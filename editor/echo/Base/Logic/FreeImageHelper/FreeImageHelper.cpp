@@ -1,4 +1,5 @@
 #include "FreeImageHelper.h"
+#include "engine/core/util/PathUtil.h"
 
 namespace Echo
 {

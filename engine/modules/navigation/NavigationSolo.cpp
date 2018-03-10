@@ -1,4 +1,5 @@
 #include "Engine/Core.h"
+#include "engine/core/util/PathUtil.h"
 #include "NavigationSolo.h"
 #include <thirdparty/recast/recast/recast.h>
 #include "DetourNavMeshBuilder.h"

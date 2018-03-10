@@ -2,6 +2,7 @@
 #include <QFileDialog>
 #include "LuaEditor.h"
 #include "Studio.h"
+#include <engine/core/util/PathUtil.h>
 
 namespace Studio
 {

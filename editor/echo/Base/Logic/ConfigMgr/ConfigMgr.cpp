@@ -1,4 +1,5 @@
 #include "ConfigMgr.h"
+#include <engine/core/util/PathUtil.h>
 #include <ostream>
 
 namespace Studio

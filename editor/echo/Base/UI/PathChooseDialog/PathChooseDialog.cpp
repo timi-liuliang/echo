@@ -1,7 +1,8 @@
 #include "PathChooseDialog.h"
 #include "Studio.h"
 #include <Engine/Core.h>
-#include <Engine/core/main/Root.h>
+#include <engine/core/util/PathUtil.h>
+#include <engine/core/main/Root.h>
 
 namespace Studio
 {

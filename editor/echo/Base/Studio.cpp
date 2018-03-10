@@ -12,8 +12,9 @@
 #include "QPropertyModel.h"
 #include "TimelinePanel.h"
 #include <shellapi.h>
-#include <engine/core/Util/HashGenerator.h>
-#include <engine/core/Util/TimeProfiler.h>
+#include <engine/core/util/HashGenerator.h>
+#include <engine/core/util/TimeProfiler.h>
+#include <engine/core/util/PathUtil.h>
 #include "EchoEngine.h"
 
 

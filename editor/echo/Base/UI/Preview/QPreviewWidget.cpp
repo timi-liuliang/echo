@@ -1,8 +1,9 @@
 #include "QPreviewWidget.h"
 
-#include <Engine/core/Resource/EchoThread.h>
-#include <Engine/core/main/Root.h>
+#include <Engine/core/resource/EchoThread.h>
 #include <Engine/modules/Audio/FMODStudio/FSAudioManager.h>
+#include <engine/core/util/PathUtil.h>
+#include <engine/core/main/Root.h>
 #include <TlHelp32.h>
 #include "Studio.h"
 #include <QFileInfo>

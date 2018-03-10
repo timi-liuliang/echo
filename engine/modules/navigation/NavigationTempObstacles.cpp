@@ -1,7 +1,8 @@
 #include <math.h>
-#include "engine/core/Util/LogManager.h"
+#include "engine/core/util/PathUtil.h"
+#include "engine/core/util/LogManager.h"
 #include "engine/core/resource/DataStream.h"
-#include <engine/core/Memory/MemAllocDef.h>
+#include <engine/core/memory/MemAllocDef.h>
 #include "Engine/Core.h"
 #include <engine/core/Base/EchoDef.h>
 #include <thirdparty/Recast/Recast/Recast.h>

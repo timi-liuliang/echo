@@ -6,7 +6,6 @@
 namespace Echo
 {
 	// ÉùÃ÷
-	class PathUtil;
 	class Time;
 	class TimeProfiler;
 	class Vector2;
@@ -135,7 +134,6 @@ namespace Echo
 	class ISkeletonController;
 }
 
-#include "engine/core/Util/PathUtil.h"
 #include "engine/core/Util/StringUtil.h"
 #include "engine/core/Util/AssertX.h"
 #include "engine/core/Util/any.hpp"

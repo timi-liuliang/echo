@@ -23,6 +23,7 @@
 #include "RenderStage/RenderStageManager.h"
 #include "RenderStage/PostProcessRenderStage.h"
 #include "Engine/modules/Audio/FMODStudio/FSAudioSource.h"
+#include <engine/core/util/PathUtil.h>
 
 
 // 事件回调
