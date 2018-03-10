@@ -1,0 +1,27 @@
+#version 100
+
+#define TRANSPARENT
+
+precision mediump float;
+#include <tonemapping.inc>
+#include <hdr_ldr.inc>
+
+uniform vec4 _AmbientColor;
+uniform sampler2D Albedo;
+uniform mediump float Alpha;
+uniform mediump float Alpha2;
+
+#define AMBIENT_LIGHT     1
+#define DIRECTIONAL_LIGHT 2
+#define POINT_LIGHT     3
+
+varying vec2 xlv_TEXCOORD0;
+
+void main ()
+{
+	vec4 diffuseColor = texture2d_linear(Albedo, xlv_TEXCOORD0);
+	gl_FragColor.rgb = diffuseColor.rgb * _AmbientColor.rgb * 2.0;
+	gl_FragColor.w = Alpha + Alpha2;
+	gl_FragColor = hdr2ldr(gl_FragColor);
+}
+

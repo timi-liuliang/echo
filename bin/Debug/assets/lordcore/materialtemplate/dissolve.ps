@@ -1,0 +1,244 @@
+#version 100
+precision mediump float;
+
+#include <tonemapping.inc>
+#include <fog_ps.inc>
+
+uniform mediump vec3  CameraDirection;
+uniform mediump vec3  CameraPosition;
+uniform mediump float CurrentTime;			// current time
+
+uniform sampler2D Albedo;
+uniform sampler2D DissolveMap;
+
+uniform mediump float Percentage;
+uniform mediump float EdgeWidth; 
+
+#ifdef DYNAMIC_SPECULAR
+	uniform sampler2D 	  SpecularSampler;
+	uniform mediump float SpecularIntensity;	// 0.0-16.f;
+	uniform mediump float SpecularPow;			// 2.0,4.0,8.0,16.0,32.0;
+#endif
+
+varying mediump vec2 texCoord;
+varying mediump vec3 normal;
+varying mediump vec3 position;
+
+#ifdef USE_LIGHTMAP
+	uniform sampler2D LMSampler;
+	uniform mediump vec4 LMUV;
+	uniform mediump vec3 LMScale;
+	varying mediump vec2 texCoord1;
+#endif
+
+#ifdef RECEIVE_FOG
+	varying vec4 ofogColor;
+#endif
+
+#ifdef ALPHA_TEST
+	uniform mediump float AlphaTestValue;
+#endif
+
+#ifdef COVERAGE_ALPHA
+	uniform mediump vec3 coveragePos;
+	uniform mediump float fallOff;
+	uniform mediump float radius;
+#endif
+
+#ifdef ENV_MAP
+	uniform sampler2D EnvSampler;
+	uniform sampler2D EnvMaskSampler;
+	uniform mediump float EnvStrength;
+#endif
+
+#define HSV_SUPPORT
+#ifdef  HSV_SUPPORT
+	#include <hsv.inc>
+#endif
+
+#ifdef SURFACE_COLOR_MASK
+	uniform mediump vec3  HSVOffset1;
+	uniform mediump vec3  HSVOffset2;
+	uniform mediump vec3  HSVOffset3;
+	uniform sampler2D 	  SurfaceColorMaskSampler;
+#elif defined(SURFACE_COLOR)
+	uniform mediump vec3  HSVOffset0;	
+#endif
+
+#ifdef NORMAL_MAP
+	uniform sampler2D NormalSampler;
+	varying mediump vec3 tangent;
+	varying mediump vec3 binormal;
+#endif
+
+#ifdef FLOW_MAP
+	uniform mediump vec2 FlowDir;
+	uniform sampler2D 	 FlowSampler;
+#endif
+
+#define AMBIENT_LIGHT     1
+#define DIRECTIONAL_LIGHT 2
+#define POINT_LIGHT 	  3
+
+uniform mediump int	 LightArrayInfo[8];
+uniform mediump vec4 LightArrayData[16];
+
+#ifdef FILTER_COLOR
+uniform mediump vec4 filterColor;
+uniform mediump float filterGray;
+#endif
+
+// calculate diffuse
+void LightingPhase( out mediump vec4 oLightSpecular, mediump vec4 iSpecularColor, mediump vec3 inPixelWorldPosition, mediump vec3 inPixelNormal, mediump float inSpecularIntensity, mediump float inSpecularPow)
+{
+	oLightSpecular= vec4( 0.0, 0.0, 0.0, 1.0);
+	
+	for( int i=0; i<2; i++)
+	{
+		int lightType = LightArrayInfo[i];
+		mediump vec4 LightColor = LightArrayData[i*2];
+		mediump vec4 LightDir   = LightArrayData[i*2+1];
+		if( lightType==DIRECTIONAL_LIGHT)
+		{
+			// Specular
+			mediump vec3 reflectNormal = normalize( reflect( LightDir.xyz, inPixelNormal));
+			oLightSpecular.xyz += LightColor.xyz * pow( max( dot(reflectNormal, -CameraDirection), 0.0), inSpecularPow)* inSpecularIntensity;
+		}
+		else if( lightType==POINT_LIGHT)
+		{
+			mediump vec3  pixelToLight		  = LightDir.xyz-inPixelWorldPosition;
+			mediump	float pixelToLightLen	  = length( pixelToLight);
+			mediump float offsetDistance      = pixelToLightLen * LightDir.w;
+			mediump float DistanceAttenuation = max( pow( 1.0-clamp( offsetDistance, 0.0, 1.0), LightColor.w), 0.0);
+			
+			// Specular
+			mediump vec3 reflectNormal = normalize( reflect( -pixelToLight, inPixelNormal));
+			oLightSpecular.xyz += LightColor.rgb  * DistanceAttenuation * pow( max( dot(reflectNormal, -CameraDirection), 0.0), inSpecularPow)* inSpecularIntensity;
+		}
+	}
+	
+	oLightSpecular *= iSpecularColor;
+}
+
+#ifdef EDGE_SHINE
+	uniform mediump vec4  EdgeShineColor;
+	uniform mediump float EdgeShinePower;
+#endif
+
+mediump vec3 SurfaceNormal(mediump vec3 n, mediump vec3 vTangent, mediump vec3 vBinormal)
+{
+   mediump vec3 T = vTangent;
+   mediump vec3 B = vBinormal;
+   mediump vec3 N = gl_FrontFacing ? normal : -normal;
+   
+   N = normalize(N);
+   T -= dot(T, N)*N;
+   T = normalize(T);
+   B = (B - dot(B, N)*N) - dot(B, T)*T;
+   B = normalize(B);
+
+   n = 2.0*n - vec3(1.0);
+   return normalize(T*n.x + B*n.y + N*n.z);
+}
+
+mediump float GetSurfaceColorEdgeParam(mediump vec4 dissolveColor)
+{
+#ifdef SURFACE_EDGE_R
+	return dissolveColor.r;
+#elif defined(SURFACE_EDGE_G)
+	return dissolveColor.g;
+#elif defined(SURFACE_EDGE_B)
+	return dissolveColor.b;
+#else
+	return dissolveColor.a; 
+#endif
+}
+
+mediump float GetSurfaceUVEdgeParam(mediump vec2 inTexCoord)
+{
+#ifdef DISSOLVE_PARAM_U
+  return inTexCoord.x;
+#elif defined(DISSOLVE_PARAM_INV_U)
+  return 1 - inTexCoord.x;
+#elif defined(DISSOLVE_PARAM_V)
+  return inTexCoord.y;
+#elif defined(DISSOLVE_PARAM_INV_V)
+  return 1 - inTexCoord.y;
+#else
+  return inTexCoord.x;
+#endif
+}
+
+#ifdef ENV_MAP
+vec3 computeEnvColor(vec3 en)
+{
+	en /= dot(vec3(1.0), abs(en));
+	vec2 eH = abs(en.zx) - vec2(1.0, 1.0);
+	vec2 eI = vec2(en.x < 0.0 ? eH.x : -eH.x, en.z < 0.0 ? eH.y : -eH.y);
+	vec2 eJ = (en.y < 0.0) ? eI : en.xz; 
+	eJ = vec2(0.5*(254.0 / 256.0), 0.125*0.5*(254.0 / 256.0))*eJ + vec2(0.5, 0.125*0.5);
+	vec2 eL = vec2(eJ.x,eJ.y*8.0);
+	vec4 eM = texture2D(EnvSampler, eL);
+	vec3 r = eM.xyz;
+	return r*r;
+}
+#endif
+
+void main(void)
+{
+#ifdef DISSOLVE_INVERSE
+  mediump float per = Percentage; 
+  per = clamp(per, 0.0, 1.0); 
+  per = per * per - 2.0 * per + 1.0; 
+#else
+  mediump float per = Percentage; 
+#endif
+
+#ifdef DISSOLVE_USE_UV
+	// textureColor
+	mediump vec4 surfaceColor = texture2d_linear(Albedo, texCoord);
+	mediump vec4 dissolveColor = texture2d_linear(DissolveMap, texCoord);
+	
+	mediump float edgeParam = GetSurfaceUVEdgeParam(texCoord);
+	
+	// test percentage
+	if(edgeParam > per)
+	{
+		discard; 
+	}
+	
+	if ( per - edgeParam < EdgeWidth)
+	{
+		surfaceColor.rgb = dissolveColor.rgb; 
+	}
+#else
+	// textureColor
+	mediump vec4 surfaceColor = texture2d_linear(Albedo, texCoord);
+	mediump vec4 dissolveColor = texture2d_linear(DissolveMap, texCoord);
+	
+	mediump float edgeParam = GetSurfaceColorEdgeParam(dissolveColor);
+	
+	// test percentage
+	if(edgeParam > per)
+	{
+		discard; 
+	}
+	
+	if ( per - edgeParam < EdgeWidth)
+	{
+		surfaceColor.rgb = dissolveColor.rgb; 
+	}
+#endif
+	// mediump float surfaceWeight = clamp((per) * 9999.0, 0.0, 1.0);
+	// surfaceColor.rgb = mix(dissolveColor.rgb, surfaceColor.rgb, surfaceWeight); 
+	
+#ifdef ALPHA_TEST
+	// alpha test
+	if(surfaceColor.a < AlphaTestValue)
+	{
+		discard;
+	}
+#endif
+
+	gl_FragColor = surfaceColor;
+}

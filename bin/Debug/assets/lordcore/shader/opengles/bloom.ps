@@ -1,0 +1,21 @@
+#version 100
+precision mediump float;
+
+#include <hdr_ldr.inc>
+
+uniform sampler2D tInput;
+uniform vec4 uKernel[SAMPLER];
+varying highp vec2 texCoord;
+
+void main(void)
+{
+	vec3 c = vec3(0.0, 0.0, 0.0);
+	for (int u = 0; u < SAMPLER; ++u)
+	{
+		vec3 v = uKernel[u].xyz;
+		c += texture2d_ldr2hdr(tInput, texCoord + v.xy).xyz * v.z;
+	}
+	gl_FragColor.xyz = c;
+	gl_FragColor.w = 0.0;
+	gl_FragColor = hdr2ldr(gl_FragColor);
+}

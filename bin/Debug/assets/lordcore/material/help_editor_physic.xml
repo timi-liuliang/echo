@@ -1,0 +1,39 @@
+<?xml version = "1.0" encoding = "GB2312"?>
+<MaterialDesc>
+	<ShaderPrograme vs="wireframephysic.vs" ps="wireframephysic.ps">
+		<BlendState>
+		</BlendState>
+		<RasterizerState>
+		</RasterizerState>
+		<DepthStencilState>
+			<DepthEnable value="false"/>
+			<WriteDepth value="false"/>
+		</DepthStencilState>
+		<SamplerState>
+			<BiLinearMirror>
+				<MinFilter value="FO_LINEAR"/>
+				<MagFilter value="FO_LINEAR"/>
+				<MipFilter value="FO_NONE"/>
+				<AddrUMode value="AM_MIRROR"/>
+				<AddrVMode value="AM_MIRROR"/>
+			</BiLinearMirror>
+		</SamplerState>
+		<Texture>
+			<stage no="0" sampler = "BiLinearMirror"/>
+		</Texture>
+		<VertexFormats>
+			<VertexFormat>
+				<VertexSemantic value="VS_POSITION"/>
+				<PixelFormat value="PF_RGB32_FLOAT"/>
+			</VertexFormat>
+			<VertexFormat>
+				<VertexSemantic value="VS_NORMAL"/>
+				<PixelFormat value="PF_RGB32_FLOAT"/>
+			</VertexFormat>
+			<VertexFormat>
+				<VertexSemantic value="VS_COLOR"/>
+				<PixelFormat value="PF_RGBA8_UNORM"/>
+			</VertexFormat>
+		</VertexFormats>
+	</ShaderPrograme>
+</MaterialDesc>

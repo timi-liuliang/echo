@@ -1,0 +1,21 @@
+precision highp float;
+
+uniform sampler2D tSkySpecular;
+
+varying mediump vec2 fCoord;
+#define saturate(x) clamp(x, 0.0, 1.0)
+void main(void)
+{
+	vec4 color = texture2D(tSkySpecular, fCoord);
+	float gray = dot(color.rgb,vec3(0.229,0.587,0.114));
+	
+	//vec3 v = (1.0/7.0)*color.xyz;
+	//float m = saturate( max( v.x, max( v.y, v.z ) ) );
+	//m = ceil( m * 255.0 ) / 255.0;
+	//if( m > 0.0 )
+	//{ color.xyz = v.xyz / m; }
+	//color.w = m;
+	
+	gl_FragColor = color;
+	
+}

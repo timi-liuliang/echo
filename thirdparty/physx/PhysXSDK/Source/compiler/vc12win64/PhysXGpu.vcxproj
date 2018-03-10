@@ -1,0 +1,823 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ItemGroup Label="ProjectConfigurations">
+		<ProjectConfiguration Include="release|x64">
+			<Configuration>release</Configuration>
+			<Platform>x64</Platform>
+		</ProjectConfiguration>
+		<ProjectConfiguration Include="debug|x64">
+			<Configuration>debug</Configuration>
+			<Platform>x64</Platform>
+		</ProjectConfiguration>
+		<ProjectConfiguration Include="checked|x64">
+			<Configuration>checked</Configuration>
+			<Platform>x64</Platform>
+		</ProjectConfiguration>
+		<ProjectConfiguration Include="profile|x64">
+			<Configuration>profile</Configuration>
+			<Platform>x64</Platform>
+		</ProjectConfiguration>
+	</ItemGroup>
+	<PropertyGroup Label="Globals">
+		<ProjectGuid>{2820A6D8-8E20-A8F6-E640-A82015D03978}</ProjectGuid>
+		<RootNamespace>PhysXGpu</RootNamespace>
+	</PropertyGroup>
+	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'" Label="Configuration">
+		<ConfigurationType>DynamicLibrary</ConfigurationType>
+		<PlatformToolset>v120</PlatformToolset>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug|x64'" Label="Configuration">
+		<ConfigurationType>DynamicLibrary</ConfigurationType>
+		<PlatformToolset>v120</PlatformToolset>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='checked|x64'" Label="Configuration">
+		<ConfigurationType>DynamicLibrary</ConfigurationType>
+		<PlatformToolset>v120</PlatformToolset>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='profile|x64'" Label="Configuration">
+		<ConfigurationType>DynamicLibrary</ConfigurationType>
+		<PlatformToolset>v120</PlatformToolset>
+	</PropertyGroup>
+	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+	<ImportGroup Label="ExtensionSettings">
+	</ImportGroup>
+	<ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='release|x64'">
+		<Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+	</ImportGroup>
+	<ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='debug|x64'">
+		<Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+	</ImportGroup>
+	<ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='checked|x64'">
+		<Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+	</ImportGroup>
+	<ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='profile|x64'">
+		<Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+	</ImportGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'">
+		<OutDir>./../../../Bin/vc12win64\</OutDir>
+		<IntDir>./x64/PhysXGpu/release\</IntDir>
+		<TargetExt>.dll</TargetExt>
+		<TargetName>PhysX3Gpu_x64</TargetName>
+		<CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+		<CodeAnalysisRules />
+		<CodeAnalysisRuleAssemblies />
+		<SkipCopyingSymbolsToOutputDirectory>true</SkipCopyingSymbolsToOutputDirectory>
+	</PropertyGroup>
+	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'">
+		<ClCompile>
+			<TreatWarningAsError>true</TreatWarningAsError>
+			<StringPooling>true</StringPooling>
+			<RuntimeTypeInfo>false</RuntimeTypeInfo>
+			<BufferSecurityCheck>false</BufferSecurityCheck>
+			<FloatingPointModel>Fast</FloatingPointModel>
+			<AdditionalOptions>/MP /Wall /wd4514 /wd4820 /wd4127 /wd4710 /wd4711 /d2Zi+</AdditionalOptions>
+			<Optimization>Full</Optimization>
+			<AdditionalIncludeDirectories>./../../../externals/LoadNvidiaSignedLibrary;./../../../externals/nvToolsExt/1/include;./../../../externals/nvToolsExt/1/include/stdint;./../../LowLevel/API/include/windows;./../../../Include/foundation;./../../foundation/include;./../../../Include/physxprofilesdk;./../../../Include/physxvisualdebuggersdk;./../../../Include;./../../../Include/common;./../../../Include/geometry;./../../../Include/pxtask;./../../PhysXGpu/include;./../../PhysXGpu/src/common;./../../Common/src;./../../GeomUtils/headers;./../../GeomUtils/src;./../../LowLevel/API/include;./../../LowLevel/common/include/pipeline;./../../LowLevel/common/include/math;./../../LowLevelCloth/include;./../../LowLevelCloth/src;./../../LowLevelCloth/src/windows;./../../pxtask/src/CUDA;./../../../externals/CUDA/6.5.19/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+			<PreprocessorDefinitions>WIN32;WIN64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_WINSOCK_DEPRECATED_NO_WARNINGS;NV_FILE_SIGNATURE_VERIFICATION;PX_SECURE_LOAD_LIBRARY;PX_PHYSX_GPU_EXPORTS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+			<ExceptionHandling>false</ExceptionHandling>
+			<WarningLevel>Level4</WarningLevel>
+			<RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+			<PrecompiledHeader>NotUsing</PrecompiledHeader>
+			<PrecompiledHeaderFile></PrecompiledHeaderFile>
+			<ProgramDataBaseFileName>$(TargetDir)\$(TargetName).pdb</ProgramDataBaseFileName>
+			<DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+		</ClCompile>
+		<Link>
+			<AdditionalOptions>/DELAYLOAD:nvcuda.dll /MAP /MACHINE:x64 Crypt32.lib /DELAYLOAD:PhysX3Common_x64.dll /INCREMENTAL:NO</AdditionalOptions>
+			<AdditionalDependencies>./../../../externals/nvToolsExt/1/lib/x64/nvToolsExt64_1.lib;cuda.lib;DelayImp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+			<OutputFile>$(OutDir)PhysX3Gpu_x64.dll</OutputFile>
+			<AdditionalLibraryDirectories>./../../../externals/CUDA/6.5.19/lib/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+			<ProgramDatabaseFile>$(TargetDir)\$(TargetName).pdb</ProgramDatabaseFile>
+			<SubSystem>Console</SubSystem>
+			<ImportLibrary>./../../../Lib/vc12win64/$(TargetName).lib</ImportLibrary>
+			<GenerateDebugInformation>true</GenerateDebugInformation>
+			<TargetMachine>MachineX64</TargetMachine>
+		</Link>
+		<ResourceCompile>
+		</ResourceCompile>
+		<ProjectReference>
+		</ProjectReference>
+	</ItemDefinitionGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug|x64'">
+		<OutDir>./../../../Bin/vc12win64\</OutDir>
+		<IntDir>./x64/PhysXGpu/debug\</IntDir>
+		<TargetExt>.dll</TargetExt>
+		<TargetName>PhysX3GpuDEBUG_x64</TargetName>
+		<CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+		<CodeAnalysisRules />
+		<CodeAnalysisRuleAssemblies />
+		<SkipCopyingSymbolsToOutputDirectory>true</SkipCopyingSymbolsToOutputDirectory>
+	</PropertyGroup>
+	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug|x64'">
+		<ClCompile>
+			<TreatWarningAsError>true</TreatWarningAsError>
+			<StringPooling>true</StringPooling>
+			<RuntimeTypeInfo>false</RuntimeTypeInfo>
+			<BufferSecurityCheck>false</BufferSecurityCheck>
+			<FloatingPointModel>Fast</FloatingPointModel>
+			<BasicRuntimeChecks>UninitializedLocalUsageCheck</BasicRuntimeChecks>
+			<AdditionalOptions>/MP /Wall /wd4514 /wd4820 /wd4127 /wd4710 /wd4711 /d2Zi+</AdditionalOptions>
+			<Optimization>Disabled</Optimization>
+			<AdditionalIncludeDirectories>./../../../externals/LoadNvidiaSignedLibrary;./../../../externals/nvToolsExt/1/include;./../../../externals/nvToolsExt/1/include/stdint;./../../LowLevel/API/include/windows;./../../../Include/foundation;./../../foundation/include;./../../../Include/physxprofilesdk;./../../../Include/physxvisualdebuggersdk;./../../../Include;./../../../Include/common;./../../../Include/geometry;./../../../Include/pxtask;./../../PhysXGpu/include;./../../PhysXGpu/src/common;./../../Common/src;./../../GeomUtils/headers;./../../GeomUtils/src;./../../LowLevel/API/include;./../../LowLevel/common/include/pipeline;./../../LowLevel/common/include/math;./../../LowLevelCloth/include;./../../LowLevelCloth/src;./../../LowLevelCloth/src/windows;./../../pxtask/src/CUDA;./../../../externals/CUDA/6.5.19/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+			<PreprocessorDefinitions>WIN32;WIN64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_WINSOCK_DEPRECATED_NO_WARNINGS;NV_FILE_SIGNATURE_VERIFICATION;PX_SECURE_LOAD_LIBRARY;PX_PHYSX_GPU_EXPORTS;_DEBUG;PX_DEBUG;PX_CHECKED;PX_SUPPORT_VISUAL_DEBUGGER;PX_NVTX;PX_PHYSX_DLL_NAME_POSTFIX=DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+			<ExceptionHandling>false</ExceptionHandling>
+			<WarningLevel>Level4</WarningLevel>
+			<RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+			<PrecompiledHeader>NotUsing</PrecompiledHeader>
+			<PrecompiledHeaderFile></PrecompiledHeaderFile>
+			<ProgramDataBaseFileName>$(TargetDir)\$(TargetName).pdb</ProgramDataBaseFileName>
+			<DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+		</ClCompile>
+		<Link>
+			<AdditionalOptions>/DELAYLOAD:nvcuda.dll /MAP /MACHINE:x64 Crypt32.lib /DELAYLOAD:PhysX3CommonDEBUG_x64.dll /DEBUG</AdditionalOptions>
+			<AdditionalDependencies>./../../../externals/nvToolsExt/1/lib/x64/nvToolsExt64_1.lib;cuda.lib;DelayImp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+			<OutputFile>$(OutDir)PhysX3GpuDEBUG_x64.dll</OutputFile>
+			<AdditionalLibraryDirectories>./../../../externals/CUDA/6.5.19/lib/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+			<ProgramDatabaseFile>$(TargetDir)\$(TargetName).pdb</ProgramDatabaseFile>
+			<SubSystem>Console</SubSystem>
+			<ImportLibrary>./../../../Lib/vc12win64/$(TargetName).lib</ImportLibrary>
+			<GenerateDebugInformation>true</GenerateDebugInformation>
+			<TargetMachine>MachineX64</TargetMachine>
+		</Link>
+		<ResourceCompile>
+		</ResourceCompile>
+		<ProjectReference>
+		</ProjectReference>
+	</ItemDefinitionGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='checked|x64'">
+		<OutDir>./../../../Bin/vc12win64\</OutDir>
+		<IntDir>./x64/PhysXGpu/checked\</IntDir>
+		<TargetExt>.dll</TargetExt>
+		<TargetName>PhysX3GpuCHECKED_x64</TargetName>
+		<CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+		<CodeAnalysisRules />
+		<CodeAnalysisRuleAssemblies />
+		<SkipCopyingSymbolsToOutputDirectory>true</SkipCopyingSymbolsToOutputDirectory>
+	</PropertyGroup>
+	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='checked|x64'">
+		<ClCompile>
+			<TreatWarningAsError>true</TreatWarningAsError>
+			<StringPooling>true</StringPooling>
+			<RuntimeTypeInfo>false</RuntimeTypeInfo>
+			<BufferSecurityCheck>false</BufferSecurityCheck>
+			<FloatingPointModel>Fast</FloatingPointModel>
+			<AdditionalOptions>/MP /Wall /wd4514 /wd4820 /wd4127 /wd4710 /wd4711 /d2Zi+</AdditionalOptions>
+			<Optimization>Full</Optimization>
+			<AdditionalIncludeDirectories>./../../../externals/LoadNvidiaSignedLibrary;./../../../externals/nvToolsExt/1/include;./../../../externals/nvToolsExt/1/include/stdint;./../../LowLevel/API/include/windows;./../../../Include/foundation;./../../foundation/include;./../../../Include/physxprofilesdk;./../../../Include/physxvisualdebuggersdk;./../../../Include;./../../../Include/common;./../../../Include/geometry;./../../../Include/pxtask;./../../PhysXGpu/include;./../../PhysXGpu/src/common;./../../Common/src;./../../GeomUtils/headers;./../../GeomUtils/src;./../../LowLevel/API/include;./../../LowLevel/common/include/pipeline;./../../LowLevel/common/include/math;./../../LowLevelCloth/include;./../../LowLevelCloth/src;./../../LowLevelCloth/src/windows;./../../pxtask/src/CUDA;./../../../externals/CUDA/6.5.19/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+			<PreprocessorDefinitions>WIN32;WIN64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_WINSOCK_DEPRECATED_NO_WARNINGS;NV_FILE_SIGNATURE_VERIFICATION;PX_SECURE_LOAD_LIBRARY;PX_PHYSX_GPU_EXPORTS;NDEBUG;PX_CHECKED;PX_SUPPORT_VISUAL_DEBUGGER;PX_NVTX;PX_PHYSX_DLL_NAME_POSTFIX=CHECKED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+			<ExceptionHandling>false</ExceptionHandling>
+			<WarningLevel>Level4</WarningLevel>
+			<RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+			<PrecompiledHeader>NotUsing</PrecompiledHeader>
+			<PrecompiledHeaderFile></PrecompiledHeaderFile>
+			<ProgramDataBaseFileName>$(TargetDir)\$(TargetName).pdb</ProgramDataBaseFileName>
+			<DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+		</ClCompile>
+		<Link>
+			<AdditionalOptions>/DELAYLOAD:nvcuda.dll /MAP /MACHINE:x64 Crypt32.lib /DELAYLOAD:PhysX3CommonCHECKED_x64.dll</AdditionalOptions>
+			<AdditionalDependencies>./../../../externals/nvToolsExt/1/lib/x64/nvToolsExt64_1.lib;cuda.lib;DelayImp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+			<OutputFile>$(OutDir)PhysX3GpuCHECKED_x64.dll</OutputFile>
+			<AdditionalLibraryDirectories>./../../../externals/CUDA/6.5.19/lib/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+			<ProgramDatabaseFile>$(TargetDir)\$(TargetName).pdb</ProgramDatabaseFile>
+			<SubSystem>Console</SubSystem>
+			<ImportLibrary>./../../../Lib/vc12win64/$(TargetName).lib</ImportLibrary>
+			<GenerateDebugInformation>true</GenerateDebugInformation>
+			<TargetMachine>MachineX64</TargetMachine>
+		</Link>
+		<ResourceCompile>
+		</ResourceCompile>
+		<ProjectReference>
+		</ProjectReference>
+	</ItemDefinitionGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='profile|x64'">
+		<OutDir>./../../../Bin/vc12win64\</OutDir>
+		<IntDir>./x64/PhysXGpu/profile\</IntDir>
+		<TargetExt>.dll</TargetExt>
+		<TargetName>PhysX3GpuPROFILE_x64</TargetName>
+		<CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+		<CodeAnalysisRules />
+		<CodeAnalysisRuleAssemblies />
+		<SkipCopyingSymbolsToOutputDirectory>true</SkipCopyingSymbolsToOutputDirectory>
+	</PropertyGroup>
+	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='profile|x64'">
+		<ClCompile>
+			<TreatWarningAsError>true</TreatWarningAsError>
+			<StringPooling>true</StringPooling>
+			<RuntimeTypeInfo>false</RuntimeTypeInfo>
+			<BufferSecurityCheck>false</BufferSecurityCheck>
+			<FloatingPointModel>Fast</FloatingPointModel>
+			<AdditionalOptions>/MP /Wall /wd4514 /wd4820 /wd4127 /wd4710 /wd4711 /d2Zi+</AdditionalOptions>
+			<Optimization>Full</Optimization>
+			<AdditionalIncludeDirectories>./../../../externals/LoadNvidiaSignedLibrary;./../../../externals/nvToolsExt/1/include;./../../../externals/nvToolsExt/1/include/stdint;./../../LowLevel/API/include/windows;./../../../Include/foundation;./../../foundation/include;./../../../Include/physxprofilesdk;./../../../Include/physxvisualdebuggersdk;./../../../Include;./../../../Include/common;./../../../Include/geometry;./../../../Include/pxtask;./../../PhysXGpu/include;./../../PhysXGpu/src/common;./../../Common/src;./../../GeomUtils/headers;./../../GeomUtils/src;./../../LowLevel/API/include;./../../LowLevel/common/include/pipeline;./../../LowLevel/common/include/math;./../../LowLevelCloth/include;./../../LowLevelCloth/src;./../../LowLevelCloth/src/windows;./../../pxtask/src/CUDA;./../../../externals/CUDA/6.5.19/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+			<PreprocessorDefinitions>WIN32;WIN64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_WINSOCK_DEPRECATED_NO_WARNINGS;NV_FILE_SIGNATURE_VERIFICATION;PX_SECURE_LOAD_LIBRARY;PX_PHYSX_GPU_EXPORTS;NDEBUG;PX_PROFILE;PX_SUPPORT_VISUAL_DEBUGGER;PX_NVTX;PX_PHYSX_DLL_NAME_POSTFIX=PROFILE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+			<ExceptionHandling>false</ExceptionHandling>
+			<WarningLevel>Level4</WarningLevel>
+			<RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+			<PrecompiledHeader>NotUsing</PrecompiledHeader>
+			<PrecompiledHeaderFile></PrecompiledHeaderFile>
+			<ProgramDataBaseFileName>$(TargetDir)\$(TargetName).pdb</ProgramDataBaseFileName>
+			<DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+		</ClCompile>
+		<Link>
+			<AdditionalOptions>/DELAYLOAD:nvcuda.dll /MAP /MACHINE:x64 Crypt32.lib /DELAYLOAD:PhysX3CommonPROFILE_x64.dll /INCREMENTAL:NO /DEBUG</AdditionalOptions>
+			<AdditionalDependencies>./../../../externals/nvToolsExt/1/lib/x64/nvToolsExt64_1.lib;cuda.lib;DelayImp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+			<OutputFile>$(OutDir)PhysX3GpuPROFILE_x64.dll</OutputFile>
+			<AdditionalLibraryDirectories>./../../../externals/CUDA/6.5.19/lib/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+			<ProgramDatabaseFile>$(TargetDir)\$(TargetName).pdb</ProgramDatabaseFile>
+			<SubSystem>Console</SubSystem>
+			<ImportLibrary>./../../../Lib/vc12win64/$(TargetName).lib</ImportLibrary>
+			<GenerateDebugInformation>true</GenerateDebugInformation>
+			<TargetMachine>MachineX64</TargetMachine>
+		</Link>
+		<ResourceCompile>
+		</ResourceCompile>
+		<ProjectReference>
+		</ProjectReference>
+	</ItemDefinitionGroup>
+	<ItemGroup>
+		<ResourceCompile Include="..\resource_x64\PhysX3Gpu.rc">
+		</ResourceCompile>
+	</ItemGroup>
+	<ItemGroup>
+		<ClCompile Include="..\..\..\externals\LoadNvidiaSignedLibrary\nvSecureLoadLibrary.c">
+		</ClCompile>
+		<ClInclude Include="..\..\..\externals\LoadNvidiaSignedLibrary\nvSecureLoadLibrary.h">
+		</ClInclude>
+	</ItemGroup>
+	<ItemGroup>
+	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="..\..\LowLevelCloth\src\windows\CuCheckSuccess.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\windows\CuCloth.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\windows\CuClothData.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\windows\CuCollision.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\windows\CuContextLock.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\windows\CuDevicePointer.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\windows\CuDeviceVector.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\windows\CuFabric.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\windows\CuFactory.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\windows\CuPhaseConfig.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\windows\CuPinnedAllocator.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\windows\CuSelfCollision.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\windows\CuSolver.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\windows\CuSolverKernel.h">
+		</ClInclude>
+		<ClCompile Include="..\..\LowLevelCloth\src\windows\CuCloth.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\LowLevelCloth\src\windows\CuClothClone.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\LowLevelCloth\src\windows\CuClothData.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\LowLevelCloth\src\windows\CuContextLock.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\LowLevelCloth\src\windows\CuFabric.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\LowLevelCloth\src\windows\CuFactory.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\LowLevelCloth\src\windows\CuSolver.cpp">
+		</ClCompile>
+		<ClInclude Include="..\..\LowLevelCloth\src\Allocator.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\Array.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\BoundingBox.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\ClothBase.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\ClothImpl.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\IndexPair.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\IterationState.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\MovingAverage.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\PointInterpolator.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\Simd4f.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\Simd4i.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\SimdTypes.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\StackAllocator.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\SwCloth.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\SwClothData.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\SwCollision.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\SwCollisionHelpers.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\SwFabric.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\SwFactory.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\SwInterCollision.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\SwSelfCollision.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\SwSolver.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\SwSolverKernel.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\TripletScheduler.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\src\Vec4T.h">
+		</ClInclude>
+		<ClCompile Include="..\..\LowLevelCloth\src\Allocator.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\LowLevelCloth\src\Factory.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\LowLevelCloth\src\PhaseConfig.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\LowLevelCloth\src\SwCloth.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\LowLevelCloth\src\SwFabric.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\LowLevelCloth\src\SwFactory.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\LowLevelCloth\src\SwInterCollision.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\LowLevelCloth\src\TripletScheduler.cpp">
+		</ClCompile>
+	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="..\..\LowLevelCloth\include\Cloth.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\include\Fabric.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\include\Factory.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\include\PhaseConfig.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\include\Range.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\include\Solver.h">
+		</ClInclude>
+		<ClInclude Include="..\..\LowLevelCloth\include\Types.h">
+		</ClInclude>
+	</ItemGroup>
+	<ItemGroup>
+		<CustomBuild Include="..\..\LowLevelCloth\src\windows\CuSolverKernel.cu">
+			<Command Condition="'$(Configuration)|$(Platform)'=='release|x64'">"C:/b/83cefae98f3c0e/sw/physx/tools/nvcccache/bin/nvcccache.exe" "C:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/externals/CUDA/6.5.19/bin/nvcc.exe" -m64 -lineinfo -use_fast_math -ftz=true -prec-div=false -prec-sqrt=false -Xopencc woffall  -gencode arch=compute_11,code=sm_11 -gencode arch=compute_20,code=sm_20 -gencode arch=compute_30,code=sm_30 -gencode arch=compute_35,code=sm_35 -gencode arch=compute_50,code=sm_50 -gencode arch=compute_50,code=compute_50 --compiler-bindir="$(VCInstallDir)bin" -D_USE_MATH_DEFINES -DNDEBUG --compiler-options=/W3,/nologo,/Zi,/MT,/Ox  -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/externals/CUDA/6.5.19/include -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Include/foundation -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Include -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/LowLevelCloth/include -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/LowLevelCloth/src -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/PhysXGpu/include -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/foundation/include -I../../../Source/pxtask/src/CUDA --compile -o ./x64/PhysXGpu/release/CUDA_cloth_src/CuSolverKernel.obj ..\..\LowLevelCloth\src\windows\CuSolverKernel.cu</Command>
+			<AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='release|x64'">%(RelativeDir)CuSolverKernel.h;%(RelativeDir)CuClothData.h;%(RelativeDir)CuPhaseConfig.h;%(RelativeDir)CuCollision.h;%(RelativeDir)CuSelfCollision.h;%(RelativeDir)../IndexPair.h;%(RelativeDir)../Types.h</AdditionalInputs>
+			<Message Condition="'$(Configuration)|$(Platform)'=='release|x64'">Building %(Identity)</Message>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'">./x64/PhysXGpu/release/CUDA_cloth_src/CuSolverKernel.obj;</Outputs>
+			<Command Condition="'$(Configuration)|$(Platform)'=='debug|x64'">"C:/b/83cefae98f3c0e/sw/physx/tools/nvcccache/bin/nvcccache.exe" "C:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/externals/CUDA/6.5.19/bin/nvcc.exe" -m64 -lineinfo -use_fast_math -ftz=true -prec-div=false -prec-sqrt=false -Xopencc woffall -G -g -gencode arch=compute_11,code=sm_11 -gencode arch=compute_20,code=sm_20 -gencode arch=compute_30,code=sm_30 -gencode arch=compute_35,code=sm_35 -gencode arch=compute_50,code=sm_50 -gencode arch=compute_50,code=compute_50 --compiler-bindir="$(VCInstallDir)bin" -D_USE_MATH_DEFINES -D_NEXUS_DEBUG --compiler-options=/W3,/nologo,/Zi,/MTd,/Od,/RTC1 -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/externals/CUDA/6.5.19/include -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Include/foundation -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Include -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/LowLevelCloth/include -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/LowLevelCloth/src -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/PhysXGpu/include -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/foundation/include -I../../../Source/pxtask/src/CUDA --compile -o ./x64/PhysXGpu/debug/CUDA_cloth_src/CuSolverKernel.obj ..\..\LowLevelCloth\src\windows\CuSolverKernel.cu</Command>
+			<AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'">%(RelativeDir)CuSolverKernel.h;%(RelativeDir)CuClothData.h;%(RelativeDir)CuPhaseConfig.h;%(RelativeDir)CuCollision.h;%(RelativeDir)CuSelfCollision.h;%(RelativeDir)../IndexPair.h;%(RelativeDir)../Types.h</AdditionalInputs>
+			<Message Condition="'$(Configuration)|$(Platform)'=='debug|x64'">Building %(Identity)</Message>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'">./x64/PhysXGpu/debug/CUDA_cloth_src/CuSolverKernel.obj;</Outputs>
+			<Command Condition="'$(Configuration)|$(Platform)'=='checked|x64'">"C:/b/83cefae98f3c0e/sw/physx/tools/nvcccache/bin/nvcccache.exe" "C:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/externals/CUDA/6.5.19/bin/nvcc.exe" -m64 -lineinfo -use_fast_math -ftz=true -prec-div=false -prec-sqrt=false -Xopencc woffall  -gencode arch=compute_11,code=sm_11 -gencode arch=compute_20,code=sm_20 -gencode arch=compute_30,code=sm_30 -gencode arch=compute_35,code=sm_35 -gencode arch=compute_50,code=sm_50 -gencode arch=compute_50,code=compute_50 --compiler-bindir="$(VCInstallDir)bin" -D_USE_MATH_DEFINES -DNDEBUG --compiler-options=/W3,/nologo,/Zi,/MT,/Ox  -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/externals/CUDA/6.5.19/include -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Include/foundation -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Include -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/LowLevelCloth/include -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/LowLevelCloth/src -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/PhysXGpu/include -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/foundation/include -I../../../Source/pxtask/src/CUDA --compile -o ./x64/PhysXGpu/checked/CUDA_cloth_src/CuSolverKernel.obj ..\..\LowLevelCloth\src\windows\CuSolverKernel.cu</Command>
+			<AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'">%(RelativeDir)CuSolverKernel.h;%(RelativeDir)CuClothData.h;%(RelativeDir)CuPhaseConfig.h;%(RelativeDir)CuCollision.h;%(RelativeDir)CuSelfCollision.h;%(RelativeDir)../IndexPair.h;%(RelativeDir)../Types.h</AdditionalInputs>
+			<Message Condition="'$(Configuration)|$(Platform)'=='checked|x64'">Building %(Identity)</Message>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'">./x64/PhysXGpu/checked/CUDA_cloth_src/CuSolverKernel.obj;</Outputs>
+			<Command Condition="'$(Configuration)|$(Platform)'=='profile|x64'">"C:/b/83cefae98f3c0e/sw/physx/tools/nvcccache/bin/nvcccache.exe" "C:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/externals/CUDA/6.5.19/bin/nvcc.exe" -m64 -lineinfo -use_fast_math -ftz=true -prec-div=false -prec-sqrt=false -Xopencc woffall  -gencode arch=compute_11,code=sm_11 -gencode arch=compute_20,code=sm_20 -gencode arch=compute_30,code=sm_30 -gencode arch=compute_35,code=sm_35 -gencode arch=compute_50,code=sm_50 -gencode arch=compute_50,code=compute_50 --compiler-bindir="$(VCInstallDir)bin" -D_USE_MATH_DEFINES -DNDEBUG -DPX_PROFILE --compiler-options=/W3,/nologo,/Zi,/MT,/Ox -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/externals/CUDA/6.5.19/include -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Include/foundation -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Include -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/LowLevelCloth/include -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/LowLevelCloth/src -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/PhysXGpu/include -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/foundation/include -I../../../Source/pxtask/src/CUDA --compile -o ./x64/PhysXGpu/profile/CUDA_cloth_src/CuSolverKernel.obj ..\..\LowLevelCloth\src\windows\CuSolverKernel.cu</Command>
+			<AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'">%(RelativeDir)CuSolverKernel.h;%(RelativeDir)CuClothData.h;%(RelativeDir)CuPhaseConfig.h;%(RelativeDir)CuCollision.h;%(RelativeDir)CuSelfCollision.h;%(RelativeDir)../IndexPair.h;%(RelativeDir)../Types.h</AdditionalInputs>
+			<Message Condition="'$(Configuration)|$(Platform)'=='profile|x64'">Building %(Identity)</Message>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'">./x64/PhysXGpu/profile/CUDA_cloth_src/CuSolverKernel.obj;</Outputs>
+		</CustomBuild>
+	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="..\..\PhysXGpu\src\common\PxcFluidParameter.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\common\PxcHeightFieldAabbTest.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\common\PxcParticleCollData.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\common\PxcParticleCollisionBox.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\common\PxcParticleCollisionCapsule.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\common\PxcParticleCollisionConvex.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\common\PxcParticleCollisionHelpers.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\common\PxcParticleCollisionParameter.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\common\PxcParticleCollisionPlane.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\common\PxcParticleCollisionTriangle.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\common\PxcParticleCollisionWorkUnit.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\common\PxcParticleCommon.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\common\PxcParticleTwoWayData.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\common\PxcRigidBodyData.h">
+		</ClInclude>
+	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="..\..\PhysXGpu\src\PxgContext.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\PxgCuda.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\PxgDelegateGpuTask.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\PxgErrorMap.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\PxgFixedSizeArray.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\PxgFluidSpatialHash.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\PxgGpuArray.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\PxgMeshMirror.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\PxgMirrored.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\PxgMirroredArray.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\PxgMirroredPool.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\PxgMirroredScratch.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\PxgPackedArray.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\PxgParticleCommon.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\PxgParticleContactManagerStream.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\PxgParticleShape.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\PxgParticleShapeUpdate.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\PxgParticleSystemBatcher.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\PxgParticleSystemSim.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\PxgParticleUpdateNotifications.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\PxgPhysXGpu.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\PxgRigidBodyMirror.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\PxgSceneGpu.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\src\PxgTriMeshChunkMirror.h">
+		</ClInclude>
+		<ClCompile Include="..\..\PhysXGpu\src\PxgFluidSpatialHash.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\PhysXGpu\src\PxgMeshMirror.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\PhysXGpu\src\PxgParticleShape.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\PhysXGpu\src\PxgParticleShapeUpdate.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\PhysXGpu\src\PxgParticleSystemBatcher.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\PhysXGpu\src\PxgParticleSystemSim.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\PhysXGpu\src\PxgParticleUpdateNotifications.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\PhysXGpu\src\PxgPhysXGpu.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\PhysXGpu\src\PxgRigidBodyMirror.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\PhysXGpu\src\PxgSceneGpu.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\PhysXGpu\src\PxgTriMeshChunkMirror.cpp">
+		</ClCompile>
+	</ItemGroup>
+	<ItemGroup>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\sort.cu">
+			<Command Condition="'$(Configuration)|$(Platform)'=='release|x64'">"C:/b/83cefae98f3c0e/sw/physx/tools/nvcccache/bin/nvcccache.exe" "C:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/externals/CUDA/6.5.19/bin/nvcc.exe" -m64 -lineinfo -use_fast_math -ftz=true -prec-div=false -prec-sqrt=false -Xopencc woffall  -gencode arch=compute_11,code=sm_11 -gencode arch=compute_12,code=sm_12 -gencode arch=compute_20,code=sm_20 -gencode arch=compute_30,code=sm_30 -gencode arch=compute_35,code=sm_35 -gencode arch=compute_50,code=sm_50 -gencode arch=compute_50,code=compute_50 --compiler-bindir="$(VCInstallDir)bin" -DNDEBUG -DWIN32 -D_CONSOLE -D_WIN32_WINNT=0x0501  --compiler-options=/W3,/nologo,/Ot,/Ox,/Zi,/MT,/Fd./x64/PhysXGpu/release/CUDA_particles_src/sort.obj.pdb -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Include/foundation -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/foundation/include -I../../../Include -I../../../Include/common -I../../../Include/geometry -I../../../Include/pxtask -I../../../Source/Common/src -I../../../Source/GeomUtils/headers -I../../../Source/GeomUtils/src -I../../../Source/LowLevel/API/include -I../../../Source/LowLevel/common/include/math -I../../../Source/PhysXGpu/src/common -I../../../Source/pxtask/src/CUDA -I../../PhysXGpu/src/CUDA --compile -o ./x64/PhysXGpu/release/CUDA_particles_src/sort.obj ..\..\PhysXGpu\src\CUDA\sort.cu</Command>
+			<Message Condition="'$(Configuration)|$(Platform)'=='release|x64'">Building %(Identity)</Message>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'">./x64/PhysXGpu/release/CUDA_particles_src/sort.obj;</Outputs>
+			<Command Condition="'$(Configuration)|$(Platform)'=='debug|x64'">"C:/b/83cefae98f3c0e/sw/physx/tools/nvcccache/bin/nvcccache.exe" "C:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/externals/CUDA/6.5.19/bin/nvcc.exe" -m64 -lineinfo -use_fast_math -ftz=true -prec-div=false -prec-sqrt=false -Xopencc woffall  -gencode arch=compute_11,code=sm_11 -gencode arch=compute_12,code=sm_12 -gencode arch=compute_20,code=sm_20 -gencode arch=compute_30,code=sm_30 -gencode arch=compute_35,code=sm_35 -gencode arch=compute_50,code=sm_50 -gencode arch=compute_50,code=compute_50 --compiler-bindir="$(VCInstallDir)bin" -D_DEBUG -DWIN32 -D_CONSOLE -D_WIN32_WINNT=0x0501  --compiler-options=/W3,/nologo,/Ot,/Ox,/Zi,/MTd,/Fd./x64/PhysXGpu/debug/CUDA_particles_src/sort.obj.pdb -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Include/foundation -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/foundation/include -I../../../Include -I../../../Include/common -I../../../Include/geometry -I../../../Include/pxtask -I../../../Source/Common/src -I../../../Source/GeomUtils/headers -I../../../Source/GeomUtils/src -I../../../Source/LowLevel/API/include -I../../../Source/LowLevel/common/include/math -I../../../Source/PhysXGpu/src/common -I../../../Source/pxtask/src/CUDA -I../../PhysXGpu/src/CUDA --compile -o ./x64/PhysXGpu/debug/CUDA_particles_src/sort.obj ..\..\PhysXGpu\src\CUDA\sort.cu</Command>
+			<Message Condition="'$(Configuration)|$(Platform)'=='debug|x64'">Building %(Identity)</Message>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'">./x64/PhysXGpu/debug/CUDA_particles_src/sort.obj;</Outputs>
+			<Command Condition="'$(Configuration)|$(Platform)'=='checked|x64'">"C:/b/83cefae98f3c0e/sw/physx/tools/nvcccache/bin/nvcccache.exe" "C:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/externals/CUDA/6.5.19/bin/nvcc.exe" -m64 -lineinfo -use_fast_math -ftz=true -prec-div=false -prec-sqrt=false -Xopencc woffall  -gencode arch=compute_11,code=sm_11 -gencode arch=compute_12,code=sm_12 -gencode arch=compute_20,code=sm_20 -gencode arch=compute_30,code=sm_30 -gencode arch=compute_35,code=sm_35 -gencode arch=compute_50,code=sm_50 -gencode arch=compute_50,code=compute_50 --compiler-bindir="$(VCInstallDir)bin" -DNDEBUG -DWIN32 -D_CONSOLE -D_WIN32_WINNT=0x0501  --compiler-options=/W3,/nologo,/Ot,/Ox,/Zi,/MT,/Fd./x64/PhysXGpu/checked/CUDA_particles_src/sort.obj.pdb -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Include/foundation -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/foundation/include -I../../../Include -I../../../Include/common -I../../../Include/geometry -I../../../Include/pxtask -I../../../Source/Common/src -I../../../Source/GeomUtils/headers -I../../../Source/GeomUtils/src -I../../../Source/LowLevel/API/include -I../../../Source/LowLevel/common/include/math -I../../../Source/PhysXGpu/src/common -I../../../Source/pxtask/src/CUDA -I../../PhysXGpu/src/CUDA --compile -o ./x64/PhysXGpu/checked/CUDA_particles_src/sort.obj ..\..\PhysXGpu\src\CUDA\sort.cu</Command>
+			<Message Condition="'$(Configuration)|$(Platform)'=='checked|x64'">Building %(Identity)</Message>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'">./x64/PhysXGpu/checked/CUDA_particles_src/sort.obj;</Outputs>
+			<Command Condition="'$(Configuration)|$(Platform)'=='profile|x64'">"C:/b/83cefae98f3c0e/sw/physx/tools/nvcccache/bin/nvcccache.exe" "C:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/externals/CUDA/6.5.19/bin/nvcc.exe" -m64 -lineinfo -use_fast_math -ftz=true -prec-div=false -prec-sqrt=false -Xopencc woffall  -gencode arch=compute_11,code=sm_11 -gencode arch=compute_12,code=sm_12 -gencode arch=compute_20,code=sm_20 -gencode arch=compute_30,code=sm_30 -gencode arch=compute_35,code=sm_35 -gencode arch=compute_50,code=sm_50 -gencode arch=compute_50,code=compute_50 --compiler-bindir="$(VCInstallDir)bin" -DNDEBUG -DWIN32 -D_CONSOLE -D_WIN32_WINNT=0x0501 -DPX_PROFILE --compiler-options=/W3,/nologo,/Ot,/Ox,/Zi,/MT,/Fd./x64/PhysXGpu/profile/CUDA_particles_src/sort.obj.pdb -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Include/foundation -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/foundation/include -I../../../Include -I../../../Include/common -I../../../Include/geometry -I../../../Include/pxtask -I../../../Source/Common/src -I../../../Source/GeomUtils/headers -I../../../Source/GeomUtils/src -I../../../Source/LowLevel/API/include -I../../../Source/LowLevel/common/include/math -I../../../Source/PhysXGpu/src/common -I../../../Source/pxtask/src/CUDA -I../../PhysXGpu/src/CUDA --compile -o ./x64/PhysXGpu/profile/CUDA_particles_src/sort.obj ..\..\PhysXGpu\src\CUDA\sort.cu</Command>
+			<Message Condition="'$(Configuration)|$(Platform)'=='profile|x64'">Building %(Identity)</Message>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'">./x64/PhysXGpu/profile/CUDA_particles_src/sort.obj;</Outputs>
+		</CustomBuild>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\UnityParticles.cu">
+			<Command Condition="'$(Configuration)|$(Platform)'=='release|x64'">"C:/b/83cefae98f3c0e/sw/physx/tools/nvcccache/bin/nvcccache.exe" "C:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/externals/CUDA/6.5.19/bin/nvcc.exe" -m64 -lineinfo -use_fast_math -ftz=true -prec-div=false -prec-sqrt=false -Xopencc woffall  -gencode arch=compute_11,code=sm_11 -gencode arch=compute_12,code=sm_12 -gencode arch=compute_20,code=sm_20 -gencode arch=compute_30,code=sm_30 -gencode arch=compute_35,code=sm_35 -gencode arch=compute_50,code=sm_50 -gencode arch=compute_50,code=compute_50 --compiler-bindir="$(VCInstallDir)bin" -DNDEBUG -DWIN32 -D_CONSOLE -D_WIN32_WINNT=0x0501  --compiler-options=/W3,/nologo,/Ot,/Ox,/Zi,/MT,/Fd./x64/PhysXGpu/release/CUDA_particles_src/UnityParticles.obj.pdb -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Include/foundation -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/foundation/include -I../../../Include -I../../../Include/common -I../../../Include/geometry -I../../../Include/pxtask -I../../../Source/Common/src -I../../../Source/GeomUtils/headers -I../../../Source/GeomUtils/src -I../../../Source/LowLevel/API/include -I../../../Source/LowLevel/common/include/math -I../../../Source/PhysXGpu/src/common -I../../../Source/pxtask/src/CUDA -I../../PhysXGpu/src/CUDA --compile -o ./x64/PhysXGpu/release/CUDA_particles_src/UnityParticles.obj ..\..\PhysXGpu\src\CUDA\UnityParticles.cu</Command>
+			<Message Condition="'$(Configuration)|$(Platform)'=='release|x64'">Building %(Identity)</Message>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'">./x64/PhysXGpu/release/CUDA_particles_src/UnityParticles.obj;</Outputs>
+			<Command Condition="'$(Configuration)|$(Platform)'=='debug|x64'">"C:/b/83cefae98f3c0e/sw/physx/tools/nvcccache/bin/nvcccache.exe" "C:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/externals/CUDA/6.5.19/bin/nvcc.exe" -m64 -lineinfo -use_fast_math -ftz=true -prec-div=false -prec-sqrt=false -Xopencc woffall  -gencode arch=compute_11,code=sm_11 -gencode arch=compute_12,code=sm_12 -gencode arch=compute_20,code=sm_20 -gencode arch=compute_30,code=sm_30 -gencode arch=compute_35,code=sm_35 -gencode arch=compute_50,code=sm_50 -gencode arch=compute_50,code=compute_50 --compiler-bindir="$(VCInstallDir)bin" -D_DEBUG -DWIN32 -D_CONSOLE -D_WIN32_WINNT=0x0501  --compiler-options=/W3,/nologo,/Ot,/Ox,/Zi,/MTd,/Fd./x64/PhysXGpu/debug/CUDA_particles_src/UnityParticles.obj.pdb -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Include/foundation -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/foundation/include -I../../../Include -I../../../Include/common -I../../../Include/geometry -I../../../Include/pxtask -I../../../Source/Common/src -I../../../Source/GeomUtils/headers -I../../../Source/GeomUtils/src -I../../../Source/LowLevel/API/include -I../../../Source/LowLevel/common/include/math -I../../../Source/PhysXGpu/src/common -I../../../Source/pxtask/src/CUDA -I../../PhysXGpu/src/CUDA --compile -o ./x64/PhysXGpu/debug/CUDA_particles_src/UnityParticles.obj ..\..\PhysXGpu\src\CUDA\UnityParticles.cu</Command>
+			<Message Condition="'$(Configuration)|$(Platform)'=='debug|x64'">Building %(Identity)</Message>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'">./x64/PhysXGpu/debug/CUDA_particles_src/UnityParticles.obj;</Outputs>
+			<Command Condition="'$(Configuration)|$(Platform)'=='checked|x64'">"C:/b/83cefae98f3c0e/sw/physx/tools/nvcccache/bin/nvcccache.exe" "C:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/externals/CUDA/6.5.19/bin/nvcc.exe" -m64 -lineinfo -use_fast_math -ftz=true -prec-div=false -prec-sqrt=false -Xopencc woffall  -gencode arch=compute_11,code=sm_11 -gencode arch=compute_12,code=sm_12 -gencode arch=compute_20,code=sm_20 -gencode arch=compute_30,code=sm_30 -gencode arch=compute_35,code=sm_35 -gencode arch=compute_50,code=sm_50 -gencode arch=compute_50,code=compute_50 --compiler-bindir="$(VCInstallDir)bin" -DNDEBUG -DWIN32 -D_CONSOLE -D_WIN32_WINNT=0x0501  --compiler-options=/W3,/nologo,/Ot,/Ox,/Zi,/MT,/Fd./x64/PhysXGpu/checked/CUDA_particles_src/UnityParticles.obj.pdb -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Include/foundation -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/foundation/include -I../../../Include -I../../../Include/common -I../../../Include/geometry -I../../../Include/pxtask -I../../../Source/Common/src -I../../../Source/GeomUtils/headers -I../../../Source/GeomUtils/src -I../../../Source/LowLevel/API/include -I../../../Source/LowLevel/common/include/math -I../../../Source/PhysXGpu/src/common -I../../../Source/pxtask/src/CUDA -I../../PhysXGpu/src/CUDA --compile -o ./x64/PhysXGpu/checked/CUDA_particles_src/UnityParticles.obj ..\..\PhysXGpu\src\CUDA\UnityParticles.cu</Command>
+			<Message Condition="'$(Configuration)|$(Platform)'=='checked|x64'">Building %(Identity)</Message>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'">./x64/PhysXGpu/checked/CUDA_particles_src/UnityParticles.obj;</Outputs>
+			<Command Condition="'$(Configuration)|$(Platform)'=='profile|x64'">"C:/b/83cefae98f3c0e/sw/physx/tools/nvcccache/bin/nvcccache.exe" "C:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/externals/CUDA/6.5.19/bin/nvcc.exe" -m64 -lineinfo -use_fast_math -ftz=true -prec-div=false -prec-sqrt=false -Xopencc woffall  -gencode arch=compute_11,code=sm_11 -gencode arch=compute_12,code=sm_12 -gencode arch=compute_20,code=sm_20 -gencode arch=compute_30,code=sm_30 -gencode arch=compute_35,code=sm_35 -gencode arch=compute_50,code=sm_50 -gencode arch=compute_50,code=compute_50 --compiler-bindir="$(VCInstallDir)bin" -DNDEBUG -DWIN32 -D_CONSOLE -D_WIN32_WINNT=0x0501 -DPX_PROFILE --compiler-options=/W3,/nologo,/Ot,/Ox,/Zi,/MT,/Fd./x64/PhysXGpu/profile/CUDA_particles_src/UnityParticles.obj.pdb -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Include/foundation -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/foundation/include -I../../../Include -I../../../Include/common -I../../../Include/geometry -I../../../Include/pxtask -I../../../Source/Common/src -I../../../Source/GeomUtils/headers -I../../../Source/GeomUtils/src -I../../../Source/LowLevel/API/include -I../../../Source/LowLevel/common/include/math -I../../../Source/PhysXGpu/src/common -I../../../Source/pxtask/src/CUDA -I../../PhysXGpu/src/CUDA --compile -o ./x64/PhysXGpu/profile/CUDA_particles_src/UnityParticles.obj ..\..\PhysXGpu\src\CUDA\UnityParticles.cu</Command>
+			<Message Condition="'$(Configuration)|$(Platform)'=='profile|x64'">Building %(Identity)</Message>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'">./x64/PhysXGpu/profile/CUDA_particles_src/UnityParticles.obj;</Outputs>
+		</CustomBuild>
+	</ItemGroup>
+	<ItemGroup>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\SpecialBuildParticles.cu">
+			<Command Condition="'$(Configuration)|$(Platform)'=='release|x64'">"C:/b/83cefae98f3c0e/sw/physx/tools/nvcccache/bin/nvcccache.exe" "C:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/externals/CUDA/6.5.19/bin/nvcc.exe" -Xptxas -dlcm=ca -m64 -lineinfo -use_fast_math -ftz=true -prec-div=false -prec-sqrt=false -Xopencc woffall  -gencode arch=compute_11,code=sm_11 -gencode arch=compute_12,code=sm_12 -gencode arch=compute_20,code=sm_20 -gencode arch=compute_30,code=sm_30 -gencode arch=compute_35,code=sm_35 -gencode arch=compute_50,code=sm_50 -gencode arch=compute_52,code=sm_52 -gencode arch=compute_50,code=compute_50 --compiler-bindir="$(VCInstallDir)bin" -DNDEBUG -DWIN32 -D_CONSOLE -D_WIN32_WINNT=0x0501  --compiler-options=/W3,/nologo,/Ot,/Ox,/Zi,/MT,/Fd./x64/PhysXGpu/release/CUDA_particles_src_special/SpecialBuildParticles.obj.pdb -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Include/foundation -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/foundation/include -I../../../Include -I../../../Include/common -I../../../Include/geometry -I../../../Include/pxtask -I../../../Source/Common/src -I../../../Source/GeomUtils/headers -I../../../Source/GeomUtils/src -I../../../Source/LowLevel/API/include -I../../../Source/LowLevel/common/include/math -I../../../Source/PhysXGpu/src/common -I../../../Source/pxtask/src/CUDA -I../../PhysXGpu/src/CUDA --compile -o ./x64/PhysXGpu/release/CUDA_particles_src_special/SpecialBuildParticles.obj ..\..\PhysXGpu\src\CUDA\SpecialBuildParticles.cu</Command>
+			<Message Condition="'$(Configuration)|$(Platform)'=='release|x64'">Building %(Identity)</Message>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'">./x64/PhysXGpu/release/CUDA_particles_src_special/SpecialBuildParticles.obj;</Outputs>
+			<Command Condition="'$(Configuration)|$(Platform)'=='debug|x64'">"C:/b/83cefae98f3c0e/sw/physx/tools/nvcccache/bin/nvcccache.exe" "C:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/externals/CUDA/6.5.19/bin/nvcc.exe" -Xptxas -dlcm=ca -m64 -lineinfo -use_fast_math -ftz=true -prec-div=false -prec-sqrt=false -Xopencc woffall  -gencode arch=compute_11,code=sm_11 -gencode arch=compute_12,code=sm_12 -gencode arch=compute_20,code=sm_20 -gencode arch=compute_30,code=sm_30 -gencode arch=compute_35,code=sm_35 -gencode arch=compute_50,code=sm_50 -gencode arch=compute_52,code=sm_52 -gencode arch=compute_50,code=compute_50 --compiler-bindir="$(VCInstallDir)bin" -D_DEBUG -DWIN32 -D_CONSOLE -D_WIN32_WINNT=0x0501  --compiler-options=/W3,/nologo,/Ot,/Ox,/Zi,/MTd,/Fd./x64/PhysXGpu/debug/CUDA_particles_src_special/SpecialBuildParticles.obj.pdb -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Include/foundation -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/foundation/include -I../../../Include -I../../../Include/common -I../../../Include/geometry -I../../../Include/pxtask -I../../../Source/Common/src -I../../../Source/GeomUtils/headers -I../../../Source/GeomUtils/src -I../../../Source/LowLevel/API/include -I../../../Source/LowLevel/common/include/math -I../../../Source/PhysXGpu/src/common -I../../../Source/pxtask/src/CUDA -I../../PhysXGpu/src/CUDA --compile -o ./x64/PhysXGpu/debug/CUDA_particles_src_special/SpecialBuildParticles.obj ..\..\PhysXGpu\src\CUDA\SpecialBuildParticles.cu</Command>
+			<Message Condition="'$(Configuration)|$(Platform)'=='debug|x64'">Building %(Identity)</Message>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'">./x64/PhysXGpu/debug/CUDA_particles_src_special/SpecialBuildParticles.obj;</Outputs>
+			<Command Condition="'$(Configuration)|$(Platform)'=='checked|x64'">"C:/b/83cefae98f3c0e/sw/physx/tools/nvcccache/bin/nvcccache.exe" "C:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/externals/CUDA/6.5.19/bin/nvcc.exe" -Xptxas -dlcm=ca -m64 -lineinfo -use_fast_math -ftz=true -prec-div=false -prec-sqrt=false -Xopencc woffall  -gencode arch=compute_11,code=sm_11 -gencode arch=compute_12,code=sm_12 -gencode arch=compute_20,code=sm_20 -gencode arch=compute_30,code=sm_30 -gencode arch=compute_35,code=sm_35 -gencode arch=compute_50,code=sm_50 -gencode arch=compute_52,code=sm_52 -gencode arch=compute_50,code=compute_50 --compiler-bindir="$(VCInstallDir)bin" -DNDEBUG -DWIN32 -D_CONSOLE -D_WIN32_WINNT=0x0501  --compiler-options=/W3,/nologo,/Ot,/Ox,/Zi,/MT,/Fd./x64/PhysXGpu/checked/CUDA_particles_src_special/SpecialBuildParticles.obj.pdb -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Include/foundation -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/foundation/include -I../../../Include -I../../../Include/common -I../../../Include/geometry -I../../../Include/pxtask -I../../../Source/Common/src -I../../../Source/GeomUtils/headers -I../../../Source/GeomUtils/src -I../../../Source/LowLevel/API/include -I../../../Source/LowLevel/common/include/math -I../../../Source/PhysXGpu/src/common -I../../../Source/pxtask/src/CUDA -I../../PhysXGpu/src/CUDA --compile -o ./x64/PhysXGpu/checked/CUDA_particles_src_special/SpecialBuildParticles.obj ..\..\PhysXGpu\src\CUDA\SpecialBuildParticles.cu</Command>
+			<Message Condition="'$(Configuration)|$(Platform)'=='checked|x64'">Building %(Identity)</Message>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'">./x64/PhysXGpu/checked/CUDA_particles_src_special/SpecialBuildParticles.obj;</Outputs>
+			<Command Condition="'$(Configuration)|$(Platform)'=='profile|x64'">"C:/b/83cefae98f3c0e/sw/physx/tools/nvcccache/bin/nvcccache.exe" "C:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/externals/CUDA/6.5.19/bin/nvcc.exe" -Xptxas -dlcm=ca -m64 -lineinfo -use_fast_math -ftz=true -prec-div=false -prec-sqrt=false -Xopencc woffall  -gencode arch=compute_11,code=sm_11 -gencode arch=compute_12,code=sm_12 -gencode arch=compute_20,code=sm_20 -gencode arch=compute_30,code=sm_30 -gencode arch=compute_35,code=sm_35 -gencode arch=compute_50,code=sm_50 -gencode arch=compute_52,code=sm_52 -gencode arch=compute_50,code=compute_50 --compiler-bindir="$(VCInstallDir)bin" -DNDEBUG -DWIN32 -D_CONSOLE -D_WIN32_WINNT=0x0501 -DPX_PROFILE --compiler-options=/W3,/nologo,/Ot,/Ox,/Zi,/MT,/Fd./x64/PhysXGpu/profile/CUDA_particles_src_special/SpecialBuildParticles.obj.pdb -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Include/foundation -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/foundation/include -I../../../Include -I../../../Include/common -I../../../Include/geometry -I../../../Include/pxtask -I../../../Source/Common/src -I../../../Source/GeomUtils/headers -I../../../Source/GeomUtils/src -I../../../Source/LowLevel/API/include -I../../../Source/LowLevel/common/include/math -I../../../Source/PhysXGpu/src/common -I../../../Source/pxtask/src/CUDA -I../../PhysXGpu/src/CUDA --compile -o ./x64/PhysXGpu/profile/CUDA_particles_src_special/SpecialBuildParticles.obj ..\..\PhysXGpu\src\CUDA\SpecialBuildParticles.cu</Command>
+			<Message Condition="'$(Configuration)|$(Platform)'=='profile|x64'">Building %(Identity)</Message>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'">./x64/PhysXGpu/profile/CUDA_particles_src_special/SpecialBuildParticles.obj;</Outputs>
+		</CustomBuild>
+	</ItemGroup>
+	<ItemGroup>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\UB\AddParticles.cu">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\UB\CreateParticleShapes.cu">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\UB\cuPrintf.cu">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\UB\DynamicCollisionResponse.cu">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\UB\FinalizeCollision.cu">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\UB\FluidCalculateDensity.cu">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\UB\FluidCalculateForce.cu">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\UB\FluidSortParticles.cu">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\UB\InitCollDataAndApplyConstraints.cu">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\UB\InitParticleShapes.cu">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\UB\PackParticleShapes.cu">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\UB\ParticleCollisionBox.cu">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\UB\ParticleCollisionCapsules.cu">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\UB\ParticleCollisionConvex.cu">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\UB\ParticleCollisionHeightField.cu">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\UB\ParticleCollisionPlane.cu">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\UB\ParticleCollisionTriangleChunk.cu">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\UB\RemoveParticles.cu">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\UB\RemoveParticleShapes.cu">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\UB\sortNew.cu">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\UB\UpdateParticles.cu">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+	</ItemGroup>
+	<ItemGroup>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\cutil_math.h">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\PxGpuFluidKernel.h">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\blocksync.cuh">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\common.cuh">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\cuPrintf.cuh">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\ParticleCollisionConvex.cuh">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\ParticleCollisionPrimitive.cuh">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\ParticleCollisionShared.cuh">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\reduce.cuh">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\scan.cuh">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+		<CustomBuild Include="..\..\PhysXGpu\src\CUDA\cuPrintf.cu_include">
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'"> ;</Outputs>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'"> ;</Outputs>
+		</CustomBuild>
+	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="..\..\PhysXGpu\include\Pxg.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\include\PxParticleDeviceExclusive.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\include\PxPhysXGpu.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\include\PxPhysXIndicatorDeviceExclusive.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\include\PxRigidBodyAccessGpu.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXGpu\include\PxSceneGpu.h">
+		</ClInclude>
+	</ItemGroup>
+	<ItemGroup>
+		<ClCompile Include="..\..\pxtask\src\CUDA\windows\PhysXDeviceWrapperWindows.cpp">
+		</ClCompile>
+	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="..\..\pxtask\src\CUDA\CudaKernelWrangler.h">
+		</ClInclude>
+		<ClInclude Include="..\..\pxtask\src\CUDA\CudaMemoryManager.h">
+		</ClInclude>
+		<ClInclude Include="..\..\pxtask\src\CUDA\CudaNode3DLowLatencyInterface.h">
+		</ClInclude>
+		<ClInclude Include="..\..\pxtask\src\CUDA\GpuDispatcher.h">
+		</ClInclude>
+		<ClInclude Include="..\..\pxtask\src\CUDA\GPUProfile.h">
+		</ClInclude>
+		<ClInclude Include="..\..\pxtask\src\CUDA\HeapManagerInterface.h">
+		</ClInclude>
+		<ClInclude Include="..\..\pxtask\src\CUDA\HeapManagerLinkedList.h">
+		</ClInclude>
+		<ClInclude Include="..\..\pxtask\src\CUDA\HeapManagerRef.h">
+		</ClInclude>
+		<ClInclude Include="..\..\pxtask\src\CUDA\PhysXDevice.h">
+		</ClInclude>
+		<ClCompile Include="..\..\pxtask\src\CUDA\BlockingWait.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\pxtask\src\CUDA\CudaContextManager.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\pxtask\src\CUDA\CudaKernelWrangler.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\pxtask\src\CUDA\CudaMemoryManager.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\pxtask\src\CUDA\GpuDispatcher.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\pxtask\src\CUDA\HeapManagerRef.cpp">
+		</ClCompile>
+	</ItemGroup>
+	<ItemGroup>
+		<CustomBuild Include="..\..\pxtask\src\CUDA\UtilKernels.cu">
+			<Command Condition="'$(Configuration)|$(Platform)'=='release|x64'">"C:/b/83cefae98f3c0e/sw/physx/tools/nvcccache/bin/nvcccache.exe" "C:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/externals/CUDA/6.5.19/bin/nvcc.exe" -m64 -lineinfo -use_fast_math -ftz=true -prec-div=false -prec-sqrt=false -Xopencc woffall  -gencode arch=compute_11,code=sm_11 -gencode arch=compute_12,code=sm_12 -gencode arch=compute_20,code=sm_20 -gencode arch=compute_30,code=sm_30 -gencode arch=compute_35,code=sm_35 -gencode arch=compute_50,code=sm_50 -gencode arch=compute_50,code=compute_50 --compiler-bindir="$(VCInstallDir)bin" -DNDEBUG -DWIN32 -D_CONSOLE -D_WIN32_WINNT=0x0501  --compiler-options=/W3,/nologo,/Ot,/Ox,/Zi,/MT,/Fd./x64/PhysXGpu/release/CUDA_particles_src/UtilKernels.obj.pdb -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Include/foundation -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/foundation/include -I../../../Include -I../../../Include/common -I../../../Include/geometry -I../../../Include/pxtask -I../../../Source/Common/src -I../../../Source/GeomUtils/headers -I../../../Source/GeomUtils/src -I../../../Source/LowLevel/API/include -I../../../Source/LowLevel/common/include/math -I../../../Source/PhysXGpu/src/common -I../../../Source/pxtask/src/CUDA -I../../PhysXGpu/src/CUDA --compile -o ./x64/PhysXGpu/release/CUDA_particles_src/UtilKernels.obj ..\..\pxtask\src\CUDA\UtilKernels.cu</Command>
+			<Message Condition="'$(Configuration)|$(Platform)'=='release|x64'">Building %(Identity)</Message>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='release|x64'">./x64/PhysXGpu/release/CUDA_particles_src/UtilKernels.obj;</Outputs>
+			<Command Condition="'$(Configuration)|$(Platform)'=='debug|x64'">"C:/b/83cefae98f3c0e/sw/physx/tools/nvcccache/bin/nvcccache.exe" "C:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/externals/CUDA/6.5.19/bin/nvcc.exe" -m64 -lineinfo -use_fast_math -ftz=true -prec-div=false -prec-sqrt=false -Xopencc woffall  -gencode arch=compute_11,code=sm_11 -gencode arch=compute_12,code=sm_12 -gencode arch=compute_20,code=sm_20 -gencode arch=compute_30,code=sm_30 -gencode arch=compute_35,code=sm_35 -gencode arch=compute_50,code=sm_50 -gencode arch=compute_50,code=compute_50 --compiler-bindir="$(VCInstallDir)bin" -D_DEBUG -DWIN32 -D_CONSOLE -D_WIN32_WINNT=0x0501  --compiler-options=/W3,/nologo,/Ot,/Ox,/Zi,/MTd,/Fd./x64/PhysXGpu/debug/CUDA_particles_src/UtilKernels.obj.pdb -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Include/foundation -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/foundation/include -I../../../Include -I../../../Include/common -I../../../Include/geometry -I../../../Include/pxtask -I../../../Source/Common/src -I../../../Source/GeomUtils/headers -I../../../Source/GeomUtils/src -I../../../Source/LowLevel/API/include -I../../../Source/LowLevel/common/include/math -I../../../Source/PhysXGpu/src/common -I../../../Source/pxtask/src/CUDA -I../../PhysXGpu/src/CUDA --compile -o ./x64/PhysXGpu/debug/CUDA_particles_src/UtilKernels.obj ..\..\pxtask\src\CUDA\UtilKernels.cu</Command>
+			<Message Condition="'$(Configuration)|$(Platform)'=='debug|x64'">Building %(Identity)</Message>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='debug|x64'">./x64/PhysXGpu/debug/CUDA_particles_src/UtilKernels.obj;</Outputs>
+			<Command Condition="'$(Configuration)|$(Platform)'=='checked|x64'">"C:/b/83cefae98f3c0e/sw/physx/tools/nvcccache/bin/nvcccache.exe" "C:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/externals/CUDA/6.5.19/bin/nvcc.exe" -m64 -lineinfo -use_fast_math -ftz=true -prec-div=false -prec-sqrt=false -Xopencc woffall  -gencode arch=compute_11,code=sm_11 -gencode arch=compute_12,code=sm_12 -gencode arch=compute_20,code=sm_20 -gencode arch=compute_30,code=sm_30 -gencode arch=compute_35,code=sm_35 -gencode arch=compute_50,code=sm_50 -gencode arch=compute_50,code=compute_50 --compiler-bindir="$(VCInstallDir)bin" -DNDEBUG -DWIN32 -D_CONSOLE -D_WIN32_WINNT=0x0501  --compiler-options=/W3,/nologo,/Ot,/Ox,/Zi,/MT,/Fd./x64/PhysXGpu/checked/CUDA_particles_src/UtilKernels.obj.pdb -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Include/foundation -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/foundation/include -I../../../Include -I../../../Include/common -I../../../Include/geometry -I../../../Include/pxtask -I../../../Source/Common/src -I../../../Source/GeomUtils/headers -I../../../Source/GeomUtils/src -I../../../Source/LowLevel/API/include -I../../../Source/LowLevel/common/include/math -I../../../Source/PhysXGpu/src/common -I../../../Source/pxtask/src/CUDA -I../../PhysXGpu/src/CUDA --compile -o ./x64/PhysXGpu/checked/CUDA_particles_src/UtilKernels.obj ..\..\pxtask\src\CUDA\UtilKernels.cu</Command>
+			<Message Condition="'$(Configuration)|$(Platform)'=='checked|x64'">Building %(Identity)</Message>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='checked|x64'">./x64/PhysXGpu/checked/CUDA_particles_src/UtilKernels.obj;</Outputs>
+			<Command Condition="'$(Configuration)|$(Platform)'=='profile|x64'">"C:/b/83cefae98f3c0e/sw/physx/tools/nvcccache/bin/nvcccache.exe" "C:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/externals/CUDA/6.5.19/bin/nvcc.exe" -m64 -lineinfo -use_fast_math -ftz=true -prec-div=false -prec-sqrt=false -Xopencc woffall  -gencode arch=compute_11,code=sm_11 -gencode arch=compute_12,code=sm_12 -gencode arch=compute_20,code=sm_20 -gencode arch=compute_30,code=sm_30 -gencode arch=compute_35,code=sm_35 -gencode arch=compute_50,code=sm_50 -gencode arch=compute_50,code=compute_50 --compiler-bindir="$(VCInstallDir)bin" -DNDEBUG -DWIN32 -D_CONSOLE -D_WIN32_WINNT=0x0501 -DPX_PROFILE --compiler-options=/W3,/nologo,/Ot,/Ox,/Zi,/MT,/Fd./x64/PhysXGpu/profile/CUDA_particles_src/UtilKernels.obj.pdb -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Include/foundation -IC:/b/83cefae98f3c0e/installers/workPhysX-3.3.4_WINDOWS_SDK_Source/Source/foundation/include -I../../../Include -I../../../Include/common -I../../../Include/geometry -I../../../Include/pxtask -I../../../Source/Common/src -I../../../Source/GeomUtils/headers -I../../../Source/GeomUtils/src -I../../../Source/LowLevel/API/include -I../../../Source/LowLevel/common/include/math -I../../../Source/PhysXGpu/src/common -I../../../Source/pxtask/src/CUDA -I../../PhysXGpu/src/CUDA --compile -o ./x64/PhysXGpu/profile/CUDA_particles_src/UtilKernels.obj ..\..\pxtask\src\CUDA\UtilKernels.cu</Command>
+			<Message Condition="'$(Configuration)|$(Platform)'=='profile|x64'">Building %(Identity)</Message>
+			<Outputs Condition="'$(Configuration)|$(Platform)'=='profile|x64'">./x64/PhysXGpu/profile/CUDA_particles_src/UtilKernels.obj;</Outputs>
+		</CustomBuild>
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="./PhysXCommon.vcxproj">
+			<ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+		</ProjectReference>
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="./PhysXProfileSDK.vcxproj">
+			<ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+		</ProjectReference>
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="./PxTask.vcxproj">
+			<ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+		</ProjectReference>
+	</ItemGroup>
+	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+	<ImportGroup Label="ExtensionTargets"></ImportGroup>
+</Project>

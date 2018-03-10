@@ -1,0 +1,54 @@
+#version 100
+
+uniform sampler2D texSampler;
+uniform sampler2D maskSampler;
+
+uniform mediump vec4 maskColorR;
+uniform mediump vec4 maskColorG;
+uniform mediump vec4 maskColorB;
+
+varying mediump vec4 color;
+varying mediump vec2 texCoord;
+
+
+mediump vec3 rgb2hsv(mediump vec3 c)
+{
+    mediump vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
+    mediump vec4 p = c.g < c.b ? vec4(c.bg, K.wz) : vec4(c.gb, K.xy);
+    mediump vec4 q = c.r < p.x ? vec4(p.xyw, c.r) : vec4(c.r, p.yzx);
+
+    mediump float d = q.x - min(q.w, q.y);
+    mediump float e = 1.0e-10;
+    return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
+}
+
+mediump vec3 hsv2rgb(mediump vec3 c)
+{
+    mediump vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+    mediump vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+}
+
+mediump vec3 hsvMask(mediump vec3 h, mediump vec4 m)
+{
+	h.x = h.x * m.a + m.r;
+    h.y = clamp(h.y + 2.0 * (m.g - 0.5), 0.0, 1.0);
+    h.z = clamp(h.z + 2.0 * (m.b - 0.5), 0.0, 1.0);
+    return h;
+}
+
+void main(void)
+{
+	mediump vec4 textureColor 	  = texture2D(texSampler, texCoord);
+	mediump vec4 masktextureColor = texture2D(maskSampler, texCoord);
+	mediump vec3 finalColor 	  = textureColor.rgb;
+	mediump vec3 hsv 			  = rgb2hsv(finalColor);
+	finalColor *= masktextureColor.r;
+	finalColor *= masktextureColor.g;
+	finalColor *= masktextureColor.b;
+	finalColor += hsv2rgb(hsvMask(hsv,maskColorR)) * (1.0 - masktextureColor.r);
+	finalColor += hsv2rgb(hsvMask(hsv,maskColorG)) * (1.0 - masktextureColor.g);
+	finalColor += hsv2rgb(hsvMask(hsv,maskColorB)) * (1.0 - masktextureColor.b);
+	finalColor *= color.rgb;
+	gl_FragColor = vec4(finalColor.rgb,color.a);
+}

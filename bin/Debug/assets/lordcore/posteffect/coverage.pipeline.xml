@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<pipeline>
+	<RenderTarget id="Coverage" material="pp_coverageshade.xml" width="" height="" scale="1.0">
+		<BindBuffer sampler="texLDRColor" sourceRT="" slot="0" />
+    <BindBuffer sampler="texCoverage" sourceRT="RTI_CoverageMap" slot="1" />
+	</RenderTarget>
+</pipeline>

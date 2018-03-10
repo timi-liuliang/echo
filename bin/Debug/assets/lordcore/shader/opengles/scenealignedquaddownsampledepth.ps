@@ -1,0 +1,11 @@
+#version 300 es
+
+uniform sampler2D texSampler;
+
+in mediump vec2 texCoord;
+
+void main(void)
+{
+	highp vec4 depth = texture(texSampler, texCoord);
+    gl_FragDepth = depth.r;
+}

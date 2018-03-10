@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ItemGroup Label="ProjectConfigurations">
+		<ProjectConfiguration Include="debug|x64">
+			<Configuration>debug</Configuration>
+			<Platform>x64</Platform>
+		</ProjectConfiguration>
+		<ProjectConfiguration Include="checked|x64">
+			<Configuration>checked</Configuration>
+			<Platform>x64</Platform>
+		</ProjectConfiguration>
+		<ProjectConfiguration Include="profile|x64">
+			<Configuration>profile</Configuration>
+			<Platform>x64</Platform>
+		</ProjectConfiguration>
+		<ProjectConfiguration Include="release|x64">
+			<Configuration>release</Configuration>
+			<Platform>x64</Platform>
+		</ProjectConfiguration>
+	</ItemGroup>
+	<PropertyGroup Label="Globals">
+		<ProjectGuid>{7705FBF6-A4A8-E380-0E1A-25DAC1D2C9A8}</ProjectGuid>
+		<RootNamespace>PhysXVisualDebuggerSDK</RootNamespace>
+	</PropertyGroup>
+	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug|x64'" Label="Configuration">
+		<ConfigurationType>StaticLibrary</ConfigurationType>
+		<PlatformToolset>v110</PlatformToolset>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='checked|x64'" Label="Configuration">
+		<ConfigurationType>StaticLibrary</ConfigurationType>
+		<PlatformToolset>v110</PlatformToolset>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='profile|x64'" Label="Configuration">
+		<ConfigurationType>StaticLibrary</ConfigurationType>
+		<PlatformToolset>v110</PlatformToolset>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'" Label="Configuration">
+		<ConfigurationType>StaticLibrary</ConfigurationType>
+		<PlatformToolset>v110</PlatformToolset>
+	</PropertyGroup>
+	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+	<ImportGroup Label="ExtensionSettings">
+	</ImportGroup>
+	<ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='debug|x64'">
+		<Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+	</ImportGroup>
+	<ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='checked|x64'">
+		<Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+	</ImportGroup>
+	<ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='profile|x64'">
+		<Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+	</ImportGroup>
+	<ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='release|x64'">
+		<Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+	</ImportGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug|x64'">
+		<OutDir>./../../../Lib/vc11win64\</OutDir>
+		<IntDir>./x64/PhysXVisualDebuggerSDK/debug\</IntDir>
+		<TargetExt>.lib</TargetExt>
+		<TargetName>$(ProjectName)DEBUG</TargetName>
+		<CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+		<CodeAnalysisRules />
+		<CodeAnalysisRuleAssemblies />
+	</PropertyGroup>
+	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug|x64'">
+		<ClCompile>
+			<TreatWarningAsError>true</TreatWarningAsError>
+			<StringPooling>true</StringPooling>
+			<RuntimeTypeInfo>false</RuntimeTypeInfo>
+			<BufferSecurityCheck>false</BufferSecurityCheck>
+			<FloatingPointModel>Fast</FloatingPointModel>
+			<BasicRuntimeChecks>UninitializedLocalUsageCheck</BasicRuntimeChecks>
+			<AdditionalOptions>/MP /Wall /wd4514 /wd4820 /wd4127 /wd4710 /wd4711 /d2Zi+</AdditionalOptions>
+			<Optimization>Disabled</Optimization>
+			<AdditionalIncludeDirectories>./../../PhysXProfileSDK;./../../../Include/foundation;./../../foundation/include;./../../../Include/physxprofilesdk;./../../../Include/physxvisualdebuggersdk;./../../../Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+			<PreprocessorDefinitions>WIN32;WIN64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_WINSOCK_DEPRECATED_NO_WARNINGS;PX_PHYSX_STATIC_LIB;_DEBUG;PX_DEBUG;PX_CHECKED;PX_SUPPORT_VISUAL_DEBUGGER;PX_NVTX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+			<ExceptionHandling>false</ExceptionHandling>
+			<WarningLevel>Level4</WarningLevel>
+			<RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+			<PrecompiledHeader>NotUsing</PrecompiledHeader>
+			<PrecompiledHeaderFile></PrecompiledHeaderFile>
+			<ProgramDataBaseFileName>$(TargetDir)\$(TargetName).pdb</ProgramDataBaseFileName>
+			<DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+		</ClCompile>
+		<Lib>
+			<AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+			<OutputFile>$(OutDir)$(ProjectName)DEBUG.lib</OutputFile>
+			<AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+			<ProgramDatabaseFile>$(TargetDir)\$(TargetName).pdb</ProgramDatabaseFile>
+			<TargetMachine>MachineX64</TargetMachine>
+		</Lib>
+		<ResourceCompile>
+		</ResourceCompile>
+		<ProjectReference>
+			<LinkLibraryDependencies>true</LinkLibraryDependencies>
+		</ProjectReference>
+	</ItemDefinitionGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='checked|x64'">
+		<OutDir>./../../../Lib/vc11win64\</OutDir>
+		<IntDir>./x64/PhysXVisualDebuggerSDK/checked\</IntDir>
+		<TargetExt>.lib</TargetExt>
+		<TargetName>$(ProjectName)CHECKED</TargetName>
+		<CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+		<CodeAnalysisRules />
+		<CodeAnalysisRuleAssemblies />
+	</PropertyGroup>
+	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='checked|x64'">
+		<ClCompile>
+			<TreatWarningAsError>true</TreatWarningAsError>
+			<StringPooling>true</StringPooling>
+			<RuntimeTypeInfo>false</RuntimeTypeInfo>
+			<BufferSecurityCheck>false</BufferSecurityCheck>
+			<FloatingPointModel>Fast</FloatingPointModel>
+			<AdditionalOptions>/MP /Wall /wd4514 /wd4820 /wd4127 /wd4710 /wd4711 /d2Zi+</AdditionalOptions>
+			<Optimization>Full</Optimization>
+			<AdditionalIncludeDirectories>./../../PhysXProfileSDK;./../../../Include/foundation;./../../foundation/include;./../../../Include/physxprofilesdk;./../../../Include/physxvisualdebuggersdk;./../../../Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+			<PreprocessorDefinitions>WIN32;WIN64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_WINSOCK_DEPRECATED_NO_WARNINGS;PX_PHYSX_STATIC_LIB;NDEBUG;PX_CHECKED;PX_SUPPORT_VISUAL_DEBUGGER;PX_NVTX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+			<ExceptionHandling>false</ExceptionHandling>
+			<WarningLevel>Level4</WarningLevel>
+			<RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+			<PrecompiledHeader>NotUsing</PrecompiledHeader>
+			<PrecompiledHeaderFile></PrecompiledHeaderFile>
+			<ProgramDataBaseFileName>$(TargetDir)\$(TargetName).pdb</ProgramDataBaseFileName>
+			<DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+		</ClCompile>
+		<Lib>
+			<AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+			<OutputFile>$(OutDir)$(ProjectName)CHECKED.lib</OutputFile>
+			<AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+			<ProgramDatabaseFile>$(TargetDir)\$(TargetName).pdb</ProgramDatabaseFile>
+			<TargetMachine>MachineX64</TargetMachine>
+		</Lib>
+		<ResourceCompile>
+		</ResourceCompile>
+		<ProjectReference>
+			<LinkLibraryDependencies>true</LinkLibraryDependencies>
+		</ProjectReference>
+	</ItemDefinitionGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='profile|x64'">
+		<OutDir>./../../../Lib/vc11win64\</OutDir>
+		<IntDir>./x64/PhysXVisualDebuggerSDK/profile\</IntDir>
+		<TargetExt>.lib</TargetExt>
+		<TargetName>$(ProjectName)PROFILE</TargetName>
+		<CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+		<CodeAnalysisRules />
+		<CodeAnalysisRuleAssemblies />
+	</PropertyGroup>
+	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='profile|x64'">
+		<ClCompile>
+			<TreatWarningAsError>true</TreatWarningAsError>
+			<StringPooling>true</StringPooling>
+			<RuntimeTypeInfo>false</RuntimeTypeInfo>
+			<BufferSecurityCheck>false</BufferSecurityCheck>
+			<FloatingPointModel>Fast</FloatingPointModel>
+			<AdditionalOptions>/MP /Wall /wd4514 /wd4820 /wd4127 /wd4710 /wd4711 /d2Zi+</AdditionalOptions>
+			<Optimization>Full</Optimization>
+			<AdditionalIncludeDirectories>./../../PhysXProfileSDK;./../../../Include/foundation;./../../foundation/include;./../../../Include/physxprofilesdk;./../../../Include/physxvisualdebuggersdk;./../../../Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+			<PreprocessorDefinitions>WIN32;WIN64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_WINSOCK_DEPRECATED_NO_WARNINGS;PX_PHYSX_STATIC_LIB;NDEBUG;PX_PROFILE;PX_SUPPORT_VISUAL_DEBUGGER;PX_NVTX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+			<ExceptionHandling>false</ExceptionHandling>
+			<WarningLevel>Level4</WarningLevel>
+			<RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+			<PrecompiledHeader>NotUsing</PrecompiledHeader>
+			<PrecompiledHeaderFile></PrecompiledHeaderFile>
+			<ProgramDataBaseFileName>$(TargetDir)\$(TargetName).pdb</ProgramDataBaseFileName>
+			<DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+		</ClCompile>
+		<Lib>
+			<AdditionalOptions>/INCREMENTAL:NO</AdditionalOptions>
+			<AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+			<OutputFile>$(OutDir)$(ProjectName)PROFILE.lib</OutputFile>
+			<AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+			<ProgramDatabaseFile>$(TargetDir)\$(TargetName).pdb</ProgramDatabaseFile>
+			<TargetMachine>MachineX64</TargetMachine>
+		</Lib>
+		<ResourceCompile>
+		</ResourceCompile>
+		<ProjectReference>
+			<LinkLibraryDependencies>true</LinkLibraryDependencies>
+		</ProjectReference>
+	</ItemDefinitionGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'">
+		<OutDir>./../../../Lib/vc11win64\</OutDir>
+		<IntDir>./x64/PhysXVisualDebuggerSDK/release\</IntDir>
+		<TargetExt>.lib</TargetExt>
+		<TargetName>$(ProjectName)</TargetName>
+		<CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+		<CodeAnalysisRules />
+		<CodeAnalysisRuleAssemblies />
+	</PropertyGroup>
+	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'">
+		<ClCompile>
+			<TreatWarningAsError>true</TreatWarningAsError>
+			<StringPooling>true</StringPooling>
+			<RuntimeTypeInfo>false</RuntimeTypeInfo>
+			<BufferSecurityCheck>false</BufferSecurityCheck>
+			<FloatingPointModel>Fast</FloatingPointModel>
+			<AdditionalOptions>/MP /Wall /wd4514 /wd4820 /wd4127 /wd4710 /wd4711 /d2Zi+</AdditionalOptions>
+			<Optimization>Full</Optimization>
+			<AdditionalIncludeDirectories>./../../PhysXProfileSDK;./../../../Include/foundation;./../../foundation/include;./../../../Include/physxprofilesdk;./../../../Include/physxvisualdebuggersdk;./../../../Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+			<PreprocessorDefinitions>WIN32;WIN64;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_WINSOCK_DEPRECATED_NO_WARNINGS;PX_PHYSX_STATIC_LIB;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+			<ExceptionHandling>false</ExceptionHandling>
+			<WarningLevel>Level4</WarningLevel>
+			<RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+			<PrecompiledHeader>NotUsing</PrecompiledHeader>
+			<PrecompiledHeaderFile></PrecompiledHeaderFile>
+			<ProgramDataBaseFileName>$(TargetDir)\$(TargetName).pdb</ProgramDataBaseFileName>
+			<DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+		</ClCompile>
+		<Lib>
+			<AdditionalOptions>/INCREMENTAL:NO</AdditionalOptions>
+			<AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+			<OutputFile>$(OutDir)$(ProjectName).lib</OutputFile>
+			<AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+			<ProgramDatabaseFile>$(TargetDir)\$(TargetName).pdb</ProgramDatabaseFile>
+			<TargetMachine>MachineX64</TargetMachine>
+		</Lib>
+		<ResourceCompile>
+		</ResourceCompile>
+		<ProjectReference>
+			<LinkLibraryDependencies>true</LinkLibraryDependencies>
+		</ProjectReference>
+	</ItemDefinitionGroup>
+	<ItemGroup>
+		<ClInclude Include="..\..\..\Include\physxvisualdebuggersdk\PvdConnection.h">
+		</ClInclude>
+		<ClInclude Include="..\..\..\Include\physxvisualdebuggersdk\PvdConnectionFlags.h">
+		</ClInclude>
+		<ClInclude Include="..\..\..\Include\physxvisualdebuggersdk\PvdConnectionManager.h">
+		</ClInclude>
+		<ClInclude Include="..\..\..\Include\physxvisualdebuggersdk\PvdDataStream.h">
+		</ClInclude>
+		<ClInclude Include="..\..\..\Include\physxvisualdebuggersdk\PvdDataStreamHelpers.h">
+		</ClInclude>
+		<ClInclude Include="..\..\..\Include\physxvisualdebuggersdk\PvdErrorCodes.h">
+		</ClInclude>
+		<ClInclude Include="..\..\..\Include\physxvisualdebuggersdk\PvdNetworkStreams.h">
+		</ClInclude>
+		<ClInclude Include="..\..\..\Include\physxvisualdebuggersdk\PvdObjectModelBaseTypeDefs.h">
+		</ClInclude>
+		<ClInclude Include="..\..\..\Include\physxvisualdebuggersdk\PvdObjectModelBaseTypes.h">
+		</ClInclude>
+		<ClInclude Include="..\..\..\Include\physxvisualdebuggersdk\PvdUserRenderer.h">
+		</ClInclude>
+	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="..\..\PhysXVisualDebuggerSDK\PvdBits.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXVisualDebuggerSDK\PvdByteStreams.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXVisualDebuggerSDK\PvdCommStreamEvents.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXVisualDebuggerSDK\PvdCommStreamEventSink.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXVisualDebuggerSDK\PvdCommStreamEventTypes.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXVisualDebuggerSDK\PvdCommStreamSDKEventTypes.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXVisualDebuggerSDK\PvdCommStreamTypes.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXVisualDebuggerSDK\PvdFoundation.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXVisualDebuggerSDK\PvdInternalByteStreams.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXVisualDebuggerSDK\PvdMarshalling.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXVisualDebuggerSDK\PvdMemNetworkStreams.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXVisualDebuggerSDK\PvdObjectModel.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXVisualDebuggerSDK\PvdObjectModelEventStream.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXVisualDebuggerSDK\PvdObjectModelInternalTypeDefs.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXVisualDebuggerSDK\PvdObjectModelInternalTypes.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXVisualDebuggerSDK\PvdObjectModelMetaData.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXVisualDebuggerSDK\PvdUserRenderImpl.h">
+		</ClInclude>
+		<ClInclude Include="..\..\PhysXVisualDebuggerSDK\PvdUserRenderTypes.h">
+		</ClInclude>
+		<ClCompile Include="..\..\PhysXVisualDebuggerSDK\PvdConnection.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\PhysXVisualDebuggerSDK\PvdConnectionManager.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\PhysXVisualDebuggerSDK\PvdDataStream.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\PhysXVisualDebuggerSDK\PvdNetworkStreams.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\PhysXVisualDebuggerSDK\PvdObjectModelMetaData.cpp">
+		</ClCompile>
+		<ClCompile Include="..\..\PhysXVisualDebuggerSDK\PvdUserRenderer.cpp">
+		</ClCompile>
+	</ItemGroup>
+	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+	<ImportGroup Label="ExtensionTargets"></ImportGroup>
+</Project>

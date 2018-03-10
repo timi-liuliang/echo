@@ -1,0 +1,18 @@
+#version 100
+precision mediump float;
+#include <tonemapping.inc>
+
+uniform sampler2D sceneColorSampler;
+uniform sampler2D glowSampler;
+varying mediump vec2 texCoord;
+
+void main(void)
+{
+	mediump vec4 scene = texture2D( sceneColorSampler, texCoord );
+	mediump vec4 glow = texture2D( glowSampler, texCoord ) * 0.5;
+
+	mediump vec4 final = scene + glow;
+	
+	gl_FragColor = final;
+	gl_FragColor.a = scene.a;
+}

@@ -1,0 +1,26 @@
+#version 100
+
+uniform sampler2D noiseSampler;
+uniform sampler2D scSampler;
+uniform highp float dissrotStrength;
+uniform highp vec2 centerUV;
+
+varying highp vec4 color;
+varying highp vec2 texCoord;
+varying highp  vec4 clipPos;
+
+void main(void)
+{
+	//获取屏幕空间坐标
+	highp vec2 scTexcoord = ((clipPos.xy / clipPos.w) + 1.0) / 2.0; 
+	//获取扭曲贴图上的局部强度
+	highp float localStrength  =  texture2D(noiseSampler, texCoord).a;
+	//根据中心点来计算出要扭曲的方向矢量(如果不是中心模式centerUV为0,0)
+	highp vec2 noise = normalize(centerUV - texCoord) * localStrength;
+	//将偏移加在原来的屏幕空间坐标上,后面乘以一个全局的扭曲强度(0-1)
+	//color.a 是用来方面美术通过控制器调节颜色alpha值来进行额外控制
+	highp vec2 offset = scTexcoord + noise *clamp(dissrotStrength,0.0,1.0) * color.a;
+	//用偏移后的屏幕UV来对贴图进行采样得到最终结果
+	highp vec4 scColor = texture2D(scSampler,offset);
+	gl_FragColor  = scColor;
+}

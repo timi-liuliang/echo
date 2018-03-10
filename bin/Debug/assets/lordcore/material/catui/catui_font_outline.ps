@@ -1,0 +1,19 @@
+#version 100
+
+precision mediump float;
+
+uniform sampler2D Albedo;
+uniform vec4	  OutlineColor;
+
+varying mediump vec4 color;
+varying mediump vec2 texCoord;
+
+void main(void)
+{
+	mediump vec4 texColor = texture2D(Albedo, texCoord);
+	float fontAlpha = texColor.a;
+	float outlineAlpha = texColor.g;
+	vec4 surfaceColor = color * fontAlpha + OutlineColor * (1.0-fontAlpha);
+	
+	gl_FragColor = vec4(surfaceColor.rgb, max(fontAlpha, outlineAlpha) * surfaceColor.a);
+}

@@ -1,0 +1,48 @@
+#version 100
+
+uniform sampler2D texBackBuffer;
+
+varying mediump vec4 texCoord0;
+varying mediump vec4 texCoord1;
+varying mediump vec4 texCoord2;
+varying mediump vec4 texCoord3;
+varying mediump vec4 texCoord4;
+//varying mediump vec4 texCoord5;
+void main(void)
+{
+	lowp vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
+
+	lowp vec4 sample = texture2D( texBackBuffer , texCoord0.xy );
+	color += vec4( sample.rgb * sample.a, sample.a);
+
+	sample = texture2D( texBackBuffer , texCoord0.zw );
+	color += vec4( sample.rgb * sample.a, sample.a);
+
+	sample = texture2D( texBackBuffer , texCoord1.xy );
+	color += vec4( sample.rgb * sample.a, sample.a);
+
+	sample = texture2D( texBackBuffer , texCoord1.zw );
+	color += vec4( sample.rgb * sample.a, sample.a);
+	
+	sample = texture2D( texBackBuffer , texCoord2.xy );
+	color += vec4( sample.rgb * sample.a, sample.a);
+
+	sample = texture2D( texBackBuffer , texCoord2.zw );
+	color += vec4( sample.rgb * sample.a, sample.a);
+
+	sample = texture2D( texBackBuffer , texCoord3.xy );
+	color += vec4( sample.rgb * sample.a, sample.a);
+
+	sample = texture2D( texBackBuffer , texCoord3.zw );
+	color += vec4( sample.rgb * sample.a, sample.a);
+	
+	sample = texture2D( texBackBuffer , texCoord4.xy );
+	color += vec4( sample.rgb * sample.a, sample.a);
+
+	sample = texture2D( texBackBuffer , texCoord4.zw );
+	color += vec4( sample.rgb * sample.a, sample.a);
+
+	
+	color.rgb = color.rgb / 10.0;	
+	gl_FragColor = color;
+}

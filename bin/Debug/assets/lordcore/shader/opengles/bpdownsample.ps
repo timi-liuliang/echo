@@ -1,0 +1,22 @@
+#version 100
+
+uniform sampler2D texSampler;
+
+uniform mediump vec4 arrayDSGOffset[16];
+
+varying mediump vec2 texCoord;
+
+
+void main(void)
+{
+    mediump vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
+	
+	for( int i = 0; i < 16; i++ )
+	{
+		color += texture2D( texSampler, texCoord + vec2(arrayDSGOffset[i].x, arrayDSGOffset[i].y) );
+	}
+
+	color /= 16.0;
+	
+	gl_FragColor = color;
+}

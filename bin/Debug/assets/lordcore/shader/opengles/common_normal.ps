@@ -1,0 +1,43 @@
+#version 100
+precision mediump float;
+#include <tonemapping.inc>
+#include <fog_ps.inc>
+#include <hdr_ldr.inc>
+
+uniform mediump vec4 naturalColor;
+uniform mediump vec4 LMUV;
+uniform mediump vec3 LMScale;
+uniform sampler2D texSampler;
+uniform sampler2D LMSampler;
+
+
+varying mediump vec4 ofogColor;
+varying mediump vec2 texCoord;
+varying mediump vec2 texCoord1;
+
+#ifdef FILTER_COLOR
+uniform mediump vec4 filterColor;
+uniform mediump float filterGray;
+#endif
+
+void main(void)
+{
+	mediump vec4 textureColor = texture2D(texSampler, texCoord);
+	if(textureColor.a < 0.5 )
+		discard;
+
+	textureColor.rgb = srgb_to_linear(textureColor.rgb);
+	mediump vec3 LMColor    = texture2d_linear(LMSampler, texCoord1.xy*LMUV.zw+LMUV.xy).rgb * LMScale;
+	
+	mediump vec4 finalColor = vec4(textureColor.rgb * LMColor, textureColor.a) + naturalColor;
+	
+	gl_FragColor = vec4(mix(ofogColor.rgb, finalColor.rgb, ofogColor.a), finalColor.a);
+	gl_FragColor.rgb = mix(gl_FragColor.rgb, varHeightFog.rgb, ComputeHeightFog(varHeightFog.a));
+
+#ifdef FILTER_COLOR
+	mediump float gray = rgb_to_gray(gl_FragColor.r, gl_FragColor.g, gl_FragColor.b);
+	mediump vec3 vec_gray = vec3(gray, gray, gray);
+	gl_FragColor = vec4(mix(gl_FragColor.rgb, vec_gray, filterGray), gl_FragColor.a) * filterColor;
+#endif
+	gl_FragColor = hdr2ldr(gl_FragColor);
+}

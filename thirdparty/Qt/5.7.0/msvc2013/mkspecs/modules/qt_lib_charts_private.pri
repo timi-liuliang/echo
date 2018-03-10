@@ -1,0 +1,11 @@
+QT.charts_private.VERSION = 5.7.0
+QT.charts_private.MAJOR_VERSION = 5
+QT.charts_private.MINOR_VERSION = 7
+QT.charts_private.PATCH_VERSION = 0
+QT.charts_private.name = QtCharts
+QT.charts_private.module =
+QT.charts_private.libs = $$QT_MODULE_LIB_BASE
+QT.charts_private.includes = $$QT_MODULE_INCLUDE_BASE/QtCharts/5.7.0 $$QT_MODULE_INCLUDE_BASE/QtCharts/5.7.0/QtCharts
+QT.charts_private.frameworks =
+QT.charts_private.depends = charts
+QT.charts_private.module_config = v2 internal_module

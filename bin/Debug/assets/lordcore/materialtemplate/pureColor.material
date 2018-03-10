@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<MaterialRoot>
+	<MaterialTemplate name="pureColor.mt" stage="Transparent" macros=""/>
+	<BlendState>
+	</BlendState>
+	<DepthStencilState/>
+	<Uniform>
+		<Property name="PureColor" type="SPT_VEC4" count="1" value="1 0 0 0"/>
+		<Property name="Albedo" type="SPT_TEXTURE" count="1" value="offical_matertal_template.tga"/>
+	</Uniform>
+	<Controllers/>
+</MaterialRoot>
+

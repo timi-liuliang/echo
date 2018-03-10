@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<pipeline>
+	<RenderTarget id="shrink" material="pp_bloomshrink.xml" width="256" height="256" scale="1" formate="PF_RGBA16_FLOAT">
+		<BindBuffer sampler="tInput" sourceRT="RTI_LDRSceneColorMap" slot="0" mutable="1"/>
+	</RenderTarget>
+	<RenderTarget id="bloom0" material="pp_bloom.xml" width="256" height="256" scale="1" formate="PF_RGBA16_FLOAT" custom="BloomEffectPass0">
+		<BindBuffer sampler="tInput" sourceRT="shrink" slot="0" />
+		<CustomUniform name="bloomSize" x="0.008" />
+	</RenderTarget>
+	<RenderTarget id="bloom1" material="pp_bloom.xml" width="256" height="256" scale="1" formate="PF_RGBA16_FLOAT" custom="BloomEffectPass1">
+		<BindBuffer sampler="tInput" sourceRT="bloom0" slot="0" />
+		<CustomUniform name="bloomSize" x="0.008" />
+	</RenderTarget>
+</pipeline>

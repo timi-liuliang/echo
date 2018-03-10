@@ -1,0 +1,13 @@
+#version 100
+
+uniform sampler2D Albedo;
+
+varying mediump vec2 texCoord;
+
+void main(void)
+{
+	// textureColor
+    mediump vec4 surfaceColor = texture2D(Albedo, texCoord);
+
+	gl_FragColor = surfaceColor;
+}

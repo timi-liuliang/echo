@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<PostEffectQueue>
+	<PostEffect name="GuassBlur" pipeline=""/>
+	<PostEffect name="Dof" pipeline=""/>
+	<PostEffect name="Bloom" pipeline="marmosetbloom.pipeline.xml"/>
+	<PostEffect name="MotionBlur" pipeline="motionblur.pipeline.xml"/>
+	<PostEffect name="PBR" pipeline="pbr.pipeline.xml" enable="true"/>
+</PostEffectQueue>
+

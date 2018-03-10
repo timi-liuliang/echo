@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ItemGroup>
+		<Filter Include="resource"><!--  -->
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<ResourceCompile Include="..\resource\apex.rc">
+			<Filter>resource</Filter>
+		</ResourceCompile>
+	</ItemGroup>
+	<ItemGroup>
+		<Filter Include="include"><!--  -->
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="..\..\framework\include\ApexAssetPreviewScene.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\ApexCustomBufferIterator.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\ApexDefaultStream.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\ApexInteropableBuffer.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\ApexPhysXObjectDesc.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\ApexRenderDebug.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\ApexRenderMeshActor.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\ApexRenderMeshAsset.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\ApexRenderMeshAssetAuthoring.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\ApexRenderSubmesh.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\ApexResourceProvider.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\ApexScene.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\ApexSceneTasks.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\ApexSceneUserNotify.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\ApexSDK.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\ApexStubPxProfileZone.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\ApexVertexBuffer.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\ApexVertexFormat.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\BufferF32x1.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\BufferF32x2.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\BufferF32x3.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\BufferF32x4.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\BufferU16x1.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\BufferU16x2.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\BufferU16x3.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\BufferU16x4.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\BufferU32x1.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\BufferU32x2.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\BufferU32x3.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\BufferU32x4.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\BufferU8x1.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\BufferU8x2.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\BufferU8x3.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\BufferU8x4.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\FrameworkEventDefs.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\FrameworkParamClasses.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\FrameworkPerfScope.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\MirrorScene.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\NxApexCudaProfileManager.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\NxCudaModuleScene.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\PVD28Binding.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\PVDBindingErrorStream.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\PVDParameterizedHandler.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\PxPVDRenderDebug.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\RenderMeshAssetParameters.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\RenderResourceManagerWrapper.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\SubmeshParameters.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\SurfaceBufferParameters.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\ThreadPool.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\VertexBufferParameters.h">
+			<Filter>include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\include\VertexFormatParameters.h">
+			<Filter>include</Filter>
+		</ClInclude>
+	</ItemGroup>
+	<ItemGroup>
+		<Filter Include="public"><!--  -->
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<Filter Include="public\PhysX3"><!--  -->
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="..\..\framework\public\PhysX3\NxPhysXSDKVersion.h">
+			<Filter>public\PhysX3</Filter>
+		</ClInclude>
+	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="..\..\framework\public\NxApex.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxApexActor.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxApexAsset.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxApexAssetPreview.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxApexAssetPreviewScene.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxApexContext.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxApexCudaTestManager.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxApexCustomBufferIterator.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxApexDefs.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxApexDesc.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxApexInterface.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxApexNameSpace.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxApexPhysXObjectDesc.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxApexReadWriteLock.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxApexRenderable.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxApexRenderBufferData.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxApexRenderContext.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxApexRenderDataFormat.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxApexRenderDataProvider.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxApexRenderDebug.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxApexRWLockable.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxApexScene.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxApexSDK.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxApexSDKCachedData.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxApexSDKVersionString.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxApexShape.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxApexUserProgress.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxApexUsingNamespace.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxApexUtils.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxCurve.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxFromPx.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxInstancedObjectSimulationAsset.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxLock.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxMirrorScene.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxModule.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxRenderMesh.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxRenderMeshActor.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxRenderMeshActorDesc.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxRenderMeshAsset.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxResourceCallback.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxResourceProvider.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxTestBase.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxUserOpaqueMesh.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxUserRenderBoneBuffer.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxUserRenderBoneBufferDesc.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxUserRenderer.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxUserRenderIndexBuffer.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxUserRenderIndexBufferDesc.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxUserRenderInstanceBuffer.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxUserRenderInstanceBufferDesc.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxUserRenderResource.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxUserRenderResourceDesc.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxUserRenderResourceManager.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxUserRenderSpriteBuffer.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxUserRenderSpriteBufferDesc.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxUserRenderSurfaceBuffer.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxUserRenderSurfaceBufferDesc.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxUserRenderVertexBuffer.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxUserRenderVertexBufferDesc.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\NxVertexFormat.h">
+			<Filter>public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\framework\public\PVDBinding.h">
+			<Filter>public</Filter>
+		</ClInclude>
+	</ItemGroup>
+	<ItemGroup>
+		<Filter Include="src"><!--  -->
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<Filter Include="src\windows"><!--  -->
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<ClCompile Include="..\..\framework\src\windows\AgMMFile.cpp">
+			<Filter>src\windows</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\windows\ApexScenePlatform.cpp">
+			<Filter>src\windows</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\windows\PhysXIndicator.cpp">
+			<Filter>src\windows</Filter>
+		</ClCompile>
+	</ItemGroup>
+	<ItemGroup>
+		<ClCompile Include="..\..\framework\src\ApexAssetPreviewScene.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\ApexCreateSDK.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\ApexCustomBufferIterator.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\ApexRenderDebug.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\ApexRenderMeshActor.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\ApexRenderMeshAsset.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\ApexRenderMeshAssetAuthoring.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\ApexRenderSubmesh.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\ApexResourceProvider.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\ApexScene.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\ApexSceneTasks.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\ApexSceneUserNotify.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\ApexSDK.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\ApexSDKVersionString.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\ApexVertexBuffer.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\ApexVertexFormat.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\BufferF32x1.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\BufferF32x2.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\BufferF32x3.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\BufferF32x4.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\BufferU16x1.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\BufferU16x2.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\BufferU16x3.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\BufferU16x4.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\BufferU32x1.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\BufferU32x2.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\BufferU32x3.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\BufferU32x4.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\BufferU8x1.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\BufferU8x2.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\BufferU8x3.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\BufferU8x4.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\FrameworkProfile.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\MirrorScene.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\PVD28Binding.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\PVDBinding.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\PVDParameterizedHandler.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\PxPVDRenderDebug.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\RenderMeshAssetParameters.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\SubmeshParameters.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\SurfaceBufferParameters.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\ThreadPool.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\VertexBufferParameters.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\framework\src\VertexFormatParameters.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+	</ItemGroup>
+	<ItemGroup>
+		<Filter Include="param"><!--  -->
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="..\..\framework\parameters\ApexRenderMeshAssetParamSchema.pl">
+			<Filter>param</Filter>
+		</None>
+	</ItemGroup>
+</Project>

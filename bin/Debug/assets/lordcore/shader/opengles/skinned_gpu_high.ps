@@ -1,0 +1,47 @@
+#version 100
+
+uniform sampler2D texSampler;
+//uniform sampler2D texMaskSampler;
+
+uniform mediump vec4 naturalColor;
+// uniform mediump vec3 litDir;
+// uniform mediump vec4 litColor;
+// uniform mediump vec4 ambtColor;
+uniform mediump vec4 edgeColor;
+uniform mediump vec4 colorParams;
+uniform mediump vec3 camPos;
+uniform mediump vec4 litParam[3];
+
+varying mediump vec2 texCoord;
+varying mediump vec4 worldPosition;
+varying mediump vec3 worldNormal;
+
+void main(void)
+{
+	mediump vec4 textureColor = texture2D(texSampler, texCoord);
+	//mediump vec4 maskColor = texture2D(texMaskSampler, texCoord);
+
+  mediump vec3 Normal = normalize(worldNormal);
+
+	mediump float diffuseLight = max(dot(litParam[0].xyz, Normal), 0.0);
+	mediump vec4 diffuse = (litParam[1] * diffuseLight + litParam[2] + naturalColor);
+	
+	// diffuse
+	gl_FragColor = textureColor*diffuse;
+	
+	//specular
+  mediump vec3 viewDir = normalize(camPos - worldPosition.rgb);
+	//mediump vec3 H = normalize(litParam[0].xyz + viewDir);
+	//mediump float NdotH = max(dot(Normal, H),0.0);
+	//mediump float specularLightps = pow(NdotH, colorParams.x * 128.0) * maskColor.r;
+	
+	//specularLightps = max(specularLightps, 0.0);
+	
+	//gl_FragColor += specularLightps*litParam[1];
+	
+	//rim
+	mediump float cosView = dot(viewDir, Normal);
+	mediump float shineEdge = pow(1.0 - cosView*cosView, colorParams.y*128.0);
+  
+	gl_FragColor += max(shineEdge * edgeColor, 0.0);
+}

@@ -1,0 +1,265 @@
+#version 100
+
+uniform mediump vec3  CameraDirection;
+uniform mediump float DiffuseIntensity;		// 0.0-1.0;
+uniform mediump float SpecularIntensity;	// 0.0-16.f;
+uniform mediump float SpecularPow;			// 2.0,4.0,8.0,16.0,32.0;
+uniform mediump vec4  SpecularColor;
+uniform mediump float CurrentTime;			// current time
+
+uniform sampler2D Albedo;
+
+varying mediump vec2 texCoord;
+varying mediump vec3 normal;
+varying mediump vec3 position;
+
+#ifdef EFFECT_COLOR
+#include <effect_color.inc>
+#endif
+
+#ifdef USE_LIGHTMAP
+	uniform sampler2D LMSampler;
+	uniform mediump vec4 LMUV;
+	uniform mediump vec3 LMScale;
+	varying mediump vec2 texCoord1;
+#endif
+
+#ifdef TRANSPARENT
+	uniform mediump float AlphaValue;
+#endif
+
+#ifdef ALPHA_TEST
+	uniform mediump float AlphaTestValue;
+#endif
+
+#ifdef COVERAGE_ALPHA
+	uniform mediump vec3 coveragePos;
+	uniform mediump float fallOff;
+	uniform mediump float radius;
+#endif
+
+#define HSV_SUPPORT
+#ifdef  HSV_SUPPORT
+	#include <hsv.inc>
+#endif
+
+#ifdef SURFACE_COLOR_MASK
+	uniform mediump vec3  HSVOffset1;
+	uniform mediump vec3  HSVOffset2;
+	uniform mediump vec3  HSVOffset3;
+	uniform sampler2D 	  SurfaceColorMaskSampler;
+#elif defined(SURFACE_COLOR)
+	uniform mediump vec3  HSVOffset0;	
+#endif
+
+#ifdef NORMAL_MAP
+	uniform sampler2D NormalSampler;
+	varying mediump vec3 tangent;
+	varying mediump vec3 binormal;
+#endif
+
+#ifdef MASK_MAP
+	uniform sampler2D MaskSampler;
+#endif
+
+#ifdef FLOW_MAP
+	uniform mediump vec2 FlowDir;
+	uniform sampler2D 	 FlowSampler;
+#endif
+
+#ifdef RECEIVE_SHADOW
+	uniform mediump float ShadowShade;
+	uniform sampler2D 	  SMSampler;
+	varying mediump vec4  shadowmapSpace;
+#endif
+
+#define AMBIENT_LIGHT     1
+#define DIRECTIONAL_LIGHT 2
+#define POINT_LIGHT 	  3
+
+uniform mediump int	 LightArrayInfo[8];
+uniform mediump vec4 LightArrayData[16];
+
+// calculate diffuse
+void LightingPhase( out mediump vec4 oLightDiffuse, out mediump vec4 oLightSpecular, mediump vec3 inPixelWorldPosition, mediump vec3 inPixelNormal, mediump float inDiffuseIntensity, mediump float inSpecularIntensity, mediump float inSpecularPow)
+{
+	oLightDiffuse = vec4( 0.0, 0.0, 0.0, 1.0);
+	oLightSpecular= vec4( 0.0, 0.0, 0.0, 1.0);
+	
+	for( int i=0; i<8; i++)
+	{
+		int lightType = LightArrayInfo[i];
+		mediump vec4 LightColor = LightArrayData[i*2];
+		mediump vec4 LightDir   = LightArrayData[i*2+1];
+		if( lightType==AMBIENT_LIGHT)
+		{
+			oLightDiffuse.xyz += LightColor.xyz;
+		}
+		else if( lightType==DIRECTIONAL_LIGHT)
+		{
+			// Diffuse
+			oLightDiffuse.xyz  += (LightColor.xyz * max( dot(inPixelNormal, -LightDir.xyz), 0.0));
+			
+			// Specular
+			mediump vec3 reflectNormal = normalize( reflect( LightDir.xyz, inPixelNormal));
+			oLightSpecular.xyz += LightColor.xyz * pow( max( dot(reflectNormal, -CameraDirection), 0.0), inSpecularPow)* inSpecularIntensity;
+		}
+		else if( lightType==POINT_LIGHT)
+		{
+			mediump vec3  pixelToLight		  = LightDir.xyz-inPixelWorldPosition;
+			mediump	float pixelToLightLen	  = length( pixelToLight);
+			mediump float offsetDistance      = pixelToLightLen * LightDir.w;
+			mediump float DistanceAttenuation = max( pow( 1.0-clamp( offsetDistance, 0.0, 1.0), LightColor.w), 0.0);
+
+			oLightDiffuse.xyz += LightColor.xyz * DistanceAttenuation * max( dot(inPixelNormal, pixelToLight/pixelToLightLen), 0.0);
+			
+			// Specular
+			mediump vec3 reflectNormal = normalize( reflect( -pixelToLight, inPixelNormal));
+			oLightSpecular.xyz += LightColor.rgb  * DistanceAttenuation * pow( max( dot(reflectNormal, -CameraDirection), 0.0), inSpecularPow)* inSpecularIntensity;
+		}
+	}
+	
+	oLightDiffuse *= inDiffuseIntensity;
+	oLightSpecular *= SpecularColor;
+}
+
+#ifdef EDGE_SHINE
+	uniform mediump vec4  EdgeShineColor;
+	uniform mediump float EdgeShinePower;
+#endif
+
+mediump vec3 SurfaceNormal(mediump vec3 n, mediump vec3 vTangent, mediump vec3 vBinormal)
+{
+   mediump vec3 T = vTangent;
+   mediump vec3 B = vBinormal;
+   mediump vec3 N = gl_FrontFacing ? normal : -normal;
+   
+   N = normalize(N);
+   T -= dot(T, N)*N;
+   T = normalize(T);
+   B = (B - dot(B, N)*N) - dot(B, T)*T;
+   B = normalize(B);
+
+   n = 2.0*n - vec3(1.0);
+   return normalize(T*n.x + B*n.y + N*n.z);
+}
+
+void main(void)
+{
+	// textureColor
+	mediump vec4 surfaceColor = texture2D(Albedo, texCoord);
+	
+#ifdef USE_LIGHTMAP
+	mediump vec3 LMColor = texture2D(LMSampler, texCoord1.xy*LMUV.zw+LMUV.xy).rgb * LMScale;
+
+	surfaceColor = vec4(surfaceColor.rgb * LMColor, surfaceColor.a);
+#endif
+
+#ifdef ALPHA_TEST
+	// alpha test
+	if(surfaceColor.w < AlphaTestValue)
+	{
+		discard;
+	}
+#endif
+	
+#ifdef SURFACE_COLOR_MASK
+	mediump vec3 surfaceColorMask = texture2D(SurfaceColorMaskSampler, texCoord).xyz;
+	
+	mediump vec3 hsvSurfaceColor = hsvAdjust(rgb2hsv(surfaceColor.xyz), HSVOffset1 * surfaceColorMask.x + HSVOffset2*surfaceColorMask.y + HSVOffset3*surfaceColorMask.z);
+	surfaceColor.xyz = hsv2rgb(hsvSurfaceColor.xyz);
+	
+#elif defined(SURFACE_COLOR)
+	mediump vec3 hsvSurfaceColor = hsvAdjust(rgb2hsv(surfaceColor.xyz), HSVOffset0);
+	surfaceColor.xyz = hsv2rgb(hsvSurfaceColor.xyz);
+#endif
+	
+	mediump vec3 finalNormal = normal;
+	
+#ifdef NORMAL_MAP
+	// normal map
+	// mediump vec3 texnormal = 2.0 * texture2D(NormalSampler, texCoord).xyz - vec3(1.0);
+	// mediump vec3 binormal = normalize(cross(normal, tangent));
+	// finalNormal = vec3(dot(vec3(tangent.x, binormal.x, normal.x), texnormal), dot(vec3(tangent.y, binormal.y, normal.y), texnormal), dot(vec3(tangent.z, binormal.z, normal.z), texnormal));
+
+	finalNormal = SurfaceNormal(texture2D(NormalSampler, texCoord).xyz, tangent, binormal);
+#endif
+	
+#ifdef FLOW_MAP
+	mediump float flowRange = 1.0;
+	mediump vec4  flowColor = texture2D(FlowSampler, texCoord + FlowDir * CurrentTime * 0.001);
+#endif
+	
+	mediump float specularIntensity = SpecularIntensity;
+	
+#ifdef MASK_MAP
+	mediump vec3 texmask = texture2D(MaskSampler, texCoord).rgb;
+	specularIntensity *= texmask.r;
+
+	#ifdef FLOW_MAP
+		flowRange = texmask.y;
+	#endif
+#endif
+	
+#ifndef USE_LIGHTMAP
+	// illumination
+	mediump vec4 lightDiffuse;
+	mediump vec4 lightSpecular;
+	LightingPhase(lightDiffuse, lightSpecular, position, finalNormal, DiffuseIntensity, specularIntensity, SpecularPow);
+#else
+	mediump vec4 lightDiffuse = vec4(1.0);
+	mediump vec4 lightSpecular = vec4(0.0);
+#endif
+	
+#ifdef RECEIVE_SHADOW
+	// shadow
+	mediump vec4  smColor = vec4(1.0, 1.0, 1.0, 1.0);
+	mediump vec3  smCoordDepth = shadowmapSpace.xyz; 
+	mediump vec2  smCoord;
+	smCoord = smCoordDepth.xy * 0.5 + 0.5;
+	mediump float dxx;
+	mediump float dx = 1.0;
+	//if(smCoord.x >= 1.0 || smCoord.y>=1.0 || smCoord.x<=0.0 || smCoord.y<=0.0)
+	//	dx = 1.0;
+	//else
+	{
+		mediump float z = clamp(smCoordDepth.z, 0.0, 1.0);
+		dxx = dot(vec4(texture2D(SMSampler, smCoord)) ,vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+		dx = 2.71828 - exp((z-dxx)*1024.0);
+	}
+	dx = clamp(dx,ShadowShade,1.0);
+	smColor = vec4(dx,dx,dx, 1.0);
+#else
+	mediump vec4 smColor = vec4(1.0, 1.0, 1.0, 1.0);
+#endif
+	
+#ifdef FLOW_MAP
+	gl_FragColor = mix(surfaceColor, mix(surfaceColor, flowColor, flowColor.a), flowRange) * lightDiffuse * smColor + lightSpecular;
+#else
+	gl_FragColor = surfaceColor * lightDiffuse * smColor + lightSpecular;
+#endif
+
+#ifdef EDGE_SHINE
+	mediump float edgeIntensity = clamp(1.0 - abs(dot(CameraDirection, normal)), 0.0, 1.0);
+//	mediump float edgeMixValue  = pow(edgeIntensity, EdgeShinePower);
+	gl_FragColor = mix(gl_FragColor, EdgeShineColor, pow(edgeIntensity, EdgeShinePower));
+#endif
+
+#ifdef TRANSPARENT
+	gl_FragColor.a = AlphaValue;
+#endif
+
+#ifdef EFFECT_COLOR
+    gl_FragColor = ComputeEffectColor(gl_FragColor);
+#endif
+
+#ifdef COVERAGE_ALPHA
+	mediump vec3 curPos = coveragePos - vec3(position.y-coveragePos.y, 0.0, position.y-coveragePos.y) * CameraDirection;
+	curPos.y = position.y;
+	mediump float delta = distance(position, curPos);
+	if(delta <= radius)
+	{
+		gl_FragColor.a = min(pow(delta / radius, fallOff), 1.0) * gl_FragColor.a;
+	}
+#endif
+}

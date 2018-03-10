@@ -1,0 +1,50 @@
+#version 100
+precision mediump float;
+#include <tonemapping.inc>
+#include <hdr_ldr.inc>
+#include <fog_ps.inc>
+
+#ifdef HEIGHT_FOG	
+    uniform vec4 FogColor;
+    uniform float FogHeight;
+#endif
+
+uniform sampler2D Albedo;
+
+varying vec2 texCoord;
+varying vec3 normal;
+varying vec3 position;
+
+#ifdef DOUBLE_SKY
+	uniform sampler2D Albedo2;
+	uniform float Sky1ToSky2;
+#endif
+
+#ifdef RECEIVE_FOG
+	varying vec4 ofogColor;
+#endif
+
+void main(void)
+{
+  vec4 surfaceColor = texture2d_linear(Albedo, texCoord);
+	
+#ifdef DOUBLE_SKY
+	surfaceColor = mix(surfaceColor, texture2d_linear(Albedo2, texCoord), Sky1ToSky2) ;
+#endif
+
+	gl_FragColor = surfaceColor;
+
+#ifdef HEIGHT_FOG	
+	float fogFactor = min(1.0, position.y / FogHeight);
+	vec3 heightFogColor = FogColor.rgb * FogColor.rgb * 3.0;
+	vec3 fogColorLinear = mix(heightFogColor, surfaceColor.rgb, fogFactor);
+	gl_FragColor.rgb = fogColorLinear;
+#endif
+
+#ifdef RECEIVE_FOG
+	gl_FragColor.xyz = mix(ofogColor.xyz, gl_FragColor.xyz, ofogColor.a);
+	gl_FragColor.rgb = mix(gl_FragColor.rgb, varHeightFog.rgb, ComputeHeightFog(varHeightFog.a));
+#endif
+
+	gl_FragColor = hdr2ldr(gl_FragColor);
+}

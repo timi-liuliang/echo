@@ -1,0 +1,178 @@
+#pragma once
+
+#include <engine/core/Base/EchoConfig.h>
+#include "engine/core/Base/EchoDef.h"
+
+namespace Echo
+{
+	// ÉùÃ÷
+	class PathUtil;
+	class Time;
+	class TimeProfiler;
+	class Vector2;
+	class Vector3;
+	class Vector4;
+	class Matrix4;
+	class Quaternion;
+	class Triangle;
+	class Circle;
+	class Rect;
+	class Sphere;
+	class Plane;
+	class Frustum;
+	class Ray;
+	class ParamSurface;
+	class SimpleSpline;
+	class LogManager;
+	class Root;
+	class ProjectFile;
+	class Color;
+	class Box;
+	class PixelBox;
+	class GPUBuffer;
+	class Shader;
+	class ShaderProgram;
+	class RenderState;
+	class TextureRes;
+	class MemoryManager;
+	class TextureResManager;
+	class RenderInput;
+	class RenderView;
+	class RenderTargetView;
+	class DepthStencilView;
+	struct Viewport;
+	class FrameBuffer;
+	class Renderer;
+	class ManualRenderListener;
+	class Renderable;
+	class RenderQueue;
+	class Bone;
+	class Skeleton;
+	class SkeletonManager;
+	class Animation;
+	class AnimState;
+	class AnimKeyFrame;
+	class AnimManager;
+	class AnimBlender;
+	class Mesh;
+	class SubMesh;
+	class SkinnedMesh;
+	class MeshManager;
+	class Camera;
+	class CameraShadow;
+	class DataStream;
+	class ResourceManager;
+	class ResourceGroupManager;
+	class Resource;
+	class Archive;
+	class ArchiveFactory;
+	class ArchiveManager;
+	class ZipArchive;
+	class ZipArchiveFactory;
+	class FileSystemArchive;
+	class FileSystemArchiveFactory;
+	class APKFileSystemArchive;
+	class APKFileSystemArchiveFactory;
+	class ResourcePack;
+	class EffectController;
+	class EffectTranslation;
+	class EffectRotationSelf;
+	class EffectRotationAxis;
+	class EffectRotationRevolution;
+	class EffectOffcenter;
+	class EffectColorChange;
+	class EffectScaleChange;
+	class EffectScaleNoise;
+	class EffectColorNoise;
+	class EffectColorSet;
+	class EffectScaleSet;
+	class EffectKeyFrame;
+	class EffectLayer;
+	class EffectLayer2DBillBoard;
+	class EffectLayer3DBillBoard;
+	class EffectLayerColumn;
+	class EffectLayerTrail;
+	class EffectLayer3DGrid;
+	class EffectLayer2DGrid;
+	class EffectLayerLighting;
+	class EffectLayerParaboloidal;
+	class EffectLayerParticles;
+	class EffectLayerParticlesPoint;
+	class EffectLayerParticlesCube;
+	class EffectLayerParticlesSphere;
+	class EffectLayerParticlesCylinder;
+	class EffectLayerParticlesCurve;
+	class EffectLayerModel;
+	class EffectLayerSkin;
+	class EffectMaterial;
+	class EffectParticle;
+	class EffectParticleControllerSet;
+	class EffectRenderable;
+	class EffectSystem;
+	class EffectSystemManager;
+	class ISkillAttack;
+	class SkillAttackManager;
+	class SkillAnimSystem;
+	class SkillSystem;
+	class ActorTemplateDataManager;
+	class ActorObject;
+	class ActorManager;
+	class TextureSet;
+	class LightmapMgr;
+	class LightmapRasterizer;
+	class OpenMPTaskMgr;
+	class Model;
+	class ModelManager;
+	class SkeletonManager;
+	class AnimManager;
+	class AnimSystemManager;
+	class MeshManager;
+	class PhysicsManager;
+	class FSAudioManager;
+	class NetConnectionManager;
+	class ScenarioManager;
+	class PostEffectManager;
+	class ISkeletonController;
+}
+
+#include "engine/core/Util/PathUtil.h"
+#include "engine/core/Util/StringUtil.h"
+#include "engine/core/Util/AssertX.h"
+#include "engine/core/Util/any.hpp"
+#include "engine/core/Util/TimeProfiler.h"
+#include "engine/core/Util/Exception.h"
+#include "engine/core/Util/Log.h"
+#include "engine/core/Util/LogManager.h"
+#include "engine/core/main/OpenMPTaskMgr.h"
+#include "engine/core/Thread/Threading.h"
+#include "engine/core/Math/MathLib.h"
+#include "engine/core/geom/GeomLib.h"
+#include "engine/core/Util/Singleton.h"
+#include "engine/core/Util/Timer.h"
+#include "engine/core/Math/MathLib.h"
+#include "engine/core/resource/DataStream.h"
+#include "engine/core/Resource/ResourceManager.h"
+#include "engine/core/resource/ResourceGroupManager.h"
+#include "engine/core/Resource/Resource.h"
+#include "engine/core/resource/Archive.h"
+#include "engine/core/resource/ArchiveFactory.h"
+#include "engine/core/resource/ArchiveManager.h"
+#include "engine/core/resource/FileSystem.h"
+#include "engine/core/render/render/Color.h"
+#include "engine/core/render/render/PixelFormat.h"
+#include "engine/core/render/render/PixelConversions.h"
+#include "Engine/modules/Effect/EffectHeader.h"
+#include "Engine/core/camera/Camera.h"
+#include "Engine/core/camera/CameraMain.h"
+#include "Engine/core/camera/CameraShadow.h"
+#include "Engine/core/Render/TextureRes.h"
+#include "Engine/core/Render/TextureResManager.h"
+#include "Engine/modules/Model/Model.h"
+#include "Engine/modules/Anim/AnimManager.h"
+#include "Engine/modules/Anim/SkeletonManager.h"
+#include "Engine/modules/Model/MeshManager.h"
+#include "Engine/modules/Anim/Animation.h"
+#include "Engine/modules/Anim/Skeleton.h"
+#include "Engine/modules/Model/Mesh.h"
+#include "Engine/modules/Anim/Animation.h"
+#include "engine/modules/Anim/AnimSystem.h"

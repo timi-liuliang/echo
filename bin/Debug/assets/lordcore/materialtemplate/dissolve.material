@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<MaterialRoot>
+	<MaterialTemplate name="dissolve.mt" stage="Transparent" macros=""/>
+	<BlendState>
+	</BlendState>
+	<DepthStencilState/>
+	<Uniform>
+		<Property name="Albedo" type="SPT_TEXTURE" count="1" value="player_assassin_body.tga"/>
+		<Property name="DissolveMap" type="SPT_TEXTURE" count="1" value="t03_element_fire.tga"/>
+		<Property name="Percentage" type="SPT_FLOAT" count="1" value="0.0"/>
+		<Property name="EdgeWidth" type="SPT_FLOAT" count="1" value="0.05"/>
+	</Uniform>
+	<Controllers/>
+</MaterialRoot>
+

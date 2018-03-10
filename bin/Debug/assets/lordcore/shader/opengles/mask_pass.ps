@@ -1,0 +1,25 @@
+#version 100
+
+uniform sampler2D texSampler;
+uniform mediump vec4 maskColor;
+varying mediump vec2 texCoord;
+
+void main()
+{
+	mediump float rand = sin(texCoord.x * texCoord.y + 1.0);
+	rand = mod(rand,8.0) * mod(rand,4.0);
+
+	mediump float distortX = mod(rand,0.005);
+	mediump float distortY = mod(rand,0.0055);
+	mediump vec4 textureColor = texture2D(texSampler, texCoord + vec2(distortX,distortY) * 0.0000001);
+	if(maskColor.a < 0.0)
+	{
+		textureColor.grb += maskColor.grb;
+	}
+	else
+	{
+		textureColor *= maskColor;
+	}
+
+	gl_FragColor =  textureColor;
+}

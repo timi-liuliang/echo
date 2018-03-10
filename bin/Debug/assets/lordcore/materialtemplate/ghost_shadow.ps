@@ -1,0 +1,33 @@
+#version 100
+
+precision mediump float;
+#include <tonemapping.inc>
+#include <hdr_ldr.inc>
+#include <rime_light.inc>
+
+uniform vec4 _AmbientColor;
+uniform sampler2D Albedo;
+uniform mediump float Alpha;
+uniform vec3 camPos;
+
+varying vec2 texCoord;
+varying vec3 position;
+varying vec3 normal;
+
+void main ()
+{
+	vec4 diffuseColor = texture2d_linear(Albedo, texCoord);
+	if (diffuseColor.w < 0.5)
+		discard;
+
+	gl_FragColor.rgb = _AmbientColor.rgb * _AmbientColor.rgb;
+	gl_FragColor.w = Alpha;
+
+	vec3 V = normalize(camPos - position);
+	vec3 N = normalize(normal);
+	vec3 rimeColor = calcRimeColor(N, V);
+
+	gl_FragColor.xyz += rimeColor;
+	gl_FragColor = hdr2ldr(gl_FragColor);
+}
+

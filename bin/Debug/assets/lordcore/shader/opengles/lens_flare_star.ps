@@ -1,0 +1,27 @@
+#version 100
+precision mediump float;
+
+#define MAX_SAMPLES 8
+
+uniform sampler2D texSampler;
+uniform vec2 g_sampleOffsets[MAX_SAMPLES];
+uniform vec4 g_sampleWeights[MAX_SAMPLES];
+
+varying vec2 texCoord;
+
+void main(void)
+{	
+	vec4 sample = vec4(0.0, 0.0, 0.0, 0.0);
+    vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
+        
+    vec2 samplePosition;
+    
+    for(int iSample = 0; iSample < 8; iSample++)
+    {
+        samplePosition = texCoord + g_sampleOffsets[iSample];
+        sample = texture2D(texSampler, samplePosition);
+        color += g_sampleWeights[iSample] * sample;
+    }
+
+	gl_FragColor = vec4(color.rgb, 1.0);
+}

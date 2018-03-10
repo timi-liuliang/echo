@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<pipeline>
+  <RenderTarget id="previousFrame" material="mbLastResultPre.xml" scale="1">
+    <BindBuffer sampler="sceneSampler" sourceRT="PBRPass" slot="0"/>
+  </RenderTarget>
+</pipeline>

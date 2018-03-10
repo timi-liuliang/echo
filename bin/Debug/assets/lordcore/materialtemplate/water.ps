@@ -1,0 +1,102 @@
+#version 100
+precision mediump float;
+#include <tonemapping.inc>
+#include <hdr_ldr.inc>
+
+#ifdef USE_FILTER_COLOR
+uniform mediump vec4 filterColor;
+uniform mediump float filterGray;
+#endif
+
+uniform mediump float CurrentTime;
+
+uniform sampler2D NoiseSampler;
+uniform sampler2D NormalSampler;
+uniform sampler2D WaterColorSampler;
+uniform sampler2D RefectSampler;
+uniform sampler2D RefractionSampler;
+
+uniform mediump float refect_degree;
+uniform mediump float refraction_degree;
+
+uniform mediump float noise_speed;
+uniform mediump float noise_degree;
+
+uniform mediump vec4 water_color;
+
+
+varying mediump vec4 ofogColor;
+varying mediump vec2 texCoord;
+varying mediump vec2 texCoord1;
+varying mediump vec2 texCoord2;
+
+varying mediump vec3 texnormal;
+varying mediump vec3 vViewVec;
+varying mediump vec3 vWaveVec;
+
+varying vec2 bumpuv0;
+varying vec2 bumpuv1;
+
+void main(void)
+{
+	mediump vec2 texCoordOffset = texCoord;
+	texCoordOffset.x += CurrentTime * 0.045 * noise_speed;
+	texCoordOffset.y += CurrentTime * 0.045 * noise_speed;
+	mediump vec4 NoiseColor = texture2D(NoiseSampler, texCoordOffset);
+
+	texCoordOffset = texCoord;
+	texCoordOffset.x += NoiseColor.x * 0.005 * noise_degree;
+	texCoordOffset.y += NoiseColor.y * 0.005 * noise_degree;
+	mediump vec4 RefectColor = texture2d_ldr2hdr(RefectSampler, texCoordOffset);  //反射颜色
+
+	texCoordOffset = texCoord2;
+	texCoordOffset.x += NoiseColor.x * 0.005 * noise_degree;
+	texCoordOffset.y += NoiseColor.y * 0.005 * noise_degree;
+	mediump vec4 RefractionColor = texture2d_ldr2hdr(RefractionSampler, texCoordOffset); //折射颜色
+
+
+	//计算水的波动颜色
+	vec2 tcoord = vec2(0.0,0.0);
+	mediump vec3 bump1 = texture2D(NormalSampler, bumpuv0).rgb;
+	mediump vec3 bump2 = texture2D(NormalSampler, bumpuv1).rgb;
+
+	bump1 = (bump1 + vec3(-0.5,-0.5,-0.5)) * vec3(2.0,2.0,2.0);
+	bump2 = (bump2 + vec3(-0.5,-0.5,-0.5)) * vec3(2.0,2.0,2.0);
+
+	bump1 = normalize(bump1);
+	bump2 = normalize(bump2);
+	
+	mediump vec3 bumpfinal = (bump1 + bump2) * vec3(0.5,0.5,0.5);
+	//bumpfinal = normalize(bumpfinal);
+	mediump vec3 viewfinal = normalize(vViewVec);
+	mediump vec3 wavefinal = normalize(vWaveVec);
+
+	mediump float fresnelFac1 = dot(viewfinal,bumpfinal);
+
+	mediump float fresnelFac2 = dot(wavefinal,bumpfinal);
+
+
+	mediump float fresnelFac = min(fresnelFac1,fresnelFac2);
+
+	tcoord.x =  fresnelFac;
+	tcoord.y =	0.0;
+
+	mediump vec4 WaterColor = mix(texture2D(WaterColorSampler, tcoord),water_color, fresnelFac);
+	
+
+	mediump vec4 color_refect_water = WaterColor * RefectColor;
+	mediump vec4 finalColor = mix(WaterColor,color_refect_water,refect_degree);
+	//mediump vec4 finalColor = WaterColor;
+	//折射相当于半透
+	finalColor = mix(finalColor,RefractionColor,refraction_degree);
+
+	gl_FragColor = vec4(mix(ofogColor.rgb, finalColor.rgb, ofogColor.a), finalColor.a);
+
+#ifdef USE_FILTER_COLOR
+	mediump float gray = (gl_FragColor.r + gl_FragColor.g + gl_FragColor.b) / 3.0;
+	mediump vec3 vec_gray = vec3(gray, gray, gray);
+	gl_FragColor = vec4(mix(gl_FragColor.rgb, vec_gray, filterGray), gl_FragColor.a) * filterColor;	
+#endif
+
+	gl_FragColor = hdr2ldr(gl_FragColor);
+}

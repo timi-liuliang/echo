@@ -1,0 +1,14 @@
+#version 100
+
+uniform mediump vec4 LightPositionAndInvRadius;
+uniform mediump vec4 LightColorAndFalloffExponent;
+
+varying mediump vec3 worldPosition;
+
+void main(void)
+{
+	mediump float offsetDistance      = length( LightPositionAndInvRadius.xyz-worldPosition) * LightPositionAndInvRadius.w;
+	mediump float DistanceAttenuation = pow( 1.0-clamp( offsetDistance, 0.0, 1.0), LightColorAndFalloffExponent.w);
+
+	gl_FragColor = vec4( LightColorAndFalloffExponent.rgb, 0.5) * DistanceAttenuation;
+}

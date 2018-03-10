@@ -1,0 +1,173 @@
+#version 100
+precision highp float;
+#include <tonemapping.inc>
+#include <fog_ps.inc>
+#include <hdr_ldr.inc>
+
+#define saturate(x) clamp( x, 0.0, 1.0 )
+
+uniform mediump vec4 ActorLitParam[3]; // 0.sunDir  1.sunColor 2.environmentColor
+uniform float _RimIntensity;
+uniform float _RimPower;
+uniform vec4 _RimColor;
+
+#ifdef FLOW_MAP
+	#include <flow_map.inc>
+#endif
+
+#ifdef RIME_LIGHT
+	#include <rime_light.inc>
+#endif
+
+#ifdef ALPHA_TEST
+	// 由于流光用的也是diffuse的a通道
+	// 当使用alpha test的时候使用法线贴图的a通道
+	// 如果这个时候没开法线贴图就直接关闭流光
+	#ifndef NORMAL_MAP
+		#undef FLOW_MAP
+	#endif
+	uniform float _AlphaTestValue;
+#endif
+
+uniform sampler2D Albedo;
+
+varying vec2 texcoord0;
+varying vec3 normal;
+varying vec3 view;
+
+varying vec4 ofogColor;
+
+#ifdef HSV_COLOR_MASK
+	#include <hsv_mask.inc>
+#endif
+
+#ifdef EFFECT_COLOR
+	#include <effect_color.inc>
+#endif
+
+
+#ifdef NORMAL_MAP
+	uniform sampler2D normalSampler;
+	varying mediump vec3 tangent;
+	varying mediump vec3 binormal;
+
+	vec3 SurfaceNormal(vec3 n)
+	{
+		vec3 T = tangent;
+		vec3 B = binormal;
+		vec3 N = gl_FrontFacing ? normal : -normal;
+
+		vec3 r = 2.0 * n - vec3(1.0, 1.0, 1.0);
+		return normalize(T*r.x + B*r.y + N*r.z);
+	}
+#endif
+
+#ifdef SPECULAR_COLOR_MAP
+	uniform sampler2D specularColorSampler;
+	uniform mediump vec2 specularPower;
+	uniform mediump float angle;
+#endif
+
+#ifdef SPRITE_ANIMATION
+	uniform sampler2D SA_sampler;
+	varying vec2  SA_inTexCoord;
+#endif
+
+vec3 rota(in vec3 normal, in float angle)
+{
+	float rad = radians(angle);
+	float c = cos(rad);
+	float s = sin(rad);
+
+	mat3 rotaM = mat3(vec3(1.0, 0.0, 0.0), vec3(0.0, c, -s), vec3(0, s, c));
+
+	return normalize(rotaM * normal);
+}
+
+void main ()
+{
+	vec4 albedoTexture = texture2d_linear(Albedo, texcoord0);
+	
+#ifdef HSV_COLOR_MASK
+	hsv_color_calc(albedoTexture.xyz);
+#endif
+	
+#ifdef ALPHA_TEST
+	if(albedoTexture.a < _AlphaTestValue)
+	{
+		discard;
+	}
+#endif
+	
+	vec3 albedo = albedoTexture.rgb;
+	vec3 lightColor = ActorLitParam[1].rgb;
+	vec3 ambientcolor = ActorLitParam[2].rgb;
+	
+#ifdef NORMAL_MAP
+	vec4 normalMapColor = texture2D(normalSampler, texcoord0);
+	vec3 N = SurfaceNormal(normalMapColor.xyz);
+#else
+	vec3 N = normalize(normal);
+#endif
+
+	vec3 V = normalize(view);
+	vec3 L = normalize(ActorLitParam[0].xyz);
+	vec3 H = normalize(L + V);
+ 
+	float LdotH = saturate(dot(L, H));
+	float NdotL = saturate(dot(N, L));
+	float NdotH = saturate(dot(N, H));
+
+	vec3 specularColor = vec3(0.00001);
+	vec3 rimeColor = vec3(0.000001);
+	
+	float atten = 2.0;
+	vec3 lightIntens = atten * lightColor;  
+  
+	vec3 ambiIntens = albedo * ambientcolor * 2.0;
+	vec3 diffIntens = albedo * NdotL * lightIntens;
+
+#ifdef SPECULAR_COLOR_MAP
+	vec4 textureColor = texture2d_linear(specularColorSampler, texcoord0);
+	float rotaNdotV = saturate(dot(rota(N, angle), V));
+	specularColor = saturate(textureColor.xyz * specularPower.x * pow( rotaNdotV, (specularPower.y * textureColor.w) ) * textureColor.w);
+#endif
+
+#ifdef RIME_LIGHT
+	rimeColor = calcRimeColor(N, V);
+#endif
+	
+	float NdotV = saturate(dot(N, V));
+    float VdotL = saturate(dot(V, L));
+    vec3 rimIntens = pow((1.0 - NdotV) * saturate(1.0 - abs(dot(N, L)) * VdotL), _RimPower) * _RimIntensity * _RimColor.rgb * albedo;
+
+#ifdef SPRITE_ANIMATION
+	vec4 sa_color = texture2d_linear(SA_sampler, SA_inTexCoord);
+	//ambiIntens = mix(ambiIntens,sa_color.rgb,sa_color.a);
+	ambiIntens += sa_color.xyz;
+#endif
+	
+	vec3 result = ambiIntens + diffIntens + specularColor + rimIntens + rimeColor;
+
+#ifdef FLOW_MAP
+	vec4 flowColor = calcFlowMapColor(texcoord0);
+
+	#ifdef ALPHA_TEST
+		result = mixFlowColor(vec4(result, 1.0), flowColor, normalMapColor.a).xyz;
+	#else
+		result = mixFlowColor(vec4(result, 1.0), flowColor, albedoTexture.a).xyz;
+	#endif
+#endif
+	
+	gl_FragColor = vec4(result, 1.0);
+
+	gl_FragColor.xyz = mix(ofogColor.xyz, gl_FragColor.xyz, ofogColor.a);
+	gl_FragColor.rgb = mix(gl_FragColor.rgb, varHeightFog.rgb, ComputeHeightFog(varHeightFog.a));
+	
+#ifdef EFFECT_COLOR
+    gl_FragColor = ComputeEffectColor(gl_FragColor);
+#endif
+	
+	gl_FragColor = hdr2ldr(gl_FragColor);
+}
+

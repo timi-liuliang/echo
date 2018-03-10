@@ -1,0 +1,33 @@
+#version 100
+
+uniform sampler2D texLDRColor;
+//uniform sampler2D texLDRDepth;
+uniform sampler2D texCoverage;
+
+uniform mediump vec4 Shade;
+
+
+varying mediump vec2 texCoord;
+
+void main(void)
+{
+	mediump vec4 texColor = texture2D(texLDRColor, texCoord);
+//	mediump vec4 texDepth = texture2D(texLDRDepth, texCoord);
+	mediump vec4 texCover = texture2D(texCoverage, texCoord);
+
+	/*
+	mediump vec4 finalColor = texColor;
+	// ±»ÕÚ±ÎÇøÓò
+	mediump float depth = dot(texCover ,vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+	if(depth > texDepth.x)
+	{
+		finalColor = texColor*0.25;	
+	}
+	
+	gl_FragColor = finalColor;
+	*/
+
+	mediump float c = clamp(texCover.r*1.5, Shade.x, 1.0);
+	gl_FragColor = c * texColor;
+
+}

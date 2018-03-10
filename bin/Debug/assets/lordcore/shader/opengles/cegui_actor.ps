@@ -1,0 +1,11 @@
+#version 100
+precision mediump float;
+
+uniform sampler2D texSampler;
+varying mediump vec2 texCoord;
+
+void main(void)
+{
+	mediump vec4 textureColor = texture2D(texSampler, texCoord);
+	gl_FragColor = textureColor;
+}

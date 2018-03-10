@@ -1,0 +1,21 @@
+<?xml version = "1.0" encoding = "GB2312"?>
+<MaterialDesc>
+	<ShaderPrograme vs="QueryObject_Coverage.vs" ps="QueryObject_Coverage.ps">
+		<BlendState>
+		</BlendState>
+		<RasterizerState>
+		</RasterizerState>
+		<DepthStencilState>
+		</DepthStencilState>
+		<VertexFormats>
+      <VertexFormat>
+        <VertexSemantic value="VS_POSITION"/>
+        <PixelFormat value="PF_RGB32_FLOAT"/>
+      </VertexFormat>
+      <VertexFormat>
+        <VertexSemantic value="VS_COLOR"/>
+        <PixelFormat value="PF_RGBA8_UNORM"/>
+      </VertexFormat>
+		</VertexFormats>
+	</ShaderPrograme>
+</MaterialDesc>

@@ -1,0 +1,34 @@
+<?xml version = "1.0" encoding = "GB2312"?>
+<MaterialDesc>
+	<ShaderPrograme vs="lightprobe.vs" ps="lightprobe.ps">
+		<BlendState>
+		</BlendState>
+		<RasterizerState>
+			<DepthBias value="0.0"/>
+			<DepthBiasFactor value="1.0"/>
+			<CullMode value="CULL_NONE"/>			
+		</RasterizerState>
+		<DepthStencilState>
+			<DepthFunc value = "CF_ALWAYS"/>
+		</DepthStencilState>
+		<SamplerState>
+			<BiLinearMirror>
+				<MinFilter value="FO_LINEAR"/>
+				<MagFilter value="FO_LINEAR"/>
+				<MipFilter value="FO_NONE"/>
+				<AddrUMode value="AM_WRAP"/>
+				<AddrVMode value="AM_WRAP"/>
+			</BiLinearMirror>
+		</SamplerState>
+		<VertexFormats>
+			<VertexFormat>
+				<VertexSemantic value="VS_POSITION"/>
+				<PixelFormat value="PF_RGB32_FLOAT"/>
+			</VertexFormat>
+			<VertexFormat>
+				<VertexSemantic value="VS_NORMAL"/>
+				<PixelFormat value="PF_RGB32_FLOAT"/>
+			</VertexFormat>
+		</VertexFormats>
+	</ShaderPrograme>
+</MaterialDesc>

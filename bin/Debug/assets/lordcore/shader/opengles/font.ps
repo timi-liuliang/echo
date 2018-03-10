@@ -1,0 +1,12 @@
+#version 100
+
+uniform sampler2D texSampler;
+
+varying mediump vec4 color;
+varying mediump vec2 texCoord;
+
+void main(void)
+{
+	mediump vec4 temp = vec4(1.0, 1.0, 1.0, texture2D(texSampler, texCoord).a);
+	gl_FragColor = temp * color;
+}

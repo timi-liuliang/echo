@@ -1,0 +1,25 @@
+#version 100
+
+uniform mediump vec4 naturalColor;
+uniform mediump vec4 LMUV;
+uniform mediump vec3 LMScale;
+uniform sampler2D texSampler;
+uniform sampler2D LMSampler;
+uniform sampler2D alphaSampler;
+
+varying mediump vec4 ofogColor;
+varying mediump vec2 texCoord;
+varying mediump vec2 texCoord1;
+
+void main(void)
+{
+	mediump vec4 alphaColor = texture2D(alphaSampler, texCoord);
+	if(alphaColor.r < 0.5 )
+        discard;
+
+	mediump vec4 textureColor = texture2D(texSampler, texCoord);
+	mediump vec3 LMColor = texture2D(LMSampler, texCoord1.xy*LMUV.zw+LMUV.xy).rgb;
+	mediump vec4 finalColor = vec4(textureColor.rgb * LMColor * LMScale, alphaColor.r) + naturalColor;
+	
+	gl_FragColor = vec4(mix(ofogColor.xyz, finalColor.xyz, ofogColor.w), finalColor.w);
+}

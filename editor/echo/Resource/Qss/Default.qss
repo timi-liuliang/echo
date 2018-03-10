@@ -1,0 +1,6 @@
+AssetsBrowser *
+{
+	background-color:rgb(68,68,68); color:rgb(200,200,200);
+	font-family:"Segoe UI"; font-size:12px;
+}
+

@@ -1,0 +1,11 @@
+<?xml version = "1.0" encoding = "GB2312"?>
+<MaterialDesc>
+	<ShaderPrograme vs="official_write_depth.vs" ps="official_write_depth.ps">
+		<BlendState>
+		</BlendState>
+		<RasterizerState>
+		</RasterizerState>
+		<DepthStencilState>
+		</DepthStencilState>
+	</ShaderPrograme>
+</MaterialDesc>

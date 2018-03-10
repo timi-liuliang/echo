@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<pipeline>
+	<RenderTarget id="WeatherLightningMixPass" material="pp_weatherLightingMix.xml" width="" height="" scale="1">
+		<BindBuffer sampler="texSampler" sourceRT="" slot="0" />
+		<Uniform name="colorMix" x="1" y="1" z="1" w="1" />
+		<Uniform name="elapsedTime" x="0" />
+		<Uniform name="durationTimes" x="0" y="0" z="0" w="0" />
+		<Uniform name="intensity" x="1" />
+	</RenderTarget>
+	<RenderTarget id="WeatherLightningVBlurPass" material="pp_weatherLightingVBlur.xml" width="" height="" scale="1">
+		<BindBuffer sampler="texSampler" sourceRT="WeatherLightningMixPass" slot="0" />
+	</RenderTarget>
+	<RenderTarget id="WeatherLightningHBlurPass" material="pp_weatherLightingHBlur.xml" width="" height="" scale="1">
+		<BindBuffer sampler="texSampler" sourceRT="WeatherLightningVBlurPass" slot="0" />
+	</RenderTarget>
+	<RenderTarget id="WeatherLightingPass" material="pp_weatherLighting.xml" width="" height="" scale="1">
+		<BindBuffer sampler="texSampler" sourceRT="" slot="0" />
+		<BindBuffer sampler="texBloom" sourceRT="WeatherLightningHBlurPass" slot="1" />
+		<Uniform name="elapsedTime" x="0" />
+		<Uniform name="durationTimes" x="0" y="0" z="0" w="0" />
+	</RenderTarget>
+</pipeline>
+

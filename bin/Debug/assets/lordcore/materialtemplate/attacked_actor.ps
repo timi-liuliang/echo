@@ -1,0 +1,53 @@
+#version 100
+precision highp float;
+#include <tonemapping.inc>
+#include <fog_ps.inc>
+#include <hdr_ldr.inc>
+
+#define saturate(x) clamp( x, 0.0, 1.0 )
+
+uniform float _RimIntensity;
+uniform float _RimPower;
+uniform vec3 _RimDir;
+uniform vec4 _RimColor;
+
+#ifdef RIME_LIGHT
+	#include <rime_light.inc>
+#endif
+
+varying vec2 texcoord0;
+varying vec3 viewNormal;
+varying vec3 viewDir;
+
+#ifdef SPRITE_ANIMATION
+	uniform sampler2D SA_sampler;
+	varying vec2  SA_inTexCoord;
+#endif
+
+void main ()
+{
+	vec3 N = normalize(viewNormal);
+	vec3 V = normalize(viewDir);
+	vec3 R = normalize(_RimDir);
+	
+	vec3 rimeColor = vec3(0.000001);
+	vec3 albedo = vec3(0.000001);
+
+#ifdef SPRITE_ANIMATION
+	albedo = texture2d_linear(SA_sampler, SA_inTexCoord).rgb;
+#endif
+
+#ifdef RIME_LIGHT
+	rimeColor = calcRimeColor(N, V);
+#endif
+
+	N = normalize(vec3(N.x, 0.5, N.z));
+	float NdotR = saturate(dot(N, R));
+	float NdotV = saturate(dot(N, V));
+	vec3 rimIntens = pow(NdotR*(1.0 - NdotV), _RimPower) * _RimIntensity * _RimColor.rgb * albedo;
+
+	vec3 result = albedo + rimIntens + rimeColor;
+
+	gl_FragColor = vec4(result, 1.0);
+	gl_FragColor = hdr2ldr(gl_FragColor);
+}

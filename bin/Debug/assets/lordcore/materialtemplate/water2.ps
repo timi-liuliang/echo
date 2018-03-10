@@ -1,0 +1,116 @@
+#version 100
+
+precision highp float;
+
+#include <tonemapping.inc>
+#include <fog_ps.inc>
+#include <common_fog.inc>
+#include <hdr_ldr.inc>
+
+
+#ifdef USE_FILTER_COLOR
+uniform mediump vec4 filterColor;
+uniform mediump float filterGray;
+#endif
+
+uniform highp float CurrentTime;
+uniform highp float _HeatTime;
+uniform highp float _ForceX;
+uniform highp float _ForceY;
+uniform highp vec4 _TintColor;
+
+uniform highp float refect_degree;
+
+uniform mat4 matWVPWater;
+
+uniform vec4 fogParam[3];
+
+
+uniform sampler2D NoiseSampler;
+uniform sampler2D MainSampler;
+uniform sampler2D RefectSampler;
+uniform sampler2D WaveNoiseSampler;
+//varying vec2 texCoord1;
+
+uniform highp float  transparent;
+
+varying vec2 vs_TEXCOORD0;
+varying vec3 vs_position;
+varying vec3 position;
+
+void main(void)
+{
+
+	highp vec4 projectUV = matWVPWater * vec4(vs_position, 1.0);
+	projectUV = projectUV/projectUV.w;
+
+	vec2 texCoord1 = projectUV.xy;
+	texCoord1.x = (texCoord1.x + 1.0) * 0.5;
+	texCoord1.y = (texCoord1.y + 1.0) * 0.5;
+
+	highp vec2 texCoordOffset = texCoord1;
+	texCoordOffset.x += CurrentTime * 0.020;
+	texCoordOffset.y += CurrentTime * 0.020;
+	highp vec4 NoiseWaveColor = texture2D(WaveNoiseSampler, texCoordOffset);
+
+	texCoordOffset = texCoord1;
+	texCoordOffset.x += NoiseWaveColor.x * 0.009;
+	texCoordOffset.y += NoiseWaveColor.y * 0.009;
+
+
+	highp vec4 RefectColor = texture2d_ldr2hdr(RefectSampler, texCoordOffset);
+	RefectColor.rgb = linear_to_srgb(RefectColor.rgb);
+
+	highp vec4 u_xlat0;
+	highp float u_xlat16_0;
+	highp float u_xlat10_0;
+	highp vec4 u_xlat1;
+	highp float u_xlat16_1;
+	highp vec3 u_xlat10_1;
+	highp vec3 u_xlat2;
+	highp float u_xlat10_2;
+	highp float u_xlat10_3;
+	highp float u_xlat7;
+
+	u_xlat0.x = CurrentTime * _HeatTime;
+    u_xlat0.yz = u_xlat0.xx * vec2(0.0500000007, 2.0);
+	u_xlat0 = u_xlat0.yzxy + vs_TEXCOORD0.xyxy;
+    u_xlat10_1.x = texture2D(NoiseSampler, u_xlat0.xy).x;
+    u_xlat10_3 = texture2D(NoiseSampler, u_xlat0.zw).x;
+    u_xlat16_1 = u_xlat10_3 + u_xlat10_1.x;
+    u_xlat10_0 = texture2D(NoiseSampler, u_xlat0.xy).x;
+    u_xlat10_2 = texture2D(NoiseSampler, u_xlat0.zw).x;
+    u_xlat16_0 = u_xlat10_2 + u_xlat10_0;
+	u_xlat16_0 = u_xlat16_1 * u_xlat16_0;
+    u_xlat0.xy = vec2(u_xlat16_0 * 0.03) * vec2(_ForceX, _ForceY) + vs_TEXCOORD0.xy;
+    u_xlat10_1.xyz = texture2D(MainSampler, u_xlat0.xy).xyz;
+    u_xlat2.xyz = u_xlat10_1.xyz * _TintColor.xyz;
+    u_xlat1.xyz = u_xlat2.xyz;
+
+ 
+    u_xlat0 = u_xlat1;
+
+	vec4 finalColor = u_xlat0;
+
+	mediump vec4 color_refect_water = finalColor * RefectColor;
+	finalColor = mix(finalColor,color_refect_water,refect_degree);
+
+	//finalColor.rgb  = linear_to_srgb(toneMapping(finalColor.rgb));
+
+	vec3 fogColorLinear = fogParam[1].rgb * fogParam[1].rgb * 3.0;
+	
+	vec4 ofogColor = vec4(fogColorLinear, ComputeFog(position-fogParam[2].xyz, fogParam[0].xyz));
+	vec4 varHeightFog = vec4(fogColorLinear, position.y);
+
+	//gl_FragColor = vec4(mix(ofogColor.rgb, finalColor.rgb, ofogColor.a), transparent);
+
+	gl_FragColor.xyz = mix(ofogColor.xyz, finalColor.xyz, ofogColor.a);
+	gl_FragColor.rgb = mix(gl_FragColor.rgb, varHeightFog.rgb, ComputeHeightFog(varHeightFog.a));
+	gl_FragColor.a = transparent;
+
+#ifdef USE_FILTER_COLOR
+	mediump float gray = (gl_FragColor.r + gl_FragColor.g + gl_FragColor.b) / 3.0;
+	mediump vec3 vec_gray = vec3(gray, gray, gray);
+	gl_FragColor = vec4(mix(gl_FragColor.rgb, vec_gray, filterGray), gl_FragColor.a) * filterColor;	
+#endif
+}

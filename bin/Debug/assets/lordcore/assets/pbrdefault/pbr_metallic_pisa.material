@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<MaterialRoot>
+	<MaterialTemplate name="pbr_metallic.mt" stage="Opaque" macros="TONE_MAPPING;"/>
+	<Uniform>
+		<Property name="tAlbedo" type="SPT_TEXTURE" count="1" value="pbr_default_c.jpg"/>
+		<Property name="tGloss" type="SPT_TEXTURE" count="1" value="pbr_default_g.jpg"/>
+		<Property name="tGlossIntensity" type="SPT_FLOAT" count="1" value="1"/>
+		<Property name="tNormal" type="SPT_TEXTURE" count="1" value="pbr_default_n.jpg"/>
+		<Property name="tMetallic" type="SPT_TEXTURE" count="1" value="pbr_default_r.jpg"/>
+		<Property name="tSkySpecular" type="SPT_TEXTURE" count="1" value="sky_pisa.png"/>
+		<Property name="uDiffuseCoefficients" type="SPT_VEC4" count="9" value="0.1993 0.159024 0.14601 0;0.161389 0.128385 0.127299 0;-0.0282465 -0.0320299 -0.0341437 0;-0.00154754 0.0613606 0.105506 0;-0.0160921 0.0473719 0.0938992 0;-0.025143 -0.0308221 -0.0331725 0;-0.00579802 -0.00454949 -0.00558427 0;0.0106961 -0.0134365 -0.0250541 -0;0.00901219 0.00875469 0.00548851 0;"/>
+		<Property name="uHorizonOcclude" type="SPT_FLOAT" count="1" value="1"/>
+		<Property name="uHorizonSmoothing" type="SPT_FLOAT" count="1" value="1"/>
+		<Property name="uScaleLevel1" type="SPT_FLOAT" count="1" value="1"/>
+		<Property name="uShadowShade" type="SPT_FLOAT" count="1" value="1"/>
+		<Property name="uMetallic" type="SPT_FLOAT" count="1" value="1"/>
+	</Uniform>
+	<Controllers/>
+</MaterialRoot>
+

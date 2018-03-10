@@ -1,0 +1,14 @@
+#version 100
+
+#define GAMMA_CORRECT
+
+varying mediump vec4 color;
+
+void main(void)
+{
+	gl_FragColor = color;
+	
+#ifdef GAMMA_CORRECT
+	gl_FragColor.xyz *= color.xyz;
+#endif
+}

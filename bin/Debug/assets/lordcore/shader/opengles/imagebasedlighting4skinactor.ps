@@ -1,0 +1,165 @@
+#version 100
+
+uniform sampler2D texSampler;
+uniform sampler2D texMaskSampler;
+//uniform sampler2D texEnvBRDF;
+uniform samplerCube texEnvMapA;
+uniform samplerCube texEnvMapB;
+
+uniform mediump vec4 naturalColor;
+// uniform mediump vec3 litDir;
+// uniform mediump vec4 litColor;
+// uniform mediump vec4 ambtColor;
+uniform mediump vec4 edgeColor;
+uniform mediump vec4 colorParams;
+uniform mediump vec3 camPos;
+uniform mediump vec4 litParam[3];
+
+varying mediump vec2 texCoord;
+varying mediump vec4 worldPosition;
+varying mediump vec3 worldNormal;
+
+mediump vec3 lerp( mediump vec3 A, mediump vec3 B, mediump vec3 factor )
+{
+	return (vec3(1.0, 1.0, 1.0) - factor) * A + factor * B;
+}
+
+#define ONE_OVER_PI 0.31831
+#define ONE_OVER_TWO_PI 0.159155
+
+// Optimized phong, use if mirrowed reflection vector pre-computed
+mediump float _Phong(mediump vec3 R, mediump vec3 L, mediump float Exp)
+{	
+	mediump float fNormFactor = Exp * ONE_OVER_TWO_PI + ONE_OVER_TWO_PI;		// 1 ALU
+  return fNormFactor *  pow(max(0.0, dot(L, R)), Exp);					// 4 ALU
+	// 5 ALU
+}
+
+mediump float Phong(mediump vec3 N, mediump vec3 V, mediump vec3 L, mediump float Exp)
+{
+  mediump vec3 R = reflect(-V, N);	// 3 ALU
+  return _Phong(R, L, Exp);	// 5 ALU
+  // 8 ALU
+}
+
+mediump vec3 BlinnPhong( mediump vec3 n, mediump vec3 v, mediump vec3 l, mediump float gloss, mediump vec3 SpecCol )
+{
+	mediump vec3 H = normalize( v + (l) );
+	mediump float intensity = pow(dot( H, n ),gloss);
+	
+	return SpecCol * intensity;
+}
+
+#define PI 3.1415926
+mediump float DiffuseBRDF(mediump vec3 N, mediump vec3 V, mediump vec3 L, mediump float Gloss, mediump float NdotL)
+{
+	// TODO: Merge with Specular BRDF to save a few instructions
+	
+	mediump float m = pow( (1.0 - Gloss * 0.7), 6.0 );
+	
+	// Approximation of the full quality Oren-Nayar model
+	mediump float s = dot(L, V) - dot(N, L) * dot(N, V);
+	mediump float t = s <= 0.0 ? 1.0 : max(max(dot(N, L), dot(N, V)), 1e-6);
+	mediump float A = 1.0 / (1.0 + (0.5 - 2.0/ (3.0* PI)) * m);
+	mediump float B = m * A;
+	
+	return NdotL * max(A + B * (s / t), 0.0);
+}
+
+
+mediump vec3 PhysicalBRDF(mediump vec3 N, mediump vec3 V, mediump vec3 L, mediump float Gloss, mediump vec3 SpecCol)
+{
+	mediump vec3 H = normalize( V + L );
+	
+	// Compute perceptually linear roughness parameter (squared)
+	mediump float m = pow( (1.0 - Gloss * 0.7), 6.0 );
+	mediump float m2 = m * m;
+	
+	// Prevent highlights from getting too tiny since we don't have real area lights yet
+	m2 = max( m2, 0.00001 );
+	
+	// GGX NDF
+	mediump float NdotH = clamp( dot( N, H ), 0.0, 1.0 );
+	mediump float spec = (NdotH * NdotH) * (m2 - 1.0) + 1.0;
+	spec = m2 / (spec * spec);
+	
+	// Schlick-Smith Visibility Term
+	mediump float k = (0.8 + m * 0.5) * (0.8 + m * 0.5) / 2.0;
+	mediump float Gv = clamp( dot( N, V ), 0.0, 1.0 ) * (1.0 - k) + k;
+	mediump float Gl = clamp( dot( N, L ), 0.0, 1.0 ) * (1.0 - k) + k;
+	spec = spec/max( Gv * Gl, 1e-6 );
+		
+	// Schlick approximation for Fresnel
+	mediump float power_Val = pow( 1.0 - dot(L, H), 5.0 );
+	mediump vec3 fresnel = lerp( SpecCol, vec3(1.0,1.0,1.0), vec3(power_Val, power_Val, power_Val) );
+
+	return (fresnel * spec) / 4.0;
+}
+
+
+mediump vec3 GetEnvBRDFFresnel(mediump vec3 specCol0, mediump float gloss, mediump float fNdotV, sampler2D sampEnvBRDF)
+{
+	// Use a LUT that contains the numerically integrated BRDF for given N.V and smoothness parameters
+	// x: integral for base reflectance 0.0, y: integral for base reflectance 1.0
+	
+	mediump vec2 envBRDF = texture2D( sampEnvBRDF, vec2( fNdotV, 1.0-gloss) ).xy;
+	return lerp( envBRDF.xxx, envBRDF.yyy, specCol0 );
+}
+
+mediump vec3 _GetEnvironmentCMap(samplerCube envMapA, samplerCube envMapB, mediump vec3 envTC, mediump float fGloss)
+{
+  mediump vec3 envColorA = textureCube(envMapA , envTC).xyz;
+  mediump vec3 envColorB = textureCube(envMapB , envTC).xyz;
+  return (fGloss)*envColorA +  (1.0-fGloss) * envColorB ;
+}
+
+mediump vec3 GetSpecular(mediump vec3 N, mediump vec3 V, mediump vec3 L, mediump float Gloss, mediump vec3 SpecCol)
+{
+	mediump vec3 H = normalize( V + L );
+	mediump float NdotH = max(dot(N, H),0.0);
+	mediump vec3 specularLightps = SpecCol * pow(NdotH, colorParams.x * Gloss * 128.0);
+	return specularLightps;
+}
+
+	
+void main(void)
+{
+	mediump vec4 textureColor = texture2D(texSampler, texCoord);
+	mediump vec4 maskColor = texture2D(texMaskSampler, texCoord);
+
+	mediump vec3 Normal = normalize(worldNormal);
+
+	// diffuse
+	mediump vec3 diffuse_color = textureCube(texEnvMapB, Normal).xyz * colorParams.w;
+	mediump vec3 diffuse = (litParam[1].xyz * diffuse_color + litParam[2].xyz + naturalColor.xyz);
+
+	mediump vec3 viewDir = normalize(camPos - worldPosition.rgb);
+	mediump vec3 H = normalize(litParam[0].xyz + viewDir);
+	mediump float NdotH = max(dot(Normal, H),0.0);
+	mediump vec3 reflect_dir = normalize(reflect(-viewDir, Normal));
+	
+	//rim
+	mediump float cosView = dot(viewDir, Normal);
+	mediump float shineEdge = pow(1.0 - cosView*cosView, (1.0 - maskColor.r)*colorParams.y*128.0);
+	mediump vec3 rimColor = max(shineEdge * edgeColor.xyz, 0.0);
+	gl_FragColor.xyz += (rimColor*0.00001);
+	
+	
+	// brdf specular 
+	mediump float _gloss = 1.0 - maskColor.g;
+	mediump vec3 reflect_Color = _GetEnvironmentCMap(texEnvMapA, texEnvMapB, reflect_dir, _gloss );
+ 
+	mediump vec3 specularIntensity = GetSpecular(Normal, viewDir, normalize(litParam[0].xyz), _gloss,  maskColor.rrr );
+
+	mediump vec3 specular = specularIntensity * reflect_Color * (colorParams.z+0.6) * 2.0;
+
+	// final color
+	gl_FragColor.xyz += (specular+diffuse) * textureColor.rgb;
+	gl_FragColor.w = 1.0;
+	gl_FragColor.xyz = lerp( gl_FragColor.xyz, textureColor.rgb, maskColor.bbb );
+	
+	//gl_FragColor.xyz*=0.00001;
+	//gl_FragColor.xyz+= specularIntensity.xyz;
+
+	
+}

@@ -1,0 +1,46 @@
+#version 100
+
+precision mediump float;
+
+#include <hdr_ldr.inc>
+uniform sampler2D texSampler;
+//uniform sampler2D sceneDepthSampler;
+
+uniform mediump vec2 RTSize;
+
+
+//uniform mediump float dof_h;
+
+uniform mediump float bright;
+
+varying mediump vec2 texCoord;
+
+void main(void)
+{
+	mediump vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
+	
+	//only use mid pixel depth 
+	//mediump vec2 texCoordDepthL = texCoord + vec2( -4.0 / RTSize.x, 0);
+	//mediump vec2 texCoordDepthR = texCoord + vec2( 4.0 / RTSize.x, 0);
+	//mediump vec4 depth = texture2D( sceneDepthSampler, texCoord);
+	//mediump vec4 depthL = texture2D( sceneDepthSampler, texCoordDepthL);
+	//mediump vec4 depthR = texture2D( sceneDepthSampler, texCoordDepthR);
+	for( int i = 0; i < 5; i++ )
+	{
+		//if (depth.r > dof_h && depthL.r > dof_h && depthR.r > dof_h)
+		//{
+
+		//	color += texture2d_ldr2hdr( texSampler, texCoord + vec2( (float(i)-4.0) / RTSize.x, 0)) * 0.13 * bright;
+		//}
+		//else
+		//{
+		//	color += texture2d_ldr2hdr( texSampler, texCoord) * 0.13 * bright;
+		//}
+		color += texture2d_ldr2hdr( texSampler, texCoord + vec2( (float(i)-2.0) / RTSize.x, 0)) * 0.10 * bright;
+		
+	}
+	
+	gl_FragColor = vec4( color.rgb, 1.0 );
+	gl_FragColor = hdr2ldr(gl_FragColor);
+}
+

@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<MaterialDesc>
+  <ShaderPrograme vs="SceneAlignedQuad.vs" ps="mbLastResult.ps">
+    <BlendState>
+      <BlendEnable value="false"/>
+      <SrcBlend value="BF_SRC_ALPHA"/>
+      <DstBlend value="BF_INV_DST_ALPHA"/>
+    </BlendState>
+    <RasterizerState>
+    </RasterizerState>
+    <DepthStencilState>
+      <WriteDepth value="false"/>
+      <DepthEnable value="false"/>
+    </DepthStencilState>
+    <SamplerState>
+      <BiLinearMirror>
+        <MinFilter value="FO_LINEAR"/>
+        <MagFilter value="FO_LINEAR"/>
+        <MipFilter value="FO_NONE"/>
+        <AddrUMode value="AM_CLAMP"/>
+        <AddrVMode value="AM_CLAMP"/>
+      </BiLinearMirror>
+    </SamplerState>
+    <Texture>
+      <stage no="0" sampler = "BiLinearMirror"/>
+    </Texture>
+    <VertexFormats>
+      <VertexFormat>
+        <VertexSemantic value="VS_POSITION"/>
+        <PixelFormat value="PF_RGB32_FLOAT"/>
+      </VertexFormat>
+      <VertexFormat>
+        <VertexSemantic value="VS_TEXCOORD"/>
+        <PixelFormat value="PF_RG32_FLOAT"/>
+      </VertexFormat>
+    </VertexFormats>
+  </ShaderPrograme>
+</MaterialDesc>

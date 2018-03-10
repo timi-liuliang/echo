@@ -1,0 +1,1 @@
+Compiled in Visual Studio 2013 using android++ extension, 32 bit only, GCC 4.9

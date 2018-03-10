@@ -1,0 +1,35 @@
+precision mediump float;
+#include <tonemapping.inc>
+#include <hdr_ldr.inc>
+
+uniform float _Intensity;
+uniform float _Power;
+uniform vec4 _HighLightColor;
+uniform sampler2D Albedo;
+
+
+varying vec2 texcoord0;
+varying vec3 normal;
+varying vec3 viewDir;
+
+
+void main ()
+{	
+	vec4 albedoTexture = texture2d_linear(Albedo, texcoord0);
+	
+	vec3 albedo = albedoTexture.rgb;
+	vec3 N = normalize(normal);
+	vec3 V = vec3(viewDir.x, 0.0, viewDir.z);
+    V = normalize(viewDir);
+	
+	float NdotV = max(0.0, dot(N, V));
+	
+	vec3 hightLightIntens = pow((1.0 - NdotV), _Power) * _Intensity * _HighLightColor.rgb;
+  
+	vec3 result = albedo + hightLightIntens;
+  
+	vec4 finalColor = vec4(result, 1.0);
+	gl_FragColor = finalColor;
+	gl_FragColor = hdr2ldr(gl_FragColor);
+}
+

@@ -1,0 +1,11 @@
+QT.qmltest_private.VERSION = 5.7.0
+QT.qmltest_private.MAJOR_VERSION = 5
+QT.qmltest_private.MINOR_VERSION = 7
+QT.qmltest_private.PATCH_VERSION = 0
+QT.qmltest_private.name = QtQuickTest
+QT.qmltest_private.module =
+QT.qmltest_private.libs = $$QT_MODULE_LIB_BASE
+QT.qmltest_private.includes = $$QT_MODULE_INCLUDE_BASE/QtQuickTest/5.7.0 $$QT_MODULE_INCLUDE_BASE/QtQuickTest/5.7.0/QtQuickTest
+QT.qmltest_private.frameworks =
+QT.qmltest_private.depends = testlib_private qmltest
+QT.qmltest_private.module_config = v2 internal_module

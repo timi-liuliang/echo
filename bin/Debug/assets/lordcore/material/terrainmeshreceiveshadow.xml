@@ -1,0 +1,62 @@
+<?xml version = "1.0" encoding = "GB2312"?>
+<MaterialDesc>
+	<ShaderPrograme vs="TerrainMeshReceiveShadow.vs" ps="TerrainMeshReceiveShadow1.ps">
+		<BlendState>
+		</BlendState>
+		<RasterizerState>
+			<DepthBias value="0.0"/>
+			<DepthBiasFactor value="1.0"/>
+		</RasterizerState>
+		<DepthStencilState>
+		</DepthStencilState>
+		<SamplerState>
+			<BiLinearMirror>
+				<MinFilter value="FO_LINEAR"/>
+				<MagFilter value="FO_LINEAR"/>
+				<MipFilter value="FO_NONE"/>
+				<AddrUMode value="AM_WRAP"/>
+				<AddrVMode value="AM_WRAP"/>
+			</BiLinearMirror>
+			<BiLinearMirrorShadowMap>
+				<MinFilter value="FO_LINEAR"/>
+				<MagFilter value="FO_LINEAR"/>
+				<MipFilter value="FO_NONE"/>
+				<AddrUMode value="AM_BORDER"/>
+				<AddrVMode value="AM_BORDER"/>
+				<AddrWMode value="AM_BORDER"/>
+				<BorderColor value="1 1 1 1"/>
+			</BiLinearMirrorShadowMap>
+		</SamplerState>
+		<Texture>
+			<stage no="0" sampler = "BiLinearMirror"/>
+			<stage no="1" sampler = "BiLinearMirror"/>
+			<stage no="2" sampler = "BiLinearMirror"/>
+			<stage no="3" sampler = "BiLinearMirror"/>
+			<stage no="4" sampler = "BiLinearMirror"/>
+			<stage no="5" sampler = "BiLinearMirrorShadowMap"/>			
+		</Texture>
+		<VertexFormats>
+			<VertexFormat>
+				<VertexSemantic value="VS_POSITION"/>
+				<PixelFormat value="PF_RGB32_FLOAT"/>
+			</VertexFormat>
+			<VertexFormat>
+				<VertexSemantic value="VS_NORMAL"/>
+				<PixelFormat value="PF_RGB32_FLOAT"/>
+			</VertexFormat>
+			<VertexFormat>
+				<VertexSemantic value="VS_COLOR"/>
+				<PixelFormat value="PF_RGBA8_UNORM"/>
+			</VertexFormat>
+			<VertexFormat>
+				<VertexSemantic value="VS_TEXCOORD"/>
+				<PixelFormat value="PF_RG32_FLOAT"/>
+			</VertexFormat>
+			<VertexFormat>
+				<VertexSemantic value="VS_TEXCOORD1"/>
+				<PixelFormat value="PF_RG32_FLOAT"/>
+			</VertexFormat>
+		</VertexFormats>
+		<FilterColor enable="true" />
+	</ShaderPrograme>
+</MaterialDesc>

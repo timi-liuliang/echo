@@ -1,0 +1,23 @@
+#version 100
+
+uniform sampler2D sceneColorSampler;
+uniform sampler2D FilterAdditionalSampler;
+
+varying mediump vec2 texCoord;
+
+void main(void)
+{
+    mediump vec3 weight = vec3(0.299, 0.587, 0.114);
+    mediump vec4 src = texture2D(sceneColorSampler, texCoord);
+    mediump vec4 blendmap = texture2D(FilterAdditionalSampler, texCoord);
+  
+    mediump float gray_value =  dot( src.rgb, weight );//max( color.r, max(color.g, color.b) );
+    if(gray_value <= 0.5)
+    {
+        gl_FragColor = 2.0*src*blendmap;
+    }
+    else
+    {
+        gl_FragColor = 1.0-2.0*(1.0-blendmap)*(1.0-src);
+    }
+}

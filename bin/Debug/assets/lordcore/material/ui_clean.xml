@@ -1,0 +1,24 @@
+<?xml version = "1.0" encoding = "GB2312"?>
+<MaterialDesc>
+	<ShaderPrograme vs="ui_clean.vs" ps="ui_clean.ps">
+		<BlendState>
+			<ColorWriteMask value="CMASK_ALL"/>
+		</BlendState>
+		<RasterizerState>
+		</RasterizerState>
+		<DepthStencilState>
+			<DepthEnable value="false"/>
+			<WriteDepth value="false"/>
+		</DepthStencilState>
+		<SamplerState>
+		</SamplerState>
+		<Texture>
+		</Texture>
+		<VertexFormats>
+			<VertexFormat>
+				<VertexSemantic value="VS_POSITION"/>
+				<PixelFormat value="PF_RGB32_FLOAT"/>
+			</VertexFormat>
+		</VertexFormats>
+	</ShaderPrograme>
+</MaterialDesc>

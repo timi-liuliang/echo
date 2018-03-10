@@ -1,0 +1,39 @@
+
+
+#version 100
+
+uniform sampler2D texSampler;
+
+uniform mediump vec2 RTSize;
+
+uniform mediump float brightThresholdValue;   
+
+varying mediump vec2 texCoord;
+
+void main()
+{
+	mediump vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
+	mediump vec2 offsets[4];
+	offsets[0] = vec2(-0.5  /RTSize.x, 0.5 / RTSize.y);
+	offsets[1] = vec2(0.5 / RTSize.x, 0.5 / RTSize.y);
+	offsets[2] = vec2(-0.5 / RTSize.x, -0.5 / RTSize.y);
+	offsets[3] = vec2(0.5 / RTSize.x, -0.5 / RTSize.y);
+
+	for( int i = 0; i < 4; i++ )
+	{
+		color += texture2D(texSampler, texCoord + offsets[i]);
+	}
+	
+	color *= 0.25;
+	
+	//mediump float bright_value = dot( color.rgb, vec3(0.299, 0.587, 0.114) );
+
+	mediump float bright_value = dot( color.rgb, vec3(1.0, 1.0, 1.0) );
+	
+	if( bright_value > brightThresholdValue )
+	{
+		color *= 1.8;
+	}
+	
+	gl_FragColor = color;
+}

@@ -1,0 +1,29 @@
+#version 100
+
+uniform sampler2D texSampler;
+
+uniform mediump vec4 arrayDSGOffset[9];
+
+varying mediump vec2 texCoord;
+
+
+void main(void)
+{
+    mediump vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
+    mediump float maximum_gray = -1e20;
+    mediump float average_gray = 0.0;
+	
+	for( int i = 0; i < 9; i++ )
+	{
+		color = texture2D( texSampler, texCoord + vec2(arrayDSGOffset[i].x, arrayDSGOffset[i].y) );
+		
+		average_gray += color.r;
+		
+		maximum_gray = max( maximum_gray, color.g );
+
+	}
+
+	average_gray /= 9.0;
+	
+	gl_FragColor = vec4( average_gray, maximum_gray, 0.0, 1.0 );
+}

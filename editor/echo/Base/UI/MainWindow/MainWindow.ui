@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1126</width>
+    <height>722</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QT_UI::QMenuBarEx" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1126</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile_F">
+    <property name="title">
+     <string>File(&amp;F)</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuHelp_H">
+    <property name="title">
+     <string>Help(&amp;H)</string>
+    </property>
+    <addaction name="m_actionAbout"/>
+   </widget>
+   <addaction name="menuFile_F"/>
+   <addaction name="menuHelp_H"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="m_actionAbout">
+   <property name="icon">
+    <iconset resource="../../../Resource/App.qrc">
+     <normaloff>:/icon/Icon/effectskin.png</normaloff>:/icon/Icon/effectskin.png</iconset>
+   </property>
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QT_UI::QMenuBarEx</class>
+   <extends>QMenuBar</extends>
+   <header>qmenubarex.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../../../Resource/App.qrc"/>
+ </resources>
+ <connections/>
+</ui>

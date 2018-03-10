@@ -1,0 +1,20 @@
+#version 100
+
+precision mediump float;
+
+#include <hdr_ldr.inc>
+
+uniform sampler2D sceneSampler;
+uniform sampler2D lastSceneSampler;
+
+varying mediump vec2 texCoord;
+
+uniform mediump float blur_param;
+
+void main(void)
+{
+	vec4 scene_color = texture2d_ldr2hdr(sceneSampler,texCoord);
+	vec4 last_motion_color = texture2d_ldr2hdr(lastSceneSampler,texCoord);
+
+	gl_FragColor = mix(scene_color,last_motion_color,blur_param);
+}

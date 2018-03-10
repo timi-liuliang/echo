@@ -1,0 +1,16 @@
+-prefix
+D:/Qt
+-debug-and-release
+-force-debug-info
+-opensource
+-shared
+-no-compile-examples
+-force-asserts
+-platform
+win32-msvc2013
+-skip
+qtwebengine
+-no-opengl
+-no-angle
+-opengl
+dynamic

@@ -1,0 +1,107 @@
+#version 100
+precision mediump float;
+#include <tonemapping.inc>
+#include <fog_ps.inc>
+#include <hdr_ldr.inc>
+
+uniform mediump vec4 ActorLitParam[3]; // 0.sunDir  1.sunColor 2.environmentColor
+uniform float _Gloss;
+uniform float _SpecularPower;
+uniform float _RimIntensity;
+uniform float _RimPower;
+uniform vec3 _RimDir;
+uniform vec3 _LightDir;
+uniform sampler2D Albedo;
+
+#ifdef GLOSS_MAP
+	uniform sampler2D glossSampler;
+#endif
+
+#ifdef DYNAMIC_SPECULAR
+	uniform sampler2D 	  specularSampler;
+#endif
+
+#define saturate(x) clamp( x, 0.0, 1.0 )
+
+varying vec2 texcoord0;
+varying vec3 viewNormal;
+varying vec3 viewDir;
+
+varying vec4 ofogColor;
+
+#ifdef NORMAL_MAP
+	uniform sampler2D normalSampler;
+	varying mediump vec3 tangent;
+	varying mediump vec3 binormal;
+
+	vec3 SurfaceNormal(vec3 n)
+	{
+		vec3 T = tangent;
+		vec3 B = binormal;
+		vec3 N = gl_FrontFacing ? viewNormal : -viewNormal;
+
+		n = 2.0*n - vec3(1.0);
+		return normalize(T*n.x + B*n.y + N*n.z);
+	}
+#endif
+
+void main ()
+{
+	vec4 albedoTexture = texture2d_linear(Albedo, texcoord0);
+	vec3 albedo = albedoTexture.rgb;
+	vec3 specular = albedo;
+	vec3 lightColor = ActorLitParam[1].rgb;
+	vec3 ambientcolor = ActorLitParam[2].rgb;
+	
+#ifdef DYNAMIC_SPECULAR
+	vec4 specularMap = texture2d_linear(specularSampler, texcoord0);
+	specular = specularMap.rgb;	
+#endif
+	
+#ifdef NORMAL_MAP
+	vec3 N = SurfaceNormal(texture2D(normalSampler, texcoord0).xyz);
+#else
+	vec3 N = normalize(viewNormal);
+#endif
+
+	vec3 V = normalize(viewDir);
+	vec3 L = normalize(_LightDir);
+	vec3 H = normalize(L + V);
+	vec3 R = normalize(_RimDir);
+	vec3 Z = vec3(0.0, 0.0, -1.0);
+ 
+	vec3 W = vec3(N.x, 0.5, N.z);
+	W = normalize(W);
+	float LdotH = saturate(dot(L, H));
+	float NdotL = saturate(dot(N, L));
+	float NdotH = saturate(dot(N, H));
+	float WdotR = saturate(dot(W, R));
+	float ZdotR = saturate(dot(Z, R));
+	
+#ifdef GLOSS_MAP
+	float gloss = texture2D(glossSampler, texcoord0).r * _Gloss;
+#else
+	float gloss = _Gloss;
+#endif
+	
+	float specPower = _SpecularPower;
+
+	float atten = 2.0;
+	vec3 lightIntens = atten * lightColor;  
+  
+	vec3 ambiIntens = albedo * ambientcolor * 2.0;
+	vec3 diffIntens = albedo * NdotL * lightIntens;
+	vec3 specIntens = specular * pow(NdotH, specPower) * lightIntens;
+  
+	vec3 rimIntens = lightColor * pow(WdotR*(1.0 - ZdotR), _RimPower) * _RimIntensity;
+  
+	vec3 result = ambiIntens + diffIntens + specIntens + rimIntens;
+  
+	gl_FragColor = vec4(result, 1.0);
+
+	gl_FragColor.xyz = mix(ofogColor.xyz, gl_FragColor.xyz, ofogColor.a);
+	gl_FragColor.rgb = mix(gl_FragColor.rgb, varHeightFog.rgb, ComputeHeightFog(varHeightFog.a));
+
+	gl_FragColor = hdr2ldr(gl_FragColor);
+}
+

@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<pipeline>
+	<RenderTarget id="PBRPass" material="pp_pbrpass.xml" width="" height="" scale="1.0" depth = "RTI_LDRSceneColorMap" formate="PF_RGBA8_UNORM" custom="PostFrag">
+		<BindBuffer sampler="tInput" sourceRT="RTI_LDRSceneColorMap" slot="0" mutable="1"/>
+
+		<BindBuffer sampler="tBlur" sourceRT="bloom1" slot="1" for="GuassBlur" />
+
+		<BindBuffer sampler="tBloom" sourceRT="bloom1" slot="2" for="Bloom" />
+
+		<BindBuffer sampler="tDofBlur" sourceRT="bloom1" slot="3" for="Dof" />
+		<BindBuffer sampler="tDepth" sourceRT="RTI_LDRSceneColorMap" slot="4" depth="1" for="Dof" />
+
+		<BindBuffer sampler="tPreviousFrame" sourceRT="previousFrame" slot="5" for="MotionBlur" />
+		
+		<Uniform name="color" for="Bloom" x="1" y="1" z="1" w="1" />
+		<Uniform name="brightness" for="Bloom" x="0.2"/>
+		
+		<Uniform name="dof_c" for="Dof" x="0.8164" />
+		<Uniform name="attenuation" for="Dof" x="30" />
+
+		<Uniform name="blur_param"  for="MotionBlur" x="0.6" />
+
+		<Uniform name="blurWidth" for="FocusBlur" x="0.7" />
+		<Uniform name="blurStrength" for="FocusBlur" x="6" />
+	</RenderTarget>
+</pipeline>

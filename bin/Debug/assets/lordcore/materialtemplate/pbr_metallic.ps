@@ -1,0 +1,290 @@
+#version 100
+
+precision highp float;
+
+#include <tonemapping.inc>
+#include <hdr_ldr.inc>
+
+uniform sampler2D tAlbedo;
+uniform sampler2D tMetallic;
+uniform sampler2D tNormal;
+uniform sampler2D tSkySpecular;
+
+#ifndef MERGE_GLOSS
+uniform sampler2D tGloss;
+#endif
+
+uniform float	uHorizonOcclude;
+uniform float	uHorizonSmoothing;
+uniform float	uShadowShade;
+uniform float	uMetallic;
+
+uniform float uScaleLevel1;
+
+uniform vec3	camPos;
+uniform float	tGlossIntensity;
+uniform vec3 	uSaturation;
+
+varying vec2 vTexCoord;
+varying vec3 vNormal;
+varying vec3 vBinormal;
+varying vec3 vTangent;
+varying vec3 vPosition;
+
+#ifdef RECEIVE_SHADOW
+	uniform sampler2D	SMSampler;
+	varying vec4		shadowmapSpace;
+#endif
+
+#ifdef ALPHA_BLEND
+	uniform sampler2D tAlphaSampler;
+#endif
+
+#ifdef ALPHA_TEST
+	uniform float uAlphaTest;
+#endif
+
+#ifdef AMBIENT_OCCLUSION
+	uniform sampler2D tExtras;
+#endif
+
+#ifdef EMISSIVE
+	uniform sampler2D tEmissive;
+	uniform vec4 uEmissiveColor;
+	uniform float uEmissiveScale;
+#endif
+
+uniform vec4 uDiffuseCoefficients[9];
+
+#ifdef LIGHT_COUNT
+	uniform vec4 uLightPositions[LIGHT_COUNT];
+	uniform vec3 uLightDirections[LIGHT_COUNT];
+	uniform vec3 uLightColors[LIGHT_COUNT];
+	uniform vec3 uLightParams[LIGHT_COUNT];
+	uniform vec3 uLightSpot[LIGHT_COUNT];
+#endif
+
+#define saturate(x) clamp(x, 0.0, 1.0)
+vec3 Sqr(vec3 sRGB)
+{
+	return sRGB*sRGB;
+}
+
+vec3 SurfaceNormal(vec3 n)
+{
+	vec3 T = vTangent;
+	vec3 B = vBinormal;
+	vec3 N = gl_FrontFacing ? vNormal : -vNormal;
+
+	 N = normalize(N);
+	// T -= dot(T, N)*N;
+	 T = normalize(T);
+	// B = (B - dot(B, N)*N) - dot(B, T)*T;
+	 B = normalize(B);
+
+	n = 2.0*n - vec3(1.0);
+	return normalize(T*n.x + B*n.y + N*n.z);
+}
+
+vec3 F_Schlick(vec3 viewDir, vec3 normal, vec3 reflectColor, float gloss)
+{
+	float ei = 1.0 - saturate(dot(viewDir, normal));
+	float ej = ei * ei;
+	ei *= ej * ej;
+	ei *= gloss;
+	return (reflectColor - ei * reflectColor) + ei * vec3(1.0);
+}
+
+float dC(vec3 reflectDir, vec3 normal)
+{
+	normal = gl_FrontFacing ? normal : -normal;
+	float eO = dot(reflectDir, normal);
+	eO = saturate(1.0 + uHorizonOcclude*eO);
+	return eO*eO;
+}
+
+vec3 SH_Coeff(vec3 normal)
+{
+#define c(n) uDiffuseCoefficients[n].xyz * uScaleLevel1
+	vec3 C = (c(0) + normal.y*((c(1) + c(4)*normal.x) + c(5)*normal.z)) + normal.x*(c(3) + c(7)*normal.z) + c(2)*normal.z;
+#undef c
+	vec3 sqr = normal*normal;
+	C += uDiffuseCoefficients[6].xyz*(3.0*sqr.z - 1.0) * uScaleLevel1;
+	C += uDiffuseCoefficients[8].xyz*(sqr.x - sqr.y) * uScaleLevel1;
+	return C;
+}
+
+vec4 ConvertRGBEtoFloatingPoint( vec4 Value )
+{
+	float MidPoint = ( 118.0 / 255.0 );
+
+	float Brightness = exp2( ( Value.a - MidPoint ) * 10.0 );
+	return vec4( Value.rgb * Brightness, 1.0 );
+}
+
+vec3 decodeRGBE( vec4 hdr )
+{
+  return hdr.rgb * exp2( (hdr.a*255.0)-128.0 );
+}
+
+vec3 IBL(in vec3 reflectDir, float gloss)
+{
+	reflectDir /= dot(vec3(1.0), abs(reflectDir));
+	vec2 eH = abs(reflectDir.zx) - vec2(1.0, 1.0);
+	vec2 eI = vec2(reflectDir.x < 0.0 ? eH.x : -eH.x, reflectDir.z < 0.0 ? eH.y : -eH.y);
+	vec2 eJ = (reflectDir.y < 0.0) ? eI : reflectDir.xz; 
+	eJ = vec2(0.5*(254.0 / 256.0), 0.125*0.5*(254.0 / 256.0))*eJ + vec2(0.5, 0.125*0.5);
+	float eK = fract(7.0*gloss);
+	eJ.y += 0.125*(7.0*gloss - eK);
+	eJ.y = 1.0 - eJ.y;
+	vec2 eL = eJ - vec2(0.0, 0.125);
+
+	vec4 sky1 = (texture2D(tSkySpecular, eJ));
+	vec4 sky2 = (texture2D(tSkySpecular, eL));
+	vec4 eM = mix(sky1, sky2, eK);
+	vec3 r = eM.xyz*(7.0*eM.w);
+
+	return r*r*sqrt(uScaleLevel1);
+}
+
+// vec3 hv(vec3 c)
+// {
+// 	vec3 hA = sqrt(c);
+// 	return(hA - hA*c) + c*(0.4672*c + vec3(0.5328));
+// }
+
+void main( void )
+{
+	vec4 albedo = texture2D(tAlbedo,vTexCoord);
+	vec4 metallicTex = texture2D(tMetallic,vTexCoord);
+	float metallic = metallicTex.x * metallicTex.x * uMetallic;
+
+	vec3 albedo_rgb_sqr = Sqr(albedo.xyz);
+	float albedo_a = albedo.w;
+
+	const float Default_Metallic = 0.04;
+	vec3 reflectityColor = mix(vec3(Default_Metallic), albedo_rgb_sqr.xyz, vec3(metallic));
+	albedo_rgb_sqr.xyz *= vec3(1.0 - metallic);
+
+	float dd = 1.0;
+#ifdef AMBIENT_OCCLUSION
+	dd = texture2D(tExtras, vTexCoord).x;
+	dd *= dd;
+#endif
+
+#ifdef ALPHA_BLEND
+	albedo_a = texture2D(tAlphaSampler, vTexCoord).r;
+#endif
+
+#ifdef ALPHA_TEST
+	if (albedo_a < uAlphaTest)
+	{
+		discard;
+	}
+#endif
+
+	vec3 specular_rgb_sqr = reflectityColor.xyz;
+#ifndef MERGE_GLOSS
+	float gloss = texture2D(tGloss,vTexCoord).r;
+#else
+	float gloss = metallicTex.w;
+#endif
+	
+#ifdef INVERT_GLOSS
+	gloss = 1.0 - gloss;
+#endif
+
+	vec3 normal = SurfaceNormal(texture2D(tNormal, vTexCoord).xyz);
+	
+	vec3 eye = normalize(camPos.xyz - vPosition);
+
+	float horizon = dot(eye, normal);
+	horizon = uHorizonSmoothing - horizon * uHorizonSmoothing;
+
+	gloss = mix(gloss, 1.0, horizon * horizon) * tGlossIntensity;
+
+	vec3 f_reflectDir = reflect(-eye, normal);
+
+	vec3 f_diffuse = SH_Coeff(normal) * dd;     //vec3 dn = du(Normal);
+
+	vec3 f_specular = IBL(f_reflectDir, gloss); //vec3 dA = dB(dv, V);
+
+	f_specular *= dC(f_reflectDir, normal);
+	
+#ifdef RECEIVE_SHADOW
+	// shadow
+	float smColor = 1.0;
+	vec3 smCoordDepth = shadowmapSpace.xyz; 
+	vec2 smCoord = smCoordDepth.xy * 0.5 + 0.5;
+	{
+		float z = clamp(smCoordDepth.z, 0.0, 1.0);
+		float dxx = dot(vec4(texture2D(SMSampler, smCoord)) ,vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+		float dx = 2.71828 - exp((z - dxx) * 1024.0);
+
+		smColor = clamp(dx, 1.0 - uShadowShade, 1.0);
+	}
+	
+#endif
+	
+#ifdef LIGHT_COUNT
+	float smColors[LIGHT_COUNT];
+
+	highp float dD = 10.0 / log2(gloss * 0.968 + 0.03);
+	dD *= dD;
+	float dE = dD * (1.0 / (8.0 * 3.1415926)) + (4.0 / (8.0 * 3.1415926));
+	dE = min(dE, 1.0e3);
+
+	for (int u = 0; u < LIGHT_COUNT; ++u)
+	{
+#ifdef RECEIVE_SHADOW
+		// 为了方便计算设置了只有第一盏灯会投射阴影
+		smColors[u] = 1.0;
+		smColors[0] = smColor;
+#endif
+
+#ifdef IS_FOR_UI
+		vec3 dK = uLightPositions[u].xyz * -1.0 - vPosition * uLightPositions[u].w;
+#else
+		vec3 dK = uLightPositions[u].xyz - vPosition * uLightPositions[u].w;
+#endif
+		float dL = inversesqrt(dot(dK, dK));
+		dK *= dL;
+		// uLightParams-> x: falloff * -2 y: falloff * 2 - 1 z: 1 / radius (For Point Light)
+		float a = saturate(uLightParams[u].z / dL);
+		a = 1.0 + a * (uLightParams[u].x + uLightParams[u].y*a); //衰减
+		float s = saturate(dot(dK, uLightDirections[u]));
+		s = saturate(uLightSpot[u].y - uLightSpot[u].z * (1.0 - s * s));
+		vec3 dM = (a * s) * uLightColors[u].xyz;
+		
+		float dQ = saturate((1.0 / 3.1415926) * dot(dK, normal));
+		
+#ifdef RECEIVE_SHADOW
+		dQ *= smColors[u];
+#endif
+
+		f_diffuse += dQ * dM;
+
+		vec3 dR = dK + eye;
+		dR = normalize(dR);
+		float dS = dE * pow(saturate(dot(dR, normal)), dD);
+		
+#ifdef RECEIVE_SHADOW	
+		dS *= smColors[u];
+#endif
+		f_specular += dS * dM;
+	}	
+#endif
+
+	f_specular *= F_Schlick(eye, normal, specular_rgb_sqr, gloss*gloss);
+
+	gl_FragColor.xyz = f_diffuse * albedo_rgb_sqr + f_specular;
+
+#ifdef EMISSIVE
+	vec3 emissive = Sqr(texture2D(tEmissive, vTexCoord).xyz) * uEmissiveColor.xyz * uEmissiveScale;
+	gl_FragColor.xyz += emissive;
+#endif
+
+	gl_FragColor.w = albedo_a;
+	
+	gl_FragColor = hdr2ldr(gl_FragColor); 
+}

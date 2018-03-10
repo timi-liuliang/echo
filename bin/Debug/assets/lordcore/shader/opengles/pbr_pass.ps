@@ -1,0 +1,82 @@
+#version 100
+precision mediump float;
+
+#define HEJL
+
+#include <tonemapping.inc>
+#include <hdr_ldr.inc>
+
+#ifdef FOCUSBLUR
+#include <focus_blur.inc>
+#endif
+
+uniform sampler2D tInput;
+varying vec2 texCoord;
+
+#ifdef GUASSBLUR
+uniform sampler2D tBlur;
+#endif
+
+#ifdef DOF
+uniform sampler2D tDofBlur;
+uniform sampler2D tDepth;
+uniform mediump float dof_c;
+uniform mediump float attenuation;
+#endif
+
+#ifdef BLOOM
+uniform sampler2D tBloom;
+uniform vec4 color;
+uniform float brightness;
+#endif
+
+#ifdef MOTIONBLUR
+uniform sampler2D tPreviousFrame;
+uniform mediump float blur_param;
+#endif
+
+void main()
+{
+	vec4 baseColor = texture2d_ldr2hdr(tInput, texCoord);
+	vec4 c = baseColor;
+#ifdef GUASSBLUR
+	c = c*0.000001 + texture2d_ldr2hdr(tBlur, texCoord);
+#endif
+
+#ifdef FOCUSBLUR
+	c = calcFocusBlur(baseColor, tInput, texCoord);
+#endif
+
+#ifdef DOF
+	vec4 blur = texture2d_ldr2hdr(tDofBlur, texCoord);
+	vec4 depth = texture2D(tDepth, texCoord);
+	c = mix(c, blur, clamp((depth.r - dof_c) * attenuation, 0.0, 1.0));
+#endif
+
+#ifdef BLOOM
+	c.rgb += (brightness*color*texture2d_ldr2hdr(tBloom, texCoord)).rgb;
+#endif
+
+#ifdef TONEMAPPING
+	c.rgb = toneMapping(c.rgb);
+#endif
+
+	c.rgb = hv(c.rgb);
+
+#ifdef MOTIONBLUR
+	vec4 last_motion_color = texture2D(tPreviousFrame, texCoord);
+	c.rgb = mix(c, last_motion_color, blur_param).rgb;
+#endif
+
+#ifdef ISFORUI
+#ifdef NONSUPPOT_HFLOAT_COLORBUFFER 
+	float a = max(baseColor.r,max(baseColor.g,baseColor.b));
+	if(a > 0.0001)
+		c.a = 1.0;
+	else
+		c.a = 0.0;
+#endif
+#endif
+
+	gl_FragColor = c;
+}

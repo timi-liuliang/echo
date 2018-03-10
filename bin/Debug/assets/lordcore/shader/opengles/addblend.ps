@@ -1,0 +1,15 @@
+#version 100
+
+uniform sampler2D brightMap;
+uniform sampler2D blurredMap;
+
+
+
+varying mediump vec2 texCoord;
+
+void main(void)
+{
+	mediump vec4 bright_color = texture2D(brightMap, texCoord);
+	mediump vec4 blurred_color = texture2D(blurredMap, texCoord);
+	gl_FragColor = 0.5 * (bright_color + blurred_color);
+}

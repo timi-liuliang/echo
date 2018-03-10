@@ -1,0 +1,143 @@
+#version 100
+precision mediump float;
+
+varying mediump vec2 texCoord;	//input interpolated texture coordinate
+uniform sampler2D texSampler;	//the input image to blur
+uniform vec2 texelSize;
+// mediump float kernel[21] = float[21](0.000272337,  0.00089296, 0.002583865, 0.00659813,  0.014869116,
+// 0.029570767, 0.051898313, 0.080381679, 0.109868729, 0.132526984, 
+// 0.14107424,  0.132526984, 0.109868729, 0.080381679, 0.051898313, 
+// 0.029570767, 0.014869116, 0.00659813,  0.002583865, 0.00089296, 0.000272337);
+
+void main()
+{ 
+	mediump vec2 delta = /*vec2(1.0/256.0,1.0/256.0)*/texelSize;
+	mediump float color = 0.0;
+ 
+ 	mediump float d0 = dot(texture2D(texSampler, texCoord + (vec2(0.0,0.0*delta.y))),
+		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+// 	mediump float d1 = dot(texture2D(texSampler, texCoord + (vec2(0.0,-10.0*delta.y))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+// 	mediump float d2 = dot(texture2D(texSampler, texCoord + (vec2(0.0,-9.0*delta.y))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+// 	mediump float d3 = dot(texture2D(texSampler, texCoord + (vec2(0.0,-8.0*delta.y))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+// 	mediump float d4 = dot(texture2D(texSampler, texCoord + (vec2(0.0,-7.0*delta.y))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+// 	mediump float d5 = dot(texture2D(texSampler, texCoord + (vec2(0.0,-6.0*delta.y))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+// 	mediump float d6 = dot(texture2D(texSampler, texCoord + (vec2(0.0,-5.0*delta.y))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+// 	mediump float d7 = dot(texture2D(texSampler, texCoord + (vec2(0.0,-4.0*delta.y))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+// 	mediump float d8 = dot(texture2D(texSampler, texCoord + (vec2(0.0,-3.0*delta.y))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+//  	mediump float d9 = dot(texture2D(texSampler, texCoord + (vec2(0.0,-2.0*delta.y))),
+//  		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+	mediump float d10 = dot(texture2D(texSampler, texCoord + (vec2(0.0,-1.0*delta.y))),
+		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+	mediump float d11 = dot(texture2D(texSampler, texCoord + (vec2(0.0,1.0*delta.y))),
+		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+//  	mediump float d12 = dot(texture2D(texSampler, texCoord + (vec2(0.0,2.0*delta.y))),
+//  		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+// 	mediump float d13 = dot(texture2D(texSampler, texCoord + (vec2(0.0,3.0*delta.y))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+// 	mediump float d14 = dot(texture2D(texSampler, texCoord + (vec2(0.0,4.0*delta.y))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+// 	mediump float d15 = dot(texture2D(texSampler, texCoord + (vec2(0.0,5.0*delta.y))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+// 	mediump float d16 = dot(texture2D(texSampler, texCoord + (vec2(0.0,6.0*delta.y))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+// 	mediump float d17 = dot(texture2D(texSampler, texCoord + (vec2(0.0,7.0*delta.y))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+//  	mediump float d18 = dot(texture2D(texSampler, texCoord + (vec2(0.0,8.0*delta.y))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+//  	mediump float d19 = dot(texture2D(texSampler, texCoord + (vec2(0.0,9.0*delta.y))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+//  	mediump float d20 = dot(texture2D(texSampler, texCoord + (0.0,vec2(10.0*delta.y))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+
+// 	mediump float d00 = dot(texture2D(texSampler, texCoord + (vec2(0.0*delta.x,0.0))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+// 	mediump float d1111 = dot(texture2D(texSampler, texCoord + (vec2(-10.0*delta.x,0.0))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+// 	mediump float d22 = dot(texture2D(texSampler, texCoord + (vec2(-9.0*delta.x,0.0))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+// 	mediump float d33 = dot(texture2D(texSampler, texCoord + (vec2(-8.0*delta.x,0.0))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+// 	mediump float d44 = dot(texture2D(texSampler, texCoord + (vec2(-7.0*delta.x,0.0))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+// 	mediump float d55 = dot(texture2D(texSampler, texCoord + (vec2(-6.0*delta.x,0.0))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+// 	mediump float d66 = dot(texture2D(texSampler, texCoord + (vec2(-5.0*delta.x,0.0))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+// 	mediump float d77 = dot(texture2D(texSampler, texCoord + (vec2(-4.0*delta.x,0.0))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+// 	mediump float d88 = dot(texture2D(texSampler, texCoord + (vec2(-3.0*delta.x,0.0))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+// 	mediump float d99 = dot(texture2D(texSampler, texCoord + (vec2(-2.0*delta.x,0.0))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+// 	mediump float d100 = dot(texture2D(texSampler, texCoord + (vec2(-1.0*delta.x,0.0))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+// 	mediump float d111 = dot(texture2D(texSampler, texCoord + (vec2(1.0*delta.x,0.0))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+// 	mediump float d122 = dot(texture2D(texSampler, texCoord + (vec2(2.0*delta.x,0.0))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+// 	mediump float d133 = dot(texture2D(texSampler, texCoord + (vec2(3.0*delta.x,0.0))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+// 	mediump float d144 = dot(texture2D(texSampler, texCoord + (vec2(4.0*delta.x,0.0))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+// 	mediump float d155 = dot(texture2D(texSampler, texCoord + (vec2(5.0*delta.x,0.0))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+// 	mediump float d166 = dot(texture2D(texSampler, texCoord + (vec2(6.0*delta.x,0.0))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+// 	mediump float d177 = dot(texture2D(texSampler, texCoord + (vec2(7.0*delta.x,0.0))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+//  	mediump float d188 = dot(texture2D(texSampler, texCoord + (vec2(8.0*delta.x,0.0))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+//  	mediump float d199 = dot(texture2D(texSampler, texCoord + (vec2(9.0*delta.x,0.0))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+//  	mediump float d200 = dot(texture2D(texSampler, texCoord + (vec2(10.0*delta.x,0.0))),
+// 		vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
+
+  	mediump float m7,m8,m9, m10, m11, m12, m13;
+
+
+
+// 	m7 = 0.00;
+// 	m8 = 0.05;
+	m9 = 0.15;
+	m10 = 0.7;
+	m11 = 0.15;
+// 	m12 = 0.05;
+// 	m13 = 0.00;
+
+// 	color += m7*d8;
+//  	color += m8*d9;
+	color += m9*d10;
+	color += m10*d0;
+	color += m11*d11;
+//  	color += m12*d12;
+// 	color += m13*d13;
+
+	
+
+// 	color = (300.0*d0 
+// 		+ log(m10+(
+// 		m7*(exp(300.0*(d8-d0))/*+exp(300.0*(d88-d0))*/)+
+// 		m8*(exp(300.0*(d9-d0))+exp(300.0*(d99-d0)))+
+// 		m9*(exp(300.0*(d10-d0))+exp(300.0*(d100-d0)))+
+// 		m11*(exp(300.0*(d11-d0))+exp(300.0*(d111-d0)))+
+// 		m12*(exp(300.0*(d12-d0))+exp(300.0*(d122-d0)))
+// 		m13*(exp(300.0*(d13-d0))+exp(300.0*(d133-d0)))
+// 	)))
+// 		/(300.0)
+// 	;
+
+	mediump vec4 enc = vec4(1.0, 255.0, 65025.0, 16581375.0) * clamp(color,0.0,0.9995);
+	enc = fract(enc);
+	enc -= enc.yzww * vec4(1.0 / 255.0, 1.0 / 255.0, 1.0 / 255.0, 0);
+
+	//return the filtered colour as fragment output
+	gl_FragColor =  enc;
+}

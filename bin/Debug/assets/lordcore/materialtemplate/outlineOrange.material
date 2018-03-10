@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<MaterialRoot>
+	<MaterialTemplate name="outline2.mt" stage="Transparent" submit_to_stage="false" macros=""/>
+	<RasterizerState>
+		<CullMode value="CULL_FRONT"/>
+	</RasterizerState>
+	<DepthStencilState>
+		<DepthEnable value="true"/>
+		<WriteDepth value="false"/>
+	</DepthStencilState>
+	<Uniform>
+		<Property name="EdgeColor" type="SPT_VEC4" count="1" value="1 0.666 0 1"/>
+		<Property name="EdgeScale" type="SPT_FLOAT" count="1" value="0.119"/>
+	</Uniform>
+	<Controllers/>
+</MaterialRoot>
+

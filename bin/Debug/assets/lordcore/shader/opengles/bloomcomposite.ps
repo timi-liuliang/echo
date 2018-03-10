@@ -1,0 +1,15 @@
+#version 100
+precision highp float;
+uniform sampler2D tInput;
+uniform sampler2D tBloom;
+uniform vec4 color;
+uniform float brightness;
+varying highp vec2 texCoord;
+
+void main(void)
+{
+    vec4 c = texture2D(tInput, texCoord);
+    c += brightness*color*texture2D(tBloom, texCoord);
+    gl_FragColor.xyz = c.xyz;
+    gl_FragColor.w = c.w;
+}

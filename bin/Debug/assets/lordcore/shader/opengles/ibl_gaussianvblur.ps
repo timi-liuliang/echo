@@ -1,0 +1,29 @@
+#version 100
+precision highp float;
+
+uniform sampler2D texSampler;
+uniform vec2 texelSize;
+uniform float sigma;
+
+varying vec2 texCoord;
+
+#define saturate(x) clamp(x, 0.0, 1.0)
+
+float ComputeGaussianValue(float x, float sigma)
+{
+	return (1.0 / sqrt(2.0 * 3.141592653589793 * sigma * sigma)) * exp(-x * x  / (2.0 * sigma * sigma));
+}
+
+void main(void)
+{
+	vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
+	
+	int r = int(sigma*3.0 + 0.5);
+	for( int i = -r; i <= r; i++ )
+	{
+		float weight = saturate(ComputeGaussianValue(float(i),sigma));
+		color += texture2D( texSampler, texCoord + vec2(float(i)* texelSize.x,0.0)) * weight;
+	}
+	
+	gl_FragColor = vec4( color.rgb, 1.0 );
+}

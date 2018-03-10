@@ -1,0 +1,323 @@
+QMenuBar
+{
+    background-color: #FF535353;
+    color: rgb(243,243,243);
+	min-height:27px;
+	font : bold;
+	border-top: 1px solid #383838;
+	border-left: 1px solid #383838;
+	border-right: 1px solid #383838;
+	/*border-radius:5px;*/
+}
+
+QMenuBar::item:pressed
+{
+	background:rgb(26,26,26);
+}
+
+QMenu
+{
+	font : bold;
+}
+
+QMenu::item
+{
+	color : rgb(243,243,243);
+	/*font : bold;*/
+}
+
+QMenu::item:selected
+{
+	background-color:rgb(26,26,26);
+}
+
+QMenu::icon
+{
+	border : none;
+}
+
+QWidget
+{
+	color : rgb(180,180,180);
+	font : bold;
+	background-color: #FF535353;
+}
+
+QToolBar
+{
+    background-color: #FF535353;
+	border-top: 1px solid #383838;
+	border-bottom:1px solid #383838;
+	border-left: 1px solid #383838;
+	border-right: 1px solid #383838;
+}
+
+QToolBar::handle 
+{
+    image: url(:/icon/Icon/handle.png);
+}
+
+QDockWidget 
+{
+	font : bold;
+	color : rgb(180,180,180);
+	titlebar-close-icon: url(:/icon/Icon/close.png);
+	titlebar-normal-icon: url(:/icon/Icon/minimize.png);
+}
+
+QDockWidget::title 
+{
+    text-align: center; /* align the text to the left */
+	background-color: rgb(66,66,66)/*#FF535353;*/
+}
+
+QTabWidget:pane
+{
+}
+
+QTabWidget::tab-bar 
+{ /* The tab widget frame */
+
+}
+
+QTabBar
+{
+	background : rgb(66,66,66);
+}
+
+/* QTabBar */
+QTabBar::tab
+{
+	background:rgb(66,66,66);
+	color : rgb(180,180,180);
+	font : bold;
+	padding: 8 8px;
+	min-width: 80px;
+	
+	/*order-left:1px solid rgb(66,66,66);*/
+	border: 1px solid rgb(56,56,56);
+}
+
+QTabBar::tab:selected,QTabBar::tab:hover
+{
+	background:rgb(77,77,77);
+	color:rgb(243,243,243);
+	
+	border-top: none;
+}
+
+QGroupBox
+{
+	border: 2px solid rgb(56,56,56);
+}
+
+QMainWindow::separator
+{
+    background-color: rgb(56,56,56);
+    color: white;
+    padding-left: 4px;
+    spacing: 2px;
+    /*border: 2px dashed rgb(56,56,56);*/
+}
+
+QLineEdit
+{
+	height: 22px;
+	border : 1px solid rgb(56,56,56);
+	background-color: rgb( 102, 102, 102);
+	color : rgb(180,180,180);
+	margin: 2px;
+}
+
+QToolButton
+{
+	border: 0px solid #666666;
+}
+
+QToolButton:hover
+{
+	border: 2px solid #1E90FF;
+}
+
+QToolButton:pressed
+{
+	border: 2px solid #666666;
+}
+
+QListWidget
+{
+	border : 1px solid rgb(56,56,56);
+}
+
+/*QTreeWidget
+{
+	border:1px solid rgb(56,56,56);
+}*/
+
+
+/* QHeaderView */
+QHeaderView
+{
+	color: rgb(180,180,180);
+	background-color: rgb(56,56,56);
+}
+
+QHeaderView::section
+{
+	font-family: "Arial";
+	font : bold;
+	background-color: rgb(66,66,66);
+	margin: 5px;
+	text-align: center;
+}
+
+/* QTreeView */
+QTreeView
+{
+	background-color: rgb(77,77,77);
+	alternate-background-color: rgb(107,107,107);
+	border:none;
+	font : bold;
+	icon-size:22px;
+}
+
+QTreeView::item
+{
+	font : bold;
+	color: rgb(243,243,243);
+	height:24px;
+	background-color:rgba(0,0,0,0);
+	border-right:1px solid rgb(66,66,66);
+}
+
+QTreeView::item:hover
+{
+	/*font : bold;
+	background-color: rgb(107,107,107);*/
+}
+
+QTreeView::item:selected
+{
+	color : rgb(255,255,255);
+	font : bold;
+	padding: -1;
+	background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgb(14,99,156), stop:0.5 rgb(14,99,156), stop:1 rgb(14,99,156));
+}
+
+QTreeView::branch:hover
+{
+	/*font : bold;
+	background-color: rgb(107,107,107);*/
+}
+
+QTreeView::branch:selected
+{
+	background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgb(14,99,156), stop:0.5 rgb(14,99,156), stop:1 rgb(14,99,156));
+}
+
+/*QTreeView#m_treeViewProperty::branch:selected
+{
+	background: rgb(175,217,232);
+}
+
+QTreeView#m_treeViewProperty::item:selected
+{
+	background-color:rgb(175,217,232);
+}*/
+
+QGraphicsView
+{
+	border: 1px solid #383838;
+}
+
+/* QScrollBar */
+QScrollBar:horizontal  
+{
+	border: 2px solid #333333;
+	background: #333333;
+	height: 15px;
+	margin: 0;
+}
+
+QScrollBar:vertical  
+{
+	border: 2px solid #333333;
+	background: #333333;
+	width: 15px;
+	margin: 0;
+}
+
+QScrollBar::handle:horizontal
+{
+	background: #666666;
+	min-width: 20px;
+}
+
+QScrollBar::handle:vertical
+{
+	background: #666666;
+	min-height: 20px;
+}
+
+QScrollBar::add-line:horizontal
+{
+	border: none;
+	background: #333333;
+	width: 10px;
+	subcontrol-position: bottom;
+	subcontrol-origin: margin;
+}
+
+QScrollBar::add-line:vertical
+{
+	border: none;
+	background: #333333;
+	height: 10px;
+	subcontrol-position: bottom;
+	subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:horizontal
+{
+	border: none;
+	background: #333333;
+	width: 10px;
+	subcontrol-position: top;
+	subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:vertical
+{
+	border: none;
+	background: #333333;
+	height: 10px;
+	subcontrol-position: top;
+	subcontrol-origin: margin;
+}
+
+QScrollBar::up-arrow:horizontal,
+QScrollBar::down-arrow:horizontal
+QScrollBar::up-arrow:vertical,
+QScrollBar::down-arrow:vertical
+{
+	border: none;
+	width: 3px;
+	height: 3px;
+	background: #333333;
+}
+
+QScrollBar::add-page:horizontal,
+QScrollBar::sub-page:horizontal,
+QScrollBar::add-page:vertical,
+QScrollBar::sub-page:vertical
+{
+	background: none;
+}
+
+QStatusBar
+{
+	background-color: rgb(77,77,77);
+	border-top: 1px solid rgb(66,66,66);
+	border-bottom: 2px solid rgb(202,81,0);
+	color : rgb(180, 180,180);
+}

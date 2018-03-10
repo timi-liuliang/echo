@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ItemGroup>
+		<Filter Include="Emitter"><!--  -->
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<Filter Include="Emitter\src"><!--  -->
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<ClCompile Include="..\..\module\emitter\src\ApexEmitterActor.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\module\emitter\src\ApexEmitterActorParameters.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\module\emitter\src\ApexEmitterAsset.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\module\emitter\src\ApexEmitterAssetParameters.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\module\emitter\src\ApexEmitterAssetPreview.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\module\emitter\src\EmitterAssetPreviewParameters.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\module\emitter\src\EmitterDebugRenderParams.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\module\emitter\src\EmitterGeom.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\module\emitter\src\EmitterGeomBox.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\module\emitter\src\EmitterGeomBoxParams.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\module\emitter\src\EmitterGeomCylinder.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\module\emitter\src\EmitterGeomCylinderParams.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\module\emitter\src\EmitterGeomExplicit.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\module\emitter\src\EmitterGeomExplicitParams.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\module\emitter\src\EmitterGeomSphere.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\module\emitter\src\EmitterGeomSphereParams.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\module\emitter\src\EmitterGeomSphereShell.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\module\emitter\src\EmitterGeomSphereShellParams.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\module\emitter\src\EmitterModuleParameters.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\module\emitter\src\EmitterScene.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\module\emitter\src\GroundEmitterActor.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\module\emitter\src\GroundEmitterActorParameters.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\module\emitter\src\GroundEmitterAsset.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\module\emitter\src\GroundEmitterAssetParameters.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\module\emitter\src\GroundEmitterAssetPreview.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\module\emitter\src\ImpactEmitterActor.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\module\emitter\src\ImpactEmitterActorParameters.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\module\emitter\src\ImpactEmitterAsset.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\module\emitter\src\ImpactEmitterAssetParameters.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\module\emitter\src\ImpactExplosionEvent.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\module\emitter\src\ImpactObjectEvent.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\module\emitter\src\ModuleEmitter.cpp">
+			<Filter>Emitter\src</Filter>
+		</ClCompile>
+	</ItemGroup>
+	<ItemGroup>
+		<Filter Include="Emitter\include"><!--  -->
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="..\..\module\emitter\include\ApexEmitterActor.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\ApexEmitterActorParameters.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\ApexEmitterAsset.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\ApexEmitterAssetParameters.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\ApexEmitterAssetPreview.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\EmitterAssetPreviewParameters.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\EmitterDebugRenderParams.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\EmitterGeom.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\EmitterGeomBox.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\EmitterGeomBoxParams.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\EmitterGeomCylinder.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\EmitterGeomCylinderParams.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\EmitterGeomExplicit.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\EmitterGeomExplicitParams.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\EmitterGeomSphere.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\EmitterGeomSphereParams.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\EmitterGeomSphereShell.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\EmitterGeomSphereShellParams.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\EmitterModuleParameters.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\EmitterParamClasses.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\EmitterScene.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\GroundEmitterActor.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\GroundEmitterActorParameters.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\GroundEmitterAsset.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\GroundEmitterAssetParameters.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\GroundEmitterAssetPreview.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\ImpactEmitterActor.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\ImpactEmitterActorParameters.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\ImpactEmitterAsset.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\ImpactEmitterAssetParameters.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\ImpactExplosionEvent.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\ImpactObjectEvent.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\MinPhysxSdkVersion.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\ModuleEmitter.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\ModuleEventDefs.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\include\ModulePerfScope.h">
+			<Filter>Emitter\include</Filter>
+		</ClInclude>
+	</ItemGroup>
+	<ItemGroup>
+		<Filter Include="Emitter\public"><!--  -->
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="..\..\module\emitter\public\NxApexEmitterActor.h">
+			<Filter>Emitter\public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\public\NxApexEmitterAsset.h">
+			<Filter>Emitter\public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\public\NxApexEmitterPreview.h">
+			<Filter>Emitter\public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\public\NxEmitterGeoms.h">
+			<Filter>Emitter\public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\public\NxEmitterLodParamDesc.h">
+			<Filter>Emitter\public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\public\NxGroundEmitterActor.h">
+			<Filter>Emitter\public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\public\NxGroundEmitterAsset.h">
+			<Filter>Emitter\public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\public\NxGroundEmitterPreview.h">
+			<Filter>Emitter\public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\public\NxImpactEmitterActor.h">
+			<Filter>Emitter\public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\public\NxImpactEmitterAsset.h">
+			<Filter>Emitter\public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\public\NxImpactEmitterPreview.h">
+			<Filter>Emitter\public</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\module\emitter\public\NxModuleEmitter.h">
+			<Filter>Emitter\public</Filter>
+		</ClInclude>
+	</ItemGroup>
+	<ItemGroup>
+	</ItemGroup>
+	<ItemGroup>
+		<Filter Include="Module Common"><!--  -->
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<Filter Include="Module Common\src"><!--  -->
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<ClCompile Include="..\..\module\common\src\ModuleProfileCommon.cpp">
+			<Filter>Module Common\src</Filter>
+		</ClCompile>
+	</ItemGroup>
+	<ItemGroup>
+		<Filter Include="Module Common\include"><!--  -->
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="..\..\module\common\include\ModuleProfileCommon.h">
+			<Filter>Module Common\include</Filter>
+		</ClInclude>
+	</ItemGroup>
+	<ItemGroup>
+	</ItemGroup>
+</Project>
