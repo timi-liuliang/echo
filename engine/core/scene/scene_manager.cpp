@@ -27,33 +27,14 @@ namespace Echo
 
 	// 构造函数
 	SceneManager::SceneManager()
-		: m_isSceneVisible(true)
-		, m_pMainCamera(NULL)
+		: m_pMainCamera(NULL)
 		, m_p2DCamera(NULL)
 		, m_pGUICamera(NULL)
 		, m_pShadowCamera(NULL)
 		, m_bNeedUpate(false)
 		, m_bIsRenderActorHigh(false)
-		, m_isUseXRay(false)
-		, m_bisComputeActorFog(false)
-		, m_mainActorPos(Vector3::ZERO)
 	{
 		__ConstructSingleton;
-
-		memset(m_LightParam, 0, sizeof(Vector4) * 3);
-		memset(m_FogParam, 0, sizeof(Vector4) * 9);
-		memset(m_UIFogParam, 0, sizeof(Vector4) * 3);
-		memset(m_LightParamForActor, 0, sizeof(Vector4) * 3);
-
-		m_heightFogParam = Vector4(-1000.0f, 1.0f, 0.0f, 0.0f);
-		m_UIheightFogParam = Vector4::ZERO;
-		// add by huangteng
-		// 避免shader出现除0，不同机型出现不同表现
-		m_UIFogParam[0].y = 1.0f;
-		m_UIheightFogParam.y = 1.0f;
-		// z值作为高度雾开关
-		m_UIheightFogParam.z = 0.0f;
-		m_heightFogParam.z = 1.0f;
 	}
 
 	SceneManager::~SceneManager()
@@ -255,59 +236,20 @@ namespace Echo
 	// 更新 
 	void SceneManager::update(float elapsedTime)
 	{
-		static Box visibleShadowAABB;
-
-		// 更新摄像机
-		m_pMainCamera->frameMove(elapsedTime);
-		// VR Mode需要手动更新
-		if (!(EngineSettingsMgr::instance()->isInitVRMode() && EngineSettingsMgr::instance()->isUseVRMode()))
-			m_pMainCamera->update();
-
-		// 更新所有Actors
-		if (EngineSettingsMgr::instance()->isActorCastShadow())
+		if (m_invisibleRoot)
 		{
-			// update Shadow AABB Begine
-			visibleShadowAABB.reset();
-
-			// 更新Model包围盒
-			//if (Root::instance()->getActorManagerUnsafe())
-			//{
-			//	ModelManager::instance()->buildBoxSM(visibleShadowAABB, EchoEngineActorManager->getMainActor() ? EchoEngineActorManager->getMainActorPosition() : SceneManager::instance()->getMainPosition(), m_pMainCamera, m_shadowDistance);
-			//	if (visibleShadowAABB.isValid())
-			//	{
-			//		visibleShadowAABB.vMin -= Vector3(0.1f, 0.1f, 0.1f);
-			//		visibleShadowAABB.vMax += Vector3(0.1f, 0.1f, 0.1f);
-			//	}
-			//}
-
-			m_pShadowCamera->update(&visibleShadowAABB);
-			// update Shadow AABB end
-
-			// actors and breakables real update
-			//if (Root::instance()->getActorManagerUnsafe())
-			//	EchoEngineActorManager->updateActors(elapsedTime, m_pMainCamera, NULL);
+			m_invisibleRoot->update(true);
 		}
-		else
-		{
-			//if (Root::instance()->getActorManagerUnsafe())
-			//	EchoEngineActorManager->updateActors(elapsedTime, m_pMainCamera);
-		}
-
-		// 雾效过渡插值
-		//m_FogParam[0][0] = m_FogParam[1][0] * (1.f - m_fog1ToFog2) + m_FogParam[2][0] * m_fog1ToFog2;
-		//m_FogParam[0][1] = m_FogParam[1][1] * (1.f - m_fog1ToFog2) + m_FogParam[2][1] * m_fog1ToFog2;
-		//m_FogParam[0][2] = m_FogParam[1][2];
 	}
 
 	void SceneManager::render()
 	{
-		size_t nCount = m_RenderQueueGroup.size();
-		for (size_t i = 0; i < nCount; ++i)
+		for (RenderQueue* queue : m_RenderQueueGroup)
 		{
-			if (m_RenderQueueGroup[i])
+			if (queue)
 			{
-				m_RenderQueueGroup[i]->renderQueue();
-				m_RenderQueueGroup[i]->beginRender();
+				queue->renderQueue();
+				queue->beginRender();
 			}
 		}
 	}

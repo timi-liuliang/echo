@@ -60,11 +60,15 @@ namespace Echo
 		void convertWorldToLocalPosition(Vector3& posLocal, const Vector3& posWorld);
 		void convertWorldToLocalOrientation(Quaternion& ortLocal, const Quaternion& ortWorld);
 
+	public:
+		Node* getNode(const String& path) { return nullptr; }
+
 	protected:
 		inline void		needUpdate();
 
 	protected:
 		ui32			m_identifier;		// Î¨Ò»±êÊ¶·û
+		String			m_name;
 		Node*			m_pParent;
 		bool			m_bVisible;
 

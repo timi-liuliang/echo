@@ -10,10 +10,17 @@ namespace Echo
 		scene();
 		virtual ~scene();
 
-		// ¸üÐÂ(Ãë)
+		// update
 		void tick(float delta);
-	
+
+		Node* root() { return m_node; }
+
+	public:
+		void load(const String& fileName){}
+		void save(const String& fileName) {}
+
 	private:
+		String		m_path;
 		Node*		m_node;
 	};
 }

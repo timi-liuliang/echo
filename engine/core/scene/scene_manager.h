@@ -84,26 +84,15 @@ namespace Echo
 		void destroyRenderQueueGroup();
 
 	protected:
-		bool				m_isSceneVisible; 
 		Camera*			    m_pMainCamera;			// 主摄像机
 		Camera*				m_p2DCamera;			// 2D摄像机
 		Camera*				m_pGUICamera;			// 界面摄像机
 		CameraShadow*		m_pShadowCamera;		// 阴影图摄像机		
-		Vector4				m_LightParam[3];		// 主光源朝向,主光源颜色，环境光颜色
-		Vector4				m_LightParamForActor[3];
-		Vector4				m_LightParamForSceneObject[3];
-		Vector4				m_FogParam[3][3];			// param, color, mainpos
-		Vector4				m_UIFogParam[3];		// UI Fog Param
-		Vector4				m_heightFogParam;		// x:start height, y:deep
-		Vector4				m_UIheightFogParam;		// x:start height, y:deep
 		bool				m_bNeedUpate;
 		RenderQueueGroup	m_RenderQueueGroup;
 		bool				m_bIsRenderActorHigh;
-		bool				m_isUseXRay;
-		bool				m_bisComputeActorFog;
-		std::map<ui32, Node*>	m_sceneNodes;
-		Vector3				m_mainActorPos;
-		Vector3				m_lookatPos;
 		float				m_shadowDistance;		// 阴影有效距离
+
+		Node*				m_invisibleRoot;		// invisible root node
 	};
 }
