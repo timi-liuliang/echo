@@ -5,7 +5,6 @@
 #include "Engine/core/Camera/Camera.h"
 #include "Engine/core/Camera/CameraShadow.h"
 #include "Node.h"
-#include "scene.h"
 #include "Engine/core/Render/TextureRes.h"
 #include "engine/core/Util/Singleton.h"
 

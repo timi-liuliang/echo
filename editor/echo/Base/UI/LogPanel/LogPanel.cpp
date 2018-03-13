@@ -6,6 +6,8 @@ namespace Studio
 	// 构造函数
 	LogPanel::LogPanel(QWidget* parent/* = 0*/)
 		: QDockWidget( parent)
+		, m_sameMessageNum(0)
+		, m_lastLevel(LL_INVALID)
 	{
 		setupUi(this);
 
@@ -36,36 +38,35 @@ namespace Studio
 	{
 		switch (level)
 		{
-		case LL_WARNING: Warning(msg.toStdString().c_str()); break;
+		case LL_WARNING: OutMsg(level, msg.toStdString().c_str(), ":/icon/Icon/CheckWarning.png"); break;
 		case LL_ERROR:
-		case LL_FATAL:	Error(msg.toStdString().c_str());	break;
+		case LL_FATAL:	OutMsg(level, msg.toStdString().c_str(), ":/icon/Icon/CheckError.png");	break;
 		default:								break;
 		}
 	}
 
-	// 警告
-	void LogPanel::Warning( const char* msg)
+	// 输出消息
+	void LogPanel::OutMsg( int level, const char* msg, const char* icon)
 	{
-		QListWidgetItem* warningItem = new QListWidgetItem( QString::fromLocal8Bit(msg));
-		if( warningItem)
-		{	
-			warningItem->setIcon( QIcon(":/icon/Icon/CheckWarning.png"));
-			m_logList->addItem( warningItem);
+		if (msg == m_lastMessage && level==m_lastLevel)
+		{
+			m_sameMessageNum++;
+			QListWidgetItem* lastItem = m_logList->item(m_logList->count()-1);
+			lastItem->setText(QString::fromLocal8Bit(Echo::StringUtil::Format("(%d) %s", m_sameMessageNum, msg).c_str()));
+		}
+		else
+		{
+			m_sameMessageNum = 0;
+			QListWidgetItem* warningItem = new QListWidgetItem(QString::fromLocal8Bit(msg));
+			if (warningItem)
+			{
+				warningItem->setIcon(QIcon(icon));
+				m_logList->addItem(warningItem);
+			}
 		}
 
-		// 显示界面
-		setVisible( true);
-	}
-
-	// 错误
-	void LogPanel::Error( const char* msg)
-	{
-		QListWidgetItem* errorItem = new QListWidgetItem( QString::fromLocal8Bit(msg));
-		if( errorItem)
-		{	
-			errorItem->setIcon( QIcon(":/icon/Icon/CheckError.png"));
-			m_logList->addItem( errorItem);
-		}
+		m_lastMessage = msg;
+		m_lastLevel = level;
 
 		// 显示界面
 		setVisible( true);
@@ -74,13 +75,8 @@ namespace Studio
 	void LogPanel::onClearMessage()
 	{
 		m_logList->clear();
+		m_sameMessageNum = 0;
+		m_lastLevel = -1;
+		m_lastMessage = "";
 	}
-
-	// 关闭
-	//void LogPanel::closeEvent(QCloseEvent *event)
-	//{
-	//	m_logList->clear();
-
-	//	QDialog::closeEvent( event);
-	//}
 }

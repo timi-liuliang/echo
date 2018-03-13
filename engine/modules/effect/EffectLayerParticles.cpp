@@ -1492,7 +1492,7 @@ namespace Echo
 			(*itChileEffect)->sceneNode->setLocalOrientation(oritation);
 			float _scale = (*itChileEffect)->particle->scale * scale;
 			(*itChileEffect)->sceneNode->setLocalScalingXYZ(_scale, _scale, _scale);
-			(*itChileEffect)->sceneNode->update();
+			(*itChileEffect)->sceneNode->update( time);
 			pEffect->setSystemColor((*itChileEffect)->particle->color);
 
 			pEffect->_update_sys(ui32(time * mChildEffectSpeed));

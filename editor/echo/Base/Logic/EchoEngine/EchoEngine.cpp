@@ -50,7 +50,7 @@ namespace Studio
 		//, m_FontRenderManager(NULL)
 		, m_isShowFps(false)
 		, m_isManualUpdateEngine(false)
-		//, m_RCCMgr(nullptr)
+		, m_currentEditNode(nullptr)
 	{
 	}
 
@@ -110,6 +110,8 @@ namespace Studio
 
 		EchoAudioManager->setAudioEventCb(&MyAudioEventCallBack);
 
+		m_currentEditNode = nullptr;
+
 		return true;
 	}
 
@@ -132,6 +134,11 @@ namespace Studio
 
 		if (!m_isManualUpdateEngine)
 		{
+			if (m_currentEditNode)
+			{
+				m_currentEditNode->update( elapsedTime, true);
+			}
+
 			EchoRoot->tick(elapsedTime);
 
 			if (m_isShowFps)

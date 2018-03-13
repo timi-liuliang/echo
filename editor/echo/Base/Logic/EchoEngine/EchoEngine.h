@@ -1,11 +1,9 @@
-#ifndef _ENGINE_INTERFACE_H_
-#define _ENGINE_INTERFACE_H_
+#pragma once
 
 #include <string>
 #include <Engine/Core.h>
 #include <Engine/core/main/Root.h>
 #include <Engine/core/Scene/Scene_Manager.h>
-#include <Engine/core/Scene/Scene.h>
 #include <Engine/modules/Model/Mesh.h>
 #include <Engine/modules/Audio/FMODStudio/FSAudioManager.h>
 
@@ -38,6 +36,13 @@ namespace Studio
 
 		// 获取FBX格式管理器
 		FBXManager* GetFBXManager() { return m_fbxManager; }
+
+	public:
+		// 设置当前编辑结点
+		void setCurrentEditNode(Echo::Node* node) { m_currentEditNode = node; }
+
+		// 获取当前编辑结点
+		Echo::Node* getCurrentEditNode() { return m_currentEditNode; }
 
 	public:
 		// 预览声音
@@ -86,9 +91,11 @@ namespace Studio
 		void upDateFpsNode(int index);
 
 	protected:
-		Echo::Log*				m_log;			// 日志
-		Echo::SceneManager*		m_sceneMgr;		// 场景管理器
-		//Echo::node*		m_backGridNode;	// 背景网格用场景结点
+		Echo::Log*				m_log;				// 日志
+		Echo::SceneManager*		m_sceneMgr;			// 场景管理器
+		Echo::Node*				m_currentEditNode;	// 当前编辑场景
+
+		//Echo::node*			m_backGridNode;	// 背景网格用场景结点
 		//Echo::DebugDisplayItem*	m_backGrid;		// 背景网格
 		//int						m_gridNum;		// 网格的数量
 		//float					m_gridGap;		// 网格间距
@@ -103,14 +110,10 @@ namespace Studio
 		Echo::AudioSourceID		m_curPlayAudio;		// 当前播放音频
 
 		//FontRenderManager*  m_FontRenderManager; // 字体渲染  
-		bool				m_isShowFps;		 // 是否显示FPS	
-		Echo::Node*    m_FpsPrarentNode;	 // FPS父节点
+		bool					m_isShowFps;		 // 是否显示FPS	
+		Echo::Node*				m_FpsPrarentNode;	 // FPS父节点
 		Echo::array<Echo::Node*,FPSINFONUM>	m_pFpsNodes;	 // FPS显示，挂载点
 		//Echo::array<FontCNRender*, FPSINFONUM>		m_pTextRenders;	 // 字体集合
 		bool				m_isManualUpdateEngine; 
-	
-		//RCC::RCCMgr*		m_RCCMgr;			// c++热加载管理器
 	};
 }
-
-#endif

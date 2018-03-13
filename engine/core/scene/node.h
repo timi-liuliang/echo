@@ -6,7 +6,7 @@
 
 namespace Echo
 {
-	class Node
+	class Node : public Object
 	{
 		ECHO_CLASS(Node, Object)
 
@@ -20,6 +20,9 @@ namespace Echo
 		ui32 getIdentifier() const { return m_identifier; }
 		void setParent(Node* pParent);
 		Node* getParent() const;
+
+		ui32 getChildNum() const { return m_children.size(); }
+		Node* getChild(ui32 idx);
 
 		void setVisible(bool bVisible);
 		bool isVisible() const;
@@ -41,7 +44,7 @@ namespace Echo
 		void setWorldOrientation(const Quaternion& ort);
 		void setWorldPosition(const Vector3& pos);
 
-		void update(bool bUpdateChildren = false);
+		void update(float delta, bool bUpdateChildren = false);
 
 		const Vector3& getLocalScaling() const;
 		const Quaternion& getLocalOrientation() const;
@@ -66,9 +69,10 @@ namespace Echo
 	protected:
 		inline void		needUpdate();
 
+		virtual void update() {}
+
 	protected:
 		ui32			m_identifier;		// Î¨Ò»±êÊ¶·û
-		String			m_name;
 		Node*			m_pParent;
 		bool			m_bVisible;
 

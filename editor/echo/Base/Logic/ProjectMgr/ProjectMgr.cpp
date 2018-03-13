@@ -87,7 +87,7 @@ namespace Studio
 					if ( info.m_width != info.m_height )
 					{
 						Echo::String msg = Echo::StringUtil::Format("Texture [%s] width [%d] is not equal to height [%d]!", it->first.c_str(), info.m_width, info.m_height);
-						AStudio::Instance()->getLogPanel()->Error(msg.c_str());
+						//AStudio::Instance()->getLogPanel()->Error(msg.c_str());
 					}
 				}
 			}

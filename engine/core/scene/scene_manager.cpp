@@ -2,7 +2,6 @@
 #include "engine/core/render/render/Renderer.h"
 #include "engine/core/Util/LogManager.h"
 #include "Engine/core/main/Root.h"
-#include "scene.h"
 #include "engine/core/render/render/Material.h"
 #include "Engine/core/Resource/EchoThread.h"
 #include "Engine/modules/Anim/Animation.h"
@@ -33,6 +32,7 @@ namespace Echo
 		, m_pShadowCamera(NULL)
 		, m_bNeedUpate(false)
 		, m_bIsRenderActorHigh(false)
+		, m_invisibleRoot(nullptr)
 	{
 		__ConstructSingleton;
 	}

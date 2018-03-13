@@ -59,7 +59,7 @@
          </layout>
         </item>
         <item>
-         <widget class="QTreeWidget" name="m_treeWidget">
+         <widget class="QTreeWidget" name="m_nodeTreeWidget">
           <property name="headerHidden">
            <bool>true</bool>
           </property>

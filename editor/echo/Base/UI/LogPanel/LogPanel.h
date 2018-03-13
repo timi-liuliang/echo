@@ -22,11 +22,8 @@ namespace Studio
 		// 析构函数
 		~LogPanel();
 
-		// 警告
-		void Warning( const char* msg);
-
-		// 错误
-		void Error( const char* msg);
+		// 输出消息
+		void OutMsg( int level,const char* msg, const char* icon);
 
 	public:
 		// 设置日志名称
@@ -53,8 +50,10 @@ namespace Studio
 		void onLogMessage(int level, QString);
 		void onClearMessage();
 
-	protected:
-		// 关闭
-		//void closeEvent(QCloseEvent *event);
+
+	private:
+		Echo::ui32			m_sameMessageNum;
+		Echo::String		m_lastMessage;
+		int			m_lastLevel;
 	};
 }

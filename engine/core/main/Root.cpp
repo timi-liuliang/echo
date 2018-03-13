@@ -24,7 +24,6 @@
 #include "Engine/core/Render/RenderStage/RenderStageManager.h"
 #include "ProjectFile.h"
 #include "ProjectPropertyManager.h"
-#include "Engine/core/Scene/Scene.h"
 #include "Engine/modules/Audio/FMODStudio/FSAudioManager.h"
 #include "Engine/core/Resource/HttpFileSystemArchive.h"
 #include "Engine/core/Resource/7zipArchive.h"

@@ -26,7 +26,6 @@
 #include "rapidxml/rapidxml_utils.hpp"
 #include "rapidxml/rapidxml_print.hpp"
 #include "rapidxml/rapidxml_helper.hpp"
-#include "Engine/core/Scene/Scene.h"
 
 using namespace rapidxml;
 

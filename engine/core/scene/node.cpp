@@ -173,6 +173,11 @@ namespace Echo
 		return m_pParent;
 	}
 
+	Node* Node::getChild(ui32 idx)
+	{
+		return *std::next(m_children.begin(), idx);
+	}
+
 	bool Node::isVisible() const
 	{
 		return m_bVisible;
@@ -297,7 +302,7 @@ namespace Echo
 		}
 	}
 
-	void Node::update(bool bUpdateChildren)
+	void Node::update(float delta, bool bUpdateChildren)
 	{
 		if (m_bModify)
 		{
@@ -322,11 +327,13 @@ namespace Echo
 			m_bModify = false;
 		}
 
+		update();
+
 		if (bUpdateChildren)
 		{
 			for (Node* node : m_children)
 			{
-				node->update(true);
+				node->update(delta, bUpdateChildren);
 			}
 		}
 	}

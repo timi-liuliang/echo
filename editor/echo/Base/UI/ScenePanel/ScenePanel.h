@@ -4,6 +4,7 @@
 #include "ui_ScenePanel.h"
 #include "QProperty.hpp"
 #include "NewNodeDialog.h"
+#include <engine/core/scene/node.h>
 
 namespace Studio
 {
@@ -15,11 +16,19 @@ namespace Studio
 		ScenePanel( QWidget* parent=0);
 		~ScenePanel();
 
+		static ScenePanel* instance();
+
 		// 设置显示配置
 		void setDisplayConfig(const char* config);
 
 		// 设置属性值
 		void setPropertyValue(const char* propertyName, QVariant& value);
+
+	public:
+		void refreshNodeTreeDisplay();
+		void addNode(Echo::Node* node);
+		void addNode( Echo::Node* node, QTreeWidgetItem* parent, bool recursive);
+		Echo::Node* getCurrentSelectNode();
 
 	private slots:
 		void showNewNodeDialog();

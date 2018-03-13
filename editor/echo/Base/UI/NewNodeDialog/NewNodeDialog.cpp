@@ -1,4 +1,6 @@
 #include "NewNodeDialog.h"
+#include "EchoEngine.h"
+#include "ScenePanel.h"
 #include <engine/core/base/class.h>
 
 namespace Studio
@@ -13,6 +15,8 @@ namespace Studio
 
 		// display nodes
 		initNodeDisplay();
+
+		QObject::connect(m_confirm, SIGNAL(clicked()), this, SLOT(onConfirmNode()));
 	}
 
 	NewNodeDialog::~NewNodeDialog()
@@ -42,6 +46,8 @@ namespace Studio
 		nodeItem->setText( 0, nodeName.c_str());
 		nodeItem->setIcon(0, QIcon(iconPath.c_str()));
 
+		QObject::connect(m_treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(addNodeToScene(QTreeWidgetItem *item, int)));
+
 		Echo::StringArray childNodes;
 		if( Echo::Class::getChildClasses(childNodes, nodeName.c_str()))
 		{
@@ -50,5 +56,22 @@ namespace Studio
 				addNode(childNode, nodeItem);
 			}
 		}
+	}
+
+	void NewNodeDialog::onConfirmNode()
+	{
+		QTreeWidgetItem* item = m_treeWidget->currentItem();
+		if (item)
+		{
+			Echo::String text = item->text(0).toStdString().c_str();
+			Echo::Node* node = Echo::Class::create<Echo::Node*>(text.c_str());
+			if (node)
+			{
+				ScenePanel::instance()->addNode(node);
+			}
+		}
+
+		// hide window
+		hide();
 	}
 }
