@@ -315,6 +315,8 @@ ADD_SUBDIRECTORY(thirdparty/lua)
 ADD_SUBDIRECTORY(thirdparty/freeimage)
 ADD_SUBDIRECTORY(thirdparty/freetype-2.6)
 ADD_SUBDIRECTORY(thirdparty/zlib)
+ADD_SUBDIRECTORY(thirdparty/protobuf/src/google/protobuf)
+ADD_SUBDIRECTORY(thirdparty/tensorflow/tensorflow)
 
 IF(ECHO_ARCHIVE_SUPPORT_7ZIP)
 	ADD_SUBDIRECTORY(thirdparty/7zip)
