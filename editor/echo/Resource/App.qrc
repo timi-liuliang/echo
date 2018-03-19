@@ -1,6 +1,6 @@
 <RCC>
   <qresource prefix="/icon">
-    <file>node/live2d.png</file>
+    <file>node/live2dcubism.png</file>
     <file>node/node.png</file>
     <file>Icon/icon.png</file>
     <file>Icon/batchmerge.png</file>

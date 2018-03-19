@@ -4,9 +4,9 @@
 
 namespace Echo
 {
-	class Live2d : public Node
+	class Live2dCubism : public Node
 	{
-		ECHO_CLASS(Live2d, Node)
+		ECHO_CLASS(Live2dCubism, Node)
 
 	protected:
 		virtual void update();
