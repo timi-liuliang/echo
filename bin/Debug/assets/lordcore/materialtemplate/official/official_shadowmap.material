@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='utf-8' ?>
-<MaterialRoot>
-	<MaterialTemplate name="official_write_depth.mto" stage="ShadowMap" />
-	<Uniform>
-	</Uniform>
-	<Controllers/>
-</MaterialRoot>
-

@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='utf-8' ?>
-<pipeline>
-	<RenderTarget id="FXAA" material="pp_FxaaPass.xml" width="" height="" scale="1.0" formate="PF_RGBA16_FLOAT" custom="Fxaa">
-		<BindBuffer sampler="texSampler" sourceRT="" slot="0" />
-		<CustomUniform name="uResolution" x="1" y="1" />
-	</RenderTarget>
-</pipeline>
-

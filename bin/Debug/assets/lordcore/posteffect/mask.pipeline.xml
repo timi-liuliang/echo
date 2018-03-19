@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='utf-8' ?>
-<pipeline>
-	<RenderTarget id="Mask" material="pp_MaskPass.xml" width="" height="" scale="1.0">
-		<BindBuffer sampler="texSampler" sourceRT="" slot="0" />
-		<Uniform name="maskColor" x="0.25" y="0.25" z="0.25" w="0.25" />
-	</RenderTarget>
-</pipeline>
