@@ -71,6 +71,11 @@ namespace Echo
 		};
 		typedef vector<TextureCompressItem>::type TextureCPIVec;
 
+		struct RenderQueueInfo
+		{
+			String		m_name;
+		};
+
 	public:
 		ProjectFile();
 		~ProjectFile();
@@ -106,9 +111,6 @@ namespace Echo
 		//根据字符串名称返回压缩格式对应
 		static TextureCompressType getCompressTypeFormName(std::string cname);
 
-		// 获取ui路径
-		String getUIRootPath(){ return m_path + m_uiRootPath; }
-
 		// 获取默认的材质名称
 		const String& getDefaultMaterial() { return m_defaultMaterial; }
 
@@ -117,7 +119,7 @@ namespace Echo
 		void loadArchives( xml_node<>* projectNode);
 
 		// 加载ui配置
-		void loadUIPath(xml_node<>* projectNode);
+		void loadRenderQueues(xml_node<>* projectNode);
 
 		// 保存存档
 		void saveArchives( xml_document<>& doc, xml_node<>* projectNode);
@@ -137,8 +139,8 @@ namespace Echo
 		String								m_pathName;			// 项目全路径(包含名称)
 		String								m_defaultMaterial;	// 默认的材质名称
 		vector<ArchiveItem>::type			m_archives;			// 存档配置
+		vector<RenderQueueInfo>::type		m_renderQueues;		// 渲染队列信息
 		TextureCPIVec						m_TextureCompreses; // 纹理压缩信息表
-		String								m_uiRootPath;		// ui根目录
 	};
 }
 

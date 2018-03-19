@@ -92,8 +92,6 @@ namespace Echo
 		};
 		std::vector<ShaderParam>		m_globalParams;
 	};
-
-	typedef vector<RenderQueue*>::type RenderQueueGroup;
 }
 
 #endif

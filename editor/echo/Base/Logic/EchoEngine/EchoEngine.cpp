@@ -76,9 +76,6 @@ namespace Studio
 			}
 			rootcfg.m_isEnableProfiler = true;
 			EchoRoot->initialize(rootcfg);
-
-			// 添加默认资源路径
-			EchoResourceManager->addArchive(Echo::PathUtil::GetCurrentDir() + "/assets/", "filesystem", true);
 		)
 
 		TIME_PROFILE

@@ -6,6 +6,7 @@
 #include "Render/Material.h"
 #include "Engine/core/Scene/Scene_Manager.h"
 #include "Engine/core/Render/MaterialInstance.h"
+#include "RenderQueueGroup.h"
 
 namespace Echo
 {
@@ -194,10 +195,10 @@ namespace Echo
 				if (isfind)
 				{
 					String manualQueueName = queueName[0] + "@" + queueName[1] + "@" + generatedMacros + "@" + queueName[3];
-					m_ManualRenderQueue = SceneManager::instance()->getRenderQueue(manualQueueName);
+					m_ManualRenderQueue = RenderQueueGroup::instance()->getRenderQueue(manualQueueName);
 					if (!m_ManualRenderQueue)
 					{
-						m_ManualRenderQueue = SceneManager::instance()->addRenderQueue(queueName[3], queueName[0].c_str(), generatedMacros, queueName[1] == "_" ? false : true);
+						m_ManualRenderQueue = RenderQueueGroup::instance()->addRenderQueue(queueName[3], queueName[0].c_str(), generatedMacros, queueName[1] == "_" ? false : true);
 					}
 				}
 			}

@@ -1,6 +1,7 @@
 #include "UIRenderStage.h"
 #include "engine/core/Scene/scene_manager.h"
 #include "Engine/core/Render/RenderTargetManager.h"
+#include "render/RenderQueueGroup.h"
 
 namespace Echo
 {
@@ -82,7 +83,7 @@ namespace Echo
 	void UIRenderStage::_renderCEGUI()
 	{
 		EchoAssert(SceneManager::instance());
-		RenderQueue* pRenderQueue = SceneManager::instance()->getRenderQueue("UI");
+		RenderQueue* pRenderQueue = RenderQueueGroup::instance()->getRenderQueue("UI");
 		if (!pRenderQueue) return;
 		pRenderQueue->renderQueue();
 		pRenderQueue->beginRender();
@@ -111,5 +112,4 @@ namespace Echo
 		}
 		m_autoDeletes.clear();
 	}
-
 }

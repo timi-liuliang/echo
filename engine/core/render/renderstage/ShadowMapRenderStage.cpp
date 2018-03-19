@@ -4,6 +4,7 @@
 #include "Engine/core/Render/RenderTargetManager.h"
 #include "Engine/core/Render/MaterialInstance.h"
 #include "Engine/core/main/EngineSettings.h"
+#include "render/RenderQueueGroup.h"
 
 namespace Echo
 {
@@ -178,8 +179,8 @@ namespace Echo
 			m_renderViewPort.resize(s_ShadowMapEdge, s_ShadowMapEdge, m_shadowMapSize - s_ShadowMapEdge * 2, m_shadowMapSize - s_ShadowMapEdge * 2);
 			Renderer::instance()->setViewport(&m_renderViewPort);
 
-			int beginIdx = SceneManager::instance()->getRenderQueueIndex("ShadowMap") + 1;
-			int endIdx = SceneManager::instance()->getRenderQueueIndex("/ShadowMap");
+			int beginIdx = RenderQueueGroup::instance()->getRenderQueueIndex("ShadowMap") + 1;
+			int endIdx = RenderQueueGroup::instance()->getRenderQueueIndex("/ShadowMap");
 			// 判断是否有投射阴影的物体
 			if (beginIdx == endIdx)
 			{
@@ -191,7 +192,7 @@ namespace Echo
 			bool needRet = false;
 			for (int i = beginIdx; i < endIdx; i++)
 			{
-				RenderQueue* renderQueue = SceneManager::instance()->getRenderQueueByIndex(i);
+				RenderQueue* renderQueue = RenderQueueGroup::instance()->getRenderQueueByIndex(i);
 				if (!renderQueue->hasRenderables())
 				{
 					needRet = true;
@@ -217,7 +218,7 @@ namespace Echo
 			// 			qName.push_back("SkinMeshForActorShodowMap");
 			for (int i = beginIdx; i < endIdx; i++)
 			{
-				RenderQueue* renderQueue = SceneManager::instance()->getRenderQueueByIndex(i);
+				RenderQueue* renderQueue = RenderQueueGroup::instance()->getRenderQueueByIndex(i);
 				if (renderQueue)
 				{
 					renderQueue->renderQueue();

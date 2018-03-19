@@ -6,6 +6,7 @@
 #include "engine/core/render/render/MaterialDesc.h"
 #include "engine/core/render/render/Renderer.h"
 #include "engine/core/render/TextureResManager.h"
+#include "render/RenderQueueGroup.h"
 #include "rapidxml/rapidxml.hpp"
 #include "rapidxml/rapidxml_utils.hpp"
 #include "rapidxml/rapidxml_print.hpp"
@@ -1523,7 +1524,7 @@ namespace Echo
 			}
 
 			// Ìí¼ÓäÖÈ¾¶ÓÁÐ
-			m_renderQueue = SceneManager::instance()->addRenderQueue(m_materialTemplate, m_stage.c_str(), finalMacros, false);
+			m_renderQueue = RenderQueueGroup::instance()->addRenderQueue(m_materialTemplate, m_stage.c_str(), finalMacros, false);
 		}
 	}
 

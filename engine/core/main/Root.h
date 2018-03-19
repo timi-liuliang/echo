@@ -25,7 +25,6 @@ namespace Echo
 	class RenderStageManager;
 	class RenderTargetManager;
 	class ProfilerServer;
-	class ProjectPropertyManager;
 	class MaterialManager;
 	class Root
 	{	
@@ -126,12 +125,6 @@ namespace Echo
 		// 获取当前帧数量
 		ui32 getCurFrameCount() const { return m_curFameCount; }
 
-		// 禁用渲染队列
-		void disableRenderQueue( ui32 renderQueueID );
-
-		// 启用渲染队列
-		void enableRenderQueue( ui32 renderQueueID );
-
 		void setEnableFilterAdditional( bool _val) { m_enableFilterAdditional = _val; }
 
 		bool getEnableFilterAdditional() const { return m_enableFilterAdditional; }
@@ -204,7 +197,6 @@ namespace Echo
 		FSAudioManager* getAudioManager() { EchoAssert(m_audioManager);  return m_audioManager; }
 		NetConnectionManager* getNetConnectionManager() { EchoAssert(m_netConnectionManager); return m_netConnectionManager; }
 		PostEffectManager* getPostEffectManager() { EchoAssert(m_postEffectManager); return m_postEffectManager; }
-		ProjectPropertyManager* getProjectPropertyManager() { EchoAssert(m_projectPropertyManager); return m_projectPropertyManager; }
 		luaex::LuaEx* getLuaEx() {return m_luaEx;}
 		void setLuaEx(luaex::LuaEx* luaex) { m_luaEx = luaex; }
 
@@ -220,8 +212,8 @@ namespace Echo
 		RootCfg				m_cfg;					// 客户端传入
 		EngineSettingsMgr	m_settingsMgr;			// 配置管理器
 		EngineConsole		m_console;				// 命令行控制台
-		String				m_rootPath;
-		String				m_strWriteablePath;
+		String				m_resPath;				// 资源路径
+		String				m_userPath;				// 用户资源路径
 		void*				m_pAssetMgr;			// for android
 		bool				m_bRendererInited;
 
@@ -277,7 +269,6 @@ namespace Echo
 		RenderTargetManager*m_renderTargetManager;			// 渲染目标管理器
 		RenderStageManager* m_renderStageMangager;
 		ProjectFile*		m_projectFile;					// 项目信息
-		ProjectPropertyManager* m_projectPropertyManager;
 
 #ifdef ECHO_PROFILER
 		ProfilerServer*		m_profilerSev;					// 性能分析服务器

@@ -2,6 +2,7 @@
 #include "Engine/core/Scene/Scene_Manager.h"
 #include "engine/core/render/render/Viewport.h"
 #include "engine/core/render/render/Renderer.h"
+#include "render/RenderQueueGroup.h"
 
 namespace Echo
 {
@@ -37,12 +38,12 @@ namespace Echo
 		if( param0 == "info")
 		{
 			// 列出所有渲染队列
-			size_t rqCount = SceneManager::instance()->getRenderQueueCount();
+			size_t rqCount = RenderQueueGroup::instance()->getRenderQueueCount();
 			output += StringUtil::Format( "\n%-8s%-40s%-10s\n", "index", "name", "state");
 
 			for( size_t i=0; i<rqCount; i++)
 			{
-				RenderQueue* pQueue = SceneManager::instance()->getRenderQueueByIndex(i);
+				RenderQueue* pQueue = RenderQueueGroup::instance()->getRenderQueueByIndex(i);
 				if( pQueue)
 				{
 					output += StringUtil::Format( "%-8d%-40s%-10s\n", i, pQueue->getName().c_str(), pQueue->isEnable() ? "enable" : "disable");
@@ -56,10 +57,10 @@ namespace Echo
 			if( param1=="all")
 			{
 				// 启用所有
-				size_t rqCount = SceneManager::instance()->getRenderQueueCount();
+				size_t rqCount = RenderQueueGroup::instance()->getRenderQueueCount();
 				for( size_t i=0; i<rqCount; i++)
 				{
-					RenderQueue* pQueue = SceneManager::instance()->getRenderQueueByIndex(i);
+					RenderQueue* pQueue = RenderQueueGroup::instance()->getRenderQueueByIndex(i);
 					if( pQueue)
 						pQueue->enableRender();
 				}
@@ -67,7 +68,7 @@ namespace Echo
 			else
 			{
 				// 启用指定队列
-				RenderQueue* pQueue = SceneManager::instance()->getRenderQueue(param1.c_str());
+				RenderQueue* pQueue = RenderQueueGroup::instance()->getRenderQueue(param1.c_str());
 				if( pQueue)
 					pQueue->enableRender();
 				else
@@ -81,10 +82,10 @@ namespace Echo
 			if( param1=="all")
 			{
 				// 禁用所有
-				size_t rqCount = SceneManager::instance()->getRenderQueueCount();
+				size_t rqCount = RenderQueueGroup::instance()->getRenderQueueCount();
 				for( size_t i=0; i<rqCount; i++)
 				{
-					RenderQueue* pQueue = SceneManager::instance()->getRenderQueueByIndex(i);
+					RenderQueue* pQueue = RenderQueueGroup::instance()->getRenderQueueByIndex(i);
 					if( pQueue)
 						pQueue->disableRender();
 
@@ -93,7 +94,7 @@ namespace Echo
 			else
 			{
 				// 禁用指定队列
-				RenderQueue* pQueue = SceneManager::instance()->getRenderQueue(param1.c_str());
+				RenderQueue* pQueue = RenderQueueGroup::instance()->getRenderQueue(param1.c_str());
 				if( pQueue)
 					pQueue->disableRender();
 				else

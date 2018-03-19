@@ -28,6 +28,7 @@
 #include "engine/core/render/RenderTargetManager.h"
 #include "Engine/core/Render/TextureResManager.h"
 #include "Engine/core/Render/MaterialInstance.h"
+#include "render/RenderQueueGroup.h"
 
 namespace Echo
 {
@@ -621,12 +622,14 @@ namespace Echo
 	{
 		if(!mRenderalbeSetCreated)
 		{
-			SceneManager* pSceneManager = SceneManager::instance();
 			RenderQueue* pRenderQueue = NULL;
 			Material* pMaterial = NULL;
 			ShaderProgram* shaderProgram = NULL;
 
-			pRenderQueue = pSceneManager->getRenderQueue("Effect");/*m_camera ? pSceneManager->getRenderQueue("EffectUI") :*/
+			pRenderQueue = RenderQueueGroup::instance()->getRenderQueue("Effect");/*m_camera ? pSceneManager->getRenderQueue("EffectUI") :*/
+			if (!pRenderQueue)
+				return;
+
 			pMaterial = pRenderQueue->getMaterial();
 			shaderProgram = pMaterial->getShaderProgram();
 
@@ -1109,8 +1112,7 @@ namespace Echo
 
 		Renderer* pRender = Renderer::instance();
 		Camera* camera;// = getCamera();
-		SceneManager*  pSceneManager = SceneManager::instance();
-		RenderQueue*   pRenderQueue =  pSceneManager->getRenderQueue("Effect");
+		RenderQueue*   pRenderQueue =  RenderQueueGroup::instance()->getRenderQueue("Effect");
 		Material*      pMaterial = pRenderQueue->getMaterial();
 		ShaderProgram* shaderProgram = pMaterial->getShaderProgram();
 		ShaderProgram* shaderProgramUV2 = mMtlUV2->getShaderProgram();
@@ -1313,7 +1315,7 @@ namespace Echo
 	RenderQueue* EffectSystemManager::_getEffectRenderQueue()
 	{
 		if (NULL == mEffectRenderQueue)
-			mEffectRenderQueue = SceneManager::instance()->getRenderQueue("Effect");
+			mEffectRenderQueue = RenderQueueGroup::instance()->getRenderQueue("Effect");
 		return mEffectRenderQueue;
 	}
 

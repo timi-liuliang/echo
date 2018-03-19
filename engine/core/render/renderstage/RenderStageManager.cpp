@@ -20,20 +20,20 @@ namespace Echo
 		__ConstructSingleton;
 
 		// ÒõÓ°Í¼äÖÈ¾½×¶Î
-		m_shadowMapRenderStage = EchoNew(ShadowMapRenderStage);
-		m_shadowMapRenderStage->setEnable(EngineSettingsMgr::instance()->isActorCastShadow());
-		m_renderStages.push_back(m_shadowMapRenderStage);
+		//m_shadowMapRenderStage = EchoNew(ShadowMapRenderStage);
+		//m_shadowMapRenderStage->setEnable(EngineSettingsMgr::instance()->isActorCastShadow());
+		//m_renderStages.push_back(m_shadowMapRenderStage);
 
 		// äÖÈ¾ÕÚÕÖÃæÆ¬½×¶Î
 		RenderStage* pRs = NULL;
-		pRs = EchoNew(CoverageRenderStage);
-		pRs->setEnable(Root::instance()->getSettingsMgr().isEnableCoverage());
-		m_renderStages.push_back(pRs);
+		//pRs = EchoNew(CoverageRenderStage);
+		//pRs->setEnable(Root::instance()->getSettingsMgr().isEnableCoverage());
+		//m_renderStages.push_back(pRs);
 
 		//äÖÈ¾Ë®Ãæ
-		pRs = EchoNew(WaterRefectRenderStage);
-		pRs->setEnable(false);
-		m_renderStages.push_back(pRs);
+		//pRs = EchoNew(WaterRefectRenderStage);
+		//pRs->setEnable(false);
+		//m_renderStages.push_back(pRs);
 
 		// äÖÈ¾³¡¾°½×¶Î
 		pRs = EchoNew(LDRSceneColorRenderStage);
@@ -41,26 +41,26 @@ namespace Echo
 		m_renderStages.push_back(pRs);
 
 		// ºó´¦Àí½×¶Î
-		pRs = EchoNew(PostProcessRenderStage);
-		pRs->setEnable(true);
-		m_renderStages.push_back(pRs);
+		//pRs = EchoNew(PostProcessRenderStage);
+		//pRs->setEnable(true);
+		//m_renderStages.push_back(pRs);
 
-		pRs = EchoNew(AfterPostProcessStage);
-		pRs->setEnable(true);
-		m_renderStages.push_back(pRs);
+		//pRs = EchoNew(AfterPostProcessStage);
+		//pRs->setEnable(true);
+		//m_renderStages.push_back(pRs);
 
-		pRs = EchoNew(GlowRenderStage);
-		pRs->setEnable(EngineSettingsMgr::instance()->isEnableGlow());
-		m_renderStages.push_back(pRs);
+		//pRs = EchoNew(GlowRenderStage);
+		//pRs->setEnable(EngineSettingsMgr::instance()->isEnableGlow());
+		//m_renderStages.push_back(pRs);
 
 		// 2D¹Ç÷À¶¯»­½×¶Î
-		pRs = EchoNew(SpineRenderStage);
-		pRs->setEnable(true);
-		m_renderStages.push_back(pRs);
+		//pRs = EchoNew(SpineRenderStage);
+		//pRs->setEnable(true);
+		//m_renderStages.push_back(pRs);
 
-		pRs = EchoNew(UIRenderStage);
-		pRs->setEnable(true);
-		m_renderStages.push_back(pRs);
+		//pRs = EchoNew(UIRenderStage);
+		//pRs->setEnable(true);
+		//m_renderStages.push_back(pRs);
 	}
 
 	// Îö¹¹º¯Êı

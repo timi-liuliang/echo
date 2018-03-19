@@ -4,6 +4,7 @@
 #include "Engine/core/Scene/Scene_Manager.h"
 #include "engine/core/resource/DataStream.h"
 #include "EffectSystemManager.h"
+#include "render/RenderQueueGroup.h"
 
 namespace Echo
 {
@@ -127,7 +128,7 @@ namespace Echo
 			mNoiseTextPtr->prepareLoad();
 		}
 
-		Material* pMaterial = SceneManager::instance()->getRenderQueue("Effect")->getMaterial();
+		Material* pMaterial = RenderQueueGroup::instance()->getRenderQueue("Effect")->getMaterial();
 
 		m_textureSampler.m_texture = mTexturePtr->getTexture();
 		m_textureSampler.m_samplerState = pMaterial->getSamplerState(0);

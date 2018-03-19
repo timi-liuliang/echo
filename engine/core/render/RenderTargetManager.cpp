@@ -111,16 +111,16 @@ namespace Echo
 			m_logicHeightScale = static_cast<float>(m_logicHeight) / static_cast<float>(screenHeight);
 		}
 
-		m_pMaterialBaseUpdate = MaterialManager::instance()->createMaterial();
-		m_pMaterialBaseUpdate->loadFromFile("pp_UpdateRT.xml", "");
+		//m_pMaterialBaseUpdate = MaterialManager::instance()->createMaterial();
+		//m_pMaterialBaseUpdate->loadFromFile("pp_UpdateRT.xml", "");
 
-		m_pMaterialNightSight = MaterialManager::instance()->createMaterial();
-		m_pMaterialNightSight->loadFromFile("pp_UpdateRTNightSight.xml", "");
+		//m_pMaterialNightSight = MaterialManager::instance()->createMaterial();
+		//m_pMaterialNightSight->loadFromFile("pp_UpdateRTNightSight.xml", "");
 
 		if (Renderer::instance()->getDeviceFeatures().supportGLES30() && EngineSettingsMgr::instance()->isEnableDownsampleDepth())
 		{
-			m_pMaterialDownsampleDepth = MaterialManager::instance()->createMaterial();
-			m_pMaterialDownsampleDepth->loadFromFile("pp_downsample_depth.xml", "");
+			//m_pMaterialDownsampleDepth = MaterialManager::instance()->createMaterial();
+			//m_pMaterialDownsampleDepth->loadFromFile("pp_downsample_depth.xml", "");
 		}
 
 		if( storeDefaultRenderTarget() )
@@ -353,6 +353,8 @@ namespace Echo
 
 	bool RenderTargetManager::createScreenAlignedQuad_ext()
 	{
+		return true;
+
 		RenderInput::VertexElementList verElementLists;
 		verElementLists.push_back(Echo::RenderInput::VertexElement(Echo::RenderInput::VS_POSITION, Echo::PF_RGB32_FLOAT));
 		verElementLists.push_back(Echo::RenderInput::VertexElement(Echo::RenderInput::VS_TEXCOORD0, Echo::PF_RG32_FLOAT));
@@ -504,6 +506,8 @@ namespace Echo
 
 	bool RenderTargetManager::createScreenAlignedQuadQuarterLB_ext()
 	{
+		return true;
+
 		RenderInput::VertexElementList verElementLists;
 		verElementLists.push_back(Echo::RenderInput::VertexElement(Echo::RenderInput::VS_POSITION, Echo::PF_RGB32_FLOAT));
 		verElementLists.push_back(Echo::RenderInput::VertexElement(Echo::RenderInput::VS_TEXCOORD0, Echo::PF_RG32_FLOAT));

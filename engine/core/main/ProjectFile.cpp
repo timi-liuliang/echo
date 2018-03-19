@@ -2,6 +2,7 @@
 #include "engine/core/Util/LogManager.h"
 #include "engine/core/Util/PathUtil.h"
 #include "engine/core/resource/ResourceGroupManager.h"
+#include "render/RenderQueueGroup.h"
 #include <ostream>
 
 namespace Echo
@@ -9,7 +10,6 @@ namespace Echo
 	// 构造函数
 	ProjectFile::ProjectFile()
 	{
-		m_uiRootPath = "../media/ui";
 		m_defaultMaterial = "general.mt";
 	}
 
@@ -39,8 +39,8 @@ namespace Echo
 			if ( projectNode )
 			{
 				loadArchives(projectNode);
+				loadRenderQueues(projectNode);
 				loadTextureCompreses(projectNode);
-				loadUIPath(projectNode);
 
 				// get default Material Name
 				xml_node<>* materialNode = projectNode->first_node("defaultMaterial");
@@ -85,24 +85,25 @@ namespace Echo
 		out << doc;
 	}
 
-	// 加载ui配置
-	void ProjectFile::loadUIPath(xml_node<>* projectNode)
+	// 加载渲染队列信息
+	void ProjectFile::loadRenderQueues(xml_node<>* projectNode)
 	{
 		try
 		{
-			xml_node<>* uiNode = projectNode->first_node("ui");
-			if ( uiNode )
+			m_renderQueues.clear();
+
+			xml_node<>* renderQueueGroupNode = projectNode->first_node("RenderQueueGroup");
+			for (xml_node<>* renderQueueNode = renderQueueGroupNode->first_node("RenderQueue"); renderQueueNode; renderQueueNode = renderQueueNode->next_sibling("RenderQueue"))
 			{
-				xml_node<>* rootNode = uiNode->first_node("uiroot");
-				if ( rootNode )
-				{
-					m_uiRootPath = rootNode->first_attribute("root_value")->value();
-				}
+				RenderQueueInfo queueInfo;
+				queueInfo.m_name = renderQueueNode->first_attribute("name")->value();
+
+				m_renderQueues.push_back(queueInfo);
 			}
 		}
 		catch ( ... )
 		{
-			EchoLogError("Load ui root path value failed");
+			EchoLogError("Load render queues failed");
 		}
 
 	}
@@ -167,6 +168,12 @@ namespace Echo
 		for ( size_t i = 0; i < m_archives.size(); i++ )
 		{
 			ResourceGroupManager::instance()->addArchive(m_archives[i].m_archiveValue, m_archives[i].m_archiveType);
+		}
+
+		// 渲染队列
+		for (const RenderQueueInfo& info : m_renderQueues)
+		{
+			RenderQueueGroup::instance()->addRenderQueue( info.m_name);
 		}
 	}
 

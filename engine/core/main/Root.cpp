@@ -23,7 +23,6 @@
 #include "Engine/core/Render/MaterialInstance.h"
 #include "Engine/core/Render/RenderStage/RenderStageManager.h"
 #include "ProjectFile.h"
-#include "ProjectPropertyManager.h"
 #include "Engine/modules/Audio/FMODStudio/FSAudioManager.h"
 #include "Engine/core/Resource/HttpFileSystemArchive.h"
 #include "Engine/core/Resource/7zipArchive.h"
@@ -218,9 +217,6 @@ namespace Echo
 		m_audioManager->init(cfg.m_AudiomaxVoribsCodecs,cfg.m_AudioLoadDecompresse);
 		loadAllBankFile();
 
-		m_projectPropertyManager = EchoNew(ProjectPropertyManager);
-		m_projectPropertyManager->init();
-
 		setEnableFrameProfile(true);
 
 #ifdef ECHO_PROFILER
@@ -245,7 +241,7 @@ namespace Echo
 	{
 		if (PathUtil::IsFileExist(projectFile))
 		{
-			m_rootPath = PathUtil::GetFileDirPath(projectFile);
+			m_resPath = PathUtil::GetFileDirPath(projectFile);
 
 			EchoSafeDelete(m_projectFile, ProjectFile);
 			m_projectFile = EchoNew(ProjectFile);
@@ -466,8 +462,6 @@ namespace Echo
 		EchoSafeDelete(m_projectFile, ProjectFile);
 #ifdef ECHO_PROFILER
 #endif
-		EchoSafeDelete(m_projectPropertyManager, ProjectPropertyManager);
-
 		// 销毁时间控制器
 		EngineTimeController::destroy();
 		MemoryManager::destroyInstance();
@@ -475,13 +469,13 @@ namespace Echo
 
 	const String& Root::getRootPath() const
 	{
-		return m_rootPath;
+		return m_resPath;
 	}
 
 	const String& Root::getWriteablePath() const
 	{
 #ifdef ECHO_PLATFORM_WINDOWS
-		return m_rootPath;
+		return m_resPath;
 #else
 		return m_strWriteablePath;
 #endif
@@ -489,7 +483,7 @@ namespace Echo
 
 	void Root::setWriteablePath(const String& strPath)
 	{
-		m_strWriteablePath = strPath;
+		m_userPath = strPath;
 	}
 
 	void Root::SetPhoneinformation(int max, int free, String tex)
@@ -661,54 +655,6 @@ namespace Echo
 			case 5: EchoAnimSystemManager->updateDelayedRelease(m_frameTime * MOD); break;
 			default:
 				break;
-		}
-	}
-
-	void Root::enableRenderQueue(ui32 renderQueueID)
-	{
-		ui8 nCount = EchoSceneManager->getRenderQueueCount();
-		if (renderQueueID >= nCount) return;
-
-		if (renderQueueID == EchoSceneManager->getRenderQueueIndex("Effect"))
-		{
-			if (EchoEffectSystemManager)
-				EchoEffectSystemManager->setEnableRender(true);
-			return;
-		}
-
-		SceneManager* pSm = EchoSceneManager;
-		if (pSm)
-		{
-			RenderQueue* pRenderQueue = pSm->getRenderQueueByIndex(renderQueueID);
-
-			if (pRenderQueue)
-			{
-				pRenderQueue->enableRender();
-			}
-		}
-	}
-
-	void Root::disableRenderQueue(ui32 renderQueueID)
-	{
-		ui8 nCount = EchoSceneManager->getRenderQueueCount();
-		if (renderQueueID >= nCount) return;
-
-		if (renderQueueID == EchoSceneManager->getRenderQueueIndex("Effect"))
-		{
-			if (EchoEffectSystemManager)
-				EchoEffectSystemManager->setEnableRender(false);
-			return;
-		}
-
-		SceneManager* pSm = EchoSceneManager;
-		if (pSm)
-		{
-			RenderQueue* pRenderQueue = pSm->getRenderQueueByIndex(renderQueueID);
-
-			if (pRenderQueue)
-			{
-				pRenderQueue->disableRender();
-			}
 		}
 	}
 
