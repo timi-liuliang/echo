@@ -1,6 +1,6 @@
 /****************************************************************************************
  
-   Copyright (C) 2014 Autodesk, Inc.
+   Copyright (C) 2015 Autodesk, Inc.
    All rights reserved.
  
    Use of this software is subject to the terms of the Autodesk license agreement
@@ -96,6 +96,14 @@ typedef FbxLong*				FbxLongPtr;
 typedef FbxULong*				FbxULongPtr;
 typedef FbxLongLong*			FbxLongLongPtr;
 typedef FbxULongLong*			FbxULongLongPtr;
+
+
+#if defined(FBXSDK_ENV_EMSCRIPTEN)
+	typedef FbxInt32 			__int32_t;
+	typedef FbxUInt32			__uint32_t;
+	typedef FbxInt64  			__int64_t;
+	typedef FbxUInt64			__uint64_t;
+#endif
 
 //-------------------------------------------------------------------------------------
 //Minimum and Maximum values for types

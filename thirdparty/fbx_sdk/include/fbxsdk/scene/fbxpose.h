@@ -1,6 +1,6 @@
 /****************************************************************************************
  
-   Copyright (C) 2014 Autodesk, Inc.
+   Copyright (C) 2015 Autodesk, Inc.
    All rights reserved.
  
    Use of this software is subject to the terms of the Autodesk license agreement
@@ -272,12 +272,16 @@ public:
 		  * \li d) All the parents of the deforming nodes are part of the bind pose.
 		  * \li e) Each deformer relative matrix correspond to the deformer Inv(bindMatrix) * deformed Geometry bindMatrix.
 		  *
-		  * \param pRoot This node is used as the stop point when visiting the parents (cannot be NULL).
+		  * \param pRoot This node is used as the stop point when visiting the parents (cannot be NULL).		           
 		  * \param pMatrixCmpTolerance Tolerance value when comparing the matrices.
           * \param pStatus The FbxStatus object to hold error codes.
 		  * \return true if all the above conditions are met and false otherwise.
-		  * \remarks If the returned value is false, querying for the error will return the reason of the failure.
-		  *  As soon as one of the above conditions is not met, this method return ignoring any subsequent errors.
+		  * \remarks 
+		  * a) If pRoot node is not defined in the BindPose it must not have a Geometry or Skeleton attribute and its
+		  * transform must be an Identity.
+		  * \remarks
+		  * b) If the returned value is false, querying for the error will return the reason of the failure.
+		  * As soon as one of the above conditions is not met, this method return ignoring any subsequent errors.
 		  * Run the IsBindPoseVerbose if more details are needed.
 		  */
 		bool IsValidBindPose(FbxNode* pRoot, double pMatrixCmpTolerance=0.0001, FbxStatus* pStatus = NULL);
@@ -293,6 +297,8 @@ public:
 		  * \param pWrongMatrices Nodes that yield to a wrong matrix comparisons are added to this list.
 		  * \param pMatrixCmpTolerance Tolerance value when comparing the matrices.
           * \param pStatus The FbxStatus object to hold error codes.
+		  * \remarks If pRoot node is not defined in the BindPose it must not have a Geometry or Skeleton attribute and its
+		  *          transform must be an Identity.		  
 		  */
 		bool IsValidBindPoseVerbose(FbxNode* pRoot, NodeList& pMissingAncestors, NodeList& pMissingDeformers, NodeList& pMissingDeformersAncestors, NodeList& pWrongMatrices, double pMatrixCmpTolerance=0.0001, FbxStatus* pStatus = NULL);
 
@@ -304,6 +310,8 @@ public:
 		  * \param pMatrixCmpTolerance Tolerance value when comparing the matrices.
           * \param pStatus The FbxStatus object to hold error codes.
 		  * \remarks If the pUserNotification parameter is NULL, this method will call IsValidBindPose().
+		  * \remarks If pRoot node is not defined in the BindPose it must not have a Geometry or Skeleton attribute and its
+		  *          transform must be an Identity.		  
 		  */
 		bool IsValidBindPoseVerbose(FbxNode* pRoot, FbxUserNotification* pUserNotification, double pMatrixCmpTolerance=0.0001, FbxStatus* pStatus = NULL);
 

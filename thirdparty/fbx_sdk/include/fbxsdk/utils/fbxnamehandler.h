@@ -1,6 +1,6 @@
 /****************************************************************************************
  
-   Copyright (C) 2014 Autodesk, Inc.
+   Copyright (C) 2015 Autodesk, Inc.
    All rights reserved.
  
    Use of this software is subject to the terms of the Autodesk license agreement
@@ -123,6 +123,8 @@ public:
 
     /** Get the namespaces in a string pointer array format.
     * \return FbxArray<FbxString*> .
+	* \remarks The array is filled in reverse order. For example, with a namespace string defined as:
+	*          a:b:c:d, the filled array is: array[0]=d, array[1]=c, array[2]=b and array[3]=a
     */
     FbxArray<FbxString*> GetNameSpaceArray(char identifier);
 

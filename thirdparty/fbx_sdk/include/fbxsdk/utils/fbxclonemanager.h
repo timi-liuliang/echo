@@ -1,6 +1,6 @@
 /****************************************************************************************
  
-   Copyright (C) 2014 Autodesk, Inc.
+   Copyright (C) 2015 Autodesk, Inc.
    All rights reserved.
  
    Use of this software is subject to the terms of the Autodesk license agreement
@@ -103,6 +103,11 @@ public:
           * It is set after the call to FbxCloneManager::Clone()
           */
         FbxObject* mObjectClone;
+
+		/** Internal use.
+		  */
+		bool mLayerElementProcessed;
+		bool mConnectionsProcessed;
     };
 
     /** The CloneSet is a collection of pointers to objects that will be cloned in Clone()

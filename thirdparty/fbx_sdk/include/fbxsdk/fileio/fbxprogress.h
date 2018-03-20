@@ -1,6 +1,6 @@
 /****************************************************************************************
  
-   Copyright (C) 2014 Autodesk, Inc.
+   Copyright (C) 2015 Autodesk, Inc.
    All rights reserved.
  
    Use of this software is subject to the terms of the Autodesk license agreement
@@ -21,7 +21,7 @@
 
 typedef bool (*FbxProgressCallback)(void* pArgs, float pPercentage, const char* pStatus);
 
-#ifndef FBXSDK_ENV_WINSTORE
+#if !defined(FBXSDK_ENV_WINSTORE) && !defined(FBXSDK_ENV_EMSCRIPTEN) 
 	class FbxSpinLock;
 #endif
 
@@ -83,7 +83,7 @@ private:
 	float GetPercent() const;
 	bool ExecuteCallback() const;
 
-#ifndef FBXSDK_ENV_WINSTORE
+#if !defined(FBXSDK_ENV_WINSTORE) && !defined(FBXSDK_ENV_EMSCRIPTEN)
     FbxSpinLock*		mLock;
 #endif
     float				mCurrent;

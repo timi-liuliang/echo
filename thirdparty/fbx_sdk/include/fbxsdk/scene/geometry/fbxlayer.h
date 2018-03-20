@@ -1,6 +1,6 @@
 /****************************************************************************************
  
-   Copyright (C) 2014 Autodesk, Inc.
+   Copyright (C) 2016 Autodesk, Inc.
    All rights reserved.
  
    Use of this software is subject to the terms of the Autodesk license agreement
@@ -238,12 +238,18 @@ public:
     void SetType(const FbxDataType* pType) { mType = pType; }
 	const FbxLayerContainer* GetOwner() const { return mOwner; }
 
+    // Reference count added in case of shared objects or corrupted files that uses the same object.
+    // This will prevent the deletion of an object that is stil used.
+	void IncRefCount() { mRefCount++; }
+	int  DecRefCount() { mRefCount--; if (mRefCount < 0) { mRefCount = 0; } return mRefCount; }
+
 protected:
 	FbxLayerElement() 
 		: mMappingMode(eNone)
 		, mReferenceMode(eDirect)
 		, mName("")
 		, mOwner(NULL)
+		, mRefCount(0) 
 	{
 	}
 	
@@ -257,8 +263,9 @@ protected:
 	FbxString mName;
 	const FbxDataType* mType;
 	FbxLayerContainer* mOwner;
-
-	void Destruct() { FbxDelete(this); }
+	int		  mRefCount;
+	
+	void Destruct() { if (DecRefCount() == 0) { FbxDelete(this); } }
 	virtual void SetOwner(FbxLayerContainer* pOwner, int pInstance = 0);
 
     FBXSDK_FRIEND_NEW();
@@ -2717,7 +2724,7 @@ private:
 
 	void Clear();
 
-	FbxLayerContainer& mOwner;
+	FbxLayerContainer& mOwner;	
 
     FbxLayerElement*             mNonTexturesArray[FbxLayerElement::sTypeNonTextureCount];
     FbxLayerElementUV*           mUVsArray[FbxLayerElement::sTypeTextureCount];

@@ -1,6 +1,6 @@
 /****************************************************************************************
  
-   Copyright (C) 2014 Autodesk, Inc.
+   Copyright (C) 2015 Autodesk, Inc.
    All rights reserved.
  
    Use of this software is subject to the terms of the Autodesk license agreement
@@ -25,6 +25,8 @@
 #define SUBDEFORMER_PREFIX				"SubDeformer::"
 #define CONSTRAINT_PREFIX				"Constraint::"
 #define CONTROLSET_PLUG_PREFIX			"ControlSetPlug::"
+#define AUDIO_PREFIX					"Audio::"
+#define AUDIO_LAYER_PREFIX				"AudioLayer::"
 #define VIDEO_PREFIX					"Video::"
 #define TEXTURE_PREFIX					"Texture::"
 #define THUMBNAIL_PREFIX				"Thumbnail::"

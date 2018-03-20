@@ -1,6 +1,6 @@
 /****************************************************************************************
  
-   Copyright (C) 2014 Autodesk, Inc.
+   Copyright (C) 2015 Autodesk, Inc.
    All rights reserved.
  
    Use of this software is subject to the terms of the Autodesk license agreement
@@ -1350,6 +1350,7 @@ public:
 	virtual KFCurve* GetKFCurve() = 0;
 	virtual bool Store(FbxIO* pFileObject, bool pLegacyVersion=false) = 0;
     virtual bool Retrieve(FbxIO* pFileObject) = 0;
+	virtual void ExtrapolationSyncCallback() = 0;
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

@@ -1,6 +1,6 @@
 /****************************************************************************************
  
-   Copyright (C) 2014 Autodesk, Inc.
+   Copyright (C) 2015 Autodesk, Inc.
    All rights reserved.
  
    Use of this software is subject to the terms of the Autodesk license agreement
@@ -113,6 +113,9 @@ class FbxXRefManager;
 
  	\li Version 7400
 	Normals, tangents and binormals save the 4th component into a separate array	
+
+	\li Version 7500
+	Added support for large files (>2GB). NOTE: This breaks forward compatibility (i.e. older products won't be able to open these files!!)
    
  */
 
@@ -133,10 +136,8 @@ class FbxXRefManager;
 #define FBX_FILE_VERSION_7100		7100	//FBX 7.1 (guarantee compatibility with Autodesk 2011 products)
 #define FBX_FILE_VERSION_7200		7200	//FBX 7.2 (guarantee compatibility with Autodesk 2012 products)
 #define FBX_FILE_VERSION_7300		7300	//FBX 7.3 (guarantee compatibility with Autodesk 2013 products)
-#define FBX_FILE_VERSION_7400		7400	//FBX 7.4 (guarantee compatibility with Autodesk 2014 products)
-
-//Default file version number used when writing new FBX files
-#define FBX_DEFAULT_FILE_VERSION	FBX_FILE_VERSION_7400
+#define FBX_FILE_VERSION_7400		7400	//FBX 7.4 (guarantee compatibility with Autodesk 2014/2015 products)
+#define FBX_FILE_VERSION_7500		7500	//FBX 7.5 (guarantee compatibility with Autodesk 2016 products)
 
 //File version compatibility strings
 #define FBX_53_MB55_COMPATIBLE		"FBX53_MB55"
@@ -152,6 +153,12 @@ class FbxXRefManager;
 #define FBX_2012_00_COMPATIBLE		"FBX201200"
 #define FBX_2013_00_COMPATIBLE		"FBX201300"
 #define FBX_2014_00_COMPATIBLE		"FBX201400"
+#define FBX_2016_00_COMPATIBLE		"FBX201600"
+#define FBX_2018_00_COMPATIBLE      "FBX201800"
+
+//Default file version number used when writing new FBX files
+#define FBX_DEFAULT_FILE_VERSION		FBX_FILE_VERSION_7500
+#define FBX_DEFAULT_FILE_COMPATIBILITY	FBX_2018_00_COMPATIBLE
 
 /** Convert the FBX file version string to an integral number for <= or >= tests purposes.
   * \param pFileVersion File version string.
@@ -348,14 +355,20 @@ public:
         }
     };
 
+	enum BinaryType
+	{
+		BinaryNormal,	//<! Standard FBX file field alignment using 32bit values, used by all file format version 7.4.0 or lower
+		BinaryLarge		//<! New FBX file field alignment using 64bit values, used by all file format version 7.5.0 or higher
+	};
+
 	/** Creation function for this FbxIO class
       * \param pStatus  The FbxStatus object to hold error codes.
 	  * \return a new FbxIO object pointer
 	  */
-    static FbxIO* Create(FbxStatus& pStatus){ return FbxNew< FbxIO >(pStatus); }
+    static FbxIO* Create(BinaryType pBinaryType, FbxStatus& pStatus){ return FbxNew< FbxIO >(pBinaryType, pStatus); }
 
 	/** Default constructor */
-    FbxIO(FbxStatus& pStatus);
+    FbxIO(BinaryType pBinaryType, FbxStatus& pStatus);
 
 	/** Destructor */
     virtual ~FbxIO();
@@ -1660,6 +1673,7 @@ public:
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     bool ProjectOpen (FbxFile * pFile, FbxReader* pReader, bool pCheckCRC = false, bool pOpenMainSection = true, FbxIOFileHeaderInfo* pFileHeaderInfo = NULL);
+	FbxStatus& GetStatus() { return mStatus; }
 
 private:
     // to resolve warning C4512: 'class' : assignment operator could not be generated
@@ -1668,6 +1682,8 @@ private:
     FbxStatus& mStatus;
 
     struct InternalImpl;
+	struct InternalImpl32;
+	struct InternalImpl64;
     InternalImpl* mImpl;
 
     //! Project Global
@@ -1676,7 +1692,7 @@ private:
     void ProjectReset();
 
     bool ProjectReadHeader(bool pCheckASCIIHeader, bool pCheckCRC, bool pOpenMainSection, FbxIOFileHeaderInfo* pFileHeaderInfo);
-    bool ProjectReadExtendedHeader(int& pExtendedHeaderEnd, FbxIOFileHeaderInfo* pFileHeaderInfo);
+    bool ProjectReadExtendedHeader(FbxInt64& pExtendedHeaderEnd, FbxIOFileHeaderInfo* pFileHeaderInfo);
     bool BinaryReadHeader();
     bool BinaryReadSectionPosition();
     bool ASCIIReadHeader();
@@ -1695,13 +1711,13 @@ private:
     bool ProjectClearSection();
     bool ProjectOpenSection(int pSection);
     bool BinaryReadSectionHeader();
-    int BinaryReadSectionFooter(char* pSourceCheck);
-    bool BinaryReadExtensionCode(FbxUInt32 pFollowingSectionStart, FbxUInt32& pSectionStart, FbxUInt32& pSectionVersion);
+    FbxInt64 BinaryReadSectionFooter(char* pSourceCheck);
+    bool BinaryReadExtensionCode(FbxInt64 pFollowingSectionStart, FbxInt64& pSectionStart, FbxUInt32& pSectionVersion);
     void BinaryReadSectionPassword();
 
     bool ProjectWriteSectionHeader();
     void BinaryWriteSectionFooter();
-    bool BinaryWriteExtensionCode(FbxUInt32 pSectionStart, FbxUInt32 pSectionVersion);
+    bool BinaryWriteExtensionCode(FbxInt64 pSectionStart, FbxUInt32 pSectionVersion);
 
     FbxString GetCreationTime() const;
     void SetCreationTime(FbxString pCreationTime);

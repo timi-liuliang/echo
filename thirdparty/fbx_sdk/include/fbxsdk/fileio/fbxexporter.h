@@ -1,6 +1,6 @@
 /****************************************************************************************
  
-   Copyright (C) 2014 Autodesk, Inc.
+   Copyright (C) 2015 Autodesk, Inc.
    All rights reserved.
  
    Use of this software is subject to the terms of the Autodesk license agreement
@@ -144,7 +144,7 @@ public:
 		  */
 		bool Export(FbxDocument* pDocument, bool pNonBlocking=false);
 
-	#ifndef FBXSDK_ENV_WINSTORE
+	#if !defined(FBXSDK_ENV_WINSTORE) && !defined(FBXSDK_ENV_EMSCRIPTEN)
 		/** Check if the exporter is currently exporting.
 		  * \param pExportResult  This parameter, after the export finished, will contain the result of the export success or failure.
 		  * \return               Return true if the exporter is currently exporting.
@@ -154,7 +154,7 @@ public:
 		  *                       since it will also free up the thread's allocations when its done.
 		  */
 		bool IsExporting(bool& pExportResult);
-	#endif /* !FBXSDK_ENV_WINSTORE */
+	#endif /* !FBXSDK_ENV_WINSTORE && ! FBXSDK_ENV_EMSCRIPTEN */
 
 		/** Get the progress status in non-blocking mode.
 		  *	\param pStatus Optional current status string.
@@ -207,7 +207,7 @@ public:
 		  * \param pRenamingMode Renaming mode.
 		  * \return \c true if mode is set correctly
 		  */
-		bool SetFileExportVersion(FbxString pVersion, FbxSceneRenamer::ERenamingMode pRenamingMode);
+		bool SetFileExportVersion(FbxString pVersion, FbxSceneRenamer::ERenamingMode pRenamingMode=FbxSceneRenamer::eNone);
 
 		/** Set the resampling rate (only used when exporting to FBX 5.3 and lower)
 		  * \param pResamplingRate resampling rate
@@ -255,12 +255,12 @@ private:
 
 	int								mFileFormat;
 	FbxWriter*						mWriter;
-#ifndef FBXSDK_ENV_WINSTORE
+#if !defined(FBXSDK_ENV_WINSTORE) && !defined(FBXSDK_ENV_EMSCRIPTEN)
     FbxThread*						mExportThread;
     FbxExportThreadArg*				mExportThreadArg;
     bool							mExportThreadResult;
     bool							mIsThreadExporting;
-#endif /* !FBXSDK_ENV_WINSTORE */
+#endif /* !FBXSDK_ENV_WINSTORE && !FBXSDK_ENV_EMSCRIPTEN */
     FbxProgress						mProgress;
 	FbxStream*                      mStream;
 	void*                           mStreamData;

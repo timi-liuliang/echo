@@ -1,6 +1,6 @@
 /****************************************************************************************
  
-   Copyright (C) 2014 Autodesk, Inc.
+   Copyright (C) 2015 Autodesk, Inc.
    All rights reserved.
  
    Use of this software is subject to the terms of the Autodesk license agreement
@@ -399,6 +399,9 @@ template <typename K, typename V, typename C, typename A> inline void FbxMapDest
 	}
 	pMap.Clear();
 }
+
+template class FbxSimpleMap<FbxString, FbxObject*, FbxStringCompare>;
+template class FbxObjectMap<FbxString, FbxStringCompare>;
 
 #include <fbxsdk/fbxsdk_nsend.h>
 

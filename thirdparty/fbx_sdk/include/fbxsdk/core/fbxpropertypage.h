@@ -1,6 +1,6 @@
 /****************************************************************************************
  
-   Copyright (C) 2014 Autodesk, Inc.
+   Copyright (C) 2015 Autodesk, Inc.
    All rights reserved.
  
    Use of this software is subject to the terms of the Autodesk license agreement
@@ -77,12 +77,14 @@ public:
 	// Enum list       
     int AddEnumValue(const char* pStringValue)
     {
-        if (GetType() == eFbxEnum)
+		EFbxType lType = GetType();
+        if (lType == eFbxEnum || lType == eFbxEnumM)
         {
             if (!mEnumList)
                 mEnumList.Reset(FbxNew< FbxStringList >());
 
-            if( mEnumList->FindIndex( pStringValue ) == -1 )
+			bool lCanAdd = (lType == eFbxEnumM || mEnumList->FindIndex( pStringValue ) == -1);
+            if( lCanAdd )
                 return mEnumList->Add((char*)pStringValue);
         }
         return -1;
@@ -90,12 +92,15 @@ public:
 
     void InsertEnumValue(int pIndex, const char* pStringValue)
     {
-        if (GetType() == eFbxEnum)
+        EFbxType lType = GetType();
+        if (lType == eFbxEnum || lType == eFbxEnumM)
         {
             if (!mEnumList)
                 mEnumList.Reset(FbxNew< FbxStringList >());
 
-            mEnumList->InsertAt(pIndex,(char*)pStringValue);
+			bool lCanAdd = (lType == eFbxEnumM || mEnumList->FindIndex( pStringValue ) == -1);
+            if( lCanAdd )
+				mEnumList->InsertAt(pIndex,(char*)pStringValue);
         }
     }
 
@@ -106,18 +111,22 @@ public:
 
     void SetEnumValue(int pIndex, const char* pStringValue)
     {
-        if (GetType() == eFbxEnum)
+        EFbxType lType = GetType();
+        if (lType == eFbxEnum || lType == eFbxEnumM)
         {
             if (!mEnumList)
                 mEnumList.Reset(FbxNew< FbxStringList >());
 
-            mEnumList->SetStringAt(pIndex,(char*)pStringValue);
+			bool lCanAdd = (lType == eFbxEnumM || mEnumList->FindIndex( pStringValue ) == -1);
+			if (lCanAdd)
+				mEnumList->SetStringAt(pIndex,(char*)pStringValue);
         }
     }
 
     void RemoveEnumValue(int pIndex)
     {
-        if (GetType() == eFbxEnum)
+        EFbxType lType = GetType();
+        if (lType == eFbxEnum || lType == eFbxEnumM)
         {
             if (!mEnumList)
                 mEnumList.Reset(FbxNew< FbxStringList >());
@@ -128,8 +137,10 @@ public:
 
     char* GetEnumValue(int pIndex)
     {
-      char* lValue = NULL;
-        if (GetType() == eFbxEnum) {
+		char* lValue = NULL;
+        EFbxType lType = GetType();
+        if (lType == eFbxEnum || lType == eFbxEnumM)
+		{
             lValue = mEnumList ? mEnumList->GetStringAt(pIndex) : 0;
         }
         return lValue;

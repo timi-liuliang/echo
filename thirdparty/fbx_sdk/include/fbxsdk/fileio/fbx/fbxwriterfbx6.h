@@ -1,6 +1,6 @@
 /****************************************************************************************
  
-   Copyright (C) 2014 Autodesk, Inc.
+   Copyright (C) 2015 Autodesk, Inc.
    All rights reserved.
  
    Use of this software is subject to the terms of the Autodesk license agreement
@@ -298,6 +298,7 @@ private:
     FbxArray<ModifiedPropertyInfo*> mModifiedProperties;
     void ReplaceUnsupportedProperties(FbxScene* pScene, bool pPreprocessPass, int pFormatV);
 	void StoreUnsupportedProperty(FbxObject* pObject, FbxProperty& pProperty);
+    bool IsLeafRoll(const FbxString& pNameWithoutNameSpacePrefix);
 
     FbxProgress* mProgress;
     bool mProgressPause;

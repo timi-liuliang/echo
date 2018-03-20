@@ -1,6 +1,6 @@
 /****************************************************************************************
  
-   Copyright (C) 2014 Autodesk, Inc.
+   Copyright (C) 2015 Autodesk, Inc.
    All rights reserved.
  
    Use of this software is subject to the terms of the Autodesk license agreement
@@ -27,6 +27,10 @@ class FbxNurbsSurface;
 class FbxNurbsCurve;
 class FbxWeightedMapping;
 class FbxSurfaceEvaluator;
+class FbxScene;
+class FbxNode;
+class FbxNodeAttribute;
+class FbxGeometry;
 
 /** 
 * This class provides the functionality to convert geometry nodes 
@@ -251,6 +255,14 @@ public:
 	*					 For meshes with skin binding, if the pose of frame 0 is different with bind pose, the new mesh will be distorted.
 	*/
 	FbxNode* MergeMeshes(FbxArray<FbxNode*>& pMeshNodes, const char* pNodeName, FbxScene* pScene);
+
+	/**
+	* Cleanup or remove degenerated meshes.
+	* \param pScene The scene to process.
+	* \param pAffectedNodes The list of nodes that have been affected by this operation.
+	* \remarks  If the cleaned-up mesh becomes invalid, it is removed entirely.
+	*/
+	void RemoveBadPolygonsFromMeshes(FbxScene* pScene, FbxArray<FbxNode*>* pAffectedNodes = NULL);
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **

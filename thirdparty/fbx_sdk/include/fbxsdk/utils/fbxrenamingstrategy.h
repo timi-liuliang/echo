@@ -1,6 +1,6 @@
 /****************************************************************************************
  
-   Copyright (C) 2014 Autodesk, Inc.
+   Copyright (C) 2016 Autodesk, Inc.
    All rights reserved.
  
    Use of this software is subject to the terms of the Autodesk license agreement
@@ -162,7 +162,7 @@ public:
     /** Setup the strategy to perform this algorithm
       * \param pType 
       */
-    void SetClashSoverType(EClashType pType);
+    void SetClashSolverType(EClashType pType);
 
     /** Returns a name with its prefix removed.
      * \param pName    A name containing a prefix.
@@ -209,12 +209,14 @@ public:
     /** Recursively renames all the unparented namespaced objects (Prefix mode) starting from this node.
      * \param pNode       Parent node.
      * \param pIsRoot     The root node.
+	 * \return            \c true if the "_NSclash" have been added to one or more node.
      * \remarks           This function adds "_NSclash" when it encounters an unparented namespaced object.
      */
     virtual bool RenameUnparentNameSpace(FbxNode* pNode, bool pIsRoot = false);
 
     /** Recursively removes all the unparented namespaced "key" starting from this node.
      * \param pNode     Parent node.
+	 * \return          \c true if successfully removed the "_NSclash" from one or more nodes.
      * \remarks         This function removes "_NSclash" when encountered. This is the opposite from RenameUnparentNameSpace.
      */
     virtual bool RemoveImportNameSpaceClash(FbxNode* pNode);
@@ -229,6 +231,8 @@ public:
      * \param pNode        Current node.
      * \param OldNS        The old namespace to be replaced with the NewNs.
      * \param NewNS        The new namespace to replace OldNs.
+	 * \return             \c true if successfull
+	 * \remarks            This function only replaces the first occurence of OldNS with NewNS.
      */
     virtual bool PropagateNameSpaceChange(FbxNode* pNode, FbxString OldNS, FbxString NewNS);
 

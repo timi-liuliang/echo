@@ -1,6 +1,6 @@
 /****************************************************************************************
  
-   Copyright (C) 2014 Autodesk, Inc.
+   Copyright (C) 2015 Autodesk, Inc.
    All rights reserved.
  
    Use of this software is subject to the terms of the Autodesk license agreement
@@ -117,6 +117,7 @@
 // Media
 //
 #define FIELD_MEDIA_MEDIA               "Media"
+#define FIELD_MEDIA_AUDIO               "Audio"
 #define FIELD_MEDIA_VIDEO               "Video"
 #define FIELD_MEDIA_TYPE                "Type"
 #define TOKEN_MEDIA_CLIP                "Clip"
@@ -956,6 +957,8 @@
 #define FIELD_OBJECT_DEFINITION_VERSION                                 "Version"
 #define FIELD_OBJECT_DEFINITION_COUNT                                   "Count"
 #define FIELD_OBJECT_DEFINITION_OBJECT_TYPE                             "ObjectType"
+#define FIELD_OBJECT_DEFINITION_OBJECT_TYPE_AUDIO                       "Audio"
+#define FIELD_OBJECT_DEFINITION_OBJECT_TYPE_AUDIO_LAYER                 "AudioLayer"
 #define FIELD_OBJECT_DEFINITION_OBJECT_TYPE_REFERENCE                   "SceneReference"
 #define FIELD_OBJECT_DEFINITION_OBJECT_TYPE_CONTAINER                   "Container"
 #define FIELD_OBJECT_DEFINITION_OBJECT_TYPE_MODEL                       "Model"
@@ -1030,6 +1033,7 @@
 #define FIELD_OBJECT_RELATIONS_TYPE_MODEL            "Model"
 #define FIELD_OBJECT_RELATIONS_TYPE_MATERIAL         "Material"
 #define FIELD_OBJECT_RELATIONS_TYPE_TEXTURE          "Texture"
+#define FIELD_OBJECT_RELATIONS_TYPE_AUDIO            "Audio"
 #define FIELD_OBJECT_RELATIONS_TYPE_VIDEO            "Video"
 #define FIELD_OBJECT_RELATIONS_TYPE_CONSTRAINT       "Constraint"
 #define FIELD_OBJECT_RELATIONS_TYPE_DEFORMER         "Deformer"

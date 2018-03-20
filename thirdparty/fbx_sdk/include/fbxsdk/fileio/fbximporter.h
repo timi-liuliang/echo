@@ -1,6 +1,6 @@
 /****************************************************************************************
  
-   Copyright (C) 2014 Autodesk, Inc.
+   Copyright (C) 2015 Autodesk, Inc.
    All rights reserved.
  
    Use of this software is subject to the terms of the Autodesk license agreement
@@ -183,7 +183,7 @@ public:
       */
 	  bool Import(FbxDocument* pDocument, bool pNonBlocking=false);
 
-#ifndef FBXSDK_ENV_WINSTORE
+#if  !defined(FBXSDK_ENV_WINSTORE) && !defined(FBXSDK_ENV_EMSCRIPTEN) 
     /** Check if the importer is currently importing.
 	  * \param pImportResult  This parameter, after the import finished, will contain the result of the import success or failure.
       * \return               Return true if the importer is currently importing.
@@ -193,7 +193,7 @@ public:
       *                       since it will also free up the thread's allocations when its done.
       */
 	  bool IsImporting(bool& pImportResult);
-#endif /* !FBXSDK_ENV_WINSTORE */
+#endif /* !FBXSDK_ENV_WINSTORE && !defined(FBXSDK_ENV_EMSCRIPTEN) */
 
 	/** Get the progress status in non-blocking mode.
 	  *	\param pStatus Optional current status string.
@@ -335,12 +335,12 @@ private:
 	FbxTime::EMode			mFrameRate;
     bool					mParseForStatistics;
     FbxStatistics			mStatistics;
-#ifndef FBXSDK_ENV_WINSTORE
+#if  !defined(FBXSDK_ENV_WINSTORE) && !defined(FBXSDK_ENV_EMSCRIPTEN) 
 	FbxThread*				mImportThread;
 	FbxImportThreadArg*		mImportThreadArg;
 	bool					mImportThreadResult;
 	bool					mIsThreadImporting;
-#endif /* !FBXSDK_ENV_WINSTORE */
+#endif /* !FBXSDK_ENV_WINSTORE && !defined(FBXSDK_ENV_EMSCRIPTEN) */
     FbxProgress				mProgress;
     FbxFile*				mFile;
 	FbxStream*				mStream;

@@ -1,6 +1,6 @@
 /****************************************************************************************
  
-   Copyright (C) 2014 Autodesk, Inc.
+   Copyright (C) 2015 Autodesk, Inc.
    All rights reserved.
  
    Use of this software is subject to the terms of the Autodesk license agreement
@@ -182,7 +182,7 @@ public:
 	static bool Copy(const char* pDestination_UTF8, const char* pSource_UTF8);
 
 	//! Get given file's size.
-	static FbxLong Size(const char* pFilePath_UTF8);
+	static FbxInt64 Size(const char* pFilePath_UTF8);
 
 	/** Find if the specified file exist.
 	  * \param pFilePath_UTF8 The file path to test against.

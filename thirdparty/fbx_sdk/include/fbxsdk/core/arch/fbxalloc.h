@@ -1,6 +1,6 @@
 /****************************************************************************************
  
-   Copyright (C) 2014 Autodesk, Inc.
+   Copyright (C) 2015 Autodesk, Inc.
    All rights reserved.
  
    Use of this software is subject to the terms of the Autodesk license agreement
@@ -138,6 +138,8 @@ public:
 };
 
 //! Deletion policy for pointer template classes that uses the FbxDelete() function.
+template<typename T> void FbxDelete(T* p);
+template<typename T> void FbxDelete(const T* p);
 template <class Type> class FbxDeletionPolicyDelete
 {
 public:

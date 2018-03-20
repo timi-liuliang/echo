@@ -1,6 +1,6 @@
 /****************************************************************************************
  
-   Copyright (C) 2014 Autodesk, Inc.
+   Copyright (C) 2016 Autodesk, Inc.
    All rights reserved.
  
    Use of this software is subject to the terms of the Autodesk license agreement
@@ -738,6 +738,33 @@ public:
         int GetComponentCount() { return mOffsets.GetCount() - 1; }
     };
     void ComputeComponentMaps(ComponentMap& pEdgeToPolyMap, ComponentMap& pPolyToEdgeMap);
+	
+	// Internal structure used to keep the mapping information between the control points and the
+	// vertices referencing them
+	class FBXSDK_DLL ControlPointToVerticesMap
+	{
+	public:
+		ControlPointToVerticesMap();
+		~ControlPointToVerticesMap();
+		bool Valid();		
+
+		void Fill(FbxMesh* pMesh);
+
+		int  GetCount();
+		bool Init(int pNbEntries);
+		void Clear();
+
+		FbxArray<int>* GetVerticesArray(int pControlPoint);
+		FbxArray<int>* operator[](int pControlPoint);
+
+	private:
+		FbxArray< FbxArray<int>* > mMap;
+	};
+	void ComputeControlPointToVerticesMap(ControlPointToVerticesMap& pMap);
+
+	// this function will compare the vertex normals with the corresponding ones in pMesh and 
+	// make them similar (i.e: if pMesh(NVi) == pMesh(NVj) then make this(NVi) == this(NVj))
+	bool ConformNormalsTo(const FbxMesh* pMesh);
 
 protected:
 	virtual void Construct(const FbxObject* pFrom);

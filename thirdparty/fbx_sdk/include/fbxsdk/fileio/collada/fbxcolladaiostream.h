@@ -1,6 +1,6 @@
 /****************************************************************************************
  
-   Copyright (C) 2014 Autodesk, Inc.
+   Copyright (C) 2015 Autodesk, Inc.
    All rights reserved.
  
    Use of this software is subject to the terms of the Autodesk license agreement
@@ -45,7 +45,7 @@ template <> bool FromString(FbxAMatrix * pDest, const char * pSourceBegin, const
   * The valid unit range in each destination unit is [pDestUnitOffset, pDestUnitOffset + pDestValidUnitCount).
   * The units in invalid range of destination is set to a default value.
   */
-template <typename TYPE> int FromStringToArray(const char * pString, TYPE * pArray, int pSourceUnitOffset, int pSourceValidUnitCount, int pSourceGroupSize, int pDestUnitOffset, int pDestValidUnitCount, int pDestGroupSize, TYPE pDefaultValue = TYPE())
+template <typename TYPE> int FromStringToArray(const char * pString, TYPE * pArray, int pArraySize, int pSourceUnitOffset, int pSourceValidUnitCount, int pSourceGroupSize, int pDestUnitOffset, int pDestValidUnitCount, int pDestGroupSize, TYPE pDefaultValue = TYPE())
 {
     if (pString == 0 || pArray == 0)
         return 0;
@@ -68,6 +68,12 @@ template <typename TYPE> int FromStringToArray(const char * pString, TYPE * pArr
         const char * lSourceStart = lSource;
         if (FromString(&lData, lSource, &lSource) && lSourceCounter >= pSourceUnitOffset && lSourceCounter < lSourceUnitValidEnd)
         {
+			if (lReadCount >= pArraySize)
+			{
+				// we are trying to write past the allocated buffer
+				return 0;
+			}
+
             if (lDestCounter == 0)
             {
                 for (int lIndex = 0; lIndex < pDestUnitOffset; ++lIndex)

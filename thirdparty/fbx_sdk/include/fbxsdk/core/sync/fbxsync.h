@@ -1,6 +1,6 @@
 /****************************************************************************************
  
-   Copyright (C) 2014 Autodesk, Inc.
+   Copyright (C) 2015 Autodesk, Inc.
    All rights reserved.
  
    Use of this software is subject to the terms of the Autodesk license agreement
@@ -15,7 +15,7 @@
 
 #include <fbxsdk/fbxsdk_def.h>
 
-#ifndef FBXSDK_ENV_WINSTORE
+#if !defined(FBXSDK_ENV_WINSTORE) && !defined(FBXSDK_ENV_EMSCRIPTEN)
 
 #include <fbxsdk/core/sync/fbxclock.h>
 #include <fbxsdk/core/sync/fbxthread.h>
@@ -183,6 +183,6 @@ private:
 
 #include <fbxsdk/fbxsdk_nsend.h>
 
-#endif /* !FBXSDK_ENV_WINSTORE */
+#endif /* !FBXSDK_ENV_WINSTORE && !FBXSDK_ENV_EMSCRIPTEN */
 
 #endif /* _FBXSDK_CORE_SYNC_H_ */

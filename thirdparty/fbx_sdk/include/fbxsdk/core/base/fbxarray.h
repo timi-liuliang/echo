@@ -1,6 +1,6 @@
 /****************************************************************************************
  
-   Copyright (C) 2014 Autodesk, Inc.
+   Copyright (C) 2015 Autodesk, Inc.
    All rights reserved.
  
    Use of this software is subject to the terms of the Autodesk license agreement
@@ -211,7 +211,7 @@ public:
 	* within capacity range, element count is increased such that Size() will become pIndex + 1. */
 	inline void SetAt(const int pIndex, const T& pElement)
 	{
-		FBX_ASSERT_RETURN(pIndex < mCapacity);
+		FBX_ASSERT_RETURN(pIndex >= 0 && pIndex < mCapacity);
 		if( pIndex >= mSize ) mSize = pIndex + 1;
 		if( mArray ) memcpy(&mArray[pIndex], &pElement, sizeof(T));
 	}
@@ -283,6 +283,8 @@ public:
 	* \return \c true if successful, otherwise \c false. */
 	inline void RemoveRange(const int pIndex, const int pCount)
 	{
+		FBX_ASSERT_RETURN(pIndex >= 0);
+		FBX_ASSERT_RETURN(pCount >= 0);
 		if( pIndex + pCount < mSize )
 		{
 			memmove(&mArray[pIndex], &mArray[pIndex + pCount], (mSize - pIndex - pCount) * sizeof(T));

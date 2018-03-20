@@ -1,6 +1,6 @@
 /****************************************************************************************
  
-   Copyright (C) 2014 Autodesk, Inc.
+   Copyright (C) 2016 Autodesk, Inc.
    All rights reserved.
  
    Use of this software is subject to the terms of the Autodesk license agreement
@@ -84,14 +84,14 @@ struct ElementContentAccessor
     }
 
     template <typename TYPE>
-    int GetArray(TYPE * pArray,
+    int GetArray(TYPE * pArray, int pArraySize,
         int pSourceUnitOffset = 0, int pSourceUnitValidCount = 1, int pSourceUnitSize = 1,
         int pDestUnitOffset = 0, int pDestUnitValidCount = 1, int pDestUnitSize = 1,
         TYPE pDefaultValue = TYPE())
     {
         if (pArray)
         {
-            return FromStringToArray(mPointer, pArray,
+            return FromStringToArray(mPointer, pArray, pArraySize,
                 pSourceUnitOffset, pSourceUnitValidCount, pSourceUnitSize,
                 pDestUnitOffset, pDestUnitValidCount, pDestUnitSize, pDefaultValue);
         }
@@ -117,18 +117,16 @@ struct SourceElementContentAccessor : public ElementContentAccessor
         if (lTechniqueElement)
         {
             xmlNode* lAccessorElement = DAE_FindChildElementByTag(lTechniqueElement, COLLADA_ACCESSOR_STRUCTURE);
-            FBX_ASSERT(lAccessorElement);
-            if (!lAccessorElement)
-                return;
-
-            DAE_GetElementAttributeValue(lAccessorElement, COLLADA_COUNT_PROPERTY, mCount);
-            DAE_GetElementAttributeValue(lAccessorElement, COLLADA_STRIDE_PROPERTY, mStride);
-            DAE_GetElementAttributeValue(lAccessorElement, COLLADA_OFFSET_PROPERTY, mOffset);
+            if (lAccessorElement)
+			{
+				DAE_GetElementAttributeValue(lAccessorElement, COLLADA_COUNT_PROPERTY, mCount);
+				DAE_GetElementAttributeValue(lAccessorElement, COLLADA_STRIDE_PROPERTY, mStride);
+				DAE_GetElementAttributeValue(lAccessorElement, COLLADA_OFFSET_PROPERTY, mOffset);
+			}
             lReadCount = false;
         }
 
-        xmlNode * lDataArrayElement = DAE_FindChildElementByTag(pSourceElement,
-            TypeToArrayTag<TYPE>());
+        xmlNode * lDataArrayElement = DAE_FindChildElementByTag(pSourceElement, TypeToArrayTag<TYPE>());
         // Some COLLADA exporters use IDREF_array instead of Name_array
         if (!lDataArrayElement && TypeToArrayTag<TYPE>() == COLLADA_NAME_ARRAY_STRUCTURE)
             lDataArrayElement = DAE_FindChildElementByTag(pSourceElement, COLLADA_IDREF_ARRAY_STRUCTURE);
@@ -265,7 +263,7 @@ template <typename TYPE> FbxLayerElementArray * PopulateLayerElementDirectArray(
 
     TYPE * lArray = NULL;
     lArray = lLayerElement->GetDirectArray().GetLocked(lArray);
-    lSourceElementAccessor.GetArray((double *)lArray, 0, pSize,
+    lSourceElementAccessor.GetArray((double *)lArray, lSourceElementAccessor.mCount*pSize, 0, pSize,
         lSourceElementAccessor.mStride, 0, pSize, sizeof(TYPE)/sizeof(double), 1.0);
     lLayerElement->GetDirectArray().Release(&lArray, lArray);
 

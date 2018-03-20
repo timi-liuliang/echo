@@ -1,6 +1,6 @@
 /****************************************************************************************
  
-   Copyright (C) 2014 Autodesk, Inc.
+   Copyright (C) 2015 Autodesk, Inc.
    All rights reserved.
  
    Use of this software is subject to the terms of the Autodesk license agreement
@@ -47,17 +47,8 @@
 
 	#define FBXSDK_ENV_WIN 1
 
-	#if defined(WINAPI_FAMILY)
-		#if _MSC_VER >= 1800
-			// VS 2013 rewrote the winapifamily.h file 
-			#if !WINAPI_PARTITION_DESKTOP
-				#define FBXSDK_ENV_WINSTORE 1
-			#endif
-		#else
-			#if WINAPI_FAMILY_ONE_PARTITION(WINAPI_FAMILY, WINAPI_PARTITION_APP)
-				#define FBXSDK_ENV_WINSTORE 1
-			#endif
-		#endif
+	#if defined(WINAPI_FAMILY) && (WINAPI_FAMILY == WINAPI_FAMILY_APP)
+		#define FBXSDK_ENV_WINSTORE 1
 	#endif
 
 	#if defined(_M_X64)
@@ -121,9 +112,17 @@
 		#error Unsupported compiler!
 	#endif
 
-#elif defined(__linux__) || defined(__CYGWIN__) //Linux ---------------------------------
+#elif defined(__linux__) || defined(__CYGWIN__) || defined(EMSCRIPTEN) || defined(ANDROID) //Linux ---------------------------------
 
 	#define FBXSDK_ENV_LINUX 1
+
+  	#if defined(EMSCRIPTEN)
+  		#define FBXSDK_ENV_EMSCRIPTEN 1
+  	#endif
+
+	#if defined(ANDROID)
+		#define FBXSDK_ENV_ANDROID 1
+	#endif
 
 	#if defined(__i386__)
 		#define FBXSDK_ARCH_IX86 1
@@ -131,20 +130,24 @@
 	#elif defined(__x86_64__) || defined(__x86_64)
 		#define FBXSDK_ARCH_AMD64 1
 		#define FBXSDK_CPU_64 1
-	#elif defined(__arm__)
+    #elif defined(__arm__)
 		#define FBXSDK_ARCH_ARM 1
 		#define FBXSDK_CPU_32 1
-	#else
+	#elif defined(EMSCRIPTEN)
+  		#define FBXSDK_ARCH_AMD64 1
+		#define FBXSDK_CPU_64 1
+  	#else
 		#error Unsupported architecture!
 	#endif
 
 	#if defined(__GNUC__)
 		#define FBXSDK_COMPILER_GNU 1
+	#elif defined(EMSCRIPTEN)
+  		#define FBXSDK_COMPILER_EMSCRIPTEN 1 
 	#else
 		#error Unsupported compiler!
 	#endif
-
-#else
+ #else
 	#error Unsupported platform!
 #endif
 
@@ -177,7 +180,7 @@
     #else
         #define FBX_DEPRECATED
     #endif
-#elif defined(FBXSDK_COMPILER_GNU)
+#elif defined(FBXSDK_COMPILER_GNU) || defined(FBXSDK_COMPILER_EMSCRIPTEN)
     #define FBX_DEPRECATED __attribute__((deprecated))
 #elif defined(FBXSDK_COMPILER_INTEL)
     #if __INTEL_COMPILER >= 810

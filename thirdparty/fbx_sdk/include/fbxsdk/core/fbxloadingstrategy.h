@@ -1,6 +1,6 @@
 /****************************************************************************************
  
-   Copyright (C) 2014 Autodesk, Inc.
+   Copyright (C) 2016 Autodesk, Inc.
    All rights reserved.
  
    Use of this software is subject to the terms of the Autodesk license agreement
@@ -35,10 +35,10 @@ public:
      */
     enum EState
 	{
-        eAllLoaded,     //!< All plug-in are loaded.
-        eNoneLoaded,    //!< No plug-in is loaded, i.e., there is not plug-in to load. 
-        eAllFailed,     //!< All plug-in are failed to load.
-        eSomeFailed     //!< Some plug-ins are loaded but some are failed.
+        eAllLoaded,     //!< Plug-ins are loaded.
+        eNoneLoaded,    //!< No plug-ins are loaded. 
+        eAllFailed,     //!< Plug-ins failed to load.
+        eSomeFailed     //!< Not all found plug-ins are loaded.
     };
 
     /**
@@ -47,7 +47,7 @@ public:
     //@{
 		/** Execute the operation of loading the plug-in(s). The way it is executed is determined by the specific implementations.
 		* \param pData  Plug in data that can be access inside the plug-ins.
-		* \return If the plugin loading is successful return \c true, otherwise return \c false.
+		* \return The state of the loading action.
 		*/
 		EState Load(FbxPluginData& pData);
 

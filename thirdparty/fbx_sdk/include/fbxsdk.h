@@ -1,6 +1,6 @@
 /****************************************************************************************
  
-   Copyright (C) 2014 Autodesk, Inc.
+   Copyright (C) 2016 Autodesk, Inc.
    All rights reserved.
  
    Use of this software is subject to the terms of the Autodesk license agreement
@@ -134,6 +134,8 @@
 
 //---------------------------------------------------------------------------------------
 //Scene Includes
+#include <fbxsdk/scene/fbxaudio.h>
+#include <fbxsdk/scene/fbxaudiolayer.h>
 #include <fbxsdk/scene/fbxcollection.h>
 #include <fbxsdk/scene/fbxcollectionexclusive.h>
 #include <fbxsdk/scene/fbxcontainer.h>
@@ -144,6 +146,7 @@
 #include <fbxsdk/scene/fbxenvironment.h>
 #include <fbxsdk/scene/fbxgroupname.h>
 #include <fbxsdk/scene/fbxlibrary.h>
+#include <fbxsdk/scene/fbxmediaclip.h>
 #include <fbxsdk/scene/fbxobjectmetadata.h>
 #include <fbxsdk/scene/fbxpose.h>
 #include <fbxsdk/scene/fbxreference.h>
@@ -262,6 +265,7 @@
 #include <fbxsdk/utils/fbxrenamingstrategyutilities.h>
 #include <fbxsdk/utils/fbxrootnodeutility.h>
 #include <fbxsdk/utils/fbxusernotification.h>
+#include <fbxsdk/utils/fbxscenecheckutility.h>
 
 //---------------------------------------------------------------------------------------
 #if defined(FBXSDK_NAMESPACE) && (FBXSDK_NAMESPACE_USING == 1)

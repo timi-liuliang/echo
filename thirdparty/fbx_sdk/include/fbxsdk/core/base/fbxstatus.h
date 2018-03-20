@@ -1,6 +1,6 @@
 /****************************************************************************************
  
-   Copyright (C) 2014 Autodesk, Inc.
+   Copyright (C) 2016 Autodesk, Inc.
    All rights reserved.
  
    Use of this software is subject to the terms of the Autodesk license agreement
@@ -37,7 +37,8 @@ public:
         eIndexOutOfRange,                       //!< Index value outside the valid range
         ePasswordError,                         //!< Operation on FBX file password failed
         eInvalidFileVersion,                    //!< File version not supported (anymore or yet)
-        eInvalidFile                            //!< Operation on the file access failed
+        eInvalidFile,                           //!< Operation on the file access failed
+		eSceneCheckFail							//!< Scene validation failure
     };
 
     //! Default constructor.

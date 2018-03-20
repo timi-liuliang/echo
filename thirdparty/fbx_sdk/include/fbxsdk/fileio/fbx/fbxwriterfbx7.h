@@ -1,6 +1,6 @@
 /****************************************************************************************
  
-   Copyright (C) 2014 Autodesk, Inc.
+   Copyright (C) 2017 Autodesk, Inc.
    All rights reserved.
  
    Use of this software is subject to the terms of the Autodesk license agreement
@@ -58,6 +58,10 @@ private:
     struct ModifiedPropertyInfo{ FbxObject* mObj; FbxString mPropName; };
     FbxArray<ModifiedPropertyInfo*> mModifiedProperties;
 	void StoreUnsupportedProperty(FbxObject* pObject, FbxProperty& pProperty);
+
+	void MakeNonSavableAndRemember(FbxObject* pObj);
+	FbxArray<FbxObject*> mSwitchedToNonSavablesObjects;
+	FbxArray<FbxAnimLayer*> mAnimLayerInternallyAdded;
 
 private:
     FbxWriterFbx7_Impl* mImpl;

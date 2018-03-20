@@ -1,6 +1,6 @@
 /****************************************************************************************
  
-   Copyright (C) 2014 Autodesk, Inc.
+   Copyright (C) 2015 Autodesk, Inc.
    All rights reserved.
  
    Use of this software is subject to the terms of the Autodesk license agreement
@@ -65,7 +65,7 @@
 
 //---------------------------------------------------------------------------------------
 //Euler Definition
-#define FBXSDK_EULER_DEGENERATE	(16.0*FBXSDK_FLOAT_EPSILON)	//!< Euler degenerate threshold
+#define FBXSDK_EULER_DEGENERATE  FbxEuler::DegenerateThreshold() //!< Euler degenerate threshold can be changed with a call to FbxEuler::SetDegenerateThreshold.
 
 class FBXSDK_DLL FbxEuler
 {
@@ -88,6 +88,17 @@ public:
 
 	static const int AxisTableSize;
 	static const int AxisTable[][3];
+
+	// Used to detect Euler gimbal locks when extracting the rotation vector from 
+    // the FbxAMatrix. This value should only be changed when the user system stores
+    // single floating point values into the FbxAMatrix with a very low precision.
+    // In this case, the default threshold value would be too small for a proper detection
+    // and the extracted values can quickly become off target by a huge amount.
+	static void SetDegenerateThreshold(double pThreshold=16.0*FBXSDK_FLOAT_EPSILON);
+    static inline double DegenerateThreshold() { return FbxEuler::mDegenerateThreshold; }
+
+private:
+	static double mDegenerateThreshold;
 };
 
 /** Rotation order flags.
@@ -180,7 +191,7 @@ inline FbxULongLong FbxAbs(const FbxULongLong x)
 
 inline FbxFloat FbxAbs(const FbxFloat x)
 {
-	return fabs(x);
+	return (FbxFloat)fabs(x);
 }
 
 inline FbxDouble FbxAbs(const FbxDouble x)

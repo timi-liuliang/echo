@@ -1,6 +1,6 @@
 /****************************************************************************************
  
-   Copyright (C) 2014 Autodesk, Inc.
+   Copyright (C) 2015 Autodesk, Inc.
    All rights reserved.
  
    Use of this software is subject to the terms of the Autodesk license agreement
@@ -35,8 +35,12 @@
 FBXSDK_DLL FbxString FbxGetSystemTempPath();
 
 /** Override the system temporary folder path name.
-* \param pPathUTF8 The system temporary folder to use for override. */
-FBXSDK_DLL void FbxSetSystemTempPath(const char* pPathUTF8);
+  * \param pPathUTF8 The system temporary folder to use for override.
+  * \return True if the system temporary folder path has been set and False otherwise.
+  * \remark The system temporary folder is limited to _MAX_PATH characters. Trying to set
+  * a longer value will fail and the current system temporary folder path is left unchanged.
+  */
+FBXSDK_DLL bool FbxSetSystemTempPath(const char* pPathUTF8);
 
 /** Retrieve the working directory of the system in UTF8 format.
 * \return A string that contain the current working directory of the system. */
