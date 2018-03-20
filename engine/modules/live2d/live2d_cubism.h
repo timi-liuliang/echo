@@ -8,7 +8,14 @@ namespace Echo
 	{
 		ECHO_CLASS(Live2dCubism, Node)
 
+	public:
+		Live2dCubism();
+		virtual ~Live2dCubism();
+
 	protected:
 		virtual void update();
+
+	private:
+		void*		m_model;
 	};
 }

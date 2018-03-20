@@ -7,6 +7,8 @@ namespace Echo
 	class Live2DModule : public Module
 	{
 	public:
+		Live2DModule();
+
 		virtual void registerTypes();
 	};
 }
