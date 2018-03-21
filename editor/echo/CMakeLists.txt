@@ -133,7 +133,7 @@ ADD_EXECUTABLE(${MODULE_NAME}
 	CMakeLists.txt)
 
 # Á´½Ó¿â
-TARGET_LINK_LIBRARIES(${MODULE_NAME} zlib engine 7zip winmm.lib imm32.lib dxgi.lib libfbxsdk.lib Shlwapi.lib lua physx recast freeimage)
+TARGET_LINK_LIBRARIES(${MODULE_NAME} zlib engine 7zip winmm.lib imm32.lib dxgi.lib libfbxsdk.lib Shlwapi.lib lua recast freeimage)
 IF(CMAKE_SIZEOF_VOID_P EQUAL 4)
 	TARGET_LINK_LIBRARIES(${MODULE_NAME} fmod_vc.lib fmodstudio_vc.lib)
 ELSEIF(CMAKE_SIZEOF_VOID_P EQUAL 8)

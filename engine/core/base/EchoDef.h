@@ -4,46 +4,8 @@
 #include "TypeDef.h"
 #include <assert.h>
 
-#if __cplusplus >= 201103L || defined(__GNUC__)
-	#include <unordered_map>
-	#include <unordered_set>
-#else
-	#if defined( __APPLE_CC__ )
-		//#include <ext/hash_map>
-	#else
-		#include <hash_map>
-		#include <hash_set>
-	#endif
-#endif
-
-//// Note - not in the original STL, but exists in SGI STL and STLport
-//// For gcc 4.3 see http://gcc.gnu.org/gcc-4.3/changes.html
-//#if (ECHO_COMPILER == ECHO_COMPILER_GNUC) && !defined(STLPORT)
-//#   if (ECHO_COMPILER_VERSION >= 430)
-//#       include <tr1/unordered_map>
-//#       include <tr1/unordered_set>
-//#   else
-//#       include <ext/hash_map>
-//#       include <ext/hash_set>
-//#   endif
-//#elif (ECHO_COMPILER == ECHO_COMPILER_CLANG)
-//#   if defined(_LIBCPP_VERSION)
-//#       include <unordered_map>
-//#       include <unordered_set>
-//#   else
-//#       include <tr1/unordered_map>
-//#       include <tr1/unordered_set>
-//#       include <tr1/functional>
-//#   endif
-//#else
-//#   if ((ECHO_COMPILER == ECHO_COMPILER_MSVC) && !defined(STLPORT) && (ECHO_COMPILER_VERSION >= 100)) // VC++ 10.0
-//#    	include <unordered_map>
-//#    	include <unordered_set>
-//#	else
-//#   	include <hash_set>
-//#   	include <hash_map>
-//#	endif
-//#endif
+#include <unordered_map>
+#include <unordered_set>
 
 // Echo Engine version
 #define ECHO_VERSION 1.3
@@ -58,7 +20,6 @@
 // Disable Warnings
 #pragma warning(disable:4996)
 #pragma warning(disable:4819)
-
 
 // Platform recognition
 #if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
@@ -162,15 +123,9 @@
 #           define EchoHashCode	::std::hash
 #		endif
 #	else
-#		if __cplusplus >= 201103L  || defined(ECHO_PLATFORM_HTML5)
-#			define EchoHashMap	::std::unordered_map
-#			define EchoHashSet	::std::unordered_set
-#			define EchoHashCode	::std::hash
-#		else
-#			define EchoHashMap	::std::hash_map
-#			define EchoHashSet	::std::hash_set
-#			define EchoHashCode	::std::hash
-#		endif
+		#define EchoHashMap	::std::unordered_map
+		#define EchoHashSet	::std::unordered_set
+		#define EchoHashCode	::std::hash
 #	endif
 #endif
 

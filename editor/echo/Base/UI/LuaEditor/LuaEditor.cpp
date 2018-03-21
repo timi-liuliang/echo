@@ -30,7 +30,7 @@ namespace Studio
 		m_textEditor->setTabStopWidth(tabStop * metrics.width(' '));
 
 		// 语法高亮器
-		m_luaSyntaxHighLighter = new LuaSyntaxHighLighter(m_textEditor->document());
+		//m_luaSyntaxHighLighter = new LuaSyntaxHighLighter(m_textEditor->document());
 
 		// 消息链接
 		QObject::connect(m_actionSave, SIGNAL(triggered()), this, SLOT(save()));
@@ -71,7 +71,7 @@ namespace Studio
 
 	// 保存
 	void LuaEditor::save()
-	{
+	{/*
 		if (!m_fullPath.empty())
 		{
 			QFile file(m_fullPath.c_str());
@@ -86,7 +86,7 @@ namespace Studio
 
 			// 0.更改标题
 			updateTitle();
-		}
+		}*/
 	}
 
 	// 更新标题显示

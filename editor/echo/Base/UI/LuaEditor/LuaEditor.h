@@ -31,6 +31,6 @@ namespace Studio
 	private:
 		Echo::String				m_fullPath;					// 全路径
 		QString						m_origContent;				// 文件中内容
-		LuaSyntaxHighLighter*		m_luaSyntaxHighLighter;
+		//LuaSyntaxHighLighter*		m_luaSyntaxHighLighter;
 	};
 }

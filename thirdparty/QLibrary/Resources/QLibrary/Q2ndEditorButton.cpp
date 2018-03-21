@@ -17,6 +17,6 @@ namespace QT_UI
 
 	void Q2ndEditor::onClicked()
 	{
-		m_model->on2ndSubEditorCallback(text().toLocal8Bit().data()); 
+		//m_model->on2ndSubEditorCallback(text().toLocal8Bit().data()); 
 	}
 }
