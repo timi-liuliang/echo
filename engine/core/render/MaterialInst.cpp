@@ -2148,5 +2148,4 @@ namespace Echo
 		m_materialList.remove(mtrl);
 		EchoSafeDelete(mtrl, Material);
 	}
-
 }
