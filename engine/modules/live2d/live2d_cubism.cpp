@@ -8,7 +8,8 @@ extern "C"
 namespace Echo
 {
 	Live2dCubism::Live2dCubism()
-		: m_model(nullptr)
+		: m_moc(nullptr)
+		, m_model(nullptr)
 		, m_mesh(nullptr)
 		, m_materialInst(nullptr)
 	{
@@ -18,6 +19,23 @@ namespace Echo
 	Live2dCubism::~Live2dCubism()
 	{
 
+	}
+
+	void Live2dCubism::bindMethods()
+	{
+		int a = 10;
+	}
+
+	// set moc
+	void setMoc(const String& res)
+	{
+		//m_moc = csmReviveMocInPlace(void* address, const unsigned int size);
+	}
+
+	// set model
+	void setModel(const String& model)
+	{
+		//m_model = csmInitializeModelInPlace(m_moc, );
 	}
 
 	// update per frame

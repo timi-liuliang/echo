@@ -27,7 +27,7 @@ namespace Echo
 
 		for (auto it : *g_classInfos)
 		{
-			if (it.second->m_parent == className)
+			if (it.second->m_classInfo.m_parent == className)
 			{
 				childClasses.push_back(it.first);
 			}
@@ -49,5 +49,11 @@ namespace Echo
 		}
 
 		return nullptr;
+	}
+
+	// add property
+	bool Class::registerProperty(const String& className, const String& propertyName, const String& type, const String& getter, const String& setter)
+	{
+		return true;
 	}
 }

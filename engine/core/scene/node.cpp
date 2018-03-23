@@ -337,4 +337,12 @@ namespace Echo
 			}
 		}
 	}
+
+	// bind methods
+	void Node::bindMethods()
+	{
+		CLASS_REGISTER_PROPERTY(Node, "Rotation",  "Vector3", "getPosition", "setPosition");
+		CLASS_REGISTER_PROPERTY(Node, "Scale",     "Vector3", "getPos", "setPos");
+		CLASS_REGISTER_PROPERTY(Node, "Translate", "Vector3", "getPos", "setPos");
+	}
 }

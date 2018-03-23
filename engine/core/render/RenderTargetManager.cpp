@@ -12,6 +12,8 @@ namespace Echo
 	RenderTargetManager::RenderTargetManager()
 		: m_pScreenAlignedQuadDownsampleDepth(nullptr)
 		, m_pMaterialDownsampleDepth(nullptr)
+		, m_pMaterialBaseUpdate(nullptr)
+		, m_pMaterialNightSight(nullptr)
 		, m_inUsingRenderTarget( RTI_End )
 		, m_bEnableMultiResolution( false )
 		, m_bEnableFilter(false)
@@ -21,6 +23,7 @@ namespace Echo
 		, m_logicWidth(0)
 		, m_logicHeight(0)
 		, m_filterBlendmapTexture( NULL)
+		, m_pScreenAlignedQuad(nullptr)
 	{
 		m_preDefinedTargetIDs.reserve(RTI_PostProcess + 1);
 		m_preDefinedTargetIDs.push_back("RTI_DefaultBackBuffer");
@@ -41,6 +44,9 @@ namespace Echo
 	// Îö¹¹º¯Êý
 	RenderTargetManager::~RenderTargetManager()
 	{
+		if (!m_pScreenAlignedQuad)
+			return;
+
 		for( RenderTargetMap::iterator bit = m_mapRenderTargets.begin(); bit != m_mapRenderTargets.end();  )
 		{
 			EchoSafeDelete( bit->second, RenderTarget);

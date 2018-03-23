@@ -5,10 +5,21 @@
 
 namespace Echo
 {
+	struct PropertyInfo
+	{
+
+	};
+
+	struct ClassInfo
+	{
+		String			m_parent;
+		PropertyInfo	m_propertyInfo;
+	};
+
 	struct ObjectFactory
 	{
-		String	m_name;
-		String	m_parent;
+		String		m_name;
+		ClassInfo	m_classInfo;
 
 		virtual Object* create() = 0;
 	};
@@ -19,9 +30,10 @@ namespace Echo
 		ObjectFactoryT(const String& name, const String& parent)
 		{
 			m_name = name;
-			m_parent = parent;
+			m_classInfo.m_parent = parent;
 
 			Class::addClass(name, this);
+			T::bindMethods();
 		}
 
 		virtual Object* create()
@@ -58,13 +70,22 @@ namespace Echo
 
 		// get all child class
 		static bool getChildClasses(StringArray& childClasses, const char* className);
+
+		// add property
+		static bool registerProperty(const String& className, const String& propertyName, const String& type, const String& getter, const String& setter);
 	};
 }
 
-#define ECHO_CLASS(m_class, m_parent)											\
-public:																			\
-	static void initClassInfo()													\
-{																				\
-	static Echo::ObjectFactoryT<m_class> G_OBJECT_FACTORY(#m_class, #m_parent);	\
-}																				\
-private:
+#define ECHO_CLASS(m_class, m_parent)												\
+public:																				\
+	const String& getClassName() { return #m_class; }								\
+																					\
+	static void initClassInfo()														\
+	{																				\
+		static Echo::ObjectFactoryT<m_class> G_OBJECT_FACTORY(#m_class, #m_parent);	\
+	}																				\
+																					\
+private:															
+
+#define CLASS_REGISTER_PROPERTY(m_class, name, type, getter, setter) \
+	Echo::Class::registerProperty(#m_class, name, type, getter, setter)

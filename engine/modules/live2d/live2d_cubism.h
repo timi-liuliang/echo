@@ -14,12 +14,22 @@ namespace Echo
 		Live2dCubism();
 		virtual ~Live2dCubism();
 
+		// bind class methods to script
+		static void bindMethods();
+
+		// set moc
+		void setMoc(const String& res);
+
+		// set model
+		void setModel(const String& model);
+
 	protected:
 		// update
 		virtual void update();
 
 	private:
-		void*			m_model;
+		csmMoc*			m_moc;
+		csmModel*		m_model;
 		Mesh*			m_mesh;			// Geometry Data for render
 		MaterialInst*	m_materialInst;	// Material Instance
 	};

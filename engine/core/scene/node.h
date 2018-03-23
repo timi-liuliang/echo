@@ -17,6 +17,9 @@ namespace Echo
 		Node();
 		virtual ~Node();
 
+		// bind methods to script
+		static void bindMethods();
+
 		ui32 getIdentifier() const { return m_identifier; }
 		void setParent(Node* pParent);
 		Node* getParent() const;

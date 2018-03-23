@@ -9,6 +9,7 @@ namespace Echo
 	public:
 		Live2DModule();
 
+		// register all types of the module
 		virtual void registerTypes();
 	};
 }
