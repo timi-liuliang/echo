@@ -52,14 +52,6 @@ namespace Echo
 			RP_Total,
 		};
 
-		enum DoubleLMPType
-		{
-			LMP_USE_NONE	= 0,
-			LMP_USE_FIRST	= 1,
-			LMP_USE_SECOND	= 2,
-			LMP_USE_BOTH	= 3,
-		};
-
 		enum DynamicMtlIst
 		{
 			RECEIVE_SHADOW = 1,
@@ -142,12 +134,6 @@ namespace Echo
 		// Model重新加载,暂时也用于重新加载Mesh 材质 光阵列;
 		void reload();
 
-		////设置场景节点
-		//void attachTo(node* pNode){ m_pSceneNode = pNode; }
-
-		//// 获取场景节点
-		//node* getSceneNode() const{ return m_pSceneNode; }
-
 		// 创建渲染单元
 		void createRenderable( bool isForUI=false);
 
@@ -202,7 +188,7 @@ namespace Echo
 		void setLightArray(LightArray* lightArray); 
 
 		// 获取mesh
-		Mesh* getMesh() { return m_mesh.get(); }
+		Mesh* getMesh() { return m_mesh; }
 
 		// 获取模型阶段
 		RenderPhase* getPhase(RenderPhaseType type) { return m_phases[type]; }
@@ -258,8 +244,6 @@ namespace Echo
 
 
 		void updateCameraPos();
-
-		bool haveWaterMaterial(){ return m_have_water_material; }
 
 		bool isSkyBox(){ return m_isNeedUpdateMatSky; }
 
@@ -343,9 +327,7 @@ namespace Echo
 		Info						m_info;				// 模型信息(加载存储)
 		RenderPhaseArray			m_phases;			// 渲染阶段
 		RenderPhaseMap				m_phasesLod;		// 渲染阶段(LOD)
-
-		typedef std::unique_ptr<Mesh, decltype(&ReleaseMesh)> MeshPtr; 
-		MeshPtr						m_mesh;				// 关联模型
+		Mesh*						m_mesh;				// 关联模型
 
 		typedef std::unique_ptr<LightArray, decltype(&DeleteLightArray)> LightArrayPtr; 
 		LightArrayPtr				m_lightArray;		// 光阵列
@@ -369,46 +351,13 @@ namespace Echo
 		Matrix4						m_matWVPWater;		    // 水面反射世界观察投影矩阵
 		bool						m_isNeedUpdateMatSky;	// 是否更新天空盒矩阵
 		Matrix4						m_matWVPSky;			// 天空盒使用世界观察投影矩阵
-
-		vector<Vector4>::type	    m_lightmapUV1;			// 光照图相关参数
-		vector<Vector4>::type	    m_lightmapUV2;
-		vector<Vector3>::type       m_lightmapScale1;
-		vector<Vector3>::type       m_lightmapScale2;
-		vector<Vector4>::type		m_lightmapUV1_bak;
-		vector<Vector3>::type		m_lightmapScale1_bak;
-
-		vector<TextureSampler>::type		m_submeshAlbedo;
-
 		float						m_currentTime;			// 当前时间(生命)
 		Box							m_worldBox;				// 世界包围盒
 
 		bool						m_isEnable;				// 是否加载完成。
 
-		bool						m_have_water_material;	// 是否有水材质
-		float						m_original_water_refect_degree; //原始的水面材质反射度
-		float						m_close_refect_degree;  // 关闭水面反射
-		WaterQuality				m_last_water_quality;	// 上一次的水面材质质量
-
-		bool						m_isUseXRay;
-		vector<Renderable*>::type	m_xrayRenderables;	// 可渲染对象供Xray用
-		Vector4						m_xrayColor;		// xray 颜色
-		
-		bool						m_isUseDynamicMatIst; // 是否开启动态切换材质
 		bool						m_isInShowdownBox;  // 是否在投射阴影包围盒中
 		ui32						m_dymOffset;
-
-		float						m_LM1ToLM2;				// 两张光照图之间插值
-		
-		float						m_Sky1ToSky2;			// 两张天空贴图之间插值
-
-		ui32						m_LMSlot1;
-		ui32						m_LMSlot2;
-
-#ifdef ECHO_EDITOR_MODE
-		vector<Vector3>::type		m_hsvColor0;
-		vector<Vector3>::type		m_hsvColor1;
-		vector<Vector3>::type		m_hsvColor2;
-#endif
 	};
 
 	/**

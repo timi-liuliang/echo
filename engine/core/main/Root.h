@@ -182,7 +182,6 @@ namespace Echo
 		SkeletonManager* getSkeletonManager() { EchoAssert(m_skeletonManager);  return m_skeletonManager; }
 		AnimManager* getAnimManager() { EchoAssert(m_animManager);  return m_animManager; }
 		AnimSystemManager* getAnimSysManager() { EchoAssert(m_animSysManager);  return m_animSysManager; }
-		MeshManager* getMeshManager() { EchoAssert(m_meshManager);  return m_meshManager; }
 		ModelManager* getModelManager() { EchoAssert(m_modelManager);  return m_modelManager; }
 		Renderer* getRender() { EchoAssert(m_renderer);  return m_renderer; }
 		EffectSystemManager* getEffectSystemManager() { EchoAssert(m_EffectSystemManager);  return m_EffectSystemManager; }
@@ -244,7 +243,6 @@ namespace Echo
 		SkeletonManager*	m_skeletonManager;				// 骨骼资源管理器
 		AnimManager*		m_animManager;					// 动画管理器
 		AnimSystemManager*	m_animSysManager;				// 动画系统管理器
-		MeshManager*		m_meshManager;					// 模型管理器
 		MaterialManager*	m_materialManager;				// 材质管理器
 		ImageCodecMgr*		m_imageCodecManager;			// 纹理编码管理器
 		ModelManager*		m_modelManager;					// 模型管理器
@@ -282,12 +280,9 @@ namespace Echo
 #define EchoSkeletonManager			EchoRoot->getSkeletonManager()
 #define EchoAnimManager				EchoRoot->getAnimManager()
 #define EchoAnimSystemManager		EchoRoot->getAnimSysManager()
-#define EchoMeshManager				EchoRoot->getMeshManager()
 #define EchoEffectSystemManager		EchoRoot->getEffectSystemManager()
 #define EchoRender					EchoRoot->getRender()
-#define EchoDebugDisplayManager		EchoRoot->getDebugDisplayManager()
 #define EchoTextureResManager		EchoRoot->getTextureResManager()
-#define EchoEngineActorManager		EchoRoot->getActorManager()
 #define EchoSceneManager			EchoRoot->getSceneManager()
 #define EchoOpenMPTaskMgr			EchoRoot->getOpenMPTaskMgr()
 #define EchoEngineSettings			EchoRoot->getSettingsMgr()
@@ -297,10 +292,5 @@ namespace Echo
 #define EchoMaterialManager			EchoRoot->getMaterialManager()
 #define EchoImageCodecManager		EchoRoot->getImageCodecManager()
 #define EchoAudioManager			EchoRoot->getAudioManager()
-#define EchoCinemaDirector			EchoRoot->getCinemaDirector()
 #define EchoNetConnectionManager	EchoRoot->getNetConnectionManager()
-#ifndef ECHO_ENGINE_MIN
-#define EchoScenarioManager			EchoRoot->getScenarioManager()
-#endif
 #define EchoPostEffectManager		EchoRoot->getPostEffectManager()
-#define EchoRootAssit				EchoRoot->getAssit()

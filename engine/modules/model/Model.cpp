@@ -2,10 +2,7 @@
 #include "Engine/core/Camera/Camera.h"
 #include "Engine/core/main/Root.h"
 #include "Engine/modules/Model/Model.h"
-#include "Engine/modules/Model/MeshManager.h"
 #include "Engine/modules/Model/Mesh.h"
-#include "Engine/modules/Model/SkinnedMesh.h"
-#include "Engine/modules/Model/SubMesh.h"
 #include "Render/RenderInput.h"
 #include "Render/Renderer.h"
 #include "Render/Material.h"
@@ -114,7 +111,7 @@ namespace Echo
 
 	void Model::ReleaseMesh(Mesh* p)
 	{
-		MeshManager::instance()->releaseResource(p); 
+		p->release();
 	}
 
 	void Model::DeleteLightArray(LightArray* p)
@@ -140,27 +137,12 @@ namespace Echo
 		, m_alpha(1.f)
 		, m_currentTime( 0.f)
 		, m_isEnable(false)
-		, m_have_water_material(false)
-		, m_isUseXRay(false)
-		, m_xrayColor(0.f, 0.75f, 1.f, 0.5f)
 		, m_isNeedUpdateMatWater(false)
 		, m_isNeedUpdateMatSky(false)
-		, m_original_water_refect_degree(0.0f)
-		, m_close_refect_degree(0.0f)
-		, m_last_water_quality(WQ_High)
-		, m_isUseDynamicMatIst(EchoEngineSettings.isAutoOptMatInt())
 		, m_isInShowdownBox(true)
 		, m_worldBox(Box::ZERO)
-		, m_LM1ToLM2(0.0f)
-		, m_Sky1ToSky2(0.f)
 		, m_dymOffset(0)
 	{
-#ifdef ECHO_EDITOR_MODE
-		m_isUseDynamicMatIst = false;
-#endif // ECHO_EDITOR_MODE
-
-		m_isUseDynamicMatIst &= !m_info.isSkinModel();
-
 		for (int type = RP_Normal0; type < RP_Total; type++)
 		{
 			m_phases[type] = EchoNew(RenderPhase);
@@ -1168,10 +1150,6 @@ namespace Echo
 			//}
 
 			return nullptr;
-		}
-		else if (name == "tShadowAlbedo")
-		{
-			return &m_submeshAlbedo[subMesh];
 		}
 
 		return NULL;

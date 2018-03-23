@@ -26,7 +26,6 @@ namespace Echo
 	class Root;
 	class ProjectFile;
 	class Color;
-	class Box;
 	class PixelBox;
 	class GPUBuffer;
 	class Shader;
@@ -54,9 +53,6 @@ namespace Echo
 	class AnimManager;
 	class AnimBlender;
 	class Mesh;
-	class SubMesh;
-	class SkinnedMesh;
-	class MeshManager;
 	class Camera;
 	class CameraShadow;
 	class DataStream;
@@ -125,7 +121,6 @@ namespace Echo
 	class SkeletonManager;
 	class AnimManager;
 	class AnimSystemManager;
-	class MeshManager;
 	class PhysicsManager;
 	class FSAudioManager;
 	class NetConnectionManager;
@@ -168,7 +163,6 @@ namespace Echo
 #include "Engine/modules/Model/Model.h"
 #include "Engine/modules/Anim/AnimManager.h"
 #include "Engine/modules/Anim/SkeletonManager.h"
-#include "Engine/modules/Model/MeshManager.h"
 #include "Engine/modules/Anim/Animation.h"
 #include "Engine/modules/Anim/Skeleton.h"
 #include "Engine/modules/Model/Mesh.h"

@@ -6,7 +6,6 @@
 #include "Engine/core/Resource/EchoThread.h"
 #include "Engine/modules/Anim/Animation.h"
 #include "Engine/modules/Effect/EffectSystemManager.h"
-#include "Engine/modules/Model/MeshManager.h"
 #include "Engine/modules/Anim/AnimManager.h"
 #include "Engine/modules/Anim/SkeletonManager.h"
 #include "engine/core/render/RenderStage/PostProcessRenderStage.h"

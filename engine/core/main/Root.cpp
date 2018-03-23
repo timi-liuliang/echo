@@ -12,7 +12,6 @@
 #include "Engine/core/Resource/EchoThread.h"
 #include "engine/core/Util/LogManager.h"
 #include "engine/core/render/render/ImageCodecMgr.h"
-#include "Engine/modules/Model/MeshManager.h"
 #include "Engine/modules/Model/Model.h"
 #include "Engine/modules/Anim/AnimManager.h"
 #include "Engine/modules/Anim/SkeletonManager.h"
@@ -97,7 +96,6 @@ namespace Echo
 		, m_animSysManager(NULL)
 		, m_renderer(NULL)
 		, m_sceneManager(NULL)
-		, m_meshManager(NULL)
 		, m_modelManager(NULL)
 		, m_imageCodecManager(NULL)
 		, m_materialManager(NULL)
@@ -160,7 +158,6 @@ namespace Echo
 			// register all basic class types
 			registerClassTypes();
 
-			m_meshManager = EchoNew(MeshManager);
 			m_imageCodecManager = EchoNew(ImageCodecMgr);
 			m_modelManager		= EchoNew( ModelManager);
 			m_animManager		= EchoNew( AnimManager);
@@ -419,7 +416,6 @@ namespace Echo
 		EchoSafeDelete(m_animSysManager, AnimSystemManager); //animSysManager要在animManager之前释放，因为会用到animManager来释放自己的animBlend
 		EchoSafeDelete(m_animManager, AnimManager);
 		EchoSafeDelete(m_skeletonManager, SkeletonManager);
-		EchoSafeDelete(m_meshManager, MeshManager);
 		
 		EchoSafeDelete(m_imageCodecManager, ImageCodecMgr);
 		EchoSafeDelete(m_openMPTaskMgr, OpenMPTaskMgr);
@@ -643,7 +639,7 @@ namespace Echo
 		switch (ct)
 		{
 			case 0:	EchoTextureResManager->updateDelayedRelease(m_frameTime * MOD); break;
-			case 1:	EchoMeshManager->updateDelayedRelease(m_frameTime * MOD); break;
+			//case 1:	EchoMeshManager->updateDelayedRelease(m_frameTime * MOD); break;
 			case 2: EchoSkeletonManager->updateDelayedRelease(m_frameTime * MOD); break;
 			case 3: EchoAnimManager->updateDelayedRelease(m_frameTime * MOD); break;
 			case 4:
@@ -678,7 +674,7 @@ namespace Echo
 	void Root::setReleaseDelayTime(ui32 t)
 	{
 		EchoTextureResManager->setReleaseDelayTime(t);
-		EchoMeshManager->setReleaseDelayTime(t);
+		//EchoMeshManager->setReleaseDelayTime(t);
 		EchoSkeletonManager->setReleaseDelayTime(t);
 		EchoAnimManager->setReleaseDelayTime(t);
 	}
