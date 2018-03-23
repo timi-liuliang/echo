@@ -3,7 +3,7 @@
 #include "engine/core/main/EngineSettings.h"
 #include "engine/core/render/render/Material.h"
 #include "Engine/core/Render/RenderTargetManager.h"
-#include "Engine/core/Render/MaterialInstance.h"
+#include "Engine/core/Render/MaterialInst.h"
 
 namespace Echo
 {

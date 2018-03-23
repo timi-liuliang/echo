@@ -1,5 +1,5 @@
 #include "RenderTargetManager.h"
-#include "MaterialInstance.h"
+#include "MaterialInst.h"
 #include "Engine/core/main/EngineSettings.h"
 #include "Engine/core/main/Root.h"
 #include "render/Material.h"

@@ -3,7 +3,7 @@
 #include "engine/core/render/render/Renderer.h"
 #include "RenderStageManager.h"
 #include <bitset>
-#include "engine/core/render/MaterialInstance.h"
+#include "engine/core/render/MaterialInst.h"
 
 namespace Echo
 {

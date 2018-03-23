@@ -1,4 +1,4 @@
-#include "MaterialInstance.h"
+#include "MaterialInst.h"
 #include "Engine/modules/Light/Light.h"
 #include "Engine/core/Scene/Scene_Manager.h"
 #include "MaterialController.h"
@@ -30,14 +30,14 @@ namespace
 namespace Echo
 {
 	// 克隆
-	MaterialInstance::uniform* MaterialInstance::uniform::clone()
+	MaterialInst::uniform* MaterialInst::uniform::clone()
 	{
 		uniform* result = EchoNew(uniform);
 		result->name = name;
 		result->type = type;
 		result->count = count;
 		if (value)
-			result->value = MaterialInstance::cloneVoid2Value(type, value, count);
+			result->value = MaterialInst::cloneVoid2Value(type, value, count);
 		else
 			result->value = NULL;
 
@@ -45,7 +45,7 @@ namespace Echo
 	}
 
 	// 构造函数
-	MaterialInstance::MaterialInstance()
+	MaterialInst::MaterialInst()
 		: m_TextureCount(0)
 		, m_renderQueue(NULL)
 		, m_isHaveCustomBlend(false)
@@ -61,7 +61,7 @@ namespace Echo
 	}
 
 	// 析构函数
-	MaterialInstance::~MaterialInstance()
+	MaterialInst::~MaterialInst()
 	{
 		for (auto& element : m_unifromParamSet)
 		{
@@ -99,7 +99,7 @@ namespace Echo
 	}
 
 	// 加载(内存)
-	bool MaterialInstance::loadByFile(const String& name, const String& macros)
+	bool MaterialInst::loadByFile(const String& name, const String& macros)
 	{
 		try
 		{
@@ -231,7 +231,7 @@ namespace Echo
 		return false;
 	}
 
-	bool MaterialInstance::applyLoadedData()
+	bool MaterialInst::applyLoadedData()
 	{
 		// 加载材质模板
 		buildRenderQueue();
@@ -288,7 +288,7 @@ namespace Echo
 	}
 
 	// 保存到文件
-	void MaterialInstance::saveToFile(const String& name)
+	void MaterialInst::saveToFile(const String& name)
 	{
 		using namespace rapidxml;
 
@@ -681,7 +681,7 @@ namespace Echo
 	}
 
 	// 复制材质实例
-	void MaterialInstance::cloneFromTemplate(MaterialInstance* _template)
+	void MaterialInst::cloneFromTemplate(MaterialInst* _template)
 	{
 		// 拷贝名称，材质
 		m_name = _template->m_name;
@@ -751,7 +751,7 @@ namespace Echo
 	}
 
 	// 参数继承
-	void MaterialInstance::deriveUniforms(MaterialInstance* from)
+	void MaterialInst::deriveUniforms(MaterialInst* from)
 	{
 		// 继承参数
 		for (auto& item : m_unifromParamSetFromFile)
@@ -773,7 +773,7 @@ namespace Echo
 		}
 	}
 
-	Echo::ShaderParamType MaterialInstance::S2ShaderParamType(const String& value)
+	Echo::ShaderParamType MaterialInst::S2ShaderParamType(const String& value)
 	{
 		if (value == "SPT_INT")	return SPT_INT;
 		else if (value == "SPT_FLOAT")	return SPT_FLOAT;
@@ -785,7 +785,7 @@ namespace Echo
 		else							return SPT_UNKNOWN;
 	}
 
-	String MaterialInstance::ShaderParamType2S(const ShaderParamType& type) const
+	String MaterialInst::ShaderParamType2S(const ShaderParamType& type) const
 	{
 		switch (type)
 		{
@@ -802,7 +802,7 @@ namespace Echo
 
 
 	//是否是全局变量，全局变量在model里面赋值
-	bool MaterialInstance::isGlobalUniform(const String& name)
+	bool MaterialInst::isGlobalUniform(const String& name)
 	{
 		auto begin = std::begin(globalUnfiorms);
 		auto end = std::end(globalUnfiorms);
@@ -810,7 +810,7 @@ namespace Echo
 		return it != end;
 	}
 
-	void MaterialInstance::S2Void(const ShaderParamType& type, const String& value, void* dstValue, const int count /* = 1 */)
+	void MaterialInst::S2Void(const ShaderParamType& type, const String& value, void* dstValue, const int count /* = 1 */)
 	{
 		switch (type)
 		{
@@ -916,7 +916,7 @@ namespace Echo
 		}
 	}
 
-	void MaterialInstance::delVoid2Value(const ShaderParamType& type, void* value, const int count /* = 1 */)
+	void MaterialInst::delVoid2Value(const ShaderParamType& type, void* value, const int count /* = 1 */)
 	{
 		if (value)
 		{
@@ -924,7 +924,7 @@ namespace Echo
 		}
 	}
 
-	void* MaterialInstance::cloneVoid2Value(const ShaderParamType& type, void* value, const int count /* = 1 */)
+	void* MaterialInst::cloneVoid2Value(const ShaderParamType& type, void* value, const int count /* = 1 */)
 	{
 		// 计算所需内存大小
 		int bytes = 0;
@@ -953,7 +953,7 @@ namespace Echo
 	}
 
 	// 获取变量值
-	void* MaterialInstance::getUniformValue(const String& name)
+	void* MaterialInst::getUniformValue(const String& name)
 	{
 		const auto& it = m_unifromParamSet.find(name);
 		if (it != m_unifromParamSet.end())
@@ -966,7 +966,7 @@ namespace Echo
 	}
 
 	// 修改变量的值
-	void MaterialInstance::modifyUniformValue(const String& name, void* value)
+	void MaterialInst::modifyUniformValue(const String& name, void* value)
 	{
 		const ParamMap::iterator iter = m_unifromParamSet.find(name);
 		if (iter != m_unifromParamSet.end())
@@ -980,7 +980,7 @@ namespace Echo
 	}
 
 	// 准备资源IO
-	TextureRes* MaterialInstance::prepareTextureImp(const String& texName)
+	TextureRes* MaterialInst::prepareTextureImp(const String& texName)
 	{
 		TextureRes* pTexture;
 		size_t cubePos = texName.find("_cube_");
@@ -1006,7 +1006,7 @@ namespace Echo
 	}
 
 	// 资源加载线程准备纹理
-	void MaterialInstance::prepareTexture()
+	void MaterialInst::prepareTexture()
 	{
 		TextureRes* pTexture;
 		for (const auto& element : m_TexturesName)
@@ -1016,7 +1016,7 @@ namespace Echo
 		}
 	}
 
-	void MaterialInstance::loadTexture()
+	void MaterialInst::loadTexture()
 	{
 		for (auto& it : m_textures)
 		{
@@ -1034,7 +1034,7 @@ namespace Echo
 		}
 	}
 
-	void MaterialInstance::unloadTexture()
+	void MaterialInst::unloadTexture()
 	{
 		TextureMapItor it = m_textures.begin();
 		for (; it != m_textures.end(); ++it)
@@ -1046,7 +1046,7 @@ namespace Echo
 	}
 
 	// 根据索引获取纹理
-	TextureRes* MaterialInstance::getTexture(const int& index)
+	TextureRes* MaterialInst::getTexture(const int& index)
 	{
 		TextureMapItor it = m_textures.find(index);
 		if (it != m_textures.end())
@@ -1058,26 +1058,26 @@ namespace Echo
 	}
 
 	// 设置宏定义
-	void MaterialInstance::setMacros(const String& macros) 
+	void MaterialInst::setMacros(const String& macros) 
 	{ 
 		m_macros = StringUtil::Split(macros, ";");
 		std::sort(m_macros.begin(), m_macros.end());
 	}
 
-	void MaterialInstance::AddUniformParam(uniform* param)
+	void MaterialInst::AddUniformParam(uniform* param)
 	{
 		if (param)
 			m_unifromParamSet[param->name] = param;
 	}
 
 	// 判断变量是否存在
-	bool MaterialInstance::isUniformExist(const String& name)
+	bool MaterialInst::isUniformExist(const String& name)
 	{
 		return m_unifromParamSet.find(name)!=m_unifromParamSet.end();
 	}
 
 	// 修改变量
-	void MaterialInstance::ModifyUniformParam(const String& name, const ShaderParamType& type, void* value)
+	void MaterialInst::ModifyUniformParam(const String& name, const ShaderParamType& type, void* value)
 	{
 		const auto& it = m_unifromParamSet.find(name);
 		if (it != m_unifromParamSet.end())
@@ -1089,7 +1089,7 @@ namespace Echo
 		}
 	}
 
-	void* MaterialInstance::GetuniformValue(const String& name, ShaderParamType type)
+	void* MaterialInst::GetuniformValue(const String& name, ShaderParamType type)
 	{
 		if (type == SPT_TEXTURE)
 		{
@@ -1104,12 +1104,12 @@ namespace Echo
 		return getUniformValue(name);
 	}
 
-	void MaterialInstance::AddTextureName(int idex, const String& name)
+	void MaterialInst::AddTextureName(int idex, const String& name)
 	{
 		m_TexturesName[idex] = name;
 	}
 
-	TextureRes* MaterialInstance::SetTexture(int idex, const String& name)
+	TextureRes* MaterialInst::SetTexture(int idex, const String& name)
 	{
 		if (name.empty())
 		{
@@ -1131,7 +1131,7 @@ namespace Echo
 	}
 
 	// 获取变量
-	MaterialInstance::uniform* MaterialInstance::GetUniform(const String& name)
+	MaterialInst::uniform* MaterialInst::GetUniform(const String& name)
 	{
 		const auto& it = m_unifromParamSet.find(name);
 		if (it != m_unifromParamSet.end())
@@ -1140,7 +1140,7 @@ namespace Echo
 		return NULL;
 	}
 
-	void MaterialInstance::void2s(uniform* param, String& value)
+	void MaterialInst::void2s(uniform* param, String& value)
 	{
 		ShaderParamType type = param->type;
 		switch (type)
@@ -1242,7 +1242,7 @@ namespace Echo
 	}
 
 	// 每帧更新
-	void MaterialInstance::update(ui32 delta)
+	void MaterialInst::update(ui32 delta)
 	{
 		if (!m_ControllerList.empty())
 		{
@@ -1257,7 +1257,7 @@ namespace Echo
 		}
 	}
 
-	MaterialController* MaterialInstance::AddController(const String& name, ui32 type)
+	MaterialController* MaterialInst::AddController(const String& name, ui32 type)
 	{
 		// 目前一个参数，只能添加一个参数控制器
 		MaterialControllerItor it = m_ControllerList.find(name);
@@ -1290,7 +1290,7 @@ namespace Echo
 		return controller;
 	}
 
-	MaterialController* MaterialInstance::AddControllerFromTemplate(const String& name, MaterialController* controllerTemplate)
+	MaterialController* MaterialInst::AddControllerFromTemplate(const String& name, MaterialController* controllerTemplate)
 	{
 		auto iter = m_ControllerList.find(name);
 		if (iter != m_ControllerList.end())
@@ -1315,7 +1315,7 @@ namespace Echo
 		return controller;
 	}
 
-	void MaterialInstance::DelController(const String& name)
+	void MaterialInst::DelController(const String& name)
 	{
 		MaterialControllerItor it = m_ControllerList.find(name);
 		if (it != m_ControllerList.end())
@@ -1325,7 +1325,7 @@ namespace Echo
 		}
 	}
 
-	MaterialController* MaterialInstance::GetController(const String& name)
+	MaterialController* MaterialInst::GetController(const String& name)
 	{
 		MaterialControllerItor it = m_ControllerList.find(name);
 		if (it != m_ControllerList.end())
@@ -1336,7 +1336,7 @@ namespace Echo
 		return NULL;
 	}
 
-	void* MaterialInstance::createValue2Void(const ShaderParamType& type, const int count /* = 1 */)
+	void* MaterialInst::createValue2Void(const ShaderParamType& type, const int count /* = 1 */)
 	{
 		void* value = NULL;
 		switch (type)
@@ -1389,7 +1389,7 @@ namespace Echo
 		return value;
 	}
 
-	void MaterialInstance::CopyUniformValue(void* dstValue, const ShaderParamType& type, void* srcValue)
+	void MaterialInst::CopyUniformValue(void* dstValue, const ShaderParamType& type, void* srcValue)
 	{
 		switch (type)
 		{
@@ -1428,7 +1428,7 @@ namespace Echo
 	}
 
 	// 是否使用了宏定义
-	bool MaterialInstance::isMacroUsed(const String& macro)
+	bool MaterialInst::isMacroUsed(const String& macro)
 	{
 		for (const String& _macro : m_macros)
 		{
@@ -1447,7 +1447,7 @@ namespace Echo
 
 #ifdef ECHO_EDITOR_MODE
 	// 设置宏定义
-	void MaterialInstance::setMacro(const String& macro, bool enabled)
+	void MaterialInst::setMacro(const String& macro, bool enabled)
 	{
 		if (enabled)
 		{
@@ -1479,7 +1479,7 @@ namespace Echo
 		refresh();
 	}
 
-	void MaterialInstance::setPBRLight(const vector<PBRLight*>::type& lights)
+	void MaterialInst::setPBRLight(const vector<PBRLight*>::type& lights)
 	{
 		String macros = StringUtil::Format("LIGHT_COUNT %d", lights.size());
 		if (lights.size() > 0)
@@ -1493,12 +1493,12 @@ namespace Echo
 		}
 	}
 
-	bool MaterialInstance::isUsingSceneEnvMap() const
+	bool MaterialInst::isUsingSceneEnvMap() const
 	{
 		return std::find(m_macros.begin(), m_macros.end(), "USE_SCENE_ENV_MAP") != m_macros.end();
 	}
 
-	void MaterialInstance::refresh()
+	void MaterialInst::refresh()
 	{
 		buildRenderQueue();
 		matchUniforms();
@@ -1507,7 +1507,7 @@ namespace Echo
 #endif // ECHO_EDITOR_MODE
 
 	// 构建渲染队列
-	void MaterialInstance::buildRenderQueue()
+	void MaterialInst::buildRenderQueue()
 	{
 		if (!m_materialTemplate.empty())
 		{
@@ -1528,7 +1528,7 @@ namespace Echo
 		}
 	}
 
-	void MaterialInstance::LoadBlendState(void* pNode)
+	void MaterialInst::LoadBlendState(void* pNode)
 	{
 		m_blendDesc.reset();
 
@@ -1671,7 +1671,7 @@ namespace Echo
 
 	}
 
-	void MaterialInstance::LoadRasterizerState(void* pNode)
+	void MaterialInst::LoadRasterizerState(void* pNode)
 	{
 		m_rasterizerStateDesc.reset();
 
@@ -1754,7 +1754,7 @@ namespace Echo
 		} // end while
 	}
 
-	void MaterialInstance::LoadDepthStencilState(void* pNode)
+	void MaterialInst::LoadDepthStencilState(void* pNode)
 	{
 		m_depthStencilDesc.reset();
 
@@ -1936,7 +1936,7 @@ namespace Echo
 	}
 
 	// 参数匹配
-	void MaterialInstance::matchUniforms()
+	void MaterialInst::matchUniforms()
 	{
 		ShaderProgram* shaderProgram = m_renderQueue->getMaterial()->getShaderProgram();
 		if (shaderProgram)
@@ -2002,16 +2002,16 @@ namespace Echo
 	}
 
 	// 创建材质实例
-	MaterialInstance* MaterialManager::createMaterialIst(const String& materialName, const String& macros)
+	MaterialInst* MaterialManager::createMaterialIst(const String& materialName, const String& macros)
 	{
-		MaterialInstance* matTemplate = getMaterialTemplate(materialName, macros);
+		MaterialInst* matTemplate = getMaterialTemplate(materialName, macros);
 
 		if (m_isEditModel)
 			return matTemplate;
 
 		if (matTemplate)
 		{
-			MaterialInstance* matInst = EchoNew(MaterialInstance);
+			MaterialInst* matInst = EchoNew(MaterialInst);
 			matInst->cloneFromTemplate(matTemplate);
 
 			{
@@ -2026,7 +2026,7 @@ namespace Echo
 	}
 
 	// 获取材质模板
-	MaterialInstance* MaterialManager::getMaterialTemplate(const String& materialName, const String& macros)
+	MaterialInst* MaterialManager::getMaterialTemplate(const String& materialName, const String& macros)
 	{
 		std::lock_guard<std::mutex> lock(m_materialIstTemplatesMutex);
 
@@ -2034,11 +2034,11 @@ namespace Echo
 		MaterialIstTemplateItor it = m_MaterialIstTemplates.find(id);
 		if (it == m_MaterialIstTemplates.end())
 		{
-			MaterialInstance* matInst = EchoNew(MaterialInstance);
+			MaterialInst* matInst = EchoNew(MaterialInst);
 			if (!matInst->loadByFile(materialName, macros))
 			{
 				EchoLogError("Material File %s Not Found, Skip.", materialName.c_str());
-				EchoSafeDelete(matInst, MaterialInstance);
+				EchoSafeDelete(matInst, MaterialInst);
 				return NULL;
 			}
 
@@ -2055,7 +2055,7 @@ namespace Echo
 		}
 	}
 
-	void MaterialManager::destroyMaterialIst(MaterialInstance* material)
+	void MaterialManager::destroyMaterialIst(MaterialInst* material)
 	{
 		EchoAssert(material);
 
@@ -2064,8 +2064,8 @@ namespace Echo
 		MaterialIstItor it = m_MaterialIsts.find(material);
 		if (it != m_MaterialIsts.end())
 		{
-			MaterialInstance* matIt = *it;
-			EchoSafeDelete(matIt, MaterialInstance);
+			MaterialInst* matIt = *it;
+			EchoSafeDelete(matIt, MaterialInst);
 			m_MaterialIsts.erase(it);
 		}
 	}
@@ -2073,7 +2073,7 @@ namespace Echo
 	void MaterialManager::destroyAllMaterialIst()
 	{
 		std::lock_guard<std::mutex> lock(m_materialIstsMutex);
-		EchoSafeDeleteContainer(m_MaterialIsts, MaterialInstance);
+		EchoSafeDeleteContainer(m_MaterialIsts, MaterialInst);
 	}
 
 	bool MaterialManager::AddMaterialIstTemplate(const String& materialName)
@@ -2087,7 +2087,7 @@ namespace Echo
 		MaterialIstTemplateItor it = m_MaterialIstTemplates.find(materialName);
 		if (it != m_MaterialIstTemplates.end())
 		{
-			EchoSafeDelete(it->second, MaterialInstance);
+			EchoSafeDelete(it->second, MaterialInst);
 		}
 		m_MaterialIstTemplates.erase(it);
 
@@ -2100,7 +2100,7 @@ namespace Echo
 		for (; it != m_MaterialIstTemplates.end(); ++it)
 		{
 			it->second->m_TexturesName.clear();
-			EchoSafeDelete(it->second, MaterialInstance);
+			EchoSafeDelete(it->second, MaterialInst);
 		}
 		m_MaterialIstTemplates.clear();
 	}

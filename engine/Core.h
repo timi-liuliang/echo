@@ -165,6 +165,5 @@ namespace Echo
 #include "Engine/modules/Anim/SkeletonManager.h"
 #include "Engine/modules/Anim/Animation.h"
 #include "Engine/modules/Anim/Skeleton.h"
-#include "Engine/modules/Model/Mesh.h"
 #include "Engine/modules/Anim/Animation.h"
 #include "engine/modules/Anim/AnimSystem.h"

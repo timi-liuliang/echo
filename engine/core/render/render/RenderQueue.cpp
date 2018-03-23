@@ -5,7 +5,7 @@
 #include "engine/core/Util/LogManager.h"
 #include "Render/Material.h"
 #include "Engine/core/Scene/Scene_Manager.h"
-#include "Engine/core/Render/MaterialInstance.h"
+#include "Engine/core/Render/MaterialInst.h"
 #include "RenderQueueGroup.h"
 
 namespace Echo

@@ -9,7 +9,7 @@
 #include "PostFrag.h"
 #include "MaterialDesc.h"
 #include "Fxaa.h"
-#include "MaterialInstance.h"
+#include "MaterialInst.h"
 
 namespace Echo
 {

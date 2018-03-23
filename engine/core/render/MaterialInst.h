@@ -15,7 +15,7 @@ namespace Echo
 	/**
 	* 材质实例
 	*/
-	class MaterialInstance
+	class MaterialInst
 	{
 		friend class Model;
 		friend class MaterialManager;
@@ -45,8 +45,8 @@ namespace Echo
 		typedef MaterialControllerMap::iterator MaterialControllerItor;
 
 	public:
-		MaterialInstance();
-		~MaterialInstance();
+		MaterialInst();
+		~MaterialInst();
 
 		// 加载 --> 可以异步。
 		bool loadByFile(const String& name, const String& macros);
@@ -58,10 +58,10 @@ namespace Echo
 		void saveToFile(const String& name);
 
 		// 克隆
-		void cloneFromTemplate(MaterialInstance* _template);
+		void cloneFromTemplate(MaterialInst* _template);
 
 		// 参数继承
-		void deriveUniforms( MaterialInstance* from);
+		void deriveUniforms( MaterialInst* from);
 
 		// 资源加载线程准备纹理
 		void prepareTexture();
@@ -240,10 +240,10 @@ namespace Echo
 	*/
 	class MaterialManager
 	{
-		typedef map<String, MaterialInstance* >::type MaterialIstTemplateMap;
-		typedef map<String, MaterialInstance* >::type::iterator MaterialIstTemplateItor;
-		typedef set<MaterialInstance* >::type MaterialIstSet;
-		typedef set<MaterialInstance* >::type::iterator MaterialIstItor;
+		typedef map<String, MaterialInst* >::type MaterialIstTemplateMap;
+		typedef map<String, MaterialInst* >::type::iterator MaterialIstTemplateItor;
+		typedef set<MaterialInst* >::type MaterialIstSet;
+		typedef set<MaterialInst* >::type::iterator MaterialIstItor;
 		typedef list<Material* >::type MaterialList;
 
 		__DeclareSingleton(MaterialManager);
@@ -252,8 +252,8 @@ namespace Echo
 		MaterialManager();
 		~MaterialManager();
 
-		MaterialInstance* createMaterialIst(const String& materialName, const String& macros);
-		void   destroyMaterialIst(MaterialInstance* material);
+		MaterialInst* createMaterialIst(const String& materialName, const String& macros);
+		void   destroyMaterialIst(MaterialInst* material);
 
 		// 删除所有材质实例
 		void  destroyAllMaterialIst();
@@ -261,7 +261,7 @@ namespace Echo
 		bool AddMaterialIstTemplate(const String& materialName);
 
 		// 获取材质模板
-		MaterialInstance* getMaterialTemplate(const String& materialName, const String& macros);
+		MaterialInst* getMaterialTemplate(const String& materialName, const String& macros);
 
 		// 删除材质模板
 		bool DelMaterialIstTemplate(const String& materialName);

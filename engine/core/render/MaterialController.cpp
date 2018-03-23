@@ -59,7 +59,7 @@ namespace Echo
 		return 0.0f;
 	}
 
-	MaterialController::MaterialController(MaterialInstance* ins)
+	MaterialController::MaterialController(MaterialInst* ins)
 		: m_MateIns(ins)
 		, m_PUniform(NULL)
 	{
@@ -136,7 +136,7 @@ namespace Echo
 		parentNode->append_node(Controller);
 	}
 
-	MaterialController* MaterialController::Clone(MaterialInstance* instance)
+	MaterialController* MaterialController::Clone(MaterialInst* instance)
 	{
 		EchoLogError("Trying to clone an unknown type MaterialController."); 
 		return NULL; 
@@ -147,7 +147,7 @@ namespace Echo
 		return "MaterialController"; 
 	}
 
-	RollLoopController::RollLoopController(MaterialInstance* ins)
+	RollLoopController::RollLoopController(MaterialInst* ins)
 		: MaterialController(ins)
 		, m_beginValue(NULL)
 		, m_endValue(NULL)
@@ -226,7 +226,7 @@ namespace Echo
 
 	void RollLoopController::GetPropertyValue( const String & name, String &value)
 	{
-		MaterialInstance::uniform param;
+		MaterialInst::uniform param;
 		if(name == "beginValue")
 		{
 			param.type = m_PUniform->type;
@@ -282,7 +282,7 @@ namespace Echo
 	}
 
 
-	void RollLoopController::SetControlUniform(MaterialInstance::uniform* uniform )
+	void RollLoopController::SetControlUniform(MaterialInst::uniform* uniform )
 	{
 		MaterialController::SetControlUniform(uniform);
 
@@ -323,7 +323,7 @@ namespace Echo
 		return false;
 	}
 
-	RollLoopController* RollLoopController::Clone(MaterialInstance* instance)
+	RollLoopController* RollLoopController::Clone(MaterialInst* instance)
 	{
 		//String _value;
 		//_template->GetPropertyValue("beginValue", _value);
@@ -337,7 +337,7 @@ namespace Echo
 
 	//////////////////////////////////////////////////////////////////////////
 
-	LinearController::LinearController(MaterialInstance* instance) 
+	LinearController::LinearController(MaterialInst* instance) 
 		: MaterialController(instance)
 		, m_begin(0.0f)
 		, m_end(0.0f)
@@ -428,7 +428,7 @@ namespace Echo
 		return true; 
 	}
 
-	LinearController* LinearController::Clone(MaterialInstance* instance)
+	LinearController* LinearController::Clone(MaterialInst* instance)
 	{
 		LinearController* other = EchoNew(LinearController(*this)); 
 		other->SetMaterialInstance(instance); 
@@ -645,7 +645,7 @@ namespace Echo
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	BezierController::BezierController(MaterialInstance* instance)
+	BezierController::BezierController(MaterialInst* instance)
 		: MaterialController(instance)
 		, m_beginNode(Vector3::ZERO)
 		, m_controlNode1(Vector3::ZERO)
@@ -737,7 +737,7 @@ namespace Echo
 		return true; 
 	}
 
-	BezierController* BezierController::Clone(MaterialInstance* instance)
+	BezierController* BezierController::Clone(MaterialInst* instance)
 	{
 		BezierController* controller = EchoNew(BezierController(*this)); 
 		controller->SetMaterialInstance(instance); 
@@ -975,7 +975,7 @@ namespace Echo
 
 
 	//////////////////////////////////////////////////////////////////////////
-	ScriptController::ScriptController(MaterialInstance* instance)
+	ScriptController::ScriptController(MaterialInst* instance)
 		:MaterialController(instance)
 	{
 		m_controlType = MCT_Script;
@@ -1018,7 +1018,7 @@ namespace Echo
 		return true;  
 	}
 
-	ScriptController* ScriptController::Clone(MaterialInstance* instance) 
+	ScriptController* ScriptController::Clone(MaterialInst* instance) 
 	{ 
 		ScriptController* other = EchoNew(ScriptController(*this)); 
 		other->SetMaterialInstance(instance); 
@@ -1031,7 +1031,7 @@ namespace Echo
 		return "ScriptController"; 
 	}
 
-	TimeController::TimeController(MaterialInstance* ins)
+	TimeController::TimeController(MaterialInst* ins)
 		: MaterialController(ins)
 		, m_time(0.0f)
 	{
@@ -1065,7 +1065,7 @@ namespace Echo
 		}
 	}
 
-	TimeController* TimeController::Clone(MaterialInstance* instance)
+	TimeController* TimeController::Clone(MaterialInst* instance)
 	{
 		TimeController* other = EchoNew(TimeController(*this));
 		other->SetMaterialInstance(instance);

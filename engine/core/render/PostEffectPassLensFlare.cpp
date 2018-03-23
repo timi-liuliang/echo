@@ -3,7 +3,7 @@
 #include "engine/core/render/render/ShaderProgram.h"
 #include "engine/core/render/RenderTargetManager.h"
 #include "rapidxml/rapidxml.hpp"
-#include "Engine/core/Render/MaterialInstance.h"
+#include "Engine/core/Render/MaterialInst.h"
 
 namespace Echo
 {

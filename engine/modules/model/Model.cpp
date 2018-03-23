@@ -2,11 +2,10 @@
 #include "Engine/core/Camera/Camera.h"
 #include "Engine/core/main/Root.h"
 #include "Engine/modules/Model/Model.h"
-#include "Engine/modules/Model/Mesh.h"
 #include "Render/RenderInput.h"
 #include "Render/Renderer.h"
 #include "Render/Material.h"
-#include "engine/core/Render/MaterialInstance.h"
+#include "engine/core/Render/MaterialInst.h"
 #include "Render/GPUBuffer.h"
 #include "Render/RenderTarget.h"
 #include "Engine/modules/Anim/AABBKeyFrame.h"
@@ -56,57 +55,24 @@ namespace Echo
 	void Model::RenderPhase::clean()
 	{
 		// 删除材质实例
-		for (size_t i = 0; i < m_materialInsts.size(); i++)
+		if (m_materialInst)
 		{
-			if (m_materialInsts[i])
-			{
-				MaterialManager::instance()->destroyMaterialIst(m_materialInsts[i]);
-				m_materialInsts[i] = NULL;
-			}
+			MaterialManager::instance()->destroyMaterialIst(m_materialInst);
+			m_materialInst = NULL;
 		}
-		m_materialInsts.clear();
-
-		for (size_t i = 0; i < m_materialInsts_dym.size(); i++)
-		{
-			for (size_t j = 0; j < m_materialInsts_dym[i].size(); j++)
-			{
-				if(m_materialInsts_dym[i][j])
-				{
-					MaterialManager::instance()->destroyMaterialIst(m_materialInsts_dym[i][j]);
-					m_materialInsts_dym[i][j] = NULL;
-				}
-			}
-			m_materialInsts_dym[i].clear();
-		}
-		m_materialInsts_dym.clear();
 
 		// 删除几何体缓冲
-		EchoSafeDeleteContainer(m_renderInputs, RenderInput);
+		EchoSafeDelete(m_renderInput, RenderInput);
 
 		// 删除渲染单元
-		Renderer::instance()->destroyRenderables(m_renderables.data(), m_renderables.size());
-		m_renderables.clear();
+		Renderer::instance()->destroyRenderables(&m_renderable, 1);
 	}
 
 	// 更新
 	void Model::RenderPhase::update( ui32 delta)
 	{
-		for (MaterialInst* matInst : m_materialInsts)
-		{
-			if ( matInst)
-				matInst->update(delta);
-		}
-
-		for (size_t i = 0; i < m_materialInsts_dym.size(); i++)
-		{
-			for (size_t j = 0; j < m_materialInsts_dym[i].size(); j++)
-			{
-				if (m_materialInsts_dym[i][j])
-				{
-					m_materialInsts_dym[i][j]->update(delta);
-				}
-			}
-		}
+		if ( m_materialInst)
+			m_materialInst->update(delta);
 	}
 
 	void Model::ReleaseMesh(Mesh* p)
@@ -127,7 +93,7 @@ namespace Echo
 	Model::Model( const Model::Info& modelInfo )
 		: PtrMonitor()
 		, m_info(modelInfo)
-		, m_mesh(nullptr, &ReleaseMesh)
+		, m_mesh(nullptr)
 		, m_pSkeleton(NULL)
 		, m_pAnimBlender(NULL)
 		, m_boneCount(0)
@@ -156,26 +122,11 @@ namespace Echo
 		EchoSafeFree(m_boneMatRows);
 		EchoSafeFreeVector(m_subMeshBoneMatRows);
 
-		for (size_t i = 0; i < m_xrayRenderables.size(); i++)
-		{
-			RenderInput* renderInput = m_xrayRenderables[i]->getRenderInput();
-			EchoSafeDelete(renderInput, RenderInput);
-			Renderer::instance()->destroyRenderables(&m_xrayRenderables[i], 1);
-		}
-		m_xrayRenderables.clear();
-
 		// 清空材质实例
 		for (int type = RP_Normal0; type < RP_Total; type++)
 		{
 			m_phases[type]->clean();
 			EchoSafeDelete(m_phases[type], RenderPhase);
-		}
-
-		// 清空材质实例(LOD)
-		for (RenderPhaseMap::iterator it = m_phasesLod.begin(); it != m_phasesLod.end(); it++)
-		{
-			it->second->clean();
-			EchoSafeDelete(it->second, RenderPhase);
 		}
 	}
 
@@ -197,33 +148,6 @@ namespace Echo
 		applyLoadedLightArrayData(); 
 	}
 
-	void Model::recursionDymMat(int type, ui32 num, ui32 flag, ui32 exp, String& matName,String& macros)
-	{
-		String _macros = macros;
-		// 判断有无此宏
-		if ((flag & static_cast<ui32>(pow(2, exp))) != 0)
-			_macros += MACROS[exp] + ";";
-
-		if (exp == 0)
-		{
-			MaterialInst* matInst = MaterialManager::instance()->createMaterialIst(matName, macros);
-			matInst->prepareTexture();
-			m_phases[type]->m_materialInsts_dym[num].push_back(matInst);
-
-			matInst = MaterialManager::instance()->createMaterialIst(matName, _macros);
-			matInst->prepareTexture();
-			m_phases[type]->m_materialInsts_dym[num].push_back(matInst);
-
-			return;
-		}
-		else
-		{
-			recursionDymMat(type, num, flag, exp - 1, matName, macros);
-
-			recursionDymMat(type, num, flag, exp - 1, matName, _macros);
-		}
-	}
-
 	// 加载材质实例
 	void Model::loadMaterialInstanceFromFile()
 	{
@@ -238,49 +162,13 @@ namespace Echo
 			if (materialInstances.empty())
 				continue;
 
-			m_phases[type]->m_materialInsts.resize(materialInstances.size(), NULL);
-			m_phases[type]->m_materialInsts_dym.resize(materialInstances.size());
+			m_phases[type]->m_materialInst = nullptr;
 			for (size_t i = 0; i < materialInstances.size(); i++)
 			{
 				if (Echo::StringUtil::Equal(materialInstances[i], invalidTag, false))
 					continue;
-				
-				MaterialInst* materialInst = createMaterialInst(materialInstances[i]);
-
-				// 动态材质实例
-				if (m_isUseDynamicMatIst)
-				{
-					String macros;
-					if (m_info.isSkinModel())
-						macros += "SKIN_MESH;";
-
-					if (m_info.m_isForUI)
-						macros += "IS_FOR_UI;";
-
-					// 判断可为动态材质的组合
-					ui32 flag = 0;
-					for (ui32 j = 0; j < MACROS_NUM; j++)
-					{
-						if (materialInst->isMacroUsed(MACROS[j]))
-							flag += 1 << j;
-					}
-
-					if (flag != 0)
-					{
-						ui32 exp = static_cast<ui32>(floor(log(flag) / log(2)));
-
-						recursionDymMat(type, i, flag, exp, materialInstances[i], macros);
-
-						// m_materialInsts第i个为null，则m_materialInsts_dym列表里有可用的动态材质
-						m_phases[type]->m_materialInsts[i] = NULL;
-						MaterialManager::instance()->destroyMaterialIst(materialInst);
-						materialInst = NULL;
-
-						continue;
-					}			
-				}
-				
-				m_phases[type]->m_materialInsts[i] = materialInst;		
+					
+				m_phases[type]->m_materialInst = createMaterialInst(materialInstances[i]);
 			}
 		}
 	}
@@ -292,12 +180,6 @@ namespace Echo
 		if (m_info.isSkinModel())
 			macros += "SKIN_MESH;";
 		
-		//if (SceneManager::instance()->getCurrentScene())
-		//{
-		//	if (!m_info.isSkinModel() && SceneManager::instance()->getCurrentScene()->isDoubleLMP())
-		//		macros += "DOUBLE_LMP;";
-		//}
-
 		if (EchoEngineSettings.isActorCastShadow() && m_info.m_isReceiveShadow)
 			macros += "RECEIVE_SHADOW;";
 
@@ -319,9 +201,9 @@ namespace Echo
 			return; 
 		}
 
-		m_mesh.reset(MeshManager::instance()->createMesh(m_info.m_meshName, false)); 
-		m_mesh->disableDefaultTexLoad();
-		m_mesh->prepare(); 
+		//m_mesh.reset(MeshManager::instance()->createMesh(m_info.m_meshName, false)); 
+		//m_mesh->disableDefaultTexLoad();
+		//m_mesh->prepare(); 
 	}
 
 	// 加载光阵列
@@ -337,49 +219,18 @@ namespace Echo
 	// 应用材质数据
 	void Model::applyLoadedMaterialInstanceData(RenderPhase& phase)
 	{
-		for (size_t i = 0; i < phase.m_materialInsts.size(); i++)
+		if (!phase.m_materialInst)
+			return;
+
+		if (phase.m_materialInst->getStage() == "Transparent" || phase.m_materialInst->getStage() == "Opaque")
 		{
-			if (!phase.m_materialInsts[i])
-				continue;
-
-			if (phase.m_materialInsts[i]->getStage() == "Transparent" || phase.m_materialInsts[i]->getStage() == "Opaque")
-			{
-				String first = phase.m_materialInsts[i]->getStage();
-				String second = m_info.m_isActor ? "_Actor" : "";
-// 				if (m_info.m_isUIActor)
-// 				{
-// 					first = "UI_Actor";
-// 					second = "";
-// 				}
-				phase.m_materialInsts[i]->setStage(first + second);
-			}
-
-			phase.m_materialInsts[i]->applyLoadedData(); // --> must sync.
-			phase.m_materialInsts[i]->loadTexture();     // --> must sync.
+			String first = phase.m_materialInst->getStage();
+			String second = m_info.m_isActor ? "_Actor" : "";
+			phase.m_materialInst->setStage(first + second);
 		}
 
-		if (m_isUseDynamicMatIst)
-		{
-			for (size_t i = 0; i < phase.m_materialInsts_dym.size(); i++)
-			{
-				for (size_t j = 0; j < phase.m_materialInsts_dym[i].size(); j++)
-				{
-// 					if (!phase.m_materialInsts_dym[i][j])
-// 						continue;
-
-					if (phase.m_materialInsts_dym[i][j]->getStage() == "Transparent" || 
-						phase.m_materialInsts_dym[i][j]->getStage() == "Opaque")
-					{
-						String first = phase.m_materialInsts_dym[i][j]->getStage();
-						String second = m_info.m_isActor ? "_Actor" : "";
-						phase.m_materialInsts_dym[i][j]->setStage(first + second);
-					}
-
-					phase.m_materialInsts_dym[i][j]->applyLoadedData();
-					phase.m_materialInsts_dym[i][j]->loadTexture();
-				}
-			}
-		}
+		phase.m_materialInst->applyLoadedData(); // --> must sync.
+		phase.m_materialInst->loadTexture();     // --> must sync.
 	}
 
 	// apply材质信息
@@ -401,19 +252,18 @@ namespace Echo
 			return; 
 		}
 
-		m_mesh->load();
+		//m_mesh->load();
 
 		if (m_info.isSkinModel())
 		{
 			EchoSafeFreeVector(m_subMeshBoneMatRows);
-
+			/*
 			// 分配数据
 			if (m_mesh->getUseSubMeshBoneMatrices())
 			{
 				m_subMeshBoneMatRows.resize(m_mesh->getSubMeshNum(), NULL);
 				for (int i = 0; i < m_mesh->getSubMeshNum(); i++)
 				{
-					SubMesh* pSubMesh = m_mesh->getSubMesh(i);
 					if (pSubMesh && pSubMesh->getBoneNum())
 					{
 						if (pSubMesh->getBoneNum() > s_maxBoneCount)
@@ -433,38 +283,9 @@ namespace Echo
 							m_subMeshBoneMatRows[i][j * 3 + 2].set(mat.m02, mat.m12, mat.m22, mat.m32);
 						}
 					}
-
-					if (pSubMesh && static_cast<int>(m_lightmapUV1.size()) <= i)
-					{
-						m_lightmapUV1.push_back(Vector4(0.f, 0.f, 1.f, 1.f));
-						m_lightmapUV2.push_back(Vector4(0.f, 0.f, 1.f, 1.f));
-						m_lightmapScale1.push_back(Vector3::ONE);
-						m_lightmapScale2.push_back(Vector3::ONE);
-					}
 				}
-			}
+			}*/
 		}
-		else
-		{
-			for (int i = 0; i < m_mesh->getSubMeshNum(); i++)
-			{
-				SubMesh* pSubMesh = m_mesh->getSubMesh(i);
-				if (pSubMesh && static_cast<int>(m_lightmapUV1.size()) <= i)
-				{
-					m_lightmapUV1.push_back(Vector4(0.f, 0.f, 1.f, 1.f));
-					m_lightmapUV2.push_back(Vector4(0.f, 0.f, 1.f, 1.f));
-					m_lightmapScale1.push_back(Vector3::ONE);
-					m_lightmapScale2.push_back(Vector3::ONE);
-				}
-			}
-		}
-
-#ifdef ECHO_EDITOR_MODE
-		i32 submeshNum = m_mesh->getSubMeshNum();
-		m_hsvColor0.resize(submeshNum);
-		m_hsvColor1.resize(submeshNum);
-		m_hsvColor2.resize(submeshNum);
-#endif
 	}
 
 	// apply光阵列
@@ -483,71 +304,60 @@ namespace Echo
 			}
 		}
 
-		if (m_mesh && m_mesh->getSubMeshNum())
+		if (m_mesh)
 		{
 			for (int j = 0; j < RP_ShadowMap; ++j)
 			{
-				for (int i = 0; i < m_mesh->getSubMeshNum(); i++)
-				{
-					RenderPhase& phase = *m_phases[j];
-					if (i < static_cast<int>(phase.m_materialInsts.size()) && phase.m_materialInsts[i])
-					{
-						phase.m_materialInsts[i]->setPBRLight(m_pbrlights);
-					}
-				}
+				RenderPhase& phase = *m_phases[j];
+				phase.m_materialInst->setPBRLight(m_pbrlights);
 			}
 		}
 #endif
 	}
 
 	// 设置材质实例
-	void Model::setMaterialInstance(RenderPhaseType type, i32 subMeshIdx, MaterialInst* mate)
+	void Model::setMaterialInstance(RenderPhaseType type, MaterialInst* mate)
 	{
-		m_phases[type]->m_materialInsts[subMeshIdx] = mate;
+		m_phases[type]->m_materialInst = mate;
 	}
 
 	// 设置纹理
-	void Model::setTexture(RenderPhaseType type, i32 subMeshIdx, i32 index, const String& name)
+	void Model::setTexture(RenderPhaseType type, i32 index, const String& name)
 	{
-		MaterialInst* materialInst = m_phases[type]->m_materialInsts[subMeshIdx];
+		MaterialInst* materialInst = m_phases[type]->m_materialInst;
 		EchoAssert(materialInst);
 		EchoAssert(m_mesh);
 
 		TextureRes* pTexture = materialInst->SetTexture(index, name);
-		int subNum = m_mesh->getSubMeshNum();
-		for (int i = 0; i < subNum; i++)
-		{
-			const SamplerState* defaultState = Renderer::instance()->getSamplerState(SamplerState::SamplerDesc());
-			m_phases[type]->m_renderables[i]->setTexture(index, pTexture->getTexture(), defaultState);
-		}
+		const SamplerState* defaultState = Renderer::instance()->getSamplerState(SamplerState::SamplerDesc());
+		m_phases[type]->m_renderable->setTexture(index, pTexture->getTexture(), defaultState);
 	}
 
 	// 设置模型
 	void Model::setMesh(Mesh* mesh)
 	{
-		m_mesh.reset(mesh);
-		m_info.m_meshName = mesh->getName();
-		EchoSafeFreeVector(m_subMeshBoneMatRows);
-		i32 submeshNum = m_mesh->getSubMeshNum();
-		// 分配数据
-		if (m_mesh->getUseSubMeshBoneMatrices())
-		{
-			m_subMeshBoneMatRows.resize(m_mesh->getSubMeshNum(), NULL);
-			for (int i = 0; i < submeshNum; i++)
-			{
-				SubMesh* pSubMesh = m_mesh->getSubMesh(i);
-				if (pSubMesh && pSubMesh->getBoneNum())
-					m_subMeshBoneMatRows[i] = EchoAlloc(Vector4, /*pSubMesh->getBoneNum()*/s_maxBoneCount * 3);
+		//m_info.m_meshName = mesh->getName();
+		//EchoSafeFreeVector(m_subMeshBoneMatRows);
+		//i32 submeshNum = m_mesh->getSubMeshNum();
+		//// 分配数据
+		//if (m_mesh->getUseSubMeshBoneMatrices())
+		//{
+		//	m_subMeshBoneMatRows.resize(m_mesh->getSubMeshNum(), NULL);
+		//	for (int i = 0; i < submeshNum; i++)
+		//	{
+		//		SubMesh* pSubMesh = m_mesh->getSubMesh(i);
+		//		if (pSubMesh && pSubMesh->getBoneNum())
+		//			m_subMeshBoneMatRows[i] = EchoAlloc(Vector4, /*pSubMesh->getBoneNum()*/s_maxBoneCount * 3);
 
-				if (pSubMesh && static_cast<int>(m_lightmapUV1.size()) <= i)
-				{
-					m_lightmapUV1.push_back(Vector4(0.f, 0.f, 1.f, 1.f));
-					m_lightmapUV2.push_back(Vector4(0.f, 0.f, 1.f, 1.f));
-					m_lightmapScale1.push_back(Vector3::ONE);
-					m_lightmapScale2.push_back(Vector3::ONE);
-				}
-			}
-		}
+		//		if (pSubMesh && static_cast<int>(m_lightmapUV1.size()) <= i)
+		//		{
+		//			m_lightmapUV1.push_back(Vector4(0.f, 0.f, 1.f, 1.f));
+		//			m_lightmapUV2.push_back(Vector4(0.f, 0.f, 1.f, 1.f));
+		//			m_lightmapScale1.push_back(Vector3::ONE);
+		//			m_lightmapScale2.push_back(Vector3::ONE);
+		//		}
+		//	}
+		//}
 	}
 
 	// 设置光阵列
@@ -565,11 +375,9 @@ namespace Echo
 			m_phases[type]->clean();
 		}
 
-		m_mesh.reset(); 
+		m_mesh->release(); 
 		m_lightArray.reset(); 
 		m_pbrlights.clear();
-
-		m_last_water_quality = WQ_High;
 	}
 
 	void Model::reload()
@@ -708,7 +516,6 @@ namespace Echo
 	// 创建渲染单元
 	void Model::createRenderable(bool isForUI)
 	{
-		m_have_water_material = false;
 		createRenderable(*m_phases[RP_Normal0], isForUI);
 		createRenderable(*m_phases[RP_Normal1], isForUI);
 		createRenderable(*m_phases[RP_Normal2], isForUI);
@@ -724,20 +531,18 @@ namespace Echo
 	void Model::createRenderabeSM( bool isForUI)
 	{
 		// 添加材质
-		if (m_mesh && m_mesh->getSubMeshNum())
+		if (m_mesh)
 		{
-			m_phases[RP_ShadowMap]->m_materialInsts.resize(m_mesh->getSubMeshNum(), NULL);
-			int size = static_cast<int>(m_phases[RP_Normal0]->m_materialInsts.size());
-			for (int i = 0; i < m_mesh->getSubMeshNum(); i++)
+			m_phases[RP_ShadowMap]->m_materialInst = nullptr;
 			{
 				bool isAlphaTest = false;
-				if (size > i && m_phases[RP_Normal0]->m_materialInsts[i] != NULL)
+				if (m_phases[RP_Normal0]->m_materialInst != nullptr)
 				{
-					isAlphaTest = m_phases[RP_Normal0]->m_materialInsts[i]->isMacroUsed("ALPHA_TEST");
+					isAlphaTest = m_phases[RP_Normal0]->m_materialInst->isMacroUsed("ALPHA_TEST");
 				}
 				
 				Echo::String MACROS = isAlphaTest ? "ALPHA_TEST;" : "";
-				if (m_mesh->isSkinned())
+				if (m_mesh->isSkin())
 					MACROS += "SKIN_MESH;";
 
 				MaterialInst* materialInst = MaterialManager::instance()->createMaterialIst(
@@ -745,7 +550,7 @@ namespace Echo
 				materialInst->applyLoadedData(); // --> must sync.
 				materialInst->loadTexture();
 
-				m_phases[RP_ShadowMap]->m_materialInsts[i] = materialInst;
+				m_phases[RP_ShadowMap]->m_materialInst = materialInst;
 			}
 
 			// 组织渲染数据
@@ -1065,10 +870,6 @@ namespace Echo
 				return waterRefractionRT->getBindTexture();
 			}
 		}
-		else if (name == "tShadowAlbedo")
-		{
-			return m_submeshAlbedo[subMesh].m_texture;
-		}
 
 		return NULL;
 	}
@@ -1216,11 +1017,11 @@ namespace Echo
 		{
 			//return (void*)SceneManager::instance()->getSceneObjectLightParamPtr();
 		}
-		else if(name =="matBoneRows")
-		{
-			Vector4* pBoneMatRaws = m_mesh->getUseSubMeshBoneMatrices() ? m_subMeshBoneMatRows[subMesh] : m_boneMatRows;
-			return (void*)pBoneMatRaws;
-		}
+		//else if(name =="matBoneRows")
+		//{
+		//	Vector4* pBoneMatRaws;/* = m_mesh->getUseSubMeshBoneMatrices() ? m_subMeshBoneMatRows[subMesh] : m_boneMatRows;*/
+		//	return (void*)pBoneMatRaws;
+		//}
 		else if(name == "fogParam")
 		{
 			//if (isUIModel)
@@ -1236,40 +1037,6 @@ namespace Echo
 			//	return (void*)&SceneManager::instance()->getUIHeightFogParam();
 			//}
 			//return (void*)&SceneManager::instance()->getHeightFogParam();
-		}
-		else if(name == "LMScale1")
-		{
-			return (void*)&(m_lightmapScale1[subMesh]);
-		}
-		else if (name == "LMScale2")
-		{
-			return (void*)&(m_lightmapScale2[subMesh]);
-		}
-		else if(name == "LMUV")
-		{
-			return (void*)&(m_lightmapUV1[subMesh]);
-		}
-		else if (name == "LMUV2")
-		{
-			return (void*)&(m_lightmapUV2[subMesh]);
-		}
-		else if (name == "LMSampler1")
-		{
-			m_LMSlot1 = LMSlot1;
-			return (void*)&m_LMSlot1;
-		}
-		else if (name == "LMSampler2")
-		{
-			m_LMSlot2 = LMSlot2;
-			return (void*)&m_LMSlot2;
-		}
-		else if (name == "Sky1ToSky2")
-		{
-			return (void*)&m_Sky1ToSky2; 
-		}
-		else if (name == "LM1ToLM2")
-		{
-			return (void*)&m_LM1ToLM2; 
 		}
 		else if (name == "matWVPSM")
 		{
@@ -1363,21 +1130,6 @@ namespace Echo
 
 			Color::HSV_to_RGB(hsvColor);
 
-			if (name == "hsvColorRChannel")
-			{
-				m_hsvColor0[subMeshId] = hsvColor;
-				return (void*)&m_hsvColor0[subMeshId];
-			}
-			else if (name == "hsvColorGChannel")
-			{
-				m_hsvColor1[subMeshId] = hsvColor;
-				return (void*)&m_hsvColor1[subMeshId];
-			}
-			else
-			{
-				m_hsvColor2[subMeshId] = hsvColor;
-				return (void*)&m_hsvColor2[subMeshId];
-			}
 #else
 			Vector3* hsvColor = (Vector3*)value;
 			hsvColor->x = Math::Clamp(hsvColor->x, 0.f, 360.f);
@@ -1396,24 +1148,15 @@ namespace Echo
 	{
 		bool isSuc = false;
 		RenderPhase& renderPhase = *m_phases[phase];
-		size_t size = renderPhase.m_materialInsts.size();
-		for ( size_t i = 0; i < size; ++i )
+		if (renderPhase.m_materialInst)
 		{
-			if (renderPhase.m_materialInsts[i])
+			if (renderPhase.m_materialInst->GetUniform(name))
 			{
-				if (renderPhase.m_materialInsts[i]->GetUniform(name))
-				{
-					renderPhase.m_materialInsts[i]->modifyUniformValue(name, value);
-					isSuc = true;
-				}
-			}
-			else
-			{
-				ui32 num = renderPhase.m_materialInsts_dym[i].size();
-				renderPhase.m_materialInsts_dym[i][num-1]->modifyUniformValue(name, value);
+				renderPhase.m_materialInst->modifyUniformValue(name, value);
 				isSuc = true;
 			}
 		}
+
 		return isSuc;
 	}
 
@@ -1421,8 +1164,8 @@ namespace Echo
 	{
 		RenderPhase& renderPhase = *m_phases[phase];
 
-		if (renderPhase.m_materialInsts[subId] && renderPhase.m_materialInsts[subId]->GetUniform(name))
-			renderPhase.m_materialInsts[subId]->modifyUniformValue(name, value);
+		if (renderPhase.m_materialInst && renderPhase.m_materialInst->GetUniform(name))
+			renderPhase.m_materialInst->modifyUniformValue(name, value);
 	}
 
 	// 提交到渲染队列
@@ -1430,26 +1173,10 @@ namespace Echo
 	{
 		for (int i = RP_Normal0; i <= RP_Normal3; i++)
 		{
-			const vector<Renderable*>::type& renderables = m_phases[i]->m_renderables;
-			for (size_t j = 0; j < renderables.size(); j++)
+			Renderable* renderable = m_phases[i]->m_renderable;
+			if (renderable->isVisible())
 			{
-				if (renderables[j]->isVisible())
-				{
-#ifdef ECHO_EDITOR_MODE
-#else
-					// 天空盒材质渐变
-					if (m_phases[i]->m_materialInsts[j])
-					{
-						Scene* scene = SceneManager::instance()->getCurrentScene();
-						m_Sky1ToSky2 = scene->getSky1ToSky2();
-					}
-#endif
-					{
-						renderables[j]->setLowRenderQueue(NULL);
-					}
-
-					renderables[j]->submitToRenderQueue();
-				}
+				renderable->submitToRenderQueue();
 			}
 		}
 	}
@@ -1460,10 +1187,10 @@ namespace Echo
 		if (!m_isInShowdownBox)
 			return;
 
-		const vector<Renderable*>::type& renderables = m_phases[RP_ShadowMap]->m_renderables;
-		for (size_t j = 0; j < renderables.size(); j++)
+		Renderable* renderable = m_phases[RP_ShadowMap]->m_renderable;
+		if (renderable)
 		{
-			renderables[j]->submitToRenderQueue();
+			renderable->submitToRenderQueue();
 		}
 	}
 
@@ -1500,6 +1227,7 @@ namespace Echo
 
 	void Model::refreshSubMeshBoneMatRows()
 	{
+		/*
 		// 复制动画结果数据
 		if (m_mesh->getUseSubMeshBoneMatrices() && m_boneMatRows)
 		{
@@ -1512,12 +1240,12 @@ namespace Echo
 					memcpy(&m_subMeshBoneMatRows[i][j * 3], &m_boneMatRows[srcIdx * 3], sizeof(Vector4)* 3);
 				}
 			}
-		}
+		}*/
 	}
 
 	Box Model::getLocalMeshAABB()
 	{
-		return m_mesh ? m_mesh->getBox() : Box(-3.f, -3.f, -3.f, 3.f, 3.f, 3.f);
+		return m_mesh ? m_mesh->getLocalBox() : Box(-3.f, -3.f, -3.f, 3.f, 3.f, 3.f);
 	}
 
 
@@ -1528,304 +1256,17 @@ namespace Echo
 		{
 			AABBKeyFrame* pKeyFrame = (AABBKeyFrame*)m_pAnimBlender->getAnimState()->getCurrentAnimKeyFrame();
 			Box ret = pKeyFrame->getBox();
-			ret.unionBox(m_mesh->getBox());	
+			ret.unionBox(m_mesh->getLocalBox());	
 			return ret;
 		}
 		
-		return m_mesh ? m_mesh->getBox() : Box( -3.f, -3.f, -3.f, 3.f, 3.f, 3.f);
-	}
-
-	// 设置光照图纹理
-	void Model::setLMTexture(ui32 subId, TextureRes* pTexture, ui32 lmID)
-	{
-		for (i32 renderPhaseType = RP_Normal0; renderPhaseType < RP_ShadowMap; ++renderPhaseType)
-		{
-			RenderPhase& phase = *m_phases[renderPhaseType];
-			ui32 size = phase.m_materialInsts.size();
-			if (size > subId)
-			{
-				MaterialInst* material = phase.m_materialInsts[subId];
-				if (!material)
-				{
-					ui32 size = phase.m_materialInsts_dym[subId].size();
-					if (size > 0)
-						material = phase.m_materialInsts_dym[subId][size - 1];
-				}
-				if (material && material->isMacroUsed("USE_LIGHTMAP") && phase.m_renderables.size() > subId)
-				{
-					Renderable* renderable = phase.m_renderables[subId];
-					// 减掉默认光照图的引用计数
-					Texture* tex = renderable->getTexture(LMSlot1 + lmID);
-					if (tex)
-					{
-						TextureRes* pTextureRes = (TextureRes*)tex->getUserData();
-						TextureResManager::instance()->releaseResource(pTextureRes);
-					}
-
-					Texture* texture = pTexture->getTexture();
-					pTexture->addRefrenceCount();
-					const SamplerState* sampleState = texture->getCurSamplerState();
-					if (NULL == sampleState)
-					{
-						SamplerState::SamplerDesc desc;
-						desc.addrUMode = SamplerState::AM_BORDER;
-						desc.addrVMode = SamplerState::AM_BORDER;
-						desc.addrWMode = SamplerState::AM_BORDER;
-
-						sampleState = Renderer::instance()->getSamplerState(desc);
-						texture->setCurSamplerState(sampleState);
-					}
-					renderable->setTexture(LMSlot1+lmID, texture, texture->getCurSamplerState());
-				}
-			}
-		}
-	}
-
-	void Model::setLightMapUVBias(i32 subId, const Vector4& lmUVparam1, const Vector3& scale1, const Vector4& lmUVparam2 /* = Vector4::ZERO */, const Vector3& scale2 /* = Vector3::ONE */)
-	{
-		m_lightmapUV1[subId] = lmUVparam1;
-		m_lightmapUV2[subId] = lmUVparam2;
-		m_lightmapScale1[subId] = scale1;
-		m_lightmapScale2[subId] = scale2;
-
-		//if (SceneManager::instance()->getCurrentScene()->isDoubleLMP())
-		{
-			m_lightmapUV1_bak = m_lightmapUV1;
-			m_lightmapScale1_bak = m_lightmapScale1;
-		}
-	}
-	
-	// 更新光照图纹理
-	void Model::unloadLMTexture()
-	{
-		for (i32 renderPhaseType = RP_Normal0; renderPhaseType < RP_ShadowMap; ++renderPhaseType)
-		{
-			RenderPhase& phase = *m_phases[renderPhaseType];
-			size_t size = phase.m_materialInsts.size();
-			for (size_t i = 0; i < size; ++i)
-			{
-				MaterialInst* material = phase.m_materialInsts[i];
-				if ( i < phase.m_renderables.size() && material && material->isMacroUsed("USE_LIGHTMAP"))
-				{
-					Renderable* renderable = phase.m_renderables[i];
-					Texture* tex = renderable->getTexture(LMSlot1);
-					if (tex)
-					{
-						TextureRes* pTextureRes = (TextureRes*)tex->getUserData();
-						if (pTextureRes)
-						{
-							TextureResManager::instance()->releaseResource(pTextureRes);
-						}
-						renderable->setTexture(LMSlot1, NULL, NULL);
-					}
-					Texture* tex2 = renderable->getTexture(LMSlot2);
-					if (tex2)
-					{
-						TextureRes* pTextureRes = (TextureRes*)tex2->getUserData();
-						if (pTextureRes)
-						{
-							TextureResManager::instance()->releaseResource(pTextureRes);
-						}
-						renderable->setTexture(LMSlot1, NULL, NULL);
-					}
-					
-				}
-				else if (!material)
-				{
-					size_t size = phase.m_materialInsts_dym[i].size();
-					for (size_t j = 0; j < size; ++j)
-					{
-						MaterialInst* material1 = phase.m_materialInsts_dym[i][j];
-						if (i < phase.m_renderables.size() && material1 )
-						{
-							if (material1->isMacroUsed("USE_LIGHTMAP"))
-							{
-								Renderable* renderable = phase.m_renderables[i];
-								Texture* tex = renderable->getTexture(LMSlot1);
-								if (tex)
-								{
-									TextureRes* pTextureRes = (TextureRes*)tex->getUserData();
-									if (pTextureRes)
-									{
-										TextureResManager::instance()->releaseResource(pTextureRes);
-									}
-									renderable->setTexture(LMSlot1, NULL, NULL);
-								}
-								tex = renderable->getTexture(LMSlot2);
-								if (tex)
-								{
-									TextureRes* pTextureRes = (TextureRes*)tex->getUserData();
-									if (pTextureRes)
-									{
-										TextureResManager::instance()->releaseResource(pTextureRes);
-									}
-									renderable->setTexture(LMSlot2, NULL, NULL);
-								}
-								
-							}
-							
-						}
-					}
-				}
-			}
-		}
-	}
-
-	void Model::setUseXRay(bool state, Vector4* color /* = NULL */)
-	{
-		/*
-		m_isUseXRay = state && SceneManager::instance()->isUseXRay();
-		if (color)
-		{
-			m_xrayColor = *color;
-		}
-
-		if (m_isUseXRay && m_xrayRenderables.empty())
-		{
-			bool isSkin = m_info.isSkinModel();
-			String renderQueueName = isSkin ? "SkinedMeshForActorXray" : "StaticMeshForActorXray";
-			i32 shaderParamSize = isSkin ? 3 : 2;
-			RenderQueue* pXrayRenderQueue = SceneManager::instance()->getRenderQueue(renderQueueName);
-
-			i32 subNum = m_mesh->getSubMeshNum();
-			for (i32 i = 0; i < subNum; ++i)
-			{
-				SubMesh* pSubMesh = m_mesh->getSubMesh(i);
-
-				Renderable* pXrayRenderable = Renderer::instance()->createRenderable(pXrayRenderQueue, NULL);
-				Material*      pXrayMaterial = pXrayRenderQueue->getMaterial();
-				ShaderProgram* pXrayshaderProgram = pXrayMaterial->getShaderProgram();
-				RenderInput*   pXrayRenderInput = Renderer::instance()->createRenderInput(pXrayMaterial->getShaderProgram());
-				
-				if (pSubMesh->isMultiVertexBuff())
-				{
-					pXrayRenderInput->set_is_muti_stream(true);
-					SubMesh::itrMutiVertexBuff itrVertexBuff = pSubMesh->getMultiVertexBuff().begin();
-					for (; itrVertexBuff != pSubMesh->getMultiVertexBuff().end(); itrVertexBuff++)
-					{
-						pXrayRenderInput->bindVertexStream(itrVertexBuff->m_vertex_element_list, itrVertexBuff->m_gpubuff);
-					}
-
-				}
-				else
-				{
-					pXrayRenderInput->bindVertexStream(pSubMesh->getVertexElements(), pSubMesh->getVertexBuffer());
-				}
-				
-				pXrayRenderInput->bindIndexStream(pSubMesh->getIndexBuffer(), pSubMesh->getIndexStride());
-				pXrayRenderable->beginShaderParams(shaderParamSize);
-				pXrayRenderable->setShaderParam(pXrayshaderProgram->getParamPhysicsIndex("matWVP"), SPT_MAT4, (void*)&m_matWVP);
-				pXrayRenderable->setShaderParam(pXrayshaderProgram->getParamPhysicsIndex("xrayColor"), SPT_VEC4, &m_xrayColor);
-				if (isSkin)
-				{
-					Vector4* pBoneMatRaws = m_mesh->getUseSubMeshBoneMatrices() ? m_subMeshBoneMatRows[i] : m_boneMatRows;
-					pXrayRenderable->setShaderParam(pXrayshaderProgram->getParamPhysicsIndex("boneMatRows"), SPT_VEC4, pBoneMatRaws, s_maxBoneCount * 3);
-				}
-				pXrayRenderable->endShaderParams();
-				pXrayRenderable->setRenderInput(pXrayRenderInput);
-
-				m_xrayRenderables.push_back(pXrayRenderable);
-			}
-		}
-		*/
+		return m_mesh ? m_mesh->getLocalBox() : Box( -3.f, -3.f, -3.f, 3.f, 3.f, 3.f);
 	}
 
 	void Model::updateCameraPos()
 	{
 		//m_matWV = m_pSceneNode->getWorldMatrix() * SceneManager::instance()->getMainCamera()->getViewMatrix();
 		//m_matWVP = m_pSceneNode->getWorldMatrix() * SceneManager::instance()->getMainCamera()->getViewProjMatrix();
-	}
-
-	// Create Phase by Phase, Used for Model replace MaterialInsts.
-	bool Model::createLodRenderPhase(const String& name, const String& materialName, bool isDeriveUniformsFromOtherPhase, RenderPhase* parentPhase)
-	{
-		if (m_phasesLod.find(materialName) == m_phasesLod.end())
-		{
-			RenderPhase* phase = EchoNew(RenderPhase);
-			phase->m_tag = name; 
-
-			// 1.创建材质实例
-			int subMeshNum = m_phases[RP_Normal0]->m_materialInsts.size();
-			phase->m_materialInsts.resize(subMeshNum);
-			for (int i = 0; i < subMeshNum; i++)
-			{
-				MaterialInst* materialInst = createMaterialInst(materialName);
-				if (!materialInst)
-				{
-					EchoLogError("Model::createLodRenderPhase failed");
-					return false;
-				}
-
-				// 参数继承
-				if (isDeriveUniformsFromOtherPhase)
-				{
-					MaterialInst* matOld = parentPhase->m_materialInsts[i];
-					if (!matOld)
-					{
-						ui32 size = parentPhase->m_materialInsts_dym[i].size();
-						matOld = parentPhase->m_materialInsts_dym[i][size-1];
-					}
-					materialInst->deriveUniforms(matOld);
-				}
-
-				materialInst->prepareTexture();
-				materialInst->loadTexture();
-				phase->m_materialInsts[i] = materialInst;
-			}
-
-			applyLoadedMaterialInstanceData( *phase);
-
-			// 2.创建Renderable
-			createRenderable(*phase, false);
-
-			m_phasesLod[name] = phase;
-
-			return true;
-		}
-
-		return false;
-	}
-
-	// Get Lod Phase
-	Model::RenderPhase* Model::getLodPhase(const String& name)
-	{
-		RenderPhaseMap::iterator it = m_phasesLod.find(name);
-		if (it != m_phasesLod.end())
-		{
-			return it->second;
-		}
-
-		return nullptr;
-	}
-
-	// Delete Phase by Name
-	bool Model::deleteLodPhase(const String& phaseName)
-	{
-		return false;
-	}
-
-	// Swap Phase
-	bool Model::swapPhase(const String& phaseName, RenderPhaseType phaseSlot)
-	{
-		if (m_phasesLod.find(phaseName) != m_phasesLod.end())
-		{
-			std::swap(m_phases[phaseSlot], m_phasesLod[phaseName]);
-
-			return true;
-		}
-		
-		return false;
-	}
-
-	bool Model::swapPhase(RenderPhase* phase, RenderPhaseType phaseSlot)
-	{
-		if (phase)
-		{
-			std::swap(m_phases[phaseSlot], phase);
-			return true;
-		}
-
-		return false;
 	}
 
 	void Model::updateRenderablesPosition()
@@ -1854,14 +1295,10 @@ namespace Echo
 	void Model::execute_render()
 	{
 		for (int i = RP_Normal0; i <= RP_Normal3; i++)
-		{
-			const vector<Renderable*>::type& renderables = m_phases[i]->m_renderables;
-			for (size_t j = 0; j < renderables.size(); j++)
+		{	 
+			if (m_phases[i]->m_renderable->isVisible())
 			{
-				if (renderables[j]->isVisible())
-				{
-					renderables[j]->render();
-				}
+				m_phases[i]->m_renderable->render();
 			}
 		}
 	}
@@ -2329,14 +1766,14 @@ namespace Echo
 
 			String filePath = m_mesh->getName( );
 			filePath =  ResourceGroupManager::instance()->getFileLocation( filePath );
-			return m_mesh->saveToFile( filePath.c_str() );
+			//return m_mesh->saveToFile( filePath.c_str() );
 		}
 
 		return false;
 	}
 
 	void Model::resetRenderInput()
-	{
+	{/*
 #ifdef ECHO_EDITOR_MODE
 		for (RenderPhase* phase : m_phases)
 		{
@@ -2365,7 +1802,7 @@ namespace Echo
 			
 		}
 #endif // ECHO_EDITOR_MODE
-
+*/
 	}
 
 	ModelLoadEvent::ModelLoadEvent(Model* model, std::function<bool(Model*)> onModelLoadComplete)

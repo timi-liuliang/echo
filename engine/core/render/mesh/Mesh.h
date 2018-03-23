@@ -51,6 +51,9 @@ namespace Echo
 		// 获取索引数据
 		Word* getIndices() const;
 
+		// 是否为蒙皮
+		bool isSkin() const { return isVertexUsage(RenderInput::VS_BLENDINDICES); }
+
 		// 判断顶点格式中是否含有指定类型的数据
 		bool isVertexUsage(RenderInput::VertexSemantic semantic) const { return m_vertData.isVertexUsage(semantic); }
 

@@ -1,7 +1,7 @@
 #include "BloomEffect.h"
 #include "render/Material.h"
 #include "render/Renderer.h"
-#include "MaterialInstance.h"
+#include "MaterialInst.h"
 
 namespace Echo
 {

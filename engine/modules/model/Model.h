@@ -5,6 +5,7 @@
 #include <engine/modules/Light/LightArray.h>
 #include <engine/core/Resource/EchoThread.h>
 #include <engine/core/main/EngineSettings.h>
+#include "engine/core/render/mesh/Mesh.h"
 
 namespace Echo
 {
@@ -14,7 +15,6 @@ namespace Echo
 	class Camera;
 	class ModelManager;
 	class MaterialInst;
-	class Mesh;
 	class RenderInput;
 	class Renderable;
 	class TextureRes;
@@ -103,10 +103,9 @@ namespace Echo
 		struct RenderPhase
 		{
 			String							m_tag;									// 阶段标识;
-			vector<MaterialInst*>::type	m_materialInsts;						// 材质实例
-			vector<vector<MaterialInst*>::type>::type	m_materialInsts_dym;	// 动态材质实例
-			vector<RenderInput*>::type		m_renderInputs;							// 几何体数据
-			vector<Renderable*>::type		m_renderables;							// 可渲染对象
+			MaterialInst*					m_materialInst;							// 材质实例
+			RenderInput*					m_renderInput;							// 几何体数据
+			Renderable*						m_renderable;							// 可渲染对象
 
 			RenderPhase(){}
 			~RenderPhase();
@@ -171,12 +170,10 @@ namespace Echo
 		void setInfo(const Model::Info& info) { m_info = info; }
 
 		// 获取材质实例
-		MaterialInst* getMaterialInstance(RenderPhaseType type, i32 subMeshIdx) { return m_phases[type]->m_materialInsts[subMeshIdx]; }
-
-		size_t getMaterialInstanceNum(RenderPhaseType type) { return m_phases[type]->m_materialInsts.size(); }
+		MaterialInst* getMaterialInstance(RenderPhaseType type) { return m_phases[type]->m_materialInst; }
 
 		// 设置材质实例
-		void setMaterialInstance(RenderPhaseType type, i32 subMeshIdx, MaterialInst* mate);
+		void setMaterialInstance(RenderPhaseType type, MaterialInst* mate);
 
 		// 设置Mesh
 		void setMesh(Mesh* mesh);
@@ -194,7 +191,7 @@ namespace Echo
 		RenderPhase* getPhase(RenderPhaseType type) { return m_phases[type]; }
 
 		// 设置纹理
-		void setTexture(RenderPhaseType type, i32 subMeshIdx, i32 index, const String& name);
+		void setTexture(RenderPhaseType type, i32 index, const String& name);
 
 		//设置骨骼
 		void  setSkeleton(Skeleton* pSkeleton);
@@ -207,15 +204,6 @@ namespace Echo
 
 		// 是否可见
 		bool  isVisible() { return m_IsVisible; }
- 
-		// 设置光照图纹理
-		void setLMTexture(ui32 subId, TextureRes* pTexture, ui32 lmID = 0);
-
-		// 设置光照图相关参数
-		void setLightMapUVBias(i32 subId, const Vector4& lmUVparam1, const Vector3& scale1, const Vector4& lmUVparam2 = Vector4::ZERO, const Vector3& scale2 = Vector3::ONE);
-
-		// 卸载光照图纹理
-		void unloadLMTexture();
 
 		// 获取全局变量值
 		void* getGlobalUniformValue(const String& name, i32 subMesh, bool isUIModel = false);
@@ -237,11 +225,8 @@ namespace Echo
 		// 设置加载完成状态.
 		void setEnable(bool isEnable) { m_isEnable = isEnable; }
 
-		void setUseXRay(bool state, Vector4* color = NULL);
-
 		// 获取烘焙配置
 		LightmassConfigArray& getLightmassConfig() { return m_info.m_lightmassConfig; }
-
 
 		void updateCameraPos();
 
@@ -250,32 +235,6 @@ namespace Echo
 		void execute_render();
 
 	public:
-		/**
-		\Create Phase by Phase, Used for Model replace MaterialInsts.
-		\param[name] used to remember the result
-		\param[materialTemplate]
-		\param[srcPhase] srcPhase used for create new phase
-		\ return true if succed else false
-		*/
-		bool createLodRenderPhase(const String& name, const String& materialName, bool isDeriveUniformsFromOtherPhase=false, RenderPhase* parentPhase=nullptr);
-
-		/**
-		\ Get Lod Phase
-		*/
-		RenderPhase* getLodPhase(const String& name);
-		
-		/**
-		\ Delete Phase by Name
-		*/
-		bool deleteLodPhase(const String& phaseName);
-
-		/**
-		\ Swap Phase 
-		*/
-		bool swapPhase(const String& phaseName, RenderPhaseType phaseSlot);
-		
-		bool swapPhase(RenderPhase* phase, RenderPhaseType phaseSlot);
-
 		void updateRenderablesPosition();
 
 		void resetRenderInput();
@@ -303,9 +262,6 @@ namespace Echo
 		//
 		void applyLoadedLightArrayData();
 
-		//
-		void recursionDymMat(int type, ui32 num, ui32 flag, ui32 exp, String& matName, String& macros);
-
 	public:
 		Model(const Model::Info& modelInfo);
 		~Model();
@@ -326,7 +282,6 @@ namespace Echo
 	private:
 		Info						m_info;				// 模型信息(加载存储)
 		RenderPhaseArray			m_phases;			// 渲染阶段
-		RenderPhaseMap				m_phasesLod;		// 渲染阶段(LOD)
 		Mesh*						m_mesh;				// 关联模型
 
 		typedef std::unique_ptr<LightArray, decltype(&DeleteLightArray)> LightArrayPtr; 
@@ -353,9 +308,7 @@ namespace Echo
 		Matrix4						m_matWVPSky;			// 天空盒使用世界观察投影矩阵
 		float						m_currentTime;			// 当前时间(生命)
 		Box							m_worldBox;				// 世界包围盒
-
 		bool						m_isEnable;				// 是否加载完成。
-
 		bool						m_isInShowdownBox;  // 是否在投射阴影包围盒中
 		ui32						m_dymOffset;
 	};

@@ -27,7 +27,7 @@
 #include "Render/Material.h"
 #include "engine/core/render/RenderTargetManager.h"
 #include "Engine/core/Render/TextureResManager.h"
-#include "Engine/core/Render/MaterialInstance.h"
+#include "Engine/core/Render/MaterialInst.h"
 #include "render/RenderQueueGroup.h"
 
 namespace Echo

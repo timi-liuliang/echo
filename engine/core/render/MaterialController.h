@@ -8,7 +8,7 @@
 #include <engine/core/Util/Array.hpp>
 #include "render/RenderDef.h"
 #include "render/ShaderProgram.h"
-#include "MaterialInstance.h"
+#include "MaterialInst.h"
 
 namespace Echo
 {
@@ -17,7 +17,7 @@ namespace Echo
 	 */
 	class ECHO_EXPORT_RENDER MaterialController
 	{
-		friend class MaterialInstance;
+		friend class MaterialInst;
 	public:
 		// 材质控制类型
 		enum MATERIAL_CONTROL_TYPE
@@ -57,7 +57,7 @@ namespace Echo
 		};
 
 	public:
-		explicit MaterialController(MaterialInstance* ins);
+		explicit MaterialController(MaterialInst* ins);
 		virtual ~MaterialController();
 
 		// 更新函数
@@ -67,20 +67,20 @@ namespace Echo
 		virtual void GetPropertyList(StringArray& list);
 		virtual bool GetPropertyType(const String& name, ShaderParamType& type);
 
-		virtual MaterialController*	Clone(MaterialInstance* instance);
+		virtual MaterialController*	Clone(MaterialInst* instance);
 
 		virtual char* getControllerName() const; 
 
 		// 设置控制的参数
-		virtual void SetControlUniform(MaterialInstance::uniform* uniform){ m_PUniform = uniform;}
+		virtual void SetControlUniform(MaterialInst::uniform* uniform){ m_PUniform = uniform;}
 
 		virtual void SetControlUniformName(const String& name){ m_uniformName = name; }
 
 		// 设置控制器的材质实例;
-		void SetMaterialInstance(MaterialInstance* instance) { m_MateIns = instance; }
+		void SetMaterialInstance(MaterialInst* instance) { m_MateIns = instance; }
 
 		// 获取控制参数
-		MaterialInstance::uniform*	GetControlUniform(){return m_PUniform;}
+		MaterialInst::uniform*	GetControlUniform(){return m_PUniform;}
 
 		//获取控制器类型
 		MATERIAL_CONTROL_TYPE	GetControlType() { return m_controlType;}	
@@ -91,8 +91,8 @@ namespace Echo
 
 	protected:
 		MATERIAL_CONTROL_TYPE		m_controlType;
-		MaterialInstance*			m_MateIns;
-		MaterialInstance::uniform*	m_PUniform;
+		MaterialInst*			m_MateIns;
+		MaterialInst::uniform*	m_PUniform;
 		String						m_uniformName;
 
 	protected:
@@ -117,7 +117,7 @@ namespace Echo
 	class RollLoopController : public MaterialController
 	{
 	public:
-		explicit RollLoopController(MaterialInstance* ins);
+		explicit RollLoopController(MaterialInst* ins);
 		~RollLoopController();
 
 		virtual void Update(ui32 delta);
@@ -126,10 +126,10 @@ namespace Echo
 		virtual void GetPropertyList(StringArray& list);
 		virtual bool GetPropertyType(const String& name, ShaderParamType& type);
 
-		virtual RollLoopController* Clone(MaterialInstance* instance);
+		virtual RollLoopController* Clone(MaterialInst* instance);
 
 
-		virtual void SetControlUniform(MaterialInstance::uniform* uniform);
+		virtual void SetControlUniform(MaterialInst::uniform* uniform);
 	protected:
 		void initPropertyListMap();
 
@@ -145,11 +145,11 @@ namespace Echo
 		TimeController& operator=(const TimeController& rhs);
 
 	public:
-		explicit TimeController(MaterialInstance* ins);
+		explicit TimeController(MaterialInst* ins);
 		~TimeController();
 
 		virtual void Update(ui32 delta) override;;
-		virtual TimeController* Clone(MaterialInstance* instance) override;
+		virtual TimeController* Clone(MaterialInst* instance) override;
 		virtual char* getControllerName() const override;
 
 	private:
@@ -163,7 +163,7 @@ namespace Echo
 		LinearController& operator=(const LinearController& rhs); 
 
 	public: 
-		explicit LinearController(MaterialInstance* instance); 
+		explicit LinearController(MaterialInst* instance); 
 		~LinearController(); 
 
 	public: 
@@ -175,7 +175,7 @@ namespace Echo
 		virtual void GetPropertyList(StringArray& list) override; 
 		virtual bool GetPropertyType(const String& name, ShaderParamType& type) override;
 
-		virtual LinearController* Clone(MaterialInstance* instance) override;
+		virtual LinearController* Clone(MaterialInst* instance) override;
 
 		virtual char* getControllerName() const override; 
 
@@ -230,7 +230,7 @@ namespace Echo
 		BezierController& operator=(const BezierController& rhs); 
 
 	public: 
-		explicit BezierController(MaterialInstance* instance); 
+		explicit BezierController(MaterialInst* instance); 
 		~BezierController(); 
 
 	public:
@@ -242,7 +242,7 @@ namespace Echo
 		virtual void GetPropertyList(StringArray& list) override;
 		virtual bool GetPropertyType(const String& name, ShaderParamType& type) override;
 
-		virtual BezierController* Clone(MaterialInstance* instance) override;
+		virtual BezierController* Clone(MaterialInst* instance) override;
 	
 		virtual char* getControllerName() const override; 
 
@@ -307,7 +307,7 @@ namespace Echo
 		ScriptController& operator=(const ScriptController& rhs);
 
 	public:
-		explicit ScriptController(MaterialInstance* instance);
+		explicit ScriptController(MaterialInst* instance);
 		~ScriptController();
 
 	public:
@@ -319,7 +319,7 @@ namespace Echo
 		virtual void GetPropertyList(StringArray& list) override;
 		virtual bool GetPropertyType(const String& name, ShaderParamType& type) override;
 
-		virtual ScriptController* Clone(MaterialInstance* instance) override;
+		virtual ScriptController* Clone(MaterialInst* instance) override;
 
 		virtual char* getControllerName() const; 
 

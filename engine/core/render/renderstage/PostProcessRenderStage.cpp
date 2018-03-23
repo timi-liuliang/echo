@@ -4,7 +4,7 @@
 #include "rapidxml/rapidxml.hpp"
 #include "Engine/core/Render/VRModeAUX.h"
 #include "Engine/core/Render/RenderTargetManager.h"
-#include "Engine/core/Render/MaterialInstance.h"
+#include "Engine/core/Render/MaterialInst.h"
 #include "Engine/core/main/Root.h"
 
 namespace Echo

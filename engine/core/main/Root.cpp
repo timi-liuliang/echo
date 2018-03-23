@@ -19,7 +19,7 @@
 #include "Engine/modules/Effect/EffectSystemManager.h"
 #include "engine/core/Util/Timer.h"
 #include "engine/core/render/render/Viewport.h"
-#include "Engine/core/Render/MaterialInstance.h"
+#include "Engine/core/Render/MaterialInst.h"
 #include "Engine/core/Render/RenderStage/RenderStageManager.h"
 #include "ProjectFile.h"
 #include "Engine/modules/Audio/FMODStudio/FSAudioManager.h"

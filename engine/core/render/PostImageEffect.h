@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core.h"
+#include "render/RenderInput.h"
 
 namespace rapidxml
 {
