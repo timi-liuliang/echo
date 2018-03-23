@@ -13,7 +13,7 @@ namespace Echo
 	 */
 	class Camera;
 	class ModelManager;
-	class MaterialInstance;
+	class MaterialInst;
 	class Mesh;
 	class RenderInput;
 	class Renderable;
@@ -103,8 +103,8 @@ namespace Echo
 		struct RenderPhase
 		{
 			String							m_tag;									// 阶段标识;
-			vector<MaterialInstance*>::type	m_materialInsts;						// 材质实例
-			vector<vector<MaterialInstance*>::type>::type	m_materialInsts_dym;	// 动态材质实例
+			vector<MaterialInst*>::type	m_materialInsts;						// 材质实例
+			vector<vector<MaterialInst*>::type>::type	m_materialInsts_dym;	// 动态材质实例
 			vector<RenderInput*>::type		m_renderInputs;							// 几何体数据
 			vector<Renderable*>::type		m_renderables;							// 可渲染对象
 
@@ -171,12 +171,12 @@ namespace Echo
 		void setInfo(const Model::Info& info) { m_info = info; }
 
 		// 获取材质实例
-		MaterialInstance* getMaterialInstance(RenderPhaseType type, i32 subMeshIdx) { return m_phases[type]->m_materialInsts[subMeshIdx]; }
+		MaterialInst* getMaterialInstance(RenderPhaseType type, i32 subMeshIdx) { return m_phases[type]->m_materialInsts[subMeshIdx]; }
 
 		size_t getMaterialInstanceNum(RenderPhaseType type) { return m_phases[type]->m_materialInsts.size(); }
 
 		// 设置材质实例
-		void setMaterialInstance(RenderPhaseType type, i32 subMeshIdx, MaterialInstance* mate);
+		void setMaterialInstance(RenderPhaseType type, i32 subMeshIdx, MaterialInst* mate);
 
 		// 设置Mesh
 		void setMesh(Mesh* mesh);
@@ -318,7 +318,7 @@ namespace Echo
 		void createRenderabeSM(bool isForUI);
 
 		// 创建材质实例
-		MaterialInstance* createMaterialInst(const String& materialName);
+		MaterialInst* createMaterialInst(const String& materialName);
 
 		// 应用材质数据
 		void applyLoadedMaterialInstanceData( RenderPhase& phase);

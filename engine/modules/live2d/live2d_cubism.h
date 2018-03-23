@@ -16,6 +16,8 @@ namespace Echo
 		virtual void update();
 
 	private:
-		void*		m_model;
+		void*			m_model;
+		Mesh*			m_mesh;			// Geometry Data for render
+		MaterialInst*	m_materialInst;	// Material Instance
 	};
 }

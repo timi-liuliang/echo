@@ -91,7 +91,7 @@ namespace Echo
 	// 更新
 	void Model::RenderPhase::update( ui32 delta)
 	{
-		for (MaterialInstance* matInst : m_materialInsts)
+		for (MaterialInst* matInst : m_materialInsts)
 		{
 			if ( matInst)
 				matInst->update(delta);
@@ -206,7 +206,7 @@ namespace Echo
 
 		if (exp == 0)
 		{
-			MaterialInstance* matInst = MaterialManager::instance()->createMaterialIst(matName, macros);
+			MaterialInst* matInst = MaterialManager::instance()->createMaterialIst(matName, macros);
 			matInst->prepareTexture();
 			m_phases[type]->m_materialInsts_dym[num].push_back(matInst);
 
@@ -245,7 +245,7 @@ namespace Echo
 				if (Echo::StringUtil::Equal(materialInstances[i], invalidTag, false))
 					continue;
 				
-				MaterialInstance* materialInst = createMaterialInst(materialInstances[i]);
+				MaterialInst* materialInst = createMaterialInst(materialInstances[i]);
 
 				// 动态材质实例
 				if (m_isUseDynamicMatIst)
@@ -286,7 +286,7 @@ namespace Echo
 	}
 
 	// 创建材质实例
-	MaterialInstance* Model::createMaterialInst(const String& materialName)
+	MaterialInst* Model::createMaterialInst(const String& materialName)
 	{
 		String macros;
 		if (m_info.isSkinModel())
@@ -304,7 +304,7 @@ namespace Echo
 		if (m_info.m_isForUI)
 			macros += "IS_FOR_UI;";
 
-		MaterialInstance* materialInst = MaterialManager::instance()->createMaterialIst(materialName, macros);
+		MaterialInst* materialInst = MaterialManager::instance()->createMaterialIst(materialName, macros);
 		materialInst->prepareTexture();
 		//materialInst->loadTexture();
 		return materialInst;
@@ -501,7 +501,7 @@ namespace Echo
 	}
 
 	// 设置材质实例
-	void Model::setMaterialInstance(RenderPhaseType type, i32 subMeshIdx, MaterialInstance* mate)
+	void Model::setMaterialInstance(RenderPhaseType type, i32 subMeshIdx, MaterialInst* mate)
 	{
 		m_phases[type]->m_materialInsts[subMeshIdx] = mate;
 	}
@@ -509,7 +509,7 @@ namespace Echo
 	// 设置纹理
 	void Model::setTexture(RenderPhaseType type, i32 subMeshIdx, i32 index, const String& name)
 	{
-		MaterialInstance* materialInst = m_phases[type]->m_materialInsts[subMeshIdx];
+		MaterialInst* materialInst = m_phases[type]->m_materialInsts[subMeshIdx];
 		EchoAssert(materialInst);
 		EchoAssert(m_mesh);
 
@@ -740,7 +740,7 @@ namespace Echo
 				if (m_mesh->isSkinned())
 					MACROS += "SKIN_MESH;";
 
-				MaterialInstance* materialInst = MaterialManager::instance()->createMaterialIst(
+				MaterialInst* materialInst = MaterialManager::instance()->createMaterialIst(
 					"official_shadowmap.material", MACROS.c_str());
 				materialInst->applyLoadedData(); // --> must sync.
 				materialInst->loadTexture();
@@ -1544,7 +1544,7 @@ namespace Echo
 			ui32 size = phase.m_materialInsts.size();
 			if (size > subId)
 			{
-				MaterialInstance* material = phase.m_materialInsts[subId];
+				MaterialInst* material = phase.m_materialInsts[subId];
 				if (!material)
 				{
 					ui32 size = phase.m_materialInsts_dym[subId].size();
@@ -1604,7 +1604,7 @@ namespace Echo
 			size_t size = phase.m_materialInsts.size();
 			for (size_t i = 0; i < size; ++i)
 			{
-				MaterialInstance* material = phase.m_materialInsts[i];
+				MaterialInst* material = phase.m_materialInsts[i];
 				if ( i < phase.m_renderables.size() && material && material->isMacroUsed("USE_LIGHTMAP"))
 				{
 					Renderable* renderable = phase.m_renderables[i];
@@ -1635,7 +1635,7 @@ namespace Echo
 					size_t size = phase.m_materialInsts_dym[i].size();
 					for (size_t j = 0; j < size; ++j)
 					{
-						MaterialInstance* material1 = phase.m_materialInsts_dym[i][j];
+						MaterialInst* material1 = phase.m_materialInsts_dym[i][j];
 						if (i < phase.m_renderables.size() && material1 )
 						{
 							if (material1->isMacroUsed("USE_LIGHTMAP"))
@@ -1749,7 +1749,7 @@ namespace Echo
 			phase->m_materialInsts.resize(subMeshNum);
 			for (int i = 0; i < subMeshNum; i++)
 			{
-				MaterialInstance* materialInst = createMaterialInst(materialName);
+				MaterialInst* materialInst = createMaterialInst(materialName);
 				if (!materialInst)
 				{
 					EchoLogError("Model::createLodRenderPhase failed");
@@ -1759,7 +1759,7 @@ namespace Echo
 				// 参数继承
 				if (isDeriveUniformsFromOtherPhase)
 				{
-					MaterialInstance* matOld = parentPhase->m_materialInsts[i];
+					MaterialInst* matOld = parentPhase->m_materialInsts[i];
 					if (!matOld)
 					{
 						ui32 size = parentPhase->m_materialInsts_dym[i].size();
