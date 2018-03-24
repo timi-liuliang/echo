@@ -311,13 +311,13 @@ namespace Math
 		return (Abs<double>(lhs - rhs) <= Echo::Math::EPSILON);
 	}
 
-	ECHO_EXPORT_FOUNDATION Real UnitRandom(unsigned int uiSeed = 0);
+	Real UnitRandom(unsigned int uiSeed = 0);
 
 	// [-1,1)
-	ECHO_EXPORT_FOUNDATION Real SymmetricRandom(unsigned int uiSeed = 0);
+	Real SymmetricRandom(unsigned int uiSeed = 0);
 
 	// [min,max)
-	ECHO_EXPORT_FOUNDATION Real IntervalRandom(Real fMin, Real fMax, unsigned int uiSeed = 0);
+	Real IntervalRandom(Real fMin, Real fMax, unsigned int uiSeed = 0);
 
 	// Write a n*8 bits integer value to memory in native endian.
 	inline void IntWrite(void* pDest, int n, ui32 value)

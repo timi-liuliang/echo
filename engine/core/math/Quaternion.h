@@ -10,7 +10,7 @@ namespace Echo
 	*/
 	class Vector3;
 	class Vector4;
-	class ECHO_EXPORT_FOUNDATION Quaternion
+	class Quaternion
 	{
 	public:
 		union

@@ -1,10 +1,5 @@
 #include "live2d_cubism.h"
 
-extern "C"
-{
-	#include "thirdparty\live2d\Cubism31SdkNative-EAP5\Core\include\Live2DCubismCore.h"
-}
-
 namespace Echo
 {
 	Live2dCubism::Live2dCubism()
@@ -13,7 +8,7 @@ namespace Echo
 		, m_mesh(nullptr)
 		, m_materialInst(nullptr)
 	{
-
+		setMoc("Res://girl.moc");
 	}
 
 	Live2dCubism::~Live2dCubism()
@@ -27,8 +22,10 @@ namespace Echo
 	}
 
 	// set moc
-	void setMoc(const String& res)
+	void Live2dCubism::setMoc(const String& res)
 	{
+		MemoryReader memReader( res);
+
 		//m_moc = csmReviveMocInPlace(void* address, const unsigned int size);
 	}
 

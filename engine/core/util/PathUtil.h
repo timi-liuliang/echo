@@ -8,7 +8,7 @@ namespace Echo
 	/**
 	 * 路径处理函数
 	 */
-	class ECHO_EXPORT_FOUNDATION PathUtil
+	class PathUtil
 	{
 	public:
 		static const unsigned int	MAX_PATHNAME;		//!< 1024

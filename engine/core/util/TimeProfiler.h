@@ -9,7 +9,7 @@ namespace Echo
 	/**
 	 * TimeProfiler
 	 */
-	class ECHO_EXPORT_FOUNDATION TimeProfiler
+	class TimeProfiler
 	{
 	public:
 		// ¸ú×ÙÊý¾Ý

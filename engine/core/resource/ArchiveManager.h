@@ -9,7 +9,7 @@ namespace Echo
 	/**
 	 * ¥Êµµπ‹¿Ì∆˜
 	 */
-	class ECHO_EXPORT_FOUNDATION ArchiveManager : public Singleton<ArchiveManager>
+	class ArchiveManager : public Singleton<ArchiveManager>
 	{
 		typedef map<String, ArchiveFactory*>::type ArchiveFactoryMap;
 		typedef map<String, Archive*>::type ArchiveMap;

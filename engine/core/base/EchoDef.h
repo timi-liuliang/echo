@@ -46,20 +46,6 @@
 #	error "Couldn't recognize platform"
 #endif
 
-#ifdef ECHO_PLATFORM_WINDOWS
-#	ifdef ECHO_CORE_STATIC 
-#		define ECHO_EXPORT_FOUNDATION
-#	else
-#		ifdef ECHO_CORE_EXPORTS
-#			define ECHO_EXPORT_FOUNDATION //__declspec(dllexport)
-#		else
-#			define ECHO_EXPORT_FOUNDATION //__declspec(dllimport)
-#		endif
-#	endif
-#else
-#	define ECHO_EXPORT_FOUNDATION
-#endif
-
 #define INLINE inline
 
 // Initial compiler-related stuff to set.

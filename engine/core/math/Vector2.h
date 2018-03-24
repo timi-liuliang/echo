@@ -7,7 +7,7 @@
 
 namespace Echo
 {
-	class ECHO_EXPORT_FOUNDATION Vector2
+	class Vector2
 	{
 	public:
 

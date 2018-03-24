@@ -12,7 +12,7 @@
 
 namespace Echo
 {
-	class ECHO_EXPORT_FOUNDATION Time: public Singleton<Time>
+	class Time: public Singleton<Time>
 	{	
 	public:
 		static Time* instance();

@@ -15,7 +15,7 @@ namespace Echo
 	// out 返回点
 	// v1,v2,v3,v4 控制点
 	// amount      控制量
-	Vector3 ECHO_EXPORT_FOUNDATION Bezier3( Vector3& out, const Vector3& v1, const Vector3& v2, const Vector3& v3, const Vector3& v4, float amount);
+	Vector3 Bezier3( Vector3& out, const Vector3& v1, const Vector3& v2, const Vector3& v3, const Vector3& v4, float amount);
 
 	//---------------------------------------------------------------
 	// Catmull_Rom3 2011-07-12  帝林
@@ -33,12 +33,12 @@ namespace Echo
 	// out 返回点
 	// v1,v2,v3,v4 控制点
 	// amount      控制量
-	Vector3 ECHO_EXPORT_FOUNDATION CatmullRom3(Vector3& out, const Vector3& v1, const Vector3& v2, const Vector3& v3, const Vector3& v4, float amount);
+	Vector3 CatmullRom3(Vector3& out, const Vector3& v1, const Vector3& v2, const Vector3& v3, const Vector3& v4, float amount);
 
-	Vector3 ECHO_EXPORT_FOUNDATION Bezier2(Vector3& out, const Vector3& p0, const Vector3& p1, const Vector3& p2, float t);
+	Vector3 Bezier2(Vector3& out, const Vector3& p0, const Vector3& p1, const Vector3& p2, float t);
 
 	// 计算经过 p0 p1 p2 的二次贝塞尔曲线的控制点
-	Vector3 ECHO_EXPORT_FOUNDATION Bezier2TensionPoint(Vector3& out, const Vector3& p0, const Vector3& p1, const Vector3& p2);
+	Vector3 Bezier2TensionPoint(Vector3& out, const Vector3& p0, const Vector3& p1, const Vector3& p2);
 }
 
 #endif

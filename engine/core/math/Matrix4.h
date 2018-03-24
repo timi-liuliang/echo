@@ -6,7 +6,7 @@
 namespace Echo
 {
 	class Quaternion;
-	class ECHO_EXPORT_FOUNDATION Matrix4
+	class Matrix4
 	{
 	public:
 		union

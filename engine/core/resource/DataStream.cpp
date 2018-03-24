@@ -719,7 +719,7 @@ namespace Echo
 	}
 
 	// 构造函数
-	MemoryReader::MemoryReader(const char* file, bool isUseResGroupMgr)
+	MemoryReader::MemoryReader(const String& file, bool isUseResGroupMgr)
 	{
 		// 加载数据
 		DataStream* stream = NULL;

@@ -221,7 +221,7 @@ namespace Echo
 	class MemoryReader
 	{
 	public:
-		MemoryReader( const char* file, bool isUseResGroupMgr=true);
+		MemoryReader( const String& file, bool isUseResGroupMgr=true);
 		~MemoryReader();
 
 		// 获取数据指针

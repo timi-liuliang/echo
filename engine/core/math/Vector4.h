@@ -5,7 +5,7 @@
 
 namespace Echo
 {
-	class ECHO_EXPORT_FOUNDATION Vector4
+	class Vector4
 	{
 	public:
 		union

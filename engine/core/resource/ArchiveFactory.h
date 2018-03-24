@@ -6,7 +6,7 @@
 namespace Echo
 {
 
-	class ECHO_EXPORT_FOUNDATION ArchiveFactory
+	class ArchiveFactory
 	{
 	public:
 		/** Returns the factory type.

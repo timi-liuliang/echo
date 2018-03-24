@@ -4,6 +4,12 @@
 #include "engine/core/render/mesh/Mesh.h"
 #include "engine/core/render/MaterialInst.h"
 
+extern "C"
+{
+#include "thirdparty\live2d\Cubism31SdkNative-EAP5\Core\include\Live2DCubismCore.h"
+}
+
+
 namespace Echo
 {
 	class Live2dCubism : public Node

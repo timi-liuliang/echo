@@ -7,7 +7,7 @@
 
 namespace Echo
 {
-	class ECHO_EXPORT_FOUNDATION DefaultImpl
+	class DefaultImpl
 	{
 	public:
 		static void*	allocBytes(size_t count, const char* file, int line, const char* func);
@@ -17,7 +17,7 @@ namespace Echo
 		static void		deallocBytesAligned(size_t align, void* ptr);
 	};
     
-	class ECHO_EXPORT_FOUNDATION DefaultImplNoMemTrace
+	class DefaultImplNoMemTrace
 	{
 	public:
 		static void*	allocBytes(size_t count);
@@ -27,7 +27,7 @@ namespace Echo
 		static void		deallocBytesAligned(size_t align, void* ptr);
 	};
     
-	class ECHO_EXPORT_FOUNDATION DefaultPolicy
+	class DefaultPolicy
 	{
 	public:
 		static inline void* allocateBytes(size_t count, const char* file = NULL, int line = 0, const char* func = NULL)
@@ -55,7 +55,7 @@ namespace Echo
 		}
 	};
     
-	class ECHO_EXPORT_FOUNDATION DefaultNoMemTracePolicy
+	class DefaultNoMemTracePolicy
 	{
 	public:
 		static inline void* allocateBytes(size_t count)

@@ -145,10 +145,6 @@ namespace Echo
 
 		try
 		{
-			EchoLogDebug("Loading charset encoding...");
-			_EncoderInit();
-			EchoLogDebug("Charset encoding loaded success.");
-
 			if (!PathUtil::IsFileExist( cfg.projectFile))
 			{
 				EchoLogError("Set root path failed [%s], initialise Echo Engine failed.", cfg.projectFile.c_str());
