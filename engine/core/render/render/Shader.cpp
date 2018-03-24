@@ -1,6 +1,6 @@
 #include "Render/Shader.h"
 #include "engine/core/Util/LogManager.h"
-#include <engine/core/resource/ResourceGroupManager.h>
+#include <engine/core/io/IO.h>
 #include "engine/core/Util/PathUtil.h"
 #include "Render/Renderer.h"
 #include "Render/ShaderProgram.h"
@@ -12,7 +12,7 @@ namespace Echo
 		: m_pProgram(NULL)
 		, m_filename(filename)
 	{
-		DataStream* pShaderStream = ResourceGroupManager::instance()->openResource(filename);
+		DataStream* pShaderStream = IO::instance()->open(filename);
 		if(!pShaderStream)
 		{
 			EchoException("Shader file isn't exist. [%s]", filename.c_str());

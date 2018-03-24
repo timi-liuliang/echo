@@ -4,9 +4,8 @@
 #include "Engine/core/Util/Exception.h"
 #include "Engine/core/Util/LogManager.h"
 #include "Engine/core/Util/AssertX.h"
-#include "Engine/core/resource/Archive.h"
-#include "Engine/core/resource/ArchiveManager.h"
-#include "Engine/core/resource/ResourceGroupManager.h"
+#include "Engine/core/io/archive/Archive.h"
+#include "Engine/core/io/IO.h"
 #include "Engine/core/Memory/MemAllocDef.h"
 #include "engine/core/Util/PathUtil.h"
 

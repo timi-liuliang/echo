@@ -1,6 +1,6 @@
 #include "Engine/core/Render/PixelFill.h"
 #include "engine/core/render/TextureResManager.h"
-#include "engine/core/resource/ResourceGroupManager.h"
+#include "engine/core/io/IO.h"
 #include "engine/core/Util/LogManager.h"
 #include "rapidxml/rapidxml.hpp"
 #include "rapidxml/rapidxml_utils.hpp"
@@ -25,7 +25,7 @@ namespace Echo
 	{
 		try
 		{
-			DataStream* pXMLStream = ResourceGroupManager::instance()->openResource(cfgFile);
+			DataStream* pXMLStream = IO::instance()->open(cfgFile);
 			if(pXMLStream == NULL)
 			{
 				EchoLogError("PixelFill file not found [%s].", cfgFile.c_str());

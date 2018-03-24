@@ -3,7 +3,6 @@
 #include "engine/core/Math/Vector3.h"
 #include "engine/core/Math/Vector4.h"
 #include "engine/core/Math/Quaternion.h"
-#include "Encoder.h"
 
 #include <cmath>
 #include <cstdlib>

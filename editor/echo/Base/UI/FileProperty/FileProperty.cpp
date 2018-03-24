@@ -27,7 +27,7 @@ namespace Studio
 	// 设置文件名
 	void FilePropertyDialog::setFile(const char* fileName)
 	{
-		Echo::String fileFullName = EchoResourceManager->getFileLocation(fileName);
+		Echo::String fileFullName;// = EchoResourceManager->getFileLocation(fileName);
 
 		QFileInfo inputFileInfo(fileFullName.c_str());
 		if (inputFileInfo.isFile())

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <engine/core/resource/DataStream.h>
+#include <engine/core/io/DataStream.h>
 #include "engine/core/Thread/Threading.h"
 
 #define MAX_FILE_NODE_NUM 20000

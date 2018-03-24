@@ -2,13 +2,8 @@
 #include "engine/core/Memory/MemManager.h"
 #include "Engine/core/main/Root.h"
 #include "engine/core/Util/PathUtil.h"
-#include "engine/core/Util/Encoder.h"
 #include "engine/core/Util/Exception.h"
-#include "engine/core/resource/ArchiveManager.h"
-#include "engine/core/Resource/FileSystem.h"
-#include "Engine/core/Resource/ZipArchive.h"
-#include "Engine/core/Resource/APKFileSystem.h"
-#include "engine/core/resource/ResourceGroupManager.h"
+#include "engine/core/io/IO.h"
 #include "Engine/core/Resource/EchoThread.h"
 #include "engine/core/Util/LogManager.h"
 #include "engine/core/render/render/ImageCodecMgr.h"
@@ -23,8 +18,6 @@
 #include "Engine/core/Render/RenderStage/RenderStageManager.h"
 #include "ProjectFile.h"
 #include "Engine/modules/Audio/FMODStudio/FSAudioManager.h"
-#include "Engine/core/Resource/HttpFileSystemArchive.h"
-#include "Engine/core/Resource/7zipArchive.h"
 #include "rapidxml/rapidxml.hpp"
 #include "rapidxml/rapidxml_utils.hpp"
 #include "rapidxml/rapidxml_print.hpp"
@@ -76,13 +69,7 @@ namespace Echo
 		, m_curFameCount(0)
 		, m_fps(0)
 		, m_maxFrameTime(0)
-		, m_FileSystemArchiveFactory(NULL)
-		, m_httpFileSystemArchiveFactory(NULL)
-		, m_7zipArchiveFactory(nullptr)
-		, m_ZipPackArchiveFactory(NULL)
-		, m_ApkFileSystemArchiveFactory(NULL)
-		, m_ArchiveManager(NULL)
-		, m_ResourceGroupManager(NULL)
+		, m_io(NULL)
 		, m_Timer(NULL)
 		, m_EffectSystemManager(NULL)
 		, m_StreamThreading(NULL)
@@ -100,7 +87,6 @@ namespace Echo
 		, m_imageCodecManager(NULL)
 		, m_materialManager(NULL)
 		, m_audioManager(NULL)
-		, m_netConnectionManager(NULL)
 		, m_textureResManager(NULL)
 		, m_renderTargetManager(NULL)
 		, m_projectFile(NULL)
@@ -161,36 +147,10 @@ namespace Echo
 			m_materialManager	= EchoNew( MaterialManager);
 			m_skeletonManager	= EchoNew( SkeletonManager);
 			m_sceneManager		= EchoNew( SceneManager);
-			m_netConnectionManager = EchoNew(NetConnectionManager); 
 			m_postEffectManager = EchoNew(PostEffectManager);
-
-			m_ArchiveManager = EchoNew(ArchiveManager);
-			m_FileSystemArchiveFactory = EchoNew(FileSystemArchiveFactory);
-			m_ZipPackArchiveFactory = EchoNew(ZipArchiveFactory);
-			m_ArchiveManager->addArchiveFactory(m_FileSystemArchiveFactory);
-			m_ArchiveManager->addArchiveFactory(m_ZipPackArchiveFactory);
-
-#if defined(ECHO_ARCHIVE_SUPPORT_7ZIP) && !defined(ECHO_ENGINE_MIN)
-			m_7zipArchiveFactory = EchoNew(SzArchiveFactory);
-			m_ArchiveManager->addArchiveFactory(m_7zipArchiveFactory);
-#endif
-
-#if ECHO_USE_LIBEVENT
-			m_httpFileSystemArchiveFactory = EchoNew(HttpFileSystemArchiveFactory);
-			m_ArchiveManager->addArchiveFactory(m_httpFileSystemArchiveFactory);
-#endif
-			// 外部存档
-			for (size_t i = 0; i<cfg.externalArchiveFactorys.size(); i++)
-				m_ArchiveManager->addArchiveFactory(cfg.externalArchiveFactorys[i]);
-
-#ifdef ECHO_PLATFORM_ANDROID
-			m_ApkFileSystemArchiveFactory = EchoNew(APKFileSystemArchiveFactory((AAssetManager*)cfg.pAssetMgr));
-			m_ArchiveManager->addArchiveFactory(m_ApkFileSystemArchiveFactory);
-#endif
-			m_ResourceGroupManager = EchoNew(ResourceGroupManager);
+			m_io = EchoNew(IO);
 			m_EffectSystemManager = EchoNew(EffectSystemManager);
 			m_StreamThreading = EchoNew(StreamThread);
-			//SetThreadAffinityMask(1);
 		}
 		catch (const Exception &e)
 		{
@@ -211,9 +171,6 @@ namespace Echo
 		loadAllBankFile();
 
 		setEnableFrameProfile(true);
-
-#ifdef ECHO_PROFILER
-#endif
 
 		m_isInited = true;
 
@@ -240,6 +197,8 @@ namespace Echo
 			m_projectFile = EchoNew(ProjectFile);
 			m_projectFile->load(projectFile);
 			m_projectFile->setupResource();
+
+			IO::instance()->setResPath(m_resPath);
 		}
 		else
 		{
@@ -405,7 +364,6 @@ namespace Echo
 		if (m_audioManager)
 			m_audioManager->release();
 
-		EchoSafeDelete(m_netConnectionManager, NetConnectionManager); 
 		EchoSafeDelete(m_audioManager, FSAudioManager);
 		EchoSafeDelete(m_sceneManager, SceneManager);
 		EchoSafeDelete(m_modelManager, ModelManager);
@@ -416,15 +374,7 @@ namespace Echo
 		EchoSafeDelete(m_imageCodecManager, ImageCodecMgr);
 		EchoSafeDelete(m_openMPTaskMgr, OpenMPTaskMgr);
 
-		EchoSafeDelete(m_ResourceGroupManager, ResourceGroupManager); //ResourceGroupManager的析构需要用到ArchiveManager
-		EchoSafeDelete(m_ArchiveManager, ArchiveManager);
-		EchoSafeDelete(m_ZipPackArchiveFactory, ArchiveFactory);
-		EchoSafeDelete(m_FileSystemArchiveFactory, ArchiveFactory);
-		EchoSafeDelete(m_httpFileSystemArchiveFactory, ArchiveFactory);
-#if defined(ECHO_ARCHIVE_SUPPORT_7ZIP) && !defined(ECHO_ENGINE_MIN)
-		EchoSafeDelete(m_7zipArchiveFactory, ArchiveFactory);
-#endif
-		EchoSafeDelete(m_ApkFileSystemArchiveFactory, ArchiveFactory);
+		EchoSafeDelete(m_io, IO); //ResourceGroupManager的析构需要用到ArchiveManager
 		Time::destroyInstance();
 		EchoSafeDelete(m_postEffectManager, PostEffectManager);
 
@@ -459,23 +409,21 @@ namespace Echo
 		MemoryManager::destroyInstance();
 	}
 
-	const String& Root::getRootPath() const
+	const String& Root::getResPath() const
 	{
 		return m_resPath;
 	}
 
-	const String& Root::getWriteablePath() const
+	const String& Root::getUserPath() const
 	{
-#ifdef ECHO_PLATFORM_WINDOWS
-		return m_resPath;
-#else
-		return m_strWriteablePath;
-#endif
+		return m_userPath;
 	}
 
-	void Root::setWriteablePath(const String& strPath)
+	void Root::setUserPath(const String& strPath)
 	{
 		m_userPath = strPath;
+
+		IO::instance()->setUserPath(m_userPath);
 	}
 
 	void Root::SetPhoneinformation(int max, int free, String tex)

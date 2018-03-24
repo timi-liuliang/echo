@@ -2,7 +2,7 @@
 #include "engine/core/Util/Exception.h"
 #include "Render/Material.h"
 #include "Engine/core/Scene/Scene_Manager.h"
-#include "engine/core/resource/DataStream.h"
+#include "engine/core/io/DataStream.h"
 #include "EffectSystemManager.h"
 #include "render/RenderQueueGroup.h"
 

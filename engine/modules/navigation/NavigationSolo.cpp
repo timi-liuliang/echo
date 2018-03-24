@@ -6,7 +6,7 @@
 #include "DetourCommon.h"
 #include "InputGeometryData.h"
 #include "engine/core/Util/LogManager.h"
-#include "engine/core/resource/DataStream.h"
+#include "engine/core/io/DataStream.h"
 #include "DetourCrowd.h"
 #include "DetourNavMesh.h"
 #include "DetourNavMeshQuery.h"
@@ -436,7 +436,7 @@ namespace Echo
 	// ╪сть
 	void NavigationSolo::load(const String& filePath)
 	{
-		DataStream* pStream = ResourceGroupManager::instance()->openResource(filePath);
+		DataStream* pStream = IO::instance()->open(filePath);
 		if (pStream)
 		{
 			int navDataSize = 0;

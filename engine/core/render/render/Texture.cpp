@@ -1,5 +1,5 @@
-#include <engine/core/resource/ResourceGroupManager.h>
-#include <engine/core/resource/DataStream.h>
+#include <engine/core/io/IO.h>
+#include <engine/core/io/DataStream.h>
 #include <engine/core/Util/PathUtil.h>
 #include <engine/core/Base/EchoDef.h>
 #include "Render/Texture.h"
@@ -340,7 +340,7 @@ namespace Echo
 		size_t offset = 0;
 		for (int i = 0; i < 6; i++)
 		{
-			DataStream* pStream = ResourceGroupManager::instance()->openResource(m_surfaceFilename[i]);
+			DataStream* pStream = IO::instance()->open(m_surfaceFilename[i]);
 			if (!pStream) return false;
 
 			if (!m_pPreparedData)

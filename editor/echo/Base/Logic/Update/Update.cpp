@@ -1,6 +1,6 @@
 #include "Update.h"
 #include <engine/core/Base/EchoDef.h>
-#include <engine/core/resource/DataStream.h>
+#include <engine/core/io/DataStream.h>
 #include <engine/core/Util/PathUtil.h>
 #include <QMessageBox>
 #include <QApplication>

@@ -4,7 +4,7 @@
 #include "engine/core/Util/LogManager.h"
 #include "Engine/core/Geom/GeomLib.h"
 #include "Engine/modules/Anim/AnimKeyFrame.h"
-#include "engine/core/resource/ResourceGroupManager.h"
+#include "engine/core/io/IO.h"
 #include "AnimManager.h"
 #include "Animation.h"
 
@@ -83,7 +83,7 @@ namespace Echo
 #ifdef LIULIANG_ANIMATION_MMAP
 		m_type = AT_SKELETON;
 
-		m_stream = ResourceGroupManager::instance()->openResource(getName());
+		m_stream = IO::instance()->open(getName());
 		m_data = (const char*)m_stream->getBuffer();
 		m_size = m_stream->size();
 
@@ -457,7 +457,7 @@ namespace Echo
 	void Animation::optAnimation()
 	{
 #ifdef ECHO_PLATFORM_WINDOWS
-		String filePath = ResourceGroupManager::instance()->getFileLocation(getName());
+		String filePath = IO::instance()->getFileLocation(getName());
 		FILE* fileHandle;
 		fopen_s(&fileHandle, filePath.c_str(), "wb");
 

@@ -20,7 +20,7 @@ namespace Echo
 	class ProjectFile;
 	class ArchiveManager;
 	class ArchiveFactory;
-	class ResourceGroupManager;
+	class IO;
 	class ImageCodecMgr;
 	class RenderStageManager;
 	class RenderTargetManager;
@@ -94,12 +94,17 @@ namespace Echo
 		// 获取配置
 		const RootCfg& getConfig() const { return m_cfg; }
 
-		// 获取主路径
-		const String&	getRootPath() const;
-		const String&	getWriteablePath() const;
-		void			setWriteablePath(const String& strPath);
-		void*			getAssetManager() const;
-		bool			isRendererInited() const;
+		// 获取资源主路径
+		const String& getResPath() const;
+
+		// 获取用户资源路径
+		const String& getUserPath() const;
+
+		// 设置用户资源路径
+		void setUserPath(const String& strPath);
+
+		void* getAssetManager() const;
+		bool isRendererInited() const;
 		const ui32&		getCurrentTime() const;
 		inline ui32		getFrameTime() const { return m_frameTime; }
 		inline ui32		getFrameRealTime() const { return m_frameRealTime; }
@@ -185,7 +190,7 @@ namespace Echo
 		ModelManager* getModelManager() { EchoAssert(m_modelManager);  return m_modelManager; }
 		Renderer* getRender() { EchoAssert(m_renderer);  return m_renderer; }
 		EffectSystemManager* getEffectSystemManager() { EchoAssert(m_EffectSystemManager);  return m_EffectSystemManager; }
-		ResourceGroupManager* getResourceGroupManager() { EchoAssert(m_ResourceGroupManager); return m_ResourceGroupManager; }
+		IO* getResourceGroupManager() { EchoAssert(m_io); return m_io; }
 		TextureResManager* getTextureResManager() { EchoAssert(m_textureResManager);  return m_textureResManager; }
 		SceneManager* getSceneManager() { EchoAssert(m_sceneManager);  return m_sceneManager; }
 		OpenMPTaskMgr* getOpenMPTaskMgr() { EchoAssert(m_openMPTaskMgr);  return m_openMPTaskMgr; }
@@ -194,7 +199,6 @@ namespace Echo
 		ImageCodecMgr* getImageCodecManager() { EchoAssert(m_imageCodecManager);  return m_imageCodecManager; }
 		MaterialManager* getMaterialManager() { EchoAssert(m_materialManager);  return m_materialManager; }
 		FSAudioManager* getAudioManager() { EchoAssert(m_audioManager);  return m_audioManager; }
-		NetConnectionManager* getNetConnectionManager() { EchoAssert(m_netConnectionManager); return m_netConnectionManager; }
 		PostEffectManager* getPostEffectManager() { EchoAssert(m_postEffectManager); return m_postEffectManager; }
 		luaex::LuaEx* getLuaEx() {return m_luaEx;}
 		void setLuaEx(luaex::LuaEx* luaex) { m_luaEx = luaex; }
@@ -229,16 +233,9 @@ namespace Echo
 		ui32				m_maxFrameTime;
 		bool				m_isRenderScene;				// 是否渲染场景
 
-		ArchiveFactory*		m_FileSystemArchiveFactory;
-		ArchiveFactory*		m_ZipPackArchiveFactory;
-		ArchiveFactory*		m_ApkFileSystemArchiveFactory;
-		ArchiveFactory*		m_httpFileSystemArchiveFactory;	// Http文件存档
-		ArchiveFactory*		m_7zipArchiveFactory;			// 7zip文件存档
-
 		MemoryManager*		m_memoryManager;				// 内存管理器
 		LogManager*			m_logManager;
-		ArchiveManager*		m_ArchiveManager;
-		ResourceGroupManager* m_ResourceGroupManager;
+		IO*					m_io;
 		TextureResManager*	m_textureResManager;			// 纹理资源管理器
 		SkeletonManager*	m_skeletonManager;				// 骨骼资源管理器
 		AnimManager*		m_animManager;					// 动画管理器
@@ -251,7 +248,6 @@ namespace Echo
 		Renderer*			m_renderer;						// 渲染器
 		SceneManager*		m_sceneManager;					// 场景管理器
 		FSAudioManager*		m_audioManager;					// 音频管理器
-		NetConnectionManager* m_netConnectionManager;		// 网络连接管理器
 		PostEffectManager*	m_postEffectManager;			// 全屏后处理特效管理器
 		luaex::LuaEx*		m_luaEx;						// 脚本接口
 		StreamThread*		m_StreamThreading;				// 流加载线程
@@ -287,10 +283,8 @@ namespace Echo
 #define EchoOpenMPTaskMgr			EchoRoot->getOpenMPTaskMgr()
 #define EchoEngineSettings			EchoRoot->getSettingsMgr()
 #define EchoEngineConsole			EchoRoot->getConsole()
-#define EchoResourceManager			EchoRoot->getResourceGroupManager()				// 资源管理器
 #define EchoModelManager			EchoRoot->getModelManager()
 #define EchoMaterialManager			EchoRoot->getMaterialManager()
 #define EchoImageCodecManager		EchoRoot->getImageCodecManager()
 #define EchoAudioManager			EchoRoot->getAudioManager()
-#define EchoNetConnectionManager	EchoRoot->getNetConnectionManager()
 #define EchoPostEffectManager		EchoRoot->getPostEffectManager()

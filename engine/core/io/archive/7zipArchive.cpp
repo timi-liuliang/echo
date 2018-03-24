@@ -48,7 +48,7 @@ namespace Echo
 	SzArchive::SzArchive(const String& name, const String& archType)
 		: Archive(name, archType)
 	{
-		m_name = EchoRoot->getRootPath() + name;
+		m_name = EchoRoot->getResPath() + name;
 		m_7zipHandle = EchoNew(SzHandler);
 	}
 
@@ -266,12 +266,5 @@ namespace Echo
 	{
 #ifdef ECHO_PLATFORM_WINDOWS
 #endif
-	}
-
-	// 获取类型
-	const String& SzArchiveFactory::getType(void) const
-	{
-		static String name = "7zip";
-		return name;
 	}
 }

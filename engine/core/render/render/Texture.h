@@ -2,7 +2,7 @@
 
 #include <engine/core/Util/Buffer.h>
 #include <engine/core/Math/Rect.h>
-#include <engine/core/resource/DataStream.h>
+#include <engine/core/io/DataStream.h>
 #include "PixelFormat.h"
 
 namespace Echo

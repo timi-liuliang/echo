@@ -2,7 +2,7 @@
 #include <qfiledialog.h>
 #include "Studio.h"
 #include "Update.h"
-#include <engine/core/resource/7zipArchive.h>
+#include <engine/core/io/archive/7zipArchive.h>
 #include <engine/core/util/PathUtil.h>
 
 namespace Studio

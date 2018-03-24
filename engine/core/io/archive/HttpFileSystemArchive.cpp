@@ -81,7 +81,7 @@ namespace Echo
 		using namespace rapidxml;
 		try
 		{
-			String fullPath = PathUtil::IsRelativePath(mName) ? EchoRoot->getRootPath() + mName : mName;
+			String fullPath = PathUtil::IsRelativePath(mName) ? EchoRoot->getResPath() + mName : mName;
 			file<> fdoc( fullPath.c_str());
 			xml_document<> doc;
 			doc.parse<0>(fdoc.data());

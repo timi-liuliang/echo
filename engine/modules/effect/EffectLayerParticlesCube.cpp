@@ -1,6 +1,6 @@
 #include "Engine/Core.h"
 #include "EffectLayerParticlesCube.h"
-#include "engine/core/resource/DataStream.h"
+#include "engine/core/io/DataStream.h"
 
 namespace Echo
 {

@@ -1,8 +1,9 @@
 #include "ProjectFile.h"
 #include "engine/core/Util/LogManager.h"
 #include "engine/core/Util/PathUtil.h"
-#include "engine/core/resource/ResourceGroupManager.h"
+#include "engine/core/io/IO.h"
 #include "render/RenderQueueGroup.h"
+#include "engine/core/main/Root.h"
 #include <ostream>
 
 namespace Echo
@@ -167,7 +168,7 @@ namespace Echo
 		//在读取Project配置文件设置的目录
 		for ( size_t i = 0; i < m_archives.size(); i++ )
 		{
-			ResourceGroupManager::instance()->addArchive(m_archives[i].m_archiveValue, m_archives[i].m_archiveType);
+			IO::instance()->addArchive(m_archives[i].m_archiveValue, m_archives[i].m_archiveType);
 		}
 
 		// 渲染队列

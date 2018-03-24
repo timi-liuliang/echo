@@ -2,7 +2,7 @@
 #include "EffectSystemManager.h"
 #include "Engine/core/Geom/SimpleSpline.h"
 #include "Engine/core/Scene/Node.h"
-#include "engine/core/resource/DataStream.h"
+#include "engine/core/io/DataStream.h"
 
 namespace Echo
 {

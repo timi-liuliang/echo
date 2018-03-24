@@ -23,7 +23,7 @@
 #include "EffectLayerParticlesCylinder.h"
 #include "EffectLayerParticlesCurve.h"
 #include "EffectLayerSpriteAnimation.h"
-#include "engine/core/resource/ResourceGroupManager.h"
+#include "engine/core/io/IO.h"
 #include "Render/Material.h"
 #include "engine/core/render/RenderTargetManager.h"
 #include "Engine/core/Render/TextureResManager.h"
@@ -444,7 +444,7 @@ namespace Echo
 			if (!pTemplate)
 			{
 				// ´´½¨Ä£°å
-				DataStream* pEffectStream = ResourceGroupManager::instance()->openResource(templateName);
+				DataStream* pEffectStream = IO::instance()->open(templateName);
 				if (!pEffectStream || pEffectStream->size() == 0)
 				{
 					EchoLogError("The effect file does not exsit or size is 0. [%s]", templateName.c_str());

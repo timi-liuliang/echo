@@ -3,7 +3,7 @@
 #include "engine/core/Util/StringUtil.h"
 #include "engine/core/Util/AssertX.h"
 #include <engine/core/Util/LogManager.h>
-#include "ResourceGroupManager.h"
+#include "IO.h"
 #include <algorithm>
 #include <sstream>
 #include <iostream>
@@ -724,7 +724,7 @@ namespace Echo
 		// 加载数据
 		DataStream* stream = NULL;
 		if (isUseResGroupMgr)
-			stream = ResourceGroupManager::instance()->openResource(file);
+			stream = IO::instance()->open(file);
 		else
 			stream = EchoNew(FileHandleDataStream(file));
 
@@ -757,7 +757,7 @@ namespace Echo
 		// 加载数据
 		DataStream* stream = NULL;
 		if (isUseResGroupMgr)
-			stream = ResourceGroupManager::instance()->openResource(file);
+			stream = IO::instance()->open(file);
 		else
 			stream = EchoNew(FileHandleDataStream(file));
 

@@ -2,7 +2,7 @@
 #include "EffectKeyFrame.h"
 #include "EffectLayer.h" 
 #include "Engine/core/Geom/SimpleSpline.h"
-#include "engine/core/resource/DataStream.h"
+#include "engine/core/io/DataStream.h"
 #include "engine/modules/Audio/FMODStudio/FSAudioManager.h"
 
 namespace Echo

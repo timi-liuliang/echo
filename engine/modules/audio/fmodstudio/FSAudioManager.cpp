@@ -10,7 +10,7 @@ namespace Echo
 	FMOD_RESULT F_CALLBACK customFileOpen(const char* name, unsigned int *filesize, void **handle, void *userdata)
 	{
 		Echo::BankUserData* data = (Echo::BankUserData*)userdata;
-		Echo::DataStream* stream = ResourceGroupManager::instance()->openResource(data->filename.c_str());
+		Echo::DataStream* stream = IO::instance()->open(data->filename.c_str());
 		if (stream)
 		{
 			stream->seek(0, SEEK_END);
@@ -77,7 +77,7 @@ namespace Echo
 
 			if (isStream)
 			{
-				ResourceGroupManager::instance()->getFileLocation(bankFile);
+				IO::instance()->getFileLocation(bankFile);
 				userdata.filename = bankFile;
 
 				FMOD_STUDIO_BANK_INFO bankinfo;
@@ -212,7 +212,7 @@ namespace Echo
 
 		// 获取所有bank文件
 		StringArray bankFiles;
-		ResourceGroupManager::instance()->listFilesWithExt(bankFiles, ".bank");
+		IO::instance()->listFilesWithExt(bankFiles, ".bank");
 		for (size_t i = 0; i<bankFiles.size(); i++)
 		{
 			loadBankFile(bankFiles[i].c_str());

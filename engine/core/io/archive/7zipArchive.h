@@ -1,7 +1,7 @@
 #pragma once
 
 #include <engine/core/Thread/Threading.h>
-#include "ArchiveFactory.h"
+#include "Archive.h"
 
 namespace Echo
 {
@@ -52,23 +52,5 @@ namespace Echo
 		map<String, int>::type		m_files;		// 文件名与索引映射
 		void*						m_7zipHandle;	// 7zip操作
 		Echo::Mutex					m_7zipMutexLock;// 线程锁
-	};
-
-	/**
-	* 存档工厂类
-	*/
-	class SzArchiveFactory : public ArchiveFactory
-	{
-	public:
-		virtual ~SzArchiveFactory() {}
-
-		// 获取类型
-		const String& getType(void) const;
-
-		// 创建实例
-		Archive* createInstance(const String& name) { return EchoNew(SzArchive(name, "7zip")); }
-
-		// 销毁实例
-		void destroyInstance(Archive* arch) { EchoSafeDelete(arch, Archive); }
 	};
 }

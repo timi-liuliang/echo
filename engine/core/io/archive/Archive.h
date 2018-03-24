@@ -2,51 +2,34 @@
 
 #include <functional>
 #include "engine/core/Util/StringUtil.h"
-#include "engine/core/resource/DataStream.h"
+#include "engine/core/io/DataStream.h"
 
 namespace Echo
 {
 	typedef std::function<bool(const Echo::String&, DataStream*)>	 EchoOpenResourceCb;
 
 	class Archive;
-	/** Information about a file/directory within the archive will be
-	returned using a FileInfo struct.
-	@see
-	Archive
-	*/
-	struct FileInfo {
-		/// The archive in which the file has been found (for info when performing
-		/// multi-Archive searches, note you should still open through ResourceGroupManager)
-		Archive* archive;
-		/// The file's fully qualified name
-		String filename;
-		/// Path name; separated by '/' and ending with '/'
-		String path;
-		/// Base filename
-		String basename;
-		/// Compressed size
-		size_t compressedSize;
-		/// Uncompressed size
-		size_t uncompressedSize;
+	struct FileInfo 
+	{
+		Archive* archive;				// The archive in which the file has been found (for info when performing
+		String filename;				// The file's fully qualified name
+		String path;					// Path name; separated by '/' and ending with '/'
+		String basename;				// Base filename
+		size_t compressedSize;			// Compressed size
+		size_t uncompressedSize;		// Uncompressed size
 	};
-
 	typedef vector<FileInfo>::type FileInfoList;
 
-	/**
-	 * 存档接口
-	 */
 	class Archive
 	{
 	public:
-		/** Constructor - don't call direct, used by ArchiveFactory.
-		*/
-		Archive( const String& name, const String& archType )
-			: mName(name), mType(archType) {}
+		// create
+		static Archive* create( const String& type);
 
-		/** Default destructor.
-		*/
-		virtual ~Archive() {}
+		// load
+		static Archive* load(const String& name, const String& type);
 
+	public:
 		/// Get the name of this archive
 		const String& getName(void) const { return mName; }
 
@@ -127,6 +110,15 @@ namespace Echo
 
 		// 设置异步加载回调
 		virtual bool addAsyncCompleteCallback(const Echo::String& name, EchoOpenResourceCb callback) = 0;
+
+		// constructor
+		Archive(const String& name, const String& archType)
+			: mName(name), mType(archType) 
+		{}
+
+		// destructor
+		virtual ~Archive()
+		{}
 
 	protected:
 		/// Archive name

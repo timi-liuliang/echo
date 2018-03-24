@@ -2,51 +2,108 @@
 #include "engine/core/Util/Exception.h"
 #include "engine/core/Util/PathUtil.h"
 #include "engine/core/Util/TimeProfiler.h"
-#include "ArchiveManager.h"
-#include "ResourceGroupManager.h"
+#include "IO.h"
 #include "engine/core/Util/LogManager.h"
 
 namespace Echo
 {
-	__ImplementSingleton(ResourceGroupManager);
+	__ImplementSingleton(IO);
 
 	// 构造函数
-	ResourceGroupManager::ResourceGroupManager()
+	IO::IO()
 	{
 		__ConstructSingleton;
+
+		m_resFileSystem = EchoNew(FileSystem);
+		m_userFileSystem = EchoNew(FileSystem);
 	}
 
 	// 析构函数
-	ResourceGroupManager::~ResourceGroupManager()
+	IO::~IO()
 	{
 		reset();
 
 		__DestructSingleton;
 	}
 
-	// 重置
-	void ResourceGroupManager::reset()
+	// 设置引擎资源路径
+	void IO::setResPath(const String& resPath)
 	{
-		for (list<Archive*>::type::iterator it = m_archiveList.begin(); it != m_archiveList.end(); it++)
+		m_resFileSystem->setPath(resPath, "Res://");
+	}
+
+	// 设置用户资源路径
+	void IO::setUserPath(const String& userPath)
+	{
+		m_userFileSystem->setPath(userPath, "User://");
+	}
+
+	// 打开资源
+	DataStream* IO::open(const String& resourceName)
+	{
+		if (StringUtil::StartWith(resourceName, "Res://"))
 		{
-			ArchiveManager::Instance()->unload((*it)->getName());
+			DataStream* stream = m_resFileSystem->open(resourceName);
+			if (!stream)
+			{
+
+			}
+
+			return stream;
 		}
-		m_archiveList.clear();
+		else if (StringUtil::StartWith(resourceName, "User://"))
+		{
+
+		}
+
+		//// 打开资源
+		//String  lcResourceName = resourceName;
+		//if (!PathUtil::IsAbsolutePath(resourceName))
+		//{
+		//	StringUtil::LowerCase(lcResourceName);
+		//}
+
+		//// 查找所有存档
+		//if ( !pArch)
+		//	pArch = getArchiveByFileName(lcResourceName.c_str());
+
+		//// 打开资源
+		//if (pArch)
+		//{
+		//	DataStream* stream = pArch->open(lcResourceName);
+		//	if (stream == nullptr)
+		//	{
+		//		EchoLogError("[DataStream* ResourceGroupManager::openResource:%d]::Cannot open a resource [%s] in [%s] ", __LINE__, resourceName.c_str(), archiveName); 
+		//		return nullptr; 
+		//	}
+
+		//	return stream;
+		//}
+
+		EchoLogError("Cannot locate a resource [%s] ResourceGroupManager::openResource", resourceName.c_str());
+
+		return  nullptr;
+	}
+
+	// 重置
+	void IO::reset()
+	{
+		EchoSafeDeleteContainer(m_archives, Archive);
 		m_resourceIndexCaseSensitive.clear();
 	}
 
 	// 添加资源存档
-	void ResourceGroupManager::addArchive(const String& name, const String& locType, bool isOverWrite)
+	void IO::addArchive(const String& name, const String& locType, bool isOverWrite)
 	{
 		TIME_PROFILE
 		(
 			// Get archive
-			Archive* pArch = ArchiveManager::Instance()->load(name, locType);
+			Archive* pArch = Archive::load(name, locType);
 			{
 				EE_LOCK_MUTEX(AUTO_MUTEX_NAME)
 
 				// Add to location list
-				m_archiveList.push_back(pArch);
+				m_archives.push_back(pArch);
 
 				// Index resources
 				StringArray vec = pArch->list();
@@ -59,12 +116,12 @@ namespace Echo
 	}
 
 	// 移除资源存档
-	void ResourceGroupManager::removeArchive(const String& name)
+	void IO::removeArchive(const String& name)
 	{
 		EE_LOCK_MUTEX(AUTO_MUTEX_NAME)
 
 		// Remove from location list
-		for (ArchiveList::iterator li = m_archiveList.begin(); li != m_archiveList.end(); ++li)
+		for (ArchiveList::iterator li = m_archives.begin(); li != m_archives.end(); ++li)
 		{
 			Archive* pArch = *li;
 			if (pArch->getName() == name)
@@ -81,8 +138,7 @@ namespace Echo
 						++rit;
 					}
 				}
-				ArchiveManager::Instance()->unload(name);
-				m_archiveList.erase(li);
+				m_archives.erase(li);
 
 				break;
 			}
@@ -92,7 +148,7 @@ namespace Echo
 	}
 
 	// 获取文件所在的存档
-	Archive* ResourceGroupManager::getArchiveByFileName(const char* fileName)
+	Archive* IO::getArchiveByFileName(const char* fileName)
 	{
 		String  lcResourceName = fileName;
 		StringUtil::LowerCase(lcResourceName);
@@ -110,9 +166,9 @@ namespace Echo
 	}
 
 	// 根据存档名称获取存档
-	Archive* ResourceGroupManager::getArchiveByName(const char* archiveName)
+	Archive* IO::getArchiveByName(const char* archiveName)
 	{
-		for (Archive* archive : m_archiveList)
+		for (Archive* archive : m_archives)
 		{
 			if (archive->getName() == archiveName)
 				return archive;
@@ -120,48 +176,8 @@ namespace Echo
 
 		return NULL;
 	}
-	
-	// 打开资源
-	DataStream* ResourceGroupManager::openResource( const String& resourceName, const char* archiveName)
-	{
-		// 打开资源
-		String  lcResourceName = resourceName;
-		if (!PathUtil::IsAbsolutePath(resourceName))
-		{
-			StringUtil::LowerCase(lcResourceName);
-		}
 
-		// 获取对应的存档文件
-		Archive* pArch = NULL;
-		if (archiveName && strlen(archiveName))
-		{
-			EchoAssert(!StringUtil::IsHaveUpper(archiveName));
-			pArch = getArchiveByName(archiveName);
-
-		}
-
-		// 查找所有存档
-		if ( !pArch)
-			pArch = getArchiveByFileName(lcResourceName.c_str());
-
-		// 打开资源
-		if (pArch)
-		{
-			DataStream* stream = pArch->open(lcResourceName);
-			if (stream == nullptr)
-			{
-				EchoLogError("[DataStream* ResourceGroupManager::openResource:%d]::Cannot open a resource [%s] in [%s] ", __LINE__, resourceName.c_str(), archiveName); 
-				return nullptr; 
-			}
-
-			return stream;
-		}
-
-		EchoLogError("Cannot locate a resource [%s] ResourceGroupManager::openResource", resourceName.c_str());
-		return NULL;
-	}
-
-	void ResourceGroupManager::openResourceAsync(const String& resourceName, EchoOpenResourceCb callback)
+	void IO::openResourceAsync(const String& resourceName, EchoOpenResourceCb callback)
 	{
 		String  lcResourceName = resourceName;
 		StringUtil::LowerCase(lcResourceName);
@@ -174,7 +190,7 @@ namespace Echo
 	}
 
 	// 是否为异步资源
-	bool ResourceGroupManager::isAsync(const char* fileName)
+	bool IO::isAsync(const char* fileName)
 	{
 		Archive* archive = getArchiveByFileName(fileName);
 
@@ -182,7 +198,7 @@ namespace Echo
 	}
 
 	// 判断资源是否存在
-	bool ResourceGroupManager::isResourceExists(const String& resourceName)
+	bool IO::isResourceExists(const String& resourceName)
 	{
 		EE_LOCK_MUTEX(AUTO_MUTEX_NAME)
 
@@ -200,7 +216,7 @@ namespace Echo
 	}
 
 	// 获取文件位置
-	String ResourceGroupManager::getFileLocation(const String& filename)
+	String IO::getFileLocation(const String& filename)
 	{
 		String ret;
         {
@@ -226,7 +242,7 @@ namespace Echo
 	}
 
 	// 获取指定后缀名的所有文件
-	void ResourceGroupManager::listFilesWithExt( StringArray& oFiles, const char* extWithDot)
+	void IO::listFilesWithExt( StringArray& oFiles, const char* extWithDot)
 	{
 		oFiles.clear();
 
@@ -246,7 +262,7 @@ namespace Echo
 	}
 
 		// 获取指定后缀名的所有文件
-	void ResourceGroupManager::foreach_archive_unsafe(std::function<bool (const Echo::String&, const int index)> callback)
+	void IO::foreach_archive_unsafe(std::function<bool (const Echo::String&, const int index)> callback)
 	{
 //		EE_LOCK_AUTO_MUTEX
 		int i = 0;
@@ -258,7 +274,7 @@ namespace Echo
 		}
 	}
 
-	void ResourceGroupManager::listFileWithPathAndExt(StringArray& oFiles, const char* path, const char* extWithDot)
+	void IO::listFileWithPathAndExt(StringArray& oFiles, const char* path, const char* extWithDot)
 	{
 		oFiles.clear();
 
@@ -285,7 +301,7 @@ namespace Echo
 
 
 	// 添加索引
-	void ResourceGroupManager::addToIndex(const String& filename, Archive* arch, bool isOverWrite)
+	void IO::addToIndex(const String& filename, Archive* arch, bool isOverWrite)
 	{
 		EE_LOCK_AUTO_MUTEX
 		Echo::String fileName = filename;
@@ -302,7 +318,7 @@ namespace Echo
 	}
 
 	// 获取存档
-	Archive* ResourceGroupManager::FindFileArchive(const String& filename)
+	Archive* IO::FindFileArchive(const String& filename)
 	{
 		EE_LOCK_AUTO_MUTEX
 		FileArchiveMapping::iterator rit = m_resourceIndexCaseSensitive.find(filename);
@@ -315,7 +331,7 @@ namespace Echo
 	}
 
 	// 移除到索引
-	void ResourceGroupManager::removeFromIndex(const String& filename)
+	void IO::removeFromIndex(const String& filename)
 	{
 		EE_LOCK_AUTO_MUTEX
 
@@ -325,14 +341,14 @@ namespace Echo
 	}
 
 	// 添加文件(运行期添加文件)
-	void ResourceGroupManager::addFile(const String& archiveType, const String& fullPath)
+	void IO::addFile(const String& archiveType, const String& fullPath)
 	{
 #ifdef ECHO_EDITOR_MODE
 		Echo::String fileName = Echo::PathUtil::GetPureFilename(fullPath);
 		StringUtil::LowerCase(fileName);
 		if ( !isResourceExists(fileName) && !fileName.empty())
 		{
-			for (ArchiveList::iterator it = m_archiveList.begin(); it != m_archiveList.end(); it++)
+			for (ArchiveList::iterator it = m_archives.begin(); it != m_archives.end(); it++)
 			{
 				Archive* archive = *it;
 				if (archive->getType() == archiveType && archive->isCanAddFile(fullPath))
@@ -351,7 +367,7 @@ namespace Echo
 	}
 
 	// 移除文件
-	void ResourceGroupManager::removeFile(const String& _fileName)
+	void IO::removeFile(const String& _fileName)
 	{
 		String fileName = _fileName;
 		StringUtil::LowerCase(fileName);

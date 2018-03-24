@@ -430,7 +430,7 @@ namespace QT_UI
 		}
 		else
 		{
-			fileFullName = EchoResourceManager->getFileLocation(fileName);
+			//fileFullName = EchoResourceManager->getFileLocation(fileName);
 		}
 
 		QFileInfo inputFileInfo(fileFullName.c_str());

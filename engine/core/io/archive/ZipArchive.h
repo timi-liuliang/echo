@@ -1,9 +1,8 @@
 #ifndef __ECHO_ZIP_ARCHIVE_H__
 #define __ECHO_ZIP_ARCHIVE_H__
 
-#include <engine/core/resource/DataStream.h>
-#include "engine/core/resource/Archive.h"
-#include "engine/core/resource/ArchiveFactory.h"
+#include <engine/core/io/DataStream.h>
+#include "Archive.h"
 #include "ResourcePack.h"
 
 namespace Echo
@@ -48,24 +47,6 @@ namespace Echo
 	protected:
 		ResourcePack		m_resourcePack;		// 资源包
 		bool				mLoaded;			// 加载状态，是否已加载成功
-	};
-
-	/**
-	 * ZipArchive工厂
-	 */
-	class ZipArchiveFactory : public ArchiveFactory
-	{
-	public:
-		virtual ~ZipArchiveFactory() {}
-
-		// 获取当前类型
-		const String& getType(void) const{ static String strName = "pkg"; return strName;}
-
-		// 创建实例
-		Archive *createInstance(const String& strName) { return EchoNew(ZipArchive(strName, "pkg"));}
-
-		// 销毁实例
-		void destroyInstance(Archive* arch) { EchoSafeDelete(arch, Archive); }
 	};
 
 	/**

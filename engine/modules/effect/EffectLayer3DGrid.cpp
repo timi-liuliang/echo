@@ -1,7 +1,7 @@
 #include "EffectLayer3DGrid.h"
 #include "EffectSystemManager.h"
 #include "Engine/core/Scene/Node.h"
-#include "engine/core/resource/DataStream.h"
+#include "engine/core/io/DataStream.h"
 #include "engine/core/Scene/scene_manager.h"
 
 namespace Echo

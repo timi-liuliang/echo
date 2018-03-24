@@ -25,11 +25,11 @@ namespace Studio
 		//titleLable << "Assets";
 		//m_dirModel->setHorizontalHeaderLabels(titleLable);
 
-		const Echo::ResourceGroupManager::ArchiveList& archiveList = EchoResourceManager->getArchiveList();
-		for (Echo::Archive* archive : archiveList)
+		//const Echo::ResourceGroupManager::ArchiveList& archiveList = EchoResourceManager->getArchiveList();
+		//for (Echo::Archive* archive : archiveList)
 		{
-			m_dirModel->SetRootPath(archive->getName().c_str(), "none", m_resDirView, NULL/*m_proxyModel*/);
-			m_dirModel->Refresh();
+		//	m_dirModel->SetRootPath(archive->getName().c_str(), "none", m_resDirView, NULL/*m_proxyModel*/);
+		//	m_dirModel->Refresh();
 		}
 	}
 

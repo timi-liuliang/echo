@@ -8,7 +8,7 @@
 #include "Engine/modules/Anim/AnimBlender.h"
 #include "Engine/modules/Anim/Skeleton.h"
 #include "Engine/modules/Anim/Bone.h"
-#include "engine/core/resource/DataStream.h"
+#include "engine/core/io/DataStream.h"
 
 namespace Echo
 {

@@ -26,7 +26,7 @@ namespace Studio
 	{
 		Echo::String path = _path;
 		if (!Echo::PathUtil::IsAbsolutePath(path))
-			path = EchoRoot->getRootPath() + path;
+			path = EchoRoot->getResPath() + path;
 
 		// 所有子路径
 		Echo::StringArray files;
@@ -153,7 +153,7 @@ namespace Studio
 	{
 		if (!Echo::PathUtil::IsDir(file))
 		{
-			EchoResourceManager->addFile("filesystem", file);
+			//EchoResourceManager->addFile("filesystem", file);
 
 			// 添加到项目管理
 			AStudio::Instance()->getProjectMgr()->AddFileToProject(file.c_str());
@@ -170,7 +170,7 @@ namespace Studio
 		if (!Echo::PathUtil::IsDir(file))
 		{
 			Echo::String fileName = Echo::PathUtil::GetPureFilename(file);
-			EchoResourceManager->removeFile(fileName);
+			//EchoResourceManager->removeFile(fileName);
 		}
 
 		m_fileSystemWatcher->removePath(file.c_str());

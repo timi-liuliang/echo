@@ -1,7 +1,7 @@
 #include "Engine/core/Resource/Resource.h"
 #include "Engine/core/Resource/ResourceManager.h"
 #include "Engine/core/Resource/EchoThread.h"
-#include "engine/core/resource/ResourceGroupManager.h"
+#include "engine/core/io/IO.h"
 #include "engine/core/Util/PathUtil.h"
 #include "engine/core/Util/Exception.h"
 #include "engine/core/Util/LogManager.h"
@@ -109,16 +109,16 @@ namespace Echo
 		if (mLoadingState != LOADSTATE_CREATED)
 			return false;
 
-		bool isAsync = ResourceGroupManager::instance()->isAsync(mName.c_str());
+		bool isAsync = IO::instance()->isAsync(mName.c_str());
 		if (isAsync)
 		{
-			ResourceGroupManager::instance()->openResourceAsync(getName(), std::bind(&onDownloadResourceComplete, std::placeholders::_1, std::placeholders::_2));
+			IO::instance()->openResourceAsync(getName(), std::bind(&onDownloadResourceComplete, std::placeholders::_1, std::placeholders::_2));
 
 			mLoadingState = LOADSTATE_DOWNLOADING;
 		}
 		else
 		{
-			DataStream* pStream = ResourceGroupManager::instance()->openResource(getName());
+			DataStream* pStream = IO::instance()->open(getName());
 			if (!pStream)
 			{
 				// 若文件不存在，尝试全路径
@@ -226,7 +226,7 @@ namespace Echo
 			// 刚创建纹理，调用准备函数
 			if (mLoadingState == LOADSTATE_CREATED)
 			{
-				if (ResourceGroupManager::instance()->isAsync(mName.c_str()))
+				if (IO::instance()->isAsync(mName.c_str()))
 				{
 					// 取流加载器
 					Echo::StreamThread* streamThread = Echo::StreamThread::Instance();

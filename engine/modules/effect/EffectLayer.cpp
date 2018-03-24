@@ -1,7 +1,7 @@
 #include "EffectSystem.h"
 #include "EffectLayer.h"
 #include "EffectSystemManager.h"
-#include "engine/core/resource/DataStream.h"
+#include "engine/core/io/DataStream.h"
 #include "EffectKeyFrame.h"
 #include "Engine/modules/Audio/FMODStudio/FSAudioManager.h" 
 #include <algorithm>

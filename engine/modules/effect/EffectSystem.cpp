@@ -4,7 +4,7 @@
 #include "engine/core/Util/Exception.h"
 #include "Render/Image.h"
 #include "Engine/core/Scene/Node.h"
-#include "engine/core/resource/DataStream.h"
+#include "engine/core/io/DataStream.h"
 
 namespace Echo
 {

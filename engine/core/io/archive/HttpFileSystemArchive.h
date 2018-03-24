@@ -1,6 +1,5 @@
 #pragma once
 
-#include <engine/core/resource/ArchiveFactory.h>
 #include "engine/modules/net/NetConnectionManager.h"
 
 #ifdef ECHO_USE_LIBEVENT
@@ -64,43 +63,6 @@ namespace Echo
 		String						m_url;			// 服务器地址
 		set<String>::type			m_files;		// 所有文件(文件名称，文件路径)
 		ResourceCallbackMapping		m_callbacks;	// 
-	};
-
-	/**
-	 * 存档工厂类
-	 */
-	class HttpFileSystemArchiveFactory : public ArchiveFactory
-	{
-	public:
-		virtual ~HttpFileSystemArchiveFactory() {}
-
-		// 获取类型
-		const String& getType(void) const;
-
-		// 创建实例
-		Archive* createInstance(const String& name) { return EchoNew(HttpFileSystemArchive(name, "http")); }
-
-		// 销毁实例
-		void destroyInstance(Archive* arch) { EchoDelete(arch); }
-	};
-}
-#else
-namespace Echo
-{
-	class HttpFileSystemArchiveFactory : public ArchiveFactory
-	{
-	public:
-		virtual ~HttpFileSystemArchiveFactory() {}
-
-		// 获取类型
-		const String& getType(void) const
-		{
-			static String name = "http";
-			return name;
-		}
-
-		virtual Archive* createInstance(const String& name) { return nullptr; }
-		virtual void destroyInstance(Archive*) {}
 	};
 }
 #endif

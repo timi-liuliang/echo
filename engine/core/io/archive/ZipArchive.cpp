@@ -1,8 +1,8 @@
 #include "Engine/Core.h"
-#include "Engine/core/Resource/ResourcePack.h"
+#include "ResourcePack.h"
 #include "engine/core/Util/LogManager.h"
 #include "engine/core/Util/Exception.h"
-#include "Engine/core/Resource/ZipArchive.h"
+#include "ZipArchive.h"
 #include "Engine/core/main/Root.h"
 
 namespace Echo
@@ -30,7 +30,7 @@ namespace Echo
 	void ZipArchive::load()
 	{
 		EE_LOCK_MUTEX(AUTO_MUTEX_NAME)
-		String fullName = Root::instance()->getRootPath() + mName;
+		String fullName = Root::instance()->getResPath() + mName;
 		m_resourcePack.openFile(fullName.c_str());
 		mLoaded = true;
 	}

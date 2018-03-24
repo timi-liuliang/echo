@@ -57,18 +57,9 @@ namespace Echo
 	class CameraShadow;
 	class DataStream;
 	class ResourceManager;
-	class ResourceGroupManager;
+	class IO;
 	class Resource;
 	class Archive;
-	class ArchiveFactory;
-	class ArchiveManager;
-	class ZipArchive;
-	class ZipArchiveFactory;
-	class FileSystemArchive;
-	class FileSystemArchiveFactory;
-	class APKFileSystemArchive;
-	class APKFileSystemArchiveFactory;
-	class ResourcePack;
 	class EffectController;
 	class EffectTranslation;
 	class EffectRotationSelf;
@@ -143,14 +134,10 @@ namespace Echo
 #include "engine/core/Util/Singleton.h"
 #include "engine/core/Util/Timer.h"
 #include "engine/core/Math/MathLib.h"
-#include "engine/core/resource/DataStream.h"
+#include "engine/core/io/DataStream.h"
+#include "engine/core/io/IO.h"
 #include "engine/core/Resource/ResourceManager.h"
-#include "engine/core/resource/ResourceGroupManager.h"
 #include "engine/core/Resource/Resource.h"
-#include "engine/core/resource/Archive.h"
-#include "engine/core/resource/ArchiveFactory.h"
-#include "engine/core/resource/ArchiveManager.h"
-#include "engine/core/resource/FileSystem.h"
 #include "engine/core/render/render/Color.h"
 #include "engine/core/render/render/PixelFormat.h"
 #include "engine/core/render/render/PixelConversions.h"

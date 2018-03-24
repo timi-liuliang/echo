@@ -5,7 +5,7 @@
 #include "engine/core/Util/Exception.h"
 #include "Render/Renderer.h"
 #include "PixelFormat.h"
-#include "engine/core/resource/ResourceGroupManager.h"
+#include "engine/core/io/IO.h"
 #include "Render/MaterialDesc.h"
 #include "rapidxml/rapidxml.hpp"
 #include "rapidxml/rapidxml_utils.hpp"

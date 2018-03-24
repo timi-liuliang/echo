@@ -2,7 +2,7 @@
 #include "engine/core/Util/StringUtil.h"
 #include "EffectParticle.h"
 #include "EffectLayer.h"
-#include "engine/core/resource/DataStream.h"
+#include "engine/core/io/DataStream.h"
 
 namespace Echo
 {

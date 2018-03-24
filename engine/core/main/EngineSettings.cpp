@@ -75,7 +75,7 @@ namespace Echo
 	// Ó¦ÓÃÉèÖÃ
 	void EngineSettingsMgr::Apply(const String& fileName)
 	{
-		Echo::String lstrFile = Root::instance()->getRootPath() + fileName;
+		Echo::String lstrFile = Root::instance()->getResPath() + fileName;
 		if (!PathUtil::IsFileExist(lstrFile))
 		{
 			EchoLogInfo("Config file Engine.xml not exits");

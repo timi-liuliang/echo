@@ -2,18 +2,19 @@
 
 #include <functional>
 #include "engine/core/Thread/Threading.h"
-#include "engine/core/resource/DataStream.h"
-#include "engine/core/resource/Archive.h"
+#include "DataStream.h"
+#include "archive/Archive.h"
 #include "engine/core/util/Singleton.h"
+#include "FileSystem.h"
 
 namespace Echo
 {
 	/**
 	 * 资源管理器 
 	 */
-	class ResourceGroupManager
+	class IO
 	{
-		__DeclareSingleton(ResourceGroupManager);
+		__DeclareSingleton(IO);
 
 	public:
 		EE_AUTO_MUTEX
@@ -21,8 +22,17 @@ namespace Echo
 		typedef list<Archive*>::type				 ArchiveList;
 		typedef map<String, Archive*>::type			 FileArchiveMapping;
 	public:
-		ResourceGroupManager();
-		virtual ~ResourceGroupManager();
+		IO();
+		virtual ~IO();
+
+		// 设置引擎资源路径
+		void setResPath(const String& resPath);
+
+		// 设置用户资源路径
+		void setUserPath(const String& userPath);
+
+		// 打开资源
+		DataStream* open(const String& resourceName);
 
 		// 重置
 		void reset();
@@ -32,9 +42,6 @@ namespace Echo
 
 		// 移除资源存档
 		void removeArchive(const String& name);
-
-		// 打开资源
-		DataStream* openResource(const String& resourceName, const char* archiveName=NULL);
 
 		// 异步打开资源
 		void openResourceAsync(const String& resourceName, EchoOpenResourceCb callback);
@@ -49,7 +56,7 @@ namespace Echo
 		String getFileLocation(const String& filename);
 
 		// 根据组获取所有资源存档
-		const ArchiveList& getArchiveList() { return m_archiveList; }
+		const ArchiveList& getArchiveList() { return m_archives; }
 
 		// 获取指定后缀名的所有文件(.bmp|.tga)
 		void listFilesWithExt( StringArray& oFiles, const char* extWithDot);
@@ -82,7 +89,9 @@ namespace Echo
 		Archive* FindFileArchive(const String& filename);
 
 	protected:
-		ArchiveList					m_archiveList;							// 存档列表
-		FileArchiveMapping			m_resourceIndexCaseSensitive;			// 文件名与存档映射关系
+		FileSystem*					m_resFileSystem;					// 引擎资源管理("Res://")
+		FileSystem*					m_userFileSystem;					// 用户资源管理("User://")
+		ArchiveList					m_archives;							// 存档列表
+		FileArchiveMapping			m_resourceIndexCaseSensitive;		// 文件名与存档映射关系
 	};
 }

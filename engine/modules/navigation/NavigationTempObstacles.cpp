@@ -1,7 +1,7 @@
 #include <math.h>
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/util/LogManager.h"
-#include "engine/core/resource/DataStream.h"
+#include "engine/core/io/DataStream.h"
 #include <engine/core/memory/MemAllocDef.h>
 #include "Engine/Core.h"
 #include <engine/core/Base/EchoDef.h>
@@ -639,7 +639,7 @@ namespace Echo
 	// ╪сть
 	void NavigationTempObstacles::load(const String& filePath)
 	{
-		DataStream* pStream = ResourceGroupManager::instance()->openResource(filePath);
+		DataStream* pStream = IO::instance()->open(filePath);
 		if (pStream)
 		{		
 			i32 version = 0;
