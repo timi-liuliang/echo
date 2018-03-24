@@ -44,22 +44,23 @@ namespace Echo
 		// (quicker than streaming to the end and back)
 		struct stat tagStat;
 		int ret = stat(fullPath.c_str(), &tagStat);
-		assert(ret == 0);
-		(void)ret;  // Silence warning
-
-		std::ifstream* origStream = EchoNew(std::ifstream);
-		origStream->open(fullPath.c_str(), std::ios::in | std::ios::binary);
-
-		if(origStream->fail())
+		if (ret == 0)
 		{
-			EchoSafeDelete(origStream, basic_ifstream);
-			EchoLogError("Error: Cannot open file: %s in FileSystemArchive::open[%s]", filename.c_str(), strerror(errno));
-
-			return NULL;
+			std::ifstream* origStream = EchoNew(std::ifstream);
+			origStream->open(fullPath.c_str(), std::ios::in | std::ios::binary);
+			if (!origStream->fail())
+			{
+				FileStreamDataStream* stream = EchoNew(FileStreamDataStream(filename, origStream, tagStat.st_size, true));
+				return stream;
+			}
+			else
+			{
+				EchoSafeDelete(origStream, basic_ifstream);
+			}
 		}
-		FileStreamDataStream* stream = EchoNew(FileStreamDataStream(filename, origStream, tagStat.st_size, true));
 
-		return stream;
+		EchoLogError("Error: Cannot open file: %s in FileSystem::open[%s]", filename.c_str(), strerror(errno));
+		return nullptr;
 	}
 
 	bool FileSystem::isExist(const String& filename)

@@ -93,7 +93,7 @@ namespace Echo
 			}
 			else
 			{
-				MemoryReader memory = MemoryReader(bankFile.c_str());
+				MemoryReader memory = MemoryReader(bankFile);
 				FS_ERRORCHECK(FSAudioManager::instance()->getStudioSystem()->loadBankMemory(memory.getData<const char*>(), memory.getSize(), FMOD_STUDIO_LOAD_MEMORY, decompress ? FMOD_STUDIO_LOAD_BANK_DECOMPRESS_SAMPLES : FMOD_STUDIO_LOAD_BANK_NORMAL, &m_bank), nullptr);
 			}
 		}

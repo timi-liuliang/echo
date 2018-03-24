@@ -613,7 +613,7 @@ namespace Echo
 	{
 		try
 		{
-			MemoryReader memReader(name.c_str());
+			MemoryReader memReader(name);
 			if (memReader.getData<char*>())
 			{
 				using namespace rapidxml;

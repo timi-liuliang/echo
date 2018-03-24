@@ -1,5 +1,5 @@
 #include "LightArray.h"
-#include <engine/core/resource/DataStream.h>
+#include <engine/core/io/DataStream.h>
 #include "Engine/core/Scene/Scene_Manager.h"
 #include "rapidxml/rapidxml.hpp"
 #include "rapidxml/rapidxml_utils.hpp"

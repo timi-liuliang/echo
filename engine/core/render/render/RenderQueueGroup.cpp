@@ -1,6 +1,6 @@
 #include "engine/core/memory/MemAllocDef.h"
 #include "RenderQueueGroup.h"
-#include "engine/core/resource/DataStream.h"
+#include "engine/core/io/DataStream.h"
 #include "engine/core/util/LogManager.h"
 #include "thirdparty/Rapidxml/rapidxml.hpp"
 #include "thirdparty/Rapidxml/rapidxml_helper.hpp"

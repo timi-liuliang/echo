@@ -1,14 +1,24 @@
 #include "live2d_cubism.h"
+#include "engine/core/util/LogManager.h"
 
 namespace Echo
 {
+	static void csmLogFunc(const char* message)
+	{
+		EchoLogError( message);
+	}
+
+
 	Live2dCubism::Live2dCubism()
 		: m_moc(nullptr)
 		, m_model(nullptr)
 		, m_mesh(nullptr)
 		, m_materialInst(nullptr)
 	{
-		setMoc("Res://girl.moc");
+		// set log fun
+		csmSetLogFunction(csmLogFunc);
+
+		setMoc("Res://girl/girl.moc3");
 	}
 
 	Live2dCubism::~Live2dCubism()
@@ -24,9 +34,16 @@ namespace Echo
 	// set moc
 	void Live2dCubism::setMoc(const String& res)
 	{
-		MemoryReader memReader( res);
-
-		//m_moc = csmReviveMocInPlace(void* address, const unsigned int size);
+		MemoryReaderAlign memReader( res, csmAlignofMoc);
+		if (memReader.getSize())
+		{
+			m_moc = csmReviveMocInPlace(memReader.getData<void*>(), memReader.getSize());
+			if ( m_moc)
+			{
+				ui32 modelSize = csmGetSizeofModel(m_moc);
+				int a = 10;
+			}
+		}
 	}
 
 	// set model

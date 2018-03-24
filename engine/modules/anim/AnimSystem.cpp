@@ -82,7 +82,7 @@ namespace Echo
 	{
 		try
 		{
-			MemoryReader memReader(mName.c_str());
+			MemoryReader memReader(mName);
 			xml_document<> doc;
 			doc.parse<0>(memReader.getData<char*>());
 

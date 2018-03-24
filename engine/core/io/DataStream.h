@@ -221,7 +221,7 @@ namespace Echo
 	class MemoryReader
 	{
 	public:
-		MemoryReader( const String& file, bool isUseResGroupMgr=true);
+		MemoryReader( const String& file);
 		~MemoryReader();
 
 		// 获取数据指针
@@ -241,7 +241,7 @@ namespace Echo
 	class MemoryReaderAlign
 	{
 	public:
-		MemoryReaderAlign(const char* file, bool isUseResGroupMgr = true, int align=0);
+		MemoryReaderAlign(const String& file, int align=0);
 		~MemoryReaderAlign();
 
 		// 获取数据指针

@@ -719,15 +719,10 @@ namespace Echo
 	}
 
 	// 构造函数
-	MemoryReader::MemoryReader(const String& file, bool isUseResGroupMgr)
+	MemoryReader::MemoryReader(const String& file)
 	{
 		// 加载数据
-		DataStream* stream = NULL;
-		if (isUseResGroupMgr)
-			stream = IO::instance()->open(file);
-		else
-			stream = EchoNew(FileHandleDataStream(file));
-
+		DataStream* stream = IO::instance()->open(file);
 		if (stream)
 		{
 			m_size = stream->size();
@@ -752,15 +747,10 @@ namespace Echo
 	}
 
 	// 构造函数
-	MemoryReaderAlign::MemoryReaderAlign(const char* file, bool isUseResGroupMgr, int align)
+	MemoryReaderAlign::MemoryReaderAlign(const String& file, int align)
 	{
 		// 加载数据
-		DataStream* stream = NULL;
-		if (isUseResGroupMgr)
-			stream = IO::instance()->open(file);
-		else
-			stream = EchoNew(FileHandleDataStream(file));
-
+		DataStream* stream = IO::instance()->open(file);
 		if (stream)
 		{
 			m_size = stream->size();
