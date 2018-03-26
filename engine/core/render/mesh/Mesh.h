@@ -12,6 +12,19 @@ namespace Echo
 	class Mesh
 	{
 	public:
+		// Vertex Define
+		struct VertexDefine
+		{
+			bool	m_isUseNormal;
+			bool	m_isUseVertexColor;
+			bool	m_isUseDiffuseUV;
+
+			VertexDefine()
+				: m_isUseNormal(false), m_isUseVertexColor(false), m_isUseDiffuseUV(false)
+			{}
+		};
+
+	public:
 		// 创建
 		static Mesh* create();
 
@@ -71,6 +84,9 @@ namespace Echo
 
 		// 获取受影响的骨骼索引
 		ui32 getBoneIdx(int idx) { return m_boneIdxs[idx]; }
+
+		// 设置数据
+		void set(const VertexDefine& format,ui32 vertCount, const Byte* vertices, ui32 indicesCount, const ui16* indices, const Box& box);
 
 		// 清空数据
 		void clear();

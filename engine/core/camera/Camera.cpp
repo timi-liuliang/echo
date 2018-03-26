@@ -2,7 +2,6 @@
 #include "Engine/Core.h"
 #include "Engine/core/Camera/Camera.h"
 #include "engine/core/Util/LogManager.h"
-#include "Engine/core/Scene/Scene_Manager.h"
 #include "engine/core/render/render/Renderer.h"
 #include "engine/core/render/render/Viewport.h"
 #include "engine/core/render/RenderTargetManager.h"

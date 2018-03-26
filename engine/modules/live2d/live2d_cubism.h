@@ -49,7 +49,13 @@ namespace Echo
 			float				m_opacitie;
 			vector<ui32>::type	m_masks;
 			VertexArray			m_vertices;
+			Box					m_box;
 			vector<Word>::type	m_indices;
+			Mesh*				m_mesh;			// Geometry Data for render
+			MaterialInst*		m_materialInst;	// Material Instance
+
+			// build for render
+			void build();
 		};
 
 	public:
@@ -61,6 +67,9 @@ namespace Echo
 
 		// set moc
 		void setMoc(const String& res);
+
+		// build drawable
+		void buildDrawables();
 
 	protected:
 		// update
@@ -86,8 +95,5 @@ namespace Echo
 		vector<Paramter>::type	m_params;
 		vector<Part>::type		m_parts;
 		vector<Drawable>::type	m_drawables;
-
-		Mesh*			m_mesh;			// Geometry Data for render
-		MaterialInst*	m_materialInst;	// Material Instance
 	};
 }

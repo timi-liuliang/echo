@@ -8,19 +8,27 @@ namespace Echo
 		EchoLogError( message);
 	}
 
+	// build for render
+	void Live2dCubism::Drawable::build()
+	{
+		Mesh::VertexDefine define;
+		define.m_isUseDiffuseUV = true;
+
+		m_mesh = Mesh::create();
+		m_mesh->set(define, m_vertices.size(), (const Byte*)m_vertices.data(), m_indices.size(), m_indices.data(), m_box);
+	}
 
 	Live2dCubism::Live2dCubism()
 		: m_moc(nullptr)
 		, m_model(nullptr)
 		, m_modelSize(0)
 		, m_modelMemory(nullptr)
-		, m_mesh(nullptr)
-		, m_materialInst(nullptr)
 	{
 		// set log fun
 		csmSetLogFunction(csmLogFunc);
 
 		setMoc("Res://girl/girl.moc3");
+		buildDrawables();
 	}
 
 	Live2dCubism::~Live2dCubism()
@@ -115,6 +123,7 @@ namespace Echo
 				
 				// vertexs
 				ui32 vertexCount = vertexCounts[i];
+				drawable.m_box.reset();
 				for (int j = 0; j < vertexCount; j++)
 				{
 					csmVector2 pos = positions[i][j];
@@ -125,6 +134,7 @@ namespace Echo
 					vert.m_uv = Vector2(uv.X, uv.Y);
 
 					drawable.m_vertices.push_back( vert);
+					drawable.m_box.addPoint(vert.m_position);
 				}
 
 				// indices
@@ -164,6 +174,15 @@ namespace Echo
 				parseParts();
 				parseDrawables();
 			}
+		}
+	}
+
+	// build drawable
+	void Live2dCubism::buildDrawables()
+	{
+		for (Drawable& drawable : m_drawables)
+		{
+			drawable.build();
 		}
 	}
 

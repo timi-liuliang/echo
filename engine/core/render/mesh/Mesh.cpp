@@ -326,4 +326,37 @@ namespace Echo
 		Buffer vertBuff(m_vertData.m_stride*m_vertData.m_count, m_vertData.m_vertices);
 		m_vertexBuffer = Renderer::instance()->createVertexBuffer(GPUBuffer::GBU_GPU_READ, vertBuff);
 	}
+
+	// …Ë÷√ ˝æ›
+	void Mesh::set(const Mesh::VertexDefine& format ,ui32 vertCount, const Byte* vertices, ui32 indicesCount, const ui16* indices, const Box& box)
+	{
+		// process vertex format define
+		m_vertData.m_isUseNormal = format.m_isUseNormal;
+		m_vertData.m_isUseVertexColor = format.m_isUseVertexColor;
+		m_vertData.m_isUseDiffuseUV = format.m_isUseDiffuseUV;
+		m_vertData.build();
+
+		// process data
+		EchoSafeFree(m_vertData.m_vertices);
+		EchoSafeFree(m_indices);
+
+		m_vertData.m_count = vertCount;
+
+		// calc vertex buffer size
+		ui32 vertBuffSize = m_vertData.m_count * m_vertData.m_stride;
+		m_vertData.m_vertices = EchoAlloc(Byte, vertBuffSize);
+
+		memcpy(m_vertData.m_vertices, vertices, vertCount * m_vertData.m_stride);
+
+		// load indices
+		m_idxCount = indicesCount;
+		m_idxStride = sizeof(Word);
+
+		ui32 idxBuffSize = m_idxCount * m_idxStride;
+		m_indices = EchoAlloc(Byte, idxBuffSize);
+		memcpy(m_indices, indices, idxBuffSize);
+		m_box = box;
+
+		buildBuffer();
+	}
 }

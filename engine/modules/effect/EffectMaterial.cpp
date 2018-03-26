@@ -1,7 +1,7 @@
 #include "EffectMaterial.h"
 #include "engine/core/Util/Exception.h"
 #include "Render/Material.h"
-#include "Engine/core/Scene/Scene_Manager.h"
+#include "Engine/core/Scene/NodeTree.h"
 #include "engine/core/io/DataStream.h"
 #include "EffectSystemManager.h"
 #include "render/RenderQueueGroup.h"

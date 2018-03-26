@@ -2,7 +2,6 @@
 #include "EchoThread.h"
 #include "engine/core/Util/Exception.h"
 #include "engine/core/Util/LogManager.h"
-#include "Engine/core/Scene/Scene_Manager.h"
 #include "engine/core/Util/AssertX.h"
 #ifndef ECHO_PLATFORM_WINDOWS
 #include <unistd.h>

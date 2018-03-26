@@ -1,5 +1,4 @@
 #include "EngineConsole.h"
-#include "Engine/core/Scene/Scene_Manager.h"
 #include "engine/core/render/render/Viewport.h"
 #include "engine/core/render/render/Renderer.h"
 #include "render/RenderQueueGroup.h"
