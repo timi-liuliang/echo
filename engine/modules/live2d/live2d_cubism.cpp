@@ -12,6 +12,8 @@ namespace Echo
 	Live2dCubism::Live2dCubism()
 		: m_moc(nullptr)
 		, m_model(nullptr)
+		, m_modelSize(0)
+		, m_modelMemory(nullptr)
 		, m_mesh(nullptr)
 		, m_materialInst(nullptr)
 	{
@@ -23,7 +25,7 @@ namespace Echo
 
 	Live2dCubism::~Live2dCubism()
 	{
-
+		EchoSafeFreeAlign(m_modelMemory, csmAlignofModel);
 	}
 
 	void Live2dCubism::bindMethods()
@@ -40,16 +42,12 @@ namespace Echo
 			m_moc = csmReviveMocInPlace(memReader.getData<void*>(), memReader.getSize());
 			if ( m_moc)
 			{
-				ui32 modelSize = csmGetSizeofModel(m_moc);
+				m_modelSize = csmGetSizeofModel(m_moc);
+				m_modelMemory = EchoMallocAlign(m_modelSize, csmAlignofModel);
+				m_model = csmInitializeModelInPlace(m_moc, m_modelMemory, m_modelSize);
 				int a = 10;
 			}
 		}
-	}
-
-	// set model
-	void setModel(const String& model)
-	{
-		//m_model = csmInitializeModelInPlace(m_moc, );
 	}
 
 	// update per frame

@@ -21,7 +21,7 @@ namespace Echo
 		bool getValueBool(const String& key, bool defaultValue) const;
 		i32 getValueI32(const String& key, i32 defaultValue)const;
 		float getValueFloat(const String& key, float defaultValue) const;
-		const Vector3& getValueVec3(const String& key, const Vector3& defaultValue)const;
+		Vector3 getValueVec3(const String& key, const Vector3& defaultValue)const;
 
 		// …Ë÷√÷µ
 		void setValue(const String& key, const String& value);

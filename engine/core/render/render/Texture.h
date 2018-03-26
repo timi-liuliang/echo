@@ -11,7 +11,7 @@ namespace Echo
 	 * ÎÆÀí·â×°
 	 */
 	class SamplerState;
-	class ECHO_EXPORT_RENDER Texture
+	class Texture
 	{
 		friend class Renderer;
 		friend class RenderTarget;

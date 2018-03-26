@@ -26,15 +26,14 @@ namespace Echo
 		// set moc
 		void setMoc(const String& res);
 
-		// set model
-		void setModel(const String& model);
-
 	protected:
 		// update
 		virtual void update();
 
 	private:
 		csmMoc*			m_moc;
+		ui32			m_modelSize;
+		void*			m_modelMemory;
 		csmModel*		m_model;
 		Mesh*			m_mesh;			// Geometry Data for render
 		MaterialInst*	m_materialInst;	// Material Instance

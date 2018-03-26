@@ -454,10 +454,11 @@ namespace Echo
 #define EchoSafeDeleteContainer(container, T)	{ for (auto& element : container){ ECHO_DELETE_T(element, T); } container.clear();	}
 
 #define EchoMalloc(bytes)						ECHO_MALLOC(bytes)
+#define EchoMallocAlign(bytes, align)			ECHO_MALLOC_ALIGN(bytes, align)
 #define EchoAlloc(T, count)						ECHO_ALLOC_T(T, count)
 #define EchoSafeFree(ptr)						{ if(ptr) { ECHO_FREE(ptr); (ptr) = NULL; } }
+#define EchoSafeFreeAlign(ptr, align)			{ if(ptr) { ECHO_FREE_ALIGN(ptr, align); ptr = nullptr;}}
 #define EchoSafeFreeVector(v)					{ for ( size_t i=0; i<v.size(); i++) EchoSafeFree( v[i]); v.clear();}
-
 #define EchoSafeRelease(ptr)					{ if(ptr) { ptr->release(); ptr = NULL; } }
 
 #endif

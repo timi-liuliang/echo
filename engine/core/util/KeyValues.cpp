@@ -70,7 +70,7 @@ namespace Echo
 		return defaultValue;
 	}
 
-	const Vector3& KeyValues::getValueVec3(const String& key, const Vector3& defaultValue)const
+	Vector3 KeyValues::getValueVec3(const String& key, const Vector3& defaultValue)const
 	{
 		const String& value = getValueStr(key);
 		if (value != StringUtil::BLANK)
