@@ -8,7 +8,7 @@
 #include "engine/core/Util/Exception.h"
 #include "Render/Renderer.h"
 #include "Render/ShaderProgram.h"
-#include "Engine/core/Scene/Scene_Manager.h"
+#include "Engine/core/Scene/NodeTree.h"
 #include "EffectLayer2DBillBoard.h"
 #include "EffectLayer3DBillBoard.h"
 #include "EffectLayerColumn.h"
@@ -428,10 +428,10 @@ namespace Echo
 			if (NULL != m_userCamera)
 				return m_userCamera;
 			else
-				return SceneManager::instance()->getGUICamera();
+				return NodeTree::instance()->getGUICamera();
 		}
 		else
-			return SceneManager::instance()->getMainCamera();
+			return NodeTree::instance()->getMainCamera();
 	}
 
 	//-----------------------------------------------------------------------
@@ -989,7 +989,7 @@ namespace Echo
 			return;
 
 		Renderer* pRender = Renderer::instance();
-		SceneManager* pSceneManager = SceneManager::instance();
+		NodeTree* pSceneManager = NodeTree::instance();
 		RenderQueue* pRenderQueue = NULL;
 		Material* pMaterial = NULL;
 		ShaderProgram* shaderProgram = NULL;
@@ -1010,7 +1010,7 @@ namespace Echo
 		//pRender->setDepthStencilState(mEffectDepthState);
 
 		//get the camera to fill the matrix.
-		Camera* camera = SceneManager::instance()->getMainCamera();
+		Camera* camera = NodeTree::instance()->getMainCamera();
 		Matrix4 viewProjMat;
 
 		viewProjMat = camera->getViewProjMatrix();

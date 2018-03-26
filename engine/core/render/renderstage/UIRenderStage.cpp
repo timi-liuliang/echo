@@ -1,5 +1,5 @@
 #include "UIRenderStage.h"
-#include "engine/core/Scene/scene_manager.h"
+#include "engine/core/Scene/NodeTree.h"
 #include "Engine/core/Render/RenderTargetManager.h"
 #include "render/RenderQueueGroup.h"
 
@@ -82,7 +82,7 @@ namespace Echo
 
 	void UIRenderStage::_renderCEGUI()
 	{
-		EchoAssert(SceneManager::instance());
+		EchoAssert(NodeTree::instance());
 		RenderQueue* pRenderQueue = RenderQueueGroup::instance()->getRenderQueue("UI");
 		if (!pRenderQueue) return;
 		pRenderQueue->renderQueue();

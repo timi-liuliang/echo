@@ -1,6 +1,6 @@
 #include "LightArray.h"
 #include <engine/core/io/DataStream.h>
-#include "Engine/core/Scene/Scene_Manager.h"
+#include "Engine/core/Scene/NodeTree.h"
 #include "rapidxml/rapidxml.hpp"
 #include "rapidxml/rapidxml_utils.hpp"
 #include "rapidxml/rapidxml_print.hpp"
@@ -61,7 +61,7 @@ namespace Echo
 					#ifdef ECHO_EDITOR_MODE
 						if (pbrLight->m_castShadow && pbrLight->m_selfType == Echo::LT_Directional)
 						{
-							SceneManager::instance()->getShadowCamera().setLightDir(pbrLight->m_direction);
+							NodeTree::instance()->getShadowCamera().setLightDir(pbrLight->m_direction);
 						}
 					#endif
 

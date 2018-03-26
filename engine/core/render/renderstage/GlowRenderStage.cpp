@@ -2,7 +2,7 @@
 #include "RenderTargetManager.h"
 #include "Engine/modules/Effect/EffectSystemManager.h"
 #include "RenderStageManager.h"
-#include "engine/core/Scene/scene_manager.h"
+#include "engine/core/Scene/NodeTree.h"
 
 namespace Echo
 {

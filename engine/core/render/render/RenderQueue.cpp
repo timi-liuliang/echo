@@ -4,7 +4,7 @@
 #include "Render/ShaderProgram.h"
 #include "engine/core/Util/LogManager.h"
 #include "Render/Material.h"
-#include "Engine/core/Scene/Scene_Manager.h"
+#include "Engine/core/Scene/NodeTree.h"
 #include "Engine/core/Render/MaterialInst.h"
 #include "RenderQueueGroup.h"
 
@@ -15,7 +15,7 @@ namespace Echo
 		Renderable* pr1 = Renderer::instance()->getRenderable(p1);
 		Renderable* pr2 = Renderer::instance()->getRenderable(p2);
 		
-		const Vector3& camPos = SceneManager::instance()->getMainCamera()->getPosition();
+		const Vector3& camPos = NodeTree::instance()->getMainCamera()->getPosition();
 		float d1 = (pr1->m_worldPos - camPos).lenSqr();
 		float d2 = (pr2->m_worldPos - camPos).lenSqr();
 

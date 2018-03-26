@@ -1,6 +1,6 @@
 #include "ShadowMapRenderStage.h"
 #include <engine/core/render/render/Material.h>
-#include "Engine/core/Scene/Scene_Manager.h"
+#include "Engine/core/Scene/NodeTree.h"
 #include "Engine/core/Render/RenderTargetManager.h"
 #include "Engine/core/Render/MaterialInst.h"
 #include "Engine/core/main/EngineSettings.h"
@@ -170,7 +170,7 @@ namespace Echo
 	// Ö´ÐÐ
 	void ShadowMapRenderStage::render()
 	{
-		bool isShadowCameraEnable = SceneManager::instance()->getShadowCamera().isEnable();
+		bool isShadowCameraEnable = NodeTree::instance()->getShadowCamera().isEnable();
 		if (m_bEnable && m_init && isShadowCameraEnable)
 		{
 			m_isShadowCameraEnable = isShadowCameraEnable;

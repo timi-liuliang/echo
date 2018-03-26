@@ -989,17 +989,17 @@ namespace Echo
 		{
 			if ( isUIModel )
 			{
-				return (void*)SceneManager::instance()->getGUICamera()->getPositionPtr();
+				return (void*)NodeTree::instance()->getGUICamera()->getPositionPtr();
 			}
-			return (void*)SceneManager::instance()->getMainCamera()->getPositionPtr();
+			return (void*)NodeTree::instance()->getMainCamera()->getPositionPtr();
 		}
 		else if (name == "CameraDirection")
 		{
 			if ( isUIModel )
 			{
-				return (void*)&SceneManager::instance()->getGUICamera()->getDirection();
+				return (void*)&NodeTree::instance()->getGUICamera()->getDirection();
 			}
-			return (void*)&SceneManager::instance()->getMainCamera()->getDirection();
+			return (void*)&NodeTree::instance()->getMainCamera()->getDirection();
 		}
 		else if (name == "LightArrayInfo")
 		{
@@ -1098,15 +1098,15 @@ namespace Echo
 #ifndef ECHO_EDITOR_MODE
 		else if ( name == "coveragePos" )
 		{
-			return (void*)SceneManager::instance()->getMainActorPositionPtr();
+			return (void*)NodeTree::instance()->getMainActorPositionPtr();
 		}
 		else if (name == "filterColor")
 		{
-			return const_cast<void*>(static_cast<const void*>(&SceneManager::instance()->getFilterColor()));
+			return const_cast<void*>(static_cast<const void*>(&NodeTree::instance()->getFilterColor()));
 		}
 		else if (name == "filterGray")
 		{
-			return const_cast<void*>(static_cast<const void*>(&SceneManager::instance()->getFilterGray()));
+			return const_cast<void*>(static_cast<const void*>(&NodeTree::instance()->getFilterGray()));
 		}
 #endif
 		else

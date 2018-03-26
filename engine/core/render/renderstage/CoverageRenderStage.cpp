@@ -1,5 +1,5 @@
 #include "CoverageRenderStage.h"
-#include "engine/core/Scene/scene_manager.h"
+#include "engine/core/Scene/NodeTree.h"
 #include "engine/core/main/EngineSettings.h"
 #include "engine/core/render/render/Material.h"
 #include "Engine/core/Render/RenderTargetManager.h"
@@ -72,7 +72,7 @@ namespace Echo
 	{
 		if (m_bEnable)
 		{ 
-			EchoAssert(SceneManager::instance());
+			EchoAssert(NodeTree::instance());
 			EchoAssert(RenderTargetManager::instance());
 			ui32 coverageRendertarget;
 

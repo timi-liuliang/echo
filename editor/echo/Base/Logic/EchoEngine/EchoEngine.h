@@ -3,7 +3,7 @@
 #include <string>
 #include <Engine/Core.h>
 #include <Engine/core/main/Root.h>
-#include <Engine/core/Scene/Scene_Manager.h>
+#include <Engine/core/Scene/NodeTree.h>
 #include <Engine/core/render/mesh/Mesh.h>
 #include <Engine/modules/Audio/FMODStudio/FSAudioManager.h>
 
@@ -92,7 +92,7 @@ namespace Studio
 
 	protected:
 		Echo::Log*				m_log;				// 日志
-		Echo::SceneManager*		m_sceneMgr;			// 场景管理器
+		Echo::NodeTree*			m_nodeTree;			// 场景管理器
 		Echo::Node*				m_currentEditNode;	// 当前编辑场景
 
 		//Echo::node*			m_backGridNode;	// 背景网格用场景结点

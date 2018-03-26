@@ -1,7 +1,7 @@
 #include "engine/core/Base/EchoDef.h"
 #include "LDRSceneColorRenderStage.h"
 #include "Engine/modules/Effect/EffectSystemManager.h"
-#include "Engine/core/Scene/Scene_Manager.h"
+#include "Engine/core/Scene/NodeTree.h"
 #include "Engine/core/Camera/Camera.h"
 #include "Engine/core/main/Root.h"
 #include "engine/core/render/RenderTargetManager.h"
@@ -37,7 +37,7 @@ namespace Echo
             
 		bool isRenderScene = Root::instance()->isRenderScene();
 
-		EchoAssert(SceneManager::instance());
+		EchoAssert(NodeTree::instance());
 		EchoAssert(RenderTargetManager::instance());
 		RenderTargetID ldrRendertarget = RTI_LDRSceneColorMap;
 
@@ -53,7 +53,7 @@ namespace Echo
 			//SceneManager::instance()->renderScene(Root::instance()->isRenderScene());
 			// 2
 			RenderTargetManager::instance()->getRenderTargetByID(RTI_LDRVRSceneColorMap)->bindTarget_right();
-			SceneManager::instance()->getMainCamera()->setVRModeForEye(false);
+			NodeTree::instance()->getMainCamera()->setVRModeForEye(false);
 			Root::instance()->tick(0);
 			//SceneManager::instance()->renderScene(Root::instance()->isRenderScene());
 

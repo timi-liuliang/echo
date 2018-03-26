@@ -40,7 +40,7 @@ namespace Studio
 
 	// 构造函数
 	EchoEngine::EchoEngine()
-		: m_sceneMgr(NULL)
+		: m_nodeTree(NULL)
 		//, m_backGrid(NULL)
 		//, m_backGridNode(NULL)
 		, m_curPlayAudio(NULL)
@@ -85,7 +85,7 @@ namespace Studio
 			renderCfg.windowHandle = (unsigned int)hwnd;
 			renderCfg.enableThreadedRendering = false;
 			EchoRoot->initRenderer(EchoNew(Echo::GLES2Renderer), renderCfg, NULL);
-			m_sceneMgr = EchoSceneManager;
+			m_nodeTree = EchoSceneManager;
 
 			// 背景网格
 			InitializeBackGrid();

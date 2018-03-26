@@ -10,7 +10,7 @@ namespace Echo
 	{
 		ECHO_CLASS(Node, Object)
 
-		friend class SceneManager;
+		friend class NodeTree;
 		typedef set<Node*>::type ChildNodeSet;
 
 	public:

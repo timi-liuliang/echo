@@ -1,6 +1,5 @@
 #include "CameraMain.h"
 #include "CameraShakeModule.h"
-#include "Engine/core/Scene/Scene_Manager.h"
 
 namespace Echo
 {
@@ -298,6 +297,4 @@ namespace Echo
 			start();
 		}
 	}
-
-
 }

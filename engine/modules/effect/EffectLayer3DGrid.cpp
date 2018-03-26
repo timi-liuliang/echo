@@ -2,7 +2,7 @@
 #include "EffectSystemManager.h"
 #include "Engine/core/Scene/Node.h"
 #include "engine/core/io/DataStream.h"
-#include "engine/core/Scene/scene_manager.h"
+#include "engine/core/Scene/NodeTree.h"
 
 namespace Echo
 {

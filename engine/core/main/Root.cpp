@@ -10,7 +10,7 @@
 #include "Engine/modules/Model/Model.h"
 #include "Engine/modules/Anim/AnimManager.h"
 #include "Engine/modules/Anim/SkeletonManager.h"
-#include "Engine/core/Scene/Scene_Manager.h"
+#include "Engine/core/Scene/NodeTree.h"
 #include "Engine/modules/Effect/EffectSystemManager.h"
 #include "engine/core/Util/Timer.h"
 #include "engine/core/render/render/Viewport.h"
@@ -146,7 +146,7 @@ namespace Echo
 			m_animSysManager	= EchoNew( AnimSystemManager);
 			m_materialManager	= EchoNew( MaterialManager);
 			m_skeletonManager	= EchoNew( SkeletonManager);
-			m_sceneManager		= EchoNew( SceneManager);
+			m_sceneManager		= EchoNew( NodeTree);
 			m_postEffectManager = EchoNew(PostEffectManager);
 			m_io = EchoNew(IO);
 			m_EffectSystemManager = EchoNew(EffectSystemManager);
@@ -289,13 +289,13 @@ namespace Echo
 		if (m_bRendererInited)
 			return true;
 
-		if (!SceneManager::instance()->initialize())
+		if (!NodeTree::instance()->init())
 			return false;
 
 		// setup viewport
 		Viewport* pViewport = EchoRender->getFrameBuffer()->getViewport();
 
-		Camera* p2DCamera = SceneManager::instance()->get2DCamera();
+		Camera* p2DCamera = NodeTree::instance()->get2DCamera();
 		pViewport->setViewProjMatrix(p2DCamera->getViewProjMatrix());
 		ui32 width = pViewport->getWidth();
 		ui32 height = pViewport->getHeight();
@@ -314,12 +314,12 @@ namespace Echo
 		{
 			EchoRender->onSize(width, height);
 
-			Camera* pMainCamera = SceneManager::instance()->getMainCamera();
+			Camera* pMainCamera = NodeTree::instance()->getMainCamera();
 			pMainCamera->setWidth(Real(width));
 			pMainCamera->setHeight(Real(height));
 			pMainCamera->update();
 
-			Camera* p2DCamera = SceneManager::instance()->get2DCamera();
+			Camera* p2DCamera = NodeTree::instance()->get2DCamera();
 			p2DCamera->setWidth(Real(width));
 			p2DCamera->setHeight(Real(height));
 			p2DCamera->update();
@@ -365,7 +365,7 @@ namespace Echo
 			m_audioManager->release();
 
 		EchoSafeDelete(m_audioManager, FSAudioManager);
-		EchoSafeDelete(m_sceneManager, SceneManager);
+		EchoSafeDelete(m_sceneManager, NodeTree);
 		EchoSafeDelete(m_modelManager, ModelManager);
 		EchoSafeDelete(m_animSysManager, AnimSystemManager); //animSysManager要在animManager之前释放，因为会用到animManager来释放自己的animBlend
 		EchoSafeDelete(m_animManager, AnimManager);
@@ -535,7 +535,7 @@ namespace Echo
 		//
 		auto t = EngineSettingsMgr::instance()->isSlowDownExclusiveUI() ? m_frameRealTime : elapsedTime;
 
-		SceneManager::instance()->update(elapsedTime*0.001f);
+		NodeTree::instance()->update(elapsedTime*0.001f);
 
 		updateAllManagerDelayResource();
 

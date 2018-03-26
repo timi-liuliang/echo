@@ -5,7 +5,7 @@
 #include "engine/core/main/EngineSettings.h"
 #include "engine/core/main/EngineConsole.h"
 #include "engine/core/Util/Singleton.h"
-#include "engine/core/Scene/scene_manager.h"
+#include "engine/core/Scene/NodeTree.h"
 #include "FrameState.h"
 
 namespace luaex
@@ -192,7 +192,7 @@ namespace Echo
 		EffectSystemManager* getEffectSystemManager() { EchoAssert(m_EffectSystemManager);  return m_EffectSystemManager; }
 		IO* getResourceGroupManager() { EchoAssert(m_io); return m_io; }
 		TextureResManager* getTextureResManager() { EchoAssert(m_textureResManager);  return m_textureResManager; }
-		SceneManager* getSceneManager() { EchoAssert(m_sceneManager);  return m_sceneManager; }
+		NodeTree* getSceneManager() { EchoAssert(m_sceneManager);  return m_sceneManager; }
 		OpenMPTaskMgr* getOpenMPTaskMgr() { EchoAssert(m_openMPTaskMgr);  return m_openMPTaskMgr; }
 		EngineSettingsMgr& getSettingsMgr() { return m_settingsMgr; }
 		EngineConsole& getConsole() { return m_console; }
@@ -246,7 +246,7 @@ namespace Echo
 		Time*				m_Timer;
 		EffectSystemManager*m_EffectSystemManager;			// 特效系统管理器
 		Renderer*			m_renderer;						// 渲染器
-		SceneManager*		m_sceneManager;					// 场景管理器
+		NodeTree*		m_sceneManager;					// 场景管理器
 		FSAudioManager*		m_audioManager;					// 音频管理器
 		PostEffectManager*	m_postEffectManager;			// 全屏后处理特效管理器
 		luaex::LuaEx*		m_luaEx;						// 脚本接口
