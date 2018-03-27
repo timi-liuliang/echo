@@ -31,7 +31,8 @@ namespace Echo
 
 		// load and parse by file
 		bool loadFromFile(const String& filename, const String& macros);
-		bool loadShaderFrom(void* pNode);
+		bool loadFromContent(const char* content, const String& macros);
+		bool loadShaderFrom(void* node);
 		bool loadBlendState(void* pNode);
 		bool loadMacro(void * pNode);
 		bool loadRasterizerState(void* pNode);
@@ -48,7 +49,7 @@ namespace Echo
 		//void createSamplerState(int stage, SamplerState::SamplerDesc& desc);
 
 		// 创建着色器
-		void createShaderProgram( const String& vsFileName, const String& psFileName);
+		void createShaderProgram( const String& vsContent, const String& psContent);
 
 		// 获取混合状态
 		BlendState* getBlendState() const { return m_pBlendState; }
@@ -79,7 +80,6 @@ namespace Echo
 
 		bool			hasMacro		(const char* const macro) const;
 
-//#ifdef ECHO_EDITOR_MODE
 		// 获取材质可选宏定义列表
 		static StringArray getEnabledMacros(const String& matFileName, bool withEnabled = false);
 
@@ -96,13 +96,13 @@ namespace Echo
 		bool					loadDefaultUniform(void* pNode);
 		const DefaultUniform*	getDefaultUniformValue(const String& name);
 		void*					createDefaultUniformValue(const String& strType, const i32 count, const String& strValue, ui32& outSize, ShaderParamType& outType);
-//#endif
 
 	private:
 		// 获取采样状态
 		const SamplerState* getSamplerStateByTexStage(int stage);
 
-		bool _loadColorFilter( rapidxml::xml_node<char>* pNode );
+		// 从内容加载
+		bool loadFromContent(char* content, const String& macros);
 
 	private:
 		String				m_name;
@@ -116,10 +116,7 @@ namespace Echo
 		TextureSamplerStateArray	m_arrTexSamplerState;
 		ShaderProgram*		m_pShaderProgram;
 		size_t				m_VertexStrite;
-//#ifdef ECHO_EDITOR_MODE
 		typedef map<String, DefaultUniform*>::type MapDefaultUniforms;
 		MapDefaultUniforms	m_defaultUniforms;
-//#endif // ECHO_EDITOR_MODE
-
 	};
 }

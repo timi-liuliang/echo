@@ -73,22 +73,12 @@ namespace Echo
 			m_shaderDesc.macros = macros;
 
 			MemoryReader memReader(filename.c_str());
-			rapidxml::xml_document<> doc;
 			if (!memReader.getData<char*>())
 			{
 				return false;
 			}
 
-			doc.parse<0>( memReader.getData<char*>());
-
-			rapidxml::xml_node<> *pRootNode = doc.first_node();
-			if(!pRootNode)
-			{
-				EchoException("The Material file [%s] content is invalid.", filename.c_str());
-			}
-
-			bool ret = loadShaderFrom(pRootNode->first_node());
-			return ret;
+			return loadFromContent(memReader.getData<char*>(), macros);
 		}
 		catch(bool)
 		{
@@ -98,29 +88,49 @@ namespace Echo
 		}
 	}
 
-	// 加载着色器
-	bool Material::loadShaderFrom( void* pNode )
+	bool Material::loadFromContent(const char* content, const String& macros)
 	{
-		rapidxml::xml_node<>* pSubNode = static_cast<rapidxml::xml_node<>*>(pNode);
+		MemoryReader memReader(content, strlen(content));
+
+		return loadFromContent(memReader.getData<char*>(), macros);
+	}
+
+	// 从内容加载
+	bool Material::loadFromContent(char* content, const String& macros)
+	{
+		rapidxml::xml_document<> doc;
+		doc.parse<0>(content);
+
+		rapidxml::xml_node<>* rootNode = doc.first_node();
+		if (!rootNode)
+		{
+			EchoLogError("The Material file content is invalid.");
+			return false;
+		}
+
+		return loadShaderFrom(rootNode);
+	}
+
+	// 加载着色器
+	bool Material::loadShaderFrom(void* node)
+	{
+		rapidxml::xml_node<>* rootNode = static_cast<rapidxml::xml_node<>*>(node);
 		try
 		{
-			rapidxml::xml_attribute<>* pVarNode = pSubNode->first_attribute();
-			String vsPrograme, psPrograme;
-			while(pVarNode)
+			rapidxml::xml_node<>* vsNode = rootNode->first_node("vs");
+			String vsSrc, psSrc;
+			if (vsNode)
 			{
-				const char *str = pVarNode->value();
-				String strName = pVarNode->name();
-				if (strName == "vs")
-				{
-					vsPrograme = str;
-				}
-				else if (strName == "ps")
-				{
-					psPrograme = str;
-				}
-				pVarNode = pVarNode->next_attribute();
+				vsSrc = vsNode->value();
 			}
-			rapidxml::xml_node<>* pElementNode = pSubNode->first_node();
+
+			rapidxml::xml_node<>* psNode = rootNode->first_node("ps");
+			if (psNode)
+			{
+				psSrc = psNode->value();
+			}
+
+			rapidxml::xml_node<>* pElementNode = rootNode->first_node();
 			if (pElementNode)
 			{
 				do
@@ -169,21 +179,12 @@ namespace Echo
 							throw false;
 						}
 					}
-					else if( strName == "FilterColor" )
-					{
-						if( !_loadColorFilter( pElementNode ) )
-						{
-							throw false;
-						}
-					}
 					else if ( strName == "DefaultUniformValue" )
 					{
-//#ifdef ECHO_EDITOR_MODE
 						if ( !loadDefaultUniform( pElementNode ) )
 						{
 							throw false;
 						}
-//#endif // ECHO_EDITOR_MODE
 					}
 
 					pElementNode = pElementNode->next_sibling();
@@ -194,7 +195,7 @@ namespace Echo
 			// 执行着色器创建
 			try
 			{
-				createShaderProgram(vsPrograme, psPrograme);
+				createShaderProgram( vsSrc, psSrc);
 			}
 			catch(Exception& e)
 			{
@@ -904,16 +905,15 @@ namespace Echo
 	}
 
 	// 创建着色器
-	void Material::createShaderProgram(const String& vsFileName, const String& psFileName)
+	void Material::createShaderProgram(const String& vsContent, const String& psContent)
 	{
 		EchoSafeDelete(m_pShaderProgram, ShaderProgram);
 		Shader::ShaderDesc vsDesc(m_shaderDesc);
 		Renderer* pRenderer = Renderer::instance();
-		Shader *pVertexShader = pRenderer->createShader(Shader::ST_VERTEXSHADER, vsDesc, vsFileName);
+		Shader *pVertexShader = pRenderer->createShader(Shader::ST_VERTEXSHADER, vsDesc, vsContent.data(), vsContent.size());
 		if(!pVertexShader)
 		{
 			String output = "Error in create vs file: ";
-			output += vsFileName;
 			EchoException(output.c_str());
 		}
 
@@ -924,11 +924,10 @@ namespace Echo
 			psDesc.macros += "#define NONSUPPOT_HFLOAT_COLORBUFFER\n";
 		}
 
-		Shader *pPixelShader = pRenderer->createShader(Shader::ST_PIXELSHADER, psDesc, psFileName);
+		Shader *pPixelShader = pRenderer->createShader(Shader::ST_PIXELSHADER, psDesc, psContent.data(), psContent.size());
 		if(!pPixelShader)
 		{
 			String output = "Error in create ps file: ";
-			output += psFileName;
 			EchoException(output.c_str());
 		}
 
@@ -1165,21 +1164,6 @@ namespace Echo
 		}
 
 		return value;
-	}
-
-	bool Material::_loadColorFilter(rapidxml::xml_node<char>* pNode)
-	{
-		bool enable = false;
-		for (rapidxml::xml_attribute<>* a = pNode->first_attribute(); a != NULL; a = a->next_attribute())
-		{
-			if (0 == strcmp(a->name(), "enable"))
-				enable = StringUtil::ParseBool(a->value());
-		}
-		if (enable)
-		{
-			m_shaderDesc.macros += "\n#define FILTER_COLOR\n"; 
-		}
-		return true;
 	}
 
 	bool Material::hasMacro(const char* const macro) const

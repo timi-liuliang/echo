@@ -73,7 +73,7 @@ namespace Echo
 		Texture*				createTexture2D(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff);
 		ShaderProgram*			createShaderProgram(  Material* material);
 		Shader*					createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const String& filename);
-		Shader*					createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const Buffer& buff);
+		Shader*					createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const char* srcBuffer, ui32 size);
 		RenderInput*			createRenderInput( ShaderProgram* pProgram);
 		RenderTargetView*		createRenderTargetView(PixelFormat fmt, ui32 width, ui32 height);
 		DepthStencilView*		createDepthStencilView(PixelFormat fmt, ui32 width, ui32 height);

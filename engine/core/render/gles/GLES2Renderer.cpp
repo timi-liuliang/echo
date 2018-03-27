@@ -549,12 +549,12 @@ namespace Echo
 		return pShader;
 	}
 
-	Shader* GLES2Renderer::createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const Buffer& buff)
+	Shader* GLES2Renderer::createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const char* srcBuffer, ui32 size)
 	{
 		Shader* pShader = NULL;
 		try
 		{
-			pShader = EchoNew(GLES2Shader(type, desc, buff));
+			pShader = EchoNew(GLES2Shader(type, desc, srcBuffer, size));
 		}
 		catch (Exception& e)
 		{

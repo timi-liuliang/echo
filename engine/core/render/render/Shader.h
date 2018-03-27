@@ -33,7 +33,7 @@ namespace Echo
 
 	public:
 		Shader(ShaderType type, const ShaderDesc& desc, const String& filename);
-		Shader(ShaderType type, const ShaderDesc& desc, const Buffer& buff);
+		Shader(ShaderType type, const ShaderDesc& desc, const char* srcBuffer, ui32 size);
 		virtual ~Shader();
 
 		const String& getName() { return m_filename; }

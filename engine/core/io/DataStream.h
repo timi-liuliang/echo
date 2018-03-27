@@ -222,6 +222,7 @@ namespace Echo
 	{
 	public:
 		MemoryReader( const String& file);
+		MemoryReader(const char* data, ui32 size);
 		~MemoryReader();
 
 		// 获取数据指针

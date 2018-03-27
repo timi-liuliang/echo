@@ -12,7 +12,7 @@ namespace Echo
 		friend class GLES2ShaderProgram;
 	public:
 		GLES2Shader(ShaderType type, const ShaderDesc& desc, const String& filename);
-		GLES2Shader(ShaderType type, const ShaderDesc& desc, const Buffer& buff);
+		GLES2Shader(ShaderType type, const ShaderDesc& desc, const char* srcBuffer, ui32 size);
 		~GLES2Shader();
 
 	private:

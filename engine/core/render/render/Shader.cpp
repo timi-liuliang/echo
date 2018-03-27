@@ -31,16 +31,16 @@ namespace Echo
 	}
 
 	// ¹¹Ôìº¯Êý
-	Shader::Shader(ShaderType type, const ShaderDesc& desc, const Buffer& buff)
+	Shader::Shader(ShaderType type, const ShaderDesc& desc, const char* srcBuffer, ui32 size)
 		: m_pProgram(NULL)
 	{
 		m_validata	 = true;
 		m_shaderType = type;
 		m_desc		 = desc;
-		m_shaderSize = buff.getSize();
+		m_shaderSize = size;
 		
 		m_srcData.resize( m_shaderSize);
-		memcpy( &m_srcData[0], buff.getData(), buff.getSize());
+		memcpy( &m_srcData[0], srcBuffer, size);
 
 	}
 

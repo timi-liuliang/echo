@@ -58,18 +58,13 @@ namespace Echo
 	// 根据渲染队列名称获取渲染队列
 	RenderQueue* RenderQueueGroup::getRenderQueue(const String& strQueueName) const
 	{
-		RenderQueue* pRenderQueue = NULL;
-		size_t nCount = m_renderQueues.size();
-		for (size_t i = 0; i < nCount; ++i)
+		for (RenderQueue* queue : m_renderQueues)
 		{
-			if (strQueueName == m_renderQueues[i]->getName())
-			{
-				pRenderQueue = m_renderQueues[i];
-				break;
-			}
+			if (queue->getName() == strQueueName)
+				return queue;
 		}
 
-		return pRenderQueue;
+		return nullptr;
 	}
 
 	// 根据索引获取渲染队列

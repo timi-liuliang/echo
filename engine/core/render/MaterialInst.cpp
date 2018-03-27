@@ -55,6 +55,7 @@ namespace Echo
 		, m_depthStencil(NULL)
 		, m_isTemplate(false)
 		, m_isSubmitToStageRenderQueue(false)
+		, m_officialMaterialContent(nullptr)
 	{
 
 	}
@@ -1384,24 +1385,27 @@ namespace Echo
 	// 构建渲染队列
 	void MaterialInst::buildRenderQueue()
 	{
-		if (!m_materialTemplate.empty())
+		// confirm render queue
+		m_renderQueue = RenderQueueGroup::instance()->getRenderQueue(m_stage);
+
+		// make sure macros
+		String finalMacros; finalMacros.reserve(512);
+		for (const String& macro : m_macros)
 		{
-			// 重新组织宏定义
-			String finalMacros; finalMacros.reserve(512);
-			for (const String& macro : m_macros)
-			{
-				finalMacros += "#define " + macro + "\n";
-			}
-
-			for (const String& macro : m_macrosEx)
-			{
-				finalMacros += "#define " + macro + "\n";
-			}
-
-			m_material = EchoNew(Material);
-			m_material->loadFromFile( m_materialTemplate, finalMacros);
-			m_renderQueue = RenderQueueGroup::instance()->getRenderQueue(m_stage);
+			finalMacros += "#define " + macro + "\n";
 		}
+
+		for (const String& macro : m_macrosEx)
+		{
+			finalMacros += "#define " + macro + "\n";
+		}
+
+		// create material
+		m_material = EchoNew(Material);
+		if (m_officialMaterialContent)
+			m_material->loadFromContent(m_officialMaterialContent, finalMacros);
+		else if (!m_materialTemplate.empty())
+			m_material->loadFromFile( m_materialTemplate, finalMacros);
 	}
 
 	void MaterialInst::LoadBlendState(void* pNode)

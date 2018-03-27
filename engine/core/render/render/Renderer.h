@@ -319,7 +319,7 @@ namespace Echo
 		//virtual Texture*			createTextureFromImage(Image* pImage, Dword usage = Texture::TU_DEFAULT);
 		virtual ShaderProgram*		createShaderProgram(Material* material)=0;
 		virtual Shader*				createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const String& filename) = 0;
-		virtual Shader*				createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const Buffer& buff) = 0;
+		virtual Shader*				createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const char* srcBuffer, ui32 size) = 0;
 
 		// ¥¥Ω®‰÷»æ ‰»Î
 		virtual RenderInput* createRenderInput(ShaderProgram* pProgram) = 0;

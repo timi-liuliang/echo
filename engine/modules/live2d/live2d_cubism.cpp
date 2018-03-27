@@ -2,73 +2,72 @@
 #include "engine/core/util/LogManager.h"
 
 // 默认材质
-static const char* live2dDefaultMaterial = "\
-<?xml version = \"1.0\" encoding = \"utf-8\"?>\
+static const char* g_live2dDefaultMaterial = "\
+<?xml version = \"1.0\" encoding = \"GB2312\"?>\
 <material> \
-	<vs>#version 100\
-		\
-		attribute vec3 inPosition;\
-		attribute vec2 inTexCoord;\
-		\
-		uniform mat4 matWVP;\
-		\
-		varying vec2 texCoord;\
-		\
-		void main(void)\
-		{\
-			vec4 position = matWVP * vec4(inPosition, 1.0);\
-			gl_Position = position;\
-			\
-			texCoord = inTexCoord;\
-		}\
-	</vs>\
-	<ps>#version 100\
-		\
-		uniform sampler2D DiffuseSampler;\
-		varying mediump vec2 texCoord;\
-		\
-		void main(void)\
-		{\
-			mediump vec4 textureColor = texture2D(DiffuseSampler, texCoord);\
-			gl_FragColor = textureColor;\
-		}\
+<vs>#version 100\n\
+\n\
+attribute vec3 inPosition;\n\
+attribute vec2 inTexCoord;\n\
+\n\
+uniform mat4 matWVP;\n\
+\n\
+varying vec2 texCoord;\n\
+\n\
+void main(void)\n\
+{\n\
+	vec4 position = matWVP * vec4(inPosition, 1.0);\n\
+	gl_Position = position;\n\
+	\n\
+	texCoord = inTexCoord;\n\
+}\n\
+</vs>\
+<ps>#version 100\n\
+\n\
+uniform sampler2D DiffuseSampler;\n\
+varying mediump vec2 texCoord;\n\
+\n\
+void main(void)\n\
+{\n\
+	mediump vec4 textureColor = texture2D(DiffuseSampler, texCoord);\n\
+	gl_FragColor = textureColor;\n\
+}\n\
 	</ps>\
 	<BlendState>\
-		<BlendEnable value = \"true\" / >\
-		<SrcBlend value = \"BF_SRC_ALPHA\" / >\
-		<DstBlend value = \"BF_INV_SRC_ALPHA\" / >\
+		<BlendEnable value = \"true\" />\
+		<SrcBlend value = \"BF_SRC_ALPHA\" />\
+		<DstBlend value = \"BF_INV_SRC_ALPHA\" />\
 	</BlendState>\
 	<RasterizerState>\
-		<CullMode value = \"CULL_NONE\" / >\
+		<CullMode value = \"CULL_NONE\" />\
 	</RasterizerState>\
 	<DepthStencilState>\
-		<DepthEnable value = \"false\" / >\
-		<WriteDepth value = \"false\" / >\
+		<DepthEnable value = \"false\" />\
+		<WriteDepth value = \"false\" />\
 	</DepthStencilState>\
 	<SamplerState>\
 		<BiLinearMirror>\
-			<MinFilter value = \"FO_LINEAR\" / >\
-			<MagFilter value = \"FO_LINEAR\" / >\
-			<MipFilter value = \"FO_NONE\" / >\
-			<AddrUMode value = \"AM_CLAMP\" / >\
-			<AddrVMode value = \"AM_CLAMP\" / >\
+			<MinFilter value = \"FO_LINEAR\" />\
+			<MagFilter value = \"FO_LINEAR\" />\
+			<MipFilter value = \"FO_NONE\" />\
+			<AddrUMode value = \"AM_CLAMP\" />\
+			<AddrVMode value = \"AM_CLAMP\" />\
 		</BiLinearMirror>\
 	</SamplerState>\
 	<Texture>\
-		<stage no = \"0\" sampler = \"BiLinearMirror\" / >\
+		<stage no = \"0\" sampler = \"BiLinearMirror\" />\
 	</Texture>\
 	<VertexFormats>\
 		<VertexFormat>\
-			<VertexSemantic value = \"VS_POSITION\" / >\
-			<PixelFormat value = \"PF_RGB32_FLOAT\" / >\
+			<VertexSemantic value = \"VS_POSITION\" />\
+			<PixelFormat value = \"PF_RGB32_FLOAT\" />\
 		</VertexFormat>\
 		<VertexFormat>\
-			<VertexSemantic value = \"VS_TEXCOORD\" / >\
-			<PixelFormat value = \"PF_RG32_FLOAT\" / >\
+			<VertexSemantic value = \"VS_TEXCOORD\" />\
+			<PixelFormat value = \"PF_RG32_FLOAT\" />\
 		</VertexFormat>\
 	</VertexFormats>\
-</material>\
-";
+</material>";
 
 namespace Echo
 {
@@ -87,11 +86,11 @@ namespace Echo
 		m_mesh->set(define, m_vertices.size(), (const Byte*)m_vertices.data(), m_indices.size(), m_indices.data(), m_box);
 
 		m_materialInst = MaterialInst::create();
-
-		// 这些参数以后存入到结点属性中
-		m_materialInst->setMaterialTemplate("Res://material/live2d.mt");
+		m_materialInst->setOfficialMaterialContent( g_live2dDefaultMaterial);
 		m_materialInst->setStage("Transparent");
 		m_materialInst->applyLoadedData();
+
+		m_renderable = Renderer::instance()->createRenderable( m_materialInst->getRenderQueue(), m_materialInst->getMaterial());
 	}
 
 	Live2dCubism::Live2dCubism()

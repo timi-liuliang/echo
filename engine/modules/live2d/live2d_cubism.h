@@ -52,6 +52,7 @@ namespace Echo
 			vector<Word>::type	m_indices;
 			Mesh*				m_mesh;			// Geometry Data for render
 			MaterialInst*		m_materialInst;	// Material Instance
+			Renderable*			m_renderable;
 
 			// build for render
 			void build();

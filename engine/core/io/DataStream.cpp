@@ -718,7 +718,6 @@ namespace Echo
 		}
 	}
 
-	// 构造函数
 	MemoryReader::MemoryReader(const String& file)
 	{
 		// 加载数据
@@ -735,11 +734,26 @@ namespace Echo
 		else
 		{
 			m_size = 0;
-			m_data = NULL;
+			m_data = nullptr;
 		}
 	}
 
-	// 析构函数
+	MemoryReader::MemoryReader(const char* data, ui32 size)
+	{
+		if (size > 0)
+		{
+			m_size = size;
+			m_data = (char*)EchoMalloc(m_size + 1);
+			std::memcpy(m_data, data, m_size);
+			m_data[m_size] = '\0';
+		}
+		else
+		{
+			m_size = 0;
+			m_data = nullptr;
+		}
+	}
+
 	MemoryReader::~MemoryReader()
 	{
 		EchoSafeFree( m_data);
