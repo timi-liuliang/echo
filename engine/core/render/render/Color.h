@@ -1,5 +1,4 @@
-#ifndef __ECHO_COLOR_H__
-#define __ECHO_COLOR_H__
+#pragma once
 
 #include <engine/core/Math/Vector4.h>
 #include <engine/core/Math/EchoMath.h>
@@ -10,7 +9,7 @@ namespace Echo
 	/**
 	 * ÑÕÉ«¶¨Òå
 	 */
-	class ECHO_EXPORT_RENDER Color
+	class Color
 	{
 	public:	
 		Real r, g, b, a;
@@ -339,5 +338,3 @@ namespace Echo
 		Color fromString(const String& val);
 	}
 }
-
-#endif

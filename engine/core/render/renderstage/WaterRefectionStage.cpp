@@ -2,7 +2,7 @@
 #include "engine/core/Render/RenderTargetManager.h"
 #include <engine/core/Util/LogManager.h>
 #include "Engine/core/main/EngineSettings.h"
-#include "Engine/core/Scene/Scene_Manager.h"
+#include "Engine/core/Scene/NodeTree.h"
 
 namespace Echo
 {

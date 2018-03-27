@@ -5,7 +5,7 @@
 
 namespace Echo
 {
-	class ECHO_EXPORT_RENDER PVRCodec: public ImageCodec
+	class PVRCodec: public ImageCodec
 	{
 	public:
 		PVRCodec();

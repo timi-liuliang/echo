@@ -16,7 +16,7 @@
 
 namespace Echo
 {
-	class ECHO_EXPORT_RENDER DeviceFeature
+	class DeviceFeature
 	{
 	public:
 		DeviceFeature();
@@ -98,7 +98,7 @@ namespace Echo
 	};
 
 
-	class ECHO_EXPORT_RENDER Renderer
+	class Renderer
 	{
 		typedef RasterizerState::PolygonMode PolygonFillMode;
 	public:

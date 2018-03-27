@@ -1,6 +1,6 @@
 #include "MaterialInst.h"
 #include "Engine/modules/Light/Light.h"
-#include "Engine/core/Scene/Scene_Manager.h"
+#include "Engine/core/Scene/NodeTree.h"
 #include "MaterialController.h"
 #include "engine/core/render/render/Material.h"
 #include "engine/core/render/render/MaterialDesc.h"

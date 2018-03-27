@@ -15,7 +15,7 @@ namespace Echo
 	/**
 	 * 材质参数控制器                                                       
 	 */
-	class ECHO_EXPORT_RENDER MaterialController
+	class MaterialController
 	{
 		friend class MaterialInst;
 	public:

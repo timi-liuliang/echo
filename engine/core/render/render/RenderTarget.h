@@ -11,7 +11,7 @@ namespace Echo
 	/**
 	 * 渲染目标接口
 	 */
-	class ECHO_EXPORT_RENDER RenderTarget
+	class RenderTarget
 	{
 	public:
 		struct Options

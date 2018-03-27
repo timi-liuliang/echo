@@ -5,7 +5,7 @@
 
 namespace Echo
 {
-	class ECHO_EXPORT_RENDER RenderView
+	class RenderView
 	{
 	public:
 		enum RenderViewType

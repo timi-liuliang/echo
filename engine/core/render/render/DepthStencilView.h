@@ -7,7 +7,7 @@ namespace Echo
 	/**
 	 * Éî¶ÈÄ£°å
 	 */
-	class ECHO_EXPORT_RENDER DepthStencilView : public RenderView
+	class DepthStencilView : public RenderView
 	{
 	public:
 		DepthStencilView(PixelFormat pixFmt, ui32 width, ui32 height);

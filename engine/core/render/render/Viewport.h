@@ -8,7 +8,7 @@ namespace Echo
 	/**
 	 * йс©з
 	 */
-	struct ECHO_EXPORT_RENDER Viewport
+	struct Viewport
 	{	
 		int			m_left;
 		int			m_top;

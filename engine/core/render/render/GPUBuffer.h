@@ -9,7 +9,7 @@ namespace Echo
 	/**
 	 * GpuBuffer
 	 */
-	class ECHO_EXPORT_RENDER GPUBuffer
+	class GPUBuffer
 	{	
 		friend class GPUBufferManager;
 	public:

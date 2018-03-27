@@ -9,7 +9,7 @@ namespace Echo
 	 * 渲染输入(几何体数据)
 	 */
 	class ShaderProgram;
-	class ECHO_EXPORT_RENDER RenderInput
+	class RenderInput
 	{
 	public:
 		enum VertexSemantic
@@ -67,7 +67,7 @@ namespace Echo
 		struct VertexElement
 		{
 			VertexSemantic		m_semantic;		// Vertex Semantic
-			PixelFormat			m_pixFmt;			// Vertex pixel format
+			PixelFormat			m_pixFmt;		// Vertex pixel format
 
 			// 构造函数
 			VertexElement(VertexSemantic semantic = VS_UNKNOWN, PixelFormat pixFmt = PF_UNKNOWN)

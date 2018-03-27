@@ -25,7 +25,7 @@ namespace Echo
 	* ShaderProgram 2014-11-18
 	*/
 	class Material;
-	class ECHO_EXPORT_RENDER ShaderProgram
+	class ShaderProgram
 	{
 	public:
 		// ฒฮสýร่ส๖

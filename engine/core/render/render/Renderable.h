@@ -22,7 +22,7 @@ namespace Echo
 	/**
 	 * 渲染接口
 	 */
-	class ECHO_EXPORT_RENDER IManualRenderable
+	class IManualRenderable
 	{
 	public:
 		virtual ~IManualRenderable(){}
@@ -34,7 +34,7 @@ namespace Echo
 	/**
 	 * 最小可渲染体封装
 	 */
-	class ECHO_EXPORT_RENDER Renderable : public IManualRenderable
+	class Renderable : public IManualRenderable
 	{
 		friend class RenderQueue;
 		friend class Renderer;

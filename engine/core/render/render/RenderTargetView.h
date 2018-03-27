@@ -1,11 +1,10 @@
-#ifndef __ECHO_RENDERTARGETVIEW_H__
-#define __ECHO_RENDERTARGETVIEW_H__
+#pragma once
 
 #include "RenderView.h"
 
 namespace Echo
 {
-	class ECHO_EXPORT_RENDER RenderTargetView : public RenderView
+	class RenderTargetView : public RenderView
 	{
 	public:
 		RenderTargetView(PixelFormat pixFmt, ui32 width, ui32 height);
@@ -25,5 +24,3 @@ namespace Echo
 		ui32				m_height;
 	};
 }
-
-#endif

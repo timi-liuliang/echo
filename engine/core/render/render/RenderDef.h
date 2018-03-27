@@ -1,7 +1,5 @@
 #pragma once
 
-#define ECHO_EXPORT_RENDER
-
 namespace Echo
 {
 	enum EShaderPlatform

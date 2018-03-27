@@ -8,7 +8,7 @@
 
 namespace Echo
 {
-	class ECHO_EXPORT_RENDER FrameBuffer
+	class FrameBuffer
 	{
 	public:
 		static const ui32 MAX_RENDERTARGETS = 4;

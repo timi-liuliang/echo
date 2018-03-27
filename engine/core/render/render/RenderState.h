@@ -8,7 +8,7 @@ namespace Echo
 	/**
 	 * 渲染状态
 	 */
-	class ECHO_EXPORT_RENDER RenderState
+	class RenderState
 	{
 	public:
 		RenderState();
@@ -38,7 +38,7 @@ namespace Echo
 		};
 	};
 
-	class ECHO_EXPORT_RENDER BlendState: public RenderState
+	class BlendState: public RenderState
 	{
 	public:
 		enum BlendOperation
@@ -125,7 +125,7 @@ namespace Echo
 		BlendDesc		m_desc;
 	};
 
-	class ECHO_EXPORT_RENDER DepthStencilState: public RenderState
+	class DepthStencilState: public RenderState
 	{
 	public:
 
@@ -217,7 +217,7 @@ namespace Echo
 		DepthStencilDesc		m_desc;
 	};
 
-	class ECHO_EXPORT_RENDER RasterizerState : public RenderState
+	class RasterizerState : public RenderState
 	{
 	public:
 
@@ -292,7 +292,7 @@ namespace Echo
 	/**
 	 * 纹理采样状态
 	 */
-	class ECHO_EXPORT_RENDER SamplerState : public RenderState
+	class SamplerState : public RenderState
 	{
 	public:
 		// 采样算法

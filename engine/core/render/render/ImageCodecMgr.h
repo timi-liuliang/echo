@@ -9,7 +9,7 @@ namespace Echo
 	/**
 	 * ÎÆÀí±àÂë¹ÜÀíÆ÷
 	 */
-	class ECHO_EXPORT_RENDER ImageCodecMgr
+	class ImageCodecMgr
 	{
 		typedef map<int, ImageCodec*>::type CodecMap;
 	public:

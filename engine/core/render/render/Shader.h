@@ -7,7 +7,7 @@
 namespace Echo
 {
 	class ShaderProgram;
-	class ECHO_EXPORT_RENDER Shader
+	class Shader
 	{
 	public:
 		enum ShaderType
