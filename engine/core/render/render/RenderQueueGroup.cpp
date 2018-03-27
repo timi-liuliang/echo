@@ -35,15 +35,15 @@ namespace Echo
 	{
 		String queueName = String(stage) + "@" + String(isAlphaTest ? "AlphaTest" : "_") + "@" + macros + "@" + materialTemplate;
 		RenderQueue* renderQueue = getRenderQueue(queueName);
-		if (!renderQueue)
-		{
-			renderQueue = EchoNew(RenderQueue)(queueName);
-			Material* pMaterial = renderQueue->getMaterial();
-			pMaterial->loadFromFile(materialTemplate, macros);
+		//if (!renderQueue)
+		//{
+		//	renderQueue = EchoNew(RenderQueue)(queueName);
+		//	Material* pMaterial = renderQueue->getMaterial();
+		//	pMaterial->loadFromFile(materialTemplate, macros);
 
-			int offset = getRenderQueueIndex(stage) + 1;
-			m_renderQueues.insert(m_renderQueues.begin() + offset, renderQueue);
-		}
+		//	int offset = getRenderQueueIndex(stage) + 1;
+		//	m_renderQueues.insert(m_renderQueues.begin() + offset, renderQueue);
+		//}
 
 		return renderQueue;
 	}

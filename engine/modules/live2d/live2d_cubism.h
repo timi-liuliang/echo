@@ -9,7 +9,6 @@ extern "C"
 #include "thirdparty\live2d\Cubism31SdkNative-EAP5\Core\include\Live2DCubismCore.h"
 }
 
-
 namespace Echo
 {
 	class Live2dCubism : public Node

@@ -25,7 +25,6 @@ namespace Echo
 	class RenderStageManager;
 	class RenderTargetManager;
 	class ProfilerServer;
-	class MaterialManager;
 	class Root
 	{	
 	public:
@@ -197,7 +196,6 @@ namespace Echo
 		EngineSettingsMgr& getSettingsMgr() { return m_settingsMgr; }
 		EngineConsole& getConsole() { return m_console; }
 		ImageCodecMgr* getImageCodecManager() { EchoAssert(m_imageCodecManager);  return m_imageCodecManager; }
-		MaterialManager* getMaterialManager() { EchoAssert(m_materialManager);  return m_materialManager; }
 		FSAudioManager* getAudioManager() { EchoAssert(m_audioManager);  return m_audioManager; }
 		PostEffectManager* getPostEffectManager() { EchoAssert(m_postEffectManager); return m_postEffectManager; }
 		luaex::LuaEx* getLuaEx() {return m_luaEx;}
@@ -240,7 +238,6 @@ namespace Echo
 		SkeletonManager*	m_skeletonManager;				// 骨骼资源管理器
 		AnimManager*		m_animManager;					// 动画管理器
 		AnimSystemManager*	m_animSysManager;				// 动画系统管理器
-		MaterialManager*	m_materialManager;				// 材质管理器
 		ImageCodecMgr*		m_imageCodecManager;			// 纹理编码管理器
 		ModelManager*		m_modelManager;					// 模型管理器
 		Time*				m_Timer;
@@ -284,7 +281,6 @@ namespace Echo
 #define EchoEngineSettings			EchoRoot->getSettingsMgr()
 #define EchoEngineConsole			EchoRoot->getConsole()
 #define EchoModelManager			EchoRoot->getModelManager()
-#define EchoMaterialManager			EchoRoot->getMaterialManager()
 #define EchoImageCodecManager		EchoRoot->getImageCodecManager()
 #define EchoAudioManager			EchoRoot->getAudioManager()
 #define EchoPostEffectManager		EchoRoot->getPostEffectManager()

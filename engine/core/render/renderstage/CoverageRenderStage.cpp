@@ -50,7 +50,7 @@ namespace Echo
 		}
 
 		// 加载生成遮罩图的材质
-		m_pMtlCoverage = MaterialManager::instance()->createMaterial();
+		m_pMtlCoverage = EchoNew(Material);
 		EchoAssert(m_pMtlCoverage);
 		m_pMtlCoverage->loadFromFile("pp_CoverageMap.xml","");
 
@@ -59,7 +59,7 @@ namespace Echo
 
 	void CoverageRenderStage::destroy()
 	{
-		MaterialManager::instance()->destroyMaterial(m_pMtlCoverage);
+		EchoSafeDelete(m_pMtlCoverage, Material);
 	}
 
 	void CoverageRenderStage::addQueryObject(class QueryObject* pQo)

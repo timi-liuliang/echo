@@ -1,7 +1,6 @@
 #include "MaterialInst.h"
 #include "Engine/modules/Light/Light.h"
 #include "Engine/core/Scene/NodeTree.h"
-#include "MaterialController.h"
 #include "engine/core/render/render/Material.h"
 #include "engine/core/render/render/MaterialDesc.h"
 #include "engine/core/render/render/Renderer.h"
@@ -47,7 +46,7 @@ namespace Echo
 	// 构造函数
 	MaterialInst::MaterialInst()
 		: m_TextureCount(0)
-		, m_renderQueue(NULL)
+		, m_material(NULL)
 		, m_isHaveCustomBlend(false)
 		, m_blendState(NULL)
 		, m_isHaveCustomRasterizer(false)
@@ -82,12 +81,6 @@ namespace Echo
 			EchoSafeDelete(element.second, uniform);
 		}
 
-		for (MaterialControllerItor iter = m_ControllerList.begin(); iter != m_ControllerList.end(); ++iter)
-		{
-			EchoSafeDelete(iter->second, MaterialController);
-		}
-		m_ControllerList.clear();
-
 		m_unifromParamSetFromFile.clear();
 
 		unloadTexture();
@@ -96,6 +89,12 @@ namespace Echo
 		EchoSafeDelete(m_blendState, BlendState);
 		EchoSafeDelete(m_rasterizerState, RasterizerState);
 		EchoSafeDelete(m_depthStencil, DepthStencilState);
+	}
+
+	// create a material instance
+	MaterialInst* MaterialInst::create()
+	{
+		return EchoNew(MaterialInst);
 	}
 
 	// 加载(内存)
@@ -206,21 +205,6 @@ namespace Echo
 				}
 			}
 
-			// 控制器
-			xml_node<>* controllerNode = pRootNode->first_node("Controllers");
-			if (controllerNode)
-			{
-				xml_node<> *pPropertyNode = controllerNode->first_node();
-				while (pPropertyNode)
-				{
-					xml_attribute<> *pUniformName = pPropertyNode->first_attribute();
-					xml_attribute<> *pControllerType = pUniformName->next_attribute();
-					MaterialController* pController = AddController(pUniformName->value(), MaterialManager::instance()->GetControllerType(pControllerType->value()));
-					pController->importData(pPropertyNode);
-					pPropertyNode = pPropertyNode->next_sibling();
-				}
-			}
-
 			return true;
 		}
 		catch (...)
@@ -252,7 +236,7 @@ namespace Echo
 		}
 
 		// 获取着色器
-		ShaderProgram* shaderProgram = m_renderQueue->getMaterial()->getShaderProgram();
+		ShaderProgram* shaderProgram = m_material->getShaderProgram();
 		if (!shaderProgram)
 		{
 			return false;
@@ -300,7 +284,6 @@ namespace Echo
 		rapidxml::xml_node<>* rot = doc.allocate_node(rapidxml::node_pi, strValue);
 		doc.append_node(rot);
 
-		// ---------------------------write logic object--------------------------------------------
 		// root node
 		rapidxml::xml_node<>* MaterialRoot = doc.allocate_node(rapidxml::node_element, "MaterialRoot", NULL);
 		doc.append_node(MaterialRoot);
@@ -663,19 +646,6 @@ namespace Echo
 		}
 		MaterialRoot->append_node(Uniform);
 
-		rapidxml::xml_node<>* Controllers = doc.allocate_node(rapidxml::node_element, "Controllers", NULL);
-
-		MaterialControllerItor itBegin = m_ControllerList.begin();
-		MaterialControllerItor itEnd = m_ControllerList.end();
-		MaterialController* pConTroller;
-		for (; itBegin != itEnd; ++itBegin)
-		{
-			pConTroller = itBegin->second;
-			pConTroller->exportData(doc, Controllers);
-		}
-
-		MaterialRoot->append_node(Controllers);
-
 		std::ofstream out(name.c_str());
 		out << doc;
 	}
@@ -689,7 +659,7 @@ namespace Echo
 		m_macros = _template->m_macros;
 		m_macrosEx = _template->m_macrosEx;
 		m_materialTemplate = _template->m_materialTemplate;
-		m_renderQueue = _template->m_renderQueue;
+		m_material = _template->m_material;
 		m_isHaveCustomRasterizer = _template->m_isHaveCustomRasterizer;
 		m_isHaveCustomBlend = _template->m_isHaveCustomBlend;
 		m_isHaveCustomDepthStencil = _template->m_isHaveCustomDepthStencil;
@@ -743,11 +713,6 @@ namespace Echo
 		}
 
 		m_TexturesName = _template->m_TexturesName;
-
-		for (const auto& element : _template->m_ControllerList)
-		{
-			AddControllerFromTemplate(element.first, element.second);
-		}
 	}
 
 	// 参数继承
@@ -961,7 +926,7 @@ namespace Echo
 			return  it->second->value;
 		}
 
-		const Material::DefaultUniform* dUniform = m_renderQueue->getMaterial()->getDefaultUniformValue(name);
+		const Material::DefaultUniform* dUniform = m_material->getDefaultUniformValue(name);
 		return dUniform ? dUniform->value : NULL;
 	}
 
@@ -1244,96 +1209,6 @@ namespace Echo
 	// 每帧更新
 	void MaterialInst::update(ui32 delta)
 	{
-		if (!m_ControllerList.empty())
-		{
-			MaterialControllerItor itBegin = m_ControllerList.begin();
-			MaterialControllerItor itEnd = m_ControllerList.end();
-			MaterialController* pConTroller;
-			for (; itBegin != itEnd; ++itBegin)
-			{
-				pConTroller = itBegin->second;
-				pConTroller->Update(delta);
-			}
-		}
-	}
-
-	MaterialController* MaterialInst::AddController(const String& name, ui32 type)
-	{
-		// 目前一个参数，只能添加一个参数控制器
-		MaterialControllerItor it = m_ControllerList.find(name);
-		if (it != m_ControllerList.end())
-		{
-			if (it->second->GetControlType() == type)
-				return it->second;
-			else
-				m_ControllerList.erase(it);
-		}
-
-		MaterialController* controller = NULL;
-		switch (type)
-		{
-			case MaterialController::MCT_RollLoop:	 controller = EchoNew(RollLoopController(this)); break;
-			case MaterialController::MCT_Linear:	 controller = EchoNew(LinearController(this)); break;
-			case MaterialController::MCT_Bezier:	 controller = EchoNew(BezierController(this)); break;
-			case MaterialController::MCT_Script:	 controller = EchoNew(ScriptController(this)); break;
-			case MaterialController::MCT_Time:		 controller = EchoNew(TimeController(this)); break;
-			default:break;
-		}
-
-		if (controller)
-		{
-			m_ControllerList[name] = controller;
-			controller->SetControlUniformName(name);
-			controller->SetControlUniform(GetUniform(name));
-		}
-
-		return controller;
-	}
-
-	MaterialController* MaterialInst::AddControllerFromTemplate(const String& name, MaterialController* controllerTemplate)
-	{
-		auto iter = m_ControllerList.find(name);
-		if (iter != m_ControllerList.end())
-		{
-			if (iter->second->GetControlType() == controllerTemplate->GetControlType())
-			{
-				return iter->second;
-			}
-			else
-			{
-				EchoSafeDelete(iter->second, MaterialController);
-				m_ControllerList.erase(iter);
-			}
-		}
-
-		auto* controller = controllerTemplate->Clone(this);
-
-		m_ControllerList[name] = controller;
-		controller->SetControlUniformName(name);
-		controller->SetControlUniform(GetUniform(name));
-
-		return controller;
-	}
-
-	void MaterialInst::DelController(const String& name)
-	{
-		MaterialControllerItor it = m_ControllerList.find(name);
-		if (it != m_ControllerList.end())
-		{
-			EchoSafeDelete(it->second, MaterialController);
-			m_ControllerList.erase(name);
-		}
-	}
-
-	MaterialController* MaterialInst::GetController(const String& name)
-	{
-		MaterialControllerItor it = m_ControllerList.find(name);
-		if (it != m_ControllerList.end())
-		{
-			return it->second;
-		}
-
-		return NULL;
 	}
 
 	void* MaterialInst::createValue2Void(const ShaderParamType& type, const int count /* = 1 */)
@@ -1523,8 +1398,9 @@ namespace Echo
 				finalMacros += "#define " + macro + "\n";
 			}
 
-			// 添加渲染队列
-			m_renderQueue = RenderQueueGroup::instance()->addRenderQueue(m_materialTemplate, m_stage.c_str(), finalMacros, false);
+			m_material = EchoNew(Material);
+			m_material->loadFromFile( m_materialTemplate, finalMacros);
+			m_renderQueue = RenderQueueGroup::instance()->getRenderQueue(m_stage);
 		}
 	}
 
@@ -1667,8 +1543,6 @@ namespace Echo
 			}
 			pElementNode = pElementNode->next_sibling();
 		} // while
-
-
 	}
 
 	void MaterialInst::LoadRasterizerState(void* pNode)
@@ -1938,7 +1812,7 @@ namespace Echo
 	// 参数匹配
 	void MaterialInst::matchUniforms()
 	{
-		ShaderProgram* shaderProgram = m_renderQueue->getMaterial()->getShaderProgram();
+		ShaderProgram* shaderProgram = m_material->getShaderProgram();
 		if (shaderProgram)
 		{
 			// 添加未设置参数
@@ -1972,7 +1846,7 @@ namespace Echo
 						break;
 					}
 
-					Material* pMaterial = m_renderQueue->getMaterial();
+					Material* pMaterial = m_material;
 					const Material::DefaultUniform* defaultUniform = pMaterial->getDefaultUniformValue(pUnifrom->name);
 					if (defaultUniform && pUnifrom->count == defaultUniform->count && pUnifrom->type == defaultUniform->type)
 					{
@@ -1983,169 +1857,5 @@ namespace Echo
 				}
 			}
 		}
-	}
-
-	__ImplementSingleton(MaterialManager);
-
-	MaterialManager::MaterialManager()
-		:m_isEditModel(false)
-	{
-		__ConstructSingleton;
-	}
-
-	MaterialManager::~MaterialManager()
-	{
-		DelAllMaterIstialTemplate();
-		destroyAllMaterialIst();
-
-		__DestructSingleton;
-	}
-
-	// 创建材质实例
-	MaterialInst* MaterialManager::createMaterialIst(const String& materialName, const String& macros)
-	{
-		MaterialInst* matTemplate = getMaterialTemplate(materialName, macros);
-
-		if (m_isEditModel)
-			return matTemplate;
-
-		if (matTemplate)
-		{
-			MaterialInst* matInst = EchoNew(MaterialInst);
-			matInst->cloneFromTemplate(matTemplate);
-
-			{
-				std::lock_guard<std::mutex> lock(m_materialIstsMutex);
-				m_MaterialIsts.insert(matInst);
-			}
-
-			return matInst;
-		}
-
-		return NULL;
-	}
-
-	// 获取材质模板
-	MaterialInst* MaterialManager::getMaterialTemplate(const String& materialName, const String& macros)
-	{
-		std::lock_guard<std::mutex> lock(m_materialIstTemplatesMutex);
-
-		String id = materialName + macros;
-		MaterialIstTemplateItor it = m_MaterialIstTemplates.find(id);
-		if (it == m_MaterialIstTemplates.end())
-		{
-			MaterialInst* matInst = EchoNew(MaterialInst);
-			if (!matInst->loadByFile(materialName, macros))
-			{
-				EchoLogError("Material File %s Not Found, Skip.", materialName.c_str());
-				EchoSafeDelete(matInst, MaterialInst);
-				return NULL;
-			}
-
-// #ifdef ECHO_EDITOR_MODE
-// 			matInst->applyLoadedData();
-// #endif
-
-			m_MaterialIstTemplates[id] = matInst;
-			return matInst;
-		}
-		else
-		{
-			return it->second;
-		}
-	}
-
-	void MaterialManager::destroyMaterialIst(MaterialInst* material)
-	{
-		EchoAssert(material);
-
-		std::lock_guard<std::mutex> lock(m_materialIstsMutex);
-
-		MaterialIstItor it = m_MaterialIsts.find(material);
-		if (it != m_MaterialIsts.end())
-		{
-			MaterialInst* matIt = *it;
-			EchoSafeDelete(matIt, MaterialInst);
-			m_MaterialIsts.erase(it);
-		}
-	}
-
-	void MaterialManager::destroyAllMaterialIst()
-	{
-		std::lock_guard<std::mutex> lock(m_materialIstsMutex);
-		EchoSafeDeleteContainer(m_MaterialIsts, MaterialInst);
-	}
-
-	bool MaterialManager::AddMaterialIstTemplate(const String& materialName)
-	{
-		return true;
-	}
-
-	// 删除材质模板
-	bool MaterialManager::DelMaterialIstTemplate(const String& materialName)
-	{
-		MaterialIstTemplateItor it = m_MaterialIstTemplates.find(materialName);
-		if (it != m_MaterialIstTemplates.end())
-		{
-			EchoSafeDelete(it->second, MaterialInst);
-		}
-		m_MaterialIstTemplates.erase(it);
-
-		return true;
-	}
-
-	void MaterialManager::DelAllMaterIstialTemplate()
-	{
-		MaterialIstTemplateItor it = m_MaterialIstTemplates.begin();
-		for (; it != m_MaterialIstTemplates.end(); ++it)
-		{
-			it->second->m_TexturesName.clear();
-			EchoSafeDelete(it->second, MaterialInst);
-		}
-		m_MaterialIstTemplates.clear();
-	}
-
-	void MaterialManager::GetControllerTypes(StringArray& stringArry)
-	{
-		stringArry.clear();
-		stringArry.push_back("none");
-		stringArry.push_back("TimeController");
-		stringArry.push_back("rollLoop");
-	}
-
-	Echo::ui32 MaterialManager::GetControllerType(const String& typeName)
-	{
-		if (typeName == "rollLoop")
-			return MaterialController::MCT_RollLoop;
-		else if (typeName == "TimeController")
-			return MaterialController::MCT_Time;
-
-		return MaterialController::MCT_None;
-	}
-
-	Echo::String MaterialManager::GetControllerTypeString(ui32 type)
-	{
-		switch (type)
-		{
-			case MaterialController::MCT_RollLoop:
-				return "rollLoop";
-			case MaterialController::MCT_Time:
-				return "TimeController";
-			default:
-				return "none";
-		}
-	}
-
-	Material* MaterialManager::createMaterial()
-	{
-		Material* mtrl = EchoNew(Material);
-		m_materialList.push_back(mtrl);
-		return mtrl;
-	}
-
-	void MaterialManager::destroyMaterial(Material* mtrl)
-	{
-		m_materialList.remove(mtrl);
-		EchoSafeDelete(mtrl, Material);
 	}
 }

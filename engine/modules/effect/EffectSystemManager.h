@@ -7,13 +7,14 @@
 #include "EffectLayer.h"
 #include "engine/core/Util/Singleton.h"
 #include "engine/core/Util/StringUtil.h"
+#include "engine/core/render/render/Material.h"
 #include "engine/core/render/render/RenderState.h"
 #include "engine/core/render/render/RenderQueue.h"
 
 namespace Echo
 {
 	class EffectSystemManager;
-	class  EffectManualRender : public ManualRenderListener
+	class  EffectManualRender
 	{
 	public:
 		virtual void render();
@@ -202,7 +203,6 @@ namespace Echo
 		RenderQueue*					mEffectRenderQueue;
 
 	public:
-		// FIXME
 		HashNode<EffectRenderable>**	mEffectRenderablePtr;
 		HashNode<EffectMaterial>**		mEffectMaterialPtr;
 	};

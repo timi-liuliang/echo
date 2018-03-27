@@ -57,7 +57,7 @@ namespace Echo
 
 	PostEffectPassLensFlare::~PostEffectPassLensFlare()
 	{
-		MaterialManager::instance()->destroyMaterial(m_materialMerge);
+		EchoSafeDelete(m_materialMerge, Material);
 		RenderInput* renderinput = m_renderableMerge->getRenderInput();
 		EchoSafeDelete(renderinput, RenderInput);
 		Renderer::instance()->destroyRenderables(&m_renderableMerge, 1);

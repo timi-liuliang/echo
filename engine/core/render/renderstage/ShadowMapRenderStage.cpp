@@ -59,11 +59,11 @@ namespace Echo
 			return false;
 		}
 
-		m_pMtlShadowMapHBlurPass = MaterialManager::instance()->createMaterial();
+		m_pMtlShadowMapHBlurPass = EchoNew(Material);
 		EchoAssert(m_pMtlShadowMapHBlurPass);
 		m_pMtlShadowMapHBlurPass->loadFromFile("pp_shadowMapHBlur.xml", "");
 
-		m_pMtlShadowMapVBlurPass = MaterialManager::instance()->createMaterial();
+		m_pMtlShadowMapVBlurPass = EchoNew(Material);
 		EchoAssert(m_pMtlShadowMapVBlurPass);
 		m_pMtlShadowMapVBlurPass->loadFromFile("pp_shadowMapVBlur.xml", "");
 
@@ -130,12 +130,12 @@ namespace Echo
 		RenderTargetManager::instance()->destroyRenderTargetByID(RTI_ShadowMap);
 		RenderTargetManager::instance()->destroyRenderTargetByID(RTI_ShadowMapVBlur);
 
-		MaterialManager::instance()->destroyMaterial(m_pMtlShadowMapVBlurPass);
+		EchoSafeDelete(m_pMtlShadowMapVBlurPass, Material);
 		RenderInput* pRi = m_pRaShadowMapVBlurPass->getRenderInput();
 		EchoSafeDelete(pRi, RenderInput);
 		Renderer::instance()->destroyRenderables(&m_pRaShadowMapVBlurPass, 1);
 
-		MaterialManager::instance()->destroyMaterial(m_pMtlShadowMapHBlurPass);
+		EchoSafeDelete(m_pMtlShadowMapHBlurPass, Material);
 		pRi = m_pRaShadowMapHBlurPass->getRenderInput();
 		EchoSafeDelete(pRi, RenderInput);
 		Renderer::instance()->destroyRenderables(&m_pRaShadowMapHBlurPass, 1);

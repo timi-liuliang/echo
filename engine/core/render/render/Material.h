@@ -1,5 +1,4 @@
-#ifndef __ECHO_MATERIAL_H__
-#define __ECHO_MATERIAL_H__
+#pragma once
 
 #include "RenderState.h"
 #include "ShaderProgram.h"
@@ -17,12 +16,13 @@ namespace Echo
 	class Renderer;
 	class Material : public PtrMonitor<Material>
 	{
-		friend class MaterialManager;
-
 		typedef map<String, const SamplerState*>::type SamplerStateMap;
 		typedef vector<std::pair<String, String> >::type SeparatedSamplerArray;
 		typedef vector<String>::type TextureSamplerStateArray;
 	public:
+		Material();
+		~Material();
+
 		// 获取名称
 		const String& getName() { return m_name; }
 
@@ -102,9 +102,6 @@ namespace Echo
 		// 获取采样状态
 		const SamplerState* getSamplerStateByTexStage(int stage);
 
-		Material();
-		~Material();
-
 		bool _loadColorFilter( rapidxml::xml_node<char>* pNode );
 
 	private:
@@ -126,5 +123,3 @@ namespace Echo
 
 	};
 }
-
-#endif

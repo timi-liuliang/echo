@@ -61,7 +61,7 @@ namespace Echo
 				{
 					RenderQueue* pQueue = RenderQueueGroup::instance()->getRenderQueueByIndex(i);
 					if( pQueue)
-						pQueue->enableRender();
+						pQueue->setEnable(true);
 				}
 			}
 			else
@@ -69,7 +69,7 @@ namespace Echo
 				// 启用指定队列
 				RenderQueue* pQueue = RenderQueueGroup::instance()->getRenderQueue(param1.c_str());
 				if( pQueue)
-					pQueue->enableRender();
+					pQueue->setEnable(true);
 				else
 					output += StringUtil::Format( "renderqueue[%s] not exist \n", param1.c_str());
 			}
@@ -86,7 +86,7 @@ namespace Echo
 				{
 					RenderQueue* pQueue = RenderQueueGroup::instance()->getRenderQueueByIndex(i);
 					if( pQueue)
-						pQueue->disableRender();
+						pQueue->setEnable(false);
 
 				}
 			}
@@ -95,7 +95,7 @@ namespace Echo
 				// 禁用指定队列
 				RenderQueue* pQueue = RenderQueueGroup::instance()->getRenderQueue(param1.c_str());
 				if( pQueue)
-					pQueue->disableRender();
+					pQueue->setEnable(false);
 				else
 					output += StringUtil::Format( "renderqueue[%s] not exist \n", param1.c_str());
 			}

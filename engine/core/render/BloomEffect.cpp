@@ -78,7 +78,7 @@ namespace Echo
 
 	Material* BloomEffectPass0::createMaterial(const String& fileName)
 	{
-		Material* retMaterial = MaterialManager::instance()->createMaterial();
+		Material* retMaterial = EchoNew(Material);
 		String marcos = StringUtil::Format("#define SAMPLER %d\n", BLOOM_SAMPLER_COUNT);
 
 		retMaterial->loadFromFile(fileName, marcos);
@@ -142,7 +142,7 @@ namespace Echo
 
 	Material* BloomEffectPass1::createMaterial(const String& fileName)
 	{
-		Material* retMaterial = MaterialManager::instance()->createMaterial();
+		Material* retMaterial = EchoNew(Material);
 		String marcos = StringUtil::Format("#define SAMPLER %d\n", BLOOM_SAMPLER_COUNT);
 
 		retMaterial->loadFromFile(fileName, marcos);

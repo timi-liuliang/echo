@@ -1,20 +1,10 @@
-#ifndef __ECHO_RENDERQUEUE_H__
-#define __ECHO_RENDERQUEUE_H__
+#pragma once
 
 #include <engine/core/Memory/MemManager.h>
-#include "ShaderProgram.h"
 
 namespace Echo
 {
 	class Renderable;
-	class Material;
-
-	class ManualRenderListener
-	{
-	public:
-		virtual void render() = 0;
-		virtual void beginRender()=0;
-	};
 
 	/**
 	 * 渲染队列
@@ -22,18 +12,16 @@ namespace Echo
 	class RenderQueue
 	{
 		friend class Renderable;
-
 		typedef vector<int>::type RenderableList;
+
 	public:
 		RenderQueue(const String& strName);
 		~RenderQueue();
 
 		// 开始渲染
 		void beginRender();
-		void setManalRenderBegin(ManualRenderListener* mListener);
-		void setManalRenderEnd(ManualRenderListener* mListener);
 
-		bool hasRenderables(){ return !m_Renderables.empty(); }
+		bool hasRenderables(){ return !m_renderables.empty(); }
 
 		void sortByPos();
 
@@ -49,49 +37,17 @@ namespace Echo
 		void clearRenderables();
 
 		// 获取名称
-		const String& getName() { return m_strName; }
-
-		// 获取材质
-		Material* getMaterial() const;
+		const String& getName() { return m_name; }
 
 		// 设置为可渲染
-		void enableRender() { m_bEnableRender = true; }
-		
-		// 暂停渲染
-		void disableRender(){ m_bEnableRender = false; }
+		void setEnable( bool isEnable) { m_isEnable = isEnable; }
 
 		// 是否可用
-		bool isEnable() const { return m_bEnableRender; }
-
-		// 是否进行排序
-		//void setIsSort(bool isSort) { m_isSort = isSort; }
-
-		void addGlobalParams(const String& name, ShaderParamType type, const void* value, size_t count);
-
-		void setRenderWithoutMacros(const StringArray& macros,bool refresh = false);
+		bool isEnable() const { return m_isEnable; }
 
 	protected:
-		String					m_strName;
-		Material*				m_pMaterial;		// 材质
-		RenderableList			m_Renderables;		
-		ManualRenderListener*	m_ManualBegin;
-		ManualRenderListener*	m_ManualEnd;
-		bool					m_bEnableRender;
-		//bool					m_isSort;			// 渲染前是否进行排序
-		RenderQueue*			m_ManualRenderQueue;// 手动配置shader宏渲染 
-		bool					m_isInitManualRQ;
-		bool					m_useManualRQ;		//只作用一针（渲染完重置成false）
-
-		// 着色器参数
-		struct ShaderParam
-		{
-			String			name;	
-			ShaderParamType type;
-			const void*		value;
-			ui32			count;  // shader constance register num.
-		};
-		std::vector<ShaderParam>		m_globalParams;
+		String					m_name;
+		RenderableList			m_renderables;		
+		bool					m_isEnable;
 	};
 }
-
-#endif

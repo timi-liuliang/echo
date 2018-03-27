@@ -27,7 +27,7 @@ namespace Echo
 		}));
 		for (auto& m : m_materials)
 		{
-			MaterialManager::instance()->destroyMaterial(m.first);
+			EchoSafeDelete(m.first, Material);
 			RenderInput* renderinput = m.second->getRenderInput();
 			EchoSafeDelete(renderinput, RenderInput);
 			Renderer::instance()->destroyRenderables(&m.second, 1);
@@ -122,7 +122,7 @@ namespace Echo
 					macro += "#define " + e + "\n";
 				}
 			}
-			auto m = MaterialManager::instance()->createMaterial();
+			Material* m = EchoNew(Material);
 			m->loadFromFile(fileName, macro);
 			m_materials.push_back(std::make_pair(m, PostImageEffectPass::createRenderable(m)));
 		}

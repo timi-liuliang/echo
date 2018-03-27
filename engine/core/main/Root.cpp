@@ -85,7 +85,6 @@ namespace Echo
 		, m_sceneManager(NULL)
 		, m_modelManager(NULL)
 		, m_imageCodecManager(NULL)
-		, m_materialManager(NULL)
 		, m_audioManager(NULL)
 		, m_textureResManager(NULL)
 		, m_renderTargetManager(NULL)
@@ -144,7 +143,6 @@ namespace Echo
 			m_modelManager		= EchoNew( ModelManager);
 			m_animManager		= EchoNew( AnimManager);
 			m_animSysManager	= EchoNew( AnimSystemManager);
-			m_materialManager	= EchoNew( MaterialManager);
 			m_skeletonManager	= EchoNew( SkeletonManager);
 			m_sceneManager		= EchoNew( NodeTree);
 			m_postEffectManager = EchoNew(PostEffectManager);
@@ -388,7 +386,6 @@ namespace Echo
 		EchoLogInfo("Echo Engine has been shutdown.");
 		
 		EchoSafeDelete(m_renderTargetManager, RenderTargetManager);
-		EchoSafeDelete(m_materialManager, MaterialManager);
 		EchoSafeDelete(m_textureResManager, TextureResManager);
 		
 		// äÖÈ¾Æ÷

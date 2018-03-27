@@ -57,7 +57,7 @@ namespace Echo
 		// 删除材质实例
 		if (m_materialInst)
 		{
-			MaterialManager::instance()->destroyMaterialIst(m_materialInst);
+			EchoSafeDelete(m_materialInst, MaterialInst);
 			m_materialInst = NULL;
 		}
 
@@ -186,7 +186,7 @@ namespace Echo
 		if (m_info.m_isForUI)
 			macros += "IS_FOR_UI;";
 
-		MaterialInst* materialInst = MaterialManager::instance()->createMaterialIst(materialName, macros);
+		MaterialInst* materialInst = MaterialInst::create(); // MaterialManager::instance()->createMaterialIst(materialName, macros);
 		materialInst->prepareTexture();
 		//materialInst->loadTexture();
 		return materialInst;
@@ -199,11 +199,7 @@ namespace Echo
 		{
 			EchoLogInfo("[Model::loadMeshFromFile()]::meshName empty, so Model does not contain a Mesh Now."); 
 			return; 
-		}
-
-		//m_mesh.reset(MeshManager::instance()->createMesh(m_info.m_meshName, false)); 
-		//m_mesh->disableDefaultTexLoad();
-		//m_mesh->prepare(); 
+		} 
 	}
 
 	// 加载光阵列
@@ -545,8 +541,8 @@ namespace Echo
 				if (m_mesh->isSkin())
 					MACROS += "SKIN_MESH;";
 
-				MaterialInst* materialInst = MaterialManager::instance()->createMaterialIst(
-					"official_shadowmap.material", MACROS.c_str());
+				MaterialInst* materialInst = nullptr;// MaterialManager::instance()->createMaterialIst(
+				//	"official_shadowmap.material", MACROS.c_str());
 				materialInst->applyLoadedData(); // --> must sync.
 				materialInst->loadTexture();
 

@@ -45,7 +45,7 @@ namespace Echo
 			EchoSafeDelete(m_EyeGlassVB[1], GPUBuffer);
 			EchoSafeDelete(m_EyeGlassIB[0], GPUBuffer);
 			EchoSafeDelete(m_EyeGlassIB[1], GPUBuffer);
-			MaterialManager::instance()->destroyMaterial(m_material);
+			EchoSafeDelete(m_material, Material);
 
 			EchoSafeDelete(m_renderInput[0], RenderInput);
 			EchoSafeDelete(m_renderInput[1], RenderInput);
@@ -87,7 +87,7 @@ namespace Echo
 		// vr Mode
 		if (EngineSettingsMgr::instance()->isInitVRMode())
 		{
-			m_material = MaterialManager::instance()->createMaterial();
+			m_material = EchoNew(Material);
 			m_material->loadFromFile("pp_vrGlass.xml", "");
 			ShaderProgram* shader = m_material->getShaderProgram();
 			m_renderable[0] = Renderer::instance()->createRenderable(NULL, m_material);

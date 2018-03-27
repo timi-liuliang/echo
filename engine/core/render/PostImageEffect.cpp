@@ -23,7 +23,7 @@ namespace Echo
 
 	PostImageEffectPass::~PostImageEffectPass()
 	{
-		MaterialManager::instance()->destroyMaterial(m_material);
+		EchoSafeDelete(m_material, Material);
 		if (m_renderable)
 		{
 			RenderInput* renderinput = m_renderable->getRenderInput();
@@ -253,7 +253,7 @@ namespace Echo
 
 	Material* PostImageEffectPass::createMaterial(const String& fileName)
 	{
-		Material* retMaterial = MaterialManager::instance()->createMaterial();
+		Material* retMaterial = EchoNew(Material);
 		retMaterial->loadFromFile(fileName, "");
 		return retMaterial;
 	}

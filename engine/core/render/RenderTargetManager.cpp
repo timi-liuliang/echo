@@ -53,9 +53,9 @@ namespace Echo
 			m_mapRenderTargets.erase(bit ++);
 		}
 
-		MaterialManager::instance()->destroyMaterial(m_pMaterialBaseUpdate);
-		MaterialManager::instance()->destroyMaterial(m_pMaterialNightSight);
-		MaterialManager::instance()->destroyMaterial(m_pMaterialDownsampleDepth);
+		EchoSafeDelete(m_pMaterialBaseUpdate, Material);
+		EchoSafeDelete(m_pMaterialNightSight, Material);
+		EchoSafeDelete(m_pMaterialDownsampleDepth, Material);
 		RenderInput* ri = m_pScreenAlignedQuad->getRenderInput();
 
 		GPUBuffer* vertBuffer = (*ri->getVertexBuffer())[0].m_buffer;
@@ -89,7 +89,7 @@ namespace Echo
 
 		if(m_bEnableFilter)
 		{
-			MaterialManager::instance()->destroyMaterial(m_pMaterialFilterUpdate);
+			EchoSafeDelete(m_pMaterialFilterUpdate, Material);
 			Renderer::instance()->releaseTexture(m_pFilterBlendmap.m_texture);
 			m_pFilterBlendmap.m_texture = NULL;
 			RenderInput* _ri = m_pScreenAlignedQuadFilter->getRenderInput();
@@ -225,7 +225,7 @@ namespace Echo
 		{
 			m_bEnableFilter = true;
 
-			m_pMaterialFilterUpdate = MaterialManager::instance()->createMaterial();
+			m_pMaterialFilterUpdate = EchoNew(Material);
 			m_pMaterialFilterUpdate->loadFromFile("pp_FilterAdditional.xml", "");
 
 			changeFilterBlendmapName("FilterAdditional.tga");

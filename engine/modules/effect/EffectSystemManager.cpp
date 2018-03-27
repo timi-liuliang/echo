@@ -82,8 +82,8 @@ namespace Echo
 		destroyAllEffectSystemTemplates();
 		destroyAllEffectSystems();
 		destroyRenderableSet();
-		MaterialManager::instance()->destroyMaterial(mMtlDistortion);
-		MaterialManager::instance()->destroyMaterial(mMtlUV2);
+		EchoSafeDelete(mMtlDistortion, Material);
+		EchoSafeDelete(mMtlUV2, Material);
 		EchoSafeDelete(m_particlePool, EffectParticlePool);
 
 		__DestructSingleton;
@@ -630,7 +630,7 @@ namespace Echo
 			if (!pRenderQueue)
 				return;
 
-			pMaterial = pRenderQueue->getMaterial();
+			pMaterial = nullptr;// pRenderQueue->getMaterial();
 			shaderProgram = pMaterial->getShaderProgram();
 
 			mSPFogParamIndex = shaderProgram->getParamPhysicsIndex("fogParam");
@@ -694,11 +694,11 @@ namespace Echo
 			mRenderalbeSetCreated = true;
 
 			// add the manual render process
-			pRenderQueue->setManalRenderEnd(&mEffectManualRender);
+			//pRenderQueue->setManalRenderEnd(&mEffectManualRender);
 
 			if( mMtlDistortion == NULL )
 			{
-				mMtlDistortion = MaterialManager::instance()->createMaterial();
+				mMtlDistortion = EchoNew(Material);
 				mMtlDistortion->loadFromFile("DistortionEffect.xml", "");
 				
 				EchoAssert( mMtlDistortion );
@@ -721,7 +721,7 @@ namespace Echo
 
 			if (mMtlUV2 == NULL)
 			{
-				mMtlUV2 = MaterialManager::instance()->createMaterial();
+				mMtlUV2 = EchoNew(Material);
 				mMtlUV2->loadFromFile("effect_uv2.xml","");
 				mEffectUV2RenderInput = Renderer::instance()->createRenderInput(mMtlUV2->getShaderProgram());
 				mEffectUV2RenderInput->enableWireFrame(true);
@@ -915,7 +915,7 @@ namespace Echo
 		//Camera* camera;// = getCamera();
 		//SceneManager*  pSceneManager = SceneManager::instance();
 		RenderQueue*   pRenderQueue  = _getEffectRenderQueue();
-		Material*      pMaterial     = pRenderQueue->getMaterial();
+		Material*      pMaterial     = nullptr;
 		ShaderProgram* shaderProgram =  pMaterial->getShaderProgram();
 		ShaderProgram* shaderProgramUV2 = mMtlUV2->getShaderProgram();
 		int uv2_MatIndex = shaderProgramUV2->getParamPhysicsIndex("matWVP");
@@ -1113,7 +1113,7 @@ namespace Echo
 		Renderer* pRender = Renderer::instance();
 		Camera* camera;// = getCamera();
 		RenderQueue*   pRenderQueue =  RenderQueueGroup::instance()->getRenderQueue("Effect");
-		Material*      pMaterial = pRenderQueue->getMaterial();
+		Material*      pMaterial = nullptr;
 		ShaderProgram* shaderProgram = pMaterial->getShaderProgram();
 		ShaderProgram* shaderProgramUV2 = mMtlUV2->getShaderProgram();
 		int uv2_MatIndex = shaderProgramUV2->getParamPhysicsIndex("matWVP");
@@ -1248,7 +1248,7 @@ namespace Echo
 		Camera* camera = getCamera(pRenderable);
 		EFFECT_BLEND_MODE blendMode = pRenderable->getBlendMode();
 		Renderer* pRender = Renderer::instance();
-		Material*      pMaterial     = pRenderQueue->getMaterial();
+		Material*      pMaterial     = nullptr;
 		ShaderProgram* shaderProgram =  pMaterial->getShaderProgram();
 		ShaderProgram* shaderProgramUV2 = mMtlUV2->getShaderProgram();
 

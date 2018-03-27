@@ -128,7 +128,7 @@ namespace Echo
 			mNoiseTextPtr->prepareLoad();
 		}
 
-		Material* pMaterial = RenderQueueGroup::instance()->getRenderQueue("Effect")->getMaterial();
+		Material* pMaterial = nullptr;// RenderQueueGroup::instance()->getRenderQueue("Effect")->getMaterial();
 
 		m_textureSampler.m_texture = mTexturePtr->getTexture();
 		m_textureSampler.m_samplerState = pMaterial->getSamplerState(0);

@@ -10,7 +10,6 @@ namespace Echo
 {
 	struct PBRLight;
 	class Material;
-	class MaterialController;
 
 	/**
 	* 材质实例
@@ -18,10 +17,6 @@ namespace Echo
 	class MaterialInst
 	{
 		friend class Model;
-		friend class MaterialManager;
-		friend class MaterialController;
-		typedef vector<String>::type StringVec;
-		typedef vector<String>::type::iterator StringVecItor;
 		typedef map<int, TextureRes*>::type TextureMap;
 		typedef map<int, TextureRes*>::type::iterator TextureMapItor;
 		typedef map<int, String>::type TextureNameMap;
@@ -41,12 +36,12 @@ namespace Echo
 
 		typedef map<String, uniform* >::type ParamMap;
 
-		typedef map<String, MaterialController*>::type MaterialControllerMap;
-		typedef MaterialControllerMap::iterator MaterialControllerItor;
-
 	public:
 		MaterialInst();
 		~MaterialInst();
+
+		// create a material instance
+		static MaterialInst* create();
 
 		// 加载 --> 可以异步。
 		bool loadByFile(const String& name, const String& macros);
@@ -98,7 +93,7 @@ namespace Echo
 		const String& getMaterialTemplate() const { return m_materialTemplate; }
 
 		// 获取渲染队列
-		RenderQueue* getRenderQueue() { return m_renderQueue; }
+		Material* getMaterial() { return m_material; }
 
 		// 添加uniform变量
 		void AddUniformParam(uniform* param);
@@ -130,21 +125,9 @@ namespace Echo
 		// 获取属性队列
 		ParamMap& GetUniformSet() { return m_unifromParamSet; }
 
-		// 添加参数控制器
-		MaterialController* AddController(const String& name, ui32 type);
-
-		// 使用模版添加参数控制器
-		MaterialController* AddControllerFromTemplate(const String& name, MaterialController* controllerTemplate);
-
-		// 删除参数控制器
-		void DelController(const String& name);
-
 		void LoadBlendState(void* pNode);
 		void LoadRasterizerState(void* pNode);
 		void LoadDepthStencilState(void* pNode);
-
-		// 获取控制器
-		MaterialController* GetController(const String& name);
 
 		ShaderParamType S2ShaderParamType(const String& value);
 		String			ShaderParamType2S(const ShaderParamType& type) const;
@@ -211,13 +194,13 @@ namespace Echo
 		String				m_stage;				// 所处渲染阶段
 		StringArray			m_macros;				// 宏定义
 		StringArray			m_macrosEx;				// 外部宏定义
+		Material*			m_material;				// 对应材质
 		RenderQueue*		m_renderQueue;			// 渲染队列
 		ParamMap			m_unifromParamSet;
 		ParamMap			m_unifromParamSetFromFile;
 		TextureMap			m_textures;
 		TextureNameMap 		m_TexturesName;
 		int					m_TextureCount;
-		MaterialControllerMap m_ControllerList;   //参数控制器列表
 
 		bool					 m_isHaveCustomBlend;
 		BlendState*				 m_blendState;
@@ -233,58 +216,5 @@ namespace Echo
 
 		bool				m_isTemplate;
 		bool				m_isSubmitToStageRenderQueue;
-	};
-
-	/**
-	* 材质实例管理器
-	*/
-	class MaterialManager
-	{
-		typedef map<String, MaterialInst* >::type MaterialIstTemplateMap;
-		typedef map<String, MaterialInst* >::type::iterator MaterialIstTemplateItor;
-		typedef set<MaterialInst* >::type MaterialIstSet;
-		typedef set<MaterialInst* >::type::iterator MaterialIstItor;
-		typedef list<Material* >::type MaterialList;
-
-		__DeclareSingleton(MaterialManager);
-
-	public:
-		MaterialManager();
-		~MaterialManager();
-
-		MaterialInst* createMaterialIst(const String& materialName, const String& macros);
-		void   destroyMaterialIst(MaterialInst* material);
-
-		// 删除所有材质实例
-		void  destroyAllMaterialIst();
-
-		bool AddMaterialIstTemplate(const String& materialName);
-
-		// 获取材质模板
-		MaterialInst* getMaterialTemplate(const String& materialName, const String& macros);
-
-		// 删除材质模板
-		bool DelMaterialIstTemplate(const String& materialName);
-
-		// 删除所有材质模板
-		void DelAllMaterIstialTemplate();
-
-		// 控制器相关操作
-		void GetControllerTypes(StringArray& stringArry);
-		ui32 GetControllerType(const String& typeName);
-		String GetControllerTypeString(ui32 type);
-
-		void setIsEditorModel(bool b) { m_isEditModel = b; }
-
-		Material* createMaterial();
-		void destroyMaterial(Material* mtrl);
-
-	private:
-		MaterialIstTemplateMap	m_MaterialIstTemplates;
-		std::mutex				m_materialIstTemplatesMutex;
-		MaterialIstSet			m_MaterialIsts;
-		std::mutex				m_materialIstsMutex;
-		bool					m_isEditModel;
-		MaterialList			m_materialList;
 	};
 }
