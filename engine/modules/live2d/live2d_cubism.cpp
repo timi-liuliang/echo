@@ -91,6 +91,7 @@ namespace Echo
 		m_materialInst->setOfficialMaterialContent( g_live2dDefaultMaterial);
 		m_materialInst->setStage("Transparent");
 		m_materialInst->applyLoadedData();
+		m_materialInst->setTexture(0, "Res://girl/girl.1024/texture_00.png");
 
 		m_renderable = Renderable::create(m_mesh, m_materialInst, cubism);
 	}

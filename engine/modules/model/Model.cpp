@@ -324,7 +324,7 @@ namespace Echo
 		EchoAssert(materialInst);
 		EchoAssert(m_mesh);
 
-		TextureRes* pTexture = materialInst->SetTexture(index, name);
+		TextureRes* pTexture = materialInst->setTexture(index, name);
 		const SamplerState* defaultState = Renderer::instance()->getSamplerState(SamplerState::SamplerDesc());
 		m_phases[type]->m_renderable->setTexture(index, pTexture->getTexture(), defaultState);
 	}

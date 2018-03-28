@@ -122,7 +122,7 @@ namespace Echo
 		void AddTextureName(int idex, const String& name);
 
 		// 设置贴图
-		TextureRes* SetTexture(int idex, const String& name);
+		TextureRes* setTexture(int idex, const String& name);
 
 		// 通过索引获取贴图名字
 		const String& GetTextureName(int index) { return m_TexturesName[index]; }

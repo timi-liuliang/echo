@@ -1075,14 +1075,14 @@ namespace Echo
 		m_TexturesName[idex] = name;
 	}
 
-	TextureRes* MaterialInst::SetTexture(int idex, const String& name)
+	TextureRes* MaterialInst::setTexture(int index, const String& name)
 	{
 		if (name.empty())
 		{
 			return NULL;
 		}
 
-		TextureMapItor it = m_textures.find(idex);
+		TextureMapItor it = m_textures.find(index);
 		if (it != m_textures.end())
 		{
 			TextureResManager::instance()->releaseResource(it->second);
@@ -1091,8 +1091,8 @@ namespace Echo
 
 		TextureRes* pTexture = prepareTextureImp(name);
 		pTexture->load();
-		m_textures[idex] = pTexture;
-		m_TexturesName[idex] = name;
+		m_textures[index] = pTexture;
+		m_TexturesName[index] = name;
 		return pTexture;
 	}
 
