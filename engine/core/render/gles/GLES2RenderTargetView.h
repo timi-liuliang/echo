@@ -6,7 +6,7 @@ namespace Echo
 {
 	class GLES2TargetViewGPUProxy;
 
-	class ECHO_GLES2RENDER_API GLES2RenderTargetView: public RenderTargetView
+	class GLES2RenderTargetView: public RenderTargetView
 	{
 	public:
 		GLES2RenderTargetView(PixelFormat pixFmt, ui32 width, ui32 height);

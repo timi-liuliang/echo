@@ -55,7 +55,10 @@ namespace Echo
 			Renderable*			m_renderable;
 
 			// build for render
-			void build();
+			void build( Live2dCubism* cubism);
+
+			// submit for render
+			void submitToRenderQueue();
 		};
 
 	public:

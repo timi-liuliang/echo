@@ -26,8 +26,6 @@ namespace Echo
 		EchoSafeDelete(m_material, Material);
 		if (m_renderable)
 		{
-			RenderInput* renderinput = m_renderable->getRenderInput();
-			EchoSafeDelete(renderinput, RenderInput);
 			Renderer::instance()->destroyRenderables(&m_renderable, 1);
 		}
 
@@ -266,7 +264,7 @@ namespace Echo
 		RenderInput* renderInput = Renderer::instance()->createRenderInput(shader);
 		renderInput->bindVertexStream(*m_parent->m_verticesList, m_parent->m_verticesBuffer);
 		renderInput->bindIndexStream(m_parent->m_indicesBuffer);
-		retRenderable->setRenderInput(renderInput);
+		//retRenderable->setRenderInput(renderInput);
 
 		return retRenderable;
 	}

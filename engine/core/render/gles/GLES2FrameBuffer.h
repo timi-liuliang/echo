@@ -6,7 +6,7 @@
 
 namespace Echo
 {
-	class ECHO_GLES2RENDER_API GLES2FrameBuffer: public FrameBuffer
+	class GLES2FrameBuffer: public FrameBuffer
 	{
 	public:
 		GLES2FrameBuffer();

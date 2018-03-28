@@ -71,9 +71,6 @@ namespace Echo
 
 		// 绑定shader
 		void activeShader();
-		
-		// 激活纹理(指定纹理要使用的采样状态)
-		//void activeTexture(int stage, Texture* tex);
 
 		// 设置队列
 		void setQueue(RenderQueue* queue) { m_queue = queue; }

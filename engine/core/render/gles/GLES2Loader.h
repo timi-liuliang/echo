@@ -13,7 +13,7 @@
 
 namespace Echo
 {
-	class ECHO_GLES2RENDER_API GLES2Loader: public Singleton<GLES2Loader>
+	class GLES2Loader: public Singleton<GLES2Loader>
 	{
 		typedef void (GL_APIENTRYP ECHO_PFNGLBINDVERTEXARRAYOESPROC) (GLuint array);
 		typedef void (GL_APIENTRYP ECHO_PFNGLDELETEVERTEXARRAYSOESPROC) (GLsizei n, const GLuint* arrays);

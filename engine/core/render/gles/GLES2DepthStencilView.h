@@ -7,7 +7,7 @@ namespace Echo
 {
 	class GLES2DepthStencilViewGPUProxy;
 
-	class ECHO_GLES2RENDER_API GLES2DepthStencilView: public DepthStencilView
+	class GLES2DepthStencilView : public DepthStencilView
 	{
 	public:
 		GLES2DepthStencilView(PixelFormat pixFmt, ui32 width, ui32 height);

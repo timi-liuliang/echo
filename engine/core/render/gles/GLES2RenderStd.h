@@ -4,20 +4,6 @@
 #include <engine/core/Base/EchoDef.h>
 #include <engine/core/Util/LogManager.h>
 
-#ifdef ECHO_PLATFORM_WINDOWS
-// #	ifdef ECHO_GLES2RENDER_STATIC
-#		define ECHO_GLES2RENDER_API
-// #	else
-// #		ifdef ECHO_GLES2RENDER_EXPORTS
-// #			define ECHO_GLES2RENDER_API __declspec(dllexport)
-// #		else
-// #			define ECHO_GLES2RENDER_API __declspec(dllimport)
-// #		endif
-// #	endif
-#else
-#	define ECHO_GLES2RENDER_API
-#endif
-
 #ifndef GL_GLEXT_PROTOTYPES
 #  define  GL_GLEXT_PROTOTYPES
 #endif

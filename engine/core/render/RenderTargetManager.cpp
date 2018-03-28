@@ -56,35 +56,13 @@ namespace Echo
 		EchoSafeDelete(m_pMaterialBaseUpdate, Material);
 		EchoSafeDelete(m_pMaterialNightSight, Material);
 		EchoSafeDelete(m_pMaterialDownsampleDepth, Material);
-		RenderInput* ri = m_pScreenAlignedQuad->getRenderInput();
-
-		GPUBuffer* vertBuffer = (*ri->getVertexBuffer())[0].m_buffer;
-		EchoSafeDelete( vertBuffer, GPUBuffer);
-
-		GPUBuffer* indexBuffer = ri->getIndexBuffer();
-		EchoSafeDelete( indexBuffer, GPUBuffer);
-		
-		EchoSafeDelete( ri, RenderInput);
 
 		Renderer::instance()->destroyRenderables( &m_pScreenAlignedQuad, 1);
 
 		if (m_pScreenAlignedQuadDownsampleDepth)
 		{
-			RenderInput* ri = m_pScreenAlignedQuadDownsampleDepth->getRenderInput();
-			EchoSafeDelete(ri, RenderInput);
 			Renderer::instance()->destroyRenderables(&m_pScreenAlignedQuadDownsampleDepth, 1);
 		}
-		
-		ri = m_pScreenAlignedQuadQuarterLB->getRenderInput();
-
-		vertBuffer = (*ri->getVertexBuffer())[0].m_buffer;
-		EchoSafeDelete( vertBuffer, GPUBuffer);
-
-		indexBuffer = ri->getIndexBuffer();
-		EchoSafeDelete( indexBuffer, GPUBuffer);
-
-		EchoSafeDelete( ri, RenderInput);
-
 		Renderer::instance()->destroyRenderables( &m_pScreenAlignedQuadQuarterLB, 1);
 
 		if(m_bEnableFilter)
@@ -92,12 +70,6 @@ namespace Echo
 			EchoSafeDelete(m_pMaterialFilterUpdate, Material);
 			Renderer::instance()->releaseTexture(m_pFilterBlendmap.m_texture);
 			m_pFilterBlendmap.m_texture = NULL;
-			RenderInput* _ri = m_pScreenAlignedQuadFilter->getRenderInput();
-			GPUBuffer* _vertBuffer = (*_ri->getVertexBuffer())[0].m_buffer;
-			EchoSafeDelete( _vertBuffer, GPUBuffer);
-			GPUBuffer* _indexBuffer = _ri->getIndexBuffer();
-			EchoSafeDelete( _indexBuffer, GPUBuffer);
-			EchoSafeDelete( _ri, RenderInput);
 			Renderer::instance()->destroyRenderables( &m_pScreenAlignedQuadFilter, 1);
 		}
 	}
@@ -387,7 +359,7 @@ namespace Echo
 		pRenderInput->bindIndexStream(indexGPUBuffer, sizeof(ui16));
 		pRenderInput->setTopologyType(RenderInput::TT_TRIANGLELIST);
 
-		m_pScreenAlignedQuad->setRenderInput(pRenderInput);
+		//m_pScreenAlignedQuad->setRenderInput(pRenderInput);
 /*
 		getRenderTargetByID(RTI_SceneColorMap)->getBindTexture()->setSamplerState(m_pMaterialBaseUpdate->getSamplerStateByTexStage(0));
 		m_pScreenAlignedQuad->setTexture( 0, getRenderTargetByID(RTI_SceneColorMap)->m_bindTexture );*/
@@ -403,7 +375,7 @@ namespace Echo
 			pRenderInput->bindVertexStream(verElementLists, vertexGPUBuffer);
 			pRenderInput->bindIndexStream(indexGPUBuffer, sizeof(ui16));
 			pRenderInput->setTopologyType(RenderInput::TT_TRIANGLELIST);
-			m_pScreenAlignedQuadDownsampleDepth->setRenderInput(pRenderInput);
+			//m_pScreenAlignedQuadDownsampleDepth->setRenderInput(pRenderInput);
 			m_pScreenAlignedQuadDownsampleDepth->beginShaderParams(1);
 			m_pScreenAlignedQuadDownsampleDepth->setShaderParam(m_pMaterialDownsampleDepth->getShaderProgram()->getParamPhysicsIndex("texSampler"), SPT_TEXTURE, (void*)&SHADER_TEXTURE_SLOT0);
 			m_pScreenAlignedQuadDownsampleDepth->endShaderParams();
@@ -425,7 +397,7 @@ namespace Echo
 			pRenderInput_filter->setTopologyType(RenderInput::TT_TRIANGLELIST);
 
 			m_pScreenAlignedQuadFilter = Renderer::instance()->createRenderable(NULL, m_pMaterialFilterUpdate);
-			m_pScreenAlignedQuadFilter->setRenderInput(pRenderInput_filter);
+			//m_pScreenAlignedQuadFilter->setRenderInput(pRenderInput_filter);
 
 			m_FilterTex[0] = 0;
 			m_FilterTex[1] = 1;
@@ -541,7 +513,7 @@ namespace Echo
 		pRenderInput->setTopologyType(RenderInput::TT_TRIANGLELIST);
 
 		m_pScreenAlignedQuadQuarterLB = Renderer::instance()->createRenderable(NULL, m_pMaterialBaseUpdate);
-		m_pScreenAlignedQuadQuarterLB->setRenderInput(pRenderInput);
+		//m_pScreenAlignedQuadQuarterLB->setRenderInput(pRenderInput);
 		m_pScreenAlignedQuadQuarterLB->beginShaderParams(1);
 		m_pScreenAlignedQuadQuarterLB->setShaderParam(pShaderProgram->getParamPhysicsIndex("texSampler"), SPT_TEXTURE, (void*)&SHADER_TEXTURE_SLOT0);
 		m_pScreenAlignedQuadQuarterLB->endShaderParams();

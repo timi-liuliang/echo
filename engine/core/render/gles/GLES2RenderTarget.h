@@ -7,7 +7,7 @@ namespace Echo
 {
 	class GLES2TargetGPUProxy;
 
-	class ECHO_GLES2RENDER_API GLES2RenderTarget : public RenderTarget
+	class GLES2RenderTarget : public RenderTarget
 	{
 		friend class GLES2RenderTargetManager;
 	protected:

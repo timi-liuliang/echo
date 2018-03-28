@@ -7,7 +7,7 @@ namespace Echo
 {
 	class GLES2TextureGPUProxy;
 	
-	class ECHO_GLES2RENDER_API GLES2Texture: public Texture
+	class GLES2Texture: public Texture
 	{
 		friend class GLES2Renderer;
 	public:

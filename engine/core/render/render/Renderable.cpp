@@ -2,15 +2,17 @@
 #include "Render/ShaderProgram.h"
 #include "Render/Renderer.h"
 #include "Render/Material.h"
+#include "engine/core/render/MaterialInst.h"
+#include "engine/core/render/mesh/Mesh.h"
+#include "engine/core/scene/node.h"
 
 namespace Echo
 {
 	// 构造函数
 	Renderable::Renderable(RenderQueue* pRenderQueue, Material* material, int identifier)
-		: m_RenderInput(NULL)
+		: m_renderInput(nullptr)
 		, m_SParamWriteIndex(0)
 		, m_pRenderQueue(pRenderQueue)
-		, m_stageRenderQueue(NULL)
 		, m_visible(NULL)
 		, m_bRenderState(false)
 		, m_pBlendState(NULL)
@@ -24,7 +26,48 @@ namespace Echo
 	// 析构函数
 	Renderable::~Renderable()
 	{
+		EchoSafeDelete(m_renderInput, RenderInput);
+
 		m_shaderParams.clear();
+	}
+
+	// 新建
+	Renderable* Renderable::create(Mesh* mesh, MaterialInst* matInst, Node* node)
+	{
+		Renderable* renderable = Renderer::instance()->createRenderable( matInst->getRenderQueue(), matInst->getMaterial());
+		renderable->setRenderInput(mesh->getVertexBuffer(), mesh->getVertexElements(), mesh->getIndexBuffer(), mesh->getIndexStride());
+		Material* material = matInst->getMaterial();
+		ShaderProgram* shaderProgram = material->getShaderProgram();
+		ShaderProgram::UniformArray* uniforms = shaderProgram->getUniforms();
+
+		// bind shader param
+		renderable->beginShaderParams(uniforms->size());
+		for (auto it = uniforms->begin(); it != uniforms->end(); it++)
+		{
+			const ShaderProgram::Uniform& uniform = it->second;
+			void* value = node->getGlobalUniformValue(uniform.m_name);
+			if (!value)
+				value = matInst->getUniformValue(uniform.m_name);
+
+			if (value)
+			{
+				renderable->setShaderParam(shaderProgram->getParamPhysicsIndex(uniform.m_name), uniform.m_type, value, uniform.m_count);
+				if (uniform.m_type == SPT_TEXTURE)
+				{
+					int index = *(int*)value;
+					Texture* texture = matInst->getTexture(index)->getTexture();
+					const SamplerState* sampleState = material->getSamplerState(index);
+					renderable->setTexture(index, texture, sampleState);
+				}
+			}
+		}
+		renderable->endShaderParams();
+
+		renderable->setRasterizerState(matInst->getRasterizerState());
+		renderable->setBlendState(matInst->getBlendState());
+		renderable->setDepthStencilState(matInst->getDepthStencilState());
+
+		return renderable;
 	}
 
 	// 开始绑定shader参数
@@ -165,29 +208,16 @@ namespace Echo
 				bindShaderParams();
 
 				// 执行渲染
-				EchoAssert(m_RenderInput);
-				Renderer::instance()->render(m_RenderInput, material->getShaderProgram());
+				EchoAssert(m_renderInput);
+				Renderer::instance()->render(m_renderInput, material->getShaderProgram());
 			}
 		}
-	}
-
-	// 设置
-	void Renderable::setStageRenderQueue(RenderQueue* stageRenderQueue)
-	{
-		m_stageRenderQueue = stageRenderQueue;
 	}
 
 	// 提交到渲染队列
 	void Renderable::submitToRenderQueue()
 	{
-		if (m_stageRenderQueue)
-		{
-			m_stageRenderQueue->addRenderable(this);
-		}
-		else
-		{
-			m_pRenderQueue->addRenderable(this);
-		}	
+		m_pRenderQueue->addRenderable(this);
 	}
 
 	// 设置混合状态
@@ -209,5 +239,23 @@ namespace Echo
 	{
 		m_pDepthStencil = state;
 		m_bRenderState = state ? true : false;
+	}
+
+	// 设置渲染几何数据
+	void Renderable::setRenderInput(GPUBuffer* vertexStream, const RenderInput::VertexElementList& vertElements, GPUBuffer* indexStream, ui32 idxStride)
+	{
+		EchoSafeDelete(m_renderInput, RenderInput);
+
+		Material* material = IdToPtr(Material, m_materialID);
+		if (material)
+		{
+			ShaderProgram* program = material->getShaderProgram();
+			if (program)
+			{
+				m_renderInput = Renderer::instance()->createRenderInput(program);
+				m_renderInput->bindVertexStream(vertElements, vertexStream);
+				m_renderInput->bindIndexStream(indexStream, idxStride);
+			}
+		}
 	}
 }

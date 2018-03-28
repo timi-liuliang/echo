@@ -1020,7 +1020,7 @@ namespace Echo
 			return it->second;
 		}
 
-		return NULL;
+		return nullptr;
 	}
 
 	// …Ë÷√∫Í∂®“Â

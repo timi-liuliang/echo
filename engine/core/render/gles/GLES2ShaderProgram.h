@@ -13,7 +13,7 @@ namespace Echo
 	/**
 	 * ×ÅÉ«Æ÷³ÌÐò
 	 */
-	class ECHO_GLES2RENDER_API GLES2ShaderProgram: public ShaderProgram
+	class GLES2ShaderProgram : public ShaderProgram
 	{
 	public:
 		typedef array<GLint, RenderInput::VS_MAX> AttribLocationArray;

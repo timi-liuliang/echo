@@ -150,7 +150,7 @@ namespace Echo
 				m_renderInput[eyeNum]->bindVertexStream(m_verElementLists_vr, m_EyeGlassVB[eyeNum]);
 				m_renderInput[eyeNum]->bindIndexStream(m_EyeGlassIB[eyeNum]);
 				m_renderInput[eyeNum]->setTopologyType(RenderInput::TT_TRIANGLELIST);
-				m_renderable[eyeNum]->setRenderInput(m_renderInput[eyeNum]);
+				//m_renderable[eyeNum]->setRenderInput(m_renderInput[eyeNum]);
 
 				free(pVBVerts);
 				DestroyDistortionMesh(&meshData);

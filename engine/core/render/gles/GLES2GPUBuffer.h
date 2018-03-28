@@ -7,7 +7,7 @@ namespace Echo
 {
 	class GLES2GPUBufferGPUProxy;
 
-	class ECHO_GLES2RENDER_API GLES2GPUBuffer: public GPUBuffer
+	class GLES2GPUBuffer: public GPUBuffer
 	{
 	public:
 		GLES2GPUBuffer(GPUBufferType type, Dword usage, const Buffer& buff);

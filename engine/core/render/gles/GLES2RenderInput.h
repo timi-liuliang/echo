@@ -7,7 +7,7 @@ namespace Echo
 	/**
 	 * 渲染输入
 	 */
-	class ECHO_GLES2RENDER_API GLES2RenderInput: public RenderInput
+	class GLES2RenderInput : public RenderInput
 	{
 	public:
 		GLES2RenderInput( ShaderProgram* pProgram);
@@ -20,9 +20,6 @@ namespace Echo
 		void unbind();
 
 	private:
-		// 构建顶点属性
-		void buildVertexAttributes();
-
 		// 计算顶点流声明
 		virtual bool buildVertStreamDeclaration(StreamUnit* stream);
 

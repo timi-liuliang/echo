@@ -6,8 +6,7 @@
 namespace Echo
 {
 	class GLES2ShaderGPUProxy;
-
-	class ECHO_GLES2RENDER_API GLES2Shader: public Shader
+	class GLES2Shader: public Shader
 	{
 		friend class GLES2ShaderProgram;
 	public:

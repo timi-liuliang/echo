@@ -99,7 +99,7 @@ namespace Echo
 		pRenderInput->setTopologyType(RenderInput::TT_TRIANGLELIST);
 
 		static float texelSize[2] = { 1.f / m_shadowMapSize, 1.f / m_shadowMapSize };
-		m_pRaShadowMapVBlurPass->setRenderInput(pRenderInput);
+		//m_pRaShadowMapVBlurPass->setRenderInput(pRenderInput);
 		m_pRaShadowMapVBlurPass->beginShaderParams(2);
 		m_pRaShadowMapVBlurPass->setShaderParam(pShaderProgram->getParamPhysicsIndex("texSampler"), SPT_TEXTURE, (void*)&SHADER_TEXTURE_SLOT0);
 		m_pRaShadowMapVBlurPass->setShaderParam(pShaderProgram->getParamPhysicsIndex("texelSize"), SPT_VEC2, (void*)texelSize);
@@ -113,7 +113,7 @@ namespace Echo
 		pRenderInput->bindIndexStream(m_pScreenAlignedQuadIB, sizeof(ui16));
 		pRenderInput->setTopologyType(RenderInput::TT_TRIANGLELIST);
 
-		m_pRaShadowMapHBlurPass->setRenderInput(pRenderInput);
+		//m_pRaShadowMapHBlurPass->setRenderInput(pRenderInput);
 		m_pRaShadowMapHBlurPass->beginShaderParams(2);
 		m_pRaShadowMapHBlurPass->setShaderParam(pShaderProgram->getParamPhysicsIndex("texSampler"), SPT_TEXTURE, (void*)&SHADER_TEXTURE_SLOT0);
 		m_pRaShadowMapHBlurPass->setShaderParam(pShaderProgram->getParamPhysicsIndex("texelSize"), SPT_VEC2, (void*)texelSize);
@@ -131,13 +131,9 @@ namespace Echo
 		RenderTargetManager::instance()->destroyRenderTargetByID(RTI_ShadowMapVBlur);
 
 		EchoSafeDelete(m_pMtlShadowMapVBlurPass, Material);
-		RenderInput* pRi = m_pRaShadowMapVBlurPass->getRenderInput();
-		EchoSafeDelete(pRi, RenderInput);
 		Renderer::instance()->destroyRenderables(&m_pRaShadowMapVBlurPass, 1);
 
 		EchoSafeDelete(m_pMtlShadowMapHBlurPass, Material);
-		pRi = m_pRaShadowMapHBlurPass->getRenderInput();
-		EchoSafeDelete(pRi, RenderInput);
 		Renderer::instance()->destroyRenderables(&m_pRaShadowMapHBlurPass, 1);
 
 		EchoSafeDelete(m_pScreenAlignedQuadVB, GPUBuffer);

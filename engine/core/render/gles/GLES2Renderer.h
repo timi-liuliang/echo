@@ -33,7 +33,7 @@ namespace Echo
 	/**
 	 * OpenGLES2.0äÖÈ¾Æ÷
 	 */
-	class ECHO_GLES2RENDER_API GLES2Renderer: public Renderer
+	class GLES2Renderer: public Renderer
 	{
 		typedef vector<GLuint>::type			TexUintList;
 		typedef vector<SamplerState*>::type		SamplerList;

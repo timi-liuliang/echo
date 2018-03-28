@@ -1,5 +1,7 @@
 #include "live2d_cubism.h"
 #include "engine/core/util/LogManager.h"
+#include "render/renderer.h"
+#include "render/Material.h"
 
 // Ä¬ÈÏ²ÄÖÊ
 static const char* g_live2dDefaultMaterial = "\
@@ -77,7 +79,7 @@ namespace Echo
 	}
 
 	// build for render
-	void Live2dCubism::Drawable::build()
+	void Live2dCubism::Drawable::build(Live2dCubism* cubism)
 	{
 		Mesh::VertexDefine define;
 		define.m_isUseDiffuseUV = true;
@@ -90,7 +92,13 @@ namespace Echo
 		m_materialInst->setStage("Transparent");
 		m_materialInst->applyLoadedData();
 
-		m_renderable = Renderer::instance()->createRenderable( m_materialInst->getRenderQueue(), m_materialInst->getMaterial());
+		m_renderable = Renderable::create(m_mesh, m_materialInst, cubism);
+	}
+
+	// submit for render
+	void Live2dCubism::Drawable::submitToRenderQueue()
+	{
+		m_renderable->submitToRenderQueue();
 	}
 
 	Live2dCubism::Live2dCubism()
@@ -257,7 +265,7 @@ namespace Echo
 	{
 		for (Drawable& drawable : m_drawables)
 		{
-			drawable.build();
+			drawable.build( this);
 		}
 	}
 
@@ -266,7 +274,12 @@ namespace Echo
 	{
 		if (m_model)
 		{
-			csmUpdateModel((csmModel*)m_model);
+			//csmUpdateModel((csmModel*)m_model);
+
+			for (Drawable& drawable : m_drawables)
+			{
+				drawable.submitToRenderQueue();
+			}
 		}
 	}
 }

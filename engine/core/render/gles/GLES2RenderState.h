@@ -6,9 +6,7 @@
 namespace Echo
 {
 	class GLES2SamplerStateGPUProxy;
-	
-
-	class ECHO_GLES2RENDER_API GLES2BlendState: public BlendState
+	class GLES2BlendState: public BlendState
 	{
 	public:
 		GLES2BlendState();
@@ -34,7 +32,7 @@ namespace Echo
 		GLboolean					m_glAlphaMask;
 	};
 	
-	class ECHO_GLES2RENDER_API GLES2DepthStencilState: public DepthStencilState
+	class GLES2DepthStencilState: public DepthStencilState
 	{
 	public:
 		GLES2DepthStencilState();
@@ -60,7 +58,7 @@ namespace Echo
 		GLenum						m_glBackStencilPassOP;
 	};
 
-	class ECHO_GLES2RENDER_API GLES2RasterizerState: public RasterizerState
+	class GLES2RasterizerState: public RasterizerState
 	{
 	public:
 		GLES2RasterizerState();
@@ -79,7 +77,7 @@ namespace Echo
 		GLenum						m_glFrontFace;
 	};
 
-	class ECHO_GLES2RENDER_API GLES2SamplerState: public SamplerState
+	class GLES2SamplerState: public SamplerState
 	{
 		friend class GLES2Renderer;
 	private:

@@ -28,8 +28,6 @@ namespace Echo
 		for (auto& m : m_materials)
 		{
 			EchoSafeDelete(m.first, Material);
-			RenderInput* renderinput = m.second->getRenderInput();
-			EchoSafeDelete(renderinput, RenderInput);
 			Renderer::instance()->destroyRenderables(&m.second, 1);
 		}
 	}

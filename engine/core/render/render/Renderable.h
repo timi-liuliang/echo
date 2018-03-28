@@ -34,6 +34,9 @@ namespace Echo
 	/**
 	 * 最小可渲染体封装
 	 */
+	class Node;
+	class Mesh;
+	class MaterialInst;
 	class Renderable : public IManualRenderable
 	{
 		friend class RenderQueue;
@@ -54,11 +57,11 @@ namespace Echo
 		// 获取唯一标识符
 		ui32 getIdentifier() const { return m_identifier; }
 
-		// 获取渲染几何数据
-		RenderInput* getRenderInput() const { return m_RenderInput; }
+		// 构建数据
+		static Renderable* create(Mesh* mesh, MaterialInst* matInst, Node* node);
 
 		// 设置渲染几何数据
-		inline void setRenderInput(RenderInput* input) { m_RenderInput = input; }
+		void setRenderInput(GPUBuffer* vertexStream, const RenderInput::VertexElementList& vertElements,  GPUBuffer* indexStream, ui32 idxStride);
 
 		// 开始参数
 		void beginShaderParams(size_t paramNum);
@@ -83,9 +86,6 @@ namespace Echo
 		
 		// 设置渲染队列
 		void setRenderQueue(RenderQueue* pRenderQueue) { m_pRenderQueue = pRenderQueue; }
-
-		// 设置主渲染队列
-		void setStageRenderQueue(RenderQueue* stageRenderQueue);
 
 		// 获取渲染队列
 		const RenderQueue* getRenderQueue(void){ return m_pRenderQueue; }
@@ -137,10 +137,9 @@ namespace Echo
 	public:
 		ui32									m_identifier;
 		String									m_ownerDesc;			// 拥有者信息
-		RenderQueue*							m_stageRenderQueue;		// Opaque,Transparent 等主渲染队列
 		RenderQueue*							m_pRenderQueue;
 		MaterialID								m_materialID;			// material
-		RenderInput*							m_RenderInput;			// first  VB, IB, etc.
+		RenderInput*							m_renderInput;			// first  VB, IB, etc.
 		MaxTextureArray							m_Textures;				// now only one texture sampler.
 		vector<ShaderParam>::type				m_shaderParams;			// third shader params
 		size_t									m_SParamWriteIndex;

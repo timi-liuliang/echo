@@ -69,6 +69,9 @@ namespace Echo
 	public:
 		Node* getNode(const String& path) { return nullptr; }
 
+		// 获取全局变量值
+		virtual void* getGlobalUniformValue(const String& name);
+
 	protected:
 		inline void		needUpdate();
 

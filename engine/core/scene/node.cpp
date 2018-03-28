@@ -338,6 +338,15 @@ namespace Echo
 		}
 	}
 
+	// 获取全局变量值
+	void* Node::getGlobalUniformValue(const String& name)
+	{
+		if (name == "matWVP")
+			return (void*)(&Matrix4::IDENTITY);
+
+		return nullptr;
+	}
+
 	// bind methods
 	void Node::bindMethods()
 	{
