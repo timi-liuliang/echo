@@ -5,9 +5,9 @@
 namespace Echo
 {
 	// 创建
-	Mesh* Mesh::create()
+	Mesh* Mesh::create(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer)
 	{
-		return EchoNew(Mesh);
+		return EchoNew(Mesh(isDynamicVertexBuffer, isDynamicIndicesBuffer));
 	}
 
 	// 释放
@@ -17,12 +17,14 @@ namespace Echo
 	}
 
 	// 构造函数
-	Mesh::Mesh()
+	Mesh::Mesh(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer)
 		: m_vertexBuffer(NULL)
 		, m_indexBuffer(NULL)
 		, m_idxCount(0)
 		, m_idxStride(0)
 		, m_indices(NULL)
+		, m_isDynamicVertexBuffer(isDynamicVertexBuffer)
+		, m_isDynamicIndicesBuffer(isDynamicIndicesBuffer)
 	{
 	}
 
@@ -315,16 +317,40 @@ namespace Echo
 	// 建立索引缓冲
 	void Mesh::buildIndexBuffer()
 	{
-		EchoSafeDelete(m_indexBuffer, GPUBuffer);
 		Buffer indexBuff(m_idxCount*m_idxStride, m_indices);
-		m_indexBuffer = Renderer::instance()->createIndexBuffer(GPUBuffer::GBU_GPU_READ, indexBuff);
+		if (m_isDynamicIndicesBuffer)
+		{
+			if (!m_indexBuffer)
+				m_indexBuffer = Renderer::instance()->createIndexBuffer(GPUBuffer::GBU_GPU_READ, indexBuff);
+			else
+				m_indexBuffer->updateData(indexBuff);
+		}
+		else
+		{
+			if(!m_indexBuffer)
+				m_indexBuffer = Renderer::instance()->createIndexBuffer(GPUBuffer::GBU_GPU_READ, indexBuff);
+			else
+				EchoLogError("Cannot modify static mesh index buffer");
+		}	
 	}
 
 	void Mesh::buildVertexBuffer()
 	{
-		EchoSafeDelete(m_vertexBuffer, GPUBuffer);
 		Buffer vertBuff(m_vertData.m_stride*m_vertData.m_count, m_vertData.m_vertices);
-		m_vertexBuffer = Renderer::instance()->createVertexBuffer(GPUBuffer::GBU_GPU_READ, vertBuff);
+		if (m_isDynamicVertexBuffer)
+		{
+			if (!m_vertexBuffer)
+				m_vertexBuffer = Renderer::instance()->createVertexBuffer(GPUBuffer::GBU_DYNAMIC, vertBuff);
+			else
+				m_vertexBuffer->updateData(vertBuff);
+		}
+		else
+		{
+			if (!m_vertexBuffer)
+				m_vertexBuffer = Renderer::instance()->createVertexBuffer(GPUBuffer::GBU_GPU_READ, vertBuff);
+			else
+				EchoLogError("Cannot modify static mesh vertex buffer");
+		}	
 	}
 
 	// 设置数据
@@ -336,17 +362,16 @@ namespace Echo
 		m_vertData.m_isUseDiffuseUV = format.m_isUseDiffuseUV;
 		m_vertData.build();
 
+		updateIndices(indicesCount, indices);
+
+		updateVertexs(vertCount, vertices, box);
+	}
+
+	// update indices data
+	void Mesh::updateIndices(ui32 indicesCount, const ui16* indices)
+	{
 		// process data
-		EchoSafeFree(m_vertData.m_vertices);
 		EchoSafeFree(m_indices);
-
-		m_vertData.m_count = vertCount;
-
-		// calc vertex buffer size
-		ui32 vertBuffSize = m_vertData.m_count * m_vertData.m_stride;
-		m_vertData.m_vertices = EchoAlloc(Byte, vertBuffSize);
-
-		memcpy(m_vertData.m_vertices, vertices, vertCount * m_vertData.m_stride);
 
 		// load indices
 		m_idxCount = indicesCount;
@@ -355,8 +380,24 @@ namespace Echo
 		ui32 idxBuffSize = m_idxCount * m_idxStride;
 		m_indices = EchoAlloc(Byte, idxBuffSize);
 		memcpy(m_indices, indices, idxBuffSize);
+
+		buildIndexBuffer();
+	}
+
+	// update vertex data
+	void Mesh::updateVertexs(ui32 vertCount, const Byte* vertices, const Box& box)
+	{
+		EchoSafeFree(m_vertData.m_vertices);
+
+		m_vertData.m_count = vertCount;
+
+		// calc vertex buffer size
+		ui32 vertBuffSize = m_vertData.m_count * m_vertData.m_stride;
+		m_vertData.m_vertices = EchoAlloc(Byte, vertBuffSize);
+
+		memcpy(m_vertData.m_vertices, vertices, vertCount * m_vertData.m_stride);
 		m_box = box;
 
-		buildBuffer();
+		buildVertexBuffer();
 	}
 }

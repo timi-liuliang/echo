@@ -84,7 +84,7 @@ namespace Echo
 		Mesh::VertexDefine define;
 		define.m_isUseDiffuseUV = true;
 
-		m_mesh = Mesh::create();
+		m_mesh = Mesh::create(true, false);
 		m_mesh->set(define, m_vertices.size(), (const Byte*)m_vertices.data(), m_indices.size(), m_indices.data(), m_box);
 
 		m_materialInst = MaterialInst::create();
@@ -96,10 +96,20 @@ namespace Echo
 		m_renderable = Renderable::create(m_mesh, m_materialInst, cubism);
 	}
 
+	// update vertex buffer
+	void Live2dCubism::Drawable::updateVertexBuffer()
+	{
+		if (m_mesh)
+		{
+			m_mesh->updateVertexs(m_vertices.size(), (const Byte*)m_vertices.data(), m_box);
+		}
+	}
+
 	// submit for render
 	void Live2dCubism::Drawable::submitToRenderQueue()
 	{
-		m_renderable->submitToRenderQueue();
+		//if(m_name=="ArtMesh25")
+			m_renderable->submitToRenderQueue();
 	}
 
 	Live2dCubism::Live2dCubism()
@@ -169,6 +179,8 @@ namespace Echo
 	// parse drawables
 	void Live2dCubism::parseDrawables()
 	{
+		m_localAABB.reset();
+
 		int drawableCount = csmGetDrawableCount(m_model);
 		if (drawableCount > 0)
 		{
@@ -210,16 +222,19 @@ namespace Echo
 				drawable.m_box.reset();
 				for (ui32 j = 0; j < vertexCount; j++)
 				{
-					csmVector2 pos = positions[i][j];
-					csmVector2 uv = uvs[i][j];
+					const csmVector2& pos = positions[i][j];
+					const csmVector2& uv = uvs[i][j];
 
 					VertexFormat vert;
-					vert.m_position = Vector3(pos.X, pos.Y, 0.f);
-					vert.m_uv = Vector2(uv.X, uv.Y);
+					vert.m_position = Vector3(pos.X * m_canvas.m_width, pos.Y * m_canvas.m_height, 0.f);
+					vert.m_uv = Vector2(uv.X, 1.f-uv.Y);
 
 					drawable.m_vertices.push_back( vert);
 					drawable.m_box.addPoint(vert.m_position);
 				}
+
+				// calc local aabb
+				m_localAABB.unionBox(drawable.m_box);
 
 				// indices
 				ui32 indeceCount = indexCounts[i];
@@ -228,16 +243,23 @@ namespace Echo
 					drawable.m_indices.push_back( indices[i][j]);
 				}
 			}
+
+			std::sort(m_drawables.begin(), m_drawables.end(), [](const Drawable& a, const Drawable& b) ->int {return a.m_renderOrder<b.m_renderOrder; });
 		}
 	}
 
 	// parse canvas info
 	void Live2dCubism::parseCanvasInfo()
 	{
-		csmVector2 sizeInBytes;
+		csmVector2 sizeInPixels;
 		csmVector2 originInPixels;
 		float	   pixelsPerUnit;
-		csmReadCanvasInfo(m_model, &sizeInBytes, &originInPixels, &pixelsPerUnit);
+		csmReadCanvasInfo(m_model, &sizeInPixels, &originInPixels, &pixelsPerUnit);
+
+		m_canvas.m_width = sizeInPixels.X;
+		m_canvas.m_height = sizeInPixels.Y;
+		m_canvas.m_originInPixels = Vector2(originInPixels.X, originInPixels.Y);
+		m_canvas.m_pixelsPerUnit = pixelsPerUnit;
 	}
 
 	// set moc
@@ -277,10 +299,68 @@ namespace Echo
 		{
 			//csmUpdateModel((csmModel*)m_model);
 
+			//updateVertexBuffer();
+
 			for (Drawable& drawable : m_drawables)
 			{
 				drawable.submitToRenderQueue();
 			}
 		}
+	}
+
+	// update vertex buffer
+	void Live2dCubism::updateVertexBuffer()
+	{
+		int drawableCount = csmGetDrawableCount(m_model);
+		if (drawableCount > 0)
+		{
+			if (m_drawables.size() == drawableCount)
+			{
+				const int* vertexCounts = csmGetDrawableVertexCounts(m_model);
+				const csmVector2** positions = csmGetDrawableVertexPositions(m_model);
+				const csmVector2** uvs = csmGetDrawableVertexUvs(m_model);
+
+				for (int i = 0; i < drawableCount; i++)
+				{
+					// reference
+					Drawable& drawable = m_drawables[i];
+					drawable.m_vertices.clear();
+					drawable.m_box.reset();
+
+					// vertexs
+					ui32 vertexCount = vertexCounts[i];
+					drawable.m_box.reset();
+					for (ui32 j = 0; j < vertexCount; j++)
+					{
+						const csmVector2& pos = positions[i][j];
+						const csmVector2& uv = uvs[i][j];
+
+						VertexFormat vert;
+						vert.m_position = Vector3(pos.X, pos.Y, 0.f);
+						vert.m_uv = Vector2(uv.X, 1.f-uv.Y);
+
+						drawable.m_vertices.push_back(vert);
+						drawable.m_box.addPoint(vert.m_position);
+
+						drawable.updateVertexBuffer();
+					}
+				}
+			}			
+		}
+	}
+
+	// 获取全局变量值
+	void* Live2dCubism::getGlobalUniformValue(const String& name)
+	{
+		float width = Renderer::instance()->getScreenWidth();
+		float height = Renderer::instance()->getScreenHeight();
+
+		static Matrix4 matWVP;
+		matWVP.scaleReplace(Vector3(1.f/width, 1.f/height, 0.001));
+
+		if (name == "matWVP")
+			return (void*)(&matWVP);
+
+		return nullptr;
 	}
 }

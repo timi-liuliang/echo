@@ -26,7 +26,7 @@ namespace Echo
 
 	public:
 		// 创建
-		static Mesh* create();
+		static Mesh* create(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer);
 
 		// 释放
 		void release();
@@ -88,11 +88,17 @@ namespace Echo
 		// 设置数据
 		void set(const VertexDefine& format,ui32 vertCount, const Byte* vertices, ui32 indicesCount, const ui16* indices, const Box& box);
 
+		// update indices data
+		void updateIndices(ui32 indicesCount, const ui16* indices);
+
+		// update vertex data
+		void updateVertexs( ui32 vertCount, const Byte* vertices, const Box& box);
+
 		// 清空数据
 		void clear();
 
 	protected:
-		Mesh();
+		Mesh(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer);
 		~Mesh();
 
 		// 附加数据
@@ -117,15 +123,17 @@ namespace Echo
 		void buildIndexBuffer();
 
 	protected:
-		String					m_name;					// 名称
-		Box						m_box;					// 包围盒
-		ui32					m_idxCount;				// 索引数量
-		ui32					m_idxStride;			// 索引格式大小
-		Byte*					m_indices;				// 索引数据
-		VertexData				m_vertData;				// 顶点数据
-		GPUBuffer*				m_vertexBuffer;			// 顶点缓冲
-		GPUBuffer*				m_indexBuffer;			// 索引缓冲
-		vector<ui32>::type		m_boneIdxs;				// 骨骼索引(mesh only use a part of bones of a skeleton)
+		String					m_name;						// 名称
+		Box						m_box;						// 包围盒
+		ui32					m_idxCount;					// 索引数量
+		ui32					m_idxStride;				// 索引格式大小
+		Byte*					m_indices;					// 索引数据
+		VertexData				m_vertData;					// 顶点数据
+		bool					m_isDynamicVertexBuffer;	// 是否支持动态更新
+		GPUBuffer*				m_vertexBuffer;				// 顶点缓冲
+		bool					m_isDynamicIndicesBuffer;	// 索引缓冲
+		GPUBuffer*				m_indexBuffer;				// 索引缓冲
+		vector<ui32>::type		m_boneIdxs;					// 骨骼索引(mesh only use a part of bones of a skeleton)
 	};
 }
 

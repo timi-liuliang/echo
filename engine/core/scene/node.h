@@ -3,6 +3,7 @@
 #include "engine/core/base/class.h"
 #include <engine/core/Math/EchoMath.h>
 #include "engine/core/Util/PtrMonitor.h"
+#include "engine/core/geom/Box.h"
 
 namespace Echo
 {
@@ -58,9 +59,7 @@ namespace Echo
 		const Vector3& getWorldPosition() const;
 		void getWorldPositionXYZ(Real* x = 0, Real* y = 0, Real* z = 0);
 
-		void setWorldMatrix(const Matrix4& tempMatrix);
 		const Matrix4& getWorldMatrix();
-		Matrix4* getWorldMatrixPtr();
 		Matrix4	getInverseWorldMatrix() const;
 
 		void convertWorldToLocalPosition(Vector3& posLocal, const Vector3& posWorld);
@@ -79,8 +78,8 @@ namespace Echo
 
 	protected:
 		ui32			m_identifier;		// Î¨Ò»±êÊ¶·û
-		Node*			m_pParent;
-		bool			m_bVisible;
+		Node*			m_parent;
+		bool			m_isVisible;
 
 		// only to notify the parent is modifyed.
 		ChildNodeSet    m_children;
@@ -99,5 +98,7 @@ namespace Echo
 
 		bool			m_bModify;      //for caculate. ie: getWorldPostion
 		bool			m_bMatrixDirty; //for rendering.
+
+		Box				m_localAABB;		// local aabb
 	};
 }

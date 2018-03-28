@@ -50,7 +50,7 @@ namespace Echo
 		if( !m_isEnable ) 
 			return ;
 
-		sortByPos();
+		//sortByPos();
 
 		for (int renderableID : m_renderables)
 		{

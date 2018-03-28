@@ -108,7 +108,11 @@ namespace Echo
 		{
 			Echo::RenderQueue* renderQuene = getRenderQueueByIndex(i);
 			if (renderQuene)
+			{
 				renderQuene->render();
+				renderQuene->clear();
+			}
+
 		}
 	}
 

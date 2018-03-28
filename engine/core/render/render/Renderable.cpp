@@ -36,6 +36,7 @@ namespace Echo
 	{
 		Renderable* renderable = Renderer::instance()->createRenderable( matInst->getRenderQueue(), matInst->getMaterial());
 		renderable->setRenderInput(mesh->getVertexBuffer(), mesh->getVertexElements(), mesh->getIndexBuffer(), mesh->getIndexStride());
+
 		Material* material = matInst->getMaterial();
 		ShaderProgram* shaderProgram = material->getShaderProgram();
 		ShaderProgram::UniformArray* uniforms = shaderProgram->getUniforms();

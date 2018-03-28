@@ -15,6 +15,14 @@ namespace Echo
 	{
 		ECHO_CLASS(Live2dCubism, Node)
 
+		struct CanvasInfo
+		{
+			float		m_width;
+			float		m_height;
+			Vector2		m_originInPixels;
+			float	    m_pixelsPerUnit;
+		};
+
 		struct Paramter
 		{
 			String	m_name;
@@ -57,6 +65,9 @@ namespace Echo
 			// build for render
 			void build( Live2dCubism* cubism);
 
+			// update vertex buffer
+			void updateVertexBuffer();
+
 			// submit for render
 			void submitToRenderQueue();
 		};
@@ -78,6 +89,9 @@ namespace Echo
 		// update
 		virtual void update();
 
+		// update vertex buffer
+		void updateVertexBuffer();
+
 		// parse paramters
 		void parseParams();
 
@@ -90,11 +104,15 @@ namespace Echo
 		// parse drawables
 		void parseDrawables();
 
+		// 获取全局变量值
+		virtual void* getGlobalUniformValue(const String& name);
+
 	private:
 		csmMoc*					m_moc;
 		ui32					m_modelSize;
 		void*					m_modelMemory;
 		csmModel*				m_model;
+		CanvasInfo				m_canvas;
 		vector<Paramter>::type	m_params;
 		vector<Part>::type		m_parts;
 		vector<Drawable>::type	m_drawables;

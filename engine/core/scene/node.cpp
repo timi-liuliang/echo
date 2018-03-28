@@ -4,8 +4,8 @@
 namespace Echo
 {
 	Node::Node()
-		: m_pParent(NULL)
-		, m_bVisible(true)
+		: m_parent(NULL)
+		, m_isVisible(true)
 		, m_posLocal(Vector3::ZERO)
 		, m_ortLocal(Quaternion::IDENTITY)
 		, m_sclLocal(Vector3::ONE)
@@ -32,33 +32,33 @@ namespace Echo
 	{
 		for (Node* n : m_children)
 		{
-			n->m_pParent = nullptr;
+			n->m_parent = nullptr;
 		}
 	}
 
 	// ÉèÖÃ¸¸½Úµã
 	void Node::setParent(Node* pParent)
 	{
-		if(m_pParent)
+		if(m_parent)
 		{
-			ChildNodeSet::iterator it = m_pParent->m_children.find(this);
-			if(it != m_pParent->m_children.end())
+			ChildNodeSet::iterator it = m_parent->m_children.find(this);
+			if(it != m_parent->m_children.end())
 			{
-				m_pParent->m_children.erase(it);
+				m_parent->m_children.erase(it);
 			}
 		}
 
-		m_pParent = pParent;
+		m_parent = pParent;
 
-		if(m_pParent)
-			m_pParent->m_children.insert(this);
+		if(m_parent)
+			m_parent->m_children.insert(this);
 
 		needUpdate();
 	}
 
 	void Node::setVisible(bool bVisible)
 	{
-		m_bVisible = bVisible;
+		m_isVisible = bVisible;
 	}
 
 	void Node::scale(const Vector3& scl)
@@ -142,10 +142,10 @@ namespace Echo
 
 	void Node::setWorldOrientation(const Quaternion& ort)
 	{
-		if(m_pParent)
+		if(m_parent)
 		{
 			Quaternion ortLocal;
-			m_pParent->convertWorldToLocalOrientation(ortLocal, ort);
+			m_parent->convertWorldToLocalOrientation(ortLocal, ort);
 			setLocalOrientation(ortLocal);
 		}
 		else
@@ -156,10 +156,10 @@ namespace Echo
 
 	void Node::setWorldPosition(const Vector3& pos)
 	{
-		if(m_pParent)
+		if(m_parent)
 		{
 			Vector3 posLocal;
-			m_pParent->convertWorldToLocalPosition(posLocal, pos);
+			m_parent->convertWorldToLocalPosition(posLocal, pos);
 			setLocalPosition(posLocal);
 		}
 		else
@@ -170,7 +170,7 @@ namespace Echo
 
 	Node* Node::getParent() const
 	{
-		return m_pParent;
+		return m_parent;
 	}
 
 	Node* Node::getChild(ui32 idx)
@@ -180,7 +180,7 @@ namespace Echo
 
 	bool Node::isVisible() const
 	{
-		return m_bVisible;
+		return m_isVisible;
 	}
 
 	const Vector3& Node::getLocalScaling() const
@@ -227,11 +227,6 @@ namespace Echo
 		*y = m_posWorld.y;
 		*z = m_posWorld.z;
 	}
-
-	void Node::setWorldMatrix(const Matrix4& tempMatrix)
-	{
-		m_matWorld = tempMatrix;
-	}
 	
 	const Matrix4& Node::getWorldMatrix()
 	{
@@ -251,11 +246,6 @@ namespace Echo
 		}
 
 		return m_matWorld;
-	}
-
-	Matrix4* Node::getWorldMatrixPtr()
-	{
-		return &m_matWorld;
 	}
 
 	Matrix4 Node::getInverseWorldMatrix() const
@@ -306,16 +296,16 @@ namespace Echo
 	{
 		if (m_bModify)
 		{
-			if (m_pParent)
+			if (m_parent)
 			{
-				m_ortWorld = m_pParent->m_ortWorld * m_ortLocal;
+				m_ortWorld = m_parent->m_ortWorld * m_ortLocal;
 
 				// Update scale
-				m_sclWorld = m_pParent->m_sclWorld * m_sclLocal;
+				m_sclWorld = m_parent->m_sclWorld * m_sclLocal;
 
 				// Change position vector based on parent's orientation & scale
-				m_posWorld = m_pParent->m_ortWorld * (m_pParent->m_sclWorld * m_posLocal);
-				m_posWorld += m_pParent->m_posWorld;
+				m_posWorld = m_parent->m_ortWorld * (m_parent->m_sclWorld * m_posLocal);
+				m_posWorld += m_parent->m_posWorld;
 			}
 			else
 			{
@@ -326,6 +316,9 @@ namespace Echo
 
 			m_bModify = false;
 		}
+
+		// update world matrix
+		getWorldMatrix();
 
 		update();
 
