@@ -85,8 +85,8 @@ namespace Echo
 		EchoAssert(NodeTree::instance());
 		RenderQueue* pRenderQueue = RenderQueueGroup::instance()->getRenderQueue("UI");
 		if (!pRenderQueue) return;
-		pRenderQueue->renderQueue();
-		pRenderQueue->beginRender();
+		pRenderQueue->render();
+		pRenderQueue->clear();
 	}
 
 	void UIRenderStage::_renderCatui()

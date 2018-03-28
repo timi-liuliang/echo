@@ -12,7 +12,7 @@ namespace Echo
 	Renderable::Renderable(RenderQueue* pRenderQueue, Material* material, int identifier)
 		: m_renderInput(nullptr)
 		, m_SParamWriteIndex(0)
-		, m_pRenderQueue(pRenderQueue)
+		, m_renderQueue(pRenderQueue)
 		, m_visible(NULL)
 		, m_bRenderState(false)
 		, m_pBlendState(NULL)
@@ -55,9 +55,13 @@ namespace Echo
 				if (uniform.m_type == SPT_TEXTURE)
 				{
 					int index = *(int*)value;
-					Texture* texture = matInst->getTexture(index)->getTexture();
-					const SamplerState* sampleState = material->getSamplerState(index);
-					renderable->setTexture(index, texture, sampleState);
+					TextureRes* textureRes = matInst->getTexture(index);//
+					if (textureRes)
+					{
+						Texture* texture = textureRes->getTexture();
+						const SamplerState* sampleState = material->getSamplerState(index);
+						renderable->setTexture(index, texture, sampleState);
+					}
 				}
 			}
 		}
@@ -217,7 +221,7 @@ namespace Echo
 	// 提交到渲染队列
 	void Renderable::submitToRenderQueue()
 	{
-		m_pRenderQueue->addRenderable(this);
+		m_renderQueue->addRenderable(this);
 	}
 
 	// 设置混合状态

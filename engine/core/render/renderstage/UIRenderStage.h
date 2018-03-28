@@ -8,7 +8,6 @@ namespace Echo
 	/**
 	 * UIäÖÈ¾½×¶Î
 	 */
-
 	class UIRenderStage : public RenderStage
 	{
 		friend class RenderStageManager;

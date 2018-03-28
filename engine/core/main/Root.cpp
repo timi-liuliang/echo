@@ -291,7 +291,7 @@ namespace Echo
 			return false;
 
 		// setup viewport
-		Viewport* pViewport = EchoRender->getFrameBuffer()->getViewport();
+		Viewport* pViewport = Renderer::instance()->getFrameBuffer()->getViewport();
 
 		Camera* p2DCamera = NodeTree::instance()->get2DCamera();
 		pViewport->setViewProjMatrix(p2DCamera->getViewProjMatrix());
@@ -310,7 +310,7 @@ namespace Echo
 	{
 		if (m_bRendererInited)
 		{
-			EchoRender->onSize(width, height);
+			Renderer::instance()->onSize(width, height);
 
 			Camera* pMainCamera = NodeTree::instance()->getMainCamera();
 			pMainCamera->setWidth(Real(width));
@@ -322,7 +322,7 @@ namespace Echo
 			p2DCamera->setHeight(Real(height));
 			p2DCamera->update();
 
-			EchoRender->getFrameBuffer()->getViewport()->setViewProjMatrix(p2DCamera->getViewProjMatrix());
+			Renderer::instance()->getFrameBuffer()->getViewport()->setViewProjMatrix(p2DCamera->getViewProjMatrix());
 		}
 
 		// 渲染目标重置大小
@@ -550,6 +550,12 @@ namespace Echo
 		}
 
 		m_rootNode.update(true);
+
+		// 渲染
+		render();
+
+		// present to screen
+		Renderer::instance()->present();
 	}
 
 	void Root::setEnableBloom(bool _val)

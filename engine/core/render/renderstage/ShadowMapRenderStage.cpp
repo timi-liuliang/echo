@@ -189,7 +189,7 @@ namespace Echo
 			for (int i = beginIdx; i < endIdx; i++)
 			{
 				RenderQueue* renderQueue = RenderQueueGroup::instance()->getRenderQueueByIndex(i);
-				if (!renderQueue->hasRenderables())
+				if (!renderQueue->getRenderableCount())
 				{
 					needRet = true;
 				}
@@ -217,8 +217,8 @@ namespace Echo
 				RenderQueue* renderQueue = RenderQueueGroup::instance()->getRenderQueueByIndex(i);
 				if (renderQueue)
 				{
-					renderQueue->renderQueue();
-					renderQueue->beginRender();
+					renderQueue->render();
+					renderQueue->clear();
 				}
 			}
 

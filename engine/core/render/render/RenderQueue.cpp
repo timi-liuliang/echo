@@ -32,11 +32,6 @@ namespace Echo
 	{
 	}
 
-	void RenderQueue::beginRender()
-	{
-		m_renderables.clear();
-	}
-
 	// 添加渲染体
 	void RenderQueue::addRenderable(Renderable* pRenderable)
 	{
@@ -50,7 +45,7 @@ namespace Echo
 	}
 
 	// 执行渲染
-	void RenderQueue::renderQueue()
+	void RenderQueue::render()
 	{
 		if( !m_isEnable ) 
 			return ;
@@ -68,7 +63,7 @@ namespace Echo
 	}
 
 	// 清空可渲染物
-	void RenderQueue::clearRenderables()
+	void RenderQueue::clear()
 	{
 		m_renderables.clear();
 	}

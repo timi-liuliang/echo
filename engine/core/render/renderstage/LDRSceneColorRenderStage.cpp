@@ -5,6 +5,7 @@
 #include "Engine/core/Camera/Camera.h"
 #include "Engine/core/main/Root.h"
 #include "engine/core/render/RenderTargetManager.h"
+#include "render/RenderQueueGroup.h"
 
 namespace Echo
 {
@@ -71,6 +72,8 @@ namespace Echo
 #endif
 			// äÖÈ¾³¡¾°
 			//SceneManager::instance()->renderScene(isRenderScene);
+
+			RenderQueueGroup::instance()->execRenderQueue("Opaque", "Transparent+3", true);
 		}
 
 		/*if (EchoRoot->getEnableDistortion() && RenderTargetManager::Instance()->getRenderTargetByID(RTI_SceneColorMap))

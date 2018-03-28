@@ -18,23 +18,14 @@ namespace Echo
 		RenderQueue(const String& strName);
 		~RenderQueue();
 
-		// 开始渲染
-		void beginRender();
-
-		bool hasRenderables(){ return !m_renderables.empty(); }
-
-		void sortByPos();
-
-	private:
-		// 添加渲染体
-		void addRenderable(Renderable* pRenderable);
-
-	public:
 		// 执行渲染(参数为交集渲染)
-		void renderQueue();
+		void render();
 
 		// 清空可渲染物
-		void clearRenderables();
+		void clear();
+
+		// 获取渲染物数据
+		ui32 getRenderableCount(){ return m_renderables.size(); }
 
 		// 获取名称
 		const String& getName() { return m_name; }
@@ -44,6 +35,13 @@ namespace Echo
 
 		// 是否可用
 		bool isEnable() const { return m_isEnable; }
+
+	private:
+		// 添加渲染体
+		void addRenderable(Renderable* pRenderable);
+
+		// 根据距离排序
+		void sortByPos();
 
 	protected:
 		String					m_name;

@@ -76,7 +76,6 @@ namespace Echo
 		~Root();
 
 		void tick(i32 elapsedTime);
-		bool render();
 
 		// 是否已初始化
 		bool isInited() const { return m_isInited; }
@@ -187,7 +186,6 @@ namespace Echo
 		AnimManager* getAnimManager() { EchoAssert(m_animManager);  return m_animManager; }
 		AnimSystemManager* getAnimSysManager() { EchoAssert(m_animSysManager);  return m_animSysManager; }
 		ModelManager* getModelManager() { EchoAssert(m_modelManager);  return m_modelManager; }
-		Renderer* getRender() { EchoAssert(m_renderer);  return m_renderer; }
 		EffectSystemManager* getEffectSystemManager() { EchoAssert(m_EffectSystemManager);  return m_EffectSystemManager; }
 		IO* getResourceGroupManager() { EchoAssert(m_io); return m_io; }
 		TextureResManager* getTextureResManager() { EchoAssert(m_textureResManager);  return m_textureResManager; }
@@ -204,6 +202,9 @@ namespace Echo
 	protected:
 		void			updateAllManagerDelayResource();
 		void			configEngine(const String& fileName);
+
+		// exec render
+		bool render();
 
 	private:
 		Node				m_rootNode;
@@ -274,7 +275,6 @@ namespace Echo
 #define EchoAnimManager				EchoRoot->getAnimManager()
 #define EchoAnimSystemManager		EchoRoot->getAnimSysManager()
 #define EchoEffectSystemManager		EchoRoot->getEffectSystemManager()
-#define EchoRender					EchoRoot->getRender()
 #define EchoTextureResManager		EchoRoot->getTextureResManager()
 #define EchoSceneManager			EchoRoot->getSceneManager()
 #define EchoOpenMPTaskMgr			EchoRoot->getOpenMPTaskMgr()

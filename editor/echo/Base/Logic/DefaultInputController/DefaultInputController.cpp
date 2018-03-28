@@ -60,7 +60,7 @@ namespace Studio
 		InitializeCameraSettings();
 
 		// ³õÊ¼»¯UIÉãÏñ»ú
-		InitUICamera(EchoRender->getScreenWidth(), EchoRender->getScreenHeight());
+		InitUICamera(Echo::Renderer::instance()->getScreenWidth(), Echo::Renderer::instance()->getScreenHeight());
 
 		m_orthoTopCamRot.z -= 0.01f;
 		m_orthoTopCamRot.normalize();
@@ -327,15 +327,15 @@ namespace Studio
 		}
 
 		Echo::Camera* mainCamera = EchoSceneManager->getMainCamera();
-		if (EchoRender->getScreenHeight() > EchoRender->getScreenWidth())
+		if (Echo::Renderer::instance()->getScreenHeight() > Echo::Renderer::instance()->getScreenWidth())
 		{
-			float aspect = (float)EchoRender->getScreenHeight() / EchoRender->getScreenWidth();
+			float aspect = (float)Echo::Renderer::instance()->getScreenHeight() / Echo::Renderer::instance()->getScreenWidth();
 			mainCamera->setWidth(Echo::Math::Max(dis, 1.0f));
 			mainCamera->setHeight(Echo::Math::Max(dis * aspect, 1.0f));
 		}
 		else
 		{
-			float aspect = (float)EchoRender->getScreenWidth() / EchoRender->getScreenHeight();
+			float aspect = (float)Echo::Renderer::instance()->getScreenWidth() / Echo::Renderer::instance()->getScreenHeight();
 			mainCamera->setWidth(Echo::Math::Max(dis * aspect, 1.0f));
 			mainCamera->setHeight(Echo::Math::Max(dis, 1.0f));
 		}

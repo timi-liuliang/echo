@@ -86,7 +86,7 @@ namespace Echo
 	{
 		//针对rgba16f不支持的情况下,对_backgroundColor做hdr2ldr处理
 		Color newClearColor = _backgroundColor;
-		if (_clearColor && !EchoRender->getDeviceFeatures().supportHFColorBf())
+		if (_clearColor && !Renderer::instance()->getDeviceFeatures().supportHFColorBf())
 		{
 			Color result = 1.f / 25.f * _backgroundColor;
 			float maxValue = Math::Max(result.r, Math::Max(result.g, result.b));

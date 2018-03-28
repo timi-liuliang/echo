@@ -85,10 +85,10 @@ namespace Echo
 		virtual void render();
 		
 		// 设置渲染队列
-		void setRenderQueue(RenderQueue* pRenderQueue) { m_pRenderQueue = pRenderQueue; }
+		void setRenderQueue(RenderQueue* pRenderQueue) { m_renderQueue = pRenderQueue; }
 
 		// 获取渲染队列
-		const RenderQueue* getRenderQueue(void){ return m_pRenderQueue; }
+		const RenderQueue* getRenderQueue(void){ return m_renderQueue; }
 
 		// 提交到渲染队列
 		void submitToRenderQueue();
@@ -137,7 +137,7 @@ namespace Echo
 	public:
 		ui32									m_identifier;
 		String									m_ownerDesc;			// 拥有者信息
-		RenderQueue*							m_pRenderQueue;
+		RenderQueue*							m_renderQueue;
 		MaterialID								m_materialID;			// material
 		RenderInput*							m_renderInput;			// first  VB, IB, etc.
 		MaxTextureArray							m_Textures;				// now only one texture sampler.

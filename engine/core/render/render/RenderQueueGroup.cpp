@@ -108,7 +108,7 @@ namespace Echo
 		{
 			Echo::RenderQueue* renderQuene = getRenderQueueByIndex(i);
 			if (renderQuene)
-				renderQuene->renderQueue();
+				renderQuene->render();
 		}
 	}
 
@@ -123,7 +123,7 @@ namespace Echo
 		{
 			Echo::RenderQueue* renderQuene = getRenderQueueByIndex(i);
 			if (renderQuene)
-				renderQuene->clearRenderables();
+				renderQuene->clear();
 		}
 	}
 
@@ -133,8 +133,8 @@ namespace Echo
 		{
 			if (queue)
 			{
-				queue->renderQueue();
-				queue->beginRender();
+				queue->render();
+				queue->clear();
 			}
 		}
 	}

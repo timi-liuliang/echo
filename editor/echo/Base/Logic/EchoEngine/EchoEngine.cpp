@@ -136,7 +136,6 @@ namespace Studio
 				m_currentEditNode->update( elapsedTime, true);
 			}
 
-			EchoRoot->tick(elapsedTime);
 
 			if (m_isShowFps)
 			{
@@ -146,13 +145,10 @@ namespace Studio
 				// ‰÷»æ◊÷ÃÂ
 				//FontRenderManager::Instance()->Render();
 				EchoRoot->resetFrameState();
-				EchoRender->getFrameState().reset();
+				Echo::Renderer::instance()->getFrameState().reset();
 			}
 
-			// ‰÷»æ
-			EchoRoot->render();
-
-			EchoRender->present();
+			EchoRoot->tick(elapsedTime);
 		}
 	}
 
@@ -161,7 +157,7 @@ namespace Studio
 	{
 		EchoRoot->onSize(cx, cy);
 
-		m_renderWindow->getInputController()->onSizeCamera(EchoRender->getScreenWidth(), EchoRender->getScreenHeight());
+		m_renderWindow->getInputController()->onSizeCamera(Echo::Renderer::instance()->getScreenWidth(), Echo::Renderer::instance()->getScreenHeight());
 	}
 
 	// …Ë÷√project
