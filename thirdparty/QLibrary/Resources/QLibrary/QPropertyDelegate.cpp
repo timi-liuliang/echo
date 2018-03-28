@@ -223,6 +223,7 @@ namespace QT_UI
 				QDoubleSpinBox* widget = qobject_cast<QDoubleSpinBox*>(editor);
 				widget->setRange(-65535.f, 65535.f); 
 				widget->setValue( value.toFloat());
+				widget->setDecimals(3);
 				widget->setSingleStep(0.1f); 
 			}
 			else if( widgetType == "LineEdit")
