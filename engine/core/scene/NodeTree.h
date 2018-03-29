@@ -23,7 +23,7 @@ namespace Echo
 
 	public:
 		// 获取主摄像机
-		Camera* getMainCamera() const { return m_3dCamera; }
+		Camera* get3dCamera() const { return m_3dCamera; }
 
 		// 设置主摄像机
 		void setMainCamera(Camera* camera) { m_3dCamera = camera; }

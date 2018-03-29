@@ -143,7 +143,6 @@ namespace Echo
 #include "engine/core/render/render/PixelConversions.h"
 #include "Engine/modules/Effect/EffectHeader.h"
 #include "Engine/core/camera/Camera.h"
-#include "Engine/core/camera/CameraMain.h"
 #include "Engine/core/camera/CameraShadow.h"
 #include "Engine/core/Render/TextureRes.h"
 #include "Engine/core/Render/TextureResManager.h"

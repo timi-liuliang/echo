@@ -52,7 +52,7 @@ namespace Studio
 		, m_preMode(OrthoCamMode::OCM_NONE)
 		, m_curMode(OrthoCamMode::OCM_NONE)
 	{
-		m_camera = EchoSceneManager->getMainCamera();
+		m_camera = Echo::NodeTree::instance()->get3dCamera();
 		m_camera->setNearClip(1.f);
 		m_camera->setFarClip(2000.f);
 
@@ -233,7 +233,7 @@ namespace Studio
 
 		updateOrthoCamPos(m_preMode);
 
-		Echo::Camera* mainCamera = EchoSceneManager->getMainCamera();
+		Echo::Camera* mainCamera = Echo::NodeTree::instance()->get3dCamera();
 		mainCamera->setPosition(pos);
 		mainCamera->setDirection(dir);
 		mainCamera->setProjectionMode(Echo::Camera::PM_ORTHO);
@@ -243,7 +243,7 @@ namespace Studio
 
 	void DefaultInputController::updateOrthoCamPos(OrthoCamMode mode)
 	{
-		Echo::Camera* mainCamera = EchoSceneManager->getMainCamera();
+		Echo::Camera* mainCamera = Echo::NodeTree::instance()->get3dCamera();
 		if (mode == OrthoCamMode::OCM_TOP)
 		{
 			m_orthoTopCamPos = mainCamera->getPosition();
@@ -270,7 +270,7 @@ namespace Studio
 	{
 		m_preMode = m_curMode;
 		m_curMode = OrthoCamMode::OCM_NONE;
-		Echo::Camera* mainCamera = EchoSceneManager->getMainCamera();
+		Echo::Camera* mainCamera = Echo::NodeTree::instance()->get3dCamera();
 		mainCamera->setPosition(m_backCameraPos);
 		mainCamera->setDirection(m_backCameraRot);
 		mainCamera->setProjectionMode(Echo::Camera::PM_PERSPECTIVE);
@@ -326,7 +326,7 @@ namespace Studio
 			dis = m_orthoLeftDis;
 		}
 
-		Echo::Camera* mainCamera = EchoSceneManager->getMainCamera();
+		Echo::Camera* mainCamera = Echo::NodeTree::instance()->get3dCamera();
 		if (Echo::Renderer::instance()->getScreenHeight() > Echo::Renderer::instance()->getScreenWidth())
 		{
 			float aspect = (float)Echo::Renderer::instance()->getScreenHeight() / Echo::Renderer::instance()->getScreenWidth();
@@ -401,7 +401,7 @@ namespace Studio
 		m_guiCamera->setHeight(h);
 		m_guiCamera->update();
 
-		EchoSceneManager->setGUICamera(m_guiCamera);
+		Echo::NodeTree::instance()->setGUICamera(m_guiCamera);
 	}
 
 	// ÉãÏñ»ú¸üĞÂ

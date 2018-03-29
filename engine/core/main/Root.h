@@ -85,6 +85,8 @@ namespace Echo
 		bool initialize(const RootCfg& cfg);
 		bool initRenderer(Renderer* pRenderer, const Renderer::RenderCfg& config, lua_State* lua = NULL);
 		bool onRendererInited();
+
+		// screen size changed
 		bool onSize(ui32 width, ui32 height);
 		void destroy();
 		void releasePlugins();
@@ -189,7 +191,6 @@ namespace Echo
 		EffectSystemManager* getEffectSystemManager() { EchoAssert(m_EffectSystemManager);  return m_EffectSystemManager; }
 		IO* getResourceGroupManager() { EchoAssert(m_io); return m_io; }
 		TextureResManager* getTextureResManager() { EchoAssert(m_textureResManager);  return m_textureResManager; }
-		NodeTree* getSceneManager() { EchoAssert(m_sceneManager);  return m_sceneManager; }
 		OpenMPTaskMgr* getOpenMPTaskMgr() { EchoAssert(m_openMPTaskMgr);  return m_openMPTaskMgr; }
 		EngineSettingsMgr& getSettingsMgr() { return m_settingsMgr; }
 		EngineConsole& getConsole() { return m_console; }
@@ -276,7 +277,6 @@ namespace Echo
 #define EchoAnimSystemManager		EchoRoot->getAnimSysManager()
 #define EchoEffectSystemManager		EchoRoot->getEffectSystemManager()
 #define EchoTextureResManager		EchoRoot->getTextureResManager()
-#define EchoSceneManager			EchoRoot->getSceneManager()
 #define EchoOpenMPTaskMgr			EchoRoot->getOpenMPTaskMgr()
 #define EchoEngineSettings			EchoRoot->getSettingsMgr()
 #define EchoEngineConsole			EchoRoot->getConsole()

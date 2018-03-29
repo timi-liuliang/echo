@@ -40,10 +40,9 @@ namespace Studio
 
 	// 构造函数
 	EchoEngine::EchoEngine()
-		: m_nodeTree(NULL)
+		: m_curPlayAudio(0)
 		//, m_backGrid(NULL)
-		//, m_backGridNode(NULL)
-		, m_curPlayAudio(NULL)
+		//, m_backGridNode(NULL)		 
 		//, m_gridNum(lineNum)
 		//, m_gridGap(1)
 		, m_log(NULL)
@@ -85,7 +84,6 @@ namespace Studio
 			renderCfg.windowHandle = (unsigned int)hwnd;
 			renderCfg.enableThreadedRendering = false;
 			EchoRoot->initRenderer(EchoNew(Echo::GLES2Renderer), renderCfg, NULL);
-			m_nodeTree = EchoSceneManager;
 
 			// 背景网格
 			InitializeBackGrid();
@@ -127,7 +125,7 @@ namespace Studio
 
 		// 更新
 		if (EchoEngineSettings.isInitVRMode() && EchoEngineSettings.isUseVRMode()) // 按左眼更新
-			EchoSceneManager->getMainCamera()->setVRModeForEye(true);
+			Echo::NodeTree::instance()->get3dCamera()->setVRModeForEye(true);
 
 		if (!m_isManualUpdateEngine)
 		{

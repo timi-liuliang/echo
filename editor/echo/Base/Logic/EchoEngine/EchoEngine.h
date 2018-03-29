@@ -92,7 +92,6 @@ namespace Studio
 
 	protected:
 		Echo::Log*				m_log;				// 日志
-		Echo::NodeTree*			m_nodeTree;			// 场景管理器
 		Echo::Node*				m_currentEditNode;	// 当前编辑场景
 
 		//Echo::node*			m_backGridNode;	// 背景网格用场景结点

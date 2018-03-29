@@ -431,7 +431,7 @@ namespace Echo
 				return NodeTree::instance()->getGUICamera();
 		}
 		else
-			return NodeTree::instance()->getMainCamera();
+			return NodeTree::instance()->get3dCamera();
 	}
 
 	//-----------------------------------------------------------------------
@@ -1010,7 +1010,7 @@ namespace Echo
 		//pRender->setDepthStencilState(mEffectDepthState);
 
 		//get the camera to fill the matrix.
-		Camera* camera = NodeTree::instance()->getMainCamera();
+		Camera* camera = NodeTree::instance()->get3dCamera();
 		Matrix4 viewProjMat;
 
 		viewProjMat = camera->getViewProjMatrix();

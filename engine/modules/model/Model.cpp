@@ -987,7 +987,7 @@ namespace Echo
 			{
 				return (void*)NodeTree::instance()->getGUICamera()->getPositionPtr();
 			}
-			return (void*)NodeTree::instance()->getMainCamera()->getPositionPtr();
+			return (void*)NodeTree::instance()->get3dCamera()->getPositionPtr();
 		}
 		else if (name == "CameraDirection")
 		{
@@ -995,7 +995,7 @@ namespace Echo
 			{
 				return (void*)&NodeTree::instance()->getGUICamera()->getDirection();
 			}
-			return (void*)&NodeTree::instance()->getMainCamera()->getDirection();
+			return (void*)&NodeTree::instance()->get3dCamera()->getDirection();
 		}
 		else if (name == "LightArrayInfo")
 		{

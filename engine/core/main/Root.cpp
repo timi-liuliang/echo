@@ -312,7 +312,7 @@ namespace Echo
 		{
 			Renderer::instance()->onSize(width, height);
 
-			Camera* pMainCamera = NodeTree::instance()->getMainCamera();
+			Camera* pMainCamera = NodeTree::instance()->get3dCamera();
 			pMainCamera->setWidth(Real(width));
 			pMainCamera->setHeight(Real(height));
 			pMainCamera->update();

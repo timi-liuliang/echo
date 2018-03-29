@@ -54,7 +54,7 @@ namespace Echo
 			//SceneManager::instance()->renderScene(Root::instance()->isRenderScene());
 			// 2
 			RenderTargetManager::instance()->getRenderTargetByID(RTI_LDRVRSceneColorMap)->bindTarget_right();
-			NodeTree::instance()->getMainCamera()->setVRModeForEye(false);
+			NodeTree::instance()->get3dCamera()->setVRModeForEye(false);
 			Root::instance()->tick(0);
 			//SceneManager::instance()->renderScene(Root::instance()->isRenderScene());
 

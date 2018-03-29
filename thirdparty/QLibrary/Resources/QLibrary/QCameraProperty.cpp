@@ -35,8 +35,8 @@ namespace QT_UI
 	// Ñ¡ÔñÂ·¾¶
 	void QCameraPosDir::OnCatchData()
 	{
-		Echo::Vector3 postion = EchoSceneManager->getMainCamera()->getPosition();
-		Echo::Vector3 direction  = EchoSceneManager->getMainCamera()->getDirection();
+		Echo::Vector3 postion = Echo::NodeTree::instance()->get3dCamera()->getPosition();
+		Echo::Vector3 direction  = Echo::NodeTree::instance()->get3dCamera()->getDirection();
 		Echo::String  format = Echo::StringUtil::ToString(postion) + ";" + Echo::StringUtil::ToString(direction);
 
 		m_lineEdit->setText(format.c_str());

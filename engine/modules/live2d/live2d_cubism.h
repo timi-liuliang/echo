@@ -108,5 +108,7 @@ namespace Echo
 		Mesh*					m_mesh;			// Geometry Data for render
 		MaterialInst*			m_materialInst;	// Material Instance
 		Renderable*				m_renderable;
+
+		Matrix4					m_matWVP;
 	};
 }

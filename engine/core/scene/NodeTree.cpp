@@ -1,5 +1,5 @@
 #include "NodeTree.h"
-#include "engine/core/camera/CameraMain.h"
+#include "engine/core/camera/Camera.h"
 
 namespace Echo
 {
@@ -25,7 +25,7 @@ namespace Echo
 	bool NodeTree::init()
 	{
 		// create main camera
-		m_3dCamera = EchoNew(CameraMain(Camera::PM_PERSPECTIVE));
+		m_3dCamera = EchoNew(Camera(Camera::PM_PERSPECTIVE));
 		m_shadowCamera = EchoNew(CameraShadow);
 
 		Vector3 vCamPos(0, 100, 100);
@@ -36,14 +36,14 @@ namespace Echo
 		m_3dCamera->setDirection(vCamDir);
 
 		// create 2D camera
-		Vector3 vCam2DPos(0, 0, 1);
+		Vector3 vCam2DPos(0, 0, 0);
 		Vector3 vCam2DDir = -Vector3::UNIT_Z;
 		m_2dCamera = EchoNew(Camera(Camera::PM_ORTHO));
 
 		m_2dCamera->setPosition(vCam2DPos);
 		m_2dCamera->setDirection(vCam2DDir);
-		m_2dCamera->setNearClip(0.1f);
-		m_2dCamera->setFarClip(100.0f);
+		m_2dCamera->setNearClip(-256.f);
+		m_2dCamera->setFarClip(256.0f);
 		m_2dCamera->update();
 
 		update(0.001f);

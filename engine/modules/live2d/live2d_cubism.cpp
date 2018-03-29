@@ -1,5 +1,6 @@
 #include "live2d_cubism.h"
 #include "engine/core/util/LogManager.h"
+#include "engine/core/scene/NodeTree.h"
 #include "render/renderer.h"
 #include "render/Material.h"
 
@@ -192,7 +193,7 @@ namespace Echo
 					const csmVector2& uv = uvs[i][j];
 
 					VertexFormat vert;
-					vert.m_position = Vector3(pos.X * m_canvas.m_width, pos.Y * m_canvas.m_height, 0.f);
+					vert.m_position = Vector3(pos.X * m_canvas.m_pixelsPerUnit, pos.Y * m_canvas.m_pixelsPerUnit, 0.f);
 					vert.m_uv = Vector2(uv.X, 1.f-uv.Y);
 
 					drawable.m_vertices.push_back( vert);
@@ -287,6 +288,10 @@ namespace Echo
 	{
 		if (m_model)
 		{
+			static Matrix4 scale; scale.scaleReplace(Vector3(0.3f, 0.3f, 0.3f));
+
+			m_matWVP = scale * NodeTree::instance()->get2DCamera()->getViewProjMatrix();;
+
 			//csmUpdateModel((csmModel*)m_model);
 
 			//updateVertexBuffer();
@@ -337,14 +342,8 @@ namespace Echo
 	// 获取全局变量值
 	void* Live2dCubism::getGlobalUniformValue(const String& name)
 	{
-		float width = Renderer::instance()->getScreenWidth();
-		float height = Renderer::instance()->getScreenHeight();
-
-		static Matrix4 matWVP;
-		matWVP.scaleReplace(Vector3(1.f/width, 1.f/height, 0.001));
-
 		if (name == "matWVP")
-			return (void*)(&matWVP);
+			return (void*)(&m_matWVP);
 
 		return nullptr;
 	}

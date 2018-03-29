@@ -12,7 +12,7 @@ namespace Echo
 		Renderable* pr1 = Renderer::instance()->getRenderable(p1);
 		Renderable* pr2 = Renderer::instance()->getRenderable(p2);
 		
-		const Vector3& camPos = NodeTree::instance()->getMainCamera()->getPosition();
+		const Vector3& camPos = NodeTree::instance()->get3dCamera()->getPosition();
 		float d1 = (pr1->m_worldPos - camPos).lenSqr();
 		float d2 = (pr2->m_worldPos - camPos).lenSqr();
 
