@@ -65,7 +65,7 @@ namespace Echo
 	}
 
 	// add property
-	bool Class::registerProperty(const String& className, const String& propertyName, const String& type, const String& getter, const String& setter)
+	bool Class::registerProperty(const String& className, const String& propertyName, const Variant::Type type, const String& getter, const String& setter)
 	{
 		auto it = g_classInfos->find(className);
 		if (it != g_classInfos->end())

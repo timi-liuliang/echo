@@ -1,16 +1,17 @@
 #pragma once
 
 #include "object.h"
+#include "variant.h"
 #include "engine/core/Util/StringUtil.h"
 
 namespace Echo
 {
 	struct PropertyInfo
 	{
-		String		m_name;
-		String		m_type;
-		String		m_getter;
-		String		m_setter;
+		String			m_name;
+		Variant::Type	m_type;
+		String			m_getter;
+		String			m_setter;
 	};
 	typedef vector<PropertyInfo>::type PropertyInfos;
 
@@ -91,7 +92,7 @@ namespace Echo
 		static bool getChildClasses(StringArray& childClasses, const String& className);
 
 		// add property
-		static bool registerProperty(const String& className, const String& propertyName, const String& type, const String& getter, const String& setter);
+		static bool registerProperty(const String& className, const String& propertyName, const Variant::Type type, const String& getter, const String& setter);
 
 		// get propertys
 		static const PropertyInfos& getPropertys(const String& className);

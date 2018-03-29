@@ -99,8 +99,8 @@ namespace Echo
 
 	void Live2dCubism::bindMethods()
 	{
-		CLASS_REGISTER_PROPERTY(Live2dCubism, "Moc", "String", "getMoc", "setMoc");
-		CLASS_REGISTER_PROPERTY(Live2dCubism, "Texture", "String", "getPos", "setPos");
+		CLASS_REGISTER_PROPERTY(Live2dCubism, "Moc", Variant::String, "getMoc", "setMoc");
+		CLASS_REGISTER_PROPERTY(Live2dCubism, "Texture", Variant::String, "getPos", "setPos");
 	}
 
 	// parse paramters

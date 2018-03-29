@@ -145,7 +145,7 @@ namespace Studio
 			const Echo::PropertyInfos& propertys = Echo::Class::getPropertys(className);
 			for (const Echo::PropertyInfo& prop : propertys)
 			{
-				m_propertyHelper.addItem(prop.m_name.c_str(), Echo::Vector3(), QT_UI::WT_Vector3);
+				m_propertyHelper.addItem(prop.m_name.c_str(), true, QT_UI::WT_CheckBox);
 			}
 		}
 		m_propertyHelper.endMenu();
