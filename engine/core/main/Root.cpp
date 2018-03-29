@@ -25,7 +25,7 @@
 #include "engine/core/render/render/Video.h"
 #include "PostEffectManager.h"
 #include "EngineTimeController.h"
-#include "Engine/core/Script/Lua/ExportToLua.h"
+#include "engine/core/script/lua/LuaBind.h"
 #include "engine/core/render/RenderTargetManager.h"
 #include "module.h"
 
@@ -89,7 +89,6 @@ namespace Echo
 		, m_textureResManager(NULL)
 		, m_renderTargetManager(NULL)
 		, m_projectFile(NULL)
-		, m_luaEx(nullptr)
 #ifdef ECHO_PROFILER
 		, m_profilerSev( nullptr)
 #endif
@@ -139,6 +138,7 @@ namespace Echo
 			// register all basic class types
 			registerClassTypes();
 
+			LuaBind::instance();
 			m_imageCodecManager = EchoNew(ImageCodecMgr);
 			m_modelManager		= EchoNew( ModelManager);
 			m_animManager		= EchoNew( AnimManager);
@@ -213,7 +213,7 @@ namespace Echo
 	}
 
 	// 初始化渲染器
-	bool Root::initRenderer(Renderer* pRenderer, const Renderer::RenderCfg& config, lua_State* lua)
+	bool Root::initRenderer(Renderer* pRenderer, const Renderer::RenderCfg& config)
 	{
 		EchoLogDebug("Canvas Size : %d x %d", config.screenWidth, config.screenHeight);
 
@@ -255,13 +255,6 @@ namespace Echo
 
 			return false;
 		}
-
-		// 外部模块初始化
-		for (const ExternalMgr& mgr : m_cfg.m_externalMgrs)
-			mgr.m_init(lua);
-
-		// 导出接口到lua
-		registerInterfaceToLua();
 
 		EchoLogInfo("Initialize RenderStageManager Success !");
 
@@ -403,6 +396,7 @@ namespace Echo
 #endif
 		// 销毁时间控制器
 		EngineTimeController::destroy();
+		LuaBind::destroy();
 		MemoryManager::destroyInstance();
 	}
 

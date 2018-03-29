@@ -8,13 +8,6 @@
 #include "engine/core/Scene/NodeTree.h"
 #include "FrameState.h"
 
-namespace luaex
-{
-	class LuaEx;
-}
-
-struct lua_State;
-
 namespace Echo
 {
 	class ProjectFile;
@@ -31,13 +24,11 @@ namespace Echo
 		// 外部模块接口
 		struct ExternalMgr
 		{
-			typedef std::function<void(lua_State*)> InitFun;
 			typedef std::function<void(int)> TickFun;
 			typedef std::function<void()> ReleaseFun;
 			typedef std::function<void()> RenderFun;
 
 			String		m_name;			// 组件名称
-			InitFun		m_init;			// 初始化函数
 			TickFun		m_tick;			// 更新函数 
 			RenderFun	m_render;		// 渲染函数
 			ReleaseFun	m_release;		// 释放函数
@@ -83,7 +74,7 @@ namespace Echo
 		// 装载日志系统
 		bool initLogSystem();
 		bool initialize(const RootCfg& cfg);
-		bool initRenderer(Renderer* pRenderer, const Renderer::RenderCfg& config, lua_State* lua = NULL);
+		bool initRenderer(Renderer* pRenderer, const Renderer::RenderCfg& config);
 		bool onRendererInited();
 
 		// screen size changed
@@ -197,8 +188,6 @@ namespace Echo
 		ImageCodecMgr* getImageCodecManager() { EchoAssert(m_imageCodecManager);  return m_imageCodecManager; }
 		FSAudioManager* getAudioManager() { EchoAssert(m_audioManager);  return m_audioManager; }
 		PostEffectManager* getPostEffectManager() { EchoAssert(m_postEffectManager); return m_postEffectManager; }
-		luaex::LuaEx* getLuaEx() {return m_luaEx;}
-		void setLuaEx(luaex::LuaEx* luaex) { m_luaEx = luaex; }
 
 	protected:
 		void			updateAllManagerDelayResource();
@@ -248,7 +237,6 @@ namespace Echo
 		NodeTree*		m_sceneManager;					// 场景管理器
 		FSAudioManager*		m_audioManager;					// 音频管理器
 		PostEffectManager*	m_postEffectManager;			// 全屏后处理特效管理器
-		luaex::LuaEx*		m_luaEx;						// 脚本接口
 		StreamThread*		m_StreamThreading;				// 流加载线程
 		bool				m_enableFrameProfile;
 		FrameState			m_frameState;

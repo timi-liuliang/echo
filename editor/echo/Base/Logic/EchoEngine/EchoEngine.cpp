@@ -83,7 +83,7 @@ namespace Studio
 			renderCfg.enableThreadedRendering = false;
 			renderCfg.windowHandle = (unsigned int)hwnd;
 			renderCfg.enableThreadedRendering = false;
-			EchoRoot->initRenderer(EchoNew(Echo::GLES2Renderer), renderCfg, NULL);
+			EchoRoot->initRenderer(EchoNew(Echo::GLES2Renderer), renderCfg);
 
 			// ±³¾°Íø¸ñ
 			InitializeBackGrid();
