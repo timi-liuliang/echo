@@ -58,18 +58,6 @@ namespace Echo
 			VertexArray			m_vertices;
 			Box					m_box;
 			vector<Word>::type	m_indices;
-			Mesh*				m_mesh;			// Geometry Data for render
-			MaterialInst*		m_materialInst;	// Material Instance
-			Renderable*			m_renderable;
-
-			// build for render
-			void build( Live2dCubism* cubism);
-
-			// update vertex buffer
-			void updateVertexBuffer();
-
-			// submit for render
-			void submitToRenderQueue();
 		};
 
 	public:
@@ -83,7 +71,7 @@ namespace Echo
 		void setMoc(const String& res);
 
 		// build drawable
-		void buildDrawables();
+		void buildRenderable();
 
 	protected:
 		// update
@@ -116,5 +104,9 @@ namespace Echo
 		vector<Paramter>::type	m_params;
 		vector<Part>::type		m_parts;
 		vector<Drawable>::type	m_drawables;
+
+		Mesh*					m_mesh;			// Geometry Data for render
+		MaterialInst*			m_materialInst;	// Material Instance
+		Renderable*				m_renderable;
 	};
 }

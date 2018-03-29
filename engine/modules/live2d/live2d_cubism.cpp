@@ -78,40 +78,6 @@ namespace Echo
 		EchoLogError( message);
 	}
 
-	// build for render
-	void Live2dCubism::Drawable::build(Live2dCubism* cubism)
-	{
-		Mesh::VertexDefine define;
-		define.m_isUseDiffuseUV = true;
-
-		m_mesh = Mesh::create(true, false);
-		m_mesh->set(define, m_vertices.size(), (const Byte*)m_vertices.data(), m_indices.size(), m_indices.data(), m_box);
-
-		m_materialInst = MaterialInst::create();
-		m_materialInst->setOfficialMaterialContent( g_live2dDefaultMaterial);
-		m_materialInst->setStage("Transparent");
-		m_materialInst->applyLoadedData();
-		m_materialInst->setTexture(0, "Res://girl/girl.1024/texture_00.png");
-
-		m_renderable = Renderable::create(m_mesh, m_materialInst, cubism);
-	}
-
-	// update vertex buffer
-	void Live2dCubism::Drawable::updateVertexBuffer()
-	{
-		if (m_mesh)
-		{
-			m_mesh->updateVertexs(m_vertices.size(), (const Byte*)m_vertices.data(), m_box);
-		}
-	}
-
-	// submit for render
-	void Live2dCubism::Drawable::submitToRenderQueue()
-	{
-		//if(m_name=="ArtMesh25")
-			m_renderable->submitToRenderQueue();
-	}
-
 	Live2dCubism::Live2dCubism()
 		: m_moc(nullptr)
 		, m_model(nullptr)
@@ -122,7 +88,7 @@ namespace Echo
 		csmSetLogFunction(csmLogFunc);
 
 		setMoc("Res://girl/girl.moc3");
-		buildDrawables();
+		buildRenderable();
 	}
 
 	Live2dCubism::~Live2dCubism()
@@ -284,12 +250,36 @@ namespace Echo
 	}
 
 	// build drawable
-	void Live2dCubism::buildDrawables()
+	void Live2dCubism::buildRenderable()
 	{
+		VertexArray			vertices;
+		vector<Word>::type	indices;
 		for (Drawable& drawable : m_drawables)
 		{
-			drawable.build( this);
+			ui32 vertOffset = vertices.size();
+
+			// vertices
+			for (VertexFormat& vert : drawable.m_vertices)
+				vertices.push_back(vert);
+
+			// indices
+			for (int idx : drawable.m_indices)
+				indices.push_back(idx + vertOffset);
 		}
+
+		Mesh::VertexDefine define;
+		define.m_isUseDiffuseUV = true;
+
+		m_mesh = Mesh::create(true, false);
+		m_mesh->set(define, vertices.size(), (const Byte*)vertices.data(), indices.size(), indices.data(), m_localAABB);
+
+		m_materialInst = MaterialInst::create();
+		m_materialInst->setOfficialMaterialContent(g_live2dDefaultMaterial);
+		m_materialInst->setStage("Transparent");
+		m_materialInst->applyLoadedData();
+		m_materialInst->setTexture(0, "Res://girl/girl.1024/texture_00.png");
+
+		m_renderable = Renderable::create(m_mesh, m_materialInst, this);
 	}
 
 	// update per frame
@@ -301,10 +291,7 @@ namespace Echo
 
 			//updateVertexBuffer();
 
-			for (Drawable& drawable : m_drawables)
-			{
-				drawable.submitToRenderQueue();
-			}
+			m_renderable->submitToRenderQueue();
 		}
 	}
 
@@ -341,8 +328,6 @@ namespace Echo
 
 						drawable.m_vertices.push_back(vert);
 						drawable.m_box.addPoint(vert.m_position);
-
-						drawable.updateVertexBuffer();
 					}
 				}
 			}			
@@ -363,4 +348,13 @@ namespace Echo
 
 		return nullptr;
 	}
+
+	// update vertex buffer
+	//void Live2dCubism::updateVertexBuffer()
+	//{
+	//	if (m_mesh)
+	//	{
+			//m_mesh->updateVertexs(m_vertices.size(), (const Byte*)m_vertices.data(), m_box);
+	//	}
+	//}
 }
