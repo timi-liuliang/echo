@@ -7,13 +7,17 @@ namespace Echo
 {
 	struct PropertyInfo
 	{
-
+		String		m_name;
+		String		m_type;
+		String		m_getter;
+		String		m_setter;
 	};
+	typedef vector<PropertyInfo>::type PropertyInfos;
 
 	struct ClassInfo
 	{
 		String			m_parent;
-		PropertyInfo	m_propertyInfo;
+		PropertyInfos	m_propertyInfos;
 	};
 
 	struct ObjectFactory
@@ -22,6 +26,18 @@ namespace Echo
 		ClassInfo	m_classInfo;
 
 		virtual Object* create() = 0;
+
+		// register property
+		void registerProperty(const PropertyInfo& property)
+		{
+			m_classInfo.m_propertyInfos.push_back(property);
+		}
+
+		// get propertys
+		const PropertyInfos& getPropertys()
+		{
+			return m_classInfo.m_propertyInfos;
+		}
 	};
 
 	template<typename T>
@@ -73,6 +89,9 @@ namespace Echo
 
 		// add property
 		static bool registerProperty(const String& className, const String& propertyName, const String& type, const String& getter, const String& setter);
+
+		// get propertys
+		static const PropertyInfos& getPropertys(const String& className);
 	};
 }
 

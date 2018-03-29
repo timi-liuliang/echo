@@ -54,6 +54,31 @@ namespace Echo
 	// add property
 	bool Class::registerProperty(const String& className, const String& propertyName, const String& type, const String& getter, const String& setter)
 	{
+		auto it = g_classInfos->find(className);
+		if (it != g_classInfos->end())
+		{
+			PropertyInfo info;
+			info.m_name = propertyName;
+			info.m_type = type;
+			info.m_setter = setter;
+			info.m_getter = getter;
+
+			it->second->registerProperty(info);
+		}
+
 		return true;
+	}
+
+	// get propertys
+	const PropertyInfos& Class::getPropertys(const String& className)
+	{
+		auto it = g_classInfos->find(className);
+		if (it != g_classInfos->end())
+		{
+			return it->second->getPropertys();
+		}
+
+		static PropertyInfos invalid;
+		return invalid;
 	}
 }
