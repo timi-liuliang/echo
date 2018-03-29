@@ -16,8 +16,21 @@ namespace Echo
 		(*g_classInfos)[className] = objFactory;
 	}
 
+	// get parent class name
+	bool Class::getParentClass(String& parentClassName, const String& className)
+	{
+		auto it = g_classInfos->find(className);
+		if (it != g_classInfos->end())
+		{
+			parentClassName = it->second->m_classInfo.m_parent;
+			return true;
+		}
+
+		return false;
+	}
+
 	// get all child class
-	bool Class::getChildClasses(StringArray& childClasses, const char* className)
+	bool Class::getChildClasses(StringArray& childClasses, const String& className)
 	{
 		// keep clean
 		childClasses.clear();

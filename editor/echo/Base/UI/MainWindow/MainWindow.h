@@ -5,7 +5,7 @@
 namespace Studio
 {
 	class ResPanel;
-	class ScenePanel;
+	class NodeTreePanel;
 	class TimelinePanel;
 	class DebuggerPanel;
 	class MainWindow : public QMainWindow, public Ui_MainWindow
@@ -31,7 +31,7 @@ namespace Studio
 
 	protected:
 		ResPanel*		m_resPanel;
-		ScenePanel*		m_scenePanel;
+		NodeTreePanel*		m_scenePanel;
 		TimelinePanel*	m_timelinePanel;
 		DebuggerPanel*	m_debuggerPanel;
 	};

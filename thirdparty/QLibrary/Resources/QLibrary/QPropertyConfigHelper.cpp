@@ -181,8 +181,8 @@ namespace QT_UI
 			treeView->setModel(m_property->m_model);
 			treeView->setItemDelegate(m_property->m_delegate);
 			treeView->setAlternatingRowColors(true);
-			treeView->resizeColumnToContents(0);
 			treeView->expandAll();
+			treeView->resizeColumnToContents(0);
 
 			m_lastResult = getResult();
 

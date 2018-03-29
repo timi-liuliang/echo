@@ -84,8 +84,11 @@ namespace Echo
 		// add class
 		static void addClass(const String& className, ObjectFactory* objFactory);
 
+		// get parent class name
+		static bool getParentClass(String& parentClassName, const String& className);
+
 		// get all child class
-		static bool getChildClasses(StringArray& childClasses, const char* className);
+		static bool getChildClasses(StringArray& childClasses, const String& className);
 
 		// add property
 		static bool registerProperty(const String& className, const String& propertyName, const String& type, const String& getter, const String& setter);
@@ -97,7 +100,11 @@ namespace Echo
 
 #define ECHO_CLASS(m_class, m_parent)												\
 public:																				\
-	const String& getClassName() { return #m_class; }								\
+	virtual const String& getClassName()											\
+	{																				\
+		static String className=#m_class;											\
+		return className;															\
+	}																				\
 																					\
 	static void initClassInfo()														\
 	{																				\

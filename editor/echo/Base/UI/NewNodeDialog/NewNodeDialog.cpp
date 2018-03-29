@@ -1,6 +1,6 @@
 #include "NewNodeDialog.h"
 #include "EchoEngine.h"
-#include "ScenePanel.h"
+#include "NodeTreePanel.h"
 #include <engine/core/base/class.h>
 
 namespace Studio
@@ -67,7 +67,7 @@ namespace Studio
 			Echo::Node* node = Echo::Class::create<Echo::Node*>(text.c_str());
 			if (node)
 			{
-				ScenePanel::instance()->addNode(node);
+				NodeTreePanel::instance()->addNode(node);
 			}
 		}
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ScenePanel</class>
- <widget class="QDockWidget" name="ScenePanel">
+ <class>NodeTreePanel</class>
+ <widget class="QDockWidget" name="NodeTreePanel">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Scene</string>
+   <string>Node Tree</string>
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QVBoxLayout" name="verticalLayout_4">

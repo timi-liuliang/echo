@@ -1,14 +1,14 @@
 #include <QtGui>
 #include <QDateTime>
 #include <QMenuBar>
-#include "ScenePanel.h"
+#include "NodeTreePanel.h"
 #include "EchoEngine.h"
 
 namespace Studio
 {
-	static ScenePanel* g_inst = nullptr;
+	static NodeTreePanel* g_inst = nullptr;
 
-	ScenePanel::ScenePanel( QWidget* parent/*=0*/)
+	NodeTreePanel::NodeTreePanel( QWidget* parent/*=0*/)
 		: QDockWidget( parent)
 		, m_newNodeDialog(nullptr)
 	{
@@ -18,38 +18,20 @@ namespace Studio
 		setupUi( this);
 
 		QObject::connect(m_newNodeButton, SIGNAL(clicked()), this, SLOT(showNewNodeDialog()));
+		QObject::connect(m_nodeTreeWidget, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(showSelectedNodeProperty()));
 	}
 
-	ScenePanel::~ScenePanel()
+	NodeTreePanel::~NodeTreePanel()
 	{
 
 	}
 
-	ScenePanel* ScenePanel::instance()
+	NodeTreePanel* NodeTreePanel::instance()
 	{
 		return g_inst;
 	}
 
-	// 设置显示配置
-	void ScenePanel::setDisplayConfig(const char* config)
-	{
-		EchoSafeDelete(m_property, QProperty);
-
-		m_property = EchoNew(QT_UI::QProperty(config, m_propertyTreeView));
-		m_property->m_model->setObjectName(QStringLiteral("property_model"));
-		m_propertyTreeView->setModel(m_property->m_model);
-		m_propertyTreeView->setItemDelegate(m_property->m_delegate);
-		m_propertyTreeView->setAlternatingRowColors(true);
-		m_propertyTreeView->expandAll();
-	}
-
-	// 设置属性值
-	void ScenePanel::setPropertyValue(const char* propertyName, QVariant& value)
-	{
-		m_property->m_model->setValue(propertyName, value);
-	}
-
-	void ScenePanel::showNewNodeDialog()
+	void NodeTreePanel::showNewNodeDialog()
 	{
 		if (!m_newNodeDialog)
 			m_newNodeDialog = new NewNodeDialog(this);
@@ -58,7 +40,7 @@ namespace Studio
 	}
 
 
-	void ScenePanel::refreshNodeTreeDisplay()
+	void NodeTreePanel::refreshNodeTreeDisplay()
 	{
 		m_nodeTreeWidget->clear();
 
@@ -68,7 +50,7 @@ namespace Studio
 		m_nodeTreeWidget->expandAll();
 	}
 
-	void ScenePanel::addNode(Echo::Node* node, QTreeWidgetItem* parent, bool recursive)
+	void NodeTreePanel::addNode(Echo::Node* node, QTreeWidgetItem* parent, bool recursive)
 	{
 		Echo::String nodeName = node->getName();
 
@@ -94,7 +76,7 @@ namespace Studio
 		}
 	}
 
-	Echo::Node* ScenePanel::getCurrentSelectNode()
+	Echo::Node* NodeTreePanel::getCurrentSelectNode()
 	{
 		if (m_nodeTreeWidget->invisibleRootItem()->childCount() == 0)
 			return nullptr;
@@ -108,7 +90,7 @@ namespace Studio
 		return nullptr;
 	}
 
-	void ScenePanel::addNode(Echo::Node* node)
+	void NodeTreePanel::addNode(Echo::Node* node)
 	{
 		if (m_nodeTreeWidget->invisibleRootItem()->childCount() == 0)
 		{
@@ -128,5 +110,50 @@ namespace Studio
 				parentItem->setExpanded(true);
 			}
 		}
+	}
+
+	// 显示当前选中节点属性
+	void NodeTreePanel::showSelectedNodeProperty()
+	{
+		m_propertyHelper.clear();
+		m_propertyHelper.setHeader("Property", "Value");
+
+		Echo::Node* node = getCurrentSelectNode();
+		if (node)
+		{
+			showNodePropertyRecursive(node->getClassName());
+		}
+
+		m_propertyHelper.applyTo(node->getName(), m_propertyTreeView, this, SLOT(refreshPropertyToNode(const QString&, QVariant)), false);
+	}
+
+	// 显示属性
+	void NodeTreePanel::showNodePropertyRecursive(const Echo::String& className)
+	{
+		// show parent property first
+		Echo::String parentClassName;
+		if (Echo::Class::getParentClass(parentClassName, className))
+		{
+			// don't display property of object
+			if(parentClassName!="Object")
+				showNodePropertyRecursive(parentClassName);
+		}
+
+		// show self property
+		m_propertyHelper.beginMenu(className.c_str());
+		{
+			const Echo::PropertyInfos& propertys = Echo::Class::getPropertys(className);
+			for (const Echo::PropertyInfo& prop : propertys)
+			{
+				m_propertyHelper.addItem(prop.m_name.c_str(), Echo::Vector3(), QT_UI::WT_Vector3);
+			}
+		}
+		m_propertyHelper.endMenu();
+	}
+
+	// 属性修改后,更新结点值
+	void NodeTreePanel::refreshPropertyToNode(const QString& property, QVariant value)
+	{
+		int a = 10;
 	}
 }

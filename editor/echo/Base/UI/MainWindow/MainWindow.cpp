@@ -3,7 +3,7 @@
 #include "PostEffectDialog.h"
 #include "LogPanel.h"
 #include "ResPanel.h"
-#include "ScenePanel.h"
+#include "NodeTreePanel.h"
 #include <QFileDialog>
 #include <QDesktopservices>
 #include <QShortcut>
@@ -37,7 +37,7 @@ namespace Studio
 	void MainWindow::onOpenProject()
 	{
 		m_resPanel = EchoNew(ResPanel(this));
-		m_scenePanel = EchoNew(ScenePanel(this));
+		m_scenePanel = EchoNew(NodeTreePanel(this));
 		m_timelinePanel = EchoNew(TimelinePanel(this));
 		m_debuggerPanel = EchoNew(DebuggerPanel(this));
 
