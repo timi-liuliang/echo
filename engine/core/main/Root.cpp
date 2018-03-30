@@ -138,7 +138,6 @@ namespace Echo
 			// register all basic class types
 			registerClassTypes();
 
-			LuaBind::instance();
 			m_imageCodecManager = EchoNew(ImageCodecMgr);
 			m_modelManager		= EchoNew( ModelManager);
 			m_animManager		= EchoNew( AnimManager);
@@ -162,6 +161,8 @@ namespace Echo
 #endif
 		// 加载项目文件
 		loadProject(cfg.projectFile.c_str());
+
+		LuaBind::instance();
 
 		// 音频管理器
 		m_audioManager = EchoNew(FSAudioManager);
