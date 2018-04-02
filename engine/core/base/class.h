@@ -3,6 +3,7 @@
 #include "object.h"
 #include "variant.h"
 #include "engine/core/Util/StringUtil.h"
+#include "engine/core/script/lua/LuaBind.h"
 
 namespace Echo
 {
@@ -46,6 +47,9 @@ namespace Echo
 	{
 		ObjectFactoryT(const String& name, const String& parent)
 		{
+			// register class to lua
+			LuaBind::instance()->registerClass(name, parent);
+
 			m_name = name;
 			m_classInfo.m_parent = parent;
 

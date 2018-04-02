@@ -134,9 +134,6 @@ namespace Echo
 				return false;
 			}
 
-			// register all basic class types
-			registerClassTypes();
-
 			m_imageCodecManager = EchoNew(ImageCodecMgr);
 			m_modelManager		= EchoNew( ModelManager);
 			m_animManager		= EchoNew( AnimManager);
@@ -161,6 +158,16 @@ namespace Echo
 		loadProject(cfg.projectFile.c_str());
 
 		LuaBind::instance();
+
+		// register all basic class types
+		registerClassTypes();
+
+		{
+			//test
+			LuaBind::instance()->loadFile("Res://lua/a.lua");
+			LuaBind::instance()->call("calla");
+		}
+
 
 		// ÒôÆµ¹ÜÀíÆ÷
 		m_audioManager = EchoNew(FSAudioManager);

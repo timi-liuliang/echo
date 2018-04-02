@@ -74,6 +74,11 @@ namespace Echo
 		// build drawable
 		void buildRenderable();
 
+		void test()
+		{
+			int a = 10;
+		}
+
 	protected:
 		// update
 		virtual void update();

@@ -3,65 +3,23 @@
 #include "engine/core/io/DataStream.h"
 #include "LuaBind.h"
 
-extern "C"
-{
-#include <thirdparty/lua/lua.h>
-#include <thirdparty/lua/lualib.h>
-#include <thirdparty/lua/lauxlib.h>
-}
-
-int howdy(lua_State* state)
-{
-	int numArgs = lua_gettop(state);
-	for (int n = 1; n <= numArgs; n++)
-	{
-		Echo::String a = lua_tostring(state, n);
-		int b = 10;
-	}
-
-	//lua_CFunction()
-
-	lua_pushnumber(state, 123);
-	lua_pushnumber(state, 456);
-
-	// number of results 
-	return 2;
-}
-
 namespace Echo
 {
 	static LuaBind* g_lua = nullptr;
 
 	LuaBind::LuaBind()
 	{
-		lua_State* state = luaL_newstate();
+		m_state = luaL_newstate();
 
 		// Make standard libraries available in the lua object
-		luaL_openlibs(state);
-
-		lua_register(state, "hao123", howdy);
-
-		MemoryReader memReader("Res://lua/hello_world.lua");
-
-		if (LUA_OK == luaL_loadbuffer(state, memReader.getData<const char*>(), memReader.getSize(), "name"))
-		{
-			if (LUA_OK != lua_pcall(state, 0, LUA_MULTRET, 0))
-			{
-				outputError(state);
-			}
-		}
-		else
-		{
-			outputError(state);
-		}
-
-		lua_close(state);
-
-		int a = 10;
+		luaL_openlibs(m_state);
 	}
 
 	LuaBind::~LuaBind()
 	{
+		if(m_state)
+			lua_close(m_state);
+
 		g_lua = nullptr;
 	}
 
@@ -78,6 +36,79 @@ namespace Echo
 	void LuaBind::destroy()
 	{
 		EchoSafeDelete(g_lua, LuaBind);
+	}
+
+	// load file
+	bool LuaBind::loadFile(const String& file)
+	{
+		MemoryReader memReader( file);
+		if (LUA_OK == luaL_loadbuffer(m_state, memReader.getData<const char*>(), memReader.getSize(), "name"))
+		{
+			if (true)
+			{
+				if (LUA_OK != lua_pcall(m_state, 0, LUA_MULTRET, 0))
+				{
+					outputError(m_state);
+					return false;
+				}
+			}
+		}
+		else
+		{
+			outputError(m_state);
+			return false;
+		}
+
+		return true;
+	}
+
+	// register class
+	void LuaBind::registerClass(const String& className, const String& parentClassName)
+	{
+		checkStack();
+
+		// create metatable for class
+		luaL_newmetatable(m_state, className.c_str());
+		const int classMetatable = lua_gettop(m_state);
+
+		// change the metatable's __index to metatable itself
+		lua_pushliteral(m_state, "__index");
+		lua_pushvalue(m_state, classMetatable);
+		lua_settable(m_state, classMetatable);
+
+		lua_pop(m_state, 1);
+
+		checkStack();
+	}
+
+	// prepare register class function
+	int LuaBind::prepareRegisterClassFunction(const String& className, const String& funcName, class_function* cf)
+	{
+		checkStack();
+
+		luaL_getmetatable(m_state, className.c_str());
+		lua_pushstring(m_state, funcName.c_str());
+
+		void* ptr = *reinterpret_cast<void**>(cf);
+		lua_pushlightuserdata(m_state, ptr);
+
+		return 1;
+	}
+
+	// post register class function
+	void LuaBind::postRegisterClassFunction()
+	{
+		lua_settable(m_state, 1);
+		lua_pop(m_state, 1);
+
+		checkStack();
+	}
+
+	// check stack
+	bool LuaBind::checkStack()
+	{
+		const int topIdx = lua_gettop(m_state);
+		return topIdx == 0;
 	}
 
 	// out error

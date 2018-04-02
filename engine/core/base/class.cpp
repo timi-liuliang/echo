@@ -1,5 +1,6 @@
 #include "class.h"
 #include <map>
+#include "engine/core/script/lua/LuaBind.h"
 
 namespace Echo
 {
