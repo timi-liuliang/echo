@@ -116,7 +116,6 @@ namespace Echo
 	class FSAudioManager;
 	class NetConnectionManager;
 	class ScenarioManager;
-	class PostEffectManager;
 	class ISkeletonController;
 }
 

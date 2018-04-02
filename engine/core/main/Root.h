@@ -15,7 +15,6 @@ namespace Echo
 	class ArchiveFactory;
 	class IO;
 	class ImageCodecMgr;
-	class RenderStageManager;
 	class RenderTargetManager;
 	class ProfilerServer;
 	class Root
@@ -125,20 +124,6 @@ namespace Echo
 
 		bool getEnableFilterAdditional() const { return m_enableFilterAdditional; }
 
-		//启动空间扭曲
-		void setEnableDistortion(bool _val) { m_settingsMgr.setEnableDistortion(_val); }
-
-		bool getEnableDistortion() { return m_settingsMgr.isEnableDistortion(); }
-
-		// 启用关闭Bloom
-		void setEnableBloom(bool _val);
-
-		bool getEnableBloom() const { return m_settingsMgr.isEnableBloom(); }
-
-		void setEnableFXAA(bool _val) { m_settingsMgr.setEnableFXAA(_val); }
-		
-		bool getEnableFXAA() const { return m_settingsMgr.isEnableFXAA(); }
-
 		// 设置帧缓冲缩放比
 		void setFrameBufferScale( float scale) { m_framebufferScale =  scale; }
 		
@@ -187,7 +172,6 @@ namespace Echo
 		EngineConsole& getConsole() { return m_console; }
 		ImageCodecMgr* getImageCodecManager() { EchoAssert(m_imageCodecManager);  return m_imageCodecManager; }
 		FSAudioManager* getAudioManager() { EchoAssert(m_audioManager);  return m_audioManager; }
-		PostEffectManager* getPostEffectManager() { EchoAssert(m_postEffectManager); return m_postEffectManager; }
 
 	protected:
 		void			updateAllManagerDelayResource();
@@ -236,7 +220,6 @@ namespace Echo
 		Renderer*			m_renderer;						// 渲染器
 		NodeTree*		m_sceneManager;					// 场景管理器
 		FSAudioManager*		m_audioManager;					// 音频管理器
-		PostEffectManager*	m_postEffectManager;			// 全屏后处理特效管理器
 		StreamThread*		m_StreamThreading;				// 流加载线程
 		bool				m_enableFrameProfile;
 		FrameState			m_frameState;
@@ -248,7 +231,6 @@ namespace Echo
 		float				m_framebufferScale;             // 帧缓冲区缩放
 		OpenMPTaskMgr*		m_openMPTaskMgr;				// OpenMP任务处理器
 		RenderTargetManager*m_renderTargetManager;			// 渲染目标管理器
-		RenderStageManager* m_renderStageMangager;
 		ProjectFile*		m_projectFile;					// 项目信息
 
 #ifdef ECHO_PROFILER
@@ -271,4 +253,3 @@ namespace Echo
 #define EchoModelManager			EchoRoot->getModelManager()
 #define EchoImageCodecManager		EchoRoot->getImageCodecManager()
 #define EchoAudioManager			EchoRoot->getAudioManager()
-#define EchoPostEffectManager		EchoRoot->getPostEffectManager()

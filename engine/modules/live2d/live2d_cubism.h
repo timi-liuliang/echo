@@ -3,6 +3,7 @@
 #include "engine/core/scene/Node.h"
 #include "engine/core/render/mesh/Mesh.h"
 #include "engine/core/render/MaterialInst.h"
+#include "engine/core/render/render/Renderable.h"
 
 extern "C"
 {

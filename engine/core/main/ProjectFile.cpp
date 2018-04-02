@@ -2,7 +2,6 @@
 #include "engine/core/Util/LogManager.h"
 #include "engine/core/Util/PathUtil.h"
 #include "engine/core/io/IO.h"
-#include "render/RenderQueueGroup.h"
 #include "engine/core/main/Root.h"
 #include <ostream>
 
@@ -91,15 +90,13 @@ namespace Echo
 	{
 		try
 		{
-			m_renderQueues.clear();
-
 			xml_node<>* renderQueueGroupNode = projectNode->first_node("RenderQueueGroup");
 			for (xml_node<>* renderQueueNode = renderQueueGroupNode->first_node("RenderQueue"); renderQueueNode; renderQueueNode = renderQueueNode->next_sibling("RenderQueue"))
 			{
-				RenderQueueInfo queueInfo;
-				queueInfo.m_name = renderQueueNode->first_attribute("name")->value();
+				//RenderQueueInfo queueInfo;
+				//queueInfo.m_name = renderQueueNode->first_attribute("name")->value();
 
-				m_renderQueues.push_back(queueInfo);
+				//m_renderQueues.push_back(queueInfo);
 			}
 		}
 		catch ( ... )
@@ -169,12 +166,6 @@ namespace Echo
 		for ( size_t i = 0; i < m_archives.size(); i++ )
 		{
 			IO::instance()->addArchive(m_archives[i].m_archiveValue, m_archives[i].m_archiveType);
-		}
-
-		// äÖÈ¾¶ÓÁÐ
-		for (const RenderQueueInfo& info : m_renderQueues)
-		{
-			RenderQueueGroup::instance()->addRenderQueue( info.m_name);
 		}
 	}
 

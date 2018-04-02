@@ -5,7 +5,6 @@
 #include "engine/core/render/render/MaterialDesc.h"
 #include "engine/core/render/render/Renderer.h"
 #include "engine/core/render/TextureResManager.h"
-#include "render/RenderQueueGroup.h"
 #include "rapidxml/rapidxml.hpp"
 #include "rapidxml/rapidxml_utils.hpp"
 #include "rapidxml/rapidxml_print.hpp"
@@ -130,11 +129,11 @@ namespace Echo
 			if (matTemNode)
 			{
 				m_materialTemplate = rapidxml_helper::get_string(matTemNode->first_attribute("name"), "");
-				m_stage = rapidxml_helper::get_string(matTemNode->first_attribute("stage"), "");
+				m_renderStage = rapidxml_helper::get_string(matTemNode->first_attribute("stage"), "");
 
 				if (m_materialTemplate == "water.mt" || m_materialTemplate == "water2.mt" || m_materialTemplate == "water1.mt")
 				{
-					m_stage = "SampleWater";
+					m_renderStage = "SampleWater";
 				}
 
 				m_isSubmitToStageRenderQueue = rapidxml_helper::parsebool(matTemNode->first_attribute("submit_to_stage"), false);
@@ -293,7 +292,7 @@ namespace Echo
 		{
 			xml_node<>* matTemplate = doc.allocate_node(node_element, "MaterialTemplate");
 			xml_attribute<>* matTemplateName = doc.allocate_attribute("name", m_materialTemplate.c_str());
-			xml_attribute<>* matTemplateStage = doc.allocate_attribute("stage", m_stage.c_str());
+			xml_attribute<>* matTemplateStage = doc.allocate_attribute("stage", m_renderStage.c_str());
 			xml_attribute<>* matTemplateSubmitToStage = doc.allocate_attribute("submit_to_stage", m_isSubmitToStageRenderQueue ? "true" : "false");
 			xml_attribute<>* matTemplateMacros = doc.allocate_attribute("macros", doc.allocate_string(StringUtil::ToString(m_macros, ";").c_str()));
 			matTemplate->append_attribute(matTemplateName);
@@ -656,7 +655,7 @@ namespace Echo
 	{
 		// 拷贝名称，材质
 		m_name = _template->m_name;
-		m_stage = _template->m_stage;
+		m_renderStage = _template->m_renderStage;
 		m_macros = _template->m_macros;
 		m_macrosEx = _template->m_macrosEx;
 		m_materialTemplate = _template->m_materialTemplate;
@@ -1385,9 +1384,6 @@ namespace Echo
 	// 构建渲染队列
 	void MaterialInst::buildRenderQueue()
 	{
-		// confirm render queue
-		m_renderQueue = RenderQueueGroup::instance()->getRenderQueue(m_stage);
-
 		// make sure macros
 		String finalMacros; finalMacros.reserve(512);
 		for (const String& macro : m_macros)

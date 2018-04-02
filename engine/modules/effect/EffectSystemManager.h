@@ -9,7 +9,6 @@
 #include "engine/core/Util/StringUtil.h"
 #include "engine/core/render/render/Material.h"
 #include "engine/core/render/render/RenderState.h"
-#include "engine/core/render/render/RenderQueue.h"
 
 namespace Echo
 {

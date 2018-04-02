@@ -15,7 +15,6 @@
 #include "engine/core/Util/Timer.h"
 #include "engine/core/render/render/Viewport.h"
 #include "Engine/core/Render/MaterialInst.h"
-#include "Engine/core/Render/RenderStage/RenderStageManager.h"
 #include "ProjectFile.h"
 #include "Engine/modules/Audio/FMODStudio/FSAudioManager.h"
 #include "rapidxml/rapidxml.hpp"
@@ -23,11 +22,11 @@
 #include "rapidxml/rapidxml_print.hpp"
 #include "engine/core/render/render/RenderThread.h"
 #include "engine/core/render/render/Video.h"
-#include "PostEffectManager.h"
 #include "EngineTimeController.h"
 #include "engine/core/script/lua/LuaBind.h"
 #include "engine/core/render/RenderTargetManager.h"
 #include "module.h"
+#include "engine/core/render/renderstage/RenderStage.h"
 
 #ifdef ECHO_PLATFORM_ANDROID
 #include <sys/syscall.h>
@@ -144,7 +143,6 @@ namespace Echo
 			m_animSysManager	= EchoNew( AnimSystemManager);
 			m_skeletonManager	= EchoNew( SkeletonManager);
 			m_sceneManager		= EchoNew( NodeTree);
-			m_postEffectManager = EchoNew(PostEffectManager);
 			m_io = EchoNew(IO);
 			m_EffectSystemManager = EchoNew(EffectSystemManager);
 			m_StreamThreading = EchoNew(StreamThread);
@@ -244,15 +242,6 @@ namespace Echo
 		if (!m_renderTargetManager->initialize())
 		{
 			EchoLogError("RenderTargetManager::initialize Falied !");
-
-			return false;
-		}
-
-		// 初始化渲染阶段管理器
-		m_renderStageMangager = EchoNew(RenderStageManager);
-		if (!RenderStageManager::instance()->initialize())
-		{
-			EchoLogInfo("Initialize RenderStageManager Failed !");
 
 			return false;
 		}
@@ -368,9 +357,6 @@ namespace Echo
 
 		EchoSafeDelete(m_io, IO); //ResourceGroupManager的析构需要用到ArchiveManager
 		Time::destroyInstance();
-		EchoSafeDelete(m_postEffectManager, PostEffectManager);
-
-		EchoSafeDelete(m_renderStageMangager, RenderStageManager);
 
 		// 外部模块释放
 		//for (const ExternalMgr& mgr : m_cfg.m_externalMgrs)
@@ -553,19 +539,6 @@ namespace Echo
 		Renderer::instance()->present();
 	}
 
-	void Root::setEnableBloom(bool _val)
-	{
-		m_settingsMgr.setEnableBloom(_val);
-		auto manager = RenderStageManager::instance();
-		auto renderStage = (Echo::PostProcessRenderStage*)manager->getRenderStageByID(Echo::RSI_PostProcess);
-		if (renderStage)
-		{
-			auto dof = m_postEffectManager->getDofManager();
-			dof->setBloomStatus(_val);
-			renderStage->setImageEffectEnable("Bloom", _val);
-		}
-	}
-
 	void Root::changeFilterAdditionalMap(const String& mapName)
 	{
 		if (m_enableFilterAdditional)
@@ -599,7 +572,6 @@ namespace Echo
 	// 渲染场景
 	bool Root::render()
 	{
-		EchoAssert(RenderStageManager::instance());
 		g_render_thread->syncFrame();
 
 		// 外部模块更新, 目前只有 CatUI
@@ -608,7 +580,7 @@ namespace Echo
 			mgr.m_render();
 		}
 
-		RenderStageManager::instance()->processRenderStages();
+		RenderStage::instance()->process();
 
 		return true;
 	}

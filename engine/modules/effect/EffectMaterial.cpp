@@ -4,7 +4,6 @@
 #include "Engine/core/Scene/NodeTree.h"
 #include "engine/core/io/DataStream.h"
 #include "EffectSystemManager.h"
-#include "render/RenderQueueGroup.h"
 
 namespace Echo
 {

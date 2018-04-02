@@ -278,7 +278,7 @@ namespace Echo
 
 		m_materialInst = MaterialInst::create();
 		m_materialInst->setOfficialMaterialContent(g_live2dDefaultMaterial);
-		m_materialInst->setStage("Transparent");
+		m_materialInst->setRenderStage("Transparent");
 		m_materialInst->applyLoadedData();
 		m_materialInst->setTexture(0, "Res://girl/girl.1024/texture_00.png");
 

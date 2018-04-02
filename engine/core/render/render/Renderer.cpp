@@ -448,9 +448,9 @@ namespace Echo
 	}
 
 	// ĞÂ½¨Renderable
-	Renderable* Renderer::createRenderable(RenderQueue* renderQueue, Material* material)
+	Renderable* Renderer::createRenderable(const String& renderStage, Material* material)
 	{
-		Renderable* renderable = EchoNew(Renderable(renderQueue, material, m_renderableIdentifier++));
+		Renderable* renderable = EchoNew(Renderable(renderStage, material, m_renderableIdentifier++));
 		ui32 id = renderable->getIdentifier();
 		assert(!m_renderables.count(id));
 		m_renderables[id] = renderable;

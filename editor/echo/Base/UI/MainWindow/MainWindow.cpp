@@ -1,6 +1,5 @@
 #include "MainWindow.h"
 #include "Studio.h"
-#include "PostEffectDialog.h"
 #include "LogPanel.h"
 #include "ResPanel.h"
 #include "NodeTreePanel.h"

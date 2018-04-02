@@ -37,46 +37,15 @@ namespace Echo
 		// 应用设置
 		void Apply(const String& fileName);
 
-		// 设置是否启用阴影
-		void setActorCastShadow(bool isEnable);
-
-		// 获取是否启用阴影
-		bool isActorCastShadow() const { return m_isActorCastShadow; }
-
-		void setShadowMapSize(ui32 size);
-		ui32 getShadowMapSize() { return m_shadowMapSize; }
-
-		void setActorUseEasyShadow(bool isEnable) { m_isActorUseEasyShadow = isEnable; }
-
-		bool isEnableBlurShadow() const;
-
-		void setEnableBlurShadow(bool isEnable);
-
-		bool isActorUseEasyShadow() const { return m_isActorUseEasyShadow; }
-
-		// 设置是否开启遮罩
-		void setEnableCoverage(bool isEnable);
-
-		bool isEnableCoverage() const { return m_bEnableCoverage; }
-
-		void setEnableManualRenderActor(bool isEnable);
-
-		bool isEnableManualRenderActor() const { return m_bEnableManualRenderActor; }
-
 		// 设置特效是否支持空间扭曲
 		void setEnableDistortion(bool isDistortion) { m_bEnableDistortion = isDistortion; }
 
 		// 是否空间扭曲
 		bool isEnableDistortion() const { return m_bEnableDistortion; }
 
-		void setEnableGlow(bool isEnable);
-		bool isEnableGlow() const { return m_bEnableGlow; }
 		bool isEnableLensFlare() const { return false; }
 
 		bool isEnableDownsampleDepth() const { return false; }
-
-		bool isEnableBloom() const { return m_bEnableBloom; }
-		void setEnableBloom(bool val) { m_bEnableBloom = val; }
 
 		bool isEnableToneMapping() const { return m_bEnableToneMapping; }
 		void setEnableToneMapping(bool val) { m_bEnableToneMapping = val; }
@@ -156,15 +125,12 @@ namespace Echo
 		
 
 	protected:
-		bool			m_isActorCastShadow;						// (阴影)是否启用动态阴影	
-		bool			m_isActorUseEasyShadow;
 		bool			m_isShowOcclusionOccluder;					// 是否显示遮挡物
 		bool			m_bEnableHighEffectActor;
 		bool			m_bEnableBloom;
 		bool			m_bEnableToneMapping;
 		bool			m_bEnableFXAA;
 		bool			m_bEnableCoverage;
-		bool			m_bEnableManualRenderActor;
 		bool			m_bEnableFilterAdditional;
 		bool			m_bEnableDistortion;
 		bool			m_bEnableGlow;

@@ -2,7 +2,6 @@
 
 #include "engine/core/render/render/ShaderProgram.h"
 #include "engine/core/render/render/RenderState.h"
-#include <engine/core/render/render/RenderQueue.h>
 #include "engine/core/render/TextureRes.h"
 #include "engine/core/Util/Singleton.h"
 
@@ -86,10 +85,8 @@ namespace Echo
 		void setOfficialMaterialContent(const char* content) { m_officialMaterialContent = content; }
 
 		// 阶段相关函数
-		const String& getStage() { return m_stage; }
-		void setStage(const String& stage) { m_stage = stage; }
-
-		RenderQueue* getRenderQueue() { return m_renderQueue; }
+		const String& getRenderStage() { return m_renderStage; }
+		void setRenderStage(const String& stage) { m_renderStage = stage; }
 
 		// 设置宏定义
 		void setMacros(const String& macros);
@@ -197,11 +194,10 @@ namespace Echo
 		String				m_name;					// 材质实例名称
 		String				m_materialTemplate;		// 所使用的材质模板
 		const char*			m_officialMaterialContent;		// 官方材质
-		String				m_stage;				// 所处渲染阶段
+		String				m_renderStage;				// 所处渲染阶段
 		StringArray			m_macros;				// 宏定义
 		StringArray			m_macrosEx;				// 外部宏定义
 		Material*			m_material;				// 对应材质
-		RenderQueue*		m_renderQueue;			// 渲染队列
 		ParamMap			m_unifromParamSet;
 		ParamMap			m_unifromParamSetFromFile;
 		TextureMap			m_textures;

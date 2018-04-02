@@ -17,9 +17,6 @@ namespace Echo
 		// 解析
 		void parse( const StringArray& argv, String& output);
 
-		//渲染队列相关处理
-		void parseRenderQueue( const StringArray& argv, String& output);
-
 		// 获取变量
 		void parseGet( const StringArray& argv, String& output);
 	};

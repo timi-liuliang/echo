@@ -13,8 +13,6 @@
 #include "Engine/modules/Anim/AnimState.h"
 #include "Engine/modules/Anim/AnimBlender.h"
 #include "Engine/core/Render/RenderTargetManager.h"
-#include "Engine/core/Render/RenderStage/ShadowMapRenderStage.h"
-#include "Engine/core/Render/RenderStage/RenderStageManager.h"
 #include "Engine/core/Render/TextureRes.h"
 #include "engine/core/Util/LogManager.h"
 #include "Render/PixelFormat.h"
@@ -179,9 +177,6 @@ namespace Echo
 		String macros;
 		if (m_info.isSkinModel())
 			macros += "SKIN_MESH;";
-		
-		if (EchoEngineSettings.isActorCastShadow() && m_info.m_isReceiveShadow)
-			macros += "RECEIVE_SHADOW;";
 
 		if (m_info.m_isForUI)
 			macros += "IS_FOR_UI;";
@@ -217,13 +212,6 @@ namespace Echo
 	{
 		if (!phase.m_materialInst)
 			return;
-
-		if (phase.m_materialInst->getStage() == "Transparent" || phase.m_materialInst->getStage() == "Opaque")
-		{
-			String first = phase.m_materialInst->getStage();
-			String second = m_info.m_isActor ? "_Actor" : "";
-			phase.m_materialInst->setStage(first + second);
-		}
 
 		phase.m_materialInst->applyLoadedData(); // --> must sync.
 		phase.m_materialInst->loadTexture();     // --> must sync.
@@ -1041,11 +1029,6 @@ namespace Echo
 		else if (name == "matWSM")
 		{
 			return (void*)&m_matWSM;
-		}
-		else if (name == "ShadowShade")
-		{
-			ShadowMapRenderStage* pStage = (ShadowMapRenderStage*)RenderStageManager::instance()->getRenderStageByID(RSI_ShadowMap);
-			return (void*)pStage->getShadowShadePtr();
 		}
 		else if (name == "SMSampler")
 		{

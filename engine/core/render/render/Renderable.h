@@ -1,6 +1,5 @@
 #pragma once
 
-#include "RenderQueue.h"
 #include <engine/core/Util/PtrMonitor.h>
 #include <engine/core/Util/Array.hpp>
 #include "ShaderProgram.h"
@@ -20,24 +19,12 @@ namespace Echo
 	static const int	SHADER_TEXTURE_SLOT7= 7;	// 默认使用纹理槽
 
 	/**
-	 * 渲染接口
-	 */
-	class IManualRenderable
-	{
-	public:
-		virtual ~IManualRenderable(){}
-
-		// 执行渲染
-		virtual void render()=0;
-	};
-
-	/**
 	 * 最小可渲染体封装
 	 */
 	class Node;
 	class Mesh;
 	class MaterialInst;
-	class Renderable : public IManualRenderable
+	class Renderable
 	{
 		friend class RenderQueue;
 		friend class Renderer;
@@ -85,10 +72,10 @@ namespace Echo
 		virtual void render();
 		
 		// 设置渲染队列
-		void setRenderQueue(RenderQueue* pRenderQueue) { m_renderQueue = pRenderQueue; }
+		void setRenderStage(const String& renderStage) { m_renderStage = renderStage; }
 
 		// 获取渲染队列
-		const RenderQueue* getRenderQueue(void){ return m_renderQueue; }
+		const String& getRenderStage(void){ return m_renderStage; }
 
 		// 提交到渲染队列
 		void submitToRenderQueue();
@@ -131,13 +118,13 @@ namespace Echo
 		void bindRenderState();
 
 	private:
-		Renderable( RenderQueue* pRenderQueue, Material* material, int identifier);
+		Renderable( const String& renderStage, Material* material, int identifier);
 		virtual ~Renderable();
 
 	public:
 		ui32									m_identifier;
 		String									m_ownerDesc;			// 拥有者信息
-		RenderQueue*							m_renderQueue;
+		String									m_renderStage;
 		MaterialID								m_materialID;			// material
 		RenderInput*							m_renderInput;			// first  VB, IB, etc.
 		MaxTextureArray							m_Textures;				// now only one texture sampler.

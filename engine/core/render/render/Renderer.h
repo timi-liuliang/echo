@@ -334,7 +334,7 @@ namespace Echo
 		virtual RenderTarget* createRenderTarget(ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const RenderTarget::Options& option) = 0;
 
 		// 新建Renderable
-		Renderable* createRenderable(RenderQueue* renderQueue, Material* material);
+		Renderable* createRenderable(const String& renderStage, Material* material);
 
 		// 获取Renderable
 		Renderable* getRenderable(RenderableID id);

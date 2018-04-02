@@ -919,11 +919,6 @@ namespace Echo
 
 		Shader::ShaderDesc psDesc(m_shaderDesc);
 
-		if (!Renderer::instance()->getDeviceFeatures().supportHFColorBf() && (!m_queue || m_queue->getName().find("SampleWater") == String::npos))
-		{
-			psDesc.macros += "#define NONSUPPOT_HFLOAT_COLORBUFFER\n";
-		}
-
 		Shader *pPixelShader = pRenderer->createShader(Shader::ST_PIXELSHADER, psDesc, psContent.data(), psContent.size());
 		if(!pPixelShader)
 		{

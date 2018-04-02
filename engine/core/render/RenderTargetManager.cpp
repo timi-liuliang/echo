@@ -111,7 +111,7 @@ namespace Echo
 			return false;
 		}
 
-		if (Root::instance()->getEnableDistortion())
+		if (EngineSettingsMgr::instance()->isEnableDistortion())
 		{
 			RenderTarget::Options option;
 			option.multiResolution = m_bEnableMultiResolution;

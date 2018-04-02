@@ -28,7 +28,6 @@
 #include "engine/core/render/RenderTargetManager.h"
 #include "Engine/core/Render/TextureResManager.h"
 #include "Engine/core/Render/MaterialInst.h"
-#include "render/RenderQueueGroup.h"
 
 namespace Echo
 {
@@ -626,7 +625,7 @@ namespace Echo
 			Material* pMaterial = NULL;
 			ShaderProgram* shaderProgram = NULL;
 
-			pRenderQueue = RenderQueueGroup::instance()->getRenderQueue("Effect");/*m_camera ? pSceneManager->getRenderQueue("EffectUI") :*/
+			pRenderQueue = nullptr;
 			if (!pRenderQueue)
 				return;
 
@@ -858,10 +857,7 @@ namespace Echo
 	// ¿ªÊ¼äÖÈ¾
 	void EffectSystemManager::beginRender()
 	{
-		if (EngineSettingsMgr::instance()->isEnableGlow() && !m_bRenderGlowOver)
-		{
-			return;
-		}
+		return;
 
 		clearUsedRenderablesRenderData();
 	}
@@ -891,7 +887,7 @@ namespace Echo
 
 		int current_target_id = RenderTargetManager::instance()->getInUsingRenderTargetID();
 
-		if (Root::instance()->getEnableDistortion()
+		if (EngineSettingsMgr::instance()->isEnableDistortion()
 			&& RenderTargetManager::instance()->getRenderTargetByID(RTI_SceneColorMap)
 			&& current_target_id != 0
 			&& isHaveDistortionLayer())
@@ -1112,7 +1108,7 @@ namespace Echo
 
 		Renderer* pRender = Renderer::instance();
 		Camera* camera;// = getCamera();
-		RenderQueue*   pRenderQueue =  RenderQueueGroup::instance()->getRenderQueue("Effect");
+		RenderQueue*   pRenderQueue = nullptr;// RenderQueueGroup::instance()->getRenderQueue("Effect");
 		Material*      pMaterial = nullptr;
 		ShaderProgram* shaderProgram = pMaterial->getShaderProgram();
 		ShaderProgram* shaderProgramUV2 = mMtlUV2->getShaderProgram();
@@ -1315,7 +1311,7 @@ namespace Echo
 	RenderQueue* EffectSystemManager::_getEffectRenderQueue()
 	{
 		if (NULL == mEffectRenderQueue)
-			mEffectRenderQueue = RenderQueueGroup::instance()->getRenderQueue("Effect");
+			mEffectRenderQueue = nullptr;// RenderQueueGroup::instance()->getRenderQueue("Effect");
 		return mEffectRenderQueue;
 	}
 

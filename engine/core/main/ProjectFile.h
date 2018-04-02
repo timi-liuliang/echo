@@ -71,11 +71,6 @@ namespace Echo
 		};
 		typedef vector<TextureCompressItem>::type TextureCPIVec;
 
-		struct RenderQueueInfo
-		{
-			String		m_name;
-		};
-
 	public:
 		ProjectFile();
 		~ProjectFile();
@@ -139,7 +134,6 @@ namespace Echo
 		String								m_pathName;			// 项目全路径(包含名称)
 		String								m_defaultMaterial;	// 默认的材质名称
 		vector<ArchiveItem>::type			m_archives;			// 存档配置
-		vector<RenderQueueInfo>::type		m_renderQueues;		// 渲染队列信息
 		TextureCPIVec						m_TextureCompreses; // 纹理压缩信息表
 	};
 }

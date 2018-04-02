@@ -2,6 +2,7 @@
 #include "Render/ShaderProgram.h"
 #include "Render/Renderer.h"
 #include "Render/Material.h"
+#include "engine/core/render/renderstage/RenderStage.h"
 #include "engine/core/render/MaterialInst.h"
 #include "engine/core/render/mesh/Mesh.h"
 #include "engine/core/scene/node.h"
@@ -9,10 +10,10 @@
 namespace Echo
 {
 	// 构造函数
-	Renderable::Renderable(RenderQueue* pRenderQueue, Material* material, int identifier)
-		: m_renderInput(nullptr)
+	Renderable::Renderable(const String& renderStage, Material* material, int identifier)
+		: m_renderStage(renderStage)
+		, m_renderInput(nullptr)
 		, m_SParamWriteIndex(0)
-		, m_renderQueue(pRenderQueue)
 		, m_visible(NULL)
 		, m_bRenderState(false)
 		, m_pBlendState(NULL)
@@ -34,7 +35,7 @@ namespace Echo
 	// 新建
 	Renderable* Renderable::create(Mesh* mesh, MaterialInst* matInst, Node* node)
 	{
-		Renderable* renderable = Renderer::instance()->createRenderable( matInst->getRenderQueue(), matInst->getMaterial());
+		Renderable* renderable = Renderer::instance()->createRenderable( matInst->getRenderStage(), matInst->getMaterial());
 		renderable->setRenderInput(mesh->getVertexBuffer(), mesh->getVertexElements(), mesh->getIndexBuffer(), mesh->getIndexStride());
 
 		Material* material = matInst->getMaterial();
@@ -222,7 +223,7 @@ namespace Echo
 	// 提交到渲染队列
 	void Renderable::submitToRenderQueue()
 	{
-		m_renderQueue->addRenderable(this);
+		RenderStage::instance()->addRenderable(m_renderStage, getIdentifier());
 	}
 
 	// 设置混合状态
