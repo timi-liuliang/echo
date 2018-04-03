@@ -162,12 +162,6 @@ namespace Echo
 			luaex::LuaEx::instance();
 			register_core_to_lua();
 			registerClassTypes();
-
-			{
-				//test
-				luaex::LuaEx::instance()->loadfile("Res://lua/a.lua");
-				luaex::LuaEx::instance()->callf("calla");
-			}
 		}
 		
 		// ÒôÆµ¹ÜÀíÆ÷

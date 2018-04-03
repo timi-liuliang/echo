@@ -91,6 +91,12 @@ namespace Echo
 
 		setMoc("Res://girl/girl.moc3");
 		buildRenderable();
+
+		{
+			//test
+			luaex::LuaEx::instance()->loadfile("Res://lua/live2dcubism.lua", true);
+			luaex::LuaEx::instance()->callf("start");
+		}
 	}
 
 	Live2dCubism::~Live2dCubism()
@@ -293,6 +299,8 @@ namespace Echo
 	{
 		if (m_model)
 		{
+			luaex::LuaEx::instance()->callf("update");
+
 			static Matrix4 scale; scale.scaleReplace(Vector3(0.3f, 0.3f, 0.3f));
 
 			m_matWVP = scale * NodeTree::instance()->get2DCamera()->getViewProjMatrix();;
