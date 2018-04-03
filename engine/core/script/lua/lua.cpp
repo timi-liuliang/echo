@@ -1,18 +1,11 @@
 
 #include "lua.h"
-
 #include "scl/assert.h"
 #include "scl/log.h"
 #include "scl/string.h"
 #include "scl/backtrace.h"
 
-//extern "C" {
-//#include "lua/src/lua.h"
-//#include "lua/src/lualib.h"
-//#include "lua/src/lauxlib.h"
-//}
-
-//#define SCL_LUA_CHECK_STACK
+#include "engine/core/io/DataStream.h"
 
 #define LUAEX_CHECK_BEGIN const int __check_n = lua_gettop(L)
 #define LUAEX_CHECK_END assert(__check_n == lua_gettop(L)) 
@@ -79,47 +72,55 @@ void Lua::release()
 
 bool Lua::loadfile(const char* const file, bool execute, const char* const environment, bool see_all)
 {
-SCL_ASSERT_TRY {
-	_checkstack();
-
-	int r = luaL_loadfile(L, file);					// stack + 1
-	if (r)
+	Echo::MemoryReader memReader( file);
+	if (memReader.getSize())
 	{
-		_print_error();
-		return false;
+		return loadbuffer(memReader.getData<const char*>(), memReader.getSize(), NULL, execute, environment, see_all);
 	}
-
-	if (NULL != environment && 0 != environment[0])
-	{
-		_set_environment(L, environment);
-		if (see_all)
-			_let_environment_see_all(environment);
-	}
-
-	if (execute)
-	{
-		r = lua_pcall(L, 0, LUA_MULTRET, 0);		//stack - 1
-		if (r)
-		{
-			_print_error();
-			return false;
-		}
-	}
-	else
-		lua_pop(L, 1);
-
-	_checkstack();
-
-	return true;
-	}
-SCL_ASSERT_CATCH {
-	
-	const int top = lua_gettop(L);
-	if (top > 0)
-		lua_pop(L, top);
 
 	return false;
-	}
+
+//SCL_ASSERT_TRY {
+//	_checkstack();
+//
+//	int r = luaL_loadfile(L, file);					// stack + 1
+//	if (r)
+//	{
+//		_print_error();
+//		return false;
+//	}
+//
+//	if (NULL != environment && 0 != environment[0])
+//	{
+//		_set_environment(L, environment);
+//		if (see_all)
+//			_let_environment_see_all(environment);
+//	}
+//
+//	if (execute)
+//	{
+//		r = lua_pcall(L, 0, LUA_MULTRET, 0);		//stack - 1
+//		if (r)
+//		{
+//			_print_error();
+//			return false;
+//		}
+//	}
+//	else
+//		lua_pop(L, 1);
+//
+//	_checkstack();
+//
+//	return true;
+//	}
+//SCL_ASSERT_CATCH {
+//	
+//	const int top = lua_gettop(L);
+//	if (top > 0)
+//		lua_pop(L, top);
+//
+//	return false;
+//	}
 }
 
 bool Lua::loadstring(const char* const script, bool execute, const char* const environment, bool see_all)

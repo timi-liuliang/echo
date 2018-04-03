@@ -1,8 +1,7 @@
 
 #pragma once
 
-#include "luaex/lua.h"
-
+#include "lua.h"
 #include "scl/assert.h"
 
 //#include "lua/lua.hpp"
@@ -18,6 +17,10 @@ namespace luaex {
 ////////////////////////////////////
 class LuaEx : public Lua
 {
+public:
+	static LuaEx* instance();
+	void destroy();
+
 public:
 	LuaEx() {}
 	LuaEx(bool auto_init) { if (auto_init) init(); }

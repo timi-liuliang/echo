@@ -3,7 +3,7 @@
 #include "object.h"
 #include "variant.h"
 #include "engine/core/Util/StringUtil.h"
-#include "engine/core/script/lua/LuaBinder.h"
+#include "engine/core/script/lua/luaex.h"
 
 namespace Echo
 {
@@ -48,7 +48,7 @@ namespace Echo
 		ObjectFactoryT(const String& name, const String& parent)
 		{
 			// register class to lua
-			LuaBinder::instance()->registerClass(name, parent);
+			luaex::LuaEx::instance()->register_class(name.c_str(), parent.c_str());
 
 			m_name = name;
 			m_classInfo.m_parent = parent;
