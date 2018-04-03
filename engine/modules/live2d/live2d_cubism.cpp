@@ -3,7 +3,7 @@
 #include "engine/core/scene/NodeTree.h"
 #include "render/renderer.h"
 #include "render/Material.h"
-#include "engine/core/script/lua/LuaBind.h"
+#include "engine/core/script/lua/LuaBinder.h"
 
 // Ä¬ÈÏ²ÄÖÊ
 static const char* g_live2dDefaultMaterial = "\
@@ -100,7 +100,7 @@ namespace Echo
 
 	void Live2dCubism::bindMethods()
 	{
-		LuaBind::instance()->registerFunction<Live2dCubism>("Live2dCubism", "test", &Live2dCubism::test);
+		LuaBinder::instance()->registerFunction<Live2dCubism>("Live2dCubism", "test", &Live2dCubism::test);
 
 		CLASS_REGISTER_PROPERTY(Live2dCubism, "Moc", Variant::String, "getMoc", "setMoc");
 		CLASS_REGISTER_PROPERTY(Live2dCubism, "Texture", Variant::String, "getPos", "setPos");

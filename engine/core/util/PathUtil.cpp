@@ -3,7 +3,7 @@
 #include <fstream>
 
 #ifdef ECHO_PLATFORM_WINDOWS
-#	include <DirentWin32.h>
+#	include "engine/core/util/DirentWin32.h"
 #	include <direct.h>
 #	if (ECHO_COMPILER == ECHO_COMPILER_MSVC)
 #		pragma warning(disable: 4996)

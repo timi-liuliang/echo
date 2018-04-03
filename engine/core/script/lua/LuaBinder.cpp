@@ -1,13 +1,13 @@
 #include "engine/core/util/AssertX.h"
 #include "engine/core/util/LogManager.h"
 #include "engine/core/io/DataStream.h"
-#include "LuaBind.h"
+#include "LuaBinder.h"
 
 namespace Echo
 {
-	static LuaBind* g_lua = nullptr;
+	static LuaBinder* g_lua = nullptr;
 
-	LuaBind::LuaBind()
+	LuaBinder::LuaBinder()
 	{
 		m_state = luaL_newstate();
 
@@ -15,7 +15,7 @@ namespace Echo
 		luaL_openlibs(m_state);
 	}
 
-	LuaBind::~LuaBind()
+	LuaBinder::~LuaBinder()
 	{
 		if(m_state)
 			lua_close(m_state);
@@ -24,22 +24,22 @@ namespace Echo
 	}
 
 	// get instance
-	LuaBind* LuaBind::instance()
+	LuaBinder* LuaBinder::instance()
 	{
 		if (!g_lua)
-			g_lua = EchoNew(LuaBind);
+			g_lua = EchoNew(LuaBinder);
 
 		return g_lua;
 	}
 
 	// destory
-	void LuaBind::destroy()
+	void LuaBinder::destroy()
 	{
-		EchoSafeDelete(g_lua, LuaBind);
+		EchoSafeDelete(g_lua, LuaBinder);
 	}
 
 	// load file
-	bool LuaBind::loadFile(const String& file)
+	bool LuaBinder::loadFile(const String& file)
 	{
 		MemoryReader memReader( file);
 		if (LUA_OK == luaL_loadbuffer(m_state, memReader.getData<const char*>(), memReader.getSize(), "name"))
@@ -63,7 +63,7 @@ namespace Echo
 	}
 
 	// register class
-	void LuaBind::registerClass(const String& className, const String& parentClassName)
+	void LuaBinder::registerClass(const String& className, const String& parentClassName)
 	{
 		checkStack();
 
@@ -82,7 +82,7 @@ namespace Echo
 	}
 
 	// prepare register class function
-	int LuaBind::prepareRegisterClassFunction(const String& className, const String& funcName, class_function* cf)
+	int LuaBinder::prepareRegisterClassFunction(const String& className, const String& funcName, class_function* cf)
 	{
 		checkStack();
 
@@ -96,7 +96,7 @@ namespace Echo
 	}
 
 	// post register class function
-	void LuaBind::postRegisterClassFunction()
+	void LuaBinder::postRegisterClassFunction()
 	{
 		lua_settable(m_state, 1);
 		lua_pop(m_state, 1);
@@ -105,14 +105,14 @@ namespace Echo
 	}
 
 	// check stack
-	bool LuaBind::checkStack()
+	bool LuaBinder::checkStack()
 	{
 		const int topIdx = lua_gettop(m_state);
 		return topIdx == 0;
 	}
 
 	// out error
-	void LuaBind::outputError(lua_State* state)
+	void LuaBinder::outputError(lua_State* state)
 	{
 		const char* message = lua_tostring(state, -1);
 		EchoLogError("lua : %s", message);

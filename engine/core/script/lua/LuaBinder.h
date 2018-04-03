@@ -48,14 +48,14 @@ namespace Echo
 		return 0;
 	}
 
-	class LuaBind
+	class LuaBinder
 	{
 	public:
-		LuaBind();
-		~LuaBind();
+		LuaBinder();
+		~LuaBinder();
 
 		// get instance
-		static LuaBind* instance();
+		static LuaBinder* instance();
 
 		// destory
 		static void destroy();

@@ -10,7 +10,13 @@ SET(MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 SET(INCLUDE_FILES
 	${ECHO_ROOT_PATH}
 	${ECHO_ROOT_PATH}/engine
-	${ECHO_ROOT_PATH}/engine/render
+	${ECHO_ROOT_PATH}/engine/core/render
+	${ECHO_ROOT_PATH}/engine/core/render/render
+	${ECHO_ROOT_PATH}/engine/core/render/gles
+	${ECHO_ROOT_PATH}/engine/core/render/gles/RenderTask
+	${ECHO_ROOT_PATH}/engine/core/render/gles/GPUProxy
+	${ECHO_ROOT_PATH}/engine/core/render/gles/Android
+	${ECHO_ROOT_PATH}/engine/core/script/lua
 	${ECHO_ROOT_PATH}/thirdparty/
 	${ECHO_ROOT_PATH}/ThirdParty/Recast/Recast
 	${ECHO_ROOT_PATH}/ThirdParty/Recast/Detour
@@ -49,8 +55,6 @@ ENDIF()
 INCLUDE_DIRECTORIES(${INCLUDE_FILES})
 
 # Net
-INCLUDE_DIRECTORIES(${ECHO_SRC_PATH}/Net/protocolbuffer/src)
-
 INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/Dependencies/theoraplayer/SDK/include)
 
 IF(${ECHO_PLATFORM_WIN32})
@@ -89,7 +93,7 @@ ENDIF()
 
 EXCLUDE_FILES(ALL_FILES GLOB_RECURSE ${MODULE_PATH}/core/render/vulkan/*.*)
 
-GROUP_FILES(ALL_FILES ${CMAKE_CURRENT_SOURCE_DIR})
+GROUP_FILES_NO_INCLUDE(ALL_FILES ${CMAKE_CURRENT_SOURCE_DIR})
 
 IF(ECHO_STATIC)
   ADD_DEFINITIONS("-DECHO_CORE_STATIC")

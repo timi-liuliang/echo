@@ -1,7 +1,7 @@
 #ifndef __ECHO_GLES2GPUBUFFER_H__
 #define __ECHO_GLES2GPUBUFFER_H__
 
-#include "GPUBuffer.h"
+#include "render/GPUBuffer.h"
 
 namespace Echo
 {

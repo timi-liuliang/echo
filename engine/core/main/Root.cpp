@@ -23,7 +23,7 @@
 #include "engine/core/render/render/RenderThread.h"
 #include "engine/core/render/render/Video.h"
 #include "EngineTimeController.h"
-#include "engine/core/script/lua/LuaBind.h"
+#include "engine/core/script/lua/LuaBinder.h"
 #include "engine/core/render/RenderTargetManager.h"
 #include "module.h"
 #include "engine/core/render/renderstage/RenderStage.h"
@@ -157,15 +157,15 @@ namespace Echo
 		// 加载项目文件
 		loadProject(cfg.projectFile.c_str());
 
-		LuaBind::instance();
+		LuaBinder::instance();
 
 		// register all basic class types
 		registerClassTypes();
 
 		{
 			//test
-			LuaBind::instance()->loadFile("Res://lua/a.lua");
-			LuaBind::instance()->call("calla");
+			LuaBinder::instance()->loadFile("Res://lua/a.lua");
+			LuaBinder::instance()->call("calla");
 		}
 
 
@@ -390,7 +390,7 @@ namespace Echo
 #endif
 		// 销毁时间控制器
 		EngineTimeController::destroy();
-		LuaBind::destroy();
+		LuaBinder::destroy();
 		MemoryManager::destroyInstance();
 	}
 

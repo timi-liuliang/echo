@@ -5,7 +5,6 @@
 #include "engine/core/Util/Exception.h"
 #include "TextureResManager.h"
 #include "render/PixelFormat.h"
-#include "TextureLoader.h"
 #include "engine/core/Math/EchoMathFunction.h"
 
 namespace Echo

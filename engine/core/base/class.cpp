@@ -1,6 +1,6 @@
 #include "class.h"
 #include <map>
-#include "engine/core/script/lua/LuaBind.h"
+#include "engine/core/script/lua/LuaBinder.h"
 
 namespace Echo
 {
