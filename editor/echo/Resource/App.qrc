@@ -1,5 +1,8 @@
 <RCC>
   <qresource prefix="/icon">
+    <file>Icon/log/CheckError.png</file>
+    <file>Icon/log/CheckWarning.png</file>
+    <file>Icon/log/info.png</file>
     <file>node/live2dcubism.png</file>
     <file>node/node.png</file>
     <file>Icon/icon.png</file>
@@ -41,8 +44,6 @@
     <file>Icon/repeat.png</file>
     <file>Icon/revocation.png</file>
     <file>Icon/root.png</file>
-    <file>Icon/CheckError.png</file>
-    <file>Icon/CheckWarning.png</file>
     <file>Icon/new.png</file>
     <file>Icon/open.png</file>
     <file>Icon/save.png</file>
@@ -122,7 +123,6 @@
   </qresource>
   <qresource prefix="/Project">
     <file>Project/blank_project.7z</file>
-    <file>Project/CppScript_BehaviorTemplate.cpp_t</file>
     <file>Project/LuaScript_BehaviorTemplate.lua_t</file>
   </qresource>
 </RCC>

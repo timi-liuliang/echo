@@ -233,9 +233,9 @@ namespace QT_UI
 		this->layout()->addWidget(m_listView);
 
 		// 开启缩略图线程
-		m_thumbnailThread = EchoNew( WorkerThread(this));
-		m_thumbnailThread->set(this);
-		m_thumbnailThread->start();
+		//m_thumbnailThread = EchoNew( WorkerThread(this));
+		//m_thumbnailThread->set(this);
+		//m_thumbnailThread->start();
 
 		// 消息链接
 		QObject::connect(m_listView, &QListView::clicked, this, &QPreviewWidget::onClicked);
@@ -250,8 +250,8 @@ namespace QT_UI
 	// 析构函数
 	QPreviewWidget::~QPreviewWidget()
 	{
-		m_thumbnailThread->shutdown();
-		EchoSafeDelete(m_thumbnailThread, WorkerThread);
+		//m_thumbnailThread->shutdown();
+		//EchoSafeDelete(m_thumbnailThread, WorkerThread);
 
 		for (auto& it : m_iconCaches)
 		{
@@ -382,7 +382,7 @@ namespace QT_UI
 		}
 		else
 		{
-			m_thumbnailThread->addTask(fileName.c_str(), icon.toStdString().c_str());
+			//m_thumbnailThread->addTask(fileName.c_str(), icon.toStdString().c_str());
 			thumbnailPath = "";
 
 			//widgetItem = new QListWidgetItem(QIcon(thumbnailPath.c_str()), fileNameWithoutExt.c_str());
@@ -404,7 +404,7 @@ namespace QT_UI
 
 	void QPreviewWidget::addThumbnailThreadTask(const char* name, const char* thumbNailFile)
 	{
-		m_thumbnailThread->addTask(name, thumbNailFile);
+		//m_thumbnailThread->addTask(name, thumbNailFile);
 	}
 
 	// 获取当前选中项
@@ -486,7 +486,7 @@ namespace QT_UI
 		//m_listWidget->clear();
 		m_listModel->clear();
 
-		m_thumbnailThread->clear();
+		//m_thumbnailThread->clear();
 	}
 
 	// 单击时触发

@@ -24,6 +24,7 @@
 #include "engine/core/render/render/Video.h"
 #include "EngineTimeController.h"
 #include "engine/core/script/lua/LuaEx.h"
+#include "engine/core/script/lua/register_core_to_lua.cxx"
 #include "engine/core/render/RenderTargetManager.h"
 #include "module.h"
 #include "engine/core/render/renderstage/RenderStage.h"
@@ -48,7 +49,6 @@ namespace Echo
 	// 输出引擎状态
 	void FrameState::output()
 	{
-		// to do it 磊哥
 	}
 
 	__ImplementSingleton(Root);
@@ -157,18 +157,19 @@ namespace Echo
 		// 加载项目文件
 		loadProject(cfg.projectFile.c_str());
 
-		luaex::LuaEx::instance();
-
-		// register all basic class types
-		registerClassTypes();
-
+		// lua script
 		{
-			//test
-			luaex::LuaEx::instance()->loadfile("Res://lua/a.lua");
-			luaex::LuaEx::instance()->callf("calla");
+			luaex::LuaEx::instance();
+			register_core_to_lua();
+			registerClassTypes();
+
+			{
+				//test
+				luaex::LuaEx::instance()->loadfile("Res://lua/a.lua");
+				luaex::LuaEx::instance()->callf("calla");
+			}
 		}
-
-
+		
 		// 音频管理器
 		m_audioManager = EchoNew(FSAudioManager);
 		m_audioManager->init(cfg.m_AudiomaxVoribsCodecs,cfg.m_AudioLoadDecompresse);

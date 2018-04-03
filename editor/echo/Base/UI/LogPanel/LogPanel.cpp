@@ -38,9 +38,11 @@ namespace Studio
 	{
 		switch (level)
 		{
-		case LL_WARNING: OutMsg(level, msg.toStdString().c_str(), ":/icon/Icon/CheckWarning.png"); break;
+		case LL_WARNING: OutMsg(level, msg.toStdString().c_str(), ":/icon/Icon/log/CheckWarning.png"); break;
 		case LL_ERROR:
-		case LL_FATAL:	OutMsg(level, msg.toStdString().c_str(), ":/icon/Icon/CheckError.png");	break;
+		case LL_FATAL:	OutMsg(level, msg.toStdString().c_str(), ":/icon/Icon/log/CheckError.png");	break;
+		case LL_INFO:
+		case LL_DEBUG:	OutMsg(level, msg.toStdString().c_str(), ":/icon/Icon/log/info.png"); break;
 		default:								break;
 		}
 	}

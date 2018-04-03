@@ -94,6 +94,8 @@
    </layout>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../../Resource/App.qrc"/>
+ </resources>
  <connections/>
 </ui>

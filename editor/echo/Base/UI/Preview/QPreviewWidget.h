@@ -151,7 +151,7 @@ namespace QT_UI
 		QStandardItemModel*			m_listModel;		// list model
 		QSortFilterProxyModel*		m_listProxyModel;	// list sort and filter proxy model
 
-		WorkerThread*				m_thumbnailThread;	// 缩略图生成线程
+		//WorkerThread*				m_thumbnailThread;	// 缩略图生成线程
 
 		std::vector<QString>		m_typesFilter;		// 
 		IconMap						m_iconMaps;			// 图标
