@@ -21,17 +21,6 @@ namespace Studio
 		m_dirModel->Clean();
 
 		QObject::connect(m_dirModel, SIGNAL(FileSelected(const char*)), this, SLOT(onSelectDir(const char*)));
-
-		//QStringList titleLable;
-		//titleLable << "Assets";
-		//m_dirModel->setHorizontalHeaderLabels(titleLable);
-
-		//const Echo::ResourceGroupManager::ArchiveList& archiveList = EchoResourceManager->getArchiveList();
-		//for (Echo::Archive* archive : archiveList)
-		{
-		//	m_dirModel->SetRootPath(archive->getName().c_str(), "none", m_resDirView, NULL/*m_proxyModel*/);
-		//	m_dirModel->Refresh();
-		}
 	}
 
 	// 析构函数
@@ -56,6 +45,6 @@ namespace Studio
 	// 选择文件夹
 	void ResPanel::onSelectDir(const char* dir)
 	{
-
+		int a = 10;
 	}
 }

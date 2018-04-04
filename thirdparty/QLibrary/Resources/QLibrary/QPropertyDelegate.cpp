@@ -10,7 +10,6 @@
 #include "QColorSelect.h"
 #include "QCheckBoxList.h"
 #include "QUVEditor.h"
-#include "Q2ndEditorButton.h"
 #include <QCheckBox>
 #include <QComboBox>
 #include <QApplication>
@@ -188,10 +187,6 @@ namespace QT_UI
 			m_model->ThrowSelfDefineSig("BoneSelectComboBoxEdit", propertyName, reinterpret_cast<qintptr>(pWidget));
 			return pWidget;
 		}
-		else if (widgetType == "2ndEditor")
-		{
-			return new Q2ndEditor(m_model, parent); 
-		}
 		else if (widgetType == "default")
 		{
 			return QStyledItemDelegate::createEditor(parent, option, index);
@@ -293,12 +288,6 @@ namespace QT_UI
 				}
 				widget->setCurrentText(value.toString());
 			}
-			else if (widgetType == "2ndEditor")
-			{
-				Q2ndEditor* widget = qobject_cast<Q2ndEditor*>(editor); 
-				widget->setText(value.toString()); 
-			}
-
 			else if( widgetType == "default")
 			{
 				QStyledItemDelegate::setEditorData(editor, index);
@@ -391,12 +380,6 @@ namespace QT_UI
 				QComboBox* widget = qobject_cast<QComboBox*>(editor);
 				m_model->setValue(propertyName, widget->currentText());
 			}
-			else if (widgetType == "2ndEditor")
-			{
-				Q2ndEditor* widget = qobject_cast<Q2ndEditor*>(editor);
-				m_model->setValue(propertyName, widget->text());
-			}
-
 			else if( widgetType == "default")
 			{
 				QStyledItemDelegate::setModelData(editor, model, index);

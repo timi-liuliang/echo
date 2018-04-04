@@ -4,6 +4,7 @@
 #include "ui_ResPanel.h"
 #include "QProperty.hpp"
 #include <QDirectoryModel.h>
+#include <QPreviewWidget.h>
 
 namespace Studio
 {
@@ -23,6 +24,7 @@ namespace Studio
 		void onSelectDir(const char* dir);
 
 	private:
-		QT_UI::QDirectoryModel*		m_dirModel;		// Ŀ¼
+		QT_UI::QDirectoryModel*		m_dirModel;
+		QT_UI::QPreviewWidget*		m_previewWidget;
 	};
 }

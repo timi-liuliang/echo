@@ -81,8 +81,6 @@ namespace QT_UI
 		// 双击某文件
 		void OnEditFile( const QModelIndex& pIndex);
 
-		void OnThreadFindDirectory();
-
 	private:
 		QTreeView*						m_treeView;		// treeView
 		QSortFilterProxyModel*			m_proxy;		// 排序代理模型
@@ -93,14 +91,5 @@ namespace QT_UI
 		std::vector< QStandardItem*>	m_dirItems;		// 所有目录item
 		QModelIndex						m_currentSelect;// 当前选中
 		Echo::Dword						m_selectTime;	// 当前选中时间
-
-		struct RingQueueElem
-		{
-			QStandardItem* parent;
-			QStandardItem* child;
-			RingQueueElem() : parent(NULL), child(NULL) {}
-			RingQueueElem(QStandardItem* _parent, QStandardItem* _child) : parent(_parent), child(_child) {}
-		};
-		//scl::ring_queue<RingQueueElem, 256> m_threadRingQueue; //ring queue for thread mode
 	};
 }

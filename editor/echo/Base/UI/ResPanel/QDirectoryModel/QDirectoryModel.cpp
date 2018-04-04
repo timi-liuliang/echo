@@ -13,7 +13,6 @@ namespace QT_UI
 		, m_proxy(NULL)
 		, m_selectTime(0)
 	{
-		connect(this, &QDirectoryModel::signalThreadFindDirectory, this, &QDirectoryModel::OnThreadFindDirectory);
 	}
 
 	// 设置主目录, 文件类型过滤
@@ -267,18 +266,6 @@ namespace QT_UI
 		}
 
 		emit FileEdit(filePath.toStdString().c_str());
-	}
-
-	void QDirectoryModel::OnThreadFindDirectory()
-	{
-		//if (m_threadRingQueue.used() <= 0)
-			return;
-		RingQueueElem elem;
-		//m_threadRingQueue.pop_front(elem);
-		if (NULL != elem.parent && NULL != elem.child)
-		{
-			elem.parent->setChild(elem.parent->rowCount(), elem.child);
-		}
 	}
 
 	void QDirectoryModel::ClearThreadRingQueue()
