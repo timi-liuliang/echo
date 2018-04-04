@@ -2,6 +2,7 @@
 #include <QDateTime>
 #include <QMenuBar>
 #include "ResPanel.h"
+#include "engine/core/util/PathUtil.h"
 #include "engine/core/main/Root.h"
 
 namespace Studio
@@ -21,6 +22,8 @@ namespace Studio
 		m_dirModel->Clean();
 
 		QObject::connect(m_dirModel, SIGNAL(FileSelected(const char*)), this, SLOT(onSelectDir(const char*)));
+
+		m_previewHelper = new QT_UI::QPreviewHelper(m_listView);
 	}
 
 	// 析构函数
@@ -40,11 +43,14 @@ namespace Studio
 
 		m_dirModel->SetRootPath(Echo::Root::instance()->getResPath().c_str(), "none", m_resDirView, NULL);
 		m_dirModel->Refresh();
+
+		onSelectDir(Echo::Root::instance()->getResPath().c_str());
 	}
 
 	// 选择文件夹
 	void ResPanel::onSelectDir(const char* dir)
 	{
-		int a = 10;
+		m_previewHelper->clear();
+		m_previewHelper->setPath(dir);
 	}
 }

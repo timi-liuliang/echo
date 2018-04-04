@@ -37,7 +37,11 @@
         <bool>true</bool>
        </property>
       </widget>
-      <widget class="QTreeView" name="treeView"/>
+      <widget class="QListView" name="m_listView">
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+      </widget>
      </widget>
     </item>
    </layout>

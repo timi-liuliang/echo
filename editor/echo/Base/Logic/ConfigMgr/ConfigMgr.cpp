@@ -11,7 +11,7 @@ namespace Studio
 		: m_outPutDir( "" )
 		, m_maxRecentProjects( 10)
 	{
-		m_cfgFile = Echo::PathUtil::GetCurrentDir() + "/Cache/astudio.cfg";
+		m_cfgFile = Echo::PathUtil::GetCurrentDir() + "/cache/echo.cache";
 	}
 
 	// Îö¹¹º¯Êý

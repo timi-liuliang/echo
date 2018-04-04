@@ -4,7 +4,7 @@
 #include "ui_ResPanel.h"
 #include "QProperty.hpp"
 #include <QDirectoryModel.h>
-#include <QPreviewWidget.h>
+#include "QPreviewHelper.h"
 
 namespace Studio
 {
@@ -25,6 +25,6 @@ namespace Studio
 
 	private:
 		QT_UI::QDirectoryModel*		m_dirModel;
-		QT_UI::QPreviewWidget*		m_previewWidget;
+		QT_UI::QPreviewHelper*		m_previewHelper;
 	};
 }
