@@ -69,6 +69,7 @@ namespace Studio
 		//move(-value, y());
 	}
 
+	// paint the ruler
 	void Ruler::paintEvent(QPaintEvent* event)
 	{
 		Q_UNUSED(event);
@@ -121,17 +122,17 @@ namespace Studio
 		//绘制当前帧标注外框及标注线
 		if (m_CurrentFrame != -1)
 		{
-			//框
-			QRectF rect;
-			rect.setX(m_CurrentFrame * kUnitWidth - offsetValue);
-			rect.setY(0);
-			rect.setWidth(kUnitWidth);
-			rect.setHeight(kUnitHeight);
-			painter.drawRect(rect);
+			////框
+			//QRectF rect;
+			//rect.setX(m_CurrentFrame * kUnitWidth - offsetValue);
+			//rect.setY(0);
+			//rect.setWidth(kUnitWidth);
+			//rect.setHeight(kUnitHeight);
+			//painter.drawRect(rect);
 			
 			//线
-			QPointF point1(m_CurrentFrame * kUnitWidth + kUnitWidth/2.0 - offsetValue, 0);
-			QPointF point2(m_CurrentFrame * kUnitWidth + kUnitWidth/2.0 - offsetValue,kUnitHeight + 2);
+			QPointF point1(m_CurrentFrame * kUnitWidth/* + kUnitWidth/2.0*/ - offsetValue, 0);
+			QPointF point2(m_CurrentFrame * kUnitWidth/* + kUnitWidth/2.0*/ - offsetValue,kUnitHeight + 2);
 			painter.setPen(kCurFrameLineColor);
 			QPen pen(kCurFrameLineColor); 
 			pen.setWidth(2); 
@@ -140,5 +141,4 @@ namespace Studio
 		}
 
 	}
-}  // namespace Studio
-
+} 

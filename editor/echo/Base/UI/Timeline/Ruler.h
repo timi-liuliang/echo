@@ -7,6 +7,7 @@ namespace Studio
 	class Ruler : public QWidget
 	{
 		Q_OBJECT
+
 	public:
 		explicit Ruler(QWidget* parent = 0);
 		//更新面板的时间纵轴
@@ -24,6 +25,7 @@ namespace Studio
 		void frameClicked(int);
 
 	protected:
+		// Ruler painer code
 		void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
 
 	private:
@@ -33,6 +35,5 @@ namespace Studio
 		unsigned int m_msPerFrame;
 		unsigned int m_framePerSecond; 
 	};
-
-}  // namespace Studio
+}
 

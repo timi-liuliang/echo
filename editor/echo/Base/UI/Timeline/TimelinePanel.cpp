@@ -222,6 +222,4 @@ namespace Studio
 			}
 		}
 	}
-
-
-}  // namespace Studio
+}
