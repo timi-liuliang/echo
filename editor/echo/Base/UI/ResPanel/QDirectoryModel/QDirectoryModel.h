@@ -34,8 +34,8 @@ namespace QT_UI
 		bool IsSupportExt( const string& ext);
 
 		// 刷新显示
-		void Refresh() { Refresh(false, NULL); }
-		void Refresh(bool thread, volatile bool* interrupt);
+		void Refresh() { Refresh(NULL); }
+		void Refresh(volatile bool* interrupt);
 
 		// 设置图标
 		void SetIcon( const char* name, const QIcon& icon){ m_iconMaps[name] = icon; }
@@ -54,8 +54,8 @@ namespace QT_UI
 
 	private:
 		// 迭代目录
-		void RecursiveDir( const string& dir, QStandardItem* parentItem) { RecursiveDir(dir, parentItem, false, NULL); }
-		void RecursiveDir( const string& dir, QStandardItem* parentItem, bool thread, volatile bool* interrupt);
+		void RecursiveDir( const string& dir, QStandardItem* parentItem) { RecursiveDir(dir, parentItem, NULL); }
+		void RecursiveDir( const string& dir, QStandardItem* parentItem, volatile bool* interrupt);
 
 		// 获取文件图标
 		QIcon getFileIcon( const char* fullPath);

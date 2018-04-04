@@ -54,6 +54,8 @@ namespace Studio
 
 		this->tabifyDockWidget(AStudio::Instance()->getLogPanel(), m_debuggerPanel);
 		this->tabifyDockWidget(m_debuggerPanel, m_timelinePanel);
+
+		m_resPanel->onOpenProject();
 	}
 
 	// ±£´æÎÄ¼ş

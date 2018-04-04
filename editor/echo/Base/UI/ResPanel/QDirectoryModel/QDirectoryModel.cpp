@@ -97,7 +97,7 @@ namespace QT_UI
 	}
 
 	// 刷新显示
-	void QDirectoryModel::Refresh(bool thread, bool volatile* interrupt)
+	void QDirectoryModel::Refresh(bool volatile* interrupt)
 	{
 		if (Echo::PathUtil::IsDirExist(m_rootPath.c_str()))
 		{
@@ -108,19 +108,17 @@ namespace QT_UI
 			Echo::PathUtil::FormatPath(pathName);
 			Echo::String dirName = Echo::PathUtil::GetLastDirName(pathName);
 			QStandardItem* rootItem = new QStandardItem;
-			rootItem->setText(dirName.c_str());
+			rootItem->setText("Res://");
 			rootItem->setIcon(m_iconMaps["root"]);
 			rootItem->setData(m_rootPath.c_str(), Qt::UserRole);
 
-			if (thread)
-			{
-				_addToRingQueue(invisibleRootItem(), rootItem);
-			}
-			else
-				invisibleRootItem()->setChild(invisibleRootItem()->rowCount(), 0, rootItem);
+			invisibleRootItem()->setChild(invisibleRootItem()->rowCount(), 0, rootItem);
 
 			m_dirItems.push_back(rootItem);
-			RecursiveDir(m_rootPath, rootItem, thread, interrupt);
+			RecursiveDir(m_rootPath, rootItem, interrupt);
+
+			// expand root index
+			m_treeView->expand(rootItem->index());
 		}
 	}
 
@@ -138,7 +136,7 @@ namespace QT_UI
 	}
 
 	// 迭代目录
-	void QDirectoryModel::RecursiveDir(const string& dir, QStandardItem* parentItem, bool thread, volatile bool* interrupt)
+	void QDirectoryModel::RecursiveDir(const string& dir, QStandardItem* parentItem, volatile bool* interrupt)
 	{
 		vector<QStandardItem*> dirItems;
 		vector<QStandardItem*> fileItems;
@@ -157,15 +155,11 @@ namespace QT_UI
 				childItem->setText(dirName.c_str());
 				childItem->setIcon(m_iconMaps["filter"]);
 				childItem->setData(fileDirs[i].c_str(), Qt::UserRole);
-				if (thread)
-				{
-					_addToRingQueue(parentItem, childItem);
-				}
-				else
-					dirItems.push_back(childItem);
+
+				dirItems.push_back(childItem);
 
 				m_dirItems.push_back(childItem);
-				RecursiveDir(fileDirs[i].c_str(), childItem, thread, interrupt);
+				RecursiveDir(fileDirs[i].c_str(), childItem, interrupt);
 			}
 			else
 			{
@@ -179,8 +173,7 @@ namespace QT_UI
 					childItem->setIcon(getFileIcon(fileDirs[i].c_str()));
 					childItem->setData(fileDirs[i].c_str(), Qt::UserRole);
 
-					if (!thread)
-						fileItems.push_back(childItem);
+					fileItems.push_back(childItem);
 				}
 			}
 		}
@@ -188,7 +181,6 @@ namespace QT_UI
 		int tRow = 0;
 
 		// 先插入目录
-		if (!thread)
 		{
 			for (size_t i = 0; i < dirItems.size(); i++)
 			{
@@ -293,15 +285,4 @@ namespace QT_UI
 	{
 		//m_threadRingQueue.clear_unsafe();
 	}
-
-	void QDirectoryModel::_addToRingQueue(QStandardItem* parent, QStandardItem* child)
-	{
-		//while (m_threadRingQueue.free() == 0)
-		//	scl::sleep(100);
-		//m_threadRingQueue.push_back(RingQueueElem(parent, child));
-		//emit signalThreadFindDirectory();
-	}
-
-
-
 }
