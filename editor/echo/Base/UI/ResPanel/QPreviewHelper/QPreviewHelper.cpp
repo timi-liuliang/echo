@@ -7,12 +7,7 @@ namespace QT_UI
 	QPreviewHelper::QPreviewHelper(QListView* view)	
 		: m_listView(view)
 	{
-		m_listView->setIconSize(QSize(64, 64));
-		m_listView->setResizeMode(QListView::Adjust);
-		m_listView->setViewMode(QListView::IconMode);
-		m_listView->setMovement(QListView::Static);
-		m_listView->setWordWrap(true);
-		m_listView->setSpacing(10);
+		setUseIconMode();
 
 		m_listModel = new QStandardItemModel(m_listView);
 
@@ -94,5 +89,43 @@ namespace QT_UI
 	void QPreviewHelper::clear()
 	{
 		m_listModel->clear();
+	}
+
+	// set mode
+	void QPreviewHelper::setUseIconMode()
+	{
+		m_listView->setIconSize(QSize(64, 64));
+		m_listView->setResizeMode(QListView::Adjust);
+		m_listView->setViewMode(QListView::IconMode);
+		m_listView->setMovement(QListView::Free);
+		m_listView->setFlow(QListView::LeftToRight);
+		//m_listView->setWrapping(false);
+		m_listView->setWordWrap(true);
+		m_listView->setSpacing(5);
+	}
+
+	// set use list Mode
+	void QPreviewHelper::setUseListMode()
+	{
+		m_listView->setIconSize(QSize(30, 30));
+		m_listView->setResizeMode(QListView::Adjust);
+		m_listView->setViewMode(QListView::ListMode);
+		m_listView->setMovement(QListView::Free);
+		m_listView->setWordWrap(true);
+		m_listView->setSpacing(0);
+	}
+
+	// when resize list view, modify spacing
+	void QPreviewHelper::onListViewResize()
+	{
+		if (m_listView->viewMode() == QListView::IconMode)
+		{
+			float listViewWidth = m_listView->geometry().width() -26;
+			float iconSizeWidth = m_listView->iconSize().width();
+			int numberIcons = std::max<int>(listViewWidth / iconSizeWidth, 1);
+			int spacing = std::max<int>(listViewWidth - numberIcons * iconSizeWidth, 0) / numberIcons / 2;
+
+			m_listView->setSpacing(std::max<int>(spacing, 0));
+		}
 	}
 }

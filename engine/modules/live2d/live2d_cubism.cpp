@@ -89,7 +89,7 @@ namespace Echo
 		// set log fun
 		csmSetLogFunction(csmLogFunc);
 
-		setMoc("Res://girl/girl.moc3");
+		setMoc("Res://cartoon/cartoon.moc3");
 		buildRenderable();
 
 		{
@@ -289,7 +289,7 @@ namespace Echo
 		m_materialInst->setOfficialMaterialContent(g_live2dDefaultMaterial);
 		m_materialInst->setRenderStage("Transparent");
 		m_materialInst->applyLoadedData();
-		m_materialInst->setTexture(0, "Res://girl/texture/texture_00.png");
+		m_materialInst->setTexture(0, "Res://cartoon/cartoon.png");
 
 		m_renderable = Renderable::create(m_mesh, m_materialInst, this);
 	}

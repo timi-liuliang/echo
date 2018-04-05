@@ -64,7 +64,8 @@ namespace Studio
 		nodeItem->setIcon(0, QIcon(iconPath.c_str()));
 		nodeItem->setData(0, Qt::UserRole, QVariant::fromValue((void*)node));
 
-		QObject::connect(m_nodeTreeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(addNodeToScene(QTreeWidgetItem *item, int)));
+		// show property
+		m_nodeTreeWidget->setCurrentItem(nodeItem);
 
 		if (recursive)
 		{
@@ -110,6 +111,9 @@ namespace Studio
 				parentItem->setExpanded(true);
 			}
 		}
+
+		// show property
+		showSelectedNodeProperty();
 	}
 
 	// 显示当前选中节点属性

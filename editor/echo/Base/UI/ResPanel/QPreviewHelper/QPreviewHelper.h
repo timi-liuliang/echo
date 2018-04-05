@@ -17,6 +17,9 @@ namespace QT_UI
 		// clear all items
 		void clear();
 
+		// when resize list view
+		void onListViewResize();
+
 	private:
 		// add item
 		void addItem(const char* filePath);
@@ -26,6 +29,12 @@ namespace QT_UI
 
 		// get icon
 		QIcon QPreviewHelper::getFileIcon(const char* fullPath);
+
+		// set mode
+		void setUseIconMode();
+
+		// set use list Mode
+		void setUseListMode();
 
 	private:
 		QListView*				m_listView;

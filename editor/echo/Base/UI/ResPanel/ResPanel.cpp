@@ -24,6 +24,11 @@ namespace Studio
 		QObject::connect(m_dirModel, SIGNAL(FileSelected(const char*)), this, SLOT(onSelectDir(const char*)));
 
 		m_previewHelper = new QT_UI::QPreviewHelper(m_listView);
+
+
+		// test
+		QRect geom = m_listView->geometry();
+		int  a = 10;
 	}
 
 	// 析构函数
@@ -45,6 +50,8 @@ namespace Studio
 		m_dirModel->Refresh();
 
 		onSelectDir(Echo::Root::instance()->getResPath().c_str());
+
+		resizeEvent(nullptr);
 	}
 
 	// 选择文件夹
@@ -52,5 +59,11 @@ namespace Studio
 	{
 		m_previewHelper->clear();
 		m_previewHelper->setPath(dir);
+	}
+
+	// reimplement reiszeEvent function
+	void ResPanel::resizeEvent(QResizeEvent * e)
+	{
+		m_previewHelper->onListViewResize();
 	}
 }

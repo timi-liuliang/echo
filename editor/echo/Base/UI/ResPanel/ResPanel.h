@@ -23,6 +23,10 @@ namespace Studio
 		// 选择文件夹
 		void onSelectDir(const char* dir);
 
+	protected:
+		// reimplement reiszeEvent function
+		virtual void resizeEvent(QResizeEvent * e);
+
 	private:
 		QT_UI::QDirectoryModel*		m_dirModel;
 		QT_UI::QPreviewHelper*		m_previewHelper;
