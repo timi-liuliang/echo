@@ -65,7 +65,7 @@ namespace Echo
 	}
 
 	// add property
-	bool Class::registerProperty(const String& className, const String& propertyName, const Variant::Type type, const String& getter, const String& setter)
+	bool Class::registerProperty(const String& className, const String& propertyName, const Variant::Type type, void* getter, const String& setter)
 	{
 		auto it = g_classInfos->find(className);
 		if (it != g_classInfos->end())
@@ -93,5 +93,26 @@ namespace Echo
 
 		static PropertyInfos invalid;
 		return invalid;
+	}
+
+	// get property value
+	const String& Class::getPropertyValue(const Object* classPtr, const String& propertyName)
+	{
+		const String& className = classPtr->getClassName();
+		auto it = g_classInfos->find(className);
+		if (it != g_classInfos->end())
+		{
+			ObjectFactory* objFactory = it->second;
+			objFactory->getPropertyValue(classPtr, propertyName);
+		}
+
+		static String invalid = "";
+		return invalid;
+	}
+
+	// set property value
+	bool Class::setPropertyValue(const Object* classPtr, const String& className, const String& propertyValue)
+	{
+		return false;
 	}
 }

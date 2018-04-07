@@ -45,6 +45,7 @@ namespace Echo
 			Vector2		m_uv;
 		};
 		typedef vector<VertexFormat>::type	VertexArray;
+		typedef vector<Word>::type	IndiceArray;
 
 		struct Drawable
 		{
@@ -59,6 +60,12 @@ namespace Echo
 			VertexArray			m_vertices;
 			Box					m_box;
 			vector<Word>::type	m_indices;
+
+			void reset()
+			{
+				m_vertices.clear();
+				m_indices.clear();
+			}
 		};
 
 	public:
@@ -71,20 +78,18 @@ namespace Echo
 		// set moc
 		void setMoc(const String& res);
 
+		// set parameter value
+		void setParameter(const String& name, float value);
+
+	protected:
 		// build drawable
 		void buildRenderable();
 
-		void test()
-		{
-			int a = 10;
-		}
-
-	protected:
 		// update
 		virtual void update();
 
 		// update vertex buffer
-		void updateVertexBuffer();
+		void updateMeshBuffer();
 
 		// parse paramters
 		void parseParams();
@@ -98,10 +103,14 @@ namespace Echo
 		// parse drawables
 		void parseDrawables();
 
+		// build mesh data by drawables data
+		void buildMeshDataByDrawables(VertexArray& oVertices, IndiceArray& oIndices);
+
 		// 获取全局变量值
 		virtual void* getGlobalUniformValue(const String& name);
 
 	private:
+		MemoryReaderAlign*		m_mocMemory;
 		csmMoc*					m_moc;
 		ui32					m_modelSize;
 		void*					m_modelMemory;

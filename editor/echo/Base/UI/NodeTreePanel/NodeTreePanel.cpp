@@ -125,14 +125,14 @@ namespace Studio
 		Echo::Node* node = getCurrentSelectNode();
 		if (node)
 		{
-			showNodePropertyRecursive(node->getClassName());
+			showNodePropertyRecursive(node, node->getClassName());
 		}
 
 		m_propertyHelper.applyTo(node->getName(), m_propertyTreeView, this, SLOT(refreshPropertyToNode(const QString&, QVariant)), false);
 	}
 
 	// œ‘ æ Ù–‘
-	void NodeTreePanel::showNodePropertyRecursive(const Echo::String& className)
+	void NodeTreePanel::showNodePropertyRecursive(Echo::Object* classPtr, const Echo::String& className)
 	{
 		// show parent property first
 		Echo::String parentClassName;
@@ -140,7 +140,7 @@ namespace Studio
 		{
 			// don't display property of object
 			if(parentClassName!="Object")
-				showNodePropertyRecursive(parentClassName);
+				showNodePropertyRecursive(classPtr, parentClassName);
 		}
 
 		// show self property
@@ -149,7 +149,9 @@ namespace Studio
 			const Echo::PropertyInfos& propertys = Echo::Class::getPropertys(className);
 			for (const Echo::PropertyInfo& prop : propertys)
 			{
-				m_propertyHelper.addItem(prop.m_name.c_str(), true, QT_UI::WT_CheckBox);
+				const Echo::String& propValue = Echo::Class::getPropertyValue( classPtr, prop.m_name);
+
+				m_propertyHelper.addItem(prop.m_name.c_str(), propValue, QT_UI::WT_CheckBox);
 			}
 		}
 		m_propertyHelper.endMenu();

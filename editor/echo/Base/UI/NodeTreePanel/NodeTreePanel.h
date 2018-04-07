@@ -44,7 +44,7 @@ namespace Studio
 
 	private:
 		// 递归显示属性
-		void showNodePropertyRecursive(const Echo::String& className);
+		void showNodePropertyRecursive(Echo::Object* classPtr, const Echo::String& className);
 
 	private:
 		NewNodeDialog*					m_newNodeDialog;		// 新建结点

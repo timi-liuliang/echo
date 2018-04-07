@@ -81,7 +81,8 @@ namespace Echo
 	}
 
 	Live2dCubism::Live2dCubism()
-		: m_moc(nullptr)
+		: m_mocMemory(nullptr)
+		, m_moc(nullptr)
 		, m_model(nullptr)
 		, m_modelSize(0)
 		, m_modelMemory(nullptr)
@@ -101,15 +102,16 @@ namespace Echo
 
 	Live2dCubism::~Live2dCubism()
 	{
-		EchoSafeFreeAlign(m_modelMemory, csmAlignofModel);
+		EchoSafeDelete(m_mocMemory, MemoryReaderAlign);
+		EchoSafeFreeAlign(m_mocMemory, csmAlignofModel);
 	}
 
 	void Live2dCubism::bindMethods()
 	{
-		luaex::LuaEx::instance()->register_function<Live2dCubism>("Live2dCubism", "test", &Live2dCubism::test);
+		//luaex::LuaEx::instance()->register_function<Live2dCubism>("Live2dCubism", "test", &Live2dCubism::test);
 
-		CLASS_REGISTER_PROPERTY(Live2dCubism, "Moc", Variant::String, "getMoc", "setMoc");
-		CLASS_REGISTER_PROPERTY(Live2dCubism, "Texture", Variant::String, "getPos", "setPos");
+		//CLASS_REGISTER_PROPERTY(Live2dCubism, "Moc", Variant::String, "getMoc", "setMoc");
+		//CLASS_REGISTER_PROPERTY(Live2dCubism, "Texture", Variant::String, "getPos", "setPos");
 	}
 
 	// parse paramters
@@ -181,6 +183,7 @@ namespace Echo
 			{
 				// reference
 				Drawable& drawable = m_drawables[i];
+				drawable.reset();
 
 				drawable.m_name = ids[i];
 				drawable.m_constantFlag = constantFlags[i];
@@ -243,10 +246,10 @@ namespace Echo
 	// set moc
 	void Live2dCubism::setMoc(const String& res)
 	{
-		MemoryReaderAlign memReader( res, csmAlignofMoc);
-		if (memReader.getSize())
+		m_mocMemory = EchoNew(MemoryReaderAlign( res, csmAlignofMoc));
+		if (m_mocMemory->getSize())
 		{
-			m_moc = csmReviveMocInPlace(memReader.getData<void*>(), memReader.getSize());
+			m_moc = csmReviveMocInPlace(m_mocMemory->getData<void*>(), m_mocMemory->getSize());
 			if ( m_moc)
 			{
 				m_modelSize = csmGetSizeofModel(m_moc);
@@ -261,28 +264,31 @@ namespace Echo
 		}
 	}
 
+	// set parameter value
+	void Live2dCubism::setParameter(const String& name, float value)
+	{
+		float* curValues = csmGetParameterValues(m_model);
+		for (size_t i = 0; i < m_params.size(); i++)
+		{
+			if (m_params[i].m_name == name)
+			{
+				curValues[i] = value;
+				m_params[i].m_value = value;
+			}
+		}
+	}
+
 	// build drawable
 	void Live2dCubism::buildRenderable()
 	{
-		VertexArray			vertices;
-		vector<Word>::type	indices;
-		for (Drawable& drawable : m_drawables)
-		{
-			ui32 vertOffset = vertices.size();
-
-			// vertices
-			for (VertexFormat& vert : drawable.m_vertices)
-				vertices.push_back(vert);
-
-			// indices
-			for (int idx : drawable.m_indices)
-				indices.push_back(idx + vertOffset);
-		}
+		VertexArray	vertices;
+		IndiceArray	indices;
+		buildMeshDataByDrawables(vertices, indices);
 
 		Mesh::VertexDefine define;
 		define.m_isUseDiffuseUV = true;
 
-		m_mesh = Mesh::create(true, false);
+		m_mesh = Mesh::create(true, true);
 		m_mesh->set(define, vertices.size(), (const Byte*)vertices.data(), indices.size(), indices.data(), m_localAABB);
 
 		m_materialInst = MaterialInst::create();
@@ -299,57 +305,55 @@ namespace Echo
 	{
 		if (m_model)
 		{
+			static float xx = 0.0f;
+			xx += 0.01f;
+			if (xx >= 1.0f)
+				xx = 0.f;
+
+			setParameter("ParamEyeLSmile", xx);
+
 			luaex::LuaEx::instance()->callf("update");
 
 			static Matrix4 scale; scale.scaleReplace(Vector3(0.3f, 0.3f, 0.3f));
 
 			m_matWVP = scale * NodeTree::instance()->get2DCamera()->getViewProjMatrix();;
 
-			//csmUpdateModel((csmModel*)m_model);
+			csmUpdateModel((csmModel*)m_model);
 
-			//updateVertexBuffer();
+			updateMeshBuffer();
 
 			m_renderable->submitToRenderQueue();
 		}
 	}
 
-	// update vertex buffer
-	void Live2dCubism::updateVertexBuffer()
+	// build mesh data by drawables data
+	void Live2dCubism::buildMeshDataByDrawables(VertexArray& oVertices, IndiceArray& oIndices)
 	{
-		int drawableCount = csmGetDrawableCount(m_model);
-		if (drawableCount > 0)
+		for (Drawable& drawable : m_drawables)
 		{
-			if (m_drawables.size() == drawableCount)
-			{
-				const int* vertexCounts = csmGetDrawableVertexCounts(m_model);
-				const csmVector2** positions = csmGetDrawableVertexPositions(m_model);
-				const csmVector2** uvs = csmGetDrawableVertexUvs(m_model);
+			ui32 vertOffset = oVertices.size();
 
-				for (int i = 0; i < drawableCount; i++)
-				{
-					// reference
-					Drawable& drawable = m_drawables[i];
-					drawable.m_vertices.clear();
-					drawable.m_box.reset();
+			// vertices
+			for (VertexFormat& vert : drawable.m_vertices)
+				oVertices.push_back(vert);
 
-					// vertexs
-					ui32 vertexCount = vertexCounts[i];
-					drawable.m_box.reset();
-					for (ui32 j = 0; j < vertexCount; j++)
-					{
-						const csmVector2& pos = positions[i][j];
-						const csmVector2& uv = uvs[i][j];
-
-						VertexFormat vert;
-						vert.m_position = Vector3(pos.X, pos.Y, 0.f);
-						vert.m_uv = Vector2(uv.X, 1.f-uv.Y);
-
-						drawable.m_vertices.push_back(vert);
-						drawable.m_box.addPoint(vert.m_position);
-					}
-				}
-			}			
+			// indices
+			for (int idx : drawable.m_indices)
+				oIndices.push_back(idx + vertOffset);
 		}
+	}
+
+	// update vertex buffer
+	void Live2dCubism::updateMeshBuffer()
+	{
+		parseDrawables();
+
+		VertexArray	vertices;
+		IndiceArray	indices;
+		buildMeshDataByDrawables(vertices, indices);
+
+		m_mesh->updateIndices(indices.size(), indices.data());
+		m_mesh->updateVertexs( vertices.size(), (const Byte*)vertices.data(), m_localAABB);
 	}
 
 	// 获取全局变量值
@@ -360,13 +364,4 @@ namespace Echo
 
 		return nullptr;
 	}
-
-	// update vertex buffer
-	//void Live2dCubism::updateVertexBuffer()
-	//{
-	//	if (m_mesh)
-	//	{
-			//m_mesh->updateVertexs(m_vertices.size(), (const Byte*)m_vertices.data(), m_box);
-	//	}
-	//}
 }

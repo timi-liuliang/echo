@@ -72,6 +72,8 @@ namespace Studio
 
 		// ÏÔÊ¾½çÃæ
 		setVisible( true);
+
+		m_logList->scrollToBottom();
 	}
 
 	void LogPanel::onClearMessage()

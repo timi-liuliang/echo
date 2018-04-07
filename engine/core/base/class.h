@@ -11,7 +11,7 @@ namespace Echo
 	{
 		String			m_name;
 		Variant::Type	m_type;
-		String			m_getter;
+		void*			m_getter;
 		String			m_setter;
 	};
 	typedef vector<PropertyInfo>::type PropertyInfos;
@@ -40,6 +40,9 @@ namespace Echo
 		{
 			return m_classInfo.m_propertyInfos;
 		}
+
+		// get property value
+		virtual const String& getPropertyValue(const Object* classPtr, const String& propertyName) = 0;
 	};
 
 	template<typename T>
@@ -60,6 +63,17 @@ namespace Echo
 		virtual Object* create()
 		{
 			return EchoNew(T);
+		}
+
+		// get property value
+		virtual const String& getPropertyValue(const Object* classPtr, const String& propertyName)
+		{
+			const T* realClassPtr = dynamic_cast<const T*>(classPtr);
+
+			int a = 10;
+
+			static String invalid = "";
+			return invalid;
 		}
 	};
 
@@ -96,16 +110,22 @@ namespace Echo
 		static bool getChildClasses(StringArray& childClasses, const String& className);
 
 		// add property
-		static bool registerProperty(const String& className, const String& propertyName, const Variant::Type type, const String& getter, const String& setter);
+		static bool registerProperty(const String& className, const String& propertyName, const Variant::Type type, void* getter, const String& setter);
 
 		// get propertys
 		static const PropertyInfos& getPropertys(const String& className);
+
+		// get property value
+		static const String& getPropertyValue(const Object* classPtr, const String& propertyName);
+
+		// set property value
+		static bool setPropertyValue(const Object* classPtr, const String& className, const String& propertyValue);
 	};
 }
 
 #define ECHO_CLASS(m_class, m_parent)												\
 public:																				\
-	virtual const String& getClassName()											\
+	virtual const String& getClassName() const										\
 	{																				\
 		static String className=#m_class;											\
 		return className;															\
