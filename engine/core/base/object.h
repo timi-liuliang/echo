@@ -8,6 +8,7 @@ namespace Echo
 	class Object
 	{
 	public:
+		Object();
 		virtual ~Object(){}
 
 		// get class name

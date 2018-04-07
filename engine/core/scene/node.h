@@ -15,6 +15,17 @@ namespace Echo
 		typedef set<Node*>::type ChildNodeSet;
 
 	public:
+		// lua script
+		struct LuaScript
+		{
+			String		m_file;					// file name
+			String		m_globalTableName;		// global table name
+
+			void start(Object* obj);
+			void update();
+		};
+
+	public:
 		Node();
 		virtual ~Node();
 
@@ -99,6 +110,8 @@ namespace Echo
 		bool			m_bModify;      //for caculate. ie: getWorldPostion
 		bool			m_bMatrixDirty; //for rendering.
 
-		Box				m_localAABB;		// local aabb
+		Box				m_localAABB;	// local aabb
+
+		LuaScript		m_script;		// bind script
 	};
 }

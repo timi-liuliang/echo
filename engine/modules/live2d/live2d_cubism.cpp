@@ -95,8 +95,10 @@ namespace Echo
 
 		{
 			//test
-			luaex::LuaEx::instance()->loadfile("Res://lua/live2dcubism.lua", true);
+			luaex::LuaEx::instance()->loadfile("Res://lua/live2dcubism_a.lua", true);
+
 			luaex::LuaEx::instance()->callf("start");
+			int  a = 10;
 		}
 	}
 
@@ -312,7 +314,7 @@ namespace Echo
 
 			setParameter("ParamEyeLSmile", xx);
 
-			luaex::LuaEx::instance()->callf("update");
+			//luaex::LuaEx::instance()->callf("update");
 
 			static Matrix4 scale; scale.scaleReplace(Vector3(0.3f, 0.3f, 0.3f));
 

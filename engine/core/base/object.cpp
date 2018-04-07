@@ -2,6 +2,10 @@
 
 namespace Echo
 {
+	Object::Object()
+	{
+	}
+
 	// get class name
 	const String& Object::getClassName() const
 	{

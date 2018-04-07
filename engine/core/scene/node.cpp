@@ -3,6 +3,16 @@
 
 namespace Echo
 {
+	void Node::LuaScript::start(Object* obj)
+	{
+		int  a = 10;
+	}
+
+	void Node::LuaScript::update()
+	{
+		int a = 10;
+	}
+
 	Node::Node()
 		: m_parent(NULL)
 		, m_isVisible(true)
@@ -25,6 +35,8 @@ namespace Echo
 		// 以1开始计数
 		static int identifier=1;
 		m_identifier = identifier++;
+
+		m_script.start(this);
 	}
 
 	// 析构函数
@@ -319,6 +331,9 @@ namespace Echo
 
 		// update world matrix
 		getWorldMatrix();
+
+		// script update
+		m_script.update();
 
 		update();
 
