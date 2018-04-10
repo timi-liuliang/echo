@@ -78,14 +78,13 @@ namespace Echo
 		}
 
 		// get property value
-		const String& getPropertyValue(Object* classPtr, const String& propertyName)
+		Variant getPropertyValue(Object* classPtr, const String& propertyName)
 		{
 			PropertyInfo* proptertyInfo = getProperty(propertyName);
 			if (proptertyInfo)
 			{
 				Variant::CallError error;
-				Variant ret = proptertyInfo->m_getterMethod->call(classPtr, nullptr, 0, error);
-				return ret.toString();
+				return proptertyInfo->m_getterMethod->call(classPtr, nullptr, 0, error);
 			}
 
 			static String invalid = "";
@@ -159,7 +158,7 @@ namespace Echo
 		static const PropertyInfos& getPropertys(const String& className);
 
 		// get property value
-		static const String& getPropertyValue(Object* classPtr, const String& propertyName);
+		static Variant getPropertyValue(Object* classPtr, const String& propertyName);
 
 		// set property value
 		static bool setPropertyValue(const Object* classPtr, const String& className, const String& propertyValue);

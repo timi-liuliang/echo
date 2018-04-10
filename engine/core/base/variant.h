@@ -10,6 +10,7 @@ namespace Echo
 	public:
 		enum Type
 		{
+			Nil,
 			Bool,
 			Real,
 			Vector3,
@@ -29,21 +30,33 @@ namespace Echo
 			};
 		};
 
+		static const Variant INVALID;
+
 	public:
-		Variant(){}
-		Variant(const Echo::String& str){}
+		Variant():m_type(Nil), m_str(nullptr){}
+		Variant(const Echo::String& str);
+		~Variant();
 
 		// to string
-		Echo::String toString() { return ""; }
+		Echo::String toString();
+
+		// operator "="
+		Variant& operator=(const Variant& orig);
+		Variant(const Variant &orig);
+
+	private:
+		// copy string
+		void copyStr(const char* str, int size);
 
 	private:
 		Type			m_type;
 
 		union 
 		{
-			bool		m_bool;
-			i64			m_int;
-			float		m_real;
+			bool			m_bool;
+			i64				m_int;
+			float			m_real;
+			char*			m_str;
 		};
 	};
 }

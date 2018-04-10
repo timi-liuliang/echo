@@ -122,18 +122,17 @@ namespace Echo
 	}
 
 	// get property value
-	const String& Class::getPropertyValue(Object* classPtr, const String& propertyName)
+	Variant Class::getPropertyValue(Object* classPtr, const String& propertyName)
 	{
 		const String& className = classPtr->getClassName();
 		auto it = g_classInfos->find(className);
 		if (it != g_classInfos->end())
 		{
 			ObjectFactory* objFactory = it->second;
-			objFactory->getPropertyValue(classPtr, propertyName);
+			return objFactory->getPropertyValue(classPtr, propertyName);
 		}
 
-		static String invalid = "";
-		return invalid;
+		return Variant::INVALID;
 	}
 
 	// set property value
