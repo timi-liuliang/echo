@@ -30,16 +30,21 @@ namespace Echo
 	typedef std::map<String, MethodBind*>	MethodMap;
 
 	// declare a nonexistent class..
-	template<typename ClassT>
+#ifdef ECHO_PLATFORM_WINDOWS
+	class __UnexistingClass{};
+#else
+	class __UnexistingClass;
+#endif
+
 	class MethodBind0 : public MethodBind
 	{
 	public:
-		void (ClassT::*method)();
+		void (__UnexistingClass::*method)();
 		
 		// exec the method
 		virtual Variant call(Object* obj, const Variant** args, int argCount, Variant::CallError& error)
 		{
-			ClassT* instance = (ClassT*)obj;
+			__UnexistingClass* instance = (__UnexistingClass*)obj;
 
 			(instance->*method)();
 
@@ -50,7 +55,7 @@ namespace Echo
 	template<typename T>
 	MethodBind* createMethodBind(void(T::*method)())
 	{
-		MethodBind0* bind = new(MethodBind0<T>);
+		MethodBind0* bind = new(MethodBind0);
 
 		union 
 		{
@@ -63,16 +68,16 @@ namespace Echo
 		return bind;
 	}
 
-	template<typename R, typename ClassT>
+	template<typename R>
 	class MethodBind0R : public MethodBind
 	{
 	public:
-		R (ClassT::*method)();
+		R (__UnexistingClass::*method)();
 
 		// exec the method
 		virtual Variant call(Object* obj, const Variant** args, int argCount, Variant::CallError& error)
 		{
-			ClassT* instance = (ClassT*)obj;
+			__UnexistingClass* instance = (__UnexistingClass*)obj;
 
 			return (instance->*method)();
 		}
@@ -81,8 +86,15 @@ namespace Echo
 	template<typename T, typename R>
 	MethodBind* createMethodBind(R(T::*method)())
 	{
-		MethodBind0R<R, T> * bind = new (MethodBind0R<R, T>);
-		bind->method = method;
+		MethodBind0R<R> * bind = new (MethodBind0R<R>);
+
+		union
+		{
+			R (T::*sm)();
+			R (__UnexistingClass::*dm)();
+		} u;
+		u.sm = method;
+		bind->method = u.dm;
 
 		return bind;
 	}
