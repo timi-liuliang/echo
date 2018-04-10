@@ -110,10 +110,13 @@ namespace Echo
 
 	void Live2dCubism::bindMethods()
 	{
+		CLASS_BIND_METHOD(Live2dCubism, getMoc, DEF_METHOD("getMoc"));
+		CLASS_BIND_METHOD(Live2dCubism, getTextureRes, DEF_METHOD("getTextureRes"));
+
 		//luaex::LuaEx::instance()->register_function<Live2dCubism>("Live2dCubism", "test", &Live2dCubism::test);
 
-		//CLASS_REGISTER_PROPERTY(Live2dCubism, "Moc", Variant::String, "getMoc", "setMoc");
-		//CLASS_REGISTER_PROPERTY(Live2dCubism, "Texture", Variant::String, "getPos", "setPos");
+		CLASS_REGISTER_PROPERTY(Live2dCubism, "Moc", Variant::String, "getMoc", "setMoc");
+		CLASS_REGISTER_PROPERTY(Live2dCubism, "Texture", Variant::String, "getTextureRes", "setTextureRes");
 	}
 
 	// parse paramters
@@ -248,6 +251,8 @@ namespace Echo
 	// set moc
 	void Live2dCubism::setMoc(const String& res)
 	{
+		m_mocRes = res;
+
 		m_mocMemory = EchoNew(MemoryReaderAlign( res, csmAlignofMoc));
 		if (m_mocMemory->getSize())
 		{
@@ -283,6 +288,8 @@ namespace Echo
 	// build drawable
 	void Live2dCubism::buildRenderable()
 	{
+		m_textureRes = "Res://cartoon/cartoon.png";
+
 		VertexArray	vertices;
 		IndiceArray	indices;
 		buildMeshDataByDrawables(vertices, indices);
@@ -297,7 +304,7 @@ namespace Echo
 		m_materialInst->setOfficialMaterialContent(g_live2dDefaultMaterial);
 		m_materialInst->setRenderStage("Transparent");
 		m_materialInst->applyLoadedData();
-		m_materialInst->setTexture(0, "Res://cartoon/cartoon.png");
+		m_materialInst->setTexture(0, m_textureRes);
 
 		m_renderable = Renderable::create(m_mesh, m_materialInst, this);
 	}

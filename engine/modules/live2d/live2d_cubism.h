@@ -78,6 +78,12 @@ namespace Echo
 		// set moc
 		void setMoc(const String& res);
 
+		// get moc
+		const String& getMoc() { return m_mocRes; }
+
+		// get texture res
+		const String& getTextureRes() { return m_textureRes; }
+
 		// set parameter value
 		void setParameter(const String& name, float value);
 
@@ -110,6 +116,8 @@ namespace Echo
 		virtual void* getGlobalUniformValue(const String& name);
 
 	private:
+		String					m_mocRes;
+		String					m_textureRes;
 		MemoryReaderAlign*		m_mocMemory;
 		csmMoc*					m_moc;
 		ui32					m_modelSize;

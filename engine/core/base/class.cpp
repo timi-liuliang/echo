@@ -64,8 +64,32 @@ namespace Echo
 		return nullptr;
 	}
 
+	// register method
+	bool Class::registerMethodBind(const String& className, const String& methodName, MethodBind* method)
+	{
+		auto it = g_classInfos->find(className);
+		if (it != g_classInfos->end())
+		{
+			it->second->registerMethod( methodName, method);
+		}
+
+		return true;
+	}
+
+	// get method
+	MethodBind* Class::getMethodBind(const String& className, const String& methodName)
+	{
+		auto it = g_classInfos->find(className);
+		if (it != g_classInfos->end())
+		{
+			return it->second->getMethodBind(methodName);
+		}
+
+		return nullptr;
+	}
+
 	// add property
-	bool Class::registerProperty(const String& className, const String& propertyName, const Variant::Type type, void* getter, const String& setter)
+	bool Class::registerProperty(const String& className, const String& propertyName, const Variant::Type type, const String& getter, const String& setter)
 	{
 		auto it = g_classInfos->find(className);
 		if (it != g_classInfos->end())
@@ -75,6 +99,8 @@ namespace Echo
 			info.m_type = type;
 			info.m_setter = setter;
 			info.m_getter = getter;
+			info.m_setterMethod = getMethodBind(className, setter);
+			info.m_getterMethod = getMethodBind(className, getter);
 
 			it->second->registerProperty(info);
 		}
@@ -96,7 +122,7 @@ namespace Echo
 	}
 
 	// get property value
-	const String& Class::getPropertyValue(const Object* classPtr, const String& propertyName)
+	const String& Class::getPropertyValue(Object* classPtr, const String& propertyName)
 	{
 		const String& className = classPtr->getClassName();
 		auto it = g_classInfos->find(className);

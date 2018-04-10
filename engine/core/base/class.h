@@ -2,6 +2,7 @@
 
 #include "object.h"
 #include "variant.h"
+#include "MethodBind.h"
 #include "engine/core/Util/StringUtil.h"
 #include "engine/core/script/lua/luaex.h"
 
@@ -11,8 +12,10 @@ namespace Echo
 	{
 		String			m_name;
 		Variant::Type	m_type;
-		void*			m_getter;
+		String			m_getter;
 		String			m_setter;
+		MethodBind*		m_getterMethod;
+		MethodBind*		m_setterMethod;
 	};
 	typedef vector<PropertyInfo>::type PropertyInfos;
 
@@ -20,6 +23,7 @@ namespace Echo
 	{
 		String			m_parent;
 		PropertyInfos	m_propertyInfos;
+		MethodMap		m_methods;
 	};
 
 	struct ObjectFactory
@@ -35,14 +39,58 @@ namespace Echo
 			m_classInfo.m_propertyInfos.push_back(property);
 		}
 
+		// register method
+		void registerMethod(const String& methodName, MethodBind* method)
+		{
+			m_classInfo.m_methods[methodName] = method;
+		}
+
+		// return method bind
+		MethodBind* getMethodBind(const String& methodName)
+		{
+			auto it = m_classInfo.m_methods.find(methodName);
+			if (it != m_classInfo.m_methods.end())
+			{
+				return it->second;
+			}
+
+			return nullptr;
+		}
+
 		// get propertys
 		const PropertyInfos& getPropertys()
 		{
 			return m_classInfo.m_propertyInfos;
 		}
 
+		// get property
+		PropertyInfo* getProperty(const String& propertyName)
+		{
+			for (PropertyInfo& pi : m_classInfo.m_propertyInfos)
+			{
+				if (pi.m_name == propertyName)
+				{
+					return &pi;
+				}
+			}
+
+			return nullptr;
+		}
+
 		// get property value
-		virtual const String& getPropertyValue(const Object* classPtr, const String& propertyName) = 0;
+		const String& getPropertyValue(Object* classPtr, const String& propertyName)
+		{
+			PropertyInfo* proptertyInfo = getProperty(propertyName);
+			if (proptertyInfo)
+			{
+				Variant::CallError error;
+				Variant ret = proptertyInfo->m_getterMethod->call(classPtr, nullptr, 0, error);
+				return ret.toString();
+			}
+
+			static String invalid = "";
+			return invalid;
+		}
 	};
 
 	template<typename T>
@@ -63,17 +111,6 @@ namespace Echo
 		virtual Object* create()
 		{
 			return EchoNew(T);
-		}
-
-		// get property value
-		virtual const String& getPropertyValue(const Object* classPtr, const String& propertyName)
-		{
-			const T* realClassPtr = dynamic_cast<const T*>(classPtr);
-
-			int a = 10;
-
-			static String invalid = "";
-			return invalid;
 		}
 	};
 
@@ -109,17 +146,34 @@ namespace Echo
 		// get all child class
 		static bool getChildClasses(StringArray& childClasses, const String& className);
 
+		// register method
+		static bool registerMethodBind(const String& className, const String& methodName, MethodBind* method);
+
+		// get method
+		static MethodBind* getMethodBind(const String& className, const String& methodName);
+
 		// add property
-		static bool registerProperty(const String& className, const String& propertyName, const Variant::Type type, void* getter, const String& setter);
+		static bool registerProperty(const String& className, const String& propertyName, const Variant::Type type, const String& getter, const String& setter);
 
 		// get propertys
 		static const PropertyInfos& getPropertys(const String& className);
 
 		// get property value
-		static const String& getPropertyValue(const Object* classPtr, const String& propertyName);
+		static const String& getPropertyValue(Object* classPtr, const String& propertyName);
 
 		// set property value
 		static bool setPropertyValue(const Object* classPtr, const String& className, const String& propertyValue);
+
+		// bind method
+		template<typename N, typename M>
+		static MethodBind* bindMethod(const String& className, M method, N methodName)
+		{
+			MethodBind* bind = createMethodBind(method);
+
+			registerMethodBind(className, methodName, bind);
+
+			return bind;
+		}
 	};
 }
 
@@ -137,6 +191,9 @@ public:																				\
 	}																				\
 																					\
 private:															
+
+#define CLASS_BIND_METHOD(m_class, method, methodName) \
+	Echo::Class::bindMethod(#m_class, &##m_class::method, methodName)
 
 #define CLASS_REGISTER_PROPERTY(m_class, name, type, getter, setter) \
 	Echo::Class::registerProperty(#m_class, name, type, getter, setter)
