@@ -46,6 +46,9 @@ namespace Studio
 		// 递归显示属性
 		void showNodePropertyRecursive(Echo::Object* classPtr, const Echo::String& className);
 
+		// show property
+		void showPropertyByVariant(const Echo::String& name, const class Echo::Variant& var);
+
 	private:
 		NewNodeDialog*					m_newNodeDialog;		// 新建结点
 		QT_UI::QPropertyConfigHelper	m_propertyHelper;		// 属性

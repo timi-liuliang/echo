@@ -63,6 +63,7 @@ namespace Echo
 
 		const Vector3& getLocalScaling() const;
 		const Quaternion& getLocalOrientation() const;
+		const Vector3 getLocalYawPitchRoll();
 		const Vector3& getLocalPosition() const;
 		const Vector3& getWorldScaling() const;
 		const Quaternion& getWorldOrientation() const;

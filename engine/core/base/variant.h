@@ -2,6 +2,7 @@
 
 #include "TypeDef.h"
 #include "engine/core/memory/MemAllocDef.h"
+#include "engine/core/math/Vector4.h"
 
 namespace Echo
 {
@@ -10,11 +11,11 @@ namespace Echo
 	public:
 		enum Type
 		{
-			Nil,
-			Bool,
-			Real,
-			Vector3,
-			String,
+			Type_Nil,
+			Type_Bool,
+			Type_Real,
+			Type_Vector3,
+			Type_String,
 		};
 
 		struct CallError
@@ -33,16 +34,22 @@ namespace Echo
 		static const Variant INVALID;
 
 	public:
-		Variant():m_type(Nil), m_str(nullptr){}
-		Variant(const Echo::String& str);
+		Variant():m_type(Type_Nil), m_str(nullptr){}
+		Variant(const String& str);
+		Variant(const Vector3& value);
 		~Variant();
 
 		// to string
-		Echo::String toString();
+		Echo::String toString() const;
 
 		// operator "="
 		Variant& operator=(const Variant& orig);
 		Variant(const Variant &orig);
+
+		// type
+		Type getType() const { return m_type; }
+
+		const Vector3& getValue() const { return m_vec3; }
 
 	private:
 		// copy string
@@ -56,6 +63,7 @@ namespace Echo
 			bool			m_bool;
 			i64				m_int;
 			float			m_real;
+			Vector3			m_vec3;
 			char*			m_str;
 		};
 	};

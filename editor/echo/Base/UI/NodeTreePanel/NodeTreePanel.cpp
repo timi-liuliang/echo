@@ -149,12 +149,23 @@ namespace Studio
 			const Echo::PropertyInfos& propertys = Echo::Class::getPropertys(className);
 			for (const Echo::PropertyInfo& prop : propertys)
 			{
-				const Echo::String& propValue = Echo::Class::getPropertyValue( classPtr, prop.m_name).toString();
-
-				m_propertyHelper.addItem(prop.m_name.c_str(), propValue, QT_UI::WT_None);
+				const Echo::Variant& var = Echo::Class::getPropertyValue( classPtr, prop.m_name);
+				showPropertyByVariant( prop.m_name, var);
 			}
 		}
 		m_propertyHelper.endMenu();
+	}
+
+	// show property
+	void NodeTreePanel::showPropertyByVariant(const Echo::String& name, const Echo::Variant& var)
+	{
+		switch (var.getType())
+		{
+		case Echo::Variant::Type_String: m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_None); break;
+		case Echo::Variant::Type_Vector3:m_propertyHelper.addItem(name.c_str(), var.getValue(), QT_UI::WT_Vector3); break;
+		default:						 m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_None); break;
+		}
+		
 	}
 
 	// 属性修改后,更新结点值

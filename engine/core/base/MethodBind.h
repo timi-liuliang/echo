@@ -98,4 +98,35 @@ namespace Echo
 
 		return bind;
 	}
+
+	template<typename R>
+	class MethodBind0RC : public MethodBind
+	{
+	public:
+		R(__UnexistingClass::*method)() const;
+
+		// exec the method
+		virtual Variant call(Object* obj, const Variant** args, int argCount, Variant::CallError& error)
+		{
+			__UnexistingClass* instance = (__UnexistingClass*)obj;
+
+			return (instance->*method)();
+		}
+	};
+
+	template<typename T, typename R>
+	MethodBind* createMethodBind(R(T::*method)() const)
+	{
+		MethodBind0RC<R> * bind = new (MethodBind0RC<R>);
+
+		union
+		{
+			R(T::*sm)() const;
+			R(__UnexistingClass::*dm)() const;
+		} u;
+		u.sm = method;
+		bind->method = u.dm;
+
+		return bind;
+	}
 }

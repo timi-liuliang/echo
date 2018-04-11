@@ -205,6 +205,14 @@ namespace Echo
 		return m_ortLocal;
 	}
 
+	const Vector3 Node::getLocalYawPitchRoll()
+	{
+		Vector3 yawpitchroll;
+		m_ortLocal.toEulerAngle(yawpitchroll.x, yawpitchroll.y, yawpitchroll.z);
+
+		return yawpitchroll;
+	}
+
 	const Vector3& Node::getLocalPosition() const
 	{
 		return m_posLocal;
@@ -358,8 +366,13 @@ namespace Echo
 	// bind methods
 	void Node::bindMethods()
 	{
-		//CLASS_REGISTER_PROPERTY(Node, "Rotation",  Variant::Vector3, "getPosition", "setPosition");
-		//CLASS_REGISTER_PROPERTY(Node, "Scale",     Variant::Vector3, "getPos", "setPos");
-		CLASS_REGISTER_PROPERTY(Node, "Translate", Variant::Vector3, "getPos", "setPos");
+		CLASS_BIND_METHOD(Node, getLocalPosition, DEF_METHOD("getPos"));
+		CLASS_BIND_METHOD(Node, getWorldPosition, DEF_METHOD("getWorldPos"));
+		CLASS_BIND_METHOD(Node, getLocalYawPitchRoll, DEF_METHOD("getYawPitchRoll"));
+		CLASS_BIND_METHOD(Node, getLocalScaling, DEF_METHOD("getScale"));
+
+		CLASS_REGISTER_PROPERTY(Node, "Position", Variant::Type_Vector3, "getPos", "setPos");
+		CLASS_REGISTER_PROPERTY(Node, "Rotation", Variant::Type_Vector3, "getYawPitchRoll", "setRot");
+		CLASS_REGISTER_PROPERTY(Node, "Scale",    Variant::Type_Vector3, "getScale", "setScale");
 	}
 }
