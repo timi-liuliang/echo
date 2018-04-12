@@ -6,7 +6,7 @@
 #include "QFileSelect.h"
 #include "QCameraProperty.h"
 #include "QAssetsSelect.h"
-//#include "QVector3Editor.h"
+#include "QVector3Editor.h"
 #include "QColorSelect.h"
 #include "QCheckBoxList.h"
 #include "QUVEditor.h"
@@ -62,20 +62,7 @@ namespace QT_UI
 		QVariant value;
 		if (m_model->findValue(value, propertyName) && IsSupportCustomPaint(widgetType))
 		{
-// 			if( IsSupportCustomPaint( widgetType))
-// 			{
-				ItemDelegatePaint( painter, widgetType, option.rect, value);
-// 			}
-// 			else
-// 			{
-// 				QString text = value.toString();
-// 
-// 				QStyleOptionViewItem myOption = option;
-// 				myOption.displayAlignment = Qt::AlignLeft | Qt::AlignVCenter;
-// 
-// 				drawDisplay(painter, myOption, myOption.rect, text);
-// 				drawFocus(painter, myOption, myOption.rect);
-// 			}
+			ItemDelegatePaint( painter, widgetType, option.rect, value);
 		}
 		else
 		{
@@ -169,11 +156,11 @@ namespace QT_UI
 			}
 			return pWidget;
 		}
-		/*else if(widgetType == "Vector3")
+		else if(widgetType == "Vector3")
 		{
-			return new QVector3EditorA(m_model, propertyName, parent);
+			return new QVector3Editor(m_model, propertyName, parent);
 		}
-		else if (widgetType == "Vector4")
+		/*else if (widgetType == "Vector4")
 		{
 			return new QVector4EditorA(m_model, propertyName, parent);
 		}*/
@@ -264,12 +251,12 @@ namespace QT_UI
 				QComboBox* widget = qobject_cast<QComboBox*>(editor);
 				widget->setCurrentText( value.toString());
 			}
-			/*else if(widgetType == "Vector3")
+			else if(widgetType == "Vector3")
 			{
-				QVector3EditorA* widget = qobject_cast<QVector3EditorA*>(editor);
-				widget->SetVector3(value.toString());
+				QVector3Editor* widget = qobject_cast<QVector3Editor*>(editor);
+				widget->setValue(value.toString());
 			}
-			else if (widgetType == "Vector4")
+			/*else if (widgetType == "Vector4")
 			{
 				QVector4EditorA* widget = qobject_cast<QVector4EditorA*>(editor);
 				widget->SetVector4(value.toString());
