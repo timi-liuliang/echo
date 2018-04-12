@@ -18,6 +18,10 @@ namespace QT_UI
 		// set value
 		void setValue(const QString& val);
 
+	public slots:
+		// edit finished
+		void onEditFinished();
+
 	protected:
 		// redefine paintEvent
 		void paintEvent(QPaintEvent* event);
@@ -30,5 +34,8 @@ namespace QT_UI
 		QLineEdit*		m_lineEditY;
 		QLabel*			m_labelZ;
 		QLineEdit*		m_lineEditZ;
+
+		QPropertyModel* m_propertyModel;
+		QString			m_propertyName;
 	};
 }

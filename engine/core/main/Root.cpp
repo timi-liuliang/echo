@@ -25,6 +25,7 @@
 #include "EngineTimeController.h"
 #include "engine/core/script/lua/LuaEx.h"
 #include "engine/core/script/lua/register_core_to_lua.cxx"
+#include "engine/core/script/lua/LuaBinder.h"
 #include "engine/core/render/RenderTargetManager.h"
 #include "module.h"
 #include "engine/core/render/renderstage/RenderStage.h"
@@ -159,9 +160,11 @@ namespace Echo
 
 		// lua script
 		{
-			luaex::LuaEx::instance();
+			luaex::LuaEx* luaEx = luaex::LuaEx::instance();
 			register_core_to_lua();
 			registerClassTypes();
+
+			LuaBinder::instance()->init(luaEx->get_state());
 		}
 		
 		// 音频管理器
@@ -385,6 +388,7 @@ namespace Echo
 #endif
 		// 销毁时间控制器
 		EngineTimeController::destroy();
+		LuaBinder::destroy();
 		luaex::LuaEx::instance()->destroy();
 		MemoryManager::destroyInstance();
 	}
