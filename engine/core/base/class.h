@@ -78,17 +78,17 @@ namespace Echo
 		}
 
 		// get property value
-		Variant getPropertyValue(Object* classPtr, const String& propertyName)
+		bool getPropertyValue(Object* classPtr, const String& propertyName, Variant& oVar)
 		{
 			PropertyInfo* proptertyInfo = getProperty(propertyName);
 			if (proptertyInfo)
 			{
 				Variant::CallError error;
-				return proptertyInfo->m_getterMethod->call(classPtr, nullptr, 0, error);
+				oVar = proptertyInfo->m_getterMethod->call(classPtr, nullptr, 0, error);
+				return true;
 			}
 
-			static String invalid = "";
-			return invalid;
+			return false;
 		}
 	};
 
@@ -158,7 +158,10 @@ namespace Echo
 		static const PropertyInfos& getPropertys(const String& className);
 
 		// get property value
-		static Variant getPropertyValue(Object* classPtr, const String& propertyName);
+		static bool getPropertyValue(Object* classPtr, const String& propertyName, Variant& oVar);
+
+		// get property value by class name
+		static bool getPropertyValue(Object* classPtr, const String& className, const String& propertyName, Variant& oVar);
 
 		// set property value
 		static bool setPropertyValue(const Object* classPtr, const String& className, const String& propertyValue);

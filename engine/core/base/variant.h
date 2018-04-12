@@ -51,6 +51,9 @@ namespace Echo
 
 		const Vector3& getValue() const { return m_vec3; }
 
+		// is nil
+		bool isNil() const { return m_type == Type_Nil; }
+
 	private:
 		// copy string
 		void copyStr(const char* str, int size);

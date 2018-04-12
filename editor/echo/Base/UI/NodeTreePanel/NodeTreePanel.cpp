@@ -149,7 +149,9 @@ namespace Studio
 			const Echo::PropertyInfos& propertys = Echo::Class::getPropertys(className);
 			for (const Echo::PropertyInfo& prop : propertys)
 			{
-				const Echo::Variant& var = Echo::Class::getPropertyValue( classPtr, prop.m_name);
+				Echo::Variant var;
+				Echo::Class::getPropertyValue( classPtr, prop.m_name, var);
+
 				showPropertyByVariant( prop.m_name, var);
 			}
 		}

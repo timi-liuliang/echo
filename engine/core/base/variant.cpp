@@ -64,10 +64,10 @@ namespace Echo
 	{
 		if (m_type == Type_String && m_str)
 		{
-			delete[] m_str;
+			EchoSafeFree(m_str);
 		}
 
-		m_str = new char[size + 1];
+		m_str = (char*)EchoMalloc(size + 1);
 		std::memcpy(m_str, str, size);
 		m_str[size] = '\0';
 	}
