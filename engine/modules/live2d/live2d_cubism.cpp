@@ -320,10 +320,7 @@ namespace Echo
 			setParameter("ParamEyeLSmile", xx);
 
 			//luaex::LuaEx::instance()->callf("update");
-
-			static Matrix4 scale; scale.scaleReplace(Vector3(0.3f, 0.3f, 0.3f));
-
-			m_matWVP = scale * NodeTree::instance()->get2DCamera()->getViewProjMatrix();;
+			m_matWVP = getWorldMatrix() * NodeTree::instance()->get2DCamera()->getViewProjMatrix();;
 
 			csmUpdateModel((csmModel*)m_model);
 

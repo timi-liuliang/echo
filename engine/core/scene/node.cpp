@@ -213,6 +213,14 @@ namespace Echo
 		return yawpitchroll;
 	}
 
+	void Node::setLocalYawPitchRoll(const Vector3& yawPitchRoll)
+	{
+		Quaternion quat;
+		quat.fromEulerAngle(yawPitchRoll.x, yawPitchRoll.y, yawPitchRoll.z);
+
+		setLocalOrientation(quat);
+	}
+
 	const Vector3& Node::getLocalPosition() const
 	{
 		return m_posLocal;
@@ -366,14 +374,16 @@ namespace Echo
 	// bind methods
 	void Node::bindMethods()
 	{
-		CLASS_BIND_METHOD(Node, getLocalPosition, DEF_METHOD("getPos"));
-		CLASS_BIND_METHOD(Node, getWorldPosition, DEF_METHOD("getWorldPos"));
+		CLASS_BIND_METHOD(Node, getLocalPosition,	  DEF_METHOD("getPos"));
+		CLASS_BIND_METHOD(Node, getWorldPosition,	  DEF_METHOD("getWorldPos"));
 		CLASS_BIND_METHOD(Node, getLocalYawPitchRoll, DEF_METHOD("getYawPitchRoll"));
-		CLASS_BIND_METHOD(Node, getLocalScaling, DEF_METHOD("getScale"));
-		CLASS_BIND_METHOD(Node, setLocalPosition, DEF_METHOD("setPos"));
+		CLASS_BIND_METHOD(Node, getLocalScaling,	  DEF_METHOD("getScale"));
+		CLASS_BIND_METHOD(Node, setLocalPosition,	  DEF_METHOD("setPos"));
+		CLASS_BIND_METHOD(Node, setLocalScaling,	  DEF_METHOD("setScale"));
+		CLASS_BIND_METHOD(Node, setLocalYawPitchRoll, DEF_METHOD("setYawPitchRoll"));
 
 		CLASS_REGISTER_PROPERTY(Node, "Position", Variant::Type_Vector3, "getPos", "setPos");
-		CLASS_REGISTER_PROPERTY(Node, "Rotation", Variant::Type_Vector3, "getYawPitchRoll", "setRot");
+		CLASS_REGISTER_PROPERTY(Node, "Rotation", Variant::Type_Vector3, "getYawPitchRoll", "setYawPitchRoll");
 		CLASS_REGISTER_PROPERTY(Node, "Scale",    Variant::Type_Vector3, "getScale", "setScale");
 	}
 }
