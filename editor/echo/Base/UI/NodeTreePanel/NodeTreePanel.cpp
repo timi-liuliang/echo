@@ -164,7 +164,7 @@ namespace Studio
 		switch (var.getType())
 		{
 		case Echo::Variant::Type_String: m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_None); break;
-		case Echo::Variant::Type_Vector3:m_propertyHelper.addItem(name.c_str(), var.getValue(), QT_UI::WT_Vector3); break;
+		case Echo::Variant::Type_Vector3:m_propertyHelper.addItem(name.c_str(), var.toVector3(), QT_UI::WT_Vector3); break;
 		default:						 m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_None); break;
 		}
 		

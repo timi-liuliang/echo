@@ -370,6 +370,7 @@ namespace Echo
 		CLASS_BIND_METHOD(Node, getWorldPosition, DEF_METHOD("getWorldPos"));
 		CLASS_BIND_METHOD(Node, getLocalYawPitchRoll, DEF_METHOD("getYawPitchRoll"));
 		CLASS_BIND_METHOD(Node, getLocalScaling, DEF_METHOD("getScale"));
+		CLASS_BIND_METHOD(Node, setLocalPosition, DEF_METHOD("setPos"));
 
 		CLASS_REGISTER_PROPERTY(Node, "Position", Variant::Type_Vector3, "getPos", "setPos");
 		CLASS_REGISTER_PROPERTY(Node, "Rotation", Variant::Type_Vector3, "getYawPitchRoll", "setRot");

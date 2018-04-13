@@ -29,22 +29,18 @@ namespace Echo
 	// please use hash map
 	typedef std::map<String, MethodBind*>	MethodMap;
 
-	// declare a nonexistent class..
-#ifdef ECHO_PLATFORM_WINDOWS
-	class __UnexistingClass{};
-#else
-	class __UnexistingClass;
-#endif
+	// declare a empty class..
+	class __AnEmptyClass{};
 
 	class MethodBind0 : public MethodBind
 	{
 	public:
-		void (__UnexistingClass::*method)();
+		void (__AnEmptyClass::*method)();
 		
 		// exec the method
 		virtual Variant call(Object* obj, const Variant** args, int argCount, Variant::CallError& error)
 		{
-			__UnexistingClass* instance = (__UnexistingClass*)obj;
+			__AnEmptyClass* instance = (__AnEmptyClass*)obj;
 
 			(instance->*method)();
 
@@ -60,7 +56,7 @@ namespace Echo
 		union 
 		{
 			void (T::*sm)();
-			void (__UnexistingClass::*dm)();
+			void (__AnEmptyClass::*dm)();
 		} u;
 		u.sm = method;
 		bind->method = u.dm;
@@ -72,12 +68,12 @@ namespace Echo
 	class MethodBind0R : public MethodBind
 	{
 	public:
-		R (__UnexistingClass::*method)();
+		R (__AnEmptyClass::*method)();
 
 		// exec the method
 		virtual Variant call(Object* obj, const Variant** args, int argCount, Variant::CallError& error)
 		{
-			__UnexistingClass* instance = (__UnexistingClass*)obj;
+			__AnEmptyClass* instance = (__AnEmptyClass*)obj;
 
 			return (instance->*method)();
 		}
@@ -91,7 +87,7 @@ namespace Echo
 		union
 		{
 			R (T::*sm)();
-			R (__UnexistingClass::*dm)();
+			R (__AnEmptyClass::*dm)();
 		} u;
 		u.sm = method;
 		bind->method = u.dm;
@@ -103,12 +99,12 @@ namespace Echo
 	class MethodBind0RC : public MethodBind
 	{
 	public:
-		R(__UnexistingClass::*method)() const;
+		R(__AnEmptyClass::*method)() const;
 
 		// exec the method
 		virtual Variant call(Object* obj, const Variant** args, int argCount, Variant::CallError& error)
 		{
-			__UnexistingClass* instance = (__UnexistingClass*)obj;
+			__AnEmptyClass* instance = (__AnEmptyClass*)obj;
 
 			return (instance->*method)();
 		}
@@ -122,7 +118,41 @@ namespace Echo
 		union
 		{
 			R(T::*sm)() const;
-			R(__UnexistingClass::*dm)() const;
+			R(__AnEmptyClass::*dm)() const;
+		} u;
+		u.sm = method;
+		bind->method = u.dm;
+
+		return bind;
+	}
+
+	template <typename P0>
+	class MethodBind1 : public MethodBind
+	{
+	public:
+		void (__AnEmptyClass::*method)(P0);
+
+		// exec the method
+		virtual Variant call(Object* obj, const Variant** args, int argCount, Variant::CallError& error)
+		{
+			__AnEmptyClass* instance = (__AnEmptyClass*)obj;
+
+			P0 p0 = *args[0];
+			(instance->*method)(p0);
+
+			return Variant();
+		}
+	};
+
+	template<typename T, typename P0>
+	MethodBind* createMethodBind(void(T::*method)(P0))
+	{
+		MethodBind1<P0>* bind = new (MethodBind1<P0>);
+
+		union
+		{
+			void (T::*sm)(P0);
+			void (__AnEmptyClass::*dm)(P0);
 		} u;
 		u.sm = method;
 		bind->method = u.dm;

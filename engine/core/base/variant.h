@@ -39,12 +39,6 @@ namespace Echo
 		Variant(const Vector3& value);
 		~Variant();
 
-		// to string
-		Echo::String toString() const;
-		
-		// from string
-		bool fromString(Type type, const String& str);
-
 		// operator "="
 		Variant& operator=(const Variant& orig);
 		Variant(const Variant &orig);
@@ -52,10 +46,19 @@ namespace Echo
 		// type
 		Type getType() const { return m_type; }
 
-		const Vector3& getValue() const { return m_vec3; }
+		// reimplent operator
+		operator const Vector3&() const { return m_vec3; }
+
+		// convert to other type
+		const bool toVector3() { return m_bool; }
+		const Vector3& toVector3() const { return m_vec3; }
 
 		// is nil
 		bool isNil() const { return m_type == Type_Nil; }
+
+		// string convert
+		Echo::String toString() const;
+		bool fromString(Type type, const String& str);
 
 	private:
 		// copy string
