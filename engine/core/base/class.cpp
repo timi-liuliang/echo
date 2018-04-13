@@ -70,7 +70,7 @@ namespace Echo
 		auto it = g_classInfos->find(className);
 		if (it != g_classInfos->end())
 		{
-			it->second->registerMethod( methodName, method);
+			it->second->registerMethod(methodName, method);
 		}
 
 		return true;
@@ -121,36 +121,72 @@ namespace Echo
 		return invalid;
 	}
 
-	// get property value
-	bool Class::getPropertyValue(Object* classPtr, const String& propertyName, Variant& oVar)
-	{
-		String className = classPtr->getClassName();
-		do 
-		{		
-			if (getPropertyValue(classPtr, className, propertyName, oVar))
-				return true;
-
-		} while (getParentClass( className, className));
-
-		return false;
-	}
-
-	// get property value by class name
-	bool Class::getPropertyValue(Object* classPtr, const String& className, const String& propertyName, Variant& oVar)
+	// get property
+	PropertyInfo* Class::getProperty(const String& className, const String& propertyName)
 	{
 		auto it = g_classInfos->find(className);
 		if (it != g_classInfos->end())
 		{
-			ObjectFactory* objFactory = it->second;
-			return objFactory->getPropertyValue(classPtr, propertyName, oVar);
+			return it->second->getProperty(propertyName);
 		}
+
+		return nullptr;
+	}
+
+	// get property value
+	bool Class::getPropertyValue(Object* classPtr, const String& propertyName, Variant& oVar)
+	{
+		String className = classPtr->getClassName();
+		do
+		{
+			PropertyInfo* pi = getProperty(className, propertyName);
+			if (pi)
+			{
+				Variant::CallError error;
+				oVar = pi->m_getterMethod->call(classPtr, nullptr, 0, error);
+
+				return true;
+			}
+
+		} while (getParentClass(className, className));
 
 		return false;
 	}
 
-	// set property value
-	bool Class::setPropertyValue(const Object* classPtr, const String& className, const String& propertyValue)
+	// get property type
+	Variant::Type Class::getPropertyType(Object* classPtr, const String& propertyName)
 	{
+		String className = classPtr->getClassName();
+		do
+		{
+			PropertyInfo* pi = getProperty(className, propertyName);
+			if (pi)
+				return pi->m_type;
+
+		} while (getParentClass(className, className));
+
+		return Variant::Type_Nil;
+	}
+
+	// set property value
+	// set property value
+	bool Class::setPropertyValue(Object* classPtr, const String& propertyName, const Variant& propertyValue)
+	{
+		String className = classPtr->getClassName();
+		do
+		{
+			PropertyInfo* pi = getProperty(className, propertyName);
+			if (pi)
+			{
+				Variant::CallError error;
+				const Variant* args[1] = { &propertyValue };
+				pi->m_setterMethod->call(classPtr, args, 1, error);
+
+				return true;
+			}
+
+		} while (getParentClass(className, className));
+
 		return false;
 	}
 }

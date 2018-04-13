@@ -59,6 +59,17 @@ namespace Echo
 		return invalid; 
 	}
 
+	// from string
+	bool Variant::fromString(Type type, const String& str)
+	{
+		switch (type)
+		{
+		case Echo::Variant::Type_Vector3: m_type = Type_Vector3; m_vec3 = StringUtil::ParseVec3(str); return true;
+		}
+
+		return false;
+	}
+
 	// copy string
 	void Variant::copyStr(const char* str, int size)
 	{

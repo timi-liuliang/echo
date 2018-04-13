@@ -173,6 +173,19 @@ namespace Studio
 	// 属性修改后,更新结点值
 	void NodeTreePanel::refreshPropertyToNode(const QString& property, QVariant value)
 	{
-		int a = 10;
+		Echo::String propertyName = property.toStdString().c_str();
+		Echo::String valStr = value.toString().toStdString().c_str();
+		Echo::Node* node = getCurrentSelectNode();
+		Echo::Variant::Type type = Echo::Class::getPropertyType(node, propertyName);
+
+		Echo::Variant propertyValue;
+		if(propertyValue.fromString(type, valStr))
+		{
+			Echo::Class::setPropertyValue(node, propertyName, propertyValue);
+		}
+		else
+		{
+			EchoLogError("Can't set property [%s] value [%s]", propertyName.c_str(), valStr.c_str());
+		}
 	}
 }

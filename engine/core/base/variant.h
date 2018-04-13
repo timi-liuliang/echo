@@ -41,6 +41,9 @@ namespace Echo
 
 		// to string
 		Echo::String toString() const;
+		
+		// from string
+		bool fromString(Type type, const String& str);
 
 		// operator "="
 		Variant& operator=(const Variant& orig);

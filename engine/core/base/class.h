@@ -76,20 +76,6 @@ namespace Echo
 
 			return nullptr;
 		}
-
-		// get property value
-		bool getPropertyValue(Object* classPtr, const String& propertyName, Variant& oVar)
-		{
-			PropertyInfo* proptertyInfo = getProperty(propertyName);
-			if (proptertyInfo)
-			{
-				Variant::CallError error;
-				oVar = proptertyInfo->m_getterMethod->call(classPtr, nullptr, 0, error);
-				return true;
-			}
-
-			return false;
-		}
 	};
 
 	template<typename T>
@@ -157,14 +143,17 @@ namespace Echo
 		// get propertys
 		static const PropertyInfos& getPropertys(const String& className);
 
+		// get property
+		static PropertyInfo* getProperty(const String& className, const String& propertyName);
+
 		// get property value
 		static bool getPropertyValue(Object* classPtr, const String& propertyName, Variant& oVar);
 
-		// get property value by class name
-		static bool getPropertyValue(Object* classPtr, const String& className, const String& propertyName, Variant& oVar);
+		// get property type
+		static Variant::Type getPropertyType(Object* classPtr, const String& propertyName);
 
 		// set property value
-		static bool setPropertyValue(const Object* classPtr, const String& className, const String& propertyValue);
+		static bool setPropertyValue(Object* classPtr, const String& propertyName, const Variant& propertyValue);
 
 		// bind method
 		template<typename N, typename M>
