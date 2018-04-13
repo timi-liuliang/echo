@@ -11,14 +11,16 @@ namespace Studio
 	NodeTreePanel::NodeTreePanel( QWidget* parent/*=0*/)
 		: QDockWidget( parent)
 		, m_newNodeDialog(nullptr)
+		, m_nodeTreeMenu(nullptr)
 	{
 		EchoAssert(!g_inst);
 		g_inst = this;
 
 		setupUi( this);
 
-		QObject::connect(m_newNodeButton, SIGNAL(clicked()), this, SLOT(showNewNodeDialog()));
+		QObject::connect(m_newNodeButton,  SIGNAL(clicked()), this, SLOT(showNewNodeDialog()));
 		QObject::connect(m_nodeTreeWidget, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(showSelectedNodeProperty()));
+		QObject::connect(m_nodeTreeWidget, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showMenu(const QPoint&)));
 	}
 
 	NodeTreePanel::~NodeTreePanel()
@@ -114,6 +116,19 @@ namespace Studio
 
 		// show property
 		showSelectedNodeProperty();
+	}
+
+	// node tree widget show menu
+	void NodeTreePanel::showMenu(const QPoint& point)
+	{
+		QTreeWidgetItem* item = m_nodeTreeWidget->itemAt(point);
+		if (item)
+		{
+			EchoSafeDelete(m_nodeTreeMenu, QMenu);
+			m_nodeTreeMenu = EchoNew(QMenu);
+			m_nodeTreeMenu->addAction(m_actionDeleteNode);
+			m_nodeTreeMenu->exec(QCursor::pos());
+		}
 	}
 
 	// 显示当前选中节点属性

@@ -60,6 +60,12 @@
         </item>
         <item>
          <widget class="QTreeWidget" name="m_nodeTreeWidget">
+          <property name="contextMenuPolicy">
+           <enum>Qt::CustomContextMenu</enum>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::ExtendedSelection</enum>
+          </property>
           <property name="headerHidden">
            <bool>true</bool>
           </property>
@@ -147,6 +153,18 @@
     </item>
    </layout>
   </widget>
+  <action name="m_actionDeleteNode">
+   <property name="icon">
+    <iconset resource="../../../Resource/App.qrc">
+     <normaloff>:/icon/Icon/minus.png</normaloff>:/icon/Icon/minus.png</iconset>
+   </property>
+   <property name="text">
+    <string>Delete Node(s)</string>
+   </property>
+   <property name="iconText">
+    <string>Delete Node(s)</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="../../../Resource/App.qrc"/>

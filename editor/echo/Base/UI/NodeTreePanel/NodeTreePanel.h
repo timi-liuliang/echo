@@ -36,6 +36,9 @@ namespace Studio
 		// 显示新建节点窗口
 		void showNewNodeDialog();
 
+		// node tree widget show menu
+		void showMenu(const QPoint& point);
+
 		// 显示当前选中节点属性
 		void showSelectedNodeProperty();
 
@@ -52,5 +55,6 @@ namespace Studio
 	private:
 		NewNodeDialog*					m_newNodeDialog;		// 新建结点
 		QT_UI::QPropertyConfigHelper	m_propertyHelper;		// 属性
+		QMenu*							m_nodeTreeMenu;			// 结点树右键菜单
 	};
 }
