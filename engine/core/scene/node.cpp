@@ -69,7 +69,7 @@ namespace Echo
 		}
 
 		if(m_parent)
-			m_parent->m_children.insert(this);
+			m_parent->m_children.push_back(this);
 
 		needUpdate();
 	}
@@ -225,10 +225,9 @@ namespace Echo
 	// remove child
 	bool Node::removeChild(Node* node)
 	{
-		ChildNodeSet::iterator it = m_children.find(node);
-		if (it != m_children.end())
+		for( NodeArray::iterator it = m_children.begin(); it!=m_children.end(); it++)
 		{
-			if (node->getParent() == this)
+			if (*it == node)
 			{
 				m_children.erase(it);
 				return true;
@@ -361,10 +360,9 @@ namespace Echo
 		m_bModify = true;
 		m_bMatrixDirty = true;
 
-		ChildNodeSet::iterator it = m_children.begin();
-		for(; it!=m_children.end(); ++it)
+		for (Node* node : m_children)
 		{
-			(*it)->needUpdate();
+			node->needUpdate();
 		}
 	}
 
@@ -460,14 +458,18 @@ namespace Echo
 	{
 		pugi::xml_node* xmlNode = (pugi::xml_node*)pugiNode;
 
-		xmlNode->append_attribute("class").set_value(node->getClassName().c_str());
 		xmlNode->append_attribute("name").set_value(node->getName().c_str());
+		xmlNode->append_attribute("class").set_value(node->getClassName().c_str());
 		savePropertyRecursive(pugiNode, node, node->getClassName());
 
-		for (Node* child : m_children)
+		for (ui32 idx=0; idx < node->getChildNum(); idx++)
 		{
-			pugi::xml_node newNode = xmlNode->append_child("node");
-			saveXml(&newNode, child);
+			Node* child = node->getChild(idx);
+			if (child)
+			{
+				pugi::xml_node newNode = xmlNode->append_child("node");
+				saveXml(&newNode, child);
+			}
 		}
 	}
 
@@ -488,9 +490,9 @@ namespace Echo
 		const Echo::PropertyInfos& propertys = Echo::Class::getPropertys(className);
 		for (const Echo::PropertyInfo& prop : propertys)
 		{
-			//Echo::Variant var;
-			//Echo::Class::getPropertyValue(classPtr, prop.m_name, var);
-			Echo::String varStr = prop.m_getter;// var.toString();
+			Echo::Variant var;
+			Echo::Class::getPropertyValue(classPtr, prop.m_name, var);
+			Echo::String varStr = var.toString();
 
 			xmlNode->append_attribute(prop.m_name.c_str()).set_value(varStr.c_str());
 		}

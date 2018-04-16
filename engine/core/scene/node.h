@@ -12,7 +12,7 @@ namespace Echo
 		ECHO_CLASS(Node, Object)
 
 		friend class NodeTree;
-		typedef set<Node*>::type ChildNodeSet;
+		typedef vector<Node*>::type NodeArray;
 
 	public:
 		// lua script
@@ -117,7 +117,7 @@ namespace Echo
 		bool			m_isVisible;
 
 		// only to notify the parent is modifyed.
-		ChildNodeSet    m_children;
+		NodeArray		m_children;
 
 		Vector3			m_posLocal;
 		Quaternion		m_ortLocal;
