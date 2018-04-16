@@ -35,7 +35,14 @@
     </property>
     <addaction name="m_actionAbout"/>
    </widget>
+   <widget class="QMenu" name="menuGame">
+    <property name="title">
+     <string>Game(&amp;G)</string>
+    </property>
+    <addaction name="m_actionPlayGame"/>
+   </widget>
    <addaction name="menuFile_F"/>
+   <addaction name="menuGame"/>
    <addaction name="menuHelp_H"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -58,6 +65,18 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="m_actionPlayGame">
+   <property name="icon">
+    <iconset resource="../../../Resource/App.qrc">
+     <normaloff>:/icon/Icon/EnterGameMode.png</normaloff>:/icon/Icon/EnterGameMode.png</iconset>
+   </property>
+   <property name="text">
+    <string>Play</string>
+   </property>
+   <property name="shortcut">
+    <string>F5</string>
    </property>
   </action>
  </widget>
