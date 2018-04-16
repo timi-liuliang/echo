@@ -43,6 +43,8 @@ namespace Echo
 		void remove();
 
 		// remove child
+		bool isChildExist(const String& name);
+		void addChild(Node* node);
 		bool removeChild(Node* node);
 
 		void setVisible(bool bVisible);

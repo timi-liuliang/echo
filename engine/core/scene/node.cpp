@@ -49,18 +49,21 @@ namespace Echo
 	}
 
 	// ÉèÖÃ¸¸½Úµã
-	void Node::setParent(Node* pParent)
+	void Node::setParent(Node* parent)
 	{
 		if(m_parent)
-		{
-			ChildNodeSet::iterator it = m_parent->m_children.find(this);
-			if(it != m_parent->m_children.end())
-			{
-				m_parent->m_children.erase(it);
-			}
-		}
+			m_parent->removeChild(this);
 
-		m_parent = pParent;
+		m_parent = parent;
+
+		// make sure the name is unique in current layer
+		int    id = 1;
+		String name = getName();
+		while (parent->isChildExist(getName()))
+		{
+			id++;
+			setName(StringUtil::Format( "%s%d", name.c_str(), id));
+		}
 
 		if(m_parent)
 			m_parent->m_children.insert(this);
@@ -196,6 +199,24 @@ namespace Echo
 		Node* parent = getParent();
 		if (parent)
 			parent->removeChild(this);
+	}
+
+	// remove child
+	bool Node::isChildExist(const String& name)
+	{
+		for (Node* child : m_children)
+		{
+			if (child->getName() == name)
+				return true;
+		}
+
+		return false;
+	}
+
+	// remove child
+	void Node::addChild(Node* node)
+	{
+		node->setParent(this);
 	}
 
 	// remove child

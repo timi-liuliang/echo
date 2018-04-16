@@ -57,9 +57,10 @@ namespace Studio
 	void NodeTreePanel::addNode(Echo::Node* node, QTreeWidgetItem* parent, bool recursive)
 	{
 		Echo::String nodeName = node->getName();
+		Echo::String nodeClassName = node->getClassName();
 
 		// get icon path by node name
-		Echo::String lowerCaseNodeName = nodeName;
+		Echo::String lowerCaseNodeName = nodeClassName;
 		Echo::StringUtil::LowerCase(lowerCaseNodeName);
 		Echo::String iconPath = Echo::StringUtil::Format(":/icon/node/%s.png", lowerCaseNodeName.c_str());
 
