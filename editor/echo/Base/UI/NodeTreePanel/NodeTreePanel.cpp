@@ -162,6 +162,9 @@ namespace Studio
 		{
 			EchoEngine::Instance()->setCurrentEditNode( nullptr);
 		}
+
+		// update property panel display
+		showSelectedNodeProperty();
 	}
 
 	// 显示当前选中节点属性
@@ -174,9 +177,12 @@ namespace Studio
 		if (node)
 		{
 			showNodePropertyRecursive(node, node->getClassName());
+			m_propertyHelper.applyTo(node->getName(), m_propertyTreeView, this, SLOT(refreshPropertyToNode(const QString&, QVariant)), false);
 		}
-
-		m_propertyHelper.applyTo(node->getName(), m_propertyTreeView, this, SLOT(refreshPropertyToNode(const QString&, QVariant)), false);
+		else
+		{
+			m_propertyHelper.applyTo("empty", m_propertyTreeView, this, SLOT(refreshPropertyToNode(const QString&, QVariant)), false);
+		}	
 	}
 
 	// 显示属性
