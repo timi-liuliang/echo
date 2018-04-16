@@ -20,9 +20,12 @@ namespace Studio
 
 		QObject::connect(m_newNodeButton,  SIGNAL(clicked()), this, SLOT(showNewNodeDialog()));
 		QObject::connect(m_nodeTreeWidget, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(showSelectedNodeProperty()));
+		QObject::connect(m_nodeTreeWidget, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)), this, SLOT(showSelectedNodeProperty()));
+		QObject::connect(m_nodeTreeWidget, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, SLOT(onChangedNodeName(QTreeWidgetItem*)));
 		QObject::connect(m_nodeTreeWidget, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showMenu(const QPoint&)));
 
 		QObject::connect(m_actionDeleteNode, SIGNAL(triggered()), this, SLOT(onDeleteNodes()));
+		QObject::connect(m_actionRenameNode, SIGNAL(triggered()), this, SLOT(onRenameNode()));
 	}
 
 	NodeTreePanel::~NodeTreePanel()
@@ -68,6 +71,7 @@ namespace Studio
 		nodeItem->setText(0, nodeName.c_str());
 		nodeItem->setIcon(0, QIcon(iconPath.c_str()));
 		nodeItem->setData(0, Qt::UserRole, QVariant::fromValue((void*)node));
+		nodeItem->setFlags( nodeItem->flags() | Qt::ItemIsEditable);
 
 		// show property
 		m_nodeTreeWidget->setCurrentItem(nodeItem);
@@ -127,8 +131,12 @@ namespace Studio
 		QTreeWidgetItem* item = m_nodeTreeWidget->itemAt(point);
 		if (item)
 		{
+			m_nodeTreeWidget->setCurrentItem(item);
+
 			EchoSafeDelete(m_nodeTreeMenu, QMenu);
 			m_nodeTreeMenu = EchoNew(QMenu);
+			m_nodeTreeMenu->addAction(m_actionRenameNode);
+			m_nodeTreeMenu->addSeparator();
 			m_nodeTreeMenu->addAction(m_actionDeleteNode);
 			m_nodeTreeMenu->exec(QCursor::pos());
 		}
@@ -166,6 +174,48 @@ namespace Studio
 
 		// update property panel display
 		showSelectedNodeProperty();
+	}
+
+	// on trigger rename node
+	void NodeTreePanel::onRenameNode()
+	{
+		QTreeWidgetItem* item = m_nodeTreeWidget->currentItem();
+		if (item)
+		{
+			m_nodeTreeWidget->editItem( item);
+		}
+	}
+
+	// when modifyd item name
+	void NodeTreePanel::onChangedNodeName(QTreeWidgetItem* item)
+	{
+		if (item)
+		{
+			Echo::Node* node = (Echo::Node*)item->data(0, Qt::UserRole).value<void*>();
+			if (!node)
+				return;
+
+			Echo::String newName = item->text(0).toStdString().c_str();
+			if (newName.empty())
+				item->setText(0, node->getName().c_str());
+
+			Echo::Node* parent = node->getParent();
+			if (parent)
+			{
+				if (parent->isChildExist(newName))
+				{
+					item->setText(0, node->getName().c_str());
+				}
+				else
+				{
+					node->setName(newName);
+				}
+			}
+			else
+			{
+				node->setName(newName);
+			}
+		}
 	}
 
 	// 显示当前选中节点属性

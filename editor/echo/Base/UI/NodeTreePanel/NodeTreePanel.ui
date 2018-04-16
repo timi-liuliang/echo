@@ -63,6 +63,9 @@
           <property name="contextMenuPolicy">
            <enum>Qt::CustomContextMenu</enum>
           </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::EditKeyPressed</set>
+          </property>
           <property name="selectionMode">
            <enum>QAbstractItemView::ExtendedSelection</enum>
           </property>
@@ -163,6 +166,11 @@
    </property>
    <property name="iconText">
     <string>Delete Node(s)</string>
+   </property>
+  </action>
+  <action name="m_actionRenameNode">
+   <property name="text">
+    <string>Rename</string>
    </property>
   </action>
  </widget>

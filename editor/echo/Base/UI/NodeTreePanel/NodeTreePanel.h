@@ -48,6 +48,12 @@ namespace Studio
 		// on trigger delete nodes
 		void onDeleteNodes();
 
+		// on trigger rename node
+		void onRenameNode();
+
+		// when modifyd item name
+		void onChangedNodeName(QTreeWidgetItem* item);
+
 	private:
 		// µ›πÈœ‘ æ Ù–‘
 		void showNodePropertyRecursive(Echo::Object* classPtr, const Echo::String& className);
