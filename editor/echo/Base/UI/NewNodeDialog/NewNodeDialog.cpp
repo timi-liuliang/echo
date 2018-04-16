@@ -6,7 +6,7 @@
 namespace Studio
 {
 	NewNodeDialog::NewNodeDialog(QWidget* parent)
-		: QMainWindow(parent)
+		: QDialog(parent)
 	{
 		setupUi(this);
 

@@ -1,12 +1,13 @@
 ﻿#pragma once
 
 #include <engine/core/Util/StringUtil.h>
-#include <QMainWindow>
+#include <QDialog>
+#include "QMenubarEx.h"
 #include "ui_NewNodeDialog.h"
 
 namespace Studio
 {
-	class NewNodeDialog : public QMainWindow, public Ui_NewNodeDialog
+	class NewNodeDialog : public QDialog, public Ui_NewNodeDialog
 	{
 		Q_OBJECT
 
