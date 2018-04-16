@@ -45,6 +45,9 @@ namespace Studio
 		// 属性修改后,更新结点值
 		void refreshPropertyToNode(const QString& property, QVariant value);
 
+		// on trigger delete nodes
+		void onDeleteNodes();
+
 	private:
 		// 递归显示属性
 		void showNodePropertyRecursive(Echo::Object* classPtr, const Echo::String& className);

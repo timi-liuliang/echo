@@ -21,6 +21,8 @@ namespace Studio
 		QObject::connect(m_newNodeButton,  SIGNAL(clicked()), this, SLOT(showNewNodeDialog()));
 		QObject::connect(m_nodeTreeWidget, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(showSelectedNodeProperty()));
 		QObject::connect(m_nodeTreeWidget, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showMenu(const QPoint&)));
+
+		QObject::connect(m_actionDeleteNode, SIGNAL(triggered()), this, SLOT(onDeleteNodes()));
 	}
 
 	NodeTreePanel::~NodeTreePanel()
@@ -128,6 +130,37 @@ namespace Studio
 			m_nodeTreeMenu = EchoNew(QMenu);
 			m_nodeTreeMenu->addAction(m_actionDeleteNode);
 			m_nodeTreeMenu->exec(QCursor::pos());
+		}
+	}
+
+	// on trigger delete nodes
+	void NodeTreePanel::onDeleteNodes()
+	{
+		QList<QTreeWidgetItem*> items = m_nodeTreeWidget->selectedItems();
+		while (items.size() > 0)
+		{
+			QTreeWidgetItem* item = items[0];
+
+			Echo::Node* node = (Echo::Node*)item->data(0, Qt::UserRole).value<void*>();
+
+			// remove item from ui
+			QTreeWidgetItem* parentItem = item->parent();
+			if (parentItem)
+				parentItem->removeChild(item);
+			else
+				m_nodeTreeWidget->invisibleRootItem()->removeChild(item);
+			
+			// remove item from node tree
+			node->remove();
+			node->queueFree();
+
+			items = m_nodeTreeWidget->selectedItems();
+		}
+
+		// set as nullptr
+		if (m_nodeTreeWidget->invisibleRootItem()->childCount() == 0)
+		{
+			EchoEngine::Instance()->setCurrentEditNode( nullptr);
 		}
 	}
 

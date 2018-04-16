@@ -8,7 +8,6 @@
     <file>node/node.png</file>
     <file>Icon/icon.png</file>
     <file>Icon/2DGrid.png</file>
-    <file>Icon/3DGrid.png</file>
     <file>Icon/SpriteAnimation.png</file>
     <file>Icon/pause.png</file>
     <file>Icon/stop.png</file>
@@ -27,9 +26,6 @@
     <file>Icon/root.png</file>
     <file>Icon/folder_close.png</file>
     <file>Icon/folder_open.png</file>
-    <file>Icon/mesh.png</file>
-    <file>Icon/mp3.png</file>
-    <file>Icon/scene.png</file>
     <file>Icon/close-white.png</file>
     <file>Icon/AudioSource.png</file>
     <file>Icon/Launch/launch-0.png</file>

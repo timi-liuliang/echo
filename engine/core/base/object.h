@@ -20,6 +20,10 @@ namespace Echo
 		virtual void setProperty(const String& key, const String& value){}
 		virtual bool getProperty(const String& key, String& value) { return false; }
 
+		// free this object from memory
+		void queueFree() { ECHO_DELETE_T(this, Object); }
+		void free() { ECHO_DELETE_T(this, Object); }
+
 	protected:
 		String			m_name;
 		KeyValues		m_propertys;

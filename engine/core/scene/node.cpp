@@ -190,6 +190,30 @@ namespace Echo
 		return *std::next(m_children.begin(), idx);
 	}
 
+	// remove from tree
+	void Node::remove()
+	{
+		Node* parent = getParent();
+		if (parent)
+			parent->removeChild(this);
+	}
+
+	// remove child
+	bool Node::removeChild(Node* node)
+	{
+		ChildNodeSet::iterator it = m_children.find(node);
+		if (it != m_children.end())
+		{
+			if (node->getParent() == this)
+			{
+				m_children.erase(it);
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	bool Node::isVisible() const
 	{
 		return m_isVisible;

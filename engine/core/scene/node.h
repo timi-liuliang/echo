@@ -39,6 +39,12 @@ namespace Echo
 		ui32 getChildNum() const { return m_children.size(); }
 		Node* getChild(ui32 idx);
 
+		// remove from tree
+		void remove();
+
+		// remove child
+		bool removeChild(Node* node);
+
 		void setVisible(bool bVisible);
 		bool isVisible() const;
 		

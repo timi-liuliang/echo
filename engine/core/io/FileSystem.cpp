@@ -60,6 +60,7 @@ namespace Echo
 		}
 
 		EchoLogError("Error: Cannot open file: %s in FileSystem::open[%s]", filename.c_str(), strerror(errno));
+
 		return nullptr;
 	}
 
