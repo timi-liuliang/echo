@@ -23,6 +23,9 @@ namespace Studio
 		// 选择文件夹
 		void onSelectDir(const char* dir);
 
+		// double click res
+		void onDoubleClickPreviewRes(const char* res);
+
 	protected:
 		// reimplement reiszeEvent function
 		virtual void resizeEvent(QResizeEvent * e);

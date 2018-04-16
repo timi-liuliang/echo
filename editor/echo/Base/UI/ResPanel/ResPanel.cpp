@@ -2,6 +2,8 @@
 #include <QDateTime>
 #include <QMenuBar>
 #include "ResPanel.h"
+#include "NodeTreePanel.h"
+#include "EchoEngine.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/main/Root.h"
 
@@ -24,6 +26,8 @@ namespace Studio
 		QObject::connect(m_dirModel, SIGNAL(FileSelected(const char*)), this, SLOT(onSelectDir(const char*)));
 
 		m_previewHelper = new QT_UI::QPreviewHelper(m_listView);
+
+		QObject::connect(m_previewHelper, SIGNAL(doubleClickedRes(const char*)), this, SLOT(onDoubleClickPreviewRes(const char*)));
 	}
 
 	// Îö¹¹º¯Êý
@@ -54,6 +58,28 @@ namespace Studio
 	{
 		m_previewHelper->clear();
 		m_previewHelper->setPath(dir);
+	}
+
+	// double click res
+	void ResPanel::onDoubleClickPreviewRes(const char* res)
+	{
+		Echo::String resPath;
+		if (Echo::IO::instance()->covertFullPathToResPath(res, resPath))
+		{
+			Echo::Node* node = Echo::Node::load(resPath);
+			if (node)
+			{
+				Echo::Node* old = Studio::EchoEngine::Instance()->getCurrentEditNode();
+				if (old)
+				{
+					old->queueFree();
+				}
+
+				Studio::EchoEngine::Instance()->setCurrentEditNode(node);
+
+				NodeTreePanel::instance()->refreshNodeTreeDisplay();
+			}
+		}
 	}
 
 	// reimplement reiszeEvent function

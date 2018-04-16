@@ -16,6 +16,8 @@ namespace QT_UI
 		m_listProxyModel->setFilterKeyColumn(0);
 
 		m_listView->setModel(m_listProxyModel);
+
+		QObject::connect(m_listView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onDoubleClicked(QModelIndex)));
 	}
 
 	// add item
@@ -62,12 +64,14 @@ namespace QT_UI
 		{
 			Echo::String folderName = Echo::PathUtil::GetLastDirName(previewFile);
 			QStandardItem* item = new QStandardItem(QIcon(":/icon/Icon/root.png"), folderName.c_str());
+			item->setData( "_Directory", Qt::UserRole);
 			results.push_back(item);
 		}
 		else
 		{
 			Echo::String fileName = Echo::PathUtil::GetPureFilename(previewFile, true);
 			QStandardItem* item = new QStandardItem( getFileIcon(previewFile.c_str()), fileName.c_str());
+			item->setData(previewFile.c_str(), Qt::UserRole);
 			results.push_back(item);
 		}
 	}
@@ -126,6 +130,16 @@ namespace QT_UI
 			int spacing = std::max<int>(listViewWidth - numberIcons * iconSizeWidth, 0) / numberIcons / 2;
 
 			m_listView->setSpacing(std::max<int>(spacing, 0));
+		}
+	}
+
+	// double clicked resource
+	void QPreviewHelper::onDoubleClicked(const QModelIndex& pIndex)
+	{
+		Echo::String resPath = m_listProxyModel ? m_listProxyModel->data(pIndex, Qt::UserRole).toString().toStdString().c_str() : m_listModel->data(pIndex, Qt::UserRole).toString().toStdString().c_str();
+		if (resPath != "_Directory")
+		{
+			emit doubleClickedRes(resPath.c_str());
 		}
 	}
 }

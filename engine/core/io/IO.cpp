@@ -236,6 +236,19 @@ namespace Echo
 		return ret; 
 	}
 
+	// 通过全路径获取资源路径
+	bool IO::covertFullPathToResPath(const String& fullPath, String& resPath)
+	{
+		String result = StringUtil::Replace(fullPath, m_resFileSystem->getPath(), m_resFileSystem->getPrefix());
+		if (StringUtil::StartWith(result, "Res://"))
+		{
+			resPath = result;
+			return true;
+		}
+		
+		return false;
+	}
+
 	// 获取指定后缀名的所有文件
 	void IO::listFilesWithExt( StringArray& oFiles, const char* extWithDot)
 	{

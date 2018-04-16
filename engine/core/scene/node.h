@@ -108,7 +108,7 @@ namespace Echo
 
 		// instance node
 		static Node* instanceNode(void* pugiNode);
-		static void instanceChildNode(void* pugiNode, Node* parent);
+		static Node* instanceNodeTree(void* pugiNode, Node* parent);
 
 		// remember property recursive
 		static void loadPropertyRecursive(void* pugiNode, Echo::Object* classPtr, const Echo::String& className);

@@ -55,6 +55,9 @@ namespace Echo
 		// 获取文件全路径(相应于存档类型)
 		String getFullPath(const String& filename);
 
+		// 通过全路径获取资源路径
+		bool covertFullPathToResPath(const String& fullPath, String& resPath);
+
 		// 根据组获取所有资源存档
 		const ArchiveList& getArchiveList() { return m_archives; }
 

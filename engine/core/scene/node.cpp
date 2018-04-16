@@ -508,11 +508,7 @@ namespace Echo
 			if (doc.load_buffer(reader.getData<char*>(), reader.getSize()))
 			{
 				pugi::xml_node root = doc.child("node");
-				Node* rootNode = instanceNode(&root);
-				if(rootNode)
-				{
-					instanceChildNode(&root, rootNode);
-				}
+				Node* rootNode = instanceNodeTree(&root, nullptr);
 
 				return rootNode;
 			}
@@ -535,25 +531,32 @@ namespace Echo
 			node->setName(name);
 
 			loadPropertyRecursive(pugiNode, node, className);
+
+			return node;
 		}
 
 		return  nullptr;
 	}
 
-	void Node::instanceChildNode(void* pugiNode, Node* parent)
+	Node* Node::instanceNodeTree(void* pugiNode, Node* parent)
 	{
 		if (pugiNode)
 		{
 			pugi::xml_node* xmlNode = (pugi::xml_node*)pugiNode;
 
 			Node* node = instanceNode(pugiNode);
-			parent->addChild(node);
+			if (parent)
+				parent->addChild(node);
 
 			for (pugi::xml_node child = xmlNode->child("node").first_child(); child; child = child.next_sibling())
 			{
-				instanceChildNode(child, node);
+				instanceNodeTree(child, node);
 			}
+
+			return node;
 		}
+
+		return nullptr;
 	}
 
 	// remember property recursive

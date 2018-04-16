@@ -25,6 +25,12 @@ namespace Echo
 		// 是否存在
 		bool isExist(const String& filename);
 
+		// 获取前缀
+		const String& getPrefix() const { return m_prefix; }
+
+		// 获取路径
+		const String& getPath() const { return m_path; }
+
 		// 全路径
 		String getFullPath(const String& resPath);
 

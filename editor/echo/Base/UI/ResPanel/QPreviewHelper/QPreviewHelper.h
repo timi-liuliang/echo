@@ -6,8 +6,10 @@
 
 namespace QT_UI
 {
-	class QPreviewHelper
+	class QPreviewHelper : public QObject
 	{
+		Q_OBJECT
+
 	public:
 		QPreviewHelper(QListView* view);
 
@@ -19,6 +21,10 @@ namespace QT_UI
 
 		// when resize list view
 		void onListViewResize();
+
+	public: signals :
+		// double clicked
+		void doubleClickedRes(const char* path);
 
 	private:
 		// add item
@@ -35,6 +41,10 @@ namespace QT_UI
 
 		// set use list Mode
 		void setUseListMode();
+
+	private slots:
+		// double clicked resource
+		void onDoubleClicked(const QModelIndex& pIndex);
 
 	private:
 		QListView*				m_listView;
