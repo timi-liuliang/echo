@@ -501,6 +501,83 @@ namespace Echo
 	// load
 	Node* Node::load(const String& path)
 	{
+		MemoryReader reader(path);
+		if (reader.getSize())
+		{
+			pugi::xml_document doc;
+			if (doc.load_buffer(reader.getData<char*>(), reader.getSize()))
+			{
+				pugi::xml_node root = doc.child("node");
+				Node* rootNode = instanceNode(&root);
+				if(rootNode)
+				{
+					instanceChildNode(&root, rootNode);
+				}
+
+				return rootNode;
+			}
+		}
+
 		return nullptr;
+	}
+
+	// instance node
+	Node* Node::instanceNode(void* pugiNode)
+	{
+		pugi::xml_node* xmlNode = (pugi::xml_node*)pugiNode;
+
+		Echo::String name     = xmlNode->attribute("name").value();
+		Echo::String className = xmlNode->attribute("class").value();
+
+		Node* node = Echo::Class::create<Node*>(className);
+		if (node)
+		{
+			node->setName(name);
+
+			loadPropertyRecursive(pugiNode, node, className);
+		}
+
+		return  nullptr;
+	}
+
+	void Node::instanceChildNode(void* pugiNode, Node* parent)
+	{
+		if (pugiNode)
+		{
+			pugi::xml_node* xmlNode = (pugi::xml_node*)pugiNode;
+
+			Node* node = instanceNode(pugiNode);
+			parent->addChild(node);
+
+			for (pugi::xml_node child = xmlNode->child("node").first_child(); child; child = child.next_sibling())
+			{
+				instanceChildNode(child, node);
+			}
+		}
+	}
+
+	// remember property recursive
+	void Node::loadPropertyRecursive(void* pugiNode, Echo::Object* classPtr, const Echo::String& className)
+	{
+		pugi::xml_node* xmlNode = (pugi::xml_node*)pugiNode;
+
+		// load parent property first
+		Echo::String parentClassName;
+		if (Echo::Class::getParentClass(parentClassName, className))
+		{
+			// don't display property of object
+			if (parentClassName != "Object")
+				loadPropertyRecursive(pugiNode, classPtr, parentClassName);
+		}
+
+		const Echo::PropertyInfos& propertys = Echo::Class::getPropertys(className);
+		for (const Echo::PropertyInfo& prop : propertys)
+		{
+			Echo::Variant var;
+			String valueStr = xmlNode->attribute(prop.m_name.c_str()).value();
+			var.fromString( prop.m_type, valueStr);
+
+			Class::setPropertyValue(classPtr, prop.m_name, var);
+		}
 	}
 }

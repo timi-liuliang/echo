@@ -109,7 +109,7 @@ namespace Echo
 		}
 
 		template<typename T>
-		static T create(const char* className)
+		static T create(const String& className)
 		{
 			Object* obj = create(className);
 			if (obj)
@@ -120,7 +120,7 @@ namespace Echo
 			return nullptr;
 		}
 
-		static Object* create(const char* className);
+		static Object* create(const String& className);
 
 		// add class
 		static void addClass(const String& className, ObjectFactory* objFactory);

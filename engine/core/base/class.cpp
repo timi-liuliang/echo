@@ -49,7 +49,7 @@ namespace Echo
 		return !childClasses.empty();
 	}
 
-	Object* Class::create(const char* className)
+	Object* Class::create(const String& className)
 	{
 		auto it = g_classInfos->find(className);
 		if (it != g_classInfos->end())
