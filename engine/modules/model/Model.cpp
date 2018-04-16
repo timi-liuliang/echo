@@ -1744,7 +1744,7 @@ namespace Echo
 			m_mesh->generateTangentData( useNornalMap );
 
 			String filePath = m_mesh->getName( );
-			filePath =  IO::instance()->getFileLocation( filePath );
+			filePath =  IO::instance()->getFullPath( filePath );
 			//return m_mesh->saveToFile( filePath.c_str() );
 		}
 

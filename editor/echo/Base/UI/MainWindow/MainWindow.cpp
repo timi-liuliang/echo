@@ -8,6 +8,7 @@
 #include <QShortcut>
 #include "TimelinePanel.h"
 #include "DebuggerPanel.h"
+#include "EchoEngine.h"
 
 namespace Studio
 {
@@ -64,7 +65,7 @@ namespace Studio
 	// 保存文件
 	void MainWindow::onSaveProject()
 	{
-		int  a = 10;
+		Studio::EchoEngine::Instance()->saveCurrentEditNodeTree();
 	}
 
 	// 打开文件

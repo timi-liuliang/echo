@@ -216,25 +216,20 @@ namespace Echo
 	}
 
 	// 获取文件位置
-	String IO::getFileLocation(const String& filename)
+	String IO::getFullPath(const String& filename)
 	{
+		EE_LOCK_AUTO_MUTEX
+
 		String ret;
-        {
-			String lowerCaseName = filename;
-			StringUtil::LowerCase(lowerCaseName);
 
-			EE_LOCK_AUTO_MUTEX
+		if (StringUtil::StartWith(filename, "Res://"))
+		{
+			return m_resFileSystem->getFullPath(filename);
+		}
+		else if (StringUtil::StartWith(filename, "User://"))
+		{
 
-			Archive *pArch = NULL;
-            FileArchiveMapping::iterator rit = m_resourceIndexCaseSensitive.find( lowerCaseName);
-			if (rit != m_resourceIndexCaseSensitive.end())
-			{
-				// Found in the index
-				pArch = rit->second;
-                ret = pArch->location( lowerCaseName);
-				return ret;
-			}
-        }
+		}
 
 		EchoLogError("getFileLocation [%s] failed", filename.c_str());
 
@@ -287,7 +282,7 @@ namespace Echo
 		for (FileArchiveMapping::iterator itf = m_resourceIndexCaseSensitive.begin(); itf != m_resourceIndexCaseSensitive.end(); itf++)
 		{
 			String fileExt = PathUtil::GetFileExt(itf->first, true);
-			String filePath = getFileLocation(itf->first);
+			String filePath = getFullPath(itf->first);
 			filePath = PathUtil::GetFileDirPath(filePath);
 			PathUtil::FormatPathAbsolut(filePath, true);
 			PathUtil::FormatPathAbsolut(realPath, true);

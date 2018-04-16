@@ -26,6 +26,5 @@ namespace Echo
 
 	protected:
 		String			m_name;
-		KeyValues		m_propertys;
 	};
 }

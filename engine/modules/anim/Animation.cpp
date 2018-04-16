@@ -457,7 +457,7 @@ namespace Echo
 	void Animation::optAnimation()
 	{
 #ifdef ECHO_PLATFORM_WINDOWS
-		String filePath = IO::instance()->getFileLocation(getName());
+		String filePath = IO::instance()->getFullPath(getName());
 		FILE* fileHandle;
 		fopen_s(&fileHandle, filePath.c_str(), "wb");
 

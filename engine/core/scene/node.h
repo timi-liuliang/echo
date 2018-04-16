@@ -92,6 +92,20 @@ namespace Echo
 		// 获取全局变量值
 		virtual void* getGlobalUniformValue(const String& name);
 
+	public:
+		// save
+		void save(const String& path);
+
+		// load
+		static Node* load(const String& path);
+
+	private:
+		// save xml recursive
+		void saveXml(void* pugiNode, Node* node);
+
+		// remember property recursive
+		void savePropertyRecursive(void* pugiNode, Echo::Object* classPtr, const Echo::String& className);
+
 	protected:
 		inline void		needUpdate();
 

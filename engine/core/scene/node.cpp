@@ -1,5 +1,8 @@
 #include "Node.h"
 #include "engine/core/Util/LogManager.h"
+#include "engine/core/io/IO.h"
+#include <thirdparty/pugixml/pugixml.hpp>
+#include <thirdparty/pugixml/pugiconfig.hpp>
 
 namespace Echo
 {
@@ -430,5 +433,72 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(Node, "Position", Variant::Type_Vector3, "getPos", "setPos");
 		CLASS_REGISTER_PROPERTY(Node, "Rotation", Variant::Type_Vector3, "getYawPitchRoll", "setYawPitchRoll");
 		CLASS_REGISTER_PROPERTY(Node, "Scale",    Variant::Type_Vector3, "getScale", "setScale");
+	}
+
+	// save
+	void Node::save(const String& path)
+	{
+		String fullPath = IO::instance()->getFullPath(path);
+
+		pugi::xml_document doc;
+
+		// declaration
+		pugi::xml_node dec = doc.prepend_child(pugi::node_declaration);
+		dec.append_attribute("version") = "1.0";
+		dec.append_attribute("encoding") = "utf-8";
+
+		// root node
+		pugi::xml_node root = doc.append_child("node");
+
+		saveXml(&root, this);
+
+		doc.save_file(fullPath.c_str(), "\t", 1U, pugi::encoding_utf8);
+	}
+
+	// save xml recursive
+	void Node::saveXml(void* pugiNode, Node* node)
+	{
+		pugi::xml_node* xmlNode = (pugi::xml_node*)pugiNode;
+
+		xmlNode->append_attribute("class").set_value(node->getClassName().c_str());
+		xmlNode->append_attribute("name").set_value(node->getName().c_str());
+		savePropertyRecursive(pugiNode, node, node->getClassName());
+
+		for (Node* child : m_children)
+		{
+			pugi::xml_node newNode = xmlNode->append_child("node");
+			saveXml(&newNode, child);
+		}
+	}
+
+	// remember property recursive
+	void Node::savePropertyRecursive(void* pugiNode, Echo::Object* classPtr, const Echo::String& className)
+	{
+		pugi::xml_node* xmlNode = (pugi::xml_node*)pugiNode;
+
+		// save parent property first
+		Echo::String parentClassName;
+		if (Echo::Class::getParentClass(parentClassName, className))
+		{
+			// don't display property of object
+			if (parentClassName != "Object")
+				savePropertyRecursive( pugiNode, classPtr, parentClassName);
+		}
+
+		const Echo::PropertyInfos& propertys = Echo::Class::getPropertys(className);
+		for (const Echo::PropertyInfo& prop : propertys)
+		{
+			//Echo::Variant var;
+			//Echo::Class::getPropertyValue(classPtr, prop.m_name, var);
+			Echo::String varStr = prop.m_getter;// var.toString();
+
+			xmlNode->append_attribute(prop.m_name.c_str()).set_value(varStr.c_str());
+		}
+	}
+
+	// load
+	Node* Node::load(const String& path)
+	{
+		return nullptr;
 	}
 }

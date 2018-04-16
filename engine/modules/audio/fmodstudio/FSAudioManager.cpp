@@ -77,7 +77,7 @@ namespace Echo
 
 			if (isStream)
 			{
-				IO::instance()->getFileLocation(bankFile);
+				IO::instance()->getFullPath(bankFile);
 				userdata.filename = bankFile;
 
 				FMOD_STUDIO_BANK_INFO bankinfo;

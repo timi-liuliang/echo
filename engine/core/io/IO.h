@@ -53,7 +53,7 @@ namespace Echo
 		bool isResourceExists(const String& filename);
 
 		// 获取文件全路径(相应于存档类型)
-		String getFileLocation(const String& filename);
+		String getFullPath(const String& filename);
 
 		// 根据组获取所有资源存档
 		const ArchiveList& getArchiveList() { return m_archives; }

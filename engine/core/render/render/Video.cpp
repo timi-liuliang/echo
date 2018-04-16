@@ -68,7 +68,7 @@ namespace Echo
 		TheoraOutputMode outputMode = TH_RGB;
 		String filename;
 #if defined(ECHO_PLATFORM_WINDOWS)
-		filename = IO::instance()->getFileLocation(m_fileName);
+		filename = IO::instance()->getFullPath(m_fileName);
 #endif
 		if (filename == "")
 			filename = m_fileName;

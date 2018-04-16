@@ -167,6 +167,15 @@ namespace Studio
 		return true;
 	}
 
+	// save current node tree
+	void EchoEngine::saveCurrentEditNodeTree()
+	{
+		if (m_currentEditNode)
+		{
+			m_currentEditNode->save("Res://first.tree");
+		}
+	}
+
 	// ÇÐ»»³¡¾°
 	void EchoEngine::ChangeScene(const char* sceneName, bool isGameMode)
 	{

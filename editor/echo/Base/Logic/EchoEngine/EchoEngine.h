@@ -68,6 +68,9 @@ namespace Studio
 
 		// 场景相关
 	public:
+		// save current node tree
+		void saveCurrentEditNodeTree();
+
 		// 切换场景
 		void ChangeScene( const char* sceneName, bool isGameMode=false);
 
