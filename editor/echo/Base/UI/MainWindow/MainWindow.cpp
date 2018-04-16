@@ -25,6 +25,9 @@ namespace Studio
 
 		// 设置菜单左上控件
 		menubar->setTopLeftCornerIcon(":/icon/Icon/icon.png");
+
+		// connect signal slot
+		QObject::connect(m_actionSave, SIGNAL(triggered(bool)), this, SLOT(onSaveProject()));
 	}
 
 	// 析构函数
@@ -59,8 +62,9 @@ namespace Studio
 	}
 
 	// 保存文件
-	void MainWindow::SaveFile()
+	void MainWindow::onSaveProject()
 	{
+		int  a = 10;
 	}
 
 	// 打开文件

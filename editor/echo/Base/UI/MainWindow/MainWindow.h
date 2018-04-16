@@ -25,9 +25,9 @@ namespace Studio
 	protected:
 		void closeEvent(QCloseEvent *event);
 
-	private slots:
+	public slots:
 		// ±£´æÎÄ¼þ
-		void SaveFile();
+		void onSaveProject();
 
 	protected:
 		ResPanel*		m_resPanel;

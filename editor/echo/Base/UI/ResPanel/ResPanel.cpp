@@ -24,11 +24,6 @@ namespace Studio
 		QObject::connect(m_dirModel, SIGNAL(FileSelected(const char*)), this, SLOT(onSelectDir(const char*)));
 
 		m_previewHelper = new QT_UI::QPreviewHelper(m_listView);
-
-
-		// test
-		QRect geom = m_listView->geometry();
-		int  a = 10;
 	}
 
 	// Îö¹¹º¯Êı
