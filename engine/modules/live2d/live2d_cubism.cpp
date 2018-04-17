@@ -61,16 +61,6 @@ void main(void)\n\
 	<Texture>\
 		<stage no = \"0\" sampler = \"BiLinearMirror\" />\
 	</Texture>\
-	<VertexFormats>\
-		<VertexFormat>\
-			<VertexSemantic value = \"VS_POSITION\" />\
-			<PixelFormat value = \"PF_RGB32_FLOAT\" />\
-		</VertexFormat>\
-		<VertexFormat>\
-			<VertexSemantic value = \"VS_TEXCOORD\" />\
-			<PixelFormat value = \"PF_RG32_FLOAT\" />\
-		</VertexFormat>\
-	</VertexFormats>\
 </material>";
 
 namespace Echo

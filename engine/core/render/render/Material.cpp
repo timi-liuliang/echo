@@ -24,7 +24,6 @@ namespace Echo
 		, m_pDepthState(NULL)
 		, m_pRasterizerState(NULL)
 		, m_pShaderProgram(NULL)
-		, m_VertexStrite(0)
 	{
 		for(size_t i=0; i<MAX_TEXTURE_SAMPLER; ++i)
 			m_pSamplerState[i] = 0;
@@ -209,7 +208,6 @@ namespace Echo
 		{
 			for( pugi::xml_node elementNode = pSubNode->first_child(); elementNode; elementNode=elementNode.next_sibling())
 			{
-				int idx = 0;
 				String strName = elementNode.name();
 				if(strName == "BlendEnable")
 					blendDesc.bBlendEnable = elementNode.attribute("value").as_bool();
@@ -294,7 +292,6 @@ namespace Echo
 		{
 			for(pugi::xml_node elementNode=pSubNode->first_child(); elementNode; elementNode=elementNode.next_sibling())
 			{
-				int idx = 0;
 				String strName = elementNode.name();
 				if (strName == "PolygonMode")
 					rasterizerState.polygonMode = (RasterizerState::PolygonMode)(MappingStringArrayIdx(s_PolygonMode, 3, elementNode.attribute("value").as_string("")));
@@ -329,190 +326,60 @@ namespace Echo
 	bool Material::loadDepthStencilState( void* pNode )
 	{
 		DepthStencilState::DepthStencilDesc depthStencilState;
-		//rapidxml::xml_node<>* pSubNode = static_cast<rapidxml::xml_node<>*>(pNode);
-		//try
-		//{
-		//	rapidxml::xml_node<>* pElementNode = pSubNode->first_node();
-		//	while(pElementNode)
-		//	{
-		//		String strName = pElementNode->name();
-		//		if (strName == "DepthEnable")
-		//		{
-		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-		//			depthStencilState.bDepthEnable = StringUtil::ParseBool(String(pVarNode->value()));
-		//		}
-		//		else if (strName == "WriteDepth")
-		//		{
-		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-		//			depthStencilState.bWriteDepth = StringUtil::ParseBool(String(pVarNode->value()));
-		//		}
-		//		else if (strName == "DepthFunc")
-		//		{
-		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-		//			String val(pVarNode->value());
-		//			for (size_t i=0; i<RenderState::CF_MAXNUM; ++i)
-		//			{
-		//				if (val == s_ComparisonFunc[i])
-		//				{
-		//					depthStencilState.depthFunc = (RenderState::ComparisonFunc)i;
-		//					break;
-		//				}
-		//			}
-		//		}
-		//		else if (strName == "FrontStencilEnable")
-		//		{
-		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-		//			depthStencilState.bFrontStencilEnable = StringUtil::ParseBool(String(pVarNode->value()));
-		//		}
-		//		else if (strName == "FrontStencilFunc")
-		//		{
-		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-		//			String val(pVarNode->value());
-		//			for (size_t i=0; i<RenderState::CF_MAXNUM; ++i)
-		//			{
-		//				if (val == s_ComparisonFunc[i])
-		//				{
-		//					depthStencilState.frontStencilFunc = (RenderState::ComparisonFunc)i;
-		//					break;
-		//				}
-		//			}
-		//		}
-		//		else if (strName == "FrontStencilReadMask")
-		//		{
-		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-		//			depthStencilState.frontStencilReadMask = StringUtil::ParseUI16(String(pVarNode->value()));
-		//		}
-		//		else if (strName == "FrontStencilWriteMask")
-		//		{
-		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-		//			depthStencilState.frontStencilWriteMask = StringUtil::ParseUI16(String(pVarNode->value()));
-		//		}
-		//		else if (strName == "FrontStencilFailOP")
-		//		{
-		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-		//			String val(pVarNode->value());
-		//			for (size_t i=0; i<DepthStencilState::SOP_MAX; ++i)
-		//			{
-		//				if (val == s_StencilOperation[i])
-		//				{
-		//					depthStencilState.frontStencilFailOP = (DepthStencilState::StencilOperation)i;
-		//					break;
-		//				}
-		//			}
-		//		}
-		//		else if (strName == "FrontStencilDepthFailOP")
-		//		{
-		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-		//			String val(pVarNode->value());
-		//			for (size_t i=0; i<DepthStencilState::SOP_MAX; ++i)
-		//			{
-		//				if (val == s_StencilOperation[i])
-		//				{
-		//					depthStencilState.frontStencilDepthFailOP = (DepthStencilState::StencilOperation)i;
-		//					break;
-		//				}
-		//			}
-		//		}
-		//		else if (strName == "FrontStencilPassOP")
-		//		{
-		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-		//			String val(pVarNode->value());
-		//			for (size_t i=0; i<DepthStencilState::SOP_MAX; ++i)
-		//			{
-		//				if (val == s_StencilOperation[i])
-		//				{
-		//					depthStencilState.frontStencilPassOP = (DepthStencilState::StencilOperation)i;
-		//					break;
-		//				}
-		//			}
-		//		}
-		//		else if (strName == "FrontStencilRef")
-		//		{
-		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-		//			depthStencilState.frontStencilRef = StringUtil::ParseUI32(String(pVarNode->value()));
-		//		}
-		//		else if (strName == "BackStencilEnable")
-		//		{
-		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-		//			depthStencilState.bBackStencilEnable = StringUtil::ParseBool(String(pVarNode->value()));
-		//		}
-		//		else if (strName == "BackStencilFunc")
-		//		{
-		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-		//			String val(pVarNode->value());
-		//			for (size_t i=0; i<RenderState::CF_MAXNUM; ++i)
-		//			{
-		//				if (val == s_ComparisonFunc[i])
-		//				{
-		//					depthStencilState.backStencilFunc = (RenderState::ComparisonFunc)i;
-		//					break;
-		//				}
-		//			}
-		//		}
-		//		else if (strName == "BackStencilReadMask")
-		//		{
-		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-		//			depthStencilState.backStencilReadMask = StringUtil::ParseUI16(String(pVarNode->value()));
-		//		}
-		//		else if (strName == "BackStencilWriteMask")
-		//		{
-		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-		//			depthStencilState.backStencilWriteMask = StringUtil::ParseI16(String(pVarNode->value()));
-		//		}
-		//		else if (strName == "BackStencilFailOP")
-		//		{
-		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-		//			String val(pVarNode->value());
-		//			for (size_t i=0; i<DepthStencilState::SOP_MAX; ++i)
-		//			{
-		//				if (val == s_StencilOperation[i])
-		//				{
-		//					depthStencilState.backStencilFailOP = (DepthStencilState::StencilOperation)i;
-		//					break;
-		//				}
-		//			}
-		//		}
-		//		else if (strName == "BackStencilDepthFailOP")
-		//		{
-		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-		//			String val(pVarNode->value());
-		//			for (size_t i=0; i<DepthStencilState::SOP_MAX; ++i)
-		//			{
-		//				if (val == s_StencilOperation[i])
-		//				{
-		//					depthStencilState.backStencilDepthFailOP = (DepthStencilState::StencilOperation)i;
-		//					break;
-		//				}
-		//			}
-		//		}
-		//		else if (strName == "BackStencilPassOP")
-		//		{
-		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-		//			String val(pVarNode->value());
-		//			for (size_t i=0; i<DepthStencilState::SOP_MAX; ++i)
-		//			{
-		//				if (val == s_StencilOperation[i])
-		//				{
-		//					depthStencilState.backStencilPassOP = (DepthStencilState::StencilOperation)i;
-		//					break;
-		//				}
-		//			}
-		//		}
-		//		else if (strName == "BackStencilRef")
-		//		{
-		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-		//			depthStencilState.backStencilRef = StringUtil::ParseI32(String(pVarNode->value()));
-		//		}
-		//		pElementNode = pElementNode->next_sibling();
-		//	}
+		pugi::xml_node* pSubNode = static_cast<pugi::xml_node*>(pNode);
+		try
+		{
+			for (pugi::xml_node elementNode = pSubNode->first_child(); elementNode; elementNode = elementNode.next_sibling())
+			{
+				String strName = elementNode.name();
+				if (strName == "DepthEnable")
+					depthStencilState.bDepthEnable = StringUtil::ParseBool( elementNode.attribute("value").as_string());
+				else if (strName == "WriteDepth")
+					depthStencilState.bWriteDepth = StringUtil::ParseBool(elementNode.attribute("value").as_string());
+				else if (strName == "DepthFunc")
+					depthStencilState.depthFunc = (RenderState::ComparisonFunc)(MappingStringArrayIdx(s_ComparisonFunc, RenderState::CF_MAXNUM, elementNode.attribute("value").as_string("")));
+				else if (strName == "FrontStencilEnable")
+					depthStencilState.bFrontStencilEnable = StringUtil::ParseBool(elementNode.attribute("value").as_string());
+				else if (strName == "FrontStencilFunc")
+					depthStencilState.frontStencilFunc = (RenderState::ComparisonFunc)(MappingStringArrayIdx(s_ComparisonFunc, RenderState::CF_MAXNUM, elementNode.attribute("value").as_string("")));
+				else if (strName == "FrontStencilReadMask")
+					depthStencilState.frontStencilReadMask = (ui16)elementNode.attribute("value").as_uint();
+				else if (strName == "FrontStencilWriteMask")
+					depthStencilState.frontStencilWriteMask = (ui16)elementNode.attribute("value").as_uint();
+				else if (strName == "FrontStencilFailOP")
+					depthStencilState.frontStencilFailOP = (DepthStencilState::StencilOperation)(MappingStringArrayIdx(s_StencilOperation, DepthStencilState::SOP_MAX, elementNode.attribute("value").as_string("")));
+				else if (strName == "FrontStencilDepthFailOP")
+					depthStencilState.frontStencilDepthFailOP = (DepthStencilState::StencilOperation)(MappingStringArrayIdx(s_StencilOperation, DepthStencilState::SOP_MAX, elementNode.attribute("value").as_string("")));
+				else if (strName == "FrontStencilPassOP")
+					depthStencilState.frontStencilPassOP = (DepthStencilState::StencilOperation)(MappingStringArrayIdx(s_StencilOperation, DepthStencilState::SOP_MAX, elementNode.attribute("value").as_string("")));
+				else if (strName == "FrontStencilRef")
+					depthStencilState.frontStencilRef = elementNode.attribute("value").as_uint();
+				else if (strName == "BackStencilEnable")
+					depthStencilState.bBackStencilEnable = StringUtil::ParseBool(elementNode.attribute("value").as_string());
+				else if (strName == "BackStencilFunc")
+					depthStencilState.backStencilFunc = (RenderState::ComparisonFunc)(MappingStringArrayIdx(s_ComparisonFunc, RenderState::CF_MAXNUM, elementNode.attribute("value").as_string("")));
+				else if (strName == "BackStencilReadMask")
+					depthStencilState.backStencilReadMask = (ui16)elementNode.attribute("value").as_uint();
+				else if (strName == "BackStencilWriteMask")
+					depthStencilState.backStencilWriteMask = (ui16)elementNode.attribute("value").as_uint();
+				else if (strName == "BackStencilFailOP")
+					depthStencilState.backStencilFailOP = (DepthStencilState::StencilOperation)(MappingStringArrayIdx(s_StencilOperation, DepthStencilState::SOP_MAX, elementNode.attribute("value").as_string("")));
+				else if (strName == "BackStencilDepthFailOP")
+					depthStencilState.backStencilDepthFailOP = (DepthStencilState::StencilOperation)(MappingStringArrayIdx(s_StencilOperation, DepthStencilState::SOP_MAX, elementNode.attribute("value").as_string("")));
+				else if (strName == "BackStencilPassOP")
+					depthStencilState.backStencilPassOP = (DepthStencilState::StencilOperation)(MappingStringArrayIdx(s_StencilOperation, DepthStencilState::SOP_MAX, elementNode.attribute("value").as_string("")));
+				else if (strName == "BackStencilRef")
+					depthStencilState.backStencilRef = elementNode.attribute("value").as_int();
+			}
+
 			createDepthState(depthStencilState);
 			return true;
-		//}
-		//catch(bool)
-		//{
-		//	free();
-		//	return false;
-		//}
+		}
+		catch(bool)
+		{
+			free();
+			return false;
+		}
 	}
 
 	bool Material::loadSamplerState_Ext( void* pNode )

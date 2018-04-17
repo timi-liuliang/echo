@@ -64,9 +64,6 @@ namespace Echo
 		// 获取着色器
 		ShaderProgram* getShaderProgram() const { return m_pShaderProgram; }
 
-		// 获取顶点步幅
-		size_t getVertexStrite() const { return m_VertexStrite; }
-
 		// 绑定shader
 		void activeShader();
 
@@ -110,7 +107,6 @@ namespace Echo
 		SamplerStateMap		m_mapSamplerState;
 		TextureSamplerStateArray	m_arrTexSamplerState;
 		ShaderProgram*		m_pShaderProgram;
-		size_t				m_VertexStrite;
 		typedef map<String, DefaultUniform*>::type MapDefaultUniforms;
 		MapDefaultUniforms	m_defaultUniforms;
 	};
