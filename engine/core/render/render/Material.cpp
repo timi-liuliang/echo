@@ -128,66 +128,44 @@ namespace Echo
 				psSrc = psNode.text().as_string();
 			}
 
-			pugi::xml_node pElementNode = rootNode->first_child();
-			if (pElementNode)
+			for(pugi::xml_node elementNode = rootNode->first_child(); elementNode; elementNode=elementNode.next_sibling())
 			{
-				do
+				String strName = elementNode.name();
+				if (strName == "Macro")
 				{
-					String strName = pElementNode.name();
-					if (strName == "Macro")
-					{
-						if (!loadMacro(&pElementNode))
-						{
-							throw false;
-						}
-					}
-					else if (strName == "BlendState")
-					{
-						if (!loadBlendState(&pElementNode))
-						{
-							throw false;
-						}
-					}
-					else if (strName == "RasterizerState")
-					{
-						if (!loadRasterizerState(&pElementNode))
-						{
-							throw false;
-						}
-					}
-					else if (strName == "DepthStencilState")
-					{
-						if (!loadDepthStencilState(&pElementNode))
-						{
-							throw false;
-						}
-					}
-					else if (strName == "SamplerState")
-					{
-						if( !loadSamplerState_Ext( &pElementNode ) )
-						{
-							throw false;
-						}
-					}
-
-					else if( strName == "Texture" )
-					{
-						if( !loadTexture_Ext( &pElementNode ) )
-						{
-							throw false;
-						}
-					}
-					else if ( strName == "DefaultUniformValue" )
-					{
-						if ( !loadDefaultUniform( &pElementNode ) )
-						{
-							throw false;
-						}
-					}
-
-					pElementNode = pElementNode.next_sibling();
+					if (!loadMacro(&elementNode))
+						throw false;
 				}
-				while(pElementNode);
+				else if (strName == "BlendState")
+				{
+					if (!loadBlendState(&elementNode))
+						throw false;
+				}
+				else if (strName == "RasterizerState")
+				{
+					if (!loadRasterizerState(&elementNode))
+						throw false;
+				}
+				else if (strName == "DepthStencilState")
+				{
+					if (!loadDepthStencilState(&elementNode))
+						throw false;
+				}
+				else if (strName == "SamplerState")
+				{
+					if( !loadSamplerState_Ext( &elementNode ) )
+						throw false;
+				}
+				else if( strName == "Texture" )
+				{
+					if( !loadTexture_Ext( &elementNode ) )
+						throw false;
+				}
+				else if ( strName == "DefaultUniformValue" )
+				{
+					if ( !loadDefaultUniform( &elementNode ) )
+						throw false;
+				}
 			}
 
 			// 执行着色器创建
@@ -210,18 +188,17 @@ namespace Echo
 		}
 	}
 
-	static bool MappingStringArrayIdx(const String* arry, int count, const String& value, int& idx)
+	static int MappingStringArrayIdx(const String* arry, int count, const String& value)
 	{
-		for (size_t i = 0; i < count; i++)
+		for (int i = 0; i < count; i++)
 		{
 			if (value == arry[i])
-			{
-				idx = i;
-				return true;
-			}
+				return i;
 		}
 
-		return false;
+		EchoLogError("Mapping string array idx failed [%s]", value.c_str());
+
+		return 0;
 	}
 
 	bool Material::loadBlendState( void* pNode )
@@ -237,35 +214,17 @@ namespace Echo
 				if(strName == "BlendEnable")
 					blendDesc.bBlendEnable = elementNode.attribute("value").as_bool();
 				else if (strName == "SrcBlend")
-				{
-					if (MappingStringArrayIdx(s_BlendFactor, BlendState::BF_MAX, elementNode.attribute("value").as_string(""), idx))
-						blendDesc.srcBlend = (BlendState::BlendFactor)idx;
-				}
+					blendDesc.srcBlend = (BlendState::BlendFactor)(MappingStringArrayIdx(s_BlendFactor, BlendState::BF_MAX, elementNode.attribute("value").as_string("")));
 				else if (strName == "DstBlend")
-				{
-					if (MappingStringArrayIdx(s_BlendFactor, BlendState::BF_MAX, elementNode.attribute("value").as_string(""), idx))
-						blendDesc.dstBlend = (BlendState::BlendFactor)idx;
-				}
+					blendDesc.dstBlend = (BlendState::BlendFactor)(MappingStringArrayIdx(s_BlendFactor, BlendState::BF_MAX, elementNode.attribute("value").as_string("")));
 				else if (strName == "BlendOP")
-				{
-					if (MappingStringArrayIdx(s_BlendOperation, 6, elementNode.attribute("value").as_string(""), idx))
-						blendDesc.blendOP = (BlendState::BlendOperation)idx;
-				}
+					blendDesc.blendOP = (BlendState::BlendOperation)(MappingStringArrayIdx(s_BlendOperation, 6, elementNode.attribute("value").as_string("")));
 				else if (strName == "SrcAlphaBlend")
-				{
-					if (MappingStringArrayIdx(s_BlendFactor, 6, elementNode.attribute("value").as_string(""), idx))
-						blendDesc.srcAlphaBlend = (BlendState::BlendFactor)idx;
-				}
+					blendDesc.srcAlphaBlend = (BlendState::BlendFactor)(MappingStringArrayIdx(s_BlendFactor, 6, elementNode.attribute("value").as_string("")));
 				else if (strName == "DstAlphaBlend")
-				{
-					if (MappingStringArrayIdx(s_BlendFactor, 6, elementNode.attribute("value").as_string(""), idx))
-						blendDesc.dstAlphaBlend = (BlendState::BlendFactor)idx;
-				}
+					blendDesc.dstAlphaBlend = (BlendState::BlendFactor)(MappingStringArrayIdx(s_BlendFactor, 6, elementNode.attribute("value").as_string("")));
 				else if (strName == "AlphaBlendOP")
-				{
-					if (MappingStringArrayIdx(s_BlendOperation, 6, elementNode.attribute("value").as_string(""), idx))
-						blendDesc.alphaBlendOP = (BlendState::BlendOperation)idx;
-				}
+					blendDesc.alphaBlendOP = (BlendState::BlendOperation)(MappingStringArrayIdx(s_BlendOperation, 6, elementNode.attribute("value").as_string("")));
 				else if (strName == "ColorWriteMask")
 					blendDesc.colorWriteMask = MappingColorMask(elementNode.attribute("value").as_string(""));
 				else if (strName == "A2CEnable")
@@ -330,92 +289,41 @@ namespace Echo
 	bool Material::loadRasterizerState( void* pNode )
 	{
 		RasterizerState::RasterizerDesc rasterizerState;
-		//rapidxml::xml_node<>* pSubNode = static_cast<rapidxml::xml_node<>*>(pNode);
-		//try
-		//{
-		//	rapidxml::xml_node<>* pElementNode = pSubNode->first_node();
-		//	while(pElementNode)
-		//	{
-		//		String strName = pElementNode->name();
-		//		if (strName == "PolygonMode")
-		//		{
-		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-		//			String val(pVarNode->value());
-		//			for (size_t i=0; i<3; ++i)
-		//			{
-		//				if (val == s_PolygonMode[i])
-		//				{
-		//					rasterizerState.polygonMode = (RasterizerState::PolygonMode)i;
-		//					break;
-		//				}
-		//			}
-		//		}
-		//		else if (strName == "ShadeModel")
-		//		{
-		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-		//			String val(pVarNode->value());
-		//			for (size_t i=0; i<2; ++i)
-		//			{
-		//				if (val == s_ShadeModel[i])
-		//				{
-		//					rasterizerState.shadeModel = (RasterizerState::ShadeModel)i;
-		//					break;
-		//				}
-		//			}
-		//		}
-		//		else if (strName == "CullMode")
-		//		{
-		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-		//			String val(pVarNode->value());
-		//			for (size_t i=0; i<2; ++i)
-		//			{
-		//				if (val == s_CullMode[i])
-		//				{
-		//					rasterizerState.cullMode = (RasterizerState::CullMode)i;
-		//					break;
-		//				}
-		//			}
-		//		}
-		//		else if (strName == "FrontFaceCCW")
-		//		{
-		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-		//			rasterizerState.bFrontFaceCCW = StringUtil::ParseBool(String(pVarNode->value()));
-		//		}
-		//		else if (strName == "DepthBias")
-		//		{
-		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-		//			rasterizerState.depthBias = StringUtil::ParseFloat(String(pVarNode->value()));
-		//		}
-		//		else if (strName == "DepthBiasFactor")
-		//		{
-		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-		//			rasterizerState.depthBiasFactor = StringUtil::ParseFloat(String(pVarNode->value()));
-		//		}
-		//		else if (strName == "DepthClip")
-		//		{
-		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-		//			rasterizerState.bDepthClip = StringUtil::ParseBool(String(pVarNode->value()));
-		//		}
-		//		else if (strName == "Scissor")
-		//		{
-		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-		//			rasterizerState.bScissor = StringUtil::ParseBool(String(pVarNode->value()));
-		//		}
-		//		else if (strName == "Multisample")
-		//		{
-		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-		//			rasterizerState.bMultisample = StringUtil::ParseBool(String(pVarNode->value()));
-		//		}
-		//		pElementNode = pElementNode->next_sibling();
-		//	}
+		pugi::xml_node* pSubNode = static_cast<pugi::xml_node*>(pNode);
+		try
+		{
+			for(pugi::xml_node elementNode=pSubNode->first_child(); elementNode; elementNode=elementNode.next_sibling())
+			{
+				int idx = 0;
+				String strName = elementNode.name();
+				if (strName == "PolygonMode")
+					rasterizerState.polygonMode = (RasterizerState::PolygonMode)(MappingStringArrayIdx(s_PolygonMode, 3, elementNode.attribute("value").as_string("")));
+				else if (strName == "ShadeModel")
+					rasterizerState.shadeModel = (RasterizerState::ShadeModel)(MappingStringArrayIdx(s_ShadeModel, 2, elementNode.attribute("value").as_string("")));
+				else if (strName == "CullMode")
+					rasterizerState.cullMode = (RasterizerState::CullMode)(MappingStringArrayIdx(s_CullMode, 2, elementNode.attribute("value").as_string()));
+				else if (strName == "FrontFaceCCW")
+					rasterizerState.bFrontFaceCCW = StringUtil::ParseBool(elementNode.attribute("value").as_string());
+				else if (strName == "DepthBias")
+					rasterizerState.depthBias = StringUtil::ParseBool(elementNode.attribute("value").as_string());
+				else if (strName == "DepthBiasFactor")
+					rasterizerState.depthBiasFactor = elementNode.attribute("value").as_float();
+				else if (strName == "DepthClip")
+					rasterizerState.bDepthClip = StringUtil::ParseBool(elementNode.attribute("value").as_string());
+				else if (strName == "Scissor")
+					rasterizerState.bScissor = StringUtil::ParseBool(elementNode.attribute("value").as_string());
+				else if (strName == "Multisample")
+					rasterizerState.bMultisample = StringUtil::ParseBool(elementNode.attribute("value").as_string());
+			}
+
 			createRasterizerState(rasterizerState);
 			return true;
-		//}
-		//catch(bool)
-		//{
-		//	free();
-		//	return false;
-		//}
+		}
+		catch (bool)
+		{
+			free();
+			return false;
+		}
 	}
 
 	bool Material::loadDepthStencilState( void* pNode )
