@@ -1,10 +1,7 @@
 #include "LightArray.h"
 #include <engine/core/io/DataStream.h>
 #include "Engine/core/Scene/NodeTree.h"
-#include "rapidxml/rapidxml.hpp"
-#include "rapidxml/rapidxml_utils.hpp"
-#include "rapidxml/rapidxml_print.hpp"
-#include "rapidxml/rapidxml_helper.hpp"
+#include <thirdparty/pugixml/pugixml.hpp>
 
 namespace Echo
 {
@@ -184,84 +181,84 @@ namespace Echo
 
 		try
 		{
-			MemoryReader memReader(fileName);
-			if (!memReader.getData<char*>())
-			{
-				throw false;
-			}
-			using namespace rapidxml;
-
-			xml_document<> doc;
-			doc.parse<0>(memReader.getData<char*>());
-
-			xml_node<>* lightsNode = doc.first_node("Lights");
-			if (lightsNode)
-			{
-				xml_node<>* lightNode = lightsNode->first_node("Light");
-				while (lightNode)
-				{
-					String type = lightNode->first_attribute("Type")->value();
-					if (type == "Ambient")
-					{
-						AmbientLight* light = ECHO_DOWN_CAST<AmbientLight*>(addLight(LT_Ambient));
-						light->m_color = Echo::StringUtil::ParseVec4(lightNode->first_attribute("Color")->value());
-						light->m_intensity = Echo::StringUtil::ParseFloat(lightNode->first_attribute("Intensity")->value());
-					}
-					else if (type == "Directional")
-					{
-						DirectionalLight* light = ECHO_DOWN_CAST<DirectionalLight*>(addLight(LT_Directional));
-						light->m_color = Echo::StringUtil::ParseVec4(lightNode->first_attribute("Color")->value());
-						light->m_direction = Echo::StringUtil::ParseVec4(lightNode->first_attribute("Direction")->value());
-						light->m_intensity = Echo::StringUtil::ParseFloat(lightNode->first_attribute("Intensity")->value());
-						xml_attribute<>* posAttrib = lightNode->first_attribute("Position");
-						if (posAttrib)
-						{
-							light->m_position = Echo::StringUtil::ParseVec3(posAttrib->value());
-						}
-					}
-					else if (type == "Point")
-					{
-						PointLight* light = ECHO_DOWN_CAST<PointLight*>(addLight(LT_Point));
-						light->m_colorAddFalloff = Echo::StringUtil::ParseVec4(lightNode->first_attribute("ColorAndFalloff")->value());
-						light->m_positionAndInvRadius = Echo::StringUtil::ParseVec4(lightNode->first_attribute("PosAndInvRadius")->value());
-						light->m_intensity = Echo::StringUtil::ParseFloat(lightNode->first_attribute("Intensity")->value());
-
-						rapidxml::xml_attribute<>* follow = lightNode->first_attribute("FollowModel");
-						light->m_followModel = Echo::StringUtil::ParseBool(follow ? lightNode->first_attribute("FollowModel")->value() : "true");
-					}
-					else if (type == "PBRLight")
-					{
-						PBRLight* light = ECHO_DOWN_CAST<PBRLight*>(addLight(LT_PBRLight));
-
-						light->m_selfType = (LightType)Echo::StringUtil::ParseI32(lightNode->first_attribute("SelfType")->value());
-						light->m_intensity = Echo::StringUtil::ParseFloat(lightNode->first_attribute("Intensity")->value());
-						light->m_direction = Echo::StringUtil::ParseVec3(lightNode->first_attribute("Direction")->value());
-						light->m_position = Echo::StringUtil::ParseVec4(lightNode->first_attribute("Position")->value());
-						light->m_color = Echo::StringUtil::ParseVec3(lightNode->first_attribute("Color")->value());
-						light->m_spot = Echo::StringUtil::ParseVec3(lightNode->first_attribute("Spot")->value());
-						light->m_lightParam = Echo::StringUtil::ParseVec3(lightNode->first_attribute("LightParam")->value());
-
-#ifdef ECHO_EDITOR_MODE
-						rapidxml::xml_attribute<>* logicPos = lightNode->first_attribute("LogicPos");
-						if (logicPos)
-						{
-							light->m_logicPos = Echo::StringUtil::ParseVec4(logicPos->value());
-						}
-#endif
-
-						rapidxml::xml_attribute<>* follow = lightNode->first_attribute("FollowModel");
-						light->m_followModel = Echo::StringUtil::ParseBool(follow ? lightNode->first_attribute("FollowModel")->value() : "true");
-						rapidxml::xml_attribute<>* castShadow = lightNode->first_attribute("CastShadow");
-						light->m_castShadow = Echo::StringUtil::ParseBool(castShadow ? lightNode->first_attribute("CastShadow")->value() : "false");
-					}
-					else if (type == "Spot")
-					{
-						EchoAssert(false);
-					}
-
-					lightNode = lightNode->next_sibling("Light");
-				}
-			}
+//			MemoryReader memReader(fileName);
+//			if (!memReader.getData<char*>())
+//			{
+//				throw false;
+//			}
+//			using namespace rapidxml;
+//
+//			xml_document<> doc;
+//			doc.parse<0>(memReader.getData<char*>());
+//
+//			xml_node<>* lightsNode = doc.first_node("Lights");
+//			if (lightsNode)
+//			{
+//				xml_node<>* lightNode = lightsNode->first_node("Light");
+//				while (lightNode)
+//				{
+//					String type = lightNode->first_attribute("Type")->value();
+//					if (type == "Ambient")
+//					{
+//						AmbientLight* light = ECHO_DOWN_CAST<AmbientLight*>(addLight(LT_Ambient));
+//						light->m_color = Echo::StringUtil::ParseVec4(lightNode->first_attribute("Color")->value());
+//						light->m_intensity = Echo::StringUtil::ParseFloat(lightNode->first_attribute("Intensity")->value());
+//					}
+//					else if (type == "Directional")
+//					{
+//						DirectionalLight* light = ECHO_DOWN_CAST<DirectionalLight*>(addLight(LT_Directional));
+//						light->m_color = Echo::StringUtil::ParseVec4(lightNode->first_attribute("Color")->value());
+//						light->m_direction = Echo::StringUtil::ParseVec4(lightNode->first_attribute("Direction")->value());
+//						light->m_intensity = Echo::StringUtil::ParseFloat(lightNode->first_attribute("Intensity")->value());
+//						xml_attribute<>* posAttrib = lightNode->first_attribute("Position");
+//						if (posAttrib)
+//						{
+//							light->m_position = Echo::StringUtil::ParseVec3(posAttrib->value());
+//						}
+//					}
+//					else if (type == "Point")
+//					{
+//						PointLight* light = ECHO_DOWN_CAST<PointLight*>(addLight(LT_Point));
+//						light->m_colorAddFalloff = Echo::StringUtil::ParseVec4(lightNode->first_attribute("ColorAndFalloff")->value());
+//						light->m_positionAndInvRadius = Echo::StringUtil::ParseVec4(lightNode->first_attribute("PosAndInvRadius")->value());
+//						light->m_intensity = Echo::StringUtil::ParseFloat(lightNode->first_attribute("Intensity")->value());
+//
+//						rapidxml::xml_attribute<>* follow = lightNode->first_attribute("FollowModel");
+//						light->m_followModel = Echo::StringUtil::ParseBool(follow ? lightNode->first_attribute("FollowModel")->value() : "true");
+//					}
+//					else if (type == "PBRLight")
+//					{
+//						PBRLight* light = ECHO_DOWN_CAST<PBRLight*>(addLight(LT_PBRLight));
+//
+//						light->m_selfType = (LightType)Echo::StringUtil::ParseI32(lightNode->first_attribute("SelfType")->value());
+//						light->m_intensity = Echo::StringUtil::ParseFloat(lightNode->first_attribute("Intensity")->value());
+//						light->m_direction = Echo::StringUtil::ParseVec3(lightNode->first_attribute("Direction")->value());
+//						light->m_position = Echo::StringUtil::ParseVec4(lightNode->first_attribute("Position")->value());
+//						light->m_color = Echo::StringUtil::ParseVec3(lightNode->first_attribute("Color")->value());
+//						light->m_spot = Echo::StringUtil::ParseVec3(lightNode->first_attribute("Spot")->value());
+//						light->m_lightParam = Echo::StringUtil::ParseVec3(lightNode->first_attribute("LightParam")->value());
+//
+//#ifdef ECHO_EDITOR_MODE
+//						rapidxml::xml_attribute<>* logicPos = lightNode->first_attribute("LogicPos");
+//						if (logicPos)
+//						{
+//							light->m_logicPos = Echo::StringUtil::ParseVec4(logicPos->value());
+//						}
+//#endif
+//
+//						rapidxml::xml_attribute<>* follow = lightNode->first_attribute("FollowModel");
+//						light->m_followModel = Echo::StringUtil::ParseBool(follow ? lightNode->first_attribute("FollowModel")->value() : "true");
+//						rapidxml::xml_attribute<>* castShadow = lightNode->first_attribute("CastShadow");
+//						light->m_castShadow = Echo::StringUtil::ParseBool(castShadow ? lightNode->first_attribute("CastShadow")->value() : "false");
+//					}
+//					else if (type == "Spot")
+//					{
+//						EchoAssert(false);
+//					}
+//
+//					lightNode = lightNode->next_sibling("Light");
+//				}
+//			}
 		}
 		catch (...)
 		{
@@ -275,85 +272,85 @@ namespace Echo
 	void LightArray::save(const char* fullPath)
 	{
 #ifdef ECHO_EDITOR_MODE
-		try
-		{
-			using namespace rapidxml;
-			xml_document<> doc;
+		//try
+		//{
+			//using namespace rapidxml;
+			//xml_document<> doc;
 
-			rapidxml_helper saveHelper(&doc);
+			//rapidxml_helper saveHelper(&doc);
 
-			// 版本
-			xml_node<>* xmlnode = doc.allocate_node(rapidxml::node_pi, doc.allocate_string("xml version='1.0' encoding='utf-8'"));
-			xml_node<>* rootnode = doc.allocate_node(node_element, "Lights");
+			//// 版本
+			//xml_node<>* xmlnode = doc.allocate_node(rapidxml::node_pi, doc.allocate_string("xml version='1.0' encoding='utf-8'"));
+			//xml_node<>* rootnode = doc.allocate_node(node_element, "Lights");
 
-			doc.append_node(xmlnode);
-			doc.append_node(rootnode);
+			//doc.append_node(xmlnode);
+			//doc.append_node(rootnode);
 
-			// 保存光源数据
-			for (Light* light : m_lights)
-			{
-				xml_node<>* lightnode = doc.allocate_node(node_element, "Light");
-				rootnode->append_node(lightnode);
+			//// 保存光源数据
+			//for (Light* light : m_lights)
+			//{
+			//	xml_node<>* lightnode = doc.allocate_node(node_element, "Light");
+			//	rootnode->append_node(lightnode);
 
-				lightnode->append_attribute(doc.allocate_attribute("Type", light->getType()));
-				lightnode->append_attribute(doc.allocate_attribute("Intensity", saveHelper.tostr<float>(light->m_intensity)));
+			//	lightnode->append_attribute(doc.allocate_attribute("Type", light->getType()));
+			//	lightnode->append_attribute(doc.allocate_attribute("Intensity", saveHelper.tostr<float>(light->m_intensity)));
 
-				switch (light->m_type)
-				{
-					case LT_Ambient:
-					{
-						lightnode->append_attribute(doc.allocate_attribute("Color", saveHelper.tostr<Vector4>(ECHO_DOWN_CAST<AmbientLight*>(light)->m_color)));
-					}
-					break;
+			//	switch (light->m_type)
+			//	{
+			//		case LT_Ambient:
+			//		{
+			//			lightnode->append_attribute(doc.allocate_attribute("Color", saveHelper.tostr<Vector4>(ECHO_DOWN_CAST<AmbientLight*>(light)->m_color)));
+			//		}
+			//		break;
 
-					case LT_Directional:
-					{
-						lightnode->append_attribute(doc.allocate_attribute("Color", saveHelper.tostr<Vector4>(ECHO_DOWN_CAST<DirectionalLight*>(light)->m_color)));
-						lightnode->append_attribute(doc.allocate_attribute("Direction", saveHelper.tostr<Vector4>(ECHO_DOWN_CAST<DirectionalLight*>(light)->m_direction)));
-						lightnode->append_attribute(doc.allocate_attribute("Position", saveHelper.tostr<Vector3>(ECHO_DOWN_CAST<DirectionalLight*>(light)->m_position)));
-					}
-					break;
+			//		case LT_Directional:
+			//		{
+			//			lightnode->append_attribute(doc.allocate_attribute("Color", saveHelper.tostr<Vector4>(ECHO_DOWN_CAST<DirectionalLight*>(light)->m_color)));
+			//			lightnode->append_attribute(doc.allocate_attribute("Direction", saveHelper.tostr<Vector4>(ECHO_DOWN_CAST<DirectionalLight*>(light)->m_direction)));
+			//			lightnode->append_attribute(doc.allocate_attribute("Position", saveHelper.tostr<Vector3>(ECHO_DOWN_CAST<DirectionalLight*>(light)->m_position)));
+			//		}
+			//		break;
 
-					case LT_Point:
-					{
-						lightnode->append_attribute(doc.allocate_attribute("ColorAndFalloff", saveHelper.tostr<Vector4>(ECHO_DOWN_CAST<PointLight*>(light)->m_colorAddFalloff)));
-						lightnode->append_attribute(doc.allocate_attribute("PosAndInvRadius", saveHelper.tostr<Vector4>(ECHO_DOWN_CAST<PointLight*>(light)->m_positionAndInvRadius)));
-						lightnode->append_attribute(doc.allocate_attribute("FollowModel", saveHelper.tostr(ECHO_DOWN_CAST<PointLight*>(light)->m_followModel)));
-					}
-					break;
-					case LT_PBRLight:
-					{
-						PBRLight* pbrlight = ECHO_DOWN_CAST<PBRLight*>(light);
-						lightnode->append_attribute(doc.allocate_attribute("Color", saveHelper.tostr<Vector3>(pbrlight->m_color)));
-						lightnode->append_attribute(doc.allocate_attribute("Direction", saveHelper.tostr<Vector3>(pbrlight->m_direction)));
-						if (pbrlight->m_selfType == LT_Directional)
-						{
-							pbrlight->m_position = Vector4(-pbrlight->m_direction.x, -pbrlight->m_direction.y, -pbrlight->m_direction.z, 0.f);
-						}
-						lightnode->append_attribute(doc.allocate_attribute("Position", saveHelper.tostr<Vector4>(pbrlight->m_position)));
-						lightnode->append_attribute(doc.allocate_attribute("SelfType", saveHelper.tostr(pbrlight->m_selfType)));
-						lightnode->append_attribute(doc.allocate_attribute("Spot", saveHelper.tostr<Vector3>(pbrlight->m_spot)));
-						lightnode->append_attribute(doc.allocate_attribute("LightParam", saveHelper.tostr<Vector3>(pbrlight->m_lightParam)));
-						lightnode->append_attribute(doc.allocate_attribute("FollowModel", saveHelper.tostr(pbrlight->m_followModel)));
-						lightnode->append_attribute(doc.allocate_attribute("CastShadow", saveHelper.tostr(pbrlight->m_castShadow)));
-						lightnode->append_attribute(doc.allocate_attribute("LogicPos", saveHelper.tostr(pbrlight->m_logicPos)));
-					}
-					break;
+			//		case LT_Point:
+			//		{
+			//			lightnode->append_attribute(doc.allocate_attribute("ColorAndFalloff", saveHelper.tostr<Vector4>(ECHO_DOWN_CAST<PointLight*>(light)->m_colorAddFalloff)));
+			//			lightnode->append_attribute(doc.allocate_attribute("PosAndInvRadius", saveHelper.tostr<Vector4>(ECHO_DOWN_CAST<PointLight*>(light)->m_positionAndInvRadius)));
+			//			lightnode->append_attribute(doc.allocate_attribute("FollowModel", saveHelper.tostr(ECHO_DOWN_CAST<PointLight*>(light)->m_followModel)));
+			//		}
+			//		break;
+			//		case LT_PBRLight:
+			//		{
+			//			PBRLight* pbrlight = ECHO_DOWN_CAST<PBRLight*>(light);
+			//			lightnode->append_attribute(doc.allocate_attribute("Color", saveHelper.tostr<Vector3>(pbrlight->m_color)));
+			//			lightnode->append_attribute(doc.allocate_attribute("Direction", saveHelper.tostr<Vector3>(pbrlight->m_direction)));
+			//			if (pbrlight->m_selfType == LT_Directional)
+			//			{
+			//				pbrlight->m_position = Vector4(-pbrlight->m_direction.x, -pbrlight->m_direction.y, -pbrlight->m_direction.z, 0.f);
+			//			}
+			//			lightnode->append_attribute(doc.allocate_attribute("Position", saveHelper.tostr<Vector4>(pbrlight->m_position)));
+			//			lightnode->append_attribute(doc.allocate_attribute("SelfType", saveHelper.tostr(pbrlight->m_selfType)));
+			//			lightnode->append_attribute(doc.allocate_attribute("Spot", saveHelper.tostr<Vector3>(pbrlight->m_spot)));
+			//			lightnode->append_attribute(doc.allocate_attribute("LightParam", saveHelper.tostr<Vector3>(pbrlight->m_lightParam)));
+			//			lightnode->append_attribute(doc.allocate_attribute("FollowModel", saveHelper.tostr(pbrlight->m_followModel)));
+			//			lightnode->append_attribute(doc.allocate_attribute("CastShadow", saveHelper.tostr(pbrlight->m_castShadow)));
+			//			lightnode->append_attribute(doc.allocate_attribute("LogicPos", saveHelper.tostr(pbrlight->m_logicPos)));
+			//		}
+			//		break;
 
-					case LT_Spot:
-					{}
-					break;
-				}
-			}
+			//		case LT_Spot:
+			//		{}
+			//		break;
+			//	}
+			//}
 
-			// 保存
-			std::ofstream out(fullPath);
-			out << doc;
-		}
-		catch (...)
-		{
-			EchoLogError("LightArray::save [%s] failed", fullPath);
-		}
+			//// 保存
+			//std::ofstream out(fullPath);
+			//out << doc;
+		//}
+		//catch (...)
+		//{
+		//	EchoLogError("LightArray::save [%s] failed", fullPath);
+		//}
 #else
 		EchoLogError("Undefined function LightArray::save()");
 #endif

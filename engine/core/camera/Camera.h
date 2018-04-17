@@ -127,12 +127,6 @@ namespace Echo
 		// 克隆
 		virtual void clone(Camera* other);
 
-		// 加载
-		void load(const String& name);
-
-		// 保存
-		void save(const String& pathName);
-
 	protected:
 		Vector3			m_position;
 		Vector3			m_dir;

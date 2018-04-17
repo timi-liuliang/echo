@@ -6,10 +6,6 @@
 #include "engine/core/render/render/Viewport.h"
 #include "engine/core/render/RenderTargetManager.h"
 #include "Engine/core/Geom/Ray.h"
-#include "rapidxml/rapidxml.hpp"
-#include "rapidxml/rapidxml_utils.hpp"
-#include "rapidxml/rapidxml_print.hpp"
-#include "rapidxml/rapidxml_helper.hpp"
 
 namespace Echo
 {
@@ -605,73 +601,5 @@ namespace Echo
 		m_water_height = other->m_water_height;
 		m_renderLayers = other->m_renderLayers;
 		m_isRenderLayers = other->m_isRenderLayers;
-	}
-
-	// 加载
-	void Camera::load(const String& name)
-	{
-		try
-		{
-			MemoryReader memReader(name);
-			if (memReader.getData<char*>())
-			{
-				using namespace rapidxml;
-
-				xml_document<> doc;
-				doc.parse<0>(memReader.getData<char*>());
-
-				xml_node<>* cameraNode = doc.first_node("camera");
-				if (cameraNode)
-				{
-					setProjectionMode(ProjMode(rapidxml_helper::parseI32(cameraNode->first_attribute("type"), PM_PERSPECTIVE)));
-					setPosition(rapidxml_helper::parseVec3(cameraNode->first_attribute("position"), Vector3::ZERO));
-					setDirection(rapidxml_helper::parseVec3(cameraNode->first_attribute("dir"), Vector3::UNIT_X));
-					setWidth(rapidxml_helper::parsefloat(cameraNode->first_attribute("width"), 256.f));
-					setHeight(rapidxml_helper::parsefloat(cameraNode->first_attribute("height"), 256.f));
-					setNearClip(rapidxml_helper::parsefloat(cameraNode->first_attribute("near"), 1.f));
-					setFarClip(rapidxml_helper::parsefloat(cameraNode->first_attribute("far"), 1000.f));
-				}
-			}
-		}
-		catch (...)
-		{
-			EchoLogError("LightArray [%s] load failed...", name.c_str());
-		}
-	}
-
-	// 保存
-	void Camera::save(const String& pathName)
-	{
-		try
-		{
-			using namespace rapidxml;
-			xml_document<> doc;
-
-			rapidxml_helper saveHelper(&doc);
-
-			// 版本
-			xml_node<>* xmlnode = doc.allocate_node(rapidxml::node_pi, doc.allocate_string("xml version='1.0' encoding='utf-8'"));
-			xml_node<>* rootnode = doc.allocate_node(node_element, "camera");
-
-			doc.append_node(xmlnode);
-			doc.append_node(rootnode);
-
-			// 保存摄像机
-			rootnode->append_attribute(doc.allocate_attribute("type", saveHelper.tostr(m_projMode)));
-			rootnode->append_attribute(doc.allocate_attribute("position", saveHelper.tostr(m_position)));
-			rootnode->append_attribute(doc.allocate_attribute("dir", saveHelper.tostr(m_dir)));
-			rootnode->append_attribute(doc.allocate_attribute("width", saveHelper.tostr(m_width)));
-			rootnode->append_attribute(doc.allocate_attribute("height", saveHelper.tostr(m_height)));
-			rootnode->append_attribute(doc.allocate_attribute("near", saveHelper.tostr(m_nearClip)));
-			rootnode->append_attribute(doc.allocate_attribute("far", saveHelper.tostr(m_farClip)));
-
-			// 保存
-			std::ofstream out(pathName);
-			out << doc;
-		}
-		catch (...)
-		{
-			EchoLogError("Camera::save [%s] failed", pathName.c_str());
-		}
 	}
 }

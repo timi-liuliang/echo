@@ -1,8 +1,6 @@
 #include "FSAudioManager.h"
 #include "FSAudioBase.h"
 #include "Engine/Core.h"
-#include "rapidxml/rapidxml.hpp"
-#include "rapidxml/rapidxml_helper.hpp"
 
 namespace Echo
 {
