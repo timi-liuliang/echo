@@ -67,30 +67,32 @@ namespace QT_UI
 	}
 
 	// 递归添加
-	void  QPropertyModel::addChildItem(pugi::xml_node* pFirstChildElement, QStandardItem* pParentItem)
+	void  QPropertyModel::addChildItem(pugi::xml_node* firstChildElement, QStandardItem* pParentItem)
 	{
-		while (pFirstChildElement)
+		pugi::xml_node elementNode = *firstChildElement;
+		while (elementNode)
 		{
-			QString text = m_isEnableGB2312 ? QString::fromLocal8Bit(pFirstChildElement->attribute("text").value())
-				: QString::fromUtf8(pFirstChildElement->attribute("text").value());
+			QString text = m_isEnableGB2312 ? QString::fromLocal8Bit(elementNode.attribute("text").value()) : QString::fromUtf8(elementNode.attribute("text").value());
 
-			bool bold = pFirstChildElement->attribute("bold").as_bool(false);
+			bool bold = elementNode.attribute("bold").as_bool(false);
 
-			int row = pFirstChildElement->attribute("row").as_int(0);
-			int col = pFirstChildElement->attribute("col").as_int(0);
+			int row = elementNode.attribute("row").as_int(0);
+			int col = elementNode.attribute("col").as_int(0);
 
-			QStandardItem* item = addChildItem(pParentItem, text.toStdString().c_str(), bold, row, col, pFirstChildElement->attribute("widget").as_string(""), pFirstChildElement->attribute("property").as_string(""));
-			item->setData(constraintCondition(pFirstChildElement), kConstraint);
-			addChildItem(&pFirstChildElement->child("item"), item);
+			QStandardItem* item = addChildItem(pParentItem, text.toStdString().c_str(), bold, row, col, elementNode.attribute("widget").as_string(""), elementNode.attribute("property").as_string(""));
+			item->setData(constraintCondition(firstChildElement), kConstraint);
 
-			pFirstChildElement = &pFirstChildElement->next_sibling("item");
+			pugi::xml_node childNode = elementNode.child("item");
+			if (childNode)
+				addChildItem(&childNode, item);
+
+			elementNode = elementNode.next_sibling("item");
 		}
 	}
 
 	// 添加子结点
 	QStandardItem* QPropertyModel::addChildItem(QStandardItem* parent, const char* text, bool bold, int row, int col, const char* widget, const char* propertyName)
 	{
-
 		QString propertyNamelocal = m_isEnableGB2312 ? QString::fromLocal8Bit(propertyName) : QString::fromUtf8(propertyName);
 		QStandardItem* item = new QStandardItem(text);
 		QFont font = item->font(); font.setBold(bold);
