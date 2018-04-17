@@ -6,8 +6,6 @@
 #include <thirdparty/pugixml/pugixml.hpp>
 #include "EngineTimeController.h"
 
-using namespace rapidxml;
-
 namespace Echo
 { 
 	// »ñÈ¡ÊµÀý

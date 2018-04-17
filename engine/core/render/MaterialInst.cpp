@@ -7,8 +7,6 @@
 #include "engine/core/render/TextureResManager.h"
 #include <thirdparty/pugixml/pugixml.hpp>
 
-using namespace rapidxml;
-
 namespace
 {
 	const char* globalUnfiorms[] = {
@@ -257,8 +255,6 @@ namespace Echo
 	// 保存到文件
 	void MaterialInst::saveToFile(const String& name)
 	{
-		using namespace rapidxml;
-
 		pugi::xml_document doc;
 
 		pugi::xml_node dec = doc.prepend_child(pugi::node_declaration);

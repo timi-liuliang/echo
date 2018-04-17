@@ -6,8 +6,6 @@
 #include "Renderable.h"
 #include <utility>
 
-namespace rapidxml { template<class Ch> class xml_node; }
-
 namespace Echo
 {
 	/**

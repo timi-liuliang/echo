@@ -119,13 +119,13 @@ namespace Echo
 			String vsSrc, psSrc;
 			if (vsNode)
 			{
-				vsSrc = vsNode.value();
+				vsSrc = vsNode.text().as_string();
 			}
 
 			pugi::xml_node psNode = rootNode->child("ps");
 			if (psNode)
 			{
-				psSrc = psNode.value();
+				psSrc = psNode.text().as_string();
 			}
 
 			pugi::xml_node pElementNode = rootNode->first_child();
@@ -959,7 +959,6 @@ namespace Echo
 	// 获取材质可选宏定义列表
 	StringArray Material::getEnabledMacros(const String& matFileName, bool withEnabled /* = false */)
 	{
-		using namespace rapidxml;
 		StringArray macros;
 
 		try

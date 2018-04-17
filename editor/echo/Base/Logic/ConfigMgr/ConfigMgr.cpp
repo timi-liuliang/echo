@@ -82,8 +82,7 @@ namespace Studio
 
 		saveData( doc, &rootnode);
 
-		std::ofstream out( m_cfgFile.c_str());
-		out << doc;
+		doc.save_file(m_cfgFile.c_str(), "\t", 1U, pugi::encoding_utf8);
 
 		return true;
 	}

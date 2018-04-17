@@ -16,12 +16,6 @@
 #include "Engine/core/Render/TextureRes.h"
 #include "engine/core/Util/LogManager.h"
 #include "Render/PixelFormat.h"
-#include "rapidxml/rapidxml.hpp"
-#include "rapidxml/rapidxml_utils.hpp"
-#include "rapidxml/rapidxml_print.hpp"
-#include "rapidxml/rapidxml_helper.hpp"
-
-using namespace rapidxml;
 
 namespace Echo
 {
@@ -1546,94 +1540,94 @@ namespace Echo
 	// 加载模型资源
 	bool ModelManager::loadModelByFile( const String& modelName ,Model::Info* modelInfo )
 	{
-		try
-		{
-			MemoryReader reader( modelName.c_str());
-			if (reader.getData<char*>() == nullptr)
-			{
-				return false;
-			}
+		//try
+		//{
+		//	MemoryReader reader( modelName.c_str());
+		//	if (reader.getData<char*>() == nullptr)
+		//	{
+		//		return false;
+		//	}
 
-			xml_document<> doc;        
-			doc.parse<0>( reader.getData<char*>());
+		//	xml_document<> doc;        
+		//	doc.parse<0>( reader.getData<char*>());
 
-			modelInfo->m_name = modelName;
+		//	modelInfo->m_name = modelName;
 
-			xml_node<> *pNode = doc.first_node();
-			
-			String str = pNode->value();
-			modelInfo->m_geometryType = StringUtil::ParseBool(str) ? Model::GT_Skin : Model::GT_StaticMesh;
-			pNode = pNode->next_sibling();
-			modelInfo->m_meshName = pNode->value();
+		//	xml_node<> *pNode = doc.first_node();
+		//	
+		//	String str = pNode->value();
+		//	modelInfo->m_geometryType = StringUtil::ParseBool(str) ? Model::GT_Skin : Model::GT_StaticMesh;
+		//	pNode = pNode->next_sibling();
+		//	modelInfo->m_meshName = pNode->value();
 
-			//modelInfo->m_originName = "";
-			xml_node<>* originNameNode = pNode->next_sibling();
-			char* name = originNameNode->name();
-			for (; strcmp(name, "OriginName") == 0; )
-			{
-				String originName = originNameNode->value();
-				modelInfo->m_originNames.push_back(originName);
+		//	//modelInfo->m_originName = "";
+		//	xml_node<>* originNameNode = pNode->next_sibling();
+		//	char* name = originNameNode->name();
+		//	for (; strcmp(name, "OriginName") == 0; )
+		//	{
+		//		String originName = originNameNode->value();
+		//		modelInfo->m_originNames.push_back(originName);
 
-				originNameNode = originNameNode->next_sibling();
-				name = originNameNode->name();
-			}
-			
-			// 是否投射接收阴影
-			xml_node<>* modelNode = doc.first_node("Model");
-			if (modelNode)
-			{
-				modelInfo->m_isCastShadow    = rapidxml_helper::parsebool(modelNode->first_attribute("CastShadow"), false);
-				modelInfo->m_isReceiveShadow = rapidxml_helper::parsebool(modelNode->first_attribute("ReceiveShadow"), false);
-			}
+		//		originNameNode = originNameNode->next_sibling();
+		//		name = originNameNode->name();
+		//	}
+		//	
+		//	// 是否投射接收阴影
+		//	xml_node<>* modelNode = doc.first_node("Model");
+		//	if (modelNode)
+		//	{
+		//		modelInfo->m_isCastShadow    = rapidxml_helper::parsebool(modelNode->first_attribute("CastShadow"), false);
+		//		modelInfo->m_isReceiveShadow = rapidxml_helper::parsebool(modelNode->first_attribute("ReceiveShadow"), false);
+		//	}
 
-			xml_node<>* materialInstNode = doc.first_node("MaterialInsts");
-			if (materialInstNode)
-			{
-				xml_attribute<>* rp0 = materialInstNode->first_attribute("rp0");
-				xml_attribute<>* rp1 = materialInstNode->first_attribute("rp1");
-				xml_attribute<>* rp2 = materialInstNode->first_attribute("rp2");
-				xml_attribute<>* rp3 = materialInstNode->first_attribute("rp3");
-				xml_attribute<>* all = materialInstNode->first_attribute("all");
-				modelInfo->m_materialInsts[Model::RP_Normal0] = rp0->value();
-				modelInfo->m_materialInsts[Model::RP_Normal1] = rp1->value();
-				modelInfo->m_materialInsts[Model::RP_Normal2] = rp2->value();
-				modelInfo->m_materialInsts[Model::RP_Normal3] = rp3->value();
-				modelInfo->m_materialInstsAll = all->value();
-			}
+		//	xml_node<>* materialInstNode = doc.first_node("MaterialInsts");
+		//	if (materialInstNode)
+		//	{
+		//		xml_attribute<>* rp0 = materialInstNode->first_attribute("rp0");
+		//		xml_attribute<>* rp1 = materialInstNode->first_attribute("rp1");
+		//		xml_attribute<>* rp2 = materialInstNode->first_attribute("rp2");
+		//		xml_attribute<>* rp3 = materialInstNode->first_attribute("rp3");
+		//		xml_attribute<>* all = materialInstNode->first_attribute("all");
+		//		modelInfo->m_materialInsts[Model::RP_Normal0] = rp0->value();
+		//		modelInfo->m_materialInsts[Model::RP_Normal1] = rp1->value();
+		//		modelInfo->m_materialInsts[Model::RP_Normal2] = rp2->value();
+		//		modelInfo->m_materialInsts[Model::RP_Normal3] = rp3->value();
+		//		modelInfo->m_materialInstsAll = all->value();
+		//	}
 
-			// 静态烘焙配置
-			xml_node<>* lightmassNode = doc.first_node("lightmass");
-			if (lightmassNode)
-			{
-				StringArray normalMaps = Echo::StringUtil::Split(rapidxml_helper::get_string(lightmassNode->first_attribute("Normal")), ";");
-				StringArray diffuseMaps = Echo::StringUtil::Split(rapidxml_helper::get_string(lightmassNode->first_attribute("Diffuse")), ";");
-				StringArray emissiveMaps = Echo::StringUtil::Split(rapidxml_helper::get_string(lightmassNode->first_attribute("Emissive")), ";");
-				StringArray specularMaps = Echo::StringUtil::Split(rapidxml_helper::get_string(lightmassNode->first_attribute("Specular")), ";");
-				modelInfo->m_lightmassConfig.resize(normalMaps.size());
-				for (size_t i = 0; i < normalMaps.size(); i++)
-				{
-					modelInfo->m_lightmassConfig[i].m_textureNormal = safegetstr(normalMaps[i]);
-					modelInfo->m_lightmassConfig[i].m_textureDiffuse = safegetstr(diffuseMaps[i]);
-					modelInfo->m_lightmassConfig[i].m_textureEmissive = safegetstr(emissiveMaps[i]);
-					modelInfo->m_lightmassConfig[i].m_textureSpecular = safegetstr(specularMaps[i]);
-				}
-			}
+		//	// 静态烘焙配置
+		//	xml_node<>* lightmassNode = doc.first_node("lightmass");
+		//	if (lightmassNode)
+		//	{
+		//		StringArray normalMaps = Echo::StringUtil::Split(rapidxml_helper::get_string(lightmassNode->first_attribute("Normal")), ";");
+		//		StringArray diffuseMaps = Echo::StringUtil::Split(rapidxml_helper::get_string(lightmassNode->first_attribute("Diffuse")), ";");
+		//		StringArray emissiveMaps = Echo::StringUtil::Split(rapidxml_helper::get_string(lightmassNode->first_attribute("Emissive")), ";");
+		//		StringArray specularMaps = Echo::StringUtil::Split(rapidxml_helper::get_string(lightmassNode->first_attribute("Specular")), ";");
+		//		modelInfo->m_lightmassConfig.resize(normalMaps.size());
+		//		for (size_t i = 0; i < normalMaps.size(); i++)
+		//		{
+		//			modelInfo->m_lightmassConfig[i].m_textureNormal = safegetstr(normalMaps[i]);
+		//			modelInfo->m_lightmassConfig[i].m_textureDiffuse = safegetstr(diffuseMaps[i]);
+		//			modelInfo->m_lightmassConfig[i].m_textureEmissive = safegetstr(emissiveMaps[i]);
+		//			modelInfo->m_lightmassConfig[i].m_textureSpecular = safegetstr(specularMaps[i]);
+		//		}
+		//	}
 
-			// 光源阵列
-			xml_node<>* lightArrayNode = doc.first_node( "LightArray");
-			if (lightArrayNode)
-			{
-				xml_attribute<>* nameatt = lightArrayNode->first_attribute("name");
-				if (nameatt)
-					modelInfo->m_lightArray = nameatt->value();
-			}
+		//	// 光源阵列
+		//	xml_node<>* lightArrayNode = doc.first_node( "LightArray");
+		//	if (lightArrayNode)
+		//	{
+		//		xml_attribute<>* nameatt = lightArrayNode->first_attribute("name");
+		//		if (nameatt)
+		//			modelInfo->m_lightArray = nameatt->value();
+		//	}
 
-			return true;
-		}
-		catch(...)
-		{
-			EchoLogError("Parse model file [%s] failed.", modelName.c_str());
-		}
+		//	return true;
+		//}
+		//catch(...)
+		//{
+		//	EchoLogError("Parse model file [%s] failed.", modelName.c_str());
+		//}
 
 		return false;
 	}
@@ -1641,72 +1635,72 @@ namespace Echo
 	// 保存模型文件
 	void ModelManager::saveModelToFile( const String& modelName ,const Model::Info& modelInfo)
 	{
-		xml_document<> doc;
-		rapidxml_helper helper( &doc);
+		//xml_document<> doc;
+		//rapidxml_helper helper( &doc);
 
 
-		xml_node<>* rot = doc.allocate_node(rapidxml::node_pi,doc.allocate_string("xml version='1.0' encoding='utf-8'"));
-		doc.append_node(rot);
+		//xml_node<>* rot = doc.allocate_node(rapidxml::node_pi,doc.allocate_string("xml version='1.0' encoding='utf-8'"));
+		//doc.append_node(rot);
 
-		// 写属性
-		char* strValue = doc.allocate_string(StringUtil::ToString(modelInfo.isSkinModel()).c_str());
-		xml_node<>* pNode = doc.allocate_node(rapidxml::node_element,"IsSkinMesh",strValue);
-		doc.append_node(pNode);
-		strValue = doc.allocate_string(modelInfo.m_meshName.c_str());
-		pNode = doc.allocate_node(rapidxml::node_element,"ModelName",strValue);
-		doc.append_node(pNode);
-		for (size_t i = 0; i < modelInfo.m_originNames.size(); i++)
-		{
-			strValue = doc.allocate_string(modelInfo.m_originNames[i].c_str());
-			pNode = doc.allocate_node(rapidxml::node_element, "OriginName", strValue);
-			doc.append_node(pNode);
-		}
+		//// 写属性
+		//char* strValue = doc.allocate_string(StringUtil::ToString(modelInfo.isSkinModel()).c_str());
+		//xml_node<>* pNode = doc.allocate_node(rapidxml::node_element,"IsSkinMesh",strValue);
+		//doc.append_node(pNode);
+		//strValue = doc.allocate_string(modelInfo.m_meshName.c_str());
+		//pNode = doc.allocate_node(rapidxml::node_element,"ModelName",strValue);
+		//doc.append_node(pNode);
+		//for (size_t i = 0; i < modelInfo.m_originNames.size(); i++)
+		//{
+		//	strValue = doc.allocate_string(modelInfo.m_originNames[i].c_str());
+		//	pNode = doc.allocate_node(rapidxml::node_element, "OriginName", strValue);
+		//	doc.append_node(pNode);
+		//}
 
-		// 是事投射接收阴影
-		xml_node<>* modelNode = doc.allocate_node(rapidxml::node_element, "Model");
-		modelNode->append_attribute(doc.allocate_attribute("CastShadow", helper.tostr(modelInfo.m_isCastShadow)));
-		modelNode->append_attribute(doc.allocate_attribute("ReceiveShadow", helper.tostr(modelInfo.m_isReceiveShadow)));
-		doc.append_node(modelNode);
+		//// 是事投射接收阴影
+		//xml_node<>* modelNode = doc.allocate_node(rapidxml::node_element, "Model");
+		//modelNode->append_attribute(doc.allocate_attribute("CastShadow", helper.tostr(modelInfo.m_isCastShadow)));
+		//modelNode->append_attribute(doc.allocate_attribute("ReceiveShadow", helper.tostr(modelInfo.m_isReceiveShadow)));
+		//doc.append_node(modelNode);
 
-		// 材质实例设置
-		xml_node<>* materialInstsNode = doc.allocate_node(node_element, "MaterialInsts");
-		xml_attribute<>* renderPhase0 = doc.allocate_attribute("rp0", modelInfo.m_materialInsts[Model::RP_Normal0].c_str());
-		xml_attribute<>* renderPhase1 = doc.allocate_attribute("rp1", modelInfo.m_materialInsts[Model::RP_Normal1].c_str());
-		xml_attribute<>* renderPhase2 = doc.allocate_attribute("rp2", modelInfo.m_materialInsts[Model::RP_Normal2].c_str());
-		xml_attribute<>* renderPhase3 = doc.allocate_attribute("rp3", modelInfo.m_materialInsts[Model::RP_Normal3].c_str());
-		xml_attribute<>* allMaterials = doc.allocate_attribute("all", modelInfo.m_materialInstsAll.c_str());
-		materialInstsNode->append_attribute(renderPhase0);
-		materialInstsNode->append_attribute(renderPhase1);
-		materialInstsNode->append_attribute(renderPhase2);
-		materialInstsNode->append_attribute(renderPhase3);
-		materialInstsNode->append_attribute(allMaterials);
-		doc.append_node(materialInstsNode);
+		//// 材质实例设置
+		//xml_node<>* materialInstsNode = doc.allocate_node(node_element, "MaterialInsts");
+		//xml_attribute<>* renderPhase0 = doc.allocate_attribute("rp0", modelInfo.m_materialInsts[Model::RP_Normal0].c_str());
+		//xml_attribute<>* renderPhase1 = doc.allocate_attribute("rp1", modelInfo.m_materialInsts[Model::RP_Normal1].c_str());
+		//xml_attribute<>* renderPhase2 = doc.allocate_attribute("rp2", modelInfo.m_materialInsts[Model::RP_Normal2].c_str());
+		//xml_attribute<>* renderPhase3 = doc.allocate_attribute("rp3", modelInfo.m_materialInsts[Model::RP_Normal3].c_str());
+		//xml_attribute<>* allMaterials = doc.allocate_attribute("all", modelInfo.m_materialInstsAll.c_str());
+		//materialInstsNode->append_attribute(renderPhase0);
+		//materialInstsNode->append_attribute(renderPhase1);
+		//materialInstsNode->append_attribute(renderPhase2);
+		//materialInstsNode->append_attribute(renderPhase3);
+		//materialInstsNode->append_attribute(allMaterials);
+		//doc.append_node(materialInstsNode);
 
-		// 静态烘焙配置
-		String normalStr,diffuseStr, emissiveStr, specularStr;
-		for (size_t i = 0; i < modelInfo.m_lightmassConfig.size(); i++)
-		{
-			normalStr += safesavestr(modelInfo.m_lightmassConfig[i].m_textureNormal) + ";";
-			diffuseStr += safesavestr(modelInfo.m_lightmassConfig[i].m_textureDiffuse) + ";";
-			emissiveStr += safesavestr(modelInfo.m_lightmassConfig[i].m_textureEmissive) + ";";
-			specularStr += safesavestr(modelInfo.m_lightmassConfig[i].m_textureSpecular) + ";";
-		}
+		//// 静态烘焙配置
+		//String normalStr,diffuseStr, emissiveStr, specularStr;
+		//for (size_t i = 0; i < modelInfo.m_lightmassConfig.size(); i++)
+		//{
+		//	normalStr += safesavestr(modelInfo.m_lightmassConfig[i].m_textureNormal) + ";";
+		//	diffuseStr += safesavestr(modelInfo.m_lightmassConfig[i].m_textureDiffuse) + ";";
+		//	emissiveStr += safesavestr(modelInfo.m_lightmassConfig[i].m_textureEmissive) + ";";
+		//	specularStr += safesavestr(modelInfo.m_lightmassConfig[i].m_textureSpecular) + ";";
+		//}
 
-		xml_node<>* lightmassNode = doc.allocate_node(node_element, "lightmass");
-		lightmassNode->append_attribute(doc.allocate_attribute("Normal", normalStr.c_str()));
-		lightmassNode->append_attribute(doc.allocate_attribute("Diffuse", diffuseStr.c_str()));
-		lightmassNode->append_attribute(doc.allocate_attribute("Emissive", emissiveStr.c_str()));
-		lightmassNode->append_attribute(doc.allocate_attribute("Specular", specularStr.c_str()));
-		doc.append_node(lightmassNode);
+		//xml_node<>* lightmassNode = doc.allocate_node(node_element, "lightmass");
+		//lightmassNode->append_attribute(doc.allocate_attribute("Normal", normalStr.c_str()));
+		//lightmassNode->append_attribute(doc.allocate_attribute("Diffuse", diffuseStr.c_str()));
+		//lightmassNode->append_attribute(doc.allocate_attribute("Emissive", emissiveStr.c_str()));
+		//lightmassNode->append_attribute(doc.allocate_attribute("Specular", specularStr.c_str()));
+		//doc.append_node(lightmassNode);
 
-		// 光源阵列
-		xml_node<>* lightArrayNode = doc.allocate_node( node_element, "LightArray");
-		xml_attribute<>* value = doc.allocate_attribute("name", modelInfo.m_lightArray.c_str());
-		lightArrayNode->append_attribute(value);
-		doc.append_node(lightArrayNode);
+		//// 光源阵列
+		//xml_node<>* lightArrayNode = doc.allocate_node( node_element, "LightArray");
+		//xml_attribute<>* value = doc.allocate_attribute("name", modelInfo.m_lightArray.c_str());
+		//lightArrayNode->append_attribute(value);
+		//doc.append_node(lightArrayNode);
 
-		std::ofstream out(modelName.c_str());
-		out << doc;
+		//std::ofstream out(modelName.c_str());
+		//out << doc;
 	}
 
 	bool ModelManager::refreshModelTemplate(const String& modelName)

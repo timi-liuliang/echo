@@ -40,8 +40,6 @@ static unsigned int _GetCurrThreadId()
 }
 #endif
 
-using namespace rapidxml;
-
 namespace Echo
 {
 	// Êä³öÒıÇæ×´Ì¬
