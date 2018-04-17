@@ -113,8 +113,8 @@ namespace Echo
 		CLASS_BIND_METHOD(Live2dCubism, getMoc, DEF_METHOD("getMoc"));
 		CLASS_BIND_METHOD(Live2dCubism, getTextureRes, DEF_METHOD("getTextureRes"));
 
-		CLASS_REGISTER_PROPERTY(Live2dCubism, "Moc", Variant::Type_String, "getMoc", "setMoc");
-		CLASS_REGISTER_PROPERTY(Live2dCubism, "Texture", Variant::Type_String, "getTextureRes", "setTextureRes");
+		//CLASS_REGISTER_PROPERTY(Live2dCubism, "Moc", Variant::Type_String, "getMoc", "setMoc");
+		//CLASS_REGISTER_PROPERTY(Live2dCubism, "Texture", Variant::Type_String, "getTextureRes", "setTextureRes");
 	}
 
 	// parse paramters
