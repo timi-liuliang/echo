@@ -65,9 +65,8 @@ namespace Echo
 		// 保存Archive属性
 		saveArchives(doc, &rootnode);
 
-		// 写文件
-		std::ofstream out(fileName);
-		out << doc;
+		// write xml
+		doc.save_file(fileName, "\t", 1U, pugi::encoding_utf8);
 	}
 
 	// 加载存档配置

@@ -95,10 +95,10 @@ namespace Echo
 
 		{
 			//test
-			luaex::LuaEx::instance()->loadfile("Res://lua/live2dcubism_a.lua", true);
+			//luaex::LuaEx::instance()->loadfile("Res://lua/live2dcubism_a.lua", true);
 
-			luaex::LuaEx::instance()->callf("start");
-			int  a = 10;
+			//luaex::LuaEx::instance()->callf("start");
+			//int  a = 10;
 		}
 	}
 

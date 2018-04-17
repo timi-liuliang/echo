@@ -210,145 +210,74 @@ namespace Echo
 		}
 	}
 
+	static bool MappingStringArrayIdx(const String* arry, int count, const String& value, int& idx)
+	{
+		for (size_t i = 0; i < count; i++)
+		{
+			if (value == arry[i])
+			{
+				idx = i;
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	bool Material::loadBlendState( void* pNode )
 	{
 		BlendState::BlendDesc blendDesc;
 		pugi::xml_node* pSubNode = static_cast<pugi::xml_node*>(pNode);
 		try
 		{
-			pugi::xml_node pElementNode = pSubNode->first_child();
-			while(pElementNode)
+			for( pugi::xml_node elementNode = pSubNode->first_child(); elementNode; elementNode=elementNode.next_sibling())
 			{
-				String strName(pElementNode.name());
+				int idx = 0;
+				String strName = elementNode.name();
 				if(strName == "BlendEnable")
+					blendDesc.bBlendEnable = elementNode.attribute("value").as_bool();
+				else if (strName == "SrcBlend")
 				{
-					blendDesc.bBlendEnable = StringUtil::ParseBool(pElementNode.value());
+					if (MappingStringArrayIdx(s_BlendFactor, BlendState::BF_MAX, elementNode.attribute("value").as_string(""), idx))
+						blendDesc.srcBlend = (BlendState::BlendFactor)idx;
 				}
-				//else if (strName == "SrcBlend")
-				//{
-				//	rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				//	String val(pVarNode->value());
-				//	for (size_t i=0; i<BlendState::BF_MAX; ++i)
-				//	{
-				//		if (val == s_BlendFactor[i])
-				//		{
-				//			blendDesc.srcBlend = (BlendState::BlendFactor)i;
-				//			break;
-				//		}
-				//	}
-				//}
-				//else if (strName == "DstBlend")
-				//{
-				//	rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				//	String val(pVarNode->value());
-				//	for (size_t i=0; i<BlendState::BF_MAX; ++i)
-				//	{
-				//		if (val == s_BlendFactor[i])
-				//		{
-				//			blendDesc.dstBlend = (BlendState::BlendFactor)i;
-				//			break;
-				//		}
-				//	}
-				//}
-				//else if (strName == "BlendOP")
-				//{
-				//	rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				//	String val(pVarNode->value());
-				//	for (size_t i=0; i<6; ++i)
-				//	{
-				//		if (val == s_BlendOperation[i])
-				//		{
-				//			blendDesc.blendOP = (BlendState::BlendOperation)i;
-				//			break;
-				//		}
-				//	}
-				//}
-				//else if (strName == "SrcAlphaBlend")
-				//{
-				//	rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				//	String val(pVarNode->value());
-				//	for (size_t i=0; i<6; ++i)
-				//	{
-				//		if (val == s_BlendFactor[i])
-				//		{
-				//			blendDesc.srcAlphaBlend = (BlendState::BlendFactor)i;
-				//			break;
-				//		}
-				//	}
-				//}
-				//else if (strName == "DstAlphaBlend")
-				//{
-				//	rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				//	String val(pVarNode->value());
-				//	for (size_t i=0; i<6; ++i)
-				//	{
-				//		if (val == s_BlendFactor[i])
-				//		{
-				//			blendDesc.dstAlphaBlend = (BlendState::BlendFactor)i;
-				//			break;
-				//		}
-				//	}
-				//}
-				//else if (strName == "AlphaBlendOP")
-				//{
-				//	rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				//	String val(pVarNode->value());
-				//	for (size_t i=0; i<6; ++i)
-				//	{
-				//		if (val == s_BlendOperation[i])
-				//		{
-				//			blendDesc.alphaBlendOP = (BlendState::BlendOperation)i;
-				//			break;
-				//		}
-				//	}
-				//}
-				//else if (strName == "ColorWriteMask")
-				//{
-				//	rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				//	String val(pVarNode->value());
-				//	if (val == s_ColorMask[0])
-				//	{
-				//		blendDesc.colorWriteMask = RenderState::CMASK_RED;
-				//	}
-				//	else if (val == s_ColorMask[1])
-				//	{
-				//		blendDesc.colorWriteMask = RenderState::CMASK_GREEN;
-				//	}
-				//	else if (val == s_ColorMask[2])
-				//	{
-				//		blendDesc.colorWriteMask = RenderState::CMASK_BLUE;
-				//	}
-				//	else if (val == s_ColorMask[3])
-				//	{
-				//		blendDesc.colorWriteMask = RenderState::CMASK_ALPHA;
-				//	}
-				//	else if (val == s_ColorMask[4])
-				//	{
-				//		blendDesc.colorWriteMask = RenderState::CMASK_COLOR;
-				//	}
-				//	else if (val == s_ColorMask[5])
-				//	{
-				//		blendDesc.colorWriteMask = RenderState::CMASK_ALL;
-				//	}
-				//}
-				//else if (strName == "A2CEnable")
-				//{
-				//	rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				//	blendDesc.bA2CEnable = StringUtil::ParseBool(pVarNode->value());
-				//}
-				//else if (strName == "IndependBlendEnable")
-				//{
-				//	rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				//	blendDesc.bIndependBlendEnable = StringUtil::ParseBool(pVarNode->value());
-				//}
-				//else if (strName == "BlendFactor")
-				//{
-				//	rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				//	blendDesc.blendFactor = StringUtil::ParseColor(pVarNode->value());
-				//}
-				pElementNode = pElementNode.next_sibling();
-			}//if
+				else if (strName == "DstBlend")
+				{
+					if (MappingStringArrayIdx(s_BlendFactor, BlendState::BF_MAX, elementNode.attribute("value").as_string(""), idx))
+						blendDesc.dstBlend = (BlendState::BlendFactor)idx;
+				}
+				else if (strName == "BlendOP")
+				{
+					if (MappingStringArrayIdx(s_BlendOperation, 6, elementNode.attribute("value").as_string(""), idx))
+						blendDesc.blendOP = (BlendState::BlendOperation)idx;
+				}
+				else if (strName == "SrcAlphaBlend")
+				{
+					if (MappingStringArrayIdx(s_BlendFactor, 6, elementNode.attribute("value").as_string(""), idx))
+						blendDesc.srcAlphaBlend = (BlendState::BlendFactor)idx;
+				}
+				else if (strName == "DstAlphaBlend")
+				{
+					if (MappingStringArrayIdx(s_BlendFactor, 6, elementNode.attribute("value").as_string(""), idx))
+						blendDesc.dstAlphaBlend = (BlendState::BlendFactor)idx;
+				}
+				else if (strName == "AlphaBlendOP")
+				{
+					if (MappingStringArrayIdx(s_BlendOperation, 6, elementNode.attribute("value").as_string(""), idx))
+						blendDesc.alphaBlendOP = (BlendState::BlendOperation)idx;
+				}
+				else if (strName == "ColorWriteMask")
+					blendDesc.colorWriteMask = MappingColorMask(elementNode.attribute("value").as_string(""));
+				else if (strName == "A2CEnable")
+					blendDesc.bA2CEnable = elementNode.attribute("value").as_bool();
+				else if (strName == "IndependBlendEnable")
+					blendDesc.bIndependBlendEnable = elementNode.attribute("value").as_bool();
+				else if (strName == "BlendFactor")
+					blendDesc.blendFactor = StringUtil::ParseColor(elementNode.attribute("value").as_string());
+			}
+
 			createBlendState(blendDesc);
+
 			return true;
 		}
 		catch(bool)

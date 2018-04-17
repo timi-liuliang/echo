@@ -1196,7 +1196,7 @@ namespace Echo
 			m_material->loadFromFile( m_materialTemplate, finalMacros);
 	}
 
-	bool MappingStringArrayIdx(const String* arry, int count, const String& value, int& idx)
+	static bool MappingStringArrayIdx(const String* arry, int count, const String& value, int& idx)
 	{
 		for (size_t i = 0; i < count; i++)
 		{
