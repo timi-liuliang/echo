@@ -1,6 +1,6 @@
 #pragma once
 
-class QSplashScreen;
+#include <engine/core/util/StringUtil.h>
 
 namespace Echo
 {
@@ -11,9 +11,29 @@ namespace Echo
 	{
 	public:
 		// 解析主入口
-		static bool Parser(int argc, char* argv[], QSplashScreen* splash);
+		static bool Parser(int argc, char* argv[]);
 
 		// 释放
 		static void Release();
+	};
+
+	/**
+	 * EditorMode
+	 */
+	class EditorMode
+	{
+	public:
+		// exec command
+		bool exec(int argc, char* argv[]);
+	};
+
+	/**
+	 * GameMode
+	 */
+	class GameMode
+	{
+	public:
+		// exec command
+		bool exec(const StringArray& argvs, int argc, char* argv[]);
 	};
 }

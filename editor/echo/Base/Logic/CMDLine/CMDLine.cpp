@@ -2,15 +2,19 @@
 #include <string>
 #include <QDir>
 #include <QSplashScreen>
+#include <QApplication>
+#include <QTextCodec>
+#include <QTime>
 #include "Studio.h"
 #include "EchoEngine.h"
+#include "Window.h"
 
 namespace Echo
 {
 	Studio::AStudio* g_astudio = NULL;
 
 	// 解析主入口
-	bool CMDLine::Parser(int argc, char* argv[], QSplashScreen* splash)
+	bool CMDLine::Parser(int argc, char* argv[])
 	{
 		if ( argc > 1 )
 		{	
@@ -22,35 +26,18 @@ namespace Echo
 			g_astudio = new Studio::AStudio(" ");
 			g_astudio->setAppPath(QDir::currentPath().toStdString().c_str());
 
+			if (sargv[0] == "play")
+			{
+				GameMode gameMode;
+				gameMode.exec(sargv, argc, argv);
+			}
+
 			return true;
 		}
 		else
 		{
-			// 基础编辑器
-			TIME_PROFILE
-			(
-				g_astudio = new Studio::AStudio;
-				g_astudio->setAppPath(QDir::currentPath().toStdString().c_str());
-			)
-
-			// 加载配置
-			TIME_PROFILE
-			(
-				g_astudio->getConfigMgr()->loadCfgFile();
-			)
-			
-			TIME_PROFILE
-			(
-				g_astudio->Start();
-			)
-
-			// 显示主窗口
-			TIME_PROFILE
-			(
-				ThreadSleepByMilliSecond(1000);
-				g_astudio->getProjectWindow()->show();
-				splash->finish(g_astudio->getProjectWindow());
-			)
+			EditorMode editorMode;
+			editorMode.exec(argc, argv);
 		}
 
 		return false;
@@ -60,5 +47,99 @@ namespace Echo
 	void CMDLine::Release()
 	{
 		delete g_astudio;
+	}
+
+	// exec command
+	bool EditorMode::exec(int argc, char* argv[])
+	{
+		const auto& list = QApplication::libraryPaths();
+
+		QApplication app(argc, argv);
+		app.setAttribute(Qt::AA_NativeWindows);
+
+		// 设置编码方式
+		QTextCodec *codec = QTextCodec::codecForName("GB18030");
+		QTextCodec::setCodecForLocale(codec);
+
+		// 随机使用launch image
+		int idx = QTime(0, 0, 0).secsTo(QTime::currentTime()) % 4;
+		Echo::String iconLocation = Echo::StringUtil::Format(":/icon/Icon/Launch/launch-%d.png", idx);
+
+		QSplashScreen splash;
+		splash.setPixmap(QPixmap(iconLocation.c_str()));
+		splash.show();
+		splash.showMessage(QString::fromLocal8Bit("Echo (32 bit OpenGLES) Copyright @ 2018-2019 B-Lab"), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
+
+		// 设置界面风格
+		QFile qssFile(":/Qss/Qss/Ps.qss");
+		qssFile.open(QFile::ReadOnly);
+		if (qssFile.isOpen())
+		{
+			QString qss = QLatin1String(qssFile.readAll());
+			app.setStyleSheet(qss);
+
+			qssFile.close();
+		}
+
+		// 基础编辑器
+		TIME_PROFILE
+		(
+			g_astudio = new Studio::AStudio;
+			g_astudio->setAppPath(QDir::currentPath().toStdString().c_str());
+		)
+
+		// 加载配置
+		TIME_PROFILE
+		(
+			g_astudio->getConfigMgr()->loadCfgFile();
+		)
+
+		TIME_PROFILE
+		(
+			g_astudio->Start();
+		)
+
+		// 显示主窗口
+		TIME_PROFILE
+		(
+			ThreadSleepByMilliSecond(1000);
+			g_astudio->getProjectWindow()->show();
+			splash.finish(g_astudio->getProjectWindow());
+		)
+
+		// 执行
+		app.exec();
+
+		return true;
+	}
+
+	// exec command
+	bool GameMode::exec(const StringArray& argvs, int argc, char* argv[])
+	{
+		//int i = 0;
+		//if (argvs[i++] != "play")
+		//	return false;
+
+		//Echo::String projectFile = argvs[i++];
+		QApplication app(argc, argv);
+		app.setAttribute(Qt::AA_NativeWindows);
+
+		// set qss
+		QFile qssFile(":/Qss/Qss/Ps.qss");
+		qssFile.open(QFile::ReadOnly);
+		if (qssFile.isOpen())
+		{
+			QString qss = QLatin1String(qssFile.readAll());
+			app.setStyleSheet(qss);
+			qssFile.close();
+		}
+
+		// start window
+		Game::Window window;
+		window.show();
+
+		app.exec();
+
+		return false;
 	}
 }
