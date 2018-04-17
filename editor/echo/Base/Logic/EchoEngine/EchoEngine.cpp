@@ -172,7 +172,7 @@ namespace Studio
 	{
 		if (m_currentEditNode)
 		{
-			m_currentEditNode->save("Res://first.tree");
+			m_currentEditNode->save("Res://main.scene");
 		}
 	}
 
