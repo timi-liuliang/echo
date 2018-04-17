@@ -15,6 +15,27 @@ namespace Echo
 		"CMASK_ALL",
 	};
 
+	INLINE RenderState::ColorMask MappingColorMask(const String& strValue)
+	{
+		RenderState::ColorMask results[] = 
+		{
+			RenderState::CMASK_RED,
+			RenderState::CMASK_GREEN,
+			RenderState::CMASK_BLUE,
+			RenderState::CMASK_ALPHA,
+			RenderState::CMASK_COLOR,
+			RenderState::CMASK_ALL
+		};
+
+		for (int i = 0; i < sizeof(results); i++)
+		{
+			if (strValue == s_ColorMask[i])
+				return results[i];
+		}
+
+		return RenderState::CMASK_ALL;
+	}
+
 	static const String s_BlendOperation[5] =
 	{
 		"BOP_ADD", 

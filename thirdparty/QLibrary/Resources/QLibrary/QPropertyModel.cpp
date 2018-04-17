@@ -15,8 +15,8 @@ namespace QT_UI
 		QByteArray fileContent(fileName);
 
 		// 创建Item
-		m_cfg = new xml_document < > ;
-		m_cfg->parse<0>(fileContent.data());
+		m_cfg = new pugi::xml_document;
+		m_cfg->load(fileContent.data());
 
 		ParseCfg();
 
@@ -32,7 +32,7 @@ namespace QT_UI
 	}
 
 	// 设置数据
-	void  QPropertyModel::setupModelData(xml_document<>* cfg)
+	void  QPropertyModel::setupModelData(pugi::xml_document* cfg)
 	{
 		if (!cfg)
 			return;
@@ -48,54 +48,42 @@ namespace QT_UI
 		clear();
 
 		// headerLabel
-		xml_node<>* root = m_cfg->first_node("cfg");
-		xml_node<>* headers = root->first_node("headers");
+		pugi::xml_node root = m_cfg->child("cfg");
+		pugi::xml_node headers = root.child("headers");
 		if (headers)
 		{
 			QStringList headerLables;
-			xml_node<>* header = headers->first_node("header");
+			pugi::xml_node header = headers.child("header");
 			while (header)
 			{
-				headerLables << header->first_attribute("text")->value();
-				header = header->next_sibling("header");
+				headerLables << header.attribute("text").as_string();
+				header = header.next_sibling("header");
 			}
 			setHorizontalHeaderLabels(headerLables);
 		}
 
 		// 表项
-		addChildItem(root->first_node("item"), this->invisibleRootItem());
-	}
-
-	// 安全获取接点值
-	string safeGetAttribute(xml_node<>* node, const char* attribute)
-	{
-		if (node->first_attribute(attribute))
-			return node->first_attribute(attribute)->value();
-
-		return "";
+		addChildItem(&root.child("item"), this->invisibleRootItem());
 	}
 
 	// 递归添加
-	void  QPropertyModel::addChildItem(xml_node<>* pFirstChildElement, QStandardItem* pParentItem)
+	void  QPropertyModel::addChildItem(pugi::xml_node* pFirstChildElement, QStandardItem* pParentItem)
 	{
 		while (pFirstChildElement)
 		{
-			QString text = m_isEnableGB2312 ? QString::fromLocal8Bit(pFirstChildElement->first_attribute("text")->value())
-				: QString::fromUtf8(pFirstChildElement->first_attribute("text")->value());
+			QString text = m_isEnableGB2312 ? QString::fromLocal8Bit(pFirstChildElement->attribute("text").value())
+				: QString::fromUtf8(pFirstChildElement->attribute("text").value());
 
-			int  bold = false;
-			if (pFirstChildElement->first_attribute("bold"))
-				bold = atoi(pFirstChildElement->first_attribute("bold")->value());
+			bool bold = pFirstChildElement->attribute("bold").as_bool(false);
 
-			int row = 0, col = 0;
-			row = atoi(pFirstChildElement->first_attribute("row")->value());
-			col = atoi(pFirstChildElement->first_attribute("col")->value());
+			int row = pFirstChildElement->attribute("row").as_int(0);
+			int col = pFirstChildElement->attribute("col").as_int(0);
 
-			QStandardItem* item = addChildItem(pParentItem, text.toStdString().c_str(), bold, row, col, safeGetAttribute(pFirstChildElement, "widget").c_str(), safeGetAttribute(pFirstChildElement, "property").c_str());
+			QStandardItem* item = addChildItem(pParentItem, text.toStdString().c_str(), bold, row, col, pFirstChildElement->attribute("widget").as_string(""), pFirstChildElement->attribute("property").as_string(""));
 			item->setData(constraintCondition(pFirstChildElement), kConstraint);
-			addChildItem(pFirstChildElement->first_node("item"), item);
+			addChildItem(&pFirstChildElement->child("item"), item);
 
-			pFirstChildElement = pFirstChildElement->next_sibling("item");
+			pFirstChildElement = &pFirstChildElement->next_sibling("item");
 		}
 	}
 
@@ -221,18 +209,18 @@ namespace QT_UI
 		//});
 	}
 
-	QMap<QString, QVariant> QPropertyModel::constraintCondition(xml_node<>* itemNode)
+	QMap<QString, QVariant> QPropertyModel::constraintCondition(pugi::xml_node* itemNode)
 	{
 		QMap<QString, QVariant> constraint;
-		auto node = itemNode->first_node("constraint");
+		pugi::xml_node node = itemNode->child("constraint");
 		if (node)
 		{
-			auto attr = node->first_attribute();
+			auto attr = node.first_attribute();
 			while (attr)
 			{
-				auto value = QString(attr->value()).split(",");
-				constraint.insert(QString(attr->name()), value);
-				attr = attr->next_attribute();
+				auto value = QString(attr.value()).split(",");
+				constraint.insert(QString(attr.name()), value);
+				attr = attr.next_attribute();
 			}
 		}
 		return constraint;

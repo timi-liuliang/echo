@@ -5,10 +5,7 @@
 #include "engine/core/render/render/MaterialDesc.h"
 #include "engine/core/render/render/Renderer.h"
 #include "engine/core/render/TextureResManager.h"
-#include "rapidxml/rapidxml.hpp"
-#include "rapidxml/rapidxml_utils.hpp"
-#include "rapidxml/rapidxml_print.hpp"
-#include "rapidxml/rapidxml_helper.hpp"
+#include <thirdparty/pugixml/pugixml.hpp>
 
 using namespace rapidxml;
 
@@ -114,10 +111,10 @@ namespace Echo
 				return false;
 			}
 
-			xml_document<> doc;
-			doc.parse<0>(memReader.getData<char*>());
+			pugi::xml_document doc;
+			doc.load(memReader.getData<char*>());
 
-			xml_node<> *pRootNode = doc.first_node();
+			pugi::xml_node pRootNode = doc.first_child();
 			if (!pRootNode)
 			{
 				EchoLogError("Material file content is valid. there is no root node");
@@ -125,19 +122,19 @@ namespace Echo
 			}
 
 			// 材质模板
-			xml_node<>* matTemNode = pRootNode->first_node("MaterialTemplate");
+			pugi::xml_node matTemNode = pRootNode.child("MaterialTemplate");
 			if (matTemNode)
 			{
-				m_materialTemplate = rapidxml_helper::get_string(matTemNode->first_attribute("name"), "");
-				m_renderStage = rapidxml_helper::get_string(matTemNode->first_attribute("stage"), "");
+				m_materialTemplate = matTemNode.attribute("name").as_string("");
+				m_renderStage = matTemNode.attribute("stage").as_string("");
 
 				if (m_materialTemplate == "water.mt" || m_materialTemplate == "water2.mt" || m_materialTemplate == "water1.mt")
 				{
 					m_renderStage = "SampleWater";
 				}
 
-				m_isSubmitToStageRenderQueue = rapidxml_helper::parsebool(matTemNode->first_attribute("submit_to_stage"), false);
-				m_macros = StringUtil::Split(rapidxml_helper::get_string(matTemNode->first_attribute("macros"), ""), ";");
+				m_isSubmitToStageRenderQueue = matTemNode.attribute("submit_to_stage").as_bool(false);
+				m_macros = StringUtil::Split(matTemNode.attribute("macros").as_string(""), ";");
 				std::sort(m_macros.begin(), m_macros.end());
 			}
 			else
@@ -147,7 +144,7 @@ namespace Echo
 			}
 
 			{
-				xml_node<>* pSubNode = pRootNode->first_node("RasterizerState");
+				pugi::xml_node pSubNode = pRootNode.child("RasterizerState");
 				if (pSubNode)
 				{
 					LoadRasterizerState(pSubNode);
@@ -155,7 +152,7 @@ namespace Echo
 			}
 
 			{
-				xml_node<>* pSubNode = pRootNode->first_node("BlendState");
+				pugi::xml_node pSubNode = pRootNode.child("BlendState");
 				if (pSubNode)
 				{
 					LoadBlendState(pSubNode);
@@ -163,7 +160,7 @@ namespace Echo
 			}
 
 			{
-				xml_node<>* pSubNode = pRootNode->first_node("DepthStencilState");
+				pugi::xml_node pSubNode = pRootNode.child("DepthStencilState");
 				if (pSubNode)
 				{
 					LoadDepthStencilState(pSubNode);
@@ -171,37 +168,23 @@ namespace Echo
 			}
 
 			// 参数模板
-			xml_node<>* uniformNode = pRootNode->first_node("Uniform");
+			pugi::xml_node uniformNode = pRootNode.child("Uniform");
 			if (uniformNode)
 			{
-				xml_node<>* propertyNode = uniformNode->first_node("Property");
-				while (propertyNode)
+				for(pugi::xml_node propertyNode = uniformNode.child("Property"); propertyNode; propertyNode=pRootNode.next_sibling("Property"))
 				{
-					Echo::String uniformName = rapidxml_helper::get_string(propertyNode->first_attribute("name"), "");
+					Echo::String uniformName = propertyNode.attribute("name").as_string("");
 					{
 						uniform* pProperty = EchoNew(uniform);
 
 						pProperty->name = uniformName;
-						xml_attribute<> *pPropertyValueType = propertyNode->first_attribute("type");
-						pProperty->type = S2ShaderParamType(pPropertyValueType->value());
-						xml_attribute<> *pPropertyValueCount = propertyNode->first_attribute("count");
-						if (pPropertyValueCount)
-						{
-							pProperty->count = StringUtil::ParseI32(pPropertyValueCount->value());
-						}
-						else
-						{
-							pProperty->count = 1;
-						}
-						xml_attribute<> *pPropertyValue = propertyNode->first_attribute("value");
-
+						pProperty->type = S2ShaderParamType(propertyNode.attribute("type").as_string(""));
+						pProperty->count = propertyNode.attribute("count").as_int(1);
 						pProperty->value = createValue2Void(pProperty->type, pProperty->count);
-						S2Void(pProperty->type, pPropertyValue->value(), pProperty->value, pProperty->count);
+						S2Void(pProperty->type, propertyNode.attribute("value").as_string(""), pProperty->value, pProperty->count);
 
 						m_unifromParamSetFromFile[pProperty->name] = pProperty;
 					}
-
-					propertyNode = propertyNode->next_sibling("Property");
 				}
 			}
 
@@ -276,30 +259,22 @@ namespace Echo
 	{
 		using namespace rapidxml;
 
-		rapidxml::xml_document<> doc;
-		Echo::String str;
-		char* strValue;
-		str = "xml version='1.0' encoding='utf-8'";
-		strValue = doc.allocate_string(str.c_str());
-		rapidxml::xml_node<>* rot = doc.allocate_node(rapidxml::node_pi, strValue);
-		doc.append_node(rot);
+		pugi::xml_document doc;
+
+		pugi::xml_node dec = doc.prepend_child(pugi::node_declaration);
+		dec.append_attribute("version") = "1.0";
+		dec.append_attribute("encoding") = "utf-8";
 
 		// root node
-		rapidxml::xml_node<>* MaterialRoot = doc.allocate_node(rapidxml::node_element, "MaterialRoot", NULL);
-		doc.append_node(MaterialRoot);
+		pugi::xml_node MaterialRoot = doc.append_child( "MaterialRoot");
 
 		// 保存材质模板
 		{
-			xml_node<>* matTemplate = doc.allocate_node(node_element, "MaterialTemplate");
-			xml_attribute<>* matTemplateName = doc.allocate_attribute("name", m_materialTemplate.c_str());
-			xml_attribute<>* matTemplateStage = doc.allocate_attribute("stage", m_renderStage.c_str());
-			xml_attribute<>* matTemplateSubmitToStage = doc.allocate_attribute("submit_to_stage", m_isSubmitToStageRenderQueue ? "true" : "false");
-			xml_attribute<>* matTemplateMacros = doc.allocate_attribute("macros", doc.allocate_string(StringUtil::ToString(m_macros, ";").c_str()));
-			matTemplate->append_attribute(matTemplateName);
-			matTemplate->append_attribute(matTemplateStage);
-			matTemplate->append_attribute(matTemplateSubmitToStage);
-			matTemplate->append_attribute(matTemplateMacros);
-			MaterialRoot->append_node(matTemplate);
+			pugi::xml_node matTemplate = doc.append_child("MaterialTemplate");
+			matTemplate.append_attribute("name").set_value(m_materialTemplate.c_str());
+			matTemplate.append_attribute("stage").set_value(m_renderStage.c_str());
+			matTemplate.append_attribute("submit_to_stage").set_value(m_isSubmitToStageRenderQueue ? "true" : "false");
+			matTemplate.append_attribute("macros").set_value(StringUtil::ToString(m_macros, ";").c_str());
 		}
 
 		{
@@ -307,56 +282,28 @@ namespace Echo
 			{
 				BlendState::BlendDesc defaultDesc;
 				const BlendState::BlendDesc& desc = m_blendState->getDesc();
-				rapidxml::xml_node<>* renderState = doc.allocate_node(rapidxml::node_element, "BlendState", NULL);
+				pugi::xml_node renderState = MaterialRoot.append_child("BlendState");
 
 				if (desc.bBlendEnable != defaultDesc.bBlendEnable)
-				{
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "BlendEnable", NULL);
-					property->append_attribute(doc.allocate_attribute("value", (desc.bBlendEnable ? "true" : "false")));
-					renderState->append_node(property);
-				}
+					renderState.append_attribute("BlendEnable").set_value(desc.bBlendEnable ? "true" : "false");
 
 				if (desc.blendOP != defaultDesc.blendOP)
-				{
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "BlendOP", NULL);
-					property->append_attribute(doc.allocate_attribute("value", s_BlendOperation[desc.blendOP].c_str()));
-					renderState->append_node(property);
-				}
+					renderState.append_attribute("BlendOP").set_value(s_BlendOperation[desc.blendOP].c_str());
 
 				if (desc.srcBlend != defaultDesc.srcBlend)
-				{
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "SrcBlend", NULL);
-					property->append_attribute(doc.allocate_attribute("value", s_BlendFactor[desc.srcBlend].c_str()));
-					renderState->append_node(property);
-				}
+					renderState.append_attribute("SrcBlend").set_value(s_BlendFactor[desc.srcBlend].c_str());
 
 				if (desc.dstBlend != defaultDesc.dstBlend)
-				{
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "DstBlend", NULL);
-					property->append_attribute(doc.allocate_attribute("value", s_BlendFactor[desc.dstBlend].c_str()));
-					renderState->append_node(property);
-				}
+					renderState.append_attribute("DstBlend").set_value(s_BlendFactor[desc.dstBlend].c_str());
 
 				if (desc.alphaBlendOP != defaultDesc.alphaBlendOP)
-				{
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "AlphaBlendOP", NULL);
-					property->append_attribute(doc.allocate_attribute("value", s_BlendOperation[desc.alphaBlendOP].c_str()));
-					renderState->append_node(property);
-				}
+					renderState.append_attribute("AlphaBlendOP").set_value(s_BlendOperation[desc.alphaBlendOP].c_str());
 
 				if (desc.srcAlphaBlend != defaultDesc.srcAlphaBlend)
-				{
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "SrcAlphaBlend", NULL);
-					property->append_attribute(doc.allocate_attribute("value", s_BlendFactor[desc.srcAlphaBlend].c_str()));
-					renderState->append_node(property);
-				}
+					renderState.append_attribute("SrcAlphaBlend").set_value(s_BlendFactor[desc.srcAlphaBlend].c_str());
 
 				if (desc.dstAlphaBlend != defaultDesc.dstAlphaBlend)
-				{
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "DstAlphaBlend", NULL);
-					property->append_attribute(doc.allocate_attribute("value", s_BlendFactor[desc.dstAlphaBlend].c_str()));
-					renderState->append_node(property);
-				}
+					renderState.append_attribute("DstAlphaBlend").set_value(s_BlendFactor[desc.dstAlphaBlend].c_str());
 
 				if (desc.colorWriteMask != defaultDesc.colorWriteMask)
 				{
@@ -371,283 +318,132 @@ namespace Echo
 							break;
 						}
 					}
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "ColorWriteMask", NULL);
-					property->append_attribute(doc.allocate_attribute("value", s_ColorMask[colorIndex].c_str()));
-					renderState->append_node(property);
+
+					renderState.append_attribute("ColorWriteMask").set_value(s_ColorMask[colorIndex].c_str());
 				}
 
 				if (desc.bA2CEnable != defaultDesc.bA2CEnable)
-				{
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "A2CEnable", NULL);
-					property->append_attribute(doc.allocate_attribute("value", (desc.bA2CEnable ? "true" : "false")));
-					renderState->append_node(property);
-				}
+					renderState.append_attribute("A2CEnable").set_value(desc.bA2CEnable ? "true" : "false");
 
 				if (desc.bIndependBlendEnable != defaultDesc.bIndependBlendEnable)
-				{
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "IndependBlendEnable", NULL);
-					property->append_attribute(doc.allocate_attribute("value", (desc.bIndependBlendEnable ? "true" : "false")));
-					renderState->append_node(property);
-				}
+					renderState.append_attribute("IndependBlendEnable").set_value(desc.bIndependBlendEnable ? "true" : "false");
 
 				if (desc.blendFactor != defaultDesc.blendFactor)
-				{
-					String color = StringUtil::ToString(desc.blendFactor);
-					strValue = doc.allocate_string(color.c_str());
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "BlendFactor", NULL);
-					property->append_attribute(doc.allocate_attribute("value", strValue));
-					renderState->append_node(property);
-				}
-
-				MaterialRoot->append_node(renderState);
+					renderState.append_attribute("BlendFactor").set_value(StringUtil::ToString(desc.blendFactor).c_str());
 			}
 
 			if (m_rasterizerState)
 			{
 				RasterizerState::RasterizerDesc defaultDesc;
 				const RasterizerState::RasterizerDesc& desc = m_rasterizerState->getDesc();
-				rapidxml::xml_node<>* renderState = doc.allocate_node(rapidxml::node_element, "RasterizerState", NULL);
+				pugi::xml_node rasterizerState = MaterialRoot.append_child("RasterizerState");
 
 				if (desc.polygonMode != defaultDesc.polygonMode)
-				{
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "PolygonMode", NULL);
-					property->append_attribute(doc.allocate_attribute("value", s_PolygonMode[desc.polygonMode].c_str()));
-					renderState->append_node(property);
-				}
+					rasterizerState.append_attribute("PolygonMode").set_value(s_PolygonMode[desc.polygonMode].c_str());
 
 				if (desc.shadeModel != defaultDesc.shadeModel)
-				{
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "ShadeModel", NULL);
-					property->append_attribute(doc.allocate_attribute("value", s_ShadeModel[desc.shadeModel].c_str()));
-					renderState->append_node(property);
-				}
+					rasterizerState.append_attribute("ShadeModel").set_value(s_ShadeModel[desc.shadeModel].c_str());
 
 				if (desc.cullMode != defaultDesc.cullMode)
-				{
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "CullMode", NULL);
-					property->append_attribute(doc.allocate_attribute("value", s_CullMode[desc.cullMode].c_str()));
-					renderState->append_node(property);
-				}
+					rasterizerState.append_attribute("CullMode").set_value(s_CullMode[desc.cullMode].c_str());
 
 				if (desc.bFrontFaceCCW != defaultDesc.bFrontFaceCCW)
-				{
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "FrontFaceCCW", NULL);
-					property->append_attribute(doc.allocate_attribute("value", "true"));
-					renderState->append_node(property);
-				}
+					rasterizerState.append_attribute("FrontFaceCCW").set_value("true");
 
 				if (desc.depthBias != defaultDesc.depthBias)
-				{
-					char* str = doc.allocate_string(StringUtil::ToString(desc.depthBias).c_str());
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "DepthBias", NULL);
-					property->append_attribute(doc.allocate_attribute("value", str));
-					renderState->append_node(property);
-				}
+					rasterizerState.append_attribute("DepthBias").set_value(StringUtil::ToString(desc.depthBias).c_str());
 
 				if (desc.depthBiasFactor != defaultDesc.depthBiasFactor)
-				{
-					char* str = doc.allocate_string(StringUtil::ToString(desc.depthBiasFactor).c_str());
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "DepthBiasFactor", NULL);
-					property->append_attribute(doc.allocate_attribute("value", str));
-					renderState->append_node(property);
-				}
+					rasterizerState.append_attribute("DepthBiasFactor").set_value(StringUtil::ToString(desc.depthBiasFactor).c_str());
 
 				if (desc.bDepthClip != defaultDesc.bDepthClip)
-				{
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "DepthClip", NULL);
-					property->append_attribute(doc.allocate_attribute("value", "false"));
-					renderState->append_node(property);
-				}
+					rasterizerState.append_attribute("DepthClip").set_value("false");
 
 				if (desc.bScissor != defaultDesc.bScissor)
-				{
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "Scissor", NULL);
-					property->append_attribute(doc.allocate_attribute("value", "true"));
-					renderState->append_node(property);
-				}
+					rasterizerState.append_attribute("Scissor").set_value("true");
 
 				if (desc.bMultisample != defaultDesc.bMultisample)
-				{
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "Multisample", NULL);
-					property->append_attribute(doc.allocate_attribute("value", "true"));
-					renderState->append_node(property);
-				}
-
-				MaterialRoot->append_node(renderState);
+					rasterizerState.append_attribute("Multisample").set_value("true");
 			}
 
 			if (m_depthStencil)
 			{
 				DepthStencilState::DepthStencilDesc defaultDesc;
 				const DepthStencilState::DepthStencilDesc& desc = m_depthStencil->getDesc();
-				rapidxml::xml_node<>* renderState = doc.allocate_node(rapidxml::node_element, "DepthStencilState", NULL);
+				pugi::xml_node depthStencilState = MaterialRoot.append_child( "DepthStencilState");
 
 				if (desc.bDepthEnable != defaultDesc.bDepthEnable)
-				{
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "DepthEnable", NULL);
-					property->append_attribute(doc.allocate_attribute("value", desc.bDepthEnable ? "true" : "false"));
-					renderState->append_node(property);
-				}
+					depthStencilState.append_attribute("DepthEnable").set_value(desc.bDepthEnable ? "true" : "false");
 
 				if (desc.bWriteDepth != defaultDesc.bWriteDepth)
-				{
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "WriteDepth", NULL);
-					property->append_attribute(doc.allocate_attribute("value", desc.bWriteDepth ? "true" : "false"));
-					renderState->append_node(property);
-				}
+					depthStencilState.append_attribute("WriteDepth").set_value(desc.bWriteDepth ? "true" : "false");
 
 				if (desc.depthFunc != defaultDesc.depthFunc)
-				{
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "DepthFunc", NULL);
-					property->append_attribute(doc.allocate_attribute("value", s_ComparisonFunc[desc.depthFunc].c_str()));
-					renderState->append_node(property);
-				}
+					depthStencilState.append_attribute("DepthFunc").set_value(s_ComparisonFunc[desc.depthFunc].c_str());
 
 				if (desc.bFrontStencilEnable != defaultDesc.bFrontStencilEnable)
-				{
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "FrontStencilEnable", NULL);
-					property->append_attribute(doc.allocate_attribute("value", desc.bFrontStencilEnable ? "true" : "false"));
-					renderState->append_node(property);
-				}
+					depthStencilState.append_attribute("FrontStencilEnable").set_value(desc.bFrontStencilEnable ? "true" : "false");
 
 				if (desc.frontStencilFunc != defaultDesc.frontStencilFunc)
-				{
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "FrontStencilFunc", NULL);
-					property->append_attribute(doc.allocate_attribute("value", s_ComparisonFunc[desc.frontStencilFunc].c_str()));
-					renderState->append_node(property);
-				}
+					depthStencilState.append_attribute("FrontStencilFunc").set_value(s_ComparisonFunc[desc.frontStencilFunc].c_str());
 
 				if (desc.frontStencilReadMask != defaultDesc.frontStencilReadMask)
-				{
-					char* str = doc.allocate_string(StringUtil::ToString(desc.frontStencilReadMask).c_str());
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "FrontStencilReadMask", NULL);
-					property->append_attribute(doc.allocate_attribute("value", str));
-					renderState->append_node(property);
-				}
+					depthStencilState.append_attribute("FrontStencilReadMask").set_value(StringUtil::ToString(desc.frontStencilReadMask).c_str());
 
 				if (desc.frontStencilWriteMask != defaultDesc.frontStencilWriteMask)
-				{
-					char* str = doc.allocate_string(StringUtil::ToString(desc.frontStencilWriteMask).c_str());
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "FrontStencilWriteMask", NULL);
-					property->append_attribute(doc.allocate_attribute("value", str));
-					renderState->append_node(property);
-				}
+					depthStencilState.append_attribute("FrontStencilWriteMask").set_value(StringUtil::ToString(desc.frontStencilWriteMask).c_str());
 
 				if (desc.frontStencilFailOP != defaultDesc.frontStencilFailOP)
-				{
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "FrontStencilFailOP", NULL);
-					property->append_attribute(doc.allocate_attribute("value", s_StencilOperation[desc.frontStencilFailOP].c_str()));
-					renderState->append_node(property);
-				}
+					depthStencilState.append_attribute("FrontStencilFailOP").set_value(s_StencilOperation[desc.frontStencilFailOP].c_str());
 
 				if (desc.frontStencilDepthFailOP != defaultDesc.frontStencilDepthFailOP)
-				{
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "FrontStencilDepthFailOP", NULL);
-					property->append_attribute(doc.allocate_attribute("value", s_StencilOperation[desc.frontStencilDepthFailOP].c_str()));
-					renderState->append_node(property);
-				}
+					depthStencilState.append_attribute("FrontStencilDepthFailOP").set_value(s_StencilOperation[desc.frontStencilDepthFailOP].c_str());
 
 				if (desc.frontStencilPassOP != defaultDesc.frontStencilPassOP)
-				{
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "FrontStencilPassOP", NULL);
-					property->append_attribute(doc.allocate_attribute("value", s_StencilOperation[desc.frontStencilPassOP].c_str()));
-					renderState->append_node(property);
-				}
+					depthStencilState.append_attribute("FrontStencilPassOP").set_value(s_StencilOperation[desc.frontStencilPassOP].c_str());
 
 				if (desc.frontStencilRef != defaultDesc.frontStencilRef)
-				{
-					char* str = doc.allocate_string(StringUtil::ToString(desc.frontStencilRef).c_str());
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "FrontStencilRef", NULL);
-					property->append_attribute(doc.allocate_attribute("value", str));
-					renderState->append_node(property);
-				}
+					depthStencilState.append_attribute("FrontStencilRef").set_value(StringUtil::ToString(desc.frontStencilRef).c_str());
 
 				if (desc.bBackStencilEnable != defaultDesc.bBackStencilEnable)
-				{
-					char* str = doc.allocate_string(StringUtil::ToString(desc.bBackStencilEnable).c_str());
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "BackStencilEnable", NULL);
-					property->append_attribute(doc.allocate_attribute("value", str));
-					renderState->append_node(property);
-				}
+					depthStencilState.append_attribute("BackStencilEnable").set_value(StringUtil::ToString(desc.bBackStencilEnable).c_str());
 
 				if (desc.backStencilFunc != defaultDesc.backStencilFunc)
-				{
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "BackStencilFunc", NULL);
-					property->append_attribute(doc.allocate_attribute("value", s_ComparisonFunc[desc.backStencilFunc].c_str()));
-					renderState->append_node(property);
-				}
+					depthStencilState.append_attribute("BackStencilFunc").set_value(s_ComparisonFunc[desc.backStencilFunc].c_str());
 
 				if (desc.backStencilReadMask != defaultDesc.backStencilReadMask)
-				{
-					char* str = doc.allocate_string(StringUtil::ToString(desc.backStencilReadMask).c_str());
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "BackStencilReadMask", NULL);
-					property->append_attribute(doc.allocate_attribute("value", str));
-					renderState->append_node(property);
-				}
+					depthStencilState.append_attribute("BackStencilReadMask").set_value(StringUtil::ToString(desc.backStencilReadMask).c_str());
 
 				if (desc.backStencilWriteMask != defaultDesc.backStencilWriteMask)
-				{
-					char* str = doc.allocate_string(StringUtil::ToString(desc.backStencilWriteMask).c_str());
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "BackStencilWriteMask", NULL);
-					property->append_attribute(doc.allocate_attribute("value", str));
-					renderState->append_node(property);
-				}
+					depthStencilState.append_attribute("BackStencilWriteMask").set_value(StringUtil::ToString(desc.backStencilWriteMask).c_str());
 
 				if (desc.backStencilFailOP != defaultDesc.backStencilFailOP)
-				{
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "BackStencilFailOP", NULL);
-					property->append_attribute(doc.allocate_attribute("value", s_StencilOperation[desc.backStencilFailOP].c_str()));
-					renderState->append_node(property);
-				}
+					depthStencilState.append_attribute("BackStencilFailOP").set_value(s_StencilOperation[desc.backStencilFailOP].c_str());
 
 				if (desc.backStencilDepthFailOP != defaultDesc.backStencilDepthFailOP)
-				{
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "BackStencilDepthFailOP", NULL);
-					property->append_attribute(doc.allocate_attribute("value", s_StencilOperation[desc.backStencilDepthFailOP].c_str()));
-					renderState->append_node(property);
-				}
+					depthStencilState.append_attribute("BackStencilDepthFailOP").set_value(s_StencilOperation[desc.backStencilDepthFailOP].c_str());
 
 				if (desc.backStencilPassOP != defaultDesc.backStencilPassOP)
-				{
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "BackStencilPassOP", NULL);
-					property->append_attribute(doc.allocate_attribute("value", s_StencilOperation[desc.backStencilPassOP].c_str()));
-					renderState->append_node(property);
-				}
+					depthStencilState.append_attribute("BackStencilPassOP").set_value(s_StencilOperation[desc.backStencilPassOP].c_str());
 
 				if (desc.backStencilRef != defaultDesc.backStencilRef)
-				{
-					char* str = doc.allocate_string(StringUtil::ToString(desc.backStencilRef).c_str());
-					xml_node<>* property = doc.allocate_node(rapidxml::node_element, "BackStencilRef", NULL);
-					property->append_attribute(doc.allocate_attribute("value", str));
-					renderState->append_node(property);
-				}
-
-				MaterialRoot->append_node(renderState);
+					depthStencilState.append_attribute("BackStencilRef").set_value(StringUtil::ToString(desc.backStencilRef).c_str());
 			}
 		}
 
-		rapidxml::xml_node<>* Uniform = doc.allocate_node(rapidxml::node_element, "Uniform", NULL);
+		pugi::xml_node Uniform = MaterialRoot.append_child("Uniform");
 		for (const auto& item : m_unifromParamSet)
 		{
-			xml_node<>* Property = doc.allocate_node(rapidxml::node_element, "Property", NULL);
-			str = item.second->name;
-			strValue = doc.allocate_string(str.c_str());
-			Property->append_attribute(doc.allocate_attribute("name", strValue));
-			str = (ShaderParamType2S(item.second->type));
-			strValue = doc.allocate_string(str.c_str());
-			Property->append_attribute(doc.allocate_attribute("type", strValue));
-			str = StringUtil::ToString(item.second->count);
-			strValue = doc.allocate_string(str.c_str());
-			Property->append_attribute(doc.allocate_attribute("count", strValue));
-			void2s(item.second, str);
-			strValue = doc.allocate_string(str.c_str());
-			Property->append_attribute(doc.allocate_attribute("value", strValue));
-			Uniform->append_node(Property);
-		}
-		MaterialRoot->append_node(Uniform);
+			pugi::xml_node propertyNode = Uniform.append_child("Property");
+			propertyNode.append_attribute("name") = item.second->name.c_str();
+			propertyNode.append_attribute("type") = ShaderParamType2S(item.second->type).c_str();
+			propertyNode.append_attribute("count") = StringUtil::ToString(item.second->count).c_str();
 
-		std::ofstream out(name.c_str());
-		out << doc;
+			String str; void2s(item.second, str);
+			propertyNode.append_attribute("value") = str.c_str();
+		}
+
+		doc.save_file(name.c_str(), "\t", 1U, pugi::encoding_utf8);
 	}
 
 	// 复制材质实例
@@ -1404,408 +1200,187 @@ namespace Echo
 			m_material->loadFromFile( m_materialTemplate, finalMacros);
 	}
 
+	bool MappingStringArrayIdx(const String* arry, int count, const String& value, int& idx)
+	{
+		for (size_t i = 0; i < count; i++)
+		{
+			if (value == arry[i])
+			{
+				idx = i;
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	void MaterialInst::LoadBlendState(void* pNode)
 	{
 		m_blendDesc.reset();
 
-		rapidxml::xml_node<>* pSubNode = static_cast<xml_node<>*>(pNode);
-		rapidxml::xml_node<>* pElementNode = pSubNode->first_node();
-		while (pElementNode)
+		pugi::xml_node* pSubNode = (pugi::xml_node*)(pNode);
+		for (pugi::xml_attribute elementAttr = pSubNode->first_attribute(); elementAttr; elementAttr = elementAttr.next_attribute())
 		{
-			m_isHaveCustomBlend = true;
-			String strName(pElementNode->name());
-			if (strName == "BlendEnable")
+			int idx = 0;
+			String name = elementAttr.name();
+			if (name == "BlendEnable")
+				m_blendDesc.bBlendEnable = elementAttr.as_bool( m_blendDesc.bBlendEnable);
+			else if (name == "SrcBlend")
 			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				m_blendDesc.bBlendEnable = StringUtil::ParseBool(String(pVarNode->value()));
+				if(MappingStringArrayIdx(s_BlendFactor, BlendState::BF_MAX, elementAttr.as_string(""), idx))
+					m_blendDesc.srcBlend = (BlendState::BlendFactor)idx;
 			}
-			else if (strName == "SrcBlend")
+			else if (name == "DstBlend")
 			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				String val(pVarNode->value());
-				for (size_t i = 0; i < BlendState::BF_MAX; ++i)
-				{
-					if (val == s_BlendFactor[i])
-					{
-						m_blendDesc.srcBlend = (BlendState::BlendFactor)i;
-						break;
-					}
-				}
+				if (MappingStringArrayIdx(s_BlendFactor, BlendState::BF_MAX, elementAttr.as_string(""), idx))
+					m_blendDesc.dstBlend = (BlendState::BlendFactor)idx;
 			}
-			else if (strName == "DstBlend")
+			else if (name == "BlendOP")
 			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				String val(pVarNode->value());
-				for (size_t i = 0; i < BlendState::BF_MAX; ++i)
-				{
-					if (val == s_BlendFactor[i])
-					{
-						m_blendDesc.dstBlend = (BlendState::BlendFactor)i;
-						break;
-					}
-				}
+				if (MappingStringArrayIdx(s_BlendOperation, 6, elementAttr.as_string(""), idx))
+					m_blendDesc.blendOP = (BlendState::BlendOperation)idx;
 			}
-			else if (strName == "BlendOP")
+			else if (name == "SrcAlphaBlend")
 			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				String val(pVarNode->value());
-				for (size_t i = 0; i < 6; ++i)
-				{
-					if (val == s_BlendOperation[i])
-					{
-						m_blendDesc.blendOP = (BlendState::BlendOperation)i;
-						break;
-					}
-				}
+				if (MappingStringArrayIdx(s_BlendFactor, 6, elementAttr.as_string(""), idx))
+					m_blendDesc.srcAlphaBlend = (BlendState::BlendFactor)idx;
 			}
-			else if (strName == "SrcAlphaBlend")
+			else if (name == "DstAlphaBlend")
 			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				String val(pVarNode->value());
-				for (size_t i = 0; i < 6; ++i)
-				{
-					if (val == s_BlendFactor[i])
-					{
-						m_blendDesc.srcAlphaBlend = (BlendState::BlendFactor)i;
-						break;
-					}
-				}
+				if (MappingStringArrayIdx(s_BlendFactor, 6, elementAttr.as_string(""), idx))
+					m_blendDesc.dstAlphaBlend = (BlendState::BlendFactor)idx;
 			}
-			else if (strName == "DstAlphaBlend")
+			else if (name == "AlphaBlendOP")
 			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				String val(pVarNode->value());
-				for (size_t i = 0; i < 6; ++i)
-				{
-					if (val == s_BlendFactor[i])
-					{
-						m_blendDesc.dstAlphaBlend = (BlendState::BlendFactor)i;
-						break;
-					}
-				}
+				if (MappingStringArrayIdx(s_BlendOperation, 6, elementAttr.as_string(""), idx))
+					m_blendDesc.alphaBlendOP = (BlendState::BlendOperation)idx;
 			}
-			else if (strName == "AlphaBlendOP")
-			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				String val(pVarNode->value());
-				for (size_t i = 0; i < 6; ++i)
-				{
-					if (val == s_BlendOperation[i])
-					{
-						m_blendDesc.alphaBlendOP = (BlendState::BlendOperation)i;
-						break;
-					}
-				}
-			}
-			else if (strName == "ColorWriteMask")
-			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				String val(pVarNode->value());
-				if (val == s_ColorMask[0])
-				{
-					m_blendDesc.colorWriteMask = RenderState::CMASK_RED;
-				}
-				else if (val == s_ColorMask[1])
-				{
-					m_blendDesc.colorWriteMask = RenderState::CMASK_GREEN;
-				}
-				else if (val == s_ColorMask[2])
-				{
-					m_blendDesc.colorWriteMask = RenderState::CMASK_BLUE;
-				}
-				else if (val == s_ColorMask[3])
-				{
-					m_blendDesc.colorWriteMask = RenderState::CMASK_ALPHA;
-				}
-				else if (val == s_ColorMask[4])
-				{
-					m_blendDesc.colorWriteMask = RenderState::CMASK_COLOR;
-				}
-				else if (val == s_ColorMask[5])
-				{
-					m_blendDesc.colorWriteMask = RenderState::CMASK_ALL;
-				}
-			}
-			else if (strName == "A2CEnable")
-			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				m_blendDesc.bA2CEnable = StringUtil::ParseBool(pVarNode->value());
-			}
-			else if (strName == "IndependBlendEnable")
-			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				m_blendDesc.bIndependBlendEnable = StringUtil::ParseBool(pVarNode->value());
-			}
-			else if (strName == "BlendFactor")
-			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				m_blendDesc.blendFactor = StringUtil::ParseColor(pVarNode->value());
-			}
-			pElementNode = pElementNode->next_sibling();
-		} // while
+			else if (name == "ColorWriteMask")
+				m_blendDesc.colorWriteMask = MappingColorMask(elementAttr.as_string(""));
+			else if (name == "A2CEnable")
+				m_blendDesc.bA2CEnable = elementAttr.as_bool(m_blendDesc.bA2CEnable);
+			else if (name == "IndependBlendEnable")
+				m_blendDesc.bIndependBlendEnable = elementAttr.as_bool(m_blendDesc.bIndependBlendEnable);
+			else if (name == "BlendFactor")
+				m_blendDesc.blendFactor = StringUtil::ParseColor(elementAttr.as_string(""));
+		}
 	}
 
 	void MaterialInst::LoadRasterizerState(void* pNode)
 	{
 		m_rasterizerStateDesc.reset();
 
-		rapidxml::xml_node<>* pSubNode = static_cast<rapidxml::xml_node<>*>(pNode);
-		rapidxml::xml_node<>* pElementNode = pSubNode->first_node();
-		while (pElementNode)
+		pugi::xml_node* pSubNode = static_cast<pugi::xml_node*>(pNode);
+		for (pugi::xml_attribute elementAttr = pSubNode->first_attribute(); elementAttr; elementAttr = elementAttr.next_attribute())
 		{
+			int idx = 0;
 			m_isHaveCustomRasterizer = true;
-			String strName = pElementNode->name();
+			String strName = elementAttr.name();
 			if (strName == "PolygonMode")
 			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				String val(pVarNode->value());
-				for (size_t i = 0; i < 3; ++i)
-				{
-					if (val == s_PolygonMode[i])
-					{
-						m_rasterizerStateDesc.polygonMode = (RasterizerState::PolygonMode)i;
-						break;
-					}
-				}
+				if (MappingStringArrayIdx(s_PolygonMode, 3, elementAttr.as_string(""), idx))
+					m_rasterizerStateDesc.polygonMode = (RasterizerState::PolygonMode)idx;
 			}
 			else if (strName == "ShadeModel")
 			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				String val(pVarNode->value());
-				for (size_t i = 0; i < 2; ++i)
-				{
-					if (val == s_ShadeModel[i])
-					{
-						m_rasterizerStateDesc.shadeModel = (RasterizerState::ShadeModel)i;
-						break;
-					}
-				}
+				if (MappingStringArrayIdx(s_ShadeModel, 2, elementAttr.as_string(""), idx))
+					m_rasterizerStateDesc.shadeModel = (RasterizerState::ShadeModel)idx;
 			}
 			else if (strName == "CullMode")
 			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				String val(pVarNode->value());
-				for (size_t i = 0; i < 2; ++i)
-				{
-					if (val == s_CullMode[i])
-					{
-						m_rasterizerStateDesc.cullMode = (RasterizerState::CullMode)i;
-						break;
-					}
-				}
+				if (MappingStringArrayIdx(s_CullMode, 2, elementAttr.as_string(""), idx))
+					m_rasterizerStateDesc.cullMode = (RasterizerState::CullMode)idx;
 			}
 			else if (strName == "FrontFaceCCW")
-			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				m_rasterizerStateDesc.bFrontFaceCCW = StringUtil::ParseBool(String(pVarNode->value()));
-			}
+				m_rasterizerStateDesc.bFrontFaceCCW = elementAttr.as_bool(m_rasterizerStateDesc.bFrontFaceCCW);
 			else if (strName == "DepthBias")
-			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				m_rasterizerStateDesc.depthBias = StringUtil::ParseFloat(String(pVarNode->value()));
-			}
+				m_rasterizerStateDesc.depthBias = elementAttr.as_float(m_rasterizerStateDesc.depthBias);
 			else if (strName == "DepthBiasFactor")
-			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				m_rasterizerStateDesc.depthBiasFactor = StringUtil::ParseFloat(String(pVarNode->value()));
-			}
+				m_rasterizerStateDesc.depthBiasFactor = elementAttr.as_float(m_rasterizerStateDesc.depthBiasFactor);
 			else if (strName == "DepthClip")
-			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				m_rasterizerStateDesc.bDepthClip = StringUtil::ParseBool(String(pVarNode->value()));
-			}
+				m_rasterizerStateDesc.bDepthClip = elementAttr.as_bool(m_rasterizerStateDesc.bDepthClip);
 			else if (strName == "Scissor")
-			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				m_rasterizerStateDesc.bScissor = StringUtil::ParseBool(String(pVarNode->value()));
-			}
+				m_rasterizerStateDesc.bScissor = elementAttr.as_bool(m_rasterizerStateDesc.bScissor);
 			else if (strName == "Multisample")
-			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				m_rasterizerStateDesc.bMultisample = StringUtil::ParseBool(String(pVarNode->value()));
-			}
-			pElementNode = pElementNode->next_sibling();
-		} // end while
+				m_rasterizerStateDesc.bMultisample = elementAttr.as_bool(m_rasterizerStateDesc.bMultisample);
+		}
 	}
 
 	void MaterialInst::LoadDepthStencilState(void* pNode)
 	{
 		m_depthStencilDesc.reset();
 
-		rapidxml::xml_node<>* pSubNode = static_cast<rapidxml::xml_node<>*>(pNode);	
-		rapidxml::xml_node<>* pElementNode = pSubNode->first_node();
-		while (pElementNode)
+		pugi::xml_node* pSubNode = static_cast<pugi::xml_node*>(pNode);
+		for (pugi::xml_attribute elementAttr = pSubNode->first_attribute(); elementAttr; elementAttr = elementAttr.next_attribute())
 		{
+			int idx = 0;
 			m_isHaveCustomDepthStencil = true;
-			String strName = pElementNode->name();
+			String strName = elementAttr.name();
 			if (strName == "DepthEnable")
-			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				m_depthStencilDesc.bDepthEnable = StringUtil::ParseBool(String(pVarNode->value()));
-			}
+				m_depthStencilDesc.bDepthEnable = elementAttr.as_bool(m_depthStencilDesc.bDepthEnable);
 			else if (strName == "WriteDepth")
-			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				m_depthStencilDesc.bWriteDepth = StringUtil::ParseBool(String(pVarNode->value()));
-			}
+				m_depthStencilDesc.bWriteDepth = elementAttr.as_bool(m_depthStencilDesc.bWriteDepth);
 			else if (strName == "DepthFunc")
 			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				String val(pVarNode->value());
-				for (size_t i = 0; i < RenderState::CF_MAXNUM; ++i)
-				{
-					if (val == s_ComparisonFunc[i])
-					{
-						m_depthStencilDesc.depthFunc = (RenderState::ComparisonFunc)i;
-						break;
-					}
-				}
+				if (MappingStringArrayIdx(s_ComparisonFunc, RenderState::CF_MAXNUM, elementAttr.as_string(""), idx))
+					m_depthStencilDesc.depthFunc = (RenderState::ComparisonFunc)idx;
 			}
 			else if (strName == "FrontStencilEnable")
-			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				m_depthStencilDesc.bFrontStencilEnable = StringUtil::ParseBool(String(pVarNode->value()));
-			}
+				m_depthStencilDesc.bFrontStencilEnable = elementAttr.as_bool();
 			else if (strName == "FrontStencilFunc")
 			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				String val(pVarNode->value());
-				for (size_t i = 0; i < RenderState::CF_MAXNUM; ++i)
-				{
-					if (val == s_ComparisonFunc[i])
-					{
-						m_depthStencilDesc.frontStencilFunc = (RenderState::ComparisonFunc)i;
-						break;
-					}
-				}
+				if (MappingStringArrayIdx(s_ComparisonFunc, RenderState::CF_MAXNUM, elementAttr.as_string(""), idx))
+					m_depthStencilDesc.frontStencilFunc = (RenderState::ComparisonFunc)idx;
 			}
 			else if (strName == "FrontStencilReadMask")
-			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				m_depthStencilDesc.frontStencilReadMask = StringUtil::ParseUI16(String(pVarNode->value()));
-			}
+				m_depthStencilDesc.frontStencilReadMask = elementAttr.as_uint();
 			else if (strName == "FrontStencilWriteMask")
-			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				m_depthStencilDesc.frontStencilWriteMask = StringUtil::ParseUI16(String(pVarNode->value()));
-			}
+				m_depthStencilDesc.frontStencilWriteMask = elementAttr.as_uint();
 			else if (strName == "FrontStencilFailOP")
 			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				String val(pVarNode->value());
-				for (size_t i = 0; i < DepthStencilState::SOP_MAX; ++i)
-				{
-					if (val == s_StencilOperation[i])
-					{
-						m_depthStencilDesc.frontStencilFailOP = (DepthStencilState::StencilOperation)i;
-						break;
-					}
-				}
+				if (MappingStringArrayIdx(s_StencilOperation, DepthStencilState::SOP_MAX, elementAttr.as_string(""), idx))
+					m_depthStencilDesc.frontStencilFailOP = (DepthStencilState::StencilOperation)idx;
 			}
 			else if (strName == "FrontStencilDepthFailOP")
 			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				String val(pVarNode->value());
-				for (size_t i = 0; i < DepthStencilState::SOP_MAX; ++i)
-				{
-					if (val == s_StencilOperation[i])
-					{
-						m_depthStencilDesc.frontStencilDepthFailOP = (DepthStencilState::StencilOperation)i;
-						break;
-					}
-				}
+				if (MappingStringArrayIdx(s_StencilOperation, DepthStencilState::SOP_MAX, elementAttr.as_string(""), idx))
+					m_depthStencilDesc.frontStencilDepthFailOP = (DepthStencilState::StencilOperation)idx;
 			}
 			else if (strName == "FrontStencilPassOP")
 			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				String val(pVarNode->value());
-				for (size_t i = 0; i < DepthStencilState::SOP_MAX; ++i)
-				{
-					if (val == s_StencilOperation[i])
-					{
-						m_depthStencilDesc.frontStencilPassOP = (DepthStencilState::StencilOperation)i;
-						break;
-					}
-				}
+				if (MappingStringArrayIdx(s_StencilOperation, DepthStencilState::SOP_MAX, elementAttr.as_string(""), idx))
+					m_depthStencilDesc.frontStencilPassOP = (DepthStencilState::StencilOperation)idx;
 			}
 			else if (strName == "FrontStencilRef")
-			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				m_depthStencilDesc.frontStencilRef = StringUtil::ParseUI32(String(pVarNode->value()));
-			}
+				m_depthStencilDesc.frontStencilRef = elementAttr.as_uint();
 			else if (strName == "BackStencilEnable")
-			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				m_depthStencilDesc.bBackStencilEnable = StringUtil::ParseBool(String(pVarNode->value()));
-			}
+				m_depthStencilDesc.bBackStencilEnable = elementAttr.as_bool();
 			else if (strName == "BackStencilFunc")
 			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				String val(pVarNode->value());
-				for (size_t i = 0; i < RenderState::CF_MAXNUM; ++i)
-				{
-					if (val == s_ComparisonFunc[i])
-					{
-						m_depthStencilDesc.backStencilFunc = (RenderState::ComparisonFunc)i;
-						break;
-					}
-				}
+				if (MappingStringArrayIdx(s_ComparisonFunc, RenderState::CF_MAXNUM, elementAttr.as_string(""), idx))
+					m_depthStencilDesc.backStencilFunc = (RenderState::ComparisonFunc)idx;
 			}
 			else if (strName == "BackStencilReadMask")
-			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				m_depthStencilDesc.backStencilReadMask = StringUtil::ParseUI16(String(pVarNode->value()));
-			}
+				m_depthStencilDesc.backStencilReadMask = elementAttr.as_uint();
 			else if (strName == "BackStencilWriteMask")
-			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				m_depthStencilDesc.backStencilWriteMask = StringUtil::ParseI16(String(pVarNode->value()));
-			}
+				m_depthStencilDesc.backStencilWriteMask = elementAttr.as_int();
 			else if (strName == "BackStencilFailOP")
 			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				String val(pVarNode->value());
-				for (size_t i = 0; i < DepthStencilState::SOP_MAX; ++i)
-				{
-					if (val == s_StencilOperation[i])
-					{
-						m_depthStencilDesc.backStencilFailOP = (DepthStencilState::StencilOperation)i;
-						break;
-					}
-				}
+				if (MappingStringArrayIdx(s_StencilOperation, DepthStencilState::SOP_MAX, elementAttr.as_string(""), idx))
+					m_depthStencilDesc.backStencilFailOP = (DepthStencilState::StencilOperation)idx;
 			}
 			else if (strName == "BackStencilDepthFailOP")
 			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				String val(pVarNode->value());
-				for (size_t i = 0; i < DepthStencilState::SOP_MAX; ++i)
-				{
-					if (val == s_StencilOperation[i])
-					{
-						m_depthStencilDesc.backStencilDepthFailOP = (DepthStencilState::StencilOperation)i;
-						break;
-					}
-				}
+				if (MappingStringArrayIdx(s_StencilOperation, DepthStencilState::SOP_MAX, elementAttr.as_string(""), idx))
+					m_depthStencilDesc.backStencilDepthFailOP = (DepthStencilState::StencilOperation)idx;
 			}
 			else if (strName == "BackStencilPassOP")
 			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				String val(pVarNode->value());
-				for (size_t i = 0; i < DepthStencilState::SOP_MAX; ++i)
-				{
-					if (val == s_StencilOperation[i])
-					{
-						m_depthStencilDesc.backStencilPassOP = (DepthStencilState::StencilOperation)i;
-						break;
-					}
-				}
+				if (MappingStringArrayIdx(s_StencilOperation, DepthStencilState::SOP_MAX, elementAttr.as_string(""), idx))
+					m_depthStencilDesc.backStencilPassOP = (DepthStencilState::StencilOperation)idx;
 			}
 			else if (strName == "BackStencilRef")
-			{
-				rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-				m_depthStencilDesc.backStencilRef = StringUtil::ParseI32(String(pVarNode->value()));
-			}
-			pElementNode = pElementNode->next_sibling();
+				m_depthStencilDesc.backStencilRef = elementAttr.as_int();
 		}
 	}
 

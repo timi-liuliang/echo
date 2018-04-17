@@ -10,7 +10,6 @@ namespace Echo
 	// 构造函数
 	ProjectFile::ProjectFile()
 	{
-		m_defaultMaterial = "general.mt";
 	}
 
 	// 析构函数
@@ -30,25 +29,14 @@ namespace Echo
 			m_pathName = pathName;
 
 			// 解析项目文件
-			file<> fdoc(m_pathName.c_str());
-			xml_document<> doc;
-			doc.parse<0>(fdoc.data());
+			pugi::xml_document doc;
+			doc.load_file(m_pathName.c_str());
 
 			// 项目结点
-			xml_node<>* projectNode = doc.first_node("project");
+			pugi::xml_node projectNode = doc.child("project");
 			if ( projectNode )
 			{
-				loadArchives(projectNode);
-				loadRenderQueues(projectNode);
-				loadTextureCompreses(projectNode);
-
-				// get default Material Name
-				xml_node<>* materialNode = projectNode->first_node("defaultMaterial");
-				if (materialNode)
-				{
-					xml_attribute<>* pName = materialNode->first_attribute();
-					m_defaultMaterial = pName->value();
-				}
+				loadArchives(&projectNode);
 			}
 			else
 			{
@@ -67,55 +55,31 @@ namespace Echo
 		if ( !fileName )
 			fileName = m_pathName.c_str();
 
-		xml_document<> doc;
-		xml_node<>* xmlnode = doc.allocate_node(node_pi, doc.allocate_string("xml version='1.0' encoding='utf-8'"));
-		xml_node<>* rootnode = doc.allocate_node(node_element, "project");
+		pugi::xml_document doc;
+		pugi::xml_node dec = doc.prepend_child(pugi::node_declaration);
+		dec.append_attribute("version") = "1.0";
+		dec.append_attribute("encoding") = "utf-8";
 
-		doc.append_node(xmlnode);
-		doc.append_node(rootnode);
+		pugi::xml_node rootnode = doc.append_child("project");
 
 		// 保存Archive属性
-		saveArchives(doc, rootnode);
-
-		// 保存压缩信息
-		saveTextureCompreses(doc, rootnode);
+		saveArchives(doc, &rootnode);
 
 		// 写文件
 		std::ofstream out(fileName);
 		out << doc;
 	}
 
-	// 加载渲染队列信息
-	void ProjectFile::loadRenderQueues(xml_node<>* projectNode)
-	{
-		try
-		{
-			xml_node<>* renderQueueGroupNode = projectNode->first_node("RenderQueueGroup");
-			for (xml_node<>* renderQueueNode = renderQueueGroupNode->first_node("RenderQueue"); renderQueueNode; renderQueueNode = renderQueueNode->next_sibling("RenderQueue"))
-			{
-				//RenderQueueInfo queueInfo;
-				//queueInfo.m_name = renderQueueNode->first_attribute("name")->value();
-
-				//m_renderQueues.push_back(queueInfo);
-			}
-		}
-		catch ( ... )
-		{
-			EchoLogError("Load render queues failed");
-		}
-
-	}
-
 	// 加载存档配置
-	void ProjectFile::loadArchives(xml_node<>* projectNode)
+	void ProjectFile::loadArchives(pugi::xml_node* projectNode)
 	{
 		m_archives.clear();
 
-		xml_node<>* archivesNode = projectNode->first_node("archives");
-		for ( xml_node<>* archiveNode = archivesNode->first_node("archive"); archiveNode; archiveNode = archiveNode->next_sibling("archive") )
+		pugi::xml_node archivesNode = projectNode->child("archives");
+		for ( pugi::xml_node archiveNode = archivesNode.child("archive"); archiveNode; archiveNode = archiveNode.next_sibling("archive") )
 		{
-			String archiveType = archiveNode->first_attribute("archive_type")->value();
-			String archiveValue = archiveNode->first_attribute("archive_value")->value();
+			String archiveType = archiveNode.attribute("archive_type").as_string();
+			String archiveValue = archiveNode.attribute("archive_value").as_string();
 			if ( archiveType == "filesystem" )
 				PathUtil::FormatPath(archiveValue, true);
 
@@ -127,22 +91,17 @@ namespace Echo
 	}
 
 	// 保存存档
-	void ProjectFile::saveArchives(xml_document<>& doc, xml_node<>* projectNode)
+	void ProjectFile::saveArchives(pugi::xml_document& doc, pugi::xml_node* projectNode)
 	{
 		if ( projectNode )
 		{
-			xml_node<>* archivesNode = doc.allocate_node(node_element, "archives");
-			projectNode->append_node(archivesNode);
+			pugi::xml_node archivesNode = projectNode->append_child("archives");
 
 			for ( size_t i = 0; i < m_archives.size(); i++ )
 			{
-				xml_node<>* archiveNode = doc.allocate_node(node_element, "archive");
-				xml_attribute<>* archiveType = doc.allocate_attribute("archive_type", m_archives[i].m_archiveType.c_str());
-				xml_attribute<>* archiveValue = doc.allocate_attribute("archive_value", m_archives[i].m_archiveValue.c_str());
-
-				archiveNode->append_attribute(archiveType);
-				archiveNode->append_attribute(archiveValue);
-				archivesNode->append_node(archiveNode);
+				pugi::xml_node archiveNode =  archivesNode.append_child("archive");
+				archiveNode.append_attribute("archive_type") = m_archives[i].m_archiveType.c_str();
+				archiveNode.append_attribute("archive_value") = m_archives[i].m_archiveValue.c_str();
 			}
 		}
 	}
@@ -166,62 +125,6 @@ namespace Echo
 		for ( size_t i = 0; i < m_archives.size(); i++ )
 		{
 			IO::instance()->addArchive(m_archives[i].m_archiveValue, m_archives[i].m_archiveType);
-		}
-	}
-
-	// 读取纹理压缩信息
-	void ProjectFile::loadTextureCompreses(xml_node<>* projectNode)
-	{
-		m_TextureCompreses.clear();
-		xml_node<>* textureCompresesNode = projectNode->first_node("textureCompreses");
-		if ( textureCompresesNode )
-		{
-			xml_node<>* textureNode = textureCompresesNode->first_node("texture");
-			while ( textureNode )
-			{
-				String name = textureNode->first_attribute("name")->value();
-				char* str = textureNode->first_attribute("cios")->value();
-				char* str1 = textureNode->first_attribute("candroid")->value();
-				Real _scale;
-				if (textureNode->first_attribute("scale"))
-				{
-					_scale = StringUtil::ParseReal(textureNode->first_attribute("scale")->value());
-				}
-				
-				TextureCompressType cios = getCompressTypeFormName(str);
-				TextureCompressType candroid = getCompressTypeFormName(str1);
-				m_TextureCompreses.push_back(TextureCompressItem(name, cios, candroid,_scale));
-
-				textureNode = textureNode->next_sibling("texture");
-			}
-		}
-	}
-
-	// 保存纹理压缩信息
-	void ProjectFile::saveTextureCompreses(xml_document<>& doc, xml_node<>* projectNode)
-	{
-		if ( projectNode )
-		{
-			xml_node<>* textureCompresesNode = doc.allocate_node(node_element, "textureCompreses");
-			projectNode->append_node(textureCompresesNode);
-
-			for ( size_t i = 0; i < m_TextureCompreses.size(); i++ )
-			{
-				xml_node<>* textureNode = doc.allocate_node(node_element, "texture");
-				xml_attribute<>* name = doc.allocate_attribute("name", m_TextureCompreses[i].m_name.c_str());
-				char* cTypeName = getCompressTypeName(m_TextureCompreses[i].m_iosCType);
-				xml_attribute<>* cios = doc.allocate_attribute("cios", cTypeName);
-				cTypeName = getCompressTypeName(m_TextureCompreses[i].m_androidCType);
-				xml_attribute<>* candroid = doc.allocate_attribute("candroid", cTypeName);
-				String _scaleStr = StringUtil::ToString(m_TextureCompreses[i].m_scale);
-				xml_attribute<>* _scale = doc.allocate_attribute("scale", doc.allocate_string(_scaleStr.c_str()));
-
-				textureNode->append_attribute(_scale);
-				textureNode->append_attribute(cios);
-				textureNode->append_attribute(candroid);
-				textureNode->append_attribute(name);
-				textureCompresesNode->append_node(textureNode);
-			}
 		}
 	}
 

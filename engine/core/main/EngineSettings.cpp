@@ -3,9 +3,7 @@
 #include <engine/core/render/render/RenderThread.h>
 #include <Engine/modules/Effect/EffectSystemManager.h>
 #include "Root.h"
-#include "rapidxml/rapidxml.hpp"
-#include "rapidxml/rapidxml_utils.hpp"
-#include "rapidxml/rapidxml_print.hpp"
+#include <thirdparty/pugixml/pugixml.hpp>
 #include "EngineTimeController.h"
 
 using namespace rapidxml;
@@ -69,94 +67,94 @@ namespace Echo
 	// 应用设置
 	void EngineSettingsMgr::Apply(const String& fileName)
 	{
-		Echo::String lstrFile = Root::instance()->getResPath() + fileName;
-		if (!PathUtil::IsFileExist(lstrFile))
-		{
-			EchoLogInfo("Config file Engine.xml not exits");
-			return;
-		}
+		//Echo::String lstrFile = Root::instance()->getResPath() + fileName;
+		//if (!PathUtil::IsFileExist(lstrFile))
+		//{
+		//	EchoLogInfo("Config file Engine.xml not exits");
+		//	return;
+		//}
 
-		Echo::FileHandleDataStream memory(lstrFile.c_str());
-		xml_document<> doc;        // character type defaults to cha
-		vector<char>::type buffer;
-		buffer.resize(memory.size() + 1);
-		memory.readAll(&buffer[0]);
-		doc.parse<0>(&buffer[0]);
+		//Echo::FileHandleDataStream memory(lstrFile.c_str());
+		//xml_document<> doc;        // character type defaults to cha
+		//vector<char>::type buffer;
+		//buffer.resize(memory.size() + 1);
+		//memory.readAll(&buffer[0]);
+		//doc.parse<0>(&buffer[0]);
 
-		xml_node<>* pEngineConfigRoot = doc.first_node();
-		if (!pEngineConfigRoot)
-		{
-			EchoLogInfo("invalid engine config file [%s].", fileName.c_str());
-			return;
-		}
-		xml_node<>* pValueNode = pEngineConfigRoot->first_node();
-		while (pValueNode)
-		{
-			String strNodeName = pValueNode->name();
-			xml_attribute<>* pValue = pValueNode->first_attribute();
-			if (pValue)
-			{
-				String strValue = pValue->value();
-				if (strNodeName == "EnableHighEffectActor")
-				{
-					m_bEnableHighEffectActor = StringUtil::ParseBool(strValue);
-				}
-				else if (strNodeName == "EnableBloom")
-				{
-					m_bEnableBloom = StringUtil::ParseBool(strValue);
-				}
-				else if (strNodeName == "EnableToneMapping")
-				{
-					m_bEnableToneMapping = StringUtil::ParseBool(strValue);
-				}
-				else if (strNodeName == "EnableFXAA")
-				{
-					m_bEnableFXAA = StringUtil::ParseBool(strValue);
-				}
-				else if (strNodeName == "EnableCoverage")
-				{
-					m_bEnableCoverage = StringUtil::ParseBool(strValue);
-				}
-				else if (strNodeName == "EnableFilterAdditional")
-				{
-					m_bEnableFilterAdditional = StringUtil::ParseBool(strValue);
-				}
-				else if (strNodeName == "EnableDistortion")
-				{
-					m_bEnableDistortion = StringUtil::ParseBool(strValue);
-				}
-				else if (strNodeName == "EnableLensFlare")
-				{
-					m_bEnableLensFlare = StringUtil::ParseBool(strValue);
-				}
-				else if (strNodeName == "EnableCalcThread")
-				{
-					m_bEnableCalcThread = StringUtil::ParseBool(strValue);
-				}
-				else if (strNodeName == "EnableStreamThread")
-				{
-					m_bEnableStreamThread = StringUtil::ParseBool(strValue);
-				}
-				else if (strNodeName == "GuassScaleSetting")
-				{
-					m_guassScaleSetting = StringUtil::ParseFloat(strValue);
-				}
-				else if (strNodeName == "EnableSmallObjectCull")
-				{
-					setEnableSmallObjectCull(StringUtil::ParseBool(strValue));
-				}
-				else if (strNodeName == "ShadowMapSize")
-				{
-					m_shadowMapSize = StringUtil::ParseUI32(strValue);
-				}
-			}
-			pValueNode = pValueNode->next_sibling();
-		}
-		//config all
-		Root::instance()->setEnableFilterAdditional(m_bEnableFilterAdditional);
-		setEnableDistortion(m_bEnableDistortion);
-		EffectSystemManager::instance()->setEnableDistortionRender(m_bEnableDistortion);
-		Root::instance()->enableStreamThread(m_bEnableStreamThread);
+		//xml_node<>* pEngineConfigRoot = doc.first_node();
+		//if (!pEngineConfigRoot)
+		//{
+		//	EchoLogInfo("invalid engine config file [%s].", fileName.c_str());
+		//	return;
+		//}
+		//xml_node<>* pValueNode = pEngineConfigRoot->first_node();
+		//while (pValueNode)
+		//{
+		//	String strNodeName = pValueNode->name();
+		//	xml_attribute<>* pValue = pValueNode->first_attribute();
+		//	if (pValue)
+		//	{
+		//		String strValue = pValue->value();
+		//		if (strNodeName == "EnableHighEffectActor")
+		//		{
+		//			m_bEnableHighEffectActor = StringUtil::ParseBool(strValue);
+		//		}
+		//		else if (strNodeName == "EnableBloom")
+		//		{
+		//			m_bEnableBloom = StringUtil::ParseBool(strValue);
+		//		}
+		//		else if (strNodeName == "EnableToneMapping")
+		//		{
+		//			m_bEnableToneMapping = StringUtil::ParseBool(strValue);
+		//		}
+		//		else if (strNodeName == "EnableFXAA")
+		//		{
+		//			m_bEnableFXAA = StringUtil::ParseBool(strValue);
+		//		}
+		//		else if (strNodeName == "EnableCoverage")
+		//		{
+		//			m_bEnableCoverage = StringUtil::ParseBool(strValue);
+		//		}
+		//		else if (strNodeName == "EnableFilterAdditional")
+		//		{
+		//			m_bEnableFilterAdditional = StringUtil::ParseBool(strValue);
+		//		}
+		//		else if (strNodeName == "EnableDistortion")
+		//		{
+		//			m_bEnableDistortion = StringUtil::ParseBool(strValue);
+		//		}
+		//		else if (strNodeName == "EnableLensFlare")
+		//		{
+		//			m_bEnableLensFlare = StringUtil::ParseBool(strValue);
+		//		}
+		//		else if (strNodeName == "EnableCalcThread")
+		//		{
+		//			m_bEnableCalcThread = StringUtil::ParseBool(strValue);
+		//		}
+		//		else if (strNodeName == "EnableStreamThread")
+		//		{
+		//			m_bEnableStreamThread = StringUtil::ParseBool(strValue);
+		//		}
+		//		else if (strNodeName == "GuassScaleSetting")
+		//		{
+		//			m_guassScaleSetting = StringUtil::ParseFloat(strValue);
+		//		}
+		//		else if (strNodeName == "EnableSmallObjectCull")
+		//		{
+		//			setEnableSmallObjectCull(StringUtil::ParseBool(strValue));
+		//		}
+		//		else if (strNodeName == "ShadowMapSize")
+		//		{
+		//			m_shadowMapSize = StringUtil::ParseUI32(strValue);
+		//		}
+		//	}
+		//	pValueNode = pValueNode->next_sibling();
+		//}
+		////config all
+		//Root::instance()->setEnableFilterAdditional(m_bEnableFilterAdditional);
+		//setEnableDistortion(m_bEnableDistortion);
+		//EffectSystemManager::instance()->setEnableDistortionRender(m_bEnableDistortion);
+		//Root::instance()->enableStreamThread(m_bEnableStreamThread);
 	}
 
 	// 设置是否使用流加载

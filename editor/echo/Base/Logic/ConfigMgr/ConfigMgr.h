@@ -2,9 +2,7 @@
 
 #include <map>
 #include <Engine/Core.h>
-#include "rapidxml/rapidxml.hpp"
-#include "rapidxml/rapidxml_utils.hpp"
-#include "rapidxml/rapidxml_print.hpp"
+#include <thirdparty/pugixml/pugixml.hpp>
 
 namespace Studio
 {
@@ -56,16 +54,16 @@ namespace Studio
 
 	private:
 		// 保存到文件
-		void saveData( rapidxml::xml_document<>& doc, rapidxml::xml_node<>* projectNode );
+		void saveData( pugi::xml_document& doc, pugi::xml_node* projectNode );
 
 		// 读取最近打开的工程
-		void loadRecentProject( rapidxml::xml_node<>* node);
+		void loadRecentProject( pugi::xml_node* node);
 
 		// 读取资源输出路径
-		void loadOutPutDir( rapidxml::xml_node<>* node);
+		void loadOutPutDir( pugi::xml_node* node);
 
 		// 加载属性值
-		void loadPropertys( rapidxml::xml_node<>* node);
+		void loadPropertys( pugi::xml_node* node);
 
 		// 添加到菜单中
 		void addToMenu( );

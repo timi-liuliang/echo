@@ -4,8 +4,6 @@
 
 namespace Studio
 {
-	using namespace rapidxml;
-	
 	// 构造函数
 	ConfigMgr::ConfigMgr()
 		: m_outPutDir( "" )
@@ -48,17 +46,16 @@ namespace Studio
 		isFileExit();
 		try
 		{	
-			file<> fdoc( m_cfgFile.c_str());
-			xml_document<> doc;
-			doc.parse<0>( fdoc.data());
+			pugi::xml_document doc;
+			doc.load_file(m_cfgFile.c_str());
 
 			// root节点
-			xml_node<>* projectNode = doc.first_node( "project" );
+			pugi::xml_node projectNode = doc.child( "project" );
 			if( projectNode)
 			{
-				loadRecentProject( projectNode );
-				loadOutPutDir( projectNode );
-				loadPropertys( projectNode);
+				loadRecentProject( &projectNode );
+				loadOutPutDir( &projectNode );
+				loadPropertys( &projectNode);
 			}
 			else
 			{
@@ -76,14 +73,14 @@ namespace Studio
 	// 写到本地文件中
 	bool ConfigMgr::saveCfgFile( )
 	{
-		xml_document<> doc;
-		xml_node<>* xmlnode = doc.allocate_node( node_pi, doc.allocate_string( "xml version='1.0' encoding='utf-8'" ) );
-		xml_node<>* rootnode= doc.allocate_node( node_element, "project" );
+		pugi::xml_document doc;
+		pugi::xml_node dec = doc.prepend_child(pugi::node_declaration);
+		dec.append_attribute("version") = "1.0";
+		dec.append_attribute("encoding") = "utf-8";
 
-		doc.append_node( xmlnode);
-		doc.append_node( rootnode);
+		pugi::xml_node rootnode= doc.append_child("project" );
 
-		saveData( doc, rootnode);
+		saveData( doc, &rootnode);
 
 		std::ofstream out( m_cfgFile.c_str());
 		out << doc;
@@ -160,57 +157,45 @@ namespace Studio
 	}
 
 	// 保存数据
-	void ConfigMgr::saveData( rapidxml::xml_document<>& doc, rapidxml::xml_node<>* projectNode )
+	void ConfigMgr::saveData( pugi::xml_document& doc, pugi::xml_node* projectNode)
 	{
 		if( projectNode)
 		{
-			xml_node<>* recentNodes = doc.allocate_node( node_element, "recentProjects" );
-			xml_node<>* outputDir = doc.allocate_node( node_element, "outputDir" );
-			xml_node<>* propertys = doc.allocate_node( node_element, "propertys");
-			projectNode->append_node( recentNodes );
-			projectNode->append_node( outputDir );
-			projectNode->append_node( propertys);
+			pugi::xml_node recentNodes = projectNode->append_child("recentProjects" );
+			pugi::xml_node outputDir = projectNode->append_child("outputDir" );
+			pugi::xml_node propertys = projectNode->append_child("propertys");
 
 			Echo::list<Echo::String>::iterator Iter = m_fileName.begin();
 			for( ; Iter != m_fileName.end(); ++Iter )
 			{
-				xml_node<>* recentNode      = doc.allocate_node( node_element, "recentProject" );
-				xml_attribute<>* recentValue= doc.allocate_attribute( "project_value", (*Iter).c_str() );
-
-				recentNode->append_attribute( recentValue );
-				recentNodes->append_node( recentNode );
+				pugi::xml_node recentNode = recentNodes.append_child( "recentProject" );
+				recentNode.append_attribute("project_value") = (*Iter).c_str();
 			}
 
-			xml_attribute<>* dirValue = doc.allocate_attribute( "dir_value", m_outPutDir.c_str() );
-			outputDir->append_attribute( dirValue );
+			outputDir.append_attribute("dir_value") = m_outPutDir.c_str();
 
 			// 保存所有属性
 			for( std::map<Echo::String, Echo::String>::iterator it=m_propertys.begin(); it!=m_propertys.end(); it++)
 			{
-				xml_node<>* propertyNode = doc.allocate_node( node_element, "property" );
-				xml_attribute<>* property= doc.allocate_attribute( "property", it->first.c_str());
-				xml_attribute<>* value   = doc.allocate_attribute( "value", it->second.c_str());
-
-				propertyNode->append_attribute( property );
-				propertyNode->append_attribute( value);
-				propertys->append_node( propertyNode );
+				pugi::xml_node propertyNode = propertys.append_child("property");
+				propertyNode.append_attribute("property") = it->first.c_str();
+				propertyNode.append_attribute("value") = it->second.c_str();
 			}
 		}
 	}
 
 	// 从文件读取最近的工程 
-	void ConfigMgr::loadRecentProject( rapidxml::xml_node<>* node )
+	void ConfigMgr::loadRecentProject( pugi::xml_node* node)
 	{
 		if ( node )
 		{
-			xml_node<>* recentNodes = node->first_node( "recentProjects" );
+			pugi::xml_node recentNodes = node->child( "recentProjects" );
 			if ( !recentNodes )
-			{
 				return ;
-			}
-			for ( xml_node<>* recentNode = recentNodes->first_node("recentProject"); recentNode; recentNode=recentNode->next_sibling("recentProject") )
+
+			for ( pugi::xml_node recentNode = recentNodes.child("recentProject"); recentNode; recentNode=recentNode.next_sibling("recentProject") )
 			{
-				Echo::String recentValue= recentNode->first_attribute( "project_value" )->value();
+				Echo::String recentValue= recentNode.attribute( "project_value" ).as_string();
 				if ( !isPathExist( recentValue ) )
 				{
 					m_fileName.push_back(recentValue);
@@ -222,35 +207,28 @@ namespace Studio
 	}
 
 	// 读取输出路径
-	void ConfigMgr::loadOutPutDir( rapidxml::xml_node<>* node )
+	void ConfigMgr::loadOutPutDir( pugi::xml_node* node )
 	{
 		if ( node )
 		{
-			xml_node<>* outputDirNode = node->first_node( "outputDir" );
+			pugi::xml_node outputDirNode = node->child( "outputDir" );
 			if ( outputDirNode )
-			{
-				xml_attribute<>* node = outputDirNode->first_attribute( "dir_value" );
-				if ( node )
-				{
-					Echo::String dir = node->value();
-					m_outPutDir = dir;
-				}
-			}
+				m_outPutDir = outputDirNode.attribute( "dir_value").as_string("");
 		}
 	}
 
 	// 加载属性值
-	void ConfigMgr::loadPropertys( rapidxml::xml_node<>* node)
+	void ConfigMgr::loadPropertys( pugi::xml_node* node)
 	{
 		if ( node )
 		{
-			xml_node<>* propertysNode = node->first_node( "propertys" );
+			pugi::xml_node propertysNode = node->child( "propertys" );
 			if( propertysNode)
 			{
-				for ( xml_node<>* propertyNode = propertysNode->first_node("property");  propertyNode; propertyNode=propertyNode->next_sibling("property") )
+				for ( pugi::xml_node propertyNode = propertysNode.child("property");  propertyNode; propertyNode=propertyNode.next_sibling("property") )
 				{
-					Echo::String property = propertyNode->first_attribute( "property" )->value();
-					Echo::String value    = propertyNode->first_attribute( "value")->value();
+					Echo::String property = propertyNode.attribute("property").as_string();
+					Echo::String value    = propertyNode.attribute( "value").as_string();
 					
 					m_propertys[property] = value;
 				}

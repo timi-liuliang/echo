@@ -1,12 +1,7 @@
-#ifndef _ECHO_PROJECTFILE_H_
-#define _ECHO_PROJECTFILE_H_
+#pragma once
 
 #include "engine/core/Util/StringUtil.h"
-#include "Rapidxml/rapidxml.hpp"
-#include "Rapidxml/rapidxml_utils.hpp"
-#include "Rapidxml/rapidxml_print.hpp"
-
-using namespace rapidxml;
+#include <thirdparty/pugixml/pugixml.hpp>
 
 namespace Echo
 {
@@ -106,36 +101,21 @@ namespace Echo
 		//根据字符串名称返回压缩格式对应
 		static TextureCompressType getCompressTypeFormName(std::string cname);
 
-		// 获取默认的材质名称
-		const String& getDefaultMaterial() { return m_defaultMaterial; }
-
 	private:
 		// 加载存档配置
-		void loadArchives( xml_node<>* projectNode);
-
-		// 加载ui配置
-		void loadRenderQueues(xml_node<>* projectNode);
+		void loadArchives( pugi::xml_node* projectNode);
 
 		// 保存存档
-		void saveArchives( xml_document<>& doc, xml_node<>* projectNode);
+		void saveArchives( pugi::xml_document& doc, pugi::xml_node* projectNode);
 
 		// 是否已存在
 		bool isArchiveExist( const String& archiveType, const String& archiveValue);
-
-		// 读取纹理压缩控制文件
-		void loadTextureCompreses(xml_node<>* projectNode);
-
-		// 保存纹理压缩控制文件
-		void saveTextureCompreses(xml_document<>& doc, xml_node<>* projectNode);
 
 	private:
 		String								m_path;				// 项目路径
 		String								m_name;				// 项目文件名
 		String								m_pathName;			// 项目全路径(包含名称)
-		String								m_defaultMaterial;	// 默认的材质名称
 		vector<ArchiveItem>::type			m_archives;			// 存档配置
 		TextureCPIVec						m_TextureCompreses; // 纹理压缩信息表
 	};
 }
-
-#endif

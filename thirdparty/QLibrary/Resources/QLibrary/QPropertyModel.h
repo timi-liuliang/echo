@@ -4,10 +4,9 @@
 #include <functional>
 #include <QStandardItem>
 #include <QStandardItemModel>
-#include <Rapidxml/rapidxml.hpp>
+#include <thirdparty/pugixml/pugixml.hpp>
 
 using namespace std;
-using namespace rapidxml;
 
 namespace QT_UI
 {
@@ -33,7 +32,7 @@ namespace QT_UI
 		const QString& getID() { return m_id; }
 
 		// 设置数据
-		void  setupModelData(xml_document<>* cfg);
+		void  setupModelData(pugi::xml_document* cfg);
 
 		// 根据属性查找数据
 		bool findValue(QVariant& value, const QString& propertyName);
@@ -67,13 +66,13 @@ namespace QT_UI
 		void ParseCfg();
 
 		// 递归添加
-		void addChildItem(xml_node<>* pFirstChildElement, QStandardItem* pParentItem);
+		void addChildItem(pugi::xml_node* pFirstChildElement, QStandardItem* pParentItem);
 
 		// 更新约束
 		void updateConstraint(const QString& propertyName, QVariant value);
 
 		// 读取约束
-		QMap<QString, QVariant> constraintCondition(xml_node<>* itemNode);
+		QMap<QString, QVariant> constraintCondition(pugi::xml_node* itemNode);
 
 	signals:
 		// 数据变动
@@ -85,7 +84,7 @@ namespace QT_UI
 
 	private:
 		QString						m_id;					// 标识
-		xml_document<>*				m_cfg;
+		pugi::xml_document*			m_cfg;
 		AttribList					m_valueList;
 		vector<QStandardItem*>		m_standItems;			// 表项
 		map<QString, QStandardItem*>m_propertyStandItmes;	// 属性对应的StandItem

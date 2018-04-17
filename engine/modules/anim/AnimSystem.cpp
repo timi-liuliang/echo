@@ -8,11 +8,7 @@
 #include "AnimManager.h"
 #include "SkeletonManager.h"
 #include "AnimSystem.h"
-#include <rapidxml/rapidxml.hpp>
-#include <rapidxml/rapidxml_print.hpp>
-#include <rapidxml/rapidxml_utils.hpp>
-
-using namespace rapidxml;
+#include <thirdparty/pugixml/pugixml.hpp>
 
 namespace Echo
 {
@@ -80,21 +76,23 @@ namespace Echo
 	// 资源加载
 	bool AnimSystem::loadImpl()
 	{
+		using namespace pugi;
+
 		try
 		{
 			MemoryReader memReader(mName);
-			xml_document<> doc;
-			doc.parse<0>(memReader.getData<char*>());
+			xml_document doc;
+			doc.load(memReader.getData<char*>());
 
 			// 获取主节点
-			xml_node<>* rootnode = doc.first_node("animsys"); EchoAssert(rootnode);
+			xml_node rootnode = doc.child("animsys"); EchoAssert(rootnode);
 			if (rootnode)
 			{
 				// 骨架信息
-				xml_attribute<>* skeletonAtt = rootnode->first_attribute("skeleton");
+				xml_attribute skeletonAtt = rootnode.attribute("skeleton");
 				if (skeletonAtt)
 				{
-					String skeleton = skeletonAtt->value();
+					String skeleton = skeletonAtt.value();
 					if (!skeleton.empty())
 					{
 						setSkeleton(skeleton.c_str());
@@ -102,10 +100,10 @@ namespace Echo
 				}
 
 				// 动画信息
-				xml_attribute<>* animationsAtt = rootnode->first_attribute("anims");
+				xml_attribute animationsAtt = rootnode.attribute("anims");
 				if (animationsAtt)
 				{
-					StringArray anims = StringUtil::Split(animationsAtt->value(), ";");
+					StringArray anims = StringUtil::Split(animationsAtt.value(), ";");
 					for (size_t i = 0; i < anims.size(); i++)
 					{
 						addAnimation(anims[i].c_str());
@@ -282,18 +280,19 @@ namespace Echo
 	void AnimSystem::save(const char* filePath)
 	{
 #ifdef ECHO_PLATFORM_WINDOWS
-		xml_document<> doc;
-		xml_node<>* xmlnode = doc.allocate_node(node_pi, doc.allocate_string("xml version='1.0' encoding='utf-8'"));
-		xml_node<>* rootnode = doc.allocate_node(node_element, "animsys");
+		using namespace pugi;
 
-		doc.append_node(xmlnode);
-		doc.append_node(rootnode);
+		xml_document doc;
+		xml_node xmlnode = doc.prepend_child(node_declaration);
+		xmlnode.append_attribute("version") = "1.0";
+		xmlnode.append_attribute("encoding") = "utf-8";
+
+		xml_node rootnode = doc.append_child("animsys");
 
 		// 存储骨架名称
 		if (m_skeleton)
 		{
-			xml_attribute<>* propertySkeleton = doc.allocate_attribute("skeleton", m_skeleton->getName().c_str());
-			rootnode->append_attribute(propertySkeleton);
+			rootnode.append_attribute("skeleton") = m_skeleton->getName().c_str();
 		}
 
 		// 保存动画信息
@@ -305,8 +304,7 @@ namespace Echo
 				animations += m_animations[i]->getName() + ";";
 
 			// 添加到属性项
-			xml_attribute<>* propertyanims = doc.allocate_attribute("anims", animations.c_str());
-			rootnode->append_attribute(propertyanims);
+			rootnode.append_attribute("anims").set_value(animations.c_str());
 		}
 
 		std::ofstream out(filePath);

@@ -7,9 +7,7 @@
 #include "PixelFormat.h"
 #include "engine/core/io/IO.h"
 #include "Render/MaterialDesc.h"
-#include "rapidxml/rapidxml.hpp"
-#include "rapidxml/rapidxml_utils.hpp"
-#include "rapidxml/rapidxml_print.hpp"
+#include <thirdparty/pugixml/pugixml.hpp>
 
 namespace Echo
 {
@@ -98,75 +96,75 @@ namespace Echo
 	// 从内容加载
 	bool Material::loadFromContent(char* content, const String& macros)
 	{
-		rapidxml::xml_document<> doc;
-		doc.parse<0>(content);
+		pugi::xml_document doc;
+		doc.load(content);
 
-		rapidxml::xml_node<>* rootNode = doc.first_node();
+		pugi::xml_node rootNode = doc.first_child();
 		if (!rootNode)
 		{
 			EchoLogError("The Material file content is invalid.");
 			return false;
 		}
 
-		return loadShaderFrom(rootNode);
+		return loadShaderFrom(&rootNode);
 	}
 
 	// 加载着色器
 	bool Material::loadShaderFrom(void* node)
 	{
-		rapidxml::xml_node<>* rootNode = static_cast<rapidxml::xml_node<>*>(node);
+		pugi::xml_node* rootNode = static_cast<pugi::xml_node*>(node);
 		try
 		{
-			rapidxml::xml_node<>* vsNode = rootNode->first_node("vs");
+			pugi::xml_node vsNode = rootNode->child("vs");
 			String vsSrc, psSrc;
 			if (vsNode)
 			{
-				vsSrc = vsNode->value();
+				vsSrc = vsNode.value();
 			}
 
-			rapidxml::xml_node<>* psNode = rootNode->first_node("ps");
+			pugi::xml_node psNode = rootNode->child("ps");
 			if (psNode)
 			{
-				psSrc = psNode->value();
+				psSrc = psNode.value();
 			}
 
-			rapidxml::xml_node<>* pElementNode = rootNode->first_node();
+			pugi::xml_node pElementNode = rootNode->first_child();
 			if (pElementNode)
 			{
 				do
 				{
-					String strName = pElementNode->name();
+					String strName = pElementNode.name();
 					if (strName == "Macro")
 					{
-						if (!loadMacro(pElementNode))
+						if (!loadMacro(&pElementNode))
 						{
 							throw false;
 						}
 					}
 					else if (strName == "BlendState")
 					{
-						if (!loadBlendState(pElementNode))
+						if (!loadBlendState(&pElementNode))
 						{
 							throw false;
 						}
 					}
 					else if (strName == "RasterizerState")
 					{
-						if (!loadRasterizerState(pElementNode))
+						if (!loadRasterizerState(&pElementNode))
 						{
 							throw false;
 						}
 					}
 					else if (strName == "DepthStencilState")
 					{
-						if (!loadDepthStencilState(pElementNode))
+						if (!loadDepthStencilState(&pElementNode))
 						{
 							throw false;
 						}
 					}
 					else if (strName == "SamplerState")
 					{
-						if( !loadSamplerState_Ext( pElementNode ) )
+						if( !loadSamplerState_Ext( &pElementNode ) )
 						{
 							throw false;
 						}
@@ -174,20 +172,20 @@ namespace Echo
 
 					else if( strName == "Texture" )
 					{
-						if( !loadTexture_Ext( pElementNode ) )
+						if( !loadTexture_Ext( &pElementNode ) )
 						{
 							throw false;
 						}
 					}
 					else if ( strName == "DefaultUniformValue" )
 					{
-						if ( !loadDefaultUniform( pElementNode ) )
+						if ( !loadDefaultUniform( &pElementNode ) )
 						{
 							throw false;
 						}
 					}
 
-					pElementNode = pElementNode->next_sibling();
+					pElementNode = pElementNode.next_sibling();
 				}
 				while(pElementNode);
 			}
@@ -215,141 +213,140 @@ namespace Echo
 	bool Material::loadBlendState( void* pNode )
 	{
 		BlendState::BlendDesc blendDesc;
-		rapidxml::xml_node<>* pSubNode = static_cast<rapidxml::xml_node<>*>(pNode);
+		pugi::xml_node* pSubNode = static_cast<pugi::xml_node*>(pNode);
 		try
 		{
-			rapidxml::xml_node<>* pElementNode = pSubNode->first_node();
+			pugi::xml_node pElementNode = pSubNode->first_child();
 			while(pElementNode)
 			{
-				String strName(pElementNode->name());
+				String strName(pElementNode.name());
 				if(strName == "BlendEnable")
 				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					blendDesc.bBlendEnable = StringUtil::ParseBool(String(pVarNode->value()));
+					blendDesc.bBlendEnable = StringUtil::ParseBool(pElementNode.value());
 				}
-				else if (strName == "SrcBlend")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					String val(pVarNode->value());
-					for (size_t i=0; i<BlendState::BF_MAX; ++i)
-					{
-						if (val == s_BlendFactor[i])
-						{
-							blendDesc.srcBlend = (BlendState::BlendFactor)i;
-							break;
-						}
-					}
-				}
-				else if (strName == "DstBlend")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					String val(pVarNode->value());
-					for (size_t i=0; i<BlendState::BF_MAX; ++i)
-					{
-						if (val == s_BlendFactor[i])
-						{
-							blendDesc.dstBlend = (BlendState::BlendFactor)i;
-							break;
-						}
-					}
-				}
-				else if (strName == "BlendOP")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					String val(pVarNode->value());
-					for (size_t i=0; i<6; ++i)
-					{
-						if (val == s_BlendOperation[i])
-						{
-							blendDesc.blendOP = (BlendState::BlendOperation)i;
-							break;
-						}
-					}
-				}
-				else if (strName == "SrcAlphaBlend")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					String val(pVarNode->value());
-					for (size_t i=0; i<6; ++i)
-					{
-						if (val == s_BlendFactor[i])
-						{
-							blendDesc.srcAlphaBlend = (BlendState::BlendFactor)i;
-							break;
-						}
-					}
-				}
-				else if (strName == "DstAlphaBlend")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					String val(pVarNode->value());
-					for (size_t i=0; i<6; ++i)
-					{
-						if (val == s_BlendFactor[i])
-						{
-							blendDesc.dstAlphaBlend = (BlendState::BlendFactor)i;
-							break;
-						}
-					}
-				}
-				else if (strName == "AlphaBlendOP")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					String val(pVarNode->value());
-					for (size_t i=0; i<6; ++i)
-					{
-						if (val == s_BlendOperation[i])
-						{
-							blendDesc.alphaBlendOP = (BlendState::BlendOperation)i;
-							break;
-						}
-					}
-				}
-				else if (strName == "ColorWriteMask")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					String val(pVarNode->value());
-					if (val == s_ColorMask[0])
-					{
-						blendDesc.colorWriteMask = RenderState::CMASK_RED;
-					}
-					else if (val == s_ColorMask[1])
-					{
-						blendDesc.colorWriteMask = RenderState::CMASK_GREEN;
-					}
-					else if (val == s_ColorMask[2])
-					{
-						blendDesc.colorWriteMask = RenderState::CMASK_BLUE;
-					}
-					else if (val == s_ColorMask[3])
-					{
-						blendDesc.colorWriteMask = RenderState::CMASK_ALPHA;
-					}
-					else if (val == s_ColorMask[4])
-					{
-						blendDesc.colorWriteMask = RenderState::CMASK_COLOR;
-					}
-					else if (val == s_ColorMask[5])
-					{
-						blendDesc.colorWriteMask = RenderState::CMASK_ALL;
-					}
-				}
-				else if (strName == "A2CEnable")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					blendDesc.bA2CEnable = StringUtil::ParseBool(pVarNode->value());
-				}
-				else if (strName == "IndependBlendEnable")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					blendDesc.bIndependBlendEnable = StringUtil::ParseBool(pVarNode->value());
-				}
-				else if (strName == "BlendFactor")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					blendDesc.blendFactor = StringUtil::ParseColor(pVarNode->value());
-				}
-				pElementNode = pElementNode->next_sibling();
+				//else if (strName == "SrcBlend")
+				//{
+				//	rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+				//	String val(pVarNode->value());
+				//	for (size_t i=0; i<BlendState::BF_MAX; ++i)
+				//	{
+				//		if (val == s_BlendFactor[i])
+				//		{
+				//			blendDesc.srcBlend = (BlendState::BlendFactor)i;
+				//			break;
+				//		}
+				//	}
+				//}
+				//else if (strName == "DstBlend")
+				//{
+				//	rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+				//	String val(pVarNode->value());
+				//	for (size_t i=0; i<BlendState::BF_MAX; ++i)
+				//	{
+				//		if (val == s_BlendFactor[i])
+				//		{
+				//			blendDesc.dstBlend = (BlendState::BlendFactor)i;
+				//			break;
+				//		}
+				//	}
+				//}
+				//else if (strName == "BlendOP")
+				//{
+				//	rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+				//	String val(pVarNode->value());
+				//	for (size_t i=0; i<6; ++i)
+				//	{
+				//		if (val == s_BlendOperation[i])
+				//		{
+				//			blendDesc.blendOP = (BlendState::BlendOperation)i;
+				//			break;
+				//		}
+				//	}
+				//}
+				//else if (strName == "SrcAlphaBlend")
+				//{
+				//	rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+				//	String val(pVarNode->value());
+				//	for (size_t i=0; i<6; ++i)
+				//	{
+				//		if (val == s_BlendFactor[i])
+				//		{
+				//			blendDesc.srcAlphaBlend = (BlendState::BlendFactor)i;
+				//			break;
+				//		}
+				//	}
+				//}
+				//else if (strName == "DstAlphaBlend")
+				//{
+				//	rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+				//	String val(pVarNode->value());
+				//	for (size_t i=0; i<6; ++i)
+				//	{
+				//		if (val == s_BlendFactor[i])
+				//		{
+				//			blendDesc.dstAlphaBlend = (BlendState::BlendFactor)i;
+				//			break;
+				//		}
+				//	}
+				//}
+				//else if (strName == "AlphaBlendOP")
+				//{
+				//	rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+				//	String val(pVarNode->value());
+				//	for (size_t i=0; i<6; ++i)
+				//	{
+				//		if (val == s_BlendOperation[i])
+				//		{
+				//			blendDesc.alphaBlendOP = (BlendState::BlendOperation)i;
+				//			break;
+				//		}
+				//	}
+				//}
+				//else if (strName == "ColorWriteMask")
+				//{
+				//	rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+				//	String val(pVarNode->value());
+				//	if (val == s_ColorMask[0])
+				//	{
+				//		blendDesc.colorWriteMask = RenderState::CMASK_RED;
+				//	}
+				//	else if (val == s_ColorMask[1])
+				//	{
+				//		blendDesc.colorWriteMask = RenderState::CMASK_GREEN;
+				//	}
+				//	else if (val == s_ColorMask[2])
+				//	{
+				//		blendDesc.colorWriteMask = RenderState::CMASK_BLUE;
+				//	}
+				//	else if (val == s_ColorMask[3])
+				//	{
+				//		blendDesc.colorWriteMask = RenderState::CMASK_ALPHA;
+				//	}
+				//	else if (val == s_ColorMask[4])
+				//	{
+				//		blendDesc.colorWriteMask = RenderState::CMASK_COLOR;
+				//	}
+				//	else if (val == s_ColorMask[5])
+				//	{
+				//		blendDesc.colorWriteMask = RenderState::CMASK_ALL;
+				//	}
+				//}
+				//else if (strName == "A2CEnable")
+				//{
+				//	rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+				//	blendDesc.bA2CEnable = StringUtil::ParseBool(pVarNode->value());
+				//}
+				//else if (strName == "IndependBlendEnable")
+				//{
+				//	rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+				//	blendDesc.bIndependBlendEnable = StringUtil::ParseBool(pVarNode->value());
+				//}
+				//else if (strName == "BlendFactor")
+				//{
+				//	rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+				//	blendDesc.blendFactor = StringUtil::ParseColor(pVarNode->value());
+				//}
+				pElementNode = pElementNode.next_sibling();
 			}//if
 			createBlendState(blendDesc);
 			return true;
@@ -363,519 +360,514 @@ namespace Echo
 
 	bool Material::loadMacro(void * pNode)
 	{
-		rapidxml::xml_node<>* pSubNode = static_cast<rapidxml::xml_node<>*>(pNode);
-		rapidxml::xml_node<>* itemNode = pSubNode->first_node();
-		String strName = pSubNode->name();
-		try
-		{
-			while (itemNode)
-			{
-				String item = itemNode->name();
-				if (item != "item") throw false;
+		return true;
+		//rapidxml::xml_node<>* pSubNode = static_cast<rapidxml::xml_node<>*>(pNode);
+		//rapidxml::xml_node<>* itemNode = pSubNode->first_node();
+		//String strName = pSubNode->name();
+		//try
+		//{
+		//	while (itemNode)
+		//	{
+		//		String item = itemNode->name();
+		//		if (item != "item") throw false;
 
-				rapidxml::xml_attribute<>* nameAttr = itemNode->first_attribute();
-				String name = nameAttr->name();
-				if (name != "name") throw false;
-				m_shaderDesc.macros = nameAttr->value();
+		//		rapidxml::xml_attribute<>* nameAttr = itemNode->first_attribute();
+		//		String name = nameAttr->name();
+		//		if (name != "name") throw false;
+		//		m_shaderDesc.macros = nameAttr->value();
 
-				rapidxml::xml_attribute<>* functionAttr = nameAttr->next_attribute();
-				String function = functionAttr->name();
-				if (function != "function") throw false;
-				m_shaderDesc.func = functionAttr->value();
+		//		rapidxml::xml_attribute<>* functionAttr = nameAttr->next_attribute();
+		//		String function = functionAttr->name();
+		//		if (function != "function") throw false;
+		//		m_shaderDesc.func = functionAttr->value();
 
-				rapidxml::xml_attribute<>* paramAttr = functionAttr->next_attribute();
-				String param = paramAttr->name();
-				if (param != "param") throw false;
-				m_shaderDesc.param = paramAttr->value();
+		//		rapidxml::xml_attribute<>* paramAttr = functionAttr->next_attribute();
+		//		String param = paramAttr->name();
+		//		if (param != "param") throw false;
+		//		m_shaderDesc.param = paramAttr->value();
 
-				itemNode = itemNode->next_sibling();
-			}
+		//		itemNode = itemNode->next_sibling();
+		//	}
 
-			return true;
-		}
-		catch (bool)
-		{
-			free();
-			return false;
-		}
+		//	return true;
+		//}
+		//catch (bool)
+		//{
+		//	free();
+		//	return false;
+		//}
 	}
 
 	bool Material::loadRasterizerState( void* pNode )
 	{
 		RasterizerState::RasterizerDesc rasterizerState;
-		rapidxml::xml_node<>* pSubNode = static_cast<rapidxml::xml_node<>*>(pNode);
-		try
-		{
-			rapidxml::xml_node<>* pElementNode = pSubNode->first_node();
-			while(pElementNode)
-			{
-				String strName = pElementNode->name();
-				if (strName == "PolygonMode")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					String val(pVarNode->value());
-					for (size_t i=0; i<3; ++i)
-					{
-						if (val == s_PolygonMode[i])
-						{
-							rasterizerState.polygonMode = (RasterizerState::PolygonMode)i;
-							break;
-						}
-					}
-				}
-				else if (strName == "ShadeModel")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					String val(pVarNode->value());
-					for (size_t i=0; i<2; ++i)
-					{
-						if (val == s_ShadeModel[i])
-						{
-							rasterizerState.shadeModel = (RasterizerState::ShadeModel)i;
-							break;
-						}
-					}
-				}
-				else if (strName == "CullMode")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					String val(pVarNode->value());
-					for (size_t i=0; i<2; ++i)
-					{
-						if (val == s_CullMode[i])
-						{
-							rasterizerState.cullMode = (RasterizerState::CullMode)i;
-							break;
-						}
-					}
-				}
-				else if (strName == "FrontFaceCCW")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					rasterizerState.bFrontFaceCCW = StringUtil::ParseBool(String(pVarNode->value()));
-				}
-				else if (strName == "DepthBias")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					rasterizerState.depthBias = StringUtil::ParseFloat(String(pVarNode->value()));
-				}
-				else if (strName == "DepthBiasFactor")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					rasterizerState.depthBiasFactor = StringUtil::ParseFloat(String(pVarNode->value()));
-				}
-				else if (strName == "DepthClip")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					rasterizerState.bDepthClip = StringUtil::ParseBool(String(pVarNode->value()));
-				}
-				else if (strName == "Scissor")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					rasterizerState.bScissor = StringUtil::ParseBool(String(pVarNode->value()));
-				}
-				else if (strName == "Multisample")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					rasterizerState.bMultisample = StringUtil::ParseBool(String(pVarNode->value()));
-				}
-				pElementNode = pElementNode->next_sibling();
-			}
+		//rapidxml::xml_node<>* pSubNode = static_cast<rapidxml::xml_node<>*>(pNode);
+		//try
+		//{
+		//	rapidxml::xml_node<>* pElementNode = pSubNode->first_node();
+		//	while(pElementNode)
+		//	{
+		//		String strName = pElementNode->name();
+		//		if (strName == "PolygonMode")
+		//		{
+		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+		//			String val(pVarNode->value());
+		//			for (size_t i=0; i<3; ++i)
+		//			{
+		//				if (val == s_PolygonMode[i])
+		//				{
+		//					rasterizerState.polygonMode = (RasterizerState::PolygonMode)i;
+		//					break;
+		//				}
+		//			}
+		//		}
+		//		else if (strName == "ShadeModel")
+		//		{
+		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+		//			String val(pVarNode->value());
+		//			for (size_t i=0; i<2; ++i)
+		//			{
+		//				if (val == s_ShadeModel[i])
+		//				{
+		//					rasterizerState.shadeModel = (RasterizerState::ShadeModel)i;
+		//					break;
+		//				}
+		//			}
+		//		}
+		//		else if (strName == "CullMode")
+		//		{
+		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+		//			String val(pVarNode->value());
+		//			for (size_t i=0; i<2; ++i)
+		//			{
+		//				if (val == s_CullMode[i])
+		//				{
+		//					rasterizerState.cullMode = (RasterizerState::CullMode)i;
+		//					break;
+		//				}
+		//			}
+		//		}
+		//		else if (strName == "FrontFaceCCW")
+		//		{
+		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+		//			rasterizerState.bFrontFaceCCW = StringUtil::ParseBool(String(pVarNode->value()));
+		//		}
+		//		else if (strName == "DepthBias")
+		//		{
+		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+		//			rasterizerState.depthBias = StringUtil::ParseFloat(String(pVarNode->value()));
+		//		}
+		//		else if (strName == "DepthBiasFactor")
+		//		{
+		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+		//			rasterizerState.depthBiasFactor = StringUtil::ParseFloat(String(pVarNode->value()));
+		//		}
+		//		else if (strName == "DepthClip")
+		//		{
+		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+		//			rasterizerState.bDepthClip = StringUtil::ParseBool(String(pVarNode->value()));
+		//		}
+		//		else if (strName == "Scissor")
+		//		{
+		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+		//			rasterizerState.bScissor = StringUtil::ParseBool(String(pVarNode->value()));
+		//		}
+		//		else if (strName == "Multisample")
+		//		{
+		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+		//			rasterizerState.bMultisample = StringUtil::ParseBool(String(pVarNode->value()));
+		//		}
+		//		pElementNode = pElementNode->next_sibling();
+		//	}
 			createRasterizerState(rasterizerState);
 			return true;
-		}
-		catch(bool)
-		{
-			free();
-			return false;
-		}
+		//}
+		//catch(bool)
+		//{
+		//	free();
+		//	return false;
+		//}
 	}
 
 	bool Material::loadDepthStencilState( void* pNode )
 	{
 		DepthStencilState::DepthStencilDesc depthStencilState;
-		rapidxml::xml_node<>* pSubNode = static_cast<rapidxml::xml_node<>*>(pNode);
-		try
-		{
-			rapidxml::xml_node<>* pElementNode = pSubNode->first_node();
-			while(pElementNode)
-			{
-				String strName = pElementNode->name();
-				if (strName == "DepthEnable")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					depthStencilState.bDepthEnable = StringUtil::ParseBool(String(pVarNode->value()));
-				}
-				else if (strName == "WriteDepth")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					depthStencilState.bWriteDepth = StringUtil::ParseBool(String(pVarNode->value()));
-				}
-				else if (strName == "DepthFunc")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					String val(pVarNode->value());
-					for (size_t i=0; i<RenderState::CF_MAXNUM; ++i)
-					{
-						if (val == s_ComparisonFunc[i])
-						{
-							depthStencilState.depthFunc = (RenderState::ComparisonFunc)i;
-							break;
-						}
-					}
-				}
-				else if (strName == "FrontStencilEnable")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					depthStencilState.bFrontStencilEnable = StringUtil::ParseBool(String(pVarNode->value()));
-				}
-				else if (strName == "FrontStencilFunc")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					String val(pVarNode->value());
-					for (size_t i=0; i<RenderState::CF_MAXNUM; ++i)
-					{
-						if (val == s_ComparisonFunc[i])
-						{
-							depthStencilState.frontStencilFunc = (RenderState::ComparisonFunc)i;
-							break;
-						}
-					}
-				}
-				else if (strName == "FrontStencilReadMask")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					depthStencilState.frontStencilReadMask = StringUtil::ParseUI16(String(pVarNode->value()));
-				}
-				else if (strName == "FrontStencilWriteMask")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					depthStencilState.frontStencilWriteMask = StringUtil::ParseUI16(String(pVarNode->value()));
-				}
-				else if (strName == "FrontStencilFailOP")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					String val(pVarNode->value());
-					for (size_t i=0; i<DepthStencilState::SOP_MAX; ++i)
-					{
-						if (val == s_StencilOperation[i])
-						{
-							depthStencilState.frontStencilFailOP = (DepthStencilState::StencilOperation)i;
-							break;
-						}
-					}
-				}
-				else if (strName == "FrontStencilDepthFailOP")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					String val(pVarNode->value());
-					for (size_t i=0; i<DepthStencilState::SOP_MAX; ++i)
-					{
-						if (val == s_StencilOperation[i])
-						{
-							depthStencilState.frontStencilDepthFailOP = (DepthStencilState::StencilOperation)i;
-							break;
-						}
-					}
-				}
-				else if (strName == "FrontStencilPassOP")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					String val(pVarNode->value());
-					for (size_t i=0; i<DepthStencilState::SOP_MAX; ++i)
-					{
-						if (val == s_StencilOperation[i])
-						{
-							depthStencilState.frontStencilPassOP = (DepthStencilState::StencilOperation)i;
-							break;
-						}
-					}
-				}
-				else if (strName == "FrontStencilRef")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					depthStencilState.frontStencilRef = StringUtil::ParseUI32(String(pVarNode->value()));
-				}
-				else if (strName == "BackStencilEnable")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					depthStencilState.bBackStencilEnable = StringUtil::ParseBool(String(pVarNode->value()));
-				}
-				else if (strName == "BackStencilFunc")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					String val(pVarNode->value());
-					for (size_t i=0; i<RenderState::CF_MAXNUM; ++i)
-					{
-						if (val == s_ComparisonFunc[i])
-						{
-							depthStencilState.backStencilFunc = (RenderState::ComparisonFunc)i;
-							break;
-						}
-					}
-				}
-				else if (strName == "BackStencilReadMask")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					depthStencilState.backStencilReadMask = StringUtil::ParseUI16(String(pVarNode->value()));
-				}
-				else if (strName == "BackStencilWriteMask")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					depthStencilState.backStencilWriteMask = StringUtil::ParseI16(String(pVarNode->value()));
-				}
-				else if (strName == "BackStencilFailOP")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					String val(pVarNode->value());
-					for (size_t i=0; i<DepthStencilState::SOP_MAX; ++i)
-					{
-						if (val == s_StencilOperation[i])
-						{
-							depthStencilState.backStencilFailOP = (DepthStencilState::StencilOperation)i;
-							break;
-						}
-					}
-				}
-				else if (strName == "BackStencilDepthFailOP")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					String val(pVarNode->value());
-					for (size_t i=0; i<DepthStencilState::SOP_MAX; ++i)
-					{
-						if (val == s_StencilOperation[i])
-						{
-							depthStencilState.backStencilDepthFailOP = (DepthStencilState::StencilOperation)i;
-							break;
-						}
-					}
-				}
-				else if (strName == "BackStencilPassOP")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					String val(pVarNode->value());
-					for (size_t i=0; i<DepthStencilState::SOP_MAX; ++i)
-					{
-						if (val == s_StencilOperation[i])
-						{
-							depthStencilState.backStencilPassOP = (DepthStencilState::StencilOperation)i;
-							break;
-						}
-					}
-				}
-				else if (strName == "BackStencilRef")
-				{
-					rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
-					depthStencilState.backStencilRef = StringUtil::ParseI32(String(pVarNode->value()));
-				}
-				pElementNode = pElementNode->next_sibling();
-			}
+		//rapidxml::xml_node<>* pSubNode = static_cast<rapidxml::xml_node<>*>(pNode);
+		//try
+		//{
+		//	rapidxml::xml_node<>* pElementNode = pSubNode->first_node();
+		//	while(pElementNode)
+		//	{
+		//		String strName = pElementNode->name();
+		//		if (strName == "DepthEnable")
+		//		{
+		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+		//			depthStencilState.bDepthEnable = StringUtil::ParseBool(String(pVarNode->value()));
+		//		}
+		//		else if (strName == "WriteDepth")
+		//		{
+		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+		//			depthStencilState.bWriteDepth = StringUtil::ParseBool(String(pVarNode->value()));
+		//		}
+		//		else if (strName == "DepthFunc")
+		//		{
+		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+		//			String val(pVarNode->value());
+		//			for (size_t i=0; i<RenderState::CF_MAXNUM; ++i)
+		//			{
+		//				if (val == s_ComparisonFunc[i])
+		//				{
+		//					depthStencilState.depthFunc = (RenderState::ComparisonFunc)i;
+		//					break;
+		//				}
+		//			}
+		//		}
+		//		else if (strName == "FrontStencilEnable")
+		//		{
+		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+		//			depthStencilState.bFrontStencilEnable = StringUtil::ParseBool(String(pVarNode->value()));
+		//		}
+		//		else if (strName == "FrontStencilFunc")
+		//		{
+		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+		//			String val(pVarNode->value());
+		//			for (size_t i=0; i<RenderState::CF_MAXNUM; ++i)
+		//			{
+		//				if (val == s_ComparisonFunc[i])
+		//				{
+		//					depthStencilState.frontStencilFunc = (RenderState::ComparisonFunc)i;
+		//					break;
+		//				}
+		//			}
+		//		}
+		//		else if (strName == "FrontStencilReadMask")
+		//		{
+		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+		//			depthStencilState.frontStencilReadMask = StringUtil::ParseUI16(String(pVarNode->value()));
+		//		}
+		//		else if (strName == "FrontStencilWriteMask")
+		//		{
+		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+		//			depthStencilState.frontStencilWriteMask = StringUtil::ParseUI16(String(pVarNode->value()));
+		//		}
+		//		else if (strName == "FrontStencilFailOP")
+		//		{
+		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+		//			String val(pVarNode->value());
+		//			for (size_t i=0; i<DepthStencilState::SOP_MAX; ++i)
+		//			{
+		//				if (val == s_StencilOperation[i])
+		//				{
+		//					depthStencilState.frontStencilFailOP = (DepthStencilState::StencilOperation)i;
+		//					break;
+		//				}
+		//			}
+		//		}
+		//		else if (strName == "FrontStencilDepthFailOP")
+		//		{
+		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+		//			String val(pVarNode->value());
+		//			for (size_t i=0; i<DepthStencilState::SOP_MAX; ++i)
+		//			{
+		//				if (val == s_StencilOperation[i])
+		//				{
+		//					depthStencilState.frontStencilDepthFailOP = (DepthStencilState::StencilOperation)i;
+		//					break;
+		//				}
+		//			}
+		//		}
+		//		else if (strName == "FrontStencilPassOP")
+		//		{
+		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+		//			String val(pVarNode->value());
+		//			for (size_t i=0; i<DepthStencilState::SOP_MAX; ++i)
+		//			{
+		//				if (val == s_StencilOperation[i])
+		//				{
+		//					depthStencilState.frontStencilPassOP = (DepthStencilState::StencilOperation)i;
+		//					break;
+		//				}
+		//			}
+		//		}
+		//		else if (strName == "FrontStencilRef")
+		//		{
+		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+		//			depthStencilState.frontStencilRef = StringUtil::ParseUI32(String(pVarNode->value()));
+		//		}
+		//		else if (strName == "BackStencilEnable")
+		//		{
+		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+		//			depthStencilState.bBackStencilEnable = StringUtil::ParseBool(String(pVarNode->value()));
+		//		}
+		//		else if (strName == "BackStencilFunc")
+		//		{
+		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+		//			String val(pVarNode->value());
+		//			for (size_t i=0; i<RenderState::CF_MAXNUM; ++i)
+		//			{
+		//				if (val == s_ComparisonFunc[i])
+		//				{
+		//					depthStencilState.backStencilFunc = (RenderState::ComparisonFunc)i;
+		//					break;
+		//				}
+		//			}
+		//		}
+		//		else if (strName == "BackStencilReadMask")
+		//		{
+		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+		//			depthStencilState.backStencilReadMask = StringUtil::ParseUI16(String(pVarNode->value()));
+		//		}
+		//		else if (strName == "BackStencilWriteMask")
+		//		{
+		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+		//			depthStencilState.backStencilWriteMask = StringUtil::ParseI16(String(pVarNode->value()));
+		//		}
+		//		else if (strName == "BackStencilFailOP")
+		//		{
+		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+		//			String val(pVarNode->value());
+		//			for (size_t i=0; i<DepthStencilState::SOP_MAX; ++i)
+		//			{
+		//				if (val == s_StencilOperation[i])
+		//				{
+		//					depthStencilState.backStencilFailOP = (DepthStencilState::StencilOperation)i;
+		//					break;
+		//				}
+		//			}
+		//		}
+		//		else if (strName == "BackStencilDepthFailOP")
+		//		{
+		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+		//			String val(pVarNode->value());
+		//			for (size_t i=0; i<DepthStencilState::SOP_MAX; ++i)
+		//			{
+		//				if (val == s_StencilOperation[i])
+		//				{
+		//					depthStencilState.backStencilDepthFailOP = (DepthStencilState::StencilOperation)i;
+		//					break;
+		//				}
+		//			}
+		//		}
+		//		else if (strName == "BackStencilPassOP")
+		//		{
+		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+		//			String val(pVarNode->value());
+		//			for (size_t i=0; i<DepthStencilState::SOP_MAX; ++i)
+		//			{
+		//				if (val == s_StencilOperation[i])
+		//				{
+		//					depthStencilState.backStencilPassOP = (DepthStencilState::StencilOperation)i;
+		//					break;
+		//				}
+		//			}
+		//		}
+		//		else if (strName == "BackStencilRef")
+		//		{
+		//			rapidxml::xml_attribute<>* pVarNode = pElementNode->first_attribute();
+		//			depthStencilState.backStencilRef = StringUtil::ParseI32(String(pVarNode->value()));
+		//		}
+		//		pElementNode = pElementNode->next_sibling();
+		//	}
 			createDepthState(depthStencilState);
 			return true;
-		}
-		catch(bool)
-		{
-			free();
-			return false;
-		}
+		//}
+		//catch(bool)
+		//{
+		//	free();
+		//	return false;
+		//}
 	}
 
 	bool Material::loadSamplerState_Ext( void* pNode )
 	{
-		rapidxml::xml_node<>* pSubNode = static_cast<rapidxml::xml_node<>*>(pNode);
-		try
-		{
-			rapidxml::xml_node<>* pElementNode = pSubNode->first_node();
-			while(pElementNode)
-			{
-				String stageName = pElementNode->name();
+		//rapidxml::xml_node<>* pSubNode = static_cast<rapidxml::xml_node<>*>(pNode);
+		//try
+		//{
+		//	rapidxml::xml_node<>* pElementNode = pSubNode->first_node();
+		//	while(pElementNode)
+		//	{
+		//		String stageName = pElementNode->name();
 
-				rapidxml::xml_node<>* pSubElementNode = pElementNode->first_node();
+		//		rapidxml::xml_node<>* pSubElementNode = pElementNode->first_node();
 
-				SamplerState::SamplerDesc samplerState;
+		//		SamplerState::SamplerDesc samplerState;
 
-				while( pSubElementNode )
-				{
+		//		while( pSubElementNode )
+		//		{
 
-					String strName = pSubElementNode->name();
+		//			String strName = pSubElementNode->name();
 
-					if (strName == "MinFilter")
-					{
-						rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
+		//			if (strName == "MinFilter")
+		//			{
+		//				rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
 
-						String val(pVarNode->value());
-						for (size_t i=0; i<SamplerState::FO_MAX; ++i)
-						{
-							if (val == s_FilterOption[i])
-							{
-								samplerState.minFilter = (SamplerState::FilterOption)i;
-								break;
-							}
-						}
-					}
-					else if (strName == "MagFilter")
-					{
-						rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
-						String val(pVarNode->value());
-						for (size_t i=0; i<SamplerState::FO_MAX; ++i)
-						{
-							if (val == s_FilterOption[i])
-							{
-								samplerState.magFilter = (SamplerState::FilterOption)i;
-								break;
-							}
-						}
-					}
-					else if (strName == "MipFilter")
-					{
-						rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
-						String val(pVarNode->value());
-						for (size_t i=0; i<SamplerState::FO_MAX; ++i)
-						{
-							if (val == s_FilterOption[i])
-							{
-								samplerState.mipFilter = (SamplerState::FilterOption)i;
-								break;
-							}
-						}
-					}
-					else if (strName == "AddrUMode")
-					{
-						rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
-						String val(pVarNode->value());
-						for (size_t i=0; i<SamplerState::AM_MAX; ++i)
-						{
-							if (val == s_AddressMode[i])
-							{
-								samplerState.addrUMode = (SamplerState::AddressMode)i;
-								break;
-							}
-						}
-					}
-					else if (strName == "AddrVMode")
-					{
-						rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
-						String val(pVarNode->value());
-						for (size_t i=0; i<SamplerState::AM_MAX; ++i)
-						{
-							if (val == s_AddressMode[i])
-							{
-								samplerState.addrVMode = (SamplerState::AddressMode)i;
-								break;
-							}
-						}
-					}
-					else if (strName == "AddrWMode")
-					{
-						rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
-						String val(pVarNode->value());
-						for (size_t i=0; i<SamplerState::AM_MAX; ++i)
-						{
-							if (val == s_AddressMode[i])
-							{
-								samplerState.addrWMode = (SamplerState::AddressMode)i;
-								break;
-							}
-						}
-					}
-					else if (strName == "MaxAnisotropy")
-					{
-						rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
-						samplerState.maxAnisotropy = StringUtil::ParseI8(String(pVarNode->value()));
-					}
-					else if (strName == "CmpFunc")
-					{
-						rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
-						String val(pVarNode->value());
-						for (size_t i=0; i<RenderState::CF_MAXNUM; ++i)
-						{
-							if (val == s_ComparisonFunc[i])
-							{
-								samplerState.cmpFunc = (RenderState::ComparisonFunc)i;
-								break;
-							}
-						}
-					}
-					else if (strName == "BorderColor")
-					{
-						rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
-						samplerState.borderColor = StringUtil::ParseColor(String(pVarNode->value()));
-					}
-					else if (strName == "MinLOD")
-					{
-						rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
-						samplerState.minLOD = StringUtil::ParseFloat(String(pVarNode->value()));
-					}
-					else if (strName == "MaxLOD")
-					{
-						rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
-						samplerState.maxLOD = StringUtil::ParseFloat(String(pVarNode->value()));
-					}
-					else if (strName == "MipLODBias")
-					{
-						rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
-						samplerState.mipLODBias = StringUtil::ParseFloat(String(pVarNode->value()));
-					}
+		//				String val(pVarNode->value());
+		//				for (size_t i=0; i<SamplerState::FO_MAX; ++i)
+		//				{
+		//					if (val == s_FilterOption[i])
+		//					{
+		//						samplerState.minFilter = (SamplerState::FilterOption)i;
+		//						break;
+		//					}
+		//				}
+		//			}
+		//			else if (strName == "MagFilter")
+		//			{
+		//				rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
+		//				String val(pVarNode->value());
+		//				for (size_t i=0; i<SamplerState::FO_MAX; ++i)
+		//				{
+		//					if (val == s_FilterOption[i])
+		//					{
+		//						samplerState.magFilter = (SamplerState::FilterOption)i;
+		//						break;
+		//					}
+		//				}
+		//			}
+		//			else if (strName == "MipFilter")
+		//			{
+		//				rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
+		//				String val(pVarNode->value());
+		//				for (size_t i=0; i<SamplerState::FO_MAX; ++i)
+		//				{
+		//					if (val == s_FilterOption[i])
+		//					{
+		//						samplerState.mipFilter = (SamplerState::FilterOption)i;
+		//						break;
+		//					}
+		//				}
+		//			}
+		//			else if (strName == "AddrUMode")
+		//			{
+		//				rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
+		//				String val(pVarNode->value());
+		//				for (size_t i=0; i<SamplerState::AM_MAX; ++i)
+		//				{
+		//					if (val == s_AddressMode[i])
+		//					{
+		//						samplerState.addrUMode = (SamplerState::AddressMode)i;
+		//						break;
+		//					}
+		//				}
+		//			}
+		//			else if (strName == "AddrVMode")
+		//			{
+		//				rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
+		//				String val(pVarNode->value());
+		//				for (size_t i=0; i<SamplerState::AM_MAX; ++i)
+		//				{
+		//					if (val == s_AddressMode[i])
+		//					{
+		//						samplerState.addrVMode = (SamplerState::AddressMode)i;
+		//						break;
+		//					}
+		//				}
+		//			}
+		//			else if (strName == "AddrWMode")
+		//			{
+		//				rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
+		//				String val(pVarNode->value());
+		//				for (size_t i=0; i<SamplerState::AM_MAX; ++i)
+		//				{
+		//					if (val == s_AddressMode[i])
+		//					{
+		//						samplerState.addrWMode = (SamplerState::AddressMode)i;
+		//						break;
+		//					}
+		//				}
+		//			}
+		//			else if (strName == "MaxAnisotropy")
+		//			{
+		//				rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
+		//				samplerState.maxAnisotropy = StringUtil::ParseI8(String(pVarNode->value()));
+		//			}
+		//			else if (strName == "CmpFunc")
+		//			{
+		//				rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
+		//				String val(pVarNode->value());
+		//				for (size_t i=0; i<RenderState::CF_MAXNUM; ++i)
+		//				{
+		//					if (val == s_ComparisonFunc[i])
+		//					{
+		//						samplerState.cmpFunc = (RenderState::ComparisonFunc)i;
+		//						break;
+		//					}
+		//				}
+		//			}
+		//			else if (strName == "BorderColor")
+		//			{
+		//				rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
+		//				samplerState.borderColor = StringUtil::ParseColor(String(pVarNode->value()));
+		//			}
+		//			else if (strName == "MinLOD")
+		//			{
+		//				rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
+		//				samplerState.minLOD = StringUtil::ParseFloat(String(pVarNode->value()));
+		//			}
+		//			else if (strName == "MaxLOD")
+		//			{
+		//				rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
+		//				samplerState.maxLOD = StringUtil::ParseFloat(String(pVarNode->value()));
+		//			}
+		//			else if (strName == "MipLODBias")
+		//			{
+		//				rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
+		//				samplerState.mipLODBias = StringUtil::ParseFloat(String(pVarNode->value()));
+		//			}
 
-					pSubElementNode = pSubElementNode->next_sibling();
-				}
+		//			pSubElementNode = pSubElementNode->next_sibling();
+		//		}
 
-				const SamplerState* pSS = Renderer::instance()->getSamplerState(samplerState);
-				EchoAssert( pSS );
-				m_mapSamplerState.insert( SamplerStateMap::value_type(stageName, pSS) );
+		//		const SamplerState* pSS = Renderer::instance()->getSamplerState(samplerState);
+		//		EchoAssert( pSS );
+		//		m_mapSamplerState.insert( SamplerStateMap::value_type(stageName, pSS) );
 
-				pElementNode = pElementNode->next_sibling();
-			}
+		//		pElementNode = pElementNode->next_sibling();
+		//	}
 
 			return true;
-		}
-		catch(bool)
-		{
-			free();
-			return false;
-		}
+		//}
+		//catch(bool)
+		//{
+		//	free();
+		//	return false;
+		//}
 	}
 
 	bool Material::loadTexture_Ext( void* pNode )
 	{
-		rapidxml::xml_node<>* pTextureNode = static_cast<rapidxml::xml_node<>*>(pNode);
-		
-		rapidxml::xml_node<>* pTextureStageNode = pTextureNode->first_node();
-
-		String strName = pTextureNode->name();
-
+		pugi::xml_node* pTextureNode = static_cast<pugi::xml_node*>(pNode);
 		try
 		{
+			//for(pugi::xml_node pTextureStageNode = pTextureNode->first_child(); pTextureStageNode; pTextureStageNode=pTextureStageNode.next_sibling())
+			//{
+			//	String stageName = pTextureStageNode->name();
+			//
+			//	if( stageName != "stage" ) throw false;
 
-			while( pTextureStageNode )
-			{
-				String stageName = pTextureStageNode->name();
-			
-				if( stageName != "stage" ) throw false;
+			//	rapidxml::xml_attribute<>* pStageNoAttribute = pTextureStageNode->first_attribute();
 
-				rapidxml::xml_attribute<>* pStageNoAttribute = pTextureStageNode->first_attribute();
+			//	String no_name = pStageNoAttribute->name();
 
-				String no_name = pStageNoAttribute->name();
+			//	if( no_name != "no" ) throw false;
 
-				if( no_name != "no" ) throw false;
+			//	int stage_no = StringUtil::ParseInt(pStageNoAttribute->value());
 
-				int stage_no = StringUtil::ParseInt(pStageNoAttribute->value());
+			//	rapidxml::xml_attribute<>* pStageSampAttribute = pStageNoAttribute->next_attribute();
+			//
+			//	String strSampler = pStageSampAttribute->name();
 
-				rapidxml::xml_attribute<>* pStageSampAttribute = pStageNoAttribute->next_attribute();
-			
-				String strSampler = pStageSampAttribute->name();
+			//	if( strSampler != "sampler" ) throw false;
 
-				if( strSampler != "sampler" ) throw false;
+			//	String strSampValue = pStageSampAttribute->value();
 
-				String strSampValue = pStageSampAttribute->value();
+			//	if( strSampValue == "" ) throw false;
 
-				if( strSampValue == "" ) throw false;
+			//	m_arrTexSamplerState[stage_no] = strSampValue;
+			//	m_pSamplerState[stage_no] = getSamplerStateByTexStage(stage_no);
 
-				m_arrTexSamplerState[stage_no] = strSampValue;
-				m_pSamplerState[stage_no] = getSamplerStateByTexStage(stage_no);
-
-				pTextureStageNode = pTextureStageNode->next_sibling();
-			}
+			//	pTextureStageNode = pTextureStageNode->next_sibling();
+			//}
 
 			return true;
 		}
@@ -973,46 +965,40 @@ namespace Echo
 		try
 		{
 			MemoryReader memReader( matFileName.c_str());
-			xml_document<> doc;
-			doc.parse<0>(memReader.getData<char*>());
+			pugi::xml_document doc;
+			doc.load(memReader.getData<char*>());
 
-			xml_node<> *rootNode = doc.first_node();
+			pugi::xml_node rootNode = doc.first_child();
 			if (rootNode)
 			{
-				xml_node<>* shaderNode = rootNode->first_node("ShaderPrograme");
+				pugi::xml_node shaderNode = rootNode.child("ShaderPrograme");
 				if (shaderNode)
 				{
-					xml_node<>* macrosNode = shaderNode->first_node("Macros");
+					pugi::xml_node macrosNode = shaderNode.child("Macros");
 					if (macrosNode)
 					{
-						xml_node<>* macroNode = macrosNode->first_node("Macro");
+						pugi::xml_node macroNode = macrosNode.child("Macro");
 						while (macroNode)
 						{
-							xml_attribute<>* attribute = macroNode->first_attribute("value");
+							pugi::xml_attribute attribute = macroNode.attribute("value");
 							if (attribute)
 							{
-								macros.push_back(attribute->value());
-
+								macros.push_back(attribute.as_string());
 								if (withEnabled)
 								{
-									xml_attribute<>* enabledAttribute = attribute->next_attribute("default");
+									pugi::xml_attribute enabledAttribute = macroNode.attribute("default");
 									if (enabledAttribute)
-									{
-										macros.push_back(enabledAttribute->value());
-									}
+										macros.push_back(enabledAttribute.as_string());
 									else
-									{
 										macros.push_back("false");
-									}
 								}
 							}
 								
-							macroNode = macroNode->next_sibling("Macro");
+							macroNode = macroNode.next_sibling("Macro");
 						}
 					}
 				}
 			}
-
 		}
 		catch (...)
 		{
@@ -1030,28 +1016,15 @@ namespace Echo
 
 	bool Material::loadDefaultUniform(void* pNode)
 	{
-		rapidxml::xml_node<>* pDefaultUniforms = static_cast<rapidxml::xml_node<>*>(pNode);
-		rapidxml::xml_node<>* pUniform = pDefaultUniforms->first_node();
-
+		pugi::xml_node* pDefaultUniforms = static_cast<pugi::xml_node*>(pNode);
 		try
 		{
-			while (pUniform)
+			for(pugi::xml_node pUniform = pDefaultUniforms->first_child(); pUniform; pUniform = pUniform.next_sibling())
 			{
-				rapidxml::xml_attribute<>* pNameAttribute = pUniform->first_attribute();
-				String strName = pNameAttribute->name();
-				String strNameValue = pNameAttribute->value();
-
-				rapidxml::xml_attribute<>* pTypeAttribute = pNameAttribute->next_attribute();
-				String strType = pTypeAttribute->name();
-				String strTypeValue = pTypeAttribute->value();
-
-				rapidxml::xml_attribute<>* pCountAttribute = pTypeAttribute->next_attribute();
-				String strCount = pCountAttribute->name();
-				i32 count = StringUtil::ParseI32(pCountAttribute->value());
-
-				rapidxml::xml_attribute<>* pValueAttribute = pCountAttribute->next_attribute();
-				String strValue = pValueAttribute->name();
-				String strValueValue = pValueAttribute->value();
+				String strNameValue = pUniform.attribute("name").as_string();
+				String strTypeValue = pUniform.attribute("type").as_string();
+				i32 count = pUniform.attribute("count").as_int();
+				String strValueValue = pUniform.attribute("value").as_string();
 
 				DefaultUniform* uniform = EchoNew(DefaultUniform);
 				void* value = createDefaultUniformValue(strTypeValue, count, strValueValue, uniform->sizeInByte, uniform->type);
@@ -1066,8 +1039,6 @@ namespace Echo
 				{
 					EchoSafeDelete(uniform, DefaultUniform);
 				}
-
-				pUniform = pUniform->next_sibling();
 			}
 
 			return true;
