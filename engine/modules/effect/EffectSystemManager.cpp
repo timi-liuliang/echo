@@ -1034,7 +1034,7 @@ namespace Echo
 				if (mRenderUIEffectOnly && !pRenderable->isUiEffect())
 					continue;
 
-				pRenderable->updateSinceCreateTime(pRenderable->getSinceCreateTime() + Root::instance()->getFrameTime());
+				//pRenderable->updateSinceCreateTime(pRenderable->getSinceCreateTime() + Root::instance()->getFrameTime());
 
 				ui16 vertexNum = pRenderable->getVertexNum();
 				if (vertexNum > 0)

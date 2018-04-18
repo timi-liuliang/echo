@@ -54,8 +54,6 @@ namespace Echo
 			m_triangleNum += _triangles;
 		}
 
-		void output();
-
 		inline ui32 getTextureSizeInBytes() const
 		{
 			return m_uploadedTextureSizeInBytes;

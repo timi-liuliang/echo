@@ -10,7 +10,7 @@
 
 namespace Echo
 {
-	class ProjectFile;
+	class ProjectSettings;
 	class ArchiveManager;
 	class ArchiveFactory;
 	class IO;
@@ -100,11 +100,6 @@ namespace Echo
 		void* getAssetManager() const;
 		bool isRendererInited() const;
 		const ui32&		getCurrentTime() const;
-		inline ui32		getFrameTime() const { return m_frameTime; }
-		inline ui32		getFrameRealTime() const { return m_frameRealTime; }
-		ui32			getFrameCount() const;
-		ui32			getFPS() const;
-		ui32			getMaxFrameTime() const;
 
 		void			enableStreamThread(bool enable);
 		StreamThread*	getThreadThread() const;
@@ -113,16 +108,12 @@ namespace Echo
 
 		inline bool		getEnableFrameProfile() const { return m_enableFrameProfile; }
 
-		inline FrameState&		frameState() { return m_frameState; }
+		FrameState&		frameState() { return m_frameState; }
 
-		inline const FrameState& frameState() const { return m_frameState; }
+		const FrameState& frameState() const { return m_frameState; }
 
-		void outputFrameState() { m_frameState.output(); }
 		void resetFrameState() { m_frameState.reset(); }
 		void SetPhoneinformation(int max,int free,String cpu);
-
-		// 获取当前帧数量
-		ui32 getCurFrameCount() const { return m_curFameCount; }
 
 		void setEnableFilterAdditional( bool _val) { m_enableFilterAdditional = _val; }
 
@@ -135,12 +126,6 @@ namespace Echo
 		float getFramebufferScale() const { return m_framebufferScale; }
 		
 		void changeFilterAdditionalMap(const String& mapName);
-
-		// 设置是否渲染当前场景
-		void setRenderSceneEnable( bool isRenderScene) { m_isRenderScene = isRenderScene; }
-
-		// 是否渲染场景
-		bool isRenderScene() { return m_isRenderScene; }
 
 		// 加载项目,引擎初始化时会自动调用，也可单独调用(全路径)
 		void loadProject( const char* projectFile);
@@ -161,7 +146,7 @@ namespace Echo
 		void registerClassTypes();
 
 	public:
-		ProjectFile* getProjectFile() { return m_projectFile; }
+		ProjectSettings* getProjectFile() { return m_projectFile; }
 		MemoryManager* getMemoryManager() { EchoAssert(m_memoryManager);  return m_memoryManager; }
 		LogManager* getLogManager() { EchoAssert(m_logManager);  return m_logManager; }
 		SkeletonManager* getSkeletonManager() { EchoAssert(m_skeletonManager);  return m_skeletonManager; }
@@ -180,7 +165,7 @@ namespace Echo
 	protected:
 		void updateAllManagerDelayResource();
 		bool render();
-		void loadFirstScene();
+		void loadLaunchScene();
 
 	private:
 		bool				m_isInited;				// 是否已初始化
@@ -191,20 +176,8 @@ namespace Echo
 		String				m_userPath;				// 用户资源路径
 		void*				m_pAssetMgr;			// for android
 		bool				m_bRendererInited;
-
-		bool				m_bSupportGPUSkin;
-
-		ui32				m_lastTime;
-		ui32				m_frameTime;
-		ui32				m_frameRealTime;
+		float				m_frameTime;
 		ui32				m_currentTime;
-		ui32				m_timeCount;
-		ui32				m_frameCount;
-		ui32				m_curFameCount;
-		ui32				m_fps;
-		ui32				m_maxFrameTime;
-		bool				m_isRenderScene;				// 是否渲染场景
-
 		MemoryManager*		m_memoryManager;				// 内存管理器
 		LogManager*			m_logManager;
 		IO*					m_io;
@@ -217,7 +190,6 @@ namespace Echo
 		Time*				m_Timer;
 		EffectSystemManager*m_EffectSystemManager;			// 特效系统管理器
 		Renderer*			m_renderer;						// 渲染器
-		NodeTree*		m_sceneManager;					// 场景管理器
 		FSAudioManager*		m_audioManager;					// 音频管理器
 		StreamThread*		m_StreamThreading;				// 流加载线程
 		bool				m_enableFrameProfile;
@@ -230,7 +202,7 @@ namespace Echo
 		float				m_framebufferScale;             // 帧缓冲区缩放
 		OpenMPTaskMgr*		m_openMPTaskMgr;				// OpenMP任务处理器
 		RenderTargetManager*m_renderTargetManager;			// 渲染目标管理器
-		ProjectFile*		m_projectFile;					// 项目信息
+		ProjectSettings*		m_projectFile;					// 项目信息
 
 #ifdef ECHO_PROFILER
 		ProfilerServer*		m_profilerSev;					// 性能分析服务器

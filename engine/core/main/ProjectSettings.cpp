@@ -1,4 +1,4 @@
-#include "ProjectFile.h"
+#include "ProjectSettings.h"
 #include "engine/core/Util/LogManager.h"
 #include "engine/core/Util/PathUtil.h"
 #include "engine/core/io/IO.h"
@@ -8,18 +8,55 @@
 namespace Echo
 {
 	// 构造函数
-	ProjectFile::ProjectFile()
+	ProjectSettings::ProjectSettings()
 	{
+		addSetting("Application/Launch/LaunchScene", Variant::Type_String);
 	}
 
 	// 析构函数
-	ProjectFile::~ProjectFile()
+	ProjectSettings::~ProjectSettings()
 	{
 
 	}
 
+	// add setting
+	void ProjectSettings::addSetting(const String& name, Variant::Type type)
+	{
+		auto it = m_settings.find(name);
+		if (it == m_settings.end())
+		{
+			Setting setting;
+			setting.m_name = name;
+			setting.m_type = type;
+
+			m_settings[name] = setting;
+		}
+		else
+		{
+			EchoLogError("Category [%s] has exist.", name.c_str());
+		}
+	}
+
+	// 设置配置
+	void ProjectSettings::setSetting(const String& name, const String& value)
+	{
+
+	}
+
+	// 获取设置
+	const ProjectSettings::Setting* ProjectSettings::getSetting(const String& name)
+	{
+		auto it = m_settings.find(name);
+		if (it != m_settings.end())
+		{
+			return &(it->second);
+		}
+
+		return nullptr;
+	}
+
 	// 加载
-	void ProjectFile::load(const char* pathName)
+	void ProjectSettings::load(const char* pathName)
 	{
 		try
 		{
@@ -50,7 +87,7 @@ namespace Echo
 	}
 
 	// 保存
-	void ProjectFile::save(const char* fileName)
+	void ProjectSettings::save(const char* fileName)
 	{
 		if ( !fileName )
 			fileName = m_pathName.c_str();
@@ -70,7 +107,7 @@ namespace Echo
 	}
 
 	// 加载存档配置
-	void ProjectFile::loadArchives(pugi::xml_node* projectNode)
+	void ProjectSettings::loadArchives(pugi::xml_node* projectNode)
 	{
 		m_archives.clear();
 
@@ -90,7 +127,7 @@ namespace Echo
 	}
 
 	// 保存存档
-	void ProjectFile::saveArchives(pugi::xml_document& doc, pugi::xml_node* projectNode)
+	void ProjectSettings::saveArchives(pugi::xml_document& doc, pugi::xml_node* projectNode)
 	{
 		if ( projectNode )
 		{
@@ -106,7 +143,7 @@ namespace Echo
 	}
 
 	// 是否已存在
-	bool ProjectFile::isArchiveExist(const String& archiveType, const String& archiveValue)
+	bool ProjectSettings::isArchiveExist(const String& archiveType, const String& archiveValue)
 	{
 		for ( size_t i = 0; i < m_archives.size(); i++ )
 		{
@@ -118,7 +155,7 @@ namespace Echo
 	}
 
 	// 配置引擎
-	void ProjectFile::setupResource()
+	void ProjectSettings::setupResource()
 	{
 		//在读取Project配置文件设置的目录
 		for ( size_t i = 0; i < m_archives.size(); i++ )
@@ -128,7 +165,7 @@ namespace Echo
 	}
 
 	//返回压缩格式对应字符串名称
-	char* ProjectFile::getCompressTypeName(TextureCompressType ctype)
+	char* ProjectSettings::getCompressTypeName(TextureCompressType ctype)
 	{
 		char* name;
 		switch ( ctype )
@@ -148,9 +185,9 @@ namespace Echo
 	}
 
 	//根据字符串名称返回压缩格式对应
-	ProjectFile::TextureCompressType ProjectFile::getCompressTypeFormName(std::string cname)
+	ProjectSettings::TextureCompressType ProjectSettings::getCompressTypeFormName(std::string cname)
 	{
-		ProjectFile::TextureCompressType ctype;
+		ProjectSettings::TextureCompressType ctype;
 		if ( cname == "DoNotCompress" )
 		{
 			ctype = DoNotCompress;

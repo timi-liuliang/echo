@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Engine/core/main/ProjectFile.h>
+#include <Engine/core/main/ProjectSettings.h>
 
 namespace Studio
 {
@@ -9,7 +9,7 @@ namespace Studio
 	 */
 	class ProjectMgr
 	{
-		typedef std::map<std::string, Echo::ProjectFile::TextureCompressType>  CompressMap;
+		typedef std::map<std::string, Echo::ProjectSettings::TextureCompressType>  CompressMap;
 	public:
 		//压缩纹理输出平台
 		enum PLATFORM
@@ -36,7 +36,7 @@ namespace Studio
 		bool LoadProject(const char* fileName);
 
 		// 获取项目文件
-		Echo::ProjectFile& GetProjectFile() { return m_projectFile; }
+		Echo::ProjectSettings& GetProjectFile() { return m_projectFile; }
 
 		// 获取所有文件
 		Echo::map<Echo::String, Echo::String>::type& GetAllFiles() { return m_files; }
@@ -59,10 +59,10 @@ namespace Studio
 		const Echo::String& GetProjectFilePathName() { return m_projectFile.getPathName(); }
 
 		//记录压缩格式变化的文件
-		void addCompressChangeTextrue(PLATFORM platform, std::string name, Echo::ProjectFile::TextureCompressType ctype);
+		void addCompressChangeTextrue(PLATFORM platform, std::string name, Echo::ProjectSettings::TextureCompressType ctype);
 
 		// 根据图片名字获取压缩格式信息
-		Echo::ProjectFile::TextureCompressItem* GetTextureCompressItem(const Echo::String& name);
+		Echo::ProjectSettings::TextureCompressItem* GetTextureCompressItem(const Echo::String& name);
 
 		// 资源检测
 		void CheckProject();
@@ -72,8 +72,8 @@ namespace Studio
 		void checkTextures();
 
 	private:
-		Echo::ProjectFile							m_projectFile;		 // 项目剖析器
-		Echo::map<Echo::String, Echo::String>::type	m_files;			 // 所有文件
-		Echo::ProjectFile::TextureCPIVec*			m_pTextureCompreses; // 纹理压缩信息表
+		Echo::ProjectSettings							m_projectFile;		 // 项目剖析器
+		Echo::map<Echo::String, Echo::String>::type		m_files;			 // 所有文件
+		Echo::ProjectSettings::TextureCPIVec*			m_pTextureCompreses; // 纹理压缩信息表
 	};
 }

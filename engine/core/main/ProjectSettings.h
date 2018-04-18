@@ -1,5 +1,6 @@
 #pragma once
 
+#include "engine/core/base/variant.h"
 #include "engine/core/Util/StringUtil.h"
 #include <thirdparty/pugixml/pugixml.hpp>
 
@@ -8,7 +9,7 @@ namespace Echo
 	/**
 	 * 项目文件
 	 */
-	class ProjectFile
+	class ProjectSettings
 	{
 	public:
 		// 存档
@@ -24,6 +25,14 @@ namespace Echo
 				StringUtil::LowerCase(m_archiveValue);
 			}
 		};
+
+		struct Setting
+		{
+			String			m_name;
+			Variant::Type	m_type;
+			Variant			m_value;
+		};
+		typedef map<String, Setting>::type SettingMap;
 
 		enum TextureCompressType
 		{
@@ -67,8 +76,8 @@ namespace Echo
 		typedef vector<TextureCompressItem>::type TextureCPIVec;
 
 	public:
-		ProjectFile();
-		~ProjectFile();
+		ProjectSettings();
+		~ProjectSettings();
 
 		// 获取项目路径
 		const String& getPath() const { return m_path; }
@@ -78,6 +87,12 @@ namespace Echo
 
 		// 获取全路径
 		const String& getPathName() const { return m_pathName;  }
+
+		// 设置配置
+		void setSetting(const String& name, const String& value);
+
+		// 获取设置
+		const Setting* getSetting(const String& name);
 
 		// 加载
 		void load( const char* fileName);
@@ -111,11 +126,15 @@ namespace Echo
 		// 是否已存在
 		bool isArchiveExist( const String& archiveType, const String& archiveValue);
 
+		// add setting
+		void addSetting(const String& name, Variant::Type type);
+
 	private:
 		String								m_path;				// 项目路径
 		String								m_name;				// 项目文件名
 		String								m_pathName;			// 项目全路径(包含名称)
 		vector<ArchiveItem>::type			m_archives;			// 存档配置
 		TextureCPIVec						m_TextureCompreses; // 纹理压缩信息表
+		SettingMap							m_settings;
 	};
 }

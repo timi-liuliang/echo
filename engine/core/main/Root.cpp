@@ -15,7 +15,7 @@
 #include "engine/core/Util/Timer.h"
 #include "engine/core/render/render/Viewport.h"
 #include "Engine/core/Render/MaterialInst.h"
-#include "ProjectFile.h"
+#include "ProjectSettings.h"
 #include "Engine/modules/Audio/FMODStudio/FSAudioManager.h"
 #include "engine/core/render/render/RenderThread.h"
 #include "engine/core/render/render/Video.h"
@@ -43,11 +43,6 @@ static unsigned int _GetCurrThreadId()
 
 namespace Echo
 {
-	// 输出引擎状态
-	void FrameState::output()
-	{
-	}
-
 	__ImplementSingleton(Root);
 
 	// 构造函数
@@ -55,16 +50,7 @@ namespace Echo
 		: m_isInited(false)
 		, m_pAssetMgr(NULL)
 		, m_bRendererInited(NULL)
-		, m_bSupportGPUSkin(true)
-		, m_lastTime(0)
-		, m_frameTime(0)
-		, m_frameRealTime(0)
 		, m_currentTime(0)
-		, m_timeCount(0)
-		, m_frameCount(0)
-		, m_curFameCount(0)
-		, m_fps(0)
-		, m_maxFrameTime(0)
 		, m_io(NULL)
 		, m_Timer(NULL)
 		, m_EffectSystemManager(NULL)
@@ -72,13 +58,11 @@ namespace Echo
 		, m_enableBloom(false)
 		, m_enableFilterAdditional(false)
 		, m_framebufferScale(1.0f)
-		, m_isRenderScene(true)
 		, m_logManager(NULL)
 		, m_skeletonManager(NULL)
 		, m_animManager(NULL)
 		, m_animSysManager(NULL)
 		, m_renderer(NULL)
-		, m_sceneManager(NULL)
 		, m_modelManager(NULL)
 		, m_imageCodecManager(NULL)
 		, m_audioManager(NULL)
@@ -136,7 +120,7 @@ namespace Echo
 			m_animManager		= EchoNew( AnimManager);
 			m_animSysManager	= EchoNew( AnimSystemManager);
 			m_skeletonManager	= EchoNew( SkeletonManager);
-			m_sceneManager		= EchoNew( NodeTree);
+			EchoNew( NodeTree);
 			m_io = EchoNew(IO);
 			m_EffectSystemManager = EchoNew(EffectSystemManager);
 			m_StreamThreading = EchoNew(StreamThread);
@@ -184,7 +168,7 @@ namespace Echo
 
 		if (m_cfg.m_isGame)
 		{
-			loadFirstScene();
+			loadLaunchScene();
 		}
 
 		m_isInited = true;
@@ -192,12 +176,15 @@ namespace Echo
 		return true;
 	}
 
-	void Root::loadFirstScene()
+	void Root::loadLaunchScene()
 	{
 		Echo::String launchScene = "Res://main.scene";
-
-		Echo::Node* node = Echo::Node::load(launchScene);
-		node->setParent(NodeTree::instance()->getInvisibleRootNode());
+		//const ProjectSettings::Setting* setting = m_projectFile->getSetting("Application/Run/LaunchScene");
+		//if (setting)
+		{
+			Echo::Node* node = Echo::Node::load(launchScene);
+			node->setParent(NodeTree::instance()->getInvisibleRootNode());
+		}
 	}
 
 	// register all class types
@@ -216,8 +203,8 @@ namespace Echo
 		{
 			m_resPath = PathUtil::GetFileDirPath(projectFile);
 
-			EchoSafeDelete(m_projectFile, ProjectFile);
-			m_projectFile = EchoNew(ProjectFile);
+			EchoSafeDelete(m_projectFile, ProjectSettings);
+			m_projectFile = EchoNew(ProjectSettings);
 			m_projectFile->load(projectFile);
 			m_projectFile->setupResource();
 
@@ -364,15 +351,13 @@ namespace Echo
 		}
 
 		// 场景管理器
-		if (m_sceneManager)
-			m_sceneManager->destroy();
+		NodeTree::instance()->destroy();
 
 		// 音频管理器
 		if (m_audioManager)
 			m_audioManager->release();
 
 		EchoSafeDelete(m_audioManager, FSAudioManager);
-		EchoSafeDelete(m_sceneManager, NodeTree);
 		EchoSafeDelete(m_modelManager, ModelManager);
 		EchoSafeDelete(m_animSysManager, AnimSystemManager); //animSysManager要在animManager之前释放，因为会用到animManager来释放自己的animBlend
 		EchoSafeDelete(m_animManager, AnimManager);
@@ -404,7 +389,7 @@ namespace Echo
 
 		LogManager* logMgr = LogManager::instance();
 		EchoSafeDelete(logMgr, LogManager);
-		EchoSafeDelete(m_projectFile, ProjectFile);
+		EchoSafeDelete(m_projectFile, ProjectSettings);
 #ifdef ECHO_PROFILER
 #endif
 		// 销毁时间控制器
@@ -453,21 +438,6 @@ namespace Echo
 		return m_currentTime;
 	}
 
-	ui32 Root::getFrameCount() const
-	{
-		return m_frameCount;
-	}
-
-	ui32 Root::getFPS() const
-	{
-		return m_fps;
-	}
-
-	ui32 Root::getMaxFrameTime() const
-	{
-		return m_maxFrameTime;
-	}
-
 	void Root::enableStreamThread(bool enable)
 	{
 		if (m_StreamThreading)
@@ -488,35 +458,12 @@ namespace Echo
 	void Root::tick(i32 elapsedTime)
 	{
 		elapsedTime = Math::Clamp( elapsedTime, 0, 1000);
+		m_frameTime = elapsedTime * 0.001f;
 
 #ifdef ECHO_PROFILER
 #endif
-		++m_curFameCount;
-
-		++m_frameCount;
 		m_currentTime = Time::instance()->getMilliseconds();
 
-		m_frameTime = elapsedTime;//m_currentTime - m_lastTime;
-		m_frameRealTime = m_currentTime - m_lastTime;
-		if (m_frameRealTime > 1000)
-		{
-			m_frameRealTime = 0;
-		}
-		m_lastTime = m_currentTime;
-		m_timeCount += m_frameRealTime;
-
-		if (m_maxFrameTime < m_frameRealTime)
-		{
-			m_maxFrameTime = m_frameRealTime;
-		}
-
-		if (m_timeCount >= 1000)
-		{
-			m_fps = m_frameCount;
-			m_frameCount = 0;
-			m_timeCount -= 1000;
-			m_maxFrameTime = 0;
-		}
 
 #if !defined(NO_THEORA_PLAYER)
 		// 视频更新
@@ -538,7 +485,7 @@ namespace Echo
 		m_audioManager->tick(static_cast<ui32>(elapsedTime * t0 / t1));
 
 		//
-		auto t = EngineSettingsMgr::instance()->isSlowDownExclusiveUI() ? m_frameRealTime : elapsedTime;
+		auto t = EngineSettingsMgr::instance()->isSlowDownExclusiveUI() ? m_frameTime : elapsedTime;
 
 		NodeTree::instance()->update(elapsedTime*0.001f);
 
@@ -584,8 +531,6 @@ namespace Echo
 			case 3: EchoAnimManager->updateDelayedRelease(m_frameTime * MOD); break;
 			case 4:
 			{
-	/*			if (EchoRoot->getActorManagerUnsafe())
-					EchoEngineActorManager->DestroyDelayActors(false);*/
 			}
 			break;
 			case 5: EchoAnimSystemManager->updateDelayedRelease(m_frameTime * MOD); break;

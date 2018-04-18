@@ -24,7 +24,7 @@ namespace Echo
 	class SimpleSpline;
 	class LogManager;
 	class Root;
-	class ProjectFile;
+	class ProjectSettings;
 	class Color;
 	class PixelBox;
 	class GPUBuffer;

@@ -22,7 +22,7 @@ namespace Studio
 	// 新建项目文件
 	void ProjectMgr::NewProject(const char* projectName)
 	{
-		Echo::ProjectFile projectFile;
+		Echo::ProjectSettings projectFile;
 		m_pTextureCompreses = NULL;
 		projectFile.save(projectName);
 	}
@@ -46,7 +46,7 @@ namespace Studio
 		m_files.clear();
 
 		// 检测同名文件
-		Echo::vector<Echo::ProjectFile::ArchiveItem>::type& archives = m_projectFile.getArchives();
+		Echo::vector<Echo::ProjectSettings::ArchiveItem>::type& archives = m_projectFile.getArchives();
 		for ( size_t archiveIdx = 0; archiveIdx < archives.size(); archiveIdx++ )
 		{
 			Echo::StringArray strs;
@@ -149,12 +149,12 @@ namespace Studio
 	}
 
 	// 添加图片压缩格式信息
-	void ProjectMgr::addCompressChangeTextrue(PLATFORM platform, std::string name, Echo::ProjectFile::TextureCompressType ctype)
+	void ProjectMgr::addCompressChangeTextrue(PLATFORM platform, std::string name, Echo::ProjectSettings::TextureCompressType ctype)
 	{
 		if (m_pTextureCompreses)
 		{
-			Echo::ProjectFile::TextureCompressItem* pItem = NULL;
-			Echo::ProjectFile::TextureCPIVec::iterator it = m_pTextureCompreses->begin();
+			Echo::ProjectSettings::TextureCompressItem* pItem = NULL;
+			Echo::ProjectSettings::TextureCPIVec::iterator it = m_pTextureCompreses->begin();
 			for (; it != m_pTextureCompreses->end(); ++it)
 			{
 				if (it->m_name == name)
@@ -166,7 +166,7 @@ namespace Studio
 
 			if (!pItem)
 			{
-				Echo::ProjectFile::TextureCompressItem item;
+				Echo::ProjectSettings::TextureCompressItem item;
 				item.m_name = name;
 				m_pTextureCompreses->push_back(item);
 				pItem = &item;
@@ -187,12 +187,12 @@ namespace Studio
 	}
 	
 
-	Echo::ProjectFile::TextureCompressItem* ProjectMgr::GetTextureCompressItem(const Echo::String& name)
+	Echo::ProjectSettings::TextureCompressItem* ProjectMgr::GetTextureCompressItem(const Echo::String& name)
 	{
 		if (m_pTextureCompreses)
 		{
-			Echo::ProjectFile::TextureCompressItem* pItem;
-			Echo::ProjectFile::TextureCPIVec::iterator it = m_pTextureCompreses->begin();
+			Echo::ProjectSettings::TextureCompressItem* pItem;
+			Echo::ProjectSettings::TextureCPIVec::iterator it = m_pTextureCompreses->begin();
 			for (; it != m_pTextureCompreses->end(); ++it)
 			{
 				pItem = &(*it);
@@ -203,5 +203,4 @@ namespace Studio
 
 		return NULL;
 	}
-
 }

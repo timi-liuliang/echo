@@ -27,7 +27,11 @@
     <property name="title">
      <string>File(&amp;F)</string>
     </property>
+    <addaction name="m_actionProjectSettings"/>
+    <addaction name="separator"/>
     <addaction name="m_actionSave"/>
+    <addaction name="separator"/>
+    <addaction name="m_actionExitEditor"/>
    </widget>
    <widget class="QMenu" name="menuHelp_H">
     <property name="title">
@@ -93,6 +97,16 @@
    </property>
    <property name="shortcut">
     <string>Shift+F5</string>
+   </property>
+  </action>
+  <action name="m_actionExitEditor">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="m_actionProjectSettings">
+   <property name="text">
+    <string>Settings</string>
    </property>
   </action>
  </widget>
