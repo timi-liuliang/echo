@@ -26,11 +26,11 @@ namespace Studio
 		m_model->setHorizontalHeaderLabels(titleLable);
 
 		using namespace Echo;
-		ProjectFile& projectFile = Studio_ProjectMgr->GetProjectFile();
+		ProjectFile projectFile;// = Studio_ProjectMgr->GetProjectFile();
 		Echo::vector<ProjectFile::ArchiveItem>::type& archives = projectFile.getArchives();
 		for (size_t i = 0; i < archives.size(); i++)
 		{
-			Echo::String fullPath = Studio_ProjectMgr->GetRootPath() + archives[i].m_archiveValue;
+			Echo::String fullPath;// = Studio_ProjectMgr->GetRootPath() + archives[i].m_archiveValue;
 			m_model->SetRootPath(fullPath.c_str(), "none", m_PathTreeView, NULL/*m_proxyModel*/);
 			m_model->Refresh();
 

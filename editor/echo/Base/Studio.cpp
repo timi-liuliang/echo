@@ -25,7 +25,6 @@ namespace Studio
 		: m_logPanel(nullptr)
 	{
 		m_renderWindow = NULL;
-		m_projectMgr = EchoNew( ProjectMgr);
 		m_projectCfg = EchoNew( ConfigMgr);
 
 		m_log = NULL;
@@ -34,7 +33,6 @@ namespace Studio
 	AStudio::AStudio(const char* inputProject)
 	{
 		m_renderWindow = NULL;
-		m_projectMgr = EchoNew( ProjectMgr);
 		m_projectCfg = NULL;
 		m_log = NULL;
 
@@ -49,7 +47,6 @@ namespace Studio
 
 		EchoSafeDelete(m_projectWindow, ProjectWnd);
 		EchoSafeDelete(m_renderWindow, RenderWindow);
-		EchoSafeDelete(m_projectMgr, ProjectMgr);
 		EchoSafeDelete(m_projectCfg, ConfigMgr);
 		EchoSafeDelete(m_mainWindow, MainWindow);
 
@@ -211,9 +208,6 @@ namespace Studio
 	{
 		//生成缩略图
 		ShellExecute(0, "open", "Thumbnail.exe", fileName, "", SW_HIDE);
-
-		// 项目管理器
-		TIME_PROFILE(m_projectMgr->OpenProject(fileName);)
 
 		// 初始化渲染窗口
 		TIME_PROFILE(EchoEngine::SetProject(fileName);)

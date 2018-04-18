@@ -25,7 +25,7 @@ namespace Echo
 			if (sargv[0] == "play")
 			{
 				GameMode gameMode;
-				gameMode.exec(sargv, argc, argv);
+				gameMode.exec(argc, argv);
 			}
 
 			return true;
@@ -106,13 +106,14 @@ namespace Echo
 	}
 
 	// exec command
-	bool GameMode::exec(const StringArray& argvs, int argc, char* argv[])
+	bool GameMode::exec(int argc, char* argv[])
 	{
-		//int i = 0;
-		//if (argvs[i++] != "play")
-		//	return false;
+		Echo::String type = argv[1];
+		if (type != "play")
+			return false;
 
-		//Echo::String projectFile = argvs[i++];
+		Echo::String projectFile = argv[2];
+
 		QApplication app(argc, argv);
 		app.setAttribute(Qt::AA_NativeWindows);
 
@@ -133,9 +134,10 @@ namespace Echo
 		// start window
 		Game::Window window;
 		window.show();
+		window.start(projectFile);
 
 		app.exec();
 
-		return false;
+		return true;
 	}
 }

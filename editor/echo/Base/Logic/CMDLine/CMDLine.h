@@ -31,6 +31,6 @@ namespace Echo
 	{
 	public:
 		// exec command
-		bool exec(const StringArray& argvs, int argc, char* argv[]);
+		bool exec(int argc, char* argv[]);
 	};
 }

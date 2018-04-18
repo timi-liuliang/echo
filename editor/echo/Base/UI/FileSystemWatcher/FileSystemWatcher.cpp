@@ -154,9 +154,6 @@ namespace Studio
 		if (!Echo::PathUtil::IsDir(file))
 		{
 			//EchoResourceManager->addFile("filesystem", file);
-
-			// 添加到项目管理
-			AStudio::Instance()->getProjectMgr()->AddFileToProject(file.c_str());
 		}
 
 		m_fileSystemWatcher->addPath(file.c_str());

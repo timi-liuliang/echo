@@ -2,6 +2,7 @@
 
 #include <QWidget>
 #include <QMenu>
+#include "App.h"
 
 namespace Game
 {
@@ -10,14 +11,14 @@ namespace Game
 	//-----------------------------------
 	class Window : public QWidget
 	{
-		//Q_OBJECT
+		Q_OBJECT
 
 	public:
 		Window( QWidget* parent = NULL);
 		virtual ~Window();
 
 		// 开始渲染
-		void BeginRender();
+		void start(const Echo::String& echoProject);
 
 		// 窗口大小改变
 		void ResizeWindow();
@@ -58,5 +59,6 @@ namespace Game
 		QSize					m_dx9Size;					// 调整后大小
 		QTimer*					m_timer;					// 计时器
 		QSize					m_ratio;
+		App*					m_app;
 	};
 }

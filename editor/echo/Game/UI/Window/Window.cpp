@@ -7,15 +7,17 @@ namespace Game
 	// 构造函数
 	Window::Window(QWidget* parent/* = NULL*/)
 		: QWidget(parent)
+		, m_app(nullptr)
 		//, m_mouseMenu(NULL)
-		//, m_timer(NULL)
+		, m_timer(nullptr)
 		//, m_inputController(NULL)
 		//, m_defaultInputController(NULL)
 		//, m_isLeftButtonDown(false)
 	{
-		//setAttribute(Qt::WA_NativeWindow);
-		//setUpdatesEnabled(false);
-		//setMouseTracking(true);
+		setUpdatesEnabled(false);
+		setMouseTracking(true);
+
+		m_app = new App;
 	}
 
 	// 析构函数
@@ -28,40 +30,42 @@ namespace Game
 	}
 
 	// 开始渲染
-	void Window::BeginRender()
+	void Window::start(const Echo::String& echoProject)
 	{
+		m_app->init((HWND)winId(), echoProject);
+
 		//EchoEngine::Instance()->Initialize((HWND)this->winId());
 
 		//if (!m_defaultInputController)
 		//	m_defaultInputController = new DefaultInputController; 
 
 		// 时间事件
-		//m_timer = new QTimer(this);
-		//connect(m_timer, SIGNAL(timeout()), this, SLOT(Render()));
-		//m_timer->start(10);
+		m_timer = new QTimer(this);
+		connect(m_timer, SIGNAL(timeout()), this, SLOT(Render()));
+		m_timer->start(10);
 	}
 
 	// 渲染更新
 	void  Window::Render()
 	{
 		// 鼠标是否位于窗口中
-		//ResizeWindow();
+		ResizeWindow();
 
-		//static DWORD lastTime = QDateTime::currentMSecsSinceEpoch();
+		static DWORD lastTime = QDateTime::currentMSecsSinceEpoch();
 
-		//// 计算delta Time
-		//DWORD curTime = QDateTime::currentMSecsSinceEpoch();
-		//DWORD elapsedTime = curTime - lastTime;
+		// 计算delta Time
+		DWORD curTime = QDateTime::currentMSecsSinceEpoch();
+		DWORD elapsedTime = curTime - lastTime;
 
 		//auto controller = m_inputController ? m_inputController : m_defaultInputController;
 		//auto pos = controller->mousePosition();
 		//auto button = controller->pressedMouseButton();
-		//auto elapsed = elapsedTime * 0.001f;
+		auto elapsed = elapsedTime;
 
-		//// Call the main render function
-		////EchoEngine::Instance()->Render(elapsedTime, this->isVisible());
+		// Call the main render function
+		m_app->tick(elapsedTime);
 
-		//lastTime = curTime;
+		lastTime = curTime;
 	}
 
 	// 窗口大小改变

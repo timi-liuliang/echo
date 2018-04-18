@@ -60,9 +60,6 @@ namespace Studio
 		// 获取程序工作路径
 		const char* getAppPath() const { return m_appPath.c_str(); }
 
-		// 获取项目管理器
-		ProjectMgr* getProjectMgr() { return m_projectMgr; }
-
 		// 获取配置管理器
 		ConfigMgr* getConfigMgr() { return m_projectCfg; }
 
@@ -120,8 +117,6 @@ namespace Studio
 		RenderWindow*					m_renderWindow;		// 渲染窗口
 		Echo::LogDefault*				m_log;				// 日志实现
 		LogPanel*						m_logPanel;			// 日志面板
-
-		ProjectMgr*						m_projectMgr;		// 项目管理器
 		ConfigMgr*						m_projectCfg;		// 配置文件
 
 		std::vector<AssetSupportInfo>	m_assetSupportInfos;// 资源编辑相关信息
