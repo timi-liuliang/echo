@@ -206,6 +206,9 @@ namespace Studio
 	// 打开项目文件
 	void AStudio::OpenProject(const char* fileName)
 	{
+		// remember it
+		m_projectCfg->addRecentProject(fileName);
+
 		//生成缩略图
 		ShellExecute(0, "open", "Thumbnail.exe", fileName, "", SW_HIDE);
 

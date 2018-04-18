@@ -9,6 +9,7 @@
 #include "TimelinePanel.h"
 #include "DebuggerPanel.h"
 #include "EchoEngine.h"
+#include "PlayGameToolBar.h"
 
 namespace Studio
 {
@@ -19,6 +20,7 @@ namespace Studio
 		, m_timelinePanel(nullptr)
 		, m_debuggerPanel(nullptr)
 		, m_gameProcess(nullptr)
+		, m_playGameToolBar(nullptr)
 	{
 		setupUi( this);
 
@@ -47,7 +49,12 @@ namespace Studio
 		m_timelinePanel = EchoNew(TimelinePanel(this));
 		m_debuggerPanel = EchoNew(DebuggerPanel(this));
 
-		setCentralWidget(AStudio::Instance()->getRenderWindow());
+		QWidget* renderWindow = AStudio::Instance()->getRenderWindow();
+
+		setCentralWidget(renderWindow);
+		//m_playGameToolBar = EchoNew(PlayGameToolBar(centralWidget()));
+		//centralWidget()->layout()->addWidget(m_playGameToolBar);
+		//centralWidget()->layout()->addWidget(renderWindow);
 
 		this->setCorner(Qt::BottomLeftCorner, Qt::LeftDockWidgetArea);
 		this->setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);

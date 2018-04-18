@@ -116,4 +116,10 @@ namespace QT_UI
 	{
 		QMenuBar::mouseReleaseEvent(event);
 	}
+
+	// redefine paintEvent
+	void QMenuBarEx::paintEvent(QPaintEvent* event)
+	{
+		QMenuBar::paintEvent(event);
+	}
 }

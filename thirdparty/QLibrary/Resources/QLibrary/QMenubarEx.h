@@ -36,6 +36,10 @@ namespace QT_UI
 		// ×î´ó»¯
 		void onMaxmized();
 
+	protected:
+		// redefine paintEvent
+		void paintEvent(QPaintEvent* event);
+
 	private:
 		QPointF			m_lastPos;
 		QMainWindow*	m_parent;
