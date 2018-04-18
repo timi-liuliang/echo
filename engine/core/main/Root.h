@@ -35,7 +35,7 @@ namespace Echo
 		};
 
 		// 配置
-		struct RootCfg
+		struct Config
 		{
 			typedef vector<ArchiveFactory*>::type ArchiveFactoryTypes;
 			typedef vector<ExternalMgr>::type ExternalMgrs;
@@ -49,13 +49,17 @@ namespace Echo
 			bool				m_isEnableProfiler;			// 是否开启性能分析服务
 			ExternalMgrs		m_externalMgrs;				// 外部模块
 
-			RootCfg()
+			unsigned int		m_windowHandle;
+			bool				m_isGame;
+
+			Config()
 				: projectFile("")
 				, engineCfgFile("engine.xml")
 				, pAssetMgr(NULL)
 				, m_AudiomaxVoribsCodecs(32)
 				, m_AudioLoadDecompresse(false)
 				, m_isEnableProfiler(false)
+				, m_isGame(true)
 			{}
 		};
 
@@ -72,7 +76,7 @@ namespace Echo
 
 		// 装载日志系统
 		bool initLogSystem();
-		bool initialize(const RootCfg& cfg);
+		bool initialize(const Config& cfg);
 		bool initRenderer(Renderer* pRenderer, const Renderer::RenderCfg& config);
 		bool onRendererInited();
 
@@ -82,7 +86,7 @@ namespace Echo
 		void releasePlugins();
 
 		// 获取配置
-		const RootCfg& getConfig() const { return m_cfg; }
+		const Config& getConfig() const { return m_cfg; }
 
 		// 获取资源主路径
 		const String& getResPath() const;
@@ -174,18 +178,13 @@ namespace Echo
 		FSAudioManager* getAudioManager() { EchoAssert(m_audioManager);  return m_audioManager; }
 
 	protected:
-		void			updateAllManagerDelayResource();
-		void			configEngine(const String& fileName);
-
-		// exec render
+		void updateAllManagerDelayResource();
 		bool render();
-
-	private:
-		Node				m_rootNode;
+		void loadFirstScene();
 
 	private:
 		bool				m_isInited;				// 是否已初始化
-		RootCfg				m_cfg;					// 客户端传入
+		Config				m_cfg;					// 客户端传入
 		EngineSettingsMgr	m_settingsMgr;			// 配置管理器
 		EngineConsole		m_console;				// 命令行控制台
 		String				m_resPath;				// 资源路径

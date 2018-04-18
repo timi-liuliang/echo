@@ -20,9 +20,6 @@ namespace Game
 		// 开始渲染
 		void start(const Echo::String& echoProject);
 
-		// 窗口大小改变
-		void ResizeWindow();
-
 		// aspect ratio
 		void SetAspectRatio(const QSize& size);
 		QSize GetAspectRatio() const { return m_ratio; }
@@ -54,6 +51,10 @@ namespace Game
 
 		// 重置设备
 		void  ResetDevice();
+
+	private:
+		// 窗口大小改变
+		void checkWindowSize();
 
 	private:
 		QSize					m_dx9Size;					// 调整后大小

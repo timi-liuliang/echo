@@ -64,7 +64,7 @@ namespace Studio
 	{
 		TIME_PROFILE
 		(
-			Echo::Root::RootCfg rootcfg;
+			Echo::Root::Config rootcfg;
 
 			// 是否预设项目文件
 			if (!m_projectFile.empty())
@@ -72,22 +72,16 @@ namespace Studio
 				rootcfg.projectFile = m_projectFile.c_str();
 			}
 			rootcfg.m_isEnableProfiler = true;
+			rootcfg.m_isGame = false;
+			rootcfg.m_windowHandle = (unsigned int)hwnd;
+
 			EchoRoot->initialize(rootcfg);
 		)
 
 		TIME_PROFILE
 		(
-			Echo::Renderer::RenderCfg renderCfg;
-			renderCfg.enableThreadedRendering = false;
-			renderCfg.windowHandle = (unsigned int)hwnd;
-			renderCfg.enableThreadedRendering = false;
-			EchoRoot->initRenderer(EchoNew(Echo::GLES2Renderer), renderCfg);
-
 			// 背景网格
 			InitializeBackGrid();
-
-			// 背景色
-			Echo::Renderer::BGCOLOR = Echo::Color(0.298f, 0.298f, 0.322f);
 
 			// 初始化字体渲染管理器
 			//m_FontRenderManager = EchoNew(FontRenderManager);

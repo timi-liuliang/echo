@@ -21,6 +21,8 @@ namespace Echo
 		// 销毁
 		void destroy();
 
+		Node* getInvisibleRootNode() { return &m_invisibleRoot; }
+
 	public:
 		// 获取主摄像机
 		Camera* get3dCamera() const { return m_3dCamera; }
@@ -48,6 +50,6 @@ namespace Echo
 		Camera*				m_2dCamera;			// 2D摄像机
 		Camera*				m_uiCamera;			// 界面摄像机
 		CameraShadow*		m_shadowCamera;		// 阴影图摄像机		
-		Node*				m_invisibleRoot;	// invisible root node
+		Node				m_invisibleRoot;	// invisible root node
 	};
 }

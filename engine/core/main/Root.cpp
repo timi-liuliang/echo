@@ -26,6 +26,7 @@
 #include "engine/core/render/RenderTargetManager.h"
 #include "module.h"
 #include "engine/core/render/renderstage/RenderStage.h"
+#include "engine/core/render/gles/GLES2.h"
 
 #ifdef ECHO_PLATFORM_ANDROID
 #include <sys/syscall.h>
@@ -114,7 +115,7 @@ namespace Echo
 	}
 
 	// “˝«Ê≥ı ºªØ
-	bool Root::initialize(const RootCfg& cfg)
+	bool Root::initialize(const Config& cfg)
 	{
 		m_cfg = cfg;
 		m_pAssetMgr = cfg.pAssetMgr;
@@ -169,9 +170,34 @@ namespace Echo
 
 		setEnableFrameProfile(true);
 
+		// init render
+		Renderer* renderer = nullptr;
+		LoadGLESRenderer(renderer);
+
+		Echo::Renderer::RenderCfg renderCfg;
+		renderCfg.enableThreadedRendering = false;
+		renderCfg.windowHandle = cfg.m_windowHandle;
+		renderCfg.enableThreadedRendering = false;
+		EchoRoot->initRenderer(renderer, renderCfg);
+
+		Renderer::BGCOLOR = Echo::Color(0.298f, 0.298f, 0.322f);
+
+		if (m_cfg.m_isGame)
+		{
+			loadFirstScene();
+		}
+
 		m_isInited = true;
 
 		return true;
+	}
+
+	void Root::loadFirstScene()
+	{
+		Echo::String launchScene = "Res://main.scene";
+
+		Echo::Node* node = Echo::Node::load(launchScene);
+		node->setParent(NodeTree::instance()->getInvisibleRootNode());
 	}
 
 	// register all class types
@@ -530,8 +556,6 @@ namespace Echo
 		{
 			mgr.m_tick(elapsedTime);
 		}
-
-		m_rootNode.update(true);
 
 		// ‰÷»æ
 		render();

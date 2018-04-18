@@ -15,5 +15,8 @@ namespace Game
 
 		// tick
 		void tick(Echo::ui32 elapsedTime);
+
+		// onSize
+		void onSize(Echo::ui32 width, Echo::ui32 height);
 	};
 }

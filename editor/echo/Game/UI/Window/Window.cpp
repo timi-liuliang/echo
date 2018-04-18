@@ -49,7 +49,7 @@ namespace Game
 	void  Window::Render()
 	{
 		// 鼠标是否位于窗口中
-		ResizeWindow();
+		checkWindowSize();
 
 		static DWORD lastTime = QDateTime::currentMSecsSinceEpoch();
 
@@ -69,18 +69,17 @@ namespace Game
 	}
 
 	// 窗口大小改变
-	void Window::ResizeWindow()
-	{
-		
-		//int width = static_cast<int>(this->width());
-		//int height = static_cast<int>(this->height());
+	void Window::checkWindowSize()
+	{	
+		int width = static_cast<int>(this->width());
+		int height = static_cast<int>(this->height());
 
-		//if (m_dx9Size.width() != width || m_dx9Size.height() != height)
-		//{
-		//	EchoEngine::Instance()->Resize(width, height);
-		//	m_dx9Size.setWidth(width);
-		//	m_dx9Size.setHeight(height);
-		//}
+		if (m_dx9Size.width() != width || m_dx9Size.height() != height)
+		{
+			m_app->onSize(width, height);
+			m_dx9Size.setWidth(width);
+			m_dx9Size.setHeight(height);
+		}
 	}
 
 	void Window::SetAspectRatio(const QSize& size)

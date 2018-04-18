@@ -11,7 +11,6 @@ namespace Echo
 		, m_2dCamera(NULL)
 		, m_uiCamera(NULL)
 		, m_shadowCamera(NULL)
-		, m_invisibleRoot(nullptr)
 	{
 		__ConstructSingleton;
 	}
@@ -62,9 +61,6 @@ namespace Echo
 	// ¸üÐÂ 
 	void NodeTree::update(float elapsedTime)
 	{
-		if (m_invisibleRoot)
-		{
-			m_invisibleRoot->update(true);
-		}
+		m_invisibleRoot.update(elapsedTime, true);
 	}
 }
