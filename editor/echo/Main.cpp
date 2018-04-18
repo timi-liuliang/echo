@@ -32,7 +32,4 @@ int main( int argc, char* argv[])
 
 	// 解析命令行，运行主界面。
 	Echo::CMDLine::Parser(argc, argv);
-
-	// 释放资源
-	Echo::CMDLine::Release();
 }

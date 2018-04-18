@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QProcess>
 #include "ui_MainWindow.h"
 
 namespace Studio
@@ -29,10 +30,14 @@ namespace Studio
 		// ±£´æÎÄ¼þ
 		void onSaveProject();
 
+		// game mode
+		void onPlayGame();
+
 	protected:
 		ResPanel*		m_resPanel;
-		NodeTreePanel*		m_scenePanel;
+		NodeTreePanel*	m_scenePanel;
 		TimelinePanel*	m_timelinePanel;
 		DebuggerPanel*	m_debuggerPanel;
+		QProcess		m_gameProcess;
 	};
 }

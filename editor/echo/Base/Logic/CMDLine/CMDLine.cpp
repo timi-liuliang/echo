@@ -22,10 +22,6 @@ namespace Echo
 			for( int i=1; i<argc; i++)
 				sargv.push_back( argv[i]);
 
-			//ÃüÁîÐÐ±à¼­Æ÷
-			g_astudio = new Studio::AStudio(" ");
-			g_astudio->setAppPath(QDir::currentPath().toStdString().c_str());
-
 			if (sargv[0] == "play")
 			{
 				GameMode gameMode;
@@ -41,12 +37,6 @@ namespace Echo
 		}
 
 		return false;
-	}
-
-	// ÊÍ·Å
-	void CMDLine::Release()
-	{
-		delete g_astudio;
 	}
 
 	// exec command
@@ -110,6 +100,8 @@ namespace Echo
 		// Ö´ÐÐ
 		app.exec();
 
+		delete g_astudio;
+
 		return true;
 	}
 
@@ -133,6 +125,10 @@ namespace Echo
 			app.setStyleSheet(qss);
 			qssFile.close();
 		}
+
+		//ÃüÁîÐÐ±à¼­Æ÷
+		g_astudio = new Studio::AStudio(" ");
+		g_astudio->setAppPath(QDir::currentPath().toStdString().c_str());
 
 		// start window
 		Game::Window window;

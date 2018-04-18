@@ -18,6 +18,7 @@ namespace Studio
 		, m_resPanel(nullptr)
 		, m_timelinePanel(nullptr)
 		, m_debuggerPanel(nullptr)
+		, m_gameProcess(nullptr)
 	{
 		setupUi( this);
 
@@ -29,6 +30,8 @@ namespace Studio
 
 		// connect signal slot
 		QObject::connect(m_actionSave, SIGNAL(triggered(bool)), this, SLOT(onSaveProject()));
+		QObject::connect(m_actionPlayGame, SIGNAL(triggered(bool)), this, SLOT(onPlayGame()));
+		QObject::connect(m_actionStopGame, SIGNAL(triggered(bool)), &m_gameProcess, SLOT(terminate()));
 	}
 
 	// 析构函数
@@ -66,6 +69,21 @@ namespace Studio
 	void MainWindow::onSaveProject()
 	{
 		Studio::EchoEngine::Instance()->saveCurrentEditNodeTree();
+	}
+
+	// play game
+	void MainWindow::onPlayGame()
+	{
+		onSaveProject();
+
+		Echo::String app = QCoreApplication::applicationFilePath().toStdString().c_str();
+		Echo::String project = Echo::Root::instance()->getProjectFile()->getPathName();
+		Echo::String cmd = Echo::StringUtil::Format("%s play %s", app.c_str(), project.c_str());
+
+		m_gameProcess.terminate();
+		m_gameProcess.waitForFinished();
+
+		m_gameProcess.start(cmd.c_str());
 	}
 
 	// 打开文件

@@ -40,6 +40,7 @@
      <string>Game(&amp;G)</string>
     </property>
     <addaction name="m_actionPlayGame"/>
+    <addaction name="m_actionStopGame"/>
    </widget>
    <addaction name="menuFile_F"/>
    <addaction name="menuGame"/>
@@ -77,6 +78,21 @@
    </property>
    <property name="shortcut">
     <string>F5</string>
+   </property>
+  </action>
+  <action name="m_actionStopGame">
+   <property name="icon">
+    <iconset resource="../../../Resource/App.qrc">
+     <normaloff>:/icon/Icon/stop.png</normaloff>:/icon/Icon/stop.png</iconset>
+   </property>
+   <property name="text">
+    <string>Stop</string>
+   </property>
+   <property name="toolTip">
+    <string>Stop</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+F5</string>
    </property>
   </action>
  </widget>

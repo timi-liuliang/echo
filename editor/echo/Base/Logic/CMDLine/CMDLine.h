@@ -12,9 +12,6 @@ namespace Echo
 	public:
 		// 解析主入口
 		static bool Parser(int argc, char* argv[]);
-
-		// 释放
-		static void Release();
 	};
 
 	/**

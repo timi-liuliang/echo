@@ -22,6 +22,7 @@ namespace Studio
 {
 	// ¹¹Ôìº¯Êý
 	AStudio::AStudio()
+		: m_logPanel(nullptr)
 	{
 		m_renderWindow = NULL;
 		m_projectMgr = EchoNew( ProjectMgr);
