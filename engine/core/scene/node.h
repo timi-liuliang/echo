@@ -18,11 +18,15 @@ namespace Echo
 		// lua script
 		struct LuaScript
 		{
+			bool		m_isStart;
+			bool		m_isValid;
 			String		m_file;					// file name
 			String		m_globalTableName;		// global table name
 
-			void start(Object* obj);
-			void update();
+			LuaScript() : m_isStart(false), m_isValid(false){}
+			void start(Node* obj);
+			void update(Node* obj);
+			bool isValid()const { return m_isValid; }
 		};
 
 	public:

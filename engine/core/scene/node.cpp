@@ -1,19 +1,38 @@
 #include "Node.h"
 #include "engine/core/Util/LogManager.h"
 #include "engine/core/io/IO.h"
+#include "engine/core/main/Root.h"
+#include "engine/core/script/lua/LuaBinder.h"
 #include <thirdparty/pugixml/pugixml.hpp>
 #include <thirdparty/pugixml/pugiconfig.hpp>
 
 namespace Echo
 {
-	void Node::LuaScript::start(Object* obj)
+	void Node::LuaScript::start(Node* obj)
 	{
-		int  a = 10;
+		m_file = "Res://lua/move.lua";
+
+		m_isValid = Root::instance()->getConfig().m_isGame && IO::instance()->isResourceExists(m_file);
+		if (m_isValid)
+		{
+			m_globalTableName = StringUtil::Format("g_node_%d", obj->getIdentifier());
+			String luaStr = m_globalTableName + "= require \"move\"";
+			LuaBinder::instance()->execString(luaStr);
+		}
 	}
 
-	void Node::LuaScript::update()
+	void Node::LuaScript::update(Node* obj)
 	{
-		int a = 10;
+		if (!m_isStart)
+		{
+			start(obj);
+			m_isStart = true;
+		}
+
+		if (m_isValid)
+		{
+
+		}
 	}
 
 	Node::Node()
@@ -38,8 +57,6 @@ namespace Echo
 		// 以1开始计数
 		static int identifier=1;
 		m_identifier = identifier++;
-
-		m_script.start(this);
 	}
 
 	// 析构函数
@@ -395,7 +412,7 @@ namespace Echo
 		getWorldMatrix();
 
 		// script update
-		m_script.update();
+		m_script.update(this);
 
 		update();
 

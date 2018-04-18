@@ -202,14 +202,13 @@ namespace Echo
 	{
 		EE_LOCK_MUTEX(AUTO_MUTEX_NAME)
 
-		// Try indexes first
-		String lcResourceName = resourceName;
-		StringUtil::LowerCase(lcResourceName);
-		FileArchiveMapping::iterator rit = m_resourceIndexCaseSensitive.find(lcResourceName);
-		if (rit != m_resourceIndexCaseSensitive.end())
+		if (StringUtil::StartWith(resourceName, "Res://"))
 		{
-			// Found in the index
-			return true;
+			return m_resFileSystem->isExist(resourceName);
+		}
+		else if (StringUtil::StartWith(resourceName, "User://"))
+		{
+
 		}
 
 		return false;
