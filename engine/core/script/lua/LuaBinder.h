@@ -27,6 +27,9 @@ namespace Echo
 		// exec script
 		bool execString(const String& script, bool execute=true);
 
+		// exec fun
+
+
 	public:
 		// get global value
 		bool getGlobalVariableBoolean(const String& varName);

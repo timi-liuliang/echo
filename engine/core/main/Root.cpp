@@ -141,10 +141,9 @@ namespace Echo
 		// lua script
 		{
 			luaex::LuaEx* luaEx = luaex::LuaEx::instance();
+			LuaBinder::instance()->init(luaEx->get_state());
 			register_core_to_lua();
 			registerClassTypes();
-
-			LuaBinder::instance()->init(luaEx->get_state());
 		}
 		
 		// ÒôÆµ¹ÜÀíÆ÷

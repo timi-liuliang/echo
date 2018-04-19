@@ -66,6 +66,7 @@ namespace Echo
 		void setLocalScalingXYZ(Real x, Real y, Real z);
 		void setLocalOrientation(const Quaternion& ort);
 		void setLocalPosition(const Vector3& pos);
+		void setLocalPositionX(float pos);
 		void setLocalPositionXYZ(Real posX, Real posY, Real posZ);
 		void setLocalYawPitchRoll(const Vector3& yawPitchRoll);
 

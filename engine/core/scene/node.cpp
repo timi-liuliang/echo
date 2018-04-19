@@ -15,8 +15,13 @@ namespace Echo
 		m_isValid = Root::instance()->getConfig().m_isGame && IO::instance()->isResourceExists(m_file);
 		if (m_isValid)
 		{
-			m_globalTableName = StringUtil::Format("g_node_%d", obj->getIdentifier());
-			String luaStr = m_globalTableName + "= require \"move\"";
+			m_globalTableName = StringUtil::Format("g_node_%d", obj->getIdentifier());;
+			luaex::LuaEx::instance()->register_object("Node", m_globalTableName.c_str(), obj);
+
+			String luaStr = StringUtil::Format(
+				"local script_table = require \"move\""\
+				"utils.append_table(%s, script_table)", m_globalTableName.c_str());
+
 			LuaBinder::instance()->execString(luaStr);
 		}
 	}
@@ -31,7 +36,7 @@ namespace Echo
 
 		if (m_isValid)
 		{
-
+			luaex::LuaEx::instance()->callf((m_globalTableName+":update").c_str());
 		}
 	}
 
@@ -166,6 +171,12 @@ namespace Echo
 	void Node::setLocalPosition(const Vector3& pos)
 	{
 		m_posLocal = pos;
+		needUpdate();
+	}
+
+	void Node::setLocalPositionX(float pos)
+	{
+		m_posLocal.x = pos;
 		needUpdate();
 	}
 
@@ -437,6 +448,17 @@ namespace Echo
 	// bind methods
 	void Node::bindMethods()
 	{
+		luaex::LuaEx* luaEx = luaex::LuaEx::instance();
+		if (!luaEx)
+			return;
+
+		luaEx->register_class("Node");
+		luaEx->register_function<Node, float>("Node", "setPosX", &Node::setLocalPositionX);
+		//luaEx->register_function<LogManager, const char*>("LogManager", "warning", &LogManager::warning);
+		//luaEx->register_function<LogManager, const char*>("LogManager", "info", &LogManager::info);
+
+		//luaEx->register_object("LogManager", "log", LogManager::instance());
+
 		CLASS_BIND_METHOD(Node, getLocalPosition,	  DEF_METHOD("getPos"));
 		CLASS_BIND_METHOD(Node, getWorldPosition,	  DEF_METHOD("getWorldPos"));
 		CLASS_BIND_METHOD(Node, getLocalYawPitchRoll, DEF_METHOD("getYawPitchRoll"));
