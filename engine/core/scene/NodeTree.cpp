@@ -62,5 +62,8 @@ namespace Echo
 	void NodeTree::update(float elapsedTime)
 	{
 		m_invisibleRoot.update(elapsedTime, true);
+
+		// update scripts
+		luaex::LuaEx::instance()->callf("_update_all_nodes");
 	}
 }

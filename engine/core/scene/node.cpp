@@ -15,11 +15,11 @@ namespace Echo
 		m_isValid = Root::instance()->getConfig().m_isGame && IO::instance()->isResourceExists(m_file);
 		if (m_isValid)
 		{
-			m_globalTableName = StringUtil::Format("g_node_%d", obj->getIdentifier());;
+			m_globalTableName = StringUtil::Format("_Nodes._%d", obj->getIdentifier());;
 			luaex::LuaEx::instance()->register_object("Node", m_globalTableName.c_str(), obj);
 
 			String luaStr = StringUtil::Format(
-				"local script_table = require \"move\""\
+				"local script_table = require \"move\"\n"\
 				"utils.append_table(%s, script_table)", m_globalTableName.c_str());
 
 			LuaBinder::instance()->execString(luaStr);
@@ -32,11 +32,6 @@ namespace Echo
 		{
 			start(obj);
 			m_isStart = true;
-		}
-
-		if (m_isValid)
-		{
-			luaex::LuaEx::instance()->callf((m_globalTableName+":update").c_str());
 		}
 	}
 

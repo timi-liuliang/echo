@@ -19,7 +19,17 @@ namespace Echo
 			"    for k, v in pairs(b) do\n"\
 			"        a[k] = v\n"\
 			"    end\n"\
-			"end\n";
+			"end\n"\
+			"\n"\
+			"_Nodes = {}\n"\
+			"\n"\
+			"function _update_all_nodes()\n"\
+			"    for k, v in pairs(_Nodes) do\n"\
+			"        v:update()\n"\
+			"    end\n"\
+			"end\n"\
+			"\n"\
+			"";
 			LuaBinder::instance()->execString(utils.c_str(), true);
 		}
 

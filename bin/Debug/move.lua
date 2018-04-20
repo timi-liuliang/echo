@@ -14,7 +14,6 @@ function Move:update()
 
 	self.posX = self.posX + 1
 	self:setPosX(self.posX)
-	log:info("update live2dcubism ...")
 end
 
 return Move

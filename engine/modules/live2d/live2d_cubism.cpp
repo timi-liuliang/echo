@@ -309,8 +309,7 @@ namespace Echo
 
 			setParameter("ParamEyeLSmile", xx);
 
-			//luaex::LuaEx::instance()->callf("update");
-			m_matWVP = /*getWorldMatrix() */ NodeTree::instance()->get2DCamera()->getViewProjMatrix();;
+			m_matWVP = getWorldMatrix() * NodeTree::instance()->get2DCamera()->getViewProjMatrix();;
 
 			csmUpdateModel((csmModel*)m_model);
 
