@@ -127,10 +127,6 @@ namespace Echo
 			qssFile.close();
 		}
 
-		//ÃüÁîÐÐ±à¼­Æ÷
-		g_astudio = new Studio::AStudio(" ");
-		g_astudio->setAppPath(QDir::currentPath().toStdString().c_str());
-
 		// start window
 		Game::Window window;
 		window.show();

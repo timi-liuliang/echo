@@ -4,7 +4,6 @@
 #include <QWheelEvent>
 #include <QMouseEvent>
 #include <engine/core/Math/EchoMathFunction.h>
-#include "UICamera.h"
 
 namespace Studio
 {
@@ -39,7 +38,6 @@ namespace Studio
  		, m_xOffset(0.f)
  		, m_yOffset(0.f)
 		, m_bNeedUpdateCamera(true)
-		, m_guiCamera(NULL)
 		, m_orthoTopCamRot(-Echo::Vector3::UNIT_Y)
 		, m_orthoFrontCamRot(-Echo::Vector3::UNIT_Z)
 		, m_orthoLeftCamRot(Echo::Vector3::UNIT_X)
@@ -58,9 +56,6 @@ namespace Studio
 
 		// 初始化摄像机参数
 		InitializeCameraSettings();
-
-		// 初始化UI摄像机
-		InitUICamera(Echo::Renderer::instance()->getScreenWidth(), Echo::Renderer::instance()->getScreenHeight());
 
 		m_orthoTopCamRot.z -= 0.01f;
 		m_orthoTopCamRot.normalize();
@@ -356,7 +351,6 @@ namespace Studio
 	//
 	void DefaultInputController::onSizeCamera(unsigned int width, unsigned int height)
 	{
-		InitUICamera(width, height);
 	}
 
 	//
@@ -374,34 +368,6 @@ namespace Studio
 	void DefaultInputController::InitializeCameraSettings(float diroffset)
 	{
 		m_cameraRadius = diroffset;
-	}
-
-	// 初始化UI摄像机
-	void DefaultInputController::InitUICamera(Echo::ui32 screenWidth, Echo::ui32 screenHeight)
-	{
-		Echo::ui32 w = screenWidth;
-		Echo::ui32 h = screenHeight;
-		MappingUILogicWH(screenWidth, screenHeight, w, h);
-
-		const float midx = w * 0.5f;
-		const float midy = h * 0.5f;
-		const float viewDistance = 1000.f;
-
-		Echo::Vector3 vEye(midx, midy, -viewDistance*0.5f);
-		Echo::Vector3 vLookAt(midx, midy, 0.0f);
-		Echo::Vector3 vUp(0, -1.0f, 0);
-
-		m_guiCamera = m_guiCamera ? m_guiCamera : new Echo::Camera(Echo::Camera::PM_ORTHO, false);
-		m_guiCamera->setPosition(vEye);
-		m_guiCamera->setDirection(vLookAt - vEye);
-		m_guiCamera->setUp(vUp);
-		m_guiCamera->setNearClip(0.f);
-		m_guiCamera->setFarClip(viewDistance);
-		m_guiCamera->setWidth(w);
-		m_guiCamera->setHeight(h);
-		m_guiCamera->update();
-
-		Echo::NodeTree::instance()->setGUICamera(m_guiCamera);
 	}
 
 	// 摄像机更新

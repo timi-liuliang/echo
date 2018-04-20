@@ -34,6 +34,7 @@ namespace Studio
 		QObject::connect(m_actionSave, SIGNAL(triggered(bool)), this, SLOT(onSaveProject()));
 		QObject::connect(m_actionPlayGame, SIGNAL(triggered(bool)), this, SLOT(onPlayGame()));
 		QObject::connect(m_actionStopGame, SIGNAL(triggered(bool)), &m_gameProcess, SLOT(terminate()));
+		QObject::connect(m_actionExitEditor, SIGNAL(triggered(bool)), this, SLOT(close()));
 	}
 
 	// 析构函数
@@ -91,6 +92,11 @@ namespace Studio
 		m_gameProcess.waitForFinished();
 
 		m_gameProcess.start(cmd.c_str());
+
+		QObject::connect(&m_gameProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(onGameProcessFinished(int, QProcess::ExitStatus)));
+		QObject::connect(&m_gameProcess, SIGNAL(readyRead()), this, SLOT(onReadMsgFromGame()));
+
+		EchoLogWarning("**start game debug [%s]**", cmd.c_str());
 	}
 
 	// 打开文件
@@ -105,5 +111,35 @@ namespace Studio
 	void MainWindow::closeEvent(QCloseEvent *event)
 	{
 		AStudio::Instance()->getLogPanel()->close();
+	}
+
+	// game process exit
+	void MainWindow::onGameProcessFinished(int id, QProcess::ExitStatus status)
+	{
+		EchoLogWarning("stop game debug");
+	}
+
+	// receive msg from game
+	void MainWindow::onReadMsgFromGame()
+	{
+		Echo::String msg = m_gameProcess.readAllStandardOutput().toStdString().c_str();
+		if (!msg.empty())
+		{
+			Echo::StringArray msgArray = Echo::StringUtil::Split(msg, "@:");
+			
+			int i = 0;
+			int argc = msgArray.size();
+			while (i < argc)
+			{
+				Echo::String command = msgArray[i++];
+				if (command == "-log")
+				{
+					int    logLevel     = Echo::StringUtil::ParseInt(msgArray[i++]);
+					Echo::String logMsg = msgArray[i++];
+
+					Echo::LogManager::instance()->logMessage(Echo::Log::LogLevel(logLevel), logMsg.c_str());
+				}
+			}
+		}
 	}
 }

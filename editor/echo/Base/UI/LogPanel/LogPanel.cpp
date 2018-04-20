@@ -6,6 +6,7 @@ namespace Studio
 	// 构造函数
 	LogPanel::LogPanel(QWidget* parent/* = 0*/)
 		: QDockWidget( parent)
+		, Log("LogPanel")
 		, m_sameMessageNum(0)
 		, m_lastLevel(LL_INVALID)
 	{
@@ -18,14 +19,6 @@ namespace Studio
 	// 析构函数
 	LogPanel::~LogPanel()
 	{
-	}
-
-	// 获取目标名称
-	const Echo::String& LogPanel::getName() const 
-	{ 
-		static Echo::String logPanel = "LogPanel";
-
-		return logPanel; 
 	}
 
 	// 日志输出

@@ -34,6 +34,12 @@ namespace Studio
 		// game mode
 		void onPlayGame();
 
+		// receive msg from game
+		void onReadMsgFromGame();
+
+		// game process exit
+		void onGameProcessFinished(int id, QProcess::ExitStatus status);
+
 	protected:
 		ResPanel*		m_resPanel;
 		NodeTreePanel*	m_scenePanel;

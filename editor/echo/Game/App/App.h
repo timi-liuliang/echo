@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Engine/core/main/Root.h>
+#include "Log.h"
 
 namespace Game
 {
@@ -18,5 +19,9 @@ namespace Game
 
 		// onSize
 		void onSize(Echo::ui32 width, Echo::ui32 height);
+
+	private:
+		Echo::Root*		m_root;
+		GameLog*		m_log;
 	};
 }

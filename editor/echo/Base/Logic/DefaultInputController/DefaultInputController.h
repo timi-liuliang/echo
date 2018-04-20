@@ -130,10 +130,6 @@ namespace Studio
 		// 初始化摄像机参数
 		void InitializeCameraSettings(float offsetdir = 5);
 
-		// 初始化UI摄像机
-		void InitUICamera(Echo::ui32 screenWidth, Echo::ui32 screenHeight);
-
-
 		// 摄像机更新
 		void UpdateCamera(float elapsedTime);
 
@@ -198,7 +194,6 @@ namespace Studio
 		float				m_yOffset;			// Y方向偏移
 
 		bool				m_bNeedUpdateCamera;// 是否需要更新相机位置
-		Echo::Camera*		m_guiCamera;		// CEGUI所使用摄像机
 
 		Echo::Vector3		m_backCameraPos;
 		Echo::Vector3		m_backCameraRot;

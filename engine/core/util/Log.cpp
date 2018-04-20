@@ -15,13 +15,8 @@
 
 namespace Echo
 {
-	LogDefault::LogDefault()
-	{
-	}
-
 	LogDefault::LogDefault(const String& name)
-		: m_logName(name)
-		, m_loglevel(LL_INVALID)
+		: Log(name)
 		, m_bConsoleOutput(true)
 		, m_bVSOutput(true)
 		, m_bFileOutput(false)
@@ -59,9 +54,8 @@ namespace Echo
 	}
 
 	LogDefault::LogDefault(const LogConfig& config)
-		: m_logName(config.logName)
+		: Log(config.logName)
 		, m_logFilename(config.logFilename)
-		, m_loglevel(config.logLevel)
 		, m_bConsoleOutput(config.bConsoleOutput)
 		, m_bVSOutput(config.bVSOutput)
 		, m_bFileOutput(config.bFileOutput)
@@ -142,11 +136,6 @@ namespace Echo
 		}
 	}
 
-	const String& LogDefault::getName() const
-	{
-		return m_logName;
-	}
-
 	const String& LogDefault::getFilename() const
 	{
 		return m_logFilename;
@@ -167,21 +156,6 @@ namespace Echo
 		m_bTimeStamp = bEnable;
 	}
 
-	void LogDefault::setLogName(const String &logName)
-	{
-		m_logName = logName;
-	}
-
-	void LogDefault::setLogLevel(LogLevel level)
-	{
-		m_loglevel = level;
-	}
-
-	LogDefault::LogLevel LogDefault::getLogLevel() const
-	{
-		return m_loglevel;
-	}
-
 	String LogDefault::getLogLevelDesc(LogLevel level) const
 	{
 		switch(level)
@@ -197,7 +171,7 @@ namespace Echo
 
 	bool LogDefault::isIgnore(LogLevel level) const
 	{
-		return (level < m_loglevel);
+		return false;
 	}
 
 	void LogDefault::logMessage(LogLevel level, const String& msg)
@@ -267,7 +241,7 @@ namespace Echo
 		}
 		msgStr += "[" + logLevelDesc + "]: " + msg;
 
-		msgStr = "(" + m_logName + ") " + msgStr + "\n";
+		msgStr = "(" + getName() + ") " + msgStr + "\n";
 
 		// Write time to console
 		if(m_bConsoleOutput)

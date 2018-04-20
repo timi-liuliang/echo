@@ -26,20 +26,9 @@ namespace Studio
 		void OutMsg( int level,const char* msg, const char* icon);
 
 	public:
-		// 设置日志名称
-		virtual void setLogName(const Echo::String &logName) {}
-
-		// 获取目标名称
-		virtual const Echo::String& getName() const;
-
-		// 设置日志过滤级别
-		virtual void setLogLevel(LogLevel level) {}
-
 		// 日志输出
 		virtual void logMessage(LogLevel level, const Echo::String &msg);
 		 
-		// 获取日志级别
-		virtual LogLevel getLogLevel() const { return LL_WARNING;}
 
 		virtual void setPath(const Echo::String&) {}
 

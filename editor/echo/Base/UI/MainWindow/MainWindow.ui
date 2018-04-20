@@ -43,7 +43,7 @@
    </property>
    <widget class="QMenu" name="menuFile_F">
     <property name="title">
-     <string>File(&amp;F)</string>
+     <string>Project(&amp;P)</string>
     </property>
     <addaction name="m_actionProjectSettings"/>
     <addaction name="separator"/>
@@ -64,7 +64,13 @@
     <addaction name="m_actionPlayGame"/>
     <addaction name="m_actionStopGame"/>
    </widget>
+   <widget class="QMenu" name="menuScene_S">
+    <property name="title">
+     <string>Scene(&amp;S)</string>
+    </property>
+   </widget>
    <addaction name="menuFile_F"/>
+   <addaction name="menuScene_S"/>
    <addaction name="menuGame"/>
    <addaction name="menuHelp_H"/>
   </widget>
@@ -124,7 +130,7 @@
   </action>
   <action name="m_actionProjectSettings">
    <property name="text">
-    <string>Project Settings</string>
+    <string>Settings</string>
    </property>
   </action>
  </widget>
