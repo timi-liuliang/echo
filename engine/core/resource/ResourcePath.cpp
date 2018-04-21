@@ -1,5 +1,6 @@
 #include "ResourcePath.h"
 #include "engine/core/util/PathUtil.h"
+#include "engine/core/util/LogManager.h"
 
 namespace Echo
 {
@@ -17,6 +18,8 @@ namespace Echo
 			m_path = path;
 			return true;
 		}
+
+		EchoLogError("set path [%s] failed, not support this ext [%s].",  path.c_str(), ext.c_str());
 
 		return false;
 	}

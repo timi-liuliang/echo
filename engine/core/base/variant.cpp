@@ -6,9 +6,8 @@ namespace Echo
 
 	Variant::Variant(const Echo::String& str)
 		: m_type(Type_String)
-		, m_str(nullptr)
 	{
-		copyStr(str.data(), str.size());
+		m_any = str;
 	}
 
 	Variant::Variant(const Echo::Vector3& value)
@@ -20,7 +19,7 @@ namespace Echo
 	Variant::Variant(const ResourcePath& value)
 		: m_type(Type_ResourcePath)
 	{
-
+		m_any = value;
 	}
 
 	Variant::~Variant()
@@ -34,7 +33,8 @@ namespace Echo
 
 		switch (orig.m_type)
 		{
-		case Type_String: copyStr(orig.m_str, strlen(orig.m_str)); break;
+		case Type_String:
+		case Type_ResourcePath:	 m_any = orig.m_any; break;
 		}
 	}
 
@@ -45,7 +45,8 @@ namespace Echo
 
 		switch (orig.m_type) 
 		{
-		case Type_String: copyStr(orig.m_str, strlen(orig.m_str)); break;
+		case Type_ResourcePath:
+		case Type_String: m_any = orig.m_any; break;
 		case Type_Vector3: m_vec3 = orig.m_vec3;				   break;
 		}
 
@@ -57,8 +58,9 @@ namespace Echo
 	{
 		switch (m_type)
 		{
-		case Type_String: return m_str;
+		case Type_String: return any_cast<String>(m_any);
 		case Type_Vector3: return StringUtil::ToString(m_vec3);
+		case Type_ResourcePath: return (any_cast<ResourcePath>(m_any)).getPath();
 		}
 
 		static Echo::String invalid;
@@ -74,18 +76,5 @@ namespace Echo
 		}
 
 		return false;
-	}
-
-	// copy string
-	void Variant::copyStr(const char* str, int size)
-	{
-		if (m_type == Type_String && m_str)
-		{
-			EchoSafeFree(m_str);
-		}
-
-		m_str = (char*)EchoMalloc(size + 1);
-		std::memcpy(m_str, str, size);
-		m_str[size] = '\0';
 	}
 }

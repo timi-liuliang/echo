@@ -4,6 +4,7 @@
 #include "engine/core/memory/MemAllocDef.h"
 #include "engine/core/math/Vector4.h"
 #include "engine/core/resource/ResourcePath.h"
+#include "engine/core/util/Any.hpp"
 
 namespace Echo
 {
@@ -36,7 +37,7 @@ namespace Echo
 		static const Variant INVALID;
 
 	public:
-		Variant():m_type(Type_Nil), m_str(nullptr){}
+		Variant():m_type(Type_Nil){}
 		Variant(const String& str);
 		Variant(const Vector3& value);
 		Variant(const ResourcePath& value);
@@ -56,6 +57,7 @@ namespace Echo
 		// convert to other type
 		const bool toVector3() { return m_bool; }
 		const Vector3& toVector3() const { return m_vec3; }
+		const ResourcePath& toResPath() const { return any_cast<ResourcePath>(m_any); }
 
 		// is nil
 		bool isNil() const { return m_type == Type_Nil; }
@@ -65,11 +67,8 @@ namespace Echo
 		bool fromString(Type type, const String& str);
 
 	private:
-		// copy string
-		void copyStr(const char* str, int size);
-
-	private:
 		Type			m_type;
+		any				m_any;
 
 		union 
 		{
@@ -77,8 +76,6 @@ namespace Echo
 			i64				m_int;
 			float			m_real;
 			Vector3			m_vec3;
-			char*			m_str;
-			void*			m_ptr;
 		};
 	};
 }

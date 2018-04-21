@@ -122,16 +122,22 @@ namespace Echo
     }
 
     template<typename ValueType>
-    ValueType any_cast(any& operand)
+    ValueType& any_cast(any& operand)
     {
-        //typedef typename remove_reference<ValueType>::type nonref;
-
         ValueType* result = any_cast<ValueType>(&operand);
         if(!result)
-		{
 			EchoLogError( "any_cast failed,so terrible!");
-		}
 
         return *result;
     }
+
+	template<typename ValueType>
+	const ValueType& any_cast(const any& operand)
+	{
+		const ValueType* result = any_cast<ValueType>(&operand);
+		if (!result)
+			EchoLogError("any_cast failed,so terrible!");
+
+		return *result;
+	}
 }

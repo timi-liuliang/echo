@@ -268,9 +268,10 @@ namespace Studio
 	{
 		switch (var.getType())
 		{
-		case Echo::Variant::Type_String: m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_None); break;
-		case Echo::Variant::Type_Vector3:m_propertyHelper.addItem(name.c_str(), var.toVector3(), QT_UI::WT_Vector3); break;
-		default:						 m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_None); break;
+		case Echo::Variant::Type_String:		m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_None); break;
+		case Echo::Variant::Type_Vector3:		m_propertyHelper.addItem(name.c_str(), var.toVector3(), QT_UI::WT_Vector3); break;
+		case Echo::Variant::Type_ResourcePath:	m_propertyHelper.addItem(name.c_str(), var.toResPath().getPath(), QT_UI::WT_AssetsSelect, var.toResPath().getSupportExts().c_str());break;
+		default:								m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_None); break;
 		}
 		
 	}

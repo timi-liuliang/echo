@@ -71,7 +71,8 @@ namespace Echo
 	}
 
 	Live2dCubism::Live2dCubism()
-		: m_textureRes("", ".png")
+		: m_mocRes("", ".moc3")
+		, m_textureRes("", ".png")
 		, m_mocMemory(nullptr)
 		, m_moc(nullptr)
 		, m_model(nullptr)
@@ -83,14 +84,6 @@ namespace Echo
 
 		setMoc(ResourcePath("Res://cartoon/cartoon.moc3"));
 		buildRenderable();
-
-		{
-			//test
-			//luaex::LuaEx::instance()->loadfile("Res://lua/live2dcubism_a.lua", true);
-
-			//luaex::LuaEx::instance()->callf("start");
-			//int  a = 10;
-		}
 	}
 
 	Live2dCubism::~Live2dCubism()
