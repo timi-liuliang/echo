@@ -10,6 +10,8 @@
 #include "DebuggerPanel.h"
 #include "EchoEngine.h"
 #include "PlayGameToolBar.h"
+#include "QResSelect.h"
+#include "ResChooseDialog.h"
 
 namespace Studio
 {
@@ -35,6 +37,9 @@ namespace Studio
 		QObject::connect(m_actionPlayGame, SIGNAL(triggered(bool)), this, SLOT(onPlayGame()));
 		QObject::connect(m_actionStopGame, SIGNAL(triggered(bool)), &m_gameProcess, SLOT(terminate()));
 		QObject::connect(m_actionExitEditor, SIGNAL(triggered(bool)), this, SLOT(close()));
+
+		// connect
+		QT_UI::QResSelect::setOpenFileDialogFunction(ResChooseDialog::getExistingFile);
 	}
 
 	// Îö¹¹º¯Êý

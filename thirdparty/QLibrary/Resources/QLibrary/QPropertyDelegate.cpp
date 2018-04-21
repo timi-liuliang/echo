@@ -5,7 +5,7 @@
 #include <QRadioButton>
 #include "QFileSelect.h"
 #include "QCameraProperty.h"
-#include "QAssetsSelect.h"
+#include "QResSelect.h"
 #include "QVector3Editor.h"
 #include "QColorSelect.h"
 #include "QCheckBoxList.h"
@@ -115,7 +115,7 @@ namespace QT_UI
 		}
 		else if( widgetType == "AssetsSelect")
 		{
-			QAssetsSelect* widget = new QAssetsSelect( parent);
+			QResSelect* widget = new QResSelect( parent);
 			if( widget && userDatas.size()>1)
 			{
 				widget->setExts( userDatas[1].c_str());
@@ -225,7 +225,7 @@ namespace QT_UI
 			}
 			else if( widgetType == "AssetsSelect")
 			{
-				QAssetsSelect* widget = qobject_cast<QAssetsSelect*>(editor);
+				QResSelect* widget = qobject_cast<QResSelect*>(editor);
 				widget->SetPath( value.toString());
 			}
 			else if( widgetType == "ColorSelect")
@@ -321,7 +321,7 @@ namespace QT_UI
 			}
 			else if( widgetType == "AssetsSelect")
 			{
-				QAssetsSelect* widget = qobject_cast<QAssetsSelect*>(editor);
+				QResSelect* widget = qobject_cast<QResSelect*>(editor);
 				m_model->setValue( propertyName, widget->GetPath());
 			}
 			else if( widgetType == "ColorSelect")

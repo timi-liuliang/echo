@@ -51,7 +51,7 @@ namespace Studio
 		}
 		else
 		{
-			m_sameMessageNum = 0;
+			m_sameMessageNum = 1;
 			QListWidgetItem* warningItem = new QListWidgetItem(QString::fromLocal8Bit(msg));
 			if (warningItem)
 			{

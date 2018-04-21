@@ -5,18 +5,22 @@
 #include <QToolButton>
 #include <QWidget>
 #include <functional>
+#include "engine/core/util/StringUtil.h"
 
 namespace QT_UI
 {
 	//-------------------------------------------
 	// AssetsSelect 文件选择控件 2013-1-22 帝林
 	//-------------------------------------------
-	class QAssetsSelect : public QWidget
+	class QResSelect : public QWidget
 	{
 		Q_OBJECT
+
 	public:
-		using OpenFileDialogFunction = std::function < QString(QWidget*, const char*, const char*, const char*) > ;
-		QAssetsSelect( QWidget* parent = 0);
+		using OpenFileDialogFunction = std::function < Echo::String(QWidget*, const char*, const char*, const char*) >;
+
+	public:
+		QResSelect( QWidget* parent = 0);
 
 		// 设置路径
 		void SetPath( QString text) { m_lineEdit->setText( text);  }
@@ -30,10 +34,9 @@ namespace QT_UI
 		// 获取路径
 		QString GetPath() { return m_lineEdit->text(); }
 
-	//	void setOpenFileDialogFunction(const OpenFileDialogFunction& func) { m_openFileFunction = func; }
+		// set open operation
+		static void setOpenFileDialogFunction(const OpenFileDialogFunction& func) { m_openFileFunction = func; }
 
-	public:
-		static OpenFileDialogFunction m_openFileFunction;
 	private slots:
 		// 选择路径
 		void OnSelectPath();
@@ -44,5 +47,6 @@ namespace QT_UI
 		QHBoxLayout*	m_horizonLayout;
 		QLineEdit*		m_lineEdit;
 		QToolButton*	m_toolButton;
+		static OpenFileDialogFunction m_openFileFunction;
 	};
 }

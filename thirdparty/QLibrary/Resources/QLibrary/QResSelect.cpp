@@ -1,12 +1,12 @@
-#include "QAssetsSelect.h"
+#include "QResSelect.h"
 #include <QFileDialog>
-//#include <Base/UI/AssetsChooseDialog/AssetsChooseDialog.h>
 
 namespace QT_UI
 {
-	QAssetsSelect::OpenFileDialogFunction QAssetsSelect::m_openFileFunction;
+	QResSelect::OpenFileDialogFunction QResSelect::m_openFileFunction;
+
 	// 构造函数
-	QAssetsSelect::QAssetsSelect( QWidget* parent)
+	QResSelect::QResSelect( QWidget* parent)
 		: QWidget( parent)
 	{
 		// 布局控件
@@ -35,13 +35,13 @@ namespace QT_UI
 	}
 
 	// 选择路径
-	void QAssetsSelect::OnSelectPath()
+	void QResSelect::OnSelectPath()
 	{
 		Q_ASSERT_X(m_openFileFunction, "", "");
-		QString qFileName = m_openFileFunction(this, m_exts.toStdString().c_str(), m_files.toStdString().c_str(), "");
-		if (!qFileName.isEmpty())
+		Echo::String qFileName = m_openFileFunction(this, m_exts.toStdString().c_str(), m_files.toStdString().c_str(), "");
+		if (!qFileName.empty())
 		{
-			m_lineEdit->setText(qFileName.toStdString().c_str());
+			m_lineEdit->setText(qFileName.c_str());
 		}
 	}
 }
