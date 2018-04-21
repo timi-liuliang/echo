@@ -17,6 +17,12 @@ namespace Echo
 		m_vec3 = value;
 	}
 
+	Variant::Variant(const ResourcePath& value)
+		: m_type(Type_ResourcePath)
+	{
+
+	}
+
 	Variant::~Variant()
 	{
 

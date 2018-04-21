@@ -76,13 +76,22 @@ namespace Echo
 		static void bindMethods();
 
 		// set moc
-		void setMoc(const String& res);
+		void setMoc(const ResourcePath& res);
 
 		// get moc
-		const String& getMoc() { return m_mocRes; }
+		const ResourcePath& getMoc() { return m_mocRes; }
+
+		// set texture res path
+		void setTextureRes(const ResourcePath& path);
 
 		// get texture res
-		const String& getTextureRes() { return m_textureRes; }
+		const ResourcePath& getTextureRes() { return m_textureRes; }
+
+		// set anim res path
+		void setAnimRes(const ResourcePath& path);
+
+		// get anim res path
+		const ResourcePath& getAnimRes() const { return m_animRes; }
 
 		// set parameter value
 		void setParameter(const String& name, float value);
@@ -116,8 +125,9 @@ namespace Echo
 		virtual void* getGlobalUniformValue(const String& name);
 
 	private:
-		String					m_mocRes;
-		String					m_textureRes;
+		ResourcePath			m_mocRes;
+		ResourcePath			m_textureRes;
+		ResourcePath			m_animRes;
 		MemoryReaderAlign*		m_mocMemory;
 		csmMoc*					m_moc;
 		ui32					m_modelSize;

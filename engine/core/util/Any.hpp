@@ -134,12 +134,4 @@ namespace Echo
 
         return *result;
     }
-// 
-//     template<typename ValueType>
-//     inline ValueType any_cast(const any & operand)
-//     {
-//        // typedef typename remove_reference<ValueType>::type nonref;
-// 
-//         return any_cast<const nonref &>(const_cast<any &>(operand));
-//     }
 }

@@ -71,7 +71,8 @@ namespace Echo
 	}
 
 	Live2dCubism::Live2dCubism()
-		: m_mocMemory(nullptr)
+		: m_textureRes("", ".png")
+		, m_mocMemory(nullptr)
 		, m_moc(nullptr)
 		, m_model(nullptr)
 		, m_modelSize(0)
@@ -80,7 +81,7 @@ namespace Echo
 		// set log fun
 		csmSetLogFunction(csmLogFunc);
 
-		setMoc("Res://cartoon/cartoon.moc3");
+		setMoc(ResourcePath("Res://cartoon/cartoon.moc3"));
 		buildRenderable();
 
 		{
@@ -101,10 +102,15 @@ namespace Echo
 	void Live2dCubism::bindMethods()
 	{
 		CLASS_BIND_METHOD(Live2dCubism, getMoc, DEF_METHOD("getMoc"));
+		CLASS_BIND_METHOD(Live2dCubism, setMoc, DEF_METHOD("setMoc"));
 		CLASS_BIND_METHOD(Live2dCubism, getTextureRes, DEF_METHOD("getTextureRes"));
+		CLASS_BIND_METHOD(Live2dCubism, setTextureRes, DEF_METHOD("setTextureRes"));
+		CLASS_BIND_METHOD(Live2dCubism, getAnimRes, DEF_METHOD("getAnimRes"));
+		CLASS_BIND_METHOD(Live2dCubism, setAnimRes, DEF_METHOD("setAnimRes"));
 
-		//CLASS_REGISTER_PROPERTY(Live2dCubism, "Moc", Variant::Type_String, "getMoc", "setMoc");
-		//CLASS_REGISTER_PROPERTY(Live2dCubism, "Texture", Variant::Type_String, "getTextureRes", "setTextureRes");
+		CLASS_REGISTER_PROPERTY(Live2dCubism, "Moc", Variant::Type_ResourcePath, "getMoc", "setMoc");
+		CLASS_REGISTER_PROPERTY(Live2dCubism, "Texture", Variant::Type_ResourcePath, "getTextureRes", "setTextureRes");
+		CLASS_REGISTER_PROPERTY(Live2dCubism, "Anim", Variant::Type_ResourcePath, "getAnimRes", "setAnimRes");
 	}
 
 	// parse paramters
@@ -237,26 +243,39 @@ namespace Echo
 	}
 
 	// set moc
-	void Live2dCubism::setMoc(const String& res)
+	void Live2dCubism::setMoc(const ResourcePath& res)
 	{
-		m_mocRes = res;
-
-		m_mocMemory = EchoNew(MemoryReaderAlign( res, csmAlignofMoc));
-		if (m_mocMemory->getSize())
+		if (m_mocRes.setPath(res.getPath()))
 		{
-			m_moc = csmReviveMocInPlace(m_mocMemory->getData<void*>(), m_mocMemory->getSize());
-			if ( m_moc)
+			m_mocMemory = EchoNew(MemoryReaderAlign(m_mocRes.getPath(), csmAlignofMoc));
+			if (m_mocMemory->getSize())
 			{
-				m_modelSize = csmGetSizeofModel(m_moc);
-				m_modelMemory = EchoMallocAlign(m_modelSize, csmAlignofModel);
-				m_model = csmInitializeModelInPlace(m_moc, m_modelMemory, m_modelSize);
+				m_moc = csmReviveMocInPlace(m_mocMemory->getData<void*>(), m_mocMemory->getSize());
+				if (m_moc)
+				{
+					m_modelSize = csmGetSizeofModel(m_moc);
+					m_modelMemory = EchoMallocAlign(m_modelSize, csmAlignofModel);
+					m_model = csmInitializeModelInPlace(m_moc, m_modelMemory, m_modelSize);
 
-				parseCanvasInfo();
-				parseParams();
-				parseParts();
-				parseDrawables();
+					parseCanvasInfo();
+					parseParams();
+					parseParts();
+					parseDrawables();
+				}
 			}
 		}
+	}
+
+	// set texture res path
+	void Live2dCubism::setTextureRes(const ResourcePath& path)
+	{
+
+	}
+
+	// set anim res path
+	void Live2dCubism::setAnimRes(const ResourcePath& path)
+	{
+
 	}
 
 	// set parameter value
@@ -276,25 +295,26 @@ namespace Echo
 	// build drawable
 	void Live2dCubism::buildRenderable()
 	{
-		m_textureRes = "Res://cartoon/cartoon.png";
+		if (m_textureRes.setPath("Res://cartoon/cartoon.png"))
+		{
+			VertexArray	vertices;
+			IndiceArray	indices;
+			buildMeshDataByDrawables(vertices, indices);
 
-		VertexArray	vertices;
-		IndiceArray	indices;
-		buildMeshDataByDrawables(vertices, indices);
+			Mesh::VertexDefine define;
+			define.m_isUseDiffuseUV = true;
 
-		Mesh::VertexDefine define;
-		define.m_isUseDiffuseUV = true;
+			m_mesh = Mesh::create(true, true);
+			m_mesh->set(define, vertices.size(), (const Byte*)vertices.data(), indices.size(), indices.data(), m_localAABB);
 
-		m_mesh = Mesh::create(true, true);
-		m_mesh->set(define, vertices.size(), (const Byte*)vertices.data(), indices.size(), indices.data(), m_localAABB);
+			m_materialInst = MaterialInst::create();
+			m_materialInst->setOfficialMaterialContent(g_live2dDefaultMaterial);
+			m_materialInst->setRenderStage("Transparent");
+			m_materialInst->applyLoadedData();
+			m_materialInst->setTexture(0, m_textureRes.getPath());
 
-		m_materialInst = MaterialInst::create();
-		m_materialInst->setOfficialMaterialContent(g_live2dDefaultMaterial);
-		m_materialInst->setRenderStage("Transparent");
-		m_materialInst->applyLoadedData();
-		m_materialInst->setTexture(0, m_textureRes);
-
-		m_renderable = Renderable::create(m_mesh, m_materialInst, this);
+			m_renderable = Renderable::create(m_mesh, m_materialInst, this);
+		}
 	}
 
 	// update per frame

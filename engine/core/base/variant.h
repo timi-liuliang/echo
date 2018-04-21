@@ -3,6 +3,7 @@
 #include "TypeDef.h"
 #include "engine/core/memory/MemAllocDef.h"
 #include "engine/core/math/Vector4.h"
+#include "engine/core/resource/ResourcePath.h"
 
 namespace Echo
 {
@@ -16,6 +17,7 @@ namespace Echo
 			Type_Real,
 			Type_Vector3,
 			Type_String,
+			Type_ResourcePath,
 		};
 
 		struct CallError
@@ -37,6 +39,7 @@ namespace Echo
 		Variant():m_type(Type_Nil), m_str(nullptr){}
 		Variant(const String& str);
 		Variant(const Vector3& value);
+		Variant(const ResourcePath& value);
 		~Variant();
 
 		// operator "="
@@ -48,6 +51,7 @@ namespace Echo
 
 		// reimplent operator
 		operator const Vector3&() const { return m_vec3; }
+		operator const ResourcePath() const { return ResourcePath(); }
 
 		// convert to other type
 		const bool toVector3() { return m_bool; }
@@ -74,6 +78,7 @@ namespace Echo
 			float			m_real;
 			Vector3			m_vec3;
 			char*			m_str;
+			void*			m_ptr;
 		};
 	};
 }
