@@ -17,6 +17,8 @@ namespace Game
 		setUpdatesEnabled(false);
 		setMouseTracking(true);
 
+		resize(800, 450);
+
 		m_app = new App;
 	}
 
@@ -32,6 +34,8 @@ namespace Game
 	// ¿ªÊ¼äÖÈ¾
 	void Window::start(const Echo::String& echoProject)
 	{
+		setWindowTitle( echoProject.c_str());
+
 		m_app->init((HWND)winId(), echoProject);
 
 		//EchoEngine::Instance()->Initialize((HWND)this->winId());

@@ -1,6 +1,6 @@
 local Move = {
 	extends=Live2DCubism,
-	posX = 100,
+	posX = 0,
 }
 
 function Move:start()
@@ -8,12 +8,15 @@ function Move:start()
 end
 
 function Move:update()
-	if self.posX > 500 then
+	if self.posX < -250 then
 		self.posX = 0
 	end
 
-	self.posX = self.posX + 1
+	self.posX = self.posX - 0.3
 	self:setPosX(self.posX)
+	
+	print = nil
+	print(self.posX)
 end
 
 return Move
