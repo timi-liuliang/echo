@@ -2,6 +2,7 @@
 #include "engine/core/Util/LogManager.h"
 #include "engine/core/io/IO.h"
 #include "engine/core/main/Root.h"
+#include "engine/core/util/PathUtil.h"
 #include "engine/core/script/lua/LuaBinder.h"
 #include <thirdparty/pugixml/pugixml.hpp>
 #include <thirdparty/pugixml/pugiconfig.hpp>
@@ -10,17 +11,17 @@ namespace Echo
 {
 	void Node::LuaScript::start(Node* obj)
 	{
-		m_file = "Res://lua/move.lua";
-
-		m_isValid = Root::instance()->getConfig().m_isGame && IO::instance()->isResourceExists(m_file);
+		m_isValid = Root::instance()->getConfig().m_isGame && IO::instance()->isResourceExists(m_file.getPath());
 		if (m_isValid)
 		{
 			m_globalTableName = StringUtil::Format("_Nodes._%d", obj->getIdentifier());;
 			luaex::LuaEx::instance()->register_object("Node", m_globalTableName.c_str(), obj);
 
+			String fileName = PathUtil::GetPureFilename(m_file.getPath(), false);
+
 			String luaStr = StringUtil::Format(
-				"local script_table = require \"move\"\n"\
-				"utils.append_table(%s, script_table)", m_globalTableName.c_str());
+				"local script_table = require \"%s\"\n"\
+				"utils.append_table(%s, script_table)", fileName.c_str(),m_globalTableName.c_str());
 
 			LuaBinder::instance()->execString(luaStr);
 		}
@@ -375,6 +376,11 @@ namespace Echo
 		ortLocal = ortWorldInv * ortWorld;
 	}
 
+	void Node::setScript(const ResourcePath& path)
+	{
+		m_script.m_file.setPath(path.getPath());
+	}
+
 	void Node::needUpdate()
 	{
 		if (m_bModify)
@@ -449,10 +455,6 @@ namespace Echo
 
 		luaEx->register_class("Node");
 		luaEx->register_function<Node, float>("Node", "setPosX", &Node::setLocalPositionX);
-		//luaEx->register_function<LogManager, const char*>("LogManager", "warning", &LogManager::warning);
-		//luaEx->register_function<LogManager, const char*>("LogManager", "info", &LogManager::info);
-
-		//luaEx->register_object("LogManager", "log", LogManager::instance());
 
 		CLASS_BIND_METHOD(Node, getLocalPosition,	  DEF_METHOD("getPos"));
 		CLASS_BIND_METHOD(Node, getWorldPosition,	  DEF_METHOD("getWorldPos"));
@@ -461,10 +463,13 @@ namespace Echo
 		CLASS_BIND_METHOD(Node, setLocalPosition,	  DEF_METHOD("setPos"));
 		CLASS_BIND_METHOD(Node, setLocalScaling,	  DEF_METHOD("setScale"));
 		CLASS_BIND_METHOD(Node, setLocalYawPitchRoll, DEF_METHOD("setYawPitchRoll"));
+		CLASS_BIND_METHOD(Node, setScript,			  DEF_METHOD("setScript"));
+		CLASS_BIND_METHOD(Node, getScript,			  DEF_METHOD("getScript"));
 
 		CLASS_REGISTER_PROPERTY(Node, "Position", Variant::Type_Vector3, "getPos", "setPos");
 		CLASS_REGISTER_PROPERTY(Node, "Rotation", Variant::Type_Vector3, "getYawPitchRoll", "setYawPitchRoll");
 		CLASS_REGISTER_PROPERTY(Node, "Scale",    Variant::Type_Vector3, "getScale", "setScale");
+		CLASS_REGISTER_PROPERTY(Node, "Script", Variant::Type_ResourcePath, "getScript", "setScript");
 	}
 
 	// save

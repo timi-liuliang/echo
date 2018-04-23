@@ -18,12 +18,12 @@ namespace Echo
 		// lua script
 		struct LuaScript
 		{
-			bool		m_isStart;
-			bool		m_isValid;
-			String		m_file;					// file name
-			String		m_globalTableName;		// global table name
+			bool			m_isStart;
+			bool			m_isValid;
+			ResourcePath	m_file;					// file name
+			String			m_globalTableName;		// global table name
 
-			LuaScript() : m_isStart(false), m_isValid(false){}
+			LuaScript() : m_isStart(false), m_isValid(false), m_file("", ".lua"){}
 			void start(Node* obj);
 			void update(Node* obj);
 			bool isValid()const { return m_isValid; }
@@ -90,6 +90,10 @@ namespace Echo
 
 		void convertWorldToLocalPosition(Vector3& posLocal, const Vector3& posWorld);
 		void convertWorldToLocalOrientation(Quaternion& ortLocal, const Quaternion& ortWorld);
+
+		// script
+		const ResourcePath& getScript() { return m_script.m_file; }
+		void setScript(const ResourcePath& path);
 
 	public:
 		Node* getNode(const String& path) { return nullptr; }
