@@ -73,6 +73,7 @@ namespace Echo
 	Live2dCubism::Live2dCubism()
 		: m_mocRes("", ".moc3")
 		, m_textureRes("", ".png")
+		, m_animRes("", ".json")
 		, m_mocMemory(nullptr)
 		, m_moc(nullptr)
 		, m_model(nullptr)

@@ -3,6 +3,7 @@
 #include <QListView>
 #include <QStandardItemModel>
 #include <QSortFilterProxyModel>
+#include <engine/core/util/StringUtil.h>
 
 namespace QT_UI
 {
@@ -14,7 +15,7 @@ namespace QT_UI
 		QPreviewHelper(QListView* view);
 
 		// add item
-		void setPath(const char* filePath);
+		void setPath(const char* filePath, const char* exts);
 
 		// clear all items
 		void clear();
@@ -42,6 +43,9 @@ namespace QT_UI
 		// set use list Mode
 		void setUseListMode();
 
+		// is support this ext
+		bool isSupportExt(const Echo::String& file);
+
 	private slots:
 		// double clicked resource
 		void onDoubleClicked(const QModelIndex& pIndex);
@@ -50,5 +54,6 @@ namespace QT_UI
 		QListView*				m_listView;
 		QStandardItemModel*		m_listModel;
 		QSortFilterProxyModel*	m_listProxyModel;
+		Echo::StringArray		m_supportExts;
 	};
 }

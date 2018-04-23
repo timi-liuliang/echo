@@ -36,7 +36,7 @@ namespace QT_UI
 	void QDirectoryModel::updateRootPath(const char* rootPath)
 	{
 		m_rootPath = rootPath;
-		Echo::PathUtil::FormatPathAbsolut(m_rootPath, true);
+		Echo::PathUtil::FormatPathAbsolut(m_rootPath, false);
 	}
 
 	// 是否支持文件类型
@@ -148,7 +148,7 @@ namespace QT_UI
 				return;
 			if (Echo::PathUtil::IsDir(fileDirs[i]))
 			{
-				Echo::PathUtil::FormatPathAbsolut(fileDirs[i], true);
+				Echo::PathUtil::FormatPathAbsolut(fileDirs[i], false);
 				Echo::String dirName = Echo::PathUtil::GetLastDirName(fileDirs[i]);
 				QStandardItem* childItem = new QStandardItem;
 				childItem->setText(dirName.c_str());
@@ -165,7 +165,7 @@ namespace QT_UI
 				Echo::String fileExt = Echo::PathUtil::GetFileExt(fileDirs[i], true);
 				if (IsSupportExt(fileExt))
 				{
-					Echo::PathUtil::FormatPathAbsolut(fileDirs[i], true);
+					Echo::PathUtil::FormatPathAbsolut(fileDirs[i], false);
 					Echo::String pureFileName = Echo::PathUtil::GetPureFilename(fileDirs[i]);
 					QStandardItem* childItem = new QStandardItem;
 					childItem->setText(pureFileName.c_str());

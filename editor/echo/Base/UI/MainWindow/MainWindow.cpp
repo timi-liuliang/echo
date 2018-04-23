@@ -6,6 +6,7 @@
 #include <QFileDialog>
 #include <QDesktopservices>
 #include <QShortcut>
+#include <QMdiArea>
 #include "TimelinePanel.h"
 #include "DebuggerPanel.h"
 #include "EchoEngine.h"
@@ -55,9 +56,12 @@ namespace Studio
 		m_timelinePanel = EchoNew(TimelinePanel(this));
 		m_debuggerPanel = EchoNew(DebuggerPanel(this));
 
+		//QMdiArea* midArea = new QMdiArea(this);
+
 		QWidget* renderWindow = AStudio::Instance()->getRenderWindow();
 
 		setCentralWidget(renderWindow);
+		//midArea->addSubWindow(renderWindow);
 		//m_playGameToolBar = EchoNew(PlayGameToolBar(centralWidget()));
 		//centralWidget()->layout()->addWidget(m_playGameToolBar);
 		//centralWidget()->layout()->addWidget(renderWindow);

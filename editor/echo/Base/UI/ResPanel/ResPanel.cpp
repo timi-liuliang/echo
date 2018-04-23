@@ -57,7 +57,7 @@ namespace Studio
 	void ResPanel::onSelectDir(const char* dir)
 	{
 		m_previewHelper->clear();
-		m_previewHelper->setPath(dir);
+		m_previewHelper->setPath(dir, nullptr);
 	}
 
 	// double click res

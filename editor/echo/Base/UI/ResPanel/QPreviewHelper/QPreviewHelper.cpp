@@ -21,11 +21,16 @@ namespace QT_UI
 	}
 
 	// add item
-	void QPreviewHelper::setPath(const char* filePath)
+	void QPreviewHelper::setPath(const char* filePath, const char* exts)
 	{
 		// get all files
 		Echo::StringArray files;
 		Echo::PathUtil::EnumFilesInDir(files, filePath, true, false, true);
+
+		if (exts)
+			m_supportExts = Echo::StringUtil::Split(exts, "|");
+		else
+			m_supportExts.clear();
 
 		// sort by name
 		std::sort( files.begin(), files.end());
@@ -40,7 +45,7 @@ namespace QT_UI
 		// add files
 		for (const Echo::String& file : files)
 		{
-			if (!Echo::PathUtil::IsDir(file))
+			if (!Echo::PathUtil::IsDir(file) && isSupportExt(file))
 				addItem(file.c_str());
 		}
 	}
@@ -117,6 +122,22 @@ namespace QT_UI
 		m_listView->setMovement(QListView::Free);
 		m_listView->setWordWrap(true);
 		m_listView->setSpacing(0);
+	}
+
+	// is support this ext
+	bool QPreviewHelper::isSupportExt(const Echo::String& file)
+	{
+		if (m_supportExts.empty())
+			return true;
+
+		Echo::String ext = Echo::PathUtil::GetFileExt(file, true);
+		for (Echo::String& supportExt : m_supportExts)
+		{
+			if (supportExt == ext)
+				return true;
+		}
+
+		return false;
 	}
 
 	// when resize list view, modify spacing
