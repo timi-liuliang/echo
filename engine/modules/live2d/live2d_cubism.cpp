@@ -79,18 +79,17 @@ namespace Echo
 		, m_model(nullptr)
 		, m_modelSize(0)
 		, m_modelMemory(nullptr)
+		, m_mesh(nullptr)
+		, m_materialInst(nullptr)
+		, m_renderable(nullptr)
 	{
 		// set log fun
 		csmSetLogFunction(csmLogFunc);
-
-		setMoc(ResourcePath("Res://cartoon/cartoon.moc3"));
-		buildRenderable();
 	}
 
 	Live2dCubism::~Live2dCubism()
 	{
-		EchoSafeDelete(m_mocMemory, MemoryReaderAlign);
-		EchoSafeFreeAlign(m_mocMemory, csmAlignofModel);
+		clear();
 	}
 
 	void Live2dCubism::bindMethods()
@@ -241,6 +240,8 @@ namespace Echo
 	{
 		if (m_mocRes.setPath(res.getPath()))
 		{
+			clear();
+
 			m_mocMemory = EchoNew(MemoryReaderAlign(m_mocRes.getPath(), csmAlignofMoc));
 			if (m_mocMemory->getSize())
 			{
@@ -255,6 +256,8 @@ namespace Echo
 					parseParams();
 					parseParts();
 					parseDrawables();
+
+					buildRenderable();
 				}
 			}
 		}
@@ -263,7 +266,11 @@ namespace Echo
 	// set texture res path
 	void Live2dCubism::setTextureRes(const ResourcePath& path)
 	{
-
+		if (m_textureRes.setPath(path.getPath()))
+		{
+			clearRenderable();
+			buildRenderable();
+		}
 	}
 
 	// set anim res path
@@ -289,7 +296,7 @@ namespace Echo
 	// build drawable
 	void Live2dCubism::buildRenderable()
 	{
-		if (m_textureRes.setPath("Res://cartoon/cartoon.png"))
+		if (!m_textureRes.getPath().empty() && !m_drawables.empty())
 		{
 			VertexArray	vertices;
 			IndiceArray	indices;
@@ -305,6 +312,7 @@ namespace Echo
 			m_materialInst->setOfficialMaterialContent(g_live2dDefaultMaterial);
 			m_materialInst->setRenderStage("Transparent");
 			m_materialInst->applyLoadedData();
+
 			m_materialInst->setTexture(0, m_textureRes.getPath());
 
 			m_renderable = Renderable::create(m_mesh, m_materialInst, this);
@@ -370,5 +378,20 @@ namespace Echo
 			return (void*)(&m_matWVP);
 
 		return nullptr;
+	}
+
+	void Live2dCubism::clear()
+	{
+		EchoSafeDelete(m_mocMemory, MemoryReaderAlign);
+		EchoSafeFreeAlign(m_mocMemory, csmAlignofModel);
+
+		clearRenderable();
+	}
+
+	void Live2dCubism::clearRenderable()
+	{
+		EchoSafeRelease(m_renderable);
+		EchoSafeRelease(m_materialInst);
+		EchoSafeRelease(m_mesh);
 	}
 }

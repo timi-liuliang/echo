@@ -1,13 +1,16 @@
 #include "QResSelect.h"
 #include <QFileDialog>
+#include "QPropertyModel.h"
 
 namespace QT_UI
 {
 	QResSelect::OpenFileDialogFunction QResSelect::m_openFileFunction;
 
 	// 构造函数
-	QResSelect::QResSelect( QWidget* parent)
+	QResSelect::QResSelect(class QPropertyModel* model, QString propertyName, QWidget* parent)
 		: QWidget( parent)
+		, m_propertyModel(model)
+		, m_propertyName(propertyName)
 	{
 		// 布局控件
 		m_horizonLayout = new QHBoxLayout( this);
@@ -31,7 +34,8 @@ namespace QT_UI
 		setFocusProxy( m_toolButton);
 
 		// 消息
-		connect( m_toolButton, SIGNAL(clicked()), this, SLOT(OnSelectPath()));
+		QObject::connect( m_toolButton, SIGNAL(clicked()), this, SLOT(OnSelectPath()));
+		QObject::connect(m_lineEdit, SIGNAL(returnPressed()), this, SLOT(onEditFinished()));
 	}
 
 	// 选择路径
@@ -42,6 +46,13 @@ namespace QT_UI
 		if (!qFileName.empty())
 		{
 			m_lineEdit->setText(qFileName.c_str());
+			onEditFinished();
 		}
+	}
+
+	// edit finished
+	void QResSelect::onEditFinished()
+	{
+		m_propertyModel->setValue(m_propertyName, m_lineEdit->text().toStdString().c_str());
 	}
 }

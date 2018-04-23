@@ -72,7 +72,8 @@ namespace Echo
 	{
 		switch (type)
 		{
-		case Echo::Variant::Type_Vector3: m_type = Type_Vector3; m_vec3 = StringUtil::ParseVec3(str); return true;
+		case Echo::Variant::Type_Vector3: { m_type = Type_Vector3; m_vec3 = StringUtil::ParseVec3(str); }return true;
+		case Echo::Variant::Type_ResourcePath: { m_type = Type_ResourcePath; m_any = ResourcePath(str, nullptr); }return true;
 		}
 
 		return false;

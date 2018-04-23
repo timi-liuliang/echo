@@ -121,8 +121,12 @@ namespace Echo
 		// build mesh data by drawables data
 		void buildMeshDataByDrawables(VertexArray& oVertices, IndiceArray& oIndices);
 
-		// 获取全局变量值
+		// get global uniforms
 		virtual void* getGlobalUniformValue(const String& name);
+
+		// clear
+		void clear();
+		void clearRenderable();
 
 	private:
 		ResourcePath			m_mocRes;

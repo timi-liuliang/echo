@@ -36,11 +36,11 @@ namespace Echo
 		typedef map<String, uniform* >::type ParamMap;
 
 	public:
-		MaterialInst();
-		~MaterialInst();
-
 		// create a material instance
 		static MaterialInst* create();
+
+		// release
+		void release();
 
 		// 加载 --> 可以异步。
 		bool loadByFile(const String& name, const String& macros);
@@ -183,7 +183,10 @@ namespace Echo
 		// 构建渲染队列
 		void buildRenderQueue();
 
-	private:	
+	private:
+		MaterialInst();
+		~MaterialInst();
+
 		// 参数匹配
 		void matchUniforms();
 

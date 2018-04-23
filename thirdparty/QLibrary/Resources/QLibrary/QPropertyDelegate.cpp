@@ -115,7 +115,7 @@ namespace QT_UI
 		}
 		else if( widgetType == "AssetsSelect")
 		{
-			QResSelect* widget = new QResSelect( parent);
+			QResSelect* widget = new QResSelect(m_model, propertyName, parent);
 			if( widget && userDatas.size()>1)
 			{
 				widget->setExts( userDatas[1].c_str());

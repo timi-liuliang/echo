@@ -52,7 +52,7 @@ namespace Echo
 
 		// reimplent operator
 		operator const Vector3&() const { return m_vec3; }
-		operator const ResourcePath() const { return ResourcePath(); }
+		operator const ResourcePath&() const { return any_cast<ResourcePath>(m_any); }
 
 		// convert to other type
 		const bool toVector3() { return m_bool; }

@@ -7,7 +7,8 @@ namespace Echo
 	ResourcePath::ResourcePath(const String& path, const char* exts)
 	{
 		m_supportExts = exts ? exts : PathUtil::GetFileExt(path, true);
-		setPath(path);
+		if(!path.empty())
+			setPath(path);
 	}
 
 	bool ResourcePath::setPath(const String& path)

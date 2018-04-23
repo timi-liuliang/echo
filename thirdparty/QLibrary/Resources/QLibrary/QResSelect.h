@@ -20,7 +20,7 @@ namespace QT_UI
 		using OpenFileDialogFunction = std::function < Echo::String(QWidget*, const char*, const char*, const char*) >;
 
 	public:
-		QResSelect( QWidget* parent = 0);
+		QResSelect(class QPropertyModel* model, QString propertyName, QWidget* parent = 0);
 
 		// 设置路径
 		void SetPath( QString text) { m_lineEdit->setText( text);  }
@@ -41,6 +41,9 @@ namespace QT_UI
 		// 选择路径
 		void OnSelectPath();
 
+		// edit finished
+		void onEditFinished();
+
 	private:
 		QString			m_exts;
 		QString			m_files;
@@ -48,5 +51,7 @@ namespace QT_UI
 		QLineEdit*		m_lineEdit;
 		QToolButton*	m_toolButton;
 		static OpenFileDialogFunction m_openFileFunction;
+		QPropertyModel* m_propertyModel;
+		QString			m_propertyName;
 	};
 }

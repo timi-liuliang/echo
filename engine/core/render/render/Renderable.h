@@ -47,6 +47,9 @@ namespace Echo
 		// 构建数据
 		static Renderable* create(Mesh* mesh, MaterialInst* matInst, Node* node);
 
+		// release
+		void release();
+
 		// 设置渲染几何数据
 		void setRenderInput(GPUBuffer* vertexStream, const RenderInput::VertexElementList& vertElements,  GPUBuffer* indexStream, ui32 idxStride);
 

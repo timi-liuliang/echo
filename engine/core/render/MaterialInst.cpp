@@ -92,6 +92,12 @@ namespace Echo
 		return EchoNew(MaterialInst);
 	}
 
+	// release
+	void MaterialInst::release()
+	{
+		ECHO_DELETE_T(this, MaterialInst);
+	}
+
 	// ╪сть(дз╢Ф)
 	bool MaterialInst::loadByFile(const String& name, const String& macros)
 	{

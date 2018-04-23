@@ -32,6 +32,13 @@ namespace Echo
 		m_shaderParams.clear();
 	}
 
+	// release
+	void Renderable::release()
+	{
+		Renderable* ptr = this;
+		Renderer::instance()->destroyRenderables(&ptr, 1);
+	}
+
 	// ÐÂ½¨
 	Renderable* Renderable::create(Mesh* mesh, MaterialInst* matInst, Node* node)
 	{
@@ -57,13 +64,10 @@ namespace Echo
 				if (uniform.m_type == SPT_TEXTURE)
 				{
 					int index = *(int*)value;
-					TextureRes* textureRes = matInst->getTexture(index);//
-					if (textureRes)
-					{
-						Texture* texture = textureRes->getTexture();
-						const SamplerState* sampleState = material->getSamplerState(index);
-						renderable->setTexture(index, texture, sampleState);
-					}
+					TextureRes* textureRes = matInst->getTexture(index);
+					Texture* texture = textureRes ? textureRes->getTexture() : nullptr;
+					const SamplerState* sampleState = material->getSamplerState(index);
+					renderable->setTexture(index, texture, sampleState);
 				}
 			}
 		}
