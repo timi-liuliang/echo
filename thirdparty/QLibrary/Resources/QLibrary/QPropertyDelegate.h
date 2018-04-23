@@ -18,6 +18,9 @@ namespace QT_UI
 		// 构造函数
 		QPropertyDelegate(QPropertyModel* model, QObject *parent = 0);
 
+		// size
+		QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+
 		// 绘制函数
 		void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 

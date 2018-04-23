@@ -9,10 +9,12 @@ namespace QT_UI
 	QResSelect::OpenFileDialogFunction QResSelect::m_openFileFunction;
 
 	// 构造函数
-	QResSelect::QResSelect(class QPropertyModel* model, QString propertyName, QWidget* parent)
+	QResSelect::QResSelect(class QPropertyModel* model, QString propertyName, const char* exts, const char* files, QWidget* parent)
 		: QWidget( parent)
 		, m_propertyModel(model)
 		, m_propertyName(propertyName)
+		, m_exts(exts)
+		, m_files(files)
 	{
 		// 布局控件
 		m_horizonLayout = new QHBoxLayout( this);
@@ -38,17 +40,59 @@ namespace QT_UI
 		// 消息
 		QObject::connect( m_toolButton, SIGNAL(clicked()), this, SLOT(OnSelectPath()));
 		QObject::connect(m_lineEdit, SIGNAL(returnPressed()), this, SLOT(onEditFinished()));
+
+		if (isTextureRes())
+		{
+			m_lineEdit->setMinimumHeight(m_lineEdit->geometry().height()*1.6);
+			m_toolButton->setMinimumHeight(m_toolButton->geometry().height() * 1.6);
+		}
 	}
 
 	// 选择路径
 	void QResSelect::OnSelectPath()
 	{
 		Q_ASSERT_X(m_openFileFunction, "", "");
-		Echo::String qFileName = m_openFileFunction(this, m_exts.toStdString().c_str(), m_files.toStdString().c_str(), "");
+		Echo::String qFileName = m_openFileFunction(this, m_exts.c_str(), m_files.toStdString().c_str(), "");
 		if (!qFileName.empty())
 		{
 			m_lineEdit->setText(qFileName.c_str());
 			onEditFinished();
+		}
+	}
+
+	// is texture res
+	bool QResSelect::isTextureRes()
+	{
+		Echo::StringArray exts = Echo::StringUtil::Split(m_exts, "|");
+		for (Echo::String ext : exts)
+		{
+			if (ext == ".png")
+				return true;
+		}
+
+		return false;
+	}
+
+	// redefine paintEvent
+	void QResSelect::paintEvent(QPaintEvent* event)
+	{
+		// get label background color
+		//QColor background = m_toolButton->palette().color(QPalette::Window);
+
+		// add background color for this widget.(Transparent is inappropriate here)
+		//QPainter painter(this);
+		//painter.setBrush(background);
+		//painter.drawRect(rect());
+		//painter.setPen(background);
+		//painter.drawRect(rect());
+
+		if (isTextureRes())
+		{
+
+		}
+		else
+		{
+			QWidget::paintEvent(event);
 		}
 	}
 

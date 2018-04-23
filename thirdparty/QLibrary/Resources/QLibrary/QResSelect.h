@@ -21,16 +21,10 @@ namespace QT_UI
 		using OpenFileDialogFunction = std::function < Echo::String(QWidget*, const char*, const char*, const char*) >;
 
 	public:
-		QResSelect(class QPropertyModel* model, QString propertyName, QWidget* parent = 0);
+		QResSelect(class QPropertyModel* model, QString propertyName, const char* exts, const char* files, QWidget* parent = 0);
 
 		// 设置路径
 		void SetPath( QString text) { m_lineEdit->setText( text);  }
-
-		// 设置后缀过滤
-		void setExts( const char* exts) { m_exts = exts; }
-
-		// 设置文件过滤
-		void setFiles(const char* files) { m_files = files; }
 
 		// 获取路径
 		QString GetPath() { return m_lineEdit->text(); }
@@ -41,6 +35,13 @@ namespace QT_UI
 		// MVC渲染
 		static void ItemDelegatePaint(QPainter *painter, const QRect& rect, const Echo::String& val);
 
+	protected:
+		// redefine paintEvent
+		void paintEvent(QPaintEvent* event);
+
+		// is texture res
+		bool isTextureRes();
+
 	private slots:
 		// 选择路径
 		void OnSelectPath();
@@ -49,7 +50,7 @@ namespace QT_UI
 		void onEditFinished();
 
 	private:
-		QString			m_exts;
+		Echo::String	m_exts;
 		QString			m_files;
 		QHBoxLayout*	m_horizonLayout;
 		QLineEdit*		m_lineEdit;

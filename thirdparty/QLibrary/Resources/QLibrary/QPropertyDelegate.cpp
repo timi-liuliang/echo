@@ -65,6 +65,31 @@ namespace QT_UI
 		}
 	}
 
+	QSize QPropertyDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+	{
+		Echo::String widgetType;
+		QString propertyName = index.model()->data(index, Qt::DisplayPropertyRole).toString();
+		QVariant userData = index.model()->data(index, Qt::UserRole);
+		Echo::String  userDataStr = userData.toString().toStdString().c_str();
+		Echo::StringArray userDatas = Echo::StringUtil::Split(userDataStr, ",");
+		if (!userDatas.empty())
+			widgetType = userDatas[0];
+
+		QVariant value;
+		m_model->findValue(value, propertyName);
+
+		QSize size = QStyledItemDelegate::sizeHint( option, index);
+		if (widgetType == "AssetsSelect")
+		{
+			Echo::String path = value.toString().toStdString().c_str();
+			Echo::String ext = Echo::PathUtil::GetFileExt(path, true);
+			if (ext == ".png")
+				size.setHeight(2 * size.height());
+		}
+
+		return size;
+	}
+
 	// »æÖÆº¯Êı
 	void QPropertyDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 	{
@@ -132,14 +157,7 @@ namespace QT_UI
 		}
 		else if( widgetType == "AssetsSelect")
 		{
-			QResSelect* widget = new QResSelect(m_model, propertyName, parent);
-			if( widget && userDatas.size()>1)
-			{
-				widget->setExts( userDatas[1].c_str());
-
-				if (userDatas.size() > 2)
-					widget->setFiles(userDatas[2].c_str());
-			}
+			QResSelect* widget = new QResSelect(m_model, propertyName, userDatas.size() > 1 ? userDatas[1].c_str() : nullptr, userDatas.size() > 2 ? userDatas[2].c_str() : nullptr, parent);
 
 			return widget;
 		}
