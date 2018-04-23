@@ -1,6 +1,8 @@
 #include "QResSelect.h"
 #include <QFileDialog>
 #include "QPropertyModel.h"
+#include <engine/core/util/PathUtil.h>
+#include <engine/core/io/IO.h>
 
 namespace QT_UI
 {
@@ -54,5 +56,19 @@ namespace QT_UI
 	void QResSelect::onEditFinished()
 	{
 		m_propertyModel->setValue(m_propertyName, m_lineEdit->text().toStdString().c_str());
+	}
+
+	// MVCäÖÈ¾
+	void QResSelect::ItemDelegatePaint(QPainter *painter, const QRect& rect, const Echo::String& val)
+	{
+		Echo::String path = val;
+		Echo::String fullPath = Echo::IO::instance()->getFullPath(path);
+		Echo::String ext = Echo::PathUtil::GetFileExt(path, true);
+		if (ext == ".png")
+		{
+			QPixmap pixmap(fullPath.c_str());
+			QRect tRect = QRect(rect.left() + 3, rect.top() + 2, rect.height() - 4, rect.height() - 4);
+			painter->drawPixmap( tRect, pixmap);
+		}
 	}
 }

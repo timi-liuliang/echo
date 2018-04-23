@@ -13,6 +13,7 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QApplication>
+#include <engine/core/util/PathUtil.h>
 
 namespace QT_UI
 {
@@ -24,18 +25,25 @@ namespace QT_UI
 	}
 
 	// 是否拥有自定义渲染
-	bool QPropertyDelegate::IsSupportCustomPaint( const QString& widgetType) const
+	bool QPropertyDelegate::IsSupportCustomPaint( const Echo::String& widgetType, const QVariant& value) const
 	{
-		if( widgetType=="ColorSelect")
+		if (widgetType == "ColorSelect")
 			return true;
-		else if( widgetType=="CheckBox")
+		else if (widgetType == "CheckBox")
 			return true;
+		else if (widgetType == "AssetsSelect")
+		{
+			Echo::String path = value.toString().toStdString().c_str();
+			Echo::String ext = Echo::PathUtil::GetFileExt(path, true);
+			if( ext==".png")
+				return true;
+		}
 
 		return false;
 	}
 
 	// 自定义渲染
-	void QPropertyDelegate::ItemDelegatePaint( QPainter *painter, const QString& widgetType, const QRect& rect, const QVariant& val) const
+	void QPropertyDelegate::ItemDelegatePaint( QPainter *painter, const Echo::String& widgetType, const QRect& rect, const QVariant& val) const
 	{
 		if (widgetType == "ColorSelect")
 		{
@@ -50,17 +58,26 @@ namespace QT_UI
 
 			QApplication::style()->drawControl( QStyle::CE_CheckBox, &opt, painter);
 		}
+		else if (widgetType == "AssetsSelect")
+		{
+			Echo::String path = val.toString().toStdString().c_str();
+			QResSelect::ItemDelegatePaint(painter, rect, path);
+		}
 	}
 
 	// 绘制函数
 	void QPropertyDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 	{
+		Echo::String widgetType;
 		QString propertyName = index.model()->data( index, Qt::DisplayPropertyRole).toString();
 		QVariant userData = index.model()->data( index, Qt::UserRole);
-		QString  widgetType = userData.toString();
+		Echo::String  userDataStr = userData.toString().toStdString().c_str();
+		Echo::StringArray userDatas = Echo::StringUtil::Split(userDataStr, ",");
+		if(!userDatas.empty())
+			widgetType = userDatas[0];
 
 		QVariant value;
-		if (m_model->findValue(value, propertyName) && IsSupportCustomPaint(widgetType))
+		if (m_model->findValue(value, propertyName) && IsSupportCustomPaint(widgetType, value))
 		{
 			ItemDelegatePaint( painter, widgetType, option.rect, value);
 		}
@@ -390,5 +407,4 @@ namespace QT_UI
 			editor->setFocus();
 		}
 	}
-
 }

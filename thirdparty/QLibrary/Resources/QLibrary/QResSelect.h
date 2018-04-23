@@ -4,6 +4,7 @@
 #include <QLineEdit>
 #include <QToolButton>
 #include <QWidget>
+#include <QPainter>
 #include <functional>
 #include "engine/core/util/StringUtil.h"
 
@@ -36,6 +37,9 @@ namespace QT_UI
 
 		// set open operation
 		static void setOpenFileDialogFunction(const OpenFileDialogFunction& func) { m_openFileFunction = func; }
+
+		// MVC‰÷»æ
+		static void ItemDelegatePaint(QPainter *painter, const QRect& rect, const Echo::String& val);
 
 	private slots:
 		// —°‘Ò¬∑æ∂

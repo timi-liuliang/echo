@@ -4,6 +4,7 @@
 #include <QStyledItemDelegate>
 #include <QEvent>
 #include "QPropertyModel.h"
+#include <engine/core/util/StringUtil.h>
 
 namespace QT_UI
 {
@@ -37,10 +38,10 @@ namespace QT_UI
 
 	private:
 		// 是否拥有自定义渲染
-		bool IsSupportCustomPaint( const QString& widgetType) const;
+		bool IsSupportCustomPaint( const Echo::String& widgetType, const QVariant& value) const;
 
 		// 自定义渲染
-		void ItemDelegatePaint(  QPainter *painter, const QString& widgetType, const QRect& rect, const QVariant& val) const;
+		void ItemDelegatePaint(  QPainter *painter, const Echo::String& widgetType, const QRect& rect, const QVariant& val) const;
 	
 	private slots:
 		void commitEditor();
