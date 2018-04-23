@@ -1,7 +1,7 @@
 #include "LuaBinder.h"
 #include "engine/core/memory/MemAllocDef.h"
 #include "engine/core/util/LogManager.h"
-#include "engine/core/util/LogManager.h"
+#include "engine/core/util/PathUtil.h"
 
 namespace Echo
 {
@@ -24,6 +24,26 @@ namespace Echo
 	void LuaBinder::init(lua_State* state)
 	{
 		m_state = state;
+	}
+
+	// set search path
+	void LuaBinder::setSearchPath(const String& path)
+	{
+		setGlobalVariableStr("package.path", path);
+
+		execString("log:error(package.path)");
+	}
+
+	// add search path
+	void LuaBinder::addSearchPath(const String& path)
+	{
+		String formatPath = path;
+		PathUtil::FormatPath(formatPath, false);
+
+		String curPath = getGlobalVariableStr("package.path");
+		setGlobalVariableStr("package.path", StringUtil::Format("%s;%s?.lua", formatPath.c_str(), curPath.c_str()));
+
+		execString("log:error(package.path)");
 	}
 
 	// exec string
@@ -56,7 +76,7 @@ namespace Echo
 		if (lua_isnil(m_state, 1))	EchoLogError("Lua global variable [%s == nil]", varName.c_str());
 	#endif
 
-		bool result = static_cast<bool>(lua_toboolean(m_state, 1));
+		bool result = (bool)(lua_toboolean(m_state, 1));
 
 		// clear stack
 		lua_settop(m_state, 0);
@@ -84,6 +104,38 @@ namespace Echo
 		lua_settop(m_state, 0);
 
 		return result;
+	}
+
+	String LuaBinder::getGlobalVariableStr(const String& varName)
+	{
+		StringArray vars = StringUtil::Split(varName, ".");
+
+		lua_getglobal(m_state, vars[0].c_str());
+		for (size_t idx = 1; idx < vars.size(); idx++)
+			lua_getfield(m_state, -1, vars[idx].c_str());
+
+#ifdef ECHO_EDITOR_MODE
+		if (lua_isnil(m_state, vars.size())) EchoLogError("lua global variable [%s == nil]", varName.c_str());
+#endif
+
+		String result = lua_tostring(m_state, vars.size());
+
+		// clear stack
+		lua_settop(m_state, 0);
+
+		return result;
+	}
+
+	// set global value
+	void LuaBinder::setGlobalVariableStr(const String& varName, const String& value)
+	{
+		StringArray vars = StringUtil::Split(varName, ".");
+
+		lua_getglobal(m_state, vars[0].c_str());
+		for (size_t idx = 1; idx < vars.size(); idx++)
+			lua_getfield(m_state, -1, vars[idx].c_str());
+
+
 	}
 
 	void LuaBinder::outputError(int pop)

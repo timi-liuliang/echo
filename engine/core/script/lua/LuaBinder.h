@@ -23,6 +23,10 @@ namespace Echo
 		// set state
 		void init(lua_State* state);
 
+		// def search path
+		void setSearchPath(const String& path);
+		void addSearchPath(const String& path);
+
 	public:
 		// exec script
 		bool execString(const String& script, bool execute=true);
@@ -35,6 +39,10 @@ namespace Echo
 		bool getGlobalVariableBoolean(const String& varName);
 		float getGlobalVariableFloat(const String& varName);
 		double getGlobalVariableDouble(const String& varName);
+		String getGlobalVariableStr(const String& varName);
+
+		// set global value
+		void setGlobalVariableStr(const String& varName, const String& value);
 
 	public:
 		// output error and pop stack
