@@ -3,6 +3,8 @@
 #include <QHBoxLayout>
 #include <QMouseEvent>
 #include <QApplication>
+#include <engine/core/util/StringUtil.h>
+#include <engine/core/util/PathUtil.h>
 
 namespace QT_UI
 {
@@ -46,7 +48,22 @@ namespace QT_UI
 	void QMenuBarEx::setTopLeftCornerIcon(const char* icon)
 	{
 		QToolButton* menuTopLeftButton = new QToolButton(this);
-		menuTopLeftButton->setIcon(QIcon(icon));
+		if (Echo::StringUtil::StartWith( icon,":/"))
+		{
+			menuTopLeftButton->setIcon(QIcon(icon));
+		}
+		else
+		{
+			bool a = Echo::PathUtil::IsFileExist(icon);
+
+			QPixmap pixmap(icon);
+			bool isNull = pixmap.isNull();
+			int w = pixmap.width();
+			int h = pixmap.height();
+
+			menuTopLeftButton->setIcon(QIcon(pixmap));
+		}
+
 		menuTopLeftButton->setIconSize(QSize(22, 22));
 		menuTopLeftButton->setStyleSheet("background-color: #00535353;");
 		setCornerWidget(menuTopLeftButton, Qt::TopLeftCorner);

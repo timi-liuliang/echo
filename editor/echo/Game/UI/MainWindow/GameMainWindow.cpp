@@ -1,4 +1,5 @@
 #include "GameMainWindow.h"
+#include "engine/core/util/PathUtil.h"
 
 namespace Game
 {
@@ -29,7 +30,11 @@ namespace Game
 	// ¿ªÊ¼äÖÈ¾
 	void GameMainWindow::start(const Echo::String& echoProject)
 	{
+		Echo::String iconPath = Echo::PathUtil::GetFileDirPath(echoProject);
+
 		setWindowTitle(echoProject.c_str());
+		menubar->setTopLeftCornerIcon((iconPath + "icon.png").c_str());
+
 		m_renderWindow->start(echoProject);
 	}
 }
