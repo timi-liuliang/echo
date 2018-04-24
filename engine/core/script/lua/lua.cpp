@@ -6,6 +6,7 @@
 #include "scl/backtrace.h"
 
 #include "engine/core/io/DataStream.h"
+#include "engine/core/util/LogManager.h"
 
 #define LUAEX_CHECK_BEGIN const int __check_n = lua_gettop(L)
 #define LUAEX_CHECK_END assert(__check_n == lua_gettop(L)) 
@@ -559,8 +560,9 @@ void Lua::callf( const char* const function )
 	const int callResult = lua_pcall(L, narg, 0, 0);
 	if (callResult != 0)
 	{
-		const char* errorMessage = lua_tostring(L, -1);
-		log_error << errorMessage << scl::endl;
+		//const char* errorMessage = lua_tostring(L, -1);
+		//log_error << errorMessage << scl::endl;
+		EchoLogError(lua_tostring(L, -1));
 		lua_pop(L, 1 + table_count - 1);
 		_checkstack();
 		return;

@@ -35,7 +35,7 @@ namespace Echo
 		bool execString(const String& script, bool execute=true);
 
 		// exec fun
-
+		void execFunc(const String& funName);
 
 	public:
 		// get global value

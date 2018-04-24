@@ -13,7 +13,7 @@ namespace Game
 	/** »’÷æ ‰≥ˆ */
 	void GameLog::logMessage(LogLevel level, const Echo::String &msg)
 	{
-		Echo::String msgs = Echo::StringUtil::Format("@:-log@:%d@:%s", level, msg.c_str());
+		Echo::String msgs = Echo::StringUtil::Format("@@-log@@%d@@%s", level, msg.c_str());
 
 		// write to stderr
 		QFile fileout;

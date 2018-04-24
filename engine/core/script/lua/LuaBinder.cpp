@@ -110,6 +110,12 @@ namespace Echo
 		return false;
 	}
 
+	// exec fun
+	void LuaBinder::execFunc(const String& funName)
+	{
+
+	}
+
 	// get global value(boolean)
 	bool LuaBinder::getGlobalVariableBoolean(const String& varName)
 	{

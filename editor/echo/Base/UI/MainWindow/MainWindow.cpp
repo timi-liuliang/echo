@@ -134,7 +134,7 @@ namespace Studio
 		Echo::String msg = m_gameProcess.readAllStandardOutput().toStdString().c_str();
 		if (!msg.empty())
 		{
-			Echo::StringArray msgArray = Echo::StringUtil::Split(msg, "@:");
+			Echo::StringArray msgArray = Echo::StringUtil::Split(msg, "@@");
 			
 			int i = 0;
 			int argc = msgArray.size();
