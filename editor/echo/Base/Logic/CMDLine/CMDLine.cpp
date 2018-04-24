@@ -8,6 +8,7 @@
 #include "Studio.h"
 #include "EchoEngine.h"
 #include "Window.h"
+#include "GameMainWindow.h"
 
 namespace Echo
 {
@@ -128,9 +129,9 @@ namespace Echo
 		}
 
 		// start window
-		Game::Window window;
-		window.show();
-		window.start(projectFile);
+		Game::GameMainWindow mainWindow;
+		mainWindow.show();
+		mainWindow.start(projectFile);
 
 		app.exec();
 
