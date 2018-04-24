@@ -13,9 +13,12 @@
 #include "PlayGameToolBar.h"
 #include "QResSelect.h"
 #include "ResChooseDialog.h"
+#include "LuaEditor.h"
 
 namespace Studio
 {
+	static MainWindow* g_inst = nullptr;
+
 	// 构造函数
 	MainWindow::MainWindow(QMainWindow* parent/*=0*/)
 		: QMainWindow( parent)
@@ -41,11 +44,18 @@ namespace Studio
 
 		// connect
 		QT_UI::QResSelect::setOpenFileDialogFunction(ResChooseDialog::getExistingFile);
+
+		g_inst = this;
 	}
 
 	// 析构函数
 	MainWindow::~MainWindow()
 	{
+	}
+
+	MainWindow* MainWindow::instance()
+	{
+		return g_inst;
 	}
 
 	// 打开项目时调用
@@ -60,7 +70,8 @@ namespace Studio
 
 		QWidget* renderWindow = AStudio::Instance()->getRenderWindow();
 
-		setCentralWidget(renderWindow);
+		m_tabWidget->addTab(renderWindow, "NodeTree");
+
 		//midArea->addSubWindow(renderWindow);
 		//m_playGameToolBar = EchoNew(PlayGameToolBar(centralWidget()));
 		//centralWidget()->layout()->addWidget(m_playGameToolBar);
@@ -115,6 +126,20 @@ namespace Studio
 
 		// 初始化渲染窗口
 		AStudio::Instance()->getRenderWindow();
+	}
+
+	// open lua file for edit
+	void MainWindow::openLuaScript(const Echo::String& fileName)
+	{
+		Echo::String fullPath = Echo::IO::instance()->getFullPath(fileName);
+
+		LuaEditor* editor = new LuaEditor(this);
+		editor->open(fullPath);
+
+		m_tabWidget->addTab( editor, fileName.c_str());
+		m_tabWidget->setCurrentIndex(m_tabWidget->count() - 1);
+
+		QObject::connect(m_actionSave, SIGNAL(triggered(bool)), editor, SLOT(save()));
 	}
 
 	void MainWindow::closeEvent(QCloseEvent *event)

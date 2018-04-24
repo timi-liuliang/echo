@@ -4,6 +4,7 @@
 #include "ResPanel.h"
 #include "NodeTreePanel.h"
 #include "EchoEngine.h"
+#include "MainWindow.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/main/Root.h"
 
@@ -66,18 +67,26 @@ namespace Studio
 		Echo::String resPath;
 		if (Echo::IO::instance()->covertFullPathToResPath(res, resPath))
 		{
-			Echo::Node* node = Echo::Node::load(resPath);
-			if (node)
+			Echo::String ext = Echo::PathUtil::GetFileExt(resPath, true);
+			if (ext == ".scene")
 			{
-				Echo::Node* old = Studio::EchoEngine::Instance()->getCurrentEditNode();
-				if (old)
+				Echo::Node* node = Echo::Node::load(resPath);
+				if (node)
 				{
-					old->queueFree();
+					Echo::Node* old = Studio::EchoEngine::Instance()->getCurrentEditNode();
+					if (old)
+					{
+						old->queueFree();
+					}
+
+					Studio::EchoEngine::Instance()->setCurrentEditNode(node);
+
+					NodeTreePanel::instance()->refreshNodeTreeDisplay();
 				}
-
-				Studio::EchoEngine::Instance()->setCurrentEditNode(node);
-
-				NodeTreePanel::instance()->refreshNodeTreeDisplay();
+			}
+			else if (ext == ".lua")
+			{
+				MainWindow::instance()->openLuaScript(resPath);
 			}
 		}
 	}

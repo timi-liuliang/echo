@@ -43,6 +43,12 @@ QWidget
 	background-color: #FF535353;
 }
 
+QTextEdit
+{
+	border : 0px;
+	background : rgb(77, 77, 77);
+}
+
 QToolBar
 {
     background-color: #FF535353;
@@ -91,7 +97,7 @@ QTabBar::tab
 	background:rgb(66,66,66);
 	color : rgb(180,180,180);
 	font : bold;
-	padding: 8 8px;
+	padding: 7 7px;
 	min-width: 80px;
 	
 	/*order-left:1px solid rgb(66,66,66);*/

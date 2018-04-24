@@ -30,6 +30,13 @@
     <property name="bottomMargin">
      <number>0</number>
     </property>
+    <item>
+     <widget class="QTabWidget" name="m_tabWidget">
+      <property name="currentIndex">
+       <number>-1</number>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QT_UI::QMenuBarEx" name="menubar">

@@ -7,7 +7,7 @@
 
 namespace Studio
 {
-	class LuaEditor : public QMainWindow, public Ui_LuaEditor
+	class LuaEditor : public QWidget, public Ui_LuaEditor
 	{
 		Q_OBJECT
 
@@ -16,7 +16,7 @@ namespace Studio
 		~LuaEditor();
 
 		// 显示纹理
-		void open( const char* tex);
+		void open( const Echo::String& tex);
 
 	protected slots:
 		// 保存
@@ -31,6 +31,6 @@ namespace Studio
 	private:
 		Echo::String				m_fullPath;					// 全路径
 		QString						m_origContent;				// 文件中内容
-		//LuaSyntaxHighLighter*		m_luaSyntaxHighLighter;
+		LuaSyntaxHighLighter*		m_luaSyntaxHighLighter;
 	};
 }

@@ -8,7 +8,7 @@ namespace Studio
 {
 	// 构造函数
 	LuaEditor::LuaEditor(QWidget* parent)
-		: QMainWindow( parent)
+		: QWidget(parent)
 	{
 		setupUi( this);
 
@@ -30,10 +30,10 @@ namespace Studio
 		m_textEditor->setTabStopWidth(tabStop * metrics.width(' '));
 
 		// 语法高亮器
-		//m_luaSyntaxHighLighter = new LuaSyntaxHighLighter(m_textEditor->document());
+		m_luaSyntaxHighLighter = new LuaSyntaxHighLighter(m_textEditor->document());
 
 		// 消息链接
-		QObject::connect(m_actionSave, SIGNAL(triggered()), this, SLOT(save()));
+		//QObject::connect(m_actionSave, SIGNAL(triggered()), this, SLOT(save()));
 		QObject::connect(m_textEditor, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
 	}
 
@@ -43,12 +43,12 @@ namespace Studio
 	}
 
 	// 显示纹理
-	void LuaEditor::open(const char* fullPath)
+	void LuaEditor::open(const Echo::String& fullPath)
 	{
 		m_fullPath = "";
 
 		// 1.显示Lua
-		QFile file(fullPath);
+		QFile file(fullPath.c_str());
 		if (file.open(QFile::ReadOnly | QFile::Text))
 		{
 			m_fullPath = fullPath;
@@ -71,7 +71,7 @@ namespace Studio
 
 	// 保存
 	void LuaEditor::save()
-	{/*
+	{
 		if (!m_fullPath.empty())
 		{
 			QFile file(m_fullPath.c_str());
@@ -86,7 +86,7 @@ namespace Studio
 
 			// 0.更改标题
 			updateTitle();
-		}*/
+		}
 	}
 
 	// 更新标题显示

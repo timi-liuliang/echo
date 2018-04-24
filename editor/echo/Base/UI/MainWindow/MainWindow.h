@@ -2,6 +2,7 @@
 
 #include <QProcess>
 #include "ui_MainWindow.h"
+#include <engine/core/util/StringUtil.h>
 
 namespace Studio
 {
@@ -18,11 +19,17 @@ namespace Studio
 		MainWindow(QMainWindow* parent=0);
 		~MainWindow();
 
+		// instance
+		static MainWindow* instance();
+
 		// 打开项目时调用
 		void onOpenProject();
 
 		// 打开文件
 		void OpenProject(const char* projectName);
+
+		// open lua file for edit
+		void openLuaScript(const Echo::String& fileName);
 
 	protected:
 		void closeEvent(QCloseEvent *event);
