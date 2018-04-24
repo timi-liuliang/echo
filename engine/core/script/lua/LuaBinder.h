@@ -27,6 +27,9 @@ namespace Echo
 		void setSearchPath(const String& path);
 		void addSearchPath(const String& path);
 
+		// add lua loader
+		void addLoader(lua_CFunction func);
+
 	public:
 		// exec script
 		bool execString(const String& script, bool execute=true);
@@ -43,6 +46,7 @@ namespace Echo
 
 		// set global value
 		void setGlobalVariableStr(const String& varName, const String& value);
+		void setTableKeyValue(const String& tableName, int key, lua_CFunction value);
 
 	public:
 		// output error and pop stack

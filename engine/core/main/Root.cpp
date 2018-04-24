@@ -144,8 +144,6 @@ namespace Echo
 			LuaBinder::instance()->init(luaEx->get_state());
 			register_core_to_lua();
 			registerClassTypes();
-
-			LuaBinder::instance()->addSearchPath("Res://");
 		}
 		
 		// ÒôÆµ¹ÜÀíÆ÷

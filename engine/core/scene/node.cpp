@@ -18,10 +18,14 @@ namespace Echo
 			luaex::LuaEx::instance()->register_object("Node", m_globalTableName.c_str(), obj);
 
 			String fileName = PathUtil::GetPureFilename(m_file.getPath(), false);
-
+			String moduleName = StringUtil::Replace(m_file.getPath(), "Res://", "");
+			moduleName = StringUtil::Replace(moduleName, "/", ".");
+			moduleName = StringUtil::Replace(moduleName, "\\", ".");
+			moduleName = StringUtil::Replace(moduleName, ".lua", "");
+			
 			String luaStr = StringUtil::Format(
 				"local script_table = require \"%s\"\n"\
-				"utils.append_table(%s, script_table)", fileName.c_str(),m_globalTableName.c_str());
+				"utils.append_table(%s, script_table)", moduleName.c_str(),m_globalTableName.c_str());
 
 			LuaBinder::instance()->execString(luaStr);
 		}
