@@ -3,6 +3,11 @@
 #include "engine/core/io/DataStream.h"
 #include "engine/core/resource/ResourcePath.h"
 
+extern "C"
+{
+#include "CubismNativeComponents-3.0/Live2DCubismFramework.h"
+}
+
 namespace Echo
 {
 	class Live2dCubismMotion
@@ -19,6 +24,6 @@ namespace Echo
 		MemoryReader*		m_jsonMemory;
 		ui32				m_animationSize;
 		void*				m_animationMemory;
-		//csmAnimation*		m_animation;
+		csmAnimation*		m_animation;
 	};
 }

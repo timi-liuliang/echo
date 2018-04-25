@@ -4,11 +4,7 @@
 #include "engine/core/render/mesh/Mesh.h"
 #include "engine/core/render/MaterialInst.h"
 #include "engine/core/render/render/Renderable.h"
-
-extern "C"
-{
-#include <Live2DCubismCore.h>
-}
+#include "live2d_cubism_motion.h"
 
 namespace Echo
 {
@@ -68,6 +64,8 @@ namespace Echo
 			}
 		};
 
+		typedef map<String, Live2dCubismMotion*>::type MotionMap;
+
 	public:
 		Live2dCubism();
 		virtual ~Live2dCubism();
@@ -88,10 +86,10 @@ namespace Echo
 		const ResourcePath& getTextureRes() { return m_textureRes; }
 
 		// set anim res path
-		void setAnimRes(const ResourcePath& path);
+		void setMotionRes(const ResourcePath& path);
 
 		// get anim res path
-		const ResourcePath& getAnimRes() const { return m_animRes; }
+		const ResourcePath& getMotionRes() const { return m_curMotionRes; }
 
 		// set parameter value
 		void setParameter(const String& name, float value);
@@ -131,7 +129,8 @@ namespace Echo
 	private:
 		ResourcePath			m_mocRes;
 		ResourcePath			m_textureRes;
-		ResourcePath			m_animRes;
+		ResourcePath			m_curMotionRes;
+		Live2dCubismMotion*		m_curMotion;
 		MemoryReaderAlign*		m_mocMemory;
 		csmMoc*					m_moc;
 		ui32					m_modelSize;
@@ -141,6 +140,7 @@ namespace Echo
 		vector<Paramter>::type	m_params;
 		vector<Part>::type		m_parts;
 		vector<Drawable>::type	m_drawables;
+		MotionMap				m_motions;
 
 		Mesh*					m_mesh;			// Geometry Data for render
 		MaterialInst*			m_materialInst;	// Material Instance

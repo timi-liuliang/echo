@@ -27,7 +27,7 @@ namespace Echo
 			{
 				m_animationSize = csmGetDeserializedSizeofAnimation( m_jsonMemory->getData<char*>());
 				m_animationMemory = EchoMalloc(m_animationSize);
-				//m_animation = csmInitializeModelInPlace(m_moc, m_modelMemory, m_modelSize);
+				m_animation = csmDeserializeAnimationInPlace( m_jsonMemory->getData<char*>(), m_animationMemory, m_animationSize);
 			}
 		}
 	}

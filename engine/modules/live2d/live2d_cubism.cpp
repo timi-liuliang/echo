@@ -73,7 +73,8 @@ namespace Echo
 	Live2dCubism::Live2dCubism()
 		: m_mocRes("", ".moc3")
 		, m_textureRes("", ".png")
-		, m_animRes("", ".json")
+		, m_curMotionRes("", ".json")
+		, m_curMotion(nullptr)
 		, m_mocMemory(nullptr)
 		, m_moc(nullptr)
 		, m_model(nullptr)
@@ -98,12 +99,12 @@ namespace Echo
 		CLASS_BIND_METHOD(Live2dCubism, setMoc, DEF_METHOD("setMoc"));
 		CLASS_BIND_METHOD(Live2dCubism, getTextureRes, DEF_METHOD("getTextureRes"));
 		CLASS_BIND_METHOD(Live2dCubism, setTextureRes, DEF_METHOD("setTextureRes"));
-		CLASS_BIND_METHOD(Live2dCubism, getAnimRes, DEF_METHOD("getAnimRes"));
-		CLASS_BIND_METHOD(Live2dCubism, setAnimRes, DEF_METHOD("setAnimRes"));
+		CLASS_BIND_METHOD(Live2dCubism, getMotionRes, DEF_METHOD("getMotionRes"));
+		CLASS_BIND_METHOD(Live2dCubism, setMotionRes, DEF_METHOD("setMotionRes"));
 
 		CLASS_REGISTER_PROPERTY(Live2dCubism, "Moc", Variant::Type_ResourcePath, "getMoc", "setMoc");
 		CLASS_REGISTER_PROPERTY(Live2dCubism, "Texture", Variant::Type_ResourcePath, "getTextureRes", "setTextureRes");
-		CLASS_REGISTER_PROPERTY(Live2dCubism, "Anim", Variant::Type_ResourcePath, "getAnimRes", "setAnimRes");
+		CLASS_REGISTER_PROPERTY(Live2dCubism, "Motion", Variant::Type_ResourcePath, "getMotionRes", "setMotionRes");
 	}
 
 	// parse paramters
@@ -274,9 +275,21 @@ namespace Echo
 	}
 
 	// set anim res path
-	void Live2dCubism::setAnimRes(const ResourcePath& path)
+	void Live2dCubism::setMotionRes(const ResourcePath& path)
 	{
-		int a = 10;
+		if (m_curMotionRes.setPath(path.getPath()))
+		{
+			auto it = m_motions.find(path.getPath());
+			if (it == m_motions.end())
+			{
+				m_curMotion = EchoNew(Live2dCubismMotion(m_curMotionRes));
+				m_motions[path.getPath()] = m_curMotion;
+			}
+			else
+			{
+				m_curMotion = it->second;
+			}
+		}
 	}
 
 	// set parameter value
