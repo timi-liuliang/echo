@@ -78,6 +78,9 @@ namespace Echo
 		, m_mocMemory(nullptr)
 		, m_moc(nullptr)
 		, m_model(nullptr)
+		, m_tableSize(0)
+		, m_tableMemory(nullptr)
+		, m_table(nullptr)
 		, m_modelSize(0)
 		, m_modelMemory(nullptr)
 		, m_mesh(nullptr)
@@ -253,6 +256,10 @@ namespace Echo
 					m_modelMemory = EchoMallocAlign(m_modelSize, csmAlignofModel);
 					m_model = csmInitializeModelInPlace(m_moc, m_modelMemory, m_modelSize);
 
+					m_tableSize = csmGetSizeofModelHashTable(m_model);
+					m_tableMemory = EchoMalloc(m_tableSize);
+					m_table = csmInitializeModelHashTableInPlace(m_model, m_tableMemory, m_tableSize);
+
 					parseCanvasInfo();
 					parseParams();
 					parseParts();
@@ -283,11 +290,13 @@ namespace Echo
 			if (it == m_motions.end())
 			{
 				m_curMotion = EchoNew(Live2dCubismMotion(m_curMotionRes));
+				m_curMotion->play();
 				m_motions[path.getPath()] = m_curMotion;
 			}
 			else
 			{
 				m_curMotion = it->second;
+				m_curMotion->play();
 			}
 		}
 	}
@@ -337,14 +346,12 @@ namespace Echo
 	{
 		if (m_model)
 		{
-			static float xx = 0.0f;
-			xx += 0.01f;
-			if (xx >= 1.0f)
-				xx = 0.f;
-
-			setParameter("ParamEyeLSmile", xx);
-
 			m_matWVP = getWorldMatrix() * NodeTree::instance()->get2DCamera()->getViewProjMatrix();;
+
+			if (m_curMotion)
+			{
+				m_curMotion->tick( 0.01f, m_model, m_table);
+			}
 
 			csmUpdateModel((csmModel*)m_model);
 
@@ -397,6 +404,7 @@ namespace Echo
 	{
 		EchoSafeDelete(m_mocMemory, MemoryReaderAlign);
 		EchoSafeFreeAlign(m_mocMemory, csmAlignofModel);
+		EchoSafeFree(m_tableMemory);
 
 		clearRenderable();
 	}

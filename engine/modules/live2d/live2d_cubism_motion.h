@@ -19,11 +19,18 @@ namespace Echo
 		// set res
 		void setRes(const ResourcePath& path);
 
+		// play
+		void play();
+
+		// tick
+		void tick(float delta, csmModel* model, csmModelHashTable* table);
+
 	private:
 		ResourcePath		m_resPath;
-		MemoryReader*		m_jsonMemory;
 		ui32				m_animationSize;
 		void*				m_animationMemory;
 		csmAnimation*		m_animation;
+		csmAnimationState	m_animationState;
+		bool				m_isPlaying;
 	};
 }

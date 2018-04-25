@@ -136,6 +136,9 @@ namespace Echo
 		ui32					m_modelSize;
 		void*					m_modelMemory;
 		csmModel*				m_model;
+		ui32					m_tableSize;
+		void*					m_tableMemory;
+		csmModelHashTable*		m_table;
 		CanvasInfo				m_canvas;
 		vector<Paramter>::type	m_params;
 		vector<Part>::type		m_parts;
