@@ -26,6 +26,7 @@ SET(INCLUDE_FILES
 	${ECHO_DEP_PATH}/fbx_sdk/include
 	${ECHO_ROOT_PATH}/thirdparty/physx/PhysXSDK/Include
 	${ECHO_ROOT_PATH}/thirdparty/physx/APEXSDK/Include
+	${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/Core/include
 )
 
 IF(NO_THEORA_PLAYER)

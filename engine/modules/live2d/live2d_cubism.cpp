@@ -276,7 +276,7 @@ namespace Echo
 	// set anim res path
 	void Live2dCubism::setAnimRes(const ResourcePath& path)
 	{
-
+		int a = 10;
 	}
 
 	// set parameter value
