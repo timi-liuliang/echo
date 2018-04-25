@@ -1,10 +1,6 @@
 #include "live2d_module.h"
 #include "live2d_cubism.h"
-
-extern "C"
-{
-	#include "thirdparty\live2d\Cubism31SdkNative-EAP5\Core\include\Live2DCubismCore.h"
-}
+#include "live2d_cubism_motion_res.h"
 
 namespace Echo
 {

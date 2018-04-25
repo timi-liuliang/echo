@@ -2,11 +2,7 @@
 
 #include "engine/core/io/DataStream.h"
 #include "engine/core/resource/ResourcePath.h"
-
-extern "C"
-{
-#include "CubismNativeComponents-3.0/Live2DCubismFramework.h"
-}
+#include "live2d_cubism_motion_res.h"
 
 namespace Echo
 {
@@ -16,9 +12,6 @@ namespace Echo
 		Live2dCubismMotion(const ResourcePath& path);
 		~Live2dCubismMotion();
 
-		// set res
-		void setRes(const ResourcePath& path);
-
 		// play
 		void play();
 
@@ -26,11 +19,8 @@ namespace Echo
 		void tick(float delta, csmModel* model, csmModelHashTable* table);
 
 	private:
-		ResourcePath		m_resPath;
-		ui32				m_animationSize;
-		void*				m_animationMemory;
-		csmAnimation*		m_animation;
-		csmAnimationState	m_animationState;
-		bool				m_isPlaying;
+		csmAnimationState		m_animationState;
+		bool					m_isPlaying;
+		Live2dCubismMotionRes*	m_motionRes;
 	};
 }
