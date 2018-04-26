@@ -452,6 +452,7 @@ namespace Echo
 #define EchoSafeDelete(ptr, T)					{ if(ptr) { ECHO_DELETE_T(ptr, T); (ptr) = NULL; } }
 #define EchoSafeDeleteArray(ptr, T, count)		{ if(ptr) { ECHO_DELETE_ARRAY_T(ptr, T, count); (ptr) = NULL; } }
 #define EchoSafeDeleteContainer(container, T)	{ for (auto& element : container){ ECHO_DELETE_T(element, T); } container.clear();	}
+#define EchoSafeDeleteMap(container, T)			{ for (auto& element : container){ ECHO_DELETE_T(element.second, T); } container.clear();	}
 
 #define EchoMalloc(bytes)						ECHO_MALLOC(bytes)
 #define EchoMallocAlign(bytes, align)			ECHO_MALLOC_ALIGN(bytes, align)

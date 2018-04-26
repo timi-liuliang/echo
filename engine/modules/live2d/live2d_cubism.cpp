@@ -4,6 +4,7 @@
 #include "render/renderer.h"
 #include "render/Material.h"
 #include "engine/core/script/lua/luaex.h"
+#include "engine/core/main/Root.h"
 
 // Ä¬ÈÏ²ÄÖÊ
 static const char* g_live2dDefaultMaterial = "\
@@ -350,7 +351,7 @@ namespace Echo
 
 			if (m_curMotion)
 			{
-				m_curMotion->tick( 0.01f, m_model, m_table);
+				m_curMotion->tick( Root::instance()->getFrameTime(), m_model, m_table);
 			}
 
 			csmUpdateModel((csmModel*)m_model);
@@ -405,6 +406,7 @@ namespace Echo
 		EchoSafeDelete(m_mocMemory, MemoryReaderAlign);
 		EchoSafeFreeAlign(m_mocMemory, csmAlignofModel);
 		EchoSafeFree(m_tableMemory);
+		EchoSafeDeleteMap(m_motions, Live2dCubismMotion);
 
 		clearRenderable();
 	}

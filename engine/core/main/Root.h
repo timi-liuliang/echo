@@ -71,6 +71,8 @@ namespace Echo
 
 		void tick(i32 elapsedTime);
 
+		float getFrameTime() { return m_frameTime; }
+
 		// 是否已初始化
 		bool isInited() const { return m_isInited; }
 
