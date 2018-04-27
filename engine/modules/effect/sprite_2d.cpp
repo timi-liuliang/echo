@@ -1,4 +1,4 @@
-#include "sprite.h"
+#include "sprite_2d.h"
 #include "engine/core/util/LogManager.h"
 #include "engine/core/scene/NodeTree.h"
 #include "render/renderer.h"
@@ -71,7 +71,7 @@ namespace Echo
 		EchoLogError( message);
 	}
 
-	Sprite::Sprite()
+	Sprite2D::Sprite2D()
 		: m_textureRes("", ".png")
 		, m_mesh(nullptr)
 		, m_materialInst(nullptr)
@@ -79,21 +79,21 @@ namespace Echo
 	{
 	}
 
-	Sprite::~Sprite()
+	Sprite2D::~Sprite2D()
 	{
 		clear();
 	}
 
-	void Sprite::bindMethods()
+	void Sprite2D::bindMethods()
 	{
-		CLASS_BIND_METHOD(Sprite, getTextureRes, DEF_METHOD("getTextureRes"));
-		CLASS_BIND_METHOD(Sprite, setTextureRes, DEF_METHOD("setTextureRes"));
+		CLASS_BIND_METHOD(Sprite2D, getTextureRes, DEF_METHOD("getTextureRes"));
+		CLASS_BIND_METHOD(Sprite2D, setTextureRes, DEF_METHOD("setTextureRes"));
 
-		CLASS_REGISTER_PROPERTY(Sprite, "Texture", Variant::Type_ResourcePath, "getTextureRes", "setTextureRes");
+		CLASS_REGISTER_PROPERTY(Sprite2D, "Texture", Variant::Type_ResourcePath, "getTextureRes", "setTextureRes");
 	}
 
 	// set texture res path
-	void Sprite::setTextureRes(const ResourcePath& path)
+	void Sprite2D::setTextureRes(const ResourcePath& path)
 	{
 		if (m_textureRes.setPath(path.getPath()))
 		{
@@ -103,10 +103,19 @@ namespace Echo
 	}
 
 	// build drawable
-	void Sprite::buildRenderable()
+	void Sprite2D::buildRenderable()
 	{
 		if (!m_textureRes.getPath().empty())
 		{
+			// material
+			m_materialInst = MaterialInst::create();
+			m_materialInst->setOfficialMaterialContent(g_spriteDefaultMaterial);
+			m_materialInst->setRenderStage("Transparent");
+			m_materialInst->applyLoadedData();
+
+			m_materialInst->setTexture(0, m_textureRes.getPath());
+
+			// mesh
 			VertexArray	vertices;
 			IndiceArray	indices;
 			buildMeshData(vertices, indices);
@@ -117,19 +126,12 @@ namespace Echo
 			m_mesh = Mesh::create(true, true);
 			m_mesh->set(define, vertices.size(), (const Byte*)vertices.data(), indices.size(), indices.data(), m_localAABB);
 
-			m_materialInst = MaterialInst::create();
-			m_materialInst->setOfficialMaterialContent(g_spriteDefaultMaterial);
-			m_materialInst->setRenderStage("Transparent");
-			m_materialInst->applyLoadedData();
-
-			m_materialInst->setTexture(0, m_textureRes.getPath());
-
 			m_renderable = Renderable::create(m_mesh, m_materialInst, this);
 		}
 	}
 
 	// update per frame
-	void Sprite::update()
+	void Sprite2D::update()
 	{
 		if ( m_renderable)
 		{
@@ -139,10 +141,12 @@ namespace Echo
 	}
 
 	// build mesh data by drawables data
-	void Sprite::buildMeshData(VertexArray& oVertices, IndiceArray& oIndices)
+	void Sprite2D::buildMeshData(VertexArray& oVertices, IndiceArray& oIndices)
 	{
-		float hw = 255.5f;
-		float hh = 255.5f;
+		TextureRes*	texture = m_materialInst->getTexture(0);
+
+		float hw = texture? texture->getWidth() * 0.5f : 50.f;
+		float hh = texture ? texture->getHeight() * 0.5f : 50.f;
 
 		// vertices
 		oVertices.push_back(VertexFormat(Vector3(-hw, -hh, 0.f), Vector2(0.f, 1.f)));
@@ -160,7 +164,7 @@ namespace Echo
 	}
 
 	// update vertex buffer
-	void Sprite::updateMeshBuffer()
+	void Sprite2D::updateMeshBuffer()
 	{
 		VertexArray	vertices;
 		IndiceArray	indices;
@@ -171,7 +175,7 @@ namespace Echo
 	}
 
 	// 获取全局变量值
-	void* Sprite::getGlobalUniformValue(const String& name)
+	void* Sprite2D::getGlobalUniformValue(const String& name)
 	{
 		if (name == "matWVP")
 			return (void*)(&m_matWVP);
@@ -179,12 +183,12 @@ namespace Echo
 		return nullptr;
 	}
 
-	void Sprite::clear()
+	void Sprite2D::clear()
 	{
 		clearRenderable();
 	}
 
-	void Sprite::clearRenderable()
+	void Sprite2D::clearRenderable()
 	{
 		EchoSafeRelease(m_renderable);
 		EchoSafeRelease(m_materialInst);

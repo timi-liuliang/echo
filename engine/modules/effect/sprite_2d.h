@@ -7,9 +7,9 @@
 
 namespace Echo
 {
-	class Sprite : public Node
+	class Sprite2D : public Node
 	{
-		ECHO_CLASS(Sprite, Node)
+		ECHO_CLASS(Sprite2D, Node)
 
 		struct VertexFormat
 		{
@@ -24,8 +24,8 @@ namespace Echo
 		typedef vector<Word>::type	IndiceArray;
 
 	public:
-		Sprite();
-		virtual ~Sprite();
+		Sprite2D();
+		virtual ~Sprite2D();
 
 		// bind class methods to script
 		static void bindMethods();
