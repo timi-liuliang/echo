@@ -1,3 +1,9 @@
+#include "engine/modules/effect/effect_module.h"
 #include "engine/modules/live2d/live2d_module.h"
+#include "engine/modules/ui/ui_module.h"
 
-REGISTER_MODULE(Echo::Live2DModule)
+using namespace Echo;
+
+REGISTER_MODULE(Live2DModule)
+REGISTER_MODULE(UIModule)
+REGISTER_MODULE(EffectModule)

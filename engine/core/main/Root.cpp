@@ -11,12 +11,12 @@
 #include "Engine/modules/Anim/AnimManager.h"
 #include "Engine/modules/Anim/SkeletonManager.h"
 #include "Engine/core/Scene/NodeTree.h"
-#include "Engine/modules/Effect/EffectSystemManager.h"
 #include "engine/core/Util/Timer.h"
 #include "engine/core/render/render/Viewport.h"
 #include "Engine/core/Render/MaterialInst.h"
 #include "ProjectSettings.h"
 #include "Engine/modules/Audio/FMODStudio/FSAudioManager.h"
+#include "Engine/modules/anim/AnimSystem.h"
 #include "engine/core/render/render/RenderThread.h"
 #include "engine/core/render/render/Video.h"
 #include "EngineTimeController.h"
@@ -53,7 +53,6 @@ namespace Echo
 		, m_currentTime(0)
 		, m_io(NULL)
 		, m_Timer(NULL)
-		, m_EffectSystemManager(NULL)
 		, m_StreamThreading(NULL)
 		, m_enableBloom(false)
 		, m_enableFilterAdditional(false)
@@ -122,7 +121,6 @@ namespace Echo
 			m_skeletonManager	= EchoNew( SkeletonManager);
 			EchoNew( NodeTree);
 			m_io = EchoNew(IO);
-			m_EffectSystemManager = EchoNew(EffectSystemManager);
 			m_StreamThreading = EchoNew(StreamThread);
 		}
 		catch (const Exception &e)
@@ -293,9 +291,6 @@ namespace Echo
 		ui32 width = pViewport->getWidth();
 		ui32 height = pViewport->getHeight();
 
-		// 特效系统创建RenderableSet
-		m_EffectSystemManager->createRenderableSet();
-
 		m_bRendererInited = true;
 
 		return true;
@@ -341,13 +336,6 @@ namespace Echo
 		VideoPlay* videoPlay = VideoPlay::Instance();
 		EchoSafeDelete(videoPlay, VideoPlay);
 #endif
-		if (m_EffectSystemManager)
-		{
-			m_EffectSystemManager->destroyRenderableSet();
-			m_EffectSystemManager->destroyAllEffectSystemTemplates();
-			m_EffectSystemManager->destroyAllEffectSystems();
-			EchoSafeDelete(m_EffectSystemManager, EffectSystemManager);
-		}
 
 		// 场景管理器
 		NodeTree::instance()->destroy();
@@ -493,9 +481,6 @@ namespace Echo
 		// 执行动画更新
 		EchoOpenMPTaskMgr->execTasks(OpenMPTaskMgr::TT_AnimationUpdate);
 		EchoOpenMPTaskMgr->waitForAnimationUpdateComplete();
-
-		// 特效系统后续更新
-		EffectSystemManager::instance()->tick(elapsedTime);
 
 		// 外部模块更新, 目前只有 CatUI
 		for (const ExternalMgr& mgr : m_cfg.m_externalMgrs)

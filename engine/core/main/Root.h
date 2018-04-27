@@ -155,7 +155,6 @@ namespace Echo
 		AnimManager* getAnimManager() { EchoAssert(m_animManager);  return m_animManager; }
 		AnimSystemManager* getAnimSysManager() { EchoAssert(m_animSysManager);  return m_animSysManager; }
 		ModelManager* getModelManager() { EchoAssert(m_modelManager);  return m_modelManager; }
-		EffectSystemManager* getEffectSystemManager() { EchoAssert(m_EffectSystemManager);  return m_EffectSystemManager; }
 		IO* getResourceGroupManager() { EchoAssert(m_io); return m_io; }
 		TextureResManager* getTextureResManager() { EchoAssert(m_textureResManager);  return m_textureResManager; }
 		OpenMPTaskMgr* getOpenMPTaskMgr() { EchoAssert(m_openMPTaskMgr);  return m_openMPTaskMgr; }
@@ -190,7 +189,6 @@ namespace Echo
 		ImageCodecMgr*		m_imageCodecManager;			// 纹理编码管理器
 		ModelManager*		m_modelManager;					// 模型管理器
 		Time*				m_Timer;
-		EffectSystemManager*m_EffectSystemManager;			// 特效系统管理器
 		Renderer*			m_renderer;						// 渲染器
 		FSAudioManager*		m_audioManager;					// 音频管理器
 		StreamThread*		m_StreamThreading;				// 流加载线程

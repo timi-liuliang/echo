@@ -60,49 +60,6 @@ namespace Echo
 	class IO;
 	class Resource;
 	class Archive;
-	class EffectController;
-	class EffectTranslation;
-	class EffectRotationSelf;
-	class EffectRotationAxis;
-	class EffectRotationRevolution;
-	class EffectOffcenter;
-	class EffectColorChange;
-	class EffectScaleChange;
-	class EffectScaleNoise;
-	class EffectColorNoise;
-	class EffectColorSet;
-	class EffectScaleSet;
-	class EffectKeyFrame;
-	class EffectLayer;
-	class EffectLayer2DBillBoard;
-	class EffectLayer3DBillBoard;
-	class EffectLayerColumn;
-	class EffectLayerTrail;
-	class EffectLayer3DGrid;
-	class EffectLayer2DGrid;
-	class EffectLayerLighting;
-	class EffectLayerParaboloidal;
-	class EffectLayerParticles;
-	class EffectLayerParticlesPoint;
-	class EffectLayerParticlesCube;
-	class EffectLayerParticlesSphere;
-	class EffectLayerParticlesCylinder;
-	class EffectLayerParticlesCurve;
-	class EffectLayerModel;
-	class EffectLayerSkin;
-	class EffectMaterial;
-	class EffectParticle;
-	class EffectParticleControllerSet;
-	class EffectRenderable;
-	class EffectSystem;
-	class EffectSystemManager;
-	class ISkillAttack;
-	class SkillAttackManager;
-	class SkillAnimSystem;
-	class SkillSystem;
-	class ActorTemplateDataManager;
-	class ActorObject;
-	class ActorManager;
 	class TextureSet;
 	class LightmapMgr;
 	class LightmapRasterizer;
@@ -121,7 +78,6 @@ namespace Echo
 
 #include "engine/core/Util/StringUtil.h"
 #include "engine/core/Util/AssertX.h"
-#include "engine/core/Util/any.hpp"
 #include "engine/core/Util/TimeProfiler.h"
 #include "engine/core/Util/Exception.h"
 #include "engine/core/Util/Log.h"
@@ -140,15 +96,7 @@ namespace Echo
 #include "engine/core/render/render/Color.h"
 #include "engine/core/render/render/PixelFormat.h"
 #include "engine/core/render/render/PixelConversions.h"
-#include "Engine/modules/Effect/EffectHeader.h"
 #include "Engine/core/camera/Camera.h"
 #include "Engine/core/camera/CameraShadow.h"
 #include "Engine/core/Render/TextureRes.h"
 #include "Engine/core/Render/TextureResManager.h"
-#include "Engine/modules/Model/Model.h"
-#include "Engine/modules/Anim/AnimManager.h"
-#include "Engine/modules/Anim/SkeletonManager.h"
-#include "Engine/modules/Anim/Animation.h"
-#include "Engine/modules/Anim/Skeleton.h"
-#include "Engine/modules/Anim/Animation.h"
-#include "engine/modules/Anim/AnimSystem.h"

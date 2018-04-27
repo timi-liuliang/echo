@@ -1,7 +1,6 @@
 #include "EngineSettings.h"
 #include "engine/core/util/PathUtil.h"
 #include <engine/core/render/render/RenderThread.h>
-#include <Engine/modules/Effect/EffectSystemManager.h>
 #include "Root.h"
 #include <thirdparty/pugixml/pugixml.hpp>
 #include "EngineTimeController.h"

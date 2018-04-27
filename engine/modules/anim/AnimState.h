@@ -1,6 +1,8 @@
 #ifndef __ECHO_ANIMSTATE_H__
 #define __ECHO_ANIMSTATE_H__
 
+#include "Animation.h"
+
 namespace Echo
 {
 	class Animation;

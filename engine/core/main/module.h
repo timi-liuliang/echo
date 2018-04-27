@@ -27,4 +27,4 @@ namespace Echo
 	};
 }
 
-#define REGISTER_MODULE(T) static Echo::ModuleRegister<T> G_MODULE_##T_REGISTER;
+#define REGISTER_MODULE(T) static Echo::ModuleRegister<T> G_MODULE_##T##_REGISTER;

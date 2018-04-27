@@ -7,7 +7,7 @@ namespace Echo
 	// log function for cubism
 	static void log_cb(const char* message)
 	{
-
+		EchoLogInfo(message);
 	}
 
 	Live2DModule::Live2DModule()

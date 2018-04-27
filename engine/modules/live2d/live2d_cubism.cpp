@@ -66,11 +66,6 @@ void main(void)\n\
 
 namespace Echo
 {
-	static void csmLogFunc(const char* message)
-	{
-		EchoLogError( message);
-	}
-
 	Live2dCubism::Live2dCubism()
 		: m_mocRes("", ".moc3")
 		, m_textureRes("", ".png")
@@ -88,8 +83,6 @@ namespace Echo
 		, m_materialInst(nullptr)
 		, m_renderable(nullptr)
 	{
-		// set log fun
-		csmSetLogFunction(csmLogFunc);
 	}
 
 	Live2dCubism::~Live2dCubism()
