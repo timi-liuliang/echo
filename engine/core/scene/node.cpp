@@ -382,7 +382,8 @@ namespace Echo
 
 	void Node::setScript(const ResourcePath& path)
 	{
-		m_script.m_file.setPath(path.getPath());
+		if(!path.getPath().empty())
+			m_script.m_file.setPath(path.getPath());
 	}
 
 	void Node::needUpdate()

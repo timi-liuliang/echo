@@ -85,7 +85,7 @@ namespace QT_UI
 	QIcon QPreviewHelper::getFileIcon(const char* fullPath)
 	{
 		Echo::String fileExt = Echo::PathUtil::GetFileExt(fullPath, true);
-		if (fileExt == ".png")
+		if (Echo::StringUtil::Equal(fileExt, ".png", false))
 		{
 			QPixmap pixmap(fullPath);
 			return QIcon(pixmap.scaled(QSize(64, 64)));
@@ -133,7 +133,7 @@ namespace QT_UI
 		Echo::String ext = Echo::PathUtil::GetFileExt(file, true);
 		for (Echo::String& supportExt : m_supportExts)
 		{
-			if (supportExt == ext)
+			if (Echo::StringUtil::Equal( supportExt, ext, false))
 				return true;
 		}
 

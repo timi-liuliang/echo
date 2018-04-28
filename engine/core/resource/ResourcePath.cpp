@@ -33,7 +33,7 @@ namespace Echo
 		StringArray exts = StringUtil::Split(m_supportExts, "|");
 		for (const String& supportExt : exts)
 		{
-			if (supportExt == ext)
+			if (StringUtil::Equal(supportExt, ext, false))
 				return true;
 		}
 
