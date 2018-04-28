@@ -35,7 +35,7 @@ namespace QT_UI
 		{
 			Echo::String path = value.toString().toStdString().c_str();
 			Echo::String ext = Echo::PathUtil::GetFileExt(path, true);
-			if( ext==".png")
+			if( Echo::StringUtil::Equal(ext,".png", false))
 				return true;
 		}
 
@@ -83,7 +83,7 @@ namespace QT_UI
 		{
 			Echo::String path = value.toString().toStdString().c_str();
 			Echo::String ext = Echo::PathUtil::GetFileExt(path, true);
-			if (ext == ".png")
+			if (Echo::StringUtil::Equal(ext, ".png", false))
 				size.setHeight(2 * size.height());
 		}
 

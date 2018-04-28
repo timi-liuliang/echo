@@ -14,7 +14,7 @@ namespace Echo
 	bool ResourcePath::setPath(const String& path)
 	{
 		String ext = PathUtil::GetFileExt(path, true);
-		if (isSupportExt(ext))
+		if (path.empty() || isSupportExt(ext))
 		{
 			m_path = path;
 			return true;

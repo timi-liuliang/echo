@@ -66,7 +66,7 @@ namespace QT_UI
 		Echo::StringArray exts = Echo::StringUtil::Split(m_exts, "|");
 		for (Echo::String ext : exts)
 		{
-			if (ext == ".png")
+			if (Echo::StringUtil::Equal(ext, ".png", false))
 				return true;
 		}
 
@@ -108,7 +108,7 @@ namespace QT_UI
 		Echo::String path = val;
 		Echo::String fullPath = Echo::IO::instance()->getFullPath(path);
 		Echo::String ext = Echo::PathUtil::GetFileExt(path, true);
-		if (ext == ".png")
+		if (Echo::StringUtil::Equal(ext, ".png", false))
 		{
 			QPixmap pixmap(fullPath.c_str());
 			QRect tRect = QRect(rect.left() + 3, rect.top() + 2, rect.height() - 4, rect.height() - 4);
