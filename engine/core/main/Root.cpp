@@ -338,7 +338,8 @@ namespace Echo
 #endif
 
 		// 场景管理器
-		NodeTree::instance()->destroy();
+		if(NodeTree::instance())
+			NodeTree::instance()->destroy();
 
 		// 音频管理器
 		if (m_audioManager)

@@ -3,21 +3,24 @@
 
 namespace Echo
 {
-	__ImplementSingleton(NodeTree);
-
 	// 构造函数
 	NodeTree::NodeTree()
-		: m_3dCamera(NULL)
-		, m_2dCamera(NULL)
-		, m_uiCamera(NULL)
-		, m_shadowCamera(NULL)
+		: m_3dCamera(nullptr)
+		, m_2dCamera(nullptr)
+		, m_uiCamera(nullptr)
+		, m_shadowCamera(nullptr)
 	{
-		__ConstructSingleton;
 	}
 
 	NodeTree::~NodeTree()
 	{
-		__DestructSingleton;
+	}
+
+	// instance
+	NodeTree* NodeTree::instance()
+	{
+		static NodeTree* inst = EchoNew(NodeTree);
+		return inst;
 	}
 
 	// 初始化

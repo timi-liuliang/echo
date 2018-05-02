@@ -1,4 +1,5 @@
 #include <QMessageBox>
+#include <QPainter>
 #include "ProjectWnd.h"
 #include <qfiledialog.h>
 #include "Studio.h"

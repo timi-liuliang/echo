@@ -9,11 +9,12 @@ namespace Echo
 {
 	class NodeTree
 	{	
-		__DeclareSingleton(NodeTree);
-
 	public:
 		NodeTree();
 		virtual ~NodeTree();
+
+		// instance
+		static NodeTree* instance();
 
 		// ≥ı ºªØ
 		bool init();

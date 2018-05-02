@@ -11,9 +11,20 @@
 #include <shellapi.h>
 #include <windows.h>
 #include <QTime>
+#include <engine/core/base/EchoDef.h>
 
 int main( int argc, char* argv[])
 {
+#ifdef ECHO_PLATFORM_WINDOWS
+	//int aElements[2] = { COLOR_WINDOWFRAME, COLOR_ACTIVECAPTION };
+
+	//DWORD aNewColors[2];
+	//aNewColors[0] = RGB(83, 83, 83);  // light gray 
+	//aNewColors[1] = RGB(83, 83, 83);  // dark purple
+
+	//SetSysColors(2, aElements, aNewColors);
+#endif
+
 	// set directory path
 	QString filePath = QFileInfo(argv[0]).path();
 	if (filePath.length() <= 1)
