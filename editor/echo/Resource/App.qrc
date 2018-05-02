@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/icon">
+    <file>Icon/error/delete.png</file>
     <file>node/sprite2d.png</file>
     <file>Icon/file/file.png</file>
     <file>Icon/log/CheckError.png</file>

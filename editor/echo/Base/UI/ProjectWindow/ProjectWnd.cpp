@@ -1,3 +1,4 @@
+#include <QMessageBox>
 #include "ProjectWnd.h"
 #include <qfiledialog.h>
 #include "Studio.h"
@@ -45,6 +46,7 @@ namespace Studio
 		if ( m_previewerWidget && NULL != project && 0 != project[0])
 		{
 			Echo::String icon = Echo::PathUtil::GetFileDirPath(project) + "icon.png";
+			icon = Echo::PathUtil::IsFileExist(icon) ? icon : ":/icon/Icon/error/delete.png";
 			m_previewerWidget->addItem(project, icon.c_str());
 		}
 	}
@@ -136,11 +138,24 @@ namespace Studio
 
 	void ProjectWnd::onDoubleClicked(const QString& name)
 	{
-		AStudio::Instance()->getMainWindow()->showMaximized();
-		AStudio::Instance()->OpenProject(name.toStdString().c_str());
-		AStudio::Instance()->getRenderWindow();
+		Echo::String projectName = name.toStdString().c_str();
+		if (Echo::PathUtil::IsFileExist(projectName))
+		{
+			AStudio::Instance()->getMainWindow()->showMaximized();
+			AStudio::Instance()->OpenProject(name.toStdString().c_str());
+			AStudio::Instance()->getRenderWindow();
 
-		close();
+			close();
+		}
+		else
+		{
+			Echo::String alertMsg = Echo::StringUtil::Format("project file [%s] not found", projectName.c_str());
+
+			QMessageBox msgBox;
+			msgBox.setText(alertMsg.c_str());
+			msgBox.setIcon(QMessageBox::Critical);
+			msgBox.exec();
+		}
 	}
 
 	void ProjectWnd::onClicked(const QString& name)

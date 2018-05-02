@@ -43,6 +43,11 @@ QWidget
 	background-color: #FF535353;
 }
 
+QWidget:title
+{
+	background-color : rgb(83, 83, 83);
+}
+
 QTextEdit
 {
 	border : 0px;
