@@ -72,7 +72,7 @@ def run_parse_args() :
     parser.add_argument('-platform', help='build platform', default='x86', choices=['x86', 'x64'])
     parser.add_argument('-build', help='build type', default='', choices=['debug', 'release'])
     parser.add_argument('-version', help='build version', default='#1')
-    parser.add_argument('-nsis', help='nsis build', default='echo')
+    parser.add_argument('-nsis', help='nsis build', choices=['echo'])
     parser.add_argument('-lightmass', help='build lightmass', default='win32', choices=['win32', 'x64'])
 
     # parse instruction
