@@ -52,11 +52,13 @@ def compile_debug() :
 # compile vs project release
 def compile_release() :
     # change working directory
-    os.chdir( root_dir + "/../../build")
+    os.chdir( root_dir + "/../../build/editor/echo")
 
     # Compile
     vs_env = os.environ.get('VS140COMNTOOLS') + "../IDE/devenv.com"
-    subprocess.call( vs_env + " echo.sln /Build \"Release|Win32\"");
+    subprocess.call( vs_env + " echo.vcxproj /Build \"Release|Win32\"");
+	#subprocess.call( vs_env + " echo.vcxproj /Build \"Release|Win32\"");
+	
     return
 
 # function parse args
