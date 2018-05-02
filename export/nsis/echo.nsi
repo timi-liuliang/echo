@@ -2,7 +2,7 @@
 OutFile echo-setup.exe
 
 # install dir
-InstallDir "D:\Program Files (x86)\echo"
+InstallDir "D:\echo"
 
 # require admin execution level
 RequestExecutionLevel admin
