@@ -41,11 +41,7 @@ namespace QT_UI
 		QObject::connect( m_toolButton, SIGNAL(clicked()), this, SLOT(OnSelectPath()));
 		QObject::connect(m_lineEdit, SIGNAL(returnPressed()), this, SLOT(onEditFinished()));
 
-		if (isTextureRes())
-		{
-			m_lineEdit->setMinimumHeight(m_lineEdit->geometry().height()*1.6);
-			m_toolButton->setMinimumHeight(m_toolButton->geometry().height() * 1.6);
-		}
+		adjustHeightSize();
 	}
 
 	// Ñ¡ÔñÂ·¾¶
@@ -73,19 +69,19 @@ namespace QT_UI
 		return false;
 	}
 
+	// correct size
+	void QResSelect::adjustHeightSize()
+	{
+		if (isTextureRes())
+		{
+			m_lineEdit->setMinimumHeight(m_lineEdit->geometry().height()*1.6);
+			m_toolButton->setMinimumHeight(m_toolButton->geometry().height() * 1.6);
+		}
+	}
+
 	// redefine paintEvent
 	void QResSelect::paintEvent(QPaintEvent* event)
 	{
-		// get label background color
-		//QColor background = m_toolButton->palette().color(QPalette::Window);
-
-		// add background color for this widget.(Transparent is inappropriate here)
-		//QPainter painter(this);
-		//painter.setBrush(background);
-		//painter.drawRect(rect());
-		//painter.setPen(background);
-		//painter.drawRect(rect());
-
 		if (isTextureRes())
 		{
 

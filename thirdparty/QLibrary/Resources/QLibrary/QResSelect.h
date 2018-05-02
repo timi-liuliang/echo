@@ -42,6 +42,9 @@ namespace QT_UI
 		// is texture res
 		bool isTextureRes();
 
+		// correct size
+		void adjustHeightSize();
+
 	private slots:
 		// Ñ¡ÔñÂ·¾¶
 		void OnSelectPath();

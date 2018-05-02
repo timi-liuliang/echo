@@ -81,8 +81,7 @@ namespace QT_UI
 		QSize size = QStyledItemDelegate::sizeHint( option, index);
 		if (widgetType == "AssetsSelect")
 		{
-			Echo::String path = value.toString().toStdString().c_str();
-			Echo::String ext = Echo::PathUtil::GetFileExt(path, true);
+			Echo::String ext = userDatas.size() >= 2 ? userDatas[1] : "";
 			if (Echo::StringUtil::Equal(ext, ".png", false))
 				size.setHeight(2 * size.height());
 		}
