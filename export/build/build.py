@@ -28,9 +28,9 @@ def copy_res() :
 def cmake_project(version, platform) :
     vsconfig = " -G\"Visual Studio 14 2015\" ../"
     solution_dir = "/../../build"
-    
+
     os.chdir(root_dir + solution_dir)
-	
+
     # CMake the project
     subprocess.call("cmake" + vsconfig, shell=True)
 
@@ -58,7 +58,7 @@ def compile_release() :
     vs_env = os.environ.get('VS140COMNTOOLS') + "../IDE/devenv.com"
     subprocess.call( vs_env + " echo.vcxproj /Build \"Release|Win32\"");
 	#subprocess.call( vs_env + " echo.vcxproj /Build \"Release|Win32\"");
-	
+
     return
 
 # function parse args
@@ -72,15 +72,17 @@ def run_parse_args() :
     parser.add_argument('-platform', help='build platform', default='x86', choices=['x86', 'x64'])
     parser.add_argument('-build', help='build type', default='', choices=['debug', 'release'])
     parser.add_argument('-version', help='build version', default='#1')
+    parser.add_argument('-nsis', help='nsis build', default='echo')
     parser.add_argument('-lightmass', help='build lightmass', default='win32', choices=['win32', 'x64'])
 
     # parse instruction
     args = parser.parse_args()
-        
+
     if args.make=='cmake' :
         cmake_project(args.version, args.platform)
-    elif args.make=='astudio':
-        release_astudio(args.version)
+
+    if args.nsis=='echo':
+        release_echo(args.version)
 
     if args.build=='debug' :
         compile_debug()
@@ -89,39 +91,38 @@ def run_parse_args() :
 
     # end of the function parse_args
     return
-	
-def release_astudio(version):
+
+def release_echo(version):
 	 # dirs
     src_dir = root_dir + '/../../'
-    des_dir = root_dir + '/../nsis/AStudio/'
+    des_dir = root_dir + '/../nsis/echo/'
     nsis_dir= root_dir + '/../nsis/'
-    astudio_des_dir = root_dir + '/../../../'
 
     # remove des dir
     shutil.rmtree( des_dir, True)
 
     # copy bin release
-    shutil.copytree( src_dir + 'Bin/Release', des_dir+'Bin/Release')
-    print('copy resource from [' + src_dir + 'Bin/Release' + '] to [' + des_dir+'Bin/Release' + ']')
+    shutil.copytree( src_dir + 'bin/Release', des_dir)
+    print('copy resource from [' + src_dir + 'Bin/Release' + '] to [' + des_dir + ']')
 
     # copy Dependencies
-    shutil.copytree( src_dir + 'Dependencies', des_dir+'Dependencies', ignore=shutil.ignore_patterns('*Qt*', "*QLibrary*"))
-    print('copy resource from [' + src_dir + 'Dependencies' + '] to [' + des_dir+'Dependencies' + ']')
+    #shutil.copytree( src_dir + 'Dependencies', des_dir+'Dependencies', ignore=shutil.ignore_patterns('*Qt*', "*QLibrary*"))
+    #print('copy resource from [' + src_dir + 'Dependencies' + '] to [' + des_dir+'Dependencies' + ']')
 
     # copy lib
-    shutil.copytree( src_dir + 'Lib', des_dir+'Lib')
-    print('copy resource from [' + src_dir + 'Lib' + '] to [' + des_dir+'Lib' + ']')
+    #shutil.copytree( src_dir + 'Lib', des_dir+'Lib')
+    #print('copy resource from [' + src_dir + 'Lib' + '] to [' + des_dir+'Lib' + ']')
 
     # copy Src
-    shutil.copytree( src_dir + 'Src', des_dir+'Src', ignore=shutil.ignore_patterns('*.cpp', '*.txt', '*.7z', '*.rar', '*Tools*', '*.pkg'))
-    print('copy resource from [' + src_dir + 'Src' + '] to [' + des_dir+'Src' + ']')
-	
+    #shutil.copytree( src_dir + 'Src', des_dir+'Src', ignore=shutil.ignore_patterns('*.cpp', '*.txt', '*.7z', '*.rar', '*Tools*', '*.pkg'))
+    #print('copy resource from [' + src_dir + 'Src' + '] to [' + des_dir+'Src' + ']')
+
 	# generate installer
-    astudio_version_name = 'astudio-' + version + '-setup.exe'
+    astudio_version_name = 'echo-setup-' + version + '.exe'
     os.chdir( nsis_dir)
-    subprocess.call('makensis.exe astudio.nsi')
-    os.rename('astudio-setup.exe', astudio_version_name)
-    shutil.move(astudio_version_name, astudio_des_dir+astudio_version_name)
+    subprocess.call('makensis.exe echo.nsi')
+    os.rename('echo-setup.exe', astudio_version_name)
+    #shutil.move(astudio_version_name, astudio_des_dir+astudio_version_name)
 
     return
 
