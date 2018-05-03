@@ -21,6 +21,7 @@ Section
 	File /r "echo\*"
 
 	# create desktop shortcut
+	SetShellVarContext all
 	CreateShortCut "$DESKTOP\echo.lnk" "$INSTDIR\echo.exe" ""
 
 SectionEnd
