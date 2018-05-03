@@ -11,7 +11,7 @@ namespace Studio
 	//----------------------------------------
 	// Êä³ö Ö÷´°¿Ú 2010-12-30
 	//----------------------------------------
-	class LogPanel : public QDockWidget, public Echo::Log, public Ui_LogPanel
+	class LogPanel : public QWidget, public Echo::Log, public Ui_LogPanel
 	{
 		Q_OBJECT
 

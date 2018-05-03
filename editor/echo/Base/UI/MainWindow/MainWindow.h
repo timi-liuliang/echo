@@ -10,6 +10,7 @@ namespace Studio
 	class NodeTreePanel;
 	class TimelinePanel;
 	class DebuggerPanel;
+	class BottomPanel;
 	class PlayGameToolBar;
 	class MainWindow : public QMainWindow, public Ui_MainWindow
 	{
@@ -50,8 +51,8 @@ namespace Studio
 	protected:
 		ResPanel*		m_resPanel;
 		NodeTreePanel*	m_scenePanel;
-		TimelinePanel*	m_timelinePanel;
-		DebuggerPanel*	m_debuggerPanel;
+		BottomPanel*	m_bottomPanel;
+
 		QProcess		m_gameProcess;
 		PlayGameToolBar*m_playGameToolBar;
 	};

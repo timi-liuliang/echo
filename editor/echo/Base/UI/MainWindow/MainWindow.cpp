@@ -14,6 +14,7 @@
 #include "QResSelect.h"
 #include "ResChooseDialog.h"
 #include "LuaEditor.h"
+#include "BottomPanel.h"
 
 namespace Studio
 {
@@ -23,8 +24,6 @@ namespace Studio
 	MainWindow::MainWindow(QMainWindow* parent/*=0*/)
 		: QMainWindow( parent)
 		, m_resPanel(nullptr)
-		, m_timelinePanel(nullptr)
-		, m_debuggerPanel(nullptr)
 		, m_gameProcess(nullptr)
 		, m_playGameToolBar(nullptr)
 	{
@@ -63,8 +62,7 @@ namespace Studio
 	{
 		m_resPanel = EchoNew(ResPanel(this));
 		m_scenePanel = EchoNew(NodeTreePanel(this));
-		m_timelinePanel = EchoNew(TimelinePanel(this));
-		m_debuggerPanel = EchoNew(DebuggerPanel(this));
+		m_bottomPanel = EchoNew(BottomPanel(this));
 
 		//QMdiArea* midArea = new QMdiArea(this);
 
@@ -82,13 +80,7 @@ namespace Studio
 
 		this->addDockWidget(Qt::LeftDockWidgetArea, m_resPanel);
 		this->addDockWidget(Qt::RightDockWidgetArea, m_scenePanel);
-		
-		this->addDockWidget(Qt::BottomDockWidgetArea, AStudio::Instance()->getLogPanel());
-		this->addDockWidget(Qt::BottomDockWidgetArea, m_debuggerPanel);
-		this->addDockWidget(Qt::BottomDockWidgetArea, m_timelinePanel);
-
-		this->tabifyDockWidget(AStudio::Instance()->getLogPanel(), m_debuggerPanel);
-		this->tabifyDockWidget(m_debuggerPanel, m_timelinePanel);
+		this->addDockWidget(Qt::BottomDockWidgetArea, m_bottomPanel);
 
 		m_resPanel->onOpenProject();
 	}

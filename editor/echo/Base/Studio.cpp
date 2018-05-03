@@ -62,10 +62,10 @@ namespace Studio
 
 		// 添加默认日志处理
 		Echo::LogDefault::LogConfig logConfig;
-		logConfig.logName = "astudio.log";
+		logConfig.logName = "echo.log";
 		logConfig.logLevel = Echo::Log::LL_INVALID;
-		logConfig.path = "./";
-		logConfig.logFilename = "AStudio.log";
+		logConfig.path = "./cache/";
+		logConfig.logFilename = "echo.log";
 		logConfig.bFileOutput = true;
 
 		EchoLogManager->setLogLeve(logConfig.logLevel);
