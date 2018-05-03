@@ -21,6 +21,10 @@ namespace Studio
 		// Îö¹¹º¯Êý
 		~BottomPanel();
 
+	public slots:
+		// on tab index changed
+		void onTabIdxChanged(int idx);
+
 	private:
 		TimelinePanel*	m_timelinePanel;
 		DebuggerPanel*	m_debuggerPanel;

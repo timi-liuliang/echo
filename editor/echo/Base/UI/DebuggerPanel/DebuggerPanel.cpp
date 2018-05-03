@@ -5,7 +5,7 @@ namespace Studio
 {
 	// ¹¹Ôìº¯Êý
 	DebuggerPanel::DebuggerPanel(QWidget* parent/* = 0*/)
-		: QDockWidget( parent)
+		: QWidget( parent)
 	{
 		setupUi(this);
 	}

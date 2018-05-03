@@ -20,10 +20,20 @@ namespace Studio
 		m_tabWidget->addTab(AStudio::Instance()->getLogPanel(), "Log");
 		m_tabWidget->addTab(m_debuggerPanel, "Debugger");
 		m_tabWidget->addTab(m_timelinePanel, "TimeLine");
+		onTabIdxChanged(0);
+
+		QObject::connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(onTabIdxChanged(int)));
 	}
 
 	// Îö¹¹º¯Êý
 	BottomPanel::~BottomPanel()
 	{
+	}
+
+	// on tab index changed
+	void BottomPanel::onTabIdxChanged(int idx)
+	{
+		QWidget* widget = m_tabWidget->currentWidget();
+		setWindowTitle(widget->windowTitle());
 	}
 }

@@ -9,7 +9,7 @@ namespace Studio
 	//----------------------------------------
 	// Êä³ö Ö÷´°¿Ú 2010-12-30
 	//----------------------------------------
-	class DebuggerPanel : public QDockWidget, public Ui_DebuggerPanel
+	class DebuggerPanel : public QWidget, public Ui_DebuggerPanel
 	{
 		Q_OBJECT
 
