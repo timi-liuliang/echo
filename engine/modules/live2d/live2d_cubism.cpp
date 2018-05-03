@@ -401,7 +401,6 @@ namespace Echo
 		EchoSafeFree(m_tableMemory);
 		EchoSafeDeleteMap(m_motions, Live2dCubismMotion);
 		m_curMotion = nullptr;
-		m_curMotionRes.setPath("");
 
 		clearRenderable();
 	}
