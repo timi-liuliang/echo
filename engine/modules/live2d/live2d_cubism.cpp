@@ -338,7 +338,7 @@ namespace Echo
 	// update per frame
 	void Live2dCubism::update()
 	{
-		if (m_model)
+		if (m_model && m_renderable)
 		{
 			m_matWVP = getWorldMatrix() * NodeTree::instance()->get2DCamera()->getViewProjMatrix();;
 
@@ -400,6 +400,8 @@ namespace Echo
 		EchoSafeFreeAlign(m_mocMemory, csmAlignofModel);
 		EchoSafeFree(m_tableMemory);
 		EchoSafeDeleteMap(m_motions, Live2dCubismMotion);
+		m_curMotion = nullptr;
+		m_curMotionRes.setPath("");
 
 		clearRenderable();
 	}

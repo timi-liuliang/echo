@@ -5,7 +5,6 @@
 #include "render/Material.h"
 #include <algorithm>
 
-
 namespace Echo
 {
 	// ¹¹Ôìº¯Êý
