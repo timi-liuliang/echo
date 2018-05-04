@@ -1,29 +1,54 @@
 #pragma once
 
-#include "RenderStageItem.h"
+#include <engine/core/Memory/MemManager.h>
+#include <engine/core/render/render/RenderState.h>
+#include <engine/core/render/render/RenderInput.h>
+#include <engine/core/render/render/Renderable.h>
 
 namespace Echo
 {
-	class RenderStage
+	/**
+	* äÖÈ¾½×¶ÎÏî
+	*/
+	class RenderStageItem
 	{
 	public:
-		// get instance
-		static RenderStage* instance();
+		RenderStageItem();
+		virtual ~RenderStageItem();
 
-		// destroy
-		void destroy();
+		// render
+		virtual void render();
 
-		// add renderable
-		void addRenderable(const String& name, RenderableID id);
+		// add renderalbe
+		void addRenderable(RenderableID id) { m_renderables.push_back(id); }
 
-		// process
-		void process();
+		// set name
+		void setName(const String& name) { m_name = name; }
+
+		// get name
+		const String& getName() const { return m_name; }
 
 	protected:
-		RenderStage();
-		~RenderStage();
+		String							m_name;
+		vector<RenderableID>::type		m_renderables;
+	};
 
-	protected:
-		vector<RenderStageItem*>::type	m_items;				// äÖÈ¾½×¶Î
+
+	class DefaultRenderStageItemOpaque : public RenderStageItem
+	{
+	public:
+		DefaultRenderStageItemOpaque();
+
+		// render
+		virtual void render();
+	};
+
+	class DefaultRenderStageItemTransparent : public RenderStageItem
+	{
+	public:
+		DefaultRenderStageItemTransparent();
+
+		// render
+		virtual void render();
 	};
 }

@@ -1,52 +1,55 @@
-#include "RenderStage.h"
-#include "Engine/core/main/EngineSettings.h"
-#include "Engine/core/main/Root.h"
+#include "render/Renderable.h"
+#include "RenderStageItem.h"
+#include "engine/core/render/RenderTargetManager.h"
 
 namespace Echo
 {
 	// 构造函数
-	RenderStage::RenderStage()
+	RenderStageItem::RenderStageItem()
 	{
-		m_items.push_back(EchoNew(DefaultRenderStageItemOpaque));
-		m_items.push_back(EchoNew(DefaultRenderStageItemTransparent));
 	}
 
 	// 析构函数
-	RenderStage::~RenderStage()
+	RenderStageItem::~RenderStageItem()
 	{
 	}
 
-	// get instance
-	RenderStage* RenderStage::instance()
+	// 渲染
+	void RenderStageItem::render()
 	{
-		static RenderStage* inst = EchoNew(RenderStage);
-
-		return inst;
-	}
-
-	// destroy
-	void RenderStage::destroy()
-	{
-		RenderStage* inst = instance();
-		EchoSafeDelete(inst, RenderStage);
-	}
-
-	// add renderable
-	void RenderStage::addRenderable(const String& name, RenderableID id)
-	{
-		for (RenderStageItem* item : m_items)
+		for (RenderableID id : m_renderables)
 		{
-			if (item->getName() == name)
-				item->addRenderable(id);
+			Renderable* renderable = Renderer::instance()->getRenderable( id);
+			if( renderable)
+				renderable->render();
 		}
+
+		m_renderables.clear();
 	}
 
-	// 处理所有渲染阶段
-	void RenderStage::process()
+	DefaultRenderStageItemOpaque::DefaultRenderStageItemOpaque()
 	{
-		for (RenderStageItem* item : m_items)
-		{
-			item->render();
-		}
+		setName("Opaque");
+	}
+
+	// render
+	void DefaultRenderStageItemOpaque::render()
+	{
+		RenderTargetManager::instance()->beginRenderTarget(RTI_DefaultBackBuffer);
+
+		RenderStageItem::render();
+	}
+
+	DefaultRenderStageItemTransparent::DefaultRenderStageItemTransparent()
+	{
+		setName("Transparent");
+	}
+
+	// render
+	void DefaultRenderStageItemTransparent::render()
+	{
+		RenderStageItem::render();
+
+		RenderTargetManager::instance()->endRenderTarget(RTI_DefaultBackBuffer);
 	}
 }
