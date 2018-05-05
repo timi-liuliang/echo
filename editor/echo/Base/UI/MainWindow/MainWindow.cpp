@@ -100,7 +100,7 @@ namespace Studio
 				if (Echo::IO::instance()->covertFullPathToResPath(savePath, resPath))
 				{
 					EchoEngine::instance()->setCurrentEditNodeSavePath(resPath.c_str());
-					Studio::EchoEngine::instance()->saveCurrentEditNodeTree();
+					EchoEngine::instance()->saveCurrentEditNodeTree();
 				}
 			}
 		}

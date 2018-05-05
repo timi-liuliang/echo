@@ -1,5 +1,4 @@
-#ifndef __ECHO_IMAGECODECMGR_H__
-#define __ECHO_IMAGECODECMGR_H__
+#pragma once
 
 #include "RenderDef.h"
 #include "ImageCodec.h"
@@ -34,5 +33,3 @@ namespace Echo
 		CodecMap m_codecMap;		// ±àÂëÍ¼
 	};
 }
-
-#endif

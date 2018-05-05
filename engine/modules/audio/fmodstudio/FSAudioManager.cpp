@@ -119,7 +119,7 @@ namespace Echo
 	// instance
 	FSAudioManager* FSAudioManager::instance()
 	{
-		FSAudioManager* inst = EchoNew(FSAudioManager);
+		static FSAudioManager* inst = EchoNew(FSAudioManager);
 		return inst;
 	}
 
