@@ -72,7 +72,7 @@ namespace Studio
 		bool isIncludePreDir = dir == Echo::Root::instance()->getResPath() ? false : true;
 
 		m_previewHelper->clear();
-		m_previewHelper->setPath(dir, nullptr, isIncludePreDir);
+		m_previewHelper->setPath(dir, m_supportExts.c_str(), isIncludePreDir);
 	}
 
 	// double click res

@@ -1,4 +1,5 @@
 #include "gltf_module.h"
+#include "gltf_scene.h"
 
 namespace Echo
 {
@@ -8,5 +9,6 @@ namespace Echo
 
 	void GltfModule::registerTypes()
 	{
+		Class::registerType<GltfScene>();
 	}
 }
