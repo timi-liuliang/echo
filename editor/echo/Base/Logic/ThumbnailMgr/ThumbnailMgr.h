@@ -24,7 +24,6 @@ namespace Studio
 		};
 
 	public:
-		ThumbnailMgr();
 		virtual ~ThumbnailMgr();
 
 		// instance
@@ -35,5 +34,8 @@ namespace Studio
 
 		// ¸üĞÂËõÂÔÍ¼
 		static void update();
+
+	private:
+		ThumbnailMgr();
 	};
 }

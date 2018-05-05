@@ -8,28 +8,16 @@
 
 namespace Echo
 {
-	static ImageCodecMgr* g_instance = NULL;
-
 	// 获取实例
 	ImageCodecMgr* ImageCodecMgr::instance()
 	{
-		EchoAssert(g_instance);
-		return g_instance;
-	}
-
-	// 替换实例
-	void replaceInstance(ImageCodecMgr* inst)
-	{
-		EchoAssert(!g_instance);
-		g_instance = inst;
+		static ImageCodecMgr* inst = EchoNew(ImageCodecMgr);
+		return inst;
 	}
 
 	// 构造函数
 	ImageCodecMgr::ImageCodecMgr()
 	{
-		EchoAssert(!g_instance);
-		g_instance = this;
-
 		// lazy initialization.
 		FreeImage_Initialise();
 

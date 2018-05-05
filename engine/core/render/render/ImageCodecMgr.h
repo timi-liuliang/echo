@@ -18,9 +18,6 @@ namespace Echo
 		// 获取实例
 		static ImageCodecMgr* instance();
 
-		// 替换实例
-		static void replaceInstance( ImageCodecMgr* inst);
-
 		// 注册编码
 		void registerCodec(ImageCodec *pImgCodec);
 

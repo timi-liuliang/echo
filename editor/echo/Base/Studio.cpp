@@ -23,6 +23,7 @@ namespace Studio
 	// 构造函数
 	AStudio::AStudio()
 		: m_logPanel(nullptr)
+		, m_mainWindow(nullptr)
 	{
 		m_renderWindow = NULL;
 		m_projectCfg = EchoNew( ConfigMgr);
@@ -57,7 +58,7 @@ namespace Studio
 	// instance
 	AStudio* AStudio::instance()
 	{
-		AStudio* inst = new AStudio;
+		static AStudio* inst = new AStudio;
 		return inst;
 	}
 
@@ -163,8 +164,8 @@ namespace Studio
 			// 新建EchoEngine
 			TIME_PROFILE
 			(
-				new EchoEngine;
-				new ThumbnailMgr;
+				EchoEngine::instance();
+				ThumbnailMgr::instance();
 			)
 
 			// 新建渲染窗口

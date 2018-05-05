@@ -15,7 +15,6 @@ namespace Studio
 	class EchoEngine
 	{
 	public:
-		EchoEngine();
 		~EchoEngine();
 
 		// inst
@@ -86,6 +85,8 @@ namespace Studio
 		void SetIsFPSShow(bool setting){ m_isShowFps = setting; }
 
 	private:
+		EchoEngine();
+
 		// ³õÊ¼»¯±³¾°Íø¸ñ
 		void InitializeBackGrid();
 
