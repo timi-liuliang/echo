@@ -93,7 +93,7 @@ namespace Studio
 		// if path isn't exist. choose a save directory
 		if (EchoEngine::Instance()->getCurrentEditNodeSavePath().empty())
 		{
-			Echo::String savePath = PathChooseDialog::getExistingPathName(this, ".scene").toStdString().c_str();
+			Echo::String savePath = PathChooseDialog::getExistingPathName(this, ".scene", "Save").toStdString().c_str();
 			if (!savePath.empty() && !Echo::PathUtil::IsDir(savePath))
 			{
 				Echo::String resPath;

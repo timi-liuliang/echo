@@ -4,6 +4,7 @@
 #include <engine/core/Util/StringUtil.h>
 #include "ui_PathChooseDialog.h"
 #include "QDirectoryModel.h"
+#include "QPreviewHelper.h"
 
 namespace Studio
 {
@@ -19,24 +20,29 @@ namespace Studio
 		virtual ~PathChooseDialog();
 
 		// get select file
-		const Echo::String& getSelectFile() const { return m_selectedFile; }
+		Echo::String getSelectFile() const;
 
 		// 获取文件路径
 		static QString getExistingPath( QWidget* parent);
 
 		// 获取名称加路径
-		static QString getExistingPathName(QWidget* parent,const char* ext);
+		static QString getExistingPathName(QWidget* parent,const char* ext, const char* title);
 
 	private:
 		// set file name visible
 		void setFileNameVisible(bool _val);
 
 	public slots:
-		// select file slot
-		void OnSelectFile(const char* path);
+		// 选择文件夹
+		void onSelectDir(const char* dir);
+
+		// double click res
+		void onDoubleClickPreviewRes(const char* res);
 
 	private:
-		Echo::String				m_selectedFile;
 		QT_UI::QDirectoryModel*		m_dirModel;
+		QT_UI::QPreviewHelper*		m_previewHelper;
+		Echo::String				m_selectedDir;
+		Echo::String				m_supportExts;
 	};
 }

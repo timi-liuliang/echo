@@ -140,6 +140,12 @@ QLineEdit
 	margin: 2px;
 }
 
+QComboBox
+{
+	height: 22px;
+	margin: 2px;
+}
+
 QToolButton
 {
 	border: 0px solid #666666;

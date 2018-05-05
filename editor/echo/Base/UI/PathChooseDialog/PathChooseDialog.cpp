@@ -9,6 +9,7 @@ namespace Studio
 	// 构造函数
 	PathChooseDialog::PathChooseDialog(QWidget* parent, const char* exts)
 		: QDialog( parent)
+		, m_supportExts(exts)
 	{
 		setupUi( this);
 
@@ -17,24 +18,39 @@ namespace Studio
 		m_dirModel->SetIcon("root", QIcon(":/icon/Icon/root.png"));
 		m_dirModel->SetIcon("filter", QIcon(":/icon/Icon/folder_close.png"));
 		m_dirModel->SetIcon("filterexpend", QIcon(":/icon/Icon/folder_open.png"));
-		m_PathTreeView->setModel(m_dirModel);
+		m_resDirView->setModel(m_dirModel);
 		m_dirModel->Clean();
 
 		QStringList titleLable;
 		titleLable << "Res://";
 		m_dirModel->setHorizontalHeaderLabels(titleLable);
 
-		m_dirModel->SetRootPath(Echo::Root::instance()->getResPath().c_str(), exts, m_PathTreeView, NULL);
+		m_dirModel->SetRootPath(Echo::Root::instance()->getResPath().c_str(), "none", m_resDirView, NULL);
 		m_dirModel->Refresh();
 
+		// show exts
+		m_comboBoxExts->addItem(Echo::StringUtil::Format("(%s)",exts).c_str());
+
 		// 消息链接
-		QObject::connect(m_dirModel, SIGNAL(FileSelected(const char*)), this, SLOT(OnSelectFile(const char*)));
+		QObject::connect(m_dirModel, SIGNAL(FileSelected(const char*)), this, SLOT(onSelectDir(const char*)));
+
+		m_previewHelper = new QT_UI::QPreviewHelper(m_listView);
+		QObject::connect(m_previewHelper, SIGNAL(doubleClickedRes(const char*)), this, SLOT(onDoubleClickPreviewRes(const char*)));
+
+		// choose main directory
+		onSelectDir(Echo::Root::instance()->getResPath().c_str());
 	}
 
 	// 析构函数
 	PathChooseDialog::~PathChooseDialog()
 	{
 		//AStudio::Instance()->getEchoEngine()->stopCurPreviewAudioEvent();
+	}
+
+	// get select file
+	Echo::String PathChooseDialog::getSelectFile() const 
+	{ 
+		return m_selectedDir + m_fileNameLine->text().toStdString().c_str() + m_supportExts; 
 	}
 
 	// 获取文件
@@ -55,39 +71,51 @@ namespace Studio
 		return selectFile;
 	}
 
-	QString PathChooseDialog::getExistingPathName(QWidget* parent, const char* ext)
+	QString PathChooseDialog::getExistingPathName(QWidget* parent, const char* ext, const char* title)
 	{
-		Echo::String selectFile;
-
-		PathChooseDialog* dialog = new PathChooseDialog(parent, ext);
-		dialog->setFileNameVisible(true);
-		dialog->m_fileExt->setText(ext);
-		dialog->setWindowModality(Qt::WindowModal);
-		dialog->show();
-		if (dialog->exec() == QDialog::Accepted)
+		PathChooseDialog dialog(parent, ext);
+		dialog.setFileNameVisible(true);
+		dialog.setWindowModality(Qt::WindowModal);
+		dialog.setWindowTitle(title);
+		if (dialog.exec() == QDialog::Accepted)
 		{
-			selectFile = dialog->getSelectFile().c_str();
-			if (selectFile.empty())
-				selectFile = Echo::Root::instance()->getProjectFile()->getPath();
-
+			Echo::String selectFile = dialog.getSelectFile().c_str();
 			Echo::PathUtil::FormatPath(selectFile);
 
-			selectFile += (dialog->m_fileNameLine->text() + ext).toStdString().c_str();
+			return selectFile.c_str();
 		}
 
-		delete dialog;
-		return selectFile.c_str();
+		return "";
 	}
 
 	void PathChooseDialog::setFileNameVisible(bool _val)
 	{
-		m_fileExt->setVisible(_val);
 		m_fileNameLine->setVisible(_val);
 		m_fileName->setVisible(_val);
 	}
 
-	void PathChooseDialog::OnSelectFile(const char* path)
+	// 选择文件夹
+	void PathChooseDialog::onSelectDir(const char* dir)
 	{
-		m_selectedFile = path;
+		bool isIncludePreDir = dir == Echo::Root::instance()->getResPath() ? false : true;
+
+		m_previewHelper->clear();
+		m_previewHelper->setPath(dir, m_supportExts.c_str(), isIncludePreDir);
+
+		m_selectedDir = dir;
+	}
+
+	// double click res
+	void PathChooseDialog::onDoubleClickPreviewRes(const char* res)
+	{
+		if (Echo::PathUtil::IsDir(res))
+		{
+			m_dirModel->setCurrentSelect(res);
+		}
+		else
+		{
+			Echo::String fileName = Echo::PathUtil::GetPureFilename(res, false);
+			m_fileNameLine->setText( fileName.c_str());
+		}
 	}
 }
