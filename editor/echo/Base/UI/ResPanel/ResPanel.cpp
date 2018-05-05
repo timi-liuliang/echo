@@ -58,35 +58,44 @@ namespace Studio
 	void ResPanel::onSelectDir(const char* dir)
 	{
 		m_previewHelper->clear();
-		m_previewHelper->setPath(dir, nullptr);
+
+		bool isIncludePreDir = dir == Echo::Root::instance()->getResPath() ? false : true;
+		m_previewHelper->setPath(dir, nullptr, isIncludePreDir);
 	}
 
 	// double click res
 	void ResPanel::onDoubleClickPreviewRes(const char* res)
 	{
-		Echo::String resPath;
-		if (Echo::IO::instance()->covertFullPathToResPath(res, resPath))
+		if (Echo::PathUtil::IsDir(res))
 		{
-			Echo::String ext = Echo::PathUtil::GetFileExt(resPath, true);
-			if (ext == ".scene")
+			m_dirModel->setCurrentSelect(res);
+		}
+		else
+		{
+			Echo::String resPath;
+			if (Echo::IO::instance()->covertFullPathToResPath(res, resPath))
 			{
-				Echo::Node* node = Echo::Node::load(resPath);
-				if (node)
+				Echo::String ext = Echo::PathUtil::GetFileExt(resPath, true);
+				if (ext == ".scene")
 				{
-					Echo::Node* old = Studio::EchoEngine::Instance()->getCurrentEditNode();
-					if (old)
+					Echo::Node* node = Echo::Node::load(resPath);
+					if (node)
 					{
-						old->queueFree();
+						Echo::Node* old = Studio::EchoEngine::Instance()->getCurrentEditNode();
+						if (old)
+						{
+							old->queueFree();
+						}
+
+						Studio::EchoEngine::Instance()->setCurrentEditNode(node);
+
+						NodeTreePanel::instance()->refreshNodeTreeDisplay();
 					}
-
-					Studio::EchoEngine::Instance()->setCurrentEditNode(node);
-
-					NodeTreePanel::instance()->refreshNodeTreeDisplay();
 				}
-			}
-			else if (ext == ".lua")
-			{
-				MainWindow::instance()->openLuaScript(resPath);
+				else if (ext == ".lua")
+				{
+					MainWindow::instance()->openLuaScript(resPath);
+				}
 			}
 		}
 	}

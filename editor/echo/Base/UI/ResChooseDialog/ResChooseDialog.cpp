@@ -1,5 +1,6 @@
 #include "ResChooseDialog.h"
 #include <engine/core/main/Root.h>
+#include <engine/core/util/PathUtil.h>
 
 namespace Studio
 {
@@ -68,19 +69,28 @@ namespace Studio
 	// Ñ¡ÔñÎÄ¼þ¼Ð
 	void ResChooseDialog::onSelectDir(const char* dir)
 	{
+		bool isIncludePreDir = dir == Echo::Root::instance()->getResPath() ? false : true;
+
 		m_previewHelper->clear();
-		m_previewHelper->setPath(dir, m_supportExts.c_str());
+		m_previewHelper->setPath(dir, nullptr, isIncludePreDir);
 	}
 
 	// double click res
 	void ResChooseDialog::onDoubleClickPreviewRes(const char* res)
 	{
-		Echo::String resPath;
-		if (Echo::IO::instance()->covertFullPathToResPath(res, resPath))
+		if (Echo::PathUtil::IsDir(res))
 		{
-			m_selectedFile = resPath.c_str();
+			m_dirModel->setCurrentSelect(res);
 		}
+		else
+		{
+			Echo::String resPath;
+			if (Echo::IO::instance()->covertFullPathToResPath(res, resPath))
+			{
+				m_selectedFile = resPath.c_str();
+			}
 
-		accept();
+			accept();
+		}
 	}
 }

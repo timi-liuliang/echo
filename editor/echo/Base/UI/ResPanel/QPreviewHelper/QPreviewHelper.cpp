@@ -21,7 +21,7 @@ namespace QT_UI
 	}
 
 	// add item
-	void QPreviewHelper::setPath(const char* filePath, const char* exts)
+	void QPreviewHelper::setPath(const Echo::String& filePath, const char* exts, bool includePreDir)
 	{
 		// get all files
 		Echo::StringArray files;
@@ -34,6 +34,12 @@ namespace QT_UI
 
 		// sort by name
 		std::sort( files.begin(), files.end());
+
+		// include pre directory
+		if (includePreDir)
+		{
+			addItem((filePath+"../").c_str());
+		}
 
 		// add directory
 		for (const Echo::String& file : files)
@@ -69,7 +75,7 @@ namespace QT_UI
 		{
 			Echo::String folderName = Echo::PathUtil::GetLastDirName(previewFile);
 			QStandardItem* item = new QStandardItem(QIcon(":/icon/Icon/root.png"), folderName.c_str());
-			item->setData( "_Directory", Qt::UserRole);
+			item->setData( previewFile.c_str(), Qt::UserRole);
 			results.push_back(item);
 		}
 		else
@@ -158,9 +164,11 @@ namespace QT_UI
 	void QPreviewHelper::onDoubleClicked(const QModelIndex& pIndex)
 	{
 		Echo::String resPath = m_listProxyModel ? m_listProxyModel->data(pIndex, Qt::UserRole).toString().toStdString().c_str() : m_listModel->data(pIndex, Qt::UserRole).toString().toStdString().c_str();
-		if (resPath != "_Directory")
+		if (Echo::PathUtil::IsDir(resPath))
 		{
-			emit doubleClickedRes(resPath.c_str());
+			Echo::PathUtil::FormatPathAbsolut(resPath, false);
 		}
+		
+		emit doubleClickedRes(resPath.c_str());
 	}
 }

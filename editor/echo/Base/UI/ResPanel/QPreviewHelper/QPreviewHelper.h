@@ -15,7 +15,7 @@ namespace QT_UI
 		QPreviewHelper(QListView* view);
 
 		// add item
-		void setPath(const char* filePath, const char* exts);
+		void setPath(const Echo::String& filePath, const char* exts, bool includePreDir);
 
 		// clear all items
 		void clear();
