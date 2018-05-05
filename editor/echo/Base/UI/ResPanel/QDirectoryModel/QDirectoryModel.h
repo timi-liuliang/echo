@@ -6,7 +6,6 @@
 #include <QTreeView>
 #include <QStandardItemModel>
 #include <QSortFilterProxyModel>
-//#include <scl/ring_queue.h>
 
 using namespace std;
 

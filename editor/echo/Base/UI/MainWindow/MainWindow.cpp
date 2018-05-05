@@ -15,6 +15,8 @@
 #include "ResChooseDialog.h"
 #include "LuaEditor.h"
 #include "BottomPanel.h"
+#include "PathChooseDialog.h"
+#include <engine/core/util/PathUtil.h>
 
 namespace Studio
 {
@@ -88,7 +90,23 @@ namespace Studio
 	// ±£´æÎÄ¼þ
 	void MainWindow::onSaveProject()
 	{
-		Studio::EchoEngine::Instance()->saveCurrentEditNodeTree();
+		// if path isn't exist. choose a save directory
+		if (EchoEngine::Instance()->getCurrentEditNodeSavePath().empty())
+		{
+			Echo::String savePath = PathChooseDialog::getExistingPathName(this, ".scene").toStdString().c_str();
+			if (!savePath.empty() && !Echo::PathUtil::IsDir(savePath))
+			{
+				Echo::String resPath;
+				if (Echo::IO::instance()->covertFullPathToResPath(savePath, resPath))
+				{
+					EchoEngine::Instance()->setCurrentEditNodeSavePath(resPath.c_str());
+					Studio::EchoEngine::Instance()->saveCurrentEditNodeTree();
+				}
+			}
+		}
+		
+		// refresh respanel display
+		m_resPanel->reslectCurrentDir();
 	}
 
 	// play game

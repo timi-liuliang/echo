@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>558</width>
-    <height>343</height>
+    <width>841</width>
+    <height>430</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,40 +17,37 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
-      <widget class="QTreeView" name="m_PathTreeView"/>
+      <widget class="QTreeView" name="m_PathTreeView">
+       <property name="headerHidden">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
    <item>
-    <widget class="QLabel" name="m_CurPath">
-     <property name="text">
-      <string>TextLabel</string>
-     </property>
-     <property name="textFormat">
-      <enum>Qt::AutoText</enum>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QLabel" name="m_fileName">
-       <property name="text">
-        <string>文件名：</string>
-       </property>
-      </widget>
-     </item>
-     <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="1">
       <widget class="QLineEdit" name="m_fileNameLine">
        <property name="text">
-        <string>defult</string>
+        <string/>
        </property>
       </widget>
      </item>
-     <item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="m_fileName">
+       <property name="text">
+        <string>Name:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QComboBox" name="m_exts"/>
+     </item>
+     <item row="1" column="0">
       <widget class="QLabel" name="m_fileExt">
        <property name="text">
-        <string>TextLabel</string>
+        <string>Type</string>
        </property>
       </widget>
      </item>
@@ -63,6 +60,9 @@
      </property>
      <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+     <property name="centerButtons">
+      <bool>true</bool>
      </property>
     </widget>
    </item>

@@ -23,6 +23,9 @@ namespace Studio
 		// 选择文件夹
 		void onSelectDir(const char* dir);
 
+		// 重新选择当前文件夹
+		void reslectCurrentDir();
+
 		// double click res
 		void onDoubleClickPreviewRes(const char* res);
 
@@ -31,6 +34,7 @@ namespace Studio
 		virtual void resizeEvent(QResizeEvent * e);
 
 	private:
+		Echo::String				m_currentDir;
 		QT_UI::QDirectoryModel*		m_dirModel;
 		QT_UI::QPreviewHelper*		m_previewHelper;
 	};

@@ -57,10 +57,19 @@ namespace Studio
 	// 选择文件夹
 	void ResPanel::onSelectDir(const char* dir)
 	{
+		m_currentDir = dir;
+
 		m_previewHelper->clear();
 
 		bool isIncludePreDir = dir == Echo::Root::instance()->getResPath() ? false : true;
 		m_previewHelper->setPath(dir, nullptr, isIncludePreDir);
+	}
+
+	// 重新选择当前文件夹
+	void ResPanel::reslectCurrentDir()
+	{
+		if (!m_currentDir.empty())
+			onSelectDir(m_currentDir.c_str());
 	}
 
 	// double click res

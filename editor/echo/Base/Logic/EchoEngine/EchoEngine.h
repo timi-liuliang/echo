@@ -44,6 +44,12 @@ namespace Studio
 		// 获取当前编辑结点
 		Echo::Node* getCurrentEditNode() { return m_currentEditNode; }
 
+		// 设置当前结点树存储路径
+		void setCurrentEditNodeSavePath(const Echo::String& savePath) { m_currentEditNodeSavePath = savePath; }
+
+		// 获取当前结点树存储路径
+		const Echo::String& getCurrentEditNodeSavePath() { return m_currentEditNodeSavePath; }
+
 	public:
 		// 预览声音
 		virtual void previewAudioEvent( const char* audioEvent);
@@ -94,8 +100,9 @@ namespace Studio
 		void upDateFpsNode(int index);
 
 	protected:
-		Echo::Log*				m_log;				// 日志
-		Echo::Node*				m_currentEditNode;	// 当前编辑场景
+		Echo::Log*				m_log;						// 日志
+		Echo::Node*				m_currentEditNode;			// 当前编辑场景
+		Echo::String			m_currentEditNodeSavePath;	// 当前场景存储路径
 
 		//Echo::node*			m_backGridNode;	// 背景网格用场景结点
 		//Echo::DebugDisplayItem*	m_backGrid;		// 背景网格

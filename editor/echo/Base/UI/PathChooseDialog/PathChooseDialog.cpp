@@ -7,38 +7,28 @@
 namespace Studio
 {
 	// 构造函数
-	PathChooseDialog::PathChooseDialog(QWidget* parent)
+	PathChooseDialog::PathChooseDialog(QWidget* parent, const char* exts)
 		: QDialog( parent)
 	{
 		setupUi( this);
 
 		// 目录树型结构
-		m_model = new QT_UI::QDirectoryModel();
-		m_model->SetIcon("root", QIcon(":/icon/Icon/root.png"));
-		m_model->SetIcon("filter", QIcon(":/icon/Icon/folder_close.png"));
-		m_model->SetIcon("filterexpend", QIcon(":/icon/Icon/folder_open.png"));
-		m_PathTreeView->setModel(m_model);
-
-		m_model->Clean();
+		m_dirModel = new QT_UI::QDirectoryModel();
+		m_dirModel->SetIcon("root", QIcon(":/icon/Icon/root.png"));
+		m_dirModel->SetIcon("filter", QIcon(":/icon/Icon/folder_close.png"));
+		m_dirModel->SetIcon("filterexpend", QIcon(":/icon/Icon/folder_open.png"));
+		m_PathTreeView->setModel(m_dirModel);
+		m_dirModel->Clean();
 
 		QStringList titleLable;
-		titleLable << "Paths";
-		m_model->setHorizontalHeaderLabels(titleLable);
+		titleLable << "Res://";
+		m_dirModel->setHorizontalHeaderLabels(titleLable);
 
-		using namespace Echo;
-		ProjectSettings projectFile;// = Studio_ProjectMgr->GetProjectFile();
-		Echo::vector<ProjectSettings::ArchiveItem>::type& archives = projectFile.getArchives();
-		for (size_t i = 0; i < archives.size(); i++)
-		{
-			Echo::String fullPath;// = Studio_ProjectMgr->GetRootPath() + archives[i].m_archiveValue;
-			m_model->SetRootPath(fullPath.c_str(), "none", m_PathTreeView, NULL/*m_proxyModel*/);
-			m_model->Refresh();
-
-			m_CurPath->setText(fullPath.c_str());
-		}
+		m_dirModel->SetRootPath(Echo::Root::instance()->getResPath().c_str(), exts, m_PathTreeView, NULL);
+		m_dirModel->Refresh();
 
 		// 消息链接
-		QObject::connect(m_model, SIGNAL(FileSelected(const char*)), this, SLOT(OnSelectFile(const char*)));
+		QObject::connect(m_dirModel, SIGNAL(FileSelected(const char*)), this, SLOT(OnSelectFile(const char*)));
 	}
 
 	// 析构函数
@@ -52,13 +42,13 @@ namespace Studio
 	{
 		QString selectFile;
 
-		PathChooseDialog* dialog = new PathChooseDialog(parent);
+		PathChooseDialog* dialog = new PathChooseDialog(parent, "none");
 		dialog->setFileNameVisible(false);
 		dialog->setWindowModality( Qt::WindowModal);
 		dialog->show();
 		if( dialog->exec()==QDialog::Accepted)
 		{
-			selectFile = dialog->m_CurPath->text();
+			selectFile = dialog->getSelectFile().c_str();
 		}
 
 		delete dialog;
@@ -69,22 +59,20 @@ namespace Studio
 	{
 		Echo::String selectFile;
 
-		PathChooseDialog* dialog = new PathChooseDialog(parent);
+		PathChooseDialog* dialog = new PathChooseDialog(parent, ext);
 		dialog->setFileNameVisible(true);
-		QString file_ext = ext;
-		file_ext = "." + file_ext;
-		dialog->m_fileExt->setText(file_ext);
+		dialog->m_fileExt->setText(ext);
 		dialog->setWindowModality(Qt::WindowModal);
 		dialog->show();
 		if (dialog->exec() == QDialog::Accepted)
 		{
-			selectFile = dialog->m_CurPath->text().toStdString().c_str();
+			selectFile = dialog->getSelectFile().c_str();
 			if (selectFile.empty())
 				selectFile = Echo::Root::instance()->getProjectFile()->getPath();
 
 			Echo::PathUtil::FormatPath(selectFile);
 
-			selectFile += (dialog->m_fileNameLine->text() + file_ext).toStdString().c_str();
+			selectFile += (dialog->m_fileNameLine->text() + ext).toStdString().c_str();
 		}
 
 		delete dialog;
@@ -100,7 +88,6 @@ namespace Studio
 
 	void PathChooseDialog::OnSelectFile(const char* path)
 	{
-		m_CurPath->setText(path);
+		m_selectedFile = path;
 	}
-
 }

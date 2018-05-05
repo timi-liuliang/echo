@@ -164,9 +164,9 @@ namespace Studio
 	// save current node tree
 	void EchoEngine::saveCurrentEditNodeTree()
 	{
-		if (m_currentEditNode)
+		if (m_currentEditNode && !m_currentEditNodeSavePath.empty())
 		{
-			m_currentEditNode->save("Res://main.scene");
+			m_currentEditNode->save( m_currentEditNodeSavePath);
 		}
 	}
 
