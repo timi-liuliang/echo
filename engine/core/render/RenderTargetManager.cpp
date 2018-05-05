@@ -73,6 +73,13 @@ namespace Echo
 		}
 	}
 
+	// 获取渲染实例
+	RenderTargetManager* RenderTargetManager::instance()
+	{
+		static RenderTargetManager* inst = EchoNew(RenderTargetManager);
+		return inst;
+	}
+
 	// 初始化
 	bool RenderTargetManager::initialize()
 	{

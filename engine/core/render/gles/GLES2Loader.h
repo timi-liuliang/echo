@@ -1,7 +1,4 @@
-#ifndef __ECHO_GLES2LOADER_H__
-#define __ECHO_GLES2LOADER_H__
-
-#include "engine/core/Util/Singleton.h"
+#pragma once
 
 #ifdef ECHO_PLATFORM_ANDROID
 	#ifndef GL_APIENTRYP
@@ -13,7 +10,7 @@
 
 namespace Echo
 {
-	class GLES2Loader: public Singleton<GLES2Loader>
+	class GLES2Loader
 	{
 		typedef void (GL_APIENTRYP ECHO_PFNGLBINDVERTEXARRAYOESPROC) (GLuint array);
 		typedef void (GL_APIENTRYP ECHO_PFNGLDELETEVERTEXARRAYSOESPROC) (GLsizei n, const GLuint* arrays);
@@ -25,8 +22,10 @@ namespace Echo
 		typedef void (GL_APIENTRYP ECHO_PFNGLGETBUFFERPOINTERVOESPROC) (GLenum target, GLenum pname, GLvoid** params);
 
 	public:
-		GLES2Loader();
 		~GLES2Loader();
+
+		// instance
+		static GLES2Loader* instance();
 
 	public:
 		bool initialize();
@@ -39,7 +38,8 @@ namespace Echo
 		ECHO_PFNGLMAPBUFFEROESPROC				mapBufferOES;
 		ECHO_PFNGLUNMAPBUFFEROESPROC			unmapBufferOES;
 		ECHO_PFNGLGETBUFFERPOINTERVOESPROC		getBufferPointervOES;
+
+	private:
+		GLES2Loader();
 	};
 }
-
-#endif

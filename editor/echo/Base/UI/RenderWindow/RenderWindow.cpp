@@ -26,14 +26,14 @@ namespace Studio
 	{
 		delete m_timer; m_timer = NULL;
 
-		EchoEngine::Instance()->Release();
+		EchoEngine::instance()->Release();
 		delete m_defaultInputController;
 	}
 
 	// ¿ªÊ¼äÖÈ¾
 	void RenderWindow::BeginRender()
 	{
-		EchoEngine::Instance()->Initialize((HWND)this->winId());
+		EchoEngine::instance()->Initialize((HWND)this->winId());
 
 		if (!m_defaultInputController)
 			m_defaultInputController = new DefaultInputController; 
@@ -65,7 +65,7 @@ namespace Studio
 		controller->tick(ctx);
 
 		// Call the main render function
-		EchoEngine::Instance()->Render(elapsedTime, this->isVisible());
+		EchoEngine::instance()->Render(elapsedTime, this->isVisible());
 
 		lastTime = curTime;
 	}
@@ -79,7 +79,7 @@ namespace Studio
 
 		if (m_dx9Size.width() != width || m_dx9Size.height() != height)
 		{
-			EchoEngine::Instance()->Resize(width, height);
+			EchoEngine::instance()->Resize(width, height);
 			m_dx9Size.setWidth(width);
 			m_dx9Size.setHeight(height);
 		}

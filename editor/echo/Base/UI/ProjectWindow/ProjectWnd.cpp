@@ -59,9 +59,9 @@ namespace Studio
 			QString projectName = QFileDialog::getOpenFileName(this, tr("Open Project"), "", tr("(*.echo)"));
 			if ( !projectName.isEmpty() )
 			{
-				AStudio::Instance()->getMainWindow()->showMaximized();
-				AStudio::Instance()->OpenProject(projectName.toStdString().c_str());
-				AStudio::Instance()->getRenderWindow();
+				AStudio::instance()->getMainWindow()->showMaximized();
+				AStudio::instance()->OpenProject(projectName.toStdString().c_str());
+				AStudio::instance()->getRenderWindow();
 
 				close();
 			}
@@ -119,9 +119,9 @@ namespace Studio
 						Echo::PathUtil::RenameFile(projectPathName, destProjectPathName);
 
 					// 5.open project
-					AStudio::Instance()->getMainWindow()->showMaximized();
-					AStudio::Instance()->OpenProject(destProjectPathName.c_str());
-					AStudio::Instance()->getRenderWindow();
+					AStudio::instance()->getMainWindow()->showMaximized();
+					AStudio::instance()->OpenProject(destProjectPathName.c_str());
+					AStudio::instance()->getRenderWindow();
 
 					close();
 				}
@@ -142,9 +142,9 @@ namespace Studio
 		Echo::String projectName = name.toStdString().c_str();
 		if (Echo::PathUtil::IsFileExist(projectName))
 		{
-			AStudio::Instance()->getMainWindow()->showMaximized();
-			AStudio::Instance()->OpenProject(name.toStdString().c_str());
-			AStudio::Instance()->getRenderWindow();
+			AStudio::instance()->getMainWindow()->showMaximized();
+			AStudio::instance()->OpenProject(name.toStdString().c_str());
+			AStudio::instance()->getRenderWindow();
 
 			close();
 		}

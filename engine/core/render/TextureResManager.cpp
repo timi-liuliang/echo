@@ -6,19 +6,21 @@
 
 namespace Echo
 {
-	__ImplementSingleton(TextureResManager);
-
 	// 构造函数
 	TextureResManager::TextureResManager()
 	{
-		__ConstructSingleton;
 	}
 
 	// 析构函数
 	TextureResManager::~TextureResManager()
 	{
-		__DestructSingleton;
-		// subclasses should unregister with resource group manager
+	}
+
+	// instance
+	TextureResManager* TextureResManager::instance()
+	{
+		static TextureResManager* inst = EchoNew(TextureResManager);
+		return inst;
 	}
 
 	// 创建纹理资源

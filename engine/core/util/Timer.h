@@ -1,7 +1,6 @@
 #pragma once
 
 #include "engine/core/Memory/MemManager.h"
-#include "Singleton.h"
 
 #ifdef ECHO_PLATFORM_WINDOWS
 	#include <windows.h>
@@ -12,12 +11,11 @@
 
 namespace Echo
 {
-	class Time: public Singleton<Time>
+	class Time
 	{	
 	public:
+		~Time();
 		static Time* instance();
-		static void replaceInstance(Time* instance);
-		static void destroyInstance();
 
 	public:
 		// ÖØÖÃ
@@ -37,7 +35,6 @@ namespace Echo
 
 	private:
 		Time();
-		~Time();
 
 	protected:
 		clock_t mZeroClock;

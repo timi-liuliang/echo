@@ -1,4 +1,3 @@
-#include "engine/core/Util/Singleton.h"
 #include "AABBKeyFrame.h"
 #include "Bone.h"
 #include "engine/core/Util/LogManager.h"

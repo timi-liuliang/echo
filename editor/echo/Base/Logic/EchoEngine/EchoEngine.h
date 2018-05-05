@@ -12,12 +12,14 @@
 namespace Studio
 {
 	class RenderWindow; 
-	class FBXManager;
-	class EchoEngine : public Echo::Singleton<EchoEngine>
+	class EchoEngine
 	{
 	public:
 		EchoEngine();
 		~EchoEngine();
+
+		// inst
+		static EchoEngine* instance();
 
 		// 初始化
 		bool Initialize( HWND hwnd);
@@ -33,9 +35,6 @@ namespace Studio
 
 		// 卸载
 		void Release();
-
-		// 获取FBX格式管理器
-		FBXManager* GetFBXManager() { return m_fbxManager; }
 
 	public:
 		// 设置当前编辑结点
@@ -113,9 +112,6 @@ namespace Studio
 
 		static std::string		m_projectFile;		// 项目名称
 		static RenderWindow*	m_renderWindow;	// 渲染窗口
-
-		FBXManager*				m_fbxManager;		// fbx格式管理器
-
 		Echo::AudioSourceID		m_curPlayAudio;		// 当前播放音频
 
 		//FontRenderManager*  m_FontRenderManager; // 字体渲染  

@@ -36,7 +36,7 @@ namespace Studio
 		// 检测项目
 		//CheckProject();
 
-		AStudio::Instance()->getConfigMgr()->addRecentProject(fullPathName);
+		AStudio::instance()->getConfigMgr()->addRecentProject(fullPathName);
 	}
 
 	// 资源检测

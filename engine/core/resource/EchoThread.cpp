@@ -321,6 +321,13 @@ namespace Echo
 	{
 	}
 
+	// instance
+	StreamThread* StreamThread::instance()
+	{
+		static StreamThread* inst = EchoNew(StreamThread);
+		return inst;
+	}
+
 	// Ìí¼ÓÈÎÎñ
 	ui32 StreamThread::addTask( StreamThread::Task* pTask)
 	{

@@ -450,6 +450,7 @@ namespace Echo
 #define EchoNew(T)								ECHO_NEW_T(T)
 #define EchoNewArray(T, count)					ECHO_NEW_ARRAY_T(T, count)
 #define EchoSafeDelete(ptr, T)					{ if(ptr) { ECHO_DELETE_T(ptr, T); (ptr) = NULL; } }
+#define EchoSafeDeleteInstance(T)				{ T* inst = T::instance(); EchoSafeDelete(inst, T); }
 #define EchoSafeDeleteArray(ptr, T, count)		{ if(ptr) { ECHO_DELETE_ARRAY_T(ptr, T, count); (ptr) = NULL; } }
 #define EchoSafeDeleteContainer(container, T)	{ for (auto& element : container){ ECHO_DELETE_T(element, T); } container.clear();	}
 #define EchoSafeDeleteMap(container, T)			{ for (auto& element : container){ ECHO_DELETE_T(element.second, T); } container.clear();	}

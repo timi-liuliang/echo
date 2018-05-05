@@ -12,14 +12,10 @@ namespace Echo
 		typedef vector<Log*>::type	LogArray;
 
 	public:
-		LogManager();
 		~LogManager();
 
 		// 获取单一实例
 		static LogManager* instance();
-
-		// 替换实例
-		static void replaceInstance(LogManager* inst);
 
 		// 添加日志
 		bool addLog( Log* pLog);
@@ -54,7 +50,8 @@ namespace Echo
 		void warning(const char* msg);
 		void info(const char* msg);
 
-		static LogManager* s_instance;
+	private:
+		LogManager();
 
 	protected:
 		Log::LogLevel	m_logLevel;		// 日志级别

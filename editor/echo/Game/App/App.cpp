@@ -19,7 +19,7 @@ namespace Game
 	// init
 	void App::init(HWND hwnd, const Echo::String& echoProject)
 	{
-		m_root = EchoNew(Echo::Root);
+		m_root = Echo::Root::instance();
 		m_root->initLogSystem();
 
 		m_log = EchoNew(GameLog("Game"));

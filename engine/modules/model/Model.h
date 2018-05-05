@@ -327,11 +327,11 @@ namespace Echo
 		typedef set<Model* >::type ModelSet;
 		typedef set<Model* >::type::iterator ModelItor;
 
-		__DeclareSingleton(ModelManager);
-
 	public:
-		ModelManager();
 		~ModelManager();
+
+		// instance
+		static ModelManager* instance();
 
 		// 创建模型
 		void createModel(const String& modelName, bool isSync, std::function<bool(Model* )> onCreateModelComplete, bool isForUI = false);
@@ -366,6 +366,8 @@ namespace Echo
 		bool refreshModelTemplate(const String& modelName);
 
 	private:
+		ModelManager();
+
 		// 添加模型
 		void addModel(Model* model);
 

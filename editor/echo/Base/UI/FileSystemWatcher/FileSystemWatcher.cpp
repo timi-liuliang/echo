@@ -92,7 +92,7 @@ namespace Studio
 
 		if (fileExt == ".tga" || fileExt == ".bmp" || fileExt == ".png" || fileExt == ".jpg")
 		{
-			Echo::Resource* resource = EchoTextureResManager->getByName(fileName);
+			Echo::Resource* resource = Echo::TextureResManager::instance()->getByName(fileName);
 			if (resource)
 				resource->reload();
 		}

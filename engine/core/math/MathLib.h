@@ -1,5 +1,4 @@
-#ifndef __ECHO_MATHLIB_H__
-#define __ECHO_MATHLIB_H__
+#pragma once
 
 #include "EchoMath.h"
 #include "Vector2.h"
@@ -8,5 +7,3 @@
 #include "Matrix4.h"
 #include "Quaternion.h"
 #include "Curve.h"
-
-#endif

@@ -59,6 +59,13 @@ namespace Studio
 		//EchoSafeDelete(m_FontRenderManager, FontRenderManager);
 	}
 
+	// inst
+	EchoEngine* EchoEngine::instance()
+	{
+		static EchoEngine* inst = new EchoEngine;
+		return inst;
+	}
+
 	// 初始化
 	bool EchoEngine::Initialize(HWND hwnd)
 	{
@@ -95,7 +102,7 @@ namespace Studio
 		//	postProcessStage->setImageEffectEnable("FXAA", Echo::Root::instance()->getEnableFXAA());
 		}
 
-		EchoAudioManager->setAudioEventCb(&MyAudioEventCallBack);
+		Echo::FSAudioManager::instance()->setAudioEventCb(&MyAudioEventCallBack);
 
 		m_currentEditNode = nullptr;
 
@@ -156,7 +163,7 @@ namespace Studio
 		m_projectFile = projectFile;
 
 		// 初始化渲染窗口
-		m_renderWindow = static_cast<RenderWindow*>(AStudio::Instance()->getRenderWindow());
+		m_renderWindow = static_cast<RenderWindow*>(AStudio::instance()->getRenderWindow());
 
 		return true;
 	}
@@ -290,7 +297,7 @@ namespace Studio
 	// 预览声音
 	void EchoEngine::previewAudioEvent(const char* audioEvent)
 	{
-		EchoAudioManager->destroyAudioSources(&m_curPlayAudio, 1);
+		Echo::FSAudioManager::instance()->destroyAudioSources(&m_curPlayAudio, 1);
 
 		bool isAudioEvnet = Echo::StringUtil::StartWith(audioEvent, "event:", true);
 		if (isAudioEvnet)
@@ -298,14 +305,14 @@ namespace Studio
 			Echo::AudioSource::Cinfo cinfo;
 			cinfo.m_name = audioEvent;
 			cinfo.m_is3DMode = false;
-			m_curPlayAudio = EchoAudioManager->createAudioSource(cinfo);
+			m_curPlayAudio = Echo::FSAudioManager::instance()->createAudioSource(cinfo);
 		}
 	}
 
 	// 停止正在预览的声源
 	void EchoEngine::stopCurPreviewAudioEvent()
 	{
-		EchoAudioManager->destroyAudioSources(&m_curPlayAudio, 1);
+		Echo::FSAudioManager::instance()->destroyAudioSources(&m_curPlayAudio, 1);
 	}
 
 	// 获取模型半径

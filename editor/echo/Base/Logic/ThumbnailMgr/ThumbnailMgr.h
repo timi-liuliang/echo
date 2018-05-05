@@ -1,5 +1,4 @@
-#ifndef __THUMBNAIL_MANAGER_H__
-#define	__THUMBNAIL_MANAGER_H__
+#pragma once
 
 #include <Engine/Core.h>
 #include <engine/core/Util/StringUtil.h>
@@ -9,7 +8,7 @@ namespace Studio
 	/**
 	 * 缩略图管理器
 	 */
-	class ThumbnailMgr : public Echo::Singleton<ThumbnailMgr>
+	class ThumbnailMgr
 	{
 	public:
 		// 缩略图类型
@@ -24,10 +23,12 @@ namespace Studio
 			THUMB_NUM,
 		};
 
-
 	public:
 		ThumbnailMgr();
 		virtual ~ThumbnailMgr();
+
+		// instance
+		static ThumbnailMgr* instance();
 
 		// 保存缩略图
 		bool saveThumbnail( const Echo::String& fileName, THUMBNAIL_TYPE type = THUMB_NON);
@@ -36,6 +37,3 @@ namespace Studio
 		static void update();
 	};
 }
-
-#endif
-

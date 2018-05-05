@@ -54,11 +54,18 @@ namespace Studio
 		Echo::MemoryManager::outputMemLeakInfo();
 	}
 
+	// instance
+	AStudio* AStudio::instance()
+	{
+		AStudio* inst = new AStudio;
+		return inst;
+	}
+
 	// 初始化日志系统
 	bool AStudio::initLogSystem()
 	{
-		EchoNew(Echo::Root);
-		EchoRoot->initLogSystem();
+		Echo::Root::instance();
+		Echo::Root::instance()->initLogSystem();
 
 		// 添加默认日志处理
 		Echo::LogDefault::LogConfig logConfig;
@@ -68,11 +75,11 @@ namespace Studio
 		logConfig.logFilename = "echo.log";
 		logConfig.bFileOutput = true;
 
-		EchoLogManager->setLogLeve(logConfig.logLevel);
+		Echo::LogManager::instance()->setLogLeve(logConfig.logLevel);
 
 		m_log = EchoNew(Echo::LogDefault(logConfig));
 		if ( m_log )
-			EchoLogManager->addLog(m_log);
+			Echo::LogManager::instance()->addLog(m_log);
 
 		return true;
 	}
@@ -91,7 +98,7 @@ namespace Studio
 
 		// 启动日志面板
 		m_logPanel = EchoNew(LogPanel( m_mainWindow));
-		EchoLogManager->addLog(m_logPanel);
+		Echo::LogManager::instance()->addLog(m_logPanel);
 	}
 
 	// 关闭
@@ -115,7 +122,7 @@ namespace Studio
 	// 判断缩略图是否存在
 	bool AStudio::isThumbnailExists(const Echo::String& name)
 	{
-		Echo::String appPath = AStudio::Instance()->getAppPath();
+		Echo::String appPath = AStudio::instance()->getAppPath();
 		Echo::String fileFullName = Echo::StringUtil::Format("%sCache/thumbnail/%s.bmp", appPath, name);
 
 		return Echo::PathUtil::IsFileExist(fileFullName);
@@ -249,7 +256,7 @@ namespace Studio
 	// 保存缩略图
 	bool AStudio::saveThumbnail(const Echo::String& fileName, int type /* = 0 */)
 	{
-		bool success = ThumbnailMgr::Instance()->saveThumbnail(fileName, ThumbnailMgr::THUMBNAIL_TYPE(type));
+		bool success = ThumbnailMgr::instance()->saveThumbnail(fileName, ThumbnailMgr::THUMBNAIL_TYPE(type));
 		if ( success )
 		{
 			QString itemName;

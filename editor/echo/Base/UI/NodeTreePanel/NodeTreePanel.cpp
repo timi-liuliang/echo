@@ -52,7 +52,7 @@ namespace Studio
 		m_nodeTreeWidget->clear();
 
 		// begin with "Node"
-		addNode(EchoEngine::Instance()->getCurrentEditNode(), m_nodeTreeWidget->invisibleRootItem(), true);
+		addNode(EchoEngine::instance()->getCurrentEditNode(), m_nodeTreeWidget->invisibleRootItem(), true);
 
 		m_nodeTreeWidget->expandAll();
 	}
@@ -104,7 +104,7 @@ namespace Studio
 	{
 		if (m_nodeTreeWidget->invisibleRootItem()->childCount() == 0)
 		{
-			EchoEngine::Instance()->setCurrentEditNode(node);
+			EchoEngine::instance()->setCurrentEditNode(node);
 			refreshNodeTreeDisplay();
 		}
 		else
@@ -169,7 +169,7 @@ namespace Studio
 		// set as nullptr
 		if (m_nodeTreeWidget->invisibleRootItem()->childCount() == 0)
 		{
-			EchoEngine::Instance()->setCurrentEditNode( nullptr);
+			EchoEngine::instance()->setCurrentEditNode( nullptr);
 		}
 
 		// update property panel display

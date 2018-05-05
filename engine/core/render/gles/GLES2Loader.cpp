@@ -11,6 +11,13 @@ namespace Echo
 	{
 	}
 
+	// instance
+	GLES2Loader* GLES2Loader::instance()
+	{
+		static GLES2Loader* inst = EchoNew(GLES2Loader);
+		return inst;
+	}
+
 	bool GLES2Loader::initialize()
 	{
 	#if defined(ECHO_PLATFORM_ANDROID) || defined(ECHO_PLATFORM_WINDOWS)

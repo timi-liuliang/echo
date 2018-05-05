@@ -116,10 +116,8 @@ namespace Echo
 				EchoAssert( false);
 			}
 		}
-		if (LogManager::s_instance)
-		{
-			EchoLogInfo("%s", result.c_str());
-		}
+
+		EchoLogInfo("%s", result.c_str());
 	}
 
 	size_t TimeProfiler::lordStrHash(const char *str)

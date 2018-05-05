@@ -1,6 +1,5 @@
 #include "engine/core/Math/Quaternion.h"
 #include "engine/core/Math/Vector4.h"
-#include "engine/core/Util/Singleton.h"
 #include "Bone.h"
 #include "Animation.h"
 #include "AnimBlender.h"
@@ -313,7 +312,12 @@ namespace Echo
 #endif
 	}
 
-	__ImplementSingleton(AnimSystemManager);
+	// instance
+	AnimSystemManager* AnimSystemManager::instance()
+	{
+		static AnimSystemManager* inst = EchoNew(AnimSystemManager);
+		return inst;
+	}
 
 	// 创建动画系统
 	AnimSystem* AnimSystemManager::createAnimSystem(const String& name, bool isManual)

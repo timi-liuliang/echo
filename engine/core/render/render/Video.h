@@ -1,7 +1,6 @@
 #pragma once
 #include "Texture.h"
 #include <Engine/core/Render/TextureRes.h>
-#include "engine/core/Util/Singleton.h"
 
 class TheoraVideoManager;
 class TheoraVideoClip;
@@ -9,7 +8,7 @@ class OpenAL_AudioInterfaceFactory;
 
 namespace Echo
 {
-	class VideoPlay : public Singleton<VideoPlay>
+	class VideoPlay
 	{
 	public:
 		VideoPlay();

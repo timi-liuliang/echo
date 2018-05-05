@@ -17,7 +17,7 @@ namespace Studio
 		m_debuggerPanel = EchoNew(DebuggerPanel(this));
 
 		m_tabWidget->clear();
-		m_tabWidget->addTab(AStudio::Instance()->getLogPanel(), "Log");
+		m_tabWidget->addTab(AStudio::instance()->getLogPanel(), "Log");
 		m_tabWidget->addTab(m_debuggerPanel, "Debugger");
 		m_tabWidget->addTab(m_timelinePanel, "TimeLine");
 		onTabIdxChanged(0);

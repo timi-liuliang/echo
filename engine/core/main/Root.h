@@ -4,7 +4,6 @@
 #include "engine/core/Resource/EchoThread.h"
 #include "engine/core/main/EngineSettings.h"
 #include "engine/core/main/EngineConsole.h"
-#include "engine/core/Util/Singleton.h"
 #include "engine/core/Scene/NodeTree.h"
 #include "FrameState.h"
 
@@ -63,11 +62,9 @@ namespace Echo
 			{}
 		};
 
-		__DeclareSingleton(Root);
-
 	public:
-		Root();
-		~Root();
+		// instance
+		static Root* instance();
 
 		void tick(i32 elapsedTime);
 
@@ -102,9 +99,6 @@ namespace Echo
 		void* getAssetManager() const;
 		bool isRendererInited() const;
 		const ui32&		getCurrentTime() const;
-
-		void			enableStreamThread(bool enable);
-		StreamThread*	getThreadThread() const;
 
 		inline void		setEnableFrameProfile( bool _enable ){ m_enableFrameProfile = _enable; }
 
@@ -144,24 +138,16 @@ namespace Echo
 		void setReleaseDelayTime(ui32 t);
 
 	private:
+		Root();
+		~Root();
+
 		// register all class types
 		void registerClassTypes();
 
 	public:
 		ProjectSettings* getProjectFile() { return m_projectFile; }
-		MemoryManager* getMemoryManager() { EchoAssert(m_memoryManager);  return m_memoryManager; }
-		LogManager* getLogManager() { EchoAssert(m_logManager);  return m_logManager; }
-		SkeletonManager* getSkeletonManager() { EchoAssert(m_skeletonManager);  return m_skeletonManager; }
-		AnimManager* getAnimManager() { EchoAssert(m_animManager);  return m_animManager; }
-		AnimSystemManager* getAnimSysManager() { EchoAssert(m_animSysManager);  return m_animSysManager; }
-		ModelManager* getModelManager() { EchoAssert(m_modelManager);  return m_modelManager; }
-		IO* getResourceGroupManager() { EchoAssert(m_io); return m_io; }
-		TextureResManager* getTextureResManager() { EchoAssert(m_textureResManager);  return m_textureResManager; }
-		OpenMPTaskMgr* getOpenMPTaskMgr() { EchoAssert(m_openMPTaskMgr);  return m_openMPTaskMgr; }
 		EngineSettingsMgr& getSettingsMgr() { return m_settingsMgr; }
 		EngineConsole& getConsole() { return m_console; }
-		ImageCodecMgr* getImageCodecManager() { EchoAssert(m_imageCodecManager);  return m_imageCodecManager; }
-		FSAudioManager* getAudioManager() { EchoAssert(m_audioManager);  return m_audioManager; }
 
 	protected:
 		void updateAllManagerDelayResource();
@@ -179,19 +165,7 @@ namespace Echo
 		bool				m_bRendererInited;
 		float				m_frameTime;
 		ui32				m_currentTime;
-		MemoryManager*		m_memoryManager;				// 内存管理器
-		LogManager*			m_logManager;
-		IO*					m_io;
-		TextureResManager*	m_textureResManager;			// 纹理资源管理器
-		SkeletonManager*	m_skeletonManager;				// 骨骼资源管理器
-		AnimManager*		m_animManager;					// 动画管理器
-		AnimSystemManager*	m_animSysManager;				// 动画系统管理器
-		ImageCodecMgr*		m_imageCodecManager;			// 纹理编码管理器
-		ModelManager*		m_modelManager;					// 模型管理器
-		Time*				m_Timer;
 		Renderer*			m_renderer;						// 渲染器
-		FSAudioManager*		m_audioManager;					// 音频管理器
-		StreamThread*		m_StreamThreading;				// 流加载线程
 		bool				m_enableFrameProfile;
 		FrameState			m_frameState;
 		int					Maxmemory;
@@ -200,8 +174,6 @@ namespace Echo
 		bool				m_enableBloom;
 		bool				m_enableFilterAdditional;
 		float				m_framebufferScale;             // 帧缓冲区缩放
-		OpenMPTaskMgr*		m_openMPTaskMgr;				// OpenMP任务处理器
-		RenderTargetManager*m_renderTargetManager;			// 渲染目标管理器
 		ProjectSettings*		m_projectFile;					// 项目信息
 
 #ifdef ECHO_PROFILER
@@ -212,15 +184,5 @@ namespace Echo
 
 #define EchoRoot					Echo::Root::instance()
 #define EchoMemoryManager			EchoRoot->getMemoryManager()
-#define EchoLogManager				EchoRoot->getLogManager()
-#define EchoSkeletonManager			EchoRoot->getSkeletonManager()
-#define EchoAnimManager				EchoRoot->getAnimManager()
-#define EchoAnimSystemManager		EchoRoot->getAnimSysManager()
-#define EchoEffectSystemManager		EchoRoot->getEffectSystemManager()
-#define EchoTextureResManager		EchoRoot->getTextureResManager()
-#define EchoOpenMPTaskMgr			EchoRoot->getOpenMPTaskMgr()
 #define EchoEngineSettings			EchoRoot->getSettingsMgr()
 #define EchoEngineConsole			EchoRoot->getConsole()
-#define EchoModelManager			EchoRoot->getModelManager()
-#define EchoImageCodecManager		EchoRoot->getImageCodecManager()
-#define EchoAudioManager			EchoRoot->getAudioManager()

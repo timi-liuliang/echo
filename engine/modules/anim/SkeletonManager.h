@@ -1,5 +1,4 @@
-#ifndef __ECHO_SKELETONMANAGER_H__
-#define __ECHO_SKELETONMANAGER_H__
+#pragma once
 
 #include "engine/core/Resource/ResourceManager.h"
 
@@ -8,19 +7,19 @@ namespace Echo
 	class Skeleton;
 	class SkeletonManager : public ResourceManager
 	{
-		__DeclareSingleton(SkeletonManager);
-
 	public:
-		SkeletonManager();
 		virtual ~SkeletonManager();
+
+		// instance
+		static SkeletonManager* instance();
 
 		Skeleton* createSkeleton(const String& name, bool isManual=false);
 
 	protected:
+		SkeletonManager();
+
 		/// @copydoc ResourceManager::createImpl
 		Resource* createImpl(const String& name, bool isManual);
 	};
 
 }
-
-#endif

@@ -12,6 +12,14 @@ namespace Echo
 		ECHO_CLASS(GltfScene, Node)
 
 	public:
+		// asset
+		struct Info
+		{
+			int					m_version;
+			vector<int>::type	m_rootNodeIdxs;
+		};
+
+	public:
 		GltfScene();
 		virtual ~GltfScene();
 
@@ -30,5 +38,6 @@ namespace Echo
 
 	private:
 		ResourcePath			m_gltfRes;
+		Info					m_info;
 	};
 }

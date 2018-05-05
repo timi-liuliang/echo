@@ -85,8 +85,8 @@ namespace Echo
 
 		EchoLogDebug("Load GLES extensions ...");
 
-		EchoNew(GLES2Loader);
-		if (!GLES2Loader::Instance()->initialize())
+		GLES2Loader::instance();
+		if (!GLES2Loader::instance()->initialize())
 		{
 			EchoLogDebug("Load GLES extensions failed.");
 			return false;
@@ -163,7 +163,7 @@ namespace Echo
 	void GLES2Renderer::destroyImpl()
 	{
 #if defined(ECHO_LOAD_GLES_EXT)
-		GLES2Loader* gles2Loader = GLES2Loader::Instance();
+		GLES2Loader* gles2Loader = GLES2Loader::instance();
 		EchoSafeDelete(gles2Loader, GLES2Loader);
 #endif
 

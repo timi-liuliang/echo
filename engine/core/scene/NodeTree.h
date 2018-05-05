@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Node.h"
-#include "engine/core/Util/Singleton.h"
 #include "Engine/core/Camera/Camera.h"
 #include "Engine/core/Camera/CameraShadow.h"
 
@@ -10,7 +9,6 @@ namespace Echo
 	class NodeTree
 	{	
 	public:
-		NodeTree();
 		virtual ~NodeTree();
 
 		// instance
@@ -45,6 +43,9 @@ namespace Echo
 
 		// 获取阴影摄像机
 		CameraShadow& getShadowCamera() { EchoAssert( m_shadowCamera);  return *m_shadowCamera; }
+
+	private:
+		NodeTree();
 
 	protected:
 		Camera*			    m_3dCamera;			// 主摄像机

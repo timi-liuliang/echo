@@ -68,7 +68,7 @@ namespace Studio
 
 		//QMdiArea* midArea = new QMdiArea(this);
 
-		QWidget* renderWindow = AStudio::Instance()->getRenderWindow();
+		QWidget* renderWindow = AStudio::instance()->getRenderWindow();
 
 		m_tabWidget->addTab(renderWindow, "NodeTree");
 
@@ -91,7 +91,7 @@ namespace Studio
 	void MainWindow::onSaveProject()
 	{
 		// if path isn't exist. choose a save directory
-		if (EchoEngine::Instance()->getCurrentEditNodeSavePath().empty())
+		if (EchoEngine::instance()->getCurrentEditNodeSavePath().empty())
 		{
 			Echo::String savePath = PathChooseDialog::getExistingPathName(this, ".scene", "Save").toStdString().c_str();
 			if (!savePath.empty() && !Echo::PathUtil::IsDir(savePath))
@@ -99,8 +99,8 @@ namespace Studio
 				Echo::String resPath;
 				if (Echo::IO::instance()->covertFullPathToResPath(savePath, resPath))
 				{
-					EchoEngine::Instance()->setCurrentEditNodeSavePath(resPath.c_str());
-					Studio::EchoEngine::Instance()->saveCurrentEditNodeTree();
+					EchoEngine::instance()->setCurrentEditNodeSavePath(resPath.c_str());
+					Studio::EchoEngine::instance()->saveCurrentEditNodeTree();
 				}
 			}
 		}
@@ -132,10 +132,10 @@ namespace Studio
 	// 打开文件
 	void MainWindow::OpenProject(const char* projectName)
 	{
-		AStudio::Instance()->OpenProject(projectName);
+		AStudio::instance()->OpenProject(projectName);
 
 		// 初始化渲染窗口
-		AStudio::Instance()->getRenderWindow();
+		AStudio::instance()->getRenderWindow();
 	}
 
 	// open lua file for edit
@@ -154,7 +154,7 @@ namespace Studio
 
 	void MainWindow::closeEvent(QCloseEvent *event)
 	{
-		AStudio::Instance()->getLogPanel()->close();
+		AStudio::instance()->getLogPanel()->close();
 	}
 
 	// game process exit

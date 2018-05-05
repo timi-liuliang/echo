@@ -5,22 +5,11 @@
 
 namespace Echo
 {
-	LogManager* LogManager::s_instance = NULL;
 	// 获取单一实例
 	LogManager* LogManager::instance()
 	{
-		if (NULL == s_instance)
-		{
-			s_instance = EchoNew(LogManager);
-		}
-		return s_instance;
-	}
-
-	// 替换实例
-	void LogManager::replaceInstance(LogManager* inst)
-	{
-		EchoAssert(!s_instance);
-		s_instance = inst;
+		static LogManager* inst = EchoNew(LogManager);
+		return inst;
 	}
 
 	// 构造函数

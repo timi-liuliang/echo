@@ -2,8 +2,6 @@
 
 namespace Echo
 {
-	__ImplementSingleton(OpenMPTaskMgr);
-
 	// 构造函数
 	OpenMPTaskMgr::OpenMPTaskMgr()
 	{
@@ -14,8 +12,6 @@ namespace Echo
 
 		// 创建线程池
 		m_threadPool = EchoNew(Echo::CpuThreadPool(info));
-
-		__ConstructSingleton;
 	}
 
 	// 析构函数
@@ -31,8 +27,13 @@ namespace Echo
 
 		m_threadPool->stop();
 		EchoSafeDelete(m_threadPool, CpuThreadPool);
+	}
 
-		__DestructSingleton;
+	// instance
+	OpenMPTaskMgr* OpenMPTaskMgr::instance()
+	{
+		static OpenMPTaskMgr* inst = EchoNew(OpenMPTaskMgr);
+		return inst;
 	}
 
 	// 添加任务

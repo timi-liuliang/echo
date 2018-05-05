@@ -1,11 +1,11 @@
 #pragma once
+
 #include "engine/core/Resource/Resource.h"
+#include "engine/core/math/MathLib.h"
 
 namespace Echo
 {
 	class Bone;
-
-
 	class Skeleton : public Resource
 	{
 	public:

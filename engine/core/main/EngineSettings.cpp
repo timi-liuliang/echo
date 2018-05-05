@@ -158,7 +158,10 @@ namespace Echo
 	void EngineSettingsMgr::setEnableStreamThread(bool isUseStreamThread)
 	{
 		m_bEnableStreamThread = isUseStreamThread;
-		Root::instance()->enableStreamThread(m_bEnableStreamThread);
+		if (m_bEnableStreamThread)
+			StreamThread::instance()->start();
+		else
+			StreamThread::instance()->shutdown();
 	}
 
 	void EngineSettingsMgr::setEnableSmallObjectCull(bool enable)

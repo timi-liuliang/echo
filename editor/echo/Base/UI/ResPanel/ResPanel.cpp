@@ -90,13 +90,14 @@ namespace Studio
 					Echo::Node* node = Echo::Node::load(resPath);
 					if (node)
 					{
-						Echo::Node* old = Studio::EchoEngine::Instance()->getCurrentEditNode();
+						Echo::Node* old = Studio::EchoEngine::instance()->getCurrentEditNode();
 						if (old)
 						{
 							old->queueFree();
 						}
 
-						Studio::EchoEngine::Instance()->setCurrentEditNode(node);
+						Studio::EchoEngine::instance()->setCurrentEditNode(node);
+						Studio::EchoEngine::instance()->setCurrentEditNodeSavePath(res);
 
 						NodeTreePanel::instance()->refreshNodeTreeDisplay();
 					}

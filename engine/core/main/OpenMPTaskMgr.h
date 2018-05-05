@@ -1,7 +1,6 @@
 #pragma once
 
 #include <engine/core/Thread/Pool/CpuThreadPool.h>
-#include "engine/core/Util/Singleton.h"
 #include "engine/core/Base/EchoDef.h"
 
 namespace Echo
@@ -12,8 +11,6 @@ namespace Echo
 	 */
 	class OpenMPTaskMgr
 	{
-		__DeclareSingleton(OpenMPTaskMgr);
-
 	public:
 		// 任务类型
 		enum TaskType
@@ -23,8 +20,10 @@ namespace Echo
 		};
 
 	public:
-		OpenMPTaskMgr();
 		~OpenMPTaskMgr();
+
+		// instance
+		static OpenMPTaskMgr* instance();
 
 		// 添加任务
 		void addTask(TaskType type, CpuThreadPool::Job* task);
@@ -37,6 +36,9 @@ namespace Echo
 
 		// 等待特效更新完成
 		void waitForEffectSystemUpdateComplete();
+
+	private:
+		OpenMPTaskMgr();
 
 	private:
 		vector<CpuThreadPool::Job*>::type	m_animationUpdateTasks;				// 动画更新任务

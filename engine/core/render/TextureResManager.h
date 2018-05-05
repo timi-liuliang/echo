@@ -1,10 +1,8 @@
-#ifndef __ECHO_TEXTUREMANAGER_H__
-#define __ECHO_TEXTUREMANAGER_H__
+#pragma once
 
 #include <engine/core/render/render/Texture.h>
 #include <Engine/core/Resource/ResourceManager.h>
 #include "Engine/core/Render/TextureRes.h"
-#include "engine/core/Util/Singleton.h"
 
 namespace Echo
 {
@@ -14,11 +12,11 @@ namespace Echo
 	class TextureRes;
 	class TextureResManager : public ResourceManager
 	{
-		__DeclareSingleton(TextureResManager);
-
 	public:
-		TextureResManager();
 		virtual ~TextureResManager();
+
+		// instance
+		static TextureResManager* instance();
 
 		// 创建纹理
 		virtual TextureRes* createTexture(const String& name, Dword usage = Texture::TU_STATIC);
@@ -31,7 +29,8 @@ namespace Echo
 	
 		// 创建纹理实现
 		Resource* createImpl(const String& name, bool isManual);
+
+	private:
+		TextureResManager();
 	};
 }
-
-#endif

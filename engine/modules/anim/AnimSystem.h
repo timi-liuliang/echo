@@ -90,22 +90,18 @@ namespace Echo
 	*/
 	class AnimSystemManager : public ResourceManager
 	{
-		__DeclareSingleton(AnimSystemManager);
-
 	public:
-		AnimSystemManager() 
-		{
-			__ConstructSingleton;
-		}
-		virtual ~AnimSystemManager() 
-		{
-			__DestructSingleton;
-		}
+		virtual ~AnimSystemManager() {}
+
+		// instance
+		static AnimSystemManager* instance();
 
 		// 创建动画系统
 		AnimSystem* createAnimSystem(const String& name, bool isManual = false);
 
 	protected:
+		AnimSystemManager() {}
+
 		// 实现
 		virtual Resource* createImpl(const String& name, bool isManual);
 	};

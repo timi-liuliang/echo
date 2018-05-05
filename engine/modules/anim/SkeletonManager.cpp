@@ -1,20 +1,21 @@
-#include "Engine/Core.h"
 #include "Engine/modules/Anim/SkeletonManager.h"
 #include "Engine/modules/Anim/Skeleton.h"
 
 namespace Echo
 {
-	__ImplementSingleton(SkeletonManager);
-
 	SkeletonManager::SkeletonManager()
 	{
-		__ConstructSingleton;
 	}
 
 	SkeletonManager::~SkeletonManager()
 	{
-		__DestructSingleton;
-		// subclasses should unregister with resource group manager
+	}
+
+	// instance
+	SkeletonManager* SkeletonManager::instance()
+	{
+		static SkeletonManager* inst = EchoNew(SkeletonManager);
+		return inst;
 	}
 
 	Skeleton* SkeletonManager::createSkeleton(const String& name, bool isManual)

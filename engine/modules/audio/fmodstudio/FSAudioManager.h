@@ -1,7 +1,6 @@
 #pragma once
 
 #include "FSAudioSource.h"
-#include "engine/core/Util/Singleton.h"
 
 namespace Echo
 {
@@ -16,16 +15,16 @@ namespace Echo
 	struct AudioBank;
 	class FSAudioManager
 	{
-		__DeclareSingleton(FSAudioManager);
-
 	public:
 		typedef EchoHashMap<String, AudioBank*> BankMap;
 		typedef EchoHashMap<AudioSourceID, AudioSource*> AudioSourceMap;
 		typedef EchoHashSet<FMOD::Studio::EventDescription*> AudioSampleSet;
 		typedef vector<AudioSourceID>::type	AudioSourceIdArray;
 	public:
-		FSAudioManager();
 		virtual ~FSAudioManager();
+
+		// instance
+		static FSAudioManager* instance();
 
 		// 初始化
 		virtual void init(int, bool);
@@ -109,6 +108,8 @@ namespace Echo
 		AudioSourceEventCB getAudioEventCb() { return m_audioEventCallback; }
 
 	private:
+		FSAudioManager();
+
 		// 加载bank文件
 		bool loadBankFile(const char* bankFile);
 

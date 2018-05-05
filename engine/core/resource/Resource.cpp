@@ -229,7 +229,7 @@ namespace Echo
 				if (IO::instance()->isAsync(mName.c_str()))
 				{
 					// È¡Á÷¼ÓÔØÆ÷
-					Echo::StreamThread* streamThread = Echo::StreamThread::Instance();
+					Echo::StreamThread* streamThread = Echo::StreamThread::instance();
 					ResourcePrepareEvent* resourcePrepareEvent = EchoNew(ResourcePrepareEvent(this));
 					streamThread->addTask(resourcePrepareEvent);
 

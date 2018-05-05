@@ -39,14 +39,16 @@ namespace Studio
 	class ProjectWnd;
 	class RenderWindow;
 	class LogPanel;
-	class AStudio : public Echo::Singleton <AStudio>
+	class AStudio
 	{
 	public:
-		AStudio();
 		~AStudio();
 
 		// 命令行模式初始化
 		AStudio(const char* inputProject);
+
+		// instance
+		static AStudio* instance();
 
 		// 启动
 		void Start();
@@ -100,6 +102,8 @@ namespace Studio
 		void OpenProject( const char* fileName);
 
 	private:
+		AStudio();
+
 		// 初始化日志系统
 		bool initLogSystem();
 

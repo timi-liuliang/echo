@@ -8,28 +8,10 @@
 
 namespace Echo
 {
-	//---------------------------------------------------------------------
 	Time* Time::instance()
 	{
-		if (!ms_pSingleton)
-			ms_pSingleton = new Time;
-
-		return ms_pSingleton;
-	}
-
-	void Time::replaceInstance(Time* instance)
-	{
-		EchoAssert(instance);
-		ms_pSingleton = instance;
-	}
-
-	void Time::destroyInstance()
-	{
-		if (ms_pSingleton)
-		{
-			delete ms_pSingleton;
-			ms_pSingleton = nullptr;
-		}
+		static Time* inst = EchoNew(Time);
+		return inst;
 	}
 
 	Time::Time()
@@ -45,7 +27,6 @@ namespace Echo
 
 	}
 
-	//--------------------------------------------------------------------------------//
 	void Time::reset()
 	{
 #ifdef ECHO_PLATFORM_WINDOWS
@@ -166,7 +147,6 @@ namespace Echo
 #endif
 	}
 
-	//--------------------------------------------------------------------------------//
 	unsigned long Time::getMicroseconds()
 	{
 #ifdef ECHO_PLATFORM_WINDOWS
@@ -226,14 +206,12 @@ namespace Echo
 #endif
 	}
 
-	//-- Common Across All Timers ----------------------------------------------------//
 	unsigned long Time::getMillisecondsCPU()
 	{
 		clock_t newClock = clock();
 		return (unsigned long)((float)(newClock-mZeroClock) / ((float)CLOCKS_PER_SEC/1000.0)) ;
 	}
 
-	//-- Common Across All Timers ----------------------------------------------------//
 	unsigned long Time::getMicrosecondsCPU()
 	{
 		clock_t newClock = clock();

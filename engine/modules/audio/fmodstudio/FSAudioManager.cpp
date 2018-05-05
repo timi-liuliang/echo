@@ -101,8 +101,6 @@ namespace Echo
 		}
 	};
 
-	__ImplementSingleton(FSAudioManager);
-
 	// 构造函数
 	FSAudioManager::FSAudioManager()
 		: m_studioSystem(NULL)
@@ -111,13 +109,18 @@ namespace Echo
 		, m_loadDecompress(false)
 		, m_audioEventCallback(NULL)
 	{
-		__ConstructSingleton;
 	}
 
 	// 析构函数
 	FSAudioManager::~FSAudioManager()
 	{
-		__DestructSingleton;
+	}
+
+	// instance
+	FSAudioManager* FSAudioManager::instance()
+	{
+		FSAudioManager* inst = EchoNew(FSAudioManager);
+		return inst;
 	}
 
 	// 初始化

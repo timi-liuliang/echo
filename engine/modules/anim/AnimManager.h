@@ -1,5 +1,4 @@
-#ifndef __ECHO_ANIMMANAGER_H__
-#define __ECHO_ANIMMANAGER_H__
+#pragma once
 
 #include "engine/core/Resource/ResourceManager.h"
 
@@ -8,15 +7,13 @@ namespace Echo
 	class Animation;
 	class AnimBlender;
 	class Skeleton;
-
-
 	class AnimManager : public ResourceManager
 	{
-		__DeclareSingleton(AnimManager);
-
 	public:
-		AnimManager();
 		virtual ~AnimManager();
+
+		// instance
+		static AnimManager* instance();
 
 		// 创建动画
 		Animation* createAnim(const String& name, bool isManual=false);
@@ -32,10 +29,11 @@ namespace Echo
 
 	protected:
 		Resource*	createImpl(const String& name, bool isManual);
+
+	private:
+		AnimManager();
 		
 	private:
 		std::map<ui32, AnimBlender*>	 m_animBlenders;		// 动画混合
 	};
 }
-
-#endif

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <engine/core/Util/Singleton.h>
 #include "engine/core/Thread/Threading.h"
+#include "engine/core/memory/MemAllocDef.h"
 
 namespace Echo
 {
@@ -63,7 +63,7 @@ namespace Echo
 	/**
 	 * 资源加载线程
 	 */
-	class StreamThread : public ThreadLoopObject, public Singleton<StreamThread>
+	class StreamThread : public ThreadLoopObject
 	{
 	public:
 		/** 任务优化级 */
@@ -100,8 +100,10 @@ namespace Echo
 		typedef vector<Task*>::type	TaskArray;
 
 	public:
-		StreamThread();
 		virtual ~StreamThread();
+
+		// instance
+		static StreamThread* instance();
 
 		// 添加任务
 		virtual ui32 addTask( Task* pThreadEvent);
@@ -122,6 +124,8 @@ namespace Echo
 		virtual void processLoop();
 
 	private:
+		StreamThread();
+
 		// 获取任务
 		Task* getNextTask();
 

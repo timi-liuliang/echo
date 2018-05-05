@@ -1275,13 +1275,17 @@ namespace Echo
 			}
 		}
 	}
-	
-	__ImplementSingleton(ModelManager);
 
 	// 构造函数
 	ModelManager::ModelManager()
 	{
-		__ConstructSingleton;
+	}
+
+	// instance
+	ModelManager* ModelManager::instance()
+	{
+		static ModelManager* inst = EchoNew(ModelManager);
+		return inst;
 	}
 
 	// 析构函数
@@ -1289,8 +1293,6 @@ namespace Echo
 	{
 		destroyAllModels();
 		delAllModelTemplate();
-
-		__DestructSingleton;
 	}
 
 	// 添加模型
@@ -1363,7 +1365,7 @@ namespace Echo
 			}
 			else
 			{
-				StreamThread* thread = StreamThread::Instance();
+				StreamThread* thread = StreamThread::instance();
 				if (thread && thread->IsRunning())
 				{
 					ModelLoadEvent* task = EchoNew(ModelLoadEvent(model, onCreateModelComplete));
@@ -1411,7 +1413,7 @@ namespace Echo
 		}
 		else
 		{
-			StreamThread* thread = StreamThread::Instance();
+			StreamThread* thread = StreamThread::instance();
 			ModelUnLoadEvent* task = EchoNew(ModelUnLoadEvent(model, onDestroyComplete));
 			thread->addTask(task); 
 		}

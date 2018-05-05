@@ -86,7 +86,6 @@ namespace Echo
 #include "engine/core/Thread/Threading.h"
 #include "engine/core/Math/MathLib.h"
 #include "engine/core/geom/GeomLib.h"
-#include "engine/core/Util/Singleton.h"
 #include "engine/core/Util/Timer.h"
 #include "engine/core/Math/MathLib.h"
 #include "engine/core/io/DataStream.h"

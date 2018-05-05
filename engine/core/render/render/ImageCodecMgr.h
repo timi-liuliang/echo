@@ -13,7 +13,6 @@ namespace Echo
 	{
 		typedef map<int, ImageCodec*>::type CodecMap;
 	public:
-		ImageCodecMgr();
 		~ImageCodecMgr();
 
 		// 获取实例
@@ -30,6 +29,9 @@ namespace Echo
 
 		// 获取编码
 		ImageCodec* getCodec(ImageFormat imgFmt) const;
+
+	private:
+		ImageCodecMgr();
 
 	private:	
 		CodecMap m_codecMap;		// 编码图

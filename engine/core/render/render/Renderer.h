@@ -4,7 +4,6 @@
 #include "Color.h"
 #include <engine/core/Math/Vector3.h>
 #include <engine/core/Math/Matrix4.h>
-#include "engine/core/Util/Singleton.h"
 #include "engine/core/Thread/Threading.h"
 #include "RenderInput.h"
 #include "RenderState.h"

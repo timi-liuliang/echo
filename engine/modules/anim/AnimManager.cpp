@@ -5,19 +5,21 @@
 
 namespace Echo
 {
-	__ImplementSingleton(AnimManager);
-
 	// 构造函数
 	AnimManager::AnimManager()
 	{
-		__ConstructSingleton;
 	}
 
 	// 析构函数
 	AnimManager::~AnimManager()
 	{
-		__DestructSingleton;
-		// subclasses should unregister with resource group manager
+	}
+
+	// instance
+	AnimManager* AnimManager::instance()
+	{
+		static AnimManager* inst = EchoNew(AnimManager);
+		return inst;
 	}
 
 	Animation* AnimManager::createAnim(const String& name, bool isManual)

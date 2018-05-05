@@ -1,7 +1,6 @@
 #pragma once
 
 #include "engine/core/Base/EchoDef.h"
-#include "engine/core/Util/Singleton.h"
 #include "engine/core/render/render/Texture.h"
 #include "engine/core/render/render/RenderTarget.h"
 #include "engine/core/render/render/Renderer.h"
@@ -66,16 +65,13 @@ namespace Echo
 	/**
 	 * 渲染目标管理器
 	 */
-	class RenderTargetManager : public Singleton<RenderTargetManager>
+	class RenderTargetManager
 	{
 	public:
-		RenderTargetManager();
 		virtual ~RenderTargetManager();
 
 		// 获取渲染实例
-		static inline RenderTargetManager* instance() { return ms_pSingleton;}
-
-		static inline void replaceInstance(RenderTargetManager* instance) { ms_pSingleton = instance; }
+		static RenderTargetManager* instance();
 
 		// 初始化
 		bool initialize();
@@ -235,6 +231,9 @@ namespace Echo
 
 		bool createScreenAlignedQuad_ext();
 		bool createScreenAlignedQuadQuarterLB_ext();
+
+	private:
+		RenderTargetManager();
 
 	protected:
 		RenderTargetMap			m_mapRenderTargets;					// 所有渲染目标

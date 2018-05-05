@@ -286,10 +286,10 @@ namespace QT_UI
 		if (fileExt == "bank")
 		{
 			// 获取所有声音事件
-			if (EchoAudioManager)
+			//if (EchoAudioManager)
 			{
 				Echo::StringArray bankEvents;
-				EchoAudioManager->getAudioEvents(bankEvents, fileName.c_str());
+				Echo::FSAudioManager::instance()->getAudioEvents(bankEvents, fileName.c_str());
 				for (size_t i = 0; i < bankEvents.size(); i++)
 				{
 					//if (!m_searchName.isEmpty())
@@ -309,7 +309,7 @@ namespace QT_UI
 		}
 		else
 		{
-			Echo::String thumbNailFile = Studio::AStudio::Instance()->getThumbnailPath(fileName);
+			Echo::String thumbNailFile = Studio::AStudio::instance()->getThumbnailPath(fileName);
 			Echo::String fileExt = Echo::PathUtil::GetFileExt(fileName, false);
 
 			IconMap::iterator it = m_iconMaps.find(fileExt);

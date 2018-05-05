@@ -7,13 +7,9 @@
 
 namespace Echo
 {
-	__ImplementSingleton(IO);
-
 	// 构造函数
 	IO::IO()
 	{
-		__ConstructSingleton;
-
 		m_resFileSystem = EchoNew(FileSystem);
 		m_userFileSystem = EchoNew(FileSystem);
 	}
@@ -22,8 +18,13 @@ namespace Echo
 	IO::~IO()
 	{
 		reset();
+	}
 
-		__DestructSingleton;
+	// get instance
+	IO* IO::instance()
+	{
+		IO* inst = EchoNew(IO);
+		return inst;
 	}
 
 	// 设置引擎资源路径

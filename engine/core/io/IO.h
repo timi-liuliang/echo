@@ -4,7 +4,6 @@
 #include "engine/core/Thread/Threading.h"
 #include "DataStream.h"
 #include "archive/Archive.h"
-#include "engine/core/util/Singleton.h"
 #include "FileSystem.h"
 
 namespace Echo
@@ -14,16 +13,16 @@ namespace Echo
 	 */
 	class IO
 	{
-		__DeclareSingleton(IO);
-
 	public:
 		EE_AUTO_MUTEX
 
 		typedef list<Archive*>::type				 ArchiveList;
 		typedef map<String, Archive*>::type			 FileArchiveMapping;
 	public:
-		IO();
 		virtual ~IO();
+
+		// get instance
+		static IO* instance();
 
 		// 设置引擎资源路径
 		void setResPath(const String& resPath);
@@ -82,6 +81,8 @@ namespace Echo
 		Archive* getArchiveByName( const char* archiveName);
 
 	private:
+		IO();
+
 		// 添加到索引
 		void addToIndex(const String& filename, Archive* arch, bool isOverWrite=false);
 

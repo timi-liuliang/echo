@@ -75,7 +75,7 @@ namespace Echo
 		// »ù´¡±à¼­Æ÷
 		TIME_PROFILE
 		(
-			g_astudio = new Studio::AStudio;
+			g_astudio = Studio::AStudio::instance();
 			g_astudio->setAppPath(QDir::currentPath().toStdString().c_str());
 		)
 

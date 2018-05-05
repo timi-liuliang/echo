@@ -1,6 +1,5 @@
 #pragma once
 
-#include <engine/core/Util/Singleton.h>
 #include "Texture.h"
 
 namespace Echo

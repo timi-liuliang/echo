@@ -5,6 +5,7 @@
 #include "render/Material.h"
 #include "engine/core/script/lua/luaex.h"
 #include "engine/core/main/Root.h"
+#include <rapidjson/document.h>
 
 namespace Echo
 {
@@ -30,6 +31,18 @@ namespace Echo
 	{
 		if (m_gltfRes.setPath(path.getPath()))
 		{
+			MemoryReader memReader(m_gltfRes.getPath());
+			if (memReader.getSize())
+			{
+				rapidjson::Document doc;
+				doc.Parse(memReader.getData<char*>());
+
+				// parse asset info
+				rapidjson::Type type = doc["asset"]["version"].GetType();
+
+				// parse meshes
+				int a = 10;
+			}
 		}
 	}
 

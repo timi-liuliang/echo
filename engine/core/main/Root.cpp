@@ -43,30 +43,16 @@ static unsigned int _GetCurrThreadId()
 
 namespace Echo
 {
-	__ImplementSingleton(Root);
-
 	// 构造函数
 	Root::Root()
 		: m_isInited(false)
 		, m_pAssetMgr(NULL)
 		, m_bRendererInited(NULL)
 		, m_currentTime(0)
-		, m_io(NULL)
-		, m_Timer(NULL)
-		, m_StreamThreading(NULL)
 		, m_enableBloom(false)
 		, m_enableFilterAdditional(false)
 		, m_framebufferScale(1.0f)
-		, m_logManager(NULL)
-		, m_skeletonManager(NULL)
-		, m_animManager(NULL)
-		, m_animSysManager(NULL)
 		, m_renderer(NULL)
-		, m_modelManager(NULL)
-		, m_imageCodecManager(NULL)
-		, m_audioManager(NULL)
-		, m_textureResManager(NULL)
-		, m_renderTargetManager(NULL)
 		, m_projectFile(NULL)
 #ifdef ECHO_PROFILER
 		, m_profilerSev( nullptr)
@@ -76,23 +62,26 @@ namespace Echo
 		// 解决Windows VS2013 Thread join死锁BUG
 		_Cnd_do_broadcast_at_thread_exit();
 #endif
-
-		__ConstructSingleton;
-
-		m_memoryManager = MemoryManager::instance();
-		m_Timer = Time::instance();
-		m_openMPTaskMgr = EchoNew(OpenMPTaskMgr);
+		MemoryManager::instance();
+		Time::instance();
+		OpenMPTaskMgr::instance();
 	}
 
 	Root::~Root()
 	{
-		__DestructSingleton;
+	}
+
+	// instance
+	Root* Root::instance()
+	{
+		static Root* inst = new Root();
+		return inst;
 	}
 
 	// 装载日志系统
 	bool Root::initLogSystem()
 	{
-		m_logManager = LogManager::instance();
+		LogManager::instance();
 
 		return true;
 	}
@@ -114,14 +103,10 @@ namespace Echo
 				return false;
 			}
 
-			m_imageCodecManager = EchoNew(ImageCodecMgr);
-			m_modelManager		= EchoNew( ModelManager);
-			m_animManager		= EchoNew( AnimManager);
-			m_animSysManager	= EchoNew( AnimSystemManager);
-			m_skeletonManager	= EchoNew( SkeletonManager);
-			EchoNew( NodeTree);
-			m_io = EchoNew(IO);
-			m_StreamThreading = EchoNew(StreamThread);
+			ImageCodecMgr::instance();
+			ModelManager::instance();
+			SkeletonManager::instance();
+			IO::instance();
 		}
 		catch (const Exception &e)
 		{
@@ -145,8 +130,7 @@ namespace Echo
 		}
 		
 		// 音频管理器
-		m_audioManager = EchoNew(FSAudioManager);
-		m_audioManager->init(cfg.m_AudiomaxVoribsCodecs,cfg.m_AudioLoadDecompresse);
+		FSAudioManager::instance()->init(cfg.m_AudiomaxVoribsCodecs,cfg.m_AudioLoadDecompresse);
 		loadAllBankFile();
 
 		setEnableFrameProfile(true);
@@ -215,10 +199,7 @@ namespace Echo
 	
 	void Root::loadAllBankFile()
 	{
-		if (m_audioManager)
-		{
-			m_audioManager->loadAllBankFile();
-		}
+		FSAudioManager::instance()->loadAllBankFile();
 	}
 
 	// 初始化渲染器
@@ -229,7 +210,7 @@ namespace Echo
 		m_renderer = pRenderer;
 
 		// 创建纹理资源工厂
-		m_textureResManager = EchoNew(TextureResManager);
+		TextureResManager::instance();
 
 		EchoAssert(pRenderer);
 		if (!pRenderer->initialize(config))
@@ -239,7 +220,6 @@ namespace Echo
 			return false;
 		}
 
-
 		if (!onRendererInited())
 			return false;
 
@@ -248,8 +228,7 @@ namespace Echo
 		m_settingsMgr.Apply(m_cfg.engineCfgFile);
 
 		// 初始化渲染目标管理器
-		m_renderTargetManager = EchoNew(RenderTargetManager);
-		if (!m_renderTargetManager->initialize())
+		if (!RenderTargetManager::instance()->initialize())
 		{
 			EchoLogError("RenderTargetManager::initialize Falied !");
 
@@ -264,14 +243,14 @@ namespace Echo
 	// 当游戏挂起时候引擎需要进行的处理
 	void Root::onPlatformSuspend()
 	{
-		m_audioManager->suspendFmodSystem();
+		FSAudioManager::instance()->suspendFmodSystem();
 		g_render_thread->flushRenderTasks();
 	}
 
 	// 当游戏从挂起中恢复时引擎需要进行的处理
 	void Root::onPlatformResume()
 	{
-		m_audioManager->resumeFmodSystem();
+		FSAudioManager::instance()->resumeFmodSystem();
 	}
 
 	// 渲染初始化
@@ -327,35 +306,30 @@ namespace Echo
 	// 游戏销毁
 	void Root::destroy()
 	{
-		if (m_StreamThreading)
-		{
-			m_StreamThreading->shutdown();
-			EchoSafeDelete(m_StreamThreading, StreamThread);
-		}
+		EchoSafeDeleteInstance(StreamThread);
+
 #if !defined(NO_THEORA_PLAYER)
 		VideoPlay* videoPlay = VideoPlay::Instance();
 		EchoSafeDelete(videoPlay, VideoPlay);
 #endif
 
 		// 场景管理器
-		if(NodeTree::instance())
-			NodeTree::instance()->destroy();
+		EchoSafeDeleteInstance(NodeTree);
 
 		// 音频管理器
-		if (m_audioManager)
-			m_audioManager->release();
+		FSAudioManager::instance()->release();
 
-		EchoSafeDelete(m_audioManager, FSAudioManager);
-		EchoSafeDelete(m_modelManager, ModelManager);
-		EchoSafeDelete(m_animSysManager, AnimSystemManager); //animSysManager要在animManager之前释放，因为会用到animManager来释放自己的animBlend
-		EchoSafeDelete(m_animManager, AnimManager);
-		EchoSafeDelete(m_skeletonManager, SkeletonManager);
+		EchoSafeDeleteInstance(FSAudioManager);
+		EchoSafeDeleteInstance(ModelManager);
+		EchoSafeDeleteInstance(AnimSystemManager); //animSysManager要在animManager之前释放，因为会用到animManager来释放自己的animBlend
+		EchoSafeDeleteInstance(AnimManager);
+		EchoSafeDeleteInstance(SkeletonManager);
 		
-		EchoSafeDelete(m_imageCodecManager, ImageCodecMgr);
-		EchoSafeDelete(m_openMPTaskMgr, OpenMPTaskMgr);
+		EchoSafeDeleteInstance(ImageCodecMgr);
+		EchoSafeDeleteInstance(OpenMPTaskMgr);
 
-		EchoSafeDelete(m_io, IO); //ResourceGroupManager的析构需要用到ArchiveManager
-		Time::destroyInstance();
+		EchoSafeDeleteInstance(IO);
+		EchoSafeDeleteInstance(Time);
 
 		// 外部模块释放
 		//for (const ExternalMgr& mgr : m_cfg.m_externalMgrs)
@@ -364,8 +338,8 @@ namespace Echo
 		
 		EchoLogInfo("Echo Engine has been shutdown.");
 		
-		EchoSafeDelete(m_renderTargetManager, RenderTargetManager);
-		EchoSafeDelete(m_textureResManager, TextureResManager);
+		EchoSafeDeleteInstance(RenderTargetManager);
+		EchoSafeDeleteInstance(TextureResManager);
 		
 		// 渲染器
 		if (m_renderer)
@@ -375,8 +349,7 @@ namespace Echo
 			EchoLogInfo("Echo Renderer has been shutdown.");
 		}
 
-		LogManager* logMgr = LogManager::instance();
-		EchoSafeDelete(logMgr, LogManager);
+		EchoSafeDeleteInstance(LogManager);
 		EchoSafeDelete(m_projectFile, ProjectSettings);
 #ifdef ECHO_PROFILER
 #endif
@@ -426,22 +399,6 @@ namespace Echo
 		return m_currentTime;
 	}
 
-	void Root::enableStreamThread(bool enable)
-	{
-		if (m_StreamThreading)
-		{
-			if (enable)
-				m_StreamThreading->start();
-			else
-				m_StreamThreading->shutdown();
-		}
-	}
-
-	StreamThread* Root::getThreadThread() const
-	{
-		return m_StreamThreading;
-	}
-
 	// 每帧更新
 	void Root::tick(i32 elapsedTime)
 	{
@@ -458,19 +415,19 @@ namespace Echo
 		VideoPlay::Instance()->tick(elapsedTime);
 #endif
 		// 资源加载线程
-		if (m_StreamThreading && m_StreamThreading->IsRunning())
+		if (StreamThread::instance()->IsRunning())
 		{
 #ifdef ECHO_PLATFORM_HTML5
 			// Html5 doesn't support multithread well
 			m_StreamThreading->processLoop();
 #endif
-			m_StreamThreading->notifyTaskFinished();
+			StreamThread::instance()->notifyTaskFinished();
 		}
 
 		// 声音更新
 		auto t0 = EngineTimeController::instance()->getSpeed(EngineTimeController::ET_SOUND);
 		auto t1 = EngineTimeController::instance()->getSpeed();
-		m_audioManager->tick(static_cast<ui32>(elapsedTime * t0 / t1));
+		FSAudioManager::instance()->tick(static_cast<ui32>(elapsedTime * t0 / t1));
 
 		//
 		auto t = EngineSettingsMgr::instance()->isSlowDownExclusiveUI() ? m_frameTime : elapsedTime;
@@ -480,8 +437,8 @@ namespace Echo
 		updateAllManagerDelayResource();
 
 		// 执行动画更新
-		EchoOpenMPTaskMgr->execTasks(OpenMPTaskMgr::TT_AnimationUpdate);
-		EchoOpenMPTaskMgr->waitForAnimationUpdateComplete();
+		OpenMPTaskMgr::instance()->execTasks(OpenMPTaskMgr::TT_AnimationUpdate);
+		OpenMPTaskMgr::instance()->waitForAnimationUpdateComplete();
 
 		// 外部模块更新, 目前只有 CatUI
 		for (const ExternalMgr& mgr : m_cfg.m_externalMgrs)
@@ -510,15 +467,15 @@ namespace Echo
 		int ct = nCount % MOD;
 		switch (ct)
 		{
-			case 0:	EchoTextureResManager->updateDelayedRelease(m_frameTime * MOD); break;
+			case 0:	TextureResManager::instance()->updateDelayedRelease(m_frameTime * MOD); break;
 			//case 1:	EchoMeshManager->updateDelayedRelease(m_frameTime * MOD); break;
-			case 2: EchoSkeletonManager->updateDelayedRelease(m_frameTime * MOD); break;
-			case 3: EchoAnimManager->updateDelayedRelease(m_frameTime * MOD); break;
+			case 2: SkeletonManager::instance()->updateDelayedRelease(m_frameTime * MOD); break;
+			case 3: AnimManager::instance()->updateDelayedRelease(m_frameTime * MOD); break;
 			case 4:
 			{
 			}
 			break;
-			case 5: EchoAnimSystemManager->updateDelayedRelease(m_frameTime * MOD); break;
+			case 5: AnimSystemManager::instance()->updateDelayedRelease(m_frameTime * MOD); break;
 			default:
 				break;
 		}
@@ -542,10 +499,10 @@ namespace Echo
 
 	void Root::setReleaseDelayTime(ui32 t)
 	{
-		EchoTextureResManager->setReleaseDelayTime(t);
+		TextureResManager::instance()->setReleaseDelayTime(t);
 		//EchoMeshManager->setReleaseDelayTime(t);
-		EchoSkeletonManager->setReleaseDelayTime(t);
-		EchoAnimManager->setReleaseDelayTime(t);
+		SkeletonManager::instance()->setReleaseDelayTime(t);
+		AnimManager::instance()->setReleaseDelayTime(t);
 	}
 
 	void Root::releasePlugins()
