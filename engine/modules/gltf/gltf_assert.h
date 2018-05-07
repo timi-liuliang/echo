@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/core/memory/MemAllocDef.h"
+#include "engine/core/math/MathLib.h"
 #include <nlohmann/json.hpp>
 
 namespace Echo
@@ -43,8 +44,19 @@ namespace Echo
 	struct GltfMeshInfo
 	{
 		String						m_name;
-		vector<float>::type			m_weights;
 		vector<GltfPrimitive>::type	m_primitives;
+	};
+
+	struct GltfNodeInfo
+	{
+		String				m_name;
+		i32					m_camera = -1;
+		i32					m_mesh = -1;
+		i32					m_skin = -1;
+		vector<i32>::type	m_children;
+		Quaternion			m_rotation = { 0, 0, 0, 1 };
+		Vector3				m_scale = { 1, 1, 1 };
+		Vector3				m_translation = { 0, 0, 0 };
 	};
 
 	struct GltfAsset
@@ -52,11 +64,13 @@ namespace Echo
 		GltfMetaInfo				m_metaInfo;
 		vector<GltfSceneInfo>::type	m_scenes;
 		vector<GltfMeshInfo>::type	m_meshes;
+		vector<GltfNodeInfo>::type	m_nodes;
 
 		// load
 		bool load(const String& path);
 		bool loadAsset(nlohmann::json& json);
 		bool loadScenes(nlohmann::json& json);
 		bool loadMeshes(nlohmann::json& json);
+		bool loadNodes(nlohmann::json& json);
 	};
 }

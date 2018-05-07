@@ -32,6 +32,12 @@ namespace Echo
 				return false;
 			}
 
+			if (!loadNodes(j))
+			{
+				EchoLogError("gltf parse nodes failed when load resource [%s].", path.c_str());
+				return false;
+			}
+
 			return true;
 		}
 
@@ -177,6 +183,123 @@ namespace Echo
 		return true;
 	}
 
+	bool GltfAsset::loadNodes(nlohmann::json& json)
+	{
+		if (json.find("nodes") == json.end())
+			return false;
 
+		nlohmann::json& nodes = json["nodes"];
+		if (!nodes.is_array())
+			return false;
 
+		m_nodes.resize(nodes.size());
+		for (ui32 i = 0; i < nodes.size(); i++)
+		{
+			// name
+			if (nodes[i].find("name") != nodes[i].end())
+			{
+				if (!nodes[i]["name"].is_string())
+					return false;
+
+				m_nodes[i].m_name = nodes[i]["name"].get<std::string>();
+			}
+
+			// camera
+			if (nodes[i].find("camera") != nodes[i].end())
+			{
+				if (!nodes[i]["camera"].is_number())
+					return false;
+
+				m_nodes[i].m_camera = nodes[i]["camera"].get<i32>();
+			}
+
+			// children
+			if (nodes[i].find("children") != nodes[i].end())
+			{
+				nlohmann::json& children = nodes[i]["children"];
+				if (!children.is_array())
+					return false;
+
+				m_nodes[i].m_children.resize(children.size());
+				for (ui32 j = 0; j < children.size(); j++)
+				{
+					m_nodes[i].m_children[j] = children[j].get<ui32>();
+				}
+			}
+
+			// skin
+			if (nodes[i].find("skin") != nodes[i].end()) 
+			{
+				if (!nodes[i]["skin"].is_number())
+					return false;
+
+				m_nodes[i].m_skin = nodes[i]["skin"].get<i32>();
+			}
+
+			// mesh
+			if (nodes[i].find("mesh") != nodes[i].end())
+			{
+				if (!nodes[i]["mesh"].is_number())
+					return false;
+
+				m_nodes[i].m_mesh = nodes[i]["mesh"].get<i32>();
+			}
+
+			// translation
+			if (nodes[i].find("translation") != nodes[i].end())
+			{
+				if (!nodes[i]["translation"].is_array())
+					return false;
+
+				if (nodes[i]["translation"].size() != 3)
+					return false;
+
+				for (ui32 j = 0; j < 3; j++)
+				{
+					if (!nodes[i]["translation"][j].is_number())
+						return false;
+
+					m_nodes[i].m_translation[j] = nodes[i]["translation"][j].get<float>();
+				}
+			}
+
+			// rotation
+			if (nodes[i].find("rotation") != nodes[i].end())
+			{
+				if (!nodes[i]["rotation"].is_array())
+					return false;
+
+				if (nodes[i]["rotation"].size() != 4)
+					return false;
+
+				for (ui32 j = 0; j < 4; j++)
+				{
+					if (!nodes[i]["rotation"][j].is_number())
+						return false;
+
+					m_nodes[i].m_rotation[j] = nodes[i]["rotation"][j].get<float>();
+				}
+			}
+
+			// scale
+			if (nodes[i].find("scale") != nodes[i].end())
+			{
+				if (!nodes[i]["scale"].is_array())
+					return false;
+
+				if (nodes[i]["scale"].size() != 3)
+					return false;
+
+				for (ui32 j = 0; j < 3; j++)
+				{
+					if (!nodes[i]["scale"][j].is_number())
+						return false;
+
+					m_nodes[i].m_scale[j] = nodes[i]["scale"][j].get<float>();
+				}
+			}
+		}
+
+		return true;
+	}
 }
