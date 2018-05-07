@@ -5,7 +5,7 @@
 
 namespace Echo
 {
-	struct GltfMetaData
+	struct GltfMetaInfo
 	{
 		String		m_copyright;
 		String		m_generator;
@@ -13,12 +13,20 @@ namespace Echo
 		String		m_minversion;
 	};
 
+	struct GltfSceneInfo
+	{
+		String				m_name;
+		vector<ui32>::type	m_nodes;
+	};
+
 	struct GltfAsset
 	{
-		GltfMetaData	m_metaData;
+		GltfMetaInfo				m_metaInfo;
+		vector<GltfSceneInfo>::type	m_scenes;
 
 		// load
 		bool load(const String& path);
-		bool loadAsset(nlohmann::json& j);
+		bool loadAsset(nlohmann::json& json);
+		bool loadScenes(nlohmann::json& json);
 	};
 }
