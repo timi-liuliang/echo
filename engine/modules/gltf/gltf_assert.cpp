@@ -38,6 +38,12 @@ namespace Echo
 				return false;
 			}
 
+			if (!loadBuffers(j))
+			{
+				EchoLogError("gltf parse buffers failed when load resource [%s].", path.c_str());
+				return false;
+			}
+
 			return true;
 		}
 
@@ -82,19 +88,21 @@ namespace Echo
 		m_scenes.resize(scenes.size());
 		for (ui32 i = 0; i < scenes.size(); i++)
 		{
+			nlohmann::json& scene = scenes[i];
+
 			// name
-			if (scenes[i].find("name") != scenes[i].end())
+			if (scene.find("name") != scene.end())
 			{
-				if (!scenes[i]["name"].is_string())
+				if (!scene["name"].is_string())
 					return false;
 
-				m_scenes[i].m_name = scenes[i]["name"].get<std::string>();
+				m_scenes[i].m_name = scene["name"].get<std::string>();
 			}
 
 			// nodes
-			if (scenes[i].find("nodes") != scenes[i].end())
+			if (scene.find("nodes") != scene.end())
 			{
-				nlohmann::json& nodes = scenes[i]["nodes"];
+				nlohmann::json& nodes = scene["nodes"];
 				if (!nodes.is_array())
 					return false;
 
@@ -121,55 +129,59 @@ namespace Echo
 		m_meshes.resize(meshes.size());
 		for (ui32 i = 0; i < meshes.size(); i++)
 		{
-			if (meshes[i].find("name") != meshes[i].end())
+			nlohmann::json& mesh = meshes[i];
+
+			if (mesh.find("name") != mesh.end())
 			{
-				if (!meshes[i]["name"].is_string())
+				if (!mesh["name"].is_string())
 					return false;
 
-				m_meshes[i].m_name = meshes[i]["name"].get<std::string>();
+				m_meshes[i].m_name = mesh["name"].get<std::string>();
 			}
 
-			if (meshes[i].find("primitives") == meshes[i].end())
+			if (mesh.find("primitives") == mesh.end())
 				return false;
 
-			nlohmann::json& primitives = meshes[i]["primitives"];
+			nlohmann::json& primitives = mesh["primitives"];
 			if (!primitives.is_array())
 				return false;
 
 			m_meshes[i].m_primitives.resize(primitives.size());
 			for (ui32 j = 0; j < primitives.size(); j++)
 			{
+				nlohmann::json& primitive = primitives[j];
+
 				// indices
-				if (primitives[j].find("indices") != primitives[j].end())
+				if (primitive.find("indices") != primitive.end())
 				{
-					if (!primitives[j]["indices"].is_number())
+					if (!primitive["indices"].is_number())
 						return false;
 
-					m_meshes[i].m_primitives[j].m_indices = primitives[j]["indices"].get<ui32>();
+					m_meshes[i].m_primitives[j].m_indices = primitive["indices"].get<ui32>();
 				}
 
 				// material
-				if (primitives[j].find("material") != primitives[j].end())
+				if (primitive.find("material") != primitive.end())
 				{
-					if (!primitives[j]["material"].is_number())
+					if (!primitive["material"].is_number())
 						return false;
 
-					m_meshes[i].m_primitives[j].m_material = primitives[j]["material"].get<ui32>();
+					m_meshes[i].m_primitives[j].m_material = primitive["material"].get<ui32>();
 				}
 
 				// mode
-				if (primitives[j].find("mode") != primitives[j].end())
+				if (primitive.find("mode") != primitive.end())
 				{
-					if (!primitives[j]["mode"].is_number())
+					if (!primitive["mode"].is_number())
 						return false;
 
-					m_meshes[i].m_primitives[j].m_mode = GltfPrimitiveMode(primitives[j]["mode"].get<ui8>());
+					m_meshes[i].m_primitives[j].m_mode = GltfPrimitiveMode(primitive["mode"].get<ui8>());
 				}
 
-				if (primitives[j].find("attributes") == primitives[j].end())
+				if (primitive.find("attributes") == primitive.end())
 					return false;
 
-				nlohmann::json& attributes = primitives[j]["attributes"];
+				nlohmann::json& attributes = primitive["attributes"];
 				if (!attributes.is_object())
 					return false;
 
@@ -195,28 +207,30 @@ namespace Echo
 		m_nodes.resize(nodes.size());
 		for (ui32 i = 0; i < nodes.size(); i++)
 		{
+			nlohmann::json& node = nodes[i];
+
 			// name
-			if (nodes[i].find("name") != nodes[i].end())
+			if (node.find("name") != node.end())
 			{
-				if (!nodes[i]["name"].is_string())
+				if (!node["name"].is_string())
 					return false;
 
-				m_nodes[i].m_name = nodes[i]["name"].get<std::string>();
+				m_nodes[i].m_name = node["name"].get<std::string>();
 			}
 
 			// camera
-			if (nodes[i].find("camera") != nodes[i].end())
+			if (node.find("camera") != node.end())
 			{
 				if (!nodes[i]["camera"].is_number())
 					return false;
 
-				m_nodes[i].m_camera = nodes[i]["camera"].get<i32>();
+				m_nodes[i].m_camera = node["camera"].get<i32>();
 			}
 
 			// children
-			if (nodes[i].find("children") != nodes[i].end())
+			if (node.find("children") != node.end())
 			{
-				nlohmann::json& children = nodes[i]["children"];
+				nlohmann::json& children = node["children"];
 				if (!children.is_array())
 					return false;
 
@@ -228,78 +242,146 @@ namespace Echo
 			}
 
 			// skin
-			if (nodes[i].find("skin") != nodes[i].end()) 
+			if (node.find("skin") != node.end()) 
 			{
-				if (!nodes[i]["skin"].is_number())
+				if (!node["skin"].is_number())
 					return false;
 
-				m_nodes[i].m_skin = nodes[i]["skin"].get<i32>();
+				m_nodes[i].m_skin = node["skin"].get<i32>();
 			}
 
 			// mesh
-			if (nodes[i].find("mesh") != nodes[i].end())
+			if (node.find("mesh") != node.end())
 			{
-				if (!nodes[i]["mesh"].is_number())
+				if (!node["mesh"].is_number())
 					return false;
 
-				m_nodes[i].m_mesh = nodes[i]["mesh"].get<i32>();
+				m_nodes[i].m_mesh = node["mesh"].get<i32>();
 			}
 
 			// translation
-			if (nodes[i].find("translation") != nodes[i].end())
+			if (node.find("translation") != node.end())
 			{
-				if (!nodes[i]["translation"].is_array())
+				nlohmann::json& translation = node["translation"];
+				if (!translation.is_array())
 					return false;
 
-				if (nodes[i]["translation"].size() != 3)
+				if (translation.size() != 3)
 					return false;
 
 				for (ui32 j = 0; j < 3; j++)
 				{
-					if (!nodes[i]["translation"][j].is_number())
+					if (!translation[j].is_number())
 						return false;
 
-					m_nodes[i].m_translation[j] = nodes[i]["translation"][j].get<float>();
+					m_nodes[i].m_translation[j] = translation[j].get<float>();
 				}
 			}
 
 			// rotation
-			if (nodes[i].find("rotation") != nodes[i].end())
+			if (node.find("rotation") != node.end())
 			{
-				if (!nodes[i]["rotation"].is_array())
+				nlohmann::json& rotation = node["rotation"];
+				if (!rotation.is_array())
 					return false;
 
-				if (nodes[i]["rotation"].size() != 4)
+				if (rotation.size() != 4)
 					return false;
 
 				for (ui32 j = 0; j < 4; j++)
 				{
-					if (!nodes[i]["rotation"][j].is_number())
+					if (!rotation[j].is_number())
 						return false;
 
-					m_nodes[i].m_rotation[j] = nodes[i]["rotation"][j].get<float>();
+					m_nodes[i].m_rotation[j] = rotation[j].get<float>();
 				}
 			}
 
 			// scale
-			if (nodes[i].find("scale") != nodes[i].end())
+			if (node.find("scale") != node.end())
 			{
-				if (!nodes[i]["scale"].is_array())
+				nlohmann::json& scale = node["scale"];
+				if (!scale.is_array())
 					return false;
 
-				if (nodes[i]["scale"].size() != 3)
+				if (scale.size() != 3)
 					return false;
 
 				for (ui32 j = 0; j < 3; j++)
 				{
-					if (!nodes[i]["scale"][j].is_number())
+					if (!scale[j].is_number())
 						return false;
 
-					m_nodes[i].m_scale[j] = nodes[i]["scale"][j].get<float>();
+					m_nodes[i].m_scale[j] = scale[j].get<float>();
 				}
 			}
 		}
 
 		return true;
+	}
+
+	bool GltfAsset::loadBuffers(nlohmann::json& json)
+	{
+		if (json.find("buffers") == json.end())
+			return false;
+
+		nlohmann::json& buffers = json["buffers"];
+		if (!buffers.is_array())
+			return false;
+
+		m_buffers.resize(buffers.size());
+		for(ui32 i=0; i<buffers.size(); i++)
+		{
+			nlohmann::json& buffer = buffers[i];
+
+			// name
+			if (buffer.find("name") != buffer.end())
+			{
+				nlohmann::json& name = buffer["name"];
+				if (name.is_string())
+					return false;
+
+				m_buffers[i].m_name = name.get<std::string>();
+			}
+
+			// byteLength
+			if (buffer.find("byteLength") == buffer.end())
+				return false;
+
+			nlohmann::json& byteLength = buffer["byteLength"];
+			if (!byteLength.is_number())
+				return false;
+
+			m_buffers[i].m_byteLength = byteLength.get<i32>();
+
+			// uri
+			if (buffer.find("uri") != buffer.end())
+			{
+				nlohmann::json& uri = buffer["uri"];
+				if (!uri.is_string())
+					return false;
+
+				m_buffers[i].m_uri = uri.get<std::string>();
+			}
+
+			if (!loadBufferData(m_buffers[i]))
+				return false;
+		}
+
+		return true;
+	}
+
+	bool GltfAsset::loadBufferData(GltfBufferInfo& buffer)
+	{
+		if (buffer.m_uri.empty() && buffer.m_byteLength > 0)
+			return false;
+
+		buffer.m_data = EchoNew(MemoryReader(buffer.m_uri));
+		if (buffer.m_data->getSize())
+		{
+			return true;
+		}
+
+		return false;
 	}
 }

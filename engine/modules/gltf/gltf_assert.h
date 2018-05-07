@@ -2,6 +2,7 @@
 
 #include "engine/core/memory/MemAllocDef.h"
 #include "engine/core/math/MathLib.h"
+#include "engine/core/io/DataStream.h"
 #include <nlohmann/json.hpp>
 
 namespace Echo
@@ -59,12 +60,21 @@ namespace Echo
 		Vector3				m_translation = { 0, 0, 0 };
 	};
 
+	struct GltfBufferInfo
+	{
+		String			m_name;
+		String			m_uri;
+		ui32			m_byteLength;
+		MemoryReader*	m_data = nullptr;
+	};
+
 	struct GltfAsset
 	{
-		GltfMetaInfo				m_metaInfo;
-		vector<GltfSceneInfo>::type	m_scenes;
-		vector<GltfMeshInfo>::type	m_meshes;
-		vector<GltfNodeInfo>::type	m_nodes;
+		GltfMetaInfo					m_metaInfo;
+		vector<GltfSceneInfo>::type		m_scenes;
+		vector<GltfMeshInfo>::type		m_meshes;
+		vector<GltfNodeInfo>::type		m_nodes;
+		vector<GltfBufferInfo>::type	m_buffers;
 
 		// load
 		bool load(const String& path);
@@ -72,5 +82,7 @@ namespace Echo
 		bool loadScenes(nlohmann::json& json);
 		bool loadMeshes(nlohmann::json& json);
 		bool loadNodes(nlohmann::json& json);
+		bool loadBuffers(nlohmann::json& json);
+		bool loadBufferData(GltfBufferInfo& buffer);
 	};
 }
