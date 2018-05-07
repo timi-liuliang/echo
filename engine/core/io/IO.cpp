@@ -23,7 +23,7 @@ namespace Echo
 	// get instance
 	IO* IO::instance()
 	{
-		IO* inst = EchoNew(IO);
+		static IO* inst = EchoNew(IO);
 		return inst;
 	}
 

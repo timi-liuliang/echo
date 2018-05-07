@@ -1,4 +1,5 @@
 #include "gltf_scene.h"
+#include "gltf_assert.h"
 #include "engine/core/util/LogManager.h"
 #include "engine/core/scene/NodeTree.h"
 #include "render/renderer.h"
@@ -30,11 +31,10 @@ namespace Echo
 	{
 		if (m_gltfRes.setPath(path.getPath()))
 		{
-			MemoryReader memReader(m_gltfRes.getPath());
-			if (memReader.getSize())
+			GltfAsset asset;
+			if (asset.load(m_gltfRes.getPath()))
 			{
-				// parse meshes
-				int a = 10;
+				int  a = 10;
 			}
 		}
 	}
