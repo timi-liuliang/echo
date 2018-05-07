@@ -1,4 +1,3 @@
-#include "engine/core/Util/Singleton.h"
 #include "Engine/core/main/OpenMPTaskMgr.h"
 #include "Engine/core/main/EngineSettings.h"
 #include "Animation.h"
