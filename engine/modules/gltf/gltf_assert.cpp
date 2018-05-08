@@ -820,6 +820,56 @@ namespace Echo
 	// build echo node
 	Node* GltfAsset::build()
 	{
+		vector<Node*>::type nodes;
+		for (GltfSceneInfo& scene : m_scenes)
+		{
+			for (ui32 rootNodeIdx : scene.m_nodes)
+			{
+				Node* node = createNode(nullptr, rootNodeIdx);
+
+				nodes.push_back(node);
+			}
+		}
+
+		// only have one root node
+		if (nodes.size() == 1)
+			return nodes[0];
+
+		// have multi root node
+		if (nodes.size() > 1)
+		{
+			Node* node = Class::create<Node*>("GltfScene");
+			for (Node* child : nodes)
+			{
+				child->setParent(node);
+			}
+
+			return node;
+		}
+
+		// no root node
 		return nullptr;
+	}
+
+	Node* GltfAsset::createNode(Node* parent, int idx)
+	{
+		if (idx < 0 || idx >= m_nodes.size())
+			return nullptr;
+
+		GltfNodeInfo& info = m_nodes[idx];
+
+		// create current node
+		Node* node = Class::create<Node*>("GltfScene");
+		node->setName(info.m_name);
+		if(parent)
+			node->setParent(parent);
+
+		// create children
+		for (ui32 childIdx : info.m_children)
+		{
+			createNode(node, childIdx);
+		}
+
+		return node;
 	}
 }

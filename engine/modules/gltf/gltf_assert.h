@@ -212,6 +212,11 @@ namespace Echo
 
 		// load
 		bool load(const String& path);
+
+		// build echo node
+		Node* build();
+
+	private:
 		bool loadAsset(nlohmann::json& json);
 		bool loadScenes(nlohmann::json& json);
 		bool loadMeshes(nlohmann::json& json);
@@ -224,8 +229,6 @@ namespace Echo
 		bool loadImages(nlohmann::json& json);
 		bool loadSamplers(nlohmann::json& json);
 		bool loadTextures(nlohmann::json& json);
-
-		// build echo node
-		Node* build();
+		Node* createNode(Node* parent, int idx);
 	};
 }
