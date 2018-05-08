@@ -3,6 +3,7 @@
 #include "engine/core/memory/MemAllocDef.h"
 #include "engine/core/math/MathLib.h"
 #include "engine/core/io/DataStream.h"
+#include "engine/core/scene/node.h"
 #include <nlohmann/json.hpp>
 
 namespace Echo
@@ -222,5 +223,8 @@ namespace Echo
 		bool loadImages(nlohmann::json& json);
 		bool loadSamplers(nlohmann::json& json);
 		bool loadTextures(nlohmann::json& json);
+
+		// build echo node
+		Node* build();
 	};
 }

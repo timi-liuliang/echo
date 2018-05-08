@@ -54,6 +54,9 @@ namespace Studio
 		// when modifyd item name
 		void onChangedNodeName(QTreeWidgetItem* item);
 
+		// import gltf scene
+		void importGltfScene();
+
 	private:
 		// µ›πÈœ‘ æ Ù–‘
 		void showNodePropertyRecursive(Echo::Object* classPtr, const Echo::String& className);

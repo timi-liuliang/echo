@@ -3,6 +3,8 @@
 #include <QMenuBar>
 #include "NodeTreePanel.h"
 #include "EchoEngine.h"
+#include "ResChooseDialog.h"
+#include <engine/modules/gltf/gltf_assert.h>
 
 namespace Studio
 {
@@ -19,6 +21,8 @@ namespace Studio
 		setupUi( this);
 
 		QObject::connect(m_newNodeButton,  SIGNAL(clicked()), this, SLOT(showNewNodeDialog()));
+		QObject::connect(m_actionAddNode,  SIGNAL(triggered()), this, SLOT(showNewNodeDialog()));
+		QObject::connect(m_actionImportGltfScene, SIGNAL(triggered()), this, SLOT(importGltfScene()));
 		QObject::connect(m_nodeTreeWidget, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(showSelectedNodeProperty()));
 		QObject::connect(m_nodeTreeWidget, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)), this, SLOT(showSelectedNodeProperty()));
 		QObject::connect(m_nodeTreeWidget, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, SLOT(onChangedNodeName(QTreeWidgetItem*)));
@@ -135,9 +139,22 @@ namespace Studio
 
 			EchoSafeDelete(m_nodeTreeMenu, QMenu);
 			m_nodeTreeMenu = EchoNew(QMenu);
+			m_nodeTreeMenu->addAction(m_actionAddNode);
+			m_nodeTreeMenu->addAction(m_actionAddChildScene);
+			m_nodeTreeMenu->addAction(m_actionImportGltfScene);
+			m_nodeTreeMenu->addSeparator();
 			m_nodeTreeMenu->addAction(m_actionRenameNode);
 			m_nodeTreeMenu->addSeparator();
 			m_nodeTreeMenu->addAction(m_actionDeleteNode);
+			m_nodeTreeMenu->exec(QCursor::pos());
+		}
+		else
+		{
+			EchoSafeDelete(m_nodeTreeMenu, QMenu);
+			m_nodeTreeMenu = EchoNew(QMenu);
+			m_nodeTreeMenu->addAction(m_actionAddNode);
+			m_nodeTreeMenu->addAction(m_actionAddChildScene);
+			m_nodeTreeMenu->addAction(m_actionImportGltfScene);
 			m_nodeTreeMenu->exec(QCursor::pos());
 		}
 	}
@@ -214,6 +231,24 @@ namespace Studio
 			else
 			{
 				node->setName(newName);
+			}
+		}
+	}
+
+	// import gltf scene
+	void NodeTreePanel::importGltfScene()
+	{
+		Echo::String gltfFile = ResChooseDialog::getExistingFile(this, ".gltf");
+		if (!gltfFile.empty())
+		{
+			Echo::GltfAsset asset;
+			if (asset.load(gltfFile))
+			{
+				Echo::Node* node = asset.build();
+				if (node)
+				{
+					addNode(node);
+				}
 			}
 		}
 	}

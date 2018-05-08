@@ -871,4 +871,10 @@ namespace Echo
 
 		return true;
 	}
+
+	// build echo node
+	Node* GltfAsset::build()
+	{
+		return nullptr;
+	}
 }

@@ -173,6 +173,32 @@
     <string>Rename</string>
    </property>
   </action>
+  <action name="m_actionImportGltfScene">
+   <property name="icon">
+    <iconset resource="../../../Resource/App.qrc">
+     <normaloff>:/icon/node/gltfscene.png</normaloff>:/icon/node/gltfscene.png</iconset>
+   </property>
+   <property name="text">
+    <string>Import glTF Scene</string>
+   </property>
+  </action>
+  <action name="m_actionAddNode">
+   <property name="icon">
+    <iconset resource="../../../Resource/App.qrc">
+     <normaloff>:/icon/node/node.png</normaloff>:/icon/node/node.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add Node</string>
+   </property>
+  </action>
+  <action name="m_actionAddChildScene">
+   <property name="text">
+    <string>Instance Child Scene</string>
+   </property>
+   <property name="toolTip">
+    <string>Instance Child Scene</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="../../../Resource/App.qrc"/>
