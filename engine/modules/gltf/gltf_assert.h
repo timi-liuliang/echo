@@ -63,7 +63,7 @@ namespace Echo
 	{
 		String			m_name;
 		String			m_uri;
-		ui32			m_byteLength;
+		i32				m_byteLength;
 		MemoryReader*	m_data = nullptr;
 	};
 
@@ -102,7 +102,7 @@ namespace Echo
 		struct Texture
 		{
 			i32		m_index = -1;
-			ui32	m_texCoord = 0;
+			i32		m_texCoord = 0;
 		};
 
 		// base color texture and metalic roughness texture
@@ -198,6 +198,7 @@ namespace Echo
 
 	struct GltfAsset
 	{
+		String							m_path;
 		GltfMetaInfo					m_metaInfo;
 		vector<GltfSceneInfo>::type		m_scenes;
 		vector<GltfMeshInfo>::type		m_meshes;

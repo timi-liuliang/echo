@@ -43,8 +43,8 @@ namespace Echo
 		if(PathUtil::IsHttpFile(file))
 		{
 			file = StringUtil::Replace(file, BACKSLASH, SEPERATOR);
-			while(StringUtil::ReplaceRet(file, "//", "/"))
-				continue;
+			//while(StringUtil::ReplaceRet(file, "//", "/"))
+			//	continue;
 
 			file = StringUtil::Replace(file, "http:/", "http://");
 		}
@@ -53,8 +53,8 @@ namespace Echo
 			bool bLan = false;
 			bLan = IsLanFile(file);
 			file = StringUtil::Replace(file, BACKSLASH, SEPERATOR);
-			while(StringUtil::ReplaceRet(file, "//", "/"))
-				continue;
+			//while(StringUtil::ReplaceRet(file, "//", "/"))
+			//	continue;
 
 			if(bLan)
 				file = SLASH + file;

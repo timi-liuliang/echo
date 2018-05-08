@@ -1,11 +1,12 @@
 #include "gltf_assert.h"
 #include "engine/core/io/DataStream.h"
 #include "engine/core/util/LogManager.h"
+#include "engine/core/util/PathUtil.h"
 
 namespace Echo
 {
 	// parse float value of json node
-	static bool parseJsonValueFloat(float& oValue, nlohmann::json& json, const String& key)
+	static bool parseJsonValueFloat(float& oValue, nlohmann::json& json, const String& key, bool isMustExist)
 	{
 		if (json.find(key) != json.end())
 		{
@@ -18,11 +19,11 @@ namespace Echo
 			return true;
 		}
 
-		return false;
+		return isMustExist ? false : true;
 	}
 
 	// parse int value of json node
-	static bool parseJsonValueI32(i32& oValue, nlohmann::json& json, const String& key)
+	static bool parseJsonValueI32(i32& oValue, nlohmann::json& json, const String& key, bool isMustExist)
 	{
 		if (json.find(key) != json.end())
 		{
@@ -35,12 +36,29 @@ namespace Echo
 			return true;
 		}
 
-		return false;
+		return isMustExist ? false : true;
+	}
+
+	// parse int value of json node
+	static bool parseJsonValueUI32(ui32& oValue, nlohmann::json& json, const String& key, bool isMustExist)
+	{
+		if (json.find(key) != json.end())
+		{
+			nlohmann::json& subJson = json[key];
+			if (!subJson.is_number())
+				return false;
+
+			oValue = subJson.get<i32>();
+
+			return true;
+		}
+
+		return isMustExist ? false : true;
 	}
 
 
 	// parse bool value of json node
-	static bool parseJsonValueBool(bool& oValue, nlohmann::json& json, const String& key)
+	static bool parseJsonValueBool(bool& oValue, nlohmann::json& json, const String& key, bool isMustExist)
 	{
 		if (json.find(key) != json.end())
 		{
@@ -53,11 +71,11 @@ namespace Echo
 			return true;
 		}
 
-		return false;
+		return isMustExist ? false : true;
 	}
 
 	// parse string value of json node
-	static bool parseJsonValueString(String& oValue, nlohmann::json& json, const String& key)
+	static bool parseJsonValueString(String& oValue, nlohmann::json& json, const String& key, bool isMustExist)
 	{
 		if (json.find(key) != json.end())
 		{
@@ -70,12 +88,14 @@ namespace Echo
 			return true;
 		}
 
-		return false;
+		return isMustExist ? false : true;
 	}
 
 	// load
 	bool GltfAsset::load(const String& path)
 	{
+		m_path = path;
+
 		MemoryReader memReader(path);
 		if (memReader.getSize())
 		{
@@ -190,13 +210,8 @@ namespace Echo
 			nlohmann::json& scene = scenes[i];
 
 			// name
-			if (scene.find("name") != scene.end())
-			{
-				if (!scene["name"].is_string())
-					return false;
-
-				m_scenes[i].m_name = scene["name"].get<std::string>();
-			}
+			if (!parseJsonValueString(m_scenes[i].m_name, scene, "name", false))
+				return false;
 
 			// nodes
 			if (scene.find("nodes") != scene.end())
@@ -230,13 +245,9 @@ namespace Echo
 		{
 			nlohmann::json& mesh = meshes[i];
 
-			if (mesh.find("name") != mesh.end())
-			{
-				if (!mesh["name"].is_string())
-					return false;
-
-				m_meshes[i].m_name = mesh["name"].get<std::string>();
-			}
+			// name
+			if (!parseJsonValueString(m_meshes[i].m_name, mesh, "name", false))
+				return false;
 
 			if (mesh.find("primitives") == mesh.end())
 				return false;
@@ -251,22 +262,12 @@ namespace Echo
 				nlohmann::json& primitive = primitives[j];
 
 				// indices
-				if (primitive.find("indices") != primitive.end())
-				{
-					if (!primitive["indices"].is_number())
-						return false;
-
-					m_meshes[i].m_primitives[j].m_indices = primitive["indices"].get<ui32>();
-				}
+				if (!parseJsonValueUI32(m_meshes[i].m_primitives[j].m_indices, primitive, "indices", true))
+					return false;
 
 				// material
-				if (primitive.find("material") != primitive.end())
-				{
-					if (!primitive["material"].is_number())
-						return false;
-
-					m_meshes[i].m_primitives[j].m_material = primitive["material"].get<ui32>();
-				}
+				if (!parseJsonValueUI32(m_meshes[i].m_primitives[j].m_material, primitive, "material", true))
+					return false;
 
 				// mode
 				if (primitive.find("mode") != primitive.end())
@@ -309,22 +310,12 @@ namespace Echo
 			nlohmann::json& node = nodes[i];
 
 			// name
-			if (node.find("name") != node.end())
-			{
-				if (!node["name"].is_string())
-					return false;
-
-				m_nodes[i].m_name = node["name"].get<std::string>();
-			}
+			if (!parseJsonValueString(m_nodes[i].m_name, node, "name", false))
+				return false;
 
 			// camera
-			if (node.find("camera") != node.end())
-			{
-				if (!nodes[i]["camera"].is_number())
-					return false;
-
-				m_nodes[i].m_camera = node["camera"].get<i32>();
-			}
+			if (!parseJsonValueI32(m_nodes[i].m_camera, node, "camera", false))
+				return false;
 
 			// children
 			if (node.find("children") != node.end())
@@ -341,22 +332,12 @@ namespace Echo
 			}
 
 			// skin
-			if (node.find("skin") != node.end()) 
-			{
-				if (!node["skin"].is_number())
-					return false;
-
-				m_nodes[i].m_skin = node["skin"].get<i32>();
-			}
+			if (!parseJsonValueI32(m_nodes[i].m_skin, node, "skin", false))
+				return false;
 
 			// mesh
-			if (node.find("mesh") != node.end())
-			{
-				if (!node["mesh"].is_number())
-					return false;
-
-				m_nodes[i].m_mesh = node["mesh"].get<i32>();
-			}
+			if (!parseJsonValueI32(m_nodes[i].m_mesh, node, "mesh", false))
+				return false;
 
 			// translation
 			if (node.find("translation") != node.end())
@@ -434,24 +415,12 @@ namespace Echo
 			nlohmann::json& buffer = buffers[i];
 
 			// name
-			if (buffer.find("name") != buffer.end())
-			{
-				nlohmann::json& name = buffer["name"];
-				if (name.is_string())
-					return false;
-
-				m_buffers[i].m_name = name.get<std::string>();
-			}
+			if (!parseJsonValueString(m_buffers[i].m_name, buffer, "name", false))
+				return false;
 
 			// byteLength
-			if (buffer.find("byteLength") == buffer.end())
+			if (!parseJsonValueI32(m_buffers[i].m_byteLength, buffer, "byteLength", true))
 				return false;
-
-			nlohmann::json& byteLength = buffer["byteLength"];
-			if (!byteLength.is_number())
-				return false;
-
-			m_buffers[i].m_byteLength = byteLength.get<i32>();
 
 			// uri
 			if (buffer.find("uri") != buffer.end())
@@ -460,7 +429,7 @@ namespace Echo
 				if (!uri.is_string())
 					return false;
 
-				m_buffers[i].m_uri = uri.get<std::string>();
+				m_buffers[i].m_uri = PathUtil::GetFileDirPath(m_path) + uri.get<std::string>();
 			}
 
 			if (!loadBufferData(m_buffers[i]))
@@ -499,22 +468,12 @@ namespace Echo
 			nlohmann::json& accessor = accessors[i];
 
 			// bufferView
-			if (accessor.find("bufferView") != accessor.end())
-			{
-				if (!accessor["bufferView"].is_number())
-					return false;
-
-				m_accessors[i].m_bufferView = accessor["bufferView"].get<i32>();
-			}
+			if (!parseJsonValueI32(m_accessors[i].m_bufferView, accessor, "bufferView", false))
+				return false;
 
 			// byteOffset
-			if (accessor.find("byteOffset") != accessor.end()) 
-			{
-				if (!accessor["byteOffset"].is_number())
-					return false;
-
-				m_accessors[i].m_byteOffset = accessor["byteOffset"].get<ui32>();
-			}
+			if (!parseJsonValueI32(m_accessors[i].m_byteOffset, accessor, "byteOffset", false))
+				return false;
 
 			// componentType
 			if (accessor.find("componentType") == accessor.end())
@@ -525,13 +484,8 @@ namespace Echo
 			m_accessors[i].m_componentType = static_cast<GltfAccessorInfo::ComponentType>(accessor["componentType"].get<ui16>());
 
 			// normalized
-			if (accessor.find("normalized") != accessor.end())
-			{
-				if (!accessor["normalized"].is_boolean())
-					return false;
-
-				m_accessors[i].m_normalized = accessor["normalized"].get<bool>();
-			}
+			if (!parseJsonValueBool(m_accessors[i].m_normalized, accessor, "normalized", false))
+				return false;
 
 			// count
 			if (accessor.find("count") == accessor.end())
@@ -581,13 +535,8 @@ namespace Echo
 			nlohmann::json& material = materials[i];
 			
 			// name
-			if (material.find("name") != material.end())
-			{
-				if (!material["name"].is_string())
-					return false;
-
-				m_materials[i].m_name = material["name"].get<std::string>();
-			}
+			if (!parseJsonValueString(m_materials[i].m_name, material, "name", false))
+				return false;
 
 			// pbr metalic roughness
 			if (material.find("pbrMetallicRoughness") != material.end())
@@ -609,7 +558,7 @@ namespace Echo
 
 					for (ui32 j = 0; j < 4; j++)
 					{
-						if (baseColorFactor[j].is_number())
+						if (!baseColorFactor[j].is_number())
 							return false;
 
 						m_materials[i].m_pbr.m_baseColorFactor[j] = baseColorFactor[j].get<float>();
@@ -624,11 +573,11 @@ namespace Echo
 				}
 
 				// pbrMetallicRoughness.metallicFactor
-				if (!parseJsonValueFloat(m_materials[i].m_pbr.m_metallicFactor, pbrMetallicRoughness, "metallicFactor"))
+				if (!parseJsonValueFloat(m_materials[i].m_pbr.m_metallicFactor, pbrMetallicRoughness, "metallicFactor", false))
 					return false;
 
 				// pbrMetallicRoughness.roughnessFactor
-				if (!parseJsonValueFloat(m_materials[i].m_pbr.m_roughnessFactor, pbrMetallicRoughness, "roughnessFactor"))
+				if (!parseJsonValueFloat(m_materials[i].m_pbr.m_roughnessFactor, pbrMetallicRoughness, "roughnessFactor", false))
 					return false;
 
 				// pbrMetallicRoughness.metallicRoughnessTexture
@@ -647,7 +596,7 @@ namespace Echo
 					return false;
 
 				// scale
-				if (!parseJsonValueFloat(m_materials[i].m_normalTexture.m_scale, normalTexture, "scale"))
+				if (!parseJsonValueFloat(m_materials[i].m_normalTexture.m_scale, normalTexture, "scale", false))
 					return false;
 			}
 
@@ -659,7 +608,7 @@ namespace Echo
 					return false;
 
 				// scale
-				if (!parseJsonValueFloat(m_materials[i].m_occlusionTexture.m_strength, occlusionTexture, "strength"))
+				if (!parseJsonValueFloat(m_materials[i].m_occlusionTexture.m_strength, occlusionTexture, "strength", false))
 					return false;
 			}
 
@@ -682,7 +631,7 @@ namespace Echo
 
 				for (uint32_t j = 0; j < 3; ++j)
 				{
-					if (!emissiveFactor.is_number())
+					if (!emissiveFactor[j].is_number())
 						return false;
 
 					m_materials[i].m_emissiveFactor[j] = emissiveFactor[j].get<float>();
@@ -705,11 +654,11 @@ namespace Echo
 			}
 
 			// alphaCutoff
-			if (parseJsonValueFloat(m_materials[i].m_alphaCutoff, material, "alphaCutoff"))
+			if (!parseJsonValueFloat(m_materials[i].m_alphaCutoff, material, "alphaCutoff", false))
 				return false;
 
 			// doubleSided
-			if (!parseJsonValueBool(m_materials[i].m_isDoubleSided, material, "doubleSided"))
+			if (!parseJsonValueBool(m_materials[i].m_isDoubleSided, material, "doubleSided", false))
 				return false;
 
 			// TODO: materials[i]["extensions"]
@@ -734,14 +683,8 @@ namespace Echo
 		texture.m_index = json["index"].get<i32>();
 
 		// texCoord
-		if (json.find("texCoord") != json.end())
-		{
-			nlohmann::json& texCoord = json["texCoord"];
-			if (!texCoord.is_number())
-				return false;
-
-			texture.m_texCoord = texCoord.get<i32>();
-		}
+		if (!parseJsonValueI32(texture.m_texCoord, json, "texCoord", false))
+			return false;
 
 		// TODO json["extensions"]
 		// TODO json["extras"]
@@ -764,19 +707,21 @@ namespace Echo
 			nlohmann::json& image = images[i];
 
 			// name
-			if (!parseJsonValueString(m_images[i].m_name, image, "name"))
+			if (!parseJsonValueString(m_images[i].m_name, image, "name", false))
 				return false;
 
 			// uri
-			if (!parseJsonValueString(m_images[i].m_uri, image, "uri"))
+			if (parseJsonValueString(m_images[i].m_uri, image, "uri", false))
+				m_images[i].m_uri = PathUtil::GetFileDirPath(m_path) + m_images[i].m_uri;
+			else
 				return false;
 
 			// mimeType
-			if (!parseJsonValueString(m_images[i].m_mimeType, image, "mimeType"))
+			if (!parseJsonValueString(m_images[i].m_mimeType, image, "mimeType", false))
 				return false;
 
 			// bufferView
-			if (!parseJsonValueI32(m_images[i].m_bufferView, image, "bufferView"))
+			if (!parseJsonValueI32(m_images[i].m_bufferView, image, "bufferView", false))
 				return false;
 		}
 
@@ -803,31 +748,31 @@ namespace Echo
 			nlohmann::json& sampler = samplers[i];
 
 			// name
-			if (!parseJsonValueString(m_samplers[i].m_name, sampler, "name"))
+			if (!parseJsonValueString(m_samplers[i].m_name, sampler, "name", false))
 				return false;
 
 			i32 iValue;
 
 			// magFilter
-			if (parseJsonValueI32(iValue, sampler, "magFilter"))
+			if (parseJsonValueI32(iValue, sampler, "magFilter", false))
 				m_samplers[i].m_magFilter = GltfSamplerInfo::MagFilter(iValue);
 			else
 				return false;
 
 			// minFilter
-			if (parseJsonValueI32(iValue, sampler, "minFilter"))
+			if (parseJsonValueI32(iValue, sampler, "minFilter", false))
 				m_samplers[i].m_minFilter = GltfSamplerInfo::MinFilter(iValue);
 			else
 				return false;
 
 			// wrapS
-			if (parseJsonValueI32(iValue, sampler, "wrapS"))
+			if (parseJsonValueI32(iValue, sampler, "wrapS", false))
 				m_samplers[i].m_wrapS = GltfSamplerInfo::WrappingMode(iValue);
 			else
 				return false;
 
 			// wrapT
-			if (parseJsonValueI32(iValue, sampler, "wrapT"))
+			if (parseJsonValueI32(iValue, sampler, "wrapT", false))
 				m_samplers[i].m_wrapT = GltfSamplerInfo::WrappingMode(iValue);
 			else
 				return false;
@@ -854,15 +799,15 @@ namespace Echo
 			nlohmann::json& texture = textures[i];
 
 			// name
-			if (!parseJsonValueString(m_textures[i].m_name, texture, "name"))
+			if (!parseJsonValueString(m_textures[i].m_name, texture, "name", false))
 				return false;
 
 			// sampler
-			if (!parseJsonValueI32(m_textures[i].m_sampler, texture, "sampler"))
+			if (!parseJsonValueI32(m_textures[i].m_sampler, texture, "sampler", false))
 				return false;
 
 			// source
-			if (!parseJsonValueI32(m_textures[i].m_source, texture, "source"))
+			if (!parseJsonValueI32(m_textures[i].m_source, texture, "source", false))
 				return false;
 		}
 
