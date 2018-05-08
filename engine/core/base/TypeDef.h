@@ -3,15 +3,7 @@
 #include <stddef.h>
 
 // Precision
-#define ECHO_PREC_FLOAT         1
-#define ECHO_PREC_DOUBLE        2
-
-// Precision define
-#if defined(DOUBLE_PRECISION)
-#define ECHO_PRECISION    ECHO_PREC_DOUBLE
-#else
-#define ECHO_PRECISION    ECHO_PREC_FLOAT
-#endif
+// #define ECHO_PREC_DOUBLE
 
 namespace Echo
 {
@@ -33,7 +25,7 @@ namespace Echo
 	typedef unsigned char		Byte;
 	typedef unsigned short		Word;
 
-#if (ECHO_PRECISION == ECHO_PREC_DOUBLE)
+#ifdef ECHO_PREC_DOUBLE
 	typedef double			Real;
 #else
 	typedef float			Real;

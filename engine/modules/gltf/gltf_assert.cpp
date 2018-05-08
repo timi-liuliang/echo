@@ -44,6 +44,18 @@ namespace Echo
 				return false;
 			}
 
+			if (!loadAccessors(j))
+			{
+				EchoLogError("gltf parse accessors failed when load resource [%s].", path.c_str());
+				return false;
+			}
+
+			if (!loadMaterials(j))
+			{
+				EchoLogError("gltf parse materials failed when load resource [%s].", path.c_str());
+				return false;
+			}
+
 			return true;
 		}
 
@@ -175,7 +187,7 @@ namespace Echo
 					if (!primitive["mode"].is_number())
 						return false;
 
-					m_meshes[i].m_primitives[j].m_mode = GltfPrimitiveMode(primitive["mode"].get<ui8>());
+					m_meshes[i].m_primitives[j].m_mode = GltfPrimitive::Mode(primitive["mode"].get<ui8>());
 				}
 
 				if (primitive.find("attributes") == primitive.end())
@@ -383,5 +395,99 @@ namespace Echo
 		}
 
 		return false;
+	}
+
+	bool GltfAsset::loadAccessors(nlohmann::json& json)
+	{
+		if (json.find("accessors") == json.end())
+			return false;
+
+		nlohmann::json& accessors = json["accessors"];
+		if (!accessors.is_array())
+			return false;
+
+		m_accessors.resize(accessors.size());
+		for ( ui32 i = 0; i < accessors.size(); ++i)
+		{
+			nlohmann::json& accessor = accessors[i];
+
+			// bufferView
+			if (accessor.find("bufferView") != accessor.end())
+			{
+				if (!accessor["bufferView"].is_number())
+					return false;
+
+				m_accessors[i].m_bufferView = accessor["bufferView"].get<i32>();
+			}
+
+			// byteOffset
+			if (accessor.find("byteOffset") != accessor.end()) 
+			{
+				if (!accessor["byteOffset"].is_number())
+					return false;
+
+				m_accessors[i].m_byteOffset = accessor["byteOffset"].get<ui32>();
+			}
+
+			// componentType
+			if (accessor.find("componentType") == accessor.end())
+				return false;
+			if (!accessor["componentType"].is_number())
+				return false;
+
+			m_accessors[i].m_componentType = static_cast<GltfAccessorInfo::ComponentType>(accessor["componentType"].get<ui16>());
+
+			// normalized
+			if (accessor.find("normalized") != accessor.end())
+			{
+				if (!accessor["normalized"].is_boolean())
+					return false;
+
+				m_accessors[i].m_normalized = accessor["normalized"].get<bool>();
+			}
+
+			// count
+			if (accessor.find("count") == accessor.end())
+				return false;
+			else if (!accessor["count"].is_number())
+				return false;
+
+			m_accessors[i].m_count = accessor["count"].get<ui32>();
+
+			// type
+			if (accessor.find("type") == accessors[i].end())
+				return false;
+			if (!accessor["type"].is_string())
+				return false;
+
+			String type = accessor["type"].get<std::string>();
+			if (type == "SCALAR")		m_accessors[i].m_type = GltfAccessorInfo::Type::Scalar;
+			else if (type == "VEC2")	m_accessors[i].m_type = GltfAccessorInfo::Type::Vec2;
+			else if (type == "VEC3")	m_accessors[i].m_type = GltfAccessorInfo::Type::Vec3;
+			else if (type == "VEC4")	m_accessors[i].m_type = GltfAccessorInfo::Type::Vec4;
+			else if (type == "MAT2")	m_accessors[i].m_type = GltfAccessorInfo::Type::Mat2;
+			else if (type == "MAT3")	m_accessors[i].m_type = GltfAccessorInfo::Type::Mat3;
+			else if (type == "MAT4")	m_accessors[i].m_type = GltfAccessorInfo::Type::Mat4;
+			else						return false;
+
+			// TODO: accessors[i]["sparse"]
+			// TODO: accessors[i]["extensions"]
+			// TODO: accessors[i]["min"]
+			// TODO: accessors[i]["max"]
+		}
+
+		return true;
+	}
+
+	bool GltfAsset::loadMaterials(nlohmann::json& json)
+	{
+		if (json.find("materials") == json.end())
+			return true;
+
+		nlohmann::json& materials = json["materials"];
+		if (!materials.is_array())
+			return false;
+
+		m_materials.resize(materials.size());
 	}
 }
