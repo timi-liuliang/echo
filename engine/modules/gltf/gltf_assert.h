@@ -144,6 +144,57 @@ namespace Echo
 		bool		m_isDoubleSided = false;
 	};
 
+	struct GltfImageInfo
+	{
+		String	m_name;
+		String	m_uri;
+		String	m_mimeType;
+		i32		m_bufferView = -1;
+	};
+
+	struct GltfSamplerInfo
+	{
+		String		m_name;
+
+		// mag filter
+		enum class MagFilter
+		{
+			None,
+			Nearest = 9728,
+			Linear = 9729
+		}			m_magFilter = MagFilter::None;
+
+		// min filter
+		enum class MinFilter
+		{
+			None,
+			Nearest = 9728,
+			Linear = 9729,
+			NearestMipMapNearest = 9984,
+			LinearMipMapNearest = 9985,
+			NearestMipMapLinear = 9986,
+			LinearMipMapLinear = 9987
+		}				m_minFilter = MinFilter::None;
+
+		// wrapping mode
+		enum WrappingMode
+		{
+			ClampToEdge	= 33071,
+			MirroredRepeat = 33648,
+			Repeat = 10497
+		};
+
+		WrappingMode	m_wrapS = Repeat;
+		WrappingMode	m_wrapT = Repeat;
+	};
+
+	struct GltfTextureInfo
+	{
+		String		m_name;
+		i32			m_sampler = -1;
+		i32			m_source  = -1;
+	};
+
 	struct GltfAsset
 	{
 		GltfMetaInfo					m_metaInfo;
@@ -153,6 +204,9 @@ namespace Echo
 		vector<GltfBufferInfo>::type	m_buffers;
 		vector<GltfAccessorInfo>::type	m_accessors;
 		vector<GltfMaterialInfo>::type	m_materials;
+		vector<GltfImageInfo>::type		m_images;
+		vector<GltfSamplerInfo>::type	m_samplers;
+		vector<GltfTextureInfo>::type	m_textures;
 
 		// load
 		bool load(const String& path);
@@ -164,5 +218,9 @@ namespace Echo
 		bool loadBufferData(GltfBufferInfo& buffer);
 		bool loadAccessors(nlohmann::json& json);
 		bool loadMaterials(nlohmann::json& json);
+		bool loadTextureInfo(GltfMaterialInfo::Texture& texture, nlohmann::json& json);
+		bool loadImages(nlohmann::json& json);
+		bool loadSamplers(nlohmann::json& json);
+		bool loadTextures(nlohmann::json& json);
 	};
 }

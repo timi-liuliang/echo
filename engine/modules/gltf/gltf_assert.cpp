@@ -4,6 +4,75 @@
 
 namespace Echo
 {
+	// parse float value of json node
+	static bool parseJsonValueFloat(float& oValue, nlohmann::json& json, const String& key)
+	{
+		if (json.find(key) != json.end())
+		{
+			nlohmann::json& subJson = json[key];
+			if (!subJson.is_number())
+				return false;
+
+			oValue = subJson.get<float>();
+
+			return true;
+		}
+
+		return false;
+	}
+
+	// parse int value of json node
+	static bool parseJsonValueI32(i32& oValue, nlohmann::json& json, const String& key)
+	{
+		if (json.find(key) != json.end())
+		{
+			nlohmann::json& subJson = json[key];
+			if (!subJson.is_number())
+				return false;
+
+			oValue = subJson.get<i32>();
+
+			return true;
+		}
+
+		return false;
+	}
+
+
+	// parse bool value of json node
+	static bool parseJsonValueBool(bool& oValue, nlohmann::json& json, const String& key)
+	{
+		if (json.find(key) != json.end())
+		{
+			nlohmann::json& subJson = json[key];
+			if (!subJson.is_boolean())
+				return false;
+
+			oValue = subJson.get<bool>();
+
+			return true;
+		}
+
+		return false;
+	}
+
+	// parse string value of json node
+	static bool parseJsonValueString(String& oValue, nlohmann::json& json, const String& key)
+	{
+		if (json.find(key) != json.end())
+		{
+			nlohmann::json& subJson = json[key];
+			if (!subJson.is_string())
+				return false;
+
+			oValue = subJson.get<std::string>();
+
+			return true;
+		}
+
+		return false;
+	}
+
 	// load
 	bool GltfAsset::load(const String& path)
 	{
@@ -53,6 +122,24 @@ namespace Echo
 			if (!loadMaterials(j))
 			{
 				EchoLogError("gltf parse materials failed when load resource [%s].", path.c_str());
+				return false;
+			}
+
+			if (!loadImages(j))
+			{
+				EchoLogError("gltf parse images failed when load resource [%s].", path.c_str());
+				return false;
+			}
+
+			if (!loadSamplers(j))
+			{
+				EchoLogError("gltf parse samples failed when load resource [%s].", path.c_str());
+				return false;
+			}
+
+			if (!loadTextures(j))
+			{
+				EchoLogError("gltf parse textures failed when load resource [%s].", path.c_str());
 				return false;
 			}
 
@@ -489,5 +576,299 @@ namespace Echo
 			return false;
 
 		m_materials.resize(materials.size());
+		for (ui32 i = 0; i < materials.size(); i++)
+		{
+			nlohmann::json& material = materials[i];
+			
+			// name
+			if (material.find("name") != material.end())
+			{
+				if (!material["name"].is_string())
+					return false;
+
+				m_materials[i].m_name = material["name"].get<std::string>();
+			}
+
+			// pbr metalic roughness
+			if (material.find("pbrMetallicRoughness") != material.end())
+			{
+				nlohmann::json& pbrMetallicRoughness = material["pbrMetallicRoughness"];
+
+				if (!pbrMetallicRoughness.is_object())
+					return false;
+
+				// pbrMetallicRoughness.baseColorFactor
+				if (pbrMetallicRoughness.find("baseColorFactor") != pbrMetallicRoughness.end())
+				{
+					nlohmann::json& baseColorFactor = pbrMetallicRoughness["baseColorFactor"];
+					if (!baseColorFactor.is_array())
+						return false;
+
+					if (baseColorFactor.size() != 4)
+						return false;
+
+					for (ui32 j = 0; j < 4; j++)
+					{
+						if (baseColorFactor[j].is_number())
+							return false;
+
+						m_materials[i].m_pbr.m_baseColorFactor[j] = baseColorFactor[j].get<float>();
+					}				
+				}
+
+				// pbrMetallicRoughness.baseColorTexture
+				if (pbrMetallicRoughness.find("baseColorTexture") != pbrMetallicRoughness.end())
+				{
+					if (!loadTextureInfo(m_materials[i].m_pbr.m_baseColorTexture, pbrMetallicRoughness["baseColorTexture"]))
+						return false;
+				}
+
+				// pbrMetallicRoughness.metallicFactor
+				if (!parseJsonValueFloat(m_materials[i].m_pbr.m_metallicFactor, pbrMetallicRoughness, "metallicFactor"))
+					return false;
+
+				// pbrMetallicRoughness.roughnessFactor
+				if (!parseJsonValueFloat(m_materials[i].m_pbr.m_roughnessFactor, pbrMetallicRoughness, "roughnessFactor"))
+					return false;
+
+				// pbrMetallicRoughness.metallicRoughnessTexture
+				if (pbrMetallicRoughness.find("metallicRoughnessTexture") != pbrMetallicRoughness.end())
+				{
+					if (!loadTextureInfo(m_materials[i].m_pbr.m_metallicRoughnessTexture, pbrMetallicRoughness["metallicRoughnessTexture"]))
+						return false;
+				}
+			}
+
+			// normal texture
+			if (material.find("normalTexture") != material.end())
+			{
+				nlohmann::json& normalTexture = material["normalTexture"];
+				if (!loadTextureInfo(m_materials[i].m_normalTexture, normalTexture))
+					return false;
+
+				// scale
+				if (!parseJsonValueFloat(m_materials[i].m_normalTexture.m_scale, normalTexture, "scale"))
+					return false;
+			}
+
+			// occlusion texture
+			if (material.find("occlusionTexture") != material.end())
+			{
+				nlohmann::json& occlusionTexture = material["occlusionTexture"];
+				if (!loadTextureInfo(m_materials[i].m_occlusionTexture, occlusionTexture))
+					return false;
+
+				// scale
+				if (!parseJsonValueFloat(m_materials[i].m_occlusionTexture.m_strength, occlusionTexture, "strength"))
+					return false;
+			}
+
+			// emissiveTexture
+			if (material.find("emissiveTexture") != material.end()) 
+			{
+				if (!loadTextureInfo(m_materials[i].m_emissiveTexture, material["emissiveTexture"]))
+					return false;
+			}
+
+			// emissiveFactor
+			if (material.find("emissiveFactor") != material.end())
+			{
+				nlohmann::json& emissiveFactor = material["emissiveFactor"];
+				if (!emissiveFactor.is_array())
+					return false;
+
+				if (emissiveFactor.size() != 3)
+					return false;
+
+				for (uint32_t j = 0; j < 3; ++j)
+				{
+					if (!emissiveFactor.is_number())
+						return false;
+
+					m_materials[i].m_emissiveFactor[j] = emissiveFactor[j].get<float>();
+				}
+			}
+
+			// alphaMode
+			if (material.find("alphaMode") != material.end())
+			{
+				if (!material["alphaMode"].is_string())
+					return false;
+
+				std::string type = material["alphaMode"].get<std::string>();
+				if (type == "OPAQUE")		m_materials[i].m_alphaMode = GltfMaterialInfo::AlphaMode::Opaque;
+				else if (type == "MASK")	m_materials[i].m_alphaMode = GltfMaterialInfo::AlphaMode::Mask;
+				else if (type == "BLEND")	m_materials[i].m_alphaMode = GltfMaterialInfo::AlphaMode::Blend;
+				else                        return false;
+
+				return true;
+			}
+
+			// alphaCutoff
+			if (parseJsonValueFloat(m_materials[i].m_alphaCutoff, material, "alphaCutoff"))
+				return false;
+
+			// doubleSided
+			if (!parseJsonValueBool(m_materials[i].m_isDoubleSided, material, "doubleSided"))
+				return false;
+
+			// TODO: materials[i]["extensions"]
+			// TODO: materials[i]["extras"]
+		}
+
+		return true;
+	}
+
+	bool GltfAsset::loadTextureInfo(GltfMaterialInfo::Texture& texture, nlohmann::json& json)
+	{
+		if (!json.is_object())
+			return false;
+
+		// index
+		if (json.find("index") == json.end())
+			return false;
+
+		if (!json["index"].is_number())
+			return false;
+
+		texture.m_index = json["index"].get<i32>();
+
+		// texCoord
+		if (json.find("texCoord") != json.end())
+		{
+			nlohmann::json& texCoord = json["texCoord"];
+			if (!texCoord.is_number())
+				return false;
+
+			texture.m_texCoord = texCoord.get<i32>();
+		}
+
+		// TODO json["extensions"]
+		// TODO json["extras"]
+
+		return true;
+	}
+
+	bool GltfAsset::loadImages(nlohmann::json& json)
+	{
+		if (json.find("images") == json.end())
+			return true;
+
+		nlohmann::json& images = json["images"];
+		if (!images.is_array())
+			return false;
+
+		m_images.resize(images.size());
+		for (ui32 i = 0; i < images.size(); i++)
+		{
+			nlohmann::json& image = images[i];
+
+			// name
+			if (!parseJsonValueString(m_images[i].m_name, image, "name"))
+				return false;
+
+			// uri
+			if (!parseJsonValueString(m_images[i].m_uri, image, "uri"))
+				return false;
+
+			// mimeType
+			if (!parseJsonValueString(m_images[i].m_mimeType, image, "mimeType"))
+				return false;
+
+			// bufferView
+			if (!parseJsonValueI32(m_images[i].m_bufferView, image, "bufferView"))
+				return false;
+		}
+
+		// TODO: Handle dependencies between mimeType and bufferView
+		// TODO: Handle the fact that we want an uri OR a bufferView
+		// TODO: images[i]["extensions"]
+		// TODO: images[i]["extras"]
+
+		return true;
+	}
+
+	bool GltfAsset::loadSamplers(nlohmann::json& json)
+	{
+		if (json.find("samplers") == json.end())
+			return true;
+
+		nlohmann::json& samplers = json["samplers"];
+		if (!samplers.is_array())
+			return false;
+
+		m_samplers.resize(samplers.size());
+		for (ui32 i = 0; i < samplers.size(); i++)
+		{
+			nlohmann::json& sampler = samplers[i];
+
+			// name
+			if (!parseJsonValueString(m_samplers[i].m_name, sampler, "name"))
+				return false;
+
+			i32 iValue;
+
+			// magFilter
+			if (parseJsonValueI32(iValue, sampler, "magFilter"))
+				m_samplers[i].m_magFilter = GltfSamplerInfo::MagFilter(iValue);
+			else
+				return false;
+
+			// minFilter
+			if (parseJsonValueI32(iValue, sampler, "minFilter"))
+				m_samplers[i].m_minFilter = GltfSamplerInfo::MinFilter(iValue);
+			else
+				return false;
+
+			// wrapS
+			if (parseJsonValueI32(iValue, sampler, "wrapS"))
+				m_samplers[i].m_wrapS = GltfSamplerInfo::WrappingMode(iValue);
+			else
+				return false;
+
+			// wrapT
+			if (parseJsonValueI32(iValue, sampler, "wrapT"))
+				m_samplers[i].m_wrapT = GltfSamplerInfo::WrappingMode(iValue);
+			else
+				return false;
+
+			// TODO: samplers[i]["extensions"]
+			// TODO: samplers[i]["extras"]
+		}
+
+		return true;
+	}
+
+	bool GltfAsset::loadTextures(nlohmann::json& json)
+	{
+		if (json.find("textures") == json.end())
+			return true;
+
+		nlohmann::json& textures = json["textures"];
+		if (!textures.is_array())
+			return false;
+
+		m_textures.resize(textures.size());
+		for (ui32 i = 0; i < textures.size(); i++)
+		{
+			nlohmann::json& texture = textures[i];
+
+			// name
+			if (!parseJsonValueString(m_textures[i].m_name, texture, "name"))
+				return false;
+
+			// sampler
+			if (!parseJsonValueI32(m_textures[i].m_sampler, texture, "sampler"))
+				return false;
+
+			// source
+			if (!parseJsonValueI32(m_textures[i].m_source, texture, "source"))
+				return false;
+		}
+
+		// TODO: textures[i]["extensions"]
+		// TODO: textures[i]["extras"]
+
+		return true;
 	}
 }
