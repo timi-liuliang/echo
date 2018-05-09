@@ -4,7 +4,7 @@
 
 Echo is a new game engine, which used more industry standard of nowdays for game development. The new design concept makes the engine simplicty to use. but more powerful.
 
-[Examples](https://github.com/blab-liuliang/echo-examples/archive/master.zip)  
+[Examples](https://github.com/blab-liuliang/echo-examples)  
 [Tutorials](https://github.com/blab-liuliang/echo-doc/tree/master/tutorial)  
 [Documentation](https://github.com/blab-liuliang/echo-doc/tree/master/documentation)  
 
@@ -22,5 +22,6 @@ PBR Material
 ### 2D And 3D Seamless Transition  
 
 ### Easy To Program  
+lua 
 
 ### Open Source  
