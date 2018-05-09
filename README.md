@@ -1,4 +1,4 @@
-# ECHO
+# Echo
 
 ## Simplicity And Powerful Game Engine  
 
