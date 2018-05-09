@@ -1,13 +1,13 @@
 # ECHO
 
-## SIMPLICITY AND POWERFUL GAME ENGINE  
+## Simplicity And Powerful Game Engine  
 
 Echo is a new game engine, which used more industry standard of nowdays for game development. The new design concept makes the engine simplicty to use. but more powerful.
 
 [Examples](https://github.com/blab-liuliang/echo-examples/archive/master.zip)  
-[Tutorials](https://github.com/blab-liuliang/echo-doc/tree/master/tutorial)
-[Documentation](https://github.com/blab-liuliang/echo-doc/tree/master/documentation)
+[Tutorials](https://github.com/blab-liuliang/echo-doc/tree/master/tutorial)  
+[Documentation](https://github.com/blab-liuliang/echo-doc/tree/master/documentation)  
 
 ## FEATURES
 
-![](https://github.com/blab-liuliang/echo/blob/master/doc/image/echo.png?raw=true)
+![](https://github.com/blab-liuliang/echo-doc/blob/master/intro/image/echo.png?raw=true)
