@@ -4,13 +4,10 @@
 
 Echo is a new game engine, which used more industry standard of nowdays for game development. The new design concept makes the engine simplicty to use. but more powerful.
 
-DOWNLOAD (Windows)  
-DOWNLOAD (Mac)  
-DOCUMENTATION  
-EXAMPLES  
+[Examples](https://github.com/blab-liuliang/echo-examples/archive/master.zip)  
+[Tutorials](https://github.com/blab-liuliang/echo-doc/tree/master/tutorial)
+[Documentation](https://github.com/blab-liuliang/echo-doc/tree/master/documentation)
+
+## FEATURES
 
 ![](https://github.com/blab-liuliang/echo/blob/master/doc/image/echo.png?raw=true)
-
-## Compile  
-### Windows
-1.CMake + Visual Studio 2015
