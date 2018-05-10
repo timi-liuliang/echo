@@ -61,10 +61,16 @@ namespace Echo
 
 	struct GltfBufferInfo
 	{
-		String			m_name;
-		String			m_uri;
-		i32				m_byteLength;
-		MemoryReader*	m_data = nullptr;
+		String				m_name;
+		String				m_uri;
+		enum class UriType
+		{
+			Uri = 0,
+			Data,
+			Blob
+		}					m_uriType = UriType::Uri;
+		i32					m_byteLength;
+		MemoryReader*		m_data = nullptr;
 	};
 
 	struct GltfAccessorInfo

@@ -266,7 +266,7 @@ namespace Echo
 					return false;
 
 				// material
-				if (!parseJsonValueUI32(m_meshes[i].m_primitives[j].m_material, primitive, "material", true))
+				if (!parseJsonValueUI32(m_meshes[i].m_primitives[j].m_material, primitive, "material", false))
 					return false;
 
 				// mode
@@ -429,7 +429,22 @@ namespace Echo
 				if (!uri.is_string())
 					return false;
 
-				m_buffers[i].m_uri = PathUtil::GetFileDirPath(m_path) + uri.get<std::string>();
+				// resolve url
+				String bufferUri = uri.get<std::string>();
+				if (StringUtil::StartWith(bufferUri, "data:"))
+				{
+					m_buffers[i].m_uri = bufferUri;
+					m_buffers[i].m_uriType = GltfBufferInfo::UriType::Data;
+				}
+				else if (StringUtil::StartWith(bufferUri, "blob:"))
+				{
+					m_buffers[i].m_uri = bufferUri;
+					m_buffers[i].m_uriType = GltfBufferInfo::UriType::Blob;
+				}
+				else
+				{
+					m_buffers[i].m_uri = PathUtil::GetFileDirPath(m_path) + bufferUri;
+				}
 			}
 
 			if (!loadBufferData(m_buffers[i]))
@@ -443,6 +458,9 @@ namespace Echo
 	{
 		if (buffer.m_uri.empty() && buffer.m_byteLength > 0)
 			return false;
+
+		if (buffer.m_uriType != GltfBufferInfo::UriType::Uri)
+			return true;
 
 		buffer.m_data = EchoNew(MemoryReader(buffer.m_uri));
 		if (buffer.m_data->getSize())
