@@ -4,6 +4,7 @@
 #include "engine/core/math/MathLib.h"
 #include "engine/core/io/DataStream.h"
 #include "engine/core/scene/node.h"
+#include "engine/core/resource/Res.h"
 #include <nlohmann/json.hpp>
 
 namespace Echo
@@ -202,9 +203,8 @@ namespace Echo
 		i32			m_source  = -1;
 	};
 
-	struct GltfAsset
+	struct GltfRes : public Res
 	{
-		String							m_path;
 		GltfMetaInfo					m_metaInfo;
 		vector<GltfSceneInfo>::type		m_scenes;
 		vector<GltfMeshInfo>::type		m_meshes;
@@ -216,13 +216,15 @@ namespace Echo
 		vector<GltfSamplerInfo>::type	m_samplers;
 		vector<GltfTextureInfo>::type	m_textures;
 
-		// load
-		bool load(const String& path);
+		// create
+		static GltfRes* create(const ResourcePath& path);
 
 		// build echo node
 		Node* build();
 
 	private:
+		GltfRes(const ResourcePath& path);
+		bool load();
 		bool loadAsset(nlohmann::json& json);
 		bool loadScenes(nlohmann::json& json);
 		bool loadMeshes(nlohmann::json& json);
@@ -237,4 +239,5 @@ namespace Echo
 		bool loadTextures(nlohmann::json& json);
 		Node* createNode(Node* parent, int idx);
 	};
+	typedef Echo::ResRef<Echo::GltfRes> GltfResPtr;
 }

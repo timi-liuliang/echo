@@ -4,6 +4,7 @@
 #include "engine/core/render/mesh/Mesh.h"
 #include "engine/core/render/MaterialInst.h"
 #include "engine/core/render/render/Renderable.h"
+#include "gltf_assert.h"
 
 namespace Echo
 {
@@ -36,6 +37,9 @@ namespace Echo
 		// get texture res
 		const ResourcePath& getTextureRes() { return m_textureRes; }
 
+		// set geometry data
+		void setGeometryData(GltfRes* asset, int meshIdx, int primitiveIdx);
+
 	protected:
 		// build drawable
 		void buildRenderable();
@@ -62,5 +66,8 @@ namespace Echo
 		MaterialInst*			m_materialInst;	// Material Instance
 		Renderable*				m_renderable;
 		Matrix4					m_matWVP;
+		GltfResPtr				m_asset;		// gltf asset ptr
+		int						m_meshIdx;		// mesh index in the asset
+		int						m_primitiveIdx;	// sub mesh index
 	};
 }

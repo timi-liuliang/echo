@@ -6,7 +6,7 @@ namespace Echo
 	static map<String, Res*>::type				g_ress;
 
 	Res::Res(const ResourcePath& path)
-		: m_refCount(1)
+		: m_refCount(0)
 	{
 		m_path = path;
 
@@ -47,8 +47,12 @@ namespace Echo
 	}
 
 	// release
-	void Res::release()
+	void Res::subRefCount()
 	{
-
+		m_refCount--;
+		if (m_refCount <= 0)
+		{
+			ECHO_DELETE_T(this, Res);
+		}
 	}
 }

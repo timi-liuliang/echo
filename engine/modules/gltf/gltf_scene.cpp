@@ -31,11 +31,7 @@ namespace Echo
 	{
 		if (m_gltfRes.setPath(path.getPath()))
 		{
-			GltfAsset asset;
-			if (asset.load(m_gltfRes.getPath()))
-			{
-				int  a = 10;
-			}
+			GltfRes::create( path);
 		}
 	}
 

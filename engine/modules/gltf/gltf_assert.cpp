@@ -1,4 +1,5 @@
 #include "gltf_assert.h"
+#include "gltf_mesh.h"
 #include "engine/core/io/DataStream.h"
 #include "engine/core/util/LogManager.h"
 #include "engine/core/util/PathUtil.h"
@@ -91,12 +92,26 @@ namespace Echo
 		return isMustExist ? false : true;
 	}
 
-	// load
-	bool GltfAsset::load(const String& path)
+	// contructor
+	GltfRes::GltfRes(const ResourcePath& path)
+		: Res(path)
 	{
-		m_path = path;
+		load();
+	}
 
-		MemoryReader memReader(path);
+	GltfRes* GltfRes::create(const ResourcePath& path)
+	{
+		Res* res = Res::get(path);
+		if (res)
+			return dynamic_cast<GltfRes*>(res);
+		else
+			return EchoNew(GltfRes(path));
+	}
+
+	// load
+	bool GltfRes::load()
+	{
+		MemoryReader memReader(m_path.getPath());
 		if (memReader.getSize())
 		{
 			using namespace nlohmann;
@@ -105,61 +120,61 @@ namespace Echo
 			// load asset
 			if (!loadAsset(j))
 			{
-				EchoLogError("gltf parse asset failed when load resource [%s].", path.c_str());
+				EchoLogError("gltf parse asset failed when load resource [%s].", m_path.getPath().c_str());
 				return false;
 			}
 
 			if (!loadScenes(j))
 			{
-				EchoLogError("gltf parse scenes failed when load resource [%s].", path.c_str());
+				EchoLogError("gltf parse scenes failed when load resource [%s].", m_path.getPath().c_str());
 				return false;
 			}
 
 			if (!loadMeshes(j))
 			{
-				EchoLogError("gltf parse meshes failed when load resource [%s].", path.c_str());
+				EchoLogError("gltf parse meshes failed when load resource [%s].", m_path.getPath().c_str());
 				return false;
 			}
 
 			if (!loadNodes(j))
 			{
-				EchoLogError("gltf parse nodes failed when load resource [%s].", path.c_str());
+				EchoLogError("gltf parse nodes failed when load resource [%s].", m_path.getPath().c_str());
 				return false;
 			}
 
 			if (!loadBuffers(j))
 			{
-				EchoLogError("gltf parse buffers failed when load resource [%s].", path.c_str());
+				EchoLogError("gltf parse buffers failed when load resource [%s].", m_path.getPath().c_str());
 				return false;
 			}
 
 			if (!loadAccessors(j))
 			{
-				EchoLogError("gltf parse accessors failed when load resource [%s].", path.c_str());
+				EchoLogError("gltf parse accessors failed when load resource [%s].", m_path.getPath().c_str());
 				return false;
 			}
 
 			if (!loadMaterials(j))
 			{
-				EchoLogError("gltf parse materials failed when load resource [%s].", path.c_str());
+				EchoLogError("gltf parse materials failed when load resource [%s].", m_path.getPath().c_str());
 				return false;
 			}
 
 			if (!loadImages(j))
 			{
-				EchoLogError("gltf parse images failed when load resource [%s].", path.c_str());
+				EchoLogError("gltf parse images failed when load resource [%s].", m_path.getPath().c_str());
 				return false;
 			}
 
 			if (!loadSamplers(j))
 			{
-				EchoLogError("gltf parse samples failed when load resource [%s].", path.c_str());
+				EchoLogError("gltf parse samples failed when load resource [%s].", m_path.getPath().c_str());
 				return false;
 			}
 
 			if (!loadTextures(j))
 			{
-				EchoLogError("gltf parse textures failed when load resource [%s].", path.c_str());
+				EchoLogError("gltf parse textures failed when load resource [%s].", m_path.getPath().c_str());
 				return false;
 			}
 
@@ -169,7 +184,7 @@ namespace Echo
 		return false;
 	}
 
-	bool GltfAsset::loadAsset(nlohmann::json& json)
+	bool GltfRes::loadAsset(nlohmann::json& json)
 	{
 		if (json.find("asset") != json.end())
 		{
@@ -195,7 +210,7 @@ namespace Echo
 		return false;
 	}
 
-	bool GltfAsset::loadScenes(nlohmann::json& json)
+	bool GltfRes::loadScenes(nlohmann::json& json)
 	{
 		if (json.find("scenes") == json.end())
 			return false;
@@ -231,7 +246,7 @@ namespace Echo
 		return true;
 	}
 
-	bool GltfAsset::loadMeshes(nlohmann::json& json)
+	bool GltfRes::loadMeshes(nlohmann::json& json)
 	{
 		if (json.find("meshes") == json.end())
 			return false;
@@ -295,7 +310,7 @@ namespace Echo
 		return true;
 	}
 
-	bool GltfAsset::loadNodes(nlohmann::json& json)
+	bool GltfRes::loadNodes(nlohmann::json& json)
 	{
 		if (json.find("nodes") == json.end())
 			return false;
@@ -400,7 +415,7 @@ namespace Echo
 		return true;
 	}
 
-	bool GltfAsset::loadBuffers(nlohmann::json& json)
+	bool GltfRes::loadBuffers(nlohmann::json& json)
 	{
 		if (json.find("buffers") == json.end())
 			return false;
@@ -443,7 +458,7 @@ namespace Echo
 				}
 				else
 				{
-					m_buffers[i].m_uri = PathUtil::GetFileDirPath(m_path) + bufferUri;
+					m_buffers[i].m_uri = PathUtil::GetFileDirPath(m_path.getPath()) + bufferUri;
 				}
 			}
 
@@ -454,7 +469,7 @@ namespace Echo
 		return true;
 	}
 
-	bool GltfAsset::loadBufferData(GltfBufferInfo& buffer)
+	bool GltfRes::loadBufferData(GltfBufferInfo& buffer)
 	{
 		if (buffer.m_uri.empty() && buffer.m_byteLength > 0)
 			return false;
@@ -471,7 +486,7 @@ namespace Echo
 		return false;
 	}
 
-	bool GltfAsset::loadAccessors(nlohmann::json& json)
+	bool GltfRes::loadAccessors(nlohmann::json& json)
 	{
 		if (json.find("accessors") == json.end())
 			return false;
@@ -538,7 +553,7 @@ namespace Echo
 		return true;
 	}
 
-	bool GltfAsset::loadMaterials(nlohmann::json& json)
+	bool GltfRes::loadMaterials(nlohmann::json& json)
 	{
 		if (json.find("materials") == json.end())
 			return true;
@@ -686,7 +701,7 @@ namespace Echo
 		return true;
 	}
 
-	bool GltfAsset::loadTextureInfo(GltfMaterialInfo::Texture& texture, nlohmann::json& json)
+	bool GltfRes::loadTextureInfo(GltfMaterialInfo::Texture& texture, nlohmann::json& json)
 	{
 		if (!json.is_object())
 			return false;
@@ -710,7 +725,7 @@ namespace Echo
 		return true;
 	}
 
-	bool GltfAsset::loadImages(nlohmann::json& json)
+	bool GltfRes::loadImages(nlohmann::json& json)
 	{
 		if (json.find("images") == json.end())
 			return true;
@@ -730,7 +745,7 @@ namespace Echo
 
 			// uri
 			if (parseJsonValueString(m_images[i].m_uri, image, "uri", false))
-				m_images[i].m_uri = PathUtil::GetFileDirPath(m_path) + m_images[i].m_uri;
+				m_images[i].m_uri = PathUtil::GetFileDirPath(m_path.getPath()) + m_images[i].m_uri;
 			else
 				return false;
 
@@ -751,7 +766,7 @@ namespace Echo
 		return true;
 	}
 
-	bool GltfAsset::loadSamplers(nlohmann::json& json)
+	bool GltfRes::loadSamplers(nlohmann::json& json)
 	{
 		if (json.find("samplers") == json.end())
 			return true;
@@ -802,7 +817,7 @@ namespace Echo
 		return true;
 	}
 
-	bool GltfAsset::loadTextures(nlohmann::json& json)
+	bool GltfRes::loadTextures(nlohmann::json& json)
 	{
 		if (json.find("textures") == json.end())
 			return true;
@@ -836,7 +851,7 @@ namespace Echo
 	}
 
 	// build echo node
-	Node* GltfAsset::build()
+	Node* GltfRes::build()
 	{
 		vector<Node*>::type nodes;
 		for (GltfSceneInfo& scene : m_scenes)
@@ -869,7 +884,7 @@ namespace Echo
 		return nullptr;
 	}
 
-	Node* GltfAsset::createNode(Node* parent, int idx)
+	Node* GltfRes::createNode(Node* parent, int idx)
 	{
 		if (idx < 0 || idx >= (int)m_nodes.size())
 			return nullptr;
@@ -880,7 +895,30 @@ namespace Echo
 		GltfNodeInfo& info = m_nodes[idx];
 		if (info.m_mesh != -1)
 		{
-			node = Class::create<Node*>("GltfMesh");
+			GltfMeshInfo& meshInfo = m_meshes[info.m_mesh];
+			if (meshInfo.m_primitives.size() > 1)
+			{
+				// create multi mesh nodes
+				node = Class::create<GltfMesh*>("Node");
+				if (node)
+				{
+					for (size_t i = 0; i < meshInfo.m_primitives.size(); i++)
+					{
+						GltfMesh* mesh = Class::create<GltfMesh*>("GltfMesh");
+						mesh->setName(info.m_name.empty() ? node->getClassName() : info.m_name);
+						mesh->setGeometryData(this, info.m_mesh, i);
+						mesh->setParent(node);
+					}
+				}
+			}
+			else if(meshInfo.m_primitives.size() == 1)
+			{
+				// create one mesh node
+				GltfMesh* mesh = Class::create<GltfMesh*>("GltfMesh");
+				mesh->setGeometryData(this, info.m_mesh, 0);
+
+				node = mesh;
+			}
 		}
 		else
 		{

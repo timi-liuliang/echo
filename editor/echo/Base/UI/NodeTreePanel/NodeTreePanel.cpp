@@ -241,14 +241,11 @@ namespace Studio
 		Echo::String gltfFile = ResChooseDialog::getExistingFile(this, ".gltf");
 		if (!gltfFile.empty())
 		{
-			Echo::GltfAsset asset;
-			if (asset.load(gltfFile))
+			Echo::GltfResPtr asset = Echo::GltfRes::create( gltfFile);
+			Echo::Node* node = asset->build();
+			if (node)
 			{
-				Echo::Node* node = asset.build();
-				if (node)
-				{
-					addNode(node);
-				}
+				addNode(node);
 			}
 		}
 	}

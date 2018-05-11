@@ -14,7 +14,7 @@ namespace Echo
 
 	Live2dCubismMotion::~Live2dCubismMotion()
 	{
-		m_motionRes->release();
+		m_motionRes->subRefCount();
 	}
 
 	// play

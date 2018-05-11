@@ -19,6 +19,8 @@ namespace Echo
 		, m_mesh(nullptr)
 		, m_materialInst(nullptr)
 		, m_renderable(nullptr)
+		, m_meshIdx(-1)
+		, m_primitiveIdx(-1)
 	{
 	}
 
@@ -39,6 +41,19 @@ namespace Echo
 	void GltfMesh::setTextureRes(const ResourcePath& path)
 	{
 		if (m_textureRes.setPath(path.getPath()))
+		{
+			clearRenderable();
+			buildRenderable();
+		}
+	}
+
+	// set geometry data
+	void GltfMesh::setGeometryData(GltfRes* asset, int meshIdx, int primitiveIdx)
+	{
+		m_asset = asset;
+		m_meshIdx = meshIdx;
+		m_primitiveIdx = primitiveIdx;
+		if (m_meshIdx != -1)
 		{
 			clearRenderable();
 			buildRenderable();
@@ -86,6 +101,9 @@ namespace Echo
 	// build mesh data by drawables data
 	void GltfMesh::buildMeshData(VertexArray& oVertices, IndiceArray& oIndices)
 	{
+		GltfMeshInfo& meshInfo = m_asset->m_meshes[m_meshIdx];
+		GltfPrimitive& primitive = meshInfo.m_primitives[m_primitiveIdx];
+
 		TextureRes*	texture = m_materialInst->getTexture(0);
 
 		float hw = texture ? texture->getWidth() * 0.5f : 50.f;
