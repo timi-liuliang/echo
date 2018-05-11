@@ -29,4 +29,5 @@ namespace Echo
 		void*				m_animationMemory;
 		csmAnimation*		m_animation;
 	};
+	typedef ResRef<Live2dCubismMotionRes> Live2dCubismMotionResPtr;
 }

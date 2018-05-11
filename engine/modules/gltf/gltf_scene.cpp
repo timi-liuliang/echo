@@ -1,5 +1,5 @@
 #include "gltf_scene.h"
-#include "gltf_assert.h"
+#include "gltf_res.h"
 #include "engine/core/util/LogManager.h"
 #include "engine/core/scene/NodeTree.h"
 #include "render/renderer.h"

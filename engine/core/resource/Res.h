@@ -21,8 +21,8 @@ namespace Echo
 		virtual ~Res();
 
 	protected:
-		int				m_refCount;
-		ResourcePath	m_path;
+		int								m_refCount;
+		ResourcePath					m_path;
 	};
 
 	template<typename T>
@@ -32,6 +32,19 @@ namespace Echo
 		ResRef()
 			: m_ptr(nullptr)
 		{}
+
+		ResRef(T* ptr)
+		{
+			if (ptr)
+			{
+				ptr->addRefCount();
+				m_ptr = ptr;
+			}
+			else
+			{
+				m_ptr = nullptr;
+			}
+		}
 
 		~ResRef()
 		{
@@ -47,7 +60,22 @@ namespace Echo
 			}
 		}
 
-		void operator = (T* ptr)
+		void operator = (ResRef<T>& orig)
+		{
+			if (m_ptr)
+			{
+		 	m_ptr->subRefCount();
+				m_ptr = nullptr;
+			}
+
+			if (orig->m_ptr)
+			{
+				orig->addRefCount();
+				m_ptr = orig->m_ptr;
+			}
+		}
+
+		void operator = (T* orig)
 		{
 			if (m_ptr)
 			{
@@ -55,16 +83,26 @@ namespace Echo
 				m_ptr = nullptr;
 			}
 
-			if (ptr)
+			if (orig)
 			{
-				ptr->addRefCount();
-				m_ptr = ptr;
+				orig->addRefCount();
+				m_ptr = orig;
 			}
 		}
 
 		T* operator -> ()
 		{
 			return m_ptr;
+		}
+
+		T* ptr()
+		{
+			return m_ptr;
+		}
+
+		operator T*() const 
+		{ 
+			return m_ptr; 
 		}
 
 	private:

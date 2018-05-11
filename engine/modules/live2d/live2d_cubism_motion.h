@@ -19,8 +19,8 @@ namespace Echo
 		void tick(float delta, csmModel* model, csmModelHashTable* table);
 
 	private:
-		csmAnimationState		m_animationState;
-		bool					m_isPlaying;
-		Live2dCubismMotionRes*	m_motionRes;
+		csmAnimationState			m_animationState;
+		bool						m_isPlaying;
+		Live2dCubismMotionResPtr	m_motionRes;
 	};
 }

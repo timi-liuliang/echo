@@ -3,7 +3,7 @@
 
 namespace Echo
 {
-	static map<String, Res*>::type				g_ress;
+	static map<String, Res*>::type	g_ress;
 
 	Res::Res(const ResourcePath& path)
 		: m_refCount(0)
