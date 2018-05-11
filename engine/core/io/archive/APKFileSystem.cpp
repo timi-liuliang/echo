@@ -1,5 +1,3 @@
-#include "Engine/Core.h"
-
 #ifdef ECHO_PLATFORM_ANDROID
 
 #include "Engine/Resource/APKFileSystem.h"

@@ -1,5 +1,4 @@
 #include "DefaultInputController.h"
-#include <Engine/Core.h>
 #include "EchoEngine.h"
 #include <QWheelEvent>
 #include <QMouseEvent>

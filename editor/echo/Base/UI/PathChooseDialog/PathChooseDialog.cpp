@@ -1,6 +1,5 @@
 #include "PathChooseDialog.h"
 #include "Studio.h"
-#include <Engine/Core.h>
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/main/Root.h>
 

@@ -1,8 +1,8 @@
 #pragma once
 
 #include <map>
-#include <Engine/Core.h>
 #include <thirdparty/pugixml/pugixml.hpp>
+#include <engine/core/util/StringUtil.h>
 
 namespace Studio
 {

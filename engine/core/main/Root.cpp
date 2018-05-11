@@ -27,6 +27,8 @@
 #include "module.h"
 #include "engine/core/render/renderstage/RenderStage.h"
 #include "engine/core/render/gles/GLES2.h"
+#include "OpenMPTaskMgr.h"
+#include "engine/core/render/TextureResManager.h"
 
 #ifdef ECHO_PLATFORM_ANDROID
 #include <sys/syscall.h>
@@ -467,15 +469,15 @@ namespace Echo
 		int ct = nCount % MOD;
 		switch (ct)
 		{
-			case 0:	TextureResManager::instance()->updateDelayedRelease(m_frameTime * MOD); break;
+			case 0:	TextureResManager::instance()->updateDelayedRelease(ui32(m_frameTime * MOD)); break;
 			//case 1:	EchoMeshManager->updateDelayedRelease(m_frameTime * MOD); break;
-			case 2: SkeletonManager::instance()->updateDelayedRelease(m_frameTime * MOD); break;
-			case 3: AnimManager::instance()->updateDelayedRelease(m_frameTime * MOD); break;
+			case 2: SkeletonManager::instance()->updateDelayedRelease(ui32(m_frameTime * MOD)); break;
+			case 3: AnimManager::instance()->updateDelayedRelease(ui32(m_frameTime * MOD)); break;
 			case 4:
 			{
 			}
 			break;
-			case 5: AnimSystemManager::instance()->updateDelayedRelease(m_frameTime * MOD); break;
+			case 5: AnimSystemManager::instance()->updateDelayedRelease(ui32(m_frameTime * MOD)); break;
 			default:
 				break;
 		}

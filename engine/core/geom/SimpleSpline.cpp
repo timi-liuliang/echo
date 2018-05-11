@@ -1,4 +1,3 @@
-#include "Engine/Core.h"
 #include "SimpleSpline.h"
 #include "engine/core/Math/Vector4.h"
 

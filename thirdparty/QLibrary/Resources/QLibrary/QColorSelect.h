@@ -1,10 +1,10 @@
 #pragma once
 
-#include <Engine/Core.h>
 #include <QPainter>
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QWidget>
+#include <engine/core/render/render/Color.h>
 
 using namespace std;
 

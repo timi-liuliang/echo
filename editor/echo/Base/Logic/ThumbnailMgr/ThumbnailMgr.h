@@ -1,6 +1,5 @@
 #pragma once
 
-#include <Engine/Core.h>
 #include <engine/core/Util/StringUtil.h>
 
 namespace Studio

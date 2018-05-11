@@ -1,8 +1,9 @@
 #pragma once
 
 #include <engine/core/Base/TypeDef.h>
-#include <Engine/Core.h>
 #include <freeimage/FreeImage.h>
+#include <engine/core/util/StringUtil.h>
+#include <engine/core/render/render/Color.h>
 
 namespace Echo
 {

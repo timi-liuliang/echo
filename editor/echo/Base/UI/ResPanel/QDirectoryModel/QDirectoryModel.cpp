@@ -1,7 +1,7 @@
 #include <algorithm>
 #include "QDirectoryModel.h"
-#include <Engine/Core.h>
 #include <engine/core/util/PathUtil.h>
+#include <engine/core/util/StringUtil.h>
 
 namespace QT_UI
 {

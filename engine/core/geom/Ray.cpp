@@ -1,4 +1,3 @@
-#include "Engine/Core.h"
 #include "Ray.h"
 
 namespace Echo

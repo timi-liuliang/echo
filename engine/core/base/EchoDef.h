@@ -146,9 +146,6 @@ To ECHO_DOWN_CAST(From* parent)
 #endif
 }
 
-typedef Echo::ui32 EffectSystemID;
-typedef Echo::ui32 SceneNodeID;
-
 // Charset
 #define ECHO_CHARSET_UNICODE    1
 #define ECHO_CHARSET_MULTIBYTE  2
@@ -267,3 +264,7 @@ __GNUC_PATCHLEVEL__)
 #include <sstream>
 #include <algorithm>
 #include <exception>
+
+#ifdef ECHO_PLATFORM_WINDOWS
+	#include <windows.h>
+#endif

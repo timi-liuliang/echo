@@ -1,4 +1,3 @@
-#include "Engine/Core.h"
 #include "Engine/core/geom/ParamSurface.h"
 #include "engine/core/Math/Vector3.h"
 #include "engine/core/Util/Buffer.h"

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-#include <Engine/Core.h>
 #include "ProjectMgr.h"
 #include "ConfigMgr.h"
 #include "IRenderWindowInputController.h"

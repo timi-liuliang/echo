@@ -9,6 +9,7 @@
 #include "EchoEngine.h"
 #include "Window.h"
 #include "GameMainWindow.h"
+#include <engine/core/util/TimeProfiler.h>
 
 namespace Echo
 {

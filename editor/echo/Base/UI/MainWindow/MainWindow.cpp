@@ -17,6 +17,7 @@
 #include "BottomPanel.h"
 #include "PathChooseDialog.h"
 #include <engine/core/util/PathUtil.h>
+#include <engine/core/io/IO.h>
 
 namespace Studio
 {

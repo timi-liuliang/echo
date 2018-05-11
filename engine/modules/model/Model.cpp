@@ -1,5 +1,6 @@
 #include "Engine/core/Scene/Node.h"
 #include "Engine/core/Camera/Camera.h"
+#include "engine/core/io/IO.h"
 #include "Engine/core/main/Root.h"
 #include "Engine/modules/Model/Model.h"
 #include "Render/RenderInput.h"
@@ -16,6 +17,7 @@
 #include "Engine/core/Render/TextureRes.h"
 #include "engine/core/Util/LogManager.h"
 #include "Render/PixelFormat.h"
+#include "engine/core/render/TextureResManager.h"
 
 namespace Echo
 {

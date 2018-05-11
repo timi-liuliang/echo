@@ -1,4 +1,3 @@
-#include "Engine/Core.h"
 #include "Sphere.h"
 #include "Box.h"
 

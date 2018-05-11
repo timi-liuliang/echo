@@ -3,6 +3,7 @@
 #include "Engine/core/main/EngineSettings.h"
 #include "Engine/core/main/Root.h"
 #include "render/Material.h"
+#include "TextureResManager.h"
 #include <algorithm>
 
 namespace Echo

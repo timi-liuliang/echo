@@ -1,4 +1,3 @@
-#include "Engine/Core.h"
 #include "render/Texture.h"
 #include "render/Renderer.h"
 #include "engine/core/Util/LogManager.h"

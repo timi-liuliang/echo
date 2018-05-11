@@ -1,4 +1,3 @@
-#include "Engine/Core.h"
 #include "Engine/core/Resource/Resource.h"
 #include "Engine/core/Resource/ResourceManager.h"
 #include "Engine/core/Util/Exception.h"

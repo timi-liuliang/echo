@@ -4,7 +4,6 @@
 #include "QPropertyDelegate.h"
 #include "QPropertyConfigHelper.h"
 #include <QSortFilterProxyModel>
-#include <Engine/Core.h>
 
 namespace QT_UI
 {

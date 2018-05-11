@@ -1,4 +1,3 @@
-#include "Engine/Core.h"
 #include "EchoThread.h"
 #include "engine/core/Util/Exception.h"
 #include "engine/core/Util/LogManager.h"

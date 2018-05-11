@@ -1,4 +1,3 @@
-#include "Engine/Core.h"
 #include "Circle.h"
 
 namespace Echo

@@ -1,4 +1,3 @@
-#include "Engine/Core.h"
 #include "Engine/core/geom/Frustum.h"
 #include "engine/core/Util/LogManager.h"
 

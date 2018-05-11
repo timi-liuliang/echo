@@ -1,5 +1,6 @@
 #include "QColorSelect.h"
 #include <QColorDialog>
+#include <engine/core/util/StringUtil.h>
 
 namespace QT_UI
 {

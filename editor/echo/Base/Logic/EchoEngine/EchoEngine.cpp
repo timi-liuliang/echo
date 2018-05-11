@@ -3,7 +3,6 @@
 #include <QString>
 #include <array>
 #include <Engine/core/main/Root.h>
-#include <Engine/Core.h>
 #include <Engine/modules/Navigation/Navigation.h>
 #include <RenderTargetManager.h>
 #include <render/RenderTarget.h>
@@ -22,6 +21,7 @@
 #include "Render/RenderState.h"
 #include "Engine/modules/Audio/FMODStudio/FSAudioSource.h"
 #include <engine/core/util/PathUtil.h>
+#include <engine/core/util/TimeProfiler.h>
 
 
 // 事件回调

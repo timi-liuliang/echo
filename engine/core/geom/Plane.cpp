@@ -1,4 +1,3 @@
-#include "Engine/Core.h"
 #include "Plane.h"
 
 namespace Echo

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-#include <Engine/Core.h>
 #include <Engine/core/main/Root.h>
 #include <Engine/core/Scene/NodeTree.h>
 #include <Engine/core/render/mesh/Mesh.h>

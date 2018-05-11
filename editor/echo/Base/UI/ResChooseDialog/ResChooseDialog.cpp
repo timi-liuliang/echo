@@ -1,6 +1,7 @@
 #include "ResChooseDialog.h"
 #include <engine/core/main/Root.h>
 #include <engine/core/util/PathUtil.h>
+#include <engine/core/io/IO.h>
 
 namespace Studio
 {

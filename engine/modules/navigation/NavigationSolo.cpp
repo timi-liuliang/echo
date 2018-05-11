@@ -1,4 +1,3 @@
-#include "Engine/Core.h"
 #include "engine/core/util/PathUtil.h"
 #include "NavigationSolo.h"
 #include <thirdparty/recast/recast/recast.h>
@@ -6,12 +5,13 @@
 #include "DetourCommon.h"
 #include "InputGeometryData.h"
 #include "engine/core/Util/LogManager.h"
-#include "engine/core/io/DataStream.h"
+#include "engine/core/io/IO.h"
 #include "DetourCrowd.h"
 #include "DetourNavMesh.h"
 #include "DetourNavMeshQuery.h"
 #include <math.h>
 #include "BuildContext.h"
+#include "engine/core/geom/Triangle.h"
 
 namespace Echo
 {

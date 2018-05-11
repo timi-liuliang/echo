@@ -1204,7 +1204,7 @@ namespace Echo
 
 	static bool MappingStringArrayIdx(const String* arry, int count, const String& value, int& idx)
 	{
-		for (size_t i = 0; i < count; i++)
+		for (int i = 0; i < count; i++)
 		{
 			if (value == arry[i])
 			{

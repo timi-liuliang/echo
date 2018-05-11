@@ -1,7 +1,5 @@
-#ifndef __ECHO_SPLINE_H__
-#define __ECHO_SPLINE_H__
+#pragma once
 
-#include "Engine/Core.h"
 #include "engine/core/Math/Matrix4.h"
 
 namespace Echo
@@ -30,5 +28,3 @@ namespace Echo
 		Matrix4 mCoeffs;
 	};
 }
-#endif
-

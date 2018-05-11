@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Engine/Core.h"
 #include "engine/core/Math/Vector3.h"
+#include "Box.h"
 
 namespace Echo
 {

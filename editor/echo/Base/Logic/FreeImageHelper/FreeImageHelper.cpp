@@ -344,20 +344,20 @@ namespace Echo
 		struct BITMAPINFOHEADER
 		{
 			DWORD	biSize GCC_PACK(1); 
-			INT		biWidth GCC_PACK(1);
-			INT		biHeight GCC_PACK(1);
+			i32		biWidth GCC_PACK(1);
+			i32		biHeight GCC_PACK(1);
 			WORD	biPlanes GCC_PACK(1);
 			WORD	biBitCount GCC_PACK(1);
 			DWORD	biCompression GCC_PACK(1);
 			DWORD	biSizeImage GCC_PACK(1);
-			INT		biXPelsPerMeter GCC_PACK(1); 
-			INT		biYPelsPerMeter GCC_PACK(1);
+			i32		biXPelsPerMeter GCC_PACK(1); 
+			i32		biYPelsPerMeter GCC_PACK(1);
 			DWORD	biClrUsed GCC_PACK(1);
 			DWORD	biClrImportant GCC_PACK(1); 
 		} IH;
 #pragma pack (pop)
 
-		INT BytesPerLine = Align( width * 3,4);
+		i32 BytesPerLine = Align( width * 3,4);
 
 		FILE* fileHandle = fopen( savePath, "wb");
 		if( !fileHandle)

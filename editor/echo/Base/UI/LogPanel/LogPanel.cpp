@@ -1,5 +1,6 @@
 #include "LogPanel.h"
 #include <QListWidgetItem>
+#include <engine/core/util/StringUtil.h>
 
 namespace Studio
 {

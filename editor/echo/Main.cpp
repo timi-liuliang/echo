@@ -5,7 +5,6 @@
 #include <QScopedPointer>
 #include <QtPlugin>
 #include <QSplashScreen>
-#include <Engine/Core.h>
 #include "CMDLine.h"
 #include "Studio.h"
 #include <shellapi.h>

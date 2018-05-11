@@ -1,26 +1,21 @@
-#ifndef __ECHO_THREADING_H__
-#define __ECHO_THREADING_H__
+#pragma once
 
 #include "engine/core/Base/EchoDef.h"
 
-
 #ifdef ECHO_PLATFORM_WINDOWS
-#	define WIN32_LEAN_AND_MEAN
-#	define _CRT_SECURE_NO_WARNINGS
-
-#include <windows.h>
-
-#include <process.h>
+	#undef WIN32_LEAN_AND_MEAN
+	#define WIN32_LEAN_AND_MEAN
+	#define _CRT_SECURE_NO_WARNINGS
+	#include <windows.h>
+	#include <process.h>
 #else
-#include <pthread.h>
+	#include <pthread.h>
 #endif 
 
-
-
 #ifndef ECHO_PLATFORM_HTML5
-#include <thread>
-#include <mutex>
-#include <condition_variable>
+	#include <thread>
+	#include <mutex>
+	#include <condition_variable>
 #endif
 
 namespace Echo
@@ -124,5 +119,3 @@ namespace Echo
 #define EE_MUTEX(name)	mutable Echo::Mutex name;
 #define EE_STATIC_MUTEX(name)	static Echo::Mutex name;
 #define EE_LOCK_MUTEX(mutexName) Echo::MutexLock _lockName(mutexName);
-
-#endif

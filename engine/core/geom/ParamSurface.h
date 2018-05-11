@@ -1,7 +1,5 @@
-#ifndef __ECHO_PARAMSURFACE_H__
-#define __ECHO_PARAMSURFACE_H__
+#pragma once
 
-#include "Engine/Core.h"
 #include "engine/core/Util/Buffer.h"
 #include "engine/core/Math/Vector2.h"
 #include "engine/core/Math/Vector3.h"
@@ -50,5 +48,3 @@ namespace Echo
 		Real		m_radius;
 	};
 }
-
-#endif
