@@ -74,6 +74,21 @@ namespace Echo
 		MemoryReader*		m_data = nullptr;
 	};
 
+	struct GltfBufferViewInfo
+	{
+		String		m_name;
+		ui32		m_bufferIdx;
+		ui32		m_byteOffset;
+		ui32		m_byteLength;
+		ui32		m_byteStride;
+		enum class TargetType : ui16
+		{
+			None = 0,
+			ArrayBuffer = 34962,
+			ElementArrayBuffer = 34963
+		}			m_target;
+	};
+
 	struct GltfAccessorInfo
 	{
 		String				m_name;
@@ -205,16 +220,17 @@ namespace Echo
 
 	struct GltfRes : public Res
 	{
-		GltfMetaInfo					m_metaInfo;
-		vector<GltfSceneInfo>::type		m_scenes;
-		vector<GltfMeshInfo>::type		m_meshes;
-		vector<GltfNodeInfo>::type		m_nodes;
-		vector<GltfBufferInfo>::type	m_buffers;
-		vector<GltfAccessorInfo>::type	m_accessors;
-		vector<GltfMaterialInfo>::type	m_materials;
-		vector<GltfImageInfo>::type		m_images;
-		vector<GltfSamplerInfo>::type	m_samplers;
-		vector<GltfTextureInfo>::type	m_textures;
+		GltfMetaInfo						m_metaInfo;
+		vector<GltfSceneInfo>::type			m_scenes;
+		vector<GltfMeshInfo>::type			m_meshes;
+		vector<GltfNodeInfo>::type			m_nodes;
+		vector<GltfBufferInfo>::type		m_buffers;
+		vector<GltfBufferViewInfo>::type	m_bufferViews;
+		vector<GltfAccessorInfo>::type		m_accessors;
+		vector<GltfMaterialInfo>::type		m_materials;
+		vector<GltfImageInfo>::type			m_images;
+		vector<GltfSamplerInfo>::type		m_samplers;
+		vector<GltfTextureInfo>::type		m_textures;
 
 		// create
 		static GltfRes* create(const ResourcePath& path);
@@ -231,8 +247,9 @@ namespace Echo
 		bool loadMeshes(nlohmann::json& json);
 		bool loadNodes(nlohmann::json& json);
 		bool loadBuffers(nlohmann::json& json);
-		bool loadBufferData(GltfBufferInfo& buffer);
 		bool loadAccessors(nlohmann::json& json);
+		bool loadBufferViews(nlohmann::json& json);
+		bool loadBufferData(GltfBufferInfo& buffer);
 		bool loadMaterials(nlohmann::json& json);
 		bool loadTextureInfo(GltfMaterialInfo::Texture& texture, nlohmann::json& json);
 		bool loadImages(nlohmann::json& json);

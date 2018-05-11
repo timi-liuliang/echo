@@ -153,6 +153,12 @@ namespace Echo
 				return false;
 			}
 
+			if (!loadBufferViews(j))
+			{
+				EchoLogError("gltf parse bufferViews failed when load resource [%s].", m_path.getPath().c_str());
+				return false;
+			}
+
 			if (!loadAccessors(j))
 			{
 				EchoLogError("gltf parse accessors failed when load resource [%s].", m_path.getPath().c_str());
@@ -553,6 +559,51 @@ namespace Echo
 			// TODO: accessors[i]["extensions"]
 			// TODO: accessors[i]["min"]
 			// TODO: accessors[i]["max"]
+		}
+
+		return true;
+	}
+
+	bool GltfRes::loadBufferViews(nlohmann::json& json)
+	{
+		if (json.find("bufferViews") == json.end())
+			return true;
+
+		nlohmann::json& bufferViews = json["bufferViews"];
+		if (!bufferViews.is_array())
+			return false;
+
+		m_bufferViews.resize(bufferViews.size());
+		for (ui32 i = 0; i < bufferViews.size(); i++)
+		{
+			nlohmann::json& bufferView = bufferViews[i];
+
+			// name
+			if (!parseJsonValueString(m_bufferViews[i].m_name, bufferView, "name", false))
+				return false;
+
+			// buffer index
+			if (!parseJsonValueUI32(m_bufferViews[i].m_bufferIdx, bufferView, "buffer", true))
+				return false;
+
+			// byteOffset
+			if (!parseJsonValueUI32(m_bufferViews[i].m_byteOffset, bufferView, "byteOffset", true))
+				return false;
+
+			// byteLength
+			if (!parseJsonValueUI32(m_bufferViews[i].m_byteLength, bufferView, "byteLength", true))
+				return false;
+
+			// byteStride
+			if (!parseJsonValueUI32(m_bufferViews[i].m_byteStride, bufferView, "byteStride", false))
+				return false;
+
+			// target
+			ui32 target;
+			if (parseJsonValueUI32(target, bufferView, "target", true))
+				m_bufferViews[i].m_target = static_cast<GltfBufferViewInfo::TargetType>(target);
+			else
+				return false;
 		}
 
 		return true;
