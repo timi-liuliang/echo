@@ -871,14 +871,24 @@ namespace Echo
 
 	Node* GltfAsset::createNode(Node* parent, int idx)
 	{
-		if (idx < 0 || idx >= m_nodes.size())
+		if (idx < 0 || idx >= (int)m_nodes.size())
 			return nullptr;
 
-		GltfNodeInfo& info = m_nodes[idx];
+		Node* node = nullptr;
 
-		// create current node
-		Node* node = Class::create<Node*>("GltfScene");
-		node->setName(info.m_name);
+		// create node base info
+		GltfNodeInfo& info = m_nodes[idx];
+		if (info.m_mesh != -1)
+		{
+			node = Class::create<Node*>("GltfMesh");
+		}
+		else
+		{
+			node = Class::create<Node*>("Node");
+		}
+
+		// set node property
+		node->setName(info.m_name.empty() ? node->getClassName() : info.m_name);
 		if(parent)
 			node->setParent(parent);
 
