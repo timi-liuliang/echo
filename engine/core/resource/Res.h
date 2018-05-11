@@ -33,13 +33,6 @@ namespace Echo
 			: m_ptr(nullptr)
 		{}
 
-		ResRef(T* ptr)
-			: m_ptr(ptr)
-		{
-			if (ptr)
-				m_ptr->addRefCount();
-		}
-
 		~ResRef()
 		{
 			reset();
@@ -51,6 +44,21 @@ namespace Echo
 			{
 				m_ptr->subRefCount();
 				m_ptr = nullptr;
+			}
+		}
+
+		void operator = (T* ptr)
+		{
+			if (m_ptr)
+			{
+				m_ptr->subRefCount();
+				m_ptr = nullptr;
+			}
+
+			if (ptr)
+			{
+				ptr->addRefCount();
+				m_ptr = ptr;
 			}
 		}
 

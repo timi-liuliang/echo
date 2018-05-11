@@ -4,7 +4,7 @@
 #include "NodeTreePanel.h"
 #include "EchoEngine.h"
 #include "ResChooseDialog.h"
-#include <engine/modules/gltf/gltf_assert.h>
+#include <engine/modules/gltf/gltf_res.h>
 
 namespace Studio
 {

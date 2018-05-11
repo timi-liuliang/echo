@@ -1,4 +1,4 @@
-#include "gltf_assert.h"
+#include "gltf_res.h"
 #include "gltf_mesh.h"
 #include "engine/core/io/DataStream.h"
 #include "engine/core/util/LogManager.h"
@@ -97,6 +97,11 @@ namespace Echo
 		: Res(path)
 	{
 		load();
+	}
+
+	GltfRes::~GltfRes()
+	{
+
 	}
 
 	GltfRes* GltfRes::create(const ResourcePath& path)

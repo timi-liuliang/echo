@@ -4,7 +4,7 @@
 #include "engine/core/render/mesh/Mesh.h"
 #include "engine/core/render/MaterialInst.h"
 #include "engine/core/render/render/Renderable.h"
-#include "gltf_assert.h"
+#include "gltf_res.h"
 
 namespace Echo
 {

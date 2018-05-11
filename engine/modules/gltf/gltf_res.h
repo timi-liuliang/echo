@@ -224,6 +224,7 @@ namespace Echo
 
 	private:
 		GltfRes(const ResourcePath& path);
+		~GltfRes();
 		bool load();
 		bool loadAsset(nlohmann::json& json);
 		bool loadScenes(nlohmann::json& json);
