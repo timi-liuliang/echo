@@ -7,7 +7,9 @@ static const char* g_generalMaterial = "\
 <vs>#version 100\n\
 \n\
 attribute vec3 inPosition;\n\
+#ifdef ATTRIBUTE_TEXCOORD0\n\
 attribute vec2 inTexCoord;\n\
+#endif\n\
 \n\
 uniform mat4 matWVP;\n\
 \n\
@@ -18,7 +20,11 @@ void main(void)\n\
 	vec4 position = matWVP * vec4(inPosition, 1.0);\n\
 	gl_Position = position;\n\
 	\n\
+#ifdef ATTRIBUTE_TEXCOORD0\n\
 	texCoord = inTexCoord;\n\
+#else\n\
+	texCoord = vec2(0.0,0.0);\n\
+#endif\n\
 }\n\
 </vs>\
 <ps>#version 100\n\

@@ -16,7 +16,6 @@ namespace Echo
 
 	GltfMesh::GltfMesh()
 		: m_textureRes("", ".png")
-		, m_mesh(nullptr)
 		, m_materialInst(nullptr)
 		, m_renderable(nullptr)
 		, m_meshIdx(-1)
@@ -73,17 +72,8 @@ namespace Echo
 
 			m_materialInst->setTexture(0, m_textureRes.getPath());
 
-			// mesh
-			MeshVertexFormat define;
-			VertexArray	vertices;
-			IndiceArray	indices;
-			//buildMeshData( vertices, indices, &define);
-
-			m_mesh = Mesh::create(true, true);
-			m_mesh->updateIndices(indices.size(), indices.data());
-			m_mesh->updateVertexs(define, vertices.size(), (const Byte*)vertices.data(), m_localAABB);
-
-			m_renderable = Renderable::create(m_mesh, m_materialInst, this);
+			Mesh* mesh = m_asset->m_meshes[m_meshIdx].m_primitives[m_primitiveIdx].m_mesh;
+			m_renderable = Renderable::create( mesh, m_materialInst, this);
 		}
 	}
 
@@ -155,6 +145,5 @@ namespace Echo
 	{
 		EchoSafeRelease(m_renderable);
 		EchoSafeRelease(m_materialInst);
-		EchoSafeRelease(m_mesh);
 	}
 }
