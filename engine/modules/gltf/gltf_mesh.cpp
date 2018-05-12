@@ -15,8 +15,7 @@ namespace Echo
 	}
 
 	GltfMesh::GltfMesh()
-		: m_textureRes("", ".png")
-		, m_materialInst(nullptr)
+		: m_materialInst(nullptr)
 		, m_renderable(nullptr)
 		, m_meshIdx(-1)
 		, m_primitiveIdx(-1)
@@ -30,20 +29,6 @@ namespace Echo
 
 	void GltfMesh::bindMethods()
 	{
-		CLASS_BIND_METHOD(GltfMesh, getTextureRes, DEF_METHOD("getTextureRes"));
-		CLASS_BIND_METHOD(GltfMesh, setTextureRes, DEF_METHOD("setTextureRes"));
-
-		CLASS_REGISTER_PROPERTY(GltfMesh, "Texture", Variant::Type_ResourcePath, "getTextureRes", "setTextureRes");
-	}
-
-	// set texture res path
-	void GltfMesh::setTextureRes(const ResourcePath& path)
-	{
-		if (m_textureRes.setPath(path.getPath()))
-		{
-			clearRenderable();
-			buildRenderable();
-		}
 	}
 
 	// set geometry data
@@ -62,15 +47,13 @@ namespace Echo
 	// build drawable
 	void GltfMesh::buildRenderable()
 	{
-		if (!m_textureRes.getPath().empty() && m_asset)
+		if ( m_asset)
 		{
 			// material
 			m_materialInst = MaterialInst::create();
 			m_materialInst->setOfficialMaterialContent( GeneralMaterial::getContent());
 			m_materialInst->setRenderStage("Transparent");
 			m_materialInst->applyLoadedData();
-
-			m_materialInst->setTexture(0, m_textureRes.getPath());
 
 			Mesh* mesh = m_asset->m_meshes[m_meshIdx].m_primitives[m_primitiveIdx].m_mesh;
 			m_renderable = Renderable::create( mesh, m_materialInst, this);

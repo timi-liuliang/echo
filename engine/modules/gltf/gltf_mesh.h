@@ -31,12 +31,6 @@ namespace Echo
 		// bind class methods to script
 		static void bindMethods();
 
-		// set texture res path
-		void setTextureRes(const ResourcePath& path);
-
-		// get texture res
-		const ResourcePath& getTextureRes() { return m_textureRes; }
-
 		// set geometry data
 		void setGeometryData(GltfRes* asset, int meshIdx, int primitiveIdx);
 
@@ -55,7 +49,6 @@ namespace Echo
 		void clearRenderable();
 
 	private:
-		ResourcePath			m_textureRes;
 		MaterialInst*			m_materialInst;	// Material Instance
 		Renderable*				m_renderable;
 		Matrix4					m_matWVP;
