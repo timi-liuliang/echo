@@ -135,12 +135,6 @@ namespace Echo
 				return false;
 			}
 
-			if (!loadMeshes(j))
-			{
-				EchoLogError("gltf parse meshes failed when load resource [%s].", m_path.getPath().c_str());
-				return false;
-			}
-
 			if (!loadNodes(j))
 			{
 				EchoLogError("gltf parse nodes failed when load resource [%s].", m_path.getPath().c_str());
@@ -162,6 +156,12 @@ namespace Echo
 			if (!loadAccessors(j))
 			{
 				EchoLogError("gltf parse accessors failed when load resource [%s].", m_path.getPath().c_str());
+				return false;
+			}
+
+			if (!loadMeshes(j))
+			{
+				EchoLogError("gltf parse meshes failed when load resource [%s].", m_path.getPath().c_str());
 				return false;
 			}
 
@@ -250,70 +250,6 @@ namespace Echo
 				for (ui32 j = 0; j < nodes.size(); j++)
 				{
 					m_scenes[i].m_nodes[j] = nodes[j].get<ui32>();
-				}
-			}
-		}
-
-		return true;
-	}
-
-	bool GltfRes::loadMeshes(nlohmann::json& json)
-	{
-		if (json.find("meshes") == json.end())
-			return false;
-
-		nlohmann::json& meshes = json["meshes"];
-		if (!meshes.is_array())
-			return false;
-
-		m_meshes.resize(meshes.size());
-		for (ui32 i = 0; i < meshes.size(); i++)
-		{
-			nlohmann::json& mesh = meshes[i];
-
-			// name
-			if (!parseJsonValueString(m_meshes[i].m_name, mesh, "name", false))
-				return false;
-
-			if (mesh.find("primitives") == mesh.end())
-				return false;
-
-			nlohmann::json& primitives = mesh["primitives"];
-			if (!primitives.is_array())
-				return false;
-
-			m_meshes[i].m_primitives.resize(primitives.size());
-			for (ui32 j = 0; j < primitives.size(); j++)
-			{
-				nlohmann::json& primitive = primitives[j];
-
-				// indices
-				if (!parseJsonValueUI32(m_meshes[i].m_primitives[j].m_indices, primitive, "indices", true))
-					return false;
-
-				// material
-				if (!parseJsonValueUI32(m_meshes[i].m_primitives[j].m_material, primitive, "material", false))
-					return false;
-
-				// mode
-				if (primitive.find("mode") != primitive.end())
-				{
-					if (!primitive["mode"].is_number())
-						return false;
-
-					m_meshes[i].m_primitives[j].m_mode = GltfPrimitive::Mode(primitive["mode"].get<ui8>());
-				}
-
-				if (primitive.find("attributes") == primitive.end())
-					return false;
-
-				nlohmann::json& attributes = primitive["attributes"];
-				if (!attributes.is_object())
-					return false;
-
-				for (nlohmann::json::iterator it = attributes.begin(); it != attributes.end(); it++)
-				{
-					m_meshes[i].m_primitives[j].m_attributes[it.key()] = it.value();
 				}
 			}
 		}
@@ -485,10 +421,25 @@ namespace Echo
 		if (buffer.m_uri.empty() && buffer.m_byteLength > 0)
 			return false;
 
-		if (buffer.m_uriType != GltfBufferInfo::UriType::Uri)
-			return true;
+		// create MemoryReader based on Uri type
+		if (buffer.m_uriType == GltfBufferInfo::UriType::Data)
+		{
+			// extract data
+			String base64Data = StringUtil::Substr(buffer.m_uri, ",", false);
+						
+			// decode base64 data
 
-		buffer.m_data = EchoNew(MemoryReader(buffer.m_uri));
+			// construct memReader
+			buffer.m_data = EchoNew(MemoryReader(buffer.m_uri.data(), buffer.m_uri.size()));
+			if (buffer.m_byteLength != buffer.m_data->getSize())
+				return false;
+		}
+		else
+		{
+			buffer.m_data = EchoNew(MemoryReader(buffer.m_uri));
+		}
+
+		// is have data
 		if (buffer.m_data->getSize())
 		{
 			return true;
@@ -604,6 +555,105 @@ namespace Echo
 				m_bufferViews[i].m_target = static_cast<GltfBufferViewInfo::TargetType>(target);
 			else
 				return false;
+		}
+
+		return true;
+	}
+
+	bool GltfRes::loadMeshes(nlohmann::json& json)
+	{
+		if (json.find("meshes") == json.end())
+			return false;
+
+		nlohmann::json& meshes = json["meshes"];
+		if (!meshes.is_array())
+			return false;
+
+		m_meshes.resize(meshes.size());
+		for (ui32 i = 0; i < meshes.size(); i++)
+		{
+			nlohmann::json& mesh = meshes[i];
+
+			// name
+			if (!parseJsonValueString(m_meshes[i].m_name, mesh, "name", false))
+				return false;
+
+			if (mesh.find("primitives") == mesh.end())
+				return false;
+
+			nlohmann::json& primitives = mesh["primitives"];
+			if (!primitives.is_array())
+				return false;
+
+			m_meshes[i].m_primitives.resize(primitives.size());
+			for (ui32 j = 0; j < primitives.size(); j++)
+			{
+				nlohmann::json& primitive = primitives[j];
+
+				// indices
+				if (!parseJsonValueUI32(m_meshes[i].m_primitives[j].m_indices, primitive, "indices", true))
+					return false;
+
+				// material
+				if (!parseJsonValueUI32(m_meshes[i].m_primitives[j].m_material, primitive, "material", false))
+					return false;
+
+				// mode
+				if (primitive.find("mode") != primitive.end())
+				{
+					if (!primitive["mode"].is_number())
+						return false;
+
+					m_meshes[i].m_primitives[j].m_mode = GltfPrimitive::Mode(primitive["mode"].get<ui8>());
+				}
+
+				if (primitive.find("attributes") == primitive.end())
+					return false;
+
+				nlohmann::json& attributes = primitive["attributes"];
+				if (!attributes.is_object())
+					return false;
+
+				for (nlohmann::json::iterator it = attributes.begin(); it != attributes.end(); it++)
+				{
+					m_meshes[i].m_primitives[j].m_attributes[it.key()] = it.value();
+				}
+
+				buildPrimitiveData(i, j);
+			}
+		}
+		return true;
+	}
+
+	bool GltfRes::buildPrimitiveData(int meshIdx, int primitiveIdx)
+	{
+		GltfPrimitive& primitive = m_meshes[meshIdx].m_primitives[primitiveIdx];
+
+		// indices
+		ui16* indicesData = nullptr;
+		ui32  indicesCount = 0;
+		if (primitive.m_indices != -1)
+		{
+			GltfAccessorInfo&   access = m_accessors[primitive.m_indices];
+			GltfBufferViewInfo& bufferView = m_bufferViews[access.m_bufferView];
+			GltfBufferInfo&		buffer = m_buffers[bufferView.m_bufferIdx];
+			if (access.m_type == GltfAccessorInfo::UnsignedShort)
+			{
+				indicesData = (ui16*)buffer.getData(bufferView.m_byteOffset);
+				indicesCount = access.m_count;
+			}
+			else
+			{
+				EchoLogError("gltf mesh index type isn't UnsignedShort when buildPrimitiveData()");
+				return false;
+			}
+		}
+
+		// create mesh
+		if (!primitive.m_mesh)
+		{
+			//primitive.m_mesh = Mesh::create(true, true);
+			//primitive.m_mesh->set(define, vertices.size(), (const Byte*)vertices.data(), indices.size(), indices.data(), m_localAABB);
 		}
 
 		return true;

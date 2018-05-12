@@ -25,6 +25,7 @@ namespace Echo
 		vector<ui32>::type	m_nodes;
 	};
 
+	class Mesh;
 	struct GltfPrimitive
 	{
 		ui32				m_indices = -1;		// index to accessor containing the indices
@@ -40,6 +41,7 @@ namespace Echo
 			TriangleFan
 		}					m_mode = Triangles; // each attribute is mapped with his name and accessor index to the data
 		GltfAttributes		m_attributes;
+		Mesh*				m_mesh = nullptr;	// geometry Data for render
 	};
 
 	struct GltfMeshInfo
@@ -72,6 +74,18 @@ namespace Echo
 		}					m_uriType = UriType::Uri;
 		i32					m_byteLength;
 		MemoryReader*		m_data = nullptr;
+
+		// destructor
+		~GltfBufferInfo()
+		{
+			EchoSafeDelete(m_data, MemoryReader);
+		}
+
+		// get data
+		void* getData(ui32 offset)
+		{
+			return m_data ? m_data->getData<char*>() + offset : nullptr;
+		}
 	};
 
 	struct GltfBufferViewInfo
@@ -244,17 +258,18 @@ namespace Echo
 		bool load();
 		bool loadAsset(nlohmann::json& json);
 		bool loadScenes(nlohmann::json& json);
-		bool loadMeshes(nlohmann::json& json);
 		bool loadNodes(nlohmann::json& json);
 		bool loadBuffers(nlohmann::json& json);
 		bool loadAccessors(nlohmann::json& json);
 		bool loadBufferViews(nlohmann::json& json);
 		bool loadBufferData(GltfBufferInfo& buffer);
+		bool loadMeshes(nlohmann::json& json);
 		bool loadMaterials(nlohmann::json& json);
 		bool loadTextureInfo(GltfMaterialInfo::Texture& texture, nlohmann::json& json);
 		bool loadImages(nlohmann::json& json);
 		bool loadSamplers(nlohmann::json& json);
 		bool loadTextures(nlohmann::json& json);
+		bool buildPrimitiveData(int meshIdx, int primitiveIdx);
 		Node* createNode(Node* parent, int idx);
 	};
 	typedef Echo::ResRef<Echo::GltfRes> GltfResPtr;
