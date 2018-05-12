@@ -318,11 +318,12 @@ namespace Echo
 			IndiceArray	indices;
 			buildMeshDataByDrawables(vertices, indices);
 
-			Mesh::VertexDefine define;
+			MeshVertexFormat define;
 			define.m_isUseDiffuseUV = true;
 
 			m_mesh = Mesh::create(true, true);
-			m_mesh->set(define, vertices.size(), (const Byte*)vertices.data(), indices.size(), indices.data(), m_localAABB);
+			m_mesh->updateIndices(indices.size(), indices.data());
+			m_mesh->updateVertexs(define, vertices.size(), (const Byte*)vertices.data(), m_localAABB);
 
 			m_materialInst = MaterialInst::create();
 			m_materialInst->setOfficialMaterialContent(g_live2dDefaultMaterial);
@@ -381,8 +382,11 @@ namespace Echo
 		IndiceArray	indices;
 		buildMeshDataByDrawables(vertices, indices);
 
+		MeshVertexFormat define;
+		define.m_isUseDiffuseUV = true;
+
 		m_mesh->updateIndices(indices.size(), indices.data());
-		m_mesh->updateVertexs( vertices.size(), (const Byte*)vertices.data(), m_localAABB);
+		m_mesh->updateVertexs( define, vertices.size(), (const Byte*)vertices.data(), m_localAABB);
 	}
 
 	// 获取全局变量值

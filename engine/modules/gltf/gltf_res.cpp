@@ -3,6 +3,7 @@
 #include "engine/core/io/DataStream.h"
 #include "engine/core/util/LogManager.h"
 #include "engine/core/util/PathUtil.h"
+#include "engine/core/util/base64.h"
 
 namespace Echo
 {
@@ -428,9 +429,12 @@ namespace Echo
 			String base64Data = StringUtil::Substr(buffer.m_uri, ",", false);
 						
 			// decode base64 data
+			Base64Decode decode(base64Data);
+			if (!decode.getSize())
+				return false;
 
 			// construct memReader
-			buffer.m_data = EchoNew(MemoryReader(buffer.m_uri.data(), buffer.m_uri.size()));
+			buffer.m_data = EchoNew(MemoryReader(decode.getData(), decode.getSize()));
 			if (buffer.m_byteLength != buffer.m_data->getSize())
 				return false;
 		}
@@ -637,7 +641,7 @@ namespace Echo
 			GltfAccessorInfo&   access = m_accessors[primitive.m_indices];
 			GltfBufferViewInfo& bufferView = m_bufferViews[access.m_bufferView];
 			GltfBufferInfo&		buffer = m_buffers[bufferView.m_bufferIdx];
-			if (access.m_type == GltfAccessorInfo::UnsignedShort)
+			if (access.m_componentType == GltfAccessorInfo::UnsignedShort)
 			{
 				indicesData = (ui16*)buffer.getData(bufferView.m_byteOffset);
 				indicesCount = access.m_count;
@@ -649,11 +653,51 @@ namespace Echo
 			}
 		}
 
+		// parse vertex format
+		MeshVertexFormat vertFormat;
+
+		// parse vertex count
+		int vertCount = 0;
+		for (auto& it : primitive.m_attributes)
+		{
+			GltfAccessorInfo&  access = m_accessors[it.second];
+			if (vertCount != 0 && vertCount != access.m_count)
+				return false;
+
+			vertCount = access.m_count;
+		}
+
+		// init vertex data
+		MeshVertexData vertexData;
+		vertexData.set(vertFormat, vertCount);
+
+		// vertices data
+		for (auto& it : primitive.m_attributes)
+		{
+			int attributeIdx = it.second;
+			GltfAccessorInfo&   access = m_accessors[attributeIdx];
+			GltfBufferViewInfo& bufferView = m_bufferViews[access.m_bufferView];
+			GltfBufferInfo&		buffer = m_buffers[bufferView.m_bufferIdx];
+			vertexData.set(vertFormat, access.m_count);
+			if (it.first == "POSITION")
+			{
+				if (access.m_type == GltfAccessorInfo::Vec3)
+				{
+					Vector3* positions = (Vector3*)buffer.getData(bufferView.m_byteOffset);
+					for (int i = 0; i < vertCount; i++)
+					{
+						vertexData.setPosition(i, positions[i]);
+					}
+				}
+			}
+		}
+
 		// create mesh
 		if (!primitive.m_mesh)
 		{
-			//primitive.m_mesh = Mesh::create(true, true);
-			//primitive.m_mesh->set(define, vertices.size(), (const Byte*)vertices.data(), indices.size(), indices.data(), m_localAABB);
+			primitive.m_mesh = Mesh::create(true, true);
+			primitive.m_mesh->updateIndices(indicesCount, indicesData);
+			primitive.m_mesh->updateVertexs(vertexData, Box());
 		}
 
 		return true;

@@ -1,8 +1,7 @@
 #pragma once
 
 #include "engine/core/geom/Box.h"
-#include "VertexData.h"
-
+#include "MeshVertexData.h"
 
 namespace Echo
 {
@@ -11,19 +10,6 @@ namespace Echo
 	*/
 	class Mesh
 	{
-	public:
-		// Vertex Define
-		struct VertexDefine
-		{
-			bool	m_isUseNormal;
-			bool	m_isUseVertexColor;
-			bool	m_isUseDiffuseUV;
-
-			VertexDefine()
-				: m_isUseNormal(false), m_isUseVertexColor(false), m_isUseDiffuseUV(false)
-			{}
-		};
-
 	public:
 		// 创建
 		static Mesh* create(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer);
@@ -35,16 +21,16 @@ namespace Echo
 		const String& getName() const { return m_name; }
 
 		// 获取顶点信息
-		VertexData& getVertexData() { return m_vertData; }
+		MeshVertexData& getVertexData() { return m_vertData; }
 
 		// 获取顶点格式大小
-		ui32 getVertexStride() const { return m_vertData.m_stride; }
+		ui32 getVertexStride() const { return m_vertData.getVertexStride(); }
 
 		// 获取顶点数量
-		ui32 getVertexCount() const { return m_vertData.m_count; }
+		ui32 getVertexCount() const { return m_vertData.getVertexCount(); }
 
 		// 获取顶点数据
-		Byte* getVertices() const { return m_vertData.m_vertices; }
+		const MeshVertexData& getVertices() const { return m_vertData; }
 
 		// 获取顶点缓冲
 		GPUBuffer* getVertexBuffer() const;
@@ -85,14 +71,12 @@ namespace Echo
 		// 获取受影响的骨骼索引
 		ui32 getBoneIdx(int idx) { return m_boneIdxs[idx]; }
 
-		// 设置数据
-		void set(const VertexDefine& format,ui32 vertCount, const Byte* vertices, ui32 indicesCount, const ui16* indices, const Box& box);
-
 		// update indices data
 		void updateIndices(ui32 indicesCount, const ui16* indices);
 
 		// update vertex data
-		void updateVertexs( ui32 vertCount, const Byte* vertices, const Box& box);
+		void updateVertexs(const MeshVertexFormat& format, ui32 vertCount, const Byte* vertices, const Box& box);
+		void updateVertexs(const MeshVertexData& vertexData, const Box& box);
 
 		// 清空数据
 		void clear();
@@ -100,12 +84,6 @@ namespace Echo
 	protected:
 		Mesh(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer);
 		~Mesh();
-
-		// 附加数据
-		void insertVertexData(const RenderInput::VertexElement& element, void* templateData);
-
-		// 移除数据
-		void removeVertexData(RenderInput::VertexSemantic semantic);
 
 		// 获取内存占用大小
 		ui32 getMemeoryUsage() const;
@@ -128,7 +106,7 @@ namespace Echo
 		ui32					m_idxCount;					// 索引数量
 		ui32					m_idxStride;				// 索引格式大小
 		Byte*					m_indices;					// 索引数据
-		VertexData				m_vertData;					// 顶点数据
+		MeshVertexData			m_vertData;					// 顶点数据
 		bool					m_isDynamicVertexBuffer;	// 是否支持动态更新
 		GPUBuffer*				m_vertexBuffer;				// 顶点缓冲
 		bool					m_isDynamicIndicesBuffer;	// 索引缓冲

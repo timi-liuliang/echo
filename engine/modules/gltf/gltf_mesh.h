@@ -51,7 +51,7 @@ namespace Echo
 		void updateMeshBuffer();
 
 		// build mesh data by drawables data
-		void buildMeshData(VertexArray& oVertices, IndiceArray& oIndices, Mesh::VertexDefine* attributes);
+		void buildMeshData(VertexArray& oVertices, IndiceArray& oIndices);
 
 		// get global uniforms
 		virtual void* getGlobalUniformValue(const String& name);

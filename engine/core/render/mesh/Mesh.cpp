@@ -46,149 +46,14 @@ namespace Echo
 		return m_indexBuffer;
 	}
 
-	// 移除数据
-	void Mesh::removeVertexData(RenderInput::VertexSemantic semantic)
-	{
-		if (!m_vertData.isVertexUsage(semantic))
-			return;
-
-		EchoSafeDelete(m_vertexBuffer, GPUBuffer);
-
-		RenderInput::VertexElementList mlastElements = m_vertData.m_vertexElements;
-		m_vertData.m_vertexElements.clear();
-		size_t removeIndex = 0;
-		size_t removeStrite;
-		size_t oldElementsSize = mlastElements.size();
-
-		ui32 vertOffFront = 0;
-		ui32 allStrite = 0;
-		ui32 vertOffBack = 0;
-		size_t j;
-		for (j = 0; j < oldElementsSize; ++j)
-		{
-			if (mlastElements[j].m_semantic == semantic)
-			{
-				removeIndex = j;
-				removeStrite = PixelUtil::GetPixelSize(mlastElements[j].m_pixFmt);
-				break;
-			}
-			else
-			{
-				m_vertData.m_vertexElements.push_back(mlastElements[j]);
-				allStrite += PixelUtil::GetPixelSize(mlastElements[j].m_pixFmt);
-			}
-		}
-		vertOffFront = allStrite;
-		j++;
-		for (; j < oldElementsSize; ++j)
-		{
-			m_vertData.m_vertexElements.push_back(mlastElements[j]);
-			allStrite += PixelUtil::GetPixelSize(mlastElements[j].m_pixFmt);
-			vertOffBack += PixelUtil::GetPixelSize(mlastElements[j].m_pixFmt);
-		}
-
-		m_vertData.m_stride = allStrite;
-
-		Byte* pNewVertexArray = EchoAlloc(Byte, allStrite*m_vertData.m_count);
-		Byte* pcopyDest = pNewVertexArray;
-		Byte* pcopySrc = m_vertData.m_vertices;
-		for (size_t vertIdx = 0; vertIdx < m_vertData.m_count; ++vertIdx)
-		{
-			memcpy(pcopyDest, pcopySrc, vertOffFront);
-			pcopyDest += vertOffFront;
-			pcopySrc += vertOffFront + removeStrite;
-			memcpy(pcopyDest, pcopySrc, vertOffBack);
-			pcopyDest += vertOffBack;
-			pcopySrc += vertOffBack;
-		}
-
-		EchoSafeFree(m_vertData.m_vertices);
-		m_vertData.m_vertices = pNewVertexArray;
-
-		Buffer vertBuff(m_vertData.m_stride*m_vertData.m_count, m_vertData.m_vertices);
-		m_vertexBuffer = Renderer::instance()->createVertexBuffer(GPUBuffer::GBU_GPU_READ, vertBuff);
-	}
-
-	// 插入数据
-	void Mesh::insertVertexData(const RenderInput::VertexElement& element, void* templateData)
-	{
-		if (isVertexUsage(element.m_semantic))
-			return;
-
-		EchoSafeDelete(m_vertexBuffer, GPUBuffer);
-
-		RenderInput::VertexElementList lastElements = m_vertData.m_vertexElements;
-		m_vertData.m_vertexElements.clear();
-
-		// first get the vertex semantic index to insert.
-		ui32 insertIndex = 0;
-		size_t oldElementsSize = lastElements.size();
-		for (size_t j = 0; j < oldElementsSize; ++j)
-		{
-			if (lastElements[j].m_semantic < element.m_semantic)
-				insertIndex++;
-			else
-				break;
-		}
-
-		// position.
-		ui32 vertOffFront = 0;
-		ui32 allStride = 0;
-		ui32 vertOffBack = 0;
-		size_t backindex = insertIndex;
-
-		/// front
-		for (size_t j = 0; j < backindex; ++j)
-		{
-			m_vertData.m_vertexElements.push_back(lastElements[j]);
-			vertOffFront += PixelUtil::GetPixelSize(lastElements[j].m_pixFmt);
-		}
-
-		m_vertData.m_vertexElements.push_back(element);
-
-		/// back
-		for (; backindex < oldElementsSize; ++backindex)
-		{
-			m_vertData.m_vertexElements.push_back(lastElements[backindex]);
-			vertOffBack += PixelUtil::GetPixelSize(lastElements[backindex].m_pixFmt);
-		}
-
-		size_t insertStrite = PixelUtil::GetPixelSize(element.m_pixFmt);
-		allStride = vertOffFront + insertStrite + vertOffBack;
-		m_vertData.m_stride = allStride;
-
-		Byte* pNewVertexArray = EchoAlloc(Byte, allStride*m_vertData.m_count);
-		Byte* pcopyDest = pNewVertexArray;
-		Byte* pcopySrc = m_vertData.m_vertices;
-		Byte* copyData = (Byte*)templateData;
-		for (size_t vertIdx = 0; vertIdx < m_vertData.m_count; ++vertIdx)
-		{
-			memcpy(pcopyDest, pcopySrc, vertOffFront);
-			pcopyDest += vertOffFront;
-			pcopySrc += vertOffFront;
-			memcpy(pcopyDest, copyData, insertStrite);
-			pcopyDest += insertStrite;
-			copyData += insertStrite;
-			memcpy(pcopyDest, pcopySrc, vertOffBack);
-			pcopyDest += vertOffBack;
-			pcopySrc += vertOffBack;
-		}
-
-		EchoSafeFree(m_vertData.m_vertices);
-		m_vertData.m_vertices = pNewVertexArray;
-
-		Buffer vertBuff(m_vertData.m_stride*m_vertData.m_count, m_vertData.m_vertices);
-		m_vertexBuffer = Renderer::instance()->createVertexBuffer(GPUBuffer::GBU_GPU_READ, vertBuff);
-	}
-
 	// 计算切线数据
 	void Mesh::buildTangentData()
 	{
 		ui32 faceCount = getFaceCount();
 
 		// 根据位置，UV数据构建切线数据
-		vector<Vector3>::type tangentDatas;  tangentDatas.resize(m_vertData.m_count, Vector3::ZERO);
-		vector<Vector3>::type binormalDatas;  binormalDatas.resize(m_vertData.m_count, Vector3::ZERO);
+		vector<Vector3>::type tangentDatas;  tangentDatas.resize(m_vertData.getVertexCount(), Vector3::ZERO);
+		vector<Vector3>::type binormalDatas;  binormalDatas.resize(m_vertData.getVertexCount(), Vector3::ZERO);
 		for (ui32 i = 0; i < faceCount; i++)
 		{
 			// 仅支持TriangeList格式
@@ -231,18 +96,17 @@ namespace Echo
 			binormalDatas[i].normalize();
 		}
 
-		// 新建切线数据
-		insertVertexData(RenderInput::VertexElement(RenderInput::VS_TANGENT, PF_RGB32_FLOAT), tangentDatas.data());
-		insertVertexData(RenderInput::VertexElement(RenderInput::VS_BINORMAL, PF_RGB32_FLOAT), binormalDatas.data());
+		//// 新建切线数据
+		//insertVertexData(RenderInput::VertexElement(RenderInput::VS_TANGENT, PF_RGB32_FLOAT), tangentDatas.data());
+		//insertVertexData(RenderInput::VertexElement(RenderInput::VS_BINORMAL, PF_RGB32_FLOAT), binormalDatas.data());
 
-		m_vertData.m_isUseTangentBinormal = true;
-		m_vertData.build();
+		//m_vertData.m_isUseTangentBinormal = true;
+		//m_vertData.build();
 	}
 
 	// 卸载
 	void Mesh::clear()
 	{
-		EchoSafeFree(m_vertData.m_vertices);
 		EchoSafeFree(m_indices);
 
 		EchoSafeDelete(m_vertexBuffer, GPUBuffer);
@@ -282,7 +146,7 @@ namespace Echo
 	// 计算占用内存大小
 	size_t Mesh::getMemeoryUsage() const
 	{
-		return m_vertData.m_count*m_vertData.m_stride + m_idxCount*m_idxStride;
+		return m_vertData.getVertexStride()*m_vertData.getVertexCount() + m_idxCount*m_idxStride;
 	}
 
 	void Mesh::generateTangentData(bool useNormalMap)
@@ -293,16 +157,16 @@ namespace Echo
 		}
 		else
 		{
-			m_vertData.m_isUseTangentBinormal = false;
-			removeVertexData(RenderInput::VS_TANGENT);
-			removeVertexData(RenderInput::VS_BINORMAL);
+			//m_vertData.m_isUseTangentBinormal = false;
+			//removeVertexData(RenderInput::VS_TANGENT);
+			//removeVertexData(RenderInput::VS_BINORMAL);
 		}
 	}
 
 	// 获取顶点格式
 	const RenderInput::VertexElementList& Mesh::getVertexElements() const
 	{
-		return m_vertData.m_vertexElements;
+		return m_vertData.getFormat().m_vertexElements;
 	}
 
 	// 加载函数
@@ -321,7 +185,7 @@ namespace Echo
 		if (m_isDynamicIndicesBuffer)
 		{
 			if (!m_indexBuffer)
-				m_indexBuffer = Renderer::instance()->createIndexBuffer(GPUBuffer::GBU_GPU_READ, indexBuff);
+				m_indexBuffer = Renderer::instance()->createIndexBuffer(GPUBuffer::GBU_DYNAMIC, indexBuff);
 			else
 				m_indexBuffer->updateData(indexBuff);
 		}
@@ -336,7 +200,7 @@ namespace Echo
 
 	void Mesh::buildVertexBuffer()
 	{
-		Buffer vertBuff(m_vertData.m_stride*m_vertData.m_count, m_vertData.m_vertices);
+		Buffer vertBuff(m_vertData.getByteSize(), m_vertData.getVertices());
 		if (m_isDynamicVertexBuffer)
 		{
 			if (!m_vertexBuffer)
@@ -351,20 +215,6 @@ namespace Echo
 			else
 				EchoLogError("Cannot modify static mesh vertex buffer");
 		}	
-	}
-
-	// 设置数据
-	void Mesh::set(const Mesh::VertexDefine& format ,ui32 vertCount, const Byte* vertices, ui32 indicesCount, const ui16* indices, const Box& box)
-	{
-		// process vertex format define
-		m_vertData.m_isUseNormal = format.m_isUseNormal;
-		m_vertData.m_isUseVertexColor = format.m_isUseVertexColor;
-		m_vertData.m_isUseDiffuseUV = format.m_isUseDiffuseUV;
-		m_vertData.build();
-
-		updateIndices(indicesCount, indices);
-
-		updateVertexs(vertCount, vertices, box);
 	}
 
 	// update indices data
@@ -385,17 +235,21 @@ namespace Echo
 	}
 
 	// update vertex data
-	void Mesh::updateVertexs(ui32 vertCount, const Byte* vertices, const Box& box)
+	void Mesh::updateVertexs(const MeshVertexFormat& format, ui32 vertCount, const Byte* vertices, const Box& box)
 	{
-		EchoSafeFree(m_vertData.m_vertices);
+		m_vertData.set(format, vertCount);
 
-		m_vertData.m_count = vertCount;
+		// copy data
+		memcpy(m_vertData.getVertices(), vertices, vertCount * m_vertData.getVertexStride());
+		m_box = box;
 
-		// calc vertex buffer size
-		ui32 vertBuffSize = m_vertData.m_count * m_vertData.m_stride;
-		m_vertData.m_vertices = EchoAlloc(Byte, vertBuffSize);
+		buildVertexBuffer();
+	}
 
-		memcpy(m_vertData.m_vertices, vertices, vertCount * m_vertData.m_stride);
+	// update vertex data
+	void Mesh::updateVertexs(const MeshVertexData& vertexData, const Box& box)
+	{
+		m_vertData = vertexData;
 		m_box = box;
 
 		buildVertexBuffer();

@@ -74,13 +74,14 @@ namespace Echo
 			m_materialInst->setTexture(0, m_textureRes.getPath());
 
 			// mesh
-			Mesh::VertexDefine define;
+			MeshVertexFormat define;
 			VertexArray	vertices;
 			IndiceArray	indices;
-			buildMeshData( vertices, indices, &define);
+			//buildMeshData( vertices, indices, &define);
 
 			m_mesh = Mesh::create(true, true);
-			m_mesh->set(define, vertices.size(), (const Byte*)vertices.data(), indices.size(), indices.data(), m_localAABB);
+			m_mesh->updateIndices(indices.size(), indices.data());
+			m_mesh->updateVertexs(define, vertices.size(), (const Byte*)vertices.data(), m_localAABB);
 
 			m_renderable = Renderable::create(m_mesh, m_materialInst, this);
 		}
@@ -97,18 +98,12 @@ namespace Echo
 	}
 
 	// build mesh data by drawables data
-	void GltfMesh::buildMeshData(VertexArray& oVertices, IndiceArray& oIndices, Mesh::VertexDefine* attributes)
+	void GltfMesh::buildMeshData(VertexArray& oVertices, IndiceArray& oIndices)
 	{
 		GltfMeshInfo& meshInfo = m_asset->m_meshes[m_meshIdx];
 		GltfPrimitive& primitive = meshInfo.m_primitives[m_primitiveIdx];
 		if (primitive.m_indices != -1)
 		{
-			// parse attributes
-			if (attributes)
-			{
-
-			}
-
 		}
 
 		TextureRes*	texture = m_materialInst->getTexture(0);
@@ -134,12 +129,12 @@ namespace Echo
 	// update vertex buffer
 	void GltfMesh::updateMeshBuffer()
 	{
-		VertexArray	vertices;
-		IndiceArray	indices;
-		buildMeshData( vertices, indices, nullptr);
+		//VertexArray	vertices;
+		//IndiceArray	indices;
+		//buildMeshData( vertices, indices, nullptr);
 
-		m_mesh->updateIndices(indices.size(), indices.data());
-		m_mesh->updateVertexs(vertices.size(), (const Byte*)vertices.data(), m_localAABB);
+		//m_mesh->updateIndices(indices.size(), indices.data());
+		//m_mesh->updateVertexs(vertices.size(), (const Byte*)vertices.data(), m_localAABB);
 	}
 
 	// 获取全局变量值
