@@ -7,7 +7,6 @@
 #include "Engine/core/Resource/EchoThread.h"
 #include "engine/core/Util/LogManager.h"
 #include "engine/core/render/render/ImageCodecMgr.h"
-#include "Engine/modules/Model/Model.h"
 #include "Engine/modules/Anim/AnimManager.h"
 #include "Engine/modules/Anim/SkeletonManager.h"
 #include "Engine/core/Scene/NodeTree.h"
@@ -106,7 +105,6 @@ namespace Echo
 			}
 
 			ImageCodecMgr::instance();
-			ModelManager::instance();
 			SkeletonManager::instance();
 			IO::instance();
 		}
@@ -322,7 +320,6 @@ namespace Echo
 		FSAudioManager::instance()->release();
 
 		EchoSafeDeleteInstance(FSAudioManager);
-		EchoSafeDeleteInstance(ModelManager);
 		EchoSafeDeleteInstance(AnimSystemManager); //animSysManager要在animManager之前释放，因为会用到animManager来释放自己的animBlend
 		EchoSafeDeleteInstance(AnimManager);
 		EchoSafeDeleteInstance(SkeletonManager);
