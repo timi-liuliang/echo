@@ -7,15 +7,12 @@
 #include "Engine/core/Resource/EchoThread.h"
 #include "engine/core/Util/LogManager.h"
 #include "engine/core/render/render/ImageCodecMgr.h"
-#include "Engine/modules/Anim/AnimManager.h"
-#include "Engine/modules/Anim/SkeletonManager.h"
 #include "Engine/core/Scene/NodeTree.h"
 #include "engine/core/Util/Timer.h"
 #include "engine/core/render/render/Viewport.h"
 #include "Engine/core/Render/MaterialInst.h"
 #include "ProjectSettings.h"
 #include "Engine/modules/Audio/FMODStudio/FSAudioManager.h"
-#include "Engine/modules/anim/AnimSystem.h"
 #include "engine/core/render/render/RenderThread.h"
 #include "engine/core/render/render/Video.h"
 #include "EngineTimeController.h"
@@ -105,7 +102,6 @@ namespace Echo
 			}
 
 			ImageCodecMgr::instance();
-			SkeletonManager::instance();
 			IO::instance();
 		}
 		catch (const Exception &e)
@@ -320,9 +316,6 @@ namespace Echo
 		FSAudioManager::instance()->release();
 
 		EchoSafeDeleteInstance(FSAudioManager);
-		EchoSafeDeleteInstance(AnimSystemManager); //animSysManager要在animManager之前释放，因为会用到animManager来释放自己的animBlend
-		EchoSafeDeleteInstance(AnimManager);
-		EchoSafeDeleteInstance(SkeletonManager);
 		
 		EchoSafeDeleteInstance(ImageCodecMgr);
 		EchoSafeDeleteInstance(OpenMPTaskMgr);
@@ -467,14 +460,6 @@ namespace Echo
 		switch (ct)
 		{
 			case 0:	TextureResManager::instance()->updateDelayedRelease(ui32(m_frameTime * MOD)); break;
-			//case 1:	EchoMeshManager->updateDelayedRelease(m_frameTime * MOD); break;
-			case 2: SkeletonManager::instance()->updateDelayedRelease(ui32(m_frameTime * MOD)); break;
-			case 3: AnimManager::instance()->updateDelayedRelease(ui32(m_frameTime * MOD)); break;
-			case 4:
-			{
-			}
-			break;
-			case 5: AnimSystemManager::instance()->updateDelayedRelease(ui32(m_frameTime * MOD)); break;
 			default:
 				break;
 		}
@@ -499,9 +484,6 @@ namespace Echo
 	void Root::setReleaseDelayTime(ui32 t)
 	{
 		TextureResManager::instance()->setReleaseDelayTime(t);
-		//EchoMeshManager->setReleaseDelayTime(t);
-		SkeletonManager::instance()->setReleaseDelayTime(t);
-		AnimManager::instance()->setReleaseDelayTime(t);
 	}
 
 	void Root::releasePlugins()
