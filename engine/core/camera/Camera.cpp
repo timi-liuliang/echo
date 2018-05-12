@@ -12,8 +12,6 @@ namespace Echo
 	Camera::Camera(ProjMode mode, bool isFixedYaw)
 		: m_bFixedYawAxis(isFixedYaw)
 		, m_projMode(mode)
-		, m_water_height(0.0f)
-		, m_orthoZRadian(0.f)
 	{
 		m_up = Vector3::UNIT_Y;
 		m_position = Vector3(-150.0f, 150.0f, -150.0f);
@@ -23,16 +21,6 @@ namespace Echo
 		m_fixedYawAxis = Vector3::UNIT_Y;
 		m_matView.identity();
 		m_bNeedUpdateView = true;
-
-		m_matMirrView.identity();
-
-		m_matSkyView.identity();
-		m_matSkyProj.identity();
-		m_matSkyViewProj.identity();
-
-#ifdef ECHO_CAMERA_SUPPORT_SCREENOFFSET
-		m_matScreenOffset.identity();
-#endif
 
 		Viewport* pViewport = Renderer::instance()->getFrameBuffer()->getViewport();
 		if(pViewport)
@@ -56,19 +44,6 @@ namespace Echo
 		m_bNeedUpdateProj = true;
 
 		m_originalViewProjMatrix.identity();
-
-		m_renderLayers[0] = 2000.f;
-		m_renderLayers[1] = 200.f;
-		m_renderLayers[2] = 150.f;
-		m_renderLayers[3] = 100.f;
-		m_renderLayers[4] = 70.f;
-		m_renderLayers[5] = 50.f;
-		m_renderLayers[6] = 40.f;
-		m_renderLayers[7] = 30.f;
-		m_renderLayers[8] = 20.f;
-		m_renderLayers[9] = 10.f;
-
-		m_isRenderLayers.fill(true);
 	}
 
 	Camera::~Camera()
@@ -256,15 +231,6 @@ namespace Echo
 		Renderer::instance()->unproject(to, v1, m_matVP);
 	}
 
-#ifdef ECHO_CAMERA_SUPPORT_SCREENOFFSET
-	void Camera::setScreenOffset( float xOffset, float yOffset)
-	{
-		m_matScreenOffset.translateReplace(xOffset, yOffset, 0.f);
-
-		m_bNeedUpdateProj = true;
-	}
-#endif
-
 	void Camera::update()
 	{
 		Vector3 vUp;
@@ -277,15 +243,6 @@ namespace Echo
 			else
 				vUp = m_up;
 
-			Vector3 tempDir = m_dir;
-			tempDir.y = -m_dir.y;
-			Vector3 tempRight = m_right;
-			Vector3 tempUp = vUp;
-			Vector3 tempPos = m_position;
-			float height_diff = m_position.y - m_water_height;
-
-			tempPos.y = m_position.y - height_diff * 2.0f;
-
 			vUp.normalize();
 
 			zAxis = -m_dir;
@@ -296,16 +253,6 @@ namespace Echo
 
 			Vector3::Cross(vUp, zAxis, m_right);
 
-			// 如果是VRmode 有偏移
-			if (EngineSettingsMgr::instance()->isInitVRMode() && EngineSettingsMgr::instance()->isUseVRMode())
-			{
-				Vector3 offset = Vector3(0.032f, 0.f, 0.f);
-				if (m_vrModeForEye)
-					m_position -= offset;
-				else
-					m_position += offset;
-			}
-
 			m_matView = Matrix4(	m_right.x, vUp.x, zAxis.x, 0,
 				m_right.y, vUp.y, zAxis.y, 0,
 				m_right.z, vUp.z, zAxis.z, 0,
@@ -314,32 +261,7 @@ namespace Echo
 				-Vector3::Dot(zAxis, m_position),
 				1);
 
-			m_matSkyView = Matrix4(m_right.x, vUp.x, zAxis.x, 0,
-				m_right.y, vUp.y, zAxis.y, 0,
-				m_right.z, vUp.z, zAxis.z, 0,
-				-Vector3::Dot(m_right, m_position),
-				-Vector3::Dot(vUp, m_position),
-				-Vector3::Dot(zAxis, m_position),
-				1);
-
-			//计算一下镜面反射的相机矩阵
-			tempUp.normalize();
-
-			zAxis = -tempDir;
 			zAxis.normalize();
-
-			Vector3::Cross(tempRight, tempUp, zAxis);
-			tempRight.normalize();
-
-			Vector3::Cross(tempUp, zAxis, tempRight);
-
-			m_matMirrView = Matrix4(tempRight.x, tempUp.x, zAxis.x, 0,
-				tempRight.y, tempUp.y, zAxis.y, 0,
-				tempRight.z, tempUp.z, zAxis.z, 0,
-				-Vector3::Dot(tempRight, tempPos),
-				-Vector3::Dot(tempUp, tempPos),
-				-Vector3::Dot(zAxis, tempPos),
-				1);
 			
 			if(!m_bFixedYawAxis)
 				m_up = vUp;
@@ -376,44 +298,23 @@ namespace Echo
 			{
 			case PM_PERSPECTIVE:
 				{
-					// 如果是VRmode 有偏移
-					if (EngineSettingsMgr::instance()->isUseVRMode() && RenderTargetManager::instance())
-					{
-						if (m_vrModeForEye)
-							m_matProj = CreateProjection(RenderTargetManager::instance()->m_fovPort[0], 0.2f, 1000.f);
-						else
-							m_matProj = CreateProjection(RenderTargetManager::instance()->m_fovPort[1], 0.2f, 1000.f);
-						m_matProj.transpose();
-					}
-					else
-					{
-						m_aspect = (Real)m_width / (Real)m_height;
-						Matrix4::PerspectiveFovRH(m_matProj, m_fov, m_aspect, m_nearClip, m_farClip);
-						Renderer::instance()->convertMatProj(m_matProj, m_matProj);
-
-						Matrix4::PerspectiveFovRH(m_matSkyProj, m_fov, m_aspect, 1.f, 10000.f);
-						Renderer::instance()->convertMatProj(m_matSkyProj, m_matSkyProj);
-					}
-					
-				} break;
+					m_aspect = (Real)m_width / (Real)m_height;
+					Matrix4::PerspectiveFovRH(m_matProj, m_fov, m_aspect, m_nearClip, m_farClip);
+					Renderer::instance()->convertMatProj(m_matProj, m_matProj);
+				}
+				break;
 			case PM_ORTHO:
 				{
 					Matrix4::OrthoRH(m_matProj, (Real)m_width, (Real)m_height, m_nearClip, m_farClip);
-					m_matProj.rotateZ(m_orthoZRadian);
 					Renderer::instance()->convertMatOrho(m_matProj, m_matProj, m_nearClip, m_farClip);
 				} break;
 			default: ;
 			}
-
-#ifdef ECHO_CAMERA_SUPPORT_SCREENOFFSET
-			m_matProj *= m_matScreenOffset;
-#endif
 		}
 
 		if(m_bNeedUpdateView || m_bNeedUpdateProj)
 		{
 			m_matVP = m_matView * m_matProj;
-			m_matSkyViewProj = m_matSkyView * m_matSkyProj;
 
 			if(m_projMode == PM_PERSPECTIVE)
 			{
@@ -501,69 +402,10 @@ namespace Echo
 		}
 	}
 
-	void Camera::toMirrCamera(const Vector4& clipPlane)
-	{
-		m_originalViewProjMatrix = m_matVP;
-
-		m_matVP = m_matMirrView * m_matProj;
-
-		calculateObliquematrixOrtho(m_matVP, clipPlane);
-	}
-
-	void Camera::calculateObliquematrixOrtho(Matrix4& projection, const Vector4& clipPlane)
-	{
-		/*Matrix4 inProj;
-		Matrix4::Inverse(inProj, projection);
-		Vector4 q = Vector4(Math::Sgn(clipPlane.x), Math::Sgn(clipPlane.y), 1.f, 1.f) *inProj;
-		Vector4 c = clipPlane * (2.f / (Vector4::Dot(clipPlane, q)));
-		projection.m02 = c.x - projection.m03;
-		projection.m12 = c.y - projection.m13;
-		projection.m22 = c.z - projection.m23;
-		projection.m32 = c.w - projection.m33;*/
-
-		projection.m02 = clipPlane.x - projection.m03;
-		projection.m12 = clipPlane.y - projection.m13;
-		projection.m22 = clipPlane.z - projection.m23;
-		projection.m32 = clipPlane.w - projection.m33;
-	}
-
-
-	void Camera::toOriginalCamera()
-	{
-		m_matVP = m_originalViewProjMatrix;
-	}
 	void Camera::needUpdate()
 	{
 		m_bNeedUpdateView = true;
 		m_bNeedUpdateProj = true;
-	}
-
-	void Camera::setRenderLayers(const array<float, MAX_RENDER_LAYER>& layers)
-	{
-		for (size_t i = 0; i < MAX_RENDER_LAYER;++i)
-		{
-			m_renderLayers[i] = layers[i];
-		}
-	}
-
-	void Camera::setIsRenderLayers(const array<bool, MAX_RENDER_LAYER>& layers)
-	{
-		for (size_t i = 0; i < MAX_RENDER_LAYER; ++i)
-		{
-			m_isRenderLayers[i] = layers[i];
-		}
-	}
-
-	bool Camera::checkNeedRender(const Vector3& pos, const ui32& layer,const ui32& renderLayer)
-	{
-		bool isRender = true;
-		if (EngineSettingsMgr::instance()->isEnableRenderLayer())
-		{
-			isRender = (m_position - pos).len() < m_renderLayers[layer];
-			isRender = isRender && m_isRenderLayers[renderLayer];
-		}
-		
-		return isRender;
 	}
 
 	// 克隆
@@ -577,10 +419,6 @@ namespace Echo
 		m_bFixedYawAxis = other->m_bFixedYawAxis;
 		m_fixedYawAxis = other->m_fixedYawAxis;
 		m_matView = other->m_matView;
-		m_matMirrView = other->m_matMirrView;
-		m_matSkyView = other->m_matSkyView;
-		m_matSkyProj = other->m_matSkyProj;
-		m_matSkyViewProj = other->m_matSkyViewProj;
 		m_bNeedUpdateView = other->m_bNeedUpdateView;
 		m_projMode = other->m_projMode;
 		m_fov = other->m_fov;
@@ -594,12 +432,5 @@ namespace Echo
 		m_matVP = other->m_matVP;
 		m_frustum = other->m_frustum;
 		m_originalViewProjMatrix = other->m_originalViewProjMatrix;
-#ifdef ECHO_CAMERA_SUPPORT_SCREENOFFSET
-		m_matScreenOffset = other->m_matScreenOffset;
-#endif
-		m_vrModeForEye = other->m_vrModeForEye;
-		m_water_height = other->m_water_height;
-		m_renderLayers = other->m_renderLayers;
-		m_isRenderLayers = other->m_isRenderLayers;
 	}
 }

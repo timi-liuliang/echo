@@ -65,7 +65,7 @@ namespace Echo
 	{
 		if (m_renderable)
 		{
-			m_matWVP = getWorldMatrix() * NodeTree::instance()->get2DCamera()->getViewProjMatrix();;
+			m_matWVP = getWorldMatrix() * NodeTree::instance()->get3dCamera()->getViewProjMatrix();;
 			m_renderable->submitToRenderQueue();
 		}
 	}

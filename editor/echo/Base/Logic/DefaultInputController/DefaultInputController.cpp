@@ -28,7 +28,7 @@ namespace Studio
 		, m_cameraRadius(5.f)
 		, m_cameraLookAt(Echo::Vector3::ZERO)
 		, m_cameraMoveDir(Echo::Vector3::UNIT_X)
-		, m_cameraForward(Echo::Vector3::UNIT_X)
+		, m_cameraForward(-Echo::Vector3::UNIT_Z)
 		, m_cameraPositon(Echo::Vector3::ZERO)
 		, m_horizonAngle(-Echo::Math::PI_DIV2)
 		, m_verticleAngle(Echo::Math::PI_DIV2)
@@ -493,8 +493,6 @@ namespace Studio
 	{
 		m_xOffset += xOffset;
 		m_yOffset += yOffset;
-
-		m_camera->setScreenOffset(m_xOffset * 2.f / m_camera->getWidth(), m_yOffset * -2.f / m_camera->getHeight());
 	}
 
 	void DefaultInputController::AdaptCamera()

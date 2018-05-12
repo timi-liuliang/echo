@@ -4,11 +4,8 @@
 #include "engine/core/geom/Frustum.h"
 #include "engine/core/Util/Array.hpp"
 
-#define ECHO_CAMERA_SUPPORT_SCREENOFFSET
-
 namespace Echo
 {
-	static const size_t MAX_RENDER_LAYER = 20;
 	/**
 	 * 摄像机接口
 	 */
@@ -26,9 +23,6 @@ namespace Echo
 	public:	
 		Camera(ProjMode mode = PM_PERSPECTIVE, bool isFixedYaw = true );
 		virtual ~Camera();
-
-		// vr模式下，判断是左眼还是右眼
-		void setVRModeForEye(bool isleftEye){ m_bNeedUpdateProj = true; m_bNeedUpdateView = true; m_vrModeForEye = isleftEye; update(); }
 
 		// 更新
 		virtual void frameMove( float elapsedTime){}
@@ -70,23 +64,6 @@ namespace Echo
 		// 获取观察投影矩阵
 		const Matrix4& getViewProjMatrix() const { return m_matVP; }
 
-		//获得镜面反射观察矩阵
-		const Matrix4& getMirrViewMatric() const { return m_matMirrView; }
-
-		// 获取天空盒观察投影矩阵
-		const Matrix4& getSkyViewProj() const { return m_matSkyViewProj; }
-
-		//变到mirrcamera
-		void toMirrCamera(const Vector4& clipPlane);
-
-		//回到original
-		void toOriginalCamera();
-
-		void calculateObliquematrixOrtho(Matrix4& projection, const Vector4& clipPlane);
-
-
-		void setWaterHeight(float water_height) { m_water_height = water_height; }
-
 		void			setProjectionMode(ProjMode mode);
 		ProjMode		getProjectionMode() const;
 
@@ -109,19 +86,9 @@ namespace Echo
 
 		void			unProjectionMousePos( Vector3& from, Vector3& to, const Vector2& screenPos );
 
-		void			setRenderLayers(const array<float, MAX_RENDER_LAYER>& layers);
-		void			setIsRenderLayers(const array<bool, MAX_RENDER_LAYER>& layers);
-		bool			checkNeedRender(const Vector3& pos, const ui32& layer, const ui32& renderLayer);
-
 		virtual void	update();
 
 		virtual void    needUpdate();
-
-#ifdef ECHO_CAMERA_SUPPORT_SCREENOFFSET
-		void			setScreenOffset( float xOffset, float yOffset);
-#endif
-		void			setOrthoZRadian(float rad){ m_orthoZRadian = rad; }
-		float			getOrthoZRadian(){ return m_orthoZRadian; }
 
 	public:
 		// 克隆
@@ -136,10 +103,6 @@ namespace Echo
 		bool			m_bFixedYawAxis;
 		Vector3			m_fixedYawAxis;
 		Matrix4			m_matView;
-		Matrix4			m_matMirrView;
-		Matrix4			m_matSkyView;
-		Matrix4			m_matSkyProj;
-		Matrix4			m_matSkyViewProj;
 		bool			m_bNeedUpdateView;
 		ProjMode		m_projMode;
 		Real			m_fov;
@@ -153,18 +116,5 @@ namespace Echo
 		Matrix4			m_matVP;
 		Frustum			m_frustum;
 		Matrix4			m_originalViewProjMatrix;
-
-#ifdef ECHO_CAMERA_SUPPORT_SCREENOFFSET
-		Matrix4			m_matScreenOffset;		// 屏幕空间偏移矩阵
-#endif
-
-		bool			m_vrModeForEye;				// vr模式相机需要偏移
-
-		float			m_water_height;			//水面高度，根据这个值来计算，水面反射相机的位置
-		array<float, MAX_RENDER_LAYER> m_renderLayers;      // 渲染层级 按距离计算
-		array<bool, MAX_RENDER_LAYER> m_isRenderLayers;      // 渲染层级 按标记
-
-		float			m_orthoZRadian;			//ortho print screen z radian
 	};
-
 }

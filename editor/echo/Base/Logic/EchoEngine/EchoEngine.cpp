@@ -122,10 +122,6 @@ namespace Studio
 		Echo::EngineTimeController::instance()->update(elapsedTime * 0.001f);
 		elapsedTime = static_cast<Echo::ui32>(elapsedTime * Echo::EngineTimeController::instance()->getSpeed());
 
-		// 更新
-		if (EchoEngineSettings.isInitVRMode() && EchoEngineSettings.isUseVRMode()) // 按左眼更新
-			Echo::NodeTree::instance()->get3dCamera()->setVRModeForEye(true);
-
 		if (!m_isManualUpdateEngine)
 		{
 			if (m_currentEditNode)

@@ -68,6 +68,10 @@ namespace Echo
 	// ¸üÐÂ 
 	void NodeTree::update(float elapsedTime)
 	{
+		// update 3d camera
+		m_3dCamera->update();
+
+		// update nodes
 		m_invisibleRoot.update(elapsedTime, true);
 
 		// update scripts
