@@ -35,7 +35,7 @@ varying mediump vec2 texCoord;\n\
 void main(void)\n\
 {\n\
 	mediump vec4 textureColor = texture2D(DiffuseSampler, texCoord);\n\
-	gl_FragColor = textureColor;\n\
+	gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);\n\
 }\n\
 	</ps>\
 	<BlendState>\

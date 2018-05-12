@@ -62,7 +62,7 @@ namespace Echo
 	// build drawable
 	void GltfMesh::buildRenderable()
 	{
-		if (!m_textureRes.getPath().empty())
+		if (!m_textureRes.getPath().empty() && m_asset)
 		{
 			// material
 			m_materialInst = MaterialInst::create();
@@ -85,46 +85,6 @@ namespace Echo
 			m_matWVP = getWorldMatrix() * NodeTree::instance()->get2DCamera()->getViewProjMatrix();;
 			m_renderable->submitToRenderQueue();
 		}
-	}
-
-	// build mesh data by drawables data
-	void GltfMesh::buildMeshData(VertexArray& oVertices, IndiceArray& oIndices)
-	{
-		GltfMeshInfo& meshInfo = m_asset->m_meshes[m_meshIdx];
-		GltfPrimitive& primitive = meshInfo.m_primitives[m_primitiveIdx];
-		if (primitive.m_indices != -1)
-		{
-		}
-
-		TextureRes*	texture = m_materialInst->getTexture(0);
-
-		float hw = texture ? texture->getWidth() * 0.5f : 50.f;
-		float hh = texture ? texture->getHeight() * 0.5f : 50.f;
-
-		// vertices
-		oVertices.push_back(VertexFormat(Vector3(-hw, -hh, 0.f), Vector2(0.f, 1.f)));
-		oVertices.push_back(VertexFormat(Vector3(-hw, hh, 0.f), Vector2(0.f, 0.f)));
-		oVertices.push_back(VertexFormat(Vector3(hw, hh, 0.f), Vector2(1.f, 0.f)));
-		oVertices.push_back(VertexFormat(Vector3(hw, -hh, 0.f), Vector2(1.f, 1.f)));
-
-		// indices
-		oIndices.push_back(0);
-		oIndices.push_back(1);
-		oIndices.push_back(2);
-		oIndices.push_back(0);
-		oIndices.push_back(2);
-		oIndices.push_back(3);
-	}
-
-	// update vertex buffer
-	void GltfMesh::updateMeshBuffer()
-	{
-		//VertexArray	vertices;
-		//IndiceArray	indices;
-		//buildMeshData( vertices, indices, nullptr);
-
-		//m_mesh->updateIndices(indices.size(), indices.data());
-		//m_mesh->updateVertexs(vertices.size(), (const Byte*)vertices.data(), m_localAABB);
 	}
 
 	// 获取全局变量值

@@ -30,12 +30,16 @@ namespace Echo
 		m_3dCamera = EchoNew(Camera(Camera::PM_PERSPECTIVE));
 		m_shadowCamera = EchoNew(CameraShadow);
 
-		Vector3 vCamPos(0, 100, 100);
+		Vector3 vCamPos(0.f, 3.f, 3.f);
 		Vector3 vCamDir = Vector3::ZERO - vCamPos;
 		vCamDir.normalize();
 
 		m_3dCamera->setPosition(vCamPos);
+		m_3dCamera->setUp(Vector3::UNIT_Y);
 		m_3dCamera->setDirection(vCamDir);
+		m_3dCamera->setNearClip(0.1f);
+		m_3dCamera->setFarClip(250.f);
+		m_3dCamera->update();
 
 		// create 2D camera
 		Vector3 vCam2DPos(0, 0, 0);

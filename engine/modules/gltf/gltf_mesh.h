@@ -47,12 +47,6 @@ namespace Echo
 		// update
 		virtual void update();
 
-		// update vertex buffer
-		void updateMeshBuffer();
-
-		// build mesh data by drawables data
-		void buildMeshData(VertexArray& oVertices, IndiceArray& oIndices);
-
 		// get global uniforms
 		virtual void* getGlobalUniformValue(const String& name);
 
