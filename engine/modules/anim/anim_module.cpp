@@ -1,4 +1,5 @@
 #include "anim_module.h"
+#include "anim_player.h"
 
 namespace Echo
 {
@@ -8,5 +9,6 @@ namespace Echo
 
 	void AnimModule::registerTypes()
 	{
+		Class::registerType<AnimPlayer>();
 	}
 }

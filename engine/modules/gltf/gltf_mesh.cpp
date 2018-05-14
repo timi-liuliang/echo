@@ -9,11 +9,6 @@
 
 namespace Echo
 {
-	static void csmLogFunc(const char* message)
-	{
-		EchoLogError(message);
-	}
-
 	GltfMesh::GltfMesh()
 		: m_materialInst(nullptr)
 		, m_renderable(nullptr)
