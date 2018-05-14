@@ -5,19 +5,25 @@ namespace Echo
 	const Variant Variant::INVALID;
 
 	Variant::Variant(const Echo::String& str)
-		: m_type(Type_String)
+		: m_type(Type::String)
 	{
 		m_any = str;
 	}
 
 	Variant::Variant(const Echo::Vector3& value)
 	{
-		m_type = Type_Vector3;
+		m_type = Type::Vector3;
 		m_vec3 = value;
 	}
 
+	Variant::Variant(const Base64String& value)
+		: m_type(Type::Base64String)
+	{
+		m_any = value;
+	}
+
 	Variant::Variant(const ResourcePath& value)
-		: m_type(Type_ResourcePath)
+		: m_type(Type::ResourcePath)
 	{
 		m_any = value;
 	}
@@ -33,8 +39,8 @@ namespace Echo
 
 		switch (orig.m_type)
 		{
-		case Type_String:
-		case Type_ResourcePath:	 m_any = orig.m_any; break;
+		case Type::String:
+		case Type::ResourcePath:	 m_any = orig.m_any; break;
 		}
 	}
 
@@ -45,9 +51,9 @@ namespace Echo
 
 		switch (orig.m_type) 
 		{
-		case Type_ResourcePath:
-		case Type_String: m_any = orig.m_any; break;
-		case Type_Vector3: m_vec3 = orig.m_vec3;				   break;
+		case Type::ResourcePath:
+		case Type::String: m_any = orig.m_any; break;
+		case Type::Vector3: m_vec3 = orig.m_vec3;				   break;
 		}
 
 		return *this;
@@ -58,9 +64,9 @@ namespace Echo
 	{
 		switch (m_type)
 		{
-		case Type_String: return any_cast<String>(m_any);
-		case Type_Vector3: return StringUtil::ToString(m_vec3);
-		case Type_ResourcePath: return (any_cast<ResourcePath>(m_any)).getPath();
+		case Type::String: return any_cast<String>(m_any);
+		case Type::Vector3: return StringUtil::ToString(m_vec3);
+		case Type::ResourcePath: return (any_cast<ResourcePath>(m_any)).getPath();
 		}
 
 		static Echo::String invalid;
@@ -72,8 +78,8 @@ namespace Echo
 	{
 		switch (type)
 		{
-		case Echo::Variant::Type_Vector3: { m_type = Type_Vector3; m_vec3 = StringUtil::ParseVec3(str); }return true;
-		case Echo::Variant::Type_ResourcePath: { m_type = Type_ResourcePath; m_any = ResourcePath(str, nullptr); }return true;
+		case Echo::Variant::Type::Vector3: { m_type = Type::Vector3; m_vec3 = StringUtil::ParseVec3(str); }return true;
+		case Echo::Variant::Type::ResourcePath: { m_type = Type::ResourcePath; m_any = ResourcePath(str, nullptr); }return true;
 		}
 
 		return false;

@@ -5,20 +5,22 @@
 #include "engine/core/math/Vector4.h"
 #include "engine/core/resource/ResourcePath.h"
 #include "engine/core/util/Any.hpp"
+#include "engine/core/util/base64.h"
 
 namespace Echo
 {
 	class Variant
 	{
 	public:
-		enum Type
+		enum class Type
 		{
-			Type_Nil,
-			Type_Bool,
-			Type_Real,
-			Type_Vector3,
-			Type_String,
-			Type_ResourcePath,
+			Nil,
+			Bool,
+			Real,
+			Vector3,
+			String,
+			ResourcePath,
+			Base64String,
 		};
 
 		struct CallError
@@ -37,10 +39,11 @@ namespace Echo
 		static const Variant INVALID;
 
 	public:
-		Variant():m_type(Type_Nil){}
+		Variant():m_type(Type::Nil){}
 		Variant(const String& str);
 		Variant(const Vector3& value);
 		Variant(const ResourcePath& value);
+		Variant(const Base64String& value);
 		~Variant();
 
 		// operator "="
@@ -53,6 +56,7 @@ namespace Echo
 		// reimplent operator
 		operator const Vector3&() const { return m_vec3; }
 		operator const ResourcePath&() const { return any_cast<ResourcePath>(m_any); }
+		operator const Base64String&() const { return any_cast<Base64String>(m_any); }
 
 		// convert to other type
 		const bool toVector3() { return m_bool; }
@@ -60,7 +64,7 @@ namespace Echo
 		const ResourcePath& toResPath() const { return any_cast<ResourcePath>(m_any); }
 
 		// is nil
-		bool isNil() const { return m_type == Type_Nil; }
+		bool isNil() const { return m_type == Type::Nil; }
 
 		// string convert
 		Echo::String toString() const;

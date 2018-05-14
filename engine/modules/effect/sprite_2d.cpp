@@ -89,7 +89,7 @@ namespace Echo
 		CLASS_BIND_METHOD(Sprite2D, getTextureRes, DEF_METHOD("getTextureRes"));
 		CLASS_BIND_METHOD(Sprite2D, setTextureRes, DEF_METHOD("setTextureRes"));
 
-		CLASS_REGISTER_PROPERTY(Sprite2D, "Texture", Variant::Type_ResourcePath, "getTextureRes", "setTextureRes");
+		CLASS_REGISTER_PROPERTY(Sprite2D, "Texture", Variant::Type::ResourcePath, "getTextureRes", "setTextureRes");
 	}
 
 	// set texture res path

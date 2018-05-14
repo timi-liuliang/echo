@@ -10,7 +10,7 @@ namespace Echo
 	// 构造函数
 	ProjectSettings::ProjectSettings()
 	{
-		addSetting("Application/Launch/LaunchScene", Variant::Type_String);
+		addSetting("Application/Launch/LaunchScene", Variant::Type::String);
 	}
 
 	// 析构函数

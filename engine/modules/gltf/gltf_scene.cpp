@@ -23,7 +23,7 @@ namespace Echo
 		CLASS_BIND_METHOD(GltfScene, getGltfRes, DEF_METHOD("getGltfRes"));
 		CLASS_BIND_METHOD(GltfScene, setGltfRes, DEF_METHOD("setGltfRes"));
 
-		CLASS_REGISTER_PROPERTY(GltfScene, "GltfRes", Variant::Type_ResourcePath, "getGltfRes", "setGltfRes");
+		CLASS_REGISTER_PROPERTY(GltfScene, "GltfRes", Variant::Type::ResourcePath, "getGltfRes", "setGltfRes");
 	}
 
 	// set texture res path

@@ -27,4 +27,11 @@ namespace Echo
 	private:
 		vector<char>::type		m_decoded;
 	};
+
+	// a string saved in base64 format, 
+	// that means it can be decoded into a string.
+	struct Base64String
+	{
+
+	};
 }

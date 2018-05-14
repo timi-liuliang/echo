@@ -165,7 +165,7 @@ namespace Echo
 
 		} while (getParentClass(className, className));
 
-		return Variant::Type_Nil;
+		return Variant::Type::Nil;
 	}
 
 	// set property value

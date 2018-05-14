@@ -99,9 +99,9 @@ namespace Echo
 		CLASS_BIND_METHOD(Live2dCubism, getMotionRes, DEF_METHOD("getMotionRes"));
 		CLASS_BIND_METHOD(Live2dCubism, setMotionRes, DEF_METHOD("setMotionRes"));
 
-		CLASS_REGISTER_PROPERTY(Live2dCubism, "Moc", Variant::Type_ResourcePath, "getMoc", "setMoc");
-		CLASS_REGISTER_PROPERTY(Live2dCubism, "Texture", Variant::Type_ResourcePath, "getTextureRes", "setTextureRes");
-		CLASS_REGISTER_PROPERTY(Live2dCubism, "Motion", Variant::Type_ResourcePath, "getMotionRes", "setMotionRes");
+		CLASS_REGISTER_PROPERTY(Live2dCubism, "Moc", Variant::Type::ResourcePath, "getMoc", "setMoc");
+		CLASS_REGISTER_PROPERTY(Live2dCubism, "Texture", Variant::Type::ResourcePath, "getTextureRes", "setTextureRes");
+		CLASS_REGISTER_PROPERTY(Live2dCubism, "Motion", Variant::Type::ResourcePath, "getMotionRes", "setMotionRes");
 	}
 
 	// parse paramters

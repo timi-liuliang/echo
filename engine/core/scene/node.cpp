@@ -471,10 +471,10 @@ namespace Echo
 		CLASS_BIND_METHOD(Node, setScript,			  DEF_METHOD("setScript"));
 		CLASS_BIND_METHOD(Node, getScript,			  DEF_METHOD("getScript"));
 
-		CLASS_REGISTER_PROPERTY(Node, "Position", Variant::Type_Vector3, "getPos", "setPos");
-		CLASS_REGISTER_PROPERTY(Node, "Rotation", Variant::Type_Vector3, "getYawPitchRoll", "setYawPitchRoll");
-		CLASS_REGISTER_PROPERTY(Node, "Scale",    Variant::Type_Vector3, "getScale", "setScale");
-		CLASS_REGISTER_PROPERTY(Node, "Script", Variant::Type_ResourcePath, "getScript", "setScript");
+		CLASS_REGISTER_PROPERTY(Node, "Position", Variant::Type::Vector3, "getPos", "setPos");
+		CLASS_REGISTER_PROPERTY(Node, "Rotation", Variant::Type::Vector3, "getYawPitchRoll", "setYawPitchRoll");
+		CLASS_REGISTER_PROPERTY(Node, "Scale",    Variant::Type::Vector3, "getScale", "setScale");
+		CLASS_REGISTER_PROPERTY(Node, "Script", Variant::Type::ResourcePath, "getScript", "setScript");
 	}
 
 	// save
