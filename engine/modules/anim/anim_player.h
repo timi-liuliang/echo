@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/core/scene/Node.h"
-#include "anim_node.h"
+#include "anim_clip.h"
 
 namespace Echo
 {
@@ -20,6 +20,6 @@ namespace Echo
 
 
 	private:
-		vector<AnimNode*>		m_nodes;
+		vector<AnimClip*>		m_clips;
 	};
 }
