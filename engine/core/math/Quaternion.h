@@ -1,5 +1,4 @@
-#ifndef __ECHO_QUAN_H__
-#define __ECHO_QUAN_H__
+#pragma once
 
 #include "Matrix4.h"
 
@@ -928,5 +927,3 @@ namespace Echo
 		void			Spline(Quaternion &quan, const Quaternion &q1,const Quaternion &q2, const Quaternion &q3);
 	};
 }
-
-#endif

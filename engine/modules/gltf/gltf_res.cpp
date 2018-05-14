@@ -655,6 +655,7 @@ namespace Echo
 
 		// parse vertex format
 		MeshVertexFormat vertFormat;
+		vertFormat.m_isUseNormal = primitive.m_attributes.find("NORMAL") != primitive.m_attributes.end();
 
 		// parse vertex count
 		int vertCount = 0;
@@ -688,6 +689,25 @@ namespace Echo
 					{
 						vertexData.setPosition(i, positions[i]);
 					}
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else if (it.first == "NORMAL")
+			{
+				if (access.m_type == GltfAccessorInfo::Vec3)
+				{
+					Vector3* normals = (Vector3*)buffer.getData(bufferView.m_byteOffset);
+					for (int i = 0; i < vertCount; i++)
+					{
+						vertexData.setNormal(i, normals[i]);
+					}
+				}
+				else
+				{
+					return false;
 				}
 			}
 		}
@@ -1021,7 +1041,8 @@ namespace Echo
 		// have multi root node
 		if (nodes.size() > 1)
 		{
-			Node* node = Class::create<Node*>("GltfScene");
+			Node* node = Class::create<Node*>("Node");
+			node->setName("gltf");
 			for (Node* child : nodes)
 			{
 				child->setParent(node);
@@ -1074,6 +1095,15 @@ namespace Echo
 		{
 			node = Class::create<Node*>("Node");
 		}
+
+		// rotation
+		node->setLocalOrientation(info.m_rotation);
+
+		// scale
+		node->setLocalScaling(info.m_scale);
+
+		// translation
+		node->setLocalPosition(info.m_translation);
 
 		// set node property
 		node->setName(info.m_name.empty() ? node->getClassName() : info.m_name);

@@ -72,6 +72,7 @@ namespace Echo
 
 		// 获取顶点法线数据
 		const Vector3& getNormal(Word index);
+		void setNormal(int idx, const Vector3& normal);
 
 		// 获取顶点颜色数据
 		Dword& getColor(Word index);

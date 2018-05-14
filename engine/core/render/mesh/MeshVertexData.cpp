@@ -173,6 +173,11 @@ namespace Echo
 		return *(Vector3*)(getVertice(index) + m_format.m_normalOffset);
 	}
 
+	void MeshVertexData::setNormal(int idx, const Vector3& normal)
+	{
+		*(Vector3*)(getVertice(idx) + m_format.m_normalOffset) = normal;
+	}
+
 	// 获取顶点颜色数据
 	Dword& MeshVertexData::getColor(Word index)
 	{

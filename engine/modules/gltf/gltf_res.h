@@ -57,7 +57,7 @@ namespace Echo
 		i32					m_mesh = -1;
 		i32					m_skin = -1;
 		vector<i32>::type	m_children;
-		Quaternion			m_rotation = { 0, 0, 0, 1 };
+		Quaternion			m_rotation = { 1, 0, 0, 0 };
 		Vector3				m_scale = { 1, 1, 1 };
 		Vector3				m_translation = { 0, 0, 0 };
 	};
