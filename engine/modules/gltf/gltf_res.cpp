@@ -1077,7 +1077,9 @@ namespace Echo
 					{
 						GltfMesh* mesh = Class::create<GltfMesh*>("GltfMesh");
 						mesh->setName(info.m_name.empty() ? node->getClassName() : info.m_name);
-						mesh->setGeometryData(this, info.m_mesh, i);
+						mesh->setGltfRes(m_path);
+						mesh->setMeshIdx(info.m_mesh);
+						mesh->setPrimitiveIdx(i);
 						mesh->setParent(node);
 					}
 				}
@@ -1086,7 +1088,9 @@ namespace Echo
 			{
 				// create one mesh node
 				GltfMesh* mesh = Class::create<GltfMesh*>("GltfMesh");
-				mesh->setGeometryData(this, info.m_mesh, 0);
+				mesh->setGltfRes(m_path);
+				mesh->setMeshIdx(info.m_mesh);
+				mesh->setPrimitiveIdx(0);
 
 				node = mesh;
 			}

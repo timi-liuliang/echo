@@ -4,6 +4,12 @@ namespace Echo
 {
 	const Variant Variant::INVALID;
 
+	Variant::Variant(int value)
+		: m_type(Type::Int)
+	{
+		m_int = value;
+	}
+
 	Variant::Variant(const Echo::String& str)
 		: m_type(Type::String)
 	{
@@ -36,25 +42,16 @@ namespace Echo
 	Variant::Variant(const Variant &orig)
 	{
 		m_type = orig.m_type;
-
-		switch (orig.m_type)
-		{
-		case Type::String:
-		case Type::ResourcePath:	 m_any = orig.m_any; break;
-		}
+		m_any  = orig.m_any;
+		m_vec3 = orig.m_vec3;
 	}
 
 	// operator "="
 	Variant&  Variant::operator=(const Variant& orig)
 	{
 		m_type = orig.m_type;
-
-		switch (orig.m_type) 
-		{
-		case Type::ResourcePath:
-		case Type::String: m_any = orig.m_any; break;
-		case Type::Vector3: m_vec3 = orig.m_vec3;				   break;
-		}
+		m_any = orig.m_any;
+		m_vec3 = orig.m_vec3;
 
 		return *this;
 	}
@@ -64,6 +61,7 @@ namespace Echo
 	{
 		switch (m_type)
 		{
+		case Type::Int: return StringUtil::ToString(m_int);
 		case Type::String: return any_cast<String>(m_any);
 		case Type::Vector3: return StringUtil::ToString(m_vec3);
 		case Type::ResourcePath: return (any_cast<ResourcePath>(m_any)).getPath();
@@ -78,6 +76,7 @@ namespace Echo
 	{
 		switch (type)
 		{
+		case Echo::Variant::Type::Int: m_int = StringUtil::ParseI32(str); return true;
 		case Echo::Variant::Type::Vector3: { m_type = Type::Vector3; m_vec3 = StringUtil::ParseVec3(str); }return true;
 		case Echo::Variant::Type::ResourcePath: { m_type = Type::ResourcePath; m_any = ResourcePath(str, nullptr); }return true;
 		}

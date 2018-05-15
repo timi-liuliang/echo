@@ -10,7 +10,8 @@
 namespace Echo
 {
 	GltfMesh::GltfMesh()
-		: m_materialInst(nullptr)
+		: m_assetPath("", ".gltf")
+		, m_materialInst(nullptr)
 		, m_renderable(nullptr)
 		, m_meshIdx(-1)
 		, m_primitiveIdx(-1)
@@ -24,26 +25,52 @@ namespace Echo
 
 	void GltfMesh::bindMethods()
 	{
+		CLASS_BIND_METHOD(GltfMesh, getGltfRes, DEF_METHOD("getGltfRes"));
+		CLASS_BIND_METHOD(GltfMesh, setGltfRes, DEF_METHOD("setGltfRes"));
+		CLASS_BIND_METHOD(GltfMesh, getMeshIdx, DEF_METHOD("getMeshIdx"));
+		CLASS_BIND_METHOD(GltfMesh, setMeshIdx, DEF_METHOD("setMeshIdx"));
+		CLASS_BIND_METHOD(GltfMesh, getPrimitiveIdx, DEF_METHOD("getPrimitiveIdx"));
+		CLASS_BIND_METHOD(GltfMesh, setPrimitiveIdx, DEF_METHOD("setPrimitiveIdx"));
+
+		CLASS_REGISTER_PROPERTY(GltfMesh, "Gltf", Variant::Type::ResourcePath, "getGltfRes", "setGltfRes");
+		CLASS_REGISTER_PROPERTY(GltfMesh, "Mesh", Variant::Type::Int, "getMeshIdx", "setMeshIdx");
+		CLASS_REGISTER_PROPERTY(GltfMesh, "Primitive", Variant::Type::Int, "getPrimitiveIdx", "setPrimitiveIdx");
 	}
 
-	// set geometry data
-	void GltfMesh::setGeometryData(GltfRes* asset, int meshIdx, int primitiveIdx)
+	// set gltf resource
+	void GltfMesh::setGltfRes(const ResourcePath& path)
 	{
-		m_asset = asset;
-		m_meshIdx = meshIdx;
-		m_primitiveIdx = primitiveIdx;
-		if (m_meshIdx != -1)
+		if (m_assetPath.setPath(path.getPath()))
 		{
-			clearRenderable();
+			m_asset = GltfRes::create(m_assetPath);
+
 			buildRenderable();
 		}
+	}
+
+	// set mesh index
+	void GltfMesh::setMeshIdx(int meshIdx) 
+	{ 
+		m_meshIdx = meshIdx;
+
+		buildRenderable();
+	}
+
+	// set primitive index
+	void GltfMesh::setPrimitiveIdx(int primitiveIdx) 
+	{
+		m_primitiveIdx = primitiveIdx;
+
+		buildRenderable();
 	}
 
 	// build drawable
 	void GltfMesh::buildRenderable()
 	{
-		if ( m_asset)
+		if ( m_asset && m_meshIdx!=-1 && m_primitiveIdx!=-1)
 		{
+			clearRenderable();
+
 			// material
 			m_materialInst = MaterialInst::create();
 			m_materialInst->setOfficialMaterialContent( GeneralMaterial::getContent());

@@ -16,6 +16,7 @@ namespace Echo
 		{
 			Nil,
 			Bool,
+			Int,
 			Real,
 			Vector3,
 			String,
@@ -40,6 +41,7 @@ namespace Echo
 
 	public:
 		Variant():m_type(Type::Nil){}
+		Variant(int value);
 		Variant(const String& str);
 		Variant(const Vector3& value);
 		Variant(const ResourcePath& value);
@@ -54,6 +56,7 @@ namespace Echo
 		Type getType() const { return m_type; }
 
 		// reimplent operator
+		operator const int() const { return m_int; }
 		operator const Vector3&() const { return m_vec3; }
 		operator const ResourcePath&() const { return any_cast<ResourcePath>(m_any); }
 		operator const Base64String&() const { return any_cast<Base64String>(m_any); }
@@ -77,7 +80,7 @@ namespace Echo
 		union 
 		{
 			bool			m_bool;
-			i64				m_int;
+			i32				m_int;
 			float			m_real;
 			Vector3			m_vec3;
 		};

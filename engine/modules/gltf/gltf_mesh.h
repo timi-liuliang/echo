@@ -31,8 +31,17 @@ namespace Echo
 		// bind class methods to script
 		static void bindMethods();
 
-		// set geometry data
-		void setGeometryData(GltfRes* asset, int meshIdx, int primitiveIdx);
+		// set gltf resource
+		const ResourcePath& getGltfRes() { return m_assetPath; }
+		void setGltfRes(const ResourcePath& path);
+
+		// set mesh index
+		int getMeshIdx() const { return m_meshIdx; }
+		void setMeshIdx(int meshIdx);
+
+		// set primitive index
+		int getPrimitiveIdx() { return m_primitiveIdx; }
+		void setPrimitiveIdx(int primitiveIdx);
 
 	protected:
 		// build drawable
@@ -52,6 +61,7 @@ namespace Echo
 		MaterialInst*			m_materialInst;	// Material Instance
 		Renderable*				m_renderable;
 		Matrix4					m_matWVP;
+		ResourcePath			m_assetPath;
 		GltfResPtr				m_asset;		// gltf asset ptr
 		int						m_meshIdx;		// mesh index in the asset
 		int						m_primitiveIdx;	// sub mesh index
