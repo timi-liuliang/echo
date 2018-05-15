@@ -217,8 +217,6 @@ namespace Echo
 		bool								m_isHaveCustomDepthStencil;
 		DepthStencilState*					m_depthStencil;
 		DepthStencilState::DepthStencilDesc m_depthStencilDesc;
-
-		bool				m_isTemplate;
 		bool				m_isSubmitToStageRenderQueue;
 	};
 }

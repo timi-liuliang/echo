@@ -47,7 +47,6 @@ namespace Echo
 		, m_rasterizerState(NULL)
 		, m_isHaveCustomDepthStencil(false)
 		, m_depthStencil(NULL)
-		, m_isTemplate(false)
 		, m_isSubmitToStageRenderQueue(false)
 		, m_officialMaterialContent(nullptr)
 	{
@@ -106,7 +105,6 @@ namespace Echo
 			m_name = name;
 			m_macrosEx = StringUtil::Split(macros, ";");
 			std::sort(m_macrosEx.begin(), m_macrosEx.end());
-			m_isTemplate = true;
 
 			MemoryReader memReader(name.c_str());
 			if (!memReader.getData<char*>())

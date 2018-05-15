@@ -8,6 +8,6 @@ namespace Echo
 	{
 	public:
 		// get shader
-		static const char* getContent();
+		static const char* getPbrMetalicRoughnessContent();
 	};
 }

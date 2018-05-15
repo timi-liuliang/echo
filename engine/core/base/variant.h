@@ -22,19 +22,17 @@ namespace Echo
 			String,
 			ResourcePath,
 			Base64String,
+			Material,
 		};
 
-		struct CallError
+		enum class CallError
 		{
-			enum Error
-			{
-				CE_Ok,
-				CE_InvalidMethod,
-				CE_InvalidArgument,
-				CE_TooManyArguments,
-				CE_ToolFewArguments,
-				CE_InstanceIsNull,
-			};
+			Ok,
+			InvalidMethod,
+			InvalidArgument,
+			TooManyArguments,
+			ToolFewArguments,
+			InstanceIsNull,
 		};
 
 		static const Variant INVALID;

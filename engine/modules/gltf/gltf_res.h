@@ -142,7 +142,7 @@ namespace Echo
 		};
 
 		// base color texture and metalic roughness texture
-		struct Pbr
+		struct PbrMetalicRoughness
 		{
 			float	m_baseColorFactor[4] = { 1.f, 1.f, 1.f, 1.f };
 			Texture	m_baseColorTexture;

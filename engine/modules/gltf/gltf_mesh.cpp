@@ -73,7 +73,7 @@ namespace Echo
 
 			// material
 			m_materialInst = MaterialInst::create();
-			m_materialInst->setOfficialMaterialContent( GeneralMaterial::getContent());
+			m_materialInst->setOfficialMaterialContent( GeneralMaterial::getPbrMetalicRoughnessContent());
 			m_materialInst->setRenderStage("Transparent");
 			m_materialInst->applyLoadedData();
 
