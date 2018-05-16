@@ -12,7 +12,7 @@ attribute vec4 a_Tangent;
 attribute vec2 a_UV;
 #endif
 
-uniform mat4 u_MVPMatrix;
+uniform mat4 u_WVPMatrix;
 uniform mat4 u_WorldMatrix;
 uniform mat4 u_NormalMatrix;
 
@@ -49,7 +49,7 @@ void main()
   v_UV = vec2(0.,0.);
   #endif
 
-  gl_Position = u_MVPMatrix * a_Position; // needs w for proper perspective correction
+  gl_Position = u_WVPMatrix * a_Position; // needs w for proper perspective correction
 }
 )";
 
@@ -378,34 +378,34 @@ void main()
 )";
 
 // Ä¬ÈÏ²ÄÖÊ
-static const char* g_generalPbrMetalicRoughnessMaterial = R"(
-<?xml version = \"1.0\" encoding = \"utf-8\"?>
+static const char* g_generalPbrMetalicRoughnessMaterial = 
+R"(<?xml version = "1.0" encoding = "utf-8"?>
 <material> 
 	<vs>VS_PLACE_HOLDER</vs>
 	<ps>PS_PLACE_HOLDER</ps>
 	<BlendState>
-		<BlendEnable value = \"true\" />
-		<SrcBlend value = \"BF_SRC_ALPHA\" />
-		<DstBlend value = \"BF_INV_SRC_ALPHA\" />
+		<BlendEnable value = "true" />
+		<SrcBlend value = "BF_SRC_ALPHA" />
+		<DstBlend value = "BF_INV_SRC_ALPHA" />
 	</BlendState>
 	<RasterizerState>
-		<CullMode value = \"CULL_NONE\" />
+		<CullMode value = "CULL_NONE" />
 	</RasterizerState>
 	<DepthStencilState>
-		<DepthEnable value = \"false\" />
-		<WriteDepth value = \"false\" />
+		<DepthEnable value = "false" />
+		<WriteDepth value = "false" />
 	</DepthStencilState>
 	<SamplerState>
 		<BiLinearMirror>
-			<MinFilter value = \"FO_LINEAR\" />
-			<MagFilter value = \"FO_LINEAR\" />
-			<MipFilter value = \"FO_NONE\" />
-			<AddrUMode value = \"AM_CLAMP\" />
-			<AddrVMode value = \"AM_CLAMP\" />
+			<MinFilter value = "FO_LINEAR" />
+			<MagFilter value = "FO_LINEAR" />
+			<MipFilter value = "FO_NONE" />
+			<AddrUMode value = "AM_CLAMP" />
+			<AddrVMode value = "AM_CLAMP" />
 		</BiLinearMirror>
 	</SamplerState>
 	<Texture>
-		<stage no = \"0\" sampler = \"BiLinearMirror\" />
+		<stage no = "0" sampler = "BiLinearMirror" />
 	</Texture>
 </material>
 )";

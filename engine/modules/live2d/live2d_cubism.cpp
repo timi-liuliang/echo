@@ -8,7 +8,7 @@
 
 // Ä¬ÈÏ²ÄÖÊ
 static const char* g_live2dDefaultMaterial = R"(
-<?xml version = \"1.0\" encoding = \"GB2312\"?>
+<?xml version = "1.0" encoding = "utf-8"?>
 <material>
 <vs>#version 100
 
@@ -39,28 +39,28 @@ void main(void)
 }
 	</ps>
 	<BlendState>
-		<BlendEnable value = \"true\" />
-		<SrcBlend value = \"BF_SRC_ALPHA\" />
-		<DstBlend value = \"BF_INV_SRC_ALPHA\" />
+		<BlendEnable value = "true" />
+		<SrcBlend value = "BF_SRC_ALPHA" />
+		<DstBlend value = "BF_INV_SRC_ALPHA" />
 	</BlendState>
 	<RasterizerState>
-		<CullMode value = \"CULL_NONE\" />
+		<CullMode value = "CULL_NONE" />
 	</RasterizerState>
 	<DepthStencilState>
-		<DepthEnable value = \"false\" />
-		<WriteDepth value = \"false\" />
+		<DepthEnable value = "false" />
+		<WriteDepth value = "false" />
 	</DepthStencilState>
 	<SamplerState>
 		<BiLinearMirror>
-			<MinFilter value = \"FO_LINEAR\" />
-			<MagFilter value = \"FO_LINEAR\" />
-			<MipFilter value = \"FO_NONE\" />
-			<AddrUMode value = \"AM_CLAMP\" />
-			<AddrVMode value = \"AM_CLAMP\" />
+			<MinFilter value = "FO_LINEAR" />
+			<MagFilter value = "FO_LINEAR" />
+			<MipFilter value = "FO_NONE" />
+			<AddrUMode value = "AM_CLAMP" />
+			<AddrVMode value = "AM_CLAMP" />
 		</BiLinearMirror>
 	</SamplerState>
 	<Texture>
-		<stage no = \"0\" sampler = \"BiLinearMirror\" />
+		<stage no = "0" sampler = "BiLinearMirror" />
 	</Texture>
 </material>
 )";

@@ -12,7 +12,7 @@ attribute vec4 a_Tangent;
 attribute vec2 a_UV;
 #endif
 
-uniform mat4 u_MVPMatrix;
+uniform mat4 u_WVPMatrix;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_NormalMatrix;
 
@@ -49,7 +49,7 @@ void main()
   v_UV = vec2(0.,0.);
   #endif
 
-  gl_Position = u_MVPMatrix * a_Position; // needs w for proper perspective correction
+  gl_Position = u_WVPMatrix * a_Position; // needs w for proper perspective correction
 }
 )";
 

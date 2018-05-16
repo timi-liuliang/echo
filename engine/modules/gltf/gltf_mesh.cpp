@@ -74,7 +74,7 @@ namespace Echo
 			Mesh* mesh = m_asset->m_meshes[m_meshIdx].m_primitives[m_primitiveIdx].m_mesh;
 			m_materialInst = MaterialInst::create();
 			m_materialInst->cloneFromTemplate(m_asset->m_meshes[m_meshIdx].m_primitives[m_primitiveIdx].m_materialInst);
-			m_renderable = Renderable::create( mesh, m_materialInst, this);
+			m_renderable = Renderable::create( mesh, m_asset->m_meshes[m_meshIdx].m_primitives[m_primitiveIdx].m_materialInst, this);
 		}
 	}
 
@@ -101,13 +101,13 @@ namespace Echo
 			return (void*)&(NodeTree::instance()->get3dCamera()->getPosition());
 		else if (name == "u_LightDirection")
 		{
-			static Vector3 lightDirectionFromSurfaceToLight(1.f, 1.f, 0.35f);
+			static Vector3 lightDirectionFromSurfaceToLight(1.f, 1.f, 0.5f);
 			lightDirectionFromSurfaceToLight.normalize();
 			return &lightDirectionFromSurfaceToLight;
 		}
 		else if (name == "u_LightColor")
 		{
-			static Vector3 lightColor(1.f, 1.f, 0.35f);
+			static Vector3 lightColor(2.f, 2.f, 2.f);
 			return &lightColor;
 		}
 
