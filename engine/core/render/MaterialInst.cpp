@@ -756,8 +756,7 @@ namespace Echo
 
 	void MaterialInst::unloadTexture()
 	{
-		TextureMapItor it = m_textures.begin();
-		for (; it != m_textures.end(); ++it)
+		for (auto it = m_textures.begin(); it != m_textures.end(); ++it)
 		{
 			if (it->second)
 				TextureResManager::instance()->releaseResource(it->second);
@@ -768,7 +767,7 @@ namespace Echo
 	// 根据索引获取纹理
 	TextureRes* MaterialInst::getTexture(const int& index)
 	{
-		TextureMapItor it = m_textures.find(index);
+		auto it = m_textures.find(index);
 		if (it != m_textures.end())
 		{
 			return it->second;
@@ -832,11 +831,9 @@ namespace Echo
 	TextureRes* MaterialInst::setTexture(int index, const String& name)
 	{
 		if (name.empty())
-		{
-			return NULL;
-		}
+			return nullptr;
 
-		TextureMapItor it = m_textures.find(index);
+		auto it = m_textures.find(index);
 		if (it != m_textures.end())
 		{
 			TextureResManager::instance()->releaseResource(it->second);

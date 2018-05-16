@@ -15,9 +15,7 @@ namespace Echo
 	class MaterialInst
 	{
 		typedef map<int, TextureRes*>::type TextureMap;
-		typedef map<int, TextureRes*>::type::iterator TextureMapItor;
 		typedef map<int, String>::type TextureNameMap;
-		typedef map<int, String>::type::iterator TextureNameMapItor;
 
 	public:
 		struct uniform
