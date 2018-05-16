@@ -265,12 +265,12 @@ namespace Echo
 		bool loadAccessors(nlohmann::json& json);
 		bool loadBufferViews(nlohmann::json& json);
 		bool loadBufferData(GltfBufferInfo& buffer);
-		bool loadMeshes(nlohmann::json& json);
 		bool loadMaterials(nlohmann::json& json);
 		bool loadTextureInfo(GltfMaterialInfo::Texture& texture, nlohmann::json& json);
 		bool loadImages(nlohmann::json& json);
 		bool loadSamplers(nlohmann::json& json);
 		bool loadTextures(nlohmann::json& json);
+		bool loadMeshes(nlohmann::json& json);
 		bool buildPrimitiveData(int meshIdx, int primitiveIdx);
 		bool buildMaterial(int meshIdx, int primitiveIdx);
 		Node* createNode(Node* parent, int idx);

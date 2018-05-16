@@ -13,7 +13,7 @@ attribute vec2 a_UV;
 #endif
 
 uniform mat4 u_MVPMatrix;
-uniform mat4 u_ModelMatrix;
+uniform mat4 u_WorldMatrix;
 uniform mat4 u_NormalMatrix;
 
 varying vec3 v_Position;
@@ -29,17 +29,17 @@ varying vec3 v_Normal;
 
 void main()
 {
-  vec4 pos = u_ModelMatrix * a_Position;
+  vec4 pos = u_WorldMatrix * a_Position;
   v_Position = vec3(pos.xyz) / pos.w;
 
   #ifdef HAS_NORMALS
   #ifdef HAS_TANGENTS
   vec3 normalW = normalize(vec3(u_NormalMatrix * vec4(a_Normal.xyz, 0.0)));
-  vec3 tangentW = normalize(vec3(u_ModelMatrix * vec4(a_Tangent.xyz, 0.0)));
+  vec3 tangentW = normalize(vec3(u_WorldMatrix * vec4(a_Tangent.xyz, 0.0)));
   vec3 bitangentW = cross(normalW, tangentW) * a_Tangent.w;
   v_TBN = mat3(tangentW, bitangentW, normalW);
   #else // HAS_TANGENTS != 1
-  v_Normal = normalize(vec3(u_ModelMatrix * vec4(a_Normal.xyz, 0.0)));
+  v_Normal = normalize(vec3(u_WorldMatrix * vec4(a_Normal.xyz, 0.0)));
   #endif
   #endif
 
@@ -103,7 +103,7 @@ uniform float     u_OcclusionStrength;
 uniform vec2 u_MetallicRoughnessValues;
 uniform vec4 u_BaseColorFactor;
 
-uniform vec3 u_Camera;
+uniform vec3 u_CameraPosition;
 
 // debugging flags used for shader output of intermediate PBR variables
 uniform vec4 u_ScaleDiffBaseMR;
@@ -198,6 +198,7 @@ vec3 getNormal()
 // Calculation of the lighting contribution from an optional Image Based Light source.
 // Precomputed Environment Maps are required uniform inputs and are computed as outlined in [1].
 // See our README.md on Environment Maps [3] for additional discussion.
+#ifdef USE_IBL
 vec3 getIBLContribution(PBRInfo pbrInputs, vec3 n, vec3 reflection)
 {
     float mipCount = 9.0; // resolution of 512x512
@@ -221,6 +222,7 @@ vec3 getIBLContribution(PBRInfo pbrInputs, vec3 n, vec3 reflection)
 
     return diffuse + specular;
 }
+#endif
 
 // Basic Lambertian diffuse
 // Implementation from Lambert's Photometria https://archive.org/details/lambertsphotome00lambgoog
@@ -304,7 +306,7 @@ void main()
     vec3 specularEnvironmentR90 = vec3(1.0, 1.0, 1.0) * reflectance90;
 
     vec3 n = getNormal();                             // normal at surface point
-    vec3 v = normalize(u_Camera - v_Position);        // Vector from surface point to camera
+    vec3 v = normalize(u_CameraPosition - v_Position);        // Vector from surface point to camera
     vec3 l = normalize(u_LightDirection);             // Vector from surface point to light
     vec3 h = normalize(l+v);                          // Half vector between both l and v
     vec3 reflection = -normalize(reflect(v, n));
@@ -359,6 +361,7 @@ void main()
 
     // This section uses mix to override final color for reference app visualization
     // of various parameters in the lighting equation.
+#ifdef SHADER_DEBUG
     color = mix(color, F, u_ScaleFGDSpec.x);
     color = mix(color, vec3(G), u_ScaleFGDSpec.y);
     color = mix(color, vec3(D), u_ScaleFGDSpec.z);
@@ -368,6 +371,7 @@ void main()
     color = mix(color, baseColor.rgb, u_ScaleDiffBaseMR.y);
     color = mix(color, vec3(metallic), u_ScaleDiffBaseMR.z);
     color = mix(color, vec3(perceptualRoughness), u_ScaleDiffBaseMR.w);
+#endif
 
     gl_FragColor = vec4(pow(color,vec3(1.0/2.2)), baseColor.a);
 }

@@ -44,10 +44,9 @@ namespace Echo
 		void createBlendState(BlendState::BlendDesc& desc);
 		void createDepthState(DepthStencilState::DepthStencilDesc& desc);
 		void createRasterizerState(RasterizerState::RasterizerDesc& desc);
-		//void createSamplerState(int stage, SamplerState::SamplerDesc& desc);
 
 		// 创建着色器
-		void createShaderProgram( const String& vsContent, const String& psContent);
+		bool createShaderProgram( const String& vsContent, const String& psContent);
 
 		// 获取混合状态
 		BlendState* getBlendState() const { return m_pBlendState; }

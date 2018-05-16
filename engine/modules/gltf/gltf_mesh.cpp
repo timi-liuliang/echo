@@ -91,8 +91,25 @@ namespace Echo
 	// 获取全局变量值
 	void* GltfMesh::getGlobalUniformValue(const String& name)
 	{
-		if (name == "matWVP")
+		void* value = Node::getGlobalUniformValue(name);
+		if (value)
+			return value;	
+
+		if (name == "u_WVPMatrix")
 			return (void*)(&m_matWVP);
+		else if (name == "u_CameraPosition")
+			return (void*)&(NodeTree::instance()->get3dCamera()->getPosition());
+		else if (name == "u_LightDirection")
+		{
+			static Vector3 lightDirectionFromSurfaceToLight(1.f, 1.f, 0.35f);
+			lightDirectionFromSurfaceToLight.normalize();
+			return &lightDirectionFromSurfaceToLight;
+		}
+		else if (name == "u_LightColor")
+		{
+			static Vector3 lightColor(1.f, 1.f, 0.35f);
+			return &lightColor;
+		}
 
 		return nullptr;
 	}

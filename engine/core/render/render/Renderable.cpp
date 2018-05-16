@@ -42,14 +42,16 @@ namespace Echo
 	// ĞÂ½¨
 	Renderable* Renderable::create(Mesh* mesh, MaterialInst* matInst, Node* node)
 	{
-		Renderable* renderable = Renderer::instance()->createRenderable( matInst->getRenderStage(), matInst->getMaterial());
-		renderable->setRenderInput(mesh->getVertexBuffer(), mesh->getVertexElements(), mesh->getIndexBuffer(), mesh->getIndexStride());
-
 		Material* material = matInst->getMaterial();
 		ShaderProgram* shaderProgram = material->getShaderProgram();
+		if (!shaderProgram)
+			return nullptr;
+
 		ShaderProgram::UniformArray* uniforms = shaderProgram->getUniforms();
 
 		// bind shader param
+		Renderable* renderable = Renderer::instance()->createRenderable(matInst->getRenderStage(), matInst->getMaterial());
+		renderable->setRenderInput(mesh->getVertexBuffer(), mesh->getVertexElements(), mesh->getIndexBuffer(), mesh->getIndexStride());
 		renderable->beginShaderParams(uniforms->size());
 		for (auto it = uniforms->begin(); it != uniforms->end(); it++)
 		{

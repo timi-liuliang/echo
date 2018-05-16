@@ -1,7 +1,6 @@
 #define ECHO_EDITOR_MODE
 #define ECHO_PROFILER
 /* #undef CEGUI_STRING32 */
-#define ECHO_RENDER_THREAD
 #define ECHO_ARCHIVE_SUPPORT_7ZIP
 #define ASSETS_OUT_DIR_CLASS_NAME "nonExistsClass"
 #define ASSETS_OUT_DIR_FUNCTION_NAME "getAssetsOutDir"

@@ -168,13 +168,9 @@ namespace Echo
 			}
 
 			// 执行着色器创建
-			try
+			if(!createShaderProgram( vsSrc, psSrc))
 			{
-				createShaderProgram( vsSrc, psSrc);
-			}
-			catch(Exception& e)
-			{
-				EchoLogError(e.getMessage().c_str());
+				EchoLogError("create shader program failed");
 				return false;
 			}
 
@@ -601,7 +597,7 @@ namespace Echo
 	}
 
 	// 创建着色器
-	void Material::createShaderProgram(const String& vsContent, const String& psContent)
+	bool Material::createShaderProgram(const String& vsContent, const String& psContent)
 	{
 		EchoSafeDelete(m_pShaderProgram, ShaderProgram);
 		Shader::ShaderDesc vsDesc(m_shaderDesc);
@@ -610,7 +606,8 @@ namespace Echo
 		if(!pVertexShader)
 		{
 			String output = "Error in create vs file: ";
-			EchoException(output.c_str());
+			EchoLogError(output.c_str());
+			return false;
 		}
 
 		Shader::ShaderDesc psDesc(m_shaderDesc);
@@ -619,7 +616,8 @@ namespace Echo
 		if(!pPixelShader)
 		{
 			String output = "Error in create ps file: ";
-			EchoException(output.c_str());
+			EchoLogError(output.c_str());
+			return false;
 		}
 
 		// create shader program
@@ -627,6 +625,8 @@ namespace Echo
 		m_pShaderProgram->attachShader(pVertexShader);
 		m_pShaderProgram->attachShader(pPixelShader);
 		m_pShaderProgram->linkShaders();
+
+		return true;
 	}
 
 	void Material::activeShader()

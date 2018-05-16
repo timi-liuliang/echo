@@ -224,7 +224,7 @@ namespace Echo
 						case SPT_FLOAT:		OGLESDebug(glUniform1fv(uniform.m_location, uniform.m_count, (GLfloat*)uniform.m_value));					break;
 						case SPT_VEC2:		OGLESDebug(glUniform2fv(uniform.m_location, uniform.m_count, (GLfloat*)uniform.m_value));					break;
 						case SPT_VEC3:		OGLESDebug(glUniform3fv(uniform.m_location, uniform.m_count, (GLfloat*)uniform.m_value));					break;
-						case SPT_TEXTURE:	OGLESDebug(glUniform1i(uniform.m_location, *(uint*)uniform.m_value));										break;
+						case SPT_TEXTURE:	OGLESDebug(glUniform1i(uniform.m_location, *(ui32*)uniform.m_value));										break;
 						default:			EchoAssertX(0, "unknow shader param format!");													break;
 					}
 

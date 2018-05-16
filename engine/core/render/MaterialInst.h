@@ -105,7 +105,7 @@ namespace Echo
 		void setUniformValue(const String& name, const ShaderParamType& type, void* value);
 
 		// 获取uniform变量的值
-		void* GetuniformValue(const String& name, ShaderParamType type);
+		void* getuniformValue(const String& name, ShaderParamType type);
 
 		// 获取uniform变量
 		uniform* GetUniform(const String& name);
@@ -135,9 +135,6 @@ namespace Echo
 		static void*	createValue2Void(const ShaderParamType& type, const int count = 1);
 		static void*	cloneVoid2Value(const ShaderParamType& type, void* value, const int count = 1);
 		static void		CopyUniformValue(void* dstValue, const ShaderParamType& type, void* srcValue);
-
-		// 是否是全局变量
-		static bool isGlobalUniform(const String& name);
 
 		void*	getUniformValue(const String& name);
 		void	void2s(uniform* param, String& value);

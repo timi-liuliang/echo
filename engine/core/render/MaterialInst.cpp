@@ -7,19 +7,6 @@
 #include "engine/core/render/TextureResManager.h"
 #include <thirdparty/pugixml/pugixml.hpp>
 
-namespace
-{
-	const char* globalUnfiorms[] = {
-		"matW", "matV", "matWV", "matWVP", "matWVPWater", "matWVPSky", "camPos",
-		"CameraPosition", "CameraDirection", "LightArrayInfo", "LightArrayData",
-		"SceneObjectLightParams", "matBoneRows", "fogParam", "heightFogParam",
-		"LMScale1", "LMScale2", "LMUV", "LMSampler1", "LMSampler2", "matWVPSM",
-		"ShadowShade", "SMSampler", "CurrentTime", "ActorLitParam", "RefectSampler",
-		"RefractionSampler", "SceneEnvSampler", "uLightPositions", "uLightDirections",
-		"uLightColors", "uLightParams", "uLightSpot", "offset", "tShadowAlbedo"
-	};
-}
-
 namespace Echo
 {
 	// 克隆
@@ -228,7 +215,7 @@ namespace Echo
 		auto iter = m_unifromParamSetFromFile.begin();
 		for (; iter != m_unifromParamSetFromFile.end(); ++iter)
 		{
-			if (shaderProgram->getUniform(iter->first) && !isGlobalUniform(iter->first))
+			if (shaderProgram->getUniform(iter->first))
 			{
 				m_unifromParamSet[iter->first] = iter->second;
 				iter->second = NULL;
@@ -557,16 +544,6 @@ namespace Echo
 		}
 	}
 
-
-	//是否是全局变量，全局变量在model里面赋值
-	bool MaterialInst::isGlobalUniform(const String& name)
-	{
-		auto begin = std::begin(globalUnfiorms);
-		auto end = std::end(globalUnfiorms);
-		auto it = std::find_if(begin, end, [&name](const char* s) { return !name.compare(s); });
-		return it != end;
-	}
-
 	void MaterialInst::S2Void(const ShaderParamType& type, const String& value, void* dstValue, const int count /* = 1 */)
 	{
 		switch (type)
@@ -832,7 +809,7 @@ namespace Echo
 		}
 	}
 
-	void* MaterialInst::GetuniformValue(const String& name, ShaderParamType type)
+	void* MaterialInst::getuniformValue(const String& name, ShaderParamType type)
 	{
 		if (type == SPT_TEXTURE)
 		{
@@ -1377,7 +1354,6 @@ namespace Echo
 			for (ShaderProgram::UniformArray::iterator it = uniforms->begin(); it != uniforms->end(); it++)
 			{
 				const ShaderProgram::Uniform& suniform = it->second;
-				if (!isGlobalUniform(suniform.m_name) && !GetUniform(suniform.m_name))
 				{
 					uniform* pUnifrom = EchoNew(uniform);
 					pUnifrom->name = suniform.m_name;
@@ -1386,12 +1362,12 @@ namespace Echo
 
 					switch (pUnifrom->type)
 					{
-						case Echo::SPT_INT:		pUnifrom->value = pUnifrom->count > 1 ? EchoNewArray(int, pUnifrom->count) : EchoNew(int(1));					break;
-						case Echo::SPT_FLOAT:	pUnifrom->value = pUnifrom->count > 1 ? EchoNewArray(float, pUnifrom->count) : EchoNew(float(1.f));				break;
-						case Echo::SPT_VEC2:	pUnifrom->value = pUnifrom->count > 1 ? EchoNewArray(Vector2, pUnifrom->count) : EchoNew(Vector2(Vector2::ONE));	break;
-						case Echo::SPT_VEC3:	pUnifrom->value = pUnifrom->count > 1 ? EchoNewArray(Vector3, pUnifrom->count) : EchoNew(Vector3(Vector3::ONE));	break;
-						case Echo::SPT_VEC4:	pUnifrom->value = pUnifrom->count > 1 ? EchoNewArray(Vector4, pUnifrom->count) : EchoNew(Vector4(Vector4::ONE));	break;
-						case Echo::SPT_MAT4:	EchoAssert(false);	break;
+						case Echo::SPT_INT:		pUnifrom->value = pUnifrom->count > 1 ? EchoNewArray(int, pUnifrom->count) : EchoNew(int(1));							break;
+						case Echo::SPT_FLOAT:	pUnifrom->value = pUnifrom->count > 1 ? EchoNewArray(float, pUnifrom->count) : EchoNew(float(1.f));						break;
+						case Echo::SPT_VEC2:	pUnifrom->value = pUnifrom->count > 1 ? EchoNewArray(Vector2, pUnifrom->count) : EchoNew(Vector2(Vector2::ONE));		break;
+						case Echo::SPT_VEC3:	pUnifrom->value = pUnifrom->count > 1 ? EchoNewArray(Vector3, pUnifrom->count) : EchoNew(Vector3(Vector3::ONE));		break;
+						case Echo::SPT_VEC4:	pUnifrom->value = pUnifrom->count > 1 ? EchoNewArray(Vector4, pUnifrom->count) : EchoNew(Vector4(Vector4::ONE));		break;
+						case Echo::SPT_MAT4:	pUnifrom->value = pUnifrom->count > 1 ? EchoNewArray(Matrix4, pUnifrom->count) : EchoNew(Matrix4(Matrix4::IDENTITY));	break;
 						case Echo::SPT_TEXTURE:
 						{
 							pUnifrom->value = EchoNew(int(getTextureNum()));

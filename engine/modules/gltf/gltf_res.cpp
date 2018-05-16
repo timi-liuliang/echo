@@ -161,12 +161,6 @@ namespace Echo
 				return false;
 			}
 
-			if (!loadMeshes(j))
-			{
-				EchoLogError("gltf parse meshes failed when load resource [%s].", m_path.getPath().c_str());
-				return false;
-			}
-
 			if (!loadMaterials(j))
 			{
 				EchoLogError("gltf parse materials failed when load resource [%s].", m_path.getPath().c_str());
@@ -188,6 +182,12 @@ namespace Echo
 			if (!loadTextures(j))
 			{
 				EchoLogError("gltf parse textures failed when load resource [%s].", m_path.getPath().c_str());
+				return false;
+			}
+
+			if (!loadMeshes(j))
+			{
+				EchoLogError("gltf parse meshes failed when load resource [%s].", m_path.getPath().c_str());
 				return false;
 			}
 
@@ -721,7 +721,8 @@ namespace Echo
 			primitive.m_mesh->updateVertexs(vertexData, Box());
 		}
 
-		buildMaterial( meshIdx, primitiveIdx);
+		if (!buildMaterial(meshIdx, primitiveIdx))
+			return false;
 
 		return true;
 	}
@@ -743,12 +744,13 @@ namespace Echo
 			const MeshVertexFormat& vertexFormat = primitive.m_mesh->getVertexData().getFormat();
 			primitive.m_materialInst->setMacro("HAS_NORMALS", vertexFormat.m_isUseNormal);
 
-			// params
-			primitive.m_materialInst->setUniformValue("u_MetallicRoughnessValues",ShaderParamType::SPT_VEC2, &Vector2(matInfo.m_pbr.m_metallicFactor, matInfo.m_pbr.m_roughnessFactor));
-			primitive.m_materialInst->setUniformValue("u_BaseColorFactor",ShaderParamType::SPT_VEC4, matInfo.m_pbr.m_baseColorFactor);
-
 			// active
-			primitive.m_materialInst->applyLoadedData();
+			if (!primitive.m_materialInst->applyLoadedData())
+				return false;
+
+			// params
+			primitive.m_materialInst->setUniformValue("u_MetallicRoughnessValues", ShaderParamType::SPT_VEC2, &Vector2(matInfo.m_pbr.m_metallicFactor, matInfo.m_pbr.m_roughnessFactor));
+			primitive.m_materialInst->setUniformValue("u_BaseColorFactor", ShaderParamType::SPT_VEC4, matInfo.m_pbr.m_baseColorFactor);
 
 			//primitive.m_materialInst->setTexture(0, m_textureRes.getPath());
 		}
