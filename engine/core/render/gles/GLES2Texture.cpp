@@ -230,11 +230,7 @@ namespace Echo
 	bool GLES2Texture::loadToGPU()
 	{ 
 		// 如果句柄已存在，说明纹理已加载到GPU，不需再加载
-#ifdef ECHO_RENDER_THREAD
-		if (m_gpu_proxy->m_hTexture)
-#else
 		if (m_hTexture)
-#endif
 			return true;
 
 		// 缺少内存数据，无法加载到GPU

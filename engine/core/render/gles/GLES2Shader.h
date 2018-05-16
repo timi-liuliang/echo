@@ -1,5 +1,4 @@
-#ifndef __ECHO_GLES2SHADER_H__
-#define __ECHO_GLES2SHADER_H__
+#pragma once
 
 #include "Shader.h"
 
@@ -25,10 +24,6 @@ namespace Echo
 
 		GLenum GLenumMap(const String& name);
 
-#ifdef ECHO_RENDER_THREAD
-	private:
-		GLES2ShaderGPUProxy* m_proxy;
-#else
 	public:
 		void setProgramHandle(ui32 hProgram);
 		GLuint getShaderHandle() const;
@@ -36,9 +31,6 @@ namespace Echo
 	private:
 		GLuint			m_hShader;
 		GLuint			m_hProgram;
-#endif
 	};
 
 }
-
-#endif

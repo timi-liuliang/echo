@@ -435,18 +435,18 @@ namespace Echo
 			String ret;
 			switch(semantic)
 			{
-			case RenderInput::VS_POSITION:		ret = "inPosition";			break;
-			case RenderInput::VS_BLENDINDICES:	ret = "inBlendIndices";		break;
-			case RenderInput::VS_BLENDWEIGHTS:	ret = "inBlendWeights";		break;
-			case RenderInput::VS_COLOR:			ret = "inColor";			break;
-			case RenderInput::VS_NORMAL:		ret = "inNormal";			break;
-			case RenderInput::VS_TEXCOORD0:		ret = "inTexCoord";			break;
-			case RenderInput::VS_TEXCOORD1:		ret = "inTexCoord1";		break;
-			case RenderInput::VS_TANGENT:		ret = "inTangent";			break;
-			case RenderInput::VS_BINORMAL:		ret = "inBinormal";			break;
-			case RenderInput::VS_SCREEN_POS_NDC:	ret = "ScreenPosNDC";					break;
-			case RenderInput::VS_TAN_EYE_ANGLE_R:	ret = "TAN_EYE_ANGLE_R";				break;
-			case RenderInput::VS_TAN_EYE_ANGLE_G:	ret = "TAN_EYE_ANGLE_G";				break;
+			case RenderInput::VS_POSITION:			ret = "a_Position";			break;
+			case RenderInput::VS_BLENDINDICES:		ret = "a_BlendIndices";		break;
+			case RenderInput::VS_BLENDWEIGHTS:		ret = "a_BlendWeights";		break;
+			case RenderInput::VS_COLOR:				ret = "a_Color";			break;
+			case RenderInput::VS_NORMAL:			ret = "a_Normal";			break;
+			case RenderInput::VS_TEXCOORD0:			ret = "a_UV";				break;
+			case RenderInput::VS_TEXCOORD1:			ret = "a_UV1";				break;
+			case RenderInput::VS_TANGENT:			ret = "a_Tangent";			break;
+			case RenderInput::VS_BINORMAL:			ret = "a_Binormal";			break;
+			case RenderInput::VS_SCREEN_POS_NDC:	ret = "ScreenPosNDC";		break;
+			case RenderInput::VS_TAN_EYE_ANGLE_R:	ret = "TAN_EYE_ANGLE_R";	break;
+			case RenderInput::VS_TAN_EYE_ANGLE_G:	ret = "TAN_EYE_ANGLE_G";	break;
 			case RenderInput::VS_TAN_EYE_ANGLE_B:	ret = "TAN_EYE_ANGLE_B";
 			}
 			return ret;

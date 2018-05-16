@@ -379,7 +379,7 @@ void main()
 
 // Ä¬ÈÏ²ÄÖÊ
 static const char* g_generalPbrMetalicRoughnessMaterial = R"(
-<?xml version = \"1.0\" encoding = \"GB2312\"?>
+<?xml version = \"1.0\" encoding = \"utf-8\"?>
 <material> 
 	<vs>VS_PLACE_HOLDER</vs>
 	<ps>PS_PLACE_HOLDER</ps>
@@ -407,7 +407,7 @@ static const char* g_generalPbrMetalicRoughnessMaterial = R"(
 	<Texture>
 		<stage no = \"0\" sampler = \"BiLinearMirror\" />
 	</Texture>
-</material>";
+</material>
 )";
 
 namespace Echo

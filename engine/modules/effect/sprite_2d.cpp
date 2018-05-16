@@ -12,8 +12,8 @@ static const char* g_spriteDefaultMaterial = "\
 <material> \
 <vs>#version 100\n\
 \n\
-attribute vec3 inPosition;\n\
-attribute vec2 inTexCoord;\n\
+attribute vec3 a_Position;\n\
+attribute vec2 a_UV;\n\
 \n\
 uniform mat4 matWVP;\n\
 \n\
@@ -21,10 +21,10 @@ varying vec2 texCoord;\n\
 \n\
 void main(void)\n\
 {\n\
-	vec4 position = matWVP * vec4(inPosition, 1.0);\n\
+	vec4 position = matWVP * vec4(a_Position, 1.0);\n\
 	gl_Position = position;\n\
 	\n\
-	texCoord = inTexCoord;\n\
+	texCoord = a_UV;\n\
 }\n\
 </vs>\
 <ps>#version 100\n\

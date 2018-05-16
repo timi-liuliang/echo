@@ -12,8 +12,8 @@ static const char* g_live2dDefaultMaterial = R"(
 <material>
 <vs>#version 100
 
-attribute vec3 inPosition;
-attribute vec2 inTexCoord;
+attribute vec3 a_Position;
+attribute vec2 a_UV;
 
 uniform mat4 u_WorldMatrix;
 
@@ -21,10 +21,10 @@ varying vec2 texCoord;
 
 void main(void)
 {
-	vec4 position = u_WorldMatrix * vec4(inPosition, 1.0);
+	vec4 position = u_WorldMatrix * vec4(a_Position, 1.0);
 	gl_Position = position;
 
-	texCoord = inTexCoord;
+	texCoord = a_UV;
 }
 </vs>
 <ps>#version 100

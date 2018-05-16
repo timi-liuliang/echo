@@ -16,21 +16,14 @@ namespace Echo
 {
 	GLES2ShaderProgram::GLES2ShaderProgram( Material* material)
 		: ShaderProgram( material)
-#ifdef ECHO_RENDER_THREAD
-		, m_gpu_proxy(EchoNew(GLES2ShaderProgramGPUProxy))
-#endif
 	{
 		m_attribLocationMapping.assign(-1);
 
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2ShaderProgramTaskCreateProgram>::CreateTask(m_gpu_proxy);
-#else
 		m_hProgram = OGLESDebug(glCreateProgram());
 		if (!m_hProgram)
 		{
 			EchoException("Create GLES2ShaderProgram failed.");
 		}
-#endif
 		m_preRenderInput = NULL;
 	}
 
@@ -44,13 +37,8 @@ namespace Echo
 		Shader* pPixelShader = detachShader(Shader::ST_PIXELSHADER);
 		EchoSafeDelete(pPixelShader, Shader);
 
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2ShaderProgramTaskDestroyProxy>::CreateTask(m_gpu_proxy);
-		m_gpu_proxy = nullptr;
-#else
 		OGLESDebug(glDeleteProgram(m_hProgram));
 		m_hProgram = 0;
-#endif
 	}
 	
 	bool GLES2ShaderProgram::attachShader(Shader* pShader)
@@ -61,12 +49,8 @@ namespace Echo
 
 		EchoAssert(pShader);
 		GLES2Shader* pGLES2Shader = (GLES2Shader*)pShader;
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2ShaderProgramTaskAttachShader>::CreateTask(m_gpu_proxy, pGLES2Shader->m_proxy);
-#else
 		ui32 hShader = pGLES2Shader->getShaderHandle();
 		OGLESDebug(glAttachShader(m_hProgram, hShader));
-#endif
 
 		return true;
 	}
@@ -77,12 +61,8 @@ namespace Echo
 		if(pShader)
 		{
 			GLES2Shader* pGLES2Shader = (GLES2Shader*)pShader;
-#ifdef ECHO_RENDER_THREAD
-			TRenderTask<GLES2ShaderProgramTaskDetachShader>::CreateTask(m_gpu_proxy, pGLES2Shader->m_proxy);
-#else
 			ui32 hShader = pGLES2Shader->getShaderHandle();
 			OGLESDebug(glDetachShader(m_hProgram, hShader));
-#endif
 		}
 
 		return pShader;
@@ -90,21 +70,6 @@ namespace Echo
 
 	bool GLES2ShaderProgram::linkShaders()
 	{
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2ShaderProgramTaskLinkShaders>::CreateTask(m_gpu_proxy);
-		FlushRenderTasks();
-
-		if (m_gpu_proxy->m_link_status != 1)
-		{
-			return false;
-		}
-
-		TRenderTask<GLES2ShaderProgramTaskUniformReflection>::CreateTask(m_gpu_proxy, &m_uniforms);
-		FlushRenderTasks();
-
-		TRenderTask<GLES2ShaderProgramTaskAttribReflection>::CreateTask(m_gpu_proxy, &m_attribLocationMapping);
-		FlushRenderTasks();
-#else
 		OGLESDebug(glLinkProgram(m_hProgram));
 
 		// Check the status of the link.
@@ -166,7 +131,6 @@ namespace Echo
 				m_attribLocationMapping[i] = loc;
 			}
 		}
-#endif
 
 		m_bLinked = true;
 
@@ -176,37 +140,6 @@ namespace Echo
 	// 应用变量
 	void GLES2ShaderProgram::bindUniforms()
 	{
-#ifdef ECHO_RENDER_THREAD
-
-	#ifndef UNIFORM_OPTIMIZE
-		TRenderTask<GLES2ShaderProgramTaskBindUniforms>::CreateTask(m_gpu_proxy, m_uniforms);
-	#else
-		size_t cacheOffset = g_uniform_cache->BeginAppendUniformInfo();
-
-		for (ShaderProgram::UniformArray::const_iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++)
-		{
-			ShaderProgram::Uniform& uniform = const_cast<ShaderProgram::Uniform&>(it->second);
-			if (uniform.m_value)
-			{
-				if (uniform.m_isDirty && uniform.m_type != SPT_UNKNOWN)
-				{
-					g_uniform_cache->AppendUniformInfo(uniform.m_type, uniform.m_location, uniform.m_count, uniform.m_origin_value);
-
-					// 修改状态
-					uniform.m_isDirty = false;
-				}
-			}
-			else
-			{
-				EchoLogError("Shader param [%s] is NULL, material name [%s]", uniform.m_name.c_str(), m_material->getName().c_str());
-			}
-		}
-
-		size_t cacheCount = g_uniform_cache->EndAppendUniformInfo();
-		TRenderTask<GLES2ShaderProgramTaskBindUniforms>::CreateTask(m_gpu_proxy, cacheOffset, cacheCount);
-	#endif
-
-#else
 		for (UniformArray::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++)
 		{
 			Uniform& uniform = it->second;
@@ -235,7 +168,6 @@ namespace Echo
 				EchoLogError("Shader param [%s] is NULL, Material [%s]", uniform.m_name.c_str(), m_material->getName().c_str());
 			}
 		}
-#endif
 	}
 	
 	// 绑定着色器
@@ -246,11 +178,8 @@ namespace Echo
 		// Install the shader program as part of the current rendering state.
 		if ((ECHO_DOWN_CAST<GLES2Renderer*>(Renderer::instance()))->bindShaderProgram(this))
 		{
-#ifdef ECHO_RENDER_THREAD
-			TRenderTask<GLES2ShaderProgramTaskUseProgram>::CreateTask(m_gpu_proxy);
-#else
 			OGLESDebug(glUseProgram(m_hProgram));
-#endif
+
 			// 所有变量设置脏标记
 			for( UniformArray::iterator it=m_uniforms.begin(); it!=m_uniforms.end(); it++)
 			{
@@ -284,5 +213,4 @@ namespace Echo
 	{
 		return m_material->getName();
 	}
-
 }

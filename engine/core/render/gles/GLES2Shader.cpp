@@ -1,18 +1,14 @@
 #include "GLES2RenderStd.h"
 #include "GLES2Shader.h"
 #include <engine/core/Util/Exception.h>
+#include "engine/core/io/DataStream.h"
 #include "Render/RenderThread.h"
 #include "Render/RenderTask.h"
-#include "GPUProxy/GLES2ShaderGPUProxy.h"
-#include "GLES2ShaderTasks.h"
 
 namespace Echo
 {
 	GLES2Shader::GLES2Shader(ShaderType type, const ShaderDesc& desc, const String& filename)
 		: Shader(type, desc, filename)
-#ifdef ECHO_RENDER_THREAD
-		, m_proxy(EchoNew(GLES2ShaderGPUProxy))
-#endif
 	{
 		// 替换include文件
 		replaceInclude();
@@ -21,24 +17,17 @@ namespace Echo
 
 	GLES2Shader::GLES2Shader(ShaderType type, const ShaderDesc& desc, const char* srcBuffer, ui32 size)
 		: Shader(type, desc, srcBuffer, size)
-#ifdef ECHO_RENDER_THREAD
-		, m_proxy(EchoNew(GLES2ShaderGPUProxy))
-#endif
 	{
 		create("");
 	}
 
 	GLES2Shader::~GLES2Shader()
 	{
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2ShaderTaskDestroyProxy>::CreateTask(m_proxy);
-#else
 		if (m_hShader)
 		{
 			OGLESDebug(glDeleteShader(m_hShader));
 			m_hShader = 0;
 		}
-#endif
 	}
 
 	// 替换include
@@ -80,9 +69,6 @@ namespace Echo
 
 	void GLES2Shader::create(const String& filename)
 	{
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2ShaderTaskCreate>::CreateTask(m_proxy, filename, m_shaderType, m_srcData, m_desc);
-#else
 		if (!m_desc.macros.empty())
 		{
 			m_desc.macros = "\r\n" + m_desc.macros + "\r\n";
@@ -169,13 +155,12 @@ namespace Echo
 			else
 				EchoException("Compile Shader [%s] Error: \n%s", filename.c_str(), errMsg.c_str());
 		}
-#endif
+
 		// 移除数据
 		m_srcData.clear();
 		m_srcData.shrink_to_fit();
 	}
 
-#ifndef ECHO_RENDER_THREAD
 	void GLES2Shader::setProgramHandle(ui32 hProgram)
 	{
 		m_hProgram = hProgram;
@@ -185,5 +170,4 @@ namespace Echo
 	{
 		return m_hShader;
 	}
-#endif
 }
