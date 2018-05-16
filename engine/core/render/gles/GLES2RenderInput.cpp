@@ -5,13 +5,11 @@
 #include "GLES2Mapping.h"
 #include "GLES2GPUBuffer.h"
 #include "GLES2Loader.h"
-#include "GLES2RendererProxy.h"
 #include <engine/core/Util/AssertX.h>
 #include <engine/core/Util/Exception.h>
 #include "Render/PixelFormat.h"
 #include "Render/RenderThread.h"
 #include "Render/RenderTask.h"
-#include "GLES2RendererTasks.h"
 #include "GLES2Mapping.h"
 
 

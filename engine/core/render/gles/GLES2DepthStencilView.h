@@ -1,5 +1,4 @@
-#ifndef __ECHO_GLES2DEPTHSTENCILVIEW_H__
-#define __ECHO_GLES2DEPTHSTENCILVIEW_H__
+#pragma once
 
 #include "Render/DepthStencilView.h"
 
@@ -17,16 +16,9 @@ namespace Echo
 		void		onAttached();
 		void		onDetached();
 
-#ifdef ECHO_RENDER_THREAD
-	private:
-		GLES2DepthStencilViewGPUProxy* m_gpuProxy;
-#else
 		GLuint		getRBOHandle() const;
 
 	private:
 		GLuint		m_hRBO;
-#endif
 	};
 }
-
-#endif

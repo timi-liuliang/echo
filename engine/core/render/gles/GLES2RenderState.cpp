@@ -3,7 +3,6 @@
 #include "GLES2Mapping.h"
 #include "GLES2Texture.h"
 #include "Render/RenderThread.h"
-#include "RenderTask/GLES2RenderStateTasks.h"
 #include "Render/Renderer.h"
 #include "Render/RenderTask.h"
 #include "engine/core/Util/Exception.h"
@@ -97,9 +96,6 @@ namespace Echo
 			blendParams.alpha_mask = true;
 		}
 
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2StateTaskActiveBlend>::CreateTask(blendParams);
-#else
 		if (blendParams.isChangeA2C)
 		{
 			if (blendParams.isA2CEnable)
@@ -143,7 +139,6 @@ namespace Echo
 		{
 			OGLESDebug(glBlendColor((GLclampf)blendParams.blendFactor.r, (GLclampf)blendParams.blendFactor.g, (GLclampf)blendParams.blendFactor.b, (GLclampf)blendParams.blendFactor.a));
 		}
-#endif
 	}
 
 	void GLES2BlendState::create()
@@ -277,9 +272,6 @@ namespace Echo
 			depthStencilParams.isChangeStencilTest = true;
 		}
 
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2StateTaskActiveDepthStencil>::CreateTask(depthStencilParams);
-#else
 		if (depthStencilParams.isChangeDepthTest)
 		{
 			if (depthStencilParams.isEnableDepthTest)
@@ -343,7 +335,6 @@ namespace Echo
 				OGLESDebug(glDisable(GL_STENCIL_TEST));
 			}
 		}
-#endif
 	}
 
 	void GLES2DepthStencilState::create()
@@ -388,9 +379,6 @@ namespace Echo
 			currDesc = &pCurState->getDesc();
 		}
 
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2StateTaskActiveRasterizer>::CreateTask(m_desc, currDesc, m_glFrontFace);
-#else
 		if (currDesc)
 		{
 			if (m_desc.cullMode != currDesc->cullMode)
@@ -505,7 +493,6 @@ namespace Echo
 				OGLESDebug(glDisable(GL_SCISSOR_TEST));
 			}
 		}
-#endif
 	}
 
 	// 创建光栅化状态
@@ -536,11 +523,6 @@ namespace Echo
 	// 析构函数
 	GLES2SamplerState::~GLES2SamplerState()
 	{
-#ifdef ECHO_RENDER_THREAD
-		// attention!
-		// 没有放到渲染线程释放是因为Sampler对象只在Render对象destroy时释放。
-		EchoSafeDelete(m_sampler_proxy, GLES2SamplerStateGPUProxy);
-#endif
 	}
 
 	// 激活
@@ -554,9 +536,6 @@ namespace Echo
 			curr_desc = &m_desc;
 		}
 
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2RenderStateTaskActiveSampler>::CreateTask(m_sampler_proxy, curr_desc, prev_desc);
-#else
 		if (prev_desc && curr_desc)
 		{
 			// only 2D texture type.
@@ -587,49 +566,11 @@ namespace Echo
 			OGLESDebug(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, m_glAddrModeU));
 			OGLESDebug(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_glAddrModeV));
 		}
-#endif
 	}
 
 	// 新建
 	void GLES2SamplerState::create()
 	{
-#ifdef ECHO_RENDER_THREAD
-		m_sampler_proxy = EchoNew(GLES2SamplerStateGPUProxy);
-
-		if(m_desc.minFilter == FO_NONE)
-		{
-			m_sampler_proxy->m_glMinFilter = GL_NEAREST;
-		}
-		else if(m_desc.minFilter == FO_LINEAR || m_desc.minFilter == FO_ANISOTROPIC)
-		{
-			if(m_desc.mipFilter == FO_NONE)
-				m_sampler_proxy->m_glMinFilter = GL_LINEAR;
-			else if(m_desc.mipFilter == FO_LINEAR || m_desc.mipFilter == FO_ANISOTROPIC)
-				m_sampler_proxy->m_glMinFilter = GL_LINEAR_MIPMAP_LINEAR;
-			else
-				m_sampler_proxy->m_glMinFilter = GL_LINEAR_MIPMAP_NEAREST;
-		}
-		else
-		{
-			if(m_desc.mipFilter == FO_NONE)
-				m_sampler_proxy->m_glMinFilter = GL_NEAREST;
-			else if(m_desc.mipFilter == FO_LINEAR || m_desc.mipFilter == FO_ANISOTROPIC)
-				m_sampler_proxy->m_glMinFilter = GL_NEAREST_MIPMAP_LINEAR;
-			else
-				m_sampler_proxy->m_glMinFilter = GL_NEAREST_MIPMAP_NEAREST;
-		}
-
-		if(m_desc.magFilter == FO_NONE)
-			m_sampler_proxy->m_glMagFilter = GL_NEAREST;
-		else if(m_desc.magFilter == FO_LINEAR || m_desc.magFilter == FO_ANISOTROPIC)
-			m_sampler_proxy->m_glMagFilter = GL_LINEAR;
-		else
-			m_sampler_proxy->m_glMagFilter = GL_NEAREST;
-
-		m_sampler_proxy->m_glAddrModeU = GLES2Mapping::MapAddressMode(m_desc.addrUMode);
-		m_sampler_proxy->m_glAddrModeV = GLES2Mapping::MapAddressMode(m_desc.addrVMode);
-		m_sampler_proxy->m_glAddrModeW = GLES2Mapping::MapAddressMode(m_desc.addrWMode);
-#else
 		if (m_desc.minFilter == FO_NONE)
 		{
 			m_glMinFilter = 0;
@@ -663,35 +604,8 @@ namespace Echo
 		m_glAddrModeU = GLES2Mapping::MapAddressMode(m_desc.addrUMode);
 		m_glAddrModeV = GLES2Mapping::MapAddressMode(m_desc.addrVMode);
 		m_glAddrModeW = GLES2Mapping::MapAddressMode(m_desc.addrWMode);
-#endif
 	}
 
-#ifdef ECHO_RENDER_THREAD
-	GLint GLES2SamplerState::getGLMinFilter() const
-	{
-		return m_sampler_proxy->m_glMinFilter;
-	}
-
-	GLint GLES2SamplerState::getGLMagFilter() const
-	{
-		return m_sampler_proxy->m_glMagFilter;
-	}
-
-	GLint GLES2SamplerState::getGLAddrModeU() const
-	{
-		return m_sampler_proxy->m_glAddrModeU;
-	}
-
-	GLint GLES2SamplerState::getGLAddrModeV() const
-	{
-		return m_sampler_proxy->m_glAddrModeV;
-	}
-
-	GLint GLES2SamplerState::getGLAddrModeW() const
-	{
-		return m_sampler_proxy->m_glAddrModeW;
-	}
-#else
 	GLint GLES2SamplerState::getGLMinFilter() const
 	{
 		return m_glMinFilter;
@@ -716,5 +630,4 @@ namespace Echo
 	{
 		return m_glAddrModeW;
 	}
-#endif
 }

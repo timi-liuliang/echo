@@ -5,8 +5,6 @@
 #include "GLES2Mapping.h"
 #include "GLES2Loader.h"
 #include "GLES2Renderer.h"
-#include "GLES2GPUBufferGPUProxy.h"
-#include "GLES2GPUBufferTasks.h"
 #include <engine/core/Util/Exception.h>
 #include <engine/core/Util/LogManager.h>
 

@@ -14,9 +14,6 @@
 #include "Render/Viewport.h"
 #include "Render/RenderThread.h"
 #include "Render/RenderTask.h"
-#include "GLES2RendererProxy.h"
-#include "GLES2RendererTasks.h"
-#include "GLES2TextureGPUProxy.h"
 
 namespace Echo
 {
@@ -77,10 +74,6 @@ namespace Echo
 		}
 #endif
 
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2RenderTaskMakeContextCurrent>::CreateTask();
-#endif
-
 #if defined(ECHO_LOAD_GLES_EXT)
 
 		EchoLogDebug("Load GLES extensions ...");
@@ -99,12 +92,7 @@ namespace Echo
 		m_screenWidth = config.screenWidth;
 		m_screenHeight = config.screenHeight;
 
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2RenderTaskCheckExtension>::CreateTask(this);
-		FlushRenderTasks();
-#else
 		checkOpenGLExtensions();
-#endif
 
 		if (m_deviceFeature.supportGLES30())
 		{
@@ -212,11 +200,7 @@ namespace Echo
 	void GLES2Renderer::setViewport(Viewport* pViewport)
 	{
 		EchoAssert(pViewport);
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2RenderTaskSetViewport>::CreateTask(pViewport->getLeft(), pViewport->getTop(), pViewport->getWidth(), pViewport->getHeight());
-#else
 		OGLESDebug(glViewport(pViewport->getLeft(), pViewport->getTop(), pViewport->getWidth(), pViewport->getHeight()));
-#endif
 	}
 
 	ui32 GLES2Renderer::getMaxStageNum() const
@@ -226,23 +210,14 @@ namespace Echo
 
 	void GLES2Renderer::scissor(ui32 left, ui32 top, ui32 width, ui32 height)
 	{
-#ifdef ECHO_RENDER_THREAD
-		Viewport* pViewport = m_pFrameBuffer->getViewport();
-		TRenderTask<GLES2RenderTaskScissor>::CreateTask(left, pViewport->getHeight() - top - height, width, height);
-#else
 		OGLESDebug(glEnable(GL_SCISSOR_TEST));
 		Viewport* pViewport = m_pFrameBuffer->getViewport();
 		OGLESDebug(glScissor(left, pViewport->getHeight() - top - height, width, height));
-#endif
 	}
 
 	void GLES2Renderer::endScissor()
 	{
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2RenderTaskEndScissor>::CreateTask();
-#else
 		OGLESDebug(glDisable(GL_SCISSOR_TEST));
-#endif
 	}
 
 	// 设置指定槽纹理
@@ -300,12 +275,8 @@ namespace Echo
 //		if (m_dirtyTexSlot || slotInfo.m_target != target || slotInfo.m_texture != texture || needReset)
 		{
 			m_dirtyTexSlot = false;
-#ifdef ECHO_RENDER_THREAD
-			TRenderTask<GLES2RenderTaskBindTexture>::CreateTask(slot, target, texture ? texture->m_gpu_proxy : NULL);
-#else
 			OGLESDebug(glActiveTexture(GL_TEXTURE0 + slot));
 			OGLESDebug(glBindTexture(target, texture->m_hTexture));
-#endif
 			slotInfo.m_target = target;
 			slotInfo.m_texture = texture;
 		}
@@ -366,11 +337,7 @@ namespace Echo
 			Byte* idxOffset = 0;
 			idxOffset += pInput->getStartIndex() * idxStride;
 
-#ifdef ECHO_RENDER_THREAD
-			TRenderTask<GLES2RenderTaskDrawElements>::CreateTask(glTopologyType, idxCount, idxType, idxOffset);
-#else
 			OGLESDebug(glDrawElements(glTopologyType, idxCount, idxType, idxOffset));
-#endif
 
 			faceCount = idxCount / 3;
 		}
@@ -380,11 +347,7 @@ namespace Echo
 			if (vertCount > 0)
 			{
 				ui32 startVert = pInput->getStartVertex();
-#ifdef ECHO_RENDER_THREAD
-				TRenderTask<GLES2RenderTaskDrawArrays>::CreateTask(glTopologyType, startVert, vertCount);
-#else
 				OGLESDebug(glDrawArrays(glTopologyType, startVert, vertCount));
-#endif
 				faceCount = vertCount / 3;
 			}
 			else
@@ -429,11 +392,7 @@ namespace Echo
 	{
 		if (!m_isVertexAttribArrayEnable[attribLocation])
 		{
-#ifdef ECHO_RENDER_THREAD
-			TRenderTask<GLES2RenderTaskEnableVertexAttribArray>::CreateTask(attribLocation);
-#else
 			OGLESDebug(glEnableVertexAttribArray(attribLocation));
-#endif
 			m_isVertexAttribArrayEnable[attribLocation] = true;
 		}
 	}
@@ -442,11 +401,7 @@ namespace Echo
 	{
 		if (m_isVertexAttribArrayEnable[attribLocation])
 		{
-#ifdef ECHO_RENDER_THREAD
-			TRenderTask<GLES2RenderTaskDisableVertexAttribArray>::CreateTask(attribLocation);
-#else
 			OGLESDebug(glDisableVertexAttribArray(attribLocation));
-#endif
 			m_isVertexAttribArrayEnable[attribLocation] = false;
 		}
 	}
@@ -776,10 +731,6 @@ namespace Echo
 	// 创建渲染上下文
 	bool GLES2Renderer::createRenderContext(const RenderCfg& config)
 	{
-#ifndef ECHO_RENDER_THREAD
-		g_render_thread->setThreadRendering(false);
-#endif
-
 		m_hWnd = (HWND)config.windowHandle;
 		m_hDC = GetDC(m_hWnd);
 

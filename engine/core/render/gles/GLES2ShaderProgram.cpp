@@ -9,8 +9,6 @@
 #include "Render/RenderThread.h"
 #include "Render/RenderTask.h"
 #include "Render/UniformCache.h"
-#include "GLES2ShaderProgramTasks.h"
-#include "GLES2ShaderProgramGPUProxy.h"
 
 #define UNIFORM_OPTIMIZE
 

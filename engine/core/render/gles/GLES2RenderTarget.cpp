@@ -5,9 +5,6 @@
 #include "GLES2Mapping.h"
 #include "GLES2RenderTarget.h"
 #include "GLES2Texture.h"
-#include "GLES2TextureGPUProxy.h"
-#include "GLES2TargetGPUProxy.h"
-#include "GLES2TargetTasks.h"
 #include "engine/core/Util/PathUtil.h"
 
 namespace Echo

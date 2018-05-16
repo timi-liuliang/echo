@@ -10,8 +10,6 @@
 #include "GLES2Texture.h"
 #include "GLES2Mapping.h"
 #include <iostream>
-#include "GLES2TextureGPUProxy.h"
-#include "GLES2TextureTasks.h"
 
 namespace Echo
 {

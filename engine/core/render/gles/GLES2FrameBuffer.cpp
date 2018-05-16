@@ -6,16 +6,6 @@
 
 namespace Echo
 {
-#ifdef ECHO_RENDER_THREAD
-	GLES2FrameBuffer::GLES2FrameBuffer()
-	{
-	}
-	
-
-	GLES2FrameBuffer::~GLES2FrameBuffer()
-	{
-	}
-#else
 	GLES2FrameBuffer::GLES2FrameBuffer()
 	{
 		OGLESDebug(glGenFramebuffers(1, &m_hFBO));
@@ -125,5 +115,4 @@ namespace Echo
 		}
 #endif
 	}
-#endif
 }

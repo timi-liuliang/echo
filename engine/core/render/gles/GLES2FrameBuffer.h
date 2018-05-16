@@ -12,7 +12,6 @@ namespace Echo
 		GLES2FrameBuffer();
 		~GLES2FrameBuffer();
 
-#ifndef ECHO_RENDER_THREAD
 		GLES2FrameBuffer(GLuint hFBO);
 	public:
 		void			clear(Dword clearFlags, const Color& color, float depth, int stencil);
@@ -23,6 +22,5 @@ namespace Echo
 
 	private:
 		GLuint			m_hFBO;
-#endif
 	};
 }

@@ -4,8 +4,6 @@
 #include "GLES2Renderer.h"
 #include "GLES2RenderTargetView.h"
 #include "GLES2Mapping.h"
-#include "GLES2TargetViewGPUProxy.h"
-#include "GLES2TargetViewTasks.h"
 #include "engine/core/Util/Exception.h"
 
 
