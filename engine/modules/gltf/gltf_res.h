@@ -5,6 +5,7 @@
 #include "engine/core/io/DataStream.h"
 #include "engine/core/scene/node.h"
 #include "engine/core/resource/Res.h"
+#include "engine/core/render/MaterialInst.h"
 #include <nlohmann/json.hpp>
 
 namespace Echo
@@ -42,6 +43,7 @@ namespace Echo
 		}					m_mode = Triangles; // each attribute is mapped with his name and accessor index to the data
 		GltfAttributes		m_attributes;
 		Mesh*				m_mesh = nullptr;	// geometry Data for render
+		MaterialInst*		m_materialInst = nullptr;
 	};
 
 	struct GltfMeshInfo
@@ -270,6 +272,7 @@ namespace Echo
 		bool loadSamplers(nlohmann::json& json);
 		bool loadTextures(nlohmann::json& json);
 		bool buildPrimitiveData(int meshIdx, int primitiveIdx);
+		bool buildMaterial(int meshIdx, int primitiveIdx);
 		Node* createNode(Node* parent, int idx);
 	};
 	typedef Echo::ResRef<Echo::GltfRes> GltfResPtr;

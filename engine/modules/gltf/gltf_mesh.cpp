@@ -11,10 +11,10 @@ namespace Echo
 {
 	GltfMesh::GltfMesh()
 		: m_assetPath("", ".gltf")
-		, m_materialInst(nullptr)
 		, m_renderable(nullptr)
 		, m_meshIdx(-1)
 		, m_primitiveIdx(-1)
+		, m_materialInst(nullptr)
 	{
 	}
 
@@ -71,13 +71,9 @@ namespace Echo
 		{
 			clearRenderable();
 
-			// material
-			m_materialInst = MaterialInst::create();
-			m_materialInst->setOfficialMaterialContent( GeneralMaterial::getPbrMetalicRoughnessContent());
-			m_materialInst->setRenderStage("Transparent");
-			m_materialInst->applyLoadedData();
-
 			Mesh* mesh = m_asset->m_meshes[m_meshIdx].m_primitives[m_primitiveIdx].m_mesh;
+			m_materialInst = MaterialInst::create();
+			m_materialInst->cloneFromTemplate(m_asset->m_meshes[m_meshIdx].m_primitives[m_primitiveIdx].m_materialInst);
 			m_renderable = Renderable::create( mesh, m_materialInst, this);
 		}
 	}
@@ -109,6 +105,5 @@ namespace Echo
 	void GltfMesh::clearRenderable()
 	{
 		EchoSafeRelease(m_renderable);
-		EchoSafeRelease(m_materialInst);
 	}
 }

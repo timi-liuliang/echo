@@ -14,7 +14,6 @@ namespace Echo
 	*/
 	class MaterialInst
 	{
-		friend class Model;
 		typedef map<int, TextureRes*>::type TextureMap;
 		typedef map<int, TextureRes*>::type::iterator TextureMapItor;
 		typedef map<int, String>::type TextureNameMap;
@@ -103,7 +102,7 @@ namespace Echo
 		bool isUniformExist(const String& name);
 
 		// 修改uinifrom变量
-		void ModifyUniformParam(const String& name, const ShaderParamType& type, void* value);
+		void setUniformValue(const String& name, const ShaderParamType& type, void* value);
 
 		// 获取uniform变量的值
 		void* GetuniformValue(const String& name, ShaderParamType type);
@@ -141,18 +140,11 @@ namespace Echo
 		static bool isGlobalUniform(const String& name);
 
 		void*	getUniformValue(const String& name);
-		void	modifyUniformValue(const String& name, void* value);
 		void	void2s(uniform* param, String& value);
 		void	S2Void(const ShaderParamType& type, const String& value, void* dstValue, const int count = 1);
 
 		// 是否使用了宏定义
 		bool isMacroUsed(const String& macro);
-
-		// 是否提交到主渲染队列
-		bool isSubmitToStageRenderQueue() { return m_isSubmitToStageRenderQueue; }
-
-		// 设置是否提交到主渲染队列
-		void setSubmitToStageRenderQueue(bool isSubmitToStageRenderQueue) { m_isSubmitToStageRenderQueue = isSubmitToStageRenderQueue; }
 
 #ifdef ECHO_EDITOR_MODE
 		// 设置渲染状态
@@ -206,9 +198,9 @@ namespace Echo
 		TextureNameMap 		m_TexturesName;
 		int					m_TextureCount;
 
-		bool				m_isHaveCustomBlend;
-		BlendState*			m_blendState;
-		BlendState::BlendDesc	 m_blendDesc;
+		bool							m_isHaveCustomBlend;
+		BlendState*						m_blendState;
+		BlendState::BlendDesc			m_blendDesc;
 
 		bool							m_isHaveCustomRasterizer;
 		RasterizerState*				m_rasterizerState;
@@ -217,6 +209,5 @@ namespace Echo
 		bool								m_isHaveCustomDepthStencil;
 		DepthStencilState*					m_depthStencil;
 		DepthStencilState::DepthStencilDesc m_depthStencilDesc;
-		bool				m_isSubmitToStageRenderQueue;
 	};
 }

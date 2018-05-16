@@ -1,5 +1,6 @@
 #include "gltf_res.h"
 #include "gltf_mesh.h"
+#include "gltf_material.h"
 #include "engine/core/io/DataStream.h"
 #include "engine/core/util/LogManager.h"
 #include "engine/core/util/PathUtil.h"
@@ -718,6 +719,38 @@ namespace Echo
 			primitive.m_mesh = Mesh::create(true, true);
 			primitive.m_mesh->updateIndices(indicesCount, indicesData);
 			primitive.m_mesh->updateVertexs(vertexData, Box());
+		}
+
+		buildMaterial( meshIdx, primitiveIdx);
+
+		return true;
+	}
+
+	bool GltfRes::buildMaterial(int meshIdx, int primitiveIdx)
+	{
+		GltfPrimitive& primitive = m_meshes[meshIdx].m_primitives[primitiveIdx];
+		if (primitive.m_material != -1)
+		{
+			GltfMaterialInfo& matInfo = m_materials[primitive.m_material];
+
+			primitive.m_materialInst = MaterialInst::create();
+			primitive.m_materialInst->setOfficialMaterialContent(GltfMaterial::getPbrMetalicRoughnessContent());
+
+			// render stage
+			primitive.m_materialInst->setRenderStage("Opaque");
+
+			// macros
+			const MeshVertexFormat& vertexFormat = primitive.m_mesh->getVertexData().getFormat();
+			primitive.m_materialInst->setMacro("HAS_NORMALS", vertexFormat.m_isUseNormal);
+
+			// params
+			primitive.m_materialInst->setUniformValue("u_MetallicRoughnessValues",ShaderParamType::SPT_VEC2, &Vector2(matInfo.m_pbr.m_metallicFactor, matInfo.m_pbr.m_roughnessFactor));
+			primitive.m_materialInst->setUniformValue("u_BaseColorFactor",ShaderParamType::SPT_VEC4, matInfo.m_pbr.m_baseColorFactor);
+
+			// active
+			primitive.m_materialInst->applyLoadedData();
+
+			//primitive.m_materialInst->setTexture(0, m_textureRes.getPath());
 		}
 
 		return true;

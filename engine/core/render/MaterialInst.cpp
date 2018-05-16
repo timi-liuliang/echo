@@ -47,7 +47,6 @@ namespace Echo
 		, m_rasterizerState(NULL)
 		, m_isHaveCustomDepthStencil(false)
 		, m_depthStencil(NULL)
-		, m_isSubmitToStageRenderQueue(false)
 		, m_officialMaterialContent(nullptr)
 	{
 
@@ -135,7 +134,6 @@ namespace Echo
 					m_renderStage = "SampleWater";
 				}
 
-				m_isSubmitToStageRenderQueue = matTemNode.attribute("submit_to_stage").as_bool(false);
 				m_macros = StringUtil::Split(matTemNode.attribute("macros").as_string(""), ";");
 				std::sort(m_macros.begin(), m_macros.end());
 			}
@@ -273,7 +271,6 @@ namespace Echo
 			pugi::xml_node matTemplate = doc.append_child("MaterialTemplate");
 			matTemplate.append_attribute("name").set_value(m_materialTemplate.c_str());
 			matTemplate.append_attribute("stage").set_value(m_renderStage.c_str());
-			matTemplate.append_attribute("submit_to_stage").set_value(m_isSubmitToStageRenderQueue ? "true" : "false");
 			matTemplate.append_attribute("macros").set_value(StringUtil::ToString(m_macros, ";").c_str());
 		}
 
@@ -462,7 +459,6 @@ namespace Echo
 		m_blendDesc = _template->m_blendDesc;
 		m_rasterizerStateDesc = _template->m_rasterizerStateDesc;
 		m_depthStencilDesc = _template->m_depthStencilDesc;
-		m_isSubmitToStageRenderQueue = _template->m_isSubmitToStageRenderQueue;
 
 #ifdef ECHO_EDITOR_MODE
 		if (_template->m_blendState)
@@ -726,20 +722,6 @@ namespace Echo
 		return dUniform ? dUniform->value : NULL;
 	}
 
-	// 修改变量的值
-	void MaterialInst::modifyUniformValue(const String& name, void* value)
-	{
-		const ParamMap::iterator iter = m_unifromParamSet.find(name);
-		if (iter != m_unifromParamSet.end())
-		{
-			CopyUniformValue(iter->second->value, iter->second->type, value);
-		}
-		else
-		{
-			EchoLogError("MaterialInstance::modifyUniformValue ERROR, Can't find uniform [%s] in [%s]", name.c_str(), m_name.c_str());
-		}
-	}
-
 	// 准备资源IO
 	TextureRes* MaterialInst::prepareTextureImp(const String& texName)
 	{
@@ -838,7 +820,7 @@ namespace Echo
 	}
 
 	// 修改变量
-	void MaterialInst::ModifyUniformParam(const String& name, const ShaderParamType& type, void* value)
+	void MaterialInst::setUniformValue(const String& name, const ShaderParamType& type, void* value)
 	{
 		const auto& it = m_unifromParamSet.find(name);
 		if (it != m_unifromParamSet.end())

@@ -58,12 +58,12 @@ namespace Echo
 		void clearRenderable();
 
 	private:
-		MaterialInst*			m_materialInst;	// Material Instance
 		Renderable*				m_renderable;
 		Matrix4					m_matWVP;
 		ResourcePath			m_assetPath;
 		GltfResPtr				m_asset;		// gltf asset ptr
 		int						m_meshIdx;		// mesh index in the asset
 		int						m_primitiveIdx;	// sub mesh index
+		MaterialInst*			m_materialInst;
 	};
 }

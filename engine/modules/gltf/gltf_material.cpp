@@ -1,4 +1,4 @@
-#include "generalmaterial.h"
+#include "gltf_material.h"
 
 static const char* pbrMetalicRoughnessVS = R"(
 attribute vec4 a_Position;
@@ -78,7 +78,7 @@ uniform vec3 u_LightColor;
 #ifdef USE_IBL
 uniform samplerCube u_DiffuseEnvSampler;
 uniform samplerCube u_SpecularEnvSampler;
-uniform sampler2D u_brdfLUT;
+uniform sampler2D   u_brdfLUT;
 #endif
 
 #ifdef HAS_BASECOLORMAP
@@ -86,7 +86,7 @@ uniform sampler2D u_BaseColorSampler;
 #endif
 #ifdef HAS_NORMALMAP
 uniform sampler2D u_NormalSampler;
-uniform float u_NormalScale;
+uniform float     u_NormalScale;
 #endif
 #ifdef HAS_EMISSIVEMAP
 uniform sampler2D u_EmissiveSampler;
@@ -97,7 +97,7 @@ uniform sampler2D u_MetallicRoughnessSampler;
 #endif
 #ifdef HAS_OCCLUSIONMAP
 uniform sampler2D u_OcclusionSampler;
-uniform float u_OcclusionStrength;
+uniform float     u_OcclusionStrength;
 #endif
 
 uniform vec2 u_MetallicRoughnessValues;
@@ -409,7 +409,7 @@ static const char* g_generalPbrMetalicRoughnessMaterial = R"(
 namespace Echo
 {
 	// get shader
-	const char* GeneralMaterial::getPbrMetalicRoughnessBaseContent()
+	const char* GltfMaterial::getPbrMetalicRoughnessContent()
 	{
 		static String PbrMetalicRoughnessMaterial;
 		if (PbrMetalicRoughnessMaterial.empty())
