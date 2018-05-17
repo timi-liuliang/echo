@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="/icon">
+    <file>node/gltfimagebasedlight.png</file>
+    <file>node/animplayer.png</file>
     <file>node/gltfmesh.png</file>
     <file>node/gltfscene.png</file>
     <file>Icon/error/delete.png</file>

@@ -1,5 +1,4 @@
-#ifndef __ECHO_GLES2TEXTURE_H__
-#define __ECHO_GLES2TEXTURE_H__
+#pragma once
 
 #include <Render/Texture.h>
 
@@ -77,15 +76,9 @@ namespace Echo
 		bool _upload_etc_aa_ktx();
 
 	public:
-#ifdef ECHO_RENDER_THREAD
-		GLES2TextureGPUProxy* m_gpu_proxy;
-#else
 		GLuint				m_hTexture;
-#endif
 
 	private:
 		bool	m_isUploadGPU;
 	};
 }
-
-#endif

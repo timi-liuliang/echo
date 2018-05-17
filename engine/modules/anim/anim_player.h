@@ -27,7 +27,7 @@ namespace Echo
 
 
 	private:
-		Base64String				m_animData;
+		Base64String			m_animData;
 		vector<AnimClip*>		m_clips;
 	};
 }
