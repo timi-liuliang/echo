@@ -753,6 +753,8 @@ namespace Echo
 
 		// macros
 		const MeshVertexFormat& vertexFormat = primitive.m_mesh->getVertexData().getFormat();
+		primitive.m_materialInst->setMacro("MANUAL_SRGB", true);
+		primitive.m_materialInst->setMacro("SRGB_FAST_APPROXIMATION", true);
 		primitive.m_materialInst->setMacro("HAS_NORMALS", vertexFormat.m_isUseNormal);
 		primitive.m_materialInst->setMacro("HAS_UV", vertexFormat.m_isUseUV);
 		primitive.m_materialInst->setMacro("HAS_BASECOLORMAP", baseColorTextureIdx != -1);
@@ -769,7 +771,6 @@ namespace Echo
 			i32 imageIdx = m_textures[baseColorTextureIdx].m_source;
 			primitive.m_materialInst->setTexture("u_BaseColorSampler", m_images[imageIdx].m_uri);
 		}
-
 
 		//primitive.m_materialInst->setTexture(0, m_textureRes.getPath());
 

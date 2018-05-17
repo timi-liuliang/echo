@@ -17,11 +17,7 @@ namespace Echo
 	GLES2Texture::GLES2Texture(const String& name)
 		: Texture(name)
 	{
-#ifdef ECHO_RENDER_THREAD
-		m_gpu_proxy = EchoNew(GLES2TextureGPUProxy);
-#else
 		m_hTexture = 0;
-#endif
 	}
 	
 	// 构造函数
@@ -30,11 +26,7 @@ namespace Echo
 		: Texture(texType, pixFmt, usage, width, height, depth, numMipmaps, buff)
 		, m_isUploadGPU(false)
 	{
-#ifdef ECHO_RENDER_THREAD
-		m_gpu_proxy = EchoNew(GLES2TextureGPUProxy);
-#else
 		m_hTexture = 0;
-#endif
 
 		create2D(pixFmt, usage, width, height, numMipmaps, buff);
 	}
@@ -44,31 +36,20 @@ namespace Echo
 	{
 		if (m_pPreparedData)
 		{
-#ifdef ECHO_RENDER_THREAD
-			TRenderTask<GLES2TextureTaskFreeMemory>::CreateTask(m_pPreparedData);
-#else
 			EchoSafeFree(m_pPreparedData)
-#endif
 			m_pPreparedData = nullptr;
 		}
 
 		unloadFromGPU();
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2TextureTaskDestroyProxy>::CreateTask(m_gpu_proxy);
-		m_gpu_proxy = nullptr;
-#else
 		if (m_hTexture)
 			OGLESDebug(glDeleteTextures(1, &m_hTexture));
-#endif
 	}
 	
 	bool GLES2Texture::updateSubTex2D(ui32 level, const Rect& rect, void* pData, ui32 size)
 	{
 		if(level >= m_numMipmaps || !pData)
 			return false;
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2TextureTaskUpdateSubTex2D>::CreateTask(m_gpu_proxy, m_pixFmt, level, rect, pData, size);
-#else
+
 		OGLESDebug(glBindTexture(GL_TEXTURE_2D, m_hTexture));
 
 		GLenum glFmt = GLES2Mapping::MapFormat(m_pixFmt);
@@ -76,7 +57,7 @@ namespace Echo
 		OGLESDebug(glTexSubImage2D(GL_TEXTURE_2D, level, (GLint)rect.left, (GLint)rect.top, (GLsizei)rect.getWidth(), (GLsizei)rect.getHeight(), glFmt, glType, pData));
 
 		OGLESDebug(glBindTexture(GL_TEXTURE_2D, 0));
-#endif
+
 		return true;
 	}
 
@@ -91,9 +72,6 @@ namespace Echo
 		m_height = height;
 		m_pixFmt = pixFmt;
 
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2TextureTaskCreateTexture>::CreateTask(m_gpu_proxy, pixFmt, usage, width, height, m_numMipmaps, buff, m_faceNum);
-#else
 		OGLESDebug(glGenTextures(1, &m_hTexture));
 		if (!m_hTexture)
 		{
@@ -184,7 +162,6 @@ namespace Echo
 		}
 
 		OGLESDebug(glBindTexture(GL_TEXTURE_2D, 0));
-#endif
 		return true;
 	}
 	
@@ -192,28 +169,19 @@ namespace Echo
 	{
 		if (!m_isRetainPreparedData && m_pPreparedData)
 		{
-#ifdef ECHO_RENDER_THREAD
-			TRenderTask<GLES2TextureTaskFreeMemory>::CreateTask(m_pPreparedData);
-			m_pPreparedData = nullptr;
-#else
 			EchoSafeFree(m_pPreparedData);
 			m_pPreparedData = NULL;
-#endif
 		}
 	}
 
 	// 从显存中卸载
 	void GLES2Texture::unloadFromGPU()
 	{
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLESTextureTaskUnloadFromGPU>::CreateTask(m_gpu_proxy);
-#else
 		if (m_hTexture)
 		{
 			OGLESDebug(glDeleteTextures(1, &m_hTexture));
 			m_hTexture = 0;
 		}
-#endif
 
 		if (m_isUploadGPU)
 		{
@@ -323,9 +291,7 @@ namespace Echo
 		params.face_num = m_faceNum;
 		params.bits_per_pixel = m_bitsPerPixel;
 		params.name = getName();
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2TextureTaskUploadPVR>::CreateTask(m_gpu_proxy, params);
-#else
+
 		ui32 startMipMap = Renderer::instance()->getStartMipmap();
 		GLint  internalFmt = GLES2Mapping::MapInternalFormat(params.pixel_format);
 
@@ -400,7 +366,6 @@ namespace Echo
 				pPixelData += curMipMapSize;
 			}
 		}
-#endif
 
 		return true;
 	}
@@ -432,9 +397,6 @@ namespace Echo
 		params.header_size = m_headerSize;
 		params.name = getName();
 
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2TextureTaskUploadDDS>::CreateTask(m_gpu_proxy, params);
-#else
 		GLint  internalFmt = GLES2Mapping::MapInternalFormat(params.pixel_format);
 		GLenum _target = GL_TEXTURE_2D;
 
@@ -501,7 +463,6 @@ namespace Echo
 				curMipSize = block_x * block_y * params.block_size;
 			}
 		}
-#endif
 
 		return true;
 	}
@@ -517,9 +478,6 @@ namespace Echo
 		params.numMipmaps = m_numMipmaps;
 		params.name = getName();
 
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2TextureTaskUploadKTX>::CreateTask(m_gpu_proxy, params);
-#else
 		GLint  internalFmt = GLES2Mapping::MapInternalFormat(params.pixel_format);
 
 		OGLESDebug(glPixelStorei(GL_UNPACK_ALIGNMENT, 1));
@@ -560,7 +518,6 @@ namespace Echo
 
 			offset += *imageLodSize;
 		}
-#endif
 
 		return true;
 	}
@@ -586,9 +543,6 @@ namespace Echo
 			}
 		}
 		
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2TextureTaskCreateCubeTexture>::CreateTask(m_gpu_proxy, pixFmt, usage, width, height, m_numMipmaps, buff, m_fileSize);
-#else
 		unsigned char* image[Texture::CF_End];
 		unsigned char* pixel_data[Texture::CF_End];
 		size_t offset = 0;
@@ -694,9 +648,7 @@ namespace Echo
 		}
 
 		OGLESDebug(glBindTexture(GL_TEXTURE_CUBE_MAP, 0));
-#endif
 
 		return true;
-
 	}
 }

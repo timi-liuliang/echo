@@ -144,6 +144,5 @@ namespace Echo
 		HDC			m_hDC;
 		HWND		m_hWnd;
 #endif
-
 	};
 }
