@@ -745,6 +745,7 @@ namespace Echo
 		GltfMaterialInfo& matInfo = primitive.m_material!=-1 ?  m_materials[primitive.m_material] : GltfMaterialInfo();
 		i32	baseColorTextureIdx = matInfo.m_pbr.m_baseColorTexture.m_index;
 		i32 metalicRoughnessIdx = matInfo.m_pbr.m_metallicRoughnessTexture.m_index;
+		i32 normalTextureIdx = matInfo.m_normalTexture.m_index;
 
 		primitive.m_materialInst = MaterialInst::create();
 		primitive.m_materialInst->setOfficialMaterialContent(GltfMaterial::getPbrMetalicRoughnessContent());
@@ -760,6 +761,7 @@ namespace Echo
 		primitive.m_materialInst->setMacro("HAS_UV", vertexFormat.m_isUseUV);
 		primitive.m_materialInst->setMacro("HAS_BASECOLORMAP", baseColorTextureIdx != -1);
 		primitive.m_materialInst->setMacro("HAS_METALROUGHNESSMAP", metalicRoughnessIdx != -1);
+		primitive.m_materialInst->setMacro("HAS_NORMALMAP", normalTextureIdx != -1);
 
 		// active
 		if (!primitive.m_materialInst->applyLoadedData())
@@ -780,7 +782,15 @@ namespace Echo
 		if (metalicRoughnessIdx != -1)
 		{
 			i32 imageIdx = m_textures[metalicRoughnessIdx].m_source;
-			primitive.m_materialInst->setTexture("u_MetallicRoughnessSampler", m_images[imageIdx].m_uri);
+			primitive.m_materialInst->setTexture("u_MetallicRoughnessSampler", m_images[imageIdx].m_uri);	
+		}
+
+		// normal map
+		if (normalTextureIdx != -1)
+		{
+			i32 imageIdx = m_textures[normalTextureIdx].m_source;
+			primitive.m_materialInst->setTexture("u_NormalSampler", m_images[imageIdx].m_uri);
+			primitive.m_materialInst->setUniformValue("u_NormalScale", ShaderParamType::SPT_FLOAT, &matInfo.m_normalTexture.m_scale);
 		}
 
 		//primitive.m_materialInst->setTexture(0, m_textureRes.getPath());

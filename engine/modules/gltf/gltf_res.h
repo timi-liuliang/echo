@@ -157,7 +157,7 @@ namespace Echo
 		// normal texture
 		struct NormalTexture : Texture
 		{
-			float	m_scale;
+			float	m_scale = 1.f;
 		}			m_normalTexture;
 
 		// occlusion texture
