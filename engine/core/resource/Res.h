@@ -16,6 +16,9 @@ namespace Echo
 		// release
 		void subRefCount();
 
+		// is loaded succeed
+		bool isLoaded() const { return m_isLoaded; }
+
 	protected:
 		Res(const ResourcePath& path);
 		virtual ~Res();
@@ -23,6 +26,7 @@ namespace Echo
 	protected:
 		int								m_refCount;
 		ResourcePath					m_path;
+		bool							m_isLoaded;
 	};
 
 	template<typename T>

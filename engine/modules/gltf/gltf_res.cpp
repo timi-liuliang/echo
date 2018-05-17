@@ -191,6 +191,8 @@ namespace Echo
 				return false;
 			}
 
+			m_isLoaded = true;
+
 			return true;
 		}
 
@@ -543,7 +545,7 @@ namespace Echo
 				return false;
 
 			// byteOffset
-			if (!parseJsonValueUI32(m_bufferViews[i].m_byteOffset, bufferView, "byteOffset", true))
+			if (!parseJsonValueUI32(m_bufferViews[i].m_byteOffset, bufferView, "byteOffset", false))
 				return false;
 
 			// byteLength
@@ -555,8 +557,8 @@ namespace Echo
 				return false;
 
 			// target
-			ui32 target;
-			if (parseJsonValueUI32(target, bufferView, "target", true))
+			ui32 target = 0;
+			if (parseJsonValueUI32(target, bufferView, "target", false))
 				m_bufferViews[i].m_target = static_cast<GltfBufferViewInfo::TargetType>(target);
 			else
 				return false;
@@ -730,30 +732,27 @@ namespace Echo
 	bool GltfRes::buildMaterial(int meshIdx, int primitiveIdx)
 	{
 		GltfPrimitive& primitive = m_meshes[meshIdx].m_primitives[primitiveIdx];
-		if (primitive.m_material != -1)
-		{
-			GltfMaterialInfo& matInfo = m_materials[primitive.m_material];
+		GltfMaterialInfo& matInfo = primitive.m_material!=-1 ?  m_materials[primitive.m_material] : GltfMaterialInfo();
 
-			primitive.m_materialInst = MaterialInst::create();
-			primitive.m_materialInst->setOfficialMaterialContent(GltfMaterial::getPbrMetalicRoughnessContent());
+		primitive.m_materialInst = MaterialInst::create();
+		primitive.m_materialInst->setOfficialMaterialContent(GltfMaterial::getPbrMetalicRoughnessContent());
 
-			// render stage
-			primitive.m_materialInst->setRenderStage("Opaque");
+		// render stage
+		primitive.m_materialInst->setRenderStage("Opaque");
 
-			// macros
-			const MeshVertexFormat& vertexFormat = primitive.m_mesh->getVertexData().getFormat();
-			primitive.m_materialInst->setMacro("HAS_NORMALS", vertexFormat.m_isUseNormal);
+		// macros
+		const MeshVertexFormat& vertexFormat = primitive.m_mesh->getVertexData().getFormat();
+		primitive.m_materialInst->setMacro("HAS_NORMALS", vertexFormat.m_isUseNormal);
 
-			// active
-			if (!primitive.m_materialInst->applyLoadedData())
-				return false;
+		// active
+		if (!primitive.m_materialInst->applyLoadedData())
+			return false;
 
-			// params
-			primitive.m_materialInst->setUniformValue("u_MetallicRoughnessValues", ShaderParamType::SPT_VEC2, &Vector2(matInfo.m_pbr.m_metallicFactor, matInfo.m_pbr.m_roughnessFactor));
-			primitive.m_materialInst->setUniformValue("u_BaseColorFactor", ShaderParamType::SPT_VEC4, matInfo.m_pbr.m_baseColorFactor);
+		// params
+		primitive.m_materialInst->setUniformValue("u_MetallicRoughnessValues", ShaderParamType::SPT_VEC2, &Vector2(matInfo.m_pbr.m_metallicFactor, matInfo.m_pbr.m_roughnessFactor));
+		primitive.m_materialInst->setUniformValue("u_BaseColorFactor", ShaderParamType::SPT_VEC4, matInfo.m_pbr.m_baseColorFactor);
 
-			//primitive.m_materialInst->setTexture(0, m_textureRes.getPath());
-		}
+		//primitive.m_materialInst->setTexture(0, m_textureRes.getPath());
 
 		return true;
 	}
@@ -1058,6 +1057,9 @@ namespace Echo
 	// build echo node
 	Node* GltfRes::build()
 	{
+		if (!m_isLoaded)
+			return false;
+
 		vector<Node*>::type nodes;
 		for (GltfSceneInfo& scene : m_scenes)
 		{

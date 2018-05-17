@@ -7,6 +7,7 @@ namespace Echo
 
 	Res::Res(const ResourcePath& path)
 		: m_refCount(0)
+		, m_isLoaded(false)
 	{
 		m_path = path;
 

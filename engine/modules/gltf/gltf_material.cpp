@@ -392,8 +392,8 @@ R"(<?xml version = "1.0" encoding = "utf-8"?>
 		<CullMode value = "CULL_NONE" />
 	</RasterizerState>
 	<DepthStencilState>
-		<DepthEnable value = "false" />
-		<WriteDepth value = "false" />
+		<DepthEnable value = "true" />
+		<WriteDepth value = "true" />
 	</DepthStencilState>
 	<SamplerState>
 		<BiLinearMirror>
