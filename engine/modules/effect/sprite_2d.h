@@ -30,11 +30,17 @@ namespace Echo
 		// bind class methods to script
 		static void bindMethods();
 
-		// set texture res path
+		// texture res path
 		void setTextureRes(const ResourcePath& path);
-
-		// get texture res
 		const ResourcePath& getTextureRes() { return m_textureRes; }
+
+		// width
+		i32 getWidth() const { return m_width; }
+		void setWidth(i32 width);
+
+		// width
+		i32 getHeight() const { return m_height; }
+		void setHeight(i32 height);
 
 	protected:
 		// build drawable
@@ -62,5 +68,7 @@ namespace Echo
 		MaterialInst*			m_materialInst;	// Material Instance
 		Renderable*				m_renderable;
 		Matrix4					m_matWVP;
+		i32						m_width;
+		i32						m_height;
 	};
 }

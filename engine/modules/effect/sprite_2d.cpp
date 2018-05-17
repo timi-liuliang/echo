@@ -67,16 +67,13 @@ void main(void)
 
 namespace Echo
 {
-	static void csmLogFunc(const char* message)
-	{
-		EchoLogError( message);
-	}
-
 	Sprite2D::Sprite2D()
 		: m_textureRes("", ".png")
 		, m_mesh(nullptr)
 		, m_materialInst(nullptr)
 		, m_renderable(nullptr)
+		, m_width(0)
+		, m_height(0)
 	{
 	}
 
@@ -87,9 +84,15 @@ namespace Echo
 
 	void Sprite2D::bindMethods()
 	{
-		CLASS_BIND_METHOD(Sprite2D, getTextureRes, DEF_METHOD("getTextureRes"));
-		CLASS_BIND_METHOD(Sprite2D, setTextureRes, DEF_METHOD("setTextureRes"));
+		CLASS_BIND_METHOD(Sprite2D, getTextureRes,	DEF_METHOD("getTextureRes"));
+		CLASS_BIND_METHOD(Sprite2D, setTextureRes,	DEF_METHOD("setTextureRes"));
+		CLASS_BIND_METHOD(Sprite2D, getWidth,		DEF_METHOD("getWidth"));
+		CLASS_BIND_METHOD(Sprite2D, setWidth,		DEF_METHOD("setWidth"));
+		CLASS_BIND_METHOD(Sprite2D, getHeight,		DEF_METHOD("getHeight"));
+		CLASS_BIND_METHOD(Sprite2D, setHeight,		DEF_METHOD("setHeight"));
 
+		CLASS_REGISTER_PROPERTY(Sprite2D, "Width", Variant::Type::Int, "getWidth", "setWidth");
+		CLASS_REGISTER_PROPERTY(Sprite2D, "Height", Variant::Type::Int, "getHeight", "setHeight");
 		CLASS_REGISTER_PROPERTY(Sprite2D, "Texture", Variant::Type::ResourcePath, "getTextureRes", "setTextureRes");
 	}
 
@@ -98,7 +101,27 @@ namespace Echo
 	{
 		if (m_textureRes.setPath(path.getPath()))
 		{
-			clearRenderable();
+			buildRenderable();
+		}
+	}
+
+	void Sprite2D::setWidth(i32 width) 
+	{ 
+		if (m_width != width)
+		{
+			m_width = width;
+
+			buildRenderable();
+		}
+	}
+
+	// width
+	void Sprite2D::setHeight(i32 height) 
+	{
+		if (m_height != height)
+		{
+			m_height = height;
+
 			buildRenderable();
 		}
 	}
@@ -108,6 +131,8 @@ namespace Echo
 	{
 		if (!m_textureRes.getPath().empty())
 		{
+			clearRenderable();
+
 			// material
 			m_materialInst = MaterialInst::create();
 			m_materialInst->setOfficialMaterialContent(g_spriteDefaultMaterial);
@@ -146,9 +171,14 @@ namespace Echo
 	void Sprite2D::buildMeshData(VertexArray& oVertices, IndiceArray& oIndices)
 	{
 		TextureRes*	texture = m_materialInst->getTexture(0);
+		if (texture)
+		{
+			if(!m_width) m_width  = texture->getWidth();
+			if(!m_height) m_height = texture->getHeight();
+		}
 
-		float hw = texture? texture->getWidth() * 0.5f : 50.f;
-		float hh = texture ? texture->getHeight() * 0.5f : 50.f;
+		float hw = m_width * 0.5f;
+		float hh = m_height * 0.5f;
 
 		// vertices
 		oVertices.push_back(VertexFormat(Vector3(-hw, -hh, 0.f), Vector2(0.f, 1.f)));
