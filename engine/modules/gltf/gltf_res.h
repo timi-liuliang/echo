@@ -167,8 +167,10 @@ namespace Echo
 		}			m_occlusionTexture;
 
 		// emissive texture
-		float		m_emissiveFactor[3] = { 0.f, 0.f, 0.f };
-		Texture		m_emissiveTexture;
+		struct EmissiveTexture : Texture
+		{
+			float	m_factor[3] = { 0.f, 0.f, 0.f };
+		}			m_emissiveTexture;
 
 		// alpha mode
 		enum AlphaMode

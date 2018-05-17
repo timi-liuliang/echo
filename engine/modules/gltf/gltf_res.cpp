@@ -746,6 +746,8 @@ namespace Echo
 		i32	baseColorTextureIdx = matInfo.m_pbr.m_baseColorTexture.m_index;
 		i32 metalicRoughnessIdx = matInfo.m_pbr.m_metallicRoughnessTexture.m_index;
 		i32 normalTextureIdx = matInfo.m_normalTexture.m_index;
+		i32 emissiveTextureIdx = matInfo.m_emissiveTexture.m_index;
+		i32 occusionTextureIdx = matInfo.m_occlusionTexture.m_index;
 
 		primitive.m_materialInst = MaterialInst::create();
 		primitive.m_materialInst->setOfficialMaterialContent(GltfMaterial::getPbrMetalicRoughnessContent());
@@ -762,6 +764,8 @@ namespace Echo
 		primitive.m_materialInst->setMacro("HAS_BASECOLORMAP", baseColorTextureIdx != -1);
 		primitive.m_materialInst->setMacro("HAS_METALROUGHNESSMAP", metalicRoughnessIdx != -1);
 		primitive.m_materialInst->setMacro("HAS_NORMALMAP", normalTextureIdx != -1);
+		primitive.m_materialInst->setMacro("HAS_EMISSIVEMAP", emissiveTextureIdx != -1);
+		primitive.m_materialInst->setMacro("HAS_OCCLUSIONMAP", occusionTextureIdx != -1);
 
 		// active
 		if (!primitive.m_materialInst->applyLoadedData())
@@ -778,19 +782,35 @@ namespace Echo
 			primitive.m_materialInst->setTexture("u_BaseColorSampler", m_images[imageIdx].m_uri);
 		}
 
-		// metalic roughness texture
-		if (metalicRoughnessIdx != -1)
-		{
-			i32 imageIdx = m_textures[metalicRoughnessIdx].m_source;
-			primitive.m_materialInst->setTexture("u_MetallicRoughnessSampler", m_images[imageIdx].m_uri);	
-		}
-
 		// normal map
 		if (normalTextureIdx != -1)
 		{
 			i32 imageIdx = m_textures[normalTextureIdx].m_source;
 			primitive.m_materialInst->setTexture("u_NormalSampler", m_images[imageIdx].m_uri);
 			primitive.m_materialInst->setUniformValue("u_NormalScale", ShaderParamType::SPT_FLOAT, &matInfo.m_normalTexture.m_scale);
+		}
+
+		// emissive map
+		if (emissiveTextureIdx != -1)
+		{
+			i32 imageIdx = m_textures[emissiveTextureIdx].m_source;
+			primitive.m_materialInst->setTexture("u_EmissiveSampler", m_images[imageIdx].m_uri);
+			primitive.m_materialInst->setUniformValue("u_EmissiveFactor", ShaderParamType::SPT_VEC3, &matInfo.m_emissiveTexture.m_factor);
+		}
+
+		// metalic roughness texture
+		if (metalicRoughnessIdx != -1)
+		{
+			i32 imageIdx = m_textures[metalicRoughnessIdx].m_source;
+			primitive.m_materialInst->setTexture("u_MetallicRoughnessSampler", m_images[imageIdx].m_uri);
+		}
+
+		// occlusion map
+		if (occusionTextureIdx != -1)
+		{
+			i32 imageIdx = m_textures[occusionTextureIdx].m_source;
+			primitive.m_materialInst->setTexture("u_OcclusionSampler", m_images[imageIdx].m_uri);
+			primitive.m_materialInst->setUniformValue("u_OcclusionStrength", ShaderParamType::SPT_FLOAT, &matInfo.m_occlusionTexture.m_strength);
 		}
 
 		//primitive.m_materialInst->setTexture(0, m_textureRes.getPath());
@@ -912,7 +932,7 @@ namespace Echo
 					if (!emissiveFactor[j].is_number())
 						return false;
 
-					m_materials[i].m_emissiveFactor[j] = emissiveFactor[j].get<float>();
+					m_materials[i].m_emissiveTexture.m_factor[j] = emissiveFactor[j].get<float>();
 				}
 			}
 
