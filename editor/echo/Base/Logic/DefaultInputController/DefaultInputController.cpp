@@ -50,8 +50,8 @@ namespace Studio
 		, m_curMode(OrthoCamMode::OCM_NONE)
 	{
 		m_camera = Echo::NodeTree::instance()->get3dCamera();
-		m_camera->setNearClip(1.f);
-		m_camera->setFarClip(2000.f);
+		m_camera->setNearClip(0.1f);
+		m_camera->setFarClip(250.f);
 
 		// 初始化摄像机参数
 		InitializeCameraSettings();
@@ -414,7 +414,7 @@ namespace Studio
 
 		m_cameraMoveDir = m_cameraForward * dir.z - right * dir.x;
 		m_cameraMoveDir.normalize();
-		m_cameraMoveDir *= 20.f;
+		m_cameraMoveDir *= 5.f;
 	}
 
 	void DefaultInputController::SetCameraMoveDir(const Echo::Vector3& dir, Echo::Vector3 forward)

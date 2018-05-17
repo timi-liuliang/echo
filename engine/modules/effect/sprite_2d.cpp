@@ -121,7 +121,7 @@ namespace Echo
 			buildMeshData(vertices, indices);
 
 			MeshVertexFormat define;
-			define.m_isUseDiffuseUV = true;
+			define.m_isUseUV = true;
 
 			m_mesh = Mesh::create(true, true);
 			m_mesh->updateIndices(indices.size(), indices.data());
@@ -172,7 +172,7 @@ namespace Echo
 		buildMeshData(vertices, indices);
 
 		MeshVertexFormat define;
-		define.m_isUseDiffuseUV = true;
+		define.m_isUseUV = true;
 
 		m_mesh->updateIndices(indices.size(), indices.data());
 		m_mesh->updateVertexs(define, vertices.size(), (const Byte*)vertices.data(), m_localAABB);

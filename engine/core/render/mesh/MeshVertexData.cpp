@@ -5,7 +5,7 @@ namespace Echo
 	MeshVertexFormat::MeshVertexFormat()
 		: m_isUseNormal(false)
 		, m_isUseVertexColor(false)
-		, m_isUseDiffuseUV(false)
+		, m_isUseUV(false)
 		, m_isUseLightmapUV(false)
 		, m_isUseBoneData(false)
 		, m_isUseTangentBinormal(false)
@@ -28,7 +28,7 @@ namespace Echo
 		m_normalOffset = m_posOffset + sizeof(Vector3);
 		m_colorOffset = m_normalOffset + (m_isUseNormal ? sizeof(Vector3) : 0);
 		m_uv0Offset = m_colorOffset + (m_isUseVertexColor ? sizeof(Dword) : 0);
-		m_uv1Offset = m_uv0Offset + (m_isUseDiffuseUV ? sizeof(Vector2) : 0);
+		m_uv1Offset = m_uv0Offset + (m_isUseUV ? sizeof(Vector2) : 0);
 		m_boneIndicesOffset = m_uv1Offset + (m_isUseLightmapUV ? sizeof(Vector2) : 0);
 		m_boneWeightsOffset = m_boneIndicesOffset + (m_isUseBoneData ? sizeof(Dword) : 0);
 		m_tangentOffset = m_boneWeightsOffset + (m_isUseBoneData ? sizeof(Vector3) : 0);
@@ -48,7 +48,7 @@ namespace Echo
 			m_vertexElements.push_back(RenderInput::VertexElement(RenderInput::VS_COLOR, PF_RGBA8_UNORM));
 
 		// 纹理坐标
-		if (m_isUseDiffuseUV)
+		if (m_isUseUV)
 			m_vertexElements.push_back(RenderInput::VertexElement(RenderInput::VS_TEXCOORD0, PF_RG32_FLOAT));
 
 		// 灯光图
@@ -88,7 +88,7 @@ namespace Echo
 	{
 		m_isUseNormal = false;
 		m_isUseVertexColor = false;
-		m_isUseDiffuseUV = false;
+		m_isUseUV = false;
 		m_isUseLightmapUV = false;
 		m_isUseBoneData = false;
 		m_isUseTangentBinormal = false;
@@ -192,6 +192,11 @@ namespace Echo
 		EchoAssert(index < m_count && isVertexUsage(RenderInput::VS_TEXCOORD0));
 
 		return *(Vector2*)(getVertice(index) + m_format.m_uv0Offset);
+	}
+
+	void MeshVertexData::setUV0(int idx, const Vector2& uv0)
+	{
+		*(Vector2*)(getVertice(idx) + m_format.m_uv0Offset) = uv0;
 	}
 
 	// 获取顶点UV数据1

@@ -659,6 +659,7 @@ namespace Echo
 		// parse vertex format
 		MeshVertexFormat vertFormat;
 		vertFormat.m_isUseNormal = primitive.m_attributes.find("NORMAL") != primitive.m_attributes.end();
+		vertFormat.m_isUseUV = primitive.m_attributes.find("TEXCOORD_0") != primitive.m_attributes.end();
 
 		// parse vertex count
 		int vertCount = 0;
@@ -689,9 +690,7 @@ namespace Echo
 				{
 					Vector3* positions = (Vector3*)buffer.getData(bufferView.m_byteOffset);
 					for (int i = 0; i < vertCount; i++)
-					{
 						vertexData.setPosition(i, positions[i]);
-					}
 				}
 				else
 				{
@@ -704,9 +703,20 @@ namespace Echo
 				{
 					Vector3* normals = (Vector3*)buffer.getData(bufferView.m_byteOffset);
 					for (int i = 0; i < vertCount; i++)
-					{
 						vertexData.setNormal(i, normals[i]);
-					}
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else if (it.first == "TEXCOORD_0")
+			{
+				if (access.m_type == GltfAccessorInfo::Vec2)
+				{
+					Vector2* uv0s = (Vector2*)buffer.getData(bufferView.m_byteOffset);
+					for (int i = 0; i < vertCount; i++)
+						vertexData.setUV0(i, uv0s[i]);
 				}
 				else
 				{
@@ -743,6 +753,7 @@ namespace Echo
 		// macros
 		const MeshVertexFormat& vertexFormat = primitive.m_mesh->getVertexData().getFormat();
 		primitive.m_materialInst->setMacro("HAS_NORMALS", vertexFormat.m_isUseNormal);
+		primitive.m_materialInst->setMacro("HAS_UV", vertexFormat.m_isUseUV);
 
 		// active
 		if (!primitive.m_materialInst->applyLoadedData())

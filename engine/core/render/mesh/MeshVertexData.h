@@ -10,7 +10,7 @@ namespace Echo
 
 		bool		m_isUseNormal;			// 是否使用法线
 		bool		m_isUseVertexColor;		// 是否使用顶点色
-		bool		m_isUseDiffuseUV;		// 是否使用漫反射贴图UV 
+		bool		m_isUseUV;				// 是否使用漫反射贴图UV 
 		bool		m_isUseLightmapUV;		// 是否使用光照图UV
 		bool		m_isUseBoneData;		// 是否使用骨骼数据(索引权重)
 		bool		m_isUseTangentBinormal;	// 是否使用切线与副线
@@ -79,6 +79,7 @@ namespace Echo
 
 		// 获取顶点UV数据0
 		const Vector2& getUV0(Word index);
+		void setUV0(int idx, const Vector2& uv0);
 
 		// 获取顶点UV数据1
 		const Vector2& getUV1(Word index);
