@@ -105,11 +105,11 @@ namespace Echo
 			return false;
 		}
 
-		return loadShaderFrom(&rootNode);
+		return loadShaderFrom(&rootNode, macros);
 	}
 
 	// ¼ÓÔØ×ÅÉ«Æ÷
-	bool Material::loadShaderFrom(void* node)
+	bool Material::loadShaderFrom(void* node, const String& macros)
 	{
 		pugi::xml_node* rootNode = static_cast<pugi::xml_node*>(node);
 		try
@@ -118,13 +118,13 @@ namespace Echo
 			String vsSrc, psSrc;
 			if (vsNode)
 			{
-				vsSrc = vsNode.text().as_string();
+				vsSrc = macros + vsNode.text().as_string();
 			}
 
 			pugi::xml_node psNode = rootNode->child("ps");
 			if (psNode)
 			{
-				psSrc = psNode.text().as_string();
+				psSrc = macros + psNode.text().as_string();
 			}
 
 			for(pugi::xml_node elementNode = rootNode->first_child(); elementNode; elementNode=elementNode.next_sibling())

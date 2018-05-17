@@ -14,13 +14,13 @@ static const char* g_spriteDefaultMaterial = R"(<?xml version = "1.0" encoding =
 attribute vec3 a_Position;
 attribute vec2 a_UV;
 
-uniform mat4 matWVP;
+uniform mat4 u_WVPMatrix;
 
 varying vec2 texCoord;
 
 void main(void)
 {
-	vec4 position = matWVP * vec4(a_Position, 1.0);
+	vec4 position = u_WVPMatrix * vec4(a_Position, 1.0);
 	gl_Position = position;
 	
 	texCoord = a_UV;
@@ -28,12 +28,13 @@ void main(void)
 </vs>
 <ps>#version 100
 
-uniform sampler2D DiffuseSampler;
+uniform sampler2D u_BaseColorSampler;
+
 varying mediump vec2 texCoord;
 
 void main(void)
 {
-	mediump vec4 textureColor = texture2D(DiffuseSampler, texCoord);
+	mediump vec4 textureColor = texture2D(u_BaseColorSampler, texCoord);
 	gl_FragColor = textureColor;
 }
 	</ps>
@@ -113,7 +114,7 @@ namespace Echo
 			m_materialInst->setRenderStage("Transparent");
 			m_materialInst->applyLoadedData();
 
-			m_materialInst->setTexture(0, m_textureRes.getPath());
+			m_materialInst->setTexture("u_BaseColorSampler", m_textureRes.getPath());
 
 			// mesh
 			VertexArray	vertices;
@@ -181,7 +182,11 @@ namespace Echo
 	// 获取全局变量值
 	void* Sprite2D::getGlobalUniformValue(const String& name)
 	{
-		if (name == "matWVP")
+		void* value = Node::getGlobalUniformValue(name);
+		if (value)
+			return value;
+
+		if (name == "u_WVPMatrix")
 			return (void*)(&m_matWVP);
 
 		return nullptr;

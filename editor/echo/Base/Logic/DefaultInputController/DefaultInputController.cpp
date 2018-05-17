@@ -381,13 +381,6 @@ namespace Studio
 
 			m_camera->setPosition(m_cameraPositon);
 			m_camera->setDirection(m_cameraLookAt-m_cameraPositon);
-
-			//EchoSceneManager->setMainPosition(m_cameraPositon);
-
-			// 设置场景资源加载中心点
-			//Echo::Scene* scene = EchoSceneManager->getCurrentScene();
-			//if (scene)
-			//	scene->setLoadCentrePoint(m_cameraPositon);
 		}
 	}
 
@@ -500,13 +493,6 @@ namespace Studio
 		Echo::Vector3 defaultPos = Echo::Vector3(0,10,10);
 		Echo::Vector3 defaultDir = Echo::Vector3(0,-1,-1);
 
-		//auto* scene = EchoSceneManager->getCurrentScene();
-		//if ( scene )
-		//{
-		//	scene->getDefaultCamera(defaultPos, defaultDir);
-			//return;
-		//}
-
 		m_cameraPositon = defaultPos;
 		m_cameraLookAt = m_cameraPositon + defaultDir * m_cameraRadius;
 
@@ -519,25 +505,12 @@ namespace Studio
 
 		m_camera->setPosition(m_cameraPositon);
 		m_camera->setDirection(m_cameraLookAt-m_cameraPositon);
-
-		//EchoSceneManager->setMainPosition(m_cameraPositon);
-
-		// 设置场景资源加载中心点
-		//if (scene)
-		//	scene->setLoadCentrePoint(m_cameraPositon);
 	}
 
 	void DefaultInputController::UpdateCameraInfo()
 	{
 		m_camera->setPosition(m_cameraPositon);
 		m_camera->setPosition(m_cameraLookAt-m_cameraPositon);
-
-		//EchoSceneManager->setMainPosition(m_cameraPositon);
-
-		// 设置场景资源加载中心点
-		//Echo::Scene* scene = EchoSceneManager->getCurrentScene();
-		//if (scene)
-		//	scene->setLoadCentrePoint(m_cameraPositon);
 	}
 
 	bool DefaultInputController::isCameraMoving() const
@@ -583,11 +556,5 @@ namespace Studio
 		m_cameraForward.toHVAngle(m_horizonAngle, m_verticleAngle);
 		m_verticleAngleGoal = m_verticleAngle;
 		m_horizonAngleGoal = m_horizonAngle;
-		//EchoSceneManager->setMainPosition(m_cameraPositon);
-
-		// 设置场景资源加载中心点
-		//Echo::Scene* scene = EchoSceneManager->getCurrentScene();
-		//if (scene)
-		//	scene->setLoadCentrePoint(m_cameraPositon);
 	}
 }

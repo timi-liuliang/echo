@@ -743,6 +743,7 @@ namespace Echo
 	{
 		GltfPrimitive& primitive = m_meshes[meshIdx].m_primitives[primitiveIdx];
 		GltfMaterialInfo& matInfo = primitive.m_material!=-1 ?  m_materials[primitive.m_material] : GltfMaterialInfo();
+		i32	baseColorTextureIdx = matInfo.m_pbr.m_baseColorTexture.m_index;
 
 		primitive.m_materialInst = MaterialInst::create();
 		primitive.m_materialInst->setOfficialMaterialContent(GltfMaterial::getPbrMetalicRoughnessContent());
@@ -754,6 +755,7 @@ namespace Echo
 		const MeshVertexFormat& vertexFormat = primitive.m_mesh->getVertexData().getFormat();
 		primitive.m_materialInst->setMacro("HAS_NORMALS", vertexFormat.m_isUseNormal);
 		primitive.m_materialInst->setMacro("HAS_UV", vertexFormat.m_isUseUV);
+		primitive.m_materialInst->setMacro("HAS_BASECOLORMAP", baseColorTextureIdx != -1);
 
 		// active
 		if (!primitive.m_materialInst->applyLoadedData())
@@ -762,6 +764,12 @@ namespace Echo
 		// params
 		primitive.m_materialInst->setUniformValue("u_MetallicRoughnessValues", ShaderParamType::SPT_VEC2, &Vector2(matInfo.m_pbr.m_metallicFactor, matInfo.m_pbr.m_roughnessFactor));
 		primitive.m_materialInst->setUniformValue("u_BaseColorFactor", ShaderParamType::SPT_VEC4, matInfo.m_pbr.m_baseColorFactor);
+		if (baseColorTextureIdx != -1)
+		{
+			i32 imageIdx = m_textures[baseColorTextureIdx].m_source;
+			primitive.m_materialInst->setTexture("u_BaseColorSampler", m_images[imageIdx].m_uri);
+		}
+
 
 		//primitive.m_materialInst->setTexture(0, m_textureRes.getPath());
 

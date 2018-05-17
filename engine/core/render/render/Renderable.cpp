@@ -75,9 +75,9 @@ namespace Echo
 		}
 		renderable->endShaderParams();
 
-		renderable->setRasterizerState(matInst->getRasterizerState());
-		renderable->setBlendState(matInst->getBlendState());
-		renderable->setDepthStencilState(matInst->getDepthStencilState());
+		//renderable->setRasterizerState(matInst->getRasterizerState());
+		//renderable->setBlendState(matInst->getBlendState());
+		//renderable->setDepthStencilState(matInst->getDepthStencilState());
 
 		return renderable;
 	}

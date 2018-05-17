@@ -30,7 +30,7 @@ namespace Echo
 		// load and parse by file
 		bool loadFromFile(const String& filename, const String& macros);
 		bool loadFromContent(const char* content, const String& macros);
-		bool loadShaderFrom(void* node);
+		bool loadShaderFrom(void* node, const String& macros);
 		bool loadBlendState(void* pNode);
 		bool loadMacro(void * pNode);
 		bool loadRasterizerState(void* pNode);

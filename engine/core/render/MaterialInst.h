@@ -6,7 +6,6 @@
 
 namespace Echo
 {
-	struct PBRLight;
 	class Material;
 
 	/**
@@ -14,22 +13,39 @@ namespace Echo
 	*/
 	class MaterialInst
 	{
-		typedef map<int, TextureRes*>::type TextureMap;
-		typedef map<int, String>::type TextureNameMap;
+	public:
+		// texture info
+		struct TextureInfo
+		{
+			String		m_name;
+			int			m_idx = -1;
+			String		m_uri;
+			TextureRes* m_texture = nullptr;
+		};
+		typedef map<int, TextureInfo>::type TextureInfoMap;
 
 	public:
-		struct uniform
+		struct Uniform
 		{
-			String				name;		// 名称
-			ShaderParamType		type;		// 类型
-			i32					count;		// 数量
-			void*				value;		// 值
+			String				m_name;				// 名称
+			ShaderParamType		m_type;				// 类型
+			i32					m_count;				// 数量
+			Byte*				m_value = nullptr;	// 值
+
+			// destructor
+			~Uniform();
+
+			// get value bytes
+			i32 getValueBytes();
+
+			// set value
+			void setValue(const void* value);
 
 			// 克隆
-			uniform* clone();
+			Uniform* clone();
 		};
 
-		typedef map<String, uniform* >::type ParamMap;
+		typedef map<String, Uniform* >::type ParamMap;
 
 	public:
 		// create a material instance
@@ -38,20 +54,11 @@ namespace Echo
 		// release
 		void release();
 
-		// 加载 --> 可以异步。
-		bool loadByFile(const String& name, const String& macros);
-
 		// 应用数据到内存 && GPU --> 必须在主线程。
 		bool applyLoadedData();
 
-		// 保存
-		void saveToFile(const String& name);
-
 		// 克隆
-		void cloneFromTemplate(MaterialInst* _template);
-
-		// 参数继承
-		void deriveUniforms( MaterialInst* from);
+		void clone(MaterialInst* orig);
 
 		// 资源加载线程准备纹理
 		void prepareTexture();
@@ -65,9 +72,6 @@ namespace Echo
 		// 获取纹理
 		TextureRes* getTexture(const int& index);
 
-		// 更新函数
-		void update(ui32 delta);
-
 		// 获取材质实例名
 		const String& getName() const { return m_name; }
 
@@ -76,6 +80,7 @@ namespace Echo
 
 		// 设置默认渲染队列名
 		void setMaterialTemplate(const String& name) { m_materialTemplate = name; }
+		const String& getMaterialTemplate() const { return m_materialTemplate; }
 
 		// 设置使用官方材质
 		void setOfficialMaterialContent(const char* content) { m_officialMaterialContent = content; }
@@ -87,87 +92,38 @@ namespace Echo
 		// 设置宏定义
 		void setMacros(const String& macros);
 
-		// 获取默认渲染队列名
-		const String& getMaterialTemplate() const { return m_materialTemplate; }
-
 		// 获取渲染队列
 		Material* getMaterial() { return m_material; }
 
-		// 添加uniform变量
-		void AddUniformParam(uniform* param);
-
-		// 判断变量是否存在
+		// operate uniform
 		bool isUniformExist(const String& name);
-
-		// 修改uinifrom变量
 		void setUniformValue(const String& name, const ShaderParamType& type, void* value);
-
-		// 获取uniform变量的值
-		void* getuniformValue(const String& name, ShaderParamType type);
-
-		// 获取uniform变量
-		uniform* GetUniform(const String& name);
+		Uniform* getUniform(const String& name);
 
 		// 获取纹理数量(不包含全局纹理)
-		int getTextureNum() { return static_cast<int>(m_TexturesName.size()); }
-
-		// 添加贴图文件名
-		void AddTextureName(int idex, const String& name);
+		int getTextureNum() { return static_cast<int>(m_textures.size()); }
 
 		// 设置贴图
-		TextureRes* setTexture(int idex, const String& name);
-
-		// 通过索引获取贴图名字
-		const String& GetTextureName(int index) { return m_TexturesName[index]; }
+		TextureRes* setTexture(const String& name, const String& uri);
 
 		// 获取属性队列
-		ParamMap& GetUniformSet() { return m_unifromParamSet; }
+		ParamMap& GetUniformSet() { return m_unifroms; }
 
-		void LoadBlendState(void* pNode);
-		void LoadRasterizerState(void* pNode);
-		void LoadDepthStencilState(void* pNode);
-
-		ShaderParamType S2ShaderParamType(const String& value);
-		String			ShaderParamType2S(const ShaderParamType& type) const;
-		static void		delVoid2Value(const ShaderParamType& type, void* value, const int count = 1);
-		static void*	createValue2Void(const ShaderParamType& type, const int count = 1);
-		static void*	cloneVoid2Value(const ShaderParamType& type, void* value, const int count = 1);
-		static void		CopyUniformValue(void* dstValue, const ShaderParamType& type, void* srcValue);
-
-		void*	getUniformValue(const String& name);
-		void	void2s(uniform* param, String& value);
-		void	S2Void(const ShaderParamType& type, const String& value, void* dstValue, const int count = 1);
+		// get uniform value
+		void* getUniformValue(const String& name);
 
 		// 是否使用了宏定义
 		bool isMacroUsed(const String& macro);
 
-#ifdef ECHO_EDITOR_MODE
-		// 设置渲染状态
-		void setBlendState(BlendState* state) { m_blendState = state; }
-		void setRasterizerState(RasterizerState* state) { m_rasterizerState = state; }
-		void setDepthStencil(DepthStencilState* state) { m_depthStencil = state; }
-
-		void setPBRLight(const vector<PBRLight*>::type& lights);
-
-		bool isUsingSceneEnvMap() const;
-
 		// 设置宏定义
 		void setMacro(const String& macro, bool enabled);
 
-		void refresh();
-#endif
-
-		// 获取渲染状态
-		BlendState* getBlendState() { return m_blendState; }
-		RasterizerState* getRasterizerState() { return m_rasterizerState; }
-		DepthStencilState* getDepthStencilState() { return m_depthStencil; }
-
-		const BlendState::BlendDesc& getBlendDesc() { return m_blendDesc; }
-		const RasterizerState::RasterizerDesc& getRasterizerStateDesc() { return m_rasterizerStateDesc; }
-		const DepthStencilState::DepthStencilDesc& getDepthStencilDesc() { return m_depthStencilDesc; }
-
 		// 构建渲染队列
 		void buildRenderQueue();
+
+	private:
+		// 添加贴图文件名
+		void addTexture(int idx, const String& name);
 
 	private:
 		MaterialInst();
@@ -180,29 +136,13 @@ namespace Echo
 		TextureRes* prepareTextureImp(const String& texName);
 
 	private:
-		String				m_name;					// 材质实例名称
-		String				m_materialTemplate;		// 所使用的材质模板
-		const char*			m_officialMaterialContent;		// 官方材质
+		String				m_name;						// 材质实例名称
+		String				m_materialTemplate;			// 所使用的材质模板
+		const char*			m_officialMaterialContent;	// 官方材质
 		String				m_renderStage;				// 所处渲染阶段
-		StringArray			m_macros;				// 宏定义
-		StringArray			m_macrosEx;				// 外部宏定义
-		Material*			m_material;				// 对应材质
-		ParamMap			m_unifromParamSet;
-		ParamMap			m_unifromParamSetFromFile;
-		TextureMap			m_textures;
-		TextureNameMap 		m_TexturesName;
-		int					m_TextureCount;
-
-		bool							m_isHaveCustomBlend;
-		BlendState*						m_blendState;
-		BlendState::BlendDesc			m_blendDesc;
-
-		bool							m_isHaveCustomRasterizer;
-		RasterizerState*				m_rasterizerState;
-		RasterizerState::RasterizerDesc m_rasterizerStateDesc;
-
-		bool								m_isHaveCustomDepthStencil;
-		DepthStencilState*					m_depthStencil;
-		DepthStencilState::DepthStencilDesc m_depthStencilDesc;
+		StringArray			m_macros;					// 宏定义
+		Material*			m_material;					// 对应材质
+		ParamMap			m_unifroms;
+		TextureInfoMap 		m_textures;
 	};
 }
