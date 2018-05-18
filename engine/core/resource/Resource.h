@@ -27,11 +27,6 @@ namespace Echo
 	{
 		RT_Unknown = 0,		// 未知
 		RT_Texture,			// 纹理
-		RT_Animation,		// 动画
-		RT_Skeleton,		// 骨骼数据
-		RT_SoundBufferFmod,	// 声音缓冲
-		RT_Mesh,			// 模型数据
-		RT_AnimationSystem,	// 动画系统
 	};
 
 	/**

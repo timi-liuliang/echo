@@ -1,10 +1,11 @@
 #pragma once
 
 #include "ResourcePath.h"
+#include "engine/core/base/object.h"
 
 namespace Echo
 {
-	class Res
+	class Res : public Object
 	{
 	public:
 		// get res
