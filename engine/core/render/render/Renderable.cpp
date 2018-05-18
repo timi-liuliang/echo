@@ -53,24 +53,34 @@ namespace Echo
 		Renderable* renderable = Renderer::instance()->createRenderable(matInst->getRenderStage(), matInst->getMaterial());
 		renderable->setRenderInput(mesh->getVertexBuffer(), mesh->getVertexElements(), mesh->getIndexBuffer(), mesh->getIndexStride());
 		renderable->beginShaderParams(uniforms->size());
-		for (auto it = uniforms->begin(); it != uniforms->end(); it++)
+		for (auto& it : *uniforms)
 		{
-			const ShaderProgram::Uniform& uniform = it->second;
-			void* value = node->getGlobalUniformValue(uniform.m_name);
-			if (!value)
-				value = matInst->getUniformValue(uniform.m_name);
-
-			if (value)
+			const ShaderProgram::Uniform& uniform = it.second;
+			if (uniform.m_type != SPT_TEXTURE)
 			{
+				void* value = node->getGlobalUniformValue(uniform.m_name);
+				if (!value) value = matInst->getUniformValue(uniform.m_name);
+
 				renderable->setShaderParam(shaderProgram->getParamPhysicsIndex(uniform.m_name), uniform.m_type, value, uniform.m_count);
-				if (uniform.m_type == SPT_TEXTURE)
+			}
+			else
+			{
+				i32* slotIdxPtr  = (i32*)matInst->getUniformValue(uniform.m_name);
+				i32  slotIdx = *slotIdxPtr;
+				i32* globalTexture = (i32*)node->getGlobalUniformValue(uniform.m_name);
+				if (!globalTexture)
 				{
-					int index = *(int*)value;
-					TextureRes* textureRes = matInst->getTexture(index);
+					TextureRes* textureRes = matInst->getTexture(slotIdx);
 					Texture* texture = textureRes ? textureRes->getTexture() : nullptr;
-					const SamplerState* sampleState = material->getSamplerState(index);
-					renderable->setTexture(index, texture, sampleState);
+					const SamplerState* sampleState = material->getSamplerState(slotIdx);
+					renderable->setTexture(slotIdx, texture, sampleState);
 				}
+				else
+				{
+					renderable->setTexture(slotIdx, *globalTexture, material->getSamplerState(slotIdx));
+				}
+
+				renderable->setShaderParam(shaderProgram->getParamPhysicsIndex(uniform.m_name), uniform.m_type, slotIdxPtr, uniform.m_count);
 			}
 		}
 		renderable->endShaderParams();
@@ -112,7 +122,6 @@ namespace Echo
 		else
 		{
 			EchoLogError("Renderable::setShaderParam failed %s", m_ownerDesc.c_str());
-			EchoAssert(false);
 		}
 	}
 
@@ -136,17 +145,15 @@ namespace Echo
 	// 向纹理槽中设置纹理
 	void Renderable::setTexture(ui32 stage, Texture* texture, const SamplerState* state)
 	{
-		m_Textures[stage].m_texture = texture;
-		if (NULL != texture && NULL != state && texture->getNumMipmaps() > 1)
-		{
-			SamplerState::SamplerDesc desc = state->getDesc();
-			desc.mipFilter = SamplerState::FO_POINT;
-			m_Textures[stage].m_samplerState = Renderer::instance()->getSamplerState(desc);
-		}
-		else
-		{
-			m_Textures[stage].m_samplerState = state;
-		}
+		m_textures[stage].m_texture = texture;
+		m_textures[stage].m_samplerState = state;
+	}
+
+	// use global texture
+	void Renderable::setTexture(ui32 stage, ui32 globalTexture, const SamplerState* state)
+	{
+		m_textures[stage].m_globalTexture = globalTexture;
+		m_textures[stage].m_samplerState = state;
 	}
 
 	// 绑定参数
@@ -171,7 +178,7 @@ namespace Echo
 				case SPT_VEC2:
 				case SPT_VEC3:
 				case SPT_TEXTURE:	shaderProgram->setUniform(param.physicsIndex, param.pData, param.stype, param.ParamsLength);	break;
-				default:			EchoAssertX(0, "unknow shader param format! %s", m_ownerDesc.c_str());							break;
+				default:			EchoLogError("unknow shader param format! %s", m_ownerDesc.c_str());							break;
 				}
 			}
 		}
@@ -182,10 +189,10 @@ namespace Echo
 	{
 		for (size_t i = 0; i < MAX_TEXTURE_SAMPLER; ++i)
 		{
-			Texture* texture = m_Textures[i].m_texture;
+			Texture* texture = m_textures[i].getTexture();
 			if (texture)
 			{
-				Renderer::instance()->setTexture(i, m_Textures[i]);
+				Renderer::instance()->setTexture(i, m_textures[i]);
 			}
 		}
 	}
@@ -206,23 +213,21 @@ namespace Echo
 	// 执行渲染
 	void Renderable::render()
 	{
+		Material* material = IdToPtr(Material, m_materialID);
+		if (material)
 		{
-			Material* material = IdToPtr(Material, m_materialID);
-			if (material)
-			{
-				// 绑定着色器
-				material->activeShader();
+			// 绑定着色器
+			material->activeShader();
 
-				// 绑定渲染状态
-				bindRenderState();
+			// 绑定渲染状态
+			bindRenderState();
 
-				// 绑定参数
-				bindShaderParams();
+			// 绑定参数
+			bindShaderParams();
 
-				// 执行渲染
-				EchoAssert(m_renderInput);
-				Renderer::instance()->render(m_renderInput, material->getShaderProgram());
-			}
+			// 执行渲染
+			EchoAssert(m_renderInput);
+			Renderer::instance()->render(m_renderInput, material->getShaderProgram());
 		}
 	}
 

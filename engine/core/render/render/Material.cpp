@@ -19,7 +19,6 @@ namespace Echo
 	Material::Material()
 		: PtrMonitor()
 		, m_name(StringUtil::BLANK)
-		, m_queue( NULL)
 		, m_pBlendState(NULL)
 		, m_pDepthState(NULL)
 		, m_pRasterizerState(NULL)

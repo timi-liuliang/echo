@@ -66,14 +66,10 @@ namespace Echo
 		// 绑定shader
 		void activeShader();
 
-		// 设置队列
-		void setQueue(RenderQueue* queue) { m_queue = queue; }
-
-		bool			hasMacro		(const char* const macro) const;
+		bool hasMacro(const char* const macro) const;
 
 		// 获取材质可选宏定义列表
 		static StringArray getEnabledMacros(const String& matFileName, bool withEnabled = false);
-
 
 		struct DefaultUniform
 		{
@@ -98,7 +94,6 @@ namespace Echo
 	private:
 		String				m_name;
 		Shader::ShaderDesc	m_shaderDesc;							// 材质使用的宏定义
-		RenderQueue*		m_queue;								// 当前材质所处的渲染队列
 		BlendState*			m_pBlendState;
 		DepthStencilState*	m_pDepthState;
 		RasterizerState*	m_pRasterizerState;

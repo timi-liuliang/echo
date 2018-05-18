@@ -69,6 +69,9 @@ namespace Echo
 		static const ui32	MAX_MINMAPS = 16;
 
 	public:
+		// get global texture
+		static Texture* getGlobal(ui32 globalTextureIdx);
+
 		// 获取类型
 		TexType getType() const { return m_texType; }
 
@@ -221,15 +224,19 @@ public:
 	 */
 	struct TextureSampler
 	{
-		Texture*			m_texture;			// 纹理
-		const SamplerState*	m_samplerState;		// 采样状态
+		Texture*			m_texture;
+		ui32				m_globalTexture = -1;	// global idx
+		const SamplerState*	m_samplerState;
 
 		// 构造函数
 		TextureSampler()
-			: m_texture(NULL), m_samplerState(NULL)
+			: m_texture(NULL),m_globalTexture(-1), m_samplerState(NULL)
 		{}
 
 		// 构造函数
 		TextureSampler(Texture* texture, const SamplerState* samplerState);
+
+		// get texture
+		Texture* getTexture();
 	};
 }

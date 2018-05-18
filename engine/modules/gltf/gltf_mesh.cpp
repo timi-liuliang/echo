@@ -110,6 +110,21 @@ namespace Echo
 			static Vector3 lightColor(2.f, 2.f, 2.f);
 			return &lightColor;
 		}
+		else if (name == "u_DiffuseEnvSampler")
+		{
+			static i32 idx = 32;
+			return &idx;
+		}
+		else if (name == "u_SpecularEnvSampler")
+		{
+			static i32 idx = 33;
+			return &idx;
+		}
+		else if (name == "u_brdfLUT")
+		{
+			static i32 idx = 34;
+			return &idx;
+		}
 
 		return nullptr;
 	}

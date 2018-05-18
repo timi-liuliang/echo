@@ -90,6 +90,12 @@ namespace Echo
 
 	}
 
+	// get global texture
+	Texture* Texture::getGlobal(ui32 globalTextureIdx)
+	{
+		return nullptr;
+	}
+
 	ui32 Texture::GetCompressType()
 	{
 		return m_compressType;
@@ -794,15 +800,19 @@ namespace Echo
 	TextureSampler::TextureSampler(Texture* texture, const SamplerState* samplerState)
 		: m_texture(texture)
 	{
-		if (texture->getNumMipmaps() > 1)
+		m_samplerState = samplerState;
+	}
+
+	// get texture
+	Texture* TextureSampler::getTexture()
+	{
+		if (m_globalTexture == -1)
 		{
-			SamplerState::SamplerDesc desc = samplerState->getDesc();
-			desc.mipFilter = SamplerState::FO_POINT;
-			m_samplerState = Renderer::instance()->getSamplerState(desc);
+			return m_texture;
 		}
 		else
 		{
-			m_samplerState = samplerState;
+			return Texture::getGlobal(m_globalTexture);
 		}
 	}
 }

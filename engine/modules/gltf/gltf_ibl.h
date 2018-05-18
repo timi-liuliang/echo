@@ -16,6 +16,9 @@ namespace Echo
 		// bind class methods to script
 		static void bindMethods();
 
+		// get brdfLUT texture
+		//static const String& getbrdfLUTTexture()
+
 		// diffuse cube texture
 		const ResourcePath& getDiffusePositiveXTexture() { return m_positiveXDiffuseTextureName; }
 		void setDiffusePositiveXTexture(const ResourcePath& path) { if (m_positiveXDiffuseTextureName.setPath(path.getPath())) buildDiffuseCube(); }

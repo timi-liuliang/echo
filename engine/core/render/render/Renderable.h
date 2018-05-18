@@ -26,7 +26,6 @@ namespace Echo
 	class MaterialInst;
 	class Renderable
 	{
-		friend class RenderQueue;
 		friend class Renderer;
 		typedef ui32 MaterialID;
 		typedef array<TextureSampler, MAX_TEXTURE_SAMPLER> MaxTextureArray;
@@ -67,9 +66,10 @@ namespace Echo
 
 		// 设置纹理
 		void setTexture( ui32 stage, Texture* texture, const SamplerState* state);
+		void setTexture( ui32 stage, ui32 globalTexture, const SamplerState* state);
 
 		// 获取纹理
-		Texture* getTexture(ui32 stage) const { return m_Textures[stage].m_texture; }
+		Texture* getTexture(ui32 stage) const { return m_textures[stage].m_texture; }
 
 		// 执行渲染
 		virtual void render();
@@ -130,7 +130,7 @@ namespace Echo
 		String									m_renderStage;
 		MaterialID								m_materialID;			// material
 		RenderInput*							m_renderInput;			// first  VB, IB, etc.
-		MaxTextureArray							m_Textures;				// now only one texture sampler.
+		MaxTextureArray							m_textures;				// now only one texture sampler.
 		vector<ShaderParam>::type				m_shaderParams;			// third shader params
 		size_t									m_SParamWriteIndex;
 		bool*									m_visible;

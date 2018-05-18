@@ -766,6 +766,7 @@ namespace Echo
 		primitive.m_materialInst->setMacro("HAS_NORMALMAP", normalTextureIdx != -1);
 		primitive.m_materialInst->setMacro("HAS_EMISSIVEMAP", emissiveTextureIdx != -1);
 		primitive.m_materialInst->setMacro("HAS_OCCLUSIONMAP", occusionTextureIdx != -1);
+		//primitive.m_materialInst->setMacro("USE_IBL", true);
 
 		// active
 		if (!primitive.m_materialInst->applyLoadedData())
@@ -812,8 +813,6 @@ namespace Echo
 			primitive.m_materialInst->setTexture("u_OcclusionSampler", m_images[imageIdx].m_uri);
 			primitive.m_materialInst->setUniformValue("u_OcclusionStrength", ShaderParamType::SPT_FLOAT, &matInfo.m_occlusionTexture.m_strength);
 		}
-
-		//primitive.m_materialInst->setTexture(0, m_textureRes.getPath());
 
 		return true;
 	}
