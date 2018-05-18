@@ -217,8 +217,10 @@ vec3 getIBLContribution(PBRInfo pbrInputs, vec3 n, vec3 reflection)
     vec3 specular = specularLight * (pbrInputs.specularColor * brdf.x + brdf.y);
 
     // For presentation, this allows us to disable IBL terms
+#ifdef SHADER_DEBUG
     diffuse *= u_ScaleIBLAmbient.x;
     specular *= u_ScaleIBLAmbient.y;
+#endif
 
     return diffuse + specular;
 }

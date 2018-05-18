@@ -57,6 +57,17 @@ namespace Echo
 		}
 	}
 
+	// alloc Value
+	void MaterialInst::Uniform::allocValue()
+	{
+		if (!m_value)
+		{
+			i32 bytes = getValueBytes();
+			m_value = EchoNewArray(Byte, bytes);
+			std::memset(m_value, 0, bytes);
+		}
+	}
+
 	// ¹¹Ôìº¯Êý
 	MaterialInst::MaterialInst()
 		: m_material(NULL)
@@ -389,13 +400,15 @@ namespace Echo
 						uniform->setValue(&textureNum);
 						addTexture(getTextureNum(), uniform->m_name);
 					}
+					else
+					{
+						uniform->allocValue();
+					}
 
 					// default value
 					const Material::DefaultUniform* defaultUniform = m_material->getDefaultUniformValue(uniform->m_name);
 					if (defaultUniform && uniform->m_count == defaultUniform->count && uniform->m_type == defaultUniform->type)
-					{
 						uniform->setValue(defaultUniform->value);
-					}
 
 					m_unifroms[uniform->m_name] = uniform;
 				}

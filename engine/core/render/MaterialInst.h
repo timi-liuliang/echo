@@ -41,6 +41,9 @@ namespace Echo
 			// set value
 			void setValue(const void* value);
 
+			// alloc Value
+			void allocValue();
+
 			// ¿ËÂ¡
 			Uniform* clone();
 		};
