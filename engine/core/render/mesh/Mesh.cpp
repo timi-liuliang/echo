@@ -234,6 +234,22 @@ namespace Echo
 		buildIndexBuffer();
 	}
 
+	void Mesh::updateIndices(ui32 indicesCount, const ui32* indices)
+	{
+		// process data
+		EchoSafeFree(m_indices);
+
+		// load indices
+		m_idxCount = indicesCount;
+		m_idxStride = sizeof(ui32);
+
+		ui32 idxBuffSize = m_idxCount * m_idxStride;
+		m_indices = EchoAlloc(Byte, idxBuffSize);
+		memcpy(m_indices, indices, idxBuffSize);
+
+		buildIndexBuffer();
+	}
+
 	// update vertex data
 	void Mesh::updateVertexs(const MeshVertexFormat& format, ui32 vertCount, const Byte* vertices, const Box& box)
 	{

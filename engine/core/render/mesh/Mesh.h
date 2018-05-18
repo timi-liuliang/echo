@@ -73,6 +73,7 @@ namespace Echo
 
 		// update indices data
 		void updateIndices(ui32 indicesCount, const ui16* indices);
+		void updateIndices(ui32 indicesCount, const ui32* indices);
 
 		// update vertex data
 		void updateVertexs(const MeshVertexFormat& format, ui32 vertCount, const Byte* vertices, const Box& box);

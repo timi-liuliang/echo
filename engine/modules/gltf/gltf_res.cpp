@@ -637,7 +637,8 @@ namespace Echo
 		GltfPrimitive& primitive = m_meshes[meshIdx].m_primitives[primitiveIdx];
 
 		// indices
-		ui16* indicesData = nullptr;
+		ui16* indicesDataShort = nullptr;
+		ui32* indicesDataInt = nullptr;
 		ui32  indicesCount = 0;
 		if (primitive.m_indices != -1)
 		{
@@ -646,7 +647,12 @@ namespace Echo
 			GltfBufferInfo&		buffer = m_buffers[bufferView.m_bufferIdx];
 			if (access.m_componentType == GltfAccessorInfo::UnsignedShort)
 			{
-				indicesData = (ui16*)buffer.getData(bufferView.m_byteOffset);
+				indicesDataShort = (ui16*)buffer.getData(bufferView.m_byteOffset);
+				indicesCount = access.m_count;
+			}
+			else if (access.m_componentType == GltfAccessorInfo::UnsignedInt)
+			{
+				indicesDataInt = (ui32*)buffer.getData(bufferView.m_byteOffset);
 				indicesCount = access.m_count;
 			}
 			else
@@ -729,7 +735,14 @@ namespace Echo
 		if (!primitive.m_mesh)
 		{
 			primitive.m_mesh = Mesh::create(true, true);
-			primitive.m_mesh->updateIndices(indicesCount, indicesData);
+
+			// update indices
+			if(indicesDataShort)
+				primitive.m_mesh->updateIndices(indicesCount, indicesDataShort);
+			else if( indicesDataInt)
+				primitive.m_mesh->updateIndices(indicesCount, indicesDataInt);
+
+			// update vertices
 			primitive.m_mesh->updateVertexs(vertexData, Box());
 		}
 

@@ -113,11 +113,11 @@ namespace Echo
 		enum ComponentType
 		{
 			Byte = 5120,
-			UnsignedByte,
-			Short,
-			UnsignedShort,
-			UnsignedInt,
-			Float
+			UnsignedByte = 5121,
+			Short = 5122,
+			UnsignedShort = 5123,
+			UnsignedInt = 5125,
+			Float = 5126
 		}					m_componentType;
 		bool				m_normalized = false;
 		ui32				m_count;

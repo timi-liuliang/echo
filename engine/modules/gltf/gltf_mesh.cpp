@@ -70,12 +70,16 @@ namespace Echo
 	{
 		if ( m_asset && m_meshIdx!=-1 && m_primitiveIdx!=-1)
 		{
-			clearRenderable();
+			MaterialInst* origMaterial = m_asset->m_meshes[m_meshIdx].m_primitives[m_primitiveIdx].m_materialInst;
+			if (origMaterial)
+			{
+				clearRenderable();
 
-			Mesh* mesh = m_asset->m_meshes[m_meshIdx].m_primitives[m_primitiveIdx].m_mesh;
-			m_materialInst = MaterialInst::create();
-			m_materialInst->clone(m_asset->m_meshes[m_meshIdx].m_primitives[m_primitiveIdx].m_materialInst);
-			m_renderable = Renderable::create( mesh, m_materialInst, this);
+				Mesh* mesh = m_asset->m_meshes[m_meshIdx].m_primitives[m_primitiveIdx].m_mesh;
+				m_materialInst = MaterialInst::create();
+				m_materialInst->clone(origMaterial);
+				m_renderable = Renderable::create(mesh, m_materialInst, this);
+			}
 		}
 	}
 
