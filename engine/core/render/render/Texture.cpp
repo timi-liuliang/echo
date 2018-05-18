@@ -15,6 +15,8 @@
 
 namespace Echo
 {
+	static map<ui32, Texture*>::type	g_globalTextures;
+
 	// 构造函数
 	Texture::Texture(const String& name)
 		: m_name(name)
@@ -42,7 +44,7 @@ namespace Echo
 		, m_headerSize(0)
 		, m_uploadedSize(0)
 		, m_samplerState(NULL)
-		, m_bUploadFromFiles(0)
+		, m_isCubeMap(0)
 		, m_isLoadedToMemory(false)
 	{
 	}
@@ -71,7 +73,7 @@ namespace Echo
 		, m_headerSize(0)
 		, m_uploadedSize(0)
 		, m_samplerState(NULL)
-		, m_bUploadFromFiles(0)
+		, m_isCubeMap(0)
 		, m_isLoadedToMemory(false)
 	{
 		if (numMipmaps > MAX_MINMAPS)
@@ -93,7 +95,17 @@ namespace Echo
 	// get global texture
 	Texture* Texture::getGlobal(ui32 globalTextureIdx)
 	{
+		auto it = g_globalTextures.find(globalTextureIdx);
+		if (it != g_globalTextures.end())
+			return it->second;
+
 		return nullptr;
+	}
+
+	// set global texture
+	void Texture::setGlobal(ui32 globalTextureIdx, Texture* texture)
+	{
+		g_globalTextures[globalTextureIdx] = texture;
 	}
 
 	ui32 Texture::GetCompressType()
@@ -284,7 +296,7 @@ namespace Echo
 			m_isLoadedToMemory = true;
 
 			// 1) load into system memory
-			if (m_bUploadFromFiles)
+			if (m_isCubeMap)
 			{
 				if (!_data_io_cubemap_from_files()) return false;
 
@@ -341,7 +353,7 @@ namespace Echo
 	{
 		EchoAssert(!m_pPreparedData);
 
-		EchoAssert(m_bUploadFromFiles);
+		EchoAssert(m_isCubeMap);
 
 		size_t offset = 0;
 		for (int i = 0; i < 6; i++)
@@ -358,6 +370,9 @@ namespace Echo
 			{
 				return false;
 			}
+
+			if (i == 0)
+				m_firstTextureSize = pStream->size();
 
 			pStream->read(m_pPreparedData + offset, pStream->size());
 
@@ -567,7 +582,6 @@ namespace Echo
 			return false;
 		}
 
-
 		m_bCompressed = false;
 		m_compressType = Texture::CompressType_Unknown;
 		PixelFormat pixFmt = pImage->getPixelFormat();
@@ -695,7 +709,7 @@ namespace Echo
 	// 上载纹理数据
 	bool Texture::_upload_common()
 	{
-		if (m_bUploadFromFiles && m_texType == TT_CUBE)
+		if (m_isCubeMap && m_texType == TT_CUBE)
 		{
 			Buffer buff(m_fileSize, m_pPreparedData);
 			return createCube(m_pixFmt, m_usage, m_width, m_height, m_numMipmaps, buff);
@@ -804,7 +818,7 @@ namespace Echo
 	}
 
 	// get texture
-	Texture* TextureSampler::getTexture()
+	Texture* TextureSampler::getTexture() const
 	{
 		if (m_globalTexture == -1)
 		{

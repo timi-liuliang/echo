@@ -5,6 +5,8 @@
 
 namespace Studio
 {
+	static Echo::String g_lastSelectDir;
+
 	ResChooseDialog::ResChooseDialog(QWidget* parent, const char* exts, const char* filesFilter, const char* startPath, bool chooseDir)
 		: QDialog(parent)
 		, m_supportExts(exts)
@@ -37,7 +39,10 @@ namespace Studio
 		m_dirModel->SetRootPath(Echo::Root::instance()->getResPath().c_str(), "none", m_resDirView, NULL);
 		m_dirModel->Refresh();
 
-		onSelectDir(Echo::Root::instance()->getResPath().c_str());
+		if(!g_lastSelectDir.empty())
+			onSelectDir(g_lastSelectDir.c_str());
+		else
+			onSelectDir(Echo::Root::instance()->getResPath().c_str());
 	}
 
 	// get file
@@ -74,6 +79,8 @@ namespace Studio
 
 		m_previewHelper->clear();
 		m_previewHelper->setPath(dir, m_supportExts.c_str(), isIncludePreDir);
+
+		g_lastSelectDir = dir;
 	}
 
 	// double click res

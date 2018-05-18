@@ -647,6 +647,9 @@ namespace Echo
 			}
 		}
 
+		// ÔÝÇ¿ÖÆ
+		//OGLESDebug(glGenerateMipmap(m_hTexture));
+
 		OGLESDebug(glBindTexture(GL_TEXTURE_CUBE_MAP, 0));
 
 		return true;

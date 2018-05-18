@@ -45,7 +45,7 @@ namespace Echo
 		{
 			pTexture->m_usage = usage;
 			pTexture->m_texType = Texture::TT_CUBE;
-			pTexture->m_bUploadFromFiles = true;
+			pTexture->m_isCubeMap = true;
 			pTexture->m_surfaceFilename[Texture::CF_Positive_X] = x_posi_name;
 			pTexture->m_surfaceFilename[Texture::CF_Negative_X] = x_nega_name;
 			pTexture->m_surfaceFilename[Texture::CF_Positive_Y] = y_posi_name;

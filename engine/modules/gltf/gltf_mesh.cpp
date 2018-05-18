@@ -1,4 +1,5 @@
 #include "gltf_mesh.h"
+#include "gltf_ibl.h"
 #include "engine/core/util/LogManager.h"
 #include "engine/core/scene/NodeTree.h"
 #include "render/renderer.h"
@@ -112,17 +113,17 @@ namespace Echo
 		}
 		else if (name == "u_DiffuseEnvSampler")
 		{
-			static i32 idx = 32;
+			static i32 idx = i32(GltfImageBasedLight::TextureIndex::DiffuseCube);
 			return &idx;
 		}
 		else if (name == "u_SpecularEnvSampler")
 		{
-			static i32 idx = 33;
+			static i32 idx = i32(GltfImageBasedLight::TextureIndex::SpecularCube);
 			return &idx;
 		}
 		else if (name == "u_brdfLUT")
 		{
-			static i32 idx = 34;
+			static i32 idx = i32(GltfImageBasedLight::TextureIndex::BrdfLUT);
 			return &idx;
 		}
 

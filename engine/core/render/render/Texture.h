@@ -72,6 +72,9 @@ namespace Echo
 		// get global texture
 		static Texture* getGlobal(ui32 globalTextureIdx);
 
+		// set global texture
+		static void setGlobal(ui32 globalTextureIdx, Texture* texture);
+
 		// 获取类型
 		TexType getType() const { return m_texType; }
 
@@ -215,7 +218,8 @@ namespace Echo
 		const SamplerState*	m_samplerState;		// 采样状态
 
 public:
-		bool			m_bUploadFromFiles;
+		bool			m_isCubeMap;
+		i32				m_firstTextureSize;
 		String			m_surfaceFilename[CF_End];
 	};
 
@@ -237,6 +241,6 @@ public:
 		TextureSampler(Texture* texture, const SamplerState* samplerState);
 
 		// get texture
-		Texture* getTexture();
+		Texture* getTexture() const;
 	};
 }

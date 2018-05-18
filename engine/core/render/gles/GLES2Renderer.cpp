@@ -223,12 +223,13 @@ namespace Echo
 	// 设置指定槽纹理
 	void GLES2Renderer::setTexture(ui32 index, const TextureSampler& sampler, bool needUpdate)
 	{
-		if (sampler.m_texture)
+		Texture* texture = sampler.getTexture();
+		if (texture)
 		{
 			GLES2Texture* pES2Texture = NULL;
 			try
 			{
-				pES2Texture = ECHO_DOWN_CAST<GLES2Texture*>(sampler.m_texture);
+				pES2Texture = ECHO_DOWN_CAST<GLES2Texture*>(texture);
 			}
 			catch (...)
 			{

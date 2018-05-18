@@ -1,26 +1,19 @@
 #include "gltf_ibl.h"
+#include "engine/core/render/TextureResManager.h"
 
 namespace Echo
 {
 	GltfImageBasedLight::GltfImageBasedLight()
-		: m_positiveXDiffuseTextureName("", ".png")
-		, m_negativeXDiffuseTextureName("", ".png")
-		, m_positiveYDiffuseTextureName("", ".png")
-		, m_negativeYDiffuseTextureName("", ".png")
-		, m_positiveZDiffuseTextureName("", ".png")
-		, m_negativeZDiffuseTextureName("", ".png")
-		, m_cubeDiffuseTexture(nullptr)
-		, m_positiveXSpecularTextureName("", ".png")
-		, m_negativeXSpecularTextureName("", ".png")
-		, m_positiveYSpecularTextureName("", ".png")
-		, m_negativeYSpecularTextureName("", ".png")
-		, m_positiveZSpecularTextureName("", ".png")
-		, m_negativeZSpecularTextureName("", ".png")
+		: m_cubeDiffuseTexture(nullptr)
 		, m_cubeSpecularTexture(nullptr)
 		, m_brdfLUTTextureName("", ".png")
 		, m_brdfLUTTexture(nullptr)
 	{
+		for (int i = 0; i < 6; i++)
+			m_cubeDiffuseTextureNames[i] = ResourcePath("", ".png|.tga|.jpg");
 
+		for (int i = 0; i < 6; i++)
+			m_cubeSpecularTextureNames[i] = ResourcePath("", ".png|.tga|.jpg");
 	}
 
 	GltfImageBasedLight::~GltfImageBasedLight()
@@ -56,7 +49,7 @@ namespace Echo
 		CLASS_BIND_METHOD(GltfImageBasedLight, getSpecularNegativeYTexture, DEF_METHOD("getSpecularNegativeYTexture"));
 		CLASS_BIND_METHOD(GltfImageBasedLight, setSpecularNegativeYTexture, DEF_METHOD("setSpecularNegativeYTexture"));
 		CLASS_BIND_METHOD(GltfImageBasedLight, getSpecularNegativeZTexture, DEF_METHOD("getSpecularNegativeZTexture"));
-		CLASS_BIND_METHOD(GltfImageBasedLight, setSpecularNegativeZTexture, DEF_METHOD("setDiffuseNegativeZTexture"));
+		CLASS_BIND_METHOD(GltfImageBasedLight, setSpecularNegativeZTexture, DEF_METHOD("setSpecularNegativeZTexture"));
 
 		// brdfLUT
 		CLASS_BIND_METHOD(GltfImageBasedLight, getbrdfLUTTexture, DEF_METHOD("getbrdfLUTTexture"));
@@ -76,5 +69,63 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(GltfImageBasedLight, "SpecularCubeFace+Z", Variant::Type::ResourcePath, "getSpecularPositiveZTexture", "setSpecularPositiveZTexture");
 		CLASS_REGISTER_PROPERTY(GltfImageBasedLight, "SpecularCubeFace-Z", Variant::Type::ResourcePath, "getSpecularNegativeZTexture", "setSpecularNegativeZTexture");
 		CLASS_REGISTER_PROPERTY(GltfImageBasedLight, "brdfLUT", Variant::Type::ResourcePath, "getbrdfLUTTexture", "setbrdfLUTTexture");
+	}
+
+	void GltfImageBasedLight::test()
+	{
+	}
+
+	// build diffuse texture
+	void GltfImageBasedLight::buildDiffuseCube()
+	{
+		for (int i = 0; i < 6; i++)
+		{
+			if (m_cubeDiffuseTextureNames[i].getPath().empty())
+				return;
+		}
+
+		m_cubeDiffuseTexture = TextureResManager::instance()->createTextureCubeFromFiles(
+			m_cubeDiffuseTextureNames[0].getPath(), 
+			m_cubeDiffuseTextureNames[1].getPath(),
+			m_cubeDiffuseTextureNames[2].getPath(),
+			m_cubeDiffuseTextureNames[3].getPath(),
+			m_cubeDiffuseTextureNames[4].getPath(),
+			m_cubeDiffuseTextureNames[5].getPath());
+		m_cubeDiffuseTexture->prepareLoad();
+
+		Texture::setGlobal(ui32(TextureIndex::DiffuseCube), m_cubeDiffuseTexture->getTexture());
+	}
+
+	// build specular texture
+	void GltfImageBasedLight::buildSpecularCube()
+	{
+		for (int i = 0; i < 6; i++)
+		{
+			if (m_cubeSpecularTextureNames[i].getPath().empty())
+				return;
+		}
+
+		m_cubeSpecularTexture = TextureResManager::instance()->createTextureCubeFromFiles(
+			m_cubeSpecularTextureNames[0].getPath(),
+			m_cubeSpecularTextureNames[1].getPath(),
+			m_cubeSpecularTextureNames[2].getPath(),
+			m_cubeSpecularTextureNames[3].getPath(),
+			m_cubeSpecularTextureNames[4].getPath(),
+			m_cubeSpecularTextureNames[5].getPath());
+		m_cubeSpecularTexture->prepareLoad();
+
+		Texture::setGlobal(ui32(TextureIndex::SpecularCube), m_cubeSpecularTexture->getTexture());
+	}
+
+	// build brdfLUT texture
+	void GltfImageBasedLight::buildbrdfLUT()
+	{
+		if (!m_brdfLUTTextureName.getPath().empty())
+		{
+			m_brdfLUTTexture = TextureResManager::instance()->createTexture( m_brdfLUTTextureName.getPath());
+			m_brdfLUTTexture->prepareLoad();
+
+			Texture::setGlobal(ui32(TextureIndex::BrdfLUT), m_brdfLUTTexture->getTexture());
+		}
 	}
 }

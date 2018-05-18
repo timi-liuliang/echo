@@ -767,6 +767,7 @@ namespace Echo
 		primitive.m_materialInst->setMacro("HAS_EMISSIVEMAP", emissiveTextureIdx != -1);
 		primitive.m_materialInst->setMacro("HAS_OCCLUSIONMAP", occusionTextureIdx != -1);
 		primitive.m_materialInst->setMacro("USE_IBL", true);
+		//primitive.m_materialInst->setMacro("USE_TEX_LOD", true);
 
 		// active
 		if (!primitive.m_materialInst->applyLoadedData())
