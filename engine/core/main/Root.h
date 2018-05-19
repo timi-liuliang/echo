@@ -134,9 +134,6 @@ namespace Echo
 		// 当游戏从挂起中恢复时引擎需要进行的处理
 		void onPlatformResume();
 
-		// 设置资源延迟释放时间
-		void setReleaseDelayTime(ui32 t);
-
 	private:
 		Root();
 		~Root();
@@ -150,7 +147,6 @@ namespace Echo
 		EngineConsole& getConsole() { return m_console; }
 
 	protected:
-		void updateAllManagerDelayResource();
 		bool render();
 		void loadLaunchScene();
 

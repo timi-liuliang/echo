@@ -77,13 +77,6 @@ ELSEIF(CMAKE_SIZEOF_VOID_P EQUAL 8)
 	LINK_DIRECTORIES(${ECHO_DEP_PATH}/Qt/5.7.0/msvc2013_x64/plugins/platforms)
 ENDIF()
 
-# 区分32位64位编译类型
-IF(CMAKE_SIZEOF_VOID_P EQUAL 4)
-	LINK_DIRECTORIES(${ECHO_DEP_PATH}/fbx/windows/lib/vs2015/x86/${CMAKE_BUILD_TYPE})
-ELSEIF(CMAKE_SIZEOF_VOID_P EQUAL 8)
-	LINK_DIRECTORIES(${ECHO_DEP_PATH}/fbx/windows/lib/vs2015/x64/${CMAKE_BUILD_TYPE})
-ENDIF()
-
 # 设置模块名称
 SET(MODULE_NAME echo)
 
@@ -129,7 +122,7 @@ ADD_EXECUTABLE(${MODULE_NAME}
 	CMakeLists.txt)
 
 # 链接库
-TARGET_LINK_LIBRARIES(${MODULE_NAME} zlib engine 7zip winmm.lib imm32.lib dxgi.lib libfbxsdk.lib Shlwapi.lib lua recast freeimage)
+TARGET_LINK_LIBRARIES(${MODULE_NAME} zlib engine 7zip winmm.lib imm32.lib dxgi.lib Shlwapi.lib lua recast freeimage)
 IF(CMAKE_SIZEOF_VOID_P EQUAL 4)
 	TARGET_LINK_LIBRARIES(${MODULE_NAME} fmod_vc.lib fmodstudio_vc.lib)
 ELSEIF(CMAKE_SIZEOF_VOID_P EQUAL 8)

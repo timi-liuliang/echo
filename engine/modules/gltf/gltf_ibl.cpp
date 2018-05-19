@@ -1,5 +1,5 @@
 #include "gltf_ibl.h"
-#include "engine/core/render/TextureResManager.h"
+#include "engine/core/render/TextureRes.h"
 
 namespace Echo
 {
@@ -84,7 +84,7 @@ namespace Echo
 				return;
 		}
 
-		m_cubeDiffuseTexture = TextureResManager::instance()->createTextureCubeFromFiles(
+		m_cubeDiffuseTexture = TextureRes::createTextureCubeFromFiles(
 			m_cubeDiffuseTextureNames[0].getPath(), 
 			m_cubeDiffuseTextureNames[1].getPath(),
 			m_cubeDiffuseTextureNames[2].getPath(),
@@ -105,7 +105,7 @@ namespace Echo
 				return;
 		}
 
-		m_cubeSpecularTexture = TextureResManager::instance()->createTextureCubeFromFiles(
+		m_cubeSpecularTexture = TextureRes::createTextureCubeFromFiles(
 			m_cubeSpecularTextureNames[0].getPath(),
 			m_cubeSpecularTextureNames[1].getPath(),
 			m_cubeSpecularTextureNames[2].getPath(),
@@ -122,7 +122,7 @@ namespace Echo
 	{
 		if (!m_brdfLUTTextureName.getPath().empty())
 		{
-			m_brdfLUTTexture = TextureResManager::instance()->createTexture( m_brdfLUTTextureName.getPath());
+			m_brdfLUTTexture = TextureRes::createTexture( m_brdfLUTTextureName.getPath());
 			m_brdfLUTTexture->prepareLoad();
 
 			Texture::setGlobal(ui32(TextureIndex::BrdfLUT), m_brdfLUTTexture->getTexture());

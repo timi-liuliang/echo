@@ -4,7 +4,6 @@
 #include "engine/core/render/render/Material.h"
 #include "engine/core/render/render/MaterialDesc.h"
 #include "engine/core/render/render/Renderer.h"
-#include "engine/core/render/TextureResManager.h"
 #include <thirdparty/pugixml/pugixml.hpp>
 
 namespace Echo
@@ -152,7 +151,7 @@ namespace Echo
 		size_t cubePos = texName.find("_cube_");
 		if (texName.find("_cube_") == String::npos)
 		{
-			pTexture = TextureResManager::instance()->createTexture(texName.empty() ? "OFFICAL_MATERTAL_TEMPLATE.tga" : texName, Texture::TU_STATIC);
+			pTexture = TextureRes::createTexture(texName.empty() ? "OFFICAL_MATERTAL_TEMPLATE.tga" : texName, Texture::TU_STATIC);
 		}
 		else
 		{
@@ -163,10 +162,10 @@ namespace Echo
 			{
 				texNames[i] = StringUtil::Format("%s%d%s", cubeTexNamePre.c_str(), i, cubeTexNamePost.c_str());
 			}
-			pTexture = TextureResManager::instance()->createTextureCubeFromFiles(texNames[0], texNames[1], texNames[2], texNames[3], texNames[4], texNames[5]);
+			pTexture = TextureRes::createTextureCubeFromFiles(texNames[0], texNames[1], texNames[2], texNames[3], texNames[4], texNames[5]);
 		}
 
-		pTexture->prepare();
+		pTexture->prepareLoad();
 
 		return pTexture;
 	}
@@ -185,26 +184,12 @@ namespace Echo
 		for (auto& it : m_textures)
 		{
 			TextureRes* texRes = it.second.m_texture;
-
-			// 若纹理状态尚未Prepare, 准备之
-			if (texRes->getLoadingState() == Resource::LOADSTATE_CREATED)
-			{
-				EchoLogError("void MaterialInstance::loadTexture()");
-				texRes->prepare();
-			}
-
-			// 加载
-			texRes->load();
+			texRes->prepareLoad();
 		}
 	}
 
 	void MaterialInst::unloadTexture()
 	{
-		for (auto it : m_textures)
-		{
-			if (it.second.m_texture)
-				TextureResManager::instance()->releaseResource(it.second.m_texture);
-		}
 		m_textures.clear();
 	}
 
@@ -279,7 +264,7 @@ namespace Echo
 			TextureInfo& info = it.second;
 			if (info.m_name == name)
 			{
-				TextureResManager::instance()->releaseResource(info.m_texture);
+				//TextureRes::releaseResource(info.m_texture);
 
 				info.m_uri = uri;
 				info.m_texture = prepareTextureImp(info.m_uri);

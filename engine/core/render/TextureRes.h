@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/core/Resource/Resource.h"
+#include "Engine/core/Resource/Res.h"
 #include "engine/core/Util/Buffer.h"
 #include <engine/core/render/render/Texture.h>
 
@@ -9,7 +9,7 @@ namespace Echo
 	/**
 	 * 纹理封装
 	 */
-	class TextureRes: public Resource
+	class TextureRes: public Res
 	{
 	public:
 		enum MASK
@@ -30,10 +30,20 @@ namespace Echo
 		TextureRes(const String& name, bool isManual);
 		virtual ~TextureRes();
 
+		// 创建纹理
+		static TextureRes* createTexture(const String& name, Dword usage = Texture::TU_STATIC);
+
+		// 手动创建
+		static TextureRes* createManual(const String& name, Texture::TexType texType, PixelFormat format, Dword usage, ui32 width, ui32 height, ui32 depth, int num_mips, const Buffer& buff);
+
+		// 创建立方体贴图
+		static TextureRes* createTextureCubeFromFiles(const String& x_posi_name, const String& x_nega_name, const String& y_posi_name, const String& y_nage_name, const String& z_posi_name, const String& z_nega_name, Dword usage = Texture::TU_STATIC);
+
+		// 加载资源
+		void prepareLoad();
+
 		// 获取纹理
 		Texture* getTexture() { return m_texture;  }
-
-		void setTexture(Texture* texture) { m_texture = texture; }
 
 		// 获取像素格式
 		PixelFormat getPixelFormat() const{ return m_texture->getPixelFormat(); }
@@ -62,18 +72,6 @@ namespace Echo
 	protected:
 		// 计算尺寸
 		virtual size_t	calculateSize() const;
-
-		// 准备实现
-		virtual bool prepareImpl( DataStream* stream);
-
-		// 卸载实现 
-		virtual void unprepareImpl();
-
-		// 加载
-		virtual bool loadImpl();
-
-		// 卸载
-		virtual void unloadImpl();
 
 	protected:
 		Texture*		m_texture;

@@ -1181,7 +1181,7 @@ namespace Echo
 			if (meshInfo.m_primitives.size() > 1)
 			{
 				// create multi mesh nodes
-				node = Class::create<GltfMesh*>("Node");
+				node = Class::create<Node*>("Node");
 				if (node)
 				{
 					for (size_t i = 0; i < meshInfo.m_primitives.size(); i++)

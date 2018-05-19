@@ -24,7 +24,6 @@
 #include "engine/core/render/renderstage/RenderStage.h"
 #include "engine/core/render/gles/GLES2.h"
 #include "OpenMPTaskMgr.h"
-#include "engine/core/render/TextureResManager.h"
 
 #ifdef ECHO_PLATFORM_ANDROID
 #include <sys/syscall.h>
@@ -204,10 +203,6 @@ namespace Echo
 		EchoLogDebug("Canvas Size : %d x %d", config.screenWidth, config.screenHeight);
 
 		m_renderer = pRenderer;
-
-		// 创建纹理资源工厂
-		TextureResManager::instance();
-
 		EchoAssert(pRenderer);
 		if (!pRenderer->initialize(config))
 		{
@@ -331,7 +326,6 @@ namespace Echo
 		EchoLogInfo("Echo Engine has been shutdown.");
 		
 		EchoSafeDeleteInstance(RenderTargetManager);
-		EchoSafeDeleteInstance(TextureResManager);
 		
 		// 渲染器
 		if (m_renderer)
@@ -426,8 +420,6 @@ namespace Echo
 
 		NodeTree::instance()->update(elapsedTime*0.001f);
 
-		updateAllManagerDelayResource();
-
 		// 执行动画更新
 		OpenMPTaskMgr::instance()->execTasks(OpenMPTaskMgr::TT_AnimationUpdate);
 		OpenMPTaskMgr::instance()->waitForAnimationUpdateComplete();
@@ -451,20 +443,6 @@ namespace Echo
 			RenderTargetManager::instance()->changeFilterBlendmapName(mapName);
 	}
 
-	void Root::updateAllManagerDelayResource()
-	{
-		static const ui32 MOD = 6;
-		static ui32 nCount = 0;
-		++nCount;
-		int ct = nCount % MOD;
-		switch (ct)
-		{
-			case 0:	TextureResManager::instance()->updateDelayedRelease(ui32(m_frameTime * MOD)); break;
-			default:
-				break;
-		}
-	}
-
 	// 渲染场景
 	bool Root::render()
 	{
@@ -479,11 +457,6 @@ namespace Echo
 		RenderStage::instance()->process();
 
 		return true;
-	}
-
-	void Root::setReleaseDelayTime(ui32 t)
-	{
-		TextureResManager::instance()->setReleaseDelayTime(t);
 	}
 
 	void Root::releasePlugins()

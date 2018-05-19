@@ -1,6 +1,5 @@
 #include "FIleSystemWatcher.h"
 #include <engine/core/Util/PathUtil.h>
-#include <Engine/core/Render/TextureResManager.h>
 #include <Engine/core/main/Root.h>
 #include "Studio.h"
 #include <iterator>
@@ -92,9 +91,9 @@ namespace Studio
 
 		if (fileExt == ".tga" || fileExt == ".bmp" || fileExt == ".png" || fileExt == ".jpg")
 		{
-			Echo::Resource* resource = Echo::TextureResManager::instance()->getByName(fileName);
-			if (resource)
-				resource->reload();
+			//Echo::Resource* resource = Echo::TextureResManager::instance()->getByName(fileName);
+			//if (resource)
+			//	resource->reload();
 		}
 
 		// c++»»º”‘ÿ

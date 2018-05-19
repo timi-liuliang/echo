@@ -3,7 +3,7 @@
 #include "Engine/core/main/EngineSettings.h"
 #include "Engine/core/main/Root.h"
 #include "render/Material.h"
-#include "TextureResManager.h"
+#include "TextureRes.h"
 #include <algorithm>
 
 namespace Echo
@@ -435,7 +435,7 @@ namespace Echo
 				m_pFilterBlendmap.m_texture = NULL;
 			}
 
-			m_filterBlendmapTexture = TextureResManager::instance()->createTexture(m_pFilterBlendmapName);
+			m_filterBlendmapTexture = TextureRes::createTexture(m_pFilterBlendmapName);
 			m_filterBlendmapTexture->prepareLoad();
 			m_pFilterBlendmap.m_texture = m_filterBlendmapTexture->getTexture();
 
