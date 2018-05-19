@@ -1,7 +1,6 @@
 #pragma once
 
 #include "engine/core/render/render/Renderer.h"
-#include "engine/core/Resource/EchoThread.h"
 #include "engine/core/main/EngineSettings.h"
 #include "engine/core/main/EngineConsole.h"
 #include "engine/core/Scene/NodeTree.h"

@@ -154,16 +154,6 @@ namespace Echo
 		//Root::instance()->enableStreamThread(m_bEnableStreamThread);
 	}
 
-	// 设置是否使用流加载
-	void EngineSettingsMgr::setEnableStreamThread(bool isUseStreamThread)
-	{
-		m_bEnableStreamThread = isUseStreamThread;
-		if (m_bEnableStreamThread)
-			StreamThread::instance()->start();
-		else
-			StreamThread::instance()->shutdown();
-	}
-
 	void EngineSettingsMgr::setEnableSmallObjectCull(bool enable)
 	{
 #ifndef ECHO_EDITOR_MODE

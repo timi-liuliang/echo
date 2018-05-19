@@ -68,9 +68,6 @@ namespace Echo
 		// 是否渲染物理
 		bool isEnablePhysicsRender() { return m_bPhysicsRender; }
 
-		// 设置是否使用流加载
-		void setEnableStreamThread(bool isUseStreamThread);
-
 		void setEnableSmallObjectCull(bool enable);
 		bool isEnableSmallObjectCull() { return m_bEnableSmallObjectCull; }
 

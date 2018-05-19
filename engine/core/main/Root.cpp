@@ -4,7 +4,6 @@
 #include "engine/core/Util/PathUtil.h"
 #include "engine/core/Util/Exception.h"
 #include "engine/core/io/IO.h"
-#include "Engine/core/Resource/EchoThread.h"
 #include "engine/core/Util/LogManager.h"
 #include "engine/core/render/render/ImageCodecMgr.h"
 #include "Engine/core/Scene/NodeTree.h"
@@ -297,8 +296,6 @@ namespace Echo
 	// 游戏销毁
 	void Root::destroy()
 	{
-		EchoSafeDeleteInstance(StreamThread);
-
 #if !defined(NO_THEORA_PLAYER)
 		VideoPlay* videoPlay = VideoPlay::Instance();
 		EchoSafeDelete(videoPlay, VideoPlay);
@@ -400,15 +397,6 @@ namespace Echo
 		// 视频更新
 		VideoPlay::Instance()->tick(elapsedTime);
 #endif
-		// 资源加载线程
-		if (StreamThread::instance()->IsRunning())
-		{
-#ifdef ECHO_PLATFORM_HTML5
-			// Html5 doesn't support multithread well
-			m_StreamThreading->processLoop();
-#endif
-			StreamThread::instance()->notifyTaskFinished();
-		}
 
 		// 声音更新
 		auto t0 = EngineTimeController::instance()->getSpeed(EngineTimeController::ET_SOUND);
