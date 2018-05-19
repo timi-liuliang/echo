@@ -20,11 +20,7 @@ namespace Echo
 		};
 
 	private:
-		friend struct commonTextureUploadFunc;
 		friend class RenderTarget;
-		friend class TextureResManager;
-		friend struct TexturePrepareFunc;
-		typedef vector<Buffer>::type TexArray;
 
 	public:
 		TextureRes(const String& name, bool isManual);
