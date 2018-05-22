@@ -18,6 +18,7 @@ SET(INCLUDE_FILES
 	${ECHO_ROOT_PATH}/engine/core/render/gles/Android
 	${ECHO_ROOT_PATH}/engine/core/script/lua
 	${ECHO_ROOT_PATH}/thirdparty/
+	${ECHO_ROOT_PATH}/thirdparty/spine/
 	${ECHO_ROOT_PATH}/ThirdParty/Recast/Recast
 	${ECHO_ROOT_PATH}/ThirdParty/Recast/Detour
 	${ECHO_ROOT_PATH}/ThirdParty/Recast/DetourCrowd
