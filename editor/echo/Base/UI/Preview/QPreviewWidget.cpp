@@ -1,6 +1,5 @@
 #include "QPreviewWidget.h"
 
-#include <Engine/core/resource/EchoThread.h>
 #include <Engine/modules/Audio/FMODStudio/FSAudioManager.h>
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/main/Root.h>
@@ -19,7 +18,7 @@ namespace QT_UI
 	/**
 	 * 缩略图生成线程
 	 */
-	class WorkerThread : public Echo::ThreadLoopObject
+	class WorkerThread
 	{
 	public:
 		WorkerThread(QObject* parent = 0){ m_thumbExeExist = true; }
@@ -38,7 +37,7 @@ namespace QT_UI
 
 			//EchoLogInfo("=========================WorkerThread::addTask:%s,%s m_srcTextures.size:%d", text, srcTexture, m_srcTextures.size());
 
-			resume();
+			//resume();
 		}
 
 		// 清空任务
@@ -58,23 +57,23 @@ namespace QT_UI
 				Echo::StringArray infos = Echo::StringUtil::Split(*it);
 				if (text == infos[0].c_str() && srcTexture == infos[1].c_str())
 				{
-					resume();
+					//resume();
 					return true;
 				}
 			}
 
-			resume();
+			//resume();
 			return false;
 		}
 
 		// 执行
 		void processLoop()
 		{
-			while (m_state==TS_Running)
+			//while (m_state==TS_Running)
 			{
 				if (m_srcTextures.empty() /*&& !m_thumbExeExist*/)
 				{
-					pause();
+				//	pause();
 				}
 				else
 				{			

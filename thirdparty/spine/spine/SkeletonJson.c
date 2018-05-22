@@ -1,41 +1,43 @@
 /******************************************************************************
- * Spine Runtimes Software License
- * Version 2.3
- * 
- * Copyright (c) 2013-2015, Esoteric Software
+ * Spine Runtimes Software License v2.5
+ *
+ * Copyright (c) 2013-2016, Esoteric Software
  * All rights reserved.
- * 
- * You are granted a perpetual, non-exclusive, non-sublicensable and
- * non-transferable license to use, install, execute and perform the Spine
- * Runtimes Software (the "Software") and derivative works solely for personal
- * or internal use. Without the written permission of Esoteric Software (see
- * Section 2 of the Spine Software License Agreement), you may not (a) modify,
- * translate, adapt or otherwise create derivative works, improvements of the
- * Software or develop new applications using the Software or (b) remove,
- * delete, alter or obscure any trademarks or any copyright, trademark, patent
+ *
+ * You are granted a perpetual, non-exclusive, non-sublicensable, and
+ * non-transferable license to use, install, execute, and perform the Spine
+ * Runtimes software and derivative works solely for personal or internal
+ * use. Without the written permission of Esoteric Software (see Section 2 of
+ * the Spine Software License Agreement), you may not (a) modify, translate,
+ * adapt, or develop new applications using the Spine Runtimes or otherwise
+ * create derivative works or improvements of the Spine Runtimes or (b) remove,
+ * delete, alter, or obscure any trademarks or any copyright, trademark, patent,
  * or other intellectual property or proprietary rights notices on or in the
  * Software, including any copy thereof. Redistributions in binary or source
  * form must include this license and terms.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY ESOTERIC SOFTWARE "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
  * EVENT SHALL ESOTERIC SOFTWARE BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
- * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
- * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
- * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, BUSINESS INTERRUPTION, OR LOSS OF
+ * USE, DATA, OR PROFITS) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+ * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 #include <spine/SkeletonJson.h>
 #include <stdio.h>
-#include <locale.h>
 #include "Json.h"
 #include <spine/extension.h>
 #include <spine/AtlasAttachmentLoader.h>
-#include <spine/Animation.h>
+#include <spine/Array.h>
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+#define strdup _strdup
+#endif
 
 typedef struct {
 	const char* parent;
@@ -91,7 +93,8 @@ static float toColor (const char* value, int index) {
 	char *error;
 	int color;
 
-	if (strlen(value) != 8) return -1;
+	if (index >= strlen(value) / 2)
+		return -1;
 	value += index * 2;
 
 	digits[0] = *value;
@@ -185,7 +188,19 @@ static spAnimation* _spSkeletonJson_readAnimation (spSkeletonJson* self, Json* r
 		}
 
 		for (timelineMap = slotMap->child; timelineMap; timelineMap = timelineMap->next) {
-			if (strcmp(timelineMap->name, "color") == 0) {
+			if (strcmp(timelineMap->name, "attachment") == 0) {
+				spAttachmentTimeline *timeline = spAttachmentTimeline_create(timelineMap->size);
+				timeline->slotIndex = slotIndex;
+
+				for (valueMap = timelineMap->child, frameIndex = 0; valueMap; valueMap = valueMap->next, ++frameIndex) {
+					Json* name = Json_getItem(valueMap, "name");
+					spAttachmentTimeline_setFrame(timeline, frameIndex, Json_getFloat(valueMap, "time", 0),
+												  name->type == Json_NULL ? 0 : name->valueString);
+				}
+				animation->timelines[animation->timelinesCount++] = SUPER_CAST(spTimeline, timeline);
+				animation->duration = MAX(animation->duration, timeline->frames[timelineMap->size - 1]);
+
+			} else if (strcmp(timelineMap->name, "color") == 0) {
 				spColorTimeline *timeline = spColorTimeline_create(timelineMap->size);
 				timeline->slotIndex = slotIndex;
 
@@ -198,17 +213,19 @@ static spAnimation* _spSkeletonJson_readAnimation (spSkeletonJson* self, Json* r
 				animation->timelines[animation->timelinesCount++] = SUPER_CAST(spTimeline, timeline);
 				animation->duration = MAX(animation->duration, timeline->frames[(timelineMap->size - 1) * COLOR_ENTRIES]);
 
-			} else if (strcmp(timelineMap->name, "attachment") == 0) {
-				spAttachmentTimeline *timeline = spAttachmentTimeline_create(timelineMap->size);
+			} else if (strcmp(timelineMap->name, "twoColor") == 0) {
+				spTwoColorTimeline *timeline = spTwoColorTimeline_create(timelineMap->size);
 				timeline->slotIndex = slotIndex;
 
 				for (valueMap = timelineMap->child, frameIndex = 0; valueMap; valueMap = valueMap->next, ++frameIndex) {
-					Json* name = Json_getItem(valueMap, "name");
-					spAttachmentTimeline_setFrame(timeline, frameIndex, Json_getFloat(valueMap, "time", 0),
-							name->type == Json_NULL ? 0 : name->valueString);
+					const char* s = Json_getString(valueMap, "light", 0);
+					const char* ds = Json_getString(valueMap, "dark", 0);
+					spTwoColorTimeline_setFrame(timeline, frameIndex, Json_getFloat(valueMap, "time", 0), toColor(s, 0), toColor(s, 1), toColor(s, 2),
+											 toColor(s, 3), toColor(ds, 0), toColor(ds, 1), toColor(ds, 2));
+					readCurve(valueMap, SUPER(timeline), frameIndex);
 				}
 				animation->timelines[animation->timelinesCount++] = SUPER_CAST(spTimeline, timeline);
-				animation->duration = MAX(animation->duration, timeline->frames[timelineMap->size - 1]);
+				animation->duration = MAX(animation->duration, timeline->frames[(timelineMap->size - 1) * TWOCOLOR_ENTRIES]);
 
 			} else {
 				spAnimation_dispose(animation);
@@ -345,12 +362,12 @@ static spAnimation* _spSkeletonJson_readAnimation (spSkeletonJson* self, Json* r
 				}
 				animation->timelines[animation->timelinesCount++] = SUPER_CAST(spTimeline, timeline);
 				animation->duration = MAX(animation->duration, timeline->frames[(timelineMap->size - 1) * PATHCONSTRAINTPOSITION_ENTRIES]);
-			} else if (strcmp(timelineName, "mix")) {
+			} else if (strcmp(timelineName, "mix") == 0) {
 				spPathConstraintMixTimeline* timeline = spPathConstraintMixTimeline_create(timelineMap->size);
 				timeline->pathConstraintIndex = constraintIndex;
 				for (valueMap = timelineMap->child, frameIndex = 0; valueMap; valueMap = valueMap->next, ++frameIndex) {
 					spPathConstraintMixTimeline_setFrame(timeline, frameIndex, Json_getFloat(valueMap, "time", 0),
-														 Json_getFloat(valueMap, "rotateMix", 1), Json_getFloat(valueMap, "translateMix", 1));
+						Json_getFloat(valueMap, "rotateMix", 1), Json_getFloat(valueMap, "translateMix", 1));
 					readCurve(valueMap, SUPER(timeline), frameIndex);
 				}
 				animation->timelines[animation->timelinesCount++] = SUPER_CAST(spTimeline, timeline);
@@ -497,7 +514,9 @@ static spAnimation* _spSkeletonJson_readAnimation (spSkeletonJson* self, Json* r
 static void _readVertices (spSkeletonJson* self, Json* attachmentMap, spVertexAttachment* attachment, int verticesLength) {
 	Json* entry;
 	float* vertices;
-	int i, b, w, nn, entrySize;
+	int i, n, nn, entrySize;
+	spFloatArray* weights;
+	spIntArray* bones;
 
 	attachment->worldVerticesLength = verticesLength;
 
@@ -516,33 +535,31 @@ static void _readVertices (spSkeletonJson* self, Json* attachmentMap, spVertexAt
 
 		attachment->bonesCount = 0;
 		attachment->bones = 0;
-	} else {
-		attachment->verticesCount = 0;
-		attachment->bonesCount = 0;
-
-		for (i = 0; i < entrySize;) {
-			int bonesCount = (int)vertices[i];
-			attachment->bonesCount += 1 + bonesCount;
-			attachment->verticesCount += 3 * bonesCount;
-			i += 1 + bonesCount * 4;
-		}
-
-		attachment->vertices = MALLOC(float, attachment->verticesCount);
-		attachment->bones = MALLOC(int, attachment->bonesCount);
-
-		for (i = 0, b = 0, w = 0; i < entrySize;) {
-			int bonesCount = (int)vertices[i++];
-			attachment->bones[b++] = bonesCount;
-			for (nn = i + bonesCount * 4; i < nn;) {
-				attachment->bones[b++] = (int)vertices[i++];
-				attachment->vertices[w++] = vertices[i++] * self->scale;
-				attachment->vertices[w++] = vertices[i++] * self->scale;
-				attachment->vertices[w++] = vertices[i++];
-			}
-		}
-
-		FREE(vertices);
+		return;
 	}
+
+	weights = spFloatArray_create(verticesLength * 3 * 3);
+	bones = spIntArray_create(verticesLength * 3);
+
+	for (i = 0, n = entrySize; i < n;) {
+		int boneCount = (int)vertices[i++];
+		spIntArray_add(bones, boneCount);
+		for (nn = i + boneCount * 4; i < nn; i += 4) {
+			spIntArray_add(bones, (int)vertices[i]);
+			spFloatArray_add(weights, vertices[i + 1] * self->scale);
+			spFloatArray_add(weights, vertices[i + 2] * self->scale);
+			spFloatArray_add(weights, vertices[i + 3]);
+		}
+	}
+
+	attachment->verticesCount = weights->size;
+	attachment->vertices = weights->items;
+	FREE(weights);
+	attachment->bonesCount = bones->size;
+	attachment->bones = bones->items;
+	FREE(bones);
+
+	FREE(vertices);
 }
 
 spSkeletonData* spSkeletonJson_readSkeletonDataFile (spSkeletonJson* self, const char* path) {
@@ -562,16 +579,14 @@ spSkeletonData* spSkeletonJson_readSkeletonData (spSkeletonJson* self, const cha
 	int i, ii;
 	spSkeletonData* skeletonData;
 	Json *root, *skeleton, *bones, *boneMap, *ik, *transform, *path, *slots, *skins, *animations, *events;
-	char* oldLocale;
 	_spSkeletonJson* internal = SUB_CAST(_spSkeletonJson, self);
 
 	FREE(self->error);
 	CONST_CAST(char*, self->error) = 0;
 	internal->linkedMeshCount = 0;
 
-	oldLocale = setlocale(LC_NUMERIC, "C");
 	root = Json_create(json);
-	setlocale(LC_NUMERIC, oldLocale);
+
 	if (!root) {
 		_spSkeletonJson_setError(self, 0, "Invalid skeleton JSON: ", Json_getError());
 		return 0;
@@ -582,7 +597,7 @@ spSkeletonData* spSkeletonJson_readSkeletonData (spSkeletonJson* self, const cha
 	skeleton = Json_getItem(root, "skeleton");
 	if (skeleton) {
 		MALLOC_STR(skeletonData->hash, Json_getString(skeleton, "hash", 0));
-		MALLOC_STR(skeletonData->version,  Json_getString(skeleton, "spine", 0));
+		MALLOC_STR(skeletonData->version, Json_getString(skeleton, "spine", 0));
 		skeletonData->width = Json_getFloat(skeleton, "width", 0);
 		skeletonData->height = Json_getFloat(skeleton, "height", 0);
 	}
@@ -592,6 +607,7 @@ spSkeletonData* spSkeletonJson_readSkeletonData (spSkeletonJson* self, const cha
 	skeletonData->bones = MALLOC(spBoneData*, bones->size);
 	for (boneMap = bones->child, i = 0; boneMap; boneMap = boneMap->next, ++i) {
 		spBoneData* data;
+		const char* transformMode;
 
 		spBoneData* parent = 0;
 		const char* parentName = Json_getString(boneMap, "parent", 0);
@@ -613,8 +629,18 @@ spSkeletonData* spSkeletonJson_readSkeletonData (spSkeletonJson* self, const cha
 		data->scaleY = Json_getFloat(boneMap, "scaleY", 1);
 		data->shearX = Json_getFloat(boneMap, "shearX", 0);
 		data->shearY = Json_getFloat(boneMap, "shearY", 0);
-		data->inheritRotation = Json_getInt(boneMap, "inheritRotation", 1);
-		data->inheritScale = Json_getInt(boneMap, "inheritScale", 1);
+		transformMode = Json_getString(boneMap, "transform", "normal");
+		data->transformMode = SP_TRANSFORMMODE_NORMAL;
+		if (strcmp(transformMode, "normal") == 0)
+			data->transformMode = SP_TRANSFORMMODE_NORMAL;
+		if (strcmp(transformMode, "onlyTranslation") == 0)
+			data->transformMode = SP_TRANSFORMMODE_ONLYTRANSLATION;
+		if (strcmp(transformMode, "noRotationOrReflection") == 0)
+			data->transformMode = SP_TRANSFORMMODE_NOROTATIONORREFLECTION;
+		if (strcmp(transformMode, "noScale") == 0)
+			data->transformMode = SP_TRANSFORMMODE_NOSCALE;
+		if (strcmp(transformMode, "noScaleOrReflection") == 0)
+			data->transformMode = SP_TRANSFORMMODE_NOSCALEORREFLECTION;
 
 		skeletonData->bones[i] = data;
 		skeletonData->bonesCount++;
@@ -629,6 +655,7 @@ spSkeletonData* spSkeletonJson_readSkeletonData (spSkeletonJson* self, const cha
 		for (slotMap = slots->child, i = 0; slotMap; slotMap = slotMap->next, ++i) {
 			spSlotData* data;
 			const char* color;
+			const char* dark;
 			Json *item;
 
 			const char* boneName = Json_getString(slotMap, "bone", 0);
@@ -643,10 +670,21 @@ spSkeletonData* spSkeletonJson_readSkeletonData (spSkeletonJson* self, const cha
 
 			color = Json_getString(slotMap, "color", 0);
 			if (color) {
-				data->r = toColor(color, 0);
-				data->g = toColor(color, 1);
-				data->b = toColor(color, 2);
-				data->a = toColor(color, 3);
+				spColor_setFromFloats(&data->color,
+									  toColor(color, 0),
+									  toColor(color, 1),
+									  toColor(color, 2),
+									  toColor(color, 3));
+			}
+
+			dark = Json_getString(slotMap, "dark", 0);
+			if (dark) {
+				data->darkColor = spColor_create();
+				spColor_setFromFloats(data->darkColor,
+									  toColor(dark, 0),
+									  toColor(dark, 1),
+									  toColor(dark, 2),
+									  toColor(dark, 3));
 			}
 
 			item = Json_getItem(slotMap, "attachment");
@@ -676,6 +714,7 @@ spSkeletonData* spSkeletonJson_readSkeletonData (spSkeletonJson* self, const cha
 			const char* targetName;
 
 			spIkConstraintData* data = spIkConstraintData_create(Json_getString(constraintMap, "name", 0));
+			data->order = Json_getInt(constraintMap, "order", 0);
 
 			boneMap = Json_getItem(constraintMap, "bones");
 			data->bonesCount = boneMap->size;
@@ -693,7 +732,7 @@ spSkeletonData* spSkeletonJson_readSkeletonData (spSkeletonJson* self, const cha
 			data->target = spSkeletonData_findBone(skeletonData, targetName);
 			if (!data->target) {
 				spSkeletonData_dispose(skeletonData);
-				_spSkeletonJson_setError(self, root, "Target bone not found: ", boneMap->name);
+				_spSkeletonJson_setError(self, root, "Target bone not found: ", targetName);
 				return 0;
 			}
 
@@ -714,6 +753,7 @@ spSkeletonData* spSkeletonJson_readSkeletonData (spSkeletonJson* self, const cha
 			const char* name;
 
 			spTransformConstraintData* data = spTransformConstraintData_create(Json_getString(constraintMap, "name", 0));
+			data->order = Json_getInt(constraintMap, "order", 0);
 
 			boneMap = Json_getItem(constraintMap, "bones");
 			data->bonesCount = boneMap->size;
@@ -731,10 +771,12 @@ spSkeletonData* spSkeletonJson_readSkeletonData (spSkeletonJson* self, const cha
 			data->target = spSkeletonData_findBone(skeletonData, name);
 			if (!data->target) {
 				spSkeletonData_dispose(skeletonData);
-				_spSkeletonJson_setError(self, root, "Target bone not found: ", boneMap->name);
+				_spSkeletonJson_setError(self, root, "Target bone not found: ", name);
 				return 0;
 			}
 
+			data->local = Json_getInt(constraintMap, "local", 0);
+			data->relative = Json_getInt(constraintMap, "relative", 0);
 			data->offsetRotation = Json_getFloat(constraintMap, "rotation", 0);
 			data->offsetX = Json_getFloat(constraintMap, "x", 0) * self->scale;
 			data->offsetY = Json_getFloat(constraintMap, "y", 0) * self->scale;
@@ -762,6 +804,7 @@ spSkeletonData* spSkeletonJson_readSkeletonData (spSkeletonJson* self, const cha
 			const char* item;
 
 			spPathConstraintData* data = spPathConstraintData_create(Json_getString(constraintMap, "name", 0));
+			data->order = Json_getInt(constraintMap, "order", 0);
 
 			boneMap = Json_getItem(constraintMap, "bones");
 			data->bonesCount = boneMap->size;
@@ -779,7 +822,7 @@ spSkeletonData* spSkeletonJson_readSkeletonData (spSkeletonJson* self, const cha
 			data->target = spSkeletonData_findSlot(skeletonData, name);
 			if (!data->target) {
 				spSkeletonData_dispose(skeletonData);
-				_spSkeletonJson_setError(self, root, "Target slot not found: ", boneMap->name);
+				_spSkeletonJson_setError(self, root, "Target slot not found: ", name);
 				return 0;
 			}
 
@@ -846,6 +889,8 @@ spSkeletonData* spSkeletonJson_readSkeletonData (spSkeletonJson* self, const cha
 						type = SP_ATTACHMENT_BOUNDING_BOX;
 					else if (strcmp(typeString, "path") == 0)
 						type = SP_ATTACHMENT_PATH;
+					else if	(strcmp(typeString, "clipping") == 0)
+						type = SP_ATTACHMENT_CLIPPING;
 					else {
 						spSkeletonData_dispose(skeletonData);
 						_spSkeletonJson_setError(self, root, "Unknown attachment type: ", typeString);
@@ -876,10 +921,11 @@ spSkeletonData* spSkeletonJson_readSkeletonData (spSkeletonJson* self, const cha
 
 						color = Json_getString(attachmentMap, "color", 0);
 						if (color) {
-							region->r = toColor(color, 0);
-							region->g = toColor(color, 1);
-							region->b = toColor(color, 2);
-							region->a = toColor(color, 3);
+							spColor_setFromFloats(&region->color,
+												  toColor(color, 0),
+												  toColor(color, 1),
+												  toColor(color, 2),
+												  toColor(color, 3));
 						}
 
 						spRegionAttachment_updateOffset(region);
@@ -895,10 +941,11 @@ spSkeletonData* spSkeletonJson_readSkeletonData (spSkeletonJson* self, const cha
 
 						color = Json_getString(attachmentMap, "color", 0);
 						if (color) {
-							mesh->r = toColor(color, 0);
-							mesh->g = toColor(color, 1);
-							mesh->b = toColor(color, 2);
-							mesh->a = toColor(color, 3);
+							spColor_setFromFloats(&mesh->color,
+												  toColor(color, 0),
+												  toColor(color, 1),
+												  toColor(color, 2),
+												  toColor(color, 3));
 						}
 
 						mesh->width = Json_getFloat(attachmentMap, "width", 32) * self->scale;
@@ -956,7 +1003,6 @@ spSkeletonData* spSkeletonJson_readSkeletonData (spSkeletonJson* self, const cha
 						path->constantSpeed = Json_getInt(attachmentMap, "constantSpeed", 1);
 						vertexCount = Json_getInt(attachmentMap, "vertexCount", 0);
 						_readVertices(self, attachmentMap, SUPER(path), vertexCount << 1);
-						path->super.verticesCount = vertexCount;
 
 						path->lengthsLength = vertexCount / 3;
 						path->lengths = MALLOC(float, path->lengthsLength);
@@ -965,6 +1011,35 @@ spSkeletonData* spSkeletonJson_readSkeletonData (spSkeletonJson* self, const cha
 						for (curves = curves->child, ii = 0; curves; curves = curves->next, ++ii) {
 							path->lengths[ii] = curves->valueFloat * self->scale;
 						}
+						break;
+					}
+					case SP_ATTACHMENT_POINT: {
+						spPointAttachment* point = SUB_CAST(spPointAttachment, attachment);
+						point->x = Json_getFloat(attachmentMap, "x", 0) * self->scale;
+						point->y = Json_getFloat(attachmentMap, "y", 0) * self->scale;
+						point->rotation = Json_getFloat(attachmentMap, "rotation", 0);
+
+						color = Json_getString(attachmentMap, "color", 0);
+						if (color) {
+							spColor_setFromFloats(&point->color,
+												  toColor(color, 0),
+												  toColor(color, 1),
+												  toColor(color, 2),
+												  toColor(color, 3));
+						}
+						break;
+					}
+					case SP_ATTACHMENT_CLIPPING: {
+						spClippingAttachment* clip = SUB_CAST(spClippingAttachment, attachment);
+						int vertexCount = 0;
+						const char* end = Json_getString(attachmentMap, "end", 0);
+						if (end) {
+							spSlotData* slot = spSkeletonData_findSlot(skeletonData, end);
+							clip->endSlot = slot;
+						}
+						vertexCount = Json_getInt(attachmentMap, "vertexCount", 0) << 1;
+						_readVertices(self, attachmentMap, SUPER(clip), vertexCount);
+						spAttachmentLoader_configureAttachment(self->attachmentLoader, attachment);
 						break;
 					}
 					}
