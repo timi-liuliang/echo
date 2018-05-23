@@ -23,12 +23,18 @@ namespace Echo
 		// bind class methods to script
 		static void bindMethods();
 
-		// set moc
+		// set spin
 		void setSpin(const ResourcePath& res);
 
-		// get moc
+		// get spin
 		const ResourcePath& getSpin() { return m_spinRes; }
 
+		// set atlas
+		void setAtlas(const ResourcePath& res);
+
+		// get atlas
+		const ResourcePath& getAtlas() { return m_atlasRes; }
+		
 		// play anim
 		void playAnim(const String& animName);
 
@@ -48,11 +54,11 @@ namespace Echo
 
 	private:
 		ResourcePath		m_spinRes;
+		ResourcePath		m_atlasRes;
 		spAtlas*			m_spAtlas;
 		spSkeleton*			m_spSkeleton;
 		spAnimationState*	m_spAnimState;
 		spAttachmentLoader*	m_attachmentLoader;
-		float*				m_worldVertices;
 		Matrix4				m_matWVP;
 	};
 }

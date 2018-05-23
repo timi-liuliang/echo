@@ -194,9 +194,17 @@ namespace Echo
 			m_materialInst->setTexture("u_BaseColorSampler", m_texture);
 
 			m_renderable = Renderable::create(m_mesh, m_materialInst, node);
+			m_renderable->submitToRenderQueue();
 		}
 		else
 		{
+			MeshVertexFormat define;
+			define.m_isUseVertexColor = true;
+			define.m_isUseUV = true;
+
+			m_mesh->updateIndices(m_indicesData.size(), m_indicesData.data());
+			m_mesh->updateVertexs(define, m_verticesData.size(), (const Byte*)m_verticesData.data(), Box());
+
 			m_renderable->submitToRenderQueue();
 		}
 	}

@@ -24,10 +24,10 @@ namespace Echo
 
 	Spine::Spine()
 		: m_spinRes("", ".json")
+		, m_atlasRes("", ".atlas")
 		, m_spSkeleton(nullptr)
 		, m_spAnimState(nullptr)
 	{
-		m_worldVertices = new float[1000];
 	}
 
 	Spine::~Spine()
@@ -39,22 +39,18 @@ namespace Echo
 	{
 		CLASS_BIND_METHOD(Spine, getSpin, DEF_METHOD("getSpin"));
 		CLASS_BIND_METHOD(Spine, setSpin, DEF_METHOD("setSpin"));
+		CLASS_BIND_METHOD(Spine, getAtlas,DEF_METHOD("getAtlas"));
+		CLASS_BIND_METHOD(Spine, setAtlas, DEF_METHOD("setAtlas"));
 
 		CLASS_REGISTER_PROPERTY(Spine, "Spin", Variant::Type::ResourcePath, "getSpin", "setSpin");
+		CLASS_REGISTER_PROPERTY(Spine, "Atlas", Variant::Type::ResourcePath, "getAtlas", "setAtlas");
 	}
 
 	// set moc
 	void Spine::setSpin(const ResourcePath& res)
 	{
-		if (m_spinRes.setPath(res.getPath()))
+		if (m_spinRes.setPath(res.getPath()) && m_attachmentLoader)
 		{
-			// atlas
-			String atlasRes = PathUtil::GetRenameExtFile(res.getPath(), ".atlas");
-			m_spAtlas = spAtlas_createFromFile(atlasRes.c_str(), nullptr);
-
-			// attachment
-			m_attachmentLoader = &(EchoAttachmentLoader_create(m_spAtlas)->super);
-
 			// json
 			spSkeletonJson* json = spSkeletonJson_createWithLoader(m_attachmentLoader);
 			json->scale = 1.f;
@@ -67,6 +63,23 @@ namespace Echo
 			m_spAnimState = spAnimationState_create(spAnimationStateData_create(m_spSkeleton->data));
 			m_spAnimState->rendererObject = this;
 			m_spAnimState->listener = animationCallback;
+		}
+	}
+
+	// set atlas
+	void Spine::setAtlas(const ResourcePath& res)
+	{
+		if (m_atlasRes.setPath(res.getPath()))
+		{
+			// atlas
+			m_spAtlas = spAtlas_createFromFile(m_atlasRes.getPath().c_str(), nullptr);
+
+			// attachment
+			m_attachmentLoader = &(EchoAttachmentLoader_create(m_spAtlas)->super);
+
+			// animation
+			if (!m_spinRes.getPath().empty())
+				setSpin(m_spinRes.getPath());
 		}
 	}
 
@@ -89,11 +102,10 @@ namespace Echo
 			spAnimationState_update(m_spAnimState, delta);
 			spAnimationState_apply(m_spAnimState, m_spSkeleton);
 			spSkeleton_updateWorldTransform(m_spSkeleton);
+
+			submitToRenderQueue();
 		}
-
-		submitToRenderQueue();
 	}
-
 
 	// submit to render
 	void Spine::submitToRenderQueue()
@@ -108,32 +120,45 @@ namespace Echo
 			switch (slot->attachment->type)
 			{
 			case SP_ATTACHMENT_REGION:
-			{
-				spRegionAttachment* attachment = (spRegionAttachment*)slot->attachment;
-				spRegionAttachment_computeWorldVertices(attachment, slot->bone, m_worldVertices, 0, sizeof(SpineVertexFormat));
-				attachmentVertices = (AttachmentVertices*)attachment->rendererObject;
+				{
+					spRegionAttachment* attachment = (spRegionAttachment*)slot->attachment;
+					attachmentVertices = (AttachmentVertices*)attachment->rendererObject;
+
+					int stride = sizeof(SpineVertexFormat) / 4;
+					spRegionAttachment_computeWorldVertices(attachment, slot->bone, (float*)attachmentVertices->m_verticesData.data(), 0, stride);
+				}
 				break;
-			}
+
 			case SP_ATTACHMENT_MESH:
-			{
-				spMeshAttachment* attachment = (spMeshAttachment*)slot->attachment;
-				spVertexAttachment_computeWorldVertices(SUPER(attachment), slot, 0, attachmentVertices->m_verticesData.size(), m_worldVertices, 0, sizeof(SpineVertexFormat));
-				attachmentVertices = (AttachmentVertices*)attachment->rendererObject;
+				{
+					spMeshAttachment* attachment = (spMeshAttachment*)slot->attachment;
+					attachmentVertices = (AttachmentVertices*)attachment->rendererObject;
+
+					int count = attachmentVertices->m_verticesData.size() * sizeof(SpineVertexFormat) / 4;
+					int stride = sizeof(SpineVertexFormat) / 4;
+					spVertexAttachment_computeWorldVertices(SUPER(attachment), slot, 0, count, (float*)attachmentVertices->m_verticesData.data(), 0, stride);
+				}
 				break;
-			}
 			default:
-			{
+				{
 				continue;
-			}
+				}
 			}
 
 			// 更新位置颜色数据
-			for (int v = 0, w = 0, vn = attachmentVertices->m_verticesData.size(); v < vn; ++v, w += 2)
+			//for (int v = 0, w = 0, vn = attachmentVertices->m_verticesData.size(); v < vn; ++v, w += 2)
+			//{
+			//	SpineVertexFormat* vertex = attachmentVertices->m_verticesData.data() + v;
+			//	vertex->m_position.x = m_worldVertices[w];
+			//	vertex->m_position.y = m_worldVertices[w + 1];
+			//	vertex->m_position.z = 0.f;
+			//	vertex->m_diffuse = Color::WHITE;
+			//}
+
+			// diffuse
+			for (size_t v = 0; v < attachmentVertices->m_verticesData.size(); v++)
 			{
 				SpineVertexFormat* vertex = attachmentVertices->m_verticesData.data() + v;
-				vertex->m_position.x = m_worldVertices[w];
-				vertex->m_position.y = m_worldVertices[w + 1];
-				vertex->m_position.z = 0.f;
 				vertex->m_diffuse = Color::WHITE;
 			}
 
