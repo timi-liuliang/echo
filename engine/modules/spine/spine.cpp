@@ -24,6 +24,8 @@ namespace Echo
 
 	Spine::Spine()
 		: m_spinRes("", ".json")
+		, m_spSkeleton(nullptr)
+		, m_spAnimState(nullptr)
 	{
 		m_worldVertices = new float[1000];
 	}
@@ -81,10 +83,13 @@ namespace Echo
 
 		m_matWVP = getWorldMatrix()* NodeTree::instance()->get2DCamera()->getViewProjMatrix();
 
-		spSkeleton_update(m_spSkeleton, delta);
-		spAnimationState_update(m_spAnimState, delta);
-		spAnimationState_apply(m_spAnimState, m_spSkeleton);
-		spSkeleton_updateWorldTransform(m_spSkeleton);
+		if (m_spSkeleton && m_spAnimState)
+		{
+			spSkeleton_update(m_spSkeleton, delta);
+			spAnimationState_update(m_spAnimState, delta);
+			spAnimationState_apply(m_spAnimState, m_spSkeleton);
+			spSkeleton_updateWorldTransform(m_spSkeleton);
+		}
 
 		submitToRenderQueue();
 	}
