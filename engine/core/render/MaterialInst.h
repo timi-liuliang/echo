@@ -108,6 +108,7 @@ namespace Echo
 
 		// 设置贴图
 		TextureRes* setTexture(const String& name, const String& uri);
+		TextureRes* setTexture(const String& name, TextureRes* textureRes);
 
 		// 获取属性队列
 		ParamMap& GetUniformSet() { return m_unifroms; }

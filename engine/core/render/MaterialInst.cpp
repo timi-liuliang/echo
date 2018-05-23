@@ -256,7 +256,12 @@ namespace Echo
 
 	TextureRes* MaterialInst::setTexture(const String& name, const String& uri)
 	{
-		if (name.empty())
+		return setTexture( name, prepareTextureImp(uri));
+	}
+
+	TextureRes* MaterialInst::setTexture(const String& name, TextureRes* textureRes)
+	{
+		if (!textureRes)
 			return nullptr;
 
 		for (auto& it : m_textures)
@@ -266,8 +271,8 @@ namespace Echo
 			{
 				//TextureRes::releaseResource(info.m_texture);
 
-				info.m_uri = uri;
-				info.m_texture = prepareTextureImp(info.m_uri);
+				info.m_uri = textureRes->getName();
+				info.m_texture = textureRes;
 
 				return info.m_texture;
 			}

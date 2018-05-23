@@ -5,6 +5,11 @@
 #include "engine/core/render/MaterialInst.h"
 #include "engine/core/render/render/Renderable.h"
 
+struct spAtlas;
+struct spSkeleton;
+struct spAnimationState;
+struct spAttachmentLoader;
+
 namespace Echo
 {
 	class Spine : public Node
@@ -24,6 +29,9 @@ namespace Echo
 		// get moc
 		const ResourcePath& getSpin() { return m_spinRes; }
 
+		// play anim
+		void playAnim(const String& animName);
+
 	protected:
 		// update
 		virtual void update();
@@ -31,19 +39,20 @@ namespace Echo
 		// get global uniforms
 		virtual void* getGlobalUniformValue(const String& name);
 
+		// submit to renderqueue
+		void submitToRenderQueue();
+
 		// clear
 		void clear();
 		void clearRenderable();
 
 	private:
-		ResourcePath				m_spinRes;
-		struct spAtlas*				m_spAtlas;
-		struct spSkeleton*			m_spSkeleton;
-		struct spAnimationState*	m_spAnimState;
-		struct spAttachmentLoader*	m_attachmentLoader;
-		Mesh*						m_mesh;				// Geometry Data for render
-		MaterialInst*				m_materialInst;		// Material Instance
-		Renderable*					m_renderable;
-		Matrix4						m_matWVP;
+		ResourcePath		m_spinRes;
+		spAtlas*			m_spAtlas;
+		spSkeleton*			m_spSkeleton;
+		spAnimationState*	m_spAnimState;
+		spAttachmentLoader*	m_attachmentLoader;
+		float*				m_worldVertices;
+		Matrix4				m_matWVP;
 	};
 }

@@ -4,76 +4,28 @@
 #include "render/renderer.h"
 #include "render/Material.h"
 #include "engine/core/script/lua/luaex.h"
+#include "engine/core/util/PathUtil.h"
 #include "engine/core/main/Root.h"
 #include <spine/spine.h>
-
-// 默认材质
-static const char* g_spinDefaultMaterial = R"(
-<?xml version = "1.0" encoding = "utf-8"?>
-<material>
-<vs>#version 100
-
-attribute vec3 a_Position;
-attribute vec2 a_UV;
-
-uniform mat4 u_WVPMatrix;
-
-varying vec2 texCoord;
-
-void main(void)
-{
-	vec4 position = u_WVPMatrix * vec4(a_Position, 1.0);
-	gl_Position = position;
-
-	texCoord = a_UV;
-}
-</vs>
-<ps>#version 100
-
-uniform sampler2D u_BaseColorSampler;
-varying mediump vec2 texCoord;
-
-void main(void)
-{
-	mediump vec4 textureColor = texture2D(u_BaseColorSampler, texCoord);
-	gl_FragColor = textureColor;
-}
-	</ps>
-	<BlendState>
-		<BlendEnable value = "true" />
-		<SrcBlend value = "BF_SRC_ALPHA" />
-		<DstBlend value = "BF_INV_SRC_ALPHA" />
-	</BlendState>
-	<RasterizerState>
-		<CullMode value = "CULL_NONE" />
-	</RasterizerState>
-	<DepthStencilState>
-		<DepthEnable value = "false" />
-		<WriteDepth value = "false" />
-	</DepthStencilState>
-	<SamplerState>
-		<BiLinearMirror>
-			<MinFilter value = "FO_LINEAR" />
-			<MagFilter value = "FO_LINEAR" />
-			<MipFilter value = "FO_NONE" />
-			<AddrUMode value = "AM_CLAMP" />
-			<AddrVMode value = "AM_CLAMP" />
-		</BiLinearMirror>
-	</SamplerState>
-	<Texture>
-		<stage no = "0" sampler = "BiLinearMirror" />
-	</Texture>
-</material>
-)";
+#include <spine/extension.h>
+#include "AttachmentLoader.h"
 
 namespace Echo
 {
+	static void animationCallback(spAnimationState* state, spEventType type, spTrackEntry* entry, spEvent* event)
+	{
+		int  a = 10;
+	}
+
+	static void trackEntryCallback(spAnimationState* state, int trackIndex, spEventType type, spEvent* event, int loopCount)
+	{
+		//((SkeletonAnimation*)state->rendererObject)->onTrackEntryEvent(trackIndex, type, event, loopCount);
+	}
+
 	Spine::Spine()
 		: m_spinRes("", ".json")
-		, m_mesh(nullptr)
-		, m_materialInst(nullptr)
-		, m_renderable(nullptr)
 	{
+		m_worldVertices = new float[1000];
 	}
 
 	Spine::~Spine()
@@ -94,28 +46,115 @@ namespace Echo
 	{
 		if (m_spinRes.setPath(res.getPath()))
 		{
-			int a = 10;
+			// atlas
+			String atlasRes = PathUtil::GetRenameExtFile(res.getPath(), ".atlas");
+			m_spAtlas = spAtlas_createFromFile(atlasRes.c_str(), nullptr);
+
+			// attachment
+			m_attachmentLoader = &(EchoAttachmentLoader_create(m_spAtlas)->super);
+
+			// json
+			spSkeletonJson* json = spSkeletonJson_createWithLoader(m_attachmentLoader);
+			json->scale = 1.f;
+
+			// skeleton data
+			spSkeletonData* skeletonData = spSkeletonJson_readSkeletonDataFile(json, PathUtil::GetRenameExtFile(res.getPath().c_str(), ".json").c_str());
+			m_spSkeleton = spSkeleton_create(skeletonData);
+
+			// Animation
+			m_spAnimState = spAnimationState_create(spAnimationStateData_create(m_spSkeleton->data));
+			m_spAnimState->rendererObject = this;
+			m_spAnimState->listener = animationCallback;
 		}
+	}
+
+	// play anim
+	void Spine::playAnim(const String& animName)
+	{
+		spAnimationState_setAnimationByName(m_spAnimState, 0, animName.c_str(), true);
 	}
 
 	// update per frame
 	void Spine::update()
 	{
-		//if (m_model && m_renderable)
-		//{
-		//	m_matWVP = getWorldMatrix() * NodeTree::instance()->get2DCamera()->getViewProjMatrix();;
+		float delta = Root::instance()->getFrameTime();
 
-		//	if (m_curMotion)
-		//	{
-		//		m_curMotion->tick( Root::instance()->getFrameTime(), m_model, m_table);
-		//	}
+		m_matWVP = getWorldMatrix()* NodeTree::instance()->get2DCamera()->getViewProjMatrix();
 
-		//	csmUpdateModel((csmModel*)m_model);
+		spSkeleton_update(m_spSkeleton, delta);
+		spAnimationState_update(m_spAnimState, delta);
+		spAnimationState_apply(m_spAnimState, m_spSkeleton);
+		spSkeleton_updateWorldTransform(m_spSkeleton);
 
-		//	updateMeshBuffer();
+		submitToRenderQueue();
+	}
 
-		//	m_renderable->submitToRenderQueue();
-		//}
+
+	// submit to render
+	void Spine::submitToRenderQueue()
+	{
+		for (int i = 0; i < m_spSkeleton->slotsCount; i++)
+		{
+			spSlot* slot = m_spSkeleton->drawOrder[i];
+			if (!slot->attachment)
+				continue;
+
+			AttachmentVertices* attachmentVertices = nullptr;
+			switch (slot->attachment->type)
+			{
+			case SP_ATTACHMENT_REGION:
+			{
+				spRegionAttachment* attachment = (spRegionAttachment*)slot->attachment;
+				spRegionAttachment_computeWorldVertices(attachment, slot->bone, m_worldVertices, 0, sizeof(SpineVertexFormat));
+				attachmentVertices = (AttachmentVertices*)attachment->rendererObject;
+				break;
+			}
+			case SP_ATTACHMENT_MESH:
+			{
+				spMeshAttachment* attachment = (spMeshAttachment*)slot->attachment;
+				spVertexAttachment_computeWorldVertices(SUPER(attachment), slot, 0, attachmentVertices->m_verticesData.size(), m_worldVertices, 0, sizeof(SpineVertexFormat));
+				attachmentVertices = (AttachmentVertices*)attachment->rendererObject;
+				break;
+			}
+			default:
+			{
+				continue;
+			}
+			}
+
+			// 更新位置颜色数据
+			for (int v = 0, w = 0, vn = attachmentVertices->m_verticesData.size(); v < vn; ++v, w += 2)
+			{
+				SpineVertexFormat* vertex = attachmentVertices->m_verticesData.data() + v;
+				vertex->m_position.x = m_worldVertices[w];
+				vertex->m_position.y = m_worldVertices[w + 1];
+				vertex->m_position.z = 0.f;
+				vertex->m_diffuse = Color::WHITE;
+			}
+
+			// 混合状态
+			switch (slot->data->blendMode)
+			{
+			case SP_BLEND_MODE_ADDITIVE:
+			{
+				break;
+			}
+			case SP_BLEND_MODE_MULTIPLY:
+			{
+				break;
+			}
+			case SP_BLEND_MODE_SCREEN:
+			{
+				break;
+			}
+			default:
+			{
+				break;
+			}
+			}
+
+			attachmentVertices->submitToRenderQueue(this);
+		}
 	}
 
 	// 获取全局变量值
@@ -133,19 +172,10 @@ namespace Echo
 
 	void Spine::clear()
 	{
-		//EchoSafeDelete(m_mocMemory, MemoryReaderAlign);
-		//EchoSafeFreeAlign(m_mocMemory, csmAlignofModel);
-		//EchoSafeFree(m_tableMemory);
-		//EchoSafeDeleteMap(m_motions, Live2dCubismMotion);
-		//m_curMotion = nullptr;
-
 		clearRenderable();
 	}
 
 	void Spine::clearRenderable()
 	{
-		EchoSafeRelease(m_renderable);
-		EchoSafeRelease(m_materialInst);
-		EchoSafeRelease(m_mesh);
 	}
 }
