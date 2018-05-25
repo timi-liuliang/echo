@@ -526,6 +526,16 @@ namespace Echo
 			return *this;
 		}
 
+		Vector4& fract()
+		{
+			x = Math::Frac(x);
+			y = Math::Frac(y);
+			z = Math::Frac(z);
+			w = Math::Frac(w);
+
+			return *this;
+		}
+
 		inline Vector4 midPoint(const Vector4& vec) const
 		{
 			ADD_MATH_OP_COUNT

@@ -25,8 +25,11 @@ namespace Echo
 	Spine::Spine()
 		: m_spinRes("", ".json")
 		, m_atlasRes("", ".atlas")
+		, m_animations("", nullptr)
+		, m_spSkeletonData(nullptr)
 		, m_spSkeleton(nullptr)
 		, m_spAnimState(nullptr)
+		, m_attachmentLoader(nullptr)
 	{
 	}
 
@@ -41,9 +44,12 @@ namespace Echo
 		CLASS_BIND_METHOD(Spine, setSpin, DEF_METHOD("setSpin"));
 		CLASS_BIND_METHOD(Spine, getAtlas,DEF_METHOD("getAtlas"));
 		CLASS_BIND_METHOD(Spine, setAtlas, DEF_METHOD("setAtlas"));
+		CLASS_BIND_METHOD(Spine, setAnim, DEF_METHOD("setAnim"));
+		CLASS_BIND_METHOD(Spine, getAnim, DEF_METHOD("getAnim"));
 
 		CLASS_REGISTER_PROPERTY(Spine, "Spin", Variant::Type::ResourcePath, "getSpin", "setSpin");
 		CLASS_REGISTER_PROPERTY(Spine, "Atlas", Variant::Type::ResourcePath, "getAtlas", "setAtlas");
+		CLASS_REGISTER_PROPERTY(Spine, "Anim", Variant::Type::StringOption, "getAnim", "setAnim");
 	}
 
 	// set moc
@@ -56,10 +62,17 @@ namespace Echo
 			json->scale = 1.f;
 
 			// skeleton data
-			spSkeletonData* skeletonData = spSkeletonJson_readSkeletonDataFile(json, PathUtil::GetRenameExtFile(res.getPath().c_str(), ".json").c_str());
-			m_spSkeleton = spSkeleton_create(skeletonData);
+			m_spSkeletonData = spSkeletonJson_readSkeletonDataFile(json, PathUtil::GetRenameExtFile(res.getPath().c_str(), ".json").c_str());
+			m_spSkeleton = spSkeleton_create(m_spSkeletonData);
 
-			// Animation
+			// animation names
+			for (int i = 0; i < m_spSkeletonData->animationsCount; i++)
+			{
+				spAnimation* spAnim = m_spSkeletonData->animations[i];
+				m_animations.addOption(spAnim->name);
+			}
+
+			// animation state
 			m_spAnimState = spAnimationState_create(spAnimationStateData_create(m_spSkeleton->data));
 			m_spAnimState->rendererObject = this;
 			m_spAnimState->listener = animationCallback;
@@ -84,9 +97,12 @@ namespace Echo
 	}
 
 	// play anim
-	void Spine::playAnim(const String& animName)
+	void Spine::setAnim(const StringOption& animName)
 	{
-		spAnimationState_setAnimationByName(m_spAnimState, 0, animName.c_str(), true);
+		if (m_animations.setValue(animName.getValue()))
+		{
+			spAnimationState_setAnimationByName(m_spAnimState, 0, m_animations.getValue().c_str(), true);
+		}
 	}
 
 	// update per frame
@@ -159,6 +175,7 @@ namespace Echo
 			for (size_t v = 0; v < attachmentVertices->m_verticesData.size(); v++)
 			{
 				SpineVertexFormat* vertex = attachmentVertices->m_verticesData.data() + v;
+				vertex->m_position.z = 0.f;
 				vertex->m_diffuse = Color::WHITE;
 			}
 

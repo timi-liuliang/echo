@@ -28,6 +28,12 @@ namespace Echo
 		m_any = value;
 	}
 
+	Variant::Variant(const StringOption& value)
+		: m_type(Type::StringOption)
+	{
+		m_any = value;
+	}
+
 	Variant::Variant(const ResourcePath& value)
 		: m_type(Type::ResourcePath)
 	{
@@ -65,6 +71,7 @@ namespace Echo
 		case Type::String: return any_cast<String>(m_any);
 		case Type::Vector3: return StringUtil::ToString(m_vec3);
 		case Type::ResourcePath: return (any_cast<ResourcePath>(m_any)).getPath();
+		case Type::StringOption: return (any_cast<StringOption>(m_any)).getValue();
 		}
 
 		static Echo::String invalid;
@@ -79,6 +86,7 @@ namespace Echo
 		case Echo::Variant::Type::Int: m_int = StringUtil::ParseI32(str); return true;
 		case Echo::Variant::Type::Vector3: { m_type = Type::Vector3; m_vec3 = StringUtil::ParseVec3(str); }return true;
 		case Echo::Variant::Type::ResourcePath: { m_type = Type::ResourcePath; m_any = ResourcePath(str, nullptr); }return true;
+		case Echo::Variant::Type::StringOption: { m_type = Type::StringOption; m_any = StringOption(str, nullptr); } return true;
 		}
 
 		return false;

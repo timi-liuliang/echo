@@ -1,5 +1,6 @@
 #pragma once
 
+#include "engine/core/util/StringOption.h"
 #include "engine/core/scene/Node.h"
 #include "engine/core/render/mesh/Mesh.h"
 #include "engine/core/render/MaterialInst.h"
@@ -7,6 +8,7 @@
 
 struct spAtlas;
 struct spSkeleton;
+struct spSkeletonData;
 struct spAnimationState;
 struct spAttachmentLoader;
 
@@ -36,7 +38,10 @@ namespace Echo
 		const ResourcePath& getAtlas() { return m_atlasRes; }
 		
 		// play anim
-		void playAnim(const String& animName);
+		void setAnim(const StringOption& animName);
+
+		// get animations
+		const StringOption& getAnim() { return m_animations; }
 
 	protected:
 		// update
@@ -55,7 +60,9 @@ namespace Echo
 	private:
 		ResourcePath		m_spinRes;
 		ResourcePath		m_atlasRes;
+		StringOption		m_animations;
 		spAtlas*			m_spAtlas;
+		spSkeletonData*		m_spSkeletonData;
 		spSkeleton*			m_spSkeleton;
 		spAnimationState*	m_spAnimState;
 		spAttachmentLoader*	m_attachmentLoader;

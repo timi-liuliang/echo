@@ -15,13 +15,6 @@ LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/Fmod/Win32/Lib)
 LINK_DIRECTORIES(${ECHO_DEP_PATH}/AdrenoSDK/Lib/Win32)
 LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/Core/lib/windows/x86)
 
-# 区分32位64位编译类型
-IF(CMAKE_SIZEOF_VOID_P EQUAL 4)
-	LINK_DIRECTORIES(${ECHO_DEP_PATH}/fbx/windows/lib/vs2015/x86/${CMAKE_BUILD_TYPE})
-ELSEIF(CMAKE_SIZEOF_VOID_P EQUAL 8)
-	LINK_DIRECTORIES(${ECHO_DEP_PATH}/fbx/windows/lib/vs2015/x64/${CMAKE_BUILD_TYPE})
-ENDIF()
-
 # recursive get all module files
 FILE( GLOB_RECURSE HEADER_FILES *.h *.inl *.hpp)
 FILE( GLOB_RECURSE SOURCE_FILES *.cpp *.mm *.cc)
@@ -41,7 +34,7 @@ ADD_EXECUTABLE(${MODULE_NAME} ${ALL_FILES} CMakeLists.txt)
 # link libararies
 TARGET_LINK_LIBRARIES(${MODULE_NAME} googletest engine)
 
-TARGET_LINK_LIBRARIES(${MODULE_NAME} zlib engine 7zip winmm.lib imm32.lib dxgi.lib libfbxsdk.lib Shlwapi.lib lua recast freeimage)
+TARGET_LINK_LIBRARIES(${MODULE_NAME} zlib engine 7zip winmm.lib imm32.lib dxgi.lib Shlwapi.lib lua recast freeimage)
 IF(CMAKE_SIZEOF_VOID_P EQUAL 4)
 	TARGET_LINK_LIBRARIES(${MODULE_NAME} fmod_vc.lib fmodstudio_vc.lib)
 ELSEIF(CMAKE_SIZEOF_VOID_P EQUAL 8)

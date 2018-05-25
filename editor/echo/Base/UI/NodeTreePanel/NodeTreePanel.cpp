@@ -303,6 +303,7 @@ namespace Studio
 		case Echo::Variant::Type::String:		m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_None); break;
 		case Echo::Variant::Type::Vector3:		m_propertyHelper.addItem(name.c_str(), var.toVector3(), QT_UI::WT_Vector3); break;
 		case Echo::Variant::Type::ResourcePath:	m_propertyHelper.addItem(name.c_str(), var.toResPath().getPath(), QT_UI::WT_AssetsSelect, var.toResPath().getSupportExts().c_str());break;
+		case Echo::Variant::Type::StringOption: m_propertyHelper.addItem(name.c_str(), var.toStringOption().getValue(), QT_UI::WT_ComboBox, var.toStringOption().getOptionsStr().c_str()); break;
 		default:								m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_None); break;
 		}
 		
@@ -320,6 +321,9 @@ namespace Studio
 		if(propertyValue.fromString(type, valStr))
 		{
 			Echo::Class::setPropertyValue(node, propertyName, propertyValue);
+
+			// refresh property display
+			showSelectedNodeProperty();
 		}
 		else
 		{

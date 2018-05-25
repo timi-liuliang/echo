@@ -6,6 +6,7 @@
 #include "engine/core/resource/ResourcePath.h"
 #include "engine/core/util/Any.hpp"
 #include "engine/core/util/base64.h"
+#include "engine/core/util/StringOption.h"
 
 namespace Echo
 {
@@ -22,6 +23,7 @@ namespace Echo
 			String,
 			ResourcePath,
 			Base64String,
+			StringOption,
 			Material,
 		};
 
@@ -44,6 +46,7 @@ namespace Echo
 		Variant(const Vector3& value);
 		Variant(const ResourcePath& value);
 		Variant(const Base64String& value);
+		Variant(const StringOption& value);
 		~Variant();
 
 		// operator "="
@@ -58,11 +61,13 @@ namespace Echo
 		operator const Vector3&() const { return m_vec3; }
 		operator const ResourcePath&() const { return any_cast<ResourcePath>(m_any); }
 		operator const Base64String&() const { return any_cast<Base64String>(m_any); }
+		operator const StringOption&() const { return any_cast<StringOption>(m_any); }
 
 		// convert to other type
 		const bool toVector3() { return m_bool; }
 		const Vector3& toVector3() const { return m_vec3; }
 		const ResourcePath& toResPath() const { return any_cast<ResourcePath>(m_any); }
+		const StringOption& toStringOption() const { return any_cast<StringOption>(m_any); }
 
 		// is nil
 		bool isNil() const { return m_type == Type::Nil; }
