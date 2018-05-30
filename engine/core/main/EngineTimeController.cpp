@@ -1,5 +1,5 @@
 #include "EngineTimeController.h"
-#include <engine/core/Math/EchoMath.h>
+#include <engine/core/Math/Math.h>
 #include <engine/core/Util/StringUtil.h>
 #include <engine/core/Util/AssertX.h>
 #include <engine/core/Base/Function.h>
