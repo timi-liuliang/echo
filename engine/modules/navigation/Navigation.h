@@ -4,7 +4,7 @@
 #include <Recast/Recast/DetourNavMesh.h>
 #include <Recast/Recast/DetourNavMeshQuery.h>
 #include <Recast/Recast/DetourCrowd.h>
-#include <engine/core/Math/EchoMath.h>
+#include <engine/core/Math/Math.h>
 
 class dtNavMesh;
 class dtNavMeshQuery;

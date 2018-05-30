@@ -1,7 +1,7 @@
 #ifndef __ECHO_PLANE_H__
 #define __ECHO_PLANE_H__
 
-#include "engine/core/Math/MathLib.h"
+#include "engine/core/Math/Math.h"
 
 namespace Echo
 {

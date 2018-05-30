@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/core/math/MathLib.h"
+#include "engine/core/math/Math.h"
 #include "anim_curve.h"
 
 namespace Echo

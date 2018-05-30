@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/core/memory/MemAllocDef.h"
-#include "engine/core/math/MathLib.h"
+#include "engine/core/math/Math.h"
 #include "engine/core/io/DataStream.h"
 #include "engine/core/scene/node.h"
 #include "engine/core/resource/Res.h"

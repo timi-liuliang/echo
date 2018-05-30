@@ -1,7 +1,7 @@
 #ifndef __ECHO_RAY_H__
 #define __ECHO_RAY_H__
 
-#include "engine/core/Math/MathLib.h"
+#include "engine/core/Math/Math.h"
 #include "Triangle.h"
 #include "Plane.h"
 #include "engine/core/Math/Rect.h"

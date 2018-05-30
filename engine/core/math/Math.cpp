@@ -1,4 +1,4 @@
-#include "EchoMath.h"
+#include "Math.h"
 
 namespace Echo
 {

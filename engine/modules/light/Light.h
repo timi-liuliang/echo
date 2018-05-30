@@ -1,6 +1,6 @@
 #pragma once
 
-#include <engine/core/Math/EchoMath.h>
+#include <engine/core/Math/Math.h>
 
 namespace Echo
 {

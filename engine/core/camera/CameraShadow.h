@@ -1,6 +1,6 @@
 #pragma once
 
-#include <engine/core/math/EchoMath.h>
+#include <engine/core/math/Math.h>
 #include "engine/core/geom/Box.h"
 
 namespace Echo

@@ -1,5 +1,4 @@
-#ifndef __ECHO_CURVE_H__
-#define __ECHO_CURVE_H__
+#pragma once
 
 #include "Vector3.h"
 
@@ -40,5 +39,3 @@ namespace Echo
 	// 计算经过 p0 p1 p2 的二次贝塞尔曲线的控制点
 	Vector3 Bezier2TensionPoint(Vector3& out, const Vector3& p0, const Vector3& p1, const Vector3& p2);
 }
-
-#endif

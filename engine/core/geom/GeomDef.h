@@ -1,7 +1,7 @@
 #ifndef __ECHO_GEOMDEF_H__
 #define __ECHO_GEOMDEF_H__
 
-#include "engine/core/Math/MathLib.h"
+#include "engine/core/Math/Math.h"
 
 namespace Echo
 {

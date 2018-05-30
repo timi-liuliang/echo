@@ -1,5 +1,5 @@
 #include "VRModeAUX.h"
-#include "engine/core/Math/EchoMath.h"
+#include "engine/core/Math/Math.h"
 
 namespace Echo
 {
@@ -62,9 +62,6 @@ namespace Echo
 
 		return fovPort;
 	}
-
-
-
 
 	static float EvalCatmullRom10Spline(float const *K, float scaledVal)
 	{

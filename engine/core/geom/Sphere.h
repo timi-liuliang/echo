@@ -1,7 +1,7 @@
 #ifndef __ECHO_SPHERE_H__
 #define __ECHO_SPHERE_H__
 
-#include "engine/core/math/MathLib.h"
+#include "engine/core/math/Math.h"
 #include "engine/core/geom/GeomDef.h"
 #include "engine/core/base/EchoDef.h"
 
