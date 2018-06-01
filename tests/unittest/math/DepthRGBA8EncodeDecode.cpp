@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <engine/core/math/Vector4.h>
-#include <engine/core/math/MathLib.h>
+#include <engine/core/math/Math.h>
 
 namespace Echo
 {
