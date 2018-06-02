@@ -21,14 +21,14 @@ namespace Echo
 		, m_is_muti_stream(false)
 	{
 		if(!pProgram)
-			EchoException("Shader program couldn't be null, create RenderInput failed.");
+			EchoLogError("Shader program couldn't be null, create RenderInput failed.");
 
 		if (!pProgram->isLinked())
 		{
 			String vsName = pProgram->getShader(Shader::ST_VERTEXSHADER)->getName(); 
 			String psName = pProgram->getShader(Shader::ST_PIXELSHADER)->getName(); 
 
-			EchoException("The shader program [%s][%s] has not been linked, create RenderInput failed.", vsName.c_str(), psName.c_str());
+			EchoLogError("The shader program [%s][%s] has not been linked, create RenderInput failed.", vsName.c_str(), psName.c_str());
 		}
 	}
 

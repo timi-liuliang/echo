@@ -133,25 +133,21 @@ namespace Echo
 			case PF_R16_SNORM:			return GL_SHORT;
 			case PF_R16_UINT:			return GL_UNSIGNED_SHORT;
 			case PF_R16_SINT:			return GL_SHORT;
-			case PF_R16_FLOAT:			return GL_HALF_FLOAT_OES;
 
 			case PF_RG16_UNORM:			return GL_UNSIGNED_SHORT;
 			case PF_RG16_SNORM:			return GL_SHORT;
 			case PF_RG16_UINT:			return GL_UNSIGNED_SHORT;
 			case PF_RG16_SINT:			return GL_SHORT;
-			case PF_RG16_FLOAT:			return GL_HALF_FLOAT_OES;
 
 			case PF_RGB16_UNORM:		return GL_UNSIGNED_SHORT;
 			case PF_RGB16_SNORM:		return GL_SHORT;
 			case PF_RGB16_UINT:			return GL_UNSIGNED_SHORT;
 			case PF_RGB16_SINT:			return GL_SHORT;
-			case PF_RGB16_FLOAT:		return GL_HALF_FLOAT_OES;
 
 			case PF_RGBA16_UNORM:		return GL_UNSIGNED_SHORT;
 			case PF_RGBA16_SNORM:		return GL_SHORT;
 			case PF_RGBA16_UINT:		return GL_UNSIGNED_SHORT;
 			case PF_RGBA16_SINT:		return GL_SHORT;
-			case PF_RGBA16_FLOAT:		return g_halfFloatDataType;
 			case PF_R32_UNORM:			return GL_UNSIGNED_INT;
 			case PF_R32_SNORM:			return GL_INT;
 			case PF_R32_UINT:			return GL_UNSIGNED_INT;
@@ -177,7 +173,6 @@ namespace Echo
 			case PF_RGBA32_FLOAT:		return GL_FLOAT;
 
 			case PF_D16_UNORM:			return GL_UNSIGNED_SHORT;
-			case PF_D24_UNORM_S8_UINT:	return GL_UNSIGNED_INT_24_8_OES;
 			case PF_D32_FLOAT:			return GL_FLOAT;
 			default:
 				{
@@ -214,8 +209,6 @@ namespace Echo
 			case PF_RGBA8_SNORM:			return GL_RGBA;
 			case PF_RGBA8_UINT:				return GL_RGBA;
 			case PF_RGBA8_SINT:				return GL_RGBA;
-
-			case PF_BGRA8_UNORM:			return GL_BGRA_EXT;
 
 				//case PF_R16_UNORM:
 				//case PF_R16_SNORM:
@@ -270,13 +263,6 @@ namespace Echo
 				//case PF_RGBA32_SINT:
 
 			case PF_D16_UNORM:				return GL_DEPTH_COMPONENT16;
-			case PF_D24_UNORM_S8_UINT:		return GL_DEPTH24_STENCIL8_OES;
-			case PF_D32_FLOAT:				return GL_DEPTH_COMPONENT32_OES;
-
-			case PF_PVRTC1_2bpp_RGB:		return GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG;
-			case PF_PVRTC1_2bpp_RGBA:		return GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG;
-			case PF_PVRTC1_4bpp_RGB:		return GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG;
-			case PF_PVRTC1_4bpp_RGBA:		return GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG;
 			case PF_ETC1:					return GL_ETC1_RGB8_OES; 
 			case PF_ETC2_RGB:				return GL_COMPRESSED_RGB8_ETC2;
 			case PF_ETC2_RGBA:				return GL_COMPRESSED_RGBA8_ETC2_EAC;
@@ -315,8 +301,6 @@ namespace Echo
 			case PF_RGBA8_SNORM:			return GL_RGBA;
 			case PF_RGBA8_UINT:				return GL_RGBA;
 			case PF_RGBA8_SINT:				return GL_RGBA;
-
-			case PF_BGRA8_UNORM:			return GL_BGRA_EXT;
 
 				//case PF_R16_UNORM:
 				//case PF_R16_SNORM:
@@ -373,7 +357,6 @@ namespace Echo
 			case PF_RGBA32_FLOAT:			return GL_RGBA;
 
 			case PF_D16_UNORM:				return GL_DEPTH_COMPONENT;
-			case PF_D24_UNORM_S8_UINT:		return GL_DEPTH_STENCIL_OES;
 			case PF_D32_FLOAT:				return GL_DEPTH_COMPONENT;
 			default:
 				{

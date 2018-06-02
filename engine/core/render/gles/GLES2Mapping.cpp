@@ -35,8 +35,8 @@ namespace Echo
 			case BlendState::BOP_ADD:			return GL_FUNC_ADD;
 			case BlendState::BOP_SUB:			return GL_FUNC_SUBTRACT;
 			case BlendState::BOP_REV_SUB:		return GL_FUNC_REVERSE_SUBTRACT;
-			case BlendState::BOP_MIN:			return GL_MIN_EXT;
-			case BlendState::BOP_MAX:			return GL_MAX_EXT;
+			//case BlendState::BOP_MIN:			return GL_MIN_EXT;
+			//case BlendState::BOP_MAX:			return GL_MAX_EXT;
 			default:
 			{
 				EchoAssert(false);

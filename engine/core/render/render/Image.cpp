@@ -46,7 +46,7 @@ namespace Echo
 			m_flags |= IMGFLAG_CUBEMAP;
 		if(numFaces != 6 && numFaces != 1)
 		{
-			EchoException("Number of faces currently must be 6 or 1.");
+			EchoLogError("Number of faces currently must be 6 or 1.");
 		}
 
 		numMipMaps = numMipMaps > 0? numMipMaps : 1;

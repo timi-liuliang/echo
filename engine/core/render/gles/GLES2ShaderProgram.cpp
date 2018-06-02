@@ -22,7 +22,7 @@ namespace Echo
 		m_hProgram = OGLESDebug(glCreateProgram());
 		if (!m_hProgram)
 		{
-			EchoException("Create GLES2ShaderProgram failed.");
+			EchoLogError("Create GLES2ShaderProgram failed.");
 		}
 		m_preRenderInput = NULL;
 	}

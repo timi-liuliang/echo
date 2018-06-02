@@ -4,7 +4,6 @@
 
 namespace Echo
 {
-	class GLES2ShaderGPUProxy;
 	class GLES2Shader: public Shader
 	{
 		friend class GLES2ShaderProgram;
@@ -32,5 +31,4 @@ namespace Echo
 		GLuint			m_hShader;
 		GLuint			m_hProgram;
 	};
-
 }

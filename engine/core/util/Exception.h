@@ -1,14 +1,10 @@
-#ifndef __ECHO_EXCEPTION_H__
-#define __ECHO_EXCEPTION_H__
+#pragma once
 
 #include "engine/core/Util/StringUtil.h"
 #include "engine/core/Util/LogManager.h"
 
 namespace Echo
 {
-	/**
-	 * “Ï≥£
-	 */
 	class Exception
 	{
 	public:
@@ -35,8 +31,4 @@ namespace Echo
 		EchoLogError( "EchoThrowException[%s] file[%s] line[%d]", msg.c_str(), filename, lineNum);
 		throw Exception(msg, filename, lineNum);
 	};
-
-#define EchoException(formats, ...) __EchoThrowException(Echo::StringUtil::Format(formats, ##__VA_ARGS__), __FILE__, __LINE__)
 }
-
-#endif

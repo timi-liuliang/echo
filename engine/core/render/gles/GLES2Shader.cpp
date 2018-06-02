@@ -93,10 +93,7 @@ namespace Echo
 				m_hShader = OGLESDebug(glCreateShader(GL_VERTEX_SHADER));
 				if (!m_hShader)
 				{
-					if (filename.empty())
-						EchoException("Create vertex Shader failed.");
-					else
-						EchoException("Create vertex Shader [%s] failed.", filename.c_str());
+					EchoLogError("Create vertex Shader [%s] failed.", filename.c_str());
 				}
 			}
 			break;
@@ -105,18 +102,12 @@ namespace Echo
 				m_hShader = OGLESDebug(glCreateShader(GL_FRAGMENT_SHADER));
 				if (!m_hShader)
 				{
-					if (filename.empty())
-						EchoException("Create pixel Shader failed.");
-					else
-						EchoException("Create pixel Shader [%s] failed.", filename.c_str());
+					EchoLogError("Create pixel Shader [%s] failed.", filename.c_str());
 				}
 			} break;
 			default:
 			{
-				if (filename.empty())
-					EchoException("Unknown shader type, create Shader failed.");
-				else
-					EchoException("Unknown shader type, create Shader [%s] failed.", filename.c_str());
+				EchoLogError("Unknown shader type, create Shader [%s] failed.", filename.c_str());
 			}break;
 		}
 
@@ -150,10 +141,7 @@ namespace Echo
 			String errMsg = szLogInfo;
 			EchoSafeFree(szLogInfo);
 
-			if (filename.empty())
-				EchoException("Compile Shader Error: \n%s", errMsg.c_str());
-			else
-				EchoException("Compile Shader [%s] Error: \n%s", filename.c_str(), errMsg.c_str());
+			EchoLogError("Compile Shader [%s] Error: \n%s", filename.c_str(), errMsg.c_str());
 		}
 
 		// ÒÆ³ýÊý¾Ý

@@ -1,7 +1,6 @@
 #include "GLES2RenderStd.h"
 #include "GLES2Renderer.h"
 #include "GLES2Mapping.h"
-#include "GLES2TextureManager.h"
 #include "GLES2RenderTarget.h"
 #include "GLES2Loader.h"
 #include "GLES2FrameBuffer.h"
@@ -101,7 +100,6 @@ namespace Echo
 		}
 		else
 		{
-			GLES2Mapping::g_halfFloatDataType = GL_HALF_FLOAT_OES;
 			GLES2Mapping::g_halfFloatInternalFormat = GL_RGBA;
 		}
 
@@ -650,20 +648,10 @@ namespace Echo
 	// 获取真实视口大小
 	void GLES2Renderer::getViewportReal(Viewport& pViewport)
 	{
-#ifdef ECHO_RENDER_THREAD
-		IRect rect;
-		TRenderTask<GLES2RenderTaskGetViewport>::CreateTask(&rect);
-		FlushRenderTasks();
-		pViewport.m_left = rect.left;
-		pViewport.m_top = rect.top;
-		pViewport.m_width = rect.width;
-		pViewport.m_height = rect.height;
-#else
 		GLint viewPort[4];
 		OGLESDebug(glGetIntegerv(GL_VIEWPORT, viewPort));
 
 		pViewport = Viewport(viewPort[0], viewPort[1], viewPort[2], viewPort[3]);
-#endif
 	}
 
 	// 更新RendererSize
@@ -697,18 +685,8 @@ namespace Echo
 			GLenum attachments[numAttachments];
 			GLint currentAttachment = 0;
 
-			attachments[currentAttachment] = GL_COLOR_EXT;
-			currentAttachment++;
-
-			attachments[currentAttachment] = GL_DEPTH_EXT;
-			currentAttachment++;
-
-			attachments[currentAttachment] = GL_STENCIL_EXT;
-			currentAttachment++;
-
 			OGLESDebug(glDiscardFramebufferEXT(GL_FRAMEBUFFER, currentAttachment, attachments));
 		}
-
 
 		eglSwapBuffers(static_cast<EGLDisplay>(getDisplay()), static_cast<EGLSurface>(getSurface()));
 		EGLint no_erro = eglGetError();
@@ -845,14 +823,7 @@ namespace Echo
 		}
 
 		//Initialise the extension if it's found.
-		if (position != NULL)
-		{
-			glDiscardFramebufferEXT = (PFNGLDISCARDFRAMEBUFFEREXTPROC)eglGetProcAddress("glDiscardFramebufferEXT");
-		}
-		else
-		{
-			glDiscardFramebufferEXT = NULL;
-		}
+		glDiscardFramebufferEXT = NULL;
 
 		eglSwapInterval(m_eglDisplay, 0);
 

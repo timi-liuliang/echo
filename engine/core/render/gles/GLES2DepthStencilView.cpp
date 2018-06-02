@@ -8,8 +8,6 @@
 #include "Render/RenderThread.h"
 #include "Render/RenderTask.h"
 
-
-
 namespace Echo
 {
 	GLES2DepthStencilView::GLES2DepthStencilView(PixelFormat pixFmt, ui32 width, ui32 height)
@@ -18,7 +16,7 @@ namespace Echo
 		OGLESDebug(glGenRenderbuffers(1, &m_hRBO));
 		if (!m_hRBO)
 		{
-			EchoException("Create GLES2DepthStencilView failed.");
+			EchoLogError("Create GLES2DepthStencilView failed.");
 		}
 
 		OGLESDebug(glBindRenderbuffer(GL_RENDERBUFFER, m_hRBO));

@@ -14,7 +14,7 @@ namespace Echo
 		OGLESDebug(glGenRenderbuffers(1, &m_hRBO));
 		if (!m_hRBO)
 		{
-			EchoException("Create GLES2RenderTargetView failed.");
+			EchoLogError("Create GLES2RenderTargetView failed.");
 		}
 
 		OGLESDebug(glBindRenderbuffer(GL_RENDERBUFFER, m_hRBO));

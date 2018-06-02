@@ -1,5 +1,4 @@
-#ifndef __ECHO_GLES2RENDERSTD_H__
-#define __ECHO_GLES2RENDERSTD_H__
+#pragma once
 
 #include <engine/core/Base/EchoDef.h>
 #include <engine/core/Util/LogManager.h>
@@ -9,8 +8,6 @@
 #endif
 
 #ifdef ECHO_PLATFORM_MAC_IOS
-#	include <OpenGLES/ES2/gl.h>
-#	include <OpenGLES/ES2/glext.h>
 #	include <OpenGLES/ES3/gl.h>
 #	include <OpenGLES/ES3/glext.h>
 #   ifdef __OBJC__
@@ -71,8 +68,6 @@
 	#include <GLES2/gl2ext.h>
 	#include <EGL/egl.h>
 #else
-#   include <GLES2/gl2.h>
-#   include <GLES2/gl2ext.h>
 #   include <GLES3/gl3.h>
 #ifndef ECHO_POWERVR_SDK
 #   include <GLES3/gl3ext.h>
@@ -107,5 +102,3 @@ namespace Echo
 #endif
 
 }
-
-#endif

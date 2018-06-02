@@ -79,7 +79,7 @@ namespace Echo
 		catch(bool)
 		{
 			free();
-			EchoException("Material::loadFromFile: Fail to Parse Material file [%s].", filename.c_str());
+			EchoLogError("Material::loadFromFile: Fail to Parse Material file [%s].", filename.c_str());
 			return false;
 		}
 	}

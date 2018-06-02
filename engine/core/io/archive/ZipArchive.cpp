@@ -83,7 +83,7 @@ namespace Echo
 
 		cpFileNodes = m_resourcePack.GetFileList(nOutFileListCount);
 		if(!cpFileNodes)
-			EchoException("Error: Error in function ZipArchive::list, get file list fail!");
+			EchoLogError("Error: Error in function ZipArchive::list, get file list fail!");
 
 		for(int i = 0; i < nOutFileListCount; i++)
 		{
@@ -112,7 +112,7 @@ namespace Echo
 
 		cpFileNodes = m_resourcePack.GetFileList(nOutFileListCount);
 		if(!cpFileNodes)
-			EchoException("Error: Error in function ZipArchive::list, get file list fail!");
+			EchoLogError("Error: Error in function ZipArchive::list, get file list fail!");
 
 		pResult = EchoNew(FileInfoList);
 

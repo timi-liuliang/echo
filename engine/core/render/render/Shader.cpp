@@ -15,7 +15,7 @@ namespace Echo
 		DataStream* pShaderStream = IO::instance()->open(filename);
 		if(!pShaderStream)
 		{
-			EchoException("Shader file isn't exist. [%s]", filename.c_str());
+			EchoLogError("Shader file isn't exist. [%s]", filename.c_str());
 		}
 
 		m_validata = true;
