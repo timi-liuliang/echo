@@ -11,8 +11,6 @@
 #include <engine/core/Util/Exception.h>
 #include "GLES2GPUBuffer.h"
 #include "Render/Viewport.h"
-#include "Render/RenderThread.h"
-#include "Render/RenderTask.h"
 
 namespace Echo
 {
@@ -799,12 +797,9 @@ namespace Echo
 			return false;
 		}
 
-		if (!g_render_thread->isThreadedRendering())
+		if (!contextCurrent())
 		{
-			if (!contextCurrent())
-			{
-				return false;
-			}
+			return false;
 		}
 
 		//Get the gl extension string

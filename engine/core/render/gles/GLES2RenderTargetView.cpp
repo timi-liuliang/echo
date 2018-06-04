@@ -1,6 +1,4 @@
 #include "GLES2RenderStd.h"
-#include "Render/RenderThread.h"
-#include "Render/RenderTask.h"
 #include "GLES2Renderer.h"
 #include "GLES2RenderTargetView.h"
 #include "GLES2Mapping.h"

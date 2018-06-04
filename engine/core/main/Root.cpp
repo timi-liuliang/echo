@@ -12,8 +12,6 @@
 #include "Engine/core/Render/MaterialInst.h"
 #include "ProjectSettings.h"
 #include "Engine/modules/Audio/FMODStudio/FSAudioManager.h"
-#include "engine/core/render/render/RenderThread.h"
-#include "engine/core/render/render/Video.h"
 #include "EngineTimeController.h"
 #include "engine/core/script/lua/LuaEx.h"
 #include "engine/core/script/lua/register_core_to_lua.cxx"
@@ -234,7 +232,6 @@ namespace Echo
 	void Root::onPlatformSuspend()
 	{
 		FSAudioManager::instance()->suspendFmodSystem();
-		g_render_thread->flushRenderTasks();
 	}
 
 	// 当游戏从挂起中恢复时引擎需要进行的处理
@@ -434,8 +431,6 @@ namespace Echo
 	// 渲染场景
 	bool Root::render()
 	{
-		g_render_thread->syncFrame();
-
 		// 外部模块更新, 目前只有 CatUI
 		for (const ExternalMgr& mgr : m_cfg.m_externalMgrs)
 		{

@@ -1,12 +1,9 @@
 #include "GLES2RenderStd.h"
-#include "Render/RenderThread.h"
 #include "GLES2Renderer.h"
 #include "GLES2DepthStencilView.h"
 #include "GLES2Mapping.h"
 #include <engine/core/Util/Exception.h>
 #include "Render/PixelFormat.h"
-#include "Render/RenderThread.h"
-#include "Render/RenderTask.h"
 
 namespace Echo
 {

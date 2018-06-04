@@ -4,9 +4,7 @@
 #include "Render/Viewport.h"
 #include "PixelFormat.h"
 #include "Render/Renderable.h"
-#include "Render/RenderThread.h"
 #include "Render/UniformCache.h"
-#include "Render/RenderThread.h"
 #include "Render/TextureSoftDecode.h"
 
 namespace Echo
@@ -250,10 +248,6 @@ namespace Echo
 		}
 
 		g_uniform_cache = EchoNew(UniformCache);
-		RenderThread::Config conf;
-		conf.enable = config.enableThreadedRendering;
-		g_render_thread = EchoNew(RenderThread)(conf);
-		g_render_thread->Start();
 
 		if (!initializeImpl(config))
 			return false;
@@ -272,10 +266,8 @@ namespace Echo
 		m_renderables.clear();
 
 		cleanSystemResource();
-		g_render_thread->End();
 
 		destroyImpl();
-		EchoSafeDelete(g_render_thread, RenderThread);
 		EchoSafeDelete(g_uniform_cache, UniformCache);
 	}
 

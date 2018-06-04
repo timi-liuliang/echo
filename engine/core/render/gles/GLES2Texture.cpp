@@ -3,8 +3,6 @@
 #include "Render/PixelFormat.h"
 #include "Render/Image.h"
 #include "Render/TextureLoader.h"
-#include "Render/RenderThread.h"
-#include "Render/RenderTask.h"
 #include "GLES2RenderStd.h"
 #include "GLES2Renderer.h"
 #include "GLES2Texture.h"

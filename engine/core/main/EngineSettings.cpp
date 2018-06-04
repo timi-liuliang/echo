@@ -1,6 +1,5 @@
 #include "EngineSettings.h"
 #include "engine/core/util/PathUtil.h"
-#include <engine/core/render/render/RenderThread.h>
 #include "Root.h"
 #include <thirdparty/pugixml/pugixml.hpp>
 #include "EngineTimeController.h"
@@ -165,12 +164,6 @@ namespace Echo
 	void EngineSettingsMgr::setEnablePhysicsRender(bool physicsRender)
 	{
 		m_bPhysicsRender = physicsRender;
-	}
-
-	// 开启关闭多线程渲染
-	void EngineSettingsMgr::setEnableMultiThreadRendering(bool isEnable)
-	{
-		Echo::g_render_thread->enableThreadedRendering(false);
 	}
 
 	//设置高斯模糊品质

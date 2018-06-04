@@ -6,8 +6,6 @@
 #include <engine/core/Util/LogManager.h>
 #include "engine/core/Memory/MemManager.h"
 #include "Render/Material.h"
-#include "Render/RenderThread.h"
-#include "Render/RenderTask.h"
 #include "Render/UniformCache.h"
 
 #define UNIFORM_OPTIMIZE

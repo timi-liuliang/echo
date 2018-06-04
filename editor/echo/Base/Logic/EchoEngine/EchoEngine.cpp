@@ -10,7 +10,6 @@
 #include "Studio.h"
 #include "RenderWindow.h"
 #include <Render/Renderer.h>
-#include "Render/RenderThread.h"
 #include <Engine/modules/Audio/FMODStudio/FSAudioManager.h>
 #include <Engine/core/main/EngineTimeController.h>
 #include <string>

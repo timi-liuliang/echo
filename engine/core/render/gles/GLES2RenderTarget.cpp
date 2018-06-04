@@ -1,7 +1,5 @@
 #include "GLES2RenderStd.h"
 #include "Render/Renderer.h"
-#include "Render/RenderThread.h"
-#include "Render/RenderTask.h"
 #include "GLES2Mapping.h"
 #include "GLES2RenderTarget.h"
 #include "GLES2Texture.h"
@@ -12,12 +10,8 @@ namespace Echo
 	// 构造函数
 	GLES2RenderTarget::GLES2RenderTarget( ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const Options& option)
 		: RenderTarget(_id, _width, _height, _pixelFormat, option)
-#ifdef ECHO_RENDER_THREAD
-		, m_gpu_proxy(EchoNew(GLES2TargetGPUProxy))
-#else
 		, m_fbo(0)
 		, m_rbo(0)
-#endif
 	{ 
 		SamplerState::SamplerDesc desc;
 		desc.addrUMode = SamplerState::AM_CLAMP;
@@ -34,12 +28,6 @@ namespace Echo
 	// 析构函数
 	GLES2RenderTarget::~GLES2RenderTarget()
 	{
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2TargetTaskDestroyFrameBuffer>::CreateTask(m_gpu_proxy);
-		Renderer::instance()->releaseTexture(m_bindTexture.m_texture);
-		Renderer::instance()->releaseTexture(m_depthTexture.m_texture);
-		m_gpu_proxy = nullptr;
-#else
 		if (m_fbo != Invalid_Value)
 		{
 			OGLESDebug(glDeleteFramebuffers(1, &m_fbo));
@@ -51,7 +39,6 @@ namespace Echo
 		}
 		Renderer::instance()->releaseTexture(m_bindTexture.m_texture);
 		Renderer::instance()->releaseTexture(m_depthTexture.m_texture);
-#endif
 	}
 
 	// 执行创建
@@ -59,10 +46,7 @@ namespace Echo
 	{
 		GLES2Texture* texture = dynamic_cast<GLES2Texture*>(m_bindTexture.m_texture);
 		EchoAssert(texture);
-#ifdef ECHO_RENDER_THREAD
-		EchoAssert(texture->m_gpu_proxy);
-		TRenderTask<GLES2TargetTaskCreateFrameBuffer>::CreateTask(m_gpu_proxy, texture->m_gpu_proxy, m_pixelFormat, m_width, m_height);
-#else
+
 		OGLESDebug(glGenTextures(1, &texture->m_hTexture));
 		OGLESDebug(glBindTexture(GL_TEXTURE_2D, texture->m_hTexture));
 		OGLESDebug(glTexImage2D(GL_TEXTURE_2D, 0, GLES2Mapping::MapInternalFormat(m_pixelFormat), 
@@ -71,7 +55,6 @@ namespace Echo
 		OGLESDebug(glGenFramebuffers(1, &m_fbo));
 		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
 		OGLESDebug(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture->m_hTexture, 0));
-#endif
 		texture->m_width = m_width;
 		texture->m_height = m_height;
 		texture->m_pixFmt = m_pixelFormat;
@@ -84,10 +67,7 @@ namespace Echo
 		{
 			GLES2Texture* depthTexture = dynamic_cast<GLES2Texture*>(m_depthTexture.m_texture);
 			EchoAssert(depthTexture);
-#ifdef ECHO_RENDER_THREAD
-			EchoAssert(depthTexture->m_gpu_proxy);
-			TRenderTask<GLES2TargetTaskCreateDepthBuffer>::CreateTask(m_gpu_proxy, depthTexture->m_gpu_proxy, m_width, m_height);
-#else
+
 			// 将深度缓冲区映射到纹理上(这里应该分情况讨论，rbo效率更高，在不需要depth tex时应该优先使用		
 			OGLESDebug(glGenTextures(1, &depthTexture->m_hTexture));
 			OGLESDebug(glBindTexture(GL_TEXTURE_2D, depthTexture->m_hTexture));
@@ -98,7 +78,7 @@ namespace Echo
 
 			OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
 			OGLESDebug(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture->m_hTexture, 0));
-#endif
+
 			depthTexture->m_width = m_width;
 			depthTexture->m_height = m_height;
 			depthTexture->m_pixFmt = m_pixelFormat;
@@ -110,21 +90,15 @@ namespace Echo
 		else if (m_depthTarget)
 		{
 			GLES2Texture* depthTexture = dynamic_cast<GLES2Texture*>(m_depthTarget->getDepthTexture());
-#ifdef ECHO_RENDER_THREAD
-			TRenderTask<GLES2TargetTaskBindDepthBuffer>::CreateTask(m_gpu_proxy, depthTexture->m_gpu_proxy);
-#else
+
 			OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
 			OGLESDebug(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture->m_hTexture, 0));
-#endif
 
 			const SamplerState* depthSampleState = m_depthTexture.m_samplerState;
 			EchoAssert(depthSampleState);
 			depthSampleState->active(NULL);
 		}
 
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2TargetTaskPostFrameBufferCreate>::CreateTask(m_gpu_proxy);
-#else
 		GLuint uStatus = OGLESDebug(glCheckFramebufferStatus(GL_FRAMEBUFFER));
 		if (uStatus != GL_FRAMEBUFFER_COMPLETE)
 		{
@@ -134,7 +108,6 @@ namespace Echo
 #if defined(ECHO_PLATFORM_WINDOWS) || defined(ECHO_PLATFORM_ANDROID)
 		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 #endif
-#endif
 
 		return true;
 	} 
@@ -143,10 +116,7 @@ namespace Echo
 	{
 		GLES2Texture* texture = dynamic_cast<GLES2Texture*>(m_bindTexture.m_texture);
 		EchoAssert(texture);
-#ifdef ECHO_RENDER_THREAD
-		EchoAssert(texture->m_gpu_proxy);
-		TRenderTask<GLES2TargetTaskCreateFrameBufferCube>::CreateTask(m_gpu_proxy, texture->m_gpu_proxy, m_pixelFormat, m_width, m_height);
-#else
+
 		OGLESDebug(glGenTextures(1, &texture->m_hTexture));
 		OGLESDebug(glBindTexture(GL_TEXTURE_CUBE_MAP, texture->m_hTexture));
 		for (int f = 0; f < 6; f++)
@@ -157,26 +127,19 @@ namespace Echo
 		OGLESDebug(glGenFramebuffers(1, &m_fbo));
 		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
 		OGLESDebug(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X, texture->m_hTexture, 0));
-#endif
+
 		const SamplerState* sampleState = m_bindTexture.m_samplerState;
 		EchoAssert(sampleState);
 		sampleState->active(NULL);
 
 		if( m_bHasDepth )
 		{
-#ifdef ECHO_RENDER_THREAD
-			TRenderTask<GLES2TargetTaskCreateDepthBufferCube>::CreateTask(m_gpu_proxy, m_width, m_height);
-#else
 			OGLESDebug(glGenRenderbuffers(1, &m_rbo));
 			OGLESDebug(glBindRenderbuffer(GL_RENDERBUFFER, m_rbo));
 			OGLESDebug(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, m_width, m_height));
 			OGLESDebug(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_rbo));
-#endif
 		}
 
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2TargetTaskPostFrameBufferCreate>::CreateTask(m_gpu_proxy);
-#else
 		GLuint uStatus = OGLESDebug(glCheckFramebufferStatus(GL_FRAMEBUFFER));
 		if (uStatus != GL_FRAMEBUFFER_COMPLETE)
 		{
@@ -186,7 +149,6 @@ namespace Echo
 #if defined(ECHO_PLATFORM_WINDOWS) || defined(ECHO_PLATFORM_ANDROID)
 		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 #endif
-#endif
 
 		return true;
 	}
@@ -194,9 +156,6 @@ namespace Echo
 	bool GLES2RenderTarget::doBeginRender( bool _clearColor, const Color& _backgroundColor,  bool _clearDepth, float _depthValue, bool _clearStencil, ui8 _stencilValue )
 	{
 		//EchoAssert( m_id == RenderTargetManager::Instance()->getInUsingRenderTargetID() );
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2TargetTaskBeginRender>::CreateTask(m_gpu_proxy, m_bFrameBufferChange, m_tiledRender, m_curRenderTiled, m_bViewportChange, m_width, m_height);
-#else
 		if (m_bFrameBufferChange)
 		{
 			glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
@@ -214,7 +173,7 @@ namespace Echo
 		{
 			OGLESDebug(glViewport(0, 0, m_width, m_height));
 		}
-#endif
+
 		doClear( _clearColor, _backgroundColor, _clearDepth, _depthValue, _clearStencil, _stencilValue );
 
 		return true;
@@ -228,9 +187,6 @@ namespace Echo
 
 	bool GLES2RenderTarget::doInvalidateFrameBuffer(bool invalidateColor, bool invalidateDepth, bool invalidateStencil)
 	{
-#ifdef ECHO_RENDER_THREAD
-        m_gpu_proxy->invalidFrameBuffer(invalidateColor, invalidateDepth, invalidateStencil);
-#else
 		int attachment_count = 0;
 		GLenum attachments[128] = { 0 };
 		if (invalidateColor)
@@ -248,32 +204,20 @@ namespace Echo
 			OGLESDebug(glInvalidateFramebuffer(GL_FRAMEBUFFER, attachment_count, attachments));
 #endif
 		}
-#endif
 		return true;
 	}
 	void GLES2RenderTarget::bindTarget_left()
 	{
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2TargetTaskBindTargetLeft>::CreateTask(m_gpu_proxy, m_width, m_height);
-#else
 		OGLESDebug(glViewport(0, 0, m_width / 2, m_height));
-#endif
 	}
 	void GLES2RenderTarget::bindTarget_right()
 	{
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2TargetTaskBindTargetRight>::CreateTask(m_gpu_proxy, m_width, m_height);
-#else
 		OGLESDebug(glViewport(m_width / 2, 0, m_width / 2, m_height));
-#endif
 	}
 
 	// 清空渲染目标
 	void GLES2RenderTarget::doClear(bool clear_color, const Color& color, bool clear_depth, float depth_value, bool clear_stencil, ui8 stencil_value)
 	{
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2TargetTaskClear>::CreateTask(m_gpu_proxy, clear_color, color, clear_depth, depth_value, clear_stencil, stencil_value);
-#else
 		GLbitfield mask = 0;
 
 		if (clear_color)
@@ -305,7 +249,7 @@ namespace Echo
 
 		if (mask != 0)
 			OGLESDebug(glClear(mask));
-#endif
+
 		Renderer::instance()->setDepthStencilState( Renderer::instance()->getDefaultDepthStencilState());
 	}
 
@@ -316,10 +260,6 @@ namespace Echo
 			m_width = _width;
 			m_height = _height;
 
-#ifdef ECHO_RENDER_THREAD
-			TRenderTask<GLES2TargetTaskDeleteBuffersOnly>::CreateTask(m_gpu_proxy);
-			FlushRenderTasks();
-#else
 			if (m_fbo != RenderTarget::Invalid_Value)
 			{
 				OGLESDebug(glDeleteFramebuffers(1, &m_fbo));
@@ -331,7 +271,6 @@ namespace Echo
 				OGLESDebug(glDeleteRenderbuffers(1, &m_rbo));
 				m_rbo = 0;
 			}
-#endif
 
 			EchoAssert(m_bindTexture.m_texture);
 			Renderer::instance()->releaseTexture(m_bindTexture.m_texture);
@@ -377,14 +316,11 @@ namespace Echo
 		}
 
 		GLES2Texture* texture = ECHO_DOWN_CAST<GLES2Texture*>(m_bindTexture.m_texture);
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2TargetTaskSetCubeFace>::CreateTask(m_gpu_proxy, texture->m_gpu_proxy, cf);
-#else
+
 		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
 		OGLESDebug(glBindTexture(GL_TEXTURE_CUBE_MAP, texture->m_hTexture));
 		OGLESDebug(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + cf, texture->m_hTexture, 0));
 		OGLESDebug(glCheckFramebufferStatus(GL_FRAMEBUFFER));
-#endif
 #endif
 	}
 
@@ -417,12 +353,8 @@ namespace Echo
 		GLvoid* pixels = new char[m_width * m_height * sizeof(int)];
 		EchoAssert( pixels );
 
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2TargetTaskReadPixels>::CreateTask(m_gpu_proxy, m_width, m_height, pixels);
-		FlushRenderTasks();
-#else
 		OGLESDebug(glReadPixels(0, 0, m_width, m_height, GL_RGBA, GL_UNSIGNED_BYTE, pixels));
-#endif
+
 		SPixel* rgbaPixel = (SPixel*)pixels;
 
 		for( ui32 i = 0; i < m_width * m_height; i++ )
@@ -495,21 +427,15 @@ namespace Echo
 
 	bool GLES2RenderTarget::doStoreDefaultRenderTarget()
 	{
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2TargetTaskStoreTarget>::CreateTask(m_gpu_proxy);
-#else
 		OGLESDebug(glGetIntegerv(GL_FRAMEBUFFER_BINDING, (GLint*)&(m_fbo)));
-#endif
+
 		return true;
 	}
 
 	bool GLES2RenderTarget::doRestoreDefaultRenderTarget()
 	{
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2TargetTaskRestoreTarget>::CreateTask(m_gpu_proxy);
-#else
 		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
-#endif
+
 		return true;
 	}
 

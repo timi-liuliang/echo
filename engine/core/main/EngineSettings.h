@@ -85,9 +85,6 @@ namespace Echo
 		// 获取每批次粒子最大允许数量
 		ui32 getMaxEffectParticlesSizePerBatch() const { return m_maxEffectParticlesSizePerBatch; }
 
-		// 设置是否开启多线程渲染
-		void setEnableMultiThreadRendering(bool isEnable);
-
 		// 设置高斯模糊品质
 		void setGuassScaleSetting(float guass_setting_scale);
 

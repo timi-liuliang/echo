@@ -8,8 +8,6 @@
 #include <engine/core/Util/AssertX.h>
 #include <engine/core/Util/Exception.h>
 #include "Render/PixelFormat.h"
-#include "Render/RenderThread.h"
-#include "Render/RenderTask.h"
 #include "GLES2Mapping.h"
 
 

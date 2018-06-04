@@ -1,6 +1,4 @@
 #include "GLES2RenderStd.h"
-#include "RenderThread.h"
-#include "RenderTask.h"
 #include "GLES2GPUBuffer.h"
 #include "GLES2Mapping.h"
 #include "GLES2Loader.h"
