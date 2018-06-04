@@ -19,13 +19,13 @@ namespace Game
 	// init
 	void App::init(HWND hwnd, const Echo::String& echoProject)
 	{
-		m_root = Echo::Root::instance();
+		m_root = Echo::Engine::instance();
 		m_root->initLogSystem();
 
 		m_log = EchoNew(GameLog("Game"));
 		Echo::LogManager::instance()->addLog(m_log);
 
-		Echo::Root::Config rootcfg;
+		Echo::Engine::Config rootcfg;
 		rootcfg.projectFile = echoProject;
 		rootcfg.m_isEnableProfiler = true;
 		rootcfg.m_windowHandle = (unsigned int)hwnd;

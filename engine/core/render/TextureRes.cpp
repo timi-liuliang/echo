@@ -4,7 +4,7 @@
 #include "engine/core/Util/Exception.h"
 #include "render/PixelFormat.h"
 #include "engine/core/Math/EchoMathFunction.h"
-#include "engine/core/main/Root.h"
+#include "engine/core/main/Engine.h"
 #include "TextureRes.h"
 #include "engine/core/io/IO.h"
 
@@ -70,9 +70,9 @@ namespace Echo
 		else
 		{
 			pTexture->m_uploadedSize = pTexture->m_uploadedSize;
-			if (Root::instance()->getEnableFrameProfile())
+			if (Engine::instance()->getEnableFrameProfile())
 			{
-				Root::instance()->frameState().incrUploadTextureSizeInBytes(pTexture->m_uploadedSize);
+				Engine::instance()->frameState().incrUploadTextureSizeInBytes(pTexture->m_uploadedSize);
 			}
 		}
 

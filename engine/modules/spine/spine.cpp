@@ -5,7 +5,7 @@
 #include "render/Material.h"
 #include "engine/core/script/lua/luaex.h"
 #include "engine/core/util/PathUtil.h"
-#include "engine/core/main/Root.h"
+#include "engine/core/main/Engine.h"
 #include <spine/spine.h>
 #include <spine/extension.h>
 #include "AttachmentLoader.h"
@@ -108,7 +108,7 @@ namespace Echo
 	// update per frame
 	void Spine::update()
 	{
-		float delta = Root::instance()->getFrameTime();
+		float delta = Engine::instance()->getFrameTime();
 
 		m_matWVP = getWorldMatrix()* NodeTree::instance()->get2DCamera()->getViewProjMatrix();
 

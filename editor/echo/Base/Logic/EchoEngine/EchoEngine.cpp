@@ -2,7 +2,7 @@
 #include <QFileInfo>
 #include <QString>
 #include <array>
-#include <Engine/core/main/Root.h>
+#include <Engine/core/main/Engine.h>
 #include <Engine/modules/Navigation/Navigation.h>
 #include <RenderTargetManager.h>
 #include <render/RenderTarget.h>
@@ -70,7 +70,7 @@ namespace Studio
 	{
 		TIME_PROFILE
 		(
-			Echo::Root::Config rootcfg;
+			Echo::Engine::Config rootcfg;
 
 			// 是否预设项目文件
 			if (!m_projectFile.empty())
@@ -81,7 +81,7 @@ namespace Studio
 			rootcfg.m_isGame = false;
 			rootcfg.m_windowHandle = (unsigned int)hwnd;
 
-			EchoRoot->initialize(rootcfg);
+			Echo::Engine::instance()->initialize(rootcfg);
 		)
 
 		TIME_PROFILE
@@ -136,18 +136,18 @@ namespace Studio
 
 				// 渲染字体
 				//FontRenderManager::Instance()->Render();
-				EchoRoot->resetFrameState();
+				Echo::Engine::instance()->resetFrameState();
 				Echo::Renderer::instance()->getFrameState().reset();
 			}
 
-			EchoRoot->tick(elapsedTime);
+			Echo::Engine::instance()->tick(elapsedTime);
 		}
 	}
 
 	// 修改窗口大小
 	void EchoEngine::Resize(int cx, int cy)
 	{
-		EchoRoot->onSize(cx, cy);
+		Echo::Engine::instance()->onSize(cx, cy);
 
 		m_renderWindow->getInputController()->onSizeCamera(Echo::Renderer::instance()->getScreenWidth(), Echo::Renderer::instance()->getScreenHeight());
 	}

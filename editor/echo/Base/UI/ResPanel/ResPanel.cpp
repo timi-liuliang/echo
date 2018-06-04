@@ -6,7 +6,7 @@
 #include "EchoEngine.h"
 #include "MainWindow.h"
 #include "engine/core/util/PathUtil.h"
-#include "engine/core/main/Root.h"
+#include "engine/core/main/Engine.h"
 #include <engine/core/io/IO.h>
 
 namespace Studio
@@ -47,10 +47,10 @@ namespace Studio
 		titleLable << "Res://";
 		m_dirModel->setHorizontalHeaderLabels(titleLable);
 
-		m_dirModel->SetRootPath(Echo::Root::instance()->getResPath().c_str(), "none", m_resDirView, NULL);
+		m_dirModel->SetRootPath(Echo::Engine::instance()->getResPath().c_str(), "none", m_resDirView, NULL);
 		m_dirModel->Refresh();
 
-		onSelectDir(Echo::Root::instance()->getResPath().c_str());
+		onSelectDir(Echo::Engine::instance()->getResPath().c_str());
 
 		resizeEvent(nullptr);
 	}
@@ -62,7 +62,7 @@ namespace Studio
 
 		m_previewHelper->clear();
 
-		bool isIncludePreDir = dir == Echo::Root::instance()->getResPath() ? false : true;
+		bool isIncludePreDir = dir == Echo::Engine::instance()->getResPath() ? false : true;
 		m_previewHelper->setPath(dir, nullptr, isIncludePreDir);
 	}
 

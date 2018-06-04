@@ -1,7 +1,7 @@
 #include "live2d_cubism_motion.h"
 #include "CubismNativeComponents-3.0/Live2DCubismFramework.h"
 #include "engine/core/resource/Res.h"
-#include "engine/core/main/Root.h"
+#include "engine/core/main/Engine.h"
 
 namespace Echo
 {
@@ -20,7 +20,7 @@ namespace Echo
 	void Live2dCubismMotion::play()
 	{
 		csmResetAnimationState(&m_animationState);
-		m_isPlaying = Root::instance()->getConfig().m_isGame;
+		m_isPlaying = Engine::instance()->getConfig().m_isGame;
 	}
 
 	// tick

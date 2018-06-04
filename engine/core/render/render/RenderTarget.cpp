@@ -1,6 +1,6 @@
 #include "Render/RenderTarget.h"
 #include "Render/Material.h"
-#include "Engine/core/main/Root.h"
+#include "Engine/core/main/Engine.h"
 
 namespace Echo
 {

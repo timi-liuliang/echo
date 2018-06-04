@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include <Engine/core/main/Root.h>
+#include <Engine/core/main/Engine.h>
 #include <Engine/core/Scene/NodeTree.h>
 #include <Engine/core/render/mesh/Mesh.h>
 #include <Engine/modules/Audio/FMODStudio/FSAudioManager.h>

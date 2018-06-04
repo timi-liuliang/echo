@@ -43,7 +43,7 @@ namespace Studio
 	// 析构函数
 	AStudio::~AStudio()
 	{
-		EchoRoot->destroy();
+		Echo::Engine::instance()->destroy();
 		EchoSafeDelete(m_logPanel, LogPanel);
 
 		EchoSafeDelete(m_projectWindow, ProjectWnd);
@@ -65,8 +65,8 @@ namespace Studio
 	// 初始化日志系统
 	bool AStudio::initLogSystem()
 	{
-		Echo::Root::instance();
-		Echo::Root::instance()->initLogSystem();
+		Echo::Engine::instance();
+		Echo::Engine::instance()->initLogSystem();
 
 		// 添加默认日志处理
 		Echo::LogDefault::LogConfig logConfig;
@@ -273,7 +273,7 @@ namespace Studio
 		Echo::String fileName = Echo::PathUtil::GetPureFilename(filePath, needOldExt);
 		Echo::String appPath = Echo::PathUtil::GetCurrentDir();
 
-		unsigned int projectHash = Echo::BKDRHash(EchoRoot->getConfig().projectFile.c_str());
+		unsigned int projectHash = Echo::BKDRHash(Echo::Engine::instance()->getConfig().projectFile.c_str());
 		Echo::String thumbnailPath = Echo::StringUtil::Format("%s/Cache/project_%d/thumbnail/%s.bmp", appPath.c_str(), projectHash, fileName.c_str());
 
 		return thumbnailPath;

@@ -1,7 +1,7 @@
 #include "FileSystem.h"
 #include "engine/core/Util/LogManager.h"
 #include "engine/core/Util/Exception.h"
-#include "Engine/core/main/Root.h"
+#include "Engine/core/main/Engine.h"
 #include "engine/core/Util/PathUtil.h"
 #include <sys/types.h>
 #include <sys/stat.h>

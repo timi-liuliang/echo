@@ -1,7 +1,7 @@
 #include "ProjectMgr.h"
 #include "LogPanel.h"
 #include "Studio.h"
-#include <engine/core/main/Root.h>
+#include <engine/core/main/Engine.h>
 #include <engine/core/util/PathUtil.h>
 #include "FreeImageHelper.h"
 

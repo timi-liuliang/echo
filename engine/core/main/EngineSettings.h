@@ -26,7 +26,7 @@ namespace Echo
 	 */
 	class EngineSettingsMgr
 	{
-		friend class Root;
+		friend class Engine;
 	public:
 		EngineSettingsMgr();
 		~EngineSettingsMgr();

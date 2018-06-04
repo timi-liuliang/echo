@@ -1,5 +1,5 @@
 #include "ResChooseDialog.h"
-#include <engine/core/main/Root.h>
+#include <engine/core/main/Engine.h>
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/io/IO.h>
 
@@ -36,13 +36,13 @@ namespace Studio
 		titleLable << "Res://";
 		m_dirModel->setHorizontalHeaderLabels(titleLable);
 
-		m_dirModel->SetRootPath(Echo::Root::instance()->getResPath().c_str(), "none", m_resDirView, NULL);
+		m_dirModel->SetRootPath(Echo::Engine::instance()->getResPath().c_str(), "none", m_resDirView, NULL);
 		m_dirModel->Refresh();
 
 		if(!g_lastSelectDir.empty())
 			onSelectDir(g_lastSelectDir.c_str());
 		else
-			onSelectDir(Echo::Root::instance()->getResPath().c_str());
+			onSelectDir(Echo::Engine::instance()->getResPath().c_str());
 	}
 
 	// get file
@@ -75,7 +75,7 @@ namespace Studio
 	// Ñ¡ÔñÎÄ¼þ¼Ð
 	void ResChooseDialog::onSelectDir(const char* dir)
 	{
-		bool isIncludePreDir = dir == Echo::Root::instance()->getResPath() ? false : true;
+		bool isIncludePreDir = dir == Echo::Engine::instance()->getResPath() ? false : true;
 
 		m_previewHelper->clear();
 		m_previewHelper->setPath(dir, m_supportExts.c_str(), isIncludePreDir);

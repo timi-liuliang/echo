@@ -116,7 +116,7 @@ namespace Studio
 		onSaveProject();
 
 		Echo::String app = QCoreApplication::applicationFilePath().toStdString().c_str();
-		Echo::String project = Echo::Root::instance()->getProjectFile()->getPathName();
+		Echo::String project = Echo::Engine::instance()->getProjectFile()->getPathName();
 		Echo::String cmd = Echo::StringUtil::Format("%s play %s", app.c_str(), project.c_str());
 
 		m_gameProcess.terminate();

@@ -1,7 +1,7 @@
 #include "PathChooseDialog.h"
 #include "Studio.h"
 #include <engine/core/util/PathUtil.h>
-#include <engine/core/main/Root.h>
+#include <engine/core/main/Engine.h>
 
 namespace Studio
 {
@@ -24,7 +24,7 @@ namespace Studio
 		titleLable << "Res://";
 		m_dirModel->setHorizontalHeaderLabels(titleLable);
 
-		m_dirModel->SetRootPath(Echo::Root::instance()->getResPath().c_str(), "none", m_resDirView, NULL);
+		m_dirModel->SetRootPath(Echo::Engine::instance()->getResPath().c_str(), "none", m_resDirView, NULL);
 		m_dirModel->Refresh();
 
 		// show exts
@@ -37,7 +37,7 @@ namespace Studio
 		QObject::connect(m_previewHelper, SIGNAL(doubleClickedRes(const char*)), this, SLOT(onDoubleClickPreviewRes(const char*)));
 
 		// choose main directory
-		onSelectDir(Echo::Root::instance()->getResPath().c_str());
+		onSelectDir(Echo::Engine::instance()->getResPath().c_str());
 	}
 
 	// 析构函数
@@ -96,7 +96,7 @@ namespace Studio
 	// 选择文件夹
 	void PathChooseDialog::onSelectDir(const char* dir)
 	{
-		bool isIncludePreDir = dir == Echo::Root::instance()->getResPath() ? false : true;
+		bool isIncludePreDir = dir == Echo::Engine::instance()->getResPath() ? false : true;
 
 		m_previewHelper->clear();
 		m_previewHelper->setPath(dir, m_supportExts.c_str(), isIncludePreDir);

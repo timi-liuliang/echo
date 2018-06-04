@@ -1,6 +1,6 @@
 #include "engine/core/base/class.h"
 #include "engine/core/Memory/MemManager.h"
-#include "Engine/core/main/Root.h"
+#include "Engine/core/main/Engine.h"
 #include "engine/core/Util/PathUtil.h"
 #include "engine/core/Util/Exception.h"
 #include "engine/core/io/IO.h"
@@ -38,7 +38,7 @@ static unsigned int _GetCurrThreadId()
 namespace Echo
 {
 	// 构造函数
-	Root::Root()
+	Engine::Engine()
 		: m_isInited(false)
 		, m_pAssetMgr(NULL)
 		, m_bRendererInited(NULL)
@@ -61,19 +61,19 @@ namespace Echo
 		OpenMPTaskMgr::instance();
 	}
 
-	Root::~Root()
+	Engine::~Engine()
 	{
 	}
 
 	// instance
-	Root* Root::instance()
+	Engine* Engine::instance()
 	{
-		static Root* inst = new Root();
+		static Engine* inst = new Engine();
 		return inst;
 	}
 
 	// 装载日志系统
-	bool Root::initLogSystem()
+	bool Engine::initLogSystem()
 	{
 		LogManager::instance();
 
@@ -81,7 +81,7 @@ namespace Echo
 	}
 
 	// 引擎初始化
-	bool Root::initialize(const Config& cfg)
+	bool Engine::initialize(const Config& cfg)
 	{
 		m_cfg = cfg;
 		m_pAssetMgr = cfg.pAssetMgr;
@@ -135,7 +135,7 @@ namespace Echo
 		renderCfg.enableThreadedRendering = false;
 		renderCfg.windowHandle = cfg.m_windowHandle;
 		renderCfg.enableThreadedRendering = false;
-		EchoRoot->initRenderer(renderer, renderCfg);
+		initRenderer(renderer, renderCfg);
 
 		Renderer::BGCOLOR = Echo::Color(0.298f, 0.298f, 0.322f);
 
@@ -149,7 +149,7 @@ namespace Echo
 		return true;
 	}
 
-	void Root::loadLaunchScene()
+	void Engine::loadLaunchScene()
 	{
 		Echo::String launchScene = "Res://main.scene";
 		//const ProjectSettings::Setting* setting = m_projectFile->getSetting("Application/Run/LaunchScene");
@@ -161,7 +161,7 @@ namespace Echo
 	}
 
 	// register all class types
-	void Root::registerClassTypes()
+	void Engine::registerClassTypes()
 	{
 		Class::registerType<Node>();
 
@@ -170,7 +170,7 @@ namespace Echo
 	}
 
 	// 加载项目,引擎初始化时会自动调用，也可单独调用(全路径)
-	void Root::loadProject(const char* projectFile)
+	void Engine::loadProject(const char* projectFile)
 	{
 		if (PathUtil::IsFileExist(projectFile))
 		{
@@ -189,13 +189,13 @@ namespace Echo
 		}
 	}
 	
-	void Root::loadAllBankFile()
+	void Engine::loadAllBankFile()
 	{
 		FSAudioManager::instance()->loadAllBankFile();
 	}
 
 	// 初始化渲染器
-	bool Root::initRenderer(Renderer* pRenderer, const Renderer::RenderCfg& config)
+	bool Engine::initRenderer(Renderer* pRenderer, const Renderer::RenderCfg& config)
 	{
 		EchoLogDebug("Canvas Size : %d x %d", config.screenWidth, config.screenHeight);
 
@@ -229,19 +229,19 @@ namespace Echo
 	}
 
 	// 当游戏挂起时候引擎需要进行的处理
-	void Root::onPlatformSuspend()
+	void Engine::onPlatformSuspend()
 	{
 		FSAudioManager::instance()->suspendFmodSystem();
 	}
 
 	// 当游戏从挂起中恢复时引擎需要进行的处理
-	void Root::onPlatformResume()
+	void Engine::onPlatformResume()
 	{
 		FSAudioManager::instance()->resumeFmodSystem();
 	}
 
 	// 渲染初始化
-	bool Root::onRendererInited()
+	bool Engine::onRendererInited()
 	{
 		if (m_bRendererInited)
 			return true;
@@ -262,7 +262,7 @@ namespace Echo
 		return true;
 	}
 
-	bool Root::onSize(ui32 width, ui32 height)
+	bool Engine::onSize(ui32 width, ui32 height)
 	{
 		if (m_bRendererInited)
 		{
@@ -291,13 +291,8 @@ namespace Echo
 	}
 
 	// 游戏销毁
-	void Root::destroy()
+	void Engine::destroy()
 	{
-#if !defined(NO_THEORA_PLAYER)
-		VideoPlay* videoPlay = VideoPlay::Instance();
-		EchoSafeDelete(videoPlay, VideoPlay);
-#endif
-
 		// 场景管理器
 		EchoSafeDeleteInstance(NodeTree);
 
@@ -340,47 +335,47 @@ namespace Echo
 		MemoryManager::destroyInstance();
 	}
 
-	const String& Root::getResPath() const
+	const String& Engine::getResPath() const
 	{
 		return m_resPath;
 	}
 
-	const String& Root::getUserPath() const
+	const String& Engine::getUserPath() const
 	{
 		return m_userPath;
 	}
 
-	void Root::setUserPath(const String& strPath)
+	void Engine::setUserPath(const String& strPath)
 	{
 		m_userPath = strPath;
 
 		IO::instance()->setUserPath(m_userPath);
 	}
 
-	void Root::SetPhoneinformation(int max, int free, String tex)
+	void Engine::SetPhoneinformation(int max, int free, String tex)
 	{
 		Maxmemory = max;
 		Freememory = free;
 		cputex = tex;
 	}
 
-	void* Root::getAssetManager() const
+	void* Engine::getAssetManager() const
 	{
 		return m_pAssetMgr;
 	}
 
-	bool Root::isRendererInited() const
+	bool Engine::isRendererInited() const
 	{
 		return m_bRendererInited;
 	}
 
-	const ui32& Root::getCurrentTime() const
+	const ui32& Engine::getCurrentTime() const
 	{
 		return m_currentTime;
 	}
 
 	// 每帧更新
-	void Root::tick(i32 elapsedTime)
+	void Engine::tick(i32 elapsedTime)
 	{
 		elapsedTime = Math::Clamp( elapsedTime, 0, 1000);
 		m_frameTime = elapsedTime * 0.001f;
@@ -422,14 +417,14 @@ namespace Echo
 		Renderer::instance()->present();
 	}
 
-	void Root::changeFilterAdditionalMap(const String& mapName)
+	void Engine::changeFilterAdditionalMap(const String& mapName)
 	{
 		if (m_enableFilterAdditional)
 			RenderTargetManager::instance()->changeFilterBlendmapName(mapName);
 	}
 
 	// 渲染场景
-	bool Root::render()
+	bool Engine::render()
 	{
 		// 外部模块更新, 目前只有 CatUI
 		for (const ExternalMgr& mgr : m_cfg.m_externalMgrs)
@@ -442,7 +437,7 @@ namespace Echo
 		return true;
 	}
 
-	void Root::releasePlugins()
+	void Engine::releasePlugins()
 	{
 		// 外部模块释放
 		for (ExternalMgr& mgr : m_cfg.m_externalMgrs)

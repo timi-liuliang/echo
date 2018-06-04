@@ -15,7 +15,7 @@ namespace Echo
 	class ImageCodecMgr;
 	class RenderTargetManager;
 	class ProfilerServer;
-	class Root
+	class Engine
 	{	
 	public:
 		// 外部模块接口
@@ -63,7 +63,7 @@ namespace Echo
 
 	public:
 		// instance
-		static Root* instance();
+		static Engine* instance();
 
 		void tick(i32 elapsedTime);
 
@@ -134,8 +134,8 @@ namespace Echo
 		void onPlatformResume();
 
 	private:
-		Root();
-		~Root();
+		Engine();
+		~Engine();
 
 		// register all class types
 		void registerClassTypes();
@@ -176,8 +176,3 @@ namespace Echo
 #endif
 	};
 }
-
-#define EchoRoot					Echo::Root::instance()
-#define EchoMemoryManager			EchoRoot->getMemoryManager()
-#define EchoEngineSettings			EchoRoot->getSettingsMgr()
-#define EchoEngineConsole			EchoRoot->getConsole()

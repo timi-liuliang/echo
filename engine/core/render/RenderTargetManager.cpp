@@ -1,7 +1,7 @@
 #include "RenderTargetManager.h"
 #include "MaterialInst.h"
 #include "Engine/core/main/EngineSettings.h"
-#include "Engine/core/main/Root.h"
+#include "Engine/core/main/Engine.h"
 #include "render/Material.h"
 #include "TextureRes.h"
 #include <algorithm>
@@ -200,7 +200,7 @@ namespace Echo
 		}
 
 
-		if(Root::instance()->getEnableFilterAdditional())
+		if(Engine::instance()->getEnableFilterAdditional())
 		{
 			m_bEnableFilter = true;
 
@@ -636,7 +636,7 @@ namespace Echo
 	// 调整大小
 	void RenderTargetManager::AdaptSize(ui32 nWidth, ui32 nHeight, ui32& outWidth, ui32& outHeight)
 	{
-		float scale = Root::instance()->getFramebufferScale();
+		float scale = Engine::instance()->getFramebufferScale();
 
 		outWidth = static_cast<ui32>(nWidth  * scale);
 		outHeight = static_cast<ui32>(nHeight * scale);

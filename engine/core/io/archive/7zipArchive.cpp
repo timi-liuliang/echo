@@ -1,7 +1,7 @@
 #include "7zipArchive.h"
 #include <engine/core/Util/LogManager.h>
 #include <engine/core/Util/PathUtil.h>
-#include <engine/core/main/Root.h>
+#include <engine/core/main/Engine.h>
 #include <ThirdParty/7zip/7z.h>
 #include <ThirdParty/7zip/7zFile.h>
 #include <ThirdParty/7zip/7zCrc.h>
@@ -48,7 +48,7 @@ namespace Echo
 	SzArchive::SzArchive(const String& name, const String& archType)
 		: Archive(name, archType)
 	{
-		m_name = EchoRoot->getResPath() + name;
+		m_name = Engine::instance()->getResPath() + name;
 		m_7zipHandle = EchoNew(SzHandler);
 	}
 

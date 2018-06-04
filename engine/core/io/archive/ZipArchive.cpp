@@ -2,7 +2,7 @@
 #include "engine/core/Util/LogManager.h"
 #include "engine/core/Util/Exception.h"
 #include "ZipArchive.h"
-#include "Engine/core/main/Root.h"
+#include "Engine/core/main/Engine.h"
 
 namespace Echo
 {
@@ -29,7 +29,7 @@ namespace Echo
 	void ZipArchive::load()
 	{
 		EE_LOCK_MUTEX(AUTO_MUTEX_NAME)
-		String fullName = Root::instance()->getResPath() + mName;
+		String fullName = Engine::instance()->getResPath() + mName;
 		m_resourcePack.openFile(fullName.c_str());
 		mLoaded = true;
 	}

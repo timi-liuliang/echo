@@ -2,7 +2,7 @@
 #include "engine/core/Util/LogManager.h"
 #include "engine/core/Util/PathUtil.h"
 #include "engine/core/io/IO.h"
-#include "engine/core/main/Root.h"
+#include "engine/core/main/Engine.h"
 #include <ostream>
 
 namespace Echo

@@ -2,7 +2,7 @@
 
 #include <Engine/modules/Audio/FMODStudio/FSAudioManager.h>
 #include <engine/core/util/PathUtil.h>
-#include <engine/core/main/Root.h>
+#include <engine/core/main/Engine.h>
 #include <TlHelp32.h>
 #include "Studio.h"
 #include <QFileInfo>

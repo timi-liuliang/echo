@@ -1,7 +1,7 @@
 #include "Node.h"
 #include "engine/core/Util/LogManager.h"
 #include "engine/core/io/IO.h"
-#include "engine/core/main/Root.h"
+#include "engine/core/main/Engine.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/script/lua/LuaBinder.h"
 #include <thirdparty/pugixml/pugixml.hpp>
@@ -11,7 +11,7 @@ namespace Echo
 {
 	void Node::LuaScript::start(Node* obj)
 	{
-		m_isValid = Root::instance()->getConfig().m_isGame && IO::instance()->isResourceExists(m_file.getPath());
+		m_isValid = Engine::instance()->getConfig().m_isGame && IO::instance()->isResourceExists(m_file.getPath());
 		if (m_isValid)
 		{
 			m_globalTableName = StringUtil::Format("_Nodes._%d", obj->getIdentifier());;

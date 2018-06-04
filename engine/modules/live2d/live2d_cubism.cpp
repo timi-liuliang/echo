@@ -4,7 +4,7 @@
 #include "render/renderer.h"
 #include "render/Material.h"
 #include "engine/core/script/lua/luaex.h"
-#include "engine/core/main/Root.h"
+#include "engine/core/main/Engine.h"
 
 // Ä¬ÈÏ²ÄÖÊ
 static const char* g_live2dDefaultMaterial = R"(
@@ -346,7 +346,7 @@ namespace Echo
 
 			if (m_curMotion)
 			{
-				m_curMotion->tick( Root::instance()->getFrameTime(), m_model, m_table);
+				m_curMotion->tick( Engine::instance()->getFrameTime(), m_model, m_table);
 			}
 
 			csmUpdateModel((csmModel*)m_model);

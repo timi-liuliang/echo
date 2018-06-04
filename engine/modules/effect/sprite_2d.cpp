@@ -4,7 +4,7 @@
 #include "render/renderer.h"
 #include "render/Material.h"
 #include "engine/core/script/lua/luaex.h"
-#include "engine/core/main/Root.h"
+#include "engine/core/main/Engine.h"
 
 // Ä¬ÈÏ²ÄÖÊ
 static const char* g_spriteDefaultMaterial = R"(<?xml version = "1.0" encoding = "utf-8"?>

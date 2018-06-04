@@ -1,6 +1,6 @@
 #include "FIleSystemWatcher.h"
 #include <engine/core/Util/PathUtil.h>
-#include <Engine/core/main/Root.h>
+#include <Engine/core/main/Engine.h>
 #include "Studio.h"
 #include <iterator>
 #include "EchoEngine.h"
@@ -25,7 +25,7 @@ namespace Studio
 	{
 		Echo::String path = _path;
 		if (!Echo::PathUtil::IsAbsolutePath(path))
-			path = EchoRoot->getResPath() + path;
+			path = Echo::Engine::instance()->getResPath() + path;
 
 		// 所有子路径
 		Echo::StringArray files;
