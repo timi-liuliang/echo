@@ -65,12 +65,7 @@ namespace Echo
 					if (declaration.m_attribute != -1)
 					{
 						// Enable the vertex array attributes.
-#ifdef ECHO_RENDER_THREAD
-						TRenderTask<GLES2RenderTaskVertexAttribPointer>::CreateTask(declaration.m_attribute, declaration.count, declaration.type, declaration.bNormalize, streamUnit.m_vertStride, declaration.elementOffset);
-#else
 						OGLESDebug(glVertexAttribPointer(declaration.m_attribute, declaration.count, declaration.type, declaration.bNormalize, streamUnit.m_vertStride, (GLvoid*)declaration.elementOffset));
-#endif
-
 						g_renderer->enableAttribLocation(declaration.m_attribute);
 					}
 				}

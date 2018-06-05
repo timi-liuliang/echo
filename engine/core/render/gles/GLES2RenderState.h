@@ -61,7 +61,6 @@ namespace Echo
 		GLenum backStencilPassOP;
 	};
 
-	class GLES2SamplerStateGPUProxy;
 	class GLES2BlendState: public BlendState
 	{
 	public:

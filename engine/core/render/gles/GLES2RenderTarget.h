@@ -27,14 +27,9 @@ namespace Echo
 
 		virtual bool doRestoreDefaultRenderTarget();
 
-#ifdef ECHO_RENDER_THREAD
-	protected:
-		GLES2TargetGPUProxy* m_gpu_proxy;
-#else
 	private:
 		GLuint m_fbo;
 		GLuint m_rbo;
-#endif
 
 	public:
 		GLES2RenderTarget(ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const Options& option = Options());

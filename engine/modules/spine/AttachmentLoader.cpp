@@ -8,7 +8,7 @@
 static const char* g_spinDefaultMaterial = R"(
 <?xml version = "1.0" encoding = "utf-8"?>
 <material>
-<vs>#version 100
+<vs>#version 300 es
 
 attribute vec3 a_Position;
 attribute vec2 a_UV;
