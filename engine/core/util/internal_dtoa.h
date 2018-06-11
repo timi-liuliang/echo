@@ -15,7 +15,7 @@
 #include <stdint.h>
 #endif
 
-#include "LogManager.h"
+#include "engine/core/log/LogManager.h"
 
 namespace Echo
 {

@@ -1,13 +1,13 @@
-#include <engine/core/Util/LogManager.h>
+#include <engine/core/log/LogManager.h>
 #include "Render/ShaderProgram.h"
-#include "Render/Material.h"
+#include "Render/ShaderProgramRes.h"
 #include "Render/Renderer.h"
 #include "Render/UniformCache.h"
 
 namespace Echo
 {
 	// ¹¹Ôìº¯Êý
-	ShaderProgram::ShaderProgram( Material* material)
+	ShaderProgram::ShaderProgram( ShaderProgramRes* material)
 		: m_bLinked(false)
 		, m_material( material)
 	{

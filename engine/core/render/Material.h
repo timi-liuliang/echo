@@ -6,12 +6,12 @@
 
 namespace Echo
 {
-	class Material;
+	class ShaderProgramRes;
 
 	/**
 	* 材质实例
 	*/
-	class MaterialInst
+	class Material
 	{
 	public:
 		// texture info
@@ -52,7 +52,7 @@ namespace Echo
 
 	public:
 		// create a material instance
-		static MaterialInst* create();
+		static Material* create();
 
 		// release
 		void release();
@@ -61,7 +61,7 @@ namespace Echo
 		bool applyLoadedData();
 
 		// 克隆
-		void clone(MaterialInst* orig);
+		void clone(Material* orig);
 
 		// 资源加载线程准备纹理
 		void prepareTexture();
@@ -96,7 +96,7 @@ namespace Echo
 		void setMacros(const String& macros);
 
 		// 获取渲染队列
-		Material* getMaterial() { return m_material; }
+		ShaderProgramRes* getMaterial() { return m_material; }
 
 		// operate uniform
 		bool isUniformExist(const String& name);
@@ -130,8 +130,8 @@ namespace Echo
 		void addTexture(int idx, const String& name);
 
 	private:
-		MaterialInst();
-		~MaterialInst();
+		Material();
+		~Material();
 
 		// 参数匹配
 		void matchUniforms();
@@ -145,7 +145,7 @@ namespace Echo
 		const char*			m_officialMaterialContent;	// 官方材质
 		String				m_renderStage;				// 所处渲染阶段
 		StringArray			m_macros;					// 宏定义
-		Material*			m_material;					// 对应材质
+		ShaderProgramRes*			m_material;					// 对应材质
 		ParamMap			m_unifroms;
 		TextureInfoMap 		m_textures;
 	};

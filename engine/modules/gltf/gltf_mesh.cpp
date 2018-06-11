@@ -3,7 +3,7 @@
 #include "engine/core/log/LogManager.h"
 #include "engine/core/scene/NodeTree.h"
 #include "render/renderer.h"
-#include "render/Material.h"
+#include "render/ShaderProgramRes.h"
 #include "engine/core/script/lua/luaex.h"
 #include "engine/core/main/Engine.h"
 #include "engine/core/render/material/generalmaterial.h"
@@ -70,13 +70,13 @@ namespace Echo
 	{
 		if ( m_asset && m_meshIdx!=-1 && m_primitiveIdx!=-1)
 		{
-			MaterialInst* origMaterial = m_asset->m_meshes[m_meshIdx].m_primitives[m_primitiveIdx].m_materialInst;
+			Material* origMaterial = m_asset->m_meshes[m_meshIdx].m_primitives[m_primitiveIdx].m_materialInst;
 			if (origMaterial)
 			{
 				clearRenderable();
 
 				Mesh* mesh = m_asset->m_meshes[m_meshIdx].m_primitives[m_primitiveIdx].m_mesh;
-				m_materialInst = MaterialInst::create();
+				m_materialInst = Material::create();
 				m_materialInst->clone(origMaterial);
 				m_renderable = Renderable::create(mesh, m_materialInst, this);
 			}

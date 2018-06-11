@@ -2,7 +2,7 @@
 
 #include "engine/core/scene/Node.h"
 #include "engine/core/render/mesh/Mesh.h"
-#include "engine/core/render/MaterialInst.h"
+#include "engine/core/render/Material.h"
 #include "engine/core/render/render/Renderable.h"
 #include "gltf_res.h"
 
@@ -52,6 +52,6 @@ namespace Echo
 		GltfResPtr				m_asset;		// gltf asset ptr
 		int						m_meshIdx;		// mesh index in the asset
 		int						m_primitiveIdx;	// sub mesh index
-		MaterialInst*			m_materialInst;
+		Material*			m_materialInst;
 	};
 }

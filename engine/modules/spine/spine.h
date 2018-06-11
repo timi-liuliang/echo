@@ -3,7 +3,7 @@
 #include "engine/core/util/StringOption.h"
 #include "engine/core/scene/Node.h"
 #include "engine/core/render/mesh/Mesh.h"
-#include "engine/core/render/MaterialInst.h"
+#include "engine/core/render/Material.h"
 #include "engine/core/render/render/Renderable.h"
 
 struct spAtlas;

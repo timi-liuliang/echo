@@ -71,7 +71,7 @@ namespace Echo
 		// ¥¥Ω®Œ∆¿Ì
 		Texture*  createTexture(const String& name);
 		Texture*				createTexture2D(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff);
-		ShaderProgram*			createShaderProgram(  Material* material);
+		ShaderProgram*			createShaderProgram(  ShaderProgramRes* material);
 		Shader*					createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const String& filename);
 		Shader*					createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const char* srcBuffer, ui32 size);
 		RenderInput*			createRenderInput( ShaderProgram* pProgram);

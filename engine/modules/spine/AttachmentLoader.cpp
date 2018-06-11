@@ -2,7 +2,7 @@
 #include <spine/extension.h>
 #include "engine/core/render/TextureRes.h"
 #include "engine/core/render/mesh/Mesh.h"
-#include "engine/core/render/MaterialInst.h"
+#include "engine/core/render/Material.h"
 
 // Ä¬ÈÏ²ÄÖÊ
 static const char* g_spinDefaultMaterial = R"(
@@ -186,7 +186,7 @@ namespace Echo
 			m_mesh->updateIndices(m_indicesData.size(), m_indicesData.data());
 			m_mesh->updateVertexs(define, m_verticesData.size(), (const Byte*)m_verticesData.data(), Box());
 
-			m_materialInst = MaterialInst::create();
+			m_materialInst = Material::create();
 			m_materialInst->setOfficialMaterialContent(g_spinDefaultMaterial);
 			m_materialInst->setRenderStage("Transparent");
 			m_materialInst->applyLoadedData();

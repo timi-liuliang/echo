@@ -316,7 +316,7 @@ namespace Echo
 		void dirtyTexSlot(){ m_dirtyTexSlot = true; }
 
 		//virtual Texture*			createTextureFromImage(Image* pImage, Dword usage = Texture::TU_DEFAULT);
-		virtual ShaderProgram*		createShaderProgram(Material* material)=0;
+		virtual ShaderProgram*		createShaderProgram(ShaderProgramRes* material)=0;
 		virtual Shader*				createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const String& filename) = 0;
 		virtual Shader*				createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const char* srcBuffer, ui32 size) = 0;
 
@@ -333,7 +333,7 @@ namespace Echo
 		virtual RenderTarget* createRenderTarget(ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const RenderTarget::Options& option) = 0;
 
 		// 新建Renderable
-		Renderable* createRenderable(const String& renderStage, Material* material);
+		Renderable* createRenderable(const String& renderStage, ShaderProgramRes* material);
 
 		// 获取Renderable
 		Renderable* getRenderable(RenderableID id);

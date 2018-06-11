@@ -6,7 +6,7 @@
 #include "scl/backtrace.h"
 
 #include "engine/core/io/DataStream.h"
-#include "engine/core/util/LogManager.h"
+#include "engine/core/log/LogManager.h"
 
 #define LUAEX_CHECK_BEGIN const int __check_n = lua_gettop(L)
 #define LUAEX_CHECK_END assert(__check_n == lua_gettop(L)) 

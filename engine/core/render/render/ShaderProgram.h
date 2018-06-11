@@ -24,7 +24,7 @@ namespace Echo
 	/**
 	* ShaderProgram 2014-11-18
 	*/
-	class Material;
+	class ShaderProgramRes;
 	class ShaderProgram
 	{
 	public:
@@ -91,7 +91,7 @@ namespace Echo
 		typedef std::map<int, Uniform> UniformArray;
 
 	public:
-		ShaderProgram(Material* material);
+		ShaderProgram(ShaderProgramRes* material);
 		virtual ~ShaderProgram();
 
 		// 获取关连着色器
@@ -139,7 +139,7 @@ namespace Echo
 		bool checkValid();
 
 	protected:
-		Material*			m_material;							// 关联材质
+		ShaderProgramRes*			m_material;							// 关联材质
 		Shader*				m_pShaders[Shader::ST_SHADERCOUNT];
 		bool				m_bLinked;
 		UniformArray		m_uniforms;							// 参数信息

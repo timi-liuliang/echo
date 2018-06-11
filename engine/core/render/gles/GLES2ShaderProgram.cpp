@@ -5,14 +5,14 @@
 #include <engine/core/Util/Exception.h>
 #include <engine/core/log/LogManager.h>
 #include "engine/core/Memory/MemManager.h"
-#include "Render/Material.h"
+#include "Render/ShaderProgramRes.h"
 #include "Render/UniformCache.h"
 
 #define UNIFORM_OPTIMIZE
 
 namespace Echo
 {
-	GLES2ShaderProgram::GLES2ShaderProgram( Material* material)
+	GLES2ShaderProgram::GLES2ShaderProgram( ShaderProgramRes* material)
 		: ShaderProgram( material)
 	{
 		m_attribLocationMapping.assign(-1);

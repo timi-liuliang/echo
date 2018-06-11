@@ -440,7 +440,7 @@ namespace Echo
 	}
 
 	// ÐÂ½¨Renderable
-	Renderable* Renderer::createRenderable(const String& renderStage, Material* material)
+	Renderable* Renderer::createRenderable(const String& renderStage, ShaderProgramRes* material)
 	{
 		Renderable* renderable = EchoNew(Renderable(renderStage, material, m_renderableIdentifier++));
 		ui32 id = renderable->getIdentifier();

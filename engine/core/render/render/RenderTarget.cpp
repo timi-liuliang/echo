@@ -1,5 +1,5 @@
 #include "Render/RenderTarget.h"
-#include "Render/Material.h"
+#include "Render/ShaderProgramRes.h"
 #include "Engine/core/main/Engine.h"
 
 namespace Echo

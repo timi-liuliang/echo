@@ -9,7 +9,7 @@
 #include "Engine/core/Scene/NodeTree.h"
 #include "engine/core/Util/Timer.h"
 #include "engine/core/render/render/Viewport.h"
-#include "Engine/core/Render/MaterialInst.h"
+#include "Engine/core/Render/Material.h"
 #include "ProjectSettings.h"
 #include "Engine/modules/Audio/FMODStudio/FSAudioManager.h"
 #include "EngineTimeController.h"

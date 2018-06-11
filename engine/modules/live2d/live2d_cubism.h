@@ -2,7 +2,7 @@
 
 #include "engine/core/scene/Node.h"
 #include "engine/core/render/mesh/Mesh.h"
-#include "engine/core/render/MaterialInst.h"
+#include "engine/core/render/Material.h"
 #include "engine/core/render/render/Renderable.h"
 #include "live2d_cubism_motion.h"
 
@@ -146,7 +146,7 @@ namespace Echo
 		MotionMap				m_motions;
 
 		Mesh*					m_mesh;			// Geometry Data for render
-		MaterialInst*			m_materialInst;	// Material Instance
+		Material*			m_materialInst;	// Material Instance
 		Renderable*				m_renderable;
 
 		Matrix4					m_matWVP;

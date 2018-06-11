@@ -23,7 +23,7 @@ namespace Echo
 	 */
 	class Node;
 	class Mesh;
-	class MaterialInst;
+	class Material;
 	class Renderable
 	{
 		friend class Renderer;
@@ -44,7 +44,7 @@ namespace Echo
 		ui32 getIdentifier() const { return m_identifier; }
 
 		// 构建数据
-		static Renderable* create(Mesh* mesh, MaterialInst* matInst, Node* node);
+		static Renderable* create(Mesh* mesh, Material* matInst, Node* node);
 
 		// release
 		void release();
@@ -121,7 +121,7 @@ namespace Echo
 		void bindRenderState();
 
 	private:
-		Renderable( const String& renderStage, Material* material, int identifier);
+		Renderable( const String& renderStage, ShaderProgramRes* material, int identifier);
 		virtual ~Renderable();
 
 	public:

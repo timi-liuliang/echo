@@ -1,6 +1,6 @@
 #include "LuaBinder.h"
 #include "engine/core/memory/MemAllocDef.h"
-#include "engine/core/util/LogManager.h"
+#include "engine/core/log/LogManager.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/io/DataStream.h"
 

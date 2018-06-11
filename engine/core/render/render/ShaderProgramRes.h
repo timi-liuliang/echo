@@ -12,14 +12,14 @@ namespace Echo
 	 * 材质
 	 */
 	class Renderer;
-	class Material : public PtrMonitor<Material>
+	class ShaderProgramRes : public PtrMonitor<ShaderProgramRes>
 	{
 		typedef map<String, const SamplerState*>::type SamplerStateMap;
 		typedef vector<std::pair<String, String> >::type SeparatedSamplerArray;
 		typedef vector<String>::type TextureSamplerStateArray;
 	public:
-		Material();
-		~Material();
+		ShaderProgramRes();
+		~ShaderProgramRes();
 
 		// 获取名称
 		const String& getName() { return m_name; }

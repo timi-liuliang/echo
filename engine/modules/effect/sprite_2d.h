@@ -2,7 +2,7 @@
 
 #include "engine/core/scene/Node.h"
 #include "engine/core/render/mesh/Mesh.h"
-#include "engine/core/render/MaterialInst.h"
+#include "engine/core/render/Material.h"
 #include "engine/core/render/render/Renderable.h"
 
 namespace Echo
@@ -65,7 +65,7 @@ namespace Echo
 	private:
 		ResourcePath			m_textureRes;
 		Mesh*					m_mesh;			// Geometry Data for render
-		MaterialInst*			m_materialInst;	// Material Instance
+		Material*			m_materialInst;	// Material Instance
 		Renderable*				m_renderable;
 		Matrix4					m_matWVP;
 		i32						m_width;

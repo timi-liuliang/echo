@@ -1,5 +1,5 @@
 #include "Render/PVRCodec.h"
-#include "engine/core/Util/LogManager.h"
+#include "engine/core/log/LogManager.h"
 #include "engine/core/Util/StringUtil.h"
 #include "engine/core/Util/PathUtil.h"
 

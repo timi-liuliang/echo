@@ -2,7 +2,7 @@
 #include "engine/core/log/LogManager.h"
 #include "engine/core/scene/NodeTree.h"
 #include "render/renderer.h"
-#include "render/Material.h"
+#include "render/ShaderProgramRes.h"
 #include "engine/core/script/lua/luaex.h"
 #include "engine/core/main/Engine.h"
 
@@ -134,7 +134,7 @@ namespace Echo
 			clearRenderable();
 
 			// material
-			m_materialInst = MaterialInst::create();
+			m_materialInst = Material::create();
 			m_materialInst->setOfficialMaterialContent(g_spriteDefaultMaterial);
 			m_materialInst->setRenderStage("Transparent");
 			m_materialInst->applyLoadedData();

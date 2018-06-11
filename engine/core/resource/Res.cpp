@@ -1,5 +1,5 @@
 #include "Res.h"
-#include "engine/core/util/LogManager.h"
+#include "engine/core/log/LogManager.h"
 
 namespace Echo
 {

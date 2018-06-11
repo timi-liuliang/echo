@@ -157,12 +157,12 @@ namespace Echo
 			return false;
 		}
 
-		Material* getBaseMaterial() const
+		ShaderProgramRes* getBaseMaterial() const
 		{
 			return m_pMaterialBaseUpdate;
 		}
 
-		Material* getFilterMaterial() const
+		ShaderProgramRes* getFilterMaterial() const
 		{
 			return m_pMaterialFilterUpdate;
 		}
@@ -242,14 +242,14 @@ namespace Echo
 		Renderable*				m_pScreenAlignedQuad;
 		Renderable*				m_pScreenAlignedQuadQuarterLB;
 		Renderable*				m_pScreenAlignedQuadDownsampleDepth;
-		Material*				m_pMaterialBaseUpdate;
-		Material*				m_pMaterialNightSight;
-		Material*				m_pMtlAddBlend;
-		Material*				m_pMaterialDownsampleDepth;
+		ShaderProgramRes*				m_pMaterialBaseUpdate;
+		ShaderProgramRes*				m_pMaterialNightSight;
+		ShaderProgramRes*				m_pMtlAddBlend;
+		ShaderProgramRes*				m_pMaterialDownsampleDepth;
 		ui32					m_inUsingRenderTarget;
 		bool					m_bEnableMultiResolution;
 		bool					m_bEnableFilter;
-		Material*				m_pMaterialFilterUpdate;
+		ShaderProgramRes*				m_pMaterialFilterUpdate;
 		String					m_pFilterBlendmapName;
 		TextureRes*				m_filterBlendmapTexture;
 		TextureSampler			m_pFilterBlendmap;

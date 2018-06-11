@@ -1,8 +1,8 @@
 #include "RenderTargetManager.h"
-#include "MaterialInst.h"
+#include "Material.h"
 #include "Engine/core/main/EngineSettings.h"
 #include "Engine/core/main/Engine.h"
-#include "render/Material.h"
+#include "render/ShaderProgramRes.h"
 #include "TextureRes.h"
 #include <algorithm>
 
@@ -53,9 +53,9 @@ namespace Echo
 			m_mapRenderTargets.erase(bit ++);
 		}
 
-		EchoSafeDelete(m_pMaterialBaseUpdate, Material);
-		EchoSafeDelete(m_pMaterialNightSight, Material);
-		EchoSafeDelete(m_pMaterialDownsampleDepth, Material);
+		EchoSafeDelete(m_pMaterialBaseUpdate, ShaderProgramRes);
+		EchoSafeDelete(m_pMaterialNightSight, ShaderProgramRes);
+		EchoSafeDelete(m_pMaterialDownsampleDepth, ShaderProgramRes);
 
 		Renderer::instance()->destroyRenderables( &m_pScreenAlignedQuad, 1);
 
@@ -67,7 +67,7 @@ namespace Echo
 
 		if(m_bEnableFilter)
 		{
-			EchoSafeDelete(m_pMaterialFilterUpdate, Material);
+			EchoSafeDelete(m_pMaterialFilterUpdate, ShaderProgramRes);
 			Renderer::instance()->releaseTexture(m_pFilterBlendmap.m_texture);
 			m_pFilterBlendmap.m_texture = NULL;
 			Renderer::instance()->destroyRenderables( &m_pScreenAlignedQuadFilter, 1);
@@ -204,7 +204,7 @@ namespace Echo
 		{
 			m_bEnableFilter = true;
 
-			m_pMaterialFilterUpdate = EchoNew(Material);
+			m_pMaterialFilterUpdate = EchoNew(ShaderProgramRes);
 			m_pMaterialFilterUpdate->loadFromFile("pp_FilterAdditional.xml", "");
 
 			changeFilterBlendmapName("FilterAdditional.tga");

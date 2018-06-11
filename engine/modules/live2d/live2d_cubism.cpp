@@ -2,7 +2,7 @@
 #include "engine/core/log/LogManager.h"
 #include "engine/core/scene/NodeTree.h"
 #include "render/renderer.h"
-#include "render/Material.h"
+#include "render/ShaderProgramRes.h"
 #include "engine/core/script/lua/luaex.h"
 #include "engine/core/main/Engine.h"
 
@@ -326,7 +326,7 @@ namespace Echo
 			m_mesh->updateIndices(indices.size(), indices.data());
 			m_mesh->updateVertexs(define, vertices.size(), (const Byte*)vertices.data(), m_localAABB);
 
-			m_materialInst = MaterialInst::create();
+			m_materialInst = Material::create();
 			m_materialInst->setOfficialMaterialContent(g_live2dDefaultMaterial);
 			m_materialInst->setRenderStage("Transparent");
 			m_materialInst->applyLoadedData();

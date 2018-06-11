@@ -1,20 +1,20 @@
-#include "MaterialInst.h"
+#include "Material.h"
 #include "Engine/modules/Light/Light.h"
 #include "Engine/core/Scene/NodeTree.h"
-#include "engine/core/render/render/Material.h"
+#include "engine/core/render/render/ShaderProgramRes.h"
 #include "engine/core/render/render/MaterialDesc.h"
 #include "engine/core/render/render/Renderer.h"
 #include <thirdparty/pugixml/pugixml.hpp>
 
 namespace Echo
 {
-	MaterialInst::Uniform::~Uniform()
+	Material::Uniform::~Uniform()
 	{
 		EchoSafeDeleteArray(m_value, Byte, getValueBytes());
 	}
 
 	// 克隆
-	MaterialInst::Uniform* MaterialInst::Uniform::clone()
+	Material::Uniform* Material::Uniform::clone()
 	{
 		Uniform* result = EchoNew(Uniform);
 		result->m_name = m_name;
@@ -26,7 +26,7 @@ namespace Echo
 	}
 
 	// get value bytes
-	i32 MaterialInst::Uniform::getValueBytes()
+	i32 Material::Uniform::getValueBytes()
 	{
 		// 计算所需内存大小
 		int bytes = 0;
@@ -45,7 +45,7 @@ namespace Echo
 		return bytes;
 	}
 
-	void MaterialInst::Uniform::setValue(const void* value)
+	void Material::Uniform::setValue(const void* value)
 	{
 		EchoSafeDeleteArray( m_value, Byte, getValueBytes());
 		if (value)
@@ -57,7 +57,7 @@ namespace Echo
 	}
 
 	// alloc Value
-	void MaterialInst::Uniform::allocValue()
+	void Material::Uniform::allocValue()
 	{
 		if (!m_value)
 		{
@@ -68,7 +68,7 @@ namespace Echo
 	}
 
 	// 构造函数
-	MaterialInst::MaterialInst()
+	Material::Material()
 		: m_material(NULL)
 		, m_officialMaterialContent(nullptr)
 	{
@@ -76,7 +76,7 @@ namespace Echo
 	}
 
 	// 析构函数
-	MaterialInst::~MaterialInst()
+	Material::~Material()
 	{
 		m_unifroms.clear();
 
@@ -85,18 +85,18 @@ namespace Echo
 	}
 
 	// create a material instance
-	MaterialInst* MaterialInst::create()
+	Material* Material::create()
 	{
-		return EchoNew(MaterialInst);
+		return EchoNew(Material);
 	}
 
 	// release
-	void MaterialInst::release()
+	void Material::release()
 	{
-		ECHO_DELETE_T(this, MaterialInst);
+		ECHO_DELETE_T(this, Material);
 	}
 
-	bool MaterialInst::applyLoadedData()
+	bool Material::applyLoadedData()
 	{
 		// 加载材质模板
 		buildRenderQueue();
@@ -113,7 +113,7 @@ namespace Echo
 	}
 
 	// 复制材质实例
-	void MaterialInst::clone(MaterialInst* orig)
+	void Material::clone(Material* orig)
 	{
 		// 拷贝名称，材质
 		m_name = orig->m_name;
@@ -132,7 +132,7 @@ namespace Echo
 	}
 
 	// 获取变量值
-	void* MaterialInst::getUniformValue(const String& name)
+	void* Material::getUniformValue(const String& name)
 	{
 		const auto& it = m_unifroms.find(name);
 		if (it != m_unifroms.end())
@@ -140,12 +140,12 @@ namespace Echo
 			return  it->second->m_value;
 		}
 
-		const Material::DefaultUniform* dUniform = m_material->getDefaultUniformValue(name);
+		const ShaderProgramRes::DefaultUniform* dUniform = m_material->getDefaultUniformValue(name);
 		return dUniform ? dUniform->value : NULL;
 	}
 
 	// 准备资源IO
-	TextureRes* MaterialInst::prepareTextureImp(const String& texName)
+	TextureRes* Material::prepareTextureImp(const String& texName)
 	{
 		TextureRes* pTexture;
 		size_t cubePos = texName.find("_cube_");
@@ -171,7 +171,7 @@ namespace Echo
 	}
 
 	// 资源加载线程准备纹理
-	void MaterialInst::prepareTexture()
+	void Material::prepareTexture()
 	{
 		for (const auto& element : m_textures)
 		{
@@ -179,7 +179,7 @@ namespace Echo
 		}
 	}
 
-	void MaterialInst::loadTexture()
+	void Material::loadTexture()
 	{
 		for (auto& it : m_textures)
 		{
@@ -188,13 +188,13 @@ namespace Echo
 		}
 	}
 
-	void MaterialInst::unloadTexture()
+	void Material::unloadTexture()
 	{
 		m_textures.clear();
 	}
 
 	// 根据索引获取纹理
-	TextureRes* MaterialInst::getTexture(const int& index)
+	TextureRes* Material::getTexture(const int& index)
 	{
 		auto it = m_textures.find(index);
 		if (it != m_textures.end())
@@ -206,20 +206,20 @@ namespace Echo
 	}
 
 	// 设置宏定义
-	void MaterialInst::setMacros(const String& macros) 
+	void Material::setMacros(const String& macros) 
 	{ 
 		m_macros = StringUtil::Split(macros, ";");
 		std::sort(m_macros.begin(), m_macros.end());
 	}
 
 	// 判断变量是否存在
-	bool MaterialInst::isUniformExist(const String& name)
+	bool Material::isUniformExist(const String& name)
 	{
 		return m_unifroms.find(name)!=m_unifroms.end();
 	}
 
 	// 修改变量
-	void MaterialInst::setUniformValue(const String& name, const ShaderParamType& type, void* value)
+	void Material::setUniformValue(const String& name, const ShaderParamType& type, void* value)
 	{
 		const auto& it = m_unifroms.find(name);
 		if (it != m_unifroms.end())
@@ -246,7 +246,7 @@ namespace Echo
 	//	return getUniformValue(name);
 	//}
 
-	void MaterialInst::addTexture(int idx, const String& name)
+	void Material::addTexture(int idx, const String& name)
 	{
 		TextureInfo info;
 		info.m_idx = idx;
@@ -254,12 +254,12 @@ namespace Echo
 		m_textures[idx] = info;
 	}
 
-	TextureRes* MaterialInst::setTexture(const String& name, const String& uri)
+	TextureRes* Material::setTexture(const String& name, const String& uri)
 	{
 		return setTexture( name, prepareTextureImp(uri));
 	}
 
-	TextureRes* MaterialInst::setTexture(const String& name, TextureRes* textureRes)
+	TextureRes* Material::setTexture(const String& name, TextureRes* textureRes)
 	{
 		if (!textureRes)
 			return nullptr;
@@ -282,7 +282,7 @@ namespace Echo
 	}
 
 	// 获取变量
-	MaterialInst::Uniform* MaterialInst::getUniform(const String& name)
+	Material::Uniform* Material::getUniform(const String& name)
 	{
 		const auto& it = m_unifroms.find(name);
 		if (it != m_unifroms.end())
@@ -292,7 +292,7 @@ namespace Echo
 	}
 
 	// 是否使用了宏定义
-	bool MaterialInst::isMacroUsed(const String& macro)
+	bool Material::isMacroUsed(const String& macro)
 	{
 		for (const String& _macro : m_macros)
 		{
@@ -304,7 +304,7 @@ namespace Echo
 	}
 
 	// 设置宏定义
-	void MaterialInst::setMacro(const String& macro, bool enabled)
+	void Material::setMacro(const String& macro, bool enabled)
 	{
 		if (enabled)
 		{
@@ -336,7 +336,7 @@ namespace Echo
 	}
 
 	// 构建渲染队列
-	void MaterialInst::buildRenderQueue()
+	void Material::buildRenderQueue()
 	{
 		// make sure macros
 		String finalMacros; finalMacros.reserve(512);
@@ -346,7 +346,7 @@ namespace Echo
 		}
 
 		// create material
-		m_material = EchoNew(Material);
+		m_material = EchoNew(ShaderProgramRes);
 		if (m_officialMaterialContent)
 			m_material->loadFromContent(m_officialMaterialContent, finalMacros);
 		else if (!m_materialTemplate.empty())
@@ -368,7 +368,7 @@ namespace Echo
 	}
 
 	// 参数匹配
-	void MaterialInst::matchUniforms()
+	void Material::matchUniforms()
 	{
 		ShaderProgram* shaderProgram = m_material->getShaderProgram();
 		if (shaderProgram)
@@ -396,7 +396,7 @@ namespace Echo
 					}
 
 					// default value
-					const Material::DefaultUniform* defaultUniform = m_material->getDefaultUniformValue(uniform->m_name);
+					const ShaderProgramRes::DefaultUniform* defaultUniform = m_material->getDefaultUniformValue(uniform->m_name);
 					if (defaultUniform && uniform->m_count == defaultUniform->count && uniform->m_type == defaultUniform->type)
 						uniform->setValue(defaultUniform->value);
 

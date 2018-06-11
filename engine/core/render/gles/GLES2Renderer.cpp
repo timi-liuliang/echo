@@ -471,7 +471,7 @@ namespace Echo
 		return pTexture2D;
 	}
 
-	ShaderProgram* GLES2Renderer::createShaderProgram(Material* material)
+	ShaderProgram* GLES2Renderer::createShaderProgram(ShaderProgramRes* material)
 	{
 		ShaderProgram* pShaderProgram = NULL;
 		try

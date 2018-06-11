@@ -18,7 +18,7 @@ namespace Echo
 	public:
 		typedef array<GLint, RenderInput::VS_MAX> AttribLocationArray;
 	public:
-		GLES2ShaderProgram( Material* material);
+		GLES2ShaderProgram( ShaderProgramRes* material);
 		~GLES2ShaderProgram();
 
 		// ¸½¼Óshader

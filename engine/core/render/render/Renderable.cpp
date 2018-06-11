@@ -1,16 +1,16 @@
 #include "Render/Renderable.h"
 #include "Render/ShaderProgram.h"
 #include "Render/Renderer.h"
-#include "Render/Material.h"
+#include "Render/ShaderProgramRes.h"
 #include "engine/core/render/renderstage/RenderStage.h"
-#include "engine/core/render/MaterialInst.h"
+#include "engine/core/render/Material.h"
 #include "engine/core/render/mesh/Mesh.h"
 #include "engine/core/scene/node.h"
 
 namespace Echo
 {
 	// 构造函数
-	Renderable::Renderable(const String& renderStage, Material* material, int identifier)
+	Renderable::Renderable(const String& renderStage, ShaderProgramRes* material, int identifier)
 		: m_renderStage(renderStage)
 		, m_renderInput(nullptr)
 		, m_SParamWriteIndex(0)
@@ -40,9 +40,9 @@ namespace Echo
 	}
 
 	// 新建
-	Renderable* Renderable::create(Mesh* mesh, MaterialInst* matInst, Node* node)
+	Renderable* Renderable::create(Mesh* mesh, Material* matInst, Node* node)
 	{
-		Material* material = matInst->getMaterial();
+		ShaderProgramRes* material = matInst->getMaterial();
 		ShaderProgram* shaderProgram = material->getShaderProgram();
 		if (!shaderProgram)
 			return nullptr;
@@ -162,7 +162,7 @@ namespace Echo
 		// 向纹理槽中设置纹理
 		bindTextures();
 			
-		Material* material = IdToPtr(Material, m_materialID);
+		ShaderProgramRes* material = IdToPtr(ShaderProgramRes, m_materialID);
 		if (material)
 		{
 			ShaderProgram* shaderProgram = material->getShaderProgram();
@@ -200,7 +200,7 @@ namespace Echo
 	// 绑定渲染状态
 	void Renderable::bindRenderState()
 	{
-		Material* material = IdToPtr(Material, m_materialID);
+		ShaderProgramRes* material = IdToPtr(ShaderProgramRes, m_materialID);
 		if (material)
 		{
 			Renderer* pRenderer = Renderer::instance();
@@ -213,7 +213,7 @@ namespace Echo
 	// 执行渲染
 	void Renderable::render()
 	{
-		Material* material = IdToPtr(Material, m_materialID);
+		ShaderProgramRes* material = IdToPtr(ShaderProgramRes, m_materialID);
 		if (material)
 		{
 			// 绑定着色器
@@ -263,7 +263,7 @@ namespace Echo
 	{
 		EchoSafeDelete(m_renderInput, RenderInput);
 
-		Material* material = IdToPtr(Material, m_materialID);
+		ShaderProgramRes* material = IdToPtr(ShaderProgramRes, m_materialID);
 		if (material)
 		{
 			ShaderProgram* program = material->getShaderProgram();

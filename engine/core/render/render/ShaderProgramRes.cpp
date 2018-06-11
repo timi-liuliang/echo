@@ -1,4 +1,4 @@
-#include "Render/Material.h"
+#include "Render/ShaderProgramRes.h"
 #include "engine/core/util/StringUtil.h"
 #include "engine/core/Util/PathUtil.h"
 #include "engine/core/log/LogManager.h"
@@ -11,12 +11,12 @@
 
 namespace Echo
 {
-	template<> HashNode<Material>** PtrMonitor<Material>::m_ptrs = NULL;
-	template<> int PtrMonitor<Material>::m_hashcount = 0;
-	template<> unsigned int PtrMonitor<Material>::m_maxhash = 10;
+	template<> HashNode<ShaderProgramRes>** PtrMonitor<ShaderProgramRes>::m_ptrs = NULL;
+	template<> int PtrMonitor<ShaderProgramRes>::m_hashcount = 0;
+	template<> unsigned int PtrMonitor<ShaderProgramRes>::m_maxhash = 10;
 
 	// 构造函数
-	Material::Material()
+	ShaderProgramRes::ShaderProgramRes()
 		: PtrMonitor()
 		, m_name(StringUtil::BLANK)
 		, m_pBlendState(NULL)
@@ -32,12 +32,12 @@ namespace Echo
 	}
 
 	// 析构函数
-	Material::~Material()
+	ShaderProgramRes::~ShaderProgramRes()
 	{
 		free();
 	}
 
-	void Material::free()
+	void ShaderProgramRes::free()
 	{
 		EchoSafeDelete(m_pBlendState, BlendState);
 		EchoSafeDelete(m_pDepthState, DepthStencilState);
@@ -59,7 +59,7 @@ namespace Echo
 	}
 
 	// 加载
-	bool Material::loadFromFile(const String& filename, const String& macros)
+	bool ShaderProgramRes::loadFromFile(const String& filename, const String& macros)
 	{
 		try 
 		{
@@ -84,7 +84,7 @@ namespace Echo
 		}
 	}
 
-	bool Material::loadFromContent(const char* content, const String& macros)
+	bool ShaderProgramRes::loadFromContent(const char* content, const String& macros)
 	{
 		MemoryReader memReader(content, strlen(content));
 
@@ -92,7 +92,7 @@ namespace Echo
 	}
 
 	// 从内容加载
-	bool Material::loadFromContent(char* content, const String& macros)
+	bool ShaderProgramRes::loadFromContent(char* content, const String& macros)
 	{
 		pugi::xml_document doc;
 		doc.load(content);
@@ -108,7 +108,7 @@ namespace Echo
 	}
 
 	// 加载着色器
-	bool Material::loadShaderFrom(void* node, const String& macros)
+	bool ShaderProgramRes::loadShaderFrom(void* node, const String& macros)
 	{
 		pugi::xml_node* rootNode = static_cast<pugi::xml_node*>(node);
 		try
@@ -195,7 +195,7 @@ namespace Echo
 		return 0;
 	}
 
-	bool Material::loadBlendState( void* pNode )
+	bool ShaderProgramRes::loadBlendState( void* pNode )
 	{
 		BlendState::BlendDesc blendDesc;
 		pugi::xml_node* pSubNode = static_cast<pugi::xml_node*>(pNode);
@@ -239,7 +239,7 @@ namespace Echo
 		}
 	}
 
-	bool Material::loadMacro(void * pNode)
+	bool ShaderProgramRes::loadMacro(void * pNode)
 	{
 		return true;
 		//rapidxml::xml_node<>* pSubNode = static_cast<rapidxml::xml_node<>*>(pNode);
@@ -279,7 +279,7 @@ namespace Echo
 		//}
 	}
 
-	bool Material::loadRasterizerState( void* pNode )
+	bool ShaderProgramRes::loadRasterizerState( void* pNode )
 	{
 		RasterizerState::RasterizerDesc rasterizerState;
 		pugi::xml_node* pSubNode = static_cast<pugi::xml_node*>(pNode);
@@ -318,7 +318,7 @@ namespace Echo
 		}
 	}
 
-	bool Material::loadDepthStencilState( void* pNode )
+	bool ShaderProgramRes::loadDepthStencilState( void* pNode )
 	{
 		DepthStencilState::DepthStencilDesc depthStencilState;
 		pugi::xml_node* pSubNode = static_cast<pugi::xml_node*>(pNode);
@@ -377,7 +377,7 @@ namespace Echo
 		}
 	}
 
-	bool Material::loadSamplerState_Ext( void* pNode )
+	bool ShaderProgramRes::loadSamplerState_Ext( void* pNode )
 	{
 		//rapidxml::xml_node<>* pSubNode = static_cast<rapidxml::xml_node<>*>(pNode);
 		//try
@@ -533,7 +533,7 @@ namespace Echo
 		//}
 	}
 
-	bool Material::loadTexture_Ext( void* pNode )
+	bool ShaderProgramRes::loadTexture_Ext( void* pNode )
 	{
 		pugi::xml_node* pTextureNode = static_cast<pugi::xml_node*>(pNode);
 		try
@@ -577,26 +577,26 @@ namespace Echo
 		}
 	}
 
-	void Material::createBlendState(BlendState::BlendDesc& desc)
+	void ShaderProgramRes::createBlendState(BlendState::BlendDesc& desc)
 	{
 		EchoSafeDelete(m_pBlendState, BlendState);
 		m_pBlendState = Renderer::instance()->createBlendState(desc);
 	}
 
-	void Material::createDepthState(DepthStencilState::DepthStencilDesc& desc)
+	void ShaderProgramRes::createDepthState(DepthStencilState::DepthStencilDesc& desc)
 	{
 		EchoSafeDelete(m_pDepthState, DepthStencilState);
 		m_pDepthState = Renderer::instance()->createDepthStencilState(desc);
 	}
 
-	void Material::createRasterizerState(RasterizerState::RasterizerDesc& desc)
+	void ShaderProgramRes::createRasterizerState(RasterizerState::RasterizerDesc& desc)
 	{
 		EchoSafeDelete(m_pRasterizerState, RasterizerState);
 		m_pRasterizerState = Renderer::instance()->createRasterizerState(desc);
 	}
 
 	// 创建着色器
-	bool Material::createShaderProgram(const String& vsContent, const String& psContent)
+	bool ShaderProgramRes::createShaderProgram(const String& vsContent, const String& psContent)
 	{
 		EchoSafeDelete(m_pShaderProgram, ShaderProgram);
 		Shader::ShaderDesc vsDesc(m_shaderDesc);
@@ -628,7 +628,7 @@ namespace Echo
 		return true;
 	}
 
-	void Material::activeShader()
+	void ShaderProgramRes::activeShader()
 	{
 		EchoAssert(m_pShaderProgram);
 		EchoAssert(m_pBlendState);
@@ -639,14 +639,14 @@ namespace Echo
 	}
 
 	// 获取采样状态
-	const SamplerState* Material::getSamplerState(int stage) const
+	const SamplerState* ShaderProgramRes::getSamplerState(int stage) const
 	{
 		EchoAssert(stage>=0 && stage<MAX_TEXTURE_SAMPLER);
 		return m_pSamplerState[stage] ? m_pSamplerState[stage] : Renderer::instance()->getSamplerState(SamplerState::SamplerDesc());
 	}
 
 	// 获取采样状态
-	const SamplerState* Material::getSamplerStateByTexStage( int stage )
+	const SamplerState* ShaderProgramRes::getSamplerStateByTexStage( int stage )
 	{
 		EchoAssert( stage < 8 );
 		SamplerStateMap::iterator fit = m_mapSamplerState.find(m_arrTexSamplerState[stage]);
@@ -660,7 +660,7 @@ namespace Echo
 
 #ifdef ECHO_EDITOR_MODE
 	// 获取材质可选宏定义列表
-	StringArray Material::getEnabledMacros(const String& matFileName, bool withEnabled /* = false */)
+	StringArray ShaderProgramRes::getEnabledMacros(const String& matFileName, bool withEnabled /* = false */)
 	{
 		StringArray macros;
 
@@ -711,12 +711,12 @@ namespace Echo
 	}
 #endif
 
-	Material::DefaultUniform::~DefaultUniform()
+	ShaderProgramRes::DefaultUniform::~DefaultUniform()
 	{
 		EchoSafeFree(value);
 	}
 
-	bool Material::loadDefaultUniform(void* pNode)
+	bool ShaderProgramRes::loadDefaultUniform(void* pNode)
 	{
 		pugi::xml_node* pDefaultUniforms = static_cast<pugi::xml_node*>(pNode);
 		try
@@ -752,7 +752,7 @@ namespace Echo
 		}
 	}
 
-	const Material::DefaultUniform* Material::getDefaultUniformValue(const String& name)
+	const ShaderProgramRes::DefaultUniform* ShaderProgramRes::getDefaultUniformValue(const String& name)
 	{
 		MapDefaultUniforms::iterator iter = m_defaultUniforms.find(name);
 		if (iter != m_defaultUniforms.end())
@@ -763,7 +763,7 @@ namespace Echo
 		return NULL;
 	}
 
-	void* Material::createDefaultUniformValue(const String& strType, const i32 count, const String& strValue, ui32& outSize, ShaderParamType& outType)
+	void* ShaderProgramRes::createDefaultUniformValue(const String& strType, const i32 count, const String& strValue, ui32& outSize, ShaderParamType& outType)
 	{
 		// 解析字符串，数据分段
 		StringArray valueStr = StringUtil::Split(strValue, ";");
@@ -834,7 +834,7 @@ namespace Echo
 		return value;
 	}
 
-	bool Material::hasMacro(const char* const macro) const
+	bool ShaderProgramRes::hasMacro(const char* const macro) const
 	{
 		String fullMacro;
 		fullMacro = "#define ";

@@ -1,5 +1,4 @@
-#ifndef __ECHO_SHADER_H__
-#define __ECHO_SHADER_H__
+#pragma once
 
 #include "engine/core/Util/Buffer.h"
 #include "RenderDef.h"
@@ -55,5 +54,3 @@ namespace Echo
 		ShaderDesc			m_desc;					// √Ë ˆ–≈œ¢
 	};
 }
-
-#endif
