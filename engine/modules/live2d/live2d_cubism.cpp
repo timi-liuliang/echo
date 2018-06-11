@@ -81,7 +81,7 @@ namespace Echo
 		, m_modelSize(0)
 		, m_modelMemory(nullptr)
 		, m_mesh(nullptr)
-		, m_materialInst(nullptr)
+		, m_material(nullptr)
 		, m_renderable(nullptr)
 	{
 	}
@@ -99,10 +99,13 @@ namespace Echo
 		CLASS_BIND_METHOD(Live2dCubism, setTextureRes, DEF_METHOD("setTextureRes"));
 		CLASS_BIND_METHOD(Live2dCubism, getMotionRes, DEF_METHOD("getMotionRes"));
 		CLASS_BIND_METHOD(Live2dCubism, setMotionRes, DEF_METHOD("setMotionRes"));
+		CLASS_BIND_METHOD(Live2dCubism, getMaterial, DEF_METHOD("getMaterial"));
+		CLASS_BIND_METHOD(Live2dCubism, setMaterial, DEF_METHOD("setMaterial"));
 
 		CLASS_REGISTER_PROPERTY(Live2dCubism, "Moc", Variant::Type::ResourcePath, "getMoc", "setMoc");
 		CLASS_REGISTER_PROPERTY(Live2dCubism, "Texture", Variant::Type::ResourcePath, "getTextureRes", "setTextureRes");
 		CLASS_REGISTER_PROPERTY(Live2dCubism, "Motion", Variant::Type::ResourcePath, "getMotionRes", "setMotionRes");
+		CLASS_REGISTER_PROPERTY(Live2dCubism, "Material", Variant::Type::Res, "getMaterial", "setMaterial");
 	}
 
 	// parse paramters
@@ -326,14 +329,14 @@ namespace Echo
 			m_mesh->updateIndices(indices.size(), indices.data());
 			m_mesh->updateVertexs(define, vertices.size(), (const Byte*)vertices.data(), m_localAABB);
 
-			m_materialInst = Material::create();
-			m_materialInst->setOfficialMaterialContent(g_live2dDefaultMaterial);
-			m_materialInst->setRenderStage("Transparent");
-			m_materialInst->applyLoadedData();
+			m_material = Material::create();
+			m_material->setOfficialMaterialContent(g_live2dDefaultMaterial);
+			m_material->setRenderStage("Transparent");
+			m_material->applyLoadedData();
 
-			m_materialInst->setTexture("u_BaseColorSampler", m_textureRes.getPath());
+			m_material->setTexture("u_BaseColorSampler", m_textureRes.getPath());
 
-			m_renderable = Renderable::create(m_mesh, m_materialInst, this);
+			m_renderable = Renderable::create(m_mesh, m_material, this);
 		}
 	}
 
@@ -417,7 +420,7 @@ namespace Echo
 	void Live2dCubism::clearRenderable()
 	{
 		EchoSafeRelease(m_renderable);
-		EchoSafeRelease(m_materialInst);
+		EchoSafeRelease(m_material);
 		EchoSafeRelease(m_mesh);
 	}
 }
