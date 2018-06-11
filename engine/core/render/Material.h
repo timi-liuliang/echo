@@ -3,6 +3,7 @@
 #include "engine/core/render/render/ShaderProgram.h"
 #include "engine/core/render/render/RenderState.h"
 #include "engine/core/render/TextureRes.h"
+#include "engine/core/resource/Res.h"
 
 namespace Echo
 {
@@ -11,8 +12,10 @@ namespace Echo
 	/**
 	* 材质实例
 	*/
-	class Material
+	class Material : public Res
 	{
+		ECHO_CLASS(Material, Res)
+
 	public:
 		// texture info
 		struct TextureInfo
@@ -51,6 +54,13 @@ namespace Echo
 		typedef map<String, Uniform* >::type ParamMap;
 
 	public:
+		Material() {}
+		Material(const ResourcePath& path);
+		~Material();
+
+		// bind methods to script
+		static void bindMethods() {}
+
 		// create a material instance
 		static Material* create();
 
@@ -128,10 +138,6 @@ namespace Echo
 	private:
 		// 添加贴图文件名
 		void addTexture(int idx, const String& name);
-
-	private:
-		Material();
-		~Material();
 
 		// 参数匹配
 		void matchUniforms();

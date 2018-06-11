@@ -7,9 +7,18 @@ namespace Echo
 {
 	class Res : public Object
 	{
+		ECHO_CLASS(Res, Object)
+
 	public:
+		Res();
+		Res(const ResourcePath& path);
+		virtual ~Res();
+
 		// get res
 		static Res* get(const ResourcePath& path);
+
+		// bind methods to script
+		static void bindMethods() {}
 
 		// add ref count
 		void addRefCount() { m_refCount++; }
@@ -19,10 +28,6 @@ namespace Echo
 
 		// is loaded succeed
 		bool isLoaded() const { return m_isLoaded; }
-
-	protected:
-		Res(const ResourcePath& path);
-		virtual ~Res();
 
 	protected:
 		int								m_refCount;

@@ -10,6 +10,7 @@
 
 namespace Echo
 {
+	class Object;
 	class Variant
 	{
 	public:
@@ -47,6 +48,7 @@ namespace Echo
 		Variant(const ResourcePath& value);
 		Variant(const Base64String& value);
 		Variant(const StringOption& value);
+		Variant(Object* value);
 		~Variant();
 
 		// operator "="
@@ -62,12 +64,14 @@ namespace Echo
 		operator const ResourcePath&() const { return any_cast<ResourcePath>(m_any); }
 		operator const Base64String&() const { return any_cast<Base64String>(m_any); }
 		operator const StringOption&() const { return any_cast<StringOption>(m_any); }
+		operator const Object*() const { return m_obj; }
 
 		// convert to other type
 		const bool toVector3() { return m_bool; }
 		const Vector3& toVector3() const { return m_vec3; }
 		const ResourcePath& toResPath() const { return any_cast<ResourcePath>(m_any); }
 		const StringOption& toStringOption() const { return any_cast<StringOption>(m_any); }
+		const Object* toObj() const { return m_obj; }
 
 		// is nil
 		bool isNil() const { return m_type == Type::Nil; }
@@ -86,6 +90,7 @@ namespace Echo
 			i32				m_int;
 			float			m_real;
 			Vector3			m_vec3;
+			mutable Object*	m_obj;
 		};
 	};
 }

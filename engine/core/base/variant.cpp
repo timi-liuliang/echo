@@ -1,4 +1,5 @@
 #include "variant.h"
+#include "object.h"
 
 namespace Echo
 {
@@ -38,6 +39,12 @@ namespace Echo
 		: m_type(Type::ResourcePath)
 	{
 		m_any = value;
+	}
+
+	Variant::Variant(Object* value)
+		: m_type(Type::Object)
+	{
+		m_obj = value;
 	}
 
 	Variant::~Variant()

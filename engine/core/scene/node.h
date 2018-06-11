@@ -1,9 +1,9 @@
 #pragma once
 
-#include "engine/core/base/class.h"
 #include <engine/core/Math/Math.h>
 #include "engine/core/Util/PtrMonitor.h"
 #include "engine/core/geom/Box.h"
+#include "engine/core/base/object.h"
 
 namespace Echo
 {

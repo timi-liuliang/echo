@@ -5,6 +5,13 @@ namespace Echo
 {
 	static map<String, Res*>::type	g_ress;
 
+	Res::Res()
+		: m_refCount(0)
+		, m_isLoaded(false)
+	{
+
+	}
+
 	Res::Res(const ResourcePath& path)
 		: m_refCount(0)
 		, m_isLoaded(false)

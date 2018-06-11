@@ -31,6 +31,10 @@ namespace Echo
 		int getPrimitiveIdx() { return m_primitiveIdx; }
 		void setPrimitiveIdx(int primitiveIdx);
 
+		// material
+		Material* getMaterial() const { return m_material; }
+		void setMaterial(const Object* material){}
+
 	protected:
 		// build drawable
 		void buildRenderable();
@@ -52,6 +56,6 @@ namespace Echo
 		GltfResPtr				m_asset;		// gltf asset ptr
 		int						m_meshIdx;		// mesh index in the asset
 		int						m_primitiveIdx;	// sub mesh index
-		Material*			m_materialInst;
+		Material*				m_material;
 	};
 }

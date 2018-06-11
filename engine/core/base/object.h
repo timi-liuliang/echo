@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/core/memory/MemAllocDef.h"
-#include "engine/core/util/KeyValues.h"
+#include "engine/core/base/class.h"
 
 namespace Echo
 {

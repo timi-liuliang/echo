@@ -68,8 +68,9 @@ namespace Echo
 	}
 
 	// ¹¹Ôìº¯Êý
-	Material::Material()
-		: m_material(NULL)
+	Material::Material(const ResourcePath& path)
+		: Res(path)
+		, m_material(NULL)
 		, m_officialMaterialContent(nullptr)
 	{
 
