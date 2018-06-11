@@ -1,6 +1,6 @@
 #pragma once
 
-#include <engine/core/util/LogManager.h>
+#include <engine/core/log/LogManager.h>
 
 namespace Game
 {

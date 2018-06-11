@@ -1,9 +1,8 @@
 #include "Engine/core/geom/Frustum.h"
-#include "engine/core/Util/LogManager.h"
+#include "engine/core/log/LogManager.h"
 
 namespace Echo
 {
-
 	inline bool ProjectedIntersect(const Vector3& vHalfSize, const Vector3& vCenter, const Vector3* frustumCorners, const Vector3& vDir)
 	{
 		// project AABB center point to vector

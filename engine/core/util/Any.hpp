@@ -2,7 +2,7 @@
 
 #include <algorithm>
 #include <typeinfo>
-#include "engine/core/Util/LogManager.h"
+#include "engine/core/log/LogManager.h"
 #include "engine/core/Memory/MemAllocDef.h"
 
 namespace Echo

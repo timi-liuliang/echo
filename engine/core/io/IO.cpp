@@ -3,7 +3,7 @@
 #include "engine/core/Util/PathUtil.h"
 #include "engine/core/Util/TimeProfiler.h"
 #include "IO.h"
-#include "engine/core/Util/LogManager.h"
+#include "engine/core/log/LogManager.h"
 
 namespace Echo
 {

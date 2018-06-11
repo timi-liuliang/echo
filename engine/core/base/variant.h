@@ -24,7 +24,7 @@ namespace Echo
 			ResourcePath,
 			Base64String,
 			StringOption,
-			Material,
+			Object,
 		};
 
 		enum class CallError

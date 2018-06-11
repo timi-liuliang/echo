@@ -2,7 +2,7 @@
 
 #include <map>
 #include "engine/core/Base/EchoDef.h"
-#include "engine/core/Util/LogManager.h"
+#include "engine/core/log/LogManager.h"
 
 namespace Echo
 {

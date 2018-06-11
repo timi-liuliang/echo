@@ -4,7 +4,7 @@
 #include <engine/core/Base/EchoDef.h>
 #include "Render/Texture.h"
 #include "Render/Renderer.h"
-#include "engine/core/Util/LogManager.h"
+#include "engine/core/log/LogManager.h"
 #include "Render/TextureLoader.h"
 #include "engine/core/Math/EchoMathFunction.h"
 #include "PixelFormat.h"

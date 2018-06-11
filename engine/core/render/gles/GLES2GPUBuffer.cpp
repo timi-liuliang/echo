@@ -4,7 +4,7 @@
 #include "GLES2Loader.h"
 #include "GLES2Renderer.h"
 #include <engine/core/Util/Exception.h>
-#include <engine/core/Util/LogManager.h>
+#include <engine/core/log/LogManager.h>
 
 namespace Echo
 {

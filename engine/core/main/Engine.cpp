@@ -4,7 +4,7 @@
 #include "engine/core/Util/PathUtil.h"
 #include "engine/core/Util/Exception.h"
 #include "engine/core/io/IO.h"
-#include "engine/core/Util/LogManager.h"
+#include "engine/core/log/LogManager.h"
 #include "engine/core/render/render/ImageCodecMgr.h"
 #include "Engine/core/Scene/NodeTree.h"
 #include "engine/core/Util/Timer.h"

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <engine/core/Base/EchoDef.h>
-#include <engine/core/Util/LogManager.h>
+#include <engine/core/log/LogManager.h>
 
 #ifndef GL_GLEXT_PROTOTYPES
 #  define  GL_GLEXT_PROTOTYPES

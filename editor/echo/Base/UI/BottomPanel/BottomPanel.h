@@ -3,7 +3,7 @@
 #include <QDockWidget>
 #include <QString>
 #include "ui_BottomPanel.h"
-#include <engine/core/Util/Log.h>
+#include <engine/core/log/Log.h>
 
 namespace Studio
 {
