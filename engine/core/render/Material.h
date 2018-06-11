@@ -106,7 +106,7 @@ namespace Echo
 		void setMacros(const String& macros);
 
 		// 获取渲染队列
-		ShaderProgramRes* getMaterial() { return m_material; }
+		ShaderProgramRes* getMaterial() { return m_shaderProgram; }
 
 		// operate uniform
 		bool isUniformExist(const String& name);
@@ -151,7 +151,7 @@ namespace Echo
 		const char*			m_officialMaterialContent;	// 官方材质
 		String				m_renderStage;				// 所处渲染阶段
 		StringArray			m_macros;					// 宏定义
-		ShaderProgramRes*			m_material;					// 对应材质
+		ShaderProgramRes*	m_shaderProgram;			// 对应着色器
 		ParamMap			m_unifroms;
 		TextureInfoMap 		m_textures;
 	};

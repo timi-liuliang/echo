@@ -70,7 +70,7 @@ namespace Echo
 	// 构造函数
 	Material::Material(const ResourcePath& path)
 		: Res(path)
-		, m_material(NULL)
+		, m_shaderProgram(NULL)
 		, m_officialMaterialContent(nullptr)
 	{
 
@@ -103,7 +103,7 @@ namespace Echo
 		buildRenderQueue();
 
 		// 获取着色器
-		ShaderProgram* shaderProgram = m_material->getShaderProgram();
+		ShaderProgram* shaderProgram = m_shaderProgram->getShaderProgram();
 		if (shaderProgram)
 		{
 			matchUniforms();
@@ -121,7 +121,7 @@ namespace Echo
 		m_renderStage = orig->m_renderStage;
 		m_macros = orig->m_macros;
 		m_materialTemplate = orig->m_materialTemplate;
-		m_material = orig->m_material;
+		m_shaderProgram = orig->m_shaderProgram;
 
 		for (auto it : orig->m_unifroms)
 		{
@@ -141,7 +141,7 @@ namespace Echo
 			return  it->second->m_value;
 		}
 
-		const ShaderProgramRes::DefaultUniform* dUniform = m_material->getDefaultUniformValue(name);
+		const ShaderProgramRes::DefaultUniform* dUniform = m_shaderProgram->getDefaultUniformValue(name);
 		return dUniform ? dUniform->value : NULL;
 	}
 
@@ -347,11 +347,11 @@ namespace Echo
 		}
 
 		// create material
-		m_material = EchoNew(ShaderProgramRes);
+		m_shaderProgram = EchoNew(ShaderProgramRes);
 		if (m_officialMaterialContent)
-			m_material->loadFromContent(m_officialMaterialContent, finalMacros);
+			m_shaderProgram->loadFromContent(m_officialMaterialContent, finalMacros);
 		else if (!m_materialTemplate.empty())
-			m_material->loadFromFile( m_materialTemplate, finalMacros);
+			m_shaderProgram->loadFromFile( m_materialTemplate, finalMacros);
 	}
 
 	static bool MappingStringArrayIdx(const String* arry, int count, const String& value, int& idx)
@@ -371,7 +371,7 @@ namespace Echo
 	// 参数匹配
 	void Material::matchUniforms()
 	{
-		ShaderProgram* shaderProgram = m_material->getShaderProgram();
+		ShaderProgram* shaderProgram = m_shaderProgram->getShaderProgram();
 		if (shaderProgram)
 		{
 			// 添加未设置参数
@@ -397,7 +397,7 @@ namespace Echo
 					}
 
 					// default value
-					const ShaderProgramRes::DefaultUniform* defaultUniform = m_material->getDefaultUniformValue(uniform->m_name);
+					const ShaderProgramRes::DefaultUniform* defaultUniform = m_shaderProgram->getDefaultUniformValue(uniform->m_name);
 					if (defaultUniform && uniform->m_count == defaultUniform->count && uniform->m_type == defaultUniform->type)
 						uniform->setValue(defaultUniform->value);
 

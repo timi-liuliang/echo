@@ -164,6 +164,8 @@ namespace Echo
 	void Engine::registerClassTypes()
 	{
 		Class::registerType<Node>();
+		Class::registerType<Res>();
+		Class::registerType<Material>();
 
 		// register all module class
 		Module::registerAllTypes();

@@ -295,6 +295,29 @@ namespace Studio
 		m_propertyHelper.endMenu();
 	}
 
+	// 递归显示资源属性
+	void NodeTreePanel::showResPropertyRecursive(Echo::Object* classPtr, const Echo::String& className)
+	{
+		// show parent property first
+		Echo::String parentClassName;
+		if (Echo::Class::getParentClass(parentClassName, className))
+		{
+			// don't display property of object
+			if (parentClassName != "Object")
+				showResPropertyRecursive(classPtr, parentClassName);
+		}
+
+		// show self property
+		const Echo::PropertyInfos& propertys = Echo::Class::getPropertys(className);
+		for (const Echo::PropertyInfo& prop : propertys)
+		{
+			Echo::Variant var;
+			Echo::Class::getPropertyValue(classPtr, prop.m_name, var);
+
+			showPropertyByVariant(prop.m_name, var);
+		}
+	}
+
 	// show property
 	void NodeTreePanel::showPropertyByVariant(const Echo::String& name, const Echo::Variant& var)
 	{
@@ -304,6 +327,13 @@ namespace Studio
 		case Echo::Variant::Type::Vector3:		m_propertyHelper.addItem(name.c_str(), var.toVector3(), QT_UI::WT_Vector3); break;
 		case Echo::Variant::Type::ResourcePath:	m_propertyHelper.addItem(name.c_str(), var.toResPath().getPath(), QT_UI::WT_AssetsSelect, var.toResPath().getSupportExts().c_str());break;
 		case Echo::Variant::Type::StringOption: m_propertyHelper.addItem(name.c_str(), var.toStringOption().getValue(), QT_UI::WT_ComboBox, var.toStringOption().getOptionsStr().c_str()); break;
+		case Echo::Variant::Type::Res:		
+			{
+				m_propertyHelper.beginMenu(name.c_str());
+				showResPropertyRecursive(var.toObj(), var.toObj()->getClassName());
+				m_propertyHelper.endMenu();
+			}
+			break;
 		default:								m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_None); break;
 		}
 		

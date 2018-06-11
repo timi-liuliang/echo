@@ -42,7 +42,7 @@ namespace Echo
 	}
 
 	Variant::Variant(Object* value)
-		: m_type(Type::Object)
+		: m_type(Type::Res)
 	{
 		m_obj = value;
 	}

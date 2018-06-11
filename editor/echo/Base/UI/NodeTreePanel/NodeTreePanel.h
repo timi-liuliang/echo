@@ -61,6 +61,9 @@ namespace Studio
 		// 递归显示属性
 		void showNodePropertyRecursive(Echo::Object* classPtr, const Echo::String& className);
 
+		// 递归显示资源属性
+		void showResPropertyRecursive(Echo::Object* classPtr, const Echo::String& className);
+
 		// show property
 		void showPropertyByVariant(const Echo::String& name, const class Echo::Variant& var);
 

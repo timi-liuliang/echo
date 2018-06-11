@@ -18,7 +18,7 @@ namespace Echo
 		static Res* get(const ResourcePath& path);
 
 		// bind methods to script
-		static void bindMethods() {}
+		static void bindMethods();
 
 		// add ref count
 		void addRefCount() { m_refCount++; }
@@ -28,6 +28,12 @@ namespace Echo
 
 		// is loaded succeed
 		bool isLoaded() const { return m_isLoaded; }
+
+		// get path
+		const ResourcePath& getPath() const { return m_path; }
+
+		// set path
+		void setPath(const ResourcePath& path) { m_path = path; }
 
 	protected:
 		int								m_refCount;

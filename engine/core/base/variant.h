@@ -25,7 +25,7 @@ namespace Echo
 			ResourcePath,
 			Base64String,
 			StringOption,
-			Object,
+			Res,
 		};
 
 		enum class CallError
@@ -71,7 +71,7 @@ namespace Echo
 		const Vector3& toVector3() const { return m_vec3; }
 		const ResourcePath& toResPath() const { return any_cast<ResourcePath>(m_any); }
 		const StringOption& toStringOption() const { return any_cast<StringOption>(m_any); }
-		const Object* toObj() const { return m_obj; }
+		Object* toObj() const { return m_obj; }
 
 		// is nil
 		bool isNil() const { return m_type == Type::Nil; }

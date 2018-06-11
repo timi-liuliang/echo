@@ -42,6 +42,15 @@ namespace Echo
 		}
 	}
 
+	// bind methods to script
+	void Res::bindMethods()
+	{
+		CLASS_BIND_METHOD(Res, getPath, DEF_METHOD("getPath"));
+		CLASS_BIND_METHOD(Res, setPath, DEF_METHOD("setPath"));
+
+		CLASS_REGISTER_PROPERTY(Res, "Path", Variant::Type::ResourcePath, "getPath", "setPath");
+	}
+
 	// get res
 	Res* Res::get(const ResourcePath& path)
 	{
