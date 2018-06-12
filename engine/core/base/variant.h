@@ -7,10 +7,12 @@
 #include "engine/core/util/Any.hpp"
 #include "engine/core/util/base64.h"
 #include "engine/core/util/StringOption.h"
+#include "engine/core/util/VariantArray.h"
 
 namespace Echo
 {
 	class Object;
+	class VariantArray;
 	class Variant
 	{
 	public:
@@ -26,6 +28,7 @@ namespace Echo
 			Base64String,
 			StringOption,
 			Res,
+			VariantArray,
 		};
 
 		enum class CallError
@@ -48,6 +51,7 @@ namespace Echo
 		Variant(const ResourcePath& value);
 		Variant(const Base64String& value);
 		Variant(const StringOption& value);
+		Variant(const VariantArray& value);
 		Variant(Object* value);
 		~Variant();
 
@@ -64,6 +68,7 @@ namespace Echo
 		operator const ResourcePath&() const { return any_cast<ResourcePath>(m_any); }
 		operator const Base64String&() const { return any_cast<Base64String>(m_any); }
 		operator const StringOption&() const { return any_cast<StringOption>(m_any); }
+		operator const VariantArray&() const { return any_cast<VariantArray>(m_any); }
 		operator const Object*() const { return m_obj; }
 
 		// convert to other type

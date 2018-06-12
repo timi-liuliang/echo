@@ -67,6 +67,12 @@ namespace Echo
 		}
 	}
 
+	Material::Material()
+		: Res(ResourcePath("", ".material"))
+	{
+
+	}
+
 	// 构造函数
 	Material::Material(const ResourcePath& path)
 		: Res(path)
@@ -79,7 +85,7 @@ namespace Echo
 	// 析构函数
 	Material::~Material()
 	{
-		m_unifroms.clear();
+		m_uniforms.clear();
 
 		unloadTexture();
 		m_textures.clear();
@@ -89,6 +95,15 @@ namespace Echo
 	Material* Material::create()
 	{
 		return EchoNew(Material);
+	}
+
+	// bind methods to script
+	void Material::bindMethods()
+	{
+		CLASS_BIND_METHOD(Material, getUniforms, DEF_METHOD("getUniforms"));
+		CLASS_BIND_METHOD(Material, setUniforms, DEF_METHOD("setUniforms"));
+
+		CLASS_REGISTER_PROPERTY(Material, "Uniforms", Variant::Type::VariantArray, "getUniforms", "setUniforms");
 	}
 
 	// release
@@ -123,10 +138,10 @@ namespace Echo
 		m_materialTemplate = orig->m_materialTemplate;
 		m_shaderProgram = orig->m_shaderProgram;
 
-		for (auto it : orig->m_unifroms)
+		for (auto it : orig->m_uniforms)
 		{
 			Uniform* uniform = it.second;
-			m_unifroms[uniform->m_name] = uniform->clone();
+			m_uniforms[uniform->m_name] = uniform->clone();
 		}
 
 		m_textures = orig->m_textures;
@@ -135,14 +150,42 @@ namespace Echo
 	// 获取变量值
 	void* Material::getUniformValue(const String& name)
 	{
-		const auto& it = m_unifroms.find(name);
-		if (it != m_unifroms.end())
+		const auto& it = m_uniforms.find(name);
+		if (it != m_uniforms.end())
 		{
 			return  it->second->m_value;
 		}
 
 		const ShaderProgramRes::DefaultUniform* dUniform = m_shaderProgram->getDefaultUniformValue(name);
 		return dUniform ? dUniform->value : NULL;
+	}
+
+	// get uniforms
+	VariantArray Material::getUniforms() const
+	{
+		VariantArray uniforms;
+		for (auto it : m_uniforms)
+		{
+			Uniform* uniform = it.second;
+			switch (uniform->m_type)
+			{
+			case SPT_FLOAT:
+			case SPT_TEXTURE:
+			case SPT_MAT4:
+			{
+				uniforms.add(uniform->m_name, 1);
+			}
+			break;
+			}
+		}
+
+		return uniforms;
+	}
+
+	// set uniforms
+	void Material::setUniforms(const VariantArray& uniforms)
+	{
+
 	}
 
 	// 准备资源IO
@@ -216,14 +259,14 @@ namespace Echo
 	// 判断变量是否存在
 	bool Material::isUniformExist(const String& name)
 	{
-		return m_unifroms.find(name)!=m_unifroms.end();
+		return m_uniforms.find(name)!=m_uniforms.end();
 	}
 
 	// 修改变量
 	void Material::setUniformValue(const String& name, const ShaderParamType& type, void* value)
 	{
-		const auto& it = m_unifroms.find(name);
-		if (it != m_unifroms.end())
+		const auto& it = m_uniforms.find(name);
+		if (it != m_uniforms.end())
 		{
 			if (it->second->m_type == type)
 				it->second->setValue(value);
@@ -231,21 +274,6 @@ namespace Echo
 				EchoLogError("MaterialInstance::ModifyUnifromParam Type Error!");
 		}
 	}
-
-	//void* MaterialInst::getUniformValue(const String& name, ShaderParamType type)
-	//{
-	//	if (type == SPT_TEXTURE)
-	//	{
-	//		void* index = getUniformValue(name);
-	//		if (index)
-	//		{
-	//			return &m_textures[*(int*)index];
-	//		}
-	//		return NULL;
-	//	}
-
-	//	return getUniformValue(name);
-	//}
 
 	void Material::addTexture(int idx, const String& name)
 	{
@@ -285,8 +313,8 @@ namespace Echo
 	// 获取变量
 	Material::Uniform* Material::getUniform(const String& name)
 	{
-		const auto& it = m_unifroms.find(name);
-		if (it != m_unifroms.end())
+		const auto& it = m_uniforms.find(name);
+		if (it != m_uniforms.end())
 			return it->second;
 
 		return NULL;
@@ -401,7 +429,7 @@ namespace Echo
 					if (defaultUniform && uniform->m_count == defaultUniform->count && uniform->m_type == defaultUniform->type)
 						uniform->setValue(defaultUniform->value);
 
-					m_unifroms[uniform->m_name] = uniform;
+					m_uniforms[uniform->m_name] = uniform;
 				}
 			}
 		}

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "engine/core/util/VariantArray.h"
 #include "engine/core/render/render/ShaderProgram.h"
 #include "engine/core/render/render/RenderState.h"
 #include "engine/core/render/TextureRes.h"
@@ -51,15 +52,15 @@ namespace Echo
 			Uniform* clone();
 		};
 
-		typedef map<String, Uniform* >::type ParamMap;
+		typedef map<String, Uniform*>::type ParamMap;
 
 	public:
-		Material() {}
+		Material();
 		Material(const ResourcePath& path);
 		~Material();
 
 		// bind methods to script
-		static void bindMethods() {}
+		static void bindMethods();
 
 		// create a material instance
 		static Material* create();
@@ -121,7 +122,7 @@ namespace Echo
 		TextureRes* setTexture(const String& name, TextureRes* textureRes);
 
 		// 获取属性队列
-		ParamMap& GetUniformSet() { return m_unifroms; }
+		ParamMap& GetUniformSet() { return m_uniforms; }
 
 		// get uniform value
 		void* getUniformValue(const String& name);
@@ -134,6 +135,13 @@ namespace Echo
 
 		// 构建渲染队列
 		void buildRenderQueue();
+
+	public:
+		// get uniforms
+		VariantArray getUniforms() const;
+
+		// set uniforms
+		void setUniforms(const VariantArray& uniforms);
 
 	private:
 		// 添加贴图文件名
@@ -152,7 +160,7 @@ namespace Echo
 		String				m_renderStage;				// 所处渲染阶段
 		StringArray			m_macros;					// 宏定义
 		ShaderProgramRes*	m_shaderProgram;			// 对应着色器
-		ParamMap			m_unifroms;
+		ParamMap			m_uniforms;
 		TextureInfoMap 		m_textures;
 	};
 }

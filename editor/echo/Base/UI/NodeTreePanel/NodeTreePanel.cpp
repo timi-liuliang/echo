@@ -328,15 +328,25 @@ namespace Studio
 		case Echo::Variant::Type::ResourcePath:	m_propertyHelper.addItem(name.c_str(), var.toResPath().getPath(), QT_UI::WT_AssetsSelect, var.toResPath().getSupportExts().c_str());break;
 		case Echo::Variant::Type::StringOption: m_propertyHelper.addItem(name.c_str(), var.toStringOption().getValue(), QT_UI::WT_ComboBox, var.toStringOption().getOptionsStr().c_str()); break;
 		case Echo::Variant::Type::Res:		
+		{
+			m_propertyHelper.beginMenu(name.c_str());
+			showResPropertyRecursive(var.toObj(), var.toObj()->getClassName());
+			m_propertyHelper.endMenu();
+		}
+		break;
+		case Echo::Variant::Type::VariantArray:
+		{
+			const Echo::VariantArray& variants = var;
+			for (auto it : variants.getVariants())
 			{
-				m_propertyHelper.beginMenu(name.c_str());
-				showResPropertyRecursive(var.toObj(), var.toObj()->getClassName());
-				m_propertyHelper.endMenu();
+				const Echo::String& varName = it.first;
+				const Echo::Variant& varValue = it.second;
+				showPropertyByVariant(varName, varValue);
 			}
-			break;
+		}
+		break;
 		default:								m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_None); break;
 		}
-		
 	}
 
 	// 属性修改后,更新结点值

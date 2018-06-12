@@ -105,7 +105,7 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(Live2dCubism, "Moc", Variant::Type::ResourcePath, "getMoc", "setMoc");
 		CLASS_REGISTER_PROPERTY(Live2dCubism, "Texture", Variant::Type::ResourcePath, "getTextureRes", "setTextureRes");
 		CLASS_REGISTER_PROPERTY(Live2dCubism, "Motion", Variant::Type::ResourcePath, "getMotionRes", "setMotionRes");
-		CLASS_REGISTER_PROPERTY(Live2dCubism, "Material", Variant::Type::Res, "getMaterial", "setMaterial");
+		CLASS_REGISTER_PROPERTY(Live2dCubism, "Material", Variant::Type::ResourcePath, "getMaterial", "setMaterial");
 	}
 
 	// parse paramters

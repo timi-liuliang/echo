@@ -86,10 +86,10 @@ namespace Echo
 		const ResourcePath& getTextureRes() { return m_textureRes; }
 
 		// material
-		Material* getMaterial() const { return m_material; }
+		const ResourcePath& getMaterial() const { return m_material->getPath(); }
 
 		// set material
-		void setMaterial(const Object* material) {}
+		void setMaterial(const ResourcePath& material) {}
 
 		// set anim res path
 		void setMotionRes(const ResourcePath& path);

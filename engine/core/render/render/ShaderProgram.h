@@ -139,7 +139,7 @@ namespace Echo
 		bool checkValid();
 
 	protected:
-		ShaderProgramRes*			m_material;							// 关联材质
+		ShaderProgramRes*	m_material;							// 关联材质
 		Shader*				m_pShaders[Shader::ST_SHADERCOUNT];
 		bool				m_bLinked;
 		UniformArray		m_uniforms;							// 参数信息
