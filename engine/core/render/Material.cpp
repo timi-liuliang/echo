@@ -69,6 +69,7 @@ namespace Echo
 
 	Material::Material()
 		: Res(ResourcePath("", ".material"))
+		, m_shaderPath("", ".shader")
 	{
 
 	}
@@ -76,6 +77,7 @@ namespace Echo
 	// 构造函数
 	Material::Material(const ResourcePath& path)
 		: Res(path)
+		, m_shaderPath("", ".shader")
 		, m_shaderProgram(NULL)
 		, m_officialMaterialContent(nullptr)
 	{
@@ -100,9 +102,12 @@ namespace Echo
 	// bind methods to script
 	void Material::bindMethods()
 	{
+		CLASS_BIND_METHOD(Material, getShader, DEF_METHOD("getShader"));
+		CLASS_BIND_METHOD(Material, setShader, DEF_METHOD("setShader"));
 		CLASS_BIND_METHOD(Material, getUniforms, DEF_METHOD("getUniforms"));
 		CLASS_BIND_METHOD(Material, setUniforms, DEF_METHOD("setUniforms"));
 
+		CLASS_REGISTER_PROPERTY(Material, "Shader", Variant::Type::ResourcePath, "getShader", "setShader");
 		CLASS_REGISTER_PROPERTY(Material, "Uniforms", Variant::Type::VariantArray, "getUniforms", "setUniforms");
 	}
 
@@ -131,11 +136,8 @@ namespace Echo
 	// 复制材质实例
 	void Material::clone(Material* orig)
 	{
-		// 拷贝名称，材质
-		m_name = orig->m_name;
 		m_renderStage = orig->m_renderStage;
 		m_macros = orig->m_macros;
-		m_materialTemplate = orig->m_materialTemplate;
 		m_shaderProgram = orig->m_shaderProgram;
 
 		for (auto it : orig->m_uniforms)
@@ -378,8 +380,8 @@ namespace Echo
 		m_shaderProgram = EchoNew(ShaderProgramRes);
 		if (m_officialMaterialContent)
 			m_shaderProgram->loadFromContent(m_officialMaterialContent, finalMacros);
-		else if (!m_materialTemplate.empty())
-			m_shaderProgram->loadFromFile( m_materialTemplate, finalMacros);
+		else if (!m_shaderPath.getPath().empty())
+			m_shaderProgram->loadFromFile( m_shaderPath.getPath(), finalMacros);
 	}
 
 	static bool MappingStringArrayIdx(const String* arry, int count, const String& value, int& idx)

@@ -38,6 +38,9 @@
        </property>
       </widget>
       <widget class="QListView" name="m_listView">
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
        <property name="horizontalScrollBarPolicy">
         <enum>Qt::ScrollBarAlwaysOff</enum>
        </property>
@@ -49,7 +52,45 @@
     </item>
    </layout>
   </widget>
+  <action name="m_actionNewShader">
+   <property name="icon">
+    <iconset resource="../../../Resource/App.qrc">
+     <normaloff>:/icon/res/shader.png</normaloff>:/icon/res/shader.png</iconset>
+   </property>
+   <property name="text">
+    <string>New Shader</string>
+   </property>
+  </action>
+  <action name="m_actionNewMaterial">
+   <property name="icon">
+    <iconset resource="../../../Resource/App.qrc">
+     <normaloff>:/icon/res/material.png</normaloff>:/icon/res/material.png</iconset>
+   </property>
+   <property name="text">
+    <string>New Material</string>
+   </property>
+  </action>
+  <action name="m_actionNewFolder">
+   <property name="icon">
+    <iconset resource="../../../Resource/App.qrc">
+     <normaloff>:/icon/res/folder.png</normaloff>:/icon/res/folder.png</iconset>
+   </property>
+   <property name="text">
+    <string>New Folder</string>
+   </property>
+  </action>
+  <action name="m_actionShowInExplorer">
+   <property name="icon">
+    <iconset resource="../../../Resource/App.qrc">
+     <normaloff>:/icon/res/folder.png</normaloff>:/icon/res/folder.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show In Explorer</string>
+   </property>
+  </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../../Resource/App.qrc"/>
+ </resources>
  <connections/>
 </ui>

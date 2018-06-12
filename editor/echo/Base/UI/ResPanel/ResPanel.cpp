@@ -14,6 +14,7 @@ namespace Studio
 	// 构造函数
 	ResPanel::ResPanel( QWidget* parent/*=0*/)
 		: QDockWidget( parent)
+		, m_resMenu(nullptr)
 	{
 		setupUi( this);
 
@@ -30,6 +31,9 @@ namespace Studio
 		m_previewHelper = new QT_UI::QPreviewHelper(m_listView);
 
 		QObject::connect(m_previewHelper, SIGNAL(doubleClickedRes(const char*)), this, SLOT(onDoubleClickPreviewRes(const char*)));
+		QObject::connect(m_listView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showMenu(const QPoint&)));
+		QObject::connect(m_actionNewShader, SIGNAL(triggered()), this, SLOT(newShader()));
+		QObject::connect(m_actionNewMaterial, SIGNAL(triggered()), this, SLOT(newMaterial()));
 	}
 
 	// 析构函数
@@ -115,5 +119,31 @@ namespace Studio
 	void ResPanel::resizeEvent(QResizeEvent * e)
 	{
 		m_previewHelper->onListViewResize();
+	}
+
+	// node tree widget show menu
+	void ResPanel::showMenu(const QPoint& point)
+	{
+		EchoSafeDelete(m_resMenu, QMenu);
+		m_resMenu = EchoNew(QMenu);
+		m_resMenu->addAction(m_actionShowInExplorer);
+		m_resMenu->addSeparator();
+		m_resMenu->addAction(m_actionNewFolder);
+		m_resMenu->addSeparator();
+		m_resMenu->addAction(m_actionNewShader);
+		m_resMenu->addAction(m_actionNewMaterial);
+		m_resMenu->exec(QCursor::pos());
+	}
+
+	// new shader
+	void ResPanel::newShader()
+	{
+
+	}
+
+	// new material
+	void ResPanel::newMaterial()
+	{
+
 	}
 }

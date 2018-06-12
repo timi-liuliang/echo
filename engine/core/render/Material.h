@@ -86,15 +86,9 @@ namespace Echo
 		// 获取纹理
 		TextureRes* getTexture(const int& index);
 
-		// 获取材质实例名
-		const String& getName() const { return m_name; }
-
-		// 设置材质实例模板名
-		void setName(const String& name) { m_name = name; }
-
 		// 设置默认渲染队列名
-		void setMaterialTemplate(const String& name) { m_materialTemplate = name; }
-		const String& getMaterialTemplate() const { return m_materialTemplate; }
+		void setShader(const ResourcePath& path) { m_shaderPath = path; }
+		const ResourcePath& getShader() const { return m_shaderPath; }
 
 		// 设置使用官方材质
 		void setOfficialMaterialContent(const char* content) { m_officialMaterialContent = content; }
@@ -154,8 +148,7 @@ namespace Echo
 		TextureRes* prepareTextureImp(const String& texName);
 
 	private:
-		String				m_name;						// 材质实例名称
-		String				m_materialTemplate;			// 所使用的材质模板
+		ResourcePath		m_shaderPath;				// shader res path
 		const char*			m_officialMaterialContent;	// 官方材质
 		String				m_renderStage;				// 所处渲染阶段
 		StringArray			m_macros;					// 宏定义

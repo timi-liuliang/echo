@@ -1,5 +1,8 @@
 <RCC>
   <qresource prefix="/icon">
+    <file>res/folder.png</file>
+    <file>res/material.png</file>
+    <file>res/shader.png</file>
     <file>node/spine.png</file>
     <file>node/gltfimagebasedlight.png</file>
     <file>node/animplayer.png</file>

@@ -29,6 +29,15 @@ namespace Studio
 		// double click res
 		void onDoubleClickPreviewRes(const char* res);
 
+		// node tree widget show menu
+		void showMenu(const QPoint& point);
+
+		// new shader
+		void newShader();
+
+		// new material
+		void newMaterial();
+
 	protected:
 		// reimplement reiszeEvent function
 		virtual void resizeEvent(QResizeEvent * e);
@@ -37,5 +46,6 @@ namespace Studio
 		Echo::String				m_currentDir;
 		QT_UI::QDirectoryModel*		m_dirModel;
 		QT_UI::QPreviewHelper*		m_previewHelper;
+		QMenu*						m_resMenu;			// Mouse right button click
 	};
 }
