@@ -32,6 +32,12 @@ namespace Studio
 		// node tree widget show menu
 		void showMenu(const QPoint& point);
 
+		// show current dir
+		void showInExporer();
+
+		// new lua script
+		void newLuaScript();
+
 		// new shader
 		void newShader();
 

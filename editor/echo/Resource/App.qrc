@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/icon">
+    <file>res/lua.png</file>
     <file>res/folder.png</file>
     <file>res/material.png</file>
     <file>res/shader.png</file>

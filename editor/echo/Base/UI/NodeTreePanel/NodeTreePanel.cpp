@@ -370,4 +370,24 @@ namespace Studio
 			EchoLogError("Can't set property [%s] value [%s]", propertyName.c_str(), valStr.c_str());
 		}
 	}
+
+	// show res property
+	void NodeTreePanel::showResProperty(const Echo::String& resPath)
+	{
+		m_currentEditRes = Echo::Material::create();
+
+		m_propertyHelper.clear();
+		m_propertyHelper.setHeader("Property", "Value");
+
+		Echo::Res* res = m_currentEditRes.ptr();
+		if (res)
+		{
+			showNodePropertyRecursive(res, res->getClassName());
+			m_propertyHelper.applyTo(res->getName(), m_propertyTreeView, this, SLOT(refreshPropertyToNode(const QString&, QVariant)), false);
+		}
+		else
+		{
+			m_propertyHelper.applyTo("empty", m_propertyTreeView, this, SLOT(refreshPropertyToNode(const QString&, QVariant)), false);
+		}
+	}
 }

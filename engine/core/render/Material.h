@@ -156,4 +156,5 @@ namespace Echo
 		ParamMap			m_uniforms;
 		TextureInfoMap 		m_textures;
 	};
+	typedef ResRef<Material> MaterialRef;
 }

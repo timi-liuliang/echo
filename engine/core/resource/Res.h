@@ -35,6 +35,13 @@ namespace Echo
 		// set path
 		void setPath(const ResourcePath& path) { m_path = path; }
 
+		// save
+		void save();
+
+	private:
+		// save all property
+		void savePropertyRecursive(void* pugiNode, Echo::Object* classPtr, const Echo::String& className);
+
 	protected:
 		int								m_refCount;
 		ResourcePath					m_path;
@@ -124,4 +131,5 @@ namespace Echo
 	private:
 		T*		m_ptr;
 	};
+	typedef ResRef<Res> ResPtr;
 }

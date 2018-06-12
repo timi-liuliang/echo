@@ -1,6 +1,7 @@
 #include <QtGui>
 #include <QDateTime>
 #include <QMenuBar>
+#include <QDesktopServices>
 #include "ResPanel.h"
 #include "NodeTreePanel.h"
 #include "EchoEngine.h"
@@ -8,6 +9,7 @@
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/main/Engine.h"
 #include <engine/core/io/IO.h>
+#include <engine/core/render/Material.h>
 
 namespace Studio
 {
@@ -32,6 +34,8 @@ namespace Studio
 
 		QObject::connect(m_previewHelper, SIGNAL(doubleClickedRes(const char*)), this, SLOT(onDoubleClickPreviewRes(const char*)));
 		QObject::connect(m_listView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showMenu(const QPoint&)));
+		QObject::connect(m_actionShowInExplorer, SIGNAL(triggered()), this, SLOT(showInExporer()));
+		QObject::connect(m_actionNewLuaScript, SIGNAL(triggered()), this, SLOT(newLuaScript()));
 		QObject::connect(m_actionNewShader, SIGNAL(triggered()), this, SLOT(newShader()));
 		QObject::connect(m_actionNewMaterial, SIGNAL(triggered()), this, SLOT(newMaterial()));
 	}
@@ -111,6 +115,10 @@ namespace Studio
 				{
 					MainWindow::instance()->openLuaScript(resPath);
 				}
+				else if (ext == ".material")
+				{
+					NodeTreePanel::instance()->showResProperty( resPath);
+				}
 			}
 		}
 	}
@@ -130,9 +138,26 @@ namespace Studio
 		m_resMenu->addSeparator();
 		m_resMenu->addAction(m_actionNewFolder);
 		m_resMenu->addSeparator();
+		m_resMenu->addAction(m_actionNewLuaScript);
 		m_resMenu->addAction(m_actionNewShader);
 		m_resMenu->addAction(m_actionNewMaterial);
 		m_resMenu->exec(QCursor::pos());
+	}
+
+	// show current dir
+	void ResPanel::showInExporer()
+	{
+		QString openDir = m_currentDir.c_str();
+		if (!openDir.isEmpty())
+		{
+			QDesktopServices::openUrl(openDir);
+		}		
+	}
+
+	// new lua script
+	void ResPanel::newLuaScript()
+	{
+
 	}
 
 	// new shader
@@ -144,6 +169,24 @@ namespace Studio
 	// new material
 	void ResPanel::newMaterial()
 	{
+		for (int i = 0; i < Echo::Math::MAX_I16; i++)
+		{
+			Echo::String fileName = Echo::StringUtil::Format("NewMaterial_%d.material", i);
+			if (!Echo::PathUtil::IsFileExist(m_currentDir + fileName))
+			{
+				Echo::String resPath;
+				if (Echo::IO::instance()->covertFullPathToResPath(m_currentDir, resPath))
+				{
+					Echo::String savePath = resPath + fileName;
+					Echo::MaterialRef material = Echo::Material::create();
+					material->setPath(savePath);
+					material->save();
 
+					reslectCurrentDir();
+				}
+
+				break;
+			}
+		}
 	}
 }

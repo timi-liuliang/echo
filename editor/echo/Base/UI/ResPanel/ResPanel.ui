@@ -88,6 +88,15 @@
     <string>Show In Explorer</string>
    </property>
   </action>
+  <action name="m_actionNewLuaScript">
+   <property name="icon">
+    <iconset resource="../../../Resource/App.qrc">
+     <normaloff>:/icon/res/lua.png</normaloff>:/icon/res/lua.png</iconset>
+   </property>
+   <property name="text">
+    <string>New Lua Script</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="../../../Resource/App.qrc"/>

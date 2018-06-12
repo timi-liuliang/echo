@@ -4,6 +4,7 @@
 #include "ui_NodeTreePanel.h"
 #include "QProperty.hpp"
 #include "NewNodeDialog.h"
+#include <engine/core/resource/Res.h>
 #include <engine/core/scene/node.h>
 
 namespace Studio
@@ -57,6 +58,10 @@ namespace Studio
 		// import gltf scene
 		void importGltfScene();
 
+	public slots:
+		// show res property
+		void showResProperty(const Echo::String& resPath);
+
 	private:
 		// 递归显示属性
 		void showNodePropertyRecursive(Echo::Object* classPtr, const Echo::String& className);
@@ -70,6 +75,7 @@ namespace Studio
 	private:
 		NewNodeDialog*					m_newNodeDialog;		// 新建结点
 		QT_UI::QPropertyConfigHelper	m_propertyHelper;		// 属性
+		Echo::ResPtr					m_currentEditRes;		// 当前资源
 		QMenu*							m_nodeTreeMenu;			// 结点树右键菜单
 	};
 }
