@@ -32,13 +32,12 @@ namespace Echo
 		CLASS_BIND_METHOD(GltfMesh, setMeshIdx, DEF_METHOD("setMeshIdx"));
 		CLASS_BIND_METHOD(GltfMesh, getPrimitiveIdx, DEF_METHOD("getPrimitiveIdx"));
 		CLASS_BIND_METHOD(GltfMesh, setPrimitiveIdx, DEF_METHOD("setPrimitiveIdx"));
-		CLASS_BIND_METHOD(GltfMesh, getMaterial, DEF_METHOD("getMaterial"));
-		CLASS_BIND_METHOD(GltfMesh, setMaterial, DEF_METHOD("setMaterial"));
+		//CLASS_BIND_METHOD(GltfMesh, getMaterial, DEF_METHOD("getMaterial"));
+		//CLASS_BIND_METHOD(GltfMesh, setMaterial, DEF_METHOD("setMaterial"));
 
 		CLASS_REGISTER_PROPERTY(GltfMesh, "Gltf", Variant::Type::ResourcePath, "getGltfRes", "setGltfRes");
 		CLASS_REGISTER_PROPERTY(GltfMesh, "Mesh", Variant::Type::Int, "getMeshIdx", "setMeshIdx");
 		CLASS_REGISTER_PROPERTY(GltfMesh, "Primitive", Variant::Type::Int, "getPrimitiveIdx", "setPrimitiveIdx");
-		CLASS_REGISTER_PROPERTY(GltfMesh, "Material", Variant::Type::Res, "getMaterial", "setMaterial");
 	}
 
 	// set gltf resource

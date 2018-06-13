@@ -94,13 +94,13 @@ namespace Echo
 		auto it = g_classInfos->find(className);
 		if (it != g_classInfos->end())
 		{
-			PropertyInfo info;
-			info.m_name = propertyName;
-			info.m_type = type;
-			info.m_setter = setter;
-			info.m_getter = getter;
-			info.m_setterMethod = getMethodBind(className, setter);
-			info.m_getterMethod = getMethodBind(className, getter);
+			PropertyInfoStatic* info = EchoNew(PropertyInfoStatic);
+			info->m_name = propertyName;
+			info->m_type = type;
+			info->m_setter = setter;
+			info->m_getter = getter;
+			info->m_setterMethod = getMethodBind(className, setter);
+			info->m_getterMethod = getMethodBind(className, getter);
 
 			it->second->registerProperty(info);
 		}
@@ -142,10 +142,23 @@ namespace Echo
 			PropertyInfo* pi = getProperty(className, propertyName);
 			if (pi)
 			{
-				Variant::CallError error;
-				oVar = pi->m_getterMethod->call(classPtr, nullptr, 0, error);
+				switch (pi->m_type)
+				{
+				case PropertyInfo::Type::Static:
+					{
+						Variant::CallError error;
+						oVar = ((PropertyInfoStatic*)pi)->m_getterMethod->call(classPtr, nullptr, 0, error);
 
-				return true;
+						return true;
+					}
+				case PropertyInfo::Type::Dynamic:
+					{
+						PropertyInfoDynamic* dpi = (PropertyInfoDynamic*)pi;
+
+						return true;
+					}
+				}
+	
 			}
 
 		} while (getParentClass(className, className));
@@ -178,9 +191,15 @@ namespace Echo
 			PropertyInfo* pi = getProperty(className, propertyName);
 			if (pi)
 			{
-				Variant::CallError error;
-				const Variant* args[1] = { &propertyValue };
-				pi->m_setterMethod->call(classPtr, args, 1, error);
+				switch (pi->m_infoType)
+				{
+				case PropertyInfo::Type::Static:
+					{
+						Variant::CallError error;
+						const Variant* args[1] = { &propertyValue };
+						((PropertyInfoStatic*)pi)->m_setterMethod->call(classPtr, args, 1, error);
+					}
+				}		
 
 				return true;
 			}

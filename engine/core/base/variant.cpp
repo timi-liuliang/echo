@@ -41,18 +41,6 @@ namespace Echo
 		m_any = value;
 	}
 
-	Variant::Variant(const VariantArray& value)
-		: m_type(Type::VariantArray)
-	{
-		m_any = value;
-	}
-
-	Variant::Variant(Object* value)
-		: m_type(Type::Res)
-	{
-		m_obj = value;
-	}
-
 	Variant::~Variant()
 	{
 

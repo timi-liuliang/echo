@@ -532,13 +532,13 @@ namespace Echo
 		}
 
 		const Echo::PropertyInfos& propertys = Echo::Class::getPropertys(className);
-		for (const Echo::PropertyInfo& prop : propertys)
+		for ( Echo::PropertyInfo* prop : propertys)
 		{
 			Echo::Variant var;
-			Echo::Class::getPropertyValue(classPtr, prop.m_name, var);
+			Echo::Class::getPropertyValue(classPtr, prop->m_name, var);
 			Echo::String varStr = var.toString();
 
-			xmlNode->append_attribute(prop.m_name.c_str()).set_value(varStr.c_str());
+			xmlNode->append_attribute(prop->m_name.c_str()).set_value(varStr.c_str());
 		}
 	}
 
@@ -618,13 +618,13 @@ namespace Echo
 		}
 
 		const Echo::PropertyInfos& propertys = Echo::Class::getPropertys(className);
-		for (const Echo::PropertyInfo& prop : propertys)
+		for (const Echo::PropertyInfo* prop : propertys)
 		{
 			Echo::Variant var;
-			String valueStr = xmlNode->attribute(prop.m_name.c_str()).value();
-			var.fromString( prop.m_type, valueStr);
+			String valueStr = xmlNode->attribute(prop->m_name.c_str()).value();
+			var.fromString( prop->m_type, valueStr);
 
-			Class::setPropertyValue(classPtr, prop.m_name, var);
+			Class::setPropertyValue(classPtr, prop->m_name, var);
 		}
 	}
 }

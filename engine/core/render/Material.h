@@ -1,6 +1,5 @@
 #pragma once
 
-#include "engine/core/util/VariantArray.h"
 #include "engine/core/render/render/ShaderProgram.h"
 #include "engine/core/render/render/RenderState.h"
 #include "engine/core/render/TextureRes.h"
@@ -129,13 +128,6 @@ namespace Echo
 
 		// 构建渲染队列
 		void buildRenderQueue();
-
-	public:
-		// get uniforms
-		VariantArray getUniforms() const;
-
-		// set uniforms
-		void setUniforms(const VariantArray& uniforms);
 
 	private:
 		// 添加贴图文件名

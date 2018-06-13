@@ -52,7 +52,6 @@
     <property name="title">
      <string>Project(&amp;P)</string>
     </property>
-    <addaction name="m_actionProjectSettings"/>
     <addaction name="separator"/>
     <addaction name="m_actionSave"/>
     <addaction name="separator"/>
@@ -133,11 +132,6 @@
   <action name="m_actionExitEditor">
    <property name="text">
     <string>Exit</string>
-   </property>
-  </action>
-  <action name="m_actionProjectSettings">
-   <property name="text">
-    <string>Settings</string>
    </property>
   </action>
  </widget>

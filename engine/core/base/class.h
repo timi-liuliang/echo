@@ -3,22 +3,12 @@
 #include "object.h"
 #include "variant.h"
 #include "MethodBind.h"
+#include "property_info.h"
 #include "engine/core/Util/StringUtil.h"
 #include "engine/core/script/lua/luaex.h"
 
 namespace Echo
 {
-	struct PropertyInfo
-	{
-		String			m_name;
-		Variant::Type	m_type;
-		String			m_getter;
-		String			m_setter;
-		MethodBind*		m_getterMethod;
-		MethodBind*		m_setterMethod;
-	};
-	typedef vector<PropertyInfo>::type PropertyInfos;
-
 	struct ClassInfo
 	{
 		String			m_parent;
@@ -34,7 +24,7 @@ namespace Echo
 		virtual Object* create() = 0;
 
 		// register property
-		void registerProperty(const PropertyInfo& property)
+		void registerProperty(PropertyInfo* property)
 		{
 			m_classInfo.m_propertyInfos.push_back(property);
 		}
@@ -66,11 +56,11 @@ namespace Echo
 		// get property
 		PropertyInfo* getProperty(const String& propertyName)
 		{
-			for (PropertyInfo& pi : m_classInfo.m_propertyInfos)
+			for (PropertyInfo* pi : m_classInfo.m_propertyInfos)
 			{
-				if (pi.m_name == propertyName)
+				if (pi->m_name == propertyName)
 				{
-					return &pi;
+					return pi;
 				}
 			}
 
@@ -167,6 +157,8 @@ namespace Echo
 		}
 	};
 }
+
+#define ECHO_CLASS_NAME(m_class) #m_class
 
 #define ECHO_CLASS(m_class, m_parent)												\
 public:																				\

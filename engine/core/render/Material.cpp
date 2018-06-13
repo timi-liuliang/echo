@@ -104,11 +104,8 @@ namespace Echo
 	{
 		CLASS_BIND_METHOD(Material, getShader, DEF_METHOD("getShader"));
 		CLASS_BIND_METHOD(Material, setShader, DEF_METHOD("setShader"));
-		CLASS_BIND_METHOD(Material, getUniforms, DEF_METHOD("getUniforms"));
-		CLASS_BIND_METHOD(Material, setUniforms, DEF_METHOD("setUniforms"));
 
 		CLASS_REGISTER_PROPERTY(Material, "Shader", Variant::Type::ResourcePath, "getShader", "setShader");
-		CLASS_REGISTER_PROPERTY(Material, "Uniforms", Variant::Type::VariantArray, "getUniforms", "setUniforms");
 	}
 
 	// release
@@ -160,34 +157,6 @@ namespace Echo
 
 		const ShaderProgramRes::DefaultUniform* dUniform = m_shaderProgram->getDefaultUniformValue(name);
 		return dUniform ? dUniform->value : NULL;
-	}
-
-	// get uniforms
-	VariantArray Material::getUniforms() const
-	{
-		VariantArray uniforms;
-		for (auto it : m_uniforms)
-		{
-			Uniform* uniform = it.second;
-			switch (uniform->m_type)
-			{
-			case SPT_FLOAT:
-			case SPT_TEXTURE:
-			case SPT_MAT4:
-			{
-				uniforms.add(uniform->m_name, 1);
-			}
-			break;
-			}
-		}
-
-		return uniforms;
-	}
-
-	// set uniforms
-	void Material::setUniforms(const VariantArray& uniforms)
-	{
-
 	}
 
 	// 准备资源IO

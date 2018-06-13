@@ -2,6 +2,7 @@
 
 #include "engine/core/memory/MemAllocDef.h"
 #include "engine/core/base/class.h"
+#include "engine/core/base/property_info.h"
 
 namespace Echo
 {
@@ -21,7 +22,15 @@ namespace Echo
 		void queueFree() { ECHO_DELETE_T(this, Object); }
 		void free() { ECHO_DELETE_T(this, Object); }
 
+	public:
+		// propertys (script property or dynamic property)
+		const PropertyInfos& getPropertys() const;
+
+		// register property
+		bool registerProperty(const String& className, const String& propertyName, const Variant::Type type);
+
 	protected:
 		String			m_name;
+		PropertyInfos	m_propertys;
 	};
 }
