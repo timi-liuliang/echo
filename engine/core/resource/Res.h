@@ -47,10 +47,7 @@ namespace Echo
 
 		// set path
 		void setPath(const ResourcePath& path) { m_path = path; }
-
-		// load
-		static Res* load(const ResourcePath& path);
-		
+	
 		// save
 		void save();
 
@@ -58,6 +55,9 @@ namespace Echo
 		// cerate fun
 		template<typename T>
 		static Res* create() { return EchoNew(T); }
+
+		// load
+		static Res* load(const ResourcePath& path);
 
 		// save all property
 		void savePropertyRecursive(void* pugiNode, Echo::Object* classPtr, const Echo::String& className);

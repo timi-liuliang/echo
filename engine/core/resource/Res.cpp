@@ -75,6 +75,15 @@ namespace Echo
 			return it->second;
 		}
 
+		// get load fun
+		String ext = PathUtil::GetFileExt(path.getPath(), true);
+		map<String, Res::ResFun>::type::iterator itfun = g_resFuncs.find(ext);
+		if (itfun != g_resFuncs.end())
+		{
+			RES_LOAD_FUNC lfunc = itfun->second.m_lfun;
+			return lfunc(path);
+		}
+
 		return nullptr;
 	}
 
@@ -91,22 +100,19 @@ namespace Echo
 	// load
 	Res* Res::load(const ResourcePath& path)
 	{
-		Res* res = get(path);
-		if (res)
+		MemoryReader reader(path.getPath());
+		if (reader.getSize())
 		{
-			return res;
-		}
-		else
-		{
-			MemoryReader reader(path.getPath());
-			if (reader.getSize())
+			pugi::xml_document doc;
+			if (doc.load_buffer(reader.getData<char*>(), reader.getSize()))
 			{
-				pugi::xml_document doc;
-				if (doc.load_buffer(reader.getData<char*>(), reader.getSize()))
+				pugi::xml_node root = doc.child("res");
+				if (root)
 				{
-					pugi::xml_node root = doc.child("res");
 					Res* resNode = ECHO_DOWN_CAST<Res*>(instanceObject(&root));
 					resNode->setPath(path);
+
+					g_ress[path.getPath()] = resNode;
 
 					return resNode;
 				}
