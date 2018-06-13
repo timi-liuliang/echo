@@ -26,20 +26,17 @@ namespace Studio
 		// 重新选择当前文件夹
 		void reslectCurrentDir();
 
+		// click res
+		void onClickedPreviewRes(const char* res);
+
 		// double click res
-		void onDoubleClickPreviewRes(const char* res);
+		void onDoubleClickedPreviewRes(const char* res);
 
 		// node tree widget show menu
 		void showMenu(const QPoint& point);
 
 		// show current dir
 		void showInExporer();
-
-		// new lua script
-		void newLuaScript();
-
-		// new shader
-		void newShader();
 
 		// new material
 		void newMaterial();

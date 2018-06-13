@@ -12,6 +12,7 @@ namespace Echo
 	struct ClassInfo
 	{
 		String			m_parent;
+		String			m_extension;			// used for res
 		PropertyInfos	m_propertyInfos;
 		MethodMap		m_methods;
 	};
@@ -71,13 +72,16 @@ namespace Echo
 	template<typename T>
 	struct ObjectFactoryT : public ObjectFactory
 	{
-		ObjectFactoryT(const String& name, const String& parent)
+		ObjectFactoryT(const String& name, const String& parent, const char* ext = nullptr)
 		{
 			// register class to lua
 			luaex::LuaEx::instance()->register_class(name.c_str(), parent.c_str());
 
 			m_name = name;
 			m_classInfo.m_parent = parent;
+
+			if (ext)
+				m_classInfo.m_extension = ext;
 
 			Class::addClass(name, this);
 			T::bindMethods();
@@ -119,7 +123,7 @@ namespace Echo
 		static bool getParentClass(String& parentClassName, const String& className);
 
 		// get all child class
-		static bool getChildClasses(StringArray& childClasses, const String& className);
+		static bool getChildClasses(StringArray& childClasses, const String& className, bool recursive);
 
 		// register method
 		static bool registerMethodBind(const String& className, const String& methodName, MethodBind* method);
@@ -174,6 +178,21 @@ public:																				\
 	}																				\
 																					\
 private:															
+
+#define ECHO_RES(m_class, m_parent, ext)												\
+public:																					\
+	virtual const String& getClassName() const											\
+	{																					\
+		static String className=#m_class;												\
+		return className;																\
+	}																					\
+																						\
+	static void initClassInfo()															\
+	{																					\
+		static Echo::ObjectFactoryT<m_class> G_OBJECT_FACTORY(#m_class, #m_parent, ext);\
+	}																					\
+																						\
+private:		
 
 #define CLASS_BIND_METHOD(m_class, method, methodName) \
 	Echo::Class::bindMethod(#m_class, &##m_class::method, methodName)

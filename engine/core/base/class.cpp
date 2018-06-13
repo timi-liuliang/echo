@@ -30,11 +30,8 @@ namespace Echo
 	}
 
 	// get all child class
-	bool Class::getChildClasses(StringArray& childClasses, const String& className)
+	bool Class::getChildClasses(StringArray& childClasses, const String& className, bool recursive)
 	{
-		// keep clean
-		childClasses.clear();
-
 		if (!g_classInfos)
 			return false;
 
@@ -43,6 +40,10 @@ namespace Echo
 			if (it.second->m_classInfo.m_parent == className)
 			{
 				childClasses.push_back(it.first);
+				if (recursive)
+				{
+					getChildClasses(childClasses, it.first, recursive);
+				}
 			}
 		}
 

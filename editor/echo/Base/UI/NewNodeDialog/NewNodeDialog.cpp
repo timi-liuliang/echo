@@ -49,7 +49,7 @@ namespace Studio
 		QObject::connect(m_treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(onConfirmNode()));
 
 		Echo::StringArray childNodes;
-		if( Echo::Class::getChildClasses(childNodes, nodeName.c_str()))
+		if( Echo::Class::getChildClasses(childNodes, nodeName.c_str(), false))
 		{
 			for (const Echo::String& childNode : childNodes)
 			{

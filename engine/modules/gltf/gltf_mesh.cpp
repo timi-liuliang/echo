@@ -6,7 +6,6 @@
 #include "render/ShaderProgramRes.h"
 #include "engine/core/script/lua/luaex.h"
 #include "engine/core/main/Engine.h"
-#include "engine/core/render/material/generalmaterial.h"
 
 namespace Echo
 {

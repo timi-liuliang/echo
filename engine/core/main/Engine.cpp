@@ -21,6 +21,8 @@
 #include "engine/core/render/renderstage/RenderStage.h"
 #include "engine/core/render/gles/GLES2.h"
 #include "OpenMPTaskMgr.h"
+#include "engine/core/script/LuaScript.h"
+#include "engine/core/render/render/ShaderProgramRes.h"
 
 #ifdef ECHO_PLATFORM_ANDROID
 #include <sys/syscall.h>
@@ -165,7 +167,10 @@ namespace Echo
 	{
 		Class::registerType<Node>();
 		Class::registerType<Res>();
+		Class::registerType<ShaderProgramRes>();
 		Class::registerType<Material>();
+		Class::registerType<LuaScript>();
+		Class::registerType<ProjectSettings>();
 
 		// register all module class
 		Module::registerAllTypes();
@@ -180,8 +185,6 @@ namespace Echo
 
 			EchoSafeDelete(m_projectFile, ProjectSettings);
 			m_projectFile = EchoNew(ProjectSettings);
-			m_projectFile->load(projectFile);
-			m_projectFile->setupResource();
 
 			IO::instance()->setResPath(m_resPath);
 		}

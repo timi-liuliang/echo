@@ -52,31 +52,13 @@
     </item>
    </layout>
   </widget>
-  <action name="m_actionNewShader">
-   <property name="icon">
-    <iconset resource="../../../Resource/App.qrc">
-     <normaloff>:/icon/res/shader.png</normaloff>:/icon/res/shader.png</iconset>
-   </property>
-   <property name="text">
-    <string>New Shader</string>
-   </property>
-  </action>
-  <action name="m_actionNewMaterial">
-   <property name="icon">
-    <iconset resource="../../../Resource/App.qrc">
-     <normaloff>:/icon/res/material.png</normaloff>:/icon/res/material.png</iconset>
-   </property>
-   <property name="text">
-    <string>New Material</string>
-   </property>
-  </action>
   <action name="m_actionNewFolder">
    <property name="icon">
     <iconset resource="../../../Resource/App.qrc">
      <normaloff>:/icon/res/folder.png</normaloff>:/icon/res/folder.png</iconset>
    </property>
    <property name="text">
-    <string>New Folder</string>
+    <string>Folder</string>
    </property>
   </action>
   <action name="m_actionShowInExplorer">
@@ -86,15 +68,6 @@
    </property>
    <property name="text">
     <string>Show In Explorer</string>
-   </property>
-  </action>
-  <action name="m_actionNewLuaScript">
-   <property name="icon">
-    <iconset resource="../../../Resource/App.qrc">
-     <normaloff>:/icon/res/lua.png</normaloff>:/icon/res/lua.png</iconset>
-   </property>
-   <property name="text">
-    <string>New Lua Script</string>
    </property>
   </action>
  </widget>

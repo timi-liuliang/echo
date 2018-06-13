@@ -14,7 +14,7 @@ namespace Echo
 	*/
 	class Material : public Res
 	{
-		ECHO_CLASS(Material, Res)
+		ECHO_RES(Material, Res, "material")
 
 	public:
 		// texture info

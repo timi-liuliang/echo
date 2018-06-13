@@ -11,14 +11,9 @@
 
 namespace Echo
 {
-	template<> HashNode<ShaderProgramRes>** PtrMonitor<ShaderProgramRes>::m_ptrs = NULL;
-	template<> int PtrMonitor<ShaderProgramRes>::m_hashcount = 0;
-	template<> unsigned int PtrMonitor<ShaderProgramRes>::m_maxhash = 10;
-
 	// ¹¹Ôìº¯Êý
 	ShaderProgramRes::ShaderProgramRes()
-		: PtrMonitor()
-		, m_name(StringUtil::BLANK)
+		: m_name(StringUtil::BLANK)
 		, m_pBlendState(NULL)
 		, m_pDepthState(NULL)
 		, m_pRasterizerState(NULL)

@@ -24,6 +24,9 @@ namespace QT_UI
 		void onListViewResize();
 
 	public: signals :
+		// clicked
+		void clickedRes(const char* path);
+
 		// double clicked
 		void doubleClickedRes(const char* path);
 
@@ -47,6 +50,9 @@ namespace QT_UI
 		bool isSupportExt(const Echo::String& file);
 
 	private slots:
+		// clicked resource
+		void onClicked(const QModelIndex& pIndex);
+
 		// double clicked resource
 		void onDoubleClicked(const QModelIndex& pIndex);
 

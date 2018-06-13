@@ -1,10 +1,10 @@
 #pragma once
 
-#include <engine/core/Util/PtrMonitor.h>
 #include <engine/core/Util/Array.hpp>
 #include "ShaderProgram.h"
 #include "Texture.h"
 #include "RenderState.h"
+#include "ShaderProgramRes.h"
 
 namespace Echo
 {
@@ -27,7 +27,6 @@ namespace Echo
 	class Renderable
 	{
 		friend class Renderer;
-		typedef ui32 MaterialID;
 		typedef array<TextureSampler, MAX_TEXTURE_SAMPLER> MaxTextureArray;
 	public:
 		// 着色器参数
@@ -128,7 +127,7 @@ namespace Echo
 		ui32									m_identifier;
 		String									m_ownerDesc;			// 拥有者信息
 		String									m_renderStage;
-		MaterialID								m_materialID;			// material
+		ShaderProgramResPtr						m_shaderProgram;			// material
 		RenderInput*							m_renderInput;			// first  VB, IB, etc.
 		MaxTextureArray							m_textures;				// now only one texture sampler.
 		vector<ShaderParam>::type				m_shaderParams;			// third shader params

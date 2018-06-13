@@ -21,7 +21,7 @@ namespace Echo
 		, m_pDepthStencil(NULL)
 		, m_identifier(identifier)
 	{
-		m_materialID = material->getIdentifier();
+		m_shaderProgram = material;
 	}
 
 	// Îö¹¹º¯Êý
@@ -162,10 +162,9 @@ namespace Echo
 		// ÏòÎÆÀí²ÛÖÐÉèÖÃÎÆÀí
 		bindTextures();
 			
-		ShaderProgramRes* material = IdToPtr(ShaderProgramRes, m_materialID);
-		if (material)
+		if (m_shaderProgram)
 		{
-			ShaderProgram* shaderProgram = material->getShaderProgram();
+			ShaderProgram* shaderProgram = m_shaderProgram->getShaderProgram();
 			for (size_t i = 0; i < m_shaderParams.size(); ++i)
 			{
 				ShaderParam& param = m_shaderParams[i];
@@ -200,24 +199,22 @@ namespace Echo
 	// °ó¶¨äÖÈ¾×´Ì¬
 	void Renderable::bindRenderState()
 	{
-		ShaderProgramRes* material = IdToPtr(ShaderProgramRes, m_materialID);
-		if (material)
+		if (m_shaderProgram)
 		{
 			Renderer* pRenderer = Renderer::instance();
-			pRenderer->setDepthStencilState(m_pDepthStencil ? m_pDepthStencil : material->getDepthState());
-			pRenderer->setRasterizerState(m_pRasterizerState ? m_pRasterizerState : material->getRasterizerState());
-			pRenderer->setBlendState(m_pBlendState ? m_pBlendState : material->getBlendState());
+			pRenderer->setDepthStencilState(m_pDepthStencil ? m_pDepthStencil : m_shaderProgram->getDepthState());
+			pRenderer->setRasterizerState(m_pRasterizerState ? m_pRasterizerState : m_shaderProgram->getRasterizerState());
+			pRenderer->setBlendState(m_pBlendState ? m_pBlendState : m_shaderProgram->getBlendState());
 		}
 	}
 
 	// Ö´ÐÐäÖÈ¾
 	void Renderable::render()
 	{
-		ShaderProgramRes* material = IdToPtr(ShaderProgramRes, m_materialID);
-		if (material)
+		if (m_shaderProgram)
 		{
 			// °ó¶¨×ÅÉ«Æ÷
-			material->activeShader();
+			m_shaderProgram->activeShader();
 
 			// °ó¶¨äÖÈ¾×´Ì¬
 			bindRenderState();
@@ -227,7 +224,7 @@ namespace Echo
 
 			// Ö´ÐÐäÖÈ¾
 			EchoAssert(m_renderInput);
-			Renderer::instance()->render(m_renderInput, material->getShaderProgram());
+			Renderer::instance()->render(m_renderInput, m_shaderProgram->getShaderProgram());
 		}
 	}
 
@@ -263,10 +260,9 @@ namespace Echo
 	{
 		EchoSafeDelete(m_renderInput, RenderInput);
 
-		ShaderProgramRes* material = IdToPtr(ShaderProgramRes, m_materialID);
-		if (material)
+		if (m_shaderProgram)
 		{
-			ShaderProgram* program = material->getShaderProgram();
+			ShaderProgram* program = m_shaderProgram->getShaderProgram();
 			if (program)
 			{
 				m_renderInput = Renderer::instance()->createRenderInput(program);

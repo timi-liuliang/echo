@@ -32,12 +32,11 @@ namespace Studio
 
 		m_previewHelper = new QT_UI::QPreviewHelper(m_listView);
 
-		QObject::connect(m_previewHelper, SIGNAL(doubleClickedRes(const char*)), this, SLOT(onDoubleClickPreviewRes(const char*)));
+		QObject::connect(m_previewHelper, SIGNAL(clickedRes(const char*)), this, SLOT(onClickedPreviewRes(const char*)));
+		QObject::connect(m_previewHelper, SIGNAL(doubleClickedRes(const char*)), this, SLOT(onDoubleClickedPreviewRes(const char*)));
 		QObject::connect(m_listView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showMenu(const QPoint&)));
 		QObject::connect(m_actionShowInExplorer, SIGNAL(triggered()), this, SLOT(showInExporer()));
-		QObject::connect(m_actionNewLuaScript, SIGNAL(triggered()), this, SLOT(newLuaScript()));
-		QObject::connect(m_actionNewShader, SIGNAL(triggered()), this, SLOT(newShader()));
-		QObject::connect(m_actionNewMaterial, SIGNAL(triggered()), this, SLOT(newMaterial()));
+		//QObject::connect(m_actionNewMaterial, SIGNAL(triggered()), this, SLOT(newMaterial()));
 	}
 
 	// Îö¹¹º¯Êý
@@ -81,8 +80,25 @@ namespace Studio
 			onSelectDir(m_currentDir.c_str());
 	}
 
+	// click res
+	void ResPanel::onClickedPreviewRes(const char* res)
+	{
+		if (!Echo::PathUtil::IsDir(res))
+		{
+			Echo::String resPath;
+			if (Echo::IO::instance()->covertFullPathToResPath(res, resPath))
+			{
+				Echo::String ext = Echo::PathUtil::GetFileExt(resPath, true);
+				if (ext == ".material")
+				{
+					NodeTreePanel::instance()->showResProperty(resPath);
+				}
+			}
+		}
+	}
+
 	// double click res
-	void ResPanel::onDoubleClickPreviewRes(const char* res)
+	void ResPanel::onDoubleClickedPreviewRes(const char* res)
 	{
 		if (Echo::PathUtil::IsDir(res))
 		{
@@ -134,13 +150,28 @@ namespace Studio
 	{
 		EchoSafeDelete(m_resMenu, QMenu);
 		m_resMenu = EchoNew(QMenu);
+
+		// create res
+		QMenu* createResMenu = new QMenu("New");
+		createResMenu->addAction(m_actionNewFolder);
+		createResMenu->addSeparator();
+
+		Echo::StringArray allRes;
+		Echo::Class::getChildClasses(allRes, "Res", true);
+		for (const Echo::String& res : allRes)
+		{
+			if (res != ECHO_CLASS_NAME(ProjectSettings))
+			{
+				QAction* createResAction = new QAction(this);
+				createResAction->setText(res.c_str());
+				createResMenu->addAction(createResAction);
+			}
+		}
+		m_resMenu->addMenu(createResMenu);
+
+		m_resMenu->addSeparator();
 		m_resMenu->addAction(m_actionShowInExplorer);
-		m_resMenu->addSeparator();
-		m_resMenu->addAction(m_actionNewFolder);
-		m_resMenu->addSeparator();
-		m_resMenu->addAction(m_actionNewLuaScript);
-		m_resMenu->addAction(m_actionNewShader);
-		m_resMenu->addAction(m_actionNewMaterial);
+
 		m_resMenu->exec(QCursor::pos());
 	}
 
@@ -152,18 +183,6 @@ namespace Studio
 		{
 			QDesktopServices::openUrl(openDir);
 		}		
-	}
-
-	// new lua script
-	void ResPanel::newLuaScript()
-	{
-
-	}
-
-	// new shader
-	void ResPanel::newShader()
-	{
-
 	}
 
 	// new material

@@ -9,7 +9,6 @@ namespace Studio
 {
 
 	ProjectMgr::ProjectMgr()
-		:m_pTextureCompreses(NULL)
 	{
 
 	}
@@ -23,19 +22,12 @@ namespace Studio
 	void ProjectMgr::NewProject(const char* projectName)
 	{
 		Echo::ProjectSettings projectFile;
-		m_pTextureCompreses = NULL;
-		projectFile.save(projectName);
+		//projectFile.save(projectName);
 	}
 
 	// 打开项目文件
 	void ProjectMgr::OpenProject(const char* fullPathName)
 	{
-		m_projectFile.load(fullPathName);
-		m_pTextureCompreses = m_projectFile.getTextureCompreses();
-		//LoadImgCompressInfo(fileName);
-		// 检测项目
-		//CheckProject();
-
 		AStudio::instance()->getConfigMgr()->addRecentProject(fullPathName);
 	}
 
@@ -44,24 +36,6 @@ namespace Studio
 	{
 		// 清空
 		m_files.clear();
-
-		// 检测同名文件
-		Echo::vector<Echo::ProjectSettings::ArchiveItem>::type& archives = m_projectFile.getArchives();
-		for ( size_t archiveIdx = 0; archiveIdx < archives.size(); archiveIdx++ )
-		{
-			Echo::StringArray strs;
-			Echo::String fullPath = m_projectFile.getPath() + archives[archiveIdx].m_archiveValue;
-			Echo::PathUtil::EnumFilesInDir(strs, fullPath, false, true, true);
-
-			// 记录名称与路径映射
-			for ( size_t j = 0; j < strs.size(); j++ )
-			{
-				Echo::String fileName = Echo::PathUtil::GetPureFilename(strs[j]);
-				Echo::StringUtil::LowerCase(fileName);
-				if ( m_files.find(fileName) == m_files.end() )
-					m_files[fileName] = strs[j];
-			}
-		}
 
 		// 检测纹理
 		checkTextures();
@@ -112,20 +86,6 @@ namespace Studio
 			m_files.erase(m_files.find(str));
 	}
 
-	// 加载项目文件
-	bool ProjectMgr::LoadProject(const char* fileName)
-	{
-		m_projectFile.load(fileName);
-		m_pTextureCompreses = m_projectFile.getTextureCompreses();
-		return true;
-	}
-
-	// 保存项目文件
-	void ProjectMgr::SaveProject()
-	{
-		m_projectFile.save(m_projectFile.getPathName().c_str());
-	}
-
 	// 获取全路径
 	Echo::String ProjectMgr::GetFullPath(const Echo::String& name)
 	{
@@ -146,61 +106,5 @@ namespace Studio
 			return true;
 
 		return false;
-	}
-
-	// 添加图片压缩格式信息
-	void ProjectMgr::addCompressChangeTextrue(PLATFORM platform, std::string name, Echo::ProjectSettings::TextureCompressType ctype)
-	{
-		if (m_pTextureCompreses)
-		{
-			Echo::ProjectSettings::TextureCompressItem* pItem = NULL;
-			Echo::ProjectSettings::TextureCPIVec::iterator it = m_pTextureCompreses->begin();
-			for (; it != m_pTextureCompreses->end(); ++it)
-			{
-				if (it->m_name == name)
-				{
-					pItem = &(*it);
-					break;
-				}
-			}
-
-			if (!pItem)
-			{
-				Echo::ProjectSettings::TextureCompressItem item;
-				item.m_name = name;
-				m_pTextureCompreses->push_back(item);
-				pItem = &item;
-			}
-
-			switch (platform)
-			{
-			case IOS:
-				pItem->m_iosCType = ctype; break;
-			case ANDROID:
-				pItem->m_androidCType = ctype; break;
-			case WINDOWS:
-				break;
-			default:
-				break;
-			}
-		}
-	}
-	
-
-	Echo::ProjectSettings::TextureCompressItem* ProjectMgr::GetTextureCompressItem(const Echo::String& name)
-	{
-		if (m_pTextureCompreses)
-		{
-			Echo::ProjectSettings::TextureCompressItem* pItem;
-			Echo::ProjectSettings::TextureCPIVec::iterator it = m_pTextureCompreses->begin();
-			for (; it != m_pTextureCompreses->end(); ++it)
-			{
-				pItem = &(*it);
-				if (pItem->m_name == name)
-					return pItem;
-			}
-		}
-
-		return NULL;
 	}
 }

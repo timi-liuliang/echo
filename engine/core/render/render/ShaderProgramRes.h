@@ -3,8 +3,8 @@
 #include "RenderState.h"
 #include "ShaderProgram.h"
 #include "RenderInput.h"
-#include "Renderable.h"
 #include <utility>
+#include "engine/core/resource/Res.h"
 
 namespace Echo
 {
@@ -12,8 +12,10 @@ namespace Echo
 	 * ²ÄÖÊ
 	 */
 	class Renderer;
-	class ShaderProgramRes : public PtrMonitor<ShaderProgramRes>
+	class ShaderProgramRes : public Res
 	{
+		ECHO_RES(ShaderProgramRes, Res, ".shader")
+
 		typedef map<String, const SamplerState*>::type SamplerStateMap;
 		typedef vector<std::pair<String, String> >::type SeparatedSamplerArray;
 		typedef vector<String>::type TextureSamplerStateArray;
@@ -97,11 +99,12 @@ namespace Echo
 		BlendState*			m_pBlendState;
 		DepthStencilState*	m_pDepthState;
 		RasterizerState*	m_pRasterizerState;
-		const SamplerState*	m_pSamplerState[MAX_TEXTURE_SAMPLER];
+		const SamplerState*	m_pSamplerState[8];
 		SamplerStateMap		m_mapSamplerState;
 		TextureSamplerStateArray	m_arrTexSamplerState;
 		ShaderProgram*		m_pShaderProgram;
 		typedef map<String, DefaultUniform*>::type MapDefaultUniforms;
 		MapDefaultUniforms	m_defaultUniforms;
 	};
+	typedef ResRef<ShaderProgramRes> ShaderProgramResPtr;
 }

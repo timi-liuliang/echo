@@ -17,6 +17,7 @@ namespace QT_UI
 
 		m_listView->setModel(m_listProxyModel);
 
+		QObject::connect(m_listView, SIGNAL(clicked(QModelIndex)), this, SLOT(onClicked(QModelIndex)));
 		QObject::connect(m_listView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onDoubleClicked(QModelIndex)));
 	}
 
@@ -158,6 +159,18 @@ namespace QT_UI
 
 			m_listView->setSpacing(std::max<int>(spacing, 0));
 		}
+	}
+
+	// clicked resource
+	void QPreviewHelper::onClicked(const QModelIndex& pIndex)
+	{
+		Echo::String resPath = m_listProxyModel ? m_listProxyModel->data(pIndex, Qt::UserRole).toString().toStdString().c_str() : m_listModel->data(pIndex, Qt::UserRole).toString().toStdString().c_str();
+		if (Echo::PathUtil::IsDir(resPath))
+		{
+			Echo::PathUtil::FormatPathAbsolut(resPath, false);
+		}
+
+		emit clickedRes(resPath.c_str());
 	}
 
 	// double clicked resource
