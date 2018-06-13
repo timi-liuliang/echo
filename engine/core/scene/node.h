@@ -116,11 +116,7 @@ namespace Echo
 		void savePropertyRecursive(void* pugiNode, Echo::Object* classPtr, const Echo::String& className);
 
 		// instance node
-		static Node* instanceNode(void* pugiNode);
 		static Node* instanceNodeTree(void* pugiNode, Node* parent);
-
-		// remember property recursive
-		static void loadPropertyRecursive(void* pugiNode, Echo::Object* classPtr, const Echo::String& className);
 
 	protected:
 		inline void		needUpdate();

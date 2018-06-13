@@ -4,14 +4,13 @@
 
 namespace Echo
 {
-	class TextureCubeRes : public Res
+	class TextureCube : public Res
 	{
-		ECHO_CLASS(TextureCubeRes, Res)
+		ECHO_RES(TextureCube, Res, ".cubetex", Res::create<TextureCube>, Res::load)
 
 	public:
-		TextureCubeRes();
-		TextureCubeRes(const ResourcePath& path);
-		virtual ~TextureCubeRes();
+		TextureCube();
+		virtual ~TextureCube();
 
 		// bind methods to script
 		static void bindMethods() {}

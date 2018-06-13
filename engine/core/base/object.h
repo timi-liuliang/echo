@@ -30,6 +30,12 @@ namespace Echo
 		bool registerProperty(const String& className, const String& propertyName, const Variant::Type type);
 
 	protected:
+		static Object* instanceObject(void* pugiNode);
+
+		// remember property recursive
+		static void loadPropertyRecursive(void* pugiNode, Echo::Object* classPtr, const Echo::String& className);
+
+	protected:
 		String			m_name;
 		PropertyInfos	m_propertys;
 	};

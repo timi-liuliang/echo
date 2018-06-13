@@ -356,16 +356,14 @@ namespace Studio
 	// show res property
 	void NodeTreePanel::showResProperty(const Echo::String& resPath)
 	{
-		m_currentEditRes = Echo::Material::create();
-
-		m_propertyHelper.clear();
-		m_propertyHelper.setHeader("Property", "Value");
-
-		Echo::Res* res = m_currentEditRes.ptr();
-		if (res)
+		m_currentEditRes =  Echo::Res::get( resPath);
+		if (m_currentEditRes)
 		{
-			showNodePropertyRecursive(res, res->getClassName());
-			m_propertyHelper.applyTo(res->getName(), m_propertyTreeView, this, SLOT(refreshPropertyToNode(const QString&, QVariant)), false);
+			m_propertyHelper.clear();
+			m_propertyHelper.setHeader("Property", "Value");
+
+			showNodePropertyRecursive( m_currentEditRes, m_currentEditRes->getClassName());
+			m_propertyHelper.applyTo(m_currentEditRes->getName(), m_propertyTreeView, this, SLOT(refreshPropertyToNode(const QString&, QVariant)), false);
 		}
 		else
 		{

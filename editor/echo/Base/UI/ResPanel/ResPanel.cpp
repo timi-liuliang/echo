@@ -89,10 +89,7 @@ namespace Studio
 			if (Echo::IO::instance()->covertFullPathToResPath(res, resPath))
 			{
 				Echo::String ext = Echo::PathUtil::GetFileExt(resPath, true);
-				if (ext == ".material")
-				{
-					NodeTreePanel::instance()->showResProperty(resPath);
-				}
+				NodeTreePanel::instance()->showResProperty(resPath);
 			}
 		}
 	}

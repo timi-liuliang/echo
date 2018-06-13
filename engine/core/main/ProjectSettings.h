@@ -12,7 +12,7 @@ namespace Echo
 	 */
 	class ProjectSettings : public Res
 	{
-		ECHO_RES(ProjectSettings, Res, ".echo");
+		ECHO_RES(ProjectSettings, Res, ".echo", Res::create<ProjectSettings>, Res::load);
 
 	public:
 		ProjectSettings();

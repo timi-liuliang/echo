@@ -23,6 +23,7 @@
 #include "OpenMPTaskMgr.h"
 #include "engine/core/script/LuaScript.h"
 #include "engine/core/render/render/ShaderProgramRes.h"
+#include "engine/core/render/TextureCube.h"
 
 #ifdef ECHO_PLATFORM_ANDROID
 #include <sys/syscall.h>
@@ -170,6 +171,7 @@ namespace Echo
 		Class::registerType<ShaderProgramRes>();
 		Class::registerType<Material>();
 		Class::registerType<LuaScript>();
+		Class::registerType<TextureCube>();
 		Class::registerType<ProjectSettings>();
 
 		// register all module class

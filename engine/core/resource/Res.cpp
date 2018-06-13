@@ -1,12 +1,14 @@
 #include "Res.h"
 #include "engine/core/log/LogManager.h"
 #include "engine/core/io/IO.h"
+#include "engine/core/util/PathUtil.h"
 #include <thirdparty/pugixml/pugixml.hpp>
 #include <thirdparty/pugixml/pugiconfig.hpp>
 
 namespace Echo
 {
 	static map<String, Res*>::type	g_ress;
+	static map<String, Res::ResFun>::type g_resFuncs;
 
 	Res::Res()
 		: m_refCount(0)
@@ -54,6 +56,16 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(Res, "Path", Variant::Type::ResourcePath, "getPath", "setPath");
 	}
 
+	// resister res
+	void Res::registerRes(const String& ext, RES_CREATE_FUNC cfun, RES_LOAD_FUNC lfun)
+	{
+		ResFun fun;
+		fun.m_cfun = cfun;
+		fun.m_lfun = lfun;
+
+		g_resFuncs[ext] = fun;
+	}
+
 	// get res
 	Res* Res::get(const ResourcePath& path)
 	{
@@ -74,6 +86,34 @@ namespace Echo
 		{
 			ECHO_DELETE_T(this, Res);
 		}
+	}
+
+	// load
+	Res* Res::load(const ResourcePath& path)
+	{
+		Res* res = get(path);
+		if (res)
+		{
+			return res;
+		}
+		else
+		{
+			MemoryReader reader(path.getPath());
+			if (reader.getSize())
+			{
+				pugi::xml_document doc;
+				if (doc.load_buffer(reader.getData<char*>(), reader.getSize()))
+				{
+					pugi::xml_node root = doc.child("res");
+					Res* resNode = ECHO_DOWN_CAST<Res*>(instanceObject(&root));
+					resNode->setPath(path);
+
+					return resNode;
+				}
+			}
+		}
+
+		return nullptr;
 	}
 
 	// save

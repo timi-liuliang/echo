@@ -14,7 +14,7 @@ namespace Echo
 	class Renderer;
 	class ShaderProgramRes : public Res
 	{
-		ECHO_RES(ShaderProgramRes, Res, ".shader")
+		ECHO_RES(ShaderProgramRes, Res, ".shader", Res::create<ShaderProgramRes>, Res::load)
 
 		typedef map<String, const SamplerState*>::type SamplerStateMap;
 		typedef vector<std::pair<String, String> >::type SeparatedSamplerArray;
