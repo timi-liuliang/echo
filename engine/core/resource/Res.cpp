@@ -80,8 +80,13 @@ namespace Echo
 		map<String, Res::ResFun>::type::iterator itfun = g_resFuncs.find(ext);
 		if (itfun != g_resFuncs.end())
 		{
-			RES_LOAD_FUNC lfunc = itfun->second.m_lfun;
-			return lfunc(path);
+			Res* res = itfun->second.m_lfun(path);
+			if (!res)
+			{
+				EchoLogError("Res::get file [%s] failed.", path.getPath().c_str());
+			}
+
+			return res;
 		}
 
 		return nullptr;

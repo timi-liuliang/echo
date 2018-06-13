@@ -156,9 +156,12 @@ namespace Studio
 		Echo::Class::getChildClasses(allRes, "Res", true);
 		for (const Echo::String& res : allRes)
 		{
-			QAction* createResAction = new QAction(this);
-			createResAction->setText(res.c_str());
-			createResMenu->addAction(createResAction);
+			if (res != ECHO_CLASS_NAME(ProjectSettings))
+			{
+				QAction* createResAction = new QAction(this);
+				createResAction->setText(res.c_str());
+				createResMenu->addAction(createResAction);
+			}
 		}
 		m_resMenu->addMenu(createResMenu);
 
