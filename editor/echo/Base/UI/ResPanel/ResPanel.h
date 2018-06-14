@@ -38,9 +38,6 @@ namespace Studio
 		// show current dir
 		void showInExporer();
 
-		// new material
-		void newMaterial();
-
 	protected:
 		// reimplement reiszeEvent function
 		virtual void resizeEvent(QResizeEvent * e);

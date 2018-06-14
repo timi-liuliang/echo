@@ -20,6 +20,9 @@ namespace Studio
 		// 获取面板实例
 		static NodeTreePanel* instance();
 
+		// 保存当前编辑资源
+		void saveCurrentEditRes();
+
 	public:
 		// 刷新结点树显示
 		void refreshNodeTreeDisplay();

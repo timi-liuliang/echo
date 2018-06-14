@@ -11,11 +11,9 @@ namespace Echo
 	ProjectSettings::ProjectSettings()
 		: m_windowWidth(1366)
 		, m_windowHeight(768)
-		, m_mainScene("", ".scene")
+		, m_launchScene("", ".scene")
 	{
-		registerProperty(ECHO_CLASS_NAME(ProjectSettings), "Window.Width", Variant::Type::Int);
-		registerProperty(ECHO_CLASS_NAME(ProjectSettings), "Window.Height", Variant::Type::Int);
-		registerProperty(ECHO_CLASS_NAME(ProjectSettings), "Game.MainScene", Variant::Type::ResourcePath);
+		
 	}
 
 	// Îö¹¹º¯Êý
@@ -27,27 +25,21 @@ namespace Echo
 	// bind methods to script
 	void ProjectSettings::bindMethods() 
 	{
+		CLASS_BIND_METHOD(ProjectSettings, getWindowWidth, DEF_METHOD("getWindowWidth"));
+		CLASS_BIND_METHOD(ProjectSettings, setWindowWidth, DEF_METHOD("setWindowWidth"));
+		CLASS_BIND_METHOD(ProjectSettings, getWindowHeight, DEF_METHOD("getWindowHeight"));
+		CLASS_BIND_METHOD(ProjectSettings, setWindowHeight, DEF_METHOD("setWindowHeight"));
+		CLASS_BIND_METHOD(ProjectSettings, getLaunchScene, DEF_METHOD("getLaunchScene"));
+		CLASS_BIND_METHOD(ProjectSettings, setLaunchScene, DEF_METHOD("setLaunchScene"));
+
+		CLASS_REGISTER_PROPERTY(ProjectSettings, "Window.Width", Variant::Type::Int, "getWindowWidth", "setWindowWidth");
+		CLASS_REGISTER_PROPERTY(ProjectSettings, "Window.Height", Variant::Type::Int, "getWindowHeight", "setWindowHeight");
+		CLASS_REGISTER_PROPERTY(ProjectSettings, "Game.LaunchScene", Variant::Type::Int, "getLaunchScene", "setLaunchScene");
 	}
 
 	// get property value
 	bool ProjectSettings::getPropertyValue(const String& propertyName, Variant& oVar)
 	{
-		if (propertyName == "Window.Width") 
-		{
-			oVar = m_windowWidth; 
-			return true; 
-		}
-		else if (propertyName == "Window.Height") 
-		{
-			oVar = m_windowHeight; 
-			return true;
-		}
-		else if (propertyName == "Game.MainScene") 
-		{
-			oVar = m_mainScene; 
-			return true;
-		}
-		
 		return false;
 	}
 }

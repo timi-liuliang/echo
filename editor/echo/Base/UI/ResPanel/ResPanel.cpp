@@ -180,28 +180,4 @@ namespace Studio
 			QDesktopServices::openUrl(openDir);
 		}		
 	}
-
-	// new material
-	void ResPanel::newMaterial()
-	{
-		for (int i = 0; i < Echo::Math::MAX_I16; i++)
-		{
-			Echo::String fileName = Echo::StringUtil::Format("NewMaterial_%d.material", i);
-			if (!Echo::PathUtil::IsFileExist(m_currentDir + fileName))
-			{
-				Echo::String resPath;
-				if (Echo::IO::instance()->covertFullPathToResPath(m_currentDir, resPath))
-				{
-					Echo::String savePath = resPath + fileName;
-					Echo::MaterialRef material = Echo::Material::create();
-					material->setPath(savePath);
-					material->save();
-
-					reslectCurrentDir();
-				}
-
-				break;
-			}
-		}
-	}
 }

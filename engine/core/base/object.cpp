@@ -77,9 +77,16 @@ namespace Echo
 		{
 			Echo::Variant var;
 			String valueStr = xmlNode->attribute(prop->m_name.c_str()).value();
-			var.fromString(prop->m_type, valueStr);
+			if (!valueStr.empty())
+			{
+				var.fromString(prop->m_type, valueStr);
 
-			Class::setPropertyValue(classPtr, prop->m_name, var);
+				Class::setPropertyValue(classPtr, prop->m_name, var);
+			}
+			else
+			{
+				EchoLogError("Property [%s] not exist. when instance Object", prop->m_name.c_str());
+			}
 		}
 	}
 }

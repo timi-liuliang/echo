@@ -372,4 +372,13 @@ namespace Studio
 			m_propertyHelper.applyTo("empty", m_propertyTreeView, this, SLOT(refreshPropertyToNode(const QString&, QVariant)), false);
 		}
 	}
+
+	// 保存当前编辑资源
+	void NodeTreePanel::saveCurrentEditRes()
+	{
+		if (m_currentEditRes && !m_currentEditRes->getPath().isEmpty())
+		{
+			m_currentEditRes->save();
+		}
+	}
 }

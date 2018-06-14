@@ -102,6 +102,7 @@ namespace Studio
 				{
 					EchoEngine::instance()->setCurrentEditNodeSavePath(resPath.c_str());
 					EchoEngine::instance()->saveCurrentEditNodeTree();
+					NodeTreePanel::instance()->saveCurrentEditRes();
 				}
 			}
 		}

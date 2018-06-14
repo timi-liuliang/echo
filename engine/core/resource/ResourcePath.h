@@ -17,6 +17,8 @@ namespace Echo
 		const String& getSupportExts() const { return m_supportExts; }
 		bool isSupportExt(const String& ext);
 
+		bool isEmpty() const { return m_path.empty(); }
+
 	private:
 		String		m_path;
 		String		m_supportExts;
