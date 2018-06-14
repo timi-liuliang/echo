@@ -92,6 +92,22 @@ namespace Echo
 		return nullptr;
 	}
 
+	// create by extension
+	ResPtr Res::create(const String& extension)
+	{
+		String ext = extension;
+		map<String, Res::ResFun>::type::iterator itfun = g_resFuncs.find(ext);
+		if (itfun != g_resFuncs.end())
+		{
+			Res* res = itfun->second.m_cfun();
+			if (res)
+				return res;	
+		}
+
+		EchoLogError("Res::create failed. Unknown extension [%s]", extension.c_str());
+		return nullptr;
+	}
+
 	// release
 	void Res::subRefCount()
 	{
