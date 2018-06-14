@@ -70,10 +70,6 @@ namespace Echo
 		else
 		{
 			pTexture->m_uploadedSize = pTexture->m_uploadedSize;
-			if (Engine::instance()->getEnableFrameProfile())
-			{
-				Engine::instance()->frameState().incrUploadTextureSizeInBytes(pTexture->m_uploadedSize);
-			}
 		}
 
 		return textureRes;

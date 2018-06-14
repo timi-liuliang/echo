@@ -1,6 +1,5 @@
 #include "RenderTargetManager.h"
 #include "Material.h"
-#include "Engine/core/main/EngineSettings.h"
 #include "Engine/core/main/Engine.h"
 #include "render/ShaderProgramRes.h"
 #include "TextureRes.h"
@@ -96,18 +95,6 @@ namespace Echo
 			m_logicHeightScale = static_cast<float>(m_logicHeight) / static_cast<float>(screenHeight);
 		}
 
-		//m_pMaterialBaseUpdate = MaterialManager::instance()->createMaterial();
-		//m_pMaterialBaseUpdate->loadFromFile("pp_UpdateRT.xml", "");
-
-		//m_pMaterialNightSight = MaterialManager::instance()->createMaterial();
-		//m_pMaterialNightSight->loadFromFile("pp_UpdateRTNightSight.xml", "");
-
-		if (Renderer::instance()->getDeviceFeatures().supportGLES30() && EngineSettingsMgr::instance()->isEnableDownsampleDepth())
-		{
-			//m_pMaterialDownsampleDepth = MaterialManager::instance()->createMaterial();
-			//m_pMaterialDownsampleDepth->loadFromFile("pp_downsample_depth.xml", "");
-		}
-
 		if( storeDefaultRenderTarget() )
 		{
 			EchoLogInfo( "RenderTargetManager::storeDefaultRenderTarget() ... succeeded" );
@@ -118,75 +105,6 @@ namespace Echo
 			return false;
 		}
 
-		if (EngineSettingsMgr::instance()->isEnableDistortion())
-		{
-			RenderTarget::Options option;
-			option.multiResolution = m_bEnableMultiResolution;
-			RenderTarget* sceneColorRT = createRenderTarget(RTI_SceneColorMap, screenWidth, screenHeight, PF_RGB8_UNORM, option);
-			if (NULL == sceneColorRT)
-			{
-				EchoLogError( "RenderTargetManager::createRenderTarget( RTI_SceneColorMap ) ... Failed" );
-				return false;
-			}
-			else
-			{
-				sceneColorRT->setResolutionRelative(true);
-			}
-		}
-
-		// 创建LDRSceneMap
-		if (EngineSettingsMgr::instance()->isInitVRMode())
-		{
-			// 如果开启vr模式，则需要评估Map尺寸
-
-			// 需要计算两只镜头的FOV
-			float NoseToPupilInMeters = 0.032f;
-			float LensSeparationInMeters = 0.0635f;
-			float eyeReliefInMeters = 0.01f;
-			float LensDiameterInMeters = 0.035f;
-			float extraEyeRotationInRadians = 0.52359879f;
-			// Limit the eye-relief to 6 mm for FOV calculations since this just tends to spread off-screen
-			// and get clamped anyways on DK1 (but in Unity it continues to spreads and causes 
-			// unnecessarily large render targets)
-			eyeReliefInMeters = Echo::Math::Max(eyeReliefInMeters, 0.006f);
-			// 左右眼
-			float left_offsetToRightInMeters = -(NoseToPupilInMeters - 0.5f * LensSeparationInMeters);
-			float right_offsetToRightInMeters = NoseToPupilInMeters - 0.5f * LensSeparationInMeters;
-
-			// Central view.
-			m_fovPort[0] = CalculateFovFromEyePosition(eyeReliefInMeters,
-				left_offsetToRightInMeters,
-				0.0f,
-				LensDiameterInMeters,
-				extraEyeRotationInRadians);
-			m_fovPort[1] = CalculateFovFromEyePosition(eyeReliefInMeters,
-				right_offsetToRightInMeters,
-				0.0f,
-				LensDiameterInMeters,
-				extraEyeRotationInRadians);
-			
-			// clamp to the screen
-			m_fovPort[0] = ClampToPhysicalScreenFov(0, m_fovPort[0]);
-			m_fovPort[1] = ClampToPhysicalScreenFov(1, m_fovPort[1]);
-
-			Echo::Vector2 left_texSize = CalculateIdealPixelSize(m_fovPort[0], 1.0f);
-			Echo::Vector2 right_texSize = CalculateIdealPixelSize(m_fovPort[1], 1.0f);
-
-			// 得到评估后的texture尺寸
-			m_vrTexSize.x = Echo::Real(left_texSize.x + right_texSize.x);
-			m_vrTexSize.y = Echo::Real((left_texSize.y + right_texSize.y) / 2.0f); 
-
-			RenderTarget::Options option;
-			option.depth = true;
-			option.multiResolution = m_bEnableMultiResolution;
-			if (NULL == createRenderTarget(RTI_LDRVRSceneColorMap, ui32(m_vrTexSize.x), ui32(m_vrTexSize.y), PF_RGBA8_UNORM, option))
-			{
-				EchoLogError("RenderTargetManager::createRenderTarget( RTI_LDRVRSceneColorMap ) ... Failed");
-				return false;
-			}
-
-		}
-//		else
 		{
 			RenderTarget::Options option;
 			option.depth = true;
@@ -200,16 +118,6 @@ namespace Echo
 		}
 
 
-		if(Engine::instance()->getEnableFilterAdditional())
-		{
-			m_bEnableFilter = true;
-
-			m_pMaterialFilterUpdate = EchoNew(ShaderProgramRes);
-			m_pMaterialFilterUpdate->loadFromFile("pp_FilterAdditional.xml", "");
-
-			changeFilterBlendmapName("FilterAdditional.tga");
-		}
-
 		if( restoreDefaultRenderTarget() )
 		{
 			EchoLogInfo( "RenderTargetManager::restoreDefaultRenderTarget() succeeded" );
@@ -218,15 +126,6 @@ namespace Echo
 		{
 			EchoLogInfo( "RenderTargetManager::restoreDefaultRenderTarget() Failed !" );
 			return false;
-		}
-
-		if (Renderer::instance()->getDeviceFeatures().supportGLES30() && EngineSettingsMgr::instance()->isEnableDownsampleDepth())
-		{
-			RenderTarget::Options halfResDepthOption;
-			halfResDepthOption.depth = true;
-			RenderTarget* halfResDepthTarget = createRenderTarget(RTI_HalfResDepth, screenWidth / 2, screenHeight / 2, PF_RGB8_UNORM, halfResDepthOption);
-			halfResDepthTarget->setScaleFactor(0.5f);
-			halfResDepthTarget->setResolutionRelative(true);
 		}
 
 		if( !createScreenAlignedQuad_ext() )
@@ -565,13 +464,6 @@ namespace Echo
 				case RTI_DefaultBackBuffer: pRenderTarget->onResize(_width, _height); break;
 				case RTI_LDRSceneColorMap:
 					pRenderTarget->onResize(ui32(_width * m_logicWidthScale), ui32(_height * m_logicHeightScale));
-					break;
-				case RTI_HalfResDepth:
-					pRenderTarget->onResize(ui32(_width * m_logicWidthScale * pRenderTarget->scaleFactor()), ui32(_height * m_logicHeightScale * pRenderTarget->scaleFactor()));
-					break;
-				case RTI_LDRVRSceneColorMap:
-					if (EngineSettingsMgr::instance()->isInitVRMode())
-						pRenderTarget->onResize(ui32(m_vrTexSize.x*m_logicWidthScale), ui32(m_vrTexSize.y*m_logicHeightScale));
 					break;
 				default:
 					if (pRenderTarget->resolutionRelative())

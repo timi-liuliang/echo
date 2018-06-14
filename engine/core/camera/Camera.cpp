@@ -4,7 +4,6 @@
 #include "engine/core/render/render/Viewport.h"
 #include "engine/core/render/RenderTargetManager.h"
 #include "Engine/core/Geom/Ray.h"
-#include "engine/core/main/EngineSettings.h"
 
 namespace Echo
 {

@@ -11,7 +11,6 @@
 #include "RenderWindow.h"
 #include <Render/Renderer.h>
 #include <Engine/modules/Audio/FMODStudio/FSAudioManager.h>
-#include <Engine/core/main/EngineTimeController.h>
 #include <string>
 #include <Psapi.h>
 #include "studio.h"
@@ -117,17 +116,12 @@ namespace Studio
 	// 每帧渲染
 	void EchoEngine::Render(unsigned int elapsedTime, bool isRenderWindowVisible)
 	{
-		// 时间控制
-		Echo::EngineTimeController::instance()->update(elapsedTime * 0.001f);
-		elapsedTime = static_cast<Echo::ui32>(elapsedTime * Echo::EngineTimeController::instance()->getSpeed());
-
 		if (!m_isManualUpdateEngine)
 		{
 			if (m_currentEditNode)
 			{
 				m_currentEditNode->update( elapsedTime, true);
 			}
-
 
 			if (m_isShowFps)
 			{

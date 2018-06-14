@@ -28,7 +28,6 @@ namespace Echo
 
 		// 下面三条定义顺序不能变（深度缓冲复用需要保证resize顺序）
 		RTI_FinalLDRBuffer,
-		RTI_HalfResDepth,
 		// 多PassGlow
 		RTI_Glow,
 
@@ -38,25 +37,6 @@ namespace Echo
 		RTI_POSTIMAGEEFFECT_BEGIN,
 		RTI_POSTIMAGEEFFECT_END = RTI_POSTIMAGEEFFECT_BEGIN + 50,
 		// Post Image Effect end
-
-		// UI Actor
-		RTI_UI_ACTOR,
-
-		// GUI RENDER TARGET BEGIN
-		RTI_GUI_BEGIN,
-		RTI_GUI_END = RTI_GUI_BEGIN + MAX_GUI_RT_COUNT,
-		// GUI RENDER TARGET END
-
-		RTI_LIGHTPROBE_BEGIN = RTI_GUI_END + 10,
-
-		RTI_LIGHTPROBE_END = (MAX_LIGHTPROBE_COUNT * 6),
-
-#ifdef ECHO_EDITOR_MODE
-		RTI_IBLSPHERE22D,    //天空球展开成2D平面
-		RTI_IBLVBlur,
-		RTI_IBLHBlur,
-#endif
-
 
 		RTI_End
 	};

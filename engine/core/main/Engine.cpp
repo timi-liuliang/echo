@@ -12,7 +12,6 @@
 #include "Engine/core/Render/Material.h"
 #include "ProjectSettings.h"
 #include "Engine/modules/Audio/FMODStudio/FSAudioManager.h"
-#include "EngineTimeController.h"
 #include "engine/core/script/lua/LuaEx.h"
 #include "engine/core/script/lua/register_core_to_lua.cxx"
 #include "engine/core/script/lua/LuaBinder.h"
@@ -20,7 +19,6 @@
 #include "module.h"
 #include "engine/core/render/renderstage/RenderStage.h"
 #include "engine/core/render/gles/GLES2.h"
-#include "OpenMPTaskMgr.h"
 #include "engine/core/script/LuaScript.h"
 #include "engine/core/render/render/ShaderProgramRes.h"
 #include "engine/core/render/TextureCube.h"
@@ -43,17 +41,11 @@ namespace Echo
 	// 构造函数
 	Engine::Engine()
 		: m_isInited(false)
-		, m_pAssetMgr(NULL)
 		, m_bRendererInited(NULL)
 		, m_currentTime(0)
-		, m_enableBloom(false)
-		, m_enableFilterAdditional(false)
 		, m_framebufferScale(1.0f)
 		, m_renderer(NULL)
 		, m_projectFile(NULL)
-#ifdef ECHO_PROFILER
-		, m_profilerSev( nullptr)
-#endif
 	{
 #ifdef ECHO_PLATFORM_WINDOWS
 		// 解决Windows VS2013 Thread join死锁BUG
@@ -61,7 +53,6 @@ namespace Echo
 #endif
 		MemoryManager::instance();
 		Time::instance();
-		OpenMPTaskMgr::instance();
 	}
 
 	Engine::~Engine()
@@ -87,7 +78,6 @@ namespace Echo
 	bool Engine::initialize(const Config& cfg)
 	{
 		m_cfg = cfg;
-		m_pAssetMgr = cfg.pAssetMgr;
 
 		// check root path
 		setlocale(LC_ALL, "zh_CN.UTF-8");
@@ -109,10 +99,6 @@ namespace Echo
 			return false;
 		}
 
-#if !defined(NO_THEORA_PLAYER)
-		// 创建视频播放单例
-		EchoNew( VideoPlay);
-#endif
 		// 加载项目文件
 		loadProject(cfg.projectFile.c_str());
 
@@ -127,8 +113,6 @@ namespace Echo
 		// 音频管理器
 		FSAudioManager::instance()->init(cfg.m_AudiomaxVoribsCodecs,cfg.m_AudioLoadDecompresse);
 		loadAllBankFile();
-
-		setEnableFrameProfile(true);
 
 		// init render
 		Renderer* renderer = nullptr;
@@ -220,8 +204,6 @@ namespace Echo
 
 		EchoLogInfo("Init Renderer success.");
 
-		m_settingsMgr.Apply(m_cfg.engineCfgFile);
-
 		// 初始化渲染目标管理器
 		if (!RenderTargetManager::instance()->initialize())
 		{
@@ -306,18 +288,10 @@ namespace Echo
 		// 音频管理器
 		FSAudioManager::instance()->release();
 
-		EchoSafeDeleteInstance(FSAudioManager);
-		
+		EchoSafeDeleteInstance(FSAudioManager);	
 		EchoSafeDeleteInstance(ImageCodecMgr);
-		EchoSafeDeleteInstance(OpenMPTaskMgr);
-
 		EchoSafeDeleteInstance(IO);
 		EchoSafeDeleteInstance(Time);
-
-		// 外部模块释放
-		//for (const ExternalMgr& mgr : m_cfg.m_externalMgrs)
-		//	mgr.m_release();
-		releasePlugins();
 		
 		EchoLogInfo("Echo Engine has been shutdown.");
 		
@@ -333,10 +307,6 @@ namespace Echo
 
 		EchoSafeDeleteInstance(LogManager);
 		EchoSafeDelete(m_projectFile, ProjectSettings);
-#ifdef ECHO_PROFILER
-#endif
-		// 销毁时间控制器
-		EngineTimeController::destroy();
 		LuaBinder::destroy();
 		luaex::LuaEx::instance()->destroy();
 		MemoryManager::destroyInstance();
@@ -366,11 +336,6 @@ namespace Echo
 		cputex = tex;
 	}
 
-	void* Engine::getAssetManager() const
-	{
-		return m_pAssetMgr;
-	}
-
 	bool Engine::isRendererInited() const
 	{
 		return m_bRendererInited;
@@ -387,35 +352,11 @@ namespace Echo
 		elapsedTime = Math::Clamp( elapsedTime, 0, 1000);
 		m_frameTime = elapsedTime * 0.001f;
 
-#ifdef ECHO_PROFILER
-#endif
 		m_currentTime = Time::instance()->getMilliseconds();
 
-
-#if !defined(NO_THEORA_PLAYER)
-		// 视频更新
-		VideoPlay::Instance()->tick(elapsedTime);
-#endif
-
 		// 声音更新
-		auto t0 = EngineTimeController::instance()->getSpeed(EngineTimeController::ET_SOUND);
-		auto t1 = EngineTimeController::instance()->getSpeed();
-		FSAudioManager::instance()->tick(static_cast<ui32>(elapsedTime * t0 / t1));
-
-		//
-		auto t = EngineSettingsMgr::instance()->isSlowDownExclusiveUI() ? m_frameTime : elapsedTime;
-
+		FSAudioManager::instance()->tick(static_cast<ui32>(elapsedTime));
 		NodeTree::instance()->update(elapsedTime*0.001f);
-
-		// 执行动画更新
-		OpenMPTaskMgr::instance()->execTasks(OpenMPTaskMgr::TT_AnimationUpdate);
-		OpenMPTaskMgr::instance()->waitForAnimationUpdateComplete();
-
-		// 外部模块更新, 目前只有 CatUI
-		for (const ExternalMgr& mgr : m_cfg.m_externalMgrs)
-		{
-			mgr.m_tick(elapsedTime);
-		}
 
 		// 渲染
 		render();
@@ -424,36 +365,11 @@ namespace Echo
 		Renderer::instance()->present();
 	}
 
-	void Engine::changeFilterAdditionalMap(const String& mapName)
-	{
-		if (m_enableFilterAdditional)
-			RenderTargetManager::instance()->changeFilterBlendmapName(mapName);
-	}
-
 	// 渲染场景
 	bool Engine::render()
 	{
-		// 外部模块更新, 目前只有 CatUI
-		for (const ExternalMgr& mgr : m_cfg.m_externalMgrs)
-		{
-			mgr.m_render();
-		}
-
 		RenderStage::instance()->process();
 
 		return true;
-	}
-
-	void Engine::releasePlugins()
-	{
-		// 外部模块释放
-		for (ExternalMgr& mgr : m_cfg.m_externalMgrs)
-		{
-			if (!mgr.m_isReleased)
-			{
-				mgr.m_release();
-				mgr.m_isReleased = true;
-			}
-		}
 	}
 }
