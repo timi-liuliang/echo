@@ -110,16 +110,29 @@ namespace Echo
 	}
 
 	// get propertys
-	const PropertyInfos& Class::getPropertys(const String& className)
+	ui32 Class::getPropertys(const String& className, Object* classPtr, PropertyInfos& propertys)
 	{
+		// static
 		auto it = g_classInfos->find(className);
 		if (it != g_classInfos->end())
 		{
-			return it->second->getPropertys();
+			for (PropertyInfo* info : it->second->getPropertys())
+			{
+				propertys.push_back(info);
+			}
 		}
 
-		static PropertyInfos invalid;
-		return invalid;
+		// dynamic
+		const PropertyInfos& dynamicPropertys = classPtr->getPropertys();
+		for (PropertyInfo* pi : dynamicPropertys)
+		{
+			if (((PropertyInfoDynamic*)pi)->m_className == className)
+			{
+				propertys.push_back(pi);
+			}
+		}
+
+		return propertys.size();
 	}
 
 	// get property

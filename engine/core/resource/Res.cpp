@@ -179,7 +179,8 @@ namespace Echo
 				savePropertyRecursive(pugiNode, classPtr, parentClassName);
 		}
 
-		const Echo::PropertyInfos& propertys = Echo::Class::getPropertys(className);
+		Echo::PropertyInfos propertys;
+		Echo::Class::getPropertys(className, classPtr, propertys);
 		for (const Echo::PropertyInfo* prop : propertys)
 		{
 			Echo::Variant var;

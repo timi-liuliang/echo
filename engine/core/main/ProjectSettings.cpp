@@ -13,7 +13,7 @@ namespace Echo
 		registerProperty(ECHO_CLASS_NAME(ProjectSettings), "Window.Width", Variant::Type::Int);
 		registerProperty(ECHO_CLASS_NAME(ProjectSettings), "Window.Height", Variant::Type::Int);
 
-		//registerProperty(ECHO_CLASS_NAME(ProjectSettings), "Game.MainScene", Variant::Type::ResourcePath);
+		registerProperty(ECHO_CLASS_NAME(ProjectSettings), "Game.MainScene", Variant::Type::ResourcePath);
 	}
 
 	// Îö¹¹º¯Êý
