@@ -136,12 +136,16 @@ namespace Echo
 	}
 
 	// get property
-	PropertyInfo* Class::getProperty(const String& className, const String& propertyName)
+	PropertyInfo* Class::getProperty(const String& className, Object* classPtr, const String& propertyName)
 	{
-		auto it = g_classInfos->find(className);
-		if (it != g_classInfos->end())
+		PropertyInfos propertys;
+		getPropertys(className, classPtr, propertys);
+		for (PropertyInfo* p : propertys)
 		{
-			return it->second->getProperty(propertyName);
+			if (p->m_name == propertyName)
+			{
+				return p;
+			}
 		}
 
 		return nullptr;
@@ -153,26 +157,11 @@ namespace Echo
 		String className = classPtr->getClassName();
 		do
 		{
-			PropertyInfo* pi = getProperty(className, propertyName);
+			PropertyInfo* pi = getProperty(className, classPtr, propertyName);
 			if (pi)
 			{
-				switch (pi->m_type)
-				{
-				case PropertyInfo::Type::Static:
-					{
-						Variant::CallError error;
-						oVar = ((PropertyInfoStatic*)pi)->m_getterMethod->call(classPtr, nullptr, 0, error);
-
-						return true;
-					}
-				case PropertyInfo::Type::Dynamic:
-					{
-						PropertyInfoDynamic* dpi = (PropertyInfoDynamic*)pi;
-
-						return true;
-					}
-				}
-	
+				if (pi->getPropertyValue(classPtr, propertyName, oVar))
+					return true;
 			}
 
 		} while (getParentClass(className, className));
@@ -186,7 +175,7 @@ namespace Echo
 		String className = classPtr->getClassName();
 		do
 		{
-			PropertyInfo* pi = getProperty(className, propertyName);
+			PropertyInfo* pi = getProperty(className, classPtr, propertyName);
 			if (pi)
 				return pi->m_type;
 
@@ -202,7 +191,7 @@ namespace Echo
 		String className = classPtr->getClassName();
 		do
 		{
-			PropertyInfo* pi = getProperty(className, propertyName);
+			PropertyInfo* pi = getProperty(className, classPtr, propertyName);
 			if (pi)
 			{
 				switch (pi->m_infoType)

@@ -5,6 +5,7 @@
 
 namespace Echo
 {
+	class Object;
 	struct PropertyInfo
 	{
 		String			m_name;
@@ -18,6 +19,9 @@ namespace Echo
 
 		PropertyInfo(Type type) : m_infoType(type) {}
 		virtual ~PropertyInfo() {}
+
+		// get property value
+		virtual bool getPropertyValue(Object* classPtr, const String& propertyName, Variant& oVar) = 0;
 	};
 	typedef vector<PropertyInfo*>::type PropertyInfos;
 
@@ -31,6 +35,9 @@ namespace Echo
 		PropertyInfoStatic()
 			: PropertyInfo(Type::Static)
 		{}
+
+		// get property value
+		virtual bool getPropertyValue(Object* classPtr, const String& propertyName, Variant& oVar);
 	};
 
 	struct PropertyInfoDynamic : public PropertyInfo
@@ -40,5 +47,8 @@ namespace Echo
 		PropertyInfoDynamic()
 			: PropertyInfo(Type::Dynamic)
 		{}
+
+		// get property value
+		virtual bool getPropertyValue(Object* classPtr, const String& propertyName, Variant& oVar);
 	};
 }

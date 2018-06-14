@@ -29,6 +29,9 @@ namespace Echo
 		// register property
 		bool registerProperty(const String& className, const String& propertyName, const Variant::Type type);
 
+		// get property value
+		virtual bool getPropertyValue(const String& propertyName, Variant& oVar) { return false; }
+
 	protected:
 		static Object* instanceObject(void* pugiNode);
 

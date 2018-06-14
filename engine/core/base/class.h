@@ -142,7 +142,7 @@ namespace Echo
 		static ui32 getPropertys(const String& className, Object* classPtr, PropertyInfos& propertys);
 
 		// get property
-		static PropertyInfo* getProperty(const String& className, const String& propertyName);
+		static PropertyInfo* getProperty(const String& className, Object* classPtr, const String& propertyName);
 
 		// get property value
 		static bool getPropertyValue(Object* classPtr, const String& propertyName, Variant& oVar);

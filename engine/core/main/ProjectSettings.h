@@ -18,6 +18,13 @@ namespace Echo
 		ProjectSettings();
 		~ProjectSettings();
 
+	protected:
+		// get property value
+		virtual bool getPropertyValue(const String& propertyName, Variant& oVar);
+
 	private:
+		i32				m_windowWidth;
+		i32				m_windowHeight;
+		ResourcePath	m_mainScene;
 	};
 }
