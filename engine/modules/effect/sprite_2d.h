@@ -27,9 +27,6 @@ namespace Echo
 		Sprite2D();
 		virtual ~Sprite2D();
 
-		// bind class methods to script
-		static void bindMethods();
-
 		// texture res path
 		void setTextureRes(const ResourcePath& path);
 		const ResourcePath& getTextureRes() { return m_textureRes; }

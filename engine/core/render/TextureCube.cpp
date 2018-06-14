@@ -12,4 +12,9 @@ namespace Echo
 	{
 
 	}
+
+	// bind methods to script
+	void TextureCube::bindMethods() 
+	{
+	}
 }

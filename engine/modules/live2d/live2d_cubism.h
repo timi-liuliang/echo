@@ -70,9 +70,6 @@ namespace Echo
 		Live2dCubism();
 		virtual ~Live2dCubism();
 
-		// bind class methods to script
-		static void bindMethods();
-
 		// set moc
 		void setMoc(const ResourcePath& res);
 

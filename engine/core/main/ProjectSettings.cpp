@@ -21,4 +21,9 @@ namespace Echo
 	{
 
 	}
+
+	// bind methods to script
+	void ProjectSettings::bindMethods() 
+	{
+	}
 }

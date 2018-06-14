@@ -34,9 +34,6 @@ namespace Echo
 		// create by extension
 		static ResRef<Res> create(const String& extension);
 
-		// bind methods to script
-		static void bindMethods();
-
 		// add ref count
 		void addRefCount() { m_refCount++; }
 
@@ -85,7 +82,9 @@ public:																				\
 	static void initClassInfo()														\
 	{																				\
 		static Echo::ObjectFactoryT<m_class> G_OBJECT_FACTORY(#m_class, #m_parent); \
-		Echo::Res::registerRes(extension, CREATE_FUNC, LOAD_FUNC);						\
+		Echo::Res::registerRes(extension, CREATE_FUNC, LOAD_FUNC);					\
 	}																				\
+																					\
+	static void bindMethods();														\
 																					\
 private:		

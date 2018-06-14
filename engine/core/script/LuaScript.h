@@ -9,6 +9,5 @@ namespace Echo
 		ECHO_RES(LuaScript, Res, ".lua", Res::create<LuaScript>, Res::load);
 
 	public:
-
 	};
 }

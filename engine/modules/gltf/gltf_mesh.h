@@ -16,9 +16,6 @@ namespace Echo
 		GltfMesh();
 		virtual ~GltfMesh();
 
-		// bind class methods to script
-		static void bindMethods();
-
 		// set gltf resource
 		const ResourcePath& getGltfRes() { return m_assetPath; }
 		void setGltfRes(const ResourcePath& path);

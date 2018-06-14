@@ -58,9 +58,6 @@ namespace Echo
 		Material(const ResourcePath& path);
 		~Material();
 
-		// bind methods to script
-		static void bindMethods();
-
 		// create a material instance
 		static Material* create();
 

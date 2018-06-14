@@ -21,9 +21,6 @@ namespace Echo
 		GltfImageBasedLight();
 		virtual ~GltfImageBasedLight();
 
-		// bind class methods to script
-		static void bindMethods();
-
 		static void test();
 
 		// get brdfLUT texture

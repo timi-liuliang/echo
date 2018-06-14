@@ -22,9 +22,6 @@ namespace Echo
 		Spine();
 		virtual ~Spine();
 
-		// bind class methods to script
-		static void bindMethods();
-
 		// set spin
 		void setSpin(const ResourcePath& res);
 

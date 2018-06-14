@@ -12,9 +12,6 @@ namespace Echo
 		TextureCube();
 		virtual ~TextureCube();
 
-		// bind methods to script
-		static void bindMethods() {}
-
 	private:
 		ResourcePath	m_cubeDiffuseTextureNames[6];
 	};

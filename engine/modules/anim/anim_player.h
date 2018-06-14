@@ -14,9 +14,6 @@ namespace Echo
 		AnimPlayer();
 		virtual ~AnimPlayer();
 
-		// bind class methods to script
-		static void bindMethods();
-
 		// get anim data
 		const Base64String& getAnimData() const { return m_animData; }
 

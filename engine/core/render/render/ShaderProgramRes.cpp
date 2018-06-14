@@ -32,6 +32,11 @@ namespace Echo
 		free();
 	}
 
+	// bind methods to script
+	void ShaderProgramRes::bindMethods()
+	{
+	}
+
 	void ShaderProgramRes::free()
 	{
 		EchoSafeDelete(m_pBlendState, BlendState);

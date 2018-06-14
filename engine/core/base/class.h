@@ -26,7 +26,15 @@ namespace Echo
 		// register property
 		void registerProperty(PropertyInfo* property)
 		{
-			m_classInfo.m_propertyInfos.push_back(property);
+			PropertyInfo* pi = getProperty(property->m_name);
+			if (!pi)
+			{
+				m_classInfo.m_propertyInfos.push_back(property);
+			}
+			else
+			{
+				EchoLogError("property [%s] already exist", property->m_name.c_str());
+			}
 		}
 
 		// register method
@@ -172,6 +180,8 @@ public:																				\
 	{																				\
 		static Echo::ObjectFactoryT<m_class> G_OBJECT_FACTORY(#m_class, #m_parent);	\
 	}																				\
+																					\
+	static void bindMethods();														\
 																					\
 private:															
 
