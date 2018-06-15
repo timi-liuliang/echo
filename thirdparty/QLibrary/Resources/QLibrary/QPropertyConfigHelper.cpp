@@ -138,6 +138,7 @@ namespace QT_UI
 		Echo::String widgetStr;
 		switch (widget)
 		{
+		case WT_Int:			widgetStr = "Int";			 break;
 		case WT_Vector3:		widgetStr = "Vector3";		 break;
 		case WT_LineEdit:		widgetStr = "LineEdit";		 break;
 		case WT_CheckBox:		widgetStr = "CheckBox";		 break;

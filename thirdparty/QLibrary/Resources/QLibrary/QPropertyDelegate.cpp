@@ -6,6 +6,7 @@
 #include "QFileSelect.h"
 #include "QCameraProperty.h"
 #include "QResSelect.h"
+#include "QIntEditor.h"
 #include "QVector3Editor.h"
 #include "QColorSelect.h"
 #include "QCheckBoxList.h"
@@ -190,6 +191,10 @@ namespace QT_UI
 			}
 			return pWidget;
 		}
+		else if (widgetType == "Int")
+		{
+			return new QIntEditor( m_model, propertyName, parent);
+		}
 		else if(widgetType == "Vector3")
 		{
 			return new QVector3Editor(m_model, propertyName, parent);
@@ -284,6 +289,11 @@ namespace QT_UI
 			{
 				QComboBox* widget = qobject_cast<QComboBox*>(editor);
 				widget->setCurrentText( value.toString());
+			}
+			else if (widgetType == "Int")
+			{
+				QIntEditor* widget = qobject_cast<QIntEditor*>(editor);
+				widget->setValue(value.toString());
 			}
 			else if(widgetType == "Vector3")
 			{

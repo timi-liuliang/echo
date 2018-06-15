@@ -281,19 +281,20 @@ namespace Studio
 		}
 
 		// show self property
-		m_propertyHelper.beginMenu(className.c_str());
+		Echo::PropertyInfos propertys;
+		Echo::Class::getPropertys(className, classPtr, propertys);
+		if (propertys.size())
 		{
-			Echo::PropertyInfos propertys;
-			Echo::Class::getPropertys(className, classPtr, propertys);
+			m_propertyHelper.beginMenu(className.c_str());
 			for (const Echo::PropertyInfo* prop : propertys)
 			{
 				Echo::Variant var;
-				Echo::Class::getPropertyValue( classPtr, prop->m_name, var);
+				Echo::Class::getPropertyValue(classPtr, prop->m_name, var);
 
-				showPropertyByVariant( prop->m_name, var);
+				showPropertyByVariant(prop->m_name, var);
 			}
+			m_propertyHelper.endMenu();
 		}
-		m_propertyHelper.endMenu();
 	}
 
 	// 递归显示资源属性
@@ -325,6 +326,7 @@ namespace Studio
 	{
 		switch (var.getType())
 		{
+		case Echo::Variant::Type::Int:			m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_Int); break;
 		case Echo::Variant::Type::String:		m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_None); break;
 		case Echo::Variant::Type::Vector3:		m_propertyHelper.addItem(name.c_str(), var.toVector3(), QT_UI::WT_Vector3); break;
 		case Echo::Variant::Type::ResourcePath:	m_propertyHelper.addItem(name.c_str(), var.toResPath().getPath(), QT_UI::WT_AssetsSelect, var.toResPath().getSupportExts().c_str());break;

@@ -52,8 +52,6 @@ namespace Echo
 	{
 		CLASS_BIND_METHOD(Res, getPath, DEF_METHOD("getPath"));
 		CLASS_BIND_METHOD(Res, setPath, DEF_METHOD("setPath"));
-
-		CLASS_REGISTER_PROPERTY(Res, "Path", Variant::Type::ResourcePath, "getPath", "setPath");
 	}
 
 	// resister res

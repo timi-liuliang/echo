@@ -70,6 +70,8 @@ namespace Echo
 	Material::Material()
 		: Res(ResourcePath("", ".material"))
 		, m_shaderPath("", ".shader")
+		, m_shaderProgram(NULL)
+		, m_officialMaterialContent(nullptr)
 	{
 
 	}

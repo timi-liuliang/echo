@@ -10,6 +10,7 @@ namespace QT_UI
 	enum WidgetType
 	{
 		WT_None,		// ¿Õ£¬²»¿É±à¼­
+		WT_Int,
 		WT_Vector3,
 		WT_LineEdit,
 		WT_CheckBox,
