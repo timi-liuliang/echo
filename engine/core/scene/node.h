@@ -109,9 +109,6 @@ namespace Echo
 		// save xml recursive
 		void saveXml(void* pugiNode, Node* node);
 
-		// remember property recursive
-		void savePropertyRecursive(void* pugiNode, Echo::Object* classPtr, const Echo::String& className);
-
 		// instance node
 		static Node* instanceNodeTree(void* pugiNode, Node* parent);
 

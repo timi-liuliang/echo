@@ -85,8 +85,34 @@ namespace Echo
 			}
 			else
 			{
-				EchoLogError("Property [%s] not exist. when instance Object", prop->m_name.c_str());
+				EchoLogInfo("Property [%s] not exist. when instance Object", prop->m_name.c_str());
 			}
+		}
+	}
+
+	// remember property recursive
+	void Object::savePropertyRecursive(void* pugiNode, Echo::Object* classPtr, const Echo::String& className)
+	{
+		pugi::xml_node* xmlNode = (pugi::xml_node*)pugiNode;
+
+		// save parent property first
+		Echo::String parentClassName;
+		if (Echo::Class::getParentClass(parentClassName, className))
+		{
+			// don't display property of object
+			if (parentClassName != "Object")
+				savePropertyRecursive(pugiNode, classPtr, parentClassName);
+		}
+
+		Echo::PropertyInfos propertys;
+		Echo::Class::getPropertys(className, classPtr, propertys);
+		for (Echo::PropertyInfo* prop : propertys)
+		{
+			Echo::Variant var;
+			Echo::Class::getPropertyValue(classPtr, prop->m_name, var);
+			Echo::String varStr = var.toString();
+
+			xmlNode->append_attribute(prop->m_name.c_str()).set_value(varStr.c_str());
 		}
 	}
 }

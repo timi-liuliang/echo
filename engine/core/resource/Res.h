@@ -60,9 +60,6 @@ namespace Echo
 		// load
 		static Res* load(const ResourcePath& path);
 
-		// save all property
-		void savePropertyRecursive(void* pugiNode, Echo::Object* classPtr, const Echo::String& className);
-
 	protected:
 		int								m_refCount;
 		ResourcePath					m_path;

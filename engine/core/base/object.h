@@ -38,6 +38,9 @@ namespace Echo
 		// remember property recursive
 		static void loadPropertyRecursive(void* pugiNode, Echo::Object* classPtr, const Echo::String& className);
 
+		// remember property recursive
+		static void savePropertyRecursive(void* pugiNode, Echo::Object* classPtr, const Echo::String& className);
+
 	protected:
 		String			m_name;
 		PropertyInfos	m_propertys;

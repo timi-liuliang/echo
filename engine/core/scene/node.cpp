@@ -517,32 +517,6 @@ namespace Echo
 		}
 	}
 
-	// remember property recursive
-	void Node::savePropertyRecursive(void* pugiNode, Echo::Object* classPtr, const Echo::String& className)
-	{
-		pugi::xml_node* xmlNode = (pugi::xml_node*)pugiNode;
-
-		// save parent property first
-		Echo::String parentClassName;
-		if (Echo::Class::getParentClass(parentClassName, className))
-		{
-			// don't display property of object
-			if (parentClassName != "Object")
-				savePropertyRecursive( pugiNode, classPtr, parentClassName);
-		}
-
-		Echo::PropertyInfos propertys;
-		Echo::Class::getPropertys(className, classPtr, propertys);
-		for ( Echo::PropertyInfo* prop : propertys)
-		{
-			Echo::Variant var;
-			Echo::Class::getPropertyValue(classPtr, prop->m_name, var);
-			Echo::String varStr = var.toString();
-
-			xmlNode->append_attribute(prop->m_name.c_str()).set_value(varStr.c_str());
-		}
-	}
-
 	// load
 	Node* Node::load(const String& path)
 	{
