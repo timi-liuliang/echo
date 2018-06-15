@@ -47,6 +47,7 @@ namespace Studio
 		// connect
 		QT_UI::QResSelect::setOpenFileDialogFunction(ResChooseDialog::getExistingFile);
 
+		EchoAssert(!g_inst);
 		g_inst = this;
 	}
 
@@ -92,20 +93,22 @@ namespace Studio
 	void MainWindow::onSaveProject()
 	{
 		// if path isn't exist. choose a save directory
-		if (EchoEngine::instance()->getCurrentEditNodeSavePath().empty())
+		if (EchoEngine::instance()->getCurrentEditNode() && EchoEngine::instance()->getCurrentEditNodeSavePath().empty())
 		{
 			Echo::String savePath = PathChooseDialog::getExistingPathName(this, ".scene", "Save").toStdString().c_str();
 			if (!savePath.empty() && !Echo::PathUtil::IsDir(savePath))
 			{
 				Echo::String resPath;
 				if (Echo::IO::instance()->covertFullPathToResPath(savePath, resPath))
-				{
 					EchoEngine::instance()->setCurrentEditNodeSavePath(resPath.c_str());
-					EchoEngine::instance()->saveCurrentEditNodeTree();
-					NodeTreePanel::instance()->saveCurrentEditRes();
-				}
 			}
 		}
+
+		// save current edit node
+		EchoEngine::instance()->saveCurrentEditNodeTree();
+
+		// save current edit res
+		m_scenePanel->saveCurrentEditRes();
 		
 		// refresh respanel display
 		m_resPanel->reslectCurrentDir();

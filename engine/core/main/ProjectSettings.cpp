@@ -34,7 +34,7 @@ namespace Echo
 
 		CLASS_REGISTER_PROPERTY(ProjectSettings, "Window.Width", Variant::Type::Int, "getWindowWidth", "setWindowWidth");
 		CLASS_REGISTER_PROPERTY(ProjectSettings, "Window.Height", Variant::Type::Int, "getWindowHeight", "setWindowHeight");
-		CLASS_REGISTER_PROPERTY(ProjectSettings, "Game.LaunchScene", Variant::Type::Int, "getLaunchScene", "setLaunchScene");
+		CLASS_REGISTER_PROPERTY(ProjectSettings, "Game.LaunchScene", Variant::Type::ResourcePath, "getLaunchScene", "setLaunchScene");
 	}
 
 	// get property value

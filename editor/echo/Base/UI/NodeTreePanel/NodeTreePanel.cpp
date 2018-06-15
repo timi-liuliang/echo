@@ -14,6 +14,7 @@ namespace Studio
 		: QDockWidget( parent)
 		, m_newNodeDialog(nullptr)
 		, m_nodeTreeMenu(nullptr)
+		, m_currentEditNode(nullptr)
 	{
 		EchoAssert(!g_inst);
 		g_inst = this;
@@ -23,8 +24,8 @@ namespace Studio
 		QObject::connect(m_newNodeButton,  SIGNAL(clicked()), this, SLOT(showNewNodeDialog()));
 		QObject::connect(m_actionAddNode,  SIGNAL(triggered()), this, SLOT(showNewNodeDialog()));
 		QObject::connect(m_actionImportGltfScene, SIGNAL(triggered()), this, SLOT(importGltfScene()));
-		QObject::connect(m_nodeTreeWidget, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(showSelectedNodeProperty()));
-		QObject::connect(m_nodeTreeWidget, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)), this, SLOT(showSelectedNodeProperty()));
+		QObject::connect(m_nodeTreeWidget, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(onSelectNode()));
+		QObject::connect(m_nodeTreeWidget, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)), this, SLOT(onSelectNode()));
 		QObject::connect(m_nodeTreeWidget, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, SLOT(onChangedNodeName(QTreeWidgetItem*)));
 		QObject::connect(m_nodeTreeWidget, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showMenu(const QPoint&)));
 
@@ -104,6 +105,12 @@ namespace Studio
 		return nullptr;
 	}
 
+	// 获取当前编辑对象
+	Echo::Object* NodeTreePanel::getCurrentEditObject()
+	{
+		return m_currentEditNode ? static_cast<Echo::Object*>(m_currentEditNode) : static_cast<Echo::Object*>(m_currentEditRes.ptr());
+	}
+
 	void NodeTreePanel::addNode(Echo::Node* node)
 	{
 		if (m_nodeTreeWidget->invisibleRootItem()->childCount() == 0)
@@ -126,7 +133,7 @@ namespace Studio
 		}
 
 		// show property
-		showSelectedNodeProperty();
+		onSelectNode();
 	}
 
 	// node tree widget show menu
@@ -190,7 +197,7 @@ namespace Studio
 		}
 
 		// update property panel display
-		showSelectedNodeProperty();
+		onSelectNode();
 	}
 
 	// on trigger rename node
@@ -251,16 +258,16 @@ namespace Studio
 	}
 
 	// 显示当前选中节点属性
-	void NodeTreePanel::showSelectedNodeProperty()
+	void NodeTreePanel::showSelectedObjectProperty()
 	{
 		m_propertyHelper.clear();
 		m_propertyHelper.setHeader("Property", "Value");
 
-		Echo::Node* node = getCurrentSelectNode();
-		if (node)
+		Echo::Object* object = getCurrentEditObject();
+		if (object)
 		{
-			showNodePropertyRecursive(node, node->getClassName());
-			m_propertyHelper.applyTo(node->getName(), m_propertyTreeView, this, SLOT(refreshPropertyToNode(const QString&, QVariant)), false);
+			showObjectPropertyRecursive(object, object->getClassName());
+			m_propertyHelper.applyTo(object->getName(), m_propertyTreeView, this, SLOT(refreshPropertyToObject(const QString&, QVariant)), false);
 		}
 		else
 		{
@@ -269,7 +276,7 @@ namespace Studio
 	}
 
 	// 显示属性
-	void NodeTreePanel::showNodePropertyRecursive(Echo::Object* classPtr, const Echo::String& className)
+	void NodeTreePanel::showObjectPropertyRecursive(Echo::Object* classPtr, const Echo::String& className)
 	{
 		// show parent property first
 		Echo::String parentClassName;
@@ -277,7 +284,7 @@ namespace Studio
 		{
 			// don't display property of object
 			if(parentClassName!="Object")
-				showNodePropertyRecursive(classPtr, parentClassName);
+				showObjectPropertyRecursive(classPtr, parentClassName);
 		}
 
 		// show self property
@@ -297,30 +304,6 @@ namespace Studio
 		}
 	}
 
-	// 递归显示资源属性
-	void NodeTreePanel::showResPropertyRecursive(Echo::Object* classPtr, const Echo::String& className)
-	{
-		// show parent property first
-		Echo::String parentClassName;
-		if (Echo::Class::getParentClass(parentClassName, className))
-		{
-			// don't display property of object
-			if (parentClassName != "Object")
-				showResPropertyRecursive(classPtr, parentClassName);
-		}
-
-		// show self property
-		Echo::PropertyInfos propertys;
-		Echo::Class::getPropertys(className, classPtr, propertys);
-		for (const Echo::PropertyInfo* prop : propertys)
-		{
-			Echo::Variant var;
-			Echo::Class::getPropertyValue(classPtr, prop->m_name, var);
-
-			showPropertyByVariant(prop->m_name, var);
-		}
-	}
-
 	// show property
 	void NodeTreePanel::showPropertyByVariant(const Echo::String& name, const Echo::Variant& var)
 	{
@@ -336,20 +319,20 @@ namespace Studio
 	}
 
 	// 属性修改后,更新结点值
-	void NodeTreePanel::refreshPropertyToNode(const QString& property, QVariant value)
+	void NodeTreePanel::refreshPropertyToObject(const QString& property, QVariant value)
 	{
 		Echo::String propertyName = property.toStdString().c_str();
 		Echo::String valStr = value.toString().toStdString().c_str();
-		Echo::Node* node = getCurrentSelectNode();
-		Echo::Variant::Type type = Echo::Class::getPropertyType(node, propertyName);
+		Echo::Object* object = getCurrentEditObject();
+		Echo::Variant::Type type = Echo::Class::getPropertyType(object, propertyName);
 
 		Echo::Variant propertyValue;
 		if(propertyValue.fromString(type, valStr))
 		{
-			Echo::Class::setPropertyValue(node, propertyName, propertyValue);
+			Echo::Class::setPropertyValue(object, propertyName, propertyValue);
 
 			// refresh property display
-			showSelectedNodeProperty();
+			showSelectedObjectProperty();
 		}
 		else
 		{
@@ -357,22 +340,22 @@ namespace Studio
 		}
 	}
 
-	// show res property
-	void NodeTreePanel::showResProperty(const Echo::String& resPath)
+	// on select node
+	void NodeTreePanel::onSelectNode()
 	{
-		m_currentEditRes =  Echo::Res::get( resPath);
-		if (m_currentEditRes)
-		{
-			m_propertyHelper.clear();
-			m_propertyHelper.setHeader("Property", "Value");
+		m_currentEditNode = getCurrentSelectNode();
+		m_currentEditRes = nullptr;
 
-			showNodePropertyRecursive( m_currentEditRes, m_currentEditRes->getClassName());
-			m_propertyHelper.applyTo(m_currentEditRes->getName(), m_propertyTreeView, this, SLOT(refreshPropertyToNode(const QString&, QVariant)), false);
-		}
-		else
-		{
-			m_propertyHelper.applyTo("empty", m_propertyTreeView, this, SLOT(refreshPropertyToNode(const QString&, QVariant)), false);
-		}
+		showSelectedObjectProperty();
+	}
+
+	// edit res
+	void NodeTreePanel::onSelectRes(const Echo::String& resPath)
+	{
+		m_currentEditNode = nullptr;
+		m_currentEditRes = Echo::Res::get(resPath);
+
+		showSelectedObjectProperty();
 	}
 
 	// 保存当前编辑资源

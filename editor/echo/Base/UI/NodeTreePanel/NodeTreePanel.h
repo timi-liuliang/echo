@@ -36,6 +36,9 @@ namespace Studio
 		// 获取当前结点
 		Echo::Node* getCurrentSelectNode();
 
+		// 获取当前编辑对象
+		Echo::Object* getCurrentEditObject();
+
 	private slots:
 		// 显示新建节点窗口
 		void showNewNodeDialog();
@@ -44,10 +47,10 @@ namespace Studio
 		void showMenu(const QPoint& point);
 
 		// 显示当前选中节点属性
-		void showSelectedNodeProperty();
+		void showSelectedObjectProperty();
 
 		// 属性修改后,更新结点值
-		void refreshPropertyToNode(const QString& property, QVariant value);
+		void refreshPropertyToObject(const QString& property, QVariant value);
 
 		// on trigger delete nodes
 		void onDeleteNodes();
@@ -62,15 +65,15 @@ namespace Studio
 		void importGltfScene();
 
 	public slots:
-		// show res property
-		void showResProperty(const Echo::String& resPath);
+		// on select node
+		void onSelectNode();
+
+		// edit res
+		void onSelectRes(const Echo::String& resPath);
 
 	private:
 		// 递归显示属性
-		void showNodePropertyRecursive(Echo::Object* classPtr, const Echo::String& className);
-
-		// 递归显示资源属性
-		void showResPropertyRecursive(Echo::Object* classPtr, const Echo::String& className);
+		void showObjectPropertyRecursive(Echo::Object* classPtr, const Echo::String& className);
 
 		// show property
 		void showPropertyByVariant(const Echo::String& name, const class Echo::Variant& var);
@@ -79,6 +82,7 @@ namespace Studio
 		NewNodeDialog*					m_newNodeDialog;		// 新建结点
 		QT_UI::QPropertyConfigHelper	m_propertyHelper;		// 属性
 		Echo::ResPtr					m_currentEditRes;		// 当前资源
+		Echo::Node*						m_currentEditNode;
 		QMenu*							m_nodeTreeMenu;			// 结点树右键菜单
 	};
 }

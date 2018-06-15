@@ -88,7 +88,7 @@ namespace Studio
 			Echo::String resPath;
 			if (Echo::IO::instance()->covertFullPathToResPath(res, resPath))
 			{
-				NodeTreePanel::instance()->showResProperty(resPath);
+				NodeTreePanel::instance()->onSelectRes(resPath);
 			}
 		}
 	}
@@ -105,6 +105,9 @@ namespace Studio
 			Echo::String resPath;
 			if (Echo::IO::instance()->covertFullPathToResPath(res, resPath))
 			{
+				// edit res
+				NodeTreePanel::instance()->onSelectRes(resPath);
+
 				Echo::String ext = Echo::PathUtil::GetFileExt(resPath, true);
 				if (ext == ".scene")
 				{
@@ -126,10 +129,6 @@ namespace Studio
 				else if (ext == ".lua")
 				{
 					MainWindow::instance()->openLuaScript(resPath);
-				}
-				else if (ext == ".material")
-				{
-					NodeTreePanel::instance()->showResProperty( resPath);
 				}
 			}
 		}
