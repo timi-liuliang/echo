@@ -1,6 +1,7 @@
 #include <QtGui>
 #include "Window.h"
 #include <QDateTime>
+#include "GameMainWindow.h"
 
 namespace Game
 {
@@ -8,11 +9,7 @@ namespace Game
 	Window::Window(QWidget* parent/* = NULL*/)
 		: QWidget(parent)
 		, m_app(nullptr)
-		//, m_mouseMenu(NULL)
 		, m_timer(nullptr)
-		//, m_inputController(NULL)
-		//, m_defaultInputController(NULL)
-		//, m_isLeftButtonDown(false)
 	{
 		setUpdatesEnabled(false);
 		setMouseTracking(true);
@@ -23,10 +20,6 @@ namespace Game
 	// 析构函数
 	Window::~Window()
 	{
-		//delete m_timer; m_timer = NULL;
-
-		//EchoEngine::Instance()->Release();
-		//delete m_defaultInputController;
 	}
 
 	// 开始渲染
@@ -34,10 +27,16 @@ namespace Game
 	{
 		m_app->init((HWND)winId(), echoProject);
 
-		//EchoEngine::Instance()->Initialize((HWND)this->winId());
-
-		//if (!m_defaultInputController)
-		//	m_defaultInputController = new DefaultInputController; 
+		// 设置初始宽高
+		Echo::i32 thisW = width();
+		Echo::i32 thisH = height();
+		Echo::i32 mainW = GameMainWindow::instance()->width();
+		Echo::i32 mainH = GameMainWindow::instance()->height();
+		Echo::i32 aimW = Echo::Engine::instance()->getProjectFile()->getWindowWidth();
+		Echo::i32 aimH = Echo::Engine::instance()->getProjectFile()->getWindowHeight();
+		Echo::i32 mainNewWidth = mainW + (aimW - thisW);
+		Echo::i32 mainNewHeight = mainH + (aimH - thisH);
+		GameMainWindow::instance()->resize(mainNewWidth, mainNewHeight);
 
 		// 时间事件
 		m_timer = new QTimer(this);

@@ -13,6 +13,9 @@ namespace Game
 		GameMainWindow(QWidget* parent=0);
 		~GameMainWindow();
 
+		// get instance
+		static GameMainWindow* instance();
+
 		// ¿ªÊ¼äÖÈ¾
 		void start(const Echo::String& echoProject);
 

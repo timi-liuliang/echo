@@ -528,10 +528,8 @@ namespace Echo
 	// 调整大小
 	void RenderTargetManager::AdaptSize(ui32 nWidth, ui32 nHeight, ui32& outWidth, ui32& outHeight)
 	{
-		float scale = Engine::instance()->getFramebufferScale();
-
-		outWidth = static_cast<ui32>(nWidth  * scale);
-		outHeight = static_cast<ui32>(nHeight * scale);
+		outWidth = static_cast<ui32>(nWidth);
+		outHeight = static_cast<ui32>(nHeight);
 	}
 
 	// 创建渲染目标

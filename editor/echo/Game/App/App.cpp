@@ -26,7 +26,7 @@ namespace Game
 		Echo::LogManager::instance()->addLog(m_log);
 
 		Echo::Engine::Config rootcfg;
-		rootcfg.projectFile = echoProject;
+		rootcfg.m_projectFile = echoProject;
 		rootcfg.m_isEnableProfiler = true;
 		rootcfg.m_windowHandle = (unsigned int)hwnd;
 		m_root->initialize(rootcfg);

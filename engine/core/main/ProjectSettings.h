@@ -45,4 +45,5 @@ namespace Echo
 		i32				m_windowHeight;
 		ResourcePath	m_launchScene;
 	};
+	typedef ResRef<ProjectSettings> ProjectSettingsPtr;
 }

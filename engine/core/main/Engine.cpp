@@ -43,9 +43,7 @@ namespace Echo
 		: m_isInited(false)
 		, m_bRendererInited(NULL)
 		, m_currentTime(0)
-		, m_framebufferScale(1.0f)
 		, m_renderer(NULL)
-		, m_projectFile(NULL)
 	{
 #ifdef ECHO_PLATFORM_WINDOWS
 		// 解决Windows VS2013 Thread join死锁BUG
@@ -84,9 +82,9 @@ namespace Echo
 
 		try
 		{
-			if (!PathUtil::IsFileExist( cfg.projectFile))
+			if (!PathUtil::IsFileExist( cfg.m_projectFile))
 			{
-				EchoLogError("Set root path failed [%s], initialise Echo Engine failed.", cfg.projectFile.c_str());
+				EchoLogError("Set root path failed [%s], initialise Echo Engine failed.", cfg.m_projectFile.c_str());
 				return false;
 			}
 
@@ -99,9 +97,6 @@ namespace Echo
 			return false;
 		}
 
-		// 加载项目文件
-		loadProject(cfg.projectFile.c_str());
-
 		// lua script
 		{
 			luaex::LuaEx* luaEx = luaex::LuaEx::instance();
@@ -109,6 +104,9 @@ namespace Echo
 			register_core_to_lua();
 			registerClassTypes();
 		}
+
+		// 加载项目文件
+		loadProject(cfg.m_projectFile.c_str());
 		
 		// 音频管理器
 		FSAudioManager::instance()->init(cfg.m_AudiomaxVoribsCodecs,cfg.m_AudioLoadDecompresse);
@@ -138,12 +136,18 @@ namespace Echo
 
 	void Engine::loadLaunchScene()
 	{
-		Echo::String launchScene = "Res://main.scene";
-		//const ProjectSettings::Setting* setting = m_projectFile->getSetting("Application/Run/LaunchScene");
-		//if (setting)
+		if (m_projectSettings)
 		{
-			Echo::Node* node = Echo::Node::load(launchScene);
-			node->setParent(NodeTree::instance()->getInvisibleRootNode());
+			const ResourcePath& launchScene = m_projectSettings->getLaunchScene();
+			if (!launchScene.isEmpty())
+			{
+				Echo::Node* node = Echo::Node::load(launchScene.getPath());
+				node->setParent(NodeTree::instance()->getInvisibleRootNode());
+			}
+			else
+			{
+				EchoLogError("Please set Game.LaunchScene before start the game");
+			}
 		}
 	}
 
@@ -168,11 +172,11 @@ namespace Echo
 		if (PathUtil::IsFileExist(projectFile))
 		{
 			m_resPath = PathUtil::GetFileDirPath(projectFile);
-
-			EchoSafeDelete(m_projectFile, ProjectSettings);
-			m_projectFile = EchoNew(ProjectSettings);
-
 			IO::instance()->setResPath(m_resPath);
+		
+			String resPath;
+			if(IO::instance()->covertFullPathToResPath(projectFile, resPath))
+				m_projectSettings = ECHO_DOWN_CAST<ProjectSettings*>(Res::get(ResourcePath(resPath)));
 		}
 		else
 		{
@@ -306,7 +310,6 @@ namespace Echo
 		}
 
 		EchoSafeDeleteInstance(LogManager);
-		EchoSafeDelete(m_projectFile, ProjectSettings);
 		LuaBinder::destroy();
 		luaex::LuaEx::instance()->destroy();
 		MemoryManager::destroyInstance();
@@ -327,13 +330,6 @@ namespace Echo
 		m_userPath = strPath;
 
 		IO::instance()->setUserPath(m_userPath);
-	}
-
-	void Engine::SetPhoneinformation(int max, int free, String tex)
-	{
-		Maxmemory = max;
-		Freememory = free;
-		cputex = tex;
 	}
 
 	bool Engine::isRendererInited() const

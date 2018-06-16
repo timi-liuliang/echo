@@ -49,9 +49,9 @@ namespace QT_UI
 		QObject::connect(m_lineEditY, SIGNAL(returnPressed()), this, SLOT(onEditFinished()));
 		QObject::connect(m_lineEditZ, SIGNAL(returnPressed()), this, SLOT(onEditFinished()));
 
-		//QObject::connect(m_lineEditX, SIGNAL(textEdited(const QString&)), this, SLOT(onEditFinished()));
-		//QObject::connect(m_lineEditY, SIGNAL(textEdited(const QString&)), this, SLOT(onEditFinished()));
-		//QObject::connect(m_lineEditZ, SIGNAL(textEdited(const QString&)), this, SLOT(onEditFinished()));
+		QObject::connect(m_lineEditX, SIGNAL(textEdited(const QString&)), this, SLOT(onEditFinished()));
+		QObject::connect(m_lineEditY, SIGNAL(textEdited(const QString&)), this, SLOT(onEditFinished()));
+		QObject::connect(m_lineEditZ, SIGNAL(textEdited(const QString&)), this, SLOT(onEditFinished()));
 	}
 
 	// set value

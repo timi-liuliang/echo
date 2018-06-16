@@ -3,19 +3,18 @@
 #include "engine/core/render/render/Renderer.h"
 #include "engine/core/Scene/NodeTree.h"
 #include "FrameState.h"
+#include "ProjectSettings.h"
 
 namespace Echo
 {
-	class ProjectSettings;
 	class IO;
-	class ImageCodecMgr;
 	class Engine
 	{	
 	public:
 		// 配置
 		struct Config
 		{
-			String				projectFile;
+			String				m_projectFile;
 			int					m_AudiomaxVoribsCodecs;
 			bool				m_AudioLoadDecompresse;
 			bool				m_isEnableProfiler;			// 是否开启性能分析服务
@@ -23,7 +22,7 @@ namespace Echo
 			bool				m_isGame;
 
 			Config()
-				: projectFile("")
+				: m_projectFile("")
 				, m_AudiomaxVoribsCodecs(32)
 				, m_AudioLoadDecompresse(false)
 				, m_isEnableProfiler(false)
@@ -72,13 +71,6 @@ namespace Echo
 		const FrameState& frameState() const { return m_frameState; }
 
 		void resetFrameState() { m_frameState.reset(); }
-		void SetPhoneinformation(int max,int free,String cpu);
-
-		// 设置帧缓冲缩放比
-		void setFrameBufferScale( float scale) { m_framebufferScale =  scale; }
-		
-		// 获取帧缓存缩放比
-		float getFramebufferScale() const { return m_framebufferScale; }
 
 		// 加载项目,引擎初始化时会自动调用，也可单独调用(全路径)
 		void loadProject( const char* projectFile);
@@ -99,7 +91,7 @@ namespace Echo
 		void registerClassTypes();
 
 	public:
-		ProjectSettings* getProjectFile() { return m_projectFile; }
+		ProjectSettings* getProjectFile() { return m_projectSettings.ptr(); }
 
 	protected:
 		bool render();
@@ -113,12 +105,8 @@ namespace Echo
 		bool				m_bRendererInited;
 		float				m_frameTime;
 		ui32				m_currentTime;
-		Renderer*			m_renderer;						// 渲染器
+		Renderer*			m_renderer;				// 渲染器
 		FrameState			m_frameState;
-		int					Maxmemory;
-		int					Freememory;
-		String				cputex;
-		float				m_framebufferScale;             // 帧缓冲区缩放
-		ProjectSettings*	m_projectFile;					// 项目信息
+		ProjectSettingsPtr	m_projectSettings;		// 项目信息
 	};
 }

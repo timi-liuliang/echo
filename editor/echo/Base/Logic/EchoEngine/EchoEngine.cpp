@@ -74,7 +74,7 @@ namespace Studio
 			// 是否预设项目文件
 			if (!m_projectFile.empty())
 			{
-				rootcfg.projectFile = m_projectFile.c_str();
+				rootcfg.m_projectFile = m_projectFile.c_str();
 			}
 			rootcfg.m_isEnableProfiler = true;
 			rootcfg.m_isGame = false;

@@ -3,6 +3,8 @@
 
 namespace Game
 {
+	static GameMainWindow* g_inst = nullptr;
+
 	// 构造函数
 	GameMainWindow::GameMainWindow(QWidget* parent/*=0*/)
 		: QMainWindow( parent)
@@ -19,12 +21,21 @@ namespace Game
 		// 设置菜单左上控件
 		menubar->setTopLeftCornerIcon(":/icon/Icon/icon.png");
 
-		resize(800, 490);
+		//resize(800, 490);
+		EchoAssert(!g_inst);
+		g_inst = this;
+
 	}
 
 	// 析构函数
 	GameMainWindow::~GameMainWindow()
 	{
+	}
+
+	// get instance
+	GameMainWindow* GameMainWindow::instance()
+	{
+		return g_inst;
 	}
 
 	// 开始渲染
