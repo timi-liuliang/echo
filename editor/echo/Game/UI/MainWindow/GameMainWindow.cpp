@@ -1,3 +1,5 @@
+#include <QApplication>
+#include <QDesktopWidget>
 #include "GameMainWindow.h"
 #include "engine/core/util/PathUtil.h"
 
@@ -47,5 +49,11 @@ namespace Game
 		menubar->setTopLeftCornerIcon((iconPath + "icon.png").c_str());
 
 		m_renderWindow->start(echoProject);
+	}
+
+	void GameMainWindow::moveToCenter()
+	{
+		move((qApp->desktop()->availableGeometry().width() - width()) / 2 + qApp->desktop()->availableGeometry().x(),
+			(qApp->desktop()->availableGeometry().height() - height()) / 2 + qApp->desktop()->availableGeometry().y());
 	}
 }

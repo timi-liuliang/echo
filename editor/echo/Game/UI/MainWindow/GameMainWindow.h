@@ -19,6 +19,9 @@ namespace Game
 		// ¿ªÊ¼äÖÈ¾
 		void start(const Echo::String& echoProject);
 
+		// move to center
+		void moveToCenter();
+
 	private:
 		Window*		m_renderWindow;
 	};

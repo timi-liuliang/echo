@@ -38,6 +38,9 @@ namespace Game
 		Echo::i32 mainNewHeight = mainH + (aimH - thisH);
 		GameMainWindow::instance()->resize(mainNewWidth, mainNewHeight);
 
+		// 居中
+		GameMainWindow::instance()->moveToCenter();
+
 		// 时间事件
 		m_timer = new QTimer(this);
 		connect(m_timer, SIGNAL(timeout()), this, SLOT(Render()));

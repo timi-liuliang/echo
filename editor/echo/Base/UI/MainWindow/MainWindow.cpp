@@ -4,6 +4,7 @@
 #include "ResPanel.h"
 #include "NodeTreePanel.h"
 #include <QFileDialog>
+#include <QMessageBox>
 #include <QDesktopservices>
 #include <QShortcut>
 #include <QMdiArea>
@@ -117,21 +118,52 @@ namespace Studio
 	// play game
 	void MainWindow::onPlayGame()
 	{
+		// if launch scene not exist, set it
+		Echo::ProjectSettings* projSettings = Echo::Engine::instance()->getProjectFile();
+		if (projSettings)
+		{
+			const Echo::String& launchScene = projSettings->getLaunchScene().getPath();
+			if (launchScene.empty())
+			{
+				if (QMessageBox::Yes == QMessageBox(QMessageBox::Information, "Warning", "Launch Scene is empty, Would you set it now?", QMessageBox::Yes | QMessageBox::No).exec())
+				{
+					Echo::String  scene = ResChooseDialog::getExistingFile(this, ".scene");
+					if (!scene.empty())
+					{
+						projSettings->setLaunchScene(Echo::ResourcePath(scene));
+					}
+					else
+					{
+						return;
+					}
+				}
+				else
+				{
+					return;
+				}
+			}
+		}
+
+		// save project
 		onSaveProject();
 
-		Echo::String app = QCoreApplication::applicationFilePath().toStdString().c_str();
-		Echo::String project = Echo::Engine::instance()->getConfig().m_projectFile;
-		Echo::String cmd = Echo::StringUtil::Format("%s play %s", app.c_str(), project.c_str());
+		// start game
+		if (!projSettings->getLaunchScene().getPath().empty())
+		{
+			Echo::String app = QCoreApplication::applicationFilePath().toStdString().c_str();
+			Echo::String project = Echo::Engine::instance()->getConfig().m_projectFile;
+			Echo::String cmd = Echo::StringUtil::Format("%s play %s", app.c_str(), project.c_str());
 
-		m_gameProcess.terminate();
-		m_gameProcess.waitForFinished();
+			m_gameProcess.terminate();
+			m_gameProcess.waitForFinished();
 
-		m_gameProcess.start(cmd.c_str());
+			m_gameProcess.start(cmd.c_str());
 
-		QObject::connect(&m_gameProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(onGameProcessFinished(int, QProcess::ExitStatus)));
-		QObject::connect(&m_gameProcess, SIGNAL(readyRead()), this, SLOT(onReadMsgFromGame()));
+			QObject::connect(&m_gameProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(onGameProcessFinished(int, QProcess::ExitStatus)));
+			QObject::connect(&m_gameProcess, SIGNAL(readyRead()), this, SLOT(onReadMsgFromGame()));
 
-		EchoLogWarning("**start game debug [%s]**", cmd.c_str());
+			EchoLogWarning("**start game debug [%s]**", cmd.c_str());
+		}
 	}
 
 	// 打开文件
