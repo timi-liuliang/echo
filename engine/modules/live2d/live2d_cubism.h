@@ -83,10 +83,10 @@ namespace Echo
 		const ResourcePath& getTextureRes() { return m_textureRes; }
 
 		// material
-		const ResourcePath& getMaterial() const { return m_material->getPath(); }
+		const Material* getMaterial() const { return m_material; }
 
 		// set material
-		void setMaterial(const ResourcePath& material) {}
+		void setMaterial(const Res* material) {}
 
 		// set anim res path
 		void setMotionRes(const ResourcePath& path);
@@ -148,8 +148,9 @@ namespace Echo
 		vector<Drawable>::type	m_drawables;
 		MotionMap				m_motions;
 
-		Mesh*					m_mesh;			// Geometry Data for render
-		Material*				m_material;		// Material Instance
+		Mesh*					m_mesh;				// Geometry Data for render
+		MaterialPtr				m_materialDefault;	// Default Material Instance
+		MaterialPtr				m_material;			// Custom Material
 		Renderable*				m_renderable;
 
 		Matrix4					m_matWVP;

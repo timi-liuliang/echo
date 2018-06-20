@@ -39,7 +39,7 @@ namespace Echo
 			~Uniform();
 
 			// get value bytes
-			i32 getValueBytes();
+			ui32 getValueBytes();
 
 			// set value
 			void setValue(const void* value);
@@ -145,5 +145,5 @@ namespace Echo
 		ParamMap			m_uniforms;
 		TextureInfoMap 		m_textures;
 	};
-	typedef ResRef<Material> MaterialRef;
+	typedef ResRef<Material> MaterialPtr;
 }

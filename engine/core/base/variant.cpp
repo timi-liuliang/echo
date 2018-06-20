@@ -35,6 +35,12 @@ namespace Echo
 		m_any = value;
 	}
 
+	Variant::Variant(const Res* value)
+		: m_type(Type::Resource)
+	{
+		m_res = (Res*)value;
+	}
+
 	Variant::Variant(const ResourcePath& value)
 		: m_type(Type::ResourcePath)
 	{

@@ -26,10 +26,10 @@ namespace Echo
 	}
 
 	// get value bytes
-	i32 Material::Uniform::getValueBytes()
+	ui32 Material::Uniform::getValueBytes()
 	{
 		// 计算所需内存大小
-		int bytes = 0;
+		ui32 bytes = 0;
 		switch (m_type)
 		{
 		case SPT_INT:		bytes = sizeof(int)*m_count;		break;
