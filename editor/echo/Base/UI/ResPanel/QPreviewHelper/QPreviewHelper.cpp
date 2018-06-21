@@ -19,6 +19,7 @@ namespace QT_UI
 
 		QObject::connect(m_listView, SIGNAL(clicked(QModelIndex)), this, SLOT(onClicked(QModelIndex)));
 		QObject::connect(m_listView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onDoubleClicked(QModelIndex)));
+		QObject::connect(m_listModel, &QStandardItemModel::itemChanged, this, &QPreviewHelper::renameRes);
 	}
 
 	// add item
@@ -180,5 +181,28 @@ namespace QT_UI
 		}
 		
 		emit doubleClickedRes(resPath.c_str());
+	}
+
+	// rename res
+	void QPreviewHelper::renameRes(QStandardItem* item)
+	{
+		if (item)
+		{
+			Echo::String preFilePathName = item->data(Qt::UserRole).toString().toStdString().c_str();
+			Echo::String currentText = item->text().toStdString().c_str();
+			if (Echo::PathUtil::IsDir(preFilePathName))
+			{
+				Echo::String folderName = Echo::PathUtil::GetLastDirName(preFilePathName);
+				if (currentText != folderName)
+				{
+					Echo::String newPath = Echo::PathUtil::GetParentPath(preFilePathName) + currentText + "/";
+					Echo::PathUtil::RenameDir(preFilePathName, newPath);
+
+					item->setData(newPath.c_str(), Qt::UserRole);
+
+					emit renamedRes( preFilePathName.c_str(), newPath.c_str());
+				}
+			}
+		}
 	}
 }

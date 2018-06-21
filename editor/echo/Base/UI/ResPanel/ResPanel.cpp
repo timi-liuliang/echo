@@ -34,6 +34,7 @@ namespace Studio
 
 		QObject::connect(m_previewHelper, SIGNAL(clickedRes(const char*)), this, SLOT(onClickedPreviewRes(const char*)));
 		QObject::connect(m_previewHelper, SIGNAL(doubleClickedRes(const char*)), this, SLOT(onDoubleClickedPreviewRes(const char*)));
+		QObject::connect(m_previewHelper, SIGNAL(renamedRes(const QString, const QString)), this, SLOT(onRenamedRes(const QString, const QString)));
 		QObject::connect(m_listView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showMenu(const QPoint&)));
 		QObject::connect(m_actionShowInExplorer, SIGNAL(triggered()), this, SLOT(showInExporer()));
 		QObject::connect(m_actionNewFolder, SIGNAL(triggered()), this, SLOT(newFolder()));
@@ -206,5 +207,13 @@ namespace Studio
 	void ResPanel::onCreateRes()
 	{
 
+	}
+
+	// on renamed res
+	void ResPanel::onRenamedRes(const QString src, const QString dest)
+	{
+		// refresh current dir
+		m_dirModel->Clean();
+		m_dirModel->Refresh();
 	}
 }

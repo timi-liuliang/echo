@@ -447,7 +447,6 @@ namespace Echo
 	String PathUtil::GetFileDirPath(const String& filename)
 	{
 		String path = filename;
-		FormatPath(path);
 		size_t pos = path.find_last_of(SEPERATOR);
 		if(pos == String::npos)
 		{

@@ -30,6 +30,9 @@ namespace QT_UI
 		// double clicked
 		void doubleClickedRes(const char* path);
 
+		// rename res
+		void renamedRes(const QString srcPath, const QString destPath);
+
 	private:
 		// add item
 		void addItem(const char* filePath);
@@ -55,6 +58,9 @@ namespace QT_UI
 
 		// double clicked resource
 		void onDoubleClicked(const QModelIndex& pIndex);
+
+		// rename res
+		void renameRes( QStandardItem* item);
 
 	private:
 		QListView*				m_listView;

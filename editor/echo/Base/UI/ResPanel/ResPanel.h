@@ -44,6 +44,9 @@ namespace Studio
 		// create res
 		void onCreateRes();
 
+		// on renamed res
+		void onRenamedRes(const QString src, const QString dest);
+
 	protected:
 		// reimplement reiszeEvent function
 		virtual void resizeEvent(QResizeEvent * e);
