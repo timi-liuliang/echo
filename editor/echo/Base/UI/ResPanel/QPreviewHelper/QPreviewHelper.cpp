@@ -33,9 +33,6 @@ namespace QT_UI
 		else
 			m_supportExts.clear();
 
-		// sort by name
-		std::sort( files.begin(), files.end());
-
 		// include pre directory
 		if (includePreDir)
 		{

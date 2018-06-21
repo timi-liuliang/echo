@@ -38,6 +38,12 @@ namespace Studio
 		// show current dir
 		void showInExporer();
 
+		// new folder
+		void newFolder();
+
+		// create res
+		void onCreateRes();
+
 	protected:
 		// reimplement reiszeEvent function
 		virtual void resizeEvent(QResizeEvent * e);

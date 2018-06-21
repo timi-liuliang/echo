@@ -56,6 +56,7 @@ namespace QT_UI
 	{
 		this->clear();
 		m_dirItems.clear();
+		m_activeItem = nullptr;
 	}
 
 	// 设置当前选中
@@ -266,10 +267,5 @@ namespace QT_UI
 		}
 
 		emit FileEdit(filePath.toStdString().c_str());
-	}
-
-	void QDirectoryModel::ClearThreadRingQueue()
-	{
-		//m_threadRingQueue.clear_unsafe();
 	}
 }

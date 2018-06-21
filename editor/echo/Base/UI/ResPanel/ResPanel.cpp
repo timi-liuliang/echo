@@ -36,7 +36,7 @@ namespace Studio
 		QObject::connect(m_previewHelper, SIGNAL(doubleClickedRes(const char*)), this, SLOT(onDoubleClickedPreviewRes(const char*)));
 		QObject::connect(m_listView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showMenu(const QPoint&)));
 		QObject::connect(m_actionShowInExplorer, SIGNAL(triggered()), this, SLOT(showInExporer()));
-		//QObject::connect(m_actionNewMaterial, SIGNAL(triggered()), this, SLOT(newMaterial()));
+		QObject::connect(m_actionNewFolder, SIGNAL(triggered()), this, SLOT(newFolder()));
 	}
 
 	// 析构函数
@@ -76,6 +76,10 @@ namespace Studio
 	// 重新选择当前文件夹
 	void ResPanel::reslectCurrentDir()
 	{
+		// refresh current dir
+		m_dirModel->Clean();
+		m_dirModel->Refresh();
+
 		if (!m_currentDir.empty())
 			onSelectDir(m_currentDir.c_str());
 	}
@@ -160,6 +164,8 @@ namespace Studio
 				QAction* createResAction = new QAction(this);
 				createResAction->setText(res.c_str());
 				createResMenu->addAction(createResAction);
+
+				QObject::connect(createResAction, SIGNAL(triggered()), this, SLOT(onCreateRes()));
 			}
 		}
 		m_resMenu->addMenu(createResMenu);
@@ -178,5 +184,27 @@ namespace Studio
 		{
 			QDesktopServices::openUrl(openDir);
 		}		
+	}
+
+	// new folder
+	void ResPanel::newFolder()
+	{
+		Echo::String currentDir = m_currentDir;
+		for (int i = 0; i < 65535; i++)
+		{
+			Echo::String newFolder = m_currentDir + (i!=0 ? Echo::StringUtil::Format("New Folder %d", i): "New Folder") + "/";
+			if (!Echo::PathUtil::IsDirExist(newFolder))
+			{
+				Echo::PathUtil::CreateDir(newFolder);
+				reslectCurrentDir();
+				return;
+			}
+		}
+	}
+
+	// new res
+	void ResPanel::onCreateRes()
+	{
+
 	}
 }

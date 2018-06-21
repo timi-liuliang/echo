@@ -48,9 +48,6 @@ namespace QT_UI
 		// Çå¿Õ
 		void Clean();
 
-		// 
-		void ClearThreadRingQueue();
-
 	private:
 		// µü´úÄ¿Â¼
 		void RecursiveDir( const string& dir, QStandardItem* parentItem) { RecursiveDir(dir, parentItem, NULL); }
