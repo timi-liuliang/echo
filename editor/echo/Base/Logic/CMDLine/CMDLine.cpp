@@ -57,10 +57,10 @@ namespace Echo
 		int idx = QTime(0, 0, 0).secsTo(QTime::currentTime()) % 4;
 		Echo::String iconLocation = Echo::StringUtil::Format(":/icon/Icon/Launch/launch-%d.png", idx);
 
-		QSplashScreen splash;
-		splash.setPixmap(QPixmap(iconLocation.c_str()));
-		splash.show();
-		splash.showMessage(QString::fromLocal8Bit("Echo (32 bit OpenGLES) Copyright @ 2018-2019 B-Lab"), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
+		//QSplashScreen splash;
+		//splash.setPixmap(QPixmap(iconLocation.c_str()));
+		//splash.show();
+		//splash.showMessage(QString::fromLocal8Bit("Echo (32 bit OpenGLES) Copyright @ 2018-2019 B-Lab"), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
 
 		// 设置界面风格
 		QFile qssFile(":/Qss/Qss/Ps.qss");
@@ -94,9 +94,9 @@ namespace Echo
 		// 显示主窗口
 		TIME_PROFILE
 		(
-			ThreadSleepByMilliSecond(1000);
+			//ThreadSleepByMilliSecond(1000);
 			g_astudio->getProjectWindow()->show();
-			splash.finish(g_astudio->getProjectWindow());
+			//splash.finish(g_astudio->getProjectWindow());
 		)
 
 		// 执行
