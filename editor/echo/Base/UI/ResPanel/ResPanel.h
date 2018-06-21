@@ -47,6 +47,10 @@ namespace Studio
 		// on renamed res
 		void onRenamedRes(const QString src, const QString dest);
 
+	private:
+		// get unique file name
+		bool getUniqueNewResSavePath( Echo::String& outNewPath, const Echo::String& className, const Echo::String& currentDir);
+
 	protected:
 		// reimplement reiszeEvent function
 		virtual void resizeEvent(QResizeEvent * e);

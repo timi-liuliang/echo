@@ -203,6 +203,20 @@ namespace QT_UI
 					emit renamedRes( preFilePathName.c_str(), newPath.c_str());
 				}
 			}
+			else
+			{
+				Echo::String folderName = Echo::PathUtil::GetFileDirPath(preFilePathName);
+				Echo::String fileName = Echo::PathUtil::GetPureFilename(preFilePathName);
+				if (fileName != currentText)
+				{
+					Echo::String newPathName = folderName + currentText;
+					Echo::PathUtil::RenameFile(preFilePathName, newPathName);
+
+					item->setData(newPathName.c_str(), Qt::UserRole);
+
+					emit renamedRes(preFilePathName.c_str(), newPathName.c_str());
+				}
+			}
 		}
 	}
 }

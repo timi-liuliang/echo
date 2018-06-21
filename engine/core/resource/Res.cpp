@@ -55,9 +55,11 @@ namespace Echo
 	}
 
 	// resister res
-	void Res::registerRes(const String& ext, RES_CREATE_FUNC cfun, RES_LOAD_FUNC lfun)
+	void Res::registerRes(const String& className, const String& ext, RES_CREATE_FUNC cfun, RES_LOAD_FUNC lfun)
 	{
 		ResFun fun;
+		fun.m_class = className;
+		fun.m_ext = ext;
 		fun.m_cfun = cfun;
 		fun.m_lfun = lfun;
 
@@ -91,7 +93,7 @@ namespace Echo
 	}
 
 	// create by extension
-	ResPtr Res::create(const String& extension)
+	ResPtr Res::createByFileExtension(const String& extension)
 	{
 		String ext = extension;
 		map<String, Res::ResFun>::type::iterator itfun = g_resFuncs.find(ext);
@@ -103,6 +105,37 @@ namespace Echo
 		}
 
 		EchoLogError("Res::create failed. Unknown extension [%s]", extension.c_str());
+		return nullptr;
+	}
+
+	// create by class name
+	ResRef<Res> Res::createByClassName(const String& className)
+	{
+		for (auto& it : g_resFuncs)
+		{
+			if (it.second.m_class == className)
+			{
+				Res* res = it.second.m_cfun();
+				if (res)
+					return res;
+			}
+		}
+
+		EchoLogError("Res::create failed. Unknown class [%s]", className.c_str());
+		return nullptr;
+	}
+
+	// get res fun by class
+	const Res::ResFun* Res::getResFunByClassName(const String& className)
+	{
+		for (auto& it : g_resFuncs)
+		{
+			if (it.second.m_class == className)
+			{
+				return &it.second;
+			}
+		}
+
 		return nullptr;
 	}
 

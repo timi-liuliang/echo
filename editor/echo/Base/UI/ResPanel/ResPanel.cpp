@@ -203,10 +203,47 @@ namespace Studio
 		}
 	}
 
+	// get unique file name
+	bool ResPanel::getUniqueNewResSavePath( Echo::String& outNewPath, const Echo::String& className, const Echo::String& currentDir)
+	{
+		const Echo::Res::ResFun* resInfo = Echo::Res::getResFunByClassName(className);
+		if (resInfo)
+		{
+			const Echo::String& extension = resInfo->m_ext;
+			for (int i = 0; i < 65535; i++)
+			{
+				Echo::String newPath = Echo::StringUtil::Format("%sNew%s_%d%s", currentDir.c_str(), className.c_str(), i, extension.c_str());
+				if (!Echo::PathUtil::IsFileExist(newPath))
+				{
+					if(Echo::IO::instance()->covertFullPathToResPath( newPath,outNewPath))
+						return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
 	// new res
 	void ResPanel::onCreateRes()
 	{
+		QAction* action = qobject_cast<QAction*>(sender());
+		if (action)
+		{
+			Echo::String className = action->text().toStdString().c_str();
+			Echo::ResPtr res = Echo::Res::createByClassName(className);
+			if (res)
+			{			
+				Echo::String newSavePath;
+				if (getUniqueNewResSavePath(newSavePath, className, m_currentDir))
+				{
+					res->setPath( newSavePath);
+					res->save();
 
+					reslectCurrentDir();
+				}
+			}
+		}
 	}
 
 	// on renamed res

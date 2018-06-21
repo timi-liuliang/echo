@@ -16,6 +16,8 @@ namespace Echo
 
 		struct ResFun
 		{
+			String				m_class;
+			String				m_ext;
 			RES_CREATE_FUNC		m_cfun = nullptr;
 			RES_LOAD_FUNC		m_lfun = nullptr;
 		};
@@ -26,14 +28,21 @@ namespace Echo
 		virtual ~Res();
 
 		// resister res
-		static void registerRes(const String& ext, RES_CREATE_FUNC cfun, RES_LOAD_FUNC lfun);
+		static void registerRes(const String& className, const String& ext, RES_CREATE_FUNC cfun, RES_LOAD_FUNC lfun);
 
 		// get res
 		static Res* get(const ResourcePath& path);
 
 		// create by extension
-		static ResRef<Res> create(const String& extension);
+		static ResRef<Res> createByFileExtension(const String& extension);
 
+		// create by class name
+		static ResRef<Res> createByClassName(const String& className);
+
+		// get res fun by class
+		static const ResFun* getResFunByClassName(const String& className);
+
+	public:
 		// add ref count
 		void addRefCount() { m_refCount++; }
 
@@ -79,7 +88,7 @@ public:																				\
 	static void initClassInfo()														\
 	{																				\
 		static Echo::ObjectFactoryT<m_class> G_OBJECT_FACTORY(#m_class, #m_parent); \
-		Echo::Res::registerRes(extension, CREATE_FUNC, LOAD_FUNC);					\
+		Echo::Res::registerRes( #m_class,extension, CREATE_FUNC, LOAD_FUNC);					\
 	}																				\
 																					\
 	static void bindMethods();														\
