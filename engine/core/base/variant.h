@@ -11,7 +11,6 @@
 namespace Echo
 {
 	class Object;
-	class Res;
 	class Variant
 	{
 	public:
@@ -23,7 +22,6 @@ namespace Echo
 			Real,
 			Vector3,
 			String,
-			Resource,
 			ResourcePath,
 			Base64String,
 			StringOption,
@@ -46,7 +44,6 @@ namespace Echo
 		Variant(int value);
 		Variant(const String& str);
 		Variant(const Vector3& value);
-		Variant(const Res* value);
 		Variant(const ResourcePath& value);
 		Variant(const Base64String& value);
 		Variant(const StringOption& value);
@@ -62,7 +59,6 @@ namespace Echo
 		// reimplent operator
 		operator const int() const { return m_int; }
 		operator const Vector3&() const { return m_vec3; }
-		operator Res*() const { return m_res; }
 		operator const ResourcePath&() const { return any_cast<ResourcePath>(m_any); }
 		operator const Base64String&() const { return any_cast<Base64String>(m_any); }
 		operator const StringOption&() const { return any_cast<StringOption>(m_any); }
@@ -90,7 +86,6 @@ namespace Echo
 			i32				m_int;
 			float			m_real;
 			Vector3			m_vec3;
-			mutable Res*	m_res;
 		};
 	};
 }

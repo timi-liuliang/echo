@@ -83,10 +83,10 @@ namespace Echo
 		const ResourcePath& getTextureRes() { return m_textureRes; }
 
 		// material
-		const Material* getMaterial() const { return m_material; }
+		const ResourcePath& getMaterialRes() const { return m_materialRes; }
 
 		// set material
-		void setMaterial(const Res* material) {}
+		void setMaterialRes(const ResourcePath& path);
 
 		// set anim res path
 		void setMotionRes(const ResourcePath& path);
@@ -150,7 +150,7 @@ namespace Echo
 
 		Mesh*					m_mesh;				// Geometry Data for render
 		MaterialPtr				m_materialDefault;	// Default Material Instance
-		MaterialPtr				m_material;			// Custom Material
+		ResourcePath			m_materialRes;		// Custom Material
 		Renderable*				m_renderable;
 
 		Matrix4					m_matWVP;

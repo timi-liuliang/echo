@@ -71,6 +71,7 @@ namespace Echo
 		: m_mocRes("", ".moc3")
 		, m_textureRes("", ".png")
 		, m_curMotionRes("", ".json")
+		, m_materialRes("", ".material")
 		, m_curMotion(nullptr)
 		, m_mocMemory(nullptr)
 		, m_moc(nullptr)
@@ -81,7 +82,7 @@ namespace Echo
 		, m_modelSize(0)
 		, m_modelMemory(nullptr)
 		, m_mesh(nullptr)
-		, m_material(nullptr)
+		, m_materialDefault(nullptr)
 		, m_renderable(nullptr)
 	{
 	}
@@ -99,13 +100,13 @@ namespace Echo
 		CLASS_BIND_METHOD(Live2dCubism, setTextureRes, DEF_METHOD("setTextureRes"));
 		CLASS_BIND_METHOD(Live2dCubism, getMotionRes, DEF_METHOD("getMotionRes"));
 		CLASS_BIND_METHOD(Live2dCubism, setMotionRes, DEF_METHOD("setMotionRes"));
-		CLASS_BIND_METHOD(Live2dCubism, getMaterial, DEF_METHOD("getMaterial"));
-		CLASS_BIND_METHOD(Live2dCubism, setMaterial, DEF_METHOD("setMaterial"));
+		CLASS_BIND_METHOD(Live2dCubism, getMaterialRes, DEF_METHOD("getMaterialRes"));
+		CLASS_BIND_METHOD(Live2dCubism, setMaterialRes, DEF_METHOD("setMaterialRes"));
 
 		CLASS_REGISTER_PROPERTY(Live2dCubism, "Moc", Variant::Type::ResourcePath, "getMoc", "setMoc");
 		CLASS_REGISTER_PROPERTY(Live2dCubism, "Texture", Variant::Type::ResourcePath, "getTextureRes", "setTextureRes");
 		CLASS_REGISTER_PROPERTY(Live2dCubism, "Motion", Variant::Type::ResourcePath, "getMotionRes", "setMotionRes");
-		CLASS_REGISTER_PROPERTY(Live2dCubism, "Material", Variant::Type::Resource, "getMaterial", "setMaterial");
+		CLASS_REGISTER_PROPERTY(Live2dCubism, "Material", Variant::Type::ResourcePath, "getMaterialRes", "setMaterialRes");
 	}
 
 	// parse paramters
@@ -313,6 +314,12 @@ namespace Echo
 		}
 	}
 
+	// set material
+	void Live2dCubism::setMaterialRes(const ResourcePath& path)
+	{
+
+	}
+
 	// build drawable
 	void Live2dCubism::buildRenderable()
 	{
@@ -329,14 +336,14 @@ namespace Echo
 			m_mesh->updateIndices(indices.size(), indices.data());
 			m_mesh->updateVertexs(define, vertices.size(), (const Byte*)vertices.data(), m_localAABB);
 
-			m_material = Material::create();
-			m_material->setOfficialMaterialContent(g_live2dDefaultMaterial);
-			m_material->setRenderStage("Transparent");
-			m_material->applyLoadedData();
+			m_materialDefault = Material::create();
+			m_materialDefault->setOfficialMaterialContent(g_live2dDefaultMaterial);
+			m_materialDefault->setRenderStage("Transparent");
+			m_materialDefault->applyLoadedData();
 
-			m_material->setTexture("u_BaseColorSampler", m_textureRes.getPath());
+			m_materialDefault->setTexture("u_BaseColorSampler", m_textureRes.getPath());
 
-			m_renderable = Renderable::create(m_mesh, m_material, this);
+			m_renderable = Renderable::create(m_mesh, m_materialDefault, this);
 		}
 	}
 
@@ -420,7 +427,7 @@ namespace Echo
 	void Live2dCubism::clearRenderable()
 	{
 		EchoSafeRelease(m_renderable);
-		EchoSafeRelease(m_material);
+		EchoSafeRelease(m_materialDefault);
 		EchoSafeRelease(m_mesh);
 	}
 }
