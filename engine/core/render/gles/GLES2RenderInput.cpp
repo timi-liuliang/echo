@@ -1,10 +1,9 @@
-#include "GLES2RenderStd.h"
+#include "GLES2RenderBase.h"
 #include "GLES2Renderer.h"
 #include "GLES2RenderInput.h"
 #include "GLES2ShaderProgram.h"
 #include "GLES2Mapping.h"
 #include "GLES2GPUBuffer.h"
-#include "GLES2Loader.h"
 #include <engine/core/Util/AssertX.h>
 #include <engine/core/Util/Exception.h>
 #include "Render/PixelFormat.h"

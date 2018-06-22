@@ -3,7 +3,7 @@
 #include "Render/PixelFormat.h"
 #include "Render/Image.h"
 #include "Render/TextureLoader.h"
-#include "GLES2RenderStd.h"
+#include "GLES2RenderBase.h"
 #include "GLES2Renderer.h"
 #include "GLES2Texture.h"
 #include "GLES2Mapping.h"
