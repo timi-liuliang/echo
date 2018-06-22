@@ -40,6 +40,7 @@ namespace Studio
 		QObject::connect(m_actionShowInExplorer, SIGNAL(triggered()), this, SLOT(showInExporer()));
 		QObject::connect(m_actionNewFolder, SIGNAL(triggered()), this, SLOT(newFolder()));
 		QObject::connect(m_actionRenameRes, SIGNAL(triggered()), this, SLOT(onRenameRes()));
+		QObject::connect(m_actionDeleteRes, SIGNAL(triggered()), this, SLOT(onDeleteRes()));
 	}
 
 	// Îö¹¹º¯Êý
@@ -260,7 +261,20 @@ namespace Studio
 	// rename res
 	void ResPanel::onRenameRes()
 	{
-		m_previewHelper->editItem(m_menuEditItem);
+		if(m_menuEditItem)
+			m_previewHelper->editItem(m_menuEditItem);
+	}
+
+	// delete res
+	void ResPanel::onDeleteRes()
+	{
+		if (m_menuEditItem)
+		{
+			Echo::String path = m_menuEditItem->data(Qt::UserRole).toString().toStdString().c_str();
+			Echo::PathUtil::DelPath(path);
+
+			reslectCurrentDir();
+		}
 	}
 
 	// on renamed res

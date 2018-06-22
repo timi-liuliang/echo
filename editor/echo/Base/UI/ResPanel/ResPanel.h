@@ -47,6 +47,9 @@ namespace Studio
 		// rename res
 		void onRenameRes();
 
+		// delete res
+		void onDeleteRes();
+
 		// on renamed res
 		void onRenamedRes(const QString src, const QString dest);
 
