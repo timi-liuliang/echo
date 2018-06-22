@@ -4,7 +4,6 @@
 #include "Render/Viewport.h"
 #include "PixelFormat.h"
 #include "Render/Renderable.h"
-#include "Render/UniformCache.h"
 #include "Render/TextureSoftDecode.h"
 
 namespace Echo
@@ -247,8 +246,6 @@ namespace Echo
 			TextureSoftDecode::setSoftDecode(true);
 		}
 
-		g_uniform_cache = EchoNew(UniformCache);
-
 		if (!initializeImpl(config))
 			return false;
 		
@@ -268,7 +265,6 @@ namespace Echo
 		cleanSystemResource();
 
 		destroyImpl();
-		EchoSafeDelete(g_uniform_cache, UniformCache);
 	}
 
 	// ¹¹Ôìº¯Êı
@@ -488,7 +484,6 @@ namespace Echo
 	bool Renderer::present()
 	{
 		bool ret = doPresent();
-		g_uniform_cache->Reset();
 		return ret;
 	}
 }

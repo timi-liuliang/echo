@@ -49,8 +49,7 @@ namespace Echo
 
 		OGLESDebug(glGenTextures(1, &texture->m_hTexture));
 		OGLESDebug(glBindTexture(GL_TEXTURE_2D, texture->m_hTexture));
-		OGLESDebug(glTexImage2D(GL_TEXTURE_2D, 0, GLES2Mapping::MapInternalFormat(m_pixelFormat), 
-			m_width, m_height, 0, GLES2Mapping::MapFormat(m_pixelFormat), GLES2Mapping::MapDataType(m_pixelFormat), (GLvoid*)0));
+		OGLESDebug(glTexImage2D(GL_TEXTURE_2D, 0, GLES2Mapping::MapInternalFormat(m_pixelFormat), m_width, m_height, 0, GLES2Mapping::MapFormat(m_pixelFormat), GLES2Mapping::MapDataType(m_pixelFormat), (GLvoid*)0));
 
 		OGLESDebug(glGenFramebuffers(1, &m_fbo));
 		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));

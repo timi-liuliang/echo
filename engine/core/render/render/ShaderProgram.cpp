@@ -101,14 +101,8 @@ namespace Echo
 		UniformArray::iterator it = m_uniforms.find(physicIdx);
 		if (it != m_uniforms.end())
 		{
-#ifdef ECHO_RENDER_THREAD
-			Uniform& uniform = it->second;
-			Byte* uniform_cache_address = g_uniform_cache->AppendUniform(value, uniformType, uniform.m_sizeInBytes);
-			uniform.setValue(uniform_cache_address);
-#else
 			Uniform& uniform = it->second;
 			uniform.setValue(value);
-#endif
 		}
 		else
 		{
@@ -144,5 +138,4 @@ namespace Echo
 	{
 		return 0;
 	}
-
 }
