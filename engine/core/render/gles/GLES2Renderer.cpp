@@ -1,8 +1,7 @@
-#include "GLES2RenderStd.h"
+#include "GLES2RenderBase.h"
 #include "GLES2Renderer.h"
 #include "GLES2Mapping.h"
 #include "GLES2RenderTarget.h"
-#include "GLES2Loader.h"
 #include "GLES2FrameBuffer.h"
 #include "GLES2Texture.h"
 #include "GLES2ShaderProgram.h"
@@ -71,20 +70,6 @@ namespace Echo
 		}
 #endif
 
-#if defined(ECHO_LOAD_GLES_EXT)
-
-		EchoLogDebug("Load GLES extensions ...");
-
-		GLES2Loader::instance();
-		if (!GLES2Loader::instance()->initialize())
-		{
-			EchoLogDebug("Load GLES extensions failed.");
-			return false;
-		}
-
-		EchoLogDebug("Load GLES extensions successed");
-
-#endif
 
 		m_screenWidth = config.screenWidth;
 		m_screenHeight = config.screenHeight;
@@ -146,11 +131,6 @@ namespace Echo
 
 	void GLES2Renderer::destroyImpl()
 	{
-#if defined(ECHO_LOAD_GLES_EXT)
-		GLES2Loader* gles2Loader = GLES2Loader::instance();
-		EchoSafeDelete(gles2Loader, GLES2Loader);
-#endif
-
 #ifdef ECHO_PLATFORM_WINDOWS
 		destroyRenderContext();
 #endif

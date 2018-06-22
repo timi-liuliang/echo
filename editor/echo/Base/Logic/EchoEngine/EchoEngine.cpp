@@ -14,7 +14,7 @@
 #include <string>
 #include <Psapi.h>
 #include "studio.h"
-#include "gles/GLES2RenderStd.h"
+#include "gles/GLES2RenderBase.h"
 #include "gles/GLES2Renderer.h"
 #include "Render/RenderState.h"
 #include "Engine/modules/Audio/FMODStudio/FSAudioSource.h"

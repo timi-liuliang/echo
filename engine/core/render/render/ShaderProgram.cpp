@@ -2,7 +2,6 @@
 #include "Render/ShaderProgram.h"
 #include "Render/ShaderProgramRes.h"
 #include "Render/Renderer.h"
-#include "Render/UniformCache.h"
 
 namespace Echo
 {

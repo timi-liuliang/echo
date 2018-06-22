@@ -19,6 +19,19 @@ namespace Echo
 		typedef map<String, const SamplerState*>::type SamplerStateMap;
 		typedef vector<std::pair<String, String> >::type SeparatedSamplerArray;
 		typedef vector<String>::type TextureSamplerStateArray;
+
+	public:
+		struct DefaultUniform
+		{
+			i32 count;
+			ShaderParamType type;
+			ui32 sizeInByte;
+			void* value;
+
+			~DefaultUniform();
+		};
+		typedef map<String, DefaultUniform*>::type MapDefaultUniforms;
+
 	public:
 		ShaderProgramRes();
 		~ShaderProgramRes();
@@ -73,15 +86,6 @@ namespace Echo
 		// 获取材质可选宏定义列表
 		static StringArray getEnabledMacros(const String& matFileName, bool withEnabled = false);
 
-		struct DefaultUniform
-		{
-			i32 count;
-			ShaderParamType type;
-			ui32 sizeInByte;
-			void* value;
-
-			~DefaultUniform();
-		};
 		bool					loadDefaultUniform(void* pNode);
 		const DefaultUniform*	getDefaultUniformValue(const String& name);
 		void*					createDefaultUniformValue(const String& strType, const i32 count, const String& strValue, ui32& outSize, ShaderParamType& outType);
@@ -103,7 +107,6 @@ namespace Echo
 		SamplerStateMap		m_mapSamplerState;
 		TextureSamplerStateArray	m_arrTexSamplerState;
 		ShaderProgram*		m_pShaderProgram;
-		typedef map<String, DefaultUniform*>::type MapDefaultUniforms;
 		MapDefaultUniforms	m_defaultUniforms;
 	};
 	typedef ResRef<ShaderProgramRes> ShaderProgramResPtr;
