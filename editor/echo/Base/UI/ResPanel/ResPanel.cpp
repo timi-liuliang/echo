@@ -17,6 +17,7 @@ namespace Studio
 	ResPanel::ResPanel( QWidget* parent/*=0*/)
 		: QDockWidget( parent)
 		, m_resMenu(nullptr)
+		, m_menuEditItem(nullptr)
 	{
 		setupUi( this);
 
@@ -38,6 +39,7 @@ namespace Studio
 		QObject::connect(m_listView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showMenu(const QPoint&)));
 		QObject::connect(m_actionShowInExplorer, SIGNAL(triggered()), this, SLOT(showInExporer()));
 		QObject::connect(m_actionNewFolder, SIGNAL(triggered()), this, SLOT(newFolder()));
+		QObject::connect(m_actionRenameRes, SIGNAL(triggered()), this, SLOT(onRenameRes()));
 	}
 
 	// Îö¹¹º¯Êý
@@ -148,6 +150,8 @@ namespace Studio
 	// node tree widget show menu
 	void ResPanel::showMenu(const QPoint& point)
 	{
+		QStandardItem* item = m_previewHelper->itemAt( point);
+
 		EchoSafeDelete(m_resMenu, QMenu);
 		m_resMenu = EchoNew(QMenu);
 
@@ -170,6 +174,13 @@ namespace Studio
 			}
 		}
 		m_resMenu->addMenu(createResMenu);
+		if (item)
+		{
+			m_resMenu->addAction(m_actionDeleteRes);
+			m_resMenu->addAction(m_actionRenameRes);
+
+			m_menuEditItem = item;
+		}
 
 		m_resMenu->addSeparator();
 		m_resMenu->addAction(m_actionShowInExplorer);
@@ -244,6 +255,12 @@ namespace Studio
 				}
 			}
 		}
+	}
+
+	// rename res
+	void ResPanel::onRenameRes()
+	{
+		m_previewHelper->editItem(m_menuEditItem);
 	}
 
 	// on renamed res

@@ -44,6 +44,9 @@ namespace Studio
 		// create res
 		void onCreateRes();
 
+		// rename res
+		void onRenameRes();
+
 		// on renamed res
 		void onRenamedRes(const QString src, const QString dest);
 
@@ -60,5 +63,6 @@ namespace Studio
 		QT_UI::QDirectoryModel*		m_dirModel;
 		QT_UI::QPreviewHelper*		m_previewHelper;
 		QMenu*						m_resMenu;			// Mouse right button click
+		QStandardItem*				m_menuEditItem;
 	};
 }

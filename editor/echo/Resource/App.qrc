@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/icon">
+    <file>Icon/file/delete.png</file>
     <file>res/lua.png</file>
     <file>res/folder.png</file>
     <file>res/material.png</file>

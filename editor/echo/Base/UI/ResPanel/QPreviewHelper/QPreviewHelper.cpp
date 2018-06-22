@@ -159,6 +159,24 @@ namespace QT_UI
 		}
 	}
 
+	// item at
+	QStandardItem* QPreviewHelper::itemAt(const QPoint& pos)
+	{
+		QModelIndex proxyIndex = m_listView->indexAt(pos);
+
+		const QModelIndex index = m_listProxyModel->mapToSource(proxyIndex);
+		return m_listModel->itemFromIndex(index);
+	}
+
+	// edit item
+	void QPreviewHelper::editItem(QStandardItem* item)
+	{
+		if (item)
+		{
+			m_listView->edit(m_listProxyModel->mapFromSource(item->index()));
+		}
+	}
+
 	// clicked resource
 	void QPreviewHelper::onClicked(const QModelIndex& pIndex)
 	{

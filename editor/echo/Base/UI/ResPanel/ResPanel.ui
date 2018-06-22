@@ -70,6 +70,20 @@
     <string>Show In Explorer</string>
    </property>
   </action>
+  <action name="m_actionDeleteRes">
+   <property name="icon">
+    <iconset resource="../../../Resource/App.qrc">
+     <normaloff>:/icon/Icon/file/delete.png</normaloff>:/icon/Icon/file/delete.png</iconset>
+   </property>
+   <property name="text">
+    <string>Delete</string>
+   </property>
+  </action>
+  <action name="m_actionRenameRes">
+   <property name="text">
+    <string>Rename</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="../../../Resource/App.qrc"/>

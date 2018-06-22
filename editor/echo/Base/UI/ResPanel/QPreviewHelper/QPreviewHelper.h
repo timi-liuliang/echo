@@ -23,6 +23,12 @@ namespace QT_UI
 		// when resize list view
 		void onListViewResize();
 
+		// item at
+		QStandardItem* itemAt(const QPoint& pos);
+
+		// edit item
+		void editItem(QStandardItem* item);
+
 	public: signals :
 		// clicked
 		void clickedRes(const char* path);
