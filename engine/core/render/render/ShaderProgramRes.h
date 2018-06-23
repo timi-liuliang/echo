@@ -36,6 +36,7 @@ namespace Echo
 		ShaderProgramRes();
 		~ShaderProgramRes();
 
+
 		// 获取名称
 		const String& getName() { return m_name; }
 
@@ -64,19 +65,16 @@ namespace Echo
 		bool createShaderProgram( const String& vsContent, const String& psContent);
 
 		// 获取混合状态
-		BlendState* getBlendState() const { return m_pBlendState; }
+		BlendState* getBlendState() const { return m_blendState; }
 
 		// 获取深度模板状态
-		DepthStencilState* getDepthState() const { return m_pDepthState; }
+		DepthStencilState* getDepthState() const { return m_depthState; }
 
 		// 获取光栅化状态
-		RasterizerState* getRasterizerState() const { return m_pRasterizerState; }
-
-		// 获取采样状态
-		const SamplerState* getSamplerState(int stage) const;
+		RasterizerState* getRasterizerState() const { return m_rasterizerState; }
 
 		// 获取着色器
-		ShaderProgram* getShaderProgram() const { return m_pShaderProgram; }
+		ShaderProgram* getShaderProgram() const { return m_shaderProgram; }
 
 		// 绑定shader
 		void activeShader();
@@ -90,23 +88,19 @@ namespace Echo
 		const DefaultUniform*	getDefaultUniformValue(const String& name);
 		void*					createDefaultUniformValue(const String& strType, const i32 count, const String& strValue, ui32& outSize, ShaderParamType& outType);
 
-	private:
-		// 获取采样状态
-		const SamplerState* getSamplerStateByTexStage(int stage);
+		// save
+		virtual void save();
 
+	private:
 		// 从内容加载
 		bool loadFromContent(char* content, const String& macros);
 
 	private:
-		String				m_name;
 		Shader::ShaderDesc	m_shaderDesc;							// 材质使用的宏定义
-		BlendState*			m_pBlendState;
-		DepthStencilState*	m_pDepthState;
-		RasterizerState*	m_pRasterizerState;
-		const SamplerState*	m_pSamplerState[8];
-		SamplerStateMap		m_mapSamplerState;
-		TextureSamplerStateArray	m_arrTexSamplerState;
-		ShaderProgram*		m_pShaderProgram;
+		BlendState*			m_blendState;
+		DepthStencilState*	m_depthState;
+		RasterizerState*	m_rasterizerState;
+		ShaderProgram*		m_shaderProgram;
 		MapDefaultUniforms	m_defaultUniforms;
 	};
 	typedef ResRef<ShaderProgramRes> ShaderProgramResPtr;

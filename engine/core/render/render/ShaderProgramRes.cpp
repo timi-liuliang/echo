@@ -13,17 +13,11 @@ namespace Echo
 {
 	// 构造函数
 	ShaderProgramRes::ShaderProgramRes()
-		: m_name(StringUtil::BLANK)
-		, m_pBlendState(NULL)
-		, m_pDepthState(NULL)
-		, m_pRasterizerState(NULL)
-		, m_pShaderProgram(NULL)
+		: m_blendState(NULL)
+		, m_depthState(NULL)
+		, m_rasterizerState(NULL)
+		, m_shaderProgram(NULL)
 	{
-		for(size_t i=0; i<MAX_TEXTURE_SAMPLER; ++i)
-			m_pSamplerState[i] = 0;
-
-		m_arrTexSamplerState.reserve(MAX_TEXTURE_SAMPLER);
-		m_arrTexSamplerState.resize(MAX_TEXTURE_SAMPLER);
 	}
 
 	// 析构函数
@@ -39,23 +33,16 @@ namespace Echo
 
 	void ShaderProgramRes::free()
 	{
-		EchoSafeDelete(m_pBlendState, BlendState);
-		EchoSafeDelete(m_pDepthState, DepthStencilState);
-		EchoSafeDelete(m_pRasterizerState, RasterizerState);
-		for(size_t i=0; i<MAX_TEXTURE_SAMPLER; ++i)
-			m_pSamplerState[i] = NULL;
-		EchoSafeDelete(m_pShaderProgram, ShaderProgram);
+		EchoSafeDelete(m_blendState, BlendState);
+		EchoSafeDelete(m_depthState, DepthStencilState);
+		EchoSafeDelete(m_rasterizerState, RasterizerState);
+		EchoSafeDelete(m_shaderProgram, ShaderProgram);
 
-		m_mapSamplerState.clear();
-
-//#ifdef ECHO_EDITOR_MODE
 		for (MapDefaultUniforms::iterator iter = m_defaultUniforms.begin(); iter != m_defaultUniforms.end(); ++iter)
 		{
 			EchoSafeDelete(iter->second, DefaultUniform);
 		}
 		m_defaultUniforms.clear();
-//#endif // ECHO_EDITOR_MODE
-
 	}
 
 	// 加载
@@ -579,26 +566,26 @@ namespace Echo
 
 	void ShaderProgramRes::createBlendState(BlendState::BlendDesc& desc)
 	{
-		EchoSafeDelete(m_pBlendState, BlendState);
-		m_pBlendState = Renderer::instance()->createBlendState(desc);
+		EchoSafeDelete(m_blendState, BlendState);
+		m_blendState = Renderer::instance()->createBlendState(desc);
 	}
 
 	void ShaderProgramRes::createDepthState(DepthStencilState::DepthStencilDesc& desc)
 	{
-		EchoSafeDelete(m_pDepthState, DepthStencilState);
-		m_pDepthState = Renderer::instance()->createDepthStencilState(desc);
+		EchoSafeDelete(m_depthState, DepthStencilState);
+		m_depthState = Renderer::instance()->createDepthStencilState(desc);
 	}
 
 	void ShaderProgramRes::createRasterizerState(RasterizerState::RasterizerDesc& desc)
 	{
-		EchoSafeDelete(m_pRasterizerState, RasterizerState);
-		m_pRasterizerState = Renderer::instance()->createRasterizerState(desc);
+		EchoSafeDelete(m_rasterizerState, RasterizerState);
+		m_rasterizerState = Renderer::instance()->createRasterizerState(desc);
 	}
 
 	// 创建着色器
 	bool ShaderProgramRes::createShaderProgram(const String& vsContent, const String& psContent)
 	{
-		EchoSafeDelete(m_pShaderProgram, ShaderProgram);
+		EchoSafeDelete(m_shaderProgram, ShaderProgram);
 		Shader::ShaderDesc vsDesc(m_shaderDesc);
 		Renderer* pRenderer = Renderer::instance();
 		Shader *pVertexShader = pRenderer->createShader(Shader::ST_VERTEXSHADER, vsDesc, vsContent.data(), vsContent.size());
@@ -620,42 +607,22 @@ namespace Echo
 		}
 
 		// create shader program
-		m_pShaderProgram = pRenderer->createShaderProgram(this);
-		m_pShaderProgram->attachShader(pVertexShader);
-		m_pShaderProgram->attachShader(pPixelShader);
-		m_pShaderProgram->linkShaders();
+		m_shaderProgram = pRenderer->createShaderProgram(this);
+		m_shaderProgram->attachShader(pVertexShader);
+		m_shaderProgram->attachShader(pPixelShader);
+		m_shaderProgram->linkShaders();
 
 		return true;
 	}
 
 	void ShaderProgramRes::activeShader()
 	{
-		EchoAssert(m_pShaderProgram);
-		EchoAssert(m_pBlendState);
-		EchoAssert(m_pDepthState);
-		EchoAssert(m_pRasterizerState);
+		EchoAssert(m_shaderProgram);
+		EchoAssert(m_blendState);
+		EchoAssert(m_depthState);
+		EchoAssert(m_rasterizerState);
 
-		m_pShaderProgram->bind();
-	}
-
-	// 获取采样状态
-	const SamplerState* ShaderProgramRes::getSamplerState(int stage) const
-	{
-		EchoAssert(stage>=0 && stage<MAX_TEXTURE_SAMPLER);
-		return m_pSamplerState[stage] ? m_pSamplerState[stage] : Renderer::instance()->getSamplerState(SamplerState::SamplerDesc());
-	}
-
-	// 获取采样状态
-	const SamplerState* ShaderProgramRes::getSamplerStateByTexStage( int stage )
-	{
-		EchoAssert( stage < 8 );
-		SamplerStateMap::iterator fit = m_mapSamplerState.find(m_arrTexSamplerState[stage]);
-		if( fit != m_mapSamplerState.end() )
-		{
-			return fit->second;
-		}
-
-		return Renderer::instance()->getSamplerState(SamplerState::SamplerDesc());
+		m_shaderProgram->bind();
 	}
 
 #ifdef ECHO_EDITOR_MODE
@@ -842,5 +809,11 @@ namespace Echo
 		fullMacro += "\n";
 		int i = m_shaderDesc.macros.find(fullMacro.c_str());
 		return i != String::npos;
+	}
+
+	// save
+	void ShaderProgramRes::save()
+	{
+
 	}
 }

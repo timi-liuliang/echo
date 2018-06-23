@@ -72,12 +72,12 @@ namespace Echo
 				{
 					TextureRes* textureRes = matInst->getTexture(slotIdx);
 					Texture* texture = textureRes ? textureRes->getTexture() : nullptr;
-					const SamplerState* sampleState = material->getSamplerState(slotIdx);
+					const SamplerState* sampleState = Renderer::instance()->getSamplerState(SamplerState::SamplerDesc());
 					renderable->setTexture(slotIdx, texture, sampleState);
 				}
 				else
 				{
-					renderable->setTexture(slotIdx, *globalTexture, material->getSamplerState(slotIdx));
+					renderable->setTexture(slotIdx, *globalTexture, Renderer::instance()->getSamplerState(SamplerState::SamplerDesc()));
 				}
 
 				renderable->setShaderParam(shaderProgram->getParamPhysicsIndex(uniform.m_name), uniform.m_type, slotIdxPtr, uniform.m_count);

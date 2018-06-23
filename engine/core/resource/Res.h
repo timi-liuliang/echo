@@ -59,7 +59,7 @@ namespace Echo
 		void setPath(const ResourcePath& path) { m_path = path; }
 	
 		// save
-		void save();
+		virtual void save();
 
 	protected:
 		// cerate fun
