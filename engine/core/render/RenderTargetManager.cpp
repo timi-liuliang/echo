@@ -201,7 +201,7 @@ namespace Echo
 	
 	bool RenderTargetManager::invalidate(ui32 _id, bool invalidateColor, bool invalidateDepth, bool invalidateStencil)
 	{
-		//		EchoAssert( m_inUsingRenderTarget = RTI_End );
+		//EchoAssert( m_inUsingRenderTarget = RTI_End );
 
 		//return getRenderTargetByID(_id)->invalidateFrameBuffer(invalidateColor, invalidateDepth, invalidateStencil);
 		return true;

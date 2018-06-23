@@ -18,15 +18,15 @@ namespace Echo
 
 		enum ShaderLang
 		{
-			SL_HLSL,
-			SL_GLSL,
-			SL_CG,
+			//SL_HLSL,
+			//SL_GLSL,
+			//SL_CG,
 		};
 
 		struct ShaderDesc
 		{
-			String		func;
-			String		param;
+			//String		func;
+			//String		param;
 			String		macros;		// ∫Í∂®“Â
 		};
 

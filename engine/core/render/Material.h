@@ -83,11 +83,11 @@ namespace Echo
 		TextureRes* getTexture(const int& index);
 
 		// 设置默认渲染队列名
-		void setShader(const ResourcePath& path) { m_shaderPath = path; }
+		void setShader(const ResourcePath& path);
 		const ResourcePath& getShader() const { return m_shaderPath; }
 
 		// 设置使用官方材质
-		void setOfficialMaterialContent(const char* content) { m_officialMaterialContent = content; }
+		void setOfficialMaterialContent(const char* content) { m_officialShaderContent = content; }
 
 		// 阶段相关函数
 		const String& getRenderStage() { return m_renderStage; }
@@ -138,7 +138,7 @@ namespace Echo
 
 	private:
 		ResourcePath		m_shaderPath;				// shader res path
-		const char*			m_officialMaterialContent;	// 官方材质
+		const char*			m_officialShaderContent;	// 官方材质
 		String				m_renderStage;				// 所处渲染阶段
 		StringArray			m_macros;					// 宏定义
 		ShaderProgramRes*	m_shaderProgram;			// 对应着色器

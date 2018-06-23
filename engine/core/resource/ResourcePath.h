@@ -1,9 +1,11 @@
 #pragma once
 
 #include "engine/core/util/StringUtil.h"
+#include "ResRef.h"
 
 namespace Echo
 {
+	class Res;
 	class ResourcePath
 	{
 	public:
@@ -19,8 +21,11 @@ namespace Echo
 
 		bool isEmpty() const { return m_path.empty(); }
 
+		void loadRes();
+
 	private:
 		String		m_path;
 		String		m_supportExts;
+		//ResRef<Res> m_res;
 	};
 }

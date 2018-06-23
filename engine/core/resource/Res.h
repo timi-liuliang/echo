@@ -88,7 +88,7 @@ public:																				\
 	static void initClassInfo()														\
 	{																				\
 		static Echo::ObjectFactoryT<m_class> G_OBJECT_FACTORY(#m_class, #m_parent); \
-		Echo::Res::registerRes( #m_class,extension, CREATE_FUNC, LOAD_FUNC);					\
+		Echo::Res::registerRes( #m_class,extension, CREATE_FUNC, LOAD_FUNC);		\
 	}																				\
 																					\
 	static void bindMethods();														\

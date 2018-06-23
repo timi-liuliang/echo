@@ -1,6 +1,7 @@
 #include "ResourcePath.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/log/LogManager.h"
+#include "Res.h"
 
 namespace Echo
 {
@@ -38,5 +39,9 @@ namespace Echo
 		}
 
 		return false;
+	}
+
+	void ResourcePath::loadRes()
+	{
 	}
 }

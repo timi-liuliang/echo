@@ -14,11 +14,7 @@ namespace Echo
 	class Renderer;
 	class ShaderProgramRes : public Res
 	{
-		ECHO_RES(ShaderProgramRes, Res, ".shader", Res::create<ShaderProgramRes>, Res::load)
-
-		typedef map<String, const SamplerState*>::type SamplerStateMap;
-		typedef vector<std::pair<String, String> >::type SeparatedSamplerArray;
-		typedef vector<String>::type TextureSamplerStateArray;
+		ECHO_RES(ShaderProgramRes, Res, ".shader", Res::create<ShaderProgramRes>, ShaderProgramRes::load);
 
 	public:
 		struct DefaultUniform
@@ -34,11 +30,8 @@ namespace Echo
 
 	public:
 		ShaderProgramRes();
+		ShaderProgramRes(const ResourcePath& path);
 		~ShaderProgramRes();
-
-
-		// 获取名称
-		const String& getName() { return m_name; }
 
 		// 释放所有状态
 		void free();
@@ -46,23 +39,6 @@ namespace Echo
 		// load and parse by file
 		bool loadFromFile(const String& filename, const String& macros);
 		bool loadFromContent(const char* content, const String& macros);
-		bool loadShaderFrom(void* node, const String& macros);
-		bool loadBlendState(void* pNode);
-		bool loadMacro(void * pNode);
-		bool loadRasterizerState(void* pNode);
-		bool loadDepthStencilState(void* pNode);
-		
-		//bool loadSamplerState(void* pNode, int stage);
-		bool loadSamplerState_Ext( void* pNode );
-		bool loadTexture_Ext( void* pNode );
-
-		// create manual
-		void createBlendState(BlendState::BlendDesc& desc);
-		void createDepthState(DepthStencilState::DepthStencilDesc& desc);
-		void createRasterizerState(RasterizerState::RasterizerDesc& desc);
-
-		// 创建着色器
-		bool createShaderProgram( const String& vsContent, const String& psContent);
 
 		// 获取混合状态
 		BlendState* getBlendState() const { return m_blendState; }
@@ -79,6 +55,7 @@ namespace Echo
 		// 绑定shader
 		void activeShader();
 
+		// is have macro
 		bool hasMacro(const char* const macro) const;
 
 		// 获取材质可选宏定义列表
@@ -91,9 +68,22 @@ namespace Echo
 		// save
 		virtual void save();
 
+	protected:
+		// load
+		static Res* ShaderProgramRes::load(const ResourcePath& path);
+
 	private:
 		// 从内容加载
 		bool loadFromContent(char* content, const String& macros);
+		bool loadShaderFrom(void* node, const String& macros);
+		bool loadBlendState(void* pNode);
+		bool loadMacro(void * pNode);
+		bool loadRasterizerState(void* pNode);
+		bool loadDepthStencilState(void* pNode);
+		void createBlendState(BlendState::BlendDesc& desc);
+		void createDepthState(DepthStencilState::DepthStencilDesc& desc);
+		void createRasterizerState(RasterizerState::RasterizerDesc& desc);
+		bool createShaderProgram(const String& vsContent, const String& psContent);
 
 	private:
 		Shader::ShaderDesc	m_shaderDesc;							// 材质使用的宏定义

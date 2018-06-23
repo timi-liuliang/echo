@@ -71,7 +71,7 @@ namespace Echo
 		: Res(ResourcePath("", ".material"))
 		, m_shaderPath("", ".shader")
 		, m_shaderProgram(NULL)
-		, m_officialMaterialContent(nullptr)
+		, m_officialShaderContent(nullptr)
 	{
 
 	}
@@ -81,7 +81,7 @@ namespace Echo
 		: Res(path)
 		, m_shaderPath("", ".shader")
 		, m_shaderProgram(NULL)
-		, m_officialMaterialContent(nullptr)
+		, m_officialShaderContent(nullptr)
 	{
 
 	}
@@ -349,8 +349,8 @@ namespace Echo
 
 		// create material
 		m_shaderProgram = EchoNew(ShaderProgramRes);
-		if (m_officialMaterialContent)
-			m_shaderProgram->loadFromContent(m_officialMaterialContent, finalMacros);
+		if (m_officialShaderContent)
+			m_shaderProgram->loadFromContent(m_officialShaderContent, finalMacros);
 		else if (!m_shaderPath.getPath().empty())
 			m_shaderProgram->loadFromFile( m_shaderPath.getPath(), finalMacros);
 	}
@@ -406,5 +406,10 @@ namespace Echo
 				}
 			}
 		}
+	}
+
+	void Material::setShader(const ResourcePath& path) 
+	{ 
+		m_shaderPath = path; 
 	}
 }

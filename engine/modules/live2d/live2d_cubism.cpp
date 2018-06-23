@@ -9,8 +9,8 @@
 // Ä¬ÈÏ²ÄÖÊ
 static const char* g_live2dDefaultMaterial = R"(
 <?xml version = "1.0" encoding = "utf-8"?>
-<material>
-<vs>#version 100
+<Shader>
+<VS>#version 100
 
 attribute vec3 a_Position;
 attribute vec2 a_UV;
@@ -26,8 +26,8 @@ void main(void)
 
 	texCoord = a_UV;
 }
-</vs>
-<ps>#version 100
+</VS>
+<PS>#version 100
 
 uniform sampler2D u_BaseColorSampler;
 varying mediump vec2 texCoord;
@@ -37,7 +37,7 @@ void main(void)
 	mediump vec4 textureColor = texture2D(u_BaseColorSampler, texCoord);
 	gl_FragColor = textureColor;
 }
-	</ps>
+	</PS>
 	<BlendState>
 		<BlendEnable value = "true" />
 		<SrcBlend value = "BF_SRC_ALPHA" />
@@ -50,18 +50,6 @@ void main(void)
 		<DepthEnable value = "false" />
 		<WriteDepth value = "false" />
 	</DepthStencilState>
-	<SamplerState>
-		<BiLinearMirror>
-			<MinFilter value = "FO_LINEAR" />
-			<MagFilter value = "FO_LINEAR" />
-			<MipFilter value = "FO_NONE" />
-			<AddrUMode value = "AM_CLAMP" />
-			<AddrVMode value = "AM_CLAMP" />
-		</BiLinearMirror>
-	</SamplerState>
-	<Texture>
-		<stage no = "0" sampler = "BiLinearMirror" />
-	</Texture>
 </material>
 )";
 
@@ -317,7 +305,10 @@ namespace Echo
 	// set material
 	void Live2dCubism::setMaterialRes(const ResourcePath& path)
 	{
-
+		if (m_materialRes.setPath(path.getPath()))
+		{
+			m_materialRes.loadRes();
+		}
 	}
 
 	// build drawable

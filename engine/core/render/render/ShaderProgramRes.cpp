@@ -20,6 +20,17 @@ namespace Echo
 	{
 	}
 
+	// constructor
+	ShaderProgramRes::ShaderProgramRes(const ResourcePath& path)
+		: Res(path)
+		, m_blendState(nullptr)
+		, m_depthState(nullptr)
+		, m_rasterizerState(nullptr)
+		, m_shaderProgram(nullptr)
+	{
+
+	}
+
 	// 析构函数
 	ShaderProgramRes::~ShaderProgramRes()
 	{
@@ -84,7 +95,7 @@ namespace Echo
 		pugi::xml_document doc;
 		doc.load(content);
 
-		pugi::xml_node rootNode = doc.first_child();
+		pugi::xml_node rootNode = doc.child("Shader");
 		if (!rootNode)
 		{
 			EchoLogError("The Material file content is invalid.");
@@ -94,20 +105,33 @@ namespace Echo
 		return loadShaderFrom(&rootNode, macros);
 	}
 
+	// load
+	Res* ShaderProgramRes::load(const ResourcePath& path)
+	{
+		ShaderProgramRes* res = EchoNew(ShaderProgramRes(path));
+		if (res)
+		{
+			res->loadFromFile(path.getPath(), "");
+			return res;
+		}
+
+		return nullptr;
+	}
+
 	// 加载着色器
 	bool ShaderProgramRes::loadShaderFrom(void* node, const String& macros)
 	{
 		pugi::xml_node* rootNode = static_cast<pugi::xml_node*>(node);
 		try
 		{
-			pugi::xml_node vsNode = rootNode->child("vs");
+			pugi::xml_node vsNode = rootNode->child("VS");
 			String vsSrc, psSrc;
 			if (vsNode)
 			{
 				vsSrc = macros + vsNode.text().as_string();
 			}
 
-			pugi::xml_node psNode = rootNode->child("ps");
+			pugi::xml_node psNode = rootNode->child("PS");
 			if (psNode)
 			{
 				psSrc = macros + psNode.text().as_string();
@@ -134,16 +158,6 @@ namespace Echo
 				else if (strName == "DepthStencilState")
 				{
 					if (!loadDepthStencilState(&elementNode))
-						throw false;
-				}
-				else if (strName == "SamplerState")
-				{
-					if( !loadSamplerState_Ext( &elementNode ) )
-						throw false;
-				}
-				else if( strName == "Texture" )
-				{
-					if( !loadTexture_Ext( &elementNode ) )
 						throw false;
 				}
 				else if ( strName == "DefaultUniformValue" )
@@ -355,206 +369,6 @@ namespace Echo
 			}
 
 			createDepthState(depthStencilState);
-			return true;
-		}
-		catch(bool)
-		{
-			free();
-			return false;
-		}
-	}
-
-	bool ShaderProgramRes::loadSamplerState_Ext( void* pNode )
-	{
-		//rapidxml::xml_node<>* pSubNode = static_cast<rapidxml::xml_node<>*>(pNode);
-		//try
-		//{
-		//	rapidxml::xml_node<>* pElementNode = pSubNode->first_node();
-		//	while(pElementNode)
-		//	{
-		//		String stageName = pElementNode->name();
-
-		//		rapidxml::xml_node<>* pSubElementNode = pElementNode->first_node();
-
-		//		SamplerState::SamplerDesc samplerState;
-
-		//		while( pSubElementNode )
-		//		{
-
-		//			String strName = pSubElementNode->name();
-
-		//			if (strName == "MinFilter")
-		//			{
-		//				rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
-
-		//				String val(pVarNode->value());
-		//				for (size_t i=0; i<SamplerState::FO_MAX; ++i)
-		//				{
-		//					if (val == s_FilterOption[i])
-		//					{
-		//						samplerState.minFilter = (SamplerState::FilterOption)i;
-		//						break;
-		//					}
-		//				}
-		//			}
-		//			else if (strName == "MagFilter")
-		//			{
-		//				rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
-		//				String val(pVarNode->value());
-		//				for (size_t i=0; i<SamplerState::FO_MAX; ++i)
-		//				{
-		//					if (val == s_FilterOption[i])
-		//					{
-		//						samplerState.magFilter = (SamplerState::FilterOption)i;
-		//						break;
-		//					}
-		//				}
-		//			}
-		//			else if (strName == "MipFilter")
-		//			{
-		//				rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
-		//				String val(pVarNode->value());
-		//				for (size_t i=0; i<SamplerState::FO_MAX; ++i)
-		//				{
-		//					if (val == s_FilterOption[i])
-		//					{
-		//						samplerState.mipFilter = (SamplerState::FilterOption)i;
-		//						break;
-		//					}
-		//				}
-		//			}
-		//			else if (strName == "AddrUMode")
-		//			{
-		//				rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
-		//				String val(pVarNode->value());
-		//				for (size_t i=0; i<SamplerState::AM_MAX; ++i)
-		//				{
-		//					if (val == s_AddressMode[i])
-		//					{
-		//						samplerState.addrUMode = (SamplerState::AddressMode)i;
-		//						break;
-		//					}
-		//				}
-		//			}
-		//			else if (strName == "AddrVMode")
-		//			{
-		//				rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
-		//				String val(pVarNode->value());
-		//				for (size_t i=0; i<SamplerState::AM_MAX; ++i)
-		//				{
-		//					if (val == s_AddressMode[i])
-		//					{
-		//						samplerState.addrVMode = (SamplerState::AddressMode)i;
-		//						break;
-		//					}
-		//				}
-		//			}
-		//			else if (strName == "AddrWMode")
-		//			{
-		//				rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
-		//				String val(pVarNode->value());
-		//				for (size_t i=0; i<SamplerState::AM_MAX; ++i)
-		//				{
-		//					if (val == s_AddressMode[i])
-		//					{
-		//						samplerState.addrWMode = (SamplerState::AddressMode)i;
-		//						break;
-		//					}
-		//				}
-		//			}
-		//			else if (strName == "MaxAnisotropy")
-		//			{
-		//				rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
-		//				samplerState.maxAnisotropy = StringUtil::ParseI8(String(pVarNode->value()));
-		//			}
-		//			else if (strName == "CmpFunc")
-		//			{
-		//				rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
-		//				String val(pVarNode->value());
-		//				for (size_t i=0; i<RenderState::CF_MAXNUM; ++i)
-		//				{
-		//					if (val == s_ComparisonFunc[i])
-		//					{
-		//						samplerState.cmpFunc = (RenderState::ComparisonFunc)i;
-		//						break;
-		//					}
-		//				}
-		//			}
-		//			else if (strName == "BorderColor")
-		//			{
-		//				rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
-		//				samplerState.borderColor = StringUtil::ParseColor(String(pVarNode->value()));
-		//			}
-		//			else if (strName == "MinLOD")
-		//			{
-		//				rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
-		//				samplerState.minLOD = StringUtil::ParseFloat(String(pVarNode->value()));
-		//			}
-		//			else if (strName == "MaxLOD")
-		//			{
-		//				rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
-		//				samplerState.maxLOD = StringUtil::ParseFloat(String(pVarNode->value()));
-		//			}
-		//			else if (strName == "MipLODBias")
-		//			{
-		//				rapidxml::xml_attribute<>* pVarNode = pSubElementNode->first_attribute();
-		//				samplerState.mipLODBias = StringUtil::ParseFloat(String(pVarNode->value()));
-		//			}
-
-		//			pSubElementNode = pSubElementNode->next_sibling();
-		//		}
-
-		//		const SamplerState* pSS = Renderer::instance()->getSamplerState(samplerState);
-		//		EchoAssert( pSS );
-		//		m_mapSamplerState.insert( SamplerStateMap::value_type(stageName, pSS) );
-
-		//		pElementNode = pElementNode->next_sibling();
-		//	}
-
-			return true;
-		//}
-		//catch(bool)
-		//{
-		//	free();
-		//	return false;
-		//}
-	}
-
-	bool ShaderProgramRes::loadTexture_Ext( void* pNode )
-	{
-		pugi::xml_node* pTextureNode = static_cast<pugi::xml_node*>(pNode);
-		try
-		{
-			//for(pugi::xml_node pTextureStageNode = pTextureNode->first_child(); pTextureStageNode; pTextureStageNode=pTextureStageNode.next_sibling())
-			//{
-			//	String stageName = pTextureStageNode->name();
-			//
-			//	if( stageName != "stage" ) throw false;
-
-			//	rapidxml::xml_attribute<>* pStageNoAttribute = pTextureStageNode->first_attribute();
-
-			//	String no_name = pStageNoAttribute->name();
-
-			//	if( no_name != "no" ) throw false;
-
-			//	int stage_no = StringUtil::ParseInt(pStageNoAttribute->value());
-
-			//	rapidxml::xml_attribute<>* pStageSampAttribute = pStageNoAttribute->next_attribute();
-			//
-			//	String strSampler = pStageSampAttribute->name();
-
-			//	if( strSampler != "sampler" ) throw false;
-
-			//	String strSampValue = pStageSampAttribute->value();
-
-			//	if( strSampValue == "" ) throw false;
-
-			//	m_arrTexSamplerState[stage_no] = strSampValue;
-			//	m_pSamplerState[stage_no] = getSamplerStateByTexStage(stage_no);
-
-			//	pTextureStageNode = pTextureStageNode->next_sibling();
-			//}
-
 			return true;
 		}
 		catch(bool)
