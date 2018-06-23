@@ -72,8 +72,11 @@ namespace Echo
 		, m_shaderPath("", ".shader")
 		, m_shaderProgram(NULL)
 		, m_officialShaderContent(nullptr)
+		, m_renderStage("", nullptr)
 	{
-
+		m_renderStage.addOption("Opaque");
+		m_renderStage.addOption("Transparent");
+		m_renderStage.setValue("Opaque");
 	}
 
 	// 构造函数
@@ -82,8 +85,11 @@ namespace Echo
 		, m_shaderPath("", ".shader")
 		, m_shaderProgram(NULL)
 		, m_officialShaderContent(nullptr)
+		, m_renderStage("", nullptr)
 	{
-
+		m_renderStage.addOption("Opaque");
+		m_renderStage.addOption("Transparent");
+		m_renderStage.setValue("Opaque");
 	}
 
 	// 析构函数
@@ -95,19 +101,16 @@ namespace Echo
 		m_textures.clear();
 	}
 
-	// create a material instance
-	Material* Material::create()
-	{
-		return EchoNew(Material);
-	}
-
 	// bind methods to script
 	void Material::bindMethods()
 	{
 		CLASS_BIND_METHOD(Material, getShader, DEF_METHOD("getShader"));
 		CLASS_BIND_METHOD(Material, setShader, DEF_METHOD("setShader"));
+		CLASS_BIND_METHOD(Material, setRenderStage, DEF_METHOD("setRenderStage"));
+		CLASS_BIND_METHOD(Material, getRenderStage, DEF_METHOD("getRenderStage"));
 
 		CLASS_REGISTER_PROPERTY(Material, "Shader", Variant::Type::ResourcePath, "getShader", "setShader");
+		CLASS_REGISTER_PROPERTY(Material, "Stage", Variant::Type::StringOption, "getRenderStage", "setRenderStage");
 	}
 
 	// release

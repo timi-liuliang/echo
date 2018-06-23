@@ -59,6 +59,7 @@ namespace Echo
 		// reimplent operator
 		operator const int() const { return m_int; }
 		operator const Vector3&() const { return m_vec3; }
+		operator const String&() const { return any_cast<String>(m_any); }
 		operator const ResourcePath&() const { return any_cast<ResourcePath>(m_any); }
 		operator const Base64String&() const { return any_cast<Base64String>(m_any); }
 		operator const StringOption&() const { return any_cast<StringOption>(m_any); }

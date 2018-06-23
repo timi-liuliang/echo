@@ -186,7 +186,7 @@ namespace Echo
 			m_mesh->updateIndices(m_indicesData.size(), m_indicesData.data());
 			m_mesh->updateVertexs(define, m_verticesData.size(), (const Byte*)m_verticesData.data(), Box());
 
-			m_materialInst = Material::create();
+			m_materialInst =ECHO_CREATE_RES(Material);
 			m_materialInst->setOfficialMaterialContent(g_spinDefaultMaterial);
 			m_materialInst->setRenderStage("Transparent");
 			m_materialInst->applyLoadedData();

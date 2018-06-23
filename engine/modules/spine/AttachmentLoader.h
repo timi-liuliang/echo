@@ -45,7 +45,7 @@ namespace Echo
 		vector<ui16>::type				m_indicesData;			// 索引数据
 		Matrix4							m_matWVP;				// 世界观察投影矩阵
 		Mesh*							m_mesh;				// Geometry Data for render
-		Material*					m_materialInst;		// Material Instance
+		Material*						m_materialInst;		// Material Instance
 		Renderable*						m_renderable;
 	};
 }

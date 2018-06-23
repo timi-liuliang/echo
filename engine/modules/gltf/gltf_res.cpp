@@ -762,7 +762,7 @@ namespace Echo
 		i32 emissiveTextureIdx = matInfo.m_emissiveTexture.m_index;
 		i32 occusionTextureIdx = matInfo.m_occlusionTexture.m_index;
 
-		primitive.m_materialInst = Material::create();
+		primitive.m_materialInst = ECHO_CREATE_RES(Material);
 		primitive.m_materialInst->setOfficialMaterialContent(GltfMaterial::getPbrMetalicRoughnessContent());
 
 		// render stage

@@ -32,7 +32,7 @@ namespace Echo
 		{
 			String				m_name;				// 名称
 			ShaderParamType		m_type;				// 类型
-			i32					m_count;				// 数量
+			i32					m_count;			// 数量
 			Byte*				m_value = nullptr;	// 值
 
 			// destructor
@@ -57,9 +57,6 @@ namespace Echo
 		Material();
 		Material(const ResourcePath& path);
 		~Material();
-
-		// create a material instance
-		static Material* create();
 
 		// release
 		void release();
@@ -90,8 +87,8 @@ namespace Echo
 		void setOfficialMaterialContent(const char* content) { m_officialShaderContent = content; }
 
 		// 阶段相关函数
-		const String& getRenderStage() { return m_renderStage; }
-		void setRenderStage(const String& stage) { m_renderStage = stage; }
+		const StringOption& getRenderStage() { return m_renderStage; }
+		void setRenderStage(const StringOption& stage) { m_renderStage.setValue(stage.getValue()); }
 
 		// 设置宏定义
 		void setMacros(const String& macros);
@@ -139,7 +136,7 @@ namespace Echo
 	private:
 		ResourcePath		m_shaderPath;				// shader res path
 		const char*			m_officialShaderContent;	// 官方材质
-		String				m_renderStage;				// 所处渲染阶段
+		StringOption		m_renderStage;				// 所处渲染阶段
 		StringArray			m_macros;					// 宏定义
 		ShaderProgramRes*	m_shaderProgram;			// 对应着色器
 		ParamMap			m_uniforms;

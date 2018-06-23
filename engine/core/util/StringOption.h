@@ -9,9 +9,12 @@ namespace Echo
 		String			m_value;
 		StringArray		m_options;
 
+		StringOption(const char* value);
+		StringOption(const String& value);
 		StringOption(const String& value, const StringArray* options = nullptr);
 
 		// get vaule
+		operator const String&() const { return m_value; }
 		const String& getValue() const { return m_value; }
 
 		// set value

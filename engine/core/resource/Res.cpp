@@ -108,23 +108,6 @@ namespace Echo
 		return nullptr;
 	}
 
-	// create by class name
-	ResRef<Res> Res::createByClassName(const String& className)
-	{
-		for (auto& it : g_resFuncs)
-		{
-			if (it.second.m_class == className)
-			{
-				Res* res = it.second.m_cfun();
-				if (res)
-					return res;
-			}
-		}
-
-		EchoLogError("Res::create failed. Unknown class [%s]", className.c_str());
-		return nullptr;
-	}
-
 	// get res fun by class
 	const Res::ResFun* Res::getResFunByClassName(const String& className)
 	{

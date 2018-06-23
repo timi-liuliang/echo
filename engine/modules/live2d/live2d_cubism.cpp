@@ -327,7 +327,7 @@ namespace Echo
 			m_mesh->updateIndices(indices.size(), indices.data());
 			m_mesh->updateVertexs(define, vertices.size(), (const Byte*)vertices.data(), m_localAABB);
 
-			m_materialDefault = Material::create();
+			m_materialDefault = ECHO_CREATE_RES(Material);
 			m_materialDefault->setOfficialMaterialContent(g_live2dDefaultMaterial);
 			m_materialDefault->setRenderStage("Transparent");
 			m_materialDefault->applyLoadedData();

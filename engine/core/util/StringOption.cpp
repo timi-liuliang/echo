@@ -2,6 +2,16 @@
 
 namespace Echo
 {
+	StringOption::StringOption(const char* value)
+	{
+		setValue(value);
+	}
+
+	StringOption::StringOption(const String& str)
+	{
+		setValue(str);
+	}
+
 	StringOption::StringOption(const String& value, const StringArray* options)
 	{
 		m_value = value;

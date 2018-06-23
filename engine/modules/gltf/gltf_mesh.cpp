@@ -77,7 +77,7 @@ namespace Echo
 				clearRenderable();
 
 				Mesh* mesh = m_asset->m_meshes[m_meshIdx].m_primitives[m_primitiveIdx].m_mesh;
-				m_material = Material::create();
+				m_material = ECHO_CREATE_RES(Material);
 				m_material->clone(origMaterial);
 				m_renderable = Renderable::create(mesh, m_material, this);
 			}

@@ -134,7 +134,7 @@ namespace Echo
 			clearRenderable();
 
 			// material
-			m_materialInst = Material::create();
+			m_materialInst = ECHO_CREATE_RES(Material);
 			m_materialInst->setOfficialMaterialContent(g_spriteDefaultMaterial);
 			m_materialInst->setRenderStage("Transparent");
 			m_materialInst->applyLoadedData();
