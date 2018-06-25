@@ -33,7 +33,6 @@ namespace QT_UI
 		m_result = header;
 	}
 
-
 	// 开始某菜单项
 	void QPropertyConfigHelper::beginMenu(const char* text)
 	{
@@ -85,13 +84,8 @@ namespace QT_UI
 		Echo::ui32& curIdx = m_idxs[m_curDepth];
 
 		// 根据"_" 取最长的字符串
-		Echo::String displayText = propertyName;
-		//Echo::StringArray displayArr = Echo::StringUtil::Split(propertyName, "_");
-		//for (const Echo::String& text : displayArr)
-		//{
-		//	if (displayText.size() < text.size())
-		//		displayText = text;
-		//}
+		Echo::StringArray displayArr = Echo::StringUtil::Split(propertyName, ".");
+		Echo::String displayText = displayArr.back();
 
 		// 组织控件字符串
 		Echo::String widgetStr = FormatUI(widget, widgetParams);

@@ -41,7 +41,9 @@ namespace Echo
 
 	public:
 		Variant():m_type(Type::Nil){}
+		Variant(bool value);
 		Variant(int value);
+		Variant(Real value);
 		Variant(const String& str);
 		Variant(const Vector3& value);
 		Variant(const ResourcePath& value);
@@ -57,7 +59,9 @@ namespace Echo
 		Type getType() const { return m_type; }
 
 		// reimplent operator
+		operator const bool() const { return m_bool; }
 		operator const int() const { return m_int; }
+		operator const Real() const { return m_real; }
 		operator const Vector3&() const { return m_vec3; }
 		operator const String&() const { return any_cast<String>(m_any); }
 		operator const ResourcePath&() const { return any_cast<ResourcePath>(m_any); }

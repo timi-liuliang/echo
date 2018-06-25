@@ -5,6 +5,18 @@ namespace Echo
 {
 	const Variant Variant::INVALID;
 
+	Variant::Variant(bool value)
+		: m_type(Type::Bool)
+	{
+		m_bool = value;
+	}
+
+	Variant::Variant(Real value)
+		: m_type(Type::Real)
+	{
+		m_real = value;
+	}
+
 	Variant::Variant(int value)
 		: m_type(Type::Int)
 	{
@@ -68,7 +80,9 @@ namespace Echo
 	{
 		switch (m_type)
 		{
+		case Type::Bool: return StringUtil::ToString(m_bool);
 		case Type::Int: return StringUtil::ToString(m_int);
+		case Type::Real: return StringUtil::ToString(m_real);
 		case Type::String: return any_cast<String>(m_any);
 		case Type::Vector3: return StringUtil::ToString(m_vec3);
 		case Type::ResourcePath: return (any_cast<ResourcePath>(m_any)).getPath();
@@ -84,11 +98,13 @@ namespace Echo
 	{
 		switch (type)
 		{
-		case Echo::Variant::Type::Int: m_int = StringUtil::ParseI32(str); return true;
-		case Echo::Variant::Type::String: { m_type = Type::String; m_any = str; } return true;
-		case Echo::Variant::Type::Vector3: { m_type = Type::Vector3; m_vec3 = StringUtil::ParseVec3(str); }return true;
-		case Echo::Variant::Type::ResourcePath: { m_type = Type::ResourcePath; m_any = ResourcePath(str, nullptr); }return true;
-		case Echo::Variant::Type::StringOption: { m_type = Type::StringOption; m_any = StringOption(str, nullptr); } return true;
+		case Type::Bool: { m_type = Type::Bool; m_bool = StringUtil::ParseBool(str); } return true;
+		case Type::Int: { m_type = Type::Int; m_int = StringUtil::ParseI32(str); } return true;
+		case Type::Real: { m_type = Type::Real; m_real = StringUtil::ParseReal(str); } return true;
+		case Type::String: { m_type = Type::String; m_any = str; } return true;
+		case Type::Vector3: { m_type = Type::Vector3; m_vec3 = StringUtil::ParseVec3(str); }return true;
+		case Type::ResourcePath: { m_type = Type::ResourcePath; m_any = ResourcePath(str, nullptr); }return true;
+		case Type::StringOption: { m_type = Type::StringOption; m_any = StringOption(str, nullptr); } return true;
 		}
 
 		return false;

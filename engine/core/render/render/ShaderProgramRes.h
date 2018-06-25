@@ -52,7 +52,7 @@ namespace Echo
 		bool hasMacro(const char* const macro) const;
 
 		// 获取材质可选宏定义列表
-		static StringArray getEnabledMacros(const String& matFileName, bool withEnabled = false);
+		static StringArray getEditableMacros(const String& shaderFileName);
 
 		// get default value of uniform
 		const DefaultUniform* getDefaultUniformValue(const String& name);

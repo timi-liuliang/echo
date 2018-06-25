@@ -75,6 +75,7 @@ namespace Echo
 
 		// 获取纹理
 		TextureRes* getTexture(const int& index);
+		const String& getTexturePath(const int& index);
 
 		// 设置默认渲染队列名
 		void setShader(const ResourcePath& path);
@@ -136,6 +137,9 @@ namespace Echo
 
 		// 准备资源IO
 		TextureRes* prepareTextureImp(const String& texName);
+
+		// is global uniform
+		bool isGlobalUniform( const String& name);
 
 	private:
 		ResourcePath		m_shaderPath;				// shader res path

@@ -395,50 +395,25 @@ namespace Echo
 	}
 
 	// 获取材质可选宏定义列表
-	StringArray ShaderProgramRes::getEnabledMacros(const String& matFileName, bool withEnabled /* = false */)
+	StringArray ShaderProgramRes::getEditableMacros(const String& shaderFileName)
 	{
 		StringArray macros;
-		try
-		{
-			MemoryReader memReader( matFileName.c_str());
-			pugi::xml_document doc;
-			doc.load(memReader.getData<char*>());
 
-			pugi::xml_node rootNode = doc.first_child();
-			if (rootNode)
-			{
-				pugi::xml_node shaderNode = rootNode.child("ShaderPrograme");
-				if (shaderNode)
-				{
-					pugi::xml_node macrosNode = shaderNode.child("Macros");
-					if (macrosNode)
-					{
-						pugi::xml_node macroNode = macrosNode.child("Macro");
-						while (macroNode)
-						{
-							pugi::xml_attribute attribute = macroNode.attribute("value");
-							if (attribute)
-							{
-								macros.push_back(attribute.as_string());
-								if (withEnabled)
-								{
-									pugi::xml_attribute enabledAttribute = macroNode.attribute("default");
-									if (enabledAttribute)
-										macros.push_back(enabledAttribute.as_string());
-									else
-										macros.push_back("false");
-								}
-							}
-								
-							macroNode = macroNode.next_sibling("Macro");
-						}
-					}
-				}
-			}
-		}
-		catch (...)
+		MemoryReader memReader(shaderFileName.c_str());
+		pugi::xml_document doc;
+		doc.load(memReader.getData<char*>());
+		pugi::xml_node shaderNode = doc.child("Shader");
+		if (shaderNode)
 		{
-			EchoLogError( "getEnabledMacros failed...");
+			pugi::xml_node macrosNode = shaderNode.child("Macros");
+			if (macrosNode)
+			{
+				for (pugi::xml_node macroNode = macrosNode.child("Macro"); macroNode; macroNode = macroNode.next_sibling("Macro"))
+				{
+					macros.push_back(macroNode.attribute("name").as_string());
+					macros.push_back(macroNode.attribute("default").as_string());
+				}			
+			}
 		}
 
 		return macros;

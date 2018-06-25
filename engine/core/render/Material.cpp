@@ -216,6 +216,18 @@ namespace Echo
 		return nullptr;
 	}
 
+	const String& Material::getTexturePath(const int& index)
+	{
+		auto it = m_textures.find(index);
+		if (it != m_textures.end())
+		{
+			return it->second.m_uri;
+		}
+
+		static String blank = "";
+		return blank;
+	}
+
 	// …Ë÷√∫Í∂®“Â
 	void Material::setMacros(const String& macros) 
 	{ 
@@ -240,6 +252,15 @@ namespace Echo
 			else
 				EchoLogError("MaterialInstance::ModifyUnifromParam Type Error!");
 		}
+	}
+
+	// is global uniform
+	bool Material::isGlobalUniform(const String& name)
+	{
+		if (name == "u_WVPMaterix")
+			return true;
+
+		return false;
 	}
 
 	void Material::addTexture(int idx, const String& name)
@@ -357,10 +378,25 @@ namespace Echo
 		// register uniform propertys
 		if (m_shaderProgramRes)
 		{
+			StringArray macros = ShaderProgramRes::getEditableMacros(m_shaderPath.getPath());
+			for (size_t i = 0; i < macros.size() / 2; i++)
+			{
+				registerProperty(ECHO_CLASS_NAME(Material), "Macros." + macros[i * 2], Variant::Type::Bool);
+			}
+
 			for (auto& it : m_uniforms)
 			{
-				registerProperty(ECHO_CLASS_NAME(Material), "Uniforms." + it.first, Variant::Type::Int);
-			}		
+				if (!isGlobalUniform(it.first))
+				{
+					switch (it.second->m_type)
+					{
+					case ShaderParamType::SPT_INT: registerProperty(ECHO_CLASS_NAME(Material), "Uniforms." + it.first, Variant::Type::Int); break;
+					case ShaderParamType::SPT_VEC3: registerProperty(ECHO_CLASS_NAME(Material), "Uniforms." + it.first, Variant::Type::Vector3); break;
+					case ShaderParamType::SPT_TEXTURE: registerProperty(ECHO_CLASS_NAME(Material), "Uniforms." + it.first, Variant::Type::ResourcePath); break;
+					default: break;
+					}			
+				}	
+			}	
 		}
 	}
 
@@ -370,7 +406,13 @@ namespace Echo
 		StringArray ops = StringUtil::Split(propertyName, ".");
 		if (ops[0] == "Uniforms")
 		{
-			oVar = 1.1f;
+			Uniform* uniform = getUniform(ops[1]);
+			if(uniform->m_type==ShaderParamType::SPT_TEXTURE)
+				oVar = ResourcePath(getTexturePath(*(int*)uniform->m_value), ".png");
+		}
+		else if (ops[0] == "Macros")
+		{
+			oVar = isMacroUsed(ops[1]);
 		}
 
 		return false; 
