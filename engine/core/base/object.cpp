@@ -18,7 +18,7 @@ namespace Echo
 	// propertys (script property or dynamic property)
 	const PropertyInfos& Object::getPropertys() const 
 	{ 
-		return m_propertys; 
+		return m_propertys;
 	}
 
 	// register property

@@ -214,7 +214,7 @@ namespace Echo
 		if (m_shaderProgram)
 		{
 			// 绑定着色器
-			m_shaderProgram->activeShader();
+			m_shaderProgram->bind();
 
 			// 绑定渲染状态
 			bindRenderState();

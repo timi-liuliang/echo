@@ -33,12 +33,8 @@ namespace Echo
 		ShaderProgramRes(const ResourcePath& path);
 		~ShaderProgramRes();
 
-		// 释放所有状态
-		void free();
-
-		// load and parse by file
-		bool loadFromFile(const String& filename, const String& macros);
-		bool loadFromContent(const char* content, const String& macros);
+		// 绑定shader
+		void bind();
 
 		// 获取混合状态
 		BlendState* getBlendState() const { return m_blendState; }
@@ -52,21 +48,26 @@ namespace Echo
 		// 获取着色器
 		ShaderProgram* getShaderProgram() const { return m_shaderProgram; }
 
-		// 绑定shader
-		void activeShader();
-
 		// is have macro
 		bool hasMacro(const char* const macro) const;
 
 		// 获取材质可选宏定义列表
 		static StringArray getEnabledMacros(const String& matFileName, bool withEnabled = false);
 
-		bool					loadDefaultUniform(void* pNode);
-		const DefaultUniform*	getDefaultUniformValue(const String& name);
-		void*					createDefaultUniformValue(const String& strType, const i32 count, const String& strValue, ui32& outSize, ShaderParamType& outType);
+		// get default value of uniform
+		const DefaultUniform* getDefaultUniformValue(const String& name);
+
+		// load and parse by file
+		bool loadFromFile(const String& filename, const String& macros);
+
+		// load from content
+		bool loadFromContent(const char* content, const String& macros);
 
 		// save
 		virtual void save();
+
+		// clear
+		void clear();
 
 	protected:
 		// load
@@ -77,13 +78,14 @@ namespace Echo
 		bool loadFromContent(char* content, const String& macros);
 		bool loadShaderFrom(void* node, const String& macros);
 		bool loadBlendState(void* pNode);
-		bool loadMacro(void * pNode);
 		bool loadRasterizerState(void* pNode);
 		bool loadDepthStencilState(void* pNode);
+		bool loadDefaultUniform(void* pNode);
 		void createBlendState(BlendState::BlendDesc& desc);
 		void createDepthState(DepthStencilState::DepthStencilDesc& desc);
 		void createRasterizerState(RasterizerState::RasterizerDesc& desc);
 		bool createShaderProgram(const String& vsContent, const String& psContent);
+		void* createDefaultUniformValue(const String& strType, const i32 count, const String& strValue, ui32& outSize, ShaderParamType& outType);
 
 	private:
 		Shader::ShaderDesc	m_shaderDesc;							// 材质使用的宏定义

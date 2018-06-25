@@ -144,12 +144,13 @@ namespace Echo
 				pugi::xml_node root = doc.child("res");
 				if (root)
 				{
-					Res* resNode = ECHO_DOWN_CAST<Res*>(instanceObject(&root));
-					resNode->setPath(path);
+					Res* res = ECHO_DOWN_CAST<Res*>(instanceObject(&root));
+					res->setPath(path);
+					res->onLoaded();
 
-					g_ress[path.getPath()] = resNode;
+					g_ress[path.getPath()] = res;
 
-					return resNode;
+					return res;
 				}
 			}
 		}

@@ -8,8 +8,8 @@
 
 // Ä¬ÈÏ²ÄÖÊ
 static const char* g_spriteDefaultMaterial = R"(<?xml version = "1.0" encoding = "utf-8"?>
-<material>
-<vs>#version 100
+<Shader>
+<VS>#version 100
 
 attribute vec3 a_Position;
 attribute vec2 a_UV;
@@ -25,8 +25,8 @@ void main(void)
 	
 	texCoord = a_UV;
 }
-</vs>
-<ps>#version 100
+</VS>
+<PS>#version 100
 
 uniform sampler2D u_BaseColorSampler;
 
@@ -37,7 +37,7 @@ void main(void)
 	mediump vec4 textureColor = texture2D(u_BaseColorSampler, texCoord);
 	gl_FragColor = textureColor;
 }
-	</ps>
+	</PS>
 	<BlendState>
 		<BlendEnable value = "true" />
 		<SrcBlend value = "BF_SRC_ALPHA" />
@@ -62,7 +62,7 @@ void main(void)
 	<Texture>
 		<stage no = "0" sampler = "BiLinearMirror" />
 	</Texture>
-</material>
+</Shader>
 )";
 
 namespace Echo
@@ -137,7 +137,7 @@ namespace Echo
 			m_materialInst = ECHO_CREATE_RES(Material);
 			m_materialInst->setOfficialMaterialContent(g_spriteDefaultMaterial);
 			m_materialInst->setRenderStage("Transparent");
-			m_materialInst->applyLoadedData();
+			m_materialInst->onLoaded();
 
 			m_materialInst->setTexture("u_BaseColorSampler", m_textureRes.getPath());
 

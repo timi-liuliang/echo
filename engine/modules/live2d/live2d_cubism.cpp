@@ -330,7 +330,7 @@ namespace Echo
 			m_materialDefault = ECHO_CREATE_RES(Material);
 			m_materialDefault->setOfficialMaterialContent(g_live2dDefaultMaterial);
 			m_materialDefault->setRenderStage("Transparent");
-			m_materialDefault->applyLoadedData();
+			m_materialDefault->onLoaded();
 
 			m_materialDefault->setTexture("u_BaseColorSampler", m_textureRes.getPath());
 

@@ -61,9 +61,6 @@ namespace Echo
 		// release
 		void release();
 
-		// 应用数据到内存 && GPU --> 必须在主线程。
-		bool applyLoadedData();
-
 		// 克隆
 		void clone(Material* orig);
 
@@ -94,7 +91,7 @@ namespace Echo
 		void setMacros(const String& macros);
 
 		// 获取渲染队列
-		ShaderProgramRes* getMaterial() { return m_shaderProgram; }
+		ShaderProgramRes* getMaterial() { return m_shaderProgramRes; }
 
 		// operate uniform
 		bool isUniformExist(const String& name);
@@ -121,7 +118,14 @@ namespace Echo
 		void setMacro(const String& macro, bool enabled);
 
 		// 构建渲染队列
-		void buildRenderQueue();
+		void buildShaderProgram();
+
+		// on loaded
+		virtual void onLoaded();
+
+	protected:
+		// get property value
+		virtual bool getPropertyValue(const String& propertyName, Variant& oVar);
 
 	private:
 		// 添加贴图文件名
@@ -138,7 +142,7 @@ namespace Echo
 		const char*			m_officialShaderContent;	// 官方材质
 		StringOption		m_renderStage;				// 所处渲染阶段
 		StringArray			m_macros;					// 宏定义
-		ShaderProgramRes*	m_shaderProgram;			// 对应着色器
+		ShaderProgramRes*	m_shaderProgramRes;			// 对应着色器
 		ParamMap			m_uniforms;
 		TextureInfoMap 		m_textures;
 	};

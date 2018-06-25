@@ -20,7 +20,7 @@ namespace Echo
 
 		// free this object from memory
 		void queueFree() { ECHO_DELETE_T(this, Object); }
-		void free() { ECHO_DELETE_T(this, Object); }
+		void clear() { ECHO_DELETE_T(this, Object); }
 
 	public:
 		// propertys (script property or dynamic property)

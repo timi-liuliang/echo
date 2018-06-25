@@ -43,6 +43,9 @@ namespace Echo
 		static const ResFun* getResFunByClassName(const String& className);
 
 	public:
+		// on loaded
+		virtual void onLoaded() {}
+
 		// add ref count
 		void addRefCount() { m_refCount++; }
 

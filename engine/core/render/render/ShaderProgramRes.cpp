@@ -34,7 +34,7 @@ namespace Echo
 	// 析构函数
 	ShaderProgramRes::~ShaderProgramRes()
 	{
-		free();
+		clear();
 	}
 
 	// bind methods to script
@@ -42,7 +42,7 @@ namespace Echo
 	{
 	}
 
-	void ShaderProgramRes::free()
+	void ShaderProgramRes::clear()
 	{
 		EchoSafeDelete(m_blendState, BlendState);
 		EchoSafeDelete(m_depthState, DepthStencilState);
@@ -61,7 +61,7 @@ namespace Echo
 	{
 		try 
 		{
-			free();
+			clear();
 
 			m_name   = filename;
 			m_shaderDesc.macros = macros;
@@ -76,7 +76,7 @@ namespace Echo
 		}
 		catch(bool)
 		{
-			free();
+			clear();
 			EchoLogError("Material::loadFromFile: Fail to Parse Material file [%s].", filename.c_str());
 			return false;
 		}
@@ -140,12 +140,7 @@ namespace Echo
 			for(pugi::xml_node elementNode = rootNode->first_child(); elementNode; elementNode=elementNode.next_sibling())
 			{
 				String strName = elementNode.name();
-				if (strName == "Macro")
-				{
-					if (!loadMacro(&elementNode))
-						throw false;
-				}
-				else if (strName == "BlendState")
+				if (strName == "BlendState")
 				{
 					if (!loadBlendState(&elementNode))
 						throw false;
@@ -178,7 +173,7 @@ namespace Echo
 		}
 		catch (bool)
 		{
-			free();
+			clear();
 			return false;
 		}
 	}
@@ -235,49 +230,9 @@ namespace Echo
 		}
 		catch(bool)
 		{
-			free();
+			clear();
 			return false;
 		}
-	}
-
-	bool ShaderProgramRes::loadMacro(void * pNode)
-	{
-		return true;
-		//rapidxml::xml_node<>* pSubNode = static_cast<rapidxml::xml_node<>*>(pNode);
-		//rapidxml::xml_node<>* itemNode = pSubNode->first_node();
-		//String strName = pSubNode->name();
-		//try
-		//{
-		//	while (itemNode)
-		//	{
-		//		String item = itemNode->name();
-		//		if (item != "item") throw false;
-
-		//		rapidxml::xml_attribute<>* nameAttr = itemNode->first_attribute();
-		//		String name = nameAttr->name();
-		//		if (name != "name") throw false;
-		//		m_shaderDesc.macros = nameAttr->value();
-
-		//		rapidxml::xml_attribute<>* functionAttr = nameAttr->next_attribute();
-		//		String function = functionAttr->name();
-		//		if (function != "function") throw false;
-		//		m_shaderDesc.func = functionAttr->value();
-
-		//		rapidxml::xml_attribute<>* paramAttr = functionAttr->next_attribute();
-		//		String param = paramAttr->name();
-		//		if (param != "param") throw false;
-		//		m_shaderDesc.param = paramAttr->value();
-
-		//		itemNode = itemNode->next_sibling();
-		//	}
-
-		//	return true;
-		//}
-		//catch (bool)
-		//{
-		//	free();
-		//	return false;
-		//}
 	}
 
 	bool ShaderProgramRes::loadRasterizerState( void* pNode )
@@ -314,7 +269,7 @@ namespace Echo
 		}
 		catch (bool)
 		{
-			free();
+			clear();
 			return false;
 		}
 	}
@@ -373,7 +328,7 @@ namespace Echo
 		}
 		catch(bool)
 		{
-			free();
+			clear();
 			return false;
 		}
 	}
@@ -429,7 +384,7 @@ namespace Echo
 		return true;
 	}
 
-	void ShaderProgramRes::activeShader()
+	void ShaderProgramRes::bind()
 	{
 		EchoAssert(m_shaderProgram);
 		EchoAssert(m_blendState);
@@ -439,12 +394,10 @@ namespace Echo
 		m_shaderProgram->bind();
 	}
 
-#ifdef ECHO_EDITOR_MODE
 	// 获取材质可选宏定义列表
 	StringArray ShaderProgramRes::getEnabledMacros(const String& matFileName, bool withEnabled /* = false */)
 	{
 		StringArray macros;
-
 		try
 		{
 			MemoryReader memReader( matFileName.c_str());
@@ -490,7 +443,6 @@ namespace Echo
 
 		return macros;
 	}
-#endif
 
 	ShaderProgramRes::DefaultUniform::~DefaultUniform()
 	{
@@ -528,7 +480,7 @@ namespace Echo
 		}
 		catch (bool)
 		{
-			free();
+			clear();
 			return false;
 		}
 	}

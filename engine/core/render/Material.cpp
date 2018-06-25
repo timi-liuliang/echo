@@ -70,7 +70,7 @@ namespace Echo
 	Material::Material()
 		: Res(ResourcePath("", ".material"))
 		, m_shaderPath("", ".shader")
-		, m_shaderProgram(NULL)
+		, m_shaderProgramRes(NULL)
 		, m_officialShaderContent(nullptr)
 		, m_renderStage("", nullptr)
 	{
@@ -83,7 +83,7 @@ namespace Echo
 	Material::Material(const ResourcePath& path)
 		: Res(path)
 		, m_shaderPath("", ".shader")
-		, m_shaderProgram(NULL)
+		, m_shaderProgramRes(NULL)
 		, m_officialShaderContent(nullptr)
 		, m_renderStage("", nullptr)
 	{
@@ -119,20 +119,11 @@ namespace Echo
 		ECHO_DELETE_T(this, Material);
 	}
 
-	bool Material::applyLoadedData()
+	// on loaded
+	void Material::onLoaded()
 	{
 		// 加载材质模板
-		buildRenderQueue();
-
-		// 获取着色器
-		ShaderProgram* shaderProgram = m_shaderProgram->getShaderProgram();
-		if (shaderProgram)
-		{
-			matchUniforms();
-			return true;
-		}
-
-		return false;
+		buildShaderProgram();
 	}
 
 	// 复制材质实例
@@ -140,7 +131,7 @@ namespace Echo
 	{
 		m_renderStage = orig->m_renderStage;
 		m_macros = orig->m_macros;
-		m_shaderProgram = orig->m_shaderProgram;
+		m_shaderProgramRes = orig->m_shaderProgramRes;
 
 		for (auto it : orig->m_uniforms)
 		{
@@ -160,7 +151,7 @@ namespace Echo
 			return  it->second->m_value;
 		}
 
-		const ShaderProgramRes::DefaultUniform* dUniform = m_shaderProgram->getDefaultUniformValue(name);
+		const ShaderProgramRes::DefaultUniform* dUniform = m_shaderProgramRes->getDefaultUniformValue(name);
 		return dUniform ? dUniform->value : NULL;
 	}
 
@@ -341,21 +332,48 @@ namespace Echo
 	}
 
 	// 构建渲染队列
-	void Material::buildRenderQueue()
+	void Material::buildShaderProgram()
 	{
 		// make sure macros
 		String finalMacros; finalMacros.reserve(512);
 		for (const String& macro : m_macros)
-		{
 			finalMacros += "#define " + macro + "\n";
-		}
 
 		// create material
-		m_shaderProgram = EchoNew(ShaderProgramRes);
+		m_shaderProgramRes = EchoNew(ShaderProgramRes);
 		if (m_officialShaderContent)
-			m_shaderProgram->loadFromContent(m_officialShaderContent, finalMacros);
+			m_shaderProgramRes->loadFromContent(m_officialShaderContent, finalMacros);
 		else if (!m_shaderPath.getPath().empty())
-			m_shaderProgram->loadFromFile( m_shaderPath.getPath(), finalMacros);
+			m_shaderProgramRes->loadFromFile( m_shaderPath.getPath(), finalMacros);
+
+		// match uniforms
+		if (m_shaderProgramRes)
+		{
+			ShaderProgram* shaderProgram = m_shaderProgramRes->getShaderProgram();
+			if (shaderProgram)
+				matchUniforms();
+		}
+
+		// register uniform propertys
+		if (m_shaderProgramRes)
+		{
+			for (auto& it : m_uniforms)
+			{
+				registerProperty(ECHO_CLASS_NAME(Material), "Uniforms." + it.first, Variant::Type::Int);
+			}		
+		}
+	}
+
+	// get property value
+	bool Material::getPropertyValue(const String& propertyName, Variant& oVar) 
+	{ 
+		StringArray ops = StringUtil::Split(propertyName, ".");
+		if (ops[0] == "Uniforms")
+		{
+			oVar = 1.1f;
+		}
+
+		return false; 
 	}
 
 	static bool MappingStringArrayIdx(const String* arry, int count, const String& value, int& idx)
@@ -375,7 +393,7 @@ namespace Echo
 	// 参数匹配
 	void Material::matchUniforms()
 	{
-		ShaderProgram* shaderProgram = m_shaderProgram->getShaderProgram();
+		ShaderProgram* shaderProgram = m_shaderProgramRes->getShaderProgram();
 		if (shaderProgram)
 		{
 			// 添加未设置参数
@@ -401,7 +419,7 @@ namespace Echo
 					}
 
 					// default value
-					const ShaderProgramRes::DefaultUniform* defaultUniform = m_shaderProgram->getDefaultUniformValue(uniform->m_name);
+					const ShaderProgramRes::DefaultUniform* defaultUniform = m_shaderProgramRes->getDefaultUniformValue(uniform->m_name);
 					if (defaultUniform && uniform->m_count == defaultUniform->count && uniform->m_type == defaultUniform->type)
 						uniform->setValue(defaultUniform->value);
 
