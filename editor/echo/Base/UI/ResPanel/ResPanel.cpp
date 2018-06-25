@@ -129,7 +129,7 @@ namespace Studio
 						}
 
 						Studio::EchoEngine::instance()->setCurrentEditNode(node);
-						Studio::EchoEngine::instance()->setCurrentEditNodeSavePath(res);
+						Studio::EchoEngine::instance()->setCurrentEditNodeSavePath(resPath);
 
 						NodeTreePanel::instance()->refreshNodeTreeDisplay();
 					}
