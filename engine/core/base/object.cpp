@@ -69,8 +69,18 @@ namespace Echo
 				loadPropertyRecursive(pugiNode, classPtr, parentClassName);
 		}
 
+		// load property
+		loadPropertyValue(pugiNode, classPtr, className, PropertyInfo::Static);
+		loadPropertyValue(pugiNode, classPtr, className, PropertyInfo::Dynamic);
+	}
+
+	// load propertys value
+	void Object::loadPropertyValue(void* pugiNode, Echo::Object* classPtr, const Echo::String& className, i32 flag)
+	{
+		pugi::xml_node* xmlNode = (pugi::xml_node*)pugiNode;
+
 		Echo::PropertyInfos propertys;
-		Echo::Class::getPropertys(className, classPtr, propertys);
+		Echo::Class::getPropertys(className, classPtr, propertys, flag);
 
 		// iterator
 		for (const Echo::PropertyInfo* prop : propertys)

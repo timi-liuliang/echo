@@ -71,7 +71,7 @@ namespace Echo
 		: Res(ResourcePath("", ".material"))
 		, m_shaderPath("", ".shader")
 		, m_shaderProgramRes(NULL)
-		, m_officialShaderContent(nullptr)
+		, m_shaderContent(nullptr)
 		, m_renderStage("", nullptr)
 	{
 		m_renderStage.addOption("Opaque");
@@ -84,7 +84,7 @@ namespace Echo
 		: Res(path)
 		, m_shaderPath("", ".shader")
 		, m_shaderProgramRes(NULL)
-		, m_officialShaderContent(nullptr)
+		, m_shaderContent(nullptr)
 		, m_renderStage("", nullptr)
 	{
 		m_renderStage.addOption("Opaque");
@@ -122,8 +122,6 @@ namespace Echo
 	// on loaded
 	void Material::onLoaded()
 	{
-		// 加载材质模板
-		buildShaderProgram();
 	}
 
 	// 复制材质实例
@@ -286,9 +284,7 @@ namespace Echo
 			TextureInfo& info = it.second;
 			if (info.m_name == name)
 			{
-				//TextureRes::releaseResource(info.m_texture);
-
-				info.m_uri = textureRes->getName();
+				info.m_uri = textureRes->getPath().getPath();
 				info.m_texture = textureRes;
 
 				return info.m_texture;
@@ -362,8 +358,8 @@ namespace Echo
 
 		// create material
 		m_shaderProgramRes = EchoNew(ShaderProgramRes);
-		if (m_officialShaderContent)
-			m_shaderProgramRes->loadFromContent(m_officialShaderContent, finalMacros);
+		if (m_shaderContent)
+			m_shaderProgramRes->loadFromContent(m_shaderContent, finalMacros);
 		else if (!m_shaderPath.getPath().empty())
 			m_shaderProgramRes->loadFromFile( m_shaderPath.getPath(), finalMacros);
 
@@ -416,6 +412,24 @@ namespace Echo
 		}
 
 		return false; 
+	}
+
+	// set property value
+	bool Material::setPropertyValue(const String& propertyName, const Variant& propertyValue)
+	{
+		StringArray ops = StringUtil::Split(propertyName, ".");
+		if (ops[0] == "Uniforms")
+		{
+			Uniform* uniform = getUniform(ops[1]);
+			if (uniform->m_type == ShaderParamType::SPT_TEXTURE)
+				setTexture(ops[1], propertyValue.toResPath().getPath());
+		}
+		else if (ops[0] == "Macros")
+		{
+			setMacro(ops[1], propertyValue);
+		}
+
+		return false;
 	}
 
 	static bool MappingStringArrayIdx(const String* arry, int count, const String& value, int& idx)
@@ -473,6 +487,16 @@ namespace Echo
 
 	void Material::setShader(const ResourcePath& path) 
 	{ 
-		m_shaderPath = path; 
+		m_shaderPath = path;
+
+		buildShaderProgram();
+	}
+
+	// 设置使用官方材质
+	void Material::setShaderContent(const char* content)
+	{
+		m_shaderContent = content;
+
+		buildShaderProgram();
 	}
 }

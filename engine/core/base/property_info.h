@@ -10,11 +10,11 @@ namespace Echo
 	{
 		String			m_name;
 		Variant::Type	m_type;
-		enum class Type
+		enum Type
 		{
-			Static,
-			Dynamic,
-			Script,
+			Static = 1<<0,
+			Dynamic = 1<<1,
+			Script = 1<<2,
 		}				m_infoType;
 
 		PropertyInfo(Type type) : m_infoType(type) {}
@@ -22,6 +22,9 @@ namespace Echo
 
 		// get property value
 		virtual bool getPropertyValue(Object* classPtr, const String& propertyName, Variant& oVar) = 0;
+
+		// set property value
+		virtual void setPropertyValue(Object* classPtr, const String& propertyName, const Variant& propertyValue) = 0;
 	};
 	typedef vector<PropertyInfo*>::type PropertyInfos;
 
@@ -38,6 +41,9 @@ namespace Echo
 
 		// get property value
 		virtual bool getPropertyValue(Object* classPtr, const String& propertyName, Variant& oVar);
+
+		// set property value
+		virtual void setPropertyValue(Object* classPtr, const String& propertyName, const Variant& propertyValue);
 	};
 
 	struct PropertyInfoDynamic : public PropertyInfo
@@ -50,5 +56,8 @@ namespace Echo
 
 		// get property value
 		virtual bool getPropertyValue(Object* classPtr, const String& propertyName, Variant& oVar);
+
+		// set property value
+		virtual void setPropertyValue(Object* classPtr, const String& propertyName, const Variant& propertyValue);
 	};
 }

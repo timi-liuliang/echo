@@ -135,7 +135,7 @@ namespace Echo
 
 			// material
 			m_materialInst = ECHO_CREATE_RES(Material);
-			m_materialInst->setOfficialMaterialContent(g_spriteDefaultMaterial);
+			m_materialInst->setShaderContent(g_spriteDefaultMaterial);
 			m_materialInst->setRenderStage("Transparent");
 			m_materialInst->onLoaded();
 

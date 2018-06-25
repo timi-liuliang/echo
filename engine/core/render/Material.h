@@ -79,10 +79,9 @@ namespace Echo
 
 		// 设置默认渲染队列名
 		void setShader(const ResourcePath& path);
+		void setShaderContent(const char* content);
 		const ResourcePath& getShader() const { return m_shaderPath; }
 
-		// 设置使用官方材质
-		void setOfficialMaterialContent(const char* content) { m_officialShaderContent = content; }
 
 		// 阶段相关函数
 		const StringOption& getRenderStage() { return m_renderStage; }
@@ -128,6 +127,9 @@ namespace Echo
 		// get property value
 		virtual bool getPropertyValue(const String& propertyName, Variant& oVar);
 
+		// set property value
+		virtual bool setPropertyValue(const String& propertyName, const Variant& propertyValue);
+
 	private:
 		// 添加贴图文件名
 		void addTexture(int idx, const String& name);
@@ -143,7 +145,7 @@ namespace Echo
 
 	private:
 		ResourcePath		m_shaderPath;				// shader res path
-		const char*			m_officialShaderContent;	// 官方材质
+		const char*			m_shaderContent;	// 官方材质
 		StringOption		m_renderStage;				// 所处渲染阶段
 		StringArray			m_macros;					// 宏定义
 		ShaderProgramRes*	m_shaderProgramRes;			// 对应着色器

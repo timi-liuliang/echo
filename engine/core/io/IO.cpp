@@ -269,19 +269,6 @@ namespace Echo
 		}
 	}
 
-		// 获取指定后缀名的所有文件
-	void IO::foreach_archive_unsafe(std::function<bool (const Echo::String&, const int index)> callback)
-	{
-//		EE_LOCK_AUTO_MUTEX
-		int i = 0;
-		for( FileArchiveMapping::iterator itf = m_resourceIndexCaseSensitive.begin(); itf!=m_resourceIndexCaseSensitive.end(); itf++)
-		{
-			bool r = callback(itf->first, i++);
-			if (!r)
-				break;
-		}
-	}
-
 	void IO::listFileWithPathAndExt(StringArray& oFiles, const char* path, const char* extWithDot)
 	{
 		oFiles.clear();

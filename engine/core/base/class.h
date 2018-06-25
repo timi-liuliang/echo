@@ -139,7 +139,7 @@ namespace Echo
 		static bool registerProperty(const String& className, const String& propertyName, const Variant::Type type, const String& getter, const String& setter);
 
 		// get propertys
-		static ui32 getPropertys(const String& className, Object* classPtr, PropertyInfos& propertys);
+		static ui32 getPropertys(const String& className, Object* classPtr, PropertyInfos& propertys, i32 flag=PropertyInfo::Static | PropertyInfo::Dynamic);
 
 		// get property
 		static PropertyInfo* getProperty(const String& className, Object* classPtr, const String& propertyName);

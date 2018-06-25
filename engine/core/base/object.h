@@ -32,6 +32,9 @@ namespace Echo
 		// get property value
 		virtual bool getPropertyValue(const String& propertyName, Variant& oVar) { return false; }
 
+		// set property value
+		virtual bool setPropertyValue(const String& propertyName, const Variant& propertyValue) { return false; }
+
 	protected:
 		static Object* instanceObject(void* pugiNode);
 
@@ -40,6 +43,9 @@ namespace Echo
 
 		// remember property recursive
 		static void savePropertyRecursive(void* pugiNode, Echo::Object* classPtr, const Echo::String& className);
+
+		// load propertys value
+		static void loadPropertyValue(void* pugiNode, Echo::Object* classPtr, const Echo::String& className, i32 flag);
 
 	protected:
 		String			m_name;

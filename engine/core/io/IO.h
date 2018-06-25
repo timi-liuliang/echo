@@ -62,7 +62,6 @@ namespace Echo
 
 		// 获取指定后缀名的所有文件(.bmp|.tga)
 		void listFilesWithExt( StringArray& oFiles, const char* extWithDot);
-		void foreach_archive_unsafe(std::function<bool (const Echo::String&, const int)> callback);
 		int getArchiveCount() const { return m_resourceIndexCaseSensitive.size(); }
 
 		// 获取指定目录和指定后缀的资源存档

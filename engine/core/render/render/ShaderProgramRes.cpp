@@ -398,21 +398,23 @@ namespace Echo
 	StringArray ShaderProgramRes::getEditableMacros(const String& shaderFileName)
 	{
 		StringArray macros;
-
-		MemoryReader memReader(shaderFileName.c_str());
-		pugi::xml_document doc;
-		doc.load(memReader.getData<char*>());
-		pugi::xml_node shaderNode = doc.child("Shader");
-		if (shaderNode)
+		if (!shaderFileName.empty())
 		{
-			pugi::xml_node macrosNode = shaderNode.child("Macros");
-			if (macrosNode)
+			MemoryReader memReader(shaderFileName.c_str());
+			pugi::xml_document doc;
+			doc.load(memReader.getData<char*>());
+			pugi::xml_node shaderNode = doc.child("Shader");
+			if (shaderNode)
 			{
-				for (pugi::xml_node macroNode = macrosNode.child("Macro"); macroNode; macroNode = macroNode.next_sibling("Macro"))
+				pugi::xml_node macrosNode = shaderNode.child("Macros");
+				if (macrosNode)
 				{
-					macros.push_back(macroNode.attribute("name").as_string());
-					macros.push_back(macroNode.attribute("default").as_string());
-				}			
+					for (pugi::xml_node macroNode = macrosNode.child("Macro"); macroNode; macroNode = macroNode.next_sibling("Macro"))
+					{
+						macros.push_back(macroNode.attribute("name").as_string());
+						macros.push_back(macroNode.attribute("default").as_string());
+					}
+				}
 			}
 		}
 

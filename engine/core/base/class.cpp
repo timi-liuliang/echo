@@ -110,25 +110,31 @@ namespace Echo
 	}
 
 	// get propertys
-	ui32 Class::getPropertys(const String& className, Object* classPtr, PropertyInfos& propertys)
+	ui32 Class::getPropertys(const String& className, Object* classPtr, PropertyInfos& propertys, i32 flag)
 	{
 		// static
-		auto it = g_classInfos->find(className);
-		if (it != g_classInfos->end())
+		if (flag & PropertyInfo::Static)
 		{
-			for (PropertyInfo* info : it->second->getPropertys())
+			auto it = g_classInfos->find(className);
+			if (it != g_classInfos->end())
 			{
-				propertys.push_back(info);
+				for (PropertyInfo* info : it->second->getPropertys())
+				{
+					propertys.push_back(info);
+				}
 			}
 		}
 
 		// dynamic
-		const PropertyInfos& dynamicPropertys = classPtr->getPropertys();
-		for (PropertyInfo* pi : dynamicPropertys)
+		if (flag & PropertyInfo::Dynamic)
 		{
-			if (((PropertyInfoDynamic*)pi)->m_className == className)
+			const PropertyInfos& dynamicPropertys = classPtr->getPropertys();
+			for (PropertyInfo* pi : dynamicPropertys)
 			{
-				propertys.push_back(pi);
+				if (((PropertyInfoDynamic*)pi)->m_className == className)
+				{
+					propertys.push_back(pi);
+				}
 			}
 		}
 
@@ -194,15 +200,7 @@ namespace Echo
 			PropertyInfo* pi = getProperty(className, classPtr, propertyName);
 			if (pi)
 			{
-				switch (pi->m_infoType)
-				{
-				case PropertyInfo::Type::Static:
-					{
-						Variant::CallError error;
-						const Variant* args[1] = { &propertyValue };
-						((PropertyInfoStatic*)pi)->m_setterMethod->call(classPtr, args, 1, error);
-					}
-				}		
+				pi->setPropertyValue(classPtr, propertyName, propertyValue);
 
 				return true;
 			}
