@@ -9,7 +9,7 @@ namespace Echo
 	class ResourcePath
 	{
 	public:
-		ResourcePath(){}
+		ResourcePath();
 		ResourcePath(const String& path, const char* exts = nullptr);
 		~ResourcePath() {}
 
@@ -21,11 +21,11 @@ namespace Echo
 
 		bool isEmpty() const { return m_path.empty(); }
 
-		void loadRes();
+		Res* getRes();
 
 	private:
-		String		m_path;
-		String		m_supportExts;
-		//ResRef<Res> m_res;
+		String			m_path;
+		String			m_supportExts;
+		ResRef<Res>*	m_res;				// this is used only when path is empty.
 	};
 }

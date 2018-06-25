@@ -270,7 +270,7 @@ namespace Studio
 		*/
 	}
 
-	//获得背景网格的相关参数
+	// 获得背景网格的相关参数
 	void EchoEngine::GetBackGridParameters(int* linenums, float* lineGap)
 	{
 		//if (linenums)

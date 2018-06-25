@@ -149,9 +149,8 @@ namespace Echo
 		MotionMap				m_motions;
 
 		Mesh*					m_mesh;				// Geometry Data for render
-		MaterialPtr				m_materialDefault;	// Default Material Instance
 		ResourcePath			m_materialRes;		// Custom Material
-		MaterialPtr				m_materialCustom;
+		MaterialPtr				m_material;
 		Renderable*				m_renderable;
 
 		Matrix4					m_matWVP;
