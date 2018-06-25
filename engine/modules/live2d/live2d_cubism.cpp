@@ -308,6 +308,9 @@ namespace Echo
 		if (m_materialRes.setPath(path.getPath()))
 		{
 			m_materialRes.loadRes();
+
+			m_materialCustom = ECHO_DOWN_CAST<Material*>(Res::get(m_materialRes));
+			m_renderable = Renderable::create(m_mesh, m_materialCustom, this);
 		}
 	}
 
