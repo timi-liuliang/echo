@@ -47,6 +47,12 @@ namespace Echo
 		m_any = value;
 	}
 
+	Variant::Variant(Object* value)
+		: m_type(Type::Object)
+	{
+		m_obj = value;
+	}
+
 	Variant::Variant(const ResourcePath& value)
 		: m_type(Type::ResourcePath)
 	{

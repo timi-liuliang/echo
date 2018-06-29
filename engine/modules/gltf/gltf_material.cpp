@@ -382,9 +382,9 @@ void main()
 // Ä¬ÈÏ²ÄÖÊ
 static const char* g_generalPbrMetalicRoughnessMaterial = 
 R"(<?xml version = "1.0" encoding = "utf-8"?>
-<material> 
-	<vs>VS_PLACE_HOLDER</vs>
-	<ps>PS_PLACE_HOLDER</ps>
+<Shader> 
+	<VS>VS_PLACE_HOLDER</VS>
+	<PS>PS_PLACE_HOLDER</PS>
 	<BlendState>
 		<BlendEnable value = "true" />
 		<SrcBlend value = "BF_SRC_ALPHA" />
@@ -409,7 +409,7 @@ R"(<?xml version = "1.0" encoding = "utf-8"?>
 	<Texture>
 		<stage no = "0" sampler = "BiLinearMirror" />
 	</Texture>
-</material>
+</Shader>
 )";
 
 namespace Echo

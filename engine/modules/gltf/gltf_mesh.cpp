@@ -31,12 +31,13 @@ namespace Echo
 		CLASS_BIND_METHOD(GltfMesh, setMeshIdx, DEF_METHOD("setMeshIdx"));
 		CLASS_BIND_METHOD(GltfMesh, getPrimitiveIdx, DEF_METHOD("getPrimitiveIdx"));
 		CLASS_BIND_METHOD(GltfMesh, setPrimitiveIdx, DEF_METHOD("setPrimitiveIdx"));
-		//CLASS_BIND_METHOD(GltfMesh, getMaterial, DEF_METHOD("getMaterial"));
-		//CLASS_BIND_METHOD(GltfMesh, setMaterial, DEF_METHOD("setMaterial"));
+		CLASS_BIND_METHOD(GltfMesh, getMaterial, DEF_METHOD("getMaterial"));
+		CLASS_BIND_METHOD(GltfMesh, setMaterial, DEF_METHOD("setMaterial"));
 
 		CLASS_REGISTER_PROPERTY(GltfMesh, "Gltf", Variant::Type::ResourcePath, "getGltfRes", "setGltfRes");
 		CLASS_REGISTER_PROPERTY(GltfMesh, "Mesh", Variant::Type::Int, "getMeshIdx", "setMeshIdx");
 		CLASS_REGISTER_PROPERTY(GltfMesh, "Primitive", Variant::Type::Int, "getPrimitiveIdx", "setPrimitiveIdx");
+		CLASS_REGISTER_PROPERTY(GltfMesh, "Material", Variant::Type::Object, "getMaterial", "setMaterial");
 	}
 
 	// set gltf resource
@@ -77,9 +78,9 @@ namespace Echo
 				clearRenderable();
 
 				Mesh* mesh = m_asset->m_meshes[m_meshIdx].m_primitives[m_primitiveIdx].m_mesh;
-				m_material = ECHO_CREATE_RES(Material);
-				m_material->clone(origMaterial);
-				m_renderable = Renderable::create(mesh, m_material, this);
+				m_materialDefault = ECHO_CREATE_RES(Material);
+				m_materialDefault->clone(origMaterial);
+				m_renderable = Renderable::create(mesh, m_materialDefault, this);
 			}
 		}
 	}

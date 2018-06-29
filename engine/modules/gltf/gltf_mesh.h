@@ -50,9 +50,10 @@ namespace Echo
 		Renderable*				m_renderable;
 		Matrix4					m_matWVP;
 		ResourcePath			m_assetPath;
-		GltfResPtr				m_asset;		// gltf asset ptr
-		int						m_meshIdx;		// mesh index in the asset
-		int						m_primitiveIdx;	// sub mesh index
-		Material*				m_material;
+		GltfResPtr				m_asset;			// gltf asset ptr
+		int						m_meshIdx;			// mesh index in the asset
+		int						m_primitiveIdx;		// sub mesh index
+		MaterialPtr				m_material;			// custom material
+		MaterialPtr				m_materialDefault;
 	};
 }

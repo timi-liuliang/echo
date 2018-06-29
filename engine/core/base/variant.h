@@ -25,6 +25,7 @@ namespace Echo
 			ResourcePath,
 			Base64String,
 			StringOption,
+			Object,
 		};
 
 		enum class CallError
@@ -49,6 +50,7 @@ namespace Echo
 		Variant(const ResourcePath& value);
 		Variant(const Base64String& value);
 		Variant(const StringOption& value);
+		Variant(Object* value);
 		~Variant();
 
 		// operator "="
@@ -67,6 +69,7 @@ namespace Echo
 		operator const ResourcePath&() const { return any_cast<ResourcePath>(m_any); }
 		operator const Base64String&() const { return any_cast<Base64String>(m_any); }
 		operator const StringOption&() const { return any_cast<StringOption>(m_any); }
+		operator Object*() const { return m_obj; }
 
 		// convert to other type
 		const bool toVector3() { return m_bool; }
@@ -91,6 +94,7 @@ namespace Echo
 			i32				m_int;
 			float			m_real;
 			Vector3			m_vec3;
+			mutable Object*	m_obj;
 		};
 	};
 }

@@ -26,6 +26,5 @@ namespace Echo
 	private:
 		String			m_path;
 		String			m_supportExts;
-		ResRef<Res>*	m_res;				// this is used only when path is empty.
 	};
 }

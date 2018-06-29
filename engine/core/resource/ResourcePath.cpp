@@ -6,13 +6,11 @@
 namespace Echo
 {
 	ResourcePath::ResourcePath()
-		: m_res(nullptr)
 	{
 
 	}
 
 	ResourcePath::ResourcePath(const String& path, const char* exts)
-		: m_res(nullptr)
 	{
 		m_supportExts = exts ? exts : PathUtil::GetFileExt(path, true);
 		if(!path.empty())
@@ -52,8 +50,6 @@ namespace Echo
 	{
 		if (!m_path.empty())
 			return Res::get(*this);
-		else if( m_res)
-			return *m_res;
 
 		return nullptr;
 	}
