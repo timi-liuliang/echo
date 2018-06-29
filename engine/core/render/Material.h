@@ -145,7 +145,7 @@ namespace Echo
 
 	private:
 		ResourcePath		m_shaderPath;				// shader res path
-		const char*			m_shaderContent;	// 官方材质
+		const char*			m_shaderContent;			// 官方材质
 		StringOption		m_renderStage;				// 所处渲染阶段
 		StringArray			m_macros;					// 宏定义
 		ShaderProgramRes*	m_shaderProgramRes;			// 对应着色器

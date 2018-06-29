@@ -150,7 +150,7 @@ namespace Echo
 
 		Mesh*					m_mesh;				// Geometry Data for render
 		ResourcePath			m_materialRes;		// Custom Material
-		MaterialPtr				m_material;
+		MaterialPtr				m_materialDefault;
 		Renderable*				m_renderable;
 
 		Matrix4					m_matWVP;

@@ -50,7 +50,7 @@ void main(void)
 		<DepthEnable value = "false" />
 		<WriteDepth value = "false" />
 	</DepthStencilState>
-</material>
+</Shader>
 )";
 
 namespace Echo
@@ -70,13 +70,13 @@ namespace Echo
 		, m_modelSize(0)
 		, m_modelMemory(nullptr)
 		, m_mesh(nullptr)
-		, m_material(nullptr)
+		, m_materialDefault(nullptr)
 		, m_renderable(nullptr)
 	{
-		m_material = ECHO_CREATE_RES(Material);
-		m_material->setShaderContent(g_live2dDefaultMaterial);
-		m_material->setRenderStage("Transparent");
-		m_material->onLoaded();
+		m_materialDefault = ECHO_CREATE_RES(Material);
+		m_materialDefault->setShaderContent(g_live2dDefaultMaterial);
+		m_materialDefault->setRenderStage("Transparent");
+		m_materialDefault->onLoaded();
 	}
 
 	Live2dCubism::~Live2dCubism()
@@ -267,7 +267,7 @@ namespace Echo
 	{
 		if (m_textureRes.setPath(path.getPath()))
 		{
-			m_material->setTexture("u_BaseColorSampler", m_textureRes.getPath());
+			m_materialDefault->setTexture("u_BaseColorSampler", m_textureRes.getPath());
 		}
 	}
 
@@ -310,7 +310,7 @@ namespace Echo
 	{
 		if (m_materialRes.setPath(path.getPath()))
 		{
-			m_material = ECHO_DOWN_CAST<Material*>(m_materialRes.getRes());
+			m_materialDefault = ECHO_DOWN_CAST<Material*>(m_materialRes.getRes());
 		}
 	}
 
@@ -330,7 +330,7 @@ namespace Echo
 			m_mesh->updateIndices(indices.size(), indices.data());
 			m_mesh->updateVertexs(define, vertices.size(), (const Byte*)vertices.data(), m_localAABB);
 
-			m_renderable = Renderable::create(m_mesh, m_material, this);
+			m_renderable = Renderable::create(m_mesh, m_materialDefault, this);
 		}
 	}
 

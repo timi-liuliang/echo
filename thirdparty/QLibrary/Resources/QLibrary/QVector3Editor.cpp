@@ -49,9 +49,9 @@ namespace QT_UI
 		QObject::connect(m_lineEditY, SIGNAL(returnPressed()), this, SLOT(onEditFinished()));
 		QObject::connect(m_lineEditZ, SIGNAL(returnPressed()), this, SLOT(onEditFinished()));
 
-		QObject::connect(m_lineEditX, SIGNAL(textEdited(const QString&)), this, SLOT(onEditFinished()));
-		QObject::connect(m_lineEditY, SIGNAL(textEdited(const QString&)), this, SLOT(onEditFinished()));
-		QObject::connect(m_lineEditZ, SIGNAL(textEdited(const QString&)), this, SLOT(onEditFinished()));
+		QObject::connect(m_lineEditX, SIGNAL(textEdited(const QString&)), this, SLOT(onEditing()));
+		QObject::connect(m_lineEditY, SIGNAL(textEdited(const QString&)), this, SLOT(onEditing()));
+		QObject::connect(m_lineEditZ, SIGNAL(textEdited(const QString&)), this, SLOT(onEditing()));
 	}
 
 	// set value
@@ -105,6 +105,23 @@ namespace QT_UI
 
 			Vector3 vec3(x, y, z);
 			m_propertyModel->setValue(m_propertyName, StringUtil::ToString(vec3).c_str());
+		}
+	}
+
+	// editing
+	void QVector3Editor::onEditing()
+	{
+		if (m_lineEditX == sender())
+		{
+
+		}
+		else if (m_lineEditY == sender())
+		{
+
+		}
+		else if (m_lineEditZ == sender())
+		{
+
 		}
 	}
 }

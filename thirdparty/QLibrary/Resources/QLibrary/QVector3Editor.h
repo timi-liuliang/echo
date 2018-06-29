@@ -22,6 +22,9 @@ namespace QT_UI
 		// edit finished
 		void onEditFinished();
 
+		// editing
+		void onEditing();
+
 	protected:
 		// redefine paintEvent
 		void paintEvent(QPaintEvent* event);

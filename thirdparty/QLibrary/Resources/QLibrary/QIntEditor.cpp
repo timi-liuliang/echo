@@ -23,7 +23,7 @@ namespace QT_UI
 		m_horizonLayout->addWidget(m_lineEdit);
 
 		QObject::connect(m_lineEdit, SIGNAL(returnPressed()), this, SLOT(onEditFinished()));
-		QObject::connect(m_lineEdit, SIGNAL(textEdited(const QString&)), this, SLOT(onEditFinished()));
+		QObject::connect(m_lineEdit, SIGNAL(textEdited(const QString&)), this, SLOT(onEditing()));
 	}
 
 	// set value
@@ -66,5 +66,11 @@ namespace QT_UI
 
 			m_propertyModel->setValue(m_propertyName, StringUtil::ToString(i32(x)).c_str());
 		}
+	}
+
+	// editing
+	void QIntEditor::onEditing()
+	{
+
 	}
 }
