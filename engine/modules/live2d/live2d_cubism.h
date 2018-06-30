@@ -83,10 +83,8 @@ namespace Echo
 		const ResourcePath& getTextureRes() { return m_textureRes; }
 
 		// material
-		const ResourcePath& getMaterialRes() const { return m_materialRes; }
-
-		// set material
-		void setMaterialRes(const ResourcePath& path);
+		Material* getMaterial() const { return m_material; }
+		void setMaterial( Object* material);
 
 		// set anim res path
 		void setMotionRes(const ResourcePath& path);
@@ -149,7 +147,7 @@ namespace Echo
 		MotionMap				m_motions;
 
 		Mesh*					m_mesh;				// Geometry Data for render
-		ResourcePath			m_materialRes;		// Custom Material
+		MaterialPtr				m_material;			// Custom Material
 		MaterialPtr				m_materialDefault;
 		Renderable*				m_renderable;
 

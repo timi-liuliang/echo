@@ -5,11 +5,20 @@
 
 namespace Echo
 {
+	enum class PropertyHint
+	{
+		None,
+		Range,				// variable range
+		ResourceType,		// resource object type
+	};
+
 	class Object;
 	struct PropertyInfo
 	{
 		String			m_name;
 		Variant::Type	m_type;
+		PropertyHint	m_hint;
+		String			m_hintStr;
 		enum Type
 		{
 			Static = 1<<0,

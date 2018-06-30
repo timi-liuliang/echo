@@ -74,6 +74,7 @@ namespace Echo
 		// convert to other type
 		const bool toVector3() { return m_bool; }
 		const Vector3& toVector3() const { return m_vec3; }
+		Object* toObj() const { return m_obj; }
 		const ResourcePath& toResPath() const { return any_cast<ResourcePath>(m_any); }
 		const StringOption& toStringOption() const { return any_cast<StringOption>(m_any); }
 

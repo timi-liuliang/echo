@@ -4,6 +4,24 @@
 
 namespace Echo
 {
+	template<class T>
+	struct VariantCaster
+	{
+		static T cast(const Variant& variant)
+		{
+			return variant;
+		}
+	};
+
+	//template<class T>
+	//struct VariantCaster
+	//{
+	//	static T cast(Object* obj)
+	//	{
+	//		return (T)obj;
+	//	}
+	//};
+
 #ifdef DEBUG_METHODS_ENABLED
 	struct MethodDefinition
 	{
@@ -137,7 +155,7 @@ namespace Echo
 		{
 			__AnEmptyClass* instance = (__AnEmptyClass*)obj;
 
-			P0 p0 = *args[0];
+			P0 p0 = VariantCaster<P0>::cast(*args[0]);
 			(instance->*method)(p0);
 
 			return Variant();

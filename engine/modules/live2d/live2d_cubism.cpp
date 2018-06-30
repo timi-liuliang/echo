@@ -59,7 +59,6 @@ namespace Echo
 		: m_mocRes("", ".moc3")
 		, m_textureRes("", ".png")
 		, m_curMotionRes("", ".json")
-		, m_materialRes("", ".material")
 		, m_curMotion(nullptr)
 		, m_mocMemory(nullptr)
 		, m_moc(nullptr)
@@ -92,10 +91,10 @@ namespace Echo
 		CLASS_BIND_METHOD(Live2dCubism, setTextureRes, DEF_METHOD("setTextureRes"));
 		CLASS_BIND_METHOD(Live2dCubism, getMotionRes, DEF_METHOD("getMotionRes"));
 		CLASS_BIND_METHOD(Live2dCubism, setMotionRes, DEF_METHOD("setMotionRes"));
-		CLASS_BIND_METHOD(Live2dCubism, getMaterialRes, DEF_METHOD("getMaterialRes"));
-		CLASS_BIND_METHOD(Live2dCubism, setMaterialRes, DEF_METHOD("setMaterialRes"));
+		CLASS_BIND_METHOD(Live2dCubism, getMaterial, DEF_METHOD("getMaterial"));
+		CLASS_BIND_METHOD(Live2dCubism, setMaterial, DEF_METHOD("setMaterial"));
 
-		CLASS_REGISTER_PROPERTY(Live2dCubism, "Material", Variant::Type::ResourcePath, "getMaterialRes", "setMaterialRes");
+		CLASS_REGISTER_PROPERTY(Live2dCubism, "Material", Variant::Type::Object, "getMaterial", "setMaterial");
 		CLASS_REGISTER_PROPERTY(Live2dCubism, "Texture", Variant::Type::ResourcePath, "getTextureRes", "setTextureRes");
 		CLASS_REGISTER_PROPERTY(Live2dCubism, "Moc", Variant::Type::ResourcePath, "getMoc", "setMoc");
 		CLASS_REGISTER_PROPERTY(Live2dCubism, "Motion", Variant::Type::ResourcePath, "getMotionRes", "setMotionRes");
@@ -306,12 +305,9 @@ namespace Echo
 	}
 
 	// set material
-	void Live2dCubism::setMaterialRes(const ResourcePath& path)
+	void Live2dCubism::setMaterial(Object* material)
 	{
-		if (m_materialRes.setPath(path.getPath()))
-		{
-			m_materialDefault = ECHO_DOWN_CAST<Material*>(m_materialRes.getRes());
-		}
+		m_material = (Material*)material;
 	}
 
 	// build drawable

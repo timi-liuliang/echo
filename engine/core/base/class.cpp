@@ -90,7 +90,7 @@ namespace Echo
 	}
 
 	// add property
-	bool Class::registerProperty(const String& className, const String& propertyName, const Variant::Type type, const String& getter, const String& setter)
+	bool Class::registerProperty(const String& className, const String& propertyName, const Variant::Type type, PropertyHint hint, const String& hintStr, const String& getter, const String& setter)
 	{
 		auto it = g_classInfos->find(className);
 		if (it != g_classInfos->end())
@@ -98,6 +98,8 @@ namespace Echo
 			PropertyInfoStatic* info = EchoNew(PropertyInfoStatic);
 			info->m_name = propertyName;
 			info->m_type = type;
+			info->m_hint = hint;
+			info->m_hintStr = hintStr;
 			info->m_setter = setter;
 			info->m_getter = getter;
 			info->m_setterMethod = getMethodBind(className, setter);
