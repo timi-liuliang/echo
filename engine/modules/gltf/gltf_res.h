@@ -43,7 +43,7 @@ namespace Echo
 		}					m_mode = Triangles; // each attribute is mapped with his name and accessor index to the data
 		GltfAttributes		m_attributes;
 		Mesh*				m_mesh = nullptr;	// geometry Data for render
-		Material*			m_materialInst = nullptr;
+		MaterialPtr			m_materialInst;
 	};
 
 	struct GltfMeshInfo

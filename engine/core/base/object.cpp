@@ -6,6 +6,8 @@ namespace Echo
 {
 	Object::Object()
 	{
+		static i32 id = 0;
+		m_id = id++;
 	}
 
 	// get class name

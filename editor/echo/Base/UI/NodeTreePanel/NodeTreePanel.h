@@ -76,7 +76,7 @@ namespace Studio
 		void showObjectPropertyRecursive(Echo::Object* classPtr, const Echo::String& className);
 
 		// show property
-		void showPropertyByVariant(const Echo::String& name, const class Echo::Variant& var);
+		void showPropertyByVariant(const Echo::String& name, const class Echo::Variant& var, const Echo::PropertyInfo* propInfo);
 
 	private:
 		NewNodeDialog*					m_newNodeDialog;		// 新建结点

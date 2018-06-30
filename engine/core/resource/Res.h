@@ -37,7 +37,7 @@ namespace Echo
 		static ResRef<Res> createByFileExtension(const String& extension);
 
 		// create by class name
-		static ResRef<Res> createByClassName(const String& className);
+		static Res* createByClassName(const String& className);
 
 		// get res fun by class
 		static const ResFun* getResFunByClassName(const String& className);
@@ -79,7 +79,7 @@ namespace Echo
 	};
 	typedef ResRef<Res> ResPtr;
 
-	INLINE ResRef<Res> Res::createByClassName(const String& className)
+	INLINE Res* Res::createByClassName(const String& className)
 	{
 		const ResFun* resFun = getResFunByClassName(className);
 		if (resFun)
@@ -94,7 +94,7 @@ namespace Echo
 	}
 }
 
-#define  ECHO_CREATE_RES(T) (T*)Echo::Res::createByClassName(#T).ptr();
+#define  ECHO_CREATE_RES(T) (T*)Echo::Res::createByClassName(#T);
 
 #define ECHO_RES(m_class, m_parent, extension, CREATE_FUNC, LOAD_FUNC)				\
 public:																				\

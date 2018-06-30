@@ -298,14 +298,14 @@ namespace Studio
 				Echo::Variant var;
 				Echo::Class::getPropertyValue(classPtr, prop->m_name, var);
 
-				showPropertyByVariant(prop->m_name, var);
+				showPropertyByVariant(prop->m_name, var, prop);
 			}
 			m_propertyHelper.endMenu();
 		}
 	}
 
 	// show property
-	void NodeTreePanel::showPropertyByVariant(const Echo::String& name, const Echo::Variant& var)
+	void NodeTreePanel::showPropertyByVariant(const Echo::String& name, const Echo::Variant& var, const Echo::PropertyInfo* propInfo)
 	{
 		switch (var.getType())
 		{
@@ -315,6 +315,7 @@ namespace Studio
 		case Echo::Variant::Type::Vector3:		m_propertyHelper.addItem(name.c_str(), var.toVector3(), QT_UI::WT_Vector3); break;
 		case Echo::Variant::Type::ResourcePath:	m_propertyHelper.addItem(name.c_str(), var.toResPath().getPath(), QT_UI::WT_AssetsSelect, var.toResPath().getSupportExts().c_str());break;
 		case Echo::Variant::Type::StringOption: m_propertyHelper.addItem(name.c_str(), var.toStringOption().getValue(), QT_UI::WT_ComboBox, var.toStringOption().getOptionsStr().c_str()); break;
+		case Echo::Variant::Type::Object:		m_propertyHelper.addItem(name.c_str(), var.toObj() ? var.toObj()->getId() : -1, QT_UI::WT_Res, propInfo->m_hintStr.c_str()); break;
 		default:								m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_None); break;
 		}
 	}

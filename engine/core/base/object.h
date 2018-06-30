@@ -15,6 +15,9 @@ namespace Echo
 		// get class name
 		virtual const String& getClassName() const;
 
+		// get id
+		i32 getId() const { return m_id; }
+
 		void setName(const String& name) { m_name = name; }
 		const String& getName() const { return m_name; }
 
@@ -48,6 +51,7 @@ namespace Echo
 		static void loadPropertyValue(void* pugiNode, Echo::Object* classPtr, const Echo::String& className, i32 flag);
 
 	protected:
+		i32				m_id;
 		String			m_name;
 		PropertyInfos	m_propertys;
 	};

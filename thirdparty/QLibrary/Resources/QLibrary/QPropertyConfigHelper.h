@@ -18,6 +18,7 @@ namespace QT_UI
 		WT_ColorSelect,
 		WT_ComboBox,
 		WT_AssetsSelect,
+		WT_Res,
 		WT_2ND_EDITOR,			// ´ýÉ¾³ý
 	};
 
@@ -42,6 +43,7 @@ namespace QT_UI
 
 		// Ìí¼Ó±à¼­Ïî
 		void addItem(const char* propertyName, float value, WidgetType widget, const char* widgetParams = nullptr);
+		void addItem(const char* propertyName, Echo::i32 value, WidgetType widget, const char* widgetParams = nullptr);
 		void addItem(const char* propertyName, Echo::ui32 value, WidgetType widget, const char* widgetParams = nullptr);
 		void addItem(const char* propertyName, bool value, WidgetType widget, const char* widgetParams = nullptr);
 		void addItem(const char* propertyName, const Echo::Vector3& value, WidgetType widget, const char* widgetParams = nullptr);

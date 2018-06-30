@@ -30,7 +30,7 @@ namespace Echo
 
 		// material
 		Material* getMaterial() const { return m_material; }
-		void setMaterial(const Object* material){}
+		void setMaterial(const Object* material);
 
 	protected:
 		// build drawable

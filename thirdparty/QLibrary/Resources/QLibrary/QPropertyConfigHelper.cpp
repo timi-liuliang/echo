@@ -67,6 +67,12 @@ namespace QT_UI
 		addItem(propertyName, Echo::StringUtil::ToString(value), widget, widgetParams);
 	}
 
+	// ×Ö·û´®ÀàÐÍ
+	void QPropertyConfigHelper::addItem(const char* propertyName, const Echo::i32 value, WidgetType widget, const char* widgetParams)
+	{
+		addItem(propertyName, Echo::StringUtil::ToString(value), widget, widgetParams);
+	}
+
 	void QPropertyConfigHelper::addItem(const char* propertyName, bool value, WidgetType widget, const char* widgetParams)
 	{
 		addItem(propertyName, Echo::StringUtil::ToString(value), widget, widgetParams);

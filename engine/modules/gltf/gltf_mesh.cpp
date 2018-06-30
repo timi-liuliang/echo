@@ -67,6 +67,11 @@ namespace Echo
 		buildRenderable();
 	}
 
+	void GltfMesh::setMaterial(const Object* material) 
+	{
+
+	}
+
 	// build drawable
 	void GltfMesh::buildRenderable()
 	{
