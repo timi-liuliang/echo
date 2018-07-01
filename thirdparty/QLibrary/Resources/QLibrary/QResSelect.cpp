@@ -1,13 +1,12 @@
 #include "QResSelect.h"
 #include <QFileDialog>
 #include "QPropertyModel.h"
+#include "ResChooseDialog.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/io/IO.h>
 
 namespace QT_UI
 {
-	QResSelect::OpenFileDialogFunction QResSelect::m_openFileFunction;
-
 	// 构造函数
 	QResSelect::QResSelect(class QPropertyModel* model, QString propertyName, const char* exts, const char* files, QWidget* parent)
 		: QWidget( parent)
@@ -47,8 +46,7 @@ namespace QT_UI
 	// 选择路径
 	void QResSelect::OnSelectPath()
 	{
-		Q_ASSERT_X(m_openFileFunction, "", "");
-		Echo::String qFileName = m_openFileFunction(this, m_exts.c_str(), m_files.toStdString().c_str(), "");
+		Echo::String qFileName = Studio::ResChooseDialog::getExistingFile(this, m_exts.c_str(), m_files.toStdString().c_str(), "");
 		if (!qFileName.empty())
 		{
 			m_lineEdit->setText(qFileName.c_str());

@@ -146,6 +146,7 @@ namespace QT_UI
 		case WT_ColorSelect:	widgetStr = "ColorSelect";	 break;
 		case WT_ComboBox:		widgetStr = Echo::String("ComboBox,") + widgetParams;		break;
 		case WT_AssetsSelect:	widgetStr = Echo::String("AssetsSelect,") + widgetParams;	break;
+		case WT_Res:			widgetStr = Echo::String("ResEdit,") + widgetParams;		break;
 		case WT_2ND_EDITOR:		widgetStr = "2ndEditor";	 break;
 		default:				widgetStr = "";				 break;
 		}

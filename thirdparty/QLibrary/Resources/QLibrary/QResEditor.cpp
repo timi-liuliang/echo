@@ -1,20 +1,18 @@
 #include "QResEditor.h"
 #include <QFileDialog>
 #include "QPropertyModel.h"
+#include "ResChooseDialog.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/io/IO.h>
 
 namespace QT_UI
 {
-	QResEdit::OpenFileDialogFunction QResEdit::m_openFileFunction;
-
 	// 构造函数
-	QResEdit::QResEdit(class QPropertyModel* model, QString propertyName, const char* exts, const char* files, QWidget* parent)
+	QResEdit::QResEdit(class QPropertyModel* model, QString propertyName, const char* resType, QWidget* parent)
 		: QWidget( parent)
 		, m_propertyModel(model)
 		, m_propertyName(propertyName)
-		, m_exts(exts)
-		, m_files(files)
+		, m_exts(resType)
 	{
 		// 布局控件
 		m_horizonLayout = new QHBoxLayout( this);
@@ -24,6 +22,7 @@ namespace QT_UI
 
 		// LineEdit
 		m_lineEdit = new QLineEdit( this);
+		m_lineEdit->setReadOnly(true);
 		m_lineEdit->setObjectName( QString::fromUtf8("lineEdit"));
 		m_lineEdit->setContentsMargins(0, 0, 0, 0);
 		m_horizonLayout->addWidget( m_lineEdit);
@@ -47,8 +46,7 @@ namespace QT_UI
 	// 选择路径
 	void QResEdit::OnSelectPath()
 	{
-		Q_ASSERT_X(m_openFileFunction, "", "");
-		Echo::String qFileName = m_openFileFunction(this, m_exts.c_str(), m_files.toStdString().c_str(), "");
+		Echo::String qFileName = Studio::ResChooseDialog::getExistingFile(this, m_exts.c_str(), "", "");
 		if (!qFileName.empty())
 		{
 			m_lineEdit->setText(qFileName.c_str());
@@ -101,14 +99,14 @@ namespace QT_UI
 	// MVC渲染
 	void QResEdit::ItemDelegatePaint(QPainter *painter, const QRect& rect, const Echo::String& val)
 	{
-		Echo::String path = val;
-		Echo::String fullPath = Echo::IO::instance()->getFullPath(path);
-		Echo::String ext = Echo::PathUtil::GetFileExt(path, true);
-		if (Echo::StringUtil::Equal(ext, ".png", false))
-		{
-			QPixmap pixmap(fullPath.c_str());
-			QRect tRect = QRect(rect.left() + 3, rect.top() + 2, rect.height() - 4, rect.height() - 4);
-			painter->drawPixmap( tRect, pixmap);
-		}
+		Echo::String id = val;
+		//Echo::String fullPath = Echo::IO::instance()->getFullPath(path);
+		//Echo::String ext = Echo::PathUtil::GetFileExt(path, true);
+		//if (Echo::StringUtil::Equal(ext, ".png", false))
+		//{
+		//	QPixmap pixmap(fullPath.c_str());
+		//	QRect tRect = QRect(rect.left() + 3, rect.top() + 2, rect.height() - 4, rect.height() - 4);
+		//	painter->drawPixmap( tRect, pixmap);
+		//}
 	}
 }

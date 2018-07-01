@@ -45,9 +45,6 @@ namespace Studio
 		QObject::connect(m_actionStopGame, SIGNAL(triggered(bool)), &m_gameProcess, SLOT(terminate()));
 		QObject::connect(m_actionExitEditor, SIGNAL(triggered(bool)), this, SLOT(close()));
 
-		// connect
-		QT_UI::QResSelect::setOpenFileDialogFunction(ResChooseDialog::getExistingFile);
-
 		EchoAssert(!g_inst);
 		g_inst = this;
 	}

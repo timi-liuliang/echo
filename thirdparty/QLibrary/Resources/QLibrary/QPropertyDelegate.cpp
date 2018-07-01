@@ -11,6 +11,7 @@
 #include "QColorSelect.h"
 #include "QCheckBoxList.h"
 #include "QUVEditor.h"
+#include "QResEditor.h"
 #include <QCheckBox>
 #include <QComboBox>
 #include <QApplication>
@@ -32,6 +33,8 @@ namespace QT_UI
 			return true;
 		else if (widgetType == "CheckBox")
 			return true;
+		else if (widgetType == "ResEdit")
+			return false;
 		else if (widgetType == "AssetsSelect")
 		{
 			Echo::String path = value.toString().toStdString().c_str();
@@ -58,6 +61,11 @@ namespace QT_UI
 			opt.rect  =  QRect( rect.left()+3, rect.top(), rect.width()-3, rect.height());
 
 			QApplication::style()->drawControl( QStyle::CE_CheckBox, &opt, painter);
+		}
+		else if (widgetType == "ResEdit")
+		{
+			Echo::String id = val.toString().toStdString().c_str();
+			QResEdit::ItemDelegatePaint(painter, rect, id);
 		}
 		else if (widgetType == "AssetsSelect")
 		{
@@ -159,6 +167,11 @@ namespace QT_UI
 		{
 			QResSelect* widget = new QResSelect(m_model, propertyName, userDatas.size() > 1 ? userDatas[1].c_str() : nullptr, userDatas.size() > 2 ? userDatas[2].c_str() : nullptr, parent);
 
+			return widget;
+		}
+		else if (widgetType == "ResEdit")
+		{
+			QResEdit* widget = new QResEdit(m_model, propertyName, userDatas.size() > 1 ? userDatas[1].c_str() : nullptr, parent);
 			return widget;
 		}
 		else if (widgetType == "ColorSelect")
@@ -267,6 +280,11 @@ namespace QT_UI
 				QResSelect* widget = qobject_cast<QResSelect*>(editor);
 				widget->SetPath( value.toString());
 			}
+			else if (widgetType == "ResEdit")
+			{
+				QResEdit* widget = qobject_cast<QResEdit*>(editor);
+				widget->SetId(value.toString());
+			}
 			else if( widgetType == "ColorSelect")
 			{
 				QColorSelect* widget = qobject_cast<QColorSelect*>( editor);
@@ -367,6 +385,11 @@ namespace QT_UI
 			{
 				QResSelect* widget = qobject_cast<QResSelect*>(editor);
 				m_model->setValue( propertyName, widget->GetPath());
+			}
+			else if (widgetType == "ResEdit")
+			{
+				QResEdit* widget = qobject_cast<QResEdit*>(editor);
+				m_model->setValue(propertyName, widget->GetId());
 			}
 			else if( widgetType == "ColorSelect")
 			{

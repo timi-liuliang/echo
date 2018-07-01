@@ -15,19 +15,13 @@ namespace QT_UI
 		Q_OBJECT
 
 	public:
-		using OpenFileDialogFunction = std::function < Echo::String(QWidget*, const char*, const char*, const char*) >;
-
-	public:
-		QResEdit(class QPropertyModel* model, QString propertyName, const char* exts, const char* files, QWidget* parent = 0);
+		QResEdit(class QPropertyModel* model, QString propertyName, const char* resType, QWidget* parent);
 
 		// 设置路径
-		void SetPath( QString text) { m_lineEdit->setText( text);  }
+		void SetId( QString text) { m_lineEdit->setText( text);  }
 
 		// 获取路径
-		QString GetPath() { return m_lineEdit->text(); }
-
-		// set open operation
-		static void setOpenFileDialogFunction(const OpenFileDialogFunction& func) { m_openFileFunction = func; }
+		QString GetId() { return m_lineEdit->text(); }
 
 		// MVC渲染
 		static void ItemDelegatePaint(QPainter *painter, const QRect& rect, const Echo::String& val);
@@ -50,12 +44,11 @@ namespace QT_UI
 		void onEditFinished();
 
 	private:
+		Echo::String	m_id;
 		Echo::String	m_exts;
-		QString			m_files;
 		QHBoxLayout*	m_horizonLayout;
 		QLineEdit*		m_lineEdit;
 		QToolButton*	m_toolButton;
-		static OpenFileDialogFunction m_openFileFunction;
 		QPropertyModel* m_propertyModel;
 		QString			m_propertyName;
 	};
