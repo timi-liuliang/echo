@@ -11,14 +11,14 @@ namespace Echo
 	static map<String, Res::ResFun>::type g_resFuncs;
 
 	Res::Res()
-		: m_refCount(0)
+		: m_refCount(1)
 		, m_isLoaded(false)
 	{
 
 	}
 
 	Res::Res(const ResourcePath& path)
-		: m_refCount(0)
+		: m_refCount(1)
 		, m_isLoaded(false)
 	{
 		m_path = path;

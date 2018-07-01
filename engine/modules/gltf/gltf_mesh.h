@@ -30,7 +30,7 @@ namespace Echo
 
 		// material
 		Material* getMaterial() const { return m_material; }
-		void setMaterial(const Object* material);
+		void setMaterial( Object* material);
 
 	protected:
 		// build drawable
@@ -54,6 +54,5 @@ namespace Echo
 		int						m_meshIdx;			// mesh index in the asset
 		int						m_primitiveIdx;		// sub mesh index
 		MaterialPtr				m_material;			// custom material
-		MaterialPtr				m_materialDefault;
 	};
 }

@@ -10,7 +10,10 @@ namespace Echo
 	{
 	public:
 		Object();
-		virtual ~Object(){}
+		virtual ~Object();
+
+		// get by id
+		static Object* getById(i32 id);
 
 		// get class name
 		virtual const String& getClassName() const;

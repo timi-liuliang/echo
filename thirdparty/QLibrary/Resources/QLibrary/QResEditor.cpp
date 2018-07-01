@@ -4,6 +4,8 @@
 #include "ResChooseDialog.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/io/IO.h>
+#include <engine/core/resource/Res.h>
+#include <engine/core/util/StringUtil.h>
 
 namespace QT_UI
 {
@@ -12,8 +14,11 @@ namespace QT_UI
 		: QWidget( parent)
 		, m_propertyModel(model)
 		, m_propertyName(propertyName)
-		, m_exts(resType)
+		, m_resType(resType)
 	{
+		// 根据资源类型获取后缀
+		m_exts = Echo::Res::getResFunByClassName(m_resType)->m_ext;
+
 		// 布局控件
 		m_horizonLayout = new QHBoxLayout( this);
 		m_horizonLayout->setSpacing( 0);
@@ -49,8 +54,12 @@ namespace QT_UI
 		Echo::String qFileName = Studio::ResChooseDialog::getExistingFile(this, m_exts.c_str(), "", "");
 		if (!qFileName.empty())
 		{
-			m_lineEdit->setText(qFileName.c_str());
-			onEditFinished();
+			Echo::Res* res = Echo::Res::get(qFileName);
+			if (res)
+			{
+				m_lineEdit->setText(Echo::StringUtil::ToString(res->getId()).c_str());
+				onEditFinished();
+			}
 		}
 	}
 

@@ -45,6 +45,7 @@ namespace QT_UI
 
 	private:
 		Echo::String	m_id;
+		Echo::String	m_resType;
 		Echo::String	m_exts;
 		QHBoxLayout*	m_horizonLayout;
 		QLineEdit*		m_lineEdit;

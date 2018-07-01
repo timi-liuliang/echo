@@ -46,7 +46,6 @@ namespace Echo
 		if (m_assetPath.setPath(path.getPath()))
 		{
 			m_asset = GltfRes::create(m_assetPath);
-
 			buildRenderable();
 		}
 	}
@@ -55,7 +54,6 @@ namespace Echo
 	void GltfMesh::setMeshIdx(int meshIdx) 
 	{ 
 		m_meshIdx = meshIdx;
-
 		buildRenderable();
 	}
 
@@ -63,13 +61,13 @@ namespace Echo
 	void GltfMesh::setPrimitiveIdx(int primitiveIdx) 
 	{
 		m_primitiveIdx = primitiveIdx;
-
 		buildRenderable();
 	}
 
-	void GltfMesh::setMaterial(const Object* material) 
+	void GltfMesh::setMaterial(Object* material) 
 	{
-
+		m_material = (Material*)material;
+		buildRenderable();
 	}
 
 	// build drawable
@@ -77,15 +75,13 @@ namespace Echo
 	{
 		if ( m_asset && m_meshIdx!=-1 && m_primitiveIdx!=-1)
 		{
-			Material* origMaterial = m_asset->m_meshes[m_meshIdx].m_primitives[m_primitiveIdx].m_materialInst;
-			if (origMaterial)
+			Material* material = m_material ? m_material : m_asset->m_meshes[m_meshIdx].m_primitives[m_primitiveIdx].m_materialInst;
+			if (material)
 			{
 				clearRenderable();
 
 				Mesh* mesh = m_asset->m_meshes[m_meshIdx].m_primitives[m_primitiveIdx].m_mesh;
-				m_materialDefault = ECHO_CREATE_RES(Material);
-				m_materialDefault->clone(origMaterial);
-				m_renderable = Renderable::create(mesh, m_materialDefault, this);
+				m_renderable = Renderable::create(mesh, material, this);
 			}
 		}
 	}

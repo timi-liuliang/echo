@@ -4,10 +4,39 @@
 
 namespace Echo
 {
+	static map<i32, Object*>::type g_objs;
+
 	Object::Object()
 	{
 		static i32 id = 0;
 		m_id = id++;
+
+		g_objs[m_id] = this;
+	}
+
+	Object::~Object()
+	{
+		auto it = g_objs.find(m_id);
+		if (it != g_objs.end())
+		{
+			g_objs.erase(it);
+		}
+		else
+		{
+			EchoLogError("Object isn't exist. destruct failed.");
+		}
+	}
+
+	// get by id
+	Object* Object::getById(i32 id)
+	{
+		auto it = g_objs.find(id);
+		if (it!=g_objs.end())
+		{
+			return it->second;
+		}
+
+		return nullptr;
 	}
 
 	// get class name
