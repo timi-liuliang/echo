@@ -47,6 +47,7 @@ namespace Echo
 		void clearRenderable();
 
 	private:
+		bool					m_renderableDirty;
 		Renderable*				m_renderable;
 		Matrix4					m_matWVP;
 		ResourcePath			m_assetPath;

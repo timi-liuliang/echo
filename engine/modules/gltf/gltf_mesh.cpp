@@ -11,6 +11,7 @@ namespace Echo
 {
 	GltfMesh::GltfMesh()
 		: m_assetPath("", ".gltf")
+		, m_renderableDirty(true)
 		, m_renderable(nullptr)
 		, m_meshIdx(-1)
 		, m_primitiveIdx(-1)
@@ -46,7 +47,7 @@ namespace Echo
 		if (m_assetPath.setPath(path.getPath()))
 		{
 			m_asset = GltfRes::create(m_assetPath);
-			buildRenderable();
+			m_renderableDirty = true;
 		}
 	}
 
@@ -54,26 +55,26 @@ namespace Echo
 	void GltfMesh::setMeshIdx(int meshIdx) 
 	{ 
 		m_meshIdx = meshIdx;
-		buildRenderable();
+		m_renderableDirty = true;
 	}
 
 	// set primitive index
 	void GltfMesh::setPrimitiveIdx(int primitiveIdx) 
 	{
 		m_primitiveIdx = primitiveIdx;
-		buildRenderable();
+		m_renderableDirty = true;
 	}
 
 	void GltfMesh::setMaterial(Object* material) 
 	{
 		m_material = (Material*)material;
-		buildRenderable();
+		m_renderableDirty = true;
 	}
 
 	// build drawable
 	void GltfMesh::buildRenderable()
 	{
-		if ( m_asset && m_meshIdx!=-1 && m_primitiveIdx!=-1)
+		if ( m_renderableDirty && m_asset && m_meshIdx!=-1 && m_primitiveIdx!=-1)
 		{
 			Material* material = m_material ? m_material : m_asset->m_meshes[m_meshIdx].m_primitives[m_primitiveIdx].m_materialInst;
 			if (material)
@@ -89,6 +90,8 @@ namespace Echo
 	// update per frame
 	void GltfMesh::update()
 	{
+		buildRenderable();
+
 		if (m_renderable)
 		{
 			m_matWVP = getWorldMatrix() * NodeTree::instance()->get3dCamera()->getViewProjMatrix();

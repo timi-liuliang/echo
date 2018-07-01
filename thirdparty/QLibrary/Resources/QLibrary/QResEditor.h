@@ -5,17 +5,18 @@
 #include <QToolButton>
 #include <QWidget>
 #include <QPainter>
+#include <QMenu>
 #include <functional>
 #include "engine/core/util/StringUtil.h"
 
 namespace QT_UI
 {
-	class QResEdit : public QWidget
+	class QResEditor : public QWidget
 	{
 		Q_OBJECT
 
 	public:
-		QResEdit(class QPropertyModel* model, QString propertyName, const char* resType, QWidget* parent);
+		QResEditor(class QPropertyModel* model, QString propertyName, const char* resType, QWidget* parent);
 
 		// 设置路径
 		void SetId( QString text) { m_lineEdit->setText( text);  }
@@ -38,10 +39,19 @@ namespace QT_UI
 
 	private slots:
 		// 选择路径
-		void OnSelectPath();
+		void onShowMenu();
 
 		// edit finished
 		void onEditFinished();
+
+		// node tree widget show menu
+		void showMenu(const QPoint& point);
+
+		// on load
+		void onLoad();
+
+		// on clear
+		void onClearRes();
 
 	private:
 		Echo::String	m_id;
@@ -52,5 +62,6 @@ namespace QT_UI
 		QToolButton*	m_toolButton;
 		QPropertyModel* m_propertyModel;
 		QString			m_propertyName;
+		QMenu*			m_menu;			// Mouse right button click
 	};
 }

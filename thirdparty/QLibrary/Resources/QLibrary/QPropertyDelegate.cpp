@@ -65,7 +65,7 @@ namespace QT_UI
 		else if (widgetType == "ResEdit")
 		{
 			Echo::String id = val.toString().toStdString().c_str();
-			QResEdit::ItemDelegatePaint(painter, rect, id);
+			QResEditor::ItemDelegatePaint(painter, rect, id);
 		}
 		else if (widgetType == "AssetsSelect")
 		{
@@ -171,7 +171,7 @@ namespace QT_UI
 		}
 		else if (widgetType == "ResEdit")
 		{
-			QResEdit* widget = new QResEdit(m_model, propertyName, userDatas.size() > 1 ? userDatas[1].c_str() : nullptr, parent);
+			QResEditor* widget = new QResEditor(m_model, propertyName, userDatas.size() > 1 ? userDatas[1].c_str() : nullptr, parent);
 			return widget;
 		}
 		else if (widgetType == "ColorSelect")
@@ -282,7 +282,7 @@ namespace QT_UI
 			}
 			else if (widgetType == "ResEdit")
 			{
-				QResEdit* widget = qobject_cast<QResEdit*>(editor);
+				QResEditor* widget = qobject_cast<QResEditor*>(editor);
 				widget->SetId(value.toString());
 			}
 			else if( widgetType == "ColorSelect")
@@ -388,7 +388,7 @@ namespace QT_UI
 			}
 			else if (widgetType == "ResEdit")
 			{
-				QResEdit* widget = qobject_cast<QResEdit*>(editor);
+				QResEditor* widget = qobject_cast<QResEditor*>(editor);
 				m_model->setValue(propertyName, widget->GetId());
 			}
 			else if( widgetType == "ColorSelect")

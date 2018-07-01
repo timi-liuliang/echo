@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/icon">
+    <file>res/edit.png</file>
     <file>Icon/file/delete.png</file>
     <file>res/lua.png</file>
     <file>res/folder.png</file>
@@ -19,39 +20,17 @@
     <file>node/live2dcubism.png</file>
     <file>node/node.png</file>
     <file>Icon/icon.png</file>
-    <file>Icon/2DGrid.png</file>
-    <file>Icon/SpriteAnimation.png</file>
-    <file>Icon/pause.png</file>
-    <file>Icon/stop.png</file>
-    <file>Icon/pointlight.png</file>
-    <file>Icon/directionallight.png</file>
-    <file>Icon/spotlight.png</file>
     <file>Icon/move.png</file>
-    <file>Icon/rotate.png</file>
-    <file>Icon/scale.png</file>
-    <file>Icon/wire.bmp</file>
-    <file>Icon/snapshot.png</file>
-    <file>Icon/FBX_Icon.png</file>
-    <file>Icon/add.png</file>
-    <file>Icon/repeat.png</file>
-    <file>Icon/revocation.png</file>
     <file>Icon/root.png</file>
     <file>Icon/folder_close.png</file>
     <file>Icon/folder_open.png</file>
     <file>Icon/close-white.png</file>
-    <file>Icon/AudioSource.png</file>
     <file>Icon/Launch/launch-0.png</file>
     <file>Icon/Launch/launch-1.png</file>
     <file>Icon/Launch/launch-2.png</file>
     <file>Icon/Launch/launch-3.png</file>
-    <file>Icon/empty_object.png</file>
-    <file>Icon/lua_icon.png</file>
     <file>Icon/close.png</file>
     <file>Icon/handle.png</file>
-    <file>Icon/minimize.png</file>
-    <file>Icon/minus.png</file>
-    <file>Icon/EnterGameMode.png</file>
-    <file>Icon/ExitGameMode.png</file>
   </qresource>
   <qresource prefix="/Qss">
     <file>Qss/Default.qss</file>
