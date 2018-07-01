@@ -69,6 +69,9 @@ namespace Studio
 		void onSelectNode();
 
 		// edit res
+		void onEditRes(Echo::Res* res);
+
+		// edit res
 		void onSelectRes(const Echo::String& resPath);
 
 	private:

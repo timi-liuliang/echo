@@ -50,6 +50,9 @@ namespace QT_UI
 		// on load
 		void onLoad();
 
+		// on edit
+		void onEdit();
+
 		// on clear
 		void onClearRes();
 

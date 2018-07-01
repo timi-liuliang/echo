@@ -2,6 +2,7 @@
 #include <QFileDialog>
 #include "QPropertyModel.h"
 #include "ResChooseDialog.h"
+#include "NodeTreePanel.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/io/IO.h>
 #include <engine/core/resource/Res.h>
@@ -139,7 +140,7 @@ namespace QT_UI
 			editAction->setText("Edit");
 			editAction->setIcon(QIcon(":/icon/res/edit.png"));
 			m_menu->addAction(editAction);
-			QObject::connect(editAction, SIGNAL(triggered()), this, SLOT(onEditRes()));
+			QObject::connect(editAction, SIGNAL(triggered()), this, SLOT(onEdit()));
 
 			// clear
 			QAction* clearAction = new QAction(m_menu);
@@ -163,6 +164,19 @@ namespace QT_UI
 				m_lineEdit->setText(Echo::StringUtil::ToString(res->getId()).c_str());
 				onEditFinished();
 			}
+		}
+	}
+
+	// on edit
+	void QResEditor::onEdit()
+	{
+		Echo::ui32 id = Echo::StringUtil::ParseI32(GetId().toStdString().c_str());
+		Echo::Object* obj = Echo::Object::getById(id);
+		if (obj)
+		{
+			Echo::Res* res = ECHO_DOWN_CAST<Echo::Res*>(obj);
+			if(res)
+				Studio::NodeTreePanel::instance()->onEditRes(res);
 		}
 	}
 

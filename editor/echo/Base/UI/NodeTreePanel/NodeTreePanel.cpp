@@ -360,6 +360,15 @@ namespace Studio
 		showSelectedObjectProperty();
 	}
 
+	// edit res
+	void NodeTreePanel::onEditRes(Echo::Res* res)
+	{
+		m_currentEditNode = nullptr;
+		m_currentEditRes = res;
+
+		showSelectedObjectProperty();
+	}
+
 	// 保存当前编辑资源
 	void NodeTreePanel::saveCurrentEditRes()
 	{
