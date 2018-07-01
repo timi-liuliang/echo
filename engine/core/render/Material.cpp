@@ -122,6 +122,7 @@ namespace Echo
 	// on loaded
 	void Material::onLoaded()
 	{
+		buildShaderProgram();
 	}
 
 	// ¸´ÖÆ²ÄÖÊÊµÀı
