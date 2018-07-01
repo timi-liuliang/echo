@@ -116,17 +116,23 @@ namespace Echo
 		// iterator
 		for (const Echo::PropertyInfo* prop : propertys)
 		{
-			Echo::Variant var;
-			String valueStr = xmlNode->attribute(prop->m_name.c_str()).value();
-			if (!valueStr.empty())
+			if (prop->m_type == Variant::Type::Object)
 			{
-				var.fromString(prop->m_type, valueStr);
-
-				Class::setPropertyValue(classPtr, prop->m_name, var);
+				int a = 10;
 			}
 			else
 			{
-				EchoLogInfo("Property [%s] not exist. when instance Object", prop->m_name.c_str());
+				Echo::Variant var;
+				String valueStr = xmlNode->attribute(prop->m_name.c_str()).value();
+				if (!valueStr.empty())
+				{
+					var.fromString(prop->m_type, valueStr);
+					Class::setPropertyValue(classPtr, prop->m_name, var);
+				}
+				else
+				{
+					EchoLogInfo("Property [%s] not exist. when instance Object", prop->m_name.c_str());
+				}
 			}
 		}
 	}
@@ -151,9 +157,15 @@ namespace Echo
 		{
 			Echo::Variant var;
 			Echo::Class::getPropertyValue(classPtr, prop->m_name, var);
-			Echo::String varStr = var.toString();
-
-			xmlNode->append_attribute(prop->m_name.c_str()).set_value(varStr.c_str());
+			if (var.getType() == Variant::Type::Object)
+			{
+				int a = 10;
+			}
+			else
+			{
+				Echo::String varStr = var.toString();
+				xmlNode->append_attribute(prop->m_name.c_str()).set_value(varStr.c_str());
+			}
 		}
 	}
 }
