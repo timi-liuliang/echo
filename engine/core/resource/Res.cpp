@@ -52,6 +52,8 @@ namespace Echo
 	{
 		CLASS_BIND_METHOD(Res, getPath, DEF_METHOD("getPath"));
 		CLASS_BIND_METHOD(Res, setPath, DEF_METHOD("setPath"));
+
+		CLASS_REGISTER_PROPERTY(Res, "Path", Variant::Type::String, "getPath", "setPath");
 	}
 
 	// resister res
@@ -145,7 +147,7 @@ namespace Echo
 				if (root)
 				{
 					Res* res = ECHO_DOWN_CAST<Res*>(instanceObject(&root));
-					res->setPath(path);
+					res->setPath(path.getPath());
 					res->onLoaded();
 
 					g_ress[path.getPath()] = res;

@@ -14,7 +14,8 @@ namespace Studio
 		: QDockWidget( parent)
 		, m_newNodeDialog(nullptr)
 		, m_nodeTreeMenu(nullptr)
-		, m_currentEditNode(nullptr)
+		, m_currentEditObject(nullptr)
+		, m_nextEditObject(nullptr)
 	{
 		EchoAssert(!g_inst);
 		g_inst = this;
@@ -31,6 +32,11 @@ namespace Studio
 
 		QObject::connect(m_actionDeleteNode, SIGNAL(triggered()), this, SLOT(onDeleteNodes()));
 		QObject::connect(m_actionRenameNode, SIGNAL(triggered()), this, SLOT(onRenameNode()));
+
+		// 时间事件
+		m_timer = new QTimer(this);
+		connect(m_timer, SIGNAL(timeout()), this, SLOT(update()));
+		m_timer->start(50);
 	}
 
 	NodeTreePanel::~NodeTreePanel()
@@ -41,6 +47,16 @@ namespace Studio
 	NodeTreePanel* NodeTreePanel::instance()
 	{
 		return g_inst;
+	}
+
+	// 渲染
+	void NodeTreePanel::update()
+	{
+		if (m_nextEditObject)
+		{
+			onEditObject(m_nextEditObject);
+			m_nextEditObject = nullptr;
+		}
 	}
 
 	void NodeTreePanel::showNewNodeDialog()
@@ -108,7 +124,7 @@ namespace Studio
 	// 获取当前编辑对象
 	Echo::Object* NodeTreePanel::getCurrentEditObject()
 	{
-		return m_currentEditNode ? static_cast<Echo::Object*>(m_currentEditNode) : static_cast<Echo::Object*>(m_currentEditRes.ptr());
+		return m_currentEditObject;
 	}
 
 	void NodeTreePanel::addNode(Echo::Node* node)
@@ -271,7 +287,7 @@ namespace Studio
 		}
 		else
 		{
-			m_propertyHelper.applyTo("empty", m_propertyTreeView, this, SLOT(refreshPropertyToNode(const QString&, QVariant)), false);
+			m_propertyHelper.applyTo("empty", m_propertyTreeView, this, SLOT(refreshPropertyToObject(const QString&, QVariant)), false);
 		}	
 	}
 
@@ -345,8 +361,7 @@ namespace Studio
 	// on select node
 	void NodeTreePanel::onSelectNode()
 	{
-		m_currentEditNode = getCurrentSelectNode();
-		m_currentEditRes = nullptr;
+		m_currentEditObject = getCurrentSelectNode();
 
 		showSelectedObjectProperty();
 	}
@@ -354,17 +369,15 @@ namespace Studio
 	// edit res
 	void NodeTreePanel::onSelectRes(const Echo::String& resPath)
 	{
-		m_currentEditNode = nullptr;
-		m_currentEditRes = Echo::Res::get(resPath);
+		m_currentEditObject = Echo::Res::get(resPath);
 
 		showSelectedObjectProperty();
 	}
 
 	// edit res
-	void NodeTreePanel::onEditRes(Echo::Res* res)
+	void NodeTreePanel::onEditObject(Echo::Object* res)
 	{
-		m_currentEditNode = nullptr;
-		m_currentEditRes = res;
+		m_currentEditObject = res;
 
 		showSelectedObjectProperty();
 	}
@@ -372,9 +385,10 @@ namespace Studio
 	// 保存当前编辑资源
 	void NodeTreePanel::saveCurrentEditRes()
 	{
-		if (m_currentEditRes && !m_currentEditRes->getPath().isEmpty())
+		Echo::Res* res = dynamic_cast<Echo::Res*>(m_currentEditObject);
+		if ( res && !res->getPath().empty())
 		{
-			m_currentEditRes->save();
+			res->save();
 		}
 	}
 }

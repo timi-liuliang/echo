@@ -32,6 +32,9 @@ namespace Echo
 		// propertys (script property or dynamic property)
 		const PropertyInfos& getPropertys() const;
 
+		// clear propertys
+		void clearPropertys();
+
 		// register property
 		bool registerProperty(const String& className, const String& propertyName, const Variant::Type type);
 

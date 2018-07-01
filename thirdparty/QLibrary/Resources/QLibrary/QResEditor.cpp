@@ -176,7 +176,7 @@ namespace QT_UI
 		{
 			Echo::Res* res = ECHO_DOWN_CAST<Echo::Res*>(obj);
 			if(res)
-				Studio::NodeTreePanel::instance()->onEditRes(res);
+				Studio::NodeTreePanel::instance()->setNextEditObject(res);
 		}
 	}
 

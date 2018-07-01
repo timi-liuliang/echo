@@ -1,6 +1,7 @@
 #include "QPropertyModel.h"
 #include <vector>
 #include "engine/core/Util/AssertX.h"
+#include <engine/core/log/LogManager.h>
 
 namespace QT_UI
 {
@@ -104,9 +105,14 @@ namespace QT_UI
 
 		if (strlen(propertyName))
 		{
-			EchoAssertX(m_propertyStandItmes.find(propertyNamelocal) == m_propertyStandItmes.end(),
-				"property name [%s] is duplicate.", propertyNamelocal.toStdString().c_str());
-			m_propertyStandItmes[propertyNamelocal] = item;
+			if (m_propertyStandItmes.find(propertyNamelocal) == m_propertyStandItmes.end())
+			{
+				m_propertyStandItmes[propertyNamelocal] = item;
+			}
+			else
+			{
+				EchoLogError( "property name [%s] is duplicate.", propertyNamelocal.toStdString().c_str());
+			}			
 		}
 
 		return item;

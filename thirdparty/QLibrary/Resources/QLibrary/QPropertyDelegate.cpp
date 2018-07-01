@@ -278,7 +278,7 @@ namespace QT_UI
 			else if( widgetType == "AssetsSelect")
 			{
 				QResSelect* widget = qobject_cast<QResSelect*>(editor);
-				widget->SetPath( value.toString());
+				widget->SetPath( value.toString().toStdString().c_str());
 			}
 			else if (widgetType == "ResEdit")
 			{

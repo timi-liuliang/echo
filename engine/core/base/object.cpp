@@ -52,6 +52,12 @@ namespace Echo
 		return m_propertys;
 	}
 
+	// clear propertys
+	void Object::clearPropertys()
+	{
+		m_propertys.clear();
+	}
+
 	// register property
 	bool Object::registerProperty(const String& className, const String& propertyName, const Variant::Type type)
 	{

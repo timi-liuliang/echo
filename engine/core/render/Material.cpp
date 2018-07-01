@@ -285,7 +285,7 @@ namespace Echo
 			TextureInfo& info = it.second;
 			if (info.m_name == name)
 			{
-				info.m_uri = textureRes->getPath().getPath();
+				info.m_uri = textureRes->getPath();
 				info.m_texture = textureRes;
 
 				return info.m_texture;
@@ -352,6 +352,9 @@ namespace Echo
 	// 构建渲染队列
 	void Material::buildShaderProgram()
 	{
+		clearPropertys();
+		m_textures.clear();
+
 		// make sure macros
 		String finalMacros; finalMacros.reserve(512);
 		for (const String& macro : m_macros)

@@ -39,6 +39,9 @@ namespace Studio
 		// 获取当前编辑对象
 		Echo::Object* getCurrentEditObject();
 
+		// 设置编辑节点
+		void setNextEditObject(Echo::Object* obj) { m_nextEditObject = obj; }
+
 	private slots:
 		// 显示新建节点窗口
 		void showNewNodeDialog();
@@ -65,11 +68,14 @@ namespace Studio
 		void importGltfScene();
 
 	public slots:
+		// 渲染
+		void  update();
+
 		// on select node
 		void onSelectNode();
 
 		// edit res
-		void onEditRes(Echo::Res* res);
+		void onEditObject(Echo::Object* res);
 
 		// edit res
 		void onSelectRes(const Echo::String& resPath);
@@ -82,10 +88,11 @@ namespace Studio
 		void showPropertyByVariant(const Echo::String& name, const class Echo::Variant& var, const Echo::PropertyInfo* propInfo);
 
 	private:
+		QTimer*							m_timer;				// 计时器
 		NewNodeDialog*					m_newNodeDialog;		// 新建结点
 		QT_UI::QPropertyConfigHelper	m_propertyHelper;		// 属性
-		Echo::ResPtr					m_currentEditRes;		// 当前资源
-		Echo::Node*						m_currentEditNode;
+		Echo::Object*					m_nextEditObject;		
+		Echo::Object*					m_currentEditObject;
 		QMenu*							m_nodeTreeMenu;			// 结点树右键菜单
 	};
 }

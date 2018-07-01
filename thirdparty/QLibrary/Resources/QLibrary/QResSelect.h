@@ -21,7 +21,7 @@ namespace QT_UI
 		QResSelect(class QPropertyModel* model, QString propertyName, const char* exts, const char* files, QWidget* parent = 0);
 
 		// 设置路径
-		void SetPath( QString text) { m_lineEdit->setText( text);  }
+		void SetPath( const Echo::String text) { m_lineEdit->setText( text.c_str());  }
 
 		// 获取路径
 		QString GetPath() { return m_lineEdit->text(); }

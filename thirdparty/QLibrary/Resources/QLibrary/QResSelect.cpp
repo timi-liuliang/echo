@@ -93,7 +93,8 @@ namespace QT_UI
 	// edit finished
 	void QResSelect::onEditFinished()
 	{
-		m_propertyModel->setValue(m_propertyName, m_lineEdit->text().toStdString().c_str());
+		Echo::String value = m_lineEdit->text().toStdString().c_str();
+		m_propertyModel->setValue(m_propertyName, value.c_str());
 	}
 
 	// MVC‰÷»æ

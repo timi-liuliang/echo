@@ -56,10 +56,10 @@ namespace Echo
 		bool isLoaded() const { return m_isLoaded; }
 
 		// get path
-		const ResourcePath& getPath() const { return m_path; }
+		const String& getPath() const { return m_path.getPath(); }
 
 		// set path
-		void setPath(const ResourcePath& path) { m_path = path; }
+		void setPath(const String& path) { m_path.setPath(path); }
 	
 		// save
 		virtual void save();
