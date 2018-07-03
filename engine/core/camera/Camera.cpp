@@ -40,8 +40,6 @@ namespace Echo
 		m_farClip = 100.0f;
 		m_matProj.identity();
 		m_bNeedUpdateProj = true;
-
-		m_originalViewProjMatrix.identity();
 	}
 
 	Camera::~Camera()
@@ -429,6 +427,5 @@ namespace Echo
 		m_bNeedUpdateProj = other->m_bNeedUpdateProj;
 		m_matVP = other->m_matVP;
 		m_frustum = other->m_frustum;
-		m_originalViewProjMatrix = other->m_originalViewProjMatrix;
 	}
 }

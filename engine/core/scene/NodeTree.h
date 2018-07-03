@@ -27,7 +27,7 @@ namespace Echo
 		Camera* get3dCamera() const { return m_3dCamera; }
 
 		// 设置主摄像机
-		void setMainCamera(Camera* camera) { m_3dCamera = camera; }
+		void set3dCamera(Camera* camera) { m_3dCamera = camera; }
 
 		// 获取2D摄像机
 		Camera* get2DCamera() const { return m_2dCamera; }

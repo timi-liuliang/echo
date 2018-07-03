@@ -115,6 +115,5 @@ namespace Echo
 		bool			m_bNeedUpdateProj;
 		Matrix4			m_matVP;
 		Frustum			m_frustum;
-		Matrix4			m_originalViewProjMatrix;
 	};
 }
