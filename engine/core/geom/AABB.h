@@ -8,7 +8,7 @@ namespace Echo
 	/**
 	\brief AABB
 	*/
-	class Box
+	class AABB
 	{
 	public:
 		enum Extent
@@ -50,46 +50,46 @@ namespace Echo
 		Vector3		vMax;		//!< Max Point
 		Extent		mExtent;
 
-		static const Box ZERO;
+		static const AABB ZERO;
 
 	public:
-		inline Box()
+		inline AABB()
 		{
 			reset();
 		}
 
-		inline Box(const Vector3&_vMin, const Vector3&_vMax)
+		inline AABB(const Vector3&_vMin, const Vector3&_vMax)
 			:vMin(_vMin)
 			,vMax(_vMax)
 		{
 		}
 
-		inline Box(const Box &box)
+		inline AABB(const AABB &box)
 			:vMin(box.vMin)
 			,vMax(box.vMax)
 		{
 		}
 
-		inline Box(Real minX, Real minY, Real minZ, Real maxX, Real maxY, Real maxZ)
+		inline AABB(Real minX, Real minY, Real minZ, Real maxX, Real maxY, Real maxZ)
 			:vMin(minX, minY, minZ)
 			,vMax(maxX, maxY, maxZ)
 		{
 		}
 
 	public:
-		inline const Box& operator = (const Box& rhs)
+		inline const AABB& operator = (const AABB& rhs)
 		{
 			vMin = rhs.vMin;
 			vMax = rhs.vMax;
 			return *this;
 		}
 
-		inline bool operator == (const Box& rhs) const
+		inline bool operator == (const AABB& rhs) const
 		{
 			return (this->vMin == rhs.vMin) && (this->vMax == rhs.vMax);
 		}
 
-		inline bool operator != (const Box& rhs) const
+		inline bool operator != (const AABB& rhs) const
 		{
 			return !(*this == rhs);
 		}
@@ -114,7 +114,7 @@ namespace Echo
 		}
 
 		// 融合box
-		inline void unionBox(const Box &box)
+		inline void unionBox(const AABB &box)
 		{
 			if (box.isValid())
 			{
@@ -123,7 +123,7 @@ namespace Echo
 			}
 		}
 		
-		inline bool isIntersected(const Box &box) const
+		inline bool isIntersected(const AABB &box) const
 		{
 #ifdef ECHO_EDITOR_MODE
 			EchoAssert(isValid());
@@ -148,7 +148,7 @@ namespace Echo
 		}
 
 		// 是否在内部
-		bool isContain( const Box& box) const
+		bool isContain( const AABB& box) const
 		{
 			if( isPointInside( box.vMin) && isPointInside( box.vMax))
 				return true;
@@ -241,9 +241,9 @@ namespace Echo
 		}
 
 		// 矩阵转换
-		inline Box transform( const Matrix4& matrix) const
+		inline AABB transform( const Matrix4& matrix) const
 		{
-			Box box;
+			AABB box;
 			if (isValid())
 			{
 				Vector3 basePoint(vMin);
@@ -301,7 +301,7 @@ namespace Echo
 			vMax -= Vector3(x, y, z);
 		}
 
-		inline CullState	cullAABB(const Box& box) const
+		inline CullState	cullAABB(const AABB& box) const
 		{
 			if (!isIntersected(box))
 				return CS_OUTSIDE;
@@ -310,7 +310,7 @@ namespace Echo
 			else
 				return CS_INTERSECT;
 		}
-		static Box fromString(const String& val);
+		static AABB fromString(const String& val);
 		String& toString(String& s) const;
 
 		// 扩展

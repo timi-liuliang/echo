@@ -7,7 +7,7 @@
 
 namespace Echo
 {
-	class Box;
+	class AABB;
 	class Sphere
 	{
 	public:
@@ -32,7 +32,7 @@ namespace Echo
 		bool		isIntersected(const Sphere &ref) const;
 		bool		isPointIn(const Vector3& point) const;
 		// generate bounding-sphere from a axis-aligned bounding-box.
-		void		fromAABB(const Box& aabb);
+		void		fromAABB(const AABB& aabb);
 	};
 }
 

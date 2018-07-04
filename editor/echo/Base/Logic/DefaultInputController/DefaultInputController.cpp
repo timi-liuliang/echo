@@ -385,7 +385,7 @@ namespace Studio
 	}
 
 	// ÊÊÓ¦Ä£ÐÍ
-	void DefaultInputController::CameraZoom(const Echo::Box& box, float scale)
+	void DefaultInputController::CameraZoom(const Echo::AABB& box, float scale)
 	{
 		float         radius = (box.getSize().len() * 0.5f);
 		Echo::Vector3 center = ((box.vMin + box.vMax) * 0.5f);

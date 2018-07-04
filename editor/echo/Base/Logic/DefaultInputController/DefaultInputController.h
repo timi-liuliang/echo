@@ -74,7 +74,7 @@ namespace Studio
 		virtual void onInitCameraSettings(float offsetdir) override;
 
 		// 适应模型
-		virtual void CameraZoom(const Echo::Box& box, float scale);
+		virtual void CameraZoom(const Echo::AABB& box, float scale);
 
 		// 设置摄像机观察点
 		void SetCameraLookAt(const Echo::Vector3& lookAt) { m_cameraLookAt = lookAt; }

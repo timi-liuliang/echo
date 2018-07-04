@@ -335,7 +335,7 @@ namespace Echo
 	{
 		if (m_model && m_renderable)
 		{
-			m_matWVP = getWorldMatrix() * NodeTree::instance()->get2DCamera()->getViewProjMatrix();;
+			m_matWVP = getWorldMatrix() * NodeTree::instance()->get2dCamera()->getViewProjMatrix();;
 
 			if (m_curMotion)
 			{

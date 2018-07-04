@@ -133,7 +133,7 @@ namespace Echo
 		return false;
 	}
 
-	bool Ray::hitBox(const Box& box) const
+	bool Ray::hitBox(const AABB& box) const
 	{
 		Real tx_min, ty_min, tz_min;
 		Real tx_max, ty_max, tz_max; 
@@ -213,7 +213,7 @@ namespace Echo
 		}
 	}
 
-	bool Ray::hitBox(const Box& box, Real& tmin, HitInfo& hi) const
+	bool Ray::hitBox(const AABB& box, Real& tmin, HitInfo& hi) const
 	{ 
 		Real tx_min, ty_min, tz_min;
 		Real tx_max, ty_max, tz_max; 

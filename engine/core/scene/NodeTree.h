@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Node.h"
+#include "engine/core/gizmos/Gizmos.h"
 #include "Engine/core/Camera/Camera.h"
 #include "Engine/core/Camera/CameraShadow.h"
 
@@ -30,7 +31,7 @@ namespace Echo
 		void set3dCamera(Camera* camera) { m_3dCamera = camera; }
 
 		// 获取2D摄像机
-		Camera* get2DCamera() const { return m_2dCamera; }
+		Camera* get2dCamera() const { return m_2dCamera; }
 
 		// 获取界面摄像机
 		Camera* getGUICamera() const { return m_uiCamera; }
@@ -53,5 +54,6 @@ namespace Echo
 		Camera*				m_uiCamera;			// 界面摄像机
 		CameraShadow*		m_shadowCamera;		// 阴影图摄像机		
 		Node				m_invisibleRoot;	// invisible root node
+		Gizmos*				m_gizmosNode;		// gizmos node
 	};
 }

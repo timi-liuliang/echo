@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/core/geom/Box.h"
+#include "engine/core/geom/AABB.h"
 #include "MeshVertexData.h"
 
 namespace Echo
@@ -63,7 +63,7 @@ namespace Echo
 		void generateTangentData(bool useNormalMap);
 
 		// 获取本地包围盒
-		const Box& getLocalBox() const { return m_box; }
+		const AABB& getLocalBox() const { return m_box; }
 
 		// 获取受影响的骨骼数量
 		ui32 getBoneNum() const { return static_cast<ui32>(m_boneIdxs.size()); }
@@ -76,8 +76,8 @@ namespace Echo
 		void updateIndices(ui32 indicesCount, const ui32* indices);
 
 		// update vertex data
-		void updateVertexs(const MeshVertexFormat& format, ui32 vertCount, const Byte* vertices, const Box& box);
-		void updateVertexs(const MeshVertexData& vertexData, const Box& box);
+		void updateVertexs(const MeshVertexFormat& format, ui32 vertCount, const Byte* vertices, const AABB& box);
+		void updateVertexs(const MeshVertexData& vertexData, const AABB& box);
 
 		// 清空数据
 		void clear();
@@ -103,7 +103,7 @@ namespace Echo
 
 	protected:
 		String					m_name;						// 名称
-		Box						m_box;						// 包围盒
+		AABB						m_box;						// 包围盒
 		ui32					m_idxCount;					// 索引数量
 		ui32					m_idxStride;				// 索引格式大小
 		Byte*					m_indices;					// 索引数据

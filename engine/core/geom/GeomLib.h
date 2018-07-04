@@ -4,7 +4,7 @@
 #include "Triangle.h"
 #include "Circle.h"
 #include "Sphere.h"
-#include "Box.h"
+#include "AABB.h"
 #include "Plane.h"
 #include "Frustum.h"
 #include "Ray.h"

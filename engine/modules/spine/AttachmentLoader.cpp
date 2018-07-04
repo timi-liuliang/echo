@@ -184,7 +184,7 @@ namespace Echo
 
 			m_mesh = Mesh::create(true, true);
 			m_mesh->updateIndices(m_indicesData.size(), m_indicesData.data());
-			m_mesh->updateVertexs(define, m_verticesData.size(), (const Byte*)m_verticesData.data(), Box());
+			m_mesh->updateVertexs(define, m_verticesData.size(), (const Byte*)m_verticesData.data(), AABB());
 
 			m_materialInst =ECHO_CREATE_RES(Material);
 			m_materialInst->setShaderContent(g_spinDefaultMaterial);
@@ -203,7 +203,7 @@ namespace Echo
 			define.m_isUseUV = true;
 
 			m_mesh->updateIndices(m_indicesData.size(), m_indicesData.data());
-			m_mesh->updateVertexs(define, m_verticesData.size(), (const Byte*)m_verticesData.data(), Box());
+			m_mesh->updateVertexs(define, m_verticesData.size(), (const Byte*)m_verticesData.data(), AABB());
 
 			m_renderable->submitToRenderQueue();
 		}

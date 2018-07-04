@@ -5,7 +5,7 @@
 #include "Triangle.h"
 #include "Plane.h"
 #include "engine/core/Math/Rect.h"
-#include "Box.h"
+#include "AABB.h"
 #include "Sphere.h"
 
 namespace Echo
@@ -26,8 +26,8 @@ namespace Echo
 		bool hitTri(const Triangle& tri, Real& tmin, HitInfo& si) const;
 		bool hitPlane(const Plane& plane, Real& tmin) const;
 		bool hitPlane(const Plane& plane, Real& tmin, HitInfo& si) const;
-		bool hitBox(const Box& box) const;
-		bool hitBox(const Box& box, Real& tmin, HitInfo& si) const;
+		bool hitBox(const AABB& box) const;
+		bool hitBox(const AABB& box, Real& tmin, HitInfo& si) const;
 		bool hitSphere(const Sphere& sphere, Real& tmin, HitInfo& si) const;
 		bool hitSphere(const Sphere& sphere, Real& tmin) const;
 		void transform(const Matrix4& mat);

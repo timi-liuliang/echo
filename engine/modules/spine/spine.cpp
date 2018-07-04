@@ -110,7 +110,7 @@ namespace Echo
 	{
 		float delta = Engine::instance()->getFrameTime();
 
-		m_matWVP = getWorldMatrix()* NodeTree::instance()->get2DCamera()->getViewProjMatrix();
+		m_matWVP = getWorldMatrix()* NodeTree::instance()->get2dCamera()->getViewProjMatrix();
 
 		if (m_spSkeleton && m_spAnimState)
 		{

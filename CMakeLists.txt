@@ -16,7 +16,6 @@ OPTION(FREEIMAGE_SUPPORT_WEBP "FreeImage Support WebP Format" FALSE)
 OPTION(ECHO_SUPPORT_SPINE "2D Skeleton Spine Support" TRUE)
 OPTION(ECHO_ENGINE_MIN "compile engine min. (for testCatui_ECHO)" FALSE)
 OPTION(ECHO_ARCHIVE_SUPPORT_7ZIP "Is support 7zip package" TRUE)
-CMAKE_DEPENDENT_OPTION(ECHO_PROFILER "Profiler support" TRUE "NOT ECHO_ENGINE_MIN" FALSE)
 
 IF(UNIX)
 	IF (APPLE)
@@ -26,13 +25,8 @@ IF(UNIX)
 	ENDIF()
 ENDIF()
 
-OPTION(ECHO_USE_THEORA "Use THEORA" FALSE)
-OPTION(ECHO_STATIC "Static build" TRUE)
-OPTION(ECHO_GLES_STATIC "Static build opengles" TRUE)
 OPTION(ECHO_UNICODE "Using Unicode charset" FALSE)
 OPTION(ECHO_EDITOR_MODE "Include GUI" TRUE)
-OPTION(NO_THEORA_PLAYER "TheoraPlayer" ON)
-OPTION(ECHO_RENDER_THREAD "Use Multithread Render" TRUE)
 
 IF(ECHO_BUILD_PLATFORM_IOS AND ECHO_BUILD_PLATFORM_ANDROID)
 	MESSAGE(FATAL_ERROR "Can only build for one platform.")
@@ -43,7 +37,6 @@ IF(WIN32)
 		ADD_DEFINITIONS("-DANDROID")
 
 		SET(ECHO_PLATFORM_ANDROID TRUE)
-		SET(ECHO_STATIC TRUE CACHE BOOL "Forcing static build for android" FORCE)
 		
 		#notice the "recycling" of CMAKE_C_FLAGS
 		#this is necessary to pick up android flags

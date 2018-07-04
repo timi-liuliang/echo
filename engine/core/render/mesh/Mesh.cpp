@@ -251,7 +251,7 @@ namespace Echo
 	}
 
 	// update vertex data
-	void Mesh::updateVertexs(const MeshVertexFormat& format, ui32 vertCount, const Byte* vertices, const Box& box)
+	void Mesh::updateVertexs(const MeshVertexFormat& format, ui32 vertCount, const Byte* vertices, const AABB& box)
 	{
 		m_vertData.set(format, vertCount);
 
@@ -263,7 +263,7 @@ namespace Echo
 	}
 
 	// update vertex data
-	void Mesh::updateVertexs(const MeshVertexData& vertexData, const Box& box)
+	void Mesh::updateVertexs(const MeshVertexData& vertexData, const AABB& box)
 	{
 		m_vertData = vertexData;
 		m_box = box;

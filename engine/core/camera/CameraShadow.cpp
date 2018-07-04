@@ -6,8 +6,8 @@ namespace Echo
 	// 构造函数
 	CameraShadow::CameraShadow()
 		: m_enable(true)
-		, m_Box(Box::ZERO)
-		, m_CalcBox(Box::ZERO)
+		, m_Box(AABB::ZERO)
+		, m_CalcBox(AABB::ZERO)
 	{
 		m_viewProj = (Matrix4::IDENTITY);
 		m_dir = Vector3::ZERO;
@@ -20,7 +20,7 @@ namespace Echo
 	}
 
 	// 更新
-	void CameraShadow::update(const Box* visibleActorsAABB)
+	void CameraShadow::update(const AABB* visibleActorsAABB)
 	{
 		m_enable = visibleActorsAABB->isValid();
 		m_Box = *visibleActorsAABB;
@@ -80,13 +80,13 @@ namespace Echo
 	}
 
 	// 根据包围盒与观察矩阵计算正交矩阵
-	void CameraShadow::calcOrthoRH(Matrix4& oOrth, const Box& box, const Matrix4& viewMat)
+	void CameraShadow::calcOrthoRH(Matrix4& oOrth, const AABB& box, const Matrix4& viewMat)
 	{
 		// 计算观察空间AABB
-		Box orthAABB;
-		for (int i = Box::CORNER_NLT; i < Box::CORNER_FRT; i++)
+		AABB orthAABB;
+		for (int i = AABB::CORNER_NLT; i < AABB::CORNER_FRT; i++)
 		{
-			orthAABB.addPoint(viewMat.transform(box.getCorner(Box::Corner(i))));
+			orthAABB.addPoint(viewMat.transform(box.getCorner(AABB::Corner(i))));
 		}
 
 		// 纠正远近截面

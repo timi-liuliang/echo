@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/core/Math/Vector3.h"
-#include "Box.h"
+#include "AABB.h"
 
 namespace Echo
 {
@@ -24,7 +24,7 @@ namespace Echo
 		void Set( const Vector3& center, const Vector3& axis0, const Vector3& axis1, const Vector3& axis2, float extent0, float extent1, float extent2);
 
 		// 构建AABB包围盒
-		void buildAABB( Box& aabb);
+		void buildAABB( AABB& aabb);
 
 		// 构建八个顶点
 		void buildEightPoints( Vector3* points);

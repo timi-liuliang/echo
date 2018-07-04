@@ -22,6 +22,7 @@
 #include "engine/core/script/LuaScript.h"
 #include "engine/core/render/render/ShaderProgramRes.h"
 #include "engine/core/render/TextureCube.h"
+#include "engine/core/gizmos/Gizmos.h"
 
 #ifdef ECHO_PLATFORM_ANDROID
 #include <sys/syscall.h>
@@ -161,6 +162,7 @@ namespace Echo
 		Class::registerType<LuaScript>();
 		Class::registerType<TextureCube>();
 		Class::registerType<ProjectSettings>();
+		Class::registerType<Gizmos>();
 
 		// register all module class
 		Module::registerAllTypes();
@@ -245,7 +247,7 @@ namespace Echo
 		// setup viewport
 		Viewport* pViewport = Renderer::instance()->getFrameBuffer()->getViewport();
 
-		Camera* p2DCamera = NodeTree::instance()->get2DCamera();
+		Camera* p2DCamera = NodeTree::instance()->get2dCamera();
 		pViewport->setViewProjMatrix(p2DCamera->getViewProjMatrix());
 		ui32 width = pViewport->getWidth();
 		ui32 height = pViewport->getHeight();
@@ -266,7 +268,7 @@ namespace Echo
 			pMainCamera->setHeight(Real(height));
 			pMainCamera->update();
 
-			Camera* p2DCamera = NodeTree::instance()->get2DCamera();
+			Camera* p2DCamera = NodeTree::instance()->get2dCamera();
 			p2DCamera->setWidth(Real(width));
 			p2DCamera->setHeight(Real(height));
 			p2DCamera->update();

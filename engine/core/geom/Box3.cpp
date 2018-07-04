@@ -27,7 +27,7 @@ namespace Echo
 	}
 
 	// ¹¹½¨AABB°üÎ§ºÐ
-	void Box3::buildAABB( Box& aabb)
+	void Box3::buildAABB( AABB& aabb)
 	{
 		Vector3 eightPoints[8];
 		buildEightPoints( eightPoints);

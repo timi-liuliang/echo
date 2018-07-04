@@ -1,7 +1,7 @@
 #ifndef __ECHO_FRUSTUM_H__
 #define __ECHO_FRUSTUM_H__
 
-#include "Box.h"
+#include "AABB.h"
 #include "Plane.h"
 #include "Sphere.h"
 
@@ -95,7 +95,7 @@ namespace Echo
 		}
 
 		// ¹¹½¨AABB
-		void buildAABB( Box& oAABB) const;
+		void buildAABB( AABB& oAABB) const;
 
 	public:
 		inline const Frustum& operator = (const Frustum& src)
@@ -153,7 +153,7 @@ namespace Echo
 		}
 
 		// ¼ì²â
-		bool isVisible(const Box& box) const;
+		bool isVisible(const AABB& box) const;
 		
 		inline bool isVisible(const Sphere& sphere) const
 		{
@@ -167,9 +167,9 @@ namespace Echo
 			return true;
 		}
 
-		bool intersect(const Box& box) const;
+		bool intersect(const AABB& box) const;
 
-		bool include(const Box& box) const;
+		bool include(const AABB& box) const;
 
 	protected:
 		mutable Vector3	m_corners[8];

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/core/Memory/MemManager.h"
-#include "Engine/core/geom/Box.h"
+#include "Engine/core/geom/AABB.h"
 #include "ChunkyTriMesh.h"
 
 namespace Echo
@@ -23,7 +23,7 @@ namespace Echo
 		void addVertex(float x, float y, float z);
 		void addTriangle(int a, int b, int c, int area, float maxSlope);
 		void destroyAll();
-		Box& getAABB() { return m_box; }
+		AABB& getAABB() { return m_box; }
 
 		// OffMeshLinks
 		int getOffMeshConnectionCount() const { return m_offMeshConCount; }
@@ -40,7 +40,7 @@ namespace Echo
 		vector<Vector3>::type			m_verts;
 		vector<int>::type				m_tris;
 		vector<rcChunkyTriInfo>::type	m_triInfos;		// 三角形区域分类
-		Box								m_box;
+		AABB								m_box;
 
 		static const int	MAX_OFFMESH_CONNECTIONS = 1024;
 		float				m_offMeshConVerts[MAX_OFFMESH_CONNECTIONS * 3 * 2];

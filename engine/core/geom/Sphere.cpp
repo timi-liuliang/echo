@@ -1,5 +1,5 @@
 #include "Sphere.h"
-#include "Box.h"
+#include "AABB.h"
 
 namespace Echo
 {
@@ -77,7 +77,7 @@ namespace Echo
 		return (point-c).lenSqr() < r*r;
 	}
 
-	void Sphere::fromAABB(const Box& aabb)
+	void Sphere::fromAABB(const AABB& aabb)
 	{
 		c = aabb.getCenter();
 		r = aabb.getDiagonalLen() / 2.f;

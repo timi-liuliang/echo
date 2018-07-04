@@ -34,7 +34,7 @@ namespace Echo
 	}
 
 	// ¼ì²â
-	bool Frustum::isVisible(const Box& box) const
+	bool Frustum::isVisible(const AABB& box) const
 	{
 		if( box.isValid())
 		{
@@ -58,7 +58,7 @@ namespace Echo
 		return false;
 	}
 
-	bool Frustum::intersect(const Box& box) const
+	bool Frustum::intersect(const AABB& box) const
 	{
 		if( box.isValid())
 		{
@@ -82,7 +82,7 @@ namespace Echo
 		return false;
 	}
 
-	bool Frustum::include(const Box& box) const
+	bool Frustum::include(const AABB& box) const
 	{
 		if( box.isValid())
 		{
@@ -167,7 +167,7 @@ namespace Echo
 #endif
 
 	// ¹¹½¨AABB
-	void Frustum::buildAABB(Box& oAABB) const
+	void Frustum::buildAABB(AABB& oAABB) const
 	{
 		oAABB.reset();
 		for (size_t i = 0; i < CORNER_NUM; i++)

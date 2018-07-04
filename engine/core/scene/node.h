@@ -2,7 +2,7 @@
 
 #include <engine/core/Math/Math.h>
 #include "engine/core/Util/PtrMonitor.h"
-#include "engine/core/geom/Box.h"
+#include "engine/core/geom/AABB.h"
 #include "engine/core/base/object.h"
 
 namespace Echo
@@ -140,7 +140,7 @@ namespace Echo
 		bool			m_bModify;      //for caculate. ie: getWorldPostion
 		bool			m_bMatrixDirty; //for rendering.
 
-		Box				m_localAABB;	// local aabb
+		AABB				m_localAABB;	// local aabb
 
 		LuaScript		m_script;		// bind script
 	};

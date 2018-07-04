@@ -58,7 +58,7 @@ namespace Echo
 			const ShaderProgram::Uniform& uniform = it.second;
 			if (uniform.m_type != SPT_TEXTURE)
 			{
-				void* value = node->getGlobalUniformValue(uniform.m_name);
+				void* value = node ? node->getGlobalUniformValue(uniform.m_name) : nullptr;
 				if (!value) value = matInst->getUniformValue(uniform.m_name);
 
 				renderable->setShaderParam(shaderProgram->getParamPhysicsIndex(uniform.m_name), uniform.m_type, value, uniform.m_count);

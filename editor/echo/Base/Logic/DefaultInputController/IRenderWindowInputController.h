@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QPoint>
-#include "engine/core/geom/Box.h"
+#include "engine/core/geom/AABB.h"
 
 class QWheelEvent;
 class QMouseEvent;
@@ -81,7 +81,7 @@ namespace Studio
 		virtual void onInitCameraSettings(float offsetdir) = 0;
 
 		// ÊÊÓ¦Ä£ÐÍ
-		virtual void CameraZoom(const Echo::Box& box, float scale){}
+		virtual void CameraZoom(const Echo::AABB& box, float scale){}
 	};
 	typedef IRenderWindowInputController IRWInputController;
 }
