@@ -163,6 +163,8 @@ namespace Echo
 	void MeshVertexData::setPosition(int idx, const Vector3& pos)
 	{
 		*(Vector3*)(getVertice(idx) + m_format.m_posOffset) = pos;
+
+		m_aabb.addPoint(pos);
 	}
 
 	// 获取顶点法线数据
@@ -219,5 +221,6 @@ namespace Echo
 	{
 		m_count = 0;
 		m_vertices.clear();
+		m_aabb.reset();
 	}
 }

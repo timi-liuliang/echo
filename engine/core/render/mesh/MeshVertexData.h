@@ -1,5 +1,6 @@
 #pragma once
 
+#include "core/geom/Box.h"
 #include "render/RenderInput.h"
 
 namespace Echo
@@ -87,6 +88,9 @@ namespace Echo
 		// 获取切线
 		Vector3& getTangent(Word index);
 
+		// 获取包围盒
+		const Box& getAABB() const { return m_aabb; }
+
 		//状态置空
 		void reset();
 
@@ -94,5 +98,6 @@ namespace Echo
 		ui32				m_count;		// 顶点数量
 		MeshVertexFormat	m_format;		// 顶点格式
 		ByteArray			m_vertices;		// 顶点数据
+		Box					m_aabb;			// 轴向包围盒
 	};
 }

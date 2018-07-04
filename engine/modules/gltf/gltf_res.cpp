@@ -743,7 +743,7 @@ namespace Echo
 				primitive.m_mesh->updateIndices(indicesCount, indicesDataInt);
 
 			// update vertices
-			primitive.m_mesh->updateVertexs(vertexData, Box());
+			primitive.m_mesh->updateVertexs(vertexData, vertexData.getAABB());
 		}
 
 		if (!buildMaterial(meshIdx, primitiveIdx))
