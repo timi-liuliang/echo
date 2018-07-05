@@ -51,7 +51,7 @@ namespace Echo
 
 		// bind shader param
 		Renderable* renderable = Renderer::instance()->createRenderable(matInst->getRenderStage(), matInst->getMaterial());
-		renderable->setRenderInput(mesh->getVertexBuffer(), mesh->getVertexElements(), mesh->getIndexBuffer(), mesh->getIndexStride());
+		renderable->setRenderInput(mesh->getVertexBuffer(), mesh->getVertexElements(), mesh->getIndexBuffer(), mesh->getIndexStride(), mesh->getTopologyType());
 		renderable->beginShaderParams(uniforms->size());
 		for (auto& it : *uniforms)
 		{
@@ -256,7 +256,7 @@ namespace Echo
 	}
 
 	// 设置渲染几何数据
-	void Renderable::setRenderInput(GPUBuffer* vertexStream, const RenderInput::VertexElementList& vertElements, GPUBuffer* indexStream, ui32 idxStride)
+	void Renderable::setRenderInput(GPUBuffer* vertexStream, const RenderInput::VertexElementList& vertElements, GPUBuffer* indexStream, ui32 idxStride, RenderInput::TopologyType topologyType)
 	{
 		EchoSafeDelete(m_renderInput, RenderInput);
 
@@ -266,6 +266,7 @@ namespace Echo
 			if (program)
 			{
 				m_renderInput = Renderer::instance()->createRenderInput(program);
+				m_renderInput->setTopologyType(topologyType);
 				m_renderInput->bindVertexStream(vertElements, vertexStream);
 				m_renderInput->bindIndexStream(indexStream, idxStride);
 			}

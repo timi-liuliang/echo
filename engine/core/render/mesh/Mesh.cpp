@@ -18,7 +18,8 @@ namespace Echo
 
 	// ¹¹Ôìº¯Êý
 	Mesh::Mesh(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer)
-		: m_vertexBuffer(NULL)
+		: m_topologyType(RenderInput::TT_TRIANGLELIST)
+		, m_vertexBuffer(NULL)
 		, m_indexBuffer(NULL)
 		, m_idxCount(0)
 		, m_idxStride(0)

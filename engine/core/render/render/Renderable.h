@@ -49,7 +49,7 @@ namespace Echo
 		void release();
 
 		// 设置渲染几何数据
-		void setRenderInput(GPUBuffer* vertexStream, const RenderInput::VertexElementList& vertElements,  GPUBuffer* indexStream, ui32 idxStride);
+		void setRenderInput(GPUBuffer* vertexStream, const RenderInput::VertexElementList& vertElements,  GPUBuffer* indexStream, ui32 idxStride, RenderInput::TopologyType topologyType);
 
 		// 开始参数
 		void beginShaderParams(size_t paramNum);

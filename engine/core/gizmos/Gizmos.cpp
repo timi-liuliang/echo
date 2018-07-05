@@ -42,17 +42,82 @@ static const char* g_gizmoOpaqueMaterial = R"(
 
 namespace Echo
 {
+	Gizmos::Batch::Batch(Material* material, Gizmos* gizmos)
+	{
+		m_gizmos = gizmos;
+		m_material = material;
+		m_mesh = Mesh::create(true, true);
+		m_renderable = nullptr;
+		m_meshDirty = true;
+	}
+
+	void Gizmos::Batch::addVertex(const Gizmos::VertexFormat& vert)
+	{
+		m_vertexs.push_back(vert);
+		m_meshDirty = true;
+	}
+
+	void Gizmos::Batch::addIndex(Word idx)
+	{
+		m_indices.push_back(idx);
+		m_meshDirty = true;
+	}
+
+	void Gizmos::Batch::clear()
+	{
+		m_vertexs.clear();
+		m_indices.clear();
+
+		m_meshDirty = true;
+	}
+
+	void Gizmos::Batch::update()
+	{
+		// update mesh and renderable
+		if (m_meshDirty)
+		{
+			if (m_vertexs.size())
+			{
+				// safe release renderable
+				if (m_renderable)
+				{
+					m_renderable->release();
+					m_renderable = nullptr;
+				}
+
+				MeshVertexFormat define;
+
+				m_mesh->updateIndices(m_indices.size(), m_indices.data());
+				m_mesh->updateVertexs(define, m_vertexs.size(), (const Byte*)m_vertexs.data(), m_aabb);
+
+				m_renderable = Renderable::create(m_mesh, m_material, m_gizmos);
+
+				m_meshDirty = false;
+			}
+		}
+
+		// render
+		if(m_renderable)
+			m_renderable->submitToRenderQueue();
+
+		// auto clear data
+		if (m_gizmos->isAutoClear())
+		{
+			clear();
+		}
+	}
+
 	// constructor
 	Gizmos::Gizmos()
-		: m_meshOpaque(nullptr)
-		, m_renderableOpaque(nullptr)
+		: m_isAutoClear(false)
 	{
-		m_materialOpaque = ECHO_CREATE_RES(Material);
-		m_materialOpaque->setShaderContent(g_gizmoOpaqueMaterial);
-		m_materialOpaque->setRenderStage("Transparent");
-		m_materialOpaque->onLoaded();
+		m_material = ECHO_CREATE_RES(Material);
+		m_material->setShaderContent(g_gizmoOpaqueMaterial);
+		m_material->setRenderStage("Transparent");
+		m_material->onLoaded();
 
-		m_meshOpaque = Mesh::create(true, true);
+		m_lineBatch = EchoNew(Batch(m_material, this));
+		m_lineBatch->m_mesh->setTopologyType(RenderInput::TT_LINELIST);
 	}
 
 	void Gizmos::bindMethods()
@@ -60,19 +125,19 @@ namespace Echo
 	}
 
 	// draw line
-	void Gizmos::drawLine(const Vector3& from, const Vector3& to, const Color& color, bool transparent, float thickNess)
+	void Gizmos::drawLine(const Vector3& from, const Vector3& to, const Color& color)
 	{
-		m_indicesOpaque.push_back(m_vertexsOpaque.size());
-		m_indicesOpaque.push_back(m_vertexsOpaque.size() + 1);
-		m_indicesOpaque.push_back(m_vertexsOpaque.size() + 2);
-		m_indicesOpaque.push_back(m_vertexsOpaque.size() + 0);
-		m_indicesOpaque.push_back(m_vertexsOpaque.size() + 2);
-		m_indicesOpaque.push_back(m_vertexsOpaque.size() + 3);
+		m_lineBatch->addIndex((Word)m_lineBatch->m_vertexs.size());
+		m_lineBatch->addIndex((Word)m_lineBatch->m_vertexs.size() + 1);
 
-		m_vertexsOpaque.push_back(VertexFormat(from + Vector3::NEG_UNIT_Z * thickNess));
-		m_vertexsOpaque.push_back(VertexFormat(from - Vector3::NEG_UNIT_Z * thickNess));
-		m_vertexsOpaque.push_back(VertexFormat(to - Vector3::NEG_UNIT_Z * thickNess));
-		m_vertexsOpaque.push_back(VertexFormat(to + Vector3::NEG_UNIT_Z * thickNess));
+		m_lineBatch->addVertex(VertexFormat(from));
+		m_lineBatch->addVertex(VertexFormat(to));
+	}
+
+	// clear mesh data
+	void Gizmos::clear()
+	{
+		m_lineBatch->clear();
 	}
 
 	// get global uniforms
@@ -87,26 +152,6 @@ namespace Echo
 	// update
 	void Gizmos::update()
 	{
-		if (m_vertexsOpaque.size())
-		{
-			// safe release renderable
-			if (m_renderableOpaque)
-			{
-				m_renderableOpaque->release();
-				m_renderableOpaque = nullptr;
-			}
-
-			MeshVertexFormat define;
-
-			m_meshOpaque->updateIndices(m_indicesOpaque.size(), m_indicesOpaque.data());
-			m_meshOpaque->updateVertexs(define, m_vertexsOpaque.size(), (const Byte*)m_vertexsOpaque.data(), m_aabb);
-
-			m_renderableOpaque = Renderable::create(m_meshOpaque, m_materialOpaque, this);
-
-			m_renderableOpaque->submitToRenderQueue();
-
-			m_vertexsOpaque.clear();
-			m_indicesOpaque.clear();
-		}
+		m_lineBatch->update();
 	}
 }

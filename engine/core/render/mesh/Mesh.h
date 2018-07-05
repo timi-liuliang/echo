@@ -20,6 +20,9 @@ namespace Echo
 		// 获取名称
 		const String& getName() const { return m_name; }
 
+		// 图元类型
+		RenderInput::TopologyType getTopologyType() { return m_topologyType; }
+
 		// 获取顶点信息
 		MeshVertexData& getVertexData() { return m_vertData; }
 
@@ -71,6 +74,9 @@ namespace Echo
 		// 获取受影响的骨骼索引
 		ui32 getBoneIdx(int idx) { return m_boneIdxs[idx]; }
 
+		// set primitive type
+		void setTopologyType(RenderInput::TopologyType type) { m_topologyType = type; }
+
 		// update indices data
 		void updateIndices(ui32 indicesCount, const ui16* indices);
 		void updateIndices(ui32 indicesCount, const ui32* indices);
@@ -102,17 +108,18 @@ namespace Echo
 		void buildIndexBuffer();
 
 	protected:
-		String					m_name;						// 名称
+		String						m_name;						// 名称
+		RenderInput::TopologyType	m_topologyType;				// 图元类型
 		AABB						m_box;						// 包围盒
-		ui32					m_idxCount;					// 索引数量
-		ui32					m_idxStride;				// 索引格式大小
-		Byte*					m_indices;					// 索引数据
-		MeshVertexData			m_vertData;					// 顶点数据
-		bool					m_isDynamicVertexBuffer;	// 是否支持动态更新
-		GPUBuffer*				m_vertexBuffer;				// 顶点缓冲
-		bool					m_isDynamicIndicesBuffer;	// 索引缓冲
-		GPUBuffer*				m_indexBuffer;				// 索引缓冲
-		vector<ui32>::type		m_boneIdxs;					// 骨骼索引(mesh only use a part of bones of a skeleton)
+		ui32						m_idxCount;					// 索引数量
+		ui32						m_idxStride;				// 索引格式大小
+		Byte*						m_indices;					// 索引数据
+		MeshVertexData				m_vertData;					// 顶点数据
+		bool						m_isDynamicVertexBuffer;	// 是否支持动态更新
+		GPUBuffer*					m_vertexBuffer;				// 顶点缓冲
+		bool						m_isDynamicIndicesBuffer;	// 索引缓冲
+		GPUBuffer*					m_indexBuffer;				// 索引缓冲
+		vector<ui32>::type			m_boneIdxs;					// 骨骼索引(mesh only use a part of bones of a skeleton)
 	};
 }
 

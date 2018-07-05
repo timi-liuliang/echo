@@ -100,6 +100,8 @@ namespace Studio
 			m_gizmosNodeForEditor = ECHO_DOWN_CAST<Echo::Gizmos*>(Echo::Class::create("Gizmos"));
 			m_gizmosNodeForEditor->setName("Gizmos");
 			m_gizmosNodeForEditor->setParent(m_invisibleNodeForEditor);
+
+			m_gizmosNodeForEditor->drawLine(-Echo::Vector3(100.f, 0.f, 0.f), Echo::Vector3(100.f, 0.f, 0.f), Echo::Color::RED);
 		}
 
 		return true;
@@ -114,8 +116,6 @@ namespace Studio
 	// Ã¿Ö¡äÖÈ¾
 	void EchoEngine::Render(unsigned int elapsedTime, bool isRenderWindowVisible)
 	{
-		m_gizmosNodeForEditor->drawLine(-Echo::Vector3(100.f, 0.f, 0.f), Echo::Vector3(100.f, 0.f, 0.f), Echo::Color::RED, false, 1.f);
-
 		if (m_currentEditNode)
 			m_currentEditNode->update( elapsedTime, true);
 

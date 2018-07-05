@@ -26,12 +26,41 @@ namespace Echo
 		typedef vector<VertexFormat>::type	VertexArray;
 		typedef vector<Word>::type			IndiceArray;
 
+		// batch
+		struct Batch
+		{
+			Gizmos*			m_gizmos;
+			AABB			m_aabb;
+			VertexArray		m_vertexs;
+			IndiceArray		m_indices;
+			MaterialPtr		m_material;
+			Mesh*			m_mesh;
+			Renderable*		m_renderable;
+			bool			m_meshDirty;
+
+			Batch(Material* material, Gizmos* gizmos);
+			void update();
+			void addVertex(const VertexFormat& vert);
+			void addIndex(Word idx);
+			void clear();
+		};
+
 	public:
 		Gizmos();
 
 		// draw line
-		void drawLine(const Vector3& from, const Vector3& to, const Color& color, bool transparent, float thickNess);
+		void drawLine(const Vector3& from, const Vector3& to, const Color& color);
 
+		// is auto clear
+		bool isAutoClear() const { return m_isAutoClear; }
+
+		// set auto clear
+		void setAutoClear(bool autClear) { m_isAutoClear = autClear; }
+
+		// clear mesh data
+		void clear();
+
+	protected:
 		// get global uniforms
 		virtual void* getGlobalUniformValue(const String& name);
 
@@ -39,12 +68,8 @@ namespace Echo
 		virtual void update();
 
 	private:
-		VertexArray		m_vertexsOpaque;
-		IndiceArray		m_indicesOpaque;
-		AABB			m_aabb;
-		MaterialPtr		m_materialOpaque;
-		Mesh*			m_meshOpaque;
-		Renderable*		m_renderableOpaque;
-		MaterialPtr		m_materialTransparent;
+		bool			m_isAutoClear;
+		MaterialPtr		m_material;
+		Batch*			m_lineBatch;
 	};
 }
