@@ -6,8 +6,7 @@
 static const char* g_gizmoOpaqueMaterial = R"(
 <?xml version = "1.0" encoding = "utf-8"?>
 <Shader>
-	<VS>
-		#version 300
+	<VS>#version 100
 
 		attribute vec3 a_Position;
 		attribute vec4 a_Color;
@@ -26,8 +25,9 @@ static const char* g_gizmoOpaqueMaterial = R"(
 			v_Color = a_Color;
 		}
 	</VS>
-	<PS>
-		#version 100
+	<PS>#version 100
+
+		precision mediump float;
 
 		varying vec4  v_Position;
 		varying vec4  v_Color;
