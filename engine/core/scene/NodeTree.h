@@ -54,6 +54,5 @@ namespace Echo
 		Camera*				m_uiCamera;			// 界面摄像机
 		CameraShadow*		m_shadowCamera;		// 阴影图摄像机		
 		Node				m_invisibleRoot;	// invisible root node
-		Gizmos*				m_gizmosNode;		// gizmos node
 	};
 }

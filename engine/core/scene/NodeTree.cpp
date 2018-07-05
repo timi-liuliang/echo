@@ -10,9 +10,6 @@ namespace Echo
 		, m_uiCamera(nullptr)
 		, m_shadowCamera(nullptr)
 	{
-		m_gizmosNode = EchoNew(Gizmos);
-		m_gizmosNode->setName("Gizmos");
-		m_invisibleRoot.addChild(m_gizmosNode);
 	}
 
 	NodeTree::~NodeTree()
@@ -73,9 +70,6 @@ namespace Echo
 	{
 		// update 3d camera
 		m_3dCamera->update();
-
-		// test;
-		m_gizmosNode->drawLine(-Vector3(100.f, 0.f, 0.f), Vector3(100.f, 0.f, 0.f), Color::RED, false, 1.f);
 
 		// update nodes
 		m_invisibleRoot.update(elapsedTime, true);

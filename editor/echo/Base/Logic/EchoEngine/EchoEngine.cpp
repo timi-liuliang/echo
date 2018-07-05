@@ -42,10 +42,9 @@ namespace Studio
 		//, m_gridNum(lineNum)
 		//, m_gridGap(1)
 		, m_log(NULL)
-		//, m_FontRenderManager(NULL)
-		, m_isShowFps(false)
-		, m_isManualUpdateEngine(false)
 		, m_currentEditNode(nullptr)
+		, m_invisibleNodeForEditor(nullptr)
+		, m_gizmosNodeForEditor(nullptr)
 	{
 	}
 
@@ -87,22 +86,21 @@ namespace Studio
 		(
 			// 背景网格
 			InitializeBackGrid();
-
-			// 初始化字体渲染管理器
-			//m_FontRenderManager = EchoNew(FontRenderManager);
-
-			InitFPSShow();
 		);
-
-		//Echo::PostProcessRenderStage* postProcessStage = static_cast<Echo::PostProcessRenderStage*>(Echo::RenderStageManager::instance()->getRenderStageByID(Echo::RSI_PostProcess));
-		//if (postProcessStage)
-		{
-		//	postProcessStage->setImageEffectEnable("FXAA", Echo::Root::instance()->getEnableFXAA());
-		}
 
 		Echo::FSAudioManager::instance()->setAudioEventCb(&MyAudioEventCallBack);
 
 		m_currentEditNode = nullptr;
+
+		{
+			// editor node
+			m_invisibleNodeForEditor = ECHO_DOWN_CAST<Echo::Node*>(Echo::Class::create("Node"));
+
+			// gizmos node
+			m_gizmosNodeForEditor = ECHO_DOWN_CAST<Echo::Gizmos*>(Echo::Class::create("Gizmos"));
+			m_gizmosNodeForEditor->setName("Gizmos");
+			m_gizmosNodeForEditor->setParent(m_invisibleNodeForEditor);
+		}
 
 		return true;
 	}
@@ -116,26 +114,15 @@ namespace Studio
 	// 每帧渲染
 	void EchoEngine::Render(unsigned int elapsedTime, bool isRenderWindowVisible)
 	{
-		if (!m_isManualUpdateEngine)
-		{
-			if (m_currentEditNode)
-			{
-				m_currentEditNode->update( elapsedTime, true);
-			}
+		m_gizmosNodeForEditor->drawLine(-Echo::Vector3(100.f, 0.f, 0.f), Echo::Vector3(100.f, 0.f, 0.f), Echo::Color::RED, false, 1.f);
 
-			if (m_isShowFps)
-			{
-				//更新FPS
-				UpdateFPS();
+		if (m_currentEditNode)
+			m_currentEditNode->update( elapsedTime, true);
 
-				// 渲染字体
-				//FontRenderManager::Instance()->Render();
-				Echo::Engine::instance()->resetFrameState();
-				Echo::Renderer::instance()->getFrameState().reset();
-			}
+		if (m_invisibleNodeForEditor)
+			m_invisibleNodeForEditor->update(elapsedTime, true);
 
-			Echo::Engine::instance()->tick(elapsedTime);
-		}
+		Echo::Engine::instance()->tick(elapsedTime);
 	}
 
 	// 修改窗口大小
@@ -330,80 +317,5 @@ namespace Studio
 		//	else
 		//		defaultBackBuffer->saveTo((std::string(sceneLocation.c_str()) + "/map.bmp").c_str());
 		//}
-	}
-
-
-	void EchoEngine::InitFPSShow()
-	{
-		//m_FpsPrarentNode = EchoSceneManager->getRootNode()->createChild();
-
-		//Echo::node* pSceneNode;
-		//FontCNRender* pTextRender;
-
-		//for (int j = 0; j < FPSINFONUM; ++j)
-		//{
-		//	pSceneNode = m_FpsPrarentNode->createChild();
-		//	pTextRender = FontRenderManager::Instance()->CreateFontCNRender();
-		//	pTextRender->setFontColor(Echo::Color::GREEN);
-		//	pTextRender->setParentSceneNode(pSceneNode);
-		//	pTextRender->setRenderText(" ");
-		//	pTextRender->setScale(0.7f);
-		//	m_pFpsNodes[j] = pSceneNode;
-		//	m_pTextRenders[j] = pTextRender;
-		//}
-
-	}
-
-	void EchoEngine::UpdateFPS()
-	{
-		//Echo::ui32	fps = EchoRoot->getFPS();
-		//Echo::ui32	drawCallTimes = EchoRender->getFrameState().getDrawCalls();
-		//Echo::ui32	triangleNum = EchoRender->getFrameState().getTriangleNum();
-		//float		vertexSize = EchoRender->getFrameState().getVertexSize() / 1024.f / 1024.f;
-		//float		textureSize = EchoRender->getFrameState().getTextureSizeInBytes() / 1024.f / 1024.f;
-
-		//_PROCESS_MEMORY_COUNTERS pmc;
-		//pmc.cb = sizeof(_PROCESS_MEMORY_COUNTERS);
-		//GetProcessMemoryInfo(GetCurrentProcess(), &pmc, pmc.cb);
-		//float memorySize = pmc.WorkingSetSize / (1024.f * 1024.f);
-
-		//char format[256];
-		//sprintf(format, "FPS: %d", fps);
-		//m_pTextRenders[0]->setRenderText(format, false);
-		//upDateFpsNode(0);
-
-		//sprintf(format, "DrawCall: %d", drawCallTimes);
-		//m_pTextRenders[1]->setRenderText(format, false);
-		//upDateFpsNode(1);
-
-		//sprintf(format, "TriangleNum: %d", triangleNum);
-		//m_pTextRenders[2]->setRenderText(format, false);
-		//upDateFpsNode(2);
-
-		//sprintf(format, "VertexSize: %.3f mb", vertexSize);
-		//m_pTextRenders[3]->setRenderText(format, false);
-		//upDateFpsNode(3);
-
-		//sprintf(format, "TextureSize: %.3f mb", textureSize);
-		//m_pTextRenders[4]->setRenderText(format, false);
-		//upDateFpsNode(4);
-
-		//sprintf(format, "MemorySize: %.3f mb", memorySize);
-		//m_pTextRenders[5]->setRenderText(format, false);
-		//upDateFpsNode(5);
-	}
-
-	void EchoEngine::upDateFpsNode(int index)
-	{
-		//Echo::Ray _ray;
-		//Echo::Vector2 point = Echo::Vector2(20.0f, 20.0f + index * 20.f);
-		//EchoSceneManager->getMainCamera()->getCameraRay(_ray, point);
-		//Echo::Real fov = EchoSceneManager->getMainCamera()->getFov();
-		//Echo::Vector3 fpsPos = _ray.o;
-		//fpsPos += _ray.dir*2.3f;
-		//m_pTextRenders[index]->setScale(fov);
-
-		//m_pFpsNodes[index]->setWorldPosition(fpsPos);
-		//m_pFpsNodes[index]->update();
-	}
+	}	
 }

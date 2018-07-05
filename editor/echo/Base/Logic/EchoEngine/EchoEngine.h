@@ -80,45 +80,25 @@ namespace Studio
 		// 保存当前编辑场景
 		void SaveScene();
 
-		// 设置FPS是否显示
-		void SetIsFPSShow(bool setting){ m_isShowFps = setting; }
-
 	private:
 		EchoEngine();
 
 		// 初始化背景网格
 		void InitializeBackGrid();
 
-		// 初始化FPS显示
-		void InitFPSShow();
-
-		// 更新FPS显示
-		void UpdateFPS();
-
-		// 更新字体节点
-		void upDateFpsNode(int index);
-
 	protected:
 		Echo::Log*				m_log;						// 日志
 		Echo::Node*				m_currentEditNode;			// 当前编辑场景
 		Echo::String			m_currentEditNodeSavePath;	// 当前场景存储路径
-
+		Echo::Node*				m_invisibleNodeForEditor;		// 编辑器结点
+		Echo::Gizmos*			m_gizmosNodeForEditor;
 		//Echo::node*			m_backGridNode;	// 背景网格用场景结点
 		//Echo::DebugDisplayItem*	m_backGrid;		// 背景网格
 		//int						m_gridNum;		// 网格的数量
 		//float					m_gridGap;		// 网格间距
-
-		Echo::Node *		m_pCameraAxis;
-
-		static std::string		m_projectFile;		// 项目名称
-		static RenderWindow*	m_renderWindow;	// 渲染窗口
-		Echo::AudioSourceID		m_curPlayAudio;		// 当前播放音频
-
-		//FontRenderManager*  m_FontRenderManager; // 字体渲染  
-		bool					m_isShowFps;		 // 是否显示FPS	
-		Echo::Node*				m_FpsPrarentNode;	 // FPS父节点
-		Echo::array<Echo::Node*,FPSINFONUM>	m_pFpsNodes;	 // FPS显示，挂载点
-		//Echo::array<FontCNRender*, FPSINFONUM>		m_pTextRenders;	 // 字体集合
-		bool				m_isManualUpdateEngine; 
+		Echo::Node *			m_pCameraAxis;
+		static std::string		m_projectFile;			// 项目名称
+		static RenderWindow*	m_renderWindow;			// 渲染窗口
+		Echo::AudioSourceID		m_curPlayAudio;			// 当前播放音频
 	};
 }
