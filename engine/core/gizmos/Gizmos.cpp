@@ -10,32 +10,47 @@ static const char* g_gizmoOpaqueMaterial = R"(
 		#version 300
 
 		attribute vec3 a_Position;
+		attribute vec4 a_Color;
 
 		uniform mat4 u_VPMatrix;
+
+		varying vec4 v_Position;
+		varying vec4 v_Color;
 
 		void main(void)
 		{
 			vec4 position = u_VPMatrix * vec4(a_Position, 1.0);
 			gl_Position = position;
+
+			v_Position = gl_Position;
+			v_Color = a_Color;
 		}
 	</VS>
 	<PS>
 		#version 100
 
+		varying vec4  v_Position;
+		varying vec4  v_Color;
+
 		void main(void)
 		{
-			gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+			float depth = v_Position.z / v_Position.w;
+
+			gl_FragColor    = v_Color;
+			gl_FragColor.w *= pow(1.0 - depth, 0.3333);
 		}
 	</PS>
 	<BlendState>
-		<BlendEnable value = "false" />
+		<BlendEnable value = "true" />
+		<SrcBlend value = "BF_SRC_ALPHA" />
+		<DstBlend value = "BF_INV_SRC_ALPHA" />
 	</BlendState>
 	<RasterizerState>
 		<CullMode value = "CULL_NONE" />
 	</RasterizerState>
 	<DepthStencilState>
 		<DepthEnable value = "true" />
-		<WriteDepth value = "true" />
+		<WriteDepth value = "false" />
 	</DepthStencilState>
 </Shader>
 )";
@@ -86,6 +101,7 @@ namespace Echo
 				}
 
 				MeshVertexFormat define;
+				define.m_isUseVertexColor = true;
 
 				m_mesh->updateIndices(m_indices.size(), m_indices.data());
 				m_mesh->updateVertexs(define, m_vertexs.size(), (const Byte*)m_vertexs.data(), m_aabb);
@@ -130,8 +146,8 @@ namespace Echo
 		m_lineBatch->addIndex((Word)m_lineBatch->m_vertexs.size());
 		m_lineBatch->addIndex((Word)m_lineBatch->m_vertexs.size() + 1);
 
-		m_lineBatch->addVertex(VertexFormat(from));
-		m_lineBatch->addVertex(VertexFormat(to));
+		m_lineBatch->addVertex(VertexFormat(from, color));
+		m_lineBatch->addVertex(VertexFormat(to, color));
 	}
 
 	// clear mesh data
@@ -145,6 +161,8 @@ namespace Echo
 	{
 		if (name == "u_VPMatrix")
 			return (void*)(&NodeTree::instance()->get3dCamera()->getViewProjMatrix());
+		else if (name == "u_CameraPosition")
+			return (void*)(&NodeTree::instance()->get3dCamera()->getPosition());
 
 		return nullptr;
 	}

@@ -18,9 +18,11 @@ namespace Echo
 		struct VertexFormat
 		{
 			Vector3		m_position;
+			Dword		m_color;
 
-			VertexFormat(const Vector3& pos)
+			VertexFormat(const Vector3& pos, const Color& color)
 				: m_position(pos)
+				, m_color(color)
 			{}
 		};
 		typedef vector<VertexFormat>::type	VertexArray;

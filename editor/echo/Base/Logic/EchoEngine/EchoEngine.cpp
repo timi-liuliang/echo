@@ -21,39 +21,24 @@
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/util/TimeProfiler.h>
 
-
-// 事件回调
-void MyAudioEventCallBack(Echo::AudioSouceEventCBType type, Echo::AudioSource *event)
-{
-}
-
 namespace Studio
 {
-
-#define lineNum 10
 	std::string	EchoEngine::m_projectFile;		// 项目名称
 	RenderWindow* EchoEngine::m_renderWindow = NULL;
 
 	// 构造函数
 	EchoEngine::EchoEngine()
 		: m_curPlayAudio(0)
-		//, m_backGrid(NULL)
-		//, m_backGridNode(NULL)		 
-		//, m_gridNum(lineNum)
-		//, m_gridGap(1)
 		, m_log(NULL)
 		, m_currentEditNode(nullptr)
 		, m_invisibleNodeForEditor(nullptr)
-		, m_gizmosNodeForEditor(nullptr)
+		, m_gizmosNodeBackGrid(nullptr)
 	{
 	}
 
 	// 析构
 	EchoEngine::~EchoEngine()
 	{
-		//EchoSceneManager->getRootNode()->destroyChild(m_pCameraAxis);
-
-		//EchoSafeDelete(m_FontRenderManager, FontRenderManager);
 	}
 
 	// inst
@@ -84,25 +69,19 @@ namespace Studio
 
 		TIME_PROFILE
 		(
-			// 背景网格
-			InitializeBackGrid();
-		);
-
-		Echo::FSAudioManager::instance()->setAudioEventCb(&MyAudioEventCallBack);
-
-		m_currentEditNode = nullptr;
-
-		{
 			// editor node
 			m_invisibleNodeForEditor = ECHO_DOWN_CAST<Echo::Node*>(Echo::Class::create("Node"));
 
 			// gizmos node
-			m_gizmosNodeForEditor = ECHO_DOWN_CAST<Echo::Gizmos*>(Echo::Class::create("Gizmos"));
-			m_gizmosNodeForEditor->setName("Gizmos");
-			m_gizmosNodeForEditor->setParent(m_invisibleNodeForEditor);
+			m_gizmosNodeBackGrid = ECHO_DOWN_CAST<Echo::Gizmos*>(Echo::Class::create("Gizmos"));
+			m_gizmosNodeBackGrid->setName("Gizmos");
+			m_gizmosNodeBackGrid->setParent(m_invisibleNodeForEditor);
 
-			m_gizmosNodeForEditor->drawLine(-Echo::Vector3(100.f, 0.f, 0.f), Echo::Vector3(100.f, 0.f, 0.f), Echo::Color::RED);
-		}
+			// 背景网格
+			InitializeBackGrid();
+		);
+
+		m_currentEditNode = nullptr;
 
 		return true;
 	}
@@ -116,6 +95,9 @@ namespace Studio
 	// 每帧渲染
 	void EchoEngine::Render(unsigned int elapsedTime, bool isRenderWindowVisible)
 	{
+		// update back grid
+		ResizeBackGrid();
+
 		if (m_currentEditNode)
 			m_currentEditNode->update( elapsedTime, true);
 
@@ -165,78 +147,71 @@ namespace Studio
 	// 初始化背景网格
 	void EchoEngine::InitializeBackGrid()
 	{
-		ResizeBackGrid(lineNum, 1);
+		ResizeBackGrid();
 	}
 
 	//生成背景网格(调整网格参数)
-	void EchoEngine::ResizeBackGrid(int linenums, float lineGap)
-	{/*
-		if (m_backGrid)
+	void EchoEngine::ResizeBackGrid()
+	{	
+		m_gizmosNodeBackGrid->clear();
+
+		static int xOffsetBefore = 0.f;
+		static int zOffsetBefore = 0.f;
+
+		// center pos
+		Echo::Vector3 centerPos = Echo::NodeTree::instance()->get3dCamera()->getPosition();
+		int xOffset = centerPos.x;
+		int yOffset = abs(centerPos.y);
+		int zOffset = centerPos.z;
+
+		// calc y alpha scale
+		float startGrayFadeDistance = 10.f;
+		float endGrayFadeDistance = 35.f;
+		float yGrayAlphaScale = 1.f - Echo::Math::Clamp((float)abs(yOffset), startGrayFadeDistance, endGrayFadeDistance) / (endGrayFadeDistance - startGrayFadeDistance);
+
+		float startBlueFadeDistance = 10.f;
+		float endBlueFadeDistance = 200.f;
+		float yBlueAlphaScale = 1.f - Echo::Math::Clamp((float)abs(yOffset), startBlueFadeDistance, endBlueFadeDistance) / (endBlueFadeDistance - startBlueFadeDistance);
+			
+		if (xOffset != xOffsetBefore || zOffset != zOffsetBefore)
 		{
-			m_backGrid->attachTo(NULL);
-			EchoDebugDisplayManager->destroyQueryObject(m_backGrid);
-		}
-		m_backGrid = EchoDebugDisplayManager->createQueryObject("BackGrid");
-		m_backGrid->setQueryFlag(0x00000000);
-		m_backGrid->setTestDepth(true);
-		m_backGrid->setWriteDepth(false);
-		m_backGrid->setVisible(true);
-
-		m_backGrid->beginPolygon(Echo::QueryObject::QO_WIREFRAME);
-		{
-			// 十字红线
-			std::array<Echo::Vector3, 4> vertexData;
-
-			vertexData[0] = Echo::Vector3(-linenums*lineGap, 0, 0);
-			vertexData[1] = Echo::Vector3(linenums*lineGap, 0, 0);
-			vertexData[2] = Echo::Vector3(0, 0, -linenums*lineGap);
-			vertexData[3] = Echo::Vector3(0, 0, linenums*lineGap);
-
-			for (size_t i = 0; i < vertexData.size(); i++)
+			// gray line
+			if (yOffset < endGrayFadeDistance)
 			{
-				m_backGrid->setPosition(vertexData[i]);
-				m_backGrid->setColor(Echo::Color(0.7f, 0.0f, 0.0f));
-			}
-		}
-		{
-			// 白线
-			std::vector<Echo::Vector3> vertexData(linenums * 8, Echo::Vector3(0, 0, 0));
-			//for(int i =0;i<linenums*8;i++)
-			//{
-			//	vertexData[i] = Echo::Vector3(0,0,0);
-			//}
+				int lineNum = (80 + abs(yOffset)) / 10 * 10;
+				for (int i = -lineNum; i <= lineNum; i++)
+				{
+					Echo::Color color = Echo::Color(0.5f, 0.5f, 0.5f, 0.8f * yGrayAlphaScale);
 
-			for (int i = 0; i < linenums; i++)
-			{
-				int j = i + 1;
-				vertexData[i * 8 + 0] = Echo::Vector3(linenums*lineGap, 0, j*lineGap);
-				vertexData[i * 8 + 1] = Echo::Vector3(-linenums*lineGap, 0, j*lineGap);
-				vertexData[i * 8 + 2] = Echo::Vector3(j*lineGap, 0, linenums*lineGap);
-				vertexData[i * 8 + 3] = Echo::Vector3(j*lineGap, 0, -linenums*lineGap);
-				vertexData[i * 8 + 4] = Echo::Vector3(linenums*lineGap, 0, -j*lineGap);
-				vertexData[i * 8 + 5] = Echo::Vector3(-linenums*lineGap, 0, -j*lineGap);
-				vertexData[i * 8 + 6] = Echo::Vector3(-j*lineGap, 0, linenums*lineGap);
-				vertexData[i * 8 + 7] = Echo::Vector3(-j*lineGap, 0, -linenums*lineGap);
+					// xaxis
+					int xAxis = xOffset + i;
+					if (xAxis % 10 != 0)
+						m_gizmosNodeBackGrid->drawLine(Echo::Vector3(xAxis, 0.f, -lineNum + zOffset), Echo::Vector3(xAxis, 0.f, lineNum + zOffset), color);
+
+					int zAxis = zOffset + i;
+					if (zAxis % 10 != 0)
+						m_gizmosNodeBackGrid->drawLine(Echo::Vector3(-lineNum + xOffset, 0.f, zAxis), Echo::Vector3(lineNum + xOffset, 0.f, zAxis), color);
+				}
 			}
 
-			for (size_t i = 0; i < vertexData.size(); i++)
+			// blue line
+			int xOffset10 = xOffset / 10;
+			int zOffset10 = zOffset / 10;
+			int lineNum = (80 + abs(yOffset * 5)) / 10;
+			for (int i = -lineNum; i <= lineNum; i++)
 			{
-				m_backGrid->setPosition(vertexData[i]);
-				m_backGrid->setColor(Echo::Color(0.6f, 0.6f, 0.6f));
+				// xaxis
+				int xAxis = xOffset10 + i;
+				Echo::Color color = Echo::Color(0.8f, 0.5, 0.5f, 1.f * yBlueAlphaScale);
+				m_gizmosNodeBackGrid->drawLine(Echo::Vector3(xAxis * 10.f, 0.f, (-lineNum + zOffset10)*10.f), Echo::Vector3(xAxis * 10.f, 0.f, (lineNum + zOffset10)*10.f), color);
+
+				int zAxis = zOffset10 + i;
+				m_gizmosNodeBackGrid->drawLine(Echo::Vector3((-lineNum + xOffset10)*10.f, 0.f, zAxis * 10.f), Echo::Vector3((lineNum + xOffset10)*10.f, 0.f, zAxis*10.f), color);
 			}
-		}
-		m_backGrid->endPolygon();
-		if (!m_backGridNode)
-		{
-			m_backGridNode = EchoSceneManager->getRootNode()->createChild();
-		}
 
-		m_backGridNode->setWorldPosition(Echo::Vector3::ZERO);
-		m_backGrid->attachTo(m_backGridNode);
-		m_gridNum = linenums;
-		m_gridGap = lineGap;
-
-		*/
+			xOffsetBefore = xOffset;
+			zOffsetBefore = zOffset;
+		}
 	}
 
 	//设置显示或隐藏背景网格

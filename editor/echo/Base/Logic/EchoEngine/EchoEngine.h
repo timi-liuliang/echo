@@ -58,7 +58,7 @@ namespace Studio
 		virtual void setBackGridVisibleOrNot(bool showFlag);
 
 		//调整背景网格的参数
-		virtual void ResizeBackGrid(int linenums,float lineGap);
+		virtual void ResizeBackGrid();
 
 		//获得背景网格的相关参数
 		virtual void GetBackGridParameters(int* linenums,float* lineGap);
@@ -90,15 +90,11 @@ namespace Studio
 		Echo::Log*				m_log;						// 日志
 		Echo::Node*				m_currentEditNode;			// 当前编辑场景
 		Echo::String			m_currentEditNodeSavePath;	// 当前场景存储路径
-		Echo::Node*				m_invisibleNodeForEditor;		// 编辑器结点
-		Echo::Gizmos*			m_gizmosNodeForEditor;
-		//Echo::node*			m_backGridNode;	// 背景网格用场景结点
-		//Echo::DebugDisplayItem*	m_backGrid;		// 背景网格
-		//int						m_gridNum;		// 网格的数量
-		//float					m_gridGap;		// 网格间距
+		Echo::Node*				m_invisibleNodeForEditor;	// 编辑器结点
+		Echo::Gizmos*			m_gizmosNodeBackGrid;
 		Echo::Node *			m_pCameraAxis;
-		static std::string		m_projectFile;			// 项目名称
-		static RenderWindow*	m_renderWindow;			// 渲染窗口
-		Echo::AudioSourceID		m_curPlayAudio;			// 当前播放音频
+		static std::string		m_projectFile;				// 项目名称
+		static RenderWindow*	m_renderWindow;				// 渲染窗口
+		Echo::AudioSourceID		m_curPlayAudio;				// 当前播放音频
 	};
 }
