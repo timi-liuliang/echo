@@ -122,11 +122,8 @@ namespace Studio
 					Echo::Node* node = Echo::Node::load(resPath);
 					if (node)
 					{
-						Echo::Node* old = Studio::EchoEngine::instance()->getCurrentEditNode();
-						if (old)
-						{
-							old->queueFree();
-						}
+						// clear
+						MainWindow::instance()->onNewScene();
 
 						Studio::EchoEngine::instance()->setCurrentEditNode(node);
 						Studio::EchoEngine::instance()->setCurrentEditNodeSavePath(resPath);
