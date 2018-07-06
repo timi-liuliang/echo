@@ -174,12 +174,12 @@ namespace Echo
 		return m_height;
 	}
 
-	Real Camera::getNearClip() const
+	const Real& Camera::getNearClip() const
 	{
 		return m_nearClip;
 	}
 
-	Real Camera::getFarClip() const
+	const Real& Camera::getFarClip() const
 	{
 		return m_farClip;
 	}

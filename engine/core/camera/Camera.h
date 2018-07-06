@@ -76,8 +76,8 @@ namespace Echo
 		Real			getFov() const;
 		Real			getWidth() const;
 		Real			getHeight() const;
-		Real			getNearClip() const;
-		Real			getFarClip() const;
+		const Real&		getNearClip() const;
+		const Real&		getFarClip() const;
 		const Frustum&	getFrustum() const;
 		Real			getNearClipWidth() const;
 		Real			getNearClipHeight() const;

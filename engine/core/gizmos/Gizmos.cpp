@@ -11,17 +11,19 @@ static const char* g_gizmoOpaqueMaterial = R"(
 		attribute vec3 a_Position;
 		attribute vec4 a_Color;
 
-		uniform mat4 u_VPMatrix;
+		uniform mat4 u_WorldMatrix;
+		uniform mat4 u_ViewProjMatrix;
 
-		varying vec4 v_Position;
+		varying vec3 v_Position;
 		varying vec4 v_Color;
 
 		void main(void)
 		{
-			vec4 position = u_VPMatrix * vec4(a_Position, 1.0);
-			gl_Position = position;
+			vec4 position = /*u_WorldMatrix */ vec4(a_Position, 1.0);
 
-			v_Position = gl_Position;
+			v_Position  = position.xyz;
+			gl_Position = u_ViewProjMatrix * position;
+
 			v_Color = a_Color;
 		}
 	</VS>
@@ -29,15 +31,15 @@ static const char* g_gizmoOpaqueMaterial = R"(
 
 		precision mediump float;
 
-		varying vec4  v_Position;
+		uniform vec3  u_CameraPosition;
+		uniform float u_CameraFar;
+
+		varying vec3  v_Position;
 		varying vec4  v_Color;
 
 		void main(void)
 		{
-			float depth = v_Position.z / v_Position.w;
-
 			gl_FragColor    = v_Color;
-			gl_FragColor.w *= pow(1.0 - depth, 0.3333);
 		}
 	</PS>
 	<BlendState>
@@ -159,10 +161,14 @@ namespace Echo
 	// get global uniforms
 	void* Gizmos::getGlobalUniformValue(const String& name)
 	{
-		if (name == "u_VPMatrix")
+		if (name == "u_ViewProjMatrix")
 			return (void*)(&NodeTree::instance()->get3dCamera()->getViewProjMatrix());
 		else if (name == "u_CameraPosition")
 			return (void*)(&NodeTree::instance()->get3dCamera()->getPosition());
+		else if (name == "u_CameraNear")
+			return (void*)(&NodeTree::instance()->get3dCamera()->getNearClip());
+		else if (name == "u_CameraFar")
+			return (void*)(&NodeTree::instance()->get3dCamera()->getFarClip());
 
 		return nullptr;
 	}

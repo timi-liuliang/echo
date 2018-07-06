@@ -181,7 +181,7 @@ namespace Studio
 				int lineNum = (80 + abs(yOffset)) / 10 * 10;
 				for (int i = -lineNum; i <= lineNum; i++)
 				{
-					Echo::Color color = Echo::Color(0.5f, 0.5f, 0.5f, 0.8f * yGrayAlphaScale);
+					Echo::Color color = Echo::Color(0.5f, 0.5f, 0.5f, 0.4f * yGrayAlphaScale);
 
 					// xaxis
 					int xAxis = xOffset + i;
@@ -202,7 +202,7 @@ namespace Studio
 			{
 				// xaxis
 				int xAxis = xOffset10 + i;
-				Echo::Color color = Echo::Color(0.8f, 0.5, 0.5f, 1.f * yBlueAlphaScale);
+				Echo::Color color = Echo::Color(0.8f, 0.5, 0.5f, 0.5f * yBlueAlphaScale);
 				m_gizmosNodeBackGrid->drawLine(Echo::Vector3(xAxis * 10.f, 0.f, (-lineNum + zOffset10)*10.f), Echo::Vector3(xAxis * 10.f, 0.f, (lineNum + zOffset10)*10.f), color);
 
 				int zAxis = zOffset10 + i;
