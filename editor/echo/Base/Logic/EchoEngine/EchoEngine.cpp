@@ -126,12 +126,28 @@ namespace Studio
 		return true;
 	}
 
+	// new
+	void EchoEngine::newEditNodeTree()
+	{
+		setCurrentEditNodeSavePath("");
+		m_currentEditNode->queueFree();
+		m_currentEditNode = nullptr;
+	}
+
 	// save current node tree
 	void EchoEngine::saveCurrentEditNodeTree()
 	{
 		if (m_currentEditNode && !m_currentEditNodeSavePath.empty())
 		{
 			m_currentEditNode->save( m_currentEditNodeSavePath);
+		}
+	}
+
+	void EchoEngine::saveCurrentEditNodeTreeAs(const Echo::String& savePath)
+	{
+		if (m_currentEditNode && !savePath.empty())
+		{
+			m_currentEditNode->save(savePath);
 		}
 	}
 

@@ -24,6 +24,9 @@ namespace Studio
 		void saveCurrentEditRes();
 
 	public:
+		// clear
+		void clear();
+
 		// 刷新结点树显示
 		void refreshNodeTreeDisplay();
 

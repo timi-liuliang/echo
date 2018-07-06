@@ -39,6 +39,11 @@ namespace Studio
 		// 设置菜单左上控件
 		menubar->setTopLeftCornerIcon(":/icon/Icon/icon.png");
 
+		// connect scene operate signal slot
+		QObject::connect(m_actionNewScene, SIGNAL(triggered(bool)), this, SLOT(onNewScene()));
+		QObject::connect(m_actionSaveScene, SIGNAL(triggered(bool)), this, SLOT(onSaveScene()));
+		QObject::connect(m_actionSaveAsScene, SIGNAL(triggered(bool)), this, SLOT(onSaveAsScene()));
+
 		// connect signal slot
 		QObject::connect(m_actionSave, SIGNAL(triggered(bool)), this, SLOT(onSaveProject()));
 		QObject::connect(m_actionPlayGame, SIGNAL(triggered(bool)), this, SLOT(onPlayGame()));
@@ -85,6 +90,35 @@ namespace Studio
 		this->addDockWidget(Qt::BottomDockWidgetArea, m_bottomPanel);
 
 		m_resPanel->onOpenProject();
+	}
+
+	// new scene
+	void MainWindow::onNewScene()
+	{
+		onSaveProject();
+		m_scenePanel->clear();
+		EchoEngine::instance()->newEditNodeTree();
+	}
+
+	// on save scene
+	void MainWindow::onSaveScene()
+	{
+		onSaveProject();
+	}
+
+	// on save as scene
+	void MainWindow::onSaveAsScene()
+	{
+		Echo::String savePath = PathChooseDialog::getExistingPathName(this, ".scene", "Save").toStdString().c_str();
+		if (!savePath.empty() && !Echo::PathUtil::IsDir(savePath))
+		{
+			Echo::String resPath;
+			if (Echo::IO::instance()->covertFullPathToResPath(savePath, resPath))
+				EchoEngine::instance()->saveCurrentEditNodeTreeAs(resPath.c_str());
+
+			// refresh respanel display
+			m_resPanel->reslectCurrentDir();
+		}
 	}
 
 	// 保存文件

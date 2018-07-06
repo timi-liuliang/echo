@@ -36,6 +36,15 @@ namespace Studio
 		void closeEvent(QCloseEvent *event);
 
 	public slots:
+		// new scene
+		void onNewScene();
+
+		// on save scene
+		void onSaveScene();
+
+		// on save as scene
+		void onSaveAsScene();
+
 		// ±£´æÎÄ¼þ
 		void onSaveProject();
 

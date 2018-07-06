@@ -67,6 +67,12 @@ namespace Studio
 		m_newNodeDialog->setVisible(true);
 	}
 
+	// clear
+	void NodeTreePanel::clear()
+	{
+		m_nodeTreeWidget->clear();
+		onEditObject(nullptr);
+	}
 
 	void NodeTreePanel::refreshNodeTreeDisplay()
 	{

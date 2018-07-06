@@ -74,6 +74,10 @@
     <property name="title">
      <string>Scene(&amp;S)</string>
     </property>
+    <addaction name="m_actionNewScene"/>
+    <addaction name="separator"/>
+    <addaction name="m_actionSaveScene"/>
+    <addaction name="m_actionSaveAsScene"/>
    </widget>
    <addaction name="menuFile_F"/>
    <addaction name="menuScene_S"/>
@@ -92,7 +96,7 @@
   </action>
   <action name="m_actionSave">
    <property name="icon">
-    <iconset resource="../../../Resource/App.qrc">
+    <iconset>
      <normaloff>:/icon/Icon/snapshot.png</normaloff>:/icon/Icon/snapshot.png</iconset>
    </property>
    <property name="text">
@@ -104,7 +108,7 @@
   </action>
   <action name="m_actionPlayGame">
    <property name="icon">
-    <iconset resource="../../../Resource/App.qrc">
+    <iconset>
      <normaloff>:/icon/Icon/EnterGameMode.png</normaloff>:/icon/Icon/EnterGameMode.png</iconset>
    </property>
    <property name="text">
@@ -116,7 +120,7 @@
   </action>
   <action name="m_actionStopGame">
    <property name="icon">
-    <iconset resource="../../../Resource/App.qrc">
+    <iconset>
      <normaloff>:/icon/Icon/stop.png</normaloff>:/icon/Icon/stop.png</iconset>
    </property>
    <property name="text">
@@ -132,6 +136,27 @@
   <action name="m_actionExitEditor">
    <property name="text">
     <string>Exit</string>
+   </property>
+  </action>
+  <action name="m_actionNewScene">
+   <property name="text">
+    <string>New</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+N</string>
+   </property>
+  </action>
+  <action name="m_actionSaveAsScene">
+   <property name="text">
+    <string>Save As</string>
+   </property>
+  </action>
+  <action name="m_actionSaveScene">
+   <property name="text">
+    <string>Save</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+S</string>
    </property>
   </action>
  </widget>
