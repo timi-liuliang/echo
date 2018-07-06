@@ -148,7 +148,6 @@ namespace Echo
 				{
 					Res* res = ECHO_DOWN_CAST<Res*>(instanceObject(&root));
 					res->setPath(path.getPath());
-					res->onLoaded();
 
 					g_ress[path.getPath()] = res;
 

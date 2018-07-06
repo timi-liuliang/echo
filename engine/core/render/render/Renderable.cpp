@@ -42,7 +42,7 @@ namespace Echo
 	// ÐÂ½¨
 	Renderable* Renderable::create(Mesh* mesh, Material* matInst, Node* node)
 	{
-		ShaderProgramRes* material = matInst->getMaterial();
+		ShaderProgramRes* material = matInst->getShader();
 		ShaderProgram* shaderProgram = material->getShaderProgram();
 		if (!shaderProgram)
 			return nullptr;
@@ -50,7 +50,7 @@ namespace Echo
 		ShaderProgram::UniformArray* uniforms = shaderProgram->getUniforms();
 
 		// bind shader param
-		Renderable* renderable = Renderer::instance()->createRenderable(matInst->getRenderStage(), matInst->getMaterial());
+		Renderable* renderable = Renderer::instance()->createRenderable(matInst->getRenderStage(), matInst->getShader());
 		renderable->setRenderInput(mesh->getVertexBuffer(), mesh->getVertexElements(), mesh->getIndexBuffer(), mesh->getIndexStride(), mesh->getTopologyType());
 		renderable->beginShaderParams(uniforms->size());
 		for (auto& it : *uniforms)

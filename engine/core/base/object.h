@@ -30,7 +30,7 @@ namespace Echo
 
 	public:
 		// propertys (script property or dynamic property)
-		const PropertyInfos& getPropertys() const;
+		virtual const PropertyInfos& getPropertys();
 
 		// clear propertys
 		void clearPropertys();

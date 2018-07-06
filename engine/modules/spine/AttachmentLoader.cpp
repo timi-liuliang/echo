@@ -189,7 +189,6 @@ namespace Echo
 			m_materialInst =ECHO_CREATE_RES(Material);
 			m_materialInst->setShaderContent(g_spinDefaultMaterial);
 			m_materialInst->setRenderStage("Transparent");
-			m_materialInst->onLoaded();
 
 			m_materialInst->setTexture("u_BaseColorSampler", m_texture);
 

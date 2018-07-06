@@ -132,7 +132,6 @@ namespace Echo
 		m_material = ECHO_CREATE_RES(Material);
 		m_material->setShaderContent(g_gizmoOpaqueMaterial);
 		m_material->setRenderStage("Transparent");
-		m_material->onLoaded();
 
 		m_lineBatch = EchoNew(Batch(m_material, this));
 		m_lineBatch->m_mesh->setTopologyType(RenderInput::TT_LINELIST);

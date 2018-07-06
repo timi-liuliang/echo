@@ -78,9 +78,9 @@ namespace Echo
 		const String& getTexturePath(const int& index);
 
 		// 设置默认渲染队列名
-		void setShader(const ResourcePath& path);
+		void setShaderPath(const ResourcePath& path);
 		void setShaderContent(const char* content);
-		const ResourcePath& getShader() const { return m_shaderPath; }
+		const ResourcePath& getShaderPath() const { return m_shaderPath; }
 
 
 		// 阶段相关函数
@@ -91,7 +91,7 @@ namespace Echo
 		void setMacros(const String& macros);
 
 		// 获取渲染队列
-		ShaderProgramRes* getMaterial() { return m_shaderProgramRes; }
+		ShaderProgramRes* getShader();
 
 		// operate uniform
 		bool isUniformExist(const String& name);
@@ -120,10 +120,10 @@ namespace Echo
 		// 构建渲染队列
 		void buildShaderProgram();
 
-		// on loaded
-		virtual void onLoaded();
-
 	protected:
+		// propertys (script property or dynamic property)
+		virtual const PropertyInfos& getPropertys();
+
 		// get property value
 		virtual bool getPropertyValue(const String& propertyName, Variant& oVar);
 
@@ -144,6 +144,7 @@ namespace Echo
 		bool isGlobalUniform( const String& name);
 
 	private:
+		bool				m_isDirty;					// need rebuild
 		ResourcePath		m_shaderPath;				// shader res path
 		const char*			m_shaderContent;			// 官方材质
 		StringOption		m_renderStage;				// 所处渲染阶段

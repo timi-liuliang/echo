@@ -1,5 +1,4 @@
-#ifndef __ECHO_MATERIALDESC_H_
-#define __ECHO_MATERIALDESC_H_
+#pragma once
 
 #include "String.h"
 
@@ -7,6 +6,7 @@ namespace Echo
 {
 	static const String s_ColorMask[6] = 
 	{
+		"CMASK_NONE"
 		"CMASK_RED",
 		"CMASK_GREEN",
 		"CMASK_BLUE",
@@ -19,6 +19,7 @@ namespace Echo
 	{
 		RenderState::ColorMask results[] = 
 		{
+			RenderState::CMASK_NONE,
 			RenderState::CMASK_RED,
 			RenderState::CMASK_GREEN,
 			RenderState::CMASK_BLUE,
@@ -27,13 +28,15 @@ namespace Echo
 			RenderState::CMASK_ALL
 		};
 
+		i32 result = 0;
 		for (int i = 0; i < sizeof(results); i++)
 		{
+			if(StringUtil::Contain( strValue, s_ColorMask[i]))
 			if (strValue == s_ColorMask[i])
-				return results[i];
+				result |= results[i];
 		}
 
-		return RenderState::CMASK_ALL;
+		return RenderState::ColorMask(result);
 	}
 
 	static const String s_BlendOperation[5] =
@@ -216,5 +219,3 @@ namespace Echo
 		"PF_PVRTC_RGBA_4444"
 	};
 }
-
-#endif

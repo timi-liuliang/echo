@@ -47,7 +47,7 @@ namespace Echo
 	}
 
 	// propertys (script property or dynamic property)
-	const PropertyInfos& Object::getPropertys() const 
+	const PropertyInfos& Object::getPropertys() 
 	{ 
 		return m_propertys;
 	}

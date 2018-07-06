@@ -29,6 +29,7 @@ namespace Echo
 		bool			StartWith(const String& str, const String& pattern, bool lowCase = false);
 		bool			EndWith(const String& str, const String& pattern);
 		bool			Equal(const String& str1, const String& str2, bool bCaseSensitive = true);
+		bool			Contain(const String& str, const String& pattern, bool bCaseSensitive = true);
 
 		String			WCS2MBS(const WString& str);
 		WString			MBS2WCS(const String& str);

@@ -69,6 +69,7 @@ namespace Echo
 
 	Material::Material()
 		: Res()
+		, m_isDirty(false)
 		, m_shaderPath("", ".shader")
 		, m_shaderProgramRes(NULL)
 		, m_shaderContent(nullptr)
@@ -82,6 +83,7 @@ namespace Echo
 	// 构造函数
 	Material::Material(const ResourcePath& path)
 		: Res(path)
+		, m_isDirty(false)
 		, m_shaderPath("", ".shader")
 		, m_shaderProgramRes(NULL)
 		, m_shaderContent(nullptr)
@@ -104,12 +106,12 @@ namespace Echo
 	// bind methods to script
 	void Material::bindMethods()
 	{
-		CLASS_BIND_METHOD(Material, getShader, DEF_METHOD("getShader"));
-		CLASS_BIND_METHOD(Material, setShader, DEF_METHOD("setShader"));
+		CLASS_BIND_METHOD(Material, getShaderPath, DEF_METHOD("getShaderPath"));
+		CLASS_BIND_METHOD(Material, setShaderPath, DEF_METHOD("setShaderPath"));
 		CLASS_BIND_METHOD(Material, setRenderStage, DEF_METHOD("setRenderStage"));
 		CLASS_BIND_METHOD(Material, getRenderStage, DEF_METHOD("getRenderStage"));
 
-		CLASS_REGISTER_PROPERTY(Material, "Shader", Variant::Type::ResourcePath, "getShader", "setShader");
+		CLASS_REGISTER_PROPERTY(Material, "Shader", Variant::Type::ResourcePath, "getShaderPath", "setShaderPath");
 		CLASS_REGISTER_PROPERTY(Material, "Stage", Variant::Type::StringOption, "getRenderStage", "setRenderStage");
 	}
 
@@ -117,12 +119,6 @@ namespace Echo
 	void Material::release()
 	{
 		ECHO_DELETE_T(this, Material);
-	}
-
-	// on loaded
-	void Material::onLoaded()
-	{
-		buildShaderProgram();
 	}
 
 	// 复制材质实例
@@ -232,6 +228,16 @@ namespace Echo
 	{ 
 		m_macros = StringUtil::Split(macros, ";");
 		std::sort(m_macros.begin(), m_macros.end());
+
+		m_isDirty = true;
+	}
+
+	// 获取渲染队列
+	ShaderProgramRes* Material::getShader() 
+	{ 
+		buildShaderProgram();
+
+		return m_shaderProgramRes; 
 	}
 
 	// 判断变量是否存在
@@ -243,6 +249,8 @@ namespace Echo
 	// 修改变量
 	void Material::setUniformValue(const String& name, const ShaderParamType& type, void* value)
 	{
+		buildShaderProgram();
+
 		const auto& it = m_uniforms.find(name);
 		if (it != m_uniforms.end())
 		{
@@ -272,6 +280,8 @@ namespace Echo
 
 	TextureRes* Material::setTexture(const String& name, const String& uri)
 	{
+		buildShaderProgram();
+
 		return setTexture( name, prepareTextureImp(uri));
 	}
 
@@ -347,62 +357,79 @@ namespace Echo
 			}
 		}
 		std::sort(m_macros.begin(), m_macros.end());
+
+		m_isDirty = true;
 	}
 
 	// 构建渲染队列
 	void Material::buildShaderProgram()
 	{
-		clearPropertys();
-		m_textures.clear();
-
-		// make sure macros
-		String finalMacros; finalMacros.reserve(512);
-		for (const String& macro : m_macros)
-			finalMacros += "#define " + macro + "\n";
-
-		// create material
-		m_shaderProgramRes = EchoNew(ShaderProgramRes);
-		if (m_shaderContent)
-			m_shaderProgramRes->loadFromContent(m_shaderContent, finalMacros);
-		else if (!m_shaderPath.getPath().empty())
-			m_shaderProgramRes->loadFromFile( m_shaderPath.getPath(), finalMacros);
-
-		// match uniforms
-		if (m_shaderProgramRes)
+		if (m_isDirty)
 		{
-			ShaderProgram* shaderProgram = m_shaderProgramRes->getShaderProgram();
-			if (shaderProgram)
-				matchUniforms();
-		}
+			clearPropertys();
 
-		// register uniform propertys
-		if (m_shaderProgramRes)
-		{
-			StringArray macros = ShaderProgramRes::getEditableMacros(m_shaderPath.getPath());
-			for (size_t i = 0; i < macros.size() / 2; i++)
+			// make sure macros
+			String finalMacros; finalMacros.reserve(512);
+			for (const String& macro : m_macros)
+				finalMacros += "#define " + macro + "\n";
+
+			// create material
+			m_shaderProgramRes = EchoNew(ShaderProgramRes);
+			if (m_shaderContent)
+				m_shaderProgramRes->loadFromContent(m_shaderContent, finalMacros);
+			else if (!m_shaderPath.getPath().empty())
+				m_shaderProgramRes->loadFromFile(m_shaderPath.getPath(), finalMacros);
+
+			// match uniforms
+			if (m_shaderProgramRes)
 			{
-				registerProperty(ECHO_CLASS_NAME(Material), "Macros." + macros[i * 2], Variant::Type::Bool);
+				ShaderProgram* shaderProgram = m_shaderProgramRes->getShaderProgram();
+				if (shaderProgram)
+					matchUniforms();
 			}
 
-			for (auto& it : m_uniforms)
+			// register uniform propertys
+			if (m_shaderProgramRes)
 			{
-				if (!isGlobalUniform(it.first))
+				StringArray macros = ShaderProgramRes::getEditableMacros(m_shaderPath.getPath());
+				for (size_t i = 0; i < macros.size() / 2; i++)
 				{
-					switch (it.second->m_type)
+					registerProperty(ECHO_CLASS_NAME(Material), "Macros." + macros[i * 2], Variant::Type::Bool);
+				}
+
+				for (auto& it : m_uniforms)
+				{
+					if (!isGlobalUniform(it.first))
 					{
-					case ShaderParamType::SPT_INT: registerProperty(ECHO_CLASS_NAME(Material), "Uniforms." + it.first, Variant::Type::Int); break;
-					case ShaderParamType::SPT_VEC3: registerProperty(ECHO_CLASS_NAME(Material), "Uniforms." + it.first, Variant::Type::Vector3); break;
-					case ShaderParamType::SPT_TEXTURE: registerProperty(ECHO_CLASS_NAME(Material), "Uniforms." + it.first, Variant::Type::ResourcePath); break;
-					default: break;
-					}			
-				}	
-			}	
+						switch (it.second->m_type)
+						{
+						case ShaderParamType::SPT_INT: registerProperty(ECHO_CLASS_NAME(Material), "Uniforms." + it.first, Variant::Type::Int); break;
+						case ShaderParamType::SPT_FLOAT:registerProperty(ECHO_CLASS_NAME(Material), "Uniforms." + it.first, Variant::Type::Real); break;
+						case ShaderParamType::SPT_VEC3: registerProperty(ECHO_CLASS_NAME(Material), "Uniforms." + it.first, Variant::Type::Vector3); break;
+						case ShaderParamType::SPT_TEXTURE: registerProperty(ECHO_CLASS_NAME(Material), "Uniforms." + it.first, Variant::Type::ResourcePath); break;
+						default: break;
+						}
+					}
+				}
+			}
+
+			m_isDirty = false;
 		}
+	}
+
+	// propertys (script property or dynamic property)
+	const PropertyInfos& Material::getPropertys()
+	{
+		buildShaderProgram();
+
+		return m_propertys;
 	}
 
 	// get property value
 	bool Material::getPropertyValue(const String& propertyName, Variant& oVar) 
 	{ 
+		buildShaderProgram();
+
 		StringArray ops = StringUtil::Split(propertyName, ".");
 		if (ops[0] == "Uniforms")
 		{
@@ -421,6 +448,8 @@ namespace Echo
 	// set property value
 	bool Material::setPropertyValue(const String& propertyName, const Variant& propertyValue)
 	{
+		buildShaderProgram();
+
 		StringArray ops = StringUtil::Split(propertyName, ".");
 		if (ops[0] == "Uniforms")
 		{
@@ -489,11 +518,11 @@ namespace Echo
 		}
 	}
 
-	void Material::setShader(const ResourcePath& path) 
+	void Material::setShaderPath(const ResourcePath& path) 
 	{ 
 		m_shaderPath = path;
 
-		buildShaderProgram();
+		m_isDirty = true;
 	}
 
 	// 设置使用官方材质
@@ -501,6 +530,6 @@ namespace Echo
 	{
 		m_shaderContent = content;
 
-		buildShaderProgram();
+		m_isDirty = true;
 	}
 }

@@ -16,12 +16,13 @@ namespace Echo
 
 		enum ColorMask
 		{
+			CMASK_NONE		= 0x00000000,
 			CMASK_RED		= 0x00000001,
 			CMASK_GREEN		= 0x00000002,
 			CMASK_BLUE		= 0x00000004,
 			CMASK_ALPHA		= 0x00000008,
-			CMASK_ALL		= CMASK_RED | CMASK_GREEN | CMASK_BLUE | CMASK_ALPHA,
-			CMASK_COLOR		= CMASK_RED | CMASK_GREEN | CMASK_BLUE
+			CMASK_COLOR     = CMASK_RED | CMASK_GREEN | CMASK_BLUE,
+			CMASK_ALL		= CMASK_RED | CMASK_GREEN | CMASK_BLUE | CMASK_ALPHA
 		};
 
 		enum ComparisonFunc
@@ -220,7 +221,6 @@ namespace Echo
 	class RasterizerState : public RenderState
 	{
 	public:
-
 		enum PolygonMode
 		{
 			PM_POINT, 
@@ -289,9 +289,6 @@ namespace Echo
 		RasterizerDesc		m_desc;
 	};
 
-	/**
-	 * ÎÆÀí²ÉÑù×´Ì¬
-	 */
 	class SamplerState : public RenderState
 	{
 	public:

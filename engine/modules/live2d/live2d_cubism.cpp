@@ -75,7 +75,6 @@ namespace Echo
 		m_materialDefault = ECHO_CREATE_RES(Material);
 		m_materialDefault->setShaderContent(g_live2dDefaultMaterial);
 		m_materialDefault->setRenderStage("Transparent");
-		m_materialDefault->onLoaded();
 	}
 
 	Live2dCubism::~Live2dCubism()

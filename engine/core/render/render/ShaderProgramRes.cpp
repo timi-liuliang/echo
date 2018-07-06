@@ -178,11 +178,11 @@ namespace Echo
 		}
 	}
 
-	static int MappingStringArrayIdx(const String* arry, int count, const String& value)
+	static int MappingStringArrayIdx(const String* array, int count, const String& value)
 	{
 		for (int i = 0; i < count; i++)
 		{
-			if (value == arry[i])
+			if (value == array[i])
 				return i;
 		}
 
@@ -249,7 +249,7 @@ namespace Echo
 				else if (strName == "ShadeModel")
 					rasterizerState.shadeModel = (RasterizerState::ShadeModel)(MappingStringArrayIdx(s_ShadeModel, 2, elementNode.attribute("value").as_string("")));
 				else if (strName == "CullMode")
-					rasterizerState.cullMode = (RasterizerState::CullMode)(MappingStringArrayIdx(s_CullMode, 2, elementNode.attribute("value").as_string()));
+					rasterizerState.cullMode = (RasterizerState::CullMode)(MappingStringArrayIdx(s_CullMode, 3, elementNode.attribute("value").as_string()));
 				else if (strName == "FrontFaceCCW")
 					rasterizerState.bFrontFaceCCW = StringUtil::ParseBool(elementNode.attribute("value").as_string());
 				else if (strName == "DepthBias")

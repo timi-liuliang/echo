@@ -332,6 +332,21 @@ namespace Echo
 		}
 	}
 
+	bool StringUtil::Contain(const String& str, const String& pattern, bool bCaseSensitive)
+	{
+		if (!bCaseSensitive)
+		{
+			String strLower = str;
+			String patternLower = pattern;
+			LowerCase(strLower);
+			LowerCase(patternLower);
+
+			return strLower.find(patternLower) != std::string::npos;
+		}
+
+		return str.find(pattern) != std::string::npos;
+	}
+
 	String StringUtil::WCS2MBS(const WString &str)
 	{	
 #ifdef ECHO_PLATFORM_WINDOWS

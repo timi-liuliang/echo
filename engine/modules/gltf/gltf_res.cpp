@@ -782,9 +782,6 @@ namespace Echo
 		primitive.m_materialInst->setMacro("USE_IBL", true);
 		//primitive.m_materialInst->setMacro("USE_TEX_LOD", true);
 
-		// active
-		primitive.m_materialInst->onLoaded();
-
 		// params
 		primitive.m_materialInst->setUniformValue("u_MetallicRoughnessValues", ShaderParamType::SPT_VEC2, &Vector2(matInfo.m_pbr.m_metallicFactor, matInfo.m_pbr.m_roughnessFactor));
 		primitive.m_materialInst->setUniformValue("u_BaseColorFactor", ShaderParamType::SPT_VEC4, matInfo.m_pbr.m_baseColorFactor);
