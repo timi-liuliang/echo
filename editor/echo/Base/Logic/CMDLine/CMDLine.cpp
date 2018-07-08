@@ -8,6 +8,7 @@
 #include "Studio.h"
 #include "EchoEngine.h"
 #include "Window.h"
+#include "ProjectWnd.h"
 #include "GameMainWindow.h"
 #include <engine/core/util/TimeProfiler.h>
 

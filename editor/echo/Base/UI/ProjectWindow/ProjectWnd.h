@@ -2,6 +2,7 @@
 
 #include "ui_ProjectWindow.h"
 #include "QPreviewWidget.h"
+#include <engine/core/util/StringUtil.h>
 
 class QShowEvent;
 namespace Studio
@@ -21,6 +22,9 @@ namespace Studio
 
 		// 显示所有可更新版本
 		void showAllUpdateableVersion();
+
+		// new project file
+		Echo::String newProject();
 
 	protected:
 		virtual void showEvent(QShowEvent* event) override;

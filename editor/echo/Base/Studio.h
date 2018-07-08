@@ -94,7 +94,7 @@ namespace Studio
 	public:
 		// 获取主窗口
 		QWidget* getMainWindow();
-		QWidget* getProjectWindow();
+		ProjectWnd* getProjectWindow();
 		QDockWidget* getPropertyPanel();
 
 		// 打开项目文件

@@ -36,17 +36,16 @@ namespace Studio
 		void closeEvent(QCloseEvent *event);
 
 	public slots:
-		// new scene
+		// scene operate
 		void onNewScene();
-
-		// on save scene
 		void onSaveScene();
-
-		// on save as scene
 		void onSaveAsScene();
 
-		// ±£´æÎÄ¼þ
+		// project operate
+		void onNewAnotherProject();
+		void onOpenAnotherProject();
 		void onSaveProject();
+		void onSaveasProject();
 
 		// game mode
 		void onPlayGame();
@@ -56,6 +55,10 @@ namespace Studio
 
 		// game process exit
 		void onGameProcessFinished(int id, QProcess::ExitStatus status);
+
+	protected:
+		// open another project
+		void openAnotherProject(const Echo::String& fullPathName);
 
 	protected:
 		ResPanel*		m_resPanel;

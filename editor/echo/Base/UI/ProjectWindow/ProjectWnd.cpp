@@ -58,7 +58,7 @@ namespace Studio
 		if ( 2 == index )
 		{
 			QString projectName = QFileDialog::getOpenFileName(this, tr("Open Project"), "", tr("(*.echo)"));
-			if ( !projectName.isEmpty() )
+			if ( !projectName.isEmpty())
 			{
 				AStudio::instance()->getMainWindow()->showMaximized();
 				AStudio::instance()->OpenProject(projectName.toStdString().c_str());
@@ -75,67 +75,79 @@ namespace Studio
 		// create project
 		else if (1 == index)
 		{
-			QString projectName = QFileDialog::getSaveFileName(this, tr("New Project"), "", tr("(*.echo)"));
-			if (!projectName.isEmpty())
+			Echo::String newProjectPathName = newProject();
+			if (!newProjectPathName.empty())
 			{
-				// 0.confirm path and file name
-				Echo::String fullPath = projectName.toStdString().c_str();
-				Echo::String filePath = Echo::PathUtil::GetFileDirPath(fullPath);
-				Echo::String fileName = Echo::PathUtil::GetPureFilename(fullPath, false);
+				// 5.open project
+				AStudio::instance()->getMainWindow()->showMaximized();
+				AStudio::instance()->OpenProject(newProjectPathName.c_str());
+				AStudio::instance()->getRenderWindow();
 
-				// 1.create directory
-				Echo::String newFilePath = filePath + fileName + "/";
-				if (!Echo::PathUtil::IsDirExist(newFilePath))
-				{
-					Echo::PathUtil::CreateDir(newFilePath);
-
-					// 2.copy zip
-					Echo::String writePath = newFilePath + "blank_project.7z";
-					QFile qfile(":/Project/Project/blank_project.7z");
-					if (qfile.open(QIODevice::ReadOnly))
-					{
-						// write files
-						QFile writeFile(writePath.c_str());
-						if (writeFile.open(QIODevice::WriteOnly))
-						{
-							writeFile.write(qfile.readAll());
-							writeFile.close();
-						}
-
-						qfile.close();
-					}
-
-					// 3.unzip
-					if (Echo::PathUtil::IsFileExist(writePath))
-					{
-						Echo::SzArchive::extractTo(writePath, newFilePath);
-
-						Echo::PathUtil::DelPath(writePath);
-					}
-
-					// 4.rename
-					Echo::String projectPathName = newFilePath + "blank.echo";
-					Echo::String destProjectPathName = newFilePath + fileName + ".echo";
-					if (Echo::PathUtil::IsFileExist(projectPathName))
-						Echo::PathUtil::RenameFile(projectPathName, destProjectPathName);
-
-					// 5.open project
-					AStudio::instance()->getMainWindow()->showMaximized();
-					AStudio::instance()->OpenProject(destProjectPathName.c_str());
-					AStudio::instance()->getRenderWindow();
-
-					close();
-				}
-				else
-				{
-					EchoLogError("[%s] has existed", newFilePath.c_str());
-				}
+				close();
 			}
 			else
 			{
 				tabWidget->setCurrentIndex(0);
 			}
 		}
+	}
+
+	// new project file
+	Echo::String ProjectWnd::newProject()
+	{
+		QString projectName = QFileDialog::getSaveFileName(this, tr("New Project"), "", tr("(*.echo)"));
+		if (!projectName.isEmpty())
+		{
+			// 0.confirm path and file name
+			Echo::String fullPath = projectName.toStdString().c_str();
+			Echo::String filePath = Echo::PathUtil::GetFileDirPath(fullPath);
+			Echo::String fileName = Echo::PathUtil::GetPureFilename(fullPath, false);
+
+			// 1.create directory
+			Echo::String newFilePath = filePath + fileName + "/";
+			if (!Echo::PathUtil::IsDirExist(newFilePath))
+			{
+				Echo::PathUtil::CreateDir(newFilePath);
+
+				// 2.copy zip
+				Echo::String writePath = newFilePath + "blank_project.7z";
+				QFile qfile(":/Project/Project/blank_project.7z");
+				if (qfile.open(QIODevice::ReadOnly))
+				{
+					// write files
+					QFile writeFile(writePath.c_str());
+					if (writeFile.open(QIODevice::WriteOnly))
+					{
+						writeFile.write(qfile.readAll());
+						writeFile.close();
+					}
+
+					qfile.close();
+				}
+
+				// 3.unzip
+				if (Echo::PathUtil::IsFileExist(writePath))
+				{
+					Echo::SzArchive::extractTo(writePath, newFilePath);
+
+					Echo::PathUtil::DelPath(writePath);
+				}
+
+				// 4.rename
+				Echo::String projectPathName = newFilePath + "blank.echo";
+				Echo::String destProjectPathName = newFilePath + fileName + ".echo";
+				if (Echo::PathUtil::IsFileExist(projectPathName))
+					Echo::PathUtil::RenameFile(projectPathName, destProjectPathName);
+
+				return destProjectPathName;
+			}
+			else
+			{
+				EchoLogError("[%s] has existed", newFilePath.c_str());
+			}
+		}
+
+		return "";
 	}
 
 	void ProjectWnd::onDoubleClicked(const QString& name)

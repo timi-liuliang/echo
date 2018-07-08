@@ -16,6 +16,7 @@
 #include "ResChooseDialog.h"
 #include "LuaEditor.h"
 #include "BottomPanel.h"
+#include "ProjectWnd.h"
 #include "PathChooseDialog.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/io/IO.h>
@@ -39,13 +40,18 @@ namespace Studio
 		// 设置菜单左上控件
 		menubar->setTopLeftCornerIcon(":/icon/Icon/icon.png");
 
+		// project operate
+		QObject::connect(m_actionNewProject, SIGNAL(triggered(bool)), this, SLOT(onNewProject));
+		QObject::connect(m_actionOpenProject, SIGNAL(triggered(bool)), this, SLOT(onOpenProject));
+		QObject::connect(m_actionSave, SIGNAL(triggered(bool)), this, SLOT(onSaveProject()));
+		QObject::connect(m_actionSaveAsProject, SIGNAL(triggered(bool)), this, SLOT(onSaveasProject));
+
 		// connect scene operate signal slot
 		QObject::connect(m_actionNewScene, SIGNAL(triggered(bool)), this, SLOT(onNewScene()));
 		QObject::connect(m_actionSaveScene, SIGNAL(triggered(bool)), this, SLOT(onSaveScene()));
 		QObject::connect(m_actionSaveAsScene, SIGNAL(triggered(bool)), this, SLOT(onSaveAsScene()));
 
 		// connect signal slot
-		QObject::connect(m_actionSave, SIGNAL(triggered(bool)), this, SLOT(onSaveProject()));
 		QObject::connect(m_actionPlayGame, SIGNAL(triggered(bool)), this, SLOT(onPlayGame()));
 		QObject::connect(m_actionStopGame, SIGNAL(triggered(bool)), &m_gameProcess, SLOT(terminate()));
 		QObject::connect(m_actionExitEditor, SIGNAL(triggered(bool)), this, SLOT(close()));
@@ -118,6 +124,65 @@ namespace Studio
 
 			// refresh respanel display
 			m_resPanel->reslectCurrentDir();
+		}
+	}
+
+	// new
+	void MainWindow::onNewAnotherProject()
+	{
+		Echo::String newProjectPathName = AStudio::instance()->getProjectWindow()->newProject();
+		if (!newProjectPathName.empty())
+		{
+			openAnotherProject(newProjectPathName);
+		}
+	}
+
+	void MainWindow::onOpenAnotherProject()
+	{
+		QString projectName = QFileDialog::getOpenFileName(this, tr("Open Project"), "", tr("(*.echo)"));
+		if (!projectName.isEmpty())
+		{
+			openAnotherProject(projectName.toStdString().c_str());
+		}
+	}
+
+	// open another project
+	void MainWindow::openAnotherProject(const Echo::String& fullPathName)
+	{
+		assert(false);
+	}
+
+	void MainWindow::onSaveasProject()
+	{
+		Echo::String projectName = QFileDialog::getSaveFileName(this, tr("Save as Project"), "", tr("(*.echo)")).toStdString().c_str();
+		if (!projectName.empty())
+		{
+			// 0.confirm path and file name
+			Echo::String fullPath = projectName;
+			Echo::String filePath = Echo::PathUtil::GetFileDirPath(fullPath);
+			Echo::String fileName = Echo::PathUtil::GetPureFilename(fullPath, false);
+			Echo::String saveasPath = filePath + fileName + "/";
+
+			if (!Echo::PathUtil::IsDirExist(saveasPath))
+			{
+				Echo::PathUtil::CreateDir(saveasPath);
+
+				Echo::String currentProject = Echo::Engine::instance()->getProjectFile()->getPath();
+				Echo::String currentPath = Echo::PathUtil::GetFileDirPath(currentProject);
+				Echo::String currentName = Echo::PathUtil::GetPureFilename(currentProject, true);
+
+				// copy resource
+				Echo::PathUtil::CopyDir(currentPath, saveasPath);
+
+				// rename
+				Echo::String currentPathname = saveasPath + currentName;
+				Echo::String destPathName = saveasPath + fileName + ".echo";
+				Echo::PathUtil::RenameFile(currentPathname, destPathName);
+			}
+			else
+			{
+				EchoLogError("Save as directory [%s] isn't null", saveasPath.c_str());
+			}
 		}
 	}
 

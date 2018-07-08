@@ -206,7 +206,7 @@ namespace Studio
 		return m_mainWindow;
 	}
 
-	QWidget* AStudio::getProjectWindow()
+	ProjectWnd* AStudio::getProjectWindow()
 	{
 		return m_projectWindow;
 	}
