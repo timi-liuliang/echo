@@ -100,6 +100,9 @@ namespace Studio
 		nodeItem->setData(0, Qt::UserRole, QVariant::fromValue((void*)node));
 		nodeItem->setFlags( nodeItem->flags() | Qt::ItemIsEditable);
 
+		// change foreground color based on node state
+		updateNodeTreeWidgetItemDisplay(nodeItem);
+
 		// show property
 		m_nodeTreeWidget->setCurrentItem(nodeItem);
 
@@ -125,6 +128,26 @@ namespace Studio
 		}
 
 		return nullptr;
+	}
+
+	// update item display
+	void NodeTreePanel::updateNodeTreeWidgetItemDisplay( QTreeWidgetItem* item)
+	{
+		if (m_nodeTreeWidget->invisibleRootItem()->childCount() == 0)
+			return;
+
+		QTreeWidgetItem* curItem = item ? item : (m_nodeTreeWidget->currentItem() ? m_nodeTreeWidget->currentItem() : m_nodeTreeWidget->invisibleRootItem()->child(0));
+		if (curItem)
+		{
+			Echo::Node* node = (Echo::Node*)curItem->data(0, Qt::UserRole).value<void*>();
+
+			// no effect now!!! do it when we have time
+			//curItem->setBackgroundColor(0, node->isActive() ? QColor(255, 0, 0) : QColor(0, 255, 0));
+
+			QFont font = curItem->font(0);
+			font.setItalic(!node->isActive());
+			curItem->setFont(0, font);
+		}
 	}
 
 	// 获取当前编辑对象
@@ -357,6 +380,9 @@ namespace Studio
 
 			// refresh property display
 			showSelectedObjectProperty();
+
+			// update select item display
+			updateNodeTreeWidgetItemDisplay(nullptr);
 		}
 		else
 		{

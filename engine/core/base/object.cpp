@@ -8,7 +8,8 @@ namespace Echo
 
 	Object::Object()
 	{
-		static i32 id = 0;
+		// begin with 1
+		static i32 id = 1;
 		m_id = id++;
 
 		g_objs[m_id] = this;

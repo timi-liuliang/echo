@@ -33,7 +33,7 @@ namespace Echo
 		Node();
 		virtual ~Node();
 
-		ui32 getIdentifier() const { return m_identifier; }
+		// parent(can only have one parent)
 		void setParent(Node* pParent);
 		Node* getParent() const;
 
@@ -48,8 +48,8 @@ namespace Echo
 		void addChild(Node* node);
 		bool removeChild(Node* node);
 
-		void setVisible(bool bVisible);
-		bool isVisible() const;
+		void setActive(bool isActive) { m_isActive = isActive; }
+		bool isActive() const { return m_isActive; }
 		
 		void scale(const Vector3& scl);
 		void roll(const Real randian);
@@ -118,9 +118,9 @@ namespace Echo
 		virtual void update() {}
 
 	protected:
-		ui32			m_identifier;		// Î¨Ò»±êÊ¶·û
+		bool			m_isActive;
+
 		Node*			m_parent;
-		bool			m_isVisible;
 
 		// only to notify the parent is modifyed.
 		NodeArray		m_children;
@@ -140,7 +140,7 @@ namespace Echo
 		bool			m_bModify;      //for caculate. ie: getWorldPostion
 		bool			m_bMatrixDirty; //for rendering.
 
-		AABB				m_localAABB;	// local aabb
+		AABB			m_localAABB;	// local aabb
 
 		LuaScript		m_script;		// bind script
 	};

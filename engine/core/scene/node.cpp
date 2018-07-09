@@ -14,7 +14,7 @@ namespace Echo
 		m_isValid = Engine::instance()->getConfig().m_isGame && IO::instance()->isResourceExists(m_file.getPath());
 		if (m_isValid)
 		{
-			m_globalTableName = StringUtil::Format("_Nodes._%d", obj->getIdentifier());;
+			m_globalTableName = StringUtil::Format("_Nodes._%d", obj->getId());;
 			luaex::LuaEx::instance()->register_object("Node", m_globalTableName.c_str(), obj);
 
 			String fileName = PathUtil::GetPureFilename(m_file.getPath(), false);
@@ -42,7 +42,7 @@ namespace Echo
 
 	Node::Node()
 		: m_parent(NULL)
-		, m_isVisible(true)
+		, m_isActive(true)
 		, m_posLocal(Vector3::ZERO)
 		, m_ortLocal(Quaternion::IDENTITY)
 		, m_sclLocal(Vector3::ONE)
@@ -58,10 +58,6 @@ namespace Echo
 		needUpdate();
         
         m_children.clear();
-
-		// 以1开始计数
-		static int identifier=1;
-		m_identifier = identifier++;
 	}
 
 	// 析构函数
@@ -94,11 +90,6 @@ namespace Echo
 			m_parent->m_children.push_back(this);
 
 		needUpdate();
-	}
-
-	void Node::setVisible(bool bVisible)
-	{
-		m_isVisible = bVisible;
 	}
 
 	void Node::scale(const Vector3& scl)
@@ -265,11 +256,6 @@ namespace Echo
 		return false;
 	}
 
-	bool Node::isVisible() const
-	{
-		return m_isVisible;
-	}
-
 	const Vector3& Node::getLocalScaling() const
 	{
 		return m_sclLocal;
@@ -402,6 +388,9 @@ namespace Echo
 
 	void Node::update(float delta, bool bUpdateChildren)
 	{
+		if (!m_isActive)
+			return;
+
 		if (m_bModify)
 		{
 			if (m_parent)
@@ -468,12 +457,15 @@ namespace Echo
 		CLASS_BIND_METHOD(Node, setLocalPosition,	  DEF_METHOD("setPos"));
 		CLASS_BIND_METHOD(Node, setLocalScaling,	  DEF_METHOD("setScale"));
 		CLASS_BIND_METHOD(Node, setLocalYawPitchRoll, DEF_METHOD("setYawPitchRoll"));
+		CLASS_BIND_METHOD(Node, setActive,			  DEF_METHOD("setActive"));
+		CLASS_BIND_METHOD(Node, isActive,			  DEF_METHOD("isActive"));
 		CLASS_BIND_METHOD(Node, setScript,			  DEF_METHOD("setScript"));
 		CLASS_BIND_METHOD(Node, getScript,			  DEF_METHOD("getScript"));
 
+		CLASS_REGISTER_PROPERTY(Node, "Active", Variant::Type::Bool, "isActive", "setActive");
 		CLASS_REGISTER_PROPERTY(Node, "Position", Variant::Type::Vector3, "getPos", "setPos");
 		CLASS_REGISTER_PROPERTY(Node, "Rotation", Variant::Type::Vector3, "getYawPitchRoll", "setYawPitchRoll");
-		CLASS_REGISTER_PROPERTY(Node, "Scale",    Variant::Type::Vector3, "getScale", "setScale");
+		CLASS_REGISTER_PROPERTY(Node, "Scale",  Variant::Type::Vector3, "getScale", "setScale");
 		CLASS_REGISTER_PROPERTY(Node, "Script", Variant::Type::ResourcePath, "getScript", "setScript");
 	}
 

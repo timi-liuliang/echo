@@ -83,6 +83,10 @@ namespace Studio
 		// edit res
 		void onSelectRes(const Echo::String& resPath);
 
+	protected:
+		// update item display
+		void updateNodeTreeWidgetItemDisplay(QTreeWidgetItem* item);
+
 	private:
 		// µ›πÈœ‘ æ Ù–‘
 		void showObjectPropertyRecursive(Echo::Object* classPtr, const Echo::String& className);
