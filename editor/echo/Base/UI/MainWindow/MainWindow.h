@@ -46,6 +46,7 @@ namespace Studio
 		void onOpenAnotherProject();
 		void onSaveProject();
 		void onSaveasProject();
+		void onOpenRencentProject();
 
 		// game mode
 		void onPlayGame();
@@ -59,6 +60,9 @@ namespace Studio
 	protected:
 		// open another project
 		void openAnotherProject(const Echo::String& fullPathName);
+
+		// update rencent project display
+		void updateRencentProjectsDisplay();
 
 	protected:
 		ResPanel*		m_resPanel;

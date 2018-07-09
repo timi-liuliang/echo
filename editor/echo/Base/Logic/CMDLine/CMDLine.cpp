@@ -30,6 +30,11 @@ namespace Echo
 				GameMode gameMode;
 				gameMode.exec(argc, argv);
 			}
+			else if (sargv[0] == "editopen")
+			{
+				EditOpenMode openMode;
+				openMode.exec(argc, argv);
+			}
 
 			return true;
 		}
@@ -45,8 +50,6 @@ namespace Echo
 	// exec command
 	bool EditorMode::exec(int argc, char* argv[])
 	{
-		const auto& list = QApplication::libraryPaths();
-
 		QApplication app(argc, argv);
 		app.setAttribute(Qt::AA_NativeWindows);
 
@@ -55,8 +58,8 @@ namespace Echo
 		QTextCodec::setCodecForLocale(codec);
 
 		// 随机使用launch image
-		int idx = QTime(0, 0, 0).secsTo(QTime::currentTime()) % 4;
-		Echo::String iconLocation = Echo::StringUtil::Format(":/icon/Icon/Launch/launch-%d.png", idx);
+		//int idx = QTime(0, 0, 0).secsTo(QTime::currentTime()) % 4;
+		//Echo::String iconLocation = Echo::StringUtil::Format(":/icon/Icon/Launch/launch-%d.png", idx);
 
 		//QSplashScreen splash;
 		//splash.setPixmap(QPixmap(iconLocation.c_str()));
@@ -136,6 +139,64 @@ namespace Echo
 		mainWindow.start(projectFile);
 
 		app.exec();
+
+		return true;
+	}
+
+	// exec command
+	bool EditOpenMode::exec(int argc, char* argv[])
+	{
+		Echo::String type = argv[1];
+		if (type != "editopen")
+			return false;
+
+		QApplication app(argc, argv);
+		app.setAttribute(Qt::AA_NativeWindows);
+
+		// 设置编码方式
+		QTextCodec *codec = QTextCodec::codecForName("GB18030");
+		QTextCodec::setCodecForLocale(codec);
+
+		// 设置界面风格
+		QFile qssFile(":/Qss/Qss/Ps.qss");
+		qssFile.open(QFile::ReadOnly);
+		if (qssFile.isOpen())
+		{
+			QString qss = QLatin1String(qssFile.readAll());
+			app.setStyleSheet(qss);
+
+			qssFile.close();
+		}
+
+		// 基础编辑器
+		TIME_PROFILE
+		(
+			g_astudio = Studio::AStudio::instance();
+			g_astudio->setAppPath(QDir::currentPath().toStdString().c_str());
+		)
+
+		// 加载配置
+		TIME_PROFILE
+		(
+			g_astudio->getConfigMgr()->loadCfgFile();
+		)
+
+		TIME_PROFILE
+		(
+			g_astudio->Start();
+		)
+
+		// 显示主窗口
+		TIME_PROFILE
+		(
+			Echo::String projectFile = argv[2];
+			g_astudio->getProjectWindow()->openProject( projectFile);
+		)
+
+		// 执行
+		app.exec();
+
+		delete g_astudio;
 
 		return true;
 	}

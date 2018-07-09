@@ -217,9 +217,6 @@ namespace Studio
 		// remember it
 		m_projectCfg->addRecentProject(fileName);
 
-		//生成缩略图
-		ShellExecute(0, "open", "Thumbnail.exe", fileName, "", SW_HIDE);
-
 		// 初始化渲染窗口
 		TIME_PROFILE(EchoEngine::SetProject(fileName);)
 

@@ -41,10 +41,10 @@ namespace Studio
 		menubar->setTopLeftCornerIcon(":/icon/Icon/icon.png");
 
 		// project operate
-		QObject::connect(m_actionNewProject, SIGNAL(triggered(bool)), this, SLOT(onNewProject));
-		QObject::connect(m_actionOpenProject, SIGNAL(triggered(bool)), this, SLOT(onOpenProject));
+		QObject::connect(m_actionNewProject, SIGNAL(triggered(bool)), this, SLOT(onNewAnotherProject()));
+		QObject::connect(m_actionOpenProject, SIGNAL(triggered(bool)), this, SLOT(onOpenAnotherProject()));
 		QObject::connect(m_actionSave, SIGNAL(triggered(bool)), this, SLOT(onSaveProject()));
-		QObject::connect(m_actionSaveAsProject, SIGNAL(triggered(bool)), this, SLOT(onSaveasProject));
+		QObject::connect(m_actionSaveAsProject, SIGNAL(triggered(bool)), this, SLOT(onSaveasProject()));
 
 		// connect scene operate signal slot
 		QObject::connect(m_actionNewScene, SIGNAL(triggered(bool)), this, SLOT(onNewScene()));
@@ -96,6 +96,9 @@ namespace Studio
 		this->addDockWidget(Qt::BottomDockWidgetArea, m_bottomPanel);
 
 		m_resPanel->onOpenProject();
+
+		// update rencents project display
+		updateRencentProjectsDisplay();
 	}
 
 	// new scene
@@ -149,7 +152,14 @@ namespace Studio
 	// open another project
 	void MainWindow::openAnotherProject(const Echo::String& fullPathName)
 	{
-		assert(false);
+		Echo::String app = QCoreApplication::applicationFilePath().toStdString().c_str();
+		Echo::String cmd = Echo::StringUtil::Format("%s editopen %s", app.c_str(), fullPathName.c_str());
+
+		QProcess process;
+		process.startDetached(cmd.c_str());
+
+		// exit
+		close();
 	}
 
 	void MainWindow::onSaveasProject()
@@ -167,7 +177,7 @@ namespace Studio
 			{
 				Echo::PathUtil::CreateDir(saveasPath);
 
-				Echo::String currentProject = Echo::Engine::instance()->getProjectFile()->getPath();
+				Echo::String currentProject = Echo::IO::instance()->getFullPath(Echo::Engine::instance()->getProjectFile()->getPath());
 				Echo::String currentPath = Echo::PathUtil::GetFileDirPath(currentProject);
 				Echo::String currentName = Echo::PathUtil::GetPureFilename(currentProject, true);
 
@@ -178,11 +188,29 @@ namespace Studio
 				Echo::String currentPathname = saveasPath + currentName;
 				Echo::String destPathName = saveasPath + fileName + ".echo";
 				Echo::PathUtil::RenameFile(currentPathname, destPathName);
+
+				// open dest folder
+				QString qSaveasPath = saveasPath.c_str();
+				QDesktopServices::openUrl(qSaveasPath);
 			}
 			else
 			{
 				EchoLogError("Save as directory [%s] isn't null", saveasPath.c_str());
 			}
+		}
+	}
+
+	// Open rencent project
+	void MainWindow::onOpenRencentProject()
+	{
+		QAction* action = qobject_cast<QAction*>(sender());
+		if (action)
+		{
+			Echo::String text = action->text().toStdString().c_str();
+			if (Echo::PathUtil::IsFileExist(text))
+				openAnotherProject(text);
+			else
+				EchoLogError("Project file [%s] not exist.", text.c_str());
 		}
 	}
 
@@ -315,6 +343,38 @@ namespace Studio
 					Echo::String logMsg = msgArray[i++];
 
 					Echo::LogManager::instance()->logMessage(Echo::Log::LogLevel(logLevel), logMsg.c_str());
+				}
+			}
+		}
+	}
+
+	// update rencent project display
+	void MainWindow::updateRencentProjectsDisplay()
+	{
+		// clear
+		m_menuRecents->clear();
+
+		ConfigMgr* configMgr = AStudio::instance()->getConfigMgr();
+
+		Echo::list<Echo::String>::type recentProjects;
+		configMgr->getAllRecentProject(recentProjects);
+
+		Echo::list<Echo::String>::iterator iter = recentProjects.begin();
+		for (; iter != recentProjects.end(); ++iter)
+		{
+			Echo::String projectFullPath = (*iter).c_str();
+			if (!projectFullPath.empty() && Echo::PathUtil::IsFileExist(projectFullPath))
+			{
+				Echo::String icon = Echo::PathUtil::GetFileDirPath(projectFullPath) + "icon.png";
+				if (Echo::PathUtil::IsFileExist(icon))
+				{
+					QAction* action = new QAction(this);
+					action->setText(projectFullPath.c_str());
+					action->setIcon(QIcon(icon.c_str()));
+
+					m_menuRecents->addAction(action);
+
+					QObject::connect(action, SIGNAL(triggered()), this, SLOT(onOpenRencentProject()));
 				}
 			}
 		}

@@ -24,6 +24,14 @@ namespace Echo
 		bool exec(int argc, char* argv[]);
 	};
 
+	// EditOpen
+	class EditOpenMode
+	{
+	public:
+		// exec command
+		bool exec(int argc, char* argv[]);
+	};
+
 	/**
 	 * GameMode
 	 */

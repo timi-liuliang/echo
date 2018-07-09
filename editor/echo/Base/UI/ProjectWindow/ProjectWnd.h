@@ -26,6 +26,9 @@ namespace Studio
 		// new project file
 		Echo::String newProject();
 
+		// open project
+		void openProject(const Echo::String& projectFile);
+
 	protected:
 		virtual void showEvent(QShowEvent* event) override;
 

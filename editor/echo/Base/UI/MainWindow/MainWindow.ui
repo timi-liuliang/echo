@@ -52,9 +52,15 @@
     <property name="title">
      <string>Project(&amp;P)</string>
     </property>
+    <widget class="QMenu" name="m_menuRecents">
+     <property name="title">
+      <string>Recents</string>
+     </property>
+     <addaction name="m_actionEmptyProject"/>
+    </widget>
     <addaction name="m_actionNewProject"/>
     <addaction name="m_actionOpenProject"/>
-    <addaction name="actionRecents"/>
+    <addaction name="m_menuRecents"/>
     <addaction name="separator"/>
     <addaction name="m_actionSave"/>
     <addaction name="m_actionSaveAsProject"/>
@@ -172,6 +178,9 @@
    <property name="text">
     <string>New</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
   </action>
   <action name="m_actionOpenProject">
    <property name="text">
@@ -181,9 +190,9 @@
     <string>Ctrl+O</string>
    </property>
   </action>
-  <action name="actionRecents">
+  <action name="m_actionEmptyProject">
    <property name="text">
-    <string>Recents</string>
+    <string>Empty Project</string>
    </property>
   </action>
  </widget>

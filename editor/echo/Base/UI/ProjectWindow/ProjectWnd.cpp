@@ -60,11 +60,7 @@ namespace Studio
 			QString projectName = QFileDialog::getOpenFileName(this, tr("Open Project"), "", tr("(*.echo)"));
 			if ( !projectName.isEmpty())
 			{
-				AStudio::instance()->getMainWindow()->showMaximized();
-				AStudio::instance()->OpenProject(projectName.toStdString().c_str());
-				AStudio::instance()->getRenderWindow();
-
-				close();
+				openProject(projectName.toStdString().c_str());
 			}
 			else
 			{
@@ -148,6 +144,16 @@ namespace Studio
 		}
 
 		return "";
+	}
+
+	// open project
+	void ProjectWnd::openProject(const Echo::String& projectFile)
+	{
+		AStudio::instance()->getMainWindow()->showMaximized();
+		AStudio::instance()->OpenProject(projectFile.c_str());
+		AStudio::instance()->getRenderWindow();
+
+		close();
 	}
 
 	void ProjectWnd::onDoubleClicked(const QString& name)
