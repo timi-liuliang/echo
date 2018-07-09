@@ -123,6 +123,9 @@ namespace Echo
 		// add class
 		static void addClass(const String& className, ObjectFactory* objFactory);
 
+		// is derived from
+		static bool isDerivedFrom(const String& className, const String& parentClassName);
+
 		// get parent class name
 		static bool getParentClass(String& parentClassName, const String& className);
 

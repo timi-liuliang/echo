@@ -16,6 +16,21 @@ namespace Echo
 		(*g_classInfos)[className] = objFactory;
 	}
 
+	// is derived from
+	bool Class::isDerivedFrom(const String& className, const String& parentClassName)
+	{
+		String parent;
+		if (getParentClass(parent, className))
+		{
+			if (parent == parentClassName)
+				return true;
+			else
+				return isDerivedFrom(parent, parentClassName);
+		}
+
+		return false;
+	}
+
 	// get parent class name
 	bool Class::getParentClass(String& parentClassName, const String& className)
 	{

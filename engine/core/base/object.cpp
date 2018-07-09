@@ -1,4 +1,5 @@
 #include "object.h"
+#include "engine/core/resource/Res.h"
 #include <thirdparty/pugixml/pugixml.hpp>
 #include <thirdparty/pugixml/pugiconfig.hpp>
 
@@ -125,7 +126,27 @@ namespace Echo
 		{
 			if (prop->m_type == Variant::Type::Object)
 			{
-				int a = 10;
+				for (pugi::xml_node propertyNode = xmlNode->child("property"); propertyNode; propertyNode = propertyNode.next_sibling("property"))
+				{
+					String propertyName = propertyNode.attribute("name").as_string();
+					if (propertyName == prop->m_name)
+					{
+						String path = propertyNode.attribute("path").as_string();
+						if (!path.empty())
+						{
+							Res* res = Res::get(path);
+							Class::setPropertyValue(classPtr, prop->m_name, res);
+						}
+						else
+						{
+							pugi::xml_node objNode = propertyNode.child("obj");
+							Object* obj = instanceObject(&objNode);
+							Class::setPropertyValue(classPtr, prop->m_name, obj);
+						}
+
+						break;
+					}
+				}
 			}
 			else
 			{
@@ -166,7 +187,21 @@ namespace Echo
 			Echo::Class::getPropertyValue(classPtr, prop->m_name, var);
 			if (var.getType() == Variant::Type::Object)
 			{
-				int a = 10;
+				Object* obj = var.toObj();
+				if (obj)
+				{
+					pugi::xml_node propertyNode = xmlNode->append_child("property");
+					propertyNode.append_attribute("name").set_value(prop->m_name.c_str());
+					if (!obj->getPath().empty())
+					{
+						propertyNode.append_attribute("path").set_value(obj->getPath().c_str());
+					}
+					else
+					{
+						pugi::xml_node objNode = propertyNode.append_child("obj");
+						savePropertyRecursive(&obj, obj, obj->getClassName());
+					}
+				}
 			}
 			else
 			{

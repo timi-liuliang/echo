@@ -24,6 +24,10 @@ namespace Echo
 		void setName(const String& name) { m_name = name; }
 		const String& getName() const { return m_name; }
 
+		// path
+		const String& getPath() const { return m_path.getPath(); }
+		void setPath(const String& path) { m_path.setPath(path); }
+
 		// free this object from memory
 		void queueFree() { ECHO_DELETE_T(this, Object); }
 		void clear() { ECHO_DELETE_T(this, Object); }
@@ -59,6 +63,7 @@ namespace Echo
 	protected:
 		i32				m_id;
 		String			m_name;
+		ResourcePath	m_path;
 		PropertyInfos	m_propertys;
 	};
 }

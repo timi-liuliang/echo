@@ -538,7 +538,7 @@ namespace Echo
 			if (parent)
 				parent->addChild(node);
 
-			for (pugi::xml_node child = xmlNode->child("node"); child; child = child.next_sibling())
+			for (pugi::xml_node child = xmlNode->child("node"); child; child = child.next_sibling("node"))
 			{
 				instanceNodeTree(&child, node);
 			}

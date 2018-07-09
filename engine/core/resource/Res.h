@@ -51,12 +51,6 @@ namespace Echo
 
 		// is loaded succeed
 		bool isLoaded() const { return m_isLoaded; }
-
-		// get path
-		const String& getPath() const { return m_path.getPath(); }
-
-		// set path
-		void setPath(const String& path) { m_path.setPath(path); }
 	
 		// save
 		virtual void save();
@@ -71,7 +65,6 @@ namespace Echo
 
 	protected:
 		int								m_refCount;
-		ResourcePath					m_path;
 		bool							m_isLoaded;
 	};
 	typedef ResRef<Res> ResPtr;
