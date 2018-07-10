@@ -177,7 +177,7 @@ namespace Echo
 
 	void MeshVertexData::setNormal(int idx, const Vector3& normal)
 	{
-		*(Vector3*)(getVertice(idx) + m_format.m_normalOffset) = normal;
+		Vector3::Normalize(*(Vector3*)(getVertice(idx) + m_format.m_normalOffset),normal);
 	}
 
 	// 获取顶点颜色数据

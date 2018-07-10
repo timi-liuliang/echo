@@ -72,7 +72,8 @@ namespace Echo
 		operator Object*() const { return m_obj; }
 
 		// convert to other type
-		const bool toVector3() { return m_bool; }
+		const bool toBool() const { return m_bool; }
+		const Real toReal() const { return m_real; }
 		const Vector3& toVector3() const { return m_vec3; }
 		Object* toObj() const { return m_obj; }
 		const ResourcePath& toResPath() const { return any_cast<ResourcePath>(m_any); }

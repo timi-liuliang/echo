@@ -694,7 +694,7 @@ namespace Echo
 			{
 				if (access.m_type == GltfAccessorInfo::Vec3)
 				{
-					Vector3* positions = (Vector3*)buffer.getData(bufferView.m_byteOffset);
+					Vector3* positions = (Vector3*)buffer.getData(bufferView.m_byteOffset + access.m_byteOffset);
 					for (int i = 0; i < vertCount; i++)
 						vertexData.setPosition(i, positions[i]);
 				}
@@ -707,7 +707,7 @@ namespace Echo
 			{
 				if (access.m_type == GltfAccessorInfo::Vec3)
 				{
-					Vector3* normals = (Vector3*)buffer.getData(bufferView.m_byteOffset);
+					Vector3* normals = (Vector3*)buffer.getData(bufferView.m_byteOffset + access.m_byteOffset);
 					for (int i = 0; i < vertCount; i++)
 						vertexData.setNormal(i, normals[i]);
 				}
@@ -720,7 +720,7 @@ namespace Echo
 			{
 				if (access.m_type == GltfAccessorInfo::Vec2)
 				{
-					Vector2* uv0s = (Vector2*)buffer.getData(bufferView.m_byteOffset);
+					Vector2* uv0s = (Vector2*)buffer.getData(bufferView.m_byteOffset + access.m_byteOffset);
 					for (int i = 0; i < vertCount; i++)
 						vertexData.setUV0(i, uv0s[i]);
 				}

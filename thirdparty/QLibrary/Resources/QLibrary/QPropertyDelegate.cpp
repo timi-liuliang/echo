@@ -7,6 +7,7 @@
 #include "QCameraProperty.h"
 #include "QResSelect.h"
 #include "QIntEditor.h"
+#include "QRealEditor.h"
 #include "QVector3Editor.h"
 #include "QColorSelect.h"
 #include "QCheckBoxList.h"
@@ -208,6 +209,10 @@ namespace QT_UI
 		{
 			return new QIntEditor( m_model, propertyName, parent);
 		}
+		else if (widgetType == "Real")
+		{
+			return new QRealEditor(m_model, propertyName, parent);
+		}
 		else if(widgetType == "Vector3")
 		{
 			return new QVector3Editor(m_model, propertyName, parent);
@@ -311,6 +316,11 @@ namespace QT_UI
 			else if (widgetType == "Int")
 			{
 				QIntEditor* widget = qobject_cast<QIntEditor*>(editor);
+				widget->setValue(value.toString());
+			}
+			else if (widgetType == "Real")
+			{
+				QRealEditor* widget = qobject_cast<QRealEditor*>(editor);
 				widget->setValue(value.toString());
 			}
 			else if(widgetType == "Vector3")

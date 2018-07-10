@@ -139,6 +139,7 @@ namespace QT_UI
 		switch (widget)
 		{
 		case WT_Int:			widgetStr = "Int";			 break;
+		case WT_Real:			widgetStr = "Real";			 break;
 		case WT_Vector3:		widgetStr = "Vector3";		 break;
 		case WT_LineEdit:		widgetStr = "LineEdit";		 break;
 		case WT_CheckBox:		widgetStr = "CheckBox";		 break;

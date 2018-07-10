@@ -386,9 +386,9 @@ R"(<?xml version = "1.0" encoding = "utf-8"?>
 	<VS>VS_PLACE_HOLDER</VS>
 	<PS>PS_PLACE_HOLDER</PS>
 	<BlendState>
-		<BlendEnable value = "true" />
+		<!--BlendEnable value = "true" />
 		<SrcBlend value = "BF_SRC_ALPHA" />
-		<DstBlend value = "BF_INV_SRC_ALPHA" />
+		<DstBlend value = "BF_INV_SRC_ALPHA" /-->
 	</BlendState>
 	<RasterizerState>
 		<CullMode value = "CULL_NONE" />

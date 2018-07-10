@@ -434,8 +434,11 @@ namespace Echo
 		if (ops[0] == "Uniforms")
 		{
 			Uniform* uniform = getUniform(ops[1]);
-			if(uniform->m_type==ShaderParamType::SPT_TEXTURE)
-				oVar = ResourcePath(getTexturePath(*(int*)uniform->m_value), ".png");
+			switch (uniform->m_type)
+			{
+			case ShaderParamType::SPT_TEXTURE : oVar = ResourcePath(getTexturePath(*(int*)uniform->m_value), ".png"); break;
+			default:							oVar = *(float*)(uniform->m_value); break;
+			}
 		}
 		else if (ops[0] == "Macros")
 		{
@@ -456,6 +459,11 @@ namespace Echo
 			Uniform* uniform = getUniform(ops[1]);
 			if (uniform->m_type == ShaderParamType::SPT_TEXTURE)
 				setTexture(ops[1], propertyValue.toResPath().getPath());
+			else if (uniform->m_type == ShaderParamType::SPT_FLOAT)
+			{
+				Real realValue = propertyValue.toReal();
+				setUniformValue(ops[1], uniform->m_type, &realValue);
+			}
 		}
 		else if (ops[0] == "Macros")
 		{
