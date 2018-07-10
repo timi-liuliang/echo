@@ -280,13 +280,13 @@ namespace Echo
 
 	TextureRes* Material::setTexture(const String& name, const String& uri)
 	{
-		buildShaderProgram();
-
 		return setTexture( name, prepareTextureImp(uri));
 	}
 
 	TextureRes* Material::setTexture(const String& name, TextureRes* textureRes)
 	{
+		buildShaderProgram();
+
 		if (!textureRes)
 			return nullptr;
 

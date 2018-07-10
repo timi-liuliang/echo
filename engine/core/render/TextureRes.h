@@ -72,4 +72,5 @@ namespace Echo
 	protected:
 		Texture*		m_texture;
 	};
+	typedef ResRef<TextureRes> TextureResPtr;
 }

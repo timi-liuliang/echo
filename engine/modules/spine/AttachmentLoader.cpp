@@ -7,35 +7,37 @@
 // Ä¬ÈÏ²ÄÖÊ
 static const char* g_spinDefaultMaterial = R"(
 <?xml version = "1.0" encoding = "utf-8"?>
-<material>
-<vs>#version 300 es
+<Shader>
+	<VS>#version 300 es
 
-attribute vec3 a_Position;
-attribute vec2 a_UV;
+		attribute vec3 a_Position;
+		attribute vec2 a_UV;
 
-uniform mat4 u_WVPMatrix;
+		uniform mat4 u_WVPMatrix;
 
-varying vec2 texCoord;
+		varying vec2 v_UV;
 
-void main(void)
-{
-	vec4 position = u_WVPMatrix * vec4(a_Position, 1.0);
-	gl_Position = position;
+		void main(void)
+		{
+			vec4 position = u_WVPMatrix * vec4(a_Position, 1.0);
+			gl_Position = position;
 
-	texCoord = a_UV;
-}
-</vs>
-<ps>#version 100
+			v_UV = a_UV;
+		}
+	</VS>
+	<PS>#version 300 es
 
-uniform sampler2D u_BaseColorSampler;
-varying mediump vec2 texCoord;
+		precision mediump float;
 
-void main(void)
-{
-	mediump vec4 textureColor = texture2D(u_BaseColorSampler, texCoord);
-	gl_FragColor = textureColor;
-}
-	</ps>
+		uniform sampler2D u_BaseColorSampler;
+		varying vec2	  v_UV;
+
+		void main(void)
+		{
+			vec4 textureColor = texture2D(u_BaseColorSampler, v_UV);
+			gl_FragColor = textureColor;
+		}
+	</PS>
 	<BlendState>
 		<BlendEnable value = "true" />
 		<SrcBlend value = "BF_SRC_ALPHA" />
@@ -60,7 +62,7 @@ void main(void)
 	<Texture>
 		<stage no = "0" sampler = "BiLinearMirror" />
 	</Texture>
-</material>
+</Shader>
 )";
 
 using namespace Echo;
@@ -186,13 +188,13 @@ namespace Echo
 			m_mesh->updateIndices(m_indicesData.size(), m_indicesData.data());
 			m_mesh->updateVertexs(define, m_verticesData.size(), (const Byte*)m_verticesData.data(), AABB());
 
-			m_materialInst =ECHO_CREATE_RES(Material);
-			m_materialInst->setShaderContent(g_spinDefaultMaterial);
-			m_materialInst->setRenderStage("Transparent");
+			m_material =ECHO_CREATE_RES(Material);
+			m_material->setShaderContent(g_spinDefaultMaterial);
+			m_material->setRenderStage("Transparent");
 
-			m_materialInst->setTexture("u_BaseColorSampler", m_texture);
+			m_material->setTexture("u_BaseColorSampler", m_texture);
 
-			m_renderable = Renderable::create(m_mesh, m_materialInst, node);
+			m_renderable = Renderable::create(m_mesh, m_material, node);
 			m_renderable->submitToRenderQueue();
 		}
 		else
