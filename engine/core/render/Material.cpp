@@ -47,11 +47,12 @@ namespace Echo
 
 	void Material::Uniform::setValue(const void* value)
 	{
-		EchoSafeDeleteArray( m_value, Byte, getValueBytes());
 		if (value)
 		{
 			i32 bytes = getValueBytes();
-			m_value = EchoNewArray(Byte, bytes);
+			if (!m_value)
+				m_value = EchoNewArray(Byte, bytes);
+
 			std::memcpy(m_value, value, bytes);
 		}
 	}
