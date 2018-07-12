@@ -43,7 +43,7 @@ namespace Studio
 		// project operate
 		QObject::connect(m_actionNewProject, SIGNAL(triggered(bool)), this, SLOT(onNewAnotherProject()));
 		QObject::connect(m_actionOpenProject, SIGNAL(triggered(bool)), this, SLOT(onOpenAnotherProject()));
-		QObject::connect(m_actionSave, SIGNAL(triggered(bool)), this, SLOT(onSaveProject()));
+		QObject::connect(m_actionSaveProject, SIGNAL(triggered(bool)), this, SLOT(onSaveProject()));
 		QObject::connect(m_actionSaveAsProject, SIGNAL(triggered(bool)), this, SLOT(onSaveasProject()));
 
 		// connect scene operate signal slot
@@ -313,7 +313,7 @@ namespace Studio
 		//m_tabWidget->addTab( editor, fileName.c_str());
 		//m_tabWidget->setCurrentIndex(m_tabWidget->count() - 1);
 
-		QObject::connect(m_actionSave, SIGNAL(triggered(bool)), editor, SLOT(save()));
+		QObject::connect(m_actionSaveProject, SIGNAL(triggered(bool)), editor, SLOT(save()));
 	}
 
 	void MainWindow::closeEvent(QCloseEvent *event)

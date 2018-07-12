@@ -55,7 +55,7 @@
     <addaction name="m_actionOpenProject"/>
     <addaction name="m_menuRecents"/>
     <addaction name="separator"/>
-    <addaction name="m_actionSave"/>
+    <addaction name="m_actionSaveProject"/>
     <addaction name="m_actionSaveAsProject"/>
     <addaction name="separator"/>
     <addaction name="m_actionExitEditor"/>
@@ -104,8 +104,6 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="m_actionSave"/>
-   <addaction name="m_actionPlayGame"/>
   </widget>
   <action name="m_actionAbout">
    <property name="icon">
@@ -116,10 +114,10 @@
     <string>About</string>
    </property>
   </action>
-  <action name="m_actionSave">
+  <action name="m_actionSaveProject">
    <property name="icon">
-    <iconset>
-     <normaloff>:/icon/Icon/snapshot.png</normaloff>:/icon/Icon/snapshot.png</iconset>
+    <iconset resource="../../../Resource/App.qrc">
+     <normaloff>:/icon/Icon/project/save.png</normaloff>:/icon/Icon/project/save.png</iconset>
    </property>
    <property name="text">
     <string>Save</string>
@@ -131,7 +129,7 @@
   <action name="m_actionPlayGame">
    <property name="icon">
     <iconset resource="../../../Resource/App.qrc">
-     <normaloff>:/icon/Icon/log/info.png</normaloff>:/icon/Icon/log/info.png</iconset>
+     <normaloff>:/icon/Icon/game/play.png</normaloff>:/icon/Icon/game/play.png</iconset>
    </property>
    <property name="text">
     <string>Play</string>
@@ -142,8 +140,8 @@
   </action>
   <action name="m_actionStopGame">
    <property name="icon">
-    <iconset>
-     <normaloff>:/icon/Icon/stop.png</normaloff>:/icon/Icon/stop.png</iconset>
+    <iconset resource="../../../Resource/App.qrc">
+     <normaloff>:/icon/Icon/game/stop.png</normaloff>:/icon/Icon/game/stop.png</iconset>
    </property>
    <property name="text">
     <string>Stop</string>
