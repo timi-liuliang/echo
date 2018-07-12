@@ -150,6 +150,15 @@ QComboBox
 {
 	height: 22px;
 	margin: 2px;
+	color: rgb(243, 243, 243);
+	padding-left: 4px;
+	padding-right : 5px;
+	selection-background-color: rgb( 83, 83, 83);
+}
+
+QComboBox QAbstractItemView
+{
+	padding-left : 4px;
 }
 
 QToolButton

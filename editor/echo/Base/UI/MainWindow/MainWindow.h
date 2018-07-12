@@ -3,6 +3,7 @@
 #include <QProcess>
 #include "ui_MainWindow.h"
 #include <engine/core/util/StringUtil.h>
+#include <QComboBox>
 
 namespace Studio
 {
@@ -71,5 +72,7 @@ namespace Studio
 
 		QProcess		m_gameProcess;
 		PlayGameToolBar*m_playGameToolBar;
+
+		QComboBox*		m_subEditComboBox;
 	};
 }

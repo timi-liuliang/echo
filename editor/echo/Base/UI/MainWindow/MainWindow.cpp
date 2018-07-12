@@ -8,6 +8,7 @@
 #include <QDesktopservices>
 #include <QShortcut>
 #include <QMdiArea>
+#include <QComboBox>
 #include "TimelinePanel.h"
 #include "DebuggerPanel.h"
 #include "EchoEngine.h"
@@ -55,6 +56,14 @@ namespace Studio
 		QObject::connect(m_actionPlayGame, SIGNAL(triggered(bool)), this, SLOT(onPlayGame()));
 		QObject::connect(m_actionStopGame, SIGNAL(triggered(bool)), &m_gameProcess, SLOT(terminate()));
 		QObject::connect(m_actionExitEditor, SIGNAL(triggered(bool)), this, SLOT(close()));
+
+		// add combox, switch 2D,3D,Script etc.
+		m_subEditComboBox = new QComboBox(m_toolBar);
+		m_subEditComboBox->addItem("2D");
+		m_subEditComboBox->addItem("3D");
+		m_subEditComboBox->addItem("Script");
+		m_toolBar->addWidget(m_subEditComboBox);
+		//QObject::connect(m_subEditComboBox, SIGNAL(), this, SLOT());
 
 		EchoAssert(!g_inst);
 		g_inst = this;
