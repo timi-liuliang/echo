@@ -5,6 +5,7 @@ QMenuBar
 	min-height:27px;
 	font : bold;
 	border-top: 1px solid #383838;
+	border-bottom : 1px solid #383838;
 	border-left: 1px solid #383838;
 	border-right: 1px solid #383838;
 	/*border-radius:5px;*/
@@ -57,8 +58,8 @@ QTextEdit
 QToolBar
 {
     background-color: #FF535353;
-	border-top: 1px solid #383838;
-	border-bottom:1px solid #383838;
+	border-top: 1px solid #FF666666;
+	border-bottom : 1px solid rgb(66,66,66);
 	border-left: 1px solid #383838;
 	border-right: 1px solid #383838;
 }
@@ -74,6 +75,11 @@ QDockWidget
 	color : rgb(180,180,180);
 	titlebar-close-icon: url(:/icon/Icon/close.png);
 	titlebar-normal-icon: url(:/icon/Icon/minimize.png);
+}
+
+QTabWidget
+{
+	border-top: 1px solid #FF666666;
 }
 
 QDockWidget::title 

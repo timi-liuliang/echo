@@ -30,13 +30,6 @@
     <property name="bottomMargin">
      <number>0</number>
     </property>
-    <item>
-     <widget class="QTabWidget" name="m_tabWidget">
-      <property name="currentIndex">
-       <number>-1</number>
-      </property>
-     </widget>
-    </item>
    </layout>
   </widget>
   <widget class="QT_UI::QMenuBarEx" name="menubar">
@@ -95,6 +88,25 @@
    <addaction name="menuHelp_H"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="m_toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>24</width>
+     <height>24</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="m_actionSave"/>
+   <addaction name="m_actionPlayGame"/>
+  </widget>
   <action name="m_actionAbout">
    <property name="icon">
     <iconset>
@@ -118,8 +130,8 @@
   </action>
   <action name="m_actionPlayGame">
    <property name="icon">
-    <iconset>
-     <normaloff>:/icon/Icon/EnterGameMode.png</normaloff>:/icon/Icon/EnterGameMode.png</iconset>
+    <iconset resource="../../../Resource/App.qrc">
+     <normaloff>:/icon/Icon/log/info.png</normaloff>:/icon/Icon/log/info.png</iconset>
    </property>
    <property name="text">
     <string>Play</string>

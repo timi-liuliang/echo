@@ -81,7 +81,8 @@ namespace Studio
 
 		QWidget* renderWindow = AStudio::instance()->getRenderWindow();
 
-		m_tabWidget->addTab(renderWindow, "NodeTree");
+		setCentralWidget(renderWindow);
+		//m_tabWidget->addTab(renderWindow, "NodeTree");
 
 		//midArea->addSubWindow(renderWindow);
 		//m_playGameToolBar = EchoNew(PlayGameToolBar(centralWidget()));
@@ -307,8 +308,10 @@ namespace Studio
 		LuaEditor* editor = new LuaEditor(this);
 		editor->open(fullPath);
 
-		m_tabWidget->addTab( editor, fileName.c_str());
-		m_tabWidget->setCurrentIndex(m_tabWidget->count() - 1);
+		setCentralWidget(editor);
+
+		//m_tabWidget->addTab( editor, fileName.c_str());
+		//m_tabWidget->setCurrentIndex(m_tabWidget->count() - 1);
 
 		QObject::connect(m_actionSave, SIGNAL(triggered(bool)), editor, SLOT(save()));
 	}
