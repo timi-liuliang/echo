@@ -145,7 +145,7 @@ namespace Studio
 			//curItem->setBackgroundColor(0, node->isActive() ? QColor(255, 0, 0) : QColor(0, 255, 0));
 
 			QFont font = curItem->font(0);
-			font.setItalic(!node->isActive());
+			font.setItalic(!node->isEnable());
 			curItem->setFont(0, font);
 		}
 	}

@@ -21,6 +21,7 @@
 #include "PathChooseDialog.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/io/IO.h>
+#include <engine/core/scene/render_node.h>
 
 namespace Studio
 {
@@ -63,7 +64,7 @@ namespace Studio
 		m_subEditComboBox->addItem("3D");
 		m_subEditComboBox->addItem("Script");
 		m_toolBar->addWidget(m_subEditComboBox);
-		//QObject::connect(m_subEditComboBox, SIGNAL(), this, SLOT());
+		QObject::connect(m_subEditComboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(onSubEditChanged(const QString&)));
 
 		EchoAssert(!g_inst);
 		g_inst = this;
@@ -221,6 +222,20 @@ namespace Studio
 				openAnotherProject(text);
 			else
 				EchoLogError("Project file [%s] not exist.", text.c_str());
+		}
+	}
+
+	// sub editor operate
+	void MainWindow::onSubEditChanged(const QString& subeditName)
+	{
+		Echo::String renderType = subeditName.toStdString().c_str();
+		if (renderType == "2D")
+		{
+			Echo::Render::setRenderTypes(Echo::Render::Type_2D);
+		}
+		else if (renderType == "3D")
+		{ 
+			Echo::Render::setRenderTypes(Echo::Render::Type_3D);
 		}
 	}
 

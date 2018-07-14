@@ -42,7 +42,7 @@ namespace Echo
 
 	Node::Node()
 		: m_parent(NULL)
-		, m_isActive(true)
+		, m_isEnable(true)
 		, m_posLocal(Vector3::ZERO)
 		, m_ortLocal(Quaternion::IDENTITY)
 		, m_sclLocal(Vector3::ONE)
@@ -388,7 +388,7 @@ namespace Echo
 
 	void Node::update(float delta, bool bUpdateChildren)
 	{
-		if (!m_isActive)
+		if (!m_isEnable)
 			return;
 
 		if (m_bModify)
@@ -457,12 +457,12 @@ namespace Echo
 		CLASS_BIND_METHOD(Node, setLocalPosition,	  DEF_METHOD("setPos"));
 		CLASS_BIND_METHOD(Node, setLocalScaling,	  DEF_METHOD("setScale"));
 		CLASS_BIND_METHOD(Node, setLocalYawPitchRoll, DEF_METHOD("setYawPitchRoll"));
-		CLASS_BIND_METHOD(Node, setActive,			  DEF_METHOD("setActive"));
-		CLASS_BIND_METHOD(Node, isActive,			  DEF_METHOD("isActive"));
+		CLASS_BIND_METHOD(Node, setEnable,			  DEF_METHOD("setEnable"));
+		CLASS_BIND_METHOD(Node, isEnable,			  DEF_METHOD("isEnable"));
 		CLASS_BIND_METHOD(Node, setScript,			  DEF_METHOD("setScript"));
 		CLASS_BIND_METHOD(Node, getScript,			  DEF_METHOD("getScript"));
 
-		CLASS_REGISTER_PROPERTY(Node, "Active", Variant::Type::Bool, "isActive", "setActive");
+		CLASS_REGISTER_PROPERTY(Node, "Enable", Variant::Type::Bool, "isEnable", "setEnable");
 		CLASS_REGISTER_PROPERTY(Node, "Position", Variant::Type::Vector3, "getPos", "setPos");
 		CLASS_REGISTER_PROPERTY(Node, "Rotation", Variant::Type::Vector3, "getYawPitchRoll", "setYawPitchRoll");
 		CLASS_REGISTER_PROPERTY(Node, "Scale",  Variant::Type::Vector3, "getScale", "setScale");

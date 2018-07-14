@@ -49,6 +49,9 @@ namespace Studio
 		void onSaveasProject();
 		void onOpenRencentProject();
 
+		// sub editor operate
+		void onSubEditChanged(const QString& subeditName);
+
 		// game mode
 		void onPlayGame();
 

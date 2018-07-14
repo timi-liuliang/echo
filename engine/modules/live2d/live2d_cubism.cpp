@@ -332,20 +332,23 @@ namespace Echo
 	// update per frame
 	void Live2dCubism::update()
 	{
-		if (m_model && m_renderable)
+		if (isNeedRender())
 		{
-			m_matWVP = getWorldMatrix() * NodeTree::instance()->get2dCamera()->getViewProjMatrix();;
-
-			if (m_curMotion)
+			if (m_model && m_renderable)
 			{
-				m_curMotion->tick( Engine::instance()->getFrameTime(), m_model, m_table);
+				m_matWVP = getWorldMatrix() * NodeTree::instance()->get2dCamera()->getViewProjMatrix();;
+
+				if (m_curMotion)
+				{
+					m_curMotion->tick(Engine::instance()->getFrameTime(), m_model, m_table);
+				}
+
+				csmUpdateModel((csmModel*)m_model);
+
+				updateMeshBuffer();
+
+				m_renderable->submitToRenderQueue();
 			}
-
-			csmUpdateModel((csmModel*)m_model);
-
-			updateMeshBuffer();
-
-			m_renderable->submitToRenderQueue();
 		}
 	}
 

@@ -48,8 +48,8 @@ namespace Echo
 		void addChild(Node* node);
 		bool removeChild(Node* node);
 
-		void setActive(bool isActive) { m_isActive = isActive; }
-		bool isActive() const { return m_isActive; }
+		void setEnable(bool isEnable) { m_isEnable = isEnable; }
+		bool isEnable() const { return m_isEnable; }
 		
 		void scale(const Vector3& scl);
 		void roll(const Real randian);
@@ -118,7 +118,7 @@ namespace Echo
 		virtual void update() {}
 
 	protected:
-		bool			m_isActive;
+		bool			m_isEnable;
 
 		Node*			m_parent;
 

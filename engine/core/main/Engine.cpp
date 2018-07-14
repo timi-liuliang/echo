@@ -6,6 +6,7 @@
 #include "engine/core/io/IO.h"
 #include "engine/core/log/LogManager.h"
 #include "engine/core/render/render/ImageCodecMgr.h"
+#include "engine/core/scene/render_node.h"
 #include "Engine/core/Scene/NodeTree.h"
 #include "engine/core/Util/Timer.h"
 #include "engine/core/render/render/Viewport.h"
@@ -156,6 +157,7 @@ namespace Echo
 	void Engine::registerClassTypes()
 	{
 		Class::registerType<Node>();
+		Class::registerType<Render>();
 		Class::registerType<Res>();
 		Class::registerType<ShaderProgramRes>();
 		Class::registerType<Material>();
