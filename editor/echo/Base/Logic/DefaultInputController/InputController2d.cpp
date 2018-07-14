@@ -28,10 +28,6 @@ namespace Studio
 		, m_cameraMoveDir(Echo::Vector3::UNIT_X)
 		, m_cameraForward(-Echo::Vector3::UNIT_Z)
 		, m_cameraPositon(Echo::Vector3::ZERO)
-		, m_horizonAngle(-Echo::Math::PI_DIV2)
-		, m_verticleAngle(Echo::Math::PI_DIV2)
-		, m_horizonAngleGoal(-Echo::Math::PI_DIV2)
- 		, m_verticleAngleGoal(Echo::Math::PI_DIV2)
 		, m_bNeedUpdateCamera(true)
 		, m_orthoTopCamRot(-Echo::Vector3::UNIT_Y)
 		, m_orthoFrontCamRot(-Echo::Vector3::UNIT_Z)
@@ -89,9 +85,9 @@ namespace Studio
 	void InputController2d::mouseMoveEvent(QMouseEvent* e)
 	{
 		QPointF posChanged = e->localPos() - m_pos;
-		if ( m_mouseRButtonPressed )
+		if (m_mouseMButtonPressed)
 		{
-			RotationCamera(posChanged.x() * kCameraRotationYScalar * kCameraRotationYScalar, m_cameraOperateMode* posChanged.y() * kCameraRadiusScalar);
+			MoveCamera(posChanged.x() * kCameraRotationYScalar * kCameraRotationYScalar, m_cameraOperateMode* posChanged.y() * kCameraRadiusScalar);
 		}
 
 		m_pos = e->localPos();
@@ -239,24 +235,6 @@ namespace Studio
 		//m_cameraPositon = m_cameraLookAt - m_cameraForward * m_cameraRadius;
 	}
 
-	// 平移摄像机
-	void InputController2d::SetCameraMoveDir(const Echo::Vector3& dir)
-	{
-		
-	}
-
-	void InputController2d::SetCameraMoveDir(const Echo::Vector3& dir, Echo::Vector3 forward)
-	{
-		Echo::Vector3 tempForward = forward;
-		tempForward.y = 0.f;
-		tempForward.normalize();
-
-		Echo::Vector3 right = tempForward.cross(Echo::Vector3::UNIT_Y);
-		right.normalize();
-
-		m_cameraMoveDir = forward * dir.z - right * dir.x + Echo::Vector3::UNIT_Y * dir.y;
-	}
-
 	// 操作摄像机
 	void InputController2d::CameraZoom(float zValue)
 	{
@@ -264,17 +242,13 @@ namespace Studio
 	}
 
 	// 旋转摄像机
-	void InputController2d::RotationCamera(float xValue, float yValue)
+	void InputController2d::MoveCamera(float xValue, float yValue)
 	{
 		if ( !xValue && !yValue )
 			return;
 
-		m_horizonAngleGoal += xValue;
-		m_verticleAngleGoal += yValue;
-
-		m_verticleAngleGoal = min(m_verticleAngleGoal, Echo::Math::PI - 0.01f);
-		m_verticleAngleGoal = max(m_verticleAngleGoal, 0.01f);
-		
+		Echo::Vector3 cameraMoveDir(-xValue, yValue, 0.f);
+		m_cameraPositon += cameraMoveDir * 300;
 	}
 
 	void InputController2d::AdaptCamera()

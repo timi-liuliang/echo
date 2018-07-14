@@ -77,18 +77,6 @@ namespace Studio
 		void SetCameraMoveDirVal(const Echo::Vector3& dir) { m_cameraMoveDir = dir; }
 		const Echo::Vector3& GetCameraMoveDirVal() const { return m_cameraMoveDir; }
 
-		void SetVerticleAngle(const float angle) { m_verticleAngle = angle; }
-		const float GetVerticleAngle() const { return m_verticleAngle; }
-
-		void SetHorizonAngle(const float angle) { m_horizonAngle = angle; }
-		const float GetHorizonAngle() const { return m_horizonAngle; }
-
-		void SetVerticleAngleGoal(const float angle) { m_verticleAngleGoal = angle; }
-		const float GetVerticleAngleGoal() const { return m_verticleAngleGoal; }
-
-		void SetHorizonAngleGoal(const float angle) { m_horizonAngleGoal = angle; }
-		const float GetHorizonAngleGoal() const { return m_horizonAngleGoal; }
-
 		void UpdateCameraInfo();
 
 		bool isCameraMoving() const;
@@ -105,16 +93,11 @@ namespace Studio
 		// 摄像机更新
 		void UpdateCamera(float elapsedTime);
 
-		// 平移摄像机
-		void SetCameraMoveDir(const Echo::Vector3& dir);
-
-		void SetCameraMoveDir(const Echo::Vector3& dir, Echo::Vector3 forward);
-
 		// 操作摄像机
 		void CameraZoom(float zValue);
 
-		// 旋转摄像机
-		void RotationCamera(float xValue, float yValue);
+		// 位移摄像机
+		void MoveCamera(float xValue, float yValue);
 
 		// 摄像机自适应
 		void AdaptCamera();
@@ -148,10 +131,6 @@ namespace Studio
 		Echo::Vector3		m_cameraMoveDir;	// 摄像机移动
 		Echo::Vector3		m_cameraForward;	// 朝向
 		Echo::Vector3		m_cameraPositon;	// 摄像机位置
-		float				m_horizonAngle;		// 水平旋转角度(顺时针)
-		float				m_verticleAngle;	// 垂直旋转角度(顺时针)
-		float				m_horizonAngleGoal;	// 目标水平旋转角度
-		float				m_verticleAngleGoal;// 目标垂直旋转角度
 
 		bool				m_bNeedUpdateCamera;// 是否需要更新相机位置
 
