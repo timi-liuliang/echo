@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/core/util/StringOption.h"
-#include "engine/core/scene/Node.h"
+#include "engine/core/scene/render_node.h"
 #include "engine/core/render/mesh/Mesh.h"
 #include "engine/core/render/Material.h"
 #include "engine/core/render/render/Renderable.h"
@@ -14,9 +14,9 @@ struct spAttachmentLoader;
 
 namespace Echo
 {
-	class Spine : public Node
+	class Spine : public Render
 	{
-		ECHO_CLASS(Spine, Node)
+		ECHO_CLASS(Spine, Render)
 
 	public:
 		Spine();
@@ -43,9 +43,6 @@ namespace Echo
 	protected:
 		// update
 		virtual void update();
-
-		// get global uniforms
-		virtual void* getGlobalUniformValue(const String& name);
 
 		// submit to renderqueue
 		void submitToRenderQueue();

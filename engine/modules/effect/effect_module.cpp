@@ -1,5 +1,5 @@
 #include "effect_module.h"
-#include "sprite_2d.h"
+#include "sprite.h"
 
 namespace Echo
 {
@@ -9,6 +9,6 @@ namespace Echo
 
 	void EffectModule::registerTypes()
 	{
-		Class::registerType<Sprite2D>();
+		Class::registerType<Sprite>();
 	}
 }

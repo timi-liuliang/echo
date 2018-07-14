@@ -108,18 +108,21 @@ namespace Echo
 	// update per frame
 	void Spine::update()
 	{
-		float delta = Engine::instance()->getFrameTime();
-
-		m_matWVP = getWorldMatrix()* NodeTree::instance()->get2dCamera()->getViewProjMatrix();
-
-		if (m_spSkeleton && m_spAnimState)
+		if (isNeedRender())
 		{
-			spSkeleton_update(m_spSkeleton, delta);
-			spAnimationState_update(m_spAnimState, delta);
-			spAnimationState_apply(m_spAnimState, m_spSkeleton);
-			spSkeleton_updateWorldTransform(m_spSkeleton);
+			float delta = Engine::instance()->getFrameTime();
 
-			submitToRenderQueue();
+			Render::update();
+
+			if (m_spSkeleton && m_spAnimState)
+			{
+				spSkeleton_update(m_spSkeleton, delta);
+				spAnimationState_update(m_spAnimState, delta);
+				spAnimationState_apply(m_spAnimState, m_spSkeleton);
+				spSkeleton_updateWorldTransform(m_spSkeleton);
+
+				submitToRenderQueue();
+			}
 		}
 	}
 
@@ -202,19 +205,6 @@ namespace Echo
 
 			attachmentVertices->submitToRenderQueue(this);
 		}
-	}
-
-	// 获取全局变量值
-	void* Spine::getGlobalUniformValue(const String& name)
-	{
-		void* value = Node::getGlobalUniformValue(name);
-		if (value)
-			return value;
-
-		if (name == "u_WVPMatrix")
-			return (void*)(&m_matWVP);
-
-		return nullptr;
 	}
 
 	void Spine::clear()

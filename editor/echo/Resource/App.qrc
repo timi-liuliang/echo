@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="/icon">
+    <file>node/render.png</file>
+    <file>node/gizmos.png</file>
     <file>Icon/project/save.png</file>
     <file>Icon/game/stop.png</file>
     <file>Icon/game/play.png</file>
@@ -15,8 +17,8 @@
     <file>node/gltfmesh.png</file>
     <file>node/gltfscene.png</file>
     <file>Icon/error/delete.png</file>
-    <file>node/sprite2d.png</file>
     <file>Icon/file/file.png</file>
+    <file>node/sprite.png</file>
     <file>Icon/log/CheckError.png</file>
     <file>Icon/log/CheckWarning.png</file>
     <file>Icon/log/info.png</file>

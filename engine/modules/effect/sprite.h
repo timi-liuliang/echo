@@ -7,9 +7,9 @@
 
 namespace Echo
 {
-	class Sprite2D : public Render
+	class Sprite : public Render
 	{
-		ECHO_CLASS(Sprite2D, Render)
+		ECHO_CLASS(Sprite, Render)
 
 		struct VertexFormat
 		{
@@ -24,8 +24,8 @@ namespace Echo
 		typedef vector<Word>::type	IndiceArray;
 
 	public:
-		Sprite2D();
-		virtual ~Sprite2D();
+		Sprite();
+		virtual ~Sprite();
 
 		// texture res path
 		void setTextureRes(const ResourcePath& path);

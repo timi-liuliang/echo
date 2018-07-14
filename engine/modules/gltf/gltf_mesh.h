@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/core/scene/Node.h"
+#include "engine/core/scene/render_node.h"
 #include "engine/core/render/mesh/Mesh.h"
 #include "engine/core/render/Material.h"
 #include "engine/core/render/render/Renderable.h"
@@ -8,9 +8,9 @@
 
 namespace Echo
 {
-	class GltfMesh : public Node
+	class GltfMesh : public Render
 	{
-		ECHO_CLASS(GltfMesh, Node)
+		ECHO_CLASS(GltfMesh, Render)
 
 	public:
 		GltfMesh();

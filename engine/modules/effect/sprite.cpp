@@ -1,4 +1,4 @@
-#include "sprite_2d.h"
+#include "sprite.h"
 #include "engine/core/log/LogManager.h"
 #include "engine/core/scene/NodeTree.h"
 #include "render/renderer.h"
@@ -67,7 +67,7 @@ void main(void)
 
 namespace Echo
 {
-	Sprite2D::Sprite2D()
+	Sprite::Sprite()
 		: m_textureRes("", ".png")
 		, m_mesh(nullptr)
 		, m_materialInst(nullptr)
@@ -77,27 +77,27 @@ namespace Echo
 	{
 	}
 
-	Sprite2D::~Sprite2D()
+	Sprite::~Sprite()
 	{
 		clear();
 	}
 
-	void Sprite2D::bindMethods()
+	void Sprite::bindMethods()
 	{
-		CLASS_BIND_METHOD(Sprite2D, getTextureRes,	DEF_METHOD("getTextureRes"));
-		CLASS_BIND_METHOD(Sprite2D, setTextureRes,	DEF_METHOD("setTextureRes"));
-		CLASS_BIND_METHOD(Sprite2D, getWidth,		DEF_METHOD("getWidth"));
-		CLASS_BIND_METHOD(Sprite2D, setWidth,		DEF_METHOD("setWidth"));
-		CLASS_BIND_METHOD(Sprite2D, getHeight,		DEF_METHOD("getHeight"));
-		CLASS_BIND_METHOD(Sprite2D, setHeight,		DEF_METHOD("setHeight"));
+		CLASS_BIND_METHOD(Sprite, getTextureRes,	DEF_METHOD("getTextureRes"));
+		CLASS_BIND_METHOD(Sprite, setTextureRes,	DEF_METHOD("setTextureRes"));
+		CLASS_BIND_METHOD(Sprite, getWidth,		DEF_METHOD("getWidth"));
+		CLASS_BIND_METHOD(Sprite, setWidth,		DEF_METHOD("setWidth"));
+		CLASS_BIND_METHOD(Sprite, getHeight,		DEF_METHOD("getHeight"));
+		CLASS_BIND_METHOD(Sprite, setHeight,		DEF_METHOD("setHeight"));
 
-		CLASS_REGISTER_PROPERTY(Sprite2D, "Width", Variant::Type::Int, "getWidth", "setWidth");
-		CLASS_REGISTER_PROPERTY(Sprite2D, "Height", Variant::Type::Int, "getHeight", "setHeight");
-		CLASS_REGISTER_PROPERTY(Sprite2D, "Texture", Variant::Type::ResourcePath, "getTextureRes", "setTextureRes");
+		CLASS_REGISTER_PROPERTY(Sprite, "Width", Variant::Type::Int, "getWidth", "setWidth");
+		CLASS_REGISTER_PROPERTY(Sprite, "Height", Variant::Type::Int, "getHeight", "setHeight");
+		CLASS_REGISTER_PROPERTY(Sprite, "Texture", Variant::Type::ResourcePath, "getTextureRes", "setTextureRes");
 	}
 
 	// set texture res path
-	void Sprite2D::setTextureRes(const ResourcePath& path)
+	void Sprite::setTextureRes(const ResourcePath& path)
 	{
 		if (m_textureRes.setPath(path.getPath()))
 		{
@@ -105,7 +105,7 @@ namespace Echo
 		}
 	}
 
-	void Sprite2D::setWidth(i32 width) 
+	void Sprite::setWidth(i32 width) 
 	{ 
 		if (m_width != width)
 		{
@@ -116,7 +116,7 @@ namespace Echo
 	}
 
 	// width
-	void Sprite2D::setHeight(i32 height) 
+	void Sprite::setHeight(i32 height) 
 	{
 		if (m_height != height)
 		{
@@ -127,7 +127,7 @@ namespace Echo
 	}
 
 	// build drawable
-	void Sprite2D::buildRenderable()
+	void Sprite::buildRenderable()
 	{
 		if (!m_textureRes.getPath().empty())
 		{
@@ -157,7 +157,7 @@ namespace Echo
 	}
 
 	// update per frame
-	void Sprite2D::update()
+	void Sprite::update()
 	{
 		if (isNeedRender())
 		{
@@ -172,7 +172,7 @@ namespace Echo
 	}
 
 	// build mesh data by drawables data
-	void Sprite2D::buildMeshData(VertexArray& oVertices, IndiceArray& oIndices)
+	void Sprite::buildMeshData(VertexArray& oVertices, IndiceArray& oIndices)
 	{
 		TextureRes*	texture = m_materialInst->getTexture(0);
 		if (texture)
@@ -200,7 +200,7 @@ namespace Echo
 	}
 
 	// update vertex buffer
-	void Sprite2D::updateMeshBuffer()
+	void Sprite::updateMeshBuffer()
 	{
 		VertexArray	vertices;
 		IndiceArray	indices;
@@ -213,12 +213,12 @@ namespace Echo
 		m_mesh->updateVertexs(define, vertices.size(), (const Byte*)vertices.data(), m_localAABB);
 	}
 
-	void Sprite2D::clear()
+	void Sprite::clear()
 	{
 		clearRenderable();
 	}
 
-	void Sprite2D::clearRenderable()
+	void Sprite::clearRenderable()
 	{
 		EchoSafeRelease(m_renderable);
 		EchoSafeRelease(m_materialInst);
