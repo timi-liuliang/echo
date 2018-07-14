@@ -10,6 +10,7 @@ namespace Echo
 	Camera::Camera(ProjMode mode, bool isFixedYaw)
 		: m_bFixedYawAxis(isFixedYaw)
 		, m_projMode(mode)
+		, m_scale( 1.f)
 	{
 		m_up = Vector3::UNIT_Y;
 		m_position = Vector3(-150.0f, 150.0f, -150.0f);
@@ -67,52 +68,6 @@ namespace Echo
 		m_bNeedUpdateView = true;
 	}
 
-	void Camera::yaw(Real rad)
-	{
-		Matrix4 matRot;
-		matRot.rotateAxisReplace(m_fixedYawAxis, rad);
-
-		m_dir = matRot.transform(m_dir);
-		m_up = matRot.transform(m_up);
-		m_bNeedUpdateView = true;
-	}
-
-	void Camera::pitch(Real rad)
-	{
-		Matrix4 matRot;
-		matRot.rotateAxisReplace(m_right, rad);
-
-		m_dir = matRot.transform(m_dir);
-		m_up = matRot.transform(m_up);
-		m_bNeedUpdateView = true;
-	}
-
-	void Camera::roll(Real rad)
-	{
-		Matrix4 matRot;
-		matRot.rotateAxisReplace(m_dir, rad);
-
-		m_dir = matRot.transform(m_dir);
-		m_up = matRot.transform(m_up);
-		m_bNeedUpdateView = true;
-	}
-
-	void Camera::rotate(const Vector3& vAxis, Real rad)
-	{
-		Matrix4 matRot;
-		matRot.rotateAxisReplace(vAxis, rad);
-
-		m_dir = matRot.transform(m_dir);
-		m_up = matRot.transform(m_up);
-		m_bNeedUpdateView = true;
-	}
-
-	void Camera::move(const Vector3& offset)
-	{
-		m_position += offset;
-		m_bNeedUpdateView = true;
-	}
-
 	void Camera::setProjectionMode(ProjMode mode)
 	{
 		m_projMode = mode;
@@ -141,6 +96,13 @@ namespace Echo
 	void Camera::setHeight(Real height)
 	{
 		m_height = height;
+		m_bNeedUpdateProj = true;
+		m_bNeedUpdateView = true;
+	}
+
+	void Camera::setScale(Real scale) 
+	{ 
+		m_scale = scale; 
 		m_bNeedUpdateProj = true;
 		m_bNeedUpdateView = true;
 	}
@@ -301,7 +263,7 @@ namespace Echo
 				break;
 			case PM_ORTHO:
 				{
-					Matrix4::OrthoRH(m_matProj, (Real)m_width, (Real)m_height, m_nearClip, m_farClip);
+					Matrix4::OrthoRH(m_matProj, (Real)m_width * m_scale, (Real)m_height * m_scale, m_nearClip, m_farClip);
 					Renderer::instance()->convertMatOrho(m_matProj, m_matProj, m_nearClip, m_farClip);
 				} break;
 			default: ;
@@ -402,30 +364,5 @@ namespace Echo
 	{
 		m_bNeedUpdateView = true;
 		m_bNeedUpdateProj = true;
-	}
-
-	// ¿ËÂ¡
-	void Camera::clone(Camera* other)
-	{
-		m_position = other->m_position;
-		m_dir = other->m_dir;
-		m_oritation = other->m_oritation;
-		m_up = other->m_up;
-		m_right = other->m_right;
-		m_bFixedYawAxis = other->m_bFixedYawAxis;
-		m_fixedYawAxis = other->m_fixedYawAxis;
-		m_matView = other->m_matView;
-		m_bNeedUpdateView = other->m_bNeedUpdateView;
-		m_projMode = other->m_projMode;
-		m_fov = other->m_fov;
-		m_width = other->m_width;
-		m_height = other->m_height;
-		m_aspect = other->m_aspect;
-		m_nearClip = other->m_nearClip;
-		m_farClip = other->m_farClip;
-		m_matProj = other->m_matProj;
-		m_bNeedUpdateProj = other->m_bNeedUpdateProj;
-		m_matVP = other->m_matVP;
-		m_frustum = other->m_frustum;
 	}
 }

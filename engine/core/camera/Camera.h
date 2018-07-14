@@ -11,7 +11,7 @@ namespace Echo
 	 */
 	class Ray;
 	class Camera
- 	{
+	{
 	public:
 		enum ProjMode
 		{
@@ -20,22 +20,16 @@ namespace Echo
 			PM_UI,				// UI专用
 		};
 
-	public:	
-		Camera(ProjMode mode = PM_PERSPECTIVE, bool isFixedYaw = true );
+	public:
+		Camera(ProjMode mode = PM_PERSPECTIVE, bool isFixedYaw = true);
 		virtual ~Camera();
 
 		// 更新
-		virtual void frameMove( float elapsedTime){}
+		virtual void frameMove(float elapsedTime) {}
 
 		virtual void setPosition(const Vector3& pos);
 		virtual void setDirection(const Vector3& dir);
 		virtual void setUp(const Vector3& vUp);
-
-		virtual void yaw(Real rad);
-		virtual void pitch(Real rad);
-		virtual void roll(Real rad);
-		virtual void rotate(const Vector3& vAxis, Real rad);
-		virtual void move(const Vector3& offset);
 
 		// 获取摄像机位置
 		const Vector3& getPosition() const { return m_position; }
@@ -57,7 +51,7 @@ namespace Echo
 
 		// 获取观察矩阵
 		const Matrix4& getViewMatrix() const { return m_matView; }
-		
+
 		// 获取投影矩阵
 		const Matrix4& getProjMatrix() const { return m_matProj; }
 
@@ -67,10 +61,11 @@ namespace Echo
 		void			setProjectionMode(ProjMode mode);
 		ProjMode		getProjectionMode() const;
 
-		void			setFixedYawAxis(bool fixed){ m_bFixedYawAxis = fixed; }
-		void			setFov(Real fov);
-		void			setWidth(Real width);
-		void			setHeight(Real height);
+		void setFixedYawAxis(bool fixed) { m_bFixedYawAxis = fixed; }
+		void setFov(Real fov);
+		void setWidth(Real width);
+		void setHeight(Real height);
+		void setScale(Real scale);
 		void			setNearClip(Real nearClip);
 		void			setFarClip(Real farClip);
 		Real			getFov() const;
@@ -82,17 +77,11 @@ namespace Echo
 		Real			getNearClipWidth() const;
 		Real			getNearClipHeight() const;
 
-		void			getCameraRay(Ray& ray, const Vector2& screenPos);
-
-		void			unProjectionMousePos( Vector3& from, Vector3& to, const Vector2& screenPos );
+		void getCameraRay(Ray& ray, const Vector2& screenPos);
+		void unProjectionMousePos( Vector3& from, Vector3& to, const Vector2& screenPos );
 
 		virtual void	update();
-
 		virtual void    needUpdate();
-
-	public:
-		// 克隆
-		virtual void clone(Camera* other);
 
 	protected:
 		Vector3			m_position;
@@ -108,6 +97,7 @@ namespace Echo
 		Real			m_fov;
 		Real			m_width;
 		Real			m_height;
+		Real			m_scale;
 		Real			m_aspect;
 		Real			m_nearClip;
 		Real			m_farClip;

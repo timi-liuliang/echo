@@ -25,8 +25,6 @@ namespace Studio
 		, m_keyShiftDown(false)
 		, m_cameraOperateMode(1)
 		, m_camera(NULL)
-		, m_cameraRadius(5.f)
-		, m_cameraLookAt(Echo::Vector3::ZERO)
 		, m_cameraMoveDir(Echo::Vector3::UNIT_X)
 		, m_cameraForward(-Echo::Vector3::UNIT_Z)
 		, m_cameraPositon(Echo::Vector3::ZERO)
@@ -34,8 +32,6 @@ namespace Studio
 		, m_verticleAngle(Echo::Math::PI_DIV2)
 		, m_horizonAngleGoal(-Echo::Math::PI_DIV2)
  		, m_verticleAngleGoal(Echo::Math::PI_DIV2)
- 		, m_xOffset(0.f)
- 		, m_yOffset(0.f)
 		, m_bNeedUpdateCamera(true)
 		, m_orthoTopCamRot(-Echo::Vector3::UNIT_Y)
 		, m_orthoFrontCamRot(-Echo::Vector3::UNIT_Z)
@@ -46,8 +42,7 @@ namespace Studio
 		, m_orthoTopCamPos(Echo::Vector3::ZERO)
 		, m_orthoFrontCamPos(Echo::Vector3::ZERO)
 		, m_orthoLeftCamPos(Echo::Vector3::ZERO)
-		, m_preMode(OrthoCamMode::OCM_NONE)
-		, m_curMode(OrthoCamMode::OCM_NONE)
+		, m_cameraScale(1.f)
 	{
 		m_camera = Echo::NodeTree::instance()->get2dCamera();
 
@@ -66,21 +61,19 @@ namespace Studio
 	// 每帧更新
 	void InputController2d::tick(const InputContext& ctx)
 	{
-		// 摄像机旋转更新
-		SmoothRotation(ctx.elapsedTime);
-
 		// 移动摄像机
 		Echo::Vector3 cameraMoveDir = Echo::Vector3::ZERO;
 		if ( m_keyADown ) 
-			cameraMoveDir.x += 1.f;
-		if ( m_keyDDown ) 
 			cameraMoveDir.x += -1.f;
+		if ( m_keyDDown ) 
+			cameraMoveDir.x += 1.f;
 		if ( m_keyWDown ) 
 			cameraMoveDir.y += 1.f;
 		if ( m_keySDown && !m_keyCtrlDown) 
 			cameraMoveDir.y += -1.f;
 
-		SetCameraMoveDir(cameraMoveDir);
+		m_cameraMoveDir = cameraMoveDir;
+		m_cameraMoveDir.normalize();
 
 		// 更新摄像机
 		UpdateCamera(ctx.elapsedTime);
@@ -189,150 +182,6 @@ namespace Studio
 		return m_pos;
 	}
 
-	void InputController2d::switchToOrthoCam(OrthoCamMode destMode, Echo::Vector3 pos)
-	{
-		m_preMode = m_curMode;
-		m_curMode = destMode;
-		if (m_curMode == OrthoCamMode::OCM_TOP && m_orthoTopCamPos == Echo::Vector3::ZERO)
-		{
-			m_orthoTopCamPos = pos;
-		}
-		else if (m_curMode == OrthoCamMode::OCM_FRONT && m_orthoFrontCamPos == Echo::Vector3::ZERO)
-		{
-			m_orthoFrontCamPos = pos;
-		}
-		else if (m_curMode == OrthoCamMode::OCM_LEFT && m_orthoLeftCamPos == Echo::Vector3::ZERO)
-		{
-			m_orthoLeftCamPos = pos;
-		}
-
-		Echo::Vector3 dir = Echo::Vector3::ZERO;
-		if (m_curMode == OrthoCamMode::OCM_TOP)
-		{
-			pos = m_orthoTopCamPos;
-			dir = m_orthoTopCamRot;
-		}
-		else if (m_curMode == OrthoCamMode::OCM_FRONT)
-		{
-			pos = m_orthoFrontCamPos;
-			dir = m_orthoFrontCamRot;
-		}
-		else if (m_curMode == OrthoCamMode::OCM_LEFT)
-		{
-			pos = m_orthoLeftCamPos;
-			dir = m_orthoLeftCamRot;
-		}
-
-		updateOrthoCamPos(m_preMode);
-
-		Echo::Camera* mainCamera = Echo::NodeTree::instance()->get3dCamera();
-		mainCamera->setPosition(pos);
-		mainCamera->setDirection(dir);
-		mainCamera->setProjectionMode(Echo::Camera::PM_ORTHO);
-
-		UpdateOrthoCamModeWH(m_curMode);
-	}
-
-	void InputController2d::updateOrthoCamPos(OrthoCamMode mode)
-	{
-		Echo::Camera* mainCamera = Echo::NodeTree::instance()->get3dCamera();
-		if (mode == OrthoCamMode::OCM_TOP)
-		{
-			m_orthoTopCamPos = mainCamera->getPosition();
-			m_orthoTopCamRot = mainCamera->getDirection();
-		}
-		else if (mode == OrthoCamMode::OCM_FRONT)
-		{
-			m_orthoFrontCamPos = mainCamera->getPosition();
-			m_orthoFrontCamRot = mainCamera->getDirection();
-		}
-		else if (mode == OrthoCamMode::OCM_LEFT)
-		{
-			m_orthoLeftCamPos = mainCamera->getPosition();
-			m_orthoLeftCamRot = mainCamera->getDirection();
-		}
-		else
-		{
-			m_backCameraPos = mainCamera->getPosition();
-			m_backCameraRot = mainCamera->getDirection();
-		}
-	}
-
-	void InputController2d::resetPerspectiveCamera()
-	{
-		m_preMode = m_curMode;
-		m_curMode = OrthoCamMode::OCM_NONE;
-		Echo::Camera* mainCamera = Echo::NodeTree::instance()->get3dCamera();
-		mainCamera->setPosition(m_backCameraPos);
-		mainCamera->setDirection(m_backCameraRot);
-		mainCamera->setProjectionMode(Echo::Camera::PM_PERSPECTIVE);
-	}
-
-	float InputController2d::getOrthoCamDis(OrthoCamMode mode)
-	{
-		if (mode == OrthoCamMode::OCM_TOP)
-		{
-			return m_orthoTopDis;
-		}
-		else if (mode == OrthoCamMode::OCM_FRONT)
-		{
-			return m_orthoFrontDis;
-		}
-		else if (mode == OrthoCamMode::OCM_LEFT)
-		{
-			return m_orthoLeftDis;
-		}
-
-		return 0.f;
-	}
-
-	void InputController2d::setOrthoCamDis(OrthoCamMode mode, float dis)
-	{
-		if (mode == OrthoCamMode::OCM_TOP)
-		{
-			m_orthoTopDis = dis;
-		}
-		else if (mode == OrthoCamMode::OCM_FRONT)
-		{
-			m_orthoFrontDis = dis;
-		}
-		else if (mode == OrthoCamMode::OCM_LEFT)
-		{
-			m_orthoLeftDis = dis;
-		}
-	}
-
-	void InputController2d::UpdateOrthoCamModeWH(OrthoCamMode mode)
-	{
-		float dis = 0.0f;
-		if (mode == OrthoCamMode::OCM_TOP)
-		{
-			dis = m_orthoTopDis;
-		}
-		else if (mode == OrthoCamMode::OCM_FRONT)
-		{
-			dis = m_orthoFrontDis;
-		}
-		else if (mode == OrthoCamMode::OCM_LEFT)
-		{
-			dis = m_orthoLeftDis;
-		}
-
-		Echo::Camera* mainCamera = Echo::NodeTree::instance()->get3dCamera();
-		if (Echo::Renderer::instance()->getScreenHeight() > Echo::Renderer::instance()->getScreenWidth())
-		{
-			float aspect = (float)Echo::Renderer::instance()->getScreenHeight() / Echo::Renderer::instance()->getScreenWidth();
-			mainCamera->setWidth(Echo::Math::Max(dis, 1.0f));
-			mainCamera->setHeight(Echo::Math::Max(dis * aspect, 1.0f));
-		}
-		else
-		{
-			float aspect = (float)Echo::Renderer::instance()->getScreenWidth() / Echo::Renderer::instance()->getScreenHeight();
-			mainCamera->setWidth(Echo::Math::Max(dis * aspect, 1.0f));
-			mainCamera->setHeight(Echo::Math::Max(dis, 1.0f));
-		}
-	}
-
 	//设置相机操作模式
 	void InputController2d::SetCameraOperateMode(int mode)
 	{
@@ -364,7 +213,6 @@ namespace Studio
 	// 初始化摄像机参数
 	void InputController2d::InitializeCameraSettings(float diroffset)
 	{
-		m_cameraRadius = diroffset;
 	}
 
 	// 摄像机更新
@@ -372,11 +220,10 @@ namespace Studio
 	{
 		if (m_bNeedUpdateCamera)
 		{
-			m_cameraLookAt += m_cameraMoveDir * elapsedTime;
+			m_cameraPositon += m_cameraMoveDir * elapsedTime * 300;
 
 			m_cameraForward.normalize();
-			//m_cameraPositon = m_cameraLookAt - m_cameraForward * m_cameraRadius;
-
+			m_camera->setScale(m_cameraScale);
 			m_camera->setPosition(m_cameraPositon);
 			m_camera->setDirection(Echo::Vector3::NEG_UNIT_Z);
 		}
@@ -385,27 +232,17 @@ namespace Studio
 	// 适应模型
 	void InputController2d::CameraZoom(const Echo::AABB& box, float scale)
 	{
-		float         radius = (box.getSize().len() * 0.5f);
-		Echo::Vector3 center = ((box.vMin + box.vMax) * 0.5f);
-		m_cameraRadius = radius * scale;
-		m_cameraLookAt = center;
-		m_cameraPositon = m_cameraLookAt - m_cameraForward * m_cameraRadius;
-
-		AddScreenOffset(-m_xOffset, -m_yOffset);
+		//float         radius = (box.getSize().len() * 0.5f);
+		//Echo::Vector3 center = ((box.vMin + box.vMax) * 0.5f);
+		//m_cameraRadius = radius * scale;
+		//m_cameraLookAt = center;
+		//m_cameraPositon = m_cameraLookAt - m_cameraForward * m_cameraRadius;
 	}
 
 	// 平移摄像机
 	void InputController2d::SetCameraMoveDir(const Echo::Vector3& dir)
 	{
-		Echo::Vector3 forward = m_cameraForward; forward.y = 0.f;
-		forward.normalize();
-
-		Echo::Vector3 right = forward.cross(Echo::Vector3::UNIT_Y);
-		right.normalize();
-
-		m_cameraMoveDir = m_cameraForward * dir.z - right * dir.x;
-		m_cameraMoveDir.normalize();
-		m_cameraMoveDir *= 5.f;
+		
 	}
 
 	void InputController2d::SetCameraMoveDir(const Echo::Vector3& dir, Echo::Vector3 forward)
@@ -423,46 +260,7 @@ namespace Studio
 	// 操作摄像机
 	void InputController2d::CameraZoom(float zValue)
 	{
-		float newRadius = m_cameraRadius + zValue;
-		if (newRadius * m_cameraRadius > 0.0f)
-		{
-			m_cameraRadius = newRadius;
-		}
-		else
-		{
-			m_cameraLookAt -= m_cameraForward * zValue;
-		}
-	}
-
-	// 旋转摄像机(平滑处理)
-	void InputController2d::SmoothRotation(float elapsedTime)
-	{
-		float diffHorizonAngle = m_horizonAngleGoal - m_horizonAngle;
-		float diffVerticleAngle = m_verticleAngleGoal - m_verticleAngle;
-
-		if (diffHorizonAngle > Echo::Math::PI_DIV6)
-		{
-			m_horizonAngle = m_horizonAngleGoal;
-		}
-		else
-		{
-			m_horizonAngle += diffHorizonAngle * elapsedTime * 25.f;
-		}
-
-		if ( diffVerticleAngle > Echo::Math::PI_DIV6 )
-		{
-			m_verticleAngle = m_verticleAngleGoal;
-		}
-		else
-		{
-			m_verticleAngle += diffVerticleAngle* elapsedTime * 25.f;
-		}
-
-		if (!Echo::Math::IsEqual(diffHorizonAngle, 0.0f) && !Echo::Math::IsEqual(diffVerticleAngle, 0.0f))
-		{
-			m_cameraForward.fromHVAngle(m_horizonAngle, m_verticleAngle);
-			m_cameraLookAt = m_cameraPositon + m_cameraForward * m_cameraRadius;
-		}
+		m_cameraScale = Echo::Math::Clamp(m_cameraScale + zValue * 0.03f, 0.01f, 100.f);
 	}
 
 	// 旋转摄像机
@@ -479,36 +277,13 @@ namespace Studio
 		
 	}
 
-	// 添加屏幕偏移
-	void InputController2d::AddScreenOffset(float xOffset, float yOffset)
-	{
-		m_xOffset += xOffset;
-		m_yOffset += yOffset;
-	}
-
 	void InputController2d::AdaptCamera()
 	{
-		Echo::Vector3 defaultPos = Echo::Vector3(0,10,10);
-		Echo::Vector3 defaultDir = Echo::Vector3(0,-1,-1);
-
-		m_cameraPositon = defaultPos;
-		m_cameraLookAt = m_cameraPositon + defaultDir * m_cameraRadius;
-
-		m_cameraForward = m_cameraLookAt - m_cameraPositon;
-		m_cameraForward.normalize();
-
-		m_cameraForward.toHVAngle(m_horizonAngle, m_verticleAngle);
-		m_verticleAngleGoal = m_verticleAngle;
-		m_horizonAngleGoal = m_horizonAngle;
-
-		m_camera->setPosition(m_cameraPositon);
-		m_camera->setDirection(m_cameraLookAt-m_cameraPositon);
 	}
 
 	void InputController2d::UpdateCameraInfo()
 	{
 		m_camera->setPosition(m_cameraPositon);
-		m_camera->setPosition(m_cameraLookAt-m_cameraPositon);
 	}
 
 	bool InputController2d::isCameraMoving() const
@@ -519,40 +294,5 @@ namespace Studio
 			m_keyDDown ||
 			m_keyQDown ||
 			m_keyEDown;
-	}
-
-	void InputController2d::rotateCameraAtPos(float xValue, float yValue, const Echo::Vector3& rotCenter)
-	{
-		Echo::Vector3 rotVec = m_cameraPositon - rotCenter;
-		Echo::Vector3 forward = m_cameraForward;
-		Echo::Vector3 camRight = m_camera->getRight();
-		float verticleAngle = acos(forward.y);
-		float vertRotAngle = verticleAngle + yValue;
-		vertRotAngle = Echo::Math::Clamp(vertRotAngle, 0.01f, Echo::Math::PI - 0.01f) - verticleAngle;
-		if (!Echo::Math::IsEqual(vertRotAngle, 0.0f))
-		{
-			Echo::Quaternion camRightQuat;
-			camRightQuat.fromAxisAngle(camRight, -vertRotAngle);
-			camRightQuat.rotateVec3(forward, forward);
-			camRightQuat.rotateVec3(rotVec, rotVec);
-			m_cameraForward = forward;
-		}
-
-		float sinv = Echo::Math::Sin(xValue);
-		float cosv = Echo::Math::Cos(xValue);
-		forward = m_cameraForward;
-		m_cameraForward = Echo::Vector3(forward.x*cosv - forward.z*sinv, forward.y, forward.x*sinv + forward.z*cosv);
-		rotVec = Echo::Vector3(rotVec.x*cosv - rotVec.z*sinv, rotVec.y, rotVec.x*sinv + rotVec.z*cosv);
-
-		m_cameraPositon = rotCenter + rotVec;
-		m_cameraLookAt = m_cameraPositon + m_cameraForward * m_cameraRadius;
-
-		m_camera->setPosition(m_cameraPositon);
-		m_camera->setDirection(m_cameraForward);
-		m_camera->update();
-
-		m_cameraForward.toHVAngle(m_horizonAngle, m_verticleAngle);
-		m_verticleAngleGoal = m_verticleAngle;
-		m_horizonAngleGoal = m_horizonAngle;
 	}
 }
