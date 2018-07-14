@@ -32,8 +32,8 @@ namespace Game
 		Echo::i32 thisH = height();
 		Echo::i32 mainW = GameMainWindow::instance()->width();
 		Echo::i32 mainH = GameMainWindow::instance()->height();
-		Echo::i32 aimW = Echo::Engine::instance()->getProjectFile()->getWindowWidth();
-		Echo::i32 aimH = Echo::Engine::instance()->getProjectFile()->getWindowHeight();
+		Echo::i32 aimW = Echo::Engine::instance()->getProjectSettings()->getWindowWidth();
+		Echo::i32 aimH = Echo::Engine::instance()->getProjectSettings()->getWindowHeight();
 		Echo::i32 mainNewWidth = mainW + (aimW - thisW);
 		Echo::i32 mainNewHeight = mainH + (aimH - thisH);
 		GameMainWindow::instance()->resize(mainNewWidth, mainNewHeight);

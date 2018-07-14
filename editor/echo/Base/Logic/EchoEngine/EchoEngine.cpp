@@ -33,6 +33,7 @@ namespace Studio
 		, m_currentEditNode(nullptr)
 		, m_invisibleNodeForEditor(nullptr)
 		, m_gizmosNodeBackGrid(nullptr)
+		, m_gizmosNodeGrid2d(nullptr)
 	{
 	}
 
@@ -77,6 +78,11 @@ namespace Studio
 			m_gizmosNodeBackGrid->setName("Gizmos");
 			m_gizmosNodeBackGrid->setParent(m_invisibleNodeForEditor);
 
+			// gizmos node 2d
+			m_gizmosNodeGrid2d = ECHO_DOWN_CAST<Echo::Gizmos*>(Echo::Class::create("Gizmos"));
+			m_gizmosNodeGrid2d->setName("Gizmos 2d grid");
+			m_gizmosNodeGrid2d->setParent(m_invisibleNodeForEditor);
+
 			// 背景网格
 			InitializeBackGrid();
 		);
@@ -96,7 +102,7 @@ namespace Studio
 	void EchoEngine::Render(unsigned int elapsedTime, bool isRenderWindowVisible)
 	{
 		// update back grid
-		ResizeBackGrid();
+		resizeBackGrid3d();
 
 		if (m_currentEditNode)
 			m_currentEditNode->update( elapsedTime, true);
@@ -163,11 +169,12 @@ namespace Studio
 	// 初始化背景网格
 	void EchoEngine::InitializeBackGrid()
 	{
-		ResizeBackGrid();
+		resizeBackGrid2d();
+		resizeBackGrid3d();
 	}
 
 	//生成背景网格(调整网格参数)
-	void EchoEngine::ResizeBackGrid()
+	void EchoEngine::resizeBackGrid3d()
 	{	
 		m_gizmosNodeBackGrid->clear();
 
@@ -228,6 +235,17 @@ namespace Studio
 			xOffsetBefore = xOffset;
 			zOffsetBefore = zOffset;
 		}
+	}
+
+	void EchoEngine::resizeBackGrid2d()
+	{
+		Echo::i32 windowWidth = Echo::Engine::instance()->getProjectSettings()->getWindowWidth();
+		Echo::i32 windowHeight = Echo::Engine::instance()->getProjectSettings()->getWindowHeight();
+		m_gizmosNodeGrid2d->clear();
+		m_gizmosNodeGrid2d->drawLine(Echo::Vector3(0.0, 0.0, 0.0), Echo::Vector3(windowWidth, 0.0, 0.0), Echo::Color::BLUE);
+		m_gizmosNodeGrid2d->drawLine(Echo::Vector3(0.0, 0.0, 0.0), Echo::Vector3(0.0, windowHeight, 0.0), Echo::Color::BLUE);
+		m_gizmosNodeGrid2d->drawLine(Echo::Vector3(windowWidth, windowHeight, 0.0), Echo::Vector3(windowWidth, 0.0, 0.0), Echo::Color::BLUE);
+		m_gizmosNodeGrid2d->drawLine(Echo::Vector3(windowWidth, windowHeight, 0.0), Echo::Vector3(0.0, windowHeight, 0.0), Echo::Color::BLUE);
 	}
 
 	//设置显示或隐藏背景网格

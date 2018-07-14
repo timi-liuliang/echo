@@ -188,7 +188,7 @@ namespace Studio
 			{
 				Echo::PathUtil::CreateDir(saveasPath);
 
-				Echo::String currentProject = Echo::IO::instance()->getFullPath(Echo::Engine::instance()->getProjectFile()->getPath());
+				Echo::String currentProject = Echo::IO::instance()->getFullPath(Echo::Engine::instance()->getProjectSettings()->getPath());
 				Echo::String currentPath = Echo::PathUtil::GetFileDirPath(currentProject);
 				Echo::String currentName = Echo::PathUtil::GetPureFilename(currentProject, true);
 
@@ -268,7 +268,7 @@ namespace Studio
 	void MainWindow::onPlayGame()
 	{
 		// if launch scene not exist, set it
-		Echo::ProjectSettings* projSettings = Echo::Engine::instance()->getProjectFile();
+		Echo::ProjectSettings* projSettings = Echo::Engine::instance()->getProjectSettings();
 		if (projSettings)
 		{
 			const Echo::String& launchScene = projSettings->getLaunchScene().getPath();

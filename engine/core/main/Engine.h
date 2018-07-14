@@ -91,7 +91,7 @@ namespace Echo
 		void registerClassTypes();
 
 	public:
-		ProjectSettings* getProjectFile() { return m_projectSettings.ptr(); }
+		ProjectSettings* getProjectSettings() { return m_projectSettings.ptr(); }
 
 	protected:
 		bool render();

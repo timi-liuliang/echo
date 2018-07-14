@@ -58,7 +58,8 @@ namespace Studio
 		virtual void setBackGridVisibleOrNot(bool showFlag);
 
 		//调整背景网格的参数
-		virtual void ResizeBackGrid();
+		void resizeBackGrid3d();
+		void resizeBackGrid2d();
 
 		//获得背景网格的相关参数
 		virtual void GetBackGridParameters(int* linenums,float* lineGap);
@@ -96,6 +97,7 @@ namespace Studio
 		Echo::String			m_currentEditNodeSavePath;	// 当前场景存储路径
 		Echo::Node*				m_invisibleNodeForEditor;	// 编辑器结点
 		Echo::Gizmos*			m_gizmosNodeBackGrid;
+		Echo::Gizmos*			m_gizmosNodeGrid2d;			// 2d 框
 		Echo::Node *			m_pCameraAxis;
 		static std::string		m_projectFile;				// 项目名称
 		static RenderWindow*	m_renderWindow;				// 渲染窗口
