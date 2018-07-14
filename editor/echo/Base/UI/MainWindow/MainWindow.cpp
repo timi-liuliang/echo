@@ -19,6 +19,7 @@
 #include "BottomPanel.h"
 #include "ProjectWnd.h"
 #include "PathChooseDialog.h"
+#include "RenderWindow.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/io/IO.h>
 #include <engine/core/scene/render_node.h>
@@ -232,10 +233,18 @@ namespace Studio
 		if (renderType == "2D")
 		{
 			Echo::Render::setRenderTypes(Echo::Render::Type_2D);
+
+			RenderWindow* renderWindow = ECHO_DOWN_CAST<RenderWindow*>(AStudio::instance()->getRenderWindow());
+			if (renderWindow)
+				renderWindow->switchToController2d();
 		}
 		else if (renderType == "3D")
 		{ 
 			Echo::Render::setRenderTypes(Echo::Render::Type_3D);
+
+			RenderWindow* renderWindow = ECHO_DOWN_CAST<RenderWindow*>(AStudio::instance()->getRenderWindow());
+			if (renderWindow)
+				renderWindow->switchToController3d();
 		}
 	}
 

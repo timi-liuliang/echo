@@ -157,24 +157,14 @@ namespace Echo
 		m_lineBatch->clear();
 	}
 
-	// get global uniforms
-	void* Gizmos::getGlobalUniformValue(const String& name)
-	{
-		if (name == "u_ViewProjMatrix")
-			return (void*)(&NodeTree::instance()->get3dCamera()->getViewProjMatrix());
-		else if (name == "u_CameraPosition")
-			return (void*)(&NodeTree::instance()->get3dCamera()->getPosition());
-		else if (name == "u_CameraNear")
-			return (void*)(&NodeTree::instance()->get3dCamera()->getNearClip());
-		else if (name == "u_CameraFar")
-			return (void*)(&NodeTree::instance()->get3dCamera()->getFarClip());
-
-		return nullptr;
-	}
-
 	// update
 	void Gizmos::update()
 	{
-		m_lineBatch->update();
+		if (isNeedRender())
+		{
+			Render::update();
+
+			m_lineBatch->update();
+		}
 	}
 }

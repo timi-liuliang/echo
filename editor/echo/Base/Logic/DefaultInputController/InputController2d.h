@@ -14,7 +14,7 @@ namespace Studio
 	/**
 	* 渲染窗口默认控制器
 	*/
-	class DefaultInputController : public IRWInputController
+	class InputController2d : public IRWInputController
 	{
 	public:
 		enum OrthoCamMode
@@ -25,8 +25,8 @@ namespace Studio
 			OCM_NONE,
 		};
 
-		DefaultInputController();
-		virtual ~DefaultInputController();
+		InputController2d();
+		virtual ~InputController2d();
 
 		// 每帧更新
 		virtual void tick(const InputContext& ctx) override;

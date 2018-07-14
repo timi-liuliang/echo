@@ -1,15 +1,15 @@
 #pragma once
 
-#include "engine/core/scene/Node.h"
+#include "engine/core/scene/render_node.h"
 #include "engine/core/render/mesh/Mesh.h"
 #include "engine/core/render/Material.h"
 #include "engine/core/render/render/Renderable.h"
 
 namespace Echo
 {
-	class Sprite2D : public Node
+	class Sprite2D : public Render
 	{
-		ECHO_CLASS(Sprite2D, Node)
+		ECHO_CLASS(Sprite2D, Render)
 
 		struct VertexFormat
 		{
@@ -51,9 +51,6 @@ namespace Echo
 
 		// build mesh data by drawables data
 		void buildMeshData(VertexArray& oVertices, IndiceArray& oIndices);
-
-		// get global uniforms
-		virtual void* getGlobalUniformValue(const String& name);
 
 		// clear
 		void clear();

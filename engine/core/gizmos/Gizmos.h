@@ -5,13 +5,13 @@
 #include "engine/core/render/Material.h"
 #include "engine/core/render/mesh/Mesh.h"
 #include "engine/core/render/render/Renderable.h"
-#include "engine/core/scene/node.h"
+#include "engine/core/scene/render_node.h"
 
 namespace Echo
 {
-	class Gizmos : public Node
+	class Gizmos : public Render
 	{
-		ECHO_CLASS(Gizmos, Node)
+		ECHO_CLASS(Gizmos, Render)
 
 	public:
 		// vertex format
@@ -63,9 +63,6 @@ namespace Echo
 		void clear();
 
 	protected:
-		// get global uniforms
-		virtual void* getGlobalUniformValue(const String& name);
-
 		// update
 		virtual void update();
 

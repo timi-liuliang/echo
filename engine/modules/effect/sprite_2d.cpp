@@ -14,13 +14,13 @@ static const char* g_spriteDefaultMaterial = R"(<?xml version = "1.0" encoding =
 attribute vec3 a_Position;
 attribute vec2 a_UV;
 
-uniform mat4 u_WVPMatrix;
+uniform mat4 u_WorldViewProjMatrix;
 
 varying vec2 texCoord;
 
 void main(void)
 {
-	vec4 position = u_WVPMatrix * vec4(a_Position, 1.0);
+	vec4 position = u_WorldViewProjMatrix * vec4(a_Position, 1.0);
 	gl_Position = position;
 	
 	texCoord = a_UV;
@@ -159,10 +159,15 @@ namespace Echo
 	// update per frame
 	void Sprite2D::update()
 	{
-		if ( m_renderable)
+		if (isNeedRender())
 		{
-			m_matWVP = getWorldMatrix() * NodeTree::instance()->get2dCamera()->getViewProjMatrix();;
-			m_renderable->submitToRenderQueue();
+			if (m_renderable)
+			{
+				Render::update();
+
+				m_matWVP = getWorldMatrix() * NodeTree::instance()->get2dCamera()->getViewProjMatrix();;
+				m_renderable->submitToRenderQueue();
+			}
 		}
 	}
 
@@ -206,19 +211,6 @@ namespace Echo
 
 		m_mesh->updateIndices(indices.size(), indices.data());
 		m_mesh->updateVertexs(define, vertices.size(), (const Byte*)vertices.data(), m_localAABB);
-	}
-
-	// 获取全局变量值
-	void* Sprite2D::getGlobalUniformValue(const String& name)
-	{
-		void* value = Node::getGlobalUniformValue(name);
-		if (value)
-			return value;
-
-		if (name == "u_WVPMatrix")
-			return (void*)(&m_matWVP);
-
-		return nullptr;
 	}
 
 	void Sprite2D::clear()

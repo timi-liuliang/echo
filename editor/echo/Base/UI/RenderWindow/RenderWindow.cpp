@@ -1,7 +1,8 @@
 #include <QtGui>
 #include "RenderWindow.h"
 #include "EchoEngine.h"
-#include "DefaultInputController.h"
+#include "InputController2d.h"
+#include "InputController3d.h"
 #include <QDateTime>
 
 
@@ -12,8 +13,9 @@ namespace Studio
 		: QWidget(parent)
 		, m_mouseMenu(NULL)
 		, m_timer(NULL)
-		, m_inputController(NULL)
-		, m_defaultInputController(NULL)
+		, m_inputController(nullptr)
+		, m_inputController2d(nullptr)
+		, m_inputController3d(nullptr)
 		, m_isLeftButtonDown(false)
 	{
 		setAttribute(Qt::WA_NativeWindow);
@@ -27,7 +29,8 @@ namespace Studio
 		delete m_timer; m_timer = NULL;
 
 		EchoEngine::instance()->Release();
-		delete m_defaultInputController;
+		delete m_inputController2d;
+		delete m_inputController3d;
 	}
 
 	// 开始渲染
@@ -35,8 +38,13 @@ namespace Studio
 	{
 		EchoEngine::instance()->Initialize((HWND)this->winId());
 
-		if (!m_defaultInputController)
-			m_defaultInputController = new DefaultInputController; 
+		if (!m_inputController2d)
+			m_inputController2d = new InputController2d;
+
+		if (!m_inputController3d)
+			m_inputController3d = new InputController3d;
+
+		m_inputController = m_inputController2d;
 
 		// 时间事件
 		m_timer = new QTimer(this);
@@ -56,13 +64,12 @@ namespace Studio
 		DWORD curTime = QDateTime::currentMSecsSinceEpoch();
 		DWORD elapsedTime = curTime - lastTime;
 
-		auto controller = m_inputController ? m_inputController : m_defaultInputController;
-		auto pos = controller->mousePosition();
-		auto button = controller->pressedMouseButton();
+		auto pos = m_inputController->mousePosition();
+		auto button = m_inputController->pressedMouseButton();
 		auto elapsed = elapsedTime * 0.001f;
 		InputContext ctx(pos, button, elapsed);
 
-		controller->tick(ctx);
+		m_inputController->tick(ctx);
 
 		// Call the main render function
 		EchoEngine::instance()->Render(elapsedTime, this->isVisible());
@@ -98,8 +105,7 @@ namespace Studio
 	// 鼠标滚轮事件
 	void RenderWindow::wheelEvent(QWheelEvent * e)
 	{
-		auto controller = m_inputController ? m_inputController : m_defaultInputController;
-		controller->wheelEvent(e);
+		m_inputController->wheelEvent(e);
 	}
 
 	// 鼠标移动事件
@@ -117,8 +123,7 @@ namespace Studio
 			lastPos = e->localPos();
 		}
 
-		auto controller = m_inputController ? m_inputController : m_defaultInputController;
-		controller->mouseMoveEvent(e);
+		m_inputController->mouseMoveEvent(e);
 	}
 
 	// 鼠标按下事件
@@ -136,14 +141,12 @@ namespace Studio
 		}
 
 		// 注册控制器事件
-		auto controller = m_inputController ? m_inputController : m_defaultInputController;
-		controller->mousePressEvent(e);
+		m_inputController->mousePressEvent(e);
 	}
 
 	void RenderWindow::mouseDoubleClickEvent(QMouseEvent* e)
 	{
-		const auto& controller = m_inputController ? m_inputController : m_defaultInputController; 
-		controller->mouseDoubleClickEvent(e); 
+		m_inputController->mouseDoubleClickEvent(e);
 	}
 
 	// 鼠标释放事件
@@ -155,21 +158,18 @@ namespace Studio
 			m_isLeftButtonDown = false;
 		}
 
-		auto controller = m_inputController ? m_inputController : m_defaultInputController;
-		controller->mouseReleaseEvent(e);
+		m_inputController->mouseReleaseEvent(e);
 	}
 
 	// 鼠标按下事件
 	void RenderWindow::keyPressEvent(QKeyEvent* e)
 	{
-		auto controller = m_inputController ? m_inputController : m_defaultInputController;
-		controller->keyPressEvent(e);
+		m_inputController->keyPressEvent(e);
 	}
 
 	// 鼠标抬起事件
 	void RenderWindow::keyReleaseEvent(QKeyEvent* e)
 	{
-		auto controller = m_inputController ? m_inputController : m_defaultInputController;
-		controller->keyReleaseEvent(e);
+		m_inputController->keyReleaseEvent(e);
 	}
 }

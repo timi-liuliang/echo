@@ -177,6 +177,7 @@ namespace Studio
 	void EchoEngine::resizeBackGrid3d()
 	{	
 		m_gizmosNodeBackGrid->clear();
+		m_gizmosNodeBackGrid->set2d(false);
 
 		static int xOffsetBefore = 0.f;
 		static int zOffsetBefore = 0.f;
@@ -239,13 +240,14 @@ namespace Studio
 
 	void EchoEngine::resizeBackGrid2d()
 	{
-		Echo::i32 windowWidth = Echo::Engine::instance()->getProjectSettings()->getWindowWidth();
-		Echo::i32 windowHeight = Echo::Engine::instance()->getProjectSettings()->getWindowHeight();
+		Echo::i32 windowHalfWidth = Echo::Engine::instance()->getProjectSettings()->getWindowWidth() / 2;
+		Echo::i32 windowHalfHeight = Echo::Engine::instance()->getProjectSettings()->getWindowHeight() / 2;
 		m_gizmosNodeGrid2d->clear();
-		m_gizmosNodeGrid2d->drawLine(Echo::Vector3(0.0, 0.0, 0.0), Echo::Vector3(windowWidth, 0.0, 0.0), Echo::Color::BLUE);
-		m_gizmosNodeGrid2d->drawLine(Echo::Vector3(0.0, 0.0, 0.0), Echo::Vector3(0.0, windowHeight, 0.0), Echo::Color::BLUE);
-		m_gizmosNodeGrid2d->drawLine(Echo::Vector3(windowWidth, windowHeight, 0.0), Echo::Vector3(windowWidth, 0.0, 0.0), Echo::Color::BLUE);
-		m_gizmosNodeGrid2d->drawLine(Echo::Vector3(windowWidth, windowHeight, 0.0), Echo::Vector3(0.0, windowHeight, 0.0), Echo::Color::BLUE);
+		m_gizmosNodeGrid2d->set2d(true);
+		m_gizmosNodeGrid2d->drawLine(Echo::Vector3(-windowHalfWidth, -windowHalfHeight, 0.0), Echo::Vector3(windowHalfWidth, -windowHalfHeight, 0.0), Echo::Color::BLUE);
+		m_gizmosNodeGrid2d->drawLine(Echo::Vector3(-windowHalfWidth, -windowHalfHeight, 0.0), Echo::Vector3(-windowHalfWidth, windowHalfHeight, 0.0), Echo::Color::BLUE);
+		m_gizmosNodeGrid2d->drawLine(Echo::Vector3(windowHalfWidth, windowHalfHeight, 0.0), Echo::Vector3(windowHalfWidth, -windowHalfHeight, 0.0), Echo::Color::BLUE);
+		m_gizmosNodeGrid2d->drawLine(Echo::Vector3(windowHalfWidth, windowHalfHeight, 0.0), Echo::Vector3(-windowHalfWidth, windowHalfHeight, 0.0), Echo::Color::BLUE);
 	}
 
 	//设置显示或隐藏背景网格

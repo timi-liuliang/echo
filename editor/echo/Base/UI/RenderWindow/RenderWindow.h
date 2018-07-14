@@ -52,7 +52,11 @@ namespace Studio
 		void setInputController( IRWInputController* controller) { m_inputController = controller; }
 
 		// 获取输入控制器
-		IRWInputController* getInputController(){return m_inputController? m_inputController:m_defaultInputController; }
+		IRWInputController* getInputController(){return m_inputController; }
+
+		// switch controller
+		void switchToController2d() { m_inputController = m_inputController2d; }
+		void switchToController3d() { m_inputController = m_inputController3d; }
 
 	private slots:
 		// 渲染
@@ -66,7 +70,8 @@ namespace Studio
 		QTimer*					m_timer;					// 计时器
 		QMenu*					m_mouseMenu;				// 鼠标菜单
 		IRWInputController*		m_inputController;			// 输入控制器
-		IRWInputController*		m_defaultInputController;	// 默认输入控制器
+		IRWInputController*		m_inputController2d;		// 默认输入控制器
+		IRWInputController*		m_inputController3d;
 		bool					m_isLeftButtonDown;			// 鼠标左键是否按下
 		QSize					m_ratio;
 	};

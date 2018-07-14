@@ -120,9 +120,6 @@ namespace Echo
 		// build mesh data by drawables data
 		void buildMeshDataByDrawables(VertexArray& oVertices, IndiceArray& oIndices);
 
-		// get global uniforms
-		virtual void* getGlobalUniformValue(const String& name);
-
 		// clear
 		void clear();
 		void clearRenderable();
@@ -150,7 +147,5 @@ namespace Echo
 		MaterialPtr				m_material;			// Custom Material
 		MaterialPtr				m_materialDefault;
 		Renderable*				m_renderable;
-
-		Matrix4					m_matWVP;
 	};
 }

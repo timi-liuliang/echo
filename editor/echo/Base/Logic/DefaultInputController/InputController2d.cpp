@@ -1,4 +1,4 @@
-#include "DefaultInputController.h"
+#include "InputController2d.h"
 #include "EchoEngine.h"
 #include <QWheelEvent>
 #include <QMouseEvent>
@@ -10,7 +10,7 @@ namespace Studio
 	static const float kCameraRotationZScalar = 0.3f;
 	static const float kCameraRadiusScalar = 0.003f;
 
-	DefaultInputController::DefaultInputController()
+	InputController2d::InputController2d()
 		: m_mouseLButtonPressed(false)
 		, m_mouseMButtonPressed(false)
 		, m_mouseRButtonPressed(false)
@@ -49,9 +49,7 @@ namespace Studio
 		, m_preMode(OrthoCamMode::OCM_NONE)
 		, m_curMode(OrthoCamMode::OCM_NONE)
 	{
-		m_camera = Echo::NodeTree::instance()->get3dCamera();
-		m_camera->setNearClip(0.1f);
-		m_camera->setFarClip(250.f);
+		m_camera = Echo::NodeTree::instance()->get2dCamera();
 
 		// 初始化摄像机参数
 		InitializeCameraSettings();
@@ -61,12 +59,12 @@ namespace Studio
 
 	}
 
-	DefaultInputController::~DefaultInputController()
+	InputController2d::~InputController2d()
 	{
 	}
 
 	// 每帧更新
-	void DefaultInputController::tick(const InputContext& ctx)
+	void InputController2d::tick(const InputContext& ctx)
 	{
 		// 摄像机旋转更新
 		SmoothRotation(ctx.elapsedTime);
@@ -78,9 +76,9 @@ namespace Studio
 		if ( m_keyDDown ) 
 			cameraMoveDir.x += -1.f;
 		if ( m_keyWDown ) 
-			cameraMoveDir.z += 1.f;
+			cameraMoveDir.y += 1.f;
 		if ( m_keySDown && !m_keyCtrlDown) 
-			cameraMoveDir.z += -1.f;
+			cameraMoveDir.y += -1.f;
 
 		SetCameraMoveDir(cameraMoveDir);
 
@@ -89,13 +87,13 @@ namespace Studio
 	}
 
 	// 鼠标滚轮事件
-	void DefaultInputController::wheelEvent(QWheelEvent* e)
+	void InputController2d::wheelEvent(QWheelEvent* e)
 	{
 		CameraZoom(e->delta()  * -0.015f);
 	}
 
 	// 鼠标移动事件
-	void DefaultInputController::mouseMoveEvent(QMouseEvent* e)
+	void InputController2d::mouseMoveEvent(QMouseEvent* e)
 	{
 		QPointF posChanged = e->localPos() - m_pos;
 		if ( m_mouseRButtonPressed )
@@ -107,30 +105,30 @@ namespace Studio
 	}
 
 	// 鼠标按下事件
-	void DefaultInputController::mousePressEvent(QMouseEvent* e)
+	void InputController2d::mousePressEvent(QMouseEvent* e)
 	{
 		updateMouseButtonPressedStatus(e, true);
 	}
 
 	// 鼠标释放事件
-	void DefaultInputController::mouseReleaseEvent(QMouseEvent* e)
+	void InputController2d::mouseReleaseEvent(QMouseEvent* e)
 	{
 		updateMouseButtonPressedStatus(e, false);
 	}
 
 	// 鼠标按下事件
-	void DefaultInputController::keyPressEvent(QKeyEvent* e)
+	void InputController2d::keyPressEvent(QKeyEvent* e)
 	{
 		updateKeyPressedStatus(e, true);
 	}
 
 	// 鼠标抬起事件
-	void DefaultInputController::keyReleaseEvent(QKeyEvent* e)
+	void InputController2d::keyReleaseEvent(QKeyEvent* e)
 	{
 		updateKeyPressedStatus(e, false);
 	}
 
-	void DefaultInputController::updateMouseButtonPressedStatus(QMouseEvent* e, bool pressed)
+	void InputController2d::updateMouseButtonPressedStatus(QMouseEvent* e, bool pressed)
 	{
 		if ( e->button() == Qt::LeftButton )
 		{
@@ -147,7 +145,7 @@ namespace Studio
 		m_pos = e->localPos();
 	}
 
-	void DefaultInputController::updateKeyPressedStatus(QKeyEvent* e, bool pressed)
+	void InputController2d::updateKeyPressedStatus(QKeyEvent* e, bool pressed)
 	{
 		switch ( e->key() )
 		{
@@ -165,7 +163,7 @@ namespace Studio
 	}
 
 	// 鼠标按键
-	Qt::MouseButton DefaultInputController::pressedMouseButton()
+	Qt::MouseButton InputController2d::pressedMouseButton()
 	{
 		if ( m_mouseLButtonPressed )
 		{
@@ -186,12 +184,12 @@ namespace Studio
 	}
 
 	// 鼠标位置
-	QPointF DefaultInputController::mousePosition()
+	QPointF InputController2d::mousePosition()
 	{
 		return m_pos;
 	}
 
-	void DefaultInputController::switchToOrthoCam(OrthoCamMode destMode, Echo::Vector3 pos)
+	void InputController2d::switchToOrthoCam(OrthoCamMode destMode, Echo::Vector3 pos)
 	{
 		m_preMode = m_curMode;
 		m_curMode = destMode;
@@ -235,7 +233,7 @@ namespace Studio
 		UpdateOrthoCamModeWH(m_curMode);
 	}
 
-	void DefaultInputController::updateOrthoCamPos(OrthoCamMode mode)
+	void InputController2d::updateOrthoCamPos(OrthoCamMode mode)
 	{
 		Echo::Camera* mainCamera = Echo::NodeTree::instance()->get3dCamera();
 		if (mode == OrthoCamMode::OCM_TOP)
@@ -260,7 +258,7 @@ namespace Studio
 		}
 	}
 
-	void DefaultInputController::resetPerspectiveCamera()
+	void InputController2d::resetPerspectiveCamera()
 	{
 		m_preMode = m_curMode;
 		m_curMode = OrthoCamMode::OCM_NONE;
@@ -270,7 +268,7 @@ namespace Studio
 		mainCamera->setProjectionMode(Echo::Camera::PM_PERSPECTIVE);
 	}
 
-	float DefaultInputController::getOrthoCamDis(OrthoCamMode mode)
+	float InputController2d::getOrthoCamDis(OrthoCamMode mode)
 	{
 		if (mode == OrthoCamMode::OCM_TOP)
 		{
@@ -288,7 +286,7 @@ namespace Studio
 		return 0.f;
 	}
 
-	void DefaultInputController::setOrthoCamDis(OrthoCamMode mode, float dis)
+	void InputController2d::setOrthoCamDis(OrthoCamMode mode, float dis)
 	{
 		if (mode == OrthoCamMode::OCM_TOP)
 		{
@@ -304,7 +302,7 @@ namespace Studio
 		}
 	}
 
-	void DefaultInputController::UpdateOrthoCamModeWH(OrthoCamMode mode)
+	void InputController2d::UpdateOrthoCamModeWH(OrthoCamMode mode)
 	{
 		float dis = 0.0f;
 		if (mode == OrthoCamMode::OCM_TOP)
@@ -336,56 +334,56 @@ namespace Studio
 	}
 
 	//设置相机操作模式
-	void DefaultInputController::SetCameraOperateMode(int mode)
+	void InputController2d::SetCameraOperateMode(int mode)
 	{
 		m_cameraOperateMode = mode;
 	}
 
 	//返回当前相机操作模式
-	int DefaultInputController::GetCameraOperateMode()
+	int InputController2d::GetCameraOperateMode()
 	{
 		return m_cameraOperateMode;
 	}
 
 	//
-	void DefaultInputController::onSizeCamera(unsigned int width, unsigned int height)
+	void InputController2d::onSizeCamera(unsigned int width, unsigned int height)
 	{
 	}
 
 	//
-	void DefaultInputController::onAdaptCamera()
+	void InputController2d::onAdaptCamera()
 	{
 		AdaptCamera();
 	}
 
-	void DefaultInputController::onInitCameraSettings(float offsetdir /* = 0 */)
+	void InputController2d::onInitCameraSettings(float offsetdir /* = 0 */)
 	{
 		InitializeCameraSettings(offsetdir);
 	}
 
 	// 初始化摄像机参数
-	void DefaultInputController::InitializeCameraSettings(float diroffset)
+	void InputController2d::InitializeCameraSettings(float diroffset)
 	{
 		m_cameraRadius = diroffset;
 	}
 
 	// 摄像机更新
-	void DefaultInputController::UpdateCamera(float elapsedTime)
+	void InputController2d::UpdateCamera(float elapsedTime)
 	{
 		if (m_bNeedUpdateCamera)
 		{
 			m_cameraLookAt += m_cameraMoveDir * elapsedTime;
 
 			m_cameraForward.normalize();
-			m_cameraPositon = m_cameraLookAt - m_cameraForward * m_cameraRadius;
+			//m_cameraPositon = m_cameraLookAt - m_cameraForward * m_cameraRadius;
 
 			m_camera->setPosition(m_cameraPositon);
-			m_camera->setDirection(m_cameraLookAt-m_cameraPositon);
+			m_camera->setDirection(Echo::Vector3::NEG_UNIT_Z);
 		}
 	}
 
 	// 适应模型
-	void DefaultInputController::CameraZoom(const Echo::AABB& box, float scale)
+	void InputController2d::CameraZoom(const Echo::AABB& box, float scale)
 	{
 		float         radius = (box.getSize().len() * 0.5f);
 		Echo::Vector3 center = ((box.vMin + box.vMax) * 0.5f);
@@ -397,7 +395,7 @@ namespace Studio
 	}
 
 	// 平移摄像机
-	void DefaultInputController::SetCameraMoveDir(const Echo::Vector3& dir)
+	void InputController2d::SetCameraMoveDir(const Echo::Vector3& dir)
 	{
 		Echo::Vector3 forward = m_cameraForward; forward.y = 0.f;
 		forward.normalize();
@@ -410,7 +408,7 @@ namespace Studio
 		m_cameraMoveDir *= 5.f;
 	}
 
-	void DefaultInputController::SetCameraMoveDir(const Echo::Vector3& dir, Echo::Vector3 forward)
+	void InputController2d::SetCameraMoveDir(const Echo::Vector3& dir, Echo::Vector3 forward)
 	{
 		Echo::Vector3 tempForward = forward;
 		tempForward.y = 0.f;
@@ -423,7 +421,7 @@ namespace Studio
 	}
 
 	// 操作摄像机
-	void DefaultInputController::CameraZoom(float zValue)
+	void InputController2d::CameraZoom(float zValue)
 	{
 		float newRadius = m_cameraRadius + zValue;
 		if (newRadius * m_cameraRadius > 0.0f)
@@ -437,7 +435,7 @@ namespace Studio
 	}
 
 	// 旋转摄像机(平滑处理)
-	void DefaultInputController::SmoothRotation(float elapsedTime)
+	void InputController2d::SmoothRotation(float elapsedTime)
 	{
 		float diffHorizonAngle = m_horizonAngleGoal - m_horizonAngle;
 		float diffVerticleAngle = m_verticleAngleGoal - m_verticleAngle;
@@ -468,7 +466,7 @@ namespace Studio
 	}
 
 	// 旋转摄像机
-	void DefaultInputController::RotationCamera(float xValue, float yValue)
+	void InputController2d::RotationCamera(float xValue, float yValue)
 	{
 		if ( !xValue && !yValue )
 			return;
@@ -482,13 +480,13 @@ namespace Studio
 	}
 
 	// 添加屏幕偏移
-	void DefaultInputController::AddScreenOffset(float xOffset, float yOffset)
+	void InputController2d::AddScreenOffset(float xOffset, float yOffset)
 	{
 		m_xOffset += xOffset;
 		m_yOffset += yOffset;
 	}
 
-	void DefaultInputController::AdaptCamera()
+	void InputController2d::AdaptCamera()
 	{
 		Echo::Vector3 defaultPos = Echo::Vector3(0,10,10);
 		Echo::Vector3 defaultDir = Echo::Vector3(0,-1,-1);
@@ -507,13 +505,13 @@ namespace Studio
 		m_camera->setDirection(m_cameraLookAt-m_cameraPositon);
 	}
 
-	void DefaultInputController::UpdateCameraInfo()
+	void InputController2d::UpdateCameraInfo()
 	{
 		m_camera->setPosition(m_cameraPositon);
 		m_camera->setPosition(m_cameraLookAt-m_cameraPositon);
 	}
 
-	bool DefaultInputController::isCameraMoving() const
+	bool InputController2d::isCameraMoving() const
 	{
 		return m_keyADown ||
 			m_keyWDown ||
@@ -523,7 +521,7 @@ namespace Studio
 			m_keyEDown;
 	}
 
-	void DefaultInputController::rotateCameraAtPos(float xValue, float yValue, const Echo::Vector3& rotCenter)
+	void InputController2d::rotateCameraAtPos(float xValue, float yValue, const Echo::Vector3& rotCenter)
 	{
 		Echo::Vector3 rotVec = m_cameraPositon - rotCenter;
 		Echo::Vector3 forward = m_cameraForward;

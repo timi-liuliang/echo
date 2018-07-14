@@ -15,13 +15,13 @@ static const char* g_live2dDefaultMaterial = R"(
 attribute vec3 a_Position;
 attribute vec2 a_UV;
 
-uniform mat4 u_WVPMatrix;
+uniform mat4 u_WorldViewProjMatrix;
 
 varying vec2 texCoord;
 
 void main(void)
 {
-	vec4 position = u_WVPMatrix * vec4(a_Position, 1.0);
+	vec4 position = u_WorldViewProjMatrix * vec4(a_Position, 1.0);
 	gl_Position = position;
 
 	texCoord = a_UV;
@@ -334,10 +334,10 @@ namespace Echo
 	{
 		if (isNeedRender())
 		{
+			Render::update();
+
 			if (m_model && m_renderable)
 			{
-				m_matWVP = getWorldMatrix() * NodeTree::instance()->get2dCamera()->getViewProjMatrix();;
-
 				if (m_curMotion)
 				{
 					m_curMotion->tick(Engine::instance()->getFrameTime(), m_model, m_table);
@@ -383,19 +383,6 @@ namespace Echo
 
 		m_mesh->updateIndices(indices.size(), indices.data());
 		m_mesh->updateVertexs( define, vertices.size(), (const Byte*)vertices.data(), m_localAABB);
-	}
-
-	// 获取全局变量值
-	void* Live2dCubism::getGlobalUniformValue(const String& name)
-	{
-		void* value = Node::getGlobalUniformValue(name);
-		if (value)
-			return value;
-
-		if (name == "u_WVPMatrix")
-			return (void*)(&m_matWVP);
-
-		return nullptr;
 	}
 
 	void Live2dCubism::clear()

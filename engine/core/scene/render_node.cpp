@@ -29,4 +29,39 @@ namespace Echo
 		return true;
 #endif
 	}
+
+	// update
+	void Render::update()
+	{
+		Camera* camera = is2d() ? NodeTree::instance()->get2dCamera() : NodeTree::instance()->get3dCamera();
+		if (camera)
+		{
+			m_matWVP = getWorldMatrix() * camera->getViewProjMatrix();;
+		}
+	}
+
+	// get global uniforms
+	void* Render::getGlobalUniformValue(const String& name)
+	{
+		void* value = Node::getGlobalUniformValue(name);
+		if (value)
+			return value;
+
+		Camera* camera = is2d() ? NodeTree::instance()->get2dCamera() : NodeTree::instance()->get3dCamera();
+		if (camera)
+		{
+			if (name == "u_WorldViewProjMatrix")
+				return (void*)(&m_matWVP);
+			else if (name == "u_ViewProjMatrix")
+				return (void*)(&camera->getViewProjMatrix());
+			else if (name == "u_CameraPosition")
+				return (void*)(&camera->getPosition());
+			else if (name == "u_CameraNear")
+				return (void*)(&camera->getNearClip());
+			else if (name == "u_CameraFar")
+				return (void*)(&camera->getFarClip());
+		}
+
+		return nullptr;
+	}
 }

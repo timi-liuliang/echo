@@ -23,7 +23,15 @@ namespace Echo
 		bool is2d() const { return m_is2d; }
 
 	protected:
-		static i32	m_renderTypes;
-		bool		m_is2d;
+		// update
+		virtual void update();
+
+		// get global uniforms
+		virtual void* getGlobalUniformValue(const String& name);
+
+	protected:
+		static i32		m_renderTypes;
+		bool			m_is2d;
+		Matrix4			m_matWVP;
 	};
 }
