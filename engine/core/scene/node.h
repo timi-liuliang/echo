@@ -70,7 +70,8 @@ namespace Echo
 		void setWorldOrientation(const Quaternion& ort);
 		void setWorldPosition(const Vector3& pos);
 
-		void update(float delta, bool bUpdateChildren = false);
+		// update recursive
+		virtual void update(float delta, bool bUpdateChildren = false);
 
 		const Vector3& getLocalScaling() const;
 		const Quaternion& getLocalOrientation() const;
@@ -113,7 +114,7 @@ namespace Echo
 		static Node* instanceNodeTree(void* pugiNode, Node* parent);
 
 	protected:
-		inline void		needUpdate();
+		void needUpdate();
 
 		virtual void update() {}
 

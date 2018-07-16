@@ -95,8 +95,6 @@ namespace Echo
 	{
 		if (isNeedRender())
 		{
-			Render::update();
-
 			buildRenderable();
 			if (m_renderable)
 				m_renderable->submitToRenderQueue();

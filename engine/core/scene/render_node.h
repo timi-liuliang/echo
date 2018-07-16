@@ -22,10 +22,9 @@ namespace Echo
 		void set2d(bool is2d) { m_is2d = is2d; }
 		bool is2d() const { return m_is2d; }
 
-	protected:
-		// update
-		virtual void update();
+		virtual void update(float delta, bool bUpdateChildren);
 
+	protected:
 		// get global uniforms
 		virtual void* getGlobalUniformValue(const String& name);
 

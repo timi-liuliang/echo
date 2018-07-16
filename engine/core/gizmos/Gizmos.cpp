@@ -162,8 +162,6 @@ namespace Echo
 	{
 		if (isNeedRender())
 		{
-			Render::update();
-
 			m_lineBatch->update();
 		}
 	}

@@ -112,8 +112,6 @@ namespace Echo
 		{
 			float delta = Engine::instance()->getFrameTime();
 
-			Render::update();
-
 			if (m_spSkeleton && m_spAnimState)
 			{
 				spSkeleton_update(m_spSkeleton, delta);

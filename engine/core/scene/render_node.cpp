@@ -30,9 +30,14 @@ namespace Echo
 #endif
 	}
 
-	// update
-	void Render::update()
+	void Render::update(float delta, bool bUpdateChildren)
 	{
+		if (!m_isEnable)
+			return;
+
+		Node::update(delta, bUpdateChildren);
+
+		// update world view project matrix
 		Camera* camera = is2d() ? NodeTree::instance()->get2dCamera() : NodeTree::instance()->get3dCamera();
 		if (camera)
 		{

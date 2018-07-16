@@ -163,8 +163,6 @@ namespace Echo
 		{
 			if (m_renderable)
 			{
-				Render::update();
-
 				m_matWVP = getWorldMatrix() * NodeTree::instance()->get2dCamera()->getViewProjMatrix();;
 				m_renderable->submitToRenderQueue();
 			}

@@ -334,8 +334,6 @@ namespace Echo
 	{
 		if (isNeedRender())
 		{
-			Render::update();
-
 			if (m_model && m_renderable)
 			{
 				if (m_curMotion)
