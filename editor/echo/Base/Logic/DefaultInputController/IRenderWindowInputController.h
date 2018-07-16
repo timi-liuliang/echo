@@ -77,9 +77,6 @@ namespace Studio
 		// 相机自适应
 		virtual void onAdaptCamera() = 0; 
 
-		// 手动初始化摄像机参数
-		virtual void onInitCameraSettings(float offsetdir) = 0;
-
 		// 适应模型
 		virtual void CameraZoom(const Echo::AABB& box, float scale){}
 	};

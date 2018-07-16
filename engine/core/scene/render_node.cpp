@@ -10,7 +10,7 @@ namespace Echo
 		CLASS_BIND_METHOD(Render, set2d, DEF_METHOD("set2d"));
 		CLASS_BIND_METHOD(Render, is2d, DEF_METHOD("is2d"));
 
-		CLASS_REGISTER_PROPERTY(Render, "2D", Variant::Type::Bool, "is2d", "set2d");
+		CLASS_REGISTER_PROPERTY(Render, "Is2D", Variant::Type::Bool, "is2d", "set2d");
 	}
 
 	bool Render::isNeedRender() const

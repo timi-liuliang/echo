@@ -18,6 +18,7 @@ namespace Echo
 		, m_primitiveIdx(-1)
 		, m_material(nullptr)
 	{
+		set2d(false);
 	}
 
 	GltfMesh::~GltfMesh()

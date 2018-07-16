@@ -70,9 +70,6 @@ namespace Studio
 		// 修正摄像机
 		virtual void onAdaptCamera() override;
 
-		// 手动初始化摄像机参数
-		virtual void onInitCameraSettings(float offsetdir) override;
-
 		// 适应模型
 		virtual void CameraZoom(const Echo::AABB& box, float scale);
 
@@ -101,12 +98,6 @@ namespace Studio
 		void SetHorizonAngleGoal(const float angle) { m_horizonAngleGoal = angle; }
 		const float GetHorizonAngleGoal() const { return m_horizonAngleGoal; }
 
-		void SetXOffset(const float offset) { m_xOffset = offset; }
-		const float GetXOffset() const { return m_xOffset; }
-
-		void SetYOffset(const float offset) { m_yOffset = offset; }
-		const float GetYOffset() const { return m_yOffset; }
-
 		// 获取摄像机半径（即摄像机与主角距离）
 		float GetCameraRadius() { return m_cameraRadius; }
 
@@ -127,9 +118,6 @@ namespace Studio
 		void updateOrthoCamPos(OrthoCamMode mode);
 
 	protected:
-		// 初始化摄像机参数
-		void InitializeCameraSettings(float offsetdir = 5);
-
 		// 摄像机更新
 		void UpdateCamera(float elapsedTime);
 
@@ -143,9 +131,6 @@ namespace Studio
 
 		// 旋转摄像机
 		void RotationCamera(float xValue, float yValue);
-
-		// 添加屏幕偏移
-		void AddScreenOffset(float xOffset, float yOffset);
 
 		// 摄像机自适应
 		void AdaptCamera();
@@ -190,8 +175,6 @@ namespace Studio
 		float				m_verticleAngle;	// 垂直旋转角度(顺时针)
 		float				m_horizonAngleGoal;	// 目标水平旋转角度
 		float				m_verticleAngleGoal;// 目标垂直旋转角度
-		float				m_xOffset;			// X方向偏移
-		float				m_yOffset;			// Y方向偏移
 
 		bool				m_bNeedUpdateCamera;// 是否需要更新相机位置
 

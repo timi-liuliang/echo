@@ -25,17 +25,14 @@ namespace Studio
 		, m_keyShiftDown(false)
 		, m_cameraOperateMode(1)
 		, m_camera(NULL)
-		, m_cameraRadius(5.f)
+		, m_cameraRadius(8.f)
 		, m_cameraLookAt(Echo::Vector3::ZERO)
 		, m_cameraMoveDir(Echo::Vector3::UNIT_X)
-		, m_cameraForward(-Echo::Vector3::UNIT_Z)
 		, m_cameraPositon(Echo::Vector3::ZERO)
 		, m_horizonAngle(-Echo::Math::PI_DIV2)
 		, m_verticleAngle(Echo::Math::PI_DIV2)
 		, m_horizonAngleGoal(-Echo::Math::PI_DIV2)
  		, m_verticleAngleGoal(Echo::Math::PI_DIV2)
- 		, m_xOffset(0.f)
- 		, m_yOffset(0.f)
 		, m_bNeedUpdateCamera(true)
 		, m_orthoTopCamRot(-Echo::Vector3::UNIT_Y)
 		, m_orthoFrontCamRot(-Echo::Vector3::UNIT_Z)
@@ -49,16 +46,17 @@ namespace Studio
 		, m_preMode(OrthoCamMode::OCM_NONE)
 		, m_curMode(OrthoCamMode::OCM_NONE)
 	{
+		m_cameraForward = Echo::Vector3( 0.f, -1.f, -1.f);
+		m_cameraForward.normalize();
+		m_cameraForward.toHVAngle(m_horizonAngleGoal, m_verticleAngleGoal);
+		m_cameraForward.toHVAngle(m_horizonAngle, m_verticleAngle);
+
 		m_camera = Echo::NodeTree::instance()->get3dCamera();
 		m_camera->setNearClip(0.1f);
 		m_camera->setFarClip(250.f);
 
-		// 初始化摄像机参数
-		InitializeCameraSettings();
-
 		m_orthoTopCamRot.z -= 0.01f;
 		m_orthoTopCamRot.normalize();
-
 	}
 
 	InputController3d::~InputController3d()
@@ -358,17 +356,6 @@ namespace Studio
 		AdaptCamera();
 	}
 
-	void InputController3d::onInitCameraSettings(float offsetdir /* = 0 */)
-	{
-		InitializeCameraSettings(offsetdir);
-	}
-
-	// 初始化摄像机参数
-	void InputController3d::InitializeCameraSettings(float diroffset)
-	{
-		m_cameraRadius = diroffset;
-	}
-
 	// 摄像机更新
 	void InputController3d::UpdateCamera(float elapsedTime)
 	{
@@ -392,8 +379,6 @@ namespace Studio
 		m_cameraRadius = radius * scale;
 		m_cameraLookAt = center;
 		m_cameraPositon = m_cameraLookAt - m_cameraForward * m_cameraRadius;
-
-		AddScreenOffset(-m_xOffset, -m_yOffset);
 	}
 
 	// 平移摄像机
@@ -479,13 +464,6 @@ namespace Studio
 		m_verticleAngleGoal = min(m_verticleAngleGoal, Echo::Math::PI - 0.01f);
 		m_verticleAngleGoal = max(m_verticleAngleGoal, 0.01f);
 		
-	}
-
-	// 添加屏幕偏移
-	void InputController3d::AddScreenOffset(float xOffset, float yOffset)
-	{
-		m_xOffset += xOffset;
-		m_yOffset += yOffset;
 	}
 
 	void InputController3d::AdaptCamera()

@@ -201,11 +201,6 @@ namespace Studio
 		AdaptCamera();
 	}
 
-	void InputController2d::onInitCameraSettings(float offsetdir /* = 0 */)
-	{
-		InitializeCameraSettings(offsetdir);
-	}
-
 	// 初始化摄像机参数
 	void InputController2d::InitializeCameraSettings(float diroffset)
 	{

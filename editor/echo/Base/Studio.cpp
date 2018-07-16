@@ -279,7 +279,7 @@ namespace Studio
 	// ÖØÖÃÉãÏñ»ú
 	void AStudio::resetCamera(float diroffset)
 	{
-		auto* renderWindow = static_cast<RenderWindow*>(getRenderWindow());
-		renderWindow->getInputController()->onInitCameraSettings(diroffset);
+		//auto* renderWindow = static_cast<RenderWindow*>(getRenderWindow());
+		//renderWindow->getInputController()->onInitCameraSettings(diroffset);
 	}
 }
