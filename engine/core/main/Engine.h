@@ -14,17 +14,13 @@ namespace Echo
 		// 配置
 		struct Config
 		{
-			String				m_projectFile;
-			int					m_AudiomaxVoribsCodecs;
-			bool				m_AudioLoadDecompresse;
-			bool				m_isEnableProfiler;			// 是否开启性能分析服务
-			unsigned int		m_windowHandle;
-			bool				m_isGame;
+			String			m_projectFile;
+			bool			m_isEnableProfiler;			// 是否开启性能分析服务
+			unsigned int	m_windowHandle;
+			bool			m_isGame;
 
 			Config()
 				: m_projectFile("")
-				, m_AudiomaxVoribsCodecs(32)
-				, m_AudioLoadDecompresse(false)
 				, m_isEnableProfiler(false)
 				, m_isGame(true)
 			{}
@@ -36,6 +32,7 @@ namespace Echo
 
 		void tick(i32 elapsedTime);
 
+		// get frame time
 		float getFrameTime() { return m_frameTime; }
 
 		// 是否已初始化
@@ -44,8 +41,6 @@ namespace Echo
 		// 装载日志系统
 		bool initLogSystem();
 		bool initialize(const Config& cfg);
-		bool initRenderer(Renderer* pRenderer, const Renderer::RenderCfg& config);
-		bool onRendererInited();
 
 		// screen size changed
 		bool onSize(ui32 width, ui32 height);
@@ -64,18 +59,15 @@ namespace Echo
 		void setUserPath(const String& strPath);
 
 		bool isRendererInited() const;
-		const ui32&		getCurrentTime() const;
+		const ui32&	getCurrentTime() const;
 
-		FrameState&		frameState() { return m_frameState; }
-
+		// frame state
+		FrameState&	frameState() { return m_frameState; }
 		const FrameState& frameState() const { return m_frameState; }
-
 		void resetFrameState() { m_frameState.reset(); }
 
 		// 加载项目,引擎初始化时会自动调用，也可单独调用(全路径)
 		void loadProject( const char* projectFile);
-        
-        void loadAllBankFile();
 
 		// 当游戏挂起时候引擎需要进行的处理
 		void onPlatformSuspend();
@@ -94,8 +86,11 @@ namespace Echo
 		ProjectSettings* getProjectSettings() { return m_projectSettings.ptr(); }
 
 	protected:
-		bool render();
 		void loadLaunchScene();
+
+		// initialize
+		bool initRenderer(Renderer* pRenderer, const Renderer::RenderCfg& config);
+		bool onRendererInited();
 
 	private:
 		bool				m_isInited;				// 是否已初始化

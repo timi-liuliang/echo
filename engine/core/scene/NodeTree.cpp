@@ -71,7 +71,7 @@ namespace Echo
 		// update 3d camera
 		m_2dCamera->update();
 		m_3dCamera->update();
-
+		
 		// update nodes
 		m_invisibleRoot.update(elapsedTime, true);
 

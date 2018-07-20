@@ -4,10 +4,10 @@
 
 namespace Echo
 {
-	class Box2DModule : public Module
+	class AudioModule : public Module
 	{
 	public:
-		Box2DModule();
+		AudioModule();
 
 		// register all types of the module
 		virtual void registerTypes();

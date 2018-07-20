@@ -24,4 +24,16 @@ namespace Echo
 			}
 		}
 	}
+
+	// update all modules every frame(ms)
+	void Module::updateAll(float elapsedTime)
+	{
+		if (g_modules)
+		{
+			for (Module* module : *g_modules)
+			{
+				module->update(elapsedTime);
+			}
+		}
+	}
 }

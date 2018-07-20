@@ -12,7 +12,6 @@
 #include "engine/core/render/render/Viewport.h"
 #include "Engine/core/Render/Material.h"
 #include "ProjectSettings.h"
-#include "Engine/modules/Audio/FMODStudio/FSAudioManager.h"
 #include "engine/core/script/lua/LuaEx.h"
 #include "engine/core/script/lua/register_core_to_lua.cxx"
 #include "engine/core/script/lua/LuaBinder.h"
@@ -109,10 +108,6 @@ namespace Echo
 
 		// 加载项目文件
 		loadProject(cfg.m_projectFile.c_str());
-		
-		// 音频管理器
-		FSAudioManager::instance()->init(cfg.m_AudiomaxVoribsCodecs,cfg.m_AudioLoadDecompresse);
-		loadAllBankFile();
 
 		// init render
 		Renderer* renderer = nullptr;
@@ -187,11 +182,6 @@ namespace Echo
 			EchoLogError("Not found project file [%s], initialise Echo Engine failed.", projectFile);
 		}
 	}
-	
-	void Engine::loadAllBankFile()
-	{
-		FSAudioManager::instance()->loadAllBankFile();
-	}
 
 	// 初始化渲染器
 	bool Engine::initRenderer(Renderer* pRenderer, const Renderer::RenderCfg& config)
@@ -228,13 +218,11 @@ namespace Echo
 	// 当游戏挂起时候引擎需要进行的处理
 	void Engine::onPlatformSuspend()
 	{
-		FSAudioManager::instance()->suspendFmodSystem();
 	}
 
 	// 当游戏从挂起中恢复时引擎需要进行的处理
 	void Engine::onPlatformResume()
 	{
-		FSAudioManager::instance()->resumeFmodSystem();
 	}
 
 	// 渲染初始化
@@ -287,25 +275,17 @@ namespace Echo
 		return true;
 	}
 
-	// 游戏销毁
 	void Engine::destroy()
 	{
-		// 场景管理器
+		// destory manager
 		EchoSafeDeleteInstance(NodeTree);
-
-		// 音频管理器
-		FSAudioManager::instance()->release();
-
-		EchoSafeDeleteInstance(FSAudioManager);	
 		EchoSafeDeleteInstance(ImageCodecMgr);
 		EchoSafeDeleteInstance(IO);
-		EchoSafeDeleteInstance(Time);
-		
+		EchoSafeDeleteInstance(Time);	
+		EchoSafeDeleteInstance(RenderTargetManager);
 		EchoLogInfo("Echo Engine has been shutdown.");
 		
-		EchoSafeDeleteInstance(RenderTargetManager);
-		
-		// 渲染器
+		// destory render
 		if (m_renderer)
 		{
 			m_renderer->destroy();
@@ -313,6 +293,7 @@ namespace Echo
 			EchoLogInfo("Echo Renderer has been shutdown.");
 		}
 
+		// destory other
 		EchoSafeDeleteInstance(LogManager);
 		LuaBinder::destroy();
 		luaex::LuaEx::instance()->destroy();
@@ -349,27 +330,19 @@ namespace Echo
 	// 每帧更新
 	void Engine::tick(i32 elapsedTime)
 	{
+		// calculate time
 		elapsedTime = Math::Clamp( elapsedTime, 0, 1000);
 		m_frameTime = elapsedTime * 0.001f;
-
 		m_currentTime = Time::instance()->getMilliseconds();
 
-		// 声音更新
-		FSAudioManager::instance()->tick(static_cast<ui32>(elapsedTime));
+		// update logic
+		Module::updateAll(elapsedTime);
 		NodeTree::instance()->update(elapsedTime*0.001f);
 
-		// 渲染
-		render();
+		// render
+		RenderStage::instance()->process();
 
 		// present to screen
 		Renderer::instance()->present();
-	}
-
-	// 渲染场景
-	bool Engine::render()
-	{
-		RenderStage::instance()->process();
-
-		return true;
 	}
 }

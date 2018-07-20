@@ -9,11 +9,16 @@ namespace Echo
 
 		virtual void registerTypes()=0;
 
+		virtual void update(float elapsedTime) {}
+
 	public:
 		static void addModule(Module* module);
 
 		// register all module types
 		static void registerAllTypes();
+
+		// update all modules every frame(ms)
+		static void updateAll(float elapsedTime);
 	};
 
 	template<typename T>

@@ -129,7 +129,7 @@ ELSEIF(CMAKE_SIZEOF_VOID_P EQUAL 8)
 	TARGET_LINK_LIBRARIES(${MODULE_NAME} fmod64_vc.lib fmodstudio64_vc.lib)
 ENDIF()
 TARGET_LINK_LIBRARIES(${MODULE_NAME} Qt5::Core Qt5::Widgets Qt5::UiTools)
-TARGET_LINK_LIBRARIES(${MODULE_NAME} Live2DCubismCore.lib pugixml spine)
+TARGET_LINK_LIBRARIES(${MODULE_NAME} Live2DCubismCore.lib pugixml spine box2d)
 
 # 性能分析服务
 IF(ECHO_PROFILER)
