@@ -25,7 +25,7 @@ namespace Echo
 	Spine::Spine()
 		: m_spinRes("", ".json")
 		, m_atlasRes("", ".atlas")
-		, m_animations("", nullptr)
+		, m_animations("")
 		, m_spSkeletonData(nullptr)
 		, m_spSkeleton(nullptr)
 		, m_spAnimState(nullptr)

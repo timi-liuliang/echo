@@ -110,7 +110,7 @@ namespace Echo
 		case Type::String: { m_type = Type::String; m_any = str; } return true;
 		case Type::Vector3: { m_type = Type::Vector3; m_vec3 = StringUtil::ParseVec3(str); }return true;
 		case Type::ResourcePath: { m_type = Type::ResourcePath; m_any = ResourcePath(str, nullptr); }return true;
-		case Type::StringOption: { m_type = Type::StringOption; m_any = StringOption(str, nullptr); } return true;
+		case Type::StringOption: { m_type = Type::StringOption; m_any = StringOption(str); } return true;
 		case Type::Object: { m_type = Type::Object; m_obj = Object::getById(StringUtil::ParseI32(str)); } return true;
 		}
 

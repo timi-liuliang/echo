@@ -74,11 +74,8 @@ namespace Echo
 		, m_shaderPath("", ".shader")
 		, m_shaderProgramRes(NULL)
 		, m_shaderContent(nullptr)
-		, m_renderStage("", nullptr)
+		, m_renderStage("Opaque", { "Opaque", "Transparent" })
 	{
-		m_renderStage.addOption("Opaque");
-		m_renderStage.addOption("Transparent");
-		m_renderStage.setValue("Opaque");
 	}
 
 	// 构造函数
@@ -88,11 +85,8 @@ namespace Echo
 		, m_shaderPath("", ".shader")
 		, m_shaderProgramRes(NULL)
 		, m_shaderContent(nullptr)
-		, m_renderStage("", nullptr)
+		, m_renderStage("Opaque", { "Opaque", "Transparent" })
 	{
-		m_renderStage.addOption("Opaque");
-		m_renderStage.addOption("Transparent");
-		m_renderStage.setValue("Opaque");
 	}
 
 	// 析构函数

@@ -82,7 +82,6 @@ namespace Echo
 		void setShaderContent(const char* content);
 		const ResourcePath& getShaderPath() const { return m_shaderPath; }
 
-
 		// ½×¶ÎÏà¹Øº¯Êý
 		const StringOption& getRenderStage() { return m_renderStage; }
 		void setRenderStage(const StringOption& stage) { m_renderStage.setValue(stage.getValue()); }

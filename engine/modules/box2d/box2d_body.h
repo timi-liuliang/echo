@@ -13,11 +13,18 @@ namespace Echo
 		Box2DBody();
 		~Box2DBody();
 
+		// get type
+		const StringOption& getType() { return m_type; }
+
+		// set type
+		void setType(const StringOption& type) { m_type.setValue(type.getValue()); }
+
 	protected:
 		// update
 		virtual void update();
 
 	private:
 		b2Body*			m_body;
+		StringOption	m_type;
 	};
 }

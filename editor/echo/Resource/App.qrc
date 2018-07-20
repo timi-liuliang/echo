@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/icon">
+    <file>node/box2dbody.png</file>
     <file>node/render.png</file>
     <file>node/gizmos.png</file>
     <file>Icon/project/save.png</file>

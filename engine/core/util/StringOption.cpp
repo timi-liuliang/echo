@@ -4,30 +4,37 @@ namespace Echo
 {
 	StringOption::StringOption(const char* value)
 	{
-		setValue(value);
+		if (strlen(value))
+		{
+			addOption(value);
+			setValue(value);
+		}
 	}
 
 	StringOption::StringOption(const String& str)
 	{
-		setValue(str);
+		if (!str.empty())
+		{
+			addOption(str);
+			setValue(str);
+		}
 	}
 
-	StringOption::StringOption(const String& value, const StringArray* options)
+	StringOption::StringOption(const String& value, const StringArray& options)
 	{
-		m_value = value;
-		if (options)
-			m_options = *options;
+		m_options = options;
+		setValue(value);
 	}
 
 	// set value
 	bool StringOption::setValue(const String& value)
 	{
-		for (String& option : m_options)
+		m_index = 0;
+		for (size_t i = 0; i < m_options.size(); i++)
 		{
-			if (option == value)
+			if (m_options[i] == value)
 			{
-				m_value = value;
-
+				m_index = static_cast<i32>(i);
 				return true;
 			}
 		}

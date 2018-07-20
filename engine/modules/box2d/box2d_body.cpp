@@ -6,8 +6,8 @@ namespace Echo
 {
 	Box2DBody::Box2DBody()
 		: m_body(nullptr)
+		, m_type("Static", { "Static", "Kinematic", "Dynamic" })
 	{
-
 	}
 
 	Box2DBody::~Box2DBody()
@@ -17,7 +17,10 @@ namespace Echo
 
 	void Box2DBody::bindMethods()
 	{
+		CLASS_BIND_METHOD(Box2DBody, getType, DEF_METHOD("getType"));
+		CLASS_BIND_METHOD(Box2DBody, setType, DEF_METHOD("setType"));
 
+		CLASS_REGISTER_PROPERTY(Box2DBody, "Type", Variant::Type::StringOption, "getType", "setType");
 	}
 
 	// update
@@ -42,7 +45,7 @@ namespace Echo
 
 				// create body
 				b2BodyDef bodyDef;
-				bodyDef.type = b2_dynamicBody;
+				bodyDef.type = b2BodyType(m_type.getIdx());
 				bodyDef.position.Set(getWorldPosition().x, getWorldPosition().y);
 				bodyDef.userData = this;
 				bodyDef.fixedRotation = true;
