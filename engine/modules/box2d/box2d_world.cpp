@@ -29,11 +29,11 @@ namespace Echo
 	{
 		if (m_isEnable)
 		{
-			float timeStep = 1.f / 50.f;
+			float timeStep = 1.f / 60.f;
 
 			static float elapsedFixed = 0.f;
 			elapsedFixed += elapsedTime;
-			if (elapsedFixed > timeStep)
+			if (elapsedFixed >= timeStep)
 			{
 				//move the world ahead , step ahead man!!
 				m_b2World->Step(timeStep, 8, 3);

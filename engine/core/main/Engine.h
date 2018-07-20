@@ -7,7 +7,6 @@
 
 namespace Echo
 {
-	class IO;
 	class Engine
 	{	
 	public:
@@ -39,15 +38,11 @@ namespace Echo
 		bool isInited() const { return m_isInited; }
 
 		// 装载日志系统
-		bool initLogSystem();
 		bool initialize(const Config& cfg);
 
 		// screen size changed
 		bool onSize(ui32 width, ui32 height);
 		void destroy();
-
-		// 获取配置
-		const Config& getConfig() const { return m_cfg; }
 
 		// 获取资源主路径
 		const String& getResPath() const;
@@ -83,13 +78,17 @@ namespace Echo
 		void registerClassTypes();
 
 	public:
+		// config
+		const Config& getConfig() const { return m_cfg; }
+
+		// project settings
 		ProjectSettings* getProjectSettings() { return m_projectSettings.ptr(); }
 
 	protected:
 		void loadLaunchScene();
 
 		// initialize
-		bool initRenderer(Renderer* pRenderer, const Renderer::RenderCfg& config);
+		bool initRenderer(unsigned int windowHandle);
 		bool onRendererInited();
 
 	private:
@@ -100,7 +99,6 @@ namespace Echo
 		bool				m_bRendererInited;
 		float				m_frameTime;
 		ui32				m_currentTime;
-		Renderer*			m_renderer;				// 渲染器
 		FrameState			m_frameState;
 		ProjectSettingsPtr	m_projectSettings;		// 项目信息
 	};

@@ -66,7 +66,6 @@ namespace Studio
 	bool AStudio::initLogSystem()
 	{
 		Echo::Engine::instance();
-		Echo::Engine::instance()->initLogSystem();
 
 		// 添加默认日志处理
 		Echo::LogDefault::LogConfig logConfig;

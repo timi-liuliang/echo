@@ -48,7 +48,7 @@ namespace Studio
 
 		// 时间事件
 		m_timer = new QTimer(this);
-		connect(m_timer, SIGNAL(timeout()), this, SLOT(Render()));
+		QObject::connect(m_timer, SIGNAL(timeout()), this, SLOT(Render()));
 		m_timer->start(10);
 	}
 

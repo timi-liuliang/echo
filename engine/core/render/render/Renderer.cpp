@@ -292,7 +292,6 @@ namespace Echo
 	// 析构函数
 	Renderer::~Renderer()
 	{
-
 	}
 
 	// 设置光栅化状态

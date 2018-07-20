@@ -24,34 +24,16 @@
 #include "engine/core/render/TextureCube.h"
 #include "engine/core/gizmos/Gizmos.h"
 
-#ifdef ECHO_PLATFORM_ANDROID
-#include <sys/syscall.h>
-static unsigned int _GetCurrThreadId()
-{
-	return (unsigned int)syscall(224); 
-}
-#else
-static unsigned int _GetCurrThreadId()
-{
-	return 0;
-}
-#endif
-
 namespace Echo
 {
-	// 构造函数
 	Engine::Engine()
 		: m_isInited(false)
 		, m_bRendererInited(NULL)
 		, m_currentTime(0)
-		, m_renderer(NULL)
 	{
-#ifdef ECHO_PLATFORM_WINDOWS
-		// 解决Windows VS2013 Thread join死锁BUG
-		_Cnd_do_broadcast_at_thread_exit();
-#endif
 		MemoryManager::instance();
 		Time::instance();
+		LogManager::instance();
 	}
 
 	Engine::~Engine()
@@ -63,14 +45,6 @@ namespace Echo
 	{
 		static Engine* inst = new Engine();
 		return inst;
-	}
-
-	// 装载日志系统
-	bool Engine::initLogSystem()
-	{
-		LogManager::instance();
-
-		return true;
 	}
 
 	// 引擎初始化
@@ -110,14 +84,7 @@ namespace Echo
 		loadProject(cfg.m_projectFile.c_str());
 
 		// init render
-		Renderer* renderer = nullptr;
-		LoadGLESRenderer(renderer);
-
-		Echo::Renderer::RenderCfg renderCfg;
-		renderCfg.enableThreadedRendering = false;
-		renderCfg.windowHandle = cfg.m_windowHandle;
-		renderCfg.enableThreadedRendering = false;
-		initRenderer(renderer, renderCfg);
+		initRenderer( cfg.m_windowHandle);
 
 		Renderer::BGCOLOR = Echo::Color(0.298f, 0.298f, 0.322f);
 
@@ -184,35 +151,37 @@ namespace Echo
 	}
 
 	// 初始化渲染器
-	bool Engine::initRenderer(Renderer* pRenderer, const Renderer::RenderCfg& config)
+	bool Engine::initRenderer(unsigned int windowHandle)
 	{
-		EchoLogDebug("Canvas Size : %d x %d", config.screenWidth, config.screenHeight);
+		Renderer* renderer = nullptr;
+		LoadGLESRenderer(renderer);
 
-		m_renderer = pRenderer;
-		EchoAssert(pRenderer);
-		if (!pRenderer->initialize(config))
+		Echo::Renderer::RenderCfg renderCfg;
+		renderCfg.enableThreadedRendering = false;
+		renderCfg.windowHandle = windowHandle;
+		renderCfg.enableThreadedRendering = false;
+
+		EchoLogDebug("Canvas Size : %d x %d", renderCfg.screenWidth, renderCfg.screenHeight);
+		if (renderer)
 		{
-			EchoAssert(false);
-			EchoLogError( "Root::initRenderer failed...");
-			return false;
+			if (!renderer->initialize(renderCfg))
+			{
+				EchoLogError("Root::initRenderer failed...");
+				return false;
+			}
+
+			if (!onRendererInited())
+				return false;
+
+			// 初始化渲染目标管理器
+			if (!RenderTargetManager::instance()->initialize())
+				return false;
+
+			EchoLogInfo("Init Renderer success.");
+			return true;
 		}
-
-		if (!onRendererInited())
-			return false;
-
-		EchoLogInfo("Init Renderer success.");
-
-		// 初始化渲染目标管理器
-		if (!RenderTargetManager::instance()->initialize())
-		{
-			EchoLogError("RenderTargetManager::initialize Falied !");
-
-			return false;
-		}
-
-		EchoLogInfo("Initialize RenderStageManager Success !");
-
-		return true;
+		
+		return false;
 	}
 
 	// 当游戏挂起时候引擎需要进行的处理
@@ -277,23 +246,15 @@ namespace Echo
 
 	void Engine::destroy()
 	{
-		// destory manager
 		EchoSafeDeleteInstance(NodeTree);
 		EchoSafeDeleteInstance(ImageCodecMgr);
 		EchoSafeDeleteInstance(IO);
 		EchoSafeDeleteInstance(Time);	
 		EchoSafeDeleteInstance(RenderTargetManager);
 		EchoLogInfo("Echo Engine has been shutdown.");
-		
-		// destory render
-		if (m_renderer)
-		{
-			m_renderer->destroy();
-			EchoSafeDelete(m_renderer, Renderer);
-			EchoLogInfo("Echo Renderer has been shutdown.");
-		}
-
-		// destory other
+		Renderer::instance()->destroy();
+		EchoSafeDeleteInstance(Renderer);
+		EchoLogInfo("Echo Renderer has been shutdown.");
 		EchoSafeDeleteInstance(LogManager);
 		LuaBinder::destroy();
 		luaex::LuaEx::instance()->destroy();
@@ -336,8 +297,8 @@ namespace Echo
 		m_currentTime = Time::instance()->getMilliseconds();
 
 		// update logic
-		Module::updateAll(elapsedTime);
-		NodeTree::instance()->update(elapsedTime*0.001f);
+		Module::updateAll(m_frameTime);
+		NodeTree::instance()->update(m_frameTime);
 
 		// render
 		RenderStage::instance()->process();

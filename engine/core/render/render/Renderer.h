@@ -234,9 +234,6 @@ namespace Echo
 		// 初始化
 		bool initialize(const RenderCfg& config);
 		
-		// 销毁
-		void destroy();
-		
 		// 硬件支持性检测
 		virtual void checkOpenGLExtensions() = 0;
 
@@ -379,6 +376,8 @@ namespace Echo
 
 		// 更新RendererSize
 		virtual void onSize(int width, int height) = 0; 
+
+		void destroy();
 
 	protected:
 		virtual bool doPresent() = 0;
