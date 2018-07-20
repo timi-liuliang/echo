@@ -53,7 +53,7 @@
 
 namespace scl {
 
-typedef char				int8;
+typedef signed char			int8;
 typedef unsigned char		uchar;
 typedef unsigned char		uint8;
 typedef unsigned char		byte;

@@ -535,15 +535,18 @@ namespace Echo
 			pugi::xml_node* xmlNode = (pugi::xml_node*)pugiNode;
 
 			Node* node = ECHO_DOWN_CAST<Node*>(instanceObject(pugiNode));
-			if (parent)
-				parent->addChild(node);
-
-			for (pugi::xml_node child = xmlNode->child("node"); child; child = child.next_sibling("node"))
+			if (node)
 			{
-				instanceNodeTree(&child, node);
-			}
+				if (parent)
+					parent->addChild(node);
 
-			return node;
+				for (pugi::xml_node child = xmlNode->child("node"); child; child = child.next_sibling("node"))
+				{
+					instanceNodeTree(&child, node);
+				}
+
+				return node;
+			}
 		}
 
 		return nullptr;

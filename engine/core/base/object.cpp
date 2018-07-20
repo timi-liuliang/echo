@@ -90,6 +90,10 @@ namespace Echo
 
 			return res;
 		}
+		else
+		{
+			EchoLogError("Class::create failed. Class [%s] not exist", className.c_str());
+		}
 
 		return  nullptr;
 	}

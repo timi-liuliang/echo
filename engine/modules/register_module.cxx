@@ -4,9 +4,11 @@
 #include "engine/modules/ui/ui_module.h"
 #include "engine/modules/gltf/gltf_module.h"
 #include "engine/modules/anim/anim_module.h"
+#include "engine/modules/box2d/box2d_module.h"
 
 using namespace Echo;
 
+REGISTER_MODULE(Box2DModule)
 REGISTER_MODULE(Live2DModule)
 REGISTER_MODULE(SpineModule)
 REGISTER_MODULE(GltfModule)

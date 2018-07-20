@@ -127,8 +127,10 @@ To ECHO_DOWN_CAST(From& parent)
 
 #ifdef ECHO_DEBUG
 	ToAsPointer to = dynamic_cast<ToAsPointer>(&parent);
-	assert(to);
-	return *to;
+	if (to)
+		return *to;
+	else
+		return nullptr;
 #else
 	return *static_cast<ToAsPointer>(&parent);
 #endif
@@ -139,7 +141,6 @@ To ECHO_DOWN_CAST(From* parent)
 {
 #ifdef ECHO_DEBUG
 	To to = dynamic_cast<To>(parent);
-	assert(to);
 	return to;
 #else
 	return static_cast<To>(parent);
