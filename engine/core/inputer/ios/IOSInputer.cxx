@@ -1,11 +1,4 @@
-﻿//
-//  IOSInputer.cpp
-//
-//  Created by Fantasy on 14-8-12.
-//  Copyright (c) 2014年 Fantasy. All rights reserved.
-//
-//  !!!编译时需要对cpp文件加标记 ：-fno-objc-arc
-//
+﻿
 #if defined( __APPLE_CC__) && (LORD_PLATFORM == LORD_PLATFORM_MAC_IOS)
 
 #include <stdio.h>

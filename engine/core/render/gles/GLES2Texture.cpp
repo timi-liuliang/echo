@@ -98,22 +98,10 @@ namespace Echo
 				srcPixFmt = PF_R8_UNORM;
 				dstPixFmt = PF_RGBA8_UNORM;
 			} break;
-			// 		case PF_RGBA8_UNORM:
-			// 			{
-			// 				srcPixFmt = PF_BGRA8_UNORM;
-			// 				dstPixFmt = PF_RGBA8_UNORM;
-			// 			} break;
-			// 		case PF_RGB8_UNORM:
-			// 			{
-			// 				srcPixFmt = PF_BGR8_UNORM;
-			// 				dstPixFmt = PF_RGB8_UNORM;
-			// 			} break;
 			default: break;
 		}
 
 		bool bRequiredConvert = (srcPixFmt == dstPixFmt ? false : true);
-
-
 		for (ui32 level = 0; level < m_numMipmaps; ++level)
 		{
 			Byte* curMipData = 0;
