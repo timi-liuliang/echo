@@ -5,23 +5,22 @@
 #include "engine/core/render/renderstage/RenderStage.h"
 #include "engine/core/render/Material.h"
 #include "engine/core/render/mesh/Mesh.h"
-#include "engine/core/scene/node.h"
+#include "engine/core/scene/render_node.h"
 
 namespace Echo
 {
 	// 构造函数
-	Renderable::Renderable(const String& renderStage, ShaderProgramRes* material, int identifier)
+	Renderable::Renderable(const String& renderStage, ShaderProgramRes* shader, int identifier)
 		: m_renderStage(renderStage)
 		, m_renderInput(nullptr)
 		, m_SParamWriteIndex(0)
-		, m_visible(NULL)
 		, m_bRenderState(false)
 		, m_pBlendState(NULL)
 		, m_pRasterizerState(NULL)
 		, m_pDepthStencil(NULL)
 		, m_identifier(identifier)
 	{
-		m_shaderProgram = material;
+		m_shaderProgram = shader;
 	}
 
 	// 析构函数
@@ -40,7 +39,7 @@ namespace Echo
 	}
 
 	// 新建
-	Renderable* Renderable::create(Mesh* mesh, Material* matInst, Node* node)
+	Renderable* Renderable::create(Mesh* mesh, Material* matInst, Render* node)
 	{
 		ShaderProgramRes* material = matInst->getShader();
 		ShaderProgram* shaderProgram = material->getShaderProgram();
@@ -51,6 +50,7 @@ namespace Echo
 
 		// bind shader param
 		Renderable* renderable = Renderer::instance()->createRenderable(matInst->getRenderStage(), matInst->getShader());
+		renderable->setNode(node);
 		renderable->setRenderInput(mesh->getVertexBuffer(), mesh->getVertexElements(), mesh->getIndexBuffer(), mesh->getIndexStride(), mesh->getTopologyType());
 		renderable->beginShaderParams(uniforms->size());
 		for (auto& it : *uniforms)
@@ -104,7 +104,7 @@ namespace Echo
 	{
 		if (m_SParamWriteIndex != m_shaderParams.size())
 		{
-			EchoLogError("[Renderable:%d]:: index == %d, shader size == %d  %s", __LINE__, m_SParamWriteIndex, m_shaderParams.size(), m_ownerDesc.c_str());
+			EchoLogError("[Renderable:%d]:: index == %d, shader size == %d Node [%s]", __LINE__, m_SParamWriteIndex, m_shaderParams.size(), m_node->getName().c_str());
 		}
 	}
 
@@ -121,7 +121,7 @@ namespace Echo
 		}
 		else
 		{
-			EchoLogError("Renderable::setShaderParam failed %s", m_ownerDesc.c_str());
+			EchoLogError("Renderable::setShaderParam failed %s", m_node->getName().c_str());
 		}
 	}
 
@@ -177,7 +177,7 @@ namespace Echo
 				case SPT_VEC2:
 				case SPT_VEC3:
 				case SPT_TEXTURE:	shaderProgram->setUniform(param.physicsIndex, param.pData, param.stype, param.ParamsLength);	break;
-				default:			EchoLogError("unknow shader param format! %s", m_ownerDesc.c_str());							break;
+				default:			EchoLogError("unknow shader param format! %s", m_node->getName().c_str());							break;
 				}
 			}
 		}

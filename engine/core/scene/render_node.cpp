@@ -48,9 +48,8 @@ namespace Echo
 	// get global uniforms
 	void* Render::getGlobalUniformValue(const String& name)
 	{
-		void* value = Node::getGlobalUniformValue(name);
-		if (value)
-			return value;
+		if (name == "u_WorldMatrix")
+			return (void*)(&m_matWorld);
 
 		Camera* camera = is2d() ? NodeTree::instance()->get2dCamera() : NodeTree::instance()->get3dCamera();
 		if (camera)

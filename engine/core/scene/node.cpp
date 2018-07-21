@@ -431,15 +431,6 @@ namespace Echo
 		}
 	}
 
-	// 获取全局变量值
-	void* Node::getGlobalUniformValue(const String& name)
-	{
-		if (name == "u_WorldMatrix")
-			return (void*)(&m_matWorld);
-
-		return nullptr;
-	}
-
 	// bind methods
 	void Node::bindMethods()
 	{

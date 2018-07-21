@@ -210,7 +210,7 @@ namespace Echo
 				}
 			}
 
-			std::sort(m_drawables.begin(), m_drawables.end(), [](const Drawable& a, const Drawable& b) ->int {return a.m_renderOrder<b.m_renderOrder; });
+			std::sort(m_drawables.begin(), m_drawables.end(), [](const Drawable& a, const Drawable& b) ->bool{return a.m_renderOrder<b.m_renderOrder; });
 		}
 	}
 

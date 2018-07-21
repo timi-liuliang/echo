@@ -24,7 +24,7 @@ namespace Echo
 
 		virtual void update(float delta, bool bUpdateChildren);
 
-	protected:
+	public:
 		// get global uniforms
 		virtual void* getGlobalUniformValue(const String& name);
 

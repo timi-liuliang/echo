@@ -176,7 +176,7 @@ namespace Echo
 	}
 
 	// render
-	void AttachmentVertices::submitToRenderQueue(Node* node)
+	void AttachmentVertices::submitToRenderQueue(Render* node)
 	{
 		if (!m_renderable)
 		{

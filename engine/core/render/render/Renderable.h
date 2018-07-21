@@ -21,7 +21,7 @@ namespace Echo
 	/**
 	 * 最小可渲染体封装
 	 */
-	class Node;
+	class Render;
 	class Mesh;
 	class Material;
 	class Renderable
@@ -43,7 +43,7 @@ namespace Echo
 		ui32 getIdentifier() const { return m_identifier; }
 
 		// 构建数据
-		static Renderable* create(Mesh* mesh, Material* matInst, Node* node);
+		static Renderable* create(Mesh* mesh, Material* matInst, Render* node);
 
 		// release
 		void release();
@@ -82,9 +82,6 @@ namespace Echo
 		// 提交到渲染队列
 		void submitToRenderQueue();
 
-		void setVisible(bool* state) { m_visible = state; }
-		bool isVisible() { return *m_visible; }
-
 		// 是否有自己的渲染状态
 		bool isHaveRenderState( ) { return m_bRenderState; }
 
@@ -106,8 +103,11 @@ namespace Echo
 		// 获取深度模板状态
 		DepthStencilState* getDepthStencilState() { return m_pDepthStencil; }
 
-		// 设置拥有者信息,方便调试
-		void setOwnerDesc(const String& ownerDesc) { m_ownerDesc = ownerDesc; }
+		// set node
+		void setNode( Render* node) { m_node = node; }
+
+		// get node
+		Render* getNode() { return m_node; }
 
 	protected:
 		// 向纹理槽中设置纹理
@@ -120,25 +120,23 @@ namespace Echo
 		void bindRenderState();
 
 	private:
-		Renderable( const String& renderStage, ShaderProgramRes* material, int identifier);
+		Renderable( const String& renderStage, ShaderProgramRes* shader, int identifier);
 		virtual ~Renderable();
 
 	public:
 		ui32									m_identifier;
-		String									m_ownerDesc;			// 拥有者信息
+		Render*									m_node;
 		String									m_renderStage;
 		ShaderProgramResPtr						m_shaderProgram;			// material
 		RenderInput*							m_renderInput;			// first  VB, IB, etc.
 		MaxTextureArray							m_textures;				// now only one texture sampler.
 		vector<ShaderParam>::type				m_shaderParams;			// third shader params
 		size_t									m_SParamWriteIndex;
-		bool*									m_visible;
 
 		bool									m_bRenderState;
 		BlendState*								m_pBlendState;
 		RasterizerState*						m_pRasterizerState;
 		DepthStencilState*						m_pDepthStencil;
-		Vector3									m_worldPos;
 	};
 	typedef ui32 RenderableID;
 }

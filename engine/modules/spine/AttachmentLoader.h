@@ -37,7 +37,7 @@ namespace Echo
 		virtual ~AttachmentVertices();
 
 		// render
-		void submitToRenderQueue(Node* node);
+		void submitToRenderQueue(Render* node);
 
 	public:
 		TextureResPtr					m_texture;			// Œ∆¿Ì

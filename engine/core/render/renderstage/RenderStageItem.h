@@ -48,6 +48,9 @@ namespace Echo
 	public:
 		DefaultRenderStageItemTransparent();
 
+		// sort
+		void sort();
+
 		// render
 		virtual void render();
 	};
