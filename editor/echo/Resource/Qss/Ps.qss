@@ -77,6 +77,16 @@ QDockWidget
 	titlebar-normal-icon: url(:/icon/Icon/minimize.png);
 }
 
+QDockWidget::close-button, QDockWidget::float-button
+{
+	background:transparent;
+}
+
+QDockWidget::close-button:hover, QDockWidget::float-button:hover 
+{
+	border: 2px solid rgb(14, 99, 156);
+}
+
 QTabWidget
 {
 	border-top: 1px solid #FF666666;
