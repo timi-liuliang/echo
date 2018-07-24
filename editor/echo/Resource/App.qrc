@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="/icon">
+    <file>Icon/minimize.png</file>
+    <file>Icon/minus.png</file>
     <file>node/box2dbody.png</file>
     <file>node/render.png</file>
     <file>node/gizmos.png</file>
@@ -26,7 +28,6 @@
     <file>node/live2dcubism.png</file>
     <file>node/node.png</file>
     <file>Icon/icon.png</file>
-    <file>Icon/move.png</file>
     <file>Icon/root.png</file>
     <file>Icon/folder_close.png</file>
     <file>Icon/folder_open.png</file>
