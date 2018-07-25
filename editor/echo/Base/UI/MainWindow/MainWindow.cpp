@@ -333,6 +333,22 @@ namespace Studio
 		AStudio::instance()->getRenderWindow();
 	}
 
+	// open node tree
+	void MainWindow::openNodeTree(Echo::String& resPath)
+	{
+		Echo::Node* node = Echo::Node::load(resPath);
+		if (node)
+		{
+			// clear
+			onNewScene();
+
+			Studio::EchoEngine::instance()->setCurrentEditNode(node);
+			Studio::EchoEngine::instance()->setCurrentEditNodeSavePath(resPath);
+
+			NodeTreePanel::instance()->refreshNodeTreeDisplay();
+		}
+	}
+
 	// open lua file for edit
 	void MainWindow::openLuaScript(const Echo::String& fileName)
 	{

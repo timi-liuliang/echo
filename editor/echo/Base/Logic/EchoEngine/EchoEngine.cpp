@@ -20,6 +20,7 @@
 #include "Engine/modules/Audio/FMODStudio/FSAudioSource.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/util/TimeProfiler.h>
+#include <engine/core/io/IO.h>
 
 namespace Studio
 {
@@ -132,6 +133,16 @@ namespace Studio
 		return true;
 	}
 
+	// 设置当前结点树存储路径
+	void EchoEngine::setCurrentEditNodeSavePath(const Echo::String& savePath) 
+	{ 
+		m_currentEditNodeSavePath = savePath;
+		if (!m_currentEditNodeSavePath.empty())
+		{
+			AStudio::instance()->getConfigMgr()->SetValue("last_edit_node_tree", m_currentEditNodeSavePath.c_str());
+		}
+	}
+
 	// new
 	void EchoEngine::newEditNodeTree()
 	{
@@ -155,15 +166,6 @@ namespace Studio
 		{
 			m_currentEditNode->save(savePath);
 		}
-	}
-
-	// 切换场景
-	void EchoEngine::ChangeScene(const char* sceneName, bool isGameMode)
-	{
-		using namespace  Echo;
-		//m_sceneMgr->loadScene(sceneName, Vector3::ZERO, 3, false, isGameMode);
-		InitializeBackGrid();
-		m_renderWindow->getInputController()->onAdaptCamera();
 	}
 
 	// 初始化背景网格

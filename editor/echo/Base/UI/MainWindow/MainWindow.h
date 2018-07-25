@@ -30,8 +30,11 @@ namespace Studio
 		// 打开文件
 		void OpenProject(const char* projectName);
 
+		// open node tree
+		void openNodeTree(Echo::String& resPath);
+
 		// open lua file for edit
-		void openLuaScript(const Echo::String& fileName);
+		void openLuaScript(const Echo::String& resPath);
 
 	protected:
 		void closeEvent(QCloseEvent *event);

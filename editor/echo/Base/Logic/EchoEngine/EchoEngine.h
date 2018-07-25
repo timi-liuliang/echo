@@ -42,7 +42,7 @@ namespace Studio
 		Echo::Node* getCurrentEditNode() { return m_currentEditNode; }
 
 		// 设置当前结点树存储路径
-		void setCurrentEditNodeSavePath(const Echo::String& savePath) { m_currentEditNodeSavePath = savePath; }
+		void setCurrentEditNodeSavePath(const Echo::String& savePath);
 
 		// 获取当前结点树存储路径
 		const Echo::String& getCurrentEditNodeSavePath() { return m_currentEditNodeSavePath; }
@@ -78,9 +78,6 @@ namespace Studio
 		// save current node tree
 		void saveCurrentEditNodeTree();
 		void saveCurrentEditNodeTreeAs(const Echo::String& savePath);
-
-		// 切换场景
-		void ChangeScene( const char* sceneName, bool isGameMode=false);
 
 		// 保存当前编辑场景
 		void SaveScene();

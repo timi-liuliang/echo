@@ -15,6 +15,7 @@
 #include <engine/core/util/HashGenerator.h>
 #include <engine/core/util/TimeProfiler.h>
 #include <engine/core/util/PathUtil.h>
+#include <engine/core/io/IO.h>
 #include "EchoEngine.h"
 
 
@@ -225,6 +226,13 @@ namespace Studio
 			m_mainWindow->onOpenProject();
 			m_mainWindow->setWindowTitle(fileName);
 		)
+
+		// open last edit node tree
+		Echo::String lastNodeTreePath = AStudio::instance()->getConfigMgr()->GetValue("last_edit_node_tree");
+		if(Echo::IO::instance()->isResourceExists(lastNodeTreePath))		
+		{
+			MainWindow::instance()->openNodeTree(lastNodeTreePath);
+		}
 
 		// 输出时间占比结果
 		TIME_PROFILE_OUTPUT

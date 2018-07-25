@@ -119,17 +119,7 @@ namespace Studio
 				Echo::String ext = Echo::PathUtil::GetFileExt(resPath, true);
 				if (ext == ".scene")
 				{
-					Echo::Node* node = Echo::Node::load(resPath);
-					if (node)
-					{
-						// clear
-						MainWindow::instance()->onNewScene();
-
-						Studio::EchoEngine::instance()->setCurrentEditNode(node);
-						Studio::EchoEngine::instance()->setCurrentEditNodeSavePath(resPath);
-
-						NodeTreePanel::instance()->refreshNodeTreeDisplay();
-					}
+					MainWindow::instance()->openNodeTree(resPath);
 				}
 				else if (ext == ".lua")
 				{
