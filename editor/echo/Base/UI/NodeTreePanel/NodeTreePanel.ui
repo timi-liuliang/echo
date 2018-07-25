@@ -49,7 +49,7 @@
             </property>
             <property name="icon">
              <iconset resource="../../../Resource/App.qrc">
-              <normaloff>:/icon/Icon/add.png</normaloff>:/icon/Icon/add.png</iconset>
+              <normaloff>:/icon/Icon/project/add.png</normaloff>:/icon/Icon/project/add.png</iconset>
             </property>
            </widget>
           </item>

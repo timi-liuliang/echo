@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/icon">
+    <file>Icon/project/add.png</file>
     <file>Icon/minimize.png</file>
     <file>Icon/minus.png</file>
     <file>node/box2dbody.png</file>
