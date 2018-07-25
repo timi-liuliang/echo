@@ -10,6 +10,10 @@ namespace Echo
 	{
 		m_isEnable = Engine::instance()->getConfig().m_isGame;
 		m_b2World = EchoNew(b2World(b2Vec2(m_gravity.x, m_gravity.y)));
+
+		// debug draw
+		m_debugDraw = EchoNew(Box2DDebugDraw);
+		m_b2World->SetDebugDraw(m_debugDraw);
 	}
 
 	Box2DWorld::~Box2DWorld()

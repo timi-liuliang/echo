@@ -15,7 +15,7 @@ namespace Echo
 		ERRRET_ABORT
 	};
 
-	//- Global functions ----------------------------------------------------------
+	//- Global functions
 	ErrRet NotifyAssert(const char* condition, const char* fileName, int lineNumber, const char* formats, ...);
 }
 
