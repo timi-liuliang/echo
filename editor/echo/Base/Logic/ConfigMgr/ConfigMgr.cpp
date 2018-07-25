@@ -41,7 +41,7 @@ namespace Studio
 	// 加载配置
 	bool ConfigMgr::loadCfgFile( )
 	{
-		m_fileName.clear();
+		m_recentProjects.clear();
 		  
 		isFileExit();
 		try
@@ -90,12 +90,12 @@ namespace Studio
 	// 使某项目切换到最前
 	void ConfigMgr::switchProjectToTop(const char* fileName)
 	{		
-		for (Echo::list<Echo::String>::iterator iter = m_fileName.begin(); iter != m_fileName.end(); ++iter)
+		for (Echo::list<Echo::String>::iterator iter = m_recentProjects.begin(); iter != m_recentProjects.end(); ++iter)
 		{
 			if ((*iter) == fileName)
 			{
-				m_fileName.erase(iter);
-				m_fileName.push_front(fileName);
+				m_recentProjects.erase(iter);
+				m_recentProjects.push_front(fileName);
 
 				return;
 			}
@@ -114,14 +114,13 @@ namespace Studio
 		}
 
 		// 最多保留十个，超过则去掉最早的
-		size_t size = m_fileName.size();
+		size_t size = m_recentProjects.size();
 		if ( size >= m_maxRecentProjects )
 		{
-			m_fileName.pop_back();
+			m_recentProjects.pop_back();
 		}
 
-		m_fileName.push_front(fileName);
-		addToMenu();
+		m_recentProjects.push_front(fileName);
 		saveCfgFile();
 
 		return true;
@@ -130,9 +129,9 @@ namespace Studio
 	// 获取最近打开的项目文件
 	Echo::String ConfigMgr::getLastOpenProjectFile()
 	{
-		if( m_fileName.size())
+		if( m_recentProjects.size())
 		{
-			Echo::list<Echo::String>::type::reverse_iterator it = m_fileName.rbegin();
+			Echo::list<Echo::String>::type::reverse_iterator it = m_recentProjects.rbegin();
 
 			return *it;
 		}
@@ -143,8 +142,8 @@ namespace Studio
 	// 判断路径是否存在
 	bool ConfigMgr::isPathExist( Echo::String path )
 	{
-		Echo::list<Echo::String>::iterator iter = m_fileName.begin();
-		for ( ; iter != m_fileName.end(); ++iter )
+		Echo::list<Echo::String>::iterator iter = m_recentProjects.begin();
+		for ( ; iter != m_recentProjects.end(); ++iter )
 		{
 			if ( (*iter) == path )
 			{
@@ -164,8 +163,8 @@ namespace Studio
 			pugi::xml_node outputDir = projectNode->append_child("outputDir" );
 			pugi::xml_node propertys = projectNode->append_child("propertys");
 
-			Echo::list<Echo::String>::iterator Iter = m_fileName.begin();
-			for( ; Iter != m_fileName.end(); ++Iter )
+			Echo::list<Echo::String>::iterator Iter = m_recentProjects.begin();
+			for( ; Iter != m_recentProjects.end(); ++Iter )
 			{
 				pugi::xml_node recentNode = recentNodes.append_child( "recentProject" );
 				recentNode.append_attribute("project_value") = (*Iter).c_str();
@@ -197,12 +196,10 @@ namespace Studio
 				Echo::String recentValue= recentNode.attribute( "project_value" ).as_string();
 				if ( !isPathExist( recentValue ) )
 				{
-					m_fileName.push_back(recentValue);
+					m_recentProjects.push_back(recentValue);
 				}
 			}
 		}
-		
-		addToMenu();
 	}
 
 	// 读取输出路径
@@ -235,48 +232,36 @@ namespace Studio
 		}
 	}
 
-	// 添加到菜单中
-	void ConfigMgr::addToMenu()
-	{
-		//QMenu* pMenu = NULL;//UI_MainWindow->GetRecentMenu();
-		//if ( !pMenu )
-		//{
-		//	return ;
-		//}
-
-		//pMenu->clear();
-		//Echo::list<Echo::String>::iterator Iter = m_fileName.begin();
-		//for ( ; Iter != m_fileName.end(); ++Iter )
-		//{
-		//	// 将目录缓存在action中，方便MainWindow获取
-		//	QAction* pAction = new QAction( pMenu );
-		//	pAction->setText( (*Iter).c_str() );
-		//	pMenu->addAction( pAction );
-		//}
-	}
-
 	// 根据名称获取属性值
-	Echo::String ConfigMgr::GetValue( const char* property)
+	Echo::String ConfigMgr::getValue( const char* property)
 	{
-		std::map<Echo::String, Echo::String>::iterator it = m_propertys.find( property);
-		if( it!=m_propertys.end())
+		if (!m_recentProjects.empty())
 		{
-			return it->second;
+			Echo::String propertyName = m_recentProjects.front() + Echo::String(":") + property;
+			auto it = m_propertys.find(propertyName);
+			if (it != m_propertys.end())
+			{
+				return it->second;
+			}
 		}
 
 		return "";
 	}
 
 	// 设置属性
-	void ConfigMgr::SetValue( const char* property, const char* value)
+	void ConfigMgr::setValue( const char* property, const char* value)
 	{
-		m_propertys[property] = value;
+		if (!m_recentProjects.empty())
+		{
+			Echo::String propertyName = m_recentProjects.front() + Echo::String(":") + property;
+			m_propertys[propertyName] = value;
 
-		saveCfgFile();
+			saveCfgFile();
+		}
 	}
 
 	void ConfigMgr::getAllRecentProject(Echo::list<Echo::String>::type& projects)
 	{
-		projects.insert(projects.begin(), m_fileName.begin(), m_fileName.end());
+		projects.insert(projects.begin(), m_recentProjects.begin(), m_recentProjects.end());
 	}
 }

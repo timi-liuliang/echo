@@ -44,10 +44,10 @@ namespace Studio
 		Echo::String getLastOpenProjectFile();
 
 		// 根据名称获取属性值
-		Echo::String GetValue( const char* property);
+		Echo::String getValue( const char* property);
 
 		// 设置属性
-		void SetValue( const char* property, const char* value);
+		void setValue( const char* property, const char* value);
 
 		// 获取所有最近打开的工程
 		void getAllRecentProject(Echo::list<Echo::String>::type& projects);
@@ -65,12 +65,9 @@ namespace Studio
 		// 加载属性值
 		void loadPropertys( pugi::xml_node* node);
 
-		// 添加到菜单中
-		void addToMenu( );
-
 	private:
 		Echo::String						m_cfgFile;			// 配置文件
-		Echo::list<Echo::String>::type		m_fileName;			// 最近打开的工程
+		Echo::list<Echo::String>::type		m_recentProjects;	// 最近打开的工程
 		Echo::String						m_outPutDir;		// 资源转换输出路径
 		size_t								m_maxRecentProjects;// 记录最近打
 		std::map<Echo::String, Echo::String>m_propertys;		// 配置

@@ -228,7 +228,7 @@ namespace Studio
 		)
 
 		// open last edit node tree
-		Echo::String lastNodeTreePath = AStudio::instance()->getConfigMgr()->GetValue("last_edit_node_tree");
+		Echo::String lastNodeTreePath = AStudio::instance()->getConfigMgr()->getValue("last_edit_node_tree");
 		if(Echo::IO::instance()->isResourceExists(lastNodeTreePath))		
 		{
 			MainWindow::instance()->openNodeTree(lastNodeTreePath);

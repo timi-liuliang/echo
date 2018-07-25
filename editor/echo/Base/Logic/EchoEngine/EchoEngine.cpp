@@ -139,7 +139,7 @@ namespace Studio
 		m_currentEditNodeSavePath = savePath;
 		if (!m_currentEditNodeSavePath.empty())
 		{
-			AStudio::instance()->getConfigMgr()->SetValue("last_edit_node_tree", m_currentEditNodeSavePath.c_str());
+			AStudio::instance()->getConfigMgr()->setValue("last_edit_node_tree", m_currentEditNodeSavePath.c_str());
 		}
 	}
 
