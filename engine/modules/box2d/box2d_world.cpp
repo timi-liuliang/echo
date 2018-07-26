@@ -7,12 +7,14 @@ namespace Echo
 	Box2DWorld::Box2DWorld()
 		: m_gravity( 0.f, -9.8f)
 		, m_pixelsPerMeter( 32.f)
+		, m_isDrawDebugData(true)
 	{
 		m_isEnable = Engine::instance()->getConfig().m_isGame;
 		m_b2World = EchoNew(b2World(b2Vec2(m_gravity.x, m_gravity.y)));
 
 		// debug draw
 		m_debugDraw = EchoNew(Box2DDebugDraw);
+		m_debugDraw->SetFlags(b2Draw::e_shapeBit | b2Draw::e_jointBit | b2Draw::e_aabbBit | b2Draw::e_pairBit | b2Draw::e_centerOfMassBit);
 		m_b2World->SetDebugDraw(m_debugDraw);
 	}
 
@@ -37,7 +39,7 @@ namespace Echo
 
 			static float elapsedFixed = 0.f;
 			elapsedFixed += elapsedTime;
-			if (elapsedFixed >= timeStep)
+			while (elapsedFixed >= timeStep)
 			{
 				//move the world ahead , step ahead man!!
 				m_b2World->Step(timeStep, 8, 3);
@@ -45,6 +47,10 @@ namespace Echo
 
 				elapsedFixed -= timeStep;
 			}
+
+			// draw debug data
+			if (m_isDrawDebugData)
+				m_b2World->DrawDebugData();
 		}
 	}
 }
