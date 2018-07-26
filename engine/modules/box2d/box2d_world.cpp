@@ -50,7 +50,10 @@ namespace Echo
 
 			// draw debug data
 			if (m_isDrawDebugData)
+			{
 				m_b2World->DrawDebugData();
+				m_debugDraw->Update(elapsedTime);
+			}
 		}
 	}
 }

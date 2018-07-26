@@ -92,7 +92,7 @@ namespace Echo
 	}
 
 	// update per frame
-	void GltfMesh::update()
+	void GltfMesh::update_self()
 	{
 		if (isNeedRender())
 		{

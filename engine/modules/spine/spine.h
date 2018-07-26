@@ -42,7 +42,7 @@ namespace Echo
 
 	protected:
 		// update
-		virtual void update();
+		virtual void update_self();
 
 		// submit to renderqueue
 		void submitToRenderQueue();

@@ -4,9 +4,15 @@
 
 namespace Echo
 {
+	class Gizmos;
 	class Box2DDebugDraw : public b2Draw
 	{
 	public:
+		Box2DDebugDraw();
+
+		// void step
+		void Update(float elapsedTime);
+
 		// Draw a closed polygon provided in CCW order.
 		virtual void DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color);
 
@@ -25,5 +31,8 @@ namespace Echo
 		// Draw a transform. Choose your own length scale.
 		// @param xf a transform.
 		virtual void DrawTransform(const b2Transform& xf);
+
+	private:
+		Gizmos*			m_gizmosNode;		// used for render, update by this b2Draw
 	};
 }

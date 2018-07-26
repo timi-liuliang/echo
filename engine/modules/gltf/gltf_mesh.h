@@ -37,7 +37,7 @@ namespace Echo
 		void buildRenderable();
 
 		// update
-		virtual void update();
+		virtual void update_self();
 
 		// get global uniforms
 		virtual void* getGlobalUniformValue(const String& name);

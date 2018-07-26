@@ -24,7 +24,7 @@ namespace Echo
 	}
 
 	// update
-	void Box2DBody::update()
+	void Box2DBody::update_self()
 	{
 		if (Engine::instance()->getConfig().m_isGame)
 		{

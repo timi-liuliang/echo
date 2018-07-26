@@ -64,7 +64,7 @@ namespace Echo
 
 	protected:
 		// update
-		virtual void update();
+		virtual void update_self();
 
 	private:
 		bool			m_isAutoClear;

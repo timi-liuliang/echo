@@ -1,9 +1,22 @@
 #include "box2d_debug_draw.h"
 #include "engine/core/util/AssertX.h"
 #include "engine/core/log/LogManager.h"
+#include "engine/core/gizmos/Gizmos.h"
 
 namespace Echo
 {
+	Box2DDebugDraw::Box2DDebugDraw()
+	{
+		m_gizmosNode = ECHO_DOWN_CAST<Echo::Gizmos*>(Echo::Class::create("Gizmos"));
+		m_gizmosNode->setAutoClear(true);
+	}
+
+	// void step
+	void Box2DDebugDraw::Update(float elapsedTime)
+	{
+		m_gizmosNode->update(elapsedTime, false);
+	}
+
 	// Draw a closed polygon provided in CCW order.
 	void Box2DDebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 	{

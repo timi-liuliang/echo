@@ -330,7 +330,7 @@ namespace Echo
 	}
 
 	// update per frame
-	void Live2dCubism::update()
+	void Live2dCubism::update_self()
 	{
 		if (isNeedRender())
 		{

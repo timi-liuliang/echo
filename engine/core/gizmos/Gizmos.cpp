@@ -158,7 +158,7 @@ namespace Echo
 	}
 
 	// update
-	void Gizmos::update()
+	void Gizmos::update_self()
 	{
 		if (isNeedRender())
 		{

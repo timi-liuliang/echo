@@ -157,7 +157,7 @@ namespace Echo
 	}
 
 	// update per frame
-	void Sprite::update()
+	void Sprite::update_self()
 	{
 		if (isNeedRender())
 		{

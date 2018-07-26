@@ -106,7 +106,7 @@ namespace Echo
 	}
 
 	// update per frame
-	void Spine::update()
+	void Spine::update_self()
 	{
 		if (isNeedRender())
 		{

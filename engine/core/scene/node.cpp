@@ -322,7 +322,7 @@ namespace Echo
 		if (m_bMatrixDirty)
 		{
 			if(m_bModify)
-				update();
+				update_self();
 
 			m_matWorld.makeScaling(getWorldScaling());
 
@@ -420,7 +420,7 @@ namespace Echo
 		// script update
 		m_script.update(this);
 
-		update();
+		update_self();
 
 		if (bUpdateChildren)
 		{

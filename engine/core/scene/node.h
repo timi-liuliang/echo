@@ -113,7 +113,7 @@ namespace Echo
 	protected:
 		void needUpdate();
 
-		virtual void update() {}
+		virtual void update_self() {}
 
 	protected:
 		bool			m_isEnable;
