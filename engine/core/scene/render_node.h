@@ -6,7 +6,7 @@ namespace Echo
 {
 	class Render : public Node
 	{
-		ECHO_CLASS(Render, Node)
+		ECHO_VIRTUAL_CLASS(Render, Node)
 
 	public:
 		enum Type

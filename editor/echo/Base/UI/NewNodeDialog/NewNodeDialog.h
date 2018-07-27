@@ -20,6 +20,7 @@ namespace Studio
 		void addNode(const Echo::String& nodeName, QTreeWidgetItem* parent);
 
 	private slots:
+		void onSelectNode();
 		void onConfirmNode();
 	};
 }

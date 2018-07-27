@@ -11,6 +11,7 @@ namespace Echo
 {
 	struct ClassInfo
 	{
+		bool			m_isVirtual;			// virtual class can't be instanced
 		String			m_parent;
 		PropertyInfos	m_propertyInfos;
 		MethodMap		m_methods;
@@ -79,12 +80,13 @@ namespace Echo
 	template<typename T>
 	struct ObjectFactoryT : public ObjectFactory
 	{
-		ObjectFactoryT(const String& name, const String& parent)
+		ObjectFactoryT(const String& name, const String& parent, bool isVirtual=false)
 		{
 			// register class to lua
 			luaex::LuaEx::instance()->register_class(name.c_str(), parent.c_str());
 
 			m_name = name;
+			m_classInfo.m_isVirtual = isVirtual;
 			m_classInfo.m_parent = parent;
 
 			Class::addClass(name, this);
@@ -125,6 +127,9 @@ namespace Echo
 
 		// is derived from
 		static bool isDerivedFrom(const String& className, const String& parentClassName);
+
+		// is virtual
+		static bool isVirtual(const String& className);
 
 		// get parent class name
 		static bool getParentClass(String& parentClassName, const String& className);
@@ -171,21 +176,38 @@ namespace Echo
 
 #define ECHO_CLASS_NAME(m_class) #m_class
 
-#define ECHO_CLASS(m_class, m_parent)												\
-public:																				\
-	virtual const String& getClassName() const										\
-	{																				\
-		static String className=#m_class;											\
-		return className;															\
-	}																				\
-																					\
-	static void initClassInfo()														\
-	{																				\
-		static Echo::ObjectFactoryT<m_class> G_OBJECT_FACTORY(#m_class, #m_parent);	\
-	}																				\
-																					\
-	static void bindMethods();														\
-																					\
+#define ECHO_CLASS(m_class, m_parent)														\
+public:																						\
+	virtual const String& getClassName() const												\
+	{																						\
+		static String className=#m_class;													\
+		return className;																	\
+	}																						\
+																							\
+	static void initClassInfo()																\
+	{																						\
+		static Echo::ObjectFactoryT<m_class> G_OBJECT_FACTORY(#m_class, #m_parent);			\
+	}																						\
+																							\
+	static void bindMethods();																\
+																							\
+private:															
+
+#define ECHO_VIRTUAL_CLASS(m_class, m_parent)												\
+public:																						\
+	virtual const String& getClassName() const												\
+	{																						\
+		static String className=#m_class;													\
+		return className;																	\
+	}																						\
+																							\
+	static void initClassInfo()																\
+	{																						\
+		static Echo::ObjectFactoryT<m_class> G_OBJECT_FACTORY(#m_class, #m_parent, true);	\
+	}																						\
+																							\
+	static void bindMethods();																\
+																							\
 private:															
 
 #define CLASS_BIND_METHOD(m_class, method, methodName) \

@@ -31,6 +31,18 @@ namespace Echo
 		return false;
 	}
 
+	// is virtual
+	bool Class::isVirtual(const String& className)
+	{
+		auto it = g_classInfos->find(className);
+		if (it != g_classInfos->end())
+		{
+			return it->second->m_classInfo.m_isVirtual;
+		}
+
+		return true;
+	}
+
 	// get parent class name
 	bool Class::getParentClass(String& parentClassName, const String& className)
 	{

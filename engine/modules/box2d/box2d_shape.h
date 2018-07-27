@@ -7,7 +7,7 @@ namespace Echo
 {
 	class Box2DShape : public Node
 	{
-		ECHO_CLASS(Box2DShape, Node)
+		ECHO_VIRTUAL_CLASS(Box2DShape, Node)
 
 	public:
 		Box2DShape();
