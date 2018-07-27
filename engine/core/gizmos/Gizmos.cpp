@@ -68,6 +68,16 @@ namespace Echo
 		m_meshDirty = true;
 	}
 
+	Gizmos::Batch::~Batch()
+	{
+		// safe release renderable
+		if (m_renderable)
+		{
+			m_renderable->release();
+			m_renderable = nullptr;
+		}
+	}
+
 	void Gizmos::Batch::addVertex(const Gizmos::VertexFormat& vert)
 	{
 		m_vertexs.push_back(vert);
@@ -95,28 +105,26 @@ namespace Echo
 		{
 			if (m_vertexs.size())
 			{
-				// safe release renderable
-				if (m_renderable)
-				{
-					m_renderable->release();
-					m_renderable = nullptr;
-				}
-
 				MeshVertexFormat define;
 				define.m_isUseVertexColor = true;
 
 				m_mesh->updateIndices(m_indices.size(), m_indices.data());
 				m_mesh->updateVertexs(define, m_vertexs.size(), (const Byte*)m_vertexs.data(), m_aabb);
 
-				m_renderable = Renderable::create(m_mesh, m_material, m_gizmos);
-
 				m_meshDirty = false;
 			}
 		}
 
 		// render
-		if(m_renderable)
+		if (m_renderable)
+		{
 			m_renderable->submitToRenderQueue();
+		}
+		else if(m_vertexs.size())
+		{
+			m_renderable = Renderable::create(m_mesh, m_material, m_gizmos);
+			m_renderable->submitToRenderQueue();
+		}
 
 		// auto clear data
 		if (m_gizmos->isAutoClear())
@@ -135,6 +143,9 @@ namespace Echo
 
 		m_lineBatch = EchoNew(Batch(m_material, this));
 		m_lineBatch->m_mesh->setTopologyType(RenderInput::TT_LINELIST);
+
+		m_triangleBatch = EchoNew(Batch(m_material, this));
+		m_triangleBatch->m_mesh->setTopologyType(RenderInput::TT_TRIANGLELIST);
 	}
 
 	void Gizmos::bindMethods()
@@ -151,10 +162,23 @@ namespace Echo
 		m_lineBatch->addVertex(VertexFormat(to, color));
 	}
 
+	// draw trangle
+	void Gizmos::drawTriangle(const Vector3& v0, const Vector3& v1, const Vector3& v2, const Color& color)
+	{
+		m_triangleBatch->addIndex((Word)m_triangleBatch->m_vertexs.size());
+		m_triangleBatch->addIndex((Word)m_triangleBatch->m_vertexs.size() + 1);
+		m_triangleBatch->addIndex((Word)m_triangleBatch->m_vertexs.size() + 2);
+
+		m_triangleBatch->addVertex(VertexFormat(v0, color));
+		m_triangleBatch->addVertex(VertexFormat(v1, color));
+		m_triangleBatch->addVertex(VertexFormat(v2, color));
+	}
+
 	// clear mesh data
 	void Gizmos::clear()
 	{
 		m_lineBatch->clear();
+		m_triangleBatch->clear();
 	}
 
 	// update
@@ -163,6 +187,7 @@ namespace Echo
 		if (isNeedRender())
 		{
 			m_lineBatch->update();
+			m_triangleBatch->update();
 		}
 	}
 }

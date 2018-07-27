@@ -1,5 +1,4 @@
-#ifndef __ECHO_VEC3_H__
-#define __ECHO_VEC3_H__
+#pragma once
 
 #include "vector2.h"
 
@@ -690,8 +689,5 @@ namespace Echo
 			outVec= a;
 			outVec.saturate();
 		}
-
 	};
 }
-
-#endif

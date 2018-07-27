@@ -41,6 +41,7 @@ namespace Echo
 			bool			m_meshDirty;
 
 			Batch(Material* material, Gizmos* gizmos);
+			~Batch();
 			void update();
 			void addVertex(const VertexFormat& vert);
 			void addIndex(Word idx);
@@ -52,6 +53,9 @@ namespace Echo
 
 		// draw line
 		void drawLine(const Vector3& from, const Vector3& to, const Color& color);
+
+		// draw trangle
+		void drawTriangle(const Vector3& v0, const Vector3& v1, const Vector3& v2, const Color& color);
 
 		// is auto clear
 		bool isAutoClear() const { return m_isAutoClear; }
@@ -70,5 +74,6 @@ namespace Echo
 		bool			m_isAutoClear;
 		MaterialPtr		m_material;
 		Batch*			m_lineBatch;
+		Batch*			m_triangleBatch;
 	};
 }

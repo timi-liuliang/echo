@@ -2,6 +2,8 @@
 #include "engine/core/util/AssertX.h"
 #include "engine/core/log/LogManager.h"
 #include "engine/core/gizmos/Gizmos.h"
+#include "engine/core/math/Math.h"
+#include "box2d_world.h"
 
 namespace Echo
 {
@@ -9,6 +11,7 @@ namespace Echo
 	{
 		m_gizmosNode = ECHO_DOWN_CAST<Echo::Gizmos*>(Echo::Class::create("Gizmos"));
 		m_gizmosNode->setAutoClear(true);
+		m_gizmosNode->setLocalPosition(Vector3(0.f, 0.f, 100.f));
 	}
 
 	// void step
@@ -19,14 +22,27 @@ namespace Echo
 
 	// Draw a closed polygon provided in CCW order.
 	void Box2DDebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
-	{
-		EchoLogError("Box2DDebugDraw::DrawPolygon not implented");
+	{ 
+		float pixelsPerMeter = Box2DWorld::instance()->getPixelsPerMeter();
+		for (i32 idx = 0; idx < vertexCount; idx++)
+		{
+			const b2Vec2& from = vertices[idx % vertexCount];
+			const b2Vec2& to = vertices[(idx + 1) % vertexCount];
+			m_gizmosNode->drawLine(Vector3( from.x, from.y, 0.f) * pixelsPerMeter, Vector3(to.x, to.y, 0.f) * pixelsPerMeter, Color(color.r, color.g, color.b, color.a));
+		}
 	}
 
 	// Draw a solid closed polygon provided in CCW order.
 	void Box2DDebugDraw::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 	{
-		EchoLogError("Box2DDebugDraw::DrawSolidPolygon not implented");
+		float pixelsPerMeter = Box2DWorld::instance()->getPixelsPerMeter();
+		for (i32 idx = 2; idx < vertexCount; idx++)
+		{
+			const b2Vec2& v0 = vertices[0];
+			const b2Vec2& v1 = vertices[idx-1];
+			const b2Vec2& v2 = vertices[idx];
+			m_gizmosNode->drawTriangle(Vector3(v0.x, v0.y, 0.f) * pixelsPerMeter, Vector3(v1.x, v1.y, 0.f) * pixelsPerMeter, Vector3(v2.x, v2.y, 0.f) * pixelsPerMeter, Color(color.r, color.g, color.b, color.a * 0.8f));
+		}
 	}
 
 	// Draw a circle.
