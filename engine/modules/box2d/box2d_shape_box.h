@@ -14,11 +14,11 @@ namespace Echo
 
 		// width
 		float getWidth() const { return m_width; }
-		void setWidth(float width) { m_width = width; }
+		void setWidth(float width);
 
 		// height
 		float getHeight() const { return m_height; }
-		void setHeight(float height) { m_height = height; }
+		void setHeight(float height);
 
 	protected:
 		// get shape
