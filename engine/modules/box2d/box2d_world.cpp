@@ -47,13 +47,13 @@ namespace Echo
 
 				elapsedFixed -= timeStep;
 			}
+		}
 
-			// draw debug data
-			if (m_isDrawDebugData)
-			{
-				m_b2World->DrawDebugData();
-				m_debugDraw->Update(elapsedTime);
-			}
+		// draw debug data
+		if (m_isDrawDebugData)
+		{
+			m_b2World->DrawDebugData();
+			m_debugDraw->Update(elapsedTime);
 		}
 	}
 }

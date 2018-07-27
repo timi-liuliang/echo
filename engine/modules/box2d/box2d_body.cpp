@@ -26,7 +26,7 @@ namespace Echo
 	// update
 	void Box2DBody::update_self()
 	{
-		if (Engine::instance()->getConfig().m_isGame)
+		//if (Engine::instance()->getConfig().m_isGame)
 		{
 			if (m_isEnable && !m_body)
 			{
