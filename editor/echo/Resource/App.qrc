@@ -1,10 +1,13 @@
 <RCC>
   <qresource prefix="/icon">
+    <file>node/box2dshape.png</file>
+    <file>node/box2dshapebox.png</file>
+    <file>node/render.png</file>
+    <file>node/box2dshapecircle.png</file>
     <file>Icon/project/add.png</file>
     <file>Icon/minimize.png</file>
     <file>Icon/minus.png</file>
     <file>node/box2dbody.png</file>
-    <file>node/render.png</file>
     <file>node/gizmos.png</file>
     <file>Icon/project/save.png</file>
     <file>Icon/game/stop.png</file>
@@ -46,6 +49,5 @@
   </qresource>
   <qresource prefix="/Project">
     <file>Project/blank_project.7z</file>
-    <file>Project/LuaScript_BehaviorTemplate.lua_t</file>
   </qresource>
 </RCC>

@@ -78,7 +78,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../../Resource/App.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>pushButton_2</sender>

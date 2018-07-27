@@ -1,7 +1,0 @@
-﻿-- Use this for initialization
-function start()
-end
-
--- Tick is called once per frame
-function tick(deltaTime)
-end
