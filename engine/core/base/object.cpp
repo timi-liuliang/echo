@@ -161,10 +161,6 @@ namespace Echo
 					var.fromString(prop->m_type, valueStr);
 					Class::setPropertyValue(classPtr, prop->m_name, var);
 				}
-				else
-				{
-					EchoLogInfo("Property [%s] not exist. when instance Object", prop->m_name.c_str());
-				}
 			}
 		}
 	}
