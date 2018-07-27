@@ -17,9 +17,12 @@ namespace Echo
 		const StringOption& getType() { return m_type; }
 		void setType(const StringOption& type) { m_type.setValue(type.getValue()); }
 
-		// restitution
-		float getRestitution() const { return m_restitution; }
-		void setRestitution(float restitution) { m_restitution = restitution; }
+		// fix rotation
+		bool isFixRotation()const { return m_isFixRotation; }
+		void setFixRotation(bool isFixRotation) { m_isFixRotation = isFixRotation; }
+
+		// get body
+		b2Body* getb2Body() { return m_body; }
 
 	protected:
 		// update
@@ -28,6 +31,6 @@ namespace Echo
 	private:
 		b2Body*			m_body;
 		StringOption	m_type;
-		float			m_restitution;
+		bool			m_isFixRotation;
 	};
 }
