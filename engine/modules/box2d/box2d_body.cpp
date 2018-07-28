@@ -52,6 +52,7 @@ namespace Echo
 
 				const b2Vec2& pos = m_body->GetPosition();
 				this->setWorldPosition(Vector3(pos.x * pixelsPerUnit, pos.y * pixelsPerUnit, getWorldPosition().z));
+				//this->setWorldOrientation();
 			}
 			else
 			{
