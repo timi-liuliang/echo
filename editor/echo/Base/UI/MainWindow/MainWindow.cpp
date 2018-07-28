@@ -190,7 +190,7 @@ namespace Studio
 			{
 				Echo::PathUtil::CreateDir(saveasPath);
 
-				Echo::String currentProject = Echo::IO::instance()->getFullPath(Echo::Engine::instance()->getProjectSettings()->getPath());
+				Echo::String currentProject = Echo::IO::instance()->getFullPath(Echo::GameSettings::instance()->getPath());
 				Echo::String currentPath = Echo::PathUtil::GetFileDirPath(currentProject);
 				Echo::String currentName = Echo::PathUtil::GetPureFilename(currentProject, true);
 
@@ -276,6 +276,9 @@ namespace Studio
 			}
 		}
 
+		// save settings
+		Echo::Engine::instance()->saveSettings();
+
 		// save current edit node
 		EchoEngine::instance()->saveCurrentEditNodeTree();
 
@@ -290,7 +293,7 @@ namespace Studio
 	void MainWindow::onPlayGame()
 	{
 		// if launch scene not exist, set it
-		Echo::ProjectSettings* projSettings = Echo::Engine::instance()->getProjectSettings();
+		Echo::GameSettings* projSettings = Echo::GameSettings::instance();
 		if (projSettings)
 		{
 			const Echo::String& launchScene = projSettings->getLaunchScene().getPath();

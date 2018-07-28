@@ -3,7 +3,7 @@
 #include "engine/core/render/render/Renderer.h"
 #include "engine/core/Scene/NodeTree.h"
 #include "FrameState.h"
-#include "ProjectSettings.h"
+#include "GameSettings.h"
 
 namespace Echo
 {
@@ -81,9 +81,6 @@ namespace Echo
 		// config
 		const Config& getConfig() const { return m_cfg; }
 
-		// project settings
-		ProjectSettings* getProjectSettings() { return m_projectSettings.ptr(); }
-
 		// settings
 		void loadSettings();
 		void saveSettings();
@@ -104,6 +101,5 @@ namespace Echo
 		float				m_frameTime;
 		ui32				m_currentTime;
 		FrameState			m_frameState;
-		ProjectSettingsPtr	m_projectSettings;		// 项目信息
 	};
 }

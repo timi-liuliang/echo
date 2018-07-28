@@ -21,8 +21,6 @@ namespace Studio
 	// 新建项目文件
 	void ProjectMgr::NewProject(const char* projectName)
 	{
-		Echo::ProjectSettings projectFile;
-		//projectFile.save(projectName);
 	}
 
 	// 打开项目文件

@@ -242,8 +242,8 @@ namespace Studio
 
 	void EchoEngine::resizeBackGrid2d()
 	{
-		Echo::i32 windowHalfWidth = Echo::Engine::instance()->getProjectSettings()->getWindowWidth() / 2;
-		Echo::i32 windowHalfHeight = Echo::Engine::instance()->getProjectSettings()->getWindowHeight() / 2;
+		Echo::i32 windowHalfWidth = Echo::GameSettings::instance()->getWindowWidth() / 2;
+		Echo::i32 windowHalfHeight = Echo::GameSettings::instance()->getWindowHeight() / 2;
 		m_gizmosNodeGrid2d->clear();
 		m_gizmosNodeGrid2d->set2d(true);
 		m_gizmosNodeGrid2d->drawLine(Echo::Vector3(-windowHalfWidth, -windowHalfHeight, 0.0), Echo::Vector3(windowHalfWidth, -windowHalfHeight, 0.0), Echo::Color::BLUE);

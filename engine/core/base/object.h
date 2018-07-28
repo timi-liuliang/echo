@@ -48,7 +48,8 @@ namespace Echo
 		// set property value
 		virtual bool setPropertyValue(const String& propertyName, const Variant& propertyValue) { return false; }
 
-	protected:
+	public:
+		// instance object
 		static Object* instanceObject(void* pugiNode);
 
 		// remember property recursive

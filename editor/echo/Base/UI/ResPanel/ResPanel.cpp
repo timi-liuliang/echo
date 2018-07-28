@@ -152,14 +152,11 @@ namespace Studio
 		Echo::Class::getChildClasses(allRes, "Res", true);
 		for (const Echo::String& res : allRes)
 		{
-			if (res != ECHO_CLASS_NAME(ProjectSettings))
-			{
-				QAction* createResAction = new QAction(this);
-				createResAction->setText(res.c_str());
-				createResMenu->addAction(createResAction);
+			QAction* createResAction = new QAction(this);
+			createResAction->setText(res.c_str());
+			createResMenu->addAction(createResAction);
 
-				QObject::connect(createResAction, SIGNAL(triggered()), this, SLOT(onCreateRes()));
-			}
+			QObject::connect(createResAction, SIGNAL(triggered()), this, SLOT(onCreateRes()));
 		}
 		m_resMenu->addMenu(createResMenu);
 		if (item)

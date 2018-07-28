@@ -11,7 +11,7 @@
 #include "engine/core/Util/Timer.h"
 #include "engine/core/render/render/Viewport.h"
 #include "Engine/core/Render/Material.h"
-#include "ProjectSettings.h"
+#include "GameSettings.h"
 #include "engine/core/script/lua/LuaEx.h"
 #include "engine/core/script/lua/register_core_to_lua.cxx"
 #include "engine/core/script/lua/LuaBinder.h"
@@ -100,18 +100,15 @@ namespace Echo
 
 	void Engine::loadLaunchScene()
 	{
-		if (m_projectSettings)
+		const ResourcePath& launchScene = GameSettings::instance()->getLaunchScene();
+		if (!launchScene.isEmpty())
 		{
-			const ResourcePath& launchScene = m_projectSettings->getLaunchScene();
-			if (!launchScene.isEmpty())
-			{
-				Echo::Node* node = Echo::Node::load(launchScene.getPath());
-				node->setParent(NodeTree::instance()->getInvisibleRootNode());
-			}
-			else
-			{
-				EchoLogError("Please set Game.LaunchScene before start the game");
-			}
+			Echo::Node* node = Echo::Node::load(launchScene.getPath());
+			node->setParent(NodeTree::instance()->getInvisibleRootNode());
+		}
+		else
+		{
+			EchoLogError("Please set Game.LaunchScene before start the game");
 		}
 	}
 
@@ -125,7 +122,7 @@ namespace Echo
 		Class::registerType<Material>();
 		Class::registerType<LuaScript>();
 		Class::registerType<TextureCube>();
-		Class::registerType<ProjectSettings>();
+		Class::registerType<GameSettings>();
 		Class::registerType<Gizmos>();
 
 		// register all module class
@@ -140,9 +137,7 @@ namespace Echo
 			m_resPath = PathUtil::GetFileDirPath(projectFile);
 			IO::instance()->setResPath(m_resPath);
 		
-			String resPath;
-			if(IO::instance()->covertFullPathToResPath(projectFile, resPath))
-				m_projectSettings = ECHO_DOWN_CAST<ProjectSettings*>(Res::get(ResourcePath(resPath)));
+			loadSettings();	
 		}
 		else
 		{
@@ -153,12 +148,71 @@ namespace Echo
 	// settings
 	void Engine::loadSettings()
 	{
-
+		String projectFile;
+		if (IO::instance()->covertFullPathToResPath(m_cfg.m_projectFile, projectFile))
+		{
+			MemoryReader reader(projectFile);
+			if (reader.getSize())
+			{
+				pugi::xml_document doc;
+				if (doc.load_buffer(reader.getData<char*>(), reader.getSize()))
+				{
+					pugi::xml_node root = doc.child("settings");
+					if (root)
+					{
+						Echo::StringArray classes;
+						Echo::Class::getAllClasses(classes);
+						for (Echo::String& className : classes)
+						{
+							if (Echo::Class::isSingleton(className))
+							{
+								pugi::xml_node classNode = root.child(className.c_str());
+								if(classNode)
+								{
+									Echo::Object::instanceObject(&classNode);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	void Engine::saveSettings()
 	{
+		pugi::xml_document doc;
 
+		// declaration
+		pugi::xml_node dec = doc.prepend_child(pugi::node_declaration);
+		dec.append_attribute("version") = "1.0";
+		dec.append_attribute("encoding") = "utf-8";
+
+		// root node
+		pugi::xml_node root = doc.append_child("settings");
+
+		// save all singleton class settings
+		Echo::StringArray classes;
+		Echo::Class::getAllClasses(classes);
+		for (Echo::String& className : classes)
+		{
+			if (Echo::Class::isSingleton(className))
+			{
+				pugi::xml_node classNode = root.append_child(className.c_str());
+				if (classNode)
+				{
+					Object* obj = Echo::Class::create(className);
+					if (obj)
+					{
+						classNode.append_attribute("name").set_value(className.c_str());
+						classNode.append_attribute("class").set_value(className.c_str());
+						Object::savePropertyRecursive(&classNode, obj, obj->getClassName());
+					}
+				}
+			}
+		}
+
+		doc.save_file(m_cfg.m_projectFile.c_str(), "\t", 1U, pugi::encoding_utf8);
 	}
 
 	// ≥ı ºªØ‰÷»æ∆˜

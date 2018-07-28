@@ -10,13 +10,16 @@ namespace Echo
 	/**
 	 * 项目文件
 	 */
-	class ProjectSettings : public Res
+	class GameSettings : public Object
 	{
-		ECHO_RES(ProjectSettings, Res, ".echo", Res::create<ProjectSettings>, Res::load);
+		ECHO_SINGLETON_CLASS(GameSettings, Object);
 
 	public:
-		ProjectSettings();
-		~ProjectSettings();
+		GameSettings();
+		~GameSettings();
+
+		// instance
+		static GameSettings* instance();
 
 		// set window width
 		void setWindowWidth(i32 width) { m_windowWidth = width; }
@@ -36,14 +39,9 @@ namespace Echo
 		// get launch scene
 		const ResourcePath& getLaunchScene() const { return m_launchScene; }
 
-	protected:
-		// get property value
-		virtual bool getPropertyValue(const String& propertyName, Variant& oVar);
-
 	private:
 		i32				m_windowWidth;
 		i32				m_windowHeight;
 		ResourcePath	m_launchScene;
 	};
-	typedef ResRef<ProjectSettings> ProjectSettingsPtr;
 }
