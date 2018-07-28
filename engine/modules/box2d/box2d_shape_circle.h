@@ -18,10 +18,9 @@ namespace Echo
 
 	protected:
 		// get shape
-		virtual b2Shape* getShape();
+		virtual b2Shape* createb2Shape();
 
 	private:
 		float				m_radius;
-		b2CircleShape*		m_shape;
 	};
 }

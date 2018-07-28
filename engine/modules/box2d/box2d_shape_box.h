@@ -22,11 +22,10 @@ namespace Echo
 
 	protected:
 		// get shape
-		virtual b2Shape* getShape();
+		virtual b2Shape* createb2Shape();
 
 	private:
 		float			m_width;
 		float			m_height;
-		b2PolygonShape*	m_shape;
 	};
 } 

@@ -5,16 +5,13 @@
 namespace Echo
 {
 	Box2DShapeBox::Box2DShapeBox()
-		: m_shape(nullptr)
-		, m_width( 128.f)
+		: m_width( 128.f)
 		, m_height( 128.f)
 	{
-		m_shape = EchoNew(b2PolygonShape);
 	}
 
 	Box2DShapeBox::~Box2DShapeBox()
 	{
-
 	}
 
 	void Box2DShapeBox::bindMethods()
@@ -30,22 +27,31 @@ namespace Echo
 
 	void Box2DShapeBox::setWidth(float width)
 	{ 
-		m_width = width; 
-
-		float invPixelsPerUnit = 1.f / Box2DWorld::instance()->getPixelsPerMeter();
-		m_shape->SetAsBox(m_width*0.5f*invPixelsPerUnit, m_height*.5f*invPixelsPerUnit);
+		m_width = width;
+		b2PolygonShape* shape = getb2Shape<b2PolygonShape*>();
+		if (shape)
+		{
+			float invPixelsPerUnit = 1.f / Box2DWorld::instance()->getPixelsPerMeter();
+			shape->SetAsBox(m_width*0.5f*invPixelsPerUnit, m_height*.5f*invPixelsPerUnit);
+		}
 	}
 
 	void Box2DShapeBox::setHeight(float height)
 	{ 
-		m_height = height;
-		
-		float invPixelsPerUnit = 1.f / Box2DWorld::instance()->getPixelsPerMeter();
-		m_shape->SetAsBox(m_width*0.5f*invPixelsPerUnit, m_height*.5f*invPixelsPerUnit);
+		m_height = height;		
+		b2PolygonShape* shape = getb2Shape<b2PolygonShape*>();
+		if (shape)
+		{
+			float invPixelsPerUnit = 1.f / Box2DWorld::instance()->getPixelsPerMeter();
+			shape->SetAsBox(m_width*0.5f*invPixelsPerUnit, m_height*.5f*invPixelsPerUnit);
+		}
 	}
 
-	b2Shape* Box2DShapeBox::getShape() 
+	b2Shape* Box2DShapeBox::createb2Shape()
 	{ 
-		return m_shape; 
+		float invPixelsPerUnit = 1.f / Box2DWorld::instance()->getPixelsPerMeter();
+		b2PolygonShape* shape = EchoNew(b2PolygonShape);
+		shape->SetAsBox(m_width*0.5f*invPixelsPerUnit, m_height*.5f*invPixelsPerUnit);		
+		return shape;
 	}
 }

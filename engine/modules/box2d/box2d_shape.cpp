@@ -6,10 +6,11 @@
 namespace Echo
 {
 	Box2DShape::Box2DShape()
-		: m_fixtureDef(nullptr)
+		: m_fixture(nullptr)
 		, m_density(1.f)
 		, m_friction(1.f)
 		, m_restitution(0.5f)
+		, m_shape(nullptr)
 	{
 
 	}
@@ -33,10 +34,37 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(Box2DShape, "Restitution", Variant::Type::Real, "getRestitution", "setRestitution");
 	}
 
+	void Box2DShape::setRestitution(float restitution)
+	{ 
+		m_restitution = restitution;
+		if (m_fixture)
+		{
+			m_fixture->SetRestitution(m_restitution);
+		}
+	}
+
+	void Box2DShape::setDensity(float density)
+	{ 
+		m_density = density;
+		if (m_fixture)
+		{
+			m_fixture->SetDensity(m_density);
+		}
+	}
+
+	void Box2DShape::setFriction(float friction)
+	{ 
+		m_friction = friction; 
+		if (m_fixture)
+		{
+			m_fixture->SetFriction(friction);
+		}
+	}
+
 	// update self
 	void Box2DShape::update_self()
 	{
-		if (m_isEnable && !m_fixtureDef)
+		if (m_isEnable && !m_fixture)
 		{
 			Box2DBody* body = ECHO_DOWN_CAST<Box2DBody*>(getParent());
 			if (body && body->getb2Body())
@@ -44,17 +72,19 @@ namespace Echo
 				float pixelsPerUnit = Box2DWorld::instance()->getPixelsPerMeter();
 
 				// create fixture
-				m_fixtureDef = EchoNew(b2FixtureDef);
-				m_fixtureDef->density = m_density;
-				m_fixtureDef->friction = m_friction;
-				m_fixtureDef->restitution = m_restitution;
+				b2FixtureDef fixtureDef;
+				fixtureDef.density = m_density;
+				fixtureDef.friction = m_friction;
+				fixtureDef.restitution = m_restitution;
 
 				// set fixture shape
-				b2Shape* shape = getShape();
+				b2Shape* shape = createb2Shape();
 				if (shape)
 				{
-					m_fixtureDef->shape = shape;
-					body->getb2Body()->CreateFixture(m_fixtureDef);
+					fixtureDef.shape = shape;
+					m_fixture = body->getb2Body()->CreateFixture(&fixtureDef);
+					m_shape = m_fixture->GetShape();
+					EchoSafeDelete(shape, b2Shape);
 				}
 			}
 		}

@@ -15,27 +15,31 @@ namespace Echo
 
 		// restitution
 		float getRestitution() const { return m_restitution; }
-		void setRestitution(float restitution) { m_restitution = restitution; }
+		void setRestitution(float restitution);
 
 		// density
 		float getDensity() const { return m_density; }
-		void setDensity(float density) { m_density = density; }
+		void setDensity(float density);
 
 		// friction
 		float getFriction() const { return m_friction; }
-		void setFriction(float friction) { m_friction = friction; }
+		void setFriction(float friction);
+
+		// get b2Shape
+		template<typename T> T getb2Shape() { return ECHO_DOWN_CAST<T>(m_shape); }
 
 	protected:
 		// update self
 		virtual void update_self();
 
 		// create shape
-		virtual b2Shape* getShape() { return nullptr; }
+		virtual b2Shape* createb2Shape() { return nullptr; }
 
 	private:
-		b2FixtureDef*	m_fixtureDef;
+		b2Fixture*		m_fixture;
 		float			m_density;
 		float			m_friction;
 		float			m_restitution;
+		b2Shape*		m_shape;
 	};
 }

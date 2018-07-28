@@ -4,14 +4,11 @@
 namespace Echo
 {
 	Box2DShapeCircle::Box2DShapeCircle()
-		: m_shape(nullptr)
 	{
-		m_shape = EchoNew(b2CircleShape);
 	}
 
 	Box2DShapeCircle::~Box2DShapeCircle()
 	{
-
 	}
 
 	void Box2DShapeCircle::bindMethods()
@@ -24,16 +21,24 @@ namespace Echo
 
 	float Box2DShapeCircle::getRadius() const
 	{ 
-		return m_shape->m_radius * Box2DWorld::instance()->getPixelsPerMeter();
+		return m_radius;
 	}
 
 	void Box2DShapeCircle::setRadius(float radius)
 	{ 
-		m_shape->m_radius = radius / Box2DWorld::instance()->getPixelsPerMeter(); 
+		m_radius = radius;
+
+		b2CircleShape* shape = getb2Shape<b2CircleShape*>();
+		if (shape)
+		{
+			shape->m_radius = radius / Box2DWorld::instance()->getPixelsPerMeter();
+		}
 	}
 
-	b2Shape* Box2DShapeCircle::getShape()
+	b2Shape* Box2DShapeCircle::createb2Shape()
 	{
-		return m_shape;
+		b2CircleShape* shape = EchoNew(b2CircleShape);
+		shape->m_radius = m_radius / Box2DWorld::instance()->getPixelsPerMeter();
+		return shape;
 	}
 }
