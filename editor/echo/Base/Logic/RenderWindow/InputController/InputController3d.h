@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IRenderWindowInputController.h"
+#include "IInputController.h"
 #include <QPoint>
 #include "engine/core/Math/Vector3.h"
 #include "engine/core/camera/Camera.h"
