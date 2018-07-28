@@ -51,6 +51,7 @@ namespace Studio
 		void onSaveProject();
 		void onSaveasProject();
 		void onOpenRencentProject();
+		void onEditSingletonSettings();
 
 		// sub editor operate
 		void onSubEditChanged(const QString& subeditName);
@@ -70,6 +71,9 @@ namespace Studio
 
 		// update rencent project display
 		void updateRencentProjectsDisplay();
+
+		// update setting display
+		void updateSettingDisplay();
 
 	protected:
 		ResPanel*		m_resPanel;

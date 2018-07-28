@@ -84,6 +84,10 @@ namespace Echo
 		// project settings
 		ProjectSettings* getProjectSettings() { return m_projectSettings.ptr(); }
 
+		// settings
+		void loadSettings();
+		void saveSettings();
+
 	protected:
 		void loadLaunchScene();
 

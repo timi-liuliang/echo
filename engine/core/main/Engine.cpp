@@ -150,6 +150,17 @@ namespace Echo
 		}
 	}
 
+	// settings
+	void Engine::loadSettings()
+	{
+
+	}
+
+	void Engine::saveSettings()
+	{
+
+	}
+
 	// ³õÊ¼»¯äÖÈ¾Æ÷
 	bool Engine::initRenderer(unsigned int windowHandle)
 	{

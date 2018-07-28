@@ -111,6 +111,7 @@ namespace Studio
 
 		// update rencents project display
 		updateRencentProjectsDisplay();
+		updateSettingDisplay();
 	}
 
 	// new scene
@@ -223,6 +224,18 @@ namespace Studio
 				openAnotherProject(text);
 			else
 				EchoLogError("Project file [%s] not exist.", text.c_str());
+		}
+	}
+
+	void MainWindow::onEditSingletonSettings()
+	{
+		QAction* action = qobject_cast<QAction*>(sender());
+		if (action)
+		{
+			Echo::String text = action->text().toStdString().c_str();
+			Echo::Object* obj = Echo::Class::create(text);
+			if (obj)
+				Studio::NodeTreePanel::instance()->setNextEditObject(obj);
 		}
 	}
 
@@ -428,6 +441,26 @@ namespace Studio
 
 					QObject::connect(action, SIGNAL(triggered()), this, SLOT(onOpenRencentProject()));
 				}
+			}
+		}
+	}
+
+	// update setting display
+	void MainWindow::updateSettingDisplay()
+	{
+		m_menuSettings->clear();
+
+		Echo::StringArray classes;
+		Echo::Class::getAllClasses(classes);
+		for (Echo::String& className : classes)
+		{
+			if (Echo::Class::isSingleton(className))
+			{
+				QAction* action = new QAction(this);
+				action->setText(className.c_str());
+				m_menuSettings->addAction(action);
+
+				QObject::connect(action, SIGNAL(triggered()), this, SLOT(onEditSingletonSettings()));
 			}
 		}
 	}

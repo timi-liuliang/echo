@@ -37,7 +37,19 @@ namespace Echo
 		auto it = g_classInfos->find(className);
 		if (it != g_classInfos->end())
 		{
-			return it->second->m_classInfo.m_isVirtual;
+			return it->second->m_classInfo.m_virtual;
+		}
+
+		return true;
+	}
+
+	// is singleton
+	bool Class::isSingleton(const String& className)
+	{
+		auto it = g_classInfos->find(className);
+		if (it != g_classInfos->end())
+		{
+			return it->second->m_classInfo.m_singleton;
 		}
 
 		return true;
@@ -75,6 +87,17 @@ namespace Echo
 		}
 
 		return !childClasses.empty();
+	}
+
+	// get all class names
+	size_t Class::getAllClasses(StringArray& classes)
+	{
+		for (auto& it : *g_classInfos)
+		{
+			classes.push_back(it.first);
+		}
+
+		return classes.size();
 	}
 
 	Object* Class::create(const String& className)

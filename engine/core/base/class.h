@@ -11,7 +11,8 @@ namespace Echo
 {
 	struct ClassInfo
 	{
-		bool			m_isVirtual;			// virtual class can't be instanced
+		bool			m_singleton;		// singleton class
+		bool			m_virtual;			// virtual class can't be instanced
 		String			m_parent;
 		PropertyInfos	m_propertyInfos;
 		MethodMap		m_methods;
@@ -86,7 +87,8 @@ namespace Echo
 			luaex::LuaEx::instance()->register_class(name.c_str(), parent.c_str());
 
 			m_name = name;
-			m_classInfo.m_isVirtual = isVirtual;
+			m_classInfo.m_singleton = false;
+			m_classInfo.m_virtual = isVirtual;
 			m_classInfo.m_parent = parent;
 
 			Class::addClass(name, this);
@@ -108,7 +110,8 @@ namespace Echo
 			luaex::LuaEx::instance()->register_class(name.c_str(), parent.c_str());
 
 			m_name = name;
-			m_classInfo.m_isVirtual = isVirtual;
+			m_classInfo.m_singleton = true;
+			m_classInfo.m_virtual = isVirtual;
 			m_classInfo.m_parent = parent;
 
 			Class::addClass(name, this);
@@ -142,6 +145,10 @@ namespace Echo
 			return nullptr;
 		}
 
+		// get all class names
+		static size_t getAllClasses(StringArray& classes);
+
+		// create
 		static Object* create(const String& className);
 
 		// add class
@@ -152,6 +159,9 @@ namespace Echo
 
 		// is virtual
 		static bool isVirtual(const String& className);
+
+		// is singleton
+		static bool isSingleton(const String& className);
 
 		// get parent class name
 		static bool getParentClass(String& parentClassName, const String& className);

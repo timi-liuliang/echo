@@ -51,9 +51,17 @@
      </property>
      <addaction name="m_actionEmptyProject"/>
     </widget>
+    <widget class="QMenu" name="m_menuSettings">
+     <property name="title">
+      <string>Settings</string>
+     </property>
+     <addaction name="m_actionEmptyProject"/>
+    </widget>
     <addaction name="m_actionNewProject"/>
     <addaction name="m_actionOpenProject"/>
     <addaction name="m_menuRecents"/>
+    <addaction name="separator"/>
+    <addaction name="m_menuSettings"/>
     <addaction name="separator"/>
     <addaction name="m_actionSaveProject"/>
     <addaction name="m_actionSaveAsProject"/>
