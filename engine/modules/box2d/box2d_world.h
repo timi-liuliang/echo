@@ -24,6 +24,10 @@ namespace Echo
 		float getPixelsPerMeter() const { return m_pixelsPerMeter; }
 		void setPixelsPerPeter(float pixelsPerMeter) { m_pixelsPerMeter = pixelsPerMeter; }
 
+		// debug draw
+		bool isDebugDraw() const { return m_isDrawDebugData; }
+		void setDebugDraw(bool isDebugDraw) { m_isDrawDebugData = isDebugDraw; }
+
 	private:
 		Box2DWorld();
 		~Box2DWorld();

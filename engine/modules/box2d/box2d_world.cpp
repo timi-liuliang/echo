@@ -27,7 +27,10 @@ namespace Echo
 	{
 		CLASS_BIND_METHOD(Box2DWorld, getPixelsPerMeter, DEF_METHOD("getPixelsPerMeter"));
 		CLASS_BIND_METHOD(Box2DWorld, setPixelsPerPeter, DEF_METHOD("setPixelsPerMeter"));
+		CLASS_BIND_METHOD(Box2DWorld, isDebugDraw, DEF_METHOD("isDebugDraw"));
+		CLASS_BIND_METHOD(Box2DWorld, setDebugDraw, DEF_METHOD("setDebugDraw"));
 
+		CLASS_REGISTER_PROPERTY(Box2DWorld, "DebugDraw", Variant::Type::Bool, "isDebugDraw", "setDebugDraw");
 		CLASS_REGISTER_PROPERTY(Box2DWorld, "PixelsPerMeter", Variant::Type::Real, "getPixelsPerMeter", "setPixelsPerMeter");
 	}
 
