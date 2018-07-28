@@ -7,13 +7,16 @@
 
 namespace Echo
 {
-	// 构造函数
 	ProjectSettings::ProjectSettings()
 		: m_windowWidth(1366)
 		, m_windowHeight(768)
 		, m_launchScene("", ".scene")
 	{
-		
+		// register all module propertys
+		//for (Module* module : )
+		//{
+
+		//}
 	}
 
 	// 析构函数

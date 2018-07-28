@@ -23,6 +23,14 @@ namespace Echo
 
 	}
 
+	void Box2DWorld::bindMethods()
+	{
+		CLASS_BIND_METHOD(Box2DWorld, getPixelsPerMeter, DEF_METHOD("getPixelsPerMeter"));
+		CLASS_BIND_METHOD(Box2DWorld, setPixelsPerPeter, DEF_METHOD("setPixelsPerMeter"));
+
+		CLASS_REGISTER_PROPERTY(Box2DWorld, "PixelsPerMeter", Variant::Type::Real, "getPixelsPerMeter", "setPixelsPerMeter");
+	}
+
 	// instance
 	Box2DWorld* Box2DWorld::instance()
 	{

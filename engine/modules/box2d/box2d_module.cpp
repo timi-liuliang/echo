@@ -12,6 +12,7 @@ namespace Echo
 
 	void Box2DModule::registerTypes()
 	{
+		Class::registerType<Box2DWorld>();
 		Class::registerType<Box2DBody>();
 		Class::registerType<Box2DShape>();
 		Class::registerType<Box2DShapeBox>();

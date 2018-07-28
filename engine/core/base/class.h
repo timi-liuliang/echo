@@ -99,6 +99,28 @@ namespace Echo
 		}
 	};
 
+	template<typename T>
+	struct ObjectFactorySingletonT : public ObjectFactory
+	{
+		ObjectFactorySingletonT(const String& name, const String& parent, bool isVirtual = false)
+		{
+			// register class to lua
+			luaex::LuaEx::instance()->register_class(name.c_str(), parent.c_str());
+
+			m_name = name;
+			m_classInfo.m_isVirtual = isVirtual;
+			m_classInfo.m_parent = parent;
+
+			Class::addClass(name, this);
+			T::bindMethods();
+		}
+
+		virtual Object* create()
+		{
+			return T::instance();
+		}
+	};
+
 	class Class
 	{
 	public:
@@ -208,7 +230,26 @@ public:																						\
 																							\
 	static void bindMethods();																\
 																							\
-private:															
+private:				
+
+
+#define ECHO_SINGLETON_CLASS(m_class, m_parent)												\
+public:																						\
+	virtual const String& getClassName() const												\
+	{																						\
+		static String className=#m_class;													\
+		return className;																	\
+	}																						\
+																							\
+	static void initClassInfo()																\
+	{																						\
+		static Echo::ObjectFactorySingletonT<m_class>										\
+		G_OBJECT_FACTORY(#m_class, #m_parent, true);										\
+	}																						\
+																							\
+	static void bindMethods();																\
+																							\
+private:		
 
 #define CLASS_BIND_METHOD(m_class, method, methodName) \
 	Echo::Class::bindMethod(#m_class, &##m_class::method, methodName)

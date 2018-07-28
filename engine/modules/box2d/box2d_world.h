@@ -1,12 +1,15 @@
 #pragma once
 
+#include <engine/core/base/object.h>
 #include <engine/core/math/Math.h>
 #include "box2d_debug_draw.h"
 
 namespace Echo
 {
-	class Box2DWorld
+	class Box2DWorld : public Object
 	{
+		ECHO_SINGLETON_CLASS(Box2DWorld, Object);
+
 	public:
 		// instance
 		static Box2DWorld* instance();
@@ -19,6 +22,7 @@ namespace Echo
 
 		// get pixels per unit
 		float getPixelsPerMeter() const { return m_pixelsPerMeter; }
+		void setPixelsPerPeter(float pixelsPerMeter) { m_pixelsPerMeter = pixelsPerMeter; }
 
 	private:
 		Box2DWorld();
