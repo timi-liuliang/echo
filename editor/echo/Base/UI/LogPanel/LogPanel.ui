@@ -30,7 +30,11 @@
     <number>3</number>
    </property>
    <item>
-    <widget class="QListWidget" name="m_logList"/>
+    <widget class="QListWidget" name="m_logList">
+     <property name="contextMenuPolicy">
+      <enum>Qt::CustomContextMenu</enum>
+     </property>
+    </widget>
    </item>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -97,6 +101,11 @@
     </layout>
    </item>
   </layout>
+  <action name="m_actionCopyContent">
+   <property name="text">
+    <string>Copy</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

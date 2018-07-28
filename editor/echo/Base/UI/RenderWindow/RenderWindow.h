@@ -2,7 +2,7 @@
 
 #include <QWidget>
 #include <QMenu>
-#include "IRenderWindowInputController.h"
+#include "IInputController.h"
 
 namespace Studio
 {

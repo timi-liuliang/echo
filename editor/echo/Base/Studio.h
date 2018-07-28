@@ -3,7 +3,7 @@
 #include <string>
 #include "ProjectMgr.h"
 #include "ConfigMgr.h"
-#include "IRenderWindowInputController.h"
+#include "IInputController.h"
 #include "Logic/ThumbnailMgr/ThumbnailMgr.h"
 #include <QWidget>
 #include <QDockWidget>

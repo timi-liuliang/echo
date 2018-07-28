@@ -38,10 +38,17 @@ namespace Studio
 		void onLogMessage(int level, QString);
 		void onClearMessage();
 
+		// node tree widget show menu
+		void showMenu(const QPoint& point);
+
+		// copy log content
+		void copyLogContent();
 
 	private:
 		Echo::ui32			m_sameMessageNum;
 		Echo::String		m_lastMessage;
-		int			m_lastLevel;
+		int					m_lastLevel;
+		QMenu*				m_menu;
+		QListWidgetItem*	m_currentSelectItem;
 	};
 }
