@@ -7,7 +7,7 @@ namespace Echo
 	Box2DWorld::Box2DWorld()
 		: m_gravity( 0.f, -9.8f)
 		, m_pixelsPerMeter( 32.f)
-		, m_isDrawDebugData(true)
+		, m_drawDebugOption("Editor", {"None","Editor","Game","All"})
 	{
 		m_isEnable = Engine::instance()->getConfig().m_isGame;
 		m_b2World = EchoNew(b2World(b2Vec2(m_gravity.x, m_gravity.y)));
@@ -29,10 +29,10 @@ namespace Echo
 		CLASS_BIND_METHOD(Box2DWorld, setPixelsPerPeter, DEF_METHOD("setPixelsPerMeter"));
 		CLASS_BIND_METHOD(Box2DWorld, getGravity, DEF_METHOD("getGravity"));
 		CLASS_BIND_METHOD(Box2DWorld, setGravity, DEF_METHOD("setGravity"));
-		CLASS_BIND_METHOD(Box2DWorld, isDebugDraw, DEF_METHOD("isDebugDraw"));
-		CLASS_BIND_METHOD(Box2DWorld, setDebugDraw, DEF_METHOD("setDebugDraw"));
+		CLASS_BIND_METHOD(Box2DWorld, getDebugDrawOption, DEF_METHOD("getDebugDrawOption"));
+		CLASS_BIND_METHOD(Box2DWorld, setDebugDrawOption, DEF_METHOD("setDebugDrawOption"));
 
-		CLASS_REGISTER_PROPERTY(Box2DWorld, "DebugDraw", Variant::Type::Bool, "isDebugDraw", "setDebugDraw");
+		CLASS_REGISTER_PROPERTY(Box2DWorld, "DebugDraw", Variant::Type::StringOption, "getDebugDrawOption", "setDebugDrawOption");
 		CLASS_REGISTER_PROPERTY(Box2DWorld, "PixelsPerMeter", Variant::Type::Real, "getPixelsPerMeter", "setPixelsPerMeter");
 		CLASS_REGISTER_PROPERTY(Box2DWorld, "Gravity", Variant::Type::Vector2, "getGravity", "setGravity");
 	}
@@ -73,7 +73,8 @@ namespace Echo
 		}
 
 		// draw debug data
-		if (m_isDrawDebugData)
+		bool isGame = Engine::instance()->getConfig().m_isGame;
+		if(m_drawDebugOption.getIdx() == 3 || (m_drawDebugOption.getIdx() == 1 && !isGame) || (m_drawDebugOption.getIdx() == 2 && isGame) )
 		{
 			m_b2World->DrawDebugData();
 			m_debugDraw->Update(elapsedTime);

@@ -29,8 +29,8 @@ namespace Echo
 		void setGravity(const Vector2& gravity);
 
 		// debug draw
-		bool isDebugDraw() const { return m_isDrawDebugData; }
-		void setDebugDraw(bool isDebugDraw) { m_isDrawDebugData = isDebugDraw; }
+		const StringOption& getDebugDrawOption() const { return m_drawDebugOption; }
+		void setDebugDrawOption(const StringOption& option) { m_drawDebugOption.setValue( option.getValue()); }
 
 	private:
 		Box2DWorld();
@@ -38,7 +38,7 @@ namespace Echo
 
 	private:
 		bool			m_isEnable;
-		bool			m_isDrawDebugData;
+		StringOption	m_drawDebugOption;
 		Box2DDebugDraw*	m_debugDraw;
 		b2World*		m_b2World;			// we only support one b2World
 		Vector2			m_gravity;
