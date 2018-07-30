@@ -64,6 +64,9 @@ namespace Studio
 		// on trigger rename node
 		void onRenameNode();
 
+		// on save branch as scene
+		void onSaveBranchAsScene();
+
 		// when modifyd item name
 		void onChangedNodeName(QTreeWidgetItem* item);
 

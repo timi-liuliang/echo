@@ -162,9 +162,15 @@ namespace Studio
 
 	void EchoEngine::saveCurrentEditNodeTreeAs(const Echo::String& savePath)
 	{
-		if (m_currentEditNode && !savePath.empty())
+		saveBranchAsScene(savePath, m_currentEditNode);
+	}
+
+	// save branch node as scene
+	void EchoEngine::saveBranchAsScene(const Echo::String& savePath, Echo::Node* node)
+	{
+		if (node && !savePath.empty())
 		{
-			m_currentEditNode->save(savePath);
+			node->save(savePath);
 		}
 	}
 

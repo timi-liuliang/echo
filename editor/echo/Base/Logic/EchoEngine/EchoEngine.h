@@ -79,6 +79,9 @@ namespace Studio
 		void saveCurrentEditNodeTree();
 		void saveCurrentEditNodeTreeAs(const Echo::String& savePath);
 
+		// save branch node as scene
+		void saveBranchAsScene(const Echo::String& savePath, Echo::Node* node);
+
 		// 保存当前编辑场景
 		void SaveScene();
 

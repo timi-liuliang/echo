@@ -188,7 +188,7 @@
      <normaloff>:/icon/node/node.png</normaloff>:/icon/node/node.png</iconset>
    </property>
    <property name="text">
-    <string>Add Node</string>
+    <string>Add Child Node</string>
    </property>
   </action>
   <action name="m_actionAddChildScene">
@@ -197,6 +197,16 @@
    </property>
    <property name="toolTip">
     <string>Instance Child Scene</string>
+   </property>
+  </action>
+  <action name="m_actionChangeType">
+   <property name="text">
+    <string>Change Type</string>
+   </property>
+  </action>
+  <action name="m_actionSaveBranchasScene">
+   <property name="text">
+    <string>Save Branch As Scene</string>
    </property>
   </action>
  </widget>

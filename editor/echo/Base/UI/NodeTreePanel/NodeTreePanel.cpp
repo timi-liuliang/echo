@@ -4,6 +4,10 @@
 #include "NodeTreePanel.h"
 #include "EchoEngine.h"
 #include "ResChooseDialog.h"
+#include "PathChooseDialog.h"
+#include "ResPanel.h"
+#include <engine/core/util/PathUtil.h>
+#include <engine/core/io/IO.h>
 #include <engine/modules/gltf/gltf_res.h>
 
 namespace Studio
@@ -32,6 +36,7 @@ namespace Studio
 
 		QObject::connect(m_actionDeleteNode, SIGNAL(triggered()), this, SLOT(onDeleteNodes()));
 		QObject::connect(m_actionRenameNode, SIGNAL(triggered()), this, SLOT(onRenameNode()));
+		QObject::connect(m_actionSaveBranchasScene, SIGNAL(triggered()), this, SLOT(onSaveBranchAsScene()));
 
 		// 时间事件
 		m_timer = new QTimer(this);
@@ -196,6 +201,9 @@ namespace Studio
 			m_nodeTreeMenu->addAction(m_actionImportGltfScene);
 			m_nodeTreeMenu->addSeparator();
 			m_nodeTreeMenu->addAction(m_actionRenameNode);
+			m_nodeTreeMenu->addAction(m_actionChangeType);
+			m_nodeTreeMenu->addSeparator();
+			m_nodeTreeMenu->addAction(m_actionSaveBranchasScene);
 			m_nodeTreeMenu->addSeparator();
 			m_nodeTreeMenu->addAction(m_actionDeleteNode);
 			m_nodeTreeMenu->exec(QCursor::pos());
@@ -254,6 +262,26 @@ namespace Studio
 			m_nodeTreeWidget->editItem( item);
 		}
 	}
+
+	void NodeTreePanel::onSaveBranchAsScene()
+	{
+		QTreeWidgetItem* item = m_nodeTreeWidget->currentItem();
+		if (item)
+		{
+			Echo::Node* node = (Echo::Node*)item->data(0, Qt::UserRole).value<void*>();
+			Echo::String savePath = PathChooseDialog::getExistingPathName(this, ".scene", "Save").toStdString().c_str();
+			if (node && !savePath.empty() && !Echo::PathUtil::IsDir(savePath))
+			{
+				Echo::String resPath;
+				if (Echo::IO::instance()->covertFullPathToResPath(savePath, resPath))
+					EchoEngine::instance()->saveBranchAsScene(resPath.c_str(), node);
+
+				// refresh respanel display
+				ResPanel::instance()->reslectCurrentDir();
+			}
+		}
+	}
+
 
 	// when modifyd item name
 	void NodeTreePanel::onChangedNodeName(QTreeWidgetItem* item)

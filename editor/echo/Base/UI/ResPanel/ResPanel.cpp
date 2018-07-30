@@ -13,6 +13,8 @@
 
 namespace Studio
 {
+	static ResPanel* g_inst = nullptr;
+
 	// 构造函数
 	ResPanel::ResPanel( QWidget* parent/*=0*/)
 		: QDockWidget( parent)
@@ -41,12 +43,20 @@ namespace Studio
 		QObject::connect(m_actionNewFolder, SIGNAL(triggered()), this, SLOT(newFolder()));
 		QObject::connect(m_actionRenameRes, SIGNAL(triggered()), this, SLOT(onRenameRes()));
 		QObject::connect(m_actionDeleteRes, SIGNAL(triggered()), this, SLOT(onDeleteRes()));
+
+		g_inst = this;
 	}
 
 	// 析构函数
 	ResPanel::~ResPanel()
 	{
 
+	}
+
+	// instance
+	ResPanel* ResPanel::instance()
+	{
+		return g_inst;
 	}
 
 	// call when open project

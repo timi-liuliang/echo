@@ -16,6 +16,9 @@ namespace Studio
 		ResPanel( QWidget* parent=0);
 		~ResPanel();
 
+		// instance
+		static ResPanel* instance();
+
 		// call when open project
 		void onOpenProject();
 
