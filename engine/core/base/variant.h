@@ -20,6 +20,7 @@ namespace Echo
 			Bool,
 			Int,
 			Real,
+			Vector2,
 			Vector3,
 			String,
 			ResourcePath,
@@ -46,6 +47,7 @@ namespace Echo
 		Variant(int value);
 		Variant(Real value);
 		Variant(const String& str);
+		Variant(const Vector2& value);
 		Variant(const Vector3& value);
 		Variant(const ResourcePath& value);
 		Variant(const Base64String& value);
@@ -64,7 +66,8 @@ namespace Echo
 		operator const bool() const { return m_bool; }
 		operator const int() const { return m_int; }
 		operator const Real() const { return m_real; }
-		operator const Vector3&() const { return m_vec3; }
+		operator const Vector2&() const { return any_cast<Vector2>(m_any); }
+		operator const Vector3&() const { return any_cast<Vector3>(m_any); }
 		operator const String&() const { return any_cast<String>(m_any); }
 		operator const ResourcePath&() const { return any_cast<ResourcePath>(m_any); }
 		operator const Base64String&() const { return any_cast<Base64String>(m_any); }
@@ -74,7 +77,8 @@ namespace Echo
 		// convert to other type
 		const bool toBool() const { return m_bool; }
 		const Real toReal() const { return m_real; }
-		const Vector3& toVector3() const { return m_vec3; }
+		const Vector2& toVector2() const { return any_cast<Vector2>(m_any); }
+		const Vector3& toVector3() const { return any_cast<Vector3>(m_any); }
 		Object* toObj() const { return m_obj; }
 		const ResourcePath& toResPath() const { return any_cast<ResourcePath>(m_any); }
 		const StringOption& toStringOption() const { return any_cast<StringOption>(m_any); }
@@ -95,7 +99,6 @@ namespace Echo
 			bool			m_bool;
 			i32				m_int;
 			float			m_real;
-			Vector3			m_vec3;
 			mutable Object*	m_obj;
 		};
 	};

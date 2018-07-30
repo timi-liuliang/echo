@@ -32,7 +32,7 @@ namespace QT_UI
 		const Echo::Color& GetColor() const { return m_color; }
 
 		// MVC‰÷»æ
-		static void ItemDelegatePaint( QPainter *painter, const QRect& rect, const string& val);
+		static bool ItemDelegatePaint( QPainter *painter, const QRect& rect, const string& val);
 
 	protected:
 		// ÷ÿ∂®“Â‰÷»æ

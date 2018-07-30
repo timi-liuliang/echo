@@ -99,7 +99,7 @@ namespace QT_UI
 	}
 
 	// MVCäÖÈ¾
-	void QResEditor::ItemDelegatePaint(QPainter *painter, const QRect& rect, const Echo::String& val)
+	bool QResEditor::ItemDelegatePaint(QPainter *painter, const QRect& rect, const Echo::String& val)
 	{
 		Echo::String id = val;
 		//Echo::String fullPath = Echo::IO::instance()->getFullPath(path);
@@ -110,6 +110,8 @@ namespace QT_UI
 		//	QRect tRect = QRect(rect.left() + 3, rect.top() + 2, rect.height() - 4, rect.height() - 4);
 		//	painter->drawPixmap( tRect, pixmap);
 		//}
+
+		return false;
 	}
 
 

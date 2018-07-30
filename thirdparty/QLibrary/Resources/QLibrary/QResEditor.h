@@ -25,7 +25,7 @@ namespace QT_UI
 		QString GetId() { return m_lineEdit->text(); }
 
 		// MVC‰÷»æ
-		static void ItemDelegatePaint(QPainter *painter, const QRect& rect, const Echo::String& val);
+		static bool ItemDelegatePaint(QPainter *painter, const QRect& rect, const Echo::String& val);
 
 	protected:
 		// redefine paintEvent

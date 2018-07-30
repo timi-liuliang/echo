@@ -29,10 +29,16 @@ namespace Echo
 		m_any = str;
 	}
 
-	Variant::Variant(const Echo::Vector3& value)
+	Variant::Variant(const Vector2& value)
+		: m_type(Type::Vector2)
 	{
-		m_type = Type::Vector3;
-		m_vec3 = value;
+		m_any = value;
+	}
+
+	Variant::Variant(const Echo::Vector3& value)
+		: m_type(Type::Vector3)
+	{
+		m_any = value;
 	}
 
 	Variant::Variant(const Base64String& value)
@@ -68,7 +74,7 @@ namespace Echo
 	{
 		m_type = orig.m_type;
 		m_any  = orig.m_any;
-		m_vec3 = orig.m_vec3;
+		m_obj = orig.m_obj;
 	}
 
 	// operator "="
@@ -76,7 +82,7 @@ namespace Echo
 	{
 		m_type = orig.m_type;
 		m_any = orig.m_any;
-		m_vec3 = orig.m_vec3;
+		m_obj = orig.m_obj;
 
 		return *this;
 	}
@@ -90,7 +96,8 @@ namespace Echo
 		case Type::Int: return StringUtil::ToString(m_int);
 		case Type::Real: return StringUtil::ToString(m_real);
 		case Type::String: return any_cast<String>(m_any);
-		case Type::Vector3: return StringUtil::ToString(m_vec3);
+		case Type::Vector2: return StringUtil::ToString(any_cast<Vector2>(m_any));
+		case Type::Vector3: return StringUtil::ToString(any_cast<Vector3>(m_any));
 		case Type::ResourcePath: return (any_cast<ResourcePath>(m_any)).getPath();
 		case Type::StringOption: return (any_cast<StringOption>(m_any)).getValue();
 		}
@@ -108,7 +115,8 @@ namespace Echo
 		case Type::Int: { m_type = Type::Int; m_int = StringUtil::ParseI32(str); } return true;
 		case Type::Real: { m_type = Type::Real; m_real = StringUtil::ParseReal(str); } return true;
 		case Type::String: { m_type = Type::String; m_any = str; } return true;
-		case Type::Vector3: { m_type = Type::Vector3; m_vec3 = StringUtil::ParseVec3(str); }return true;
+		case Type::Vector2: { m_type = Type::Vector2; m_any = StringUtil::ParseVec2(str); } return true;
+		case Type::Vector3: { m_type = Type::Vector3; m_any = StringUtil::ParseVec3(str); }return true;
 		case Type::ResourcePath: { m_type = Type::ResourcePath; m_any = ResourcePath(str, nullptr); }return true;
 		case Type::StringOption: { m_type = Type::StringOption; m_any = StringOption(str); } return true;
 		case Type::Object: { m_type = Type::Object; m_obj = Object::getById(StringUtil::ParseI32(str)); } return true;

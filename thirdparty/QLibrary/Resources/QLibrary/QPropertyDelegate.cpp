@@ -4,14 +4,14 @@
 #include <QLineEdit>
 #include <QRadioButton>
 #include "QFileSelect.h"
-#include "QCameraProperty.h"
 #include "QResSelect.h"
 #include "QIntEditor.h"
 #include "QRealEditor.h"
+#include "QCheckBoxEditor.h"
+#include "QVector2Editor.h"
 #include "QVector3Editor.h"
 #include "QColorSelect.h"
 #include "QCheckBoxList.h"
-#include "QUVEditor.h"
 #include "QResEditor.h"
 #include <QCheckBox>
 #include <QComboBox>
@@ -25,54 +25,46 @@ namespace QT_UI
 		: QStyledItemDelegate(parent)
 	{
 		m_model = model;
+
+		registerWidget("ColorSelect", true, QColorSelect::ItemDelegatePaint);
+		registerWidget("CheckBox", true, QCheckBoxEditor::ItemDelegatePaint);
+		registerWidget("ResEdit", true, nullptr);
+		registerWidget("AssetsSelect", true, QResSelect::ItemDelegatePaint);
+	}
+
+	// register widget
+	void QPropertyDelegate::registerWidget(const Echo::String& type, bool isSupportCustomPaint, QPropertyWidgetInfo::ItemDelegatePaintFun paintFun)
+	{
+		QPropertyWidgetInfo info;
+		info.m_type = type;
+		info.m_isSupportCustomPaint = isSupportCustomPaint;
+		info.m_paintFun = paintFun;
+
+		m_widgetInfos[type] = info;
 	}
 
 	// 是否拥有自定义渲染
 	bool QPropertyDelegate::IsSupportCustomPaint( const Echo::String& widgetType, const QVariant& value) const
 	{
-		if (widgetType == "ColorSelect")
-			return true;
-		else if (widgetType == "CheckBox")
-			return true;
-		else if (widgetType == "ResEdit")
-			return false;
-		else if (widgetType == "AssetsSelect")
+		auto& it = m_widgetInfos.find(widgetType);
+		if (it != m_widgetInfos.end())
 		{
-			Echo::String path = value.toString().toStdString().c_str();
-			Echo::String ext = Echo::PathUtil::GetFileExt(path, true);
-			if( Echo::StringUtil::Equal(ext,".png", false))
-				return true;
+			return it->second.m_isSupportCustomPaint;
 		}
 
 		return false;
 	}
 
 	// 自定义渲染
-	void QPropertyDelegate::ItemDelegatePaint( QPainter *painter, const Echo::String& widgetType, const QRect& rect, const QVariant& val) const
+	bool QPropertyDelegate::ItemDelegatePaint( QPainter *painter, const Echo::String& widgetType, const QRect& rect, const QVariant& val) const
 	{
-		if (widgetType == "ColorSelect")
+		auto& it = m_widgetInfos.find(widgetType);
+		if (it != m_widgetInfos.end() && it->second.m_paintFun)
 		{
-			QColorSelect::ItemDelegatePaint(painter, rect, val.toString().toStdString());
+			return (*(it->second.m_paintFun))(painter, rect, val.toString().toStdString());
 		}
-		else if( widgetType == "CheckBox")
-		{
-			QStyleOptionButton opt;
-			opt.state |= val.toBool() ?  QStyle::State_On : QStyle::State_Off;
-			opt.state |= QStyle::State_Enabled;
-			opt.rect  =  QRect( rect.left()+3, rect.top(), rect.width()-3, rect.height());
 
-			QApplication::style()->drawControl( QStyle::CE_CheckBox, &opt, painter);
-		}
-		else if (widgetType == "ResEdit")
-		{
-			Echo::String id = val.toString().toStdString().c_str();
-			QResEditor::ItemDelegatePaint(painter, rect, id);
-		}
-		else if (widgetType == "AssetsSelect")
-		{
-			Echo::String path = val.toString().toStdString().c_str();
-			QResSelect::ItemDelegatePaint(painter, rect, path);
-		}
+		return false;
 	}
 
 	QSize QPropertyDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -113,7 +105,8 @@ namespace QT_UI
 		QVariant value;
 		if (m_model->findValue(value, propertyName) && IsSupportCustomPaint(widgetType, value))
 		{
-			ItemDelegatePaint( painter, widgetType, option.rect, value);
+			if (!ItemDelegatePaint(painter, widgetType, option.rect, value))
+				QStyledItemDelegate::paint(painter, option, index);
 		}
 		else
 		{
@@ -159,10 +152,6 @@ namespace QT_UI
 		else if (widgetType == "FileSelect")
 		{
 			return new QFileSelect(parent);
-		}
-		else if (widgetType == "CameraPos")
-		{
-			return new QCameraPosDir(parent);
 		}
 		else if( widgetType == "AssetsSelect")
 		{
@@ -213,17 +202,13 @@ namespace QT_UI
 		{
 			return new QRealEditor(m_model, propertyName, parent);
 		}
+		else if (widgetType == "Vector2")
+		{
+			return new QVector2Editor(m_model, propertyName, parent);
+		}
 		else if(widgetType == "Vector3")
 		{
 			return new QVector3Editor(m_model, propertyName, parent);
-		}
-		/*else if (widgetType == "Vector4")
-		{
-			return new QVector4EditorA(m_model, propertyName, parent);
-		}*/
-		else if (widgetType == "UV")
-		{
-			return new QUVEditor(m_model, propertyName, parent);
 		}
 		else if (widgetType == "BoneSelectComboBox")
 		{
@@ -275,11 +260,6 @@ namespace QT_UI
 				QFileSelect* widget = qobject_cast<QFileSelect*>(editor);
 				widget->SetPath( value.toString());
 			}
-			else if (widgetType == "CameraPos")
-			{
-				QCameraPosDir* widget = qobject_cast<QCameraPosDir*>(editor);
-				widget->SetPos(value.toString());
-			}
 			else if( widgetType == "AssetsSelect")
 			{
 				QResSelect* widget = qobject_cast<QResSelect*>(editor);
@@ -323,20 +303,15 @@ namespace QT_UI
 				QRealEditor* widget = qobject_cast<QRealEditor*>(editor);
 				widget->setValue(value.toString());
 			}
+			else if (widgetType == "Vector2")
+			{
+				QVector2Editor* widget = qobject_cast<QVector2Editor*>(editor);
+				widget->setValue(value.toString());
+			}
 			else if(widgetType == "Vector3")
 			{
 				QVector3Editor* widget = qobject_cast<QVector3Editor*>(editor);
 				widget->setValue(value.toString());
-			}
-			/*else if (widgetType == "Vector4")
-			{
-				QVector4EditorA* widget = qobject_cast<QVector4EditorA*>(editor);
-				widget->SetVector4(value.toString());
-			}*/
-			else if (widgetType == "UV")
-			{
-				QUVEditor* widget = qobject_cast<QUVEditor*>(editor);
-				widget->SetUV(value.toString());
 			}
 			else if (widgetType == "BoneSelectComboBox")
 			{
@@ -386,11 +361,6 @@ namespace QT_UI
 				QFileSelect* widget = qobject_cast<QFileSelect*>(editor);
 				m_model->setValue( propertyName, widget->GetPath());
 			}
-			else if (widgetType == "CameraPos")
-			{
-				QCameraPosDir* widget = qobject_cast<QCameraPosDir*>(editor);
-				m_model->setValue(propertyName, widget->GetPos());
-			}
 			else if( widgetType == "AssetsSelect")
 			{
 				QResSelect* widget = qobject_cast<QResSelect*>(editor);
@@ -420,24 +390,6 @@ namespace QT_UI
 			{
 				QComboBox* widget = qobject_cast<QComboBox*>( editor);
 				m_model->setValue( propertyName, widget->currentText());
-			}
-			/*else if( widgetType=="Vector3")
-			{
-				QVector3EditorA* widget = qobject_cast<QVector3EditorA*>(editor);
-				m_model->setValue(propertyName,widget->GetVector3());
-			}
-			else if (widgetType == "Vector4")
-			{
-				QVector4EditorA* widget = qobject_cast<QVector4EditorA*>(editor);
-				m_model->setValue(propertyName, widget->GetVector4());
-			}*/
-			else if (widgetType == "UV")
-			{
-				//由于如果在外部手动设置一个属性值的时候,发现model里的值虽然变了但是没有及时更新到面板上，
-				//导致调用此函数时候依然使用UI上的旧数据覆盖新的。所以强制掉了一次setEditorData更新最新数据到UI上
-				setEditorData(editor, index);
-				QUVEditor* widget = qobject_cast<QUVEditor*>(editor);
-				m_model->setValue(propertyName, widget->GetUV());
 			}
 			else if (widgetType == "BoneSelectComboBox")
 			{

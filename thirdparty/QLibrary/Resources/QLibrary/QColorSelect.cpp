@@ -39,7 +39,7 @@ namespace QT_UI
 	}
 
 	// MVC‰÷»æ
-	void QColorSelect::ItemDelegatePaint( QPainter *painter, const QRect& rect, const string& val)
+	bool QColorSelect::ItemDelegatePaint( QPainter *painter, const QRect& rect, const string& val)
 	{
 		Echo::Color color = Echo::StringUtil::ParseColor(val.c_str());
 		QColor qColor((int)(color.r*255.f), (int)(color.g*255.f), (int)(color.b*255.f));
@@ -55,6 +55,8 @@ namespace QT_UI
 		Echo::String text = Echo::StringUtil::Format( "rgb(%d,%d,%d)"/* "#%02x%02x%02x%02x"*/, (int)(color.r*255.f), (int)(color.g*255.f), (int)(color.b*255.f),(int)(color.a*255.f));
 		QRect textRect( rect.left()+rect.height()+3, rect.top()+2, rect.width()-rect.height()-3, rect.height()-4);
 		painter->drawText( textRect, Qt::AlignLeft, text.c_str());
+
+		return true;
 	}
 
 	// ¥Û–°

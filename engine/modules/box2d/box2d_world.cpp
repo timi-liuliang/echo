@@ -27,11 +27,14 @@ namespace Echo
 	{
 		CLASS_BIND_METHOD(Box2DWorld, getPixelsPerMeter, DEF_METHOD("getPixelsPerMeter"));
 		CLASS_BIND_METHOD(Box2DWorld, setPixelsPerPeter, DEF_METHOD("setPixelsPerMeter"));
+		CLASS_BIND_METHOD(Box2DWorld, getGravity, DEF_METHOD("getGravity"));
+		CLASS_BIND_METHOD(Box2DWorld, setGravity, DEF_METHOD("setGravity"));
 		CLASS_BIND_METHOD(Box2DWorld, isDebugDraw, DEF_METHOD("isDebugDraw"));
 		CLASS_BIND_METHOD(Box2DWorld, setDebugDraw, DEF_METHOD("setDebugDraw"));
 
 		CLASS_REGISTER_PROPERTY(Box2DWorld, "DebugDraw", Variant::Type::Bool, "isDebugDraw", "setDebugDraw");
 		CLASS_REGISTER_PROPERTY(Box2DWorld, "PixelsPerMeter", Variant::Type::Real, "getPixelsPerMeter", "setPixelsPerMeter");
+		CLASS_REGISTER_PROPERTY(Box2DWorld, "Gravity", Variant::Type::Vector2, "getGravity", "setGravity");
 	}
 
 	// instance
@@ -39,6 +42,15 @@ namespace Echo
 	{
 		static Box2DWorld* inst = EchoNew(Box2DWorld);
 		return inst;
+	}
+
+	void Box2DWorld::setGravity(const Vector2& gravity)
+	{
+		m_gravity = gravity;
+		if (m_b2World)
+		{
+			m_b2World->SetGravity(b2Vec2( m_gravity.x, m_gravity.y));
+		}
 	}
 
 	// step
