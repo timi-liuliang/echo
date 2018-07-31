@@ -43,6 +43,7 @@ namespace Echo
 	Node::Node()
 		: m_parent(NULL)
 		, m_isEnable(true)
+		, m_isBranch(false)
 		, m_posLocal(Vector3::ZERO)
 		, m_ortLocal(Quaternion::IDENTITY)
 		, m_sclLocal(Vector3::ONE)
@@ -487,24 +488,18 @@ namespace Echo
 
 		xmlNode->append_attribute("name").set_value(node->getName().c_str());
 		xmlNode->append_attribute("class").set_value(node->getClassName().c_str());
-		if (node->getPath().empty())
-		{
-			savePropertyRecursive(pugiNode, node, node->getClassName());
+		xmlNode->append_attribute("path").set_value(node->getPath().c_str());
 
-			for (ui32 idx = 0; idx < node->getChildNum(); idx++)
-			{
-				Node* child = node->getChild(idx);
-				if (child)
-				{
-					pugi::xml_node newNode = xmlNode->append_child("node");
-					saveXml(&newNode, child);
-				}
-			}
-		}
-		else
+		savePropertyRecursive(pugiNode, node, node->getClassName());
+
+		for (ui32 idx = 0; idx < node->getChildNum(); idx++)
 		{
-			xmlNode->append_attribute("path").set_value(node->getPath().c_str());
-			savePropertyRecursive(pugiNode, node, node->getClassName());
+			Node* child = node->getChild(idx);
+			if (child && !child->isBranch())
+			{
+				pugi::xml_node newNode = xmlNode->append_child("node");
+				saveXml(&newNode, child);
+			}
 		}
 	}
 
@@ -535,35 +530,30 @@ namespace Echo
 		{
 			pugi::xml_node* xmlNode = (pugi::xml_node*)pugiNode;
 			Echo::String path = xmlNode->attribute("path").value();
-			if (path.empty())
+			Node* node = path.empty() ? ECHO_DOWN_CAST<Node*>(instanceObject(pugiNode)) : load(path);
+			if (node)
 			{
-				Node* node = ECHO_DOWN_CAST<Node*>(instanceObject(pugiNode));
-				if (node)
-				{
-					if (parent)
-						parent->addChild(node);
-
-					for (pugi::xml_node child = xmlNode->child("node"); child; child = child.next_sibling("node"))
-					{
-						instanceNodeTree(&child, node);
-					}
-
-					return node;
-				}
-			}
-			else
-			{
-				Node* node = load(path);
-				if (node)
+				if (!path.empty())
 				{
 					node->setPath(path);
 
 					// overwrite property
 					loadPropertyRecursive(xmlNode, node, node->getClassName());
 
-					if (parent)
-						parent->addChild(node);
+					// set as branch
+					for (i32 i = 0; i < node->getChildNum(); i++)
+						node->getChild(i)->setBranch(true);
 				}
+
+				if (parent)
+					parent->addChild(node);
+
+				for (pugi::xml_node child = xmlNode->child("node"); child; child = child.next_sibling("node"))
+				{
+					instanceNodeTree(&child, node);
+				}
+
+				return node;
 			}
 		}
 

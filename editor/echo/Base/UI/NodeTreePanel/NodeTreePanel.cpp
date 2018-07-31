@@ -107,18 +107,23 @@ namespace Studio
 		nodeItem->setData(0, Qt::UserRole, QVariant::fromValue((void*)node));
 		nodeItem->setFlags( nodeItem->flags() | Qt::ItemIsEditable);
 
+		// child scene
+		if (!node->getPath().empty())
+			nodeItem->setIcon(2, QIcon(iconPath.c_str()));
+
 		// change foreground color based on node state
 		updateNodeTreeWidgetItemDisplay(nodeItem);
 
 		// show property
 		m_nodeTreeWidget->setCurrentItem(nodeItem);
 
-		if (recursive && node->getPath().empty())
+		if (recursive)
 		{
 			for (Echo::ui32 i = 0; i < node->getChildNum(); i++)
 			{
 				Echo::Node* childNode = node->getChild(i);
-				addNode(childNode, nodeItem, recursive);
+				if(!childNode->isBranch())
+					addNode(childNode, nodeItem, recursive);
 			}
 		}
 	}
@@ -225,6 +230,7 @@ namespace Studio
 				m_nodeTreeMenu->addSeparator();
 				m_nodeTreeMenu->addAction(m_actionRenameNode);
 				m_nodeTreeMenu->addSeparator();
+				m_nodeTreeMenu->addAction(m_actionSaveBranchasScene);
 				m_nodeTreeMenu->addAction(m_actionDiscardInstancing);
 				m_nodeTreeMenu->addSeparator();
 				m_nodeTreeMenu->addAction(m_actionDeleteNode);
@@ -300,6 +306,10 @@ namespace Studio
 				{
 					EchoEngine::instance()->saveBranchAsScene(resPath.c_str(), node);
 					node->setPath(resPath);
+					for (Echo::ui32 idx = 0; idx < node->getChildNum(); idx++)
+					{
+						node->getChild(idx)->setBranch(true);
+					}
 				}
 
 				// refresh respanel display
@@ -318,6 +328,10 @@ namespace Studio
 		{
 			Echo::Node* node = (Echo::Node*)item->data(0, Qt::UserRole).value<void*>();
 			node->setPath("");
+			for (Echo::ui32 idx =0; idx < node->getChildNum(); idx++)
+			{
+				node->getChild(idx)->setBranch(false);
+			}
 
 			refreshNodeDisplay(item);
 		}
@@ -331,16 +345,17 @@ namespace Studio
 			Echo::Node* node = (Echo::Node*)item->data(0, Qt::UserRole).value<void*>();
 
 			// remove item from ui
-			QTreeWidgetItem* parentItem = item->parent();
+			QTreeWidgetItem* parentItem = item->parent() ? item->parent() : m_nodeTreeWidget->invisibleRootItem();
 			if (parentItem)
+			{
+				addNode(node, parentItem, true);
+
+				// update property panel display
+				onSelectNode();
+
+				// remove this
 				parentItem->removeChild(item);
-			else
-				m_nodeTreeWidget->invisibleRootItem()->removeChild(item);
-
-			addNode(node, parentItem, true);
-
-			// update property panel display
-			onSelectNode();
+			}
 		}
 	}
 
