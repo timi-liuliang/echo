@@ -39,6 +39,9 @@ namespace Studio
 		// double click res
 		void onDoubleClickPreviewRes(const char* res);
 
+		// on file name changed
+		void onFileNameChanged();
+
 	private:
 		QT_UI::QDirectoryModel*		m_dirModel;
 		QT_UI::QPreviewHelper*		m_previewHelper;

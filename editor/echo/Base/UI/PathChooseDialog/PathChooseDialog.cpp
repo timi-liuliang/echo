@@ -1,5 +1,6 @@
 #include "PathChooseDialog.h"
 #include "Studio.h"
+#include <QPushButton>
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/main/Engine.h>
 
@@ -11,6 +12,9 @@ namespace Studio
 		, m_supportExts(exts)
 	{
 		setupUi( this);
+
+		// disable ok button
+		m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 
 		// 目录树型结构
 		m_dirModel = new QT_UI::QDirectoryModel();
@@ -32,6 +36,7 @@ namespace Studio
 
 		// 消息链接
 		QObject::connect(m_dirModel, SIGNAL(FileSelected(const char*)), this, SLOT(onSelectDir(const char*)));
+		QObject::connect(m_fileNameLine, SIGNAL(textChanged(const QString &)), this, SLOT(onFileNameChanged()));
 
 		m_previewHelper = new QT_UI::QPreviewHelper(m_listView);
 		QObject::connect(m_previewHelper, SIGNAL(doubleClickedRes(const char*)), this, SLOT(onDoubleClickPreviewRes(const char*)));
@@ -115,6 +120,19 @@ namespace Studio
 		{
 			Echo::String fileName = Echo::PathUtil::GetPureFilename(res, false);
 			m_fileNameLine->setText( fileName.c_str());
+		}
+	}
+
+	// on file name changed
+	void PathChooseDialog::onFileNameChanged()
+	{
+		if (m_fileNameLine->text().isEmpty())
+		{
+			m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+		}
+		else
+		{
+			m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
 		}
 	}
 }
