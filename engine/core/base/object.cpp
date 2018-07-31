@@ -80,7 +80,6 @@ namespace Echo
 
 		Echo::String name = xmlNode->attribute("name").value();
 		Echo::String className = xmlNode->attribute("class").value();
-
 		Object* res = Echo::Class::create<Object*>(className);
 		if (res)
 		{

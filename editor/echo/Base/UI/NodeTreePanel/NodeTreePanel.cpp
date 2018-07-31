@@ -111,7 +111,7 @@ namespace Studio
 		// show property
 		m_nodeTreeWidget->setCurrentItem(nodeItem);
 
-		if (recursive)
+		if (recursive && node->getPath().empty())
 		{
 			for (Echo::ui32 i = 0; i < node->getChildNum(); i++)
 			{
@@ -274,7 +274,10 @@ namespace Studio
 			{
 				Echo::String resPath;
 				if (Echo::IO::instance()->covertFullPathToResPath(savePath, resPath))
+				{
 					EchoEngine::instance()->saveBranchAsScene(resPath.c_str(), node);
+					node->setPath(resPath);
+				}
 
 				// refresh respanel display
 				ResPanel::instance()->reslectCurrentDir();

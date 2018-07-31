@@ -487,16 +487,24 @@ namespace Echo
 
 		xmlNode->append_attribute("name").set_value(node->getName().c_str());
 		xmlNode->append_attribute("class").set_value(node->getClassName().c_str());
-		savePropertyRecursive(pugiNode, node, node->getClassName());
-
-		for (ui32 idx=0; idx < node->getChildNum(); idx++)
+		if (node->getPath().empty())
 		{
-			Node* child = node->getChild(idx);
-			if (child)
+			savePropertyRecursive(pugiNode, node, node->getClassName());
+
+			for (ui32 idx = 0; idx < node->getChildNum(); idx++)
 			{
-				pugi::xml_node newNode = xmlNode->append_child("node");
-				saveXml(&newNode, child);
+				Node* child = node->getChild(idx);
+				if (child)
+				{
+					pugi::xml_node newNode = xmlNode->append_child("node");
+					saveXml(&newNode, child);
+				}
 			}
+		}
+		else
+		{
+			xmlNode->append_attribute("path").set_value(node->getPath().c_str());
+			savePropertyRecursive(pugiNode, node, node->getClassName());
 		}
 	}
 
@@ -516,6 +524,8 @@ namespace Echo
 			}
 		}
 
+		EchoLogError("Node::load failed. path [%s] not exist", path.c_str());
+
 		return nullptr;
 	}
 
@@ -524,19 +534,36 @@ namespace Echo
 		if (pugiNode)
 		{
 			pugi::xml_node* xmlNode = (pugi::xml_node*)pugiNode;
-
-			Node* node = ECHO_DOWN_CAST<Node*>(instanceObject(pugiNode));
-			if (node)
+			Echo::String path = xmlNode->attribute("path").value();
+			if (path.empty())
 			{
-				if (parent)
-					parent->addChild(node);
-
-				for (pugi::xml_node child = xmlNode->child("node"); child; child = child.next_sibling("node"))
+				Node* node = ECHO_DOWN_CAST<Node*>(instanceObject(pugiNode));
+				if (node)
 				{
-					instanceNodeTree(&child, node);
-				}
+					if (parent)
+						parent->addChild(node);
 
-				return node;
+					for (pugi::xml_node child = xmlNode->child("node"); child; child = child.next_sibling("node"))
+					{
+						instanceNodeTree(&child, node);
+					}
+
+					return node;
+				}
+			}
+			else
+			{
+				Node* node = load(path);
+				if (node)
+				{
+					node->setPath(path);
+
+					// overwrite property
+					loadPropertyRecursive(xmlNode, node, node->getClassName());
+
+					if (parent)
+						parent->addChild(node);
+				}
 			}
 		}
 
