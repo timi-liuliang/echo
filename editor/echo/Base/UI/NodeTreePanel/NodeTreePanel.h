@@ -76,6 +76,9 @@ namespace Studio
 		// on instance child scene
 		void onInstanceChildScene();
 
+		// refresh node display
+		void refreshNodeDisplay(QTreeWidgetItem* item);
+
 	public slots:
 		// ‰÷»æ
 		void  update();

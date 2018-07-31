@@ -283,9 +283,31 @@ namespace Studio
 				// refresh respanel display
 				ResPanel::instance()->reslectCurrentDir();
 			}
+
+			refreshNodeDisplay(item);
 		}
 	}
 
+	// refresh node display
+	void NodeTreePanel::refreshNodeDisplay(QTreeWidgetItem* item)
+	{
+		if (item)
+		{
+			Echo::Node* node = (Echo::Node*)item->data(0, Qt::UserRole).value<void*>();
+
+			// remove item from ui
+			QTreeWidgetItem* parentItem = item->parent();
+			if (parentItem)
+				parentItem->removeChild(item);
+			else
+				m_nodeTreeWidget->invisibleRootItem()->removeChild(item);
+
+			addNode(node, parentItem, true);
+
+			// update property panel display
+			onSelectNode();
+		}
+	}
 
 	// when modifyd item name
 	void NodeTreePanel::onChangedNodeName(QTreeWidgetItem* item)
