@@ -209,6 +209,11 @@
     <string>Save Branch As Scene</string>
    </property>
   </action>
+  <action name="m_actionDiscardInstancing">
+   <property name="text">
+    <string>Discard Instancing</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="../../../Resource/App.qrc"/>

@@ -67,6 +67,9 @@ namespace Studio
 		// on save branch as scene
 		void onSaveBranchAsScene();
 
+		// on discard instancing
+		void onDiscardInstancing();
+
 		// when modifyd item name
 		void onChangedNodeName(QTreeWidgetItem* item);
 

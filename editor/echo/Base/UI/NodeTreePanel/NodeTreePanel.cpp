@@ -38,6 +38,7 @@ namespace Studio
 		QObject::connect(m_actionRenameNode, SIGNAL(triggered()), this, SLOT(onRenameNode()));
 		QObject::connect(m_actionAddChildScene, SIGNAL(triggered()), this, SLOT(onInstanceChildScene()));
 		QObject::connect(m_actionSaveBranchasScene, SIGNAL(triggered()), this, SLOT(onSaveBranchAsScene()));
+		QObject::connect(m_actionDiscardInstancing, SIGNAL(triggered()), this, SLOT(onDiscardInstancing()));
 
 		// 时间事件
 		m_timer = new QTimer(this);
@@ -193,21 +194,42 @@ namespace Studio
 		QTreeWidgetItem* item = m_nodeTreeWidget->itemAt(point);
 		if (item)
 		{
-			m_nodeTreeWidget->setCurrentItem(item);
+			Echo::Node* node = (Echo::Node*)item->data(0, Qt::UserRole).value<void*>();
+			if (node->getPath().empty())
+			{
+				m_nodeTreeWidget->setCurrentItem(item);
 
-			EchoSafeDelete(m_nodeTreeMenu, QMenu);
-			m_nodeTreeMenu = EchoNew(QMenu);
-			m_nodeTreeMenu->addAction(m_actionAddNode);
-			m_nodeTreeMenu->addAction(m_actionAddChildScene);
-			m_nodeTreeMenu->addAction(m_actionImportGltfScene);
-			m_nodeTreeMenu->addSeparator();
-			m_nodeTreeMenu->addAction(m_actionRenameNode);
-			m_nodeTreeMenu->addAction(m_actionChangeType);
-			m_nodeTreeMenu->addSeparator();
-			m_nodeTreeMenu->addAction(m_actionSaveBranchasScene);
-			m_nodeTreeMenu->addSeparator();
-			m_nodeTreeMenu->addAction(m_actionDeleteNode);
-			m_nodeTreeMenu->exec(QCursor::pos());
+				EchoSafeDelete(m_nodeTreeMenu, QMenu);
+				m_nodeTreeMenu = EchoNew(QMenu);
+				m_nodeTreeMenu->addAction(m_actionAddNode);
+				m_nodeTreeMenu->addAction(m_actionAddChildScene);
+				m_nodeTreeMenu->addAction(m_actionImportGltfScene);
+				m_nodeTreeMenu->addSeparator();
+				m_nodeTreeMenu->addAction(m_actionRenameNode);
+				m_nodeTreeMenu->addAction(m_actionChangeType);
+				m_nodeTreeMenu->addSeparator();
+				m_nodeTreeMenu->addAction(m_actionSaveBranchasScene);
+				m_nodeTreeMenu->addSeparator();
+				m_nodeTreeMenu->addAction(m_actionDeleteNode);
+				m_nodeTreeMenu->exec(QCursor::pos());
+			}
+			else
+			{
+				m_nodeTreeWidget->setCurrentItem(item);
+
+				EchoSafeDelete(m_nodeTreeMenu, QMenu);
+				m_nodeTreeMenu = EchoNew(QMenu);
+				m_nodeTreeMenu->addAction(m_actionAddNode);
+				m_nodeTreeMenu->addAction(m_actionAddChildScene);
+				m_nodeTreeMenu->addAction(m_actionImportGltfScene);
+				m_nodeTreeMenu->addSeparator();
+				m_nodeTreeMenu->addAction(m_actionRenameNode);
+				m_nodeTreeMenu->addSeparator();
+				m_nodeTreeMenu->addAction(m_actionDiscardInstancing);
+				m_nodeTreeMenu->addSeparator();
+				m_nodeTreeMenu->addAction(m_actionDeleteNode);
+				m_nodeTreeMenu->exec(QCursor::pos());
+			}
 		}
 		else
 		{
@@ -283,6 +305,19 @@ namespace Studio
 				// refresh respanel display
 				ResPanel::instance()->reslectCurrentDir();
 			}
+
+			refreshNodeDisplay(item);
+		}
+	}
+
+	// on discard instancing
+	void NodeTreePanel::onDiscardInstancing()
+	{
+		QTreeWidgetItem* item = m_nodeTreeWidget->currentItem();
+		if (item)
+		{
+			Echo::Node* node = (Echo::Node*)item->data(0, Qt::UserRole).value<void*>();
+			node->setPath("");
 
 			refreshNodeDisplay(item);
 		}
