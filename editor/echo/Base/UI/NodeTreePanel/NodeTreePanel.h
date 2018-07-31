@@ -73,6 +73,9 @@ namespace Studio
 		// import gltf scene
 		void importGltfScene();
 
+		// on instance child scene
+		void onInstanceChildScene();
+
 	public slots:
 		// ‰÷»æ
 		void  update();

@@ -36,6 +36,7 @@ namespace Studio
 
 		QObject::connect(m_actionDeleteNode, SIGNAL(triggered()), this, SLOT(onDeleteNodes()));
 		QObject::connect(m_actionRenameNode, SIGNAL(triggered()), this, SLOT(onRenameNode()));
+		QObject::connect(m_actionAddChildScene, SIGNAL(triggered()), this, SLOT(onInstanceChildScene()));
 		QObject::connect(m_actionSaveBranchasScene, SIGNAL(triggered()), this, SLOT(onSaveBranchAsScene()));
 
 		// 时间事件
@@ -326,6 +327,19 @@ namespace Studio
 		{
 			Echo::GltfResPtr asset = Echo::GltfRes::create( gltfFile);
 			Echo::Node* node = asset->build();
+			if (node)
+			{
+				addNode(node);
+			}
+		}
+	}
+
+	void NodeTreePanel::onInstanceChildScene()
+	{
+		Echo::String nodeTreeFile = ResChooseDialog::getExistingFile(this, ".scene");
+		if (!nodeTreeFile.empty())
+		{
+			Echo::Node* node = Echo::Node::load(nodeTreeFile);
 			if (node)
 			{
 				addNode(node);
