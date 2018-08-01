@@ -36,6 +36,7 @@ namespace Studio
 		QObject::connect(m_nodeTreeWidget, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, SLOT(onChangedNodeName(QTreeWidgetItem*)));
 		QObject::connect(m_nodeTreeWidget, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showMenu(const QPoint&)));
 
+		QObject::connect(m_actionDuplicateNode, SIGNAL(triggered()), this, SLOT(onDuplicateNode()));
 		QObject::connect(m_actionDeleteNode, SIGNAL(triggered()), this, SLOT(onDeleteNodes()));
 		QObject::connect(m_actionRenameNode, SIGNAL(triggered()), this, SLOT(onRenameNode()));
 		QObject::connect(m_actionAddChildScene, SIGNAL(triggered()), this, SLOT(onInstanceChildScene()));
@@ -229,6 +230,8 @@ namespace Studio
 				m_nodeTreeMenu->addSeparator();
 				m_nodeTreeMenu->addAction(m_actionRenameNode);
 				m_nodeTreeMenu->addAction(m_actionChangeType);
+				if(node->getParent())
+					m_nodeTreeMenu->addAction(m_actionDuplicateNode);
 				m_nodeTreeMenu->addSeparator();
 				m_nodeTreeMenu->addAction(m_actionSaveBranchasScene);
 				m_nodeTreeMenu->addSeparator();
@@ -246,6 +249,8 @@ namespace Studio
 				m_nodeTreeMenu->addAction(m_actionImportGltfScene);
 				m_nodeTreeMenu->addSeparator();
 				m_nodeTreeMenu->addAction(m_actionRenameNode);
+				if(node->getParent())
+					m_nodeTreeMenu->addAction(m_actionDuplicateNode);
 				m_nodeTreeMenu->addSeparator();
 				m_nodeTreeMenu->addAction(m_actionSaveBranchasScene);
 				m_nodeTreeMenu->addAction(m_actionDiscardInstancing);
@@ -309,6 +314,23 @@ namespace Studio
 		}
 	}
 
+	// on duplicate node
+	void NodeTreePanel::onDuplicateNode()
+	{
+		QTreeWidgetItem* item = m_nodeTreeWidget->currentItem();
+		if (item)
+		{
+			Echo::Node* node = (Echo::Node*)item->data(0, Qt::UserRole).value<void*>();
+			if (node)
+			{
+				Echo::Node* duplicateNode = node->duplicate(true);
+				duplicateNode->setParent(node->getParent());
+
+				addNode( duplicateNode, item->parent(), true);
+			}
+		}
+	}
+
 	void NodeTreePanel::onSaveBranchAsScene()
 	{
 		QTreeWidgetItem* item = m_nodeTreeWidget->currentItem();
@@ -334,6 +356,19 @@ namespace Studio
 			}
 
 			refreshNodeDisplay(item);
+		}
+	}
+
+	void NodeTreePanel::onInstanceChildScene()
+	{
+		Echo::String nodeTreeFile = ResChooseDialog::getExistingFile(this, ".scene");
+		if (!nodeTreeFile.empty())
+		{
+			Echo::Node* node = Echo::Node::load(nodeTreeFile, true);
+			if (node)
+			{
+				addNode(node);
+			}
 		}
 	}
 
@@ -416,19 +451,6 @@ namespace Studio
 		{
 			Echo::GltfResPtr asset = Echo::GltfRes::create( gltfFile);
 			Echo::Node* node = asset->build();
-			if (node)
-			{
-				addNode(node);
-			}
-		}
-	}
-
-	void NodeTreePanel::onInstanceChildScene()
-	{
-		Echo::String nodeTreeFile = ResChooseDialog::getExistingFile(this, ".scene");
-		if (!nodeTreeFile.empty())
-		{
-			Echo::Node* node = Echo::Node::load(nodeTreeFile);
 			if (node)
 			{
 				addNode(node);

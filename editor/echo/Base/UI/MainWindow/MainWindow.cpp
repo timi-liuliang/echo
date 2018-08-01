@@ -352,7 +352,7 @@ namespace Studio
 	// open node tree
 	void MainWindow::openNodeTree(const Echo::String& resPath)
 	{
-		Echo::Node* node = Echo::Node::load(resPath);
+		Echo::Node* node = Echo::Node::load(resPath, false);
 		if (node)
 		{
 			// clear

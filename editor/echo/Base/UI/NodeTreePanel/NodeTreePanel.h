@@ -61,6 +61,9 @@ namespace Studio
 		// on trigger delete nodes
 		void onDeleteNodes();
 
+		// on duplicate node
+		void onDuplicateNode();
+
 		// on trigger rename node
 		void onRenameNode();
 

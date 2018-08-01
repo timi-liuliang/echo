@@ -98,18 +98,21 @@ namespace Echo
 		void setScript(const ResourcePath& path);
 
 	public:
+		// get node by path
 		Node* getNode(const String& path) { return nullptr; }
 
-	public:
+		// duplicate
+		Node* duplicate(bool recursive);
+
 		// save
 		void save(const String& path);
 
 		// load
-		static Node* load(const String& path);
+		static Node* load(const String& path, bool isLink);
 
 	private:
 		// save xml recursive
-		void saveXml(void* pugiNode, Node* node);
+		void saveXml(void* pugiNode, Node* node, bool recursive);
 
 		// instance node
 		static Node* instanceNodeTree(void* pugiNode, Node* parent);

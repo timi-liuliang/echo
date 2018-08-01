@@ -461,6 +461,20 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(Node, "Script", Variant::Type::ResourcePath, "getScript", "setScript");
 	}
 
+	// duplicate
+	Node* Node::duplicate(bool recursive)
+	{
+		// save
+		pugi::xml_document doc;
+		pugi::xml_node root = doc.append_child("node");
+		saveXml(&root, this, recursive);
+
+		// load
+		Node* duplicateNode = instanceNodeTree(&root, nullptr);
+
+		return duplicateNode;
+	}
+
 	// save
 	void Node::save(const String& path)
 	{
@@ -476,13 +490,13 @@ namespace Echo
 		// root node
 		pugi::xml_node root = doc.append_child("node");
 
-		saveXml(&root, this);
+		saveXml(&root, this, true);
 
 		doc.save_file(fullPath.c_str(), "\t", 1U, pugi::encoding_utf8);
 	}
 
 	// save xml recursive
-	void Node::saveXml(void* pugiNode, Node* node)
+	void Node::saveXml(void* pugiNode, Node* node, bool recursive)
 	{
 		pugi::xml_node* xmlNode = (pugi::xml_node*)pugiNode;
 
@@ -492,19 +506,22 @@ namespace Echo
 
 		savePropertyRecursive(pugiNode, node, node->getClassName());
 
-		for (ui32 idx = 0; idx < node->getChildNum(); idx++)
+		if (recursive)
 		{
-			Node* child = node->getChild(idx);
-			if (child && !child->isLink())
+			for (ui32 idx = 0; idx < node->getChildNum(); idx++)
 			{
-				pugi::xml_node newNode = xmlNode->append_child("node");
-				saveXml(&newNode, child);
+				Node* child = node->getChild(idx);
+				if (child && !child->isLink())
+				{
+					pugi::xml_node newNode = xmlNode->append_child("node");
+					saveXml(&newNode, child, true);
+				}
 			}
 		}
 	}
 
 	// load
-	Node* Node::load(const String& path)
+	Node* Node::load(const String& path, bool isLink)
 	{
 		MemoryReader reader(path);
 		if (reader.getSize())
@@ -514,6 +531,14 @@ namespace Echo
 			{
 				pugi::xml_node root = doc.child("node");
 				Node* rootNode = instanceNodeTree(&root, nullptr);
+				if (isLink)
+				{
+					rootNode->setPath(path);
+					for (Echo::ui32 idx = 0; idx < rootNode->getChildNum(); idx++)
+					{
+						rootNode->getChild(idx)->setLink(true);
+					}
+				}
 
 				return rootNode;
 			}
@@ -530,19 +555,13 @@ namespace Echo
 		{
 			pugi::xml_node* xmlNode = (pugi::xml_node*)pugiNode;
 			Echo::String path = xmlNode->attribute("path").value();
-			Node* node = path.empty() ? ECHO_DOWN_CAST<Node*>(instanceObject(pugiNode)) : load(path);
+			Node* node = path.empty() ? ECHO_DOWN_CAST<Node*>(instanceObject(pugiNode)) : load(path, true);
 			if (node)
 			{
 				if (!path.empty())
 				{
-					node->setPath(path);
-
 					// overwrite property
 					loadPropertyRecursive(xmlNode, node, node->getClassName());
-
-					// set child as link
-					for (i32 i = 0; i < node->getChildNum(); i++)
-						node->getChild(i)->setLink(true);
 				}
 
 				if (parent)

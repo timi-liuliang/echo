@@ -234,6 +234,11 @@
     <string>Discard Instancing</string>
    </property>
   </action>
+  <action name="m_actionDuplicateNode">
+   <property name="text">
+    <string>Duplicate</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="../../../Resource/App.qrc"/>
