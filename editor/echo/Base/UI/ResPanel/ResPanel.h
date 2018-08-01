@@ -53,6 +53,9 @@ namespace Studio
 		// delete res
 		void onDeleteRes();
 
+		// duplicate res
+		void onDuplicateRes();
+
 		// on renamed res
 		void onRenamedRes(const QString src, const QString dest);
 

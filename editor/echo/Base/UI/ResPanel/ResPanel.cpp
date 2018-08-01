@@ -43,6 +43,7 @@ namespace Studio
 		QObject::connect(m_actionNewFolder, SIGNAL(triggered()), this, SLOT(newFolder()));
 		QObject::connect(m_actionRenameRes, SIGNAL(triggered()), this, SLOT(onRenameRes()));
 		QObject::connect(m_actionDeleteRes, SIGNAL(triggered()), this, SLOT(onDeleteRes()));
+		QObject::connect(m_actionDuplicateRes, SIGNAL(triggered()), this, SLOT(onDuplicateRes()));
 
 		g_inst = this;
 	}
@@ -171,6 +172,7 @@ namespace Studio
 		m_resMenu->addMenu(createResMenu);
 		if (item)
 		{
+			m_resMenu->addAction(m_actionDuplicateRes);
 			m_resMenu->addAction(m_actionDeleteRes);
 			m_resMenu->addAction(m_actionRenameRes);
 
@@ -266,6 +268,47 @@ namespace Studio
 		{
 			Echo::String path = m_menuEditItem->data(Qt::UserRole).toString().toStdString().c_str();
 			Echo::PathUtil::DelPath(path);
+
+			reslectCurrentDir();
+		}
+	}
+
+	// duplicate res
+	void ResPanel::onDuplicateRes()
+	{
+		if (m_menuEditItem)
+		{
+			Echo::String fullPathName = m_menuEditItem->data(Qt::UserRole).toString().toStdString().c_str();
+			if (!Echo::PathUtil::IsDir(fullPathName))
+			{
+				Echo::String path = Echo::PathUtil::GetFileDirPath(fullPathName);
+				Echo::String fileName = Echo::PathUtil::GetPureFilename(fullPathName, false);
+				Echo::String fileExt = Echo::PathUtil::GetFileExt(fullPathName, true);
+				for (int i = 0; i < 65535; i++)
+				{
+					Echo::String newPath = Echo::StringUtil::Format("%s%sCopy_%d%s", path.c_str(), fileName.c_str(), i, fileExt.c_str());
+					if (!Echo::PathUtil::IsFileExist(newPath))
+					{
+						Echo::PathUtil::CopyFilePath(fullPathName, newPath, false);
+						break;
+					}
+				}
+			}
+			else
+			{
+				Echo::String parentPath = Echo::PathUtil::GetParentPath(fullPathName);
+				Echo::String lastPath = Echo::PathUtil::GetLastDirName(fullPathName);
+				for (int i = 0; i < 65535; i++)
+				{
+					Echo::String newDir = Echo::StringUtil::Format("%s%sCopy_%d/", parentPath.c_str(), lastPath.c_str(), i);
+					if (!Echo::PathUtil::IsDirExist(newDir))
+					{
+						Echo::PathUtil::CopyDir(fullPathName, newDir, false);
+						break;
+					}
+				}
+			}
+
 
 			reslectCurrentDir();
 		}

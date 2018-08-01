@@ -84,6 +84,11 @@
     <string>Rename</string>
    </property>
   </action>
+  <action name="m_actionDuplicateRes">
+   <property name="text">
+    <string>Duplicate</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="../../../Resource/App.qrc"/>
