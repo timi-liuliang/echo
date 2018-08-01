@@ -21,14 +21,12 @@ namespace Studio
 		, m_nodeTreeMenu(nullptr)
 		, m_currentEditObject(nullptr)
 		, m_nextEditObject(nullptr)
+		, m_width(0)
 	{
 		EchoAssert(!g_inst);
 		g_inst = this;
 
 		setupUi( this);
-		m_nodeTreeWidget->header()->setSectionResizeMode(0, QHeaderView::Stretch);
-		m_nodeTreeWidget->header()->resizeSection(1, 32);
-		m_nodeTreeWidget->header()->setSectionResizeMode(1, QHeaderView::Fixed);
 
 		QObject::connect(m_newNodeButton,  SIGNAL(clicked()), this, SLOT(showNewNodeDialog()));
 		QObject::connect(m_actionAddNode,  SIGNAL(triggered()), this, SLOT(showNewNodeDialog()));
@@ -60,6 +58,11 @@ namespace Studio
 		return g_inst;
 	}
 
+	//void NodeTreePanel::resizeEvent(QResizeEvent* event)
+	//{
+	//	QDockWidget::resizeEvent(event);	
+	//}
+
 	// äÖÈ¾
 	void NodeTreePanel::update()
 	{
@@ -67,6 +70,16 @@ namespace Studio
 		{
 			onEditObject(m_nextEditObject);
 			m_nextEditObject = nullptr;
+		}
+
+		if (m_width != m_nodeTreeWidget->width())
+		{
+			m_nodeTreeWidget->header()->resizeSection(1, 32);
+			m_nodeTreeWidget->header()->setSectionResizeMode(1, QHeaderView::Fixed);
+			m_nodeTreeWidget->header()->resizeSection(0, m_nodeTreeWidget->width() - 32);
+			m_width = m_nodeTreeWidget->width();
+
+			//m_propertyTreeView->header()->resizeSection(0, std::max<int>(140, m_propertyTreeView->header()->sectionSize(0)));
 		}
 	}
 

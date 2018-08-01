@@ -78,6 +78,9 @@
           <property name="columnCount">
            <number>2</number>
           </property>
+          <attribute name="headerVisible">
+           <bool>false</bool>
+          </attribute>
           <attribute name="headerDefaultSectionSize">
            <number>200</number>
           </attribute>
