@@ -13,7 +13,11 @@ namespace Echo
 
 	Box2DBody::~Box2DBody()
 	{
-
+		if (m_body)
+		{
+			Box2DWorld::instance()->getWorld()->DestroyBody(m_body);
+			m_body = nullptr;
+		}
 	}
 
 	void Box2DBody::bindMethods()

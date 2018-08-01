@@ -31,7 +31,7 @@ namespace Studio
 		void OpenProject(const char* projectName);
 
 		// open node tree
-		void openNodeTree(Echo::String& resPath);
+		void openNodeTree(const Echo::String& resPath);
 
 		// open lua file for edit
 		void openLuaScript(const Echo::String& resPath);

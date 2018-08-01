@@ -6,6 +6,7 @@
 #include "ResChooseDialog.h"
 #include "PathChooseDialog.h"
 #include "ResPanel.h"
+#include "MainWindow.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/io/IO.h>
 #include <engine/modules/gltf/gltf_res.h>
@@ -25,11 +26,14 @@ namespace Studio
 		g_inst = this;
 
 		setupUi( this);
+		m_nodeTreeWidget->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+		m_nodeTreeWidget->header()->resizeSection(1, 32);
+		m_nodeTreeWidget->header()->setSectionResizeMode(1, QHeaderView::Fixed);
 
 		QObject::connect(m_newNodeButton,  SIGNAL(clicked()), this, SLOT(showNewNodeDialog()));
 		QObject::connect(m_actionAddNode,  SIGNAL(triggered()), this, SLOT(showNewNodeDialog()));
 		QObject::connect(m_actionImportGltfScene, SIGNAL(triggered()), this, SLOT(importGltfScene()));
-		QObject::connect(m_nodeTreeWidget, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(onSelectNode()));
+		QObject::connect(m_nodeTreeWidget, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(onClickedNodeItem(QTreeWidgetItem*, int)));
 		QObject::connect(m_nodeTreeWidget, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)), this, SLOT(onSelectNode()));
 		QObject::connect(m_nodeTreeWidget, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, SLOT(onChangedNodeName(QTreeWidgetItem*)));
 		QObject::connect(m_nodeTreeWidget, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showMenu(const QPoint&)));
@@ -109,7 +113,7 @@ namespace Studio
 
 		// child scene
 		if (!node->getPath().empty())
-			nodeItem->setIcon(2, QIcon(iconPath.c_str()));
+			nodeItem->setIcon(1, QIcon(":/icon/node/link_child_scene.png"));
 
 		// change foreground color based on node state
 		updateNodeTreeWidgetItemDisplay(nodeItem);
@@ -122,7 +126,7 @@ namespace Studio
 			for (Echo::ui32 i = 0; i < node->getChildNum(); i++)
 			{
 				Echo::Node* childNode = node->getChild(i);
-				if(!childNode->isBranch())
+				if(!childNode->isLink())
 					addNode(childNode, nodeItem, recursive);
 			}
 		}
@@ -308,7 +312,7 @@ namespace Studio
 					node->setPath(resPath);
 					for (Echo::ui32 idx = 0; idx < node->getChildNum(); idx++)
 					{
-						node->getChild(idx)->setBranch(true);
+						node->getChild(idx)->setLink(true);
 					}
 				}
 
@@ -330,7 +334,7 @@ namespace Studio
 			node->setPath("");
 			for (Echo::ui32 idx =0; idx < node->getChildNum(); idx++)
 			{
-				node->getChild(idx)->setBranch(false);
+				node->getChild(idx)->setLink(false);
 			}
 
 			refreshNodeDisplay(item);
@@ -506,6 +510,22 @@ namespace Studio
 		else
 		{
 			EchoLogError("Can't set property [%s] value [%s]", propertyName.c_str(), valStr.c_str());
+		}
+	}
+
+	void NodeTreePanel::onClickedNodeItem(QTreeWidgetItem* item, int column)
+	{
+		if (column == 1)
+		{
+			Echo::Node* node = (Echo::Node*)item->data(0, Qt::UserRole).value<void*>();
+			if (node)
+			{
+				const Echo::String& path = node->getPath();
+				if (!path.empty())
+				{
+					MainWindow::instance()->openNodeTree(path);
+				}
+			}
 		}
 	}
 

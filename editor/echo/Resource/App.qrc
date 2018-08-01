@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/icon">
+    <file>node/link_child_scene.png</file>
     <file>node/box2dshape.png</file>
     <file>node/box2dshapebox.png</file>
     <file>node/render.png</file>

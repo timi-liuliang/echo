@@ -89,6 +89,9 @@ namespace Studio
 		// on select node
 		void onSelectNode();
 
+		// on clicked node item
+		void onClickedNodeItem(QTreeWidgetItem* item, int column);
+
 		// edit res
 		void onEditObject(Echo::Object* res);
 

@@ -52,8 +52,8 @@ namespace Echo
 		bool isEnable() const { return m_isEnable; }
 
 		// is branch node
-		bool isBranch() const { return m_isBranch; }
-		void setBranch(bool isBranch) { m_isBranch = isBranch; }
+		bool isLink() const { return m_isLink; }
+		void setLink(bool isLink) { m_isLink = isLink; }
 		
 		void scale(const Vector3& scl);
 		void roll(const Real randian);
@@ -121,7 +121,7 @@ namespace Echo
 
 	protected:
 		bool			m_isEnable;
-		bool			m_isBranch;			// belong to branch scene
+		bool			m_isLink;			// belong to branch scene
 
 		Node*			m_parent;
 		NodeArray		m_children;

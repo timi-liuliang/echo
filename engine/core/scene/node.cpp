@@ -43,7 +43,7 @@ namespace Echo
 	Node::Node()
 		: m_parent(NULL)
 		, m_isEnable(true)
-		, m_isBranch(false)
+		, m_isLink(false)
 		, m_posLocal(Vector3::ZERO)
 		, m_ortLocal(Quaternion::IDENTITY)
 		, m_sclLocal(Vector3::ONE)
@@ -495,7 +495,7 @@ namespace Echo
 		for (ui32 idx = 0; idx < node->getChildNum(); idx++)
 		{
 			Node* child = node->getChild(idx);
-			if (child && !child->isBranch())
+			if (child && !child->isLink())
 			{
 				pugi::xml_node newNode = xmlNode->append_child("node");
 				saveXml(&newNode, child);
@@ -540,9 +540,9 @@ namespace Echo
 					// overwrite property
 					loadPropertyRecursive(xmlNode, node, node->getClassName());
 
-					// set as branch
+					// set child as link
 					for (i32 i = 0; i < node->getChildNum(); i++)
-						node->getChild(i)->setBranch(true);
+						node->getChild(i)->setLink(true);
 				}
 
 				if (parent)
