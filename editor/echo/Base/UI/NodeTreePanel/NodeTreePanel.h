@@ -64,6 +64,9 @@ namespace Studio
 		// on duplicate node
 		void onDuplicateNode();
 
+		// on change type
+		void onChangeType();
+
 		// on trigger rename node
 		void onRenameNode();
 

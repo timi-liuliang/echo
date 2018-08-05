@@ -36,6 +36,7 @@ namespace Studio
 		QObject::connect(m_nodeTreeWidget, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, SLOT(onChangedNodeName(QTreeWidgetItem*)));
 		QObject::connect(m_nodeTreeWidget, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showMenu(const QPoint&)));
 
+		QObject::connect(m_actionChangeType, SIGNAL(triggered()), this, SLOT(onChangeType()));
 		QObject::connect(m_actionDuplicateNode, SIGNAL(triggered()), this, SLOT(onDuplicateNode()));
 		QObject::connect(m_actionDeleteNode, SIGNAL(triggered()), this, SLOT(onDeleteNodes()));
 		QObject::connect(m_actionRenameNode, SIGNAL(triggered()), this, SLOT(onRenameNode()));
@@ -249,6 +250,7 @@ namespace Studio
 				m_nodeTreeMenu->addAction(m_actionImportGltfScene);
 				m_nodeTreeMenu->addSeparator();
 				m_nodeTreeMenu->addAction(m_actionRenameNode);
+				m_nodeTreeMenu->addAction(m_actionChangeType);
 				if(node->getParent())
 					m_nodeTreeMenu->addAction(m_actionDuplicateNode);
 				m_nodeTreeMenu->addSeparator();
@@ -328,6 +330,22 @@ namespace Studio
 
 				addNode( duplicateNode, item->parent(), true);
 			}
+		}
+	}
+
+	void NodeTreePanel::onChangeType()
+	{
+		QTreeWidgetItem* item = m_nodeTreeWidget->currentItem();
+		if (item)
+		{
+			//Echo::Node* node = (Echo::Node*)item->data(0, Qt::UserRole).value<void*>();
+			//if (node)
+			//{
+			//	Echo::Node* duplicateNode = node->duplicate(true);
+			//	duplicateNode->setParent(node->getParent());
+
+			//	addNode(duplicateNode, item->parent(), true);
+			//}
 		}
 	}
 
