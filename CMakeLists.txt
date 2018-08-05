@@ -14,7 +14,6 @@ OPTION(FREEIMAGE_SUPPORT_OPENEXR "FreeImage Support OpenEXR Format" FALSE)
 OPTION(FREEIMAGE_SUPPORT_LIBRAW "FreeImage Support LibRaw Format" FALSE)
 OPTION(FREEIMAGE_SUPPORT_WEBP "FreeImage Support WebP Format" FALSE)
 OPTION(ECHO_SUPPORT_SPINE "2D Skeleton Spine Support" TRUE)
-OPTION(ECHO_ENGINE_MIN "compile engine min. (for testCatui_ECHO)" FALSE)
 OPTION(ECHO_ARCHIVE_SUPPORT_7ZIP "Is support 7zip package" TRUE)
 
 IF(UNIX)
@@ -25,8 +24,7 @@ IF(UNIX)
 	ENDIF()
 ENDIF()
 
-OPTION(ECHO_UNICODE "Using Unicode charset" FALSE)
-OPTION(ECHO_EDITOR_MODE "Include GUI" TRUE)
+OPTION(ECHO_EDITOR_MODE "Editor Mode" TRUE)
 
 IF(ECHO_BUILD_PLATFORM_IOS AND ECHO_BUILD_PLATFORM_ANDROID)
 	MESSAGE(FATAL_ERROR "Can only build for one platform.")
@@ -37,7 +35,7 @@ IF(WIN32)
 		ADD_DEFINITIONS("-DANDROID")
 
 		SET(ECHO_PLATFORM_ANDROID TRUE)
-		
+
 		#notice the "recycling" of CMAKE_C_FLAGS
 		#this is necessary to pick up android flags
 		SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -pedantic -fPIC")
@@ -45,25 +43,22 @@ IF(WIN32)
 		MESSAGE(STATUS "Platform: Android")
 	ELSEIF(ECHO_BUILD_PLATFORM_HTML5)
 		SET(ECHO_PLATFORM_HTML5 TRUE)
-		
+
 		# enable c++11, memory growth
 		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-		
+
 		# enable memory growth
 		SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -s ALLOW_MEMORY_GROWTH=1")
 		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s ALLOW_MEMORY_GROWTH=1")
-		
+
 		# enable exception catching
 		SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -s DISABLE_EXCEPTION_CATCHING=0")
 		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s DISABLE_EXCEPTION_CATCHING=0")
-		
+
 	ELSE()
 		SET(ECHO_PLATFORM_WIN32 TRUE)
 		MESSAGE(STATUS "Platform: Windows")
-    
-    #for FBX_SDK_DLL
-    ADD_DEFINITIONS("-DFBXSDK_SHARED")
-    
+
 		# compiler building setting
 		# Flags used by the compiler during all build types.
 		SET(CMAKE_CXX_FLAGS "/DWIN32 /D_WINDOWS /W3 /Zm1000 /EHsc /GR /MP /wd4996")
@@ -109,7 +104,6 @@ ELSEIF(UNIX)
 	IF(ECHO_BUILD_PLATFORM_ANDROID)
 
 		SET(ECHO_PLATFORM_ANDROID TRUE)
-		SET(ECHO_STATIC TRUE CACHE BOOL "Forcing static build for android" FORCE)
 		SET(CMAKE_CXX_STANDARD 14)
 		SET(CMAKE_OSX_SYSROOT "" CACHE STRING "" FORCE)
 		SET(CMAKE_OSX_ARCHITECTURES "" CACHE STRING "" FORCE)
@@ -132,7 +126,6 @@ ELSEIF(UNIX)
 		IF(ECHO_BUILD_PLATFORM_IOS)
 			SET(ECHO_PLATFORM_IOS TRUE)
 			SET(HK_PLATFORM_IOS TRUE)
-			SET(ECHO_STATIC TRUE CACHE BOOL "Forcing static build for iPhone" FORCE)
 			MESSAGE(STATUS "Platform: Mac iOS")
 		ELSE()
 			SET(ECHO_PLATFORM_OSX TRUE)
@@ -257,11 +250,11 @@ MACRO(GROUP_FILES src_files root_path)
             STRING(COMPARE EQUAL ${sgbd_fpath} ${sgbd_group_name} sgbd_nogroup)
             STRING(REPLACE "/" "\\" sgbd_group_name ${sgbd_group_name})
             IF(sgbd_nogroup)
-				SOURCE_GROUP("" FILES ${group_files})   
+				SOURCE_GROUP("" FILES ${group_files})
 			ELSE()
 				INCLUDE_DIRECTORIES(${sgbd_group_name})
-				SOURCE_GROUP(${sgbd_group_name} FILES ${group_files})   
-            ENDIF(sgbd_nogroup) 
+				SOURCE_GROUP(${sgbd_group_name} FILES ${group_files})
+            ENDIF(sgbd_nogroup)
         ENDFOREACH(group_files)
 ENDMACRO(GROUP_FILES)
 
@@ -274,10 +267,10 @@ MACRO(GROUP_FILES_NO_INCLUDE src_files root_path)
             STRING(COMPARE EQUAL ${sgbd_fpath} ${sgbd_group_name} sgbd_nogroup)
             STRING(REPLACE "/" "\\" sgbd_group_name ${sgbd_group_name})
             IF(sgbd_nogroup)
-				SOURCE_GROUP("" FILES ${group_files})   
+				SOURCE_GROUP("" FILES ${group_files})
 			ELSE()
-				SOURCE_GROUP(${sgbd_group_name} FILES ${group_files})   
-            ENDIF(sgbd_nogroup) 
+				SOURCE_GROUP(${sgbd_group_name} FILES ${group_files})
+            ENDIF(sgbd_nogroup)
         ENDFOREACH(group_files)
 ENDMACRO(GROUP_FILES_NO_INCLUDE)
 
@@ -290,10 +283,10 @@ ENDMACRO(EXCLUDE_FILES)
 
 MACRO(APPEND_FILES src_files rescure append_dir)
 	FILE(${rescure} excludefiles  ${append_dir})
-	
+
 	MESSAGE(STATUS ${append_dir})
 	MESSAGE(STATUS ${excludefiles})
-	
+
 	SET(${${src_files}} ${${src_files}} ${excludefiles})
 	MESSAGE(STATUS ${${src_files}})
 ENDMACRO(APPEND_FILES)
@@ -312,7 +305,7 @@ ADD_SUBDIRECTORY(thirdparty/zlib)
 ADD_SUBDIRECTORY(thirdparty/Box2D)
 ADD_SUBDIRECTORY(thirdparty/googletest)
 ADD_SUBDIRECTORY(thirdparty/protobuf/src/google/protobuf)
-ADD_SUBDIRECTORY(thirdparty/tensorflow/tensorflow)
+#ADD_SUBDIRECTORY(thirdparty/tensorflow/tensorflow)
 ADD_SUBDIRECTORY(thirdparty/RadeonRays)
 
 IF(ECHO_ARCHIVE_SUPPORT_7ZIP)

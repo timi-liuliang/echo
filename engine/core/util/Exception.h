@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/core/Util/StringUtil.h"
+#include "engine/core/util/StringUtil.h"
 #include "engine/core/log/LogManager.h"
 
 namespace Echo

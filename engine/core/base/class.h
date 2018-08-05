@@ -4,7 +4,7 @@
 #include "variant.h"
 #include "MethodBind.h"
 #include "property_info.h"
-#include "engine/core/Util/StringUtil.h"
+#include "engine/core/util/StringUtil.h"
 #include "engine/core/script/lua/luaex.h"
 
 namespace Echo
@@ -75,52 +75,6 @@ namespace Echo
 			}
 
 			return nullptr;
-		}
-	};
-
-	template<typename T>
-	struct ObjectFactoryT : public ObjectFactory
-	{
-		ObjectFactoryT(const String& name, const String& parent, bool isVirtual=false)
-		{
-			// register class to lua
-			luaex::LuaEx::instance()->register_class(name.c_str(), parent.c_str());
-
-			m_name = name;
-			m_classInfo.m_singleton = false;
-			m_classInfo.m_virtual = isVirtual;
-			m_classInfo.m_parent = parent;
-
-			Class::addClass(name, this);
-			T::bindMethods();
-		}
-
-		virtual Object* create()
-		{
-			return EchoNew(T);
-		}
-	};
-
-	template<typename T>
-	struct ObjectFactorySingletonT : public ObjectFactory
-	{
-		ObjectFactorySingletonT(const String& name, const String& parent, bool isVirtual = false)
-		{
-			// register class to lua
-			luaex::LuaEx::instance()->register_class(name.c_str(), parent.c_str());
-
-			m_name = name;
-			m_classInfo.m_singleton = true;
-			m_classInfo.m_virtual = isVirtual;
-			m_classInfo.m_parent = parent;
-
-			Class::addClass(name, this);
-			T::bindMethods();
-		}
-
-		virtual Object* create()
-		{
-			return T::instance();
 		}
 	};
 
@@ -204,6 +158,52 @@ namespace Echo
 			return bind;
 		}
 	};
+    
+    template<typename T>
+    struct ObjectFactoryT : public ObjectFactory
+    {
+        ObjectFactoryT(const String& name, const String& parent, bool isVirtual=false)
+        {
+            // register class to lua
+            luaex::LuaEx::instance()->register_class(name.c_str(), parent.c_str());
+            
+            m_name = name;
+            m_classInfo.m_singleton = false;
+            m_classInfo.m_virtual = isVirtual;
+            m_classInfo.m_parent = parent;
+            
+            Class::addClass(name, this);
+            T::bindMethods();
+        }
+        
+        virtual Object* create()
+        {
+            return EchoNew(T);
+        }
+    };
+    
+    template<typename T>
+    struct ObjectFactorySingletonT : public ObjectFactory
+    {
+        ObjectFactorySingletonT(const String& name, const String& parent, bool isVirtual = false)
+        {
+            // register class to lua
+            luaex::LuaEx::instance()->register_class(name.c_str(), parent.c_str());
+            
+            m_name = name;
+            m_classInfo.m_singleton = true;
+            m_classInfo.m_virtual = isVirtual;
+            m_classInfo.m_parent = parent;
+            
+            Class::addClass(name, this);
+            T::bindMethods();
+        }
+        
+        virtual Object* create()
+        {
+            return T::instance();
+        }
+    };
 }
 
 #define ECHO_CLASS_NAME(m_class) #m_class

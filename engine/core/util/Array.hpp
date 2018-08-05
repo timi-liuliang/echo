@@ -33,8 +33,8 @@
 #include <cstddef>
 #include <stdexcept>
 #include <algorithm>
-#include "engine/core/Util/AssertX.h"
-#include "engine/core/Util/Exception.h"
+#include "engine/core/util/AssertX.h"
+#include "engine/core/util/Exception.h"
 
 namespace Echo {
 
@@ -166,7 +166,7 @@ namespace Echo {
 			if (i >= size()) 
 			{
 				//std::out_of_range e("array<>: index out of range");
-				Echo::EchoException("array<%d>: index:%d out of range",N,i);
+				EchoAssert("array<%d>: index:%d out of range",N,i);
 			}
 		}
 
