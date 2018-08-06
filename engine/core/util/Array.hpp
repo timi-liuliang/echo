@@ -165,8 +165,7 @@ namespace Echo {
 		{
 			if (i >= size()) 
 			{
-				//std::out_of_range e("array<>: index out of range");
-				EchoAssert("array<%d>: index:%d out of range",N,i);
+				std::out_of_range e("array<>: index out of range");
 			}
 		}
 
