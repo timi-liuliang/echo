@@ -147,8 +147,11 @@ namespace Studio
 	void EchoEngine::newEditNodeTree()
 	{
 		setCurrentEditNodeSavePath("");
-		m_currentEditNode->queueFree();
-		m_currentEditNode = nullptr;
+		if (m_currentEditNode)
+		{
+			m_currentEditNode->queueFree();
+			m_currentEditNode = nullptr;
+		}
 	}
 
 	// save current node tree

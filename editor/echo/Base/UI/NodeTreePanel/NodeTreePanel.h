@@ -105,8 +105,6 @@ namespace Studio
 		void onSelectRes(const Echo::String& resPath);
 
 	protected:
-		//virtual void resizeEvent(QResizeEvent* event);
-
 		// update item display
 		void updateNodeTreeWidgetItemDisplay(QTreeWidgetItem* item);
 
@@ -118,9 +116,12 @@ namespace Studio
 		void showPropertyByVariant(const Echo::String& name, const class Echo::Variant& var, const Echo::PropertyInfo* propInfo);
 
 	private:
+		// remove item
+		void removeItem(QTreeWidgetItem* item);
+
+	private:
 		int								m_width;
 		QTimer*							m_timer;				// 计时器
-		NewNodeDialog*					m_newNodeDialog;		// 新建结点
 		QT_UI::QPropertyConfigHelper	m_propertyHelper;		// 属性
 		Echo::Object*					m_nextEditObject;		
 		Echo::Object*					m_currentEditObject;

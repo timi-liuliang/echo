@@ -70,7 +70,7 @@ namespace Echo
 	Sprite::Sprite()
 		: m_textureRes("", ".png")
 		, m_mesh(nullptr)
-		, m_materialInst(nullptr)
+		, m_material(nullptr)
 		, m_renderable(nullptr)
 		, m_width(0)
 		, m_height(0)
@@ -134,11 +134,11 @@ namespace Echo
 			clearRenderable();
 
 			// material
-			m_materialInst = ECHO_CREATE_RES(Material);
-			m_materialInst->setShaderContent(g_spriteDefaultMaterial);
-			m_materialInst->setRenderStage("Transparent");
+			m_material = ECHO_CREATE_RES(Material);
+			m_material->setShaderContent(g_spriteDefaultMaterial);
+			m_material->setRenderStage("Transparent");
 
-			m_materialInst->setTexture("u_BaseColorSampler", m_textureRes.getPath());
+			m_material->setTexture("u_BaseColorSampler", m_textureRes.getPath());
 
 			// mesh
 			VertexArray	vertices;
@@ -152,7 +152,7 @@ namespace Echo
 			m_mesh->updateIndices(indices.size(), indices.data());
 			m_mesh->updateVertexs(define, vertices.size(), (const Byte*)vertices.data(), m_localAABB);
 
-			m_renderable = Renderable::create(m_mesh, m_materialInst, this);
+			m_renderable = Renderable::create(m_mesh, m_material, this);
 		}
 	}
 
@@ -172,7 +172,7 @@ namespace Echo
 	// build mesh data by drawables data
 	void Sprite::buildMeshData(VertexArray& oVertices, IndiceArray& oIndices)
 	{
-		TextureRes*	texture = m_materialInst->getTexture(0);
+		TextureRes*	texture = m_material->getTexture(0);
 		if (texture)
 		{
 			if(!m_width) m_width  = texture->getWidth();
@@ -219,7 +219,7 @@ namespace Echo
 	void Sprite::clearRenderable()
 	{
 		EchoSafeRelease(m_renderable);
-		EchoSafeRelease(m_materialInst);
+		EchoSafeRelease(m_material);
 		EchoSafeRelease(m_mesh);
 	}
 }

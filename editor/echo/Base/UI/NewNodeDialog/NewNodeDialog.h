@@ -12,15 +12,24 @@ namespace Studio
 		Q_OBJECT
 
 	public:
+		// instance
+		static NewNodeDialog* instance();
+
+		// get node type
+		static Echo::String getSelectedNodeType();
+
+	private:
 		NewNodeDialog(QWidget* parent = 0);
 		~NewNodeDialog();
 
-	private:
 		void initNodeDisplay();
 		void addNode(const Echo::String& nodeName, QTreeWidgetItem* parent);
 
 	private slots:
 		void onSelectNode();
 		void onConfirmNode();
+
+	private:
+		Echo::String	m_result;
 	};
 }

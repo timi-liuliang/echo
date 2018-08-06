@@ -29,8 +29,7 @@ namespace Echo
 		void setPath(const String& path) { m_path.setPath(path); }
 
 		// free this object from memory
-		void queueFree() { ECHO_DELETE_T(this, Object); }
-		void clear() { ECHO_DELETE_T(this, Object); }
+		virtual void queueFree() { ECHO_DELETE_T(this, Object); }
 
 	public:
 		// propertys (script property or dynamic property)

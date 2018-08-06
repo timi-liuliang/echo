@@ -64,10 +64,6 @@ namespace Echo
 	// 析构函数
 	Node::~Node()
 	{
-		for (Node* n : m_children)
-		{
-			n->m_parent = nullptr;
-		}
 	}
 
 	// 设置父节点
@@ -459,6 +455,24 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(Node, "Rotation", Variant::Type::Vector3, "getYawPitchRoll", "setYawPitchRoll");
 		CLASS_REGISTER_PROPERTY(Node, "Scale",  Variant::Type::Vector3, "getScale", "setScale");
 		CLASS_REGISTER_PROPERTY(Node, "Script", Variant::Type::ResourcePath, "getScript", "setScript");
+	}
+
+	// queue free
+	void Node::queueFree()
+	{
+		if (m_parent)
+		{
+			m_parent->removeChild(this);
+			m_parent = nullptr;
+		}		
+
+		NodeArray children = m_children;
+		for (Node* n : children)
+		{
+			n->queueFree();
+		}
+
+		ECHO_DELETE_T(this, Node);
 	}
 
 	// duplicate

@@ -55,7 +55,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_2">
+      <widget class="QPushButton" name="m_cancel">
        <property name="text">
         <string>Cancel</string>
        </property>
@@ -81,22 +81,5 @@
  <resources>
   <include location="../../../Resource/App.qrc"/>
  </resources>
- <connections>
-  <connection>
-   <sender>pushButton_2</sender>
-   <signal>clicked()</signal>
-   <receiver>NewNodeDialog</receiver>
-   <slot>hide()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>432</x>
-     <y>452</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>524</x>
-     <y>454</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

@@ -19,11 +19,33 @@ namespace Studio
 		// connect signal slot
 		QObject::connect(m_treeWidget, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(onSelectNode()));
 		QObject::connect(m_confirm, SIGNAL(clicked()), this, SLOT(onConfirmNode()));
+		QObject::connect(m_confirm, SIGNAL(clicked()), this, SLOT(accept()));
+		QObject::connect(m_cancel, SIGNAL(clicked()), this, SLOT(reject()));
 	}
 
 	NewNodeDialog::~NewNodeDialog()
 	{
 
+	}
+
+	// instance
+	NewNodeDialog* NewNodeDialog::instance()
+	{
+		NewNodeDialog* inst = new NewNodeDialog();
+		return inst;
+	}
+
+	// get node type
+	Echo::String NewNodeDialog::getSelectedNodeType()
+	{
+		NewNodeDialog* inst = instance();
+		inst->setVisible(true);
+		if (inst->exec() == QDialog::Accepted)
+		{
+			return inst->m_result;
+		}
+
+		return "";
 	}
 
 	void NewNodeDialog::initNodeDisplay()
@@ -78,14 +100,9 @@ namespace Studio
 			Echo::String text = item->text(0).toStdString().c_str();	
 			if (!Echo::Class::isVirtual( text))
 			{
-				Echo::Node* node = Echo::Class::create<Echo::Node*>(text.c_str());
-				if (node)
-				{
-					NodeTreePanel::instance()->addNode(node);
+				m_result = text;
 
-					// hide window
-					hide();
-				}
+				hide();
 			}
 		}
 	}

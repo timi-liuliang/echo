@@ -11,10 +11,11 @@ namespace Echo
 	{
 		ECHO_CLASS(Node, Object)
 
-		friend class NodeTree;
-		typedef vector<Node*>::type NodeArray;
+		friend class NodeTree;		
 
 	public:
+		typedef vector<Node*>::type NodeArray;
+
 		// lua script
 		struct LuaScript
 		{
@@ -39,6 +40,7 @@ namespace Echo
 
 		ui32 getChildNum() const { return m_children.size(); }
 		Node* getChild(ui32 idx);
+		const NodeArray& getChildren() { return m_children; }
 
 		// remove from tree
 		void remove();
@@ -100,6 +102,9 @@ namespace Echo
 	public:
 		// get node by path
 		Node* getNode(const String& path) { return nullptr; }
+
+		// queue free
+		virtual void queueFree();
 
 		// duplicate
 		Node* duplicate(bool recursive);

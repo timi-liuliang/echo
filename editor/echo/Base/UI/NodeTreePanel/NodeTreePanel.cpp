@@ -17,7 +17,6 @@ namespace Studio
 
 	NodeTreePanel::NodeTreePanel( QWidget* parent/*=0*/)
 		: QDockWidget( parent)
-		, m_newNodeDialog(nullptr)
 		, m_nodeTreeMenu(nullptr)
 		, m_currentEditObject(nullptr)
 		, m_nextEditObject(nullptr)
@@ -60,11 +59,6 @@ namespace Studio
 		return g_inst;
 	}
 
-	//void NodeTreePanel::resizeEvent(QResizeEvent* event)
-	//{
-	//	QDockWidget::resizeEvent(event);	
-	//}
-
 	// äÖÈ¾
 	void NodeTreePanel::update()
 	{
@@ -87,10 +81,15 @@ namespace Studio
 
 	void NodeTreePanel::showNewNodeDialog()
 	{
-		if (!m_newNodeDialog)
-			m_newNodeDialog = new NewNodeDialog(this);
-
-		m_newNodeDialog->setVisible(true);
+		Echo::String selectNodeType = NewNodeDialog::getSelectedNodeType();
+		if (!selectNodeType.empty())
+		{
+			Echo::Node* node = Echo::Class::create<Echo::Node*>(selectNodeType.c_str());
+			if (node)
+			{
+				addNode(node);
+			}
+		}
 	}
 
 	// clear
@@ -272,6 +271,20 @@ namespace Studio
 		}
 	}
 
+	// remove item
+	void NodeTreePanel::removeItem(QTreeWidgetItem* item)
+	{
+		Echo::Node* node = (Echo::Node*)item->data(0, Qt::UserRole).value<void*>();
+		node->remove();
+		node->queueFree();
+
+		QTreeWidgetItem* parentItem = item->parent();
+		if (parentItem)
+			parentItem->removeChild(item);
+		else
+			m_nodeTreeWidget->invisibleRootItem()->removeChild(item);
+	}
+
 	// on trigger delete nodes
 	void NodeTreePanel::onDeleteNodes()
 	{
@@ -280,18 +293,8 @@ namespace Studio
 		{
 			QTreeWidgetItem* item = items[0];
 
-			Echo::Node* node = (Echo::Node*)item->data(0, Qt::UserRole).value<void*>();
-
 			// remove item from ui
-			QTreeWidgetItem* parentItem = item->parent();
-			if (parentItem)
-				parentItem->removeChild(item);
-			else
-				m_nodeTreeWidget->invisibleRootItem()->removeChild(item);
-			
-			// remove item from node tree
-			node->remove();
-			node->queueFree();
+			removeItem(item);
 
 			items = m_nodeTreeWidget->selectedItems();
 		}
@@ -338,14 +341,28 @@ namespace Studio
 		QTreeWidgetItem* item = m_nodeTreeWidget->currentItem();
 		if (item)
 		{
-			//Echo::Node* node = (Echo::Node*)item->data(0, Qt::UserRole).value<void*>();
-			//if (node)
-			//{
-			//	Echo::Node* duplicateNode = node->duplicate(true);
-			//	duplicateNode->setParent(node->getParent());
+			Echo::String nodeType = NewNodeDialog::getSelectedNodeType();
+			if (!nodeType.empty())
+			{
+				Echo::Node* curNode = (Echo::Node*)item->data(0, Qt::UserRole).value<void*>();
+				Echo::Node* newNode = Echo::Class::create<Echo::Node*>(nodeType.c_str());
+				Echo::Node::NodeArray childrenNodes = curNode->getChildren();
+				for (Echo::Node* child : childrenNodes)
+				{
+					if (!child->isLink())
+					{
+						child->setParent(newNode);
+					}
+				}
 
-			//	addNode(duplicateNode, item->parent(), true);
-			//}
+				newNode->setParent(curNode->getParent());
+				newNode->setName(curNode->getName());
+
+				// remember parent item before delete this item
+				QTreeWidgetItem* parentItem = item->parent() ? item->parent() : m_nodeTreeWidget->invisibleRootItem();
+				removeItem(item);
+				addNode(newNode, parentItem, true);
+			}
 		}
 	}
 
