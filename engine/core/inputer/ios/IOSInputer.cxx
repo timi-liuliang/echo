@@ -1,4 +1,4 @@
-﻿
+/*
 #if defined( __APPLE_CC__) && (LORD_PLATFORM == LORD_PLATFORM_MAC_IOS)
 
 #include <stdio.h>
@@ -264,3 +264,4 @@ void IOSInputer::CalibrateMotion()
 }
 
 #endif //LORD_PLATFORM == LORD_PLATFORM_MAC_IOS
+ */

@@ -1,15 +1,12 @@
 #pragma once
 
 #include "engine/core/base/variant.h"
-#include "engine/core/Util/StringUtil.h"
+#include "engine/core/util/StringUtil.h"
 #include <thirdparty/pugixml/pugixml.hpp>
 #include "engine/core/resource/Res.h"
 
 namespace Echo
 {
-	/**
-	 * 项目文件
-	 */
 	class GameSettings : public Object
 	{
 		ECHO_SINGLETON_CLASS(GameSettings, Object);

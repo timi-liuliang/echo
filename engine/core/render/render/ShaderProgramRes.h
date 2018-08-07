@@ -33,25 +33,25 @@ namespace Echo
 		ShaderProgramRes(const ResourcePath& path);
 		~ShaderProgramRes();
 
-		// 绑定shader
+		// bind shader
 		void bind();
 
-		// 获取混合状态
+		// get Blend state
 		BlendState* getBlendState() const { return m_blendState; }
 
-		// 获取深度模板状态
+		// get depth state
 		DepthStencilState* getDepthState() const { return m_depthState; }
 
-		// 获取光栅化状态
+		// get rasterizer state
 		RasterizerState* getRasterizerState() const { return m_rasterizerState; }
 
-		// 获取着色器
+		// get shader program
 		ShaderProgram* getShaderProgram() const { return m_shaderProgram; }
 
 		// is have macro
 		bool hasMacro(const char* const macro) const;
 
-		// 获取材质可选宏定义列表
+		// get editable macros
 		static StringArray getEditableMacros(const String& shaderFileName);
 
 		// get default value of uniform
@@ -71,10 +71,10 @@ namespace Echo
 
 	protected:
 		// load
-		static Res* ShaderProgramRes::load(const ResourcePath& path);
+		static Res* load(const ResourcePath& path);
 
 	private:
-		// 从内容加载
+		// private functions
 		bool loadFromContent(char* content, const String& macros);
 		bool loadShaderFrom(void* node, const String& macros);
 		bool loadBlendState(void* pNode);
@@ -88,7 +88,7 @@ namespace Echo
 		void* createDefaultUniformValue(const String& strType, const i32 count, const String& strValue, ui32& outSize, ShaderParamType& outType);
 
 	private:
-		Shader::ShaderDesc	m_shaderDesc;							// 材质使用的宏定义
+		Shader::ShaderDesc	m_shaderDesc;							// Shader info
 		BlendState*			m_blendState;
 		DepthStencilState*	m_depthState;
 		RasterizerState*	m_rasterizerState;

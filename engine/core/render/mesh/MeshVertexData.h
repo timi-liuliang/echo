@@ -32,10 +32,10 @@ namespace Echo
 		void build();
 
 		// 判断顶点格式中是否含有指定类型的数据
-		bool MeshVertexFormat::isVertexUsage(RenderInput::VertexSemantic semantic) const;
+		bool isVertexUsage(RenderInput::VertexSemantic semantic) const;
 
 		// reset
-		void MeshVertexFormat::reset();
+		void reset();
 	};
 
 	// 顶点数据

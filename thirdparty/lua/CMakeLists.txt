@@ -3,27 +3,27 @@ MESSAGE( STATUS "Configuring module: 7zip ...")
 # Set Module Name
 SET(MODULE_NAME lua)
 
-# 包含目录
+# Include Directories
 INCLUDE_DIRECTORIES( ${ECHO_SRC_PATH})
 INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR})
 
-# 链接库目录
+# Link Directories
 LINK_DIRECTORIES(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 
-# 包含文件
+# Recursive get all files
 FILE( GLOB_RECURSE HEADER_FILES *.h *.inl)
 FILE( GLOB_RECURSE SOURCE_FILES *.c *.cpp *.mm)
 
 SET(ALL_FILES ${HEADER_FILES} ${SOURCE_FILES})
 
-# 分组
+# Group
 GROUP_FILES(ALL_FILES ${CMAKE_CURRENT_SOURCE_DIR})
 
-# 生成库
+# Add library
 ADD_LIBRARY(${MODULE_NAME} ${ALL_FILES} CMakeLists.txt)
 
-# 设置目录
+# Set Folder
 SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES FOLDER "thirdparty")
 
-# ??????
+# Message
 MESSAGE(STATUS "Configure success!")

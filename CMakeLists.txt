@@ -303,16 +303,16 @@ ADD_SUBDIRECTORY(thirdparty/freeimage)
 ADD_SUBDIRECTORY(thirdparty/freetype-2.6)
 ADD_SUBDIRECTORY(thirdparty/zlib)
 ADD_SUBDIRECTORY(thirdparty/Box2D)
-ADD_SUBDIRECTORY(thirdparty/googletest)
 ADD_SUBDIRECTORY(thirdparty/protobuf/src/google/protobuf)
 #ADD_SUBDIRECTORY(thirdparty/tensorflow/tensorflow)
-ADD_SUBDIRECTORY(thirdparty/RadeonRays)
 
 IF(ECHO_ARCHIVE_SUPPORT_7ZIP)
 	ADD_SUBDIRECTORY(thirdparty/7zip)
 ENDIF()
 
 IF(ECHO_PLATFORM_WIN32 AND ECHO_EDITOR_MODE)
+	ADD_SUBDIRECTORY("thirdparty/googletest")
+	ADD_SUBDIRECTORY("thirdparty/RadeonRays")
 	ADD_SUBDIRECTORY("editor/echo")
 ENDIF()
 

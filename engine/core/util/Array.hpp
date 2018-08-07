@@ -287,9 +287,9 @@ namespace Echo {
 
 		// check range (may be private because it is static)
 		static reference failed_rangecheck () {
-			// std::out_of_range e("attempt to access element of an empty array");
+            std::out_of_range e("attempt to access element of an empty array");
 
-			Echo::EchoException("attempt to access element of an empty array");
+			//Echo::EchoException("attempt to access element of an empty array");
 			//
 			// We need to return something here to keep
 			// some compilers happy: however we will never

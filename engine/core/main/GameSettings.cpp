@@ -1,6 +1,6 @@
 #include "GameSettings.h"
 #include "engine/core/log/LogManager.h"
-#include "engine/core/Util/PathUtil.h"
+#include "engine/core/util/PathUtil.h"
 #include "engine/core/io/IO.h"
 #include "engine/core/main/Engine.h"
 #include <ostream>
