@@ -125,7 +125,7 @@ namespace Echo
 		if (lua_isnil(m_state, 1))	EchoLogError("Lua global variable [%s == nil]", varName.c_str());
 	#endif
 
-		bool result = static_cast<bool>(lua_toboolean(m_state, 1));
+		bool result = lua_toboolean(m_state, 1)!=0;
 
 		// clear stack
 		lua_settop(m_state, 0);

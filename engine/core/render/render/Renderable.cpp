@@ -12,6 +12,7 @@ namespace Echo
 	// 构造函数
 	Renderable::Renderable(const String& renderStage, ShaderProgramRes* shader, int identifier)
 		: m_renderStage(renderStage)
+		, m_mesh(nullptr)
 		, m_renderInput(nullptr)
 		, m_SParamWriteIndex(0)
 		, m_bRenderState(false)
@@ -51,7 +52,7 @@ namespace Echo
 		// bind shader param
 		Renderable* renderable = Renderer::instance()->createRenderable(matInst->getRenderStage(), matInst->getShader());
 		renderable->setNode(node);
-		renderable->setRenderInput(mesh->getVertexBuffer(), mesh->getVertexElements(), mesh->getIndexBuffer(), mesh->getIndexStride(), mesh->getTopologyType());
+		renderable->setMesh(mesh);
 		renderable->beginShaderParams(uniforms->size());
 		for (auto& it : *uniforms)
 		{
@@ -231,7 +232,10 @@ namespace Echo
 	// 提交到渲染队列
 	void Renderable::submitToRenderQueue()
 	{
-		RenderStage::instance()->addRenderable(m_renderStage, getIdentifier());
+		if (m_mesh->isValid())
+		{
+			RenderStage::instance()->addRenderable(m_renderStage, getIdentifier());
+		}
 	}
 
 	// 设置混合状态
@@ -255,20 +259,20 @@ namespace Echo
 		m_bRenderState = state ? true : false;
 	}
 
-	// 设置渲染几何数据
-	void Renderable::setRenderInput(GPUBuffer* vertexStream, const RenderInput::VertexElementList& vertElements, GPUBuffer* indexStream, ui32 idxStride, RenderInput::TopologyType topologyType)
+	void Renderable::setMesh(Mesh* mesh)
 	{
-		EchoSafeDelete(m_renderInput, RenderInput);
+		m_mesh = mesh;
 
+		EchoSafeDelete(m_renderInput, RenderInput);
 		if (m_shaderProgram)
 		{
 			ShaderProgram* program = m_shaderProgram->getShaderProgram();
 			if (program)
 			{
 				m_renderInput = Renderer::instance()->createRenderInput(program);
-				m_renderInput->setTopologyType(topologyType);
-				m_renderInput->bindVertexStream(vertElements, vertexStream);
-				m_renderInput->bindIndexStream(indexStream, idxStride);
+				m_renderInput->setTopologyType(m_mesh->getTopologyType());
+				m_renderInput->bindVertexStream( m_mesh->getVertexElements(), m_mesh->getVertexBuffer());
+				m_renderInput->bindIndexStream(m_mesh->getIndexBuffer(), m_mesh->getIndexStride());
 			}
 		}
 	}

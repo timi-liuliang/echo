@@ -53,6 +53,9 @@ namespace Echo
 		// 获取索引数据
 		Word* getIndices() const;
 
+		// is valid
+		bool isValid() const { return getFaceCount() > 0; }
+
 		// 是否为蒙皮
 		bool isSkin() const { return isVertexUsage(RenderInput::VS_BLENDINDICES); }
 

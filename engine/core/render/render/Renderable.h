@@ -48,8 +48,8 @@ namespace Echo
 		// release
 		void release();
 
-		// 设置渲染几何数据
-		void setRenderInput(GPUBuffer* vertexStream, const RenderInput::VertexElementList& vertElements,  GPUBuffer* indexStream, ui32 idxStride, RenderInput::TopologyType topologyType);
+		// set mesh
+		void setMesh(Mesh* mesh);
 
 		// 开始参数
 		void beginShaderParams(size_t paramNum);
@@ -127,7 +127,8 @@ namespace Echo
 		ui32									m_identifier;
 		Render*									m_node;
 		String									m_renderStage;
-		ShaderProgramResPtr						m_shaderProgram;			// material
+		ShaderProgramResPtr						m_shaderProgram;		// material
+		Mesh*									m_mesh;
 		RenderInput*							m_renderInput;			// first  VB, IB, etc.
 		MaxTextureArray							m_textures;				// now only one texture sampler.
 		vector<ShaderParam>::type				m_shaderParams;			// third shader params

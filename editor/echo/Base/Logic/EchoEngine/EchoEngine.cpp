@@ -187,9 +187,6 @@ namespace Studio
 	//生成背景网格(调整网格参数)
 	void EchoEngine::resizeBackGrid3d()
 	{	
-		m_gizmosNodeBackGrid->clear();
-		m_gizmosNodeBackGrid->set2d(false);
-
 		static int xOffsetBefore = 0.f;
 		static int zOffsetBefore = 0.f;
 
@@ -210,6 +207,9 @@ namespace Studio
 			
 		if (xOffset != xOffsetBefore || zOffset != zOffsetBefore)
 		{
+			m_gizmosNodeBackGrid->clear();
+			m_gizmosNodeBackGrid->set2d(false);
+
 			// gray line
 			if (yOffset < endGrayFadeDistance)
 			{

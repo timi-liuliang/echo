@@ -18,8 +18,8 @@ namespace Echo
 #ifdef ECHO_EDITOR_MODE
 		if (!Engine::instance()->getConfig().m_isGame)
 		{
-			if (m_is2d) return static_cast<bool>(m_renderTypes & Type_2D);
-			else		return static_cast<bool>(m_renderTypes & Type_3D);
+			if (m_is2d) return (m_renderTypes & Type_2D) != 0;
+			else		return (m_renderTypes & Type_3D) != 0;
 		}
 		else
 		{

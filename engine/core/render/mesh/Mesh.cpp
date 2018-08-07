@@ -115,11 +115,15 @@ namespace Echo
 
 	ui32 Mesh::getFaceCount() const
 	{
-		// triangle strip
-		// return m_idxCount - 2;
-
-		// triangle list
-		return m_idxCount / 3;
+		switch (m_topologyType)
+		{
+		case RenderInput::TT_POINTLIST:		return m_idxCount;
+		case RenderInput::TT_LINELIST:		return m_idxCount / 2;
+		case RenderInput::TT_LINESTRIP:		return m_idxCount - 1;
+		case RenderInput::TT_TRIANGLELIST:	return m_idxCount / 3;
+		case RenderInput::TT_TRIANGLESTRIP:	return m_idxCount - 2;
+		default:							return 0;
+		}
 	}
 
 	// 获取索引数据步长
@@ -211,46 +215,53 @@ namespace Echo
 	// update indices data
 	void Mesh::updateIndices(ui32 indicesCount, const ui16* indices)
 	{
-		// process data
-		EchoSafeFree(m_indices);
-
 		// load indices
 		m_idxCount = indicesCount;
 		m_idxStride = sizeof(Word);
+		if (m_idxCount)
+		{
+			// process data
+			EchoSafeFree(m_indices);
 
-		ui32 idxBuffSize = m_idxCount * m_idxStride;
-		m_indices = EchoAlloc(Byte, idxBuffSize);
-		memcpy(m_indices, indices, idxBuffSize);
+			ui32 idxBuffSize = m_idxCount * m_idxStride;
+			m_indices = EchoAlloc(Byte, idxBuffSize);
+			memcpy(m_indices, indices, idxBuffSize);
 
-		buildIndexBuffer();
+			buildIndexBuffer();
+		}
 	}
 
 	void Mesh::updateIndices(ui32 indicesCount, const ui32* indices)
 	{
-		// process data
-		EchoSafeFree(m_indices);
-
 		// load indices
 		m_idxCount = indicesCount;
 		m_idxStride = sizeof(ui32);
+		if (m_idxCount)
+		{
+			// process data
+			EchoSafeFree(m_indices);
 
-		ui32 idxBuffSize = m_idxCount * m_idxStride;
-		m_indices = EchoAlloc(Byte, idxBuffSize);
-		memcpy(m_indices, indices, idxBuffSize);
+			ui32 idxBuffSize = m_idxCount * m_idxStride;
+			m_indices = EchoAlloc(Byte, idxBuffSize);
+			memcpy(m_indices, indices, idxBuffSize);
 
-		buildIndexBuffer();
+			buildIndexBuffer();
+		}
+
 	}
 
 	// update vertex data
 	void Mesh::updateVertexs(const MeshVertexFormat& format, ui32 vertCount, const Byte* vertices, const AABB& box)
 	{
 		m_vertData.set(format, vertCount);
+		if (vertCount)
+		{
+			// copy data
+			memcpy(m_vertData.getVertices(), vertices, vertCount * m_vertData.getVertexStride());
+			m_box = box;
 
-		// copy data
-		memcpy(m_vertData.getVertices(), vertices, vertCount * m_vertData.getVertexStride());
-		m_box = box;
-
-		buildVertexBuffer();
+			buildVertexBuffer();
+		}
 	}
 
 	// update vertex data

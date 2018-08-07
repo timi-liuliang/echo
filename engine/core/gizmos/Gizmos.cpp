@@ -103,20 +103,17 @@ namespace Echo
 		// update mesh and renderable
 		if (m_meshDirty)
 		{
-			if (m_vertexs.size())
-			{
-				MeshVertexFormat define;
-				define.m_isUseVertexColor = true;
+			MeshVertexFormat define;
+			define.m_isUseVertexColor = true;
 
-				m_mesh->updateIndices(m_indices.size(), m_indices.data());
-				m_mesh->updateVertexs(define, m_vertexs.size(), (const Byte*)m_vertexs.data(), m_aabb);
+			m_mesh->updateIndices(m_indices.size(), m_indices.data());
+			m_mesh->updateVertexs(define, m_vertexs.size(), (const Byte*)m_vertexs.data(), m_aabb);
 
-				m_meshDirty = false;
-			}
+			m_meshDirty = false;
 		}
 
 		// render
-		if (m_renderable && !m_meshDirty)
+		if (m_renderable)
 		{
 			m_renderable->submitToRenderQueue();
 		}
