@@ -13,13 +13,13 @@ static const char* g_spinDefaultMaterial = R"(
 		attribute vec3 a_Position;
 		attribute vec2 a_UV;
 
-		uniform mat4 u_WordViewProjMatrix;
+		uniform mat4 u_WorldViewProjMatrix;
 
 		varying vec2 v_UV;
 
 		void main(void)
 		{
-			vec4 position = u_WordViewProjMatrix * vec4(a_Position, 1.0);
+			vec4 position = u_WorldViewProjMatrix * vec4(a_Position, 1.0);
 			gl_Position = position;
 
 			v_UV = a_UV;
