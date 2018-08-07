@@ -1,8 +1,8 @@
-#include "Render/FrameBuffer.h"
-#include "Render/Renderer.h"
-#include "Render/RenderTargetView.h"
-#include "Render/DepthStencilView.h"
-#include "Render/Viewport.h"
+#include "render/FrameBuffer.h"
+#include "render/Renderer.h"
+#include "render/RenderTargetView.h"
+#include "render/DepthStencilView.h"
+#include "render/Viewport.h"
 
 namespace Echo
 {

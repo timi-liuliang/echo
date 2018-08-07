@@ -1,6 +1,6 @@
 #include "GLES2RenderBase.h"
 #include "GLES2Shader.h"
-#include <engine/core/Util/Exception.h>
+#include <engine/core/util/Exception.h>
 #include "engine/core/io/DataStream.h"
 
 namespace Echo

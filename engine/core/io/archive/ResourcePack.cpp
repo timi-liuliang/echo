@@ -1,7 +1,7 @@
-#include "Engine/core/io/archive/ResourcePack.h"
-#include "engine/core/Util/PathUtil.h"
+#include "engine/core/io/archive/ResourcePack.h"
+#include "engine/core/util/PathUtil.h"
 #include "zlib/zlib.h"
-#include "engine/core/Util/AssertX.h"
+#include "engine/core/util/AssertX.h"
 
 namespace Echo
 {

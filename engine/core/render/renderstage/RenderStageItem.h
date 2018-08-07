@@ -1,6 +1,6 @@
 #pragma once
 
-#include <engine/core/Memory/MemManager.h>
+#include <engine/core/memory/MemManager.h>
 #include <engine/core/render/render/RenderState.h>
 #include <engine/core/render/render/RenderInput.h>
 #include <engine/core/render/render/Renderable.h>

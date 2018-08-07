@@ -1,6 +1,6 @@
 #pragma once
 
-#include <engine/core/Thread/Threading.h>
+#include <engine/core/thread/Threading.h>
 #include "Archive.h"
 
 namespace Echo

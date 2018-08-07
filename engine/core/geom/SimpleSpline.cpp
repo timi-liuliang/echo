@@ -1,5 +1,5 @@
 #include "SimpleSpline.h"
-#include "engine/core/Math/Vector4.h"
+#include "engine/core/math/Vector4.h"
 
 namespace Echo
 {
@@ -24,11 +24,11 @@ namespace Echo
 
 		mAutoCalc = true;
 	}
-	//---------------------------------------------------------------------
+
 	SimpleSpline::~SimpleSpline()
 	{
 	}
-	//---------------------------------------------------------------------
+
 	void SimpleSpline::addPoint(const Vector3& p)
 	{
 		mPoints.push_back(p);
@@ -44,7 +44,7 @@ namespace Echo
 
 		mPoints.erase(itPoint);
 	}
-	//---------------------------------------------------------------------
+
 	Vector3 SimpleSpline::interpolate(Real t) const
 	{
 		// Work out which segment this is in
@@ -56,7 +56,7 @@ namespace Echo
 		return interpolate(segIdx, t);
 
 	}
-	//---------------------------------------------------------------------
+
 	Vector3 SimpleSpline::interpolate(unsigned int fromIndex, Real t) const
 	{
 		// Bounds check
@@ -115,7 +115,7 @@ namespace Echo
 
 		return Vector3(ret.x, ret.y, ret.z);
 	}
-	//---------------------------------------------------------------------
+
 	void SimpleSpline::recalcTangents(void)
 	{
 		// Catmull-Rom approach
@@ -183,25 +183,25 @@ namespace Echo
 
 		}
 	}
-	//---------------------------------------------------------------------
+
 	const Vector3& SimpleSpline::getPoint(unsigned short index) const
 	{
 		EchoAssert(index < mPoints.size() && "Point index is out of bounds!!");
 
 		return mPoints[index];
 	}
-	//---------------------------------------------------------------------
+
 	unsigned short SimpleSpline::getNumPoints(void) const
 	{
 		return (unsigned short)mPoints.size();
 	}
-	//---------------------------------------------------------------------
+
 	void SimpleSpline::clear(void)
 	{
 		mPoints.clear();
 		mTangents.clear();
 	}
-	//---------------------------------------------------------------------
+
 	void SimpleSpline::updatePoint(unsigned short index, const Vector3& value)
 	{
 		EchoAssert(index < mPoints.size() && "Point index is out of bounds!!");
@@ -212,7 +212,7 @@ namespace Echo
 			recalcTangents();
 		}
 	}
-	//---------------------------------------------------------------------
+
 	void SimpleSpline::setAutoCalculate(bool autoCalc)
 	{
 		mAutoCalc = autoCalc;

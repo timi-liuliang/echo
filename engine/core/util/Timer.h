@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/core/Memory/MemManager.h"
+#include "engine/core/memory/MemManager.h"
 
 #ifdef ECHO_PLATFORM_WINDOWS
 	#include <windows.h>

@@ -1,5 +1,5 @@
-#include "engine/core/Util/AssertX.h"
-#include "engine/core/Memory/MemTracker.h"
+#include "engine/core/util/AssertX.h"
+#include "engine/core/memory/MemTracker.h"
 #include <iostream>
 #include <fstream>
 

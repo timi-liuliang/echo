@@ -1,5 +1,5 @@
 #include "module.h"
-#include "engine/core/Memory/MemAllocDef.h"
+#include "engine/core/memory/MemAllocDef.h"
 #include "engine/modules/register_module.cxx"
 
 namespace Echo

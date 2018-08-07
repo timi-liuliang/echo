@@ -1,7 +1,7 @@
 #pragma once
 
-#include "engine/core/Memory/MemDef.h"
-#include "engine/core/Thread/Threading.h"
+#include "engine/core/memory/MemDef.h"
+#include "engine/core/thread/Threading.h"
 #include <string>
 #include <vector>
 

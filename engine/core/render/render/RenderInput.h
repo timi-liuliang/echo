@@ -171,13 +171,13 @@ namespace Echo
 
 	protected:
 		ShaderProgram*				m_program;
+        TopologyType                m_topologyType;
 		ui32						m_startVert;
 		ui32						m_baseVert;
 		ui32						m_startIdx;
 		vector<StreamUnit>::type	m_vertexStreams;
 		unsigned int				m_vertexStreamsHash;		// ¶¥µãÁ÷hash
 		ui32						m_vertCount;
-		TopologyType				m_topologyType;
 		GPUBuffer*					m_pIdxBuff;
 		ui32						m_idxStride;
 		ui32						m_idxCount;

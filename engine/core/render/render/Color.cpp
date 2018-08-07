@@ -1,5 +1,5 @@
 #include "Color.h"
-#include "engine/core/Memory/MemAllocDef.h"
+#include "engine/core/memory/MemAllocDef.h"
 
 namespace Echo
 {

@@ -2,17 +2,13 @@
 #define __ECHO_GLES2SHADERPROGRAM_H__
 
 #include "GLES2Shader.h"
-#include "Render/ShaderProgram.h"
-#include "Render/Renderable.h"
-#include <engine/core/Util/Array.hpp>
+#include "render/ShaderProgram.h"
+#include "render/Renderable.h"
+#include <engine/core/util/Array.hpp>
 
 namespace Echo
 {
 	class GLES2ShaderProgramGPUProxy;
-
-	/**
-	 * 着色器程序
-	 */
 	class GLES2ShaderProgram : public ShaderProgram
 	{
 	public:
@@ -22,25 +18,25 @@ namespace Echo
 		~GLES2ShaderProgram();
 
 		// 附加shader
-		bool attachShader(Shader* pShader);
+		virtual bool attachShader(Shader* pShader) override;
 
 		// 移除shader
-		Shader*	detachShader(Shader::ShaderType type);
+		virtual Shader*	detachShader(Shader::ShaderType type) override;
 
 		// 链接shader
-		bool linkShaders();
+		virtual bool linkShaders() override;
 
 		// 应用变量
-		virtual void bindUniforms();
+		virtual void bindUniforms() override;
 
 		// 绑定
-		void bind();
+		virtual void bind() override;
 
 		// 解绑
-		void unbind();
+		virtual void unbind() override;
 
 		// 绑定几何体数据
-		virtual void bindRenderInput(RenderInput* renderInput);
+		virtual void bindRenderInput(RenderInput* renderInput) override;
 
 		// 获取顶点属性物理位置
 		i32 getAtrribLocation(RenderInput::VertexSemantic vertexSemantic) override;

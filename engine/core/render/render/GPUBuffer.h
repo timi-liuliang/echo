@@ -1,7 +1,6 @@
-#ifndef __ECHO_GPUBUFFER_H__
-#define __ECHO_GPUBUFFER_H__
+#pragma once
 
-#include <engine/core/Util/Buffer.h>
+#include <engine/core/util/Buffer.h>
 #include "RenderDef.h"
 
 namespace Echo
@@ -57,4 +56,3 @@ namespace Echo
 	};
 }
 
-#endif

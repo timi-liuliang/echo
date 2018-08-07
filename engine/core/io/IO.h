@@ -1,7 +1,7 @@
 #pragma once
 
 #include <functional>
-#include "engine/core/Thread/Threading.h"
+#include "engine/core/thread/Threading.h"
 #include "DataStream.h"
 #include "archive/Archive.h"
 #include "FileSystem.h"

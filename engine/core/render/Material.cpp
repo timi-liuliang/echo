@@ -1,6 +1,6 @@
 #include "Material.h"
-#include "Engine/modules/Light/Light.h"
-#include "Engine/core/Scene/NodeTree.h"
+#include "engine/modules/light/Light.h"
+#include "engine/core/scene/NodeTree.h"
 #include "engine/core/render/render/ShaderProgramRes.h"
 #include "engine/core/render/render/MaterialDesc.h"
 #include "engine/core/render/render/Renderer.h"

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "engine/core/Base/TypeDef.h"
-#include "engine/core/Memory/MemAllocDef.h"
+#include "engine/core/base/TypeDef.h"
+#include "engine/core/memory/MemAllocDef.h"
 
 namespace Echo
 {
@@ -11,8 +11,8 @@ namespace Echo
 		FrameState()
 			: m_uploadedTextureSizeInBytes(0)
 			, m_uploadedGeometricSize(0)
-			, m_triangleNum(0)
 			, m_lockTimes(0)
+            , m_triangleNum(0)
 		{}
 
 		~FrameState() {}

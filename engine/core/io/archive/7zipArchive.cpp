@@ -1,11 +1,11 @@
 #include "7zipArchive.h"
 #include <engine/core/log/LogManager.h>
-#include <engine/core/Util/PathUtil.h>
+#include <engine/core/util/PathUtil.h>
 #include <engine/core/main/Engine.h>
-#include <ThirdParty/7zip/7z.h>
-#include <ThirdParty/7zip/7zFile.h>
-#include <ThirdParty/7zip/7zCrc.h>
-#include <ThirdParty/7zip/7zAlloc.h>
+#include <thirdparty/7zip/7z.h>
+#include <thirdparty/7zip/7zFile.h>
+#include <thirdparty/7zip/7zCrc.h>
+#include <thirdparty/7zip/7zAlloc.h>
 
 namespace Echo
 {

@@ -1,4 +1,4 @@
-#include "Engine/core/geom/Frustum.h"
+#include "engine/core/geom/Frustum.h"
 #include "engine/core/log/LogManager.h"
 
 namespace Echo

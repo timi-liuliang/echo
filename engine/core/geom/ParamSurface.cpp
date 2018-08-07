@@ -1,6 +1,6 @@
-#include "Engine/core/geom/ParamSurface.h"
-#include "engine/core/Math/Vector3.h"
-#include "engine/core/Util/Buffer.h"
+#include "engine/core/geom/ParamSurface.h"
+#include "engine/core/math/Vector3.h"
+#include "engine/core/util/Buffer.h"
 
 namespace Echo
 {

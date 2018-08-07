@@ -1,11 +1,11 @@
 #include <engine/core/log/LogManager.h>
-#include <engine/core/Util/Exception.h>
-#include <engine/core/Util/PathUtil.h>
+#include <engine/core/util/Exception.h>
+#include <engine/core/util/PathUtil.h>
 #include <engine/core/io/DataStream.h>
-#include "Render/Image.h"
-#include "Render/ImageResampler.h"
-#include "Render/ImageCodec.h"
-#include "Render/ImageCodecMgr.h"
+#include "render/Image.h"
+#include "render/ImageResampler.h"
+#include "render/ImageCodec.h"
+#include "render/ImageCodecMgr.h"
 #include <freeimage/FreeImage.h>
 
 namespace Echo

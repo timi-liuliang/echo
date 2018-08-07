@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/core/Util/Buffer.h"
+#include "engine/core/util/Buffer.h"
 #include "RenderDef.h"
 
 namespace Echo

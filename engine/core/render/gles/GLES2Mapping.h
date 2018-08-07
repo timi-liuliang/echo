@@ -405,24 +405,23 @@ namespace Echo
 
 		static inline String MapVertexSemanticString(RenderInput::VertexSemantic semantic)
 		{
-			String ret;
 			switch(semantic)
 			{
-			case RenderInput::VS_POSITION:			ret = "a_Position";			break;
-			case RenderInput::VS_BLENDINDICES:		ret = "a_BlendIndices";		break;
-			case RenderInput::VS_BLENDWEIGHTS:		ret = "a_BlendWeights";		break;
-			case RenderInput::VS_COLOR:				ret = "a_Color";			break;
-			case RenderInput::VS_NORMAL:			ret = "a_Normal";			break;
-			case RenderInput::VS_TEXCOORD0:			ret = "a_UV";				break;
-			case RenderInput::VS_TEXCOORD1:			ret = "a_UV1";				break;
-			case RenderInput::VS_TANGENT:			ret = "a_Tangent";			break;
-			case RenderInput::VS_BINORMAL:			ret = "a_Binormal";			break;
-			case RenderInput::VS_SCREEN_POS_NDC:	ret = "ScreenPosNDC";		break;
-			case RenderInput::VS_TAN_EYE_ANGLE_R:	ret = "TAN_EYE_ANGLE_R";	break;
-			case RenderInput::VS_TAN_EYE_ANGLE_G:	ret = "TAN_EYE_ANGLE_G";	break;
-			case RenderInput::VS_TAN_EYE_ANGLE_B:	ret = "TAN_EYE_ANGLE_B";
+			case RenderInput::VS_POSITION:			return "a_Position";
+			case RenderInput::VS_BLENDINDICES:		return "a_BlendIndices";
+			case RenderInput::VS_BLENDWEIGHTS:		return "a_BlendWeights";
+			case RenderInput::VS_COLOR:				return "a_Color";
+			case RenderInput::VS_NORMAL:			return "a_Normal";
+			case RenderInput::VS_TEXCOORD0:			return "a_UV";
+			case RenderInput::VS_TEXCOORD1:			return "a_UV1";
+			case RenderInput::VS_TANGENT:			return "a_Tangent";
+			case RenderInput::VS_BINORMAL:			return "a_Binormal";
+			case RenderInput::VS_SCREEN_POS_NDC:	return "ScreenPosNDC";
+			case RenderInput::VS_TAN_EYE_ANGLE_R:	return "TAN_EYE_ANGLE_R";
+			case RenderInput::VS_TAN_EYE_ANGLE_G:	return "TAN_EYE_ANGLE_G";
+			case RenderInput::VS_TAN_EYE_ANGLE_B:	return "TAN_EYE_ANGLE_B";
+            default:                                return "";
 			}
-			return ret;
 		}
 
 		// 映射着色器参数类型

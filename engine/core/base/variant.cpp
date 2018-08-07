@@ -100,10 +100,8 @@ namespace Echo
 		case Type::Vector3: return StringUtil::ToString(any_cast<Vector3>(m_any));
 		case Type::ResourcePath: return (any_cast<ResourcePath>(m_any)).getPath();
 		case Type::StringOption: return (any_cast<StringOption>(m_any)).getValue();
+        default:                 return StringUtil::BLANK;
 		}
-
-		static Echo::String invalid;
-		return invalid; 
 	}
 
 	// from string
@@ -120,8 +118,7 @@ namespace Echo
 		case Type::ResourcePath: { m_type = Type::ResourcePath; m_any = ResourcePath(str, nullptr); }return true;
 		case Type::StringOption: { m_type = Type::StringOption; m_any = StringOption(str); } return true;
 		case Type::Object: { m_type = Type::Object; m_obj = Object::getById(StringUtil::ParseI32(str)); } return true;
+        default:    return false;
 		}
-
-		return false;
 	}
 }

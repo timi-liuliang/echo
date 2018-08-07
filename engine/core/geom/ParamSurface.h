@@ -1,8 +1,8 @@
 #pragma once
 
-#include "engine/core/Util/Buffer.h"
-#include "engine/core/Math/Vector2.h"
-#include "engine/core/Math/Vector3.h"
+#include "engine/core/util/Buffer.h"
+#include "engine/core/math/Vector2.h"
+#include "engine/core/math/Vector3.h"
 
 namespace Echo
 {

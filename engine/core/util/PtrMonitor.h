@@ -1,7 +1,7 @@
 #pragma once
 
 #include <map>
-#include "engine/core/Base/EchoDef.h"
+#include "engine/core/base/EchoDef.h"
 #include "engine/core/log/LogManager.h"
 
 namespace Echo

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Render/RenderState.h"
+#include "render/RenderState.h"
 
 namespace Echo
 {

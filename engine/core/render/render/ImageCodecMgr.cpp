@@ -1,5 +1,5 @@
-#include "Render/ImageCodec.h"
-#include "Render/ImageCodecMgr.h"
+#include "render/ImageCodec.h"
+#include "render/ImageCodecMgr.h"
 #include <freeimage/FreeImage.h>
 
 #ifdef _WINDOWS_

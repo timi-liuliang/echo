@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/core/Base/EchoDef.h"
+#include "engine/core/base/EchoDef.h"
 #include "engine/core/render/render/Texture.h"
 #include "engine/core/render/render/RenderTarget.h"
 #include "engine/core/render/render/Renderer.h"

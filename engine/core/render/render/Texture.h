@@ -1,7 +1,7 @@
 #pragma once
 
-#include <engine/core/Util/Buffer.h>
-#include <engine/core/Math/Rect.h>
+#include <engine/core/util/Buffer.h>
+#include <engine/core/math/Rect.h>
 #include <engine/core/io/DataStream.h>
 #include "PixelFormat.h"
 

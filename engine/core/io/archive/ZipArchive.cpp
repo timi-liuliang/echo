@@ -1,8 +1,8 @@
 #include "ResourcePack.h"
 #include "engine/core/log/LogManager.h"
-#include "engine/core/Util/Exception.h"
+#include "engine/core/util/Exception.h"
 #include "ZipArchive.h"
-#include "Engine/core/main/Engine.h"
+#include "engine/core/main/Engine.h"
 
 namespace Echo
 {

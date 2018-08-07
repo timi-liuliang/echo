@@ -1,8 +1,8 @@
-﻿#pragma once
+#pragma once
 
-#include "engine/core/Math/Quaternion.h"
+#include "engine/core/math/Quaternion.h"
 #include "engine/core/geom/Frustum.h"
-#include "engine/core/Util/Array.hpp"
+#include "engine/core/util/Array.hpp"
 
 namespace Echo
 {

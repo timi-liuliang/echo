@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/core/Math/Vector3.h"
+#include "engine/core/math/Vector3.h"
 #include "AABB.h"
 
 namespace Echo
@@ -13,9 +13,9 @@ namespace Echo
 	// y[2]*U[2] is inside or on the box wheneve |y[i]| <= e[i] for all i
 	struct Box3
 	{
-		Vector3		m_center;	// 中心点
-		Vector3		m_axis[3];	// 朝向,轴朝向必须是规范正交的
-		float		m_extent[3];// 非负 
+		Vector3		m_center;
+		Vector3		m_axis[3];
+		float		m_extent[3];
 
 		// initialized
 		Box3( const Vector3& center, const Vector3& axis0, const Vector3& axis1, const Vector3& axis2, float extent0, float extent1, float extent2);
@@ -23,10 +23,10 @@ namespace Echo
 		// Set
 		void Set( const Vector3& center, const Vector3& axis0, const Vector3& axis1, const Vector3& axis2, float extent0, float extent1, float extent2);
 
-		// 构建AABB包围盒
+		// build AABB
 		void buildAABB( AABB& aabb);
 
-		// 构建八个顶点
+		// get eight points
 		void buildEightPoints( Vector3* points);
 	};
 }

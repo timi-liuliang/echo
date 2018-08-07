@@ -1,6 +1,6 @@
 #pragma once
 
-#include <engine/core/Base/TypeDef.h>
+#include <engine/core/base/TypeDef.h>
 #include "Color.h"
 
 namespace Echo

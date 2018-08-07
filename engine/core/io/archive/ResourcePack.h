@@ -1,7 +1,7 @@
 #pragma once
 
 #include <engine/core/io/DataStream.h>
-#include "engine/core/Thread/Threading.h"
+#include "engine/core/thread/Threading.h"
 
 #define MAX_FILE_NODE_NUM 20000
 #define MIN_FILE_NODE_NUM 50			

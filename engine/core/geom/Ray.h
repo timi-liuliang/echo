@@ -1,10 +1,9 @@
-#ifndef __ECHO_RAY_H__
-#define __ECHO_RAY_H__
+#pragma once
 
-#include "engine/core/Math/Math.h"
+#include "engine/core/math/Math.h"
 #include "Triangle.h"
 #include "Plane.h"
-#include "engine/core/Math/Rect.h"
+#include "engine/core/math/Rect.h"
 #include "AABB.h"
 #include "Sphere.h"
 
@@ -34,5 +33,3 @@ namespace Echo
 		Vector3 getPoint(Real dis) const;
 	};
 }
-
-#endif

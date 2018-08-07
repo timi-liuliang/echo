@@ -1,6 +1,6 @@
 #include "PixelFormat.h"
 #include "PixelConversions.h"
-#include "engine/core/Util/AssertX.h"
+#include "engine/core/util/AssertX.h"
 #include "engine/core/log/LogManager.h"
 #include "Color.h"
 

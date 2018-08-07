@@ -1,7 +1,7 @@
 #pragma once
 
-#include "engine/core/Memory/MemManager.h"
-#include "Engine/core/geom/AABB.h"
+#include "engine/core/memory/MemManager.h"
+#include "engine/core/geom/AABB.h"
 #include "ChunkyTriMesh.h"
 
 namespace Echo

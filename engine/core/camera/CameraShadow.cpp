@@ -1,4 +1,4 @@
-#include "engine/core/camera/camerashadow.h"
+#include "engine/core/camera/CameraShadow.h"
 #include "engine/core/main/Engine.h"
 
 namespace Echo

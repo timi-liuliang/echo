@@ -1,6 +1,6 @@
 #pragma once
 
-#include <engine/core/Math/Math.h>
+#include <engine/core/math/Math.h>
 
 namespace Echo
 {
@@ -76,8 +76,8 @@ namespace Echo
 		// ¹¹Ôìº¯Êý
 		PointLight()
 			: Light(LT_Point)
+            , m_colorAddFalloff(1.f, 1.f, 1.f, 1.f)
 			, m_positionAndInvRadius(0.f, 0.f, 0.f, 0.2f)
-			, m_colorAddFalloff(1.f, 1.f, 1.f, 1.f)
 			, m_followModel( true )
 		{}
 	};

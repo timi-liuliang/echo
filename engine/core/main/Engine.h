@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/core/render/render/Renderer.h"
-#include "engine/core/Scene/NodeTree.h"
+#include "engine/core/scene/NodeTree.h"
 #include "FrameState.h"
 #include "GameSettings.h"
 

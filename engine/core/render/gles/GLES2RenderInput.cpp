@@ -4,9 +4,9 @@
 #include "GLES2ShaderProgram.h"
 #include "GLES2Mapping.h"
 #include "GLES2GPUBuffer.h"
-#include <engine/core/Util/AssertX.h>
-#include <engine/core/Util/Exception.h>
-#include "Render/PixelFormat.h"
+#include <engine/core/util/AssertX.h>
+#include <engine/core/util/Exception.h>
+#include "render/PixelFormat.h"
 #include "GLES2Mapping.h"
 
 

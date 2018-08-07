@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/core/Math/Vector3.h"
+#include "engine/core/math/Vector3.h"
 
 namespace Echo
 {

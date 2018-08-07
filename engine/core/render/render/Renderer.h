@@ -1,10 +1,10 @@
 #pragma once
 
-#include <engine/core/Util/Buffer.h>
+#include <engine/core/util/Buffer.h>
 #include "Color.h"
-#include <engine/core/Math/Vector3.h>
-#include <engine/core/Math/Matrix4.h>
-#include "engine/core/Thread/Threading.h"
+#include <engine/core/math/Vector3.h>
+#include <engine/core/math/Matrix4.h>
+#include "engine/core/thread/Threading.h"
 #include "RenderInput.h"
 #include "RenderState.h"
 #include "FrameBuffer.h"
@@ -124,8 +124,8 @@ namespace Echo
 				, bFullscreen(false)
 				, bVSync(false)
 				, bSeparatedAlpha(false)
-				, windowHandle(0)
 				, enableThreadedRendering(true)
+                , windowHandle(0)
 			{}
 		};
 
@@ -138,9 +138,9 @@ namespace Echo
 				, m_uploadedGeometricSize(0)
 				, m_rendertargetSize(0)
 				, m_drawCallTimes(0)
-				, m_triangleNum(0)
 				, m_lockTimes(0)
 				, m_fps(0)
+                , m_triangleNum(0)
 			{}
 
 			~FrameState()

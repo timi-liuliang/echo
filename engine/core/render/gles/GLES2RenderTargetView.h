@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Render/RenderTargetView.h"
+#include "render/RenderTargetView.h"
 
 namespace Echo
 {

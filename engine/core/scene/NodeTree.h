@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Node.h"
+#include "node.h"
 #include "engine/core/gizmos/Gizmos.h"
-#include "Engine/core/Camera/Camera.h"
-#include "Engine/core/Camera/CameraShadow.h"
+#include "engine/core/camera/Camera.h"
+#include "engine/core/camera/CameraShadow.h"
 
 namespace Echo
 {

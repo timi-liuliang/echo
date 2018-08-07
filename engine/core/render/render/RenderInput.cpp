@@ -1,7 +1,7 @@
-#include "Render/RenderInput.h"
-#include "engine/core/Util/Exception.h"
-#include "Render/Renderer.h"
-#include "Render/ShaderProgram.h"
+#include "render/RenderInput.h"
+#include "engine/core/util/Exception.h"
+#include "render/Renderer.h"
+#include "render/ShaderProgram.h"
 
 namespace Echo
 {

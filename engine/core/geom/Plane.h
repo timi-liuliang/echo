@@ -1,7 +1,6 @@
-#ifndef __ECHO_PLANE_H__
-#define __ECHO_PLANE_H__
+#pragma once
 
-#include "engine/core/Math/Math.h"
+#include "engine/core/math/Math.h"
 
 namespace Echo
 {
@@ -37,10 +36,6 @@ namespace Echo
 		Vector3 projectVector(const Vector3& v) const;
 		void normalize();
 		Side getSide (const Vector3& centre, const Vector3& halfSize) const;
-
-		// 平面与线段交点
 		bool intersect(const Vector3& p0, const Vector3& p1, Real& t) const;
 	};
 }
-
-#endif

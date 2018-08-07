@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/core/scene/Node.h"
+#include "engine/core/scene/node.h"
 #include "engine/core/util/base64.h"
 #include "anim_clip.h"
 

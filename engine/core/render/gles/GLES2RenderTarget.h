@@ -1,7 +1,7 @@
 #ifndef ECHO_GLES2RENDERTAGER
 #define ECHO_GLES2RENDERTAGER
 
-#include "Render/RenderTarget.h"
+#include "render/RenderTarget.h"
 
 namespace Echo
 {

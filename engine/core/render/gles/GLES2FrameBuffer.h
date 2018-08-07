@@ -2,7 +2,7 @@
 
 #include "GLES2RenderTargetView.h"
 #include "GLES2DepthStencilView.h"
-#include "Render/FrameBuffer.h"
+#include "render/FrameBuffer.h"
 
 namespace Echo
 {

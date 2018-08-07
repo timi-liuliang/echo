@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Engine/core/Resource/Res.h"
-#include "engine/core/Util/Buffer.h"
+#include "engine/core/resource/Res.h"
+#include "engine/core/util/Buffer.h"
 #include <engine/core/render/render/Texture.h>
 
 namespace Echo

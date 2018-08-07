@@ -1,6 +1,6 @@
 #pragma once
 
-#include <engine/core/Util/AssertX.h>
+#include <engine/core/util/AssertX.h>
 #include "Shader.h"
 #include "RenderInput.h"
 

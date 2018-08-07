@@ -1,6 +1,6 @@
 #pragma once
 
-#include <engine/core/Math/Math.h>
+#include <engine/core/math/Math.h>
 #include "RenderDef.h"
 
 namespace Echo

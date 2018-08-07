@@ -1,6 +1,6 @@
 #pragma once
 
-#include <engine/core/Util/Array.hpp>
+#include <engine/core/util/Array.hpp>
 #include "ShaderProgram.h"
 #include "Texture.h"
 #include "RenderState.h"

@@ -196,7 +196,7 @@ namespace Echo
 					else
 					{
 						pugi::xml_node objNode = propertyNode.append_child("obj");
-						savePropertyRecursive(&obj, obj, obj->getClassName());
+						savePropertyRecursive(&objNode, obj, obj->getClassName());
 					}
 				}
 			}

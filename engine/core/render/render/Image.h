@@ -1,7 +1,6 @@
-#ifndef __ECHO_IMAGE_H__
-#define __ECHO_IMAGE_H__
+#pragma once
 
-#include "engine/core/Util/Buffer.h"
+#include "engine/core/util/Buffer.h"
 #include "engine/core/render/render/Color.h"
 #include "engine/core/render/render/PixelFormat.h"
 
@@ -15,11 +14,8 @@ namespace Echo
 		Image();
 
 	public:
-		Image(Byte* pData, ui32 width, ui32 height, ui32 depth, 
-			PixelFormat pixFmt, ui32 numFaces = 1, ui32 numMipMaps = 0);
-
+		Image(Byte* pData, ui32 width, ui32 height, ui32 depth, PixelFormat pixFmt, ui32 numFaces = 1, ui32 numMipMaps = 0);
 		virtual ~Image();
-
 
 		static const ui32	MAX_MINMAPS = 16;
 
@@ -114,4 +110,3 @@ namespace Echo
 	};
 }
 
-#endif

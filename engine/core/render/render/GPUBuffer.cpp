@@ -1,4 +1,4 @@
-#include "Render/GPUBuffer.h"
+#include "render/GPUBuffer.h"
 
 namespace Echo
 {
