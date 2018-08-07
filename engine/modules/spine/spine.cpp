@@ -63,19 +63,26 @@ namespace Echo
 
 			// skeleton data
 			m_spSkeletonData = spSkeletonJson_readSkeletonDataFile(json, PathUtil::GetRenameExtFile(res.getPath().c_str(), ".json").c_str());
-			m_spSkeleton = spSkeleton_create(m_spSkeletonData);
-
-			// animation names
-			for (int i = 0; i < m_spSkeletonData->animationsCount; i++)
+			if (m_spSkeletonData)
 			{
-				spAnimation* spAnim = m_spSkeletonData->animations[i];
-				m_animations.addOption(spAnim->name);
-			}
+				m_spSkeleton = spSkeleton_create(m_spSkeletonData);
 
-			// animation state
-			m_spAnimState = spAnimationState_create(spAnimationStateData_create(m_spSkeleton->data));
-			m_spAnimState->rendererObject = this;
-			m_spAnimState->listener = animationCallback;
+				// animation names
+				for (int i = 0; i < m_spSkeletonData->animationsCount; i++)
+				{
+					spAnimation* spAnim = m_spSkeletonData->animations[i];
+					m_animations.addOption(spAnim->name);
+				}
+
+				// animation state
+				m_spAnimState = spAnimationState_create(spAnimationStateData_create(m_spSkeleton->data));
+				m_spAnimState->rendererObject = this;
+				m_spAnimState->listener = animationCallback;
+			}
+			else
+			{
+				EchoLogError("Read spine skeleton data [%s] failed", res.getPath().c_str());
+			}
 		}
 	}
 
