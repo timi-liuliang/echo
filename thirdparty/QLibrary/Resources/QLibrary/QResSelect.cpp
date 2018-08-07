@@ -101,15 +101,18 @@ namespace QT_UI
 	bool QResSelect::ItemDelegatePaint(QPainter *painter, const QRect& rect, const Echo::String& val)
 	{
 		Echo::String path = val;
-		Echo::String fullPath = Echo::IO::instance()->getFullPath(path);
-		Echo::String ext = Echo::PathUtil::GetFileExt(path, true);
-		if (Echo::StringUtil::Equal(ext, ".png", false))
+		if (!path.empty())
 		{
-			QPixmap pixmap(fullPath.c_str());
-			QRect tRect = QRect(rect.left() + 3, rect.top() + 2, rect.height() - 4, rect.height() - 4);
-			painter->drawPixmap( tRect, pixmap);
+			Echo::String fullPath = Echo::IO::instance()->getFullPath(path);
+			Echo::String ext = Echo::PathUtil::GetFileExt(path, true);
+			if (Echo::StringUtil::Equal(ext, ".png", false))
+			{
+				QPixmap pixmap(fullPath.c_str());
+				QRect tRect = QRect(rect.left() + 3, rect.top() + 2, rect.height() - 4, rect.height() - 4);
+				painter->drawPixmap(tRect, pixmap);
 
-			return true;
+				return true;
+			}
 		}
 
 		return false;
