@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <typeinfo>
 #include "engine/core/log/LogManager.h"
-#include "engine/core/Memory/MemAllocDef.h"
+#include "engine/core/memory/MemAllocDef.h"
 
 namespace Echo
 {

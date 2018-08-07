@@ -1,9 +1,9 @@
 #ifndef __ECHO_GLES2MAPPING_H__
 #define __ECHO_GLES2MAPPING_H__
 
-#include <Render/RenderInput.h>
-#include <Render/Texture.h>
-#include <Render/ShaderProgram.h>
+#include <render/RenderInput.h>
+#include <render/Texture.h>
+#include <render/ShaderProgram.h>
 #include "GLES2RenderState.h"
 
 namespace Echo
@@ -55,16 +55,6 @@ namespace Echo
 	class GLES2Mapping
 	{
 	public:
-		/*static GLES2Error		MapErrorCode(GLenum err);
-		static GLenum			MapFrontFace(bool bFrontFaceCCW);
-		static GLenum			MapGPUBufferUsage(Dword usage);
-		static GLenum			MapDataType(PixelFormat pixFmt);
-		static GLenum			MapInternalFormat(PixelFormat pixFmt);
-		static GLenum			MapFormat(PixelFormat pixFmt);
-		static GLenum			MapPrimitiveTopology(RenderInput::TopologyType type);
-		static String			MapVertexSemanticString(RenderInput::VertexSemantic semantic);
-		static GLenum			MapComparisonFunc(RenderState::ComparisonFunc func);
-		static GLenum			MapTextureType(Texture::TexType type);*/
 		static GLenum			MapStencilOperation(DepthStencilState::StencilOperation op);
 		static GLenum			MapBlendOperation(BlendState::BlendOperation op);
 		static GLenum			MapBlendFactor(BlendState::BlendFactor factor);

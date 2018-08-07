@@ -181,7 +181,6 @@ namespace Echo
 		}
 
 		// we don't need this value actually
-		ui32* textureDataSize = (ui32*)pTextureData;
 		pTextureData += sizeof(ui32);
 
 		if (pKtxHeader->glInternalFormat == GL_COMPRESSED_SIGNED_R11_EAC)

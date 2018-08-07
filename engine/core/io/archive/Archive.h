@@ -1,7 +1,7 @@
 #pragma once
 
 #include <functional>
-#include "engine/core/Util/StringUtil.h"
+#include "engine/core/util/StringUtil.h"
 #include "engine/core/io/DataStream.h"
 
 namespace Echo

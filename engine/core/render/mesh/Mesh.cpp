@@ -138,8 +138,7 @@ namespace Echo
 		return (Word*)m_indices;
 	}
 
-	// 计算占用内存大小
-	size_t Mesh::getMemeoryUsage() const
+	ui32 Mesh::getMemeoryUsage() const
 	{
 		return m_vertData.getVertexStride()*m_vertData.getVertexCount() + m_idxCount*m_idxStride;
 	}

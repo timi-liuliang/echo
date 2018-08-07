@@ -1,7 +1,7 @@
 #include "DataStream.h"
-#include "engine/core/Base/EchoDef.h"
-#include "engine/core/Util/StringUtil.h"
-#include "engine/core/Util/AssertX.h"
+#include "engine/core/base/EchoDef.h"
+#include "engine/core/util/StringUtil.h"
+#include "engine/core/util/AssertX.h"
 #include <engine/core/log/LogManager.h>
 #include "IO.h"
 #include <algorithm>

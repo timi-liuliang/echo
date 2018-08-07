@@ -1,6 +1,6 @@
 #pragma once
 
-#include <engine/core/Memory/MemDef.h>
+#include <engine/core/memory/MemDef.h>
 #include <algorithm>
 
 #if ECHO_MEMORY_ALLOCATOR==ECHO_MEMORY_ALLOCATOR_DEFAULT

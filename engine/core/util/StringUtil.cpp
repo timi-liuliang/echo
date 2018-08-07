@@ -273,7 +273,7 @@ namespace Echo
 		return szBuffer;
 	}
 
-	WString StringUtil::Format( const wchar_t* formats, ... )
+	/*WString StringUtil::Format( const wchar_t* formats, ... )
 	{
 		va_list args;
 		va_start(args,formats);
@@ -288,7 +288,7 @@ namespace Echo
 #endif
 		va_end(args);
 		return buffer;
-	}
+	}*/
 
 	bool StringUtil::StartWith(const String& str, const String& pattern, bool lowCase)
 	{

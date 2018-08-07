@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/core/Base/EchoDef.h"
+#include "engine/core/base/EchoDef.h"
 
 #ifdef ECHO_PLATFORM_WINDOWS
 	#undef WIN32_LEAN_AND_MEAN

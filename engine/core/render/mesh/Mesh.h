@@ -95,7 +95,7 @@ namespace Echo
 		Mesh(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer);
 		~Mesh();
 
-		// 获取内存占用大小
+		// get memory usage
 		ui32 getMemeoryUsage() const;
 
 		// 计算切线数据

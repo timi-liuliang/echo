@@ -1,7 +1,7 @@
-#include "engine/core/Util/AssertX.h"
-#include "engine/core/Util/Exception.h"
-#include "engine/core/Util/PathUtil.h"
-#include "engine/core/Util/TimeProfiler.h"
+#include "engine/core/util/AssertX.h"
+#include "engine/core/util/Exception.h"
+#include "engine/core/util/PathUtil.h"
+#include "engine/core/util/TimeProfiler.h"
 #include "IO.h"
 #include "engine/core/log/LogManager.h"
 

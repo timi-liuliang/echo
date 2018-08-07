@@ -1,7 +1,7 @@
 #pragma once
 
-#include "engine/core/Base/TypeDef.h"
-#include "engine/core/Math/Vector2.h"
+#include "engine/core/base/TypeDef.h"
+#include "engine/core/math/Vector2.h"
 
 namespace Echo
 {

@@ -1,7 +1,6 @@
-#ifndef __ECHO_PATHUTIL_H__
-#define __ECHO_PATHUTIL_H__
+#pragma once
 
-#include "engine/core/Memory/MemManager.h"
+#include "engine/core/memory/MemManager.h"
 
 namespace Echo
 {
@@ -71,4 +70,3 @@ namespace Echo
 		static bool WriteData(const String& path, const void* data, int len, const char* mode="wb");
 	};
 }
-#endif

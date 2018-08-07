@@ -1,7 +1,6 @@
-#ifndef __ECHO_CIRCLE_H__
-#define __ECHO_CIRCLE_H__
+#pragma once
 
-#include "engine/core/Math/Math.h"
+#include "engine/core/math/Math.h"
 
 namespace Echo
 {
@@ -35,5 +34,3 @@ namespace Echo
 		void		expand(Real n);
 	};
 }
-
-#endif

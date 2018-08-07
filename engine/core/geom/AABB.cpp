@@ -1,5 +1,5 @@
 #include "engine/core/geom/AABB.h"
-#include "engine/core/Util/StringUtil.h"
+#include "engine/core/util/StringUtil.h"
 #include <sstream>
 
 namespace Echo

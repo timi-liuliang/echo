@@ -1,7 +1,6 @@
-#ifndef __ECHO_GEOMDEF_H__
-#define __ECHO_GEOMDEF_H__
+#pragma once
 
-#include "engine/core/Math/Math.h"
+#include "engine/core/math/Math.h"
 
 namespace Echo
 {
@@ -34,5 +33,3 @@ namespace Echo
 	};
 
 }
-
-#endif

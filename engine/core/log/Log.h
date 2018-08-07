@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/core/Memory/MemManager.h"
+#include "engine/core/memory/MemManager.h"
 #include <fstream>
 
 namespace Echo

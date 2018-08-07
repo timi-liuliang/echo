@@ -1,6 +1,6 @@
 #pragma once
 
-#include "vector2.h"
+#include "Vector2.h"
 
 namespace Echo
 {

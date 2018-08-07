@@ -755,7 +755,7 @@ namespace Echo
 	bool GltfRes::buildMaterial(int meshIdx, int primitiveIdx)
 	{
 		GltfPrimitive& primitive = m_meshes[meshIdx].m_primitives[primitiveIdx];
-		GltfMaterialInfo& matInfo = primitive.m_material!=-1 ?  m_materials[primitive.m_material] : GltfMaterialInfo();
+        GltfMaterialInfo& matInfo = primitive.m_material!=-1 ?  m_materials[primitive.m_material] : GltfMaterialInfo::DEFAULT;
 		i32	baseColorTextureIdx = matInfo.m_pbr.m_baseColorTexture.m_index;
 		i32 metalicRoughnessIdx = matInfo.m_pbr.m_metallicRoughnessTexture.m_index;
 		i32 normalTextureIdx = matInfo.m_normalTexture.m_index;
@@ -782,8 +782,11 @@ namespace Echo
 		primitive.m_materialInst->setMacro("USE_IBL", true);
 		//primitive.m_materialInst->setMacro("USE_TEX_LOD", true);
 
+        // temp variables
+        Vector2 metalicRoughnessFactor(matInfo.m_pbr.m_metallicFactor, matInfo.m_pbr.m_roughnessFactor);
+        
 		// params
-		primitive.m_materialInst->setUniformValue("u_MetallicRoughnessValues", ShaderParamType::SPT_VEC2, &Vector2(matInfo.m_pbr.m_metallicFactor, matInfo.m_pbr.m_roughnessFactor));
+		primitive.m_materialInst->setUniformValue("u_MetallicRoughnessValues", ShaderParamType::SPT_VEC2, &metalicRoughnessFactor);
 		primitive.m_materialInst->setUniformValue("u_BaseColorFactor", ShaderParamType::SPT_VEC4, matInfo.m_pbr.m_baseColorFactor);
 		
 		// base color texture
@@ -1128,7 +1131,7 @@ namespace Echo
 	Node* GltfRes::build()
 	{
 		if (!m_isLoaded)
-			return false;
+			return nullptr;
 
 		vector<Node*>::type nodes;
 		for (GltfSceneInfo& scene : m_scenes)

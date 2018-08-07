@@ -273,8 +273,6 @@ namespace Echo
 
 		Camera* p2DCamera = NodeTree::instance()->get2dCamera();
 		pViewport->setViewProjMatrix(p2DCamera->getViewProjMatrix());
-		ui32 width = pViewport->getWidth();
-		ui32 height = pViewport->getHeight();
 
 		m_bRendererInited = true;
 

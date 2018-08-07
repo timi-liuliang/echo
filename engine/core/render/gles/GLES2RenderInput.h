@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Render/RenderInput.h"
+#include "render/RenderInput.h"
 
 namespace Echo
 {

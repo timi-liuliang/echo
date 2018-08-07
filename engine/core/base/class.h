@@ -262,7 +262,7 @@ public:																						\
 private:		
 
 #define CLASS_BIND_METHOD(m_class, method, methodName) \
-	Echo::Class::bindMethod(#m_class, &##m_class::method, methodName)
+	Echo::Class::bindMethod(#m_class, &m_class::method, methodName)
 
 #define CLASS_REGISTER_PROPERTY(m_class, name, type, getter, setter) \
 	Echo::Class::registerProperty(#m_class, name, type, PropertyHint::None, "", getter, setter)

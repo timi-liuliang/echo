@@ -1,6 +1,6 @@
 #include "RenderTargetManager.h"
 #include "Material.h"
-#include "Engine/core/main/Engine.h"
+#include "engine/core/main/Engine.h"
 #include "render/ShaderProgramRes.h"
 #include "TextureRes.h"
 #include <algorithm>

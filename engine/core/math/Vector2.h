@@ -1,8 +1,8 @@
 #ifndef __ECHO_VEC2_H__
 #define __ECHO_VEC2_H__
 
-#include "engine/core/Base/EchoDef.h"
-#include "engine/core/Util/AssertX.h"
+#include "engine/core/base/EchoDef.h"
+#include "engine/core/util/AssertX.h"
 #include "EchoMathFunction.h"
 
 namespace Echo

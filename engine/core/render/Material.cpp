@@ -72,9 +72,9 @@ namespace Echo
 		: Res()
 		, m_isDirty(false)
 		, m_shaderPath("", ".shader")
-		, m_shaderProgramRes(NULL)
 		, m_shaderContent(nullptr)
 		, m_renderStage("Opaque", { "Opaque", "Transparent" })
+        , m_shaderProgramRes(nullptr)
 	{
 	}
 
@@ -83,9 +83,9 @@ namespace Echo
 		: Res(path)
 		, m_isDirty(false)
 		, m_shaderPath("", ".shader")
-		, m_shaderProgramRes(NULL)
 		, m_shaderContent(nullptr)
 		, m_renderStage("Opaque", { "Opaque", "Transparent" })
+        , m_shaderProgramRes(nullptr)
 	{
 	}
 

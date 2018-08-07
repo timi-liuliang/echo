@@ -100,8 +100,6 @@ namespace Echo
 	// remember property recursive
 	void Object::loadPropertyRecursive(void* pugiNode, Echo::Object* classPtr, const Echo::String& className)
 	{
-		pugi::xml_node* xmlNode = (pugi::xml_node*)pugiNode;
-
 		// load parent property first
 		Echo::String parentClassName;
 		if (Echo::Class::getParentClass(parentClassName, className))

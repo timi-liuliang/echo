@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Render/Texture.h>
+#include <render/Texture.h>
 
 namespace Echo
 {

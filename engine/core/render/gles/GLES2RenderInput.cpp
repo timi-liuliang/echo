@@ -50,7 +50,6 @@ namespace Echo
 		// °ó¶¨¶¥µãÁ÷
 		if (isNeedSetVertexBuffer)
 		{
-			GLES2ShaderProgram* pGLES2Program = (GLES2ShaderProgram*)m_program;
 			for (i32 i = (i32)(m_vertexStreams.size() - 1); i >= 0; i--)
 			{
 				const StreamUnit& streamUnit = m_vertexStreams[i];

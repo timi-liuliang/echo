@@ -135,6 +135,8 @@ namespace Echo
 
 	struct GltfMaterialInfo
 	{
+        static GltfMaterialInfo  DEFAULT;
+        
 		String		m_name;
 
 		struct Texture
