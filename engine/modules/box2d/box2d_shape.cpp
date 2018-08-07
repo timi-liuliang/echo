@@ -17,7 +17,14 @@ namespace Echo
 
 	Box2DShape::~Box2DShape()
 	{
-
+		if (m_fixture)
+		{
+			Box2DBody* body = ECHO_DOWN_CAST<Box2DBody*>(getParent());
+			if (body && body->getb2Body())
+			{
+				body->getb2Body()->DestroyFixture(m_fixture);
+			}
+		}
 	}
 
 	void Box2DShape::bindMethods()

@@ -96,16 +96,8 @@ namespace Echo
 			tangentDatas[i].normalize();
 			binormalDatas[i].normalize();
 		}
-
-		//// 新建切线数据
-		//insertVertexData(RenderInput::VertexElement(RenderInput::VS_TANGENT, PF_RGB32_FLOAT), tangentDatas.data());
-		//insertVertexData(RenderInput::VertexElement(RenderInput::VS_BINORMAL, PF_RGB32_FLOAT), binormalDatas.data());
-
-		//m_vertData.m_isUseTangentBinormal = true;
-		//m_vertData.build();
 	}
 
-	// 卸载
 	void Mesh::clear()
 	{
 		EchoSafeFree(m_indices);
@@ -116,13 +108,11 @@ namespace Echo
 		m_vertData.reset();
 	}
 
-	// 获取索引数量
 	ui32 Mesh::getIndexCount() const
 	{
 		return m_idxCount;
 	}
 
-	// 获取面数量
 	ui32 Mesh::getFaceCount() const
 	{
 		// triangle strip

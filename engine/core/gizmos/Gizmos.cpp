@@ -116,7 +116,7 @@ namespace Echo
 		}
 
 		// render
-		if (m_renderable)
+		if (m_renderable && !m_meshDirty)
 		{
 			m_renderable->submitToRenderQueue();
 		}

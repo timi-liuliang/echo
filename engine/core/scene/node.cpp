@@ -463,8 +463,7 @@ namespace Echo
 		if (m_parent)
 		{
 			m_parent->removeChild(this);
-			m_parent = nullptr;
-		}		
+		}
 
 		NodeArray children = m_children;
 		for (Node* n : children)
