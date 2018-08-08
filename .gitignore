@@ -1,2 +1,7 @@
 /solution
 /lib
+*/.DS_Store
+build/ios/app/.DS_Store
+build/ios/app/src/.DS_Store
+build/ios/app/src/Frame/.DS_Store
+build/ios/app/src/Frame/Platform/.DS_Store

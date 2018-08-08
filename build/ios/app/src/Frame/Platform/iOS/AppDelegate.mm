@@ -1,5 +1,4 @@
 #import "AppDelegate.h"
-#include "Foundation/Base/TypeDef.h"
 #include <pthread.h>
 #include <mach/thread_act.h>
 
@@ -13,7 +12,7 @@ void PresentRenderBuffer()
     [[AppDelegate GetDelegate].m_viewController SwapBuffers];
 }
 
-void IOSSetThreadAffinityMask(LORD::ui64 mask)
+/*void IOSSetThreadAffinityMask(LORD::ui64 mask)
 {
     float osVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
     if (osVersion >= 8)
@@ -22,7 +21,7 @@ void IOSSetThreadAffinityMask(LORD::ui64 mask)
         ap.affinity_tag = static_cast<integer_t>(mask);
         thread_policy_set(pthread_mach_thread_np(pthread_self()), THREAD_AFFINITY_POLICY, (integer_t*)&ap, THREAD_AFFINITY_POLICY_COUNT);
     }
-}
+}*/
 
 @implementation AppDelegate
 

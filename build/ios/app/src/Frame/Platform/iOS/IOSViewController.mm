@@ -9,8 +9,7 @@ static CGFloat g_viewHeight = 0.0f;
 static bool  g_isInited = false;
 static float g_nativeScale = 1.f;
 
-static Examples::Application* g_app = NULL;
-
+static Echo::Application* g_app = nullptr;
 
 // 获取iOS平台沉浸屏幕大小
 void iOSGetClientSizeImpl(int32_t& width, int32_t& height)
@@ -68,7 +67,7 @@ void iOSGetClientSizeImpl(int32_t& width, int32_t& height)
         for(UITouch* touch in allTouches)
         {
             CGPoint touchPoint = [touch locationInView:[touch view]];
-            g_app->mouseLBProc( touchPoint.x * g_nativeScale, touchPoint.y * g_nativeScale);
+            //g_app->mouseLBProc( touchPoint.x * g_nativeScale, touchPoint.y * g_nativeScale);
         }
     }
 }
@@ -88,7 +87,7 @@ void iOSGetClientSizeImpl(int32_t& width, int32_t& height)
         for(UITouch* touch in allTouches)
         {
             CGPoint touchPoint = [touch locationInView:[touch view]];
-            g_app->mouseLBProc( touchPoint.x * g_nativeScale, touchPoint.y * g_nativeScale, true);
+            //g_app->mouseLBProc( touchPoint.x * g_nativeScale, touchPoint.y * g_nativeScale, true);
         }
     }
 }
@@ -102,8 +101,8 @@ void iOSGetClientSizeImpl(int32_t& width, int32_t& height)
 {
 	if( !g_isInited)
     {
-        g_app = new Examples::Application;
-        g_app->start(g_viewWidth, g_viewHeight);
+        //g_app = new Examples::Application;
+        //g_app->start(g_viewWidth, g_viewHeight);
         
         g_isInited = true;
     }
@@ -116,7 +115,7 @@ void iOSGetClientSizeImpl(int32_t& width, int32_t& height)
         timeStamp = currentTime;
             
         // 更新
-        g_app->tick(elapsedTime * 1000);
+        //g_app->tick(elapsedTime * 1000);
     }
 }
 
