@@ -8,6 +8,9 @@
 
 namespace Echo
 {
+	// init static variables
+	GltfMaterialInfo  GltfMaterialInfo::DEFAULT = GltfMaterialInfo();
+
 	// parse float value of json node
 	static bool parseJsonValueFloat(float& oValue, nlohmann::json& json, const String& key, bool isMustExist)
 	{

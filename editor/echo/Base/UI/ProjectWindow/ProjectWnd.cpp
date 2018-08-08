@@ -57,7 +57,8 @@ namespace Studio
 	{
 		if ( 2 == index )
 		{
-			QString projectName = QFileDialog::getOpenFileName(this, tr("Open Project"), "", tr("(*.echo)"));
+			Echo::String defaultDir = Echo::PathUtil::GetCurrentDir() + "/examples/";
+			QString projectName = QFileDialog::getOpenFileName(this, tr("Open Project"), defaultDir.c_str(), tr("(*.echo)"));
 			if ( !projectName.isEmpty())
 			{
 				openProject(projectName.toStdString().c_str());
