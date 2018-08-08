@@ -24,9 +24,9 @@ SET(ALL_FILES ${HEADER_FILES} ${SOURCE_FILES})
 # iOS平台资源
 IF(LORD_BUILD_PLATFORM_IOS)
 	SET(IOS_RESOURCE_FILES
-		${MODULE_PATH}/Frame/Platform/iOS/Icon.png
-		${MODULE_PATH}/Frame/Platform/iOS/launch.png
-		${MODULE_PATH}/data
+		${MODULE_PATH}/frame/Platform/iOS/Icon.png
+		${MODULE_PATH}/frame/Platform/iOS/launch.png
+		${MODULE_PATH}/resources
 	)
 
 	#SOURCE_GROUP("Resources" FILES ${IOS_RESOURCE_FILES})
