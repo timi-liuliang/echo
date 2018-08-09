@@ -351,13 +351,12 @@ namespace Echo
 		return m_currentTime;
 	}
 
-	// Ã¿Ö¡¸üÐÂ
-	void Engine::tick(i32 elapsedTime)
+	void Engine::tick(float elapsedTime)
 	{
 		// calculate time
-		elapsedTime = Math::Clamp( elapsedTime, 0, 1000);
-		m_frameTime = elapsedTime * 0.001f;
-		m_currentTime = Time::instance()->getMilliseconds();
+		elapsedTime = Math::Clamp( elapsedTime, 0.f, 1.f);
+		m_frameTime = elapsedTime;
+		m_currentTime = static_cast<ui32>(Time::instance()->getMilliseconds());
 
 		// update logic
 		Module::updateAll(m_frameTime);

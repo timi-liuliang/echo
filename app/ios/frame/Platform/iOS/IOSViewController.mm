@@ -3,13 +3,12 @@
 #include "Application.h"
 #include <OpenGLES/ES2/gl.h>
 #include <OpenGLES/ES2/glext.h>
+#include <engine/core/util/StringUtil.h>
 
 static CGFloat g_viewWidth = 0.0f;
 static CGFloat g_viewHeight = 0.0f;
 static bool  g_isInited = false;
 static float g_nativeScale = 1.f;
-
-static Echo::Application* g_app = nullptr;
 
 // 获取iOS平台沉浸屏幕大小
 void iOSGetClientSizeImpl(int32_t& width, int32_t& height)
@@ -101,8 +100,8 @@ void iOSGetClientSizeImpl(int32_t& width, int32_t& height)
 {
 	if( !g_isInited)
     {
-        //g_app = new Examples::Application;
-        //g_app->start(g_viewWidth, g_viewHeight);
+        Echo::String rootPath = [[[NSBundle mainBundle] resourcePath] UTF8String];
+        Echo::Application::instance()->init( g_viewWidth, g_viewHeight, rootPath);
         
         g_isInited = true;
     }
@@ -115,7 +114,7 @@ void iOSGetClientSizeImpl(int32_t& width, int32_t& height)
         timeStamp = currentTime;
             
         // 更新
-        //g_app->tick(elapsedTime * 1000);
+        Echo::Application::instance()->tick(elapsedTime);
     }
 }
 

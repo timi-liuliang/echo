@@ -1,4 +1,5 @@
 #include "Application.h"
+#include <engine/core/util/PathUtil.h>
 #include <engine/core/main/Engine.h>
 
 namespace Echo
@@ -18,16 +19,22 @@ namespace Echo
         return inst;
     }
     
-    void Application::init(int width, int height)
+    void Application::init(int width, int height, const String& rootPath)
     {
         Engine::instance();
         
         //m_log = EchoNew(GameLog("Game"));
         //Echo::LogManager::instance()->addLog(m_log);
         
-        Echo::Engine::Config rootcfg;
-        rootcfg.m_projectFile = "app.echo";
+        Engine::Config rootcfg;
+        rootcfg.m_projectFile = rootPath + "/app.echo";
         rootcfg.m_isEnableProfiler = false;
         Engine::instance()->initialize(rootcfg);
+    }
+    
+    // tick ms
+    void Application::tick(float elapsedTime)
+    {
+        Engine::instance()->tick(elapsedTime);
     }
 }

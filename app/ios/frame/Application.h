@@ -1,5 +1,7 @@
 #pragma once
 
+#include <engine/core/util/StringUtil.h>
+
 namespace Echo
 {
 	class Application
@@ -12,6 +14,9 @@ namespace Echo
         static Application* instance();
         
         // init
-        void init(int width, int height);
+        void init(int width, int height, const String& rootPath);
+        
+        // tick ms
+        void tick(float elapsedTime);
 	};
 }

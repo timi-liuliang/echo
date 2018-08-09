@@ -26,7 +26,8 @@ namespace Echo
 		// instance
 		static Engine* instance();
 
-		void tick(i32 elapsedTime);
+        // tick second
+		void tick(float elapsedTime);
 
 		// get frame time
 		float getFrameTime() { return m_frameTime; }
