@@ -31,7 +31,7 @@ namespace Game
 		m_root->initialize(rootcfg);
 	}
 
-	void App::tick(Echo::ui32 elapsedTime)
+	void App::tick(float elapsedTime)
 	{
 		m_root->tick(elapsedTime);
 	}

@@ -3,6 +3,7 @@
 #include <QtWidgets/QTreeView>
 #include <engine/core/Util/Array.hpp>
 #include <engine/core/Math/Math.h>
+#include <engine/core/render/render/Color.h>
 
 namespace QT_UI
 {
@@ -49,6 +50,7 @@ namespace QT_UI
 		void addItem(const char* propertyName, Echo::ui32 value, WidgetType widget, const char* widgetParams = nullptr);
 		void addItem(const char* propertyName, bool value, WidgetType widget, const char* widgetParams = nullptr);
 		void addItem(const char* propertyName, const Echo::Vector3& value, WidgetType widget, const char* widgetParams = nullptr);
+		void addItem(const char* propertyName, const Echo::Color& value, WidgetType widget, const char* widgetParams = nullptr);
 		void addItem(const char* propertyName, const Echo::String& value, WidgetType widget, const char* widgetParams = nullptr);
 		void addItem_c2(const char* propertyName, const Echo::String& value, WidgetType widget, const char* widgetParams = nullptr);
 		void addItem_c3(const char* propertyName, const Echo::String& value, WidgetType widget, const char* widgetParams = nullptr);

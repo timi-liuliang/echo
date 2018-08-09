@@ -64,15 +64,15 @@ namespace Studio
 		DWORD curTime = QDateTime::currentMSecsSinceEpoch();
 		DWORD elapsedTime = curTime - lastTime;
 
-		auto pos = m_inputController->mousePosition();
-		auto button = m_inputController->pressedMouseButton();
-		auto elapsed = elapsedTime * 0.001f;
+		QPointF pos = m_inputController->mousePosition();
+		Qt::MouseButton button = m_inputController->pressedMouseButton();
+		float elapsed = elapsedTime * 0.001f;
 		InputContext ctx(pos, button, elapsed);
 
 		m_inputController->tick(ctx);
 
 		// Call the main render function
-		EchoEngine::instance()->Render(elapsedTime, this->isVisible());
+		EchoEngine::instance()->Render(elapsed, this->isVisible());
 
 		lastTime = curTime;
 	}

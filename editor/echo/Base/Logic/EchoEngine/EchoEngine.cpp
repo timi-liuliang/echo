@@ -100,7 +100,7 @@ namespace Studio
 	}
 
 	// √ø÷°‰÷»æ
-	void EchoEngine::Render(unsigned int elapsedTime, bool isRenderWindowVisible)
+	void EchoEngine::Render(float elapsedTime, bool isRenderWindowVisible)
 	{
 		// update back grid
 		resizeBackGrid3d();

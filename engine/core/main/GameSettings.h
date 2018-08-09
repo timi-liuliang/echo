@@ -2,6 +2,7 @@
 
 #include "engine/core/base/variant.h"
 #include "engine/core/util/StringUtil.h"
+#include "engine/core/render/render/Color.h"
 #include <thirdparty/pugixml/pugixml.hpp>
 #include "engine/core/resource/Res.h"
 
@@ -35,6 +36,12 @@ namespace Echo
 
 		// get launch scene
 		const ResourcePath& getLaunchScene() const { return m_launchScene; }
+
+		// get bg color
+		const Color& getBackgroundColor() const;
+
+		// set bg color
+		void setBackgroundColor(const Color& color);
 
 	private:
 		i32				m_windowWidth;

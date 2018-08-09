@@ -2,6 +2,7 @@
 #include "Window.h"
 #include <QDateTime>
 #include "GameMainWindow.h"
+#include <engine/core/main/GameSettings.h>
 
 namespace Game
 {
@@ -65,7 +66,7 @@ namespace Game
 		auto elapsed = elapsedTime;
 
 		// Call the main render function
-		m_app->tick(elapsedTime);
+		m_app->tick(elapsedTime * 0.001f);
 
 		lastTime = curTime;
 	}

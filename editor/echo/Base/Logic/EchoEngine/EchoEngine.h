@@ -23,7 +23,7 @@ namespace Studio
 		bool Initialize( HWND hwnd);
 
 		// 每帧渲染
-		void Render( unsigned int elapsedTime, bool isRenderWindowVisible);
+		void Render( float elapsedTime, bool isRenderWindowVisible);
 
 		// 修改窗口大小
 		void Resize(int cx, int cy);

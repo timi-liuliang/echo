@@ -15,7 +15,7 @@ namespace Game
 		void init(HWND hwnd, const Echo::String& echoProject);
 
 		// tick
-		void tick(Echo::ui32 elapsedTime);
+		void tick(float elapsedTime);
 
 		// onSize
 		void onSize(Echo::ui32 width, Echo::ui32 height);

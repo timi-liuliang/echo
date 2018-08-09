@@ -24,7 +24,7 @@ namespace Game
 		menubar->setTopLeftCornerIcon(":/icon/Icon/icon.png");
 
 		//resize(800, 490);
-		EchoAssert(!g_inst);
+		assert(!g_inst);
 		g_inst = this;
 
 	}

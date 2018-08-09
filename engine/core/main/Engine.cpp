@@ -86,8 +86,6 @@ namespace Echo
 		// init render
 		initRenderer( cfg.m_windowHandle);
 
-		Renderer::BGCOLOR = Echo::Color(0.298f, 0.298f, 0.322f);
-
 		if (m_cfg.m_isGame)
 		{
 			loadLaunchScene();

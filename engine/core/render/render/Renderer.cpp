@@ -218,7 +218,7 @@ namespace Echo
 #endif
 	}
 
-	Color Renderer::BGCOLOR = Color(0.3f, 0.6f, 0.9f, 1.0f);		// 背景色
+	Color Renderer::BGCOLOR = Echo::Color(0.298f, 0.298f, 0.322f);	// render target clear color
 	static Renderer* g_render = NULL;								// 全局渲染器
 
 	// 返回实例
