@@ -1,9 +1,6 @@
 #pragma once
 
-#include "engine/core/render/render/Renderer.h"
-#include "engine/core/scene/NodeTree.h"
 #include "FrameState.h"
-#include "GameSettings.h"
 
 namespace Echo
 {
@@ -34,23 +31,23 @@ namespace Echo
 		// get frame time
 		float getFrameTime() { return m_frameTime; }
 
-		// 是否已初始化
+		// 蔵s inited
 		bool isInited() const { return m_isInited; }
 
-		// 装载日志系统
+		// initialize
 		bool initialize(const Config& cfg);
 
 		// screen size changed
 		bool onSize(ui32 width, ui32 height);
 		void destroy();
 
-		// 获取资源主路径
+		// get res path
 		const String& getResPath() const;
 
-		// 获取用户资源路径
+		// get urse path
 		const String& getUserPath() const;
 
-		// 设置用户资源路径
+		// set user path
 		void setUserPath(const String& strPath);
 
 		bool isRendererInited() const;
@@ -61,13 +58,13 @@ namespace Echo
 		const FrameState& frameState() const { return m_frameState; }
 		void resetFrameState() { m_frameState.reset(); }
 
-		// 加载项目,引擎初始化时会自动调用，也可单独调用(全路径)
+		// load project
 		void loadProject( const char* projectFile);
 
-		// 当游戏挂起时候引擎需要进行的处理
+		// on platform suspend
 		void onPlatformSuspend();
 
-		// 当游戏从挂起中恢复时引擎需要进行的处理
+		// on platform resume
 		void onPlatformResume();
 
 	private:

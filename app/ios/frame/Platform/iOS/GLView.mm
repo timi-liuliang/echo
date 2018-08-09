@@ -7,8 +7,6 @@ static int   g_viewHeight = 0;
 static bool  g_isInited = false;
 static float g_nativeScale = 1.f;
 
-static Echo::Application* g_app = NULL;
-
 #if 0
 // 获取iOS平台沉浸屏幕大小
 void iOSGetClientSizeImpl(int32_t& width, int32_t& height)
@@ -64,8 +62,8 @@ void iOSGetClientSizeImpl(int32_t& width, int32_t& height)
         
         g_nativeScale = viewPort[2] / rect.size.width;
         
-        g_app = new Echo::Application;
-        //g_app->start( viewPort[2], viewPort[3]);
+        // init echo app
+        Echo::Application::instance()->init( viewPort[2], viewPort[3]);
         
         g_isInited = true;
     }

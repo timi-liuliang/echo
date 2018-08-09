@@ -5,8 +5,8 @@ namespace Echo
 {
 	AudioModule::AudioModule()
 	{
-		FSAudioManager::instance()->init( 32, false);
-		FSAudioManager::instance()->loadAllBankFile();
+		//FSAudioManager::instance()->init( 32, false);
+		//FSAudioManager::instance()->loadAllBankFile();
 	}
 
 	void AudioModule::registerTypes()
@@ -21,6 +21,6 @@ namespace Echo
 
 	void AudioModule::update(float elapsedTime)
 	{
-		FSAudioManager::instance()->tick(static_cast<ui32>(elapsedTime));
+		//FSAudioManager::instance()->tick(static_cast<ui32>(elapsedTime));
 	}
 }

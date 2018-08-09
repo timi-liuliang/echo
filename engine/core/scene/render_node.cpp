@@ -1,4 +1,5 @@
 #include "render_node.h"
+#include "NodeTree.h"
 #include "engine/core/main/Engine.h"
 
 namespace Echo

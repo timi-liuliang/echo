@@ -135,16 +135,14 @@ namespace Echo
 		virtual bool doSaveTo( const char* file ) = 0;
 
 	protected:
-		PixelFormat				m_pixelFormat;
 		bool					m_bHasMSAA;
 		ui32					m_id;
+        PixelFormat                m_pixelFormat;
 		bool					m_bHasDepth;
 		ui32					m_width;
 		ui32					m_height;
 		ui32					m_clearFlags;
-		// —’…´Õº
 		TextureSampler			m_bindTexture;
-		// …Ó∂»Õº
 		TextureSampler			m_depthTexture;
 		ui32					m_RenderFrameCount;
 		bool					m_bLogicResolution;

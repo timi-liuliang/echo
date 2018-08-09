@@ -7,9 +7,6 @@
 
 namespace Echo
 {
-	/**
-	 * ÎÆÀí·â×°
-	 */
 	class SamplerState;
 	class Texture
 	{
