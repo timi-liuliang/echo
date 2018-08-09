@@ -29,6 +29,7 @@
         [dict setValue:kEAGLColorFormatRGBA8 forKey:kEAGLDrawablePropertyColorFormat];
         eagl_layer.drawableProperties = dict;
     }
+    
     return self;
 }
 
@@ -64,7 +65,5 @@
    
     return true;
 }
-
-
 
 @end

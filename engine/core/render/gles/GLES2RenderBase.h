@@ -64,8 +64,8 @@
 #define GL_MAX_EXT                        0x8008
 
 #elif defined(ECHO_PLATFORM_HTML5)
-	#include <GLES2/gl2.h>
-	#include <GLES2/gl2ext.h>
+	#include <GLES3/gl3.h>
+	#include <GLES3/gl3ext.h>
 	#include <EGL/egl.h>
 #else
 #   include <GLES3/gl3.h>

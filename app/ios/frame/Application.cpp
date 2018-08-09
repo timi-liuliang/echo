@@ -27,7 +27,7 @@ namespace Echo
         //Echo::LogManager::instance()->addLog(m_log);
         
         Engine::Config rootcfg;
-        rootcfg.m_projectFile = rootPath + "/app.echo";
+        rootcfg.m_projectFile = rootPath + "/data/app.echo";
         rootcfg.m_isEnableProfiler = false;
         Engine::instance()->initialize(rootcfg);
     }

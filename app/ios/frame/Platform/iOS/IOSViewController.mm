@@ -1,8 +1,8 @@
 #import "IOSViewController.h"
 #import "IOSView.h"
 #include "Application.h"
-#include <OpenGLES/ES2/gl.h>
-#include <OpenGLES/ES2/glext.h>
+#include <OpenGLES/ES3/gl.h>
+#include <OpenGLES/ES3/glext.h>
 #include <engine/core/util/StringUtil.h>
 
 static CGFloat g_viewWidth = 0.0f;
@@ -22,7 +22,7 @@ void iOSGetClientSizeImpl(int32_t& width, int32_t& height)
 - (void)loadView
 {
 	CGRect frame = [[UIScreen mainScreen] bounds];
-	self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];	        
+	self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3];
     if (!self.context || ![EAGLContext setCurrentContext:self.context])
     {
         return;
@@ -112,8 +112,8 @@ void iOSGetClientSizeImpl(int32_t& width, int32_t& height)
         float currentTime = CACurrentMediaTime();
         float elapsedTime = currentTime - timeStamp;
         timeStamp = currentTime;
-            
-        // 更新
+
+        // tick every frame
         Echo::Application::instance()->tick(elapsedTime);
     }
 }

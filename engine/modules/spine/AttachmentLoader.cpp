@@ -8,7 +8,7 @@
 static const char* g_spinDefaultMaterial = R"(
 <?xml version = "1.0" encoding = "utf-8"?>
 <Shader>
-	<VS>#version 300 es
+	<VS>#version 100
 
 		attribute vec3 a_Position;
 		attribute vec2 a_UV;
@@ -25,7 +25,7 @@ static const char* g_spinDefaultMaterial = R"(
 			v_UV = a_UV;
 		}
 	</VS>
-	<PS>#version 300 es
+	<PS>#version 100
 
 		precision mediump float;
 
