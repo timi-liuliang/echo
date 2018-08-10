@@ -80,7 +80,7 @@ namespace Echo
 
 		// convert to other type
 		const bool toBool() const { return m_bool; }
-		const Real toReal() const { return m_real; }
+		const Real& toReal() const { return m_real; }
 		const Vector2& toVector2() const { return any_cast<Vector2>(m_any); }
 		const Vector3& toVector3() const { return any_cast<Vector3>(m_any); }
 		const Color& toColor() const { return any_cast<Color>(m_any); }

@@ -94,7 +94,7 @@ namespace Echo
 
 		// operate uniform
 		bool isUniformExist(const String& name);
-		void setUniformValue(const String& name, const ShaderParamType& type, void* value);
+		void setUniformValue(const String& name, const ShaderParamType& type, const void* value);
 		Uniform* getUniform(const String& name);
 
 		// 获取纹理数量(不包含全局纹理)

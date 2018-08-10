@@ -242,7 +242,7 @@ namespace Echo
 	}
 
 	// ÐÞ¸Ä±äÁ¿
-	void Material::setUniformValue(const String& name, const ShaderParamType& type, void* value)
+	void Material::setUniformValue(const String& name, const ShaderParamType& type, const void* value)
 	{
 		buildShaderProgram();
 
@@ -401,6 +401,7 @@ namespace Echo
 						case ShaderParamType::SPT_INT: registerProperty(ECHO_CLASS_NAME(Material), "Uniforms." + it.first, Variant::Type::Int); break;
 						case ShaderParamType::SPT_FLOAT:registerProperty(ECHO_CLASS_NAME(Material), "Uniforms." + it.first, Variant::Type::Real); break;
 						case ShaderParamType::SPT_VEC3: registerProperty(ECHO_CLASS_NAME(Material), "Uniforms." + it.first, Variant::Type::Vector3); break;
+						case ShaderParamType::SPT_VEC4: registerProperty(ECHO_CLASS_NAME(Material), "Uniforms." + it.first, Variant::Type::Color); break;
 						case ShaderParamType::SPT_TEXTURE: registerProperty(ECHO_CLASS_NAME(Material), "Uniforms." + it.first, Variant::Type::ResourcePath); break;
 						default: break;
 						}
@@ -431,6 +432,10 @@ namespace Echo
 			Uniform* uniform = getUniform(ops[1]);
 			switch (uniform->m_type)
 			{
+			case ShaderParamType::SPT_FLOAT:	oVar = *(float*)(uniform->m_value); break;
+			case ShaderParamType::SPT_VEC2:		oVar = *(Vector2*)(uniform->m_value); break;
+			case ShaderParamType::SPT_VEC3:		oVar = *(Vector3*)(uniform->m_value); break;
+			case ShaderParamType::SPT_VEC4:		oVar = *(Color*)(uniform->m_value); break;
 			case ShaderParamType::SPT_TEXTURE : oVar = ResourcePath(getTexturePath(*(int*)uniform->m_value), ".png"); break;
 			default:							oVar = *(float*)(uniform->m_value); break;
 			}
@@ -452,12 +457,14 @@ namespace Echo
 		if (ops[0] == "Uniforms")
 		{
 			Uniform* uniform = getUniform(ops[1]);
-			if (uniform->m_type == ShaderParamType::SPT_TEXTURE)
-				setTexture(ops[1], propertyValue.toResPath().getPath());
-			else if (uniform->m_type == ShaderParamType::SPT_FLOAT)
+			switch (uniform->m_type)
 			{
-				Real realValue = propertyValue.toReal();
-				setUniformValue(ops[1], uniform->m_type, &realValue);
+			case ShaderParamType::SPT_FLOAT:	setUniformValue(ops[1], uniform->m_type, &(propertyValue.toReal())); break;
+			case ShaderParamType::SPT_VEC2:		setUniformValue(ops[1], uniform->m_type, &(propertyValue.toVector2())); break;
+			case ShaderParamType::SPT_VEC3:		setUniformValue(ops[1], uniform->m_type, &(propertyValue.toVector3())); break;
+			case ShaderParamType::SPT_VEC4:		setUniformValue(ops[1], uniform->m_type, &(propertyValue.toColor())); break;
+			case ShaderParamType::SPT_TEXTURE:  setTexture(ops[1], propertyValue.toResPath().getPath()); break;
+			default:							setUniformValue(ops[1], uniform->m_type, &(propertyValue.toReal())); break;
 			}
 		}
 		else if (ops[0] == "Macros")
