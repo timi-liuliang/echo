@@ -227,14 +227,7 @@ namespace Studio
 			m_mainWindow->setWindowTitle(fileName);
 		)
 
-		// open last edit node tree
-		Echo::String lastNodeTreePath = AStudio::instance()->getConfigMgr()->getValue("last_edit_node_tree");
-		if(Echo::IO::instance()->isResourceExists(lastNodeTreePath))		
-		{
-			MainWindow::instance()->openNodeTree(lastNodeTreePath);
-		}
-
-		// 输出时间占比结果
+		// output time profiler
 		TIME_PROFILE_OUTPUT
 	}
 

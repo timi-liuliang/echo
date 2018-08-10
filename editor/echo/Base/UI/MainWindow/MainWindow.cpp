@@ -112,6 +112,26 @@ namespace Studio
 		// update rencents project display
 		updateRencentProjectsDisplay();
 		updateSettingDisplay();
+
+		recoverEditSettings();
+	}
+
+	// recover edit settings
+	void MainWindow::recoverEditSettings()
+	{
+		// open last edit node tree
+		Echo::String lastNodeTreePath = AStudio::instance()->getConfigMgr()->getValue("last_edit_node_tree");
+		if (Echo::IO::instance()->isResourceExists(lastNodeTreePath))
+		{
+			openNodeTree(lastNodeTreePath);
+		}
+
+		// recover last edit type 
+		Echo::String subEditType = AStudio::instance()->getConfigMgr()->getValue("main_window_sub_edit_type");
+		if (!subEditType.empty())
+		{
+			m_subEditComboBox->setCurrentText( subEditType.c_str());
+		}
 	}
 
 	// new scene
@@ -259,6 +279,8 @@ namespace Studio
 			if (renderWindow)
 				renderWindow->switchToController3d();
 		}
+
+		AStudio::instance()->getConfigMgr()->setValue("main_window_sub_edit_type", subeditName.toStdString().c_str());
 	}
 
 	// ±£´æÎÄ¼ş

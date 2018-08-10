@@ -75,6 +75,10 @@ namespace Studio
 		// update setting display
 		void updateSettingDisplay();
 
+		// recover edit settings
+		void recoverEditSettings();
+
+
 	protected:
 		ResPanel*		m_resPanel;
 		NodeTreePanel*	m_scenePanel;

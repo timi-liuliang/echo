@@ -598,6 +598,10 @@ namespace Studio
 				}
 			}
 		}
+		else
+		{
+			onSelectNode();
+		}
 	}
 
 	// on select node
