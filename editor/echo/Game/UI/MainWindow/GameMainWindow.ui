@@ -42,6 +42,7 @@
     </rect>
    </property>
   </widget>
+  <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <customwidgets>
   <customwidget>
