@@ -13,6 +13,15 @@ namespace Echo
 		ECHO_SINGLETON_CLASS(GameSettings, Object);
 
 	public:
+		enum class KeepAspectType
+		{
+			None,
+			Stretch,
+			Width,
+			Height,
+		};
+
+	public:
 		GameSettings();
 		~GameSettings();
 
@@ -26,6 +35,10 @@ namespace Echo
 		// design window height
 		void setDesignHeight(i32 height);
 		i32 getDesignHeight() const { return m_designHeight; }
+
+		// aspect
+		const StringOption& getAspect() const { return m_aspect; }
+		void setAspect(const StringOption& option);
 
 		// set launch scene
 		void setLaunchScene(const ResourcePath& path) { m_launchScene.setPath(path.getPath()); }
@@ -43,8 +56,13 @@ namespace Echo
 		void onSize(ui32 windowWidth, ui32 windowHeight);
 
 	private:
+		// keep aspect
+		void keepAspect(ui32 windowWidth, ui32 windowHeight, KeepAspectType type);
+
+	private:
 		i32				m_designWidth;
 		i32				m_designHeight;
+		StringOption	m_aspect;
 		ResourcePath	m_launchScene;
 	};
 }
