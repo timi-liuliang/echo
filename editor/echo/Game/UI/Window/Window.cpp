@@ -33,8 +33,8 @@ namespace Game
 		Echo::i32 thisH = height();
 		Echo::i32 mainW = GameMainWindow::instance()->width();
 		Echo::i32 mainH = GameMainWindow::instance()->height();
-		Echo::i32 aimW = Echo::GameSettings::instance()->getWindowWidth();
-		Echo::i32 aimH = Echo::GameSettings::instance()->getWindowHeight();
+		Echo::i32 aimW = Echo::GameSettings::instance()->getDesignWidth();
+		Echo::i32 aimH = Echo::GameSettings::instance()->getDesignHeight();
 		Echo::i32 mainNewWidth = mainW + (aimW - thisW);
 		Echo::i32 mainNewHeight = mainH + (aimH - thisH);
 		GameMainWindow::instance()->resize(mainNewWidth, mainNewHeight);
@@ -59,11 +59,6 @@ namespace Game
 		// ¼ÆËãdelta Time
 		DWORD curTime = QDateTime::currentMSecsSinceEpoch();
 		DWORD elapsedTime = curTime - lastTime;
-
-		//auto controller = m_inputController ? m_inputController : m_defaultInputController;
-		//auto pos = controller->mousePosition();
-		//auto button = controller->pressedMouseButton();
-		auto elapsed = elapsedTime;
 
 		// Call the main render function
 		m_app->tick(elapsedTime * 0.001f);

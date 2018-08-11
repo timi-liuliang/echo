@@ -26,7 +26,6 @@ namespace Game
 
 		Echo::Engine::Config rootcfg;
 		rootcfg.m_projectFile = echoProject;
-		rootcfg.m_isEnableProfiler = true;
 		rootcfg.m_windowHandle = (unsigned int)hwnd;
 		m_root->initialize(rootcfg);
 	}

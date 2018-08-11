@@ -68,6 +68,7 @@ namespace Echo
 		{
 			return m_triangleNum;
 		}
+
 	protected:
 		ui32 m_uploadedTextureSizeInBytes;
 		ui32 m_uploadedGeometricSize;

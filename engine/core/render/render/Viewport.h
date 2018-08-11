@@ -5,17 +5,12 @@
 
 namespace Echo
 {
-	/**
-	 * йс©з
-	 */
 	struct Viewport
 	{	
 		int			m_left;
 		int			m_top;
 		ui32		m_width;
 		ui32		m_height;
-		Matrix4		m_matVP;
-
 
 		Viewport() {}
 		Viewport(int left, int top, ui32 width, ui32 height);
@@ -29,8 +24,5 @@ namespace Echo
 		ui32		getHeight() const;
 
 		void		resize(int left, int top, ui32 width, ui32 height);
-		void		setViewProjMatrix(const Matrix4& mat);
-
-		const Matrix4&	getViewProjMatrix() const;
 	};
 }

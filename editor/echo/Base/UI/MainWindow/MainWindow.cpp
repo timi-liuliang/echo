@@ -28,7 +28,6 @@ namespace Studio
 {
 	static MainWindow* g_inst = nullptr;
 
-	// 构造函数
 	MainWindow::MainWindow(QMainWindow* parent/*=0*/)
 		: QMainWindow( parent)
 		, m_resPanel(nullptr)
@@ -37,10 +36,10 @@ namespace Studio
 	{
 		setupUi( this);
 
-		// 隐藏标题
+		// hide title
 		setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
 
-		// 设置菜单左上控件
+		// set menu icon
 		menubar->setTopLeftCornerIcon(":/icon/Icon/icon.png");
 
 		// project operate
@@ -71,7 +70,6 @@ namespace Studio
 		g_inst = this;
 	}
 
-	// 析构函数
 	MainWindow::~MainWindow()
 	{
 	}
@@ -81,7 +79,6 @@ namespace Studio
 		return g_inst;
 	}
 
-	// 打开项目时调用
 	void MainWindow::onOpenProject()
 	{
 		m_resPanel = EchoNew(ResPanel(this));
@@ -283,7 +280,6 @@ namespace Studio
 		AStudio::instance()->getConfigMgr()->setValue("main_window_sub_edit_type", subeditName.toStdString().c_str());
 	}
 
-	// 保存文件
 	void MainWindow::onSaveProject()
 	{
 		// if path isn't exist. choose a save directory

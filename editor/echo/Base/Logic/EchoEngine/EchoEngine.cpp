@@ -58,7 +58,6 @@ namespace Studio
 			{
 				rootcfg.m_projectFile = m_projectFile.c_str();
 			}
-			rootcfg.m_isEnableProfiler = true;
 			rootcfg.m_isGame = false;
 			rootcfg.m_windowHandle = (unsigned int)hwnd;
 
@@ -243,8 +242,8 @@ namespace Studio
 	{
 		static Echo::i32 curWindowHalfWidth = -1;
 		static Echo::i32 curWindowHalfHeight = -1;
-		Echo::i32 windowHalfWidth = Echo::GameSettings::instance()->getWindowWidth() / 2;
-		Echo::i32 windowHalfHeight = Echo::GameSettings::instance()->getWindowHeight() / 2;
+		Echo::i32 windowHalfWidth = Echo::GameSettings::instance()->getDesignWidth() / 2;
+		Echo::i32 windowHalfHeight = Echo::GameSettings::instance()->getDesignHeight() / 2;
 		if (curWindowHalfWidth != windowHalfWidth || curWindowHalfHeight != windowHalfHeight)
 		{
 			m_gizmosNodeGrid2d->clear();

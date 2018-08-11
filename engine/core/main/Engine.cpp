@@ -28,7 +28,6 @@ namespace Echo
 {
 	Engine::Engine()
 		: m_isInited(false)
-		, m_bRendererInited(NULL)
 		, m_currentTime(0)
 	{
 		MemoryManager::instance();
@@ -50,7 +49,7 @@ namespace Echo
 	// 引擎初始化
 	bool Engine::initialize(const Config& cfg)
 	{
-		m_cfg = cfg;
+		m_config = cfg;
 
 		// check root path
 		setlocale(LC_ALL, "zh_CN.UTF-8");
@@ -80,15 +79,21 @@ namespace Echo
 			registerClassTypes();
 		}
 
-		// 加载项目文件
-		loadProject(cfg.m_projectFile.c_str());
-
 		// init render
-		initRenderer( cfg.m_windowHandle);
-
-		if (m_cfg.m_isGame)
+		if (initRenderer(cfg.m_windowHandle))
 		{
-			loadLaunchScene();
+			if (!NodeTree::instance()->init())
+				return false;
+
+			if (!RenderTargetManager::instance()->initialize())
+				return false;
+
+			// load project
+			loadProject(cfg.m_projectFile.c_str());
+			if (m_config.m_isGame)
+			{
+				loadLaunchScene();
+			}
 		}
 
 		m_isInited = true;
@@ -127,7 +132,6 @@ namespace Echo
 		Module::registerAllTypes();
 	}
 
-	// 加载项目,引擎初始化时会自动调用，也可单独调用(全路径)
 	void Engine::loadProject(const char* projectFile)
 	{
 		if (PathUtil::IsFileExist(projectFile))
@@ -147,7 +151,7 @@ namespace Echo
 	void Engine::loadSettings()
 	{
 		String projectFile;
-		if (IO::instance()->covertFullPathToResPath(m_cfg.m_projectFile, projectFile))
+		if (IO::instance()->covertFullPathToResPath(m_config.m_projectFile, projectFile))
 		{
 			MemoryReader reader(projectFile);
 			if (reader.getSize())
@@ -210,10 +214,10 @@ namespace Echo
 			}
 		}
 
-		doc.save_file(m_cfg.m_projectFile.c_str(), "\t", 1U, pugi::encoding_utf8);
+		doc.save_file(m_config.m_projectFile.c_str(), "\t", 1U, pugi::encoding_utf8);
 	}
 
-	// 初始化渲染器
+	// init renderer
 	bool Engine::initRenderer(unsigned int windowHandle)
 	{
 		Renderer* renderer = nullptr;
@@ -225,81 +229,36 @@ namespace Echo
 		renderCfg.enableThreadedRendering = false;
 
 		EchoLogDebug("Canvas Size : %d x %d", renderCfg.screenWidth, renderCfg.screenHeight);
-		if (renderer)
+		if (renderer && renderer->initialize(renderCfg))
 		{
-			if (!renderer->initialize(renderCfg))
-			{
-				EchoLogError("Root::initRenderer failed...");
-				return false;
-			}
-
-			if (!onRendererInited())
-				return false;
-
-			// 初始化渲染目标管理器
-			if (!RenderTargetManager::instance()->initialize())
-				return false;
-
 			EchoLogInfo("Init Renderer success.");
 			return true;
 		}
 		
+		EchoLogError("Root::initRenderer failed...");
 		return false;
 	}
 
-	// 当游戏挂起时候引擎需要进行的处理
 	void Engine::onPlatformSuspend()
 	{
 	}
 
-	// 当游戏从挂起中恢复时引擎需要进行的处理
 	void Engine::onPlatformResume()
 	{
 	}
 
-	// 渲染初始化
-	bool Engine::onRendererInited()
+	bool Engine::onSize(ui32 windowWidth, ui32 windowHeight)
 	{
-		if (m_bRendererInited)
-			return true;
-
-		if (!NodeTree::instance()->init())
-			return false;
-
-		// setup viewport
-		Viewport* pViewport = Renderer::instance()->getFrameBuffer()->getViewport();
-
-		Camera* p2DCamera = NodeTree::instance()->get2dCamera();
-		pViewport->setViewProjMatrix(p2DCamera->getViewProjMatrix());
-
-		m_bRendererInited = true;
-
-		return true;
-	}
-
-	bool Engine::onSize(ui32 width, ui32 height)
-	{
-		if (m_bRendererInited)
+		if ( m_isInited)
 		{
-			Renderer::instance()->onSize(width, height);
-
-			Camera* pMainCamera = NodeTree::instance()->get3dCamera();
-			pMainCamera->setWidth(Real(width));
-			pMainCamera->setHeight(Real(height));
-			pMainCamera->update();
-
-			Camera* p2DCamera = NodeTree::instance()->get2dCamera();
-			p2DCamera->setWidth(Real(width));
-			p2DCamera->setHeight(Real(height));
-			p2DCamera->update();
-
-			Renderer::instance()->getFrameBuffer()->getViewport()->setViewProjMatrix(p2DCamera->getViewProjMatrix());
+			Renderer::instance()->onSize(windowWidth, windowHeight);
+			GameSettings::instance()->onSize(windowWidth, windowHeight);
 		}
 
-		// 渲染目标重置大小
+		// render target
 		if (RenderTargetManager::instance())
 		{
-			RenderTargetManager::instance()->onScreensizeChanged(width, height);
+			RenderTargetManager::instance()->onScreensizeChanged(windowWidth, windowHeight);
 		}
 
 		return true;
@@ -337,11 +296,6 @@ namespace Echo
 		m_userPath = strPath;
 
 		IO::instance()->setUserPath(m_userPath);
-	}
-
-	bool Engine::isRendererInited() const
-	{
-		return m_bRendererInited;
 	}
 
 	const ui32& Engine::getCurrentTime() const

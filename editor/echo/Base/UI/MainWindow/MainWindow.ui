@@ -98,7 +98,7 @@
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="m_toolBar">
    <property name="windowTitle">
-    <string>toolBar</string>
+    <string>ToolBar</string>
    </property>
    <property name="iconSize">
     <size>

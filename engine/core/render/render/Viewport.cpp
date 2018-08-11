@@ -41,15 +41,4 @@ namespace Echo
 		m_width = width;
 		m_height = height;
 	}
-
-	void Viewport::setViewProjMatrix(const Matrix4& mat)
-	{
-		m_matVP = mat;
-	}
-
-	const Matrix4& Viewport::getViewProjMatrix() const
-	{
-		return m_matVP;
-	}
-
 }

@@ -19,17 +19,13 @@ namespace Echo
 		// instance
 		static GameSettings* instance();
 
-		// set window width
-		void setWindowWidth(i32 width) { m_windowWidth = width; }
+		// design window width
+		void setDesignWidth(i32 width);
+		i32 getDesignWidth() const { return m_designWidth; }
 
-		// get winodw width
-		i32 getWindowWidth() const { return m_windowWidth; }
-
-		// set window height
-		void setWindowHeight(i32 height) { m_windowHeight = height; }
-
-		// get window height
-		i32 getWindowHeight() const { return m_windowHeight; }
+		// design window height
+		void setDesignHeight(i32 height);
+		i32 getDesignHeight() const { return m_designHeight; }
 
 		// set launch scene
 		void setLaunchScene(const ResourcePath& path) { m_launchScene.setPath(path.getPath()); }
@@ -43,9 +39,12 @@ namespace Echo
 		// set bg color
 		void setBackgroundColor(const Color& color);
 
+		// on size
+		void onSize(ui32 windowWidth, ui32 windowHeight);
+
 	private:
-		i32				m_windowWidth;
-		i32				m_windowHeight;
+		i32				m_designWidth;
+		i32				m_designHeight;
 		ResourcePath	m_launchScene;
 	};
 }

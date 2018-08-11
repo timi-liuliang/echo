@@ -11,13 +11,11 @@ namespace Echo
 		struct Config
 		{
 			String			m_projectFile;
-			bool			m_isEnableProfiler;			// 是否开启性能分析服务
 			unsigned int	m_windowHandle;
 			bool			m_isGame;
 
 			Config()
 				: m_projectFile("")
-				, m_isEnableProfiler(false)
 				, m_isGame(true)
 			{}
 		};
@@ -26,47 +24,48 @@ namespace Echo
 		// instance
 		static Engine* instance();
 
+		// initialize
+		bool initialize(const Config& cfg);
+
         // tick second
 		void tick(float elapsedTime);
 
 		// get frame time
 		float getFrameTime() { return m_frameTime; }
 
-		// 蔵s inited
+		// is inited
 		bool isInited() const { return m_isInited; }
 
-		// initialize
-		bool initialize(const Config& cfg);
-
-		// screen size changed
-		bool onSize(ui32 width, ui32 height);
-		void destroy();
-
-		// get res path
+		// res path
 		const String& getResPath() const;
 
-		// get urse path
+		// urse path
 		const String& getUserPath() const;
-
-		// set user path
 		void setUserPath(const String& strPath);
 
-		bool isRendererInited() const;
+		// get current time
 		const ui32&	getCurrentTime() const;
 
 		// frame state
-		FrameState&	frameState() { return m_frameState; }
-		const FrameState& frameState() const { return m_frameState; }
-		void resetFrameState() { m_frameState.reset(); }
-
-		// load project
-		void loadProject( const char* projectFile);
+		FrameState&	getFrameState() { return m_frameState; }
+		const FrameState& getFrameState() const { return m_frameState; }
 
 		// on platform suspend
 		void onPlatformSuspend();
 
 		// on platform resume
 		void onPlatformResume();
+
+		// screen size changed
+		bool onSize(ui32 windowWidth, ui32 windowHeight);
+		void destroy();
+
+		// config
+		const Config& getConfig() const { return m_config; }
+
+		// settings
+		void loadSettings();
+		void saveSettings();
 
 	private:
 		Engine();
@@ -75,27 +74,20 @@ namespace Echo
 		// register all class types
 		void registerClassTypes();
 
-	public:
-		// config
-		const Config& getConfig() const { return m_cfg; }
+		// load project
+		void loadProject(const char* projectFile);
 
-		// settings
-		void loadSettings();
-		void saveSettings();
-
-	protected:
+		// load launch scene
 		void loadLaunchScene();
 
-		// initialize
+		// initialize render
 		bool initRenderer(unsigned int windowHandle);
-		bool onRendererInited();
 
 	private:
-		bool				m_isInited;				// 是否已初始化
-		Config				m_cfg;					// 客户端传入
-		String				m_resPath;				// 资源路径
-		String				m_userPath;				// 用户资源路径
-		bool				m_bRendererInited;
+		Config				m_config;
+		String				m_resPath;
+		String				m_userPath;
+		bool				m_isInited;
 		float				m_frameTime;
 		ui32				m_currentTime;
 		FrameState			m_frameState;
