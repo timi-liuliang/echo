@@ -27,7 +27,6 @@ namespace Studio
 	std::string	EchoEngine::m_projectFile;		// 项目名称
 	RenderWindow* EchoEngine::m_renderWindow = NULL;
 
-	// 构造函数
 	EchoEngine::EchoEngine()
 		: m_curPlayAudio(0)
 		, m_log(NULL)
@@ -38,19 +37,16 @@ namespace Studio
 	{
 	}
 
-	// 析构
 	EchoEngine::~EchoEngine()
 	{
 	}
 
-	// inst
 	EchoEngine* EchoEngine::instance()
 	{
 		static EchoEngine* inst = new EchoEngine;
 		return inst;
 	}
 
-	// 初始化
 	bool EchoEngine::Initialize(HWND hwnd)
 	{
 		TIME_PROFILE
@@ -93,16 +89,15 @@ namespace Studio
 		return true;
 	}
 
-	// 卸载
 	void EchoEngine::Release()
 	{
 		delete this;
 	}
 
-	// 每帧渲染
 	void EchoEngine::Render(float elapsedTime, bool isRenderWindowVisible)
 	{
 		// update back grid
+		resizeBackGrid2d();
 		resizeBackGrid3d();
 
 		if (m_currentEditNode)
@@ -114,7 +109,6 @@ namespace Studio
 		Echo::Engine::instance()->tick(elapsedTime);
 	}
 
-	// 修改窗口大小
 	void EchoEngine::Resize(int cx, int cy)
 	{
 		Echo::Engine::instance()->onSize(cx, cy);
@@ -122,7 +116,6 @@ namespace Studio
 		m_renderWindow->getInputController()->onSizeCamera(Echo::Renderer::instance()->getScreenWidth(), Echo::Renderer::instance()->getScreenHeight());
 	}
 
-	// 设置project
 	bool EchoEngine::SetProject(const char* projectFile)
 	{
 		m_projectFile = projectFile;
@@ -133,7 +126,6 @@ namespace Studio
 		return true;
 	}
 
-	// 设置当前结点树存储路径
 	void EchoEngine::setCurrentEditNodeSavePath(const Echo::String& savePath) 
 	{ 
 		m_currentEditNodeSavePath = savePath;
@@ -177,14 +169,12 @@ namespace Studio
 		}
 	}
 
-	// 初始化背景网格
 	void EchoEngine::InitializeBackGrid()
 	{
 		resizeBackGrid2d();
 		resizeBackGrid3d();
 	}
 
-	//生成背景网格(调整网格参数)
 	void EchoEngine::resizeBackGrid3d()
 	{	
 		static int xOffsetBefore = 0.f;
@@ -251,17 +241,24 @@ namespace Studio
 
 	void EchoEngine::resizeBackGrid2d()
 	{
+		static Echo::i32 curWindowHalfWidth = -1;
+		static Echo::i32 curWindowHalfHeight = -1;
 		Echo::i32 windowHalfWidth = Echo::GameSettings::instance()->getWindowWidth() / 2;
 		Echo::i32 windowHalfHeight = Echo::GameSettings::instance()->getWindowHeight() / 2;
-		m_gizmosNodeGrid2d->clear();
-		m_gizmosNodeGrid2d->set2d(true);
-		m_gizmosNodeGrid2d->drawLine(Echo::Vector3(-windowHalfWidth, -windowHalfHeight, 0.0), Echo::Vector3(windowHalfWidth, -windowHalfHeight, 0.0), Echo::Color::BLUE);
-		m_gizmosNodeGrid2d->drawLine(Echo::Vector3(-windowHalfWidth, -windowHalfHeight, 0.0), Echo::Vector3(-windowHalfWidth, windowHalfHeight, 0.0), Echo::Color::BLUE);
-		m_gizmosNodeGrid2d->drawLine(Echo::Vector3(windowHalfWidth, windowHalfHeight, 0.0), Echo::Vector3(windowHalfWidth, -windowHalfHeight, 0.0), Echo::Color::BLUE);
-		m_gizmosNodeGrid2d->drawLine(Echo::Vector3(windowHalfWidth, windowHalfHeight, 0.0), Echo::Vector3(-windowHalfWidth, windowHalfHeight, 0.0), Echo::Color::BLUE);
+		if (curWindowHalfWidth != windowHalfWidth || curWindowHalfHeight != windowHalfHeight)
+		{
+			m_gizmosNodeGrid2d->clear();
+			m_gizmosNodeGrid2d->set2d(true);
+			m_gizmosNodeGrid2d->drawLine(Echo::Vector3(-windowHalfWidth, -windowHalfHeight, 0.0), Echo::Vector3(windowHalfWidth, -windowHalfHeight, 0.0), Echo::Color::BLUE);
+			m_gizmosNodeGrid2d->drawLine(Echo::Vector3(-windowHalfWidth, -windowHalfHeight, 0.0), Echo::Vector3(-windowHalfWidth, windowHalfHeight, 0.0), Echo::Color::BLUE);
+			m_gizmosNodeGrid2d->drawLine(Echo::Vector3(windowHalfWidth, windowHalfHeight, 0.0), Echo::Vector3(windowHalfWidth, -windowHalfHeight, 0.0), Echo::Color::BLUE);
+			m_gizmosNodeGrid2d->drawLine(Echo::Vector3(windowHalfWidth, windowHalfHeight, 0.0), Echo::Vector3(-windowHalfWidth, windowHalfHeight, 0.0), Echo::Color::BLUE);
+
+			curWindowHalfWidth = windowHalfWidth;
+			curWindowHalfHeight = windowHalfHeight;
+		}
 	}
 
-	//设置显示或隐藏背景网格
 	void EchoEngine::setBackGridVisibleOrNot(bool showFlag)
 	{
 		/*
@@ -279,7 +276,6 @@ namespace Studio
 		*/
 	}
 
-	// 获得背景网格的相关参数
 	void EchoEngine::GetBackGridParameters(int* linenums, float* lineGap)
 	{
 		//if (linenums)
@@ -292,7 +288,6 @@ namespace Studio
 		//}
 	}
 
-	// 预览声音
 	void EchoEngine::previewAudioEvent(const char* audioEvent)
 	{
 		Echo::FSAudioManager::instance()->destroyAudioSources(&m_curPlayAudio, 1);
@@ -307,25 +302,21 @@ namespace Studio
 		}
 	}
 
-	// 停止正在预览的声源
 	void EchoEngine::stopCurPreviewAudioEvent()
 	{
 		Echo::FSAudioManager::instance()->destroyAudioSources(&m_curPlayAudio, 1);
 	}
 
-	// 获取模型半径
 	float EchoEngine::GetMeshRadius()
 	{
 		return 10.f;
 	}
 
-	// 保存当前编辑场景
 	void EchoEngine::SaveScene()
 	{
 		SaveSceneThumbnail();
 	}
 
-	// 保存缩略图
 	void EchoEngine::SaveSceneThumbnail(bool setCam)
 	{
 		//Echo::RenderTarget* defaultBackBuffer = Echo::RenderTargetManager::Instance()->getRenderTargetByID(Echo::RTI_DefaultBackBuffer);

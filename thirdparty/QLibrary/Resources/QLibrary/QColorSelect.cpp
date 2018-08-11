@@ -44,16 +44,19 @@ namespace QT_UI
 		Echo::Color color = Echo::StringUtil::ParseColor(val.c_str());
 		QColor qColor((int)(color.r*255.f), (int)(color.g*255.f), (int)(color.b*255.f));
 
-		// 绘制颜色块
-		QRect tRect =  QRect( rect.left()+3, rect.top()+2, rect.height()-4, rect.height()-4);// rect;  tRect.setWidth( rect.height()-4); tRect.setHeight( rect.height()-4);
+		// color rect
+		QRect tRect =  QRect( rect.left()+3, rect.top()+3, rect.height()-6, rect.height()-6);
 		painter->setBrush( qColor);
 		painter->drawRect( tRect);
-		painter->setPen( qColor);
+		painter->setPen( QColor( 0, 0, 0));
 		painter->drawRect( tRect);
 
-		// 文字显示
-		Echo::String text = Echo::StringUtil::Format( "rgb(%d,%d,%d)"/* "#%02x%02x%02x%02x"*/, (int)(color.r*255.f), (int)(color.g*255.f), (int)(color.b*255.f),(int)(color.a*255.f));
-		QRect textRect( rect.left()+rect.height()+3, rect.top()+2, rect.width()-rect.height()-3, rect.height()-4);
+		// text
+		Echo::String text = Echo::StringUtil::Format( "rgb(%d,%d,%d)", (int)(color.r*255.f), (int)(color.g*255.f), (int)(color.b*255.f),(int)(color.a*255.f));
+		QRect textRect( rect.left()+rect.height()+3, rect.top()+3, rect.width()-rect.height()-3, rect.height()-6);
+		QFont font = painter->font(); font.setBold(false);
+		painter->setFont(font);
+		painter->setPen(QColor( 232, 232, 232));
 		painter->drawText( textRect, Qt::AlignLeft, text.c_str());
 
 		return true;

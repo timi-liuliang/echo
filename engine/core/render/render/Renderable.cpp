@@ -42,8 +42,8 @@ namespace Echo
 	// ÐÂ½¨
 	Renderable* Renderable::create(Mesh* mesh, Material* matInst, Render* node)
 	{
-		ShaderProgramRes* material = matInst->getShader();
-		ShaderProgram* shaderProgram = material->getShaderProgram();
+		ShaderProgramRes* shaderRes = matInst->getShader();
+		ShaderProgram* shaderProgram = shaderRes->getShaderProgram();
 		if (!shaderProgram)
 			return nullptr;
 
