@@ -61,6 +61,8 @@ namespace Echo
 				return (void*)(&camera->getViewProjMatrix());
 			else if (name == "u_CameraPosition")
 				return (void*)(&camera->getPosition());
+			else if (name == "u_CameraDirection")
+				return (void*)(&camera->getDirection());
 			else if (name == "u_CameraNear")
 				return (void*)(&camera->getNearClip());
 			else if (name == "u_CameraFar")
