@@ -10,11 +10,16 @@ static CGFloat g_viewHeight = 0.0f;
 static bool  g_isInited = false;
 static float g_nativeScale = 1.f;
 
-// 获取iOS平台沉浸屏幕大小
-void iOSGetClientSizeImpl(int32_t& width, int32_t& height)
+// get width
+float iOSGetScreenWidth()
 {
-    width = g_viewWidth;
-    height = g_viewHeight;
+    return g_viewWidth;
+}
+
+// get width
+float iOSGetScreenHeight()
+{
+    return g_viewHeight;
 }
 
 @implementation IOSViewController
@@ -41,11 +46,11 @@ void iOSGetClientSizeImpl(int32_t& width, int32_t& height)
 
     self.view.multipleTouchEnabled = YES;
 
-    CGFloat m_screen_scale = [UIScreen mainScreen].scale;
+    CGFloat screenScale = [UIScreen mainScreen].scale;
     CGRect screen_orig_rect = [[UIScreen mainScreen] bounds];
-    g_viewWidth = screen_orig_rect.size.width * m_screen_scale;
-    g_viewHeight = screen_orig_rect.size.height * m_screen_scale;
-    g_nativeScale = m_screen_scale;
+    g_viewWidth = screen_orig_rect.size.width * screenScale;
+    g_viewHeight = screen_orig_rect.size.height * screenScale;
+    g_nativeScale = screenScale;
     
     CADisplayLink* display_link = [CADisplayLink displayLinkWithTarget:self selector:@selector(drawView:)];
     [display_link addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
@@ -107,8 +112,8 @@ void iOSGetClientSizeImpl(int32_t& width, int32_t& height)
     }
     else
     {
+        // calc elapsed time
         static float timeStamp = CACurrentMediaTime();
-        
         float currentTime = CACurrentMediaTime();
         float elapsedTime = currentTime - timeStamp;
         timeStamp = currentTime;
