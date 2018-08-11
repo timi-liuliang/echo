@@ -18,5 +18,9 @@ namespace Echo
         
         // tick ms
         void tick(float elapsedTime);
+        
+    private:
+        // check screen size
+        void checkScreenSize();
 	};
 }
