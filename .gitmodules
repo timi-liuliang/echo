@@ -1,6 +1,0 @@
-[submodule "bin/Debug/examples"]
-	path = bin/Debug/examples
-	url = https://github.com/blab-liuliang/echo-examples.git
-[submodule "bin/Release/examples"]
-	path = bin/Release/examples
-	url = https://github.com/blab-liuliang/echo-examples.git
