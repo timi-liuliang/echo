@@ -5,6 +5,7 @@
 #include "engine/core/render/mesh/Mesh.h"
 #include "engine/core/render/Material.h"
 #include "engine/core/render/render/Renderable.h"
+#include "AttachmentLoader.h"
 
 struct spAtlas;
 struct spSkeleton;
@@ -49,7 +50,9 @@ namespace Echo
 
 		// clear
 		void clear();
-		void clearRenderable();
+
+		// update renderable
+		void updateRenderable();
 
 	private:
 		ResourcePath		m_spinRes;
@@ -60,6 +63,10 @@ namespace Echo
 		spSkeleton*			m_spSkeleton;
 		spAnimationState*	m_spAnimState;
 		spAttachmentLoader*	m_attachmentLoader;
-		Matrix4				m_matWVP;
+
+		AttachmentVertices	m_batch;
+		Mesh*				m_mesh;
+		Material*			m_material;
+		Renderable*			m_renderable;
 	};
 }

@@ -33,19 +33,19 @@ namespace Echo
 	class AttachmentVertices
 	{
 	public:
+		AttachmentVertices();
 		AttachmentVertices(TextureRes* texture, int verticesCount, ui16* triangles, int indicesCount);
 		virtual ~AttachmentVertices();
 
 		// render
-		void submitToRenderQueue(Render* node);
+		void merge(const AttachmentVertices& other);
+
+		// clear
+		void clear();
 
 	public:
 		TextureResPtr					m_texture;			// 纹理
 		vector<SpineVertexFormat>::type	m_verticesData;		// 顶点数据
 		vector<ui16>::type				m_indicesData;		// 索引数据
-		Matrix4							m_matWVP;			// 世界观察投影矩阵
-		Mesh*							m_mesh;				// Geometry Data for render
-		Material*						m_material;			// Material
-		Renderable*						m_renderable;
 	};
 }

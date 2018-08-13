@@ -5,10 +5,65 @@
 #include "render/ShaderProgramRes.h"
 #include "engine/core/script/lua/luaex.h"
 #include "engine/core/util/PathUtil.h"
+#include "engine/core/render/render/Color.h"
 #include "engine/core/main/Engine.h"
 #include <spine/spine.h>
 #include <spine/extension.h>
 #include "AttachmentLoader.h"
+
+// 默认材质
+static const char* g_spinDefaultMaterial = R"(
+<?xml version = "1.0" encoding = "utf-8"?>
+<Shader>
+	<VS>#version 100
+
+		attribute vec3 a_Position;
+		attribute vec4 a_Color;
+		attribute vec2 a_UV;
+
+		uniform mat4 u_WorldViewProjMatrix;
+
+		varying vec4 v_Color;
+		varying vec2 v_UV;
+
+		void main(void)
+		{
+			vec4 position = u_WorldViewProjMatrix * vec4(a_Position, 1.0);
+			gl_Position = position;
+
+			v_Color = a_Color;
+			v_UV = a_UV;
+		}
+	</VS>
+	<PS>#version 100
+
+		precision mediump float;
+
+		uniform sampler2D u_BaseColorSampler;
+
+		varying vec4	  v_Color;
+		varying vec2	  v_UV;
+
+		void main(void)
+		{
+			vec4 textureColor = texture2D(u_BaseColorSampler, v_UV);
+			gl_FragColor = textureColor * v_Color;
+		}
+	</PS>
+	<BlendState>
+		<BlendEnable value = "true" />
+		<SrcBlend value = "BF_SRC_ALPHA" />
+		<DstBlend value = "BF_INV_SRC_ALPHA" />
+	</BlendState>
+	<RasterizerState>
+		<CullMode value = "CULL_NONE" />
+	</RasterizerState>
+	<DepthStencilState>
+		<DepthEnable value = "false" />
+		<WriteDepth value = "false" />
+	</DepthStencilState>
+</Shader>
+)";
 
 namespace Echo
 {
@@ -30,6 +85,9 @@ namespace Echo
 		, m_spSkeleton(nullptr)
 		, m_spAnimState(nullptr)
 		, m_attachmentLoader(nullptr)
+		, m_mesh(nullptr)
+		, m_material(nullptr)
+		, m_renderable(nullptr)
 	{
 	}
 
@@ -134,6 +192,7 @@ namespace Echo
 	// submit to render
 	void Spine::submitToRenderQueue()
 	{
+		m_batch.clear();
 		for (int i = 0; i < m_spSkeleton->slotsCount; i++)
 		{
 			spSlot* slot = m_spSkeleton->drawOrder[i];
@@ -169,22 +228,12 @@ namespace Echo
 				}
 			}
 
-			// 更新位置颜色数据
-			//for (int v = 0, w = 0, vn = attachmentVertices->m_verticesData.size(); v < vn; ++v, w += 2)
-			//{
-			//	SpineVertexFormat* vertex = attachmentVertices->m_verticesData.data() + v;
-			//	vertex->m_position.x = m_worldVertices[w];
-			//	vertex->m_position.y = m_worldVertices[w + 1];
-			//	vertex->m_position.z = 0.f;
-			//	vertex->m_diffuse = Color::WHITE;
-			//}
-
 			// diffuse
 			for (size_t v = 0; v < attachmentVertices->m_verticesData.size(); v++)
 			{
 				SpineVertexFormat* vertex = attachmentVertices->m_verticesData.data() + v;
 				vertex->m_position.z = 0.f;
-				vertex->m_diffuse = Color::WHITE;
+				vertex->m_diffuse = Color(slot->color.r, slot->color.g, slot->color.b, slot->color.a);
 			}
 
 			// 混合状态
@@ -208,16 +257,47 @@ namespace Echo
 			}
 			}
 
-			attachmentVertices->submitToRenderQueue(this);
+			m_batch.merge( *attachmentVertices);
+		}
+
+		updateRenderable();
+		m_renderable->submitToRenderQueue();
+	}
+
+	// update renderable
+	void Spine::updateRenderable()
+	{
+		if (!m_renderable)
+		{
+			MeshVertexFormat define;
+			define.m_isUseVertexColor = true;
+			define.m_isUseUV = true;
+
+			m_mesh = Mesh::create(true, true);
+			m_mesh->updateIndices(m_batch.m_indicesData.size(), m_batch.m_indicesData.data());
+			m_mesh->updateVertexs(define, m_batch.m_verticesData.size(), (const Byte*)m_batch.m_verticesData.data(), AABB());
+
+			m_material = ECHO_CREATE_RES(Material);
+			m_material->setShaderContent(g_spinDefaultMaterial);
+			m_material->setRenderStage("Transparent");
+
+			m_material->setTexture("u_BaseColorSampler", m_batch.m_texture);
+
+			m_renderable = Renderable::create(m_mesh, m_material, this);
+		}
+		else
+		{
+			MeshVertexFormat define;
+			define.m_isUseVertexColor = true;
+			define.m_isUseUV = true;
+
+			m_mesh->updateIndices(m_batch.m_indicesData.size(), m_batch.m_indicesData.data());
+			m_mesh->updateVertexs(define, m_batch.m_verticesData.size(), (const Byte*)m_batch.m_verticesData.data(), AABB());
 		}
 	}
 
 	void Spine::clear()
 	{
-		clearRenderable();
-	}
 
-	void Spine::clearRenderable()
-	{
 	}
 }

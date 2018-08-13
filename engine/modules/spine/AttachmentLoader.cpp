@@ -4,67 +4,6 @@
 #include "engine/core/render/mesh/Mesh.h"
 #include "engine/core/render/Material.h"
 
-// Ä¬ÈÏ²ÄÖÊ
-static const char* g_spinDefaultMaterial = R"(
-<?xml version = "1.0" encoding = "utf-8"?>
-<Shader>
-	<VS>#version 100
-
-		attribute vec3 a_Position;
-		attribute vec2 a_UV;
-
-		uniform mat4 u_WorldViewProjMatrix;
-
-		varying vec2 v_UV;
-
-		void main(void)
-		{
-			vec4 position = u_WorldViewProjMatrix * vec4(a_Position, 1.0);
-			gl_Position = position;
-
-			v_UV = a_UV;
-		}
-	</VS>
-	<PS>#version 100
-
-		precision mediump float;
-
-		uniform sampler2D u_BaseColorSampler;
-		varying vec2	  v_UV;
-
-		void main(void)
-		{
-			vec4 textureColor = texture2D(u_BaseColorSampler, v_UV);
-			gl_FragColor = textureColor;
-		}
-	</PS>
-	<BlendState>
-		<BlendEnable value = "true" />
-		<SrcBlend value = "BF_SRC_ALPHA" />
-		<DstBlend value = "BF_INV_SRC_ALPHA" />
-	</BlendState>
-	<RasterizerState>
-		<CullMode value = "CULL_NONE" />
-	</RasterizerState>
-	<DepthStencilState>
-		<DepthEnable value = "false" />
-		<WriteDepth value = "false" />
-	</DepthStencilState>
-	<SamplerState>
-		<BiLinearMirror>
-			<MinFilter value = "FO_LINEAR" />
-			<MagFilter value = "FO_LINEAR" />
-			<MipFilter value = "FO_NONE" />
-			<AddrUMode value = "AM_CLAMP" />
-			<AddrVMode value = "AM_CLAMP" />
-		</BiLinearMirror>
-	</SamplerState>
-	<Texture>
-		<stage no = "0" sampler = "BiLinearMirror" />
-	</Texture>
-</Shader>
-)";
-
 using namespace Echo;
 
 static ui16 quadTriangles[6] = { 0, 1, 2, 2, 3, 0 };
@@ -156,8 +95,13 @@ EchoAttachmentLoader* EchoAttachmentLoader_create(spAtlas* atlas)
 
 namespace Echo
 {
+	AttachmentVertices::AttachmentVertices()
+		: m_texture(nullptr)
+	{
+
+	}
+
 	AttachmentVertices::AttachmentVertices(TextureRes* texture, int verticesCount, ui16* triangles, int indicesCount)
-		: m_renderable(nullptr)
 	{
 		m_texture = texture;
 
@@ -176,37 +120,33 @@ namespace Echo
 	}
 
 	// render
-	void AttachmentVertices::submitToRenderQueue(Render* node)
+	void AttachmentVertices::merge(const AttachmentVertices& other)
 	{
-		if (!m_renderable)
+		// indices
+		ui16 vertOffset = static_cast<ui16>(m_verticesData.size());
+		for (size_t i = 0; i < other.m_indicesData.size(); i++)
 		{
-			MeshVertexFormat define;
-			define.m_isUseVertexColor = true;
-			define.m_isUseUV = true;
-
-			m_mesh = Mesh::create(true, true);
-			m_mesh->updateIndices(m_indicesData.size(), m_indicesData.data());
-			m_mesh->updateVertexs(define, m_verticesData.size(), (const Byte*)m_verticesData.data(), AABB());
-
-			m_material =ECHO_CREATE_RES(Material);
-			m_material->setShaderContent(g_spinDefaultMaterial);
-			m_material->setRenderStage("Transparent");
-
-			m_material->setTexture("u_BaseColorSampler", m_texture);
-
-			m_renderable = Renderable::create(m_mesh, m_material, node);
-			m_renderable->submitToRenderQueue();
+			m_indicesData.push_back(vertOffset + other.m_indicesData[i]);
 		}
-		else
+
+		// vertices
+		m_verticesData.insert(m_verticesData.end(), other.m_verticesData.begin(), other.m_verticesData.end());
+
+		// texture
+		if (!m_texture)
 		{
-			MeshVertexFormat define;
-			define.m_isUseVertexColor = true;
-			define.m_isUseUV = true;
-
-			m_mesh->updateIndices(m_indicesData.size(), m_indicesData.data());
-			m_mesh->updateVertexs(define, m_verticesData.size(), (const Byte*)m_verticesData.data(), AABB());
-
-			m_renderable->submitToRenderQueue();
+			m_texture = other.m_texture;
 		}
+		else if (m_texture != other.m_texture)
+		{
+			EchoLogError("Spine merge failed. used different texture");
+		}
+	}
+
+	// clear
+	void AttachmentVertices::clear()
+	{
+		m_verticesData.clear();
+		m_indicesData.clear();
 	}
 }
