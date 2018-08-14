@@ -1,12 +1,12 @@
-#include "ui_module.h"
+#include "input_module.h"
 
 namespace Echo
 {
-	UIModule::UIModule()
+	InputModule::InputModule()
 	{
 	}
 
-	void UIModule::registerTypes()
+	void InputModule::registerTypes()
 	{
 	}
 }
