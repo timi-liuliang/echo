@@ -3,6 +3,7 @@
 #include <QDateTime>
 #include "GameMainWindow.h"
 #include <engine/core/main/GameSettings.h>
+#include <engine/core/input/input.h>
 
 namespace Game
 {
@@ -119,20 +120,7 @@ namespace Game
 	// 鼠标按下事件
 	void Window::mousePressEvent(QMouseEvent* e)
 	{
-		//if (!hasFocus())
-		//{
-		//	setFocus();
-		//}
-
-		// UI事件
-		//if ( e->button()==Qt::LeftButton)
-		//{
-		//	m_isLeftButtonDown = true;
-		//}
-
-		// 注册控制器事件
-		//auto controller = m_inputController ? m_inputController : m_defaultInputController;
-		//controller->mousePressEvent(e);
+		Echo::Input::instance()->notifyMouseButtonDown(0);
 	}
 
 	void Window::mouseDoubleClickEvent(QMouseEvent* e)
@@ -144,14 +132,7 @@ namespace Game
 	// 鼠标释放事件
 	void Window::mouseReleaseEvent(QMouseEvent* e)
 	{
-		// UI事件
-		//if (e->button() == Qt::LeftButton)
-		//{
-		//	m_isLeftButtonDown = false;
-		//}
-
-		//auto controller = m_inputController ? m_inputController : m_defaultInputController;
-		//controller->mouseReleaseEvent(e);
+		Echo::Input::instance()->notifyMouseButtonUp(0);
 	}
 
 	// 鼠标按下事件

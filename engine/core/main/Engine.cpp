@@ -23,6 +23,7 @@
 #include "engine/core/render/render/ShaderProgramRes.h"
 #include "engine/core/render/TextureCube.h"
 #include "engine/core/gizmos/Gizmos.h"
+#include "engine/core/input/input.h"
 
 namespace Echo
 {
@@ -127,6 +128,7 @@ namespace Echo
 		Class::registerType<TextureCube>();
 		Class::registerType<GameSettings>();
 		Class::registerType<Gizmos>();
+		Class::registerType<Input>();
 
 		// register all module class
 		Module::registerAllTypes();
@@ -313,6 +315,9 @@ namespace Echo
 		// update logic
 		Module::updateAll(m_frameTime);
 		NodeTree::instance()->update(m_frameTime);
+
+		// input update
+		Input::instance()->update();
 
 		// render
 		RenderStage::instance()->process();

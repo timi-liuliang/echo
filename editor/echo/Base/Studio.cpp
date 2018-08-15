@@ -197,7 +197,7 @@ namespace Studio
 			return renderWindow->getInputController();
 		}
 		else
-			return NULL;
+			return nullptr;
 	}
 
 	// 获取主窗口
