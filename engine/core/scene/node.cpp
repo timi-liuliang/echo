@@ -25,7 +25,8 @@ namespace Echo
 			
 			String luaStr = StringUtil::Format(
 				"local script_table = require \"%s\"\n"\
-				"utils.append_table(%s, script_table)", moduleName.c_str(),m_globalTableName.c_str());
+				"utils.append_table(%s, script_table)\n" \
+				"%s:start()\n" , moduleName.c_str(),m_globalTableName.c_str(), m_globalTableName.c_str());
 
 			LuaBinder::instance()->execString(luaStr);
 		}

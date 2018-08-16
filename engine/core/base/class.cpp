@@ -121,7 +121,11 @@ namespace Echo
 		auto it = g_classInfos->find(className);
 		if (it != g_classInfos->end())
 		{
+			// c
 			it->second->registerMethod(methodName, method);
+
+			// lua
+			LuaBinder::instance()->registerMethod(className, methodName, method);
 		}
 
 		return true;

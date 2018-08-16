@@ -1,4 +1,5 @@
 #include "LuaBinder.h"
+#include "engine/core/base/MethodBind.h"
 #include "engine/core/memory/MemAllocDef.h"
 #include "engine/core/log/LogManager.h"
 #include "engine/core/util/PathUtil.h"
@@ -59,10 +60,10 @@ namespace Echo
 		setGlobalVariableStr("package.path", StringUtil::Format("%s?.lua", path.c_str()).c_str());
 	}
 
-	void LuaBinder::registerClass(const char* const className, const char* const parentClassName)
+	bool LuaBinder::registerClass(const String& className, const char* parentClassName)
 	{
 		//create metatable for class
-		luaL_newmetatable( m_state, className);
+		luaL_newmetatable( m_state, className.c_str());
 		const int metatable = lua_gettop(m_state);
 
 		//change the metatable's __index to metatable itself;
@@ -71,7 +72,7 @@ namespace Echo
 		lua_settable(m_state, metatable);
 
 		// inherits from parent class
-		if (parentClassName && strlen( parentClassName))
+		if (parentClassName && strlen(parentClassName))
 		{
 			// lookup metatable in Lua registry
 			luaL_getmetatable(m_state, parentClassName);
@@ -79,10 +80,20 @@ namespace Echo
 		}
 
 		lua_pop(m_state, 1);
+
+		return true;
 	}
 
-	void LuaBinder::registerObject(const char* const className, const char* const objectName, void* obj)
+	bool LuaBinder::registerMethod(const String& className, const String& methodName, MethodBind* method)
 	{
+		int a = 10;
+
+		return false;
+	}
+
+	bool LuaBinder::registerObject(const String& className, const String& objectName, void* obj)
+	{
+		int a = 10;
 		//if ( className && strlen(className) && objectName && strlen(objectName) && obj)
 		//{
 		//	LUAEX_CHECK_BEGIN;
@@ -118,6 +129,8 @@ namespace Echo
 
 		//	LUAEX_CHECK_END;
 		//}
+
+		return false;
 	}
 
 	// add search path

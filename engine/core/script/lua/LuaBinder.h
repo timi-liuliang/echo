@@ -11,6 +11,7 @@ extern "C"
 
 namespace Echo
 {
+	class MethodBind;
 	class LuaBinder
 	{
 	public:
@@ -24,8 +25,9 @@ namespace Echo
 		void init(lua_State* state);
 
 		// register
-		void registerClass(const char* const className, const char* const parentClassName);
-		void registerObject(const char* const className, const char* const objectName, void* obj);
+		bool registerClass(const String& className, const char* parentClassName);
+		bool registerMethod(const String& className, const String& methodName, MethodBind* method);
+		bool registerObject(const String& className, const String& objectName, void* obj);
 
 		// def search path
 		void setSearchPath(const String& path);
