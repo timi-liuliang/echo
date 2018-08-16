@@ -1,8 +1,10 @@
 //Lua笔记-关于lua table的C API
 //转载请注明来自yuliying的CSDN博客.
 //Lua版本5.2
-
+	
 /*相关API:
+	http://pgl.yoyo.org/luai/i/_
+
 	lua_createtable
 	原型: void lua_createtable (lua_State *L, int narr, int nrec);
 	描述: 创建一个新的table并将之放在栈顶.narr是该table数组部分的长度,nrec是该table hash部分的长度.
@@ -175,4 +177,17 @@
 			在使用 lua_pushcfunction 或者 luaL_setfuncs 将一个lua_CFunction 注册到Lua环境中时,
 			可以同时为这个函数设置一些upvalue .
 			而后在这些lua_CFunction 中可以使用 lua_upvalueindex(n) 函数来获取对应位置的upvalue.
+
+
+	lua_pushcclosure
+	原型:void lua_pushcclosure (lua_State *L, lua_CFunction fn, int n);
+	描述:Pushes a new C closure onto the stack.
+		 When a C function is created, it is possible to associate some values with it, thus creating 
+		 a C closure (see §3.4); these values are then accessible to the function whenever it is called. 
+		 To associate values with a C function, first these values should be pushed onto the stack 
+		 (when there are multiple values, the first value is pushed first). Then lua_pushcclosure is 
+		 called to create and push the C function onto the stack, with the argument n telling how many 
+		 values should be associated with the function. lua_pushcclosure also pops these values from 
+		 the stack.
+		 The maximum value for n is 255.
 */
