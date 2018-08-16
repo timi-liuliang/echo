@@ -45,9 +45,10 @@ namespace Echo
 	}
 
 	// set state
-	void LuaBinder::init(lua_State* state)
+	void LuaBinder::init()
 	{
-		m_state = state;
+		m_state = luaL_newstate();
+		luaL_openlibs(m_state);
 
 		addLoader(luaLoaderEcho);
 		setSearchPath("User://");

@@ -26,8 +26,8 @@ namespace Echo
 
 	void Input::bindMethods()
 	{
-		luaex::LuaEx::instance()->register_function<Input, bool>("Input", "isMouseButtonDown", &Input::isMouseButtonDown);
-		luaex::LuaEx::instance()->register_function<Input, bool>("Input", "getMouseButtonDown", &Input::getMouseButtonDown);
+		//CLASS_BIND_METHOD(Input, isMouseButtonDown, "isMouseButtonDown");
+		//CLASS_BIND_METHOD(Input, getMouseButtonDown, "getMouseButtonDown");
 	}
 
 	bool Input::isMouseButtonDown(Echo::ui32 id)

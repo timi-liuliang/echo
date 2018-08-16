@@ -22,7 +22,7 @@ namespace Echo
 		static void destroy();
 
 		// set state
-		void init(lua_State* state);
+		void init();
 
 		// register
 		bool registerClass(const String& className, const char* parentClassName);

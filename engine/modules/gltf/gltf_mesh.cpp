@@ -4,7 +4,6 @@
 #include "engine/core/scene/NodeTree.h"
 #include "render/renderer.h"
 #include "render/ShaderProgramRes.h"
-#include "engine/core/script/lua/luaex.h"
 #include "engine/core/main/Engine.h"
 #include "engine/core/gizmos/Gizmos.h"
 

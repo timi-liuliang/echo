@@ -12,7 +12,6 @@
 #include "engine/core/render/render/Viewport.h"
 #include "engine/core/render/Material.h"
 #include "GameSettings.h"
-#include "engine/core/script/lua/luaex.h"
 #include "engine/core/script/lua/register_core_to_lua.cxx"
 #include "engine/core/script/lua/LuaBinder.h"
 #include "engine/core/render/RenderTargetManager.h"
@@ -74,8 +73,7 @@ namespace Echo
 
 		// lua script
 		{
-			luaex::LuaEx* luaEx = luaex::LuaEx::instance();
-			LuaBinder::instance()->init(luaEx->get_state());
+			LuaBinder::instance()->init();
 			register_core_to_lua();
 			registerClassTypes();
 		}
@@ -279,7 +277,6 @@ namespace Echo
 		EchoLogInfo("Echo Renderer has been shutdown.");
 		EchoSafeDeleteInstance(LogManager);
 		LuaBinder::destroy();
-		luaex::LuaEx::instance()->destroy();
 		MemoryManager::destroyInstance();
 	}
 

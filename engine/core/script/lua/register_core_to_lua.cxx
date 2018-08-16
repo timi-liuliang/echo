@@ -1,4 +1,3 @@
-#include "luaex.h"
 #include "LuaBinder.h"
 #include "engine/core/log/LogManager.h"
 
@@ -6,10 +5,6 @@ namespace Echo
 {
 	void register_core_to_lua()
 	{
-		luaex::LuaEx* luaEx = luaex::LuaEx::instance();
-		if (!luaEx)
-			return;
-
 		// core library
 		{
 			// 1.utils
@@ -36,11 +31,11 @@ namespace Echo
 		// log
 		{
 			LuaBinder::instance()->registerClass("LogManager", nullptr);
-			luaEx->register_function<LogManager, const char*>("LogManager", "error", &LogManager::error);
-			luaEx->register_function<LogManager, const char*>("LogManager", "warning", &LogManager::warning);
-			luaEx->register_function<LogManager, const char*>("LogManager", "info", &LogManager::info);
+			//luaEx->register_function<LogManager, const char*>("LogManager", "error", &LogManager::error);
+			//luaEx->register_function<LogManager, const char*>("LogManager", "warning", &LogManager::warning);
+			//luaEx->register_function<LogManager, const char*>("LogManager", "info", &LogManager::info);
 
-			luaEx->register_object("LogManager", "Log", LogManager::instance());
+			//luaEx->register_object("LogManager", "Log", LogManager::instance());
 		}
 	}
 }

@@ -76,6 +76,6 @@ namespace Echo
 		m_invisibleRoot.update(elapsedTime, true);
 
 		// update scripts
-		luaex::LuaEx::instance()->callf("_update_all_nodes");
+		LuaBinder::instance()->execString("_update_all_nodes()\n", true);
 	}
 }

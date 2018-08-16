@@ -15,7 +15,7 @@ namespace Echo
 		if (m_isValid)
 		{
 			m_globalTableName = StringUtil::Format("_Nodes._%d", obj->getId());;
-			luaex::LuaEx::instance()->register_object("Node", m_globalTableName.c_str(), obj);
+			LuaBinder::instance()->registerObject("Node", m_globalTableName.c_str(), obj);
 
 			String fileName = PathUtil::GetPureFilename(m_file.getPath(), false);
 			String moduleName = StringUtil::Replace(m_file.getPath(), "Res://", "");
@@ -432,9 +432,6 @@ namespace Echo
 	// bind methods
 	void Node::bindMethods()
 	{
-		luaex::LuaEx::instance()->register_function<Node, float>("Node", "setPosX", &Node::setLocalPositionX);
-		luaex::LuaEx::instance()->register_function<Node, float>("Node", "yaw", &Node::yaw);
-
 		CLASS_BIND_METHOD(Node, getLocalPosition,	  DEF_METHOD("getPos"));
 		CLASS_BIND_METHOD(Node, getWorldPosition,	  DEF_METHOD("getWorldPos"));
 		CLASS_BIND_METHOD(Node, getLocalYawPitchRoll, DEF_METHOD("getYawPitchRoll"));
