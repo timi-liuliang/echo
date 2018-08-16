@@ -1,6 +1,7 @@
 #pragma once
 
 #include "variant.h"
+#include "engine/core/script/lua/LuaBinder.h"
 
 namespace Echo
 {
@@ -43,6 +44,7 @@ namespace Echo
 	{
 	public:
 		virtual Variant call(Object* obj, const Variant** args, int argCount, Variant::CallError& error) = 0;
+		virtual int call(lua_State* luaState)=0;
 	};
 	// please use hash map
 	typedef std::map<String, MethodBind*>	MethodMap;
@@ -56,13 +58,18 @@ namespace Echo
 		void (__AnEmptyClass::*method)();
 		
 		// exec the method
-		virtual Variant call(Object* obj, const Variant** args, int argCount, Variant::CallError& error)
+		virtual Variant call(Object* obj, const Variant** args, int argCount, Variant::CallError& error) override
 		{
 			__AnEmptyClass* instance = (__AnEmptyClass*)obj;
 
 			(instance->*method)();
 
 			return Variant();
+		}
+
+		virtual int call(lua_State* luaState) override
+		{
+			return 0;
 		}
 	};
 
@@ -89,11 +96,16 @@ namespace Echo
 		R (__AnEmptyClass::*method)();
 
 		// exec the method
-		virtual Variant call(Object* obj, const Variant** args, int argCount, Variant::CallError& error)
+		virtual Variant call(Object* obj, const Variant** args, int argCount, Variant::CallError& error) override
 		{
 			__AnEmptyClass* instance = (__AnEmptyClass*)obj;
 
 			return (instance->*method)();
+		}
+
+		virtual int call(lua_State* luaState) override
+		{
+			return 0;
 		}
 	};
 
@@ -120,11 +132,16 @@ namespace Echo
 		R(__AnEmptyClass::*method)() const;
 
 		// exec the method
-		virtual Variant call(Object* obj, const Variant** args, int argCount, Variant::CallError& error)
+		virtual Variant call(Object* obj, const Variant** args, int argCount, Variant::CallError& error) override
 		{
 			__AnEmptyClass* instance = (__AnEmptyClass*)obj;
 
 			return (instance->*method)();
+		}
+
+		virtual int call(lua_State* luaState) override
+		{
+			return 0;
 		}
 	};
 
@@ -151,7 +168,7 @@ namespace Echo
 		void (__AnEmptyClass::*method)(P0);
 
 		// exec the method
-		virtual Variant call(Object* obj, const Variant** args, int argCount, Variant::CallError& error)
+		virtual Variant call(Object* obj, const Variant** args, int argCount, Variant::CallError& error) override
 		{
 			__AnEmptyClass* instance = (__AnEmptyClass*)obj;
 
@@ -159,6 +176,11 @@ namespace Echo
 			(instance->*method)(p0);
 
 			return Variant();
+		}
+
+		virtual int call(lua_State* luaState) override
+		{
+			return 0;
 		}
 	};
 

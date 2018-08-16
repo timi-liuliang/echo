@@ -410,7 +410,6 @@ namespace Studio
 		EchoLogWarning("stop game debug");
 	}
 
-	// receive msg from game
 	void MainWindow::onReadMsgFromGame()
 	{
 		Echo::String msg = m_gameProcess.readAllStandardOutput().toStdString().c_str();
@@ -434,7 +433,6 @@ namespace Studio
 		}
 	}
 
-	// update rencent project display
 	void MainWindow::updateRencentProjectsDisplay()
 	{
 		// clear
@@ -466,7 +464,6 @@ namespace Studio
 		}
 	}
 
-	// update setting display
 	void MainWindow::updateSettingDisplay()
 	{
 		m_menuSettings->clear();

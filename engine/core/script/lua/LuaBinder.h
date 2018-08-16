@@ -63,6 +63,6 @@ namespace Echo
 		~LuaBinder() {}
 
 	private:
-		lua_State*		m_state;		// luaState
+		lua_State*		m_luaState;		// luaState
 	};
 }
