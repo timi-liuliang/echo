@@ -59,6 +59,67 @@ namespace Echo
 		setGlobalVariableStr("package.path", StringUtil::Format("%s?.lua", path.c_str()).c_str());
 	}
 
+	void LuaBinder::registerClass(const char* const className, const char* const parentClassName)
+	{
+		//create metatable for class
+		luaL_newmetatable( m_state, className);
+		const int metatable = lua_gettop(m_state);
+
+		//change the metatable's __index to metatable itself;
+		lua_pushliteral(m_state, "__index");
+		lua_pushvalue(m_state, metatable);
+		lua_settable(m_state, metatable);
+
+		// inherits from parent class
+		if (parentClassName && strlen( parentClassName))
+		{
+			// lookup metatable in Lua registry
+			luaL_getmetatable(m_state, parentClassName);
+			lua_setmetatable(m_state, metatable);
+		}
+
+		lua_pop(m_state, 1);
+	}
+
+	void LuaBinder::registerObject(const char* const className, const char* const objectName, void* obj)
+	{
+		//if ( className && strlen(className) && objectName && strlen(objectName) && obj)
+		//{
+		//	LUAEX_CHECK_BEGIN;
+
+		//	string128 single_name;
+		//	int parent_stack = _get_parent_table(object_name, single_name); //stack + 1
+
+		//																	//解析object_name
+		//	bool has_parent = parent_stack != 0;
+
+		//	//新建object在lua中对应的table，新table创建后被自动放在stacktop，
+		//	//然后保存新表格对象的stackindex，方便后面使用
+		//	lua_newtable(L);											// stack + 1
+		//	int si_newClassTable = lua_gettop(L);
+
+		//	//设置对象指针
+		//	lua_pushstring(L, _CHILL_LUA_CPP_PTR_NAME_);				// stack + 1
+		//	lua_pushlightuserdata(L, pobj);								// stack + 1
+		//	lua_settable(L, si_newClassTable);							// stack - 2
+
+		//																//设置对象的metatable
+		//	luaL_getmetatable(L, class_name);  // lookup metatable in Lua registry // stack + 1
+		//	lua_setmetatable(L, si_newClassTable);						// stack - 1
+
+		//																//将对象抛出给脚本
+		//	if (has_parent)
+		//	{
+		//		lua_setfield(L, parent_stack, single_name.c_str());		//stack - 1
+		//		lua_pop(L, 1); // pop the parent;						//stack - 1
+		//	}
+		//	else
+		//		lua_setglobal(L, single_name.c_str());
+
+		//	LUAEX_CHECK_END;
+		//}
+	}
+
 	// add search path
 	void LuaBinder::addSearchPath(const String& path)
 	{

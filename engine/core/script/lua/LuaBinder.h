@@ -23,6 +23,10 @@ namespace Echo
 		// set state
 		void init(lua_State* state);
 
+		// register
+		void registerClass(const char* const className, const char* const parentClassName);
+		void registerObject(const char* const className, const char* const objectName, void* obj);
+
 		// def search path
 		void setSearchPath(const String& path);
 		void addSearchPath(const String& path);

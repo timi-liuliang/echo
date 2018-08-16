@@ -431,13 +431,8 @@ namespace Echo
 	// bind methods
 	void Node::bindMethods()
 	{
-		luaex::LuaEx* luaEx = luaex::LuaEx::instance();
-		if (!luaEx)
-			return;
-
-		luaEx->register_class("Node");
-		luaEx->register_function<Node, float>("Node", "setPosX", &Node::setLocalPositionX);
-		luaEx->register_function<Node, float>("Node", "yaw", &Node::yaw);
+		luaex::LuaEx::instance()->register_function<Node, float>("Node", "setPosX", &Node::setLocalPositionX);
+		luaex::LuaEx::instance()->register_function<Node, float>("Node", "yaw", &Node::yaw);
 
 		CLASS_BIND_METHOD(Node, getLocalPosition,	  DEF_METHOD("getPos"));
 		CLASS_BIND_METHOD(Node, getWorldPosition,	  DEF_METHOD("getWorldPos"));

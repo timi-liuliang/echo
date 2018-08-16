@@ -103,7 +103,6 @@ public:
 	//regster stuffs to lua
 	template <typename ClassT> 
 	void			register_class_function			(const char* const class_name, const char* const functionname, int (ClassT::*function)(lua_State* L));
-	void			register_class					(const char* const class_name, const char* const parentClassName = NULL);	
 	void			register_object					(const char* const class_name, const char* const objectName, void* pObject);
 	void			register_function				(const char* const function_name, lua_CFunction f);
 	void*			get_object_ptr					(const char* const name);

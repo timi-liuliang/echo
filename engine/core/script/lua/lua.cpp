@@ -231,33 +231,6 @@ void Lua::gc()
 	lua_gc(L, LUA_GCCOLLECT, 0);
 }
 
-
-void Lua::register_class(const char* const className, const char* const parentClassName)
-{
-	_checkstack();
-
-	//create metatable for class
-	luaL_newmetatable(L, className);			// stack+ 1
-	const int si_metatable = lua_gettop(L);
-
-	//change the metatable's __index to metatable itself;
-	lua_pushliteral	(L, "__index");				// stack + 1
-	lua_pushvalue	(L, si_metatable);			// stack + 1
-	lua_settable	(L, si_metatable);			// stack - 2
-
-	// inherits from parent class
-	if (NULL != parentClassName && 0 != parentClassName[0])
-	{
-		// lookup metatable in Lua registry
-		luaL_getmetatable(L, parentClassName);	// stack + 1  
-		lua_setmetatable(L, si_metatable);		// stack - 1
-	}
-
-	lua_pop(L, 1);								// stack - 1
-
-	_checkstack();
-}
-
 void Lua::register_object(const char* const class_name, const char* const object_name, void* pobj)
 {
 	if (NULL == class_name || NULL == object_name || NULL == pobj || 0 == class_name[0] || 0 == object_name[0])

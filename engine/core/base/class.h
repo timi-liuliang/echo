@@ -6,6 +6,7 @@
 #include "property_info.h"
 #include "engine/core/util/StringUtil.h"
 #include "engine/core/script/lua/luaex.h"
+#include "engine/core/script/lua/LuaBinder.h"
 
 namespace Echo
 {
@@ -165,7 +166,7 @@ namespace Echo
         ObjectFactoryT(const String& name, const String& parent, bool isVirtual=false)
         {
             // register class to lua
-            luaex::LuaEx::instance()->register_class(name.c_str(), parent.c_str());
+			LuaBinder::instance()->registerClass( name.c_str(), parent.c_str());
             
             m_name = name;
             m_classInfo.m_singleton = false;
@@ -188,7 +189,7 @@ namespace Echo
         ObjectFactorySingletonT(const String& name, const String& parent, bool isVirtual = false)
         {
             // register class to lua
-            luaex::LuaEx::instance()->register_class(name.c_str(), parent.c_str());
+            LuaBinder::instance()->registerClass(name.c_str(), parent.c_str());
 			luaex::LuaEx::instance()->register_object(name.c_str(), name.c_str(), T::instance());
             
             m_name = name;

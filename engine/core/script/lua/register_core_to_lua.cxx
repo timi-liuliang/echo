@@ -35,12 +35,12 @@ namespace Echo
 
 		// log
 		{
-			luaEx->register_class("LogManager");
+			LuaBinder::instance()->registerClass("LogManager", nullptr);
 			luaEx->register_function<LogManager, const char*>("LogManager", "error", &LogManager::error);
 			luaEx->register_function<LogManager, const char*>("LogManager", "warning", &LogManager::warning);
 			luaEx->register_function<LogManager, const char*>("LogManager", "info", &LogManager::info);
 
-			luaEx->register_object("LogManager", "log", LogManager::instance());
+			luaEx->register_object("LogManager", "Log", LogManager::instance());
 		}
 	}
 }
