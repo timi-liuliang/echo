@@ -189,6 +189,7 @@ namespace Echo
         {
             // register class to lua
             luaex::LuaEx::instance()->register_class(name.c_str(), parent.c_str());
+			luaex::LuaEx::instance()->register_object(name.c_str(), name.c_str(), T::instance());
             
             m_name = name;
             m_classInfo.m_singleton = true;

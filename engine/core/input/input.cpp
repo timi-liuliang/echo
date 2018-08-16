@@ -26,14 +26,8 @@ namespace Echo
 
 	void Input::bindMethods()
 	{
-		luaex::LuaEx* luaEx = luaex::LuaEx::instance();
-		if (!luaEx)
-			return;
-
-		luaEx->register_class("Input");
-		luaEx->register_function<Input, bool>("Input", "isMouseButtonDown", &Input::isMouseButtonDown);
-		luaEx->register_function<Input, bool>("Input", "onMouseButtonDown", &Input::onMouseButtonDown);
-		luaEx->register_object("Input", "Input", Input::instance());
+		luaex::LuaEx::instance()->register_function<Input, bool>("Input", "isMouseButtonDown", &Input::isMouseButtonDown);
+		luaex::LuaEx::instance()->register_function<Input, bool>("Input", "getMouseButtonDown", &Input::getMouseButtonDown);
 	}
 
 	bool Input::isMouseButtonDown(Echo::ui32 id)
@@ -41,7 +35,7 @@ namespace Echo
 		return m_mouseState.m_mouseButtonStates[id].m_isDown;
 	}
 
-	bool Input::onMouseButtonDown(Echo::ui32 id)
+	bool Input::getMouseButtonDown(Echo::ui32 id)
 	{
 		return m_mouseState.m_mouseButtonStates[id].m_isDown && m_frame == m_mouseState.m_mouseButtonStates[id].m_frame;
 	}
@@ -51,7 +45,7 @@ namespace Echo
 		return !isMouseButtonDown(id);
 	}
 
-	bool Input::onMouseButtonUp(Echo::ui32 id)
+	bool Input::getMouseButtonUp(Echo::ui32 id)
 	{
 		return !m_mouseState.m_mouseButtonStates[id].m_isDown && m_frame == m_mouseState.m_mouseButtonStates[id].m_frame;
 	}

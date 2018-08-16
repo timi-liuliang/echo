@@ -17,10 +17,11 @@ namespace Echo
 		void update();
 
 	public:
+		// 0 for left button, 1 for right button, 2 for the middle button.
 		bool isMouseButtonDown(Echo::ui32 id);
-		bool onMouseButtonDown(Echo::ui32 id);
+		bool getMouseButtonDown(Echo::ui32 id);
 		bool isMouseButtonUp(Echo::ui32 id);
-		bool onMouseButtonUp(Echo::ui32 id);
+		bool getMouseButtonUp(Echo::ui32 id);
 
 		// called by os
 		void notifyMouseButtonDown(Echo::ui32 id);
