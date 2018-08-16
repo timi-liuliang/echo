@@ -120,7 +120,8 @@ namespace Game
 	// 鼠标按下事件
 	void Window::mousePressEvent(QMouseEvent* e)
 	{
-		Echo::Input::instance()->notifyMouseButtonDown(0);
+		Echo::ui32 buttonId = e->button == Qt::LeftButton ? 0 : ( e->button() == Qt::RightButton ? 1 : 2);
+		Echo::Input::instance()->notifyMouseButtonDown(buttonId);
 	}
 
 	void Window::mouseDoubleClickEvent(QMouseEvent* e)
@@ -132,7 +133,8 @@ namespace Game
 	// 鼠标释放事件
 	void Window::mouseReleaseEvent(QMouseEvent* e)
 	{
-		Echo::Input::instance()->notifyMouseButtonUp(0);
+		Echo::ui32 buttonId = e->button == Qt::LeftButton ? 0 : (e->button() == Qt::RightButton ? 1 : 2);
+		Echo::Input::instance()->notifyMouseButtonUp(buttonId);
 	}
 
 	// 鼠标按下事件
