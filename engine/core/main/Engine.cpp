@@ -11,13 +11,13 @@
 #include "engine/core/render/render/Viewport.h"
 #include "engine/core/render/Material.h"
 #include "GameSettings.h"
-#include "engine/core/script/lua/register_core_to_lua.cxx"
+#include "engine/core/script/lua/registerCoreToLua.cxx"
 #include "engine/core/script/lua/LuaBinder.h"
 #include "engine/core/render/RenderTargetManager.h"
 #include "module.h"
 #include "engine/core/render/renderstage/RenderStage.h"
 #include "engine/core/render/gles/GLES2.h"
-#include "engine/core/script/LuaScript.h"
+#include "engine/core/script/lua/LuaScript.h"
 #include "engine/core/render/render/ShaderProgramRes.h"
 #include "engine/core/render/TextureCube.h"
 #include "engine/core/gizmos/Gizmos.h"
@@ -72,7 +72,7 @@ namespace Echo
 		// lua script
 		{
 			LuaBinder::instance()->init();
-			register_core_to_lua();
+			registerCoreToLua();
 			registerClassTypes();
 		}
 

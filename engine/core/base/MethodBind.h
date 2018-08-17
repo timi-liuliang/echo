@@ -35,7 +35,7 @@ namespace Echo
 	{
 	public:
 		virtual Variant call(Object* obj, const Variant** args, int argCount, Variant::CallError& error) = 0;
-		virtual int call(lua_State* luaState)=0;
+		virtual int call(Object* obj, lua_State* luaState)=0;
 	};
 	// please use hash map
 	typedef std::map<String, MethodBind*>	MethodMap;
@@ -58,7 +58,7 @@ namespace Echo
 			return Variant();
 		}
 
-		virtual int call(lua_State* luaState) override
+		virtual int call(Object* obj, lua_State* luaState) override
 		{
 			return 0;
 		}
@@ -94,7 +94,7 @@ namespace Echo
 			return (instance->*method)();
 		}
 
-		virtual int call(lua_State* luaState) override
+		virtual int call(Object* obj, lua_State* luaState) override
 		{
 			return 0;
 		}
@@ -130,7 +130,7 @@ namespace Echo
 			return (instance->*method)();
 		}
 
-		virtual int call(lua_State* luaState) override
+		virtual int call(Object* obj, lua_State* luaState) override
 		{
 			return 0;
 		}
@@ -169,8 +169,20 @@ namespace Echo
 			return Variant();
 		}
 
-		virtual int call(lua_State* luaState) override
+		virtual int call(Object* obj, lua_State* luaState) override
 		{
+			__AnEmptyClass* instance = (__AnEmptyClass*)obj;
+
+			//check and fetch the arguments
+			P0 p0 = lua_stack_to_value<P0>( luaState, 2);
+
+			// exec method
+			(instance->*method)(p0);
+
+			// push the results
+			// void so do nothing
+
+			// return number of results
 			return 0;
 		}
 	};

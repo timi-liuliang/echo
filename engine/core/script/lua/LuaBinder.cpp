@@ -29,13 +29,6 @@ namespace Echo
 		return 1;
 	}
 
-	static int cb( lua_State* L)
-	{
-		MethodBind* method = nullptr;
-
-		return method ? method->call( L) : 0;
-	}
-
 	// stack dump for debug
 	static void stackDump(lua_State *L)
 	{
@@ -104,6 +97,26 @@ namespace Echo
 #else
 	#define LUA_STACK_CHECK(state)
 #endif 
+
+	static int cb(lua_State* L)
+	{
+		LUA_STACK_CHECK(L);
+
+		// get object ptr
+		lua_pushstring(L, "this");
+		lua_rawget(L, 1);
+		Object* objPtr = static_cast<Object*>(lua_touserdata(L, -1));
+		lua_pop(L, 1);
+
+		// get method ptr
+		MethodBind* methodPtr = static_cast<MethodBind*>(lua_touserdata(L, lua_upvalueindex(1)));
+		if (objPtr && methodPtr)
+		{
+			return methodPtr->call(objPtr, L);
+		}
+
+		return 0;
+	}
 
 	// instance
 	LuaBinder* LuaBinder::instance()
@@ -185,7 +198,7 @@ namespace Echo
 			LUA_STACK_CHECK(m_luaState);
 
 			String currentLayerName;
-			int parentIdx = getUpperTables(objectName, currentLayerName);
+			int parentIdx = lua_get_upper_tables(m_luaState, objectName, currentLayerName);
 
 			lua_newtable(m_luaState);
 			int objIdx = lua_gettop(m_luaState);
@@ -372,46 +385,6 @@ namespace Echo
 		lua_rawseti(m_luaState, -2, key);
 
 		lua_settop(m_luaState, 0);
-	}
-
-	int LuaBinder::getTables(lua_State* luaState, const StringArray& objectNames, const int count)
-	{
-		int tableCount = 0;
-		for (int i = 0; i < count; i++)
-		{
-			if (i == 0)
-			{
-				lua_getglobal(luaState, objectNames[i].c_str());
-			}
-			else
-			{
-				lua_getfield(luaState, -1, objectNames[i].c_str());
-			}
-
-			tableCount++;
-			if (lua_isnil(luaState, -1))
-			{
-				lua_pop(luaState, tableCount);
-				return 0;
-			}
-		}
-
-		return tableCount;
-	}
-
-	// get upper layer table
-	int LuaBinder::getUpperTables(const String& objectName, String& currentLayerName)
-	{
-		StringArray names = StringUtil::Split(objectName, ".");
-		if (names.size() > 1)
-		{
-			currentLayerName = names.back();
-			return getTables(m_luaState, names, names.size() - 1);
-		}
-		else
-		{
-			return 0;
-		}
 	}
 
 	void LuaBinder::outputError(int pop)

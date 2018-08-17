@@ -1,13 +1,6 @@
 #pragma once
 
-#include "engine/core/util/StringUtil.h"
-
-extern "C"
-{
-#include <thirdparty/lua/lua.h>
-#include <thirdparty/lua/lualib.h>
-#include <thirdparty/lua/lauxlib.h>
-}
+#include "LuaBase.h"
 
 namespace Echo
 {
@@ -52,11 +45,6 @@ namespace Echo
 		// set global value
 		void setGlobalVariableStr(const String& varName, const String& value);
 		void setTableKeyValue(const String& tableName, int key, lua_CFunction value);
-
-	public:
-		// get upper layer table
-		int getUpperTables(const String& objectName, String& currentLayerName);
-		int getTables(lua_State* luaState, const StringArray& objectNames, const int count);
 
 	private:
 		// output error and pop stack
