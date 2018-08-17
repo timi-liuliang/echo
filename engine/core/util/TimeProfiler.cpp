@@ -2,7 +2,7 @@
 #include "AssertX.h"
 #include "Timer.h"
 #include "TimeProfiler.h"
-#include "engine/core/log/LogManager.h"
+#include "engine/core/log/Log.h"
 
 #ifdef ECHO_PLATFORM_ANDROID
 #include <android/log.h>

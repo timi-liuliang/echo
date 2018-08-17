@@ -1,5 +1,5 @@
 #include "FSAudioBase.h"
-#include "engine/core/log/LogManager.h"
+#include "engine/core/log/Log.h"
 #include <stdarg.h>
 
 namespace Echo

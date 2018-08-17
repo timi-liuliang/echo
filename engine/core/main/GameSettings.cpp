@@ -1,5 +1,5 @@
 #include "GameSettings.h"
-#include "engine/core/log/LogManager.h"
+#include "engine/core/log/Log.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/io/IO.h"
 #include "engine/core/render/render/Renderer.h"

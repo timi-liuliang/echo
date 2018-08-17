@@ -1,7 +1,6 @@
 #pragma once
 
 #include "variant.h"
-#include "MethodBind.h"
 
 namespace Echo
 {
@@ -37,6 +36,7 @@ namespace Echo
 	};
 	typedef vector<PropertyInfo*>::type PropertyInfos;
 
+	class MethodBind;
 	struct PropertyInfoStatic : public PropertyInfo
 	{
 		String			m_getter;

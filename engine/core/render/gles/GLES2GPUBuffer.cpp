@@ -3,7 +3,7 @@
 #include "GLES2Mapping.h"
 #include "GLES2Renderer.h"
 #include <engine/core/Util/Exception.h>
-#include <engine/core/log/LogManager.h>
+#include <engine/core/log/Log.h>
 
 namespace Echo
 {

@@ -68,20 +68,6 @@ namespace Echo
 		bool							m_isLoaded;
 	};
 	typedef ResRef<Res> ResPtr;
-
-	INLINE Res* Res::createByClassName(const String& className)
-	{
-		const ResFun* resFun = getResFunByClassName(className);
-		if (resFun)
-		{
-			Res* res = resFun->m_cfun();
-			if (res)
-				return res;
-		}
-
-		EchoLogError("Res::create failed. Unknown class [%s]", className.c_str());
-		return nullptr;
-	}
 }
 
 #define  ECHO_CREATE_RES(T) (T*)Echo::Res::createByClassName(#T);

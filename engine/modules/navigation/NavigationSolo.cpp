@@ -4,7 +4,7 @@
 #include "DetourNavMeshBuilder.h"
 #include "DetourCommon.h"
 #include "InputGeometryData.h"
-#include "engine/core/log/LogManager.h"
+#include "engine/core/log/Log.h"
 #include "engine/core/io/IO.h"
 #include "DetourCrowd.h"
 #include "DetourNavMesh.h"

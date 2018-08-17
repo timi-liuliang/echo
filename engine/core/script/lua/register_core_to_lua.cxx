@@ -1,5 +1,5 @@
 #include "LuaBinder.h"
-#include "engine/core/log/LogManager.h"
+#include "engine/core/log/Log.h"
 
 namespace Echo
 {
@@ -26,16 +26,6 @@ namespace Echo
 			"\n"\
 			"";
 			LuaBinder::instance()->execString(utils.c_str(), true);
-		}
-
-		// log
-		{
-			LuaBinder::instance()->registerClass("LogManager", nullptr);
-			//luaEx->register_function<LogManager, const char*>("LogManager", "error", &LogManager::error);
-			//luaEx->register_function<LogManager, const char*>("LogManager", "warning", &LogManager::warning);
-			//luaEx->register_function<LogManager, const char*>("LogManager", "info", &LogManager::info);
-
-			LuaBinder::instance()->registerObject("LogManager", "Log", LogManager::instance());
 		}
 	}
 }

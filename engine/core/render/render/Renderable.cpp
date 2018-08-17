@@ -1,3 +1,4 @@
+#include "engine/core/log/Log.h"
 #include "Render/Renderable.h"
 #include "Render/ShaderProgram.h"
 #include "Render/Renderer.h"

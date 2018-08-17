@@ -1,6 +1,6 @@
 #include "render/Texture.h"
 #include "render/Renderer.h"
-#include "engine/core/log/LogManager.h"
+#include "engine/core/log/Log.h"
 #include "engine/core/util/Exception.h"
 #include "render/PixelFormat.h"
 #include "engine/core/math/EchoMathFunction.h"

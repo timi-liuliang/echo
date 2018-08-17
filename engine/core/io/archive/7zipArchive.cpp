@@ -1,5 +1,5 @@
 #include "7zipArchive.h"
-#include <engine/core/log/LogManager.h>
+#include <engine/core/log/Log.h>
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/main/Engine.h>
 #include <thirdparty/7zip/7z.h>

@@ -2,7 +2,6 @@
 
 #include <algorithm>
 #include <typeinfo>
-#include "engine/core/log/LogManager.h"
 #include "engine/core/memory/MemAllocDef.h"
 
 namespace Echo
@@ -20,6 +19,9 @@ namespace Echo
         template<typename ValueType> any(const ValueType & value) : content(new holder<ValueType>(value)){}
         any(const any & other) : content(other.content ? other.content->clone() : 0){}
         ~any(){ EchoSafeDelete(content, placeholder);}
+
+		// error
+		static void error(const char* msg);
 
     public:
 		// swap
@@ -126,7 +128,7 @@ namespace Echo
     {
         ValueType* result = any_cast<ValueType>(&operand);
         if(!result)
-			EchoLogError( "any_cast failed,so terrible!");
+			any::error( "any_cast failed,so terrible!");
 
         return *result;
     }
@@ -136,7 +138,7 @@ namespace Echo
 	{
 		const ValueType* result = any_cast<ValueType>(&operand);
 		if (!result)
-			EchoLogError("any_cast failed,so terrible!");
+			any::error("any_cast failed,so terrible!");
 
 		return *result;
 	}

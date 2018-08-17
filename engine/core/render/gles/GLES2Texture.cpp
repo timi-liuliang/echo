@@ -1,5 +1,5 @@
 #include "engine/core/math/Rect.h"
-#include "engine/core/log/LogManager.h"
+#include "engine/core/log/Log.h"
 #include "render/PixelFormat.h"
 #include "render/Image.h"
 #include "render/TextureLoader.h"

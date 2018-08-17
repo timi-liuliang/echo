@@ -1,6 +1,6 @@
 #include "gltf_mesh.h"
 #include "gltf_ibl.h"
-#include "engine/core/log/LogManager.h"
+#include "engine/core/log/Log.h"
 #include "engine/core/scene/NodeTree.h"
 #include "render/renderer.h"
 #include "render/ShaderProgramRes.h"

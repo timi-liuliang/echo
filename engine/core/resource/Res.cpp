@@ -1,5 +1,5 @@
 #include "Res.h"
-#include "engine/core/log/LogManager.h"
+#include "engine/core/log/Log.h"
 #include "engine/core/io/IO.h"
 #include "engine/core/util/PathUtil.h"
 #include <thirdparty/pugixml/pugixml.hpp>
@@ -32,6 +32,20 @@ namespace Echo
 		{
 			EchoLogError("create resource multi times");
 		}
+	}
+
+	Res* Res::createByClassName(const String& className)
+	{
+		const ResFun* resFun = getResFunByClassName(className);
+		if (resFun)
+		{
+			Res* res = resFun->m_cfun();
+			if (res)
+				return res;
+		}
+
+		EchoLogError("Res::create failed. Unknown class [%s]", className.c_str());
+		return nullptr;
 	}
 
 	Res::~Res()

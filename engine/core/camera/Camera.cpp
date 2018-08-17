@@ -1,4 +1,4 @@
-#include "engine/core/log/LogManager.h"
+#include "engine/core/log/Log.h"
 #include "engine/core/camera/Camera.h"
 #include "engine/core/render/render/Renderer.h"
 #include "engine/core/render/render/Viewport.h"

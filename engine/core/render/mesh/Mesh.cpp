@@ -1,3 +1,4 @@
+#include "engine/core/log/Log.h"
 #include "Mesh.h"
 #include "Render/Renderer.h"
 #include <algorithm>

@@ -1,5 +1,5 @@
 #include "engine/core/Util/AssertX.h"
-#include "engine/core/log/LogManager.h"
+#include "engine/core/log/Log.h"
 #include "CpuThreadPool.h"
 #include "engine/core/Thread/Threading.h"
 

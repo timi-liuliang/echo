@@ -1,13 +1,13 @@
 #pragma once
 
-//#include "engine/core/base/object.h"
+#include "engine/core/base/object.h"
 #include "LogOutput.h"
 
 namespace Echo
 {
-	class LogManager //: public Object
+	class LogManager : public Object
 	{
-		//ECHO_SINGLETON_CLASS(LogManager, Object);
+		ECHO_SINGLETON_CLASS(LogManager, Object);
 
 		typedef vector<LogOutput*>::type	OutputArray;
 

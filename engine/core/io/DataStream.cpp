@@ -2,7 +2,7 @@
 #include "engine/core/base/EchoDef.h"
 #include "engine/core/util/StringUtil.h"
 #include "engine/core/util/AssertX.h"
-#include <engine/core/log/LogManager.h>
+#include <engine/core/log/Log.h>
 #include "IO.h"
 #include <algorithm>
 #include <sstream>

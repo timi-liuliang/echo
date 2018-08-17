@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <engine/core/log/LogOutput.h>
 #include "ProjectMgr.h"
 #include "ConfigMgr.h"
 #include "IInputController.h"

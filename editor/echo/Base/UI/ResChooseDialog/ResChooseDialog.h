@@ -1,7 +1,6 @@
 #pragma once
 
 #include <QDialog>
-#include <engine/core/log/LogManager.h>
 #include "ui_ResChooseDialog.h"
 #include <QDirectoryModel.h>
 #include "QPreviewHelper.h"

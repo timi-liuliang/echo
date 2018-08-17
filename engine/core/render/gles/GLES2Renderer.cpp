@@ -6,7 +6,7 @@
 #include "GLES2Texture.h"
 #include "GLES2ShaderProgram.h"
 #include "GLES2RenderInput.h"
-#include <engine/core/log/LogManager.h>
+#include <engine/core/log/Log.h>
 #include <engine/core/util/Exception.h>
 #include "GLES2GPUBuffer.h"
 #include "render/Viewport.h"

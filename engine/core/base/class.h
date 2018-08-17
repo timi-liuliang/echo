@@ -26,18 +26,7 @@ namespace Echo
 		virtual Object* create() = 0;
 
 		// register property
-		void registerProperty(PropertyInfo* property)
-		{
-			PropertyInfo* pi = getProperty(property->m_name);
-			if (!pi)
-			{
-				m_classInfo.m_propertyInfos.push_back(property);
-			}
-			else
-			{
-				EchoLogError("property [%s] already exist", property->m_name.c_str());
-			}
-		}
+		void registerProperty(PropertyInfo* property);
 
 		// register method
 		void registerMethod(const String& methodName, MethodBind* method)

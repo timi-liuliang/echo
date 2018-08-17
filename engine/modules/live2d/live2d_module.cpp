@@ -1,3 +1,4 @@
+#include "engine/core/log/Log.h"
 #include "live2d_module.h"
 #include "live2d_cubism.h"
 #include "live2d_cubism_motion_res.h"

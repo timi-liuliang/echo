@@ -1,6 +1,6 @@
 #include "Render/Renderer.h"
 #include "Render/RenderTarget.h"
-#include "engine/core/log/LogManager.h"
+#include "engine/core/log/Log.h"
 #include "Render/Viewport.h"
 #include "PixelFormat.h"
 #include "Render/Renderable.h"

@@ -1,6 +1,6 @@
 #include "ResourcePath.h"
 #include "engine/core/util/PathUtil.h"
-#include "engine/core/log/LogManager.h"
+#include "engine/core/log/Log.h"
 #include "Res.h"
 
 namespace Echo

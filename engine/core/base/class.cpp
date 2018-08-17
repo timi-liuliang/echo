@@ -1,9 +1,23 @@
 #include "class.h"
 #include <map>
+#include "engine/core/log/Log.h"
 
 namespace Echo
 {
 	static std::map<String, ObjectFactory*>*	g_classInfos = nullptr;
+
+	void ObjectFactory::registerProperty(PropertyInfo* property)
+	{
+		PropertyInfo* pi = getProperty(property->m_name);
+		if (!pi)
+		{
+			m_classInfo.m_propertyInfos.push_back(property);
+		}
+		else
+		{
+			EchoLogError("property [%s] already exist", property->m_name.c_str());
+		}
+	}
 
 	// add class
 	void Class::addClass(const String& className, ObjectFactory* objFactory)

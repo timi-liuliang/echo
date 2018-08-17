@@ -1,7 +1,6 @@
 #pragma once
 
 #include <engine/core/math/Math.h>
-#include "engine/core/util/PtrMonitor.h"
 #include "engine/core/geom/AABB.h"
 #include "engine/core/base/object.h"
 

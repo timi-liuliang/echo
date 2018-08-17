@@ -1,3 +1,4 @@
+#include "engine/core/log/Log.h"
 #include "Material.h"
 #include "engine/modules/light/Light.h"
 #include "engine/core/scene/NodeTree.h"

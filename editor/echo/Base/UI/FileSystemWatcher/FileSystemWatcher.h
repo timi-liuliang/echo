@@ -2,7 +2,7 @@
 
 #include <QObject>
 #include <QFileSystemWatcher>
-#include <engine/core/Memory/MemManager.h>
+#include <engine/core/memory/MemAllocDef.h>
 
 namespace Studio
 {

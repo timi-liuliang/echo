@@ -1,7 +1,7 @@
 #include "PixelFormat.h"
 #include "PixelConversions.h"
 #include "engine/core/util/AssertX.h"
-#include "engine/core/log/LogManager.h"
+#include "engine/core/log/Log.h"
 #include "Color.h"
 
 namespace Echo

@@ -2,7 +2,7 @@
 #include "GLES2Renderer.h"
 #include "GLES2FrameBuffer.h"
 #include "GLES2RenderState.h"
-#include <engine/core/log/LogManager.h>
+#include <engine/core/log/Log.h>
 
 namespace Echo
 {

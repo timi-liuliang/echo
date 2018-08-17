@@ -1,5 +1,5 @@
 #include "LuaBinder.h"
-#include "engine/core/log/LogManager.h"
+#include "engine/core/log/Log.h"
 #include "engine/core/base/MethodBind.h"
 #include "engine/core/memory/MemAllocDef.h"
 #include "engine/core/util/PathUtil.h"

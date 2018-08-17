@@ -1,6 +1,6 @@
 #include <math.h>
 #include "engine/core/util/PathUtil.h"
-#include "engine/core/log/LogManager.h"
+#include "engine/core/log/Log.h"
 #include "engine/core/io/IO.h"
 #include <engine/core/memory/MemAllocDef.h>
 #include <engine/core/base/EchoDef.h>

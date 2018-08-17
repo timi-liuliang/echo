@@ -1,3 +1,4 @@
+#include "engine/core/log/Log.h"
 #include "RenderTargetManager.h"
 #include "Material.h"
 #include "engine/core/main/Engine.h"

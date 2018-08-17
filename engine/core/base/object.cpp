@@ -1,5 +1,6 @@
 #include "object.h"
 #include "engine/core/resource/Res.h"
+#include "engine/core/log/Log.h"
 #include <thirdparty/pugixml/pugixml.hpp>
 #include <thirdparty/pugixml/pugiconfig.hpp>
 

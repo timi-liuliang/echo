@@ -1,4 +1,4 @@
-#include "engine/core/log/LogManager.h"
+#include "engine/core/log/Log.h"
 #include <float.h>
 #include "Navigation.h"
 #include "BuildContext.h"

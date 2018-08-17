@@ -1,6 +1,6 @@
 #include "box2d_debug_draw.h"
 #include "engine/core/util/AssertX.h"
-#include "engine/core/log/LogManager.h"
+#include "engine/core/log/Log.h"
 #include "engine/core/gizmos/Gizmos.h"
 #include "engine/core/math/Math.h"
 #include "box2d_world.h"

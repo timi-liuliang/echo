@@ -1,4 +1,5 @@
 #include "OpenMPTaskMgr.h"
+#include "engine/core/log/Log.h"
 
 namespace Echo
 {

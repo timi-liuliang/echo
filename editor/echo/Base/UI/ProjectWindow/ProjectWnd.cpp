@@ -4,6 +4,7 @@
 #include <qfiledialog.h>
 #include "Studio.h"
 #include "Update.h"
+#include <engine/core/log/Log.h>
 #include <engine/core/io/archive/7zipArchive.h>
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/main/GameSettings.h>

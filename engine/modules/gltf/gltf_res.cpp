@@ -2,7 +2,7 @@
 #include "gltf_mesh.h"
 #include "gltf_material.h"
 #include "engine/core/io/DataStream.h"
-#include "engine/core/log/LogManager.h"
+#include "engine/core/log/Log.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/util/base64.h"
 

@@ -1,7 +1,7 @@
 #include "QPropertyModel.h"
 #include <vector>
 #include "engine/core/Util/AssertX.h"
-#include <engine/core/log/LogManager.h>
+#include <engine/core/log/Log.h>
 
 namespace QT_UI
 {

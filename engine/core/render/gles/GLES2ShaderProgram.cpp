@@ -3,7 +3,7 @@
 #include "GLES2ShaderProgram.h"
 #include "GLES2Mapping.h"
 #include <engine/core/Util/Exception.h>
-#include <engine/core/log/LogManager.h>
+#include <engine/core/log/Log.h>
 #include "engine/core/memory/MemAllocDef.h"
 #include "render/ShaderProgramRes.h"
 

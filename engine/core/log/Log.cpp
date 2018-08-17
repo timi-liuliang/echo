@@ -1,5 +1,5 @@
 #include "engine/core/util/StringUtil.h"
-#include "LogManager.h"
+#include "Log.h"
 #include "engine/core/util/AssertX.h"
 #include <stdarg.h>
 
@@ -21,12 +21,12 @@ namespace Echo
 	{
 	}
 
-	//void LogManager::bindMethods()
-	//{
-	//	CLASS_BIND_METHOD(LogManager, error, "error");
-	//	CLASS_BIND_METHOD(LogManager, warning, "warning");
-	//	CLASS_BIND_METHOD(LogManager, info, "info");
-	//}
+	void LogManager::bindMethods()
+	{
+		//CLASS_BIND_METHOD(LogManager, error, "error");
+		//CLASS_BIND_METHOD(LogManager, warning, "warning");
+		//CLASS_BIND_METHOD(LogManager, info, "info");
+	}
 
 	bool LogManager::addLog( LogOutput* pLog)
 	{

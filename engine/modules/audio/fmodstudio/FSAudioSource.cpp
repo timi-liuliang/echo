@@ -1,6 +1,6 @@
 #include "FSAudioSource.h"
 #include "FSAudioManager.h"
-#include "engine/core/log/LogManager.h"
+#include "engine/core/log/Log.h"
 
 namespace Echo
 {

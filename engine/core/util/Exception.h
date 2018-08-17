@@ -1,7 +1,6 @@
 #pragma once
 
 #include "engine/core/util/StringUtil.h"
-#include "engine/core/log/LogManager.h"
 
 namespace Echo
 {
@@ -26,9 +25,5 @@ namespace Echo
 		int			m_lineNum;
 	};
 
-	INLINE void __EchoThrowException(const String& msg, const char* filename, ui32 lineNum)
-	{
-		EchoLogError( "EchoThrowException[%s] file[%s] line[%d]", msg.c_str(), filename, lineNum);
-		throw Exception(msg, filename, lineNum);
-	};
+	void __EchoThrowException(const String& msg, const char* filename, ui32 lineNum);
 }

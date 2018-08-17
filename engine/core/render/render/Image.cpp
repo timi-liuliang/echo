@@ -1,4 +1,4 @@
-#include <engine/core/log/LogManager.h>
+#include <engine/core/log/Log.h>
 #include <engine/core/util/Exception.h>
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/io/DataStream.h>

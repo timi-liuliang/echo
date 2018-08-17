@@ -1,5 +1,5 @@
 #include "ResourcePack.h"
-#include "engine/core/log/LogManager.h"
+#include "engine/core/log/Log.h"
 #include "engine/core/util/Exception.h"
 #include "ZipArchive.h"
 #include "engine/core/main/Engine.h"

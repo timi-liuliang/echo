@@ -1,5 +1,5 @@
 #include "FileSystem.h"
-#include "engine/core/log/LogManager.h"
+#include "engine/core/log/Log.h"
 #include "engine/core/util/Exception.h"
 #include "engine/core/main/Engine.h"
 #include "engine/core/util/PathUtil.h"

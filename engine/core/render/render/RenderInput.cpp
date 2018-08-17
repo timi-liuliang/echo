@@ -1,3 +1,4 @@
+#include "engine/core/log/Log.h"
 #include "render/RenderInput.h"
 #include "engine/core/util/Exception.h"
 #include "render/Renderer.h"
