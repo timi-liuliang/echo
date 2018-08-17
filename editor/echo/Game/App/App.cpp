@@ -22,7 +22,7 @@ namespace Game
 		m_root = Echo::Engine::instance();
 
 		m_log = EchoNew(GameLog("Game"));
-		Echo::LogManager::instance()->addLog(m_log);
+		Echo::Log::instance()->addOutput(m_log);
 
 		Echo::Engine::Config rootcfg;
 		rootcfg.m_projectFile = echoProject;

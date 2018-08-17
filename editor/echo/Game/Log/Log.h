@@ -10,6 +10,6 @@ namespace Game
 		GameLog(const Echo::String& name);
 
 		/** »’÷æ ‰≥ˆ */
-		virtual void logMessage(LogLevel level, const Echo::String &msg);
+		virtual void logMessage(Level level, const Echo::String &msg);
 	};
 }

@@ -11,7 +11,7 @@ namespace Echo
 	class LogOutput
 	{
 	public:
-		enum LogLevel
+		enum Level
 		{
             LL_INVALID = -1,
 			LL_DEBUG, 
@@ -22,7 +22,7 @@ namespace Echo
 		};
 
 		/** »’÷æ ‰≥ˆ */
-		virtual void logMessage(LogLevel level, const String &msg) = 0;
+		virtual void logMessage(Level level, const String &msg) = 0;
 
 	public:
 		LogOutput(const String& name) : m_name(name) {}
@@ -47,7 +47,7 @@ namespace Echo
 			bool			bConsoleOutput;
 			bool			bVSOutput;
 			bool			bFileOutput;
-			LogLevel		logLevel;
+			Level			logLevel;
 			bool			bTimeStamp;
 			bool			bLogAppend;
 			String			path;
@@ -73,11 +73,11 @@ namespace Echo
 		void				enableConsoleOutput(bool bEnable);
 		void				enableVSConsoleOutput(bool bEnable);
 		void				enableTimeStamp(bool bEnable);
-		String				getLogLevelDesc(LogLevel level) const;
-		bool				isIgnore(LogLevel level) const;
+		String				getLogLevelDesc(Level level) const;
+		bool				isIgnore(Level level) const;
 
-		void				logMessage(LogLevel level, const String &msg);
-		void				forceLogMessage(LogLevel level, const String &msg);
+		void				logMessage(Level level, const String &msg);
+		void				forceLogMessage(Level level, const String &msg);
 		bool 				writelogtosdcard(const char* formats);
         
 	protected:

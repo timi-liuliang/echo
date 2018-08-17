@@ -26,10 +26,10 @@ namespace Studio
 
 	public:
 		// »’÷æ ‰≥ˆ
-		virtual void logMessage(LogLevel level, const Echo::String &msg);
+		virtual void logMessage(Level level, const Echo::String &msg) override;
 		 
 
-		virtual void setPath(const Echo::String&) {}
+		virtual void setPath(const Echo::String&){}
 
 	signals:
 		void postMessage(int level, QString);

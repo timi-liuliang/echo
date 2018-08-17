@@ -5,30 +5,30 @@
 
 namespace Echo
 {
-	LogManager* LogManager::instance()
+	Log* Log::instance()
 	{
-		static LogManager* inst = EchoNew(LogManager);
+		static Log* inst = EchoNew(Log);
 		return inst;
 	}
 
-	LogManager::LogManager()
+	Log::Log()
 		: m_logLevel( LogOutput::LL_INVALID)
 	{
 
 	}
 
-	LogManager::~LogManager()
+	Log::~Log()
 	{
 	}
 
-	void LogManager::bindMethods()
+	void Log::bindMethods()
 	{
 		//CLASS_BIND_METHOD(LogManager, error, "error");
 		//CLASS_BIND_METHOD(LogManager, warning, "warning");
 		//CLASS_BIND_METHOD(LogManager, info, "info");
 	}
 
-	bool LogManager::addLog( LogOutput* pLog)
+	bool Log::addOutput( LogOutput* pLog)
 	{
 		for ( size_t i = 0; i < m_logArray.size(); i++ )
 		{
@@ -41,7 +41,7 @@ namespace Echo
 		return true;
 	}
 
-	LogOutput* LogManager::getLog(const String& name) const
+	LogOutput* Log::getOutput(const String& name) const
 							{
 		for( size_t i=0; i<m_logArray.size(); i++)
 				{
@@ -52,7 +52,7 @@ namespace Echo
 			return NULL;
 	}
 
-	void LogManager::removeLog( const String &name)
+	void Log::removeOutput( const String &name)
 	{
 		for(OutputArray::iterator it=m_logArray.begin(); it!=m_logArray.end(); it++)
 	{
@@ -64,7 +64,7 @@ namespace Echo
 	}
 	}
 
-	void LogManager::removeLog( LogOutput* pLog)
+	void Log::removeOutput( LogOutput* pLog)
 	{
 		for(OutputArray::iterator it=m_logArray.begin(); it!=m_logArray.end(); it++)
 		{
@@ -76,7 +76,7 @@ namespace Echo
 		}
 	}
 
-	void LogManager::logMessage(LogOutput::LogLevel level, const char* formats, ...)
+	void Log::logMessage(LogOutput::Level level, const char* formats, ...)
 	{
         if ( LogOutput::LL_INVALID != m_logLevel )
 		{
@@ -102,22 +102,22 @@ namespace Echo
 		}
 	}
 
-	void LogManager::logMessage(LogOutput::LogLevel level, const std::wstring& message)
+	void Log::logMessage(LogOutput::Level level, const std::wstring& message)
 	{
 		logMessage(level, "%s", StringUtil::WCS2MBS(message).c_str());
 	}
 
-	void LogManager::error(const char* msg)
+	void Log::error(const char* msg)
 	{
 		logMessage(LogOutput::LL_ERROR, msg);
 	}
 
-	void LogManager::warning(const char* msg)
+	void Log::warning(const char* msg)
 	{
 		logMessage(LogOutput::LL_WARNING, msg);
 	}
 
-	void LogManager::info(const char* msg)
+	void Log::info(const char* msg)
 	{
 		logMessage(LogOutput::LL_INFO, msg);
 	}

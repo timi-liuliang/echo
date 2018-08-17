@@ -156,7 +156,7 @@ namespace Echo
 		m_bTimeStamp = bEnable;
 	}
 
-	String LogDefault::getLogLevelDesc(LogLevel level) const
+	String LogDefault::getLogLevelDesc(Level level) const
 	{
 		switch(level)
 		{
@@ -169,12 +169,12 @@ namespace Echo
 		}
 	}
 
-	bool LogDefault::isIgnore(LogLevel level) const
+	bool LogDefault::isIgnore(Level level) const
 	{
 		return false;
 	}
 
-	void LogDefault::logMessage(LogLevel level, const String& msg)
+	void LogDefault::logMessage(Level level, const String& msg)
 	{
 		if(isIgnore(level))
 			return ;
@@ -225,7 +225,7 @@ namespace Echo
 		return true;
 	}
     
-	void LogDefault::forceLogMessage(LogLevel level, const String& msg)
+	void LogDefault::forceLogMessage(Level level, const String& msg)
 	{
 		String msgStr;
 		// Write log level

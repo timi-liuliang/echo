@@ -5,36 +5,36 @@
 
 namespace Echo
 {
-	class LogManager : public Object
+	class Log : public Object
 	{
-		ECHO_SINGLETON_CLASS(LogManager, Object);
+		ECHO_SINGLETON_CLASS(Log, Object);
 
 		typedef vector<LogOutput*>::type	OutputArray;
 
 	public:
-		~LogManager();
+		~Log();
 
 		// instance
-		static LogManager* instance();
+		static Log* instance();
 
 		// add log
-		bool addLog(LogOutput* pLog);
+		bool addOutput(LogOutput* pLog);
 
 		// get log by name
-		LogOutput* getLog(const String& name) const;
+		LogOutput* getOutput(const String& name) const;
 
 		// remove log
-		void removeLog( const String& name);
-		void removeLog(LogOutput* pLog);
-		void removeAllLog() { m_logArray.clear(); }
+		void removeOutput( const String& name);
+		void removeOutput(LogOutput* pLog);
+		void removeAllOutput() { m_logArray.clear(); }
 
 		// log level
-		void setLogLeve(LogOutput::LogLevel level) { m_logLevel = level; }
-		LogOutput::LogLevel getLogLevel() { return m_logLevel; }
+		void setOutputLeve(LogOutput::Level level) { m_logLevel = level; }
+		LogOutput::Level getOutputLevel() { return m_logLevel; }
 
 		// output message
-		void logMessage(LogOutput::LogLevel level, const char* formats, ...);
-		void logMessage(LogOutput::LogLevel level, const std::wstring& message);
+		void logMessage(LogOutput::Level level, const char* formats, ...);
+		void logMessage(LogOutput::Level level, const std::wstring& message);
 
 	public:
 		// lua
@@ -43,16 +43,16 @@ namespace Echo
 		void info(const char* msg);
 
 	private:
-		LogManager();
+		Log();
 
 	protected:
-		LogOutput::LogLevel	m_logLevel;		// 日志级别
+		LogOutput::Level	m_logLevel;		// 日志级别
 		OutputArray			m_logArray;		// A list of all the logs the manager can access
 	};
 }
 
-#define EchoLogDebug(formats, ...)		Echo::LogManager::instance()->logMessage(Echo::LogOutput::LL_DEBUG, formats, ##__VA_ARGS__);
-#define EchoLogInfo(formats, ...)		Echo::LogManager::instance()->logMessage(Echo::LogOutput::LL_INFO, formats, ##__VA_ARGS__);
-#define EchoLogWarning(formats, ...)	Echo::LogManager::instance()->logMessage(Echo::LogOutput::LL_WARNING, formats, ##__VA_ARGS__);
-#define EchoLogError(formats, ...)		Echo::LogManager::instance()->logMessage(Echo::LogOutput::LL_ERROR, formats, ##__VA_ARGS__);
-#define EchoLogFatal(formats, ...)		Echo::LogManager::instance()->logMessage(Echo::LogOutput::LL_FATAL, formats, ##__VA_ARGS__);
+#define EchoLogDebug(formats, ...)		Echo::Log::instance()->logMessage(Echo::LogOutput::LL_DEBUG, formats, ##__VA_ARGS__);
+#define EchoLogInfo(formats, ...)		Echo::Log::instance()->logMessage(Echo::LogOutput::LL_INFO, formats, ##__VA_ARGS__);
+#define EchoLogWarning(formats, ...)	Echo::Log::instance()->logMessage(Echo::LogOutput::LL_WARNING, formats, ##__VA_ARGS__);
+#define EchoLogError(formats, ...)		Echo::Log::instance()->logMessage(Echo::LogOutput::LL_ERROR, formats, ##__VA_ARGS__);
+#define EchoLogFatal(formats, ...)		Echo::Log::instance()->logMessage(Echo::LogOutput::LL_FATAL, formats, ##__VA_ARGS__);

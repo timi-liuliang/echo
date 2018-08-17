@@ -30,7 +30,7 @@ namespace Echo
 		, m_currentTime(0)
 	{
 		Time::instance();
-		LogManager::instance();
+		Log::instance();
 	}
 
 	Engine::~Engine()
@@ -273,7 +273,7 @@ namespace Echo
 		Renderer::instance()->destroy();
 		EchoSafeDeleteInstance(Renderer);
 		EchoLogInfo("Echo Renderer has been shutdown.");
-		EchoSafeDeleteInstance(LogManager);
+		EchoSafeDeleteInstance(Log);
 		LuaBinder::destroy();
 	}
 

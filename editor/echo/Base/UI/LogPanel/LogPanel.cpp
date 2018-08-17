@@ -30,7 +30,7 @@ namespace Studio
 	}
 
 	// »’÷æ ‰≥ˆ
-	void LogPanel::logMessage(LogLevel level, const Echo::String &msg)
+	void LogPanel::logMessage(Level level, const Echo::String &msg)
 	{
 		emit postMessage(level, QString::fromStdString(msg));
 	}

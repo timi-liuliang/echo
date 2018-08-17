@@ -280,7 +280,7 @@ namespace Echo
 	void LuaBinder::outputError(int pop)
 	{
 		//´òÓ¡´íÎó½á¹û 
-		LogManager::instance()->error(lua_tostring(m_luaState, -1));
+		Log::instance()->error(lua_tostring(m_luaState, -1));
 		lua_pop(m_luaState, 1);
 
 		if (pop > 0)

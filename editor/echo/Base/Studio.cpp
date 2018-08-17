@@ -73,11 +73,11 @@ namespace Studio
 		logConfig.logFilename = "echo.log";
 		logConfig.bFileOutput = true;
 
-		Echo::LogManager::instance()->setLogLeve(logConfig.logLevel);
+		Echo::Log::instance()->setOutputLeve(logConfig.logLevel);
 
 		m_log = EchoNew(Echo::LogDefault(logConfig));
 		if ( m_log )
-			Echo::LogManager::instance()->addLog(m_log);
+			Echo::Log::instance()->addOutput(m_log);
 
 		return true;
 	}
@@ -96,7 +96,7 @@ namespace Studio
 
 		// 启动日志面板
 		m_logPanel = EchoNew(LogPanel( m_mainWindow));
-		Echo::LogManager::instance()->addLog(m_logPanel);
+		Echo::Log::instance()->addOutput(m_logPanel);
 	}
 
 	// 关闭
