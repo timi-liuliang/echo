@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/core/memory/MemManager.h"
+#include "engine/core/memory/MemAllocDef.h"
 #include "Color.h"
 #include "RenderTargetView.h"
 #include "DepthStencilView.h"

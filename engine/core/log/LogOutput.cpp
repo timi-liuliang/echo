@@ -1,5 +1,5 @@
 #include "engine/core/util/StringUtil.h"
-#include "Log.h"
+#include "LogOutput.h"
 #include <time.h>
 
 #ifdef ECHO_PLATFORM_WINDOWS
@@ -16,7 +16,7 @@
 namespace Echo
 {
 	LogDefault::LogDefault(const String& name)
-		: Log(name)
+		: LogOutput(name)
 		, m_bConsoleOutput(true)
 		, m_bVSOutput(true)
 		, m_bFileOutput(false)
@@ -54,7 +54,7 @@ namespace Echo
 	}
 
 	LogDefault::LogDefault(const LogConfig& config)
-		: Log(config.logName)
+		: LogOutput(config.logName)
 		, m_logFilename(config.logFilename)
 		, m_bConsoleOutput(config.bConsoleOutput)
 		, m_bVSOutput(config.bVSOutput)

@@ -5,7 +5,7 @@
 namespace Game
 {
 	GameLog::GameLog(const Echo::String& name)
-		: Log(name)
+		: LogOutput(name)
 	{
 
 	}

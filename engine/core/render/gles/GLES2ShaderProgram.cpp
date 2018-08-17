@@ -4,7 +4,7 @@
 #include "GLES2Mapping.h"
 #include <engine/core/Util/Exception.h>
 #include <engine/core/log/LogManager.h>
-#include "engine/core/memory/MemManager.h"
+#include "engine/core/memory/MemAllocDef.h"
 #include "render/ShaderProgramRes.h"
 
 #define UNIFORM_OPTIMIZE

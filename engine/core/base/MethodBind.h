@@ -14,15 +14,6 @@ namespace Echo
 		}
 	};
 
-	//template<class T>
-	//struct VariantCaster
-	//{
-	//	static T cast(Object* obj)
-	//	{
-	//		return (T)obj;
-	//	}
-	//};
-
 #ifdef DEBUG_METHODS_ENABLED
 	struct MethodDefinition
 	{

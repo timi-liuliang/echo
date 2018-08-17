@@ -427,7 +427,7 @@ namespace Studio
 					int    logLevel     = Echo::StringUtil::ParseInt(msgArray[i++]);
 					Echo::String logMsg = msgArray[i++];
 
-					Echo::LogManager::instance()->logMessage(Echo::Log::LogLevel(logLevel), logMsg.c_str());
+					Echo::LogManager::instance()->logMessage(Echo::LogOutput::LogLevel(logLevel), logMsg.c_str());
 				}
 			}
 		}

@@ -51,9 +51,6 @@ namespace Studio
 		EchoSafeDelete(m_renderWindow, RenderWindow);
 		EchoSafeDelete(m_projectCfg, ConfigMgr);
 		EchoSafeDelete(m_mainWindow, MainWindow);
-
-		// 打印内存泄漏日志
-		Echo::MemoryManager::outputMemLeakInfo();
 	}
 
 	// instance
@@ -71,7 +68,7 @@ namespace Studio
 		// 添加默认日志处理
 		Echo::LogDefault::LogConfig logConfig;
 		logConfig.logName = "echo.log";
-		logConfig.logLevel = Echo::Log::LL_INVALID;
+		logConfig.logLevel = Echo::LogOutput::LL_INVALID;
 		logConfig.path = "./cache/";
 		logConfig.logFilename = "echo.log";
 		logConfig.bFileOutput = true;

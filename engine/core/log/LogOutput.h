@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/core/memory/MemManager.h"
+#include "engine/core/memory/MemAllocDef.h"
 #include <fstream>
 
 namespace Echo
@@ -8,7 +8,7 @@ namespace Echo
 	/**
 	 * Log 2014-6-13
 	 */
-	class Log
+	class LogOutput
 	{
 	public:
 		enum LogLevel
@@ -25,7 +25,7 @@ namespace Echo
 		virtual void logMessage(LogLevel level, const String &msg) = 0;
 
 	public:
-		Log(const String& name) : m_name(name) {}
+		LogOutput(const String& name) : m_name(name) {}
 
 		/** 获取目标名称 */
 		virtual const String& getName() const { return m_name; }
@@ -37,7 +37,7 @@ namespace Echo
 	/**
 	 * default log implementation
 	 */
-	class LogDefault : public Log
+	class LogDefault : public LogOutput
 	{
 	public:
 		struct LogConfig

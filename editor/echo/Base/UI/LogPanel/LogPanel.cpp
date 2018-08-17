@@ -10,7 +10,7 @@ namespace Studio
 	// ¹¹Ôìº¯Êý
 	LogPanel::LogPanel(QWidget* parent/* = 0*/)
 		: QWidget( parent)
-		, Log("LogPanel")
+		, LogOutput("LogPanel")
 		, m_sameMessageNum(0)
 		, m_lastLevel(LL_INVALID)
 		, m_menu(nullptr)

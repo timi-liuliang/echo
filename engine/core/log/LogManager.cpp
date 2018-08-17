@@ -5,27 +5,30 @@
 
 namespace Echo
 {
-	// 获取单一实例
 	LogManager* LogManager::instance()
 	{
 		static LogManager* inst = EchoNew(LogManager);
 		return inst;
 	}
 
-	// 构造函数
 	LogManager::LogManager()
-		: m_logLevel( Log::LL_INVALID)
+		: m_logLevel( LogOutput::LL_INVALID)
 	{
 
 	}
 
-	// 析构函数
 	LogManager::~LogManager()
 	{
 	}
 
-	// 添加日志
-	bool LogManager::addLog( Log* pLog)
+	//void LogManager::bindMethods()
+	//{
+	//	CLASS_BIND_METHOD(LogManager, error, "error");
+	//	CLASS_BIND_METHOD(LogManager, warning, "warning");
+	//	CLASS_BIND_METHOD(LogManager, info, "info");
+	//}
+
+	bool LogManager::addLog( LogOutput* pLog)
 	{
 		for ( size_t i = 0; i < m_logArray.size(); i++ )
 		{
@@ -38,8 +41,7 @@ namespace Echo
 		return true;
 	}
 
-	// 根据名称获取日志
-	Log* LogManager::getLog(const String& name) const
+	LogOutput* LogManager::getLog(const String& name) const
 							{
 		for( size_t i=0; i<m_logArray.size(); i++)
 				{
@@ -50,10 +52,9 @@ namespace Echo
 			return NULL;
 	}
 
-	// 移除日志
 	void LogManager::removeLog( const String &name)
 	{
-		for( LogArray::iterator it=m_logArray.begin(); it!=m_logArray.end(); it++)
+		for(OutputArray::iterator it=m_logArray.begin(); it!=m_logArray.end(); it++)
 	{
 			if( (*it)->getName() == name)
 		{
@@ -63,10 +64,9 @@ namespace Echo
 	}
 	}
 
-	// 移除日志
-	void LogManager::removeLog( Log* pLog)
+	void LogManager::removeLog( LogOutput* pLog)
 	{
-		for( LogArray::iterator it=m_logArray.begin(); it!=m_logArray.end(); it++)
+		for(OutputArray::iterator it=m_logArray.begin(); it!=m_logArray.end(); it++)
 		{
 			if( (*it) == pLog)
 			{
@@ -76,10 +76,9 @@ namespace Echo
 		}
 	}
 
-	// 输出日志
-	void LogManager::logMessage(Log::LogLevel level, const char* formats, ...)
+	void LogManager::logMessage(LogOutput::LogLevel level, const char* formats, ...)
 	{
-        if ( Log::LL_INVALID != m_logLevel )
+        if ( LogOutput::LL_INVALID != m_logLevel )
 		{
             if ( level < m_logLevel )
                 return;
@@ -96,33 +95,30 @@ namespace Echo
 
 			szBuffer[bufferLength - 1] = 0;
 
-			for (LogArray::iterator it = m_logArray.begin(); it != m_logArray.end(); it++)
+			for (OutputArray::iterator it = m_logArray.begin(); it != m_logArray.end(); it++)
 			{
 				(*it)->logMessage(level, szBuffer);
 			}
 		}
 	}
 
-	void LogManager::logEvent(Log::LogLevel level, const std::wstring& message)
+	void LogManager::logMessage(LogOutput::LogLevel level, const std::wstring& message)
 	{
 		logMessage(level, "%s", StringUtil::WCS2MBS(message).c_str());
 	}
 
-	// 错误消息
 	void LogManager::error(const char* msg)
 	{
-		logMessage(Log::LL_ERROR, msg);
+		logMessage(LogOutput::LL_ERROR, msg);
 	}
 
-	// 警告
 	void LogManager::warning(const char* msg)
 	{
-		logMessage(Log::LL_WARNING, msg);
+		logMessage(LogOutput::LL_WARNING, msg);
 	}
 
-	// 信息
 	void LogManager::info(const char* msg)
 	{
-		logMessage(Log::LL_INFO, msg);
+		logMessage(LogOutput::LL_INFO, msg);
 	}
 }

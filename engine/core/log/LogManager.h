@@ -1,48 +1,40 @@
 #pragma once
 
-#include "Log.h"
+//#include "engine/core/base/object.h"
+#include "LogOutput.h"
 
 namespace Echo
 {
-	/** 
-	 * 日志系统 
-	 */
-	class LogManager
+	class LogManager //: public Object
 	{
-		typedef vector<Log*>::type	LogArray;
+		//ECHO_SINGLETON_CLASS(LogManager, Object);
+
+		typedef vector<LogOutput*>::type	OutputArray;
 
 	public:
 		~LogManager();
 
-		// 获取单一实例
+		// instance
 		static LogManager* instance();
 
-		// 添加日志
-		bool addLog( Log* pLog);
+		// add log
+		bool addLog(LogOutput* pLog);
 
-		// 根据名称获取日志
-		Log* getLog(const String& name) const;
+		// get log by name
+		LogOutput* getLog(const String& name) const;
 
-		// 根据名称移除日志
+		// remove log
 		void removeLog( const String& name);
-
-		// 根据日志指针移除日志
-		void removeLog( Log* pLog);
-
-		// 移除所有日志
+		void removeLog(LogOutput* pLog);
 		void removeAllLog() { m_logArray.clear(); }
 
-		// 设置日志级别
-		void setLogLeve( Log::LogLevel level) { m_logLevel = level; }
+		// log level
+		void setLogLeve(LogOutput::LogLevel level) { m_logLevel = level; }
+		LogOutput::LogLevel getLogLevel() { return m_logLevel; }
 
-		// 获取日志级别
-		Log::LogLevel getLogLevel() { return m_logLevel; }
-
-		// 输出日志
-		void logMessage(Log::LogLevel level, const char* formats, ...);
-
-		// 输出事件
-		void logEvent(Log::LogLevel level, const std::wstring& message);
+		// output message
+		void logMessage(LogOutput::LogLevel level, const char* formats, ...);
+		void logMessage(LogOutput::LogLevel level, const std::wstring& message);
 
 	public:
 		// lua
@@ -54,13 +46,13 @@ namespace Echo
 		LogManager();
 
 	protected:
-		Log::LogLevel	m_logLevel;		// 日志级别
-		LogArray		m_logArray;		// A list of all the logs the manager can access
+		LogOutput::LogLevel	m_logLevel;		// 日志级别
+		OutputArray			m_logArray;		// A list of all the logs the manager can access
 	};
 }
 
-#define EchoLogDebug(formats, ...)		Echo::LogManager::instance()->logMessage(Echo::Log::LL_DEBUG, formats, ##__VA_ARGS__);
-#define EchoLogInfo(formats, ...)		Echo::LogManager::instance()->logMessage(Echo::Log::LL_INFO, formats, ##__VA_ARGS__);
-#define EchoLogWarning(formats, ...)	Echo::LogManager::instance()->logMessage(Echo::Log::LL_WARNING, formats, ##__VA_ARGS__);
-#define EchoLogError(formats, ...)		Echo::LogManager::instance()->logMessage(Echo::Log::LL_ERROR, formats, ##__VA_ARGS__);
-#define EchoLogFatal(formats, ...)		Echo::LogManager::instance()->logMessage(Echo::Log::LL_FATAL, formats, ##__VA_ARGS__);
+#define EchoLogDebug(formats, ...)		Echo::LogManager::instance()->logMessage(Echo::LogOutput::LL_DEBUG, formats, ##__VA_ARGS__);
+#define EchoLogInfo(formats, ...)		Echo::LogManager::instance()->logMessage(Echo::LogOutput::LL_INFO, formats, ##__VA_ARGS__);
+#define EchoLogWarning(formats, ...)	Echo::LogManager::instance()->logMessage(Echo::LogOutput::LL_WARNING, formats, ##__VA_ARGS__);
+#define EchoLogError(formats, ...)		Echo::LogManager::instance()->logMessage(Echo::LogOutput::LL_ERROR, formats, ##__VA_ARGS__);
+#define EchoLogFatal(formats, ...)		Echo::LogManager::instance()->logMessage(Echo::LogOutput::LL_FATAL, formats, ##__VA_ARGS__);

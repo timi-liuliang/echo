@@ -92,7 +92,7 @@ namespace Studio
 		void InitializeBackGrid();
 
 	protected:
-		Echo::Log*				m_log;						// 日志
+		Echo::LogOutput*		m_log;						// 日志
 		Echo::Node*				m_currentEditNode;			// 当前编辑场景
 		Echo::String			m_currentEditNodeSavePath;	// 当前场景存储路径
 		Echo::Node*				m_invisibleNodeForEditor;	// 编辑器结点

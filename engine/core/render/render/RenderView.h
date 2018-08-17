@@ -1,6 +1,5 @@
 #pragma once
 
-#include <engine/core/memory/MemManager.h>
 #include "PixelFormat.h"
 
 namespace Echo

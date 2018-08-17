@@ -3,14 +3,14 @@
 #include <QDockWidget>
 #include <QString>
 #include "ui_LogPanel.h"
-#include <engine/core/log/Log.h>
+#include <engine/core/log/LogOutput.h>
 
 namespace Studio
 {
 	//----------------------------------------
 	// Êä³ö Ö÷´°¿Ú 2010-12-30
 	//----------------------------------------
-	class LogPanel : public QWidget, public Echo::Log, public Ui_LogPanel
+	class LogPanel : public QWidget, public Echo::LogOutput, public Ui_LogPanel
 	{
 		Q_OBJECT
 

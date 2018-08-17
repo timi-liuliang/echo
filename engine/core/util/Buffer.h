@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/core/memory/MemManager.h"
+#include "engine/core/base/TypeDef.h"
 
 namespace Echo
 {
@@ -8,7 +8,7 @@ namespace Echo
 	{
 	public:
 		Buffer();
-		Buffer(ui32 size, void* pData = NULL, bool bAutoFree = false);
+		Buffer(ui32 size, void* pData = nullptr, bool bAutoFree = false);
 		virtual ~Buffer();
 
 		virtual void allocate(ui32 size);

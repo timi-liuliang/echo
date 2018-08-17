@@ -1,5 +1,4 @@
 #include "engine/core/base/class.h"
-#include "engine/core/memory/MemManager.h"
 #include "engine/core/main/Engine.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/util/Exception.h"
@@ -30,7 +29,6 @@ namespace Echo
 		: m_isInited(false)
 		, m_currentTime(0)
 	{
-		MemoryManager::instance();
 		Time::instance();
 		LogManager::instance();
 	}
@@ -277,7 +275,6 @@ namespace Echo
 		EchoLogInfo("Echo Renderer has been shutdown.");
 		EchoSafeDeleteInstance(LogManager);
 		LuaBinder::destroy();
-		MemoryManager::destroyInstance();
 	}
 
 	const String& Engine::getResPath() const

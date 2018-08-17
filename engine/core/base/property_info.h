@@ -59,9 +59,7 @@ namespace Echo
 	{
 		String	m_className;
 
-		PropertyInfoDynamic()
-			: PropertyInfo(Type::Dynamic)
-		{}
+		PropertyInfoDynamic() : PropertyInfo(Type::Dynamic) {}
 
 		// get property value
 		virtual bool getPropertyValue(Object* classPtr, const String& propertyName, Variant& oVar);

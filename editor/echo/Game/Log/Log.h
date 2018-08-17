@@ -4,7 +4,7 @@
 
 namespace Game
 {
-	class GameLog : public Echo::Log
+	class GameLog : public Echo::LogOutput
 	{
 	public:
 		GameLog(const Echo::String& name);

@@ -35,7 +35,7 @@ namespace Echo
 			//luaEx->register_function<LogManager, const char*>("LogManager", "warning", &LogManager::warning);
 			//luaEx->register_function<LogManager, const char*>("LogManager", "info", &LogManager::info);
 
-			//luaEx->register_object("LogManager", "Log", LogManager::instance());
+			LuaBinder::instance()->registerObject("LogManager", "Log", LogManager::instance());
 		}
 	}
 }
