@@ -72,6 +72,7 @@ namespace Echo
 		operator const Vector2&() const { return any_cast<Vector2>(m_any); }
 		operator const Vector3&() const { return any_cast<Vector3>(m_any); }
 		operator const Color&() const { return any_cast<Color>(m_any); }
+		operator const char*() const { return any_cast<String>(m_any).c_str(); }
 		operator const String&() const { return any_cast<String>(m_any); }
 		operator const ResourcePath&() const { return any_cast<ResourcePath>(m_any); }
 		operator const Base64String&() const { return any_cast<Base64String>(m_any); }

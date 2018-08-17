@@ -23,9 +23,9 @@ namespace Echo
 
 	void Log::bindMethods()
 	{
-		//CLASS_BIND_METHOD(LogManager, error, "error");
-		//CLASS_BIND_METHOD(LogManager, warning, "warning");
-		//CLASS_BIND_METHOD(LogManager, info, "info");
+		CLASS_BIND_METHOD(Log, error, "error");
+		CLASS_BIND_METHOD(Log, warning, "warning");
+		CLASS_BIND_METHOD(Log, info, "info");
 	}
 
 	bool Log::addOutput( LogOutput* pLog)
