@@ -36,6 +36,75 @@ namespace Echo
 		return method ? method->call( L) : 0;
 	}
 
+	// stack dump for debug
+	static void stackDump(lua_State *L)
+	{
+#ifdef ECHO_EDITOR_MODE
+		struct Element
+		{
+			int		m_idx;
+			String  m_type;
+			String  m_value;
+		};
+		static vector<Element>::type  luaStack;
+		luaStack.clear();
+
+		int top = lua_gettop(L);
+		for (int i = 1; i <= top; i++) 
+		{
+			Element elem;
+			elem.m_idx = i;
+
+			int t = lua_type(L, i);
+			elem.m_type = lua_typename(L, t);
+
+			switch (t)
+			{
+			case LUA_TSTRING:  /* strings */
+				elem.m_value = lua_tostring(L, i);
+				break;
+
+			case LUA_TBOOLEAN:  /* booleans */
+				elem.m_value = (lua_toboolean(L, i) ? "true" : "false");
+				break;
+
+			case LUA_TNUMBER:  /* numbers */
+				elem.m_value =StringUtil::Format("%g", lua_tonumber(L, i));
+				break;
+
+			default:  /* other values */
+				elem.m_value = lua_typename(L, t);
+				break;
+			}
+
+			luaStack.push_back(elem);
+		}
+#endif
+	}
+
+	struct LuaStackCheck
+	{
+		int			m_elementNum;
+		lua_State*	m_luaState;
+
+		LuaStackCheck(lua_State* state)
+		{
+			m_luaState = state;
+			m_elementNum = lua_gettop(state);
+		}
+
+		~LuaStackCheck()
+		{
+			EchoAssert(m_elementNum == lua_gettop(m_luaState));
+		}
+	};
+
+#ifdef ECHO_EDITOR_MODE
+	#define LUA_STACK_CHECK(state) LuaStackCheck stackCheck(state)
+#else
+	#define LUA_STACK_CHECK(state)
+#endif 
+
 	// instance
 	LuaBinder* LuaBinder::instance()
 	{
@@ -70,6 +139,8 @@ namespace Echo
 
 	bool LuaBinder::registerClass(const String& className, const char* parentClassName)
 	{
+		LUA_STACK_CHECK(m_luaState);
+
 		//create metatable for class
 		luaL_newmetatable(m_luaState, className.c_str());
 		const int metatable = lua_gettop(m_luaState);
@@ -94,10 +165,12 @@ namespace Echo
 
 	bool LuaBinder::registerMethod(const String& className, const String& methodName, MethodBind* method)
 	{
-		luaL_getmetatable(m_luaState, className.c_str());
-		lua_pushstring(m_luaState, methodName.c_str());     // table.methodName = method
-		lua_pushlightuserdata(m_luaState, method);
-		lua_pushcclosure(m_luaState, cb, 1);
+		LUA_STACK_CHECK(m_luaState);
+
+		luaL_getmetatable(m_luaState, className.c_str());	// stack 1
+		lua_pushstring(m_luaState, methodName.c_str());     // stack 2
+		lua_pushlightuserdata(m_luaState, method);			// stack 3
+		lua_pushcclosure(m_luaState, cb, 1);				// stack 3
 
 		lua_settable(m_luaState, 1);
 		lua_pop(m_luaState, 1);
@@ -109,21 +182,33 @@ namespace Echo
 	{
 		if ( !className.empty() && !objectName.empty() && obj)
 		{
-			lua_newtable(m_luaState);
-			int objTableStatckIdx = lua_gettop(m_luaState);
+			LUA_STACK_CHECK(m_luaState);
 
-			const char* objectPtrName = "c_ptr";
-			lua_pushstring(m_luaState, objectPtrName);
+			String currentLayerName;
+			int parentIdx = getUpperTables(objectName, currentLayerName);
+
+			lua_newtable(m_luaState);
+			int objIdx = lua_gettop(m_luaState);
+
+			lua_pushstring(m_luaState, "this");
 			lua_pushlightuserdata(m_luaState, obj);
-			lua_settable(m_luaState, objTableStatckIdx);
+			lua_settable(m_luaState, objIdx);
 
 			luaL_getmetatable(m_luaState, className.c_str());
-			lua_setmetatable(m_luaState, objTableStatckIdx);
+			lua_setmetatable(m_luaState, objIdx);
 
-			lua_setglobal(m_luaState, objectName.c_str());
+			if (parentIdx != 0)
+			{
+				lua_setfield( m_luaState, parentIdx, currentLayerName.c_str());
+				lua_pop(m_luaState, parentIdx);
+			}
+			else
+			{
+				lua_setglobal(m_luaState, objectName.c_str());
+			}	
 		}
 
-		return false;
+		return true;
 	}
 
 	// add search path
@@ -159,6 +244,8 @@ namespace Echo
 	// exec string
 	bool LuaBinder::execString(const String& script, bool execute)
 	{
+		LUA_STACK_CHECK(m_luaState);
+
 		if (!luaL_loadstring(m_luaState, script.c_str()))
 		{
 			if (execute)
@@ -186,6 +273,8 @@ namespace Echo
 	// get global value(boolean)
 	bool LuaBinder::getGlobalVariableBoolean(const String& varName)
 	{
+		LUA_STACK_CHECK(m_luaState);
+
 		lua_getglobal(m_luaState, varName.c_str());
 
 	#ifdef ECHO_EDITOR_MODE
@@ -208,6 +297,8 @@ namespace Echo
 	// get global value (float)
 	double LuaBinder::getGlobalVariableDouble(const String& varName)
 	{
+		LUA_STACK_CHECK(m_luaState);
+
 		lua_getglobal(m_luaState, varName.c_str());
 
 	#ifdef ECHO_EDITOR_MODE
@@ -224,6 +315,8 @@ namespace Echo
 
 	String LuaBinder::getGlobalVariableStr(const String& varName)
 	{
+		LUA_STACK_CHECK(m_luaState);
+
 		StringArray vars = StringUtil::Split(varName, ".");
 
 		lua_getglobal(m_luaState, vars[0].c_str());
@@ -246,6 +339,8 @@ namespace Echo
 	// set global value
 	void LuaBinder::setGlobalVariableStr(const String& varName, const String& value)
 	{
+		LUA_STACK_CHECK(m_luaState);
+
 		StringArray vars = StringUtil::Split(varName, ".");
 
 		lua_getglobal(m_luaState, vars[0].c_str());
@@ -261,6 +356,8 @@ namespace Echo
 
 	void LuaBinder::setTableKeyValue(const String& tableName, int key, lua_CFunction value)
 	{
+		LUA_STACK_CHECK(m_luaState);
+
 		StringArray vars = StringUtil::Split(tableName, ".");
 
 		lua_getglobal(m_luaState, vars[0].c_str());
@@ -275,6 +372,46 @@ namespace Echo
 		lua_rawseti(m_luaState, -2, key);
 
 		lua_settop(m_luaState, 0);
+	}
+
+	int LuaBinder::getTables(lua_State* luaState, const StringArray& objectNames, const int count)
+	{
+		int tableCount = 0;
+		for (int i = 0; i < count; i++)
+		{
+			if (i == 0)
+			{
+				lua_getglobal(luaState, objectNames[i].c_str());
+			}
+			else
+			{
+				lua_getfield(luaState, -1, objectNames[i].c_str());
+			}
+
+			tableCount++;
+			if (lua_isnil(luaState, -1))
+			{
+				lua_pop(luaState, tableCount);
+				return 0;
+			}
+		}
+
+		return tableCount;
+	}
+
+	// get upper layer table
+	int LuaBinder::getUpperTables(const String& objectName, String& currentLayerName)
+	{
+		StringArray names = StringUtil::Split(objectName, ".");
+		if (names.size() > 1)
+		{
+			currentLayerName = names.back();
+			return getTables(m_luaState, names, names.size() - 1);
+		}
+		else
+		{
+			return 0;
+		}
 	}
 
 	void LuaBinder::outputError(int pop)

@@ -16,10 +16,10 @@ namespace Echo
 			"    end\n"\
 			"end\n"\
 			"\n"\
-			"_Nodes = {}\n"\
+			"_nodes = {}\n"\
 			"\n"\
 			"function _update_all_nodes()\n"\
-			"    for k, v in pairs(_Nodes) do\n"\
+			"    for k, v in pairs(_nodes) do\n"\
 			"        v:update()\n"\
 			"    end\n"\
 			"end\n"\

@@ -14,7 +14,7 @@ namespace Echo
 		m_isValid = Engine::instance()->getConfig().m_isGame && IO::instance()->isResourceExists(m_file.getPath());
 		if (m_isValid)
 		{
-			m_globalTableName = StringUtil::Format("_Nodes._%d", obj->getId());;
+			m_globalTableName = StringUtil::Format("_nodes._%d", obj->getId());;
 			LuaBinder::instance()->registerObject("Node", m_globalTableName.c_str(), obj);
 
 			String fileName = PathUtil::GetPureFilename(m_file.getPath(), false);

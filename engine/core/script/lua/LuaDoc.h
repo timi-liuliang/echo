@@ -1,7 +1,3 @@
-//Lua笔记-关于lua table的C API
-//转载请注明来自yuliying的CSDN博客.
-//Lua版本5.2
-	
 /*相关API:
 	http://pgl.yoyo.org/luai/i/_
 
@@ -31,12 +27,6 @@
 	描述: 将t[k]元素push到栈顶. 其中t是index处的table,k为栈顶元素.
 		  这个函数可能触发index元方法.
 		  调用完成后弹出栈顶元素(key).
-
-	lua_settable
-	原型: void lua_settable (lua_State *L, int index);
-	描述: 为table中的key赋值. t[k] = v . 其中t是index处的table , v为栈顶元素. k为-2处的元素.
-		  这个函数可能触发newindex元方法.
-		  调用完成后弹出栈顶两个元素(key , value)
 
 	lua_rawget
 	原型: void lua_rawget (lua_State *L, int index);
@@ -73,9 +63,8 @@
 	描述: 将index处元素的元表push到栈顶. 如果该元素没有元表, 函数返回0 , 不改变栈.
 
 	lua_setmetatable
-	原型: void lua_setmetatable (lua_State *L, int index);
-	描述: 将栈顶元素设置为index处元素的元表.
-		  调用完成后弹出栈顶元素.
+	prototype  : int lua_setmetatable (lua_State *L, int index);
+	description: Pops a table from the stack and sets it as the new metatable for the value at the given acceptable index.
 
 	lua_istable
 	原型: int lua_istable (lua_State *L, int index);
@@ -109,9 +98,10 @@
 	描述: 将 t[name] 元素push到栈顶, 其中t为全局表.
 
 	lua_setglobal
-	原型: void lua_setglobal (lua_State *L, const char *name);
-	描述: 为table中的key赋值. t[name] = v . 其中t为全局表. v为栈顶元素.
-	调用完成后弹出栈顶元素(v).
+	prototype  : void lua_setglobal (lua_State *L, const char *name);
+	description: Pops a value from the stack and sets it as the new value of global name. 
+				 It is defined as a macro:
+				 #define lua_setglobal(L,s)   lua_setfield(L, LUA_GLOBALSINDEX, s)
 
 	luaL_newlibtable
 	原型: void luaL_newlibtable (lua_State *L, const luaL_Reg l[]);
@@ -180,14 +170,51 @@
 
 
 	lua_pushcclosure
-	原型:void lua_pushcclosure (lua_State *L, lua_CFunction fn, int n);
-	描述:Pushes a new C closure onto the stack.
-		 When a C function is created, it is possible to associate some values with it, thus creating 
-		 a C closure (see §3.4); these values are then accessible to the function whenever it is called. 
-		 To associate values with a C function, first these values should be pushed onto the stack 
-		 (when there are multiple values, the first value is pushed first). Then lua_pushcclosure is 
-		 called to create and push the C function onto the stack, with the argument n telling how many 
-		 values should be associated with the function. lua_pushcclosure also pops these values from 
-		 the stack.
-		 The maximum value for n is 255.
+	prototype  : void lua_pushcclosure (lua_State *L, lua_CFunction fn, int n);
+	description: Pushes a new C closure onto the stack.
+				 When a C function is created, it is possible to associate some values with it, thus creating 
+				 a C closure (see §3.4); these values are then accessible to the function whenever it is called. 
+				 To associate values with a C function, first these values should be pushed onto the stack 
+				 (when there are multiple values, the first value is pushed first). Then lua_pushcclosure is 
+				 called to create and push the C function onto the stack, with the argument n telling how many 
+				 values should be associated with the function. lua_pushcclosure also pops these values from 
+				 the stack.
+				 The maximum value for n is 255.
+
+	lua_gettop
+	prototype  ; int lua_gettop (lua_State *L);
+	description: The lua_gettop function returns the number of elements in the stack, which is also the 
+				 index of the top element. Notice that a negative index -x is equivalent to the positive 
+				 index gettop - x + 1.
+
+	lua_settop
+	prototype  : lua_settop( lua_State *L, int idx)
+	description: lua_settop sets the top (that is, the number of elements in the stack) to a specific value. 
+				 If the previous top was higher than the new one, the top values are discarded. Otherwise, 
+				 the function pushes nils on the stack to get the given size. As a particular case, lua_settop(L, 0) 
+				 empties the stack. You can also use negative indices with lua_settop; that will set the top 
+				 element to the given index. Using this facility, the API offers the following macro, which 
+				 pops n elements from the stack:
+				 #define lua_pop(L,n)  lua_settop(L, -(n)-1)
+
+	lua_pushliteral
+	prototype  :void lua_pushliteral (lua_State *L, const char *s);
+	description:This macro is equivalent to lua_pushlstring, but can be used only when s is a literal string. 
+				In these cases, it automatically provides the string length.
+
+	lua_pushvalue
+	prototype  :void lua_pushvalue (lua_State *L, int index);
+	description:Pushes a copy of the element at the given valid index onto the stack
+
+	lua_settable
+	prototype  :void lua_settable (lua_State *L, int index);
+	description:Does the equivalent to t[k] = v, where t is the value at the given valid index, v is the value 
+				at the top of the stack, and k is the value just below the top.
+
+				This function pops both the key and the value from the stack. As in Lua, this function may 
+				trigger a metamethod for the "newindex" event (see §2.8)
+
+	lua_pop
+	prototype  :void lua_pop (lua_State *L, int n);
+	description:Pops n elements from the stack.
 */

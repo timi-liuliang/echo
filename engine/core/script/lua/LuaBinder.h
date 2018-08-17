@@ -36,7 +36,6 @@ namespace Echo
 		// add lua loader
 		void addLoader(lua_CFunction func);
 
-	public:
 		// exec script
 		bool execString(const String& script, bool execute=true);
 
@@ -55,6 +54,11 @@ namespace Echo
 		void setTableKeyValue(const String& tableName, int key, lua_CFunction value);
 
 	public:
+		// get upper layer table
+		int getUpperTables(const String& objectName, String& currentLayerName);
+		int getTables(lua_State* luaState, const StringArray& objectNames, const int count);
+
+	private:
 		// output error and pop stack
 		void outputError(int pop=0);
 

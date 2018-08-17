@@ -125,6 +125,7 @@ namespace Echo
 		Class::registerType<GameSettings>();
 		Class::registerType<Gizmos>();
 		Class::registerType<Input>();
+		Class::registerType<Log>();
 
 		// register all module class
 		Module::registerAllTypes();
