@@ -12,7 +12,6 @@
 #include "TimelinePanel.h"
 #include "DebuggerPanel.h"
 #include "EchoEngine.h"
-#include "PlayGameToolBar.h"
 #include "QResSelect.h"
 #include "ResChooseDialog.h"
 #include "LuaEditor.h"
@@ -32,7 +31,6 @@ namespace Studio
 		: QMainWindow( parent)
 		, m_resPanel(nullptr)
 		, m_gameProcess(nullptr)
-		, m_playGameToolBar(nullptr)
 	{
 		setupUi( this);
 

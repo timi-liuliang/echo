@@ -12,7 +12,6 @@ namespace Studio
 	class TimelinePanel;
 	class DebuggerPanel;
 	class BottomPanel;
-	class PlayGameToolBar;
 	class MainWindow : public QMainWindow, public Ui_MainWindow
 	{
 		Q_OBJECT
@@ -83,10 +82,7 @@ namespace Studio
 		ResPanel*		m_resPanel;
 		NodeTreePanel*	m_scenePanel;
 		BottomPanel*	m_bottomPanel;
-
 		QProcess		m_gameProcess;
-		PlayGameToolBar*m_playGameToolBar;
-
 		QComboBox*		m_subEditComboBox;
 	};
 }
