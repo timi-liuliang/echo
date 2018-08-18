@@ -84,12 +84,12 @@ namespace Studio
 
 
 	protected:
+		QDockWidget*	m_renderPanel;
 		ResPanel*		m_resPanel;
 		NodeTreePanel*	m_scenePanel;
 		BottomPanel*	m_bottomPanel;
 		DocumentPanel*	m_documentPanel;
 		QProcess		m_gameProcess;
 		QComboBox*		m_subEditComboBox;
-		QMdiArea*		m_midArea;
 	};
 }

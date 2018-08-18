@@ -30,6 +30,7 @@ namespace Studio
 
 	MainWindow::MainWindow(QMainWindow* parent/*=0*/)
 		: QMainWindow( parent)
+		, m_renderPanel(nullptr)
 		, m_resPanel(nullptr)
 		, m_gameProcess(nullptr)
 		, m_documentPanel(nullptr)
@@ -59,10 +60,6 @@ namespace Studio
 		QObject::connect(m_actionExitEditor, SIGNAL(triggered(bool)), this, SLOT(close()));
 		QObject::connect(m_actionHelp, SIGNAL(triggered(bool)), this, SLOT(onOpenHelpDialog()));
 
-		// midarea
-		m_midArea = new QMdiArea(this);
-		m_midArea->setVisible(false);
-
 		// add combox, switch 2D,3D,Script etc.
 		m_subEditComboBox = new QComboBox(m_toolBar);
 		m_subEditComboBox->addItem("2D");
@@ -86,24 +83,30 @@ namespace Studio
 
 	void MainWindow::onOpenProject()
 	{
+		setCentralWidget(nullptr);
+
+		m_renderPanel = EchoNew(QDockWidget(this));
 		m_resPanel = EchoNew(ResPanel(this));
 		m_scenePanel = EchoNew(NodeTreePanel(this));
 		m_bottomPanel = EchoNew(BottomPanel(this));
 		m_documentPanel = EchoNew(DocumentPanel(this));
 		m_documentPanel->setVisible(false);
 
+		// add renderWindow to RenderDockWidget
 		QWidget* renderWindow = AStudio::instance()->getRenderWindow();
-		setCentralWidget(renderWindow);
-		//m_midArea->addSubWindow(renderWindow);
+		m_renderPanel->setWidget(renderWindow);
+		m_renderPanel->setWindowTitle("Render");
 
+		this->setCorner(Qt::TopLeftCorner, Qt::LeftDockWidgetArea);
+		this->setCorner(Qt::TopRightCorner, Qt::RightDockWidgetArea);
 		this->setCorner(Qt::BottomLeftCorner, Qt::LeftDockWidgetArea);
 		this->setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
 
+		this->addDockWidget(Qt::TopDockWidgetArea, m_renderPanel);
 		this->addDockWidget(Qt::LeftDockWidgetArea, m_resPanel);
 		this->addDockWidget(Qt::RightDockWidgetArea, m_scenePanel);
 		this->addDockWidget(Qt::BottomDockWidgetArea, m_bottomPanel);
 		this->addDockWidget(Qt::BottomDockWidgetArea, m_documentPanel);
-		this->tabifyDockWidget(m_bottomPanel, m_documentPanel);
 
 		m_resPanel->onOpenProject();
 
@@ -283,8 +286,6 @@ namespace Studio
 		}
 		else
 		{
-			//setCentralWidget(m_midArea);
-			//m_midArea->setVisible(true);
 		}	
 	}
 
@@ -399,11 +400,6 @@ namespace Studio
 		LuaEditor* editor = new LuaEditor(this);
 		editor->open(fullPath);
 
-		setCentralWidget(editor);
-
-		//m_tabWidget->addTab( editor, fileName.c_str());
-		//m_tabWidget->setCurrentIndex(m_tabWidget->count() - 1);
-
 		QObject::connect(m_actionSaveProject, SIGNAL(triggered(bool)), editor, SLOT(save()));
 	}
 
@@ -421,7 +417,7 @@ namespace Studio
 	// open help dialog
 	void MainWindow::onOpenHelpDialog()
 	{
-		m_documentPanel->setVisible(true);
+		m_documentPanel->setVisible(!m_documentPanel->isVisible());
 	}
 
 	void MainWindow::onReadMsgFromGame()
