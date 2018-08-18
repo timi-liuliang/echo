@@ -22,6 +22,9 @@ namespace Echo
 		bool registerMethod(const String& className, const String& methodName, MethodBind* method);
 		bool registerObject(const String& className, const String& objectName, void* obj);
 
+		// get class infos
+		void getClassMethods(const String& className, StringArray& methods);
+
 		// def search path
 		void setSearchPath(const String& path);
 		void addSearchPath(const String& path);

@@ -224,6 +224,33 @@ namespace Echo
 		return true;
 	}
 
+	// get class infos
+	void LuaBinder::getClassMethods(const String& className, StringArray& methods)
+	{
+		LUA_STACK_CHECK(m_luaState);
+
+		//create metatable for class
+		luaL_getmetatable(m_luaState, className.c_str());
+		const int metatable = lua_gettop(m_luaState);
+	
+		if (!lua_isnil(m_luaState, metatable))
+		{
+			lua_pushnil(m_luaState);
+			while (lua_next(m_luaState, metatable))
+			{
+				const char* key = lua_tostring(m_luaState, -2);
+				const char* type = lua_typename(m_luaState, lua_type(m_luaState, -1));
+				if(strcmp(type, "function")==0)
+					methods.push_back(key);
+
+				lua_pop(m_luaState, 1);
+			}
+		}
+
+		// pop meta table
+		lua_pop(m_luaState, 1);
+	}
+
 	// add search path
 	void LuaBinder::addSearchPath(const String& path)
 	{

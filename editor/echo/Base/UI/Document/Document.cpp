@@ -9,6 +9,11 @@ namespace Studio
 	{
 		setupUi(this);
 
+		// splitter stretch
+		m_splitter->setStretchFactor(0, 0);
+		m_splitter->setStretchFactor(1, 1);
+
+
 		// hide default window title
 		//setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
 
@@ -28,8 +33,12 @@ namespace Studio
 	{
 		m_treeWidget->clear();
 
-		// begin with "Node"
-		addClassNode("Node", m_treeWidget->invisibleRootItem());
+		// api items
+		QTreeWidgetItem* apiItem = new QTreeWidgetItem(m_treeWidget->invisibleRootItem());
+		apiItem->setText(0, "Api");
+
+		// begin with "Object"
+		addClassNode("Object", apiItem);
 
 		// expand all items
 		m_treeWidget->expandAll();
@@ -40,11 +49,11 @@ namespace Studio
 		// get icon path by node name
 		Echo::String lowerCaseNodeName = nodeName;
 		Echo::StringUtil::LowerCase(lowerCaseNodeName);
-		Echo::String iconPath = Echo::StringUtil::Format(":/icon/node/%s.png", lowerCaseNodeName.c_str());
+		//Echo::String iconPath = Echo::StringUtil::Format(":/icon/node/%s.png", lowerCaseNodeName.c_str());
 
 		QTreeWidgetItem* nodeItem = new QTreeWidgetItem(parent);
 		nodeItem->setText( 0, nodeName.c_str());
-		nodeItem->setIcon(0, QIcon(iconPath.c_str()));
+		//nodeItem->setIcon(0, QIcon(iconPath.c_str()));
 
 		QObject::connect(m_treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(onConfirmNode()));
 
@@ -63,8 +72,23 @@ namespace Studio
 		QTreeWidgetItem* item = m_treeWidget->currentItem();
 		if (item)
 		{
-			Echo::String text = item->text(0).toStdString().c_str();
-			//m_confirm->setEnabled(!Echo::Class::isVirtual(text));
+			Echo::String className = item->text(0).toStdString().c_str();
+
+			// iterator all methods
+			Echo::StringArray methods;
+			Echo::LuaBinder::instance()->getClassMethods(className, methods);
+
+			// organize display
+			Echo::String text;
+			text += "<font color=\"green\">" + className + "</font>";
+			text += "<br />";
+			for (const Echo::String& methodName : methods)
+			{
+				text += "<br />";
+				text += methodName;
+			}
+
+			m_textBrowser->setHtml(text.c_str());
 		}
 	}
 }
