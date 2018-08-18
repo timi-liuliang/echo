@@ -82,7 +82,8 @@ namespace Studio
 
 	void MainWindow::onOpenProject()
 	{
-		setCentralWidget(nullptr);
+		//setCentralWidget(nullptr);
+		centralWidget()->setMaximumHeight(0);
 
 		m_renderPanel = EchoNew(QDockWidget(this));
 		m_resPanel = EchoNew(ResPanel(this));

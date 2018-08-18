@@ -37,7 +37,8 @@ namespace Studio
 	// size hint
 	QSize RenderWindow::sizeHint() const
 	{
-		return QSize(1366, 728);
+		return QWidget::sizeHint();
+		//return QSize(1366, 728);
 	}
 
 	// ¿ªÊ¼äÖÈ¾
