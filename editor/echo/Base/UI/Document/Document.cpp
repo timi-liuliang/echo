@@ -4,13 +4,13 @@
 
 namespace Studio
 {
-	DocumentDialog::DocumentDialog(QWidget* parent)
-		: QDialog(parent)
+	DocumentPanel::DocumentPanel(QWidget* parent)
+		: QDockWidget(parent)
 	{
 		setupUi(this);
 
 		// hide default window title
-		setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+		//setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
 
 		// display nodes
 		initApiDisplay();
@@ -19,19 +19,12 @@ namespace Studio
 		QObject::connect(m_treeWidget, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(onSelectClass()));
 	}
 
-	DocumentDialog::~DocumentDialog()
+	DocumentPanel::~DocumentPanel()
 	{
 
 	}
 
-	// instance
-	DocumentDialog* DocumentDialog::instance()
-	{
-		DocumentDialog* inst = new DocumentDialog();
-		return inst;
-	}
-
-	void DocumentDialog::initApiDisplay()
+	void DocumentPanel::initApiDisplay()
 	{
 		m_treeWidget->clear();
 
@@ -42,7 +35,7 @@ namespace Studio
 		m_treeWidget->expandAll();
 	}
 
-	void DocumentDialog::addClassNode(const Echo::String& nodeName, QTreeWidgetItem* parent)
+	void DocumentPanel::addClassNode(const Echo::String& nodeName, QTreeWidgetItem* parent)
 	{
 		// get icon path by node name
 		Echo::String lowerCaseNodeName = nodeName;
@@ -65,7 +58,7 @@ namespace Studio
 		}
 	}
 
-	void DocumentDialog::onSelectClass()
+	void DocumentPanel::onSelectClass()
 	{
 		QTreeWidgetItem* item = m_treeWidget->currentItem();
 		if (item)

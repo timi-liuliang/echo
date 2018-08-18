@@ -1,38 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>Document</class>
- <widget class="QDialog" name="Document">
+ <widget class="QDockWidget" name="Document">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1009</width>
-    <height>804</height>
+    <width>1031</width>
+    <height>754</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Document</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
-   <item>
-    <widget class="QSplitter" name="splitter">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <widget class="QTreeWidget" name="m_treeWidget">
-      <property name="headerHidden">
-       <bool>true</bool>
+  <widget class="QWidget" name="dockWidgetContents">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
       </property>
-      <column>
-       <property name="text">
-        <string notr="true">1</string>
+      <widget class="QTreeWidget" name="m_treeWidget">
+       <property name="headerHidden">
+        <bool>true</bool>
        </property>
-      </column>
+       <column>
+        <property name="text">
+         <string notr="true">1</string>
+        </property>
+       </column>
+      </widget>
+      <widget class="QTextBrowser" name="m_textBrowser"/>
      </widget>
-     <widget class="QTextBrowser" name="m_textBrowser"/>
-    </widget>
-   </item>
-  </layout>
+    </item>
+   </layout>
+  </widget>
  </widget>
  <resources/>
  <connections/>

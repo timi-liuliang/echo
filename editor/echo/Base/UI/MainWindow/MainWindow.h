@@ -12,6 +12,7 @@ namespace Studio
 	class NodeTreePanel;
 	class TimelinePanel;
 	class DebuggerPanel;
+	class DocumentPanel;
 	class BottomPanel;
 	class MainWindow : public QMainWindow, public Ui_MainWindow
 	{
@@ -65,6 +66,9 @@ namespace Studio
 		// game process exit
 		void onGameProcessFinished(int id, QProcess::ExitStatus status);
 
+		// open help dialog
+		void onOpenHelpDialog();
+
 	protected:
 		// open another project
 		void openAnotherProject(const Echo::String& fullPathName);
@@ -83,6 +87,7 @@ namespace Studio
 		ResPanel*		m_resPanel;
 		NodeTreePanel*	m_scenePanel;
 		BottomPanel*	m_bottomPanel;
+		DocumentPanel*	m_documentPanel;
 		QProcess		m_gameProcess;
 		QComboBox*		m_subEditComboBox;
 		QMdiArea*		m_midArea;

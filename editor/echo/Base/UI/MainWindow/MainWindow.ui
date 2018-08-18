@@ -72,6 +72,7 @@
     <property name="title">
      <string>Help(&amp;H)</string>
     </property>
+    <addaction name="m_actionHelp"/>
     <addaction name="m_actionAbout"/>
    </widget>
    <widget class="QMenu" name="menuGame">
@@ -211,6 +212,14 @@
   <action name="m_actionEmptyProject">
    <property name="text">
     <string>Empty Project</string>
+   </property>
+  </action>
+  <action name="m_actionHelp">
+   <property name="text">
+    <string>Help</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
    </property>
   </action>
  </widget>

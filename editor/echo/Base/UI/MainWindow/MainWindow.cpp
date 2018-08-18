@@ -19,6 +19,7 @@
 #include "ProjectWnd.h"
 #include "PathChooseDialog.h"
 #include "RenderWindow.h"
+#include "Document.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/io/IO.h>
 #include <engine/core/scene/render_node.h>
@@ -31,6 +32,7 @@ namespace Studio
 		: QMainWindow( parent)
 		, m_resPanel(nullptr)
 		, m_gameProcess(nullptr)
+		, m_documentPanel(nullptr)
 	{
 		setupUi( this);
 
@@ -55,6 +57,7 @@ namespace Studio
 		QObject::connect(m_actionPlayGame, SIGNAL(triggered(bool)), this, SLOT(onPlayGame()));
 		QObject::connect(m_actionStopGame, SIGNAL(triggered(bool)), &m_gameProcess, SLOT(terminate()));
 		QObject::connect(m_actionExitEditor, SIGNAL(triggered(bool)), this, SLOT(close()));
+		QObject::connect(m_actionHelp, SIGNAL(triggered(bool)), this, SLOT(onOpenHelpDialog()));
 
 		// midarea
 		m_midArea = new QMdiArea(this);
@@ -86,6 +89,8 @@ namespace Studio
 		m_resPanel = EchoNew(ResPanel(this));
 		m_scenePanel = EchoNew(NodeTreePanel(this));
 		m_bottomPanel = EchoNew(BottomPanel(this));
+		m_documentPanel = EchoNew(DocumentPanel(this));
+		m_documentPanel->setVisible(false);
 
 		QWidget* renderWindow = AStudio::instance()->getRenderWindow();
 		setCentralWidget(renderWindow);
@@ -97,6 +102,8 @@ namespace Studio
 		this->addDockWidget(Qt::LeftDockWidgetArea, m_resPanel);
 		this->addDockWidget(Qt::RightDockWidgetArea, m_scenePanel);
 		this->addDockWidget(Qt::BottomDockWidgetArea, m_bottomPanel);
+		this->addDockWidget(Qt::BottomDockWidgetArea, m_documentPanel);
+		this->tabifyDockWidget(m_bottomPanel, m_documentPanel);
 
 		m_resPanel->onOpenProject();
 
@@ -409,6 +416,12 @@ namespace Studio
 	void MainWindow::onGameProcessFinished(int id, QProcess::ExitStatus status)
 	{
 		EchoLogWarning("stop game debug");
+	}
+
+	// open help dialog
+	void MainWindow::onOpenHelpDialog()
+	{
+		m_documentPanel->setVisible(true);
 	}
 
 	void MainWindow::onReadMsgFromGame()
