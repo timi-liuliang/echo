@@ -51,8 +51,6 @@ namespace Studio
 		nodeItem->setText( 0, nodeName.c_str());
 		//nodeItem->setIcon(0, QIcon(iconPath.c_str()));
 
-		QObject::connect(m_treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(onConfirmNode()));
-
 		Echo::StringArray childNodes;
 		if( Echo::Class::getChildClasses(childNodes, nodeName.c_str(), false))
 		{

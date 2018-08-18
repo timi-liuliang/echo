@@ -64,7 +64,6 @@ namespace Studio
 		m_subEditComboBox = new QComboBox(m_toolBar);
 		m_subEditComboBox->addItem("2D");
 		m_subEditComboBox->addItem("3D");
-		m_subEditComboBox->addItem("Script");
 		m_toolBar->addWidget(m_subEditComboBox);
 		QObject::connect(m_subEditComboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(onSubEditChanged(const QString&)));
 
@@ -283,9 +282,6 @@ namespace Studio
 				renderWindow->switchToController3d();
 
 			AStudio::instance()->getConfigMgr()->setValue("main_window_sub_edit_type", subeditName.toStdString().c_str());
-		}
-		else
-		{
 		}	
 	}
 

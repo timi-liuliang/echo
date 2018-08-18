@@ -21,6 +21,7 @@ namespace Studio
 		setAttribute(Qt::WA_NativeWindow);
 		setUpdatesEnabled(false);
 		setMouseTracking(true);
+		setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	}
 
 	// 析构函数
@@ -31,6 +32,12 @@ namespace Studio
 		EchoEngine::instance()->Release();
 		delete m_inputController2d;
 		delete m_inputController3d;
+	}
+
+	// size hint
+	QSize RenderWindow::sizeHint() const
+	{
+		return QSize(1366, 728);
 	}
 
 	// 开始渲染

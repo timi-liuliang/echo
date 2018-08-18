@@ -58,6 +58,10 @@ namespace Studio
 		void switchToController2d() { m_inputController = m_inputController2d; }
 		void switchToController3d() { m_inputController = m_inputController3d; }
 
+	protected:
+		// size hint
+		virtual QSize sizeHint() const override;
+
 	private slots:
 		// ‰÷»æ
 		void  Render();
