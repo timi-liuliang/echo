@@ -13,10 +13,6 @@ namespace Studio
 		m_splitter->setStretchFactor(0, 0);
 		m_splitter->setStretchFactor(1, 1);
 
-
-		// hide default window title
-		//setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
-
 		// display nodes
 		initApiDisplay();
 
