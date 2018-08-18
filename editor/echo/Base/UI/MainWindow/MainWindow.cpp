@@ -56,6 +56,10 @@ namespace Studio
 		QObject::connect(m_actionStopGame, SIGNAL(triggered(bool)), &m_gameProcess, SLOT(terminate()));
 		QObject::connect(m_actionExitEditor, SIGNAL(triggered(bool)), this, SLOT(close()));
 
+		// midarea
+		m_midArea = new QMdiArea(this);
+		m_midArea->setVisible(false);
+
 		// add combox, switch 2D,3D,Script etc.
 		m_subEditComboBox = new QComboBox(m_toolBar);
 		m_subEditComboBox->addItem("2D");
@@ -83,17 +87,9 @@ namespace Studio
 		m_scenePanel = EchoNew(NodeTreePanel(this));
 		m_bottomPanel = EchoNew(BottomPanel(this));
 
-		//QMdiArea* midArea = new QMdiArea(this);
-
 		QWidget* renderWindow = AStudio::instance()->getRenderWindow();
-
 		setCentralWidget(renderWindow);
-		//m_tabWidget->addTab(renderWindow, "NodeTree");
-
-		//midArea->addSubWindow(renderWindow);
-		//m_playGameToolBar = EchoNew(PlayGameToolBar(centralWidget()));
-		//centralWidget()->layout()->addWidget(m_playGameToolBar);
-		//centralWidget()->layout()->addWidget(renderWindow);
+		//m_midArea->addSubWindow(renderWindow);
 
 		this->setCorner(Qt::BottomLeftCorner, Qt::LeftDockWidgetArea);
 		this->setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
@@ -265,6 +261,8 @@ namespace Studio
 			RenderWindow* renderWindow = ECHO_DOWN_CAST<RenderWindow*>(AStudio::instance()->getRenderWindow());
 			if (renderWindow)
 				renderWindow->switchToController2d();
+
+			AStudio::instance()->getConfigMgr()->setValue("main_window_sub_edit_type", subeditName.toStdString().c_str());
 		}
 		else if (renderType == "3D")
 		{ 
@@ -273,9 +271,14 @@ namespace Studio
 			RenderWindow* renderWindow = ECHO_DOWN_CAST<RenderWindow*>(AStudio::instance()->getRenderWindow());
 			if (renderWindow)
 				renderWindow->switchToController3d();
-		}
 
-		AStudio::instance()->getConfigMgr()->setValue("main_window_sub_edit_type", subeditName.toStdString().c_str());
+			AStudio::instance()->getConfigMgr()->setValue("main_window_sub_edit_type", subeditName.toStdString().c_str());
+		}
+		else
+		{
+			//setCentralWidget(m_midArea);
+			//m_midArea->setVisible(true);
+		}	
 	}
 
 	void MainWindow::onSaveProject()

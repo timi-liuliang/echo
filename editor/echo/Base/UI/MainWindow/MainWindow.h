@@ -4,6 +4,7 @@
 #include "ui_MainWindow.h"
 #include <engine/core/util/StringUtil.h>
 #include <QComboBox>
+#include <QMdiArea>
 
 namespace Studio
 {
@@ -84,5 +85,6 @@ namespace Studio
 		BottomPanel*	m_bottomPanel;
 		QProcess		m_gameProcess;
 		QComboBox*		m_subEditComboBox;
+		QMdiArea*		m_midArea;
 	};
 }
