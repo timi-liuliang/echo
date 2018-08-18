@@ -36,6 +36,14 @@ namespace Echo
 		void setDesignHeight(i32 height);
 		i32 getDesignHeight() const { return m_designHeight; }
 
+		// design window width
+		void setWindowWidth(i32 width) { m_windowWidth = (width==m_designWidth) ? -1 :width; }
+		i32 getWindowWidth() const { return m_windowWidth>=0 ? m_windowWidth : m_designWidth; }
+
+		// design window height
+		void setWindowHeight(i32 height) { m_windowHeight = (height==m_designHeight) ? -1 : height; }
+		i32 getWindowHeight() const { return m_windowHeight >=0 ? m_windowHeight : m_designHeight; }
+
 		// aspect
 		const StringOption& getAspect() const { return m_aspect; }
 		void setAspect(const StringOption& option);
@@ -62,6 +70,8 @@ namespace Echo
 	private:
 		i32				m_designWidth;
 		i32				m_designHeight;
+		i32				m_windowWidth;
+		i32				m_windowHeight;
 		StringOption	m_aspect;
 		ResourcePath	m_launchScene;
 	};

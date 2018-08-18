@@ -12,6 +12,8 @@ namespace Echo
 	GameSettings::GameSettings()
 		: m_designWidth(1366)
 		, m_designHeight(768)
+		, m_windowWidth(-1)
+		, m_windowHeight(-1)
 		, m_launchScene("", ".scene")
 		, m_aspect("stretch", {"none", "stretch", "keep width", "keep height", "keep in", "keep out"})
 	{
@@ -47,6 +49,10 @@ namespace Echo
 		CLASS_BIND_METHOD(GameSettings, setDesignWidth, DEF_METHOD("setDesignWidth"));
 		CLASS_BIND_METHOD(GameSettings, getDesignHeight, DEF_METHOD("getDesignHeight"));
 		CLASS_BIND_METHOD(GameSettings, setDesignHeight, DEF_METHOD("setDesignHeight"));
+		CLASS_BIND_METHOD(GameSettings, getWindowWidth, DEF_METHOD("getWindowWidth"));
+		CLASS_BIND_METHOD(GameSettings, setWindowWidth, DEF_METHOD("setWindowWidth"));
+		CLASS_BIND_METHOD(GameSettings, getWindowHeight, DEF_METHOD("getWindowHeight"));
+		CLASS_BIND_METHOD(GameSettings, setWindowHeight, DEF_METHOD("setWindowHeight"));
 		CLASS_BIND_METHOD(GameSettings, getAspect, DEF_METHOD("getAspect"));
 		CLASS_BIND_METHOD(GameSettings, setAspect, DEF_METHOD("setAspect"));
 		CLASS_BIND_METHOD(GameSettings, getLaunchScene, DEF_METHOD("getLaunchScene"));
@@ -57,6 +63,8 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(GameSettings, "Background", Variant::Type::Color, "getBackgroundColor", "setBackgroundColor");
 		CLASS_REGISTER_PROPERTY(GameSettings, "DesignWidth", Variant::Type::Int, "getDesignWidth", "setDesignWidth");
 		CLASS_REGISTER_PROPERTY(GameSettings, "DesignHeight", Variant::Type::Int, "getDesignHeight", "setDesignHeight");
+		CLASS_REGISTER_PROPERTY(GameSettings, "WindowWidth", Variant::Type::Int, "getWindowWidth", "setWindowWidth");
+		CLASS_REGISTER_PROPERTY(GameSettings, "WindowHeight", Variant::Type::Int, "getWindowHeight", "setWindowHeight");
 		CLASS_REGISTER_PROPERTY(GameSettings, "Aspect", Variant::Type::StringOption, "getAspect", "setAspect");
 		CLASS_REGISTER_PROPERTY(GameSettings, "LaunchScene", Variant::Type::ResourcePath, "getLaunchScene", "setLaunchScene");
 	}
