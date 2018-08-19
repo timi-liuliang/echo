@@ -6,7 +6,7 @@
 
 namespace Studio
 {
-	class DocumentPanel : public QDockWidget, public Ui_Document
+	class DocumentPanel : public QWidget, public Ui_DocumentPanel
 	{
 		Q_OBJECT
 

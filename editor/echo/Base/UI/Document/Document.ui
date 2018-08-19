@@ -1,58 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Document</class>
- <widget class="QDockWidget" name="Document">
+ <class>DocumentPanel</class>
+ <widget class="QWidget" name="DocumentPanel">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1031</width>
-    <height>754</height>
+    <width>842</width>
+    <height>236</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Document</string>
   </property>
-  <widget class="QWidget" name="dockWidgetContents">
-   <layout class="QHBoxLayout" name="horizontalLayout">
-    <property name="spacing">
-     <number>3</number>
-    </property>
-    <property name="leftMargin">
-     <number>3</number>
-    </property>
-    <property name="topMargin">
-     <number>3</number>
-    </property>
-    <property name="rightMargin">
-     <number>3</number>
-    </property>
-    <property name="bottomMargin">
-     <number>3</number>
-    </property>
-    <item>
-     <widget class="QSplitter" name="m_splitter">
-      <property name="lineWidth">
-       <number>1</number>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="spacing">
+    <number>3</number>
+   </property>
+   <property name="leftMargin">
+    <number>3</number>
+   </property>
+   <property name="topMargin">
+    <number>3</number>
+   </property>
+   <property name="rightMargin">
+    <number>3</number>
+   </property>
+   <property name="bottomMargin">
+    <number>3</number>
+   </property>
+   <item>
+    <widget class="QSplitter" name="m_splitter">
+     <property name="lineWidth">
+      <number>1</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QTreeWidget" name="m_treeWidget">
+      <property name="headerHidden">
+       <bool>true</bool>
       </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <widget class="QTreeWidget" name="m_treeWidget">
-       <property name="headerHidden">
-        <bool>true</bool>
+      <column>
+       <property name="text">
+        <string notr="true">1</string>
        </property>
-       <column>
-        <property name="text">
-         <string notr="true">1</string>
-        </property>
-       </column>
-      </widget>
-      <widget class="QTextBrowser" name="m_textBrowser"/>
+      </column>
      </widget>
-    </item>
-   </layout>
-  </widget>
+     <widget class="QTextBrowser" name="m_textBrowser"/>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>

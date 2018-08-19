@@ -19,7 +19,6 @@
 #include "ProjectWnd.h"
 #include "PathChooseDialog.h"
 #include "RenderWindow.h"
-#include "Document.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/io/IO.h>
 #include <engine/core/scene/render_node.h>
@@ -33,7 +32,6 @@ namespace Studio
 		, m_renderPanel(nullptr)
 		, m_resPanel(nullptr)
 		, m_gameProcess(nullptr)
-		, m_documentPanel(nullptr)
 	{
 		setupUi( this);
 
@@ -89,8 +87,6 @@ namespace Studio
 		m_resPanel = EchoNew(ResPanel(this));
 		m_scenePanel = EchoNew(NodeTreePanel(this));
 		m_bottomPanel = EchoNew(BottomPanel(this));
-		m_documentPanel = EchoNew(DocumentPanel(this));
-		m_documentPanel->setVisible(false);
 
 		// add renderWindow to RenderDockWidget
 		QWidget* renderWindow = AStudio::instance()->getRenderWindow();
@@ -106,7 +102,6 @@ namespace Studio
 		this->addDockWidget(Qt::LeftDockWidgetArea, m_resPanel);
 		this->addDockWidget(Qt::RightDockWidgetArea, m_scenePanel);
 		this->addDockWidget(Qt::BottomDockWidgetArea, m_bottomPanel);
-		this->addDockWidget(Qt::BottomDockWidgetArea, m_documentPanel);
 
 		m_resPanel->onOpenProject();
 
@@ -414,7 +409,7 @@ namespace Studio
 	// open help dialog
 	void MainWindow::onOpenHelpDialog()
 	{
-		m_documentPanel->setVisible(!m_documentPanel->isVisible());
+		m_bottomPanel->setTabVisible( "DocumentPanel", !m_bottomPanel->isTabVisible("DocumentPanel"));
 	}
 
 	void MainWindow::onReadMsgFromGame()
