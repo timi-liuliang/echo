@@ -10,9 +10,9 @@ namespace Studio
 {
 	class ResPanel;
 	class NodeTreePanel;
+	class LuaEditor;
 	class TimelinePanel;
 	class DebuggerPanel;
-	class DocumentPanel;
 	class BottomPanel;
 	class MainWindow : public QMainWindow, public Ui_MainWindow
 	{
@@ -87,6 +87,7 @@ namespace Studio
 		QDockWidget*	m_renderPanel;
 		ResPanel*		m_resPanel;
 		NodeTreePanel*	m_scenePanel;
+		LuaEditor*		m_scriptEditorPanel;
 		BottomPanel*	m_bottomPanel;
 		QProcess		m_gameProcess;
 		QComboBox*		m_subEditComboBox;

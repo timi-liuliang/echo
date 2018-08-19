@@ -7,7 +7,7 @@
 
 namespace Studio
 {
-	class LuaEditor : public QWidget, public Ui_LuaEditor
+	class LuaEditor : public QDockWidget, public Ui_ScriptEditorPanel
 	{
 		Q_OBJECT
 

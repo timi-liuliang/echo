@@ -32,6 +32,7 @@ namespace Studio
 		, m_renderPanel(nullptr)
 		, m_resPanel(nullptr)
 		, m_gameProcess(nullptr)
+		, m_scriptEditorPanel(nullptr)
 	{
 		setupUi( this);
 
@@ -87,7 +88,9 @@ namespace Studio
 		m_resPanel = EchoNew(ResPanel(this));
 		m_scenePanel = EchoNew(NodeTreePanel(this));
 		m_bottomPanel = EchoNew(BottomPanel(this));
-
+		m_scriptEditorPanel = EchoNew( LuaEditor(this));
+		m_scriptEditorPanel->setVisible(false);
+			
 		// add renderWindow to RenderDockWidget
 		QWidget* renderWindow = AStudio::instance()->getRenderWindow();
 		m_renderPanel->setWidget(renderWindow);
@@ -98,6 +101,7 @@ namespace Studio
 		this->setCorner(Qt::BottomLeftCorner, Qt::LeftDockWidgetArea);
 		this->setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
 
+		this->addDockWidget(Qt::TopDockWidgetArea, m_scriptEditorPanel);
 		this->addDockWidget(Qt::TopDockWidgetArea, m_renderPanel);
 		this->addDockWidget(Qt::LeftDockWidgetArea, m_resPanel);
 		this->addDockWidget(Qt::RightDockWidgetArea, m_scenePanel);
@@ -110,6 +114,8 @@ namespace Studio
 		updateSettingDisplay();
 
 		recoverEditSettings();
+
+		QObject::connect(m_actionSaveProject, SIGNAL(triggered(bool)), m_scriptEditorPanel, SLOT(save()));
 	}
 
 	// recover edit settings
@@ -388,11 +394,8 @@ namespace Studio
 	void MainWindow::openLuaScript(const Echo::String& fileName)
 	{
 		Echo::String fullPath = Echo::IO::instance()->getFullPath(fileName);
-
-		LuaEditor* editor = new LuaEditor(this);
-		editor->open(fullPath);
-
-		QObject::connect(m_actionSaveProject, SIGNAL(triggered(bool)), editor, SLOT(save()));
+		m_scriptEditorPanel->setVisible(true);
+		m_scriptEditorPanel->open(fullPath);
 	}
 
 	void MainWindow::closeEvent(QCloseEvent *event)

@@ -8,7 +8,7 @@ namespace Studio
 {
 	// ¹¹Ôìº¯Êý
 	LuaEditor::LuaEditor(QWidget* parent)
-		: QWidget(parent)
+		: QDockWidget(parent)
 	{
 		setupUi( this);
 

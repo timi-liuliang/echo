@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>LuaEditor</class>
- <widget class="QWidget" name="LuaEditor">
+ <class>ScriptEditorPanel</class>
+ <widget class="QDockWidget" name="ScriptEditorPanel">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,28 +11,30 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Script</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="spacing">
-    <number>0</number>
-   </property>
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
-    <number>0</number>
-   </property>
-   <item>
-    <widget class="QTextEdit" name="m_textEditor"/>
-   </item>
-  </layout>
+  <widget class="QWidget" name="dockWidgetContents">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+     <number>3</number>
+    </property>
+    <property name="leftMargin">
+     <number>3</number>
+    </property>
+    <property name="topMargin">
+     <number>3</number>
+    </property>
+    <property name="rightMargin">
+     <number>3</number>
+    </property>
+    <property name="bottomMargin">
+     <number>3</number>
+    </property>
+    <item>
+     <widget class="QTextEdit" name="m_textEditor"/>
+    </item>
+   </layout>
+  </widget>
  </widget>
  <resources/>
  <connections/>
