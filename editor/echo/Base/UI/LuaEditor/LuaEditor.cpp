@@ -12,9 +12,6 @@ namespace Studio
 	{
 		setupUi( this);
 
-		// 显示在最前
-		//setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
-
 		// 字体
 		QFont font;
 		font.setFamily("Courier");
