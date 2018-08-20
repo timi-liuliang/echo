@@ -8,10 +8,6 @@
 namespace Echo
 {
 	class ShaderProgramRes;
-
-	/**
-	* ²ÄÖÊÊµÀı
-	*/
 	class Material : public Res
 	{
 		ECHO_RES(Material, Res, ".material", Res::create<Material>, Res::load)

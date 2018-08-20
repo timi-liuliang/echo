@@ -14,7 +14,7 @@ namespace Echo
 		: m_refCount(1)
 		, m_isLoaded(false)
 	{
-
+		//EchoAssert(false);
 	}
 
 	Res::Res(const ResourcePath& path)
