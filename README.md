@@ -12,6 +12,7 @@ Echo is a new game engine, which used more industry standard of nowdays for game
 
 ###  Highly Efficient Workflow   
 ![](https://github.com/blab-liuliang/echo-doc/blob/master/intro/image/echo.png?raw=true)  
+![](https://github.com/blab-liuliang/echo-doc/blob/master/intro/image/echo1.png?raw=true) 
 
 ### Multi Platform Support  
 iOS Android Html5 Windows Mac Linux Steam  
