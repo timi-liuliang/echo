@@ -17,16 +17,28 @@ namespace Studio
 		rule.format = functionFormat;
 		m_highLightRules.append(rule);
 
-		QColor lightPurple; lightPurple.setRgb(192, 120, 221);
-		m_keyWordFormat.setForeground(lightPurple);
+		// keywords
+		color.setRgb(192, 120, 221);
+		m_keyWordFormat.setForeground(color);
 		QStringList keywordPatterns;
 		keywordPatterns << "\\blocal\\b" << "\\bfunction\\b"  << "\\bend\\b" << "\\bif\\b" << "\\bthen\\b" << "\\bdo\\b" << "\\breturn\\b" << "\\bfor\\b" << "\\bin\\b";
-
 		foreach( const QString& pattern, keywordPatterns)
 		{
 			rule.pattern = QRegExp( pattern);
 			rule.format  = m_keyWordFormat;
 			m_highLightRules.append( rule);
+		}
+
+		// false true ...
+		color.setRgb(209, 154, 102);
+		m_keyWordFormat.setForeground(color);
+		keywordPatterns.clear();
+		keywordPatterns << "\\btrue\\b" << "\\bfalse\\b";
+		foreach(const QString& pattern, keywordPatterns)
+		{
+			rule.pattern = QRegExp(pattern);
+			rule.format = m_keyWordFormat;
+			m_highLightRules.append(rule);
 		}
 
 		color.setRgb( 97, 175, 239);
