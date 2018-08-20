@@ -7,18 +7,20 @@ namespace Studio
 	LuaSyntaxHighLighter::LuaSyntaxHighLighter(QTextDocument* parent)
 		: QSyntaxHighlighter( parent)
 	{
+		// atom lua
 		HighlightingRule rule;
 
-		//functionFormat.setFontItalic(true);
-		functionFormat.setForeground(Qt::darkMagenta);
+		// functionFormat.setFontItalic(true);
+		QColor color; color.setRgb(97, 175, 239);
+		functionFormat.setForeground(color);
 		rule.pattern = QRegExp("\\b[A-Za-z0-9_]+(?=\\()");
 		rule.format = functionFormat;
 		m_highLightRules.append(rule);
 
-		QColor lightBlue; lightBlue.setRgb(14, 99, 156);
-		m_keyWordFormat.setForeground( lightBlue);
+		QColor lightPurple; lightPurple.setRgb(192, 120, 221);
+		m_keyWordFormat.setForeground(lightPurple);
 		QStringList keywordPatterns;
-		keywordPatterns << "\\bfunction\\b"  << "\\bend\\b";
+		keywordPatterns << "\\blocal\\b" << "\\bfunction\\b"  << "\\bend\\b" << "\\bif\\b" << "\\bthen\\b" << "\\bdo\\b" << "\\breturn\\b" << "\\bfor\\b" << "\\bin\\b";
 
 		foreach( const QString& pattern, keywordPatterns)
 		{
@@ -27,12 +29,15 @@ namespace Studio
 			m_highLightRules.append( rule);
 		}
 
-		classFormat.setForeground(Qt::darkMagenta);
+		color.setRgb( 97, 175, 239);
+		classFormat.setForeground(color);
 		rule.pattern = QRegExp("\\bQ[A-Za-z]+\\b");
 		rule.format = classFormat;
 		m_highLightRules.append(rule);
 
-		singleLineCommentFormat.setForeground(Qt::green);
+		// ×¢ÊÍ
+		color.setRgb(92, 99, 112);
+		singleLineCommentFormat.setForeground( color);
 		rule.pattern = QRegExp("--[^\n]*");
 		rule.format = singleLineCommentFormat;
 		m_highLightRules.append(rule);
@@ -40,8 +45,8 @@ namespace Studio
 		multiLineCommentFormat.setForeground(Qt::green);
 
 		// ×Ö·û´®
-		QColor darkYellow; darkYellow.setRgb(173, 73, 30);
-		quotationFormat.setForeground(darkYellow);
+		color.setRgb(152, 195, 121);
+		quotationFormat.setForeground(color);
 		rule.pattern = QRegExp("\".*\"");
 		rule.format = quotationFormat;
 		m_highLightRules.append(rule);

@@ -1,8 +1,8 @@
 #include "LuaScript.h"
 #include "engine/core/io/IO.h"
 
-static const char* luaScriptTemplate = R"(
-local template ={}
+static const char* luaScriptTemplate = 
+R"(local template ={}
 
 -- start
 function template:start()
