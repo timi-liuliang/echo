@@ -13,7 +13,7 @@ namespace Studio
 		setupUi( this);
 
 		// 显示在最前
-		setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
+		//setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
 
 		// 字体
 		QFont font;
@@ -95,12 +95,12 @@ namespace Studio
 		if (m_origContent == m_textEditor->toPlainText())
 		{
 			Echo::String fileName = Echo::PathUtil::GetPureFilename(m_fullPath);
-			this->setWindowTitle(fileName.c_str());
+			this->setWindowTitle( fileName.empty() ? "LuaEditor" : fileName.c_str());
 		}
 		else
 		{
 			Echo::String fileName = Echo::PathUtil::GetPureFilename(m_fullPath);
-			this->setWindowTitle((fileName+"*").c_str());
+			this->setWindowTitle(fileName.empty() ? "LuaEditor" :(fileName+"*").c_str());
 		}
 	}
 }
