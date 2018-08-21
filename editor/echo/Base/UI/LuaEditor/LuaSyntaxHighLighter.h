@@ -2,24 +2,24 @@
 
 #include <QSyntaxHighlighter>
 #include <QTextCharFormat>
+#include <engine/core/util/StringUtil.h>
 
 class QTextDocument;
 namespace Studio
 {
-	//-------------------------------
-	// Lua高度编辑 2017-04-06
-	//-------------------------------
 	class LuaSyntaxHighLighter : public QSyntaxHighlighter
 	{
 		Q_OBJECT
 
 	public:
-		// 构造函数
 		LuaSyntaxHighLighter(QTextDocument* parent = 0);
 
 	protected:
-		// 高度block
-		void  highlightBlock( const QString& text);
+		// hight light block
+		virtual void  highlightBlock( const QString& text) override;
+
+		// append rule
+		void appendRule( int r, int g, int b, const Echo::String& regExp);
 
 	private:
 		// 高度规则
@@ -29,17 +29,10 @@ namespace Studio
 			QTextCharFormat format;
 		};
 
-		QRegExp commentStartExpression;
-		QRegExp commentEndExpression;
-		QTextCharFormat classFormat;
-		QTextCharFormat singleLineCommentFormat;
-		QTextCharFormat multiLineCommentFormat;
-		QTextCharFormat quotationFormat;
-		QTextCharFormat functionFormat;
-		QTextCharFormat globalFormat;						// 全局变量
-		QTextCharFormat	mainFunFormat;	
-
+		QRegExp						commentStartExpression;
+		QRegExp						commentEndExpression;
+		QTextCharFormat				multiLineCommentFormat;
+		QTextCharFormat				singleLineCommentFormat;
 		QVector<HighlightingRule>	m_highLightRules;
-		QTextCharFormat				m_keyWordFormat;		// 关键字格式
 	};
 }

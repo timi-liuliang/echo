@@ -7,64 +7,51 @@ namespace Studio
 	LuaSyntaxHighLighter::LuaSyntaxHighLighter(QTextDocument* parent)
 		: QSyntaxHighlighter( parent)
 	{
-		// atom lua
-		HighlightingRule rule;
-
-		// functionFormat.setFontItalic(true);
-		QColor color; color.setRgb(97, 175, 239);
-		functionFormat.setForeground(color);
-		rule.pattern = QRegExp("\\b[A-Za-z0-9_]+(?=\\()");
-		rule.format = functionFormat;
-		m_highLightRules.append(rule);
+		// function
+		appendRule(97, 175, 239, "\\b[A-Za-z0-9_]+(?=\\()");
 
 		// keywords
-		color.setRgb(192, 120, 221);
-		m_keyWordFormat.setForeground(color);
-		QStringList keywordPatterns;
-		keywordPatterns << "\\blocal\\b" << "\\bfunction\\b"  << "\\bend\\b" << "\\bif\\b" << "\\bthen\\b" << "\\bdo\\b" << "\\breturn\\b" << "\\bfor\\b" << "\\bin\\b";
-		foreach( const QString& pattern, keywordPatterns)
-		{
-			rule.pattern = QRegExp( pattern);
-			rule.format  = m_keyWordFormat;
-			m_highLightRules.append( rule);
-		}
+		appendRule(192, 120, 221, "\\blocal\\b");
+		appendRule(192, 120, 221, "\\bfunction\\b");
+		appendRule(192, 120, 221, "\\bend\\b");
+		appendRule(192, 120, 221, "\\bif\\b");
+		appendRule(192, 120, 221, "\\bthen\\b");
+		appendRule(192, 120, 221, "\\bdo\\b");
+		appendRule(192, 120, 221, "\\breturn\\b");
+		appendRule(192, 120, 221, "\\bfor\\b");
+		appendRule(192, 120, 221, "\\bin\\b");
 
 		// false true ...
-		color.setRgb(209, 154, 102);
-		m_keyWordFormat.setForeground(color);
-		keywordPatterns.clear();
-		keywordPatterns << "\\btrue\\b" << "\\bfalse\\b";
-		foreach(const QString& pattern, keywordPatterns)
-		{
-			rule.pattern = QRegExp(pattern);
-			rule.format = m_keyWordFormat;
-			m_highLightRules.append(rule);
-		}
+		appendRule(209, 154, 102, "\\btrue\\b");
+		appendRule(209, 154, 102, "\\bfalse\\b");
+		appendRule( 97, 175, 239, "\\bQ[A-Za-z]+\\b");
 
-		color.setRgb( 97, 175, 239);
-		classFormat.setForeground(color);
-		rule.pattern = QRegExp("\\bQ[A-Za-z]+\\b");
-		rule.format = classFormat;
-		m_highLightRules.append(rule);
 
 		// ×¢ÊÍ
-		color.setRgb(92, 99, 112);
-		singleLineCommentFormat.setForeground( color);
-		rule.pattern = QRegExp("--[^\n]*");
-		rule.format = singleLineCommentFormat;
-		m_highLightRules.append(rule);
-
-		multiLineCommentFormat.setForeground(Qt::green);
+		appendRule(92, 99, 112, "--[^\n]*");
 
 		// ×Ö·û´®
-		color.setRgb(152, 195, 121);
-		quotationFormat.setForeground(color);
-		rule.pattern = QRegExp("\".*\"");
-		rule.format = quotationFormat;
-		m_highLightRules.append(rule);
+		appendRule( 152, 195, 121, "\".*\"");
 
-		commentStartExpression = QRegExp("/\\*");
-		commentEndExpression = QRegExp("\\*/");
+		// Êý×Ö
+		appendRule(209, 154, 102, "\\b[0-9]+.?[0-9]+\\b");
+		appendRule(209, 154, 102, "\\b[0-9]+\\b");
+
+		commentStartExpression = QRegExp("--[[");
+		commentEndExpression = QRegExp("]]--");
+	}
+
+	// append rule
+	void LuaSyntaxHighLighter::appendRule(int r, int g, int b, const Echo::String& regExp)
+	{
+		QColor color;
+		color.setRgb(r, g, b);
+
+		HighlightingRule rule;
+		rule.format.setForeground(color);
+		rule.pattern = QRegExp(regExp.c_str());
+
+		m_highLightRules.append(rule);
 	}
 
 	// ¸ß¶Èblock
@@ -102,6 +89,8 @@ namespace Studio
 				commentLength = endIndex - startIndex + commentEndExpression.matchedLength();
 			}
 
+			QColor color; color.setRgb( 92, 99, 112);
+			multiLineCommentFormat.setForeground(color);
 			setFormat(startIndex, commentLength, multiLineCommentFormat);
 			startIndex = commentStartExpression.indexIn(text, startIndex + commentLength);
 		}
