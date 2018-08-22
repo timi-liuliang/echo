@@ -4,6 +4,7 @@
 #include "ui_LuaEditor.h"
 #include "QProperty.hpp"
 #include "LuaSyntaxHighLighter.h"
+#include <engine/core/script/lua/LuaScript.h>
 
 namespace Studio
 {
@@ -33,8 +34,7 @@ namespace Studio
 		virtual QSize sizeHint() const override;
 
 	private:
-		Echo::String				m_fullPath;					// 全路径
-		QString						m_origContent;				// 文件中内容
+		Echo::LuaResPtr				m_luaRes;
 		LuaSyntaxHighLighter*		m_luaSyntaxHighLighter;
 	};
 }

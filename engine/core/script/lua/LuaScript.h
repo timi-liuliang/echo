@@ -13,6 +13,10 @@ namespace Echo
 		LuaScript(const ResourcePath& path);
 		virtual ~LuaScript();
 
+		// get src
+		void setSrc(const char* src) { m_srcData = src; }
+		const char* getSrc() const { return m_srcData.c_str(); }
+
 		// load
 		static Res* load(const ResourcePath& path);
 
@@ -22,4 +26,5 @@ namespace Echo
 	protected:
 		String			m_srcData;
 	};
+	typedef ResRef<LuaScript> LuaResPtr;
 }

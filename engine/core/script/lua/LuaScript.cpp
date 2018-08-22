@@ -59,9 +59,6 @@ namespace Echo
 		{
 			String fullPath = IO::instance()->getFullPath(m_path.getPath());
 			std::ofstream f(fullPath.c_str());
-			
-			unsigned char bom[] = { 0xEF, 0xBB, 0xBF };
-			f.write((char*)bom, sizeof(bom));
 
 			f << content;
 

@@ -400,9 +400,8 @@ namespace Studio
 	// open lua file for edit
 	void MainWindow::openLuaScript(const Echo::String& fileName)
 	{
-		Echo::String fullPath = Echo::IO::instance()->getFullPath(fileName);
 		m_scriptEditorPanel->setVisible(true);
-		m_scriptEditorPanel->open(fullPath);
+		m_scriptEditorPanel->open(fileName);
 	}
 
 	// on display script edit panel

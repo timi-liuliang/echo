@@ -31,7 +31,6 @@ namespace Studio
 		m_luaSyntaxHighLighter = new LuaSyntaxHighLighter(m_textEditor->document());
 
 		// 消息链接
-		//QObject::connect(m_actionSave, SIGNAL(triggered()), this, SLOT(save()));
 		QObject::connect(m_textEditor, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
 	}
 
@@ -51,44 +50,33 @@ namespace Studio
 	// 显示纹理
 	void LuaEditor::open(const Echo::String& fullPath)
 	{
-		m_fullPath = "";
-
-		// 1.显示Lua
-		QFile file(fullPath.c_str());
-		if (file.open(QFile::ReadOnly | QFile::Text))
+		m_luaRes = ECHO_DOWN_CAST<Echo::LuaScript*>(Echo::Res::get(fullPath));
+		if (m_luaRes)
 		{
-			m_fullPath = fullPath;
-			m_origContent = file.readAll();
-			m_textEditor->setPlainText(m_origContent);
+			m_textEditor->setPlainText(m_luaRes->getSrc());
 
-			file.close();
+			// 0.更改标题
+			updateTitle();
 		}
-
-		// 0.更改标题
-		updateTitle();
 	}
 
 	// 内容被修改
 	void LuaEditor::onTextChanged()
 	{
-		// 0.更改标题
-		updateTitle();
+		if (m_luaRes)
+		{
+			m_luaRes->setSrc( m_textEditor->toPlainText().toStdString().c_str());
+
+			updateTitle();
+		}
 	}
 
 	// 保存
 	void LuaEditor::save()
 	{
-		if (!m_fullPath.empty())
+		if (m_luaRes)
 		{
-			QFile file(m_fullPath.c_str());
-			if (file.open(QFile::WriteOnly | QFile::Text))
-			{
-				m_origContent = m_textEditor->toPlainText();
-				file.write(m_origContent.toUtf8());
-
-				file.flush();
-				file.close();
-			}
+			m_luaRes->save();
 
 			// 0.更改标题
 			updateTitle();
@@ -98,15 +86,22 @@ namespace Studio
 	// 更新标题显示
 	void LuaEditor::updateTitle()
 	{
-		if (m_origContent == m_textEditor->toPlainText())
+		if (m_luaRes)
 		{
-			Echo::String fileName = Echo::PathUtil::GetPureFilename(m_fullPath);
-			this->setWindowTitle( fileName.empty() ? "LuaEditor" : fileName.c_str());
+			if (m_luaRes->getSrc() == m_textEditor->toPlainText())
+			{
+				Echo::String fileName = m_luaRes->getPath();
+				setWindowTitle( fileName.c_str());
+			}
+			else
+			{
+				Echo::String fileName = m_luaRes->getPath();
+				setWindowTitle((fileName + "*").c_str());
+			}
 		}
 		else
 		{
-			Echo::String fileName = Echo::PathUtil::GetPureFilename(m_fullPath);
-			this->setWindowTitle(fileName.empty() ? "LuaEditor" :(fileName+"*").c_str());
+			setWindowTitle("LuaEditor");
 		}
 	}
 }
