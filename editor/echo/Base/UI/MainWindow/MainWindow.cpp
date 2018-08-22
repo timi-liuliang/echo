@@ -109,12 +109,14 @@ namespace Studio
 
 		m_resPanel->onOpenProject();
 
-		// update rencents project display
+		// menu [Project(P)]
 		updateRencentProjectsDisplay();
 		updateSettingDisplay();
 
+		// settings of echo
 		recoverEditSettings();
 
+		// signals & slots
 		QObject::connect(m_actionSaveProject, SIGNAL(triggered(bool)), m_scriptEditorPanel, SLOT(save()));
 	}
 
@@ -396,9 +398,13 @@ namespace Studio
 	// open lua file for edit
 	void MainWindow::openLuaScript(const Echo::String& fileName)
 	{
+		bool isNeedResize = !m_scriptEditorPanel->isVisible();
 		Echo::String fullPath = Echo::IO::instance()->getFullPath(fileName);
 		m_scriptEditorPanel->setVisible(true);
 		m_scriptEditorPanel->open(fullPath);
+		
+		if (isNeedResize)
+			resizeDocks({ m_scriptEditorPanel, m_renderPanel }, { 70 , 30 }, Qt::Horizontal);
 	}
 
 	void MainWindow::closeEvent(QCloseEvent *event)
