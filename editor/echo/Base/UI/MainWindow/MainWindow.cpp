@@ -118,6 +118,7 @@ namespace Studio
 
 		// signals & slots
 		QObject::connect(m_actionSaveProject, SIGNAL(triggered(bool)), m_scriptEditorPanel, SLOT(save()));
+		QObject::connect(m_scriptEditorPanel, SIGNAL(visibilityChanged(bool)), this, SLOT(onScriptEditVisibleChanged()));
 	}
 
 	// recover edit settings
@@ -398,13 +399,18 @@ namespace Studio
 	// open lua file for edit
 	void MainWindow::openLuaScript(const Echo::String& fileName)
 	{
-		bool isNeedResize = !m_scriptEditorPanel->isVisible();
 		Echo::String fullPath = Echo::IO::instance()->getFullPath(fileName);
 		m_scriptEditorPanel->setVisible(true);
 		m_scriptEditorPanel->open(fullPath);
-		
-		if (isNeedResize)
+	}
+
+	// on display script edit panel
+	void MainWindow::onScriptEditVisibleChanged()
+	{
+		if (m_scriptEditorPanel->isVisible())
+		{
 			resizeDocks({ m_scriptEditorPanel, m_renderPanel }, { 70 , 30 }, Qt::Horizontal);
+		}
 	}
 
 	void MainWindow::closeEvent(QCloseEvent *event)

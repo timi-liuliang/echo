@@ -69,6 +69,9 @@ namespace Studio
 		// open help dialog
 		void onOpenHelpDialog();
 
+		// on display script edit panel
+		void onScriptEditVisibleChanged();
+
 	protected:
 		// open another project
 		void openAnotherProject(const Echo::String& fullPathName);
