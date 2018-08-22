@@ -72,6 +72,9 @@ namespace Studio
 		// on display script edit panel
 		void onScriptEditVisibleChanged();
 
+		// on Dockwidget location changed
+		void onDockWidgetLocationChanged();
+
 	protected:
 		// open another project
 		void openAnotherProject(const Echo::String& fullPathName);

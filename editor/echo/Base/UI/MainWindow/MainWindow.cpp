@@ -119,6 +119,7 @@ namespace Studio
 		// signals & slots
 		QObject::connect(m_actionSaveProject, SIGNAL(triggered(bool)), m_scriptEditorPanel, SLOT(save()));
 		QObject::connect(m_scriptEditorPanel, SIGNAL(visibilityChanged(bool)), this, SLOT(onScriptEditVisibleChanged()));
+		QObject::connect(m_renderPanel, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(onDockWidgetLocationChanged()));
 	}
 
 	// recover edit settings
@@ -411,6 +412,13 @@ namespace Studio
 		{
 			resizeDocks({ m_scriptEditorPanel, m_renderPanel }, { 70 , 30 }, Qt::Horizontal);
 		}
+	}
+
+	// on Dockwidget location changed
+	void MainWindow::onDockWidgetLocationChanged()
+	{
+		//centralWidget()->setMaximumHeight(200);
+		//centralWidget()->setMinimumHeight(200);
 	}
 
 	void MainWindow::closeEvent(QCloseEvent *event)
