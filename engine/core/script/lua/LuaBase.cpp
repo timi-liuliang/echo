@@ -5,7 +5,11 @@
 
 namespace Echo
 {
-	// error message
+	void lua_binder_warning(const char* msg)
+	{
+		Log::instance()->warning(msg);
+	}
+
 	void lua_binder_error(const char* msg)
 	{
 		Log::instance()->error(msg);

@@ -26,10 +26,10 @@ namespace Echo
 
 	void Input::bindMethods()
 	{
-		/*CLASS_BIND_METHOD(Input, isMouseButtonDown, "isMouseButtonDown");
+		CLASS_BIND_METHOD(Input, isMouseButtonDown, "isMouseButtonDown");
 		CLASS_BIND_METHOD(Input, getMouseButtonDown, "getMouseButtonDown");
 		CLASS_BIND_METHOD(Input, isMouseButtonUp, "isMouseButtonUp");
-		CLASS_BIND_METHOD(Input, getMouseButtonUp, "getMouseButtonUp");*/
+		CLASS_BIND_METHOD(Input, getMouseButtonUp, "getMouseButtonUp");
 	}
 
 	bool Input::isMouseButtonDown(Echo::ui32 id)

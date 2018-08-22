@@ -100,8 +100,6 @@ namespace Echo
 
 	static int cb(lua_State* L)
 	{
-		LUA_STACK_CHECK(L);
-
 		// get object ptr
 		lua_pushstring(L, "this");
 		lua_rawget(L, 1);

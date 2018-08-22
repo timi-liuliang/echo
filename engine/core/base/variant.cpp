@@ -23,6 +23,12 @@ namespace Echo
 		m_int = value;
 	}
 
+	Variant::Variant(ui32 value)
+		: m_type(Type::Int)
+	{
+		m_uint = value;
+	}
+
 	Variant::Variant(const Echo::String& str)
 		: m_type(Type::String)
 	{

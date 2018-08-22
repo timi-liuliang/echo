@@ -47,6 +47,7 @@ namespace Echo
 		Variant():m_type(Type::Nil){}
 		Variant(bool value);
 		Variant(int value);
+		Variant(ui32 value);
 		Variant(Real value);
 		Variant(const String& str);
 		Variant(const Vector2& value);
@@ -68,6 +69,7 @@ namespace Echo
 		// reimplent operator
 		operator const bool() const { return m_bool; }
 		operator const int() const { return m_int; }
+		operator const ui32() const { return m_uint; }
 		operator const Real() const { return m_real; }
 		operator const Vector2&() const { return any_cast<Vector2>(m_any); }
 		operator const Vector3&() const { return any_cast<Vector3>(m_any); }
@@ -104,6 +106,7 @@ namespace Echo
 		{
 			bool			m_bool;
 			i32				m_int;
+			ui32			m_uint;
 			float			m_real;
 			mutable Object*	m_obj;
 		};
