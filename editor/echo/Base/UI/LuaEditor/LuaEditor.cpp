@@ -1,5 +1,6 @@
 #include "ProjectMgr.h"
 #include <QFileDialog>
+#include "MainWindow.h"
 #include "LuaEditor.h"
 #include "Studio.h"
 #include <engine/core/util/PathUtil.h>
@@ -37,6 +38,14 @@ namespace Studio
 	// 析构函数
 	LuaEditor::~LuaEditor()
 	{
+	}
+
+	// size hint
+	QSize LuaEditor::sizeHint() const
+	{
+		float width = MainWindow::instance()->width() * 0.7f;
+		float height = MainWindow::instance()->height() * 0.65f;
+		return QSize(width, height);
 	}
 
 	// 显示纹理

@@ -1,6 +1,7 @@
 #include <QtGui>
 #include "RenderWindow.h"
 #include "EchoEngine.h"
+#include "MainWindow.h"
 #include "InputController2d.h"
 #include "InputController3d.h"
 #include <QDateTime>
@@ -37,8 +38,9 @@ namespace Studio
 	// size hint
 	QSize RenderWindow::sizeHint() const
 	{
-		return QWidget::sizeHint();
-		//return QSize(1366, 728);
+		float width = MainWindow::instance()->width() * 0.3f;
+		float height = MainWindow::instance()->height() * 0.65f;
+		return QSize( width, height);
 	}
 
 	// ¿ªÊ¼äÖÈ¾

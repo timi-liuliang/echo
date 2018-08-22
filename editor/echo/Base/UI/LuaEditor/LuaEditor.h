@@ -28,6 +28,10 @@ namespace Studio
 		// 更新标题显示
 		void updateTitle();
 
+	protected:
+		// size hint
+		virtual QSize sizeHint() const override;
+
 	private:
 		Echo::String				m_fullPath;					// 全路径
 		QString						m_origContent;				// 文件中内容
