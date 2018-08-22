@@ -387,6 +387,9 @@ namespace Studio
 			Studio::EchoEngine::instance()->setCurrentEditNodeSavePath(resPath);
 
 			NodeTreePanel::instance()->refreshNodeTreeDisplay();
+
+			// title
+			m_renderPanel->setWindowTitle( resPath.c_str());
 		}
 	}
 
