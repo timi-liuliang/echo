@@ -6,10 +6,8 @@
 #include "InputController3d.h"
 #include <QDateTime>
 
-
 namespace Studio
 {
-	// 构造函数
 	RenderWindow::RenderWindow(QWidget* parent/* = NULL*/)
 		: QWidget(parent)
 		, m_mouseMenu(NULL)
@@ -25,7 +23,6 @@ namespace Studio
 		setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	}
 
-	// 析构函数
 	RenderWindow::~RenderWindow()
 	{
 		delete m_timer; m_timer = NULL;
@@ -43,7 +40,6 @@ namespace Studio
 		return QSize( width, height);
 	}
 
-	// 开始渲染
 	void RenderWindow::BeginRender()
 	{
 		EchoEngine::instance()->Initialize((HWND)this->winId());
@@ -56,16 +52,13 @@ namespace Studio
 
 		m_inputController = m_inputController2d;
 
-		// 时间事件
 		m_timer = new QTimer(this);
 		QObject::connect(m_timer, SIGNAL(timeout()), this, SLOT(Render()));
 		m_timer->start(10);
 	}
 
-	// 渲染更新
 	void  RenderWindow::Render()
 	{
-		// 鼠标是否位于窗口中
 		ResizeWindow();
 
 		static DWORD lastTime = QDateTime::currentMSecsSinceEpoch();
@@ -87,7 +80,6 @@ namespace Studio
 		lastTime = curTime;
 	}
 
-	// 窗口大小改变
 	void RenderWindow::ResizeWindow()
 	{
 		
@@ -107,27 +99,20 @@ namespace Studio
 		m_ratio = size;
 	}
 
-	// 重置设备
 	void  RenderWindow::ResetDevice()
 	{
 	}
 
-	// 鼠标滚轮事件
 	void RenderWindow::wheelEvent(QWheelEvent * e)
 	{
 		m_inputController->wheelEvent(e);
 	}
 
-	// 鼠标移动事件
 	void RenderWindow::mouseMoveEvent(QMouseEvent* e)
 	{
-		// UI事件
 		if ( m_isLeftButtonDown)
 		{
-			// 初始上次位置
 			static QPointF lastPos = e->localPos();
-
-			// 计算位移
 			QPointF changedPos = e->localPos() - lastPos;
 
 			lastPos = e->localPos();
@@ -136,7 +121,6 @@ namespace Studio
 		m_inputController->mouseMoveEvent(e);
 	}
 
-	// 鼠标按下事件
 	void RenderWindow::mousePressEvent(QMouseEvent* e)
 	{
 		if (!hasFocus())
@@ -144,13 +128,11 @@ namespace Studio
 			setFocus();
 		}
 
-		// UI事件
 		if ( e->button()==Qt::LeftButton)
 		{
 			m_isLeftButtonDown = true;
 		}
 
-		// 注册控制器事件
 		m_inputController->mousePressEvent(e);
 	}
 
@@ -159,10 +141,8 @@ namespace Studio
 		m_inputController->mouseDoubleClickEvent(e);
 	}
 
-	// 鼠标释放事件
 	void RenderWindow::mouseReleaseEvent(QMouseEvent* e)
 	{
-		// UI事件
 		if (e->button() == Qt::LeftButton)
 		{
 			m_isLeftButtonDown = false;
@@ -171,13 +151,11 @@ namespace Studio
 		m_inputController->mouseReleaseEvent(e);
 	}
 
-	// 鼠标按下事件
 	void RenderWindow::keyPressEvent(QKeyEvent* e)
 	{
 		m_inputController->keyPressEvent(e);
 	}
 
-	// 鼠标抬起事件
 	void RenderWindow::keyReleaseEvent(QKeyEvent* e)
 	{
 		m_inputController->keyReleaseEvent(e);
