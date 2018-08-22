@@ -95,6 +95,10 @@ namespace QT_UI
 			QPixmap pixmap(fullPath);
 			return QIcon(pixmap.scaled(QSize(64, 64)));
 		}
+		else if (Echo::StringUtil::Equal(fileExt, ".lua", false))
+		{
+			return QIcon(":/icon/Icon/file/lua.png");
+		}
 
 		return QIcon(":/icon/Icon/file/file.png");
 	}
