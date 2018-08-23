@@ -9,11 +9,11 @@ Echo is a new game engine, which used more industry standard of nowdays for game
 [Documentation](https://github.com/blab-liuliang/echo-doc/tree/master/documentation)  
 
 ## Compile
-[Windows Editor]   
-1. EnterFolder "echo/build/editor/windows"  
+###[Windows Editor]   
+1. EnterFolder "${echo_root_path}/build/editor/windows"  
 2. Double click "cmake.bat"
-3. Double click "echo.sln"
-Windows App   
+3. Double click "echo.sln"   
+###[Windows App]   
 
 ## Features
 
