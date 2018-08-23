@@ -27,15 +27,22 @@ def copy_res() :
 # cmake vs project
 def cmake_project(version, platform) :
     vsconfig = " -G\"Visual Studio 14 2015\" ../"
-    solution_dir = "/../../build"
+    solution_dir = root_dir + "/../../../solution/"
 
-    os.chdir(root_dir + solution_dir)
+	# create dir
+    shutil.rmtree( solution_dir, True)
+    os.makedirs( solution_dir)
 
-    # CMake the project
+    os.chdir(solution_dir)
+
+    # cmake the project
     subprocess.call("cmake" + vsconfig, shell=True)
 
     # copy resource
     # copy_res()
+
+    # open direcotry
+    os.system( "start " + solution_dir)
 
     return
 
