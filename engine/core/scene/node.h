@@ -39,6 +39,7 @@ namespace Echo
 
 		ui32 getChildNum() const { return m_children.size(); }
 		Node* getChild(ui32 idx);
+		Node* getChild(const char* name);
 		const NodeArray& getChildren() { return m_children; }
 
 		// remove from tree
@@ -100,7 +101,7 @@ namespace Echo
 
 	public:
 		// get node by path
-		Node* getNode(const char* path) { return this; }
+		Node* getNode(const char* path);
 
 		// queue free
 		virtual void queueFree();

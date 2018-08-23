@@ -213,6 +213,17 @@ namespace Echo
 		return *std::next(m_children.begin(), idx);
 	}
 
+	Node* Node::getChild(const char* name)
+	{
+		for (Node* child : m_children)
+		{
+			if (child->getName() == name)
+				return child;
+		}
+
+		return nullptr;
+	}
+
 	// remove from tree
 	void Node::remove()
 	{
@@ -450,6 +461,64 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(Node, "Rotation", Variant::Type::Vector3, "getYawPitchRoll", "setYawPitchRoll");
 		CLASS_REGISTER_PROPERTY(Node, "Scale",  Variant::Type::Vector3, "getScale", "setScale");
 		CLASS_REGISTER_PROPERTY(Node, "Script", Variant::Type::ResourcePath, "getScript", "setScript");
+	}
+
+	// get node by path
+	Node* Node::getNode(const char* path)
+	{
+		if (path)
+		{
+			int pathLen = strlen(path);
+			if (!pathLen)
+			{
+				return this;
+			}
+			else
+			{
+				if (path[0] == '/')
+				{
+					Node* root = this;
+					while (root->getParent())
+					{
+						root = root->getParent();
+					}
+
+					return root->getNode( path+1);
+				}
+				else
+				{
+					bool haveGrandson = false;
+					char firstName[256];
+					for (int i = 0; i <= pathLen; i++)
+					{
+						if (*path == '/')
+						{
+							firstName[i] = '\0';
+							path++;
+							haveGrandson = true;
+							break;
+						}
+						else
+						{
+							firstName[i] = *path;
+							path++;
+						}
+					}
+
+					Node* child = getChild(firstName);
+					if (haveGrandson)
+					{
+						return child->getNode(path);
+					}
+					else
+					{
+						return child;
+					}
+				}
+			}
+		}
+			
+		return nullptr;
 	}
 
 	// queue free

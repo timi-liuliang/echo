@@ -2,17 +2,17 @@
 #include "engine/core/io/IO.h"
 
 static const char* luaScriptTemplate = 
-R"(local template ={}
+R"(local object ={}
 
 -- start
-function template:start()
+function object:start()
 end
 
 -- update
-function template:update()
+function object:update()
 end
 
-return template
+return object
 )";
 
 namespace Echo
