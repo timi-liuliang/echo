@@ -1,8 +1,8 @@
 # Echo
 
-## Simplicity And Powerful Game Engine  
+## Introduction  
 
-Echo is a new game engine, which used more industry standard of nowdays for game development. The new design concept makes the engine simplicty to use. but more powerful.
+**Echo** is a new game engine, which used more industry standard of nowdays for game development. The new design concept makes the engine simplicty to use. but more powerful.
 
 [Examples](https://github.com/blab-liuliang/echo-examples)  
 [Tutorials](https://github.com/blab-liuliang/echo-doc/tree/master/tutorial)  
