@@ -19,14 +19,16 @@ namespace Echo
 		struct LuaScript
 		{
 			bool			m_isStart;
-			bool			m_isValid;
+			bool			m_isRegistered;
+			bool			m_isHaveScript;
 			ResourcePath	m_file;					// file name
 			String			m_globalTableName;		// global table name
 
-			LuaScript() : m_isStart(false), m_isValid(false), m_file("", ".lua"){}
+			LuaScript() : m_isStart(false), m_isRegistered(false), m_isHaveScript(false), m_file("", ".lua"){}
 			void start(Node* obj);
 			void update(Node* obj);
-			bool isValid()const { return m_isValid; }
+			void registObj(Node* obj);
+			bool isRegistered()const { return m_isRegistered; }
 		};
 
 	public:

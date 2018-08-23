@@ -16,6 +16,7 @@ namespace Studio
 		appendRule(192, 120, 221, "\\bend\\b");
 		appendRule(192, 120, 221, "\\bif\\b");
 		appendRule(192, 120, 221, "\\bthen\\b");
+		appendRule(192, 120, 221, "\\belse\\b");
 		appendRule(192, 120, 221, "\\bdo\\b");
 		appendRule(192, 120, 221, "\\breturn\\b");
 		appendRule(192, 120, 221, "\\bfor\\b");

@@ -10,6 +10,7 @@ function utils.append_table(a, b)
     end
 end
 
+objs = {}
 nodes = {}
 		
 function update_all_nodes()

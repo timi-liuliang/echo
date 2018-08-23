@@ -17,8 +17,8 @@ namespace Echo
 	// log messages
 	void lua_binder_warning(const char* msg);
 	void lua_binder_error(const char* msg);
-	const char* lua_get_obj_name(Object* obj);
-	const char* lua_get_node_name(Node* node);
+	void lua_get_obj_name(Object* obj, char* buffer, int len);
+	void lua_get_node_name(Node* obj, char* buffer, int len);
 
 	// lua stack to value
 	template<typename T> INLINE T lua_getvalue(lua_State* L, int index)			
@@ -88,15 +88,35 @@ namespace Echo
 
 	template<> INLINE void lua_pushvalue<Object*>(lua_State* state, Object* value) 
 	{
-		lua_getglobal(state, "nodes");
-		lua_getfield(state, -1, lua_get_obj_name(value));
-		lua_remove(state, -2);
+		if (value)
+		{
+			char obj_name[128] = "_";
+			lua_get_obj_name(value, obj_name + 1, 127);
+
+			lua_getglobal(state, "objs");
+			lua_getfield(state, -1, obj_name);
+			lua_remove(state, -2);
+		}
+		else
+		{
+			lua_pushnil(state);
+		}
 	}
 
 	template<> INLINE void lua_pushvalue<Node*>(lua_State* state, Node* value)
 	{
-		lua_getglobal(state, "nodes");
-		lua_getfield(state, -1, lua_get_node_name(value));
-		lua_remove(state, -2);
+		if (value)
+		{
+			char obj_name[128] = "_";
+			lua_get_node_name(value, obj_name + 1, 127);
+
+			lua_getglobal(state, "objs");
+			lua_getfield(state, -1, obj_name);
+			lua_remove(state, -2);
+		}
+		else
+		{
+			lua_pushnil(state);
+		}
 	}
 }

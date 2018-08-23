@@ -120,7 +120,6 @@ namespace Echo
 	LuaBinder* LuaBinder::instance()
 	{
 		static LuaBinder* binder = EchoNew(LuaBinder);
-
 		return binder;
 	}
 
@@ -196,7 +195,8 @@ namespace Echo
 			LUA_STACK_CHECK(m_luaState);
 
 			String currentLayerName;
-			int parentIdx = lua_get_upper_tables(m_luaState, objectName, currentLayerName);
+			int upperTableCount = lua_get_upper_tables(m_luaState, objectName, currentLayerName);
+			int parentIdx = lua_gettop(m_luaState);
 
 			lua_newtable(m_luaState);
 			int objIdx = lua_gettop(m_luaState);
@@ -208,10 +208,10 @@ namespace Echo
 			luaL_getmetatable(m_luaState, className.c_str());
 			lua_setmetatable(m_luaState, objIdx);
 
-			if (parentIdx != 0)
+			if (upperTableCount != 0)
 			{
 				lua_setfield( m_luaState, parentIdx, currentLayerName.c_str());
-				lua_pop(m_luaState, parentIdx);
+				lua_pop(m_luaState, upperTableCount);
 			}
 			else
 			{

@@ -17,18 +17,14 @@ namespace Echo
 		Log::instance()->error(msg);
 	}
 
-	const char* lua_get_obj_name(Object* obj)
+	void lua_get_obj_name(Object* obj, char* buffer, int len)
 	{
-		static String result;
-		result = StringUtil::Format("_%d", obj->getId());
-		return result.c_str();
+		itoa(obj->getId(), buffer, 10);
 	}
 
-	const char* lua_get_node_name(Node* node)
+	void lua_get_node_name(Node* obj, char* buffer, int len)
 	{
-		static String result;
-		result = StringUtil::Format("_%d", node->getId());
-		return result.c_str();
+		itoa(obj->getId(), buffer, 10);
 	}
 
 	// get upper layer table

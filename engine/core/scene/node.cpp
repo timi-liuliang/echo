@@ -11,24 +11,38 @@ namespace Echo
 {
 	void Node::LuaScript::start(Node* obj)
 	{
-		m_isValid = Engine::instance()->getConfig().m_isGame && IO::instance()->isResourceExists(m_file.getPath());
-		if (m_isValid)
+		m_isHaveScript = IO::instance()->isResourceExists(m_file.getPath());
+		if ( Engine::instance()->getConfig().m_isGame )
 		{
-			m_globalTableName = StringUtil::Format("nodes._%d", obj->getId());
+			if ( m_isHaveScript)
+			{
+				registObj(obj);
+
+				String fileName = PathUtil::GetPureFilename(m_file.getPath(), false);
+				String moduleName = StringUtil::Replace(m_file.getPath(), "Res://", "");
+				moduleName = StringUtil::Replace(moduleName, "/", ".");
+				moduleName = StringUtil::Replace(moduleName, "\\", ".");
+				moduleName = StringUtil::Replace(moduleName, ".lua", "");
+
+				String luaStr = StringUtil::Format(
+					"nodes._%d = objs._%d\n"\
+					"local script_table = require \"%s\"\n"\
+					"utils.append_table(%s, script_table)\n" \
+					"%s:start()\n", obj->getId(), obj->getId(), moduleName.c_str(), m_globalTableName.c_str(), m_globalTableName.c_str());
+
+				LuaBinder::instance()->execString(luaStr);
+			}
+		}
+	}
+
+	void Node::LuaScript::registObj(Node* obj)
+	{
+		if (!m_isRegistered)
+		{
+			m_globalTableName = StringUtil::Format("objs._%d", obj->getId());
 			LuaBinder::instance()->registerObject("Node", m_globalTableName.c_str(), obj);
 
-			String fileName = PathUtil::GetPureFilename(m_file.getPath(), false);
-			String moduleName = StringUtil::Replace(m_file.getPath(), "Res://", "");
-			moduleName = StringUtil::Replace(moduleName, "/", ".");
-			moduleName = StringUtil::Replace(moduleName, "\\", ".");
-			moduleName = StringUtil::Replace(moduleName, ".lua", "");
-			
-			String luaStr = StringUtil::Format(
-				"local script_table = require \"%s\"\n"\
-				"utils.append_table(%s, script_table)\n" \
-				"%s:start()\n" , moduleName.c_str(),m_globalTableName.c_str(), m_globalTableName.c_str());
-
-			LuaBinder::instance()->execString(luaStr);
+			m_isRegistered = true;
 		}
 	}
 
@@ -471,6 +485,7 @@ namespace Echo
 			int pathLen = strlen(path);
 			if (!pathLen)
 			{
+				m_script.registObj(this);
 				return this;
 			}
 			else
@@ -506,13 +521,17 @@ namespace Echo
 					}
 
 					Node* child = getChild(firstName);
-					if (haveGrandson)
+					if (child)
 					{
-						return child->getNode(path);
-					}
-					else
-					{
-						return child;
+						if (haveGrandson)
+						{
+							return child->getNode(path);
+						}
+						else
+						{
+							child->m_script.registObj(child);
+							return child;
+						}
 					}
 				}
 			}
