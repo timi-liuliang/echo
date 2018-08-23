@@ -22,6 +22,7 @@ namespace Studio
 		appendRule(192, 120, 221, "\\bin\\b");
 
 		// false true ...
+		appendRule(209, 154, 102, "\\bnil\\b");
 		appendRule(209, 154, 102, "\\btrue\\b");
 		appendRule(209, 154, 102, "\\bfalse\\b");
 		appendRule( 97, 175, 239, "\\bQ[A-Za-z]+\\b");

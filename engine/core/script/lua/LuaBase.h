@@ -11,9 +11,14 @@ extern "C"
 
 namespace Echo
 {
+	class Object;
+	class Node;
+
 	// log messages
 	void lua_binder_warning(const char* msg);
 	void lua_binder_error(const char* msg);
+	const char* lua_get_obj_name(Object* obj);
+	const char* lua_get_node_name(Node* node);
 
 	// lua stack to value
 	template<typename T> INLINE T lua_getvalue(lua_State* L, int index)			
@@ -56,9 +61,42 @@ namespace Echo
 	int lua_get_upper_tables(lua_State* luaState, const String& objectName, String& currentLayerName);
 
 	// lua push vlaue to stack
-	template<typename T> INLINE void lua_pushvalue(lua_State* L, T value) { lua_binder_error("lua stack to value error, unknow c type"); }
-	template<> INLINE void lua_pushvalue<const char*>(lua_State* state, const char* value) { lua_pushfstring(state, value); }
-	template<> INLINE void lua_pushvalue<bool>(lua_State* state, bool value) { lua_pushboolean(state, value); }
-	template<> INLINE void lua_pushvalue<i32>(lua_State* state, i32 value) { lua_pushinteger(state, value); }
-	template<> INLINE void lua_pushvalue<ui32>(lua_State* state, ui32 value) { lua_pushinteger(state, value); }
+	template<typename T> INLINE void lua_pushvalue(lua_State* L, T value) 
+	{ 
+		lua_binder_error("lua stack to value error, unknow c type"); 
+	}
+
+	template<> INLINE void lua_pushvalue<const char*>(lua_State* state, const char* value) 
+	{ 
+		lua_pushfstring(state, value); 
+	}
+
+	template<> INLINE void lua_pushvalue<bool>(lua_State* state, bool value) 
+	{ 
+		lua_pushboolean(state, value); 
+	}
+
+	template<> INLINE void lua_pushvalue<i32>(lua_State* state, i32 value) 
+	{ 
+		lua_pushinteger(state, value); 
+	}
+
+	template<> INLINE void lua_pushvalue<ui32>(lua_State* state, ui32 value) 
+	{ 
+		lua_pushinteger(state, value); 
+	}
+
+	template<> INLINE void lua_pushvalue<Object*>(lua_State* state, Object* value) 
+	{
+		lua_getglobal(state, "nodes");
+		lua_getfield(state, -1, lua_get_obj_name(value));
+		lua_remove(state, -2);
+	}
+
+	template<> INLINE void lua_pushvalue<Node*>(lua_State* state, Node* value)
+	{
+		lua_getglobal(state, "nodes");
+		lua_getfield(state, -1, lua_get_node_name(value));
+		lua_remove(state, -2);
+	}
 }

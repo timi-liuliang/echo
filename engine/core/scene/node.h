@@ -100,7 +100,7 @@ namespace Echo
 
 	public:
 		// get node by path
-		Node* getNode(const String& path) { return nullptr; }
+		Node* getNode(const char* path) { return this; }
 
 		// queue free
 		virtual void queueFree();

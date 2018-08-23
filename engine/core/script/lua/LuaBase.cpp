@@ -2,6 +2,8 @@
 
 #include "LuaBase.h"
 #include "engine/core/log/Log.h"
+#include "engine/core/base/object.h"
+#include "engine/core/scene/node.h"
 
 namespace Echo
 {
@@ -13,6 +15,20 @@ namespace Echo
 	void lua_binder_error(const char* msg)
 	{
 		Log::instance()->error(msg);
+	}
+
+	const char* lua_get_obj_name(Object* obj)
+	{
+		static String result;
+		result = StringUtil::Format("_%d", obj->getId());
+		return result.c_str();
+	}
+
+	const char* lua_get_node_name(Node* node)
+	{
+		static String result;
+		result = StringUtil::Format("_%d", node->getId());
+		return result.c_str();
 	}
 
 	// get upper layer table

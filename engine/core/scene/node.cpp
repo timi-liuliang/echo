@@ -14,7 +14,7 @@ namespace Echo
 		m_isValid = Engine::instance()->getConfig().m_isGame && IO::instance()->isResourceExists(m_file.getPath());
 		if (m_isValid)
 		{
-			m_globalTableName = StringUtil::Format("nodes._%d", obj->getId());;
+			m_globalTableName = StringUtil::Format("nodes._%d", obj->getId());
 			LuaBinder::instance()->registerObject("Node", m_globalTableName.c_str(), obj);
 
 			String fileName = PathUtil::GetPureFilename(m_file.getPath(), false);
@@ -432,6 +432,7 @@ namespace Echo
 	// bind methods
 	void Node::bindMethods()
 	{
+		CLASS_BIND_METHOD(Node, getNode,			  DEF_METHOD("get_node"));
 		CLASS_BIND_METHOD(Node, getLocalPosition,	  DEF_METHOD("getPos"));
 		CLASS_BIND_METHOD(Node, getWorldPosition,	  DEF_METHOD("getWorldPos"));
 		CLASS_BIND_METHOD(Node, getLocalYawPitchRoll, DEF_METHOD("getYawPitchRoll"));

@@ -63,7 +63,7 @@ namespace Studio
 
 		static DWORD lastTime = QDateTime::currentMSecsSinceEpoch();
 
-		// º∆À„delta Time
+		// calc delta Time
 		DWORD curTime = QDateTime::currentMSecsSinceEpoch();
 		DWORD elapsedTime = curTime - lastTime;
 
@@ -81,8 +81,7 @@ namespace Studio
 	}
 
 	void RenderWindow::ResizeWindow()
-	{
-		
+	{		
 		int width = static_cast<int>(this->width());
 		int height = static_cast<int>(this->height());
 
