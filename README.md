@@ -8,7 +8,7 @@ Echo is a new game engine, which used more industry standard of nowdays for game
 [Tutorials](https://github.com/blab-liuliang/echo-doc/tree/master/tutorial)  
 [Documentation](https://github.com/blab-liuliang/echo-doc/tree/master/documentation)  
 
-## Compile
+## compiling
 ### [Windows Editor]   
 1. Install [Visual Studio 2017] [CMake] [Python 3]...
 2. EnterFolder "${echo_root_path}/build/editor/windows"  
