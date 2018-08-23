@@ -10,9 +10,10 @@ Echo is a new game engine, which used more industry standard of nowdays for game
 
 ## Compile
 ### [Windows Editor]   
-1. EnterFolder "${echo_root_path}/build/editor/windows"  
-2. Double click "cmake.bat"
-3. Double click "echo.sln"   
+1. Install [Visual Studio 2017] [CMake] [Python 3]...
+2. EnterFolder "${echo_root_path}/build/editor/windows"  
+3. Double click "cmake.bat"
+4. Double click "echo.sln"   
 ### [Windows App]   
 
 ## Features

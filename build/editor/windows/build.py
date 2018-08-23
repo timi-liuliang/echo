@@ -26,7 +26,7 @@ def copy_res() :
 
 # cmake vs project
 def cmake_project(version, platform) :
-    vsconfig = " -G\"Visual Studio 14 2015\" ../"
+    vsconfig = " -G\"Visual Studio 15 2017\" ../"
     solution_dir = root_dir + "/../../../solution/"
 
 	# create dir
@@ -52,7 +52,7 @@ def compile_debug() :
     os.chdir( root_dir + "/../../Build/Win32")
 
     # Compile
-    vs_env = os.environ.get('VS120COMNTOOLS') + "../IDE/devenv.com"
+    vs_env = os.environ.get('VS140COMNTOOLS') + "../IDE/devenv.com"
     subprocess.call( vs_env + " LordEngine.sln /Build \"Debug|Win32\"");
     return
 
