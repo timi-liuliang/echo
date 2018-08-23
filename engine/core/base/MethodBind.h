@@ -60,6 +60,9 @@ namespace Echo
 
 		virtual int call(Object* obj, lua_State* luaState) override
 		{
+			__AnEmptyClass* instance = (__AnEmptyClass*)obj;
+			(instance->*method)();
+
 			return 0;
 		}
 	};
@@ -96,7 +99,16 @@ namespace Echo
 
 		virtual int call(Object* obj, lua_State* luaState) override
 		{
-			return 0;
+			__AnEmptyClass* instance = (__AnEmptyClass*)obj;
+
+			// exec method
+			R result = (instance->*method)();
+
+			// push the results
+			lua_pushvalue<R>(luaState, result);
+
+			// return number of results
+			return 1;
 		}
 	};
 
@@ -132,7 +144,16 @@ namespace Echo
 
 		virtual int call(Object* obj, lua_State* luaState) override
 		{
-			return 0;
+			__AnEmptyClass* instance = (__AnEmptyClass*)obj;
+
+			// exec method
+			R result = (instance->*method)();
+
+			// push the results
+			lua_pushvalue<R>(luaState, result);
+
+			// return number of results
+			return 1;
 		}
 	};
 
@@ -178,9 +199,6 @@ namespace Echo
 
 			// exec method
 			(instance->*method)(p0);
-
-			// push the results
-			// void so do nothing
 
 			// return number of results
 			return 0;

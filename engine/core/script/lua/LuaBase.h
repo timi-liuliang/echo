@@ -16,10 +16,40 @@ namespace Echo
 	void lua_binder_error(const char* msg);
 
 	// lua stack to value
-	template<typename T> INLINE T lua_getvalue(lua_State* L, const int index)			{ lua_binder_error("lua stack to value error, unknow c type"); static T st = Variant(); return st; }
-	template<> INLINE const char* lua_getvalue<const char*>(lua_State* state, int idx){ return lua_tostring(state, idx); }
-	template<> INLINE i32 lua_getvalue<i32>(lua_State* state, int idx) { return (i32)lua_tonumber(state, idx); }
-	template<> INLINE ui32 lua_getvalue<ui32>(lua_State* state, int idx) { return (ui32)lua_tonumber(state, idx); }
+	template<typename T> INLINE T lua_getvalue(lua_State* L, int index)			
+	{ 
+		lua_binder_error("lua stack to value error, unknow c type"); 
+		static T st = Variant(); 
+		return st; 
+	}
+
+	template<> INLINE const char* lua_getvalue<const char*>(lua_State* state, int idx)
+	{ 
+		return lua_tostring(state, idx); 
+	}
+
+	template<> INLINE i32 lua_getvalue<i32>(lua_State* state, int idx) 
+	{ 
+		return (i32)lua_tonumber(state, idx); 
+	}
+
+	template<> INLINE ui32 lua_getvalue<ui32>(lua_State* state, int idx) 
+	{ 
+		return (ui32)lua_tonumber(state, idx); 
+	}
+	
+	template<> INLINE const Vector3& lua_getvalue<const Vector3&>(lua_State* state, int idx) 
+	{
+		static Vector3 result;
+		lua_getfield(state, idx, "x");
+		lua_getfield(state, idx, "y");
+		lua_getfield(state, idx, "z");
+		result.x = (float)lua_tonumber(state, idx+1);
+		result.y = (float)lua_tonumber(state, idx+2);
+		result.z = (float)lua_tonumber(state, idx+3);
+		lua_pop(state, 3);
+		return result; 
+	}
 
 	// lua operate
 	int lua_get_tables(lua_State* luaState, const StringArray& objectNames, const int count);
