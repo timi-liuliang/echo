@@ -1,4 +1,8 @@
-# ![Icon](https://raw.githubusercontent.com/blab-liuliang/echo/master/editor/echo/Resource/App.ico)Echo
+<p align="center">
+    <img width="120" height="120" src="https://raw.githubusercontent.com/blab-liuliang/echo/master/editor/echo/Resource/App.ico">
+</p>  
+
+# Echo
 
 ## Introduction  
 
