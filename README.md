@@ -1,4 +1,4 @@
-# Echo
+# ![Icon](https://raw.githubusercontent.com/blab-liuliang/echo/master/editor/echo/Resource/App.ico)Echo
 
 ## Introduction  
 
