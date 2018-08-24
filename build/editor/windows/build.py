@@ -26,7 +26,7 @@ def copy_res() :
 
 # cmake vs project
 def cmake_project(version, platform) :
-    vsconfig = " -G\"Visual Studio 15 2017 Win64\" ../"
+    vsconfig = " -G\"Visual Studio 15 2017\" ../"
     solution_dir = root_dir + "/../../../solution/"
 
 	# create dir

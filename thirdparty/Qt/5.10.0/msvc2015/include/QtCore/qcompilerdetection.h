@@ -989,7 +989,7 @@
 #      define Q_COMPILER_UNIFORM_INIT
 #    endif
 #    if _MSC_VER >= 1910
-#      define Q_COMPILER_CONSTEXPR
+#     // define Q_COMPILER_CONSTEXPR
 #    endif
 #  endif /* __cplusplus */
 #endif /* Q_CC_MSVC */
