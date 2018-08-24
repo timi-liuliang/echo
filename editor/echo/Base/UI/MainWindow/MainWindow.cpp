@@ -19,6 +19,7 @@
 #include "ProjectWnd.h"
 #include "PathChooseDialog.h"
 #include "RenderWindow.h"
+#include <QTimer>
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/io/IO.h>
 #include <engine/core/scene/render_node.h>
@@ -114,7 +115,7 @@ namespace Studio
 		updateSettingDisplay();
 
 		// settings of echo
-		recoverEditSettings();
+		QTimer::singleShot(100, this, SLOT(recoverEditSettings()));
 
 		// signals & slots
 		QObject::connect(m_actionSaveProject, SIGNAL(triggered(bool)), m_scriptEditorPanel, SLOT(save()));
@@ -137,6 +138,14 @@ namespace Studio
 		if (!subEditType.empty())
 		{
 			m_subEditComboBox->setCurrentText( subEditType.c_str());
+		}
+
+		// recover last edit script
+		Echo::String isScriptEditVisible = AStudio::instance()->getConfigMgr()->getValue("luascripteditor_visible");
+		Echo::String currentEditLuaScript = AStudio::instance()->getConfigMgr()->getValue("luascripteditor_current_file");
+		if (isScriptEditVisible == "true" && !currentEditLuaScript.empty())
+		{
+			openLuaScript(currentEditLuaScript);
 		}
 	}
 
@@ -400,8 +409,8 @@ namespace Studio
 	// open lua file for edit
 	void MainWindow::openLuaScript(const Echo::String& fileName)
 	{
-		m_scriptEditorPanel->setVisible(true);
 		m_scriptEditorPanel->open(fileName);
+		m_scriptEditorPanel->setVisible(true);
 	}
 
 	// on display script edit panel
@@ -411,6 +420,9 @@ namespace Studio
 		{
 			resizeDocks({ m_scriptEditorPanel, m_renderPanel }, { 70 , 30 }, Qt::Horizontal);
 		}
+
+		AStudio::instance()->getConfigMgr()->setValue("luascripteditor_visible", m_scriptEditorPanel->isVisible() ? "true" : "false");
+		AStudio::instance()->getConfigMgr()->setValue("luascripteditor_current_file", m_scriptEditorPanel->getCurrentLuaFilePath().c_str());
 	}
 
 	// on Dockwidget location changed
@@ -423,6 +435,9 @@ namespace Studio
 	void MainWindow::closeEvent(QCloseEvent *event)
 	{
 		AStudio::instance()->getLogPanel()->close();
+
+		// disconnect connections
+		m_scriptEditorPanel->disconnect();
 	}
 
 	// game process exit

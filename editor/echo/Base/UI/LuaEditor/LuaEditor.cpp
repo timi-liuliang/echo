@@ -60,6 +60,17 @@ namespace Studio
 		}
 	}
 
+	// get current edit lua file path
+	const Echo::String& LuaEditor::getCurrentLuaFilePath()
+	{
+		if (m_luaRes)
+		{
+			return m_luaRes->getPath();
+		}
+
+		return Echo::StringUtil::BLANK;
+	}
+
 	// ÄÚÈÝ±»ÐÞ¸Ä
 	void LuaEditor::onTextChanged()
 	{

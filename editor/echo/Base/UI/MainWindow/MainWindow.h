@@ -75,7 +75,7 @@ namespace Studio
 		// on Dockwidget location changed
 		void onDockWidgetLocationChanged();
 
-	protected:
+	protected slots:
 		// open another project
 		void openAnotherProject(const Echo::String& fullPathName);
 

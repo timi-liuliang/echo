@@ -16,8 +16,11 @@ namespace Studio
 		LuaEditor(QWidget* parent = 0);
 		~LuaEditor();
 
-		// œ‘ æŒ∆¿Ì
+		// open lua file
 		void open( const Echo::String& tex);
+
+		// get current edit lua file path
+		const Echo::String& getCurrentLuaFilePath();
 
 	protected slots:
 		// ±£¥Ê
