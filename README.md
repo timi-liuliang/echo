@@ -1,5 +1,5 @@
 <p align="center">
-    <img width="120" height="120" src="https://raw.githubusercontent.com/blab-liuliang/echo/master/editor/echo/Resource/App.ico">
+    <img width="32" height="32" src="https://raw.githubusercontent.com/blab-liuliang/echo/master/editor/echo/Resource/App.ico">
 </p>  
 
 # Echo
