@@ -6,14 +6,11 @@
 
 namespace Echo
 {
-	// 构造函数
 	RenderInput::RenderInput( ShaderProgram* pProgram)
-		: m_topologyType(TT_TRIANGLELIST)
-		, m_startVert(0)
+		: m_startVert(0)
 		, m_baseVert(0)
 		, m_program( pProgram)
 		, m_startIdx(0)
-		, m_vertCount(0)
 		, m_pIdxBuff(NULL)
 		, m_idxStride(0)
 		, m_idxCount(0)
@@ -33,11 +30,9 @@ namespace Echo
 		}
 	}
 
-	// 析构函数
 	RenderInput::~RenderInput()
 	{}
 
-	// 绑定顶点流
 	bool RenderInput::bindVertexStream(const VertexElementList& vertElements, GPUBuffer* vertexBuffer, int flag)
 	{
 		if (flag & BS_BEGIN)
@@ -57,7 +52,6 @@ namespace Echo
 		return true;
 	}
 
-	// 绑定索引流
 	bool RenderInput::bindIndexStream( GPUBuffer* indexStream, ui32 idxStride)
 	{
 		m_pIdxBuff = indexStream;
@@ -66,13 +60,11 @@ namespace Echo
 		return true;
 	}
 
-	// 解绑定点索引数据流
 	void RenderInput::unbindGPUBuffers()
 	{
 		unbind();
 
 		m_vertexStreams.clear();
-		m_vertCount = 0;
 		m_pIdxBuff = NULL;
 		m_idxStride = 0;
 		m_idxCount = 0;

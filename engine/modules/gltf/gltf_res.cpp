@@ -600,8 +600,8 @@ namespace Echo
 			{
 				nlohmann::json& primitive = primitives[j];
 
-				// indices
-				if (!parseJsonValueUI32(m_meshes[i].m_primitives[j].m_indices, primitive, "indices", true))
+				// indices can be not exist
+				if (!parseJsonValueUI32(m_meshes[i].m_primitives[j].m_indices, primitive, "indices", false))
 					return false;
 
 				// material

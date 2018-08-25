@@ -3,14 +3,12 @@
 
 namespace Echo
 {
-	// 构造函数
 	RenderStage::RenderStage()
 	{
 		m_items.push_back(EchoNew(DefaultRenderStageItemOpaque));
 		m_items.push_back(EchoNew(DefaultRenderStageItemTransparent));
 	}
 
-	// 析构函数
 	RenderStage::~RenderStage()
 	{
 	}
@@ -40,7 +38,7 @@ namespace Echo
 		}
 	}
 
-	// 处理所有渲染阶段
+	// process all render stage item
 	void RenderStage::process()
 	{
 		for (RenderStageItem* item : m_items)

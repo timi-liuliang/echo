@@ -70,7 +70,7 @@ namespace Echo
 			}
 		}
 
-		// 绑定索引流
+		// bind index buffer
 		if ( isNeedSetIdxBuffer)
 		{
 			// Bind the index buffer and load the index data into it.
@@ -78,7 +78,7 @@ namespace Echo
 		}
 	}
 	
-	// 去除绑定
+	// unbind
 	void GLES2RenderInput::unbind()
 	{
 #ifndef ECHO_PLATFORM_MAC_IOS

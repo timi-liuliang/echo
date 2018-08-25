@@ -5,19 +5,16 @@
 
 namespace Echo
 {
-	// 创建
 	Mesh* Mesh::create(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer)
 	{
 		return EchoNew(Mesh(isDynamicVertexBuffer, isDynamicIndicesBuffer));
 	}
 
-	// 释放
 	void Mesh::release()
 	{
 		ECHO_DELETE_T(this, Mesh);
 	}
 
-	// 构造函数
 	Mesh::Mesh(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer)
 		: m_topologyType(RenderInput::TT_TRIANGLELIST)
 		, m_vertexBuffer(NULL)
@@ -30,35 +27,31 @@ namespace Echo
 	{
 	}
 
-	// 析构函数
 	Mesh::~Mesh()
 	{
 		clear();
 	}
 
-	// 获取顶点缓冲
 	GPUBuffer* Mesh::getVertexBuffer() const
 	{
 		return m_vertexBuffer;
 	}
 
-	// 获取索引缓冲
 	GPUBuffer* Mesh::getIndexBuffer() const
 	{
 		return m_indexBuffer;
 	}
 
-	// 计算切线数据
 	void Mesh::buildTangentData()
 	{
 		ui32 faceCount = getFaceCount();
 
-		// 根据位置，UV数据构建切线数据
+		// build tangent data by position and uv
 		vector<Vector3>::type tangentDatas;  tangentDatas.resize(m_vertData.getVertexCount(), Vector3::ZERO);
 		vector<Vector3>::type binormalDatas;  binormalDatas.resize(m_vertData.getVertexCount(), Vector3::ZERO);
 		for (ui32 i = 0; i < faceCount; i++)
 		{
-			// 仅支持TriangeList格式
+			// only support trang list topology
 			Word baseIdx = i * 3;
 			Word vertIdx0 = ((Word*)m_indices)[baseIdx + 0];
 			Word vertIdx1 = ((Word*)m_indices)[baseIdx + 1];
@@ -91,7 +84,7 @@ namespace Echo
 			binormalDatas[vertIdx2] += binormal;
 		}
 
-		// 单位化切空间数据
+		// normalize
 		for (size_t i = 0; i < tangentDatas.size(); i++)
 		{
 			tangentDatas[i].normalize();
@@ -116,24 +109,23 @@ namespace Echo
 
 	ui32 Mesh::getFaceCount() const
 	{
+		ui32 count = m_indexBuffer ? m_idxCount : getVertexCount();
 		switch (m_topologyType)
 		{
-		case RenderInput::TT_POINTLIST:		return m_idxCount;
-		case RenderInput::TT_LINELIST:		return m_idxCount / 2;
-		case RenderInput::TT_LINESTRIP:		return m_idxCount - 1;
-		case RenderInput::TT_TRIANGLELIST:	return m_idxCount / 3;
-		case RenderInput::TT_TRIANGLESTRIP:	return m_idxCount - 2;
+		case RenderInput::TT_POINTLIST:		return count;
+		case RenderInput::TT_LINELIST:		return count / 2;
+		case RenderInput::TT_LINESTRIP:		return count - 1;
+		case RenderInput::TT_TRIANGLELIST:	return count / 3;
+		case RenderInput::TT_TRIANGLESTRIP:	return count - 2;
 		default:							return 0;
 		}
 	}
 
-	// 获取索引数据步长
 	ui32 Mesh::getIndexStride() const
 	{
 		return m_idxStride;
 	}
 
-	// 获取索引数据
 	Word* Mesh::getIndices() const
 	{
 		return (Word*)m_indices;
@@ -158,13 +150,11 @@ namespace Echo
 		}
 	}
 
-	// 获取顶点格式
 	const RenderInput::VertexElementList& Mesh::getVertexElements() const
 	{
 		return m_vertData.getFormat().m_vertexElements;
 	}
 
-	// 加载函数
 	bool Mesh::buildBuffer()
 	{
 		buildIndexBuffer();
@@ -173,7 +163,6 @@ namespace Echo
 		return true;
 	}
 
-	// 建立索引缓冲
 	void Mesh::buildIndexBuffer()
 	{
 		Buffer indexBuff(m_idxCount*m_idxStride, m_indices);

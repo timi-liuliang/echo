@@ -5,9 +5,7 @@
 
 namespace Echo
 {
-	/**
-	 * 渲染输入(几何体数据)
-	 */
+	class Mesh;
 	class ShaderProgram;
 	class RenderInput
 	{
@@ -56,7 +54,7 @@ namespace Echo
 			TT_TRIANGLESTRIP, 
 		};
 
-		// 顶点流绑定状态
+		// vertex stream bind state(for multi stream)
 		enum BindState
 		{
 			BS_NORMAL= 0,
@@ -69,7 +67,6 @@ namespace Echo
 			VertexSemantic		m_semantic;		// Vertex Semantic
 			PixelFormat			m_pixFmt;		// Vertex pixel format
 
-			// 构造函数
 			VertexElement(VertexSemantic semantic = VS_UNKNOWN, PixelFormat pixFmt = PF_UNKNOWN)
 				: m_semantic(semantic)
 				, m_pixFmt(pixFmt)
@@ -77,7 +74,7 @@ namespace Echo
 		};
 		typedef vector<VertexElement>::type	VertexElementList;
 
-		// 顶点声明
+		// vertex declaration
 		struct VertexDeclaration
 		{
 			i32		m_attribute;
@@ -107,6 +104,10 @@ namespace Echo
 		virtual ~RenderInput();
 
 	public:
+		// mesh
+		void setMesh(Mesh* mesh) { m_mesh = mesh; }
+		Mesh* getMesh() { return m_mesh; }
+
 		// 绑定顶点流
 		bool bindVertexStream(const VertexElementList& vertElements, GPUBuffer* vertexStream, int flag = BS_BEGIN|BS_END);
 		
@@ -117,19 +118,10 @@ namespace Echo
 		virtual void bind( RenderInput* pre) = 0;
 		virtual void unbind() = 0;
 
-		void setTopologyType(TopologyType type) { m_topologyType = type; }
-
 		void setStartVertex(ui32 startVert) { m_startVert = startVert; }
-
 		void setBaseVertex(ui32 baseVert){ m_baseVert = baseVert; }
-
-		void setVertexCount(ui32 vertCount) { m_vertCount = vertCount; }
-
 		void setStartIndex(ui32 startIdx) { m_startIdx = startIdx; }
-
 		void setIndexCount(ui32 idxCount) { m_idxCount = idxCount;}
-
-		TopologyType getTopologyType() const { return m_topologyType; }
 		
 		ui32 getStartVertex() const { return m_startVert;}
 
@@ -138,8 +130,6 @@ namespace Echo
 		ui32 getStartIndex() const { return m_startIdx;}
 
 		const vector<StreamUnit>::type* getVertexBuffer() const { return &m_vertexStreams; }
-
-		ui32 getVertexCount() const { return m_vertCount;}
 
 		GPUBuffer* getIndexBuffer() const { return m_pIdxBuff; }
 
@@ -171,13 +161,12 @@ namespace Echo
 
 	protected:
 		ShaderProgram*				m_program;
-        TopologyType                m_topologyType;
+		Mesh*						m_mesh;
 		ui32						m_startVert;
 		ui32						m_baseVert;
 		ui32						m_startIdx;
 		vector<StreamUnit>::type	m_vertexStreams;
 		unsigned int				m_vertexStreamsHash;		// 顶点流hash
-		ui32						m_vertCount;
 		GPUBuffer*					m_pIdxBuff;
 		ui32						m_idxStride;
 		ui32						m_idxCount;

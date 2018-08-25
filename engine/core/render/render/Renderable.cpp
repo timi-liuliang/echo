@@ -271,7 +271,7 @@ namespace Echo
 			if (program)
 			{
 				m_renderInput = Renderer::instance()->createRenderInput(program);
-				m_renderInput->setTopologyType(m_mesh->getTopologyType());
+				m_renderInput->setMesh(m_mesh);
 				m_renderInput->bindVertexStream( m_mesh->getVertexElements(), m_mesh->getVertexBuffer());
 				m_renderInput->bindIndexStream(m_mesh->getIndexBuffer(), m_mesh->getIndexStride());
 			}

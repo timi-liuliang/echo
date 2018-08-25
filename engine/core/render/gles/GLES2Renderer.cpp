@@ -8,6 +8,7 @@
 #include "GLES2RenderInput.h"
 #include <engine/core/log/Log.h>
 #include <engine/core/util/Exception.h>
+#include "engine/core/render/mesh/Mesh.h"
 #include "GLES2GPUBuffer.h"
 #include "render/Viewport.h"
 
@@ -282,7 +283,7 @@ namespace Echo
 		shaderProgram->bindRenderInput(pInput);
 
 		// set the type of primitive that should be rendered from this vertex buffer
-		RenderInput::TopologyType topologyType = pInput->getTopologyType();
+		RenderInput::TopologyType topologyType = pInput->getMesh()->getTopologyType();
 		GLenum glTopologyType = GLES2Mapping::MapPrimitiveTopology(topologyType);
 
 		ui32 faceCount = 0;
@@ -320,7 +321,7 @@ namespace Echo
 		}
 		else	// no using index buffer 
 		{
-			ui32 vertCount = pInput->getVertexCount();
+			ui32 vertCount = pInput->getMesh()->getVertexCount();
 			if (vertCount > 0)
 			{
 				ui32 startVert = pInput->getStartVertex();

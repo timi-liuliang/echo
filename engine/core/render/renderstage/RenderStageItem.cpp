@@ -37,7 +37,6 @@ namespace Echo
 	void DefaultRenderStageItemOpaque::render()
 	{
 		RenderTargetManager::instance()->beginRenderTarget(RTI_DefaultBackBuffer);
-
 		RenderStageItem::render();
 	}
 
