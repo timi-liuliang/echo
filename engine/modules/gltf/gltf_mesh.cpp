@@ -1,5 +1,4 @@
 #include "gltf_mesh.h"
-#include "gltf_ibl.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/scene/NodeTree.h"
 #include "render/renderer.h"
@@ -119,21 +118,21 @@ namespace Echo
 			static Vector3 lightColor(2.f, 2.f, 2.f);
 			return &lightColor;
 		}
-		else if (name == "u_DiffuseEnvSampler")
-		{
-			static i32 idx = i32(GltfImageBasedLight::TextureIndex::DiffuseCube);
-			return &idx;
-		}
-		else if (name == "u_SpecularEnvSampler")
-		{
-			static i32 idx = i32(GltfImageBasedLight::TextureIndex::SpecularCube);
-			return &idx;
-		}
-		else if (name == "u_brdfLUT")
-		{
-			static i32 idx = i32(GltfImageBasedLight::TextureIndex::BrdfLUT);
-			return &idx;
-		}
+		//else if (name == "u_DiffuseEnvSampler")
+		//{
+		//	static i32 idx = i32(GltfImageBasedLight::TextureIndex::DiffuseCube);
+		//	return &idx;
+		//}
+		//else if (name == "u_SpecularEnvSampler")
+		//{
+		//	static i32 idx = i32(GltfImageBasedLight::TextureIndex::SpecularCube);
+		//	return &idx;
+		//}
+		//else if (name == "u_brdfLUT")
+		//{
+		//	static i32 idx = i32(GltfImageBasedLight::TextureIndex::BrdfLUT);
+		//	return &idx;
+		//}
 
 		return nullptr;
 	}

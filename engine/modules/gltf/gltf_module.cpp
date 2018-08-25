@@ -1,6 +1,5 @@
 #include "gltf_module.h"
 #include "gltf_mesh.h"
-#include "gltf_ibl.h"
 
 namespace Echo
 {
@@ -11,6 +10,5 @@ namespace Echo
 	void GltfModule::registerTypes()
 	{
 		Class::registerType<GltfMesh>();
-		Class::registerType<GltfImageBasedLight>();
 	}
 }
