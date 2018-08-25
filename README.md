@@ -12,6 +12,10 @@
 [Tutorials](https://github.com/blab-liuliang/echo-doc/tree/master/tutorial)  
 [Documentation](https://github.com/blab-liuliang/echo-doc/tree/master/documentation)  
 
+## Download
+echo.installer [Win32]
+echo.dmg       [Mac OS X 10.7 or later]
+
 ## Build
 ### [Windows Editor]   
 1. Install [Visual Studio 2017] [CMake] [Python 3]...
