@@ -7,7 +7,6 @@
 
 namespace Studio
 {
-	// 构造函数
 	LogPanel::LogPanel(QWidget* parent/* = 0*/)
 		: QWidget( parent)
 		, LogOutput("LogPanel")
@@ -24,12 +23,10 @@ namespace Studio
 		QObject::connect(m_actionCopyContent, SIGNAL(triggered()), this, SLOT(copyLogContent()));
 	}
 
-	// 析构函数
 	LogPanel::~LogPanel()
 	{
 	}
 
-	// 日志输出
 	void LogPanel::logMessage(Level level, const Echo::String &msg)
 	{
 		emit postMessage(level, QString::fromStdString(msg));
@@ -48,7 +45,6 @@ namespace Studio
 		}
 	}
 
-	// 输出消息
 	void LogPanel::OutMsg( int level, const char* msg, const char* icon)
 	{
 		if (msg == m_lastMessage && level==m_lastLevel)
@@ -71,7 +67,7 @@ namespace Studio
 		m_lastMessage = msg;
 		m_lastLevel = level;
 
-		// 显示界面
+		// show log panel
 		setVisible( true);
 
 		m_logList->scrollToBottom();

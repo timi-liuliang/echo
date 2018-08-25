@@ -44,7 +44,7 @@
      <item>
       <widget class="QCheckBox" name="checkBox_2">
        <property name="text">
-        <string>显示错误</string>
+        <string>Error</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -53,25 +53,14 @@
      </item>
      <item>
       <widget class="QCheckBox" name="checkBox">
-       <property name="text">
-        <string>显示警告</string>
+       <property name="minimumSize">
+        <size>
+         <width>120</width>
+         <height>0</height>
+        </size>
        </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="checkBox_3">
        <property name="text">
-        <string>显示性能警告    </string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="checkBox_4">
-       <property name="text">
-        <string>历史记录</string>
+        <string>Warning</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -81,7 +70,7 @@
      <item>
       <widget class="QPushButton" name="m_clear">
        <property name="text">
-        <string>清空</string>
+        <string>Clean</string>
        </property>
       </widget>
      </item>
