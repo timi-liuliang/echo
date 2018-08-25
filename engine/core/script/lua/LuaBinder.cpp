@@ -101,16 +101,19 @@ namespace Echo
 	static int cb(lua_State* L)
 	{
 		// get object ptr
-		lua_pushstring(L, "this");
-		lua_rawget(L, 1);
-		Object* objPtr = static_cast<Object*>(lua_touserdata(L, -1));
-		lua_pop(L, 1);
-
-		// get method ptr
-		MethodBind* methodPtr = static_cast<MethodBind*>(lua_touserdata(L, lua_upvalueindex(1)));
-		if (objPtr && methodPtr)
+		if (lua_istable(L, 1))
 		{
-			return methodPtr->call(objPtr, L);
+			lua_pushstring(L, "this");
+			lua_rawget(L, 1);
+			Object* objPtr = static_cast<Object*>(lua_touserdata(L, -1));
+			lua_pop(L, 1);
+
+			// get method ptr
+			MethodBind* methodPtr = static_cast<MethodBind*>(lua_touserdata(L, lua_upvalueindex(1)));
+			if (objPtr && methodPtr)
+			{
+				return methodPtr->call(objPtr, L);
+			}
 		}
 
 		return 0;
