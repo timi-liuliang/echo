@@ -33,6 +33,7 @@ iOS Android Html5 Windows Mac Linux Steam
 PBR Material  
 
 ### 2D And 3D Seamless Transition  
+Every node can be 2d or 3d. The core different is the camera and the unit the node use. So you can just switch a node to 2d or 3d easily. 
 
 ### Easy To Program  
 Mostly, you'll use lua as your main programming language. and also you can use c++ directly. the design of node tree makes the lua logic code more easily to write. and the embeded lua editor and embeded documention help you write code just in the echo editor.
@@ -42,3 +43,4 @@ If you really like other types of script language, you can tell us, or you can s
 Most of the engine's Functionality was implemented by configuralbe module. that means when you release you app at last, you can just choose the module you really need. whick makes you app have more smaller size and more efficiency runing speed.
 
 ### Open Source  
+Echo is licensed under MIT license. You can just do what you want as your wish.
