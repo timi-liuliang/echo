@@ -31,7 +31,7 @@
      <number>3</number>
     </property>
     <item>
-     <widget class="QTextEdit" name="m_textEditor">
+     <widget class="Studio::LuaTextEdit" name="m_textEditor">
       <property name="styleSheet">
        <string notr="true"/>
       </property>
@@ -40,6 +40,13 @@
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Studio::LuaTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>LuaTextEdit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

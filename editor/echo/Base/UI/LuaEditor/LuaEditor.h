@@ -23,13 +23,13 @@ namespace Studio
 		const Echo::String& getCurrentLuaFilePath();
 
 	protected slots:
-		// 保存
+		// save
 		void save();
 
-		// 内容被修改
+		// on text changed
 		void onTextChanged();
 
-		// 更新标题显示
+		// update title display
 		void updateTitle();
 
 	protected:

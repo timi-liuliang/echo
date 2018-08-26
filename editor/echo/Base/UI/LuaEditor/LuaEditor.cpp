@@ -7,13 +7,12 @@
 
 namespace Studio
 {
-	// 构造函数
 	LuaEditor::LuaEditor(QWidget* parent)
 		: QDockWidget(parent)
 	{
 		setupUi( this);
 
-		// 字体
+		// font
 		QFont font;
 		font.setFamily("Courier");
 		font.setStyleHint(QFont::Monospace);
@@ -27,14 +26,13 @@ namespace Studio
 		QFontMetrics metrics(font);
 		m_textEditor->setTabStopWidth(tabStop * metrics.width(' '));
 
-		// 语法高亮器
+		// syntax high lighter
 		m_luaSyntaxHighLighter = new LuaSyntaxHighLighter(m_textEditor->document());
 
-		// 消息链接
+		// connections
 		QObject::connect(m_textEditor, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
 	}
 
-	// 析构函数
 	LuaEditor::~LuaEditor()
 	{
 	}
@@ -47,7 +45,6 @@ namespace Studio
 		return QSize(width, height);
 	}
 
-	// 显示纹理
 	void LuaEditor::open(const Echo::String& fullPath)
 	{
 		m_luaRes = ECHO_DOWN_CAST<Echo::LuaScript*>(Echo::Res::get(fullPath));
@@ -55,7 +52,7 @@ namespace Studio
 		{
 			m_textEditor->setPlainText(m_luaRes->getSrc());
 
-			// 0.更改标题
+			// change title
 			updateTitle();
 		}
 	}
@@ -71,30 +68,29 @@ namespace Studio
 		return Echo::StringUtil::BLANK;
 	}
 
-	// 内容被修改
+	// on text changed
 	void LuaEditor::onTextChanged()
 	{
 		if (m_luaRes)
 		{
-			m_luaRes->setSrc( m_textEditor->toPlainText().toStdString().c_str());
-
 			updateTitle();
+
+			m_luaRes->setSrc( m_textEditor->toPlainText().toStdString().c_str());
 		}
 	}
 
-	// 保存
 	void LuaEditor::save()
 	{
 		if (m_luaRes)
 		{
 			m_luaRes->save();
 
-			// 0.更改标题
+			// change title
 			updateTitle();
 		}
 	}
 
-	// 更新标题显示
+	// update title display
 	void LuaEditor::updateTitle()
 	{
 		if (m_luaRes)
