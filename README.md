@@ -3,9 +3,8 @@
 </p>  
 
 # Echo
-<div class="alert alert-success">
-Please don't use echo make your games now, It's still not good enough.
-</div>
+
+**Please don't use echo make your games now, It's still not good enough.**
 
 ## Introduction  
 
