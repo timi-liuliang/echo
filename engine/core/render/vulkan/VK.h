@@ -1,12 +1,12 @@
 #pragma once
 
-#include <Render/Renderer.h>
+#include <engine/core/render/render/Renderer.h>
 
-namespace LORD
+namespace Echo
 {
 	// ĞÂ½¨GLESäÖÈ¾Æ÷
-	void LoadGLESRenderer(Renderer*& render);
+	void LoadVKRenderer(Renderer*& render);
 
 	// Ğ¶ÔØGLESäÖÈ¾Æ÷
-	void UnLoadGLESRenderer(Renderer* render);
+	void UnLoadVKRenderer(Renderer* render);
 }

@@ -22,7 +22,7 @@ def copy_res() :
     shutil.copytree( src_dir, des_release_dir)
     print('copy resource from [' + src_dir + '] to [' + des_release_dir + ']')
 
-    return;
+    return
 
 # cmake vs project
 def cmake_project(version, platform) :
@@ -30,8 +30,12 @@ def cmake_project(version, platform) :
     solution_dir = root_dir + "/../../../solution/"
 
 	# create dir
-    shutil.rmtree( solution_dir, True)
-    os.makedirs( solution_dir)
+    try:
+        shutil.rmtree( solution_dir, True)
+        os.makedirs( solution_dir)
+    except:
+        # do nothing
+        print("rmove dir [%s] failed " % solution_dir)
 
     os.chdir(solution_dir)
 

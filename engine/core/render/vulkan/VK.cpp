@@ -1,17 +1,15 @@
-#include "GLES2.h"
-#include "GLES2Render.h"
+#include "vk.h"
+#include "vk_render.h"
 
-namespace LORD
+namespace Echo
 {
-	// ĞÂ½¨GLESäÖÈ¾Æ÷
 	void LoadGLESRenderer(Renderer*& render)
 	{
-		render = LORD_NEW(GLES2Renderer);
+		render = nullptr;// EchoNew(GLES2Renderer);
 	}
 
-	// Ğ¶ÔØGLESäÖÈ¾Æ÷
 	void UnLoadGLESRenderer(Renderer* render)
 	{
-		LordSafeDelete(render);
+		EchoSafeDelete(render, Renderer);
 	}
 }
