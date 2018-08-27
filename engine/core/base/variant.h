@@ -3,7 +3,7 @@
 #include "TypeDef.h"
 #include "engine/core/memory/MemAllocDef.h"
 #include "engine/core/math/Vector4.h"
-#include "engine/core/render/render/Color.h"
+#include "engine/core/math/color.h"
 #include "engine/core/resource/ResourcePath.h"
 #include "engine/core/util/Any.hpp"
 #include "engine/core/util/base64.h"

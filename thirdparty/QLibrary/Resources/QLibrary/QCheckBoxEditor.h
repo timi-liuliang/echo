@@ -4,7 +4,7 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QWidget>
-#include <engine/core/render/render/Color.h>
+#include <engine/core/math/color.h>
 
 using namespace std;
 

@@ -3,7 +3,6 @@
 #include <QtWidgets/QTreeView>
 #include <engine/core/Util/Array.hpp>
 #include <engine/core/Math/Math.h>
-#include <engine/core/render/render/Color.h>
 
 namespace QT_UI
 {

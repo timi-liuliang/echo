@@ -2,7 +2,6 @@
 
 #include "engine/core/util/Buffer.h"
 #include "engine/core/memory/MemAllocDef.h"
-#include "RenderDef.h"
 
 namespace Echo
 {

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <engine/core/math/Math.h>
-#include "RenderDef.h"
 
 namespace Echo
 {

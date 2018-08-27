@@ -3,7 +3,7 @@
 #include <engine/core/Base/TypeDef.h>
 #include <freeimage/FreeImage.h>
 #include <engine/core/util/StringUtil.h>
-#include <engine/core/render/render/Color.h>
+#include <engine/core/math/color.h>
 
 namespace Echo
 {

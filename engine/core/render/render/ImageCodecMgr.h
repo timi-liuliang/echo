@@ -1,6 +1,5 @@
 #pragma once
 
-#include "RenderDef.h"
 #include "ImageCodec.h"
 
 namespace Echo

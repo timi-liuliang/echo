@@ -2,7 +2,7 @@
 
 #include "engine/core/base/variant.h"
 #include "engine/core/util/StringUtil.h"
-#include "engine/core/render/render/Color.h"
+#include "engine/core/math/color.h"
 #include <thirdparty/pugixml/pugixml.hpp>
 #include "engine/core/resource/Res.h"
 

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <engine/core/math/Matrix4.h>
-#include "RenderDef.h"
 
 namespace Echo
 {

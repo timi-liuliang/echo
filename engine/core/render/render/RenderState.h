@@ -1,13 +1,10 @@
 #pragma once
 
-#include "Color.h"
+#include "engine/core/math/color.h"
 #include "Texture.h"
 
 namespace Echo
 {
-	/**
-	 * äÖÈ¾×´Ì¬
-	 */
 	class RenderState
 	{
 	public:

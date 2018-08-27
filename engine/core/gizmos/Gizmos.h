@@ -1,7 +1,6 @@
 #pragma once
 
-#include "engine/core/math/Math.h"
-#include "engine/core/render/render/Color.h"
+#include "engine/core/math/math.h"
 #include "engine/core/render/Material.h"
 #include "engine/core/render/mesh/Mesh.h"
 #include "engine/core/render/render/Renderable.h"

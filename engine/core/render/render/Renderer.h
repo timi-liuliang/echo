@@ -1,8 +1,7 @@
 #pragma once
 
 #include <engine/core/util/Buffer.h>
-#include "Color.h"
-#include <engine/core/math/Vector3.h>
+#include <engine/core/math/math.h>
 #include <engine/core/math/Matrix4.h>
 #include "engine/core/thread/Threading.h"
 #include "RenderInput.h"

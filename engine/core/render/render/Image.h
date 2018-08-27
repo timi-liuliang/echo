@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/core/util/Buffer.h"
-#include "engine/core/render/render/Color.h"
+#include "engine/core/math/Color.h"
 #include "engine/core/render/render/PixelFormat.h"
 
 namespace Echo
