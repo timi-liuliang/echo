@@ -1,9 +1,10 @@
 #ifndef __ECHO_GLES2MAPPING_H__
 #define __ECHO_GLES2MAPPING_H__
 
-#include <render/RenderInput.h>
 #include <render/Texture.h>
 #include <render/ShaderProgram.h>
+#include "engine/core/render/render/GPUBuffer.h"
+#include "engine/core/render/mesh/Mesh.h"
 #include "GLES2RenderState.h"
 
 namespace Echo
@@ -356,16 +357,16 @@ namespace Echo
 			}
 		}
 
-		static inline GLenum MapPrimitiveTopology(RenderInput::TopologyType type)
+		static inline GLenum MapPrimitiveTopology(Mesh::TopologyType type)
 		{
 			switch(type)
 			{
-			case RenderInput::TT_POINTLIST:		return GL_POINTS;
-			case RenderInput::TT_LINELIST:		return GL_LINES;
-			case RenderInput::TT_LINESTRIP:		return GL_LINE_STRIP;
-			case RenderInput::TT_TRIANGLELIST:	return GL_TRIANGLES;
-			case RenderInput::TT_TRIANGLESTRIP:	return GL_TRIANGLE_STRIP;
-			default:							return GL_TRIANGLES;
+			case Mesh::TT_POINTLIST:		return GL_POINTS;
+			case Mesh::TT_LINELIST:			return GL_LINES;
+			case Mesh::TT_LINESTRIP:		return GL_LINE_STRIP;
+			case Mesh::TT_TRIANGLELIST:		return GL_TRIANGLES;
+			case Mesh::TT_TRIANGLESTRIP:	return GL_TRIANGLE_STRIP;
+			default:						return GL_TRIANGLES;
 			}
 		}
 
@@ -403,24 +404,24 @@ namespace Echo
 			}
 		}
 
-		static inline String MapVertexSemanticString(RenderInput::VertexSemantic semantic)
+		static inline String MapVertexSemanticString(VertexSemantic semantic)
 		{
 			switch(semantic)
 			{
-			case RenderInput::VS_POSITION:			return "a_Position";
-			case RenderInput::VS_BLENDINDICES:		return "a_BlendIndices";
-			case RenderInput::VS_BLENDWEIGHTS:		return "a_BlendWeights";
-			case RenderInput::VS_COLOR:				return "a_Color";
-			case RenderInput::VS_NORMAL:			return "a_Normal";
-			case RenderInput::VS_TEXCOORD0:			return "a_UV";
-			case RenderInput::VS_TEXCOORD1:			return "a_UV1";
-			case RenderInput::VS_TANGENT:			return "a_Tangent";
-			case RenderInput::VS_BINORMAL:			return "a_Binormal";
-			case RenderInput::VS_SCREEN_POS_NDC:	return "ScreenPosNDC";
-			case RenderInput::VS_TAN_EYE_ANGLE_R:	return "TAN_EYE_ANGLE_R";
-			case RenderInput::VS_TAN_EYE_ANGLE_G:	return "TAN_EYE_ANGLE_G";
-			case RenderInput::VS_TAN_EYE_ANGLE_B:	return "TAN_EYE_ANGLE_B";
-            default:                                return "";
+			case VS_POSITION:			return "a_Position";
+			case VS_BLENDINDICES:		return "a_BlendIndices";
+			case VS_BLENDWEIGHTS:		return "a_BlendWeights";
+			case VS_COLOR:				return "a_Color";
+			case VS_NORMAL:				return "a_Normal";
+			case VS_TEXCOORD0:			return "a_UV";
+			case VS_TEXCOORD1:			return "a_UV1";
+			case VS_TANGENT:			return "a_Tangent";
+			case VS_BINORMAL:			return "a_Binormal";
+			case VS_SCREEN_POS_NDC:		return "ScreenPosNDC";
+			case VS_TAN_EYE_ANGLE_R:	return "TAN_EYE_ANGLE_R";
+			case VS_TAN_EYE_ANGLE_G:	return "TAN_EYE_ANGLE_G";
+			case VS_TAN_EYE_ANGLE_B:	return "TAN_EYE_ANGLE_B";
+            default:                    return "";
 			}
 		}
 

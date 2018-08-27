@@ -4,13 +4,13 @@
 #include <engine/core/math/math.h>
 #include <engine/core/math/Matrix4.h>
 #include "engine/core/thread/Threading.h"
-#include "RenderInput.h"
 #include "RenderState.h"
 #include "FrameBuffer.h"
 #include "Shader.h"
 #include "Texture.h"
 #include "Renderable.h"
 #include "RenderTarget.h"
+#include "GPUBuffer.h"
 
 namespace Echo
 {
@@ -94,7 +94,6 @@ namespace Echo
 		static bool s_supportGLES3;
 		static bool s_supportETC2;
 	};
-
 
 	class Renderer
 	{
@@ -282,8 +281,8 @@ namespace Echo
 		// Ω· ¯≤√«–
 		virtual void endScissor()=0;
 
-		// ÷¥––‰÷»æ
-		virtual void render(RenderInput* pInput, ShaderProgram* program)=0;
+		// draw
+		virtual void draw(Renderable* program)=0;
 
 		virtual void project(Vector3& screenPos, const Vector3& worldPos, const Matrix4& matVP, Viewport* pViewport = NULL);
 		virtual void unproject(Vector3& worldPos, const Vector3& screenPos, const Matrix4& matVP, Viewport* pViewport = NULL);
@@ -315,9 +314,6 @@ namespace Echo
 		virtual ShaderProgram*		createShaderProgram(ShaderProgramRes* material)=0;
 		virtual Shader*				createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const String& filename) = 0;
 		virtual Shader*				createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const char* srcBuffer, ui32 size) = 0;
-
-		// ¥¥Ω®‰÷»æ ‰»Î
-		virtual RenderInput* createRenderInput(ShaderProgram* pProgram) = 0;
 		virtual RenderTargetView*	createRenderTargetView(PixelFormat fmt, ui32 width, ui32 height) = 0;
 		virtual DepthStencilView*	createDepthStencilView(PixelFormat fmt, ui32 width, ui32 height) = 0;
 		virtual RasterizerState*	createRasterizerState(const RasterizerState::RasterizerDesc& desc) = 0;
@@ -384,6 +380,7 @@ namespace Echo
 		virtual void destroyImpl() = 0;
 		virtual void createSystemResource() = 0;
 		virtual void cleanSystemResource() = 0;
+		virtual Renderable* createRenderableInernal(const String& renderStage, ShaderProgramRes* shader, int identifier)=0;
 
 	protected:
 		RenderCfg			m_cfg;								// ≈‰÷√

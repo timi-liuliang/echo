@@ -1,6 +1,6 @@
 #include "GLES2RenderBase.h"
 #include "GLES2Renderer.h"
-#include "GLES2RenderInput.h"
+#include "GLES2Renderable.h"
 #include "GLES2ShaderProgram.h"
 #include "GLES2Mapping.h"
 #include "GLES2GPUBuffer.h"
@@ -14,28 +14,54 @@ namespace Echo
 {
 	extern GLES2Renderer* g_renderer;
 
-	// 构造函数
-	GLES2RenderInput::GLES2RenderInput( ShaderProgram* pProgram)
-		: RenderInput( pProgram)
+	GLES2Renderable::GLES2Renderable(const String& renderStage, ShaderProgramRes* shader, int identifier)
+		: Renderable( renderStage, shader, identifier)
 		, m_vao( -1)
 	{
 	}
 	
 	// 析构函数
-	GLES2RenderInput::~GLES2RenderInput()
+	GLES2Renderable::~GLES2Renderable()
 	{
+	}
+
+	void GLES2Renderable::link()
+	{
+		bindVertexStream(m_mesh->getVertexElements(), m_mesh->getVertexBuffer());
+	}
+
+	bool GLES2Renderable::bindVertexStream(const VertexElementList& vertElements, GPUBuffer* vertexBuffer, int flag)
+	{
+		if (flag & BS_BEGIN)
+			m_vertexStreams.clear();
+
+		StreamUnit unit;
+		unit.m_vertElements = vertElements;
+		unit.m_buffer = vertexBuffer;
+		buildVertStreamDeclaration(&unit);
+
+		m_vertexStreams.push_back(unit);
+
+		// 生成Hash值
+		if (flag & BS_END)
+			generateVertexStreamHash();
+
+		return true;
 	}
 	
 	// 绑定到GPU
-	void GLES2RenderInput::bind(RenderInput* pre)
+	void GLES2Renderable::bind(Renderable* pre)
 	{
+		GPUBuffer* idxBuffer = m_mesh->getIndexBuffer();
+		GPUBuffer* preIdxBuffer = pre ? pre->getMesh()->getIndexBuffer() : nullptr;
+
 		// 1.确定顶点流索引流是否需要设置
 		bool isNeedSetVertexBuffer;
 		bool isNeedSetIdxBuffer;
 		if (!pre)
 		{
 			isNeedSetVertexBuffer = true;
-			isNeedSetIdxBuffer = m_pIdxBuff ? true : false;
+			isNeedSetIdxBuffer = idxBuffer ? true : false;
 		}
 		else
 		{
@@ -44,7 +70,7 @@ namespace Echo
 #else
 			isNeedSetVertexBuffer = true;
 #endif
-			isNeedSetIdxBuffer = (!m_pIdxBuff || pre->getIndexBuffer() == m_pIdxBuff) ? false : true;
+			isNeedSetIdxBuffer = (!idxBuffer || preIdxBuffer == idxBuffer) ? false : true;
 		}
 
 		// 绑定顶点流
@@ -74,12 +100,12 @@ namespace Echo
 		if ( isNeedSetIdxBuffer)
 		{
 			// Bind the index buffer and load the index data into it.
-			((GLES2GPUBuffer*)m_pIdxBuff)->bindBuffer();
+			((GLES2GPUBuffer*)idxBuffer)->bindBuffer();
 		}
 	}
 	
 	// unbind
-	void GLES2RenderInput::unbind()
+	void GLES2Renderable::unbind()
 	{
 #ifndef ECHO_PLATFORM_MAC_IOS
 		// 绑定顶点流
@@ -107,7 +133,7 @@ namespace Echo
 
 
 	// 计算顶点流声明
-	bool GLES2RenderInput::buildVertStreamDeclaration(StreamUnit* stream)
+	bool GLES2Renderable::buildVertStreamDeclaration(StreamUnit* stream)
 	{
 		ui32 numVertElms = stream->m_vertElements.size();
 		if (numVertElms == 0)
@@ -119,7 +145,7 @@ namespace Echo
 		stream->m_vertDeclaration.reserve(numVertElms);
 		stream->m_vertDeclaration.resize(numVertElms);
 		
-		GLES2ShaderProgram* gles2Program = ECHO_DOWN_CAST<GLES2ShaderProgram*>(m_program);
+		GLES2ShaderProgram* gles2Program = ECHO_DOWN_CAST<GLES2ShaderProgram*>(m_shaderProgram->getShaderProgram());
 		ui32 elmOffset = 0;
 		for (size_t i = 0; i < numVertElms; ++i)
 		{
@@ -156,7 +182,7 @@ namespace Echo
 
 					if (!found)
 					{
-						String errorInfo = StringUtil::Format("Vertex Attribute [%s] name is NOT in Vertex Stream", GLES2Mapping::MapVertexSemanticString((VertexSemantic)i).c_str()) + m_ownerInfo;
+						String errorInfo = StringUtil::Format("Vertex Attribute [%s] name is NOT in Vertex Stream", GLES2Mapping::MapVertexSemanticString((VertexSemantic)i).c_str());
 						EchoLogFatal(errorInfo.c_str());
 						EchoAssertX(false, errorInfo.c_str());
 					}
@@ -171,7 +197,7 @@ namespace Echo
 	}
 
 	// 生成顶点流Hash值(BKDR Hash)
-	void GLES2RenderInput::generateVertexStreamHash()
+	void GLES2Renderable::generateVertexStreamHash()
 	{
 		unsigned int seed = 131; // 31 131 1313 13131 131313 etc..
 		unsigned int hash = 0;

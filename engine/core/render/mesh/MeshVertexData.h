@@ -1,13 +1,55 @@
 #pragma once
 
 #include "core/geom/AABB.h"
-#include "render/RenderInput.h"
+#include "core/render/render/PixelFormat.h"
 
 namespace Echo
 {
+	enum VertexSemantic
+	{
+		VS_UNKNOWN = -1,
+		// Position (Vector3)
+		VS_POSITION,
+		// Normal (Vector3)
+		VS_NORMAL,
+		// Diffuse & specular color (Dword)
+		VS_COLOR,
+		// Texture coordinates 0(Vector2)
+		VS_TEXCOORD0,
+		// Texture coordinates 1(Vector2)
+		VS_TEXCOORD1,
+		// Blending indices	(Dword)
+		VS_BLENDINDICES,
+		// Blending weights(Vector3)
+		VS_BLENDWEIGHTS,
+		// Tangent (X axis if normal is Z)
+		VS_TANGENT,
+		VS_BINORMAL,
+
+		// VR Mode
+		VS_SCREEN_POS_NDC,
+		VS_TAN_EYE_ANGLE_R,
+		VS_TAN_EYE_ANGLE_G,
+		VS_TAN_EYE_ANGLE_B,
+
+		VS_MAX
+	};
+
+	struct VertexElement
+	{
+		VertexSemantic		m_semantic;		// Vertex Semantic
+		PixelFormat			m_pixFmt;		// Vertex pixel format
+
+		VertexElement(VertexSemantic semantic = VS_UNKNOWN, PixelFormat pixFmt = PF_UNKNOWN)
+			: m_semantic(semantic)
+			, m_pixFmt(pixFmt)
+		{}
+	};
+	typedef vector<VertexElement>::type	VertexElementList;
+
 	struct MeshVertexFormat
 	{
-		typedef RenderInput::VertexElementList RIVEL;
+		typedef VertexElementList RIVEL;
 
 		bool		m_isUseNormal;			// 是否使用法线
 		bool		m_isUseVertexColor;		// 是否使用顶点色
@@ -32,7 +74,7 @@ namespace Echo
 		void build();
 
 		// 判断顶点格式中是否含有指定类型的数据
-		bool isVertexUsage(RenderInput::VertexSemantic semantic) const;
+		bool isVertexUsage(VertexSemantic semantic) const;
 
 		// reset
 		void reset();
@@ -65,7 +107,7 @@ namespace Echo
 		Byte* getVertice(int idx);
 
 		// 判断顶点格式中是否含有指定类型的数据
-		bool isVertexUsage(RenderInput::VertexSemantic semantic) const;
+		bool isVertexUsage(VertexSemantic semantic) const;
 
 		// 获取顶点位置数据
 		Vector3& getPosition(Word index);

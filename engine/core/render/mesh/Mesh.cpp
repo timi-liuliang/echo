@@ -16,12 +16,14 @@ namespace Echo
 	}
 
 	Mesh::Mesh(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer)
-		: m_topologyType(RenderInput::TT_TRIANGLELIST)
+		: m_topologyType(TT_TRIANGLELIST)
 		, m_vertexBuffer(NULL)
 		, m_indexBuffer(NULL)
 		, m_idxCount(0)
 		, m_idxStride(0)
 		, m_indices(NULL)
+		, m_startVert(0)
+		, m_startIdx(0)
 		, m_isDynamicVertexBuffer(isDynamicVertexBuffer)
 		, m_isDynamicIndicesBuffer(isDynamicIndicesBuffer)
 	{
@@ -112,12 +114,12 @@ namespace Echo
 		ui32 count = m_indexBuffer ? m_idxCount : getVertexCount();
 		switch (m_topologyType)
 		{
-		case RenderInput::TT_POINTLIST:		return count;
-		case RenderInput::TT_LINELIST:		return count / 2;
-		case RenderInput::TT_LINESTRIP:		return count - 1;
-		case RenderInput::TT_TRIANGLELIST:	return count / 3;
-		case RenderInput::TT_TRIANGLESTRIP:	return count - 2;
-		default:							return 0;
+		case TT_POINTLIST:		return count;
+		case TT_LINELIST:		return count / 2;
+		case TT_LINESTRIP:		return count - 1;
+		case TT_TRIANGLELIST:	return count / 3;
+		case TT_TRIANGLESTRIP:	return count - 2;
+		default:				return 0;
 		}
 	}
 
@@ -150,7 +152,7 @@ namespace Echo
 		}
 	}
 
-	const RenderInput::VertexElementList& Mesh::getVertexElements() const
+	const VertexElementList& Mesh::getVertexElements() const
 	{
 		return m_vertData.getFormat().m_vertexElements;
 	}

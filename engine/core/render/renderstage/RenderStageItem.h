@@ -2,7 +2,6 @@
 
 #include <engine/core/memory/MemAllocDef.h>
 #include <engine/core/render/render/RenderState.h>
-#include <engine/core/render/render/RenderInput.h>
 #include <engine/core/render/render/Renderable.h>
 
 namespace Echo

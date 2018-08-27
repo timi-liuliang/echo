@@ -1,5 +1,4 @@
 #include "vk.h"
-#include "vk_render.h"
 
 namespace Echo
 {

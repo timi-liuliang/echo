@@ -1,5 +1,5 @@
 #include "GLES2.h"
-#include "GLES2Render.h"
+#include "GLES2Renderer.h"
 
 namespace Echo
 {

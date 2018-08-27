@@ -21,7 +21,7 @@ namespace Echo
 		{
 			EchoLogError("Create GLES2ShaderProgram failed.");
 		}
-		m_preRenderInput = NULL;
+		m_preRenderable = NULL;
 	}
 
 	GLES2ShaderProgram::~GLES2ShaderProgram()
@@ -119,9 +119,9 @@ namespace Echo
 			m_uniforms[desc.m_location] = desc;
 		}
 
-		for (ui32 i = 0; i < RenderInput::VS_MAX; ++i)
+		for (ui32 i = 0; i < VS_MAX; ++i)
 		{
-			String strName = GLES2Mapping::MapVertexSemanticString((RenderInput::VertexSemantic)i);
+			String strName = GLES2Mapping::MapVertexSemanticString((VertexSemantic)i);
 			GLint loc = OGLESDebug(glGetAttribLocation(m_hProgram, strName.c_str()));
 			if (loc != -1)
 			{
@@ -184,19 +184,20 @@ namespace Echo
 				uniform.m_isDirty = true;
 			}
 
-			m_preRenderInput = NULL;
+			m_preRenderable = NULL;
 		}
 	}
 
 	// 绑定几何体数据
-	void GLES2ShaderProgram::bindRenderInput(RenderInput* renderInput)
+	void GLES2ShaderProgram::bindRenderable(Renderable* renderInput)
 	{
-		renderInput->bind( m_preRenderInput);
+		GLES2Renderable* ra = ECHO_DOWN_CAST<GLES2Renderable*>(renderInput);
+		ra->bind(m_preRenderable);
 
-		m_preRenderInput = renderInput;
+		m_preRenderable = ra;
 	}
 	
-	i32 GLES2ShaderProgram::getAtrribLocation(RenderInput::VertexSemantic vertexSemantic)
+	i32 GLES2ShaderProgram::getAtrribLocation(VertexSemantic vertexSemantic)
 	{
 		return m_attribLocationMapping[vertexSemantic];
 	}

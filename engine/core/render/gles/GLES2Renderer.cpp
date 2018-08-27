@@ -5,7 +5,7 @@
 #include "GLES2FrameBuffer.h"
 #include "GLES2Texture.h"
 #include "GLES2ShaderProgram.h"
-#include "GLES2RenderInput.h"
+#include "GLES2Renderable.h"
 #include <engine/core/log/Log.h>
 #include <engine/core/util/Exception.h>
 #include "engine/core/render/mesh/Mesh.h"
@@ -266,36 +266,29 @@ namespace Echo
 		}
 	}
 
-	// 执行渲染
-	void GLES2Renderer::render(RenderInput* pInput, ShaderProgram* shaderProgram)
+	void GLES2Renderer::draw(Renderable* renderable)
 	{
-		// 合法性检测
-#if defined(ECHO_EDITOR_MODE) || defined(ECHO_DEBUG)
-		if (!shaderProgram->checkValid())
-		{
-			EchoLogError("ShaderProgram is't valid for render %s", pInput->getOwnerInfo().c_str());
-		}
-#endif
+		Mesh* mesh = renderable->getMesh();
+		ShaderProgram* shader = renderable->getShader();
 
-		EchoAssert(pInput);
-		EchoAssert(shaderProgram);
-		shaderProgram->bindUniforms();
-		shaderProgram->bindRenderInput(pInput);
+		EchoAssert(mesh);
+		EchoAssert(shader);
+		shader->bindUniforms();
+		shader->bindRenderable(renderable);
 
 		// set the type of primitive that should be rendered from this vertex buffer
-		RenderInput::TopologyType topologyType = pInput->getMesh()->getTopologyType();
-		GLenum glTopologyType = GLES2Mapping::MapPrimitiveTopology(topologyType);
+		GLenum glTopologyType = GLES2Mapping::MapPrimitiveTopology(mesh->getTopologyType());
 
 		ui32 faceCount = 0;
 
 		//set the index buffer to active in the input assembler
-		GPUBuffer* pIdxBuff = pInput->getIndexBuffer();
+		GPUBuffer* pIdxBuff = mesh->getIndexBuffer();
 		if (pIdxBuff)
 		{
 			GLenum idxType;
 			ui32 idxStride;
 
-			if (pInput->getIndexStride() == sizeof(Dword))
+			if (mesh->getIndexStride() == sizeof(Dword))
 			{
 				idxType = GL_UNSIGNED_INT;
 				idxStride = sizeof(Dword);
@@ -307,13 +300,13 @@ namespace Echo
 			}
 
 			ui32 idxCount;
-			if (pInput->getIndexCount() > 0)
-				idxCount = pInput->getIndexCount();
+			if (mesh->getIndexCount() > 0)
+				idxCount = mesh->getIndexCount();
 			else
 				idxCount = pIdxBuff->getSize() / idxStride;
 
 			Byte* idxOffset = 0;
-			idxOffset += pInput->getStartIndex() * idxStride;
+			idxOffset += mesh->getStartIndex() * idxStride;
 
 			OGLESDebug(glDrawElements(glTopologyType, idxCount, idxType, idxOffset));
 
@@ -321,10 +314,10 @@ namespace Echo
 		}
 		else	// no using index buffer 
 		{
-			ui32 vertCount = pInput->getMesh()->getVertexCount();
+			ui32 vertCount = mesh->getVertexCount();
 			if (vertCount > 0)
 			{
-				ui32 startVert = pInput->getStartVertex();
+				ui32 startVert = mesh->getStartVertex();
 				OGLESDebug(glDrawArrays(glTopologyType, startVert, vertCount));
 				faceCount = vertCount / 3;
 			}
@@ -334,9 +327,9 @@ namespace Echo
 			}
 		}
 
-		pInput->unbind();
+		shader->unbind();
 
-		// 性能分析,渲染统计
+		// profile
 		if (Renderer::instance()->isEnableFrameProfile())
 		{
 			Renderer::instance()->getFrameState().incrDrawCallTimes(1);
@@ -495,21 +488,6 @@ namespace Echo
 		}
 
 		return pShader;
-	}
-
-	RenderInput* GLES2Renderer::createRenderInput(ShaderProgram* pProgram)
-	{
-		RenderInput* pRenderInput = NULL;
-		try
-		{
-			pRenderInput = EchoNew(GLES2RenderInput(pProgram));
-		}
-		catch (Exception& e)
-		{
-			EchoLogError(e.getMessage().c_str());
-		}
-
-		return pRenderInput;
 	}
 
 	RenderTargetView* GLES2Renderer::createRenderTargetView(PixelFormat fmt, ui32 width, ui32 height)
@@ -829,5 +807,11 @@ namespace Echo
 	RenderTarget* GLES2Renderer::createRenderTarget(ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const RenderTarget::Options& option)
 	{
 		return EchoNew(GLES2RenderTarget(_id, _width, _height, _pixelFormat, option));
+	}
+
+	//  interal implement
+	Renderable* GLES2Renderer::createRenderableInernal(const String& renderStage, ShaderProgramRes* shader, int identifier)
+	{
+		return EchoNew(GLES2Renderable( renderStage, shader, identifier));
 	}
 }

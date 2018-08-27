@@ -139,10 +139,10 @@ namespace Echo
 		m_material->setRenderStage("Transparent");
 
 		m_lineBatch = EchoNew(Batch(m_material, this));
-		m_lineBatch->m_mesh->setTopologyType(RenderInput::TT_LINELIST);
+		m_lineBatch->m_mesh->setTopologyType(Mesh::TT_LINELIST);
 
 		m_triangleBatch = EchoNew(Batch(m_material, this));
-		m_triangleBatch->m_mesh->setTopologyType(RenderInput::TT_TRIANGLELIST);
+		m_triangleBatch->m_mesh->setTopologyType(Mesh::TT_TRIANGLELIST);
 	}
 
 	void Gizmos::bindMethods()

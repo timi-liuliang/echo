@@ -2,7 +2,6 @@
 
 #include "RenderState.h"
 #include "ShaderProgram.h"
-#include "RenderInput.h"
 #include <utility>
 #include "engine/core/resource/Res.h"
 

@@ -56,7 +56,7 @@ namespace Echo
 		void setTexture(ui32 index, const TextureSampler& sampler,bool needUpdate = false);
 
 		// ÷¥––‰÷»æ
-		void render(RenderInput* pInput, ShaderProgram* shaderProgram);
+		virtual void draw(Renderable* renderable) override;
 
 		void getDepthRange(Vector2& vec);
 		void convertMatOrho(Matrix4& mat, const Matrix4& matOrth, Real zn, Real zf);
@@ -74,7 +74,6 @@ namespace Echo
 		ShaderProgram*			createShaderProgram(  ShaderProgramRes* material);
 		Shader*					createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const String& filename);
 		Shader*					createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const char* srcBuffer, ui32 size);
-		RenderInput*			createRenderInput( ShaderProgram* pProgram);
 		RenderTargetView*		createRenderTargetView(PixelFormat fmt, ui32 width, ui32 height);
 		DepthStencilView*		createDepthStencilView(PixelFormat fmt, ui32 width, ui32 height);
 		RasterizerState*		createRasterizerState(const RasterizerState::RasterizerDesc& desc);
@@ -97,6 +96,9 @@ namespace Echo
 		virtual void onSize(int width, int height); 
 
 	protected:
+		//  interal implement
+		virtual Renderable* createRenderableInernal(const String& renderStage, ShaderProgramRes* shader, int identifier)override;
+
 		// ‰÷»æµΩ∆¡ƒª
 		virtual bool doPresent();
 

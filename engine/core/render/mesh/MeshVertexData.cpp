@@ -37,41 +37,41 @@ namespace Echo
 		m_vertexElements.clear();
 
 		// 增加位置的空间
-		m_vertexElements.push_back(RenderInput::VertexElement(RenderInput::VS_POSITION, PF_RGB32_FLOAT));
+		m_vertexElements.push_back(VertexElement(VS_POSITION, PF_RGB32_FLOAT));
 
 		// 使用法线
 		if (m_isUseNormal)
-			m_vertexElements.push_back(RenderInput::VertexElement(RenderInput::VS_NORMAL, PF_RGB32_FLOAT));
+			m_vertexElements.push_back(VertexElement(VS_NORMAL, PF_RGB32_FLOAT));
 
 		// 增加顶点色
 		if (m_isUseVertexColor)
-			m_vertexElements.push_back(RenderInput::VertexElement(RenderInput::VS_COLOR, PF_RGBA8_UNORM));
+			m_vertexElements.push_back(VertexElement(VS_COLOR, PF_RGBA8_UNORM));
 
 		// 纹理坐标
 		if (m_isUseUV)
-			m_vertexElements.push_back(RenderInput::VertexElement(RenderInput::VS_TEXCOORD0, PF_RG32_FLOAT));
+			m_vertexElements.push_back(VertexElement(VS_TEXCOORD0, PF_RG32_FLOAT));
 
 		// 灯光图
 		if (m_isUseLightmapUV)
-			m_vertexElements.push_back(RenderInput::VertexElement(RenderInput::VS_TEXCOORD1, PF_RG32_FLOAT));
+			m_vertexElements.push_back(VertexElement(VS_TEXCOORD1, PF_RG32_FLOAT));
 
 		// 动画数据(骨骼权重与索引)
 		if (m_isUseBoneData)
 		{
-			m_vertexElements.push_back(RenderInput::VertexElement(RenderInput::VS_BLENDINDICES, PF_RGBA8_UINT));
-			m_vertexElements.push_back(RenderInput::VertexElement(RenderInput::VS_BLENDWEIGHTS, PF_RGB32_FLOAT));
+			m_vertexElements.push_back(VertexElement(VS_BLENDINDICES, PF_RGBA8_UINT));
+			m_vertexElements.push_back(VertexElement(VS_BLENDWEIGHTS, PF_RGB32_FLOAT));
 		}
 
 		// 切空间数据
 		if (m_isUseTangentBinormal)
 		{
-			m_vertexElements.push_back(RenderInput::VertexElement(RenderInput::VS_TANGENT, PF_RGB32_FLOAT));
-			m_vertexElements.push_back(RenderInput::VertexElement(RenderInput::VS_BINORMAL, PF_RGB32_FLOAT));
+			m_vertexElements.push_back(VertexElement(VS_TANGENT, PF_RGB32_FLOAT));
+			m_vertexElements.push_back(VertexElement(VS_BINORMAL, PF_RGB32_FLOAT));
 		}
 	}
 
 	// 判断顶点格式中是否含有指定类型的数据
-	bool MeshVertexFormat::isVertexUsage(RenderInput::VertexSemantic semantic) const
+	bool MeshVertexFormat::isVertexUsage(VertexSemantic semantic) const
 	{
 		size_t num = m_vertexElements.size();
 		for (size_t i = 0; i < num; ++i)
@@ -146,7 +146,7 @@ namespace Echo
 	}
 
 	// 判断顶点格式中是否含有指定类型的数据
-	bool MeshVertexData::isVertexUsage(RenderInput::VertexSemantic semantic) const
+	bool MeshVertexData::isVertexUsage(VertexSemantic semantic) const
 	{
 		return m_format.isVertexUsage(semantic);
 	}
@@ -154,7 +154,7 @@ namespace Echo
 	// 获取顶点位置数据
 	Vector3& MeshVertexData::getPosition(Word index)
 	{
-		EchoAssert(index < m_count && isVertexUsage(RenderInput::VS_POSITION));
+		EchoAssert(index < m_count && isVertexUsage(VS_POSITION));
 
 		return *(Vector3*)(getVertice(index) + m_format.m_posOffset);
 	}
@@ -170,7 +170,7 @@ namespace Echo
 	// 获取顶点法线数据
 	const Vector3& MeshVertexData::getNormal(Word index)
 	{
-		EchoAssert(index < m_count && isVertexUsage(RenderInput::VS_NORMAL));
+		EchoAssert(index < m_count && isVertexUsage(VS_NORMAL));
 
 		return *(Vector3*)(getVertice(index) + m_format.m_normalOffset);
 	}
@@ -183,7 +183,7 @@ namespace Echo
 	// 获取顶点颜色数据
 	Dword& MeshVertexData::getColor(Word index)
 	{
-		EchoAssert(index < m_count && RenderInput::VS_COLOR);
+		EchoAssert(index < m_count && VS_COLOR);
 
 		return *(Dword*)(getVertice(index) + m_format.m_colorOffset);
 	}
@@ -191,7 +191,7 @@ namespace Echo
 	// 获取顶点UV数据0
 	const Vector2& MeshVertexData::getUV0(Word index)
 	{
-		EchoAssert(index < m_count && isVertexUsage(RenderInput::VS_TEXCOORD0));
+		EchoAssert(index < m_count && isVertexUsage(VS_TEXCOORD0));
 
 		return *(Vector2*)(getVertice(index) + m_format.m_uv0Offset);
 	}
@@ -204,7 +204,7 @@ namespace Echo
 	// 获取顶点UV数据1
 	const Vector2& MeshVertexData::getUV1(Word index)
 	{
-		EchoAssert(index < m_count && isVertexUsage(RenderInput::VS_TEXCOORD1));
+		EchoAssert(index < m_count && isVertexUsage(VS_TEXCOORD1));
 
 		return *(Vector2*)(getVertice(index) + m_format.m_uv1Offset);
 	}
@@ -212,7 +212,7 @@ namespace Echo
 	// 获取切线
 	Vector3& MeshVertexData::getTangent(Word index)
 	{
-		EchoAssert(index < m_count && isVertexUsage(RenderInput::VS_TANGENT));
+		EchoAssert(index < m_count && isVertexUsage(VS_TANGENT));
 
 		return *(Vector3*)(getVertice(index) + m_format.m_tangentOffset);
 	}

@@ -1,8 +1,8 @@
 #pragma once
 
 #include <engine/core/util/AssertX.h>
+#include "engine/core/render/mesh/MeshVertexData.h"
 #include "Shader.h"
-#include "RenderInput.h"
 
 namespace Echo
 {
@@ -24,6 +24,7 @@ namespace Echo
 	/**
 	* ShaderProgram 2014-11-18
 	*/
+	class Renderable;
 	class ShaderProgramRes;
 	class ShaderProgram
 	{
@@ -111,10 +112,10 @@ namespace Echo
 		virtual void bind() = 0;
 		virtual void unbind() = 0;
 
-		virtual i32 getAtrribLocation(RenderInput::VertexSemantic vertexSemantic);
+		virtual i32 getAtrribLocation(VertexSemantic vertexSemantic);
 
 		// 绑定几何体数据
-		virtual void bindRenderInput(RenderInput* renderInput) = 0;
+		virtual void bindRenderable(Renderable* renderInput) = 0;
 
 	public:
 		// 根据变量名称设置值

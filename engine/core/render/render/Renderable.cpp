@@ -13,7 +13,6 @@ namespace Echo
 	Renderable::Renderable(const String& renderStage, ShaderProgramRes* shader, int identifier)
 		: m_renderStage(renderStage)
 		, m_mesh(nullptr)
-		, m_renderInput(nullptr)
 		, m_SParamWriteIndex(0)
 		, m_bRenderState(false)
 		, m_pBlendState(NULL)
@@ -26,8 +25,6 @@ namespace Echo
 
 	Renderable::~Renderable()
 	{
-		EchoSafeDelete(m_renderInput, RenderInput);
-
 		m_shaderParams.clear();
 	}
 
@@ -214,8 +211,7 @@ namespace Echo
 			bindShaderParams();
 
 			// Ö´ÐÐäÖÈ¾
-			EchoAssert(m_renderInput);
-			Renderer::instance()->render(m_renderInput, m_shaderProgram->getShaderProgram());
+			Renderer::instance()->draw( this);
 		}
 	}
 
@@ -245,21 +241,15 @@ namespace Echo
 		m_bRenderState = state ? true : false;
 	}
 
+	// get shader
+	ShaderProgram* Renderable::getShader()
+	{
+		return m_shaderProgram->getShaderProgram();
+	}
+
 	void Renderable::setMesh(Mesh* mesh)
 	{
 		m_mesh = mesh;
-
-		EchoSafeDelete(m_renderInput, RenderInput);
-		if (m_shaderProgram)
-		{
-			ShaderProgram* program = m_shaderProgram->getShaderProgram();
-			if (program)
-			{
-				m_renderInput = Renderer::instance()->createRenderInput(program);
-				m_renderInput->setMesh(m_mesh);
-				m_renderInput->bindVertexStream( m_mesh->getVertexElements(), m_mesh->getVertexBuffer());
-				m_renderInput->bindIndexStream(m_mesh->getIndexBuffer(), m_mesh->getIndexStride());
-			}
-		}
+		link();
 	}
 }

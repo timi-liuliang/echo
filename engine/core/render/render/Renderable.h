@@ -49,6 +49,7 @@ namespace Echo
 		void release();
 
 		// set mesh
+		Mesh* getMesh() { return m_mesh; }
 		void setMesh(Mesh* mesh);
 
 		// 开始参数
@@ -109,6 +110,9 @@ namespace Echo
 		// get node
 		Render* getNode() { return m_node; }
 
+		// get shader
+		ShaderProgram* getShader();
+
 	protected:
 		// 向纹理槽中设置纹理
 		void bindTextures();
@@ -119,7 +123,10 @@ namespace Echo
 		// 绑定渲染状态
 		void bindRenderState();
 
-	private:
+		// link shader and program
+		virtual void link() = 0;
+
+	protected:
 		Renderable( const String& renderStage, ShaderProgramRes* shader, int identifier);
 		virtual ~Renderable();
 
@@ -129,7 +136,6 @@ namespace Echo
 		String									m_renderStage;
 		ShaderProgramResPtr						m_shaderProgram;		// material
 		Mesh*									m_mesh;
-		RenderInput*							m_renderInput;			// first  VB, IB, etc.
 		MaxTextureArray							m_textures;				// now only one texture sampler.
 		vector<ShaderParam>::type				m_shaderParams;			// third shader params
 		size_t									m_SParamWriteIndex;

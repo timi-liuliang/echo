@@ -133,7 +133,7 @@ namespace Echo
 		return true;
 	}
 
-	i32 ShaderProgram::getAtrribLocation(RenderInput::VertexSemantic vertexSemantic)
+	i32 ShaderProgram::getAtrribLocation(VertexSemantic vertexSemantic)
 	{
 		return 0;
 	}

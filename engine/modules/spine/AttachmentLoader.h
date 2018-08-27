@@ -2,7 +2,7 @@
 
 #include <spine/spine.h>
 #include <Render/GPUBuffer.h>
-#include <Render/RenderInput.h>
+#include <Render/GPUBuffer.h>
 #include <Render/Renderable.h>
 #include "engine/core/render/TextureRes.h"
 
