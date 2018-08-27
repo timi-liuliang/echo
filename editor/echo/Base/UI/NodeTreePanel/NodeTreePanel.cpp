@@ -201,7 +201,7 @@ namespace Studio
 			{
 				node->setParent(parentNode);
 
-				addNode(node, parentItem, false);
+				addNode(node, parentItem, true);
 
 				parentItem->setExpanded(true);
 			}

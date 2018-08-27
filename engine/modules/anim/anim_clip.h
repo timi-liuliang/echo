@@ -4,8 +4,9 @@
 
 namespace Echo
 {
-	class AnimClip
+	struct AnimClip
 	{
-		vector<AnimNode*>		m_nodes;
+		String					m_name;
+		vector<AnimNode*>::type	m_nodes;
 	};
 }

@@ -264,7 +264,6 @@ namespace Echo
 		GltfMetaInfo						m_metaInfo;
 		vector<GltfSceneInfo>::type			m_scenes;
 		vector<GltfMeshInfo>::type			m_meshes;
-		vector<GltfAnim>::type				m_animations;
 		vector<GltfNodeInfo>::type			m_nodes;
 		vector<GltfBufferInfo>::type		m_buffers;
 		vector<GltfBufferViewInfo>::type	m_bufferViews;
@@ -273,6 +272,7 @@ namespace Echo
 		vector<GltfImageInfo>::type			m_images;
 		vector<GltfSamplerInfo>::type		m_samplers;
 		vector<GltfTextureInfo>::type		m_textures;
+		vector<GltfAnim>::type				m_animations;
 
 		// create
 		static GltfRes* create(const ResourcePath& path);
@@ -301,6 +301,7 @@ namespace Echo
 		bool buildPrimitiveData(int meshIdx, int primitiveIdx);
 		bool buildMaterial(int meshIdx, int primitiveIdx);
 		Node* createNode(Node* parent, int idx);
+		Node* createAnimPlayer();
 	};
 	typedef Echo::ResRef<Echo::GltfRes> GltfResPtr;
 }

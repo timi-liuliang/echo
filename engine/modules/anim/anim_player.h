@@ -14,17 +14,21 @@ namespace Echo
 		AnimPlayer();
 		virtual ~AnimPlayer();
 
+		// play
+		void play(const char* animName);
+
 		// get anim data
 		const Base64String& getAnimData() const { return m_animData; }
 
 		// set anim data
 		void setAnimData(const Base64String& data) { m_animData = data; }
 
-		// add node
-
+	public:
+		// add clip
+		void addClip(AnimClip* clip);
 
 	private:
 		Base64String			m_animData;
-		vector<AnimClip*>		m_clips;
+		vector<AnimClip*>::type	m_clips;
 	};
 }
