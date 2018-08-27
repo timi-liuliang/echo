@@ -238,11 +238,33 @@ namespace Echo
 		i32			m_source  = -1;
 	};
 
+	struct GltfAnimChannel
+	{
+		i32		m_node = -1;		// node idx
+		String	m_path;				// "translation" "rotation" "scale" "weights"
+		i32		m_sampler = -1;		// anim sampler index
+	};
+
+	struct GltfAnimSampler
+	{
+		i32			m_input;
+		i32			m_output;
+		String		m_interpolation;	// "LINEAR" "STEP" "CATMULLROMSPLINE" "CUBICSPLINE"
+	};
+
+	struct GltfAnim
+	{
+		String							m_name;
+		vector<GltfAnimChannel>::type	m_channels;
+		vector<GltfAnimSampler>::type	m_samplers;
+	};
+
 	struct GltfRes : public Res
 	{
 		GltfMetaInfo						m_metaInfo;
 		vector<GltfSceneInfo>::type			m_scenes;
 		vector<GltfMeshInfo>::type			m_meshes;
+		vector<GltfAnim>::type				m_animations;
 		vector<GltfNodeInfo>::type			m_nodes;
 		vector<GltfBufferInfo>::type		m_buffers;
 		vector<GltfBufferViewInfo>::type	m_bufferViews;
@@ -275,6 +297,7 @@ namespace Echo
 		bool loadSamplers(nlohmann::json& json);
 		bool loadTextures(nlohmann::json& json);
 		bool loadMeshes(nlohmann::json& json);
+		bool loadAnimations(nlohmann::json& json);
 		bool buildPrimitiveData(int meshIdx, int primitiveIdx);
 		bool buildMaterial(int meshIdx, int primitiveIdx);
 		Node* createNode(Node* parent, int idx);

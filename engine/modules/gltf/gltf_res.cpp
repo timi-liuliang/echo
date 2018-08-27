@@ -194,6 +194,12 @@ namespace Echo
 				return false;
 			}
 
+			if (!loadAnimations(j))
+			{
+				EchoLogError("gltf parse animations failed when load resource [%s]", m_path.getPath().c_str());
+				return false;
+			}
+
 			m_isLoaded = true;
 
 			return true;
@@ -565,6 +571,71 @@ namespace Echo
 				m_bufferViews[i].m_target = static_cast<GltfBufferViewInfo::TargetType>(target);
 			else
 				return false;
+		}
+
+		return true;
+	}
+
+	bool GltfRes::loadAnimations(nlohmann::json& json)
+	{
+		// animations may not exist
+		if (json.find("animations") == json.end())
+			return true;
+
+		nlohmann::json& animations = json["animations"];
+		if (!animations.is_array())
+			return true;
+
+		m_animations.resize(animations.size());
+		for (ui32 i = 0; i < animations.size(); i++)
+		{
+			nlohmann::json& animation = animations[i];
+
+			// name
+			if (!parseJsonValueString(m_animations[i].m_name, animation, "name", false))
+				return false;
+
+			// channels
+			nlohmann::json& channels = animation["channels"];
+			if (!channels.is_array())
+				return false;
+
+			m_animations[i].m_channels.resize(channels.size());
+			for (ui32 j = 0; j < channels.size(); j++)
+			{
+				nlohmann::json&  channel = channels[j];
+				GltfAnimChannel& animChannel = m_animations[i].m_channels[j];
+				
+				if (!parseJsonValueI32(animChannel.m_node, channel["target"], "node", true))
+					return false;
+
+				if (!parseJsonValueString(animChannel.m_path, channel["target"], "path", true))
+					return false;
+
+				if (!parseJsonValueI32(animChannel.m_sampler, channel, "sampler", true))
+					return false;
+			}
+
+			// samplers
+			nlohmann::json& samplers = animation["samplers"];
+			if (!samplers.is_array())
+				return false;
+
+			m_animations[i].m_samplers.resize(samplers.size());
+			for (ui32 j = 0; j < samplers.size(); j++)
+			{
+				nlohmann::json& sampler = samplers[j];
+				GltfAnimSampler& animSampler = m_animations[i].m_samplers[j];
+
+				if (!parseJsonValueI32(animSampler.m_input, sampler, "input", true))
+					return false;
+
+				if (!parseJsonValueString(animSampler.m_interpolation, sampler, "interpolation", true))
+					return false;
+
+				if (!parseJsonValueI32(animSampler.m_output, sampler, "output", true))
+					return false;
+			}
 		}
 
 		return true;

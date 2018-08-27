@@ -19,7 +19,5 @@ namespace Echo
 		AnimCurve*	m_curveX;
 		AnimCurve*	m_curveY;
 		AnimCurve*	m_curveZ;
-
-
 	};
 }
