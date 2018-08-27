@@ -296,6 +296,7 @@ ENDMACRO(APPEND_FILES)
 
 # Add sub directories
 ADD_SUBDIRECTORY(engine)
+ADD_SUBDIRECTORY(thirdparty/vulkan)
 ADD_SUBDIRECTORY(thirdparty/pugixml)
 ADD_SUBDIRECTORY(thirdparty/physx)
 ADD_SUBDIRECTORY(thirdparty/spine)

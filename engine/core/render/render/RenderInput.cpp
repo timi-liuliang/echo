@@ -8,7 +8,6 @@ namespace Echo
 {
 	RenderInput::RenderInput( ShaderProgram* pProgram)
 		: m_startVert(0)
-		, m_baseVert(0)
 		, m_program( pProgram)
 		, m_startIdx(0)
 		, m_pIdxBuff(NULL)

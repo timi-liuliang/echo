@@ -10,7 +10,6 @@
 
 namespace Echo
 {
-	// 构造函数
 	Renderable::Renderable(const String& renderStage, ShaderProgramRes* shader, int identifier)
 		: m_renderStage(renderStage)
 		, m_mesh(nullptr)
@@ -25,7 +24,6 @@ namespace Echo
 		m_shaderProgram = shader;
 	}
 
-	// 析构函数
 	Renderable::~Renderable()
 	{
 		EchoSafeDelete(m_renderInput, RenderInput);
@@ -40,7 +38,6 @@ namespace Echo
 		Renderer::instance()->destroyRenderables(&ptr, 1);
 	}
 
-	// 新建
 	Renderable* Renderable::create(Mesh* mesh, Material* matInst, Render* node)
 	{
 		ShaderProgramRes* shaderRes = matInst->getShader();
@@ -94,14 +91,12 @@ namespace Echo
 		return renderable;
 	}
 
-	// 开始绑定shader参数
 	void Renderable::beginShaderParams(size_t paramNum)
 	{
 		m_shaderParams.resize(paramNum);
 		m_SParamWriteIndex = 0;
 	}
 
-	// 结束变量绑定
 	void Renderable::endShaderParams()
 	{
 		if (m_SParamWriteIndex != m_shaderParams.size())
@@ -110,7 +105,6 @@ namespace Echo
 		}
 	}
 
-	// 设置参数
 	void Renderable::setShaderParam(size_t physicsIndex, ShaderParamType type, const void* param, size_t num/* =1 */)
 	{
 		if (m_SParamWriteIndex < m_shaderParams.size() && param)
@@ -144,7 +138,6 @@ namespace Echo
 		m_shaderParams[modifyIndex].ParamsLength = num;
 	}
 
-	// 向纹理槽中设置纹理
 	void Renderable::setTexture(ui32 stage, Texture* texture, const SamplerState* state)
 	{
 		m_textures[stage].m_texture = texture;
@@ -158,7 +151,6 @@ namespace Echo
 		m_textures[stage].m_samplerState = state;
 	}
 
-	// 绑定参数
 	void Renderable::bindShaderParams()
 	{
 		// 向纹理槽中设置纹理
@@ -185,7 +177,6 @@ namespace Echo
 		}
 	}
 
-	// 绑定纹理
 	void Renderable::bindTextures()
 	{
 		for (size_t i = 0; i < MAX_TEXTURE_SAMPLER; ++i)
@@ -198,7 +189,6 @@ namespace Echo
 		}
 	}
 
-	// 绑定渲染状态
 	void Renderable::bindRenderState()
 	{
 		if (m_shaderProgram)
@@ -210,7 +200,6 @@ namespace Echo
 		}
 	}
 
-	// 执行渲染
 	void Renderable::render()
 	{
 		if (m_shaderProgram)
@@ -230,7 +219,6 @@ namespace Echo
 		}
 	}
 
-	// 提交到渲染队列
 	void Renderable::submitToRenderQueue()
 	{
 		if (m_mesh->isValid())
@@ -239,21 +227,18 @@ namespace Echo
 		}
 	}
 
-	// 设置混合状态
 	void Renderable::setBlendState(BlendState* pState)
 	{
 		m_pBlendState = pState;
 		m_bRenderState = pState ? true : false;
 	}
 
-	// 设置光栅化状态
 	void Renderable::setRasterizerState(RasterizerState* state)
 	{
 		m_pRasterizerState = state;
 		m_bRenderState = state ? true : false;
 	}
 
-	// 设置深度模板状态
 	void Renderable::setDepthStencilState(DepthStencilState* state)
 	{
 		m_pDepthStencil = state;

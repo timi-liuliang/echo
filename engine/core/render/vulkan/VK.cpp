@@ -3,12 +3,12 @@
 
 namespace Echo
 {
-	void LoadGLESRenderer(Renderer*& render)
+	void LoadVKRenderer(Renderer*& render)
 	{
 		render = nullptr;// EchoNew(GLES2Renderer);
 	}
 
-	void UnLoadGLESRenderer(Renderer* render)
+	void UnLoadVKRenderer(Renderer* render)
 	{
 		EchoSafeDelete(render, Renderer);
 	}

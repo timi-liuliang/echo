@@ -49,20 +49,12 @@ namespace Studio
 
 	bool EchoEngine::Initialize(HWND hwnd)
 	{
-		TIME_PROFILE
-		(
-			Echo::Engine::Config rootcfg;
-
-			// 是否预设项目文件
-			if (!m_projectFile.empty())
-			{
-				rootcfg.m_projectFile = m_projectFile.c_str();
-			}
-			rootcfg.m_isGame = false;
-			rootcfg.m_windowHandle = (unsigned int)hwnd;
-
-			Echo::Engine::instance()->initialize(rootcfg);
-		)
+		// init engine by configure
+		Echo::Engine::Config rootcfg;
+		rootcfg.m_projectFile = !m_projectFile.empty() ? m_projectFile.c_str() : "";
+		rootcfg.m_isGame = false;
+		rootcfg.m_windowHandle = (unsigned int)hwnd;
+		Echo::Engine::instance()->initialize(rootcfg);
 
 		TIME_PROFILE
 		(

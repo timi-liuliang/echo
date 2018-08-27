@@ -119,14 +119,10 @@ namespace Echo
 		virtual void unbind() = 0;
 
 		void setStartVertex(ui32 startVert) { m_startVert = startVert; }
-		void setBaseVertex(ui32 baseVert){ m_baseVert = baseVert; }
 		void setStartIndex(ui32 startIdx) { m_startIdx = startIdx; }
 		void setIndexCount(ui32 idxCount) { m_idxCount = idxCount;}
 		
 		ui32 getStartVertex() const { return m_startVert;}
-
-		ui32 getBaseVertex() const { return m_baseVert; }
-
 		ui32 getStartIndex() const { return m_startIdx;}
 
 		const vector<StreamUnit>::type* getVertexBuffer() const { return &m_vertexStreams; }
@@ -163,15 +159,14 @@ namespace Echo
 		ShaderProgram*				m_program;
 		Mesh*						m_mesh;
 		ui32						m_startVert;
-		ui32						m_baseVert;
 		ui32						m_startIdx;
 		vector<StreamUnit>::type	m_vertexStreams;
-		unsigned int				m_vertexStreamsHash;		// 顶点流hash
+		unsigned int				m_vertexStreamsHash;
 		GPUBuffer*					m_pIdxBuff;
 		ui32						m_idxStride;
 		ui32						m_idxCount;
 		bool						m_supportWireframe;
-		bool						m_is_muti_stream;			// 是否是多流
-		String						m_ownerInfo;			    // 拥有者信息
+		bool						m_is_muti_stream;
+		String						m_ownerInfo;
 	};
 }
