@@ -35,8 +35,8 @@ echo.dmg       [Mac OS X 10.7 or later]
 ### Multi Platform Support  
 iOS Android Html5 Windows Mac Linux Steam  
 
-### glTF Fully Support  
-PBR Material  
+### New Industry Standard Support 
+gLtf2.0, Vulkan
 
 ### 2D And 3D Seamless Transition  
 Every node can be 2d or 3d. The core different is the camera and the unit the node use. So you can just switch a node to 2d or 3d easily. 
