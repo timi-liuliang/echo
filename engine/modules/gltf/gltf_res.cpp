@@ -651,6 +651,83 @@ namespace Echo
 			}
 		}
 
+		buildAnimationData();
+
+		return true;
+	}
+
+	static AnimProperty::Type MapAnimPropertyType(GltfAccessorInfo::Type type)
+	{
+		switch (type)
+		{
+		case GltfAccessorInfo::Type::Scalar:	return AnimProperty::Type::Float;
+		case GltfAccessorInfo::Type::Vec3:		return AnimProperty::Type::Vector3;
+		case GltfAccessorInfo::Type::Vec4:		return AnimProperty::Type::Vector4;
+		default:								return AnimProperty::Type::Unknow;
+		}
+	}
+
+	static AnimCurve::InterpolationType MappingInterpolationType(const String& type)
+	{
+		return AnimCurve::InterpolationType::Linear;
+	}
+
+	bool GltfRes::buildAnimationData()
+	{
+		for (GltfAnim& anim : m_animations)
+		{
+			AnimClip* animClip = EchoNew(AnimClip);
+			animClip->m_name = anim.m_name;
+
+			for (GltfAnimChannel& channel : anim.m_channels)
+			{
+				GltfAnimSampler& sampler = anim.m_samplers[channel.m_sampler];
+				{
+					AnimNode* animNode = EchoNew(AnimNode);
+
+					// node path
+					animNode->m_userData = channel.m_node;
+
+					// propertys
+					GltfAccessorInfo& timeAccess = m_accessors[sampler.m_input];
+					GltfAccessorInfo& keyAccess = m_accessors[sampler.m_output];
+					const String& interpolationType = sampler.m_interpolation;
+
+					// add property
+					AnimProperty* animProperty = animNode->addProperty(channel.m_path, MapAnimPropertyType(keyAccess.m_type));
+					if (timeAccess.m_count == keyAccess.m_count)
+					{
+						// interploate type
+						animProperty->setInterpolationType(MappingInterpolationType(sampler.m_interpolation));
+
+						// key values
+						GltfBufferViewInfo& timeBufferView = m_bufferViews[timeAccess.m_bufferView];
+						GltfBufferInfo&		timeBuffer = m_buffers[timeBufferView.m_bufferIdx];
+						float*				timeData = (float*)timeBuffer.getData(timeBufferView.m_byteOffset + timeAccess.m_byteOffset);
+						GltfBufferViewInfo& keyBufferView = m_bufferViews[keyAccess.m_bufferView];
+						GltfBufferInfo&		keyBuffer = m_buffers[keyBufferView.m_bufferIdx];
+						switch (keyAccess.m_type)
+						{
+						case GltfAccessorInfo::Type::Vec4:
+						{
+							Vector4* keyData = (Vector4*)keyBuffer.getData(keyBufferView.m_byteOffset + keyAccess.m_byteOffset);
+							for (ui32 i = 0; i < timeAccess.m_count; i++)
+							{
+								float time = timeData[i];
+								((AnimPropertyVec4*)animProperty)->addKey(time, keyData[i]);
+							}
+						}
+						break;
+						}
+					}
+
+					animClip->m_nodes.push_back(animNode);
+				}
+			}
+
+			anim.m_clip = animClip;
+		}
+
 		return true;
 	}
 
@@ -1334,100 +1411,12 @@ namespace Echo
 		return node;
 	}
 
-	static String MapAnimPropertyName(const String& chanelPath)
-	{
-		if (chanelPath == "rotation")	return "Rotation";
-		else if (chanelPath == "scale")	return "Scale";
-		else if (chanelPath == "translation") return "Position";
-		else if (chanelPath == "weights") return "weights";
-		else EchoLogError("MapAnimPropertyName failed");	return "";
-	}
-
-	static AnimProperty::Type MapAnimPropertyType(GltfAccessorInfo::Type type)
-	{
-		switch (type)
-		{
-		case GltfAccessorInfo::Type::Scalar:	return AnimProperty::Type::Float;
-		case GltfAccessorInfo::Type::Vec3:		return AnimProperty::Type::Vector3;
-		case GltfAccessorInfo::Type::Vec4:		return AnimProperty::Type::Vector4;
-		default:								return AnimProperty::Type::Unknow;
-		}
-	}
-
-	static AnimCurve::InterpolationType MappingInterpolationType(const String& type)
-	{
-		return AnimCurve::InterpolationType::Linear;
-	}
-
-	static void buildNodePath(vector<GltfNodeInfo>::type& nodes, i32 nodeIdx, String& result)
-	{
-		GltfNodeInfo& node = nodes[nodeIdx];
-		result = node.m_name + (result.empty() ? "" : "/") + result;
-		if (node.m_parent != -1)
-		{
-			buildNodePath(nodes, node.m_parent, result);
-		}
-	}
-
 	Node* GltfRes::createSkeleton()
 	{
 		if (m_animations.size())
 		{
 			GltfSkeleton* skeleton = Class::create<GltfSkeleton*>("GltfSkeleton");
-			for (GltfAnim& anim : m_animations)
-			{
-				AnimClip* animClip = EchoNew(AnimClip);
-				animClip->m_name = anim.m_name;
-
-				for (GltfAnimChannel& channel : anim.m_channels)
-				{
-					GltfAnimSampler& sampler = anim.m_samplers[channel.m_sampler];
-					{
-						AnimNode* animNode = EchoNew(AnimNode);
-
-						// node path
-						buildNodePath(m_nodes, channel.m_node, animNode->m_nodePath);
-						animNode->m_nodePath = "../" + animNode->m_nodePath;
-
-						// propertys
-						GltfAccessorInfo& timeAccess = m_accessors[sampler.m_input];
-						GltfAccessorInfo& keyAccess = m_accessors[sampler.m_output];
-						const String& interpolationType = sampler.m_interpolation;
-						
-						// add property
-						AnimProperty* animProperty = animNode->addProperty(MapAnimPropertyName(channel.m_path), MapAnimPropertyType(keyAccess.m_type));
-						if (timeAccess.m_count == keyAccess.m_count)
-						{
-							// interploate type
-							animProperty->setInterpolationType( MappingInterpolationType(sampler.m_interpolation));
-
-							// key values
-							GltfBufferViewInfo& timeBufferView = m_bufferViews[timeAccess.m_bufferView];
-							GltfBufferInfo&		timeBuffer = m_buffers[timeBufferView.m_bufferIdx];
-							float*				timeData = (float*)timeBuffer.getData(timeBufferView.m_byteOffset + timeAccess.m_byteOffset);
-							GltfBufferViewInfo& keyBufferView = m_bufferViews[keyAccess.m_bufferView];
-							GltfBufferInfo&		keyBuffer = m_buffers[keyBufferView.m_bufferIdx];
-							switch (keyAccess.m_type)
-							{
-							case GltfAccessorInfo::Type::Vec4:
-								{
-									Vector4* keyData = (Vector4*)keyBuffer.getData(keyBufferView.m_byteOffset + keyAccess.m_byteOffset);
-									for (ui32 i = 0; i < timeAccess.m_count; i++)
-									{
-										float time = timeData[i];
-										((AnimPropertyVec4*)animProperty)->addKey( time, keyData[i]);
-									}
-								}
-								break;
-							}
-						}
-
-						animClip->m_nodes.push_back(animNode);
-					}
-				}
-
-				skeleton->addClip(animClip);
-			}
+			skeleton->setGltfRes(m_path);
 
 			return skeleton;
 		}

@@ -68,24 +68,11 @@ namespace Echo
 			EchoLogError("AnimPropertyVec4 add key failed");
 	}
 
-	void AnimPropertyVec4::updateToTime(float time, Node* node)
+	void AnimPropertyVec4::updateToTime(float time)
 	{
 		m_value.x = m_curves[0]->getValue(time);
 		m_value.y = m_curves[1]->getValue(time);
 		m_value.z = m_curves[2]->getValue(time);
 		m_value.w = m_curves[3]->getValue(time);
-
-		// update value to node
-		if (node)
-		{
-			Vector3 yawPitchRow;
-			Quaternion quat;
-			quat.x = m_value.x;
-			quat.y = m_value.y;
-			quat.z = m_value.z;
-			quat.w = m_value.w;
-			quat.toEulerAngle( yawPitchRow.x, yawPitchRow.y, yawPitchRow.z);
-			Class::setPropertyValue(node, m_name, yawPitchRow);
-		}
 	}
 }

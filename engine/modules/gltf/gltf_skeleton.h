@@ -3,6 +3,7 @@
 #include "engine/core/scene/node.h"
 #include "engine/core/util/base64.h"
 #include "engine/modules/anim/anim_clip.h"
+#include "gltf_res.h"
 
 namespace Echo
 {
@@ -14,6 +15,10 @@ namespace Echo
 		GltfSkeleton();
 		virtual ~GltfSkeleton();
 
+		// set gltf resource
+		const ResourcePath& getGltfRes() { return m_assetPath; }
+		void setGltfRes(const ResourcePath& path);
+
 		// play anim
 		void setAnim(const StringOption& animName);
 
@@ -23,10 +28,6 @@ namespace Echo
 		// is anim exist
 		bool isAnimExist(const char* animName);
 
-	public:
-		// add clip
-		void addClip(AnimClip* clip);
-
 	protected:
 		// update self
 		virtual void update_self() override;
@@ -35,7 +36,12 @@ namespace Echo
 		// generate unique name
 		void generateUniqueName(String& oName);
 
+		//  query clip data
+		void extractClipData(AnimClip* clip);
+
 	private:
+		ResourcePath			m_assetPath;
+		GltfResPtr				m_asset;			// gltf asset ptr
 		vector<AnimClip*>::type	m_clips;
 		StringOption			m_animations;
 	};

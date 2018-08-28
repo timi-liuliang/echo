@@ -15,7 +15,7 @@ namespace Echo
 		{}
 
 		// update
-		void update( float deltaTime, Node* base)
+		void update( float deltaTime)
 		{
 			m_time += deltaTime;
 			if (m_time > m_length)
@@ -23,7 +23,7 @@ namespace Echo
 
 			for (AnimNode* animNode : m_nodes)
 			{
-				animNode->updateToTime(m_time, base);
+				animNode->updateToTime(m_time);
 			}
 		}
 	};

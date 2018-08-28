@@ -14,29 +14,43 @@ namespace Echo
 
 	void GltfSkeleton::bindMethods()
 	{
+		CLASS_BIND_METHOD(GltfSkeleton, getGltfRes, DEF_METHOD("getGltfRes"));
+		CLASS_BIND_METHOD(GltfSkeleton, setGltfRes, DEF_METHOD("setGltfRes"));
 		CLASS_BIND_METHOD(GltfSkeleton, getAnim, DEF_METHOD("getAnim"));
 		CLASS_BIND_METHOD(GltfSkeleton, setAnim, DEF_METHOD("setAnim"));
 
+		CLASS_REGISTER_PROPERTY(GltfMesh, "Gltf", Variant::Type::ResourcePath, "getGltfRes", "setGltfRes");
 		CLASS_REGISTER_PROPERTY(GltfSkeleton, "Anim", Variant::Type::StringOption, "getAnim", "setAnim");
+	}
+
+	// set gltf resource
+	void GltfSkeleton::setGltfRes(const ResourcePath& path)
+	{
+		if (m_assetPath.setPath(path.getPath()))
+		{
+			m_asset = GltfRes::create(m_assetPath);	
+			if (m_asset)
+			{
+				for (GltfAnim& gltfAnim : m_asset->m_animations)
+				{
+					AnimClip* clip = gltfAnim.m_clip;
+					if (clip)
+					{
+						if (clip->m_name.empty())
+							generateUniqueName(clip->m_name);
+
+						m_clips.push_back(clip);
+						m_animations.addOption(clip->m_name);
+					}
+				}
+			}
+		}
 	}
 
 	// play anim
 	void GltfSkeleton::setAnim(const StringOption& animName)
 	{
 		m_animations.setValue(animName.getValue());
-	}
-
-	// add clip
-	void GltfSkeleton::addClip(AnimClip* clip)
-	{
-		if (clip)
-		{
-			if (clip->m_name.empty())
-				generateUniqueName(clip->m_name);
-
-			m_clips.push_back(clip);
-			m_animations.addOption(clip->m_name);
-		}
 	}
 
 	// update self
@@ -48,7 +62,9 @@ namespace Echo
 			AnimClip* clip = m_clips[m_animations.getIdx()];
 			if (clip)
 			{
-				clip->update(deltaTime, this);
+				clip->update(deltaTime);
+
+				extractClipData(clip);
 			}
 		}
 	}
@@ -78,5 +94,11 @@ namespace Echo
 				break;
 			}
 		}
+	}
+
+	//  query clip data
+	void GltfSkeleton::extractClipData(AnimClip* clip)
+	{
+		int a = 10;
 	}
 }

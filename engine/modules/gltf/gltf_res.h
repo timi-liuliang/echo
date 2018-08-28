@@ -253,11 +253,13 @@ namespace Echo
 		String		m_interpolation;	// "LINEAR" "STEP" "CATMULLROMSPLINE" "CUBICSPLINE"
 	};
 
+	struct AnimClip;
 	struct GltfAnim
 	{
 		String							m_name;
 		vector<GltfAnimChannel>::type	m_channels;
 		vector<GltfAnimSampler>::type	m_samplers;
+		AnimClip*						m_clip;
 	};
 
 	struct GltfRes : public Res
@@ -299,6 +301,7 @@ namespace Echo
 		bool loadTextures(nlohmann::json& json);
 		bool loadMeshes(nlohmann::json& json);
 		bool loadAnimations(nlohmann::json& json);
+		bool buildAnimationData();
 		bool buildPrimitiveData(int meshIdx, int primitiveIdx);
 		bool buildMaterial(int meshIdx, int primitiveIdx);
 		Node* createNode(Node* parent, int idx);

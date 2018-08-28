@@ -9,7 +9,7 @@ namespace Echo
 	class Node;
 	struct AnimProperty
 	{
-		String						m_name;					// name
+		any							m_userData;					// name
 		enum class Type
 		{
 			Unknow,
@@ -35,7 +35,7 @@ namespace Echo
 		virtual void addKey( float time, float value, i32 curveIdx)=0;
 
 		// update to time
-		virtual void updateToTime(float time, Node* node) = 0;
+		virtual void updateToTime(float time) = 0;
 
 		// create
 		static AnimProperty* create(Type type);
@@ -49,7 +49,7 @@ namespace Echo
 		virtual void addKey(float time, float value, i32 curveIdx);
 
 		// update to time
-		virtual void updateToTime(float time, Node* node){}
+		virtual void updateToTime(float time) override{}
 	};
 
 	struct AnimPropertyVec3 : public AnimProperty
@@ -61,7 +61,7 @@ namespace Echo
 		virtual void addKey(float time, float value, i32 curveIdx);
 		virtual i32 getCurverCount() { return 3; }
 		virtual AnimCurve* getCurve(int idx) { return m_curves[idx]; }
-		virtual void updateToTime(float time, Node* node){}
+		virtual void updateToTime(float time) override{}
 	};
 
 	struct AnimPropertyVec4 : public AnimProperty
@@ -74,6 +74,6 @@ namespace Echo
 		virtual void addKey(float time, float value, i32 curveIdx);
 		virtual i32 getCurverCount() { return 4; }
 		virtual AnimCurve* getCurve(int idx) { return m_curves[idx]; }
-		virtual void updateToTime(float time, Node* node);
+		virtual void updateToTime(float time) override;
 	};
 }

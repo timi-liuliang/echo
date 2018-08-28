@@ -7,32 +7,26 @@
 namespace Echo
 {
 	struct AnimNode
-	{
-		String						m_nodePath;			// relative to current player
+ 	{
+		any							m_userData;
 		vector<AnimProperty*>::type	m_properties;		// property need to update for this node
-		Node*						m_node = nullptr;
 
 		// add property
-		AnimProperty* addProperty( const String& name, AnimProperty::Type type)
+		AnimProperty* addProperty( const any& userData, AnimProperty::Type type)
 		{
 			AnimProperty* property = AnimProperty::create(type);
-			property->m_name = name;
+			property->m_userData = userData;
 			m_properties.push_back(property);
 
 			return property;
 		}
 
 		// update
-		void updateToTime(float time, Node* base)
+		void updateToTime(float time)
 		{
-			if (!m_node)
-			{
-				m_node = base->getNode(m_nodePath.c_str());
-			}
-
 			for (AnimProperty* property : m_properties)
 			{
-				property->updateToTime( time, m_node);
+				property->updateToTime( time);
 			}
 		}
 	};

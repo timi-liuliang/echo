@@ -19,12 +19,9 @@ namespace Echo
 			Discrete,
 		}						m_type;
 		vector<Key>::type		m_keys;
-		i32						m_curKey;
 
 		AnimCurve()
-			: m_curKey(0)
 		{
-
 		}
 
 		// set type
