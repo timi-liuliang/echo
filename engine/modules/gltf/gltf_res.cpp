@@ -1324,9 +1324,9 @@ namespace Echo
 
 	static String MapAnimPropertyName(const String& chanelPath)
 	{
-		if (chanelPath == "rotation")	return "Rotate";
+		if (chanelPath == "rotation")	return "Rotation";
 		else if (chanelPath == "scale")	return "Scale";
-		else if (chanelPath == "translation") return "Translate";
+		else if (chanelPath == "translation") return "Position";
 		else if (chanelPath == "weights") return "weights";
 		else EchoLogError("MapAnimPropertyName failed");	return "";
 	}

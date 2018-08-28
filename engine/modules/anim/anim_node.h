@@ -21,5 +21,14 @@ namespace Echo
 
 			return property;
 		}
+
+		// update
+		void updateToTime(float time)
+		{
+			for (AnimProperty* property : m_properties)
+			{
+				property->updateToTime( time, m_node);
+			}
+		}
 	};
 }

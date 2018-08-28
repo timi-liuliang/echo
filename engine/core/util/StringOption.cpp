@@ -9,6 +9,10 @@ namespace Echo
 			addOption(value);
 			setValue(value);
 		}
+		else
+		{
+			m_index = -1;
+		}
 	}
 
 	StringOption::StringOption(const String& str)
@@ -17,6 +21,10 @@ namespace Echo
 		{
 			addOption(str);
 			setValue(str);
+		}
+		else
+		{
+			m_index = -1;
 		}
 	}
 

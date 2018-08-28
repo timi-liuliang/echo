@@ -14,8 +14,14 @@ namespace Echo
 		AnimPlayer();
 		virtual ~AnimPlayer();
 
-		// play
-		void play(const char* animName);
+		// play anim
+		void setAnim(const StringOption& animName);
+
+		// get animations
+		const StringOption& getAnim() { return m_animations; }
+
+		// is anim exist
+		bool isAnimExist(const char* animName);
 
 		// get anim data
 		const Base64String& getAnimData() const { return m_animData; }
@@ -27,8 +33,17 @@ namespace Echo
 		// add clip
 		void addClip(AnimClip* clip);
 
+	protected:
+		// update self
+		virtual void update_self() override;
+
+	private:
+		// generate unique name
+		void generateUniqueName(String& oName);
+
 	private:
 		Base64String			m_animData;
 		vector<AnimClip*>::type	m_clips;
+		StringOption			m_animations;
 	};
 }

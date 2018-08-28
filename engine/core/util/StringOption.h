@@ -31,5 +31,8 @@ namespace Echo
 
 		// get options str
 		const String getOptionsStr() const { return StringUtil::ToString(m_options, ","); }
+
+		// is valid
+		bool isValid() const { return m_index < m_options.size(); }
 	};
 }

@@ -1,10 +1,12 @@
 #pragma once
 
+#include "engine/core/base/variant.h"
 #include "engine/core/math/Math.h"
 #include "anim_curve.h"
 
 namespace Echo
 {
+	class Node;
 	struct AnimProperty
 	{
 		String						m_name;					// name
@@ -32,6 +34,9 @@ namespace Echo
 		// add key
 		virtual void addKey( float time, float value, i32 curveIdx)=0;
 
+		// update to time
+		virtual void updateToTime(float time, Node* node) = 0;
+
 		// create
 		static AnimProperty* create(Type type);
 	};
@@ -42,6 +47,9 @@ namespace Echo
 		AnimCurve*	m_curve;
 
 		virtual void addKey(float time, float value, i32 curveIdx);
+
+		// update to time
+		virtual void updateToTime(float time, Node* node){}
 	};
 
 	struct AnimPropertyVec3 : public AnimProperty
@@ -53,11 +61,12 @@ namespace Echo
 		virtual void addKey(float time, float value, i32 curveIdx);
 		virtual i32 getCurverCount() { return 3; }
 		virtual AnimCurve* getCurve(int idx) { return m_curves[idx]; }
+		virtual void updateToTime(float time, Node* node){}
 	};
 
 	struct AnimPropertyVec4 : public AnimProperty
 	{
-		Vector4		m_value;
+		Variant		m_value;
 		AnimCurve*	m_curves[4];
 
 		AnimPropertyVec4();
@@ -65,5 +74,6 @@ namespace Echo
 		virtual void addKey(float time, float value, i32 curveIdx);
 		virtual i32 getCurverCount() { return 4; }
 		virtual AnimCurve* getCurve(int idx) { return m_curves[idx]; }
+		virtual void updateToTime(float time, Node* node);
 	};
 }
