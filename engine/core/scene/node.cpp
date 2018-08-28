@@ -500,6 +500,10 @@ namespace Echo
 
 					return root->getNode( path+1);
 				}
+				else if (path[0] == '.' && path[1] == '.' && path[2] == '/')
+				{
+					return getParent()->getNode(path + 3);
+				}
 				else
 				{
 					bool haveGrandson = false;

@@ -1,12 +1,5 @@
-//
-// internal_itoa.h
-//
-// 2016Äê12ÔÂ27ÈÕ 16:31:13
-//
-// moved from milo's benchmark
-//
-
 #pragma once
+
 namespace Echo
 {
 	namespace internal

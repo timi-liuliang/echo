@@ -51,7 +51,7 @@ namespace Echo
 			AnimClip* clip = m_clips[m_animations.getIdx()];
 			if (clip)
 			{
-				clip->update(deltaTime);
+				clip->update(deltaTime, this);
 			}
 		}
 	}

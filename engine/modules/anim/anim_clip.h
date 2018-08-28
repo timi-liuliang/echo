@@ -11,11 +11,11 @@ namespace Echo
 		float					m_time;
 		float					m_length;
 
-		AnimClip() : m_time(0.f), m_length(2.f)
+		AnimClip() : m_time(0.f), m_length(1.f)
 		{}
 
 		// update
-		void update( float deltaTime)
+		void update( float deltaTime, Node* base)
 		{
 			m_time += deltaTime;
 			if (m_time > m_length)
@@ -23,7 +23,7 @@ namespace Echo
 
 			for (AnimNode* animNode : m_nodes)
 			{
-				animNode->updateToTime(m_time);
+				animNode->updateToTime(m_time, base);
 			}
 		}
 	};

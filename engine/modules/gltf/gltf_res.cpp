@@ -289,6 +289,11 @@ namespace Echo
 			if (!parseJsonValueString(m_nodes[i].m_name, node, "name", false))
 				return false;
 
+			if (m_nodes[i].m_name.empty())
+			{
+				m_nodes[i].m_name = "node_" + StringUtil::ToString(i);
+			}
+
 			// camera
 			if (!parseJsonValueI32(m_nodes[i].m_camera, node, "camera", false))
 				return false;
@@ -303,7 +308,13 @@ namespace Echo
 				m_nodes[i].m_children.resize(children.size());
 				for (ui32 j = 0; j < children.size(); j++)
 				{
-					m_nodes[i].m_children[j] = children[j].get<ui32>();
+					ui32 childIdx = children[j].get<ui32>();
+					m_nodes[i].m_children[j] = childIdx;
+
+					if (m_nodes[childIdx].m_parent == -1)
+						m_nodes[childIdx].m_parent = i;
+					else
+						EchoLogError("gltf node has more than one parent.");
 				}
 			}
 
@@ -1347,6 +1358,16 @@ namespace Echo
 		return AnimCurve::InterpolationType::Linear;
 	}
 
+	static void buildNodePath(vector<GltfNodeInfo>::type& nodes, i32 nodeIdx, String& result)
+	{
+		GltfNodeInfo& node = nodes[nodeIdx];
+		result = node.m_name + (result.empty() ? "" : "/") + result;
+		if (node.m_parent != -1)
+		{
+			buildNodePath(nodes, node.m_parent, result);
+		}
+	}
+
 	Node* GltfRes::createAnimPlayer()
 	{
 		if (m_animations.size())
@@ -1362,7 +1383,10 @@ namespace Echo
 					GltfAnimSampler& sampler = anim.m_samplers[channel.m_sampler];
 					{
 						AnimNode* animNode = EchoNew(AnimNode);
-						animNode->m_nodePath = "";
+
+						// node path
+						buildNodePath(m_nodes, channel.m_node, animNode->m_nodePath);
+						animNode->m_nodePath = "../" + animNode->m_nodePath;
 
 						// propertys
 						GltfAccessorInfo& timeAccess = m_accessors[sampler.m_input];

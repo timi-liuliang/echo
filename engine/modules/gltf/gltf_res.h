@@ -58,6 +58,7 @@ namespace Echo
 		i32					m_camera = -1;
 		i32					m_mesh = -1;
 		i32					m_skin = -1;
+		i32					m_parent = -1;
 		vector<i32>::type	m_children;
 		Quaternion			m_rotation = { 1, 0, 0, 0 };
 		Vector3				m_scale = { 1, 1, 1 };

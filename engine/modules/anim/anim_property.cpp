@@ -78,7 +78,14 @@ namespace Echo
 		// update value to node
 		if (node)
 		{
-			Class::setPropertyValue(node, m_name, m_value);
+			Vector3 yawPitchRow;
+			Quaternion quat;
+			quat.x = m_value.x;
+			quat.y = m_value.y;
+			quat.z = m_value.z;
+			quat.w = m_value.w;
+			quat.toEulerAngle( yawPitchRow.x, yawPitchRow.y, yawPitchRow.z);
+			Class::setPropertyValue(node, m_name, yawPitchRow);
 		}
 	}
 }

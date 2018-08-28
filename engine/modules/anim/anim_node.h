@@ -23,8 +23,13 @@ namespace Echo
 		}
 
 		// update
-		void updateToTime(float time)
+		void updateToTime(float time, Node* base)
 		{
+			if (!m_node)
+			{
+				m_node = base->getNode(m_nodePath.c_str());
+			}
+
 			for (AnimProperty* property : m_properties)
 			{
 				property->updateToTime( time, m_node);
