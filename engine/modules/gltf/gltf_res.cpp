@@ -1,6 +1,7 @@
 #include "gltf_res.h"
 #include "gltf_mesh.h"
 #include "gltf_material.h"
+#include "gltf_skeleton.h"
 #include "engine/core/io/DataStream.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/util/PathUtil.h"
@@ -1233,7 +1234,7 @@ namespace Echo
 		// animations
 		if (m_animations.size())
 		{
-			Node* node = createAnimPlayer();
+			Node* node = createSkeleton();
 			if (node)
 				nodes.push_back(node);
 		}
@@ -1368,11 +1369,11 @@ namespace Echo
 		}
 	}
 
-	Node* GltfRes::createAnimPlayer()
+	Node* GltfRes::createSkeleton()
 	{
 		if (m_animations.size())
 		{
-			AnimPlayer* animPlayer = Class::create<AnimPlayer*>("AnimPlayer");
+			GltfSkeleton* skeleton = Class::create<GltfSkeleton*>("GltfSkeleton");
 			for (GltfAnim& anim : m_animations)
 			{
 				AnimClip* animClip = EchoNew(AnimClip);
@@ -1425,10 +1426,10 @@ namespace Echo
 					}
 				}
 
-				animPlayer->addClip(animClip);
+				skeleton->addClip(animClip);
 			}
 
-			return animPlayer;
+			return skeleton;
 		}
 
 		return nullptr;

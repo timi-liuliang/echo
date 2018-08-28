@@ -52,11 +52,13 @@ namespace Echo
 		}
 		case InterpolationType::Discrete:
 		{
+			return 0.f;
 			EchoLogError("AnimCure::Discrete not support yet");
 		}
 		break;
 		default:
 		{
+			return 0.f;
 			EchoLogError("AnimCure::Discrete not support yet");
 		}
 		break;

@@ -302,7 +302,7 @@ namespace Echo
 		bool buildPrimitiveData(int meshIdx, int primitiveIdx);
 		bool buildMaterial(int meshIdx, int primitiveIdx);
 		Node* createNode(Node* parent, int idx);
-		Node* createAnimPlayer();
+		Node* createSkeleton();
 	};
 	typedef Echo::ResRef<Echo::GltfRes> GltfResPtr;
 }
