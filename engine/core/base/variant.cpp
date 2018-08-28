@@ -47,6 +47,12 @@ namespace Echo
 		m_any = value;
 	}
 
+	Variant::Variant(const Vector4& value)
+		: m_type(Type::Vector4)
+	{
+		m_any = value;
+	}
+
 	Variant::Variant(const Color& value)
 		: m_type(Type::Color)
 	{
@@ -110,6 +116,7 @@ namespace Echo
 		case Type::String: return any_cast<String>(m_any);
 		case Type::Vector2: return StringUtil::ToString(any_cast<Vector2>(m_any));
 		case Type::Vector3: return StringUtil::ToString(any_cast<Vector3>(m_any));
+		case Type::Vector4: return StringUtil::ToString(any_cast<Vector4>(m_any));
 		case Type::Color:	return StringUtil::ToString(any_cast<Color>(m_any));
 		case Type::ResourcePath: return (any_cast<ResourcePath>(m_any)).getPath();
 		case Type::StringOption: return (any_cast<StringOption>(m_any)).getValue();
@@ -128,6 +135,7 @@ namespace Echo
 		case Type::String: { m_type = Type::String; m_any = str; } return true;
 		case Type::Vector2: { m_type = Type::Vector2; m_any = StringUtil::ParseVec2(str); } return true;
 		case Type::Vector3: { m_type = Type::Vector3; m_any = StringUtil::ParseVec3(str); }return true;
+		case Type::Vector4: { m_type = Type::Vector4; m_any = StringUtil::ParseVec4(str); } return true;
 		case Type::Color: { m_type = Type::Color; m_any = StringUtil::ParseColor(str); } return true;
 		case Type::ResourcePath: { m_type = Type::ResourcePath; m_any = ResourcePath(str, nullptr); }return true;
 		case Type::StringOption: { m_type = Type::StringOption; m_any = StringOption(str); } return true;

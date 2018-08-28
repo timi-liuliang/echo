@@ -9,11 +9,18 @@ namespace Echo
 		String					m_name;
 		vector<AnimNode*>::type	m_nodes;
 		float					m_time;
+		float					m_length;
+
+		AnimClip() : m_time(0.f), m_length(2.f)
+		{}
 
 		// update
 		void update( float deltaTime)
 		{
 			m_time += deltaTime;
+			if (m_time > m_length)
+				m_time = 0.f;
+
 			for (AnimNode* animNode : m_nodes)
 			{
 				animNode->updateToTime(m_time);

@@ -23,6 +23,7 @@ namespace Echo
 			Real,
 			Vector2,
 			Vector3,
+			Vector4,
 			Color,
 			String,
 			ResourcePath,
@@ -52,6 +53,7 @@ namespace Echo
 		Variant(const String& str);
 		Variant(const Vector2& value);
 		Variant(const Vector3& value);
+		Variant(const Vector4& value);
 		Variant(const Color& value);
 		Variant(const ResourcePath& value);
 		Variant(const Base64String& value);
@@ -73,6 +75,7 @@ namespace Echo
 		operator const Real() const { return m_real; }
 		operator const Vector2&() const { return any_cast<Vector2>(m_any); }
 		operator const Vector3&() const { return any_cast<Vector3>(m_any); }
+		operator const Vector4&() const { return any_cast<Vector4>(m_any); }
 		operator const Color&() const { return any_cast<Color>(m_any); }
 		operator const char*() const { return any_cast<String>(m_any).c_str(); }
 		operator const String&() const { return any_cast<String>(m_any); }
@@ -86,6 +89,7 @@ namespace Echo
 		const Real& toReal() const { return m_real; }
 		const Vector2& toVector2() const { return any_cast<Vector2>(m_any); }
 		const Vector3& toVector3() const { return any_cast<Vector3>(m_any); }
+		const Vector4& toVector4() const { return any_cast<Vector4>(m_any); }
 		const Color& toColor() const { return any_cast<Color>(m_any); }
 		Object* toObj() const { return m_obj; }
 		const ResourcePath& toResPath() const { return any_cast<ResourcePath>(m_any); }

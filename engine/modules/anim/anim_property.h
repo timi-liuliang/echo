@@ -66,7 +66,7 @@ namespace Echo
 
 	struct AnimPropertyVec4 : public AnimProperty
 	{
-		Variant		m_value;
+		Vector4		m_value;
 		AnimCurve*	m_curves[4];
 
 		AnimPropertyVec4();

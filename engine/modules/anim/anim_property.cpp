@@ -70,16 +70,15 @@ namespace Echo
 
 	void AnimPropertyVec4::updateToTime(float time, Node* node)
 	{
-		//Vector4& value = m_value;
-		//value.x = m_curves[0]->getValue(time);
-		//value.y = m_curves[0]->getValue(time);
-		//value.z = m_curves[0]->getValue(time);
-		//value.w = m_curves[0]->getValue(time);
+		m_value.x = m_curves[0]->getValue(time);
+		m_value.y = m_curves[1]->getValue(time);
+		m_value.z = m_curves[2]->getValue(time);
+		m_value.w = m_curves[3]->getValue(time);
 
-		//// update value to node
-		//if (node)
-		//{
-		//	Class::setPropertyValue(node, m_name, m_value);
-		//}
+		// update value to node
+		if (node)
+		{
+			Class::setPropertyValue(node, m_name, m_value);
+		}
 	}
 }
