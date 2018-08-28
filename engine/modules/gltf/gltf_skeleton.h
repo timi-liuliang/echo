@@ -12,11 +12,6 @@ namespace Echo
 		ECHO_CLASS(GltfSkeleton, Node)
 
 	public:
-		struct Transform
-		{
-		};
-
-	public:
 		GltfSkeleton();
 		virtual ~GltfSkeleton();
 
@@ -29,6 +24,9 @@ namespace Echo
 
 		// get animations
 		const StringOption& getAnim() { return m_animations; }
+
+		// get current anim clip
+		const AnimClip* getAnimClip();
 
 		// is anim exist
 		bool isAnimExist(const char* animName);
@@ -49,7 +47,6 @@ namespace Echo
 		GltfResPtr				m_asset;			// gltf asset ptr
 		StringOption			m_animations;
 		vector<AnimClip*>::type	m_clips;
-		vector<Transform>::type	m_transformedData;	// node transformed data
 		vector<Matrix4>::type	m_transformedMatrix;// node transformed matrix
 	};
 }

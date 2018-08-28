@@ -53,6 +53,12 @@ namespace Echo
 		m_animations.setValue(animName.getValue());
 	}
 
+	// get current anim clip
+	const AnimClip* GltfSkeleton::getAnimClip()
+	{
+		return m_animations.isValid() ? m_clips[m_animations.getIdx()] : nullptr;
+	}
+
 	// update self
 	void GltfSkeleton::update_self()
 	{
