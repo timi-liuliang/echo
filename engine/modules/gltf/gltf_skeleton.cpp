@@ -19,7 +19,7 @@ namespace Echo
 		CLASS_BIND_METHOD(GltfSkeleton, getAnim, DEF_METHOD("getAnim"));
 		CLASS_BIND_METHOD(GltfSkeleton, setAnim, DEF_METHOD("setAnim"));
 
-		CLASS_REGISTER_PROPERTY(GltfMesh, "Gltf", Variant::Type::ResourcePath, "getGltfRes", "setGltfRes");
+		CLASS_REGISTER_PROPERTY(GltfSkeleton, "Gltf", Variant::Type::ResourcePath, "getGltfRes", "setGltfRes");
 		CLASS_REGISTER_PROPERTY(GltfSkeleton, "Anim", Variant::Type::StringOption, "getAnim", "setAnim");
 	}
 

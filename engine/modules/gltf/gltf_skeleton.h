@@ -12,6 +12,11 @@ namespace Echo
 		ECHO_CLASS(GltfSkeleton, Node)
 
 	public:
+		struct Transform
+		{
+		};
+
+	public:
 		GltfSkeleton();
 		virtual ~GltfSkeleton();
 
@@ -42,7 +47,9 @@ namespace Echo
 	private:
 		ResourcePath			m_assetPath;
 		GltfResPtr				m_asset;			// gltf asset ptr
-		vector<AnimClip*>::type	m_clips;
 		StringOption			m_animations;
+		vector<AnimClip*>::type	m_clips;
+		vector<Transform>::type	m_transformedData;	// node transformed data
+		vector<Matrix4>::type	m_transformedMatrix;// node transformed matrix
 	};
 }
