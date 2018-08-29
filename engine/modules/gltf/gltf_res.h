@@ -60,7 +60,7 @@ namespace Echo
 		i32					m_skin = -1;
 		i32					m_parent = -1;
 		vector<i32>::type	m_children;
-		Quaternion			m_rotation = { 1, 0, 0, 0 };
+		Quaternion			m_rotation = { 0, 0, 0, 1 };
 		Vector3				m_scale = { 1, 1, 1 };
 		Vector3				m_translation = { 0, 0, 0 };
 	};
@@ -290,6 +290,9 @@ namespace Echo
 		// build echo node
 		Node* build();
 
+		// get node index of mesh
+		i32 getNodeIdxByMeshIdx(i32 meshIdx);
+
 	private:
 		GltfRes(const ResourcePath& path);
 		~GltfRes();
@@ -311,8 +314,9 @@ namespace Echo
 		bool buildAnimationData();
 		bool buildPrimitiveData(int meshIdx, int primitiveIdx);
 		bool buildMaterial(int meshIdx, int primitiveIdx);
-		Node* createNode(Node* parent, int idx);
-		Node* createSkeleton();
+		Node*createNode(Node* parent, int idx);
+		Node*createSkeleton();
+		void bindSkeleton(Node* parent);
 	};
 	typedef Echo::ResRef<Echo::GltfRes> GltfResPtr;
 }

@@ -12,6 +12,7 @@ namespace Echo
 		: m_assetPath("", ".gltf")
 		, m_renderableDirty(true)
 		, m_renderable(nullptr)
+		, m_nodeIdx(-1)
 		, m_meshIdx(-1)
 		, m_primitiveIdx(-1)
 		, m_material(nullptr)
@@ -34,11 +35,14 @@ namespace Echo
 		CLASS_BIND_METHOD(GltfMesh, setPrimitiveIdx, DEF_METHOD("setPrimitiveIdx"));
 		CLASS_BIND_METHOD(GltfMesh, getMaterial, DEF_METHOD("getMaterial"));
 		CLASS_BIND_METHOD(GltfMesh, setMaterial, DEF_METHOD("setMaterial"));
+		CLASS_BIND_METHOD(GltfMesh, getSkeletonPath, DEF_METHOD("getSkeletonPath"));
+		CLASS_BIND_METHOD(GltfMesh, setSkeletonPath, DEF_METHOD("setSkeletonPath"));
 
 		CLASS_REGISTER_PROPERTY(GltfMesh, "Gltf", Variant::Type::ResourcePath, "getGltfRes", "setGltfRes");
 		CLASS_REGISTER_PROPERTY(GltfMesh, "Mesh", Variant::Type::Int, "getMeshIdx", "setMeshIdx");
 		CLASS_REGISTER_PROPERTY(GltfMesh, "Primitive", Variant::Type::Int, "getPrimitiveIdx", "setPrimitiveIdx");
 		CLASS_REGISTER_PROPERTY_WITH_HINT(GltfMesh, "Material", Variant::Type::Object, PropertyHint::ResourceType, "Material", "getMaterial", "setMaterial");
+		CLASS_REGISTER_PROPERTY(GltfMesh, "Skeleton", Variant::Type::NodePath, "getSkeletonPath", "setSkeletonPath");
 	}
 
 	// set gltf resource
@@ -51,10 +55,19 @@ namespace Echo
 		}
 	}
 
+	void GltfMesh::setSkeletonPath(const NodePath& skeletonPath)
+	{
+		if (m_skeletonPath.setPath(skeletonPath.getPath()))
+		{
+			m_skeleton = ECHO_DOWN_CAST<GltfSkeleton*>(getNode(m_skeletonPath.getPath().c_str()));
+		}
+	}
+
 	// set mesh index
 	void GltfMesh::setMeshIdx(int meshIdx) 
 	{ 
 		m_meshIdx = meshIdx;
+		m_nodeIdx = m_asset->getNodeIdxByMeshIdx(m_meshIdx);
 		m_renderableDirty = true;
 	}
 
@@ -94,13 +107,60 @@ namespace Echo
 	{
 		if (isNeedRender())
 		{
+			// update animation
+			if (m_skeleton)
+			{
+				syncGltfNodeAnim();
+				syncGltfSkinAnim();
+			}
+
 			buildRenderable();
 			if (m_renderable)
 				m_renderable->submitToRenderQueue();
 		}
 	}
 
-	// 获取全局变量值
+	void GltfMesh::syncGltfNodeAnim()
+	{
+		if (m_skeleton)
+		{
+			const AnimClip* clip = m_skeleton->getAnimClip();
+			if (clip)
+			{
+				for (AnimNode* animNode : clip->m_nodes)
+				{
+					i32 nodeIdx = any_cast<i32>(animNode->m_userData);
+					if (nodeIdx == m_nodeIdx)
+					{
+						for (AnimProperty* property : animNode->m_properties)
+						{
+							GltfAnimChannel::Path channelPath = any_cast<GltfAnimChannel::Path>(property->m_userData);
+							switch (channelPath)
+							{
+							case GltfAnimChannel::Path::Rotation:
+							{
+								AnimPropertyVec4* pv4 = ECHO_DOWN_CAST<AnimPropertyVec4*>(property);
+								setLocalOrientation((const Quaternion&)pv4->getValue());
+							}
+							break;
+							}
+						}
+
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	void GltfMesh::syncGltfSkinAnim()
+	{
+		if (m_skeleton)
+		{
+			const AnimClip* animClip = m_skeleton->getAnimClip();
+		}
+	}
+
 	void* GltfMesh::getGlobalUniformValue(const String& name)
 	{
 		void* value = Render::getGlobalUniformValue(name);

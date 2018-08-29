@@ -34,6 +34,10 @@ namespace Echo
 		Material* getMaterial() const { return m_material; }
 		void setMaterial( Object* material);
 
+		// skeleton
+		const NodePath& getSkeletonPath() { return m_skeletonPath; }
+		void setSkeletonPath(const NodePath& skeletonPath);
+
 	protected:
 		// build drawable
 		void buildRenderable();
@@ -48,12 +52,17 @@ namespace Echo
 		void clear();
 		void clearRenderable();
 
+		// gltf anim
+		void syncGltfNodeAnim();
+		void syncGltfSkinAnim();
+
 	private:
 		bool					m_renderableDirty;
 		Renderable*				m_renderable;
 		Matrix4					m_matWVP;
 		ResourcePath			m_assetPath;
 		GltfResPtr				m_asset;			// gltf asset ptr
+		int						m_nodeIdx;			// node index in the asset, used by skeleton
 		int						m_meshIdx;			// mesh index in the asset
 		int						m_primitiveIdx;		// sub mesh index
 		MaterialPtr				m_material;			// custom material

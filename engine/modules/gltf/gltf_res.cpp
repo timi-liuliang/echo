@@ -1300,6 +1300,44 @@ namespace Echo
 		return true;
 	}
 
+	i32  GltfRes::getNodeIdxByMeshIdx(i32 meshIdx)
+	{
+		for (size_t i=0; i<m_nodes.size(); i++)
+		{
+			const GltfNodeInfo& node = m_nodes[i];
+			if (node.m_mesh != -1 && node.m_mesh == meshIdx)
+				return i;
+		}
+
+		return -1;
+	}
+
+	static String calcSkeletonNodePath(Node* node)
+	{
+		String result = "skeleton";
+		while (node->getParent())
+		{
+			result = "../" +result;
+			node = node->getParent();
+		}
+
+		return result;
+	}
+
+	void GltfRes::bindSkeleton(Node* parent)
+	{
+		GltfMesh* mesh = ECHO_DOWN_CAST<GltfMesh*>(parent);
+		if (mesh)
+		{
+			mesh->setSkeletonPath(calcSkeletonNodePath(parent));
+		}
+
+		for (Node* child : parent->getChildren())
+		{
+			bindSkeleton(child);
+		}
+	}
+
 	// build echo node
 	Node* GltfRes::build()
 	{
@@ -1331,6 +1369,7 @@ namespace Echo
 			String resPureName = PathUtil::GetPureFilename(m_path.getPath(), false);
 			nodes[0]->setName( resPureName);
 
+			bindSkeleton(nodes[0]);
 			return nodes[0];
 		}
 
@@ -1345,6 +1384,7 @@ namespace Echo
 				child->setParent(node);
 			}
 
+			bindSkeleton(node);
 			return node;
 		}
 
@@ -1388,7 +1428,6 @@ namespace Echo
 				mesh->setGltfRes(m_path);
 				mesh->setMeshIdx(info.m_mesh);
 				mesh->setPrimitiveIdx(0);
-
 				node = mesh;
 			}
 		}
@@ -1425,6 +1464,7 @@ namespace Echo
 		if (m_animations.size())
 		{
 			GltfSkeleton* skeleton = Class::create<GltfSkeleton*>("GltfSkeleton");
+			skeleton->setName("skeleton");
 			skeleton->setGltfRes(m_path);
 
 			return skeleton;

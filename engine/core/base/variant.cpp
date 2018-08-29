@@ -83,6 +83,12 @@ namespace Echo
 		m_any = value;
 	}
 
+	Variant::Variant(const NodePath& value)
+		: m_type(Type::NodePath)
+	{
+		m_any = value;
+	}
+
 	Variant::~Variant()
 	{
 
@@ -119,6 +125,7 @@ namespace Echo
 		case Type::Vector4: return StringUtil::ToString(any_cast<Vector4>(m_any));
 		case Type::Color:	return StringUtil::ToString(any_cast<Color>(m_any));
 		case Type::ResourcePath: return (any_cast<ResourcePath>(m_any)).getPath();
+		case Type::NodePath:	 return (any_cast<NodePath>(m_any)).getPath();
 		case Type::StringOption: return (any_cast<StringOption>(m_any)).getValue();
         default:                 return StringUtil::BLANK;
 		}
@@ -138,6 +145,7 @@ namespace Echo
 		case Type::Vector4: { m_type = Type::Vector4; m_any = StringUtil::ParseVec4(str); } return true;
 		case Type::Color: { m_type = Type::Color; m_any = StringUtil::ParseColor(str); } return true;
 		case Type::ResourcePath: { m_type = Type::ResourcePath; m_any = ResourcePath(str, nullptr); }return true;
+		case Type::NodePath: { m_type = Type::NodePath; m_any = NodePath(str, nullptr); } return true;
 		case Type::StringOption: { m_type = Type::StringOption; m_any = StringOption(str); } return true;
 		case Type::Object: { m_type = Type::Object; m_obj = Object::getById(StringUtil::ParseI32(str)); } return true;
         default:    return false;

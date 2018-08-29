@@ -5,7 +5,7 @@
 
 namespace Echo
 {
-	const Quaternion Quaternion::IDENTITY(1, 0, 0, 0);
+	const Quaternion Quaternion::IDENTITY(0, 0, 0, 1);
 	const Quaternion Quaternion::INVALID(Math::MAX_REAL, Math::MAX_REAL, Math::MAX_REAL, Math::MAX_REAL);
 	ui32  Quaternion::OP_COUNT = 0;
 	/*

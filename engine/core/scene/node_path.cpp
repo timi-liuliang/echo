@@ -18,16 +18,8 @@ namespace Echo
 
 	bool NodePath::setPath(const String& path)
 	{
-		String ext = PathUtil::GetFileExt(path, true);
-		if (path.empty() || isSupportType(ext))
-		{
-			m_path = path;
-			return true;
-		}
-
-		EchoLogError("set path [%s] failed, not support this ext [%s].", path.c_str(), ext.c_str());
-
-		return false;
+		m_path = path;
+		return true;
 	}
 
 	bool NodePath::isSupportType(const String& ext)
@@ -35,8 +27,8 @@ namespace Echo
 		if (m_supportTypes.empty())
 			return true;
 
-		StringArray exts = StringUtil::Split(m_supportTypes, "|");
-		for (const String& supportExt : exts)
+		StringArray types = StringUtil::Split(m_supportTypes, "|");
+		for (const String& supportExt : types)
 		{
 			if (StringUtil::Equal(supportExt, ext, false))
 				return true;

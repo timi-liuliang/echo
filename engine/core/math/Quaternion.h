@@ -16,31 +16,31 @@ namespace Echo
 		{
 			struct 
 			{
-				Real w, x, y, z;
+				Real x, y, z, w;
 			};
 
 			Real m[4];
 		};
 
-		static const Quaternion IDENTITY;		//!< Quan(1, 0, 0, 0)
+		static const Quaternion IDENTITY;		//!< Quan(0, 0, 0, 1)
 		static const Quaternion INVALID;		//!< Quan(Math::MAX_REAL, Math::MAX_REAL, Math::MAX_REAL, Math::MAX_REAL)
 		static ui32	 OP_COUNT;
 
 	public:
 		inline Quaternion()
-			: w(1)
-			, x(0)
+			: x(0)
 			, y(0)
 			, z(0)
+			, w(1)
 		{
 			ADD_MATH_OP_COUNT
 		}
 
 		inline Quaternion(const Quaternion& quan)
-			: w(quan.w)
-			, x(quan.x)
+			: x(quan.x)
 			, y(quan.y)
 			, z(quan.z)
+			, w(quan.w)
 		{
 			ADD_MATH_OP_COUNT
 		}
@@ -49,17 +49,17 @@ namespace Echo
 		{
 			EchoAssertX(pf != NULL, "The array data is NULL.");
 			ADD_MATH_OP_COUNT
-			w = pf[0];
-			x = pf[1];
-			y = pf[2];
-			z = pf[3];
+			x = pf[0];
+			y = pf[1];
+			z = pf[2];
+			w = pf[3];
 		}
 
-		inline Quaternion(Real fw, Real fx, Real fy, Real fz)
-			: w(fw)
-			, x(fx)
+		inline Quaternion(Real fx, Real fy, Real fz, Real fw)
+			: x(fx)
 			, y(fy)
 			, z(fz)
+			, w(fw)
 		{
 			ADD_MATH_OP_COUNT
 		}
@@ -94,10 +94,10 @@ namespace Echo
 		inline Quaternion& operator= (const Quaternion& quan)
 		{
 			ADD_MATH_OP_COUNT
-			w = quan.w;
 			x = quan.x;
 			y = quan.y;
 			z = quan.z;
+			w = quan.w;
 
 			return *this;
 		}
@@ -139,14 +139,14 @@ namespace Echo
 		inline Quaternion& operator *= (const Quaternion& q)
 		{
 			ADD_MATH_OP_COUNT
-			float w0 = w;
 			float x0 = x;
 			float y0 = y;
 			float z0 = z;
-			w = w0 * q.w - x0 * q.x - y0 * q.y - z0 * q.z;
+			float w0 = w;
 			x = w0 * q.x + x0 * q.w + z0 * q.y - y0 * q.z;
 			y = w0 * q.y + y0 * q.w + x0 * q.z - z0 * q.x;
 			z = w0 * q.z + z0 * q.w + y0 * q.x - x0 * q.y;
+			w = w0 * q.w - x0 * q.x - y0 * q.y - z0 * q.z;
 
 			return *this;
 		}
@@ -154,10 +154,10 @@ namespace Echo
 		inline Quaternion& operator *= (Real f)
 		{
 			ADD_MATH_OP_COUNT
-			w *= f;
 			x *= f;
 			y *= f;
 			z *= f;
+			w *= f;
 
 			return *this;
 		}
@@ -166,10 +166,10 @@ namespace Echo
 		{
 			ADD_MATH_OP_COUNT
 			Real fInv = 1.0f / f;
-			w *= fInv;
 			x *= fInv;
 			y *= fInv;
 			z *= fInv;
+			w *= fInv;
 
 			return *this;
 		}
@@ -177,13 +177,13 @@ namespace Echo
 		inline Real* ptr()
 		{
 			ADD_MATH_OP_COUNT
-			return &w;
+			return &x;
 		}
 
 		inline const Real* ptr() const
 		{
 			ADD_MATH_OP_COUNT
-			return &w;
+			return &x;
 		}
 
 		inline const Quaternion& operator + () const
@@ -195,7 +195,7 @@ namespace Echo
 		inline Quaternion operator - () const
 		{
 			ADD_MATH_OP_COUNT
-			return Quaternion(-w, -x, -y, -z);
+			return Quaternion(-x, -y, -z, -w);
 		}
 
 		inline bool operator == (const Quaternion& b) const
@@ -215,10 +215,10 @@ namespace Echo
 			ADD_MATH_OP_COUNT
 			Quaternion quan;
 
-			quan.w = w + b.w;
 			quan.x = x + b.x;
 			quan.y = y + b.y;
 			quan.z = z + b.z;
+			quan.w = w + b.w;
 
 			return quan;
 		}
@@ -228,10 +228,10 @@ namespace Echo
 			ADD_MATH_OP_COUNT
 			Quaternion quan;
 
-			quan.w = w - b.w;
 			quan.x = x - b.x;
 			quan.y = y - b.y;
 			quan.z = z - b.z;
+			quan.w = w - b.w;
 
 			return quan;
 		}
@@ -241,10 +241,10 @@ namespace Echo
 			ADD_MATH_OP_COUNT
 			Quaternion result;
 
-			result.w = f * q.w;
 			result.x = f * q.x;
 			result.y = f * q.y;
 			result.z = f * q.z;
+			result.w = f * q.w;
 
 			return result;
 		}
@@ -254,10 +254,10 @@ namespace Echo
 			ADD_MATH_OP_COUNT
 			Quaternion result;
 
-			result.w = f * w;
 			result.x = f * x;
 			result.y = f * y;
 			result.z = f * z;
+			result.w = f * w;
 
 			return result;
 		}
@@ -265,19 +265,12 @@ namespace Echo
 		inline Quaternion operator* (const Quaternion& b) const
 		{
 			ADD_MATH_OP_COUNT
-			/* standard define
-			Quan quan;
-			quan.w = w * b.w - x * b.x - y * b.y - z *b.z;
-			quan.x = w * b.x + x * b.w + z * b.y - y *b.z;
-			quan.y = w * b.y + y * b.w + x * b.z - z *b.x;
-			quan.z = w * b.z + z * b.w + y * b.x - x *b.y;
-			*/
 
 			Quaternion quan;
-			quan.w = w * b.w - x * b.x - y * b.y - z *b.z;
 			quan.x = w * b.x + x * b.w + y * b.z - z *b.y;
 			quan.y = w * b.y + y * b.w + z * b.x - x *b.z;
 			quan.z = w * b.z + z * b.w + x * b.y - y *b.x;
+			quan.w = w * b.w - x * b.x - y * b.y - z * b.z;
 
 			return quan;
 		}
@@ -317,10 +310,10 @@ namespace Echo
 			Quaternion quan;
 			Real fInv = 1.0f / f;
 
-			quan.w = w * fInv;
 			quan.x = x * fInv;
 			quan.y = y * fInv;
 			quan.z = z * fInv;
+			quan.w = w * fInv;
 
 			return quan;
 		}
@@ -330,10 +323,10 @@ namespace Echo
 			ADD_MATH_OP_COUNT
 			Quaternion quan;
 
-			quan.w = f / a.w;
 			quan.x = f / a.x;
 			quan.y = f / a.y;
 			quan.z = f / a.z;
+			quan.w = f / a.w;
 
 			return quan;
 		}
@@ -356,28 +349,28 @@ namespace Echo
 		inline void set(Real w, Real x, Real y, Real z)
 		{
 			ADD_MATH_OP_COUNT
-			this->w = w;
 			this->x = x;
 			this->y = y;
 			this->z = z;
+			this->w = w;
 		}
 
 		inline void set(Real value)
 		{
 			ADD_MATH_OP_COUNT
-			this->w = value;
 			this->x = value;
 			this->y = value;
 			this->z = value;
+			this->w = value;
 		}
 
 		inline void set(Real* p)
 		{
 			ADD_MATH_OP_COUNT
-			this->w = p[0];
 			this->x = p[1];
 			this->y = p[2];
 			this->z = p[3];
+			this->w = p[0];
 		}
 
 		inline Real dot(const Quaternion& rhs) const
@@ -390,10 +383,10 @@ namespace Echo
 		{
 			ADD_MATH_OP_COUNT
 			Quaternion quan;
-			quan.w = w * rhs.w - x * rhs.x - y * rhs.y - z *rhs.z;
 			quan.x = w * rhs.x + x * rhs.w + y * rhs.z - z *rhs.y;
 			quan.y = w * rhs.y + y * rhs.w + z * rhs.x - x *rhs.z;
 			quan.z = w * rhs.z + z * rhs.w + x * rhs.y - y *rhs.x;
+			quan.w = w * rhs.w - x * rhs.x - y * rhs.y - z * rhs.z;
 
 			return quan;
 		}
@@ -445,10 +438,10 @@ namespace Echo
 		inline void identity()
 		{
 			ADD_MATH_OP_COUNT
-			w = 1.0;
 			x = 0.0;
 			y = 0.0;
 			z = 0.0;
+			w = 1.0;
 		}
 
 		inline Quaternion log() const
@@ -521,13 +514,13 @@ namespace Echo
 		{
 			ADD_MATH_OP_COUNT
 			Real length = len();
-
-			EchoAssertX( length > 0.f, "Quaternion normalize ERROR" );
-//			if (length > 1e-08)
-			x /= length;
-			y /= length;
-			z /= length;
-			w /= length;
+			if (length > 1e-5f)
+			{
+				x /= length;
+				y /= length;
+				z /= length;
+				w /= length;
+			}
 		}
 
 

@@ -115,7 +115,6 @@ namespace Echo
 					GltfAnimChannel::Path channelPath = any_cast<GltfAnimChannel::Path>(property->m_userData);
 					for (i32 i = 0; i < property->getCurverCount(); i++)
 					{
-						int a = 10;
 					}
 				}
 			}

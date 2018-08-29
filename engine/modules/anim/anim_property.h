@@ -70,6 +70,7 @@ namespace Echo
 		AnimCurve*	m_curves[4];
 
 		AnimPropertyVec4();
+		const Vector4& getValue() { return m_value; }
 		void addKey(float time, const Vector4& value);
 		virtual void addKey(float time, float value, i32 curveIdx);
 		virtual i32 getCurverCount() { return 4; }

@@ -8,6 +8,7 @@
 #include "engine/core/util/Any.hpp"
 #include "engine/core/util/base64.h"
 #include "engine/core/util/StringOption.h"
+#include "engine/core/scene/node_path.h"
 
 namespace Echo
 {
@@ -27,6 +28,7 @@ namespace Echo
 			Color,
 			String,
 			ResourcePath,
+			NodePath,
 			Base64String,
 			StringOption,
 			Object,
@@ -56,6 +58,7 @@ namespace Echo
 		Variant(const Vector4& value);
 		Variant(const Color& value);
 		Variant(const ResourcePath& value);
+		Variant(const NodePath& value);
 		Variant(const Base64String& value);
 		Variant(const StringOption& value);
 		Variant(Object* value);
@@ -80,6 +83,7 @@ namespace Echo
 		operator const char*() const { return any_cast<String>(m_any).c_str(); }
 		operator const String&() const { return any_cast<String>(m_any); }
 		operator const ResourcePath&() const { return any_cast<ResourcePath>(m_any); }
+		operator const NodePath&() const { return any_cast<NodePath>(m_any); }
 		operator const Base64String&() const { return any_cast<Base64String>(m_any); }
 		operator const StringOption&() const { return any_cast<StringOption>(m_any); }
 		operator Object*() const { return m_obj; }
@@ -93,6 +97,7 @@ namespace Echo
 		const Color& toColor() const { return any_cast<Color>(m_any); }
 		Object* toObj() const { return m_obj; }
 		const ResourcePath& toResPath() const { return any_cast<ResourcePath>(m_any); }
+		const NodePath& toNodePath() const { return any_cast<NodePath>(m_any); }
 		const StringOption& toStringOption() const { return any_cast<StringOption>(m_any); }
 
 		// is nil
