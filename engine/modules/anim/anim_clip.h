@@ -11,7 +11,7 @@ namespace Echo
 		float					m_time;
 		float					m_length;
 
-		AnimClip() : m_time(0.f), m_length(1.f)
+		AnimClip() : m_time(0.f), m_length(0.f)
 		{}
 
 		// update
@@ -26,5 +26,11 @@ namespace Echo
 				animNode->updateToTime(m_time);
 			}
 		}
+
+		// calc anim clip length
+		float calcLength();
+
+		// optimize
+		void optimize();
 	};
 }

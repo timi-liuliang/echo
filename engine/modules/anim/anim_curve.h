@@ -41,5 +41,11 @@ namespace Echo
 
 		// get value
 		float getValue(float time);
+
+		// get time length
+		float getLength();
+
+		// optimize
+		float optimize();
 	};
 }

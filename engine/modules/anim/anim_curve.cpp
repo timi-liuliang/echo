@@ -51,4 +51,54 @@ namespace Echo
 		break;
 		}
 	}
+
+	// get time length
+	float AnimCurve::getLength()
+	{
+		return m_keys.size() ? m_keys.back().m_time : 0.f;
+	}
+
+	// optimize
+	float AnimCurve::optimize()
+	{
+		size_t beginNum = m_keys.size();
+		if (m_type == InterpolationType::Linear)
+		{
+			if (m_keys.size() > 2)
+			{
+				while (m_keys.size() > 2)
+				{
+					bool isContinue = false;
+					for (size_t i = 1; i < m_keys.size() - 1; i++)
+					{
+						size_t end = m_keys.size() - 1;
+						size_t cur = end - 1;
+						size_t pre = cur - 1;
+						float ratio = (m_keys[cur].m_time - m_keys[pre].m_time) / (m_keys[end].m_time - m_keys[pre].m_time);
+						float curValue = m_keys[pre].m_value * (1.f - ratio) + m_keys[end].m_value * ratio;
+						if (curValue == m_keys[cur].m_value)
+						{
+							m_keys.erase(m_keys.begin() + cur);
+							isContinue = true;
+							break;
+						}
+					}
+
+					if(!isContinue)
+						break;
+				}
+			}
+			
+			if (m_keys.size() == 2)
+			{
+				if (m_keys[0].m_value == m_keys[1].m_value)
+				{
+					std::swap(m_keys[0], m_keys[1]);
+					m_keys.pop_back();
+				}
+			}
+		}
+
+		return (float)(beginNum - m_keys.size()) / beginNum;
+	}
 }

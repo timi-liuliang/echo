@@ -242,7 +242,14 @@ namespace Echo
 	struct GltfAnimChannel
 	{
 		i32		m_node = -1;		// node idx
-		String	m_path;				// "translation" "rotation" "scale" "weights"
+		//String	m_path;				// "translation" "rotation" "scale" "weights"
+		enum class Path
+		{
+			Translation,
+			Rotation,
+			Scale,
+			Weights,
+		}		m_path;
 		i32		m_sampler = -1;		// anim sampler index
 	};
 

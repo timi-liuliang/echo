@@ -22,6 +22,9 @@ namespace Echo
 		// constuctor
 		AnimProperty(Type type) : m_type(type) {}
 
+		// create
+		static AnimProperty* create(Type type);
+
 		// get curve count
 		virtual i32 getCurverCount() = 0;
 
@@ -36,9 +39,6 @@ namespace Echo
 
 		// update to time
 		virtual void updateToTime(float time) = 0;
-
-		// create
-		static AnimProperty* create(Type type);
 	};
 
 	struct AnimPropertyFloat : public AnimProperty

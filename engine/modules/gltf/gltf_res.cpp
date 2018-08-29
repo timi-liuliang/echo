@@ -622,8 +622,15 @@ namespace Echo
 				if (!parseJsonValueI32(animChannel.m_node, channel["target"], "node", true))
 					return false;
 
-				if (!parseJsonValueString(animChannel.m_path, channel["target"], "path", true))
-					return false;
+				String path;
+				if (parseJsonValueString(path, channel["target"], "path", true))
+				{
+					if (StringUtil::Equal(path, "Rotation", false))	animChannel.m_path = GltfAnimChannel::Path::Rotation;
+					else if (StringUtil::Equal(path, "Scale"))		animChannel.m_path = GltfAnimChannel::Path::Scale;
+					else if (StringUtil::Equal(path, "Translation"))animChannel.m_path = GltfAnimChannel::Path::Translation;
+					else if (StringUtil::Equal(path, "Weigths"))	animChannel.m_path = GltfAnimChannel::Path::Weights;
+					else                            EchoLogError("Unknow gltf anim chanel path");
+				}
 
 				if (!parseJsonValueI32(animChannel.m_sampler, channel, "sampler", true))
 					return false;
@@ -725,6 +732,8 @@ namespace Echo
 				}
 			}
 
+			animClip->optimize();
+			animClip->calcLength();
 			anim.m_clip = animClip;
 		}
 
