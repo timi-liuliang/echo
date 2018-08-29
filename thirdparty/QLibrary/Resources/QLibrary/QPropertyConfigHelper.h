@@ -14,14 +14,11 @@ namespace QT_UI
 		WT_Real,
 		WT_Vector2,
 		WT_Vector3,
-		WT_LineEdit,
 		WT_CheckBox,
-		WT_DoubleSpinBox,
 		WT_ColorSelect,
 		WT_ComboBox,
 		WT_AssetsSelect,
 		WT_Res,
-		WT_2ND_EDITOR,			// ´ýÉ¾³ý
 	};
 
 	/**

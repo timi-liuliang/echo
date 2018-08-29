@@ -147,14 +147,11 @@ namespace QT_UI
 		case WT_Real:			widgetStr = "Real";			 break;
 		case WT_Vector2:		widgetStr = "Vector2";		 break;
 		case WT_Vector3:		widgetStr = "Vector3";		 break;
-		case WT_LineEdit:		widgetStr = "LineEdit";		 break;
 		case WT_CheckBox:		widgetStr = "CheckBox";		 break;
-		case WT_DoubleSpinBox:	widgetStr = "doubleSpinBox"; break;
 		case WT_ColorSelect:	widgetStr = "ColorSelect";	 break;
 		case WT_ComboBox:		widgetStr = Echo::String("ComboBox,") + widgetParams;		break;
 		case WT_AssetsSelect:	widgetStr = Echo::String("AssetsSelect,") + widgetParams;	break;
 		case WT_Res:			widgetStr = Echo::String("ResEdit,") + widgetParams;		break;
-		case WT_2ND_EDITOR:		widgetStr = "2ndEditor";	 break;
 		default:				widgetStr = "";				 break;
 		}
 

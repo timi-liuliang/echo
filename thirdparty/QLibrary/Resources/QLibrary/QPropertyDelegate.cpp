@@ -1,26 +1,22 @@
 #include "QPropertyDelegate.h"
 #include <QSpinBox>
-#include <QDoubleSpinBox>
 #include <QLineEdit>
-#include <QRadioButton>
 #include "QFileSelect.h"
 #include "QResSelect.h"
 #include "QIntEditor.h"
 #include "QRealEditor.h"
 #include "QCheckBoxEditor.h"
+#include "QComboBoxEditor.h"
 #include "QVector2Editor.h"
 #include "QVector3Editor.h"
 #include "QColorSelect.h"
-#include "QCheckBoxList.h"
 #include "QResEditor.h"
 #include <QCheckBox>
-#include <QComboBox>
 #include <QApplication>
 #include <engine/core/util/PathUtil.h>
 
 namespace QT_UI
 {
-	// ¹¹Ôìº¯Êý
 	QPropertyDelegate::QPropertyDelegate( QPropertyModel* model, QObject *parent/* = 0*/)
 		: QStyledItemDelegate(parent)
 	{
@@ -136,20 +132,7 @@ namespace QT_UI
 			return NULL;
 
 		QString  widgetType = userDatas[0].c_str();
-
-		if (widgetType == "spinBox")
-		{
-			return new QSpinBox(parent);
-		}
-		else if (widgetType == "doubleSpinBox")
-		{
-			return new QDoubleSpinBox(parent);
-		}
-		else if (widgetType == "LineEdit")
-		{
-			return new QLineEdit(parent);
-		}
-		else if (widgetType == "FileSelect")
+		if (widgetType == "FileSelect")
 		{
 			return new QFileSelect(parent);
 		}
@@ -170,23 +153,15 @@ namespace QT_UI
 			QObject::connect(widget, SIGNAL(clicked()), this, SLOT(commitEditor()));
 			return widget;
 		}
-		else if (widgetType == "RadioButton")
-		{
-			return new QRadioButton(parent);
-		}
 		else if( widgetType == "CheckBox")
 		{
 			QCheckBox* widget = new QCheckBox(parent);
 			QObject::connect(widget, SIGNAL(stateChanged(int)), this, SLOT(commitEditor()));
 			return widget;
 		}
-		else if (widgetType == "CheckBoxList")
-		{
-			return new QCheckBoxList(parent);
-		}
 		else if( widgetType == "ComboBox")
 		{
-			QComboBox* pWidget = new QComboBox( parent);
+			QComboBoxEditor* pWidget = new QComboBoxEditor( m_model, propertyName, parent);
 			for( size_t i=1; i<userDatas.size(); i++)
 			{
 				QString item = QString::fromUtf8(userDatas[i].c_str());
@@ -210,12 +185,6 @@ namespace QT_UI
 		{
 			return new QVector3Editor(m_model, propertyName, parent);
 		}
-		else if (widgetType == "BoneSelectComboBox")
-		{
-			QComboBox* pWidget = new QComboBox(parent);
-			m_model->ThrowSelfDefineSig("BoneSelectComboBoxEdit", propertyName, reinterpret_cast<qintptr>(pWidget));
-			return pWidget;
-		}
 		else if (widgetType == "default")
 		{
 			return QStyledItemDelegate::createEditor(parent, option, index);
@@ -236,26 +205,7 @@ namespace QT_UI
 		QString propertyName = index.model()->data( index, Qt::DisplayPropertyRole).toString();
 		if( m_model->findValue( value, propertyName))
 		{
-			if( widgetType == "spinBox")
-			{
-				QSpinBox* widget = qobject_cast<QSpinBox*>(editor);
-				widget->setRange(-65535, 65535);
-				widget->setValue( value.toInt());
-			}
-			else if( widgetType == "doubleSpinBox")
-			{
-				QDoubleSpinBox* widget = qobject_cast<QDoubleSpinBox*>(editor);
-				widget->setRange(-65535.f, 65535.f); 
-				widget->setValue( value.toFloat());
-				widget->setDecimals(3);
-				widget->setSingleStep(0.1f); 
-			}
-			else if( widgetType == "LineEdit")
-			{
-				QLineEdit* widget = qobject_cast<QLineEdit*>(editor);
-				widget->setText( value.toString());
-			}
-			else if( widgetType == "FileSelect")
+			if( widgetType == "FileSelect")
 			{
 				QFileSelect* widget = qobject_cast<QFileSelect*>(editor);
 				widget->SetPath( value.toString());
@@ -283,15 +233,10 @@ namespace QT_UI
 				widget->setChecked( value.toBool());
 				m_model->setValue(propertyName, widget->isChecked());
 			}
-			else if( widgetType == "CheckBoxList")
-			{
-				QCheckBoxList* widget = qobject_cast<QCheckBoxList*>(editor);
-				widget->SetValue( value.toString());
-			}
 			else if( widgetType == "ComboBox")
 			{
-				QComboBox* widget = qobject_cast<QComboBox*>(editor);
-				widget->setCurrentText( value.toString());
+				QComboBoxEditor* widget = qobject_cast<QComboBoxEditor*>(editor);
+				widget->setValue( value.toString());
 			}
 			else if (widgetType == "Int")
 			{
@@ -313,15 +258,6 @@ namespace QT_UI
 				QVector3Editor* widget = qobject_cast<QVector3Editor*>(editor);
 				widget->setValue(value.toString());
 			}
-			else if (widgetType == "BoneSelectComboBox")
-			{
-				QComboBox* widget = qobject_cast<QComboBox*>(editor);
-				if (value.toString().isEmpty())
-				{
-					widget->setCurrentIndex(-1);
-				}
-				widget->setCurrentText(value.toString());
-			}
 			else if( widgetType == "default")
 			{
 				QStyledItemDelegate::setEditorData(editor, index);
@@ -341,22 +277,7 @@ namespace QT_UI
 		QString propertyName = index.model()->data( index, Qt::DisplayPropertyRole).toString();
 		if( m_model->findValue( value, propertyName))
 		{
-			if( widgetType == "spinBox")
-			{
-				QSpinBox* widget = qobject_cast<QSpinBox*>(editor);
-				this->m_model->setValue( propertyName, widget->value());
-			}
-			else if( widgetType == "doubleSpinBox")
-			{
-				QDoubleSpinBox* widget = qobject_cast<QDoubleSpinBox*>(editor);
-				m_model->setValue( propertyName, widget->value());
-			}
-			else if( widgetType == "LineEdit")
-			{
-				QLineEdit* widget = qobject_cast<QLineEdit*>(editor);
-				m_model->setValue( propertyName, widget->text());
-			}
-			else if( widgetType == "FileSelect")
+			if( widgetType == "FileSelect")
 			{
 				QFileSelect* widget = qobject_cast<QFileSelect*>(editor);
 				m_model->setValue( propertyName, widget->GetPath());
@@ -380,21 +301,6 @@ namespace QT_UI
 			{
 				QCheckBox* widget = qobject_cast<QCheckBox*>(editor);
 				m_model->setValue( propertyName, widget->isChecked());
-			}
-			else if( widgetType=="CheckBoxList")
-			{
-				QCheckBoxList* widget = qobject_cast<QCheckBoxList*>(editor);
-				m_model->setValue( propertyName, widget->GetValue());
-			}
-			else if( widgetType=="ComboBox")
-			{
-				QComboBox* widget = qobject_cast<QComboBox*>( editor);
-				m_model->setValue( propertyName, widget->currentText());
-			}
-			else if (widgetType == "BoneSelectComboBox")
-			{
-				QComboBox* widget = qobject_cast<QComboBox*>(editor);
-				m_model->setValue(propertyName, widget->currentText());
 			}
 			else if( widgetType == "default")
 			{
