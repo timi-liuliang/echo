@@ -36,7 +36,7 @@ echo.dmg       [Mac OS X 10.7 or later]
 iOS Android Html5 Windows Mac Linux Steam  
 
 ### New Industry Standard Support 
-gLtf2.0, Vulkan, Real time ray tracing.
+gLtf2.0, Vulkan, Pbr, Real time ray tracing.
 
 ### 2D And 3D Seamless Transition  
 Every node can be 2d or 3d. The core difference is the camera and the unit the node use. So you can just switch a node to 2d or 3d easily. 
