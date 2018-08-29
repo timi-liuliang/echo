@@ -9,14 +9,7 @@ namespace Echo
 		{
 			for (AnimProperty* property : animNode->m_properties)
 			{
-				for (i32 i = 0; i < property->getCurverCount(); i++)
-				{
-					AnimCurve* curve = property->getCurve(i);
-					if (curve)
-					{
-						m_length = std::max<float>(m_length, curve->getLength());
-					}
-				}
+				m_length = std::max<float>(m_length, property->getLength());
 			}
 		}
 
@@ -30,14 +23,7 @@ namespace Echo
 		{
 			for (AnimProperty* property : animNode->m_properties)
 			{
-				for (i32 i = 0; i < property->getCurverCount(); i++)
-				{
-					AnimCurve* curve = property->getCurve(i);
-					if (curve)
-					{
-						curve->optimize();
-					}
-				}
+				property->optimize();
 			}
 		}
 	}

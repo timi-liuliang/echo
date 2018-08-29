@@ -21,26 +21,11 @@ namespace Echo
 	void AnimProperty::setInterpolationType(AnimCurve::InterpolationType type)
 	{ 
 		m_interpolationType = type;
-		for (i32 i = 0; i < getCurverCount(); i++)
-		{
-			getCurve(i)->setType(m_interpolationType);
-		}
 	}
 
-	void AnimPropertyFloat::addKey(float time, float value, i32 curveIdx)
+	void AnimPropertyFloat::addKey(float time, float value)
 	{
-		if (curveIdx == 0)
-			m_curve->addKey(time, value);
-		else
-			EchoLogError("AnimPropertyFloat add key failed");
-	}
-
-	void AnimPropertyVec3::addKey(float time, float value, i32 curveIdx)
-	{
-		if (curveIdx >= 0 && curveIdx <3)
-			m_curves[curveIdx]->addKey(time, value);
-		else
-			EchoLogError("AnimPropertyVec3 add key failed");
+		m_curve->addKey(time, value);
 	}
 
 	AnimPropertyVec4::AnimPropertyVec4() 
@@ -54,18 +39,10 @@ namespace Echo
 
 	void AnimPropertyVec4::addKey(float time, const Vector4& value)
 	{
-		addKey(time, value[0], 0);
-		addKey(time, value[1], 1);
-		addKey(time, value[2], 2);
-		addKey(time, value[3], 3);
-	}
-
-	void AnimPropertyVec4::addKey(float time, float value, i32 curveIdx)
-	{
-		if (curveIdx >= 0 && curveIdx < 4)
-			m_curves[curveIdx]->addKey(time, value);
-		else
-			EchoLogError("AnimPropertyVec4 add key failed");
+		m_curves[0]->addKey(time, value.x);
+		m_curves[1]->addKey(time, value.y);
+		m_curves[2]->addKey(time, value.z);
+		m_curves[3]->addKey(time, value.w);
 	}
 
 	void AnimPropertyVec4::updateToTime(float time)
@@ -74,5 +51,38 @@ namespace Echo
 		m_value.y = m_curves[1]->getValue(time);
 		m_value.z = m_curves[2]->getValue(time);
 		m_value.w = m_curves[3]->getValue(time);
+	}
+
+	// set interpolation type
+	void AnimPropertyVec4::setInterpolationType(AnimCurve::InterpolationType type)
+	{
+		AnimProperty::setInterpolationType(type);
+		m_curves[0]->setType(type);
+		m_curves[1]->setType(type);
+		m_curves[2]->setType(type);
+		m_curves[3]->setType(type);
+	}
+
+	// get length
+	float AnimPropertyVec4::getLength()
+	{
+		float length = 0.f;
+		for (int i = 0; i < 4; i++)
+		{
+			if (m_curves[i]->getLength() > length)
+				length = m_curves[i]->getLength();
+		}
+
+		return length;
+	}
+
+	void AnimPropertyQuat::addKey(float time, const Quaternion& value)
+	{
+
+	}
+
+	void AnimPropertyQuat::updateToTime(float time)
+	{
+
 	}
 }

@@ -16,6 +16,7 @@ namespace Echo
 			Float,
 			Vector3,
 			Vector4,
+			Quatition,
 		}							 m_type;				// propert type
 		AnimCurve::InterpolationType m_interpolationType;	// interpolation type
 
@@ -25,20 +26,17 @@ namespace Echo
 		// create
 		static AnimProperty* create(Type type);
 
-		// get curve count
-		virtual i32 getCurverCount() = 0;
-
-		// get curve by index
-		virtual AnimCurve* getCurve(int idx) = 0;
-
 		// set interpolation type
-		void setInterpolationType(AnimCurve::InterpolationType type);
+		virtual void setInterpolationType(AnimCurve::InterpolationType type);
 
-		// add key
-		virtual void addKey( float time, float value, i32 curveIdx)=0;
+		// optimize
+		virtual void optimize(){}
 
 		// update to time
 		virtual void updateToTime(float time) = 0;
+
+		// get length
+		virtual float getLength() = 0;
 	};
 
 	struct AnimPropertyFloat : public AnimProperty
@@ -46,10 +44,13 @@ namespace Echo
 		float		m_value;
 		AnimCurve*	m_curve;
 
-		virtual void addKey(float time, float value, i32 curveIdx);
+		void addKey(float time, float value);
 
 		// update to time
 		virtual void updateToTime(float time) override{}
+
+		// get length
+		virtual float getLength() override { return m_curve->getLength(); }
 	};
 
 	struct AnimPropertyVec3 : public AnimProperty
@@ -58,10 +59,12 @@ namespace Echo
 		AnimCurve*	m_curves[3];
 
 		AnimPropertyVec3() : AnimProperty(Type::Vector3) {}
-		virtual void addKey(float time, float value, i32 curveIdx);
 		virtual i32 getCurverCount() { return 3; }
 		virtual AnimCurve* getCurve(int idx) { return m_curves[idx]; }
 		virtual void updateToTime(float time) override{}
+
+		// get length
+		virtual float getLength() override { return m_curves[0]->getLength(); }
 	};
 
 	struct AnimPropertyVec4 : public AnimProperty
@@ -72,9 +75,25 @@ namespace Echo
 		AnimPropertyVec4();
 		const Vector4& getValue() { return m_value; }
 		void addKey(float time, const Vector4& value);
-		virtual void addKey(float time, float value, i32 curveIdx);
-		virtual i32 getCurverCount() { return 4; }
-		virtual AnimCurve* getCurve(int idx) { return m_curves[idx]; }
 		virtual void updateToTime(float time) override;
+
+		// set interpolation type
+		virtual void setInterpolationType(AnimCurve::InterpolationType type) override;
+
+		// get length
+		virtual float getLength() override;
+	};
+
+	struct AnimPropertyQuat : public AnimProperty
+	{
+		Quaternion m_vlaue;
+
+		AnimPropertyQuat() : AnimProperty(Type::Quatition), m_vlaue(Quaternion::IDENTITY) {}
+		const Quaternion& getValue() { return m_vlaue; }
+		void addKey(float time, const Quaternion& value);
+		virtual void updateToTime(float time) override;
+
+		// get length
+		virtual float getLength() override { return 1.f; }
 	};
 }
