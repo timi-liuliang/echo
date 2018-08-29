@@ -6,7 +6,7 @@
 #include "engine/core/log/Log.h"
 #include "engine/core/render/render/ImageCodecMgr.h"
 #include "engine/core/scene/render_node.h"
-#include "engine/core/scene/NodeTree.h"
+#include "engine/core/scene/node_tree.h"
 #include "engine/core/util/Timer.h"
 #include "engine/core/render/render/Viewport.h"
 #include "engine/core/render/Material.h"

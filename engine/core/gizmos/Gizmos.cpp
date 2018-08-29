@@ -1,6 +1,6 @@
 #include "Gizmos.h"
 #include "engine/core/memory/MemAllocDef.h"
-#include "engine/core/scene/NodeTree.h"
+#include "engine/core/scene/node_tree.h"
 
 // opaque material
 static const char* g_gizmoOpaqueMaterial = R"(

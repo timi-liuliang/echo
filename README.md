@@ -4,7 +4,7 @@
 
 # Echo
 
-**Please don't use echo make your games now, It's still not good enough.**
+**Please don't use echo make your Apps now, It's still not good enough.**
 
 ## Introduction  
 

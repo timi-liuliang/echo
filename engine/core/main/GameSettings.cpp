@@ -4,7 +4,7 @@
 #include "engine/core/io/IO.h"
 #include "engine/core/render/render/Renderer.h"
 #include "engine/core/main/Engine.h"
-#include "engine/core/scene/NodeTree.h"
+#include "engine/core/scene/node_tree.h"
 #include <ostream>
 
 namespace Echo

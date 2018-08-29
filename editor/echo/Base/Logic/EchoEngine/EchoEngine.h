@@ -3,7 +3,7 @@
 #include <string>
 #include <engine/core/log/Log.h>
 #include <Engine/core/main/Engine.h>
-#include <Engine/core/Scene/NodeTree.h>
+#include <Engine/core/Scene/node_tree.h>
 #include <Engine/core/render/mesh/Mesh.h>
 #include <Engine/modules/Audio/FMODStudio/FSAudioManager.h>
 

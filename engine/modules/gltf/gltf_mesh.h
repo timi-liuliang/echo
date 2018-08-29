@@ -1,10 +1,12 @@
 #pragma once
 
 #include "engine/core/scene/render_node.h"
+#include "engine/core/scene/node_path.h"
 #include "engine/core/render/mesh/Mesh.h"
 #include "engine/core/render/Material.h"
 #include "engine/core/render/render/Renderable.h"
 #include "gltf_res.h"
+#include "gltf_skeleton.h"
 
 namespace Echo
 {
@@ -55,5 +57,7 @@ namespace Echo
 		int						m_meshIdx;			// mesh index in the asset
 		int						m_primitiveIdx;		// sub mesh index
 		MaterialPtr				m_material;			// custom material
+		NodePath				m_skeletonPath;
+		GltfSkeleton*			m_skeleton;
 	};
 }
