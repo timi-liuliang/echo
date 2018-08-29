@@ -44,6 +44,7 @@ namespace Echo
 		float		m_value;
 		AnimCurve*	m_curve;
 
+		// add key
 		void addKey(float time, float value);
 
 		// update to time
@@ -59,8 +60,8 @@ namespace Echo
 		AnimCurve*	m_curves[3];
 
 		AnimPropertyVec3() : AnimProperty(Type::Vector3) {}
-		virtual i32 getCurverCount() { return 3; }
-		virtual AnimCurve* getCurve(int idx) { return m_curves[idx]; }
+
+		// update to time
 		virtual void updateToTime(float time) override{}
 
 		// get length
@@ -73,8 +74,14 @@ namespace Echo
 		AnimCurve*	m_curves[4];
 
 		AnimPropertyVec4();
+
+		// get value
 		const Vector4& getValue() { return m_value; }
+
+		// add key
 		void addKey(float time, const Vector4& value);
+
+		// update to time
 		virtual void updateToTime(float time) override;
 
 		// set interpolation type
@@ -86,14 +93,26 @@ namespace Echo
 
 	struct AnimPropertyQuat : public AnimProperty
 	{
-		Quaternion m_vlaue;
+		struct Key
+		{
+			float		m_time;
+			Quaternion	m_value;
+		};
+		Quaternion				m_vlaue;
+		vector<Key>::type		m_keys;
 
 		AnimPropertyQuat() : AnimProperty(Type::Quatition), m_vlaue(Quaternion::IDENTITY) {}
+
+		// get value
 		const Quaternion& getValue() { return m_vlaue; }
+
+		// add key
 		void addKey(float time, const Quaternion& value);
+
+		// update to time
 		virtual void updateToTime(float time) override;
 
 		// get length
-		virtual float getLength() override { return 1.f; }
+		virtual float getLength() override;
 	};
 }

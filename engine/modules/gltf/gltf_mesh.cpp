@@ -16,6 +16,8 @@ namespace Echo
 		, m_meshIdx(-1)
 		, m_primitiveIdx(-1)
 		, m_material(nullptr)
+		, m_skeletonDirty(false)
+		, m_skeleton(nullptr)
 	{
 		set2d(false);
 	}
@@ -59,7 +61,7 @@ namespace Echo
 	{
 		if (m_skeletonPath.setPath(skeletonPath.getPath()))
 		{
-			m_skeleton = ECHO_DOWN_CAST<GltfSkeleton*>(getNode(m_skeletonPath.getPath().c_str()));
+			m_skeletonDirty = true;
 		}
 	}
 
@@ -108,6 +110,12 @@ namespace Echo
 		if (isNeedRender())
 		{
 			// update animation
+			if (m_skeletonDirty)
+			{
+				m_skeleton = ECHO_DOWN_CAST<GltfSkeleton*>(getNode(m_skeletonPath.getPath().c_str()));
+				m_skeletonDirty = false;
+			}
+
 			if (m_skeleton)
 			{
 				syncGltfNodeAnim();
@@ -139,8 +147,8 @@ namespace Echo
 							{
 							case GltfAnimChannel::Path::Rotation:
 							{
-								AnimPropertyVec4* pv4 = ECHO_DOWN_CAST<AnimPropertyVec4*>(property);
-								setLocalOrientation((const Quaternion&)pv4->getValue());
+								AnimPropertyQuat* pv4 = ECHO_DOWN_CAST<AnimPropertyQuat*>(property);
+								setLocalOrientation(pv4->getValue());
 							}
 							break;
 							}

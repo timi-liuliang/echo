@@ -502,7 +502,7 @@ namespace Echo
 				}
 				else if (path[0] == '.' && path[1] == '.' && path[2] == '/')
 				{
-					return getParent()->getNode(path + 3);
+					return getParent() ? getParent()->getNode(path + 3) : nullptr;
 				}
 				else
 				{

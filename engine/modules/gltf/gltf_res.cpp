@@ -669,7 +669,7 @@ namespace Echo
 		{
 		case GltfAccessorInfo::Type::Scalar:	return AnimProperty::Type::Float;
 		case GltfAccessorInfo::Type::Vec3:		return AnimProperty::Type::Vector3;
-		case GltfAccessorInfo::Type::Vec4:		return AnimProperty::Type::Vector4;
+		case GltfAccessorInfo::Type::Vec4:		return AnimProperty::Type::Quatition;
 		default:								return AnimProperty::Type::Unknow;
 		}
 	}
@@ -717,11 +717,11 @@ namespace Echo
 						{
 						case GltfAccessorInfo::Type::Vec4:
 						{
-							Vector4* keyData = (Vector4*)keyBuffer.getData(keyBufferView.m_byteOffset + keyAccess.m_byteOffset);
+							Quaternion* keyData = (Quaternion*)keyBuffer.getData(keyBufferView.m_byteOffset + keyAccess.m_byteOffset);
 							for (ui32 i = 0; i < timeAccess.m_count; i++)
 							{
 								float time = timeData[i];
-								((AnimPropertyVec4*)animProperty)->addKey(time, keyData[i]);
+								((AnimPropertyQuat*)animProperty)->addKey(time, (keyData[i]));
 							}
 						}
 						break;

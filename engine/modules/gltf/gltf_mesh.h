@@ -67,6 +67,7 @@ namespace Echo
 		int						m_primitiveIdx;		// sub mesh index
 		MaterialPtr				m_material;			// custom material
 		NodePath				m_skeletonPath;
+		bool					m_skeletonDirty;	// dirty flag
 		GltfSkeleton*			m_skeleton;
 	};
 }
