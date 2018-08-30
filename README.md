@@ -17,9 +17,9 @@
 ## Download   
 |Description|Files|
 |---|---|
-|Editor [Win32]|[**echo-setup-2018.08.30.exe**](https://raw.githubusercontent.com/blab-liuliang/echo-doc/master/download/echo-setup-2018.08.30.exe)|
+|Editor [Win32]|[echo-setup-2018.08.30.exe](https://raw.githubusercontent.com/blab-liuliang/echo-doc/master/download/echo-setup-2018.08.30.exe)|
 |Editor [Mac OS X 10.7 or later]|echo.dmg|
-|Examples|[**echo-examples-master.zip**](https://codeload.github.com/blab-liuliang/echo-examples/zip/master)|
+|Examples|[echo-examples-master.zip](https://codeload.github.com/blab-liuliang/echo-examples/zip/master)|
 
 ## Build
 ### [Windows Editor]   
