@@ -15,8 +15,10 @@
 [Documentation](https://github.com/blab-liuliang/echo-doc/tree/master/documentation)  
 
 ## Download   
-echo.installer [Win32]   
-echo.dmg       [Mac OS X 10.7 or later]   
+|Platform|Files|
+|---|---|
+|Win32|[echo-setup-2018.08.30.exe](https://raw.githubusercontent.com/blab-liuliang/echo-doc/master/download/echo-setup-2018.08.30.exe)|
+|Mac OS X 10.7 or later|echo.dmg|
 
 ## Build
 ### [Windows Editor]   
