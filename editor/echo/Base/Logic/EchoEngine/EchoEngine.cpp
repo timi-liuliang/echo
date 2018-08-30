@@ -10,14 +10,12 @@
 #include "Studio.h"
 #include "RenderWindow.h"
 #include <Render/Renderer.h>
-#include <Engine/modules/Audio/FMODStudio/FSAudioManager.h>
 #include <string>
 #include <Psapi.h>
 #include "studio.h"
 #include "gles/GLES2RenderBase.h"
 #include "gles/GLES2Renderer.h"
 #include "Render/RenderState.h"
-#include "Engine/modules/Audio/FMODStudio/FSAudioSource.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/util/TimeProfiler.h>
 #include <engine/core/io/IO.h>
@@ -28,8 +26,7 @@ namespace Studio
 	RenderWindow* EchoEngine::m_renderWindow = NULL;
 
 	EchoEngine::EchoEngine()
-		: m_curPlayAudio(0)
-		, m_log(NULL)
+		: m_log(NULL)
 		, m_currentEditNode(nullptr)
 		, m_invisibleNodeForEditor(nullptr)
 		, m_gizmosNodeBackGrid(nullptr)
@@ -281,21 +278,21 @@ namespace Studio
 
 	void EchoEngine::previewAudioEvent(const char* audioEvent)
 	{
-		Echo::FSAudioManager::instance()->destroyAudioSources(&m_curPlayAudio, 1);
+		//Echo::FSAudioManager::instance()->destroyAudioSources(&m_curPlayAudio, 1);
 
-		bool isAudioEvnet = Echo::StringUtil::StartWith(audioEvent, "event:", true);
-		if (isAudioEvnet)
-		{
-			Echo::AudioSource::Cinfo cinfo;
-			cinfo.m_name = audioEvent;
-			cinfo.m_is3DMode = false;
-			m_curPlayAudio = Echo::FSAudioManager::instance()->createAudioSource(cinfo);
-		}
+		//bool isAudioEvnet = Echo::StringUtil::StartWith(audioEvent, "event:", true);
+		//if (isAudioEvnet)
+		//{
+		//	Echo::AudioSource::Cinfo cinfo;
+		//	cinfo.m_name = audioEvent;
+		//	cinfo.m_is3DMode = false;
+		//	m_curPlayAudio = Echo::FSAudioManager::instance()->createAudioSource(cinfo);
+		//}
 	}
 
 	void EchoEngine::stopCurPreviewAudioEvent()
 	{
-		Echo::FSAudioManager::instance()->destroyAudioSources(&m_curPlayAudio, 1);
+		//Echo::FSAudioManager::instance()->destroyAudioSources(&m_curPlayAudio, 1);
 	}
 
 	float EchoEngine::GetMeshRadius()

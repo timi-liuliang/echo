@@ -5,7 +5,6 @@
 #include <QTextCodec>
 #include <qfiledialog.h>
 #include <Engine/core/main/Engine.h>
-#include <engine/modules/Audio/FMODStudio/FSAudioManager.h>
 #include "ui_FileProperty.h"
 
 namespace Studio

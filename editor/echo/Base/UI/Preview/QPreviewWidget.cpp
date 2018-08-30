@@ -1,6 +1,4 @@
 #include "QPreviewWidget.h"
-
-#include <Engine/modules/Audio/FMODStudio/FSAudioManager.h>
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/thread/Threading.h>
 #include <engine/core/main/Engine.h>
@@ -288,9 +286,9 @@ namespace QT_UI
 			// 获取所有声音事件
 			//if (EchoAudioManager)
 			{
-				Echo::StringArray bankEvents;
-				Echo::FSAudioManager::instance()->getAudioEvents(bankEvents, fileName.c_str());
-				for (size_t i = 0; i < bankEvents.size(); i++)
+				//Echo::StringArray bankEvents;
+				//Echo::FSAudioManager::instance()->getAudioEvents(bankEvents, fileName.c_str());
+				//for (size_t i = 0; i < bankEvents.size(); i++)
 				{
 					//if (!m_searchName.isEmpty())
 					//{
@@ -301,8 +299,8 @@ namespace QT_UI
 					//}
 					//else
 					{
-						newItem = createItem(m_isNeedFullPath ? filePath : bankEvents[i].c_str(), ":/icon/Icon/AudioSource.png");
-						results.push_back(newItem);
+						//newItem = createItem(m_isNeedFullPath ? filePath : bankEvents[i].c_str(), ":/icon/Icon/AudioSource.png");
+						//results.push_back(newItem);
 					}
 				}
 			}

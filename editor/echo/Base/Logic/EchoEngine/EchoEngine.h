@@ -5,9 +5,6 @@
 #include <Engine/core/main/Engine.h>
 #include <Engine/core/Scene/node_tree.h>
 #include <Engine/core/render/mesh/Mesh.h>
-#include <Engine/modules/Audio/FMODStudio/FSAudioManager.h>
-
-#define  FPSINFONUM 6
 
 namespace Studio
 {
@@ -102,6 +99,5 @@ namespace Studio
 		Echo::Node *			m_pCameraAxis;
 		static std::string		m_projectFile;				// 项目名称
 		static RenderWindow*	m_renderWindow;				// 渲染窗口
-		Echo::AudioSourceID		m_curPlayAudio;				// 当前播放音频
 	};
 }
