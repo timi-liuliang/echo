@@ -36,6 +36,10 @@ namespace QT_UI
 	{
 		Echo::String value = val.toStdString().c_str();
 		m_comboBox->setCurrentText(value.c_str());
+		if (value.empty())
+		{
+			onEditFinished();
+		}
 
 		// after set initial value, begin emit combox index changed signal
 		QObject::connect(m_comboBox, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(onEditFinished()));

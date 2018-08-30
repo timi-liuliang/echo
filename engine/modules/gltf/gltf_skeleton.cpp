@@ -105,19 +105,24 @@ namespace Echo
 	//  query clip data
 	void GltfSkeleton::extractClipData(AnimClip* clip)
 	{
-		//if (clip)
-		//{
-		//	for (AnimNode* animNode : clip->m_nodes)
-		//	{
-		//		i32 nodeIdx = any_cast<i32>(animNode->m_userData);
-		//		for (AnimProperty* property : animNode->m_properties)
-		//		{
-		//			GltfAnimChannel::Path channelPath = any_cast<GltfAnimChannel::Path>(property->m_userData);
-		//			for (i32 i = 0; i < property->getCurverCount(); i++)
-		//			{
-		//			}
-		//		}
-		//	}
-		//}
+		if (clip)
+		{
+			for (AnimNode* animNode : clip->m_nodes)
+			{
+				// copy all propertys results of this node
+				i32 nodeIdx = any_cast<i32>(animNode->m_userData);
+				for (AnimProperty* property : animNode->m_properties)
+				{
+					GltfAnimChannel::Path channelPath = any_cast<GltfAnimChannel::Path>(property->m_userData);
+					switch (channelPath)
+					{
+						//Translation,
+						//	Rotation,
+						//	Scale,
+						//	Weights,
+					}
+				}
+			}
+		}
 	}
 }

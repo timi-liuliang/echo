@@ -151,6 +151,11 @@ namespace Echo
 								setLocalOrientation(pv4->getValue());
 							}
 							break;
+							default:
+							{
+								EchoLogError("Unprocessed gltf anim property type");
+							}
+							break;
 							}
 						}
 

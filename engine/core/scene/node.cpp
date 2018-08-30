@@ -55,24 +55,39 @@ namespace Echo
 		}
 	}
 
+	// build matrix
+	void Node::Transform::buildMatrix(Matrix4& mat) const
+	{
+		mat.makeScaling( m_scale);
+
+		Matrix4 matRot;
+		matRot.fromQuan(m_quat);
+		mat = mat * matRot;
+
+		mat.translate(m_pos);
+	}
+
+	void Node::Transform::buildInvMatrix(Matrix4& invMat) const
+	{
+		invMat.makeTranslation(-m_pos);
+		Matrix4 matRot;
+		Quaternion rot = m_quat;
+		rot.conjugate();
+		matRot.fromQuan(rot);
+		invMat = invMat * matRot;
+		matRot.makeScaling(1.0f / m_scale.x, 1.0f / m_scale.y, 1.0f / m_scale.z);
+		invMat = invMat * matRot;
+	}
+
 	Node::Node()
 		: m_parent(NULL)
 		, m_isEnable(true)
 		, m_isLink(false)
-		, m_posLocal(Vector3::ZERO)
-		, m_ortLocal(Quaternion::IDENTITY)
-		, m_sclLocal(Vector3::ONE)
 		, m_bModify(false)
 		, m_bMatrixDirty(false)
 	{
-		m_sclWorld = m_sclLocal;
-		m_ortWorld = m_ortLocal;
-		m_posWorld = m_posLocal;
-
 		m_matWorld = Matrix4::IDENTITY;
-		
-		needUpdate();
-        
+		needUpdate();   
         m_children.clear();
 	}
 
@@ -104,34 +119,6 @@ namespace Echo
 		needUpdate();
 	}
 
-	void Node::scale(const Vector3& scl)
-	{
-		m_sclLocal = m_sclLocal * scl;
-		
-		needUpdate();
-	}
-
-	void Node::roll(const Real randian)
-	{
-		rotate(Vector3::UNIT_Z, randian);
-	}
-
-	void Node::pitch(const Real randian)
-	{
-		rotate(Vector3::UNIT_X, randian);
-	}
-
-	void Node::yaw(const Real randian)
-	{
-		rotate(Vector3::UNIT_Y, randian);
-	}
-
-	void Node::rotate(const Vector3& vAxis, const Real randian)
-	{
-		Quaternion rot(vAxis, randian);
-		rotate(rot);
-	}
-
 	void Node::rotate(const Quaternion& rot)
 	{
 		// Normalise quaternion to avoid drift
@@ -139,21 +126,14 @@ namespace Echo
 		qnorm.normalize();
 
 		// Note the order of the mult, i.e. q comes after
-		m_ortLocal = m_ortLocal * qnorm;
-
-		needUpdate();
-	}
-
-	void Node::translate(const Vector3& d)
-	{
-		m_posLocal += m_ortLocal * d;
+		m_localTransform.m_quat = m_localTransform.m_quat * qnorm;
 
 		needUpdate();
 	}
 
 	void Node::setLocalScaling(const Vector3& scl)
 	{
-		m_sclLocal = scl;
+		m_localTransform.m_scale = scl;
 		needUpdate();
 	}
 
@@ -165,28 +145,16 @@ namespace Echo
 
 	void Node::setLocalOrientation(const Quaternion& ort)
 	{
-		m_ortLocal = ort;
-		m_ortLocal.normalize();
+		m_localTransform.m_quat = ort;
+		m_localTransform.m_quat.normalize();
 
 		needUpdate();
 	}
 
 	void Node::setLocalPosition(const Vector3& pos)
 	{
-		m_posLocal = pos;
+		m_localTransform.m_pos = pos;
 		needUpdate();
-	}
-
-	void Node::setLocalPositionX(float pos)
-	{
-		m_posLocal.x = pos;
-		needUpdate();
-	}
-
-	void Node::setLocalPositionXYZ(Real posX, Real posY, Real posZ)
-	{
-		Vector3 pos(posX, posY, posZ);
-		setLocalPosition(pos);
 	}
 
 	void Node::setWorldOrientation(const Quaternion& ort)
@@ -281,18 +249,18 @@ namespace Echo
 
 	const Vector3& Node::getLocalScaling() const
 	{
-		return m_sclLocal;
+		return m_localTransform.m_scale;
 	}
 
 	const Quaternion& Node::getLocalOrientation() const
 	{
-		return m_ortLocal;
+		return m_localTransform.m_quat;
 	}
 
 	const Vector3 Node::getLocalYawPitchRoll()
 	{
 		Vector3 yawpitchroll;
-		m_ortLocal.toEulerAngle(yawpitchroll.x, yawpitchroll.y, yawpitchroll.z);
+		m_localTransform.m_quat.toEulerAngle(yawpitchroll.x, yawpitchroll.y, yawpitchroll.z);
 
 		return yawpitchroll;
 	}
@@ -307,37 +275,22 @@ namespace Echo
 
 	const Vector3& Node::getLocalPosition() const
 	{
-		return m_posLocal;
+		return m_localTransform.m_pos;
 	}
 
 	const Vector3& Node::getWorldScaling() const
 	{
-		return m_sclWorld;
+		return m_worldTransform.m_scale;
 	}
 
 	const Quaternion& Node::getWorldOrientation() const
 	{
-		return m_ortWorld;
-	}
-
-	void Node::getWorldOrientationWXYZ(Real* w /* = 0 */, Real* x /* = 0 */, Real* y /* = 0 */, Real* z /* = 0 */)
-	{
-		*w = m_ortWorld.w;
-		*x = m_ortWorld.x;
-		*y = m_ortWorld.y;
-		*z = m_ortWorld.z;
+		return m_worldTransform.m_quat;
 	}
 
 	const Vector3& Node::getWorldPosition() const
 	{
-		return m_posWorld;
-	}
-	
-	void Node::getWorldPositionXYZ(Real* x /* = 0 */, Real* y /* = 0 */, Real* z /* = 0 */)
-	{
-		*x = m_posWorld.x;
-		*y = m_posWorld.y;
-		*z = m_posWorld.z;
+		return m_worldTransform.m_pos;
 	}
 	
 	const Matrix4& Node::getWorldMatrix()
@@ -347,13 +300,8 @@ namespace Echo
 			if(m_bModify)
 				update_self();
 
-			m_matWorld.makeScaling(getWorldScaling());
-
-			Matrix4 matRot;
-			matRot.fromQuan(getWorldOrientation());
-			m_matWorld = m_matWorld * matRot;
-
-			m_matWorld.translate(getWorldPosition());
+			// build mat world matrix
+			m_worldTransform.buildMatrix(m_matWorld);
 			m_bMatrixDirty = false;
 		}
 
@@ -362,28 +310,22 @@ namespace Echo
 
 	Matrix4 Node::getInverseWorldMatrix() const
 	{
-		Matrix4 inverseMat;
-		inverseMat.makeTranslation(-m_posWorld);
-		Matrix4 matRot;
-		Quaternion rot = m_ortWorld;
-		rot.conjugate();
-		matRot.fromQuan(rot);
-		inverseMat = inverseMat * matRot;
-		matRot.makeScaling(1.0f/m_sclWorld.x, 1.0f/m_sclWorld.y, 1.0f/m_sclLocal.z);
-		inverseMat = inverseMat * matRot;
-		return inverseMat;
+		Matrix4 invMat;
+		m_worldTransform.buildInvMatrix(invMat);
+
+		return invMat;
 	}
 
 	void Node::convertWorldToLocalPosition(Vector3& posLocal, const Vector3& posWorld)
 	{
-		Quaternion ortWorldInv = m_ortWorld;
+		Quaternion ortWorldInv = m_worldTransform.m_quat;
 		ortWorldInv.inverse();
-		posLocal = ortWorldInv * (posWorld - m_posWorld) / m_sclWorld;
+		posLocal = ortWorldInv * (posWorld - m_worldTransform.m_pos) / m_worldTransform.m_scale;
 	}
 
 	void Node::convertWorldToLocalOrientation(Quaternion& ortLocal, const Quaternion& ortWorld)
 	{
-		Quaternion ortWorldInv = m_ortWorld;
+		Quaternion ortWorldInv = m_worldTransform.m_quat;
 		ortWorldInv.inverse();
 
 		ortLocal = ortWorldInv * ortWorld;
@@ -416,24 +358,7 @@ namespace Echo
 
 		if (m_bModify)
 		{
-			if (m_parent)
-			{
-				m_ortWorld = m_parent->m_ortWorld * m_ortLocal;
-
-				// Update scale
-				m_sclWorld = m_parent->m_sclWorld * m_sclLocal;
-
-				// Change position vector based on parent's orientation & scale
-				m_posWorld = m_parent->m_ortWorld * (m_parent->m_sclWorld * m_posLocal);
-				m_posWorld += m_parent->m_posWorld;
-			}
-			else
-			{
-				m_ortWorld = m_ortLocal;
-				m_posWorld = m_posLocal;
-				m_sclWorld = m_sclLocal;
-			}
-
+			m_worldTransform = m_parent ? m_parent->getWorldTransform() * m_localTransform : m_localTransform;
 			m_bModify = false;
 		}
 

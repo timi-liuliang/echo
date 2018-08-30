@@ -37,12 +37,33 @@ namespace Echo
 		m_curves[2] = EchoNew(AnimCurve);
 	}
 
+	// get length
+	float AnimPropertyVec3::getLength()
+	{
+		float length = 0.f;
+		for (int i = 0; i < 3; i++)
+		{
+			if (m_curves[i]->getLength() > length)
+				length = m_curves[i]->getLength();
+		}
+
+		return length;
+	}
+
 	// add key
 	void AnimPropertyVec3::addKey(float time, const Vector3& value)
 	{
 		m_curves[0]->addKey(time, value.x);
 		m_curves[1]->addKey(time, value.y);
 		m_curves[2]->addKey(time, value.z);
+	}
+
+	// update to time
+	void AnimPropertyVec3::updateToTime(float time)
+	{
+		m_value.x = m_curves[0]->getValue(time);
+		m_value.y = m_curves[1]->getValue(time);
+		m_value.z = m_curves[2]->getValue(time);
 	}
 
 	AnimPropertyVec4::AnimPropertyVec4() 

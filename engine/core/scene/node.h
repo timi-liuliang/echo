@@ -15,6 +15,39 @@ namespace Echo
 	public:
 		typedef vector<Node*>::type NodeArray;
 
+		// transform
+		struct Transform
+		{
+			Vector3		m_pos;
+			Quaternion	m_quat;
+			Vector3		m_scale;
+
+			Transform()
+				: m_pos(Vector3::ZERO)
+				, m_quat(Quaternion::IDENTITY)
+				, m_scale(Vector3::ONE)
+			{}
+
+			// build matrix
+			void buildMatrix(Matrix4& mat) const;
+
+			// build inv matrix
+			void buildInvMatrix(Matrix4& invMat) const;
+
+			// operate "*"
+			Transform operator* (const Transform& b) const
+			{
+				Transform result;
+
+				result.m_quat = m_quat * b.m_quat;
+				result.m_scale = m_scale * b.m_scale;
+				result.m_pos = m_quat * (m_scale * b.m_pos);
+				result.m_pos += m_pos;
+
+				return result;
+			}
+		};
+
 		// lua script
 		struct LuaScript
 		{
@@ -59,37 +92,28 @@ namespace Echo
 		bool isLink() const { return m_isLink; }
 		void setLink(bool isLink) { m_isLink = isLink; }
 		
-		void scale(const Vector3& scl);
-		void roll(const Real randian);
-		void pitch(const Real randian);
-		void yaw(const Real randian);
-		void rotate(const Vector3& vAxis, const Real randian);
+		// rotate base on current rotate state
 		void rotate(const Quaternion& rot);
-		void translate(const Vector3& d);
 
 		void setLocalScaling(const Vector3& scl);
 		void setLocalScalingXYZ(Real x, Real y, Real z);
 		void setLocalOrientation(const Quaternion& ort);
 		void setLocalPosition(const Vector3& pos);
-		void setLocalPositionX(float pos);
-		void setLocalPositionXYZ(Real posX, Real posY, Real posZ);
 		void setLocalYawPitchRoll(const Vector3& yawPitchRoll);
-
 		void setWorldOrientation(const Quaternion& ort);
 		void setWorldPosition(const Vector3& pos);
 
 		// update recursive
 		virtual void update(float delta, bool bUpdateChildren = false);
-
+		
+		const Transform& getWorldTransform() const { return m_worldTransform; }
 		const Vector3& getLocalScaling() const;
 		const Quaternion& getLocalOrientation() const;
 		const Vector3 getLocalYawPitchRoll();
 		const Vector3& getLocalPosition() const;
 		const Vector3& getWorldScaling() const;
 		const Quaternion& getWorldOrientation() const;
-		void getWorldOrientationWXYZ(Real* w = 0, Real* x = 0, Real* y = 0, Real* z = 0);
 		const Vector3& getWorldPosition() const;
-		void getWorldPositionXYZ(Real* x = 0, Real* y = 0, Real* z = 0);
 
 		const Matrix4& getWorldMatrix();
 		Matrix4	getInverseWorldMatrix() const;
@@ -132,27 +156,14 @@ namespace Echo
 	protected:
 		bool			m_isEnable;
 		bool			m_isLink;			// belong to branch scene
-
 		Node*			m_parent;
 		NodeArray		m_children;
-
-		Vector3			m_posLocal;
-		Quaternion		m_ortLocal;
-		Vector3			m_sclLocal;
-
-		// Cached world space transform
-		Vector3			m_posWorld;
-		Quaternion		m_ortWorld;
-		Vector3			m_sclWorld;
-
-		/// Cached derived transform as a 4x4 matrix
-		Matrix4			m_matWorld;
-
-		bool			m_bModify;      //for caculate. ie: getWorldPostion
-		bool			m_bMatrixDirty; //for rendering.
-
-		AABB			m_localAABB;	// local aabb
-
-		LuaScript		m_script;		// bind script
+		Transform		m_localTransform;
+		Transform		m_worldTransform;
+		Matrix4			m_matWorld;			// Cached derived transform as a 4x4 matrix
+		bool			m_bModify;			// for caculate. ie: getWorldPostion
+		bool			m_bMatrixDirty;		// for rendering.
+		AABB			m_localAABB;		// local aabb
+		LuaScript		m_script;			// bind script
 	};
 }

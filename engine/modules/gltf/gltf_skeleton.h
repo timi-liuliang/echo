@@ -43,10 +43,11 @@ namespace Echo
 		void extractClipData(AnimClip* clip);
 
 	private:
-		ResourcePath			m_assetPath;
-		GltfResPtr				m_asset;			// gltf asset ptr
-		StringOption			m_animations;
-		vector<AnimClip*>::type	m_clips;
-		vector<Matrix4>::type	m_transformedMatrix;// node transformed matrix
+		ResourcePath					m_assetPath;
+		GltfResPtr						m_asset;			// gltf asset ptr
+		StringOption					m_animations;
+		vector<AnimClip*>::type			m_clips;
+		vector<Node::Transform>::type	m_boneTransforms;
+		vector<Matrix4>::type			m_boneMatrixs;		// node transformed matrix
 	};
 }

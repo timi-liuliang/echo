@@ -68,10 +68,10 @@ namespace Echo
 		void addKey(float time, const Vector3& value);
 
 		// update to time
-		virtual void updateToTime(float time) override{}
+		virtual void updateToTime(float time) override;
 
 		// get length
-		virtual float getLength() override { return m_curves[0]->getLength(); }
+		virtual float getLength() override;
 	};
 
 	struct AnimPropertyVec4 : public AnimProperty
