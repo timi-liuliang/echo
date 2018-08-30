@@ -2,6 +2,7 @@ import os
 import subprocess
 import argparse
 import shutil
+import time
 
 # root directory
 root_dir = os.getcwd()
@@ -136,7 +137,7 @@ def release_echo(version):
             print('copy resource from [' + src_dir + sub_dir + '] to [' + des_dir + sub_dir + ']')
 
 	# generate installer
-    astudio_version_name = 'echo-setup-' + version + '.exe'
+    astudio_version_name = 'echo-setup-' + time.strftime('%Y-%m-%d',time.localtime(time.time())) + '.exe' 
     os.chdir( nsis_dir)
     subprocess.call('makensis.exe echo.nsi')
     os.rename('echo-setup.exe', astudio_version_name)
