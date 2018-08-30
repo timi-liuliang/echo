@@ -53,24 +53,25 @@ def cmake_project(version, platform) :
 # compile vs project debug
 def compile_debug() :
     # change working directory
-    os.chdir( root_dir + "/../../Build/Win32")
+    solution_dir = root_dir + "/../../../solution/"
+    os.chdir( solution_dir)
 
     # Compile
-    vs_env = os.environ.get('VS140COMNTOOLS') + "../IDE/devenv.com"
-    subprocess.call( vs_env + " LordEngine.sln /Build \"Debug|Win32\"");
+    vs_env = os.environ.get('VS150COMNTOOLS') + "../IDE/devenv.com"
+    subprocess.call( vs_env + " echo.sln /Build \"Debug|Win32\"")
     return
 
 # compile vs project release
 def compile_release() :
     # change working directory
-    os.chdir( root_dir + "/../../build/editor/echo")
+	solution_dir = root_dir + "/../../../solution/"
+	os.chdir( solution_dir)
 
     # Compile
-    vs_env = os.environ.get('VS140COMNTOOLS') + "../IDE/devenv.com"
-    subprocess.call( vs_env + " echo.vcxproj /Build \"Release|Win32\"");
-	#subprocess.call( vs_env + " echo.vcxproj /Build \"Release|Win32\"");
+	vs_env = os.environ.get('VS150COMNTOOLS') + "../IDE/devenv.com"
+	subprocess.call( vs_env + " echo.sln /Build \"Release|Win32\"")
 
-    return
+	return
 
 # function parse args
 def run_parse_args() :
@@ -105,28 +106,34 @@ def run_parse_args() :
 
 def release_echo(version):
 	 # dirs
-    src_dir = root_dir + '/../../'
-    des_dir = root_dir + '/../nsis/echo/'
-    nsis_dir= root_dir + '/../nsis/'
+    src_dir = root_dir + '/../../../'
+    des_dir = root_dir + '/nsis/echo/'
+    nsis_dir= root_dir + '/nsis/'
 
     # remove des dir
     shutil.rmtree( des_dir, True)
 
-    # copy bin release
-    shutil.copytree( src_dir + 'bin/Release', des_dir)
-    print('copy resource from [' + src_dir + 'Bin/Release' + '] to [' + des_dir + ']')
+    # define copy list
+    copy_dir_list = [
+        "app/",
+        "bin/Win32/Release/",
+        "build/windows/",
+        "build/ios/",
+        "build/android/",
+        "engine/",
+        "thirdparty/",
+        "CMakeLists.txt",
+    ]
 
-    # copy Dependencies
-    #shutil.copytree( src_dir + 'Dependencies', des_dir+'Dependencies', ignore=shutil.ignore_patterns('*Qt*', "*QLibrary*"))
-    #print('copy resource from [' + src_dir + 'Dependencies' + '] to [' + des_dir+'Dependencies' + ']')
-
-    # copy lib
-    #shutil.copytree( src_dir + 'Lib', des_dir+'Lib')
-    #print('copy resource from [' + src_dir + 'Lib' + '] to [' + des_dir+'Lib' + ']')
-
-    # copy Src
-    #shutil.copytree( src_dir + 'Src', des_dir+'Src', ignore=shutil.ignore_patterns('*.cpp', '*.txt', '*.7z', '*.rar', '*Tools*', '*.pkg'))
-    #print('copy resource from [' + src_dir + 'Src' + '] to [' + des_dir+'Src' + ']')
+    # copy files
+    for sub_dir in copy_dir_list:
+        full_dir = src_dir + sub_dir
+        if os.path.isdir(full_dir):
+            shutil.copytree( full_dir, des_dir + sub_dir)
+            print('copy resource from [' + src_dir + sub_dir + '] to [' + des_dir + sub_dir + ']')
+        else:
+            shutil.copyfile( full_dir, des_dir + sub_dir)
+            print('copy resource from [' + src_dir + sub_dir + '] to [' + des_dir + sub_dir + ']')
 
 	# generate installer
     astudio_version_name = 'echo-setup-' + version + '.exe'
@@ -134,7 +141,7 @@ def release_echo(version):
     subprocess.call('makensis.exe echo.nsi')
     os.rename('echo-setup.exe', astudio_version_name)
     #shutil.move(astudio_version_name, astudio_des_dir+astudio_version_name)
-
+    
     return
 
 if __name__ == '__main__' :

@@ -2,7 +2,7 @@
 OutFile echo-setup.exe
 
 # install dir
-InstallDir "D:\echo"
+InstallDir "c:\echo"
 
 # require admin execution level
 RequestExecutionLevel admin
@@ -22,6 +22,6 @@ Section
 
 	# create desktop shortcut
 	SetShellVarContext all
-	CreateShortCut "$DESKTOP\echo.lnk" "$INSTDIR\echo.exe" ""
+	CreateShortCut "$DESKTOP\echo.lnk" "$INSTDIR\bin\Win32\Release\echo.exe" ""
 
 SectionEnd
