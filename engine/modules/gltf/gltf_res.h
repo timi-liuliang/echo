@@ -314,7 +314,7 @@ namespace Echo
 		bool buildAnimationData();
 		bool buildPrimitiveData(int meshIdx, int primitiveIdx);
 		bool buildMaterial(int meshIdx, int primitiveIdx);
-		Node*createNode(Node* parent, int idx);
+		void createNode(vector<Node*>::type& nodes, int idx);
 		Node*createSkeleton();
 		void bindSkeleton(Node* parent);
 	};

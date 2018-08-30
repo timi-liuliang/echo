@@ -715,13 +715,23 @@ namespace Echo
 						GltfBufferInfo&		keyBuffer = m_buffers[keyBufferView.m_bufferIdx];
 						switch (keyAccess.m_type)
 						{
+						case GltfAccessorInfo::Type::Vec3:
+						{
+							Vector3* keyData = (Vector3*)keyBuffer.getData(keyBufferView.m_byteOffset + keyAccess.m_byteOffset);
+							for (ui32 i = 0; i < timeAccess.m_count; i++)
+							{
+								float time = timeData[i];
+								((AnimPropertyVec3*)animProperty)->addKey(time, keyData[i]);
+							}
+						}
+						break;
 						case GltfAccessorInfo::Type::Vec4:
 						{
 							Quaternion* keyData = (Quaternion*)keyBuffer.getData(keyBufferView.m_byteOffset + keyAccess.m_byteOffset);
 							for (ui32 i = 0; i < timeAccess.m_count; i++)
 							{
 								float time = timeData[i];
-								((AnimPropertyQuat*)animProperty)->addKey(time, (keyData[i]));
+								((AnimPropertyQuat*)animProperty)->addKey(time, keyData[i]);
 							}
 						}
 						break;
@@ -1349,9 +1359,7 @@ namespace Echo
 		{
 			for (ui32 rootNodeIdx : scene.m_nodes)
 			{
-				Node* node = createNode(nullptr, rootNodeIdx);
-
-				nodes.push_back(node);
+				createNode( nodes, rootNodeIdx);
 			}
 		}
 
@@ -1392,71 +1400,58 @@ namespace Echo
 		return nullptr;
 	}
 
-	Node* GltfRes::createNode(Node* parent, int idx)
+	void GltfRes::createNode(vector<Node*>::type& nodes, int idx)
 	{
 		if (idx < 0 || idx >= (int)m_nodes.size())
-			return nullptr;
+			return ;
 
-		Node* node = nullptr;
+		vector<Node*>::type curNodes;
 
 		// create node base info
 		GltfNodeInfo& info = m_nodes[idx];
 		if (info.m_mesh != -1)
 		{
 			GltfMeshInfo& meshInfo = m_meshes[info.m_mesh];
-			if (meshInfo.m_primitives.size() > 1)
+			if (meshInfo.m_primitives.size())
 			{
 				// create multi mesh nodes
-				node = Class::create<Node*>("Node");
-				if (node)
+				for (size_t i = 0; i < meshInfo.m_primitives.size(); i++)
 				{
-					for (size_t i = 0; i < meshInfo.m_primitives.size(); i++)
-					{
-						GltfMesh* mesh = Class::create<GltfMesh*>("GltfMesh");
-						mesh->setName(info.m_name.empty() ? node->getClassName() : info.m_name);
-						mesh->setGltfRes(m_path);
-						mesh->setMeshIdx(info.m_mesh);
-						mesh->setPrimitiveIdx(i);
-						mesh->setParent(node);
-					}
+					GltfMesh* mesh = Class::create<GltfMesh*>("GltfMesh");
+					mesh->setName(info.m_name.empty() ? mesh->getClassName() : info.m_name);
+					mesh->setGltfRes(m_path);
+					mesh->setMeshIdx(info.m_mesh);
+					mesh->setPrimitiveIdx(i);
+					curNodes.push_back(mesh);
 				}
-			}
-			else if(meshInfo.m_primitives.size() == 1)
-			{
-				// create one mesh node
-				GltfMesh* mesh = Class::create<GltfMesh*>("GltfMesh");
-				mesh->setGltfRes(m_path);
-				mesh->setMeshIdx(info.m_mesh);
-				mesh->setPrimitiveIdx(0);
-				node = mesh;
 			}
 		}
 		else
 		{
-			node = Class::create<Node*>("Node");
+			// do nothing
 		}
 
-		// rotation
-		node->setLocalOrientation(info.m_rotation);
+		for (Node* node : curNodes)
+		{
+			// rotation
+			node->setLocalOrientation(info.m_rotation);
 
-		// scale
-		node->setLocalScaling(info.m_scale);
+			// scale
+			node->setLocalScaling(info.m_scale);
 
-		// translation
-		node->setLocalPosition(info.m_translation);
+			// translation
+			node->setLocalPosition(info.m_translation);
 
-		// set node property
-		node->setName(info.m_name.empty() ? node->getClassName() : info.m_name);
-		if(parent)
-			node->setParent(parent);
+			// set node property
+			node->setName(info.m_name.empty() ? node->getClassName() : info.m_name);
+		}
+		nodes.insert(nodes.end(), curNodes.begin(), curNodes.end());
 
 		// create children
 		for (ui32 childIdx : info.m_children)
 		{
-			createNode(node, childIdx);
+			createNode(nodes, childIdx);
 		}
-
-		return node;
 	}
 
 	Node* GltfRes::createSkeleton()

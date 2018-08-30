@@ -29,6 +29,22 @@ namespace Echo
 		m_curve->addKey(time, value);
 	}
 
+	AnimPropertyVec3::AnimPropertyVec3()
+		: AnimProperty(Type::Vector3)
+	{
+		m_curves[0] = EchoNew(AnimCurve);
+		m_curves[1] = EchoNew(AnimCurve);
+		m_curves[2] = EchoNew(AnimCurve);
+	}
+
+	// add key
+	void AnimPropertyVec3::addKey(float time, const Vector3& value)
+	{
+		m_curves[0]->addKey(time, value.x);
+		m_curves[1]->addKey(time, value.y);
+		m_curves[2]->addKey(time, value.z);
+	}
+
 	AnimPropertyVec4::AnimPropertyVec4() 
 		: AnimProperty(Type::Vector4)
 	{

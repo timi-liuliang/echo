@@ -59,7 +59,13 @@ namespace Echo
 		Vector3		m_value;
 		AnimCurve*	m_curves[3];
 
-		AnimPropertyVec3() : AnimProperty(Type::Vector3) {}
+		AnimPropertyVec3();
+
+		// get value
+		const Vector3& getValue() { return m_value; }
+
+		// add key
+		void addKey(float time, const Vector3& value);
 
 		// update to time
 		virtual void updateToTime(float time) override{}
