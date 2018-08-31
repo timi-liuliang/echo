@@ -61,8 +61,11 @@ namespace Echo
 
 		AnimPropertyVec3();
 
+		// set interpolation type
+		virtual void setInterpolationType(AnimCurve::InterpolationType type) override;
+
 		// get value
-		const Vector3& getValue() { return m_value; }
+		const Vector3& getValue();
 
 		// add key
 		void addKey(float time, const Vector3& value);

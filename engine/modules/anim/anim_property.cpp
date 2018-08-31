@@ -37,6 +37,15 @@ namespace Echo
 		m_curves[2] = EchoNew(AnimCurve);
 	}
 
+	// set interpolation type
+	void AnimPropertyVec3::setInterpolationType(AnimCurve::InterpolationType type)
+	{
+		AnimProperty::setInterpolationType(type);
+		m_curves[0]->setType(type);
+		m_curves[1]->setType(type);
+		m_curves[2]->setType(type);
+	}
+
 	// get length
 	float AnimPropertyVec3::getLength()
 	{
@@ -48,6 +57,12 @@ namespace Echo
 		}
 
 		return length;
+	}
+
+	// get value
+	const Vector3& AnimPropertyVec3::getValue()
+	{
+		return m_value;
 	}
 
 	// add key

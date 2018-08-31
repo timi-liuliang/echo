@@ -22,11 +22,7 @@ namespace Echo
 			Quaternion	m_quat;
 			Vector3		m_scale;
 
-			Transform()
-				: m_pos(Vector3::ZERO)
-				, m_quat(Quaternion::IDENTITY)
-				, m_scale(Vector3::ONE)
-			{}
+			Transform() { reset(); }
 
 			// build matrix
 			void buildMatrix(Matrix4& mat) const;
@@ -35,17 +31,10 @@ namespace Echo
 			void buildInvMatrix(Matrix4& invMat) const;
 
 			// operate "*"
-			Transform operator* (const Transform& b) const
-			{
-				Transform result;
+			Transform operator* (const Transform& b) const;
 
-				result.m_quat = m_quat * b.m_quat;
-				result.m_scale = m_scale * b.m_scale;
-				result.m_pos = m_quat * (m_scale * b.m_pos);
-				result.m_pos += m_pos;
-
-				return result;
-			}
+			// reset
+			void reset();
 		};
 
 		// lua script

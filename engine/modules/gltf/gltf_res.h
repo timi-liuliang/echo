@@ -270,7 +270,7 @@ namespace Echo
 	};
 
 	struct AnimClip;
-	struct GltfAnim
+	struct GltfAnimInfo
 	{
 		String							m_name;
 		vector<GltfAnimChannel>::type	m_channels;
@@ -292,7 +292,7 @@ namespace Echo
 		vector<GltfImageInfo>::type			m_images;
 		vector<GltfSamplerInfo>::type		m_samplers;
 		vector<GltfTextureInfo>::type		m_textures;
-		vector<GltfAnim>::type				m_animations;
+		vector<GltfAnimInfo>::type			m_animations;
 
 		// create
 		static GltfRes* create(const ResourcePath& path);

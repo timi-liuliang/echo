@@ -32,7 +32,7 @@ namespace Echo
 			m_asset = GltfRes::create(m_assetPath);	
 			if (m_asset)
 			{
-				for (GltfAnim& gltfAnim : m_asset->m_animations)
+				for (GltfAnimInfo& gltfAnim : m_asset->m_animations)
 				{
 					AnimClip* clip = gltfAnim.m_clip;
 					if (clip)
@@ -114,6 +114,12 @@ namespace Echo
 	{
 		if (clip)
 		{
+			// reset
+			for (Node::Transform& transform : m_nodeTransforms)
+			{
+				transform.reset();
+			}
+
 			for (AnimNode* animNode : clip->m_nodes)
 			{
 				// copy all propertys results of this node

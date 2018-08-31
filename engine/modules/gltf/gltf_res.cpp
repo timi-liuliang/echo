@@ -631,11 +631,11 @@ namespace Echo
 				String path;
 				if (parseJsonValueString(path, channel["target"], "path", true))
 				{
-					if (StringUtil::Equal(path, "Rotation", false))	animChannel.m_path = GltfAnimChannel::Path::Rotation;
-					else if (StringUtil::Equal(path, "Scale"))		animChannel.m_path = GltfAnimChannel::Path::Scale;
-					else if (StringUtil::Equal(path, "Translation"))animChannel.m_path = GltfAnimChannel::Path::Translation;
-					else if (StringUtil::Equal(path, "Weigths"))	animChannel.m_path = GltfAnimChannel::Path::Weights;
-					else                            EchoLogError("Unknow gltf anim chanel path");
+					if (StringUtil::Equal(path, "Rotation", false))			animChannel.m_path = GltfAnimChannel::Path::Rotation;
+					else if (StringUtil::Equal(path, "Scale", false))		animChannel.m_path = GltfAnimChannel::Path::Scale;
+					else if (StringUtil::Equal(path, "Translation", false))	animChannel.m_path = GltfAnimChannel::Path::Translation;
+					else if (StringUtil::Equal(path, "Weigths", false))		animChannel.m_path = GltfAnimChannel::Path::Weights;
+					else													EchoLogError("Unknow gltf anim chanel path");
 				}
 
 				if (!parseJsonValueI32(animChannel.m_sampler, channel, "sampler", true))
@@ -682,12 +682,20 @@ namespace Echo
 
 	static AnimCurve::InterpolationType MappingInterpolationType(const String& type)
 	{
-		return AnimCurve::InterpolationType::Linear;
+		if (StringUtil::Equal(type, "LINEAR", false))
+		{
+			return AnimCurve::InterpolationType::Linear;
+		}
+		else
+		{
+			EchoLogError("Unknow gltf animation interpolation type [%s]", type.c_str());
+			return AnimCurve::InterpolationType::Linear;
+		}
 	}
 
 	bool GltfRes::buildAnimationData()
 	{
-		for (GltfAnim& anim : m_animations)
+		for (GltfAnimInfo& anim : m_animations)
 		{
 			AnimClip* animClip = EchoNew(AnimClip);
 			animClip->m_name = anim.m_name;

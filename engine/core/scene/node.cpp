@@ -79,6 +79,26 @@ namespace Echo
 		invMat = invMat * matRot;
 	}
 
+	// operate "*"
+	Node::Transform Node::Transform::operator* (const Transform& b) const
+	{
+		Transform result;
+
+		result.m_quat = m_quat * b.m_quat;
+		result.m_scale = m_scale * b.m_scale;
+		result.m_pos = m_quat * (m_scale * b.m_pos);
+		result.m_pos += m_pos;
+
+		return result;
+	}
+
+	void Node::Transform::reset()
+	{
+		m_pos = Vector3::ZERO;
+		m_quat = Quaternion::IDENTITY;
+		m_scale = Vector3::ONE;
+	}
+
 	Node::Node()
 		: m_parent(NULL)
 		, m_isEnable(true)
