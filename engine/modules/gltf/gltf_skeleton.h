@@ -45,6 +45,9 @@ namespace Echo
 		//  query clip data
 		void extractClipData(AnimClip* clip);
 
+		// joint transform
+		void jointInhertParentTransform(i32 parent);
+
 	private:
 		ResourcePath					m_assetPath;
 		GltfResPtr						m_asset;			// gltf asset ptr

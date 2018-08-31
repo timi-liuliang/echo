@@ -44,7 +44,7 @@ void main()
 
 	mat4 worldMatrix = u_WorldMatrix * skinMat;
 #else
-	mat4 worldMatrix = u_WorldMatrix
+	mat4 worldMatrix = u_WorldMatrix;
 #endif
 
 	gl_Position	= u_ViewProjMatrix * worldMatrix * a_Position; // needs w for proper perspective correction

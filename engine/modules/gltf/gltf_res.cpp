@@ -984,7 +984,7 @@ namespace Echo
 	bool GltfRes::loadSkins(nlohmann::json& json)
 	{
 		if (json.find("skins") == json.end())
-			return false;
+			return true;
 
 		nlohmann::json& skins = json["skins"];
 		if (!skins.is_array())

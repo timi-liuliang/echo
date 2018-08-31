@@ -131,6 +131,29 @@ namespace Echo
 					}
 				}
 			}
+
+			for (GltfSceneInfo& scene : m_asset->m_scenes)
+			{
+				for (ui32 rootNodeIdx : scene.m_nodes)
+				{
+					jointInhertParentTransform(rootNodeIdx);
+				}
+			}
+		}
+	}
+
+	// joint transform
+	void GltfSkeleton::jointInhertParentTransform(i32 nodeIdx)
+	{
+		const GltfNodeInfo& nodeInfo = m_asset->m_nodes[nodeIdx];
+		if (nodeInfo.m_parent != -1)
+		{
+			m_nodeTransforms[nodeIdx] = m_nodeTransforms[nodeInfo.m_parent] * m_nodeTransforms[nodeIdx];
+		}
+
+		for (ui32 child : nodeInfo.m_children)
+		{
+			jointInhertParentTransform(child);
 		}
 	}
 

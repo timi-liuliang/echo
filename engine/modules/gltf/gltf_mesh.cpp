@@ -74,10 +74,13 @@ namespace Echo
 		m_skinIdx = m_asset->m_nodes[m_nodeIdx].m_skin;
 
 		// prepare joints matrix
-		const GltfSkinInfo& skinInfo = m_asset->m_skins[m_skinIdx];
-		if (skinInfo.m_joints.size())
+		if (m_skinIdx != -1)
 		{
-			m_jointMatrixs.resize(skinInfo.m_joints.size());
+			const GltfSkinInfo& skinInfo = m_asset->m_skins[m_skinIdx];
+			if (skinInfo.m_joints.size())
+			{
+				m_jointMatrixs.resize(skinInfo.m_joints.size());
+			}
 		}
 
 		m_renderableDirty = true;
