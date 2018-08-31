@@ -24,109 +24,80 @@ namespace Echo
 		m_interpolationType = type;
 	}
 
-	void AnimPropertyFloat::addKey(float time, float value)
+	AnimPropertyCurve::AnimPropertyCurve(AnimProperty::Type type, i32 curveCount)
+		: AnimProperty(type)
 	{
-		m_curve->addKey(time, value);
-	}
-
-	AnimPropertyVec3::AnimPropertyVec3()
-		: AnimProperty(Type::Vector3)
-	{
-		m_curves[0] = EchoNew(AnimCurve);
-		m_curves[1] = EchoNew(AnimCurve);
-		m_curves[2] = EchoNew(AnimCurve);
+		m_curves.reserve(curveCount);
+		for (i32 i = 0; i < curveCount; i++)
+		{
+			m_curves.push_back(EchoNew(AnimCurve));
+		}
 	}
 
 	// set interpolation type
-	void AnimPropertyVec3::setInterpolationType(AnimCurve::InterpolationType type)
+	void AnimPropertyCurve::setInterpolationType(AnimCurve::InterpolationType type)
 	{
 		AnimProperty::setInterpolationType(type);
-		m_curves[0]->setType(type);
-		m_curves[1]->setType(type);
-		m_curves[2]->setType(type);
+		for (AnimCurve* curve : m_curves)
+		{
+			curve->setType(type);
+		}
+	}
+
+	// optimize
+	void AnimPropertyCurve::optimize()
+	{
+		for (AnimCurve* curve : m_curves)
+		{
+			curve->optimize();
+		}
 	}
 
 	// get length
-	float AnimPropertyVec3::getLength()
+	float AnimPropertyCurve::getLength()
 	{
 		float length = 0.f;
-		for (int i = 0; i < 3; i++)
+		for (AnimCurve* curve : m_curves)
 		{
-			if (m_curves[i]->getLength() > length)
-				length = m_curves[i]->getLength();
+			if (curve->getLength() > length)
+				length = curve->getLength();
 		}
 
 		return length;
 	}
 
-	// get value
-	const Vector3& AnimPropertyVec3::getValue()
-	{
-		return m_value;
-	}
+	AnimPropertyVec3::AnimPropertyVec3()
+		: AnimPropertyCurve(Type::Vector3, 3)
+	{}
 
 	// add key
 	void AnimPropertyVec3::addKey(float time, const Vector3& value)
 	{
-		m_curves[0]->addKey(time, value.x);
-		m_curves[1]->addKey(time, value.y);
-		m_curves[2]->addKey(time, value.z);
+		for (size_t i = 0; i < m_curves.size(); i++)
+			m_curves[i]->addKey(time, value[i]);
 	}
 
 	// update to time
 	void AnimPropertyVec3::updateToTime(float time)
 	{
-		m_value.x = m_curves[0]->getValue(time);
-		m_value.y = m_curves[1]->getValue(time);
-		m_value.z = m_curves[2]->getValue(time);
+		for (size_t i = 0; i < m_curves.size(); i++)
+			m_value[i] = m_curves[i]->getValue(time);
 	}
 
 	AnimPropertyVec4::AnimPropertyVec4() 
-		: AnimProperty(Type::Vector4)
-	{
-		m_curves[0] = EchoNew(AnimCurve);
-		m_curves[1] = EchoNew(AnimCurve);
-		m_curves[2] = EchoNew(AnimCurve);
-		m_curves[3] = EchoNew(AnimCurve);
-	}
+		: AnimPropertyCurve(Type::Vector4, 4)
+	{}
 
 	void AnimPropertyVec4::addKey(float time, const Vector4& value)
 	{
-		m_curves[0]->addKey(time, value.x);
-		m_curves[1]->addKey(time, value.y);
-		m_curves[2]->addKey(time, value.z);
-		m_curves[3]->addKey(time, value.w);
+		for (size_t i = 0; i < m_curves.size(); i++)
+			m_curves[i]->addKey(time, value[i]);
 	}
 
 	void AnimPropertyVec4::updateToTime(float time)
 	{
-		m_value.x = m_curves[0]->getValue(time);
-		m_value.y = m_curves[1]->getValue(time);
-		m_value.z = m_curves[2]->getValue(time);
-		m_value.w = m_curves[3]->getValue(time);
-	}
-
-	// set interpolation type
-	void AnimPropertyVec4::setInterpolationType(AnimCurve::InterpolationType type)
-	{
-		AnimProperty::setInterpolationType(type);
-		m_curves[0]->setType(type);
-		m_curves[1]->setType(type);
-		m_curves[2]->setType(type);
-		m_curves[3]->setType(type);
-	}
-
-	// get length
-	float AnimPropertyVec4::getLength()
-	{
-		float length = 0.f;
-		for (int i = 0; i < 4; i++)
-		{
-			if (m_curves[i]->getLength() > length)
-				length = m_curves[i]->getLength();
-		}
-
-		return length;
+		for (size_t i = 0; i < m_curves.size(); i++)
+			m_value[i] = m_curves[i]->getValue(time);
 	}
 
 	void AnimPropertyQuat::addKey(float time, const Quaternion& value)

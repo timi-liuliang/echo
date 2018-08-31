@@ -30,7 +30,7 @@ namespace Echo
 		virtual void setInterpolationType(AnimCurve::InterpolationType type);
 
 		// optimize
-		virtual void optimize(){}
+		virtual void optimize() = 0;
 
 		// update to time
 		virtual void updateToTime(float time) = 0;
@@ -39,48 +39,44 @@ namespace Echo
 		virtual float getLength() = 0;
 	};
 
-	struct AnimPropertyFloat : public AnimProperty
+	struct AnimPropertyCurve : public AnimProperty
 	{
-		float		m_value;
-		AnimCurve*	m_curve;
+		vector<AnimCurve*>::type m_curves;
 
-		// add key
-		void addKey(float time, float value);
+		AnimPropertyCurve(Type type, i32 curveCount);
+
+		// set interpolation type
+		virtual void setInterpolationType(AnimCurve::InterpolationType type) override;
+
+		// optimize
+		virtual void optimize() override;
 
 		// update to time
 		virtual void updateToTime(float time) override{}
 
 		// get length
-		virtual float getLength() override { return m_curve->getLength(); }
+		virtual float getLength() override;
 	};
 
-	struct AnimPropertyVec3 : public AnimProperty
+	struct AnimPropertyVec3 : public AnimPropertyCurve
 	{
 		Vector3		m_value;
-		AnimCurve*	m_curves[3];
 
 		AnimPropertyVec3();
 
-		// set interpolation type
-		virtual void setInterpolationType(AnimCurve::InterpolationType type) override;
-
 		// get value
-		const Vector3& getValue();
+		const Vector3& getValue() { return m_value; }
 
 		// add key
 		void addKey(float time, const Vector3& value);
 
 		// update to time
 		virtual void updateToTime(float time) override;
-
-		// get length
-		virtual float getLength() override;
 	};
 
-	struct AnimPropertyVec4 : public AnimProperty
+	struct AnimPropertyVec4 : public AnimPropertyCurve
 	{
 		Vector4		m_value;
-		AnimCurve*	m_curves[4];
 
 		AnimPropertyVec4();
 
@@ -92,12 +88,6 @@ namespace Echo
 
 		// update to time
 		virtual void updateToTime(float time) override;
-
-		// set interpolation type
-		virtual void setInterpolationType(AnimCurve::InterpolationType type) override;
-
-		// get length
-		virtual float getLength() override;
 	};
 
 	struct AnimPropertyQuat : public AnimProperty
@@ -117,6 +107,9 @@ namespace Echo
 
 		// add key
 		void addKey(float time, const Quaternion& value);
+
+		// optimize
+		virtual void optimize() override {}
 
 		// update to time
 		virtual void updateToTime(float time) override;
