@@ -815,7 +815,10 @@ namespace Echo
 					m_meshes[i].m_primitives[j].m_attributes[it.key()] = it.value();
 				}
 
-				buildPrimitiveData(i, j);
+				if (!buildPrimitiveData(i, j))
+				{
+					EchoLogError("gltf build primitive data error");
+				}
 			}
 		}
 		return true;
@@ -883,7 +886,7 @@ namespace Echo
 			vertexData.set(vertFormat, access.m_count);
 			if (it.first == "POSITION")
 			{
-				if (access.m_type == GltfAccessorInfo::Vec3)
+				if (access.m_type == GltfAccessorInfo::Vec3 && access.m_componentType == GltfAccessorInfo::ComponentType::Float)
 				{
 					Vector3* positions = (Vector3*)buffer.getData(bufferView.m_byteOffset + access.m_byteOffset);
 					for (int i = 0; i < vertCount; i++)
@@ -896,7 +899,7 @@ namespace Echo
 			}
 			else if (it.first == "NORMAL")
 			{
-				if (access.m_type == GltfAccessorInfo::Vec3)
+				if (access.m_type == GltfAccessorInfo::Vec3 && access.m_componentType == GltfAccessorInfo::ComponentType::Float)
 				{
 					Vector3* normals = (Vector3*)buffer.getData(bufferView.m_byteOffset + access.m_byteOffset);
 					for (int i = 0; i < vertCount; i++)
@@ -909,7 +912,7 @@ namespace Echo
 			}
 			else if (it.first == "TEXCOORD_0")
 			{
-				if (access.m_type == GltfAccessorInfo::Vec2)
+				if (access.m_type == GltfAccessorInfo::Vec2 && access.m_componentType == GltfAccessorInfo::ComponentType::Float)
 				{
 					Vector2* uv0s = (Vector2*)buffer.getData(bufferView.m_byteOffset + access.m_byteOffset);
 					for (int i = 0; i < vertCount; i++)
@@ -922,11 +925,13 @@ namespace Echo
 			}
 			else if (it.first == "WEIGHTS_0")
 			{
-				if (access.m_type == GltfAccessorInfo::Vec4)
+				if (access.m_type == GltfAccessorInfo::Vec4 && access.m_componentType == GltfAccessorInfo::ComponentType::Float)
 				{
 					Vector4* weights = (Vector4*)buffer.getData(bufferView.m_byteOffset + access.m_byteOffset);
 					for (int i = 0; i < vertCount; i++)
+					{
 						vertexData.setWeight(i, weights[i]);
+					}
 				}
 				else
 				{
@@ -935,17 +940,17 @@ namespace Echo
 			}
 			else if (it.first == "JOINTS_0")
 			{
-				if (access.m_type == GltfAccessorInfo::Vec4)
+				if (access.m_type == GltfAccessorInfo::Vec4 && access.m_componentType==GltfAccessorInfo::ComponentType::UnsignedShort)
 				{
 					ui8 joint[4];
-					Vector4* joints = (Vector4*)buffer.getData(bufferView.m_byteOffset + access.m_byteOffset);
+					ui16* joints = (ui16*)buffer.getData(bufferView.m_byteOffset + access.m_byteOffset);
 					for (int i = 0; i < vertCount; i++)
 					{
-						joint[0] = (ui8)joints[i].x;
-						joint[1] = (ui8)joints[i].y;
-						joint[2] = (ui8)joints[i].z;
-						joint[3] = (ui8)joints[i].w;
-						vertexData.setJoint(i, *(const Dword*)joint);
+						joint[0] = (ui8)joints[i * 4 + 0];
+						joint[1] = (ui8)joints[i * 4 + 1];
+						joint[2] = (ui8)joints[i * 4 + 2];
+						joint[3] = (ui8)joints[i * 4 + 3];
+						vertexData.setJoint(i, *(const Dword*)joint);		
 					}
 				}
 				else
@@ -1019,11 +1024,18 @@ namespace Echo
 				GltfAccessorInfo&   access = m_accessors[skin.m_inverseBindMatrices];
 				GltfBufferViewInfo& bufferView = m_bufferViews[access.m_bufferView];
 				GltfBufferInfo&		buffer = m_buffers[bufferView.m_bufferIdx];
-				Matrix4*			inverseMatrixData = (Matrix4*)buffer.getData(bufferView.m_byteOffset + access.m_byteOffset);
-				skin.m_inverseMatrixs.resize(joints.size());
-				for (ui32 j = 0; j < joints.size(); j++)
+				if (access.m_type == GltfAccessorInfo::Type::Mat4)
 				{
-					skin.m_inverseMatrixs[j] = inverseMatrixData[j];
+					Matrix4*			inverseMatrixData = (Matrix4*)buffer.getData(bufferView.m_byteOffset + access.m_byteOffset);
+					skin.m_inverseMatrixs.resize(joints.size());
+					for (ui32 j = 0; j < joints.size(); j++)
+					{
+						skin.m_inverseMatrixs[j] = inverseMatrixData[j];
+					}
+				}
+				else
+				{
+					EchoLogError("gltf assert skin inverse matrix's type must be mat4...");
 				}
 			}
 			else
