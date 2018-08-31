@@ -134,7 +134,6 @@ namespace Echo
 		return true;
 	}
 
-	// 应用变量
 	void GLES2ShaderProgram::bindUniforms()
 	{
 		for (UniformArray::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++)
@@ -167,28 +166,31 @@ namespace Echo
 		}
 	}
 	
-	// 绑定着色器
 	void GLES2ShaderProgram::bind()
 	{
-		EchoAssertX(m_bLinked, "The shader program has not been linked.");
-	
-		// Install the shader program as part of the current rendering state.
-		if ((ECHO_DOWN_CAST<GLES2Renderer*>(Renderer::instance()))->bindShaderProgram(this))
+		if (m_bLinked)
 		{
-			OGLESDebug(glUseProgram(m_hProgram));
-
-			// 所有变量设置脏标记
-			for( UniformArray::iterator it=m_uniforms.begin(); it!=m_uniforms.end(); it++)
+			// Install the shader program as part of the current rendering state.
+			if ((ECHO_DOWN_CAST<GLES2Renderer*>(Renderer::instance()))->bindShaderProgram(this))
 			{
-				Uniform& uniform = it->second;
-				uniform.m_isDirty = true;
-			}
+				OGLESDebug(glUseProgram(m_hProgram));
 
-			m_preRenderable = NULL;
+				// set dirty flag
+				for (UniformArray::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++)
+				{
+					Uniform& uniform = it->second;
+					uniform.m_isDirty = true;
+				}
+
+				m_preRenderable = NULL;
+			}
+		}
+		else
+		{
+			EchoLogError("The shader program has not been linked.");
 		}
 	}
 
-	// 绑定几何体数据
 	void GLES2ShaderProgram::bindRenderable(Renderable* renderInput)
 	{
 		GLES2Renderable* ra = ECHO_DOWN_CAST<GLES2Renderable*>(renderInput);
@@ -202,7 +204,6 @@ namespace Echo
 		return m_attribLocationMapping[vertexSemantic];
 	}
 
-	// 解绑着色器
 	void GLES2ShaderProgram::unbind()
 	{
 	}

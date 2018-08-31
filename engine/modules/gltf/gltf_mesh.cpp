@@ -184,6 +184,10 @@ namespace Echo
 			static Vector3 lightColor(2.f, 2.f, 2.f);
 			return &lightColor;
 		}
+		else if (name == "u_JointMatrixs")
+		{
+			return m_jointMatrixs.data();
+		}
 		//else if (name == "u_DiffuseEnvSampler")
 		//{
 		//	static i32 idx = i32(GltfImageBasedLight::TextureIndex::DiffuseCube);

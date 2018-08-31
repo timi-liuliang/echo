@@ -68,7 +68,6 @@ namespace Echo
 		}
 	}
 
-	// °ó¶¨Ö¡»º³å
 	void GLES2FrameBuffer::bind()
 	{
 		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_hFBO));

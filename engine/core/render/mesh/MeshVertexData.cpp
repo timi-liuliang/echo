@@ -31,7 +31,7 @@ namespace Echo
 		m_uv1Offset = m_uv0Offset + (m_isUseUV ? sizeof(Vector2) : 0);
 		m_boneIndicesOffset = m_uv1Offset + (m_isUseLightmapUV ? sizeof(Vector2) : 0);
 		m_boneWeightsOffset = m_boneIndicesOffset + (m_isUseBoneData ? sizeof(Dword) : 0);
-		m_tangentOffset = m_boneWeightsOffset + (m_isUseBoneData ? sizeof(Vector3) : 0);
+		m_tangentOffset = m_boneWeightsOffset + (m_isUseBoneData ? sizeof(Vector4) : 0);
 		m_stride = m_tangentOffset + (m_isUseTangentBinormal ? sizeof(Vector3) * 2 : 0);
 
 		m_vertexElements.clear();
@@ -59,7 +59,7 @@ namespace Echo
 		if (m_isUseBoneData)
 		{
 			m_vertexElements.push_back(VertexElement(VS_BLENDINDICES, PF_RGBA8_UINT));
-			m_vertexElements.push_back(VertexElement(VS_BLENDWEIGHTS, PF_RGB32_FLOAT));
+			m_vertexElements.push_back(VertexElement(VS_BLENDWEIGHTS, PF_RGBA32_FLOAT));
 		}
 
 		// 切空间数据
@@ -165,6 +165,20 @@ namespace Echo
 		*(Vector3*)(getVertice(idx) + m_format.m_posOffset) = pos;
 
 		m_aabb.addPoint(pos);
+	}
+
+	// set skin weight
+	void MeshVertexData::setJoint(int idx, Dword weight)
+	{
+		if(m_format.m_isUseBoneData)
+			*(Dword*)(getVertice(idx) + m_format.m_boneIndicesOffset) = weight;
+	}
+
+	// set skin joint
+	void MeshVertexData::setWeight(int idx, const Vector4& joint)
+	{
+		if (m_format.m_isUseBoneData)
+			*(Vector4*)(getVertice(idx) + m_format.m_boneWeightsOffset) = joint;
 	}
 
 	// 获取顶点法线数据

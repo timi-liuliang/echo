@@ -12,9 +12,16 @@ attribute vec4 a_Tangent;
 attribute vec2 a_UV;
 #endif
 
-uniform mat4 u_WorldViewProjMatrix;
+uniform mat4 u_ViewProjMatrix;
 uniform mat4 u_WorldMatrix;
 uniform mat4 u_NormalMatrix;
+
+#ifdef HAS_SKIN
+attribute vec4	a_Weight;
+attribute vec4	a_Joint;
+
+uniform mat4	u_JointMatrixs[64];
+#endif
 
 varying vec3 v_Position;
 varying vec2 v_UV;
@@ -29,27 +36,38 @@ varying vec3 v_Normal;
 
 void main()
 {
-  vec4 pos = u_WorldMatrix * a_Position;
-  v_Position = vec3(pos.xyz) / pos.w;
+#ifdef HAS_SKIN
+	mat4 skinMat = a_Weight.x * u_JointMatrixs[int(a_Joint.x)] +
+				   a_Weight.y * u_JointMatrixs[int(a_Joint.y)] +
+				   a_Weight.z * u_JointMatrixs[int(a_Joint.z)] +
+				   a_Weight.w * u_JointMatrixs[int(a_Joint.w)];
 
-  #ifdef HAS_NORMALS
-  #ifdef HAS_TANGENTS
-  vec3 normalW = normalize(vec3(u_NormalMatrix * vec4(a_Normal.xyz, 0.0)));
-  vec3 tangentW = normalize(vec3(u_WorldMatrix * vec4(a_Tangent.xyz, 0.0)));
-  vec3 bitangentW = cross(normalW, tangentW) * a_Tangent.w;
-  v_TBN = mat3(tangentW, bitangentW, normalW);
-  #else // HAS_TANGENTS != 1
-  v_Normal = normalize(vec3(u_WorldMatrix * vec4(a_Normal.xyz, 0.0)));
-  #endif
-  #endif
+	mat4 worldMatrix = u_WorldMatrix * skinMat;
+#else
+	mat4 worldMatrix = u_WorldMatrix
+#endif
+
+	gl_Position	= u_ViewProjMatrix * worldMatrix * a_Position; // needs w for proper perspective correction
+
+	vec4 pos   = worldMatrix * a_Position;
+	v_Position = vec3(pos.xyz) / pos.w;
+
+	#ifdef HAS_NORMALS
+		#ifdef HAS_TANGENTS
+			vec3 normalW = normalize(vec3(u_NormalMatrix * vec4(a_Normal.xyz, 0.0)));
+			vec3 tangentW = normalize(vec3(worldMatrix * vec4(a_Tangent.xyz, 0.0)));
+			vec3 bitangentW = cross(normalW, tangentW) * a_Tangent.w;
+			v_TBN = mat3(tangentW, bitangentW, normalW);
+		#else // HAS_TANGENTS != 1
+			v_Normal = normalize(vec3(worldMatrix * vec4(a_Normal.xyz, 0.0)));
+		#endif
+	#endif
 
   #ifdef HAS_UV
-  v_UV = a_UV;
+	v_UV = a_UV;
   #else
-  v_UV = vec2(0.,0.);
+	v_UV = vec2(0.,0.);
   #endif
-
-  gl_Position = u_WorldViewProjMatrix * a_Position; // needs w for proper perspective correction
 }
 )";
 

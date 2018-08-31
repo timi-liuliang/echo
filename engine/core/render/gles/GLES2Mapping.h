@@ -409,8 +409,8 @@ namespace Echo
 			switch(semantic)
 			{
 			case VS_POSITION:			return "a_Position";
-			case VS_BLENDINDICES:		return "a_BlendIndices";
-			case VS_BLENDWEIGHTS:		return "a_BlendWeights";
+			case VS_BLENDINDICES:		return "a_Joint";
+			case VS_BLENDWEIGHTS:		return "a_Weight";
 			case VS_COLOR:				return "a_Color";
 			case VS_NORMAL:				return "a_Normal";
 			case VS_TEXCOORD0:			return "a_UV";

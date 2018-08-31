@@ -8,7 +8,6 @@ namespace Echo
 	GLES2Shader::GLES2Shader(ShaderType type, const ShaderDesc& desc, const String& filename)
 		: Shader(type, desc, filename)
 	{
-		// Ìæ»»includeÎÄ¼þ
 		replaceInclude();
 		create(filename);
 	}
@@ -28,7 +27,6 @@ namespace Echo
 		}
 	}
 
-	// Ìæ»»include
 	void GLES2Shader::replaceInclude()
 	{
 		String::size_type pos = m_srcData.find("#include");

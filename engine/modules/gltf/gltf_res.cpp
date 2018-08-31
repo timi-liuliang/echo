@@ -824,6 +824,7 @@ namespace Echo
 	bool GltfRes::buildPrimitiveData(int meshIdx, int primitiveIdx)
 	{
 		GltfPrimitive& primitive = m_meshes[meshIdx].m_primitives[primitiveIdx];
+		const GltfAttributes& attributes = primitive.m_attributes;
 
 		// indices
 		ui16* indicesDataShort = nullptr;
@@ -853,8 +854,9 @@ namespace Echo
 
 		// parse vertex format
 		MeshVertexFormat vertFormat;
-		vertFormat.m_isUseNormal = primitive.m_attributes.find("NORMAL") != primitive.m_attributes.end();
-		vertFormat.m_isUseUV = primitive.m_attributes.find("TEXCOORD_0") != primitive.m_attributes.end();
+		vertFormat.m_isUseNormal = attributes.find("NORMAL") != attributes.end();
+		vertFormat.m_isUseUV = attributes.find("TEXCOORD_0") != attributes.end();
+		vertFormat.m_isUseBoneData = attributes.find("WEIGHTS_0") != attributes.end() && attributes.find("JOINTS_0") != attributes.end();
 
 		// parse vertex count
 		int vertCount = 0;
@@ -912,6 +914,39 @@ namespace Echo
 					Vector2* uv0s = (Vector2*)buffer.getData(bufferView.m_byteOffset + access.m_byteOffset);
 					for (int i = 0; i < vertCount; i++)
 						vertexData.setUV0(i, uv0s[i]);
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else if (it.first == "WEIGHTS_0")
+			{
+				if (access.m_type == GltfAccessorInfo::Vec4)
+				{
+					Vector4* weights = (Vector4*)buffer.getData(bufferView.m_byteOffset + access.m_byteOffset);
+					for (int i = 0; i < vertCount; i++)
+						vertexData.setWeight(i, weights[i]);
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else if (it.first == "JOINTS_0")
+			{
+				if (access.m_type == GltfAccessorInfo::Vec4)
+				{
+					ui8 joint[4];
+					Vector4* joints = (Vector4*)buffer.getData(bufferView.m_byteOffset + access.m_byteOffset);
+					for (int i = 0; i < vertCount; i++)
+					{
+						joint[0] = (ui8)joints[i].x;
+						joint[1] = (ui8)joints[i].y;
+						joint[2] = (ui8)joints[i].z;
+						joint[3] = (ui8)joints[i].w;
+						vertexData.setJoint(i, *(const Dword*)joint);
+					}
 				}
 				else
 				{
@@ -1022,6 +1057,7 @@ namespace Echo
 		primitive.m_materialInst->setMacro("SRGB_FAST_APPROXIMATION", true);
 		primitive.m_materialInst->setMacro("HAS_NORMALS", vertexFormat.m_isUseNormal);
 		primitive.m_materialInst->setMacro("HAS_UV", vertexFormat.m_isUseUV);
+		primitive.m_materialInst->setMacro("HAS_SKIN", vertexFormat.m_isUseBoneData);
 		primitive.m_materialInst->setMacro("HAS_BASECOLORMAP", baseColorTextureIdx != -1);
 		primitive.m_materialInst->setMacro("HAS_METALROUGHNESSMAP", metalicRoughnessIdx != -1);
 		primitive.m_materialInst->setMacro("HAS_NORMALMAP", normalTextureIdx != -1);

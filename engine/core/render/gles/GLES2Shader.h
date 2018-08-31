@@ -15,12 +15,13 @@ namespace Echo
 	private:
 		void create(const String& filename);
 
-		// ≤Â»Î∫Í∂®“Â
+		// insert macros
 		void insertMacros();
 
-		// ÃÊªªinclude
+		// replace include
 		void replaceInclude();
 
+		// mapping
 		GLenum GLenumMap(const String& name);
 
 	public:

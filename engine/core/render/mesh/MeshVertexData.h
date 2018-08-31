@@ -20,7 +20,7 @@ namespace Echo
 		VS_TEXCOORD1,
 		// Blending indices	(Dword)
 		VS_BLENDINDICES,
-		// Blending weights(Vector3)
+		// Blending weights(Vector4)
 		VS_BLENDWEIGHTS,
 		// Tangent (X axis if normal is Z)
 		VS_TANGENT,
@@ -127,6 +127,12 @@ namespace Echo
 		// 获取顶点UV数据1
 		const Vector2& getUV1(Word index);
 
+		 // set skin weight
+		void setJoint(int idx, Dword weight);
+
+		// set skin joint
+		void setWeight(int idx, const Vector4& joint);
+
 		// 获取切线
 		Vector3& getTangent(Word index);
 
@@ -140,6 +146,6 @@ namespace Echo
 		ui32				m_count;		// 顶点数量
 		MeshVertexFormat	m_format;		// 顶点格式
 		ByteArray			m_vertices;		// 顶点数据
-		AABB					m_aabb;			// 轴向包围盒
+		AABB				m_aabb;			// 轴向包围盒
 	};
 }
