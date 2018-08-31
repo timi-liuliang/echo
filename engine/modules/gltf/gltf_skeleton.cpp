@@ -135,7 +135,7 @@ namespace Echo
 	}
 
 	// get node transform
-	bool GltfSkeleton::getNodeTransform(Transform& transform, size_t nodeIdx)
+	bool GltfSkeleton::getGltfNodeTransform(Transform& transform, size_t nodeIdx)
 	{
 		if (nodeIdx < m_nodeTransforms.size())
 		{

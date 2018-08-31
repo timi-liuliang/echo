@@ -62,12 +62,14 @@ namespace Echo
 		Matrix4					m_matWVP;
 		ResourcePath			m_assetPath;
 		GltfResPtr				m_asset;			// gltf asset ptr
-		int						m_nodeIdx;			// node index in the asset, used by skeleton
-		int						m_meshIdx;			// mesh index in the asset
+		i32						m_nodeIdx;			// node index in the asset, used by skeleton
+		i32						m_meshIdx;			// mesh index in the asset
+		i32						m_skinIdx;
 		int						m_primitiveIdx;		// sub mesh index
 		MaterialPtr				m_material;			// custom material
 		NodePath				m_skeletonPath;
 		bool					m_skeletonDirty;	// dirty flag
 		GltfSkeleton*			m_skeleton;
+		vector<Matrix4>::type	m_jointMatrixs;
 	};
 }

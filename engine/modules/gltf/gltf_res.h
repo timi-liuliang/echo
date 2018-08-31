@@ -52,6 +52,15 @@ namespace Echo
 		vector<GltfPrimitive>::type	m_primitives;
 	};
 
+	struct GltfSkinInfo
+	{
+		String					m_name;
+		i32						m_inverseBindMatrices = -1;
+		vector<Matrix4>::type	m_inverseMatrixs;
+		i32						m_skeleton;
+		vector<i32>::type		m_joints;
+	};
+
 	struct GltfNodeInfo
 	{
 		String				m_name;
@@ -274,6 +283,7 @@ namespace Echo
 		GltfMetaInfo						m_metaInfo;
 		vector<GltfSceneInfo>::type			m_scenes;
 		vector<GltfMeshInfo>::type			m_meshes;
+		vector<GltfSkinInfo>::type			m_skins;
 		vector<GltfNodeInfo>::type			m_nodes;
 		vector<GltfBufferInfo>::type		m_buffers;
 		vector<GltfBufferViewInfo>::type	m_bufferViews;
@@ -310,6 +320,7 @@ namespace Echo
 		bool loadSamplers(nlohmann::json& json);
 		bool loadTextures(nlohmann::json& json);
 		bool loadMeshes(nlohmann::json& json);
+		bool loadSkins(nlohmann::json& json);
 		bool loadAnimations(nlohmann::json& json);
 		bool buildAnimationData();
 		bool buildPrimitiveData(int meshIdx, int primitiveIdx);

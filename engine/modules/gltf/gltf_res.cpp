@@ -196,6 +196,12 @@ namespace Echo
 				return false;
 			}
 
+			if (!loadSkins(j))
+			{
+				EchoLogError("gltf parse skins failed when load resource [%s]", m_path.getPath().c_str());
+				return false;
+			}
+
 			if (!loadAnimations(j))
 			{
 				EchoLogError("gltf parse animations failed when load resource [%s]", m_path.getPath().c_str());
@@ -931,6 +937,65 @@ namespace Echo
 
 		if (!buildMaterial(meshIdx, primitiveIdx))
 			return false;
+
+		return true;
+	}
+
+	bool GltfRes::loadSkins(nlohmann::json& json)
+	{
+		if (json.find("skins") == json.end())
+			return false;
+
+		nlohmann::json& skins = json["skins"];
+		if (!skins.is_array())
+			return false;
+
+		m_skins.resize(skins.size());
+		for (ui32 i = 0; i < skins.size(); i++)
+		{
+			GltfSkinInfo& skin = m_skins[i];
+			nlohmann::json& skinJson = skins[i];
+
+			// name
+			if (!parseJsonValueString(skin.m_name, skinJson, "name", false))
+				return false;
+
+			// skeleton
+			if (!parseJsonValueI32(skin.m_skeleton, skinJson, "skeleton", false))
+				return false;
+
+			// joints
+			if (skinJson.find("joints") == skinJson.end())
+				return false;
+
+			nlohmann::json& joints = skinJson["joints"];
+			if (!joints.is_array())
+				return false;
+
+			skin.m_joints.resize(joints.size());
+			for (ui32 j = 0; j < joints.size(); j++)
+			{
+				skin.m_joints[j] = joints[j].get<i32>();
+			}
+
+			// inverse bind matrices
+			if (parseJsonValueI32(skin.m_inverseBindMatrices, skinJson, "inverseBindMatrices", false))
+			{
+				GltfAccessorInfo&   access = m_accessors[skin.m_inverseBindMatrices];
+				GltfBufferViewInfo& bufferView = m_bufferViews[access.m_bufferView];
+				GltfBufferInfo&		buffer = m_buffers[bufferView.m_bufferIdx];
+				Matrix4*			inverseMatrixData = (Matrix4*)buffer.getData(bufferView.m_byteOffset + access.m_byteOffset);
+				skin.m_inverseMatrixs.resize(joints.size());
+				for (ui32 j = 0; j < joints.size(); j++)
+				{
+					skin.m_inverseMatrixs[j] = inverseMatrixData[j];
+				}
+			}
+			else
+			{
+				return false;
+			}
+		}
 
 		return true;
 	}

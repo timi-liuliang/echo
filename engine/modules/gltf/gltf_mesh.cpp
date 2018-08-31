@@ -14,6 +14,7 @@ namespace Echo
 		, m_renderable(nullptr)
 		, m_nodeIdx(-1)
 		, m_meshIdx(-1)
+		, m_skinIdx(-1)
 		, m_primitiveIdx(-1)
 		, m_material(nullptr)
 		, m_skeletonDirty(false)
@@ -70,6 +71,15 @@ namespace Echo
 	{ 
 		m_meshIdx = meshIdx;
 		m_nodeIdx = m_asset->getNodeIdxByMeshIdx(m_meshIdx);
+		m_skinIdx = m_asset->m_nodes[m_nodeIdx].m_skin;
+
+		// prepare joints matrix
+		const GltfSkinInfo& skinInfo = m_asset->m_skins[m_skinIdx];
+		if (skinInfo.m_joints.size())
+		{
+			m_jointMatrixs.resize(skinInfo.m_joints.size());
+		}
+
 		m_renderableDirty = true;
 	}
 
@@ -132,16 +142,28 @@ namespace Echo
 	{
 		if (m_skeleton)
 		{
-			if (m_skeleton->getNodeTransform(m_localTransform, m_nodeIdx))
+			if (m_skeleton->getGltfNodeTransform(m_localTransform, m_nodeIdx))
 				needUpdate();
 		}
 	}
 
 	void GltfMesh::syncGltfSkinAnim()
 	{
-		if (m_skeleton)
+		if (m_skeleton && m_skinIdx!=-1)
 		{
-			const AnimClip* animClip = m_skeleton->getAnimClip();
+			Transform tranform;
+
+			const GltfSkinInfo& skinInfo = m_asset->m_skins[m_skinIdx];
+			for (size_t i = 0; i < skinInfo.m_joints.size(); i++)
+			{
+				if (m_skeleton->getGltfNodeTransform(tranform, skinInfo.m_joints[i]))
+				{
+					tranform.buildMatrix(m_jointMatrixs[i]);
+
+					// inverse matrix
+					m_jointMatrixs[i] = skinInfo.m_inverseMatrixs[i] * m_jointMatrixs[i];
+				}
+			}
 		}
 	}
 

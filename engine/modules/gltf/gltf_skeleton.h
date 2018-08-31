@@ -32,7 +32,7 @@ namespace Echo
 		bool isAnimExist(const char* animName);
 
 		// get node transform
-		bool getNodeTransform(Transform& transform, size_t nodeIdx);
+		bool getGltfNodeTransform(Transform& transform, size_t nodeIdx);
 
 	protected:
 		// update self
