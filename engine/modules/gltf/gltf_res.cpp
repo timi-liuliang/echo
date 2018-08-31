@@ -1253,8 +1253,6 @@ namespace Echo
 				else if (type == "MASK")	m_materials[i].m_alphaMode = GltfMaterialInfo::AlphaMode::Mask;
 				else if (type == "BLEND")	m_materials[i].m_alphaMode = GltfMaterialInfo::AlphaMode::Blend;
 				else                        return false;
-
-				return true;
 			}
 
 			// alphaCutoff
