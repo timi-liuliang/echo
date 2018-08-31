@@ -415,18 +415,6 @@ R"(<?xml version = "1.0" encoding = "utf-8"?>
 		<DepthEnable value = "true" />
 		<WriteDepth value = "true" />
 	</DepthStencilState>
-	<SamplerState>
-		<BiLinearMirror>
-			<MinFilter value = "FO_LINEAR" />
-			<MagFilter value = "FO_LINEAR" />
-			<MipFilter value = "FO_NONE" />
-			<AddrUMode value = "AM_CLAMP" />
-			<AddrVMode value = "AM_CLAMP" />
-		</BiLinearMirror>
-	</SamplerState>
-	<Texture>
-		<stage no = "0" sampler = "BiLinearMirror" />
-	</Texture>
 </Shader>
 )";
 
