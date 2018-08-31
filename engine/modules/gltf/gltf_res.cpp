@@ -1418,7 +1418,7 @@ namespace Echo
 				for (size_t i = 0; i < meshInfo.m_primitives.size(); i++)
 				{
 					GltfMesh* mesh = Class::create<GltfMesh*>("GltfMesh");
-					mesh->setName(info.m_name.empty() ? mesh->getClassName() : info.m_name);
+					mesh->setName(m_meshes[info.m_mesh].m_name);
 					mesh->setGltfRes(m_path);
 					mesh->setMeshIdx(info.m_mesh);
 					mesh->setPrimitiveIdx(i);
@@ -1442,8 +1442,9 @@ namespace Echo
 			// translation
 			node->setLocalPosition(info.m_translation);
 
-			// set node property
-			node->setName(info.m_name.empty() ? node->getClassName() : info.m_name);
+			// set node name
+			if( node->getName().empty())
+				node->setName(info.m_name.empty() ? node->getClassName() : info.m_name);
 		}
 		nodes.insert(nodes.end(), curNodes.begin(), curNodes.end());
 

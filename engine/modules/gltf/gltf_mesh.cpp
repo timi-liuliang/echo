@@ -132,37 +132,8 @@ namespace Echo
 	{
 		if (m_skeleton)
 		{
-			const AnimClip* clip = m_skeleton->getAnimClip();
-			if (clip)
-			{
-				for (AnimNode* animNode : clip->m_nodes)
-				{
-					i32 nodeIdx = any_cast<i32>(animNode->m_userData);
-					if (nodeIdx == m_nodeIdx)
-					{
-						for (AnimProperty* property : animNode->m_properties)
-						{
-							GltfAnimChannel::Path channelPath = any_cast<GltfAnimChannel::Path>(property->m_userData);
-							switch (channelPath)
-							{
-							case GltfAnimChannel::Path::Rotation:
-							{
-								AnimPropertyQuat* pv4 = ECHO_DOWN_CAST<AnimPropertyQuat*>(property);
-								setLocalOrientation(pv4->getValue());
-							}
-							break;
-							default:
-							{
-								EchoLogError("Unprocessed gltf anim property type");
-							}
-							break;
-							}
-						}
-
-						break;
-					}
-				}
-			}
+			if (m_skeleton->getNodeTransform(m_localTransform, m_nodeIdx))
+				needUpdate();
 		}
 	}
 

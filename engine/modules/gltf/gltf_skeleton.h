@@ -31,6 +31,9 @@ namespace Echo
 		// is anim exist
 		bool isAnimExist(const char* animName);
 
+		// get node transform
+		bool getNodeTransform(Transform& transform, size_t nodeIdx);
+
 	protected:
 		// update self
 		virtual void update_self() override;
@@ -47,7 +50,6 @@ namespace Echo
 		GltfResPtr						m_asset;			// gltf asset ptr
 		StringOption					m_animations;
 		vector<AnimClip*>::type			m_clips;
-		vector<Node::Transform>::type	m_boneTransforms;
-		vector<Matrix4>::type			m_boneMatrixs;		// node transformed matrix
+		vector<Node::Transform>::type	m_nodeTransforms;
 	};
 }

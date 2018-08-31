@@ -1,4 +1,5 @@
 #include "gltf_skeleton.h"
+#include "engine/core/log/Log.h"
 #include "engine/core/main/Engine.h"
 
 namespace Echo
@@ -42,6 +43,12 @@ namespace Echo
 						m_clips.push_back(clip);
 						m_animations.addOption(clip->m_name);
 					}
+				}
+
+				if (m_asset->m_animations.size() && m_asset->m_nodes.size())
+				{
+					if (m_nodeTransforms.empty())
+						m_nodeTransforms.resize(m_asset->m_nodes.size());
 				}
 			}
 		}
@@ -116,13 +123,26 @@ namespace Echo
 					GltfAnimChannel::Path channelPath = any_cast<GltfAnimChannel::Path>(property->m_userData);
 					switch (channelPath)
 					{
-						//Translation,
-						//	Rotation,
-						//	Scale,
-						//	Weights,
+					case GltfAnimChannel::Path::Translation:	m_nodeTransforms[nodeIdx].m_pos = ((AnimPropertyVec3*)property)->getValue(); break;
+					case GltfAnimChannel::Path::Rotation:		m_nodeTransforms[nodeIdx].m_quat = ((AnimPropertyQuat*)property)->getValue(); break;
+					case GltfAnimChannel::Path::Scale:			m_nodeTransforms[nodeIdx].m_scale = ((AnimPropertyVec3*)property)->getValue(); break;
+					//case GltfAnimChannel::Path::Weights:		m_nodeTransforms[nodeIdx].m_pos = ((AnimPropertyVec3*)property)->getValue(); break;
+					default: EchoLogError("Unprocessed gltf anim data form gltf skeleton");	break;
 					}
 				}
 			}
 		}
+	}
+
+	// get node transform
+	bool GltfSkeleton::getNodeTransform(Transform& transform, size_t nodeIdx)
+	{
+		if (nodeIdx < m_nodeTransforms.size())
+		{
+			transform = m_nodeTransforms[nodeIdx];
+			return true;
+		}
+
+		return false;
 	}
 }
