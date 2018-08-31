@@ -722,16 +722,12 @@ namespace Echo
 						animProperty->setInterpolationType(MappingInterpolationType(sampler.m_interpolation));
 
 						// key values
-						GltfBufferViewInfo& timeBufferView = m_bufferViews[timeAccess.m_bufferView];
-						GltfBufferInfo&		timeBuffer = m_buffers[timeBufferView.m_bufferIdx];
-						float*				timeData = (float*)timeBuffer.getData(timeBufferView.m_byteOffset + timeAccess.m_byteOffset);
-						GltfBufferViewInfo& keyBufferView = m_bufferViews[keyAccess.m_bufferView];
-						GltfBufferInfo&		keyBuffer = m_buffers[keyBufferView.m_bufferIdx];
+						float*				timeData = getAccessData<float*>(timeAccess);
 						switch (keyAccess.m_type)
 						{
 						case GltfAccessorInfo::Type::Vec3:
 						{
-							Vector3* keyData = (Vector3*)keyBuffer.getData(keyBufferView.m_byteOffset + keyAccess.m_byteOffset);
+							Vector3* keyData = getAccessData<Vector3*>(keyAccess);
 							for (ui32 i = 0; i < timeAccess.m_count; i++)
 							{
 								float time = timeData[i];
@@ -741,7 +737,7 @@ namespace Echo
 						break;
 						case GltfAccessorInfo::Type::Vec4:
 						{
-							Quaternion* keyData = (Quaternion*)keyBuffer.getData(keyBufferView.m_byteOffset + keyAccess.m_byteOffset);
+							Quaternion* keyData = getAccessData<Quaternion*>(keyAccess);
 							for (ui32 i = 0; i < timeAccess.m_count; i++)
 							{
 								float time = timeData[i];
@@ -844,16 +840,14 @@ namespace Echo
 		if (primitive.m_indices != -1)
 		{
 			GltfAccessorInfo&   access = m_accessors[primitive.m_indices];
-			GltfBufferViewInfo& bufferView = m_bufferViews[access.m_bufferView];
-			GltfBufferInfo&		buffer = m_buffers[bufferView.m_bufferIdx];
 			if (access.m_componentType == GltfAccessorInfo::UnsignedShort)
 			{
-				indicesDataShort = (ui16*)buffer.getData(bufferView.m_byteOffset);
+				indicesDataShort = getAccessData<ui16*>(access);
 				indicesCount = access.m_count;
 			}
 			else if (access.m_componentType == GltfAccessorInfo::UnsignedInt)
 			{
-				indicesDataInt = (ui32*)buffer.getData(bufferView.m_byteOffset);
+				indicesDataInt = getAccessData<ui32*>(access);
 				indicesCount = access.m_count;
 			}
 			else
@@ -889,14 +883,12 @@ namespace Echo
 		{
 			int attributeIdx = it.second;
 			GltfAccessorInfo&   access = m_accessors[attributeIdx];
-			GltfBufferViewInfo& bufferView = m_bufferViews[access.m_bufferView];
-			GltfBufferInfo&		buffer = m_buffers[bufferView.m_bufferIdx];
 			vertexData.set(vertFormat, access.m_count);
 			if (it.first == "POSITION")
 			{
 				if (access.m_type == GltfAccessorInfo::Vec3 && access.m_componentType == GltfAccessorInfo::ComponentType::Float)
 				{
-					Vector3* positions = (Vector3*)buffer.getData(bufferView.m_byteOffset + access.m_byteOffset);
+					Vector3* positions = getAccessData<Vector3*>(access);
 					for (int i = 0; i < vertCount; i++)
 						vertexData.setPosition(i, positions[i]);
 				}
@@ -909,7 +901,7 @@ namespace Echo
 			{
 				if (access.m_type == GltfAccessorInfo::Vec3 && access.m_componentType == GltfAccessorInfo::ComponentType::Float)
 				{
-					Vector3* normals = (Vector3*)buffer.getData(bufferView.m_byteOffset + access.m_byteOffset);
+					Vector3* normals = getAccessData<Vector3*>(access);
 					for (int i = 0; i < vertCount; i++)
 						vertexData.setNormal(i, normals[i]);
 				}
@@ -922,7 +914,7 @@ namespace Echo
 			{
 				if (access.m_type == GltfAccessorInfo::Vec2 && access.m_componentType == GltfAccessorInfo::ComponentType::Float)
 				{
-					Vector2* uv0s = (Vector2*)buffer.getData(bufferView.m_byteOffset + access.m_byteOffset);
+					Vector2* uv0s = getAccessData<Vector2*>(access);
 					for (int i = 0; i < vertCount; i++)
 						vertexData.setUV0(i, uv0s[i]);
 				}
@@ -935,7 +927,7 @@ namespace Echo
 			{
 				if (access.m_type == GltfAccessorInfo::Vec4 && access.m_componentType == GltfAccessorInfo::ComponentType::Float)
 				{
-					Vector4* weights = (Vector4*)buffer.getData(bufferView.m_byteOffset + access.m_byteOffset);
+					Vector4* weights = getAccessData<Vector4*>(access);
 					for (int i = 0; i < vertCount; i++)
 					{
 						vertexData.setWeight(i, weights[i]);
@@ -951,7 +943,7 @@ namespace Echo
 				if (access.m_type == GltfAccessorInfo::Vec4 && access.m_componentType==GltfAccessorInfo::ComponentType::UnsignedShort)
 				{
 					ui8 joint[4];
-					ui16* joints = (ui16*)buffer.getData(bufferView.m_byteOffset + access.m_byteOffset);
+					ui16* joints = getAccessData<ui16*>(access);
 					for (int i = 0; i < vertCount; i++)
 					{
 						joint[0] = (ui8)joints[i * 4 + 0];
@@ -1030,11 +1022,9 @@ namespace Echo
 			if (parseJsonValueI32(skin.m_inverseBindMatrices, skinJson, "inverseBindMatrices", false))
 			{
 				GltfAccessorInfo&   access = m_accessors[skin.m_inverseBindMatrices];
-				GltfBufferViewInfo& bufferView = m_bufferViews[access.m_bufferView];
-				GltfBufferInfo&		buffer = m_buffers[bufferView.m_bufferIdx];
 				if (access.m_type == GltfAccessorInfo::Type::Mat4)
 				{
-					Matrix4*			inverseMatrixData = (Matrix4*)buffer.getData(bufferView.m_byteOffset + access.m_byteOffset);
+					Matrix4*			inverseMatrixData = getAccessData<Matrix4*>(access);
 					skin.m_inverseMatrixs.resize(joints.size());
 					for (ui32 j = 0; j < joints.size(); j++)
 					{

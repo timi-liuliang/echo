@@ -328,6 +328,15 @@ namespace Echo
 		void createNode(vector<Node*>::type& nodes, int idx);
 		Node*createSkeleton();
 		void bindSkeleton(Node* parent);
+		
+	private:
+		// help function for get access data
+		template<typename T> T getAccessData(GltfAccessorInfo& access)
+		{
+			GltfBufferViewInfo& bufferView = m_bufferViews[access.m_bufferView];
+			GltfBufferInfo&		buffer = m_buffers[bufferView.m_bufferIdx];
+			return (T)buffer.getData(bufferView.m_byteOffset + access.m_byteOffset);
+		}
 	};
 	typedef Echo::ResRef<Echo::GltfRes> GltfResPtr;
 }
