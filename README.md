@@ -33,7 +33,6 @@
 
 ###  Highly Efficient Workflow   
 ![](https://github.com/blab-liuliang/echo-doc/blob/master/intro/image/echo.png?raw=true)  
-![](https://github.com/blab-liuliang/echo-doc/blob/master/intro/image/echo1.png?raw=true)
 
 ### Multi-Platform Support  
 iOS Android Html5 Windows Mac Linux Steam  
@@ -47,6 +46,8 @@ Every node can be 2d or 3d. The core difference is the camera and the unit the n
 ### Easy To Program  
 Mostly, you'll use Lua as your main programming language. and also you can use c++ directly. the design of node tree makes the Lua logic code more easy to write. and the embedded Lua editor and embedded document help you write code just in the echo editor.
 If you really like other types of script language, you can tell us, or you can support it by modifying the c++ code directly.
+
+![](https://github.com/blab-liuliang/echo-doc/blob/master/intro/image/echo1.png?raw=true)   
 
 ### Configurable Module   
 Most of the engine's Functionality was implemented by configurable modules. that means when you release your app, you can just choose the module you really need. which makes your app have smaller size and more efficiency running speed.
