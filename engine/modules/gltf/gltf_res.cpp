@@ -712,7 +712,6 @@ namespace Echo
 					// propertys
 					GltfAccessorInfo& timeAccess = m_accessors[sampler.m_input];
 					GltfAccessorInfo& keyAccess = m_accessors[sampler.m_output];
-					const String& interpolationType = sampler.m_interpolation;
 
 					// add property
 					AnimProperty* animProperty = animNode->addProperty(channel.m_path, MapAnimPropertyType(keyAccess.m_type));
@@ -722,29 +721,11 @@ namespace Echo
 						animProperty->setInterpolationType(MappingInterpolationType(sampler.m_interpolation));
 
 						// key values
-						float*				timeData = getAccessData<float*>(timeAccess);
 						switch (keyAccess.m_type)
 						{
-						case GltfAccessorInfo::Type::Vec3:
-						{
-							Vector3* keyData = getAccessData<Vector3*>(keyAccess);
-							for (ui32 i = 0; i < timeAccess.m_count; i++)
-							{
-								float time = timeData[i];
-								((AnimPropertyVec3*)animProperty)->addKey(time, keyData[i]);
-							}
-						}
-						break;
-						case GltfAccessorInfo::Type::Vec4:
-						{
-							Quaternion* keyData = getAccessData<Quaternion*>(keyAccess);
-							for (ui32 i = 0; i < timeAccess.m_count; i++)
-							{
-								float time = timeData[i];
-								((AnimPropertyQuat*)animProperty)->addKey(time, keyData[i]);
-							}
-						}
-						break;
+						case GltfAccessorInfo::Type::Scalar:	addKeyToAnimProperty<float, AnimPropertyFloat>(timeAccess, keyAccess, animProperty);	break;
+						case GltfAccessorInfo::Type::Vec3:		addKeyToAnimProperty<Vector3, AnimPropertyVec3>(timeAccess, keyAccess, animProperty);	break;
+						case GltfAccessorInfo::Type::Vec4:		addKeyToAnimProperty<Quaternion, AnimPropertyQuat>(timeAccess, keyAccess, animProperty);break;
 						}
 					}
 

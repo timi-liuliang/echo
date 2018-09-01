@@ -9,6 +9,7 @@ namespace Echo
 	{
 		switch (type)
 		{
+		case AnimProperty::Type::Float:		return EchoNew(AnimPropertyFloat);
 		case AnimProperty::Type::Vector3:	return EchoNew(AnimPropertyVec3);
 		case AnimProperty::Type::Vector4:	return EchoNew(AnimPropertyVec4);
 		case AnimProperty::Type::Quatition: return EchoNew(AnimPropertyQuat);
@@ -64,6 +65,24 @@ namespace Echo
 		}
 
 		return length;
+	}
+
+	AnimPropertyFloat::AnimPropertyFloat()
+		: AnimPropertyCurve(Type::Float, 1)
+	{}
+
+	// add key
+	void AnimPropertyFloat::addKey(float time, float value)
+	{
+		for (size_t i = 0; i < m_curves.size(); i++)
+			m_curves[i]->addKey(time, value);
+	}
+
+	// update to time
+	void AnimPropertyFloat::updateToTime(float time)
+	{
+		for (size_t i = 0; i < m_curves.size(); i++)
+			m_value = m_curves[i]->getValue(time);
 	}
 
 	AnimPropertyVec3::AnimPropertyVec3()

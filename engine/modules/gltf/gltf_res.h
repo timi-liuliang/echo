@@ -6,6 +6,7 @@
 #include "engine/core/scene/node.h"
 #include "engine/core/resource/Res.h"
 #include "engine/core/render/Material.h"
+#include "engine/modules/anim/anim_property.h"
 #include <nlohmann/json.hpp>
 
 namespace Echo
@@ -336,6 +337,18 @@ namespace Echo
 			GltfBufferViewInfo& bufferView = m_bufferViews[access.m_bufferView];
 			GltfBufferInfo&		buffer = m_buffers[bufferView.m_bufferIdx];
 			return (T)buffer.getData(bufferView.m_byteOffset + access.m_byteOffset);
+		}
+
+		// add key to property
+		template<typename DataTypeT, typename AnimPropertyTypeT> void addKeyToAnimProperty(GltfAccessorInfo& timeAccess, GltfAccessorInfo& keyAccess, AnimProperty* animProperty)
+		{
+			DataTypeT* keyData = getAccessData<DataTypeT*>(keyAccess);
+			float*     timeData = getAccessData<float*>(timeAccess);
+			for (ui32 i = 0; i < timeAccess.m_count; i++)
+			{
+				float time = timeData[i];
+				((AnimPropertyTypeT*)animProperty)->addKey(time, keyData[i]);
+			}
 		}
 	};
 	typedef Echo::ResRef<Echo::GltfRes> GltfResPtr;

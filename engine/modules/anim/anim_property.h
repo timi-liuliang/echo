@@ -58,6 +58,22 @@ namespace Echo
 		virtual float getLength() override;
 	};
 
+	struct AnimPropertyFloat : public AnimPropertyCurve
+	{
+		float		m_value;
+
+		AnimPropertyFloat();
+
+		// get value
+		float getValue() { return m_value; }
+
+		// add key
+		void addKey(float time, const float value);
+
+		// update to time
+		virtual void updateToTime(float time) override;
+	};
+
 	struct AnimPropertyVec3 : public AnimPropertyCurve
 	{
 		Vector3		m_value;
