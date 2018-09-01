@@ -79,7 +79,7 @@ namespace Echo
 			const GltfSkinInfo& skinInfo = m_asset->m_skins[m_skinIdx];
 			if (skinInfo.m_joints.size())
 			{
-				m_jointMatrixs.resize(/*skinInfo.m_joints.size()*/ 64);
+				m_jointMatrixs.resize(/*skinInfo.m_joints.size()*/ 72);
 			}
 		}
 

@@ -20,7 +20,7 @@ uniform mat4 u_NormalMatrix;
 attribute vec4	a_Weight;
 attribute vec4	a_Joint;
 
-uniform mat4	u_JointMatrixs[64];
+uniform mat4	u_JointMatrixs[72];
 #endif
 
 varying vec3 v_Position;

@@ -139,25 +139,26 @@ namespace Echo
 		{
 			m_vlaue = Quaternion::IDENTITY;
 		}
-
-		if (m_keys.size() == 1)
+		else if (m_keys.size() == 1)
 		{
 			m_vlaue = m_keys[0].m_value;
 		}
-
-		// get base key and next key
-		i32 curKey = 0;
-		i32 keyTotal = m_keys.size() - 1;
-		for (i32 i = 0; i < keyTotal; i++)
+		else
 		{
-			if (time > m_keys[i].m_time && time < m_keys[i + 1].m_time)
-				curKey = i;
-		}
+			// get base key and next key
+			i32 curKey = 0;
+			i32 keyTotal = m_keys.size() - 1;
+			for (i32 i = 0; i < keyTotal; i++)
+			{
+				if (time > m_keys[i].m_time && time < m_keys[i + 1].m_time)
+					curKey = i;
+			}
 
-		// calc value
-		const Key& pre = m_keys[curKey];
-		const Key& next = m_keys[curKey + 1];
-		float ratio = Math::Clamp((time - pre.m_time) / (next.m_time - pre.m_time), 0.f, 1.f);
-		Quaternion::Slerp(m_vlaue, pre.m_value, next.m_value, ratio, true);
+			// calc value
+			const Key& pre = m_keys[curKey];
+			const Key& next = m_keys[curKey + 1];
+			float ratio = Math::Clamp((time - pre.m_time) / (next.m_time - pre.m_time), 0.f, 1.f);
+			Quaternion::Slerp(m_vlaue, pre.m_value, next.m_value, ratio, true);
+		}
 	}
 }
