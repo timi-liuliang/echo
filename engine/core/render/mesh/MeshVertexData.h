@@ -119,6 +119,7 @@ namespace Echo
 
 		// 获取顶点颜色数据
 		Dword& getColor(Word index);
+		void setColor(i32 idx, Dword color);
 
 		// 获取顶点UV数据0
 		const Vector2& getUV0(Word index);

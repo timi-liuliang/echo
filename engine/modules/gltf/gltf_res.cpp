@@ -842,6 +842,7 @@ namespace Echo
 		MeshVertexFormat vertFormat;
 		vertFormat.m_isUseNormal = attributes.find("NORMAL") != attributes.end();
 		vertFormat.m_isUseUV = attributes.find("TEXCOORD_0") != attributes.end();
+		vertFormat.m_isUseVertexColor = attributes.find("COLOR_0") != attributes.end();
 		vertFormat.m_isUseBoneData = attributes.find("WEIGHTS_0") != attributes.end() && attributes.find("JOINTS_0") != attributes.end();
 
 		// parse vertex count
@@ -898,6 +899,19 @@ namespace Echo
 					Vector2* uv0s = getAccessData<Vector2*>(access);
 					for (int i = 0; i < vertCount; i++)
 						vertexData.setUV0(i, uv0s[i]);
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else if (it.first == "COLOR_0")
+			{
+				if (access.m_type == GltfAccessorInfo::Vec4 && access.m_componentType == GltfAccessorInfo::ComponentType::Float)
+				{
+					Color* color0s = getAccessData<Color*>(access);
+					for (int i = 0; i < vertCount; i++)
+						vertexData.setColor(i, color0s[i]);
 				}
 				else
 				{
@@ -1045,6 +1059,7 @@ namespace Echo
 		primitive.m_materialInst->setMacro("MANUAL_SRGB", true);
 		primitive.m_materialInst->setMacro("SRGB_FAST_APPROXIMATION", true);
 		primitive.m_materialInst->setMacro("HAS_NORMALS", vertexFormat.m_isUseNormal);
+		primitive.m_materialInst->setMacro("HAS_VERTEX_COLOR", vertexFormat.m_isUseVertexColor);
 		primitive.m_materialInst->setMacro("HAS_UV", vertexFormat.m_isUseUV);
 		primitive.m_materialInst->setMacro("HAS_SKIN", vertexFormat.m_isUseBoneData);
 		primitive.m_materialInst->setMacro("HAS_BASECOLORMAP", baseColorTextureIdx != -1);

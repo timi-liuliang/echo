@@ -12,6 +12,11 @@ attribute vec4 a_Tangent;
 attribute vec2 a_UV;
 #endif
 
+#ifdef HAS_VERTEX_COLOR
+attribute vec4 a_Color;
+varying	  vec4 v_Color;
+#endif
+
 uniform mat4 u_ViewProjMatrix;
 uniform mat4 u_WorldMatrix;
 uniform mat4 u_NormalMatrix;
@@ -52,16 +57,20 @@ void main()
 	vec4 pos   = worldMatrix * a_Position;
 	v_Position = vec3(pos.xyz) / pos.w;
 
-	#ifdef HAS_NORMALS
-		#ifdef HAS_TANGENTS
-			vec3 normalW = normalize(vec3(u_NormalMatrix * vec4(a_Normal.xyz, 0.0)));
-			vec3 tangentW = normalize(vec3(worldMatrix * vec4(a_Tangent.xyz, 0.0)));
-			vec3 bitangentW = cross(normalW, tangentW) * a_Tangent.w;
-			v_TBN = mat3(tangentW, bitangentW, normalW);
-		#else // HAS_TANGENTS != 1
-			v_Normal = normalize(vec3(worldMatrix * vec4(a_Normal.xyz, 0.0)));
-		#endif
+#ifdef HAS_NORMALS
+	#ifdef HAS_TANGENTS
+		vec3 normalW = normalize(vec3(u_NormalMatrix * vec4(a_Normal.xyz, 0.0)));
+		vec3 tangentW = normalize(vec3(worldMatrix * vec4(a_Tangent.xyz, 0.0)));
+		vec3 bitangentW = cross(normalW, tangentW) * a_Tangent.w;
+		v_TBN = mat3(tangentW, bitangentW, normalW);
+	#else // HAS_TANGENTS != 1
+		v_Normal = normalize(vec3(worldMatrix * vec4(a_Normal.xyz, 0.0)));
 	#endif
+#endif
+
+#ifdef HAS_VERTEX_COLOR
+	v_Color = a_Color;
+#endif
 
   #ifdef HAS_UV
 	v_UV = a_UV;
@@ -92,6 +101,10 @@ precision highp float;
 
 uniform vec3 u_LightDirection;
 uniform vec3 u_LightColor;
+
+#ifdef HAS_VERTEX_COLOR
+varying	vec4 v_Color;
+#endif
 
 #ifdef USE_IBL
 uniform samplerCube u_DiffuseEnvSampler;
@@ -309,6 +322,10 @@ void main()
     vec4 baseColor = SRGBtoLINEAR(texture2D(u_BaseColorSampler, v_UV)) * u_BaseColorFactor;
 #else
     vec4 baseColor = u_BaseColorFactor;
+#endif
+
+#ifdef HAS_VERTEX_COLOR
+	baseColor *= v_Color;
 #endif
 
     vec3 f0 = vec3(0.04);

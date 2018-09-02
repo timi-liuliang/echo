@@ -167,6 +167,12 @@ namespace Echo
 		m_aabb.addPoint(pos);
 	}
 
+	void MeshVertexData::setColor(i32 idx, Dword color)
+	{
+		if(m_format.m_isUseVertexColor)
+			*(Dword*)(getVertice(idx) + m_format.m_colorOffset) = color;
+	}
+
 	// set skin weight
 	void MeshVertexData::setJoint(int idx, Dword weight)
 	{
