@@ -148,7 +148,7 @@ namespace Echo
 			define.m_isUseUV = true;
 
 			m_mesh = Mesh::create(true, true);
-			m_mesh->updateIndices(indices.size(), indices.data());
+			m_mesh->updateIndices(indices.size(), sizeof(Word), indices.data());
 			m_mesh->updateVertexs(define, vertices.size(), (const Byte*)vertices.data(), m_localAABB);
 
 			m_renderable = Renderable::create(m_mesh, m_material, this);
@@ -206,7 +206,7 @@ namespace Echo
 		MeshVertexFormat define;
 		define.m_isUseUV = true;
 
-		m_mesh->updateIndices(indices.size(), indices.data());
+		m_mesh->updateIndices(indices.size(), sizeof(Word), indices.data());
 		m_mesh->updateVertexs(define, vertices.size(), (const Byte*)vertices.data(), m_localAABB);
 	}
 

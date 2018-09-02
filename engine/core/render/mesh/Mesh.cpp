@@ -204,11 +204,11 @@ namespace Echo
 	}
 
 	// update indices data
-	void Mesh::updateIndices(ui32 indicesCount, const ui16* indices)
+	void Mesh::updateIndices(ui32 indicesCount, ui32 indicesStride, const void* indices)
 	{
 		// load indices
 		m_idxCount = indicesCount;
-		m_idxStride = sizeof(Word);
+		m_idxStride = indicesStride;
 		if (m_idxCount)
 		{
 			// process data
@@ -220,25 +220,6 @@ namespace Echo
 
 			buildIndexBuffer();
 		}
-	}
-
-	void Mesh::updateIndices(ui32 indicesCount, const ui32* indices)
-	{
-		// load indices
-		m_idxCount = indicesCount;
-		m_idxStride = sizeof(ui32);
-		if (m_idxCount)
-		{
-			// process data
-			EchoSafeFree(m_indices);
-
-			ui32 idxBuffSize = m_idxCount * m_idxStride;
-			m_indices = EchoAlloc(Byte, idxBuffSize);
-			memcpy(m_indices, indices, idxBuffSize);
-
-			buildIndexBuffer();
-		}
-
 	}
 
 	// update vertex data

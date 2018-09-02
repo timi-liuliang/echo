@@ -106,7 +106,7 @@ namespace Echo
 			MeshVertexFormat define;
 			define.m_isUseVertexColor = true;
 
-			m_mesh->updateIndices(m_indices.size(), m_indices.data());
+			m_mesh->updateIndices(m_indices.size(), sizeof(Word), m_indices.data());
 			m_mesh->updateVertexs(define, m_vertexs.size(), (const Byte*)m_vertexs.data(), m_aabb);
 
 			m_meshDirty = false;

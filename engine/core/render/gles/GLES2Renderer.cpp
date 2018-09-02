@@ -33,7 +33,6 @@ extern void PresentRenderBuffer();
 
 namespace Echo
 {
-	// 构造函数
 	GLES2Renderer::GLES2Renderer()
 		: m_screenWidth(0)
 		, m_screenHeight(0)
@@ -52,14 +51,12 @@ namespace Echo
 		std::fill(m_isVertexAttribArrayEnable.begin(), m_isVertexAttribArrayEnable.end(), false);
 	}
 
-	// 析构函数
 	GLES2Renderer::~GLES2Renderer()
 	{
 		//destroy();
 		g_renderer = nullptr;
 	}
 
-	// 初始化
 	bool GLES2Renderer::initializeImpl(const RenderCfg& config)
 	{
 #ifdef ECHO_PLATFORM_WINDOWS
@@ -70,7 +67,6 @@ namespace Echo
 			return false;
 		}
 #endif
-
 
 		m_screenWidth = config.screenWidth;
 		m_screenHeight = config.screenHeight;
@@ -90,7 +86,6 @@ namespace Echo
 		return true;
 	}
 
-	// 检测扩展支持
 	void GLES2Renderer::checkOpenGLExtensions()
 	{
 		String GLExtensions = " ";
@@ -279,38 +274,24 @@ namespace Echo
 		// set the type of primitive that should be rendered from this vertex buffer
 		GLenum glTopologyType = GLES2Mapping::MapPrimitiveTopology(mesh->getTopologyType());
 
-		ui32 faceCount = 0;
-
 		//set the index buffer to active in the input assembler
 		GPUBuffer* pIdxBuff = mesh->getIndexBuffer();
 		if (pIdxBuff)
 		{
+			// map index type
 			GLenum idxType;
-			ui32 idxStride;
+			if (mesh->getIndexStride() == sizeof(Dword))	idxType = GL_UNSIGNED_INT;
+			else if(mesh->getIndexStride() == sizeof(Word))	idxType = GL_UNSIGNED_SHORT;
+			else											idxType = GL_UNSIGNED_BYTE;
 
-			if (mesh->getIndexStride() == sizeof(Dword))
-			{
-				idxType = GL_UNSIGNED_INT;
-				idxStride = sizeof(Dword);
-			}
-			else
-			{
-				idxType = GL_UNSIGNED_SHORT;
-				idxStride = sizeof(Word);
-			}
+			// index count
+			ui32 idxCount = mesh->getIndexCount();
 
-			ui32 idxCount;
-			if (mesh->getIndexCount() > 0)
-				idxCount = mesh->getIndexCount();
-			else
-				idxCount = pIdxBuff->getSize() / idxStride;
+			// index offset
+			Byte* idxOffset = 0; idxOffset += mesh->getStartIndex() * mesh->getIndexStride();
 
-			Byte* idxOffset = 0;
-			idxOffset += mesh->getStartIndex() * idxStride;
-
+			// draw
 			OGLESDebug(glDrawElements(glTopologyType, idxCount, idxType, idxOffset));
-
-			faceCount = idxCount / 3;
 		}
 		else	// no using index buffer 
 		{
@@ -319,7 +300,6 @@ namespace Echo
 			{
 				ui32 startVert = mesh->getStartVertex();
 				OGLESDebug(glDrawArrays(glTopologyType, startVert, vertCount));
-				faceCount = vertCount / 3;
 			}
 			else
 			{
@@ -333,7 +313,7 @@ namespace Echo
 		if (Renderer::instance()->isEnableFrameProfile())
 		{
 			Renderer::instance()->getFrameState().incrDrawCallTimes(1);
-			Renderer::instance()->getFrameState().incrTriangleNum(faceCount);
+			Renderer::instance()->getFrameState().incrTriangleNum( mesh->getFaceCount());
 		}
 	}
 

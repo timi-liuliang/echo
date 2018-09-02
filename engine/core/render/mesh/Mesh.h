@@ -103,8 +103,7 @@ namespace Echo
 		void setTopologyType(TopologyType type) { m_topologyType = type; }
 
 		// update indices data
-		void updateIndices(ui32 indicesCount, const ui16* indices);
-		void updateIndices(ui32 indicesCount, const ui32* indices);
+		void updateIndices(ui32 indicesCount, ui32 indicesStride, const void* indices);
 
 		// update vertex data
 		void updateVertexs(const MeshVertexFormat& format, ui32 vertCount, const Byte* vertices, const AABB& box);

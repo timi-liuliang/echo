@@ -815,22 +815,22 @@ namespace Echo
 		const GltfAttributes& attributes = primitive.m_attributes;
 
 		// indices
-		ui16* indicesDataShort = nullptr;
-		ui32* indicesDataInt = nullptr;
+		void* indicesDataVoid = nullptr;
 		ui32  indicesCount = 0;
+		ui32  indicesStride = 0;
 		if (primitive.m_indices != -1)
 		{
 			GltfAccessorInfo&   access = m_accessors[primitive.m_indices];
-			if (access.m_componentType == GltfAccessorInfo::UnsignedShort)
-			{
-				indicesDataShort = getAccessData<ui16*>(access);
-				indicesCount = access.m_count;
-			}
+			indicesDataVoid = getAccessData<Byte*>(access);
+			indicesCount = access.m_count;
+
+			// stride
+			if (access.m_componentType == GltfAccessorInfo::UnsignedByte)
+				indicesStride = 1;
+			else if (access.m_componentType == GltfAccessorInfo::UnsignedShort)
+				indicesStride = 2;
 			else if (access.m_componentType == GltfAccessorInfo::UnsignedInt)
-			{
-				indicesDataInt = getAccessData<ui32*>(access);
-				indicesCount = access.m_count;
-			}
+				indicesStride = 4;
 			else
 			{
 				EchoLogError("gltf mesh index type isn't UnsignedShort when buildPrimitiveData()");
@@ -947,10 +947,8 @@ namespace Echo
 			primitive.m_mesh = Mesh::create(true, true);
 
 			// update indices
-			if(indicesDataShort)
-				primitive.m_mesh->updateIndices(indicesCount, indicesDataShort);
-			else if( indicesDataInt)
-				primitive.m_mesh->updateIndices(indicesCount, indicesDataInt);
+			if(indicesDataVoid)
+				primitive.m_mesh->updateIndices(indicesCount, indicesStride, indicesDataVoid);
 
 			// update vertices
 			primitive.m_mesh->updateVertexs(vertexData, vertexData.getAABB());

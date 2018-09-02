@@ -273,7 +273,7 @@ namespace Echo
 			define.m_isUseUV = true;
 
 			m_mesh = Mesh::create(true, true);
-			m_mesh->updateIndices(m_batch.m_indicesData.size(), m_batch.m_indicesData.data());
+			m_mesh->updateIndices(m_batch.m_indicesData.size(), sizeof(Word), m_batch.m_indicesData.data());
 			m_mesh->updateVertexs(define, m_batch.m_verticesData.size(), (const Byte*)m_batch.m_verticesData.data(), AABB());
 
 			m_material = ECHO_CREATE_RES(Material);
@@ -290,7 +290,7 @@ namespace Echo
 			define.m_isUseVertexColor = true;
 			define.m_isUseUV = true;
 
-			m_mesh->updateIndices(m_batch.m_indicesData.size(), m_batch.m_indicesData.data());
+			m_mesh->updateIndices(m_batch.m_indicesData.size(), sizeof(Word), m_batch.m_indicesData.data());
 			m_mesh->updateVertexs(define, m_batch.m_verticesData.size(), (const Byte*)m_batch.m_verticesData.data(), AABB());
 		}
 	}
