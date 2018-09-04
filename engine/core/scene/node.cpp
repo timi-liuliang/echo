@@ -403,9 +403,9 @@ namespace Echo
 	// bind methods
 	void Node::bindMethods()
 	{
-		CLASS_BIND_METHOD(Node, getNode,			  DEF_METHOD("get_node"));
+		CLASS_BIND_METHOD(Node, getNode,			  DEF_METHOD("getNode"));
 		CLASS_BIND_METHOD(Node, instance,			  DEF_METHOD("instance"));
-		CLASS_BIND_METHOD(Node, addChild, 			  DEF_METHOD("add_child"));
+		CLASS_BIND_METHOD(Node, addChild, 			  DEF_METHOD("addChild"));
 		CLASS_BIND_METHOD(Node, getLocalPosition,	  DEF_METHOD("getPos"));
 		CLASS_BIND_METHOD(Node, getWorldPosition,	  DEF_METHOD("getWorldPos"));
 		CLASS_BIND_METHOD(Node, getLocalYawPitchRoll, DEF_METHOD("getYawPitchRoll"));
