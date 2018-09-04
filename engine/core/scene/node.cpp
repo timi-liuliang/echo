@@ -16,7 +16,7 @@ namespace Echo
 		{
 			if ( m_isHaveScript)
 			{
-				registObj(obj);
+				obj->registerToScript();
 
 				String fileName = PathUtil::GetPureFilename(m_file.getPath(), false);
 				String moduleName = StringUtil::Replace(m_file.getPath(), "Res://", "");
@@ -32,17 +32,6 @@ namespace Echo
 
 				LuaBinder::instance()->execString(luaStr);
 			}
-		}
-	}
-
-	void Node::LuaScript::registObj(Node* obj)
-	{
-		if (!m_isRegistered)
-		{
-			m_globalTableName = StringUtil::Format("objs._%d", obj->getId());
-			LuaBinder::instance()->registerObject("Node", m_globalTableName.c_str(), obj);
-
-			m_isRegistered = true;
 		}
 	}
 
@@ -357,6 +346,18 @@ namespace Echo
 			m_script.m_file.setPath(path.getPath());
 	}
 
+	// register to script
+	void Node::registerToScript()
+	{
+		if (!m_script.m_isRegistered)
+		{
+			m_script.m_globalTableName = StringUtil::Format("objs._%d", this->getId());
+			LuaBinder::instance()->registerObject("Node", m_script.m_globalTableName.c_str(), this);
+
+			m_script.m_isRegistered = true;
+		}
+	}
+
 	void Node::needUpdate()
 	{
 		if (m_bModify)
@@ -403,6 +404,8 @@ namespace Echo
 	void Node::bindMethods()
 	{
 		CLASS_BIND_METHOD(Node, getNode,			  DEF_METHOD("get_node"));
+		CLASS_BIND_METHOD(Node, instance,			  DEF_METHOD("instance"));
+		CLASS_BIND_METHOD(Node, addChild, 			  DEF_METHOD("add_child"));
 		CLASS_BIND_METHOD(Node, getLocalPosition,	  DEF_METHOD("getPos"));
 		CLASS_BIND_METHOD(Node, getWorldPosition,	  DEF_METHOD("getWorldPos"));
 		CLASS_BIND_METHOD(Node, getLocalYawPitchRoll, DEF_METHOD("getYawPitchRoll"));
@@ -430,7 +433,7 @@ namespace Echo
 			int pathLen = strlen(path);
 			if (!pathLen)
 			{
-				m_script.registObj(this);
+				this->registerToScript();
 				return this;
 			}
 			else
@@ -478,7 +481,7 @@ namespace Echo
 						}
 						else
 						{
-							child->m_script.registObj(child);
+							child->registerToScript();
 							return child;
 						}
 					}
@@ -563,6 +566,14 @@ namespace Echo
 				}
 			}
 		}
+	}
+
+	Node* Node::instance(const char* path)
+	{
+		Node* node = load(path, false);
+		node->registerToScript();
+
+		return node;
 	}
 
 	// load

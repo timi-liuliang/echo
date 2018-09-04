@@ -14,6 +14,29 @@ namespace Echo
 	class Object;
 	class Node;
 
+	struct LuaStackCheck
+	{
+		int			m_elementNum;
+		lua_State*	m_luaState;
+
+		LuaStackCheck(lua_State* state)
+		{
+			m_luaState = state;
+			m_elementNum = lua_gettop(state);
+		}
+
+		~LuaStackCheck()
+		{
+			EchoAssert(m_elementNum == lua_gettop(m_luaState));
+		}
+	};
+
+#ifdef ECHO_EDITOR_MODE
+#define LUA_STACK_CHECK(state) LuaStackCheck stackCheck(state)
+#else
+#define LUA_STACK_CHECK(state)
+#endif 
+
 	// log messages
 	void lua_binder_warning(const char* msg);
 	void lua_binder_error(const char* msg);
@@ -24,7 +47,7 @@ namespace Echo
 	template<typename T> INLINE T lua_getvalue(lua_State* L, int index)			
 	{ 
 		lua_binder_error("lua stack to value error, unknow c type"); 
-		static T st = Variant(); 
+		static T st = variant_cast<T>(Variant()); 
 		return st; 
 	}
 
@@ -54,6 +77,17 @@ namespace Echo
 		result.z = (float)lua_tonumber(state, idx+3);
 		lua_pop(state, 3);
 		return result; 
+	}
+
+	template<> INLINE Node* lua_getvalue<Node*>(lua_State* state, int idx)
+	{
+		LUA_STACK_CHECK(state);
+
+		lua_getfield(state, idx, "this");
+		Node* nodeptr = static_cast<Node*>(lua_touserdata(state, -1));
+		lua_pop(state, 1);
+
+		return nodeptr;
 	}
 
 	// lua operate

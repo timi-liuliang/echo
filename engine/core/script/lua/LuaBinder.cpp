@@ -75,29 +75,6 @@ namespace Echo
 #endif
 	}
 
-	struct LuaStackCheck
-	{
-		int			m_elementNum;
-		lua_State*	m_luaState;
-
-		LuaStackCheck(lua_State* state)
-		{
-			m_luaState = state;
-			m_elementNum = lua_gettop(state);
-		}
-
-		~LuaStackCheck()
-		{
-			EchoAssert(m_elementNum == lua_gettop(m_luaState));
-		}
-	};
-
-#ifdef ECHO_EDITOR_MODE
-	#define LUA_STACK_CHECK(state) LuaStackCheck stackCheck(state)
-#else
-	#define LUA_STACK_CHECK(state)
-#endif 
-
 	static int cb(lua_State* L)
 	{
 		// get object ptr

@@ -49,8 +49,6 @@ namespace Echo
 			LuaScript() : m_isStart(false), m_isRegistered(false), m_isHaveScript(false), m_file("", ".lua"){}
 			void start(Node* obj);
 			void update(Node* obj);
-			void registObj(Node* obj);
-			bool isRegistered()const { return m_isRegistered; }
 		};
 
 	public:
@@ -128,6 +126,9 @@ namespace Echo
 		void save(const String& path);
 
 		// load
+		Node* instance(const char* path);
+
+		// load link
 		static Node* load(const String& path, bool isLink);
 
 	private:
@@ -136,6 +137,9 @@ namespace Echo
 
 		// instance node
 		static Node* instanceNodeTree(void* pugiNode, Node* parent);
+
+		// register to script
+		void registerToScript();
 
 	protected:
 		void needUpdate();

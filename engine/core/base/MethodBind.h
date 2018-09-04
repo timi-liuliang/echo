@@ -5,14 +5,16 @@
 
 namespace Echo
 {
-	template<class T>
-	struct VariantCaster
+	template<typename T> INLINE T variant_cast(const Variant& variant)
 	{
-		static T cast(const Variant& variant)
-		{
-			return variant;
-		}
-	};
+		return variant;
+	}
+
+	template<> INLINE Node* variant_cast(const Variant& variant)
+	{
+		Object* obj = variant.toObj();
+		return (Node*)(obj);
+	}
 
 #ifdef DEBUG_METHODS_ENABLED
 	struct MethodDefinition
@@ -184,7 +186,7 @@ namespace Echo
 		{
 			__AnEmptyClass* instance = (__AnEmptyClass*)obj;
 
-			P0 p0 = VariantCaster<P0>::cast(*args[0]);
+			P0 p0 = variant_cast<P0>(*args[0]);
 			(instance->*method)(p0);
 
 			return Variant();
@@ -232,7 +234,7 @@ namespace Echo
 		{
 			__AnEmptyClass* instance = (__AnEmptyClass*)obj;
 
-			P0 p0 = VariantCaster<P0>::cast(*args[0]);
+			P0 p0 = variant_cast<P0>(*args[0]);
 			return (instance->*method)(p0);
 		}
 

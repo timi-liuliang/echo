@@ -12,7 +12,7 @@ end
 function object:update()
 end
 
-return object
+return setmetatable(object, Object)
 )";
 
 namespace Echo
