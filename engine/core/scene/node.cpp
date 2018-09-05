@@ -403,8 +403,9 @@ namespace Echo
 	// bind methods
 	void Node::bindMethods()
 	{
+		BIND_METHOD(Node::load,						  DEF_METHOD("instanceNodeTree"));
+
 		CLASS_BIND_METHOD(Node, getNode,			  DEF_METHOD("getNode"));
-		//CLASS_BIND_METHOD(Node, load,				  DEF_METHOD("load"));
 		CLASS_BIND_METHOD(Node, addChild, 			  DEF_METHOD("addChild"));
 		CLASS_BIND_METHOD(Node, getLocalPosition,	  DEF_METHOD("getPos"));
 		CLASS_BIND_METHOD(Node, getWorldPosition,	  DEF_METHOD("getWorldPos"));
@@ -587,7 +588,7 @@ namespace Echo
 						rootNode->getChild(idx)->setLink(true);
 					}
 				}
-
+				rootNode->registerToScript();
 				return rootNode;
 			}
 		}

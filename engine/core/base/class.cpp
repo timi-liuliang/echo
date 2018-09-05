@@ -139,7 +139,7 @@ namespace Echo
 			it->second->registerMethod(methodName, method);
 
 			// lua
-			LuaBinder::instance()->registerMethod(className, methodName, method);
+			LuaBinder::instance()->registerClassMethod(className, methodName, method);
 		}
 
 		return true;

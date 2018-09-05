@@ -1,7 +1,7 @@
 #pragma once
 
 #include "variant.h"
-#include "engine/core/script/lua/LuaBinder.h"
+#include "method_bind.h"
 
 namespace Echo
 {

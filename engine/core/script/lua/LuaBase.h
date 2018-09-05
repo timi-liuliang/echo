@@ -51,21 +51,37 @@ namespace Echo
 		return st; 
 	}
 
-	template<> INLINE const char* lua_getvalue<const char*>(lua_State* state, int idx)
+	template<> INLINE const char* lua_getvalue<const char*>(lua_State* L, int index)
 	{ 
-		return lua_tostring(state, idx); 
+		return lua_tostring(L, index);
 	}
 
-	template<> INLINE i32 lua_getvalue<i32>(lua_State* state, int idx) 
-	{ 
-		return (i32)lua_tonumber(state, idx); 
+	template<> INLINE bool lua_getvalue<bool>(lua_State* L, int index)
+	{
+		return (bool)lua_toboolean(L, index);
 	}
 
-	template<> INLINE ui32 lua_getvalue<ui32>(lua_State* state, int idx) 
+	template<> INLINE i32 lua_getvalue<i32>(lua_State* L, int index)
 	{ 
-		return (ui32)lua_tonumber(state, idx); 
+		return (i32)lua_tonumber(L, index);
+	}
+
+	template<> INLINE ui32 lua_getvalue<ui32>(lua_State* L, int index)
+	{ 
+		return (ui32)lua_tonumber(L, index);
+	}
+
+	template<> INLINE String lua_getvalue<String>(lua_State* L, int index)
+	{
+		return lua_tostring(L, index);
 	}
 	
+	template<> INLINE const String& lua_getvalue<const String&>(lua_State* L, int index)
+	{
+		static String result = lua_tostring(L, index);
+		return result;
+	}
+
 	template<> INLINE const Vector3& lua_getvalue<const Vector3&>(lua_State* state, int idx) 
 	{
 		static Vector3 result;

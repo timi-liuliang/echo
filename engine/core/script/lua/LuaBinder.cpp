@@ -76,7 +76,19 @@ namespace Echo
 #endif
 	}
 
-	static int cb(lua_State* L)
+	static int method_cb(lua_State* L)
+	{
+		// get method ptr
+		MethodBind* methodPtr = static_cast<MethodBind*>(lua_touserdata(L, lua_upvalueindex(1)));
+		if (methodPtr)
+		{
+			return methodPtr->call(L);
+		}
+
+		return 0;
+	}
+
+	static int class_method_cb(lua_State* L)
 	{
 		// get object ptr
 		if (lua_istable(L, 1))
@@ -127,6 +139,18 @@ namespace Echo
 		setGlobalVariableStr("package.path", StringUtil::Format("%s?.lua", path.c_str()).c_str());
 	}
 
+	// register
+	bool LuaBinder::registerMethod(const String& methodName, MethodBind* method)
+	{
+		LUA_STACK_CHECK(m_luaState);
+
+		lua_pushlightuserdata(m_luaState, method);
+		lua_pushcclosure(m_luaState, method_cb, 1);
+		lua_setglobal(m_luaState, methodName.c_str());
+
+		return true;
+	}
+
 	bool LuaBinder::registerClass(const String& className, const char* parentClassName)
 	{
 		LUA_STACK_CHECK(m_luaState);
@@ -153,14 +177,14 @@ namespace Echo
 		return true;
 	}
 
-	bool LuaBinder::registerMethod(const String& className, const String& methodName, ClassMethodBind* method)
+	bool LuaBinder::registerClassMethod(const String& className, const String& methodName, ClassMethodBind* method)
 	{
 		LUA_STACK_CHECK(m_luaState);
 
 		luaL_getmetatable(m_luaState, className.c_str());	// stack 1
 		lua_pushstring(m_luaState, methodName.c_str());     // stack 2
 		lua_pushlightuserdata(m_luaState, method);			// stack 3
-		lua_pushcclosure(m_luaState, cb, 1);				// stack 3
+		lua_pushcclosure(m_luaState, class_method_cb, 1);	// stack 3
 
 		lua_settable(m_luaState, 1);
 		lua_pop(m_luaState, 1);

@@ -1,0 +1,63 @@
+#pragma once
+
+#include "engine/core/script/lua/LuaBinder.h"
+
+namespace Echo
+{
+	class MethodBind
+	{
+	public:
+		virtual int call(lua_State* luaState) = 0;
+	};
+
+	template <typename R, typename P0, typename P1>
+	class MethodBind2R : public MethodBind
+	{
+	public:
+		R (*method)(P0, P1);
+
+		virtual int call(lua_State* luaState) override
+		{
+			int a = lua_gettop(luaState);
+
+			//check and fetch the arguments
+			P0 p0 = lua_getvalue<P0>(luaState, 1);
+			P1 p1 = lua_getvalue<P1>(luaState, 2);
+
+			// exec method
+			R result = (*method)(p0, p1);
+
+			// push the results
+			lua_pushvalue<R>(luaState, result);
+
+			// return number of results
+			return 1;
+		}
+	};
+
+	template<typename R, typename P0, typename P1>
+	MethodBind* createMethodBind(R(*method)(P0, P1))
+	{
+		MethodBind2R<R, P0, P1>* bind = new (MethodBind2R<R, P0, P1>);
+		bind->method = method;
+
+		return bind;
+	}
+
+	// register method
+	bool registerMethodBind(const String& methodName, MethodBind* method);
+
+	// bind method
+	template<typename N, typename M>
+	static MethodBind* bindMethod( M method, N methodName)
+	{
+		MethodBind* bind = createMethodBind(method);
+
+		registerMethodBind(methodName, bind);
+
+		return bind;
+	}
+}
+
+#define BIND_METHOD(method, methodName) \
+	bindMethod(&method, methodName)
