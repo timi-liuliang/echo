@@ -144,7 +144,7 @@ namespace Echo
 		LUA_STACK_CHECK(m_luaState);
 
 		String currentLayerName;
-		int upperTableCount = lua_get_upper_tables(m_luaState, methodName, currentLayerName, true);
+		int upperTableCount = lua_get_upper_tables(m_luaState, methodName, currentLayerName);
 		int parentIdx = lua_gettop(m_luaState);
 
 		lua_pushlightuserdata(m_luaState, method);
@@ -213,7 +213,7 @@ namespace Echo
 			LUA_STACK_CHECK(m_luaState);
 
 			String currentLayerName;
-			int upperTableCount = lua_get_upper_tables(m_luaState, objectName, currentLayerName, true);
+			int upperTableCount = lua_get_upper_tables(m_luaState, objectName, currentLayerName);
 			int parentIdx = lua_gettop(m_luaState);
 
 			lua_newtable(m_luaState);

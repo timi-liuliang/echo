@@ -28,13 +28,13 @@ namespace Echo
 	}
 
 	// get upper layer table
-	int lua_get_upper_tables(lua_State* luaState, const String& objectName, String& currentLayerName, bool isCreateWhenNotExist)
+	int lua_get_upper_tables(lua_State* luaState, const String& objectName, String& currentLayerName)
 	{
 		StringArray names = StringUtil::Split(objectName, ".");
 		if (names.size() > 1)
 		{
 			currentLayerName = names.back();
-			return lua_get_tables(luaState, names, names.size() - 1, isCreateWhenNotExist);
+			return lua_get_tables(luaState, names, names.size() - 1);
 		}
 		else
 		{
@@ -42,7 +42,7 @@ namespace Echo
 		}
 	}
 
-	int lua_get_tables(lua_State* luaState, const StringArray& objectNames, const int count, bool isCreateWhenNotExist)
+	int lua_get_tables(lua_State* luaState, const StringArray& objectNames, const int count)
 	{
 		int tableCount = 0;
 		for (int i = 0; i < count; i++)

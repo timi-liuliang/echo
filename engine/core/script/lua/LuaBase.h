@@ -107,8 +107,8 @@ namespace Echo
 	}
 
 	// lua operate
-	int lua_get_tables(lua_State* luaState, const StringArray& objectNames, const int count, bool isCreateWhenNotExist);
-	int lua_get_upper_tables(lua_State* luaState, const String& objectName, String& currentLayerName, bool isCreateWhenNotExist);
+	int lua_get_tables(lua_State* luaState, const StringArray& objectNames, const int count);
+	int lua_get_upper_tables(lua_State* luaState, const String& objectName, String& currentLayerName);
 
 	// lua push vlaue to stack
 	template<typename T> INLINE void lua_pushvalue(lua_State* L, T value) 
