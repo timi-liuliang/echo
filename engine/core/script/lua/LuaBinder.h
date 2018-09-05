@@ -4,7 +4,7 @@
 
 namespace Echo
 {
-	class MethodBind;
+	class ClassMethodBind;
 	class LuaBinder
 	{
 	public:
@@ -19,7 +19,7 @@ namespace Echo
 
 		// register
 		bool registerClass(const String& className, const char* parentClassName);
-		bool registerMethod(const String& className, const String& methodName, MethodBind* method);
+		bool registerMethod(const String& className, const String& methodName, ClassMethodBind* method);
 		bool registerObject(const String& className, const String& objectName, void* obj);
 
 		// get class infos

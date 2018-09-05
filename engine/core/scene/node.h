@@ -125,9 +125,6 @@ namespace Echo
 		// save
 		void save(const String& path);
 
-		// load
-		Node* instance(const char* path);
-
 		// load link
 		static Node* load(const String& path, bool isLink);
 

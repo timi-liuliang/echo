@@ -130,7 +130,7 @@ namespace Echo
 	}
 
 	// register method
-	bool Class::registerMethodBind(const String& className, const String& methodName, MethodBind* method)
+	bool Class::registerMethodBind(const String& className, const String& methodName, ClassMethodBind* method)
 	{
 		auto it = g_classInfos->find(className);
 		if (it != g_classInfos->end())
@@ -146,7 +146,7 @@ namespace Echo
 	}
 
 	// get method
-	MethodBind* Class::getMethodBind(const String& className, const String& methodName)
+	ClassMethodBind* Class::getMethodBind(const String& className, const String& methodName)
 	{
 		auto it = g_classInfos->find(className);
 		if (it != g_classInfos->end())

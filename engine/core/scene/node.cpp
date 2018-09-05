@@ -404,7 +404,7 @@ namespace Echo
 	void Node::bindMethods()
 	{
 		CLASS_BIND_METHOD(Node, getNode,			  DEF_METHOD("getNode"));
-		CLASS_BIND_METHOD(Node, instance,			  DEF_METHOD("instance"));
+		//CLASS_BIND_METHOD(Node, load,				  DEF_METHOD("load"));
 		CLASS_BIND_METHOD(Node, addChild, 			  DEF_METHOD("addChild"));
 		CLASS_BIND_METHOD(Node, getLocalPosition,	  DEF_METHOD("getPos"));
 		CLASS_BIND_METHOD(Node, getWorldPosition,	  DEF_METHOD("getWorldPos"));
@@ -566,14 +566,6 @@ namespace Echo
 				}
 			}
 		}
-	}
-
-	Node* Node::instance(const char* path)
-	{
-		Node* node = load(path, false);
-		node->registerToScript();
-
-		return node;
 	}
 
 	// load

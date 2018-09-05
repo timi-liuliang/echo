@@ -33,19 +33,19 @@ namespace Echo
 #endif
 
 	class Object;
-	class MethodBind
+	class ClassMethodBind
 	{
 	public:
 		virtual Variant call(Object* obj, const Variant** args, int argCount, Variant::CallError& error) = 0;
 		virtual int call(Object* obj, lua_State* luaState)=0;
 	};
 	// please use hash map
-	typedef std::map<String, MethodBind*>	MethodMap;
+	typedef std::map<String, ClassMethodBind*>	ClassMethodMap;
 
 	// declare a empty class..
 	class __AnEmptyClass{};
 
-	class MethodBind0 : public MethodBind
+	class ClassMethodBind0 : public ClassMethodBind
 	{
 	public:
 		void (__AnEmptyClass::*method)();
@@ -70,9 +70,9 @@ namespace Echo
 	};
 
 	template<typename T>
-	MethodBind* createMethodBind(void(T::*method)())
+	ClassMethodBind* createMethodBind(void(T::*method)())
 	{
-		MethodBind0* bind = new(MethodBind0);
+		ClassMethodBind0* bind = new(ClassMethodBind0);
 
 		union 
 		{
@@ -86,7 +86,7 @@ namespace Echo
 	}
 
 	template<typename R>
-	class MethodBind0R : public MethodBind
+	class ClassMethodBind0R : public ClassMethodBind
 	{
 	public:
 		R (__AnEmptyClass::*method)();
@@ -115,9 +115,9 @@ namespace Echo
 	};
 
 	template<typename T, typename R>
-	MethodBind* createMethodBind(R(T::*method)())
+	ClassMethodBind* createMethodBind(R(T::*method)())
 	{
-		MethodBind0R<R> * bind = new (MethodBind0R<R>);
+		ClassMethodBind0R<R> * bind = new (ClassMethodBind0R<R>);
 
 		union
 		{
@@ -131,7 +131,7 @@ namespace Echo
 	}
 
 	template<typename R>
-	class MethodBind0RC : public MethodBind
+	class ClassMethodBind0RC : public ClassMethodBind
 	{
 	public:
 		R(__AnEmptyClass::*method)() const;
@@ -160,9 +160,9 @@ namespace Echo
 	};
 
 	template<typename T, typename R>
-	MethodBind* createMethodBind(R(T::*method)() const)
+	ClassMethodBind* createMethodBind(R(T::*method)() const)
 	{
-		MethodBind0RC<R> * bind = new (MethodBind0RC<R>);
+		ClassMethodBind0RC<R> * bind = new (ClassMethodBind0RC<R>);
 
 		union
 		{
@@ -176,7 +176,7 @@ namespace Echo
 	}
 
 	template <typename P0>
-	class MethodBind1 : public MethodBind
+	class ClassMethodBind1 : public ClassMethodBind
 	{
 	public:
 		void (__AnEmptyClass::*method)(P0);
@@ -208,9 +208,9 @@ namespace Echo
 	};
 
 	template<typename T, typename P0>
-	MethodBind* createMethodBind(void(T::*method)(P0))
+	ClassMethodBind* createMethodBind(void(T::*method)(P0))
 	{
-		MethodBind1<P0>* bind = new (MethodBind1<P0>);
+		ClassMethodBind1<P0>* bind = new (ClassMethodBind1<P0>);
 
 		union
 		{
@@ -224,7 +224,7 @@ namespace Echo
 	}
 
 	template <typename R, typename P0>
-	class MethodBind1R : public MethodBind
+	class ClassMethodBind1R : public ClassMethodBind
 	{
 	public:
 		R (__AnEmptyClass::*method)(P0);
@@ -257,9 +257,9 @@ namespace Echo
 	};
 
 	template<typename T, typename R, typename P0>
-	MethodBind* createMethodBind(R (T::*method)(P0))
+	ClassMethodBind* createMethodBind(R (T::*method)(P0))
 	{
-		MethodBind1R<R, P0>* bind = new (MethodBind1R<R, P0>);
+		ClassMethodBind1R<R, P0>* bind = new (ClassMethodBind1R<R, P0>);
 
 		union
 		{
@@ -271,4 +271,6 @@ namespace Echo
 
 		return bind;
 	}
+
+
 }

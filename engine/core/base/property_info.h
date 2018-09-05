@@ -36,13 +36,13 @@ namespace Echo
 	};
 	typedef vector<PropertyInfo*>::type PropertyInfos;
 
-	class MethodBind;
+	class ClassMethodBind;
 	struct PropertyInfoStatic : public PropertyInfo
 	{
 		String			m_getter;
 		String			m_setter;
-		MethodBind*		m_getterMethod;
-		MethodBind*		m_setterMethod;
+		ClassMethodBind*		m_getterMethod;
+		ClassMethodBind*		m_setterMethod;
 
 		PropertyInfoStatic()
 			: PropertyInfo(Type::Static)

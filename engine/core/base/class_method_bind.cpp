@@ -1,4 +1,4 @@
-#include "MethodBind.h"
+#include "class_method_bind.h"
 
 namespace Echo
 {

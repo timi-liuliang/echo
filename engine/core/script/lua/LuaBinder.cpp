@@ -1,6 +1,7 @@
 #include "LuaBinder.h"
 #include "engine/core/log/Log.h"
-#include "engine/core/base/MethodBind.h"
+#include "engine/core/base/method_bind.h"
+#include "engine/core/base/class_method_bind.h"
 #include "engine/core/memory/MemAllocDef.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/io/DataStream.h"
@@ -80,13 +81,12 @@ namespace Echo
 		// get object ptr
 		if (lua_istable(L, 1))
 		{
-			lua_pushstring(L, "this");
-			lua_rawget(L, 1);
+			lua_getfield(L, 1, "this");
 			Object* objPtr = static_cast<Object*>(lua_touserdata(L, -1));
 			lua_pop(L, 1);
 
 			// get method ptr
-			MethodBind* methodPtr = static_cast<MethodBind*>(lua_touserdata(L, lua_upvalueindex(1)));
+			ClassMethodBind* methodPtr = static_cast<ClassMethodBind*>(lua_touserdata(L, lua_upvalueindex(1)));
 			if (objPtr && methodPtr)
 			{
 				return methodPtr->call(objPtr, L);
@@ -153,7 +153,7 @@ namespace Echo
 		return true;
 	}
 
-	bool LuaBinder::registerMethod(const String& className, const String& methodName, MethodBind* method)
+	bool LuaBinder::registerMethod(const String& className, const String& methodName, ClassMethodBind* method)
 	{
 		LUA_STACK_CHECK(m_luaState);
 

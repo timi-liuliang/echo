@@ -2,7 +2,7 @@
 
 #include "object.h"
 #include "variant.h"
-#include "MethodBind.h"
+#include "class_method_bind.h"
 #include "property_info.h"
 #include "engine/core/util/StringUtil.h"
 #include "engine/core/script/lua/LuaBinder.h"
@@ -15,7 +15,7 @@ namespace Echo
 		bool			m_virtual;			// virtual class can't be instanced
 		String			m_parent;
 		PropertyInfos	m_propertyInfos;
-		MethodMap		m_methods;
+		ClassMethodMap	m_methods;
 	};
 
 	struct ObjectFactory
@@ -29,13 +29,13 @@ namespace Echo
 		void registerProperty(PropertyInfo* property);
 
 		// register method
-		void registerMethod(const String& methodName, MethodBind* method)
+		void registerMethod(const String& methodName, ClassMethodBind* method)
 		{
 			m_classInfo.m_methods[methodName] = method;
 		}
 
 		// return method bind
-		MethodBind* getMethodBind(const String& methodName)
+		ClassMethodBind* getMethodBind(const String& methodName)
 		{
 			auto it = m_classInfo.m_methods.find(methodName);
 			if (it != m_classInfo.m_methods.end())
@@ -113,10 +113,10 @@ namespace Echo
 		static bool getChildClasses(StringArray& childClasses, const String& className, bool recursive);
 
 		// register method
-		static bool registerMethodBind(const String& className, const String& methodName, MethodBind* method);
+		static bool registerMethodBind(const String& className, const String& methodName, ClassMethodBind* method);
 
 		// get method
-		static MethodBind* getMethodBind(const String& className, const String& methodName);
+		static ClassMethodBind* getMethodBind(const String& className, const String& methodName);
 
 		// add property
 		static bool registerProperty(const String& className, const String& propertyName, const Variant::Type type, PropertyHint hint, const String& hintStr, const String& getter, const String& setter);
@@ -138,9 +138,9 @@ namespace Echo
 
 		// bind method
 		template<typename N, typename M>
-		static MethodBind* bindMethod(const String& className, M method, N methodName)
+		static ClassMethodBind* bindMethod(const String& className, M method, N methodName)
 		{
-			MethodBind* bind = createMethodBind(method);
+			ClassMethodBind* bind = createMethodBind(method);
 
 			registerMethodBind(className, methodName, bind);
 
