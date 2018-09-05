@@ -1,9 +1,11 @@
 #include "LuaTextEdit.h"
 #include <QTextCursor>
+#include <QTextBlock>
 #include <QKeyEvent>
 #include <QAbstractItemView>
 #include <QScrollBar>
 #include <QStringListModel>
+#include <engine/core/util/StringUtil.h>
 
 namespace Studio
 {
@@ -11,17 +13,15 @@ namespace Studio
 		: QTextEdit(parent)
 		, m_completer(nullptr)
 	{
-		QCompleter* completer = new QCompleter(this);
-		completer = new QCompleter(this);
+		m_completer = new QCompleter(this);
+		m_completer->setWidget(this);
+		m_completer->setCompletionMode(QCompleter::PopupCompletion);
+		m_completer->setCaseSensitivity(Qt::CaseInsensitive);
+		m_completer->setWrapAround(false);
 
-		QStringList words; words << "self" << "setLocalPosition";
-		QStringListModel* model = new QStringListModel(words, completer);
-
-		completer->setModel( model);
-		completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
-		completer->setCaseSensitivity(Qt::CaseInsensitive);
-		completer->setWrapAround(false);
-		setCompleter(completer);
+		// set words
+		m_keyWords << "self" << "function" << "if" << "then" << "for" << "return" << "end" << "do";
+		setModel( m_keyWords);
 	}
 
 	LuaTextEdit::~LuaTextEdit()
@@ -29,21 +29,11 @@ namespace Studio
 
 	}
 
-	void LuaTextEdit::setCompleter(QCompleter* c)
+	void LuaTextEdit::setModel(const QStringList& words)
 	{
-		if (m_completer)
-			QObject::disconnect(m_completer, 0, this, 0);
-
-		m_completer = c;
-		if (!m_completer)
-			return;
-
-		m_completer->setWidget(this);
-		m_completer->setCompletionMode(QCompleter::PopupCompletion);
-		m_completer->setCaseSensitivity(Qt::CaseInsensitive);
-		
-		// connect signal slot
-		QObject::connect(m_completer, SIGNAL(activated(QString)), this, SLOT(insertCompletion(QString)));
+		QStringListModel* model = new QStringListModel(words, m_completer);
+		m_completer->setModel(model);
+		m_completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
 	}
 
 	QCompleter* LuaTextEdit::getCompleter() const
@@ -53,50 +43,50 @@ namespace Studio
 
 	void LuaTextEdit::keyPressEvent(QKeyEvent* e) 
 	{
-		if (m_completer && m_completer->popup()->isVisible())
+		if (m_completer->popup()->isVisible() && e->key() == Qt::Key_Return)
 		{
-			switch (e->key())
+			// 0.insert completer when key Return pressed
+			insertCompletion(m_completer->currentCompletion());
+			m_completer->popup()->hide();
+		}
+		else
+		{
+			if (e->key() == Qt::Key_Return)
 			{
-			case Qt::Key_Enter:
-			case Qt::Key_Return:
-			case Qt::Key_Escape:
-			case Qt::Key_Tab:
-			case Qt::Key_Backtab:	e->ignore();	return;
-			default:								break;
+				// 1.support auto indent
+				autoIndent(e);
+			}
+			//else if (e->key() == Qt::Key_Space)
+			//{
+			//	// 2.
+			//}
+			else
+			{
+				QTextEdit::keyPressEvent(e);
+
+				// end of word
+				Echo::String currentCompletionPrefix = m_completer->completionPrefix().toStdString().c_str();
+				Echo::String completionPrefix = textUnderCursor().toStdString().c_str();
+				if(completionPrefix.length()>0)
+				{
+					// modify completion prefix
+					if (completionPrefix != currentCompletionPrefix)
+					{
+						m_completer->setCompletionPrefix(completionPrefix.c_str());
+						m_completer->popup()->setCurrentIndex(m_completer->completionModel()->index(0, 0));
+					}
+
+					// popup it up!
+					QRect cr = cursorRect();
+					cr.setWidth(m_completer->popup()->sizeHintForColumn(0) + m_completer->popup()->verticalScrollBar()->sizeHint().width());
+					m_completer->complete(cr);
+				}
+				else
+				{
+					m_completer->popup()->hide();
+				}
 			}
 		}
-
-		bool isShortcut = ((e->modifiers() & Qt::ControlModifier) && e->key() == Qt::Key_E);
-		if (!m_completer || !isShortcut)
-			QTextEdit::keyPressEvent(e);
-
-		// We also handle other modifiers and shortcuts for which we do not want the completer 
-		// to respond to.
-		const bool ctrlOrShift = e->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier);
-		if (m_completer && (ctrlOrShift && e->text().isEmpty()))
-			return;
-
-		// end of word
-		static QString eow("~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-=");
-		bool hasModifier = (e->modifiers() != Qt::NoModifier) && !ctrlOrShift;
-		QString completionPrefix = textUnderCursor();
-
-		if (!isShortcut && (hasModifier || e->text().isEmpty() || completionPrefix.length() < 3 || eow.contains(e->text().right(1)))) 
-		{
-			m_completer->popup()->hide();
-			return;
-		}
-
-		if (completionPrefix != m_completer->completionPrefix())
-		{
-			m_completer->setCompletionPrefix(completionPrefix);
-			m_completer->popup()->setCurrentIndex(m_completer->completionModel()->index(0, 0));
-		}
-
-		// popup it up!
-		QRect cr = cursorRect();
-		cr.setWidth(m_completer->popup()->sizeHintForColumn(0) + m_completer->popup()->verticalScrollBar()->sizeHint().width());
-		m_completer->complete(cr); 
 	}
 
 	void LuaTextEdit::focusInEvent(QFocusEvent* e)
@@ -126,5 +116,57 @@ namespace Studio
 		tc.select(QTextCursor::WordUnderCursor);
 		
 		return tc.selectedText();
+	}
+
+	// current line
+	Echo::String LuaTextEdit::textCurrentLine() const
+	{
+		QString text = textCursor().block().text().trimmed();
+		return text.toStdString().c_str();
+	}
+
+	// auto indent
+	void LuaTextEdit::autoIndent(QKeyEvent* e)
+	{
+		if (e->key() != Qt::Key_Return)
+			return;
+
+		int tabCount = 0;
+		Echo::String currentLineText = textCurrentLine();
+		for (size_t i = 0; i < currentLineText.size(); i++)
+		{
+			if (currentLineText[i] == '\t')
+			{
+				tabCount++;
+			}
+			else
+			{
+				currentLineText = currentLineText.substr(tabCount, currentLineText.size() - tabCount);
+				break;
+			}		
+		}
+
+		if (Echo::StringUtil::StartWith(currentLineText, "for") || 
+			Echo::StringUtil::StartWith(currentLineText, "if") || 
+			Echo::StringUtil::StartWith(currentLineText, "function"))
+		{
+			QTextEdit::insertPlainText("\n");
+			for (int i = 0; i < tabCount+1; i++)
+			{
+				QTextEdit::insertPlainText("\t");
+			}
+		}
+		else if (Echo::StringUtil::StartWith(currentLineText, "end"))
+		{
+			QTextEdit::insertPlainText("\n");
+		}
+		else
+		{
+			QTextEdit::insertPlainText("\n");
+			for (int i = 0; i < tabCount; i++)
+			{
+				QTextEdit::insertPlainText("\t");
+			}
+		}
 	}
 }

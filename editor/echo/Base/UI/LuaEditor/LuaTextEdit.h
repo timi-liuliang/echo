@@ -2,6 +2,7 @@
 
 #include <QTextEdit>
 #include <QCompleter>
+#include <engine/core/util/StringUtil.h>
 
 namespace Studio
 {
@@ -13,7 +14,7 @@ namespace Studio
 		LuaTextEdit(QWidget* parent = nullptr);
 		virtual ~LuaTextEdit();
 
-		void setCompleter(QCompleter* c);
+		void setModel(const QStringList& words);
 		QCompleter* getCompleter() const;
 
 	protected:
@@ -21,12 +22,20 @@ namespace Studio
 		virtual void focusInEvent(QFocusEvent* e) override;
 
 	private:
+		// insert completion
 		void insertCompletion(const QString& completion);
 
-	private:
+		// get text under cursor
 		QString textUnderCursor() const;
 
+		// current line
+		Echo::String textCurrentLine() const;
+
+		// auto indent
+		void autoIndent(QKeyEvent* e);
+
 	private:
+		QStringList		m_keyWords;
 		QCompleter*		m_completer;
 	};
 }
