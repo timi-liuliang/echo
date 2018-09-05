@@ -143,17 +143,22 @@ namespace Echo
 	{
 		LUA_STACK_CHECK(m_luaState);
 
-		StringArray vars = StringUtil::Split(methodName, ".");
-		if (vars.size() > 1)
-		{
-			lua_getglobal(m_luaState, vars[0].c_str());
-			for (size_t idx = 1; idx < vars.size() - 1; idx++)
-				lua_getfield(m_luaState, -1, vars[idx].c_str());
-		}
+		String currentLayerName;
+		int upperTableCount = lua_get_upper_tables(m_luaState, methodName, currentLayerName, true);
+		int parentIdx = lua_gettop(m_luaState);
 
 		lua_pushlightuserdata(m_luaState, method);
 		lua_pushcclosure(m_luaState, method_cb, 1);
-		lua_setfield(m_luaState, -2, vars.back().c_str());
+
+		if (upperTableCount != 0)
+		{
+			lua_setfield(m_luaState, parentIdx, currentLayerName.c_str());
+			lua_pop(m_luaState, upperTableCount);
+		}
+		else
+		{
+			lua_setglobal(m_luaState, methodName.c_str());
+		}
 
 		lua_settop(m_luaState, 0);
 
@@ -208,7 +213,7 @@ namespace Echo
 			LUA_STACK_CHECK(m_luaState);
 
 			String currentLayerName;
-			int upperTableCount = lua_get_upper_tables(m_luaState, objectName, currentLayerName);
+			int upperTableCount = lua_get_upper_tables(m_luaState, objectName, currentLayerName, true);
 			int parentIdx = lua_gettop(m_luaState);
 
 			lua_newtable(m_luaState);

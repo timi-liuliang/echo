@@ -28,13 +28,13 @@ namespace Echo
 	}
 
 	// get upper layer table
-	int lua_get_upper_tables(lua_State* luaState, const String& objectName, String& currentLayerName)
+	int lua_get_upper_tables(lua_State* luaState, const String& objectName, String& currentLayerName, bool isCreateWhenNotExist)
 	{
 		StringArray names = StringUtil::Split(objectName, ".");
 		if (names.size() > 1)
 		{
 			currentLayerName = names.back();
-			return lua_get_tables(luaState, names, names.size() - 1);
+			return lua_get_tables(luaState, names, names.size() - 1, isCreateWhenNotExist);
 		}
 		else
 		{
@@ -42,7 +42,7 @@ namespace Echo
 		}
 	}
 
-	int lua_get_tables(lua_State* luaState, const StringArray& objectNames, const int count)
+	int lua_get_tables(lua_State* luaState, const StringArray& objectNames, const int count, bool isCreateWhenNotExist)
 	{
 		int tableCount = 0;
 		for (int i = 0; i < count; i++)
@@ -50,18 +50,29 @@ namespace Echo
 			if (i == 0)
 			{
 				lua_getglobal(luaState, objectNames[i].c_str());
+				if (lua_isnil(luaState, -1))
+				{
+					LUA_STACK_CHECK( luaState);
+					lua_pop( luaState, 1);
+					lua_newtable(luaState);
+					lua_setglobal(luaState, objectNames[i].c_str());
+					lua_getglobal(luaState, objectNames[i].c_str());
+				}
 			}
 			else
 			{
 				lua_getfield(luaState, -1, objectNames[i].c_str());
+				if (lua_isnil(luaState, -1))
+				{
+					LUA_STACK_CHECK(luaState);
+					lua_pop(luaState, 1);
+					lua_newtable(luaState);
+					lua_setfield(luaState, -2, objectNames[i].c_str());
+					lua_getfield(luaState, -1, objectNames[i].c_str());
+				}
 			}
 
 			tableCount++;
-			if (lua_isnil(luaState, -1))
-			{
-				lua_pop(luaState, tableCount);
-				return 0;
-			}
 		}
 
 		return tableCount;
