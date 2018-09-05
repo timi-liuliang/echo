@@ -399,7 +399,7 @@ namespace Studio
 		Echo::String nodeTreeFile = ResChooseDialog::getExistingFile(this, ".scene");
 		if (!nodeTreeFile.empty())
 		{
-			Echo::Node* node = Echo::Node::load(nodeTreeFile, true);
+			Echo::Node* node = Echo::Node::loadLink(nodeTreeFile, true);
 			if (node)
 			{
 				addNode(node);

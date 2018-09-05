@@ -135,7 +135,6 @@ namespace Echo
 	// set search path
 	void LuaBinder::setSearchPath(const String& path)
 	{
-		String x = getGlobalVariableStr("package.path");
 		setGlobalVariableStr("package.path", StringUtil::Format("%s?.lua", path.c_str()).c_str());
 	}
 
@@ -144,9 +143,19 @@ namespace Echo
 	{
 		LUA_STACK_CHECK(m_luaState);
 
+		StringArray vars = StringUtil::Split(methodName, ".");
+		if (vars.size() > 1)
+		{
+			lua_getglobal(m_luaState, vars[0].c_str());
+			for (size_t idx = 1; idx < vars.size() - 1; idx++)
+				lua_getfield(m_luaState, -1, vars[idx].c_str());
+		}
+
 		lua_pushlightuserdata(m_luaState, method);
 		lua_pushcclosure(m_luaState, method_cb, 1);
-		lua_setglobal(m_luaState, methodName.c_str());
+		lua_setfield(m_luaState, -2, vars.back().c_str());
+
+		lua_settop(m_luaState, 0);
 
 		return true;
 	}
@@ -392,26 +401,6 @@ namespace Echo
 		lua_pushstring(m_luaState, value.c_str());
 
 		lua_setfield(m_luaState, -2, vars.back().c_str());
-
-		lua_settop(m_luaState, 0);
-	}
-
-	void LuaBinder::setTableKeyValue(const String& tableName, int key, lua_CFunction value)
-	{
-		LUA_STACK_CHECK(m_luaState);
-
-		StringArray vars = StringUtil::Split(tableName, ".");
-
-		lua_getglobal(m_luaState, vars[0].c_str());
-		for (size_t idx = 1; idx < vars.size(); idx++)
-			lua_getfield(m_luaState, -1, vars[idx].c_str());
-
-		int  a = lua_gettop(m_luaState);
-
-		lua_pushcfunction(m_luaState, value);
-
-		int  b = lua_gettop(m_luaState);
-		lua_rawseti(m_luaState, -2, key);
 
 		lua_settop(m_luaState, 0);
 	}

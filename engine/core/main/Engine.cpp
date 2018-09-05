@@ -103,7 +103,7 @@ namespace Echo
 		const ResourcePath& launchScene = GameSettings::instance()->getLaunchScene();
 		if (!launchScene.isEmpty())
 		{
-			Echo::Node* node = Echo::Node::load(launchScene.getPath(), false);
+			Echo::Node* node = Echo::Node::loadLink(launchScene.getPath(), false);
 			node->setParent(NodeTree::instance()->getInvisibleRootNode());
 		}
 		else

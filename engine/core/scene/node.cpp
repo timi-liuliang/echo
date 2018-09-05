@@ -403,7 +403,7 @@ namespace Echo
 	// bind methods
 	void Node::bindMethods()
 	{
-		BIND_METHOD(Node::load,						  DEF_METHOD("instanceNodeTree"));
+		BIND_METHOD(Node::load,						  DEF_METHOD("Node.load"));
 
 		CLASS_BIND_METHOD(Node, getNode,			  DEF_METHOD("getNode"));
 		CLASS_BIND_METHOD(Node, addChild, 			  DEF_METHOD("addChild"));
@@ -569,8 +569,17 @@ namespace Echo
 		}
 	}
 
+	// instance
+	Node* Node::load(const char* path)
+	{
+		Node* result = loadLink(path, false);
+		result->registerToScript();
+
+		return result;
+	}
+
 	// load
-	Node* Node::load(const String& path, bool isLink)
+	Node* Node::loadLink(const String& path, bool isLink)
 	{
 		MemoryReader reader(path);
 		if (reader.getSize())
@@ -604,7 +613,7 @@ namespace Echo
 		{
 			pugi::xml_node* xmlNode = (pugi::xml_node*)pugiNode;
 			Echo::String path = xmlNode->attribute("path").value();
-			Node* node = path.empty() ? ECHO_DOWN_CAST<Node*>(instanceObject(pugiNode)) : load(path, true);
+			Node* node = path.empty() ? ECHO_DOWN_CAST<Node*>(instanceObject(pugiNode)) : loadLink(path, true);
 			if (node)
 			{
 				if (!path.empty())

@@ -390,7 +390,7 @@ namespace Studio
 	// open node tree
 	void MainWindow::openNodeTree(const Echo::String& resPath)
 	{
-		Echo::Node* node = Echo::Node::load(resPath, false);
+		Echo::Node* node = Echo::Node::loadLink(resPath, false);
 		if (node)
 		{
 			// clear

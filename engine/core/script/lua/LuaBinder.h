@@ -51,7 +51,6 @@ namespace Echo
 
 		// set global value
 		void setGlobalVariableStr(const String& varName, const String& value);
-		void setTableKeyValue(const String& tableName, int key, lua_CFunction value);
 
 	private:
 		// output error and pop stack
