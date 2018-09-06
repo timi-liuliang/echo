@@ -64,7 +64,6 @@ namespace Studio
 	{
 	}
 
-	// 每帧更新
 	void InputController3d::tick(const InputContext& ctx)
 	{
 		// 摄像机旋转更新
@@ -87,13 +86,11 @@ namespace Studio
 		UpdateCamera(ctx.elapsedTime);
 	}
 
-	// 鼠标滚轮事件
 	void InputController3d::wheelEvent(QWheelEvent* e)
 	{
 		CameraZoom(e->delta()  * -0.015f);
 	}
 
-	// 鼠标移动事件
 	void InputController3d::mouseMoveEvent(QMouseEvent* e)
 	{
 		QPointF posChanged = e->localPos() - m_pos;
@@ -105,25 +102,21 @@ namespace Studio
 		m_pos = e->localPos();
 	}
 
-	// 鼠标按下事件
 	void InputController3d::mousePressEvent(QMouseEvent* e)
 	{
 		updateMouseButtonPressedStatus(e, true);
 	}
 
-	// 鼠标释放事件
 	void InputController3d::mouseReleaseEvent(QMouseEvent* e)
 	{
 		updateMouseButtonPressedStatus(e, false);
 	}
 
-	// 鼠标按下事件
 	void InputController3d::keyPressEvent(QKeyEvent* e)
 	{
 		updateKeyPressedStatus(e, true);
 	}
 
-	// 鼠标抬起事件
 	void InputController3d::keyReleaseEvent(QKeyEvent* e)
 	{
 		updateKeyPressedStatus(e, false);
@@ -334,13 +327,11 @@ namespace Studio
 		}
 	}
 
-	//设置相机操作模式
 	void InputController3d::SetCameraOperateMode(int mode)
 	{
 		m_cameraOperateMode = mode;
 	}
 
-	//返回当前相机操作模式
 	int InputController3d::GetCameraOperateMode()
 	{
 		return m_cameraOperateMode;
@@ -357,7 +348,6 @@ namespace Studio
 		AdaptCamera();
 	}
 
-	// 摄像机更新
 	void InputController3d::UpdateCamera(float elapsedTime)
 	{
 		if (m_bNeedUpdateCamera)
@@ -372,7 +362,6 @@ namespace Studio
 		}
 	}
 
-	// 适应模型
 	void InputController3d::CameraZoom(const Echo::AABB& box, float scale)
 	{
 		float         radius = (box.getSize().len() * 0.5f);
@@ -382,7 +371,6 @@ namespace Studio
 		m_cameraPositon = m_cameraLookAt - m_cameraForward * m_cameraRadius;
 	}
 
-	// 平移摄像机
 	void InputController3d::SetCameraMoveDir(const Echo::Vector3& dir)
 	{
 		Echo::Vector3 forward = m_cameraForward; forward.y = 0.f;
@@ -408,7 +396,6 @@ namespace Studio
 		m_cameraMoveDir = forward * dir.z - right * dir.x + Echo::Vector3::UNIT_Y * dir.y;
 	}
 
-	// 操作摄像机
 	void InputController3d::CameraZoom(float zValue)
 	{
 		float newRadius = m_cameraRadius + zValue;
@@ -422,7 +409,6 @@ namespace Studio
 		}
 	}
 
-	// 旋转摄像机(平滑处理)
 	void InputController3d::SmoothRotation(float elapsedTime)
 	{
 		float diffHorizonAngle = m_horizonAngleGoal - m_horizonAngle;
@@ -453,7 +439,6 @@ namespace Studio
 		}
 	}
 
-	// 旋转摄像机
 	void InputController3d::RotationCamera(float xValue, float yValue)
 	{
 		if ( !xValue && !yValue )

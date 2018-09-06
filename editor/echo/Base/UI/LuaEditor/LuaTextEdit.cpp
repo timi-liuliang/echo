@@ -175,7 +175,7 @@ namespace Studio
 	// current line
 	Echo::String LuaTextEdit::textCurrentLine() const
 	{
-		QString text = textCursor().block().text().trimmed();
+		QString text = textCursor().block().text();
 		return text.toStdString().c_str();
 	}
 
