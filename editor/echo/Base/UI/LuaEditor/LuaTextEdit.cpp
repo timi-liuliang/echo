@@ -202,7 +202,7 @@ namespace Studio
 			{
 				QString number = QString::number(blockNumber + 1);
 				painter.setPen(QColor(92, 99, 112));
-				painter.drawText(0, top, m_lineNumberArea->width(), fontMetrics().height(), Qt::AlignRight, number);
+				painter.drawText(0, top, m_lineNumberArea->width() - m_lineNumberArea->rightSpace(), fontMetrics().height(), Qt::AlignRight | Qt::AlignVCenter, number);
 			}
 
 			block = block.next();
@@ -223,7 +223,7 @@ namespace Studio
 			++digits;
 		}
 
-		int space = 3 + fontMetrics().width(QLatin1Char('9')) * digits;
+		int space = m_lineNumberArea->leftSpace() + fontMetrics().width(QLatin1Char('9')) * digits + m_lineNumberArea->rightSpace();
 
 		return space;
 	}
@@ -262,7 +262,7 @@ namespace Studio
 		{
 			QTextEdit::ExtraSelection selection;
 
-			QColor lineColor = QColor(Qt::yellow).lighter(160);
+			QColor lineColor = QColor(90, 90, 90);
 
 			selection.format.setBackground(lineColor);
 			selection.format.setProperty(QTextFormat::FullWidthSelection, true);

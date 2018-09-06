@@ -25,6 +25,7 @@ namespace Studio
 		// calculates the width of the LineNumberArea widget
 		int lineNumberAreaWidth();
 
+	private slots:
 		// update line number area width
 		void updateLineNumberAreaWidth(int newBlockCount);
 
