@@ -26,7 +26,7 @@ namespace Studio
 		m_completer->setWrapAround(false);
 
 		// set words
-		m_keyWords << "self" << "function" << "if" << "then" << "for" << "return" << "end" << "do";
+		m_keyWords << "self" << "function" << "if" << "then" << "for" << "return" << "end" << "do" << "pairs" << "ipairs";
 		setModel( m_keyWords);
 
 		// line number area
@@ -93,6 +93,7 @@ namespace Studio
 
 	void LuaTextEdit::mouseMoveEvent(QMouseEvent* e)
 	{
+		QPlainTextEdit::mouseMoveEvent(e);
 	}
 
 	void LuaTextEdit::keyPressEvent(QKeyEvent* e) 
@@ -112,7 +113,8 @@ namespace Studio
 			}
 			//else if (e->key() == Qt::Key_Space)
 			//{
-			//	// 2.
+				// 2.support auto complete end
+			//	autoCompleteEnd(e);
 			//}
 			else
 			{
@@ -177,6 +179,43 @@ namespace Studio
 	{
 		QString text = textCursor().block().text();
 		return text.toStdString().c_str();
+	}
+
+	// auto add end 
+	void LuaTextEdit::autoCompleteEnd(QKeyEvent* e)
+	{
+		if (e->key() != Qt::Key_Space)
+			return;
+
+		int tabCount = 0;
+		Echo::String currentLineText = textCurrentLine();
+		for (size_t i = 0; i < currentLineText.size(); i++)
+		{
+			if (currentLineText[i] == '\t')
+			{
+				tabCount++;
+			}
+			else
+			{
+				currentLineText = currentLineText.substr(tabCount, currentLineText.size() - tabCount);
+				break;
+			}
+		}
+
+		if (/*Echo::StringUtil::StartWith(currentLineText, "for") ||
+			Echo::StringUtil::StartWith(currentLineText, "if") ||*/
+			Echo::StringUtil::StartWith(currentLineText, "function"))
+		{
+			QPlainTextEdit::insertPlainText(" \n");
+			for (int i = 0; i < tabCount; i++)
+				QPlainTextEdit::insertPlainText("\t");
+
+			QPlainTextEdit::insertPlainText("end\n");
+
+			QTextCursor curCursor = textCursor();
+			textCursor().movePosition(QTextCursor::PreviousBlock, QTextCursor::MoveAnchor,  2);
+			setTextCursor(curCursor);
+		}
 	}
 
 	// auto indent

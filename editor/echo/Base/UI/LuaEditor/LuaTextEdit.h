@@ -55,6 +55,9 @@ namespace Studio
 		// auto indent
 		void autoIndent(QKeyEvent* e);
 
+		// auto add end 
+		void autoCompleteEnd(QKeyEvent* e);
+
 	private:
 		QStringList					m_keyWords;
 		QCompleter*					m_completer;
