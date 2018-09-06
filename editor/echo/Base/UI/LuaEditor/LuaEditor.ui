@@ -16,22 +16,26 @@
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QVBoxLayout" name="verticalLayout" stretch="0">
     <property name="spacing">
-     <number>3</number>
+     <number>0</number>
     </property>
     <property name="leftMargin">
-     <number>3</number>
+     <number>0</number>
     </property>
     <property name="topMargin">
-     <number>3</number>
+     <number>0</number>
     </property>
     <property name="rightMargin">
-     <number>3</number>
+     <number>0</number>
     </property>
     <property name="bottomMargin">
-     <number>3</number>
+     <number>0</number>
     </property>
     <item>
-     <widget class="Studio::LuaTextEdit" name="m_plainTextEdit"/>
+     <widget class="Studio::LuaTextEdit" name="m_plainTextEdit">
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

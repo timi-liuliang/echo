@@ -6,6 +6,7 @@
 
 namespace Studio
 {
+	class LuaTextEditLineNumberArea;
 	class LuaTextEdit : public  QPlainTextEdit
 	{
 		Q_OBJECT
@@ -17,9 +18,26 @@ namespace Studio
 		void setModel(const QStringList& words);
 		QCompleter* getCompleter() const;
 
+	public:
+		// draw line number paint event
+		void lineNumberAreaPaintEvent(QPaintEvent* event);
+
+		// calculates the width of the LineNumberArea widget
+		int lineNumberAreaWidth();
+
+		// update line number area width
+		void updateLineNumberAreaWidth(int newBlockCount);
+
+		// update line number area
+		void updateLineNumberArea(const QRect& rect, int dy);
+
+		// high light current line
+		void highlightCurrentLine();
+
 	protected:
 		virtual void keyPressEvent(QKeyEvent* e) override;
 		virtual void focusInEvent(QFocusEvent* e) override;
+		virtual void resizeEvent(QResizeEvent* e) override;
 
 	private:
 		// insert completion
@@ -35,7 +53,8 @@ namespace Studio
 		void autoIndent(QKeyEvent* e);
 
 	private:
-		QStringList		m_keyWords;
-		QCompleter*		m_completer;
+		QStringList					m_keyWords;
+		QCompleter*					m_completer;
+		LuaTextEditLineNumberArea*	m_lineNumberArea;
 	};
 }
