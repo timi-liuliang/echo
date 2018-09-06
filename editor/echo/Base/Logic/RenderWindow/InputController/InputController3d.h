@@ -31,25 +31,13 @@ namespace Studio
 		// 每帧更新
 		virtual void tick(const InputContext& ctx) override;
 
-		// 鼠标滚轮事件
+		// events
 		virtual void wheelEvent(QWheelEvent* e) override;
-
-		// 鼠标移动事件
 		virtual void mouseMoveEvent(QMouseEvent* e) override;
-
-		// 鼠标按下事件
 		virtual void mousePressEvent(QMouseEvent* e) override;
-
-		// 鼠标双击事件
 		virtual void mouseDoubleClickEvent(QMouseEvent* e) override {}
-
-		// 鼠标释放事件
 		virtual void mouseReleaseEvent(QMouseEvent* e) override;
-
-		// 鼠标按下事件
 		virtual void keyPressEvent(QKeyEvent* e) override;
-
-		// 鼠标抬起事件
 		virtual void keyReleaseEvent(QKeyEvent* e) override;
 
 		// 鼠标按键

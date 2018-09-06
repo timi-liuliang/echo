@@ -75,13 +75,11 @@ namespace Studio
 		UpdateCamera(ctx.elapsedTime);
 	}
 
-	// 鼠标滚轮事件
 	void InputController2d::wheelEvent(QWheelEvent* e)
 	{
 		CameraZoom(e->delta()  * -0.015f);
 	}
 
-	// 鼠标移动事件
 	void InputController2d::mouseMoveEvent(QMouseEvent* e)
 	{
 		QPointF posChanged = e->localPos() - m_pos;
@@ -93,25 +91,21 @@ namespace Studio
 		m_pos = e->localPos();
 	}
 
-	// 鼠标按下事件
 	void InputController2d::mousePressEvent(QMouseEvent* e)
 	{
 		updateMouseButtonPressedStatus(e, true);
 	}
 
-	// 鼠标释放事件
 	void InputController2d::mouseReleaseEvent(QMouseEvent* e)
 	{
 		updateMouseButtonPressedStatus(e, false);
 	}
 
-	// 鼠标按下事件
 	void InputController2d::keyPressEvent(QKeyEvent* e)
 	{
 		updateKeyPressedStatus(e, true);
 	}
 
-	// 鼠标抬起事件
 	void InputController2d::keyReleaseEvent(QKeyEvent* e)
 	{
 		updateKeyPressedStatus(e, false);

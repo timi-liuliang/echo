@@ -12,20 +12,6 @@ namespace Studio
 	{
 		setupUi( this);
 
-		// font
-		QFont font;
-		font.setFamily("Courier");
-		font.setStyleHint(QFont::Monospace);
-		font.setFixedPitch(true);
-		font.setPointSize(10);
-		font.setBold(true);
-		m_plainTextEdit->setFont(font);
-
-		// Tab Space
-		const int tabStop = 4;  // 4 characters
-		QFontMetrics metrics(font);
-		m_plainTextEdit->setTabStopWidth(tabStop * metrics.width(' '));
-
 		// syntax high lighter
 		m_luaSyntaxHighLighter = new LuaSyntaxHighLighter(m_plainTextEdit->document());
 

@@ -7,7 +7,10 @@
 #include <QScrollBar>
 #include <QStringListModel>
 #include <QFontMetrics>
+#include <engine/core/math/Math.h>
 #include <engine/core/util/StringUtil.h>
+#include <engine/core/log/Log.h>
+#include "Studio.h"
 #include "LuaTextEditLineNumberArea.h"
 
 namespace Studio
@@ -35,6 +38,20 @@ namespace Studio
 
 		updateLineNumberAreaWidth(0);
 		highlightCurrentLine();
+
+		// font
+		Echo::String fontSize =  AStudio::instance()->getConfigMgr()->getValue("lua_edit_font_size");
+		QFont font;
+		font.setFamily("Courier New");
+		font.setStyleHint(QFont::Monospace);
+		font.setFixedPitch(true);
+		font.setPointSize( fontSize.empty() ? 10 : Echo::StringUtil::ParseI32(fontSize));
+		setFont(font);
+
+		// Tab Space
+		const int tabStop = 4;  // 4 characters
+		QFontMetrics metrics(font);
+		setTabStopWidth(tabStop * metrics.width(' '));
 	}
 
 	LuaTextEdit::~LuaTextEdit()
@@ -52,6 +69,30 @@ namespace Studio
 	QCompleter* LuaTextEdit::getCompleter() const
 	{
 		return m_completer;
+	}
+
+	void LuaTextEdit::wheelEvent(QWheelEvent* e)
+	{
+		// not all font point size is valid. why?
+		if (e->modifiers() & Qt::ControlModifier)
+		{
+			QFont font = this->font();
+			font.setStyleHint(QFont::Monospace);
+			int fontPointSize = font.pointSize();
+			if (e->delta() < 0)
+				fontPointSize  = Echo::Math::Clamp(fontPointSize + 1, 5, 32);
+			else
+				fontPointSize = Echo::Math::Clamp(fontPointSize - 1, 5, 32);
+
+			font.setPointSize(fontPointSize);
+			setFont(font);
+
+			AStudio::instance()->getConfigMgr()->setValue("lua_edit_font_size", Echo::StringUtil::ToString(fontPointSize).c_str());
+		}
+	}
+
+	void LuaTextEdit::mouseMoveEvent(QMouseEvent* e)
+	{
 	}
 
 	void LuaTextEdit::keyPressEvent(QKeyEvent* e) 
