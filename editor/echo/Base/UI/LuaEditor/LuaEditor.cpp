@@ -19,18 +19,18 @@ namespace Studio
 		font.setFixedPitch(true);
 		font.setPointSize(10);
 		font.setBold(true);
-		m_textEditor->setFont(font);
+		m_plainTextEdit->setFont(font);
 
 		// Tab Space
 		const int tabStop = 4;  // 4 characters
 		QFontMetrics metrics(font);
-		m_textEditor->setTabStopWidth(tabStop * metrics.width(' '));
+		m_plainTextEdit->setTabStopWidth(tabStop * metrics.width(' '));
 
 		// syntax high lighter
-		m_luaSyntaxHighLighter = new LuaSyntaxHighLighter(m_textEditor->document());
+		m_luaSyntaxHighLighter = new LuaSyntaxHighLighter(m_plainTextEdit->document());
 
 		// connections
-		QObject::connect(m_textEditor, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
+		QObject::connect(m_plainTextEdit, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
 	}
 
 	LuaEditor::~LuaEditor()
@@ -50,7 +50,7 @@ namespace Studio
 		m_luaRes = ECHO_DOWN_CAST<Echo::LuaScript*>(Echo::Res::get(fullPath));
 		if (m_luaRes)
 		{
-			m_textEditor->setPlainText(m_luaRes->getSrc());
+			m_plainTextEdit->setPlainText(m_luaRes->getSrc());
 
 			// change title
 			updateTitle();
@@ -75,7 +75,7 @@ namespace Studio
 		{
 			updateTitle();
 
-			m_luaRes->setSrc( m_textEditor->toPlainText().toStdString().c_str());
+			m_luaRes->setSrc(m_plainTextEdit->toPlainText().toStdString().c_str());
 		}
 	}
 
@@ -95,7 +95,7 @@ namespace Studio
 	{
 		if (m_luaRes)
 		{
-			if (m_luaRes->getSrc() == m_textEditor->toPlainText())
+			if (m_luaRes->getSrc() == m_plainTextEdit->toPlainText())
 			{
 				Echo::String fileName = m_luaRes->getPath();
 				setWindowTitle( fileName.c_str());

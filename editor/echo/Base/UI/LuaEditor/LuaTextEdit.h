@@ -1,12 +1,12 @@
 #pragma once
 
-#include <QTextEdit>
+#include <QPlainTextEdit>
 #include <QCompleter>
 #include <engine/core/util/StringUtil.h>
 
 namespace Studio
 {
-	class LuaTextEdit : public QTextEdit
+	class LuaTextEdit : public  QPlainTextEdit
 	{
 		Q_OBJECT
 

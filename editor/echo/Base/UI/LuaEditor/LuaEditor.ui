@@ -31,11 +31,7 @@
      <number>3</number>
     </property>
     <item>
-     <widget class="Studio::LuaTextEdit" name="m_textEditor">
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-     </widget>
+     <widget class="Studio::LuaTextEdit" name="m_plainTextEdit"/>
     </item>
    </layout>
   </widget>
@@ -43,7 +39,7 @@
  <customwidgets>
   <customwidget>
    <class>Studio::LuaTextEdit</class>
-   <extends>QTextEdit</extends>
+   <extends>QPlainTextEdit</extends>
    <header>LuaTextEdit.h</header>
   </customwidget>
  </customwidgets>

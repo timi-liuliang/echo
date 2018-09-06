@@ -10,7 +10,7 @@
 namespace Studio
 {
 	LuaTextEdit::LuaTextEdit(QWidget* parent)
-		: QTextEdit(parent)
+		: QPlainTextEdit(parent)
 		, m_completer(nullptr)
 	{
 		m_completer = new QCompleter(this);
@@ -62,7 +62,7 @@ namespace Studio
 			//}
 			else
 			{
-				QTextEdit::keyPressEvent(e);
+				QPlainTextEdit::keyPressEvent(e);
 
 				// end of word
 				Echo::String currentCompletionPrefix = m_completer->completionPrefix().toStdString().c_str();
@@ -94,7 +94,7 @@ namespace Studio
 		if (m_completer)
 			m_completer->setWidget(this);
 
-		QTextEdit::focusInEvent(e);
+		QPlainTextEdit::focusInEvent(e);
 	}
 
 	void LuaTextEdit::insertCompletion(const QString& completion)
@@ -150,22 +150,22 @@ namespace Studio
 			Echo::StringUtil::StartWith(currentLineText, "if") || 
 			Echo::StringUtil::StartWith(currentLineText, "function"))
 		{
-			QTextEdit::insertPlainText("\n");
+			QPlainTextEdit::insertPlainText("\n");
 			for (int i = 0; i < tabCount+1; i++)
 			{
-				QTextEdit::insertPlainText("\t");
+				QPlainTextEdit::insertPlainText("\t");
 			}
 		}
 		else if (Echo::StringUtil::StartWith(currentLineText, "end"))
 		{
-			QTextEdit::insertPlainText("\n");
+			QPlainTextEdit::insertPlainText("\n");
 		}
 		else
 		{
-			QTextEdit::insertPlainText("\n");
+			QPlainTextEdit::insertPlainText("\n");
 			for (int i = 0; i < tabCount; i++)
 			{
-				QTextEdit::insertPlainText("\t");
+				QPlainTextEdit::insertPlainText("\t");
 			}
 		}
 	}
