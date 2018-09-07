@@ -34,7 +34,7 @@ namespace Echo
 		String			WCS2MBS(const WString& str);
 		WString			MBS2WCS(const String& str);
 
-		String			ToString(Real val, Word precision = 3, Word width = 0, char fill = ' ');
+		String			ToString(Real val, Word precision = 5, Word width = 0, char fill = ' ');
 		String			ToString(i32 val, Word width = 0, char fill = ' ');
 		String			ToString(i64 val, Word width = 0, char fill = ' ');
 		String			ToString(ui32 val, Word width = 0, char fill = ' ');
