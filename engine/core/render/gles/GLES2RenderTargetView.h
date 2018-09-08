@@ -1,11 +1,9 @@
 #pragma once
 
-#include "render/RenderTargetView.h"
+#include "interface/RenderTargetView.h"
 
 namespace Echo
 {
-	class GLES2TargetViewGPUProxy;
-
 	class GLES2RenderTargetView: public RenderTargetView
 	{
 	public:

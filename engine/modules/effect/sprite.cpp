@@ -1,8 +1,8 @@
 #include "sprite.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/scene/node_tree.h"
-#include "render/renderer.h"
-#include "render/ShaderProgramRes.h"
+#include "interface/renderer.h"
+#include "interface/ShaderProgramRes.h"
 #include "engine/core/main/Engine.h"
 
 // Ä¬ÈÏ²ÄÖÊ
@@ -134,7 +134,7 @@ namespace Echo
 
 			// material
 			m_material = ECHO_CREATE_RES(Material);
-			m_material->setShaderContent(g_spriteDefaultMaterial);
+			m_material->setShaderContent("echo_sprite_default_shader", g_spriteDefaultMaterial);
 			m_material->setRenderStage("Transparent");
 
 			m_material->setTexture("u_BaseColorSampler", m_textureRes.getPath());
@@ -171,7 +171,7 @@ namespace Echo
 	// build mesh data by drawables data
 	void Sprite::buildMeshData(VertexArray& oVertices, IndiceArray& oIndices)
 	{
-		TextureRes*	texture = m_material->getTexture(0);
+		Texture* texture = m_material->getTexture(0);
 		if (texture)
 		{
 			if(!m_width) m_width  = texture->getWidth();

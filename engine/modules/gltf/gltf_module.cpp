@@ -10,6 +10,7 @@ namespace Echo
 
 	void GltfModule::registerTypes()
 	{
+		Class::registerType<GltfRes>();
 		Class::registerType<GltfMesh>();
 		Class::registerType<GltfSkeleton>();
 	}

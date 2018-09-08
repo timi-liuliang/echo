@@ -6,7 +6,7 @@
 #include "GLES2GPUBuffer.h"
 #include <engine/core/util/AssertX.h>
 #include <engine/core/util/Exception.h>
-#include "render/PixelFormat.h"
+#include "interface/PixelFormat.h"
 #include "GLES2Mapping.h"
 
 
@@ -20,7 +20,6 @@ namespace Echo
 	{
 	}
 	
-	// 析构函数
 	GLES2Renderable::~GLES2Renderable()
 	{
 	}
@@ -49,7 +48,6 @@ namespace Echo
 		return true;
 	}
 	
-	// 绑定到GPU
 	void GLES2Renderable::bind(Renderable* pre)
 	{
 		GPUBuffer* idxBuffer = m_mesh->getIndexBuffer();
@@ -131,8 +129,6 @@ namespace Echo
 		//	OGLESDebug(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 	}
 
-
-	// 计算顶点流声明
 	bool GLES2Renderable::buildVertStreamDeclaration(StreamUnit* stream)
 	{
 		ui32 numVertElms = stream->m_vertElements.size();
@@ -156,11 +152,11 @@ namespace Echo
 			stream->m_vertDeclaration[i].elementOffset = elmOffset;
 			elmOffset += PixelUtil::GetPixelSize(stream->m_vertElements[i].m_pixFmt);
 
-			if (stream->m_vertDeclaration[i].m_attribute == -1)
-			{
-				String name = GLES2Mapping::MapVertexSemanticString(stream->m_vertElements[i].m_semantic);
-//				EchoLogError("Vertex Attribute [%s] is not enable in [%s] Material", name.c_str(), gles2Program->getMaterialName().c_str());
-			}
+			//if (stream->m_vertDeclaration[i].m_attribute == -1)
+			//{
+				//String name = GLES2Mapping::MapVertexSemanticString(stream->m_vertElements[i].m_semantic);
+				//EchoLogError("Vertex Attribute [%s] is not enable in [%s] Material", name.c_str(), gles2Program->getMaterialName().c_str());
+			//}
 		}
 
 		if (false == m_is_muti_stream)
@@ -190,13 +186,11 @@ namespace Echo
 			}
 		}
 
-
 		stream->m_vertStride = elmOffset;
 
 		return true;
 	}
 
-	// 生成顶点流Hash值(BKDR Hash)
 	void GLES2Renderable::generateVertexStreamHash()
 	{
 		unsigned int seed = 131; // 31 131 1313 13131 131313 etc..

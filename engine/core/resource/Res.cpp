@@ -71,15 +71,19 @@ namespace Echo
 	}
 
 	// resister res
-	void Res::registerRes(const String& className, const String& ext, RES_CREATE_FUNC cfun, RES_LOAD_FUNC lfun)
+	void Res::registerRes(const String& className, const String& exts, RES_CREATE_FUNC cfun, RES_LOAD_FUNC lfun)
 	{
 		ResFun fun;
 		fun.m_class = className;
-		fun.m_ext = ext;
 		fun.m_cfun = cfun;
 		fun.m_lfun = lfun;
 
-		g_resFuncs[ext] = fun;
+		StringArray extArray = StringUtil::Split(exts, "|");
+		for (const String& ext : extArray)
+		{
+			fun.m_ext = ext;
+			g_resFuncs[ext] = fun;
+		}
 	}
 
 	// get res

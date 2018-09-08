@@ -1,13 +1,12 @@
+#include "engine/core/Util/PathUtil.h"
+#include "interface/Renderer.h"
 #include "GLES2RenderBase.h"
-#include "Render/Renderer.h"
 #include "GLES2Mapping.h"
 #include "GLES2RenderTarget.h"
 #include "GLES2Texture.h"
-#include "engine/core/Util/PathUtil.h"
 
 namespace Echo
 {
-	// 构造函数
 	GLES2RenderTarget::GLES2RenderTarget( ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const Options& option)
 		: RenderTarget(_id, _width, _height, _pixelFormat, option)
 		, m_fbo(0)
@@ -25,7 +24,6 @@ namespace Echo
 		m_depthTexture.m_samplerState = Renderer::instance()->getSamplerState(desc);
 	} 
 
-	// 析构函数
 	GLES2RenderTarget::~GLES2RenderTarget()
 	{
 		if (m_fbo != Invalid_Value)
@@ -37,11 +35,11 @@ namespace Echo
 		{
 			OGLESDebug(glDeleteRenderbuffers(1, &m_rbo));
 		}
-		Renderer::instance()->releaseTexture(m_bindTexture.m_texture);
-		Renderer::instance()->releaseTexture(m_depthTexture.m_texture);
+
+		m_bindTexture.m_texture->subRefCount();
+		m_depthTexture.m_texture->subRefCount();
 	}
 
-	// 执行创建
 	bool GLES2RenderTarget::doCreate()
 	{
 		GLES2Texture* texture = dynamic_cast<GLES2Texture*>(m_bindTexture.m_texture);
@@ -214,7 +212,6 @@ namespace Echo
 		OGLESDebug(glViewport(m_width / 2, 0, m_width / 2, m_height));
 	}
 
-	// 清空渲染目标
 	void GLES2RenderTarget::doClear(bool clear_color, const Color& color, bool clear_depth, float depth_value, bool clear_stencil, ui8 stencil_value)
 	{
 		GLbitfield mask = 0;
@@ -272,11 +269,11 @@ namespace Echo
 			}
 
 			EchoAssert(m_bindTexture.m_texture);
-			Renderer::instance()->releaseTexture(m_bindTexture.m_texture);
+			m_bindTexture.m_texture->subRefCount();
 			m_bindTexture.m_texture = Renderer::instance()->createTexture("rt_" + StringUtil::ToString(m_id));
 
 			EchoAssert(m_depthTexture.m_texture);
-			Renderer::instance()->releaseTexture(m_depthTexture.m_texture);
+			m_depthTexture.m_texture->subRefCount();
 			m_depthTexture.m_texture = Renderer::instance()->createTexture("rtDEPTH_" + StringUtil::ToString(m_id));
 
 			doCreate();

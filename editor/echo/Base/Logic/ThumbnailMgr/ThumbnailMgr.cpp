@@ -1,6 +1,6 @@
 #include "ThumbnailMgr.h"
 #include "FreeImageHelper.h"
-#include <Engine/core/Render/RenderTargetManager.h>
+#include <engine/core/render/interface/RenderTargetManager.h>
 #include <engine/core/Util/StringUtil.h>
 #include "Studio.h"
 #include <shellapi.h>

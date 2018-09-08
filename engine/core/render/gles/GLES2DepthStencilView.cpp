@@ -3,7 +3,7 @@
 #include "GLES2DepthStencilView.h"
 #include "GLES2Mapping.h"
 #include <engine/core/util/Exception.h>
-#include "render/PixelFormat.h"
+#include "interface/PixelFormat.h"
 
 namespace Echo
 {

@@ -1,8 +1,8 @@
 #include "spine.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/scene/node_tree.h"
-#include "render/renderer.h"
-#include "render/ShaderProgramRes.h"
+#include "interface/renderer.h"
+#include "interface/ShaderProgramRes.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/math/color.h"
 #include "engine/core/main/Engine.h"
@@ -10,7 +10,7 @@
 #include <spine/extension.h>
 #include "AttachmentLoader.h"
 
-// Ä¬ÈÏ²ÄÖÊ
+// spine default material
 static const char* g_spinDefaultMaterial = R"(
 <?xml version = "1.0" encoding = "utf-8"?>
 <Shader>
@@ -235,7 +235,7 @@ namespace Echo
 				vertex->m_diffuse = Color(slot->color.r, slot->color.g, slot->color.b, slot->color.a);
 			}
 
-			// »ìºÏ×´Ì¬
+			// blend mode
 			switch (slot->data->blendMode)
 			{
 			case SP_BLEND_MODE_ADDITIVE:
@@ -277,7 +277,7 @@ namespace Echo
 			m_mesh->updateVertexs(define, m_batch.m_verticesData.size(), (const Byte*)m_batch.m_verticesData.data(), AABB());
 
 			m_material = ECHO_CREATE_RES(Material);
-			m_material->setShaderContent(g_spinDefaultMaterial);
+			m_material->setShaderContent("echo_spine_default_shader", g_spinDefaultMaterial);
 			m_material->setRenderStage("Transparent");
 
 			m_material->setTexture("u_BaseColorSampler", m_batch.m_texture);

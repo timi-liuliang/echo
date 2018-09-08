@@ -1,6 +1,6 @@
 #pragma once
 
-#include <render/Texture.h>
+#include <interface/texture.h>
 
 namespace Echo
 {
@@ -64,8 +64,6 @@ namespace Echo
 
 		// 更新内存数据到GPU
 		virtual bool loadToGPU();
-
-		virtual void unloadFromMemory();
 
 		// 从显存卸载
 		virtual void unloadFromGPU();

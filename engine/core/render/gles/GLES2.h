@@ -1,12 +1,12 @@
 #pragma once
 
-#include <engine/core/render/render/Renderer.h>
+#include <engine/core/render/interface/Renderer.h>
 
 namespace Echo
 {
-	// ĞÂ½¨GLESäÖÈ¾Æ÷
+	// load gles painter
 	void LoadGLESRenderer(Renderer*& render);
 
-	// Ğ¶ÔØGLESäÖÈ¾Æ÷
+	// unload gles painter
 	void UnLoadGLESRenderer(Renderer* render);
 }

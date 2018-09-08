@@ -1,6 +1,6 @@
 #pragma once
 
-#include "render/Renderer.h"
+#include "interface/Renderer.h"
 #include "GLES2RenderState.h"
 
 namespace Echo
@@ -105,7 +105,7 @@ namespace Echo
 		// 设置指定槽纹理
 		void bindTexture(GLenum slot, GLenum target, GLES2Texture* texture, const GLES2SamplerState* samplerState, const GLES2SamplerState* pPreSamplerState = NULL,bool needReset = false);
 
-		bool initializeImpl(const RenderCfg& config);
+		bool initializeImpl(const Config& config);
 		void destroyImpl();
 		virtual void createSystemResource();
 		virtual void cleanSystemResource();
@@ -128,7 +128,7 @@ namespace Echo
 
 		void* getSurface() const { return m_eglSurface; }
 
-		bool createRenderContext( const RenderCfg& config );
+		bool createRenderContext( const Config& config );
 
 		void destroyRenderContext();
 

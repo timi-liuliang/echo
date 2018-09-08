@@ -6,9 +6,6 @@ namespace Echo
 {
 	#define ECHO_STREAM_TEMP_SIZE 128
 
-	/**
-	 * 数据流
-	 */
 	class DataStream
 	{
 	public:
@@ -226,7 +223,7 @@ namespace Echo
 		~MemoryReader();
 
 		// 获取数据指针
-		template <typename T> T getData() { return static_cast<T>(m_data); }
+		template <typename T> T getData() { return reinterpret_cast<T>(m_data); }
 
 		// 获取大小
 		ui32 getSize() { return m_size; }

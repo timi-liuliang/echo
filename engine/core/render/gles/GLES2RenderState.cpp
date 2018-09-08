@@ -2,7 +2,7 @@
 #include "GLES2RenderState.h"
 #include "GLES2Mapping.h"
 #include "GLES2Texture.h"
-#include "render/Renderer.h"
+#include "interface/renderer.h"
 #include "engine/core/util/Exception.h"
 
 namespace Echo

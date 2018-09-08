@@ -5,7 +5,7 @@
 #include "engine/core/io/DataStream.h"
 #include "engine/core/scene/node.h"
 #include "engine/core/resource/Res.h"
-#include "engine/core/render/Material.h"
+#include "engine/core/render/interface/Material.h"
 #include "engine/modules/anim/anim_property.h"
 #include <nlohmann/json.hpp>
 
@@ -279,8 +279,11 @@ namespace Echo
 		AnimClip*						m_clip;
 	};
 
-	struct GltfRes : public Res
+	class GltfRes : public Res
 	{
+		ECHO_RES(GltfRes, Res, ".gltf", nullptr, GltfRes::load);
+
+	public:
 		GltfMetaInfo						m_metaInfo;
 		vector<GltfSceneInfo>::type			m_scenes;
 		vector<GltfMeshInfo>::type			m_meshes;
@@ -295,14 +298,17 @@ namespace Echo
 		vector<GltfTextureInfo>::type		m_textures;
 		vector<GltfAnimInfo>::type			m_animations;
 
-		// create
-		static GltfRes* create(const ResourcePath& path);
+		GltfRes() {}
 
 		// build echo node
 		Node* build();
 
 		// get node index of mesh
 		i32 getNodeIdxByMeshIdx(i32 meshIdx);
+
+	protected:
+		// create
+		static Res* load(const ResourcePath& path);
 
 	private:
 		GltfRes(const ResourcePath& path);

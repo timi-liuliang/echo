@@ -1,8 +1,8 @@
 #include "engine/core/log/Log.h"
 #include "engine/core/camera/Camera.h"
-#include "engine/core/render/render/Renderer.h"
-#include "engine/core/render/render/Viewport.h"
-#include "engine/core/render/RenderTargetManager.h"
+#include "engine/core/render/interface/Renderer.h"
+#include "engine/core/render/interface/Viewport.h"
+#include "engine/core/render/interface/RenderTargetManager.h"
 #include "engine/core/geom/Ray.h"
 
 namespace Echo

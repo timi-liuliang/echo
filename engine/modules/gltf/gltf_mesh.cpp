@@ -1,8 +1,8 @@
 #include "gltf_mesh.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/scene/node_tree.h"
-#include "render/renderer.h"
-#include "render/ShaderProgramRes.h"
+#include "interface/renderer.h"
+#include "interface/ShaderProgramRes.h"
 #include "engine/core/main/Engine.h"
 #include "engine/core/gizmos/Gizmos.h"
 
@@ -53,7 +53,7 @@ namespace Echo
 	{
 		if (m_assetPath.setPath(path.getPath()))
 		{
-			m_asset = GltfRes::create(m_assetPath);
+			m_asset = (GltfRes*)Res::get(m_assetPath);
 			m_renderableDirty = true;
 		}
 	}

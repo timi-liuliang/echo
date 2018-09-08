@@ -1,12 +1,12 @@
 #include "engine/core/io/IO.h"
-#include "engine/core/render/TextureRes.h"
+#include "engine/core/render/interface/texture.h"
 #include <spine/extension.h>
 
 // create texture res
 void _spAtlasPage_createTexture(spAtlasPage* self, const char* path)
 {
-	Echo::TextureRes* texRes = Echo::TextureRes::createTexture(path, Echo::Texture::TU_STATIC);
-	texRes->prepareLoad();
+	Echo::Texture* texRes = (Echo::Texture*)Echo::Res::get(Echo::ResourcePath(path));
+	//texRes->prepareLoad();
 
 	self->rendererObject = texRes;
 }
@@ -14,7 +14,7 @@ void _spAtlasPage_createTexture(spAtlasPage* self, const char* path)
 // dispose texture
 void _spAtlasPage_disposeTexture(spAtlasPage* self)
 {
-	Echo::TextureRes* texRes = static_cast<Echo::TextureRes*>(self->rendererObject);
+	Echo::Texture* texRes = static_cast<Echo::Texture*>(self->rendererObject);
 	texRes->subRefCount();
 }
 

@@ -1,9 +1,9 @@
 #pragma once
 
 #include "engine/core/math/math.h"
-#include "engine/core/render/Material.h"
-#include "engine/core/render/mesh/Mesh.h"
-#include "engine/core/render/render/Renderable.h"
+#include "engine/core/render/interface/Material.h"
+#include "engine/core/render/interface/mesh/Mesh.h"
+#include "engine/core/render/interface/Renderable.h"
 #include "engine/core/scene/render_node.h"
 
 namespace Echo

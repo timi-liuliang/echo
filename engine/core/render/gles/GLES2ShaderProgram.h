@@ -1,15 +1,14 @@
 #pragma once
 
+#include <engine/core/util/Array.hpp>
+#include "interface/ShaderProgram.h"
+#include "interface/Renderable.h"
+#include "interface/mesh/Mesh.h"
 #include "GLES2Shader.h"
 #include "GLES2Renderable.h"
-#include "render/ShaderProgram.h"
-#include "render/Renderable.h"
-#include "engine/core/render/mesh/Mesh.h"
-#include <engine/core/util/Array.hpp>
 
 namespace Echo
 {
-	class GLES2ShaderProgramGPUProxy;
 	class GLES2ShaderProgram : public ShaderProgram
 	{
 	public:
@@ -48,12 +47,7 @@ namespace Echo
 	private:
 		GLES2Renderable*	m_preRenderable;				// 几何体数据流
 		AttribLocationArray	m_attribLocationMapping;		// 属性物理位置映射
-
-#ifdef ECHO_RENDER_THREAD
-		GLES2ShaderProgramGPUProxy* m_gpu_proxy;
-#else
 		GLuint			m_hProgram;
-#endif
 	};
 
 }

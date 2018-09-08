@@ -9,7 +9,7 @@
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/main/Engine.h"
 #include <engine/core/io/IO.h>
-#include <engine/core/render/Material.h>
+#include <engine/core/render/interface/Material.h>
 
 namespace Studio
 {

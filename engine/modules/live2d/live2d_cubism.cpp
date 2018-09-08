@@ -1,8 +1,8 @@
 #include "live2d_cubism.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/scene/node_tree.h"
-#include "render/renderer.h"
-#include "render/ShaderProgramRes.h"
+#include "interface/renderer.h"
+#include "interface/ShaderProgramRes.h"
 #include "engine/core/main/Engine.h"
 
 // Ä¬ÈÏ²ÄÖÊ
@@ -72,7 +72,7 @@ namespace Echo
 		, m_renderable(nullptr)
 	{
 		m_materialDefault = ECHO_CREATE_RES(Material);
-		m_materialDefault->setShaderContent(g_live2dDefaultMaterial);
+		m_materialDefault->setShaderContent("echo_live2d_default_shader",g_live2dDefaultMaterial);
 		m_materialDefault->setRenderStage("Transparent");
 	}
 

@@ -8,9 +8,9 @@
 #include "GLES2Renderable.h"
 #include <engine/core/log/Log.h>
 #include <engine/core/util/Exception.h>
-#include "engine/core/render/mesh/Mesh.h"
+#include "engine/core/render/interface/mesh/Mesh.h"
 #include "GLES2GPUBuffer.h"
-#include "render/Viewport.h"
+#include "interface/Viewport.h"
 
 namespace Echo
 {
@@ -57,7 +57,7 @@ namespace Echo
 		g_renderer = nullptr;
 	}
 
-	bool GLES2Renderer::initializeImpl(const RenderCfg& config)
+	bool GLES2Renderer::initializeImpl(const Renderer::Config& config)
 	{
 #ifdef ECHO_PLATFORM_WINDOWS
 		// create render context
@@ -192,7 +192,6 @@ namespace Echo
 		OGLESDebug(glDisable(GL_SCISSOR_TEST));
 	}
 
-	// 设置指定槽纹理
 	void GLES2Renderer::setTexture(ui32 index, const TextureSampler& sampler, bool needUpdate)
 	{
 		Texture* texture = sampler.getTexture();
@@ -241,7 +240,6 @@ namespace Echo
 		}
 	}
 
-	// 设置指定槽纹理
 	void GLES2Renderer::bindTexture(GLenum slot, GLenum target, GLES2Texture* texture, const GLES2SamplerState* samplerState, const GLES2SamplerState* pPreSamplerState, bool needReset)
 	{
 		TextureSlotInfo& slotInfo = m_preTextures[slot];
@@ -308,13 +306,6 @@ namespace Echo
 		}
 
 		shader->unbind();
-
-		// profile
-		if (Renderer::instance()->isEnableFrameProfile())
-		{
-			Renderer::instance()->getFrameState().incrDrawCallTimes(1);
-			Renderer::instance()->getFrameState().incrTriangleNum( mesh->getFaceCount());
-		}
 	}
 
 	void GLES2Renderer::getDepthRange(Vector2& vec)
@@ -357,7 +348,6 @@ namespace Echo
 		}
 	}
 
-
 	GPUBuffer* GLES2Renderer::createVertexBuffer(Dword usage, const Buffer& buff)
 	{
 		GPUBuffer* pGPUBuffer = NULL;
@@ -388,41 +378,14 @@ namespace Echo
 		return pGPUBuffer;
 	}
 
-	// 创建纹理
 	Texture* GLES2Renderer::createTexture(const String& name)
 	{
-		EE_LOCK_MUTEX(m_texturesMutex);
-		std::map<String, Texture*>::iterator it = m_textures.find(name);
-		if (it == m_textures.end())
-		{
-			Texture *pTexture = EchoNew(GLES2Texture(name));
-			m_textures[name] = pTexture;
-			return pTexture;
-		}
-		else
-		{
-			return it->second;
-		}
+		return EchoNew(GLES2Texture(name));
 	}
 
 	Texture* GLES2Renderer::createTexture2D(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff)
 	{
-		static int idx = 0;
-		String identify = Echo::StringUtil::Format("CreateTexture2D_%d", idx++);
-		Texture* pTexture2D = NULL;
-		try
-		{
-			pTexture2D = EchoNew(GLES2Texture(Texture::TT_2D, pixFmt, usage, width, height, 1, numMipmaps, buff));
-		}
-		catch (Exception& e)
-		{
-			EchoLogError(e.getMessage().c_str());
-		}
-
-		EE_LOCK_MUTEX(m_texturesMutex);
-		m_textures[identify] = pTexture2D;
-
-		return pTexture2D;
+		return EchoNew(GLES2Texture(Texture::TT_2D, pixFmt, usage, width, height, 1, numMipmaps, buff));
 	}
 
 	ShaderProgram* GLES2Renderer::createShaderProgram(ShaderProgramRes* material)
@@ -644,8 +607,7 @@ namespace Echo
 
 #ifdef ECHO_PLATFORM_WINDOWS
 
-	// 创建渲染上下文
-	bool GLES2Renderer::createRenderContext(const RenderCfg& config)
+	bool GLES2Renderer::createRenderContext(const Renderer::Config& config)
 	{
 		m_hWnd = (HWND)config.windowHandle;
 		m_hDC = GetDC(m_hWnd);
@@ -783,7 +745,6 @@ namespace Echo
 	}
 #endif
 
-	// 创建渲染目标
 	RenderTarget* GLES2Renderer::createRenderTarget(ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const RenderTarget::Options& option)
 	{
 		return EchoNew(GLES2RenderTarget(_id, _width, _height, _pixelFormat, option));

@@ -1,8 +1,8 @@
 #include "engine/core/math/Rect.h"
 #include "engine/core/log/Log.h"
-#include "render/PixelFormat.h"
-#include "render/Image.h"
-#include "render/TextureLoader.h"
+#include "interface/PixelFormat.h"
+#include "interface/Image.h"
+#include "interface/TextureLoader.h"
 #include "GLES2RenderBase.h"
 #include "GLES2Renderer.h"
 #include "GLES2Texture.h"
@@ -11,14 +11,12 @@
 
 namespace Echo
 {
-	// 构造函数
 	GLES2Texture::GLES2Texture(const String& name)
 		: Texture(name)
 	{
 		m_hTexture = 0;
 	}
-	
-	// 构造函数
+
 	GLES2Texture::GLES2Texture(TexType texType, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 depth,
 							   ui32 numMipmaps, const Buffer &buff, bool bBak)
 		: Texture(texType, pixFmt, usage, width, height, depth, numMipmaps, buff)
@@ -32,11 +30,7 @@ namespace Echo
 	// 析构函数
 	GLES2Texture::~GLES2Texture()
 	{
-		if (m_pPreparedData)
-		{
-			EchoSafeFree(m_pPreparedData)
-			m_pPreparedData = nullptr;
-		}
+		EchoSafeDelete(m_memeryData, MemoryReader);
 
 		unloadFromGPU();
 		if (m_hTexture)
@@ -150,17 +144,7 @@ namespace Echo
 		OGLESDebug(glBindTexture(GL_TEXTURE_2D, 0));
 		return true;
 	}
-	
-	void GLES2Texture::unloadFromMemory()
-	{
-		if (!m_isRetainPreparedData && m_pPreparedData)
-		{
-			EchoSafeFree(m_pPreparedData);
-			m_pPreparedData = NULL;
-		}
-	}
 
-	// 从显存中卸载
 	void GLES2Texture::unloadFromGPU()
 	{
 		if (m_hTexture)
@@ -171,31 +155,19 @@ namespace Echo
 
 		if (m_isUploadGPU)
 		{
-			if (Renderer::instance()->isEnableFrameProfile())
-			{
-				Renderer::instance()->getFrameState().decrUploadTextureSizeInBytes(m_uploadedSize);
-			}
-
 			m_isUploadGPU = false;
 		}
 	}  
 
-	// 在GPU中创建此纹理`
 	bool GLES2Texture::loadToGPU()
 	{ 
-		// 如果句柄已存在，说明纹理已加载到GPU，不需再加载
+		// texture has already loaded to gpu
 		if (m_hTexture)
 			return true;
 
-		// 缺少内存数据，无法加载到GPU
-		if (!m_pPreparedData)
-		{
-			if (m_isUploadGPU)
-			{
-				return true;
-			}
-			return false;
-		}
+		// no memory data, can't load to gpu
+		if (!m_memeryData)
+			return m_isUploadGPU ? true : false;
 
 		// 满足加载条件，继续执行
 		bool no_error = false;
@@ -223,14 +195,6 @@ namespace Echo
 			no_error = _upload_common();
 			break;
 		}
-
-		if( no_error && Renderer::instance()->isEnableFrameProfile())
-		{
-			Renderer::instance()->getFrameState().incrUploadTextureSizeInBytes( m_uploadedSize );
-		}
-
-		// 卸载内存数据
-		unloadFromMemory();
 
 		m_isUploadGPU = true;
 		return no_error;
@@ -264,7 +228,8 @@ namespace Echo
 		}
 
 		PVRUploadParams params;
-		params.pPreparedData = m_pPreparedData;
+		ui8* prepareData = m_memeryData->getData<ui8*>();
+		params.pPreparedData = prepareData;
 		params.tex_type = m_texType;
 		params.pixel_format = m_pixFmt;
 		params.width = m_width;
@@ -372,7 +337,7 @@ namespace Echo
 		}
 
 		DDSUploadParams params;
-		params.pPreparedData = m_pPreparedData;
+		params.pPreparedData = m_memeryData->getData<ui8*>();
 		params.tex_type = m_texType;
 		params.pixel_format = m_pixFmt;
 		params.width = m_width;
@@ -455,8 +420,10 @@ namespace Echo
 
 	bool GLES2Texture::_upload_ktx()
 	{
+		ui8* preparedData = m_memeryData->getData<ui8*>();
+
 		KTXUploadParams params;
-		params.pPixelData = m_pPreparedData + m_headerSize;
+		params.pPixelData = preparedData + m_headerSize;
 		EchoAssert(params.pPixelData);
 		params.pixel_format = m_pixFmt;
 		params.width = m_width;
@@ -511,12 +478,8 @@ namespace Echo
 	bool GLES2Texture::_upload_etc_aa_ktx()
 	{
 		i32 etcTextureSize = 0;
-
-		// rgb
-		if( !_upload_pvr(m_pPreparedData+4, &etcTextureSize))
-				return false;
-
-		return true;
+		ui8* fileData = m_memeryData->getData<ui8*>();	
+		return _upload_pvr(fileData + 4, &etcTextureSize) ? true : false;
 	}
 
 	bool GLES2Texture::createCube(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff)
@@ -543,7 +506,7 @@ namespace Echo
 		{
 			image[i] = pData + offset;
 			pixel_data[i] = (image[i] + sizeof(TGAHeaderInfo));
-			offset += (m_fileSize / 6);
+			offset += (m_memeryData->getSize() / 6);
 		}
 
 		OGLESDebug(glGenTextures(1, &m_hTexture));

@@ -1,11 +1,9 @@
 #pragma once
 
-#include "render/DepthStencilView.h"
+#include "interface/DepthStencilView.h"
 
 namespace Echo
 {
-	class GLES2DepthStencilViewGPUProxy;
-
 	class GLES2DepthStencilView : public DepthStencilView
 	{
 	public:

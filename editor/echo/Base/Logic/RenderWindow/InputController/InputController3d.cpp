@@ -2,8 +2,8 @@
 #include "EchoEngine.h"
 #include <QWheelEvent>
 #include <QMouseEvent>
-#include <engine/core/render/render/Renderer.h>
-#include <engine/core/Math/EchoMathFunction.h>
+#include <engine/core/render/interface/Renderer.h>
+#include <engine/core/math/EchoMathFunction.h>
 
 namespace Studio
 {

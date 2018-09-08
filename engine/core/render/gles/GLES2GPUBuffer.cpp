@@ -7,7 +7,6 @@
 
 namespace Echo
 {
-	// 构造函数
 	GLES2GPUBuffer::GLES2GPUBuffer(GPUBufferType type, Dword usage, const Buffer& buff)
 		: GPUBuffer(type, usage, buff)
 	{
@@ -27,21 +26,13 @@ namespace Echo
 		OGLESDebug(glGenBuffers(1, &m_hVBO));
 
 		updateData(buff);
-
-		if (Renderer::instance()->isEnableFrameProfile())
-			Renderer::instance()->getFrameState().incrUploadGeometricSize(buff.getSize());
 	}
 
-	// 析构函数
 	GLES2GPUBuffer::~GLES2GPUBuffer()
 	{
 		OGLESDebug(glDeleteBuffers(1, &m_hVBO));
-
-		if( Renderer::instance()->isEnableFrameProfile() )
-			Renderer::instance()->getFrameState().decrUploadGeometricSize( m_size );
 	}
 
-	// 上传GPU缓冲数据
 	bool GLES2GPUBuffer::updateData(const Buffer& buff)
 	{
 		if (buff.getSize() > 0 || m_glUsage != GL_STATIC_DRAW)
@@ -52,16 +43,10 @@ namespace Echo
 			//glBufferSubData(m_target, offset, buff.getSize(), buff.getData());
 			OGLESDebug(glBufferData(m_target, buff.getSize(), buff.getData(), m_glUsage));
 
-			if (Renderer::instance()->isEnableFrameProfile())
-				Renderer::instance()->getFrameState().incrLockTimes(1);
-
 			return true;
 		}
-		else
-		{
-			EchoLogWarning("GLES2GPUBuffer::updateSubData failed");
-		}
 
+		EchoLogWarning("GLES2GPUBuffer::updateSubData failed");
 		return false;
 	}
 	

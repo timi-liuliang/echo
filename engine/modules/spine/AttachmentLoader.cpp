@@ -1,9 +1,9 @@
 #include "AttachmentLoader.h"
 #include <spine/extension.h>
 #include "engine/core/log/Log.h"
-#include "engine/core/render/TextureRes.h"
-#include "engine/core/render/mesh/Mesh.h"
-#include "engine/core/render/Material.h"
+#include "engine/core/render/interface/texture.h"
+#include "engine/core/render/interface/mesh/Mesh.h"
+#include "engine/core/render/interface/Material.h"
 
 using namespace Echo;
 
@@ -25,7 +25,7 @@ void EchoAttachmentLoader_configureAttachment(spAttachmentLoader* loader, spAtta
 	{
 		spRegionAttachment* regionAttachment = SUB_CAST(spRegionAttachment, attachment);
 		spAtlasRegion* region = (spAtlasRegion*)regionAttachment->rendererObject;
-		AttachmentVertices* attachmentVertices = new AttachmentVertices((Echo::TextureRes*)region->page->rendererObject, 4, quadTriangles, 6);
+		AttachmentVertices* attachmentVertices = new AttachmentVertices((Echo::Texture*)region->page->rendererObject, 4, quadTriangles, 6);
 
 		SpineVertexFormat* vertices = attachmentVertices->m_verticesData.data();
 		for (int i = 0, ii = 0; i < 4; ++i, ii += 2)
@@ -40,7 +40,7 @@ void EchoAttachmentLoader_configureAttachment(spAttachmentLoader* loader, spAtta
 	{
 		spMeshAttachment* meshAttachment = SUB_CAST(spMeshAttachment, attachment);
 		spAtlasRegion* region = (spAtlasRegion*)meshAttachment->rendererObject;
-		AttachmentVertices* attachmentVertices = new AttachmentVertices((Echo::TextureRes*)region->page->rendererObject, meshAttachment->super.worldVerticesLength >> 1, meshAttachment->triangles, meshAttachment->trianglesCount);
+		AttachmentVertices* attachmentVertices = new AttachmentVertices((Echo::Texture*)region->page->rendererObject, meshAttachment->super.worldVerticesLength >> 1, meshAttachment->triangles, meshAttachment->trianglesCount);
 
 		SpineVertexFormat* vertices = attachmentVertices->m_verticesData.data();
 		for (int i = 0, ii = 0, nn = meshAttachment->super.worldVerticesLength; ii < nn; ++i, ii += 2)
@@ -102,18 +102,14 @@ namespace Echo
 
 	}
 
-	AttachmentVertices::AttachmentVertices(TextureRes* texture, int verticesCount, ui16* triangles, int indicesCount)
+	AttachmentVertices::AttachmentVertices(Texture* texture, int verticesCount, ui16* triangles, int indicesCount)
 	{
 		m_texture = texture;
 
-		// 顶点数据内存分配
 		m_verticesData.resize(verticesCount);
-
-		// 记录索引数据
 		m_indicesData.resize(indicesCount);
 		for (int i = 0; i < indicesCount; i++)
 			m_indicesData[i] = triangles[i];
-
 	}
 
 	AttachmentVertices::~AttachmentVertices()

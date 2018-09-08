@@ -111,13 +111,14 @@ namespace Echo
 
 	}
 
-	GltfRes* GltfRes::create(const ResourcePath& path)
+	void GltfRes::bindMethods()
 	{
-		Res* res = Res::get(path);
-		if (res)
-			return dynamic_cast<GltfRes*>(res);
-		else
-			return EchoNew(GltfRes(path));
+
+	}
+
+	Res* GltfRes::load(const ResourcePath& path)
+	{
+		return EchoNew(GltfRes(path));
 	}
 
 	// load
@@ -1049,7 +1050,7 @@ namespace Echo
 		i32 occusionTextureIdx = matInfo.m_occlusionTexture.m_index;
 
 		primitive.m_materialInst = ECHO_CREATE_RES(Material);
-		primitive.m_materialInst->setShaderContent(GltfMaterial::getPbrMetalicRoughnessContent());
+		primitive.m_materialInst->setShaderContent("echo_gltf_default_shader", GltfMaterial::getPbrMetalicRoughnessContent());
 
 		// render stage
 		primitive.m_materialInst->setRenderStage("Opaque");

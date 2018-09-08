@@ -29,7 +29,7 @@ namespace Echo
 	{
 		if (m_assetPath.setPath(path.getPath()))
 		{
-			m_asset = GltfRes::create(m_assetPath);	
+			m_asset = (GltfRes*)Res::get(m_assetPath);	
 			if (m_asset)
 			{
 				for (GltfAnimInfo& gltfAnim : m_asset->m_animations)

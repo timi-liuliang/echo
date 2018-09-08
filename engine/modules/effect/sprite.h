@@ -1,9 +1,9 @@
 #pragma once
 
 #include "engine/core/scene/render_node.h"
-#include "engine/core/render/mesh/Mesh.h"
-#include "engine/core/render/Material.h"
-#include "engine/core/render/render/Renderable.h"
+#include "engine/core/render/interface/mesh/Mesh.h"
+#include "engine/core/render/interface/Material.h"
+#include "engine/core/render/interface/Renderable.h"
 
 namespace Echo
 {

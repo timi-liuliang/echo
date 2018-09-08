@@ -1,10 +1,9 @@
 #pragma once
 
 #include <spine/spine.h>
-#include <Render/GPUBuffer.h>
-#include <Render/GPUBuffer.h>
-#include <Render/Renderable.h>
-#include "engine/core/render/TextureRes.h"
+#include <interface/GPUBuffer.h>
+#include <interface/Renderable.h>
+#include "interface/Texture.h"
 
 extern "C"
 {
@@ -34,7 +33,7 @@ namespace Echo
 	{
 	public:
 		AttachmentVertices();
-		AttachmentVertices(TextureRes* texture, int verticesCount, ui16* triangles, int indicesCount);
+		AttachmentVertices(Texture* texture, int verticesCount, ui16* triangles, int indicesCount);
 		virtual ~AttachmentVertices();
 
 		// render
@@ -44,7 +43,7 @@ namespace Echo
 		void clear();
 
 	public:
-		TextureResPtr					m_texture;			// 纹理
+		TexturePtr						m_texture;			// 纹理
 		vector<SpineVertexFormat>::type	m_verticesData;		// 顶点数据
 		vector<ui16>::type				m_indicesData;		// 索引数据
 	};

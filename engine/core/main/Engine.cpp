@@ -4,22 +4,22 @@
 #include "engine/core/util/Exception.h"
 #include "engine/core/io/IO.h"
 #include "engine/core/log/Log.h"
-#include "engine/core/render/render/ImageCodecMgr.h"
+#include "engine/core/render/interface/ImageCodecMgr.h"
 #include "engine/core/scene/render_node.h"
 #include "engine/core/scene/node_tree.h"
 #include "engine/core/util/Timer.h"
-#include "engine/core/render/render/Viewport.h"
-#include "engine/core/render/Material.h"
+#include "engine/core/render/interface/Viewport.h"
+#include "engine/core/render/interface/Material.h"
 #include "GameSettings.h"
 #include "engine/core/script/lua/registerCoreToLua.cxx"
 #include "engine/core/script/lua/LuaBinder.h"
-#include "engine/core/render/RenderTargetManager.h"
+#include "engine/core/render/interface/RenderTargetManager.h"
 #include "module.h"
-#include "engine/core/render/renderstage/RenderStage.h"
+#include "engine/core/render/interface/renderstage/RenderStage.h"
 #include "engine/core/render/gles/GLES2.h"
 #include "engine/core/script/lua/LuaScript.h"
-#include "engine/core/render/render/ShaderProgramRes.h"
-#include "engine/core/render/TextureCube.h"
+#include "engine/core/render/interface/ShaderProgramRes.h"
+#include "engine/core/render/interface/TextureCube.h"
 #include "engine/core/gizmos/Gizmos.h"
 #include "engine/core/input/input.h"
 
@@ -118,6 +118,7 @@ namespace Echo
 		Class::registerType<Node>();
 		Class::registerType<Render>();
 		Class::registerType<Res>();
+		Class::registerType<Texture>();
 		Class::registerType<ShaderProgramRes>();
 		Class::registerType<Material>();
 		Class::registerType<LuaScript>();
@@ -222,7 +223,7 @@ namespace Echo
 		Renderer* renderer = nullptr;
 		LoadGLESRenderer(renderer);
 
-		Echo::Renderer::RenderCfg renderCfg;
+		Echo::Renderer::Config renderCfg;
 		renderCfg.enableThreadedRendering = false;
 		renderCfg.windowHandle = windowHandle;
 		renderCfg.enableThreadedRendering = false;

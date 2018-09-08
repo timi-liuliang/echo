@@ -1,7 +1,6 @@
-#ifndef __ECHO_GLES2GPUBUFFER_H__
-#define __ECHO_GLES2GPUBUFFER_H__
+#pragma once
 
-#include "render/GPUBuffer.h"
+#include "interface/GPUBuffer.h"
 
 namespace Echo
 {
@@ -20,5 +19,3 @@ namespace Echo
 		GLenum			m_glUsage;
 	};
 }
-
-#endif

@@ -5,7 +5,7 @@
 #include <engine/core/Util/Exception.h>
 #include <engine/core/log/Log.h>
 #include "engine/core/memory/MemAllocDef.h"
-#include "render/ShaderProgramRes.h"
+#include "interface/ShaderProgramRes.h"
 
 #define UNIFORM_OPTIMIZE
 

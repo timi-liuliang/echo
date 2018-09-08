@@ -135,7 +135,7 @@ namespace Echo
 		: m_isAutoClear(false)
 	{
 		m_material = ECHO_CREATE_RES(Material);
-		m_material->setShaderContent(g_gizmoOpaqueMaterial);
+		m_material->setShaderContent( "echo_gizmo_default_shader", g_gizmoOpaqueMaterial);
 		m_material->setRenderStage("Transparent");
 
 		m_lineBatch = EchoNew(Batch(m_material, this));

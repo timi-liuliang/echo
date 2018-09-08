@@ -28,7 +28,7 @@ namespace Echo
 		virtual ~Res();
 
 		// resister res
-		static void registerRes(const String& className, const String& ext, RES_CREATE_FUNC cfun, RES_LOAD_FUNC lfun);
+		static void registerRes(const String& className, const String& exts, RES_CREATE_FUNC cfun, RES_LOAD_FUNC lfun);
 
 		// get res
 		static Res* get(const ResourcePath& path);

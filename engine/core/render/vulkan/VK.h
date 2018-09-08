@@ -1,12 +1,12 @@
 #pragma once
 
-#include <engine/core/render/render/Renderer.h>
+#include <engine/core/render/interface/Renderer.h>
 
 namespace Echo
 {
-	// ĞÂ½¨GLESäÖÈ¾Æ÷
+	// new vulkan painter
 	void LoadVKRenderer(Renderer*& render);
 
-	// Ğ¶ÔØGLESäÖÈ¾Æ÷
+	// unload vk painter
 	void UnLoadVKRenderer(Renderer* render);
 }

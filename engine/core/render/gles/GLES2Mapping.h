@@ -1,10 +1,9 @@
-#ifndef __ECHO_GLES2MAPPING_H__
-#define __ECHO_GLES2MAPPING_H__
+#pragma once
 
-#include <render/Texture.h>
-#include <render/ShaderProgram.h>
-#include "engine/core/render/render/GPUBuffer.h"
-#include "engine/core/render/mesh/Mesh.h"
+#include <interface/Texture.h>
+#include <interface/ShaderProgram.h>
+#include "engine/core/render/interface/GPUBuffer.h"
+#include "engine/core/render/interface/mesh/Mesh.h"
 #include "GLES2RenderState.h"
 
 namespace Echo
@@ -443,5 +442,3 @@ namespace Echo
 		}
 	};
 }
-
-#endif
