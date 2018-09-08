@@ -4,8 +4,6 @@
 
 # Echo
 
-**Please don't use echo make your Apps now, It's still not good enough.**
-
 ## Introduction  
 
 **Echo** is a new game engine, which used more industry standard of nowadays for game development. The new design concept makes the engine simplicity to use. but more powerful.
@@ -17,7 +15,7 @@
 ## Download   
 |Description|Files|
 |---|---|
-|Editor [Win32]|[echo-setup-2018.08.30.exe](https://raw.githubusercontent.com/blab-liuliang/echo-doc/master/download/echo-setup-2018.08.30.exe)|
+|Editor [Win32]|[echo-setup-2018.09.08.exe](https://raw.githubusercontent.com/blab-liuliang/echo-doc/master/download/echo-setup-2018.09.08.exe)|
 |Editor [Mac OS X 10.7 or later]|echo.dmg|
 |Examples|[echo-examples-master.zip](https://codeload.github.com/blab-liuliang/echo-examples/zip/master)|
 
