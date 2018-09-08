@@ -79,8 +79,9 @@ namespace Echo
 		fun.m_lfun = lfun;
 
 		StringArray extArray = StringUtil::Split(exts, "|");
-		for (const String& ext : extArray)
+		for (String& ext : extArray)
 		{
+			StringUtil::LowerCase(ext);
 			fun.m_ext = ext;
 			g_resFuncs[ext] = fun;
 		}
@@ -97,6 +98,7 @@ namespace Echo
 
 		// get load fun
 		String ext = PathUtil::GetFileExt(path.getPath(), true);
+		StringUtil::LowerCase(ext);
 		map<String, Res::ResFun>::type::iterator itfun = g_resFuncs.find(ext);
 		if (itfun != g_resFuncs.end())
 		{
@@ -109,6 +111,7 @@ namespace Echo
 			return res;
 		}
 
+		EchoLogError("Res::get file [%s] failed. can't find load method for this type of resource", path.getPath().c_str());
 		return nullptr;
 	}
 

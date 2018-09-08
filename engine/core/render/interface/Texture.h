@@ -118,7 +118,6 @@ namespace Echo
 
 	public:
 		bool softDecodeETC2();
-
 		bool decodeFromPVR();
 		bool decodeFromKTX();
 
