@@ -163,11 +163,17 @@ namespace Studio
 		Echo::Class::getChildClasses(allRes, "Res", true);
 		for (const Echo::String& res : allRes)
 		{
-			QAction* createResAction = new QAction(this);
-			createResAction->setText(res.c_str());
-			createResMenu->addAction(createResAction);
+			// res may don't have create method, which means this type of resource
+			// can't be create by echo
+			const Echo::Res::ResFun* resFun = Echo::Res::getResFunByClassName(res);
+			if (resFun->m_cfun)
+			{
+				QAction* createResAction = new QAction(this);
+				createResAction->setText(res.c_str());
+				createResMenu->addAction(createResAction);
 
-			QObject::connect(createResAction, SIGNAL(triggered()), this, SLOT(onCreateRes()));
+				QObject::connect(createResAction, SIGNAL(triggered()), this, SLOT(onCreateRes()));
+			}
 		}
 		m_resMenu->addMenu(createResMenu);
 		if (item)
