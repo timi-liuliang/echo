@@ -54,14 +54,20 @@ namespace Echo
 			{
 				float pixelsPerUnit = Box2DWorld::instance()->getPixelsPerMeter();
 
+				Quaternion quat;
+				quat.fromEulerAngle( 0.f, 0.f, m_body->GetAngle()*Math::RAD2DEG);
+				
 				const b2Vec2& pos = m_body->GetPosition();
 				this->setWorldPosition(Vector3(pos.x * pixelsPerUnit, pos.y * pixelsPerUnit, getWorldPosition().z));
-				//this->setWorldOrientation();
+				this->setWorldOrientation(quat);
 			}
 			else
 			{
 				float pixelsPerUnit = Box2DWorld::instance()->getPixelsPerMeter();
-				m_body->SetTransform( b2Vec2(getWorldPosition().x / pixelsPerUnit, getWorldPosition().y / pixelsPerUnit) , 0.f);
+
+				Echo::Vector3 pitchYawRoll;
+				getWorldOrientation().toEulerAngle(pitchYawRoll.x, pitchYawRoll.y, pitchYawRoll.z);
+				m_body->SetTransform( b2Vec2(getWorldPosition().x / pixelsPerUnit, getWorldPosition().y / pixelsPerUnit) , pitchYawRoll.z * Math::DEG2RAD);
 			}
 		}
 	}

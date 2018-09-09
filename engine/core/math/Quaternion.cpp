@@ -7,37 +7,9 @@ namespace Echo
 {
 	const Quaternion Quaternion::IDENTITY(0, 0, 0, 1);
 	const Quaternion Quaternion::INVALID(Math::MAX_REAL, Math::MAX_REAL, Math::MAX_REAL, Math::MAX_REAL);
-	ui32  Quaternion::OP_COUNT = 0;
-	/*
-	// This version of slerp, used by squad, does not check for theta > 180.
-	Quan QuanSlerpNoInvert(const Quan &q1, const Quan &q2, Real t)
-	{
-	Real dot = q1.x * q2.x + q1.y * q2.y + q1.z * q2.z + q1.w * q2.w;
-	Quan quan;
-
-	if (dot > -0.95f && dot < 0.95f)
-	{
-	Real angle = Math::ACos(dot);
-	Real sina, sinat, sinaomt;
-	sina = Math::Sin(angle);
-	sinat = Math::Sin(angle * t);
-	sinaomt = Math::Sin(angle * (1 - t));
-	quan = (q1 * sinaomt + q2 * sinat) / sina;
-	}
-
-	//if the angle is small, use linear interpolation
-	else
-	quan.lerp(q1, q2, t);
-
-	return quan;
-	}
-	*/
 
 	void Quaternion::Slerp(Quaternion& quan, const Quaternion& q1, const Quaternion& q2, Real t, bool bShortestPath)
 	{
-#ifdef ECHO_DEBUG
-		++Quaternion::OP_COUNT;
-#endif
 		Real fCos = q1.dot(q2);
 		Quaternion q;
 
@@ -78,9 +50,6 @@ namespace Echo
 
 	void Quaternion::Squad(Quaternion& quan, const Quaternion& q1,const Quaternion& q2, const Quaternion& a, const Quaternion& b, Real t, bool bShortestPath)
 	{
-#ifdef ECHO_DEBUG
-		++Quaternion::OP_COUNT;
-#endif
 		Real slerpT = 2.0f * t * (1.0f - t);
 		Quaternion slerpQ1;
 		Slerp(slerpQ1, q1, q2, t, bShortestPath);
@@ -91,9 +60,6 @@ namespace Echo
 
 	void Quaternion::Spline(Quaternion& quan, const Quaternion& q1, const Quaternion& q2, const Quaternion& q3)
 	{
-#ifdef ECHO_DEBUG
-		++Quaternion::OP_COUNT;
-#endif
 		Quaternion q;
 
 		q.w = q2.w;
@@ -107,8 +73,7 @@ namespace Echo
 	// 通过两个单位朝向构造旋转
 	void Quaternion::fromVec3ToVec3(const Vector3& from, const Vector3& to)
 	{
-		ADD_MATH_OP_COUNT
-			Vector3 s = from;
+		Vector3 s = from;
 		s.normalize();
 		Vector3 t = to;
 		t.normalize();

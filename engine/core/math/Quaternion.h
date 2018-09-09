@@ -24,7 +24,6 @@ namespace Echo
 
 		static const Quaternion IDENTITY;		//!< Quan(0, 0, 0, 1)
 		static const Quaternion INVALID;		//!< Quan(Math::MAX_REAL, Math::MAX_REAL, Math::MAX_REAL, Math::MAX_REAL)
-		static ui32	 OP_COUNT;
 
 	public:
 		inline Quaternion()
@@ -32,23 +31,18 @@ namespace Echo
 			, y(0)
 			, z(0)
 			, w(1)
-		{
-			ADD_MATH_OP_COUNT
-		}
+		{}
 
 		inline Quaternion(const Quaternion& quan)
 			: x(quan.x)
 			, y(quan.y)
 			, z(quan.z)
 			, w(quan.w)
-		{
-			ADD_MATH_OP_COUNT
-		}
+		{}
 
 		inline Quaternion(const Real *pf)
 		{
 			EchoAssertX(pf != NULL, "The array data is NULL.");
-			ADD_MATH_OP_COUNT
 			x = pf[0];
 			y = pf[1];
 			z = pf[2];
@@ -61,39 +55,33 @@ namespace Echo
 			, z(fz)
 			, w(fw)
 		{
-			ADD_MATH_OP_COUNT
 		}
 
 		inline Quaternion(Real yaw, Real pitch, Real roll)
 		{
 			// NOTE: arguments order
-			ADD_MATH_OP_COUNT
 			fromEulerAngle(pitch, yaw, roll);
 		}
 
 		inline Quaternion(const Vector3& vAixs, Real radian)
 		{
-			ADD_MATH_OP_COUNT
 			fromAxisAngle(vAixs, radian);
 		}
 
 		inline Real& operator[] (int index)
 		{
-			ADD_MATH_OP_COUNT
 			EchoAssertX(index >= 0 && index < 4, "Access out of bounds");
 			return m[index];
 		}
 
 		inline const Real& operator[] (int index) const
 		{
-			ADD_MATH_OP_COUNT
 			EchoAssertX(index >= 0 && index < 4, "Access out of bounds");
 			return m[index];
 		}
 
 		inline Quaternion& operator= (const Quaternion& quan)
 		{
-			ADD_MATH_OP_COUNT
 			x = quan.x;
 			y = quan.y;
 			z = quan.z;
@@ -104,19 +92,16 @@ namespace Echo
 
 		inline operator Real* ()
 		{
-			ADD_MATH_OP_COUNT
 			return m;
 		}
 
 		inline operator const Real* () const
 		{
-			ADD_MATH_OP_COUNT
 			return m;
 		}
 
 		inline Quaternion& operator += (const Quaternion& q)
 		{
-			ADD_MATH_OP_COUNT
 			w += q.w;
 			x += q.x;
 			y += q.y;
@@ -127,7 +112,6 @@ namespace Echo
 
 		inline Quaternion& operator -= (const Quaternion& q)
 		{
-			ADD_MATH_OP_COUNT
 			w -= q.w;
 			x -= q.x;
 			y -= q.y;
@@ -138,7 +122,6 @@ namespace Echo
 
 		inline Quaternion& operator *= (const Quaternion& q)
 		{
-			ADD_MATH_OP_COUNT
 			float x0 = x;
 			float y0 = y;
 			float z0 = z;
@@ -153,7 +136,6 @@ namespace Echo
 
 		inline Quaternion& operator *= (Real f)
 		{
-			ADD_MATH_OP_COUNT
 			x *= f;
 			y *= f;
 			z *= f;
@@ -164,7 +146,6 @@ namespace Echo
 
 		inline Quaternion& operator /= (Real f)
 		{
-			ADD_MATH_OP_COUNT
 			Real fInv = 1.0f / f;
 			x *= fInv;
 			y *= fInv;
@@ -176,43 +157,36 @@ namespace Echo
 
 		inline Real* ptr()
 		{
-			ADD_MATH_OP_COUNT
 			return &x;
 		}
 
 		inline const Real* ptr() const
 		{
-			ADD_MATH_OP_COUNT
 			return &x;
 		}
 
 		inline const Quaternion& operator + () const
 		{
-			ADD_MATH_OP_COUNT
 			return *this;
 		}
 
 		inline Quaternion operator - () const
 		{
-			ADD_MATH_OP_COUNT
 			return Quaternion(-x, -y, -z, -w);
 		}
 
 		inline bool operator == (const Quaternion& b) const
 		{
-			ADD_MATH_OP_COUNT
 			return (w==b.w && x==b.x && y==b.y && z==b.z);
 		}
 
 		inline bool operator != (const Quaternion& b) const
 		{
-			ADD_MATH_OP_COUNT
 			return !(w==b.w && x==b.x && y==b.y && z==b.z);
 		}
 
 		inline Quaternion operator + (const Quaternion& b) const
 		{
-			ADD_MATH_OP_COUNT
 			Quaternion quan;
 
 			quan.x = x + b.x;
@@ -225,7 +199,6 @@ namespace Echo
 
 		inline Quaternion operator- (const Quaternion& b) const
 		{
-			ADD_MATH_OP_COUNT
 			Quaternion quan;
 
 			quan.x = x - b.x;
@@ -238,7 +211,6 @@ namespace Echo
 
 		inline friend Quaternion operator* (const Real f, const Quaternion& q)
 		{
-			ADD_MATH_OP_COUNT
 			Quaternion result;
 
 			result.x = f * q.x;
@@ -251,7 +223,6 @@ namespace Echo
 
 		inline Quaternion operator* (const Real f) const
 		{
-			ADD_MATH_OP_COUNT
 			Quaternion result;
 
 			result.x = f * x;
@@ -264,8 +235,6 @@ namespace Echo
 
 		inline Quaternion operator* (const Quaternion& b) const
 		{
-			ADD_MATH_OP_COUNT
-
 			Quaternion quan;
 			quan.x = w * b.x + x * b.w + y * b.z - z *b.y;
 			quan.y = w * b.y + y * b.w + z * b.x - x *b.z;
@@ -277,7 +246,6 @@ namespace Echo
 
 		inline Vector3 operator* (const Vector3& v) const
 		{
-			ADD_MATH_OP_COUNT
 			// nVidia SDK implementation
 			Vector3 uv, uuv;
 			Vector3 qvec(x, y, z);
@@ -291,7 +259,6 @@ namespace Echo
 
 		inline Vector4 operator* (const Vector4& v) const
 		{
-			ADD_MATH_OP_COUNT
 			// nVidia SDK implementation
 			Vector3 vec(v);
 			Vector3 uv, uuv;
@@ -306,7 +273,6 @@ namespace Echo
 
 		inline Quaternion operator/ (const Real f) const
 		{
-			ADD_MATH_OP_COUNT
 			Quaternion quan;
 			Real fInv = 1.0f / f;
 
@@ -320,7 +286,6 @@ namespace Echo
 
 		inline friend Quaternion operator/ (const Real f, const Quaternion& a)
 		{
-			ADD_MATH_OP_COUNT
 			Quaternion quan;
 
 			quan.x = f / a.x;
@@ -333,7 +298,6 @@ namespace Echo
 
 		inline void zero()
 		{
-			ADD_MATH_OP_COUNT
 			w = 0.0;
 			x = 0.0;
 			y = 0.0;
@@ -342,13 +306,11 @@ namespace Echo
 
 		inline void invalid()
 		{
-			ADD_MATH_OP_COUNT
 			*this = INVALID;
 		}
 
 		inline void set(Real w, Real x, Real y, Real z)
 		{
-			ADD_MATH_OP_COUNT
 			this->x = x;
 			this->y = y;
 			this->z = z;
@@ -357,7 +319,6 @@ namespace Echo
 
 		inline void set(Real value)
 		{
-			ADD_MATH_OP_COUNT
 			this->x = value;
 			this->y = value;
 			this->z = value;
@@ -366,7 +327,6 @@ namespace Echo
 
 		inline void set(Real* p)
 		{
-			ADD_MATH_OP_COUNT
 			this->x = p[1];
 			this->y = p[2];
 			this->z = p[3];
@@ -375,13 +335,11 @@ namespace Echo
 
 		inline Real dot(const Quaternion& rhs) const
 		{
-			ADD_MATH_OP_COUNT
 			return (w * rhs.w + x * rhs.x + y * rhs.y + z * rhs.z);
 		}
 
 		inline Quaternion cross(const Quaternion& rhs)
 		{
-			ADD_MATH_OP_COUNT
 			Quaternion quan;
 			quan.x = w * rhs.x + x * rhs.w + y * rhs.z - z *rhs.y;
 			quan.y = w * rhs.y + y * rhs.w + z * rhs.x - x *rhs.z;
@@ -393,7 +351,6 @@ namespace Echo
 
 		inline void conjugate()
 		{
-			ADD_MATH_OP_COUNT
 			x = -x;
 			y = -y;
 			z = -z;
@@ -401,7 +358,6 @@ namespace Echo
 
 		inline void inverse()
 		{
-			ADD_MATH_OP_COUNT
 			//conjugate();
 			const Real norm = lenSqr();
 
@@ -420,7 +376,6 @@ namespace Echo
 
 		inline Real len() const
 		{
-			ADD_MATH_OP_COUNT
 			Real qLen;
 
 			Real sum = w * w + x * x + y * y + z * z;
@@ -431,13 +386,11 @@ namespace Echo
 
 		inline Real lenSqr() const
 		{
-			ADD_MATH_OP_COUNT
 			return w * w + x * x + y * y + z * z;
 		}
 
 		inline void identity()
 		{
-			ADD_MATH_OP_COUNT
 			x = 0.0;
 			y = 0.0;
 			z = 0.0;
@@ -446,7 +399,6 @@ namespace Echo
 
 		inline Quaternion log() const
 		{
-			ADD_MATH_OP_COUNT
 			Real a = Math::ACos(w);
 			Real sina = Math::Sin(a);
 
@@ -467,7 +419,6 @@ namespace Echo
 
 		inline Quaternion exp() const
 		{
-			ADD_MATH_OP_COUNT
 			Real a = len();
 			Real sina = Math::Sin(a);
 			Real cosa = Math::Cos(a);
@@ -489,7 +440,6 @@ namespace Echo
 
 		inline Quaternion pow(Real fExp) const
 		{
-			ADD_MATH_OP_COUNT
 			if(Math::Abs(w) >= 1.0)
 				return *this;
 
@@ -512,7 +462,6 @@ namespace Echo
 
 		inline void normalize()
 		{
-			ADD_MATH_OP_COUNT
 			Real length = len();
 			if (length > 1e-5f)
 			{
@@ -526,7 +475,6 @@ namespace Echo
 
 		inline void toMat4(Matrix4& mat) const
 		{
-			ADD_MATH_OP_COUNT
 			Real xs = x * 2.0f;
 			Real ys = y * 2.0f;
 			Real zs = z * 2.0f;
@@ -549,7 +497,6 @@ namespace Echo
 
 		inline void fromMat4(const Matrix4& mat)
 		{
-			ADD_MATH_OP_COUNT
 			Real fTrace = mat.m00 + mat.m11 + mat.m22;
 			Real fRoot;
 
@@ -585,12 +532,10 @@ namespace Echo
 			}
 		}
 
-		// 通过两个单位朝向构造旋转
 		void fromVec3ToVec3(const Vector3& from, const Vector3& to);
 
 		inline void fromAxes(const Vector3& xAxis, const Vector3& yAxis, const Vector3& zAxis)
 		{
-			ADD_MATH_OP_COUNT
 			Matrix4 kRot = Matrix4::IDENTITY;
 			kRot.m00 = xAxis.x;
 			kRot.m01 = xAxis.y;
@@ -641,8 +586,6 @@ namespace Echo
 
 		inline void rotateVec3(Vector3& outVec, const Vector3& vec) const
 		{
-			ADD_MATH_OP_COUNT
-
 			// nVidia SDK implementation
 			Vector3 uv, uuv;
 			Vector3 qvec(x, y, z);
@@ -656,7 +599,6 @@ namespace Echo
 
 		inline void diff(const Quaternion& q1, const Quaternion& q2)
 		{
-			ADD_MATH_OP_COUNT
 			Quaternion invQ1 = q1;
 			invQ1.inverse();
 			*this = invQ1 * q2;
@@ -664,7 +606,6 @@ namespace Echo
 
 		inline Quaternion& abs()
 		{
-			ADD_MATH_OP_COUNT
 			x = Math::Abs(x);
 			y = Math::Abs(y);
 			z = Math::Abs(z);
@@ -675,7 +616,6 @@ namespace Echo
 
 		inline Quaternion& neg()
 		{
-			ADD_MATH_OP_COUNT
 			x = -x;
 			y = -y;
 			z = -z;
@@ -686,20 +626,16 @@ namespace Echo
 
 		inline bool isInvalid() const
 		{
-			ADD_MATH_OP_COUNT
 			return Math::IsInvalid(w) || Math::IsInvalid(x) || Math::IsInvalid(y) || Math::IsInvalid(z);
 		}
 
 		inline Vector3 getAxis() const
 		{
-			ADD_MATH_OP_COUNT
 			return Vector3(x, y, z);
 		}
 
 		inline Vector3 xAxis() const 
 		{
-			ADD_MATH_OP_COUNT
-			//Real fTx  = 2.0*x;
 			Real fTy  = 2.0f*y;
 			Real fTz  = 2.0f*z;
 			Real fTwy = fTy*w;
@@ -714,7 +650,6 @@ namespace Echo
 
 		inline Vector3 yAxis() const 
 		{
-			ADD_MATH_OP_COUNT
 			Real fTx  = 2.0f*x;
 			Real fTy  = 2.0f*y;
 			Real fTz  = 2.0f*z;
@@ -730,7 +665,6 @@ namespace Echo
 
 		inline Vector3 zAxis() const
 		{
-			ADD_MATH_OP_COUNT
 			Real fTx  = 2.0f*x;
 			Real fTy  = 2.0f*y;
 			Real fTz  = 2.0f*z;
@@ -746,14 +680,12 @@ namespace Echo
 
 		inline Real getRadian() const
 		{
-			ADD_MATH_OP_COUNT
 			EchoAssertX(w >= -1.0 && w <= 1.0, "The quaternion is not identity.");	
 			return Math::ACos(w) * 2.0f;
 		}
 
 		inline void fromAxisAngle(const Vector3& axis, Real radian)
 		{
-			ADD_MATH_OP_COUNT
 			// assert:  axis is unit length
 			// The quaternion representing the rotation is
 			//   q = cos(A / 2) + sin(A / 2 ) * (x * i + y * j + z * k)
@@ -768,7 +700,6 @@ namespace Echo
 
 		inline void fromEulerAngle(Real pitch, Real yaw, Real roll)
 		{
-			ADD_MATH_OP_COUNT
 			float fCosHRoll = Math::Cos(roll * Math::DEG2RAD * 0.5f);
 			float fSinHRoll = Math::Sin(roll * Math::DEG2RAD * 0.5f);
 			float fCosHPitch = Math::Cos(pitch * Math::DEG2RAD * 0.5f);
@@ -784,7 +715,6 @@ namespace Echo
 
 		inline void toEulerAngle(Real& pitch, Real& yaw, Real& roll) const
 		{
-			ADD_MATH_OP_COUNT
 			roll = Math::ATan2(2.0f * (w * z + x * y), 1.0f - 2.0f * (z * z + x * x));
 			pitch = Math::ASin(2.0f * (w * x - y * z));
 			yaw = Math::ATan2(2.0f * (w * y + z * x), 1.0f - 2.0f * (x * x + y * y));
@@ -797,9 +727,6 @@ namespace Echo
 	public:
 		static inline Quaternion Log(const Quaternion& quan)
 		{
-#ifdef ECHO_DEBUG
-			++Quaternion::OP_COUNT;
-#endif
 			Real a = Math::ACos(quan.w);
 			Real sina = Math::Sin(a);
 
@@ -820,9 +747,6 @@ namespace Echo
 
 		static inline Quaternion Exp(const Quaternion& quan)
 		{
-#ifdef ECHO_DEBUG
-			++Quaternion::OP_COUNT;
-#endif
 			Real a = quan.len();
 			Real sina = Math::Sin(a);
 			Real cosa = Math::Cos(a);
@@ -844,9 +768,6 @@ namespace Echo
 
 		static inline Quaternion Pow(const Quaternion& quan, Real fExp)
 		{
-#ifdef ECHO_DEBUG
-			++Quaternion::OP_COUNT;
-#endif
 			if(Math::Abs(quan.w) >= 1.0)
 				return quan;
 
@@ -883,9 +804,6 @@ namespace Echo
 		*/
 		static inline void Lerp(Quaternion& quan, const Quaternion& q1, const Quaternion& q2, Real t, bool bShortestPath = false)
 		{
-#ifdef ECHO_DEBUG
-			++Quaternion::OP_COUNT;
-#endif
 			Real fCos = q1.dot(q2);
 			if (fCos < 0.0f && bShortestPath)
 			{
