@@ -11,7 +11,7 @@ namespace Echo
 	class SamplerState;
 	class Texture : public Res
 	{
-		ECHO_RES(Texture, Res, ".png|.jpeg|.bmp|.tga", nullptr, Texture::load);
+		ECHO_RES(Texture, Res, ".png|.jpeg|.bmp|.tga|.jpg", nullptr, Texture::load);
 
 		friend class Renderer;
 		friend class RenderTarget;
@@ -143,7 +143,6 @@ namespace Echo
 		virtual void unloadFromGPU() {}
 
 	protected:
-		// ×ÊÔ´·ÖÎö
 		bool _data_parser();
 		bool _parser_pvr();
 		bool _parser_etc_aa_ktx();

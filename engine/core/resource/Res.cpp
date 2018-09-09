@@ -116,9 +116,9 @@ namespace Echo
 	}
 
 	// create by extension
-	ResPtr Res::createByFileExtension(const String& extension)
+	ResPtr Res::createByFileExtension(const String& extWithDot)
 	{
-		String ext = extension;
+		String ext = extWithDot;
 		map<String, Res::ResFun>::type::iterator itfun = g_resFuncs.find(ext);
 		if (itfun != g_resFuncs.end())
 		{
@@ -127,7 +127,22 @@ namespace Echo
 				return res;	
 		}
 
-		EchoLogError("Res::create failed. Unknown extension [%s]", extension.c_str());
+		EchoLogError("Res::create failed. Unknown extension [%s]", extWithDot.c_str());
+		return nullptr;
+	}
+
+	// get res fun by extension
+	const Res::ResFun* Res::getResFunByExtension(const String& extWithDot)
+	{
+		// get load fun
+		String ext = extWithDot;
+		StringUtil::LowerCase(ext);
+		map<String, Res::ResFun>::type::iterator it = g_resFuncs.find(ext);
+		if (it != g_resFuncs.end())
+		{
+			return &it->second;
+		}
+
 		return nullptr;
 	}
 

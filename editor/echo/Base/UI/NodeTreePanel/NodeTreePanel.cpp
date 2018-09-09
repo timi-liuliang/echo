@@ -615,7 +615,8 @@ namespace Studio
 	// edit res
 	void NodeTreePanel::onSelectRes(const Echo::String& resPath)
 	{
-		m_currentEditObject = Echo::Res::get(resPath);
+		Echo::String extWithDot = Echo::PathUtil::GetFileExt(resPath, true);
+		m_currentEditObject = Echo::Res::getResFunByExtension(extWithDot) ? Echo::Res::get(resPath) : nullptr;
 
 		showSelectedObjectProperty();
 	}

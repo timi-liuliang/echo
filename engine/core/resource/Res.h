@@ -34,10 +34,13 @@ namespace Echo
 		static Res* get(const ResourcePath& path);
 
 		// create by extension
-		static ResRef<Res> createByFileExtension(const String& extension);
+		static ResRef<Res> createByFileExtension(const String& extWithDot);
 
 		// create by class name
 		static Res* createByClassName(const String& className);
+
+		// get res fun by extension
+		static const ResFun* getResFunByExtension(const String& extWithDot);
 
 		// get res fun by class
 		static const ResFun* getResFunByClassName(const String& className);
@@ -57,8 +60,7 @@ namespace Echo
 
 	protected:
 		// cerate fun
-		template<typename T>
-		static Res* create() { return EchoNew(T); }
+		template<typename T> static Res* create() { return EchoNew(T); }
 
 		// load
 		static Res* load(const ResourcePath& path);
