@@ -20,7 +20,7 @@ namespace Studio
 
 		void addRecentProject(const char* projecet);
 
-		// 显示所有可更新版本
+		// show all updateable version
 		void showAllUpdateableVersion();
 
 		// new project file
@@ -33,14 +33,14 @@ namespace Studio
 		virtual void showEvent(QShowEvent* event) override;
 
 	private slots:
-		// 打开新项目
+		// open new project
 		void openNewProject(int index);
 
 		void onDoubleClicked(const QString& name);
 
 		void onClicked(const QString& name);
 
-		// 点击下载
+		// download
 		void onDownloadNewVersion(QListWidgetItem* item);
 
 	private:

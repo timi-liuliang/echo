@@ -187,7 +187,6 @@ namespace Studio
 		m_statusBar->showMessage(name);
 	}
 
-	// 显示所有可更新版本
 	void ProjectWnd::showAllUpdateableVersion()
 	{
 		// 检测更新
@@ -207,7 +206,6 @@ namespace Studio
 		QMainWindow::showEvent(event);
 	}
 
-	// 点击下载
 	void ProjectWnd::onDownloadNewVersion(QListWidgetItem* item)
 	{
 		Echo::String resName = item->text().toStdString().c_str();

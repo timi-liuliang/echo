@@ -1,6 +1,7 @@
 #include <QtGui>
 #include <QDateTime>
 #include <QMenuBar>
+#include <QMessageBox>
 #include "Studio.h"
 #include "NodeTreePanel.h"
 #include "EchoEngine.h"
@@ -60,7 +61,7 @@ namespace Studio
 		return g_inst;
 	}
 
-	// 渲染
+	// update
 	void NodeTreePanel::update()
 	{
 		if (m_nextEditObject)
@@ -183,7 +184,6 @@ namespace Studio
 		}
 	}
 
-	// 获取当前编辑对象
 	Echo::Object* NodeTreePanel::getCurrentEditObject()
 	{
 		return m_currentEditObject;
@@ -291,25 +291,28 @@ namespace Studio
 	// on trigger delete nodes
 	void NodeTreePanel::onDeleteNodes()
 	{
-		QList<QTreeWidgetItem*> items = m_nodeTreeWidget->selectedItems();
-		while (items.size() > 0)
+		if (QMessageBox::Yes == QMessageBox(QMessageBox::Warning, "Warning", "Do you really want to delete selected nodes ?", QMessageBox::Yes | QMessageBox::No).exec())
 		{
-			QTreeWidgetItem* item = items[0];
+			QList<QTreeWidgetItem*> items = m_nodeTreeWidget->selectedItems();
+			while (items.size() > 0)
+			{
+				QTreeWidgetItem* item = items[0];
 
-			// remove item from ui
-			removeItem(item);
+				// remove item from ui
+				removeItem(item);
 
-			items = m_nodeTreeWidget->selectedItems();
+				items = m_nodeTreeWidget->selectedItems();
+			}
+
+			// set as nullptr
+			if (m_nodeTreeWidget->invisibleRootItem()->childCount() == 0)
+			{
+				EchoEngine::instance()->setCurrentEditNode(nullptr);
+			}
+
+			// update property panel display
+			onSelectNode();
 		}
-
-		// set as nullptr
-		if (m_nodeTreeWidget->invisibleRootItem()->childCount() == 0)
-		{
-			EchoEngine::instance()->setCurrentEditNode( nullptr);
-		}
-
-		// update property panel display
-		onSelectNode();
 	}
 
 	// on trigger rename node
@@ -496,7 +499,7 @@ namespace Studio
 		}
 	}
 
-	// 显示当前选中节点属性
+	// show object property when select a new object
 	void NodeTreePanel::showSelectedObjectProperty()
 	{
 		m_propertyHelper.clear();
@@ -514,7 +517,7 @@ namespace Studio
 		}	
 	}
 
-	// 显示属性
+	// show property recursive
 	void NodeTreePanel::showObjectPropertyRecursive(Echo::Object* classPtr, const Echo::String& className)
 	{
 		// show parent property first
@@ -562,7 +565,6 @@ namespace Studio
 		}
 	}
 
-	// 属性修改后,更新结点值
 	void NodeTreePanel::refreshPropertyToObject(const QString& property, QVariant value)
 	{
 		Echo::String propertyName = property.toStdString().c_str();
@@ -632,7 +634,6 @@ namespace Studio
 		showSelectedObjectProperty();
 	}
 
-	// 保存当前编辑资源
 	void NodeTreePanel::saveCurrentEditRes()
 	{
 		Echo::Res* res = dynamic_cast<Echo::Res*>(m_currentEditObject);
