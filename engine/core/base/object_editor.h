@@ -9,12 +9,12 @@ public:														\
 	/* get node icon*/										\
 	virtual const char* getEditorIcon() const { return ""; }\
 
-#define ECHO_EDIT											\
+#define ECHO_EDITOR											\
 public:														\
 	/* get node icon*/										\
 	virtual const char* getEditorIcon() const;				\
 
 #else
 #define ECHO_EDIT_INTERFACE
-#define ECHO_EDIT
+#define ECHO_EDITOR
 #endif
