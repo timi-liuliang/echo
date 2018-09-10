@@ -233,8 +233,6 @@ namespace Echo
 
 				Vector3 yVec = zAdjustVec.cross( xVec );
 				yVec.normalize();
-
-				m_oritation.fromAxes(xVec, yVec, zAdjustVec );
 			}
 			else
 			{
@@ -245,8 +243,6 @@ namespace Echo
 
 				Vector3 yVec = zAdjustVec.cross( xVec );
 				yVec.normalize();
-
-				m_oritation.fromAxes(xVec, yVec, zAdjustVec );
 			}
 		}
 

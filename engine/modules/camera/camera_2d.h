@@ -12,5 +12,9 @@ namespace Echo
 	public:
 		Camera2D();
 		virtual ~Camera2D();
+
+	protected:
+		// update self
+		virtual void update_self();
 	};
 }

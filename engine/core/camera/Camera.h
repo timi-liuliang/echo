@@ -21,42 +21,25 @@ namespace Echo
 		Camera(ProjMode mode = PM_PERSPECTIVE, bool isFixedYaw = true);
 		virtual ~Camera();
 
-		// 更新
+		// tick every frame
 		virtual void frameMove(float elapsedTime) {}
 
 		virtual void setPosition(const Vector3& pos);
 		virtual void setDirection(const Vector3& dir);
 		virtual void setUp(const Vector3& vUp);
 
-		// 获取摄像机位置
 		const Vector3& getPosition() const { return m_position; }
-
-		// 获取摄像机位置指针
-		Vector3* getPositionPtr() { return &m_position; }
-
-		// 获取朝向
-		const Quaternion& getOritation() const { return m_oritation; }
-
-		// 获取朝向
 		const Vector3& getDirection() const { return m_dir; }
-
-		// 获取右方向 
 		const Vector3& getRight() const { return m_right; }
 
 		// 获取上方向
 		const Vector3& getUp() const { return m_up; }
-
-		// 获取观察矩阵
 		const Matrix4& getViewMatrix() const { return m_matView; }
-
-		// 获取投影矩阵
 		const Matrix4& getProjMatrix() const { return m_matProj; }
-
-		// 获取观察投影矩阵
 		const Matrix4& getViewProjMatrix() const { return m_matVP; }
 
-		void			setProjectionMode(ProjMode mode);
-		ProjMode		getProjectionMode() const;
+		void	setProjectionMode(ProjMode mode);
+		ProjMode getProjectionMode() const;
 
 		void setFixedYawAxis(bool fixed) { m_bFixedYawAxis = fixed; }
 		void setFov(Real fov);
@@ -83,7 +66,6 @@ namespace Echo
 	protected:
 		Vector3			m_position;
 		Vector3			m_dir;
-		Quaternion		m_oritation;
 		Vector3			m_up;
 		Vector3			m_right;
 		bool			m_bFixedYawAxis;
