@@ -1,3 +1,4 @@
+#include "engine/modules/camera/camera_module.h"
 #include "engine/modules/box2d/box2d_module.h"
 #include "engine/modules/audio/audio_module.h"
 #include "engine/modules/effect/effect_module.h"
@@ -9,8 +10,9 @@
 
 using namespace Echo;
 
+REGISTER_MODULE(CameraModule)
 REGISTER_MODULE(Box2DModule)
-REGISTER_MODULE(AudioModule);
+REGISTER_MODULE(AudioModule)
 REGISTER_MODULE(Live2DModule)
 REGISTER_MODULE(SpineModule)
 REGISTER_MODULE(GltfModule)
