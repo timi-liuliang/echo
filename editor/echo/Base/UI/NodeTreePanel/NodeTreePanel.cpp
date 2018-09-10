@@ -1,6 +1,7 @@
 #include <QtGui>
 #include <QDateTime>
 #include <QMenuBar>
+#include "Studio.h"
 #include "NodeTreePanel.h"
 #include "EchoEngine.h"
 #include "ResChooseDialog.h"
@@ -111,17 +112,19 @@ namespace Studio
 
 	void NodeTreePanel::addNode(Echo::Node* node, QTreeWidgetItem* parent, bool recursive)
 	{
+		Echo::String rootPath = AStudio::instance()->getRootPath();
 		Echo::String nodeName = node->getName();
 		Echo::String nodeClassName = node->getClassName();
+		Echo::String iconPath = node->getEditorIcon();
 
 		// get icon path by node name
 		Echo::String lowerCaseNodeName = nodeClassName;
 		Echo::StringUtil::LowerCase(lowerCaseNodeName);
-		Echo::String iconPath = Echo::StringUtil::Format(":/icon/node/%s.png", lowerCaseNodeName.c_str());
+		Echo::String qIconPath = Echo::StringUtil::Format(":/icon/node/%s.png", lowerCaseNodeName.c_str());
 
 		QTreeWidgetItem* nodeItem = new QTreeWidgetItem(parent);
 		nodeItem->setText(0, nodeName.c_str());
-		nodeItem->setIcon(0, QIcon(iconPath.c_str()));
+		nodeItem->setIcon(0, QIcon(iconPath.empty() ? qIconPath.c_str() : (rootPath+iconPath).c_str()));
 		nodeItem->setData(0, Qt::UserRole, QVariant::fromValue((void*)node));
 		nodeItem->setFlags( nodeItem->flags() | Qt::ItemIsEditable);
 

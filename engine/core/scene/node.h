@@ -9,6 +9,7 @@ namespace Echo
 	class Node : public Object
 	{
 		ECHO_CLASS(Node, Object)
+		ECHO_EDIT_INTERFACE
 
 		friend class NodeTree;		
 

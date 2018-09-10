@@ -4,6 +4,7 @@
 #include "variant.h"
 #include "class_method_bind.h"
 #include "property_info.h"
+#include "object_editor.h"
 #include "engine/core/util/StringUtil.h"
 #include "engine/core/script/lua/LuaBinder.h"
 
@@ -212,6 +213,7 @@ public:																						\
 	}																						\
 																							\
 	static void bindMethods();																\
+																							\
 																							\
 private:															
 

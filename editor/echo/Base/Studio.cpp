@@ -60,6 +60,12 @@ namespace Studio
 		return inst;
 	}
 
+	// get editor root path
+	const Echo::String& AStudio::getRootPath()
+	{
+		return m_rootPath;
+	}
+
 	// 初始化日志系统
 	bool AStudio::initLogSystem()
 	{
@@ -228,11 +234,16 @@ namespace Studio
 		TIME_PROFILE_OUTPUT
 	}
 
-	// 设置程序工作路径
 	void AStudio::setAppPath(const char* appPath)
 	{
 		m_appPath = appPath;
 		Echo::PathUtil::FormatPath(m_appPath, true);
+
+		// calculate root path
+#ifdef ECHO_PLATFORM_WINDOWS
+		m_rootPath = m_appPath + "../../../";
+#else
+#endif
 	}
 
 	// 删除资源

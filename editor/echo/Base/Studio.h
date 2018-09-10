@@ -11,30 +11,6 @@
 
 namespace Studio
 {
-	// 文件支持
-	struct AssetSupportInfo
-	{
-		std::string		m_icon;			// 图标
-		std::string		m_tabName;		// Tab名称
-		std::string		m_name;			// 资源名称
-		std::string		m_ext;			// 资源名后缀
-
-		AssetSupportInfo()
-		{}
-
-		AssetSupportInfo( const std::string& tab, const std::string& ext)
-			: m_tabName(tab)
-			, m_ext(ext)
-		{}
-
-		// 运算符重载 "=="
-		bool operator == (const AssetSupportInfo& src) const
-		{
-			return (m_tabName == src.m_tabName) && (m_ext == src.m_ext);
-		}
-	};
-	typedef std::vector<AssetSupportInfo> AssertsSupportInfoArray;
-
 	class MainWindow;
 	class ProjectWnd;
 	class RenderWindow;
@@ -61,6 +37,9 @@ namespace Studio
 
 		// 获取程序工作路径
 		const char* getAppPath() const { return m_appPath.c_str(); }
+
+		// get editor root path
+		const Echo::String& getRootPath();
 
 		// 获取配置管理器
 		ConfigMgr* getConfigMgr() { return m_projectCfg; }
@@ -115,6 +94,7 @@ namespace Studio
 		void loadAllRecentProjects();
 
 	private:
+		Echo::String					m_rootPath;			// root direcory
 		Echo::String					m_appPath;			// 程序运营目录
 		MainWindow*						m_mainWindow;		// 主窗口
 		ProjectWnd*						m_projectWindow;
@@ -122,8 +102,6 @@ namespace Studio
 		Echo::LogDefault*				m_log;				// 日志实现
 		LogPanel*						m_logPanel;			// 日志面板
 		ConfigMgr*						m_projectCfg;		// 配置文件
-
-		std::vector<AssetSupportInfo>	m_assetSupportInfos;// 资源编辑相关信息
 	};
 }
 

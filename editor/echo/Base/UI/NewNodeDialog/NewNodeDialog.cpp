@@ -1,3 +1,4 @@
+#include "Studio.h"
 #include "NewNodeDialog.h"
 #include "EchoEngine.h"
 #include "NodeTreePanel.h"
@@ -61,14 +62,21 @@ namespace Studio
 
 	void NewNodeDialog::addNode(const Echo::String& nodeName, QTreeWidgetItem* parent)
 	{
+		// iconpath
+		Echo::Node* node = (Echo::Node*)Echo::Class::create(nodeName);
+		Echo::String iconPath = node->getEditorIcon();
+		EchoSafeDelete(node, Node);
+
+		Echo::String rootPath = AStudio::instance()->getRootPath();
+
 		// get icon path by node name
 		Echo::String lowerCaseNodeName = nodeName;
 		Echo::StringUtil::LowerCase(lowerCaseNodeName);
-		Echo::String iconPath = Echo::StringUtil::Format(":/icon/node/%s.png", lowerCaseNodeName.c_str());
+		Echo::String qIconPath = Echo::StringUtil::Format(":/icon/node/%s.png", lowerCaseNodeName.c_str());
 
 		QTreeWidgetItem* nodeItem = new QTreeWidgetItem(parent);
 		nodeItem->setText( 0, nodeName.c_str());
-		nodeItem->setIcon(0, QIcon(iconPath.c_str()));
+		nodeItem->setIcon(0, QIcon(iconPath.empty() ? qIconPath.c_str() : (rootPath + iconPath).c_str()));
 
 		QObject::connect(m_treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(onConfirmNode()));
 
