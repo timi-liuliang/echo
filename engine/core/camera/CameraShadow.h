@@ -5,9 +5,6 @@
 
 namespace Echo
 {
-	/**
-	 * 阴影摄像机(Used by exponential shadow map)
-	 */
 	class CameraShadow
 	{
 	public:
@@ -43,6 +40,6 @@ namespace Echo
 		Matrix4		m_view;
 		Vector3     m_dir;				// 投影方向
 		AABB 		m_Box;              // ActorsAABB
-		AABB			m_CalcBox;			// 用于计算的AABB(在真实的AABB基础上进行扩大)
+		AABB		m_CalcBox;			// 用于计算的AABB(在真实的AABB基础上进行扩大)
 	};
 }

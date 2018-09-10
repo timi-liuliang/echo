@@ -6,9 +6,6 @@
 
 namespace Echo
 {
-	/**
-	 * 摄像机接口
-	 */
 	class Ray;
 	class Camera
 	{
