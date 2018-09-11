@@ -307,7 +307,6 @@ ADD_SUBDIRECTORY(thirdparty/freetype-2.6)
 ADD_SUBDIRECTORY(thirdparty/zlib)
 ADD_SUBDIRECTORY(thirdparty/Box2D)
 #ADD_SUBDIRECTORY(thirdparty/protobuf/src/google/protobuf)
-#ADD_SUBDIRECTORY(thirdparty/tensorflow/tensorflow)
 
 IF(ECHO_PLATFORM_WIN32 AND ECHO_EDITOR_MODE)
 	OPTION(ECHO_ARCHIVE_SUPPORT_7ZIP "Is support 7zip package" TRUE)

@@ -1,9 +1,0 @@
-op {
-  graph_op_name: "Cholesky"
-  endpoint {
-    name: "cholesky"
-  }
-  endpoint {
-    name: "linalg.cholesky"
-  }
-}
