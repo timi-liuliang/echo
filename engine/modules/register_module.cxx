@@ -7,6 +7,7 @@
 #include "engine/modules/ui/ui_module.h"
 #include "engine/modules/gltf/gltf_module.h"
 #include "engine/modules/anim/anim_module.h"
+#include "engine/modules/ai/ai_module.h"
 
 using namespace Echo;
 
@@ -19,3 +20,4 @@ REGISTER_MODULE(GltfModule)
 REGISTER_MODULE(AnimModule)
 REGISTER_MODULE(EffectModule)
 REGISTER_MODULE(UIModule)
+REGISTER_MODULE(AIModule)
