@@ -46,7 +46,7 @@ namespace Echo
 	// lua stack to value
 	template<typename T> INLINE T lua_getvalue(lua_State* L, int index)			
 	{ 
-		lua_binder_error("lua stack to value error, unknow c type"); 
+		lua_binder_error("lua stack get value error, unknow c type"); 
 		static T st = variant_cast<T>(Variant()); 
 		return st; 
 	}
@@ -113,7 +113,7 @@ namespace Echo
 	// lua push vlaue to stack
 	template<typename T> INLINE void lua_pushvalue(lua_State* L, T value) 
 	{ 
-		lua_binder_error("lua stack to value error, unknow c type"); 
+		lua_binder_error("lua stack push value error, unknow c type"); 
 	}
 
 	template<> INLINE void lua_pushvalue<const char*>(lua_State* state, const char* value) 
@@ -134,6 +134,17 @@ namespace Echo
 	template<> INLINE void lua_pushvalue<ui32>(lua_State* state, ui32 value) 
 	{ 
 		lua_pushinteger(state, value); 
+	}
+
+	template<> INLINE void lua_pushvalue<const Vector3&>(lua_State* state, const Vector3& value)
+	{
+		lua_newtable(state);
+		lua_pushnumber(state, value.x);
+		lua_setfield(state, -2, "x");
+		lua_pushnumber(state, value.y);
+		lua_setfield(state, -2, "y");
+		lua_pushnumber(state, value.z);
+		lua_setfield(state, -2, "z");
 	}
 
 	template<> INLINE void lua_pushvalue<Object*>(lua_State* state, Object* value) 
