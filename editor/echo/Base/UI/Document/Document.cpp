@@ -80,6 +80,7 @@ namespace Studio
 			{
 				text += "<br />";
 				text += methodName;
+				text += "<br />";
 			}
 
 			m_textBrowser->setHtml(text.c_str());

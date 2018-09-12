@@ -6,12 +6,21 @@ namespace Echo
 {
 	i32	Render::m_renderTypes = Render::Type_2D;
 
+	Render::Render()
+		: m_is2d(true)
+		, m_isVisible(true)
+	{
+	}
+
 	void Render::bindMethods()
 	{
-		CLASS_BIND_METHOD(Render, set2d, DEF_METHOD("set2d"));
-		CLASS_BIND_METHOD(Render, is2d, DEF_METHOD("is2d"));
+		CLASS_BIND_METHOD(Render, set2d,		DEF_METHOD("set2d"));
+		CLASS_BIND_METHOD(Render, is2d,			DEF_METHOD("is2d"));
+		CLASS_BIND_METHOD(Render, setVisible,	DEF_METHOD("setVisible"));
+		CLASS_BIND_METHOD(Render, isVisible,	DEF_METHOD("isVisible"));
 
 		CLASS_REGISTER_PROPERTY(Render, "Is2D", Variant::Type::Bool, "is2d", "set2d");
+		CLASS_REGISTER_PROPERTY(Render, "Visible", Variant::Type::Bool, "isVisible", "setVisible");
 	}
 
 	bool Render::isNeedRender() const
@@ -19,15 +28,15 @@ namespace Echo
 #ifdef ECHO_EDITOR_MODE
 		if (!Engine::instance()->getConfig().m_isGame)
 		{
-			if (m_is2d) return (m_renderTypes & Type_2D) != 0;
-			else		return (m_renderTypes & Type_3D) != 0;
+			if (m_is2d) return (m_renderTypes & Type_2D) != 0 && m_isVisible;
+			else		return (m_renderTypes & Type_3D) != 0 && m_isVisible;
 		}
 		else
 		{
-			return true;
+			return m_isVisible;
 		}
 #else
-		return true;
+		return m_isVisible;
 #endif
 	}
 

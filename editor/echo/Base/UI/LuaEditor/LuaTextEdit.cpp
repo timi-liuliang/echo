@@ -89,6 +89,10 @@ namespace Studio
 
 			AStudio::instance()->getConfigMgr()->setValue("lua_edit_font_size", Echo::StringUtil::ToString(fontPointSize).c_str());
 		}
+		else
+		{
+			QPlainTextEdit::wheelEvent(e);
+		}
 	}
 
 	void LuaTextEdit::mouseMoveEvent(QMouseEvent* e)

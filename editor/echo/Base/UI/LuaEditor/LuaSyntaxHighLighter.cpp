@@ -30,7 +30,7 @@ namespace Studio
 
 
 		// ×¢ÊÍ
-		appendRule(92, 99, 112, "--[^\n]*");
+		appendRule(128, 138, 156, "--[^\n]*");
 
 		// ×Ö·û´®
 		appendRule( 152, 195, 121, "\".*\"");

@@ -16,11 +16,16 @@ namespace Echo
 		};
 
 	public:
+		Render();
+
 		static void setRenderTypes(i32 types = Type_2D | Type_3D) { m_renderTypes = types; }
 		bool isNeedRender() const;
 
 		void set2d(bool is2d) { m_is2d = is2d; }
 		bool is2d() const { return m_is2d; }
+
+		void setVisible(bool isVisible) { m_isVisible = isVisible; }
+		bool isVisible() const { return m_isVisible; }
 
 		virtual void update(float delta, bool bUpdateChildren);
 
@@ -31,6 +36,7 @@ namespace Echo
 	protected:
 		static i32		m_renderTypes;
 		bool			m_is2d;
+		bool			m_isVisible;
 		Matrix4			m_matWVP;
 	};
 }

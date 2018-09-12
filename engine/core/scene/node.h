@@ -89,7 +89,6 @@ namespace Echo
 		void setLocalPosition(const Vector3& pos);
 		void setLocalYawPitchRoll(const Vector3& yawPitchRoll);
 		void setWorldOrientation(const Quaternion& ort);
-		void setWorldPosition(const Vector3& pos);
 
 		// update recursive
 		virtual void update(float delta, bool bUpdateChildren = false);
@@ -101,7 +100,18 @@ namespace Echo
 		const Vector3& getLocalPosition() const;
 		const Vector3& getWorldScaling() const;
 		const Quaternion& getWorldOrientation() const;
+
+		// set world position
+		void setWorldPosition(const Vector3& pos);
+		void setWorldPositionX(float x);
+		void setWorldPositionY(float y);
+		void setWorldPositionZ(float z);
+
+		// get world position
 		const Vector3& getWorldPosition() const;
+		float getWorldPositionX() const { return getWorldPosition().x; }
+		float getWorldPositionY() const { return getWorldPosition().y; }
+		float getWorldPositionZ() const { return getWorldPosition().z; }
 
 		const Matrix4& getWorldMatrix();
 		Matrix4	getInverseWorldMatrix() const;
