@@ -3,7 +3,7 @@
 #include "QPropertyModel.h"
 #include <engine/core/math/Vector3.h>
 #include <engine/core/util/StringUtil.h>
-#include <engine/core/script/lua/LuaBinder.h>
+#include <engine/core/script/lua/lua_binder.h>
 
 namespace QT_UI
 {

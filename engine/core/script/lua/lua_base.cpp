@@ -1,6 +1,6 @@
 #pragma once
 
-#include "LuaBase.h"
+#include "lua_base.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/base/object.h"
 #include "engine/core/scene/node.h"

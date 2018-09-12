@@ -1,6 +1,6 @@
 #pragma once
 
-#include "LuaBase.h"
+#include "lua_base.h"
 
 namespace Echo
 {

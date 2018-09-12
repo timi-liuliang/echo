@@ -6,7 +6,7 @@
 #include "property_info.h"
 #include "object_editor.h"
 #include "engine/core/util/StringUtil.h"
-#include "engine/core/script/lua/LuaBinder.h"
+#include "engine/core/script/lua/lua_binder.h"
 
 namespace Echo
 {

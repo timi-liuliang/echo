@@ -4,7 +4,7 @@
 #include "ui_LuaEditor.h"
 #include "QProperty.hpp"
 #include "LuaSyntaxHighLighter.h"
-#include <engine/core/script/lua/LuaScript.h>
+#include <engine/core/script/lua/lua_script.h>
 
 namespace Studio
 {

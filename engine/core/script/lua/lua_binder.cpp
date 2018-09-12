@@ -1,4 +1,4 @@
-#include "LuaBinder.h"
+#include "lua_binder.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/base/method_bind.h"
 #include "engine/core/base/class_method_bind.h"

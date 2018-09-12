@@ -3,7 +3,7 @@
 #include "engine/core/io/IO.h"
 #include "engine/core/main/Engine.h"
 #include "engine/core/util/PathUtil.h"
-#include "engine/core/script/lua/LuaBinder.h"
+#include "engine/core/script/lua/lua_binder.h"
 #include <thirdparty/pugixml/pugixml.hpp>
 #include <thirdparty/pugixml/pugiconfig.hpp>
 

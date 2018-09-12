@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/core/script/lua/LuaBinder.h"
+#include "engine/core/script/lua/lua_binder.h"
 
 namespace Echo
 {

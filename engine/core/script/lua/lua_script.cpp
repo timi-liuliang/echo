@@ -1,4 +1,4 @@
-#include "LuaScript.h"
+#include "lua_script.h"
 #include "engine/core/io/IO.h"
 
 static const char* luaScriptTemplate = 
