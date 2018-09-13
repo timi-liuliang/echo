@@ -47,6 +47,8 @@
    <header>LuaTextEdit.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../../../Resource/App.qrc"/>
+ </resources>
  <connections/>
 </ui>
