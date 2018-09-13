@@ -12,7 +12,7 @@ namespace Echo
 	// on editor select this node
 	void Camera2D::onEditorSelectThisNode()
 	{
-
+		m_editorData = 5;
 	}
 #endif
 }
