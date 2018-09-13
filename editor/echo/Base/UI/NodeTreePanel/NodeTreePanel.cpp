@@ -615,6 +615,12 @@ namespace Studio
 		m_currentEditObject = getCurrentSelectNode();
 
 		showSelectedObjectProperty();
+
+		// editor extension
+		if (Echo::Class::isDerivedFrom(m_currentEditObject->getClassName(), "Node"))
+		{
+			((Echo::Node*)m_currentEditObject)->onEditorSelectThisNode();
+		}
 	}
 
 	// edit res

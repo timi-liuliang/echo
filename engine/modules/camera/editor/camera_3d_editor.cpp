@@ -8,5 +8,11 @@ namespace Echo
 	{
 		return "engine/modules/camera/editor/icon/camera3d.png";
 	}
+
+	// on editor select this node
+	void Camera3D::onEditorSelectThisNode()
+	{
+
+	}
 #endif
 }

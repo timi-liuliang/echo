@@ -8,5 +8,11 @@ namespace Echo
 	{
 		return "engine/modules/ai/machine_learning/editor/icon/neuralnetwork.png";
 	}
+
+	// on editor select this node
+	void NeuralNetwork::onEditorSelectThisNode()
+	{
+
+	}
 #endif
 }

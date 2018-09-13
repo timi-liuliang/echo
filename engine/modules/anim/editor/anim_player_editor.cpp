@@ -8,5 +8,11 @@ namespace Echo
 	{
 		return "engine/modules/anim/editor/icon/animplayer.png";
 	}
+
+	// on editor select this node
+	void AnimPlayer::onEditorSelectThisNode()
+	{
+		int a = 10;
+	}
 #endif
 }
