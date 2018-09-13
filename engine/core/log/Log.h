@@ -33,8 +33,9 @@ namespace Echo
 		LogOutput::Level getOutputLevel() { return m_logLevel; }
 
 		// output message
-		void logMessage(LogOutput::Level level, const char* formats, ...);
+		void logMessage(LogOutput::Level level, const char* msg);
 		void logMessage(LogOutput::Level level, const std::wstring& message);
+		void logMessageExt(LogOutput::Level level, const char* formats, ...);
 
 	public:
 		// lua
@@ -51,8 +52,8 @@ namespace Echo
 	};
 }
 
-#define EchoLogDebug(formats, ...)		Echo::Log::instance()->logMessage(Echo::LogOutput::LL_DEBUG, formats, ##__VA_ARGS__);
-#define EchoLogInfo(formats, ...)		Echo::Log::instance()->logMessage(Echo::LogOutput::LL_INFO, formats, ##__VA_ARGS__);
-#define EchoLogWarning(formats, ...)	Echo::Log::instance()->logMessage(Echo::LogOutput::LL_WARNING, formats, ##__VA_ARGS__);
-#define EchoLogError(formats, ...)		Echo::Log::instance()->logMessage(Echo::LogOutput::LL_ERROR, formats, ##__VA_ARGS__);
-#define EchoLogFatal(formats, ...)		Echo::Log::instance()->logMessage(Echo::LogOutput::LL_FATAL, formats, ##__VA_ARGS__);
+#define EchoLogDebug(formats, ...)		Echo::Log::instance()->logMessageExt(Echo::LogOutput::LL_DEBUG, formats, ##__VA_ARGS__);
+#define EchoLogInfo(formats, ...)		Echo::Log::instance()->logMessageExt(Echo::LogOutput::LL_INFO, formats, ##__VA_ARGS__);
+#define EchoLogWarning(formats, ...)	Echo::Log::instance()->logMessageExt(Echo::LogOutput::LL_WARNING, formats, ##__VA_ARGS__);
+#define EchoLogError(formats, ...)		Echo::Log::instance()->logMessageExt(Echo::LogOutput::LL_ERROR, formats, ##__VA_ARGS__);
+#define EchoLogFatal(formats, ...)		Echo::Log::instance()->logMessageExt(Echo::LogOutput::LL_FATAL, formats, ##__VA_ARGS__);

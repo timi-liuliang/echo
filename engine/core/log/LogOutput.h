@@ -5,9 +5,6 @@
 
 namespace Echo
 {
-	/**
-	 * Log 2014-6-13
-	 */
 	class LogOutput
 	{
 	public:

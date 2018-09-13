@@ -76,14 +76,22 @@ namespace Echo
 		}
 	}
 
-	void Log::logMessage(LogOutput::Level level, const char* formats, ...)
+	void Log::logMessage(LogOutput::Level level, const char* msgs)
 	{
-        if ( LogOutput::LL_INVALID != m_logLevel )
+		if (LogOutput::LL_INVALID != level)
 		{
-            if ( level < m_logLevel )
-                return;
+			if (level >= m_logLevel)
+			{
+				for (LogOutput* output : m_logArray)
+				{
+					output->logMessage(level, msgs);
+				}
+			}
 		}
+	}
 
+	void Log::logMessageExt(LogOutput::Level level, const char* formats, ...)
+	{
 		if (!m_logArray.empty())
 		{
 			char szBuffer[4096];
@@ -95,16 +103,13 @@ namespace Echo
 
 			szBuffer[bufferLength - 1] = 0;
 
-			for (OutputArray::iterator it = m_logArray.begin(); it != m_logArray.end(); it++)
-			{
-				(*it)->logMessage(level, szBuffer);
-			}
+			logMessage(level, szBuffer);
 		}
 	}
 
 	void Log::logMessage(LogOutput::Level level, const std::wstring& message)
 	{
-		logMessage(level, "%s", StringUtil::WCS2MBS(message).c_str());
+		logMessage(level, StringUtil::WCS2MBS(message).c_str());
 	}
 
 	void Log::error(const char* msg)

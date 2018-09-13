@@ -53,7 +53,7 @@ namespace Echo
 
 	template<> INLINE const char* lua_getvalue<const char*>(lua_State* L, int index)
 	{ 
-		return lua_tostring(L, index);
+		return lua_isnil(L, index) ? "nil" : lua_tostring(L, index);
 	}
 
 	template<> INLINE bool lua_getvalue<bool>(lua_State* L, int index)
