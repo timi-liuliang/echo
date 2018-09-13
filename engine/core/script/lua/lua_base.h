@@ -70,6 +70,11 @@ namespace Echo
 	{ 
 		return (ui32)lua_tonumber(L, index);
 	}
+	
+	template<> INLINE float lua_getvalue<float>(lua_State* L, int index)
+	{
+		return (float)lua_tonumber(L, index);
+	}
 
 	template<> INLINE String lua_getvalue<String>(lua_State* L, int index)
 	{
@@ -134,6 +139,11 @@ namespace Echo
 	template<> INLINE void lua_pushvalue<ui32>(lua_State* state, ui32 value) 
 	{ 
 		lua_pushinteger(state, value); 
+	}
+
+	template<> INLINE void lua_pushvalue<float>(lua_State* state, float value)
+	{
+		lua_pushnumber(state, value);
 	}
 
 	template<> INLINE void lua_pushvalue<const Vector3&>(lua_State* state, const Vector3& value)

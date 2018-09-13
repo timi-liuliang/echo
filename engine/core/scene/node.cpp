@@ -371,7 +371,7 @@ namespace Echo
 		if (!m_script.m_isRegistered)
 		{
 			m_script.m_globalTableName = StringUtil::Format("objs._%d", this->getId());
-			LuaBinder::instance()->registerObject("Node", m_script.m_globalTableName.c_str(), this);
+			LuaBinder::instance()->registerObject( getClassName(), m_script.m_globalTableName.c_str(), this);
 
 			m_script.m_isRegistered = true;
 		}
