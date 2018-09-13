@@ -4,9 +4,6 @@
 
 namespace Echo
 {
-	/**
-	 * 路径处理函数
-	 */
 	class PathUtil
 	{
 	public:
