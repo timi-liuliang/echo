@@ -6,6 +6,9 @@
 // define node edit interface for echo editor
 #define ECHO_EDITOR_INTERFACE								\
 public:														\
+	/* editor update self*/									\
+	virtual void editor_update_self() {}					\
+															\
 	/* get node icon*/										\
 	virtual const char* getEditorIcon() const { return ""; }\
 															\
@@ -17,6 +20,9 @@ protected:													\
 
 #define ECHO_EDITOR											\
 public:														\
+	/* editor update self*/									\
+	virtual void editor_update_self();						\
+															\
 	/* get node icon*/										\
 	virtual const char* getEditorIcon() const;				\
 															\

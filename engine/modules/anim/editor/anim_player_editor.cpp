@@ -14,5 +14,10 @@ namespace Echo
 	{
 		int a = 10;
 	}
+
+	void AnimPlayer::editor_update_self()
+	{
+
+	}
 #endif
 }

@@ -35,7 +35,7 @@ namespace Echo
 
 		inline Color(Dword dw)
 		{
-			setARGB(dw);
+			setABGR(dw);
 		}
 
 		inline Color(const Real* pf)
@@ -67,7 +67,7 @@ namespace Echo
 		// casting
 		inline operator Dword () const
 		{
-			return getARGB();
+			return getABGR();
 		}
 
 		inline operator Real* ()

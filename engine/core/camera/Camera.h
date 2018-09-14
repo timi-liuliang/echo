@@ -21,12 +21,9 @@ namespace Echo
 		Camera(ProjMode mode = PM_PERSPECTIVE, bool isFixedYaw = true);
 		virtual ~Camera();
 
-		// tick every frame
-		virtual void frameMove(float elapsedTime) {}
-
-		virtual void setPosition(const Vector3& pos);
-		virtual void setDirection(const Vector3& dir);
-		virtual void setUp(const Vector3& vUp);
+		void setPosition(const Vector3& pos);
+		void setDirection(const Vector3& dir);
+		void setUp(const Vector3& vUp);
 
 		const Vector3& getPosition() const { return m_position; }
 		const Vector3& getDirection() const { return m_dir; }
@@ -60,8 +57,8 @@ namespace Echo
 		void getCameraRay(Ray& ray, const Vector2& screenPos);
 		void unProjectionMousePos( Vector3& from, Vector3& to, const Vector2& screenPos );
 
-		virtual void	update();
-		virtual void    needUpdate();
+		void update();
+		void needUpdate();
 
 	protected:
 		Vector3			m_position;

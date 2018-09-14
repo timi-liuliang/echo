@@ -14,5 +14,10 @@ namespace Echo
 	{
 
 	}
+
+	void NeuralNetwork::editor_update_self()
+	{
+
+	}
 #endif
 }

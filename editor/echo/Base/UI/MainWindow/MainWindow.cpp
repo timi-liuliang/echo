@@ -378,7 +378,6 @@ namespace Studio
 		}
 	}
 
-	// 打开文件
 	void MainWindow::OpenProject(const char* projectName)
 	{
 		AStudio::instance()->OpenProject(projectName);

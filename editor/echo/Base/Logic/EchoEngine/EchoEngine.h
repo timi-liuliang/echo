@@ -59,9 +59,6 @@ namespace Studio
 		void resizeBackGrid3d();
 		void resizeBackGrid2d();
 
-		//获得背景网格的相关参数
-		virtual void GetBackGridParameters(int* linenums,float* lineGap);
-
 		// 获取模型半径
 		float GetMeshRadius();
 

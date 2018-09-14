@@ -14,5 +14,10 @@ namespace Echo
 	{
 
 	}
+
+	void Neuron::editor_update_self()
+	{
+
+	}
 #endif
 }

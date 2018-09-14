@@ -14,5 +14,10 @@ namespace Echo
 	{
 
 	}
+
+	void Camera3D::editor_update_self()
+	{
+
+	}
 #endif
 }

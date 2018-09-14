@@ -20,9 +20,9 @@ namespace Echo
 			Dword		m_color;
 
 			VertexFormat(const Vector3& pos, const Color& color)
-				: m_position(pos)
-				, m_color(color)
-			{}
+				: m_position(pos), m_color(color.getABGR())
+			{		
+			}
 		};
 		typedef vector<VertexFormat>::type	VertexArray;
 		typedef vector<Word>::type			IndiceArray;

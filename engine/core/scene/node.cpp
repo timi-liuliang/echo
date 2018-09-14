@@ -410,6 +410,10 @@ namespace Echo
 
 		update_self();
 
+#ifdef ECHO_EDITOR_MODE
+		editor_update_self();
+#endif
+
 		if (bUpdateChildren)
 		{
 			for (Node* node : m_children)

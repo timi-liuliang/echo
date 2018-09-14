@@ -237,10 +237,10 @@ namespace Studio
 		{
 			m_gizmosNodeGrid2d->clear();
 			m_gizmosNodeGrid2d->set2d(true);
-			m_gizmosNodeGrid2d->drawLine(Echo::Vector3(-windowHalfWidth, -windowHalfHeight, 0.0), Echo::Vector3(windowHalfWidth, -windowHalfHeight, 0.0), Echo::Color::BLUE);
-			m_gizmosNodeGrid2d->drawLine(Echo::Vector3(-windowHalfWidth, -windowHalfHeight, 0.0), Echo::Vector3(-windowHalfWidth, windowHalfHeight, 0.0), Echo::Color::BLUE);
-			m_gizmosNodeGrid2d->drawLine(Echo::Vector3(windowHalfWidth, windowHalfHeight, 0.0), Echo::Vector3(windowHalfWidth, -windowHalfHeight, 0.0), Echo::Color::BLUE);
-			m_gizmosNodeGrid2d->drawLine(Echo::Vector3(windowHalfWidth, windowHalfHeight, 0.0), Echo::Vector3(-windowHalfWidth, windowHalfHeight, 0.0), Echo::Color::BLUE);
+			m_gizmosNodeGrid2d->drawLine(Echo::Vector3(-windowHalfWidth, -windowHalfHeight, 0.0), Echo::Vector3(windowHalfWidth, -windowHalfHeight, 0.0), Echo::Color::RED);
+			m_gizmosNodeGrid2d->drawLine(Echo::Vector3(-windowHalfWidth, -windowHalfHeight, 0.0), Echo::Vector3(-windowHalfWidth, windowHalfHeight, 0.0), Echo::Color::RED);
+			m_gizmosNodeGrid2d->drawLine(Echo::Vector3(windowHalfWidth, windowHalfHeight, 0.0), Echo::Vector3(windowHalfWidth, -windowHalfHeight, 0.0), Echo::Color::RED);
+			m_gizmosNodeGrid2d->drawLine(Echo::Vector3(windowHalfWidth, windowHalfHeight, 0.0), Echo::Vector3(-windowHalfWidth, windowHalfHeight, 0.0), Echo::Color::RED);
 
 			curWindowHalfWidth = windowHalfWidth;
 			curWindowHalfHeight = windowHalfHeight;
@@ -262,18 +262,6 @@ namespace Studio
 			}
 		}
 		*/
-	}
-
-	void EchoEngine::GetBackGridParameters(int* linenums, float* lineGap)
-	{
-		//if (linenums)
-		//{
-		//	*linenums = m_gridNum;
-		//}
-		//if (lineGap)
-		//{
-		//	*lineGap = m_gridGap;
-		//}
 	}
 
 	void EchoEngine::previewAudioEvent(const char* audioEvent)
