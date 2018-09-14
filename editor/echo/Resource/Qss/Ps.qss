@@ -49,6 +49,11 @@ QWidget:title
 	background-color : rgb(83, 83, 83);
 }
 
+QPlainTextEdit
+{
+	background-color : rgb(77, 77, 77);
+}
+
 QPushButton:!enabled
 {
 	background-color : rgb(102, 102, 102);

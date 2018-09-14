@@ -271,7 +271,7 @@ namespace Studio
 	void LuaTextEdit::lineNumberAreaPaintEvent(QPaintEvent* event)
 	{
 		QPainter painter(m_lineNumberArea);
-		painter.fillRect(event->rect(), QColor(83, 83, 83));
+		painter.fillRect(event->rect(), QColor(77, 77, 77));
 
 		QTextBlock block = firstVisibleBlock();
 		int blockNumber = block.blockNumber();
