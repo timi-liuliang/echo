@@ -168,7 +168,13 @@ namespace Echo
         
         virtual Object* create()
         {
-            return EchoNew(T);
+			Object* obj = EchoNew(T);
+
+		#ifdef ECHO_EDITOR_MODE
+			obj->initEditor();
+		#endif
+
+			return obj;
         }
     };
     

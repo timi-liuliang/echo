@@ -3,8 +3,6 @@
 namespace Echo
 {
 #ifdef ECHO_EDITOR_MODE
-	REGISTER_OBJECT_EDITOR(Camera3D, Camera3DEditor)
-
 	Camera3DEditor::Camera3DEditor(Object* object)
 		: ObjectEditor(object)
 	{

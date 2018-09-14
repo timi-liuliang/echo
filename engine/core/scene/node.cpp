@@ -98,17 +98,10 @@ namespace Echo
 		m_matWorld = Matrix4::IDENTITY;
 		needUpdate();   
         m_children.clear();
-
-#ifdef ECHO_EDITOR_MODE
-		m_objectEditor = ObjectEditor::createEditor(this);
-#endif
 	}
 
 	Node::~Node()
 	{
-#ifdef ECHO_EDITOR_MODE
-		EchoSafeDelete(m_objectEditor, ObjectEditor);
-#endif
 	}
 
 	void Node::setParent(Node* parent)

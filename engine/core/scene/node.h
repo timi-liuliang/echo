@@ -8,7 +8,6 @@ namespace Echo
 {
 	class Node : public Object
 	{
-		ECHO_EDITOR_INTERFACE
 		ECHO_CLASS(Node, Object)
 
 		friend class NodeTree;		

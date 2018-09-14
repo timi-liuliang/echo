@@ -17,7 +17,10 @@ namespace Echo
 		const char* getEditorIcon() const;
 
 		// on editor select this node
-		virtual void onEditorSelectThisNode() override;
+		virtual void onEditorSelectThisNode() override { m_isSelect = true; }
+
+		// on editor unselect this node
+		virtual void onEditorUnSelectThisNode() override { m_isSelect = false; }
 
 		// on editor update this
 		virtual void editor_update_self() override;

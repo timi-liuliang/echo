@@ -16,7 +16,7 @@ namespace Echo
 	// register editor
 	void ObjectEditor::registerEditor(const char* objName, ObjectEditorFactory* factory)
 	{
-		if (g_objEditorFactorys.find(objName) != g_objEditorFactorys.end())
+		if (g_objEditorFactorys.find(objName) == g_objEditorFactorys.end())
 		{
 			g_objEditorFactorys[objName] = factory;
 		}

@@ -3,8 +3,6 @@
 namespace Echo
 {
 #ifdef ECHO_EDITOR_MODE
-	REGISTER_OBJECT_EDITOR(NeuralNetwork, NeuralNetworkEditor)
-
 	NeuralNetworkEditor::NeuralNetworkEditor(Object* object)
 		: ObjectEditor(object)
 	{

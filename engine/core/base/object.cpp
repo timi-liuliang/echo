@@ -10,6 +10,10 @@ namespace Echo
 
 	Object::Object()
 	{
+#ifdef ECHO_EDITOR_MODE
+		m_objectEditor = nullptr;
+#endif
+
 		// begin with 1
 		static i32 id = 1;
 		m_id = id++;
@@ -19,6 +23,10 @@ namespace Echo
 
 	Object::~Object()
 	{
+#ifdef ECHO_EDITOR_MODE
+		EchoSafeDelete(m_objectEditor, ObjectEditor);
+#endif
+
 		auto it = g_objs.find(m_id);
 		if (it != g_objs.end())
 		{

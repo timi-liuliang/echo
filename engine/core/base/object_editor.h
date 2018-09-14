@@ -27,6 +27,9 @@ namespace Echo
 		/* on editor select this node*/
 		virtual void onEditorSelectThisNode() {}
 
+		// on editor unselect this node
+		virtual void onEditorUnSelectThisNode() {}
+
 		// object
 		Object* getObject() { return m_object; }
 
@@ -59,6 +62,12 @@ namespace Echo
 // define node edit interface for echo editor
 #define ECHO_EDITOR_INTERFACE									\
 public:															\
+	/* initialize editor */										\
+	void initEditor()											\
+	{															\
+		m_objectEditor = Echo::ObjectEditor::createEditor(this);\
+	}															\
+																\
 	/* on editor select this node*/								\
 	Echo::ObjectEditor* getEditor() { return m_objectEditor; }	\
 																\
@@ -68,4 +77,5 @@ protected:														\
 
 #else
 #define ECHO_EDITOR_INTERFACE
+#define REGISTER_OBJECT_EDITOR(OBJECT, EDITOR)
 #endif

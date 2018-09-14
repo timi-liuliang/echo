@@ -4,8 +4,6 @@
 namespace Echo
 {
 #ifdef ECHO_EDITOR_MODE
-	REGISTER_OBJECT_EDITOR(Neuron, NeuronEditor)
-
 	NeuronEditor::NeuronEditor(Object* object)
 		: ObjectEditor(object)
 	{

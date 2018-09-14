@@ -7,8 +7,6 @@
 namespace Echo
 {
 #ifdef ECHO_EDITOR_MODE
-	REGISTER_OBJECT_EDITOR(Camera2D, Camera2DEditor)
-
 	Camera2DEditor::Camera2DEditor(Object* object)
 		: ObjectEditor(object)
 		, m_isSelect(false)
@@ -27,12 +25,6 @@ namespace Echo
 	const char* Camera2DEditor::getEditorIcon() const
 	{
 		return "engine/modules/camera/editor/icon/camera2d.png";
-	}
-
-	// on editor select this node
-	void Camera2DEditor::onEditorSelectThisNode()
-	{
-		m_isSelect = true;
 	}
 
 	void Camera2DEditor::editor_update_self()

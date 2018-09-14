@@ -612,14 +612,19 @@ namespace Studio
 	// on select node
 	void NodeTreePanel::onSelectNode()
 	{
-		m_currentEditObject = getCurrentSelectNode();
+		// editor extension : unselect object
+		if (m_currentEditObject && m_currentEditObject->getEditor())
+		{
+			m_currentEditObject->getEditor()->onEditorUnSelectThisNode();
+		}
 
+		m_currentEditObject = getCurrentSelectNode();
 		showSelectedObjectProperty();
 
-		// editor extension
-		if (Echo::Class::isDerivedFrom(m_currentEditObject->getClassName(), "Node") && ((Echo::Node*)m_currentEditObject)->getEditor())
+		// editor extension : select object
+		if (m_currentEditObject && m_currentEditObject->getEditor())
 		{
-			((Echo::Node*)m_currentEditObject)->getEditor()->onEditorSelectThisNode();
+			m_currentEditObject->getEditor()->onEditorSelectThisNode();
 		}
 	}
 

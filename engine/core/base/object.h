@@ -3,11 +3,14 @@
 #include "engine/core/memory/MemAllocDef.h"
 #include "engine/core/base/class.h"
 #include "engine/core/base/property_info.h"
+#include "engine/core/base/object_editor.h"
 
 namespace Echo
 {
 	class Object
 	{
+		ECHO_EDITOR_INTERFACE
+
 	public:
 		Object();
 		virtual ~Object();
