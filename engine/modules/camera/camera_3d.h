@@ -6,7 +6,6 @@ namespace Echo
 {
 	class Camera3D : public Node
 	{
-		ECHO_EDITOR
 		ECHO_CLASS(Camera3D, Node)
 
 	public:

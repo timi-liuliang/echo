@@ -7,7 +7,6 @@ namespace Echo
 	class Neuron;
 	class NeuralNetwork : public Node
 	{
-		ECHO_EDITOR
 		ECHO_CLASS(NeuralNetwork, Node)
 
 	public:

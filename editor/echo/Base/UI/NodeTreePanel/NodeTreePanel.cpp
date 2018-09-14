@@ -116,7 +116,7 @@ namespace Studio
 		Echo::String rootPath = AStudio::instance()->getRootPath();
 		Echo::String nodeName = node->getName();
 		Echo::String nodeClassName = node->getClassName();
-		Echo::String iconPath = node->getEditorIcon();
+		Echo::String iconPath = node->getEditor() ? node->getEditor()->getEditorIcon() : "";
 
 		// get icon path by node name
 		Echo::String lowerCaseNodeName = nodeClassName;
@@ -617,9 +617,9 @@ namespace Studio
 		showSelectedObjectProperty();
 
 		// editor extension
-		if (Echo::Class::isDerivedFrom(m_currentEditObject->getClassName(), "Node"))
+		if (Echo::Class::isDerivedFrom(m_currentEditObject->getClassName(), "Node") && ((Echo::Node*)m_currentEditObject)->getEditor())
 		{
-			((Echo::Node*)m_currentEditObject)->onEditorSelectThisNode();
+			((Echo::Node*)m_currentEditObject)->getEditor()->onEditorSelectThisNode();
 		}
 	}
 

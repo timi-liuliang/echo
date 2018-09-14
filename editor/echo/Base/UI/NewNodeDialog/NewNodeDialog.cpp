@@ -64,7 +64,7 @@ namespace Studio
 	{
 		// iconpath
 		Echo::Node* node = (Echo::Node*)Echo::Class::create(nodeName);
-		Echo::String iconPath = node->getEditorIcon();
+		Echo::String iconPath = node->getEditor() ? node->getEditor()->getEditorIcon() : "";
 		EchoSafeDelete(node, Node);
 
 		Echo::String rootPath = AStudio::instance()->getRootPath();

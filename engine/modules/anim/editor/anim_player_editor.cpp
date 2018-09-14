@@ -1,23 +1,20 @@
-#include "../anim_player.h"
+#include "anim_player_editor.h"
 
 namespace Echo
 {
 #ifdef ECHO_EDITOR_MODE
+	REGISTER_OBJECT_EDITOR(AnimPlayer, AnimPlayerEditor);
+
+	AnimPlayerEditor::AnimPlayerEditor(Object* object)
+		: ObjectEditor(object)
+	{
+
+	}
+
 	// get camera2d icon, used for editor
-	const char* AnimPlayer::getEditorIcon() const
+	const char* AnimPlayerEditor::getEditorIcon() const
 	{
 		return "engine/modules/anim/editor/icon/animplayer.png";
-	}
-
-	// on editor select this node
-	void AnimPlayer::onEditorSelectThisNode()
-	{
-		int a = 10;
-	}
-
-	void AnimPlayer::editor_update_self()
-	{
-
 	}
 #endif
 }

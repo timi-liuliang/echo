@@ -1,23 +1,20 @@
-#include "../neural_network.h"
+#include "neural_network_editor.h"
 
 namespace Echo
 {
 #ifdef ECHO_EDITOR_MODE
+	REGISTER_OBJECT_EDITOR(NeuralNetwork, NeuralNetworkEditor)
+
+	NeuralNetworkEditor::NeuralNetworkEditor(Object* object)
+		: ObjectEditor(object)
+	{
+
+	}
+
 	// get camera2d icon, used for editor
-	const char* NeuralNetwork::getEditorIcon() const
+	const char* NeuralNetworkEditor::getEditorIcon() const
 	{
 		return "engine/modules/ai/machine_learning/editor/icon/neuralnetwork.png";
-	}
-
-	// on editor select this node
-	void NeuralNetwork::onEditorSelectThisNode()
-	{
-
-	}
-
-	void NeuralNetwork::editor_update_self()
-	{
-
 	}
 #endif
 }

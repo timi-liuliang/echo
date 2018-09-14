@@ -98,10 +98,17 @@ namespace Echo
 		m_matWorld = Matrix4::IDENTITY;
 		needUpdate();   
         m_children.clear();
+
+#ifdef ECHO_EDITOR_MODE
+		m_objectEditor = ObjectEditor::createEditor(this);
+#endif
 	}
 
 	Node::~Node()
 	{
+#ifdef ECHO_EDITOR_MODE
+		EchoSafeDelete(m_objectEditor, ObjectEditor);
+#endif
 	}
 
 	void Node::setParent(Node* parent)
@@ -411,7 +418,8 @@ namespace Echo
 		update_self();
 
 #ifdef ECHO_EDITOR_MODE
-		editor_update_self();
+		if(m_objectEditor)
+			m_objectEditor->editor_update_self();
 #endif
 
 		if (bUpdateChildren)

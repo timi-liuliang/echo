@@ -8,7 +8,6 @@ namespace Echo
 {
 	class AnimPlayer : public Node
 	{
-		ECHO_EDITOR
 		ECHO_CLASS(AnimPlayer, Node)
 
 	public:
