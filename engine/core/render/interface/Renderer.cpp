@@ -42,19 +42,6 @@ namespace Echo
 		return true;
 	}
 
-	void Renderer::destroy()
-	{
-		for (std::map<ui32, Renderable*>::iterator it = m_renderables.begin(); it != m_renderables.end(); ++it)
-		{
-			EchoSafeDelete(it->second, Renderable);
-		}
-		m_renderables.clear();
-
-		cleanSystemResource();
-
-		destroyImpl();
-	}
-
 	Renderer::Renderer()
 		: m_bVSync(false)
 		, m_pFrameBuffer(NULL)
@@ -75,6 +62,11 @@ namespace Echo
 
 	Renderer::~Renderer()
 	{
+		for (std::map<ui32, Renderable*>::iterator it = m_renderables.begin(); it != m_renderables.end(); ++it)
+		{
+			EchoSafeDelete(it->second, Renderable);
+		}
+		m_renderables.clear();
 	}
 
 	void Renderer::setRasterizerState(RasterizerState* pState)

@@ -53,7 +53,9 @@ namespace Echo
 
 	GLES2Renderer::~GLES2Renderer()
 	{
-		//destroy();
+		cleanSystemResource();
+		destroyImpl();
+
 		g_renderer = nullptr;
 	}
 

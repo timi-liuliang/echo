@@ -9,11 +9,10 @@ namespace Echo
 	class LuaBinder
 	{
 	public:
+		~LuaBinder() {}
+
 		// instance
 		static LuaBinder* instance();
-
-		// destroy
-		static void destroy();
 
 		// set state
 		void init();
@@ -58,7 +57,6 @@ namespace Echo
 
 	private:
 		LuaBinder() {}
-		~LuaBinder() {}
 
 	private:
 		lua_State*		m_luaState;		// luaState

@@ -272,11 +272,10 @@ namespace Echo
 		EchoSafeDeleteInstance(Time);	
 		EchoSafeDeleteInstance(RenderTargetManager);
 		EchoLogInfo("Echo Engine has been shutdown.");
-		Renderer::instance()->destroy();
 		EchoSafeDeleteInstance(Renderer);
 		EchoLogInfo("Echo Renderer has been shutdown.");
 		EchoSafeDeleteInstance(Log);
-		LuaBinder::destroy();
+		EchoSafeDeleteInstance(LuaBinder);
 	}
 
 	const String& Engine::getResPath() const

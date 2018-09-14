@@ -180,14 +180,10 @@ namespace Echo
 		// ¸üÐÂRendererSize
 		virtual void onSize(int width, int height) = 0; 
 
-		void destroy();
-
 	protected:
 		virtual bool doPresent() = 0;
 		virtual bool initializeImpl(const Config& config) = 0;
-		virtual void destroyImpl() = 0;
 		virtual void createSystemResource() = 0;
-		virtual void cleanSystemResource() = 0;
 		virtual Renderable* createRenderableInernal(const String& renderStage, ShaderProgramRes* shader, int identifier)=0;
 
 	protected:

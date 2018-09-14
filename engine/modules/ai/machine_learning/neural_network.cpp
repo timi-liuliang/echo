@@ -6,4 +6,10 @@ namespace Echo
 	{
 
 	}
+
+	// neuron
+	Neuron* NeuralNetwork::getNeuron(ui32 idx)
+	{
+		return m_neurons[idx];
+	}
 }

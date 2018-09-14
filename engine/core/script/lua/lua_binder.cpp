@@ -115,13 +115,6 @@ namespace Echo
 		return binder;
 	}
 
-	// destroy
-	void LuaBinder::destroy()
-	{
-		LuaBinder* inst = instance();
-		EchoSafeDelete(inst, LuaBinder);
-	}
-
 	// set state
 	void LuaBinder::init()
 	{
