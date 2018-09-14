@@ -1,5 +1,6 @@
 #include "neuron.h"
 #include "neural_network.h"
+#include "activation_function.h"
 
 namespace Echo
 {
@@ -16,6 +17,8 @@ namespace Echo
 
 	void Neuron::bindMethods()
 	{
+		BIND_METHOD(nn::sigmoid, "nn.sigmoid");
+
 		CLASS_BIND_METHOD(Neuron, getBias, DEF_METHOD("getBias"));
 		CLASS_BIND_METHOD(Neuron, setBias, DEF_METHOD("setBias"));
 
