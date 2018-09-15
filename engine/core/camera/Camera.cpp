@@ -7,9 +7,8 @@
 
 namespace Echo
 {
-	Camera::Camera(ProjMode mode, bool isFixedYaw)
-		: m_bFixedYawAxis(isFixedYaw)
-		, m_projMode(mode)
+	Camera::Camera(ProjMode mode)
+		: m_projMode(mode)
 		, m_scale( 1.f)
 	{
 		m_up = Vector3::UNIT_Y;
@@ -17,7 +16,6 @@ namespace Echo
 		m_dir = Vector3::ZERO - m_position;
 		m_dir.normalize();
 
-		m_fixedYawAxis = Vector3::UNIT_Y;
 		m_matView.identity();
 		m_bNeedUpdateView = true;
 
@@ -146,21 +144,6 @@ namespace Echo
 		return m_farClip;
 	}
 
-	Real Camera::getNearClipWidth() const
-	{
-		return Math::Abs(m_frustum[Frustum::CORNER_NLT].x - m_frustum[Frustum::CORNER_NRT].x);
-	}
-
-	Real Camera::getNearClipHeight() const
-	{
-		return Math::Abs(m_frustum[Frustum::CORNER_NLT].y - m_frustum[Frustum::CORNER_NLB].y);
-	}
-
-	const Frustum& Camera::getFrustum() const
-	{
-		return m_frustum;
-	}
-
 	void Camera::getCameraRay(Ray& ray, const Vector2& screenPos)
 	{
 		Vector2 vDepth;
@@ -191,59 +174,23 @@ namespace Echo
 
 	void Camera::update()
 	{
-		Vector3 vUp;
-		Vector3 zAxis;
 		if(m_bNeedUpdateView)
 		{
-			
-			if(m_bFixedYawAxis)
-				vUp = m_fixedYawAxis;
-			else
-				vUp = m_up;
+			// calc axis
+			Vector3 xAxis;
+			Vector3 yAxis;
+			Vector3 zAxis = -m_dir;
+			Vector3::Cross(xAxis, m_up, zAxis);
+			Vector3::Cross(yAxis, zAxis, m_right);
 
-			vUp.normalize();
+			m_matView = Matrix4(
+				xAxis.x,							yAxis.x,						zAxis.x,							0,
+				xAxis.y,							yAxis.y,						zAxis.y,							0,
+				xAxis.z,							yAxis.z,						zAxis.z,							0,
+				-Vector3::Dot(m_right, m_position), -Vector3::Dot(yAxis, m_position), -Vector3::Dot(zAxis, m_position),	1
+			);
 
-			zAxis = -m_dir;
-			zAxis.normalize();
-
-			Vector3::Cross(m_right, vUp, zAxis);
-			m_right.normalize();
-
-			Vector3::Cross(vUp, zAxis, m_right);
-
-			m_matView = Matrix4(	m_right.x, vUp.x, zAxis.x, 0,
-				m_right.y, vUp.y, zAxis.y, 0,
-				m_right.z, vUp.z, zAxis.z, 0,
-				-Vector3::Dot(m_right, m_position),
-				-Vector3::Dot(vUp, m_position),
-				-Vector3::Dot(zAxis, m_position),
-				1);
-
-			zAxis.normalize();
-			
-			if(!m_bFixedYawAxis)
-				m_up = vUp;
-
-			if( m_bFixedYawAxis )
-			{
-				Vector3 zAdjustVec = -m_dir;
-				zAdjustVec.normalize();
-				Vector3 xVec = Vector3::UNIT_Y.cross( zAdjustVec );
-				xVec.normalize();
-
-				Vector3 yVec = zAdjustVec.cross( xVec );
-				yVec.normalize();
-			}
-			else
-			{
-				Vector3 zAdjustVec = -m_dir;
-				zAdjustVec.normalize();
-				Vector3 xVec = m_up.cross( zAdjustVec );
-				xVec.normalize();
-
-				Vector3 yVec = zAdjustVec.cross( xVec );
-				yVec.normalize();
-			}
+			m_right = xAxis;
 		}
 
 		if(m_bNeedUpdateProj)
@@ -269,87 +216,6 @@ namespace Echo
 		if(m_bNeedUpdateView || m_bNeedUpdateProj)
 		{
 			m_matVP = m_matView * m_matProj;
-
-			if(m_projMode == PM_PERSPECTIVE)
-			{
-				Real tanHalfFov = Math::Tan(m_fov * 0.5f);
-				Real nearHalfH = tanHalfFov * m_nearClip;
-				Real nearHalfW = nearHalfH * m_aspect;
-				Real farHalfH = tanHalfFov * m_farClip;
-				Real farHalfW = farHalfH * m_aspect;
-
-				Vector3 vNearCenter = m_position - zAxis * m_nearClip;
-				Vector3 vFarCenter = m_position - zAxis * m_farClip;
-
-				m_frustum[Frustum::CORNER_NLT] = vNearCenter - m_right * nearHalfW + vUp * nearHalfH;
-				m_frustum[Frustum::CORNER_NRB] = vNearCenter + m_right * nearHalfW - vUp * nearHalfH;
-				m_frustum[Frustum::CORNER_NLB] = vNearCenter - m_right * nearHalfW - vUp * nearHalfH;
-				m_frustum[Frustum::CORNER_NRT] = vNearCenter + m_right * nearHalfW + vUp * nearHalfH;
-
-				m_frustum[Frustum::CORNER_FLT] = vFarCenter - m_right * farHalfW + vUp * farHalfH;
-				m_frustum[Frustum::CORNER_FRB] = vFarCenter + m_right * farHalfW - vUp * farHalfH;
-				m_frustum[Frustum::CORNER_FLB] = vFarCenter - m_right * farHalfW - vUp * farHalfH;
-				m_frustum[Frustum::CORNER_FRT] = vFarCenter + m_right * farHalfW + vUp * farHalfH;
-			}
-			else
-			{
-				Real halfH = m_width * 0.5f;
-				Real halfW = m_height * 0.5f;
-				Vector3 vNearCenter = m_position - zAxis * m_nearClip;
-				Vector3 vFarCenter = m_position - zAxis * m_farClip;
-
-				m_frustum[Frustum::CORNER_NLT] = vNearCenter - m_right * halfW + vUp * halfH;
-				m_frustum[Frustum::CORNER_NRB] = vNearCenter + m_right * halfW - vUp * halfH;
-				m_frustum[Frustum::CORNER_NLB] = vNearCenter - m_right * halfW - vUp * halfH;
-				m_frustum[Frustum::CORNER_NRT] = vNearCenter + m_right * halfW + vUp * halfH;
-
-				m_frustum[Frustum::CORNER_FLT] = vFarCenter - m_right * halfW + vUp * halfH;
-				m_frustum[Frustum::CORNER_FRB] = vFarCenter + m_right * halfW - vUp * halfH;
-				m_frustum[Frustum::CORNER_FLB] = vFarCenter - m_right * halfW - vUp * halfH;
-				m_frustum[Frustum::CORNER_FRT] = vFarCenter + m_right * halfW + vUp * halfH;
-			}
-
-			// Calculate near plane of frustum.
-			m_frustum[Frustum::FP_NEAR].n.x = m_matVP.m03 + m_matVP.m02;
-			m_frustum[Frustum::FP_NEAR].n.y = m_matVP.m13 + m_matVP.m12;
-			m_frustum[Frustum::FP_NEAR].n.z = m_matVP.m23 + m_matVP.m22;
-			m_frustum[Frustum::FP_NEAR].d = m_matVP.m33 + m_matVP.m32;
-			m_frustum[Frustum::FP_NEAR].normalize();
-
-			// Calculate far plane of frustum.
-			m_frustum[Frustum::FP_FAR].n.x = m_matVP.m03 - m_matVP.m02;
-			m_frustum[Frustum::FP_FAR].n.y = m_matVP.m13 - m_matVP.m12;
-			m_frustum[Frustum::FP_FAR].n.z = m_matVP.m23 - m_matVP.m22;
-			m_frustum[Frustum::FP_FAR].d = m_matVP.m33 - m_matVP.m32;
-			m_frustum[Frustum::FP_FAR].normalize();
-
-			//  Calculate left plane of frustum.
-			m_frustum[Frustum::FP_LEFT].n.x = m_matVP.m03 + m_matVP.m00;
-			m_frustum[Frustum::FP_LEFT].n.y = m_matVP.m13 + m_matVP.m10;
-			m_frustum[Frustum::FP_LEFT].n.z = m_matVP.m23 + m_matVP.m20;
-			m_frustum[Frustum::FP_LEFT].d = m_matVP.m33 + m_matVP.m30;
-			m_frustum[Frustum::FP_LEFT].normalize();
-
-			// Calculate right plane of frustum.
-			m_frustum[Frustum::FP_RIGHT].n.x = m_matVP.m03 - m_matVP.m00;
-			m_frustum[Frustum::FP_RIGHT].n.y = m_matVP.m13 - m_matVP.m10;
-			m_frustum[Frustum::FP_RIGHT].n.z = m_matVP.m23 - m_matVP.m20;
-			m_frustum[Frustum::FP_RIGHT].d = m_matVP.m33 - m_matVP.m30;
-			m_frustum[Frustum::FP_RIGHT].normalize();
-
-			// Calculate top plane of frustum.
-			m_frustum[Frustum::FP_TOP].n.x = m_matVP.m03 - m_matVP.m01;
-			m_frustum[Frustum::FP_TOP].n.y = m_matVP.m13 - m_matVP.m11;
-			m_frustum[Frustum::FP_TOP].n.z = m_matVP.m23 - m_matVP.m21;
-			m_frustum[Frustum::FP_TOP].d = m_matVP.m33 - m_matVP.m31;
-			m_frustum[Frustum::FP_TOP].normalize();
-
-			// Calculate bottom plane of frustum.
-			m_frustum[Frustum::FP_BOTTOM].n.x = m_matVP.m03 + m_matVP.m01;
-			m_frustum[Frustum::FP_BOTTOM].n.y = m_matVP.m13 + m_matVP.m11;
-			m_frustum[Frustum::FP_BOTTOM].n.z = m_matVP.m23 + m_matVP.m21;
-			m_frustum[Frustum::FP_BOTTOM].d = m_matVP.m33 + m_matVP.m31;
-			m_frustum[Frustum::FP_BOTTOM].normalize();
 
 			m_bNeedUpdateView = false;
 			m_bNeedUpdateProj = false;

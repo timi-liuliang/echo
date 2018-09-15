@@ -14,13 +14,14 @@ namespace Echo
 		{
 			PM_PERSPECTIVE,
 			PM_ORTHO,
-			PM_UI,				// UI专用
+			PM_UI,
 		};
 
 	public:
-		Camera(ProjMode mode = PM_PERSPECTIVE, bool isFixedYaw = true);
+		Camera(ProjMode mode = PM_PERSPECTIVE);
 		virtual ~Camera();
 
+		// set
 		void setPosition(const Vector3& pos);
 		void setDirection(const Vector3& dir);
 		void setUp(const Vector3& vUp);
@@ -38,7 +39,6 @@ namespace Echo
 		void	setProjectionMode(ProjMode mode);
 		ProjMode getProjectionMode() const;
 
-		void setFixedYawAxis(bool fixed) { m_bFixedYawAxis = fixed; }
 		void setFov(Real fov);
 		void setWidth(Real width);
 		void setHeight(Real height);
@@ -50,9 +50,6 @@ namespace Echo
 		Real			getHeight() const;
 		const Real&		getNearClip() const;
 		const Real&		getFarClip() const;
-		const Frustum&	getFrustum() const;
-		Real			getNearClipWidth() const;
-		Real			getNearClipHeight() const;
 
 		void getCameraRay(Ray& ray, const Vector2& screenPos);
 		void unProjectionMousePos( Vector3& from, Vector3& to, const Vector2& screenPos );
@@ -65,8 +62,6 @@ namespace Echo
 		Vector3			m_dir;
 		Vector3			m_up;
 		Vector3			m_right;
-		bool			m_bFixedYawAxis;
-		Vector3			m_fixedYawAxis;
 		Matrix4			m_matView;
 		bool			m_bNeedUpdateView;
 		ProjMode		m_projMode;
@@ -80,6 +75,5 @@ namespace Echo
 		Matrix4			m_matProj;
 		bool			m_bNeedUpdateProj;
 		Matrix4			m_matVP;
-		Frustum			m_frustum;
 	};
 }

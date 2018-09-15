@@ -382,7 +382,7 @@ namespace Studio
 	{
 		AStudio::instance()->OpenProject(projectName);
 
-		// ³õÊ¼»¯äÖÈ¾´°¿Ú
+		// init render window
 		AStudio::instance()->getRenderWindow();
 	}
 
