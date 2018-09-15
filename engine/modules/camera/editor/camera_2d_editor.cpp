@@ -31,12 +31,15 @@ namespace Echo
 	{
 		if (m_isSelect)
 		{
-			Camera* camera = NodeTree::instance()->get2dCamera();
-			if (camera && !Engine::instance()->getConfig().m_isGame)
+			Camera camera = *NodeTree::instance()->get2dCamera();
+			if (!Engine::instance()->getConfig().m_isGame)
 			{
-				Vector3 halfUp = camera->getUp() * Echo::GameSettings::instance()->getDesignHeight() * 0.5f;
-				Vector3 halfRight = camera->getRight() * Echo::GameSettings::instance()->getDesignWidth() * 0.5f;
-				Vector3 center = ECHO_DOWN_CAST<Camera2D*>(m_object)->getWorldPosition();
+				Camera2D* camera2D = ECHO_DOWN_CAST<Camera2D*>(m_object);
+				camera2D->syncDataToCamera(&camera);
+
+				Vector3 halfUp = camera.getUp() * (float)Echo::GameSettings::instance()->getDesignHeight() * 0.5f;
+				Vector3 halfRight = camera.getRight() * (float)Echo::GameSettings::instance()->getDesignWidth() * 0.5f;
+				Vector3 center = camera2D->getWorldPosition();
 
 				Vector3 v0 = center - halfRight + halfUp;
 				Vector3 v1 = center - halfRight - halfUp;

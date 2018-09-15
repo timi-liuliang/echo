@@ -221,10 +221,4 @@ namespace Echo
 			m_bNeedUpdateProj = false;
 		}
 	}
-
-	void Camera::needUpdate()
-	{
-		m_bNeedUpdateView = true;
-		m_bNeedUpdateProj = true;
-	}
 }

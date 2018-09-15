@@ -55,7 +55,6 @@ namespace Echo
 		void unProjectionMousePos( Vector3& from, Vector3& to, const Vector2& screenPos );
 
 		void update();
-		void needUpdate();
 
 	protected:
 		Vector3			m_position;

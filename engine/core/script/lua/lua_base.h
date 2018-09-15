@@ -157,6 +157,11 @@ namespace Echo
 		lua_setfield(state, -2, "z");
 	}
 
+	template<> INLINE void lua_pushvalue<const Vector3>(lua_State* state, const Vector3 value)
+	{
+		lua_pushvalue<const Vector3&>(state, value);
+	}
+
 	template<> INLINE void lua_pushvalue<Object*>(lua_State* state, Object* value) 
 	{
 		if (value)
