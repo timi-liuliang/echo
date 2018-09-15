@@ -361,8 +361,7 @@ namespace Echo
 
 	void Node::setScript(const ResourcePath& path)
 	{
-		if(!path.getPath().empty())
-			m_script.m_file.setPath(path.getPath());
+		m_script.m_file.setPath(path.getPath());
 	}
 
 	// register to script
