@@ -1,181 +1,67 @@
-#ifndef __ECHO_FRUSTUM_H__
-#define __ECHO_FRUSTUM_H__
+#pragma once
 
+#include <bitset>
+#include "engine/core/math/Vector3.h"
 #include "AABB.h"
-#include "Plane.h"
-#include "Sphere.h"
 
 namespace Echo
 {
-
+	// game programing gems 5- Page 52  
+	// 2010-08-24
 	class Frustum
 	{
 	public:
+		Frustum();
 
-		/*
-		4-------------7
-		|\           /|
-		| \         / |
-		|  0-------3  |
-		|  |       |  |
-		6--|-------|--5
-	   	 \ |       | /
-		  \|       |/
-		   2-------1
-		*/
+		// set perspective
+		void  setPerspective(const float fovH, const float fAspect, const float fNear, const float fFar);
 
-		enum Corner
-		{
-			CORNER_NLT	= 0,		//!< near left top
-			CORNER_NRB	= 1,		//!< near right bottom
-			CORNER_NLB	= 2,		//!< near left bottom
-			CORNER_NRT	= 3,		//!< near right top
+		// build
+		void  build(const Vector3& vEye, const Vector3& vForward, const Vector3& vUp, bool haveNormalize = false);
 
-			CORNER_FLT	= 4,		//!< far left top
-			CORNER_FRB	= 5,		//!< far right bottom
-			CORNER_FLB	= 6,		//!< far left bottom
-			CORNER_FRT	= 7,		//!< far right top
-			CORNER_NUM,				//!< num
-		};
+		// near plane
+		void  setNear(float near);
+		float getNear() const { return m_nearZ; }
 
-		enum FrustumPlane
-		{
-			FP_NEAR		= 0,
-			FP_FAR		= 1,
-			FP_LEFT		= 2,
-			FP_RIGHT	= 3,
-			FP_TOP		= 4,
-			FP_BOTTOM	= 5,
-		};
+		// far plane
+		void  setFar(const float fFar);
+		float getFar() const { return m_farZ; }
 
-	public:
-		inline Frustum()
-		{
-			memset(m_corners, 0, sizeof(m_corners));
-		}
+		// get right direction
+		const Vector3& getRight() const { return m_right; }
 
-		inline Frustum(const Vector3& vNLT, const Vector3& vNRB, const Vector3& vNLB, const Vector3& vNRT,
-			const Vector3& vFLT, const Vector3& vFRB, const Vector3& vFLB, const Vector3& vFRT)
-		{
-			m_corners[CORNER_NLT] = vNLT;
-			m_corners[CORNER_NRB] = vNRB;
-			m_corners[CORNER_NLB] = vNLB;
-			m_corners[CORNER_NRT] = vNRT;
-			m_corners[CORNER_FLT] = vFLT;
-			m_corners[CORNER_FRB] = vFRB;
-			m_corners[CORNER_FLB] = vFLB;
-			m_corners[CORNER_FRT] = vFRT;
+		// get up direction
+		const Vector3& getUp() const { return m_up; }
 
-			m_planes[FP_NEAR].set(vNLT, vNRB, vNLB);
-			m_planes[FP_FAR].set(vFRT, vFLB, vFRB);
-			m_planes[FP_LEFT].set(vFLT, vNLB, vFLB);
-			m_planes[FP_RIGHT].set(vNRT, vFRB, vNRB);
-			m_planes[FP_TOP].set(vFLT, vNRT, vNLT);
-			m_planes[FP_BOTTOM].set(vNLB, vFRB, vFLB);
-		}
+		// get AABB
+		const AABB& getAABB();
 
-		inline Frustum(const Frustum &src)
-		{
-			memcpy(&m_corners, &(src.m_corners), sizeof(m_corners));
-			memcpy(&m_planes, &(src.m_planes), sizeof(m_planes));
-		}
+		// get eight vertices
+		const Vector3*  getVertexs();
 
-		inline void transform(const Matrix4& mat)
-		{
-			for (int i=0; i<CORNER_NUM; ++i)
-			{
-				m_corners[i] = m_corners[i] * mat;
-			}
-			m_planes[FP_NEAR].set(m_corners[CORNER_NLT], m_corners[CORNER_NRB], m_corners[CORNER_NLB]);
-			m_planes[FP_FAR].set(m_corners[CORNER_FRT], m_corners[CORNER_FLB], m_corners[CORNER_FRB]);
-			m_planes[FP_LEFT].set(m_corners[CORNER_FLT], m_corners[CORNER_NLB], m_corners[CORNER_FLB]);
-			m_planes[FP_RIGHT].set(m_corners[CORNER_NRT], m_corners[CORNER_FRB], m_corners[CORNER_NRB]);
-			m_planes[FP_TOP].set(m_corners[CORNER_FLT], m_corners[CORNER_NRT], m_corners[CORNER_NLT]);
-			m_planes[FP_BOTTOM].set(m_corners[CORNER_NLB], m_corners[CORNER_FRB], m_corners[CORNER_FLB]);
-		}
+		// build plane
+		bool buildPlane(vector<Vector3>::type& plane, float length);
 
-		// ¹¹½¨AABB
-		void buildAABB( AABB& oAABB) const;
+		// is point in this frustm
+		bool  isPointIn(const Vector3& point);
 
-	public:
-		inline const Frustum& operator = (const Frustum& src)
-		{
-			memcpy(&m_corners, &(src.m_corners), sizeof(m_corners));
-			return *this;
-		}
+		// is sphere is this frustum
+		bool  isSphereIn(const Vector3& center, const float fRadius);
 
-		inline bool operator == (const Frustum& src) const
-		{
-			return memcmp(m_corners, src.m_corners, sizeof(m_corners)) == 0;
-		}
+		// is aabb in this frustm
+		bool  isAABBIn(const Vector3& minPoint, const Vector3& maxPoint) const;
 
-		inline bool operator != (const Frustum& src) const
-		{
-			return memcmp(m_corners, src.m_corners, sizeof(m_corners)) != 0;
-		}
-
-		inline Vector3& operator [] (Corner corner)
-		{
-			return m_corners[corner];
-		}
-
-		inline const Vector3& operator [] (Corner corner) const
-		{
-			return m_corners[corner];
-		}
-
-		inline Plane& operator [] (FrustumPlane plane)
-		{
-			return m_planes[plane];
-		}
-	
-		inline const Plane& operator [] (FrustumPlane plane) const
-		{
-			return m_planes[plane];
-		}
-
-	public:
-		inline Vector3* getCorners() const
-		{
-			return m_corners;
-		}
-		
-		inline bool isVisible(const Vector3& point) const
-		{
-			// Check if the point is inside all six planes of the view frustum.
-			for(int i = 0; i < 6; ++i) 
-			{
-				if ((Vector3::Dot(m_planes[i].n, point) + m_planes[i].d) < 0.0f)
-					return false;
-			}
-
-			return true;
-		}
-
-		// ¼ì²â
-		bool isVisible(const AABB& box) const;
-		
-		inline bool isVisible(const Sphere& sphere) const
-		{
-			// Check if the radius of the sphere is inside the view frustum.
-			for(int i = 0; i < 6; ++i) 
-			{
-				if ((Vector3::Dot(m_planes[i].n, sphere.c) + m_planes[i].d) < -sphere.r)
-					return false;
-			}
-
-			return true;
-		}
-
-		bool intersect(const AABB& box) const;
-
-		bool include(const AABB& box) const;
-
-	protected:
-		mutable Vector3	m_corners[8];
-		mutable Plane	m_planes[6];
+	private:
+		Vector3			m_eyePosition;
+		Vector3			m_forward;
+		Vector3			m_right;
+		Vector3			m_up;
+		float			m_rFactor;		// right factor
+		float			m_fUfactor;		// up factor
+		float			m_nearZ;
+		float			m_farZ;
+		Vector3			m_vertexs[8];
+		AABB			m_aabb;
+		std::bitset<16> m_flags;
 	};
-
 }
-
-#endif

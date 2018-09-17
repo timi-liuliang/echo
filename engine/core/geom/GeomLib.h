@@ -9,6 +9,4 @@
 #include "Frustum.h"
 #include "Ray.h"
 
-//#include "ParamSurface.h"
-
 #endif

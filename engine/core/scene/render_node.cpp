@@ -73,9 +73,9 @@ namespace Echo
 			else if (name == "u_CameraDirection")
 				return (void*)(&camera->getDirection());
 			else if (name == "u_CameraNear")
-				return (void*)(&camera->getNearClip());
+				return (void*)(&camera->getNear());
 			else if (name == "u_CameraFar")
-				return (void*)(&camera->getFarClip());
+				return (void*)(&camera->getFar());
 		}
 
 		return nullptr;

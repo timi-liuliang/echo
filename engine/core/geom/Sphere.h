@@ -2,7 +2,6 @@
 #define __ECHO_SPHERE_H__
 
 #include "engine/core/math/Math.h"
-#include "engine/core/geom/GeomDef.h"
 #include "engine/core/base/EchoDef.h"
 
 namespace Echo

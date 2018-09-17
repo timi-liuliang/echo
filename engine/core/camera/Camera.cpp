@@ -17,7 +17,7 @@ namespace Echo
 		m_dir.normalize();
 
 		m_matView.identity();
-		m_bNeedUpdateView = true;
+		m_isViewDirty = true;
 
 		Viewport* pViewport = Renderer::instance()->getFrameBuffer()->getViewport();
 		if(pViewport)
@@ -38,7 +38,7 @@ namespace Echo
 		m_nearClip = 0.1f;
 		m_farClip = 100.0f;
 		m_matProj.identity();
-		m_bNeedUpdateProj = true;
+		m_isProjDirty = true;
 	}
 
 	Camera::~Camera()
@@ -48,7 +48,7 @@ namespace Echo
 	void Camera::setPosition( const Vector3& pos )
 	{
 		m_position = pos;
-		m_bNeedUpdateView = true;
+		m_isViewDirty = true;
 	}
 
 	void Camera::setDirection(const Vector3& dir)
@@ -57,19 +57,19 @@ namespace Echo
 
 		m_dir = dir;
 		m_dir.normalize();
-		m_bNeedUpdateView = true;
+		m_isViewDirty = true;
 	}
 
 	void Camera::setUp(const Vector3& vUp)
 	{
 		m_up = vUp;
-		m_bNeedUpdateView = true;
+		m_isViewDirty = true;
 	}
 
 	void Camera::setProjectionMode(ProjMode mode)
 	{
 		m_projMode = mode;
-		m_bNeedUpdateProj = true;
+		m_isProjDirty = true;
 	}
 
 	Camera::ProjMode Camera::getProjectionMode() const
@@ -80,43 +80,43 @@ namespace Echo
 	void Camera::setFov(Real fov)
 	{
 		m_fov = fov;
-		m_bNeedUpdateProj = true;
-		m_bNeedUpdateView = true;
+		m_isProjDirty = true;
+		m_isViewDirty = true;
 	}
 
 	void Camera::setWidth(Real width)
 	{
 		m_width = width;
-		m_bNeedUpdateProj = true;
-		m_bNeedUpdateView = true;
+		m_isProjDirty = true;
+		m_isViewDirty = true;
 	}
 
 	void Camera::setHeight(Real height)
 	{
 		m_height = height;
-		m_bNeedUpdateProj = true;
-		m_bNeedUpdateView = true;
+		m_isProjDirty = true;
+		m_isViewDirty = true;
 	}
 
 	void Camera::setScale(Real scale) 
 	{ 
 		m_scale = scale; 
-		m_bNeedUpdateProj = true;
-		m_bNeedUpdateView = true;
+		m_isProjDirty = true;
+		m_isViewDirty = true;
 	}
 
 	void Camera::setNearClip(Real nearClip)
 	{
 		m_nearClip = nearClip;
-		m_bNeedUpdateProj = true;
-		m_bNeedUpdateView = true;
+		m_isProjDirty = true;
+		m_isViewDirty = true;
 	}
 
 	void Camera::setFarClip(Real farClip)
 	{
 		m_farClip = farClip;
-		m_bNeedUpdateProj = true;
-		m_bNeedUpdateView = true;
+		m_isProjDirty = true;
+		m_isViewDirty = true;
 	}
 
 	Real Camera::getFov() const
@@ -134,12 +134,12 @@ namespace Echo
 		return m_height;
 	}
 
-	const Real& Camera::getNearClip() const
+	const Real& Camera::getNear() const
 	{
 		return m_nearClip;
 	}
 
-	const Real& Camera::getFarClip() const
+	const Real& Camera::getFar() const
 	{
 		return m_farClip;
 	}
@@ -174,7 +174,7 @@ namespace Echo
 
 	void Camera::update()
 	{
-		if(m_bNeedUpdateView)
+		if(m_isViewDirty)
 		{
 			// calc axis
 			Vector3 xAxis;
@@ -193,7 +193,7 @@ namespace Echo
 			m_right = xAxis;
 		}
 
-		if(m_bNeedUpdateProj)
+		if(m_isProjDirty)
 		{
 			switch (m_projMode)
 			{
@@ -213,12 +213,12 @@ namespace Echo
 			}
 		}
 
-		if(m_bNeedUpdateView || m_bNeedUpdateProj)
+		if(m_isViewDirty || m_isProjDirty)
 		{
 			m_matVP = m_matView * m_matProj;
 
-			m_bNeedUpdateView = false;
-			m_bNeedUpdateProj = false;
+			m_isViewDirty = false;
+			m_isProjDirty = false;
 		}
 	}
 }

@@ -1,5 +1,4 @@
-#ifndef __ECHO_BOX_H__
-#define __ECHO_BOX_H__
+#pragma once
 
 #include "Sphere.h"
 
@@ -301,15 +300,6 @@ namespace Echo
 			vMax -= Vector3(x, y, z);
 		}
 
-		inline CullState	cullAABB(const AABB& box) const
-		{
-			if (!isIntersected(box))
-				return CS_OUTSIDE;
-			else if (isPointInside(box.vMin) && isPointInside(box.vMax))
-				return CS_INSIDE;
-			else
-				return CS_INTERSECT;
-		}
 		static AABB fromString(const String& val);
 		String& toString(String& s) const;
 
@@ -321,5 +311,3 @@ namespace Echo
 		}
 	};
 }
-
-#endif

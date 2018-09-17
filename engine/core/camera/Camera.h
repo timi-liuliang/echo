@@ -46,8 +46,8 @@ namespace Echo
 		Real getFov() const;
 		Real getWidth() const;
 		Real getHeight() const;
-		const Real&	getNearClip() const;
-		const Real&	getFarClip() const;
+		const Real&	getNear() const;
+		const Real&	getFar() const;
 
 		void getCameraRay(Ray& ray, const Vector2& screenPos);
 		void unProjectionMousePos( Vector3& from, Vector3& to, const Vector2& screenPos );
@@ -55,13 +55,13 @@ namespace Echo
 		void update();
 
 	protected:
+		ProjMode		m_projMode;
 		Vector3			m_position;
 		Vector3			m_dir;
 		Vector3			m_up;
 		Vector3			m_right;
 		Matrix4			m_matView;
-		bool			m_bNeedUpdateView;
-		ProjMode		m_projMode;
+		bool			m_isViewDirty;
 		Real			m_fov;
 		Real			m_width;
 		Real			m_height;
@@ -70,7 +70,7 @@ namespace Echo
 		Real			m_nearClip;
 		Real			m_farClip;
 		Matrix4			m_matProj;
-		bool			m_bNeedUpdateProj;
+		bool			m_isProjDirty;
 		Matrix4			m_matVP;
 	};
 }
