@@ -1,6 +1,6 @@
 #include "neuron.h"
 #include "neural_network.h"
-#include "activation_function.h"
+#include "function/activation.h"
 
 namespace Echo
 {

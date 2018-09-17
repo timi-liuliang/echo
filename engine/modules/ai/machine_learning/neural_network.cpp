@@ -2,9 +2,14 @@
 
 namespace Echo
 {
-	void NeuralNetwork::bindMethods()
+	NeuralNetwork::NeuralNetwork()
+		:m_lossFunction(nullptr)
 	{
 
+	}
+
+	void NeuralNetwork::bindMethods()
+	{
 	}
 
 	// neuron
