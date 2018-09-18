@@ -18,8 +18,12 @@ namespace Echo
 		// neuron
 		Neuron* getNeuron(ui32 idx);
 
+		// learning rate
+		Real getLearningRate() const { return m_learningRate; }
+		void setLearningRate(Real rate) { m_learningRate = rate; }
+
 	protected:
-		vector<Neuron*>::type		m_neurons;
 		LossFunction				m_lossFunction;
+		Real						m_learningRate;		// learning speed
 	};
 }
