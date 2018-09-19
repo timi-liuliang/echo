@@ -12,7 +12,7 @@ namespace Echo
 	void NeuralNetwork::bindMethods()
 	{
 		CLASS_BIND_METHOD(NeuralNetwork, train,			  DEF_METHOD("train"));
-		CLASS_BIND_METHOD(NeuralNetwork, computeOutput,   DEF_METHOD("computeCouput"));
+		CLASS_BIND_METHOD(NeuralNetwork, computeOutput,   DEF_METHOD("computeOutput"));
 		CLASS_BIND_METHOD(NeuralNetwork, getLearningRate, DEF_METHOD("getLearningRate"));
 		CLASS_BIND_METHOD(NeuralNetwork, setLearningRate, DEF_METHOD("setLearningRate"));
 

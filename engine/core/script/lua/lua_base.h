@@ -51,6 +51,10 @@ namespace Echo
 		return st; 
 	}
 
+	template<typename T> INLINE void lua_freevalue(T value)
+	{
+	}
+
 	template<> INLINE const char* lua_getvalue<const char*>(lua_State* L, int index)
 	{ 
 		return lua_isnil(L, index) ? "nil" : lua_tostring(L, index);
@@ -87,6 +91,11 @@ namespace Echo
 		return result;
 	}
 
+	template<> INLINE void lua_freevalue(const String& value)
+	{
+		assert(false);
+	}
+
 	template<> INLINE const Vector3& lua_getvalue<const Vector3&>(lua_State* state, int idx) 
 	{
 		static Vector3 result;	// this is wrong, modify this
@@ -98,6 +107,11 @@ namespace Echo
 		result.z = (float)lua_tonumber(state, idx+3);
 		lua_pop(state, 3);
 		return result; 
+	}
+
+	template<> INLINE void lua_freevalue(const Vector3& value)
+	{
+		assert(false);
 	}
 
 	template<> INLINE const RealVector& lua_getvalue<const RealVector&>(lua_State* state, int idx)
@@ -112,6 +126,11 @@ namespace Echo
 		}
 
 		return result;
+	}
+
+	template<> INLINE void lua_freevalue(const RealVector& value)
+	{
+		assert(false);
 	}
 
 	template<> INLINE Node* lua_getvalue<Node*>(lua_State* state, int idx)
@@ -185,6 +204,11 @@ namespace Echo
 			lua_pushnumber(state, value[i]);	// value -1	
 			lua_settable(state, -3);			// t[key] = value && pop key and value
 		}
+	}
+
+	template<> INLINE void lua_pushvalue<RealVector>(lua_State* state, RealVector value)
+	{
+		lua_pushvalue<const RealVector&>(state, value);
 	}
 
 	template<> INLINE void lua_pushvalue<Object*>(lua_State* state, Object* value) 

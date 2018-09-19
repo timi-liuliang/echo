@@ -12,8 +12,6 @@
 
 namespace Echo
 {
-	typedef vector<Real>::type	RealVector;
-
 	class Object;
 	class Variant
 	{

@@ -2,12 +2,10 @@
 
 #include <vector>
 #include <iostream>
-#include "engine/core/memory/MemAllocDef.h"
+#include "Vector2.h"
 
 namespace Echo
 {
-	typedef Echo::vector<float>::type RealVector;
-
 	class Matrix
 	{
 	public:

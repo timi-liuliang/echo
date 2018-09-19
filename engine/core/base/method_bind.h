@@ -24,6 +24,9 @@ namespace Echo
 			// exec method
 			R result = (*method)(p0);
 
+			// free value
+			lua_freevalue(p0);
+
 			// push the results
 			lua_pushvalue<R>(luaState, result);
 
@@ -58,6 +61,10 @@ namespace Echo
 
 			// push the results
 			lua_pushvalue<R>(luaState, result);
+
+			// free value
+			lua_freevalue(p0);
+			lua_freevalue(p1);
 
 			// return number of results
 			return 1;
