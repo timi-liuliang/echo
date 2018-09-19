@@ -83,13 +83,13 @@ namespace Echo
 	
 	template<> INLINE const String& lua_getvalue<const String&>(lua_State* L, int index)
 	{
-		static String result = lua_tostring(L, index);
+		static String result = lua_tostring(L, index);	// this is wrong, how to modify this?
 		return result;
 	}
 
 	template<> INLINE const Vector3& lua_getvalue<const Vector3&>(lua_State* state, int idx) 
 	{
-		static Vector3 result;
+		static Vector3 result;	// this is wrong, modify this
 		lua_getfield(state, idx, "x");
 		lua_getfield(state, idx, "y");
 		lua_getfield(state, idx, "z");
@@ -98,6 +98,20 @@ namespace Echo
 		result.z = (float)lua_tonumber(state, idx+3);
 		lua_pop(state, 3);
 		return result; 
+	}
+
+	template<> INLINE const RealVector& lua_getvalue<const RealVector&>(lua_State* state, int idx)
+	{
+		static RealVector result; // this is wrong, modify this
+		result.clear();
+		lua_pushnil(state);
+		while (lua_next(state, idx) != 0)
+		{
+			result.push_back((float)lua_tonumber(state, -1));
+			lua_pop(state, 1);
+		}
+
+		return result;
 	}
 
 	template<> INLINE Node* lua_getvalue<Node*>(lua_State* state, int idx)
@@ -160,6 +174,17 @@ namespace Echo
 	template<> INLINE void lua_pushvalue<const Vector3>(lua_State* state, const Vector3 value)
 	{
 		lua_pushvalue<const Vector3&>(state, value);
+	}
+
+	template<> INLINE void lua_pushvalue<const RealVector&>(lua_State* state, const RealVector& value)
+	{
+		lua_newtable(state);
+		for (size_t i=0; i<value.size(); i++)
+		{
+			lua_pushnumber(state, i);			// key   -2
+			lua_pushnumber(state, value[i]);	// value -1	
+			lua_settable(state, -3);			// t[key] = value && pop key and value
+		}
 	}
 
 	template<> INLINE void lua_pushvalue<Object*>(lua_State* state, Object* value) 
