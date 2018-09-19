@@ -12,20 +12,18 @@ namespace Echo
 	public:
 		typedef Real(*ActivationFunction)(Real);
 
-		// input
-		struct Input
-		{
-			ui32	m_neuron;		// the id of input neuron
-			Real	m_weight;
-		};
-		typedef vector<Input>::type	Inputs;
-
 	public:
 		Neuron();
 		virtual ~Neuron();
 
 		// get output
-		Real getOutput() const;
+		Real getOutput();
+
+		// layer
+		void setLayer(i32 layer) { m_layer = layer; }
+
+		// value
+		void setValue(Real value) { m_value = value; }
 
 		// bias
 		void setBias(Real bias) { m_bias = bias; }
@@ -37,8 +35,10 @@ namespace Echo
 
 	protected:
 		NeuralNetwork*			m_network;				// the neural net work this neuron belong to
-		Inputs					m_inputs;
+		i32						m_layer;
+		vector<Real>::type		m_weights;
 		Real					m_bias;
+		Real					m_value;
 		ActivationFunction		m_activationFunction;
 	};
 }

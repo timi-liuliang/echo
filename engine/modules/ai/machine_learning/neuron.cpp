@@ -26,15 +26,20 @@ namespace Echo
 	}
 
 	// get output
-	Real Neuron::getOutput() const
+	Real Neuron::getOutput()
 	{
-		Real iw = 0.f;
-		for (const Input& input : m_inputs)
+		if (m_layer != 0)
 		{
-			Real inputValue = m_network->getNeuron(input.m_neuron)->getOutput();
-			iw += inputValue * input.m_weight;
+			Real iw = 0.f;
+			for (size_t i = 0; i < m_weights.size(); i++)
+			{
+				Real inputValue = m_network->getNeuron(m_layer - 1, i)->getOutput();
+				iw += inputValue * m_weights[i];
+			}
+
+			m_value = m_activationFunction ? (*m_activationFunction)(iw + m_bias) : 0.f;
 		}
 
-		return m_activationFunction ? (*m_activationFunction)(iw + m_bias) : 0.f;
+		return m_value;
 	}
 }

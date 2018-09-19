@@ -15,12 +15,22 @@ namespace Echo
 	public:
 		NeuralNetwork();
 
+		// train
+		void train(vector<Real>::type& input, vector<Real>::type& output);
+
 		// neuron
-		Neuron* getNeuron(ui32 idx);
+		Neuron* getNeuron(i32 layer, i32 idx);
 
 		// learning rate
 		Real getLearningRate() const { return m_learningRate; }
 		void setLearningRate(Real rate) { m_learningRate = rate; }
+
+		// reset
+		void reset();
+
+	protected:
+		// organize by node tree structure
+		void organzieStructureBaseOnNodeTree();
 
 	protected:
 		LossFunction				m_lossFunction;
