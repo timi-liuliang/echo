@@ -19,9 +19,24 @@ namespace Echo
 	}
 
 	// train
-	void NeuralNetwork::train(vector<Real>::type& input, vector<Real>::type& output)
+	void NeuralNetwork::train(const nn::DoubleVector& inputVector, const nn::DoubleVector& expectedOutput)
 	{
+		// build data structure or sync data
+		organzieStructureBaseOnNodeTree();
 
+		// compute output
+		computeOutput(inputVector);
+
+		// learn
+		learn( expectedOutput);
+	}
+
+	// compute output
+	nn::DoubleVector NeuralNetwork::computeOutput(const nn::DoubleVector& inputVector)
+	{
+		nn::DoubleVector output;
+
+		return output;
 	}
 
 	// neuron
@@ -40,5 +55,11 @@ namespace Echo
 	void NeuralNetwork::organzieStructureBaseOnNodeTree()
 	{
 
+	}
+
+	// learn
+	void NeuralNetwork::learn(const nn::DoubleVector& expectedOutput)
+	{
+		nn::Matrix YStar = nn::Matrix(expectedOutput);
 	}
 }

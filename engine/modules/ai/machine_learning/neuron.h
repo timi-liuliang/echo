@@ -10,9 +10,6 @@ namespace Echo
 		ECHO_CLASS(Neuron, Node)
 
 	public:
-		typedef Real(*ActivationFunction)(Real);
-
-	public:
 		Neuron();
 		virtual ~Neuron();
 
@@ -29,16 +26,11 @@ namespace Echo
 		void setBias(Real bias) { m_bias = bias; }
 		Real getBias() const { return m_bias; }
 
-		// activation function
-		void setActivationFunction(ActivationFunction fun) { m_activationFunction = fun; }
-		ActivationFunction getActivationFunction() { return m_activationFunction; }
-
 	protected:
 		NeuralNetwork*			m_network;				// the neural net work this neuron belong to
 		i32						m_layer;
 		vector<Real>::type		m_weights;
 		Real					m_bias;
 		Real					m_value;
-		ActivationFunction		m_activationFunction;
 	};
 }
