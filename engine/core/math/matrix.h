@@ -4,7 +4,7 @@
 #include <iostream>
 #include "engine/core/memory/MemAllocDef.h"
 
-namespace nn
+namespace Echo
 {
 	typedef Echo::vector<float>::type RealVector;
 

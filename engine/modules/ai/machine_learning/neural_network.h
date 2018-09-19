@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/core/scene/node.h"
-#include "math/matrix.h"
+#include "engine/core/math/matrix.h"
 
 namespace Echo
 {
@@ -21,10 +21,10 @@ namespace Echo
 		NeuralNetwork();
 
 		// train
-		void train(const nn::RealVector& inputVector, const nn::RealVector& expectedOutput);
+		void train(const RealVector& inputVector, const RealVector& expectedOutput);
 
 		// compute output
-		nn::RealVector computeOutput(const nn::RealVector& inputVector);
+		RealVector computeOutput(const RealVector& inputVector);
 
 		// neuron
 		Neuron* getNeuron(i32 layer, i32 idx);
@@ -45,14 +45,14 @@ namespace Echo
 		void organzieStructureBaseOnNodeTree();
 
 		// learn
-		void learn(const nn::RealVector& expectedOutput);
+		void learn(const RealVector& expectedOutput);
 
 	protected:
 		ActivationFunction			m_activationFunction;
 		LossFunction				m_lossFunction;
 		Real						m_learningRate;			// learning speed
-		vector<nn::Matrix>			m_layerValues;
-		vector<nn::Matrix>			m_weights;
-		vector<nn::Matrix>			m_bias;
+		vector<Matrix>				m_layerValues;
+		vector<Matrix>				m_weights;
+		vector<Matrix>				m_bias;
 	};
 }

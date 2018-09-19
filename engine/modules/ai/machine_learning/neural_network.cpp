@@ -20,7 +20,7 @@ namespace Echo
 	}
 
 	// train
-	void NeuralNetwork::train(const nn::RealVector& inputVector, const nn::RealVector& expectedOutput)
+	void NeuralNetwork::train(const RealVector& inputVector, const RealVector& expectedOutput)
 	{
 		// build data structure or sync data
 		organzieStructureBaseOnNodeTree();
@@ -33,9 +33,9 @@ namespace Echo
 	}
 
 	// compute output
-	nn::RealVector NeuralNetwork::computeOutput(const nn::RealVector& inputVector)
+	RealVector NeuralNetwork::computeOutput(const RealVector& inputVector)
 	{
-		nn::RealVector output;
+		RealVector output;
 
 		return output;
 	}
@@ -59,8 +59,8 @@ namespace Echo
 	}
 
 	// learn
-	void NeuralNetwork::learn(const nn::RealVector& expectedOutput)
+	void NeuralNetwork::learn(const RealVector& expectedOutput)
 	{
-		nn::Matrix YStar = nn::Matrix(expectedOutput);
+		Matrix YStar = Matrix(expectedOutput);
 	}
 }

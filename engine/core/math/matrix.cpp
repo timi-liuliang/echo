@@ -1,6 +1,6 @@
 #include "matrix.h"
 
-namespace nn
+namespace Echo
 {
 	Matrix::Matrix()
 	{
