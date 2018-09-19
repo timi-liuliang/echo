@@ -29,6 +29,9 @@
 
 ## Features
 
+### Easy Concept  
+Scene manager is easy, No Entiy, No GameObject, No Component, No Prefab. Only Node and NodeTree. 
+
 ###  Highly Efficient Workflow   
 ![](https://github.com/blab-liuliang/echo-doc/blob/master/intro/image/echo.png?raw=true)  
 
