@@ -11,7 +11,8 @@ namespace Echo
 
 	void NeuralNetwork::bindMethods()
 	{
-		//CLASS_BIND_METHOD(NeuralNetwork, train,			  DEF_METHOD("train"));
+		CLASS_BIND_METHOD(NeuralNetwork, train,			  DEF_METHOD("train"));
+		CLASS_BIND_METHOD(NeuralNetwork, computeOutput,   DEF_METHOD("computeCouput"));
 		CLASS_BIND_METHOD(NeuralNetwork, getLearningRate, DEF_METHOD("getLearningRate"));
 		CLASS_BIND_METHOD(NeuralNetwork, setLearningRate, DEF_METHOD("setLearningRate"));
 
@@ -19,7 +20,7 @@ namespace Echo
 	}
 
 	// train
-	void NeuralNetwork::train(const nn::DoubleVector& inputVector, const nn::DoubleVector& expectedOutput)
+	void NeuralNetwork::train(const nn::RealVector& inputVector, const nn::RealVector& expectedOutput)
 	{
 		// build data structure or sync data
 		organzieStructureBaseOnNodeTree();
@@ -32,9 +33,9 @@ namespace Echo
 	}
 
 	// compute output
-	nn::DoubleVector NeuralNetwork::computeOutput(const nn::DoubleVector& inputVector)
+	nn::RealVector NeuralNetwork::computeOutput(const nn::RealVector& inputVector)
 	{
-		nn::DoubleVector output;
+		nn::RealVector output;
 
 		return output;
 	}
@@ -58,7 +59,7 @@ namespace Echo
 	}
 
 	// learn
-	void NeuralNetwork::learn(const nn::DoubleVector& expectedOutput)
+	void NeuralNetwork::learn(const nn::RealVector& expectedOutput)
 	{
 		nn::Matrix YStar = nn::Matrix(expectedOutput);
 	}

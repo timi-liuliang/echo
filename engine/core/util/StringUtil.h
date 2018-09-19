@@ -8,7 +8,7 @@ namespace Echo
 	class Vector2;
 	class Vector3;
 	class Vector4;
-	class Quaternion; 
+	class Quaternion;
 	namespace StringUtil
 	{
 		static const String		BLANK = String(); 
@@ -41,6 +41,7 @@ namespace Echo
 		String			ToString(ui64 val, Word width = 0, char fill = ' ');
 
 		String			ToString(bool val, bool bYesNo = false);
+		String			ToString(const vector<Real>::type& val);
 		String			ToString(const Vector2& val);
 		String			ToString(const vector<Vector2>::type& val);
 		String			ToString(const Vector3& val);
@@ -52,6 +53,7 @@ namespace Echo
 		float			ParseFloat(const String& val, float defVal = 0.0f);
 		double			ParseDouble(const String& val, double defVal = 0.0);
 		Real			ParseReal(const String& val, Real defVal = (Real)0.0);
+		vector<Real>::type ParseRealVector(const String& val, const vector<Real>::type& defVal = vector<Real>::type());
 		int				ParseInt(const String& val, int defVal = 0);
 		long			ParseLong(const String& val, long defVal = 0);
 		bool			ParseBool(const String& val, bool defVal = false);

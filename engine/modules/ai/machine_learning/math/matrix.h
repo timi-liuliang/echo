@@ -2,17 +2,18 @@
 
 #include <vector>
 #include <iostream>
+#include "engine/core/memory/MemAllocDef.h"
 
 namespace nn
 {
-	typedef std::vector<double> DoubleVector;
+	typedef Echo::vector<float>::type RealVector;
 
 	class Matrix
 	{
 	public:
 		Matrix();
 		Matrix(int width, int height);
-		Matrix(const DoubleVector& array) { m_array = array; }
+		Matrix(const RealVector& array) { m_array = array; }
 
 		int getWidth() const { return m_width; }
 		int getHeight() const { return m_height; }
@@ -27,6 +28,6 @@ namespace nn
 	private:
 		int			m_width;
 		int			m_height;
-		DoubleVector m_array;
+		RealVector  m_array;
 	};
 }

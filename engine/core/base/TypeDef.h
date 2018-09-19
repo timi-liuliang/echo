@@ -26,8 +26,8 @@ namespace Echo
 	typedef unsigned short		Word;
 
 #ifdef ECHO_PREC_DOUBLE
-	typedef double			Real;
+	typedef double				Real;
 #else
-	typedef float			Real;
+	typedef float				Real;
 #endif
 }

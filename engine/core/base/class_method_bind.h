@@ -272,5 +272,53 @@ namespace Echo
 		return bind;
 	}
 
+	template <typename P0, typename P1>
+	class ClassMethodBind2 : public ClassMethodBind
+	{
+	public:
+		void (__AnEmptyClass::*method)(P0, P1);
 
+		// exec the method
+		virtual Variant call(Object* obj, const Variant** args, int argCount, Variant::CallError& error) override
+		{
+			__AnEmptyClass* instance = (__AnEmptyClass*)obj;
+
+			P0 p0 = variant_cast<P0>(*args[0]);
+			P1 p1 = variant_cast<P1>(*args[1]);
+			(instance->*method)(p0, p1);
+
+			return Variant();
+		}
+
+		virtual int call(Object* obj, lua_State* luaState) override
+		{
+			__AnEmptyClass* instance = (__AnEmptyClass*)obj;
+
+			//check and fetch the arguments
+			P0 p0 = lua_getvalue<P0>(luaState, 2);
+			P0 p1 = lua_getvalue<P1>(luaState, 3);
+
+			// exec method
+			(instance->*method)(p0, p1);
+
+			// return number of results
+			return 0;
+		}
+	};
+
+	template<typename T, typename P0, typename P1>
+	ClassMethodBind* createMethodBind(void(T::*method)(P0, P1))
+	{
+		ClassMethodBind2<P0, P1>* bind = new (ClassMethodBind2<P0, P1>);
+
+		union
+		{
+			void (T::*sm)(P0, P1);
+			void (__AnEmptyClass::*dm)(P0, P1);
+		} u;
+		u.sm = method;
+		bind->method = u.dm;
+
+		return bind;
+	}
 }

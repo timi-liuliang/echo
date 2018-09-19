@@ -77,6 +77,12 @@ namespace Echo
 		m_obj = value;
 	}
 
+	Variant::Variant(const RealVector& value)
+		: m_type(Type::RealVector)
+	{
+		m_any = value;
+	}
+
 	Variant::Variant(const ResourcePath& value)
 		: m_type(Type::ResourcePath)
 	{
@@ -127,6 +133,7 @@ namespace Echo
 		case Type::ResourcePath: return (any_cast<ResourcePath>(m_any)).getPath();
 		case Type::NodePath:	 return (any_cast<NodePath>(m_any)).getPath();
 		case Type::StringOption: return (any_cast<StringOption>(m_any)).getValue();
+		case Type::RealVector:   return StringUtil::ToString(any_cast<RealVector>(m_any));
         default:                 return StringUtil::BLANK;
 		}
 	}
@@ -148,6 +155,7 @@ namespace Echo
 		case Type::NodePath: { m_type = Type::NodePath; m_any = NodePath(str, nullptr); } return true;
 		case Type::StringOption: { m_type = Type::StringOption; m_any = StringOption(str); } return true;
 		case Type::Object: { m_type = Type::Object; m_obj = Object::getById(StringUtil::ParseI32(str)); } return true;
+		case Type::RealVector: { m_type = Type::RealVector; m_any = StringUtil::ParseRealVector(str); } return true;
         default:    return false;
 		}
 	}

@@ -1,5 +1,4 @@
-#ifndef __ECHO_VEC2_H__
-#define __ECHO_VEC2_H__
+#pragma once
 
 #include "engine/core/base/EchoDef.h"
 #include "engine/core/util/AssertX.h"
@@ -7,6 +6,8 @@
 
 namespace Echo
 {
+	typedef vector<Real>::type  RealVector;
+
 	class Vector2
 	{
 	public:
@@ -532,6 +533,3 @@ namespace Echo
 
 	};
 }
-
-
-#endif

@@ -31,7 +31,6 @@ namespace Echo
 			}
 		}
 
-		// ×ª»»Îª×Ö·û´®
 		String ToString(const Color& val)
 		{
 			StringStream stream;

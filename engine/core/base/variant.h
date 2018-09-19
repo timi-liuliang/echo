@@ -12,6 +12,8 @@
 
 namespace Echo
 {
+	typedef vector<Real>::type	RealVector;
+
 	class Object;
 	class Variant
 	{
@@ -32,6 +34,7 @@ namespace Echo
 			Base64String,
 			StringOption,
 			Object,
+			RealVector,
 		};
 
 		enum class CallError
@@ -62,6 +65,7 @@ namespace Echo
 		Variant(const Base64String& value);
 		Variant(const StringOption& value);
 		Variant(Object* value);
+		Variant(const RealVector& value);
 		~Variant();
 
 		// operator "="
@@ -87,6 +91,7 @@ namespace Echo
 		operator const Base64String&() const { return any_cast<Base64String>(m_any); }
 		operator const StringOption&() const { return any_cast<StringOption>(m_any); }
 		operator Object*() const { return m_obj; }
+		operator const RealVector&() const { return any_cast<RealVector>(m_any); }
 
 		// convert to other type
 		const bool toBool() const { return m_bool; }
@@ -99,6 +104,7 @@ namespace Echo
 		const ResourcePath& toResPath() const { return any_cast<ResourcePath>(m_any); }
 		const NodePath& toNodePath() const { return any_cast<NodePath>(m_any); }
 		const StringOption& toStringOption() const { return any_cast<StringOption>(m_any); }
+		const RealVector& toRealVector() const { return any_cast<RealVector>(m_any); }
 
 		// is nil
 		bool isNil() const { return m_type == Type::Nil; }

@@ -5,6 +5,9 @@
 
 namespace Echo
 {
+	/* thanks very much to this article
+	 * https://causeyourestuck.io/2017/06/12/neural-network-scratch-theory/
+	 */
 	class Neuron;
 	class NeuralNetwork : public Node
 	{
@@ -18,10 +21,10 @@ namespace Echo
 		NeuralNetwork();
 
 		// train
-		void train(const nn::DoubleVector& inputVector, const nn::DoubleVector& expectedOutput);
+		void train(const nn::RealVector& inputVector, const nn::RealVector& expectedOutput);
 
 		// compute output
-		nn::DoubleVector computeOutput(const nn::DoubleVector& inputVector);
+		nn::RealVector computeOutput(const nn::RealVector& inputVector);
 
 		// neuron
 		Neuron* getNeuron(i32 layer, i32 idx);
@@ -42,7 +45,7 @@ namespace Echo
 		void organzieStructureBaseOnNodeTree();
 
 		// learn
-		void learn(const nn::DoubleVector& expectedOutput);
+		void learn(const nn::RealVector& expectedOutput);
 
 	protected:
 		ActivationFunction			m_activationFunction;

@@ -443,6 +443,15 @@ namespace Echo
 		}
 	}
 
+	String StringUtil::ToString(const vector<Real>::type& val)
+	{
+		String result;
+		for (Real element : val)
+			result += Format("%s ", MorphNumericString(ToString(element)).c_str());
+
+		return result;
+	}
+
 	String StringUtil::ToString(const Vector2& val)
 	{
 		// trad convert, only fast than iostream.
@@ -522,6 +531,18 @@ namespace Echo
 		// trad convert, only fast than iostream.
 		Real v = static_cast<Real>(std::atof(val.c_str()));
 		return v ? v : defVal;
+	}
+
+	vector<Real>::type StringUtil::ParseRealVector(const String& val, const vector<Real>::type& defVal)
+	{
+		vector<Real>::type result;
+		StringArray strArray = Split(val, " ");
+		for (const String& element : strArray)
+		{
+			result.push_back(ParseReal(element));
+		}
+
+		return result;
 	}
 
 	int StringUtil::ParseInt(const String& val, int defVal)
