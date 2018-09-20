@@ -25,7 +25,7 @@ namespace Echo
 			R result = (*method)(p0);
 
 			// free value
-			lua_freevalue(p0);
+			lua_freevalue<P0>(p0);
 
 			// push the results
 			lua_pushvalue<R>(luaState, result);
@@ -63,8 +63,8 @@ namespace Echo
 			lua_pushvalue<R>(luaState, result);
 
 			// free value
-			lua_freevalue(p0);
-			lua_freevalue(p1);
+			lua_freevalue<P0>(p0);
+			lua_freevalue<P1>(p1);
 
 			// return number of results
 			return 1;

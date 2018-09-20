@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/core/math/Vector4.h"
+#include "engine/core/util/object_pool.h"
 
 extern "C"
 {
@@ -13,7 +14,6 @@ namespace Echo
 {
 	class Object;
 	class Node;
-
 	struct LuaStackCheck
 	{
 		int			m_elementNum;
@@ -36,6 +36,10 @@ namespace Echo
 #else
 #define LUA_STACK_CHECK(state)
 #endif 
+
+	extern ObjectPool<Vector3>		LuaVec3Pool;
+	extern ObjectPool<String>		LuaStrPool;
+	extern ObjectPool<RealVector>	LuaRealVectorPool;
 
 	// log messages
 	void lua_binder_warning(const char* msg);
@@ -87,18 +91,20 @@ namespace Echo
 	
 	template<> INLINE const String& lua_getvalue<const String&>(lua_State* L, int index)
 	{
-		static String result = lua_tostring(L, index);	// this is wrong, how to modify this?
-		return result;
+		String* result = LuaStrPool.newObj();
+		*result = lua_tostring(L, index);	// this is wrong, how to modify this?
+		return *result;
 	}
 
-	template<> INLINE void lua_freevalue(const String& value)
+	template<> INLINE void lua_freevalue<const String&>(const String& value)
 	{
-		assert(false);
+		String* ptr = (String*)&value;
+		LuaStrPool.deleteObj(ptr);
 	}
 
 	template<> INLINE const Vector3& lua_getvalue<const Vector3&>(lua_State* state, int idx) 
 	{
-		static Vector3 result;	// this is wrong, modify this
+		Vector3& result = *LuaVec3Pool.newObj();
 		lua_getfield(state, idx, "x");
 		lua_getfield(state, idx, "y");
 		lua_getfield(state, idx, "z");
@@ -109,28 +115,31 @@ namespace Echo
 		return result; 
 	}
 
-	template<> INLINE void lua_freevalue(const Vector3& value)
+	template<> INLINE void lua_freevalue<const Vector3&>(const Vector3& value)
 	{
-		assert(false);
+		Vector3* ptr = (Vector3*)&value;
+		LuaVec3Pool.deleteObj(ptr);
 	}
 
 	template<> INLINE const RealVector& lua_getvalue<const RealVector&>(lua_State* state, int idx)
 	{
-		static RealVector result; // this is wrong, modify this
-		result.clear();
+		RealVector* result = LuaRealVectorPool.newObj();
+		result->clear();
 		lua_pushnil(state);
 		while (lua_next(state, idx) != 0)
 		{
-			result.push_back((float)lua_tonumber(state, -1));
+			result->push_back((float)lua_tonumber(state, -1));
 			lua_pop(state, 1);
 		}
 
-		return result;
+		return *result;
 	}
 
-	template<> INLINE void lua_freevalue(const RealVector& value)
+	template<> INLINE void lua_freevalue<const RealVector&>(const RealVector& value)
 	{
-		assert(false);
+		// we will use object pool replace new delete
+		RealVector* ptr = (RealVector*)&value;
+		LuaRealVectorPool.deleteObj(ptr);
 	}
 
 	template<> INLINE Node* lua_getvalue<Node*>(lua_State* state, int idx)
