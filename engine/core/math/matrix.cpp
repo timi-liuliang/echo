@@ -82,7 +82,7 @@ namespace Echo
 	// apply function
 	Matrix Matrix::applyFunction(Real(*function)(Real)) const
 	{
-		Matrix result(m_width, m_height);
+		Matrix result(m_height, m_width);
 		if (function)
 		{
 			for (int h = 0; h < m_height; h++)

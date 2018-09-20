@@ -63,7 +63,7 @@ namespace Echo
 
 	template<> INLINE const char* lua_getvalue<const char*>(lua_State* L, int index)
 	{ 
-		return lua_isnil(L, index) ? "nil" : lua_tostring(L, index);
+		return lua_isnil(L, index) ? "nil" : (lua_istable(L, index) ? "table" : lua_tostring(L, index));
 	}
 
 	template<> INLINE bool lua_getvalue<bool>(lua_State* L, int index)
@@ -250,6 +250,28 @@ namespace Echo
 	template<> INLINE void lua_pushvalue<RealVector>(lua_State* state, RealVector value)
 	{
 		lua_pushvalue<const RealVector&>(state, value);
+	}
+
+	template<> INLINE void lua_pushvalue<const Matrix&>(lua_State* state, const Matrix& value)
+	{
+		lua_newtable(state);
+		for (int i = 0; i < value.getHeight(); i++)
+		{
+			lua_pushnumber(state, i);
+			lua_newtable(state);
+			for (int j = 0; j < value.getWidth(); j++)
+			{
+				lua_pushnumber(state, j);			// key   -2
+				lua_pushnumber(state, value[i][j]);	// value -1	
+				lua_settable(state, -3);			// t[key] = value && pop key and value
+			}
+			lua_settable(state, -3);
+		}
+	}
+
+	template<> INLINE void lua_pushvalue<Matrix>(lua_State* state, Matrix value)
+	{
+		lua_pushvalue<const Matrix&>(state, value);
 	}
 
 	template<> INLINE void lua_pushvalue<Object*>(lua_State* state, Object* value) 

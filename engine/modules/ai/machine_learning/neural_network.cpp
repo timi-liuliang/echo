@@ -129,7 +129,7 @@ namespace Echo
 					i32 neuralNumber = getNeuronNum(layerIdx);
 
 					m_layerValues[layerIdx] = Matrix(1, neuralNumber);
-					m_weights[layerIdx - 1] = Matrix(neuralNumber, preNeuralNumber);
+					m_weights[layerIdx - 1] = Matrix(preNeuralNumber, neuralNumber);
 					m_bias[layerIdx - 1] = Matrix(1, neuralNumber);
 				}
 
