@@ -4,9 +4,8 @@
 namespace Echo
 {
 	Matrix::Matrix()
-		: m_width(0)
-		, m_height(0)
 	{
+		reset();
 	}
 
 	Matrix::Matrix(int height, int width)
@@ -18,6 +17,14 @@ namespace Echo
 			m_array.push_back(RealVector());
 			m_array[i].resize(width, 0.f);
 		}
+	}
+
+	// reset
+	void Matrix::reset()
+	{
+		m_width = 0;
+		m_height = 0;
+		m_array.clear();
 	}
 
 	// add row

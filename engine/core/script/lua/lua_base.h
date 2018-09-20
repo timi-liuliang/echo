@@ -147,6 +147,8 @@ namespace Echo
 	template<> INLINE const Matrix& lua_getvalue<const Matrix&>(lua_State* state, int idx)
 	{
 		Matrix* result = LuaMatrixPool.newObj();
+		result->reset();
+
 		lua_pushnil(state);
 		while (lua_next(state, idx) != 0)
 		{

@@ -29,6 +29,9 @@ namespace Echo
 		// apply function
 		Matrix applyFunction(Real(*function)(Real)) const;
 
+		// reset
+		void reset();
+
 	private:
 		int						 m_height;
 		int						 m_width;
