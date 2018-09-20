@@ -10,22 +10,28 @@ namespace Echo
 	{
 	public:
 		Matrix();
-		Matrix(int width, int height);
-		Matrix(const RealVector& array) { m_array = array; }
+		Matrix(int height, int width);
+
+		// add row
+		void addRow(const RealVector& row);
 
 		int getWidth() const { return m_width; }
 		int getHeight() const { return m_height; }
 		int getNumberElements() const { return m_width * m_height; }
 
+		Matrix multiply(const Matrix& m) const;
+		Matrix add(const Matrix& m) const;
+
 		// operator []
-		double operator[] (int idx) const { return m_array[idx]; }
+		RealVector& operator[] (int idx) { return m_array[idx]; }
+		const RealVector& operator[] (int idx) const { return m_array[idx]; }
 
 		// apply function
-		Matrix applyFunction(double(*function)(double)) const;
+		Matrix applyFunction(Real(*function)(Real)) const;
 
 	private:
-		int			m_width;
-		int			m_height;
-		RealVector  m_array;
+		int						 m_height;
+		int						 m_width;
+		vector<RealVector>::type m_array;
 	};
 }

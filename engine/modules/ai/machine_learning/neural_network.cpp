@@ -1,14 +1,17 @@
+#include "function/activation.h"
 #include "neural_network.h"
 #include "neural_layer.h"
+
 
 namespace Echo
 {
 	NeuralNetwork::NeuralNetwork()
 		: m_isInit(false)
+		, m_activationFunction(nullptr)
 		, m_lossFunction(nullptr)
 		, m_learningRate(0.001f)
 	{
-
+		setActivationFunction(nn::sigmoid);
 	}
 
 	void NeuralNetwork::bindMethods()
@@ -23,7 +26,7 @@ namespace Echo
 	}
 
 	// train
-	void NeuralNetwork::train(const RealVector& inputVector, const RealVector& expectedOutput)
+	void NeuralNetwork::train(const Matrix& inputVector, const Matrix& expectedOutput)
 	{
 		// build data structure or sync data
 		organzieStructureBaseOnNodeTree();
@@ -36,11 +39,18 @@ namespace Echo
 	}
 
 	// compute output
-	RealVector NeuralNetwork::computeOutput(const RealVector& inputVector)
+	Matrix NeuralNetwork::computeOutput(const Matrix& inputVector)
 	{
-		RealVector output;
+		// set input layer value (row matrix)
+		m_layerValues[0] = inputVector;
 
-		return output;
+		i32 layerNumbr = (i32)m_layerValues.size()-1;
+		for (i32 i = 0; i < layerNumbr; i++)
+		{
+			m_layerValues[i + 1] = m_layerValues[i].multiply(m_weights[i]).add(m_bias[0]).applyFunction(m_activationFunction);
+		}
+
+		return m_layerValues[layerNumbr];
 	}
 
 	i32 NeuralNetwork::getLayerNumber()
@@ -119,7 +129,7 @@ namespace Echo
 					i32 neuralNumber = getNeuronNum(layerIdx);
 
 					m_layerValues[layerIdx] = Matrix(1, neuralNumber);
-					m_weights[layerIdx - 1] = Matrix(preNeuralNumber, neuralNumber);
+					m_weights[layerIdx - 1] = Matrix(neuralNumber, preNeuralNumber);
 					m_bias[layerIdx - 1] = Matrix(1, neuralNumber);
 				}
 
@@ -131,7 +141,7 @@ namespace Echo
 	}
 
 	// learn
-	void NeuralNetwork::learn(const RealVector& expectedOutput)
+	void NeuralNetwork::learn(const Matrix& expectedOutput)
 	{
 		Matrix YStar = Matrix(expectedOutput);
 	}

@@ -3,6 +3,7 @@
 #include "TypeDef.h"
 #include "engine/core/memory/MemAllocDef.h"
 #include "engine/core/math/Vector4.h"
+#include "engine/core/math/matrix.h"
 #include "engine/core/math/color.h"
 #include "engine/core/resource/ResourcePath.h"
 #include "engine/core/util/Any.hpp"
@@ -25,6 +26,9 @@ namespace Echo
 			Vector2,
 			Vector3,
 			Vector4,
+			VectorN,
+			Matrix4,
+			MatrixN,
 			Color,
 			String,
 			ResourcePath,
@@ -32,7 +36,6 @@ namespace Echo
 			Base64String,
 			StringOption,
 			Object,
-			RealVector,
 		};
 
 		enum class CallError
@@ -57,6 +60,7 @@ namespace Echo
 		Variant(const Vector2& value);
 		Variant(const Vector3& value);
 		Variant(const Vector4& value);
+		Variant(const Matrix& value);
 		Variant(const Color& value);
 		Variant(const ResourcePath& value);
 		Variant(const NodePath& value);
@@ -81,6 +85,7 @@ namespace Echo
 		operator const Vector2&() const { return any_cast<Vector2>(m_any); }
 		operator const Vector3&() const { return any_cast<Vector3>(m_any); }
 		operator const Vector4&() const { return any_cast<Vector4>(m_any); }
+		operator const Matrix&() const  { return any_cast<Matrix>(m_any); }
 		operator const Color&() const { return any_cast<Color>(m_any); }
 		operator const char*() const { return any_cast<String>(m_any).c_str(); }
 		operator const String&() const { return any_cast<String>(m_any); }

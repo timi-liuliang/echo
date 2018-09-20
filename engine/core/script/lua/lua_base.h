@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/core/math/Vector4.h"
+#include "engine/core/math/matrix.h"
 #include "engine/core/util/object_pool.h"
 
 extern "C"
@@ -40,6 +41,7 @@ namespace Echo
 	extern ObjectPool<Vector3>		LuaVec3Pool;
 	extern ObjectPool<String>		LuaStrPool;
 	extern ObjectPool<RealVector>	LuaRealVectorPool;
+	extern ObjectPool<Matrix>		LuaMatrixPool;
 
 	// log messages
 	void lua_binder_warning(const char* msg);
@@ -140,6 +142,36 @@ namespace Echo
 		// we will use object pool replace new delete
 		RealVector* ptr = (RealVector*)&value;
 		LuaRealVectorPool.deleteObj(ptr);
+	}
+
+	template<> INLINE const Matrix& lua_getvalue<const Matrix&>(lua_State* state, int idx)
+	{
+		Matrix* result = LuaMatrixPool.newObj();
+		lua_pushnil(state);
+		while (lua_next(state, idx) != 0)
+		{
+			int row = lua_gettop(state);
+			RealVector rowElement;
+
+			lua_pushnil(state);
+			while (lua_next(state, row) != 0)
+			{
+				rowElement.push_back((float)lua_tonumber(state, -1));
+				lua_pop(state, 1);
+			}
+
+			result->addRow(rowElement);
+			lua_pop(state, 1);
+		}
+
+		return *result;
+	}
+
+	template<> INLINE void lua_freevalue<const Matrix&>(const Matrix& value)
+	{
+		// we will use object pool replace new delete
+		Matrix* ptr = (Matrix*)&value;
+		LuaMatrixPool.deleteObj(ptr);
 	}
 
 	template<> INLINE Node* lua_getvalue<Node*>(lua_State* state, int idx)

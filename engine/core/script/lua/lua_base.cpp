@@ -8,6 +8,7 @@ namespace Echo
 	ObjectPool<Vector3>		LuaVec3Pool = ObjectPool<Vector3>(32);
 	ObjectPool<String>		LuaStrPool  = ObjectPool<String>(32);
 	ObjectPool<RealVector>	LuaRealVectorPool = ObjectPool<RealVector>(32);
+	ObjectPool<Matrix>		LuaMatrixPool = ObjectPool<Matrix>(32);
 
 	void lua_binder_warning(const char* msg)
 	{

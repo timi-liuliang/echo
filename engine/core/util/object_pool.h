@@ -55,7 +55,7 @@ namespace Echo
 		}
 
 	private:
-		i32					m_capacity;		// capacity
+		ui32				m_capacity;		// capacity
 		T*					m_objs;			// all objs
 		std::vector<ui32>	m_frees;		// free objs
 	};

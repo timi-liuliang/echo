@@ -22,10 +22,10 @@ namespace Echo
 		NeuralNetwork();
 
 		// train
-		void train(const RealVector& inputVector, const RealVector& expectedOutput);
+		void train(const Matrix& inputVector, const Matrix& expectedOutput);
 
 		// compute output
-		RealVector computeOutput(const RealVector& inputVector);
+		Matrix computeOutput(const Matrix& inputVector);
 
 		// layer
 		i32 getLayerNumber();
@@ -51,7 +51,7 @@ namespace Echo
 		void organzieStructureBaseOnNodeTree();
 
 		// learn
-		void learn(const RealVector& expectedOutput);
+		void learn(const Matrix& expectedOutput);
 
 	protected:
 		bool						m_isInit;
