@@ -13,6 +13,9 @@ namespace Echo
 		NeuralLayer();
 		virtual ~NeuralLayer();
 
+		// get neural number
+		i32 getNeuralNumber();
+
 	protected:
 	};
 }

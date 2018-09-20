@@ -9,6 +9,7 @@ namespace Echo
 	 * https://causeyourestuck.io/2017/06/12/neural-network-scratch-theory/
 	 */
 	class Neuron;
+	class NeuralLayer;
 	class NeuralNetwork : public Node
 	{
 		ECHO_CLASS(NeuralNetwork, Node)
@@ -26,7 +27,12 @@ namespace Echo
 		// compute output
 		RealVector computeOutput(const RealVector& inputVector);
 
+		// layer
+		i32 getLayerNumber();
+		NeuralLayer* getLayer(i32 layer);
+
 		// neuron
+		i32 getNeuronNum(i32 layer);
 		Neuron* getNeuron(i32 layer, i32 idx);
 
 		// learning rate
@@ -48,11 +54,12 @@ namespace Echo
 		void learn(const RealVector& expectedOutput);
 
 	protected:
+		bool						m_isInit;
 		ActivationFunction			m_activationFunction;
 		LossFunction				m_lossFunction;
 		Real						m_learningRate;			// learning speed
-		vector<Matrix>				m_layerValues;
-		vector<Matrix>				m_weights;
-		vector<Matrix>				m_bias;
+		vector<Matrix>::type		m_layerValues;
+		vector<Matrix>::type		m_weights;
+		vector<Matrix>::type		m_bias;
 	};
 }
