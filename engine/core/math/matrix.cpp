@@ -16,7 +16,7 @@ namespace Echo
 		for (int i = 0; i < height; i++)
 		{
 			m_array.push_back(RealVector());
-			m_array[i].resize(width);
+			m_array[i].resize(width, 0.f);
 		}
 	}
 
