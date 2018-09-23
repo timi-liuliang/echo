@@ -1,4 +1,5 @@
 #include "class.h"
+#include "object.h"
 #include <map>
 #include "engine/core/log/Log.h"
 
@@ -18,6 +19,13 @@ namespace Echo
 			EchoLogError("property [%s] already exist", property->m_name.c_str());
 		}
 	}
+    
+#ifdef ECHO_EDITOR_MODE
+    void ObjectFactory::initEditor(Object* obj)
+    {
+        obj->initEditor();
+    }
+#endif
 
 	// add class
 	void Class::addClass(const String& className, ObjectFactory* objFactory)

@@ -14,6 +14,7 @@
 namespace Echo
 {
 	class Object;
+    class Node;
 	class Variant
 	{
 	public:
@@ -129,4 +130,15 @@ namespace Echo
 			mutable Object*	m_obj;
 		};
 	};
+    
+    template<typename T> INLINE T variant_cast(const Variant& variant)
+    {
+        return variant;
+    }
+    
+    template<> INLINE Node* variant_cast(const Variant& variant)
+    {
+        Object* obj = variant.toObj();
+        return (Node*)(obj);
+    }
 }

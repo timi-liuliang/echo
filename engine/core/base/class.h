@@ -66,6 +66,10 @@ namespace Echo
 
 			return nullptr;
 		}
+        
+#ifdef ECHO_EDITOR_MODE
+        void initEditor(Object* obj);
+#endif
 	};
 
 	class Class
@@ -171,7 +175,7 @@ namespace Echo
 			Object* obj = EchoNew(T);
 
 		#ifdef ECHO_EDITOR_MODE
-			obj->initEditor();
+            initEditor(obj);
 		#endif
 
 			return obj;

@@ -1,7 +1,6 @@
 #pragma once
 
-#include "engine/core/math/Vector4.h"
-#include "engine/core/math/matrix.h"
+#include "engine/core/base/variant.h"
 #include "engine/core/util/object_pool.h"
 
 extern "C"
