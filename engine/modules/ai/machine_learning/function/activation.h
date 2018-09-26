@@ -18,4 +18,9 @@ namespace nn
 		float sm = sigmoid(x);
 		return sm * (1.f - sm);
 	}
+
+	INLINE float random(float x)
+	{
+		return (float)(rand() % 10000 + 1) / 10000.f - 0.5f;
+	}
 }

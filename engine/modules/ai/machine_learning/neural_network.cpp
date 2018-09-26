@@ -124,6 +124,9 @@ namespace Echo
 					m_dJdWeights[layerIdx - 1] = Matrix(preNeuralNumber, neuralNumber);
 					m_bias[layerIdx - 1] = Matrix(1, neuralNumber);
 					m_dJdBias[layerIdx - 1] = Matrix(1, neuralNumber);
+
+					m_weights[layerIdx - 1].applyFunction(nn::random);
+					m_bias[layerIdx - 1].applyFunction(nn::random);
 				}
 
 				m_isInit = true;
@@ -157,14 +160,12 @@ namespace Echo
 	// learn
 	void NeuralNetwork::learn(const Matrix& expectedOutput)
 	{
-		const Matrix& YStar = Matrix(expectedOutput);
-
 		i32 layerNumber = getLayerNumber() - 1;
 
 		// last hidden layer
 		i32 lastLayer = layerNumber - 1;
 		{
-			m_dJdBias[lastLayer] = (*m_lossFunctionPrime)(m_layerValues[lastLayer+1], YStar).dot(computeLayerOutput( lastLayer, m_activationFunctionPrime));
+			m_dJdBias[lastLayer] = (*m_lossFunctionPrime)(expectedOutput, m_layerValues[lastLayer+1]).multiply(computeLayerOutput( lastLayer, m_activationFunctionPrime));
 			m_dJdWeights[lastLayer] = m_layerValues[lastLayer].transpose().dot(m_dJdBias[lastLayer]);
 		}
 
@@ -176,10 +177,16 @@ namespace Echo
 		}
 
 		// update params
-		for (i32 i = 0; i < layerNumber - 1; i++)
+		for (i32 i = 0; i < layerNumber; i++)
 		{
 			m_weights[i] = m_weights[i].substract( m_dJdWeights[i].multiply(m_learningRate));
 			m_bias[i] = m_bias[i].substract(m_dJdBias[i].multiply(m_learningRate));
 		}
+	}
+
+	// update
+	void NeuralNetwork::update_self()
+	{
+
 	}
 }

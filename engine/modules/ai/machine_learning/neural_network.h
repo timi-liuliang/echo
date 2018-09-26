@@ -65,6 +65,10 @@ namespace Echo
 		Matrix computeLayerOutput(i32 layer, MatrixFunction fun);
 
 	protected:
+		// update
+		virtual void update_self();
+
+	protected:
 		bool						m_isInit;
 		MatrixFunction				m_activationFunction;
 		MatrixFunction				m_activationFunctionPrime;
