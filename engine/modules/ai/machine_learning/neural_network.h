@@ -15,8 +15,8 @@ namespace Echo
 		ECHO_CLASS(NeuralNetwork, Node)
 
 	public:
-		typedef Real(*ActivationFunction)(Real);
-		typedef Real(*LossFunction)(Real);
+		typedef Real(*MatrixFunction)(Real);
+		typedef Matrix(*LossFunction)(const Matrix&, const Matrix&);
 
 	public:
 		NeuralNetwork();
@@ -40,8 +40,16 @@ namespace Echo
 		void setLearningRate(Real rate) { m_learningRate = rate; }
 
 		// activation function
-		void setActivationFunction(ActivationFunction fun) { m_activationFunction = fun; }
-		ActivationFunction getActivationFunction() { return m_activationFunction; }
+		void setActivationFunction(MatrixFunction fun) { m_activationFunction = fun; }
+		MatrixFunction getActivationFunction() { return m_activationFunction; }
+
+		// activation function prime
+		void setActivationFunctionPrime(MatrixFunction fun) { m_activationFunctionPrime = fun; }
+		MatrixFunction getActivationFunctionPrime() { return m_activationFunctionPrime; }
+
+		// loss function prime
+		void setLossFunctionPrime(LossFunction fun) { m_lossFunctionPrime = fun; }
+		LossFunction getLossFunctionPrime() { return m_lossFunctionPrime; }
 
 		// reset
 		void reset();
@@ -53,13 +61,19 @@ namespace Echo
 		// learn
 		void learn(const Matrix& expectedOutput);
 
+		// compute output by layer
+		Matrix computeLayerOutput(i32 layer, MatrixFunction fun);
+
 	protected:
 		bool						m_isInit;
-		ActivationFunction			m_activationFunction;
-		LossFunction				m_lossFunction;
+		MatrixFunction				m_activationFunction;
+		MatrixFunction				m_activationFunctionPrime;
+		LossFunction				m_lossFunctionPrime;
 		Real						m_learningRate;			// learning speed
 		vector<Matrix>::type		m_layerValues;
 		vector<Matrix>::type		m_weights;
+		vector<Matrix>::type		m_dJdWeights;			// partial derivative of loss function with with respect to weights
 		vector<Matrix>::type		m_bias;
+		vector<Matrix>::type		m_dJdBias;				// partial derivative of loss function with with respect to bias
 	};
 }

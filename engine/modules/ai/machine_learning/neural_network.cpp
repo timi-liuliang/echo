@@ -1,4 +1,5 @@
 #include "function/activation.h"
+#include "function/loss.h"
 #include "neural_network.h"
 #include "neural_layer.h"
 
@@ -8,10 +9,13 @@ namespace Echo
 	NeuralNetwork::NeuralNetwork()
 		: m_isInit(false)
 		, m_activationFunction(nullptr)
-		, m_lossFunction(nullptr)
+		, m_activationFunctionPrime(nullptr)
+		, m_lossFunctionPrime(nullptr)
 		, m_learningRate(0.001f)
 	{
 		setActivationFunction(nn::sigmoid);
+		setActivationFunctionPrime(nn::sigmoid_prime);
+		setLossFunctionPrime(nn::squaredErrorPrime);
 	}
 
 	void NeuralNetwork::bindMethods()
@@ -36,21 +40,6 @@ namespace Echo
 
 		// learn
 		learn( expectedOutput);
-	}
-
-	// compute output
-	Matrix NeuralNetwork::computeOutput(const Matrix& inputVector)
-	{
-		// set input layer value (row matrix)
-		m_layerValues[0] = inputVector;
-
-		i32 layerNumbr = (i32)m_layerValues.size()-1;
-		for (i32 i = 0; i < layerNumbr; i++)
-		{
-			m_layerValues[i + 1] = m_layerValues[i].multiply(m_weights[i]).add(m_bias[i]).applyFunction(m_activationFunction);
-		}
-
-		return m_layerValues[layerNumbr];
 	}
 
 	i32 NeuralNetwork::getLayerNumber()
@@ -117,7 +106,9 @@ namespace Echo
 			{
 				m_layerValues.resize(layerNumber);
 				m_weights.resize(layerNumber - 1);
+				m_dJdWeights.resize(layerNumber - 1);
 				m_bias.resize(layerNumber - 1);
+				m_dJdBias.resize(layerNumber - 1);
 
 				// prepare input layer matrix
 				m_layerValues[0] = Matrix( 1, getNeuronNum(0));
@@ -130,7 +121,9 @@ namespace Echo
 
 					m_layerValues[layerIdx] = Matrix(1, neuralNumber);
 					m_weights[layerIdx - 1] = Matrix(preNeuralNumber, neuralNumber);
+					m_dJdWeights[layerIdx - 1] = Matrix(preNeuralNumber, neuralNumber);
 					m_bias[layerIdx - 1] = Matrix(1, neuralNumber);
+					m_dJdBias[layerIdx - 1] = Matrix(1, neuralNumber);
 				}
 
 				m_isInit = true;
@@ -140,9 +133,53 @@ namespace Echo
 		// sync data to neuron
 	}
 
+	// compute output by layer
+	Matrix NeuralNetwork::computeLayerOutput(i32 layer, MatrixFunction fun)
+	{
+		return m_layerValues[layer].dot(m_weights[layer]).add(m_bias[layer]).applyFunction(fun);
+	}
+
+	// compute output
+	Matrix NeuralNetwork::computeOutput(const Matrix& inputVector)
+	{
+		// set input layer value (row matrix)
+		m_layerValues[0] = inputVector;
+
+		i32 layerNumbr = (i32)m_layerValues.size() - 1;
+		for (i32 i = 0; i < layerNumbr; i++)
+		{
+			m_layerValues[i + 1] = computeLayerOutput( i, m_activationFunction);
+		}
+
+		return m_layerValues[layerNumbr];
+	}
+
 	// learn
 	void NeuralNetwork::learn(const Matrix& expectedOutput)
 	{
-		Matrix YStar = Matrix(expectedOutput);
+		const Matrix& YStar = Matrix(expectedOutput);
+
+		i32 layerNumber = getLayerNumber() - 1;
+
+		// last hidden layer
+		i32 lastLayer = layerNumber - 1;
+		{
+			m_dJdBias[lastLayer] = (*m_lossFunctionPrime)(m_layerValues[lastLayer+1], YStar).dot(computeLayerOutput( lastLayer, m_activationFunctionPrime));
+			m_dJdWeights[lastLayer] = m_layerValues[lastLayer].transpose().dot(m_dJdBias[lastLayer]);
+		}
+
+		// recursive layer
+		for (i32 i = lastLayer-1; i >= 0; i--)
+		{
+			m_dJdBias[i] = m_dJdBias[i+1].dot(m_weights[i+1].transpose()).multiply(computeLayerOutput( i, m_activationFunctionPrime));
+			m_dJdWeights[i] = m_layerValues[i].transpose().dot(m_dJdBias[i]);
+		}
+
+		// update params
+		for (i32 i = 0; i < layerNumber - 1; i++)
+		{
+			m_weights[i] = m_weights[i].substract( m_dJdWeights[i].multiply(m_learningRate));
+			m_bias[i] = m_bias[i].substract(m_dJdBias[i].multiply(m_learningRate));
+		}
 	}
 }

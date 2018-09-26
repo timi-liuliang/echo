@@ -35,7 +35,7 @@ namespace Echo
 		m_height++;
 	}
 
-	Matrix Matrix::multiply(const Matrix& m) const
+	Matrix Matrix::dot(const Matrix& m) const
 	{
 		int height = getHeight();
 		int mWidth = m.getWidth();
@@ -81,6 +81,76 @@ namespace Echo
 		else
 		{
 			EchoLogError("Matrix add failed");
+		}
+
+		return result;
+	}
+
+	Matrix Matrix::substract(const Matrix& m) const
+	{
+		Matrix result = *this;
+		if (getWidth() == m.getWidth() && getHeight() == m.getHeight())
+		{
+			for (int h = 0; h < m_height; h++)
+			{
+				for (int w = 0; w < m_width; w++)
+				{
+					result[h][w] -= m[h][w];
+				}
+			}
+		}
+		else
+		{
+			EchoLogError("Matrix substract failed");
+		}
+
+		return result;
+	}
+
+	Matrix Matrix::multiply(Real f) const
+	{
+		Matrix result = *this;
+		for (int h = 0; h < m_height; h++)
+		{
+			for (int w = 0; w < m_width; w++)
+			{
+				result[h][w] *= f;
+			}
+		}
+
+		return result;
+	}
+
+	Matrix Matrix::multiply(const Matrix& m) const
+	{
+		Matrix result = *this;
+		if (getWidth() == m.getWidth() && getHeight() == m.getHeight())
+		{
+			for (int h = 0; h < m_height; h++)
+			{
+				for (int w = 0; w < m_width; w++)
+				{
+					result[h][w] *= m[h][w];
+				}
+			}
+		}
+		else
+		{
+			EchoLogError("Matrix multiply failed");
+		}
+
+		return result;
+	}
+
+	Matrix Matrix::transpose() const
+	{
+		Matrix result(m_width, m_height);
+		for (int i = 0; i < m_width; i++)
+		{
+			for (int j = 0; j < m_height; j++)
+			{
+				result[i][j] = m_array[j][i];
+			}
 		}
 
 		return result;

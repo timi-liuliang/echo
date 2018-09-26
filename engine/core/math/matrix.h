@@ -19,8 +19,12 @@ namespace Echo
 		int getHeight() const { return m_height; }
 		int getNumberElements() const { return m_width * m_height; }
 
-		Matrix multiply(const Matrix& m) const;
+		Matrix dot(const Matrix& m) const;
 		Matrix add(const Matrix& m) const;
+		Matrix substract(const Matrix& m) const;
+		Matrix multiply(const Matrix& m) const;
+		Matrix multiply(Real f) const;
+		Matrix transpose() const;
 
 		// operator []
 		RealVector& operator[] (int idx) { return m_array[idx]; }
