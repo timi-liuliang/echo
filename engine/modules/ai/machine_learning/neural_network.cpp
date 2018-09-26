@@ -47,7 +47,7 @@ namespace Echo
 		i32 layerNumbr = (i32)m_layerValues.size()-1;
 		for (i32 i = 0; i < layerNumbr; i++)
 		{
-			m_layerValues[i + 1] = m_layerValues[i].multiply(m_weights[i]).add(m_bias[0]).applyFunction(m_activationFunction);
+			m_layerValues[i + 1] = m_layerValues[i].multiply(m_weights[i]).add(m_bias[i]).applyFunction(m_activationFunction);
 		}
 
 		return m_layerValues[layerNumbr];
