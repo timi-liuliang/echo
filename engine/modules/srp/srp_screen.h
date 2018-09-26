@@ -4,13 +4,16 @@
 
 namespace Echo
 {
-	class SRPScreen : public Node
+	class SRPScreen : public Object
 	{
-		ECHO_CLASS(SRPScreen, Node)
+		ECHO_SINGLETON_CLASS(SRPScreen, Object)
 
 	public:
 		SRPScreen();
 		virtual ~SRPScreen();
+
+		// instance
+		static SRPScreen* instance();
 
 	protected:
 	};

@@ -12,6 +12,13 @@ namespace Echo
 
 	}
 
+	// instance
+	SRPScreen* SRPScreen::instance()
+	{
+		static SRPScreen* inst = EchoNew(SRPScreen);
+		return inst;
+	}
+
 	void SRPScreen::bindMethods()
 	{
 	}
