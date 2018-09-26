@@ -13,8 +13,6 @@ namespace Echo
 		virtual bool doBeginRender( bool _clearColor, const Color& _backgroundColor,  bool _clearDepth, float _depthValue, bool _clearStencil, ui8 stencilValue );
 		virtual bool doEndRender();
 		virtual bool doInvalidateFrameBuffer(bool invalidateColor, bool invalidateDepth, bool invalidateStencil);
-		virtual void bindTarget_left();
-		virtual void bindTarget_right();
 		virtual void doClear(bool clear_color, const Color& color, bool clear_depth, float depth_value, bool clear_stencil, ui8 stencil_value);
 		virtual void doOnResize( ui32 _width, ui32 _height );
 		virtual void doSetCubeFace( Texture::CubeFace cf );

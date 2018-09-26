@@ -4,12 +4,6 @@
 
 namespace Echo
 {
-	#define MAX_GUI_RT_COUNT	 12
-	#define MAX_LIGHTPROBE_COUNT 50
-
-	/**
-	 * 渲染目标接口
-	 */
 	class RenderTarget
 	{
 	public:
@@ -93,10 +87,6 @@ namespace Echo
         
         bool invalidateFrameBuffer(bool invalidateColor, bool invalidateDepth, bool invalidateStencil);
 
-		// 绑定到Target的左右半边
-		virtual void bindTarget_left() = 0;
-		virtual void bindTarget_right() = 0;
-
 		// 清空
 		void clear(bool _clearColor, const Color& _backgroundColor, bool _clearDepth, float _depthValue, bool _clearStencil, ui8 _stencilValue);
 
@@ -137,7 +127,7 @@ namespace Echo
 	protected:
 		bool					m_bHasMSAA;
 		ui32					m_id;
-        PixelFormat                m_pixelFormat;
+        PixelFormat             m_pixelFormat;
 		bool					m_bHasDepth;
 		ui32					m_width;
 		ui32					m_height;

@@ -203,14 +203,6 @@ namespace Echo
 		}
 		return true;
 	}
-	void GLES2RenderTarget::bindTarget_left()
-	{
-		OGLESDebug(glViewport(0, 0, m_width / 2, m_height));
-	}
-	void GLES2RenderTarget::bindTarget_right()
-	{
-		OGLESDebug(glViewport(m_width / 2, 0, m_width / 2, m_height));
-	}
 
 	void GLES2RenderTarget::doClear(bool clear_color, const Color& color, bool clear_depth, float depth_value, bool clear_stencil, ui8 stencil_value)
 	{
