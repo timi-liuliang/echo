@@ -6,7 +6,7 @@
 
 namespace Echo
 {
-	typedef vector<Real>::type  RealVector;
+	typedef vector<double>::type  RealVector;
 
 	class Vector2
 	{

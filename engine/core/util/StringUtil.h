@@ -41,7 +41,7 @@ namespace Echo
 		String			ToString(ui64 val, Word width = 0, char fill = ' ');
 
 		String			ToString(bool val, bool bYesNo = false);
-		String			ToString(const vector<Real>::type& val);
+		String			ToString(const vector<double>::type& val);
 		String			ToString(const Vector2& val);
 		String			ToString(const vector<Vector2>::type& val);
 		String			ToString(const Vector3& val);

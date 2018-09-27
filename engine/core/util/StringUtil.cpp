@@ -443,7 +443,7 @@ namespace Echo
 		}
 	}
 
-	String StringUtil::ToString(const vector<Real>::type& val)
+	String StringUtil::ToString(const vector<double>::type& val)
 	{
 		String result;
 		for (Real element : val)

@@ -157,7 +157,7 @@ namespace Echo
 			lua_pushnil(state);
 			while (lua_next(state, row) != 0)
 			{
-				rowElement.push_back((float)lua_tonumber(state, -1));
+				rowElement.push_back(lua_tonumber(state, -1));
 				lua_pop(state, 1);
 			}
 

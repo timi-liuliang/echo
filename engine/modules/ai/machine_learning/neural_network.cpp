@@ -11,7 +11,7 @@ namespace Echo
 		, m_activationFunction(nullptr)
 		, m_activationFunctionPrime(nullptr)
 		, m_lossFunctionPrime(nullptr)
-		, m_learningRate(0.001f)
+		, m_learningRate(0.01f)
 	{
 		setActivationFunction(nn::sigmoid);
 		setActivationFunctionPrime(nn::sigmoid_prime);
@@ -125,8 +125,8 @@ namespace Echo
 					m_bias[layerIdx - 1] = Matrix(1, neuralNumber);
 					m_dJdBias[layerIdx - 1] = Matrix(1, neuralNumber);
 
-					m_weights[layerIdx - 1].applyFunction(nn::random);
-					m_bias[layerIdx - 1].applyFunction(nn::random);
+					m_weights[layerIdx - 1] = m_weights[layerIdx - 1].applyFunction(nn::random);
+					m_bias[layerIdx - 1] = m_bias[layerIdx - 1].applyFunction(nn::random);
 				}
 
 				m_isInit = true;
