@@ -12,8 +12,8 @@
 #ifndef MLPACK_CORE_DATA_LOAD_CSV_HPP
 #define MLPACK_CORE_DATA_LOAD_CSV_HPP
 
-//#include <boost/spirit/include/qi.hpp>
-//#include <boost/algorithm/string/trim.hpp>
+#include <boost/spirit/include/qi.hpp>
+#include <boost/algorithm/string/trim.hpp>
 
 #include <mlpack/core.hpp>
 #include <mlpack/core/util/log.hpp>
