@@ -94,11 +94,13 @@ public:
 	* \b Complexity: Constant.
 	*
 	* */
-	//const_reference top(void) const
-	//{
-	//	BOOST_ASSERT(!empty());
-	//	return super_t::get_value(q_.front());
-	//}
+	const value_type& top(void) const
+	{
+		value_type a;
+		return a;
+		//BOOST_ASSERT(!empty());
+		//return super_t::get_value(q_.front());
+	}
 
 	/**
 	 * \b Effects: Adds a new element to the priority queue.
@@ -110,6 +112,16 @@ public:
 	{
 		//q_.push_back(super_t::make_node(v));
 		//std::push_heap(q_.begin(), q_.end(), static_cast<super_t const &>(*this));
+	}
+
+	/**
+	 * \b Effects: Removes the top element from the priority queue.
+	*
+	* \b Complexity: Logarithmic (amortized). Linear (worst case).
+	*
+	* */
+	void pop(void)
+	{
 	}
 };
 

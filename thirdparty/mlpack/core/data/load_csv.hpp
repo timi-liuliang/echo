@@ -223,64 +223,64 @@ class LoadCSV
   void NonTransposeParse(arma::Mat<T>& inout,
                          DatasetMapper<PolicyType>& infoSet)
   {
-    using namespace boost::spirit;
+    //using namespace boost::spirit;
 
-    // Get the size of the matrix.
-    size_t rows, cols;
-    GetMatrixSize<T>(rows, cols, infoSet);
+    //// Get the size of the matrix.
+    //size_t rows, cols;
+    //GetMatrixSize<T>(rows, cols, infoSet);
 
-    // Set up output matrix.
-    inout.set_size(rows, cols);
-    size_t row = 0;
-    size_t col = 0;
+    //// Set up output matrix.
+    //inout.set_size(rows, cols);
+    //size_t row = 0;
+    //size_t col = 0;
 
-    // Reset file position.
-    std::string line;
-    inFile.clear();
-    inFile.seekg(0, std::ios::beg);
+    //// Reset file position.
+    //std::string line;
+    //inFile.clear();
+    //inFile.seekg(0, std::ios::beg);
 
-    auto setCharClass = [&](iter_type const &iter)
-    {
-      std::string str(iter.begin(), iter.end());
-      if (str == "\t")
-      {
-        str.clear();
-      }
-      boost::trim(str);
+    //auto setCharClass = [&](iter_type const &iter)
+    //{
+    //  std::string str(iter.begin(), iter.end());
+    //  if (str == "\t")
+    //  {
+    //    str.clear();
+    //  }
+    //  boost::trim(str);
 
-      inout(row, col++) = infoSet.template MapString<T>(std::move(str), row);
-    };
+    //  inout(row, col++) = infoSet.template MapString<T>(std::move(str), row);
+    //};
 
-    while (std::getline(inFile, line))
-    {
-      // Remove whitespace from either side.
-      boost::trim(line);
+    //while (std::getline(inFile, line))
+    //{
+    //  // Remove whitespace from either side.
+    //  boost::trim(line);
 
-      // Parse the numbers from a line (ex: 1,2,3,4); if the parser finds a
-      // number it will execute the setNum function.
-      const bool canParse = qi::parse(line.begin(), line.end(),
-          stringRule[setCharClass] % delimiterRule);
+    //  // Parse the numbers from a line (ex: 1,2,3,4); if the parser finds a
+    //  // number it will execute the setNum function.
+    //  const bool canParse = qi::parse(line.begin(), line.end(),
+    //      stringRule[setCharClass] % delimiterRule);
 
-      // Make sure we got the right number of rows.
-      if (col != cols)
-      {
-        std::ostringstream oss;
-        oss << "LoadCSV::NonTransposeParse(): wrong number of dimensions ("
-            << col << ") on line " << row << "; should be " << cols
-            << " dimensions.";
-        throw std::runtime_error(oss.str());
-      }
+    //  // Make sure we got the right number of rows.
+    //  if (col != cols)
+    //  {
+    //    std::ostringstream oss;
+    //    oss << "LoadCSV::NonTransposeParse(): wrong number of dimensions ("
+    //        << col << ") on line " << row << "; should be " << cols
+    //        << " dimensions.";
+    //    throw std::runtime_error(oss.str());
+    //  }
 
-      if (!canParse)
-      {
-        std::ostringstream oss;
-        oss << "LoadCSV::NonTransposeParse(): parsing error on line " << col
-            << "!";
-        throw std::runtime_error(oss.str());
-      }
+    //  if (!canParse)
+    //  {
+    //    std::ostringstream oss;
+    //    oss << "LoadCSV::NonTransposeParse(): parsing error on line " << col
+    //        << "!";
+    //    throw std::runtime_error(oss.str());
+    //  }
 
-      ++row; col = 0;
-    }
+    //  ++row; col = 0;
+    //}
   }
 
   /**
@@ -292,69 +292,69 @@ class LoadCSV
   template<typename T, typename PolicyType>
   void TransposeParse(arma::Mat<T>& inout, DatasetMapper<PolicyType>& infoSet)
   {
-    using namespace boost::spirit;
+    //using namespace boost::spirit;
 
-    // Get matrix size.  This also initializes infoSet correctly.
-    size_t rows, cols;
-    GetTransposeMatrixSize<T>(rows, cols, infoSet);
+    //// Get matrix size.  This also initializes infoSet correctly.
+    //size_t rows, cols;
+    //GetTransposeMatrixSize<T>(rows, cols, infoSet);
 
-    // Set the matrix size.
-    inout.set_size(rows, cols);
+    //// Set the matrix size.
+    //inout.set_size(rows, cols);
 
-    // Initialize auxiliary variables.
-    size_t row = 0;
-    size_t col = 0;
-    std::string line;
-    inFile.clear();
-    inFile.seekg(0, std::ios::beg);
+    //// Initialize auxiliary variables.
+    //size_t row = 0;
+    //size_t col = 0;
+    //std::string line;
+    //inFile.clear();
+    //inFile.seekg(0, std::ios::beg);
 
-    /**
-     * This is the parse rule for strings.  When we get a string we have to pass
-     * it to the DatasetMapper.
-     */
-    auto parseString = [&](iter_type const &iter)
-    {
-      // All parsed values must be mapped.
-      std::string str(iter.begin(), iter.end());
-      boost::trim(str);
+    ///**
+    // * This is the parse rule for strings.  When we get a string we have to pass
+    // * it to the DatasetMapper.
+    // */
+    //auto parseString = [&](iter_type const &iter)
+    //{
+    //  // All parsed values must be mapped.
+    //  std::string str(iter.begin(), iter.end());
+    //  boost::trim(str);
 
-      inout(row, col) = infoSet.template MapString<T>(std::move(str), row);
-      ++row;
-    };
+    //  inout(row, col) = infoSet.template MapString<T>(std::move(str), row);
+    //  ++row;
+    //};
 
-    while (std::getline(inFile, line))
-    {
-      // Remove whitespace from either side.
-      boost::trim(line);
+    //while (std::getline(inFile, line))
+    //{
+    //  // Remove whitespace from either side.
+    //  boost::trim(line);
 
-      // Reset the row we are looking at.  (Remember this is transposed.)
-      row = 0;
+    //  // Reset the row we are looking at.  (Remember this is transposed.)
+    //  row = 0;
 
-      // Now use boost::spirit to parse the characters of the line;
-      // parseString() will be called when a token is detected.
-      const bool canParse = qi::parse(line.begin(), line.end(),
-          stringRule[parseString] % delimiterRule);
+    //  // Now use boost::spirit to parse the characters of the line;
+    //  // parseString() will be called when a token is detected.
+    //  const bool canParse = qi::parse(line.begin(), line.end(),
+    //      stringRule[parseString] % delimiterRule);
 
-      // Make sure we got the right number of rows.
-      if (row != rows)
-      {
-        std::ostringstream oss;
-        oss << "LoadCSV::TransposeParse(): wrong number of dimensions (" << row
-            << ") on line " << col << "; should be " << rows << " dimensions.";
-        throw std::runtime_error(oss.str());
-      }
+    //  // Make sure we got the right number of rows.
+    //  if (row != rows)
+    //  {
+    //    std::ostringstream oss;
+    //    oss << "LoadCSV::TransposeParse(): wrong number of dimensions (" << row
+    //        << ") on line " << col << "; should be " << rows << " dimensions.";
+    //    throw std::runtime_error(oss.str());
+    //  }
 
-      if (!canParse)
-      {
-        std::ostringstream oss;
-        oss << "LoadCSV::TransposeParse(): parsing error on line " << col
-            << "!";
-        throw std::runtime_error(oss.str());
-      }
+    //  if (!canParse)
+    //  {
+    //    std::ostringstream oss;
+    //    oss << "LoadCSV::TransposeParse(): parsing error on line " << col
+    //        << "!";
+    //    throw std::runtime_error(oss.str());
+    //  }
 
-      // Increment the column index.
-      ++col;
-    }
+    //  // Increment the column index.
+    //  ++col;
+    //}
   }
 
   //! Spirit rule for parsing.

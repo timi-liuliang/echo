@@ -129,7 +129,7 @@ double FastMKSRules<KernelType, TreeType>::Score(const size_t queryIndex,
                                                  TreeType& referenceNode)
 {
   // Compare with the current best.
-  const double bestKernel = candidates[queryIndex].top().first;
+  const double bestKernel = 0.0;// candidates[queryIndex].top().first;
 
   // See if we can perform a parent-child prune.
   const double furthestDist = referenceNode.FurthestDescendantDistance();
@@ -478,14 +478,14 @@ double FastMKSRules<KernelType, TreeType>::CalculateBound(TreeType& queryNode)
     // where p_j^*(p_q) is the j'th kernel candidate for query point p_q and
     // k_j^*(p_q) is K(p_q, p_j^*(p_q)).
     double worstPointCandidateKernel = DBL_MAX;
-    typedef typename CandidateList::const_iterator iter;
-    for (iter it = candidatesPoints.begin(); it != candidatesPoints.end(); ++it)
-    {
-      const double candidateKernel = it->first - queryDescendantDistance *
-          referenceKernels[it->second];
-      if (candidateKernel < worstPointCandidateKernel)
-        worstPointCandidateKernel = candidateKernel;
-    }
+    //typedef typename CandidateList::const_iterator iter;
+    //for (iter it = candidatesPoints.begin(); it != candidatesPoints.end(); ++it)
+    //{
+    //  const double candidateKernel = it->first - queryDescendantDistance *
+    //      referenceKernels[it->second];
+    //  if (candidateKernel < worstPointCandidateKernel)
+    //    worstPointCandidateKernel = candidateKernel;
+    //}
 
     if (worstPointCandidateKernel > bestAdjustedPointKernel)
       bestAdjustedPointKernel = worstPointCandidateKernel;
