@@ -12,8 +12,8 @@
 #ifndef MLPACK_CORE_DATA_LOAD_CSV_HPP
 #define MLPACK_CORE_DATA_LOAD_CSV_HPP
 
-#include <boost/spirit/include/qi.hpp>
-#include <boost/algorithm/string/trim.hpp>
+//#include <boost/spirit/include/qi.hpp>
+//#include <boost/algorithm/string/trim.hpp>
 
 #include <mlpack/core.hpp>
 #include <mlpack/core/util/log.hpp>
@@ -358,9 +358,9 @@ class LoadCSV
   }
 
   //! Spirit rule for parsing.
-  boost::spirit::qi::rule<std::string::iterator, iter_type()> stringRule;
+  //boost::spirit::qi::rule<std::string::iterator, iter_type()> stringRule;
   //! Spirit rule for delimiters (i.e. ',' for CSVs).
-  boost::spirit::qi::rule<std::string::iterator, iter_type()> delimiterRule;
+  //boost::spirit::qi::rule<std::string::iterator, iter_type()> delimiterRule;
 
   //! Extension (type) of file.
   std::string extension;

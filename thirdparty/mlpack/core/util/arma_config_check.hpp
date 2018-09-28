@@ -16,7 +16,7 @@
 #ifndef MLPACK_CORE_UTIL_ARMA_CONFIG_CHECK_HPP
 #define MLPACK_CORE_UTIL_ARMA_CONFIG_CHECK_HPP
 
-#include "arma_config.hpp"
+//#include "arma_config.hpp"
 
 #ifdef ARMA_64BIT_WORD
   #ifdef MLPACK_ARMA_NO_64BIT_WORD
