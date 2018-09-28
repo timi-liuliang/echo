@@ -17,6 +17,8 @@
 #ifndef BOOST_CONFIG_HPP
 #define BOOST_CONFIG_HPP
 
+// get config suffix code:
+#include <boost/config/detail/suffix.hpp>
 
 #ifdef BOOST_HAS_PRAGMA_ONCE
 #pragma once

@@ -38,7 +38,7 @@ void LoadARFF(const std::string& filename,
   {
     // Read the next line, then strip whitespace from either side.
     std::getline(ifs, line, '\n');
-    boost::trim(line);
+    //boost::trim(line);
     ++headerLines;
 
     // Is the first character a comment, or is the line empty?

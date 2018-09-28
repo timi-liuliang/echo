@@ -99,8 +99,8 @@ CosineTree::CosineTree(const arma::mat& dataset,
   {
     // Pop node from queue with highest projection error.
     CosineTree* currentNode;
-    currentNode = treeQueue.top();
-    treeQueue.pop();
+    //currentNode = treeQueue.top();
+    //treeQueue.pop();
 
     // If the priority is 0, we can't improve anything, and we can assume that
     // we've done the best we can.
@@ -167,18 +167,18 @@ void CosineTree::ModifiedGramSchmidt(CosineNodeQueue& treeQueue,
   newBasisVector = centroid;
 
   // Variables for iterating throught the priority queue.
-  CosineTree *currentNode;
-  CosineNodeQueue::const_iterator i = treeQueue.begin();
+  //CosineTree *currentNode;
+  //CosineNodeQueue::const_iterator i = treeQueue.begin();
 
-  // For every vector in the current basis, remove its projection from the
-  // centroid.
-  for ( ; i != treeQueue.end(); i++)
-  {
-    currentNode = *i;
+  //// For every vector in the current basis, remove its projection from the
+  //// centroid.
+  //for ( ; i != treeQueue.end(); i++)
+  //{
+  //  currentNode = *i;
 
-    double projection = arma::dot(currentNode->BasisVector(), centroid);
-    newBasisVector -= projection * currentNode->BasisVector();
-  }
+  //  double projection = arma::dot(currentNode->BasisVector(), centroid);
+  //  newBasisVector -= projection * currentNode->BasisVector();
+  //}
 
   // If additional basis vector is passed, take it into account.
   if (addBasisVector)
@@ -227,18 +227,18 @@ double CosineTree::MonteCarloError(CosineTree* node,
     arma::vec projection;
     projection.zeros(projectionSize);
 
-    CosineTree *currentNode;
-    CosineNodeQueue::const_iterator j = treeQueue.begin();
+    //CosineTree *currentNode;
+    //CosineNodeQueue::const_iterator j = treeQueue.begin();
 
     size_t k = 0;
-    // Compute the projection of the sampled vector onto the existing subspace.
-    for ( ; j != treeQueue.end(); j++, k++)
-    {
-      currentNode = *j;
+    //// Compute the projection of the sampled vector onto the existing subspace.
+    //for ( ; j != treeQueue.end(); j++, k++)
+    //{
+    //  currentNode = *j;
 
-      projection(k) = arma::dot(dataset.col(sampledIndices[i]),
-                                currentNode->BasisVector());
-    }
+    //  projection(k) = arma::dot(dataset.col(sampledIndices[i]),
+    //                            currentNode->BasisVector());
+    //}
     // If two additional vectors are passed, take their projections.
     if (addBasisVector1 && addBasisVector2)
     {
@@ -268,8 +268,8 @@ double CosineTree::MonteCarloError(CosineTree* node,
 
   // Fit a normal distribution using the calculated statistics, and calculate a
   // lower bound on the magnitudes for the passed 'delta' parameter.
-  boost::math::normal dist(mu, sigma);
-  double lowerBound = boost::math::quantile(dist, delta);
+  //boost::math::normal dist(mu, sigma);
+  double lowerBound = 0.0;//boost::math::quantile(dist, delta);
 
   // Upper bound on the subspace reconstruction error.
   node->L2Error(node->FrobNormSquared() - lowerBound);
@@ -283,16 +283,16 @@ void CosineTree::ConstructBasis(CosineNodeQueue& treeQueue)
   basis.zeros(dataset.n_rows, treeQueue.size());
 
   // Variables for iterating through the priority queue.
-  CosineTree *currentNode;
-  CosineNodeQueue::const_iterator i = treeQueue.begin();
+  //CosineTree *currentNode;
+  //CosineNodeQueue::const_iterator i = treeQueue.begin();
 
-  // Transfer basis vectors from the queue to the basis matrix.
-  size_t j = 0;
-  for ( ; i != treeQueue.end(); i++, j++)
-  {
-    currentNode = *i;
-    basis.col(j) = currentNode->BasisVector();
-  }
+  //// Transfer basis vectors from the queue to the basis matrix.
+  //size_t j = 0;
+  //for ( ; i != treeQueue.end(); i++, j++)
+  //{
+  //  currentNode = *i;
+  //  basis.col(j) = currentNode->BasisVector();
+  //}
 }
 
 void CosineTree::CosineNodeSplit()

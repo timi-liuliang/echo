@@ -104,8 +104,8 @@ void Timers::PrintTimer(const string& timerName)
   seconds totalDurationSec = duration_cast<seconds>(totalDuration);
   microseconds totalDurationMicroSec =
       duration_cast<microseconds>(totalDuration % seconds(1));
-  Log::Info << totalDurationSec.count() << "." << setw(6)
-      << setfill('0') << totalDurationMicroSec.count() << "s";
+  //Log::Info << totalDurationSec.count() << "." << setw(6)
+  //    << setfill('0') << totalDurationMicroSec.count() << "s";
 
   // Also output convenient day/hr/min/sec.
   // The following line is a custom duration for a day.
@@ -147,8 +147,8 @@ void Timers::PrintTimer(const string& timerName)
     {
       if (output)
         Log::Info << ", ";
-      Log::Info << s.count() << "." << setw(1)
-          << (totalDurationMicroSec.count() / 100000) << " secs";
+      //Log::Info << s.count() << "." << setw(1)
+      //    << (totalDurationMicroSec.count() / 100000) << " secs";
     }
 
     Log::Info << ")";

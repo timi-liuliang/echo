@@ -131,7 +131,7 @@ bool Load(const std::string& filename,
         const std::streampos pos = stream.tellg();
         std::string line;
         std::getline(stream, line, '\n');
-        boost::trim(line);
+        //boost::trim(line);
 
         // Reset stream position.
         stream.seekg(pos);

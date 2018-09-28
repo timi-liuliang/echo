@@ -11,7 +11,7 @@
  */
 #include "gamma_distribution.hpp"
 // This will include digamma and trigamma.
-#include <mlpack/core/boost_backport/boost_backport_math.hpp>
+//#include <mlpack/core/boost_backport/boost_backport_math.hpp>
 
 using namespace mlpack;
 using namespace mlpack::distribution;
@@ -101,8 +101,8 @@ void GammaDistribution::Train(const arma::vec& logMeanxVec,
                               const double tol)
 {
   // Use boost's definitions of digamma and tgamma, and std::log.
-  using boost::math::digamma;
-  using boost::math::trigamma;
+  //using boost::math::digamma;
+  //using boost::math::trigamma;
   using std::log;
 
   // Number of dimensions of gamma distribution.
@@ -137,8 +137,8 @@ void GammaDistribution::Train(const arma::vec& logMeanxVec,
       aOld = aEst;
 
       // Calculate new value for alpha.
-      double nominator = meanLogx - logMeanx + log(aEst) - digamma(aEst);
-      double denominator = pow(aEst, 2) * (1 / aEst - trigamma(aEst));
+	  double nominator;// = meanLogx - logMeanx + log(aEst) - digamma(aEst);
+	  double denominator;// = pow(aEst, 2) * (1 / aEst - trigamma(aEst));
 
       // Protect against division by 0.
       if (denominator == 0)
