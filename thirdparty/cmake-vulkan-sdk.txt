@@ -9,4 +9,13 @@ IF(ECHO_PLATFORM_WIN32)
 		BUILD_COMMAND ""
 		INSTALL_COMMAND ""
 	)
+ELSEIF(ECHO_PLATFORM_OSX)
+	ExternalProject_Add(
+		vulkan
+		PREFIX ${ECHO_ROOT_PATH}/thirdparty/vulkan/macosx
+		URL https://sdk.lunarg.com/sdk/download/1.1.85.0/mac/vulkansdk-macos-1.1.85.0.tar.gz?u=
+		CONFIGURE_COMMAND ""
+		BUILD_COMMAND ""
+		INSTALL_COMMAND ""
+	)
 ENDIF()
