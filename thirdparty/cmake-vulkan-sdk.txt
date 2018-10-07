@@ -1,0 +1,12 @@
+INCLUDE(ExternalProject)
+
+IF(ECHO_PLATFORM_WIN32)
+	ExternalProject_Add(
+		vulkan
+		PREFIX ${ECHO_ROOT_PATH}/thirdparty/vulkan/windows
+		URL https://github.com/blab-liuliang/echo-thirdparty/blob/master/vulkan/windows.tar.gz.001?raw=true
+		CONFIGURE_COMMAND ""
+		BUILD_COMMAND ""
+		INSTALL_COMMAND ""
+	)
+ENDIF()

@@ -14,7 +14,7 @@ OPTION(FREEIMAGE_SUPPORT_OPENEXR "FreeImage Support OpenEXR Format" FALSE)
 OPTION(FREEIMAGE_SUPPORT_LIBRAW "FreeImage Support LibRaw Format" FALSE)
 OPTION(FREEIMAGE_SUPPORT_WEBP "FreeImage Support WebP Format" FALSE)
 OPTION(ECHO_SUPPORT_SPINE "2D Skeleton Spine Support" TRUE)
-OPTION(MLPACK "2D Skeleton Spine Support" FALSE)
+OPTION(MLPACK "mlpack Support" FALSE)
 
 IF(UNIX)
 	IF (APPLE)
@@ -295,9 +295,15 @@ MACRO(APPEND_FILES src_files rescure append_dir)
 ENDMACRO(APPEND_FILES)
 
 
+# config vulkan
+OPTION(VULKAN "is support vulkan" FALSE)
+IF(VULKAN)
+	INCLUDE(thirdparty/cmake-vulkan-sdk.txt)
+ENDIF(VULKAN)
+
+
 # Add sub directories
 ADD_SUBDIRECTORY(engine)
-ADD_SUBDIRECTORY(thirdparty/vulkan)
 ADD_SUBDIRECTORY(thirdparty/pugixml)
 ADD_SUBDIRECTORY(thirdparty/physx)
 ADD_SUBDIRECTORY(thirdparty/spine)
