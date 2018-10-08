@@ -39,6 +39,9 @@ namespace Studio
 		// 获取当前结点
 		Echo::Node* getCurrentSelectNode();
 
+		// get node in the item
+		Echo::Node* getNode(QTreeWidgetItem* item);
+
 		// 获取当前编辑对象
 		Echo::Object* getCurrentEditObject();
 

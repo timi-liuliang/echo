@@ -126,7 +126,7 @@ namespace Studio
 		QTreeWidgetItem* nodeItem = new QTreeWidgetItem(parent);
 		nodeItem->setText(0, nodeName.c_str());
 		nodeItem->setIcon(0, QIcon(iconPath.empty() ? qIconPath.c_str() : (rootPath+iconPath).c_str()));
-		nodeItem->setData(0, Qt::UserRole, QVariant::fromValue((void*)node));
+		nodeItem->setData(0, Qt::UserRole, QVariant(node->getId()));
 		nodeItem->setFlags( nodeItem->flags() | Qt::ItemIsEditable);
 
 		// child scene
@@ -150,18 +150,20 @@ namespace Studio
 		}
 	}
 
+	// get node in the item
+	Echo::Node* NodeTreePanel::getNode(QTreeWidgetItem* item)
+	{
+		Echo::i32 nodeId = item->data(0, Qt::UserRole).toInt();
+		return (Echo::Node*)Echo::Node::getById(nodeId);
+	}
+
 	Echo::Node* NodeTreePanel::getCurrentSelectNode()
 	{
 		if (m_nodeTreeWidget->invisibleRootItem()->childCount() == 0)
 			return nullptr;
 
 		QTreeWidgetItem* item = m_nodeTreeWidget->currentItem() ? m_nodeTreeWidget->currentItem() : m_nodeTreeWidget->invisibleRootItem()->child(0);
-		if (item)
-		{
-			return (Echo::Node*)item->data(0, Qt::UserRole).value<void*>();
-		}
-
-		return nullptr;
+		return  item  ? getNode(item) : nullptr;
 	}
 
 	// update item display
@@ -173,7 +175,7 @@ namespace Studio
 		QTreeWidgetItem* curItem = item ? item : (m_nodeTreeWidget->currentItem() ? m_nodeTreeWidget->currentItem() : m_nodeTreeWidget->invisibleRootItem()->child(0));
 		if (curItem)
 		{
-			Echo::Node* node = (Echo::Node*)curItem->data(0, Qt::UserRole).value<void*>();
+			Echo::Node* node = getNode(curItem);
 			if (node)
 			{
 				// no effect now!!! do it when we have time
@@ -201,7 +203,7 @@ namespace Studio
 		else
 		{
 			QTreeWidgetItem* parentItem = m_nodeTreeWidget->currentItem() ? m_nodeTreeWidget->currentItem() : m_nodeTreeWidget->invisibleRootItem()->child(0);
-			Echo::Node* parentNode = (Echo::Node*)parentItem->data(0, Qt::UserRole).value<void*>();
+			Echo::Node* parentNode = getNode(parentItem);
 			if (parentNode)
 			{
 				node->setParent(parentNode);
@@ -222,7 +224,7 @@ namespace Studio
 		QTreeWidgetItem* item = m_nodeTreeWidget->itemAt(point);
 		if (item)
 		{
-			Echo::Node* node = (Echo::Node*)item->data(0, Qt::UserRole).value<void*>();
+			Echo::Node* node = getNode(item);
 			if (node->getPath().empty())
 			{
 				m_nodeTreeWidget->setCurrentItem(item);
@@ -279,7 +281,7 @@ namespace Studio
 	// remove item
 	void NodeTreePanel::removeItem(QTreeWidgetItem* item)
 	{
-		Echo::Node* node = (Echo::Node*)item->data(0, Qt::UserRole).value<void*>();
+		Echo::Node* node = getNode(item);
 		node->remove();
 		node->queueFree();
 
@@ -333,7 +335,7 @@ namespace Studio
 		QTreeWidgetItem* item = m_nodeTreeWidget->currentItem();
 		if (item)
 		{
-			Echo::Node* node = (Echo::Node*)item->data(0, Qt::UserRole).value<void*>();
+			Echo::Node* node = getNode(item);
 			if (node)
 			{
 				Echo::Node* duplicateNode = node->duplicate(true);
@@ -352,7 +354,7 @@ namespace Studio
 			Echo::String nodeType = NewNodeDialog::getSelectedNodeType();
 			if (!nodeType.empty())
 			{
-				Echo::Node* curNode = (Echo::Node*)item->data(0, Qt::UserRole).value<void*>();
+				Echo::Node* curNode = getNode(item);
 				Echo::Node* newNode = Echo::Class::create<Echo::Node*>(nodeType.c_str());
 				Echo::Node::NodeArray childrenNodes = curNode->getChildren();
 				for (Echo::Node* child : childrenNodes)
@@ -379,7 +381,7 @@ namespace Studio
 		QTreeWidgetItem* item = m_nodeTreeWidget->currentItem();
 		if (item)
 		{
-			Echo::Node* node = (Echo::Node*)item->data(0, Qt::UserRole).value<void*>();
+			Echo::Node* node = getNode(item);
 			Echo::String savePath = PathChooseDialog::getExistingPathName(this, ".scene", "Save").toStdString().c_str();
 			if (node && !savePath.empty() && !Echo::PathUtil::IsDir(savePath))
 			{
@@ -421,7 +423,7 @@ namespace Studio
 		QTreeWidgetItem* item = m_nodeTreeWidget->currentItem();
 		if (item)
 		{
-			Echo::Node* node = (Echo::Node*)item->data(0, Qt::UserRole).value<void*>();
+			Echo::Node* node = getNode(item);
 			node->setPath("");
 			for (Echo::ui32 idx =0; idx < node->getChildNum(); idx++)
 			{
@@ -437,7 +439,7 @@ namespace Studio
 	{
 		if (item)
 		{
-			Echo::Node* node = (Echo::Node*)item->data(0, Qt::UserRole).value<void*>();
+			Echo::Node* node = getNode(item);
 
 			// remove item from ui
 			QTreeWidgetItem* parentItem = item->parent() ? item->parent() : m_nodeTreeWidget->invisibleRootItem();
@@ -459,7 +461,7 @@ namespace Studio
 	{
 		if (item)
 		{
-			Echo::Node* node = (Echo::Node*)item->data(0, Qt::UserRole).value<void*>();
+			Echo::Node* node = getNode(item);
 			if (!node)
 				return;
 
@@ -595,7 +597,7 @@ namespace Studio
 	{
 		if (column == 1)
 		{
-			Echo::Node* node = (Echo::Node*)item->data(0, Qt::UserRole).value<void*>();
+			Echo::Node* node = getNode(item);
 			if (node)
 			{
 				const Echo::String& path = node->getPath();
