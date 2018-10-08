@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QTreeWidget>
+#include <QDropEvent>
 
 namespace QT_UI
 {
@@ -10,6 +11,10 @@ namespace QT_UI
 
 	public:
 		QDragDropTreeWidget(QWidget* parent);
+
+	signals:
+		// drop signal
+		void itemChildrenChanged(QTreeWidgetItem* item);
 
 	protected:
 		// override drop event

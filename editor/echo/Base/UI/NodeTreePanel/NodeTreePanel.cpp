@@ -36,6 +36,7 @@ namespace Studio
 		QObject::connect(m_nodeTreeWidget, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)), this, SLOT(onSelectNode()));
 		QObject::connect(m_nodeTreeWidget, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, SLOT(onChangedNodeName(QTreeWidgetItem*)));
 		QObject::connect(m_nodeTreeWidget, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showMenu(const QPoint&)));
+		QObject::connect(m_nodeTreeWidget, SIGNAL(itemChildrenChanged(QTreeWidgetItem*)), this, SLOT(onItemChildrenChanged(QTreeWidgetItem*)));
 
 		QObject::connect(m_actionChangeType, SIGNAL(triggered()), this, SLOT(onChangeType()));
 		QObject::connect(m_actionDuplicateNode, SIGNAL(triggered()), this, SLOT(onDuplicateNode()));
@@ -282,14 +283,14 @@ namespace Studio
 	void NodeTreePanel::removeItem(QTreeWidgetItem* item)
 	{
 		Echo::Node* node = getNode(item);
-		node->remove();
-		node->queueFree();
-
 		QTreeWidgetItem* parentItem = item->parent();
 		if (parentItem)
 			parentItem->removeChild(item);
 		else
 			m_nodeTreeWidget->invisibleRootItem()->removeChild(item);
+
+		node->remove();
+		node->queueFree();
 	}
 
 	// on trigger delete nodes
@@ -452,6 +453,23 @@ namespace Studio
 
 				// remove this
 				parentItem->removeChild(item);
+			}
+		}
+	}
+
+	// node tree drag drop operator
+	void NodeTreePanel::onItemChildrenChanged(QTreeWidgetItem* item)
+	{
+		Echo::Node* parent = getNode(item);
+		if (parent)
+		{
+			for (int idx = 0; idx < item->childCount(); idx++)
+			{
+				Echo::Node* childNode = getNode(item->child(idx));
+				if (childNode)
+				{
+					parent->insertChild(idx, childNode);
+				}
 			}
 		}
 	}

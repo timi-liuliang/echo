@@ -14,12 +14,12 @@ namespace Echo
 
 	void AIModule::registerTypes()
 	{
-		Class::registerType<Neuron>();
-		Class::registerType<NeuralLayer>();
-		Class::registerType<NeuralNetwork>();
+		//Class::registerType<Neuron>();
+		//Class::registerType<NeuralLayer>();
+		//Class::registerType<NeuralNetwork>();
 
-		REGISTER_OBJECT_EDITOR(Neuron, NeuronEditor)
-		REGISTER_OBJECT_EDITOR(NeuralLayer, NeuralLayerEditor)
-		REGISTER_OBJECT_EDITOR(NeuralNetwork, NeuralNetworkEditor)
+		//REGISTER_OBJECT_EDITOR(Neuron, NeuronEditor)
+		//REGISTER_OBJECT_EDITOR(NeuralLayer, NeuralLayerEditor)
+		//REGISTER_OBJECT_EDITOR(NeuralNetwork, NeuralNetworkEditor)
 	}
 }

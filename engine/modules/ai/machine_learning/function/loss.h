@@ -18,7 +18,7 @@ namespace nn
 			{
 				for (int j = 0; j < output.getWidth(); j++)
 				{
-					float error = desiredOutput[i][j] - output[i][j];
+					double error = desiredOutput[i][j] - output[i][j];
 					squaredError[i][j] = error * error;
 				}
 			}
@@ -40,7 +40,7 @@ namespace nn
 			{
 				for (int j = 0; j < output.getWidth(); j++)
 				{
-					float error = desiredOutput[i][j] - output[i][j];
+					double error = desiredOutput[i][j] - output[i][j];
 					squaredError[i][j] = 2.f * error;
 				}
 			}

@@ -234,6 +234,12 @@ namespace Echo
 		return nullptr;
 	}
 
+	ui32 Node::getChildIdx(Node* node)
+	{
+		ptrdiff_t pos = std::find(m_children.begin(), m_children.end(), node) - m_children.begin();
+		return (pos > m_children.size()) ? -1 : pos;
+	}
+
 	// remove from tree
 	void Node::remove()
 	{
@@ -252,6 +258,15 @@ namespace Echo
 		}
 
 		return false;
+	}
+
+	void Node::insertChild(ui32 idx, Node* node)
+	{
+		if (idx <= m_children.size())
+		{
+			node->remove();
+			m_children.insert(m_children.begin() + idx, node);
+		}
 	}
 
 	// remove child
