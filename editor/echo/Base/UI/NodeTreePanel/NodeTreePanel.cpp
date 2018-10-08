@@ -36,7 +36,7 @@ namespace Studio
 		QObject::connect(m_nodeTreeWidget, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)), this, SLOT(onSelectNode()));
 		QObject::connect(m_nodeTreeWidget, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, SLOT(onChangedNodeName(QTreeWidgetItem*)));
 		QObject::connect(m_nodeTreeWidget, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showMenu(const QPoint&)));
-		QObject::connect(m_nodeTreeWidget, SIGNAL(itemChildrenChanged(QTreeWidgetItem*)), this, SLOT(onItemChildrenChanged(QTreeWidgetItem*)));
+		QObject::connect(m_nodeTreeWidget, SIGNAL(itemPositionChanged(QTreeWidgetItem*)), this, SLOT(onItemPositionChanged(QTreeWidgetItem*)));
 
 		QObject::connect(m_actionChangeType, SIGNAL(triggered()), this, SLOT(onChangeType()));
 		QObject::connect(m_actionDuplicateNode, SIGNAL(triggered()), this, SLOT(onDuplicateNode()));
@@ -458,14 +458,15 @@ namespace Studio
 	}
 
 	// node tree drag drop operator
-	void NodeTreePanel::onItemChildrenChanged(QTreeWidgetItem* item)
+	void NodeTreePanel::onItemPositionChanged(QTreeWidgetItem* item)
 	{
-		Echo::Node* parent = getNode(item);
+		QTreeWidgetItem* itemParent = item->parent();
+		Echo::Node* parent = getNode(itemParent);
 		if (parent)
 		{
-			for (int idx = 0; idx < item->childCount(); idx++)
+			for (int idx = 0; idx < itemParent->childCount(); idx++)
 			{
-				Echo::Node* childNode = getNode(item->child(idx));
+				Echo::Node* childNode = getNode(itemParent->child(idx));
 				if (childNode)
 				{
 					parent->insertChild(idx, childNode);

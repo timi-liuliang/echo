@@ -92,7 +92,7 @@ namespace Studio
 		void refreshNodeDisplay(QTreeWidgetItem* item);
 
 		// node tree drag drop operator
-		void onItemChildrenChanged(QTreeWidgetItem* item);
+		void onItemPositionChanged(QTreeWidgetItem* item);
 
 	public slots:
 		// ‰÷»æ

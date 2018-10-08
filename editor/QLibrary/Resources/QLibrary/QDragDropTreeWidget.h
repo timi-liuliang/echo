@@ -14,9 +14,12 @@ namespace QT_UI
 
 	signals:
 		// drop signal
-		void itemChildrenChanged(QTreeWidgetItem* item);
+		void itemPositionChanged(QTreeWidgetItem* item);
 
 	protected:
+		// drag move event
+		virtual void dragMoveEvent(QDragMoveEvent* event) override;
+
 		// override drop event
 		virtual void dropEvent(QDropEvent *event) override;
 	};

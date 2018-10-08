@@ -9,19 +9,20 @@ namespace QT_UI
 
 	}
 
+	void QDragDropTreeWidget::dragMoveEvent(QDragMoveEvent* event)
+	{
+		QTreeWidget::dragMoveEvent(event);
+	}
+
 	// override drop event
 	void QDragDropTreeWidget::dropEvent(QDropEvent *event)
 	{
-		QModelIndex index = indexAt(event->pos());
-		if (index.isValid())
+		QTreeWidget* source = qobject_cast<QTreeWidget*>( event->source());
+		QTreeWidgetItem* currentItem = source->currentItem();
+		if (currentItem)
 		{
-			QTreeWidgetItem* item = itemFromIndex(index);
-			if (item)
-			{
-				emit itemChildrenChanged(item);
-
-				QTreeWidget::dropEvent(event);
-			}
+			QTreeWidget::dropEvent(event);
+			emit itemPositionChanged(currentItem);
 		}
 	}
 }
