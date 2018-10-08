@@ -174,13 +174,15 @@ namespace Studio
 		if (curItem)
 		{
 			Echo::Node* node = (Echo::Node*)curItem->data(0, Qt::UserRole).value<void*>();
+			if (node)
+			{
+				// no effect now!!! do it when we have time
+				// curItem->setBackgroundColor(0, node->isActive() ? QColor(255, 0, 0) : QColor(0, 255, 0));
 
-			// no effect now!!! do it when we have time
-			//curItem->setBackgroundColor(0, node->isActive() ? QColor(255, 0, 0) : QColor(0, 255, 0));
-
-			QFont font = curItem->font(0);
-			font.setItalic(!node->isEnable());
-			curItem->setFont(0, font);
+				QFont font = curItem->font(0);
+				font.setItalic(!node->isEnable());
+				curItem->setFont(0, font);
+			}
 		}
 	}
 

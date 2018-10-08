@@ -59,7 +59,7 @@
          </layout>
         </item>
         <item>
-         <widget class="QTreeWidget" name="m_nodeTreeWidget">
+         <widget class="QT_UI::QDragDropTreeWidget" name="m_nodeTreeWidget">
           <property name="contextMenuPolicy">
            <enum>Qt::CustomContextMenu</enum>
           </property>
@@ -67,7 +67,10 @@
            <set>QAbstractItemView::EditKeyPressed</set>
           </property>
           <property name="dragEnabled">
-           <bool>false</bool>
+           <bool>true</bool>
+          </property>
+          <property name="dragDropMode">
+           <enum>QAbstractItemView::InternalMove</enum>
           </property>
           <property name="selectionMode">
            <enum>QAbstractItemView::ExtendedSelection</enum>
@@ -240,6 +243,13 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QT_UI::QDragDropTreeWidget</class>
+   <extends>QTreeWidget</extends>
+   <header>qdragdroptreewidget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../../../Resource/App.qrc"/>
  </resources>
