@@ -385,12 +385,20 @@ namespace Echo
 #	endif
 	}
 
-	String StringUtil::ToString(Real val, Word precision, Word width, char fill)
+	String StringUtil::ToString(float val, Word precision, Word width, char fill)
 	{
 		char buffer[64] = {}; 
 		internal::dtoa_internal(val, buffer, precision); 
 
 		return String(buffer); 
+	}
+
+	String StringUtil::ToString(double val, Word precision, Word width, char fill)
+	{
+		char buffer[64] = {};
+		internal::dtoa_internal(val, buffer, precision);
+
+		return String(buffer);
 	}
 
 	String StringUtil::ToString(i32 val, Word width, char fill)
@@ -446,7 +454,7 @@ namespace Echo
 	String StringUtil::ToString(const vector<double>::type& val)
 	{
 		String result;
-		for (Real element : val)
+		for (double element : val)
 			result += Format("%s ", MorphNumericString(ToString(element)).c_str());
 
 		return result;

@@ -104,28 +104,6 @@ namespace Echo
 	{
 	}
 
-	void Node::setParent(Node* parent)
-	{
-		if(m_parent)
-			m_parent->removeChild(this);
-
-		m_parent = parent;
-
-		// make sure the name is unique in current layer
-		int    id = 1;
-		String name = getName();
-		while (parent->isChildExist(getName()))
-		{
-			id++;
-			setName(StringUtil::Format( "%s%d", name.c_str(), id));
-		}
-
-		if(m_parent)
-			m_parent->m_children.push_back(this);
-
-		needUpdate();
-	}
-
 	void Node::rotate(const Quaternion& rot)
 	{
 		// Normalise quaternion to avoid drift
@@ -234,10 +212,43 @@ namespace Echo
 		return nullptr;
 	}
 
-	ui32 Node::getChildIdx(Node* node)
+	i32 Node::getChildIdx(Node* node)
 	{
-		ptrdiff_t pos = std::find(m_children.begin(), m_children.end(), node) - m_children.begin();
-		return (pos > m_children.size()) ? -1 : pos;
+		i32 pos = std::find(m_children.begin(), m_children.end(), node) - m_children.begin();
+		return pos > (i32)m_children.size() ? -1 : pos;
+	}
+
+	void Node::setParent(Node* parent)
+	{
+		if (parent)
+		{
+			parent->insertChild(parent->getChildNum(), this);
+		}
+		else
+		{
+			this->remove();
+			m_parent = nullptr;
+			needUpdate();
+		}
+	}
+
+	void Node::insertChild(ui32 idx, Node* node)
+	{
+		node->remove();
+
+		// make sure the name is unique in current layer
+		int    id = 1;
+		String name = node->getName();
+		while (isChildExist(node->getName()))
+		{
+			id++;
+			node->setName(StringUtil::Format("%s%d", name.c_str(), id));
+		}
+
+		node->m_parent = this;
+		m_children.insert(m_children.begin() + idx, node);
+
+		needUpdate();
 	}
 
 	// remove from tree
@@ -258,15 +269,6 @@ namespace Echo
 		}
 
 		return false;
-	}
-
-	void Node::insertChild(ui32 idx, Node* node)
-	{
-		if (idx <= m_children.size())
-		{
-			node->remove();
-			m_children.insert(m_children.begin() + idx, node);
-		}
 	}
 
 	// remove child

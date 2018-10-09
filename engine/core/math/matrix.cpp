@@ -47,7 +47,7 @@ namespace Echo
 			{
 				for (int j = 0; j < width; j++)
 				{
-					Real w = 0.f;
+					double w = 0.f;
 					for (int h = 0; h < getWidth(); h++)
 					{
 						w += m_array[i][h] + m[h][j];

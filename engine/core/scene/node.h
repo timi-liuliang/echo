@@ -62,7 +62,7 @@ namespace Echo
 		ui32 getChildNum() const { return m_children.size(); }
 		Node* getChild(ui32 idx);
 		Node* getChild(const char* name);
-		ui32  getChildIdx(Node* node);
+		i32   getChildIdx(Node* node);
 		const NodeArray& getChildren() { return m_children; }
 
 		// remove from tree

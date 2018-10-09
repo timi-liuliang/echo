@@ -117,6 +117,7 @@ namespace Studio
 
 	void NodeTreePanel::addNode(Echo::Node* node, QTreeWidgetItem* parent, bool recursive)
 	{
+		Echo::ui32   nodeIdx = node->getParent() ? node->getParent()->getChildIdx(node) : 0;
 		Echo::String rootPath = AStudio::instance()->getRootPath();
 		Echo::String nodeName = node->getName();
 		Echo::String nodeClassName = node->getClassName();
@@ -127,11 +128,12 @@ namespace Studio
 		Echo::StringUtil::LowerCase(lowerCaseNodeName);
 		Echo::String qIconPath = Echo::StringUtil::Format(":/icon/node/%s.png", lowerCaseNodeName.c_str());
 
-		QTreeWidgetItem* nodeItem = new QTreeWidgetItem(parent);
+		QTreeWidgetItem* nodeItem = new QTreeWidgetItem();
 		nodeItem->setText(0, nodeName.c_str());
 		nodeItem->setIcon(0, QIcon(iconPath.empty() ? qIconPath.c_str() : (rootPath+iconPath).c_str()));
 		nodeItem->setData(0, Qt::UserRole, QVariant(node->getId()));
 		nodeItem->setFlags( nodeItem->flags() | Qt::ItemIsEditable);
+		parent->insertChild(nodeIdx, nodeItem);
 
 		// child scene
 		if (!node->getPath().empty())
@@ -369,7 +371,18 @@ namespace Studio
 					}
 				}
 
-				newNode->setParent(curNode->getParent());
+				// set new node parent
+				if (curNode->getParent())
+				{
+					Echo::ui32 curNodeIdx = curNode->getParent()->getChildIdx(curNode);
+					curNode->getParent()->insertChild(curNodeIdx, newNode);
+				}
+				else
+				{
+					newNode->setParent( nullptr);
+				}
+
+				// set new node name
 				newNode->setName(curNode->getName());
 
 				// remember parent item before delete this item
