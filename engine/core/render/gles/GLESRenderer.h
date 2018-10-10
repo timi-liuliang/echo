@@ -1,7 +1,7 @@
 #pragma once
 
 #include "interface/Renderer.h"
-#include "GLES2RenderState.h"
+#include "GLESRenderState.h"
 
 namespace Echo
 {

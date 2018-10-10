@@ -4,7 +4,6 @@
 
 namespace Echo
 {
-	// Œ∆¿Ì∏Ò Ω”≥…‰
 	PixelFormat pvrformatMapping( ui64& pixelFormat)
 	{
 		switch( pixelFormat )

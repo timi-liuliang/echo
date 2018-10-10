@@ -1,8 +1,8 @@
 #pragma once
 
 #include "interface/FrameBuffer.h"
-#include "GLES2RenderTargetView.h"
-#include "GLES2DepthStencilView.h"
+#include "GLESRenderTargetView.h"
+#include "GLESDepthStencilView.h"
 
 namespace Echo
 {

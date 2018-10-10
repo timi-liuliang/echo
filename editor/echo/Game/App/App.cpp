@@ -1,6 +1,6 @@
 #include "App.h"
 #include "Log.h"
-#include <engine/core/render/gles/GLES2.h>
+#include <engine/core/render/gles/GLES.h>
 
 namespace Game
 {

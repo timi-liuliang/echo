@@ -1,15 +1,15 @@
-#include "GLES2RenderBase.h"
-#include "GLES2Renderer.h"
-#include "GLES2Mapping.h"
-#include "GLES2RenderTarget.h"
-#include "GLES2FrameBuffer.h"
-#include "GLES2Texture.h"
-#include "GLES2ShaderProgram.h"
-#include "GLES2Renderable.h"
+#include "GLESRenderBase.h"
+#include "GLESRenderer.h"
+#include "GLESMapping.h"
+#include "GLESRenderTarget.h"
+#include "GLESFrameBuffer.h"
+#include "GLESTexture.h"
+#include "GLESShaderProgram.h"
+#include "GLESRenderable.h"
 #include <engine/core/log/Log.h>
 #include <engine/core/util/Exception.h>
 #include "engine/core/render/interface/mesh/Mesh.h"
-#include "GLES2GPUBuffer.h"
+#include "GLESGPUBuffer.h"
 #include "interface/Viewport.h"
 
 namespace Echo

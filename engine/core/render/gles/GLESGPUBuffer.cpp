@@ -1,7 +1,7 @@
-#include "GLES2RenderBase.h"
-#include "GLES2GPUBuffer.h"
-#include "GLES2Mapping.h"
-#include "GLES2Renderer.h"
+#include "GLESRenderBase.h"
+#include "GLESGPUBuffer.h"
+#include "GLESMapping.h"
+#include "GLESRenderer.h"
 #include <engine/core/Util/Exception.h>
 #include <engine/core/log/Log.h>
 

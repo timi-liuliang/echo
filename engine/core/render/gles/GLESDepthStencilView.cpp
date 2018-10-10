@@ -1,7 +1,7 @@
-#include "GLES2RenderBase.h"
-#include "GLES2Renderer.h"
-#include "GLES2DepthStencilView.h"
-#include "GLES2Mapping.h"
+#include "GLESRenderBase.h"
+#include "GLESRenderer.h"
+#include "GLESDepthStencilView.h"
+#include "GLESMapping.h"
 #include <engine/core/util/Exception.h>
 #include "interface/PixelFormat.h"
 

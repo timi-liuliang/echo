@@ -1,13 +1,13 @@
-#include "GLES2RenderBase.h"
-#include "GLES2Renderer.h"
-#include "GLES2Renderable.h"
-#include "GLES2ShaderProgram.h"
-#include "GLES2Mapping.h"
-#include "GLES2GPUBuffer.h"
+#include "GLESRenderBase.h"
+#include "GLESRenderer.h"
+#include "GLESRenderable.h"
+#include "GLESShaderProgram.h"
+#include "GLESMapping.h"
+#include "GLESGPUBuffer.h"
 #include <engine/core/util/AssertX.h>
 #include <engine/core/util/Exception.h>
 #include "interface/PixelFormat.h"
-#include "GLES2Mapping.h"
+#include "GLESMapping.h"
 
 
 namespace Echo

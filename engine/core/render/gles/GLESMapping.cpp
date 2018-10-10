@@ -1,5 +1,5 @@
-#include "GLES2RenderBase.h"
-#include "GLES2Mapping.h"
+#include "GLESRenderBase.h"
+#include "GLESMapping.h"
 #include "interface/GPUBuffer.h"
 #include "interface/PixelFormat.h"
 

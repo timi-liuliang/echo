@@ -4,8 +4,8 @@
 #include "interface/ShaderProgram.h"
 #include "interface/Renderable.h"
 #include "interface/mesh/Mesh.h"
-#include "GLES2Shader.h"
-#include "GLES2Renderable.h"
+#include "GLESShader.h"
+#include "GLESRenderable.h"
 
 namespace Echo
 {

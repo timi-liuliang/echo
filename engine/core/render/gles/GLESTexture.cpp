@@ -3,10 +3,10 @@
 #include "interface/PixelFormat.h"
 #include "interface/Image.h"
 #include "interface/TextureLoader.h"
-#include "GLES2RenderBase.h"
-#include "GLES2Renderer.h"
-#include "GLES2Texture.h"
-#include "GLES2Mapping.h"
+#include "GLESRenderBase.h"
+#include "GLESRenderer.h"
+#include "GLESTexture.h"
+#include "GLESMapping.h"
 #include <iostream>
 
 namespace Echo

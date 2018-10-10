@@ -17,7 +17,7 @@
 #include "engine/core/render/interface/RenderTargetManager.h"
 #include "module.h"
 #include "engine/core/render/interface/renderstage/RenderStage.h"
-#include "engine/core/render/gles/GLES2.h"
+#include "engine/core/render/gles/GLES.h"
 #include "engine/core/render/interface/ShaderProgramRes.h"
 #include "engine/core/render/interface/TextureCube.h"
 #include "engine/core/gizmos/Gizmos.h"

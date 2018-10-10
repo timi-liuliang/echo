@@ -103,7 +103,6 @@ namespace Echo
 	// ÏñËØÎ»Êý
 	ui32 pvrBitsPerPixel( ui64 pixelFormat );
 
-
 	// DDS
 	struct DDSPixelFormat
 	{

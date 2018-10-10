@@ -4,7 +4,7 @@
 #include <interface/ShaderProgram.h>
 #include "engine/core/render/interface/GPUBuffer.h"
 #include "engine/core/render/interface/mesh/Mesh.h"
-#include "GLES2RenderState.h"
+#include "GLESRenderState.h"
 
 namespace Echo
 {

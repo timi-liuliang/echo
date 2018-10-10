@@ -1,9 +1,9 @@
 #include "engine/core/Util/PathUtil.h"
 #include "interface/Renderer.h"
-#include "GLES2RenderBase.h"
-#include "GLES2Mapping.h"
-#include "GLES2RenderTarget.h"
-#include "GLES2Texture.h"
+#include "GLESRenderBase.h"
+#include "GLESMapping.h"
+#include "GLESRenderTarget.h"
+#include "GLESTexture.h"
 
 namespace Echo
 {

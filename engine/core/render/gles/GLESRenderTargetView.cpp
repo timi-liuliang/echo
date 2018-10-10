@@ -1,7 +1,7 @@
-#include "GLES2RenderBase.h"
-#include "GLES2Renderer.h"
-#include "GLES2RenderTargetView.h"
-#include "GLES2Mapping.h"
+#include "GLESRenderBase.h"
+#include "GLESRenderer.h"
+#include "GLESRenderTargetView.h"
+#include "GLESMapping.h"
 #include "engine/core/Util/Exception.h"
 
 namespace Echo

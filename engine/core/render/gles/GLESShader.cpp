@@ -1,5 +1,5 @@
-#include "GLES2RenderBase.h"
-#include "GLES2Shader.h"
+#include "GLESRenderBase.h"
+#include "GLESShader.h"
 #include <engine/core/util/Exception.h>
 #include "engine/core/io/DataStream.h"
 

@@ -13,8 +13,8 @@
 #include <string>
 #include <Psapi.h>
 #include "studio.h"
-#include "gles/GLES2RenderBase.h"
-#include "gles/GLES2Renderer.h"
+#include "gles/GLESRenderBase.h"
+#include "gles/GLESRenderer.h"
 #include "interface/RenderState.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/util/TimeProfiler.h>
