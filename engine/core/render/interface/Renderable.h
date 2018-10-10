@@ -27,7 +27,7 @@ namespace Echo
 	class Renderable
 	{
 		friend class Renderer;
-		typedef array<TextureSampler, MAX_TEXTURE_SAMPLER> MaxTextureArray;
+		typedef array<Texture*, MAX_TEXTURE_SAMPLER> MaxTextureArray;
 	public:
 		// 着色器参数
 		struct ShaderParam
@@ -39,10 +39,10 @@ namespace Echo
 		};
 
 	public:
-		// 获取唯一标识符
+		// identifier
 		ui32 getIdentifier() const { return m_identifier; }
 
-		// 构建数据
+		// create method
 		static Renderable* create(Mesh* mesh, Material* matInst, Render* node);
 
 		// release
@@ -65,11 +65,10 @@ namespace Echo
 		void modifyShaderParam(ui32 physics, ShaderParamType type, void* param, size_t num=1);
 
 		// 设置纹理
-		void setTexture( ui32 stage, Texture* texture, const SamplerState* state);
-		void setTexture( ui32 stage, ui32 globalTexture, const SamplerState* state);
+		void setTexture( ui32 stage, Texture* texture);
 
 		// 获取纹理
-		Texture* getTexture(ui32 stage) const { return m_textures[stage].m_texture; }
+		Texture* getTexture(ui32 stage) const { return m_textures[stage]; }
 
 		// 执行渲染
 		virtual void render();

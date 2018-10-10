@@ -1,7 +1,6 @@
 #pragma once
 
 #include "engine/core/math/color.h"
-#include "Texture.h"
 
 namespace Echo
 {

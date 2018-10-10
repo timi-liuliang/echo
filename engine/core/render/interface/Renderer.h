@@ -74,13 +74,13 @@ namespace Echo
 		// 设置混合状态
 		virtual void setBlendState(BlendState* pState);
 
-		// 向纹理槽中设置纹理
-		virtual void setTexture(ui32 index, const TextureSampler& sampler,bool needUpdate = false) = 0;
+		// set texture
+		virtual void setTexture(ui32 index, Texture* texture, bool needUpdate = false) = 0;
 
-		// 是否为全屏模式
+		// is full screen
 		virtual bool isFullscreen() const;
 
-		// 获取配置
+		// get render config
 		const Config& getCfg() const { return m_cfg; }
 
 		virtual bool				isVSync() const;
@@ -94,10 +94,8 @@ namespace Echo
 		virtual BlendState*			getBlendState() const;
 		//virtual SamplerState*		getSamplerState(ui32 stage) const;
 
-		// 调用裁切指令
+		// scissor command
 		virtual void scissor(ui32 left, ui32 top, ui32 width, ui32 height)=0;
-
-		// 结束裁切
 		virtual void endScissor()=0;
 
 		// draw

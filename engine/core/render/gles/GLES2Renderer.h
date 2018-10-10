@@ -52,8 +52,8 @@ namespace Echo
 		void scissor(ui32 left, ui32 top, ui32 width, ui32 height);
 		void endScissor();
 
-		// 向纹理槽中设置纹理
-		void setTexture(ui32 index, const TextureSampler& sampler,bool needUpdate = false);
+		// set texture to the slot
+		virtual void setTexture(ui32 index, Texture* texture,bool needUpdate = false) override;
 
 		// 执行渲染
 		virtual void draw(Renderable* renderable) override;
@@ -102,8 +102,8 @@ namespace Echo
 		// 渲染到屏幕
 		virtual bool doPresent();
 
-		// 设置指定槽纹理
-		void bindTexture(GLenum slot, GLenum target, GLES2Texture* texture, const GLES2SamplerState* samplerState, const GLES2SamplerState* pPreSamplerState = NULL,bool needReset = false);
+		// bind texture to slot
+		void bindTexture(GLenum slot, GLenum target, GLES2Texture* texture, bool needReset = false);
 
 		bool initializeImpl(const Config& config);
 		void destroyImpl();

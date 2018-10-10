@@ -4,11 +4,11 @@
 #include <engine/core/util/Buffer.h>
 #include <engine/core/math/Rect.h>
 #include <engine/core/io/DataStream.h>
+#include "RenderState.h"
 #include "PixelFormat.h"
 
 namespace Echo
 {
-	class SamplerState;
 	class Texture : public Res
 	{
 		ECHO_RES(Texture, Res, ".png|.jpeg|.bmp|.tga|.jpg", nullptr, Texture::load);
@@ -97,12 +97,10 @@ namespace Echo
 
 		// 更新纹理数据
 		virtual bool updateSubTex2D(ui32 level, const Rect& rect, void* pData, ui32 size) { return false; }
-
-		// 设置采样状态
-		void setCurSamplerState(const SamplerState* pSs) { m_samplerState = pSs; }
 		
-		// 获取采样状态
-		const SamplerState* getCurSamplerState() const { return m_samplerState; }
+		// sampler state
+		void setSamplerState( const SamplerState::SamplerDesc& desc);
+		const SamplerState* getSamplerState() const { return m_samplerState; }
 
 		// 重新创建纹理
 		virtual bool reCreate2D(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff);
@@ -157,27 +155,27 @@ namespace Echo
 		static Res* load(const ResourcePath& path);
 
 	public:
-		TexType			m_texType;
-		PixelFormat		m_pixFmt;
-		bool			m_bCompressed;
-		ui32			m_compressType;
-		Dword			m_usage;
-		ui32			m_width;
-		ui32			m_height;
-		ui32			m_depth;
-		ui32			m_numMipmaps;
-		ui32			m_pixelsSize;
-		MemoryReader*	m_memeryData;
-		ui32			m_faceNum;
-		ui32			m_endian;
-		ui32			m_bitsPerPixel;
-		ui32			m_blockSize;
-		ui32			m_xDimension;
-		ui32			m_yDimension;
-		ui32			m_zDimension;
-		ui32			m_headerSize;
-		ui32			m_uploadedSize;		// its actually uploaded size. uploadSize + headerSize + identifier size = m_size
-		ui32			m_surfaceNum;
+		TexType				m_texType;
+		PixelFormat			m_pixFmt;
+		bool				m_bCompressed;
+		ui32				m_compressType;
+		Dword				m_usage;
+		ui32				m_width;
+		ui32				m_height;
+		ui32				m_depth;
+		ui32				m_numMipmaps;
+		ui32				m_pixelsSize;
+		MemoryReader*		m_memeryData;
+		ui32				m_faceNum;
+		ui32				m_endian;
+		ui32				m_bitsPerPixel;
+		ui32				m_blockSize;
+		ui32				m_xDimension;
+		ui32				m_yDimension;
+		ui32				m_zDimension;
+		ui32				m_headerSize;
+		ui32				m_uploadedSize;		// its actually uploaded size. uploadSize + headerSize + identifier size = m_size
+		ui32				m_surfaceNum;
 		const SamplerState*	m_samplerState;
 
 public:
@@ -186,23 +184,4 @@ public:
 		String			m_surfaceFilename[CF_End];
 	};
 	typedef ResRef<Texture> TexturePtr;
-
-	// texture smapler
-	struct TextureSampler
-	{
-		Texture*			m_texture;
-		ui32				m_globalTexture = -1;	// global idx
-		const SamplerState*	m_samplerState;
-
-		// 构造函数
-		TextureSampler()
-			: m_texture(NULL),m_globalTexture(-1), m_samplerState(NULL)
-		{}
-
-		// 构造函数
-		TextureSampler(Texture* texture, const SamplerState* samplerState);
-
-		// get texture
-		Texture* getTexture() const;
-	};
 }

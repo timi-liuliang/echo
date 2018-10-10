@@ -67,11 +67,10 @@ namespace Echo
 		const Tiled& curRenderTiled() const { return m_curRenderTiled; }
 
 		// 获取渲染目标绑定纹理
-		Texture* getBindTexture() { return m_bindTexture.m_texture; }
-		const TextureSampler& getBindTextureSampler() { return m_bindTexture; }
+		Texture* getBindTexture() { return m_bindTexture; }
+
 		// 获取渲染目标深度图
-		Texture* getDepthTexture() { return m_depthTexture.m_texture; }
-		const TextureSampler& getDepthTextureSampler() { return m_depthTexture; }
+		Texture* getDepthTexture() { return m_depthTexture; }
 
 		// 是否为立方体贴图
 		bool isCubemap() const { return m_isCubemap; }
@@ -132,8 +131,8 @@ namespace Echo
 		ui32					m_width;
 		ui32					m_height;
 		ui32					m_clearFlags;
-		TextureSampler			m_bindTexture;
-		TextureSampler			m_depthTexture;
+		Texture*				m_bindTexture;
+		Texture*				m_depthTexture;
 		ui32					m_RenderFrameCount;
 		bool					m_bLogicResolution;
 		bool					m_isCubemap;

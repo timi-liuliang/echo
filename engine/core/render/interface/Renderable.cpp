@@ -21,6 +21,7 @@ namespace Echo
 		, m_identifier(identifier)
 	{
 		m_shaderProgram = shader;
+		m_textures.assign(nullptr);
 	}
 
 	Renderable::~Renderable()
@@ -67,12 +68,11 @@ namespace Echo
 				if (!globalTexture)
 				{
 					Texture* texture = matInst->getTexture(slotIdx);
-					const SamplerState* sampleState = Renderer::instance()->getSamplerState(SamplerState::SamplerDesc());
-					renderable->setTexture(slotIdx, texture, sampleState);
+					renderable->setTexture(slotIdx, texture);
 				}
 				else
 				{
-					renderable->setTexture(slotIdx, *globalTexture, Renderer::instance()->getSamplerState(SamplerState::SamplerDesc()));
+					renderable->setTexture(slotIdx, Texture::getGlobal(*globalTexture));
 				}
 
 				renderable->setShaderParam(shaderProgram->getParamPhysicsIndex(uniform.m_name), uniform.m_type, slotIdxPtr, uniform.m_count);
@@ -134,17 +134,9 @@ namespace Echo
 		m_shaderParams[modifyIndex].ParamsLength = num;
 	}
 
-	void Renderable::setTexture(ui32 stage, Texture* texture, const SamplerState* state)
+	void Renderable::setTexture(ui32 stage, Texture* texture)
 	{
-		m_textures[stage].m_texture = texture;
-		m_textures[stage].m_samplerState = state;
-	}
-
-	// use global texture
-	void Renderable::setTexture(ui32 stage, ui32 globalTexture, const SamplerState* state)
-	{
-		m_textures[stage].m_globalTexture = globalTexture;
-		m_textures[stage].m_samplerState = state;
+		m_textures[stage] = texture;
 	}
 
 	void Renderable::bindShaderParams()
@@ -176,11 +168,9 @@ namespace Echo
 	{
 		for (size_t i = 0; i < MAX_TEXTURE_SAMPLER; ++i)
 		{
-			Texture* texture = m_textures[i].getTexture();
+			Texture* texture = m_textures[i];
 			if (texture)
-			{
-				Renderer::instance()->setTexture(i, m_textures[i]);
-			}
+				Renderer::instance()->setTexture(i, texture);
 		}
 	}
 

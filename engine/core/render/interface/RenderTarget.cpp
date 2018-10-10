@@ -5,7 +5,6 @@
 
 namespace Echo
 {
-
 	void RenderTarget::reusageDepthTarget(RenderTarget* depthTarget)
 	{
 		m_depthTarget = depthTarget;
@@ -14,21 +13,15 @@ namespace Echo
 	Echo::ui32 RenderTarget::getMemorySize()
 	{
 		ui32 memorySize = 0;
-		Texture* pColorTex = m_bindTexture.m_texture;
-		if (pColorTex)
-		{
-			memorySize += PixelUtil::CalcLevelSize(pColorTex->getWidth(), pColorTex->getHeight(), pColorTex->getDepth(), 0, pColorTex->getPixelFormat());
-		}
+		if (m_bindTexture)
+			memorySize += PixelUtil::CalcLevelSize(m_bindTexture->getWidth(), m_bindTexture->getHeight(), m_bindTexture->getDepth(), 0, m_bindTexture->getPixelFormat());
+
 		if (m_bHasDepth)
-		{
-			Texture* pDepthTex = m_depthTexture.m_texture;
-			memorySize += PixelUtil::CalcLevelSize(pDepthTex->getWidth(), pDepthTex->getHeight(), pDepthTex->getDepth(), 0, pDepthTex->getPixelFormat());
-		}
+			memorySize += PixelUtil::CalcLevelSize(m_depthTexture->getWidth(), m_depthTexture->getHeight(), m_depthTexture->getDepth(), 0, m_depthTexture->getPixelFormat());
 
 		return memorySize;
 	}
 
-	// 构造函数
 	RenderTarget::RenderTarget( ui32 _id, ui32 _width, ui32 _height, PixelFormat _format, const Options& option )
 		: m_id( _id )
 		, m_pixelFormat( _format )
@@ -47,20 +40,18 @@ namespace Echo
 	{
 	}
 
-	// 析构函数
 	RenderTarget::~RenderTarget()
 	{
-		m_bindTexture.m_texture = NULL;
-		m_depthTexture.m_texture = NULL;
+		m_bindTexture = NULL;
+		m_depthTexture = NULL;
 		m_depthTarget = nullptr;
 	}
 
-	// 创建
 	bool RenderTarget::create()
 	{
-		EchoAssert(m_bindTexture.m_texture);
+		EchoAssert(m_bindTexture);
 
-		Texture* texture = m_bindTexture.m_texture;
+		Texture* texture = m_bindTexture;
 		texture->m_width = m_width;
 		texture->m_height = m_height;
 		texture->m_depth = 1;
@@ -81,8 +72,6 @@ namespace Echo
 		}
 	}
 
-
-	// 设置为当前渲染目标
 	bool RenderTarget::beginRender(bool _clearColor, const Color& _backgroundColor, bool _clearDepth, float _depthValue, bool _clearStencil, ui8 _stencilValue)
 	{
 		//针对rgba16f不支持的情况下,对_backgroundColor做hdr2ldr处理
@@ -106,7 +95,6 @@ namespace Echo
 		return doBeginRender(_clearColor, newClearColor, _clearDepth, _depthValue, _clearStencil, _stencilValue);
 	}
 
-	// 结束渲染，将要切换为另外的渲染目标
 	bool RenderTarget::endRender()
 	{
 		return doEndRender();
@@ -117,7 +105,6 @@ namespace Echo
 		return doInvalidateFrameBuffer(invalidateColor, invalidateDepth, invalidateStencil);
 	}
 
-	// 清空
 	void RenderTarget::clear(bool _clearColor, const Color& _backgroundColor, bool _clearDepth, float _depthValue, bool _clearStencil, ui8 _stencilValue)
 	{
 		return doClear(_clearColor, _backgroundColor, _clearDepth, _depthValue, _clearStencil, _stencilValue);

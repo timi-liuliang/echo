@@ -18,10 +18,10 @@ namespace Echo
 		desc.addrWMode = SamplerState::AM_CLAMP;
 		desc.mipFilter = SamplerState::FO_NONE;
 
-		m_bindTexture.m_texture = Renderer::instance()->createTexture("rt_" + StringUtil::ToString(_id));
-		m_bindTexture.m_samplerState = Renderer::instance()->getSamplerState(desc);
-		m_depthTexture.m_texture = Renderer::instance()->createTexture(("rtDEPTH_") + StringUtil::ToString(_id));
-		m_depthTexture.m_samplerState = Renderer::instance()->getSamplerState(desc);
+		m_bindTexture = Renderer::instance()->createTexture("rt_" + StringUtil::ToString(_id));
+		m_bindTexture->setSamplerState(desc);
+		m_depthTexture = Renderer::instance()->createTexture(("rtDEPTH_") + StringUtil::ToString(_id));
+		m_depthTexture->setSamplerState(desc);
 	} 
 
 	GLES2RenderTarget::~GLES2RenderTarget()
@@ -36,13 +36,13 @@ namespace Echo
 			OGLESDebug(glDeleteRenderbuffers(1, &m_rbo));
 		}
 
-		m_bindTexture.m_texture->subRefCount();
-		m_depthTexture.m_texture->subRefCount();
+		m_bindTexture->subRefCount();
+		m_depthTexture->subRefCount();
 	}
 
 	bool GLES2RenderTarget::doCreate()
 	{
-		GLES2Texture* texture = dynamic_cast<GLES2Texture*>(m_bindTexture.m_texture);
+		GLES2Texture* texture = dynamic_cast<GLES2Texture*>(m_bindTexture);
 		EchoAssert(texture);
 
 		OGLESDebug(glGenTextures(1, &texture->m_hTexture));
@@ -56,23 +56,19 @@ namespace Echo
 		texture->m_height = m_height;
 		texture->m_pixFmt = m_pixelFormat;
 
-		const SamplerState* sampleState = m_bindTexture.m_samplerState;
+		const SamplerState* sampleState = m_bindTexture->getSamplerState();
 		EchoAssert(sampleState);
 		sampleState->active(NULL);
 
 		if( m_bHasDepth )
 		{
-			GLES2Texture* depthTexture = dynamic_cast<GLES2Texture*>(m_depthTexture.m_texture);
+			GLES2Texture* depthTexture = dynamic_cast<GLES2Texture*>(m_depthTexture);
 			EchoAssert(depthTexture);
 
 			// 将深度缓冲区映射到纹理上(这里应该分情况讨论，rbo效率更高，在不需要depth tex时应该优先使用		
 			OGLESDebug(glGenTextures(1, &depthTexture->m_hTexture));
 			OGLESDebug(glBindTexture(GL_TEXTURE_2D, depthTexture->m_hTexture));
-
-
-			OGLESDebug(glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, m_width, m_height, 0, 
-				GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, NULL));
-
+			OGLESDebug(glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, m_width, m_height, 0,  GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, NULL));
 			OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
 			OGLESDebug(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture->m_hTexture, 0));
 
@@ -80,7 +76,7 @@ namespace Echo
 			depthTexture->m_height = m_height;
 			depthTexture->m_pixFmt = m_pixelFormat;
 
-			const SamplerState* depthSampleState = m_depthTexture.m_samplerState;
+			const SamplerState* depthSampleState = m_depthTexture->getSamplerState();
 			EchoAssert(depthSampleState);
 			depthSampleState->active(NULL);
 		}
@@ -91,7 +87,7 @@ namespace Echo
 			OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
 			OGLESDebug(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture->m_hTexture, 0));
 
-			const SamplerState* depthSampleState = m_depthTexture.m_samplerState;
+			const SamplerState* depthSampleState = m_depthTexture->getSamplerState();
 			EchoAssert(depthSampleState);
 			depthSampleState->active(NULL);
 		}
@@ -111,7 +107,7 @@ namespace Echo
 
 	bool GLES2RenderTarget::doCreateCubemap()
 	{
-		GLES2Texture* texture = dynamic_cast<GLES2Texture*>(m_bindTexture.m_texture);
+		GLES2Texture* texture = dynamic_cast<GLES2Texture*>(m_bindTexture);
 		EchoAssert(texture);
 
 		OGLESDebug(glGenTextures(1, &texture->m_hTexture));
@@ -125,7 +121,7 @@ namespace Echo
 		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
 		OGLESDebug(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X, texture->m_hTexture, 0));
 
-		const SamplerState* sampleState = m_bindTexture.m_samplerState;
+		const SamplerState* sampleState = m_bindTexture->getSamplerState();
 		EchoAssert(sampleState);
 		sampleState->active(NULL);
 
@@ -260,13 +256,13 @@ namespace Echo
 				m_rbo = 0;
 			}
 
-			EchoAssert(m_bindTexture.m_texture);
-			m_bindTexture.m_texture->subRefCount();
-			m_bindTexture.m_texture = Renderer::instance()->createTexture("rt_" + StringUtil::ToString(m_id));
+			EchoAssert(m_bindTexture);
+			m_bindTexture->subRefCount();
+			m_bindTexture = Renderer::instance()->createTexture("rt_" + StringUtil::ToString(m_id));
 
-			EchoAssert(m_depthTexture.m_texture);
-			m_depthTexture.m_texture->subRefCount();
-			m_depthTexture.m_texture = Renderer::instance()->createTexture("rtDEPTH_" + StringUtil::ToString(m_id));
+			EchoAssert(m_depthTexture);
+			m_depthTexture->subRefCount();
+			m_depthTexture = Renderer::instance()->createTexture("rtDEPTH_" + StringUtil::ToString(m_id));
 
 			doCreate();
 		}
@@ -303,7 +299,7 @@ namespace Echo
 			EchoAssert( GL_TEXTURE_CUBE_MAP_POSITIVE_X+cf == GL_TEXTURE_CUBE_MAP_NEGATIVE_Z );
 		}
 
-		GLES2Texture* texture = ECHO_DOWN_CAST<GLES2Texture*>(m_bindTexture.m_texture);
+		GLES2Texture* texture = ECHO_DOWN_CAST<GLES2Texture*>(m_bindTexture);
 
 		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
 		OGLESDebug(glBindTexture(GL_TEXTURE_CUBE_MAP, texture->m_hTexture));

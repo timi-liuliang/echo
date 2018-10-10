@@ -130,6 +130,12 @@ namespace Echo
 		return true;
 	}
 
+	// sampler state
+	void Texture::setSamplerState(const SamplerState::SamplerDesc& desc)
+	{
+		m_samplerState = Renderer::instance()->getSamplerState(desc);
+	}
+
 	size_t Texture::calculateSize() const
 	{
 		// need repaird
@@ -579,24 +585,5 @@ namespace Echo
 		}
 
 		return false;
-	}
-
-	TextureSampler::TextureSampler(Texture* texture, const SamplerState* samplerState)
-		: m_texture(texture)
-	{
-		m_samplerState = samplerState;
-	}
-
-	// get texture
-	Texture* TextureSampler::getTexture() const
-	{
-		if (m_globalTexture == -1)
-		{
-			return m_texture;
-		}
-		else
-		{
-			return Texture::getGlobal(m_globalTexture);
-		}
 	}
 }

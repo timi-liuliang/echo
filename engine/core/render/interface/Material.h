@@ -3,6 +3,7 @@
 #include "engine/core/render/interface/ShaderProgram.h"
 #include "engine/core/render/interface/RenderState.h"
 #include "engine/core/resource/Res.h"
+#include "Texture.h"
 
 namespace Echo
 {

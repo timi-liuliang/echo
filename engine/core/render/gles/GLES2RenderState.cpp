@@ -523,7 +523,6 @@ namespace Echo
 	{
 	}
 
-	// ¼¤»î
 	void GLES2SamplerState::active(const SamplerState* pre) const
 	{
 		const SamplerDesc* prev_desc = nullptr;

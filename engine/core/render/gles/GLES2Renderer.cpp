@@ -194,55 +194,31 @@ namespace Echo
 		OGLESDebug(glDisable(GL_SCISSOR_TEST));
 	}
 
-	void GLES2Renderer::setTexture(ui32 index, const TextureSampler& sampler, bool needUpdate)
+	void GLES2Renderer::setTexture(ui32 index, Texture* texture, bool needUpdate)
 	{
-		Texture* texture = sampler.getTexture();
 		if (texture)
 		{
-			GLES2Texture* pES2Texture = NULL;
 			try
 			{
-				pES2Texture = ECHO_DOWN_CAST<GLES2Texture*>(texture);
+				GLES2Texture* esTexture = ECHO_DOWN_CAST<GLES2Texture*>(texture);
+				if (esTexture && esTexture->loadToGPU())
+				{
+					GLenum glTarget = GLES2Mapping::MapTextureType(esTexture->getType());
+					bindTexture(index, glTarget, esTexture, needUpdate);
+				}
 			}
 			catch (...)
 			{
 				EchoLogError("GLES2Renderer::setTexture failed");
 			}
-
-			if (pES2Texture && pES2Texture->loadToGPU())
-			{
-
-				GLenum glTarget = GLES2Mapping::MapTextureType(pES2Texture->getType());
-
-				const GLES2SamplerState* pNewSamplerState = ECHO_DOWN_CAST<const GLES2SamplerState*>(sampler.m_samplerState);
-				const GLES2SamplerState* pCurSamplerState = NULL;
-				const SamplerState* pSamplerState = pES2Texture->getCurSamplerState();
-				if (pSamplerState)
-				{
-					pCurSamplerState = ECHO_DOWN_CAST<const GLES2SamplerState*>(pSamplerState);
-				}
-
-				EchoAssert(pNewSamplerState);
-
-				if (pCurSamplerState == pNewSamplerState)
-				{
-					pNewSamplerState = NULL;
-				}
-				else
-				{
-					pES2Texture->setCurSamplerState(pNewSamplerState);
-				}
-
-				bindTexture(index, glTarget, pES2Texture, pNewSamplerState, pCurSamplerState, needUpdate);
-			}
 		}
 		else
 		{
-			bindTexture(index, GL_TEXTURE_2D, NULL, NULL, NULL, false);
+			bindTexture(index, GL_TEXTURE_2D, NULL, false);
 		}
 	}
 
-	void GLES2Renderer::bindTexture(GLenum slot, GLenum target, GLES2Texture* texture, const GLES2SamplerState* samplerState, const GLES2SamplerState* pPreSamplerState, bool needReset)
+	void GLES2Renderer::bindTexture(GLenum slot, GLenum target, GLES2Texture* texture, bool needReset)
 	{
 		TextureSlotInfo& slotInfo = m_preTextures[slot];
 //		if (m_dirtyTexSlot || slotInfo.m_target != target || slotInfo.m_texture != texture || needReset)
@@ -252,12 +228,6 @@ namespace Echo
 			OGLESDebug(glBindTexture(target, texture->m_hTexture));
 			slotInfo.m_target = target;
 			slotInfo.m_texture = texture;
-		}
-
-		// ÉèÖÃ²ÉÑù×´Ì¬
-		if (samplerState)
-		{
-			samplerState->active(pPreSamplerState);
 		}
 	}
 
