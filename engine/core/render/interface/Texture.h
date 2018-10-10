@@ -15,10 +15,8 @@ namespace Echo
 
 		friend class Renderer;
 		friend class RenderTarget;
-		typedef vector<Buffer>::type		TexArray;
 
 	public:
-		// 纹理类型
 		enum TexType
 		{
 			TT_1D,
@@ -27,7 +25,6 @@ namespace Echo
 			TT_CUBE,
 		};
 
-		// 立方体贴图面
 		enum CubeFace
 		{
 			CF_Positive_X,
@@ -39,7 +36,6 @@ namespace Echo
 			CF_End
 		};
 
-		// Usage
 		enum TexUsage
 		{
 			TU_CPU_READ			= 0x00000001,
@@ -53,17 +49,9 @@ namespace Echo
 			TU_DYNAMIC			= TU_GPU_READ | TU_CPU_WRITE | TU_GPU_MIPMAP,
 		};
 
-		// 压缩类型
 		enum CompressType
 		{
-			CompressType_ETC1 = 0,
-			CompressType_ETCA,
-			CompressType_PVR,
-			CompressType_S3TC,
-			CompressType_ATITC,
-			CompressType_KTX,
-			CompressType_JPGA,
-			CompressType_Unknown
+			CompressType_Unknown = 0,
 		};
 
 		static const ui32	MAX_MINMAPS = 16;
@@ -141,14 +129,8 @@ namespace Echo
 
 	protected:
 		bool _data_parser();
-		bool _parser_pvr();
-		bool _parser_etc_aa_ktx();
-		bool _parser_dds();
-		bool _parser_ktx();
 		bool _parser_common();
-		bool _data_parser_cubemap_from_files();
 		bool _upload_common();
-		bool _upload_pvr();
 
 	protected:
 		// static load
@@ -177,11 +159,6 @@ namespace Echo
 		ui32				m_uploadedSize;		// its actually uploaded size. uploadSize + headerSize + identifier size = m_size
 		ui32				m_surfaceNum;
 		const SamplerState*	m_samplerState;
-
-public:
-		bool			m_isCubeMap;
-		i32				m_firstTextureSize;
-		String			m_surfaceFilename[CF_End];
 	};
 	typedef ResRef<Texture> TexturePtr;
 }

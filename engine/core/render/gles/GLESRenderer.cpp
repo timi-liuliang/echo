@@ -200,7 +200,7 @@ namespace Echo
 		{
 			try
 			{
-				GLES2Texture* esTexture = ECHO_DOWN_CAST<GLES2Texture*>(texture);
+				GLESTexture2D* esTexture = ECHO_DOWN_CAST<GLESTexture2D*>(texture);
 				if (esTexture && esTexture->loadToGPU())
 				{
 					GLenum glTarget = GLES2Mapping::MapTextureType(esTexture->getType());
@@ -218,7 +218,7 @@ namespace Echo
 		}
 	}
 
-	void GLES2Renderer::bindTexture(GLenum slot, GLenum target, GLES2Texture* texture, bool needReset)
+	void GLES2Renderer::bindTexture(GLenum slot, GLenum target, GLESTexture2D* texture, bool needReset)
 	{
 		TextureSlotInfo& slotInfo = m_preTextures[slot];
 //		if (m_dirtyTexSlot || slotInfo.m_target != target || slotInfo.m_texture != texture || needReset)
@@ -352,12 +352,12 @@ namespace Echo
 
 	Texture* GLES2Renderer::createTexture(const String& name)
 	{
-		return EchoNew(GLES2Texture(name));
+		return EchoNew(GLESTexture2D(name));
 	}
 
 	Texture* GLES2Renderer::createTexture2D(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff)
 	{
-		return EchoNew(GLES2Texture(Texture::TT_2D, pixFmt, usage, width, height, 1, numMipmaps, buff));
+		return EchoNew(GLESTexture2D(Texture::TT_2D, pixFmt, usage, width, height, 1, numMipmaps, buff));
 	}
 
 	ShaderProgram* GLES2Renderer::createShaderProgram(ShaderProgramRes* material)
@@ -547,9 +547,7 @@ namespace Echo
 		// 重置纹理槽信息
 		for (size_t i = 0; i < m_preTextures.size(); i++)
 			m_preTextures[i].reset();
-#ifdef ECHO_RENDER_THREAD
-		TRenderTask<GLES2RenderTaskPresent>::CreateTask();
-#else
+
 #ifdef ECHO_PLATFORM_WINDOWS
 		if (glDiscardFramebufferEXT)
 		{
@@ -570,8 +568,6 @@ namespace Echo
 		}
 #elif defined(ECHO_PLATFORM_MAC_IOS)
 		PresentRenderBuffer();
-#endif
-
 #endif
 
 		return true;

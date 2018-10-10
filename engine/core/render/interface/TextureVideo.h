@@ -4,13 +4,13 @@
 
 namespace Echo
 {
-	class TextureCube : public Texture
+	class TextureVideo : public Texture
 	{
-		ECHO_RES(TextureCube, Res, ".cubetex", Res::create<TextureCube>, Res::load)
+		ECHO_RES(TextureVideo, Res, ".mp4", Res::create<TextureVideo>, Res::load)
 
 	public:
-		TextureCube();
-		virtual ~TextureCube();
+		TextureVideo();
+		virtual ~TextureVideo();
 
 	private:
 		ResourcePath	m_cubeDiffuseTextureNames[6];

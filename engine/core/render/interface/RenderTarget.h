@@ -120,7 +120,6 @@ namespace Echo
         virtual bool doInvalidateFrameBuffer(bool invalidateColor, bool invalidateDepth, bool invalidateStencil) = 0;
 		virtual void doClear(bool clear_color, const Color& color, bool clear_depth, float depth_value, bool clear_stencil, ui8 stencil_value) = 0;
 		virtual void doOnResize( ui32 _width, ui32 _height ) = 0;
-		virtual void doSetCubeFace( Texture::CubeFace cf ) = 0;
 		virtual bool doSaveTo( const char* file ) = 0;
 
 	protected:
@@ -136,7 +135,6 @@ namespace Echo
 		ui32					m_RenderFrameCount;
 		bool					m_bLogicResolution;
 		bool					m_isCubemap;
-		Texture::CubeFace		m_curCubeface;
 		Tiled					m_curRenderTiled;
 		bool					m_tiledRender;
 		bool					m_handlerOnsize;

@@ -5,19 +5,19 @@
 #include "interface/image/TextureLoader.h"
 #include "GLESRenderBase.h"
 #include "GLESRenderer.h"
-#include "GLESTexture.h"
+#include "GLESTextureCube.h"
 #include "GLESMapping.h"
 #include <iostream>
 
 namespace Echo
 {
-	GLESTexture2D::GLESTexture2D(const String& name)
+	GLESTextureCube::GLESTextureCube(const String& name)
 		: Texture(name)
 	{
 		m_hTexture = 0;
 	}
 
-	GLESTexture2D::GLESTexture2D(TexType texType, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 depth,
+	GLESTextureCube::GLESTextureCube(TexType texType, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 depth,
 							   ui32 numMipmaps, const Buffer &buff, bool bBak)
 		: Texture(texType, pixFmt, usage, width, height, depth, numMipmaps, buff)
 		, m_isUploadGPU(false)
@@ -28,7 +28,7 @@ namespace Echo
 	}
 	
 	// Îö¹¹º¯Êý
-	GLESTexture2D::~GLESTexture2D()
+	GLESTextureCube::~GLESTextureCube()
 	{
 		EchoSafeDelete(m_memeryData, MemoryReader);
 
@@ -37,7 +37,7 @@ namespace Echo
 			OGLESDebug(glDeleteTextures(1, &m_hTexture));
 	}
 	
-	bool GLESTexture2D::updateSubTex2D(ui32 level, const Rect& rect, void* pData, ui32 size)
+	bool GLESTextureCube::updateSubTex2D(ui32 level, const Rect& rect, void* pData, ui32 size)
 	{
 		if(level >= m_numMipmaps || !pData)
 			return false;
@@ -53,7 +53,7 @@ namespace Echo
 		return true;
 	}
 
-	bool GLESTexture2D::create2D(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff)
+	bool GLESTextureCube::create2D(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff)
 	{
 		for (ui32 level = 0; level < m_numMipmaps; ++level)
 		{
@@ -145,7 +145,7 @@ namespace Echo
 		return true;
 	}
 
-	void GLESTexture2D::unloadFromGPU()
+	void GLESTextureCube::unloadFromGPU()
 	{
 		if (m_hTexture)
 		{
@@ -159,7 +159,7 @@ namespace Echo
 		}
 	}  
 
-	bool GLESTexture2D::loadToGPU()
+	bool GLESTextureCube::loadToGPU()
 	{ 
 		// texture has already loaded to gpu
 		if (m_hTexture)
@@ -182,7 +182,7 @@ namespace Echo
 		return no_error;
 	}
 
-	bool GLESTexture2D::createCube(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff)
+	bool GLESTextureCube::createCube(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff)
 	{
 		for (ui32 face = 0; face < 6; face++)
 		{

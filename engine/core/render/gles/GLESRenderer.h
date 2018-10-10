@@ -27,7 +27,7 @@ namespace Echo
 		}
 	};
 
-	class GLES2Texture;
+	class GLESTexture2D;
 	class GLES2ShaderProgram;
 
 	/**
@@ -103,7 +103,7 @@ namespace Echo
 		virtual bool doPresent();
 
 		// bind texture to slot
-		void bindTexture(GLenum slot, GLenum target, GLES2Texture* texture, bool needReset = false);
+		void bindTexture(GLenum slot, GLenum target, GLESTexture2D* texture, bool needReset = false);
 
 		bool initializeImpl(const Config& config);
 		void destroyImpl();

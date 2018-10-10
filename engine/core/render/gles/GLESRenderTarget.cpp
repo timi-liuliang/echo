@@ -42,7 +42,7 @@ namespace Echo
 
 	bool GLES2RenderTarget::doCreate()
 	{
-		GLES2Texture* texture = dynamic_cast<GLES2Texture*>(m_bindTexture);
+		GLESTexture2D* texture = dynamic_cast<GLESTexture2D*>(m_bindTexture);
 		EchoAssert(texture);
 
 		OGLESDebug(glGenTextures(1, &texture->m_hTexture));
@@ -62,7 +62,7 @@ namespace Echo
 
 		if( m_bHasDepth )
 		{
-			GLES2Texture* depthTexture = dynamic_cast<GLES2Texture*>(m_depthTexture);
+			GLESTexture2D* depthTexture = dynamic_cast<GLESTexture2D*>(m_depthTexture);
 			EchoAssert(depthTexture);
 
 			// 将深度缓冲区映射到纹理上(这里应该分情况讨论，rbo效率更高，在不需要depth tex时应该优先使用		
@@ -82,7 +82,7 @@ namespace Echo
 		}
 		else if (m_depthTarget)
 		{
-			GLES2Texture* depthTexture = dynamic_cast<GLES2Texture*>(m_depthTarget->getDepthTexture());
+			GLESTexture2D* depthTexture = dynamic_cast<GLESTexture2D*>(m_depthTarget->getDepthTexture());
 
 			OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
 			OGLESDebug(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture->m_hTexture, 0));
@@ -107,7 +107,7 @@ namespace Echo
 
 	bool GLES2RenderTarget::doCreateCubemap()
 	{
-		GLES2Texture* texture = dynamic_cast<GLES2Texture*>(m_bindTexture);
+		GLESTexture2D* texture = dynamic_cast<GLESTexture2D*>(m_bindTexture);
 		EchoAssert(texture);
 
 		OGLESDebug(glGenTextures(1, &texture->m_hTexture));
@@ -299,7 +299,7 @@ namespace Echo
 			EchoAssert( GL_TEXTURE_CUBE_MAP_POSITIVE_X+cf == GL_TEXTURE_CUBE_MAP_NEGATIVE_Z );
 		}
 
-		GLES2Texture* texture = ECHO_DOWN_CAST<GLES2Texture*>(m_bindTexture);
+		GLESTexture2D* texture = ECHO_DOWN_CAST<GLESTexture2D*>(m_bindTexture);
 
 		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
 		OGLESDebug(glBindTexture(GL_TEXTURE_CUBE_MAP, texture->m_hTexture));

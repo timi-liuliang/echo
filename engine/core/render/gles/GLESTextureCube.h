@@ -4,7 +4,7 @@
 
 namespace Echo
 {
-	class GLESTexture2D: public Texture
+	class GLESTextureCube: public Texture
 	{
 		friend class GLES2Renderer;
 	public:
@@ -12,9 +12,9 @@ namespace Echo
 		virtual	bool updateSubTex2D(ui32 level, const Rect& rect, void* pData, ui32 size);
 
 	protected:
-		GLESTexture2D(const String& name);
-		GLESTexture2D(TexType texType, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 depth, ui32 numMipmaps, const Buffer& buff, bool bBak = true);
-		virtual ~GLESTexture2D();
+		GLESTextureCube(const String& name);
+		GLESTextureCube(TexType texType, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 depth, ui32 numMipmaps, const Buffer& buff, bool bBak = true);
+		virtual ~GLESTextureCube();
 
 		virtual bool create2D(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff);
 

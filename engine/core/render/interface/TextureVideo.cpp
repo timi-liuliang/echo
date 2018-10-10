@@ -1,20 +1,20 @@
-#include "TextureCube.h"
+#include "TextureVideo.h"
 
 namespace Echo
 {
-	TextureCube::TextureCube()
+	TextureVideo::TextureVideo()
 		: Texture()
 	{
 
 	}
 
-	TextureCube::~TextureCube()
+	TextureVideo::~TextureVideo()
 	{
 
 	}
 
 	// bind methods to script
-	void TextureCube::bindMethods() 
+	void TextureVideo::bindMethods()
 	{
 	}
 }
