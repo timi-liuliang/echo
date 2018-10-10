@@ -4,7 +4,7 @@
 #include "engine/core/util/Exception.h"
 #include "engine/core/io/IO.h"
 #include "engine/core/log/Log.h"
-#include "engine/core/render/interface/ImageCodecMgr.h"
+#include "engine/core/render/interface/image/ImageCodecMgr.h"
 #include "engine/core/scene/render_node.h"
 #include "engine/core/scene/node_tree.h"
 #include "engine/core/util/Timer.h"

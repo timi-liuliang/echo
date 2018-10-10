@@ -2,10 +2,10 @@
 #include <engine/core/util/Exception.h>
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/io/DataStream.h>
-#include "interface/Image.h"
-#include "interface/ImageResampler.h"
-#include "interface/ImageCodec.h"
-#include "interface/ImageCodecMgr.h"
+#include "Image.h"
+#include "ImageResampler.h"
+#include "ImageCodec.h"
+#include "ImageCodecMgr.h"
 #include <freeimage/FreeImage.h>
 
 namespace Echo

@@ -4,7 +4,7 @@
 #include "engine/core/log/Log.h"
 #include "engine/core/Util/Exception.h"
 #include "Renderer.h"
-#include "PixelFormat.h"
+#include "image/PixelFormat.h"
 #include "engine/core/io/IO.h"
 #include "MaterialDesc.h"
 #include <thirdparty/pugixml/pugixml.hpp>

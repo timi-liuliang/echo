@@ -5,7 +5,7 @@
 #include <engine/core/math/Rect.h>
 #include <engine/core/io/DataStream.h>
 #include "RenderState.h"
-#include "PixelFormat.h"
+#include "image/PixelFormat.h"
 
 namespace Echo
 {

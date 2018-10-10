@@ -1,7 +1,7 @@
 #include "GLESRenderBase.h"
 #include "GLESMapping.h"
 #include "interface/GPUBuffer.h"
-#include "interface/PixelFormat.h"
+#include "interface/image/PixelFormat.h"
 
 namespace Echo
 {

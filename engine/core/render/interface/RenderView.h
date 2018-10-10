@@ -1,6 +1,6 @@
 #pragma once
 
-#include "PixelFormat.h"
+#include "image/PixelFormat.h"
 
 namespace Echo
 {

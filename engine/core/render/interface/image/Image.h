@@ -2,7 +2,7 @@
 
 #include "engine/core/util/Buffer.h"
 #include "engine/core/math/Color.h"
-#include "engine/core/render/interface/PixelFormat.h"
+#include "PixelFormat.h"
 
 namespace Echo
 {

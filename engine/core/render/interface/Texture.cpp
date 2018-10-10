@@ -5,10 +5,10 @@
 #include "interface/Texture.h"
 #include "interface/Renderer.h"
 #include "engine/core/log/Log.h"
-#include "interface/TextureLoader.h"
 #include "engine/core/Math/EchoMathFunction.h"
-#include "PixelFormat.h"
-#include "interface/Image.h"
+#include "image/PixelFormat.h"
+#include "image/Image.h"
+#include "image/TextureLoader.h"
 #include <iostream>
 
 namespace Echo

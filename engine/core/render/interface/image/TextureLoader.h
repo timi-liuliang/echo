@@ -1,7 +1,7 @@
 #pragma once
 
 #include <engine/core/Base/EchoDef.h>
-#include "interface/PixelFormat.h"
+#include "PixelFormat.h"
 
 namespace Echo
 {
