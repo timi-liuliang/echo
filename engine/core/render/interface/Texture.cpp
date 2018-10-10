@@ -9,7 +9,6 @@
 #include "engine/core/Math/EchoMathFunction.h"
 #include "PixelFormat.h"
 #include "interface/Image.h"
-#include "interface/TextureSoftDecode.h"
 #include <iostream>
 
 namespace Echo
@@ -117,11 +116,6 @@ namespace Echo
 		g_globalTextures[globalTextureIdx] = texture;
 	}
 
-	ui32 Texture::GetCompressType()
-	{
-		return m_compressType;
-	}
-
 	bool Texture::create2D(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff)
 	{
 		return false;
@@ -140,27 +134,6 @@ namespace Echo
 	{
 		// need repaird
 		return (size_t)PixelUtil::CalcSurfaceSize(m_width, m_height, m_depth, m_numMipmaps, m_pixFmt);
-	}
-
-	bool Texture::softDecodeETC2()
-	{
-		bool isSoftDecode = TextureSoftDecode::isSoftDecode();
-		if (!isSoftDecode)
-		{
-			return false;
-		}
-
-		ui32* pIdentifier = m_memeryData->getData<ui32*>();
-		if (*pIdentifier == c_pvrtex3_ident) // its pvr format texture
-		{
-			isSoftDecode = decodeFromPVR();
-		}
-		else if (!memcmp(pIdentifier, cs_etc1_identifier, sizeof(ui8) * 12))
-		{
-			isSoftDecode = decodeFromKTX();
-		}
-
-		return isSoftDecode;
 	}
 
 	bool Texture::decodeFromPVR()
@@ -195,19 +168,6 @@ namespace Echo
 			default:
 				m_pixFmt = PF_UNKNOWN;
 				break;
-		}
-
-		if (isSoftDecode)
-		{
-			m_pixelsSize = PixelUtil::CalcSurfaceSize(m_width, m_height, m_depth, m_numMipmaps, m_pixFmt);
-
-			ui8* pTextureData = m_memeryData->getData<ui8*>();
-			ui8* buffer = TextureSoftDecode::decodePVR(pTextureData);
-			if (buffer)
-			{
-				//EchoSafeFree(m_pPreparedData);
-				//m_pPreparedData = buffer;
-			}
 		}
 
 		return isSoftDecode;
@@ -288,7 +248,6 @@ namespace Echo
 		return true;
 	}
 
-	// 卸载
 	bool Texture::unload()
 	{
 		unloadFromGPU();
@@ -296,7 +255,6 @@ namespace Echo
 		return true;
 	}
 
-	// 资源分析
 	bool Texture::_data_parser()
 	{
 		EchoAssert(m_memeryData);
@@ -328,12 +286,7 @@ namespace Echo
 	}
 
 	bool Texture::_parser_pvr()
-	{
-		if (softDecodeETC2())
-		{
-			return true;
-		}
-		
+	{	
 		m_bCompressed = true;
 		m_compressType = Texture::CompressType_PVR;
 
@@ -465,7 +418,6 @@ namespace Echo
 		return false;
 	}
 
-	// 分析通用格式文件
 	bool Texture::_parser_common()
 	{
 		Buffer commonTextureBuffer(m_memeryData->getSize(), m_memeryData->getData<ui8*>(), false);
@@ -506,14 +458,8 @@ namespace Echo
 		return true;
 	}
 
-	// 分析ktx
 	bool Texture::_parser_ktx()
 	{
-		if (softDecodeETC2())
-		{
-			return true;
-		}
-
 		ui8* pTextureData = m_memeryData->getData<ui8*>();
 
 		KTXHeader* pKtxHeader = (KTXHeader *)pTextureData;
@@ -635,7 +581,6 @@ namespace Echo
 		return false;
 	}
 
-	// 构造函数
 	TextureSampler::TextureSampler(Texture* texture, const SamplerState* samplerState)
 		: m_texture(texture)
 	{

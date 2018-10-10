@@ -4,7 +4,6 @@
 #include "Viewport.h"
 #include "PixelFormat.h"
 #include "Renderable.h"
-#include "TextureSoftDecode.h"
 
 namespace Echo
 {
@@ -28,11 +27,6 @@ namespace Echo
 	bool Renderer::initialize(const Renderer::Config& config)
 	{
 		m_cfg = config;
-
-		if (!m_deviceFeature.supportETC2())
-		{
-			TextureSoftDecode::setSoftDecode(true);
-		}
 
 		if (!initializeImpl(config))
 			return false;

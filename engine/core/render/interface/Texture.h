@@ -113,11 +113,13 @@ namespace Echo
 		// 根据参数创建2D纹理
 		virtual bool create2D(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff);
 
+		// get compress type
+		ui32 getCompressType() { return m_compressType; }
+
 		// 计算尺寸
 		virtual size_t	calculateSize() const;
 
 	public:
-		bool softDecodeETC2();
 		bool decodeFromPVR();
 		bool decodeFromKTX();
 
@@ -133,9 +135,6 @@ namespace Echo
 		// 创建立方体贴图
 		virtual bool createCube(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff) { return false; }
 
-		ui32 GetCompressType();
-		void SetCompressType(ui32 val) { m_compressType = val; }
-
 		// 加载纹理资源到内存
 		virtual bool loadToMemory();
 
@@ -150,7 +149,6 @@ namespace Echo
 		bool _parser_ktx();
 		bool _parser_common();
 		bool _data_parser_cubemap_from_files();
-
 		bool _upload_common();
 		bool _upload_pvr();
 
