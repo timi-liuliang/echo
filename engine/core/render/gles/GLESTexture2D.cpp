@@ -5,7 +5,7 @@
 #include "interface/image/TextureLoader.h"
 #include "GLESRenderBase.h"
 #include "GLESRenderer.h"
-#include "GLESTexture.h"
+#include "GLESTexture2D.h"
 #include "GLESMapping.h"
 #include <iostream>
 
@@ -28,8 +28,6 @@ namespace Echo
 
 	GLESTexture2D::~GLESTexture2D()
 	{
-		EchoSafeDelete(m_memeryData, MemoryReader);
-
 		unload();
 	}
 	
@@ -173,14 +171,12 @@ namespace Echo
 					m_numMipmaps = 1;
 
 				m_pixelsSize = PixelUtil::CalcSurfaceSize(m_width, m_height, m_depth, m_numMipmaps, m_pixFmt);
-				EchoSafeDelete(m_memeryData, MemoryReader);
-				m_memeryData = EchoNew(MemoryReader((const char*)image->getData(), m_pixelsSize));
-
-				EchoSafeDelete(image, Image);
 
 				// load to gpu
-				Buffer buff(m_pixelsSize, m_memeryData->getData<ui8*>());
-				return create2D(m_pixFmt, m_usage, m_width, m_height, m_numMipmaps, buff);
+				Buffer buff(m_pixelsSize, image->getData(), false);
+				create2D(m_pixFmt, m_usage, m_width, m_height, m_numMipmaps, buff);
+
+				EchoSafeDelete(image, Image);
 			}
 		}
 

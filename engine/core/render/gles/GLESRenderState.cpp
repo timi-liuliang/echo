@@ -1,7 +1,7 @@
 #include "GLESRenderBase.h"
 #include "GLESRenderState.h"
 #include "GLESMapping.h"
-#include "GLESTexture.h"
+#include "GLESTexture2D.h"
 #include "interface/renderer.h"
 #include "engine/core/util/Exception.h"
 

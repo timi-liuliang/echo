@@ -125,7 +125,6 @@ namespace Echo
 		ui32				m_depth;
 		ui32				m_numMipmaps;
 		ui32				m_pixelsSize;
-		MemoryReader*		m_memeryData;
 		ui32				m_faceNum;
 		ui32				m_endian;
 		ui32				m_bitsPerPixel;

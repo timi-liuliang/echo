@@ -27,8 +27,6 @@ namespace Echo
 	
 	GLESTextureCube::~GLESTextureCube()
 	{
-		EchoSafeDelete(m_memeryData, MemoryReader);
-
 		unload();
 	}
 	
@@ -83,7 +81,7 @@ namespace Echo
 		{
 			image[i] = pData + offset;
 			pixel_data[i] = (image[i] + sizeof(TGAHeaderInfo));
-			offset += (m_memeryData->getSize() / 6);
+			//offset += (m_memeryData->getSize() / 6);
 		}
 
 		OGLESDebug(glGenTextures(1, &m_hTexture));
