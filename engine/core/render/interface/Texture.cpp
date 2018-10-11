@@ -129,11 +129,6 @@ namespace Echo
 		g_globalTextures[globalTextureIdx] = texture;
 	}
 
-	bool Texture::create2D(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff)
-	{
-		return false;
-	}
-
 	void Texture::setSamplerState(const SamplerState::SamplerDesc& desc)
 	{
 		m_samplerState = Renderer::instance()->getSamplerState(desc);
