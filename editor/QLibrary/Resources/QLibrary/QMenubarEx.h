@@ -13,32 +13,22 @@ namespace QT_UI
 		QMenuBarEx(QWidget* parent);
 		~QMenuBarEx(){}
 
-		// 设置左上角图标
+		// set top left corner icon
 		void setTopLeftCornerIcon(const char* icon);
 
 	protected:
-		// 鼠标移动事件
-		virtual void mouseMoveEvent(QMouseEvent *e);
-
-		// 鼠标双击事件
-		virtual void mouseDoubleClickEvent(QMouseEvent *event);
-
-		// 鼠标按下事件
-		virtual void mousePressEvent(QMouseEvent *event);
-
-		// 鼠标释放事件
-		virtual void mouseReleaseEvent(QMouseEvent *event);
+		virtual void mouseMoveEvent(QMouseEvent *e) override;
+		virtual void mouseDoubleClickEvent(QMouseEvent *event) override;
+		virtual void mousePressEvent(QMouseEvent *event) override;
+		virtual void mouseReleaseEvent(QMouseEvent *event) override;
 
 	protected slots:
-		// 最小化
 		void onMinus();
-
-		// 最大化
 		void onMaxmized();
 
 	protected:
 		// redefine paintEvent
-		void paintEvent(QPaintEvent* event);
+		virtual void paintEvent(QPaintEvent* event) override;
 
 	private:
 		QPointF			m_lastPos;
