@@ -123,7 +123,6 @@ namespace Echo
 		return nullptr;
 	}
 
-	// set global texture
 	void Texture::setGlobal(ui32 globalTextureIdx, Texture* texture)
 	{
 		g_globalTextures[globalTextureIdx] = texture;

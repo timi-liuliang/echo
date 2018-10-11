@@ -7,22 +7,26 @@ namespace Echo
 	class GLESTextureCube: public TextureCube
 	{
 		friend class GLES2Renderer;
-	public:
-		// 更新纹理数据
-		virtual	bool updateSubTex2D(ui32 level, const Rect& rect, void* pData, ui32 size);
 
 	protected:
 		GLESTextureCube(const String& name);
 		GLESTextureCube(TexType texType, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 depth, ui32 numMipmaps, const Buffer& buff, bool bBak = true);
 		virtual ~GLESTextureCube();
 
-		// create cube
-		virtual bool createCube(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff);
+		// load
+		virtual bool load() override;
 
-		// 从显存卸载
+		// unload
 		virtual bool unload();
 
+	protected:
+		// create cube texture
+		void createCubeTexture();
+
+		// set surface data
+		void setCubeSurfaceData(int face, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff);
+
 	public:
-		GLuint		m_hTexture;
+		GLuint		m_glesTexture;
 	};
 }

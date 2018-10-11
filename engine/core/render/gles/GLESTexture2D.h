@@ -19,7 +19,7 @@ namespace Echo
 		virtual bool create2D(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff);
 
 		// load
-		bool load();
+		virtual bool load() override;
 
 		// unload
 		bool unload();

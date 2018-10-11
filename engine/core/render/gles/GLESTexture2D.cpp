@@ -146,17 +146,6 @@ namespace Echo
 				m_bCompressed = false;
 				m_compressType = Texture::CompressType_Unknown;
 				PixelFormat pixFmt = image->getPixelFormat();
-
-				if (ECHO_ENDIAN == ECHO_ENDIAN_LITTLE)
-				{
-					switch (pixFmt)
-					{
-					case PF_BGR8_UNORM:		pixFmt = PF_RGB8_UNORM;		break;
-					case PF_BGRA8_UNORM:	pixFmt = PF_RGBA8_UNORM;	break;
-					default:;
-					}
-				}
-
 				m_width = image->getWidth();
 				m_height = image->getHeight();
 				m_depth = image->getDepth();

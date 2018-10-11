@@ -51,35 +51,47 @@ namespace Echo
 	void TextureCube::setPositiveX(const ResourcePath& path)
 	{
 		m_surfaces[0].setPath(path.getPath());
+
+		load();
 	}
 
 	// positive x
 	void TextureCube::setNegativeX(const ResourcePath& path)
 	{
 		m_surfaces[1].setPath(path.getPath());
+
+		load();
 	}
 
 	// positive x
 	void TextureCube::setPositiveY(const ResourcePath& path)
 	{
 		m_surfaces[2].setPath(path.getPath());
+
+		load();
 	}
 
 	// positive x
 	void TextureCube::setNegativeY(const ResourcePath& path)
 	{
 		m_surfaces[3].setPath(path.getPath());
+
+		load();
 	}
 
 	// positive x
 	void TextureCube::setPositiveZ(const ResourcePath& path)
 	{
 		m_surfaces[4].setPath(path.getPath());
+
+		load();
 	}
 
 	// positive x
 	void TextureCube::setNegativeZ(const ResourcePath& path)
 	{
 		m_surfaces[5].setPath(path.getPath());
+
+		load();
 	}
 }

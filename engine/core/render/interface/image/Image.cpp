@@ -250,7 +250,19 @@ namespace Echo
 
 	PixelFormat Image::getPixelFormat() const
 	{
-		return m_pixFmt;
+		if (ECHO_ENDIAN == ECHO_ENDIAN_LITTLE)
+		{
+			switch (m_pixFmt)
+			{
+			case PF_BGR8_UNORM:		return PF_RGB8_UNORM;
+			case PF_BGRA8_UNORM:	return PF_RGBA8_UNORM;
+			default:				return m_pixFmt;
+			}
+		}
+		else
+		{
+			return m_pixFmt;
+		}
 	}
 
 	ui32 Image::getWidth() const

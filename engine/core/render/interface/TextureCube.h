@@ -39,7 +39,7 @@ namespace Echo
 		void setNegativeZ(const ResourcePath& path);
 		const ResourcePath& getNegativeZ() { return m_surfaces[5]; }
 
-	private:
+	protected:
 		array<ResourcePath, 6>	m_surfaces;
 	};
 }

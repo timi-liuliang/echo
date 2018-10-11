@@ -102,6 +102,9 @@ namespace Echo
 		// calc size
 		virtual size_t	calculateSize() const;
 
+		// load operate
+		virtual bool load() { return false; }
+
 	protected:
 		Texture(const String& name);
 		Texture(TexType texType, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 depth, ui32 numMipmaps, const Buffer& buff, bool bBak = true);
