@@ -13,28 +13,24 @@ namespace Echo
 {
 	GLESTexture2D::GLESTexture2D(const String& name)
 		: Texture(name)
+		, m_hTexture(0)
 	{
-		m_hTexture = 0;
+		load();
 	}
 
-	GLESTexture2D::GLESTexture2D(TexType texType, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 depth,
-							   ui32 numMipmaps, const Buffer &buff, bool bBak)
+	GLESTexture2D::GLESTexture2D(TexType texType, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 depth, ui32 numMipmaps, const Buffer &buff, bool bBak)
 		: Texture(texType, pixFmt, usage, width, height, depth, numMipmaps, buff)
-		, m_isUploadGPU(false)
 	{
 		m_hTexture = 0;
 
 		create2D(pixFmt, usage, width, height, numMipmaps, buff);
 	}
-	
-	// 析构函数
+
 	GLESTexture2D::~GLESTexture2D()
 	{
 		EchoSafeDelete(m_memeryData, MemoryReader);
 
-		unloadFromGPU();
-		if (m_hTexture)
-			OGLESDebug(glDeleteTextures(1, &m_hTexture));
+		unload();
 	}
 	
 	bool GLESTexture2D::updateSubTex2D(ui32 level, const Rect& rect, void* pData, ui32 size)
@@ -145,161 +141,59 @@ namespace Echo
 		return true;
 	}
 
-	void GLESTexture2D::unloadFromGPU()
+	bool GLESTexture2D::load()
+	{
+		MemoryReader memReader(getPath());
+		if (memReader.getSize())
+		{
+			Buffer commonTextureBuffer(memReader.getSize(), memReader.getData<ui8*>(), false);
+			Image* image = Image::CreateFromMemory(commonTextureBuffer, Image::GetImageFormat(getPath()));
+			if (image)
+			{
+				m_bCompressed = false;
+				m_compressType = Texture::CompressType_Unknown;
+				PixelFormat pixFmt = image->getPixelFormat();
+
+				if (ECHO_ENDIAN == ECHO_ENDIAN_LITTLE)
+				{
+					switch (pixFmt)
+					{
+					case PF_BGR8_UNORM:		pixFmt = PF_RGB8_UNORM;		break;
+					case PF_BGRA8_UNORM:	pixFmt = PF_RGBA8_UNORM;	break;
+					default:;
+					}
+				}
+
+				m_width = image->getWidth();
+				m_height = image->getHeight();
+				m_depth = image->getDepth();
+				m_pixFmt = pixFmt;
+				m_numMipmaps = image->getNumMipmaps();
+				if (m_numMipmaps == 0)
+					m_numMipmaps = 1;
+
+				m_pixelsSize = PixelUtil::CalcSurfaceSize(m_width, m_height, m_depth, m_numMipmaps, m_pixFmt);
+				EchoSafeDelete(m_memeryData, MemoryReader);
+				m_memeryData = EchoNew(MemoryReader((const char*)image->getData(), m_pixelsSize));
+
+				EchoSafeDelete(image, Image);
+
+				// load to gpu
+				Buffer buff(m_pixelsSize, m_memeryData->getData<ui8*>());
+				return create2D(m_pixFmt, m_usage, m_width, m_height, m_numMipmaps, buff);
+			}
+		}
+
+		return false;
+	}
+
+	bool GLESTexture2D::unload()
 	{
 		if (m_hTexture)
 		{
 			OGLESDebug(glDeleteTextures(1, &m_hTexture));
 			m_hTexture = 0;
 		}
-
-		if (m_isUploadGPU)
-		{
-			m_isUploadGPU = false;
-		}
-	}  
-
-	bool GLESTexture2D::loadToGPU()
-	{ 
-		// texture has already loaded to gpu
-		if (m_hTexture)
-			return true;
-
-		// no memory data, can't load to gpu
-		if (!m_memeryData)
-			return m_isUploadGPU ? true : false;
-
-		// 满足加载条件，继续执行
-		bool no_error = false;
-		switch (m_compressType)
-		{
-		case Texture::CompressType_Unknown:
-			no_error = _upload_common();
-			break;
-		}
-
-		m_isUploadGPU = true;
-		return no_error;
-	}
-
-	bool GLESTexture2D::createCube(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff)
-	{
-		for (ui32 face = 0; face < 6; face++)
-		{
-			for (ui32 level = 0; level < m_numMipmaps; ++level)
-			{
-				m_uploadedSize += PixelUtil::CalcLevelSize(width, height, 1, level, pixFmt);;
-			}
-		}
-		
-		unsigned char* image[Texture::CF_End];
-		unsigned char* pixel_data[Texture::CF_End];
-		size_t offset = 0;
-
-		ui32 texWidth = width;
-		ui32 texHeight = height;
-		Byte* pData = buff.getData();
-
-		bool bHasData = (pData != NULL ? true : false);
-
-		for (int i = 0; i < Texture::CF_End; i++)
-		{
-			image[i] = pData + offset;
-			pixel_data[i] = (image[i] + sizeof(TGAHeaderInfo));
-			offset += (m_memeryData->getSize() / 6);
-		}
-
-		OGLESDebug(glGenTextures(1, &m_hTexture));
-		if (!m_hTexture)
-		{
-			EchoLogError("Create GLES2Texture [%s] failed.", PixelUtil::GetPixelFormatName(pixFmt).c_str());
-			return false;
-		}
-
-		// generate gpu texture
-		OGLESDebug(glBindTexture(GL_TEXTURE_CUBE_MAP, m_hTexture));
-		OGLESDebug(glPixelStorei(GL_UNPACK_ALIGNMENT, 1));
-
-		// set default sampler state
-		OGLESDebug(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-		OGLESDebug(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-
-
-		PixelFormat srcPixFmt = pixFmt;
-		PixelFormat dstPixFmt = pixFmt;
-		switch (pixFmt)
-		{
-			case PF_R8_UNORM:
-			{
-				srcPixFmt = PF_R8_UNORM;
-				dstPixFmt = PF_RGBA8_UNORM;
-			} break;
-			case PF_RGBA8_UNORM:
-			{
-				srcPixFmt = PF_BGRA8_UNORM;
-				dstPixFmt = PF_RGBA8_UNORM;
-			} break;
-			case PF_RGB8_UNORM:
-			{
-				srcPixFmt = PF_BGR8_UNORM;
-				dstPixFmt = PF_RGB8_UNORM;
-			} break;
-			default: break;
-		}
-
-		GLenum internalFmt = GLES2Mapping::MapInternalFormat(dstPixFmt);
-		GLenum glFmt = GLES2Mapping::MapFormat(dstPixFmt);
-		GLenum glType = GLES2Mapping::MapDataType(dstPixFmt);
-
-		bool bRequiredConvert = (srcPixFmt == dstPixFmt ? false : true);
-
-		for (ui32 face = 0; face < 6; face++)
-		{
-			texWidth = width;
-			texHeight = height;
-
-			for (ui32 level = 0; level < numMipmaps; ++level)
-			{
-
-				Byte* curMipData = 0;
-
-				if (bHasData)
-				{
-					if (bRequiredConvert)
-					{
-						PixelBox srcBox(texWidth, texHeight, 1, srcPixFmt, pixel_data[face]);
-						PixelBox dstBox(texWidth, texHeight, 1, dstPixFmt);
-						dstBox.pData = ECHO_ALLOC_T(Byte, dstBox.getConsecutiveSize());
-
-						PixelUtil::BulkPixelConversion(srcBox, dstBox);
-						curMipData = (Byte*)dstBox.pData;
-					}
-					else
-					{
-						curMipData = pixel_data[face];
-					}
-				}
-
-				OGLESDebug(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, level, internalFmt, texWidth, texHeight, 0, glFmt, glType, curMipData));
-
-				if (bHasData)
-				{
-					if (bRequiredConvert)
-						ECHO_FREE(curMipData);
-				}
-
-				ui32 curMipSize = PixelUtil::CalcLevelSize(width, height, 1, level, pixFmt);
-				pData += curMipSize;
-
-				texWidth = (texWidth > 1) ? texWidth >> 1 : 1;
-				texHeight = (texHeight > 1) ? texHeight >> 1 : 1;
-			}
-		}
-
-		// 暂强制
-		//OGLESDebug(glGenerateMipmap(m_hTexture));
-
-		OGLESDebug(glBindTexture(GL_TEXTURE_CUBE_MAP, 0));
 
 		return true;
 	}

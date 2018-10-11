@@ -107,14 +107,12 @@ namespace Echo
 		virtual void convertMatOrho(Matrix4& mat, const Matrix4& matOrth, Real zn, Real zf) = 0;
 		virtual void convertMatProj(Matrix4& mat, const Matrix4& matProj) = 0;
 
-		// 创建顶点缓冲
+		// create buffer
 		virtual GPUBuffer* createVertexBuffer(Dword usage, const Buffer& buff) = 0;
-		
-		// 创建索引缓冲
 		virtual GPUBuffer* createIndexBuffer(Dword usage, const Buffer& buff) = 0;
 
 		// create texture
-		virtual Texture* createTexture(const String& name)=0;
+		virtual Texture* createTexture2D(const String& name)=0;
 		virtual Texture* createTexture2D(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff) = 0;
 
 		void dirtyTexSlot(){ m_dirtyTexSlot = true; }
@@ -133,7 +131,7 @@ namespace Echo
 		// 创建渲染目标
 		virtual RenderTarget* createRenderTarget(ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const RenderTarget::Options& option) = 0;
 
-		// 新建Renderable
+		// create Renderable
 		Renderable* createRenderable(const String& renderStage, ShaderProgramRes* material);
 
 		// 获取Renderable

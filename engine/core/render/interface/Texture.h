@@ -93,9 +93,6 @@ namespace Echo
 		// 重新创建纹理
 		virtual bool reCreate2D(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff);
 
-		// 卸载
-		bool unload();
-
 		// 根据参数创建2D纹理
 		virtual bool create2D(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff);
 
@@ -105,14 +102,6 @@ namespace Echo
 		// 计算尺寸
 		virtual size_t	calculateSize() const;
 
-	public:
-		bool decodeFromPVR();
-		bool decodeFromKTX();
-
-	public:
-		// 更新到显存
-		virtual bool loadToGPU() { return false; }
-
 	protected:
 		Texture(const String& name);
 		Texture(TexType texType, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 depth, ui32 numMipmaps, const Buffer& buff, bool bBak = true);
@@ -120,17 +109,6 @@ namespace Echo
 
 		// 创建立方体贴图
 		virtual bool createCube(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff) { return false; }
-
-		// 加载纹理资源到内存
-		virtual bool loadToMemory();
-
-		// 从显存卸载
-		virtual void unloadFromGPU() {}
-
-	protected:
-		bool _data_parser();
-		bool _parser_common();
-		bool _upload_common();
 
 	protected:
 		// static load

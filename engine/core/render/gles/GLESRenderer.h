@@ -29,10 +29,6 @@ namespace Echo
 
 	class GLESTexture2D;
 	class GLES2ShaderProgram;
-
-	/**
-	 * OpenGLES2.0‰÷»æ∆˜
-	 */
 	class GLES2Renderer: public Renderer
 	{
 		typedef vector<GLuint>::type			TexUintList;
@@ -69,7 +65,7 @@ namespace Echo
 		GPUBuffer*				createIndexBuffer(Dword usage, const Buffer& buff);
 
 		// ¥¥Ω®Œ∆¿Ì
-		Texture*  createTexture(const String& name);
+		Texture*  createTexture2D(const String& name);
 		Texture*				createTexture2D(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff);
 		ShaderProgram*			createShaderProgram(  ShaderProgramRes* material);
 		Shader*					createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const String& filename);

@@ -8,6 +8,12 @@ namespace Echo
 
 	}
 
+	TextureCube::TextureCube(const String& name)
+		: Texture(name)
+	{
+
+	}
+
 	TextureCube::~TextureCube()
 	{
 

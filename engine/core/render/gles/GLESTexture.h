@@ -18,17 +18,13 @@ namespace Echo
 
 		virtual bool create2D(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff);
 
-		// 创建立方体贴图
-		virtual bool createCube(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff);
+		// load
+		bool load();
 
-		// 更新内存数据到GPU
-		virtual bool loadToGPU();
-
-		// 从显存卸载
-		virtual void unloadFromGPU();
+		// unload
+		bool unload();
 
 	public:
 		GLuint		m_hTexture;
-		bool		m_isUploadGPU;
 	};
 }

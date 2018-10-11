@@ -18,9 +18,6 @@ namespace Echo
 	static const int	SHADER_TEXTURE_SLOT6= 6;	// 默认使用纹理槽
 	static const int	SHADER_TEXTURE_SLOT7= 7;	// 默认使用纹理槽
 
-	/**
-	 * 最小可渲染体封装
-	 */
 	class Render;
 	class Mesh;
 	class Material;

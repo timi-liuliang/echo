@@ -201,7 +201,7 @@ namespace Echo
 			try
 			{
 				GLESTexture2D* esTexture = ECHO_DOWN_CAST<GLESTexture2D*>(texture);
-				if (esTexture && esTexture->loadToGPU())
+				if (esTexture)
 				{
 					GLenum glTarget = GLES2Mapping::MapTextureType(esTexture->getType());
 					bindTexture(index, glTarget, esTexture, needUpdate);
@@ -350,7 +350,7 @@ namespace Echo
 		return pGPUBuffer;
 	}
 
-	Texture* GLES2Renderer::createTexture(const String& name)
+	Texture* GLES2Renderer::createTexture2D(const String& name)
 	{
 		return EchoNew(GLESTexture2D(name));
 	}

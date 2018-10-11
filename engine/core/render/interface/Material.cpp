@@ -264,7 +264,6 @@ namespace Echo
 		return nullptr;
 	}
 
-	// 获取变量
 	Material::Uniform* Material::getUniform(const String& name)
 	{
 		const auto& it = m_uniforms.find(name);
@@ -274,7 +273,6 @@ namespace Echo
 		return NULL;
 	}
 
-	// 是否使用了宏定义
 	bool Material::isMacroUsed(const String& macro)
 	{
 		for (const String& _macro : m_macros)
@@ -286,7 +284,6 @@ namespace Echo
 		return false;
 	}
 
-	// 设置宏定义
 	void Material::setMacro(const String& macro, bool enabled)
 	{
 		if (enabled)
@@ -320,7 +317,6 @@ namespace Echo
 		m_isDirty = true;
 	}
 
-	// 构建渲染队列
 	void Material::buildShaderProgram()
 	{
 		if (m_isDirty)
@@ -453,7 +449,6 @@ namespace Echo
 		return false;
 	}
 
-	// 参数匹配
 	void Material::matchUniforms()
 	{
 		ShaderProgram* shaderProgram = m_shaderProgramRes->getShaderProgram();

@@ -1,10 +1,10 @@
 #pragma once
 
-#include <interface/texture.h>
+#include <interface/TextureCube.h>
 
 namespace Echo
 {
-	class GLESTextureCube: public Texture
+	class GLESTextureCube: public TextureCube
 	{
 		friend class GLES2Renderer;
 	public:
@@ -16,19 +16,13 @@ namespace Echo
 		GLESTextureCube(TexType texType, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 depth, ui32 numMipmaps, const Buffer& buff, bool bBak = true);
 		virtual ~GLESTextureCube();
 
-		virtual bool create2D(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff);
-
-		// 创建立方体贴图
+		// create cube
 		virtual bool createCube(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff);
 
-		// 更新内存数据到GPU
-		virtual bool loadToGPU();
-
 		// 从显存卸载
-		virtual void unloadFromGPU();
+		virtual bool unload();
 
 	public:
 		GLuint		m_hTexture;
-		bool		m_isUploadGPU;
 	};
 }

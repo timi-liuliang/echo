@@ -10,6 +10,7 @@ namespace Echo
 
 	public:
 		TextureCube();
+		TextureCube(const String& name);
 		virtual ~TextureCube();
 
 	public:

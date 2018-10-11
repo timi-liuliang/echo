@@ -18,9 +18,9 @@ namespace Echo
 		desc.addrWMode = SamplerState::AM_CLAMP;
 		desc.mipFilter = SamplerState::FO_NONE;
 
-		m_bindTexture = Renderer::instance()->createTexture("rt_" + StringUtil::ToString(_id));
+		m_bindTexture = Renderer::instance()->createTexture2D("rt_" + StringUtil::ToString(_id));
 		m_bindTexture->setSamplerState(desc);
-		m_depthTexture = Renderer::instance()->createTexture(("rtDEPTH_") + StringUtil::ToString(_id));
+		m_depthTexture = Renderer::instance()->createTexture2D(("rtDEPTH_") + StringUtil::ToString(_id));
 		m_depthTexture->setSamplerState(desc);
 	} 
 
@@ -258,11 +258,11 @@ namespace Echo
 
 			EchoAssert(m_bindTexture);
 			m_bindTexture->subRefCount();
-			m_bindTexture = Renderer::instance()->createTexture("rt_" + StringUtil::ToString(m_id));
+			m_bindTexture = Renderer::instance()->createTexture2D("rt_" + StringUtil::ToString(m_id));
 
 			EchoAssert(m_depthTexture);
 			m_depthTexture->subRefCount();
-			m_depthTexture = Renderer::instance()->createTexture("rtDEPTH_" + StringUtil::ToString(m_id));
+			m_depthTexture = Renderer::instance()->createTexture2D("rtDEPTH_" + StringUtil::ToString(m_id));
 
 			doCreate();
 		}

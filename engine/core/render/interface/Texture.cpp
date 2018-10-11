@@ -89,10 +89,7 @@ namespace Echo
 	{
 		if (IO::instance()->isResourceExists(path.getPath()))
 		{
-			Texture* texture = Renderer::instance()->createTexture(path.getPath());
-			texture->loadToMemory();
-			texture->loadToGPU();
-			return texture;
+			return Renderer::instance()->createTexture2D(path.getPath());
 		}
 
 		return nullptr;
@@ -121,7 +118,6 @@ namespace Echo
 
 	bool Texture::reCreate2D(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff)
 	{
-		unload();
 		create2D(pixFmt, usage, width, height, numMipmaps, buff);
 		m_pixelsSize = PixelUtil::CalcSurfaceSize(width, height, m_depth, numMipmaps, pixFmt);
 
@@ -138,179 +134,5 @@ namespace Echo
 	{
 		// need repaird
 		return (size_t)PixelUtil::CalcSurfaceSize(m_width, m_height, m_depth, m_numMipmaps, m_pixFmt);
-	}
-
-	bool Texture::decodeFromPVR()
-	{
-		bool isSoftDecode = false;
-
-		m_bCompressed = false;
-		m_compressType = Texture::CompressType_Unknown;
-
-		Byte* pTextureData = m_memeryData->getData<Byte*>();
-
-		PVRTextureHeaderV3* pHeader = (PVRTextureHeaderV3*)pTextureData;
-		m_width = pHeader->u32Width;
-		m_height = pHeader->u32Height;
-		m_depth = pHeader->u32Depth;
-		m_numMipmaps = 1;
-		m_faceNum = pHeader->u32NumFaces;
-		m_pixFmt = pvrformatMapping(pHeader->u64PixelFormat);
-		switch (m_pixFmt)
-		{
-			case Echo::PF_ETC2_RGB:
-			case Echo::PF_ETC1:
-				m_pixFmt = PF_RGB8_UNORM;
-				isSoftDecode = true;
-				break;
-
-			case Echo::PF_ETC2_RGBA:
-				m_pixFmt = PF_RGBA8_UNORM;
-				isSoftDecode = true;
-				break;
-			
-			default:
-				m_pixFmt = PF_UNKNOWN;
-				break;
-		}
-
-		return isSoftDecode;
-	}
-
-	bool Texture::decodeFromKTX()
-	{
-		bool isSoftDecode = false;
-		ui8* pTextureData = m_memeryData->getData<ui8*>();
-
-		KTXHeader* pKtxHeader = (KTXHeader*)pTextureData;
-
-		EchoAssert(pKtxHeader->m_endianness == cs_big_endian);
-
-		// for compressed texture, glType and glFormat must equal to 'zero'
-		EchoAssert(pKtxHeader->m_type == 0 && pKtxHeader->m_format == 0);
-
-		m_compressType = CompressType_Unknown;
-		m_bCompressed = false;
-
-		m_width = pKtxHeader->m_pixelWidth;
-		m_height = pKtxHeader->m_pixelHeight;
-		m_depth = pKtxHeader->m_pixelDepth <= 0 ? 1 : pKtxHeader->m_pixelDepth;
-		//m_numMipmaps = pKtxHeader->m_numberOfMipmapLevels;
-		// 软解的时候只做了一层的mipmap
-		m_numMipmaps = 1;
-		m_faceNum = pKtxHeader->m_numberOfFaces;
-
-		const ui32 GL_COMPRESSED_RGB8_ETC2 = 0x9274;
-		const ui32 GL_COMPRESSED_SRGB8_ETC2 = 0x9275;
-		const ui32 GL_COMPRESSED_RGBA8_ETC2_EAC = 0x9278;
-		const ui32 GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC = 0x9279;
-		const ui32 GL_ETC1_RGB8_OES = 0x8D64;
-
-		switch (pKtxHeader->m_internalFormat)
-		{
-			case GL_COMPRESSED_RGB8_ETC2:
-			case GL_COMPRESSED_SRGB8_ETC2:
-			case GL_ETC1_RGB8_OES:
-				m_pixFmt = PF_RGB8_UNORM;
-				isSoftDecode = true;
-				break;
-
-			case GL_COMPRESSED_RGBA8_ETC2_EAC:
-			case GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC:
-				m_pixFmt = PF_RGBA8_UNORM;
-				isSoftDecode = true;
-				break;
-
-			default:
-				m_pixFmt = PF_UNKNOWN;
-		}
-		
-		return isSoftDecode;
-	}
-
-	bool Texture::loadToMemory()
-	{
-		if (!m_memeryData)
-		{
-			m_memeryData = EchoNew(MemoryReader(getPath()));
-			return _data_parser();
-		}
-
-		return true;
-	}
-
-	bool Texture::unload()
-	{
-		unloadFromGPU();
-
-		return true;
-	}
-
-	bool Texture::_data_parser()
-	{
-		EchoAssert(m_memeryData);
-
-		ui32* pIdentifier = (ui32 *)m_memeryData->getData<ui32*>();
-		if (true)
-		{
-			// its png ,tga or jpg
-			return _parser_common();
-		}
-
-		return false;
-	}
-
-	bool Texture::_parser_common()
-	{
-		Buffer commonTextureBuffer(m_memeryData->getSize(), m_memeryData->getData<ui8*>(), false);
-		Image* pImage = Image::CreateFromMemory(commonTextureBuffer, Image::GetImageFormat(getPath()));
-		if (!pImage)
-		{
-			return false;
-		}
-
-		m_bCompressed = false;
-		m_compressType = Texture::CompressType_Unknown;
-		PixelFormat pixFmt = pImage->getPixelFormat();
-
-		if (ECHO_ENDIAN == ECHO_ENDIAN_LITTLE)
-		{
-			switch (pixFmt)
-			{
-				case PF_BGR8_UNORM:		pixFmt = PF_RGB8_UNORM;		break;
-				case PF_BGRA8_UNORM:	pixFmt = PF_RGBA8_UNORM;	break;
-				default:;
-			}
-		}
-
-		m_width = pImage->getWidth();
-		m_height = pImage->getHeight();
-		m_depth = pImage->getDepth(); // 1
-		m_pixFmt = pixFmt;
-		m_numMipmaps = pImage->getNumMipmaps();
-		if (m_numMipmaps == 0)
-			m_numMipmaps = 1;
-
-		m_pixelsSize = PixelUtil::CalcSurfaceSize(m_width, m_height, m_depth, m_numMipmaps, m_pixFmt);
-		EchoSafeDelete(m_memeryData, MemoryReader);
-		m_memeryData = EchoNew(MemoryReader((const char*)pImage->getData(), m_pixelsSize));
-
-		EchoSafeDelete(pImage, Image);
-
-		return true;
-	}
-
-	bool Texture::_upload_common()
-	{
-		//if (m_isCubeMap && m_texType == TT_CUBE)
-		//{
-		//	Buffer buff(m_memeryData->getSize(), m_memeryData->getData<ui8*>());
-		//	return createCube(m_pixFmt, m_usage, m_width, m_height, m_numMipmaps, buff);
-		//}
-		//else
-		{
-			Buffer buff(m_pixelsSize, m_memeryData->getData<ui8*>());
-			return create2D(m_pixFmt, m_usage, m_width, m_height, m_numMipmaps, buff);
-		}
 	}
 }
