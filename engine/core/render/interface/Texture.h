@@ -65,50 +65,45 @@ namespace Echo
 		// set global texture
 		static void setGlobal(ui32 globalTextureIdx, Texture* texture);
 
-		// 获取类型
+		// type
 		TexType getType() const { return m_texType; }
 
-		// 获取像素格式
+		// pixel format
 		PixelFormat getPixelFormat() const{ return m_pixFmt; }
 
-		// 获取宽度
+		// width
 		ui32 getWidth() const { return m_width; }
 
-		// 获取高度
+		// height
 		ui32 getHeight() const{ return m_height; }
 
-		// 获取深度
+		// depth
 		ui32 getDepth() const { return m_depth; }
 
 		// MipMaps
 		ui32 getNumMipmaps() const { return m_numMipmaps; }
 
-		// 更新纹理数据
+		// update texture by rect
 		virtual bool updateSubTex2D(ui32 level, const Rect& rect, void* pData, ui32 size) { return false; }
 		
 		// sampler state
 		void setSamplerState( const SamplerState::SamplerDesc& desc);
 		const SamplerState* getSamplerState() const { return m_samplerState; }
 
-		// 重新创建纹理
-		virtual bool reCreate2D(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff);
-
-		// 根据参数创建2D纹理
+		// create by buffer data
 		virtual bool create2D(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff);
+		virtual bool createCube(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff) { return false; }
 
 		// get compress type
 		ui32 getCompressType() { return m_compressType; }
 
-		// 计算尺寸
+		// calc size
 		virtual size_t	calculateSize() const;
 
 	protected:
 		Texture(const String& name);
 		Texture(TexType texType, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 depth, ui32 numMipmaps, const Buffer& buff, bool bBak = true);
 		virtual ~Texture();
-
-		// 创建立方体贴图
-		virtual bool createCube(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff) { return false; }
 
 	protected:
 		// static load

@@ -82,7 +82,6 @@ namespace Echo
 
 	}
 
-	// load
 	Res* Texture::load(const ResourcePath& path)
 	{
 		if (IO::instance()->isResourceExists(path.getPath()))
@@ -93,7 +92,6 @@ namespace Echo
 		return nullptr;
 	}
 
-	// get global texture
 	Texture* Texture::getGlobal(ui32 globalTextureIdx)
 	{
 		auto it = g_globalTextures.find(globalTextureIdx);
@@ -114,15 +112,6 @@ namespace Echo
 		return false;
 	}
 
-	bool Texture::reCreate2D(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff)
-	{
-		create2D(pixFmt, usage, width, height, numMipmaps, buff);
-		m_pixelsSize = PixelUtil::CalcSurfaceSize(width, height, m_depth, numMipmaps, pixFmt);
-
-		return true;
-	}
-
-	// sampler state
 	void Texture::setSamplerState(const SamplerState::SamplerDesc& desc)
 	{
 		m_samplerState = Renderer::instance()->getSamplerState(desc);
@@ -130,7 +119,6 @@ namespace Echo
 
 	size_t Texture::calculateSize() const
 	{
-		// need repaird
 		return (size_t)PixelUtil::CalcSurfaceSize(m_width, m_height, m_depth, m_numMipmaps, m_pixFmt);
 	}
 }

@@ -3,7 +3,7 @@
 #include "GLESMapping.h"
 #include "GLESRenderTarget.h"
 #include "GLESFrameBuffer.h"
-#include "GLESTexture.h"
+#include "GLESTexture2D.h"
 #include "GLESShaderProgram.h"
 #include "GLESRenderable.h"
 #include <engine/core/log/Log.h>

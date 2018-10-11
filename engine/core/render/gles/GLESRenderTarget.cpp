@@ -3,7 +3,7 @@
 #include "GLESRenderBase.h"
 #include "GLESMapping.h"
 #include "GLESRenderTarget.h"
-#include "GLESTexture.h"
+#include "GLESTexture2D.h"
 
 namespace Echo
 {
