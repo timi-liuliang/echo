@@ -15,6 +15,29 @@ namespace Echo
 {
 	static map<ui32, Texture*>::type	g_globalTextures;
 
+	Texture::Texture()
+		: m_texType(TT_2D)
+		, m_pixFmt(PF_UNKNOWN)
+		, m_usage(TU_DYNAMIC)
+		, m_width(0)
+		, m_height(0)
+		, m_depth(1)
+		, m_numMipmaps(1)
+		, m_pixelsSize(0)
+		, m_compressType(CompressType_Unknown)
+		, m_bCompressed(false)
+		, m_faceNum(1)
+		, m_xDimension(0)
+		, m_yDimension(0)
+		, m_zDimension(0)
+		, m_bitsPerPixel(0)
+		, m_blockSize(0)
+		, m_samplerState(NULL)
+		, m_isMipMapEnable(false)
+	{
+
+	}
+
 	Texture::Texture(const String& name)
 		: Res(name)
 		, m_texType(TT_2D)
@@ -28,15 +51,13 @@ namespace Echo
 		, m_compressType(CompressType_Unknown)
 		, m_bCompressed(false)
 		, m_faceNum(1)
-		, m_endian(0)
 		, m_xDimension(0)
 		, m_yDimension(0)
 		, m_zDimension(0)
 		, m_bitsPerPixel(0)
 		, m_blockSize(0)
-		, m_headerSize(0)
-		, m_uploadedSize(0)
 		, m_samplerState(NULL)
+		, m_isMipMapEnable(false)
 	{
 	}
 
@@ -52,15 +73,13 @@ namespace Echo
 		, m_compressType(CompressType_Unknown)
 		, m_bCompressed(false)
 		, m_faceNum(1)
-		, m_endian(0)
 		, m_xDimension(0)
 		, m_yDimension(0)
 		, m_zDimension(0)
 		, m_bitsPerPixel(0)
 		, m_blockSize(0)
-		, m_headerSize(0)
-		, m_uploadedSize(0)
 		, m_samplerState(NULL)
+		, m_isMipMapEnable(false)
 	{
 		if (numMipmaps > MAX_MINMAPS)
 		{
@@ -79,7 +98,10 @@ namespace Echo
 
 	void Texture::bindMethods()
 	{
+		CLASS_BIND_METHOD(Texture, isMipmapEnable, DEF_METHOD("isMipmapEnable"));
+		CLASS_BIND_METHOD(Texture, setMipmapEnable, DEF_METHOD("setMipmapEnable"));
 
+		CLASS_REGISTER_PROPERTY(Texture, "MipMap", Variant::Type::Bool, "isMipmapEnable", "setMipmapEnable");
 	}
 
 	Res* Texture::load(const ResourcePath& path)

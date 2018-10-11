@@ -49,11 +49,6 @@ namespace Echo
 
 	bool GLESTexture2D::create2D(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff)
 	{
-		for (ui32 level = 0; level < m_numMipmaps; ++level)
-		{
-			ui32 curMipSize = PixelUtil::CalcLevelSize(width, height, 1, level, pixFmt);
-			m_uploadedSize += curMipSize;
-		}
 		m_width = width;
 		m_height = height;
 		m_pixFmt = pixFmt;

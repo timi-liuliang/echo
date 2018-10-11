@@ -57,7 +57,7 @@ namespace Echo
 		static const ui32	MAX_MINMAPS = 16;
 
 	public:
-		Texture() {}
+		Texture();
 
 		// get global texture
 		static Texture* getGlobal(ui32 globalTextureIdx);
@@ -80,7 +80,9 @@ namespace Echo
 		// depth
 		ui32 getDepth() const { return m_depth; }
 
-		// MipMaps
+		// mip map
+		bool isMipmapEnable() const { return m_isMipMapEnable; }
+		void setMipmapEnable(bool isEanble) { m_isMipMapEnable = isEanble; }
 		ui32 getNumMipmaps() const { return m_numMipmaps; }
 
 		// update texture by rect
@@ -118,17 +120,15 @@ namespace Echo
 		ui32				m_width;
 		ui32				m_height;
 		ui32				m_depth;
+		bool				m_isMipMapEnable;
 		ui32				m_numMipmaps;
 		ui32				m_pixelsSize;
 		ui32				m_faceNum;
-		ui32				m_endian;
 		ui32				m_bitsPerPixel;
 		ui32				m_blockSize;
 		ui32				m_xDimension;
 		ui32				m_yDimension;
 		ui32				m_zDimension;
-		ui32				m_headerSize;
-		ui32				m_uploadedSize;		// its actually uploaded size. uploadSize + headerSize + identifier size = m_size
 		ui32				m_surfaceNum;
 		const SamplerState*	m_samplerState;
 	};

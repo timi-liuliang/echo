@@ -59,14 +59,6 @@ namespace Echo
 
 	bool GLESTextureCube::createCube(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff)
 	{
-		for (ui32 face = 0; face < 6; face++)
-		{
-			for (ui32 level = 0; level < m_numMipmaps; ++level)
-			{
-				m_uploadedSize += PixelUtil::CalcLevelSize(width, height, 1, level, pixFmt);;
-			}
-		}
-		
 		unsigned char* image[Texture::CF_End];
 		unsigned char* pixel_data[Texture::CF_End];
 		size_t offset = 0;
