@@ -92,38 +92,4 @@ namespace Echo
 			: Light(LT_Spot)
 		{}
 	};
-
-	/**
-	 * PBR混合灯光
-	 */
-	struct PBRLight : public Light
-	{
-		PBRLight()
-			: Light(LT_PBRLight)
-			, m_selfType(LT_Point)
-			, m_position(Vector4::ZERO)
-			, m_direction(Vector3::ZERO)
-			, m_color(Vector3::ONE)
-			, m_lightParam(-1.f, 0.f, 1.f)
-			, m_spot(Vector3(-1.f, 1.f, 0.f))
-			, m_followModel(true)
-			, m_castShadow(false)
-#ifdef ECHO_EDITOR_MODE
-			, m_logicPos(Vector4::ZERO)
-#endif
-		{ }
-
-		LightType	m_selfType;
-		Vector4		m_position;			// 位置
-		Vector3		m_direction;		// 朝向
-		Vector3		m_color;			// 颜色
-		Vector3		m_lightParam;		// 衰减
-		Vector3		m_spot;				// 聚光灯参数
-		bool		m_followModel;
-		bool		m_castShadow;
-
-#ifdef ECHO_EDITOR_MODE
-		Vector4		m_logicPos;			// 编辑器中光源逻辑位置
-#endif
-	};
 }

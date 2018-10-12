@@ -34,7 +34,7 @@ namespace Echo
 
 	private:
 		Box2DWorld();
-		~Box2DWorld();
+		virtual ~Box2DWorld();
 
 	private:
 		bool			m_isEnable;

@@ -9,6 +9,7 @@
 #include "engine/modules/anim/anim_module.h"
 #include "engine/modules/ai/ai_module.h"
 #include "engine/modules/srp/srp_module.h"
+#include "engine/modules/light/light_module.h"
 
 using namespace Echo;
 
@@ -23,3 +24,4 @@ REGISTER_MODULE(EffectModule)
 REGISTER_MODULE(UIModule)
 REGISTER_MODULE(AIModule)
 REGISTER_MODULE(SRPModule);
+REGISTER_MODULE(LightModule);
