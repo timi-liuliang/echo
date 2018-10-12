@@ -99,7 +99,7 @@ namespace Echo
 				if (m_isMipMapEnable && !m_compressType)
 				{
 					OGLESDebug(glBindTexture(GL_TEXTURE_2D, m_glesTexture));
-					OGLESDebug(glGenerateMipmap(m_glesTexture));
+					OGLESDebug(glGenerateMipmap(GL_TEXTURE_2D));
 					OGLESDebug(glBindTexture(GL_TEXTURE_2D, 0));
 				}
 
