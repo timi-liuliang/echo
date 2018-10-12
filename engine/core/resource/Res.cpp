@@ -34,20 +34,6 @@ namespace Echo
 		}
 	}
 
-	Res* Res::createByClassName(const String& className)
-	{
-		const ResFun* resFun = getResFunByClassName(className);
-		if (resFun)
-		{
-			Res* res = resFun->m_cfun();
-			if (res)
-				return res;
-		}
-
-		EchoLogError("Res::create failed. Unknown class [%s]", className.c_str());
-		return nullptr;
-	}
-
 	Res::~Res()
 	{
 		auto it = g_ress.find(m_path.getPath());

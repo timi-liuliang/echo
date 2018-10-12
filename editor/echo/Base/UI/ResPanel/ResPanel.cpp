@@ -245,7 +245,7 @@ namespace Studio
 		if (action)
 		{
 			Echo::String className = action->text().toStdString().c_str();
-			Echo::ResPtr res = Echo::Res::createByClassName(className);
+			Echo::ResPtr res = (Echo::Res*)Echo::Class::create(className);
 			if (res)
 			{			
 				Echo::String newSavePath;
