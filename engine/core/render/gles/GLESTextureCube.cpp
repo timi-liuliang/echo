@@ -93,7 +93,7 @@ namespace Echo
 			if (memReader.getSize())
 			{
 				Buffer commonTextureBuffer(memReader.getSize(), memReader.getData<ui8*>(), false);
-				Image* image = Image::CreateFromMemory(commonTextureBuffer, Image::GetImageFormat(getPath()));
+				Image* image = Image::CreateFromMemory(commonTextureBuffer, Image::GetImageFormat(path));
 				if (image)
 				{
 					m_isCompressed = false;
@@ -116,9 +116,9 @@ namespace Echo
 		// generate mip maps
 		if (m_isMipMapEnable && !m_compressType)
 		{
-			OGLESDebug(glBindTexture(GL_TEXTURE_CUBE_MAP, m_glesTexture));
-			OGLESDebug(glGenerateMipmap(m_glesTexture));
-			OGLESDebug(glBindTexture(GL_TEXTURE_CUBE_MAP, 0));
+			//OGLESDebug(glBindTexture(GL_TEXTURE_CUBE_MAP, m_glesTexture));
+			//OGLESDebug(glGenerateMipmap(m_glesTexture));
+			//OGLESDebug(glBindTexture(GL_TEXTURE_CUBE_MAP, 0));
 		}
 
 		return true;
