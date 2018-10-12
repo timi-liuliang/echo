@@ -1,6 +1,5 @@
 #include "engine/core/log/Log.h"
 #include "Material.h"
-#include "engine/modules/light/Light.h"
 #include "engine/core/scene/node_tree.h"
 #include "engine/core/render/interface/ShaderProgramRes.h"
 #include "engine/core/render/interface/MaterialDesc.h"

@@ -1,5 +1,5 @@
 #include "light_module.h"
-#include "light_settings.h"
+#include "light.h"
 
 namespace Echo
 {
@@ -10,6 +10,6 @@ namespace Echo
 
 	void LightModule::registerTypes()
 	{
-		Class::registerType<LightSettings>();
+		Class::registerType<Light>();
 	}
 }
