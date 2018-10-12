@@ -45,13 +45,13 @@ namespace Echo
 		GLESTexture2D* texture = dynamic_cast<GLESTexture2D*>(m_bindTexture);
 		EchoAssert(texture);
 
-		OGLESDebug(glGenTextures(1, &texture->m_hTexture));
-		OGLESDebug(glBindTexture(GL_TEXTURE_2D, texture->m_hTexture));
+		OGLESDebug(glGenTextures(1, &texture->m_glesTexture));
+		OGLESDebug(glBindTexture(GL_TEXTURE_2D, texture->m_glesTexture));
 		OGLESDebug(glTexImage2D(GL_TEXTURE_2D, 0, GLES2Mapping::MapInternalFormat(m_pixelFormat), m_width, m_height, 0, GLES2Mapping::MapFormat(m_pixelFormat), GLES2Mapping::MapDataType(m_pixelFormat), (GLvoid*)0));
 
 		OGLESDebug(glGenFramebuffers(1, &m_fbo));
 		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
-		OGLESDebug(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture->m_hTexture, 0));
+		OGLESDebug(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture->m_glesTexture, 0));
 		texture->m_width = m_width;
 		texture->m_height = m_height;
 		texture->m_pixFmt = m_pixelFormat;
@@ -66,11 +66,11 @@ namespace Echo
 			EchoAssert(depthTexture);
 
 			// 将深度缓冲区映射到纹理上(这里应该分情况讨论，rbo效率更高，在不需要depth tex时应该优先使用		
-			OGLESDebug(glGenTextures(1, &depthTexture->m_hTexture));
-			OGLESDebug(glBindTexture(GL_TEXTURE_2D, depthTexture->m_hTexture));
+			OGLESDebug(glGenTextures(1, &depthTexture->m_glesTexture));
+			OGLESDebug(glBindTexture(GL_TEXTURE_2D, depthTexture->m_glesTexture));
 			OGLESDebug(glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, m_width, m_height, 0,  GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, NULL));
 			OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
-			OGLESDebug(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture->m_hTexture, 0));
+			OGLESDebug(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture->m_glesTexture, 0));
 
 			depthTexture->m_width = m_width;
 			depthTexture->m_height = m_height;
@@ -85,7 +85,7 @@ namespace Echo
 			GLESTexture2D* depthTexture = dynamic_cast<GLESTexture2D*>(m_depthTarget->getDepthTexture());
 
 			OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
-			OGLESDebug(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture->m_hTexture, 0));
+			OGLESDebug(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture->m_glesTexture, 0));
 
 			const SamplerState* depthSampleState = m_depthTexture->getSamplerState();
 			EchoAssert(depthSampleState);
@@ -110,8 +110,8 @@ namespace Echo
 		GLESTexture2D* texture = dynamic_cast<GLESTexture2D*>(m_bindTexture);
 		EchoAssert(texture);
 
-		OGLESDebug(glGenTextures(1, &texture->m_hTexture));
-		OGLESDebug(glBindTexture(GL_TEXTURE_CUBE_MAP, texture->m_hTexture));
+		OGLESDebug(glGenTextures(1, &texture->m_glesTexture));
+		OGLESDebug(glBindTexture(GL_TEXTURE_CUBE_MAP, texture->m_glesTexture));
 		for (int f = 0; f < 6; f++)
 		{
 			OGLESDebug(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + f, 0, GLES2Mapping::MapFormat(m_pixelFormat), 
@@ -119,7 +119,7 @@ namespace Echo
 		}
 		OGLESDebug(glGenFramebuffers(1, &m_fbo));
 		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
-		OGLESDebug(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X, texture->m_hTexture, 0));
+		OGLESDebug(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X, texture->m_glesTexture, 0));
 
 		const SamplerState* sampleState = m_bindTexture->getSamplerState();
 		EchoAssert(sampleState);
@@ -302,8 +302,8 @@ namespace Echo
 		GLESTexture2D* texture = ECHO_DOWN_CAST<GLESTexture2D*>(m_bindTexture);
 
 		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
-		OGLESDebug(glBindTexture(GL_TEXTURE_CUBE_MAP, texture->m_hTexture));
-		OGLESDebug(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + cf, texture->m_hTexture, 0));
+		OGLESDebug(glBindTexture(GL_TEXTURE_CUBE_MAP, texture->m_glesTexture));
+		OGLESDebug(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + cf, texture->m_glesTexture, 0));
 		OGLESDebug(glCheckFramebufferStatus(GL_FRAMEBUFFER));
 #endif
 	}

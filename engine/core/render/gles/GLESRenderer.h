@@ -28,6 +28,7 @@ namespace Echo
 	};
 
 	class GLESTexture2D;
+	class GLESTextureCube;
 	class GLES2ShaderProgram;
 	class GLES2Renderer: public Renderer
 	{
@@ -51,7 +52,7 @@ namespace Echo
 		// set texture to the slot
 		virtual void setTexture(ui32 index, Texture* texture,bool needUpdate = false) override;
 
-		// 执行渲染
+		// draw
 		virtual void draw(Renderable* renderable) override;
 
 		void getDepthRange(Vector2& vec);
@@ -61,23 +62,27 @@ namespace Echo
 		void enableAttribLocation(ui32 attribLocation);
 		void disableAttribLocation(ui32 attribLocation);
 
-		GPUBuffer*				createVertexBuffer(Dword usage, const Buffer& buff);
-		GPUBuffer*				createIndexBuffer(Dword usage, const Buffer& buff);
+		// gpu buffer
+		GPUBuffer*	createVertexBuffer(Dword usage, const Buffer& buff);
+		GPUBuffer*	createIndexBuffer(Dword usage, const Buffer& buff);
 
-		// 创建纹理
+		// textures
 		Texture*  createTexture2D(const String& name);
-		Texture*				createTexture2D(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff);
-		ShaderProgram*			createShaderProgram(  ShaderProgramRes* material);
-		Shader*					createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const String& filename);
-		Shader*					createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const char* srcBuffer, ui32 size);
-		RenderTargetView*		createRenderTargetView(PixelFormat fmt, ui32 width, ui32 height);
-		DepthStencilView*		createDepthStencilView(PixelFormat fmt, ui32 width, ui32 height);
-		RasterizerState*		createRasterizerState(const RasterizerState::RasterizerDesc& desc);
-		DepthStencilState*		createDepthStencilState(const DepthStencilState::DepthStencilDesc& desc);
-		BlendState*				createBlendState(const BlendState::BlendDesc& desc);
-		const SamplerState*		getSamplerState(const SamplerState::SamplerDesc& desc);
+		TextureCube* createTextureCube(const String& name);
+
+		ShaderProgram*	createShaderProgram(  ShaderProgramRes* material);
+		Shader*	createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const String& filename);
+		Shader*	createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const char* srcBuffer, ui32 size);
+		RenderTargetView* createRenderTargetView(PixelFormat fmt, ui32 width, ui32 height);
+		DepthStencilView* createDepthStencilView(PixelFormat fmt, ui32 width, ui32 height);
+
+		// states
+		RasterizerState* createRasterizerState(const RasterizerState::RasterizerDesc& desc);
+		DepthStencilState* createDepthStencilState(const DepthStencilState::DepthStencilDesc& desc);
+		BlendState*	createBlendState(const BlendState::BlendDesc& desc);
+		const SamplerState*	getSamplerState(const SamplerState::SamplerDesc& desc);
 	
-		// 创建渲染目标
+		// render target
 		virtual RenderTarget* createRenderTarget(ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const RenderTarget::Options& option);
 
 		virtual ui32 getScreenWidth() { return m_screenWidth; }

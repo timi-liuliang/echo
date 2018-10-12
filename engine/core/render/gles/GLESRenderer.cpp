@@ -4,6 +4,7 @@
 #include "GLESRenderTarget.h"
 #include "GLESFrameBuffer.h"
 #include "GLESTexture2D.h"
+#include "GLESTextureCube.h"
 #include "GLESShaderProgram.h"
 #include "GLESRenderable.h"
 #include <engine/core/log/Log.h>
@@ -225,7 +226,7 @@ namespace Echo
 		{
 			m_dirtyTexSlot = false;
 			OGLESDebug(glActiveTexture(GL_TEXTURE0 + slot));
-			OGLESDebug(glBindTexture(target, texture->m_hTexture));
+			OGLESDebug(glBindTexture(target, texture->m_glesTexture));
 			slotInfo.m_target = target;
 			slotInfo.m_texture = texture;
 		}
@@ -355,9 +356,9 @@ namespace Echo
 		return EchoNew(GLESTexture2D(name));
 	}
 
-	Texture* GLES2Renderer::createTexture2D(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff)
+	TextureCube* GLES2Renderer::createTextureCube(const String& name)
 	{
-		return EchoNew(GLESTexture2D(Texture::TT_2D, pixFmt, usage, width, height, 1, numMipmaps, buff));
+		return name.empty() ? EchoNew(GLESTextureCube) : EchoNew(GLESTextureCube(name));
 	}
 
 	ShaderProgram* GLES2Renderer::createShaderProgram(ShaderProgramRes* material)
@@ -517,7 +518,6 @@ namespace Echo
 		return false;
 	}
 
-	// 获取真实视口大小
 	void GLES2Renderer::getViewportReal(Viewport& pViewport)
 	{
 		GLint viewPort[4];
@@ -526,7 +526,6 @@ namespace Echo
 		pViewport = Viewport(viewPort[0], viewPort[1], viewPort[2], viewPort[3]);
 	}
 
-	// 更新RendererSize
 	void GLES2Renderer::onSize(int width, int height)
 	{
 		m_screenWidth = width;

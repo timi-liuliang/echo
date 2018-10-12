@@ -5,6 +5,7 @@
 #include "FrameBuffer.h"
 #include "Shader.h"
 #include "Texture.h"
+#include "TextureCube.h"
 #include "Renderable.h"
 #include "RenderTarget.h"
 #include "GPUBuffer.h"
@@ -112,8 +113,8 @@ namespace Echo
 		virtual GPUBuffer* createIndexBuffer(Dword usage, const Buffer& buff) = 0;
 
 		// create texture
-		virtual Texture* createTexture2D(const String& name)=0;
-		virtual Texture* createTexture2D(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff) = 0;
+		virtual Texture*     createTexture2D(const String& name)=0;
+		virtual TextureCube* createTextureCube(const String& name) = 0;
 
 		void dirtyTexSlot(){ m_dirtyTexSlot = true; }
 

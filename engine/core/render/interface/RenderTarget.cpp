@@ -57,7 +57,7 @@ namespace Echo
 		texture->m_depth = 1;
 
 		texture->m_pixFmt = m_pixelFormat;
-		texture->m_bCompressed = false;
+		texture->m_isCompressed = false;
 		texture->m_compressType = Texture::CompressType_Unknown;
 
 		if (!m_isCubemap)

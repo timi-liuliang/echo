@@ -1,4 +1,5 @@
 #include "TextureCube.h"
+#include "Renderer.h"
 
 namespace Echo
 {
@@ -17,6 +18,12 @@ namespace Echo
 	TextureCube::~TextureCube()
 	{
 
+	}
+
+	// create fun
+	Res* TextureCube::create()
+	{
+		return Renderer::instance()->createTextureCube("");
 	}
 
 	// bind methods to script

@@ -13,17 +13,8 @@ namespace Echo
 {
 	GLESTexture2D::GLESTexture2D(const String& name)
 		: Texture(name)
-		, m_hTexture(0)
+		, m_glesTexture(0)
 	{
-		load();
-	}
-
-	GLESTexture2D::GLESTexture2D(TexType texType, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 depth, ui32 numMipmaps, const Buffer &buff, bool bBak)
-		: Texture(texType, pixFmt, usage, width, height, depth, numMipmaps, buff)
-	{
-		m_hTexture = 0;
-
-		create2D(pixFmt, usage, width, height, numMipmaps, buff);
 	}
 
 	GLESTexture2D::~GLESTexture2D()
@@ -36,7 +27,7 @@ namespace Echo
 		if(level >= m_numMipmaps || !pData)
 			return false;
 
-		OGLESDebug(glBindTexture(GL_TEXTURE_2D, m_hTexture));
+		OGLESDebug(glBindTexture(GL_TEXTURE_2D, m_glesTexture));
 
 		GLenum glFmt = GLES2Mapping::MapFormat(m_pixFmt);
 		GLenum glType = GLES2Mapping::MapDataType(m_pixFmt);
@@ -47,95 +38,42 @@ namespace Echo
 		return true;
 	}
 
-	bool GLESTexture2D::create2D(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff)
+	void GLESTexture2D::create2DTexture()
 	{
-		m_width = width;
-		m_height = height;
-		m_pixFmt = pixFmt;
+		unload();
 
-		OGLESDebug(glGenTextures(1, &m_hTexture));
-		if (!m_hTexture)
-		{
-			EchoLogError("Create GLES2Texture [%s] failed.", PixelUtil::GetPixelFormatName(pixFmt).c_str());
-			return false;
-		}
-
-		OGLESDebug(glBindTexture(GL_TEXTURE_2D, m_hTexture));
+		OGLESDebug(glGenTextures(1, &m_glesTexture));
+		OGLESDebug(glBindTexture(GL_TEXTURE_2D, m_glesTexture));
 		OGLESDebug(glPixelStorei(GL_UNPACK_ALIGNMENT, 1));
-
 		OGLESDebug(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
 		OGLESDebug(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+		OGLESDebug(glBindTexture(GL_TEXTURE_2D, 0));
+	}
 
-		ui32 texWidth = width;
-		ui32 texHeight = height;
-		Byte* pData = buff.getData();
+	void GLESTexture2D::set2DSurfaceData(int level, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, const Buffer& buff)
+	{
+		OGLESDebug(glBindTexture(GL_TEXTURE_2D, m_glesTexture));
+		OGLESDebug(glPixelStorei(GL_UNPACK_ALIGNMENT, 1));
 
-		bool bHasData = (pData != NULL ? true : false);
-
-		PixelFormat srcPixFmt = pixFmt;
-		PixelFormat dstPixFmt = pixFmt;
-		switch (pixFmt)
+		GLenum internalFmt = GLES2Mapping::MapInternalFormat(pixFmt);
+		if (PixelUtil::IsCompressed(pixFmt))
 		{
-			case PF_R8_UNORM:
-			{
-				srcPixFmt = PF_R8_UNORM;
-				dstPixFmt = PF_RGBA8_UNORM;
-			} break;
-			default: break;
+			OGLESDebug(glCompressedTexImage2D(GL_TEXTURE_2D, level, internalFmt, width, height, 0, buff.getSize(), buff.getData()));
 		}
-
-		bool bRequiredConvert = (srcPixFmt == dstPixFmt ? false : true);
-		for (ui32 level = 0; level < m_numMipmaps; ++level)
+		else
 		{
-			Byte* curMipData = 0;
-			if (bHasData)
-			{
-				if (bRequiredConvert)
-				{
-					PixelBox srcBox(texWidth, texHeight, 1, srcPixFmt, pData);
-					PixelBox dstBox(texWidth, texHeight, 1, dstPixFmt);
-					dstBox.pData = ECHO_ALLOC_T(Byte, dstBox.getConsecutiveSize());
-
-					PixelUtil::BulkPixelConversion(srcBox, dstBox);
-					curMipData = (Byte*)dstBox.pData;
-				}
-				else
-				{
-					curMipData = pData;
-				}
-			}
-
-			ui32 curMipSize = PixelUtil::CalcLevelSize(width, height, 1, level, pixFmt);
-			GLenum internalFmt = GLES2Mapping::MapInternalFormat(dstPixFmt);
-			if (PixelUtil::IsCompressed(pixFmt))
-			{
-				OGLESDebug(glCompressedTexImage2D(GL_TEXTURE_2D, level, internalFmt, texWidth, texHeight, 0, curMipSize, curMipData));
-			}
-			else
-			{
-				GLenum glFmt = GLES2Mapping::MapFormat(dstPixFmt);
-				GLenum glType = GLES2Mapping::MapDataType(dstPixFmt);
-				OGLESDebug(glTexImage2D(GL_TEXTURE_2D, level, internalFmt, texWidth, texHeight, 0, glFmt, glType, curMipData));
-			}
-
-			if (bHasData)
-			{
-				if (bRequiredConvert)
-					ECHO_FREE(curMipData);
-			}
-
-			pData += curMipSize;
-
-			texWidth = (texWidth > 1) ? texWidth >> 1 : 1;
-			texHeight = (texHeight > 1) ? texHeight >> 1 : 1;
+			GLenum glFmt = GLES2Mapping::MapFormat(pixFmt);
+			GLenum glType = GLES2Mapping::MapDataType(pixFmt);
+			OGLESDebug(glTexImage2D(GL_TEXTURE_2D, level, internalFmt, width, height, 0, glFmt, glType, buff.getData()));
 		}
 
 		OGLESDebug(glBindTexture(GL_TEXTURE_2D, 0));
-		return true;
 	}
 
 	bool GLESTexture2D::load()
 	{
+		create2DTexture();
+
 		MemoryReader memReader(getPath());
 		if (memReader.getSize())
 		{
@@ -143,24 +81,29 @@ namespace Echo
 			Image* image = Image::CreateFromMemory(commonTextureBuffer, Image::GetImageFormat(getPath()));
 			if (image)
 			{
-				m_bCompressed = false;
+				m_isCompressed = false;
 				m_compressType = Texture::CompressType_Unknown;
 				PixelFormat pixFmt = image->getPixelFormat();
 				m_width = image->getWidth();
 				m_height = image->getHeight();
 				m_depth = image->getDepth();
 				m_pixFmt = pixFmt;
-				m_numMipmaps = image->getNumMipmaps();
-				if (m_numMipmaps == 0)
-					m_numMipmaps = 1;
+				m_numMipmaps = image->getNumMipmaps() ? image->getNumMipmaps() : 1;
+				ui32 pixelsSize = PixelUtil::CalcSurfaceSize(m_width, m_height, m_depth, m_numMipmaps, m_pixFmt);
+				Buffer buff(pixelsSize, image->getData(), false);
 
-				m_pixelsSize = PixelUtil::CalcSurfaceSize(m_width, m_height, m_depth, m_numMipmaps, m_pixFmt);
-
-				// load to gpu
-				Buffer buff(m_pixelsSize, image->getData(), false);
-				create2D(m_pixFmt, m_usage, m_width, m_height, m_numMipmaps, buff);
-
+				set2DSurfaceData( 0, m_pixFmt, m_usage, m_width, m_height, buff);
 				EchoSafeDelete(image, Image);
+
+				// generate mip maps
+				if (m_isMipMapEnable && !m_compressType)
+				{
+					OGLESDebug(glBindTexture(GL_TEXTURE_2D, m_glesTexture));
+					OGLESDebug(glGenerateMipmap(m_glesTexture));
+					OGLESDebug(glBindTexture(GL_TEXTURE_2D, 0));
+				}
+
+				return true;
 			}
 		}
 
@@ -169,10 +112,10 @@ namespace Echo
 
 	bool GLESTexture2D::unload()
 	{
-		if (m_hTexture)
+		if (m_glesTexture)
 		{
-			OGLESDebug(glDeleteTextures(1, &m_hTexture));
-			m_hTexture = 0;
+			OGLESDebug(glDeleteTextures(1, &m_glesTexture));
+			m_glesTexture = 0;
 		}
 
 		return true;

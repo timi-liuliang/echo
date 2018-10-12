@@ -9,8 +9,8 @@ namespace Echo
 		friend class GLES2Renderer;
 
 	protected:
+		GLESTextureCube();
 		GLESTextureCube(const String& name);
-		GLESTextureCube(TexType texType, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 depth, ui32 numMipmaps, const Buffer& buff, bool bBak = true);
 		virtual ~GLESTextureCube();
 
 		// load
@@ -24,7 +24,7 @@ namespace Echo
 		void createCubeTexture();
 
 		// set surface data
-		void setCubeSurfaceData(int face, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff);
+		void setCubeSurfaceData(int face, int level, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff);
 
 	public:
 		GLuint		m_glesTexture;

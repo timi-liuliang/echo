@@ -7,12 +7,15 @@ namespace Echo
 {
 	class TextureCube : public Texture
 	{
-		ECHO_RES(TextureCube, Texture, ".cube", Res::create<TextureCube>, Res::load)
+		ECHO_RES(TextureCube, Texture, ".cube", TextureCube::create, Res::load)
 
 	public:
 		TextureCube();
 		TextureCube(const String& name);
 		virtual ~TextureCube();
+
+		// create fun
+		static Res* create();
 
 	public:
 		// positive x

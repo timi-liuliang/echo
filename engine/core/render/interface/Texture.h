@@ -92,10 +92,6 @@ namespace Echo
 		void setSamplerState( const SamplerState::SamplerDesc& desc);
 		const SamplerState* getSamplerState() const { return m_samplerState; }
 
-		// create by buffer data
-		virtual bool create2D(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff) { return false; }
-		virtual bool createCube(PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 numMipmaps, const Buffer& buff) { return false; }
-
 		// get compress type
 		ui32 getCompressType() { return m_compressType; }
 
@@ -107,7 +103,6 @@ namespace Echo
 
 	protected:
 		Texture(const String& name);
-		Texture(TexType texType, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, ui32 depth, ui32 numMipmaps, const Buffer& buff, bool bBak = true);
 		virtual ~Texture();
 
 	protected:
@@ -117,7 +112,7 @@ namespace Echo
 	public:
 		TexType				m_texType;
 		PixelFormat			m_pixFmt;
-		bool				m_bCompressed;
+		bool				m_isCompressed;
 		ui32				m_compressType;
 		Dword				m_usage;
 		ui32				m_width;
@@ -125,9 +120,7 @@ namespace Echo
 		ui32				m_depth;
 		bool				m_isMipMapEnable;
 		ui32				m_numMipmaps;
-		ui32				m_pixelsSize;
 		ui32				m_faceNum;
-		ui32				m_bitsPerPixel;
 		ui32				m_blockSize;
 		ui32				m_xDimension;
 		ui32				m_yDimension;
