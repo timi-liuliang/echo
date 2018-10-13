@@ -5,6 +5,7 @@
 #include "interface/ShaderProgramRes.h"
 #include "engine/core/main/Engine.h"
 #include "engine/core/gizmos/Gizmos.h"
+#include "engine/modules/light/light.h"
 
 namespace Echo
 {
@@ -19,6 +20,9 @@ namespace Echo
 		, m_material(nullptr)
 		, m_skeletonDirty(false)
 		, m_skeleton(nullptr)
+		, m_iblDiffuseSlot(-1)
+		, m_iblSpecularSlot(-1)
+		, m_iblBrdfSlot(-1)
 	{
 		set2d(false);
 	}
@@ -112,6 +116,14 @@ namespace Echo
 				Mesh* mesh = m_asset->m_meshes[m_meshIdx].m_primitives[m_primitiveIdx].m_mesh;
 				m_renderable = Renderable::create(mesh, material, this);
 
+				// image based lighting
+				if (material->isMacroUsed("USE_IBL"))
+				{
+					m_iblDiffuseSlot = material->getUniformValue("u_DiffuseEnvSampler") ? *(i32*)material->getUniformValue("u_DiffuseEnvSampler") : -1;
+					m_iblSpecularSlot = material->getUniformValue("u_SpecularEnvSampler") ? *(i32*)material->getUniformValue("u_SpecularEnvSampler") : -1;
+					m_iblBrdfSlot = material->getUniformValue("u_brdfLUT") ? *(i32*)material->getUniformValue("u_brdfLUT") : -1;
+				}
+
 				m_renderableDirty = false;
 			}
 		}
@@ -133,6 +145,11 @@ namespace Echo
 			{
 				syncGltfNodeAnim();
 				syncGltfSkinAnim();
+			}
+
+			if(/*m_isUseLight*/ true)
+			{
+				syncLightData();
 			}
 
 			buildRenderable();
@@ -170,13 +187,28 @@ namespace Echo
 		}
 	}
 
+	// light data
+	void GltfMesh::syncLightData()
+	{
+		if (m_renderable)
+		{
+			Material* material = m_material ? m_material : m_asset->m_meshes[m_meshIdx].m_primitives[m_primitiveIdx].m_materialInst;
+			if (material->isMacroUsed("USE_IBL"))
+			{
+				m_renderable->setTexture(m_iblDiffuseSlot, Light::instance()->getIBLDiffuseTexture());
+				m_renderable->setTexture(m_iblSpecularSlot, Light::instance()->getIBLSpecularTexture());
+				m_renderable->setTexture(m_iblBrdfSlot, Light::instance()->getIBLBrdfTexture());
+			}
+		}
+	}
+
 	void* GltfMesh::getGlobalUniformValue(const String& name)
 	{
 		void* value = Render::getGlobalUniformValue(name);
 		if (value)
 			return value;	
 
-		else if (name == "u_LightDirection")
+		if (name == "u_LightDirection")
 		{
 			static Vector3 lightDirectionFromSurfaceToLight(1.f, 1.f, 0.5f);
 			lightDirectionFromSurfaceToLight.normalize();
@@ -191,21 +223,21 @@ namespace Echo
 		{
 			return m_jointMatrixs.data();
 		}
-		//else if (name == "u_DiffuseEnvSampler")
-		//{
-		//	static i32 idx = i32(GltfImageBasedLight::TextureIndex::DiffuseCube);
-		//	return &idx;
-		//}
-		//else if (name == "u_SpecularEnvSampler")
-		//{
-		//	static i32 idx = i32(GltfImageBasedLight::TextureIndex::SpecularCube);
-		//	return &idx;
-		//}
-		//else if (name == "u_brdfLUT")
-		//{
-		//	static i32 idx = i32(GltfImageBasedLight::TextureIndex::BrdfLUT);
-		//	return &idx;
-		//}
+		else if (name == "u_DiffuseEnvSampler")
+		{
+			static i32 idx = 0;// i32(GltfImageBasedLight::TextureIndex::DiffuseCube);
+			return &idx;
+		}
+		else if (name == "u_SpecularEnvSampler")
+		{
+			static i32 idx = 0;// i32(GltfImageBasedLight::TextureIndex::SpecularCube);
+			return &idx;
+		}
+		else if (name == "u_brdfLUT")
+		{
+			static i32 idx = 0;// i32(GltfImageBasedLight::TextureIndex::BrdfLUT);
+			return &idx;
+		}
 
 		return nullptr;
 	}

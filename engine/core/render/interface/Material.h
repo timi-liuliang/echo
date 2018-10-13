@@ -93,7 +93,7 @@ namespace Echo
 		// 获取纹理数量(不包含全局纹理)
 		int getTextureNum() { return static_cast<int>(m_textures.size()); }
 
-		// 设置贴图
+		// texture
 		Texture* setTexture(const String& name, const String& uri);
 		Texture* setTexture(const String& name, Texture* texture);
 

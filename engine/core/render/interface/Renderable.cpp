@@ -63,17 +63,8 @@ namespace Echo
 			else
 			{
 				i32* slotIdxPtr  = (i32*)matInst->getUniformValue(uniform.m_name);
-				i32  slotIdx = *slotIdxPtr;
-				i32* globalTexture = (i32*)node->getGlobalUniformValue(uniform.m_name);
-				if (!globalTexture)
-				{
-					Texture* texture = matInst->getTexture(slotIdx);
-					renderable->setTexture(slotIdx, texture);
-				}
-				else
-				{
-					renderable->setTexture(slotIdx, Texture::getGlobal(*globalTexture));
-				}
+				Texture* texture = matInst->getTexture(*slotIdxPtr);
+				renderable->setTexture(*slotIdxPtr, texture);
 
 				renderable->setShaderParam(shaderProgram->getParamPhysicsIndex(uniform.m_name), uniform.m_type, slotIdxPtr, uniform.m_count);
 			}

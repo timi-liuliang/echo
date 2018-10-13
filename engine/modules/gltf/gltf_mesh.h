@@ -56,6 +56,9 @@ namespace Echo
 		void syncGltfNodeAnim();
 		void syncGltfSkinAnim();
 
+		// light data
+		void syncLightData();
+
 	private:
 		bool					m_renderableDirty;
 		Renderable*				m_renderable;
@@ -71,5 +74,8 @@ namespace Echo
 		bool					m_skeletonDirty;	// dirty flag
 		GltfSkeleton*			m_skeleton;
 		vector<Matrix4>::type	m_jointMatrixs;
+		i32						m_iblDiffuseSlot;
+		i32						m_iblSpecularSlot;
+		i32						m_iblBrdfSlot;
 	};
 }
