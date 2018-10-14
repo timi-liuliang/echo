@@ -17,6 +17,9 @@ namespace Echo
 		// create fun
 		static Res* create();
 
+		// type
+		virtual TexType getType() const override { return TT_Cube; }
+
 	public:
 		// positive x
 		void setPositiveX(const ResourcePath& path);

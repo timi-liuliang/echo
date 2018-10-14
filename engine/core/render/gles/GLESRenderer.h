@@ -5,11 +5,10 @@
 
 namespace Echo
 {
-	// 纹理槽信息
 	struct TextureSlotInfo
 	{
-		GLenum						m_target;
-		const Texture*				m_texture;
+		GLenum				m_target;
+		GLuint				m_texture;
 		const GLES2SamplerState*	m_samplerState;	// 采样状态
 		
 
@@ -22,7 +21,7 @@ namespace Echo
 		void reset()
 		{
 			m_target = -1;
-			m_texture= NULL;
+			m_texture = 0;
 			m_samplerState = NULL;
 		}
 	};
@@ -100,16 +99,20 @@ namespace Echo
 		//  interal implement
 		virtual Renderable* createRenderableInernal(const String& renderStage, ShaderProgramRes* shader, int identifier)override;
 
-		// 渲染到屏幕
+		// preset to screen
 		virtual bool doPresent();
 
 		// bind texture to slot
-		void bindTexture(GLenum slot, GLenum target, GLESTexture2D* texture, bool needReset = false);
+		void bindTexture(GLenum slot, GLenum target, GLuint texture, bool needReset = false);
 
 		bool initializeImpl(const Config& config);
 		void destroyImpl();
 		virtual void createSystemResource();
 		virtual void cleanSystemResource();
+
+	protected:
+		// get gles texture handle by texture ptr
+		GLuint getGlesTexture(Texture* texture);
 
 	protected:
 		GLES2ShaderProgram*			m_pre_shader_program;

@@ -394,7 +394,7 @@ namespace Echo
 			switch(type)
 			{
 			case Texture::TT_2D:			return GL_TEXTURE_2D;
-			case Texture::TT_CUBE:			return GL_TEXTURE_CUBE_MAP;
+			case Texture::TT_Cube:			return GL_TEXTURE_CUBE_MAP;
 			default:
 				{
 					EchoAssert(false);

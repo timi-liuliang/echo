@@ -8,15 +8,23 @@
 
 namespace Echo
 {
-	static const size_t MAX_TEXTURE_SAMPLER = 8;
-	static const int	SHADER_TEXTURE_SLOT0= 0;	// 默认使用纹理槽
-	static const int	SHADER_TEXTURE_SLOT1= 1;	// 默认使用纹理槽
-	static const int	SHADER_TEXTURE_SLOT2= 2;	// 默认使用纹理槽
-	static const int	SHADER_TEXTURE_SLOT3= 3;	// 默认使用纹理槽
-	static const int	SHADER_TEXTURE_SLOT4= 4;	// 默认使用纹理槽
-	static const int	SHADER_TEXTURE_SLOT5= 5;	// 默认使用纹理槽
-	static const int	SHADER_TEXTURE_SLOT6= 6;	// 默认使用纹理槽
-	static const int	SHADER_TEXTURE_SLOT7= 7;	// 默认使用纹理槽
+	static const size_t MAX_TEXTURE_SAMPLER = 16;
+	static const int	SHADER_TEXTURE_SLOT0= 0;
+	static const int	SHADER_TEXTURE_SLOT1= 1;
+	static const int	SHADER_TEXTURE_SLOT2= 2;
+	static const int	SHADER_TEXTURE_SLOT3= 3;
+	static const int	SHADER_TEXTURE_SLOT4= 4;
+	static const int	SHADER_TEXTURE_SLOT5= 5;
+	static const int	SHADER_TEXTURE_SLOT6= 6;
+	static const int	SHADER_TEXTURE_SLOT7= 7;
+	static const int	SHADER_TEXTURE_SLOT8 = 8;
+	static const int	SHADER_TEXTURE_SLOT9 = 9;
+	static const int	SHADER_TEXTURE_SLOT10 = 10;
+	static const int	SHADER_TEXTURE_SLOT11 = 11;
+	static const int	SHADER_TEXTURE_SLOT12 = 12;
+	static const int	SHADER_TEXTURE_SLOT13 = 13;
+	static const int	SHADER_TEXTURE_SLOT14 = 14;
+	static const int	SHADER_TEXTURE_SLOT15 = 15;
 
 	class Render;
 	class Mesh;

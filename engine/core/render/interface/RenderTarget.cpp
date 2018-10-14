@@ -62,12 +62,10 @@ namespace Echo
 
 		if (!m_isCubemap)
 		{
-			texture->m_texType = Texture::TT_2D;
 			return doCreate();
 		}
 		else
 		{
-			texture->m_texType = Texture::TT_CUBE;
 			return doCreateCubemap();
 		}
 	}

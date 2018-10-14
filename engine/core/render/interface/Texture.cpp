@@ -16,8 +16,7 @@ namespace Echo
 	static map<ui32, Texture*>::type	g_globalTextures;
 
 	Texture::Texture()
-		: m_texType(TT_2D)
-		, m_pixFmt(PF_UNKNOWN)
+		: m_pixFmt(PF_UNKNOWN)
 		, m_usage(TU_DYNAMIC)
 		, m_width(0)
 		, m_height(0)
@@ -38,7 +37,6 @@ namespace Echo
 
 	Texture::Texture(const String& name)
 		: Res(name)
-		, m_texType(TT_2D)
 		, m_pixFmt(PF_UNKNOWN)
 		, m_usage(TU_DYNAMIC)
 		, m_width(0)

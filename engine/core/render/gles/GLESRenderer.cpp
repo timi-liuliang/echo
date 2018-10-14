@@ -195,23 +195,22 @@ namespace Echo
 		OGLESDebug(glDisable(GL_SCISSOR_TEST));
 	}
 
+	GLuint GLES2Renderer::getGlesTexture(Texture* texture)
+	{
+		switch (texture->getType())
+		{
+		case Texture::TT_2D:	return ECHO_DOWN_CAST<GLESTexture2D*>(texture)->m_glesTexture;
+		case Texture::TT_Cube:  return ECHO_DOWN_CAST<GLESTextureCube*>(texture)->m_glesTexture;
+		default:				return 0;
+		}
+	}
+
 	void GLES2Renderer::setTexture(ui32 index, Texture* texture, bool needUpdate)
 	{
 		if (texture)
 		{
-			try
-			{
-				GLESTexture2D* esTexture = ECHO_DOWN_CAST<GLESTexture2D*>(texture);
-				if (esTexture)
-				{
-					GLenum glTarget = GLES2Mapping::MapTextureType(esTexture->getType());
-					bindTexture(index, glTarget, esTexture, needUpdate);
-				}
-			}
-			catch (...)
-			{
-				EchoLogError("GLES2Renderer::setTexture failed");
-			}
+			GLenum glTarget = GLES2Mapping::MapTextureType(texture->getType());
+			bindTexture(index, glTarget, getGlesTexture(texture), needUpdate);
 		}
 		else
 		{
@@ -219,14 +218,14 @@ namespace Echo
 		}
 	}
 
-	void GLES2Renderer::bindTexture(GLenum slot, GLenum target, GLESTexture2D* texture, bool needReset)
+	void GLES2Renderer::bindTexture(GLenum slot, GLenum target, GLuint texture, bool needReset)
 	{
 		TextureSlotInfo& slotInfo = m_preTextures[slot];
 //		if (m_dirtyTexSlot || slotInfo.m_target != target || slotInfo.m_texture != texture || needReset)
 		{
 			m_dirtyTexSlot = false;
 			OGLESDebug(glActiveTexture(GL_TEXTURE0 + slot));
-			OGLESDebug(glBindTexture(target, texture->m_glesTexture));
+			OGLESDebug(glBindTexture(target, texture));
 			slotInfo.m_target = target;
 			slotInfo.m_texture = texture;
 		}

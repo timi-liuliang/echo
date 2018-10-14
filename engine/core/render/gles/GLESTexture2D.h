@@ -12,6 +12,9 @@ namespace Echo
 		// updateSubTex2D
 		virtual	bool updateSubTex2D(ui32 level, const Rect& rect, void* pData, ui32 size) override;
 
+		// type
+		virtual TexType getType() const override { return TT_2D; }
+
 	protected:
 		GLESTexture2D(const String& name);
 		virtual ~GLESTexture2D();

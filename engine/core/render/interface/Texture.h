@@ -22,7 +22,8 @@ namespace Echo
 			TT_1D,
 			TT_2D,
 			TT_3D,
-			TT_CUBE,
+			TT_Cube,
+			TT_Unknown,
 		};
 
 		enum CubeFace
@@ -66,7 +67,7 @@ namespace Echo
 		static void setGlobal(ui32 globalTextureIdx, Texture* texture);
 
 		// type
-		TexType getType() const { return m_texType; }
+		virtual TexType getType() const { return TT_Unknown; }
 
 		// pixel format
 		PixelFormat getPixelFormat() const{ return m_pixFmt; }
@@ -110,7 +111,6 @@ namespace Echo
 		static Res* load(const ResourcePath& path);
 
 	public:
-		TexType				m_texType;
 		PixelFormat			m_pixFmt;
 		bool				m_isCompressed;
 		ui32				m_compressType;
