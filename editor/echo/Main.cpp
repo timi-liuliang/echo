@@ -5,6 +5,7 @@
 #include <QScopedPointer>
 #include <QtPlugin>
 #include <QSplashScreen>
+#include <QSettings>
 #include "CMDLine.h"
 #include "Studio.h"
 #include <shellapi.h>
@@ -13,18 +14,11 @@
 #include <engine/core/base/EchoDef.h>
 #include <algorithm>
 
-
-
 int main( int argc, char* argv[])
 {
 #ifdef ECHO_PLATFORM_WINDOWS
-	//int aElements[2] = { COLOR_WINDOWFRAME, COLOR_ACTIVECAPTION };
-
-	//DWORD aNewColors[2];
-	//aNewColors[0] = RGB(83, 83, 83);  // light gray 
-	//aNewColors[1] = RGB(83, 83, 83);  // dark purple
-
-	//SetSysColors(2, aElements, aNewColors);
+	// default icon
+	QSettings settings;
 #endif
 
 	// set directory path

@@ -30,7 +30,7 @@ namespace Echo
 				GameMode gameMode;
 				gameMode.exec(argc, argv);
 			}
-			else if (sargv[0] == "editopen")
+			else if ( argc==2)
 			{
 				EditOpenMode openMode;
 				openMode.exec(argc, argv);
@@ -146,10 +146,6 @@ namespace Echo
 	// exec command
 	bool EditOpenMode::exec(int argc, char* argv[])
 	{
-		Echo::String type = argv[1];
-		if (type != "editopen")
-			return false;
-
 		QApplication app(argc, argv);
 		app.setAttribute(Qt::AA_NativeWindows);
 
@@ -189,7 +185,7 @@ namespace Echo
 		// ÏÔÊ¾Ö÷´°¿Ú
 		TIME_PROFILE
 		(
-			Echo::String projectFile = argv[2];
+			Echo::String projectFile = argv[1];
 			g_astudio->getProjectWindow()->openProject( projectFile);
 		)
 

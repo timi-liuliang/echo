@@ -343,7 +343,7 @@ void main()
     vec3 specularEnvironmentR90 = vec3(1.0, 1.0, 1.0) * reflectance90;
 
     vec3 n = getNormal();                             // normal at surface point
-    vec3 v = normalize(u_CameraPosition - v_Position);        // Vector from surface point to camera
+    vec3 v = normalize(u_CameraPosition - v_Position);// Vector from surface point to camera
     vec3 l = normalize(u_LightDirection);             // Vector from surface point to light
     vec3 h = normalize(l+v);                          // Half vector between both l and v
     vec3 reflection = -normalize(reflect(v, n));

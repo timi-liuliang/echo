@@ -201,7 +201,7 @@ namespace Studio
 	void MainWindow::openAnotherProject(const Echo::String& fullPathName)
 	{
 		Echo::String app = QCoreApplication::applicationFilePath().toStdString().c_str();
-		Echo::String cmd = Echo::StringUtil::Format("%s editopen %s", app.c_str(), fullPathName.c_str());
+		Echo::String cmd = Echo::StringUtil::Format("%s %s", app.c_str(), fullPathName.c_str());
 
 		QProcess process;
 		process.startDetached(cmd.c_str());

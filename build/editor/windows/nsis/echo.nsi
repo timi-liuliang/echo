@@ -1,3 +1,5 @@
+!include "register_extension.nsh"
+
 # name the installer
 OutFile echo-setup.exe
 
@@ -23,5 +25,8 @@ Section
 	# create desktop shortcut
 	SetShellVarContext all
 	CreateShortCut "$DESKTOP\echo.lnk" "$INSTDIR\bin\Win32\Release\echo.exe" ""
+	
+	# associate echo file
+	${registerExtension} "$INSTDIR\bin\Win32\Release\echo.exe" ".echo" "echo project file"
 
 SectionEnd
