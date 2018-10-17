@@ -10,6 +10,7 @@
 #include "Window.h"
 #include "ProjectWnd.h"
 #include "GameMainWindow.h"
+#include <engine/core/util/PathUtil.h>
 #include <engine/core/util/TimeProfiler.h>
 
 namespace Echo
@@ -186,6 +187,7 @@ namespace Echo
 		TIME_PROFILE
 		(
 			Echo::String projectFile = argv[1];
+			Echo::PathUtil::FormatPath(projectFile, false);
 			g_astudio->getProjectWindow()->openProject( projectFile);
 		)
 
