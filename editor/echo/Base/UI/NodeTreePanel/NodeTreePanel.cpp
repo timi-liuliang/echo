@@ -185,7 +185,7 @@ namespace Studio
 			if (node)
 			{
 				// change color
-				curItem->setForeground(0, QBrush(node->isEnable() ? QColor(243, 243, 243) : QColor(121, 121, 121)));
+				curItem->setForeground(0, QBrush(node->isEnable() ? QColor(220, 220, 220) : QColor(120, 120, 120)));
 
 				// font
 				//QFont font = curItem->font(0);
