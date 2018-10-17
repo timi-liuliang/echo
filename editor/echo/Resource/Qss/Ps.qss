@@ -247,8 +247,6 @@ QTreeView::item
 
 QTreeView::item:hover
 {
-	/*font : bold;
-	background-color: rgb(107,107,107);*/
 }
 
 QTreeView::item:selected
@@ -257,12 +255,6 @@ QTreeView::item:selected
 	font : bold;
 	padding: -1;
 	background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgb(14,99,156), stop:0.5 rgb(14,99,156), stop:1 rgb(14,99,156));
-}
-
-QTreeView::branch:hover
-{
-	/*font : bold;
-	background-color: rgb(107,107,107);*/
 }
 
 /*
