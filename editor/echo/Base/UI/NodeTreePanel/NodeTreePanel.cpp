@@ -184,21 +184,13 @@ namespace Studio
 			Echo::Node* node = getNode(curItem);
 			if (node)
 			{
-				// no effect now!!! do it when we have time
-				// curItem->setBackgroundColor(0, node->isActive() ? QColor(255, 0, 0) : QColor(0, 255, 0));
-				curItem->setData(0, Qt::ForegroundRole, "");
+				// change color
+				curItem->setForeground(0, QBrush(node->isEnable() ? QColor(243, 243, 243) : QColor(121, 121, 121)));
 
-				QFont font = curItem->font(0);
-				font.setItalic(!node->isEnable());
-				if (!node->isEnable())
-				{
-					curItem->setForeground(0, QBrush(Qt::red));
-				}
-				else
-				{
-					curItem->setForeground(0, QBrush(Qt::white));
-				}
-				curItem->setFont(0, font);
+				// font
+				//QFont font = curItem->font(0);
+				//font.setItalic(!node->isEnable());
+				//curItem->setFont(0, font);
 			}
 		}
 	}
