@@ -4,6 +4,8 @@
 
 namespace Echo
 {
+	// 1. used for light map
+	// 2. real time painter
 	class SRayModule : public Module
 	{
 	public:
