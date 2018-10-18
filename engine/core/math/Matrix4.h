@@ -26,62 +26,54 @@ namespace Echo
 		static const Matrix4 IDENTITY;
 		static const Matrix4 INVALID;
 		static const Matrix4 D3D2GL_PROJ;
-		static ui32	 OP_COUNT;
 
 	public:
 		inline Matrix4()
 		{
 		}
 
-		inline Matrix4(Real f00, Real f01, Real f02, Real f03,
+		Matrix4(Real f00, Real f01, Real f02, Real f03,
 			Real f10, Real f11, Real f12, Real f13,
 			Real f20, Real f21, Real f22, Real f23,
 			Real f30, Real f31, Real f32, Real f33)
 		{
-			ADD_MATH_OP_COUNT
 			m00 = f00; m01 = f01; m02 = f02; m03 = f03;
 			m10 = f10; m11 = f11; m12 = f12; m13 = f13;
 			m20 = f20; m21 = f21; m22 = f22; m23 = f23;
 			m30 = f30; m31 = f31; m32 = f32; m33 = f33;
 		}
 
-		inline Matrix4(Real* arr)
+		Matrix4(Real* arr)
 		{
-			ADD_MATH_OP_COUNT
 			memcpy(m, arr, sizeof(Real)*16);
 		}
 
-		inline Matrix4(const Matrix4& mat)
+		Matrix4(const Matrix4& mat)
 		{
-			ADD_MATH_OP_COUNT
 			memcpy(m, mat.m, sizeof(Real)*16);
 		}
 
 	public:
-		inline Real operator() (int i, int j) const
+		Real operator() (int i, int j) const
 		{ 
-			ADD_MATH_OP_COUNT
 			EchoAssertX(i>=0 && i<4, "Access out of bounds");
 			EchoAssertX(j>=0 && j<4, "Access out of bounds");
 			return getRow(i)[j];
 		}
 
-		inline Vector4 operator[] (int row) const
+		Vector4 operator[] (int row) const
 		{
-			ADD_MATH_OP_COUNT
 			return getRow(row);
 		}
 
-		inline Matrix4& operator= (const Matrix4& rhs)
+		Matrix4& operator= (const Matrix4& rhs)
 		{
-			ADD_MATH_OP_COUNT
 			memcpy(m, rhs.m, sizeof(Real)*16);
 			return *this;
 		}
 
-		inline Matrix4& operator+= (const Real f)
+		Matrix4& operator+= (const Real f)
 		{
-			ADD_MATH_OP_COUNT
 			m00 += f; m01 += f; m02 += f; m03 += f;
 			m10 += f; m11 += f; m12 += f; m13 += f;
 			m20 += f; m21 += f; m22 += f; m23 += f;
@@ -90,9 +82,8 @@ namespace Echo
 			return *this;
 		}
 
-		inline Matrix4& operator+= (const Matrix4& rhs)
+		Matrix4& operator+= (const Matrix4& rhs)
 		{
-			ADD_MATH_OP_COUNT
 			m00 += rhs.m00; m01 += rhs.m01; m02 += rhs.m02; m03 += rhs.m03;
 			m10 += rhs.m10; m11 += rhs.m11; m12 += rhs.m12; m13 += rhs.m13;
 			m20 += rhs.m20; m21 += rhs.m21; m22 += rhs.m22; m23 += rhs.m23;
@@ -101,9 +92,8 @@ namespace Echo
 			return *this;
 		}
 
-		inline Matrix4& operator-= (const Real f)
+		Matrix4& operator-= (const Real f)
 		{
-			ADD_MATH_OP_COUNT
 			m00 -= f; m01 -= f; m02 -= f; m03 -= f;
 			m10 -= f; m11 -= f; m12 -= f; m13 -= f;
 			m20 -= f; m21 -= f; m22 -= f; m23 -= f;
@@ -112,9 +102,8 @@ namespace Echo
 			return *this;
 		}
 
-		inline Matrix4& operator-= (const Matrix4& rhs)
+		Matrix4& operator-= (const Matrix4& rhs)
 		{
-			ADD_MATH_OP_COUNT
 			m00 -= rhs.m00; m01 -= rhs.m01; m02 -= rhs.m02; m03 -= rhs.m03;
 			m10 -= rhs.m10; m11 -= rhs.m11; m12 -= rhs.m12; m13 -= rhs.m13;
 			m20 -= rhs.m20; m21 -= rhs.m21; m22 -= rhs.m22; m23 -= rhs.m23;
@@ -123,9 +112,8 @@ namespace Echo
 			return *this;
 		}
 
-		inline Matrix4& operator*= (const Real f)
+		Matrix4& operator*= (const Real f)
 		{
-			ADD_MATH_OP_COUNT
 			m00 *= f; m01 *= f; m02 *= f; m03 *= f;
 			m10 *= f; m11 *= f; m12 *= f; m13 *= f;
 			m20 *= f; m21 *= f; m22 *= f; m23 *= f;
@@ -134,9 +122,8 @@ namespace Echo
 			return *this;
 		}
 
-		inline Matrix4& operator *= (const Matrix4& rhs)
+		Matrix4& operator *= (const Matrix4& rhs)
 		{
-			ADD_MATH_OP_COUNT
 			Matrix4 result;
 
 			result.m00 = m00 * rhs.m00 + m01 * rhs.m10 + m02 * rhs.m20 + m03 * rhs.m30;
@@ -164,9 +151,8 @@ namespace Echo
 			return *this;
 		}
 
-		inline Matrix4& operator/= (const Real f)
+		Matrix4& operator/= (const Real f)
 		{
-			ADD_MATH_OP_COUNT
 			m00 /= f; m01 /= f; m02 /= f; m03 /= f;
 			m10 /= f; m11 /= f; m12 /= f; m13 /= f;
 			m20 /= f; m21 /= f; m22 /= f; m23 /= f;
@@ -175,21 +161,18 @@ namespace Echo
 			return *this;
 		}
 
-		inline Real* ptr()
+		Real* ptr()
 		{
-			ADD_MATH_OP_COUNT
 			return m;
 		}
 
-		inline const Real* ptr() const
+		const Real* ptr() const
 		{
-			ADD_MATH_OP_COUNT
 			return m;
 		}
 
-		inline bool operator== (const Matrix4& b) const
+		bool operator== (const Matrix4& b) const
 		{
-			ADD_MATH_OP_COUNT
 			// true if all vectors equal to each other
 			bool result = m00 == b.m00 && m01 == b.m01 && m02 == b.m02 && m03 == b.m03 &&
 				m10 == b.m10 && m11 == b.m11 && m12 == b.m12 && m13 == b.m13 &&
@@ -198,9 +181,8 @@ namespace Echo
 			return result;
 		}
 
-		inline bool operator!= (const Matrix4& b) const
+		bool operator!= (const Matrix4& b) const
 		{
-			ADD_MATH_OP_COUNT
 			// true if any one vector not-equal
 			bool result =	m00 != b.m00 || m01 != b.m01 || m02 != b.m02 || m03 != b.m03 ||
 				m10 != b.m10 || m11 != b.m11 || m12 != b.m12 || m13 != b.m13 ||
@@ -209,25 +191,22 @@ namespace Echo
 			return result;
 		}
 
-		inline const Matrix4 operator+ (const Real f) const
+		const Matrix4 operator+ (const Real f) const
 		{
-			ADD_MATH_OP_COUNT
 			Matrix4 result = *this;
 			result += f;
 			return result;
 		}
 
-		inline friend Matrix4 operator+ (const Real f, const Matrix4 &a)
+		friend Matrix4 operator+ (const Real f, const Matrix4 &a)
 		{
-			ADD_MATH_OP_COUNT
 			Matrix4 result = a;
 			result += f;
 			return result;
 		}
 
-		inline Matrix4 operator + (const Matrix4& b) const
+		Matrix4 operator + (const Matrix4& b) const
 		{
-			ADD_MATH_OP_COUNT
 			Matrix4 result;
 
 			result.m00 = m00 + b.m00;
@@ -253,25 +232,22 @@ namespace Echo
 			return result;
 		}
 
-		inline Matrix4 operator- (const Real f) const
+		Matrix4 operator- (const Real f) const
 		{
-			ADD_MATH_OP_COUNT
 			Matrix4 result = *this;
 			result -= f;
 			return result;
 		}
 
-		inline friend Matrix4 operator- (const Real f, const Matrix4&a)
+		friend Matrix4 operator- (const Real f, const Matrix4&a)
 		{
-			ADD_MATH_OP_COUNT
 			Matrix4 result = a;
 			result -= f;
 			return result;
 		}
 
-		inline Matrix4 operator - (const Matrix4& b) const
+		Matrix4 operator - (const Matrix4& b) const
 		{
-			ADD_MATH_OP_COUNT
 			Matrix4 result;
 
 			result.m00 = m00 - b.m00;
@@ -297,9 +273,8 @@ namespace Echo
 			return result;
 		}
 
-		inline friend const Vector4 operator * (const Vector4& v, const Matrix4& m)
+		friend const Vector4 operator * (const Vector4& v, const Matrix4& m)
 		{
-			ADD_MATH_OP_COUNT
 			Vector4 result;
 
 			result.x = v.x * m.m00 + v.y * m.m10 + v.z * m.m20 + v.w * m.m30;
@@ -310,9 +285,8 @@ namespace Echo
 			return result;
 		}
 
-		inline friend Vector3 operator* (const Vector3& v, const Matrix4& m)
+		friend Vector3 operator* (const Vector3& v, const Matrix4& m)
 		{
-			ADD_MATH_OP_COUNT
 			Vector3 result;
 
 			result.x = v.x * m.m00 + v.y * m.m10 + v.z * m.m20 + m.m30;
@@ -322,9 +296,8 @@ namespace Echo
 			return result;
 		}
 
-		inline Matrix4 operator* (const Matrix4& b) const
+		Matrix4 operator* (const Matrix4& b) const
 		{
-			ADD_MATH_OP_COUNT
 			Matrix4 result;
 
 			result.m00 = m00 * b.m00 + m01 * b.m10 + m02 * b.m20 + m03 * b.m30;
@@ -350,9 +323,8 @@ namespace Echo
 			return result;
 		}
 
-		inline Matrix4 operator * (const Real f) const
+		Matrix4 operator * (const Real f) const
 		{
-			ADD_MATH_OP_COUNT
 			Matrix4 result;
 
 			result.m00 = m00 * f;
@@ -378,9 +350,8 @@ namespace Echo
 			return result;
 		}
 
-		inline friend const Matrix4 operator* (const Real f, const Matrix4& a)
+		friend const Matrix4 operator* (const Real f, const Matrix4& a)
 		{
-			ADD_MATH_OP_COUNT
 			Matrix4 result;
 
 			result.m00 = f * a.m00;
@@ -406,28 +377,23 @@ namespace Echo
 			return result;
 		}
 
-		inline Matrix4 operator / (const Real f) const
+		Matrix4 operator / (const Real f) const
 		{
-			ADD_MATH_OP_COUNT
-
 			return ( 1.f/f) * (*this);
 		}
 
-		inline void zero()
+		void zero()
 		{
-			ADD_MATH_OP_COUNT
 			memset(m, 0, sizeof(Real)*16);
 		}
 
-		inline void invalid()
+		void invalid()
 		{
-			ADD_MATH_OP_COUNT
 			*this = INVALID;
 		}
 
-		inline void setRow(int row, Vector4& vec)
+		void setRow(int row, Vector4& vec)
 		{
-			ADD_MATH_OP_COUNT
 			EchoAssertX(row >= 0 && row < 4, "Access out of bounds");
 			Real* p = m + row;
 			p[0] = vec.x; 
@@ -436,9 +402,8 @@ namespace Echo
 			p[3] = vec.w;
 		}
 
-		inline void setColumn(int column, Vector4& vec)
+		void setColumn(int column, Vector4& vec)
 		{
-			ADD_MATH_OP_COUNT
 			EchoAssertX(column >= 0 && column < 4, "Access out of bounds");
 			Real* p = m + column;
 			p[0] = vec.x; 
@@ -447,78 +412,68 @@ namespace Echo
 			p[12] = vec.w; 
 		}
 
-		inline Vector4 getRow(int row) const
+		Vector4 getRow(int row) const
 		{
-			ADD_MATH_OP_COUNT
 			EchoAssertX(row >= 0 && row < 4, "Access out of bounds");
 			const Real* p = m + row*4;
 			//return Vector4(p[0], p[1], p[2], p[3]);
 			return *(Vector4*)(p);
 		}
 
-		inline Vector4 getColumn(int column) const
+		Vector4 getColumn(int column) const
 		{
-			ADD_MATH_OP_COUNT
 			EchoAssertX(column >= 0 && column < 4, "Access out of bounds");
 			const Real *p = m + column;
 			return Vector4(p[0], p[4], p[8], p[12]);
 		}
 
-		inline void identity()
+		void identity()
 		{
-			ADD_MATH_OP_COUNT
 			*this = IDENTITY;
 		}
 
-		inline void translate(Real x, Real y, Real z)
+		void translate(Real x, Real y, Real z)
 		{
-			ADD_MATH_OP_COUNT
 			m30 += x;
 			m31 += y;
 			m32 += z;
 		}
 
-		inline void translate(const Vector3& v)
+		void translate(const Vector3& v)
 		{
-			ADD_MATH_OP_COUNT
 			m30 += v.x;
 			m31 += v.y;
 			m32 += v.z;
 		}
 
-		inline void translateReplace(Real x, Real y, Real z)
+		void translateReplace(Real x, Real y, Real z)
 		{
-			ADD_MATH_OP_COUNT
 			identity();
 			m30 = x;
 			m31 = y;
 			m32 = z;
 		}
 
-		inline void translateReplace(const Vector3& v)
+		void translateReplace(const Vector3& v)
 		{
-			ADD_MATH_OP_COUNT
 			identity();
 			m30 = v.x;
 			m31 = v.y;
 			m32 = v.z;
 		}
 		
-		inline void translateX(Real d)
+		void translateX(Real d)
 		{
-			ADD_MATH_OP_COUNT
 			m30 += d;
 		}
 
-		inline void translateY(Real d)
+		void translateY(Real d)
 		{
-			ADD_MATH_OP_COUNT
 			m31 += d;
 		}
 
-		inline void translateZ(Real d)
+		void translateZ(Real d)
 		{
-			ADD_MATH_OP_COUNT
 			m32 += d;
 		}
 
@@ -533,30 +488,25 @@ namespace Echo
 		Vector3			rotateVec3(const Vector3 &vec);
 		Vector4			rotateVec4(const Vector4 &vec);
 		
-
-		inline void scale(const Vector3& scaleVec)
+		void scale(const Vector3& scaleVec)
 		{
-			ADD_MATH_OP_COUNT
 			scale(scaleVec[0], scaleVec[1], scaleVec[2]);
 		}
 
-		inline void scale(Real x, Real y, Real z)
+		void scale(Real x, Real y, Real z)
 		{
-			ADD_MATH_OP_COUNT
 			m00 *= x; m01 *= x; m02 *= x; m03 *= x;
 			m10 *= y; m11 *= y; m12 *= y; m13 *= y;
 			m20 *= z; m21 *= z; m22 *= z; m23 *= z;
 		}
 
-		inline void scaleReplace(const Vector3& scaleVec)
+		void scaleReplace(const Vector3& scaleVec)
 		{
-			ADD_MATH_OP_COUNT
 			scaleReplace(scaleVec[0], scaleVec[1], scaleVec[2]);
 		}
 
-		inline void scaleReplace(Real x, Real y, Real z)
+		void scaleReplace(Real x, Real y, Real z)
 		{
-			ADD_MATH_OP_COUNT
 			m00 = x; m01 = 0; m02 = 0; m03 = 0;
 			m10 = 0; m11 = y; m12 = 0; m13 = 0;
 			m20 = 0; m21 = 0; m22 = z; m23 = 0;
@@ -565,15 +515,13 @@ namespace Echo
 
 		// assume input vec.w equals 1
 		// result.w is garbage
-		inline Vector4 transform(const Vector4& vec) const
+		Vector4 transform(const Vector4& vec) const
 		{
-			ADD_MATH_OP_COUNT
 			return vec * (*this);
 		}
 
-		inline Vector3 transform(const Vector3& vec) const
+		Vector3 transform(const Vector3& vec) const
 		{
-			ADD_MATH_OP_COUNT
 			Vector3 result;
 
 			Real w = vec.x * m03 + vec.y * m13 + vec.z * m23 + m33;
@@ -584,26 +532,23 @@ namespace Echo
 			return result;
 		}
 
-		inline Vector4 transformNormal(const Vector4& vec) const
+		Vector4 transformNormal(const Vector4& vec) const
 		{
-			ADD_MATH_OP_COUNT
 			Matrix4 mat = *this;
 			mat.noTranslate();
 
 			return vec * mat;
 		}
 
-		inline Vector3 transformNormal(const Vector3& vec) const
+		Vector3 transformNormal(const Vector3& vec) const
 		{
-			ADD_MATH_OP_COUNT
 			Matrix4 mat = *this;
 			mat.noTranslate();
 			return mat.transform(vec);
 		}
 
-		inline Matrix4& transpose()
+		Matrix4& transpose()
 		{
-			ADD_MATH_OP_COUNT
 			Math::Swap(m01, m10);
 			Math::Swap(m02, m20);
 			Math::Swap(m03, m30);
@@ -614,9 +559,8 @@ namespace Echo
 			return *this;
 		}
 
-		inline Matrix4& inverse()
+		Matrix4& inverse()
 		{	
-			ADD_MATH_OP_COUNT
 			Math::Swap(m01, m10);
 			Math::Swap(m02, m20);
 			Math::Swap(m12, m21);
@@ -634,9 +578,8 @@ namespace Echo
 		}
 
 		//Matrix4&			detInverse();
-		inline Matrix4& detInverse()
+		Matrix4& detInverse()
 		{	
-			ADD_MATH_OP_COUNT
 			Real _m00 = m00, _m01 = m01, _m02 = m02, _m03 = m03;
 			Real _m10 = m10, _m11 = m11, _m12 = m12, _m13 = m13;
 			Real _m20 = m20, _m21 = m21, _m22 = m22, _m23 = m23;
@@ -693,9 +636,8 @@ namespace Echo
 			return *this;
 		}
 		
-		inline void makeTranslation(Real x, Real y, Real z)
+		void makeTranslation(Real x, Real y, Real z)
 		{
-			ADD_MATH_OP_COUNT
 			identity();
 			m30 = x;
 			m31 = y;
@@ -703,39 +645,34 @@ namespace Echo
 			m33 = 1;
 		}
 
-		inline void makeTranslation(const Vector3& vec)
+		void makeTranslation(const Vector3& vec)
 		{
-			ADD_MATH_OP_COUNT
 			makeTranslation(vec.x, vec.y, vec.z);
 		}
 
-		inline void makeScaling(Real x, Real y, Real z)
+		void makeScaling(Real x, Real y, Real z)
 		{
-			ADD_MATH_OP_COUNT
 			identity();
 			m00 = x;
 			m11 = y;
 			m22 = z;
 		}
 
-		inline void makeScaling(const Vector3& vec)
+		void makeScaling(const Vector3& vec)
 		{
-			ADD_MATH_OP_COUNT
 			makeScaling(vec.x, vec.y, vec.z);
 		}
 
-		inline void noTranslate()
+		void noTranslate()
 		{
-			ADD_MATH_OP_COUNT
 			m30 = 0;
 			m31 = 0;
 			m32 = 0;
 			m33 = 1;
 		}
 
-		inline void noRotate()
+		void noRotate()
 		{
-			ADD_MATH_OP_COUNT
 			m00 = 1; m01 = 0; m02 = 0; m03 = 0;
 			m10 = 1; m11 = 1; m12 = 0; m13 = 0;
 			m20 = 1; m21 = 0; m22 = 1; m23 = 0;

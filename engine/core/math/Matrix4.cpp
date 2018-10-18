@@ -28,9 +28,6 @@ namespace Echo
 		0, 0, 1, 0,
 		0, 0, 0, 1);
 
-	ui32  Matrix4::OP_COUNT = 0;
-
-	//////////////////////////////////////////////////////////////////////////
 	void Matrix4::fromQuan(const Quaternion& quan)
 	{
 		quan.toMat4(*this);
@@ -38,7 +35,6 @@ namespace Echo
 
 	void Matrix4::rotateAxis(const Vector3& v, Real radian)
 	{
-		ADD_MATH_OP_COUNT
 		Real x = v.x;
 		Real y = v.y;
 		Real z = v.z;
@@ -75,7 +71,6 @@ namespace Echo
 
 	void Matrix4::rotateAxisReplace(const Vector3& axis, Real radian)
 	{
-		ADD_MATH_OP_COUNT
 		Real x = axis.x;
 		Real y = axis.y;
 		Real z = axis.z;
@@ -108,7 +103,6 @@ namespace Echo
 	// this = Rx * this
 	void Matrix4::rotateX(const Real radian)
 	{
-		ADD_MATH_OP_COUNT
 		Real fSin, fCos;
 		fSin = Math::Sin(radian);
 		fCos = Math::Cos(radian);
@@ -135,7 +129,6 @@ namespace Echo
 
 	void Matrix4::rotateXReplace(const Real radian)
 	{
-		ADD_MATH_OP_COUNT
 		Real fSin, fCos;
 		fSin = Math::Sin(radian);
 		fCos = Math::Cos(radian);
@@ -149,7 +142,6 @@ namespace Echo
 	// this = Ry * this
 	void Matrix4::rotateY(const Real radian)
 	{
-		ADD_MATH_OP_COUNT
 		Real temp00, temp01, temp02, temp03;
 		Real temp20, temp21, temp22, temp23;
 		Real fSin, fCos;
@@ -178,7 +170,6 @@ namespace Echo
 
 	void Matrix4::rotateYReplace(const Real radian)
 	{
-		ADD_MATH_OP_COUNT
 		Real fSin, fCos;
 		fSin = Math::Sin(radian);
 		fCos = Math::Cos(radian);
@@ -192,7 +183,6 @@ namespace Echo
 	// this = Rx * this
 	void Matrix4::rotateZ(const Real radian)
 	{
-		ADD_MATH_OP_COUNT
 		Real temp00, temp01, temp02, temp03;
 		Real temp10, temp11, temp12, temp13;
 		Real fSin, fCos;
@@ -221,7 +211,6 @@ namespace Echo
 
 	void Matrix4::rotateZReplace(const Real radian)
 	{
-		ADD_MATH_OP_COUNT
 		Real fSin, fCos;
 		fSin = Math::Sin(radian);
 		fCos = Math::Cos(radian);
@@ -234,7 +223,6 @@ namespace Echo
 
 	Vector3 Matrix4::rotateVec3(const Vector3& vec)
 	{
-		ADD_MATH_OP_COUNT
 		Vector3 result;
 
 		result.x = vec.x*m00 + vec.y*m10 + vec.z*m20;
@@ -246,7 +234,6 @@ namespace Echo
 
 	Vector4 Matrix4::rotateVec4(const Vector4& vec)
 	{
-		ADD_MATH_OP_COUNT
 		Vector4 result;
 
 		result.x = vec.x*m00 + vec.y*m10 + vec.z*m20;
@@ -256,84 +243,15 @@ namespace Echo
 
 		return result;
 	}
-/*
-	Matrix4& Matrix4::detInverse()
-	{	
-		ADD_MATH_OP_COUNT
-		Real _m00 = m00, _m01 = m01, _m02 = m02, _m03 = m03;
-		Real _m10 = m10, _m11 = m11, _m12 = m12, _m13 = m13;
-		Real _m20 = m20, _m21 = m21, _m22 = m22, _m23 = m23;
-		Real _m30 = m30, _m31 = m31, _m32 = m32, _m33 = m33;
-
-		Real v0 = _m20 * _m31 - _m21 * _m30;
-		Real v1 = _m20 * _m32 - _m22 * _m30;
-		Real v2 = _m20 * _m33 - _m23 * _m30;
-		Real v3 = _m21 * _m32 - _m22 * _m31;
-		Real v4 = _m21 * _m33 - _m23 * _m31;
-		Real v5 = _m22 * _m33 - _m23 * _m32;
-
-		Real t00 = + (v5 * _m11 - v4 * _m12 + v3 * _m13);
-		Real t10 = - (v5 * _m10 - v2 * _m12 + v1 * _m13);
-		Real t20 = + (v4 * _m10 - v2 * _m11 + v0 * _m13);
-		Real t30 = - (v3 * _m10 - v1 * _m11 + v0 * _m12);
-
-		Real sdet = (t00 * _m00 + t10 * _m01 + t20 * m02 + t30 * m03);
-		if(Math::Abs(sdet) < 0.000001f)
-			return *this;
-
-		Real detInv = 1.0f / sdet;
-
-		m00 = t00 * detInv;
-		m10 = t10 * detInv;
-		m20 = t20 * detInv;
-		m30 = t30 * detInv;
-
-		m01 = - (v5 * _m01 - v4 * _m02 + v3 * _m03) * detInv;
-		m11 = + (v5 * _m00 - v2 * _m02 + v1 * _m03) * detInv;
-		m21 = - (v4 * _m00 - v2 * _m01 + v0 * _m03) * detInv;
-		m31 = + (v3 * _m00 - v1 * _m01 + v0 * _m02) * detInv;
-
-		v0 = _m10 * _m31 - _m11 * _m30;
-		v1 = _m10 * _m32 - _m12 * _m30;
-		v2 = _m10 * _m33 - _m13 * _m30;
-		v3 = _m11 * _m32 - _m12 * _m31;
-		v4 = _m11 * _m33 - _m13 * _m31;
-		v5 = _m12 * _m33 - _m13 * _m32;
-
-		m02 = + (v5 * _m01 - v4 * _m02 + v3 * _m03) * detInv;
-		m12 = - (v5 * _m00 - v2 * _m02 + v1 * _m03) * detInv;
-		m22 = + (v4 * _m00 - v2 * _m01 + v0 * _m03) * detInv;
-		m32 = - (v3 * _m00 - v1 * _m01 + v0 * _m02) * detInv;
-
-		v0 = _m21 * _m10 - _m20 * _m11;
-		v1 = _m22 * _m10 - _m20 * _m12;
-		v2 = _m23 * _m10 - _m20 * _m13;
-		v3 = _m22 * _m11 - _m21 * _m12;
-		v4 = _m23 * _m11 - _m21 * _m13;
-		v5 = _m23 * _m12 - _m22 * _m13;
-
-		m03 = - (v5 * _m01 - v4 * _m02 + v3 * _m03) * detInv;
-		m13 = + (v5 * _m00 - v2 * _m02 + v1 * _m03) * detInv;
-		m23 = - (v4 * _m00 - v2 * _m01 + v0 * _m03) * detInv;
-		m33 = + (v3 * _m00 - v1 * _m01 + v0 * _m02) * detInv;
-
-		return *this;
-	}*/
 
 	void Matrix4::Transpose(Matrix4& outMat, const Matrix4& matrix)
 	{
-#ifdef ECHO_DEBUG
-		++Matrix4::OP_COUNT;
-#endif
 		outMat = matrix;
 		outMat.transpose();
 	}
 
 	void Matrix4::TransformVec3(Vector3& outVec, const Vector3& v, const Matrix4& matrix)
 	{
-#ifdef ECHO_DEBUG
-		++Matrix4::OP_COUNT;
-#endif
 		Real x = v.x * matrix.m00 + v.y * matrix.m10 + v.z * matrix.m20 + matrix.m30;
 		Real y = v.x * matrix.m01 + v.y * matrix.m11 + v.z * matrix.m21 + matrix.m31;
 		Real z = v.x * matrix.m02 + v.y * matrix.m12 + v.z * matrix.m22 + matrix.m32;
@@ -342,9 +260,6 @@ namespace Echo
 
 	void Matrix4::TransformVec4(Vector4& outVec, const Vector4& v, const Matrix4& matrix)
 	{
-#ifdef ECHO_DEBUG
-		++Matrix4::OP_COUNT;
-#endif
 		Real x = v.x * matrix.m00 + v.y * matrix.m10 + v.z * matrix.m20 + v.w * matrix.m30;
 		Real y = v.x * matrix.m01 + v.y * matrix.m11 + v.z * matrix.m21 + v.w * matrix.m31;
 		Real z = v.x * matrix.m02 + v.y * matrix.m12 + v.z * matrix.m22 + v.w * matrix.m32;
@@ -354,18 +269,12 @@ namespace Echo
 
 	void Matrix4::Inverse(Matrix4& outMat, const Matrix4& matrix)
 	{
-#ifdef ECHO_DEBUG
-		++Matrix4::OP_COUNT;
-#endif
 		outMat = matrix;
 		outMat.inverse();
 	}
 
 	void Matrix4::RotateAxis(Matrix4& outMat, const Vector3& axis, const Real radian)
 	{
-#ifdef ECHO_DEBUG
-		++Matrix4::OP_COUNT;
-#endif
 		Real fSin, fCos;
 		fSin = Math::Sin(radian);
 		fCos = Math::Cos(radian);
@@ -397,9 +306,6 @@ namespace Echo
 
 	void Matrix4::RotateYawPitchRoll(Matrix4& outMat, Real yaw, Real pitch, Real roll)
 	{
-#ifdef ECHO_DEBUG
-		++Matrix4::OP_COUNT;
-#endif
 		outMat.identity();
 		outMat.rotateZ(roll);
 		outMat.rotateX(pitch);
@@ -408,9 +314,6 @@ namespace Echo
 
 	void Matrix4::LookAtRH(Matrix4& mat, const Vector3& eye, const Vector3& at, const Vector3& up)
 	{
-#ifdef ECHO_DEBUG
-		++Matrix4::OP_COUNT;
-#endif
 		Vector3 upNorm;
 		Vector3::Normalize(upNorm, up);
 
@@ -432,9 +335,6 @@ namespace Echo
 
 	void Matrix4::LookAtLH(Matrix4& mat, const Vector3& eye, const Vector3& at, const Vector3& up)
 	{ 
-#ifdef ECHO_DEBUG
-		++Matrix4::OP_COUNT;
-#endif
 		Vector3 upNorm;
 		Vector3::Normalize(upNorm, up);
 
@@ -456,9 +356,6 @@ namespace Echo
 
 	void Matrix4::OrthoRH(Matrix4& mat, Real w, Real h, Real zn, Real zf)
 	{
-#ifdef ECHO_DEBUG
-		++Matrix4::OP_COUNT;
-#endif
 		Real w2 = w / 2.0f;
 		Real h2 = h / 2.0f;
 
@@ -467,9 +364,6 @@ namespace Echo
 
 	void Matrix4::OrthoLH(Matrix4& mat, Real w, Real h, Real zn, Real zf)
 	{
-#ifdef ECHO_DEBUG
-		++Matrix4::OP_COUNT;
-#endif
 		Real w2 = w / 2.0f;
 		Real h2 = h / 2.0f;
 
@@ -478,10 +372,6 @@ namespace Echo
 
 	void Matrix4::OrthoOffCenterRH(Matrix4& mat, Real l, Real r, Real b, Real t, Real zn, Real zf)
 	{	
-#ifdef ECHO_DEBUG
-		++Matrix4::OP_COUNT;
-#endif
-
 		Real w = 1.0f / (r - l);
 		Real h = 1.0f / (t - b);
 		Real q = 1.0f / (zn - zf);
@@ -494,10 +384,6 @@ namespace Echo
 
 	void Matrix4::OrthoOffCenterLH(Matrix4& mat, Real l, Real r, Real b, Real t, Real zn, Real zf)
 	{
-#ifdef ECHO_DEBUG
-		++Matrix4::OP_COUNT;
-#endif
-
 		Real w = 1.0f / (r - l);
 		Real h = 1.0f / (t - b);
 		Real q = 1.0f / (zn - zf);
@@ -510,10 +396,6 @@ namespace Echo
 
  	void Matrix4::PerspectiveFovRH(Matrix4& mat, Real fovy, Real aspect, Real zn, Real zf)
  	{
- #ifdef ECHO_DEBUG
- 		++Matrix4::OP_COUNT;
- #endif
- 
  		Real ys = 1.0f / Math::Tan(fovy * 0.5f);
  		Real xs = ys / aspect;
  		Real q = zf / (zn - zf);
@@ -532,10 +414,6 @@ namespace Echo
 
 	void Matrix4::PerspectiveFovRH_OpenGL(Matrix4 &mat, Real fovy, Real aspect, Real zn, Real zf)
  	{
-#ifdef ECHO_DEBUG
-		++Matrix4::OP_COUNT;
-#endif
-
 		Real ys = 1.0f / Math::Tan(fovy * 0.5f);
 		Real xs = ys / aspect;
 		Real c = -(zf+zn) / (zf-zn);
@@ -549,10 +427,6 @@ namespace Echo
 
 	void Matrix4::PerspectiveFovLH(Matrix4& mat, Real fovy, Real aspect, Real zn, Real zf)
 	{
-#ifdef ECHO_DEBUG
-	++Matrix4::OP_COUNT;
-#endif
-
 		Real ys = 1.0f / Math::Tan(fovy * 0.5f);
 		Real xs = ys / aspect;
 		Real q = zf / (zn - zf);
@@ -565,10 +439,6 @@ namespace Echo
 
 	void Matrix4::PerspectiveOffCenterRH(Matrix4& mat, Real l, Real r, Real b, Real t, Real zn, Real zf)
 	{
-#ifdef ECHO_DEBUG
-		++Matrix4::OP_COUNT;
-#endif
-
 		Real w = 1.0f / (r - l);
 		Real h = 1.0f / (t - b);
 		Real q = zf / (zn - zf);
@@ -581,10 +451,6 @@ namespace Echo
 
 	void Matrix4::PerspectiveOffCenterLH(Matrix4& mat, Real l, Real r, Real b, Real t, Real zn, Real zf)
 	{
-#ifdef ECHO_DEBUG
-		++Matrix4::OP_COUNT;
-#endif
-
 		Real w = 1.0f / (r - l);
 		Real h = 1.0f / (t - b);
 		Real q = zf / (zn - zf);

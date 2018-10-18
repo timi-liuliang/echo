@@ -41,66 +41,57 @@ namespace Echo
 			// do nothing
 		}
 
-		inline Vector4(const Real _x, const Real _y, const Real _z, const Real _w)
+		Vector4(const Real _x, const Real _y, const Real _z, const Real _w)
 			: x(_x)
 			, y(_y)
 			, z(_z)
 			, w(_w)
 		{
-			ADD_MATH_OP_COUNT
 		}
 
-		inline Vector4(const Real value)
+		Vector4(const Real value)
 		{
-			ADD_MATH_OP_COUNT
 			set(value);
 		}
 
-		inline Vector4(const Vector3& vec3, Real _w)
+		Vector4(const Vector3& vec3, Real _w)
 			: x(vec3.x)
 			, y(vec3.y)
 			, z(vec3.z)
 			, w(_w)
 		{
-			ADD_MATH_OP_COUNT
 		}
 
-		inline Vector4(const Vector4& vec)
+		Vector4(const Vector4& vec)
 			: x(vec.x)
 			, y(vec.y)
 			, z(vec.z)
 			, w(vec.w)
 		{
-			ADD_MATH_OP_COUNT
 		}
 
-		inline operator Vector2 ()
+		operator Vector2 ()
 		{
-			ADD_MATH_OP_COUNT
 			return Vector2(x, y);
 		}
 
-		inline operator const Vector2 () const
+		operator const Vector2 () const
 		{
-			ADD_MATH_OP_COUNT
 			return Vector2(x, y);
 		}
 
-		inline operator Vector3 ()
+		operator Vector3 ()
 		{
-			ADD_MATH_OP_COUNT
 			return Vector3(x, y, z);
 		}
 
-		inline operator const Vector3 () const
+		operator const Vector3 () const
 		{
-			ADD_MATH_OP_COUNT
 			return Vector3(x, y, z);
 		}
 
-		inline Vector4& operator = (const Vector4& rhs)
+		Vector4& operator = (const Vector4& rhs)
 		{
-			ADD_MATH_OP_COUNT
 			x = rhs.x;
 			y = rhs.y;
 			z = rhs.z;
@@ -109,16 +100,14 @@ namespace Echo
 			return *this;
 		}
 
-		inline Vector4& operator = (const Real value)
+		Vector4& operator = (const Real value)
 		{
-			ADD_MATH_OP_COUNT
 			set(value);
 			return *this;
 		}
 
-		inline Vector4& operator += (const Vector4& rhs)
+		Vector4& operator += (const Vector4& rhs)
 		{
-			ADD_MATH_OP_COUNT
 			x += rhs.x;
 			y += rhs.y;
 			z += rhs.z;
@@ -126,9 +115,8 @@ namespace Echo
 			return *this;
 		}
 
-		inline Vector4& operator += (const Real value)
+		Vector4& operator += (const Real value)
 		{
-			ADD_MATH_OP_COUNT
 			x += value;
 			y += value;
 			z += value;
@@ -136,9 +124,8 @@ namespace Echo
 			return *this;
 		}
 
-		inline Vector4& operator -= (const Vector4& rhs)
+		Vector4& operator -= (const Vector4& rhs)
 		{
-			ADD_MATH_OP_COUNT
 			x -= rhs.x;
 			y -= rhs.y;
 			z -= rhs.z;
@@ -147,9 +134,8 @@ namespace Echo
 			return *this;
 		}
 
-		inline Vector4& operator -= (const Real value)
+		Vector4& operator -= (const Real value)
 		{
-			ADD_MATH_OP_COUNT
 			x -= value;
 			y -= value;
 			z -= value;
@@ -158,9 +144,8 @@ namespace Echo
 			return *this;
 		}
 
-		inline Vector4& operator *= (const Vector4& rhs)
+		Vector4& operator *= (const Vector4& rhs)
 		{
-			ADD_MATH_OP_COUNT
 			x *= rhs.x;
 			y *= rhs.y;
 			z *= rhs.z;
@@ -169,9 +154,8 @@ namespace Echo
 			return *this;
 		}
 
-		inline Vector4& operator *= (const Real value)
+		Vector4& operator *= (const Real value)
 		{
-			ADD_MATH_OP_COUNT
 			x *= value;
 			y *= value;
 			z *= value;
@@ -180,9 +164,8 @@ namespace Echo
 			return *this;
 		}
 
-		inline Vector4& operator /= (const Vector4& rhs)
+		Vector4& operator /= (const Vector4& rhs)
 		{
-			ADD_MATH_OP_COUNT
 			x /= rhs.x;
 			y /= rhs.y;
 			z /= rhs.z;
@@ -191,9 +174,8 @@ namespace Echo
 			return *this;
 		}
 
-		inline Vector4&  operator /= (const Real value)
+		Vector4&  operator /= (const Real value)
 		{
-			ADD_MATH_OP_COUNT
 			x /= value;
 			y /= value;
 			z /= value;
@@ -202,206 +184,177 @@ namespace Echo
 			return *this;
 		}
 
-		inline Real& operator [] (int index)
+		Real& operator [] (int index)
 		{
-			ADD_MATH_OP_COUNT
 			EchoAssertX(index >= 0 && index < 4, "Access out of bounds");
 			return m[index];
 		}
 
-		inline const Real& operator [] (int index) const
+		const Real& operator [] (int index) const
 		{
-			ADD_MATH_OP_COUNT
 			EchoAssertX(index >= 0 && index < 4, "Access out of bounds");
 			return m[index];
 		}
 
-		inline Real* ptr()
+		Real* ptr()
 		{
-			ADD_MATH_OP_COUNT
 			return &x;
 		}
 
-		inline const Real* ptr() const
+		const Real* ptr() const
 		{
-			ADD_MATH_OP_COUNT
 			return &x;
 		}
 
-		inline const Vector4& operator + () const
+		const Vector4& operator + () const
 		{
-			ADD_MATH_OP_COUNT
 			return *this;
 		}
 
-		inline Vector4 operator - () const
+		Vector4 operator - () const
 		{
-			ADD_MATH_OP_COUNT
 			return Vector4(x, y, z, w);
 		}
 
-		inline bool operator == (const Vector4& rhs) const
+		bool operator == (const Vector4& rhs) const
 		{
-			ADD_MATH_OP_COUNT
 			return (x==rhs.x && y==rhs.y && z==rhs.z && w==rhs.w);
 		}
 
-		inline bool operator != (const Vector4& rhs) const
+		bool operator != (const Vector4& rhs) const
 		{
-			ADD_MATH_OP_COUNT
 			return (x!=rhs.x || y!=rhs.y || z!=rhs.z || w!=rhs.w);
 		}
 
-		inline Vector4 operator + (const Vector4& rhs) const
+		Vector4 operator + (const Vector4& rhs) const
 		{
-			ADD_MATH_OP_COUNT
 			return Vector4(x+rhs.x, y+rhs.y, z+rhs.z, w+rhs.w);
 		}
 
-		inline const Vector4 operator - (const Vector4& rhs) const
+		const Vector4 operator - (const Vector4& rhs) const
 		{
-			ADD_MATH_OP_COUNT
 			return Vector4(x-rhs.x, y-rhs.y, z-rhs.z, w-rhs.w);
 		}
 
-		inline friend Vector4 operator * (const Real f, const Vector4& rhs)
+		friend Vector4 operator * (const Real f, const Vector4& rhs)
 		{
-			ADD_MATH_OP_COUNT
 			return Vector4(f*rhs.x, f*rhs.y, f*rhs.z, f*rhs.w);
 		}
 
-		inline Vector4 operator * (const Real f) const
+		Vector4 operator * (const Real f) const
 		{
-			ADD_MATH_OP_COUNT
 			return Vector4(f*x, f*y, f*z, f*w);
 		}
 
-		inline Vector4 operator * (const Vector4& rhs) const
+		Vector4 operator * (const Vector4& rhs) const
 		{
-			ADD_MATH_OP_COUNT
 			return Vector4(x*rhs.x, y*rhs.y, z*rhs.z, w*rhs.w);
 		}
 
-		inline Vector4 operator / (const Real f) const
+		Vector4 operator / (const Real f) const
 		{
-			ADD_MATH_OP_COUNT
 			return Vector4(x/f, y/f, z/f, w/f);
 		}
 
-		inline friend Vector4 operator / (const Real f, const Vector4& rhs)
+		friend Vector4 operator / (const Real f, const Vector4& rhs)
 		{
-			ADD_MATH_OP_COUNT
 			return Vector4(f/rhs.x, f/rhs.y, f/rhs.z, f/rhs.w);
 		}
 
-		inline Vector4 operator / (const Vector4& rhs) const
+		Vector4 operator / (const Vector4& rhs) const
 		{
-			ADD_MATH_OP_COUNT
 			return Vector4(x/rhs.x, y/rhs.y, z/rhs.z, w/rhs.w);
 		}
 
-		inline void zero()
+		void zero()
 		{
-			ADD_MATH_OP_COUNT
 			x = 0.0;
 			y = 0.0;
 			z = 0.0;
 			w = 0.0;
 		}
 
-		inline void one()
+		void one()
 		{
-			ADD_MATH_OP_COUNT
 			x = 1.0;
 			y = 1.0;
 			z = 1.0;
 			w = 1.0;
 		}
 
-		inline void invalid()
+		void invalid()
 		{
-			ADD_MATH_OP_COUNT
 			*this = INVALID;
 		}
 
-		inline void set(Real x, Real y, Real z, Real w)
+		void set(Real x, Real y, Real z, Real w)
 		{
-			ADD_MATH_OP_COUNT
 			this->x = x;
 			this->y = y;
 			this->z = z;
 			this->w = w;
 		}
 
-		inline void set(Real value)
+		void set(Real value)
 		{
-			ADD_MATH_OP_COUNT
 			this->x = value;
 			this->y = value;
 			this->z = value;
 			this->w = value;
 		}
 
-		inline void set(Real *p)
+		void set(Real *p)
 		{
-			ADD_MATH_OP_COUNT
 			this->x = p[0];
 			this->y = p[1];
 			this->z = p[2];
 			this->w = p[3];
 		}
 
-		inline void setVec3(const Vector3& vec3, Real _w)
+		void setVec3(const Vector3& vec3, Real _w)
 		{
-			ADD_MATH_OP_COUNT
 			x = vec3.x;
 			y = vec3.y;
 			z = vec3.z;
 			w = _w;
 		}
 
-		inline Vector3 getVec3()
+		Vector3 getVec3()
 		{
-			ADD_MATH_OP_COUNT
 			return Vector3(x, y, z);
 		}
 
-		inline Real dot(const Vector4& rhs) const
+		Real dot(const Vector4& rhs) const
 		{
-			ADD_MATH_OP_COUNT
 			return (x * rhs.x + y * rhs.y + z * rhs.z + w * rhs.w);
 		}
 
-		inline void inverse()
+		void inverse()
 		{
-			ADD_MATH_OP_COUNT
 			x = 1.0f / x;
 			y = 1.0f / y;
 			z = 1.0f / z;
 			w = 1.0f / w;
 		}
 
-		inline void sqrt()
+		void sqrt()
 		{
-			ADD_MATH_OP_COUNT
 			x = Math::Sqrt(x);
 			y = Math::Sqrt(y);
 			z = Math::Sqrt(z);
 			w = Math::Sqrt(w);
 		}
 
-		inline void invSqrt()
+		void invSqrt()
 		{
-			ADD_MATH_OP_COUNT
 			x = 1.0f / Math::Sqrt(x);
 			y = 1.0f / Math::Sqrt(y);
 			z = 1.0f / Math::Sqrt(z);
 			w = 1.0f / Math::Sqrt(w);
 		}
 
-		inline Real len() const
+		Real len() const
 		{
-			ADD_MATH_OP_COUNT
 			Real vecLen;
 
 			Real sum = x * x + y * y + z * z + w * w;
@@ -410,15 +363,13 @@ namespace Echo
 			return vecLen;
 		}
 
-		inline Real lenSqr() const
+		Real lenSqr() const
 		{
-			ADD_MATH_OP_COUNT
 			return x * x + y * y + z * z + w * w;
 		}
 
-		inline void normalize()
+		void normalize()
 		{
-			ADD_MATH_OP_COUNT
 			Real length = len();
 			if (length > 1e-08)
 			{
@@ -429,9 +380,8 @@ namespace Echo
 			}
 		}
 
-		inline Real normalizeLen()
+		Real normalizeLen()
 		{
-			ADD_MATH_OP_COUNT
 			Real length = len();
 			if (length > 1e-08)
 			{
@@ -444,9 +394,8 @@ namespace Echo
 			return length;
 		}
 
-		inline Vector4& abs()
+		Vector4& abs()
 		{
-			ADD_MATH_OP_COUNT
 			x = Math::Abs(x);
 			y = Math::Abs(y);
 			z = Math::Abs(z);
@@ -455,9 +404,8 @@ namespace Echo
 			return *this;
 		}
 
-		inline Vector4& neg()
+		Vector4& neg()
 		{
-			ADD_MATH_OP_COUNT
 			x = -x;
 			y = -y;
 			z = -z;
@@ -466,9 +414,8 @@ namespace Echo
 			return *this;
 		}
 
-		inline Vector4& saturate()
+		Vector4& saturate()
 		{
-			ADD_MATH_OP_COUNT
 			if ( x > 1.0 ) x = 1.0;
 			if ( y > 1.0 ) y = 1.0;
 			if ( z > 1.0 ) z = 1.0;
@@ -482,9 +429,8 @@ namespace Echo
 			return *this;
 		}
 
-		inline Vector4& clampZero()
+		Vector4& clampZero()
 		{
-			ADD_MATH_OP_COUNT
 			if ( x < 0.0 ) x = 0.0;
 			if ( y < 0.0 ) y = 0.0;
 			if ( z < 0.0 ) z = 0.0;
@@ -493,9 +439,8 @@ namespace Echo
 			return *this;
 		}
 
-		inline Vector4& clampOne()
+		Vector4& clampOne()
 		{
-			ADD_MATH_OP_COUNT
 			if ( x > 1.0 ) x = 1.0;
 			if ( y > 1.0 ) y = 1.0;
 			if ( z > 1.0 ) z = 1.0;
@@ -504,9 +449,8 @@ namespace Echo
 			return *this;
 		}
 
-		inline Vector4& floor()
+		Vector4& floor()
 		{
-			ADD_MATH_OP_COUNT
 			x = Math::Floor(x);
 			y = Math::Floor(y);
 			z = Math::Floor(z);
@@ -515,9 +459,8 @@ namespace Echo
 			return *this;
 		}
 
-		inline Vector4& ceil()
+		Vector4& ceil()
 		{
-			ADD_MATH_OP_COUNT
 			x = Math::Ceil(x);
 			y = Math::Ceil(y);
 			z = Math::Ceil(z);
@@ -536,58 +479,45 @@ namespace Echo
 			return *this;
 		}
 
-		inline Vector4 midPoint(const Vector4& vec) const
+		Vector4 midPoint(const Vector4& vec) const
 		{
-			ADD_MATH_OP_COUNT
 			return Vector4((x + vec.x) * 0.5f, (y + vec.y) * 0.5f, (z + vec.z) * 0.5f, 1.0);
 		}
 
-		inline void makeFloor(const Vector4& cmp)
+		void makeFloor(const Vector4& cmp)
 		{
-			ADD_MATH_OP_COUNT
 			if( cmp.x < x ) x = cmp.x;
 			if( cmp.y < y ) y = cmp.y;
 			if( cmp.z < z ) z = cmp.z;
 			if( cmp.w < w ) w = cmp.w;
 		}
 
-		inline void makeCeil(const Vector4& cmp)
+		void makeCeil(const Vector4& cmp)
 		{
-			ADD_MATH_OP_COUNT
 			if( cmp.x > x ) x = cmp.x;
 			if( cmp.y > y ) y = cmp.y;
 			if( cmp.z > z ) z = cmp.z;
 			if( cmp.w > w ) w = cmp.w;
 		}
 
-		inline bool isInvalid() const
+		bool isInvalid() const
 		{
-			ADD_MATH_OP_COUNT
 			return Math::IsInvalid(x) || Math::IsInvalid(y) || Math::IsInvalid(z) || Math::IsInvalid(w);
 		}
 
 
 		static inline Real Dot(const Vector4& a, const Vector4& b)
 		{
-#ifdef ECHO_DEBUG
-			++Vector4::OP_COUNT;
-#endif
 			return (a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w);
 		}
 
 		static inline void Lerp(Vector4& outVec, const Vector4& a, const Vector4& b, const Real t)
 		{
-#ifdef ECHO_DEBUG
-			++Vector4::OP_COUNT;
-#endif
 			outVec = a + (b - a) * t;
 		}
 
 		static inline void Max(Vector4& outVec, const Vector4& a, const Vector4& b)
 		{
-#ifdef ECHO_DEBUG
-			++Vector4::OP_COUNT;
-#endif
 			outVec.x = a.x > b.x ? a.x : b.x;
 			outVec.y = a.y > b.y ? a.y : b.y;
 			outVec.z = a.z > b.z ? a.z : b.z;
@@ -596,9 +526,6 @@ namespace Echo
 
 		static inline void Min(Vector4& outVec, const Vector4& a, const Vector4& b)
 		{
-#ifdef ECHO_DEBUG
-			++Vector4::OP_COUNT;
-#endif
 			outVec.x = a.x < b.x ? a.x : b.x;
 			outVec.y = a.y < b.y ? a.y : b.y;
 			outVec.z = a.z < b.z ? a.z : b.z;
@@ -607,45 +534,30 @@ namespace Echo
 
 		static inline void Inverse(Vector4& outVec, const Vector4& a)
 		{
-#ifdef ECHO_DEBUG
-			++Vector4::OP_COUNT;
-#endif
 			outVec = a;
 			outVec.inverse();
 		}
 
 		static inline void Sqrt(Vector4& outVec, const Vector4& a)
 		{
-#ifdef ECHO_DEBUG
-			++Vector4::OP_COUNT;
-#endif
 			outVec = a;
 			outVec.sqrt();
 		}
 
 		static inline void InvSqrt(Vector4& outVec, const Vector4& a)
 		{
-#ifdef ECHO_DEBUG
-			++Vector4::OP_COUNT;
-#endif
 			outVec = a;
 			outVec.invSqrt();
 		}
 
 		static inline void Normalize(Vector4& outVec, const Vector4& a)
 		{
-#ifdef ECHO_DEBUG
-			++Vector4::OP_COUNT;
-#endif
 			outVec = a;
 			outVec.normalize();
 		}
 
 		static inline Real NormalizeLen(Vector4& outVec, const Vector4& a)
 		{
-#ifdef ECHO_DEBUG
-			++Vector4::OP_COUNT;
-#endif
 			outVec = a;
 			Real vecLen = outVec.normalizeLen();
 			return vecLen;
@@ -653,27 +565,18 @@ namespace Echo
 
 		static inline void Abs(Vector4& outVec, const Vector4& a)
 		{
-#ifdef ECHO_DEBUG
-			++Vector4::OP_COUNT;
-#endif
 			outVec = a;
 			outVec.abs();
 		}
 
 		static inline void Neg(Vector4& outVec, const Vector4& a)
 		{
-#ifdef ECHO_DEBUG
-			++Vector4::OP_COUNT;
-#endif
 			outVec = a;
 			outVec.neg();
 		}
 
 		static inline void Saturate(Vector4& outVec, const Vector4& a)
 		{
-#ifdef ECHO_DEBUG
-			++Vector4::OP_COUNT;
-#endif
 			outVec= a;
 			outVec.saturate();
 		}

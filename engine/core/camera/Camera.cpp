@@ -181,16 +181,15 @@ namespace Echo
 			Vector3 yAxis;
 			Vector3 zAxis = -m_dir;
 			Vector3::Cross(xAxis, m_up, zAxis);
-			Vector3::Cross(yAxis, zAxis, m_right);
+			Vector3::Cross(yAxis, zAxis, xAxis);
+			m_right = xAxis;
 
 			m_matView = Matrix4(
-				xAxis.x,							yAxis.x,						zAxis.x,							0,
-				xAxis.y,							yAxis.y,						zAxis.y,							0,
-				xAxis.z,							yAxis.z,						zAxis.z,							0,
-				-Vector3::Dot(m_right, m_position), -Vector3::Dot(yAxis, m_position), -Vector3::Dot(zAxis, m_position),	1
+				xAxis.x,						  yAxis.x,							zAxis.x,							0,
+				xAxis.y,						  yAxis.y,						    zAxis.y,							0,
+				xAxis.z,						  yAxis.z,							zAxis.z,							0,
+				-Vector3::Dot(xAxis, m_position), -Vector3::Dot(yAxis, m_position), -Vector3::Dot(zAxis, m_position),	1
 			);
-
-			m_right = xAxis;
 		}
 
 		if(m_isProjDirty)

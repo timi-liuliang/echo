@@ -18,8 +18,6 @@ namespace Echo
 
 	Quaternion Vector3::getRotationTo(const Vector3& dest, const Vector3& fallbackAxis) const
 	{
-		ADD_MATH_OP_COUNT
-
 		// Based on Stan Melax's article in Game Programming Gems
 		Quaternion q;
 		// Copy, since cannot modify local

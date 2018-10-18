@@ -5,12 +5,6 @@
 namespace Echo{
 namespace Math
 {
-#ifdef ECHO_DEBUG
-	#define ADD_MATH_OP_COUNT ++OP_COUNT;
-#else
-	#define ADD_MATH_OP_COUNT
-#endif
-
 	extern const Real PI;				//!< 3.14159265358979323846264338327950288419716939937511
 	extern const Real PI_2;				//!< Math::PI * 2.0
 	extern const Real PI_DIV2;			//!< Math::PI / 2.0
