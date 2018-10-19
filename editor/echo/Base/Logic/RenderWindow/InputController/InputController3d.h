@@ -137,6 +137,13 @@ namespace Studio
 		void rotateCameraAtPos(float xValue, float yValue, const Echo::Vector3& rotCenter);
 
 	protected:
+		// on open node tree
+		virtual void onOpenNodeTree(const Echo::String& resPath) override;
+
+		// on save node tree
+		virtual void onSaveConfig() override;
+
+	protected:
 		bool m_mouseLButtonPressed;
 		bool m_mouseMButtonPressed;
 		bool m_mouseRButtonPressed;

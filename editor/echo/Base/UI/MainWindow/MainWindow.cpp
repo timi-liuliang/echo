@@ -389,20 +389,13 @@ namespace Studio
 	// open node tree
 	void MainWindow::openNodeTree(const Echo::String& resPath)
 	{
-		Echo::Node* node = Echo::Node::loadLink(resPath, false);
-		if (node)
-		{
-			// clear
-			onNewScene();
+		// clear
+		onNewScene();
 
-			Studio::EchoEngine::instance()->setCurrentEditNode(node);
-			Studio::EchoEngine::instance()->setCurrentEditNodeSavePath(resPath);
+		Studio::EchoEngine::instance()->onOpenNodeTree(resPath);
 
-			NodeTreePanel::instance()->refreshNodeTreeDisplay();
-
-			// title
-			m_renderPanel->setWindowTitle( resPath.c_str());
-		}
+		NodeTreePanel::instance()->refreshNodeTreeDisplay();
+		m_renderPanel->setWindowTitle( resPath.c_str());
 	}
 
 	// open lua file for edit

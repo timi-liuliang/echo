@@ -6,9 +6,6 @@
 
 namespace Studio
 {
-	/**
-	 * ±à¼­Æ÷ÅäÖÃ
-	 */
 	class ConfigMgr
 	{
 	public:

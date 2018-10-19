@@ -2,6 +2,7 @@
 #include "EchoEngine.h"
 #include <QWheelEvent>
 #include <QMouseEvent>
+#include "Studio.h"
 #include <engine/core/Math/EchoMathFunction.h>
 
 namespace Studio
@@ -54,7 +55,6 @@ namespace Studio
 	{
 	}
 
-	// 每帧更新
 	void InputController2d::tick(const InputContext& ctx)
 	{
 		// 移动摄像机
@@ -145,7 +145,6 @@ namespace Studio
 		}
 	}
 
-	// 鼠标按键
 	Qt::MouseButton InputController2d::pressedMouseButton()
 	{
 		if ( m_mouseLButtonPressed )
@@ -166,19 +165,16 @@ namespace Studio
 		}
 	}
 
-	// 鼠标位置
 	QPointF InputController2d::mousePosition()
 	{
 		return m_pos;
 	}
 
-	//设置相机操作模式
 	void InputController2d::SetCameraOperateMode(int mode)
 	{
 		m_cameraOperateMode = mode;
 	}
 
-	//返回当前相机操作模式
 	int InputController2d::GetCameraOperateMode()
 	{
 		return m_cameraOperateMode;
@@ -195,12 +191,10 @@ namespace Studio
 		AdaptCamera();
 	}
 
-	// 初始化摄像机参数
 	void InputController2d::InitializeCameraSettings(float diroffset)
 	{
 	}
 
-	// 摄像机更新
 	void InputController2d::UpdateCamera(float elapsedTime)
 	{
 		if (m_bNeedUpdateCamera)
@@ -211,10 +205,18 @@ namespace Studio
 			m_camera->setScale(m_cameraScale);
 			m_camera->setPosition(m_cameraPositon);
 			m_camera->setDirection(Echo::Vector3::NEG_UNIT_Z);
+
+			// save config
+			static float totalElapsed = 0.f;
+			totalElapsed += elapsedTime;
+			if (totalElapsed > 0.5f)
+			{
+				onSaveConfig();
+				totalElapsed = 0.f;
+			}
 		}
 	}
 
-	// 适应模型
 	void InputController2d::CameraZoom(const Echo::AABB& box, float scale)
 	{
 		//float         radius = (box.getSize().len() * 0.5f);
@@ -257,5 +259,46 @@ namespace Studio
 			m_keyDDown ||
 			m_keyQDown ||
 			m_keyEDown;
+	}
+
+	// on open node tree
+	void InputController2d::onOpenNodeTree(const Echo::String& resPath)
+	{
+		// camera 2d
+		Echo::Camera* camera2D = Echo::NodeTree::instance()->get2dCamera();
+		if (camera2D && !resPath.empty())
+		{
+			Echo::String preStr = Echo::Engine::instance()->getResPath() + ":" + resPath;
+			Echo::String camera2DPosition = AStudio::instance()->getConfigMgr()->getValue((preStr + "camera2dposition").c_str());
+			if (!camera2DPosition.empty())
+				m_cameraPositon = Echo::StringUtil::ParseVec3(camera2DPosition);
+
+			Echo::String camera2DDirection = AStudio::instance()->getConfigMgr()->getValue((preStr + "camera2ddirection").c_str());
+			if (!camera2DDirection.empty())
+				m_cameraForward = Echo::StringUtil::ParseVec3(camera2DDirection);
+
+			Echo::String camera2DScale = AStudio::instance()->getConfigMgr()->getValue((preStr + "camera2dscale").c_str());
+			if (!camera2DScale.empty())
+				m_cameraScale = (Echo::StringUtil::ParseReal(camera2DScale));
+		}
+	}
+
+	// on save node tree
+	void InputController2d::onSaveConfig()
+	{
+		const Echo::String& resPath = EchoEngine::instance()->getCurrentEditNodeSavePath();
+		if (!resPath.empty())
+		{
+			// camera 2d
+			Echo::Camera* camera2D = Echo::NodeTree::instance()->get2dCamera();
+			if (camera2D && !resPath.empty())
+			{
+				Echo::String preStr = Echo::Engine::instance()->getResPath() + ":" + resPath;
+
+				AStudio::instance()->getConfigMgr()->setValue((preStr + "camera2dposition").c_str(), Echo::StringUtil::ToString(camera2D->getPosition()).c_str());
+				AStudio::instance()->getConfigMgr()->setValue((preStr + "camera2ddirection").c_str(), Echo::StringUtil::ToString(camera2D->getDirection()).c_str());
+				AStudio::instance()->getConfigMgr()->setValue((preStr + "camera2dscale").c_str(), Echo::StringUtil::ToString(camera2D->getScale()).c_str());
+			}
+		}
 	}
 }

@@ -4,6 +4,7 @@
 #include <QMouseEvent>
 #include <engine/core/render/interface/Renderer.h>
 #include <engine/core/math/EchoMathFunction.h>
+#include "Studio.h"
 
 namespace Studio
 {
@@ -359,6 +360,15 @@ namespace Studio
 
 			m_camera->setPosition(m_cameraPositon);
 			m_camera->setDirection(m_cameraLookAt-m_cameraPositon);
+
+			// save config
+			static float totalElapsed = 0.f;
+			totalElapsed += elapsedTime;
+			if (totalElapsed > 0.5f)
+			{
+				onSaveConfig();
+				totalElapsed = 0.f;
+			}
 		}
 	}
 
@@ -520,5 +530,48 @@ namespace Studio
 		m_cameraForward.toHVAngle(m_horizonAngle, m_verticleAngle);
 		m_verticleAngleGoal = m_verticleAngle;
 		m_horizonAngleGoal = m_horizonAngle;
+	}
+
+	// on open node tree
+	void InputController3d::onOpenNodeTree(const Echo::String& resPath)
+	{
+		return;
+
+		// camera 3d
+		Echo::Camera* camera3D = Echo::NodeTree::instance()->get2dCamera();
+		if (camera3D && !resPath.empty())
+		{
+			Echo::String preStr = Echo::Engine::instance()->getResPath() + ":" + resPath;
+			Echo::String camera3DPosition = AStudio::instance()->getConfigMgr()->getValue((preStr + "camera2dposition").c_str());
+			if (!camera3DPosition.empty())
+				m_cameraPositon = Echo::StringUtil::ParseVec3(camera3DPosition);
+
+			Echo::String hAngle = AStudio::instance()->getConfigMgr()->getValue((preStr + "camera3dHAngle").c_str());
+			if (!hAngle.empty())
+				m_horizonAngleGoal = Echo::StringUtil::ParseReal(hAngle);
+
+			Echo::String vAngle = AStudio::instance()->getConfigMgr()->getValue((preStr + "camera3dVAngle").c_str());
+			if (!hAngle.empty())
+				m_verticleAngleGoal = Echo::StringUtil::ParseReal(vAngle);
+		}
+	}
+
+	// on save node tree
+	void InputController3d::onSaveConfig()
+	{
+		const Echo::String& resPath = EchoEngine::instance()->getCurrentEditNodeSavePath();
+		if (!resPath.empty())
+		{
+			// camera 3d
+			Echo::Camera* camera3D = Echo::NodeTree::instance()->get3dCamera();
+			if (camera3D && !resPath.empty())
+			{
+				Echo::String preStr = Echo::Engine::instance()->getResPath() + ":" + resPath;
+
+				AStudio::instance()->getConfigMgr()->setValue((preStr + "camera3dposition").c_str(), Echo::StringUtil::ToString(camera3D->getPosition()).c_str());
+				AStudio::instance()->getConfigMgr()->setValue((preStr + "camera3dHAngle").c_str(), Echo::StringUtil::ToString(m_horizonAngleGoal).c_str());
+				AStudio::instance()->getConfigMgr()->setValue((preStr + "camera3dVAngle").c_str(), Echo::StringUtil::ToString(m_verticleAngleGoal).c_str());
+			}
+		}
 	}
 }

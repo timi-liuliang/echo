@@ -21,38 +21,60 @@ namespace Echo
 		Camera(ProjMode mode = PM_PERSPECTIVE);
 		virtual ~Camera();
 
-		// set
+		// proj mode
+		ProjMode getProjectionMode() const;
 		void setProjectionMode(ProjMode mode);
+
+		// position
+		const Vector3& getPosition() const { return m_position; }
 		void setPosition(const Vector3& pos);
+
+		// direction
+		const Vector3& getDirection() const { return m_dir; }
 		void setDirection(const Vector3& dir);
+
+		// up 
+		const Vector3& getUp() const { return m_up; }
 		void setUp(const Vector3& vUp);
 
-		const Vector3& getPosition() const { return m_position; }
-		const Vector3& getDirection() const { return m_dir; }
-		const Vector3& getUp() const { return m_up; }
+		// right
 		const Vector3& getRight() const { return m_right; }
-		ProjMode getProjectionMode() const;
 
+		// fov
+		Real getFov() const;
+		void setFov(Real fov);
+
+		// width
+		Real getWidth() const;
+		void setWidth(Real width);
+
+		// height
+		Real getHeight() const;
+		void setHeight(Real height);
+
+		// scale
+		void setScale(Real scale);
+		float getScale() const { return m_scale; }
+
+		// near clip
+		const Real&	getNear() const;
+		void setNearClip(Real nearClip);
+
+		// far clip
+		const Real&	getFar() const;
+		void setFarClip(Real farClip);
+
+		// update
+		void update();
+
+		// calculate
+		void getCameraRay(Ray& ray, const Vector2& screenPos);
+		void unProjectionMousePos(Vector3& from, Vector3& to, const Vector2& screenPos);
+
+		// matrix
 		const Matrix4& getViewMatrix() const { return m_matView; }
 		const Matrix4& getProjMatrix() const { return m_matProj; }
 		const Matrix4& getViewProjMatrix() const { return m_matVP; }
-
-		void setFov(Real fov);
-		void setWidth(Real width);
-		void setHeight(Real height);
-		void setScale(Real scale);
-		void setNearClip(Real nearClip);
-		void setFarClip(Real farClip);
-		Real getFov() const;
-		Real getWidth() const;
-		Real getHeight() const;
-		const Real&	getNear() const;
-		const Real&	getFar() const;
-
-		void getCameraRay(Ray& ray, const Vector2& screenPos);
-		void unProjectionMousePos( Vector3& from, Vector3& to, const Vector2& screenPos );
-
-		void update();
 
 	protected:
 		ProjMode		m_projMode;

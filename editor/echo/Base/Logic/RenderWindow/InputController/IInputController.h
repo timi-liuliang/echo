@@ -79,6 +79,13 @@ namespace Studio
 
 		// ÊÊÓ¦Ä£ÐÍ
 		virtual void CameraZoom(const Echo::AABB& box, float scale){}
+
+	public:
+		// on open node tree
+		virtual void onOpenNodeTree(const Echo::String& resPath) {}
+
+		// on save node tree
+		virtual void onSaveConfig() {}
 	};
 	typedef IRenderWindowInputController IRWInputController;
 }

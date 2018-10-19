@@ -6,9 +6,6 @@
 
 namespace Studio
 {
-	//-----------------------------------
-	// Dx9MdiArea dx显示窗口
-	//-----------------------------------
 	class RenderWindow : public QWidget
 	{
 		Q_OBJECT
@@ -53,6 +50,8 @@ namespace Studio
 
 		// 获取输入控制器
 		IRWInputController* getInputController(){return m_inputController; }
+		IRWInputController* getInputController2D() { return m_inputController2d; }
+		IRWInputController* getInputController3D() { return m_inputController3d; }
 
 		// switch controller
 		void switchToController2d() { m_inputController = m_inputController2d; }

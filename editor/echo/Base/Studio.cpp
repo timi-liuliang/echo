@@ -158,8 +158,7 @@ namespace Studio
 		return false;
 	}
 
-	// 获取渲染窗口
-	QWidget* AStudio::getRenderWindow()
+	RenderWindow* AStudio::getRenderWindow()
 	{
 		// 新建渲染窗口
 		if ( !m_renderWindow )

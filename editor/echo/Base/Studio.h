@@ -48,7 +48,7 @@ namespace Studio
 		LogPanel* getLogPanel() { return m_logPanel; }
 
 		// 获取渲染窗口
-		virtual QWidget* getRenderWindow();
+		virtual RenderWindow* getRenderWindow();
 
 		// 保存缩略图
 		virtual bool saveThumbnail( const Echo::String& fileName, int type = 0 );

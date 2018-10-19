@@ -33,6 +33,9 @@ namespace Studio
 		void Release();
 
 	public:
+		// on open node tree
+		bool onOpenNodeTree(const Echo::String& resPath);
+
 		// 设置当前编辑结点
 		void setCurrentEditNode(Echo::Node* node) { m_currentEditNode = node; }
 
@@ -76,9 +79,6 @@ namespace Studio
 
 		// save branch node as scene
 		void saveBranchAsScene(const Echo::String& savePath, Echo::Node* node);
-
-		// 保存当前编辑场景
-		void SaveScene();
 
 	private:
 		EchoEngine();

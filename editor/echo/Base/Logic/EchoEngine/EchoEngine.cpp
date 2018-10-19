@@ -134,12 +134,27 @@ namespace Studio
 		}
 	}
 
+	// on open node tree
+	bool EchoEngine::onOpenNodeTree(const Echo::String& resPath)
+	{
+		Echo::Node* node = Echo::Node::loadLink(resPath, false);
+
+		setCurrentEditNode(node);
+		setCurrentEditNodeSavePath(resPath);
+
+		// recove input controller parameters
+		AStudio::instance()->getRenderWindow()->getInputController2D()->onOpenNodeTree(resPath);
+		AStudio::instance()->getRenderWindow()->getInputController3D()->onOpenNodeTree(resPath);
+
+		return node ? true : false;
+	}
+
 	// save current node tree
 	void EchoEngine::saveCurrentEditNodeTree()
 	{
 		if (m_currentEditNode && !m_currentEditNodeSavePath.empty())
 		{
-			m_currentEditNode->save( m_currentEditNodeSavePath);
+			saveBranchAsScene( m_currentEditNodeSavePath, m_currentEditNode);
 		}
 	}
 
@@ -148,7 +163,6 @@ namespace Studio
 		saveBranchAsScene(savePath, m_currentEditNode);
 	}
 
-	// save branch node as scene
 	void EchoEngine::saveBranchAsScene(const Echo::String& savePath, Echo::Node* node)
 	{
 		if (node && !savePath.empty())
@@ -286,11 +300,6 @@ namespace Studio
 	float EchoEngine::GetMeshRadius()
 	{
 		return 10.f;
-	}
-
-	void EchoEngine::SaveScene()
-	{
-		SaveSceneThumbnail();
 	}
 
 	void EchoEngine::SaveSceneThumbnail(bool setCam)

@@ -3,7 +3,6 @@
 
 namespace Echo
 {
-	// 构造函数
 	NodeTree::NodeTree()
 		: m_3dCamera(nullptr)
 		, m_2dCamera(nullptr)
@@ -16,14 +15,12 @@ namespace Echo
 	{
 	}
 
-	// instance
 	NodeTree* NodeTree::instance()
 	{
 		static NodeTree* inst = EchoNew(NodeTree);
 		return inst;
 	}
 
-	// 初始化
 	bool NodeTree::init()
 	{
 		// create main camera
@@ -57,7 +54,6 @@ namespace Echo
 		return true;
 	}
 
-	// 销毁
 	void NodeTree::destroy()
 	{
 		EchoSafeDelete(m_3dCamera, Camera);
@@ -65,7 +61,6 @@ namespace Echo
 		EchoSafeDelete(m_shadowCamera, CameraShadow);
 	}
 
-	// 更新 
 	void NodeTree::update(float elapsedTime)
 	{
 		// update 3d camera
