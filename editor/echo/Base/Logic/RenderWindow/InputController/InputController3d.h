@@ -11,9 +11,6 @@ class QKeyEvent;
 
 namespace Studio
 {
-	/**
-	* 渲染窗口默认控制器
-	*/
 	class InputController3d : public IRWInputController
 	{
 	public:
@@ -61,38 +58,11 @@ namespace Studio
 		// 适应模型
 		virtual void CameraZoom(const Echo::AABB& box, float scale);
 
-		// 设置摄像机观察点
-		void SetCameraLookAt(const Echo::Vector3& lookAt) { m_cameraLookAt = lookAt; }
-		const Echo::Vector3& GetCameraLookAt() const { return m_cameraLookAt; }
-
-		void SetCameraPosition(const Echo::Vector3& pos) { m_cameraPositon = pos; }
-		const Echo::Vector3& GetCameraPosition() const { return m_cameraPositon; }
-
-		void SetCameraForward(const Echo::Vector3& forward) { m_cameraForward = forward; }
-		const Echo::Vector3& GetCameraForward() const { return m_cameraForward; }
-
-		void SetCameraMoveDirVal(const Echo::Vector3& dir) { m_cameraMoveDir = dir; }
-		const Echo::Vector3& GetCameraMoveDirVal() const { return m_cameraMoveDir; }
-
-		void SetVerticleAngle(const float angle) { m_verticleAngle = angle; }
-		const float GetVerticleAngle() const { return m_verticleAngle; }
-
-		void SetHorizonAngle(const float angle) { m_horizonAngle = angle; }
-		const float GetHorizonAngle() const { return m_horizonAngle; }
-
-		void SetVerticleAngleGoal(const float angle) { m_verticleAngleGoal = angle; }
-		const float GetVerticleAngleGoal() const { return m_verticleAngleGoal; }
-
-		void SetHorizonAngleGoal(const float angle) { m_horizonAngleGoal = angle; }
-		const float GetHorizonAngleGoal() const { return m_horizonAngleGoal; }
-
 		// 获取摄像机半径（即摄像机与主角距离）
 		float GetCameraRadius() { return m_cameraRadius; }
 
 		// 设置摄像机半径
 		void SetCameraRadius(float radius) { m_cameraRadius = Echo::Math::Clamp(radius, 0.1f, 1000.f); }
-
-		void UpdateCameraInfo();
 
 		bool isCameraMoving() const;
 

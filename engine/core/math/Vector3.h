@@ -488,6 +488,7 @@ namespace Echo
 
 		static inline void Cross(Vector3& outVec, const Vector3& a, const Vector3& b)
 		{
+			// https://www.khanacademy.org/math/linear-algebra/vectors-and-spaces/dot-cross-products/v/linear-algebra-cross-product-introduction
 			outVec.x = a.y * b.z - a.z * b.y;
 			outVec.y = a.z * b.x - a.x * b.z;
 			outVec.z = a.x * b.y - a.y * b.x;

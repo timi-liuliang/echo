@@ -481,12 +481,6 @@ namespace Studio
 		m_camera->setDirection(m_cameraLookAt-m_cameraPositon);
 	}
 
-	void InputController3d::UpdateCameraInfo()
-	{
-		m_camera->setPosition(m_cameraPositon);
-		m_camera->setPosition(m_cameraLookAt-m_cameraPositon);
-	}
-
 	bool InputController3d::isCameraMoving() const
 	{
 		return m_keyADown ||

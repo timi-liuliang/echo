@@ -176,13 +176,12 @@ namespace Echo
 	{
 		if(m_isViewDirty)
 		{
-			// calc axis
 			Vector3 xAxis;
 			Vector3 yAxis;
 			Vector3 zAxis = -m_dir;
-			Vector3::Cross(xAxis, m_up, zAxis);
-			Vector3::Cross(yAxis, zAxis, xAxis);
-			m_right = xAxis;
+
+			Vector3::Cross(xAxis, m_up, zAxis);		xAxis.normalize();
+			Vector3::Cross(yAxis, zAxis, xAxis);	EchoAssert(abs(yAxis.len() - 1.f) < Math::EPSILON); /*yAxis.normalize();*/
 
 			m_matView = Matrix4(
 				xAxis.x,						  yAxis.x,							zAxis.x,							0,
@@ -190,6 +189,8 @@ namespace Echo
 				xAxis.z,						  yAxis.z,							zAxis.z,							0,
 				-Vector3::Dot(xAxis, m_position), -Vector3::Dot(yAxis, m_position), -Vector3::Dot(zAxis, m_position),	1
 			);
+
+			m_right = xAxis;
 		}
 
 		if(m_isProjDirty)
