@@ -24,31 +24,17 @@ namespace Studio
 		, m_keyAltDown(false)
 		, m_keyCtrlDown(false)
 		, m_keyShiftDown(false)
-		, m_cameraOperateMode(1)
 		, m_camera(NULL)
 		, m_cameraMoveDir(Echo::Vector3::UNIT_X)
 		, m_cameraForward(-Echo::Vector3::UNIT_Z)
 		, m_cameraPositon(Echo::Vector3::ZERO)
 		, m_bNeedUpdateCamera(true)
-		, m_orthoTopCamRot(-Echo::Vector3::UNIT_Y)
-		, m_orthoFrontCamRot(-Echo::Vector3::UNIT_Z)
-		, m_orthoLeftCamRot(Echo::Vector3::UNIT_X)
-		, m_orthoTopDis(0.f)
-		, m_orthoFrontDis(0.f)
-		, m_orthoLeftDis(0.f)
-		, m_orthoTopCamPos(Echo::Vector3::ZERO)
-		, m_orthoFrontCamPos(Echo::Vector3::ZERO)
-		, m_orthoLeftCamPos(Echo::Vector3::ZERO)
 		, m_cameraScale(1.f)
 	{
 		m_camera = Echo::NodeTree::instance()->get2dCamera();
 
 		// 初始化摄像机参数
 		InitializeCameraSettings();
-
-		m_orthoTopCamRot.z -= 0.01f;
-		m_orthoTopCamRot.normalize();
-
 	}
 
 	InputController2d::~InputController2d()
@@ -85,7 +71,7 @@ namespace Studio
 		QPointF posChanged = e->localPos() - m_pos;
 		if (m_mouseMButtonPressed)
 		{
-			MoveCamera(posChanged.x() * kCameraRotationYScalar * kCameraRotationYScalar, m_cameraOperateMode* posChanged.y() * kCameraRadiusScalar);
+			MoveCamera(posChanged.x() * kCameraRotationYScalar * kCameraRotationYScalar, posChanged.y() * kCameraRadiusScalar);
 		}
 
 		m_pos = e->localPos();
@@ -170,22 +156,10 @@ namespace Studio
 		return m_pos;
 	}
 
-	void InputController2d::SetCameraOperateMode(int mode)
-	{
-		m_cameraOperateMode = mode;
-	}
-
-	int InputController2d::GetCameraOperateMode()
-	{
-		return m_cameraOperateMode;
-	}
-
-	//
 	void InputController2d::onSizeCamera(unsigned int width, unsigned int height)
 	{
 	}
 
-	//
 	void InputController2d::onAdaptCamera()
 	{
 		AdaptCamera();

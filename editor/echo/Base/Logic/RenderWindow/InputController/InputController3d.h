@@ -14,14 +14,6 @@ namespace Studio
 	class InputController3d : public IRWInputController
 	{
 	public:
-		enum OrthoCamMode
-		{
-			OCM_TOP,
-			OCM_FRONT,
-			OCM_LEFT,
-			OCM_NONE,
-		};
-
 		InputController3d();
 		virtual ~InputController3d();
 
@@ -42,12 +34,6 @@ namespace Studio
 
 		// 鼠标位置
 		virtual QPointF mousePosition() override;
-
-		// 设置相机操作模式
-		virtual void SetCameraOperateMode(int mode) override;
-
-		// 返回当前相机操作模式
-		virtual int GetCameraOperateMode() override;
 
 		// 相机更新size
 		virtual void onSizeCamera(unsigned int width, unsigned int height) override;
@@ -70,10 +56,6 @@ namespace Studio
 		void setNeedUpdateCamera(bool need) { m_bNeedUpdateCamera = need; UpdateCamera(0.01f); }
 
 		void resetPerspectiveCamera();
-		void switchToOrthoCam(OrthoCamMode destMode, Echo::Vector3 pos);
-		void setOrthoCamDis(OrthoCamMode mode, float dis);
-		float getOrthoCamDis(OrthoCamMode mode);
-		void updateOrthoCamPos(OrthoCamMode mode);
 
 	protected:
 		// 摄像机更新
@@ -81,8 +63,6 @@ namespace Studio
 
 		// 平移摄像机
 		void SetCameraMoveDir(const Echo::Vector3& dir);
-
-		void SetCameraMoveDir(const Echo::Vector3& dir, Echo::Vector3 forward);
 
 		// 操作摄像机
 		void CameraZoom(float zValue);
@@ -98,7 +78,6 @@ namespace Studio
 
 		// 旋转摄像机(平滑处理)
 		void SmoothRotation(float elapsedTime);
-		void UpdateOrthoCamModeWH(OrthoCamMode mode);
 
 	protected:
 		void updateMouseButtonPressedStatus(QMouseEvent* e, bool pressed);
@@ -127,7 +106,6 @@ namespace Studio
 		bool m_keyCtrlDown;
 		bool m_keyShiftDown;
 		QPointF m_pos;
-		int m_cameraOperateMode; //1表示正常,-1表示上下旋转颠倒
 
 	protected:
 		Echo::Camera*		m_camera;			// 主摄像机
@@ -140,25 +118,6 @@ namespace Studio
 		float				m_verticleAngle;	// 垂直旋转角度(顺时针)
 		float				m_horizonAngleGoal;	// 目标水平旋转角度
 		float				m_verticleAngleGoal;// 目标垂直旋转角度
-
 		bool				m_bNeedUpdateCamera;// 是否需要更新相机位置
-
-		Echo::Vector3		m_backCameraPos;
-		Echo::Vector3		m_backCameraRot;
-
-		float				m_orthoTopDis;
-		Echo::Vector3		m_orthoTopCamPos;
-		Echo::Vector3		m_orthoTopCamRot;
-
-		float				m_orthoFrontDis;
-		Echo::Vector3		m_orthoFrontCamPos;
-		Echo::Vector3		m_orthoFrontCamRot;
-
-		float				m_orthoLeftDis;
-		Echo::Vector3		m_orthoLeftCamPos;
-		Echo::Vector3		m_orthoLeftCamRot;
-
-		OrthoCamMode		m_preMode;
-		OrthoCamMode		m_curMode;
 	};
 }

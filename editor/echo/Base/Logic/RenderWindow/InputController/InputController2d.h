@@ -11,9 +11,6 @@ class QKeyEvent;
 
 namespace Studio
 {
-	/**
-	* 渲染窗口默认控制器
-	*/
 	class InputController2d : public IRWInputController
 	{
 	public:
@@ -37,12 +34,6 @@ namespace Studio
 
 		// 鼠标位置
 		virtual QPointF mousePosition() override;
-
-		// 设置相机操作模式
-		virtual void SetCameraOperateMode(int mode) override;
-
-		// 返回当前相机操作模式
-		virtual int GetCameraOperateMode() override;
 
 		// 相机更新size
 		virtual void onSizeCamera(unsigned int width, unsigned int height) override;
@@ -115,7 +106,6 @@ namespace Studio
 		bool m_keyCtrlDown;
 		bool m_keyShiftDown;
 		QPointF m_pos;
-		int m_cameraOperateMode; //1表示正常,-1表示上下旋转颠倒
 
 	protected:
 		Echo::Camera*		m_camera;			// 主摄像机
@@ -125,20 +115,5 @@ namespace Studio
 		Echo::Vector3		m_cameraPositon;	// 摄像机位置
 
 		bool				m_bNeedUpdateCamera;// 是否需要更新相机位置
-
-		Echo::Vector3		m_backCameraPos;
-		Echo::Vector3		m_backCameraRot;
-
-		float				m_orthoTopDis;
-		Echo::Vector3		m_orthoTopCamPos;
-		Echo::Vector3		m_orthoTopCamRot;
-
-		float				m_orthoFrontDis;
-		Echo::Vector3		m_orthoFrontCamPos;
-		Echo::Vector3		m_orthoFrontCamRot;
-
-		float				m_orthoLeftDis;
-		Echo::Vector3		m_orthoLeftCamPos;
-		Echo::Vector3		m_orthoLeftCamRot;
 	};
 }

@@ -25,28 +25,16 @@ namespace Studio
 		, m_keyAltDown(false)
 		, m_keyCtrlDown(false)
 		, m_keyShiftDown(false)
-		, m_cameraOperateMode(1)
 		, m_camera(NULL)
 		, m_cameraRadius(8.f)
 		, m_cameraLookAt(Echo::Vector3::ZERO)
-		, m_cameraMoveDir(Echo::Vector3::UNIT_X)
+		, m_cameraMoveDir(Echo::Vector3::ZERO)
 		, m_cameraPositon(Echo::Vector3::ZERO)
 		, m_horizonAngle(-Echo::Math::PI_DIV2)
 		, m_verticleAngle(Echo::Math::PI_DIV2)
 		, m_horizonAngleGoal(-Echo::Math::PI_DIV2)
  		, m_verticleAngleGoal(Echo::Math::PI_DIV2)
 		, m_bNeedUpdateCamera(true)
-		, m_orthoTopCamRot(-Echo::Vector3::UNIT_Y)
-		, m_orthoFrontCamRot(-Echo::Vector3::UNIT_Z)
-		, m_orthoLeftCamRot(Echo::Vector3::UNIT_X)
-		, m_orthoTopDis(0.f)
-		, m_orthoFrontDis(0.f)
-		, m_orthoLeftDis(0.f)
-		, m_orthoTopCamPos(Echo::Vector3::ZERO)
-		, m_orthoFrontCamPos(Echo::Vector3::ZERO)
-		, m_orthoLeftCamPos(Echo::Vector3::ZERO)
-		, m_preMode(OrthoCamMode::OCM_NONE)
-		, m_curMode(OrthoCamMode::OCM_NONE)
 	{
 		m_cameraForward = Echo::Vector3( 0.f, -1.f, -1.f);
 		m_cameraForward.normalize();
@@ -56,9 +44,6 @@ namespace Studio
 		m_camera = Echo::NodeTree::instance()->get3dCamera();
 		m_camera->setNearClip(0.1f);
 		m_camera->setFarClip(250.f);
-
-		m_orthoTopCamRot.z -= 0.01f;
-		m_orthoTopCamRot.normalize();
 	}
 
 	InputController3d::~InputController3d()
@@ -97,7 +82,7 @@ namespace Studio
 		QPointF posChanged = e->localPos() - m_pos;
 		if ( m_mouseRButtonPressed )
 		{
-			RotationCamera(posChanged.x() * kCameraRotationYScalar * kCameraRotationYScalar, m_cameraOperateMode* posChanged.y() * kCameraRadiusScalar);
+			RotationCamera(posChanged.x() * kCameraRotationYScalar * kCameraRotationYScalar, posChanged.y() * kCameraRadiusScalar);
 		}
 
 		m_pos = e->localPos();
@@ -157,7 +142,6 @@ namespace Studio
 		}
 	}
 
-	// 鼠标按键
 	Qt::MouseButton InputController3d::pressedMouseButton()
 	{
 		if ( m_mouseLButtonPressed )
@@ -178,167 +162,11 @@ namespace Studio
 		}
 	}
 
-	// 鼠标位置
 	QPointF InputController3d::mousePosition()
 	{
 		return m_pos;
 	}
 
-	void InputController3d::switchToOrthoCam(OrthoCamMode destMode, Echo::Vector3 pos)
-	{
-		m_preMode = m_curMode;
-		m_curMode = destMode;
-		if (m_curMode == OrthoCamMode::OCM_TOP && m_orthoTopCamPos == Echo::Vector3::ZERO)
-		{
-			m_orthoTopCamPos = pos;
-		}
-		else if (m_curMode == OrthoCamMode::OCM_FRONT && m_orthoFrontCamPos == Echo::Vector3::ZERO)
-		{
-			m_orthoFrontCamPos = pos;
-		}
-		else if (m_curMode == OrthoCamMode::OCM_LEFT && m_orthoLeftCamPos == Echo::Vector3::ZERO)
-		{
-			m_orthoLeftCamPos = pos;
-		}
-
-		Echo::Vector3 dir = Echo::Vector3::ZERO;
-		if (m_curMode == OrthoCamMode::OCM_TOP)
-		{
-			pos = m_orthoTopCamPos;
-			dir = m_orthoTopCamRot;
-		}
-		else if (m_curMode == OrthoCamMode::OCM_FRONT)
-		{
-			pos = m_orthoFrontCamPos;
-			dir = m_orthoFrontCamRot;
-		}
-		else if (m_curMode == OrthoCamMode::OCM_LEFT)
-		{
-			pos = m_orthoLeftCamPos;
-			dir = m_orthoLeftCamRot;
-		}
-
-		updateOrthoCamPos(m_preMode);
-
-		Echo::Camera* mainCamera = Echo::NodeTree::instance()->get3dCamera();
-		mainCamera->setPosition(pos);
-		mainCamera->setDirection(dir);
-		mainCamera->setProjectionMode(Echo::Camera::PM_ORTHO);
-
-		UpdateOrthoCamModeWH(m_curMode);
-	}
-
-	void InputController3d::updateOrthoCamPos(OrthoCamMode mode)
-	{
-		Echo::Camera* mainCamera = Echo::NodeTree::instance()->get3dCamera();
-		if (mode == OrthoCamMode::OCM_TOP)
-		{
-			m_orthoTopCamPos = mainCamera->getPosition();
-			m_orthoTopCamRot = mainCamera->getDirection();
-		}
-		else if (mode == OrthoCamMode::OCM_FRONT)
-		{
-			m_orthoFrontCamPos = mainCamera->getPosition();
-			m_orthoFrontCamRot = mainCamera->getDirection();
-		}
-		else if (mode == OrthoCamMode::OCM_LEFT)
-		{
-			m_orthoLeftCamPos = mainCamera->getPosition();
-			m_orthoLeftCamRot = mainCamera->getDirection();
-		}
-		else
-		{
-			m_backCameraPos = mainCamera->getPosition();
-			m_backCameraRot = mainCamera->getDirection();
-		}
-	}
-
-	void InputController3d::resetPerspectiveCamera()
-	{
-		m_preMode = m_curMode;
-		m_curMode = OrthoCamMode::OCM_NONE;
-		Echo::Camera* mainCamera = Echo::NodeTree::instance()->get3dCamera();
-		mainCamera->setPosition(m_backCameraPos);
-		mainCamera->setDirection(m_backCameraRot);
-		mainCamera->setProjectionMode(Echo::Camera::PM_PERSPECTIVE);
-	}
-
-	float InputController3d::getOrthoCamDis(OrthoCamMode mode)
-	{
-		if (mode == OrthoCamMode::OCM_TOP)
-		{
-			return m_orthoTopDis;
-		}
-		else if (mode == OrthoCamMode::OCM_FRONT)
-		{
-			return m_orthoFrontDis;
-		}
-		else if (mode == OrthoCamMode::OCM_LEFT)
-		{
-			return m_orthoLeftDis;
-		}
-
-		return 0.f;
-	}
-
-	void InputController3d::setOrthoCamDis(OrthoCamMode mode, float dis)
-	{
-		if (mode == OrthoCamMode::OCM_TOP)
-		{
-			m_orthoTopDis = dis;
-		}
-		else if (mode == OrthoCamMode::OCM_FRONT)
-		{
-			m_orthoFrontDis = dis;
-		}
-		else if (mode == OrthoCamMode::OCM_LEFT)
-		{
-			m_orthoLeftDis = dis;
-		}
-	}
-
-	void InputController3d::UpdateOrthoCamModeWH(OrthoCamMode mode)
-	{
-		float dis = 0.0f;
-		if (mode == OrthoCamMode::OCM_TOP)
-		{
-			dis = m_orthoTopDis;
-		}
-		else if (mode == OrthoCamMode::OCM_FRONT)
-		{
-			dis = m_orthoFrontDis;
-		}
-		else if (mode == OrthoCamMode::OCM_LEFT)
-		{
-			dis = m_orthoLeftDis;
-		}
-
-		Echo::Camera* mainCamera = Echo::NodeTree::instance()->get3dCamera();
-		if (Echo::Renderer::instance()->getScreenHeight() > Echo::Renderer::instance()->getScreenWidth())
-		{
-			float aspect = (float)Echo::Renderer::instance()->getScreenHeight() / Echo::Renderer::instance()->getScreenWidth();
-			mainCamera->setWidth(Echo::Math::Max(dis, 1.0f));
-			mainCamera->setHeight(Echo::Math::Max(dis * aspect, 1.0f));
-		}
-		else
-		{
-			float aspect = (float)Echo::Renderer::instance()->getScreenWidth() / Echo::Renderer::instance()->getScreenHeight();
-			mainCamera->setWidth(Echo::Math::Max(dis * aspect, 1.0f));
-			mainCamera->setHeight(Echo::Math::Max(dis, 1.0f));
-		}
-	}
-
-	void InputController3d::SetCameraOperateMode(int mode)
-	{
-		m_cameraOperateMode = mode;
-	}
-
-	int InputController3d::GetCameraOperateMode()
-	{
-		return m_cameraOperateMode;
-	}
-
-	//
 	void InputController3d::onSizeCamera(unsigned int width, unsigned int height)
 	{
 	}
@@ -392,18 +220,6 @@ namespace Studio
 		m_cameraMoveDir = m_cameraForward * dir.z - right * dir.x;
 		m_cameraMoveDir.normalize();
 		m_cameraMoveDir *= 5.f;
-	}
-
-	void InputController3d::SetCameraMoveDir(const Echo::Vector3& dir, Echo::Vector3 forward)
-	{
-		Echo::Vector3 tempForward = forward;
-		tempForward.y = 0.f;
-		tempForward.normalize();
-
-		Echo::Vector3 right = tempForward.cross(Echo::Vector3::UNIT_Y);
-		right.normalize();
-
-		m_cameraMoveDir = forward * dir.z - right * dir.x + Echo::Vector3::UNIT_Y * dir.y;
 	}
 
 	void InputController3d::CameraZoom(float zValue)
@@ -529,24 +345,27 @@ namespace Studio
 	// on open node tree
 	void InputController3d::onOpenNodeTree(const Echo::String& resPath)
 	{
-		return;
-
 		// camera 3d
 		Echo::Camera* camera3D = Echo::NodeTree::instance()->get2dCamera();
 		if (camera3D && !resPath.empty())
 		{
 			Echo::String preStr = Echo::Engine::instance()->getResPath() + ":" + resPath;
-			Echo::String camera3DPosition = AStudio::instance()->getConfigMgr()->getValue((preStr + "camera2dposition").c_str());
-			if (!camera3DPosition.empty())
-				m_cameraPositon = Echo::StringUtil::ParseVec3(camera3DPosition);
+			Echo::String cameraLookat = AStudio::instance()->getConfigMgr()->getValue((preStr + "camera3dlookat").c_str());
+			if (!cameraLookat.empty())
+				m_cameraLookAt = Echo::StringUtil::ParseVec3(cameraLookat);
 
 			Echo::String hAngle = AStudio::instance()->getConfigMgr()->getValue((preStr + "camera3dHAngle").c_str());
-			if (!hAngle.empty())
-				m_horizonAngleGoal = Echo::StringUtil::ParseReal(hAngle);
-
 			Echo::String vAngle = AStudio::instance()->getConfigMgr()->getValue((preStr + "camera3dVAngle").c_str());
-			if (!hAngle.empty())
-				m_verticleAngleGoal = Echo::StringUtil::ParseReal(vAngle);
+			if (!hAngle.empty() && !vAngle.empty())
+			{
+				m_horizonAngle = m_horizonAngleGoal = Echo::StringUtil::ParseReal(hAngle);
+				m_verticleAngle = m_verticleAngleGoal = Echo::StringUtil::ParseReal(vAngle);
+				m_cameraForward.fromHVAngle(m_horizonAngle, m_verticleAngle);
+			}
+
+			Echo::String radius = AStudio::instance()->getConfigMgr()->getValue((preStr + "camera3dRadius").c_str());
+			if (!radius.empty())
+				m_cameraRadius = Echo::StringUtil::ParseReal(radius);
 		}
 	}
 
@@ -562,9 +381,10 @@ namespace Studio
 			{
 				Echo::String preStr = Echo::Engine::instance()->getResPath() + ":" + resPath;
 
-				AStudio::instance()->getConfigMgr()->setValue((preStr + "camera3dposition").c_str(), Echo::StringUtil::ToString(camera3D->getPosition()).c_str());
+				AStudio::instance()->getConfigMgr()->setValue((preStr + "camera3dlookat").c_str(), Echo::StringUtil::ToString(m_cameraLookAt).c_str());
 				AStudio::instance()->getConfigMgr()->setValue((preStr + "camera3dHAngle").c_str(), Echo::StringUtil::ToString(m_horizonAngleGoal).c_str());
 				AStudio::instance()->getConfigMgr()->setValue((preStr + "camera3dVAngle").c_str(), Echo::StringUtil::ToString(m_verticleAngleGoal).c_str());
+				AStudio::instance()->getConfigMgr()->setValue((preStr + "camera3dRadius").c_str(), Echo::StringUtil::ToString(m_cameraRadius).c_str());
 			}
 		}
 	}

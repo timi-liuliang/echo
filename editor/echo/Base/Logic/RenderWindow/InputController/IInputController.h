@@ -27,9 +27,6 @@ namespace Studio
 		float elapsedTime;
 	};
 
-	/**
-	 * 渲染窗口控制接口
-	 */
 	class IRenderWindowInputController
 	{
 	public:
@@ -64,12 +61,6 @@ namespace Studio
 
 		// 鼠标位置
 		virtual QPointF mousePosition() = 0;
-
-		// 设置相机操作模式
-		virtual void SetCameraOperateMode(int mode) = 0;
-
-		// 返回当前相机操作模式
-		virtual int GetCameraOperateMode() = 0;
 
 		// 相机更新size
 		virtual void onSizeCamera(unsigned int width, unsigned int height) = 0;
