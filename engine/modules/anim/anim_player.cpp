@@ -74,7 +74,7 @@ namespace Echo
 		char name[128] = "anim_";
 		for (i32 i = 0; i < 65535; i++)
 		{
-			itoa(i, name + 5, 10);
+            sprintf(name+5, "%d", i);
 			if (!isAnimExist(name))
 			{
 				oName = name;

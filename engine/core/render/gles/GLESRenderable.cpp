@@ -64,7 +64,7 @@ namespace Echo
 		else
 		{
 #ifdef ECHO_PLATFORM_MAC_IOS
-			isNeedSetVertexBuffer = pre->getVertexStreamHash() != m_vertexStreamsHash ? true : false;
+            isNeedSetVertexBuffer = true;//pre->getVertexStreamHash() != m_vertexStreamsHash ? true : false;
 #else
 			isNeedSetVertexBuffer = true;
 #endif

@@ -22,15 +22,14 @@ namespace Echo
 
 	void lua_get_obj_name(Object* obj, char* buffer, int len)
 	{
-		itoa(obj->getId(), buffer, 10);
+        sprintf(buffer, "%d", obj->getId());
 	}
 
 	void lua_get_node_name(Node* obj, char* buffer, int len)
 	{
-		itoa(obj->getId(), buffer, 10);
+        sprintf(buffer, "%d", obj->getId());
 	}
 
-	// get upper layer table
 	int lua_get_upper_tables(lua_State* luaState, const String& objectName, String& currentLayerName)
 	{
 		StringArray names = StringUtil::Split(objectName, ".");

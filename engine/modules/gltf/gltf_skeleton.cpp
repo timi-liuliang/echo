@@ -66,7 +66,6 @@ namespace Echo
 		return m_animations.isValid() ? m_clips[m_animations.getIdx()] : nullptr;
 	}
 
-	// update self
 	void GltfSkeleton::update_self()
 	{
 		if (m_animations.isValid())
@@ -82,7 +81,6 @@ namespace Echo
 		}
 	}
 
-	// is anim exist
 	bool GltfSkeleton::isAnimExist(const char* animName)
 	{
 		for (AnimClip* clip : m_clips)
@@ -94,13 +92,12 @@ namespace Echo
 		return false;
 	}
 
-	// generate unique name
 	void GltfSkeleton::generateUniqueName(String& oName)
 	{
 		char name[128] = "anim_";
 		for (i32 i = 0; i < 65535; i++)
 		{
-			itoa(i, name + 5, 10);
+			sprintf( name+5, "%d", i);
 			if (!isAnimExist(name))
 			{
 				oName = name;
@@ -109,7 +106,6 @@ namespace Echo
 		}
 	}
 
-	//  query clip data
 	void GltfSkeleton::extractClipData(AnimClip* clip)
 	{
 		if (clip)
@@ -148,7 +144,6 @@ namespace Echo
 		}
 	}
 
-	// joint transform
 	void GltfSkeleton::jointInhertParentTransform(i32 nodeIdx)
 	{
 		const GltfNodeInfo& nodeInfo = m_asset->m_nodes[nodeIdx];
@@ -163,7 +158,6 @@ namespace Echo
 		}
 	}
 
-	// get node transform
 	bool GltfSkeleton::getGltfNodeTransform(Transform& transform, size_t nodeIdx)
 	{
 		if (nodeIdx < m_nodeTransforms.size())
