@@ -191,13 +191,25 @@ namespace Studio
 		}
 	}
 
+	// on focuse node
+	void InputController2d::onFocusNode(Echo::Node* node)
+	{
+		if (node)
+		{
+			Echo::AABB worldAABB;
+			node->buildWorldAABB( worldAABB);
+			CameraZoom(worldAABB, 2.0f);
+		}
+	}
+
 	void InputController2d::CameraZoom(const Echo::AABB& box, float scale)
 	{
-		//float         radius = (box.getSize().len() * 0.5f);
-		//Echo::Vector3 center = ((box.vMin + box.vMax) * 0.5f);
-		//m_cameraRadius = radius * scale;
-		//m_cameraLookAt = center;
-		//m_cameraPositon = m_cameraLookAt - m_cameraForward * m_cameraRadius;
+		float         diameter = (box.getSize().len() * 0.5f);
+		Echo::Vector3 center = ((box.vMin + box.vMax) * 0.5f);
+
+		m_cameraScale = max(diameter / m_camera->getWidth(), diameter / m_camera->getHeight()) * scale;
+		m_cameraPositon.x = center.x;
+		m_cameraPositon.y = center.y;
 	}
 
 	// ²Ù×÷ÉãÏñ»ú

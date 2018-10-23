@@ -187,6 +187,11 @@ namespace Echo
 		oVertices.push_back(VertexFormat(Vector3(hw,   hh, 0.f), Vector2(1.f, 0.f)));
 		oVertices.push_back(VertexFormat(Vector3(hw,  -hh, 0.f), Vector2(1.f, 1.f)));
 
+		// calc aabb
+		m_localAABB.reset();
+		for (VertexFormat& vert : oVertices)
+			m_localAABB.addPoint(vert.m_position);
+
 		// indices
 		oIndices.push_back(0);
 		oIndices.push_back(1);

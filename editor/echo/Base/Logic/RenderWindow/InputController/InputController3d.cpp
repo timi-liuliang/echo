@@ -205,7 +205,8 @@ namespace Studio
 	{
 		if (node)
 		{
-			Echo::AABB worldAABB = node->getWorldAABB();
+			Echo::AABB worldAABB;
+			node->buildWorldAABB( worldAABB);
 			CameraZoom(worldAABB, 2.3f);
 		}
 	}

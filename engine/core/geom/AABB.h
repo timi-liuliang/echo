@@ -239,8 +239,7 @@ namespace Echo
 			return Math::Max3(getDX(), getDY(), getDZ());
 		}
 
-		// ¾ØÕó×ª»»
-		inline AABB transform( const Matrix4& matrix) const
+		AABB transform( const Matrix4& matrix) const
 		{
 			AABB box;
 			if (isValid())

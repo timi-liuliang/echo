@@ -125,7 +125,7 @@ namespace Echo
 		void setScript(const ResourcePath& path);
 
 		// aabb
-		AABB getWorldAABB();
+		void buildWorldAABB(AABB& aabb);
 		const AABB& getLocalAABB() const { return m_localAABB; }
 		
 	public:
@@ -167,11 +167,10 @@ namespace Echo
 		bool			m_isLink;			// belong to branch scene
 		Node*			m_parent;
 		NodeArray		m_children;
+		bool			m_isTransformDirty;	// for rendering.
 		Transform		m_localTransform;
 		Transform		m_worldTransform;
-		Matrix4			m_matWorld;			// Cached derived transform as a 4x4 matrix
-		bool			m_bModify;			// for caculate. ie: getWorldPostion
-		bool			m_bMatrixDirty;		// for rendering.
+		Matrix4			m_matWorld;			// cached derived transform as a 4x4 matrix
 		AABB			m_localAABB;		// local aabb
 		LuaScript		m_script;			// bind script
 	};

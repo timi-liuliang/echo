@@ -92,8 +92,7 @@ namespace Echo
 		: m_parent(NULL)
 		, m_isEnable(true)
 		, m_isLink(false)
-		, m_bModify(false)
-		, m_bMatrixDirty(false)
+		, m_isTransformDirty(false)
 	{
 		m_matWorld = Matrix4::IDENTITY;
 		needUpdate();   
@@ -340,25 +339,21 @@ namespace Echo
 	
 	const Matrix4& Node::getWorldMatrix()
 	{
-		if (m_bMatrixDirty)
+		if (m_isTransformDirty)
 		{
-			if(m_bModify)
-				update_self();
-
 			// build mat world matrix
+			m_worldTransform = m_parent ? m_parent->getWorldTransform() * m_localTransform : m_localTransform;
 			m_worldTransform.buildMatrix(m_matWorld);
-			m_bMatrixDirty = false;
+			m_isTransformDirty = false;
 		}
 
 		return m_matWorld;
 	}
 
-	AABB Node::getWorldAABB()
+	void Node::buildWorldAABB(AABB& aabb)
 	{
-		AABB worldAABB = m_localAABB.isValid() ? m_localAABB : AABB( -0.3f, -0.3f, -0.3f, 0.3f, 0.3f, 0.3f);
-		worldAABB.transform(getWorldMatrix());
-
-		return worldAABB;
+		aabb = m_localAABB.isValid() ? m_localAABB : AABB( -0.3f, -0.3f, -0.3f, 0.3f, 0.3f, 0.3f);
+		aabb = aabb.transform(getWorldMatrix());
 	}
 
 	Matrix4 Node::getInverseWorldMatrix() const
@@ -403,11 +398,10 @@ namespace Echo
 
 	void Node::needUpdate()
 	{
-		if (m_bModify)
+		if (m_isTransformDirty)
 			return;
 
-		m_bModify = true;
-		m_bMatrixDirty = true;
+		m_isTransformDirty = true;
 
 		for (Node* node : m_children)
 		{
@@ -419,12 +413,6 @@ namespace Echo
 	{
 		if (!m_isEnable)
 			return;
-
-		if (m_bModify)
-		{
-			m_worldTransform = m_parent ? m_parent->getWorldTransform() * m_localTransform : m_localTransform;
-			m_bModify = false;
-		}
 
 		// update world matrix
 		getWorldMatrix();

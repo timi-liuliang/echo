@@ -52,7 +52,7 @@ namespace Studio
 		void setNeedUpdateCamera(bool need) { m_bNeedUpdateCamera = need; UpdateCamera(0.01f); }
 
 		// on focuse node
-		virtual void onFocusNode(Echo::Node* node) {}
+		virtual void onFocusNode(Echo::Node* node) override;
 
 	protected:
 		// 初始化摄像机参数
