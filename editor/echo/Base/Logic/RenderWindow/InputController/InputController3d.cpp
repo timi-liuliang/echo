@@ -200,6 +200,16 @@ namespace Studio
 		}
 	}
 
+	// on focuse node
+	void InputController3d::onFocusNode(Echo::Node* node)
+	{
+		if (node)
+		{
+			Echo::AABB worldAABB = node->getWorldAABB();
+			CameraZoom(worldAABB, 2.3f);
+		}
+	}
+
 	void InputController3d::CameraZoom(const Echo::AABB& box, float scale)
 	{
 		float         radius = (box.getSize().len() * 0.5f);

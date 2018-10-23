@@ -274,6 +274,11 @@ namespace Studio
 		}
 	}
 
+	void MainWindow::setSubEdit(const char* subEditName)
+	{
+		m_subEditComboBox->setCurrentText(subEditName);
+	}
+
 	// sub editor operate
 	void MainWindow::onSubEditChanged(const QString& subeditName)
 	{

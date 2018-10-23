@@ -2,6 +2,7 @@
 
 #include <QPoint>
 #include "engine/core/geom/AABB.h"
+#include <engine/core/scene/node.h>
 
 class QWheelEvent;
 class QMouseEvent;
@@ -68,8 +69,8 @@ namespace Studio
 		// 相机自适应
 		virtual void onAdaptCamera() = 0; 
 
-		// 适应模型
-		virtual void CameraZoom(const Echo::AABB& box, float scale){}
+		// on focuse node
+		virtual void onFocusNode(Echo::Node* node)=0;
 
 	public:
 		// on open node tree

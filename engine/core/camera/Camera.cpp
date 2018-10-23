@@ -181,7 +181,7 @@ namespace Echo
 			Vector3 zAxis = -m_dir;
 
 			Vector3::Cross(xAxis, m_up, zAxis);		xAxis.normalize();
-			Vector3::Cross(yAxis, zAxis, xAxis);	EchoAssert(abs(yAxis.len() - 1.f) < Math::EPSILON); /*yAxis.normalize();*/
+			Vector3::Cross(yAxis, zAxis, xAxis);	yAxis.normalize();
 
 			m_matView = Matrix4(
 				xAxis.x,						  yAxis.x,							zAxis.x,							0,

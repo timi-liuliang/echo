@@ -353,6 +353,14 @@ namespace Echo
 		return m_matWorld;
 	}
 
+	AABB Node::getWorldAABB()
+	{
+		AABB worldAABB = m_localAABB.isValid() ? m_localAABB : AABB( -0.3f, -0.3f, -0.3f, 0.3f, 0.3f, 0.3f);
+		worldAABB.transform(getWorldMatrix());
+
+		return worldAABB;
+	}
+
 	Matrix4 Node::getInverseWorldMatrix() const
 	{
 		Matrix4 invMat;

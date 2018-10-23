@@ -9,6 +9,7 @@
 #include "PathChooseDialog.h"
 #include "ResPanel.h"
 #include "MainWindow.h"
+#include "RenderWindow.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/io/IO.h>
 #include <engine/modules/gltf/gltf_res.h>
@@ -33,6 +34,7 @@ namespace Studio
 		QObject::connect(m_actionAddNode,  SIGNAL(triggered()), this, SLOT(showNewNodeDialog()));
 		QObject::connect(m_actionImportGltfScene, SIGNAL(triggered()), this, SLOT(importGltfScene()));
 		QObject::connect(m_nodeTreeWidget, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(onClickedNodeItem(QTreeWidgetItem*, int)));
+		QObject::connect(m_nodeTreeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(onDoubleClickedNodeItem(QTreeWidgetItem*, int)));
 		QObject::connect(m_nodeTreeWidget, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)), this, SLOT(onSelectNode()));
 		QObject::connect(m_nodeTreeWidget, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, SLOT(onChangedNodeName(QTreeWidgetItem*)));
 		QObject::connect(m_nodeTreeWidget, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showMenu(const QPoint&)));
@@ -649,6 +651,19 @@ namespace Studio
 		}
 	}
 
+	void NodeTreePanel::onDoubleClickedNodeItem(QTreeWidgetItem* item, int column)
+	{
+		Echo::Node* node = getNode(item);
+		if (node)
+		{
+			IRWInputController* controller = AStudio::instance()->getRenderWindow()->getInputController();
+			if (controller)
+			{
+				controller->onFocusNode( node);
+			}
+		}
+	}
+
 	// on select node
 	void NodeTreePanel::onSelectNode()
 	{
@@ -665,6 +680,13 @@ namespace Studio
 		if (m_currentEditObject && m_currentEditObject->getEditor())
 		{
 			m_currentEditObject->getEditor()->onEditorSelectThisNode();
+		}
+
+		// change subeditor 2d or 3d
+		Echo::Render* renderNode = dynamic_cast<Echo::Render*>(m_currentEditObject);
+		if (renderNode)
+		{
+			MainWindow::instance()->setSubEdit( renderNode->is2d() ? "2D" : "3D");
 		}
 	}
 

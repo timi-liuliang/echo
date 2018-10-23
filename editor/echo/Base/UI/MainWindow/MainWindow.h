@@ -55,6 +55,7 @@ namespace Studio
 		void onEditSingletonSettings();
 
 		// sub editor operate
+		void setSubEdit(const char* subEditName);
 		void onSubEditChanged(const QString& subeditName);
 
 		// game mode

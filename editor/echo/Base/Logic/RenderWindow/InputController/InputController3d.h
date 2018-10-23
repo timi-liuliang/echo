@@ -55,7 +55,8 @@ namespace Studio
 		// 控制是否更新摄像机
 		void setNeedUpdateCamera(bool need) { m_bNeedUpdateCamera = need; UpdateCamera(0.01f); }
 
-		void resetPerspectiveCamera();
+		// on focuse node
+		virtual void onFocusNode(Echo::Node* node) override;
 
 	protected:
 		// 摄像机更新

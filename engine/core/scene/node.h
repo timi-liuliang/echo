@@ -124,6 +124,10 @@ namespace Echo
 		const ResourcePath& getScript() { return m_script.m_file; }
 		void setScript(const ResourcePath& path);
 
+		// aabb
+		AABB getWorldAABB();
+		const AABB& getLocalAABB() const { return m_localAABB; }
+		
 	public:
 		// get node by path
 		Node* getNode(const char* path);

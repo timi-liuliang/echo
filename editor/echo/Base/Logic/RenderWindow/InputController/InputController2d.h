@@ -44,15 +44,6 @@ namespace Studio
 		// 适应模型
 		virtual void CameraZoom(const Echo::AABB& box, float scale);
 
-		void SetCameraPosition(const Echo::Vector3& pos) { m_cameraPositon = pos; }
-		const Echo::Vector3& GetCameraPosition() const { return m_cameraPositon; }
-
-		void SetCameraForward(const Echo::Vector3& forward) { m_cameraForward = forward; }
-		const Echo::Vector3& GetCameraForward() const { return m_cameraForward; }
-
-		void SetCameraMoveDirVal(const Echo::Vector3& dir) { m_cameraMoveDir = dir; }
-		const Echo::Vector3& GetCameraMoveDirVal() const { return m_cameraMoveDir; }
-
 		void UpdateCameraInfo();
 
 		bool isCameraMoving() const;
@@ -60,7 +51,8 @@ namespace Studio
 		// 控制是否更新摄像机
 		void setNeedUpdateCamera(bool need) { m_bNeedUpdateCamera = need; UpdateCamera(0.01f); }
 
-		void resetPerspectiveCamera();
+		// on focuse node
+		virtual void onFocusNode(Echo::Node* node) {}
 
 	protected:
 		// 初始化摄像机参数

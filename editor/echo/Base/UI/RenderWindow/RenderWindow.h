@@ -48,7 +48,7 @@ namespace Studio
 		// 输入控制器
 		void setInputController( IRWInputController* controller) { m_inputController = controller; }
 
-		// 获取输入控制器
+		// input controller
 		IRWInputController* getInputController(){return m_inputController; }
 		IRWInputController* getInputController2D() { return m_inputController2d; }
 		IRWInputController* getInputController3D() { return m_inputController3d; }

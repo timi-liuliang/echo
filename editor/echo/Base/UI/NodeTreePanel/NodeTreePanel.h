@@ -17,10 +17,10 @@ namespace Studio
 		NodeTreePanel( QWidget* parent=0);
 		~NodeTreePanel();
 
-		// 获取面板实例
+		// instance
 		static NodeTreePanel* instance();
 
-		// 保存当前编辑资源
+		// save current edit resource
 		void saveCurrentEditRes();
 
 	public:
@@ -95,7 +95,7 @@ namespace Studio
 		void onItemPositionChanged(QTreeWidgetItem* item);
 
 	public slots:
-		// 渲染
+		// update
 		void  update();
 
 		// on select node
@@ -103,6 +103,7 @@ namespace Studio
 
 		// on clicked node item
 		void onClickedNodeItem(QTreeWidgetItem* item, int column);
+		void onDoubleClickedNodeItem(QTreeWidgetItem* item, int column);
 
 		// edit res
 		void onEditObject(Echo::Object* res);
@@ -115,7 +116,7 @@ namespace Studio
 		void updateNodeTreeWidgetItemDisplay(QTreeWidgetItem* item);
 
 	private:
-		// 递归显示属性
+		// show object property recursively
 		void showObjectPropertyRecursive(Echo::Object* classPtr, const Echo::String& className);
 
 		// show property
