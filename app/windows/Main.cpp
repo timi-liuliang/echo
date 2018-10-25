@@ -9,9 +9,8 @@ int main(int argc, char* argv[])
 	if (argc > 1)
 	{
 		Echo::String projectFile = argv[1];
-		Echo::String sceneName = argv[2];
 
-		LORD::App app(projectFile, sceneName);
+		App::App app(projectFile);
 		app.run();
 
 		return EXIT_SUCCESS;

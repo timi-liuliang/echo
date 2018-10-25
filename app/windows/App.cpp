@@ -1,14 +1,5 @@
 #include "App.h"
 
-#include <Engine/Object/Root.h>
-#include <Engine/Scene/Scene.h>
-#include <GLES2Render/GLES2.h>
-#include <Foundation/Util/Timer.h>
-#include <Foundation/pfs/pfs2.h>
-#include <Foundation/platform/utils/PlatformStringUtil.h>
-
-#include "Extension/Actor/ActorManager.h"
-
 #define VK_W 0x57
 #define VK_S 0x53
 #define VK_A 0x41
@@ -23,42 +14,37 @@
 
 namespace App
 {
-	bool gbKeyUp = false;
-	bool gbKeyDown = false;
-	bool gbKeyLeft = false;
-	bool gbKeyRight = false;
-
 	App* g_pApp = NULL;
 
 	void CreateDumpFile(LPCSTR lpstrDumpFilePathName, EXCEPTION_POINTERS *pException)
 	{
-		// 创建Dump文件
-		HANDLE hDumpFile = CreateFile(lpstrDumpFilePathName, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+		//// 创建Dump文件
+		//HANDLE hDumpFile = CreateFile(lpstrDumpFilePathName, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
-		// Dump信息
-		MINIDUMP_EXCEPTION_INFORMATION dumpInfo;
-		dumpInfo.ExceptionPointers = pException;
-		dumpInfo.ThreadId = GetCurrentThreadId();
-		dumpInfo.ClientPointers = TRUE;
+		//// Dump信息
+		//MINIDUMP_EXCEPTION_INFORMATION dumpInfo;
+		//dumpInfo.ExceptionPointers = pException;
+		//dumpInfo.ThreadId = GetCurrentThreadId();
+		//dumpInfo.ClientPointers = TRUE;
 
-		// 写入Dump文件内容
-		MiniDumpWriteDump(GetCurrentProcess(), GetCurrentProcessId(), hDumpFile, MiniDumpNormal, &dumpInfo, NULL, NULL);
+		//// 写入Dump文件内容
+		//MiniDumpWriteDump(GetCurrentProcess(), GetCurrentProcessId(), hDumpFile, MiniDumpNormal, &dumpInfo, NULL, NULL);
 
-		CloseHandle(hDumpFile);
+		//CloseHandle(hDumpFile);
 	}
 
 	// 作为except块中表达式的函数
 	LONG CrashHandler(EXCEPTION_POINTERS *pException)
 	{
-		// 这里以弹出一个对话框为例子
-		MessageBox(NULL, _T("崩溃日志将要保存为  Dump.dmp, 请发送给编译这个版本代码的程序员。"), _T("Crash"), MB_OK);
+		//// 这里以弹出一个对话框为例子
+		//MessageBox(NULL, _T("崩溃日志将要保存为  Dump.dmp, 请发送给编译这个版本代码的程序员。"), _T("Crash"), MB_OK);
 
-		// 创建Dump文件
-		String strRoot = g_pApp->getRootPath();
-		String strDump = strRoot + "\\Dump.dmp";
-		CreateDumpFile(strDump.c_str(), pException);
+		//// 创建Dump文件
+		//String strRoot = g_pApp->getRootPath();
+		//String strDump = strRoot + "\\Dump.dmp";
+		//CreateDumpFile(strDump.c_str(), pException);
 
-		return EXCEPTION_EXECUTE_HANDLER;
+		//return EXCEPTION_EXECUTE_HANDLER;
 	}
 
 	LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -66,11 +52,9 @@ namespace App
 		return g_pApp->messageHandler(hWnd, msg, wParam, lParam);
 	}
 
-	App::App(const String& project, const String& scene)
+	App::App(const Echo::String& project)
 		: m_log(NULL)
-		, m_pLuaModule(NULL)
 		, m_projectFile(project)
-		, m_sceneName(scene)
 	{
 		g_pApp = this;
 
@@ -177,8 +161,6 @@ namespace App
 			return false;
 		}
 
-		m_pLuaModule = new LORD::SimpleLuaModule;
-
 		return true;
 	}
 
@@ -255,21 +237,8 @@ namespace App
 		return true;
 	}
 
-	// 切换场景
-	void App::ChangeScene(const char* sceneName)
-	{
-		LordSceneManager->closeScene();
-		LordSceneManager->loadScene(sceneName, Vector3::ZERO);
-	}
-
 	void App::onDestroy()
 	{
-		if (m_pLuaModule)
-		{
-			delete m_pLuaModule;
-			m_pLuaModule = NULL;
-		}
-
 		LORD::Root* pRoot = LordRoot;
 		pRoot->destroy();
 		LordSafeDelete(pRoot, Root);
@@ -347,171 +316,11 @@ namespace App
 			break;
 			case WM_KEYDOWN:
 			{
-				if ( wParam == VK_W )
-				{
-					if ( !gbKeyUp )
-					{
-						onKeyboardMsg(kKeyEvent_Down, BUTTON_W, lParam);
-						gbKeyUp = true;
-					}
-				}
-				else if ( VK_S == wParam )
-				{
-					if ( !gbKeyDown )
-					{
-						onKeyboardMsg(kKeyEvent_Down, BUTTON_A, lParam);
-						gbKeyDown = true;
-					}
-				}
-				else if ( VK_A == wParam )
-				{
-					if ( !gbKeyLeft )
-					{
-						onKeyboardMsg(kKeyEvent_Down, BUTTON_S, lParam);
-						gbKeyLeft = true;
-					}
-				}
-				else if ( VK_D == wParam )
-				{
-					if ( !gbKeyRight )
-					{
-						onKeyboardMsg(kKeyEvent_Down, BUTTON_D, lParam);
-						gbKeyRight = true;
-					}
-				}
-				else if ( VK_NUMPAD0 == wParam )
-					onKeyboardMsg(kKeyEvent_Down, BUTTON_NUM0, lParam);
-				else if ( VK_NUMPAD1 == wParam )
-					onKeyboardMsg(kKeyEvent_Down, BUTTON_NUM1, lParam);
-				else if ( VK_NUMPAD3 == wParam )
-					onKeyboardMsg(kKeyEvent_Down, BUTTON_NUM3, lParam);
-				else if ( VK_NUMPAD4 == wParam )
-					onKeyboardMsg(kKeyEvent_Down, BUTTON_NUM4, lParam);
-				else if ( VK_NUMPAD6 == wParam )
-					onKeyboardMsg(kKeyEvent_Down, BUTTON_L1, lParam);
-				else if ( VK_NUMPAD7 == wParam )
-					onKeyboardMsg(kKeyEvent_Down, BUTTON_R1, lParam);
-				else if ( VK_DIVIDE == wParam )
-					onKeyboardMsg(kKeyEvent_Down, BUTTON_THUMBR, lParam);
-				else if ( VK_MULTIPLY == wParam )
-					onKeyboardMsg(kKeyEvent_Down, BUTTON_THUMBL, lParam);
-				else if ( 'Q' == wParam )
-					onKeyboardMsg(kKeyEvent_Down, KEYCODE_HOME, lParam);
-				else if ( 'R' == wParam )
-					onKeyboardMsg(kKeyEvent_Down, KEYCODE_MENU, lParam);
-				else if ( VK_HOME == wParam )
-					onKeyboardMsg(kKeyEvent_Down, KEYCODE_MUTE, lParam);
-				else if ( VK_MBUTTON == wParam )
-					onKeyboardMsg(kKeyEvent_Down, MAX_CONTROLLERS, lParam);
 			}
 			break;
 			case WM_KEYUP:
 			{
-				if ( wParam == VK_W )
-				{
-					onKeyboardMsg(kKeyEvent_Up, BUTTON_W, lParam);
-					if ( gbKeyUp )
-					{
-						gbKeyUp = false;
-					}
-				}
-				else if ( VK_S == wParam )
-				{
-					onKeyboardMsg(kKeyEvent_Up, BUTTON_S, lParam);
-					if ( gbKeyDown )
-					{
-						gbKeyDown = false;
-					}
-				}
-				else if ( VK_A == wParam )
-				{
-					onKeyboardMsg(kKeyEvent_Up, BUTTON_A, lParam);
-					if ( gbKeyLeft )
-					{
-						gbKeyLeft = false;
-					}
-				}
-				else if ( VK_D == wParam )
-				{
-					onKeyboardMsg(kKeyEvent_Up, BUTTON_D, lParam);
-					if ( gbKeyRight )
-					{
-						gbKeyRight = false;
-					}
-				}
-				else if ( VK_H == wParam )
-				{
-					onKeyboardMsg(kKeyEvent_Up, BUTTON_H, lParam);
-				}
-				else if ( VK_J == wParam )
-				{
-					onKeyboardMsg(kKeyEvent_Up, BUTTON_J, lParam);
-				}
-				else if ( VK_K == wParam )
-				{
-					onKeyboardMsg(kKeyEvent_Up, BUTTON_K, lParam);
-				}
-				else if ( VK_L == wParam )
-				{
-					onKeyboardMsg(kKeyEvent_Up, BUTTON_L, lParam);
-				}
-				else if ( VK_I == wParam )
-				{
-					onKeyboardMsg(kKeyEvent_Up, BUTTON_I, lParam);
-				}
-				else if ( VK_U == wParam )
-				{
-					onKeyboardMsg(kKeyEvent_Up, BUTTON_U, lParam);
-				}
-				else if ( VK_O == wParam )
-				{
-					onKeyboardMsg(kKeyEvent_Up, BUTTON_O, lParam);
-				}
-				else if ( VK_NUMPAD0 == wParam )
-				{
-					onKeyboardMsg(kKeyEvent_Up, BUTTON_NUM0, lParam);
-				}
-				else if ( VK_NUMPAD1 == wParam )
-				{
-					onKeyboardMsg(kKeyEvent_Up, BUTTON_NUM1, lParam);
-				}
-				else if ( VK_NUMPAD2 == wParam )
-				{
-					onKeyboardMsg(kKeyEvent_Up, BUTTON_NUM2, lParam);
-				}
-				else if ( VK_NUMPAD3 == wParam )
-				{
-					onKeyboardMsg(kKeyEvent_Up, BUTTON_NUM3, lParam);
-				}
-				else if ( VK_NUMPAD4 == wParam )
-				{
-					onKeyboardMsg(kKeyEvent_Up, BUTTON_NUM4, lParam);
-				}
-				else if ( VK_NUMPAD5 == wParam )
-				{
-					onKeyboardMsg(kKeyEvent_Up, BUTTON_NUM5, lParam);
-				}
-				else if ( VK_NUMPAD6 == wParam )
-				{
-					onKeyboardMsg(kKeyEvent_Up, BUTTON_NUM6, lParam);
-				}
-				else if ( VK_DIVIDE == wParam )
-					onKeyboardMsg(kKeyEvent_Up, BUTTON_THUMBR, lParam);
-				else if ( VK_MULTIPLY == wParam )
-					onKeyboardMsg(kKeyEvent_Up, BUTTON_THUMBL, lParam);
-				else if ( 'Q' == wParam )
-					onKeyboardMsg(kKeyEvent_Up, KEYCODE_HOME, lParam);
-				else if ( 'R' == wParam )
-					onKeyboardMsg(kKeyEvent_Up, KEYCODE_MENU, lParam);
-				else if ( VK_HOME == wParam )
-					onKeyboardMsg(kKeyEvent_Up, KEYCODE_MUTE, lParam);
-				else if ( VK_MBUTTON == wParam )
-					onKeyboardMsg(kKeyEvent_Up, MAX_CONTROLLERS, lParam);
-				else if ( VK_F11 == wParam )
-				{
-					onKeyboardMsg(kKeyEvent_Up, VK_F11, lParam);
-				}
-				else if ( VK_F9 == wParam )
+				if ( VK_F9 == wParam )
 				{
 					if ( m_bFullscreen )
 					{
@@ -663,47 +472,27 @@ namespace App
 		g_pApp = NULL;
 	}
 
-	// 游戏逻辑
 	void App::tick(float elapse)
 	{
-		LORD::Scene* scene = LordSceneManager->getCurrentScene();
-		if (scene)
-		{
-			scene->setLoadCentrePoint(LORD::Vector3(100.f, 0.f, 100.f));
-		}
 
-		// 从场景内运行
-		LordSceneManager->setMainPosition(LORD::Vector3(100.f, 0.f, 100.f));
-
-		// 更新
-		LordRoot->frameMove(static_cast<LORD::i32>(elapse));
-
-		// 渲染当前场景
-		LordRoot->renderScene();
-
-		// 显示到屏幕
-		LordRender->present();
 	}
 
-	// 鼠标按下
 	void App::onTouchBegine(float x, float y)
 	{
 		
 	}
 
-	// 鼠标按下后移动
 	void App::onTouchMove(float x, float y)
 	{
 		
 	}
 
-	// 鼠标抬起
 	void App::onTouchEnd(float x, float y)
 	{
 		
 	}
 
-	void App::onKeyboardMsg(ui32 AnMsg, i32 AnWParam, i32 AnLParam)
+	void App::onKeyboardMsg(Echo::ui32 AnMsg, Echo::i32 AnWParam, Echo::i32 AnLParam)
 	{
 		
 	}
