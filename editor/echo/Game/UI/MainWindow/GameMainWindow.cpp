@@ -7,7 +7,6 @@ namespace Game
 {
 	static GameMainWindow* g_inst = nullptr;
 
-	// 构造函数
 	GameMainWindow::GameMainWindow(QWidget* parent/*=0*/)
 		: QMainWindow( parent)
 		, m_renderWindow(nullptr)
@@ -29,18 +28,15 @@ namespace Game
 
 	}
 
-	// 析构函数
 	GameMainWindow::~GameMainWindow()
 	{
 	}
 
-	// get instance
 	GameMainWindow* GameMainWindow::instance()
 	{
 		return g_inst;
 	}
 
-	// 开始渲染
 	void GameMainWindow::start(const Echo::String& echoProject)
 	{
 		Echo::String iconPath = Echo::PathUtil::GetFileDirPath(echoProject);
