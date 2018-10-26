@@ -10,6 +10,13 @@ INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR})
 
 # link
 LINK_DIRECTORIES(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+IF(CMAKE_SIZEOF_VOID_P EQUAL 4)
+	LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/AdrenoSDK/Lib/Win32)
+	LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/Core/lib/windows/x86)
+ELSEIF(CMAKE_SIZEOF_VOID_P EQUAL 8)
+	LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/AdrenoSDK/Lib/x64)
+	LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/Core/lib/windows/x86_64)
+ENDIF()
 
 # recursive get all module files
 FILE( GLOB_RECURSE HEADER_FILES *.h *.inl *.hpp)
@@ -22,6 +29,12 @@ GROUP_FILES(ALL_FILES ${CMAKE_CURRENT_SOURCE_DIR})
 
 # generate module library
 ADD_EXECUTABLE(${MODULE_NAME} ${ALL_FILES} CMakeLists.txt)
+
+# link libraries
+TARGET_LINK_LIBRARIES(${MODULE_NAME} zlib engine winmm.lib imm32.lib dxgi.lib Shlwapi.lib lua recast freeimage)
+TARGET_LINK_LIBRARIES(${MODULE_NAME} Live2DCubismCore.lib pugixml spine box2d)
+TARGET_LINK_LIBRARIES(${MODULE_NAME} debug libEGL_d.lib optimized libEGL.lib)
+TARGET_LINK_LIBRARIES(${MODULE_NAME} debug libGLESv2_d.lib optimized libGLESv2.lib dbghelp.lib Psapi.lib)
 
 # set folder
 SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES FOLDER "app")

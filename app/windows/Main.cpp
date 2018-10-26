@@ -10,7 +10,7 @@ int main(int argc, char* argv[])
 	{
 		Echo::String projectFile = argv[1];
 
-		App::App app(projectFile);
+		Echo::App app(projectFile);
 		app.run();
 
 		return EXIT_SUCCESS;

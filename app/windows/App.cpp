@@ -1,18 +1,7 @@
 #include "App.h"
+#include "Log.h"
 
-#define VK_W 0x57
-#define VK_S 0x53
-#define VK_A 0x41
-#define VK_D 0x44
-#define VK_J 0x4A
-#define VK_K 0x4B
-#define VK_L 0x4C
-#define VK_I 0x49
-#define VK_U 0x55
-#define VK_O 0x4F
-#define VK_H 0x48
-
-namespace App
+namespace Echo
 {
 	App* g_pApp = NULL;
 
@@ -44,7 +33,7 @@ namespace App
 		//String strDump = strRoot + "\\Dump.dmp";
 		//CreateDumpFile(strDump.c_str(), pException);
 
-		//return EXCEPTION_EXECUTE_HANDLER;
+		return EXCEPTION_EXECUTE_HANDLER;
 	}
 
 	LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -53,11 +42,9 @@ namespace App
 	}
 
 	App::App(const Echo::String& project)
-		: m_log(NULL)
+		: m_log(nullptr)
 		, m_projectFile(project)
 	{
-		g_pApp = this;
-
 		char szRootPath[MAX_PATH];
 		memset(szRootPath, 0, sizeof(szRootPath));
 		GetCurrentDirectory(MAX_PATH, szRootPath);
@@ -67,7 +54,8 @@ namespace App
 		m_screenHeight = 720;
 		m_bPaused = false;
 		m_bRendererInited = false;
-		m_isMove = false;
+
+		g_pApp = this;
 	}
 
 	App::~App()
@@ -144,16 +132,6 @@ namespace App
 #endif
 	}
 
-	HINSTANCE App::getInstHandle()
-	{
-		return m_hInstance;
-	}
-
-	HWND App::getWindowHandle()
-	{
-		return m_hWnd;
-	}
-
 	bool App::onInit()
 	{
 		if ( !onInitEngine() )
@@ -166,89 +144,27 @@ namespace App
 
 	bool App::onInitEngine()
 	{
-		// PFS Mount
-		std::wstring rootPath = s2ws(LORD::PathUtil::GetCurrentDir());
-		PFS::CEnv::Mount(L"/root", rootPath, PFS::FST_NATIVE);
+		m_engine = Echo::Engine::instance();
 
-		LordNew(LORD::Root);
-		LordRoot->initLogSystem();
-		// 添加默认日志处理
-		LORD::LogDefault::LogConfig logConfig;
-		logConfig.logName = "lord.log";
-		logConfig.logLevel = LORD::Log::LL_DEBUG;
-		logConfig.bVSOutput = true;
-		logConfig.bFileOutput = true;
-		logConfig.path = "./";
-		logConfig.logFilename = "GameShell.log";
+		m_log = EchoNew(Echo::AppLog("Game"));
+		Echo::Log::instance()->addOutput(m_log);
 
-		LordLogManager->setLogLeve(logConfig.logLevel);
-		m_log = LordNew(LORD::LogDefault(logConfig));
-		if ( m_log )
-		{
-			LordLogManager->addLog(m_log);
-		}
-
-		LORD::ActorManager* pActorManager = LordNew(LORD::ActorManager);
-
-		// 获取当前路径
-		LORD::String currentDir = LORD::PathUtil::GetCurrentDir();
-		LORD::Root::RootCfg rootcfg;
-		rootcfg.m_actorManager = pActorManager;
-
-#ifdef LORD_PLATFORM_WINDOWS
-		rootcfg.projectFile = m_projectFile;
-#elif defined LORD_PLATFORM_MAC_IOS
-		rootcfg.projectFile = currentDir + "/media/shell.project";
-#endif
-
-		LordRoot->initialize(rootcfg);
-
-		LordRoot->setEnableDistortion(true);
-
-		LORD::Renderer::RenderCfg renderCfg;
-
-#ifdef LORD_PLATFORM_WINDOWS
-		renderCfg.windowHandle = (uint)m_hWnd;
-#endif
-		renderCfg.screenWidth = m_screenWidth;
-		renderCfg.screenHeight = m_screenHeight;
-
-		// 添加默认资源路径
-		LordResourceManager->addArchive(LORD::PathUtil::GetCurrentDir() + "/assets", "filesystem", true);
-
-		LORD::Renderer* render = NULL;
-		LORD::LoadGLESRenderer(render);
-		if ( render )
-		{
-			LordRoot->initRenderer(render, renderCfg);
-		}
-		else
-		{
-			LordLogError("GameShell Init GLESRender Failed!");
-			return false;
-		}
-
-		// 背景色
-		LORD::Renderer::BGCOLOR = LORD::Color::GRAY;
-
-		// 加载场景
-		ChangeScene(m_sceneName.c_str());
+		Echo::Engine::Config rootcfg;
+		rootcfg.m_projectFile = m_projectFile;
+		rootcfg.m_windowHandle = (unsigned int)m_hWnd;
+		m_engine->initialize(rootcfg);
 
 		return true;
 	}
 
 	void App::onDestroy()
 	{
-		LORD::Root* pRoot = LordRoot;
-		pRoot->destroy();
-		LordSafeDelete(pRoot, Root);
-
-		LordSafeDelete(m_log, LogDefault);
+		Echo::Engine::instance()->destroy();
 
 		destroyWindow();
 	}
 
-	LRESULT CALLBACK App::messageHandler(HWND hWnd, uint msg, WPARAM wParam, LPARAM lParam)
+	LRESULT CALLBACK App::messageHandler(HWND hWnd, Echo::ui32 msg, WPARAM wParam, LPARAM lParam)
 	{
 		// Is the application in a minimized or maximized state?
 		static bool minOrMaxed = false;
@@ -260,10 +176,10 @@ namespace App
 			{
 				if ( m_bRendererInited )
 				{
-					uint width = (uint)LOWORD(lParam);
-					uint height = (uint)HIWORD(lParam);
+					Echo::ui32 width = (Echo::ui32)LOWORD(lParam);
+					Echo::ui32 height = (Echo::ui32)HIWORD(lParam);
 
-					LordRoot->onSize(width, height);
+					Echo::Engine::instance()->onSize(width, height);
 				}
 			}
 			break;
@@ -290,28 +206,20 @@ namespace App
 			break;
 			case WM_LBUTTONDOWN:
 			{
-				uint x = (uint)LOWORD(lParam);
-				uint y = (uint)HIWORD(lParam);
-				m_isMove = true;
-				onTouchBegine((float)x, (float)y);
+				Echo::ui32 x = (Echo::ui32)LOWORD(lParam);
+				Echo::ui32 y = (Echo::ui32)HIWORD(lParam);
 			}
 			break;
 			case WM_LBUTTONUP:
 			{
-				uint x = (uint)LOWORD(lParam);
-				uint y = (uint)HIWORD(lParam);
-				m_isMove = false;
-				onTouchEnd((float)x, (float)y);
+				Echo::ui32 x = (Echo::ui32)LOWORD(lParam);
+				Echo::ui32 y = (Echo::ui32)HIWORD(lParam);
 			}
 			break;
 			case WM_MOUSEMOVE:
 			{
-				uint x = (uint)LOWORD(lParam);
-				uint y = (uint)HIWORD(lParam);
-				if ( m_isMove == true )
-				{
-					onTouchMove((float)x, (float)y);
-				}
+				Echo::ui32 x = (Echo::ui32)LOWORD(lParam);
+				Echo::ui32 y = (Echo::ui32)HIWORD(lParam);
 			}
 			break;
 			case WM_KEYDOWN:
@@ -411,8 +319,8 @@ namespace App
 			// If full screen set the screen to maximum size of the users desktop and 32bit.
 			memset(&dmScreenSettings, 0, sizeof(dmScreenSettings));
 			dmScreenSettings.dmSize = sizeof(dmScreenSettings);
-			dmScreenSettings.dmPelsWidth = (uint)screenWidth;
-			dmScreenSettings.dmPelsHeight = (uint)screenHeight;
+			dmScreenSettings.dmPelsWidth = (DWORD)screenWidth;
+			dmScreenSettings.dmPelsHeight = (DWORD)screenHeight;
 			dmScreenSettings.dmBitsPerPel = 32;
 			dmScreenSettings.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
 
@@ -469,32 +377,12 @@ namespace App
 		m_hInstance = NULL;
 
 		// Release the pointer to this class.
-		g_pApp = NULL;
+		g_pApp = nullptr;
 	}
 
 	void App::tick(float elapse)
 	{
 
-	}
-
-	void App::onTouchBegine(float x, float y)
-	{
-		
-	}
-
-	void App::onTouchMove(float x, float y)
-	{
-		
-	}
-
-	void App::onTouchEnd(float x, float y)
-	{
-		
-	}
-
-	void App::onKeyboardMsg(Echo::ui32 AnMsg, Echo::i32 AnWParam, Echo::i32 AnLParam)
-	{
-		
 	}
 }
 

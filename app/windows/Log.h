@@ -2,12 +2,12 @@
 
 #include <engine/core/log/Log.h>
 
-namespace App
+namespace Echo
 {
-	class Log : public Echo::LogOutput
+	class AppLog : public Echo::LogOutput
 	{
 	public:
-		Log(const Echo::String& name);
+		AppLog(const Echo::String& name);
 
 		/** out message */
 		virtual void logMessage(Level level, const Echo::String &msg);
