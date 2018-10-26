@@ -1,5 +1,6 @@
 #include "App.h"
 #include "Log.h"
+#include <engine/core/util/PathUtil.h>
 
 namespace Echo
 {
@@ -38,22 +39,20 @@ namespace Echo
 
 	LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
-		return g_pApp->messageHandler(hWnd, msg, wParam, lParam);
+		return g_pApp->wndProc(hWnd, msg, wParam, lParam);
 	}
 
-	App::App(const Echo::String& project)
+	App::App()
 		: m_log(nullptr)
-		, m_projectFile(project)
 	{
 		char szRootPath[MAX_PATH];
 		memset(szRootPath, 0, sizeof(szRootPath));
 		GetCurrentDirectory(MAX_PATH, szRootPath);
-		m_rootPath = szRootPath;
 		m_bFullscreen = false;
 		m_screenWidth = 1280;
 		m_screenHeight = 720;
-		m_bPaused = false;
-		m_bRendererInited = false;
+		m_projectFile = Echo::String(szRootPath) + "/data/app.echo";
+		Echo::PathUtil::FormatPath(m_projectFile, false);
 
 		g_pApp = this;
 	}
@@ -62,67 +61,49 @@ namespace Echo
 	{
 	}
 
-	bool App::setup()
-	{
-		if ( !initWindow(m_screenWidth, m_screenHeight, m_bFullscreen) )
-			return false;
-
-		if ( !onInit() )
-		{
-			return false;
-		}
-		m_bRendererInited = true;
-
-		return true;
-	}
-
-	void App::run()
+	void App::start()
 	{
 #ifndef _DEBUG
 		__try
 #endif
 		{
-			if ( !setup() )
-				return;
-
-			__int64 cntsPerSec = 0;
-			QueryPerformanceFrequency((LARGE_INTEGER*)&cntsPerSec);
-			float secsPerCnt = 1.0f / (float)cntsPerSec;
-
-			__int64 prevTimeStamp = 0;
-			QueryPerformanceCounter((LARGE_INTEGER*)&prevTimeStamp);
-
-			MSG msg;
-			ZeroMemory(&msg, sizeof(MSG));
-			// Loop until there is a quit message from the window or the user.
-			bool done = false;
-			while ( WM_QUIT != msg.message )
+			if (initWindow(m_screenWidth, m_screenHeight, m_bFullscreen))
 			{
-				// Handle the windows messages.
-				if ( PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) )
+				initEngine(m_hWnd, m_projectFile);
+
+				__int64 cntsPerSec = 0;
+				QueryPerformanceFrequency((LARGE_INTEGER*)&cntsPerSec);
+				float secsPerCnt = 1.0f / (float)cntsPerSec;
+
+				__int64 prevTimeStamp = 0;
+				QueryPerformanceCounter((LARGE_INTEGER*)&prevTimeStamp);
+
+				MSG msg;
+				ZeroMemory(&msg, sizeof(MSG));
+				// Loop until there is a quit message from the window or the user.
+				bool done = false;
+				while (WM_QUIT != msg.message)
 				{
-					TranslateMessage(&msg);
-					DispatchMessage(&msg);
-				}
-				else
-				{
-					if ( m_bPaused )
+					// Handle the windows messages.
+					if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 					{
-						Sleep(20);
-						continue;
+						TranslateMessage(&msg);
+						DispatchMessage(&msg);
 					}
+					else
+					{
+						__int64 currTimeStamp = 0;
+						QueryPerformanceCounter((LARGE_INTEGER*)&currTimeStamp);
+						float deltaTime = (currTimeStamp - prevTimeStamp) * 1000.f / cntsPerSec;
 
-					//Sleep( 15 );
-					__int64 currTimeStamp = 0;
-					QueryPerformanceCounter((LARGE_INTEGER*)&currTimeStamp);
-					float deltaTime = (currTimeStamp - prevTimeStamp) * 1000.f / cntsPerSec;
+						tick(deltaTime);
 
-					tick(deltaTime);
-
-					prevTimeStamp = currTimeStamp;
+						prevTimeStamp = currTimeStamp;
+					}
 				}
 			}
-			onDestroy();
+
+			destroy();
 		}
 #ifndef _DEBUG
 		__except ( CrashHandler(GetExceptionInformation()) )
@@ -132,17 +113,8 @@ namespace Echo
 #endif
 	}
 
-	bool App::onInit()
-	{
-		if ( !onInitEngine() )
-		{
-			return false;
-		}
-
-		return true;
-	}
-
-	bool App::onInitEngine()
+	// init
+	void App::initEngine(HWND hwnd, const Echo::String& echoProject)
 	{
 		m_engine = Echo::Engine::instance();
 
@@ -150,21 +122,19 @@ namespace Echo
 		Echo::Log::instance()->addOutput(m_log);
 
 		Echo::Engine::Config rootcfg;
-		rootcfg.m_projectFile = m_projectFile;
-		rootcfg.m_windowHandle = (unsigned int)m_hWnd;
+		rootcfg.m_projectFile = echoProject;
+		rootcfg.m_windowHandle = (unsigned int)hwnd;
 		m_engine->initialize(rootcfg);
-
-		return true;
 	}
 
-	void App::onDestroy()
+	void App::destroy()
 	{
 		Echo::Engine::instance()->destroy();
 
 		destroyWindow();
 	}
 
-	LRESULT CALLBACK App::messageHandler(HWND hWnd, Echo::ui32 msg, WPARAM wParam, LPARAM lParam)
+	LRESULT CALLBACK App::wndProc(HWND hWnd, Echo::ui32 msg, WPARAM wParam, LPARAM lParam)
 	{
 		// Is the application in a minimized or maximized state?
 		static bool minOrMaxed = false;
@@ -174,7 +144,6 @@ namespace Echo
 			// WM_SIZE is sent when the user resizes the window.  
 			case WM_SIZE:
 			{
-				if ( m_bRendererInited )
 				{
 					Echo::ui32 width = (Echo::ui32)LOWORD(lParam);
 					Echo::ui32 height = (Echo::ui32)HIWORD(lParam);
@@ -232,7 +201,6 @@ namespace Echo
 				{
 					if ( m_bFullscreen )
 					{
-						resetWindow();
 					}
 					else
 					{
@@ -253,7 +221,8 @@ namespace Echo
 	BOOL App::setFullScreen()
 	{
 		//获得并储存当前窗口信息，用于以后恢复
-		GetWindowRect(m_hWnd, &m_WndRect); //获得当前窗口RECT
+		RECT wndRect;
+		GetWindowRect(m_hWnd, &wndRect); //获得当前窗口RECT
 		LONG style = GetWindowLong(m_hWnd, GWL_STYLE); //获得当前窗口的类型
 		m_Style = style;
 		//m_Style = style; //储存当前的窗口类型
@@ -271,27 +240,17 @@ namespace Echo
 		return TRUE;
 	}
 
-	BOOL App::resetWindow()
-	{
-		SetWindowLong(m_hWnd, GWL_STYLE, m_Style);
-		if ( !MoveWindow(m_hWnd, m_WndRect.left, m_WndRect.top,
-			m_WndRect.right - m_WndRect.left, m_WndRect.bottom - m_WndRect.top, TRUE) )
-			return FALSE;
-
-		m_bFullscreen = false;
-
-		return TRUE;
-	}
-
 	bool App::initWindow(int screenWidth, int screenHeight, bool bFullscreen)
 	{
 		WNDCLASSEX wc;
 		DEVMODE dmScreenSettings;
 		int posX, posY;
+
 		// Get the instance of this application.
 		m_hInstance = GetModuleHandle(NULL);
+
 		// Give the application a name.
-		m_appName = m_projectFile.c_str();
+		m_appName = Echo::PathUtil::GetPureFilename(m_projectFile, false);
 
 		// Setup the windows class with default settings.
 		wc.style = CS_HREDRAW | CS_VREDRAW /*| CS_OWNDC*/;
@@ -326,6 +285,7 @@ namespace Echo
 
 			// Change the display settings to full screen.
 			ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN);
+
 			// Set the position of the window to the top left corner.
 			posX = posY = 0;
 		}
@@ -380,9 +340,9 @@ namespace Echo
 		g_pApp = nullptr;
 	}
 
-	void App::tick(float elapse)
+	void App::tick(float elapsedTime)
 	{
-
+		m_engine->tick(elapsedTime);
 	}
 }
 
