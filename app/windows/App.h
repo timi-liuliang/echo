@@ -36,14 +36,15 @@ namespace Echo
 		// switch to full screen
 		BOOL setFullScreen();
 
+		// resize window
+		void resizeWindow(HWND hwnd, int width, int height);
+
 	private:
 		Echo::String	m_appName;
 		HINSTANCE		m_hInstance;
 		HWND			m_hWnd;
 		Echo::i32		m_Style;
 		bool			m_bFullscreen;
-		Echo::i32		m_screenWidth;
-		Echo::i32		m_screenHeight;
 		Echo::String	m_projectFile;
 		Echo::Engine*	m_engine;
 		App::AppLog*	m_log;

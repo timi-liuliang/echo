@@ -7,7 +7,6 @@
 
 namespace Game
 {
-	// 构造函数
 	Window::Window(QWidget* parent/* = NULL*/)
 		: QWidget(parent)
 		, m_app(nullptr)
@@ -19,12 +18,10 @@ namespace Game
 		m_app = new App;
 	}
 
-	// 析构函数
 	Window::~Window()
 	{
 	}
 
-	// 开始渲染
 	void Window::start(const Echo::String& echoProject)
 	{
 		m_app->init((HWND)winId(), echoProject);
@@ -49,7 +46,6 @@ namespace Game
 		m_timer->start(10);
 	}
 
-	// 渲染更新
 	void  Window::Render()
 	{
 		// 鼠标是否位于窗口中
@@ -67,7 +63,6 @@ namespace Game
 		lastTime = curTime;
 	}
 
-	// 窗口大小改变
 	void Window::checkWindowSize()
 	{	
 		int width = static_cast<int>(this->width());
@@ -86,19 +81,16 @@ namespace Game
 		m_ratio = size;
 	}
 
-	// 重置设备
 	void  Window::ResetDevice()
 	{
 	}
 
-	// 鼠标滚轮事件
 	void Window::wheelEvent(QWheelEvent * e)
 	{
 		//auto controller = m_inputController ? m_inputController : m_defaultInputController;
 		//controller->wheelEvent(e);
 	}
 
-	// 鼠标移动事件
 	void Window::mouseMoveEvent(QMouseEvent* e)
 	{
 		// UI事件
@@ -117,7 +109,6 @@ namespace Game
 		//controller->mouseMoveEvent(e);
 	}
 
-	// 鼠标按下事件
 	void Window::mousePressEvent(QMouseEvent* e)
 	{
 		Echo::ui32 buttonId = e->button() == Qt::LeftButton ? 0 : ( e->button() == Qt::RightButton ? 1 : 2);
@@ -130,21 +121,18 @@ namespace Game
 		//controller->mouseDoubleClickEvent(e); 
 	}
 
-	// 鼠标释放事件
 	void Window::mouseReleaseEvent(QMouseEvent* e)
 	{
 		Echo::ui32 buttonId = e->button() == Qt::LeftButton ? 0 : (e->button() == Qt::RightButton ? 1 : 2);
 		Echo::Input::instance()->notifyMouseButtonUp(buttonId);
 	}
 
-	// 鼠标按下事件
 	void Window::keyPressEvent(QKeyEvent* e)
 	{
 		//auto controller = m_inputController ? m_inputController : m_defaultInputController;
 		//controller->keyPressEvent(e);
 	}
 
-	// 鼠标抬起事件
 	void Window::keyReleaseEvent(QKeyEvent* e)
 	{
 		//auto controller = m_inputController ? m_inputController : m_defaultInputController;

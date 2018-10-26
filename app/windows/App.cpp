@@ -1,6 +1,7 @@
 #include "App.h"
 #include "Log.h"
 #include <engine/core/util/PathUtil.h>
+#include <engine/core/main/GameSettings.h>
 
 namespace Echo
 {
@@ -42,8 +43,6 @@ namespace Echo
 		, m_log(nullptr)
 	{
 		m_bFullscreen = false;
-		m_screenWidth = 1280;
-		m_screenHeight = 720;
 		m_projectFile = rootPath + "data/app.echo";
 		Echo::PathUtil::FormatPath(m_projectFile, false);
 
@@ -60,7 +59,7 @@ namespace Echo
 		__try
 #endif
 		{
-			if (initWindow(m_screenWidth, m_screenHeight, m_bFullscreen))
+			if (initWindow( 800, 600, m_bFullscreen))
 			{
 				initEngine(m_hWnd, m_projectFile);
 
@@ -73,8 +72,8 @@ namespace Echo
 
 				MSG msg;
 				ZeroMemory(&msg, sizeof(MSG));
+
 				// Loop until there is a quit message from the window or the user.
-				bool done = false;
 				while (WM_QUIT != msg.message)
 				{
 					// Handle the windows messages.
@@ -87,7 +86,7 @@ namespace Echo
 					{
 						__int64 currTimeStamp = 0;
 						QueryPerformanceCounter((LARGE_INTEGER*)&currTimeStamp);
-						float deltaTime = (currTimeStamp - prevTimeStamp) * 1000.f / cntsPerSec;
+						float deltaTime = (currTimeStamp - prevTimeStamp) * secsPerCnt;
 
 						tick(deltaTime);
 
@@ -118,6 +117,30 @@ namespace Echo
 		rootcfg.m_projectFile = echoProject;
 		rootcfg.m_windowHandle = (unsigned int)hwnd;
 		m_engine->initialize(rootcfg);
+
+		// default window size
+		resizeWindow( m_hWnd, Echo::GameSettings::instance()->getWindowWidth(), Echo::GameSettings::instance()->getWindowHeight());
+	}
+
+	// resize window
+	void App::resizeWindow(HWND hwnd, int width, int height)
+	{
+		RECT rcClient, rcWindow;
+		POINT ptDiff;
+
+		GetClientRect(hwnd, &rcClient);
+		GetWindowRect(hwnd, &rcWindow);
+
+		ptDiff.x = rcWindow.right - rcWindow.left - rcClient.right;
+		ptDiff.y = rcWindow.bottom - rcWindow.top - rcClient.bottom;
+
+		int realWidth = width + ptDiff.x;
+		int realHeight = height + ptDiff.y;
+
+		Echo::i32 posX = (GetSystemMetrics(SM_CXSCREEN) - realWidth) / 2;
+		Echo::i32 posY = (GetSystemMetrics(SM_CYSCREEN) - realHeight) / 2;
+	
+		MoveWindow(hwnd, posX, posY, realWidth, realHeight, TRUE);
 	}
 
 	void App::destroy()
@@ -129,38 +152,26 @@ namespace Echo
 
 	LRESULT CALLBACK App::wndProc(HWND hWnd, Echo::ui32 msg, WPARAM wParam, LPARAM lParam)
 	{
-		// Is the application in a minimized or maximized state?
-		static bool minOrMaxed = false;
-
 		switch ( msg )
 		{
-			// WM_SIZE is sent when the user resizes the window.  
 			case WM_SIZE:
 			{
-				{
-					Echo::ui32 width = (Echo::ui32)LOWORD(lParam);
-					Echo::ui32 height = (Echo::ui32)HIWORD(lParam);
-
-					Echo::Engine::instance()->onSize(width, height);
-				}
+				Echo::ui32 width = (Echo::ui32)LOWORD(lParam);
+				Echo::ui32 height = (Echo::ui32)HIWORD(lParam);
+				Echo::Engine::instance()->onSize(width, height);
 			}
 			break;
-			// WM_EXITSIZEMOVE is sent when the user releases the resize bars.
-			// Here we reset everything based on the new window dimensions.
 			case WM_EXITSIZEMOVE:
 			{
 				RECT clientRect = { 0, 0, 0, 0 };
 				GetClientRect(m_hWnd, &clientRect);
 			} 
 			break;
-			// WM_CLOSE is sent when the user presses the 'X' button in the
-			// caption bar menu.
 			case WM_CLOSE:
 			{
 				DestroyWindow(m_hWnd);
 			} 
 			break;
-			// WM_DESTROY is sent when the window is being destroyed.
 			case WM_DESTROY:
 			{
 				PostQuitMessage(0);
@@ -190,16 +201,6 @@ namespace Echo
 			break;
 			case WM_KEYUP:
 			{
-				if ( VK_F9 == wParam )
-				{
-					if ( m_bFullscreen )
-					{
-					}
-					else
-					{
-						setFullScreen();
-					}
-				}
 			}
 			break;
 			case WM_CHAR:
@@ -222,7 +223,8 @@ namespace Echo
 		//设置窗口显示类型
 		style &= ~WS_CAPTION;
 		SetWindowLong(m_hWnd, GWL_STYLE, style);
-		//获得屏幕大小
+
+		// get screen size
 		int ScreenX = GetSystemMetrics(SM_CXSCREEN);
 		int ScreenY = GetSystemMetrics(SM_CYSCREEN);
 		if ( !MoveWindow(m_hWnd, 0, 0, ScreenX, ScreenY, TRUE) )
@@ -292,8 +294,8 @@ namespace Echo
 		RECT loRt;
 		loRt.left = 0;
 		loRt.top = 0;
-		loRt.right = m_screenWidth;
-		loRt.bottom = m_screenHeight;
+		loRt.right = screenWidth;
+		loRt.bottom = screenHeight;
 		AdjustWindowRect(&loRt, WS_CAPTION | WS_OVERLAPPEDWINDOW | WS_SYSMENU | WS_POPUP, FALSE);
 
 		// Create the window with the screen settings and get the handle to it.
