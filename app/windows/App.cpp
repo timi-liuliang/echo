@@ -23,13 +23,8 @@ namespace Echo
 		//CloseHandle(hDumpFile);
 	}
 
-	// 作为except块中表达式的函数
 	LONG CrashHandler(EXCEPTION_POINTERS *pException)
 	{
-		//// 这里以弹出一个对话框为例子
-		//MessageBox(NULL, _T("崩溃日志将要保存为  Dump.dmp, 请发送给编译这个版本代码的程序员。"), _T("Crash"), MB_OK);
-
-		//// 创建Dump文件
 		//String strRoot = g_pApp->getRootPath();
 		//String strDump = strRoot + "\\Dump.dmp";
 		//CreateDumpFile(strDump.c_str(), pException);
@@ -42,16 +37,14 @@ namespace Echo
 		return g_pApp->wndProc(hWnd, msg, wParam, lParam);
 	}
 
-	App::App()
-		: m_log(nullptr)
+	App::App(const Echo::String& rootPath)
+		: m_engine(nullptr)
+		, m_log(nullptr)
 	{
-		char szRootPath[MAX_PATH];
-		memset(szRootPath, 0, sizeof(szRootPath));
-		GetCurrentDirectory(MAX_PATH, szRootPath);
 		m_bFullscreen = false;
 		m_screenWidth = 1280;
 		m_screenHeight = 720;
-		m_projectFile = Echo::String(szRootPath) + "/data/app.echo";
+		m_projectFile = rootPath + "data/app.echo";
 		Echo::PathUtil::FormatPath(m_projectFile, false);
 
 		g_pApp = this;

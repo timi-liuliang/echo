@@ -8,7 +8,7 @@ namespace Echo
 	class App
 	{
 	public:
-		App();
+		App(const Echo::String& rootPath);
 		~App();
 
 		// start

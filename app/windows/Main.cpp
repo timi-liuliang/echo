@@ -3,10 +3,11 @@
 
 int main(int argc, char* argv[])
 {
-	Echo::String currentPath = Echo::PathUtil::GetFileDirPath(argv[0]);
-	SetCurrentDirectory(currentPath.c_str());
+	Echo::String exeFullPath = argv[0];
+	Echo::PathUtil::FormatPath(exeFullPath);
+	Echo::String rootPath = Echo::PathUtil::GetFileDirPath(exeFullPath);
 
-	Echo::App app;
+	Echo::App app(rootPath);
 	app.start();
 
 	return EXIT_SUCCESS;
