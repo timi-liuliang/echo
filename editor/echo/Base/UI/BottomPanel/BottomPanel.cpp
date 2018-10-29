@@ -8,7 +8,6 @@
 
 namespace Studio
 {
-	// 构造函数
 	BottomPanel::BottomPanel(QWidget* parent/* = 0*/)
 		: QDockWidget( parent)
 	{
@@ -31,12 +30,10 @@ namespace Studio
 		QObject::connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(onTabIdxChanged(int)));
 	}
 
-	// 析构函数
 	BottomPanel::~BottomPanel()
 	{
 	}
 
-	// show tab
 	void BottomPanel::setTabVisible(const Echo::String& tabName, bool isVisible)
 	{
 		QWidget* page = m_tabWidget->findChild<QWidget*>(tabName.c_str());
@@ -53,7 +50,6 @@ namespace Studio
 		return page ? page->isVisible() : false;
 	}
 
-	// on tab index changed
 	void BottomPanel::onTabIdxChanged(int idx)
 	{
 		QWidget* widget = m_tabWidget->currentWidget();

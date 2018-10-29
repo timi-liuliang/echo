@@ -10,6 +10,9 @@ namespace Echo
 
 		// get camera2d icon, used for editor
 		const char* getEditorIcon() const;
+
+		// on editor select this node
+		virtual void onEditorSelectThisNode() override;
 	};
 
 #endif

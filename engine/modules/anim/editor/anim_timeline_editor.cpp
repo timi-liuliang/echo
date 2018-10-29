@@ -14,5 +14,11 @@ namespace Echo
 	{
 		return "engine/modules/anim/editor/icon/animtimeline.png";
 	}
+
+	// on editor select this node
+	void TimelineEditor::onEditorSelectThisNode()
+	{
+		int a = 10;
+	}
 #endif
 }

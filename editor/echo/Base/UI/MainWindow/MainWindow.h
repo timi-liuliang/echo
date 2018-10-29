@@ -37,6 +37,10 @@ namespace Studio
 		// open lua file for edit
 		void openLuaScript(const Echo::String& resPath);
 
+	public:
+		// panels
+		BottomPanel* getBottomPanel() { return m_bottomPanel; }
+
 	protected:
 		void closeEvent(QCloseEvent *event);
 
@@ -88,7 +92,6 @@ namespace Studio
 
 		// recover edit settings
 		void recoverEditSettings();
-
 
 	protected:
 		QDockWidget*	m_renderPanel;
