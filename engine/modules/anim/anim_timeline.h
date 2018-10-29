@@ -6,13 +6,13 @@
 
 namespace Echo
 {
-	class AnimPlayer : public Node
+	class Timeline : public Node
 	{
-		ECHO_CLASS(AnimPlayer, Node)
+		ECHO_CLASS(Timeline, Node)
 
 	public:
-		AnimPlayer();
-		virtual ~AnimPlayer();
+		Timeline();
+		virtual ~Timeline();
 
 		// play anim
 		void setAnim(const StringOption& animName);

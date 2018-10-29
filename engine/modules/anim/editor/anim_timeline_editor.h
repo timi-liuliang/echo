@@ -1,12 +1,12 @@
-#include "../anim_player.h"
+#include "../anim_timeline.h"
 
 namespace Echo
 {
 #ifdef ECHO_EDITOR_MODE
-	class AnimPlayerEditor : public ObjectEditor
+	class TimelineEditor : public ObjectEditor
 	{
 	public:
-		AnimPlayerEditor(Object* object);
+		TimelineEditor(Object* object);
 
 		// get camera2d icon, used for editor
 		const char* getEditorIcon() const;

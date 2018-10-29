@@ -1,6 +1,6 @@
 #include "anim_module.h"
-#include "anim_player.h"
-#include "editor/anim_player_editor.h"
+#include "anim_timeline.h"
+#include "editor/anim_timeline_editor.h"
 
 namespace Echo
 {
@@ -10,8 +10,8 @@ namespace Echo
 
 	void AnimModule::registerTypes()
 	{
-		Class::registerType<AnimPlayer>();
+		Class::registerType<Timeline>();
 
-		REGISTER_OBJECT_EDITOR(AnimPlayer, AnimPlayerEditor)
+		REGISTER_OBJECT_EDITOR(Timeline, TimelineEditor)
 	}
 }

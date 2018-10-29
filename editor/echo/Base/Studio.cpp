@@ -240,7 +240,7 @@ namespace Studio
 
 		// calculate root path
 #ifdef ECHO_PLATFORM_WINDOWS
-		m_rootPath = m_appPath + "../../../";
+		m_rootPath = m_appPath + "../../../../";
 #else
 #endif
 	}

@@ -6,7 +6,6 @@
 #include "engine/core/log/Log.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/util/base64.h"
-#include "engine/modules/anim/anim_player.h"
 #include "engine/modules/light/light.h"
 
 namespace Echo
