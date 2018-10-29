@@ -1,6 +1,5 @@
 #include "BottomPanel.h"
 #include <QListWidgetItem>
-#include "TimelinePanel.h"
 #include "DebuggerPanel.h"
 #include "LogPanel.h"
 #include "Document.h"
@@ -14,13 +13,11 @@ namespace Studio
 		setupUi(this);
 
 		m_documentPanel = EchoNew(DocumentPanel(this));
-		m_timelinePanel = EchoNew(TimelinePanel(this));
 		m_debuggerPanel = EchoNew(DebuggerPanel(this));
 
 		m_tabWidget->clear();
 		m_tabWidget->addTab(AStudio::instance()->getLogPanel(), "Log");
 		m_tabWidget->addTab(m_debuggerPanel, "Debugger");
-		m_tabWidget->addTab(m_timelinePanel, "TimeLine");
 		m_tabWidget->addTab(m_documentPanel, "Document");
 
 		//setTabVisible("DocumentPanel", false);

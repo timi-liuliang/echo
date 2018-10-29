@@ -7,7 +7,6 @@
 
 namespace Studio
 {
-	class TimelinePanel;
 	class DebuggerPanel;
 	class DocumentPanel;
 	class BottomPanel : public QDockWidget, public Ui_BottomPanel
@@ -28,7 +27,6 @@ namespace Studio
 
 	private:
 		DocumentPanel*	m_documentPanel;
-		TimelinePanel*	m_timelinePanel;
 		DebuggerPanel*	m_debuggerPanel;
 	};
 }
