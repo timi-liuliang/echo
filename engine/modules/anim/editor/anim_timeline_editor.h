@@ -1,5 +1,5 @@
 #include "../anim_timeline.h"
-#include "anim_timeline_bottom_panel.h"
+#include "TimelinePanel/TimelinePanel.h"
 
 namespace Echo
 {
