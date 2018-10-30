@@ -10,7 +10,6 @@
 #include <QMetaMethod>
 #include <QSplitter>
 #include "QPropertyModel.h"
-#include "TimelinePanel.h"
 #include <shellapi.h>
 #include <engine/core/util/HashGenerator.h>
 #include <engine/core/util/TimeProfiler.h>

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../camera_2d.h"
-#include "engine/core/base/object_editor.h"
+#include "engine/core/editor/object_editor.h"
 #include "engine/core/gizmos/Gizmos.h"
 
 namespace Echo

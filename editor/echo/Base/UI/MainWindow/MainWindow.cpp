@@ -9,7 +9,6 @@
 #include <QShortcut>
 #include <QMdiArea>
 #include <QComboBox>
-#include "TimelinePanel.h"
 #include "DebuggerPanel.h"
 #include "EchoEngine.h"
 #include "QResSelect.h"

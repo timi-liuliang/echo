@@ -1,5 +1,5 @@
 #include "../neuron.h"
-#include "engine/core/base/object_editor.h"
+#include "engine/core/editor/object_editor.h"
 
 namespace Echo
 {

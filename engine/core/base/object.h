@@ -3,7 +3,7 @@
 #include "engine/core/memory/MemAllocDef.h"
 #include "engine/core/base/class.h"
 #include "engine/core/base/property_info.h"
-#include "engine/core/base/object_editor.h"
+#include "engine/core/editor/object_editor.h"
 
 namespace Echo
 {
