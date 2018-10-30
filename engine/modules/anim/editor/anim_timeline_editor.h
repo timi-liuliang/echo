@@ -1,4 +1,5 @@
 #include "../anim_timeline.h"
+#include "anim_timeline_bottom_panel.h"
 
 namespace Echo
 {
@@ -13,6 +14,9 @@ namespace Echo
 
 		// on editor select this node
 		virtual void onEditorSelectThisNode() override;
+
+	private:
+		TimelinePanel*		m_timelinePanel;
 	};
 
 #endif

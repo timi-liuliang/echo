@@ -1,12 +1,14 @@
 #include "anim_timeline_editor.h"
+#include "engine/core/editor/editor.h"
 
 namespace Echo
 {
 #ifdef ECHO_EDITOR_MODE
 	TimelineEditor::TimelineEditor(Object* object)
 		: ObjectEditor(object)
+		, m_timelinePanel(nullptr)
 	{
-
+		m_timelinePanel = EchoNew(TimelinePanel);
 	}
 
 	// get camera2d icon, used for editor
@@ -18,7 +20,7 @@ namespace Echo
 	// on editor select this node
 	void TimelineEditor::onEditorSelectThisNode()
 	{
-		int a = 10;
+		Editor::instance()->showBottomPanel(m_timelinePanel);
 	}
 #endif
 }

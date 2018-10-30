@@ -17,10 +17,8 @@
 #include <engine/core/io/IO.h>
 #include "EchoEngine.h"
 
-
 namespace Studio
 {
-	// 构造函数
 	AStudio::AStudio()
 		: m_logPanel(nullptr)
 		, m_mainWindow(nullptr)
@@ -29,18 +27,11 @@ namespace Studio
 		m_projectCfg = EchoNew( ConfigMgr);
 
 		m_log = NULL;
+
+		// set astudio as the echo editor
+		Editor::setInstance(this);
 	}
 
-	AStudio::AStudio(const char* inputProject)
-	{
-		m_renderWindow = NULL;
-		m_projectCfg = NULL;
-		m_log = NULL;
-
-		initLogSystem();
-	}
-
-	// 析构函数
 	AStudio::~AStudio()
 	{
 		Echo::Engine::instance()->destroy();
@@ -52,20 +43,17 @@ namespace Studio
 		EchoSafeDelete(m_mainWindow, MainWindow);
 	}
 
-	// instance
 	AStudio* AStudio::instance()
 	{
 		static AStudio* inst = new AStudio;
 		return inst;
 	}
 
-	// get editor root path
 	const Echo::String& AStudio::getRootPath()
 	{
 		return m_rootPath;
 	}
 
-	// 初始化日志系统
 	bool AStudio::initLogSystem()
 	{
 		Echo::Engine::instance();
@@ -87,7 +75,6 @@ namespace Studio
 		return true;
 	}
 
-	// 启动
 	void AStudio::Start()
 	{
 		// 初始日志系统
@@ -104,7 +91,6 @@ namespace Studio
 		Echo::Log::instance()->addOutput(m_logPanel);
 	}
 
-	// 关闭
 	void AStudio::Close()
 	{
 
@@ -122,7 +108,6 @@ namespace Studio
 		}
 	}
 
-	// 判断缩略图是否存在
 	bool AStudio::isThumbnailExists(const Echo::String& name)
 	{
 		Echo::String appPath = AStudio::instance()->getAppPath();
@@ -180,7 +165,6 @@ namespace Studio
 		return m_renderWindow;
 	}
 
-	// 设置渲染窗口控制器
 	void AStudio::setRenderWindowController(IRWInputController* controller)
 	{
 		RenderWindow* renderWindow = qobject_cast<RenderWindow*>(m_renderWindow);
@@ -201,7 +185,6 @@ namespace Studio
 			return nullptr;
 	}
 
-	// 获取主窗口
 	QWidget* AStudio::getMainWindow()
 	{
 		return m_mainWindow;
@@ -212,7 +195,6 @@ namespace Studio
 		return m_projectWindow;
 	}
 
-	// 打开项目文件
 	void AStudio::OpenProject(const char* fileName)
 	{
 		// remember it
@@ -244,20 +226,17 @@ namespace Studio
 #endif
 	}
 
-	// 删除资源
 	bool AStudio::deleteResource(const char* res)
 	{
 
 		return false;
 	}
 
-	// 资源是否可被删除
 	bool AStudio::isResCanbeDeleted(const char* res)
 	{
 		return true;
 	}
 
-	// 保存缩略图
 	bool AStudio::saveThumbnail(const Echo::String& fileName, int type /* = 0 */)
 	{
 		bool success = ThumbnailMgr::instance()->saveThumbnail(fileName, ThumbnailMgr::THUMBNAIL_TYPE(type));
@@ -269,7 +248,6 @@ namespace Studio
 		return success;
 	}
 
-	// 根据文件名获取缩略图全路径
 	Echo::String AStudio::getThumbnailPath(const Echo::String& filePath, bool needOldExt)
 	{
 		// 过滤掉后缀名，加上bmp
@@ -282,10 +260,14 @@ namespace Studio
 		return thumbnailPath;
 	}
 
-	// 重置摄像机
 	void AStudio::resetCamera(float diroffset)
 	{
 		//auto* renderWindow = static_cast<RenderWindow*>(getRenderWindow());
 		//renderWindow->getInputController()->onInitCameraSettings(diroffset);
+	}
+
+	void AStudio::showBottomPanel(Echo::BottomPanelTab* bottomPanel)
+	{
+		int a = 10;
 	}
 }
