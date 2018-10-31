@@ -57,7 +57,9 @@ namespace Studio
 		QObject::connect(m_actionPlayGame, SIGNAL(triggered(bool)), this, SLOT(onPlayGame()));
 		QObject::connect(m_actionStopGame, SIGNAL(triggered(bool)), &m_gameProcess, SLOT(terminate()));
 		QObject::connect(m_actionExitEditor, SIGNAL(triggered(bool)), this, SLOT(close()));
-		QObject::connect(m_actionHelp, SIGNAL(triggered(bool)), this, SLOT(onOpenHelpDialog()));
+		QObject::connect(m_actionApi, SIGNAL(triggered(bool)), this, SLOT(onOpenHelpDialog()));
+		QObject::connect(m_actionDocumentation, SIGNAL(triggered(bool)), this, SLOT(onOpenWiki()));
+		QObject::connect(m_actionAbout, SIGNAL(triggered(bool)), this, SLOT(onAbout()));
 
 		// add combox, switch 2D,3D,Script etc.
 		m_subEditComboBox = new QComboBox(m_toolBar);
@@ -446,6 +448,17 @@ namespace Studio
 	void MainWindow::onOpenHelpDialog()
 	{
 		m_bottomPanel->setTabVisible( "DocumentPanel", !m_bottomPanel->isTabVisible("DocumentPanel"));
+	}
+
+	void MainWindow::onOpenWiki()
+	{
+		QString link = "https://github.com/blab-liuliang/echo/wiki";
+		QDesktopServices::openUrl(QUrl(link));
+	}
+
+	void MainWindow::onAbout()
+	{
+
 	}
 
 	void MainWindow::onReadMsgFromGame()

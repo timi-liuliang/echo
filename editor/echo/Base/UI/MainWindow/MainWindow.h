@@ -74,6 +74,12 @@ namespace Studio
 		// open help dialog
 		void onOpenHelpDialog();
 
+		// open wiki page
+		void onOpenWiki();
+
+		// open about dialog
+		void onAbout();
+
 		// on display script edit panel
 		void onScriptEditVisibleChanged();
 

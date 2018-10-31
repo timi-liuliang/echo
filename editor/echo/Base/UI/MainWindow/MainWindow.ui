@@ -74,7 +74,9 @@
     <property name="title">
      <string>Help(&amp;H)</string>
     </property>
-    <addaction name="m_actionHelp"/>
+    <addaction name="m_actionDocumentation"/>
+    <addaction name="m_actionApi"/>
+    <addaction name="separator"/>
     <addaction name="m_actionAbout"/>
    </widget>
    <widget class="QMenu" name="menuGame">
@@ -118,11 +120,11 @@
   </widget>
   <action name="m_actionAbout">
    <property name="icon">
-    <iconset>
-     <normaloff>:/icon/Icon/effectskin.png</normaloff>:/icon/Icon/effectskin.png</iconset>
+    <iconset resource="../../../Resource/App.qrc">
+     <normaloff>:/icon/Icon/icon.png</normaloff>:/icon/Icon/icon.png</iconset>
    </property>
    <property name="text">
-    <string>About</string>
+    <string>About Echo</string>
    </property>
   </action>
   <action name="m_actionSaveProject">
@@ -216,9 +218,9 @@
     <string>Empty Project</string>
    </property>
   </action>
-  <action name="m_actionHelp">
+  <action name="m_actionApi">
    <property name="text">
-    <string>Help</string>
+    <string>API Reference</string>
    </property>
    <property name="shortcut">
     <string>F1</string>
@@ -227,6 +229,11 @@
   <action name="m_actionValiateData">
    <property name="text">
     <string>Valiate Data ...</string>
+   </property>
+  </action>
+  <action name="m_actionDocumentation">
+   <property name="text">
+    <string>Documentation</string>
    </property>
   </action>
  </widget>
