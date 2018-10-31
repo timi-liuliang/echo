@@ -63,6 +63,8 @@
     <addaction name="separator"/>
     <addaction name="m_menuSettings"/>
     <addaction name="separator"/>
+    <addaction name="m_actionValiateData"/>
+    <addaction name="separator"/>
     <addaction name="m_actionSaveProject"/>
     <addaction name="m_actionSaveAsProject"/>
     <addaction name="separator"/>
@@ -220,6 +222,11 @@
    </property>
    <property name="shortcut">
     <string>F1</string>
+   </property>
+  </action>
+  <action name="m_actionValiateData">
+   <property name="text">
+    <string>Valiate Data ...</string>
    </property>
   </action>
  </widget>
