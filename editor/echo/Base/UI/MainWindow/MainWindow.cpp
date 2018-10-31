@@ -18,6 +18,7 @@
 #include "ProjectWnd.h"
 #include "PathChooseDialog.h"
 #include "RenderWindow.h"
+#include "About.h"
 #include <QTimer>
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/io/IO.h>
@@ -33,6 +34,7 @@ namespace Studio
 		, m_resPanel(nullptr)
 		, m_gameProcess(nullptr)
 		, m_scriptEditorPanel(nullptr)
+		, m_aboutWindow(nullptr)
 	{
 		setupUi( this);
 
@@ -458,7 +460,13 @@ namespace Studio
 
 	void MainWindow::onAbout()
 	{
+		if (!m_aboutWindow)
+		{
+			m_aboutWindow = new AboutWindow(this);
+			m_aboutWindow->setWindowModality(Qt::ApplicationModal);
+		}
 
+		m_aboutWindow->setVisible(true);
 	}
 
 	void MainWindow::onReadMsgFromGame()
