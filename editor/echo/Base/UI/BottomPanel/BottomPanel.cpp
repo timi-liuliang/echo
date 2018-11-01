@@ -71,15 +71,17 @@ namespace Studio
 		// create widget by ui file
 		if (!bottomPanel->getUiPtr() && bottomPanel->getUiFile())
 		{
-			QUiLoader loader;
 			Echo::String path = AStudio::instance()->getRootPath() + Echo::String(bottomPanel->getUiFile());
-			QFile file( path.c_str());
-			file.open(QFile::ReadOnly);
-			QWidget* widget = new QWidget(this);
-			QWidget* widget1 = loader.load(&file, widget);
-			file.close();
 
-			bottomPanel->setUiPtr(widget1);
+			QFile file(path.c_str());
+			file.open(QFile::ReadOnly);
+
+			QUiLoader loader;
+			QWidget* widget = loader.load(&file, nullptr);
+
+			bottomPanel->setUiPtr(widget);
+
+			file.close();
 		}
 
 		// display
