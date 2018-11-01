@@ -30,13 +30,16 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QSplitter" name="splitter">
+    <widget class="QSplitter" name="m_splitter">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QTreeWidget" name="treeWidget">
+     <widget class="QTreeWidget" name="m_nodeTreeWidget">
       <property name="animated">
        <bool>false</bool>
+      </property>
+      <property name="headerHidden">
+       <bool>true</bool>
       </property>
       <column>
        <property name="text">
