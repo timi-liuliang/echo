@@ -1,5 +1,6 @@
 #include "Studio.h"
 #include "MainWindow.h"
+#include "BottomPanel.h"
 #include "ProjectWnd.h"
 #include "RenderWindow.h"
 #include "LogPanel.h"
@@ -268,6 +269,6 @@ namespace Studio
 
 	void AStudio::showBottomPanel(Echo::BottomPanelTab* bottomPanel)
 	{
-		int a = 10;
+		MainWindow::instance()->getBottomPanel()->showBottomPanel( bottomPanel);
 	}
 }

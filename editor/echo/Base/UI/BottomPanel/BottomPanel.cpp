@@ -1,5 +1,7 @@
 #include "BottomPanel.h"
 #include <QListWidgetItem>
+#include <QFile>
+#include <QUiLoader>
 #include "DebuggerPanel.h"
 #include "LogPanel.h"
 #include "Document.h"
@@ -20,8 +22,6 @@ namespace Studio
 		m_tabWidget->addTab(m_debuggerPanel, "Debugger");
 		m_tabWidget->addTab(m_documentPanel, "Document");
 
-		//setTabVisible("DocumentPanel", false);
-
 		onTabIdxChanged(0);
 
 		QObject::connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(onTabIdxChanged(int)));
@@ -31,9 +31,22 @@ namespace Studio
 	{
 	}
 
+	QWidget* BottomPanel::getTab(const Echo::String& tabName)
+	{
+		for (int i = 0; i < m_tabWidget->count(); i++)
+		{
+			if (m_tabWidget->tabText(i) == tabName.c_str())
+			{
+				return m_tabWidget->widget(i);
+			}
+		}
+
+		return nullptr;
+	}
+
 	void BottomPanel::setTabVisible(const Echo::String& tabName, bool isVisible)
 	{
-		QWidget* page = m_tabWidget->findChild<QWidget*>(tabName.c_str());
+		QWidget* page = getTab(tabName.c_str());
 		if (page)
 		{
 			page->setVisible(true);
@@ -43,7 +56,7 @@ namespace Studio
 
 	bool BottomPanel::isTabVisible(const Echo::String& tabName)
 	{
-		QWidget* page = m_tabWidget->findChild<QWidget*>(tabName.c_str());
+		QWidget* page = getTab(tabName.c_str());
 		return page ? page->isVisible() : false;
 	}
 
@@ -51,5 +64,35 @@ namespace Studio
 	{
 		QWidget* widget = m_tabWidget->currentWidget();
 		setWindowTitle(widget->windowTitle());
+	}
+
+	void BottomPanel::showBottomPanel(Echo::BottomPanelTab* bottomPanel)
+	{
+		// create widget by ui file
+		if (!bottomPanel->getUiPtr() && bottomPanel->getUiFile())
+		{
+			QUiLoader loader;
+			Echo::String path = AStudio::instance()->getRootPath() + Echo::String(bottomPanel->getUiFile());
+			QFile file( path.c_str());
+			file.open(QFile::ReadOnly);
+			QWidget* widget = new QWidget(this);
+			QWidget* widget1 = loader.load(&file, widget);
+			file.close();
+
+			bottomPanel->setUiPtr(widget1);
+		}
+
+		// display
+		if (bottomPanel->getUiPtr())
+		{
+			QWidget* page = getTab(bottomPanel->getTitle());
+			if (!page)
+			{
+				QWidget* widget = (QWidget*)bottomPanel->getUiPtr();
+				m_tabWidget->addTab( widget, bottomPanel->getTitle());
+			}
+
+			setTabVisible(bottomPanel->getTitle(), true);
+		}	
 	}
 }
