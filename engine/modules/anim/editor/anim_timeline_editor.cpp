@@ -11,6 +11,11 @@ namespace Echo
 		m_timelinePanel = EchoNew(TimelinePanel);
 	}
 
+	TimelineEditor::~TimelineEditor()
+	{
+		EchoSafeDelete(m_timelinePanel, TimelinePanel);
+	}
+
 	// get camera2d icon, used for editor
 	const char* TimelineEditor::getEditorIcon() const
 	{

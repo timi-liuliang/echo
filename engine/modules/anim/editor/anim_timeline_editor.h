@@ -8,6 +8,7 @@ namespace Echo
 	{
 	public:
 		TimelineEditor(Object* object);
+		virtual ~TimelineEditor();
 
 		// get camera2d icon, used for editor
 		const char* getEditorIcon() const;

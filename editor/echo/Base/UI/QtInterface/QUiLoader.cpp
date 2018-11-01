@@ -5,7 +5,7 @@
 
 namespace Echo
 {
-	void* qLoadUiFile( const char* uiFilePath)
+	QWidget* qLoadUi( const char* uiFilePath)
 	{
 		Echo::String path = Studio::AStudio::instance()->getRootPath() + uiFilePath;
 

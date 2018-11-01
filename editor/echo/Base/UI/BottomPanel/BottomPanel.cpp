@@ -4,6 +4,7 @@
 #include <QUiLoader>
 #include "DebuggerPanel.h"
 #include "LogPanel.h"
+#include <engine/core/editor/qt/QUiLoader.h>
 #include "Document.h"
 #include "Studio.h"
 
@@ -68,33 +69,18 @@ namespace Studio
 
 	void BottomPanel::showBottomPanel(Echo::BottomPanelTab* bottomPanel)
 	{
-		// create widget by ui file
-		if (!bottomPanel->getUiPtr() && bottomPanel->getUiFile())
-		{
-			Echo::String path = AStudio::instance()->getRootPath() + Echo::String(bottomPanel->getUiFile());
-
-			QFile file(path.c_str());
-			file.open(QFile::ReadOnly);
-
-			QUiLoader loader;
-			QWidget* widget = loader.load(&file, nullptr);
-
-			bottomPanel->setUiPtr(widget);
-
-			file.close();
-		}
-
 		// display
 		if (bottomPanel->getUiPtr())
 		{
-			QWidget* page = getTab(bottomPanel->getTitle());
+			Echo::String title = bottomPanel->getUiPtr()->windowTitle().toStdString().c_str();
+			QWidget* page = getTab(title);
 			if (!page)
 			{
-				QWidget* widget = (QWidget*)bottomPanel->getUiPtr();
-				m_tabWidget->addTab( widget, bottomPanel->getTitle());
+				QWidget* widget = bottomPanel->getUiPtr();
+				m_tabWidget->addTab( widget, title.c_str());
 			}
 
-			setTabVisible(bottomPanel->getTitle(), true);
+			setTabVisible(title, true);
 		}	
 	}
 }

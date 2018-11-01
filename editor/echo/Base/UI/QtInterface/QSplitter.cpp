@@ -1,12 +1,11 @@
 #include <QSplitter>
-#include <engine/core/editor/qt/QSplitter.h>
 
 namespace Echo
 {
 	// modify qsplitter stretch factor
-	void qSplitterSetStretchFactor(void* widget, int index, int stretch)
+	void qSplitterSetStretchFactor(QWidget* widget, int index, int stretch)
 	{
-		QSplitter* splitter = (QSplitter*)widget;
+		QSplitter* splitter = qobject_cast<QSplitter*>(widget);
 		if (splitter)
 		{
 			splitter->setStretchFactor(index, stretch);

@@ -1,16 +1,18 @@
 #include "TimelinePanel.h"
+#include "engine/core/editor/qt/QUiLoader.h"
+#include "engine/core/editor/qt/QSplitter.h"
 
 namespace Echo
 {
-	// get title
-	const char* TimelinePanel::getTitle() const
+	TimelinePanel::TimelinePanel()
 	{
-		return "Timeline";
-	}
+		m_ui = qLoadUi("engine/modules/anim/editor/TimelinePanel/TimelinePanel.ui");
 
-	// get ui file
-	const char* TimelinePanel::getUiFile() const
-	{
-		return "engine/modules/anim/editor/TimelinePanel/TimelinePanel.ui";
+		QWidget* splitter = qFindChild(m_ui, "m_splitter");
+		if (splitter)
+		{
+			qSplitterSetStretchFactor(splitter, 0, 0);
+			qSplitterSetStretchFactor(splitter, 1, 1);
+		}
 	}
 }

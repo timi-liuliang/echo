@@ -9,11 +9,7 @@ namespace Echo
 	class TimelinePanel : public BottomPanelTab
 	{
 	public:
-		// get title
-		virtual const char* getTitle() const override;
-
-		// get ui file
-		virtual const char* getUiFile() const override;
+		TimelinePanel();
 	};
 }
 

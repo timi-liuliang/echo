@@ -7,4 +7,9 @@ namespace Echo
 	{
 
 	}
+
+	BottomPanelTab::~BottomPanelTab()
+	{
+		qDeleteWidget(m_ui);
+	}
 }
