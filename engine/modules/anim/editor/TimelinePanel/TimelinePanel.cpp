@@ -16,7 +16,16 @@ namespace Echo
 			qSplitterSetStretchFactor(splitter, 1, 1);
 		}
 
+		// Top toolbuttons icons
+		qToolButtonSetIcon(qFindChild(m_ui, "AddNode"), "engine/modules/anim/editor/icon/new.png");
+		qToolButtonSetIcon(qFindChild(m_ui, "Play"), "engine/modules/anim/editor/icon/new.png");
+		qToolButtonSetIcon(qFindChild(m_ui, "Stop"), "engine/modules/anim/editor/icon/new.png");
+		qToolButtonSetIcon(qFindChild(m_ui, "Restart"), "engine/modules/anim/editor/icon/new.png");
+
 		// set toolbuttons icons
-		qToolButtonSetIcon( qFindChild(m_ui, "NewClip"), "engine/modules/anim/editor/icon/animtimeline.png");
+		qToolButtonSetIcon( qFindChild(m_ui, "NewClip"), "engine/modules/anim/editor/icon/new.png");
+		qToolButtonSetIcon( qFindChild(m_ui, "DuplicateClip"), "engine/modules/anim/editor/icon/duplicate.png");
+		qToolButtonSetIcon( qFindChild(m_ui, "RenameClip"), "engine/modules/anim/editor/icon/rename.png");
+		qToolButtonSetIcon( qFindChild(m_ui, "DeleteClip"), "engine/modules/anim/editor/icon/delete.png");
 	}
 }
