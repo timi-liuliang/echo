@@ -176,6 +176,9 @@
       </item>
       <item>
        <widget class="QToolButton" name="DuplicateClip">
+        <property name="toolTip">
+         <string>Duplicate Clip</string>
+        </property>
         <property name="text">
          <string>...</string>
         </property>
@@ -183,6 +186,9 @@
       </item>
       <item>
        <widget class="QToolButton" name="RenameClip">
+        <property name="toolTip">
+         <string>Rename Clip</string>
+        </property>
         <property name="text">
          <string>...</string>
         </property>
@@ -190,6 +196,9 @@
       </item>
       <item>
        <widget class="QToolButton" name="DeleteClip">
+        <property name="toolTip">
+         <string>Delete Clip</string>
+        </property>
         <property name="text">
          <string>...</string>
         </property>
