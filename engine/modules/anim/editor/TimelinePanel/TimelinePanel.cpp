@@ -25,7 +25,6 @@ namespace Echo
 		// set toolbuttons icons
 		qToolButtonSetIcon( qFindChild(m_ui, "NewClip"), "engine/modules/anim/editor/icon/new.png");
 		qToolButtonSetIcon( qFindChild(m_ui, "DuplicateClip"), "engine/modules/anim/editor/icon/duplicate.png");
-		qToolButtonSetIcon( qFindChild(m_ui, "RenameClip"), "engine/modules/anim/editor/icon/rename.png");
 		qToolButtonSetIcon( qFindChild(m_ui, "DeleteClip"), "engine/modules/anim/editor/icon/delete.png");
 	}
 }
