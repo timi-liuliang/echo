@@ -68,10 +68,12 @@ LINK_DIRECTORIES(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 
 IF(CMAKE_SIZEOF_VOID_P EQUAL 4)
 	LINK_DIRECTORIES(${ECHO_DEP_PATH}/AdrenoSDK/Lib/Win32)
+	LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/openal-1.1/windows/libs/Win32)
 	LINK_DIRECTORIES(${ECHO_DEP_PATH}/Qt/5.10.0/msvc2015/plugins/platforms)
 	LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/Core/lib/windows/x86)
 ELSEIF(CMAKE_SIZEOF_VOID_P EQUAL 8)
 	LINK_DIRECTORIES(${ECHO_DEP_PATH}/AdrenoSDK/Lib/x64)
+	LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/openal-1.1/windows/libs/Win64)
 	LINK_DIRECTORIES(${ECHO_DEP_PATH}/Qt/5.10.0/msvc2017_64/plugins/platforms)
 	LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/Core/lib/windows/x86_64)
 ENDIF()
@@ -124,12 +126,7 @@ ADD_EXECUTABLE(${MODULE_NAME}
 TARGET_LINK_LIBRARIES(${MODULE_NAME} zlib engine 7zip winmm.lib imm32.lib dxgi.lib Shlwapi.lib lua recast freeimage)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} Qt5::Core Qt5::Widgets Qt5::UiTools)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} Live2DCubismCore.lib pugixml spine box2d)
-
-# 性能分析服务
-IF(ECHO_PROFILER)
-	TARGET_LINK_LIBRARIES(${MODULE_NAME} ws2_32.lib)
-ENDIF()
-
+TARGET_LINK_LIBRARIES(${MODULE_NAME} OpenAL32.lib)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} debug libEGL_d.lib optimized libEGL.lib)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} debug libGLESv2_d.lib optimized libGLESv2.lib dbghelp.lib Psapi.lib)
 

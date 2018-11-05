@@ -1,6 +1,8 @@
 #pragma once
 
 #include "engine/core/scene/node.h"
+#include <al.h>
+#include <alc.h>
 
 namespace Echo
 {
@@ -14,5 +16,9 @@ namespace Echo
 
 		// instance
 		static AudioDevice* instance();
+
+	private:
+		ALCdevice*			m_device;
+		bool				m_isSupportEnumeration;
 	};
 }
