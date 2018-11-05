@@ -1,25 +1,22 @@
 #include "audio_module.h"
+#include "audio_player.h"
+#include "editor/audio_player_editor.h"
 
 namespace Echo
 {
 	AudioModule::AudioModule()
 	{
-		//FSAudioManager::instance()->init( 32, false);
-		//FSAudioManager::instance()->loadAllBankFile();
+
 	}
 
 	void AudioModule::registerTypes()
 	{
-		//FSAudioManager::instance()->suspendFmodSystem();
-		//FSAudioManager::instance()->resumeFmodSystem();
-		// ÒôÆµ¹ÜÀíÆ÷
-		//FSAudioManager::instance()->release();
+		Class::registerType<AudioPlayer>();
 
-		//EchoSafeDeleteInstance(FSAudioManager);
+		REGISTER_OBJECT_EDITOR(AudioPlayer, AudioPlayerEditor)
 	}
 
 	void AudioModule::update(float elapsedTime)
 	{
-		//FSAudioManager::instance()->tick(static_cast<ui32>(elapsedTime));
 	}
 }
