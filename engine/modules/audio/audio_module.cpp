@@ -24,5 +24,6 @@ namespace Echo
 
 	void AudioModule::update(float elapsedTime)
 	{
+		AudioDevice::instance()->step(elapsedTime);
 	}
 }

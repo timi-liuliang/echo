@@ -6,6 +6,7 @@
 
 namespace Echo
 {
+	class AudioListener;
 	class AudioDevice : public Object
 	{
 		ECHO_SINGLETON_CLASS(AudioDevice, Object)
@@ -17,8 +18,18 @@ namespace Echo
 		// instance
 		static AudioDevice* instance();
 
+		// step
+		void step(float elapsedTime);
+
+	private:
+		// list audio devices
+		void listAudioDevices();
+
 	private:
 		ALCdevice*			m_device;
+		ALCcontext*			m_context;
 		bool				m_isSupportEnumeration;
+		String				m_audioDevices;
+		AudioListener*		m_currentListener;
 	};
 }

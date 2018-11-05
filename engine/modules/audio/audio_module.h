@@ -12,7 +12,7 @@ namespace Echo
 		// register all types of the module
 		virtual void registerTypes();
 
-		// update box2d world
+		// update audio module
 		virtual void update(float elapsedTime);
 	};
 }

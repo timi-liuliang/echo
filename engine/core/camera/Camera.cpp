@@ -176,9 +176,9 @@ namespace Echo
 	{
 		if(m_isViewDirty)
 		{
-			Vector3 xAxis;
-			Vector3 yAxis;
-			Vector3 zAxis = -m_dir;
+			Vector3 xAxis;					// right
+			Vector3 yAxis;					// up axis
+			Vector3 zAxis = -m_dir;			// forward
 
 			Vector3::Cross(xAxis, m_up, zAxis);		xAxis.normalize();
 			Vector3::Cross(yAxis, zAxis, xAxis);	yAxis.normalize();
