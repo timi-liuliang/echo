@@ -31,7 +31,9 @@ namespace Echo
 
 	AudioDevice::~AudioDevice()
 	{
-
+		alcMakeContextCurrent(nullptr);
+		alcDestroyContext(m_context);
+		alcCloseDevice(m_device);
 	}
 
 	void AudioDevice::bindMethods()
