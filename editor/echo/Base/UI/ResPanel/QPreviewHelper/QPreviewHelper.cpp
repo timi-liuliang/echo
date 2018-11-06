@@ -1,4 +1,6 @@
 #include "QPreviewHelper.h"
+#include <QFileInfo>
+#include <QDateTime>
 #include <engine/core/util/StringUtil.h>
 #include <engine/core/util/PathUtil.h>
 
@@ -7,12 +9,11 @@ namespace QT_UI
 	QPreviewHelper::QPreviewHelper(QListView* view)	
 		: m_listView(view)
 	{
-		setUseIconMode();
-
 		m_listModel = new QStandardItemModel(m_listView);
 
 		m_listProxyModel = new QSortFilterProxyModel(m_listView);
 		m_listProxyModel->setSourceModel(m_listModel);
+		m_listProxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
 		m_listProxyModel->setFilterKeyColumn(0);
 
 		m_listView->setModel(m_listProxyModel);
@@ -20,9 +21,10 @@ namespace QT_UI
 		QObject::connect(m_listView, SIGNAL(clicked(QModelIndex)), this, SLOT(onClicked(QModelIndex)));
 		QObject::connect(m_listView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onDoubleClicked(QModelIndex)));
 		QObject::connect(m_listModel, &QStandardItemModel::itemChanged, this, &QPreviewHelper::renameRes);
+
+		setUseIconMode();
 	}
 
-	// add item
 	void QPreviewHelper::setPath(const Echo::String& filePath, const char* exts, bool includePreDir)
 	{
 		// get all files
@@ -55,7 +57,12 @@ namespace QT_UI
 		}
 	}
 
-	// add item
+	void QPreviewHelper::setFilterPattern(const char* pattern)
+	{
+		QRegExp regExp( pattern, Qt::CaseInsensitive);
+		m_listProxyModel->setFilterRegExp(regExp);
+	}
+
 	void QPreviewHelper::addItem(const char* filePath)
 	{
 		std::vector<QStandardItem*> results;
@@ -69,24 +76,42 @@ namespace QT_UI
 	// create items
 	void QPreviewHelper::createItem(const char* filePath, std::vector<QStandardItem*>& results)
 	{
-		Echo::String previewFile = filePath;
-		if (Echo::PathUtil::IsDir(previewFile))
+		QStandardItem* item = nullptr;
+		if (Echo::PathUtil::IsDir( filePath))
 		{
-			Echo::String folderName = Echo::PathUtil::GetLastDirName(previewFile);
-			QStandardItem* item = new QStandardItem(QIcon(":/icon/Icon/root.png"), folderName.c_str());
-			item->setData( previewFile.c_str(), Qt::UserRole);
-			results.push_back(item);
+			Echo::String folderName = Echo::PathUtil::GetLastDirName(filePath);
+			item = new QStandardItem(QIcon(":/icon/Icon/root.png"), folderName.c_str());
 		}
 		else
 		{
-			Echo::String fileName = Echo::PathUtil::GetPureFilename(previewFile, true);
-			QStandardItem* item = new QStandardItem( getFileIcon(previewFile.c_str()), fileName.c_str());
-			item->setData(previewFile.c_str(), Qt::UserRole);
+			Echo::String fileName = Echo::PathUtil::GetPureFilename(filePath, true);
+			item = new QStandardItem( getFileIcon(filePath), fileName.c_str());
+		}
+
+		if (item)
+		{
+			item->setData(filePath, Qt::UserRole);
+			item->setSizeHint(QSize( m_itemWidth, m_itemHeight));
+			addToolTips(item, filePath);
 			results.push_back(item);
 		}
 	}
 
-	// 获取文件图标
+	void QPreviewHelper::addToolTips(QStandardItem* item, const Echo::String& fullPath)
+	{
+		Echo::String fileName = Echo::PathUtil::IsDir(fullPath) ? Echo::PathUtil::GetLastDirName(fullPath) : Echo::PathUtil::GetPureFilename(fullPath);
+		QFileInfo fileInfo( fullPath.c_str());
+		qint64    fileSize = fileInfo.size();
+		Echo::String lastModify = fileInfo.lastModified().toString("yyyy/mm/dd hh:mm:ss").toStdString().c_str();
+
+		Echo::String tips;
+		tips += "Name : " + fileName + "\n";
+		tips += "Size : " + Echo::StringUtil::Format("%d kb\n", max(fileSize / 1024, 1));
+		tips += "Modify : " + lastModify + "\n";
+		tips += "Path : " + fullPath;
+		item->setToolTip(tips.c_str());	
+	}
+
 	QIcon QPreviewHelper::getFileIcon(const char* fullPath)
 	{
 		Echo::String fileExt = Echo::PathUtil::GetFileExt(fullPath, true);
@@ -103,34 +128,45 @@ namespace QT_UI
 		return QIcon(":/icon/Icon/file/file.png");
 	}
 
-	// clear all items
 	void QPreviewHelper::clear()
 	{
 		m_listModel->clear();
 	}
 
-	// set mode
 	void QPreviewHelper::setUseIconMode()
 	{
-		m_listView->setIconSize(QSize(64, 64));
+		m_iconSize = 64;
+		m_listView->setIconSize(QSize( m_iconSize, m_iconSize));
 		m_listView->setResizeMode(QListView::Adjust);
 		m_listView->setViewMode(QListView::IconMode);
-		m_listView->setMovement(QListView::Free);
+		m_listView->setMovement(QListView::Static);
 		m_listView->setFlow(QListView::LeftToRight);
-		//m_listView->setWrapping(false);
-		m_listView->setWordWrap(true);
 		m_listView->setSpacing(5);
+		setItemSizeHint(68, 86);
 	}
 
-	// set use list Mode
 	void QPreviewHelper::setUseListMode()
 	{
-		m_listView->setIconSize(QSize(30, 30));
+		m_iconSize = 30;
+		m_listView->setIconSize(QSize( m_iconSize, m_iconSize));
 		m_listView->setResizeMode(QListView::Adjust);
 		m_listView->setViewMode(QListView::ListMode);
-		m_listView->setMovement(QListView::Free);
-		m_listView->setWordWrap(true);
+		m_listView->setMovement(QListView::Static);
+		m_listView->setFlow(QListView::TopToBottom);
 		m_listView->setSpacing(0);
+		setItemSizeHint( 512, 30);
+	}
+
+	void QPreviewHelper::setItemSizeHint(int width, int height)
+	{
+		m_itemWidth = width;
+		m_itemHeight = height;
+		for (int i = 0; i < m_listModel->rowCount(); i++)
+		{
+			QStandardItem* item = m_listModel->item(i, 0);
+			if (item)
+				item->setSizeHint(QSize(m_itemWidth, m_itemHeight));
+		}
 	}
 
 	// is support this ext

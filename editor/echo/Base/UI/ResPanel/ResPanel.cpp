@@ -6,6 +6,7 @@
 #include "NodeTreePanel.h"
 #include "EchoEngine.h"
 #include "MainWindow.h"
+#include "Studio.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/main/Engine.h"
 #include <engine/core/io/IO.h>
@@ -15,11 +16,11 @@ namespace Studio
 {
 	static ResPanel* g_inst = nullptr;
 
-	// 构造函数
 	ResPanel::ResPanel( QWidget* parent/*=0*/)
 		: QDockWidget( parent)
 		, m_resMenu(nullptr)
 		, m_menuEditItem(nullptr)
+		, m_viewTypeGrid(true)
 	{
 		setupUi( this);
 
@@ -44,17 +45,17 @@ namespace Studio
 		QObject::connect(m_actionRenameRes, SIGNAL(triggered()), this, SLOT(onRenameRes()));
 		QObject::connect(m_actionDeleteRes, SIGNAL(triggered()), this, SLOT(onDeleteRes()));
 		QObject::connect(m_actionDuplicateRes, SIGNAL(triggered()), this, SLOT(onDuplicateRes()));
+		QObject::connect(m_viewTypeButton, SIGNAL(clicked()), this, SLOT(onSwitchResVeiwType()));
+		QObject::connect(m_searchLineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(onSearchTextChanged()));
 
 		g_inst = this;
 	}
 
-	// 析构函数
 	ResPanel::~ResPanel()
 	{
 
 	}
 
-	// instance
 	ResPanel* ResPanel::instance()
 	{
 		return g_inst;
@@ -77,7 +78,6 @@ namespace Studio
 		resizeEvent(nullptr);
 	}
 
-	// 选择文件夹
 	void ResPanel::onSelectDir(const char* dir)
 	{
 		m_currentDir = dir;
@@ -88,7 +88,6 @@ namespace Studio
 		m_previewHelper->setPath(dir, nullptr, isIncludePreDir);
 	}
 
-	// 重新选择当前文件夹
 	void ResPanel::reslectCurrentDir()
 	{
 		// refresh current dir
@@ -99,7 +98,6 @@ namespace Studio
 			onSelectDir(m_currentDir.c_str());
 	}
 
-	// click res
 	void ResPanel::onClickedPreviewRes(const char* res)
 	{
 		if (!Echo::PathUtil::IsDir(res))
@@ -112,7 +110,6 @@ namespace Studio
 		}
 	}
 
-	// double click res
 	void ResPanel::onDoubleClickedPreviewRes(const char* res)
 	{
 		if (Echo::PathUtil::IsDir(res))
@@ -140,13 +137,11 @@ namespace Studio
 		}
 	}
 
-	// reimplement reiszeEvent function
 	void ResPanel::resizeEvent(QResizeEvent * e)
 	{
 		m_previewHelper->onListViewResize();
 	}
 
-	// node tree widget show menu
 	void ResPanel::showMenu(const QPoint& point)
 	{
 		QStandardItem* item = m_previewHelper->itemAt( point);
@@ -191,7 +186,6 @@ namespace Studio
 		m_resMenu->exec(QCursor::pos());
 	}
 
-	// show current dir
 	void ResPanel::showInExporer()
 	{
 		QString openDir = m_currentDir.c_str();
@@ -201,7 +195,6 @@ namespace Studio
 		}		
 	}
 
-	// new folder
 	void ResPanel::newFolder()
 	{
 		Echo::String currentDir = m_currentDir;
@@ -217,7 +210,6 @@ namespace Studio
 		}
 	}
 
-	// get unique file name
 	bool ResPanel::getUniqueNewResSavePath( Echo::String& outNewPath, const Echo::String& className, const Echo::String& currentDir)
 	{
 		const Echo::Res::ResFun* resInfo = Echo::Res::getResFunByClassName(className);
@@ -238,7 +230,6 @@ namespace Studio
 		return false;
 	}
 
-	// new res
 	void ResPanel::onCreateRes()
 	{
 		QAction* action = qobject_cast<QAction*>(sender());
@@ -260,14 +251,12 @@ namespace Studio
 		}
 	}
 
-	// rename res
 	void ResPanel::onRenameRes()
 	{
 		if(m_menuEditItem)
 			m_previewHelper->editItem(m_menuEditItem);
 	}
 
-	// delete res
 	void ResPanel::onDeleteRes()
 	{
 		if (m_menuEditItem)
@@ -279,7 +268,6 @@ namespace Studio
 		}
 	}
 
-	// duplicate res
 	void ResPanel::onDuplicateRes()
 	{
 		if (m_menuEditItem)
@@ -320,11 +308,50 @@ namespace Studio
 		}
 	}
 
-	// on renamed res
 	void ResPanel::onRenamedRes(const QString src, const QString dest)
 	{
 		// refresh current dir
 		m_dirModel->Clean();
 		m_dirModel->Refresh();
+	}
+
+	void ResPanel::onSwitchResVeiwType()
+	{
+		m_viewTypeGrid = !m_viewTypeGrid;
+		if (m_viewTypeGrid)
+		{
+			m_previewHelper->setUseIconMode();
+
+			m_viewTypeButton->setIcon(QIcon(":/icon/Icon/res/view_type_list.png"));
+			m_viewTypeButton->setToolTip("List");
+		}
+		else
+		{
+			m_previewHelper->setUseListMode();
+
+			m_viewTypeButton->setIcon(QIcon(":/icon/Icon/res/view_type_grid.png"));
+			m_viewTypeButton->setToolTip("Thumbnail");
+		}
+
+		// save config
+		AStudio::instance()->getConfigMgr()->setValue("ResPanel_ResViewType", m_viewTypeGrid ? "Grid" : "List");
+	}
+
+	void ResPanel::onSearchTextChanged()
+	{
+		Echo::String pattern = m_searchLineEdit->text().toStdString().c_str();
+		m_previewHelper->setFilterPattern( pattern.c_str());
+	}
+
+	void ResPanel::recoverEditSettings()
+	{
+		Echo::String viewType = AStudio::instance()->getConfigMgr()->getValue("ResPanel_ResViewType");
+		if (!viewType.empty())
+		{
+			if (m_viewTypeGrid && viewType != "Grid")
+			{
+				onSwitchResVeiwType();
+			}
+		}
 	}
 }

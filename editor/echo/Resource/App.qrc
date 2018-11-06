@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="/icon">
+    <file>Icon/res/view_type_grid.png</file>
+    <file>Icon/res/view_type_list.png</file>
     <file>node/gltfskeleton.png</file>
     <file>Icon/file/lua.png</file>
     <file>node/link_child_scene.png</file>

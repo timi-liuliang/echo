@@ -150,6 +150,9 @@ namespace Studio
 		{
 			openLuaScript(currentEditLuaScript);
 		}
+
+		// save config
+		m_resPanel->recoverEditSettings();
 	}
 
 	// new scene

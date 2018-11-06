@@ -22,6 +22,9 @@ namespace Studio
 		// call when open project
 		void onOpenProject();
 
+		// recover edit settings
+		void recoverEditSettings();
+
 	public slots:
 		// 选择文件夹
 		void onSelectDir(const char* dir);
@@ -59,6 +62,12 @@ namespace Studio
 		// on renamed res
 		void onRenamedRes(const QString src, const QString dest);
 
+		// on switch view type
+		void onSwitchResVeiwType();
+
+		// on search text changed
+		void onSearchTextChanged();
+
 	private:
 		// get unique file name
 		bool getUniqueNewResSavePath( Echo::String& outNewPath, const Echo::String& className, const Echo::String& currentDir);
@@ -73,5 +82,6 @@ namespace Studio
 		QT_UI::QPreviewHelper*		m_previewHelper;
 		QMenu*						m_resMenu;			// Mouse right button click
 		QStandardItem*				m_menuEditItem;
+		bool						m_viewTypeGrid;
 	};
 }

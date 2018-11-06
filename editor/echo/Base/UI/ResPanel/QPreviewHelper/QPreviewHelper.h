@@ -17,6 +17,9 @@ namespace QT_UI
 		// add item
 		void setPath(const Echo::String& filePath, const char* exts, bool includePreDir);
 
+		// set filter
+		void setFilterPattern(const char* pattern);
+
 		// clear all items
 		void clear();
 
@@ -28,6 +31,12 @@ namespace QT_UI
 
 		// edit item
 		void editItem(QStandardItem* item);
+
+		// set mode
+		void setUseIconMode();
+
+		// set use list Mode
+		void setUseListMode();
 
 	public: signals :
 		// clicked
@@ -49,14 +58,14 @@ namespace QT_UI
 		// get icon
 		QIcon QPreviewHelper::getFileIcon(const char* fullPath);
 
-		// set mode
-		void setUseIconMode();
-
-		// set use list Mode
-		void setUseListMode();
-
 		// is support this ext
 		bool isSupportExt(const Echo::String& file);
+
+		// addToolTip
+		void addToolTips(QStandardItem* item, const Echo::String& fullPath);
+
+		// set item size hint
+		void setItemSizeHint(int width, int height);
 
 	private slots:
 		// clicked resource
@@ -69,6 +78,9 @@ namespace QT_UI
 		void renameRes( QStandardItem* item);
 
 	private:
+		int						m_iconSize;
+		int						m_itemWidth;
+		int						m_itemHeight;
 		QListView*				m_listView;
 		QStandardItemModel*		m_listModel;
 		QSortFilterProxyModel*	m_listProxyModel;
