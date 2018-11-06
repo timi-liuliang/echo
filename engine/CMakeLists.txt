@@ -57,6 +57,12 @@ ELSEIF(${ECHO_PLATFORM_ANDROID})
 ELSEIF(${ECHO_PLATFORM_IOS})
 ENDIF()
 
+# Configure FILE
+CONFIGURE_FILE(
+	${CMAKE_CURRENT_SOURCE_DIR}/core/base/echo_config.h.in
+	${CMAKE_CURRENT_SOURCE_DIR}/core/base/echo_config.h
+)
+
 # Get All Files
 FILE( GLOB_RECURSE HEADER_FILES  *.h *.hpp *.inl)
 FILE( GLOB_RECURSE SOURCE_FILES *.cpp *.c *.cc *.cxx)

@@ -13,9 +13,11 @@ LINK_DIRECTORIES(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 IF(CMAKE_SIZEOF_VOID_P EQUAL 4)
 	LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/AdrenoSDK/Lib/Win32)
 	LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/Core/lib/windows/x86)
+	LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/openal-1.1/windows/libs/Win32)
 ELSEIF(CMAKE_SIZEOF_VOID_P EQUAL 8)
 	LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/AdrenoSDK/Lib/x64)
 	LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/Core/lib/windows/x86_64)
+	LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/openal-1.1/windows/libs/Win64)
 ENDIF()
 
 # recursive get all module files
@@ -34,6 +36,7 @@ ADD_EXECUTABLE(${MODULE_NAME} ${ALL_FILES} CMakeLists.txt)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} zlib engine winmm.lib imm32.lib dxgi.lib Shlwapi.lib lua recast freeimage)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} Live2DCubismCore.lib pugixml spine box2d)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} debug libEGL_d.lib optimized libEGL.lib)
+TARGET_LINK_LIBRARIES(${MODULE_NAME} OpenAL32.lib)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} debug libGLESv2_d.lib optimized libGLESv2.lib dbghelp.lib Psapi.lib)
 
 # no cmd window

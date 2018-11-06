@@ -1,7 +1,7 @@
 #ifndef __ECHO_PIXELCONVERSIONS_H__
 #define __ECHO_PIXELCONVERSIONS_H__
 
-#include <engine/core/Base/EchoDef.h>
+#include <engine/core/Base/echo_def.h>
 
 namespace Echo
 {

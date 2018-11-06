@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/core/base/TypeDef.h"
+#include "engine/core/base/type_def.h"
 #include "engine/core/memory/MemAllocDef.h"
 
 namespace Echo

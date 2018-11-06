@@ -1,7 +1,7 @@
 #ifndef __ECHO_MEMALLOCOBJ_H__
 #define __ECHO_MEMALLOCOBJ_H__
 
-#include "engine/core/base/EchoDef.h"
+#include "engine/core/base/echo_def.h"
 
 namespace Echo
 {

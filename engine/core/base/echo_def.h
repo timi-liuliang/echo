@@ -1,7 +1,7 @@
 #pragma once
 
-#include "EchoConfig.h"
-#include "TypeDef.h"
+#include "echo_config.h"
+#include "type_def.h"
 #include <assert.h>
 
 #include <unordered_map>

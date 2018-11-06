@@ -1,0 +1,4 @@
+#cmakedefine ECHO_EDITOR_MODE
+#cmakedefine ECHO_PROFILER
+#cmakedefine ECHO_RENDER_THREAD
+#cmakedefine ECHO_ARCHIVE_SUPPORT_7ZIP

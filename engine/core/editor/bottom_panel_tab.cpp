@@ -2,6 +2,7 @@
 
 namespace Echo
 {
+#ifdef ECHO_EDITOR_MODE
 	BottomPanelTab::BottomPanelTab()
 		: m_ui(nullptr)
 	{
@@ -12,4 +13,5 @@ namespace Echo
 	{
 		qDeleteWidget(m_ui);
 	}
+#endif
 }

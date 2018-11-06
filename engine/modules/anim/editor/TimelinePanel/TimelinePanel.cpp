@@ -5,6 +5,7 @@
 
 namespace Echo
 {
+#ifdef ECHO_EDITOR_MODE
 	TimelinePanel::TimelinePanel()
 	{
 		m_ui = qLoadUi("engine/modules/anim/editor/TimelinePanel/TimelinePanel.ui");
@@ -27,4 +28,5 @@ namespace Echo
 		qToolButtonSetIcon( qFindChild(m_ui, "DuplicateClip"), "engine/modules/anim/editor/icon/duplicate.png");
 		qToolButtonSetIcon( qFindChild(m_ui, "DeleteClip"), "engine/modules/anim/editor/icon/delete.png");
 	}
+#endif
 }

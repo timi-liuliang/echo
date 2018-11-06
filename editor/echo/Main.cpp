@@ -11,7 +11,7 @@
 #include <shellapi.h>
 #include <windows.h>
 #include <QTime>
-#include <engine/core/base/EchoDef.h>
+#include <engine/core/base/echo_def.h>
 #include <algorithm>
 
 int main( int argc, char* argv[])

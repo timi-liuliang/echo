@@ -1,6 +1,6 @@
 #pragma once
 
-#include "TypeDef.h"
+#include "type_def.h"
 #include "engine/core/memory/MemAllocDef.h"
 #include "engine/core/math/Vector4.h"
 #include "engine/core/math/matrix.h"

@@ -3,7 +3,7 @@
 #include "engine/core/log/Log.h"
 #include "engine/core/io/IO.h"
 #include <engine/core/memory/MemAllocDef.h>
-#include <engine/core/base/EchoDef.h>
+#include <engine/core/base/echo_def.h>
 #include <thirdparty/recast/Recast/Recast.h>
 #include <thirdparty/recast/Recast/DetourNavMeshBuilder.h>
 #include <thirdparty/recast/Recast/DetourCommon.h>

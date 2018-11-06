@@ -1,5 +1,5 @@
 #include "DataStream.h"
-#include "engine/core/base/EchoDef.h"
+#include "engine/core/base/echo_def.h"
 #include "engine/core/util/StringUtil.h"
 #include "engine/core/util/AssertX.h"
 #include <engine/core/log/Log.h>
@@ -11,13 +11,11 @@
 
 namespace Echo
 {
-	// 析构函数
 	DataStream::~DataStream()
 	{
 		EchoSafeFree(m_buffer);
 	}
 
-	//-----------------------------------------------------------------------
 	template <typename T> DataStream& DataStream::operator >>(T& val)
 	{
 		read(static_cast<void*>(&val), sizeof(T));
@@ -31,7 +29,6 @@ namespace Echo
 		return 0;
 	}
 
-	//-----------------------------------------------------------------------
 	String DataStream::getLine(bool trimAfter)
 	{
 		char tmpBuf[ECHO_STREAM_TEMP_SIZE];
@@ -73,7 +70,7 @@ namespace Echo
 
 		return retString;
 	}
-	//-----------------------------------------------------------------------
+
 	size_t DataStream::readLine(char* buf, size_t maxCount, const String& delim)
 	{
 		// Deal with both Unix & Windows LFs
@@ -129,7 +126,7 @@ namespace Echo
 
 		return totalCount;
 	}
-	//-----------------------------------------------------------------------
+
 	size_t DataStream::skipLine(const String& delim)
 	{
 		char tmpBuf[ECHO_STREAM_TEMP_SIZE];
@@ -160,7 +157,7 @@ namespace Echo
 
 		return total;
 	}
-	//-----------------------------------------------------------------------
+
 	String DataStream::getAsString(void)
 	{
 		// Read the entire buffer
@@ -175,7 +172,6 @@ namespace Echo
 		return str;
 	}
 
-	// 获取数据流
 	const void* DataStream::getBuffer()
 	{
 		if (!m_buffer)
@@ -188,13 +184,12 @@ namespace Echo
 		return m_buffer;
 	}
 
-	//-----------------------------------------------------------------------
     void DataStream::readAll( void* buffer )
     {
         seek(0);
         read(buffer, mSize);
     }
-	//-----------------------------------------------------------------------
+
 	MemoryDataStream::MemoryDataStream(void* pMem, size_t size, bool freeOnClose, bool readOnly)
 		: DataStream(static_cast<ui16>(readOnly ? READ : (READ | WRITE)))
 	{
@@ -204,7 +199,7 @@ namespace Echo
 		mFreeOnClose = freeOnClose;
 		EchoAssert(mEnd >= mPos);
 	}
-	//-----------------------------------------------------------------------
+
 	MemoryDataStream::MemoryDataStream(const String& name, void* pMem, size_t size, 
 		bool freeOnClose, bool readOnly)
 		: DataStream(name, static_cast<ui16>(readOnly ? READ : (READ | WRITE)))
@@ -215,7 +210,7 @@ namespace Echo
 		mFreeOnClose = freeOnClose;
 		EchoAssert(mEnd >= mPos);
 	}
-	//-----------------------------------------------------------------------
+
 	MemoryDataStream::MemoryDataStream(DataStream& sourceStream, 
 		bool freeOnClose, bool readOnly)
 		: DataStream(static_cast<ui16>(readOnly ? READ : (READ | WRITE)))
@@ -228,7 +223,7 @@ namespace Echo
 		mFreeOnClose = freeOnClose;
 		EchoAssert(mEnd >= mPos);
 	}
-	//-----------------------------------------------------------------------
+
 	MemoryDataStream::MemoryDataStream(DataStream* sourceStream, 
 		bool freeOnClose, bool readOnly)
 		: DataStream(static_cast<ui16>(readOnly ? READ : (READ | WRITE)))
@@ -241,7 +236,7 @@ namespace Echo
 		mFreeOnClose = freeOnClose;
 		EchoAssert(mEnd >= mPos);
 	}
-	//-----------------------------------------------------------------------
+
 	MemoryDataStream::MemoryDataStream(const String& name, DataStream& sourceStream, 
 		bool freeOnClose, bool readOnly)
 		: DataStream(name, static_cast<ui8>(readOnly ? READ : (READ | WRITE)))
@@ -254,7 +249,7 @@ namespace Echo
 		mFreeOnClose = freeOnClose;
 		EchoAssert(mEnd >= mPos);
 	}
-	//-----------------------------------------------------------------------
+
 	MemoryDataStream::MemoryDataStream(const String& name, DataStream* sourceStream, 
 		bool freeOnClose, bool readOnly)
 		: DataStream(name, static_cast<ui16>(readOnly ? READ : (READ | WRITE)))
@@ -267,7 +262,7 @@ namespace Echo
 		mFreeOnClose = freeOnClose;
 		EchoAssert(mEnd >= mPos);
 	}
-	//-----------------------------------------------------------------------
+
 	MemoryDataStream::MemoryDataStream(size_t size, bool freeOnClose, bool readOnly)
 		: DataStream(static_cast<ui16>(readOnly ? READ : (READ | WRITE)))
 	{
@@ -278,7 +273,7 @@ namespace Echo
 		mEnd = mData + mSize;
 		EchoAssert(mEnd >= mPos);
 	}
-	//-----------------------------------------------------------------------
+
 	MemoryDataStream::MemoryDataStream(const String& name, size_t size, 
 		bool freeOnClose, bool readOnly)
 		: DataStream(name, static_cast<ui16>(readOnly ? READ : (READ | WRITE)))
@@ -290,12 +285,12 @@ namespace Echo
 		mEnd = mData + mSize;
 		EchoAssert(mEnd >= mPos);
 	}
-	//-----------------------------------------------------------------------
+
 	MemoryDataStream::~MemoryDataStream()
 	{
 		close();
 	}
-	//-----------------------------------------------------------------------
+
 	size_t MemoryDataStream::read(void* buf, size_t count)
 	{
 		size_t cnt = count;
@@ -311,7 +306,7 @@ namespace Echo
 		mPos += cnt;
 		return cnt;
 	}
-	//---------------------------------------------------------------------
+
 	size_t MemoryDataStream::write(const void* buf, size_t count)
 	{
 		size_t written = 0;
@@ -330,7 +325,7 @@ namespace Echo
 		}
 		return written;
 	}
-	//-----------------------------------------------------------------------
+
 	size_t MemoryDataStream::readLine(char* buf, size_t maxCount, 
 		const String& delim)
 	{
@@ -368,7 +363,7 @@ namespace Echo
 
 		return pos;
 	}
-	//-----------------------------------------------------------------------
+
 	size_t MemoryDataStream::skipLine(const String& delim)
 	{
 		size_t pos = 0;
@@ -387,7 +382,7 @@ namespace Echo
 		return pos;
 
 	}
-	//-----------------------------------------------------------------------
+
 	void MemoryDataStream::skip(long count)
 	{
 		size_t newpos = (size_t)( ( mPos - mData ) + count );
@@ -395,7 +390,7 @@ namespace Echo
 
 		mPos = mData + newpos;
 	}
-	//-----------------------------------------------------------------------
+
 	void MemoryDataStream::seek(size_t pos, int origin)
 	{
 		if (origin == SEEK_END)
@@ -409,18 +404,18 @@ namespace Echo
 			mPos = mData + pos;
 		}
 	}
-	//-----------------------------------------------------------------------
+
 	size_t MemoryDataStream::tell(void) const
 	{
 		//mData is start, mPos is current location
 		return mPos - mData;
 	}
-	//-----------------------------------------------------------------------
+
 	bool MemoryDataStream::eof(void) const
 	{
 		return mPos >= mEnd;
 	}
-	//-----------------------------------------------------------------------
+
 	void MemoryDataStream::close(void)    
 	{
 		if (mFreeOnClose && mData)
@@ -429,8 +424,7 @@ namespace Echo
 		}
 
 	}
-	//-----------------------------------------------------------------------
-	//-----------------------------------------------------------------------
+
 	FileStreamDataStream::FileStreamDataStream(std::ifstream* s, bool freeOnClose)
 		: DataStream(), mpInStream(s), mpFStreamRO(s), mpFStream(0), mFreeOnClose(freeOnClose)
 	{
@@ -440,7 +434,7 @@ namespace Echo
 		mpInStream->seekg(0, std::ios_base::beg);
 		determineAccess();
 	}
-	//-----------------------------------------------------------------------
+
 	FileStreamDataStream::FileStreamDataStream(const String& name, 
 		std::ifstream* s, bool freeOnClose)
 		: DataStream(name), mpInStream(s), mpFStreamRO(s), mpFStream(0), mFreeOnClose(freeOnClose)
@@ -451,7 +445,7 @@ namespace Echo
 		mpInStream->seekg(0, std::ios_base::beg);
 		determineAccess();
 	}
-	//-----------------------------------------------------------------------
+
 	FileStreamDataStream::FileStreamDataStream(const String& name, 
 		std::ifstream* s, size_t size, bool freeOnClose)
 		: DataStream(name), mpInStream(s), mpFStreamRO(s), mpFStream(0), mFreeOnClose(freeOnClose)
@@ -460,7 +454,7 @@ namespace Echo
 		mSize = size;
 		determineAccess();
 	}
-	//---------------------------------------------------------------------
+
 	FileStreamDataStream::FileStreamDataStream(std::fstream* s, bool freeOnClose)
 		: DataStream(false), mpInStream(s), mpFStreamRO(0), mpFStream(s), mFreeOnClose(freeOnClose)
 	{
@@ -472,7 +466,7 @@ namespace Echo
 		determineAccess();
 
 	}
-	//-----------------------------------------------------------------------
+
 	FileStreamDataStream::FileStreamDataStream(const String& name, 
 		std::fstream* s, bool freeOnClose)
 		: DataStream(name, false), mpInStream(s), mpFStreamRO(0), mpFStream(s), mFreeOnClose(freeOnClose)
@@ -484,7 +478,7 @@ namespace Echo
 		mpInStream->seekg(0, std::ios_base::beg);
 		determineAccess();
 	}
-	//-----------------------------------------------------------------------
+
 	FileStreamDataStream::FileStreamDataStream(const String& name, 
 		std::fstream* s, size_t size, bool freeOnClose)
 		: DataStream(name, false), mpInStream(s), mpFStreamRO(0), mpFStream(s), mFreeOnClose(freeOnClose)
@@ -494,7 +488,7 @@ namespace Echo
 		mSize = size;
 		determineAccess();
 	}
-	//---------------------------------------------------------------------
+
 	void FileStreamDataStream::determineAccess()
 	{
 		mAccess = 0;
@@ -503,20 +497,18 @@ namespace Echo
 		if (mpFStream)
 			mAccess |= WRITE;
 	}
-	//-----------------------------------------------------------------------
+
 	FileStreamDataStream::~FileStreamDataStream()
 	{
 		close();
 	}
 
-	// 读数据
 	size_t FileStreamDataStream::read(void* buf, size_t count)
 	{
 		mpInStream->read(static_cast<char*>(buf), static_cast<std::streamsize>(count));
 		return size_t(mpInStream->gcount());
 	}
 
-	// 写数据
 	size_t FileStreamDataStream::write(const void* buf, size_t count)
 	{
 		size_t written = 0;
@@ -527,7 +519,7 @@ namespace Echo
 		}
 		return written;
 	}
-	//-----------------------------------------------------------------------
+
 	size_t FileStreamDataStream::readLine(char* buf, size_t maxCount, const String& delim)
 	{
 		if (delim.empty())
@@ -592,30 +584,30 @@ namespace Echo
 		}
 		return ret;
 	}
-	//-----------------------------------------------------------------------
+
 	void FileStreamDataStream::skip(long count)
 	{
 		mpInStream->clear(); //Clear fail status in case eof was set
 		mpInStream->seekg(static_cast<std::ifstream::pos_type>(count), std::ios::cur);
 	}
-	//-----------------------------------------------------------------------
+
 	void FileStreamDataStream::seek(size_t pos, int origin)
 	{
 		mpInStream->clear(); //Clear fail status in case eof was set
 		mpInStream->seekg(static_cast<std::streamoff>(pos), origin == SEEK_SET ? std::ios::beg:std::ios::end);
 	}
-	//-----------------------------------------------------------------------
+
 	size_t FileStreamDataStream::tell(void) const
 	{
 		mpInStream->clear(); //Clear fail status in case eof was set
 		return size_t(mpInStream->tellg());
 	}
-	//-----------------------------------------------------------------------
+
 	bool FileStreamDataStream::eof(void) const
 	{
 		return mpInStream->eof();
 	}
-	//-----------------------------------------------------------------------
+
 	void FileStreamDataStream::close(void)
 	{
 		if (mpInStream)
@@ -643,7 +635,6 @@ namespace Echo
 		}
 	}
 
-	// 构造函数
 	FileHandleDataStream::FileHandleDataStream(const String& name, ui16 accessMode)
 		: DataStream(name, accessMode)
 	{
@@ -668,17 +659,17 @@ namespace Echo
 			EchoLogError( "FileHandleDataStream fopen [%s] failed", name.c_str());
 		}
 	}
-	//-----------------------------------------------------------------------
+
 	FileHandleDataStream::~FileHandleDataStream()
 	{
 		close();
 	}
-	//-----------------------------------------------------------------------
+
 	size_t FileHandleDataStream::read(void* buf, size_t count)
 	{
 		return fread(buf, 1, count, mFileHandle);
 	}
-	//-----------------------------------------------------------------------
+
 	size_t FileHandleDataStream::write(const void* buf, size_t count)
 	{
 		if (!isWriteable())
@@ -686,28 +677,27 @@ namespace Echo
 		else
 			return fwrite(buf, 1, count, mFileHandle);
 	}
-	//---------------------------------------------------------------------
-	//-----------------------------------------------------------------------
+
 	void FileHandleDataStream::skip(long count)
 	{
 		fseek(mFileHandle, count, SEEK_CUR);
 	}
-	//-----------------------------------------------------------------------
+
 	void FileHandleDataStream::seek(size_t pos, int origin)
 	{
 		fseek(mFileHandle, static_cast<long>(pos), origin);
 	}
-	//-----------------------------------------------------------------------
+
 	size_t FileHandleDataStream::tell(void) const
 	{
 		return ftell( mFileHandle );
 	}
-	//-----------------------------------------------------------------------
+
 	bool FileHandleDataStream::eof(void) const
 	{
 		return feof(mFileHandle) != 0;
 	}
-	//-----------------------------------------------------------------------
+
 	void FileHandleDataStream::close(void)
 	{
 		if (mFileHandle != 0)
@@ -760,7 +750,6 @@ namespace Echo
 		m_size = 0;
 	}
 
-	// 构造函数
 	MemoryReaderAlign::MemoryReaderAlign(const String& file, int align)
 	{
 		// 加载数据
@@ -783,7 +772,6 @@ namespace Echo
 		}
 	}
 
-	// 析构函数
 	MemoryReaderAlign::~MemoryReaderAlign()
 	{
 		EchoSafeFree(m_data);

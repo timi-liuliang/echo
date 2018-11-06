@@ -5,6 +5,7 @@
 
 namespace Echo
 {
+#ifdef ECHO_EDITOR_MODE
 	static map<String, ObjectEditorFactory*>::type	g_objEditorFactorys;
 
 	ObjectEditor::ObjectEditor(Object* object)
@@ -40,4 +41,5 @@ namespace Echo
 
 		return nullptr;
 	}
+#endif
 }

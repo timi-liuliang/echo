@@ -1,6 +1,6 @@
 #pragma once
 
-#include <engine/core/Base/TypeDef.h>
+#include <engine/core/Base/type_def.h>
 #include <freeimage/FreeImage.h>
 #include <engine/core/util/StringUtil.h>
 #include <engine/core/math/color.h>
