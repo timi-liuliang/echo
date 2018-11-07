@@ -24,9 +24,19 @@ namespace Echo
 
 	void QMessageHandler::bind(QWidget* sender, const char* signal, void* receiver, ClassMethodBind* slot)
 	{
-		Echo::String signalName = Echo::StringUtil::Format("%p:%s", &sender, signal);
-		signalName = Echo::StringUtil::Substr(signalName, "(");
-		m_connects[signalName] = Connect((Object*)receiver, slot);
+		auto it = m_connects.find( sender);
+		if (it != m_connects.end())
+		{
+			it->second.push_back(Connect( signal, (Object*)receiver, slot));
+		}
+		else
+		{
+			ConnectArray connects;
+			connects.push_back(Connect(signal, (Object*)receiver, slot));
+			m_connects[sender] = connects;
+
+			QObject::connect(sender, SIGNAL(destroyed()), this, SLOT(onDestroyWidget()));
+		}
 	}
 
 	void QMessageHandler::onReceiveMessage()
@@ -35,18 +45,32 @@ namespace Echo
 		if (sd)
 		{
 			int index = senderSignalIndex();
-			Echo::String signal = sd->metaObject()->method(index).methodSignature().toStdString().c_str();
-
-			Echo::String signalName = Echo::StringUtil::Format("%p:%s", &sd, signal.c_str());
-			signalName = Echo::StringUtil::Substr(signalName, "(");
-			auto it = m_connects.find(signalName);
+			Echo::String signal = String("2") + sd->metaObject()->method(index).methodSignature().toStdString().c_str();
+			auto it = m_connects.find((QWidget*)sd);
 			if(it!=m_connects.end())
 			{
-				Echo::Variant::CallError error;
-				Echo::Object* receiver = (Object*)it->second.m_receiver;
-				Echo::ClassMethodBind* method = it->second.m_method;
-				method->call(receiver, nullptr, 0, error);
+				ConnectArray& connectArray = it->second;
+				for (Connect& conn : connectArray)
+				{
+					if (Echo::StringUtil::Substr(signal, "(") == Echo::StringUtil::Substr(conn.m_signal, "("))
+					{
+						Echo::Variant::CallError error;
+						Echo::Object* receiver = (Object*)conn.m_receiver;
+						Echo::ClassMethodBind* method = conn.m_method;
+						method->call(receiver, nullptr, 0, error);
+					}
+				}
 			}
+		}
+	}
+
+	// on widget destroy
+	void QMessageHandler::onDestroyWidget()
+	{
+		auto it = m_connects.find((QWidget*)sender());
+		if (it != m_connects.end())
+		{
+			m_connects.erase(it);
 		}
 	}
 }

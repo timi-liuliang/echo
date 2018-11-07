@@ -15,6 +15,7 @@ namespace Echo
 		// Connect
 		struct Connect
 		{
+			String				m_signal;
 			void*				m_receiver;
 			ClassMethodBind*	m_method;
 
@@ -23,11 +24,13 @@ namespace Echo
 				, m_method(nullptr)
 			{}
 
-			Connect(void* receiver, ClassMethodBind* method)
-				: m_receiver(receiver)
+			Connect( const char* signal, void* receiver, ClassMethodBind* method)
+				: m_signal(signal)
+				, m_receiver(receiver)
 				, m_method(method)
 			{}
 		};
+		typedef vector<Connect>::type ConnectArray;
 
 	public:
 		QMessageHandler(QWidget* parent = 0);
@@ -43,7 +46,10 @@ namespace Echo
 		// on receive message
 		void onReceiveMessage();
 
+		// on widget destroy
+		void onDestroyWidget();
+
 	private:
-		map<String, Connect>::type		m_connects;
+		map<QWidget*, ConnectArray>::type		m_connects;
 	};
 }
