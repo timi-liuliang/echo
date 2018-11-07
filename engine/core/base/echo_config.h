@@ -1,4 +1,0 @@
-#define ECHO_EDITOR_MODE
-/* #undef ECHO_PROFILER */
-/* #undef ECHO_RENDER_THREAD */
-/* #undef ECHO_ARCHIVE_SUPPORT_7ZIP */
