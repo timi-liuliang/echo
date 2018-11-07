@@ -9,6 +9,7 @@ namespace Echo
 	{
 		if (sender)
 		{
+			QMessageHandler::instance()->bind( sender, signal, receiver, slot);
 			QObject::connect(sender, signal, QMessageHandler::instance(), SLOT(onReceiveMessage()));
 		}
 	}
