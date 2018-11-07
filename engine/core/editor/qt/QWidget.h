@@ -1,13 +1,18 @@
 #pragma once
 
-#include "engine/core/base/echo_def.h"
+#include "engine/core/base/class_method_bind.h"
 
 #ifdef ECHO_EDITOR_MODE
 
 class QWidget;
 
+# define QSIGNAL(a)  "2"#a
+
 namespace Echo
 {
+	// connect signal slot
+	void qConnect(QWidget* sender, const char* signal, void* receiver, ClassMethodBind* slot);
+
 	// find child widget by name
 	QWidget* qFindChild( QWidget* root, const char* name);
 

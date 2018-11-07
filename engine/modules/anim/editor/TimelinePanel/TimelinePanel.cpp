@@ -2,6 +2,7 @@
 #include "engine/core/editor/qt/QUiLoader.h"
 #include "engine/core/editor/qt/QSplitter.h"
 #include "engine/core/editor/qt/QToolButton.h"
+#include "engine/core/base/class_method_bind.h"
 
 namespace Echo
 {
@@ -27,6 +28,15 @@ namespace Echo
 		qToolButtonSetIcon( qFindChild(m_ui, "NewClip"), "engine/modules/anim/editor/icon/new.png");
 		qToolButtonSetIcon( qFindChild(m_ui, "DuplicateClip"), "engine/modules/anim/editor/icon/duplicate.png");
 		qToolButtonSetIcon( qFindChild(m_ui, "DeleteClip"), "engine/modules/anim/editor/icon/delete.png");
+
+		// connect signal slots
+		qConnect(qFindChild(m_ui, "NewClip"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onNewClip));
+	}
+
+	// on new clip
+	void TimelinePanel::onNewClip()
+	{
+
 	}
 #endif
 }

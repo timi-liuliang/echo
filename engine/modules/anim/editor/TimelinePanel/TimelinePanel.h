@@ -10,6 +10,10 @@ namespace Echo
 	{
 	public:
 		TimelinePanel();
+
+	public:
+		// on new clip
+		void onNewClip();
 	};
 }
 
