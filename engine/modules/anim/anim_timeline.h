@@ -45,6 +45,9 @@ namespace Echo
 		// delete clip
 		void deleteClip(const char* animName);
 
+		// rename clip
+		void renameClip(int idx, const char* newName);
+
 	protected:
 		// update self
 		virtual void update_self() override;

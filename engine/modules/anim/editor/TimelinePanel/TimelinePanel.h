@@ -17,6 +17,7 @@ namespace Echo
 		void onNewClip();
 		void onDuplicateClip();
 		void onDeleteClip();
+		void onRenameClip();
 
 	private:
 		// get new name

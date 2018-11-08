@@ -68,6 +68,12 @@ namespace Echo
 		}
 	}
 
+	void Timeline::renameClip(int idx, const char* newName)
+	{
+		m_clips[idx]->m_name = newName;
+		m_animations.m_options[idx] = newName;
+	}
+
 	void Timeline::update_self()
 	{
 		if (m_animations.isValid())

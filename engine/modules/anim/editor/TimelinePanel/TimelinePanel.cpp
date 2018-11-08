@@ -37,6 +37,7 @@ namespace Echo
 		qConnect(qFindChild(m_ui, "NewClip"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onNewClip));
 		qConnect(qFindChild(m_ui, "DuplicateClip"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onDuplicateClip));
 		qConnect(qFindChild(m_ui, "DeleteClip"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onDeleteClip));
+		qConnect(qFindChild(m_ui, "m_clips"), QSIGNAL(editTextChanged(const QString &)), this, createMethodBind(&TimelinePanel::onRenameClip));
 
 		// update display
 		syncClipDataToEditor();
@@ -88,6 +89,18 @@ namespace Echo
 			{
 				setCurrentEditAnim(m_timeline->getClip(0)->m_name.c_str());
 			}
+		}
+	}
+
+	void TimelinePanel::onRenameClip()
+	{
+		String currentAnimName = qComboBoxCurrentText(qFindChild(m_ui, "m_clips"));
+		if (!currentAnimName.empty() && m_timeline)
+		{
+			int currentIndex = qComboBoxCurrentIndex(qFindChild(m_ui, "m_clips"));
+			m_timeline->renameClip(currentIndex, currentAnimName.c_str());
+
+			qComboBoxSetItemText(qFindChild(m_ui, "m_clips"), currentIndex, currentAnimName.c_str());
 		}
 	}
 

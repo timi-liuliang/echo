@@ -19,6 +19,21 @@ namespace Echo
 		}
 	}
 
+	int qComboBoxCurrentIndex(QWidget* widget)
+	{
+		String result;
+		if (widget)
+		{
+			QComboBox* comboBox = qobject_cast<QComboBox*>(widget);
+			if (comboBox)
+			{
+				return comboBox->currentIndex();
+			}
+		}
+
+		return -1;
+	}
+
 	String qComboBoxCurrentText(QWidget* widget)
 	{
 		String result;
@@ -54,6 +69,18 @@ namespace Echo
 			if (comboBox)
 			{
 				comboBox->setCurrentText(text);
+			}
+		}
+	}
+
+	void qComboBoxSetItemText(QWidget* widget, int index, const char* text)
+	{
+		if (widget)
+		{
+			QComboBox* comboBox = qobject_cast<QComboBox*>(widget);
+			if (comboBox)
+			{
+				comboBox->setItemText(index, text);
 			}
 		}
 	}
