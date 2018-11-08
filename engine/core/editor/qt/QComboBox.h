@@ -11,6 +11,15 @@ namespace Echo
 	// QComboBox->addItem(const QIcon &icon, const QString &text)
 	void qComboBoxAddItem(QWidget* widget, const char* icon, const char* text);
 
+	// QString QComboBox->currentText() const;
+	String qComboBoxCurrentText(QWidget* widget);
+
+	// QComboBox->setCurrentIndex(int index);
+	void qComboBoxSetCurrentIndex(QWidget* widget, int index);
+
+	// QComboBox->setCurrentText(const QString &text);
+	void qComboBoxSetCurrentText(QWidget* widget, const char* text);
+
 	// QComboBox->clear();
 	void qComboBoxClear(QWidget* widget);
 }

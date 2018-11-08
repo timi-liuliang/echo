@@ -40,6 +40,20 @@ namespace Echo
 		}
 	}
 
+	void Timeline::deleteClip(const char* animName)
+	{
+		for (size_t i = 0; i < m_clips.size(); i++)
+		{
+			if (m_clips[i]->m_name == animName)
+			{
+				m_clips.erase(m_clips.begin() + i);
+				m_animations.removeOption(animName);
+
+				break;
+			}
+		}
+	}
+
 	void Timeline::update_self()
 	{
 		if (m_animations.isValid())
@@ -66,7 +80,7 @@ namespace Echo
 
 	void Timeline::generateUniqueAnimName(String& oName)
 	{
-		char name[128] = "anim_";
+		char name[128] = "Anim ";
 		for (i32 i = 0; i < 65535; i++)
 		{
             sprintf(name+5, "%d", i);

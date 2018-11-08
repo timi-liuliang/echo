@@ -25,6 +25,9 @@ namespace Echo
 		// sync clip data to editor
 		void syncClipDataToEditor();
 
+		// set current edit anim
+		void setCurrentEditAnim(const char* animName);
+
 	protected:
 		Timeline*		m_timeline;
 	};

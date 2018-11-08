@@ -52,6 +52,9 @@ namespace Echo
 			m_timeline->addClip(animClip);
 
 			syncClipDataToEditor();
+
+			// set current edit anim clip
+			setCurrentEditAnim(animClip->m_name.c_str());
 		}
 	}
 
@@ -62,7 +65,18 @@ namespace Echo
 
 	void TimelinePanel::onDeleteClip()
 	{
+		String currentAnim = qComboBoxCurrentText(qFindChild(m_ui, "m_clips"));
+		if (!currentAnim.empty() && m_timeline)
+		{
+			m_timeline->deleteClip(currentAnim.c_str());
 
+			syncClipDataToEditor();
+
+			if (m_timeline->getClipCount() > 0)
+			{
+				setCurrentEditAnim(m_timeline->getClip(0)->m_name.c_str());
+			}
+		}
 	}
 
 	String TimelinePanel::getNewClipName()
@@ -93,6 +107,16 @@ namespace Echo
 					qComboBoxAddItem(comboBox, nullptr, animName.c_str());
 				}
 			}
+		}
+	}
+
+	// set current edit anim
+	void TimelinePanel::setCurrentEditAnim(const char* animName)
+	{
+		QWidget* comboBox = qFindChild(m_ui, "m_clips");
+		if (comboBox)
+		{
+			qComboBoxSetCurrentText( comboBox, animName);
 		}
 	}
 

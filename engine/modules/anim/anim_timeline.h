@@ -30,8 +30,17 @@ namespace Echo
 		void setAnimData(const Base64String& data) { m_animData = data; }
 
 	public:
+		// clip count
+		int  getClipCount() const { return static_cast<int>(m_clips.size()); }
+
+		// get clip by index
+		AnimClip* getClip(int idx) { return m_clips[idx]; }
+
 		// add clip
 		void addClip(AnimClip* clip);
+
+		// delete clip
+		void deleteClip(const char* animName);
 
 	protected:
 		// update self

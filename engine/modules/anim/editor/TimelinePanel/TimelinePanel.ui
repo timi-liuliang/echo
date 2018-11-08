@@ -164,7 +164,7 @@
       <item>
        <widget class="QToolButton" name="NewClip">
         <property name="toolTip">
-         <string extracomment="New Clip">New Clip</string>
+         <string extracomment="New Clip">New Animation</string>
         </property>
         <property name="statusTip">
          <string/>
@@ -177,7 +177,7 @@
       <item>
        <widget class="QToolButton" name="DuplicateClip">
         <property name="toolTip">
-         <string>Duplicate Clip</string>
+         <string>Duplicate Animation</string>
         </property>
         <property name="text">
          <string>...</string>
@@ -187,7 +187,7 @@
       <item>
        <widget class="QToolButton" name="DeleteClip">
         <property name="toolTip">
-         <string>Delete Clip</string>
+         <string>Delete Animation</string>
         </property>
         <property name="text">
          <string>...</string>

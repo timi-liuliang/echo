@@ -49,4 +49,18 @@ namespace Echo
 
 		return false;
 	}
+
+	void StringOption::removeOption(const String& option)
+	{
+		for (size_t i = 0; i < m_options.size(); i++)
+		{
+			if (m_options[i] == option)
+			{
+				m_options.erase(m_options.begin() + i);
+				m_index = std::min<size_t>( m_index, m_options.size());
+				
+				break;
+			}
+		}
+	}
 }
