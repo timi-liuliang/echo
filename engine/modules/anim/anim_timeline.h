@@ -36,6 +36,9 @@ namespace Echo
 		// get clip by index
 		AnimClip* getClip(int idx) { return m_clips[idx]; }
 
+		// get clip by name
+		AnimClip* getClip(const char* animName);
+
 		// add clip
 		void addClip(AnimClip* clip);
 
@@ -48,7 +51,7 @@ namespace Echo
 
 	public:
 		// generate unique name
-		void generateUniqueAnimName(String& oName);
+		void generateUniqueAnimName(const String& prefix, String& oName);
 
 	private:
 		Base64String			m_animData;

@@ -32,5 +32,8 @@ namespace Echo
 
 		// optimize
 		void optimize();
+
+		// duplicate
+		AnimClip* duplicate();
 	};
 }

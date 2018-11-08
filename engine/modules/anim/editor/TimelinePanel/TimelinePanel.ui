@@ -155,7 +155,7 @@
        <widget class="QComboBox" name="m_clips">
         <property name="minimumSize">
          <size>
-          <width>120</width>
+          <width>145</width>
           <height>0</height>
          </size>
         </property>

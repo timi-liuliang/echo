@@ -33,11 +33,25 @@ namespace Echo
 		if (clip)
 		{
 			if (clip->m_name.empty())
-				generateUniqueAnimName(clip->m_name);
+				generateUniqueAnimName("Anim ", clip->m_name);
 
 			m_clips.push_back(clip);
 			m_animations.addOption(clip->m_name);
 		}
+	}
+
+	// get clip by name
+	AnimClip* Timeline::getClip(const char* animName)
+	{
+		for (size_t i = 0; i < m_clips.size(); i++)
+		{
+			if (m_clips[i]->m_name == animName)
+			{
+				return m_clips[i];
+			}
+		}
+
+		return nullptr;
 	}
 
 	void Timeline::deleteClip(const char* animName)
@@ -78,13 +92,12 @@ namespace Echo
 		return false;
 	}
 
-	void Timeline::generateUniqueAnimName(String& oName)
+	void Timeline::generateUniqueAnimName(const String& prefix, String& oName)
 	{
-		char name[128] = "Anim ";
 		for (i32 i = 0; i < 65535; i++)
 		{
-            sprintf(name+5, "%d", i);
-			if (!isAnimExist(name))
+			String name = StringUtil::Format("%s%d", prefix.c_str(), i);
+			if (!isAnimExist(name.c_str()))
 			{
 				oName = name;
 				break;

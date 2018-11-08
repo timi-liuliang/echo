@@ -60,7 +60,19 @@ namespace Echo
 
 	void TimelinePanel::onDuplicateClip()
 	{
+		String currentAnim = qComboBoxCurrentText(qFindChild(m_ui, "m_clips"));
+		if (!currentAnim.empty() && m_timeline)
+		{
+			AnimClip* animClip = m_timeline->getClip(currentAnim.c_str());
+			AnimClip* animClipDuplicate = animClip->duplicate();
+			m_timeline->generateUniqueAnimName(currentAnim + " Duplicate ", animClipDuplicate->m_name);
+			m_timeline->addClip(animClipDuplicate);
 
+			syncClipDataToEditor();
+
+			// set current edit anim clip
+			setCurrentEditAnim(animClipDuplicate->m_name.c_str());
+		}
 	}
 
 	void TimelinePanel::onDeleteClip()
@@ -84,7 +96,7 @@ namespace Echo
 		if (m_timeline)
 		{
 			Echo::String newName;
-			m_timeline->generateUniqueAnimName(newName);
+			m_timeline->generateUniqueAnimName("Anim ", newName);
 			return newName;
 		}
 

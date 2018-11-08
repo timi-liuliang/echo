@@ -27,4 +27,11 @@ namespace Echo
 			}
 		}
 	}
+
+	// duplicate
+	AnimClip* AnimClip::duplicate()
+	{
+		AnimClip* animClip = EchoNew(AnimClip);
+		return animClip;
+	}
 }
