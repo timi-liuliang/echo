@@ -4,6 +4,18 @@
 
 namespace Echo
 {
+	void qToolButtonSetFixedWidth(QWidget* button, int width)
+	{
+		if (button)
+		{
+			QToolButton* toolButton = qobject_cast<QToolButton*>(button);
+			if (toolButton)
+			{
+				toolButton->setFixedWidth(width);
+			}
+		}
+	}
+
 	void qToolButtonSetIcon(QWidget* button, const char* iconPath)
 	{
 		if (button)
