@@ -6,14 +6,25 @@
 
 namespace Echo
 {
+	class Timeline;
 	class TimelinePanel : public BottomPanelTab
 	{
 	public:
-		TimelinePanel();
+		TimelinePanel(Object* obj);
 
 	public:
 		// on new clip
 		void onNewClip();
+
+	private:
+		// get new name
+		String getNewClipName();
+
+		// sync clip data to editor
+		void syncClipDataToEditor();
+
+	protected:
+		Timeline*		m_timeline;
 	};
 }
 

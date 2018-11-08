@@ -8,7 +8,7 @@ namespace Echo
 		: ObjectEditor(object)
 		, m_timelinePanel(nullptr)
 	{
-		m_timelinePanel = EchoNew(TimelinePanel);
+		m_timelinePanel = EchoNew(TimelinePanel(object));
 	}
 
 	TimelineEditor::~TimelineEditor()

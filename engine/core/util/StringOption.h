@@ -27,7 +27,7 @@ namespace Echo
 		void addOption(const String& option) { m_options.push_back(option); }
 
 		// get options
-		const StringArray& getOptions() { return m_options; }
+		const StringArray& getOptions() const { return m_options; }
 
 		// get options str
 		const String getOptionsStr() const { return StringUtil::ToString(m_options, ","); }

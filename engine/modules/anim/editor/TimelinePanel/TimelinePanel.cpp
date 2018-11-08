@@ -2,13 +2,17 @@
 #include "engine/core/editor/qt/QUiLoader.h"
 #include "engine/core/editor/qt/QSplitter.h"
 #include "engine/core/editor/qt/QToolButton.h"
+#include "engine/core/editor/qt/QComboBox.h"
 #include "engine/core/base/class_method_bind.h"
+#include "../../anim_timeline.h"
 
 namespace Echo
 {
 #ifdef ECHO_EDITOR_MODE
-	TimelinePanel::TimelinePanel()
+	TimelinePanel::TimelinePanel(Object* obj)
 	{
+		m_timeline = ECHO_DOWN_CAST<Timeline*>(obj);
+
 		m_ui = qLoadUi("engine/modules/anim/editor/TimelinePanel/TimelinePanel.ui");
 
 		QWidget* splitter = qFindChild(m_ui, "m_splitter");
@@ -31,12 +35,60 @@ namespace Echo
 
 		// connect signal slots
 		qConnect(qFindChild(m_ui, "NewClip"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onNewClip));
+
+		// update display
+		syncClipDataToEditor();
 	}
 
 	// on new clip
 	void TimelinePanel::onNewClip()
 	{
+		if (m_timeline)
+		{
+			AnimClip* animClip = EchoNew(AnimClip);
+			animClip->m_name = getNewClipName();
+			m_timeline->addClip(animClip);
 
+			syncClipDataToEditor();
+		}
 	}
+
+	// get new name
+	String TimelinePanel::getNewClipName()
+	{
+		if (m_timeline)
+		{
+			for (int i = 0; i < 65535; i++)
+			{
+				String name = StringUtil::Format("NewClip%d", i);
+				if (!m_timeline->isAnimExist(name.c_str()))
+				{
+					return name;
+				}
+			}
+		}
+
+		return StringUtil::BLANK;
+	}
+
+	// sync clip data to editor
+	void TimelinePanel::syncClipDataToEditor()
+	{
+		if (m_timeline)
+		{
+			QWidget* comboBox = qFindChild(m_ui, "m_clips");
+			if (comboBox)
+			{
+				qComboBoxClear(comboBox);
+
+				const StringOption& anims = m_timeline->getAnim();
+				for (const String& animName : anims.getOptions())
+				{
+					qComboBoxAddItem(comboBox, nullptr, animName.c_str());
+				}
+			}
+		}
+	}
+
 #endif
 }
