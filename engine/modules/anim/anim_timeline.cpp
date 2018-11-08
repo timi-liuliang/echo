@@ -40,15 +40,26 @@ namespace Echo
 		}
 	}
 
-	// get clip by name
-	AnimClip* Timeline::getClip(const char* animName)
+	int Timeline::getClipIndex(const char* animName)
 	{
 		for (size_t i = 0; i < m_clips.size(); i++)
 		{
 			if (m_clips[i]->m_name == animName)
 			{
-				return m_clips[i];
+				return (int)i;
 			}
+		}
+
+		return -1;
+	}
+
+	// get clip by name
+	AnimClip* Timeline::getClip(const char* animName)
+	{
+		int index = getClipIndex(animName);
+		if (index != -1)
+		{
+			return m_clips[index];
 		}
 
 		return nullptr;

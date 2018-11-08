@@ -141,7 +141,8 @@ namespace Echo
 		QWidget* comboBox = qFindChild(m_ui, "m_clips");
 		if (comboBox)
 		{
-			qComboBoxSetCurrentText( comboBox, animName);
+			int index = m_timeline->getClipIndex(animName);
+			qComboBoxSetCurrentIndex( comboBox, index);
 		}
 	}
 

@@ -39,6 +39,9 @@ namespace Echo
 		// get clip by name
 		AnimClip* getClip(const char* animName);
 
+		// get clip index
+		int getClipIndex(const char* animName);
+
 		// add clip
 		void addClip(AnimClip* clip);
 
