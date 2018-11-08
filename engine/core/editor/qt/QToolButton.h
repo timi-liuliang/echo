@@ -13,6 +13,9 @@ namespace Echo
 
 	// set tool button icon
 	void qToolButtonSetIcon(QWidget* button, const char* iconPath);
+
+	// set icon size
+	void qToolButtonSetIconSize(QWidget* widget, int width, int height);
 }
 
 #endif

@@ -29,7 +29,7 @@ namespace Echo
 		qToolButtonSetIcon(qFindChild(m_ui, "Restart"), "engine/modules/anim/editor/icon/replay.png");
 
 		// set fixed width of add toolbutton
-		qToolButtonSetFixedWidth(qFindChild(m_ui, "AddNode"), 100);
+		qToolButtonSetIconSize(qFindChild(m_ui, "AddNode"), 24, 24);
 
 		// set toolbuttons icons
 		qToolButtonSetIcon( qFindChild(m_ui, "NewClip"), "engine/modules/anim/editor/icon/new.png");

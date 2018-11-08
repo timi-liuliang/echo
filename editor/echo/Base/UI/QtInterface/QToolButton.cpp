@@ -28,4 +28,17 @@ namespace Echo
 			}
 		}
 	}
+
+	// set icon size
+	void qToolButtonSetIconSize(QWidget* widget, int width, int height)
+	{
+		if (widget)
+		{
+			QToolButton* toolButton = qobject_cast<QToolButton*>(widget);
+			if (toolButton)
+			{
+				toolButton->setIconSize(QSize(width, height));
+			}
+		}
+	}
 }
