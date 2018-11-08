@@ -42,6 +42,8 @@ namespace Echo
 		qConnect(qFindChild(m_ui, "DeleteClip"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onDeleteClip));
 		qConnect(qFindChild(m_ui, "m_clips"), QSIGNAL(editTextChanged(const QString &)), this, createMethodBind(&TimelinePanel::onRenameClip));
 
+		qConnect(qFindChild(m_ui, "AddNode"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onAddObject));
+
 		// update display
 		syncClipDataToEditor();
 	}
@@ -105,6 +107,11 @@ namespace Echo
 
 			qComboBoxSetItemText(qFindChild(m_ui, "m_clips"), currentIndex, currentAnimName.c_str());
 		}
+	}
+
+	void TimelinePanel::onAddObject()
+	{
+		int  a = 0;
 	}
 
 	String TimelinePanel::getNewClipName()

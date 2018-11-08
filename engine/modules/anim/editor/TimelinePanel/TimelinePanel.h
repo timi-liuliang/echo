@@ -19,6 +19,9 @@ namespace Echo
 		void onDeleteClip();
 		void onRenameClip();
 
+		// anim operate
+		void onAddObject();
+
 	private:
 		// get new name
 		String getNewClipName();
