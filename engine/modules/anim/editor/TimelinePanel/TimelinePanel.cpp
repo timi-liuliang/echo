@@ -35,6 +35,8 @@ namespace Echo
 
 		// connect signal slots
 		qConnect(qFindChild(m_ui, "NewClip"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onNewClip));
+		qConnect(qFindChild(m_ui, "DuplicateClip"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onDuplicateClip));
+		qConnect(qFindChild(m_ui, "DeleteClip"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onDeleteClip));
 
 		// update display
 		syncClipDataToEditor();
@@ -53,19 +55,23 @@ namespace Echo
 		}
 	}
 
-	// get new name
+	void TimelinePanel::onDuplicateClip()
+	{
+
+	}
+
+	void TimelinePanel::onDeleteClip()
+	{
+
+	}
+
 	String TimelinePanel::getNewClipName()
 	{
 		if (m_timeline)
 		{
-			for (int i = 0; i < 65535; i++)
-			{
-				String name = StringUtil::Format("NewClip%d", i);
-				if (!m_timeline->isAnimExist(name.c_str()))
-				{
-					return name;
-				}
-			}
+			Echo::String newName;
+			m_timeline->generateUniqueAnimName(newName);
+			return newName;
 		}
 
 		return StringUtil::BLANK;

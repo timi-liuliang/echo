@@ -13,8 +13,10 @@ namespace Echo
 		TimelinePanel(Object* obj);
 
 	public:
-		// on new clip
+		// clip operate slots
 		void onNewClip();
+		void onDuplicateClip();
+		void onDeleteClip();
 
 	private:
 		// get new name

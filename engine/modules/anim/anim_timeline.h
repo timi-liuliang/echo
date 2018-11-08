@@ -37,9 +37,9 @@ namespace Echo
 		// update self
 		virtual void update_self() override;
 
-	private:
+	public:
 		// generate unique name
-		void generateUniqueName(String& oName);
+		void generateUniqueAnimName(String& oName);
 
 	private:
 		Base64String			m_animData;

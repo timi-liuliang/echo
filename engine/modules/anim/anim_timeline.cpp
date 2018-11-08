@@ -33,7 +33,7 @@ namespace Echo
 		if (clip)
 		{
 			if (clip->m_name.empty())
-				generateUniqueName(clip->m_name);
+				generateUniqueAnimName(clip->m_name);
 
 			m_clips.push_back(clip);
 			m_animations.addOption(clip->m_name);
@@ -64,7 +64,7 @@ namespace Echo
 		return false;
 	}
 
-	void Timeline::generateUniqueName(String& oName)
+	void Timeline::generateUniqueAnimName(String& oName)
 	{
 		char name[128] = "anim_";
 		for (i32 i = 0; i < 65535; i++)
