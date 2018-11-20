@@ -34,6 +34,8 @@ namespace Echo
 
 	protected:
 		Timeline*		m_timeline;
+		QWidget*		m_addObjectMenu;
+		QAction*		m_addNodeAction;
 	};
 }
 

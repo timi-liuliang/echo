@@ -223,6 +223,21 @@
     </widget>
    </item>
   </layout>
+  <action name="m_actionAddNode">
+   <property name="text">
+    <string>Add Node</string>
+   </property>
+  </action>
+  <action name="m_actionAddSetting">
+   <property name="text">
+    <string>Add Setting</string>
+   </property>
+  </action>
+  <action name="m_actionAddResource">
+   <property name="text">
+    <string>Add Resource</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

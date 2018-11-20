@@ -3,6 +3,7 @@
 #include "engine/core/editor/qt/QSplitter.h"
 #include "engine/core/editor/qt/QToolButton.h"
 #include "engine/core/editor/qt/QComboBox.h"
+#include "engine/core/editor/qt/QMenu.h"
 #include "engine/core/base/class_method_bind.h"
 #include "../../anim_timeline.h"
 
@@ -10,6 +11,7 @@ namespace Echo
 {
 #ifdef ECHO_EDITOR_MODE
 	TimelinePanel::TimelinePanel(Object* obj)
+		: m_addObjectMenu(nullptr)
 	{
 		m_timeline = ECHO_DOWN_CAST<Timeline*>(obj);
 
@@ -48,7 +50,6 @@ namespace Echo
 		syncClipDataToEditor();
 	}
 
-	// on new clip
 	void TimelinePanel::onNewClip()
 	{
 		if (m_timeline)
@@ -111,7 +112,16 @@ namespace Echo
 
 	void TimelinePanel::onAddObject()
 	{
-		int  a = 0;
+		if (!m_addObjectMenu)
+		{
+			m_addObjectMenu = qMenuNew(m_ui);
+
+			qMenuAddAction(m_addObjectMenu, qFindChildAction(m_ui, "m_actionAddNode"));
+			qMenuAddAction(m_addObjectMenu, qFindChildAction(m_ui, "m_actionAddSetting"));
+			qMenuAddAction(m_addObjectMenu, qFindChildAction(m_ui, "m_actionAddResource"));
+		}
+
+		qMenuExec(m_addObjectMenu);
 	}
 
 	String TimelinePanel::getNewClipName()

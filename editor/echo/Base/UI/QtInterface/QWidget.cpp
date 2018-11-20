@@ -20,6 +20,12 @@ namespace Echo
 		return widget;
 	}
 
+	QAction* qFindChildAction(QWidget* root, const char* name)
+	{
+		QAction* action = root->findChild<QAction*>(name);
+		return action;
+	}
+
 	void qDeleteWidget(QWidget*& widget)
 	{
 		if (widget)

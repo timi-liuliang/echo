@@ -5,6 +5,7 @@
 #ifdef ECHO_EDITOR_MODE
 
 class QWidget;
+class QAction;
 
 # define QSIGNAL(a)  "2"#a
 
@@ -15,6 +16,9 @@ namespace Echo
 
 	// find child widget by name
 	QWidget* qFindChild( QWidget* root, const char* name);
+
+	// find child action by name
+	QAction* qFindChildAction(QWidget* root, const char* name);
 
 	// delete QWidget
 	void qDeleteWidget(QWidget*& widget);
