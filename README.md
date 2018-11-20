@@ -54,7 +54,7 @@ If you really like other types of script language, you can tell us, or you can s
 Most of the engine's Functionality was implemented by configurable modules. that means when you release your app, you can just choose the module you really need. which makes your app have smaller size and more efficiency running speed.
 
 ### Animate Everything   
-With Timeline, You can animate everything. You can not only animate Object's(Node, Setting, Res) any property. But also can call Object's any function.
+With Timeline, You can animate everything. You can not only animate any Object's(Node, Setting, Res) any property. But also you can call any Object's any function.
 
 ### Open Source  
 Echo is licensed under MIT license. You can just do what you want as your wish.
