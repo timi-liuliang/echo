@@ -44,7 +44,8 @@ gLtf2.0, Vulkan, Pbr, Real time ray tracing.
 Every node can be 2d or 3d. The core difference is the camera and the unit the node use. So you can just switch a node to 2d or 3d easily. 
 
 ### Easy To Program  
-Mostly, you'll use Lua as your main programming language. and also you can use c++ directly. the design of node tree makes the Lua logic code more easy to write. and the embedded Lua editor and embedded document help you write code just in the echo editor.
+Mostly, you'll use Lua as your main programming language. and also you can use c++ directly. the design of node tree makes the Lua logic code more easy to write. and the embedded Lua editor and embedded document help you write code just in the echo editor.   
+Except for Lua, You can also choose use embedded Scratch as the main development language. Which is a type of visual script inspired by [MIT](https://scratch.mit.edu/).  In the echo, Scratch is based on Lua, when running the app, It'll convert to Lua, Make sure it's good both at code merge and running efficiency.   
 If you really like other types of script language, you can tell us, or you can support it by modifying the c++ code directly.
 
 ![](https://media.githubusercontent.com/media/blab-liuliang/echo-download/master/images/intro/echo1.png)   
