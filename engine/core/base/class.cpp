@@ -216,7 +216,7 @@ namespace Echo
 			}
 		}
 
-		return propertys.size();
+		return static_cast<ui32>(propertys.size());
 	}
 
 	// get property

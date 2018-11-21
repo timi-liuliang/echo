@@ -70,7 +70,7 @@ def compile_release() :
 
     # Compile
 	vs_env = os.environ.get('VS150COMNTOOLS') + "../IDE/devenv.com"
-	subprocess.call( vs_env + " echo.sln /Build \"Release|Win32\"")
+	subprocess.call( vs_env + " echo.sln /Build \"Release\"")
 
 	return
 

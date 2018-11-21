@@ -19,7 +19,7 @@ namespace Echo
 		Base64Decode(const String& data);
 
 		// size
-		ui32 getSize() { return m_decoded.size(); }
+		ui32 getSize() { return static_cast<ui32>(m_decoded.size()); }
 
 		// data
 		const char* getData() { return m_decoded.data(); }
