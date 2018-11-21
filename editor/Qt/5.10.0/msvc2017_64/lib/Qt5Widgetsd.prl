@@ -1,0 +1,5 @@
+
+QMAKE_PRO_INPUT = widgets.pro
+QMAKE_PRL_TARGET = Qt5Widgetsd.lib
+QMAKE_PRL_CONFIG = lex yacc debug depend_includepath testcase_targets import_plugins import_qpa_plugin windows qt_build_extra file_copies qmake_use qt warn_on link_prl incremental flat precompile_header autogen_precompile_source debug_and_release embed_manifest_dll embed_manifest_exe shared no_plugin_manifest win32 msvc copy_dir_files sse2 aesni sse3 ssse3 sse4_1 sse4_2 avx avx2 compile_examples f16c force_debug_info largefile precompile_header rdrnd shani prefix_build force_independent utf8_source create_prl link_prl prepare_docs qt_docs_targets no_private_qt_headers_warning QTDIR_build qt_example_installs exceptions_off testcase_exceptions warning_clean debug DebugBuild Debug build_pass c++11 uic generated_privates relative_qt_rpath git_build qmake_cache target_qt c++11 strict_c++ qt_install_headers need_fwd_pri qt_install_module debug_and_release build_all create_cmake skip_target_version_ext debug DebugBuild Debug build_pass have_target dll no_plist exclusive_builds debug_info no_autoqmake thread opengl moc resources
+QMAKE_PRL_VERSION = 5.10.0

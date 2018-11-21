@@ -27,7 +27,7 @@ def copy_res() :
 
 # cmake vs project
 def cmake_project(version, platform) :
-    vsconfig = " -G\"Visual Studio 15 2017\" ../"
+    vsconfig = " -G\"Visual Studio 15 2017 Win64\" ../"
     solution_dir = root_dir + "/../../../solution/"
 
 	# create dir
@@ -137,12 +137,12 @@ def release_echo(version):
             print('copy resource from [' + src_dir + sub_dir + '] to [' + des_dir + sub_dir + ']')
 
 	# generate installer
-    astudio_version_name = 'echo-setup-' + time.strftime('%Y.%m.%d',time.localtime(time.time())) + '.exe' 
+    astudio_version_name = 'echo-setup-' + time.strftime('%Y.%m.%d',time.localtime(time.time())) + '.exe'
     os.chdir( nsis_dir)
     subprocess.call('makensis.exe echo.nsi')
     os.rename('echo-setup.exe', astudio_version_name)
     #shutil.move(astudio_version_name, astudio_des_dir+astudio_version_name)
-    
+
     return
 
 if __name__ == '__main__' :
