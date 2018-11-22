@@ -14,6 +14,15 @@ namespace Echo
 		}
 	}
 
+	void qConnect(QAction* sender, const char* signal, void* receiver, ClassMethodBind* slot)
+	{
+		if (sender)
+		{
+			QMessageHandler::instance()->bind(sender, signal, receiver, slot);
+			QObject::connect(sender, signal, QMessageHandler::instance(), SLOT(onReceiveMessage()));
+		}
+	}
+
 	QWidget* qFindChild(QWidget* root, const char* name)
 	{
 		QWidget* widget = root->findChild<QWidget*>(name);

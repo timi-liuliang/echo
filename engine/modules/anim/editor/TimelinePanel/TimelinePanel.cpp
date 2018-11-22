@@ -119,9 +119,28 @@ namespace Echo
 			qMenuAddAction(m_addObjectMenu, qFindChildAction(m_ui, "m_actionAddNode"));
 			qMenuAddAction(m_addObjectMenu, qFindChildAction(m_ui, "m_actionAddSetting"));
 			qMenuAddAction(m_addObjectMenu, qFindChildAction(m_ui, "m_actionAddResource"));
+
+			qConnect(qFindChildAction(m_ui, "m_actionAddNode"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddNode));
+			qConnect(qFindChildAction(m_ui, "m_actionAddSetting"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddSetting));
+			qConnect(qFindChildAction(m_ui, "m_actionAddResource"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddResource));
 		}
 
 		qMenuExec(m_addObjectMenu);
+	}
+
+	void TimelinePanel::onAddNode()
+	{
+		int a = 10;
+	}
+
+	void TimelinePanel::onAddSetting()
+	{
+		int a = 10;
+	}
+
+	void TimelinePanel::onAddResource()
+	{
+		int a = 10;
 	}
 
 	String TimelinePanel::getNewClipName()

@@ -40,7 +40,7 @@ namespace Echo
 		static QMessageHandler* instance();
 
 		// bind
-		void bind(QWidget* sender, const char* signal, void* receiver, ClassMethodBind* slot);
+		void bind(QObject* sender, const char* signal, void* receiver, ClassMethodBind* slot);
 
 	private slots:
 		// on receive message
@@ -50,6 +50,6 @@ namespace Echo
 		void onDestroyWidget();
 
 	private:
-		map<QWidget*, ConnectArray>::type		m_connects;
+		map<QObject*, ConnectArray>::type		m_connects;
 	};
 }

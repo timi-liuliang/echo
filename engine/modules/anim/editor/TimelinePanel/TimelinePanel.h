@@ -21,6 +21,9 @@ namespace Echo
 
 		// anim operate
 		void onAddObject();
+		void onAddNode();
+		void onAddSetting();
+		void onAddResource();
 
 	private:
 		// get new name

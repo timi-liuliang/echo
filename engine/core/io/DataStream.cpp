@@ -714,7 +714,7 @@ namespace Echo
 		DataStream* stream = IO::instance()->open(file);
 		if (stream)
 		{
-			m_size = stream->size();
+			m_size = (ui32)stream->size();
 			m_data = (char*)EchoMalloc(m_size + 1);
 			stream->read(m_data, m_size);
 			m_data[m_size] = '\0';
@@ -756,7 +756,7 @@ namespace Echo
 		DataStream* stream = IO::instance()->open(file);
 		if (stream)
 		{
-			m_size = stream->size();
+			m_size = (ui32)stream->size();
 			m_data = (char*)EchoMalloc(m_size + align + 1);
 			m_dataAlign = (char*)((size_t(m_data) + align)&~(align - 1));
 			stream->read(m_dataAlign, m_size);

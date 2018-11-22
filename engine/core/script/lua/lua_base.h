@@ -240,7 +240,7 @@ namespace Echo
 	template<> INLINE void lua_pushvalue<const RealVector&>(lua_State* state, const RealVector& value)
 	{
 		lua_newtable(state);
-		for (size_t i=0; i<value.size(); i++)
+		for (ui32 i=0; i<value.size(); i++)
 		{
 			lua_pushnumber(state, i);			// key   -2
 			lua_pushnumber(state, value[i]);	// value -1	

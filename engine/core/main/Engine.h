@@ -11,7 +11,7 @@ namespace Echo
 		struct Config
 		{
 			String			m_projectFile;
-			unsigned int	m_windowHandle;
+			size_t			m_windowHandle;
 			bool			m_isGame;
 
 			Config()
@@ -81,7 +81,7 @@ namespace Echo
 		void loadLaunchScene();
 
 		// initialize render
-		bool initRenderer(unsigned int windowHandle);
+		bool initRenderer(size_t windowHandle);
 
 	private:
 		Config				m_config;

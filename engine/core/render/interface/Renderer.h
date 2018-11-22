@@ -29,7 +29,7 @@ namespace Echo
 			bool	enableThreadedRendering;
 
 			// for Windows Editor.
-			unsigned int windowHandle;
+			size_t windowHandle;
 
 			Config()
 				: screenWidth(800)

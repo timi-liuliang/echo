@@ -50,7 +50,7 @@ namespace Studio
 		Echo::Engine::Config rootcfg;
 		rootcfg.m_projectFile = !m_projectFile.empty() ? m_projectFile.c_str() : "";
 		rootcfg.m_isGame = false;
-		rootcfg.m_windowHandle = (unsigned int)hwnd;
+		rootcfg.m_windowHandle = (size_t)hwnd;
 		Echo::Engine::instance()->initialize(rootcfg);
 
 		TIME_PROFILE

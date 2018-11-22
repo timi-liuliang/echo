@@ -218,7 +218,7 @@ namespace Echo
 	}
 
 	// init renderer
-	bool Engine::initRenderer(unsigned int windowHandle)
+	bool Engine::initRenderer(size_t windowHandle)
 	{
 		Renderer* renderer = nullptr;
 		LoadGLESRenderer(renderer);

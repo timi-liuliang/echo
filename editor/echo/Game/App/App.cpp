@@ -26,7 +26,7 @@ namespace Game
 
 		Echo::Engine::Config rootcfg;
 		rootcfg.m_projectFile = echoProject;
-		rootcfg.m_windowHandle = (unsigned int)hwnd;
+		rootcfg.m_windowHandle = (size_t)hwnd;
 		m_root->initialize(rootcfg);
 	}
 

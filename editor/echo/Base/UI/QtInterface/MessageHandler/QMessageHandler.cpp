@@ -22,7 +22,7 @@ namespace Echo
 		return inst;
 	}
 
-	void QMessageHandler::bind(QWidget* sender, const char* signal, void* receiver, ClassMethodBind* slot)
+	void QMessageHandler::bind(QObject* sender, const char* signal, void* receiver, ClassMethodBind* slot)
 	{
 		auto it = m_connects.find( sender);
 		if (it != m_connects.end())
