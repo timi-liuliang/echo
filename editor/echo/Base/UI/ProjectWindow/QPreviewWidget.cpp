@@ -14,132 +14,6 @@
 
 namespace QT_UI
 {
-	/**
-	 * 缩略图生成线程
-	 */
-	class WorkerThread
-	{
-	public:
-		WorkerThread(QObject* parent = 0){ m_thumbExeExist = true; }
-
-		// 设置参数
-		void set( QPreviewWidget* previewWidget)
-		{
-			m_previeweWidget = previewWidget;
-		}
-
-		// 添加任务
-		void addTask( const char* text, const char* srcTexture)
-		{
-			EE_LOCK_MUTEX( m_mutexTask);
-			m_srcTextures.push_back( text + Echo::String( ",") + srcTexture);
-
-			//EchoLogInfo("=========================WorkerThread::addTask:%s,%s m_srcTextures.size:%d", text, srcTexture, m_srcTextures.size());
-
-			//resume();
-		}
-
-		// 清空任务
-		void clear()
-		{
-			EE_LOCK_MUTEX( m_mutexTask);
-			m_srcTextures.clear();
-		}
-
-		// 是否在任务队列中
-		bool checkInTask(const char* text, const char* srcTexture)
-		{
-			EE_LOCK_MUTEX(m_mutexTask);
-			std::list<Echo::String>::iterator it;
-			for (it = m_srcTextures.begin(); it != m_srcTextures.end(); it++)
-			{
-				Echo::StringArray infos = Echo::StringUtil::Split(*it);
-				if (text == infos[0].c_str() && srcTexture == infos[1].c_str())
-				{
-					//resume();
-					return true;
-				}
-			}
-
-			//resume();
-			return false;
-		}
-
-		// 执行
-		void processLoop()
-		{
-			//while (m_state==TS_Running)
-			{
-				if (m_srcTextures.empty() /*&& !m_thumbExeExist*/)
-				{
-				//	pause();
-				}
-				else
-				{			
-					if (!m_srcTextures.empty())
-					{
-						Echo::String srcTexture;
-						Echo::String srcText;
-
-						// 线程锁,获取下一个任务
-						{
-							EE_LOCK_MUTEX(m_mutexTask);
-							Echo::StringArray infos = Echo::StringUtil::Split(m_srcTextures.front(), ",");
-							srcText = infos[0];
-							srcTexture = infos[1];		
-						}
-
-						Echo::String thumbnailPath = srcTexture;
-						if (Echo::PathUtil::IsFileExist(thumbnailPath))
-						{
-							m_previeweWidget->setThumbnail(srcText.c_str(), thumbnailPath.c_str());
-							EE_LOCK_MUTEX(m_mutexTask);
-							m_srcTextures.pop_front();
-						}
-					}
-				}
-				
-				// 线程sleep
-				Echo::ThreadSleepByMilliSecond(50);
-			}
-		}
-
-		// 获取进程数量
-		int getProcessCount(const TCHAR* szExeName)
-		{
-			TCHAR sztarget[MAX_PATH];
-			lstrcpy(sztarget, szExeName);
-			CharLowerBuff(sztarget, MAX_PATH);
-
-			int count = 0;
-			PROCESSENTRY32 my;
-			HANDLE l = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-			if (((size_t)l) != -1)
-			{
-				my.dwSize = sizeof(my);
-				if (Process32First(l, &my))
-				{
-					do 
-					{
-						CharLowerBuff(my.szExeFile, MAX_PATH);
-						if (lstrcmp(sztarget, my.szExeFile) == 0)
-						{
-							count++;
-						}
-					} while (Process32Next(l, &my));
-				}
-				CloseHandle(l);
-			}
-			return count;
-		}
-
-	protected:
-		QPreviewWidget*		   m_previeweWidget;	// 预览窗口
-		std::list<Echo::String>m_srcTextures;		// 源纹理
-		EE_MUTEX(				m_mutexTask);		// 请求队列互斥量
-		bool					m_thumbExeExist;	// 缩略图进程是否存在
-	};
-
 	QDragListWidget::QDragListWidget(QWidget* parent)
 		: QListView(parent)
 	{
@@ -186,7 +60,6 @@ namespace QT_UI
 		drag->exec(Qt::MoveAction);
 	}
 
-	// 构造函数
 	QPreviewWidget::QPreviewWidget( QWidget* parent)
 		: QWidget(parent)
 		, m_iconWidth(120)
@@ -230,11 +103,6 @@ namespace QT_UI
 		this->setLayout(hLayout);
 		this->layout()->addWidget(m_listView);
 
-		// 开启缩略图线程
-		//m_thumbnailThread = EchoNew( WorkerThread(this));
-		//m_thumbnailThread->set(this);
-		//m_thumbnailThread->start();
-
 		// 消息链接
 		QObject::connect(m_listView, &QListView::clicked, this, &QPreviewWidget::onClicked);
 		QObject::connect(m_listView, &QListView::doubleClicked, this, &QPreviewWidget::onDoubleClicked);
@@ -245,12 +113,8 @@ namespace QT_UI
 		m_listView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 	}
 
-	// 析构函数
 	QPreviewWidget::~QPreviewWidget()
 	{
-		//m_thumbnailThread->shutdown();
-		//EchoSafeDelete(m_thumbnailThread, WorkerThread);
-
 		for (auto& it : m_iconCaches)
 		{
 			delete it.second;

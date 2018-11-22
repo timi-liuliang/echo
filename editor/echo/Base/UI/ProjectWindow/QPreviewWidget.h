@@ -19,8 +19,6 @@ namespace QT_UI
 	/**
 	 * QPreviewWidget ‘§¿¿ΩÁ√Ê
 	 */
-	class WorkerThread;
-
 	class QDragListWidget : public QListView
 	{
 		Q_OBJECT

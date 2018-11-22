@@ -7,9 +7,6 @@
 class QShowEvent;
 namespace Studio
 {
-	/**
-	 * 项目管理窗口
-	 */
 	class ProjectWnd : public QMainWindow, public Ui_ProjectWindow
 	{
 		Q_OBJECT
