@@ -109,6 +109,11 @@ namespace Echo
 		return false;
 	}
 
+	void Timeline::addObject(ObjectType type, const String& path)
+	{
+
+	}
+
 	void Timeline::generateUniqueAnimName(const String& prefix, String& oName)
 	{
 		for (i32 i = 0; i < 65535; i++)

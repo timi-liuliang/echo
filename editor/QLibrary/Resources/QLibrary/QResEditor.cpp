@@ -10,7 +10,6 @@
 
 namespace QT_UI
 {
-	// 构造函数
 	QResEditor::QResEditor(class QPropertyModel* model, QString propertyName, const char* resType, QWidget* parent)
 		: QWidget( parent)
 		, m_propertyModel(model)
@@ -50,7 +49,6 @@ namespace QT_UI
 		adjustHeightSize();
 	}
 
-	// 选择路径
 	void QResEditor::onShowMenu()
 	{
 		showMenu(QCursor::pos());

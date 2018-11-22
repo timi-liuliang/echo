@@ -82,6 +82,16 @@ namespace Studio
 		// show bottom panel
 		virtual void showBottomPanel(Echo::BottomPanelTab* bottomPanel) override;
 
+	public:
+		// select a node object
+		virtual const Echo::String selectANodeObject()override;
+
+		// select a setting object
+		virtual const Echo::String selectASettingObject() override;
+
+		// select a resource object
+		virtual const Echo::String selectAResObject() override;
+
 	private:
 		AStudio();
 

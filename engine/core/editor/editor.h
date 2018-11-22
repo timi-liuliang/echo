@@ -21,6 +21,16 @@ namespace Echo
 	public:
 		// show bottom panel
 		virtual void showBottomPanel(BottomPanelTab* bottomPanel)=0;
+
+	public:
+		// select a node object
+		virtual const String selectANodeObject()=0;
+
+		// select a setting object
+		virtual const String selectASettingObject()=0;
+
+		// select a resource object
+		virtual const String selectAResObject()=0;
 	};
 }
 #endif

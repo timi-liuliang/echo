@@ -3,6 +3,7 @@
 #include "BottomPanel.h"
 #include "ProjectWnd.h"
 #include "RenderWindow.h"
+#include "ResChooseDialog.h"
 #include "LogPanel.h"
 #include "ConfigMgr.h"
 #include <QtUiTools/QUiLoader>
@@ -270,5 +271,24 @@ namespace Studio
 	void AStudio::showBottomPanel(Echo::BottomPanelTab* bottomPanel)
 	{
 		MainWindow::instance()->getBottomPanel()->showBottomPanel( bottomPanel);
+	}
+
+	// select a node object
+	const Echo::String AStudio::selectANodeObject()
+	{
+		return Echo::StringUtil::BLANK;
+	}
+
+	// select a setting object
+	const Echo::String AStudio::selectASettingObject()
+	{
+		return Echo::StringUtil::BLANK;
+	}
+
+	// select a resource object
+	const Echo::String AStudio::selectAResObject()
+	{
+		Echo::String resPath = ResChooseDialog::getExistingFile( nullptr, "");
+		return resPath;
 	}
 }

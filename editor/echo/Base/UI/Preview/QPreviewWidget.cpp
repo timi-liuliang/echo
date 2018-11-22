@@ -114,7 +114,7 @@ namespace QT_UI
 			int count = 0;
 			PROCESSENTRY32 my;
 			HANDLE l = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-			if (((int)l) != -1)
+			if (((size_t)l) != -1)
 			{
 				my.dwSize = sizeof(my);
 				if (Process32First(l, &my))

@@ -39,7 +39,6 @@ namespace QT_UI
 		m_widgetInfos[type] = info;
 	}
 
-	// 是否拥有自定义渲染
 	bool QPropertyDelegate::IsSupportCustomPaint( const Echo::String& widgetType, const QVariant& value) const
 	{
 		auto& it = m_widgetInfos.find(widgetType);
@@ -51,7 +50,6 @@ namespace QT_UI
 		return false;
 	}
 
-	// 自定义渲染
 	bool QPropertyDelegate::ItemDelegatePaint( QPainter *painter, const Echo::String& widgetType, const QRect& rect, const QVariant& val) const
 	{
 		auto& it = m_widgetInfos.find(widgetType);
@@ -87,7 +85,6 @@ namespace QT_UI
 		return size;
 	}
 
-	// 绘制函数
 	void QPropertyDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 	{
 		Echo::String widgetType;
@@ -193,7 +190,6 @@ namespace QT_UI
 		return NULL;
 	}
 
-	// 更新编辑器数据
 	void  QPropertyDelegate::setEditorData( QWidget* editor, const QModelIndex& index) const
 	{
 		QVariant     userData		= index.model()->data( index, Qt::UserRole);
@@ -265,7 +261,6 @@ namespace QT_UI
 		}
 	}
 
-	// 设置模型数据
 	void  QPropertyDelegate::setModelData( QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const
 	{
 		QVariant     userData		= index.model()->data( index, Qt::UserRole);
@@ -309,7 +304,6 @@ namespace QT_UI
 		}
 	}
 
-	// 设置编辑器Geometry
 	void QPropertyDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex& index ) const
 	{
 		QCheckBox* widget = qobject_cast<QCheckBox*>(editor);

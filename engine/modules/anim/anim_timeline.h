@@ -11,6 +11,15 @@ namespace Echo
 		ECHO_CLASS(Timeline, Node)
 
 	public:
+		// object types
+		enum ObjectType
+		{
+			Node,
+			Setting,
+			Resource,
+		};
+
+	public:
 		Timeline();
 		virtual ~Timeline();
 
@@ -50,6 +59,10 @@ namespace Echo
 
 		// rename clip
 		void renameClip(int idx, const char* newName);
+
+	public:
+		// add object to animclip
+		void addObject(ObjectType type, const String& path);
 
 	protected:
 		// update self

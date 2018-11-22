@@ -1,4 +1,5 @@
 #include "TimelinePanel.h"
+#include "engine/core/editor/editor.h"
 #include "engine/core/editor/qt/QUiLoader.h"
 #include "engine/core/editor/qt/QSplitter.h"
 #include "engine/core/editor/qt/QToolButton.h"
@@ -130,17 +131,29 @@ namespace Echo
 
 	void TimelinePanel::onAddNode()
 	{
-		int a = 10;
+		Echo::String path = Editor::instance()->selectANodeObject();
+		if (!path.empty())
+		{
+			m_timeline->addObject(Timeline::Node, path);
+		}
 	}
 
 	void TimelinePanel::onAddSetting()
 	{
-		int a = 10;
+		Echo::String path = Editor::instance()->selectASettingObject();
+		if (!path.empty())
+		{
+			m_timeline->addObject(Timeline::Setting, path);
+		}
 	}
 
 	void TimelinePanel::onAddResource()
 	{
-		int a = 10;
+		Echo::String path = Editor::instance()->selectAResObject();
+		if (!path.empty())
+		{
+			m_timeline->addObject(Timeline::Resource, path);
+		}
 	}
 
 	String TimelinePanel::getNewClipName()
