@@ -27,26 +27,31 @@ namespace Studio
 		// clear
 		void clear();
 
-		// 刷新结点树显示
+		// refresh node tree display
 		void refreshNodeTreeDisplay();
 
 		// 添加结点
 		void addNode(Echo::Node* node);
 
-		// 添加结点
-		void addNode( Echo::Node* node, QTreeWidgetItem* parent, bool recursive);
-
 		// 获取当前结点
 		Echo::Node* getCurrentSelectNode();
-
-		// get node in the item
-		Echo::Node* getNode(QTreeWidgetItem* item);
 
 		// 获取当前编辑对象
 		Echo::Object* getCurrentEditObject();
 
 		// 设置编辑节点
 		void setNextEditObject(Echo::Object* obj) { m_nextEditObject = obj; }
+
+	public:
+		// refresh node tree display
+		static void refreshNodeTreeDisplay(QTreeWidget* treeWidget);
+
+		// add node
+		static void addNode(QTreeWidget* treeWidget, Echo::Node* node, QTreeWidgetItem* parent, bool recursive);
+
+		// get node in the item
+		static Echo::Node* getNode(QTreeWidgetItem* item);
+
 
 	private slots:
 		// 显示新建节点窗口
@@ -113,7 +118,7 @@ namespace Studio
 
 	protected:
 		// update item display
-		void updateNodeTreeWidgetItemDisplay(QTreeWidgetItem* item);
+		static void updateNodeTreeWidgetItemDisplay(QTreeWidget* treeWidget, QTreeWidgetItem* item);
 
 	private:
 		// show object property recursively

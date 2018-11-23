@@ -132,6 +132,9 @@ namespace Echo
 		// get node by path
 		Node* getNode(const char* path);
 
+		// build node path
+		String getNodePath();
+
 		// queue free
 		virtual void queueFree();
 

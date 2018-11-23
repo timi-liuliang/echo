@@ -1,4 +1,5 @@
 #include "NodePathChooseDialog.h"
+#include "NodeTreePanel.h"
 
 namespace Studio
 {
@@ -9,6 +10,9 @@ namespace Studio
 
 		// hide default window title
 		setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+
+		// update node tree widget
+		NodeTreePanel::refreshNodeTreeDisplay(m_treeWidget);
 	}
 
 	NodePathChooseDialog::~NodePathChooseDialog()
@@ -18,7 +22,7 @@ namespace Studio
 
 	Echo::String NodePathChooseDialog::getSelectingNode(QWidget* parent)
 	{
-		static NodePathChooseDialog dialog(parent);
+		NodePathChooseDialog dialog(parent);
 		dialog.show();
 		if (dialog.exec() == QDialog::Accepted)
 		{
@@ -32,6 +36,7 @@ namespace Studio
 
 	const Echo::String NodePathChooseDialog::getSelectingNodePath() const
 	{
-		return Echo::StringUtil::BLANK;
+		Echo::Node* node = NodeTreePanel::getNode(m_treeWidget->currentItem());
+		return node ? node->getNodePath() : Echo::StringUtil::BLANK;
 	}
 }

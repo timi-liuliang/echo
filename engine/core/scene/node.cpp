@@ -537,6 +537,22 @@ namespace Echo
 		return nullptr;
 	}
 
+	// build node path
+	String Node::getNodePath()
+	{
+		String result;
+
+		Node* node = this;
+		while (node)
+		{
+			result = "/" + node->getName() + result;
+
+			node = node->getParent();
+		}
+
+		return result;
+	}
+
 	// queue free
 	void Node::queueFree()
 	{

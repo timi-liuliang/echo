@@ -107,17 +107,23 @@ namespace Studio
 		onEditObject(nullptr);
 	}
 
+	// refresh node tree display
 	void NodeTreePanel::refreshNodeTreeDisplay()
 	{
-		m_nodeTreeWidget->clear();
-
-		// begin with "Node"
-		addNode(EchoEngine::instance()->getCurrentEditNode(), m_nodeTreeWidget->invisibleRootItem(), true);
-
-		m_nodeTreeWidget->expandAll();
+		refreshNodeTreeDisplay(m_nodeTreeWidget);
 	}
 
-	void NodeTreePanel::addNode(Echo::Node* node, QTreeWidgetItem* parent, bool recursive)
+	void NodeTreePanel::refreshNodeTreeDisplay(QTreeWidget* treeWidget)
+	{
+		treeWidget->clear();
+
+		// begin with "Node"
+		addNode( treeWidget, EchoEngine::instance()->getCurrentEditNode(), treeWidget->invisibleRootItem(), true);
+
+		treeWidget->expandAll();
+	}
+
+	void NodeTreePanel::addNode(QTreeWidget* treeWidget, Echo::Node* node, QTreeWidgetItem* parent, bool recursive)
 	{
 		Echo::ui32   nodeIdx = node->getParent() ? node->getParent()->getChildIdx(node) : 0;
 		Echo::String rootPath = AStudio::instance()->getRootPath();
@@ -142,10 +148,10 @@ namespace Studio
 			nodeItem->setIcon(1, QIcon(":/icon/node/link_child_scene.png"));
 
 		// change foreground color based on node state
-		updateNodeTreeWidgetItemDisplay(nodeItem);
+		updateNodeTreeWidgetItemDisplay(treeWidget, nodeItem);
 
 		// show property
-		m_nodeTreeWidget->setCurrentItem(nodeItem);
+		treeWidget->setCurrentItem(nodeItem);
 
 		if (recursive)
 		{
@@ -153,7 +159,7 @@ namespace Studio
 			{
 				Echo::Node* childNode = node->getChild(i);
 				if(!childNode->isLink())
-					addNode(childNode, nodeItem, recursive);
+					addNode(treeWidget, childNode, nodeItem, recursive);
 			}
 		}
 	}
@@ -161,8 +167,15 @@ namespace Studio
 	// get node in the item
 	Echo::Node* NodeTreePanel::getNode(QTreeWidgetItem* item)
 	{
-		Echo::i32 nodeId = item->data(0, Qt::UserRole).toInt();
-		return (Echo::Node*)Echo::Node::getById(nodeId);
+		if (item)
+		{
+			Echo::i32 nodeId = item->data(0, Qt::UserRole).toInt();
+			return (Echo::Node*)Echo::Node::getById(nodeId);
+		}
+		else
+		{
+			return nullptr;
+		}
 	}
 
 	Echo::Node* NodeTreePanel::getCurrentSelectNode()
@@ -175,12 +188,12 @@ namespace Studio
 	}
 
 	// update item display
-	void NodeTreePanel::updateNodeTreeWidgetItemDisplay( QTreeWidgetItem* item)
+	void NodeTreePanel::updateNodeTreeWidgetItemDisplay(QTreeWidget* treeWidget, QTreeWidgetItem* item)
 	{
-		if (m_nodeTreeWidget->invisibleRootItem()->childCount() == 0)
+		if (treeWidget->invisibleRootItem()->childCount() == 0)
 			return;
 
-		QTreeWidgetItem* curItem = item ? item : (m_nodeTreeWidget->currentItem() ? m_nodeTreeWidget->currentItem() : m_nodeTreeWidget->invisibleRootItem()->child(0));
+		QTreeWidgetItem* curItem = item ? item : (treeWidget->currentItem() ? treeWidget->currentItem() : treeWidget->invisibleRootItem()->child(0));
 		if (curItem)
 		{
 			Echo::Node* node = getNode(curItem);
@@ -217,7 +230,7 @@ namespace Studio
 			{
 				node->setParent(parentNode);
 
-				addNode(node, parentItem, true);
+				addNode(m_nodeTreeWidget, node, parentItem, true);
 
 				parentItem->setExpanded(true);
 			}
@@ -350,7 +363,7 @@ namespace Studio
 				Echo::Node* duplicateNode = node->duplicate(true);
 				duplicateNode->setParent(node->getParent());
 
-				addNode( duplicateNode, item->parent(), true);
+				addNode( m_nodeTreeWidget, duplicateNode, item->parent(), true);
 			}
 		}
 	}
@@ -391,7 +404,7 @@ namespace Studio
 				// remember parent item before delete this item
 				QTreeWidgetItem* parentItem = item->parent() ? item->parent() : m_nodeTreeWidget->invisibleRootItem();
 				removeItem(item);
-				addNode(newNode, parentItem, true);
+				addNode(m_nodeTreeWidget, newNode, parentItem, true);
 			}
 		}
 	}
@@ -465,7 +478,7 @@ namespace Studio
 			QTreeWidgetItem* parentItem = item->parent() ? item->parent() : m_nodeTreeWidget->invisibleRootItem();
 			if (parentItem)
 			{
-				addNode(node, parentItem, true);
+				addNode(m_nodeTreeWidget, node, parentItem, true);
 
 				// update property panel display
 				onSelectNode();
@@ -623,7 +636,7 @@ namespace Studio
 			showSelectedObjectProperty();
 
 			// update select item display
-			updateNodeTreeWidgetItemDisplay(nullptr);
+			updateNodeTreeWidgetItemDisplay(m_nodeTreeWidget, nullptr);
 		}
 		else
 		{
