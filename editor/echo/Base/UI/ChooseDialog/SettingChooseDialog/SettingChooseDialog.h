@@ -12,7 +12,7 @@ namespace Studio
 
 	public:
 		SettingChooseDialog(QWidget* parent);
-		~SettingChooseDialog();
+		virtual ~SettingChooseDialog();
 
 		// get setting
 		static Echo::String getSelectingSetting(QWidget* parent);

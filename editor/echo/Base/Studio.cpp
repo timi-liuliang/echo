@@ -5,6 +5,7 @@
 #include "RenderWindow.h"
 #include "ResChooseDialog.h"
 #include "SettingChooseDialog.h"
+#include "NodePathChooseDialog.h"
 #include "LogPanel.h"
 #include "ConfigMgr.h"
 #include <QtUiTools/QUiLoader>
@@ -277,7 +278,7 @@ namespace Studio
 	// select a node object
 	const Echo::String AStudio::selectANodeObject()
 	{
-		return Echo::StringUtil::BLANK;
+		return NodePathChooseDialog::getSelectingNode( nullptr);
 	}
 
 	// select a setting object
