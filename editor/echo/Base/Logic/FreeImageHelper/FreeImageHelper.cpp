@@ -574,7 +574,7 @@ namespace Echo
 			if (fileHandle)
 			{
 				BITMAPINFO* _PimageInfo = FreeImage_GetInfo(fileHandle);
-				int textureNum = (*srcFile).size();
+				int textureNum = static_cast<int>((*srcFile).size());
 				int texelByte  = int(_PimageInfo->bmiHeader.biBitCount / 8);
 				int oldWidth   = _PimageInfo->bmiHeader.biWidth;
 				int oldHeight  = _PimageInfo->bmiHeader.biHeight;

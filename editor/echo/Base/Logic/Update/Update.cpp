@@ -12,7 +12,7 @@ namespace Studio
 	{
 		// 写入当前目录Cache文件夹
 		Echo::String savePath = Echo::PathUtil::GetCurrentDir() + "/update/astudio-setup.exe";
-		Echo::PathUtil::WriteData(savePath.c_str(), data, len);
+		Echo::PathUtil::WriteData(savePath.c_str(), data, static_cast<int>(len));
 
 		// 启动
 		Echo::String cmd = Echo::PathUtil::GetCurrentDir() + "/update/astudio-setup.exe";
