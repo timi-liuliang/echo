@@ -4,6 +4,7 @@
 #include "ProjectWnd.h"
 #include "RenderWindow.h"
 #include "ResChooseDialog.h"
+#include "SettingChooseDialog.h"
 #include "LogPanel.h"
 #include "ConfigMgr.h"
 #include <QtUiTools/QUiLoader>
@@ -282,13 +283,13 @@ namespace Studio
 	// select a setting object
 	const Echo::String AStudio::selectASettingObject()
 	{
-		return Echo::StringUtil::BLANK;
+		return SettingChooseDialog::getSelectingSetting(nullptr);
 	}
 
 	// select a resource object
 	const Echo::String AStudio::selectAResObject()
 	{
-		Echo::String resPath = ResChooseDialog::getExistingFile( nullptr, "");
+		Echo::String resPath = ResChooseDialog::getSelectingFile( nullptr, "");
 		return resPath;
 	}
 }

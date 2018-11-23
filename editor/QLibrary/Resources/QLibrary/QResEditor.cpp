@@ -155,7 +155,7 @@ namespace QT_UI
 	// on load
 	void QResEditor::onLoad()
 	{
-		Echo::String qFileName = Studio::ResChooseDialog::getExistingFile(this, m_exts.c_str(), "", "");
+		Echo::String qFileName = Studio::ResChooseDialog::getSelectingFile(this, m_exts.c_str(), "", "");
 		if (!qFileName.empty())
 		{
 			Echo::Res* res = Echo::Res::get(qFileName);

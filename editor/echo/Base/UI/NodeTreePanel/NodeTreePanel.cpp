@@ -426,7 +426,7 @@ namespace Studio
 
 	void NodeTreePanel::onInstanceChildScene()
 	{
-		Echo::String nodeTreeFile = ResChooseDialog::getExistingFile(this, ".scene");
+		Echo::String nodeTreeFile = ResChooseDialog::getSelectingFile(this, ".scene");
 		if (!nodeTreeFile.empty())
 		{
 			Echo::Node* node = Echo::Node::loadLink(nodeTreeFile, true);
@@ -529,7 +529,7 @@ namespace Studio
 	// import gltf scene
 	void NodeTreePanel::importGltfScene()
 	{
-		Echo::String gltfFile = ResChooseDialog::getExistingFile(this, ".gltf");
+		Echo::String gltfFile = ResChooseDialog::getSelectingFile(this, ".gltf");
 		if (!gltfFile.empty())
 		{
 			Echo::GltfResPtr asset = (Echo::GltfRes*)Echo::Res::get( gltfFile);

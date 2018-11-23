@@ -16,7 +16,7 @@ namespace Studio
 		~ResChooseDialog(){}
 
 		// get file
-		static Echo::String getExistingFile(QWidget* parent, const char* exts, const char* filesFilter=nullptr, const char* startPath=nullptr);
+		static Echo::String getSelectingFile(QWidget* parent, const char* exts, const char* filesFilter=nullptr, const char* startPath=nullptr);
 
 		// get select file
 		const Echo::String& getSelectedFile();
@@ -24,6 +24,9 @@ namespace Studio
 	public slots:
 		// Ñ¡ÔñÎÄ¼þ¼Ð
 		void onSelectDir(const char* dir);
+
+		// on click res
+		void onClickPreviewRes(const char* res);
 
 		// double click res
 		void onDoubleClickPreviewRes(const char* res);

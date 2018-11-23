@@ -350,7 +350,7 @@ namespace Studio
 			{
 				if (QMessageBox::Yes == QMessageBox(QMessageBox::Information, "Warning", "Launch Scene is empty, Would you set it now?", QMessageBox::Yes | QMessageBox::No).exec())
 				{
-					Echo::String  scene = ResChooseDialog::getExistingFile(this, ".scene");
+					Echo::String  scene = ResChooseDialog::getSelectingFile(this, ".scene");
 					if (!scene.empty())
 					{
 						projSettings->setLaunchScene(Echo::ResourcePath(scene));

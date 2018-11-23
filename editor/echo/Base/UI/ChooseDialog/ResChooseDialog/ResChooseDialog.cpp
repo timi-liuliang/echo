@@ -14,7 +14,7 @@ namespace Studio
 		setupUi(this);
 
 		// hide default window title
-		//setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+		setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 
 		// 目录树型结构
 		m_dirModel = new QT_UI::QDirectoryModel();
@@ -27,6 +27,7 @@ namespace Studio
 		QObject::connect(m_dirModel, SIGNAL(FileSelected(const char*)), this, SLOT(onSelectDir(const char*)));
 
 		m_previewHelper = new QT_UI::QPreviewHelper(m_listView);
+		QObject::connect(m_previewHelper, SIGNAL(clickedRes(const char*)), this, SLOT(onClickPreviewRes(const char*)));
 		QObject::connect(m_previewHelper, SIGNAL(doubleClickedRes(const char*)), this, SLOT(onDoubleClickPreviewRes(const char*)));
 
 		// initialize path
@@ -46,7 +47,7 @@ namespace Studio
 	}
 
 	// get file
-	Echo::String ResChooseDialog::getExistingFile(QWidget* parent, const char* exts, const char* filesFilter, const char* startPath)
+	Echo::String ResChooseDialog::getSelectingFile(QWidget* parent, const char* exts, const char* filesFilter, const char* startPath)
 	{
 		Echo::String selectFile;
 
@@ -75,6 +76,23 @@ namespace Studio
 		m_previewHelper->setPath(dir, m_supportExts.c_str(), isIncludePreDir);
 
 		g_lastSelectDir = dir;
+	}
+
+	// on click res
+	void ResChooseDialog::onClickPreviewRes(const char* res)
+	{
+		if (Echo::PathUtil::IsDir(res))
+		{
+			m_dirModel->setCurrentSelect(res);
+		}
+		else
+		{
+			Echo::String resPath;
+			if (Echo::IO::instance()->covertFullPathToResPath(res, resPath))
+			{
+				m_selectedFile = resPath.c_str();
+			}
+		}
 	}
 
 	// double click res

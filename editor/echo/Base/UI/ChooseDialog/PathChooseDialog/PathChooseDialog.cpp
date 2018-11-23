@@ -12,6 +12,9 @@ namespace Studio
 	{
 		setupUi( this);
 
+		// hide default window title
+		setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+
 		// disable ok button
 		m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 

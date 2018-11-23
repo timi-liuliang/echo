@@ -46,7 +46,7 @@ namespace QT_UI
 	// Ñ¡ÔñÂ·¾¶
 	void QResSelect::OnSelectPath()
 	{
-		Echo::String qFileName = Studio::ResChooseDialog::getExistingFile(this, m_exts.c_str(), m_files.toStdString().c_str(), "");
+		Echo::String qFileName = Studio::ResChooseDialog::getSelectingFile(this, m_exts.c_str(), m_files.toStdString().c_str(), "");
 		if (!qFileName.empty())
 		{
 			m_lineEdit->setText(qFileName.c_str());

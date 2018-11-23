@@ -12,7 +12,7 @@ namespace Studio
 		setupUi(this);
 
 		// hide default window title
-		setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+		setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 
 		// display nodes
 		initNodeDisplay();
