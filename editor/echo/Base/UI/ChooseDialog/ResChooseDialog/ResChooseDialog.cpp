@@ -60,12 +60,6 @@ namespace Studio
 		return selectFile;
 	}
 
-	// get directory
-	Echo::String ResChooseDialog::getExistingDirectory(QWidget* parent)
-	{
-		return "";
-	}
-
 	// get select file
 	const Echo::String& ResChooseDialog::getSelectedFile()
 	{

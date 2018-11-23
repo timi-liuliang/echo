@@ -480,7 +480,7 @@ namespace Studio
 			Echo::StringArray msgArray = Echo::StringUtil::Split(msg, "@@");
 			
 			int i = 0;
-			int argc = msgArray.size();
+			int argc = static_cast<int>(msgArray.size());
 			while (i < argc)
 			{
 				Echo::String command = msgArray[i++];

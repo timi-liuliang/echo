@@ -18,9 +18,6 @@ namespace Studio
 		// get file
 		static Echo::String getExistingFile(QWidget* parent, const char* exts, const char* filesFilter=nullptr, const char* startPath=nullptr);
 
-		// get directory
-		static Echo::String getExistingDirectory(QWidget* parent);
-
 		// get select file
 		const Echo::String& getSelectedFile();
 

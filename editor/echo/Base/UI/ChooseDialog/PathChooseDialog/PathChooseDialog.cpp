@@ -6,7 +6,6 @@
 
 namespace Studio
 {
-	// 构造函数
 	PathChooseDialog::PathChooseDialog(QWidget* parent, const char* exts)
 		: QDialog( parent)
 		, m_supportExts(exts)
@@ -45,19 +44,16 @@ namespace Studio
 		onSelectDir(Echo::Engine::instance()->getResPath().c_str());
 	}
 
-	// 析构函数
 	PathChooseDialog::~PathChooseDialog()
 	{
 		//AStudio::Instance()->getEchoEngine()->stopCurPreviewAudioEvent();
 	}
 
-	// get select file
 	Echo::String PathChooseDialog::getSelectFile() const 
 	{ 
 		return m_selectedDir + m_fileNameLine->text().toStdString().c_str() + m_supportExts; 
 	}
 
-	// 获取文件
 	QString PathChooseDialog::getExistingPath(QWidget* parent)
 	{
 		QString selectFile;
@@ -98,7 +94,6 @@ namespace Studio
 		m_fileName->setVisible(_val);
 	}
 
-	// 选择文件夹
 	void PathChooseDialog::onSelectDir(const char* dir)
 	{
 		bool isIncludePreDir = dir == Echo::Engine::instance()->getResPath() ? false : true;
@@ -109,7 +104,6 @@ namespace Studio
 		m_selectedDir = dir;
 	}
 
-	// double click res
 	void PathChooseDialog::onDoubleClickPreviewRes(const char* res)
 	{
 		if (Echo::PathUtil::IsDir(res))
@@ -123,7 +117,6 @@ namespace Studio
 		}
 	}
 
-	// on file name changed
 	void PathChooseDialog::onFileNameChanged()
 	{
 		if (m_fileNameLine->text().isEmpty())
