@@ -1,0 +1,7 @@
+
+add_library(Qt5::QGeoPositionInfoSourceFactoryCL MODULE IMPORTED)
+
+_populate_Positioning_plugin_properties(QGeoPositionInfoSourceFactoryCL RELEASE "position/libqtposition_cl.dylib")
+_populate_Positioning_plugin_properties(QGeoPositionInfoSourceFactoryCL DEBUG "position/libqtposition_cl.dylib")
+
+list(APPEND Qt5Positioning_PLUGINS Qt5::QGeoPositionInfoSourceFactoryCL)

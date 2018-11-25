@@ -1,8 +1,8 @@
 #include "StringUtil.h"
-#include "engine/core/Math/Vector2.h"
-#include "engine/core/Math/Vector3.h"
-#include "engine/core/Math/Vector4.h"
-#include "engine/core/Math/Quaternion.h"
+#include "engine/core/math/Vector2.h"
+#include "engine/core/math/Vector3.h"
+#include "engine/core/math/Vector4.h"
+#include "engine/core/math/Quaternion.h"
 
 #include <cmath>
 #include <cstdlib>
@@ -910,6 +910,7 @@ static union { char c[2]; unsigned short a; } endian_test = { { 0, 1 } };
 			utf8_len - 1,				//MultiByteCount,
 			NULL,						//DefaultChar,    
 			NULL);						//UsedDefaultChar
+    #elif defined(ECHO_PLATFORM_MAC)
 
 	#else
 		iconv_t cd = iconv_open("UTF-8", WCHAR_TYPE);
@@ -938,6 +939,8 @@ static union { char c[2]; unsigned short a; } endian_test = { { 0, 1 } };
 			utf8_len, 
 			utf16, 
 			utf16_len - 1);
+    #elif defined(ECHO_PLATFORM_MAC)
+        
 	#else
 		iconv_t cd = iconv_open(WCHAR_TYPE, "UTF-8");
 		if (cd == reinterpret_cast<iconv_t>(-1))

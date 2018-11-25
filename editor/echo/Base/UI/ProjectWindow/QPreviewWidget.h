@@ -40,13 +40,11 @@ namespace QT_UI
 		struct ItemInfo
 		{
 			ItemInfo()
-			:m_time(0)
 			{
 
 			}
 			QString		m_text;		// 文件名
 			QString		m_icon;		// 图标
-			__time64_t m_time;
 		};
 
 	public:

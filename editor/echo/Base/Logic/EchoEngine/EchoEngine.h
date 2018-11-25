@@ -2,9 +2,9 @@
 
 #include <string>
 #include <engine/core/log/Log.h>
-#include <Engine/core/main/Engine.h>
-#include <Engine/core/Scene/node_tree.h>
-#include <Engine/core/render/interface/mesh/Mesh.h>
+#include <engine/core/main/Engine.h>
+#include <engine/core/scene/node_tree.h>
+#include <engine/core/render/interface/mesh/Mesh.h>
 
 namespace Studio
 {
@@ -17,8 +17,8 @@ namespace Studio
 		// inst
 		static EchoEngine* instance();
 
-		// ≥ı ºªØ
-		bool Initialize( HWND hwnd);
+		// initialize
+		bool Initialize( size_t hwnd);
 
 		// √ø÷°‰÷»æ
 		void Render( float elapsedTime, bool isRenderWindowVisible);

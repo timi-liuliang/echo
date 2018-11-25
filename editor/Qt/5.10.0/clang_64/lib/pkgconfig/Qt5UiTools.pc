@@ -1,0 +1,14 @@
+prefix=/Users/ares/Qt/5.10.0/clang_64
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+
+Name: Qt5 UiTools
+Description: Qt UiTools module
+Version: 5.10.0
+Libs: -L${libdir} -lQt5UiTools_debug 
+Libs.private: -F/Users/ares/Qt/5.10.0/clang_64/lib -F/Users/ares/Qt/5.10.0/clang_64/lib -framework QtWidgets -framework QtGui -framework QtCore -framework DiskArbitration -framework IOKit -framework QtWidgets -F/Users/ares/Qt/5.10.0/clang_64/lib -framework QtGui -framework QtCore -framework DiskArbitration -framework IOKit -framework OpenGL -framework AGL 
+Cflags: -I${includedir}/QtUiTools -I${includedir}
+Requires: Qt5Core Qt5Gui Qt5Widgets
+

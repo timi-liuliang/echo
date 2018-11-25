@@ -5,7 +5,6 @@
 
 namespace QT_UI
 {
-	// 构造函数
 	QDirectoryModel::QDirectoryModel()
 		: QStandardItemModel()
 		, m_treeView(NULL)
@@ -15,7 +14,6 @@ namespace QT_UI
 	{
 	}
 
-	// 设置主目录, 文件类型过滤
 	void QDirectoryModel::SetRootPath(const char* rootPath, const char* extFilter, QTreeView* treeView, QSortFilterProxyModel* proxy)
 	{
 		updateRootPath(rootPath);
@@ -39,7 +37,6 @@ namespace QT_UI
 		Echo::PathUtil::FormatPathAbsolut(m_rootPath, false);
 	}
 
-	// 是否支持文件类型
 	bool QDirectoryModel::IsSupportExt(const string& ext)
 	{
 		if (!m_exts.empty())
@@ -51,7 +48,6 @@ namespace QT_UI
 		return true;
 	}
 
-	// 清空
 	void QDirectoryModel::Clean()
 	{
 		this->clear();
@@ -59,7 +55,6 @@ namespace QT_UI
 		m_activeItem = nullptr;
 	}
 
-	// 设置当前选中
 	void QDirectoryModel::setCurrentSelect(const char* dir)
 	{
 		// 查找Item
@@ -96,7 +91,6 @@ namespace QT_UI
 		}
 	}
 
-	// 刷新显示
 	void QDirectoryModel::Refresh(bool volatile* interrupt)
 	{
 		if (Echo::PathUtil::IsDirExist(m_rootPath.c_str()))
@@ -122,7 +116,6 @@ namespace QT_UI
 		}
 	}
 
-	// 获取文件图标
 	QIcon QDirectoryModel::getFileIcon(const char* fullPath)
 	{
 		Echo::String fileExt = Echo::PathUtil::GetFileExt(fullPath, true);
@@ -135,7 +128,6 @@ namespace QT_UI
 		return m_iconMaps[fileExt.c_str()];
 	}
 
-	// 迭代目录
 	void QDirectoryModel::RecursiveDir(const string& dir, QStandardItem* parentItem, volatile bool* interrupt)
 	{
 		vector<QStandardItem*> dirItems;
@@ -197,7 +189,6 @@ namespace QT_UI
 		}
 	}
 
-	// 展开某Fiter
 	void QDirectoryModel::OnExpandedFilter(const QModelIndex& pIndex)
 	{
 		/*if( m_treeView->isExpanded( pIndex))
@@ -206,7 +197,6 @@ namespace QT_UI
 		itemFromIndex( pIndex)->setIcon( m_iconMaps["filter"]);*/
 	}
 
-	// 根据鼠标位置获取目录
 	QString QDirectoryModel::getFileUnderMousePos(const QPoint& pos)
 	{
 		QModelIndex index = m_treeView->indexAt(pos);
@@ -215,12 +205,11 @@ namespace QT_UI
 		return filePath;
 	}
 
-	// 选择某文件
 	void QDirectoryModel::OnSelectedFile(const QModelIndex& pIndex)
 	{
-		DWORD currenTime = GetTickCount();
-		DWORD elapsedTime = currenTime - m_selectTime;
-		m_selectTime = currenTime;
+        //Echo::Dword currenTime = GetTickCount();
+		//Echo::Dword elapsedTime = currenTime - m_selectTime;
+        m_selectTime = 0;//currenTime;
 
 		if (m_currentSelect == pIndex)
 			return;
@@ -246,7 +235,6 @@ namespace QT_UI
 		emit FileSelected(filePath.toStdString().c_str());
 	}
 
-	// 双击某文件
 	void QDirectoryModel::OnEditFile(const QModelIndex& pIndex)
 	{
 		QString filePath = m_proxy ? m_proxy->data(pIndex, Qt::UserRole).toString() : this->data(pIndex, Qt::UserRole).toString();

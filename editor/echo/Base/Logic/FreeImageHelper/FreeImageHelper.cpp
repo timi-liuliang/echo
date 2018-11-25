@@ -590,8 +590,10 @@ namespace Echo
 				{
 					fileHandle = FreeImage_Load(fileFMT, (*srcFile)[i].c_str(), fiFlags);
 					pixels = (BYTE*)FreeImage_GetBits(fileHandle);
+#ifdef ECHO_PLATFORM_WINDOWS
 					memcpy_s(finalPixels + imgByte*(textureNum - i -1), oldWidth*newHeight*texelByte, pixels, imgByte);
-					FreeImage_Unload(fileHandle);
+#endif
+                    FreeImage_Unload(fileHandle);
 				}
 					
 				FreeImage_Save(FIF_TARGA, finalHandle, dstFile, TARGA_DEFAULT);

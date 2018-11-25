@@ -14,7 +14,9 @@
 #include <QMetaMethod>
 #include <QSplitter>
 #include "QPropertyModel.h"
+#ifdef ECHO_PLATFORM_WINDOWS
 #include <shellapi.h>
+#endif
 #include <engine/core/util/HashGenerator.h>
 #include <engine/core/util/TimeProfiler.h>
 #include <engine/core/util/PathUtil.h>
@@ -115,7 +117,7 @@ namespace Studio
 	bool AStudio::isThumbnailExists(const Echo::String& name)
 	{
 		Echo::String appPath = AStudio::instance()->getAppPath();
-		Echo::String fileFullName = Echo::StringUtil::Format("%sCache/thumbnail/%s.bmp", appPath, name);
+		Echo::String fileFullName = Echo::StringUtil::Format("%sCache/thumbnail/%s.bmp", appPath.c_str(), name.c_str());
 
 		return Echo::PathUtil::IsFileExist(fileFullName);
 	}

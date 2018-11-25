@@ -7,7 +7,6 @@
 
 namespace Studio
 {
-
 	ProjectMgr::ProjectMgr()
 	{
 
@@ -18,18 +17,15 @@ namespace Studio
 
 	}
 
-	// 新建项目文件
 	void ProjectMgr::NewProject(const char* projectName)
 	{
 	}
 
-	// 打开项目文件
 	void ProjectMgr::OpenProject(const char* fullPathName)
 	{
 		AStudio::instance()->getConfigMgr()->addRecentProject(fullPathName);
 	}
 
-	// 资源检测
 	void ProjectMgr::CheckProject()
 	{
 		// 清空
@@ -39,7 +35,6 @@ namespace Studio
 		checkTextures();
 	}
 
-	// 检测纹理资源
 	void ProjectMgr::checkTextures()
 	{
 		// 分解后缀
@@ -67,7 +62,6 @@ namespace Studio
 
 	}
 
-	// 添加文件
 	void ProjectMgr::AddFileToProject(const char* fullPath)
 	{
 		Echo::String fileName = Echo::PathUtil::GetPureFilename(fullPath);
@@ -84,7 +78,6 @@ namespace Studio
 			m_files.erase(m_files.find(str));
 	}
 
-	// 获取全路径
 	Echo::String ProjectMgr::GetFullPath(const Echo::String& name)
 	{
 		Echo::map<Echo::String, Echo::String>::type::iterator it = m_files.find(name);
@@ -94,7 +87,6 @@ namespace Studio
 		return "";
 	}
 
-	// 判断文件是否存在
 	bool ProjectMgr::IsFileExist(const char* fileName)
 	{
 		Echo::String lowerFileName = fileName;

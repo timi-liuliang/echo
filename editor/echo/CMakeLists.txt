@@ -7,15 +7,15 @@ MACRO(GROUP_QT_UI_FILES src_files root_path)
 			STRING(COMPARE EQUAL ${sgbd_fpath} ${sgbd_group_name} sgbd_nogroup)
 			STRING(REPLACE "/" "\\" sgbd_group_name ${sgbd_group_name})
 			IF(sgbd_nogroup)
-				SOURCE_GROUP("" FILES ${group_files})   
+				SOURCE_GROUP("" FILES ${group_files})
 			ELSE()
 				INCLUDE_DIRECTORIES(${sgbd_group_name})
 				SOURCE_GROUP(${sgbd_group_name} FILES ${group_files})
 				SET(QTUI_HEADER_UI)
 				QT5_WRAP_UI(QTUI_HEADER_UI	${group_files})
-				SOURCE_GROUP(${sgbd_group_name} FILES ${QTUI_HEADER_UI})   
+				SOURCE_GROUP(${sgbd_group_name} FILES ${QTUI_HEADER_UI})
 				SET(ASTUDIO_QT_FILES ${ASTUDIO_QT_FILES} ${QTUI_HEADER_UI})
-			ENDIF(sgbd_nogroup) 
+			ENDIF(sgbd_nogroup)
 		ENDFOREACH(group_files)
 ENDMACRO(GROUP_QT_UI_FILES)
 
@@ -23,7 +23,7 @@ ENDMACRO(GROUP_QT_UI_FILES)
 MACRO(GROUP_QT_MOC_FILES src_files)
 	SET(QTUI_MOC_UI)
 	QT5_WRAP_CPP(QTUI_MOC_UI	${${src_files}})
-	SOURCE_GROUP("Resources\\Generated Files\\Moc" FILES ${QTUI_MOC_UI})   
+	SOURCE_GROUP("Resources\\Generated Files\\Moc" FILES ${QTUI_MOC_UI})
 	SET(ASTUDIO_QT_FILES ${ASTUDIO_QT_FILES} ${QTUI_MOC_UI})
 ENDMACRO(GROUP_QT_MOC_FILES)
 
@@ -33,9 +33,9 @@ ADD_DEFINITIONS(-DQT_STATICPLUGIN)
 
 #SET(CMAKE_AUTOMOC On)
 
-# VSÅäÖÃ http://www.oschina.net/code/explore/mariadb-5.2.4/CMakeLists.txt
+# VSï¿½ï¿½ï¿½ï¿½ http://www.oschina.net/code/explore/mariadb-5.2.4/CMakeLists.txt
 IF(MSVC)
-	# ½ûÓÃÌØ¶¨¾¯¸æ,¿ªÆô¶àºË±àÒë
+	# ï¿½ï¿½ï¿½ï¿½ï¿½Ø¶ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë±ï¿½ï¿½ï¿½
 	SET(CMAKE_CXX_FLAGS_DEBUG			"${CMAKE_CXX_FLAGS_DEBUG} /wd4996 /wd4819 /MP /openmp")
 	SET(CMAKE_CXX_FLAGS_RELEASE			"${CMAKE_CXX_FLAGS_RELEASE} /wd4996 /wd4819 /MP /openmp")
 	SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO	"${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /wd4996 /wd4819  /MP /openmp")
@@ -44,15 +44,20 @@ IF(MSVC)
 	SET(CMAKE_C_FLAGS_RELWITHDEBINFO	"${CMAKE_C_FLAGS_RELWITHDEBINFO} /wd4996 /wd4819  /MP /openmp")
 ENDIF(MSVC)
 
-# 
+#
 CMAKE_POLICY(SET CMP0020 OLD)
 
 #
-IF(CMAKE_SIZEOF_VOID_P EQUAL 4)
-	SET(CMAKE_PREFIX_PATH ${ECHO_ROOT_PATH}/editor/Qt/5.10.0/msvc2015)
-ELSEIF(CMAKE_SIZEOF_VOID_P EQUAL 8)
-	SET(CMAKE_PREFIX_PATH ${ECHO_ROOT_PATH}/editor/Qt/5.10.0/msvc2017_64)
+IF(${ECHO_PLATFORM_MAC})
+	SET(CMAKE_PREFIX_PATH ${ECHO_ROOT_PATH}/editor/Qt/5.10.0/clang_64)
+ELSEIF(${ECHO_PLATFORM_WIN32})
+	IF(CMAKE_SIZEOF_VOID_P EQUAL 4)
+		SET(CMAKE_PREFIX_PATH ${ECHO_ROOT_PATH}/editor/Qt/5.10.0/msvc2015)
+	ELSEIF(CMAKE_SIZEOF_VOID_P EQUAL 8)
+		SET(CMAKE_PREFIX_PATH ${ECHO_ROOT_PATH}/editor/Qt/5.10.0/msvc2017_64)
+	ENDIF()
 ENDIF()
+
 FIND_PACKAGE(Qt5Core)
 FIND_PACKAGE(Qt5Widgets)
 FIND_PACKAGE(Qt5UiTools)
@@ -66,25 +71,29 @@ INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/engine/core/render)
 
 LINK_DIRECTORIES(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 
-IF(CMAKE_SIZEOF_VOID_P EQUAL 4)
-	LINK_DIRECTORIES(${ECHO_DEP_PATH}/AdrenoSDK/Lib/Win32)
-	LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/openal-1.1/windows/libs/Win32)
-	LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/Core/lib/windows/x86)
-ELSEIF(CMAKE_SIZEOF_VOID_P EQUAL 8)
-	LINK_DIRECTORIES(${ECHO_DEP_PATH}/AdrenoSDK/Lib/x64)
-	LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/openal-1.1/windows/libs/Win64)
-	LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/Core/lib/windows/x86_64)
+IF(${ECHO_PLATFORM_WIN32})
+	IF(CMAKE_SIZEOF_VOID_P EQUAL 4)
+		LINK_DIRECTORIES(${ECHO_DEP_PATH}/AdrenoSDK/Lib/Win32)
+		LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/openal-1.1/windows/libs/Win32)
+		LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/Core/lib/windows/x86)
+	ELSEIF(CMAKE_SIZEOF_VOID_P EQUAL 8)
+		LINK_DIRECTORIES(${ECHO_DEP_PATH}/AdrenoSDK/Lib/x64)
+		LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/openal-1.1/windows/libs/Win64)
+		LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/Core/lib/windows/x86_64)
+	ENDIF()
+ELSE()
+	LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/Core/lib/macos)
 ENDIF()
 
-# ÉèÖÃÄ£¿éÃû³Æ
+# ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 SET(MODULE_NAME echo)
 
-# Ô´ÎÄ¼þÂ·¾¶
+# Ô´ï¿½Ä¼ï¿½Â·ï¿½ï¿½
 SET(MODULE_HEADER_PATH ${ECHO_ROOT_PATH}/editor/${MODULE_NAME})
 SET(MODULE_SOURCE_PATH ${ECHO_ROOT_PATH}/editor/${MODULE_NAME})
 SET(QLIBRARY_PATH      ${ECHO_ROOT_PATH}/editor/QLibrary)
 
-# µÝ¹é²éÕÒÎÄ¼þ
+# ï¿½Ý¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
 FILE(GLOB_RECURSE HEADER_FILES		${MODULE_HEADER_PATH}/*.h ${MODULE_HEADER_PATH}/*.inl)
 FILE(GLOB_RECURSE SOURCE_FILES		${MODULE_SOURCE_PATH}/*.c ${MODULE_SOURCE_PATH}/*.cpp)
 FILE(GLOB_RECURSE UI_FILES			${MODULE_SOURCE_PATH}/*.ui)
@@ -101,14 +110,14 @@ GROUP_QT_MOC_FILES(QT_HEADER_FILES)
 GROUP_QT_MOC_FILES(QL_HEADER_FILES)
 GROUP_QT_MOC_FILES(QOBJECT_CHILDREN_FILES)
 
-# Qt×ÊÔ´
+# Qtï¿½ï¿½Ô´
 FILE(GLOB_RECURSE RESOURCE_QT_FILES	${MODULE_SOURCE_PATH}/*.qrc)
 FILE(GLOB_RECURSE RESOURCE_FILES	${MODULE_SOURCE_PATH}/*.rc ${MODULE_SOURCE_PATH}/*.qml ${MODULE_SOURCE_PATH}/*.qss)
 
 QT5_ADD_RESOURCES(MODULE_QT_RCC_SRCS ${RESOURCE_QT_FILES})
-SOURCE_GROUP("resources" FILES ${MODULE_QT_RCC_SRCS} ${RESOURCE_QT_FILES} ${RESOURCE_FILES}) 
+SOURCE_GROUP("resources" FILES ${MODULE_QT_RCC_SRCS} ${RESOURCE_QT_FILES} ${RESOURCE_FILES})
 
-# Ìí¼ÓÖ´ÐÐ³ÌÐò
+# ï¿½ï¿½ï¿½ï¿½Ö´ï¿½Ð³ï¿½ï¿½ï¿½
 ADD_EXECUTABLE(${MODULE_NAME}
 	${HEADER_FILES}
 	${SOURCE_FILES}
@@ -120,26 +129,30 @@ ADD_EXECUTABLE(${MODULE_NAME}
 	${ASTUDIO_QT_FILES}
 	CMakeLists.txt)
 
-# Á´½Ó¿â
-TARGET_LINK_LIBRARIES(${MODULE_NAME} zlib engine 7zip winmm.lib imm32.lib dxgi.lib Shlwapi.lib lua recast freeimage)
+# ï¿½ï¿½ï¿½Ó¿ï¿½
+TARGET_LINK_LIBRARIES(${MODULE_NAME} zlib engine lua recast freeimage)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} Qt5::Core Qt5::Widgets Qt5::UiTools)
-TARGET_LINK_LIBRARIES(${MODULE_NAME} Live2DCubismCore.lib pugixml spine box2d)
-TARGET_LINK_LIBRARIES(${MODULE_NAME} OpenAL32.lib)
-TARGET_LINK_LIBRARIES(${MODULE_NAME} debug libEGL_d.lib optimized libEGL.lib)
-TARGET_LINK_LIBRARIES(${MODULE_NAME} debug libGLESv2_d.lib optimized libGLESv2.lib dbghelp.lib Psapi.lib)
+TARGET_LINK_LIBRARIES(${MODULE_NAME} Live2DCubismCore pugixml spine box2d)
 
-# ÉèÖÃÊôÐÔ
+IF(${ECHO_PLATFORM_WIN32})
+	TARGET_LINK_LIBRARIES(${MODULE_NAME} 7zip winmm.lib imm32.lib dxgi.lib Shlwapi.lib)
+	TARGET_LINK_LIBRARIES(${MODULE_NAME} debug libEGL_d.lib optimized libEGL.lib)
+	TARGET_LINK_LIBRARIES(${MODULE_NAME} debug libGLESv2_d.lib optimized libGLESv2.lib dbghelp.lib Psapi.lib)
+	TARGET_LINK_LIBRARIES(${MODULE_NAME} OpenAL32.lib)
+ENDIF()
+
+# set folder
 SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES FOLDER "editor")
 
 IF(MSVC)
-	# ÉèÖÃÎª´°¿ÚÄ£Ê½
+	# ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½Ä£Ê½
 	#SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES LINK_FLAGS_DEBUG "/SUBSYSTEM:WINDOWS /entry:mainCRTStartup")
 	SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES LINK_FLAGS_RELEASE "/SUBSYSTEM:WINDOWS /entry:mainCRTStartup")
 	#SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES LINK_FLAGS "/level='requireAdministrator' /uiAccess='false' ")
-	
+
 	SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINER_FLAGS} /SAFESEH:NO")
 	SET(CMAKE_EXE_LINKER_FLAGS_VERSION "${CMAKE_EXE_LINER_FLAGS} /SAFESEH:NO")
 ENDIF(MSVC)
 
-# ÉèÖÃÏîÄ¿ÒÀÀµ
+# ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½
 ADD_DEPENDENCIES(${MODULE_NAME} engine)

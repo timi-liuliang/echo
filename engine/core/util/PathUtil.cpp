@@ -430,13 +430,7 @@ namespace Echo
 		return true;
 	}
 
-#ifdef ECHO_PLATFORM_WINDOWS
-	String PathUtil::GetCurrentDir()
-	{
-		char buff[MAX_PATHNAME];
-		return getcwd(buff, MAX_PATHNAME);
-	}
-#elif defined ECHO_PLATFORM_HTML5
+#if defined(ECHO_PLATFORM_WINDOWS) || defined(ECHO_PLATFORM_MAC) || defined(ECHO_PLATFORM_HTML5)
 	String PathUtil::GetCurrentDir()
 	{
 		char buff[MAX_PATHNAME];

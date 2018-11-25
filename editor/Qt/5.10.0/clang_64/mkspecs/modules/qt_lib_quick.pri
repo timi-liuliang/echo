@@ -1,0 +1,17 @@
+QT.quick.VERSION = 5.10.0
+QT.quick.name = QtQuick
+QT.quick.module = QtQuick
+QT.quick.libs = $$QT_MODULE_LIB_BASE
+QT.quick.includes = $$QT_MODULE_LIB_BASE/QtQuick.framework/Headers
+QT.quick.frameworks = $$QT_MODULE_LIB_BASE
+QT.quick.bins = $$QT_MODULE_BIN_BASE
+QT.quick.plugin_types = accessible scenegraph
+QT.quick.depends = core gui qml
+QT.quick.run_depends = network
+QT.quick.uses =
+QT.quick.module_config = v2 lib_bundle
+QT.quick.DEFINES = QT_QUICK_LIB
+QT.quick.enabled_features =
+QT.quick.disabled_features = d3d12
+QT_CONFIG +=
+QT_MODULES += quick

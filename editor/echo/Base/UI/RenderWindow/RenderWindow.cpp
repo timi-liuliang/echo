@@ -42,7 +42,7 @@ namespace Studio
 
 	void RenderWindow::BeginRender()
 	{
-		EchoEngine::instance()->Initialize((HWND)this->winId());
+		EchoEngine::instance()->Initialize((size_t)this->winId());
 
 		if (!m_inputController2d)
 			m_inputController2d = new InputController2d;
@@ -61,11 +61,11 @@ namespace Studio
 	{
 		ResizeWindow();
 
-		static DWORD lastTime = QDateTime::currentMSecsSinceEpoch();
+        static Echo::Dword lastTime = QDateTime::currentMSecsSinceEpoch();
 
 		// calc delta Time
-		DWORD curTime = QDateTime::currentMSecsSinceEpoch();
-		DWORD elapsedTime = curTime - lastTime;
+        Echo::Dword curTime = QDateTime::currentMSecsSinceEpoch();
+        Echo::Dword elapsedTime = curTime - lastTime;
 
 		QPointF pos = m_inputController->mousePosition();
 		Qt::MouseButton button = m_inputController->pressedMouseButton();

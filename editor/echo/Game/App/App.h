@@ -12,7 +12,7 @@ namespace Game
 		~App();
 
 		// init
-		void init(HWND hwnd, const Echo::String& echoProject);
+		void init(size_t hwnd, const Echo::String& echoProject);
 
 		// tick
 		void tick(float elapsedTime);

@@ -1,28 +1,27 @@
 #include "ThumbnailMgr.h"
 #include "FreeImageHelper.h"
 #include <engine/core/render/interface/RenderTargetManager.h>
-#include <engine/core/Util/StringUtil.h>
+#include <engine/core/util/StringUtil.h>
 #include "Studio.h"
+
+#ifdef ECHO_PLATFORM_WINDOWS
 #include <shellapi.h>
+#endif
 
 namespace Studio
 {
-	// 构造函数
 	ThumbnailMgr::ThumbnailMgr()
 	{}
 
-	// 析构函数
 	ThumbnailMgr::~ThumbnailMgr()
 	{}
 
-	// instance
 	ThumbnailMgr* ThumbnailMgr::instance()
 	{
 		static ThumbnailMgr* inst = new ThumbnailMgr;
 		return inst;
 	}
 
-	// 保存缩略图
 	bool ThumbnailMgr::saveThumbnail( const Echo::String& fileName, THUMBNAIL_TYPE type /* = THUMB_NON */ )
 	{
 		Echo::String WaterMarkType[ThumbnailMgr::THUMB_NUM] = 
@@ -48,7 +47,6 @@ namespace Studio
 		return false;
 	}
 
-	// 更新缩略图
 	void ThumbnailMgr::update()
 	{
 		//Echo::String project = EchoRoot->getConfig().projectFile;

@@ -2,7 +2,9 @@
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/thread/Threading.h>
 #include <engine/core/main/Engine.h>
+#ifdef ECHO_PLATFORM_WINDOWS
 #include <TlHelp32.h>
+#endif
 #include "Studio.h"
 #include <QFileInfo>
 #include <QDateTime>
@@ -297,16 +299,16 @@ namespace QT_UI
 
 		QFileInfo inputFileInfo(fileFullName.c_str());
 		qint64 fileSize = inputFileInfo.size();
-		fileSize = max((fileSize / 1024), 1);
+        fileSize = std::max<int>((fileSize / 1024), 1);
 		QDateTime time = inputFileInfo.lastModified();
 		QString lastModify = time.toString("yyyy/MM/dd hh:mm:ss");
 		Echo::String fileInfos;
-		fileInfos = Echo::StringUtil::Format("名称：%s\n大小：%ldKB\n修改时间：", \
-			fileName.c_str(), fileSize);
+		//fileInfos = Echo::StringUtil::Format("名称：%s\n大小：%ldKB\n修改时间：", \
+		//	fileName.c_str(), fileSize);
 
 		QString qtFileInfos = QString::fromLocal8Bit(fileInfos.c_str());
 		qtFileInfos.append(lastModify);
-		Echo::String fullPath = "\n路径：" + fileFullName;
+        Echo::String fullPath;// = "\n路径：" + fileFullName;
 		qtFileInfos.append(QString::fromLocal8Bit(fullPath.c_str()));
 
 		item->setToolTip(qtFileInfos);

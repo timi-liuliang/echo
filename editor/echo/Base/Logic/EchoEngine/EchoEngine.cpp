@@ -2,23 +2,28 @@
 #include <QFileInfo>
 #include <QString>
 #include <array>
-#include <Engine/core/main/Engine.h>
-#include <Engine/modules/Navigation/Navigation.h>
+#include <engine/core/main/Engine.h>
+#include <engine/modules/navigation/Navigation.h>
 #include <interface/RenderTargetManager.h>
 #include <interface/RenderTarget.h>
-#include "engine/core/Thread/Threading.h"
+#include "engine/core/thread/Threading.h"
 #include "Studio.h"
 #include "RenderWindow.h"
 #include <interface/Renderer.h>
 #include <string>
-#include <Psapi.h>
-#include "studio.h"
+#include "Studio.h"
+#ifdef ECHO_PLATFORM_WINDOWS
 #include "gles/GLESRenderBase.h"
 #include "gles/GLESRenderer.h"
+#endif
 #include "interface/RenderState.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/util/TimeProfiler.h>
 #include <engine/core/io/IO.h>
+
+#ifdef ECHO_PLATFORM_WINDOWS
+    #include <Psapi.h>
+#endif
 
 namespace Studio
 {
@@ -44,7 +49,7 @@ namespace Studio
 		return inst;
 	}
 
-	bool EchoEngine::Initialize(HWND hwnd)
+	bool EchoEngine::Initialize(size_t hwnd)
 	{
 		// init engine by configure
 		Echo::Engine::Config rootcfg;

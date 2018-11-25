@@ -221,7 +221,10 @@ namespace Echo
 	bool Engine::initRenderer(size_t windowHandle)
 	{
 		Renderer* renderer = nullptr;
+#ifdef ECHO_PLATFORM_MAC
+#else
 		LoadGLESRenderer(renderer);
+#endif
 
 		Echo::Renderer::Config renderCfg;
 		renderCfg.enableThreadedRendering = false;

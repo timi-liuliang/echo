@@ -62,8 +62,9 @@ namespace QT_UI
 			setHorizontalHeaderLabels(headerLables);
 		}
 
-		// ±íÏî
-		addChildItem(&root.child("item"), this->invisibleRootItem());
+		// add child item
+        pugi::xml_node rootItme = root.child("item");
+		addChildItem(&rootItme, this->invisibleRootItem());
 	}
 
 	void  QPropertyModel::addChildItem(pugi::xml_node* firstChildElement, QStandardItem* pParentItem)

@@ -1,8 +1,8 @@
 #pragma once
 
 #include <QtWidgets/QTreeView>
-#include <engine/core/Util/Array.hpp>
-#include <engine/core/Math/Math.h>
+#include <engine/core/util/Array.hpp>
+#include <engine/core/math/Math.h>
 
 namespace QT_UI
 {
@@ -21,9 +21,6 @@ namespace QT_UI
 		WT_Res,
 	};
 
-	/**
-	 * 辅助属性显示
-	 */
 	struct QProperty;
 	class QPropertyConfigHelper
 	{
@@ -54,7 +51,7 @@ namespace QT_UI
 		template<typename T>
 		void addItem(const char* propertyName, T value, WidgetType widget, const char* widgetParams = nullptr)
 		{
-			static_assert(false, "ambiguous overload for function `addItem`.");
+			//static_assert(false, "ambiguous overload for function `addItem`.");
 		}
 
 		// 获取结果

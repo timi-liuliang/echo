@@ -9,7 +9,6 @@
 
 namespace Echo
 {
-	// 7zip操作
 	struct SzHandler
 	{
 		CSzArEx			db;
@@ -44,7 +43,6 @@ namespace Echo
 		EchoSafeFree(address);
 	}
 
-	// 构造函数
 	SzArchive::SzArchive(const String& name, const String& archType)
 		: Archive(name, archType)
 	{
@@ -52,21 +50,19 @@ namespace Echo
 		m_7zipHandle = EchoNew(SzHandler);
 	}
 
-	//  是否大小写敏感
 	bool SzArchive::isCaseSensitive(void) const
 	{
 		return true;
 	}
 
-	// 析构函数
 	SzArchive::~SzArchive()
 	{
 		unload();
 	}
 
-	// 加载
 	void SzArchive::load()
 	{
+#ifdef ECHO_PLATFORM_WINDOWS
 		Echo::MutexLock lock(m_7zipMutexLock);
 
 		SzHandler* sz = (SzHandler*)m_7zipHandle;
@@ -107,11 +103,12 @@ namespace Echo
 				}
 			}
 		}
+#endif
 	}
 
-	// 卸载
 	void SzArchive::unload()
 	{
+#ifdef ECHO_PLATFORM_WINDOWS
 		Echo::MutexLock lock(m_7zipMutexLock);
 
 		m_files.clear();
@@ -124,13 +121,13 @@ namespace Echo
 			EchoSafeDelete(sz, SzHandler);
 			m_7zipHandle = nullptr;
 		}
+#endif
 	}
 
-	// 打开资源
 	DataStream* SzArchive::open(const String& filename)
 	{
 		Echo::MutexLock lock(m_7zipMutexLock);
-
+#ifdef ECHO_PLATFORM_WINDOWS
 		auto it = m_files.find(filename);
 		if (it != m_files.end())
 		{
@@ -153,11 +150,11 @@ namespace Echo
 				return dataStream;
 			}
 		}
+#endif
 
 		return nullptr;
 	}
 
-	// 列出所有文件
 	StringArray SzArchive::list(bool recursive, bool dirs)
 	{
  		StringArray strs; 
@@ -170,13 +167,11 @@ namespace Echo
 		return strs;
 	}
 
-	// 枚举所有文件信息
 	FileInfoList* SzArchive::listFileInfo(bool dirs)
 	{
 		return nullptr;
 	}
 
-	// 判断文件是否存在
 	bool SzArchive::exists(const String& filename)
 	{
 		auto it = m_files.find(filename);
@@ -186,7 +181,6 @@ namespace Echo
 		return false;
 	}
 
-	// 静态方法，解压资源包
 	void SzArchive::extractTo(const String& szip, const String& outPath)
 	{
 #ifdef ECHO_PLATFORM_WINDOWS

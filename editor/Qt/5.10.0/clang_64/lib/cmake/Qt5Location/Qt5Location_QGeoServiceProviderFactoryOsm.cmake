@@ -1,0 +1,7 @@
+
+add_library(Qt5::QGeoServiceProviderFactoryOsm MODULE IMPORTED)
+
+_populate_Location_plugin_properties(QGeoServiceProviderFactoryOsm RELEASE "geoservices/libqtgeoservices_osm.dylib")
+_populate_Location_plugin_properties(QGeoServiceProviderFactoryOsm DEBUG "geoservices/libqtgeoservices_osm.dylib")
+
+list(APPEND Qt5Location_PLUGINS Qt5::QGeoServiceProviderFactoryOsm)

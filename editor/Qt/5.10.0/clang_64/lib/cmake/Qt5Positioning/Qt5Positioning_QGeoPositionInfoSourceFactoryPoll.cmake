@@ -1,0 +1,7 @@
+
+add_library(Qt5::QGeoPositionInfoSourceFactoryPoll MODULE IMPORTED)
+
+_populate_Positioning_plugin_properties(QGeoPositionInfoSourceFactoryPoll RELEASE "position/libqtposition_positionpoll.dylib")
+_populate_Positioning_plugin_properties(QGeoPositionInfoSourceFactoryPoll DEBUG "position/libqtposition_positionpoll.dylib")
+
+list(APPEND Qt5Positioning_PLUGINS Qt5::QGeoPositionInfoSourceFactoryPoll)

@@ -41,7 +41,7 @@ namespace QT_UI
 
 	bool QPropertyDelegate::IsSupportCustomPaint( const Echo::String& widgetType, const QVariant& value) const
 	{
-		auto& it = m_widgetInfos.find(widgetType);
+		const auto& it = m_widgetInfos.find(widgetType);
 		if (it != m_widgetInfos.end())
 		{
 			return it->second.m_isSupportCustomPaint;
@@ -52,7 +52,7 @@ namespace QT_UI
 
 	bool QPropertyDelegate::ItemDelegatePaint( QPainter *painter, const Echo::String& widgetType, const QRect& rect, const QVariant& val) const
 	{
-		auto& it = m_widgetInfos.find(widgetType);
+		const auto& it = m_widgetInfos.find(widgetType);
 		if (it != m_widgetInfos.end() && it->second.m_paintFun)
 		{
 			return (*(it->second.m_paintFun))(painter, rect, val.toString().toStdString());

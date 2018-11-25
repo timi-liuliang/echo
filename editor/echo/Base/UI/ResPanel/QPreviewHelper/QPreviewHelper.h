@@ -56,7 +56,7 @@ namespace QT_UI
 		void createItem(const char* filePath, std::vector<QStandardItem*>& results);
 
 		// get icon
-		QIcon QPreviewHelper::getFileIcon(const char* fullPath);
+		QIcon getFileIcon(const char* fullPath);
 
 		// is support this ext
 		bool isSupportExt(const Echo::String& file);

@@ -24,7 +24,7 @@ namespace Game
 
 	void Window::start(const Echo::String& echoProject)
 	{
-		m_app->init((HWND)winId(), echoProject);
+		m_app->init((size_t)winId(), echoProject);
 
 		// 设置初始宽高
 		Echo::i32 thisW = width();
@@ -48,14 +48,14 @@ namespace Game
 
 	void  Window::Render()
 	{
-		// 鼠标是否位于窗口中
+		// 蔯heck window size
 		checkWindowSize();
 
-		static DWORD lastTime = QDateTime::currentMSecsSinceEpoch();
+        static Echo::Dword lastTime = QDateTime::currentMSecsSinceEpoch();
 
 		// 计算delta Time
-		DWORD curTime = QDateTime::currentMSecsSinceEpoch();
-		DWORD elapsedTime = curTime - lastTime;
+        Echo::Dword curTime = QDateTime::currentMSecsSinceEpoch();
+        Echo::Dword elapsedTime = curTime - lastTime;
 
 		// Call the main render function
 		m_app->tick(elapsedTime * 0.001f);

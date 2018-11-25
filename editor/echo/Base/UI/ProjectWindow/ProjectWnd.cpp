@@ -17,8 +17,10 @@ namespace Studio
 	{
 		setupUi(this);
 
-		// 隐藏标题
+#ifdef ECHO_PLATFORM_WINDOWS
+		// hide window hwnd
 		setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+#endif
 
 		// 设置菜单左上控件
 		m_menuBar->setTopLeftCornerIcon(":/icon/Icon/icon.png");

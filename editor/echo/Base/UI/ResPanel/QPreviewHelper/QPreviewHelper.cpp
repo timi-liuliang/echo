@@ -106,7 +106,7 @@ namespace QT_UI
 
 		Echo::String tips;
 		tips += "Name : " + fileName + "\n";
-		tips += "Size : " + Echo::StringUtil::Format("%d kb\n", max(fileSize / 1024, 1));
+        tips += "Size : " + Echo::StringUtil::Format("%d kb\n", std::max<int>(fileSize / 1024, 1));
 		tips += "Modify : " + lastModify + "\n";
 		tips += "Path : " + fullPath;
 		item->setToolTip(tips.c_str());	

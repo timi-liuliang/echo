@@ -17,7 +17,7 @@ namespace Game
 	}
 
 	// init
-	void App::init(HWND hwnd, const Echo::String& echoProject)
+	void App::init(size_t hwnd, const Echo::String& echoProject)
 	{
 		m_root = Echo::Engine::instance();
 

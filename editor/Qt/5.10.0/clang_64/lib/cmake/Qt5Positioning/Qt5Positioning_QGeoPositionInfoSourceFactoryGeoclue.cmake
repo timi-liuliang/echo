@@ -1,0 +1,7 @@
+
+add_library(Qt5::QGeoPositionInfoSourceFactoryGeoclue MODULE IMPORTED)
+
+_populate_Positioning_plugin_properties(QGeoPositionInfoSourceFactoryGeoclue RELEASE "position/libqtposition_geoclue.dylib")
+_populate_Positioning_plugin_properties(QGeoPositionInfoSourceFactoryGeoclue DEBUG "position/libqtposition_geoclue.dylib")
+
+list(APPEND Qt5Positioning_PLUGINS Qt5::QGeoPositionInfoSourceFactoryGeoclue)

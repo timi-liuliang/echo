@@ -207,7 +207,7 @@ namespace Studio
 		float         diameter = (box.getSize().len() * 0.5f);
 		Echo::Vector3 center = ((box.vMin + box.vMax) * 0.5f);
 
-		m_cameraScale = max(diameter / m_camera->getWidth(), diameter / m_camera->getHeight()) * scale;
+        m_cameraScale = std::max<float>(diameter / m_camera->getWidth(), diameter / m_camera->getHeight()) * scale;
 		m_cameraPositon.x = center.x;
 		m_cameraPositon.y = center.y;
 	}

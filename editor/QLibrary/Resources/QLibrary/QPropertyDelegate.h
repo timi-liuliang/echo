@@ -30,22 +30,22 @@ namespace QT_UI
 		QPropertyDelegate(QPropertyModel* model, QObject *parent = 0);
 
 		// size
-		QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+		virtual QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
 		// 绘制函数
-		void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+		virtual void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
 		// 创建编辑器控件
-		QWidget* createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+		virtual QWidget* createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
 
 		// 设置控件数据
-		void  setEditorData( QWidget* editor, const QModelIndex& index) const;
+		virtual void  setEditorData( QWidget* editor, const QModelIndex& index) const override;
 
 		// 设置模型数据
-		void  setModelData( QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const;
+		virtual void  setModelData( QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const override;
 
 		// 设置编辑器Geometry
-		void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex& index ) const;
+		virtual void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex& index ) const override;
 
 	public:
 		// register widget

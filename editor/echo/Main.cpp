@@ -8,8 +8,10 @@
 #include <QSettings>
 #include "CMDLine.h"
 #include "Studio.h"
-#include <shellapi.h>
-#include <windows.h>
+#ifdef ECHO_PLATFORM_WINDOWS
+    #include <shellapi.h>
+    #include <windows.h>
+#endif
 #include <QTime>
 #include <engine/core/base/echo_def.h>
 #include <algorithm>
@@ -23,13 +25,7 @@ int main( int argc, char* argv[])
 
 	// set directory path
 	QString filePath = QFileInfo(argv[0]).path();
-	if (filePath.length() <= 1)
-	{
-		char buffer[1024] = {};
-		::GetModuleFileNameA(NULL, buffer, 1024);
-		filePath = QFileInfo(buffer).path();
-	}
-	else
+	if (filePath.length() >= 1)
 	{
 		filePath = QFileInfo(argv[0]).path();
 	}
