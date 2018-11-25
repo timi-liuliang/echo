@@ -7,7 +7,7 @@
 //#  define  GL_GLEXT_PROTOTYPES
 //#endif
 //
-//#ifdef ECHO_PLATFORM_MAC_IOS
+//#ifdef ECHO_PLATFORM_IOS
 //#	include <OpenGLES/ES3/gl.h>
 //#	include <OpenGLES/ES3/glext.h>
 //#   ifdef __OBJC__

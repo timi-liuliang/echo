@@ -93,7 +93,7 @@ namespace Echo
             		fp = fopen(strFile.c_str(),"w+");
 					fclose(fp);
 				}
-#elif defined(ECHO_PLATFORM_MAC_IOS)
+#elif defined(ECHO_PLATFORM_IOS)
 				String strDocPath = m_path;
 				if ( !strDocPath.empty( ) ) 
 				{

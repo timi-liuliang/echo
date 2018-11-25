@@ -39,7 +39,7 @@
 //		}
 //		else
 //		{
-//#ifdef ECHO_PLATFORM_MAC_IOS
+//#ifdef ECHO_PLATFORM_IOS
 //			isNeedSetVertexBuffer = pre->getVertexStreamHash() != m_vertexStreamsHash ? true : false;
 //#else
 //			isNeedSetVertexBuffer = true;
@@ -81,7 +81,7 @@
 //	// unbind
 //	void GLES2RenderInput::unbind()
 //	{
-//#ifndef ECHO_PLATFORM_MAC_IOS
+//#ifndef ECHO_PLATFORM_IOS
 //		// °ó¶¨¶¥µãÁ÷
 //  		for (size_t i = 0; i < m_vertexStreams.size(); i++)
 //  		{

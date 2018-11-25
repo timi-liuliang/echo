@@ -9,7 +9,7 @@ IF(ECHO_PLATFORM_WIN32)
 		BUILD_COMMAND ""
 		INSTALL_COMMAND ""
 	)
-ELSEIF(ECHO_PLATFORM_OSX)
+ELSEIF(ECHO_PLATFORM_MAC)
 	ExternalProject_Add(
 		vulkan
 		PREFIX ${ECHO_ROOT_PATH}/thirdparty/vulkan/macosx

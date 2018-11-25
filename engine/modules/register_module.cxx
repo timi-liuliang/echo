@@ -15,7 +15,7 @@ using namespace Echo;
 
 REGISTER_MODULE(CameraModule)
 REGISTER_MODULE(Box2DModule)
-REGISTER_MODULE(AudioModule)
+//REGISTER_MODULE(AudioModule)
 REGISTER_MODULE(Live2DModule)
 REGISTER_MODULE(SpineModule)
 REGISTER_MODULE(GltfModule)

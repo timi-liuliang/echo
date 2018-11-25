@@ -1,8 +1,7 @@
 #pragma once
 
 #include "engine/core/scene/node.h"
-#include <al.h>
-#include <alc.h>
+#include "audio_base.h"
 
 namespace Echo
 {

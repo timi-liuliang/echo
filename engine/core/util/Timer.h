@@ -5,7 +5,7 @@
 #ifdef ECHO_PLATFORM_WINDOWS
 	#include <windows.h>
 	#include <time.h>
-#elif defined(ECHO_PLATFORM_MAC_IOS) || defined(ECHO_PLATFORM_MAC_OSX)
+#elif defined(ECHO_PLATFORM_IOS) || defined(ECHO_PLATFORM_MAC)
 	#include <mach/mach_time.h>
 #endif
 
@@ -47,7 +47,7 @@ namespace Echo
 
 		DWORD_PTR mTimerMask;
 
-#elif defined(ECHO_PLATFORM_MAC_IOS) || defined(ECHO_PLATFORM_MAC_OSX)
+#elif defined(ECHO_PLATFORM_IOS) || defined(ECHO_PLATFORM_MAC)
         
         uint64_t m_IosStartTime;
         mach_timebase_info_data_t m_TimeBaseInfo;

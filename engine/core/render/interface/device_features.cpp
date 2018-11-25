@@ -17,7 +17,7 @@ namespace Echo
 	const String DeviceFeature::cs_program_binary = "GL_OES_get_program_binary";
 	const String DeviceFeature::cs_color_buffer_half_float = "GL_EXT_color_buffer_half_float";
 
-#if defined(ECHO_PLATFORM_MAC_IOS)
+#if defined(ECHO_PLATFORM_IOS)
 	bool DeviceFeature::s_supportGLES3 = false;
 #else
 	bool DeviceFeature::s_supportGLES3 = true;

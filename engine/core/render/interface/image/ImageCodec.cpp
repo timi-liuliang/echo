@@ -24,7 +24,7 @@
 #	endif
 #endif
 
-#if defined(ECHO_PLATFORM_MAC_IOS)
+#if defined(ECHO_PLATFORM_IOS)
 #	ifdef FREEIMAGE_COLORORDER
 #		undef FREEIMAGE_COLORORDER
 #	endif

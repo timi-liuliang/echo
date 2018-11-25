@@ -6,12 +6,12 @@
 
 namespace Echo
 {
-	// sleepº¯Êý
+	// sleep
 	void ThreadSleepByMilliSecond(float millSecond)
 	{
 #ifdef ECHO_PLATFORM_WINDOWS
 		Sleep(static_cast<Echo::Dword>(millSecond));
-#elif defined(ECHO_PLATFORM_MAC_IOS)
+#elif defined(ECHO_PLATFORM_IOS)
 		usleep(static_cast<int>(millSecond*1000.f));
 #elif defined(ECHO_PLATFORM_ANDROID)
 		usleep(static_cast<int>(millSecond*1000.f));

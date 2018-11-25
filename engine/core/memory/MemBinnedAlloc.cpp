@@ -1,4 +1,4 @@
-﻿#include "MemBinnedAlloc.h"
+#include "MemBinnedAlloc.h"
 #include "MemAllocDef.h"
 
 #if (ECHO_MEMORY_ALLOCATOR  == ECHO_MEMORY_ALLOCATOR_BINNED)
@@ -14,7 +14,7 @@
 #pragma comment(lib, "psapi.lib")
 #endif
 
-#ifdef ECHO_PLATFORM_MAC_IOS
+#ifdef ECHO_PLATFORM_IOS
 #include <mach/mach.h>
 #include <mach/mach_host.h>
 #endif
@@ -1456,7 +1456,7 @@ namespace Echo
 		if (g_binned_malloc)
 			return g_binned_malloc;
              
-#ifdef ECHO_PLATFORM_MAC_IOS
+#ifdef ECHO_PLATFORM_IOS
         
         // get free memory
         vm_size_t PageSize;

@@ -30,9 +30,9 @@
 // Device                                                     Simulator
 // Both requiring OS version 4.0 or greater
 #   if __ENVIRONMENT_IPHONE_OS_VERSION_MIN_REQUIRED__ >= 40000 || __IPHONE_OS_VERSION_MIN_REQUIRED >= 40000
-#       define ECHO_PLATFORM_MAC_IOS
+#       define ECHO_PLATFORM_IOS
 #   else
-#       define ECHO_PLATFORM_MAC_OSX
+#       define ECHO_PLATFORM_MAC
 #   endif
 #elif defined(__ANDROID__)
 #	define ECHO_PLATFORM_ANDROID
@@ -115,7 +115,7 @@
 #	endif
 #endif
 
-#if defined(ECHO_PLATFORM_MAC_IOS) || defined(ECHO_PLATFORM_WINDOWS) || defined(ECHO_PLATFORM_ANDROID)
+#if defined(ECHO_PLATFORM_IOS) || defined(ECHO_PLATFORM_WINDOWS) || defined(ECHO_PLATFORM_ANDROID)
 #define ECHO_RENDER_THREAD_LOCK_FREE
 #endif
 

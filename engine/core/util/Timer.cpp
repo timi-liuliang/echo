@@ -67,7 +67,7 @@ namespace Echo
 		mLastTime = 0;
 		mZeroClock = clock();
  
-#elif defined(ECHO_PLATFORM_MAC_IOS) || defined(ECHO_PLATFORM_MAC_OSX)
+#elif defined(ECHO_PLATFORM_IOS) || defined(ECHO_PLATFORM_MAC)
         
         mZeroClock = clock();
         m_IosStartTime = mach_absolute_time();
@@ -129,7 +129,7 @@ namespace Echo
 		mLastTime = newTime;
 
 		return newTicks;
-#elif defined(ECHO_PLATFORM_MAC_IOS) || defined(ECHO_PLATFORM_MAC_OSX)
+#elif defined(ECHO_PLATFORM_IOS) || defined(ECHO_PLATFORM_MAC)
         
         return  (mach_absolute_time() - m_IosStartTime) * m_TimeBaseInfo.numer / m_TimeBaseInfo.denom / 1000000;
         
@@ -188,7 +188,7 @@ namespace Echo
 
 		return newMicro;
         
-#elif defined(ECHO_PLATFORM_MAC_IOS) || defined(ECHO_PLATFORM_MAC_OSX)
+#elif defined(ECHO_PLATFORM_IOS) || defined(ECHO_PLATFORM_MAC)
         
         return  (mach_absolute_time() - m_IosStartTime) * m_TimeBaseInfo.numer / m_TimeBaseInfo.denom / 1000;
         

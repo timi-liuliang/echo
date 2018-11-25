@@ -17,7 +17,7 @@
 //	GLES2Renderer* g_renderer = nullptr;
 //}
 //
-//#if defined(ECHO_PLATFORM_MAC_IOS)
+//#if defined(ECHO_PLATFORM_IOS)
 //extern void makeContextCurrent();
 //extern void PresentRenderBuffer();
 //#elif defined(ECHO_PLATFORM_WINDOWS)
@@ -675,7 +675,7 @@
 //			EchoLogError("GLES2Renderer: Present() Failed !");
 //			return false;
 //		}
-//#elif defined(ECHO_PLATFORM_MAC_IOS)
+//#elif defined(ECHO_PLATFORM_IOS)
 //		PresentRenderBuffer();
 //#endif
 //
