@@ -4,10 +4,6 @@
 #include <engine/core/util/StringUtil.h>
 #include "Studio.h"
 
-#ifdef ECHO_PLATFORM_WINDOWS
-#include <shellapi.h>
-#endif
-
 namespace Studio
 {
 	ThumbnailMgr::ThumbnailMgr()

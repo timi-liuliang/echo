@@ -7,6 +7,7 @@
 class QObject;
 class QWidget;
 class QAction;
+class QTreeWidgetItem;
 
 # define QSIGNAL(a)  "2"#a
 

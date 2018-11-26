@@ -30,16 +30,16 @@ namespace Studio
 		// refresh node tree display
 		void refreshNodeTreeDisplay();
 
-		// 添加结点
+		// add node
 		void addNode(Echo::Node* node);
 
-		// 获取当前结点
+		// get current select node
 		Echo::Node* getCurrentSelectNode();
 
-		// 获取当前编辑对象
+		// get current edit object
 		Echo::Object* getCurrentEditObject();
 
-		// 设置编辑节点
+		// set next edit object
 		void setNextEditObject(Echo::Object* obj) { m_nextEditObject = obj; }
 
 	public:
@@ -54,16 +54,16 @@ namespace Studio
 
 
 	private slots:
-		// 显示新建节点窗口
+		// show new node dialog
 		void showNewNodeDialog();
 
 		// node tree widget show menu
 		void showMenu(const QPoint& point);
 
-		// 显示当前选中节点属性
+		// show selected object property
 		void showSelectedObjectProperty();
 
-		// 属性修改后,更新结点值
+		// refresh object property display
 		void refreshPropertyToObject(const QString& property, QVariant value);
 
 		// on trigger delete nodes

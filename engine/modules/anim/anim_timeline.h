@@ -19,6 +19,16 @@ namespace Echo
 			Resource,
 		};
 
+		struct ObjectUserData
+		{
+			ObjectType	m_type;
+			String		m_path;
+
+			ObjectUserData(ObjectType type, const String& path)
+				: m_type(type), m_path(path)
+			{}
+		};
+
 	public:
 		Timeline();
 		virtual ~Timeline();
@@ -62,7 +72,7 @@ namespace Echo
 
 	public:
 		// add object to animclip
-		void addObject(ObjectType type, const String& path);
+		void addObject(const String& animName, ObjectType type, const String& path);
 
 	protected:
 		// update self

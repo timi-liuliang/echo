@@ -109,9 +109,16 @@ namespace Echo
 		return false;
 	}
 
-	void Timeline::addObject(ObjectType type, const String& path)
+	void Timeline::addObject(const String& animName, ObjectType type, const String& path)
 	{
+		AnimClip* clip = getClip(animName.c_str());
+		if (clip)
+		{
+			AnimNode* animNode = EchoNew(AnimNode);
+			animNode->m_userData = ObjectUserData( type, path);
 
+			clip->m_nodes.push_back(animNode);
+		}
 	}
 
 	void Timeline::generateUniqueAnimName(const String& prefix, String& oName)

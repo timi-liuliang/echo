@@ -4,7 +4,6 @@
 
 namespace Studio
 {
-	// 构造函数
 	ConfigMgr::ConfigMgr()
 		: m_outPutDir( "" )
 		, m_maxRecentProjects( 10)
@@ -12,13 +11,11 @@ namespace Studio
 		m_cfgFile = Echo::PathUtil::GetCurrentDir() + "/cache/echo.cache";
 	}
 
-	// 析构函数
 	ConfigMgr::~ConfigMgr()
 	{
 		saveCfgFile();
 	}
 
-	// 若配置文件不存在，创建之
 	bool ConfigMgr::isFileExit( )
 	{
 		FILE* pFile = fopen( m_cfgFile.c_str(), "rb" );
@@ -38,7 +35,6 @@ namespace Studio
 		return true;
 	}
 
-	// 加载配置
 	bool ConfigMgr::loadCfgFile( )
 	{
 		m_recentProjects.clear();
@@ -70,7 +66,6 @@ namespace Studio
 		return true;
 	}
 
-	// 写到本地文件中
 	bool ConfigMgr::saveCfgFile( )
 	{
 		pugi::xml_document doc;
@@ -87,7 +82,6 @@ namespace Studio
 		return true;
 	}
 
-	// 使某项目切换到最前
 	void ConfigMgr::switchProjectToTop(const char* fileName)
 	{		
 		for (Echo::list<Echo::String>::iterator iter = m_recentProjects.begin(); iter != m_recentProjects.end(); ++iter)
@@ -102,7 +96,6 @@ namespace Studio
 		}
 	}
 
-	//　添加一个最近打开的工程
 	bool ConfigMgr::addRecentProject( const char* fileName )
 	{
 		if ( isPathExist(fileName) )
@@ -126,7 +119,6 @@ namespace Studio
 		return true;
 	}
 
-	// 获取最近打开的项目文件
 	Echo::String ConfigMgr::getLastOpenProjectFile()
 	{
 		if( m_recentProjects.size())
@@ -139,7 +131,6 @@ namespace Studio
 		return Echo::String();
 	}
 
-	// 判断路径是否存在
 	bool ConfigMgr::isPathExist( Echo::String path )
 	{
 		Echo::list<Echo::String>::iterator iter = m_recentProjects.begin();
@@ -154,7 +145,6 @@ namespace Studio
 		return false;
 	}
 
-	// 保存数据
 	void ConfigMgr::saveData( pugi::xml_document& doc, pugi::xml_node* projectNode)
 	{
 		if( projectNode)
@@ -182,7 +172,6 @@ namespace Studio
 		}
 	}
 
-	// 从文件读取最近的工程 
 	void ConfigMgr::loadRecentProject( pugi::xml_node* node)
 	{
 		if ( node )
@@ -202,7 +191,6 @@ namespace Studio
 		}
 	}
 
-	// 读取输出路径
 	void ConfigMgr::loadOutPutDir( pugi::xml_node* node )
 	{
 		if ( node )
@@ -213,7 +201,6 @@ namespace Studio
 		}
 	}
 
-	// 加载属性值
 	void ConfigMgr::loadPropertys( pugi::xml_node* node)
 	{
 		if ( node )
@@ -232,7 +219,6 @@ namespace Studio
 		}
 	}
 
-	// 根据名称获取属性值
 	Echo::String ConfigMgr::getValue( const char* property)
 	{
 		if (!m_recentProjects.empty())
@@ -248,7 +234,6 @@ namespace Studio
 		return "";
 	}
 
-	// 设置属性
 	void ConfigMgr::setValue( const char* property, const char* value)
 	{
 		if (!m_recentProjects.empty())

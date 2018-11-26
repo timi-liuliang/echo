@@ -30,7 +30,8 @@ namespace Echo
 		String getNewClipName();
 
 		// sync clip data to editor
-		void syncClipDataToEditor();
+		void syncClipListDataToEditor();
+		void syncClipNodeDataToEditor();
 
 		// set current edit anim
 		void setCurrentEditAnim(const char* animName);
@@ -39,6 +40,7 @@ namespace Echo
 		Timeline*		m_timeline;
 		QWidget*		m_addObjectMenu;
 		QAction*		m_addNodeAction;
+		String			m_currentEditAnim;
 	};
 }
 

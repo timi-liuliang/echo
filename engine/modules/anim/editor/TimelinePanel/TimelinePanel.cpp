@@ -5,6 +5,8 @@
 #include "engine/core/editor/qt/QToolButton.h"
 #include "engine/core/editor/qt/QComboBox.h"
 #include "engine/core/editor/qt/QMenu.h"
+#include "engine/core/editor/qt/QTreeWidget.h"
+#include "engine/core/editor/qt/QTreeWidgetItem.h"
 #include "engine/core/base/class_method_bind.h"
 #include "../../anim_timeline.h"
 
@@ -48,7 +50,7 @@ namespace Echo
 		qConnect(qFindChild(m_ui, "AddNode"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onAddObject));
 
 		// update display
-		syncClipDataToEditor();
+		syncClipListDataToEditor();
 	}
 
 	void TimelinePanel::onNewClip()
@@ -59,7 +61,7 @@ namespace Echo
 			animClip->m_name = getNewClipName();
 			m_timeline->addClip(animClip);
 
-			syncClipDataToEditor();
+			syncClipListDataToEditor();
 
 			// set current edit anim clip
 			setCurrentEditAnim(animClip->m_name.c_str());
@@ -76,7 +78,7 @@ namespace Echo
 			m_timeline->generateUniqueAnimName(currentAnim + " Duplicate ", animClipDuplicate->m_name);
 			m_timeline->addClip(animClipDuplicate);
 
-			syncClipDataToEditor();
+			syncClipListDataToEditor();
 
 			// set current edit anim clip
 			setCurrentEditAnim(animClipDuplicate->m_name.c_str());
@@ -90,7 +92,7 @@ namespace Echo
 		{
 			m_timeline->deleteClip(currentAnim.c_str());
 
-			syncClipDataToEditor();
+			syncClipListDataToEditor();
 
 			if (m_timeline->getClipCount() > 0)
 			{
@@ -134,7 +136,9 @@ namespace Echo
 		Echo::String path = Editor::instance()->selectANodeObject();
 		if (!path.empty())
 		{
-			m_timeline->addObject(Timeline::Node, path);
+			m_timeline->addObject(m_currentEditAnim, Timeline::Node, path);
+
+			syncClipNodeDataToEditor();
 		}
 	}
 
@@ -143,7 +147,9 @@ namespace Echo
 		Echo::String path = Editor::instance()->selectASettingObject();
 		if (!path.empty())
 		{
-			m_timeline->addObject(Timeline::Setting, path);
+			m_timeline->addObject(m_currentEditAnim, Timeline::Setting, path);
+
+			syncClipNodeDataToEditor();
 		}
 	}
 
@@ -152,7 +158,9 @@ namespace Echo
 		Echo::String path = Editor::instance()->selectAResObject();
 		if (!path.empty())
 		{
-			m_timeline->addObject(Timeline::Resource, path);
+			m_timeline->addObject(m_currentEditAnim, Timeline::Resource, path);
+
+			syncClipNodeDataToEditor();
 		}
 	}
 
@@ -169,7 +177,7 @@ namespace Echo
 	}
 
 	// sync clip data to editor
-	void TimelinePanel::syncClipDataToEditor()
+	void TimelinePanel::syncClipListDataToEditor()
 	{
 		if (m_timeline)
 		{
@@ -187,7 +195,30 @@ namespace Echo
 		}
 	}
 
-	// set current edit anim
+	void TimelinePanel::syncClipNodeDataToEditor()
+	{
+		QWidget* nodeTreeWidget = qFindChild(m_ui, "m_nodeTreeWidget");
+		if (nodeTreeWidget)
+		{
+			AnimClip* clip = m_timeline->getClip(m_currentEditAnim.c_str());
+			if (clip)
+			{
+				QTreeWidgetItem* rootItem = qTreeWidgetInvisibleRootItem(nodeTreeWidget);
+				if (rootItem)
+				{
+					for (AnimNode* animNode : clip->m_nodes)
+					{
+						//const Timeline::ObjectUserData& userData = any_cast<const Timeline::ObjectUserData&>(animNode->m_userData);
+						QTreeWidgetItem* objetcItem = qTreeWidgetItemNew();
+						qTreeWidgetItemSetText(objetcItem, 0, "bienao");
+
+						qTreeWidgetItemAddChild(rootItem, objetcItem);
+					}
+				}
+			}
+		}
+	}
+
 	void TimelinePanel::setCurrentEditAnim(const char* animName)
 	{
 		QWidget* comboBox = qFindChild(m_ui, "m_clips");
@@ -195,8 +226,12 @@ namespace Echo
 		{
 			int index = m_timeline->getClipIndex(animName);
 			qComboBoxSetCurrentIndex( comboBox, index);
+
+			m_currentEditAnim = animName;
+
+			// sync clip node data to editor
+			syncClipNodeDataToEditor();
 		}
 	}
-
 #endif
 }

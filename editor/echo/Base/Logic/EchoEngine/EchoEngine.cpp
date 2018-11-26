@@ -12,18 +12,10 @@
 #include <interface/Renderer.h>
 #include <string>
 #include "Studio.h"
-#ifdef ECHO_PLATFORM_WINDOWS
-#include "gles/GLESRenderBase.h"
-#include "gles/GLESRenderer.h"
-#endif
 #include "interface/RenderState.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/util/TimeProfiler.h>
 #include <engine/core/io/IO.h>
-
-#ifdef ECHO_PLATFORM_WINDOWS
-    #include <Psapi.h>
-#endif
 
 namespace Studio
 {
