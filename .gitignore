@@ -11,3 +11,4 @@ build/editor/windows/nsis/echo
 bin/app/Win32/Debug/data
 bin/app/Win32/Release/data
 /engine/core/base/echo_config.h
+bin/editor/Debug/echo

@@ -4,6 +4,7 @@
 #include <qfiledialog.h>
 #include "Studio.h"
 #include "Update.h"
+#include "MacHelper.h"
 #include <engine/core/log/Log.h>
 #include <engine/core/io/archive/7zipArchive.h>
 #include <engine/core/util/PathUtil.h>
@@ -20,9 +21,12 @@ namespace Studio
 #ifdef ECHO_PLATFORM_WINDOWS
 		// hide window hwnd
 		setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+#elif defined(ECHO_PLATFORM_MAC)
+        // set title bar color
+        macChangeTitleBarColor(effectiveWinId(), 255.0, 0.0, 0.0);
 #endif
 
-		// 设置菜单左上控件
+		// set top left corner icon
 		m_menuBar->setTopLeftCornerIcon(":/icon/Icon/icon.png");
 
 		m_previewerWidget = new QT_UI::QPreviewWidget(m_recentProject);
@@ -36,7 +40,7 @@ namespace Studio
 		QObject::connect(m_previewerWidget, SIGNAL(Signal_onClickedItem(const QString&)), this, SLOT(onClicked(const QString&)));
 		QObject::connect(m_versionListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(onDownloadNewVersion(QListWidgetItem*)));
 
-		// 显示所有可更新版本
+		// show all updateable version echo
 		showAllUpdateableVersion();
 	}
 
