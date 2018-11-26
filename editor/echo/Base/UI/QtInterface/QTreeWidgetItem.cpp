@@ -1,4 +1,6 @@
 #include <QTreeWidgetItem>
+#include <engine/core/util/StringUtil.h>
+#include "Studio.h"
 
 namespace Echo
 {
@@ -20,6 +22,15 @@ namespace Echo
 		if (item)
 		{
 			item->setText(0, text);
+		}
+	}
+
+	void qTreeWidgetItemSetIcon(QTreeWidgetItem* item, int column, const char* iconPath)
+	{
+		if (item)
+		{
+			Echo::String fullPath = Studio::AStudio::instance()->getRootPath() + iconPath;
+			item->setIcon(column, QIcon(fullPath.c_str()));
 		}
 	}
 }

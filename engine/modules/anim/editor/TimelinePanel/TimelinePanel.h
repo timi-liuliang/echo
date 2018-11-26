@@ -25,6 +25,9 @@ namespace Echo
 		void onAddSetting();
 		void onAddResource();
 
+		// property operate
+		void onAddProperty();
+
 	private:
 		// get new name
 		String getNewClipName();

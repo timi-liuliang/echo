@@ -46,8 +46,8 @@ namespace Echo
 		qConnect(qFindChild(m_ui, "DuplicateClip"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onDuplicateClip));
 		qConnect(qFindChild(m_ui, "DeleteClip"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onDeleteClip));
 		qConnect(qFindChild(m_ui, "m_clips"), QSIGNAL(editTextChanged(const QString &)), this, createMethodBind(&TimelinePanel::onRenameClip));
-
 		qConnect(qFindChild(m_ui, "AddNode"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onAddObject));
+		qConnect(qFindChild(m_ui, "m_nodeTreeWidget"), QSIGNAL(itemClicked(QTreeWidgetItem*, int)), this, createMethodBind(&TimelinePanel::onAddProperty));
 
 		// update display
 		syncClipListDataToEditor();
@@ -213,7 +213,7 @@ namespace Echo
 						const Timeline::ObjectUserData& userData = any_cast<Timeline::ObjectUserData>(animNode->m_userData);
 						QTreeWidgetItem* objetcItem = qTreeWidgetItemNew();
 						qTreeWidgetItemSetText(objetcItem, 0, userData.m_path.c_str());
-
+						qTreeWidgetItemSetIcon(objetcItem, 1, "engine/modules/anim/editor/icon/add.png");
 						qTreeWidgetItemAddChild(rootItem, objetcItem);
 					}
 				}
@@ -234,6 +234,11 @@ namespace Echo
 			// sync clip node data to editor
 			syncClipNodeDataToEditor();
 		}
+	}
+
+	void TimelinePanel::onAddProperty()
+	{
+		int a = 10;
 	}
 #endif
 }
