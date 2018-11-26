@@ -7,6 +7,9 @@
 namespace Echo
 {
 	QTreeWidgetItem* qTreeWidgetInvisibleRootItem(QWidget* treeWidget);
+
+	// clear
+	void qTreeWidgetClear(QWidget* widget);
 }
 
 #endif

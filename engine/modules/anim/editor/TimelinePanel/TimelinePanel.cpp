@@ -200,6 +200,8 @@ namespace Echo
 		QWidget* nodeTreeWidget = qFindChild(m_ui, "m_nodeTreeWidget");
 		if (nodeTreeWidget)
 		{
+			qTreeWidgetClear(nodeTreeWidget);
+
 			AnimClip* clip = m_timeline->getClip(m_currentEditAnim.c_str());
 			if (clip)
 			{
@@ -208,9 +210,9 @@ namespace Echo
 				{
 					for (AnimNode* animNode : clip->m_nodes)
 					{
-						//const Timeline::ObjectUserData& userData = any_cast<const Timeline::ObjectUserData&>(animNode->m_userData);
+						const Timeline::ObjectUserData& userData = any_cast<Timeline::ObjectUserData>(animNode->m_userData);
 						QTreeWidgetItem* objetcItem = qTreeWidgetItemNew();
-						qTreeWidgetItemSetText(objetcItem, 0, "bienao");
+						qTreeWidgetItemSetText(objetcItem, 0, userData.m_path.c_str());
 
 						qTreeWidgetItemAddChild(rootItem, objetcItem);
 					}
