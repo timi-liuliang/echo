@@ -18,6 +18,7 @@
 #include "module.h"
 #include "engine/core/render/interface/renderstage/RenderStage.h"
 #include "engine/core/render/gles/GLES.h"
+#include "engine/core/render/vulkan/VK.h"
 #include "engine/core/render/interface/ShaderProgramRes.h"
 #include "engine/core/render/interface/TextureCube.h"
 #include "engine/core/gizmos/Gizmos.h"
@@ -222,6 +223,7 @@ namespace Echo
 	{
 		Renderer* renderer = nullptr;
 #ifdef ECHO_PLATFORM_MAC
+        LoadVKRenderer(renderer);
 #else
 		LoadGLESRenderer(renderer);
 #endif
