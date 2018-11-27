@@ -121,6 +121,12 @@ namespace Echo
 		}
 	}
 
+	// add property to object
+	void Timeline::addProperty(const String& animName, Object* object, const String& propertyName)
+	{
+
+	}
+
 	void Timeline::generateUniqueAnimName(const String& prefix, String& oName)
 	{
 		for (i32 i = 0; i < 65535; i++)

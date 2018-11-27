@@ -74,6 +74,10 @@ namespace Echo
 		// add object to animclip
 		void addObject(const String& animName, ObjectType type, const String& path);
 
+	public:
+		// add property to object
+		void addProperty(const String& animName, Object* object, const String& propertyName);
+
 	protected:
 		// update self
 		virtual void update_self() override;

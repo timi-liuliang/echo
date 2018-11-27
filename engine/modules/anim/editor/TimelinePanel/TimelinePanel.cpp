@@ -249,7 +249,7 @@ namespace Echo
 				String propertyName = Editor::instance()->selectAProperty( node);
 				if (!propertyName.empty())
 				{
-					//m_timeline->addObject(m_currentEditAnim, Timeline::Setting, path);
+					m_timeline->addProperty(m_currentEditAnim, node, propertyName);
 				}
 			}
 		}
