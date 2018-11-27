@@ -213,8 +213,8 @@ namespace Echo
 
 	i32 Node::getChildIdx(Node* node)
 	{
-		i32 pos = std::find(m_children.begin(), m_children.end(), node) - m_children.begin();
-		return pos > (i32)m_children.size() ? -1 : pos;
+		size_t pos = std::find(m_children.begin(), m_children.end(), node) - m_children.begin();
+		return pos > m_children.size() ? -1 : static_cast<i32>(pos);
 	}
 
 	void Node::setParent(Node* parent)
@@ -475,7 +475,7 @@ namespace Echo
 	{
 		if (path)
 		{
-			int pathLen = strlen(path);
+			int pathLen = static_cast<int>(strlen(path));
 			if (!pathLen)
 			{
 				this->registerToScript();
@@ -542,8 +542,9 @@ namespace Echo
 	{
 		String result;
 
+		// ignore invisible root node
 		Node* node = this;
-		while (node)
+		while (node && node->getParent())
 		{
 			result = "/" + node->getName() + result;
 

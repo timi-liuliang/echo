@@ -36,8 +36,8 @@ namespace Studio
 		// on open node tree
 		bool onOpenNodeTree(const Echo::String& resPath);
 
-		// 设置当前编辑结点
-		void setCurrentEditNode(Echo::Node* node) { m_currentEditNode = node; }
+		// set current edit node
+		void setCurrentEditNode(Echo::Node* node);
 
 		// 获取当前编辑结点
 		Echo::Node* getCurrentEditNode() { return m_currentEditNode; }
@@ -93,7 +93,6 @@ namespace Studio
 		Echo::Node*				m_invisibleNodeForEditor;	// 编辑器结点
 		Echo::Gizmos*			m_gizmosNodeBackGrid;
 		Echo::Gizmos*			m_gizmosNodeGrid2d;			// 2d 框
-		Echo::Node *			m_pCameraAxis;
 		static std::string		m_projectFile;				// 项目名称
 		static RenderWindow*	m_renderWindow;				// 渲染窗口
 	};

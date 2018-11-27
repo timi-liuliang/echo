@@ -92,6 +92,9 @@ namespace Studio
 		// select a resource object
 		virtual const Echo::String selectAResObject() override;
 
+		// select a object's property
+		virtual const Echo::String selectAProperty(Echo::Object* objectPtr) override;
+
 	private:
 		AStudio();
 

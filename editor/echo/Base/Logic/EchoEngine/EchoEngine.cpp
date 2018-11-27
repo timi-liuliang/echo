@@ -65,7 +65,7 @@ namespace Studio
 			m_gizmosNodeGrid2d->setName("Gizmos 2d grid");
 			m_gizmosNodeGrid2d->setParent(m_invisibleNodeForEditor);
 
-			// 背景网格
+			// init back grid
 			InitializeBackGrid();
 		);
 
@@ -85,9 +85,6 @@ namespace Studio
 		resizeBackGrid2d();
 		resizeBackGrid3d();
 
-		if (m_currentEditNode)
-			m_currentEditNode->update( elapsedTime, true);
-
 		if (m_invisibleNodeForEditor)
 			m_invisibleNodeForEditor->update(elapsedTime, true);
 
@@ -105,7 +102,7 @@ namespace Studio
 	{
 		m_projectFile = projectFile;
 
-		// 初始化渲染窗口
+		// initialize render window
 		m_renderWindow = static_cast<RenderWindow*>(AStudio::instance()->getRenderWindow());
 
 		return true;
@@ -144,6 +141,12 @@ namespace Studio
 		AStudio::instance()->getRenderWindow()->getInputController3D()->onOpenNodeTree(resPath);
 
 		return node ? true : false;
+	}
+
+	void EchoEngine::setCurrentEditNode(Echo::Node* node) 
+	{ 
+		m_currentEditNode = node; 
+		m_currentEditNode->setParent(m_invisibleNodeForEditor); 
 	}
 
 	// save current node tree

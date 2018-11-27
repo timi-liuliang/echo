@@ -14,6 +14,9 @@ namespace Echo
 
 	// set text
 	void qTreeWidgetItemSetText(QTreeWidgetItem* item, int column, const char* text);
+	
+	// get text
+	String qTreeWidgetItemText(QTreeWidgetItem* item, int column);
 
 	// set icon
 	void qTreeWidgetItemSetIcon(QTreeWidgetItem* item, int column, const char* iconPath);

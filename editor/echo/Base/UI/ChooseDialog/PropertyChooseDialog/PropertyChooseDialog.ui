@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>664</width>
-    <height>438</height>
+    <width>319</width>
+    <height>392</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Node Path Choose</string>
+   <string>Property Choose</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="leftMargin">
@@ -30,6 +30,9 @@
     <widget class="QTreeWidget" name="m_treeWidget">
      <property name="headerHidden">
       <bool>true</bool>
+     </property>
+     <property name="columnCount">
+      <number>1</number>
      </property>
      <column>
       <property name="text">
@@ -54,7 +57,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="m_ok">
+      <widget class="QPushButton" name="m_confirm">
        <property name="text">
         <string>Confirm</string>
        </property>
@@ -87,14 +90,14 @@
  <resources/>
  <connections>
   <connection>
-   <sender>m_ok</sender>
+   <sender>m_confirm</sender>
    <signal>clicked()</signal>
    <receiver>PropertyChooseDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>182</x>
-     <y>302</y>
+     <x>156</x>
+     <y>381</y>
     </hint>
     <hint type="destinationlabel">
      <x>257</x>
@@ -109,8 +112,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>81</x>
-     <y>299</y>
+     <x>237</x>
+     <y>381</y>
     </hint>
     <hint type="destinationlabel">
      <x>16</x>

@@ -21,8 +21,18 @@ namespace Echo
 	{
 		if (item)
 		{
-			item->setText(0, text);
+			item->setText( column, text);
 		}
+	}
+
+	String qTreeWidgetItemText(QTreeWidgetItem* item, int column)
+	{
+		if (item)
+		{
+			return item->text( column).toStdString().c_str();
+		}
+
+		return Echo::StringUtil::BLANK;
 	}
 
 	void qTreeWidgetItemSetIcon(QTreeWidgetItem* item, int column, const char* iconPath)

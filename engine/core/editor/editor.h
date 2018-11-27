@@ -31,6 +31,9 @@ namespace Echo
 
 		// select a resource object
 		virtual const String selectAResObject()=0;
+
+		// select a object's property
+		virtual const Echo::String selectAProperty(Object* objectPtr)=0;
 	};
 }
 #endif

@@ -6,6 +6,7 @@
 #include "ResChooseDialog.h"
 #include "SettingChooseDialog.h"
 #include "NodePathChooseDialog.h"
+#include "PropertyChooseDialog.h"
 #include "LogPanel.h"
 #include "ConfigMgr.h"
 #include <QtUiTools/QUiLoader>
@@ -14,9 +15,6 @@
 #include <QMetaMethod>
 #include <QSplitter>
 #include "QPropertyModel.h"
-#ifdef ECHO_PLATFORM_WINDOWS
-#include <shellapi.h>
-#endif
 #include <engine/core/util/HashGenerator.h>
 #include <engine/core/util/TimeProfiler.h>
 #include <engine/core/util/PathUtil.h>
@@ -277,22 +275,24 @@ namespace Studio
 		MainWindow::instance()->getBottomPanel()->showBottomPanel( bottomPanel);
 	}
 
-	// select a node object
 	const Echo::String AStudio::selectANodeObject()
 	{
 		return NodePathChooseDialog::getSelectingNode( nullptr);
 	}
 
-	// select a setting object
 	const Echo::String AStudio::selectASettingObject()
 	{
 		return SettingChooseDialog::getSelectingSetting(nullptr);
 	}
 
-	// select a resource object
 	const Echo::String AStudio::selectAResObject()
 	{
 		Echo::String resPath = ResChooseDialog::getSelectingFile( nullptr, "");
 		return resPath;
+	}
+
+	const Echo::String AStudio::selectAProperty(Echo::Object* objectPtr)
+	{
+		return PropertyChooseDialog::getSelectingProperty(nullptr, objectPtr);
 	}
 }

@@ -238,7 +238,21 @@ namespace Echo
 
 	void TimelinePanel::onAddProperty()
 	{
-		int a = 10;
+		QTreeWidgetItem* item = qTreeWidgetCurrentItem(qFindChild(m_ui, "m_nodeTreeWidget"));
+		int column = qTreeWidgetCurrentColumn(qFindChild(m_ui, "m_nodeTreeWidget"));
+		if (column == 1)
+		{
+			String text = qTreeWidgetItemText(item, 0);
+			Node* node = m_timeline->getNode(text.c_str());
+			if (node)
+			{
+				String propertyName = Editor::instance()->selectAProperty( node);
+				if (!propertyName.empty())
+				{
+					//m_timeline->addObject(m_currentEditAnim, Timeline::Setting, path);
+				}
+			}
+		}
 	}
 #endif
 }

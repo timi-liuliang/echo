@@ -125,7 +125,7 @@ namespace Studio
 
 	void NodeTreePanel::addNode(QTreeWidget* treeWidget, Echo::Node* node, QTreeWidgetItem* parent, bool recursive)
 	{
-		Echo::ui32   nodeIdx = node->getParent() ? node->getParent()->getChildIdx(node) : 0;
+		Echo::ui32   nodeIdx = node->getParent()->getParent() ? node->getParent()->getChildIdx(node) : 0;
 		Echo::String rootPath = AStudio::instance()->getRootPath();
 		Echo::String nodeName = node->getName();
 		Echo::String nodeClassName = node->getClassName();
@@ -201,11 +201,6 @@ namespace Studio
 			{
 				// change color
 				curItem->setForeground(0, QBrush(node->isEnable() ? QColor(220, 220, 220) : QColor(120, 120, 120)));
-
-				// font
-				//QFont font = curItem->font(0);
-				//font.setItalic(!node->isEnable());
-				//curItem->setFont(0, font);
 			}
 		}
 	}
