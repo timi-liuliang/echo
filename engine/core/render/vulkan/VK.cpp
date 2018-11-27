@@ -1,10 +1,11 @@
 #include "vk.h"
+#include "vk_renderer.h"
 
 namespace Echo
 {
 	void LoadVKRenderer(Renderer*& render)
 	{
-		render = nullptr;// EchoNew(GLES2Renderer);
+		render = EchoNew(VKRenderer);
 	}
 
 	void UnLoadVKRenderer(Renderer* render)

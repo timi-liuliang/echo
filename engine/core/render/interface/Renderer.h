@@ -51,28 +51,24 @@ namespace Echo
 		Renderer();
 		virtual ~Renderer();
 
-		// 返回实例
+		// instance
 		static Renderer* instance();
 
-		// 替换实例
+		// replace instance
 		static bool replaceInstance(Renderer* inst);
 
 		// 初始化
 		bool initialize(const Config& config);
 		
-		// 硬件支持性检测
-		virtual void checkOpenGLExtensions() = 0;
+		// check extensions
+		//virtual void checkOpenGLExtensions() = 0;
 
-		// 设置视口
+		// set view port
 		virtual void setViewport(Viewport* pViewport) = 0;
 
-		// 设置光栅化状态
+		// states
 		virtual void setRasterizerState(RasterizerState* pState);
-
-		// 设置深度模板状态
 		virtual void setDepthStencilState(DepthStencilState* pState);
-
-		// 设置混合状态
 		virtual void setBlendState(BlendState* pState);
 
 		// set texture

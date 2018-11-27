@@ -8,7 +8,7 @@
 namespace Echo
 {
 	Color Renderer::BGCOLOR = Echo::Color(0.298f, 0.298f, 0.322f);	// render target clear color
-	static Renderer* g_render = NULL;								// È«¾ÖäÖÈ¾Æ÷
+	static Renderer* g_render = NULL;								// global renderer
 
 	Renderer* Renderer::instance()
 	{
