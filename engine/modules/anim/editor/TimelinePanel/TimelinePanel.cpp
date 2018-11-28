@@ -48,6 +48,7 @@ namespace Echo
 		qConnect(qFindChild(m_ui, "m_clips"), QSIGNAL(editTextChanged(const QString &)), this, createMethodBind(&TimelinePanel::onRenameClip));
 		qConnect(qFindChild(m_ui, "AddNode"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onAddObject));
 		qConnect(qFindChild(m_ui, "m_nodeTreeWidget"), QSIGNAL(itemClicked(QTreeWidgetItem*, int)), this, createMethodBind(&TimelinePanel::onAddProperty));
+		qConnect(qFindChild(m_ui, "Play"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onPlayAnim));
 
 		// update display
 		syncClipListDataToEditor();
@@ -254,5 +255,11 @@ namespace Echo
 			}
 		}
 	}
+
+	void TimelinePanel::onPlayAnim()
+	{
+		m_timeline->play(m_currentEditAnim.c_str());
+	}
+
 #endif
 }

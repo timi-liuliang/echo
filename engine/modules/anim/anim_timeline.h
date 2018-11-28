@@ -48,6 +48,9 @@ namespace Echo
 		// set anim data
 		void setAnimData(const Base64String& data) { m_animData = data; }
 
+		// play animation
+		void play(const char* animName);
+
 	public:
 		// clip count
 		int  getClipCount() const { return static_cast<int>(m_clips.size()); }
@@ -77,6 +80,9 @@ namespace Echo
 	public:
 		// add property to object
 		void addProperty(const String& animName, Object* object, const String& propertyName);
+
+		// add key frame
+		void addKey(const String& animName, Object* object, const String& propertyName, float time, const Variant& value);
 
 	protected:
 		// update self

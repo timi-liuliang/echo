@@ -1,5 +1,6 @@
 #include "anim_timeline.h"
 #include "engine/core/main/Engine.h"
+#include "engine/core/scene/node.h"
 
 namespace Echo
 {
@@ -109,6 +110,12 @@ namespace Echo
 		return false;
 	}
 
+	// play animation
+	void Timeline::play(const char* animName)
+	{
+
+	}
+
 	void Timeline::addObject(const String& animName, ObjectType type, const String& path)
 	{
 		AnimClip* clip = getClip(animName.c_str());
@@ -121,10 +128,57 @@ namespace Echo
 		}
 	}
 
-	// add property to object
 	void Timeline::addProperty(const String& animName, Object* object, const String& propertyName)
 	{
+		Echo::Node* node = dynamic_cast<Echo::Node*>(object);
+		AnimClip* clip = getClip(animName.c_str());
+		if (clip && node)
+		{
+			for (AnimNode* animNode : clip->m_nodes)
+			{
+				const ObjectUserData& userData = any_cast<ObjectUserData>(animNode->m_userData);
+				if (userData.m_path == node->getNodePath())
+				{
+					AnimProperty* property = animNode->addProperty( propertyName, AnimProperty::Type::Vector3);
+					if (property)
+					{
+						// test
+						addKey(animName, object, propertyName, 0.f, Vector3::ZERO);
+						addKey(animName, object, propertyName, 10.f, Vector3(100.f, 0.f, 0.f));
+					}
 
+					break;
+				}
+			}
+		}
+	}
+
+	void Timeline::addKey(const String& animName, Object* object, const String& propertyName, float time, const Variant& value)
+	{
+		Echo::Node* node = dynamic_cast<Echo::Node*>(object);
+		AnimClip* clip = getClip(animName.c_str());
+		if (clip && node)
+		{
+			for (AnimNode* animNode : clip->m_nodes)
+			{
+				const ObjectUserData& userData = any_cast<ObjectUserData>(animNode->m_userData);
+				if (userData.m_path == node->getNodePath())
+				{
+					for (AnimProperty* property : animNode->m_properties)
+					{
+						if (any_cast<String>(property->m_userData) == propertyName)
+						{
+							AnimPropertyVec3* vec3Prop = ECHO_DOWN_CAST<AnimPropertyVec3*>(property);
+							vec3Prop->addKey(time, value.toVector3());
+						}
+
+						break;
+					}
+
+					break;
+				}
+			}
+		}
 	}
 
 	void Timeline::generateUniqueAnimName(const String& prefix, String& oName)

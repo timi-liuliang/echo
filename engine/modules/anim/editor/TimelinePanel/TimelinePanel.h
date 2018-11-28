@@ -28,6 +28,9 @@ namespace Echo
 		// property operate
 		void onAddProperty();
 
+		// play pause stop
+		void onPlayAnim();
+
 	private:
 		// get new name
 		String getNewClipName();
