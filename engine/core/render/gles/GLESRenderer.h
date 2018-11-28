@@ -38,6 +38,9 @@ namespace Echo
 	public:
 		GLES2Renderer();
 		~GLES2Renderer();
+
+		// initialize
+		virtual bool initialize(const Config& config) override;
 	
 		void checkOpenGLExtensions();
 
@@ -97,10 +100,10 @@ namespace Echo
 
 	protected:
 		//  interal implement
-		virtual Renderable* createRenderableInernal(const String& renderStage, ShaderProgramRes* shader, int identifier)override;
+		virtual Renderable* createRenderable(const String& renderStage, ShaderProgramRes* material) override;
 
 		// preset to screen
-		virtual bool doPresent();
+		virtual bool present() override;
 
 		// bind texture to slot
 		void bindTexture(GLenum slot, GLenum target, GLuint texture, bool needReset = false);

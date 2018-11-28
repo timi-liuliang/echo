@@ -24,21 +24,9 @@ namespace Echo
 		return true;
 	}
 
-	bool Renderer::initialize(const Renderer::Config& config)
-	{
-		m_cfg = config;
-
-		if (!initializeImpl(config))
-			return false;
-		
-		createSystemResource();
-
-		return true;
-	}
-
 	Renderer::Renderer()
 		: m_bVSync(false)
-		, m_pFrameBuffer(NULL)
+		, m_frameBuffer(NULL)
 		, m_startMipmap(0)
 		, m_pDefaultRasterizerState(NULL)
 		, m_pDefaultDepthStencilState(NULL)
@@ -48,7 +36,6 @@ namespace Echo
 		, m_pBlendState(NULL)
 		, m_dirtyTexSlot(false)
 		, m_renderableIdentifier(1)
-		, m_isEnableFrameProfile(true)
 	{
 		EchoAssert(!g_render);
 		g_render = this;
@@ -105,7 +92,7 @@ namespace Echo
 
 	FrameBuffer* Renderer::getFrameBuffer() const
 	{
-		return m_pFrameBuffer;
+		return m_frameBuffer;
 	}
 
 	RasterizerState* Renderer::getDefaultRasterizerState() const
@@ -141,7 +128,7 @@ namespace Echo
 	void Renderer::project(Vector3& screenPos, const Vector3& worldPos, const Matrix4& matVP, Viewport* pViewport)
 	{
 		if (!pViewport)
-			pViewport = m_pFrameBuffer->getViewport();
+			pViewport = m_frameBuffer->getViewport();
 
 		Vector4 vSSPos = Vector4(worldPos, 1.0);
 		vSSPos = matVP.transform(vSSPos);
@@ -159,7 +146,7 @@ namespace Echo
 	void Renderer::unproject(Vector3& worldPos, const Vector3& screenPos, const Matrix4& matVP, Viewport* pViewport)
 	{
 		if (!pViewport)
-			pViewport = m_pFrameBuffer->getViewport();
+			pViewport = m_frameBuffer->getViewport();
 
 		Matrix4 matVPInv = matVP;
 		matVPInv.detInverse();
@@ -172,16 +159,6 @@ namespace Echo
 		vWorld /= vWorld.w;
 
 		worldPos = (Vector3)vWorld;
-	}
-
-	Renderable* Renderer::createRenderable(const String& renderStage, ShaderProgramRes* material)
-	{
-		Renderable* renderable = createRenderableInernal(renderStage, material, m_renderableIdentifier++);
-		ui32 id = renderable->getIdentifier();
-		assert(!m_renderables.count(id));
-		m_renderables[id] = renderable;
-
-		return renderable;
 	}
 
 	Renderable* Renderer::getRenderable(RenderableID id)
@@ -212,13 +189,7 @@ namespace Echo
 
 	void Renderer::destroyRenderables(vector<Renderable*>::type& renderables)
 	{
-		destroyRenderables(renderables.data(), renderables.size());
+		destroyRenderables(renderables.data(), static_cast<int>(renderables.size()));
 		renderables.clear();
-	}
-
-	bool Renderer::present()
-	{
-		bool ret = doPresent();
-		return ret;
 	}
 }

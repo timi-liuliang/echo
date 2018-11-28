@@ -60,6 +60,18 @@ namespace Echo
 		g_renderer = nullptr;
 	}
 
+	bool GLES2Renderer::initialize(const Config& config)
+	{
+		m_cfg = config;
+
+		if (!initializeImpl(config))
+			return false;
+
+		createSystemResource();
+
+		return true;
+	}
+
 	bool GLES2Renderer::initializeImpl(const Renderer::Config& config)
 	{
 #ifdef ECHO_PLATFORM_WINDOWS
@@ -141,7 +153,7 @@ namespace Echo
 		m_bVSync = false;
 
 		// EGL created default framebuffer is Handle 0
-		m_pFrameBuffer = EchoNew(GLES2FrameBuffer);
+		m_frameBuffer = EchoNew(GLES2FrameBuffer);
 
 		// set default render states
 		RasterizerState::RasterizerDesc rsDesc;
@@ -159,7 +171,7 @@ namespace Echo
 
 		// set view port
 		Viewport* pViewport = EchoNew(Viewport(0, 0, m_screenWidth, m_screenHeight));
-		m_pFrameBuffer->setViewport(pViewport);
+		m_frameBuffer->setViewport(pViewport);
 		setViewport(pViewport);
 	}
 
@@ -168,7 +180,7 @@ namespace Echo
 		EchoSafeDelete(m_pDefaultRasterizerState, RasterizerState);
 		EchoSafeDelete(m_pDefaultDepthStencilState, DepthStencilState);
 		EchoSafeDelete(m_pDefaultBlendState, BlendState);
-		EchoSafeDelete(m_pFrameBuffer, FrameBuffer);
+		EchoSafeDelete(m_frameBuffer, FrameBuffer);
 		EchoSafeDeleteContainer(m_vecSamlerStates, GLES2SamplerState);
 	}
 
@@ -186,7 +198,7 @@ namespace Echo
 	void GLES2Renderer::scissor(ui32 left, ui32 top, ui32 width, ui32 height)
 	{
 		OGLESDebug(glEnable(GL_SCISSOR_TEST));
-		Viewport* pViewport = m_pFrameBuffer->getViewport();
+		Viewport* pViewport = m_frameBuffer->getViewport();
 		OGLESDebug(glScissor(left, pViewport->getHeight() - top - height, width, height));
 	}
 
@@ -530,14 +542,14 @@ namespace Echo
 		m_screenWidth = width;
 		m_screenHeight = height;
 
-		Viewport* pViewport = m_pFrameBuffer->getViewport();
+		Viewport* pViewport = m_frameBuffer->getViewport();
 		EchoAssert(pViewport);
 
 		pViewport->resize(0, 0, width, height);
 		setViewport(pViewport);
 	}
 
-	bool GLES2Renderer::doPresent()
+	bool GLES2Renderer::present()
 	{
 		// 重置着色器信息
 		m_pre_shader_program = nullptr;
@@ -716,9 +728,13 @@ namespace Echo
 		return EchoNew(GLES2RenderTarget(_id, _width, _height, _pixelFormat, option));
 	}
 
-	//  interal implement
-	Renderable* GLES2Renderer::createRenderableInernal(const String& renderStage, ShaderProgramRes* shader, int identifier)
+	Renderable* GLES2Renderer::createRenderable(const String& renderStage, ShaderProgramRes* material)
 	{
-		return EchoNew(GLES2Renderable( renderStage, shader, identifier));
+		Renderable* renderable = EchoNew(GLES2Renderable(renderStage, material, m_renderableIdentifier++));
+		ui32 id = renderable->getIdentifier();
+		assert(!m_renderables.count(id));
+		m_renderables[id] = renderable;
+
+		return renderable;
 	}
 }

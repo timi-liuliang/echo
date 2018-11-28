@@ -38,14 +38,12 @@ namespace Echo
 	{
 	}
 
-	// instance
 	Engine* Engine::instance()
 	{
 		static Engine* inst = new Engine();
 		return inst;
 	}
 
-	// ÒýÇæ³õÊ¼»¯
 	bool Engine::initialize(const Config& cfg)
 	{
 		m_config = cfg;
@@ -113,7 +111,6 @@ namespace Echo
 		}
 	}
 
-	// register all class types
 	void Engine::registerClassTypes()
 	{
 		Class::registerType<Node>();
@@ -148,7 +145,6 @@ namespace Echo
 		}
 	}
 
-	// settings
 	void Engine::loadSettings()
 	{
 		String projectFile;
@@ -218,7 +214,6 @@ namespace Echo
 		doc.save_file(m_config.m_projectFile.c_str(), "\t", 1U, pugi::encoding_utf8);
 	}
 
-	// init renderer
 	bool Engine::initRenderer(size_t windowHandle)
 	{
 		Renderer* renderer = nullptr;

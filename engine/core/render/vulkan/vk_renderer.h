@@ -11,9 +11,8 @@ namespace Echo
 		VKRenderer();
 		virtual ~VKRenderer();
 
-        // scissor operate
-        virtual void scissor(ui32 left, ui32 top, ui32 width, ui32 height) override {}
-        virtual void endScissor() override {}
+		// initialize
+		virtual bool initialize(const Config& config) override { return true; }
 
         // create buffer
         virtual GPUBuffer*	createVertexBuffer(Dword usage, const Buffer& buff) override { return nullptr;}
@@ -38,13 +37,26 @@ namespace Echo
         virtual ShaderProgram* createShaderProgram(ShaderProgramRes* material) override {return nullptr;}
         virtual Shader* createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const String& filename) override {return nullptr;}
         virtual Shader* createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const char* srcBuffer, ui32 size)  override {return nullptr;}
+
+		// create renderable
+		virtual Renderable* createRenderable(const String& renderStage, ShaderProgramRes* material) override { return nullptr; }
         
         // convert matrix
         virtual void convertMatOrho(Matrix4& mat, const Matrix4& matOrth, Real zn, Real zf) override {}
         virtual void convertMatProj(Matrix4& mat, const Matrix4& matProj) override {}
-        
-        // draw
-        virtual void draw(Renderable* program) override {}
+
+		// scissor operate
+		virtual void scissor(ui32 left, ui32 top, ui32 width, ui32 height) override {}
+		virtual void endScissor() override {}
+       
+		// on size
+		virtual void onSize(int width, int height) override {}
+
+		// draw
+		virtual void draw(Renderable* program) override {}
+
+		// present
+		virtual bool present() override { return false; }
         
     public:
         // set texture
@@ -52,8 +64,7 @@ namespace Echo
         
         // view port
         virtual void setViewport(Viewport* pViewport) override;
-        virtual void getViewportReal(Viewport& pViewport) override {}
-        
+      
     public:
         // get max stage number
         virtual ui32 getMaxStageNum() const override { return 32;}
@@ -64,15 +75,8 @@ namespace Echo
         // get screen width and height
         virtual ui32 getScreenWidth() override { return 640;}
         virtual ui32 getScreenHeight() override { return 480;}
-        
-    public:
-        // on size
-        virtual void onSize(int width, int height) override {}
-        
-    protected:
-        virtual bool doPresent() override { return false;}
-        virtual bool initializeImpl(const Config& config) override { return false;}
-        virtual void createSystemResource() override {}
-        virtual Renderable* createRenderableInernal(const String& renderStage, ShaderProgramRes* shader, int identifier) override {return nullptr;}
+
+		// get view port
+		virtual void getViewportReal(Viewport& pViewport) override {}
 	};
 }
