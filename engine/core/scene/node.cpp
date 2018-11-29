@@ -538,17 +538,65 @@ namespace Echo
 	}
 
 	// build node path
-	String Node::getNodePath()
+	String Node::getNodePath() const
 	{
 		String result;
 
 		// ignore invisible root node
-		Node* node = this;
+		const Node* node = this;
 		while (node && node->getParent())
 		{
 			result = "/" + node->getName() + result;
 
 			node = node->getParent();
+		}
+
+		return result;
+	}
+
+	// get relative path
+	String Node::getNodePathRelativeTo(const Node* baseNode) const
+	{
+		int         baseNodeListCount = 0;
+		const Node* baseNodeList[256];
+		int         curNodeListCount = 0;
+		const Node* curNodeList[256];
+
+		// get base node path list
+		const Node* node = baseNode;
+		while (node)
+		{
+			baseNodeList[baseNodeListCount++] = node;
+			node = node->getParent();
+		}
+
+		// get cur node path list
+		node = this;
+		while (node)
+		{
+			curNodeList[curNodeListCount++] = node;
+			node = node->getParent();
+		}
+
+		// get the same parent
+		int i = baseNodeListCount-1, j = curNodeListCount-1;
+		for (; i >= 0, j >= 0; i--, j--)
+		{
+			if(baseNodeList[i] != curNodeList[j])
+				break;
+		}
+
+		String result;
+		while (i > -1)
+		{
+			result += "../";
+			i--;
+		}
+
+		while (j > -1)
+		{
+			result += curNodeList[j]->getName() + (j==0 ? "" : "/");
+			j--;
 		}
 
 		return result;

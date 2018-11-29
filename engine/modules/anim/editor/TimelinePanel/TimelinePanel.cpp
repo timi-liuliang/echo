@@ -9,6 +9,7 @@
 #include "engine/core/editor/qt/QTreeWidgetItem.h"
 #include "engine/core/editor/qt/QHeaderView.h"
 #include "engine/core/base/class_method_bind.h"
+#include "engine/core/util/PathUtil.h"
 #include "../../anim_timeline.h"
 
 namespace Echo
@@ -144,7 +145,12 @@ namespace Echo
 		Echo::String path = Editor::instance()->selectANodeObject();
 		if (!path.empty())
 		{
-			m_timeline->addObject(m_currentEditAnim, Timeline::Node, path);
+			Node* node = m_timeline->getNode(path.c_str());
+			if (node)
+			{
+				String relativePath = node->getNodePathRelativeTo(m_timeline);
+				m_timeline->addObject(m_currentEditAnim, Timeline::Node, relativePath);
+			}
 
 			syncClipNodeDataToEditor();
 		}

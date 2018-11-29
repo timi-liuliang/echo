@@ -20,7 +20,7 @@ namespace Echo
 		m_validata = true;
 		m_shaderType = type;
 		m_desc = desc;
-		m_shaderSize =  pShaderStream->size()+1;
+		m_shaderSize =  static_cast<ui32>(pShaderStream->size()+1);
 		m_srcData.resize( m_shaderSize);
 		m_srcData[m_shaderSize - 1] = '\0';
 

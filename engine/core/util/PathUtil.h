@@ -11,11 +11,11 @@ namespace Echo
 		static const unsigned int	MAX_DIRNAME;		//!< 256
 		static const unsigned int	MAX_FILENAME;		//!< 256
 		static const unsigned int	MAX_EXTNAME;		//!< 256
-		static const char	DOT;				//!< '.'
-		static const char	SEPERATOR;			//!< '/'
-		static const char	SLASH;				//!< '/'
-		static const char	BACKSLASH;			//!< '\\'
-		static const String INVALID_PATH;		//!< _T("")
+		static const char			DOT;				//!< '.'
+		static const char			SEPERATOR;			//!< '/'
+		static const char			SLASH;				//!< '/'
+		static const char			BACKSLASH;			//!< '\\'
+		static const String			INVALID_PATH;		//!< _T("")
 
 	public:
 		PathUtil();

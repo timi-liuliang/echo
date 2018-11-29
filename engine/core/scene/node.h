@@ -133,7 +133,8 @@ namespace Echo
 		Node* getNode(const char* path);
 
 		// build node path
-		String getNodePath();
+		String getNodePath() const;
+		String getNodePathRelativeTo(const Node* baseNode) const;
 
 		// queue free
 		virtual void queueFree();

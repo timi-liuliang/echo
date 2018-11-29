@@ -300,12 +300,11 @@ namespace Echo
 			}
 			else
 			{
-				ui32 size = m_macros.size();
-				for (ui32 i = 0; i < size; ++i)
+				for(const String& curMacro : m_macros)
 				{
-					if (StringUtil::StartWith(m_macros[i], macro))
+					if (StringUtil::StartWith(curMacro, macro))
 					{
-						m_macros.erase(std::remove(m_macros.begin(), m_macros.end(), m_macros[i]), m_macros.end());
+						m_macros.erase(std::remove(m_macros.begin(), m_macros.end(), curMacro), m_macros.end());
 						break;
 					}
 				}

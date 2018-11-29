@@ -36,7 +36,7 @@ namespace Echo
 		if (names.size() > 1)
 		{
 			currentLayerName = names.back();
-			return lua_get_tables(luaState, names, names.size() - 1);
+			return lua_get_tables(luaState, names, static_cast<int>(names.size()) - 1);
 		}
 		else
 		{

@@ -139,7 +139,7 @@ namespace Echo
 			for (AnimNode* animNode : clip->m_nodes)
 			{
 				const ObjectUserData& userData = any_cast<ObjectUserData>(animNode->m_userData);
-				if (userData.m_path == node->getNodePath())
+				if (userData.m_path == node->getNodePathRelativeTo(this))
 				{
 					AnimProperty* property = animNode->addProperty( propertyName, AnimProperty::Type::Vector3);
 					if (property)
@@ -168,7 +168,7 @@ namespace Echo
 			for (AnimNode* animNode : clip->m_nodes)
 			{
 				const ObjectUserData& userData = any_cast<ObjectUserData>(animNode->m_userData);
-				if (userData.m_path == node->getNodePath())
+				if (userData.m_path == node->getNodePathRelativeTo(this))
 				{
 					for (AnimProperty* property : animNode->m_properties)
 					{

@@ -96,10 +96,10 @@ namespace Echo
 	{
 		if (m_SParamWriteIndex < m_shaderParams.size() && param)
 		{
-			m_shaderParams[m_SParamWriteIndex].physicsIndex = physicsIndex;
+			m_shaderParams[m_SParamWriteIndex].physicsIndex = static_cast<ui32>(physicsIndex);
 			m_shaderParams[m_SParamWriteIndex].stype = type;
 			m_shaderParams[m_SParamWriteIndex].pData = param;
-			m_shaderParams[m_SParamWriteIndex].ParamsLength = num;
+			m_shaderParams[m_SParamWriteIndex].ParamsLength = static_cast<ui32>(num);
 			m_SParamWriteIndex++;
 		}
 		else
@@ -122,7 +122,7 @@ namespace Echo
 
 		m_shaderParams[modifyIndex].stype = type;
 		m_shaderParams[modifyIndex].pData = param;
-		m_shaderParams[modifyIndex].ParamsLength = num;
+		m_shaderParams[modifyIndex].ParamsLength = static_cast<ui32>(num);
 	}
 
 	void Renderable::setTexture(ui32 stage, Texture* texture)
@@ -157,7 +157,7 @@ namespace Echo
 
 	void Renderable::bindTextures()
 	{
-		for (size_t i = 0; i < MAX_TEXTURE_SAMPLER; ++i)
+		for (int i = 0; i < MAX_TEXTURE_SAMPLER; ++i)
 		{
 			Texture* texture = m_textures[i];
 			if (texture)
