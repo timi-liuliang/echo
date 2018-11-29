@@ -95,6 +95,8 @@ namespace Echo
 			if (clip)
 			{
 				clip->update(deltaTime);
+
+				extractClipData(clip);
 			}
 		}
 	}
@@ -142,9 +144,13 @@ namespace Echo
 					AnimProperty* property = animNode->addProperty( propertyName, AnimProperty::Type::Vector3);
 					if (property)
 					{
+						property->setInterpolationType(AnimCurve::InterpolationType::Linear);
+
 						// test
 						addKey(animName, object, propertyName, 0.f, Vector3::ZERO);
-						addKey(animName, object, propertyName, 10.f, Vector3(100.f, 0.f, 0.f));
+						addKey(animName, object, propertyName, 3.f, Vector3(500.f, 0.f, 0.f));
+
+						clip->m_length = 3.f;
 					}
 
 					break;
@@ -190,6 +196,28 @@ namespace Echo
 			{
 				oName = name;
 				break;
+			}
+		}
+	}
+
+	void Timeline::extractClipData(AnimClip* clip)
+	{
+		if (clip)
+		{
+			for (AnimNode* animNode : clip->m_nodes)
+			{
+				const ObjectUserData& objUserData = any_cast<ObjectUserData>(animNode->m_userData);
+				Echo::Node* node = this->getNode(objUserData.m_path.c_str());
+				if (node)
+				{
+					for (AnimProperty* property : animNode->m_properties)
+					{
+						const Echo::String& propertyName = any_cast<String>(property->m_userData);
+
+						// swith case
+						Class::setPropertyValue( node, propertyName, ((AnimPropertyVec3*)property)->getValue());
+					}
+				}
 			}
 		}
 	}

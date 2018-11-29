@@ -92,6 +92,9 @@ namespace Echo
 		// generate unique name
 		void generateUniqueAnimName(const String& prefix, String& oName);
 
+		// apply clip
+		void extractClipData(AnimClip* clip);
+
 	private:
 		Base64String			m_animData;
 		vector<AnimClip*>::type	m_clips;
