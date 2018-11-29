@@ -7,6 +7,7 @@
 #include "engine/core/editor/qt/QMenu.h"
 #include "engine/core/editor/qt/QTreeWidget.h"
 #include "engine/core/editor/qt/QTreeWidgetItem.h"
+#include "engine/core/editor/qt/QHeaderView.h"
 #include "engine/core/base/class_method_bind.h"
 #include "../../anim_timeline.h"
 
@@ -15,6 +16,7 @@ namespace Echo
 #ifdef ECHO_EDITOR_MODE
 	TimelinePanel::TimelinePanel(Object* obj)
 		: m_addObjectMenu(nullptr)
+		, m_nodeTreeWidgetWidth(0)
 	{
 		m_timeline = ECHO_DOWN_CAST<Timeline*>(obj);
 
@@ -67,6 +69,11 @@ namespace Echo
 			// set current edit anim clip
 			setCurrentEditAnim(animClip->m_name.c_str());
 		}
+	}
+
+	void TimelinePanel::update()
+	{
+		onNodeTreeWidgetSizeChanged();
 	}
 
 	void TimelinePanel::onDuplicateClip()
@@ -261,5 +268,22 @@ namespace Echo
 		m_timeline->play(m_currentEditAnim.c_str());
 	}
 
+	void TimelinePanel::onNodeTreeWidgetSizeChanged()
+	{
+		QWidget* nodeTreeWidget = qFindChild(m_ui, "m_nodeTreeWidget");
+		if (nodeTreeWidget)
+		{
+			int curWidth = qTreeWidgetWidth(nodeTreeWidget);
+			if (m_nodeTreeWidgetWidth != curWidth)
+			{
+				QWidget* header = qTreeWidgetHeader(nodeTreeWidget);
+
+				qHeaderViewResizeSection(header, 1, 30);
+				qHeaderViewSetSectionResizeMode(header, 1, QHeaderViewResizeMode::Fixed);
+				qHeaderViewResizeSection(header, 0, curWidth - 30);
+				m_nodeTreeWidgetWidth = qTreeWidgetWidth(nodeTreeWidget);
+			}
+		}
+	}
 #endif
 }

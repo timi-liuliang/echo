@@ -12,6 +12,9 @@ namespace Echo
 	public:
 		TimelinePanel(Object* obj);
 
+		// update
+		void update();
+
 	public:
 		// clip operate slots
 		void onNewClip();
@@ -42,11 +45,15 @@ namespace Echo
 		// set current edit anim
 		void setCurrentEditAnim(const char* animName);
 
+		// on nodetree widget size changed
+		void onNodeTreeWidgetSizeChanged();
+
 	protected:
 		Timeline*		m_timeline;
 		QWidget*		m_addObjectMenu;
 		QAction*		m_addNodeAction;
 		String			m_currentEditAnim;
+		int				m_nodeTreeWidgetWidth;
 	};
 }
 

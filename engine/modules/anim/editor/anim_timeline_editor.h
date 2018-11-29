@@ -16,6 +16,9 @@ namespace Echo
 		// on editor select this node
 		virtual void onEditorSelectThisNode() override;
 
+		// editor update self
+		virtual void editor_update_self() override;
+
 	private:
 		TimelinePanel*		m_timelinePanel;
 	};

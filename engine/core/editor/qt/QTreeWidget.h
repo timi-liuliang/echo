@@ -12,8 +12,14 @@ namespace Echo
 	// current select item
 	QTreeWidgetItem* qTreeWidgetCurrentItem(QWidget* treeWidget);
 
+	// header
+	QWidget* qTreeWidgetHeader(QWidget* widget);
+
 	// current column
 	int qTreeWidgetCurrentColumn(QWidget* treeWidget);
+
+	// get width
+	int qTreeWidgetWidth(QWidget* treeWidget);
 
 	// clear
 	void qTreeWidgetClear(QWidget* widget);

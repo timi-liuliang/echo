@@ -1,4 +1,5 @@
 #include <QTreeWidget>
+#include <QHeaderView>
 
 namespace Echo
 {
@@ -31,6 +32,21 @@ namespace Echo
 		return nullptr;
 	}
 
+	// header
+	QWidget* qTreeWidgetHeader(QWidget* widget)
+	{
+		if (widget)
+		{
+			QTreeWidget* treewidget = qobject_cast<QTreeWidget*>(widget);
+			if (treewidget)
+			{
+				return treewidget->header();
+			}
+		}
+
+		return nullptr;
+	}
+
 	// current column
 	int qTreeWidgetCurrentColumn(QWidget* widget)
 	{
@@ -40,6 +56,21 @@ namespace Echo
 			if (treewidget)
 			{
 				return treewidget->currentColumn();
+			}
+		}
+
+		return 0;
+	}
+
+	// get width
+	int qTreeWidgetWidth(QWidget* widget)
+	{
+		if (widget)
+		{
+			QTreeWidget* treewidget = qobject_cast<QTreeWidget*>(widget);
+			if (treewidget)
+			{
+				return treewidget->width();
 			}
 		}
 

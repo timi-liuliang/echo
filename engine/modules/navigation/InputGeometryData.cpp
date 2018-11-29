@@ -32,11 +32,10 @@ namespace Echo
 		m_triInfos.push_back(info);
 	}
 
-	// 获取三角形数量
 	int InputGeometryData::getTriCount() const 
 	{ 
 		EchoAssert(m_tris.size() % 3 == 0);
-		return m_tris.size() / 3; 
+		return static_cast<int>(m_tris.size()) / 3; 
 	}
 
 	void InputGeometryData::destroyAll()

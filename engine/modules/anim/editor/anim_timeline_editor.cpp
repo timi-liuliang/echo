@@ -27,5 +27,14 @@ namespace Echo
 	{
 		Editor::instance()->showBottomPanel(m_timelinePanel);
 	}
+
+	// editor update self
+	void TimelineEditor::editor_update_self()
+	{
+		if (m_timelinePanel)
+		{
+			m_timelinePanel->update();
+		}
+	}
 #endif
 }

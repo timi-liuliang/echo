@@ -67,7 +67,6 @@ namespace Studio
 		return g_inst;
 	}
 
-	// update
 	void NodeTreePanel::update()
 	{
 		if (m_nextEditObject)

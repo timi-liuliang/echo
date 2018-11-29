@@ -321,8 +321,8 @@ namespace Echo
 			define.m_isUseUV = true;
 
 			m_mesh = Mesh::create(true, true);
-			m_mesh->updateIndices(indices.size(), sizeof(Word), indices.data());
-			m_mesh->updateVertexs(define, vertices.size(), (const Byte*)vertices.data(), m_localAABB);
+			m_mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(Word), indices.data());
+			m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data(), m_localAABB);
 
 			m_renderable = Renderable::create(m_mesh, m_materialDefault, this);
 		}
@@ -354,7 +354,7 @@ namespace Echo
 	{
 		for (Drawable& drawable : m_drawables)
 		{
-			ui32 vertOffset = oVertices.size();
+			ui32 vertOffset = static_cast<ui32>(oVertices.size());
 
 			// vertices
 			for (VertexFormat& vert : drawable.m_vertices)
@@ -378,8 +378,8 @@ namespace Echo
 		MeshVertexFormat define;
 		define.m_isUseUV = true;
 
-		m_mesh->updateIndices(indices.size(), sizeof(Word), indices.data());
-		m_mesh->updateVertexs( define, vertices.size(), (const Byte*)vertices.data(), m_localAABB);
+		m_mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(Word), indices.data());
+		m_mesh->updateVertexs( define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data(), m_localAABB);
 	}
 
 	void Live2dCubism::clear()
