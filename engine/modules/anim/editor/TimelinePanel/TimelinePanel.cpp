@@ -49,6 +49,7 @@ namespace Echo
 		qConnect(qFindChild(m_ui, "DuplicateClip"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onDuplicateClip));
 		qConnect(qFindChild(m_ui, "DeleteClip"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onDeleteClip));
 		qConnect(qFindChild(m_ui, "m_clips"), QSIGNAL(editTextChanged(const QString &)), this, createMethodBind(&TimelinePanel::onRenameClip));
+		qConnect(qFindChild(m_ui, "m_clips"), QSIGNAL(currentIndexChanged(int)), this, createMethodBind(&TimelinePanel::onCurrentEditAnimChanged));
 		qConnect(qFindChild(m_ui, "AddNode"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onAddObject));
 		qConnect(qFindChild(m_ui, "m_nodeTreeWidget"), QSIGNAL(itemClicked(QTreeWidgetItem*, int)), this, createMethodBind(&TimelinePanel::onAddProperty));
 		qConnect(qFindChild(m_ui, "Play"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onPlayAnim));
@@ -303,6 +304,9 @@ namespace Echo
 	void TimelinePanel::onStopAnim()
 	{
 		m_timeline->stop();
+
+		// recover play button icon to "play.png"
+		qToolButtonSetIcon(qFindChild(m_ui, "Play"), "engine/modules/anim/editor/icon/play.png");
 	}
 
 	void TimelinePanel::onRestartAnim()
@@ -327,6 +331,15 @@ namespace Echo
 				m_nodeTreeWidgetWidth = qTreeWidgetWidth(nodeTreeWidget);
 			}
 		}
+	}
+
+	// current edit anim changed
+	void TimelinePanel::onCurrentEditAnimChanged()
+	{
+		String currentText = qComboBoxCurrentText(qFindChild(m_ui, "m_clips"));
+		setCurrentEditAnim( currentText.c_str());
+
+		onStopAnim();
 	}
 #endif
 }

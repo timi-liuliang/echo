@@ -113,7 +113,6 @@ namespace Echo
 		return false;
 	}
 
-	// play animation
 	void Timeline::play(const char* animName)
 	{
 		setAnim(animName);

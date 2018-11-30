@@ -36,6 +36,9 @@ namespace Echo
 		void onStopAnim();
 		void onRestartAnim();
 
+		// current edit anim changed
+		void onCurrentEditAnimChanged();
+
 	private:
 		// get new name
 		String getNewClipName();
