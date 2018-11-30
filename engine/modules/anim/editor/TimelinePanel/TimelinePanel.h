@@ -41,6 +41,7 @@ namespace Echo
 		// sync clip data to editor
 		void syncClipListDataToEditor();
 		void syncClipNodeDataToEditor();
+		void addNodePropertyToEditor();
 
 		// set current edit anim
 		void setCurrentEditAnim(const char* animName);

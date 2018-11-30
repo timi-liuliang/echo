@@ -20,6 +20,9 @@ namespace Echo
 
 	// set icon
 	void qTreeWidgetItemSetIcon(QTreeWidgetItem* item, int column, const char* iconPath);
+
+	// expand QTreeWidgetItem
+	void qTreeWidgetItemSetExpanded(QTreeWidgetItem* item, bool aexpand);
 }
 
 #endif

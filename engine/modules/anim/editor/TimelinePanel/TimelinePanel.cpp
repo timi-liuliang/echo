@@ -237,6 +237,11 @@ namespace Echo
 		}
 	}
 
+	void TimelinePanel::addNodePropertyToEditor()
+	{
+
+	}
+
 	void TimelinePanel::setCurrentEditAnim(const char* animName)
 	{
 		QWidget* comboBox = qFindChild(m_ui, "m_clips");
@@ -266,6 +271,12 @@ namespace Echo
 				if (!propertyName.empty())
 				{
 					m_timeline->addProperty(m_currentEditAnim, node, propertyName);
+
+					// addNodePropertyToEditor;
+					QTreeWidgetItem* propertyItem = qTreeWidgetItemNew();
+					qTreeWidgetItemSetText(propertyItem, 0, propertyName.c_str());
+					qTreeWidgetItemSetExpanded(item, true);
+					qTreeWidgetItemAddChild(item, propertyItem);
 				}
 			}
 		}

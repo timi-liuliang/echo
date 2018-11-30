@@ -43,4 +43,13 @@ namespace Echo
 			item->setIcon(column, QIcon(fullPath.c_str()));
 		}
 	}
+
+	// expand QTreeWidgetItem
+	void qTreeWidgetItemSetExpanded(QTreeWidgetItem* item, bool aexpand)
+	{
+		if (item)
+		{
+			item->setExpanded( aexpand);
+		}
+	}
 }
