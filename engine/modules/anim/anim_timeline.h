@@ -11,6 +11,14 @@ namespace Echo
 		ECHO_CLASS(Timeline, Node)
 
 	public:
+		// play state
+		enum class PlayState
+		{
+			Playing,
+			Pause,
+			Stop,
+		};
+
 		// object types
 		enum ObjectType
 		{
@@ -48,8 +56,14 @@ namespace Echo
 		// set anim data
 		void setAnimData(const Base64String& data) { m_animData = data; }
 
+	public:
+		// get play state
+		PlayState getPlayState() const { return m_playState; }
+
 		// play animation
 		void play(const char* animName);
+		void pause();
+		void stop();
 
 	public:
 		// clip count
@@ -96,8 +110,9 @@ namespace Echo
 		void extractClipData(AnimClip* clip);
 
 	private:
-		Base64String			m_animData;
+		PlayState				m_playState;
 		vector<AnimClip*>::type	m_clips;
+		Base64String			m_animData;
 		StringOption			m_animations;
 	};
 }

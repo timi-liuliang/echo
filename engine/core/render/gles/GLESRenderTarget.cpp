@@ -360,7 +360,7 @@ namespace Echo
 
 		bmpinfoHeader.biWidth = m_width;
 		bmpinfoHeader.biHeight = m_height;
-		bmpinfoHeader.biSizeImage = pixel_data_size;
+		bmpinfoHeader.biSizeImage = static_cast<DWORD>(pixel_data_size);
 		bmpinfoHeader.biSize = 40;
 		bmpinfoHeader.biPlanes = 1;
 		bmpinfoHeader.biBitCount = 4 * 8;
@@ -383,11 +383,11 @@ namespace Echo
 
 		size_t file_size = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + palett_size + pixel_data_size;
 
-		bmpfHeader.bfSize = file_size;
+		bmpfHeader.bfSize = static_cast<DWORD>(file_size);
 
 		bmpfHeader.bfReserved1 = 0;
 		bmpfHeader.bfReserved2 = 0;
-		bmpfHeader.bfOffBits = sizeof(BITMAPFILEHEADER) + bmpinfoHeader.biSize + palett_size;
+		bmpfHeader.bfOffBits = static_cast<DWORD>(sizeof(BITMAPFILEHEADER) + bmpinfoHeader.biSize + palett_size);
 
 		unsigned char *bmpfile = new unsigned char[file_size];
 		EchoAssert( bmpfile );

@@ -166,7 +166,7 @@ namespace Echo
 			{
 				for (int w = 0; w < m_width; w++)
 				{
-					result[h][w] = (*function)(m_array[h][w]);
+					result[h][w] = static_cast<Real>((*function)(m_array[h][w]));
 				}
 			}
 		}

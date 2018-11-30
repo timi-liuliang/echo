@@ -33,6 +33,8 @@ namespace Echo
 
 		// play pause stop
 		void onPlayAnim();
+		void onStopAnim();
+		void onRestartAnim();
 
 	private:
 		// get new name

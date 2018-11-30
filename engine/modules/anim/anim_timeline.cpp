@@ -6,6 +6,7 @@ namespace Echo
 {
 	Timeline::Timeline()
 		: m_animations("")
+		, m_playState(PlayState::Stop)
 	{
 	}
 
@@ -88,7 +89,7 @@ namespace Echo
 
 	void Timeline::update_self()
 	{
-		if (m_animations.isValid())
+		if (m_animations.isValid() && m_playState==PlayState::Playing)
 		{
 			float deltaTime = Engine::instance()->getFrameTime();
 			AnimClip* clip = m_clips[m_animations.getIdx()];
@@ -115,7 +116,29 @@ namespace Echo
 	// play animation
 	void Timeline::play(const char* animName)
 	{
+		setAnim(animName);
 
+		m_playState = PlayState::Playing;
+	}
+
+	void Timeline::pause()
+	{
+		m_playState = PlayState::Pause;
+	}
+
+	void Timeline::stop()
+	{
+		m_playState = PlayState::Stop;
+		if (m_animations.isValid())
+		{
+			AnimClip* clip = m_clips[m_animations.getIdx()];
+			if (clip)
+			{
+				clip->m_time = 0.f;
+				clip->update( 0.f);
+				extractClipData(clip);
+			}
+		}
 	}
 
 	void Timeline::addObject(const String& animName, ObjectType type, const String& path)

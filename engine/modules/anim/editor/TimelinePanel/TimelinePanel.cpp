@@ -52,6 +52,8 @@ namespace Echo
 		qConnect(qFindChild(m_ui, "AddNode"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onAddObject));
 		qConnect(qFindChild(m_ui, "m_nodeTreeWidget"), QSIGNAL(itemClicked(QTreeWidgetItem*, int)), this, createMethodBind(&TimelinePanel::onAddProperty));
 		qConnect(qFindChild(m_ui, "Play"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onPlayAnim));
+		qConnect(qFindChild(m_ui, "Stop"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onStopAnim));
+		qConnect(qFindChild(m_ui, "Restart"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onRestartAnim));
 
 		// update display
 		syncClipListDataToEditor();
@@ -284,7 +286,29 @@ namespace Echo
 
 	void TimelinePanel::onPlayAnim()
 	{
-		m_timeline->play(m_currentEditAnim.c_str());
+		if (m_timeline->getPlayState() != Timeline::PlayState::Playing)
+		{
+			m_timeline->play(m_currentEditAnim.c_str());
+
+			qToolButtonSetIcon(qFindChild(m_ui, "Play"), "engine/modules/anim/editor/icon/pause.png");
+		}
+		else
+		{
+			m_timeline->pause();
+
+			qToolButtonSetIcon(qFindChild(m_ui, "Play"), "engine/modules/anim/editor/icon/play.png");
+		}
+	}
+
+	void TimelinePanel::onStopAnim()
+	{
+		m_timeline->stop();
+	}
+
+	void TimelinePanel::onRestartAnim()
+	{
+		onStopAnim();
+		onPlayAnim();
 	}
 
 	void TimelinePanel::onNodeTreeWidgetSizeChanged()
