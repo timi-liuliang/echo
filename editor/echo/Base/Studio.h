@@ -95,6 +95,10 @@ namespace Studio
 		// select a object's property
 		virtual const Echo::String selectAProperty(Echo::Object* objectPtr) override;
 
+	public:
+		// get node icon by class name
+		virtual Echo::String getNodeIcon(Echo::Node* node);
+
 	private:
 		AStudio();
 

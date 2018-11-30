@@ -225,8 +225,10 @@ namespace Echo
 					for (AnimNode* animNode : clip->m_nodes)
 					{
 						const Timeline::ObjectUserData& userData = any_cast<Timeline::ObjectUserData>(animNode->m_userData);
+						Node* node = m_timeline->getNode(userData.m_path.c_str());
 						QTreeWidgetItem* objetcItem = qTreeWidgetItemNew();
 						qTreeWidgetItemSetText(objetcItem, 0, userData.m_path.c_str());
+						qTreeWidgetItemSetIcon(objetcItem, 0, Editor::instance()->getNodeIcon(node).c_str());
 						qTreeWidgetItemSetIcon(objetcItem, 1, "engine/modules/anim/editor/icon/add.png");
 						qTreeWidgetItemAddChild(rootItem, objetcItem);
 					}

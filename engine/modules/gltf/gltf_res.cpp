@@ -1420,7 +1420,7 @@ namespace Echo
 		{
 			const GltfNodeInfo& node = m_nodes[i];
 			if (node.m_mesh != -1 && node.m_mesh == meshIdx)
-				return i;
+				return static_cast<i32>(i);
 		}
 
 		return -1;
@@ -1525,7 +1525,7 @@ namespace Echo
 					mesh->setName(m_meshes[info.m_mesh].m_name);
 					mesh->setGltfRes(m_path);
 					mesh->setMeshIdx(info.m_mesh);
-					mesh->setPrimitiveIdx(i);
+					mesh->setPrimitiveIdx(static_cast<int>(i));
 					curNodes.push_back(mesh);
 				}
 			}

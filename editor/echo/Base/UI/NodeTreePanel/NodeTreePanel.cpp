@@ -125,19 +125,11 @@ namespace Studio
 	void NodeTreePanel::addNode(QTreeWidget* treeWidget, Echo::Node* node, QTreeWidgetItem* parent, bool recursive)
 	{
 		Echo::ui32   nodeIdx = node->getParent()->getParent() ? node->getParent()->getChildIdx(node) : 0;
-		Echo::String rootPath = AStudio::instance()->getRootPath();
 		Echo::String nodeName = node->getName();
-		Echo::String nodeClassName = node->getClassName();
-		Echo::String iconPath = node->getEditor() ? node->getEditor()->getEditorIcon() : "";
-
-		// get icon path by node name
-		Echo::String lowerCaseNodeName = nodeClassName;
-		Echo::StringUtil::LowerCase(lowerCaseNodeName);
-		Echo::String qIconPath = Echo::StringUtil::Format(":/icon/node/%s.png", lowerCaseNodeName.c_str());
 
 		QTreeWidgetItem* nodeItem = new QTreeWidgetItem();
 		nodeItem->setText(0, nodeName.c_str());
-		nodeItem->setIcon(0, QIcon(iconPath.empty() ? qIconPath.c_str() : (rootPath+iconPath).c_str()));
+		nodeItem->setIcon(0, QIcon( getNodeIcon(node).c_str()));
 		nodeItem->setData(0, Qt::UserRole, QVariant(node->getId()));
 		nodeItem->setFlags( nodeItem->flags() | Qt::ItemIsEditable);
 		parent->insertChild(nodeIdx, nodeItem);
@@ -161,6 +153,21 @@ namespace Studio
 					addNode(treeWidget, childNode, nodeItem, recursive);
 			}
 		}
+	}
+
+	Echo::String NodeTreePanel::getNodeIcon(Echo::Node* node)
+	{
+		Echo::String iconPath = node->getEditor() ? node->getEditor()->getEditorIcon() : "";
+
+		Echo::String rootPath = AStudio::instance()->getRootPath();
+		Echo::String nodeClassName = node->getClassName();
+
+		// get icon path by node name
+		Echo::String lowerCaseNodeName = nodeClassName;
+		Echo::StringUtil::LowerCase(lowerCaseNodeName);
+		Echo::String qIconPath = Echo::StringUtil::Format(":/icon/node/%s.png", lowerCaseNodeName.c_str());
+
+		return iconPath.empty() ? qIconPath.c_str() : (rootPath + iconPath).c_str();
 	}
 
 	// get node in the item

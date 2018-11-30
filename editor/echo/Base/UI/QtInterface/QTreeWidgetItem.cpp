@@ -39,7 +39,7 @@ namespace Echo
 	{
 		if (item)
 		{
-			Echo::String fullPath = Studio::AStudio::instance()->getRootPath() + iconPath;
+			Echo::String fullPath = Echo::StringUtil::StartWith(iconPath, ":/") ? iconPath : Studio::AStudio::instance()->getRootPath() + iconPath;
 			item->setIcon(column, QIcon(fullPath.c_str()));
 		}
 	}

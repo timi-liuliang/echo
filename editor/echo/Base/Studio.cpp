@@ -7,6 +7,7 @@
 #include "SettingChooseDialog.h"
 #include "NodePathChooseDialog.h"
 #include "PropertyChooseDialog.h"
+#include "NodeTreePanel.h"
 #include "LogPanel.h"
 #include "ConfigMgr.h"
 #include <QtUiTools/QUiLoader>
@@ -294,5 +295,11 @@ namespace Studio
 	const Echo::String AStudio::selectAProperty(Echo::Object* objectPtr)
 	{
 		return PropertyChooseDialog::getSelectingProperty(nullptr, objectPtr);
+	}
+
+	// get node icon by class name
+	Echo::String AStudio::getNodeIcon( Echo::Node* node)
+	{
+		return NodeTreePanel::getNodeIcon( node);
 	}
 }

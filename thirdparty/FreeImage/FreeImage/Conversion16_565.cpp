@@ -3,7 +3,7 @@
 //
 // Design and implementation by
 // - Floris van den Berg (flvdberg@wxs.nl)
-// - Hervé Drolon (drolon@infonie.fr)
+// - Herv?Drolon (drolon@infonie.fr)
 // - Jani Kajala (janik@remedy.fi)
 //
 // This file is part of FreeImage 3

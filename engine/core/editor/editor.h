@@ -34,6 +34,10 @@ namespace Echo
 
 		// select a object's property
 		virtual const Echo::String selectAProperty(Object* objectPtr)=0;
+
+	public:
+		// get node icon by class name
+		virtual Echo::String getNodeIcon(Node* node) = 0;
 	};
 }
 #endif
