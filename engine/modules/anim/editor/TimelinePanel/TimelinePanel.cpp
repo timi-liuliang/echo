@@ -234,6 +234,15 @@ namespace Echo
 						qTreeWidgetItemSetIcon(objetcItem, 0, Editor::instance()->getNodeIcon(node).c_str());
 						qTreeWidgetItemSetIcon(objetcItem, 1, "engine/modules/anim/editor/icon/add.png");
 						qTreeWidgetItemAddChild(rootItem, objetcItem);
+
+						for (AnimProperty* property : animNode->m_properties)
+						{
+							const String& propertyName = any_cast<String>(property->m_userData);
+							QTreeWidgetItem* propertyItem = qTreeWidgetItemNew();
+							qTreeWidgetItemSetText(propertyItem, 0, propertyName.c_str());
+							qTreeWidgetItemSetExpanded(objetcItem, true);
+							qTreeWidgetItemAddChild(objetcItem, propertyItem);
+						}
 					}
 				}
 			}
