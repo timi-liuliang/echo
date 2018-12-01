@@ -67,6 +67,30 @@ namespace Echo
 		return length;
 	}
 
+	// get key number
+	int AnimPropertyCurve::getKeyNumber()
+	{
+		return int(m_curves[0]->m_keys.size());
+	}
+
+	// get key time
+	float AnimPropertyCurve::getKeyTime(int idx)
+	{
+		return m_curves[0]->m_keys[idx].m_time;
+	}
+
+	// get key value str
+	String AnimPropertyCurve::getKeyValueStr(int idx)
+	{
+		String str;
+		for (size_t i = 0; i < m_curves.size(); i++)
+		{
+			str += StringUtil::Format( "%f ", m_curves[i]->m_keys[idx].m_value);
+		}
+
+		return str;
+	}
+
 	AnimPropertyFloat::AnimPropertyFloat()
 		: AnimPropertyCurve(Type::Float, 1)
 	{}

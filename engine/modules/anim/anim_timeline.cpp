@@ -167,6 +167,12 @@ namespace Echo
 						propertyXmlNode.append_attribute("interpolation_type").set_value(AnimCurveInterpolationTypeStr[int(animProperty->m_interpolationType)]);
 
 						// keys
+						for (int keyIdx = 0; keyIdx < animProperty->getKeyNumber(); keyIdx++)
+						{
+							pugi::xml_node keyXmlNode = propertyXmlNode.append_child("key");
+							keyXmlNode.append_attribute("time").set_value(animProperty->getKeyTime( keyIdx));
+							keyXmlNode.append_attribute("value").set_value(animProperty->getKeyValueStr(keyIdx).c_str());
+						}
 					}
 				}
 			}

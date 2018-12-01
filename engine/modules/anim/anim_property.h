@@ -38,6 +38,15 @@ namespace Echo
 
 		// get length
 		virtual float getLength() = 0;
+
+		// get key number
+		virtual int getKeyNumber() { return 0; }
+
+		// get key time
+		virtual float getKeyTime(int idx) { return 0.f; }
+
+		// get key value str
+		virtual String getKeyValueStr(int idx) { return ""; }
 	};
 
 	struct AnimPropertyCurve : public AnimProperty
@@ -57,6 +66,15 @@ namespace Echo
 
 		// get length
 		virtual float getLength() override;
+
+		// get key number
+		virtual int getKeyNumber();
+
+		// get key time
+		virtual float getKeyTime(int idx);
+
+		// get key value str
+		virtual String getKeyValueStr(int idx);
 	};
 
 	struct AnimPropertyFloat : public AnimPropertyCurve
