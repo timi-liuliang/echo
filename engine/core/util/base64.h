@@ -47,7 +47,7 @@ namespace Echo
 		void encode(const char* originStr);
 
 		// decode
-		const char* decode();
+		const char* decode() const;
 
 		// data
 		const String& getData() const { return m_data; }

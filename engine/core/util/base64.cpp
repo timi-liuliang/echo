@@ -92,7 +92,7 @@ namespace Echo
 	}
 
 	// decode
-	const char* Base64String::decode()
+	const char* Base64String::decode() const
 	{
 		return "";
 	}

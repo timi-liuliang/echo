@@ -186,9 +186,16 @@ namespace Echo
 	// set anim data
 	void Timeline::setAnimData(const Base64String& data)
 	{ 
+		// clear
+		EchoSafeDeleteContainer(m_clips, AnimClip);
 		m_animData = data;
 		
 		// parse clips
+		pugi::xml_document doc; 
+		doc.load(data.decode());
+
+		// root node
+		pugi::xml_node rootXmlNode = doc.append_child("clips");
 
 
 		m_isAnimDataDirty = false;
