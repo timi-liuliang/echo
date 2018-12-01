@@ -7,7 +7,13 @@ namespace Echo
 	class Base64Encode
 	{
 	public:
-		Base64Encode();
+		Base64Encode(const String& orig);
+
+		// size
+		ui32 getSize() { return static_cast<ui32>(m_encoded.size()); }
+
+		// data
+		const char* getData() { return m_encoded.data(); }
 
 	private:
 		String		m_encoded;

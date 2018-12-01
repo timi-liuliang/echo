@@ -1,15 +1,15 @@
 #pragma once
 
-#include "anim_node.h"
+#include "anim_object.h"
 
 namespace Echo
 {
 	struct AnimClip
 	{
-		String					m_name;
-		vector<AnimNode*>::type	m_nodes;
-		float					m_time;
-		float					m_length;
+		String						m_name;
+		vector<AnimObject*>::type	m_objects;
+		float						m_time;
+		float						m_length;
 
 		AnimClip() : m_time(0.f), m_length(0.f)
 		{}
@@ -21,7 +21,7 @@ namespace Echo
 			if (m_time > m_length)
 				m_time = 0.f;
 
-			for (AnimNode* animNode : m_nodes)
+			for (AnimObject* animNode : m_objects)
 			{
 				animNode->updateToTime(m_time);
 			}

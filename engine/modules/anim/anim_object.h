@@ -6,7 +6,7 @@
 
 namespace Echo
 {
-	struct AnimNode
+	struct AnimObject
  	{
 		any							m_userData;
 		vector<AnimProperty*>::type	m_properties;		// property need to update for this node

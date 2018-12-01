@@ -12,12 +12,13 @@ namespace Echo
 		any							m_userData;					// name
 		enum class Type
 		{
-			Unknow,
+			Unknown,
 			Float,
 			Vector3,
 			Vector4,
-			Quatition,
+			Quaternion,
 		}							 m_type;				// propert type
+
 		AnimCurve::InterpolationType m_interpolationType;	// interpolation type
 
 		// constuctor
@@ -116,7 +117,7 @@ namespace Echo
 		Quaternion				m_vlaue;
 		vector<Key>::type		m_keys;
 
-		AnimPropertyQuat() : AnimProperty(Type::Quatition), m_vlaue(Quaternion::IDENTITY) {}
+		AnimPropertyQuat() : AnimProperty(Type::Quaternion), m_vlaue(Quaternion::IDENTITY) {}
 
 		// get value
 		const Quaternion& getValue() { return m_vlaue; }

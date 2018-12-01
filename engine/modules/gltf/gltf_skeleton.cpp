@@ -116,7 +116,7 @@ namespace Echo
 				transform.reset();
 			}
 
-			for (AnimNode* animNode : clip->m_nodes)
+			for (AnimObject* animNode : clip->m_objects)
 			{
 				// copy all propertys results of this node
 				i32 nodeIdx = any_cast<i32>(animNode->m_userData);

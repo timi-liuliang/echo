@@ -676,8 +676,8 @@ namespace Echo
 		{
 		case GltfAccessorInfo::Type::Scalar:	return AnimProperty::Type::Float;
 		case GltfAccessorInfo::Type::Vec3:		return AnimProperty::Type::Vector3;
-		case GltfAccessorInfo::Type::Vec4:		return AnimProperty::Type::Quatition;
-		default:								return AnimProperty::Type::Unknow;
+		case GltfAccessorInfo::Type::Vec4:		return AnimProperty::Type::Quaternion;
+		default:								return AnimProperty::Type::Unknown;
 		}
 	}
 
@@ -705,7 +705,7 @@ namespace Echo
 			{
 				GltfAnimSampler& sampler = anim.m_samplers[channel.m_sampler];
 				{
-					AnimNode* animNode = EchoNew(AnimNode);
+					AnimObject* animNode = EchoNew(AnimObject);
 
 					// node path
 					animNode->m_userData = channel.m_node;
@@ -730,7 +730,7 @@ namespace Echo
 						}
 					}
 
-					animClip->m_nodes.push_back(animNode);
+					animClip->m_objects.push_back(animNode);
 				}
 			}
 

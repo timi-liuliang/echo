@@ -5,7 +5,7 @@ namespace Echo
 	float AnimClip::calcLength()
 	{
 		m_length = 0.f;
-		for (AnimNode* animNode : m_nodes)
+		for (AnimObject* animNode : m_objects)
 		{
 			for (AnimProperty* property : animNode->m_properties)
 			{
@@ -19,7 +19,7 @@ namespace Echo
 	// optimize
 	void AnimClip::optimize()
 	{
-		for (AnimNode* animNode : m_nodes)
+		for (AnimObject* animNode : m_objects)
 		{
 			for (AnimProperty* property : animNode->m_properties)
 			{

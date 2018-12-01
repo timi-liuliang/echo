@@ -225,7 +225,7 @@ namespace Echo
 				QTreeWidgetItem* rootItem = qTreeWidgetInvisibleRootItem(nodeTreeWidget);
 				if (rootItem)
 				{
-					for (AnimNode* animNode : clip->m_nodes)
+					for (AnimObject* animNode : clip->m_objects)
 					{
 						const Timeline::ObjectUserData& userData = any_cast<Timeline::ObjectUserData>(animNode->m_userData);
 						Node* node = m_timeline->getNode(userData.m_path.c_str());

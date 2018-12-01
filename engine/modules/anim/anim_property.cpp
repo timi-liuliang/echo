@@ -12,7 +12,7 @@ namespace Echo
 		case AnimProperty::Type::Float:		return EchoNew(AnimPropertyFloat);
 		case AnimProperty::Type::Vector3:	return EchoNew(AnimPropertyVec3);
 		case AnimProperty::Type::Vector4:	return EchoNew(AnimPropertyVec4);
-		case AnimProperty::Type::Quatition: return EchoNew(AnimPropertyQuat);
+		case AnimProperty::Type::Quaternion:return EchoNew(AnimPropertyQuat);
 		default:							return nullptr;
 		}
 

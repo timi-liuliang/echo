@@ -126,6 +126,10 @@ namespace Echo
 	// get anim data
 	const Base64String& Timeline::getAnimData()
 	{ 
+		static const char* AnimCurveInterpolationTypeStr[] = { "Linear", "Discrete" };
+		static const char* AnimPropertyTypeStr[] = { "Unknown", "Float", "Vector3", "Vector4", "Quaternion" };
+		static const char* ObjectTypeStr[] = { "Node", "Setting", "Resource" };
+
 		if (m_isAnimDataDirty)
 		{
 			m_isAnimDataDirty = false;
@@ -138,13 +142,31 @@ namespace Echo
 			dec.append_attribute("version") = "1.0";
 			dec.append_attribute("encoding") = "utf-8";
 
+			// root node
+			pugi::xml_node rootXmlNode = doc.append_child("clips");
+
 			for (AnimClip* animClip : m_clips)
 			{
-				for (AnimNode* animNode : animClip->m_nodes)
-				{
-					for (AnimProperty* animProperty : animNode->m_properties)
-					{
+				pugi::xml_node clipXmlNode = rootXmlNode.append_child("clip");
+				clipXmlNode.append_attribute("name").set_value( animClip->m_name.c_str());
+				clipXmlNode.append_attribute("length").set_value(animClip->m_length);
 
+				for (AnimObject* animObject : animClip->m_objects)
+				{
+					const ObjectUserData& userData = any_cast<ObjectUserData>(animObject->m_userData);
+					pugi::xml_node objectXmlNode = clipXmlNode.append_child("object");
+					objectXmlNode.append_attribute("type").set_value(ObjectTypeStr[userData.m_type]);
+					objectXmlNode.append_attribute("path").set_value(userData.m_path.c_str());
+
+					for (AnimProperty* animProperty : animObject->m_properties)
+					{
+						const String& propertyName = any_cast<String>(animProperty->m_userData);
+						pugi::xml_node propertyXmlNode = objectXmlNode.append_child("property");
+						propertyXmlNode.append_attribute("name").set_value(propertyName.c_str());
+						propertyXmlNode.append_attribute("type").set_value(AnimPropertyTypeStr[int(animProperty->m_type)]);
+						propertyXmlNode.append_attribute("interpolation_type").set_value(AnimCurveInterpolationTypeStr[int(animProperty->m_interpolationType)]);
+
+						// keys
 					}
 				}
 			}
@@ -198,10 +220,10 @@ namespace Echo
 		AnimClip* clip = getClip(animName.c_str());
 		if (clip)
 		{
-			AnimNode* animNode = EchoNew(AnimNode);
+			AnimObject* animNode = EchoNew(AnimObject);
 			animNode->m_userData = ObjectUserData( type, path);
 
-			clip->m_nodes.push_back(animNode);
+			clip->m_objects.push_back(animNode);
 
 			m_isAnimDataDirty = true;
 		}
@@ -213,7 +235,7 @@ namespace Echo
 		AnimClip* clip = getClip(animName.c_str());
 		if (clip && node)
 		{
-			for (AnimNode* animNode : clip->m_nodes)
+			for (AnimObject* animNode : clip->m_objects)
 			{
 				const ObjectUserData& userData = any_cast<ObjectUserData>(animNode->m_userData);
 				if (userData.m_path == node->getNodePathRelativeTo(this))
@@ -245,7 +267,7 @@ namespace Echo
 		AnimClip* clip = getClip(animName.c_str());
 		if (clip && node)
 		{
-			for (AnimNode* animNode : clip->m_nodes)
+			for (AnimObject* animNode : clip->m_objects)
 			{
 				const ObjectUserData& userData = any_cast<ObjectUserData>(animNode->m_userData);
 				if (userData.m_path == node->getNodePathRelativeTo(this))
@@ -287,7 +309,7 @@ namespace Echo
 	{
 		if (clip)
 		{
-			for (AnimNode* animNode : clip->m_nodes)
+			for (AnimObject* animNode : clip->m_objects)
 			{
 				const ObjectUserData& objUserData = any_cast<ObjectUserData>(animNode->m_userData);
 				Echo::Node* node = this->getNode(objUserData.m_path.c_str());
