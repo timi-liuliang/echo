@@ -195,8 +195,42 @@ namespace Echo
 		doc.load(data.decode());
 
 		// root node
-		pugi::xml_node rootXmlNode = doc.append_child("clips");
+		pugi::xml_node rootXmlNode = doc.child("clips");
+		if (rootXmlNode)
+		{
+			for (pugi::xml_node clipNode = rootXmlNode.child("clip"); clipNode; clipNode = clipNode.next_sibling("clip"))
+			{
+				AnimClip* animClip = EchoNew(AnimClip);
+				animClip->m_name = clipNode.attribute("name").as_string();
+				animClip->m_length = clipNode.attribute("length").as_float();
+				addClip(animClip);
 
+				for (pugi::xml_node objectNode = clipNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
+				{
+					Echo::String typeStr = objectNode.attribute("type").as_string();
+					ObjectType type =  typeStr== "Node" ? ObjectType::Node : ( typeStr=="Setting" ? ObjectType::Setting : ObjectType::Resource);
+					Echo::String path = objectNode.attribute("path").as_string();
+					addObject(animClip->m_name, type, path);
+
+					for (pugi::xml_node propertyNode = objectNode.child("property"); propertyNode; propertyNode = propertyNode.next_sibling("property"))
+					{
+						Echo::String propertyName = propertyNode.attribute("name").as_string();
+						Echo::String typeStr = propertyNode.attribute("type").as_string();
+						Echo::String interpolationType = propertyNode.attribute("interpolation_type").as_string();
+
+						addProperty(animClip->m_name, nullptr, propertyName);
+
+						for (pugi::xml_node keyNode = propertyNode.child("key"); keyNode; keyNode = keyNode.next_sibling("key"))
+						{
+							float time = keyNode.attribute("time").as_float();
+							Variant keyValue; keyValue.fromString( Variant::Type::Vector3, keyNode.attribute("value").as_string());
+
+							addKey(animClip->m_name, nullptr, propertyName, time, keyValue);
+						}
+					}
+				}
+			}
+		}
 
 		m_isAnimDataDirty = false;
 	}
