@@ -51,10 +51,10 @@ namespace Echo
 		bool isAnimExist(const char* animName);
 
 		// get anim data
-		const Base64String& getAnimData() const { return m_animData; }
+		const Base64String& getAnimData();
 
 		// set anim data
-		void setAnimData(const Base64String& data) { m_animData = data; }
+		void setAnimData(const Base64String& data);
 
 	public:
 		// get play state
@@ -113,6 +113,7 @@ namespace Echo
 		PlayState				m_playState;
 		vector<AnimClip*>::type	m_clips;
 		Base64String			m_animData;
+		bool					m_isAnimDataDirty;
 		StringOption			m_animations;
 	};
 }

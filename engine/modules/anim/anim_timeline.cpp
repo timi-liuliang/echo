@@ -1,12 +1,16 @@
 #include "anim_timeline.h"
 #include "engine/core/main/Engine.h"
 #include "engine/core/scene/node.h"
+#include <thirdparty/pugixml/pugixml.hpp>
+#include <thirdparty/pugixml/pugiconfig.hpp>
+#include <thirdparty/pugixml/pugixml_ext.hpp>
 
 namespace Echo
 {
 	Timeline::Timeline()
 		: m_animations("")
 		, m_playState(PlayState::Stop)
+		, m_isAnimDataDirty(false)
 	{
 	}
 
@@ -39,6 +43,8 @@ namespace Echo
 
 			m_clips.push_back(clip);
 			m_animations.addOption(clip->m_name);
+
+			m_isAnimDataDirty = true;
 		}
 	}
 
@@ -76,6 +82,8 @@ namespace Echo
 				m_clips.erase(m_clips.begin() + i);
 				m_animations.removeOption(animName);
 
+				m_isAnimDataDirty = true;
+
 				break;
 			}
 		}
@@ -85,6 +93,8 @@ namespace Echo
 	{
 		m_clips[idx]->m_name = newName;
 		m_animations.m_options[idx] = newName;
+
+		m_isAnimDataDirty = true;
 	}
 
 	void Timeline::update_self()
@@ -111,6 +121,49 @@ namespace Echo
 		}
 
 		return false;
+	}
+
+	// get anim data
+	const Base64String& Timeline::getAnimData()
+	{ 
+		if (m_isAnimDataDirty)
+		{
+			m_isAnimDataDirty = false;
+
+			// pugi xml doc
+			pugi::xml_document doc;
+
+			// declaration
+			pugi::xml_node dec = doc.prepend_child(pugi::node_declaration);
+			dec.append_attribute("version") = "1.0";
+			dec.append_attribute("encoding") = "utf-8";
+
+			for (AnimClip* animClip : m_clips)
+			{
+				for (AnimNode* animNode : animClip->m_nodes)
+				{
+					for (AnimProperty* animProperty : animNode->m_properties)
+					{
+
+					}
+				}
+			}
+
+			m_animData.encode( pugi::get_doc_string(doc).c_str());
+		}
+
+		return m_animData; 
+	}
+
+	// set anim data
+	void Timeline::setAnimData(const Base64String& data)
+	{ 
+		m_animData = data;
+		
+		// parse clips
+
+
+		m_isAnimDataDirty = false;
 	}
 
 	void Timeline::play(const char* animName)
@@ -149,6 +202,8 @@ namespace Echo
 			animNode->m_userData = ObjectUserData( type, path);
 
 			clip->m_nodes.push_back(animNode);
+
+			m_isAnimDataDirty = true;
 		}
 	}
 
@@ -179,6 +234,9 @@ namespace Echo
 				}
 			}
 		}
+
+		// dirty flag
+		m_isAnimDataDirty = true;
 	}
 
 	void Timeline::addKey(const String& animName, Object* object, const String& propertyName, float time, const Variant& value)
@@ -207,6 +265,9 @@ namespace Echo
 				}
 			}
 		}
+
+		// dirty flag
+		m_isAnimDataDirty = true;
 	}
 
 	void Timeline::generateUniqueAnimName(const String& prefix, String& oName)

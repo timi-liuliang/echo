@@ -151,7 +151,7 @@ namespace Echo
 		}
 		else
 		{
-			int last_pos = str.find_last_of(delims)+1;
+			size_t last_pos = str.find_last_of(delims)+1;
 			return str.substr( last_pos, str.size() - last_pos);
 		}
 	}

@@ -85,4 +85,16 @@ namespace Echo
 			if (j < output_length) m_decoded[j++] = (triple >> 0 * 8) & 0xFF;
 		}
 	}
+
+	// encode
+	void Base64String::encode(const char* originStr)
+	{
+		m_data = originStr;
+	}
+
+	// decode
+	const char* Base64String::decode()
+	{
+		return "";
+	}
 }

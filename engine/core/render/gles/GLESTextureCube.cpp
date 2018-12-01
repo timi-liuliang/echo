@@ -107,7 +107,7 @@ namespace Echo
 					ui32 pixelsSize = PixelUtil::CalcSurfaceSize(m_width, m_height, m_depth, m_numMipmaps, m_pixFmt);
 					Buffer buff(pixelsSize, image->getData(), false);
 					
-					setCubeSurfaceData( i, 0, m_pixFmt, m_usage, m_width, m_height, m_numMipmaps, buff);
+					setCubeSurfaceData( static_cast<int>(i), 0, m_pixFmt, m_usage, m_width, m_height, m_numMipmaps, buff);
 					EchoSafeDelete(image, Image);
 				}
 			}

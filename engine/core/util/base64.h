@@ -32,6 +32,18 @@ namespace Echo
 	// that means it can be decoded into a string.
 	struct Base64String
 	{
+		String		m_data;			// data
 
+		Base64String() {}
+		Base64String(const char* data) : m_data(data) {}
+
+		// encode
+		void encode(const char* originStr);
+
+		// decode
+		const char* decode();
+
+		// data
+		const String& getData() const { return m_data; }
 	};
 }

@@ -388,7 +388,7 @@ namespace Echo
 		}
 
 		m_fileHandle->seek( 0L, SEEK_END);
-		ui32 currFileOffset = m_fileHandle->tell();
+		ui32 currFileOffset = static_cast<ui32>(m_fileHandle->tell());
 		m_fileHandle->write(pData, nSize);
 
 
@@ -665,7 +665,6 @@ namespace Echo
 		return true;
 	}
 
-	// 压缩数据
 	bool ResourcePack::CompressData(FileNode &fileNode, const char* filePath, unsigned int &nCompressSize)
 	{
 		const unsigned char	*lpszOut		= NULL;
@@ -680,7 +679,7 @@ namespace Echo
 			return false;
 		}
 
-		nFileRealSize = fp.size();
+		nFileRealSize = static_cast<unsigned int>(fp.size());
 		if(nFileRealSize > m_RealFileBufferSize)
 		{
 			m_RealFileBufferSize = nFileRealSize;
@@ -738,7 +737,7 @@ namespace Echo
 
 		// 文件指针移到尾部
 		m_fileHandle->seek( 0, SEEK_END);
-		ui32 currFileOffset = m_fileHandle->tell();
+		ui32 currFileOffset = static_cast<ui32>(m_fileHandle->tell());
 		m_fileHandle->write(lpszOut, nCompressSize);
 
 		fileNode.m_nUseFlag = FILE_IN_USING;

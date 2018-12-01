@@ -140,6 +140,7 @@ namespace Echo
 		case Type::NodePath:	 return (any_cast<NodePath>(m_any)).getPath();
 		case Type::StringOption: return (any_cast<StringOption>(m_any)).getValue();
 		case Type::VectorN:   return StringUtil::ToString(any_cast<RealVector>(m_any));
+		case Type::Base64String: return (any_cast<Base64String>(m_any)).getData();
         default:                 return StringUtil::BLANK;
 		}
 	}
@@ -162,6 +163,7 @@ namespace Echo
 		case Type::StringOption: { m_type = Type::StringOption; m_any = StringOption(str); } return true;
 		case Type::Object: { m_type = Type::Object; m_obj = Object::getById(StringUtil::ParseI32(str)); } return true;
 		case Type::VectorN: { m_type = Type::VectorN; m_any = StringUtil::ParseRealVector(str); } return true;
+		case Type::Base64String: { m_type = Type::Base64String; m_any = Base64String(str.c_str()); } return true;
         default:    return false;
 		}
 	}

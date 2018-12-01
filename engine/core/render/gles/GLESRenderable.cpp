@@ -131,7 +131,7 @@ namespace Echo
 
 	bool GLES2Renderable::buildVertStreamDeclaration(StreamUnit* stream)
 	{
-		ui32 numVertElms = stream->m_vertElements.size();
+		ui32 numVertElms = static_cast<ui32>(stream->m_vertElements.size());
 		if (numVertElms == 0)
 		{
 			EchoLogError("Vertex elements size error, buildVertStreamDeclaration failed.");
