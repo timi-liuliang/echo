@@ -218,14 +218,14 @@ namespace Echo
 						Echo::String typeStr = propertyNode.attribute("type").as_string();
 						Echo::String interpolationType = propertyNode.attribute("interpolation_type").as_string();
 
-						addProperty(animClip->m_name, nullptr, propertyName);
+						addProperty(animClip->m_name, path, propertyName);
 
 						for (pugi::xml_node keyNode = propertyNode.child("key"); keyNode; keyNode = keyNode.next_sibling("key"))
 						{
 							float time = keyNode.attribute("time").as_float();
 							Variant keyValue; keyValue.fromString( Variant::Type::Vector3, keyNode.attribute("value").as_string());
 
-							addKey(animClip->m_name, nullptr, propertyName, time, keyValue);
+							addKey(animClip->m_name, path, propertyName, time, keyValue);
 						}
 					}
 				}
@@ -276,16 +276,15 @@ namespace Echo
 		}
 	}
 
-	void Timeline::addProperty(const String& animName, Object* object, const String& propertyName)
+	void Timeline::addProperty(const String& animName, const String& objectPath, const String& propertyName)
 	{
-		Echo::Node* node = dynamic_cast<Echo::Node*>(object);
 		AnimClip* clip = getClip(animName.c_str());
-		if (clip && node)
+		if (clip)
 		{
 			for (AnimObject* animNode : clip->m_objects)
 			{
 				const ObjectUserData& userData = any_cast<ObjectUserData>(animNode->m_userData);
-				if (userData.m_path == node->getNodePathRelativeTo(this))
+				if (userData.m_path == objectPath)
 				{
 					AnimProperty* property = animNode->addProperty( propertyName, AnimProperty::Type::Vector3);
 					if (property)
@@ -293,8 +292,8 @@ namespace Echo
 						property->setInterpolationType(AnimCurve::InterpolationType::Linear);
 
 						// test
-						addKey(animName, object, propertyName, 0.f, Vector3::ZERO);
-						addKey(animName, object, propertyName, 3.f, Vector3(500.f, 0.f, 0.f));
+						addKey(animName, objectPath, propertyName, 0.f, Vector3::ZERO);
+						addKey(animName, objectPath, propertyName, 3.f, Vector3(500.f, 0.f, 0.f));
 
 						clip->m_length = 3.f;
 					}
@@ -308,16 +307,15 @@ namespace Echo
 		m_isAnimDataDirty = true;
 	}
 
-	void Timeline::addKey(const String& animName, Object* object, const String& propertyName, float time, const Variant& value)
+	void Timeline::addKey(const String& animName, const String& objectPath, const String& propertyName, float time, const Variant& value)
 	{
-		Echo::Node* node = dynamic_cast<Echo::Node*>(object);
 		AnimClip* clip = getClip(animName.c_str());
-		if (clip && node)
+		if (clip)
 		{
 			for (AnimObject* animNode : clip->m_objects)
 			{
 				const ObjectUserData& userData = any_cast<ObjectUserData>(animNode->m_userData);
-				if (userData.m_path == node->getNodePathRelativeTo(this))
+				if (userData.m_path == objectPath)
 				{
 					for (AnimProperty* property : animNode->m_properties)
 					{

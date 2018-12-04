@@ -93,10 +93,10 @@ namespace Echo
 
 	public:
 		// add property to object
-		void addProperty(const String& animName, Object* object, const String& propertyName);
+		void addProperty(const String& animName, const String& objectPath, const String& propertyName);
 
 		// add key frame
-		void addKey(const String& animName, Object* object, const String& propertyName, float time, const Variant& value);
+		void addKey(const String& animName, const String& objectPath, const String& propertyName, float time, const Variant& value);
 
 	protected:
 		// update self
