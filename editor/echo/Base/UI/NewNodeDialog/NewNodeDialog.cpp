@@ -8,20 +8,22 @@ namespace Studio
 {
 	NewNodeDialog::NewNodeDialog(QWidget* parent)
 		: QDialog(parent)
+		, m_viewNodeByModule(true)
 	{
 		setupUi(this);
 
 		// hide default window title
 		setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 
-		// display nodes
-		initNodeDisplay();
-
 		// connect signal slot
 		QObject::connect(m_treeWidget, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(onSelectNode()));
 		QObject::connect(m_confirm, SIGNAL(clicked()), this, SLOT(onConfirmNode()));
 		QObject::connect(m_confirm, SIGNAL(clicked()), this, SLOT(accept()));
 		QObject::connect(m_cancel, SIGNAL(clicked()), this, SLOT(reject()));
+		QObject::connect(m_viewNodeButton, SIGNAL(clicked()), this, SLOT(onSwitchNodeVeiwType()));
+		QObject::connect(m_treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(onConfirmNode()));
+
+		recoverEditSettings();
 	}
 
 	NewNodeDialog::~NewNodeDialog()
@@ -49,18 +51,22 @@ namespace Studio
 		return "";
 	}
 
-	void NewNodeDialog::initNodeDisplay()
+	void NewNodeDialog::initNodeDisplayByModule()
 	{
 		m_treeWidget->clear();
 
-		// begin with "Node"
-		addNode("Node", m_treeWidget->invisibleRootItem());
+		addNode( "Node");
 
-		// expand all items
 		m_treeWidget->expandAll();
 	}
 
-	void NewNodeDialog::addNode(const Echo::String& nodeName, QTreeWidgetItem* parent)
+	QTreeWidgetItem* NewNodeDialog::getModuleItem(const Echo::String& nodeName)
+	{
+		return m_treeWidget->invisibleRootItem();
+	}
+
+	// create QTreewidgetItem by nodename
+	QTreeWidgetItem* NewNodeDialog::createQTreeWidgetItemByNodeName(const Echo::String& nodeName, QTreeWidgetItem* parent)
 	{
 		// iconpath
 		Echo::Node* node = (Echo::Node*)Echo::Class::create(nodeName);
@@ -75,11 +81,46 @@ namespace Studio
 		Echo::String qIconPath = Echo::StringUtil::Format(":/icon/node/%s.png", lowerCaseNodeName.c_str());
 
 		QTreeWidgetItem* nodeItem = new QTreeWidgetItem(parent);
-		nodeItem->setText( 0, nodeName.c_str());
+		nodeItem->setText(0, nodeName.c_str());
 		nodeItem->setIcon(0, QIcon(iconPath.empty() ? qIconPath.c_str() : (rootPath + iconPath).c_str()));
 
-		QObject::connect(m_treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(onConfirmNode()));
+		return nodeItem;
+	}
 
+	void NewNodeDialog::addNode(const Echo::String& nodeName)
+	{
+		// use module item as parent
+		QTreeWidgetItem* moduleParent = getModuleItem(nodeName);
+		createQTreeWidgetItemByNodeName(nodeName, moduleParent);
+
+		// recursive all children
+		Echo::StringArray childNodes;
+		if (Echo::Class::getChildClasses(childNodes, nodeName.c_str(), false))
+		{
+			for (const Echo::String& childNode : childNodes)
+			{
+				addNode(childNode);
+			}
+		}
+	}
+
+	void NewNodeDialog::initNodeDisplayByInherite()
+	{
+		m_treeWidget->clear();
+
+		// begin with "Node"
+		addNode("Node", m_treeWidget->invisibleRootItem());
+
+		// expand all items
+		m_treeWidget->expandAll();
+	}
+
+	void NewNodeDialog::addNode(const Echo::String& nodeName, QTreeWidgetItem* parent)
+	{
+		// create by node name
+		QTreeWidgetItem* nodeItem = createQTreeWidgetItemByNodeName(nodeName, parent);
+
+		// recursive all children
 		Echo::StringArray childNodes;
 		if( Echo::Class::getChildClasses(childNodes, nodeName.c_str(), false))
 		{
@@ -112,6 +153,41 @@ namespace Studio
 
 				hide();
 			}
+		}
+	}
+
+	void NewNodeDialog::onSwitchNodeVeiwType()
+	{
+		m_viewNodeByModule = !m_viewNodeByModule;
+		if (m_viewNodeByModule)
+		{
+			initNodeDisplayByModule();
+
+			m_viewNodeButton->setIcon(QIcon(":/icon/Icon/res/view_type_list.png"));
+			m_viewNodeButton->setToolTip("Display node by Module");
+		}
+		else
+		{
+			initNodeDisplayByInherite();
+
+			m_viewNodeButton->setIcon(QIcon(":/icon/Icon/res/view_type_grid.png"));
+			m_viewNodeButton->setToolTip("Display node by inheritance relationships");
+		}
+
+		// save config
+		AStudio::instance()->getConfigMgr()->setValue("NewNodeDialog_NodeViewType", m_viewNodeByModule ? "Module" : "Inherit");
+	}
+
+	void NewNodeDialog::recoverEditSettings()
+	{
+		Echo::String viewType = AStudio::instance()->getConfigMgr()->getValue("NewNodeDialog_NodeViewType");
+		if (!viewType.empty() && m_viewNodeByModule && viewType != "Module")
+		{
+			onSwitchNodeVeiwType();
+		}
+		else
+		{
+			initNodeDisplayByModule();
 		}
 	}
 }

@@ -24,7 +24,7 @@ namespace Studio
 	{
 		setupUi( this);
 
-		// 目录树型结构
+		// directory tree structre
 		m_dirModel = new QT_UI::QDirectoryModel();
 		m_dirModel->SetIcon("root", QIcon(":/icon/Icon/root.png"));
 		m_dirModel->SetIcon("filter", QIcon(":/icon/Icon/folder_close.png"));
