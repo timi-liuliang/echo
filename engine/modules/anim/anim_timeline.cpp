@@ -189,10 +189,10 @@ namespace Echo
 		// clear
 		EchoSafeDeleteContainer(m_clips, AnimClip);
 		m_animData = data;
-		
+
 		// parse clips
 		pugi::xml_document doc; 
-		doc.load(data.decode());
+		doc.load(data.decode().c_str());
 
 		// root node
 		pugi::xml_node rootXmlNode = doc.child("clips");

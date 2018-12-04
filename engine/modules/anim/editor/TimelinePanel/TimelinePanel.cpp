@@ -55,7 +55,11 @@ namespace Echo
 		qConnect(qFindChild(m_ui, "Play"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onPlayAnim));
 		qConnect(qFindChild(m_ui, "Stop"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onStopAnim));
 		qConnect(qFindChild(m_ui, "Restart"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onRestartAnim));
+	}
 
+	// sync data to editor
+	void TimelinePanel::syncDataToEditor()
+	{
 		// update display
 		syncClipListDataToEditor();
 	}

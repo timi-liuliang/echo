@@ -92,8 +92,10 @@ namespace Echo
 	}
 
 	// decode
-	const char* Base64String::decode() const
+			// decode
+	String Base64String::decode() const
 	{
-		return "";
+		Base64Decode decoder(m_data);
+		return decoder.getData();
 	}
 }

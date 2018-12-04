@@ -39,6 +39,9 @@ namespace Echo
 		// current edit anim changed
 		void onCurrentEditAnimChanged();
 
+		// sync data to editor
+		void syncDataToEditor();
+
 	private:
 		// get new name
 		String getNewClipName();

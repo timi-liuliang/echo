@@ -26,6 +26,8 @@ namespace Echo
 	void TimelineEditor::onEditorSelectThisNode()
 	{
 		Editor::instance()->showBottomPanel(m_timelinePanel);
+
+		m_timelinePanel->syncDataToEditor();
 	}
 
 	// editor update self
