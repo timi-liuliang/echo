@@ -63,13 +63,14 @@ namespace Studio
 	QTreeWidgetItem* NewNodeDialog::getModuleItem(const Echo::String& nodeName)
 	{
 		Echo::ClassInfo* cinfo = Echo::Class::getClassInfo(nodeName);
-		Echo::String moduleName = cinfo ? cinfo->m_module : "Core";
+		Echo::String moduleName = (cinfo && !cinfo->m_module.empty()) ? cinfo->m_module : "Core";
+		Echo::String moduleDisplayName = Echo::StringUtil::Replace(moduleName, "Module", "");
 
 		QTreeWidgetItem* rootItem = m_treeWidget->invisibleRootItem();
 		for (int i = 0; i < rootItem->childCount(); i++)
 		{
 			QTreeWidgetItem* moduleItem = rootItem->child(i);
-			if (moduleItem->text(0).toStdString().c_str() == moduleName)
+			if (moduleItem->text(0).toStdString().c_str() == moduleDisplayName)
 			{
 				return moduleItem;
 			}
@@ -77,10 +78,11 @@ namespace Studio
 
 		// create module item
 		QTreeWidgetItem* nodeItem = new QTreeWidgetItem(rootItem);
-		nodeItem->setText(0, moduleName.c_str());
+		nodeItem->setText(0, moduleDisplayName.c_str());
 		nodeItem->setIcon(0, QIcon(":/icon/node/box2dbody.png"));
+		nodeItem->setData(0, Qt::UserRole, "module");
 
-		return getModuleItem( moduleName);
+		return getModuleItem( nodeName);
 	}
 
 	// create QTreewidgetItem by nodename
@@ -101,6 +103,7 @@ namespace Studio
 		QTreeWidgetItem* nodeItem = new QTreeWidgetItem(parent);
 		nodeItem->setText(0, nodeName.c_str());
 		nodeItem->setIcon(0, QIcon(iconPath.empty() ? qIconPath.c_str() : (rootPath + iconPath).c_str()));
+		nodeItem->setData(0, Qt::UserRole, "node");
 
 		return nodeItem;
 	}
@@ -154,8 +157,9 @@ namespace Studio
 		QTreeWidgetItem* item = m_treeWidget->currentItem();
 		if (item)
 		{
+			Echo::String userData = item->data(0, Qt::UserRole).toString().toStdString().c_str();
 			Echo::String text = item->text(0).toStdString().c_str();
-			m_confirm->setEnabled(!Echo::Class::isVirtual(text));
+			m_confirm->setEnabled( userData == "node" && !Echo::Class::isVirtual(text));
 		}
 	}
 
