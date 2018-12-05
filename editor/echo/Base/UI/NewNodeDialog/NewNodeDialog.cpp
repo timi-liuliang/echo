@@ -79,7 +79,6 @@ namespace Studio
 		// create module item
 		QTreeWidgetItem* nodeItem = new QTreeWidgetItem(rootItem);
 		nodeItem->setText(0, moduleDisplayName.c_str());
-		nodeItem->setIcon(0, QIcon(":/icon/node/box2dbody.png"));
 		nodeItem->setData(0, Qt::UserRole, "module");
 
 		return getModuleItem( nodeName);
