@@ -82,6 +82,7 @@ namespace Echo
 			m_name = name;
 			m_classInfo.m_singleton = false;
 			m_classInfo.m_virtual = false;
+			m_classInfo.m_module = Module::getCurrentRegisterModuleName();
 			m_classInfo.m_parent = parent;
 			m_cfun = cfun;
 

@@ -38,6 +38,18 @@ namespace Echo
 		(*g_classInfos)[className] = objFactory;
 	}
 
+	// get class info
+	ClassInfo* Class::getClassInfo(const String& className)
+	{
+		auto it = g_classInfos->find(className);
+		if (it != g_classInfos->end())
+		{
+			return &(it->second->m_classInfo);
+		}
+
+		return nullptr;
+	}
+
 	// is derived from
 	bool Class::isDerivedFrom(const String& className, const String& parentClassName)
 	{
@@ -56,34 +68,24 @@ namespace Echo
 	// is virtual
 	bool Class::isVirtual(const String& className)
 	{
-		auto it = g_classInfos->find(className);
-		if (it != g_classInfos->end())
-		{
-			return it->second->m_classInfo.m_virtual;
-		}
-
-		return true;
+		ClassInfo* cinfo = getClassInfo(className);	
+		return cinfo ? cinfo->m_virtual : true;
 	}
 
 	// is singleton
 	bool Class::isSingleton(const String& className)
 	{
-		auto it = g_classInfos->find(className);
-		if (it != g_classInfos->end())
-		{
-			return it->second->m_classInfo.m_singleton;
-		}
-
-		return true;
+		ClassInfo* cinfo = getClassInfo(className);
+		return cinfo ? cinfo->m_singleton : true;
 	}
 
 	// get parent class name
 	bool Class::getParentClass(String& parentClassName, const String& className)
 	{
-		auto it = g_classInfos->find(className);
-		if (it != g_classInfos->end())
+		ClassInfo* cinfo = getClassInfo(className);
+		if (cinfo)
 		{
-			parentClassName = it->second->m_classInfo.m_parent;
+			parentClassName = cinfo->m_parent;
 			return true;
 		}
 

@@ -62,7 +62,25 @@ namespace Studio
 
 	QTreeWidgetItem* NewNodeDialog::getModuleItem(const Echo::String& nodeName)
 	{
-		return m_treeWidget->invisibleRootItem();
+		Echo::ClassInfo* cinfo = Echo::Class::getClassInfo(nodeName);
+		Echo::String moduleName = cinfo ? cinfo->m_module : "Core";
+
+		QTreeWidgetItem* rootItem = m_treeWidget->invisibleRootItem();
+		for (int i = 0; i < rootItem->childCount(); i++)
+		{
+			QTreeWidgetItem* moduleItem = rootItem->child(i);
+			if (moduleItem->text(0).toStdString().c_str() == moduleName)
+			{
+				return moduleItem;
+			}
+		}
+
+		// create module item
+		QTreeWidgetItem* nodeItem = new QTreeWidgetItem(rootItem);
+		nodeItem->setText(0, moduleName.c_str());
+		nodeItem->setIcon(0, QIcon(":/icon/node/box2dbody.png"));
+
+		return getModuleItem( moduleName);
 	}
 
 	// create QTreewidgetItem by nodename

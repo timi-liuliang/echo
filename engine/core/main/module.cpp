@@ -4,6 +4,7 @@
 
 namespace Echo
 {
+	static Module*				  g_currentModule = nullptr;
 	static vector<Module*>::type* g_modules = nullptr;
 
 	void Module::addModule(Module* module)
@@ -20,9 +21,16 @@ namespace Echo
 		{
 			for (Module* module : *g_modules)
 			{
+				g_currentModule = module;
 				module->registerTypes();
 			}
 		}
+	}
+
+	// get current register module name
+	const String& Module::getCurrentRegisterModuleName()
+	{
+		return g_currentModule ? g_currentModule->getName() : StringUtil::BLANK;
 	}
 
 	// update all modules every frame(ms)

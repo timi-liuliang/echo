@@ -7,6 +7,7 @@
 #include "engine/core/editor/object_editor.h"
 #include "engine/core/util/StringUtil.h"
 #include "engine/core/script/lua/lua_binder.h"
+#include "engine/core/main/module.h"
 
 namespace Echo
 {
@@ -15,6 +16,7 @@ namespace Echo
 		bool			m_singleton;		// singleton class
 		bool			m_virtual;			// virtual class can't be instanced
 		String			m_parent;
+		String			m_module;
 		PropertyInfos	m_propertyInfos;
 		ClassMethodMap	m_methods;
 	};
@@ -102,6 +104,9 @@ namespace Echo
 		// add class
 		static void addClass(const String& className, ObjectFactory* objFactory);
 
+		// get class info
+		static ClassInfo* getClassInfo(const String& className);
+
 		// is derived from
 		static bool isDerivedFrom(const String& className, const String& parentClassName);
 
@@ -164,6 +169,7 @@ namespace Echo
             m_name = name;
             m_classInfo.m_singleton = false;
             m_classInfo.m_virtual = isVirtual;
+			m_classInfo.m_module = Module::getCurrentRegisterModuleName();
             m_classInfo.m_parent = parent;
             
             Class::addClass(name, this);
@@ -194,6 +200,7 @@ namespace Echo
             m_name = name;
             m_classInfo.m_singleton = true;
             m_classInfo.m_virtual = isVirtual;
+			m_classInfo.m_module = Module::getCurrentRegisterModuleName();
             m_classInfo.m_parent = parent;
             
             Class::addClass(name, this);
