@@ -36,7 +36,7 @@ namespace Studio
 		QTreeWidgetItem* getModuleItem(const Echo::String& nodeName);
 
 		// create QTreewidgetItem by nodename
-		QTreeWidgetItem* createQTreeWidgetItemByNodeName(const Echo::String& nodeName, QTreeWidgetItem* parent);
+		QTreeWidgetItem* createQTreeWidgetItemByNodeName(const Echo::String& nodeName, QTreeWidgetItem* parent, bool isCreateWhenNodeIsVirtual);
 
 	private slots:
 		void onSelectNode();

@@ -85,24 +85,31 @@ namespace Studio
 	}
 
 	// create QTreewidgetItem by nodename
-	QTreeWidgetItem* NewNodeDialog::createQTreeWidgetItemByNodeName(const Echo::String& nodeName, QTreeWidgetItem* parent)
+	QTreeWidgetItem* NewNodeDialog::createQTreeWidgetItemByNodeName(const Echo::String& nodeName, QTreeWidgetItem* parent, bool isCreateWhenNodeIsVirtual)
 	{
-		// iconpath
-		Echo::Node* node = (Echo::Node*)Echo::Class::create(nodeName);
-		Echo::String iconPath = node->getEditor() ? node->getEditor()->getEditorIcon() : "";
-		EchoSafeDelete(node, Node);
-
-		Echo::String rootPath = AStudio::instance()->getRootPath();
-
-		// get icon path by node name
-		Echo::String lowerCaseNodeName = nodeName;
-		Echo::StringUtil::LowerCase(lowerCaseNodeName);
-		Echo::String qIconPath = Echo::StringUtil::Format(":/icon/node/%s.png", lowerCaseNodeName.c_str());
+		bool isNodeVirtual = Echo::Class::isVirtual(nodeName);
+		if (isNodeVirtual && !isCreateWhenNodeIsVirtual)
+			return nullptr;
 
 		QTreeWidgetItem* nodeItem = new QTreeWidgetItem(parent);
 		nodeItem->setText(0, nodeName.c_str());
-		nodeItem->setIcon(0, QIcon(iconPath.empty() ? qIconPath.c_str() : (rootPath + iconPath).c_str()));
 		nodeItem->setData(0, Qt::UserRole, "node");
+		if (!isNodeVirtual)
+		{
+			// iconpath
+			Echo::Node* node = (Echo::Node*)Echo::Class::create(nodeName);
+			Echo::String iconPath = node->getEditor() ? node->getEditor()->getEditorIcon() : "";
+			EchoSafeDelete(node, Node);
+
+			Echo::String rootPath = AStudio::instance()->getRootPath();
+
+			// get icon path by node name
+			Echo::String lowerCaseNodeName = nodeName;
+			Echo::StringUtil::LowerCase(lowerCaseNodeName);
+			Echo::String qIconPath = Echo::StringUtil::Format(":/icon/node/%s.png", lowerCaseNodeName.c_str());
+
+			nodeItem->setIcon(0, QIcon(iconPath.empty() ? qIconPath.c_str() : (rootPath + iconPath).c_str()));
+		}
 
 		return nodeItem;
 	}
@@ -111,7 +118,7 @@ namespace Studio
 	{
 		// use module item as parent
 		QTreeWidgetItem* moduleParent = getModuleItem(nodeName);
-		createQTreeWidgetItemByNodeName(nodeName, moduleParent);
+		createQTreeWidgetItemByNodeName(nodeName, moduleParent, false);
 
 		// recursive all children
 		Echo::StringArray childNodes;
@@ -138,7 +145,7 @@ namespace Studio
 	void NewNodeDialog::addNode(const Echo::String& nodeName, QTreeWidgetItem* parent)
 	{
 		// create by node name
-		QTreeWidgetItem* nodeItem = createQTreeWidgetItemByNodeName(nodeName, parent);
+		QTreeWidgetItem* nodeItem = createQTreeWidgetItemByNodeName(nodeName, parent, true);
 
 		// recursive all children
 		Echo::StringArray childNodes;
