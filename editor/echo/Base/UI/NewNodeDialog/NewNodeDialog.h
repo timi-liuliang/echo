@@ -2,6 +2,7 @@
 
 #include <engine/core/Util/StringUtil.h>
 #include <QDialog>
+#include <QSortFilterProxyModel>
 #include "QMenubarEx.h"
 #include "ui_NewNodeDialog.h"
 
@@ -45,8 +46,12 @@ namespace Studio
 		// on switch node view type
 		void onSwitchNodeVeiwType();
 
+		// search node
+		void onSearchTextChanged();
+
 	private:
-		Echo::String	m_result;
-		bool			m_viewNodeByModule;
+		Echo::String			m_result;
+		bool					m_viewNodeByModule;
+		QSortFilterProxyModel*	m_filterProxyModel;
 	};
 }

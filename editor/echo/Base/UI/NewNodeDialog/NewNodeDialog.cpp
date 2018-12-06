@@ -15,6 +15,12 @@ namespace Studio
 		// hide default window title
 		setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 
+		// sort proxy model
+		//QAbstractItemModel* sourceModel = m_treeWidget->model();
+		m_filterProxyModel = new QSortFilterProxyModel(this);
+		//m_filterProxyModel->setSourceModel( sourceModel);
+		//m_treeWidget->QTreeWidget::setModel(m_filterProxyModel);
+
 		// connect signal slot
 		QObject::connect(m_treeWidget, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(onSelectNode()));
 		QObject::connect(m_confirm, SIGNAL(clicked()), this, SLOT(onConfirmNode()));
@@ -22,6 +28,7 @@ namespace Studio
 		QObject::connect(m_cancel, SIGNAL(clicked()), this, SLOT(reject()));
 		QObject::connect(m_viewNodeButton, SIGNAL(clicked()), this, SLOT(onSwitchNodeVeiwType()));
 		QObject::connect(m_treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(onConfirmNode()));
+		QObject::connect(m_searchLineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(onSearchTextChanged()));
 
 		recoverEditSettings();
 	}
@@ -217,5 +224,13 @@ namespace Studio
 		{
 			initNodeDisplayByModule();
 		}
+	}
+
+	void NewNodeDialog::onSearchTextChanged()
+	{
+		Echo::String pattern = m_searchLineEdit->text().toStdString().c_str();
+
+		QRegExp regExp(pattern.c_str(), Qt::CaseInsensitive);
+		m_filterProxyModel->setFilterRegExp(regExp);
 	}
 }

@@ -20,7 +20,7 @@
       <number>2</number>
      </property>
      <item>
-      <widget class="QLineEdit" name="lineEdit"/>
+      <widget class="QLineEdit" name="m_searchLineEdit"/>
      </item>
      <item>
       <widget class="QToolButton" name="m_viewNodeButton">
