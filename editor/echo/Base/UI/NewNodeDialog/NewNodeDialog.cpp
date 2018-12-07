@@ -16,18 +16,19 @@ namespace Studio
 		setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 
 		// sort proxy model
-		//QAbstractItemModel* sourceModel = m_treeWidget->model();
-		m_filterProxyModel = new QSortFilterProxyModel(this);
-		//m_filterProxyModel->setSourceModel( sourceModel);
-		//m_treeWidget->QTreeWidget::setModel(m_filterProxyModel);
+		m_standardModel = new QStandardItemModel(m_treeView);
+		m_filterProxyModel = new QSortFilterProxyModel(m_treeView);
+		m_filterProxyModel->setSourceModel(m_standardModel);
+		m_filterProxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
+		//m_filterProxyModel->setFilterKeyColumn(0);
+		m_treeView->setModel(m_filterProxyModel);
 
 		// connect signal slot
-		QObject::connect(m_treeWidget, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(onSelectNode()));
+		QObject::connect(m_treeView, SIGNAL(clicked(QModelIndex)), this, SLOT(onSelectNode(QModelIndex)));
 		QObject::connect(m_confirm, SIGNAL(clicked()), this, SLOT(onConfirmNode()));
-		QObject::connect(m_confirm, SIGNAL(clicked()), this, SLOT(accept()));
 		QObject::connect(m_cancel, SIGNAL(clicked()), this, SLOT(reject()));
 		QObject::connect(m_viewNodeButton, SIGNAL(clicked()), this, SLOT(onSwitchNodeVeiwType()));
-		QObject::connect(m_treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(onConfirmNode()));
+		QObject::connect(m_treeView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onConfirmNode()));
 		QObject::connect(m_searchLineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(onSearchTextChanged()));
 
 		recoverEditSettings();
@@ -60,47 +61,49 @@ namespace Studio
 
 	void NewNodeDialog::initNodeDisplayByModule()
 	{
-		m_treeWidget->clear();
+		m_standardModel->clear();
 
 		addNode( "Node");
 
-		m_treeWidget->expandAll();
+		m_treeView->expandAll();
 	}
 
-	QTreeWidgetItem* NewNodeDialog::getModuleItem(const Echo::String& nodeName)
+	QStandardItem* NewNodeDialog::getModuleItem(const Echo::String& nodeName)
 	{
 		Echo::ClassInfo* cinfo = Echo::Class::getClassInfo(nodeName);
 		Echo::String moduleName = (cinfo && !cinfo->m_module.empty()) ? cinfo->m_module : "Core";
 		Echo::String moduleDisplayName = Echo::StringUtil::Replace(moduleName, "Module", "");
 
-		QTreeWidgetItem* rootItem = m_treeWidget->invisibleRootItem();
-		for (int i = 0; i < rootItem->childCount(); i++)
+		QStandardItem* rootItem = m_standardModel->invisibleRootItem();
+		for (int i = 0; i < rootItem->rowCount(); i++)
 		{
-			QTreeWidgetItem* moduleItem = rootItem->child(i);
-			if (moduleItem->text(0).toStdString().c_str() == moduleDisplayName)
+			QStandardItem* moduleItem = rootItem->child(i, 0);
+			if (moduleItem->text().toStdString().c_str() == moduleDisplayName)
 			{
 				return moduleItem;
 			}
 		}
 
 		// create module item
-		QTreeWidgetItem* nodeItem = new QTreeWidgetItem(rootItem);
-		nodeItem->setText(0, moduleDisplayName.c_str());
-		nodeItem->setData(0, Qt::UserRole, "module");
+		QStandardItem* nodeItem = new QStandardItem;
+		nodeItem->setText( moduleDisplayName.c_str());
+		nodeItem->setData( "module", Qt::UserRole);
+		rootItem->setChild(rootItem->rowCount(), nodeItem);
 
 		return getModuleItem( nodeName);
 	}
 
 	// create QTreewidgetItem by nodename
-	QTreeWidgetItem* NewNodeDialog::createQTreeWidgetItemByNodeName(const Echo::String& nodeName, QTreeWidgetItem* parent, bool isCreateWhenNodeIsVirtual)
+	QStandardItem* NewNodeDialog::createQTreeWidgetItemByNodeName(const Echo::String& nodeName, QStandardItem* parent, bool isCreateWhenNodeIsVirtual)
 	{
 		bool isNodeVirtual = Echo::Class::isVirtual(nodeName);
 		if (isNodeVirtual && !isCreateWhenNodeIsVirtual)
 			return nullptr;
 
-		QTreeWidgetItem* nodeItem = new QTreeWidgetItem(parent);
-		nodeItem->setText(0, nodeName.c_str());
-		nodeItem->setData(0, Qt::UserRole, "node");
+		QStandardItem* nodeItem = new QStandardItem();
+		parent->setChild(parent->rowCount(), nodeItem);
+		nodeItem->setText( nodeName.c_str());
+		nodeItem->setData( "node", Qt::UserRole);
 		if (!isNodeVirtual)
 		{
 			// iconpath
@@ -115,7 +118,7 @@ namespace Studio
 			Echo::StringUtil::LowerCase(lowerCaseNodeName);
 			Echo::String qIconPath = Echo::StringUtil::Format(":/icon/node/%s.png", lowerCaseNodeName.c_str());
 
-			nodeItem->setIcon(0, QIcon(iconPath.empty() ? qIconPath.c_str() : (rootPath + iconPath).c_str()));
+			nodeItem->setIcon(QIcon(iconPath.empty() ? qIconPath.c_str() : (rootPath + iconPath).c_str()));
 		}
 
 		return nodeItem;
@@ -124,7 +127,7 @@ namespace Studio
 	void NewNodeDialog::addNode(const Echo::String& nodeName)
 	{
 		// use module item as parent
-		QTreeWidgetItem* moduleParent = getModuleItem(nodeName);
+		QStandardItem* moduleParent = getModuleItem(nodeName);
 		createQTreeWidgetItemByNodeName(nodeName, moduleParent, false);
 
 		// recursive all children
@@ -140,19 +143,19 @@ namespace Studio
 
 	void NewNodeDialog::initNodeDisplayByInherite()
 	{
-		m_treeWidget->clear();
+		m_standardModel->clear();
 
 		// begin with "Node"
-		addNode("Node", m_treeWidget->invisibleRootItem());
+		addNode("Node", m_standardModel->invisibleRootItem());
 
 		// expand all items
-		m_treeWidget->expandAll();
+		m_treeView->expandAll();
 	}
 
-	void NewNodeDialog::addNode(const Echo::String& nodeName, QTreeWidgetItem* parent)
+	void NewNodeDialog::addNode(const Echo::String& nodeName, QStandardItem* parent)
 	{
 		// create by node name
-		QTreeWidgetItem* nodeItem = createQTreeWidgetItemByNodeName(nodeName, parent, true);
+		QStandardItem* nodeItem = createQTreeWidgetItemByNodeName(nodeName, parent, true);
 
 		// recursive all children
 		Echo::StringArray childNodes;
@@ -165,29 +168,23 @@ namespace Studio
 		}
 	}
 
-	void NewNodeDialog::onSelectNode()
+	void NewNodeDialog::onSelectNode(QModelIndex index)
 	{
-		QTreeWidgetItem* item = m_treeWidget->currentItem();
-		if (item)
-		{
-			Echo::String userData = item->data(0, Qt::UserRole).toString().toStdString().c_str();
-			Echo::String text = item->text(0).toStdString().c_str();
-			m_confirm->setEnabled( userData == "node" && !Echo::Class::isVirtual(text));
-		}
+		Echo::String text = m_filterProxyModel->data(index, Qt::DisplayRole).toString().toStdString().c_str();
+		Echo::String userData = m_filterProxyModel->data(index, Qt::UserRole).toString().toStdString().c_str();
+		m_confirm->setEnabled( userData == "node" && !Echo::Class::isVirtual(text));
 	}
 
 	void NewNodeDialog::onConfirmNode()
 	{
-		QTreeWidgetItem* item = m_treeWidget->currentItem();
-		if (item)
+		Echo::String text = m_filterProxyModel->data( m_treeView->currentIndex(), Qt::DisplayRole).toString().toStdString().c_str();
+		if (!Echo::Class::isVirtual( text))
 		{
-			Echo::String text = item->text(0).toStdString().c_str();	
-			if (!Echo::Class::isVirtual( text))
-			{
-				m_result = text;
+			m_result = text;
 
-				hide();
-			}
+			accept();
+
+			hide();
 		}
 	}
 
@@ -232,5 +229,7 @@ namespace Studio
 
 		QRegExp regExp(pattern.c_str(), Qt::CaseInsensitive);
 		m_filterProxyModel->setFilterRegExp(regExp);
+
+		m_treeView->expandAll();
 	}
 }

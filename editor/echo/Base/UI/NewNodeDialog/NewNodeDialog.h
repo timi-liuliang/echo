@@ -2,6 +2,7 @@
 
 #include <engine/core/Util/StringUtil.h>
 #include <QDialog>
+#include <QStandardItemModel>
 #include <QSortFilterProxyModel>
 #include "QMenubarEx.h"
 #include "ui_NewNodeDialog.h"
@@ -30,17 +31,17 @@ namespace Studio
 		void addNode(const Echo::String& nodeName);
 
 		void initNodeDisplayByInherite();
-		void addNode(const Echo::String& nodeName, QTreeWidgetItem* parent);
+		void addNode(const Echo::String& nodeName, QStandardItem* parent);
 
 	private:
 		// get module item by nodeName
-		QTreeWidgetItem* getModuleItem(const Echo::String& nodeName);
+		QStandardItem* getModuleItem(const Echo::String& nodeName);
 
 		// create QTreewidgetItem by nodename
-		QTreeWidgetItem* createQTreeWidgetItemByNodeName(const Echo::String& nodeName, QTreeWidgetItem* parent, bool isCreateWhenNodeIsVirtual);
+		QStandardItem* createQTreeWidgetItemByNodeName(const Echo::String& nodeName, QStandardItem* parent, bool isCreateWhenNodeIsVirtual);
 
 	private slots:
-		void onSelectNode();
+		void onSelectNode(QModelIndex index);
 		void onConfirmNode();
 
 		// on switch node view type
@@ -52,6 +53,7 @@ namespace Studio
 	private:
 		Echo::String			m_result;
 		bool					m_viewNodeByModule;
+		QStandardItemModel*		m_standardModel;
 		QSortFilterProxyModel*	m_filterProxyModel;
 	};
 }

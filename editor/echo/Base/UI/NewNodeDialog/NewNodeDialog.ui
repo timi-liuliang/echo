@@ -42,18 +42,10 @@
     </layout>
    </item>
    <item>
-    <widget class="QTreeWidget" name="m_treeWidget">
+    <widget class="QTreeView" name="m_treeView">
      <property name="headerHidden">
       <bool>true</bool>
      </property>
-     <property name="expandsOnDoubleClick">
-      <bool>false</bool>
-     </property>
-     <column>
-      <property name="text">
-       <string notr="true">1</string>
-      </property>
-     </column>
     </widget>
    </item>
    <item>
