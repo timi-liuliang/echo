@@ -57,6 +57,10 @@ namespace Echo
 		// on nodetree widget size changed
 		void onNodeTreeWidgetSizeChanged();
 
+	private:
+		// draw ruler
+		void drawRuler();
+
 	protected:
 		Timeline*			m_timeline;
 		QWidget*			m_addObjectMenu;
@@ -64,6 +68,7 @@ namespace Echo
 		String				m_currentEditAnim;
 		int					m_nodeTreeWidgetWidth;
 		QObject*			m_graphicsScene;
+		Color				m_rulerColor;
 		QGraphicsLineItem*	m_rulerBottom;
 	};
 }

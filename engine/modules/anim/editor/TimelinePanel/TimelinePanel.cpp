@@ -10,8 +10,10 @@
 #include "engine/core/editor/qt/QHeaderView.h"
 #include "engine/core/editor/qt/QGraphicsView.h"
 #include "engine/core/editor/qt/QGraphicsScene.h"
+#include "engine/core/editor/qt/QGraphicsItem.h"
 #include "engine/core/base/class_method_bind.h"
 #include "engine/core/util/PathUtil.h"
+#include "engine/core/util/StringUtil.h"
 #include "../../anim_timeline.h"
 
 namespace Echo
@@ -20,6 +22,8 @@ namespace Echo
 	TimelinePanel::TimelinePanel(Object* obj)
 		: m_addObjectMenu(nullptr)
 		, m_nodeTreeWidgetWidth(0)
+		, m_rulerBottom(nullptr)
+		, m_rulerColor( 0.73f, 0.73f, 0.73f)
 	{
 		m_timeline = ECHO_DOWN_CAST<Timeline*>(obj);
 
@@ -62,8 +66,8 @@ namespace Echo
 		m_graphicsScene = qGraphicsSceneNew();
 		qGraphicsViewSetScene(qFindChild(m_ui, "m_graphicsView"), m_graphicsScene);
 
-		// test draw line
-		m_rulerBottom = qGraphicsSceneAddLine( m_graphicsScene, 0.f, 0.f, 500.f, 500.f);
+		// draw ruler
+		drawRuler();
 	}
 
 	// sync data to editor
@@ -362,6 +366,36 @@ namespace Echo
 		setCurrentEditAnim( currentText.c_str());
 
 		onStopAnim();
+	}
+
+	void TimelinePanel::drawRuler()
+	{
+		const float keyWidth = 15;
+		const int   keyCount = 100;
+
+		// rulder bottom
+		m_rulerBottom = qGraphicsSceneAddLine(m_graphicsScene, float(-keyWidth), 25.f, float(keyCount * keyWidth) + keyWidth, 25.f, m_rulerColor);
+
+		// key line
+		for (int i = 0; i <= keyCount; i++)
+		{
+			float xPos = i * keyWidth;
+			qGraphicsSceneAddLine(m_graphicsScene, xPos, /*(i%10==0) ? 10.f :*/ 18.f, xPos, 25.f, m_rulerColor);
+		}
+
+		// draw Text
+		for (int i = 0; i <= keyCount; i++)
+		{
+			if (i % 2 == 0)
+			{
+				QGraphicsItem* textItem = qGraphicsSceneAddSimpleText(m_graphicsScene, StringUtil::Format("%d", i).c_str(), m_rulerColor);
+				if (textItem)
+				{
+					float halfWidth = qGraphicsItemWidth(textItem) * 0.4f /*0.5f*/;
+					qGraphicsItemSetPos( textItem, float(i * keyWidth) - halfWidth, 5.f);
+				}
+			}
+		}
 	}
 #endif
 }
