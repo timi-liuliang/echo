@@ -370,7 +370,7 @@ namespace Echo
 
 	void TimelinePanel::drawRuler()
 	{
-		const float keyWidth = 15;
+		const float keyWidth = 20;
 		const int   keyCount = 100;
 
 		// rulder bottom
