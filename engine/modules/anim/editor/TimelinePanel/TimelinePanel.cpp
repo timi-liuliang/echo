@@ -8,6 +8,8 @@
 #include "engine/core/editor/qt/QTreeWidget.h"
 #include "engine/core/editor/qt/QTreeWidgetItem.h"
 #include "engine/core/editor/qt/QHeaderView.h"
+#include "engine/core/editor/qt/QGraphicsView.h"
+#include "engine/core/editor/qt/QGraphicsScene.h"
 #include "engine/core/base/class_method_bind.h"
 #include "engine/core/util/PathUtil.h"
 #include "../../anim_timeline.h"
@@ -55,6 +57,13 @@ namespace Echo
 		qConnect(qFindChild(m_ui, "Play"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onPlayAnim));
 		qConnect(qFindChild(m_ui, "Stop"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onStopAnim));
 		qConnect(qFindChild(m_ui, "Restart"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onRestartAnim));
+
+		// create QGraphicsScene
+		m_graphicsScene = qGraphicsSceneNew();
+		qGraphicsViewSetScene(qFindChild(m_ui, "m_graphicsView"), m_graphicsScene);
+
+		// test draw line
+		m_rulerBottom = qGraphicsSceneAddLine( m_graphicsScene, 0.f, 0.f, 500.f, 500.f);
 	}
 
 	// sync data to editor

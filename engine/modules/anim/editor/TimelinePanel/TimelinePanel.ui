@@ -135,7 +135,7 @@
        </property>
       </column>
      </widget>
-     <widget class="QGraphicsView" name="graphicsView"/>
+     <widget class="QGraphicsView" name="m_graphicsView"/>
     </widget>
    </item>
    <item>

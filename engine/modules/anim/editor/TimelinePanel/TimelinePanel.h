@@ -58,11 +58,13 @@ namespace Echo
 		void onNodeTreeWidgetSizeChanged();
 
 	protected:
-		Timeline*		m_timeline;
-		QWidget*		m_addObjectMenu;
-		QAction*		m_addNodeAction;
-		String			m_currentEditAnim;
-		int				m_nodeTreeWidgetWidth;
+		Timeline*			m_timeline;
+		QWidget*			m_addObjectMenu;
+		QAction*			m_addNodeAction;
+		String				m_currentEditAnim;
+		int					m_nodeTreeWidgetWidth;
+		QObject*			m_graphicsScene;
+		QGraphicsLineItem*	m_rulerBottom;
 	};
 }
 
