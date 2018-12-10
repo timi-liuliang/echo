@@ -25,6 +25,8 @@ namespace Echo
 		, m_rulerBottom(nullptr)
 		, m_rulerColor( 0.73f, 0.73f, 0.73f)
 	{
+		m_curveItems.assign(nullptr);
+
 		m_timeline = ECHO_DOWN_CAST<Timeline*>(obj);
 
 		m_ui = qLoadUi("engine/modules/anim/editor/TimelinePanel/TimelinePanel.ui");
@@ -57,7 +59,7 @@ namespace Echo
 		qConnect(qFindChild(m_ui, "m_clips"), QSIGNAL(editTextChanged(const QString &)), this, createMethodBind(&TimelinePanel::onRenameClip));
 		qConnect(qFindChild(m_ui, "m_clips"), QSIGNAL(currentIndexChanged(int)), this, createMethodBind(&TimelinePanel::onCurrentEditAnimChanged));
 		qConnect(qFindChild(m_ui, "AddNode"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onAddObject));
-		qConnect(qFindChild(m_ui, "m_nodeTreeWidget"), QSIGNAL(itemClicked(QTreeWidgetItem*, int)), this, createMethodBind(&TimelinePanel::onAddProperty));
+		qConnect(qFindChild(m_ui, "m_nodeTreeWidget"), QSIGNAL(itemClicked(QTreeWidgetItem*, int)), this, createMethodBind(&TimelinePanel::onSelectItem));
 		qConnect(qFindChild(m_ui, "Play"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onPlayAnim));
 		qConnect(qFindChild(m_ui, "Stop"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onStopAnim));
 		qConnect(qFindChild(m_ui, "Restart"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onRestartAnim));
@@ -248,6 +250,7 @@ namespace Echo
 						Node* node = m_timeline->getNode(userData.m_path.c_str());
 						QTreeWidgetItem* objetcItem = qTreeWidgetItemNew();
 						qTreeWidgetItemSetText(objetcItem, 0, userData.m_path.c_str());
+						qTreeWidgetItemSetUserData(objetcItem, 0, "object");
 						qTreeWidgetItemSetIcon(objetcItem, 0, Editor::instance()->getNodeIcon(node).c_str());
 						qTreeWidgetItemSetIcon(objetcItem, 1, "engine/modules/anim/editor/icon/add.png");
 						qTreeWidgetItemAddChild(rootItem, objetcItem);
@@ -257,6 +260,7 @@ namespace Echo
 							const String& propertyName = any_cast<String>(property->m_userData);
 							QTreeWidgetItem* propertyItem = qTreeWidgetItemNew();
 							qTreeWidgetItemSetText(propertyItem, 0, propertyName.c_str());
+							qTreeWidgetItemSetUserData(propertyItem, 0, "property");
 							qTreeWidgetItemSetExpanded(objetcItem, true);
 							qTreeWidgetItemAddChild(objetcItem, propertyItem);
 						}
@@ -286,6 +290,21 @@ namespace Echo
 		}
 	}
 
+	// property operate
+	void TimelinePanel::onSelectItem()
+	{
+		QTreeWidgetItem* item = qTreeWidgetCurrentItem(qFindChild(m_ui, "m_nodeTreeWidget"));
+		int column = qTreeWidgetCurrentColumn(qFindChild(m_ui, "m_nodeTreeWidget"));
+		if (column == 1)
+		{
+			onAddProperty();
+		}
+		else if (column == 0)
+		{
+			onSelectProperty();
+		}
+	}
+
 	void TimelinePanel::onAddProperty()
 	{
 		QTreeWidgetItem* item = qTreeWidgetCurrentItem(qFindChild(m_ui, "m_nodeTreeWidget"));
@@ -304,9 +323,75 @@ namespace Echo
 					// addNodePropertyToEditor;
 					QTreeWidgetItem* propertyItem = qTreeWidgetItemNew();
 					qTreeWidgetItemSetText(propertyItem, 0, propertyName.c_str());
+					qTreeWidgetItemSetUserData(propertyItem, 0, "property");
 					qTreeWidgetItemSetExpanded(item, true);
 					qTreeWidgetItemAddChild(item, propertyItem);
 				}
+			}
+		}
+	}
+
+	void TimelinePanel::onSelectProperty()
+	{
+		QTreeWidgetItem* item = qTreeWidgetCurrentItem(qFindChild(m_ui, "m_nodeTreeWidget"));
+		int column = qTreeWidgetCurrentColumn(qFindChild(m_ui, "m_nodeTreeWidget"));
+		if (column == 0)
+		{
+			String userData = qTreeWidgetItemUserData( item, column);
+			if (userData == "property")
+			{
+				QTreeWidgetItem* parent = qTreeWidgetItemParent( item);
+				String objectPath = qTreeWidgetItemText( parent, 0);
+				String propertyName = qTreeWidgetItemText(item, 0);
+
+				// refresh curve display
+				refreshCurveDisplayToEditor( objectPath, propertyName);
+			}
+		}
+	}
+
+	void TimelinePanel::clearCurveItemsTo(int number)
+	{
+		//for (size_t i = 0; i < m_curveItems.size(); i++)
+		//{
+		//	if (!m_curveItems[i])
+		//	{
+		//		vector<Vector2>::type paths;
+		//		m_curveItems[i] = qGraphicsSceneAddPath(m_graphicsScene, paths);
+		//	}
+		//}
+	}
+
+	// curve display
+	void TimelinePanel::refreshCurveDisplayToEditor(const String& objectPath, const String& propertyName)
+	{
+		AnimProperty* animProperty = m_timeline->getProperty(m_currentEditAnim, objectPath, propertyName);
+		if (animProperty)
+		{
+			switch (animProperty->m_type)
+			{
+			case AnimProperty::Type::Vector3:
+			{
+				AnimPropertyVec3* vec3Proeprty = ECHO_DOWN_CAST<AnimPropertyVec3*>(animProperty);
+				if (vec3Proeprty)
+				{
+					//clearCurveItemsTo(3);
+					vector<Vector2>::type curvePaths;
+
+					// three curves
+					float length = vec3Proeprty->getLength();
+					for (float t = 0; t < length; t += 0.02f)
+					{
+						vec3Proeprty->updateToTime( t*0.02f);
+						const Vector3& value = vec3Proeprty->getValue();
+
+						curvePaths.push_back(Vector2(t * 20.f * 50.f, value.x));
+					}
+
+					m_curveItems[0] = qGraphicsSceneAddPath(m_graphicsScene, curvePaths);
+				}
+			}
+			break;
 			}
 		}
 	}

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "engine/core/util/Array.hpp"
 #include "engine/core/editor/bottom_panel_tab.h"
 
 #ifdef ECHO_EDITOR_MODE
@@ -29,7 +30,9 @@ namespace Echo
 		void onAddResource();
 
 		// property operate
+		void onSelectItem();
 		void onAddProperty();
+		void onSelectProperty();
 
 		// play pause stop
 		void onPlayAnim();
@@ -51,6 +54,10 @@ namespace Echo
 		void syncClipNodeDataToEditor();
 		void addNodePropertyToEditor();
 
+		// curve display
+		void clearCurveItemsTo(int number);
+		void refreshCurveDisplayToEditor(const String& objectPath, const String& propertyName);
+
 		// set current edit anim
 		void setCurrentEditAnim(const char* animName);
 
@@ -62,14 +69,15 @@ namespace Echo
 		void drawRuler();
 
 	protected:
-		Timeline*			m_timeline;
-		QWidget*			m_addObjectMenu;
-		QAction*			m_addNodeAction;
-		String				m_currentEditAnim;
-		int					m_nodeTreeWidgetWidth;
-		QObject*			m_graphicsScene;
-		Color				m_rulerColor;
-		QGraphicsLineItem*	m_rulerBottom;
+		Timeline*					m_timeline;
+		QWidget*					m_addObjectMenu;
+		QAction*					m_addNodeAction;
+		String						m_currentEditAnim;
+		int							m_nodeTreeWidgetWidth;
+		QObject*					m_graphicsScene;
+		Color						m_rulerColor;
+		QGraphicsLineItem*			m_rulerBottom;
+		array<QGraphicsItem*, 4>	m_curveItems;
 	};
 }
 

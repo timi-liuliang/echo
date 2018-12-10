@@ -9,6 +9,9 @@ namespace Echo
 	// create a new QTreeWidgetItem
 	QTreeWidgetItem* qTreeWidgetItemNew();
 
+	// get parent
+	QTreeWidgetItem* qTreeWidgetItemParent(QTreeWidgetItem* item);
+
 	// add child item
 	void qTreeWidgetItemAddChild(QTreeWidgetItem* parent, QTreeWidgetItem* child);
 
@@ -20,6 +23,12 @@ namespace Echo
 
 	// set icon
 	void qTreeWidgetItemSetIcon(QTreeWidgetItem* item, int column, const char* iconPath);
+
+	// get user data
+	String qTreeWidgetItemUserData(QTreeWidgetItem* item, int column);
+
+	// set user data
+	void qTreeWidgetItemSetUserData(QTreeWidgetItem* item, int column, const char* userData);
 
 	// expand QTreeWidgetItem
 	void qTreeWidgetItemSetExpanded(QTreeWidgetItem* item, bool aexpand);

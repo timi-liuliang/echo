@@ -276,6 +276,30 @@ namespace Echo
 		}
 	}
 
+	AnimProperty* Timeline::getProperty(const String& animName, const String& objectPath, const String& propertyName)
+	{
+		AnimClip* clip = getClip(animName.c_str());
+		if (clip)
+		{
+			for (AnimObject* animNode : clip->m_objects)
+			{
+				const ObjectUserData& userData = any_cast<ObjectUserData>(animNode->m_userData);
+				if (userData.m_path == objectPath)
+				{
+					for (AnimProperty* property : animNode->m_properties)
+					{
+						if (any_cast<String>(property->m_userData) == propertyName)
+						{
+							return property;
+						}
+					}
+				}
+			}
+		}
+
+		return nullptr;
+	}
+
 	void Timeline::addProperty(const String& animName, const String& objectPath, const String& propertyName)
 	{
 		AnimClip* clip = getClip(animName.c_str());

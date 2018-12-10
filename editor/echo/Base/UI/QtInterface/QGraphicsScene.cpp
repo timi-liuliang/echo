@@ -21,6 +21,30 @@ namespace Echo
 		return nullptr;
 	}
 
+	QGraphicsItem* qGraphicsSceneAddPath(QObject* scene, const vector<Vector2>::type paths)
+	{
+		QGraphicsScene* graphicsScene = qobject_cast<QGraphicsScene*>(scene);
+		if (graphicsScene)
+		{
+			if (paths.size() > 1)
+			{
+				QPainterPath painterPath(QPointF(paths[0].x, paths[0].y));
+				for (size_t i = 1; i<paths.size(); i++)
+				{
+					painterPath.lineTo(QPointF(paths[i].x, paths[i].y));
+				}
+
+				return graphicsScene->addPath(painterPath);
+			}
+			else
+			{
+				return graphicsScene->addPath(QPainterPath());
+			}
+		}
+
+		return nullptr;
+	}
+
 	QGraphicsItem* qGraphicsSceneAddSimpleText(QObject* scene, const char* txt, const Color& color)
 	{
 		QGraphicsScene* graphicsScene = qobject_cast<QGraphicsScene*>(scene);

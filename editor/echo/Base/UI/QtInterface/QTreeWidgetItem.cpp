@@ -9,6 +9,12 @@ namespace Echo
 		return new QTreeWidgetItem();
 	}
 
+	// get parent
+	QTreeWidgetItem* qTreeWidgetItemParent(QTreeWidgetItem* item)
+	{
+		return item ? item->parent() : nullptr;
+	}
+
 	void qTreeWidgetItemAddChild(QTreeWidgetItem* parent, QTreeWidgetItem* child)
 	{
 		if (parent && child)
@@ -33,6 +39,24 @@ namespace Echo
 		}
 
 		return Echo::StringUtil::BLANK;
+	}
+
+	String qTreeWidgetItemUserData(QTreeWidgetItem* item, int column)
+	{
+		if (item)
+		{
+			return item->data(column, Qt::UserRole).toString().toStdString().c_str();
+		}
+
+		return StringUtil::BLANK;
+	}
+
+	void qTreeWidgetItemSetUserData(QTreeWidgetItem* item, int column, const char* userData)
+	{
+		if (item)
+		{
+			item->setData(column, Qt::UserRole, userData);
+		}
 	}
 
 	void qTreeWidgetItemSetIcon(QTreeWidgetItem* item, int column, const char* iconPath)

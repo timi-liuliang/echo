@@ -92,7 +92,8 @@ namespace Echo
 		void addObject(const String& animName, ObjectType type, const String& path);
 
 	public:
-		// add property to object
+		//property
+		AnimProperty* getProperty(const String& animName, const String& objectPath, const String& propertyName);
 		void addProperty(const String& animName, const String& objectPath, const String& propertyName);
 
 		// add key frame
