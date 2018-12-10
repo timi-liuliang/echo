@@ -21,11 +21,14 @@ namespace Echo
 		return nullptr;
 	}
 
-	QGraphicsItem* qGraphicsSceneAddPath(QObject* scene, const vector<Vector2>::type paths)
+	QGraphicsItem* qGraphicsSceneAddPath(QObject* scene, const vector<Vector2>::type paths, float widthf, const Color& color)
 	{
 		QGraphicsScene* graphicsScene = qobject_cast<QGraphicsScene*>(scene);
 		if (graphicsScene)
 		{
+			QPen pen(QColor::fromRgbF(color.r, color.g, color.b, color.a));
+			pen.setWidthF(widthf);
+
 			if (paths.size() > 1)
 			{
 				QPainterPath painterPath(QPointF(paths[0].x, paths[0].y));
@@ -34,11 +37,11 @@ namespace Echo
 					painterPath.lineTo(QPointF(paths[i].x, paths[i].y));
 				}
 
-				return graphicsScene->addPath(painterPath);
+				return graphicsScene->addPath(painterPath, pen);
 			}
 			else
 			{
-				return graphicsScene->addPath(QPainterPath());
+				return graphicsScene->addPath(QPainterPath(), pen);
 			}
 		}
 

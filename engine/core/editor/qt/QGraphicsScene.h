@@ -13,7 +13,7 @@ namespace Echo
 	QGraphicsLineItem* qGraphicsSceneAddLine(QObject* scene, float startX, float startY, float endX, float endY, const Color& color);
 
 	// add path
-	QGraphicsItem* qGraphicsSceneAddPath(QObject* scene, const vector<Vector2>::type paths);
+	QGraphicsItem* qGraphicsSceneAddPath(QObject* scene, const vector<Vector2>::type paths, float widthf, const Color& color);
 
 	// add simple text
 	QGraphicsItem* qGraphicsSceneAddSimpleText(QObject* scene, const char* txt, const Color& color);

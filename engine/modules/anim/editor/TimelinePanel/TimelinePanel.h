@@ -75,6 +75,8 @@ namespace Echo
 		String						m_currentEditAnim;
 		int							m_nodeTreeWidgetWidth;
 		QObject*					m_graphicsScene;
+
+		float						m_rulerHeight;
 		Color						m_rulerColor;
 		QGraphicsLineItem*			m_rulerBottom;
 		array<QGraphicsItem*, 4>	m_curveItems;

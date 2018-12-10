@@ -10,6 +10,7 @@ namespace Echo
 		if (graphicsView && graphicsScene)
 		{
 			graphicsView->setScene(graphicsScene);
+			graphicsView->setRenderHint( QPainter::Antialiasing, true);
 		}
 	}
 }

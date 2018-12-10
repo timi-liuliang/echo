@@ -23,6 +23,7 @@ namespace Echo
 		: m_addObjectMenu(nullptr)
 		, m_nodeTreeWidgetWidth(0)
 		, m_rulerBottom(nullptr)
+		, m_rulerHeight( 25.f)
 		, m_rulerColor( 0.73f, 0.73f, 0.73f)
 	{
 		m_curveItems.assign(nullptr);
@@ -376,7 +377,7 @@ namespace Echo
 				if (vec3Proeprty)
 				{
 					//clearCurveItemsTo(3);
-					vector<Vector2>::type curvePaths;
+					vector<Vector2>::type curvePaths[3];
 
 					// three curves
 					float length = vec3Proeprty->getLength();
@@ -385,10 +386,14 @@ namespace Echo
 						vec3Proeprty->updateToTime( t*0.02f);
 						const Vector3& value = vec3Proeprty->getValue();
 
-						curvePaths.push_back(Vector2(t * 20.f * 50.f, value.x));
+						curvePaths[0].push_back(Vector2(t * 20.f * 50.f, value.x * 10.f + m_rulerHeight + 5.f));
+						curvePaths[1].push_back(Vector2(t * 20.f * 50.f, value.y * 10.f + m_rulerHeight + 5.f));
+						curvePaths[2].push_back(Vector2(t * 20.f * 50.f, value.z * 10.f + m_rulerHeight + 5.f));
 					}
 
-					m_curveItems[0] = qGraphicsSceneAddPath(m_graphicsScene, curvePaths);
+					m_curveItems[0] = qGraphicsSceneAddPath(m_graphicsScene, curvePaths[0], 2.5f, Color( 1.f, 0.f, 0.f, 0.7f));
+					m_curveItems[1] = qGraphicsSceneAddPath(m_graphicsScene, curvePaths[1], 2.5f, Color( 0.f, 1.f, 0.f, 0.7f));
+					m_curveItems[2] = qGraphicsSceneAddPath(m_graphicsScene, curvePaths[2], 2.5f, Color( 0.f, 0.f, 1.f, 0.7f));
 				}
 			}
 			break;
@@ -459,13 +464,13 @@ namespace Echo
 		const int   keyCount = 100;
 
 		// rulder bottom
-		m_rulerBottom = qGraphicsSceneAddLine(m_graphicsScene, float(-keyWidth), 25.f, float(keyCount * keyWidth) + keyWidth, 25.f, m_rulerColor);
+		m_rulerBottom = qGraphicsSceneAddLine(m_graphicsScene, float(-keyWidth), m_rulerHeight, float(keyCount * keyWidth) + keyWidth, m_rulerHeight, m_rulerColor);
 
 		// key line
 		for (int i = 0; i <= keyCount; i++)
 		{
 			float xPos = i * keyWidth;
-			qGraphicsSceneAddLine(m_graphicsScene, xPos, /*(i%10==0) ? 10.f :*/ 18.f, xPos, 25.f, m_rulerColor);
+			qGraphicsSceneAddLine(m_graphicsScene, xPos, /*(i%10==0) ? 10.f :*/ 18.f, xPos, m_rulerHeight, m_rulerColor);
 		}
 
 		// draw Text
