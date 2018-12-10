@@ -27,7 +27,11 @@ namespace Echo
 		if (graphicsScene)
 		{
 			QGraphicsSimpleTextItem* txtItem = graphicsScene->addSimpleText( txt);
-			txtItem->setPen( QPen( QColor::fromRgbF( color.r, color.g, color.b, color.a)));
+			QColor qColor = QColor::fromRgbF(color.r, color.g, color.b, color.a);
+			QPen pen = txtItem->pen();
+			pen.setColor(qColor);
+			txtItem->setPen( pen);
+
 			return txtItem;
 		}
 
