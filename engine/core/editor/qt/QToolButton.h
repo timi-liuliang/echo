@@ -16,6 +16,9 @@ namespace Echo
 
 	// set icon size
 	void qToolButtonSetIconSize(QWidget* widget, int width, int height);
+
+	// is toolbutton checked
+	bool qToolButtonIsChecked(QWidget* widget);
 }
 
 #endif

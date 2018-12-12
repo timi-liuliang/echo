@@ -11,6 +11,9 @@ namespace Echo
 
 	// set pos
 	void qGraphicsItemSetPos(QGraphicsItem* item, float posX, float posY);
+
+	// set visible
+	void qGraphicsItemSetVisible(QGraphicsItem* item, bool visible);
 }
 
 #endif

@@ -10,6 +10,8 @@ namespace Echo
 	class Timeline;
 	class TimelinePanel : public BottomPanelTab
 	{
+		typedef vector<QGraphicsItem*>::type QGraphicsItemArray;
+
 	public:
 		TimelinePanel(Object* obj);
 
@@ -44,6 +46,10 @@ namespace Echo
 
 		// sync data to editor
 		void syncDataToEditor();
+
+	private:
+		// switch cuve visibility
+		void onSwitchCurveVisibility();
 
 	private:
 		// get new name
@@ -81,6 +87,8 @@ namespace Echo
 		Color						m_rulerColor;
 		QGraphicsLineItem*			m_rulerBottom;
 		array<QGraphicsItem*, 4>	m_curveItems;
+		array<QGraphicsItemArray, 4>m_curveKeyItems;
+		array<bool, 4>				m_curveVisibles;
 	};
 }
 

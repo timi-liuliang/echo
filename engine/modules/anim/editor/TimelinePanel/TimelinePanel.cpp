@@ -27,6 +27,7 @@ namespace Echo
 		, m_rulerColor( 0.73f, 0.73f, 0.73f)
 	{
 		m_curveItems.assign(nullptr);
+		m_curveVisibles.assign(true);
 
 		m_timeline = ECHO_DOWN_CAST<Timeline*>(obj);
 
@@ -70,6 +71,11 @@ namespace Echo
 		qConnect(qFindChild(m_ui, "Play"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onPlayAnim));
 		qConnect(qFindChild(m_ui, "Stop"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onStopAnim));
 		qConnect(qFindChild(m_ui, "Restart"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onRestartAnim));
+
+		qConnect(qFindChild(m_ui, "m_curveXVisible"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onSwitchCurveVisibility));
+		qConnect(qFindChild(m_ui, "m_curveYVisible"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onSwitchCurveVisibility));
+		qConnect(qFindChild(m_ui, "m_curveZVisible"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onSwitchCurveVisibility));
+		qConnect(qFindChild(m_ui, "m_curveWVisible"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onSwitchCurveVisibility));
 
 		// create QGraphicsScene
 		m_graphicsScene = qGraphicsSceneNew();
@@ -436,9 +442,9 @@ namespace Echo
 						Vector2 centreZ(t * 20.f * 50.f, value.z * 10.f + m_rulerHeight + 5.f);
 						float radius = 7.f;
 						
-						qGraphicsSceneAddEclipse( m_graphicsScene, centreX.x-radius, centreX.y-radius, radius * 2.f, radius*2.f, Color(1.f, 0.f, 0.f, 0.7f));
-						qGraphicsSceneAddEclipse(m_graphicsScene, centreY.x - radius, centreY.y - radius, radius * 2.f, radius*2.f, Color(0.f, 1.f, 0.f, 0.7f));
-						qGraphicsSceneAddEclipse(m_graphicsScene, centreZ.x - radius, centreZ.y - radius, radius * 2.f, radius*2.f, Color(0.f, 0.f, 1.f, 0.7f));
+						m_curveKeyItems[0].push_back( qGraphicsSceneAddEclipse( m_graphicsScene, centreX.x-radius, centreX.y-radius, radius * 2.f, radius*2.f, Color(1.f, 0.f, 0.f, 0.7f)));
+						m_curveKeyItems[1].push_back( qGraphicsSceneAddEclipse(m_graphicsScene, centreY.x - radius, centreY.y - radius, radius * 2.f, radius*2.f, Color(0.f, 1.f, 0.f, 0.7f)));
+						m_curveKeyItems[2].push_back( qGraphicsSceneAddEclipse(m_graphicsScene, centreZ.x - radius, centreZ.y - radius, radius * 2.f, radius*2.f, Color(0.f, 0.f, 1.f, 0.7f)));
 					}
 				}
 			}
@@ -530,6 +536,27 @@ namespace Echo
 					float halfWidth = qGraphicsItemWidth(textItem) * 0.4f /*0.5f*/;
 					qGraphicsItemSetPos( textItem, float(i * keyWidth) - halfWidth, 5.f);
 				}
+			}
+		}
+	}
+
+	void TimelinePanel::onSwitchCurveVisibility()
+	{
+		m_curveVisibles[0] = qToolButtonIsChecked(qFindChild(m_ui, "m_curveXVisible"));
+		m_curveVisibles[1] = qToolButtonIsChecked(qFindChild(m_ui, "m_curveYVisible"));
+		m_curveVisibles[2] = qToolButtonIsChecked(qFindChild(m_ui, "m_curveZVisible"));
+		m_curveVisibles[3] = qToolButtonIsChecked(qFindChild(m_ui, "m_curveWVisible"));
+
+		for (size_t i = 0; i < m_curveItems.size(); i++)
+		{
+			if (m_curveItems[i])
+			{
+				qGraphicsItemSetVisible(m_curveItems[i], m_curveVisibles[i]);
+			}
+
+			for (QGraphicsItem* keyItem : m_curveKeyItems[i])
+			{
+				qGraphicsItemSetVisible( keyItem, m_curveVisibles[i]);
 			}
 		}
 	}

@@ -15,4 +15,12 @@ namespace Echo
 			item->setPos(QPointF(posX, posY));
 		}
 	}
+
+	void qGraphicsItemSetVisible(QGraphicsItem* item, bool visible)
+	{
+		if (item)
+		{
+			item->setVisible(visible);
+		}
+	}
 }

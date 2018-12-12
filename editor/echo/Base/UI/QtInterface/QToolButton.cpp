@@ -41,4 +41,18 @@ namespace Echo
 			}
 		}
 	}
+
+	bool qToolButtonIsChecked(QWidget* widget)
+	{
+		if (widget)
+		{
+			QToolButton* toolButton = qobject_cast<QToolButton*>(widget);
+			if (toolButton)
+			{
+				return toolButton->isChecked();
+			}
+		}
+
+		return false;
+	}
 }
