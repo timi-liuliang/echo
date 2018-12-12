@@ -347,6 +347,9 @@ namespace Echo
 
 				// refresh curve display
 				refreshCurveDisplayToEditor( objectPath, propertyName);
+
+				// refresh curve key display
+				refreshCurveKeyDisplayToEditor( objectPath, propertyName);
 			}
 		}
 	}
@@ -394,6 +397,43 @@ namespace Echo
 					m_curveItems[0] = qGraphicsSceneAddPath(m_graphicsScene, curvePaths[0], 2.5f, Color( 1.f, 0.f, 0.f, 0.7f));
 					m_curveItems[1] = qGraphicsSceneAddPath(m_graphicsScene, curvePaths[1], 2.5f, Color( 0.f, 1.f, 0.f, 0.7f));
 					m_curveItems[2] = qGraphicsSceneAddPath(m_graphicsScene, curvePaths[2], 2.5f, Color( 0.f, 0.f, 1.f, 0.7f));
+				}
+			}
+			break;
+			}
+		}
+	}
+
+	void TimelinePanel::refreshCurveKeyDisplayToEditor(const String& objectPath, const String& propertyName)
+	{
+		AnimProperty* animProperty = m_timeline->getProperty(m_currentEditAnim, objectPath, propertyName);
+		if (animProperty)
+		{
+			switch (animProperty->m_type)
+			{
+			case AnimProperty::Type::Vector3:
+			{
+				AnimPropertyVec3* vec3Proeprty = ECHO_DOWN_CAST<AnimPropertyVec3*>(animProperty);
+				if (vec3Proeprty)
+				{
+					int keyNumber = vec3Proeprty->getKeyNumber();
+					for (int idx = 0; idx < keyNumber; idx++)
+					{
+						// time
+						float t = vec3Proeprty->getKeyTime(idx);
+
+						vec3Proeprty->updateToTime(t*0.02f);
+						const Vector3& value = vec3Proeprty->getValue();
+
+						Vector2 centreX(t * 20.f * 50.f, value.x * 10.f + m_rulerHeight + 5.f);
+						Vector2 centreY(t * 20.f * 50.f, value.y * 10.f + m_rulerHeight + 5.f);
+						Vector2 centreZ(t * 20.f * 50.f, value.z * 10.f + m_rulerHeight + 5.f);
+						float radius = 8.f;
+						
+						qGraphicsSceneAddEclipse( m_graphicsScene, centreX.x-radius, centreX.y-radius, radius * 2.f, radius*2.f, Color(1.f, 0.f, 0.f, 0.7f));
+						qGraphicsSceneAddEclipse(m_graphicsScene, centreY.x - radius, centreY.y - radius, radius * 2.f, radius*2.f, Color(0.f, 1.f, 0.f, 0.7f));
+						qGraphicsSceneAddEclipse(m_graphicsScene, centreZ.x - radius, centreZ.y - radius, radius * 2.f, radius*2.f, Color(0.f, 0.f, 1.f, 0.7f));
+					}
 				}
 			}
 			break;

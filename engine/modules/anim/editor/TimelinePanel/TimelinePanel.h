@@ -57,6 +57,7 @@ namespace Echo
 		// curve display
 		void clearCurveItemsTo(int number);
 		void refreshCurveDisplayToEditor(const String& objectPath, const String& propertyName);
+		void refreshCurveKeyDisplayToEditor(const String& objectPath, const String& propertyName);
 
 		// set current edit anim
 		void setCurrentEditAnim(const char* animName);

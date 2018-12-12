@@ -48,6 +48,20 @@ namespace Echo
 		return nullptr;
 	}
 
+	QGraphicsItem* qGraphicsSceneAddEclipse(QObject* scene, float left, float top, float width, float height, const Color& color)
+	{
+		QGraphicsScene* graphicsScene = qobject_cast<QGraphicsScene*>(scene);
+		if (graphicsScene)
+		{
+			QPen pen(QColor::fromRgbF(color.r, color.g, color.b, color.a));
+			QBrush brush(QColor::fromRgbF(color.r, color.g, color.b, color.a));
+			QGraphicsEllipseItem* eclipseItem = graphicsScene->addEllipse(QRectF( left, top, width, height), pen, brush);
+			return eclipseItem;
+		}
+
+		return nullptr;
+	}
+
 	QGraphicsItem* qGraphicsSceneAddSimpleText(QObject* scene, const char* txt, const Color& color)
 	{
 		QGraphicsScene* graphicsScene = qobject_cast<QGraphicsScene*>(scene);

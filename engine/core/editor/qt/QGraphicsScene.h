@@ -17,6 +17,9 @@ namespace Echo
 
 	// add simple text
 	QGraphicsItem* qGraphicsSceneAddSimpleText(QObject* scene, const char* txt, const Color& color);
+
+	// add eclipse
+	QGraphicsItem* qGraphicsSceneAddEclipse(QObject* scene, float left, float top, float width, float height, const Color& color);
 }
 
 #endif
