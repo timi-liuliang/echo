@@ -1,5 +1,6 @@
 #include <QtWidgets/QWidget>
 #include <QAction>
+#include <QGraphicsItem>
 #include <engine/core/base/class_method_bind.h>
 #include "QMessageHandler.h"
 
@@ -20,6 +21,14 @@ namespace Echo
 		{
 			QMessageHandler::instance()->bind(sender, signal, receiver, slot);
 			QObject::connect(sender, signal, QMessageHandler::instance(), SLOT(onReceiveMessage()));
+		}
+	}
+
+	void qConnect(QGraphicsItem* sender, const char* signal, void* receiver, ClassMethodBind* slot)
+	{
+		if (sender)
+		{
+			QMessageHandler::instance()->bind( sender, signal, receiver, slot);
 		}
 	}
 

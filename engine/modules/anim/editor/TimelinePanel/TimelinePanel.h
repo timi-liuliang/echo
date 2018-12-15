@@ -51,6 +51,9 @@ namespace Echo
 		// switch cuve visibility
 		void onSwitchCurveVisibility();
 
+		// on double click curve key
+		void onKeyDoubleClickedCurveKey();
+
 	private:
 		// get new name
 		String getNewClipName();

@@ -1,6 +1,8 @@
 #pragma once
 
 #include <QGraphicsItem>
+#include <engine/core/editor/qt/QWidget.h>
+#include "QMessageHandler.h"
 
 namespace Echo
 {
@@ -34,6 +36,8 @@ namespace Echo
 		virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override
 		{
 			QGraphicsEllipseItem::mouseDoubleClickEvent(event);
+
+			QMessageHandler::instance()->onReceiveQGraphicsItemMessage( this, QSIGNAL(mouseDoubleClickEvent(QGraphicsSceneMouseEvent*)));
 		}
 	};
 }

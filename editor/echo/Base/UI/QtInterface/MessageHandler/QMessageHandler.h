@@ -2,6 +2,7 @@
 
 #include <engine/core/util/StringUtil.h>
 #include <QWidget>
+#include <QGraphicsItem>
 
 namespace Echo
 {
@@ -41,6 +42,11 @@ namespace Echo
 
 		// bind
 		void bind(QObject* sender, const char* signal, void* receiver, ClassMethodBind* slot);
+		void bind(QGraphicsItem* sender, const char* signal, void* receiver, ClassMethodBind* slot);
+
+	public:
+		// on receive QGraphicsItem message
+		void onReceiveQGraphicsItemMessage(QGraphicsItem* sender, const String& signal);
 
 	private slots:
 		// on receive message
@@ -50,6 +56,6 @@ namespace Echo
 		void onDestroyWidget();
 
 	private:
-		map<QObject*, ConnectArray>::type		m_connects;
+		map<void*, ConnectArray>::type		m_connects;
 	};
 }

@@ -33,6 +33,7 @@ namespace Echo
 	// connect signal slot
 	void qConnect(QWidget* sender, const char* signal, void* receiver, ClassMethodBind* slot);
 	void qConnect(QAction* sender, const char* signal, void* receiver, ClassMethodBind* slot);
+	void qConnect(QGraphicsItem* sender, const char* signal, void* receiver, ClassMethodBind* slot);
 
 	// find child widget by name
 	QWidget* qFindChild( QWidget* root, const char* name);

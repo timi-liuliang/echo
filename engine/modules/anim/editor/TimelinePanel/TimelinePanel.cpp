@@ -444,13 +444,28 @@ namespace Echo
 						
 						m_curveKeyItems[0].push_back( qGraphicsSceneAddEclipse( m_graphicsScene, centreX.x-radius, centreX.y-radius, radius * 2.f, radius*2.f, Color(1.f, 0.f, 0.f, 0.7f)));
 						m_curveKeyItems[1].push_back( qGraphicsSceneAddEclipse(m_graphicsScene, centreY.x - radius, centreY.y - radius, radius * 2.f, radius*2.f, Color(0.f, 1.f, 0.f, 0.7f)));
-						m_curveKeyItems[2].push_back( qGraphicsSceneAddEclipse(m_graphicsScene, centreZ.x - radius, centreZ.y - radius, radius * 2.f, radius*2.f, Color(0.f, 0.f, 1.f, 0.7f)));
+						m_curveKeyItems[2].push_back( qGraphicsSceneAddEclipse(m_graphicsScene, centreZ.x - radius, centreZ.y - radius, radius * 2.f, radius*2.f, Color(0.f, 0.f, 1.f, 0.7f)));		
+					}
+
+					// connect signal slots
+					for (int i = 0; i < 3; i++)
+					{
+						for (QGraphicsItem* item : m_curveKeyItems[i])
+						{
+							qConnect(item, QSIGNAL(mouseDoubleClickEvent(QGraphicsSceneMouseEvent*)), this, createMethodBind(&TimelinePanel::onKeyDoubleClickedCurveKey));
+						}
 					}
 				}
 			}
 			break;
 			}
 		}
+	}
+
+	// on double click curve key
+	void TimelinePanel::onKeyDoubleClickedCurveKey()
+	{
+
 	}
 
 	void TimelinePanel::onPlayAnim()

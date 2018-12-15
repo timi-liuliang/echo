@@ -64,6 +64,43 @@ namespace Echo
 		}
 	}
 
+	void QMessageHandler::bind(QGraphicsItem* sender, const char* signal, void* receiver, ClassMethodBind* slot)
+	{
+		auto it = m_connects.find(sender);
+		if (it != m_connects.end())
+		{
+			it->second.push_back(Connect(signal, (Object*)receiver, slot));
+		}
+		else
+		{
+			ConnectArray connects;
+			connects.push_back(Connect(signal, (Object*)receiver, slot));
+			m_connects[sender] = connects;
+
+			//QObject::connect(sender, SIGNAL(destroyed()), this, SLOT(onDestroyWidget()));
+		}
+	}
+
+	// on receive QGraphicsItem message
+	void QMessageHandler::onReceiveQGraphicsItemMessage(QGraphicsItem* sender, const String& signal)
+	{
+		auto it = m_connects.find((QWidget*)sender);
+		if (it != m_connects.end())
+		{
+			ConnectArray& connectArray = it->second;
+			for (Connect& conn : connectArray)
+			{
+				if (Echo::StringUtil::Substr(signal, "(") == Echo::StringUtil::Substr(conn.m_signal, "("))
+				{
+					Echo::Variant::CallError error;
+					Echo::Object* receiver = (Object*)conn.m_receiver;
+					Echo::ClassMethodBind* method = conn.m_method;
+					method->call(receiver, nullptr, 0, error);
+				}
+			}
+		}
+	}
+
 	// on widget destroy
 	void QMessageHandler::onDestroyWidget()
 	{
