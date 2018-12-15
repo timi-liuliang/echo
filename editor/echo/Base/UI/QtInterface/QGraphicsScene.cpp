@@ -1,6 +1,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsSimpleTextItem>
 #include <engine/core/math/color.h>
+#include "Extend/QGraphicsEllipseItemEx.h"
 
 namespace Echo
 {
@@ -55,7 +56,13 @@ namespace Echo
 		{
 			QPen pen(QColor::fromRgbF(color.r, color.g, color.b, color.a));
 			QBrush brush(QColor::fromRgbF(color.r, color.g, color.b, color.a));
-			QGraphicsEllipseItem* eclipseItem = graphicsScene->addEllipse(QRectF( left, top, width, height), pen, brush);
+
+			QGraphicsEllipseItemEx* eclipseItem = new QGraphicsEllipseItemEx;
+			eclipseItem->setRect(left, top, width, height);
+			eclipseItem->setPen(pen);
+			eclipseItem->setBrush(brush);
+			graphicsScene->addItem(eclipseItem);
+
 			return eclipseItem;
 		}
 
