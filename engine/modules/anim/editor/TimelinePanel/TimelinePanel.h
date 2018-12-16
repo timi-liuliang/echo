@@ -53,6 +53,7 @@ namespace Echo
 
 		// on double click curve key
 		void onKeyDoubleClickedCurveKey();
+		void onCurveKeyEditingFinished();
 
 	private:
 		// get new name
@@ -92,6 +93,7 @@ namespace Echo
 		array<QGraphicsItem*, 4>	m_curveItems;
 		array<QGraphicsItemArray, 4>m_curveKeyItems;
 		array<bool, 4>				m_curveVisibles;
+		QWidget*					m_curveKeyLineEdit;
 	};
 }
 

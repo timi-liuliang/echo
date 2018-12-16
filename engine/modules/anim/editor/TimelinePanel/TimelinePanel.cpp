@@ -11,6 +11,7 @@
 #include "engine/core/editor/qt/QGraphicsView.h"
 #include "engine/core/editor/qt/QGraphicsScene.h"
 #include "engine/core/editor/qt/QGraphicsItem.h"
+#include "engine/core/editor/qt/QLineEdit.h"
 #include "engine/core/base/class_method_bind.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/util/StringUtil.h"
@@ -25,6 +26,7 @@ namespace Echo
 		, m_rulerBottom(nullptr)
 		, m_rulerHeight( 25.f)
 		, m_rulerColor( 0.73f, 0.73f, 0.73f)
+		, m_curveKeyLineEdit(nullptr)
 	{
 		m_curveItems.assign(nullptr);
 		m_curveVisibles.assign(true);
@@ -462,10 +464,29 @@ namespace Echo
 		}
 	}
 
-	// on double click curve key
 	void TimelinePanel::onKeyDoubleClickedCurveKey()
 	{
+		// show key value editor widget
+		if (!m_curveKeyLineEdit)
+		{
+			m_curveKeyLineEdit = qLineEditNew();
+			qGraphicsSceneAddWidget(m_graphicsScene, m_curveKeyLineEdit);
 
+			qConnect(m_curveKeyLineEdit, QSIGNAL(editingFinished()), this, createMethodBind(&TimelinePanel::onCurveKeyEditingFinished));
+		}
+
+		qWidgetSetVisible(m_curveKeyLineEdit, true);
+	}
+
+	void TimelinePanel::onCurveKeyEditingFinished()
+	{
+		String value = qLineEditText(m_curveKeyLineEdit);
+		if (!value.empty())
+		{
+
+		}
+
+		qWidgetSetVisible( m_curveKeyLineEdit, false);
 	}
 
 	void TimelinePanel::onPlayAnim()

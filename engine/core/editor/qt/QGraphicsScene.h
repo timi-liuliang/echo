@@ -9,6 +9,9 @@ namespace Echo
 	// create a QGraphicsScene
 	QObject* qGraphicsSceneNew();
 
+	// add widget to QGraphicsScene
+	QGraphicsProxyWidget* qGraphicsSceneAddWidget(QObject* scene, QWidget* widget);
+
 	// add line
 	QGraphicsLineItem* qGraphicsSceneAddLine(QObject* scene, float startX, float startY, float endX, float endY, const Color& color);
 

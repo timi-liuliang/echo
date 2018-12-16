@@ -41,6 +41,9 @@ namespace Echo
 	// find child action by name
 	QAction* qFindChildAction(QWidget* root, const char* name);
 
+	// set visible
+	void qWidgetSetVisible(QWidget* widget, bool visible);
+
 	// delete QWidget
 	void qDeleteWidget(QWidget*& widget);
 }

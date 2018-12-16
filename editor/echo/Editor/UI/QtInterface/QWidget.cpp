@@ -44,6 +44,14 @@ namespace Echo
 		return action;
 	}
 
+	void qWidgetSetVisible(QWidget* widget, bool visible)
+	{
+		if (widget)
+		{
+			widget->setVisible(visible);
+		}
+	}
+
 	void qDeleteWidget(QWidget*& widget)
 	{
 		if (widget)
