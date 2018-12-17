@@ -91,6 +91,12 @@ namespace Echo
 		return str;
 	}
 
+	// set key value
+	void AnimPropertyCurve::setKeyValue(int curveIdx, int keyIdx, float value)
+	{
+		m_curves[curveIdx]->setValue(keyIdx, value);
+	}
+
 	AnimPropertyFloat::AnimPropertyFloat()
 		: AnimPropertyCurve(Type::Float, 1)
 	{}

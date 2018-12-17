@@ -39,6 +39,9 @@ namespace Echo
 			m_keys.push_back(key);
 		}
 
+		// set key value
+		void setValue(int keyIdx, float value);
+
 		// get value
 		float getValue(float time);
 

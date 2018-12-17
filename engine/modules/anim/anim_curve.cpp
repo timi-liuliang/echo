@@ -4,6 +4,12 @@
 
 namespace Echo
 {
+	// set key value
+	void AnimCurve::setValue(int keyIdx, float value)
+	{
+		m_keys[keyIdx].m_value = value;
+	}
+
 	// get value
 	float AnimCurve::getValue(float time)
 	{
@@ -25,6 +31,7 @@ namespace Echo
 			if (time > m_keys[i].m_time && time < m_keys[i + 1].m_time)
 			{
 				curKey = i;
+				break;
 			}
 		}
 

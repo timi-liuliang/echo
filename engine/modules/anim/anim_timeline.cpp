@@ -361,6 +361,26 @@ namespace Echo
 		m_isAnimDataDirty = true;
 	}
 
+	void Timeline::setKey(const String& animName, const String& objectPath, const String& propertyName, int curveIdx, int keyIdx, const Variant& value)
+	{
+		AnimProperty* animProperty = getProperty(animName, objectPath, propertyName);
+		if (animProperty)
+		{
+			switch (animProperty->m_type)
+			{
+			case AnimProperty::Type::Vector3:
+			{
+				AnimPropertyVec3* vec3Property = ECHO_DOWN_CAST<AnimPropertyVec3*>(animProperty);
+				if (vec3Property)
+				{
+					vec3Property->setKeyValue(curveIdx, keyIdx, value.toReal());
+				}
+			}
+			break;
+			}
+		}
+	}
+
 	void Timeline::generateUniqueAnimName(const String& prefix, String& oName)
 	{
 		for (i32 i = 0; i < 65535; i++)

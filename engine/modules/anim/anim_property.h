@@ -75,6 +75,9 @@ namespace Echo
 
 		// get key value str
 		virtual String getKeyValueStr(int idx);
+
+		// set key value
+		void setKeyValue(int curveIdx, int keyIdx, float value);
 	};
 
 	struct AnimPropertyFloat : public AnimPropertyCurve

@@ -524,13 +524,15 @@ namespace Echo
 
 	void TimelinePanel::onCurveKeyEditingFinished()
 	{
-		String value = qLineEditText(m_curveKeyLineEdit);
-		if (!value.empty() && m_curveKeyItem)
+		String valueStr = qLineEditText(m_curveKeyLineEdit);
+		if (!valueStr.empty() && m_curveKeyItem)
 		{
 			String userData = qGraphicsItemUserData(m_curveKeyItem);
 			StringArray userDataSplits = StringUtil::Split(userData, ",");
 
 			// modify key value
+			float value = StringUtil::ParseFloat(valueStr);
+			m_timeline->setKey(userDataSplits[0], userDataSplits[1], userDataSplits[2], StringUtil::ParseI32(userDataSplits[3]), StringUtil::ParseI32(userDataSplits[4]), value);
 		}
 
 		qWidgetSetVisible( m_curveKeyLineEdit, false);
