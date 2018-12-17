@@ -5,6 +5,9 @@
 
 namespace Echo
 {
+	// extern set sender item function
+	extern void qSetSenderItem(QGraphicsItem* item);
+
 	QMessageHandler::QMessageHandler(QWidget* parent)
 		: QWidget(parent)
 	{
@@ -92,6 +95,8 @@ namespace Echo
 			{
 				if (Echo::StringUtil::Substr(signal, "(") == Echo::StringUtil::Substr(conn.m_signal, "("))
 				{
+					qSetSenderItem(sender);
+
 					Echo::Variant::CallError error;
 					Echo::Object* receiver = (Object*)conn.m_receiver;
 					Echo::ClassMethodBind* method = conn.m_method;

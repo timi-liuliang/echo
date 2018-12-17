@@ -6,6 +6,9 @@
 
 namespace Echo
 {
+	// get sender item
+	QGraphicsItem* qSenderItem();
+
 	// get item width
 	float qGraphicsItemWidth(QGraphicsItem* item);
 
@@ -14,6 +17,12 @@ namespace Echo
 
 	// set visible
 	void qGraphicsItemSetVisible(QGraphicsItem* item, bool visible);
+
+	// user data
+	String qGraphicsItemUserData(QGraphicsItem* item);
+
+	// set user data
+	void qGraphicsItemSetUserData(QGraphicsItem* item, const char* userData);
 }
 
 #endif

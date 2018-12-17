@@ -27,6 +27,7 @@ namespace Echo
 		, m_rulerHeight( 25.f)
 		, m_rulerColor( 0.73f, 0.73f, 0.73f)
 		, m_curveKeyLineEdit(nullptr)
+		, m_curveKeyItem(nullptr)
 	{
 		m_curveItems.assign(nullptr);
 		m_curveVisibles.assign(true);
@@ -431,30 +432,28 @@ namespace Echo
 				if (vec3Proeprty)
 				{
 					int keyNumber = vec3Proeprty->getKeyNumber();
-					for (int idx = 0; idx < keyNumber; idx++)
+					for (int keyIdx = 0; keyIdx < keyNumber; keyIdx++)
 					{
 						// time
-						float t = vec3Proeprty->getKeyTime(idx);
+						float t = vec3Proeprty->getKeyTime(keyIdx);
 
 						vec3Proeprty->updateToTime(t*0.02f);
 						const Vector3& value = vec3Proeprty->getValue();
 
-						Vector2 centreX(t * 20.f * 50.f, value.x * 10.f + m_rulerHeight + 5.f);
-						Vector2 centreY(t * 20.f * 50.f, value.y * 10.f + m_rulerHeight + 5.f);
-						Vector2 centreZ(t * 20.f * 50.f, value.z * 10.f + m_rulerHeight + 5.f);
 						float radius = 7.f;
-						
-						m_curveKeyItems[0].push_back( qGraphicsSceneAddEclipse( m_graphicsScene, centreX.x-radius, centreX.y-radius, radius * 2.f, radius*2.f, Color(1.f, 0.f, 0.f, 0.7f)));
-						m_curveKeyItems[1].push_back( qGraphicsSceneAddEclipse(m_graphicsScene, centreY.x - radius, centreY.y - radius, radius * 2.f, radius*2.f, Color(0.f, 1.f, 0.f, 0.7f)));
-						m_curveKeyItems[2].push_back( qGraphicsSceneAddEclipse(m_graphicsScene, centreZ.x - radius, centreZ.y - radius, radius * 2.f, radius*2.f, Color(0.f, 0.f, 1.f, 0.7f)));		
-					}
-
-					// connect signal slots
-					for (int i = 0; i < 3; i++)
-					{
-						for (QGraphicsItem* item : m_curveKeyItems[i])
+						for (int curveIdx = 0; curveIdx < 3; curveIdx++)
 						{
+							Vector2 center = Vector2(t * 20.f * 50.f, value[curveIdx] * 10.f + m_rulerHeight + 5.f);
+							QGraphicsItem* item = qGraphicsSceneAddEclipse(m_graphicsScene, center.x - radius, center.y - radius, radius * 2.f, radius*2.f, Color(1.f, 0.f, 0.f, 0.7f));			
+							
+							// set userdata
+							String userData = StringUtil::Format("%s,%s,%s,%d,%d", m_currentEditAnim.c_str(), objectPath.c_str(), propertyName.c_str(), curveIdx, keyIdx);
+							qGraphicsItemSetUserData( item, userData.c_str());
+
+							// connect signal slots
 							qConnect(item, QSIGNAL(mouseDoubleClickEvent(QGraphicsSceneMouseEvent*)), this, createMethodBind(&TimelinePanel::onKeyDoubleClickedCurveKey));
+							
+							m_curveKeyItems[curveIdx].push_back(item);
 						}
 					}
 				}
@@ -462,6 +461,36 @@ namespace Echo
 			break;
 			}
 		}
+	}
+
+	// get key info
+	bool TimelinePanel::getKeyInfo(TimelinePanel::KeyInfo& keyInfo, const String& animName, const String& objectPath, const String& propertyName, int curveIdx, int keyIdx)
+	{
+		AnimProperty* animProperty = m_timeline->getProperty(m_currentEditAnim, objectPath, propertyName);
+		if (animProperty)
+		{
+			switch (animProperty->m_type)
+			{
+			case AnimProperty::Type::Vector3:
+			{
+				AnimPropertyVec3* vec3Property = ECHO_DOWN_CAST<AnimPropertyVec3*>(animProperty);
+				if (vec3Property)
+				{
+					float t = vec3Property->getKeyTime(keyIdx);
+					vec3Property->updateToTime(t*0.02f);
+					const Vector3& value = vec3Property->getValue();
+
+					keyInfo.m_type = KeyInfo::Type::Float;
+					keyInfo.m_value = value[curveIdx];
+
+					return true;
+				}
+			}
+			break;
+			}
+		}
+
+		return false;
 	}
 
 	void TimelinePanel::onKeyDoubleClickedCurveKey()
@@ -475,15 +504,33 @@ namespace Echo
 			qConnect(m_curveKeyLineEdit, QSIGNAL(editingFinished()), this, createMethodBind(&TimelinePanel::onCurveKeyEditingFinished));
 		}
 
+		// get current key value
+		QGraphicsItem* sender = qSenderItem();
+		if (sender)
+		{
+			String userData = qGraphicsItemUserData(sender);
+			StringArray userDataSplits = StringUtil::Split(userData, ",");
+			KeyInfo keyInfo;
+			if (getKeyInfo(keyInfo, userDataSplits[0], userDataSplits[1], userDataSplits[2], StringUtil::ParseI32(userDataSplits[3]), StringUtil::ParseI32(userDataSplits[4])))
+			{
+				m_curveKeyItem = sender;
+				qLineEditSetText( m_curveKeyLineEdit, StringUtil::ToString( keyInfo.m_value));
+			}
+		}
+
+
 		qWidgetSetVisible(m_curveKeyLineEdit, true);
 	}
 
 	void TimelinePanel::onCurveKeyEditingFinished()
 	{
 		String value = qLineEditText(m_curveKeyLineEdit);
-		if (!value.empty())
+		if (!value.empty() && m_curveKeyItem)
 		{
+			String userData = qGraphicsItemUserData(m_curveKeyItem);
+			StringArray userDataSplits = StringUtil::Split(userData, ",");
 
+			// modify key value
 		}
 
 		qWidgetSetVisible( m_curveKeyLineEdit, false);

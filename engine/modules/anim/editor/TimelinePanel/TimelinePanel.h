@@ -13,6 +13,20 @@ namespace Echo
 		typedef vector<QGraphicsItem*>::type QGraphicsItemArray;
 
 	public:
+		// key info
+		struct KeyInfo
+		{
+			enum class Type
+			{
+				Int,
+				Float,
+				String,
+			}		m_type;
+
+			float	m_value;
+		};
+
+	public:
 		TimelinePanel(Object* obj);
 
 		// update
@@ -55,6 +69,9 @@ namespace Echo
 		void onKeyDoubleClickedCurveKey();
 		void onCurveKeyEditingFinished();
 
+		// get key info
+		bool getKeyInfo(KeyInfo& keyInfo, const String& animName, const String& objectPath, const String& propertyName, int curveIdx, int keyIdx);
+
 	private:
 		// get new name
 		String getNewClipName();
@@ -94,6 +111,7 @@ namespace Echo
 		array<QGraphicsItemArray, 4>m_curveKeyItems;
 		array<bool, 4>				m_curveVisibles;
 		QWidget*					m_curveKeyLineEdit;
+		QGraphicsItem*				m_curveKeyItem;
 	};
 }
 

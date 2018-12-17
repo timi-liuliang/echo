@@ -3,6 +3,19 @@
 
 namespace Echo
 {
+	// current sender item
+	static QGraphicsItem* g_senderItem = nullptr;
+
+	void qSetSenderItem(QGraphicsItem* item)
+	{
+		g_senderItem = item;
+	}
+
+	QGraphicsItem* qSenderItem()
+	{
+		return g_senderItem;
+	}
+
 	float qGraphicsItemWidth(QGraphicsItem* item)
 	{
 		return item ? item->sceneBoundingRect().width() : 0.f;
