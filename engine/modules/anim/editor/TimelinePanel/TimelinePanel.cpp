@@ -80,6 +80,9 @@ namespace Echo
 		qConnect(qFindChild(m_ui, "m_curveZVisible"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onSwitchCurveVisibility));
 		qConnect(qFindChild(m_ui, "m_curveWVisible"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onSwitchCurveVisibility));
 
+		// connect signals
+		qConnect(qFindChild(m_ui, "m_graphicsView"), QSIGNAL(customContextMenuRequested(const QPoint&)), this, createMethodBind(&TimelinePanel::onRightClickGraphicsView));
+
 		// create QGraphicsScene
 		m_graphicsScene = qGraphicsSceneNew();
 		qGraphicsViewSetScene(qFindChild(m_ui, "m_graphicsView"), m_graphicsScene);
@@ -644,6 +647,12 @@ namespace Echo
 				qGraphicsItemSetVisible( keyItem, m_curveVisibles[i]);
 			}
 		}
+	}
+
+	// mouse right button on view
+	void TimelinePanel::onRightClickGraphicsView()
+	{
+
 	}
 #endif
 }

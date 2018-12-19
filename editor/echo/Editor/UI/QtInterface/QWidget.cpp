@@ -6,6 +6,15 @@
 
 namespace Echo
 {
+	void qConnect(QObject* sender, const char* signal, void* receiver, ClassMethodBind* slot)
+	{
+		if (sender)
+		{
+			QMessageHandler::instance()->bind(sender, signal, receiver, slot);
+			QObject::connect(sender, signal, QMessageHandler::instance(), SLOT(onReceiveMessage()));
+		}
+	}
+
 	void qConnect(QWidget* sender, const char* signal, void* receiver, ClassMethodBind* slot)
 	{
 		if (sender)

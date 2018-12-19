@@ -62,6 +62,9 @@ namespace Echo
 		void syncDataToEditor();
 
 	private:
+		// mouse right button on view
+		void onRightClickGraphicsView();
+
 		// switch cuve visibility
 		void onSwitchCurveVisibility();
 
