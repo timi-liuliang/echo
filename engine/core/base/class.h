@@ -217,6 +217,9 @@ namespace Echo
 #define ECHO_CLASS_NAME(m_class) #m_class
 
 #define ECHO_CLASS(m_class, m_parent)														\
+																							\
+	typedef m_parent Super;																	\
+																							\
 public:																						\
 	virtual const String& getClassName() const												\
 	{																						\
