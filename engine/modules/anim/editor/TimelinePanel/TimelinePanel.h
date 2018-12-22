@@ -72,6 +72,12 @@ namespace Echo
 		void onKeyDoubleClickedCurveKey();
 		void onCurveKeyEditingFinished();
 
+		// on add key
+		void onAddKeyToCurveRed();
+		void onAddKeyToCurveGreen();
+		void onAddKeyToCurveBlue();
+		void onAddKeyToCurveWhite();
+
 		// get key info
 		bool getKeyInfo(KeyInfo& keyInfo, const String& animName, const String& objectPath, const String& propertyName, int curveIdx, int keyIdx);
 
@@ -115,6 +121,8 @@ namespace Echo
 		array<bool, 4>				m_curveVisibles;
 		QWidget*					m_curveKeyLineEdit;
 		QGraphicsItem*				m_curveKeyItem;
+		QWidget*					m_keyEditMenu;
+		Vector2						m_keyEditCursorPos;
 	};
 }
 

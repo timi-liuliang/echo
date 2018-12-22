@@ -1,17 +1,6 @@
 #include "TimelinePanel.h"
 #include "engine/core/editor/editor.h"
-#include "engine/core/editor/qt/QUiLoader.h"
-#include "engine/core/editor/qt/QSplitter.h"
-#include "engine/core/editor/qt/QToolButton.h"
-#include "engine/core/editor/qt/QComboBox.h"
-#include "engine/core/editor/qt/QMenu.h"
-#include "engine/core/editor/qt/QTreeWidget.h"
-#include "engine/core/editor/qt/QTreeWidgetItem.h"
-#include "engine/core/editor/qt/QHeaderView.h"
-#include "engine/core/editor/qt/QGraphicsView.h"
-#include "engine/core/editor/qt/QGraphicsScene.h"
-#include "engine/core/editor/qt/QGraphicsItem.h"
-#include "engine/core/editor/qt/QLineEdit.h"
+#include "engine/core/editor/qt/QWidgets.h"
 #include "engine/core/base/class_method_bind.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/util/StringUtil.h"
@@ -28,6 +17,7 @@ namespace Echo
 		, m_rulerColor( 0.73f, 0.73f, 0.73f)
 		, m_curveKeyLineEdit(nullptr)
 		, m_curveKeyItem(nullptr)
+		, m_keyEditMenu(nullptr)
 	{
 		m_curveItems.assign(nullptr);
 		m_curveVisibles.assign(true);
@@ -652,7 +642,44 @@ namespace Echo
 	// mouse right button on view
 	void TimelinePanel::onRightClickGraphicsView()
 	{
+		if (!m_keyEditMenu)
+		{
+			m_keyEditMenu = qMenuNew(m_ui);
+
+			qMenuAddAction(m_keyEditMenu, qFindChildAction(m_ui, "m_actionAddKeyToCurveRed"));
+			qMenuAddAction(m_keyEditMenu, qFindChildAction(m_ui, "m_actionAddKeyToCurveGreen"));
+			qMenuAddAction(m_keyEditMenu, qFindChildAction(m_ui, "m_actionAddKeyToCurveBlue"));
+
+			qConnect(qFindChildAction(m_ui, "m_actionAddKeyToCurveRed"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddKeyToCurveRed));
+			qConnect(qFindChildAction(m_ui, "m_actionAddKeyToCurveGreen"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddKeyToCurveGreen));
+			qConnect(qFindChildAction(m_ui, "m_actionAddKeyToCurveBlue"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddKeyToCurveBlue));
+		}
+
+		qMenuExec(m_keyEditMenu);
+
+		// record cursor pos
+		m_keyEditCursorPos = qCursorPos();
+	}
+
+	void TimelinePanel::onAddKeyToCurveRed()
+	{
 
 	}
+
+	void TimelinePanel::onAddKeyToCurveGreen()
+	{
+
+	}
+
+	void TimelinePanel::onAddKeyToCurveBlue()
+	{
+
+	}
+
+	void TimelinePanel::onAddKeyToCurveWhite()
+	{
+
+	}
+
 #endif
 }

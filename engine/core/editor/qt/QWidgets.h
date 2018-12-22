@@ -1,0 +1,17 @@
+#pragma once
+
+#include "QWidget.h"
+#include "QAction.h"
+#include "QComboBox.h"
+#include "QCursor.h"
+#include "QGraphicsItem.h"
+#include "QGraphicsScene.h"
+#include "QGraphicsView.h"
+#include "QHeaderView.h"
+#include "QLineEdit.h"
+#include "QMenu.h"
+#include "QSplitter.h"
+#include "QToolButton.h"
+#include "QTreeWidget.h"
+#include "QTreeWidgetItem.h"
+#include "QUiLoader.h"

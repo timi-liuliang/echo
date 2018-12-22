@@ -328,6 +328,35 @@
     <string>Curve White(W)</string>
    </property>
   </action>
+  <action name="m_actionAddKeyToCurveRed">
+   <property name="text">
+    <string>Add Key To Curve Red (X)</string>
+   </property>
+  </action>
+  <action name="m_actionAddKeyToCurveGreen">
+   <property name="text">
+    <string>Add Key To Curve Green (Y)</string>
+   </property>
+   <property name="toolTip">
+    <string>Add Key To Curve Green</string>
+   </property>
+  </action>
+  <action name="m_actionAddKeyToCurveBlue">
+   <property name="text">
+    <string>Add Key To Curve Blue (Z)</string>
+   </property>
+   <property name="toolTip">
+    <string>Add Key To Curve Blue</string>
+   </property>
+  </action>
+  <action name="m_actionAddKeyToCurveWhite">
+   <property name="text">
+    <string>Add Key To Curve White (W)</string>
+   </property>
+   <property name="toolTip">
+    <string>Add Key To Curve White</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
