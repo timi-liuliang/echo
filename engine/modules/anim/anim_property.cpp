@@ -97,6 +97,12 @@ namespace Echo
 		m_curves[curveIdx]->setValue(keyIdx, value);
 	}
 
+	// add key
+	void AnimPropertyCurve::addKey(int curveIdx, float time, float value)
+	{
+		m_curves[curveIdx]->addKey(time, value);
+	}
+
 	AnimPropertyFloat::AnimPropertyFloat()
 		: AnimPropertyCurve(Type::Float, 1)
 	{}

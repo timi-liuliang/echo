@@ -78,6 +78,9 @@ namespace Echo
 
 		// set key value
 		void setKeyValue(int curveIdx, int keyIdx, float value);
+
+		// add key
+		void addKey(int curveIdx, float time, float value);
 	};
 
 	struct AnimPropertyFloat : public AnimPropertyCurve

@@ -711,8 +711,13 @@ namespace Echo
 		float value;
 		if (calcKeyTimeAndValueByPos(m_keyEditCursorPos, time, value))
 		{
-
+			Variant vValue = value;
+			m_timeline->addKey( m_currentEditAnim, m_currentEditObjectPath, m_currentEditPropertyName, time, vValue);
 		}
+
+		// refresh curve and key display
+		refreshCurveDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
+		refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
 	}
 
 	void TimelinePanel::onAddKeyToCurveGreen()
