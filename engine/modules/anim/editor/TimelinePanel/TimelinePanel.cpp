@@ -436,7 +436,9 @@ namespace Echo
 						float radius = 7.f;
 						for (int curveIdx = 0; curveIdx < 3; curveIdx++)
 						{
-							Vector2 center = Vector2(t * 20.f * 50.f, value[curveIdx] * 10.f + m_rulerHeight + 5.f);
+							Vector2 center; 
+							calcKeyPosByTimeAndValue(t, value[curveIdx], center);
+
 							QGraphicsItem* item = qGraphicsSceneAddEclipse(m_graphicsScene, center.x - radius, center.y - radius, radius * 2.f, radius*2.f, Color(1.f, 0.f, 0.f, 0.7f));			
 							
 							// set userdata
@@ -661,9 +663,30 @@ namespace Echo
 		m_keyEditCursorPos = qCursorPos();
 	}
 
+	// get time and value by pos
+	bool TimelinePanel::calcKeyTimeAndValueByPos(const Vector2& pos, float& time, float& value)
+	{
+		time = pos.x / (20.f * 50.f);
+		value = (pos.y - 5.f - m_rulerHeight) / 10.f;
+
+		return true;
+	}
+
+	bool TimelinePanel::calcKeyPosByTimeAndValue(float time, float value, Vector2& pos)
+	{
+		pos = Vector2(time * 20.f * 50.f, value * 10.f + m_rulerHeight + 5.f);
+
+		return true;
+	}
+
 	void TimelinePanel::onAddKeyToCurveRed()
 	{
+		float time;
+		float value;
+		if (calcKeyTimeAndValueByPos(m_keyEditCursorPos, time, value))
+		{
 
+		}
 	}
 
 	void TimelinePanel::onAddKeyToCurveGreen()

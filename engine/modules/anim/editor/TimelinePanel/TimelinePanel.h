@@ -81,6 +81,10 @@ namespace Echo
 		// get key info
 		bool getKeyInfo(KeyInfo& keyInfo, const String& animName, const String& objectPath, const String& propertyName, int curveIdx, int keyIdx);
 
+		// get time and value by pos
+		bool calcKeyTimeAndValueByPos(const Vector2& pos, float& time, float& value);
+		bool calcKeyPosByTimeAndValue(float time, float value, Vector2& pos);
+
 	private:
 		// get new name
 		String getNewClipName();
