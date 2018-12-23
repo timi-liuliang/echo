@@ -23,6 +23,12 @@ namespace Echo
 
 	// add eclipse
 	QGraphicsItem* qGraphicsSceneAddEclipse(QObject* scene, float left, float top, float width, float height, const Color& color);
+
+	// remove item
+	void qGraphicsSceneRemoveItem(QObject* scene, QGraphicsItem* item);
+
+	// delete item
+	void qGraphicsSceneDeleteItem(QObject* scene, QGraphicsItem* item);
 }
 
 #endif

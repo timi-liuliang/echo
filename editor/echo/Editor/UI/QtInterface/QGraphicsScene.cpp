@@ -91,4 +91,25 @@ namespace Echo
 
 		return nullptr;
 	}
+
+	void qGraphicsSceneRemoveItem(QObject* scene, QGraphicsItem* item)
+	{
+		QGraphicsScene* graphicsScene = qobject_cast<QGraphicsScene*>(scene);
+		if (graphicsScene)
+		{
+			graphicsScene->removeItem(item);
+		}
+	}
+
+	// delete item
+	void qGraphicsSceneDeleteItem(QObject* scene, QGraphicsItem* item)
+	{
+		QGraphicsScene* graphicsScene = qobject_cast<QGraphicsScene*>(scene);
+		if (graphicsScene)
+		{
+			graphicsScene->removeItem(item);
+
+			delete item;
+		}
+	}
 }

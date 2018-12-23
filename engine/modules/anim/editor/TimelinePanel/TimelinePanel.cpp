@@ -350,14 +350,14 @@ namespace Echo
 			if (userData == "property")
 			{
 				QTreeWidgetItem* parent = qTreeWidgetItemParent( item);
-				String objectPath = qTreeWidgetItemText( parent, 0);
-				String propertyName = qTreeWidgetItemText(item, 0);
+				m_currentEditObjectPath = qTreeWidgetItemText( parent, 0);
+				m_currentEditPropertyName = qTreeWidgetItemText(item, 0);
 
 				// refresh curve display
-				refreshCurveDisplayToEditor( objectPath, propertyName);
+				refreshCurveDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
 
 				// refresh curve key display
-				refreshCurveKeyDisplayToEditor( objectPath, propertyName);
+				refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
 			}
 		}
 	}
@@ -377,6 +377,17 @@ namespace Echo
 	// curve display
 	void TimelinePanel::refreshCurveDisplayToEditor(const String& objectPath, const String& propertyName)
 	{
+		// clear curves
+		for (size_t i = 0; i < m_curveItems.size(); i++)
+		{
+			if (m_curveItems[i])
+			{
+				qGraphicsSceneDeleteItem(m_graphicsScene, m_curveItems[i]);
+				m_curveItems[i] = nullptr;
+			}
+		}
+
+		// recreate curves
 		AnimProperty* animProperty = m_timeline->getProperty(m_currentEditAnim, objectPath, propertyName);
 		if (animProperty)
 		{
@@ -414,6 +425,18 @@ namespace Echo
 
 	void TimelinePanel::refreshCurveKeyDisplayToEditor(const String& objectPath, const String& propertyName)
 	{
+		// cler all key items
+		for (size_t i = 0; i < m_curveItems.size(); i++)
+		{
+			for (QGraphicsItem* item : m_curveKeyItems[i])
+			{
+				qGraphicsSceneDeleteItem(m_graphicsScene, item);
+			}
+
+			m_curveKeyItems[i].clear();
+		}
+
+		// create key
 		AnimProperty* animProperty = m_timeline->getProperty(m_currentEditAnim, objectPath, propertyName);
 		if (animProperty)
 		{
@@ -513,7 +536,6 @@ namespace Echo
 			}
 		}
 
-
 		qWidgetSetVisible(m_curveKeyLineEdit, true);
 	}
 
@@ -531,6 +553,10 @@ namespace Echo
 		}
 
 		qWidgetSetVisible( m_curveKeyLineEdit, false);
+
+		// refresh curve and key display
+		refreshCurveDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
+		refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
 	}
 
 	void TimelinePanel::onPlayAnim()
