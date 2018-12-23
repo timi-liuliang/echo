@@ -65,9 +65,17 @@ namespace Echo
 		return m_keys.size() ? m_keys.back().m_time : 0.f;
 	}
 
+	// correct 1. sort keys by time 2. remove duplicated key
+	void AnimCurve::correct()
+	{
+
+	}
+
 	// optimize
 	float AnimCurve::optimize()
 	{
+		correct();
+
 		size_t beginNum = m_keys.size();
 		if (m_type == InterpolationType::Linear)
 		{

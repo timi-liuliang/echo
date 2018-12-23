@@ -30,6 +30,9 @@ namespace Echo
 		// set interpolation type
 		virtual void setInterpolationType(AnimCurve::InterpolationType type);
 
+		// correct data
+		virtual void correct() = 0;
+
 		// optimize
 		virtual void optimize() = 0;
 
@@ -57,6 +60,9 @@ namespace Echo
 
 		// set interpolation type
 		virtual void setInterpolationType(AnimCurve::InterpolationType type) override;
+
+		// correct data
+		virtual void correct() override;
 
 		// optimize
 		virtual void optimize() override;
@@ -148,6 +154,9 @@ namespace Echo
 
 		// add key
 		void addKey(float time, const Quaternion& value);
+
+		// correct data
+		virtual void correct() {}
 
 		// optimize
 		virtual void optimize() override {}

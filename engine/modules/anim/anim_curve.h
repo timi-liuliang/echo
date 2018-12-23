@@ -48,6 +48,9 @@ namespace Echo
 		// get time length
 		float getLength();
 
+		// correct 1. sort keys by time 2. remove duplicated key
+		void correct();
+
 		// optimize
 		float optimize();
 	};

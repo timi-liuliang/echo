@@ -45,6 +45,15 @@ namespace Echo
 		}
 	}
 
+	// correct data
+	void AnimPropertyCurve::correct()
+	{
+		for (AnimCurve* curve : m_curves)
+		{
+			curve->correct();
+		}
+	}
+
 	// optimize
 	void AnimPropertyCurve::optimize()
 	{

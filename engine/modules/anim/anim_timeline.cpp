@@ -342,6 +342,7 @@ namespace Echo
 						{
 							AnimPropertyVec3* vec3Prop = ECHO_DOWN_CAST<AnimPropertyVec3*>(property);
 							vec3Prop->addKey(time, value.toVector3());
+							vec3Prop->correct();
 						}
 
 						break;
@@ -372,6 +373,7 @@ namespace Echo
 						{
 							AnimPropertyVec3* vec3Prop = ECHO_DOWN_CAST<AnimPropertyVec3*>(property);
 							vec3Prop->addKeyToCurve(curveIdx, time, value);
+							vec3Prop->correct();
 						}
 
 						break;
@@ -399,6 +401,7 @@ namespace Echo
 				if (vec3Property)
 				{
 					vec3Property->setKeyValue(curveIdx, keyIdx, value.toReal());
+					vec3Property->correct();
 				}
 			}
 			break;
