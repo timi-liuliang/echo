@@ -77,6 +77,7 @@ namespace Echo
 		void onAddKeyToCurveGreen();
 		void onAddKeyToCurveBlue();
 		void onAddKeyToCurveWhite();
+		void addKeyToCurve(int curveIdx);
 
 		// get key info
 		bool getKeyInfo(KeyInfo& keyInfo, const String& animName, const String& objectPath, const String& propertyName, int curveIdx, int keyIdx);

@@ -98,7 +98,7 @@ namespace Echo
 	}
 
 	// add key
-	void AnimPropertyCurve::addKey(int curveIdx, float time, float value)
+	void AnimPropertyCurve::addKeyToCurve(int curveIdx, float time, float value)
 	{
 		m_curves[curveIdx]->addKey(time, value);
 	}

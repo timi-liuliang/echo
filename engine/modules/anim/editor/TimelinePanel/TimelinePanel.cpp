@@ -707,32 +707,36 @@ namespace Echo
 
 	void TimelinePanel::onAddKeyToCurveRed()
 	{
+		addKeyToCurve(0);
+	}
+
+	void TimelinePanel::onAddKeyToCurveGreen()
+	{
+		addKeyToCurve(1);
+	}
+
+	void TimelinePanel::onAddKeyToCurveBlue()
+	{
+		addKeyToCurve(2);
+	}
+
+	void TimelinePanel::onAddKeyToCurveWhite()
+	{
+		addKeyToCurve(3);
+	}
+
+	void TimelinePanel::addKeyToCurve(int curveIdx)
+	{
 		float time;
 		float value;
 		if (calcKeyTimeAndValueByPos(m_keyEditCursorPos, time, value))
 		{
-			Variant vValue = value;
-			m_timeline->addKey( m_currentEditAnim, m_currentEditObjectPath, m_currentEditPropertyName, time, vValue);
+			m_timeline->addKey(m_currentEditAnim, m_currentEditObjectPath, m_currentEditPropertyName, curveIdx, time, value);
 		}
 
 		// refresh curve and key display
 		refreshCurveDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
 		refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
-	}
-
-	void TimelinePanel::onAddKeyToCurveGreen()
-	{
-
-	}
-
-	void TimelinePanel::onAddKeyToCurveBlue()
-	{
-
-	}
-
-	void TimelinePanel::onAddKeyToCurveWhite()
-	{
-
 	}
 
 #endif

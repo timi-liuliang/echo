@@ -314,11 +314,6 @@ namespace Echo
 					if (property)
 					{
 						property->setInterpolationType(AnimCurve::InterpolationType::Linear);
-
-						// test
-						addKey(animName, objectPath, propertyName, 0.f, Vector3::ZERO);
-						addKey(animName, objectPath, propertyName, 3.f, Vector3(500.f, 0.f, 0.f));
-
 						clip->m_length = 3.f;
 					}
 
@@ -347,6 +342,36 @@ namespace Echo
 						{
 							AnimPropertyVec3* vec3Prop = ECHO_DOWN_CAST<AnimPropertyVec3*>(property);
 							vec3Prop->addKey(time, value.toVector3());
+						}
+
+						break;
+					}
+
+					break;
+				}
+			}
+		}
+
+		// dirty flag
+		m_isAnimDataDirty = true;
+	}
+
+	void Timeline::addKey(const String& animName, const String& objectPath, const String& propertyName, int curveIdx, float time, float value)
+	{
+		AnimClip* clip = getClip(animName.c_str());
+		if (clip)
+		{
+			for (AnimObject* animNode : clip->m_objects)
+			{
+				const ObjectUserData& userData = any_cast<ObjectUserData>(animNode->m_userData);
+				if (userData.m_path == objectPath)
+				{
+					for (AnimProperty* property : animNode->m_properties)
+					{
+						if (any_cast<String>(property->m_userData) == propertyName)
+						{
+							AnimPropertyVec3* vec3Prop = ECHO_DOWN_CAST<AnimPropertyVec3*>(property);
+							vec3Prop->addKeyToCurve(curveIdx, time, value);
 						}
 
 						break;
