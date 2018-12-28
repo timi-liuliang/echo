@@ -70,7 +70,7 @@ namespace Echo
 	{
 		if (m_animations.isValid())
 		{
-			float deltaTime = Engine::instance()->getFrameTime();
+			ui32 deltaTime = Engine::instance()->getFrameTimeMS();
 			AnimClip* clip = m_clips[m_animations.getIdx()];
 			if (clip)
 			{

@@ -405,7 +405,7 @@ namespace Echo
 					float length = vec3Proeprty->getLength();
 					for (float t = 0; t < length; t += 0.02f)
 					{
-						vec3Proeprty->updateToTime( t*0.02f);
+						vec3Proeprty->updateToTime( ui32(t*0.02f * 1000.f));
 						const Vector3& value = vec3Proeprty->getValue();
 
 						curvePaths[0].push_back(Vector2(t * 20.f * 50.f, value.x * 10.f + m_rulerHeight + 5.f));
@@ -451,9 +451,9 @@ namespace Echo
 					for (int keyIdx = 0; keyIdx < keyNumber; keyIdx++)
 					{
 						// time
-						float t = vec3Proeprty->getKeyTime(keyIdx);
+						ui32 t = vec3Proeprty->getKeyTime(keyIdx);
 
-						vec3Proeprty->updateToTime(t*0.02f);
+						vec3Proeprty->updateToTime(ui32(t*0.02f * 1000.f));
 						const Vector3& value = vec3Proeprty->getValue();
 
 						float radius = 7.f;
@@ -494,7 +494,7 @@ namespace Echo
 				AnimPropertyVec3* vec3Property = ECHO_DOWN_CAST<AnimPropertyVec3*>(animProperty);
 				if (vec3Property)
 				{
-					float t = vec3Property->getKeyTime(keyIdx);
+					ui32 t = vec3Property->getKeyTime(keyIdx);
 					vec3Property->updateToTime(t*0.02f);
 					const Vector3& value = vec3Property->getValue();
 
@@ -698,7 +698,7 @@ namespace Echo
 		return true;
 	}
 
-	bool TimelinePanel::calcKeyPosByTimeAndValue(float time, float value, Vector2& pos)
+	bool TimelinePanel::calcKeyPosByTimeAndValue(ui32 time, float value, Vector2& pos)
 	{
 		pos = Vector2(time * 20.f * 50.f, value * 10.f + m_rulerHeight + 5.f);
 

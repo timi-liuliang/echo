@@ -4,14 +4,8 @@
 
 namespace Echo
 {
-	// set key value
-	void AnimCurve::setValue(int keyIdx, float value)
-	{
-		m_keys[keyIdx].m_value = value;
-	}
-
 	// get value
-	float AnimCurve::getValue(float time)
+	float AnimCurve::getValue(ui32 time)
 	{
 		if (m_keys.empty())
 		{
@@ -20,29 +14,26 @@ namespace Echo
 
 		if (m_keys.size() == 1)
 		{
-			return m_keys[0].m_value;
+			return m_keys.begin()->second;
 		}
 
 		// get base key and next key
-		i32 curKey = 0;
-		i32 keyTotal = m_keys.size() - 1;
-		for (i32 i = 0; i < keyTotal; i++)
+		KeyMap::iterator curKey = m_keys.begin();
+		KeyMap::iterator nextKey = ++m_keys.begin();
+		KeyMap::iterator lastKey = --m_keys.end();
+		for ( ; nextKey !=lastKey; curKey++, nextKey++)
 		{
-			if (time > m_keys[i].m_time && time < m_keys[i + 1].m_time)
-			{
-				curKey = i;
+			if (time > curKey->first && time < nextKey->first)
 				break;
-			}
 		}
 
-		const Key& pre = m_keys[curKey];
-		const Key& next = m_keys[curKey + 1];
+		// calculate
 		switch (m_type)
 		{
 		case InterpolationType::Linear:
 		{
-			float ratio = Math::Clamp((time - pre.m_time) / (next.m_time - pre.m_time), 0.f, 1.f);
-			return pre.m_value * (1.f - ratio) + next.m_value * ratio;
+			float ratio = Math::Clamp(float(time - curKey->first) / float(nextKey->first - curKey->first), 0.f, 1.f);
+			return curKey->second * (1.f - ratio) + nextKey->second * ratio;
 		}
 		case InterpolationType::Discrete:
 		{
@@ -59,61 +50,89 @@ namespace Echo
 		}
 	}
 
+	float AnimCurve::getValueByKeyIdx(i32 index)
+	{
+		if (index < (int)m_keys.size())
+		{
+			KeyMap::iterator it = m_keys.begin();
+			while (index > 0)
+			{
+				it++;
+				index--;
+			}
+
+			return it->second;
+		}
+
+		return 0.f;
+	}
+
+	// get key time by idx
+	ui32 AnimCurve::getKeyTime(int idx)
+	{
+		if (idx < (int)m_keys.size())
+		{
+			KeyMap::iterator it = m_keys.begin();
+			while (idx > 0)
+			{
+				it++;
+				idx--;
+			}
+
+			return it->first;
+		}
+
+		return 0;
+	}
+
 	// get time length
 	float AnimCurve::getLength()
 	{
-		return m_keys.size() ? m_keys.back().m_time : 0.f;
-	}
-
-	// correct 1. sort keys by time 2. remove duplicated key
-	void AnimCurve::correct()
-	{
-
+		return m_keys.size() ? m_keys.rbegin()->second : 0.f;
 	}
 
 	// optimize
 	float AnimCurve::optimize()
 	{
-		correct();
+		return 0.f;
+		//size_t beginNum = m_keys.size();
+		//if (m_type == InterpolationType::Linear)
+		//{
+		//	if (m_keys.size() > 2)
+		//	{
+		//		while (m_keys.size() > 2)
+		//		{
+		//			bool isContinue = false;
+		//			for (size_t i = 1; i < m_keys.size() - 1; i++)
+		//			{
+		//				size_t end = m_keys.size() - 1;
+		//				size_t cur = end - 1;
+		//				size_t pre = cur - 1;
+		//				float ratio = (m_keys[cur].m_time - m_keys[pre].m_time) / (m_keys[end].m_time - m_keys[pre].m_time);
+		//				float curValue = m_keys[pre].m_value * (1.f - ratio) + m_keys[end].m_value * ratio;
+		//				if (curValue == m_keys[cur].m_value)
+		//				{
+		//					m_keys.erase(m_keys.begin() + cur);
+		//					isContinue = true;
+		//					break;
+		//				}
+		//			}
 
-		size_t beginNum = m_keys.size();
-		if (m_type == InterpolationType::Linear)
-		{
-			if (m_keys.size() > 2)
-			{
-				while (m_keys.size() > 2)
-				{
-					bool isContinue = false;
-					for (size_t i = 1; i < m_keys.size() - 1; i++)
-					{
-						size_t end = m_keys.size() - 1;
-						size_t cur = end - 1;
-						size_t pre = cur - 1;
-						float ratio = (m_keys[cur].m_time - m_keys[pre].m_time) / (m_keys[end].m_time - m_keys[pre].m_time);
-						float curValue = m_keys[pre].m_value * (1.f - ratio) + m_keys[end].m_value * ratio;
-						if (curValue == m_keys[cur].m_value)
-						{
-							m_keys.erase(m_keys.begin() + cur);
-							isContinue = true;
-							break;
-						}
-					}
+		//			if(!isContinue)
+		//				break;
+		//		}
+		//	}
+		//	
+		//	if (m_keys.size() == 2)
+		//	{
+		//		if (m_keys[0].m_value == m_keys[1].m_value)
+		//		{
+		//			std::swap(m_keys[0], m_keys[1]);
+		//			m_keys.pop_back();
+		//		}
+		//	}
+		//}
 
-					if(!isContinue)
-						break;
-				}
-			}
-			
-			if (m_keys.size() == 2)
-			{
-				if (m_keys[0].m_value == m_keys[1].m_value)
-				{
-					std::swap(m_keys[0], m_keys[1]);
-					m_keys.pop_back();
-				}
-			}
-		}
-
-		return (float)(beginNum - m_keys.size()) / beginNum;
+		//return (float)(beginNum - m_keys.size()) / beginNum;
 	}
 }

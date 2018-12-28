@@ -352,7 +352,7 @@ namespace Echo
 			float*     timeData = getAccessData<float*>(timeAccess);
 			for (ui32 i = 0; i < timeAccess.m_count; i++)
 			{
-				float time = timeData[i];
+				ui32 time = ui32(timeData[i] * 1000.f);
 				((AnimPropertyTypeT*)animProperty)->addKey(time, keyData[i]);
 			}
 		}

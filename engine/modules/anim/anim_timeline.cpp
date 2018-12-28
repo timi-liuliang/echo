@@ -101,11 +101,11 @@ namespace Echo
 	{
 		if (m_animations.isValid() && m_playState==PlayState::Playing)
 		{
-			float deltaTime = Engine::instance()->getFrameTime();
+			ui32 deltaTime = Engine::instance()->getFrameTimeMS();
 			AnimClip* clip = m_clips[m_animations.getIdx()];
 			if (clip)
 			{
-				clip->update(deltaTime);
+				clip->update(ui32(deltaTime));
 
 				extractClipData(clip);
 			}
@@ -222,7 +222,7 @@ namespace Echo
 
 						for (pugi::xml_node keyNode = propertyNode.child("key"); keyNode; keyNode = keyNode.next_sibling("key"))
 						{
-							float time = keyNode.attribute("time").as_float();
+							ui32 time = keyNode.attribute("time").as_uint();
 							Variant keyValue; keyValue.fromString( Variant::Type::Vector3, keyNode.attribute("value").as_string());
 
 							addKey(animClip->m_name, path, propertyName, time, keyValue);
@@ -255,8 +255,8 @@ namespace Echo
 			AnimClip* clip = m_clips[m_animations.getIdx()];
 			if (clip)
 			{
-				clip->m_time = 0.f;
-				clip->update( 0.f);
+				clip->m_time = 0;
+				clip->update(0);
 				extractClipData(clip);
 			}
 		}
@@ -326,7 +326,7 @@ namespace Echo
 		m_isAnimDataDirty = true;
 	}
 
-	void Timeline::addKey(const String& animName, const String& objectPath, const String& propertyName, float time, const Variant& value)
+	void Timeline::addKey(const String& animName, const String& objectPath, const String& propertyName, ui32 time, const Variant& value)
 	{
 		AnimClip* clip = getClip(animName.c_str());
 		if (clip)
@@ -342,7 +342,6 @@ namespace Echo
 						{
 							AnimPropertyVec3* vec3Prop = ECHO_DOWN_CAST<AnimPropertyVec3*>(property);
 							vec3Prop->addKey(time, value.toVector3());
-							vec3Prop->correct();
 						}
 
 						break;
@@ -357,7 +356,7 @@ namespace Echo
 		m_isAnimDataDirty = true;
 	}
 
-	void Timeline::addKey(const String& animName, const String& objectPath, const String& propertyName, int curveIdx, float time, float value)
+	void Timeline::addKey(const String& animName, const String& objectPath, const String& propertyName, int curveIdx, ui32 time, float value)
 	{
 		AnimClip* clip = getClip(animName.c_str());
 		if (clip)
@@ -373,7 +372,6 @@ namespace Echo
 						{
 							AnimPropertyVec3* vec3Prop = ECHO_DOWN_CAST<AnimPropertyVec3*>(property);
 							vec3Prop->addKeyToCurve(curveIdx, time, value);
-							vec3Prop->correct();
 						}
 
 						break;
@@ -401,7 +399,6 @@ namespace Echo
 				if (vec3Property)
 				{
 					vec3Property->setKeyValue(curveIdx, keyIdx, value.toReal());
-					vec3Property->correct();
 				}
 			}
 			break;

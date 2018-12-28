@@ -45,15 +45,6 @@ namespace Echo
 		}
 	}
 
-	// correct data
-	void AnimPropertyCurve::correct()
-	{
-		for (AnimCurve* curve : m_curves)
-		{
-			curve->correct();
-		}
-	}
-
 	// optimize
 	void AnimPropertyCurve::optimize()
 	{
@@ -83,9 +74,9 @@ namespace Echo
 	}
 
 	// get key time
-	float AnimPropertyCurve::getKeyTime(int idx)
+	ui32 AnimPropertyCurve::getKeyTime(int idx)
 	{
-		return m_curves[0]->m_keys[idx].m_time;
+		return m_curves[0]->getKeyTime(idx);
 	}
 
 	// get key value str
@@ -94,7 +85,7 @@ namespace Echo
 		String str;
 		for (size_t i = 0; i < m_curves.size(); i++)
 		{
-			str += StringUtil::Format( "%f ", m_curves[i]->m_keys[idx].m_value);
+			str += StringUtil::Format( "%f ", m_curves[i]->getValueByKeyIdx(idx));
 		}
 
 		return str;
@@ -107,7 +98,7 @@ namespace Echo
 	}
 
 	// add key
-	void AnimPropertyCurve::addKeyToCurve(int curveIdx, float time, float value)
+	void AnimPropertyCurve::addKeyToCurve(int curveIdx, ui32 time, float value)
 	{
 		m_curves[curveIdx]->addKey(time, value);
 	}
@@ -117,14 +108,14 @@ namespace Echo
 	{}
 
 	// add key
-	void AnimPropertyFloat::addKey(float time, float value)
+	void AnimPropertyFloat::addKey(ui32 time, float value)
 	{
 		for (size_t i = 0; i < m_curves.size(); i++)
 			m_curves[i]->addKey(time, value);
 	}
 
 	// update to time
-	void AnimPropertyFloat::updateToTime(float time)
+	void AnimPropertyFloat::updateToTime(ui32 time)
 	{
 		for (size_t i = 0; i < m_curves.size(); i++)
 			m_value = m_curves[i]->getValue(time);
@@ -135,16 +126,16 @@ namespace Echo
 	{}
 
 	// add key
-	void AnimPropertyVec3::addKey(float time, const Vector3& value)
+	void AnimPropertyVec3::addKey(ui32 time, const Vector3& value)
 	{
-		for (size_t i = 0; i < m_curves.size(); i++)
+		for (int i = 0; i < int(m_curves.size()); i++)
 			m_curves[i]->addKey(time, value[i]);
 	}
 
 	// update to time
-	void AnimPropertyVec3::updateToTime(float time)
+	void AnimPropertyVec3::updateToTime(ui32 time)
 	{
-		for (size_t i = 0; i < m_curves.size(); i++)
+		for (int i = 0; i < int(m_curves.size()); i++)
 			m_value[i] = m_curves[i]->getValue(time);
 	}
 
@@ -152,19 +143,19 @@ namespace Echo
 		: AnimPropertyCurve(Type::Vector4, 4)
 	{}
 
-	void AnimPropertyVec4::addKey(float time, const Vector4& value)
+	void AnimPropertyVec4::addKey(ui32 time, const Vector4& value)
 	{
-		for (size_t i = 0; i < m_curves.size(); i++)
+		for (int i = 0; i < int(m_curves.size()); i++)
 			m_curves[i]->addKey(time, value[i]);
 	}
 
-	void AnimPropertyVec4::updateToTime(float time)
+	void AnimPropertyVec4::updateToTime(ui32 time)
 	{
-		for (size_t i = 0; i < m_curves.size(); i++)
+		for (int i = 0; i < int(m_curves.size()); i++)
 			m_value[i] = m_curves[i]->getValue(time);
 	}
 
-	void AnimPropertyQuat::addKey(float time, const Quaternion& value)
+	void AnimPropertyQuat::addKey(ui32 time, const Quaternion& value)
 	{
 		Key key;
 		key.m_time = time;
@@ -178,7 +169,7 @@ namespace Echo
 		return m_keys.size() ? m_keys.back().m_time : 0.f;
 	}
 
-	void AnimPropertyQuat::updateToTime(float time)
+	void AnimPropertyQuat::updateToTime(ui32 time)
 	{
 		if (m_keys.empty())
 		{
@@ -192,7 +183,7 @@ namespace Echo
 		{
 			// get base key and next key
 			i32 curKey = 0;
-			i32 keyTotal = m_keys.size() - 1;
+			i32 keyTotal = i32(m_keys.size()) - 1;
 			for (i32 i = 0; i < keyTotal; i++)
 			{
 				if (time > m_keys[i].m_time && time < m_keys[i + 1].m_time)
@@ -202,7 +193,7 @@ namespace Echo
 			// calc value
 			const Key& pre = m_keys[curKey];
 			const Key& next = m_keys[curKey + 1];
-			float ratio = Math::Clamp((time - pre.m_time) / (next.m_time - pre.m_time), 0.f, 1.f);
+			float ratio = Math::Clamp(float(time - pre.m_time) / float(next.m_time - pre.m_time), 0.f, 1.f);
 			Quaternion::Slerp(m_vlaue, pre.m_value, next.m_value, ratio, true);
 		}
 	}

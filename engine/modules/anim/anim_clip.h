@@ -8,18 +8,18 @@ namespace Echo
 	{
 		String						m_name;
 		vector<AnimObject*>::type	m_objects;
-		float						m_time;
+		ui32						m_time;
 		float						m_length;
 
-		AnimClip() : m_time(0.f), m_length(0.f)
+		AnimClip() : m_time(0), m_length(0.f)
 		{}
 
 		// update
-		void update( float deltaTime)
+		void update( ui32 deltaTime)
 		{
 			m_time += deltaTime;
 			if (m_time > m_length)
-				m_time = 0.f;
+				m_time = 0;
 
 			for (AnimObject* animNode : m_objects)
 			{

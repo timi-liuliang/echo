@@ -6,11 +6,7 @@ namespace Echo
 {
 	struct AnimCurve
 	{
-		struct Key
-		{
-			float	m_time;
-			float	m_value;
-		};
+		typedef map<ui32, float>::type KeyMap;
 
 		String					m_name;
 		enum class InterpolationType
@@ -18,38 +14,28 @@ namespace Echo
 			Linear,
 			Discrete,
 		}						m_type;
-		vector<Key>::type		m_keys;
+		map<ui32, float>::type	m_keys;
 
-		AnimCurve()
-		{
-		}
+		AnimCurve() {}
 
 		// set type
-		void setType(InterpolationType type)
-		{
-			m_type = type;
-		}
+		void setType(InterpolationType type) { m_type = type;}
 
 		// add key
-		void addKey(float time, float value)
-		{
-			Key key;
-			key.m_time = time;
-			key.m_value = value;
-			m_keys.push_back(key);
-		}
+		void addKey(ui32 time, float value) { m_keys[time] = value; }
 
 		// set key value
-		void setValue(int keyIdx, float value);
+		void setValue(ui32 time, float value) { addKey(time, value); }
 
 		// get value
-		float getValue(float time);
+		float getValue(ui32 time);
+		float getValueByKeyIdx(i32 index);
+
+		// get key time by idx
+		ui32 getKeyTime(int idx);
 
 		// get time length
 		float getLength();
-
-		// correct 1. sort keys by time 2. remove duplicated key
-		void correct();
 
 		// optimize
 		float optimize();

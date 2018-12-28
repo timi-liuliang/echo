@@ -22,7 +22,7 @@ namespace Echo
 		}
 
 		// update
-		void updateToTime(float time)
+		void updateToTime(ui32 time)
 		{
 			for (AnimProperty* property : m_properties)
 			{

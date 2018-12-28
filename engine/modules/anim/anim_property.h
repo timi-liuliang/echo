@@ -30,14 +30,11 @@ namespace Echo
 		// set interpolation type
 		virtual void setInterpolationType(AnimCurve::InterpolationType type);
 
-		// correct data
-		virtual void correct() = 0;
-
 		// optimize
 		virtual void optimize() = 0;
 
 		// update to time
-		virtual void updateToTime(float time) = 0;
+		virtual void updateToTime(ui32 time) = 0;
 
 		// get length
 		virtual float getLength() = 0;
@@ -46,7 +43,7 @@ namespace Echo
 		virtual int getKeyNumber() { return 0; }
 
 		// get key time
-		virtual float getKeyTime(int idx) { return 0.f; }
+		virtual ui32 getKeyTime(int idx) { return 0; }
 
 		// get key value str
 		virtual String getKeyValueStr(int idx) { return ""; }
@@ -61,32 +58,29 @@ namespace Echo
 		// set interpolation type
 		virtual void setInterpolationType(AnimCurve::InterpolationType type) override;
 
-		// correct data
-		virtual void correct() override;
-
 		// optimize
 		virtual void optimize() override;
 
 		// update to time
-		virtual void updateToTime(float time) override{}
+		virtual void updateToTime(ui32 time) override{}
 
 		// get length
 		virtual float getLength() override;
 
 		// get key number
-		virtual int getKeyNumber();
+		virtual int getKeyNumber() override;
 
 		// get key time
-		virtual float getKeyTime(int idx);
+		virtual ui32 getKeyTime(int idx) override;
 
 		// get key value str
-		virtual String getKeyValueStr(int idx);
+		virtual String getKeyValueStr(int idx) override;
 
 		// set key value
 		void setKeyValue(int curveIdx, int keyIdx, float value);
 
 		// add key
-		void addKeyToCurve(int curveIdx, float time, float value);
+		void addKeyToCurve(int curveIdx, ui32 time, float value);
 	};
 
 	struct AnimPropertyFloat : public AnimPropertyCurve
@@ -99,10 +93,10 @@ namespace Echo
 		float getValue() { return m_value; }
 
 		// add key
-		void addKey(float time, const float value);
+		void addKey(ui32 time, const float value);
 
 		// update to time
-		virtual void updateToTime(float time) override;
+		virtual void updateToTime(ui32 time) override;
 	};
 
 	struct AnimPropertyVec3 : public AnimPropertyCurve
@@ -115,10 +109,10 @@ namespace Echo
 		const Vector3& getValue() { return m_value; }
 
 		// add key
-		void addKey(float time, const Vector3& value);
+		void addKey(ui32 time, const Vector3& value);
 
 		// update to time
-		virtual void updateToTime(float time) override;
+		virtual void updateToTime(ui32 time) override;
 	};
 
 	struct AnimPropertyVec4 : public AnimPropertyCurve
@@ -131,17 +125,17 @@ namespace Echo
 		const Vector4& getValue() { return m_value; }
 
 		// add key
-		void addKey(float time, const Vector4& value);
+		void addKey(ui32 time, const Vector4& value);
 
 		// update to time
-		virtual void updateToTime(float time) override;
+		virtual void updateToTime(ui32 time) override;
 	};
 
 	struct AnimPropertyQuat : public AnimProperty
 	{
 		struct Key
 		{
-			float		m_time;
+			ui32		m_time;
 			Quaternion	m_value;
 		};
 		Quaternion				m_vlaue;
@@ -153,7 +147,7 @@ namespace Echo
 		const Quaternion& getValue() { return m_vlaue; }
 
 		// add key
-		void addKey(float time, const Quaternion& value);
+		void addKey(ui32 time, const Quaternion& value);
 
 		// correct data
 		virtual void correct() {}
@@ -162,7 +156,7 @@ namespace Echo
 		virtual void optimize() override {}
 
 		// update to time
-		virtual void updateToTime(float time) override;
+		virtual void updateToTime(ui32 time) override;
 
 		// get length
 		virtual float getLength() override;

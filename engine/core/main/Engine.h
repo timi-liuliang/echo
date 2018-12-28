@@ -32,6 +32,7 @@ namespace Echo
 
 		// get frame time
 		float getFrameTime() { return m_frameTime; }
+		ui32 getFrameTimeMS() { return ui32(m_frameTime*1000.f); }
 
 		// is inited
 		bool isInited() const { return m_isInited; }
