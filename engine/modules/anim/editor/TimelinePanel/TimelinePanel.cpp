@@ -57,6 +57,7 @@ namespace Echo
 		qConnect(qFindChild(m_ui, "NewClip"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onNewClip));
 		qConnect(qFindChild(m_ui, "DuplicateClip"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onDuplicateClip));
 		qConnect(qFindChild(m_ui, "DeleteClip"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onDeleteClip));
+		qConnect(qFindChild(m_ui, "m_clipLengthLineEdit"), QSIGNAL(editingFinished()), this, createMethodBind(&TimelinePanel::onCurrentEditAnimLengthChanged));
 		qConnect(qFindChild(m_ui, "m_clips"), QSIGNAL(editTextChanged(const QString &)), this, createMethodBind(&TimelinePanel::onRenameClip));
 		qConnect(qFindChild(m_ui, "m_clips"), QSIGNAL(currentIndexChanged(int)), this, createMethodBind(&TimelinePanel::onCurrentEditAnimChanged));
 		qConnect(qFindChild(m_ui, "AddNode"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onAddObject));
@@ -636,6 +637,20 @@ namespace Echo
 		setCurrentEditAnim( currentText.c_str());
 
 		onStopAnim();
+	}
+
+	void TimelinePanel::onCurrentEditAnimLengthChanged()
+	{
+		if (!m_currentEditAnim.empty())
+		{
+			AnimClip* clip = m_timeline->getClip(m_currentEditAnim.c_str());
+			if (clip)
+			{
+				ui32 newLength = StringUtil::ParseUI32( qLineEditText(qFindChild(m_ui, "m_clipLengthLineEdit")), clip->m_length);
+				clip->setLength(newLength);
+			}
+			
+		}
 	}
 
 	void TimelinePanel::drawRuler()

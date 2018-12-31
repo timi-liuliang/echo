@@ -30,6 +30,9 @@ namespace Echo
 		// calc anim clip length
 		ui32 calcLength();
 
+		// set length
+		void setLength(ui32 length) { m_length = length; }
+
 		// optimize
 		void optimize();
 

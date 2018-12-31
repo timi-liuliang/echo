@@ -57,6 +57,7 @@ namespace Echo
 
 		// current edit anim changed
 		void onCurrentEditAnimChanged();
+		void onCurrentEditAnimLengthChanged();
 
 		// sync data to editor
 		void syncDataToEditor();
