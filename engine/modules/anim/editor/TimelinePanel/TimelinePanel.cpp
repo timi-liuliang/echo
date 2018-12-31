@@ -222,6 +222,12 @@ namespace Echo
 		return StringUtil::BLANK;
 	}
 
+	void TimelinePanel::syncClipTimeLength()
+	{
+		AnimClip* clip = m_timeline->getClip(m_currentEditAnim.c_str());
+		qLineEditSetText( qFindChild(m_ui, "m_clipLengthLineEdit"), clip ? StringUtil::Format("%d", clip->m_length) : StringUtil::BLANK);
+	}
+
 	// sync clip data to editor
 	void TimelinePanel::syncClipListDataToEditor()
 	{
@@ -297,6 +303,9 @@ namespace Echo
 
 			// sync clip node data to editor
 			syncClipNodeDataToEditor();
+
+			// sync clip time length data to editor
+			syncClipTimeLength();
 		}
 	}
 

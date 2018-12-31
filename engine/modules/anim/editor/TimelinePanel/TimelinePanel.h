@@ -94,6 +94,7 @@ namespace Echo
 		String getNewClipName();
 
 		// sync clip data to editor
+		void syncClipTimeLength();
 		void syncClipListDataToEditor();
 		void syncClipNodeDataToEditor();
 		void addNodePropertyToEditor();
