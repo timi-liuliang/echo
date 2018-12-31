@@ -61,6 +61,14 @@ namespace Echo
 		}
 	}
 
+	void qWidgetSetEnable(QWidget* widget, bool enabled)
+	{
+		if (widget)
+		{
+			widget->setEnabled(enabled);
+		}
+	}
+
 	void qDeleteWidget(QWidget*& widget)
 	{
 		if (widget)

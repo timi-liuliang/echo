@@ -86,6 +86,9 @@ namespace Echo
 		bool calcKeyTimeAndValueByPos(const Vector2& pos, ui32& time, float& value);
 		bool calcKeyPosByTimeAndValue(ui32 time, float value, Vector2& pos);
 
+		// enable or disable curve editor
+		void switchCurveEditor();
+
 	private:
 		// get new name
 		String getNewClipName();

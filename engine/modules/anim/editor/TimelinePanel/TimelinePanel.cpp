@@ -79,6 +79,7 @@ namespace Echo
 
 		// draw ruler
 		drawRuler();
+		switchCurveEditor();
 	}
 
 	// sync data to editor
@@ -352,13 +353,20 @@ namespace Echo
 				QTreeWidgetItem* parent = qTreeWidgetItemParent( item);
 				m_currentEditObjectPath = qTreeWidgetItemText( parent, 0);
 				m_currentEditPropertyName = qTreeWidgetItemText(item, 0);
-
-				// refresh curve display
-				refreshCurveDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
-
-				// refresh curve key display
-				refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
 			}
+			else
+			{
+				m_currentEditPropertyName = StringUtil::BLANK;
+			}
+
+			// refresh curve display
+			refreshCurveDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
+
+			// refresh curve key display
+			refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
+
+			// enable disable curve edit
+			switchCurveEditor();
 		}
 	}
 
@@ -744,5 +752,17 @@ namespace Echo
 		refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
 	}
 
+	// enable or disable curve editor
+	void TimelinePanel::switchCurveEditor()
+	{
+		if (!m_currentEditAnim.empty() && !m_currentEditObjectPath.empty() && !m_currentEditPropertyName.empty())
+		{
+			qWidgetSetEnable(qFindChild(m_ui, "m_graphicsView"), true);
+		}
+		else
+		{
+			qWidgetSetEnable(qFindChild(m_ui, "m_graphicsView"), false);
+		}
+	}
 #endif
 }

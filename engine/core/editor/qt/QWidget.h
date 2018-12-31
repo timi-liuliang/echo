@@ -45,6 +45,9 @@ namespace Echo
 	// set visible
 	void qWidgetSetVisible(QWidget* widget, bool visible);
 
+	// set enabled
+	void qWidgetSetEnable(QWidget* widget, bool enabled);
+
 	// delete QWidget
 	void qDeleteWidget(QWidget*& widget);
 }
