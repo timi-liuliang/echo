@@ -37,7 +37,7 @@ namespace Echo
 		virtual void updateToTime(ui32 time) = 0;
 
 		// get length
-		virtual float getLength() = 0;
+		virtual ui32 getLength() = 0;
 
 		// get key number
 		virtual int getKeyNumber() { return 0; }
@@ -65,7 +65,7 @@ namespace Echo
 		virtual void updateToTime(ui32 time) override{}
 
 		// get length
-		virtual float getLength() override;
+		virtual ui32 getLength() override;
 
 		// get key number
 		virtual int getKeyNumber() override;
@@ -159,6 +159,6 @@ namespace Echo
 		virtual void updateToTime(ui32 time) override;
 
 		// get length
-		virtual float getLength() override;
+		virtual ui32 getLength() override;
 	};
 }

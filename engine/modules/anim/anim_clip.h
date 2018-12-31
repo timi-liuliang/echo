@@ -9,9 +9,9 @@ namespace Echo
 		String						m_name;
 		vector<AnimObject*>::type	m_objects;
 		ui32						m_time;
-		float						m_length;
+		ui32						m_length;
 
-		AnimClip() : m_time(0), m_length(0.f)
+		AnimClip() : m_time(0), m_length(0)
 		{}
 
 		// update
@@ -28,7 +28,7 @@ namespace Echo
 		}
 
 		// calc anim clip length
-		float calcLength();
+		ui32 calcLength();
 
 		// optimize
 		void optimize();

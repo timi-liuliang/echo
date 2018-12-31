@@ -55,9 +55,9 @@ namespace Echo
 	}
 
 	// get length
-	float AnimPropertyCurve::getLength()
+	ui32 AnimPropertyCurve::getLength()
 	{
-		float length = 0.f;
+		ui32 length = 0;
 		for (AnimCurve* curve : m_curves)
 		{
 			if (curve->getLength() > length)
@@ -164,9 +164,9 @@ namespace Echo
 	}
 
 	// get length
-	float AnimPropertyQuat::getLength()
+	ui32 AnimPropertyQuat::getLength()
 	{
-		return m_keys.size() ? m_keys.back().m_time : 0.f;
+		return m_keys.size() ? m_keys.back().m_time : 0;
 	}
 
 	void AnimPropertyQuat::updateToTime(ui32 time)

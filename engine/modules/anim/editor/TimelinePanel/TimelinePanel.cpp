@@ -401,16 +401,21 @@ namespace Echo
 					//clearCurveItemsTo(3);
 					vector<Vector2>::type curvePaths[3];
 
+					const ui32 frameStep = 20;
+
 					// three curves
-					float length = vec3Proeprty->getLength();
-					for (float t = 0; t < length; t += 0.02f)
+					ui32 length = vec3Proeprty->getLength();
+					for (ui32 t = 0; t < length; t += frameStep)
 					{
-						vec3Proeprty->updateToTime( ui32(t*0.02f * 1000.f));
+						vec3Proeprty->updateToTime( t);
 						const Vector3& value = vec3Proeprty->getValue();
 
-						curvePaths[0].push_back(Vector2(t * 20.f * 50.f, value.x * 10.f + m_rulerHeight + 5.f));
-						curvePaths[1].push_back(Vector2(t * 20.f * 50.f, value.y * 10.f + m_rulerHeight + 5.f));
-						curvePaths[2].push_back(Vector2(t * 20.f * 50.f, value.z * 10.f + m_rulerHeight + 5.f));
+						for (i32 curveIdx = 0; curveIdx < 3; curveIdx++)
+						{
+							Vector2 keyPos;
+							calcKeyPosByTimeAndValue(t, value[curveIdx], keyPos);
+							curvePaths[curveIdx].push_back(keyPos);
+						}
 					}
 
 					m_curveItems[0] = qGraphicsSceneAddPath(m_graphicsScene, curvePaths[0], 2.5f, Color( 1.f, 0.f, 0.f, 0.7f));
@@ -495,7 +500,7 @@ namespace Echo
 				if (vec3Property)
 				{
 					ui32 t = vec3Property->getKeyTime(keyIdx);
-					vec3Property->updateToTime(t*0.02f);
+					vec3Property->updateToTime(t);
 					const Vector3& value = vec3Property->getValue();
 
 					keyInfo.m_type = KeyInfo::Type::Float;
@@ -690,9 +695,9 @@ namespace Echo
 	}
 
 	// get time and value by pos
-	bool TimelinePanel::calcKeyTimeAndValueByPos(const Vector2& pos, float& time, float& value)
+	bool TimelinePanel::calcKeyTimeAndValueByPos(const Vector2& pos, ui32& time, float& value)
 	{
-		time = pos.x / (20.f * 50.f);
+		time = ui32(pos.x);
 		value = (pos.y - 5.f - m_rulerHeight) / 10.f;
 
 		return true;
@@ -700,7 +705,7 @@ namespace Echo
 
 	bool TimelinePanel::calcKeyPosByTimeAndValue(ui32 time, float value, Vector2& pos)
 	{
-		pos = Vector2(time * 20.f * 50.f, value * 10.f + m_rulerHeight + 5.f);
+		pos = Vector2(float(time), value * 10.f + m_rulerHeight + 5.f);
 
 		return true;
 	}
@@ -727,7 +732,7 @@ namespace Echo
 
 	void TimelinePanel::addKeyToCurve(int curveIdx)
 	{
-		float time;
+		ui32 time;
 		float value;
 		if (calcKeyTimeAndValueByPos(m_keyEditCursorPos, time, value))
 		{

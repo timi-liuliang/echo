@@ -83,7 +83,7 @@ namespace Echo
 		bool getKeyInfo(KeyInfo& keyInfo, const String& animName, const String& objectPath, const String& propertyName, int curveIdx, int keyIdx);
 
 		// get time and value by pos
-		bool calcKeyTimeAndValueByPos(const Vector2& pos, float& time, float& value);
+		bool calcKeyTimeAndValueByPos(const Vector2& pos, ui32& time, float& value);
 		bool calcKeyPosByTimeAndValue(ui32 time, float value, Vector2& pos);
 
 	private:

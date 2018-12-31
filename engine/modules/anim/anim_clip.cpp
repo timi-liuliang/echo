@@ -2,14 +2,14 @@
 
 namespace Echo
 {
-	float AnimClip::calcLength()
+	ui32 AnimClip::calcLength()
 	{
-		m_length = 0.f;
+		m_length = 0;
 		for (AnimObject* animNode : m_objects)
 		{
 			for (AnimProperty* property : animNode->m_properties)
 			{
-				m_length = std::max<float>(m_length, property->getLength());
+				m_length = std::max<ui32>(m_length, property->getLength());
 			}
 		}
 

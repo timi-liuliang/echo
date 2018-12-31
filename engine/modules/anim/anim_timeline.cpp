@@ -202,7 +202,7 @@ namespace Echo
 			{
 				AnimClip* animClip = EchoNew(AnimClip);
 				animClip->m_name = clipNode.attribute("name").as_string();
-				animClip->m_length = clipNode.attribute("length").as_float();
+				animClip->m_length = clipNode.attribute("length").as_int();
 				addClip(animClip);
 
 				for (pugi::xml_node objectNode = clipNode.child("object"); objectNode; objectNode = objectNode.next_sibling("object"))
@@ -314,7 +314,7 @@ namespace Echo
 					if (property)
 					{
 						property->setInterpolationType(AnimCurve::InterpolationType::Linear);
-						clip->m_length = 3.f;
+						clip->m_length = 3000;
 					}
 
 					break;

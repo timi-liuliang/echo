@@ -35,7 +35,7 @@ namespace Echo
 		ui32 getKeyTime(int idx);
 
 		// get time length
-		float getLength();
+		ui32 getLength();
 
 		// optimize
 		float optimize();

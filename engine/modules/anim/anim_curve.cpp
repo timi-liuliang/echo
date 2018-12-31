@@ -86,9 +86,9 @@ namespace Echo
 	}
 
 	// get time length
-	float AnimCurve::getLength()
+	ui32 AnimCurve::getLength()
 	{
-		return m_keys.size() ? m_keys.rbegin()->second : 0.f;
+		return m_keys.size() ? m_keys.rbegin()->first : 0;
 	}
 
 	// optimize
