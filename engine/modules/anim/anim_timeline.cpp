@@ -166,12 +166,22 @@ namespace Echo
 						propertyXmlNode.append_attribute("type").set_value(AnimPropertyTypeStr[int(animProperty->m_type)]);
 						propertyXmlNode.append_attribute("interpolation_type").set_value(AnimCurveInterpolationTypeStr[int(animProperty->m_interpolationType)]);
 
-						// keys
-						for (int keyIdx = 0; keyIdx < animProperty->getKeyNumber(); keyIdx++)
+						AnimPropertyCurve* curveProperty = dynamic_cast<AnimPropertyCurve*>(animProperty);
+						if (curveProperty)
 						{
-							pugi::xml_node keyXmlNode = propertyXmlNode.append_child("key");
-							keyXmlNode.append_attribute("time").set_value(animProperty->getKeyTime( keyIdx));
-							keyXmlNode.append_attribute("value").set_value(animProperty->getKeyValueStr(keyIdx).c_str());
+							i32 curveCount = i32(curveProperty->m_curves.size());
+							for (i32 curveIdx = 0; curveIdx < curveCount; curveIdx++)
+							{
+								AnimCurve* curve = curveProperty->m_curves[curveIdx];
+								pugi::xml_node curveXmlNode = propertyXmlNode.append_child("curve");
+								curveXmlNode.append_attribute("index").set_value(curveIdx);
+								for (auto curveKey : curve->m_keys)
+								{
+									pugi::xml_node keyXmlNode = curveXmlNode.append_child("key");
+									keyXmlNode.append_attribute("time").set_value(curveKey.first);
+									keyXmlNode.append_attribute("value").set_value(curveKey.second);
+								}
+							}
 						}
 					}
 				}
@@ -220,12 +230,16 @@ namespace Echo
 
 						addProperty(animClip->m_name, path, propertyName);
 
-						for (pugi::xml_node keyNode = propertyNode.child("key"); keyNode; keyNode = keyNode.next_sibling("key"))
+						for (pugi::xml_node curveNode = propertyNode.child("curve"); curveNode; curveNode = curveNode.next_sibling("curve"))
 						{
-							ui32 time = keyNode.attribute("time").as_uint();
-							Variant keyValue; keyValue.fromString( Variant::Type::Vector3, keyNode.attribute("value").as_string());
+							i32 curveIdx = curveNode.attribute("index").as_int();
+							for (pugi::xml_node keyNode = curveNode.child("key"); keyNode; keyNode = keyNode.next_sibling("key"))
+							{
+								ui32 time = keyNode.attribute("time").as_uint();
+								float value = keyNode.attribute("value").as_float();
 
-							addKey(animClip->m_name, path, propertyName, time, keyValue);
+								addKey(animClip->m_name, path, propertyName, curveIdx, time, value);
+							}
 						}
 					}
 				}

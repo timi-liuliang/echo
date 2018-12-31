@@ -67,30 +67,6 @@ namespace Echo
 		return length;
 	}
 
-	// get key number
-	int AnimPropertyCurve::getKeyNumber()
-	{
-		return int(m_curves[0]->m_keys.size());
-	}
-
-	// get key time
-	ui32 AnimPropertyCurve::getKeyTime(int idx)
-	{
-		return m_curves[0]->getKeyTime(idx);
-	}
-
-	// get key value str
-	String AnimPropertyCurve::getKeyValueStr(int idx)
-	{
-		String str;
-		for (size_t i = 0; i < m_curves.size(); i++)
-		{
-			str += StringUtil::Format( "%f ", m_curves[i]->getValueByKeyIdx(idx));
-		}
-
-		return str;
-	}
-
 	// set key value
 	void AnimPropertyCurve::setKeyValue(int curveIdx, int keyIdx, float value)
 	{

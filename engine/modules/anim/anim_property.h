@@ -67,15 +67,6 @@ namespace Echo
 		// get length
 		virtual ui32 getLength() override;
 
-		// get key number
-		virtual int getKeyNumber() override;
-
-		// get key time
-		virtual ui32 getKeyTime(int idx) override;
-
-		// get key value str
-		virtual String getKeyValueStr(int idx) override;
-
 		// set key value
 		void setKeyValue(int curveIdx, int keyIdx, float value);
 
