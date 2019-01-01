@@ -65,6 +65,7 @@ namespace Echo
 	private:
 		// mouse right button on view
 		void onRightClickGraphicsView();
+		void onGraphicsSceneWheelEvent();
 
 		// switch cuve visibility
 		void onSwitchCurveVisibility();
@@ -121,6 +122,7 @@ namespace Echo
 		QAction*					m_addNodeAction;
 		String						m_currentEditAnim;
 		int							m_nodeTreeWidgetWidth;
+		float						m_graphicsViewScale = 1.f;
 		QObject*					m_graphicsScene;
 		String						m_currentEditObjectPath;
 		String						m_currentEditPropertyName;

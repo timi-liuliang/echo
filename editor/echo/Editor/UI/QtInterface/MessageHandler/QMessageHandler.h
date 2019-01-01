@@ -45,6 +45,9 @@ namespace Echo
 		void bind(QGraphicsItem* sender, const char* signal, void* receiver, ClassMethodBind* slot);
 
 	public:
+		// on receive QWidget message
+		void onReceiveQObjectMessage(QObject* sender, const String& signal);
+
 		// on receive QGraphicsItem message
 		void onReceiveQGraphicsItemMessage(QGraphicsItem* sender, const String& signal);
 

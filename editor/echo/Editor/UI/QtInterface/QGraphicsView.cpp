@@ -13,4 +13,13 @@ namespace Echo
 			graphicsView->setRenderHint( QPainter::Antialiasing, true);
 		}
 	}
+
+	void qGraphicsViewSetScale(QWidget* view, float scaleX, float scaleY)
+	{
+		QGraphicsView* graphicsView = qobject_cast<QGraphicsView*>(view);
+		if (graphicsView)
+		{
+			graphicsView->scale(scaleX, scaleY);
+		}
+	}
 }

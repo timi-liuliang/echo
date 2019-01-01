@@ -84,6 +84,26 @@ namespace Echo
 		}
 	}
 
+	// on receive QWidget message
+	void QMessageHandler::onReceiveQObjectMessage(QObject* sender, const String& signal)
+	{
+		auto it = m_connects.find((QWidget*)sender);
+		if (it != m_connects.end())
+		{
+			ConnectArray& connectArray = it->second;
+			for (Connect& conn : connectArray)
+			{
+				if (Echo::StringUtil::Substr(signal, "(") == Echo::StringUtil::Substr(conn.m_signal, "("))
+				{
+					Echo::Variant::CallError error;
+					Echo::Object* receiver = (Object*)conn.m_receiver;
+					Echo::ClassMethodBind* method = conn.m_method;
+					method->call(receiver, nullptr, 0, error);
+				}
+			}
+		}
+	}
+
 	// on receive QGraphicsItem message
 	void QMessageHandler::onReceiveQGraphicsItemMessage(QGraphicsItem* sender, const String& signal)
 	{

@@ -2,12 +2,13 @@
 #include <QGraphicsSimpleTextItem>
 #include <engine/core/math/color.h>
 #include "Extend/QGraphicsEllipseItemEx.h"
+#include "Extend/QGraphicsSceneEx.h"
 
 namespace Echo
 {
 	QObject* qGraphicsSceneNew()
 	{
-		return new QGraphicsScene();
+		return new QGraphicsSceneEx();
 	}
 
 	QGraphicsProxyWidget* qGraphicsSceneAddWidget(QObject* scene, QWidget* widget)

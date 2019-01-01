@@ -78,6 +78,9 @@ namespace Echo
 		m_graphicsScene = qGraphicsSceneNew();
 		qGraphicsViewSetScene(qFindChild(m_ui, "m_graphicsView"), m_graphicsScene);
 
+		// wheel event
+		qConnect( m_graphicsScene, QSIGNAL(wheelEvent(QGraphicsSceneWheelEvent*)), this, createMethodBind(&TimelinePanel::onGraphicsSceneWheelEvent));
+
 		// draw ruler
 		drawRuler();
 		switchCurveEditor();
@@ -724,6 +727,13 @@ namespace Echo
 
 		// record cursor pos
 		m_keyEditCursorPos = qCursorPos();
+	}
+
+	void TimelinePanel::onGraphicsSceneWheelEvent()
+	{
+		m_graphicsViewScale -= 0.01f;
+		m_graphicsViewScale = Math::Clamp(m_graphicsViewScale, 0.1f, 1.f);
+		qGraphicsViewSetScale(qFindChild(m_ui, "m_graphicsView"), m_graphicsViewScale, m_graphicsViewScale);
 	}
 
 	// get time and value by pos
