@@ -39,6 +39,8 @@ namespace Echo
 
 		// get time length
 		ui32 getLength();
+		ui32 getStartTime();
+		ui32 getEndTime();
 
 		// optimize
 		float optimize();

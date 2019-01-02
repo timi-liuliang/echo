@@ -419,23 +419,23 @@ namespace Echo
 				AnimPropertyVec3* vec3Proeprty = ECHO_DOWN_CAST<AnimPropertyVec3*>(animProperty);
 				if (vec3Proeprty)
 				{
+					const ui32 frameStep = 2;
+
 					//clearCurveItemsTo(3);
 					vector<Vector2>::type curvePaths[3];
-
-					const ui32 frameStep = 20;
-
-					// three curves
-					ui32 length = vec3Proeprty->getLength();
-					for (ui32 t = 0; t < length; t += frameStep)
+					for (i32 curveIdx = 0; curveIdx < 3; curveIdx++)
 					{
-						vec3Proeprty->updateToTime( t);
-						const Vector3& value = vec3Proeprty->getValue();
-
-						for (i32 curveIdx = 0; curveIdx < 3; curveIdx++)
+						AnimCurve* curve = vec3Proeprty->m_curves[curveIdx];
+						if (curve && curve->getKeySize())
 						{
-							Vector2 keyPos;
-							calcKeyPosByTimeAndValue(t, value[curveIdx], keyPos);
-							curvePaths[curveIdx].push_back(keyPos);
+							for (ui32 t = curve->getStartTime(); t <= curve->getEndTime(); t += frameStep)
+							{
+								float value = curve->getValue(t);
+
+								Vector2 keyPos;
+								calcKeyPosByTimeAndValue(t, value, keyPos);
+								curvePaths[curveIdx].push_back(keyPos);
+							}
 						}
 					}
 

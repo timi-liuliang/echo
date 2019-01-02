@@ -23,7 +23,7 @@ namespace Echo
 		KeyMap::iterator lastKey = --m_keys.end();
 		for ( ; nextKey !=lastKey; curKey++, nextKey++)
 		{
-			if (time > curKey->first && time < nextKey->first)
+			if (time >= curKey->first && time < nextKey->first)
 				break;
 		}
 
@@ -87,6 +87,16 @@ namespace Echo
 
 	// get time length
 	ui32 AnimCurve::getLength()
+	{
+		return getEndTime() - getStartTime();
+	}
+
+	ui32 AnimCurve::getStartTime()
+	{
+		return m_keys.size() ? m_keys.begin()->first : 0;
+	}
+
+	ui32 AnimCurve::getEndTime()
 	{
 		return m_keys.size() ? m_keys.rbegin()->first : 0;
 	}
