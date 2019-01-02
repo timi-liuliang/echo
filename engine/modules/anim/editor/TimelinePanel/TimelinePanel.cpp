@@ -466,6 +466,8 @@ namespace Echo
 		AnimProperty* animProperty = m_timeline->getProperty(m_currentEditAnim, objectPath, propertyName);
 		if (animProperty)
 		{
+			array<Color, 4> KeyColors = { Color::RED, Color::GREEN, Color::BLUE, Color::WHITE};
+
 			switch (animProperty->m_type)
 			{
 			case AnimProperty::Type::Vector3:
@@ -473,30 +475,27 @@ namespace Echo
 				AnimPropertyVec3* vec3Proeprty = ECHO_DOWN_CAST<AnimPropertyVec3*>(animProperty);
 				if (vec3Proeprty)
 				{
-					int keyNumber = vec3Proeprty->getKeyNumber();
-					for (int keyIdx = 0; keyIdx < keyNumber; keyIdx++)
+					for (int curveIdx = 0; curveIdx < 3; curveIdx++)
 					{
-						// time
-						ui32 t = vec3Proeprty->getKeyTime(keyIdx);
-
-						vec3Proeprty->updateToTime(ui32(t*0.02f * 1000.f));
-						const Vector3& value = vec3Proeprty->getValue();
-
-						float radius = 7.f;
-						for (int curveIdx = 0; curveIdx < 3; curveIdx++)
+						AnimCurve* curve = vec3Proeprty->m_curves[curveIdx];
+						for (int keyIdx = 0; keyIdx < curve->getKeySize(); keyIdx++)
 						{
-							Vector2 center; 
-							calcKeyPosByTimeAndValue(t, value[curveIdx], center);
+							ui32 t = curve->getKeyTime(keyIdx);
+							float value = curve->getValueByKeyIdx(keyIdx);
+							float radius = 7.f;
 
-							QGraphicsItem* item = qGraphicsSceneAddEclipse(m_graphicsScene, center.x - radius, center.y - radius, radius * 2.f, radius*2.f, Color(1.f, 0.f, 0.f, 0.7f));			
-							
+							Vector2 center;
+							calcKeyPosByTimeAndValue(t, value, center);
+
+							QGraphicsItem* item = qGraphicsSceneAddEclipse(m_graphicsScene, center.x - radius, center.y - radius, radius * 2.f, radius*2.f, KeyColors[curveIdx]);
+
 							// set userdata
 							String userData = StringUtil::Format("%s,%s,%s,%d,%d", m_currentEditAnim.c_str(), objectPath.c_str(), propertyName.c_str(), curveIdx, keyIdx);
-							qGraphicsItemSetUserData( item, userData.c_str());
+							qGraphicsItemSetUserData(item, userData.c_str());
 
 							// connect signal slots
 							qConnect(item, QSIGNAL(mouseDoubleClickEvent(QGraphicsSceneMouseEvent*)), this, createMethodBind(&TimelinePanel::onKeyDoubleClickedCurveKey));
-							
+
 							m_curveKeyItems[curveIdx].push_back(item);
 						}
 					}

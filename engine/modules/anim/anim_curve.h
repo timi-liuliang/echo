@@ -27,6 +27,9 @@ namespace Echo
 		// set key value
 		void setValue(ui32 time, float value) { addKey(time, value); }
 
+		// key size
+		i32 getKeySize() const { return i32(m_keys.size()); }
+
 		// get value
 		float getValue(ui32 time);
 		float getValueByKeyIdx(i32 index);
