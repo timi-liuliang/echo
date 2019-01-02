@@ -1,4 +1,5 @@
 #include <QGraphicsItem>
+#include <QGraphicsProxywidget>
 #include <engine/core/util/StringUtil.h>
 
 namespace Echo
@@ -27,6 +28,22 @@ namespace Echo
 		if (item)
 		{
 			item->setPos(QPointF(posX, posY));
+		}
+	}
+	
+	void qGraphicsProxyWidgetSetPos(QGraphicsProxyWidget* item, float posX, float posY)
+	{
+		if (item)
+		{
+			item->setPos(QPointF(posX, posY));
+		}
+	}
+
+	void qGraphicsProxyWidgetSetZValue(QGraphicsProxyWidget* item, float zValue)
+	{
+		if (item)
+		{
+			item->setZValue(zValue);
 		}
 	}
 

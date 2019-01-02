@@ -482,12 +482,11 @@ namespace Echo
 						{
 							ui32 t = curve->getKeyTime(keyIdx);
 							float value = curve->getValueByKeyIdx(keyIdx);
-							float radius = 7.f;
 
 							Vector2 center;
 							calcKeyPosByTimeAndValue(t, value, center);
 
-							QGraphicsItem* item = qGraphicsSceneAddEclipse(m_graphicsScene, center.x - radius, center.y - radius, radius * 2.f, radius*2.f, KeyColors[curveIdx]);
+							QGraphicsItem* item = qGraphicsSceneAddEclipse(m_graphicsScene, center.x - m_keyRadius, center.y - m_keyRadius, m_keyRadius * 2.f, m_keyRadius*2.f, KeyColors[curveIdx]);
 
 							// set userdata
 							String userData = StringUtil::Format("%s,%s,%s,%d,%d", m_currentEditAnim.c_str(), objectPath.c_str(), propertyName.c_str(), curveIdx, keyIdx);
@@ -542,7 +541,8 @@ namespace Echo
 		if (!m_curveKeyLineEdit)
 		{
 			m_curveKeyLineEdit = qLineEditNew();
-			qGraphicsSceneAddWidget(m_graphicsScene, m_curveKeyLineEdit);
+			qLineEditSetMaximumWidth(m_curveKeyLineEdit, 100);
+			m_curveKeyLineEditProxyWidget = qGraphicsSceneAddWidget(m_graphicsScene, m_curveKeyLineEdit);
 
 			qConnect(m_curveKeyLineEdit, QSIGNAL(editingFinished()), this, createMethodBind(&TimelinePanel::onCurveKeyEditingFinished));
 		}
@@ -558,10 +558,17 @@ namespace Echo
 			{
 				m_curveKeyItem = sender;
 				qLineEditSetText( m_curveKeyLineEdit, StringUtil::ToString( keyInfo.m_value));
+
+				int halfWidth = qLineEditWidth(m_curveKeyLineEdit) / 2;
+				int halfHeight = qLineEditHeight(m_curveKeyLineEdit) / 2;
+				Vector2 mouseScenePos = qGetEventAll(sender).graphicsSceneMouseEvent.scenePos;
+				qGraphicsProxyWidgetSetPos(m_curveKeyLineEditProxyWidget, mouseScenePos.x + m_keyRadius, mouseScenePos.y - halfHeight);
+				qGraphicsProxyWidgetSetZValue(m_curveKeyLineEditProxyWidget, 250.f);
 			}
 		}
 
 		qWidgetSetVisible(m_curveKeyLineEdit, true);
+		qLineEditSetCursorPosition(m_curveKeyLineEdit, 0);
 	}
 
 	void TimelinePanel::onCurveKeyEditingFinished()

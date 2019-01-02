@@ -129,10 +129,12 @@ namespace Echo
 		float						m_rulerHeight;
 		Color						m_rulerColor;
 		QGraphicsLineItem*			m_rulerBottom;
+		float						m_keyRadius = 7.f;
 		array<QGraphicsItem*, 4>	m_curveItems;
 		array<QGraphicsItemArray, 4>m_curveKeyItems;
 		array<bool, 4>				m_curveVisibles;
-		QWidget*					m_curveKeyLineEdit;
+		QWidget*					m_curveKeyLineEdit = nullptr;
+		QGraphicsProxyWidget*		m_curveKeyLineEditProxyWidget = nullptr;
 		QGraphicsItem*				m_curveKeyItem;
 		QWidget*					m_keyEditMenu;
 		Vector2						m_keyEditCursorPos;

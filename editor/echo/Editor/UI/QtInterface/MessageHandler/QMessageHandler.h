@@ -53,7 +53,7 @@ namespace Echo
 		void onReceiveQGraphicsItemMessage(QGraphicsItem* sender, const String& signal);
 
 		// get event
-		qEventAll& getEvent(QObject* sender);
+		qEventAll& getEvent(void* sender);
 
 	private slots:
 		// on receive message

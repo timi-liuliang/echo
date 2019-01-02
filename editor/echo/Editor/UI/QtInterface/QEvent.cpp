@@ -8,4 +8,9 @@ namespace Echo
 	{
 		return QMessageHandler::instance()->getEvent(sender);
 	}
+
+	const qEventAll& qGetEventAll(QGraphicsItem* sender)
+	{
+		return QMessageHandler::instance()->getEvent(sender);
+	}
 }

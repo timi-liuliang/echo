@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QGraphicsItem>
+#include <QGraphicsSceneEvent>
 #include <engine/core/editor/qt/QWidget.h>
 #include "QMessageHandler.h"
 
@@ -37,6 +38,7 @@ namespace Echo
 		{
 			QGraphicsEllipseItem::mouseDoubleClickEvent(event);
 
+			QMessageHandler::instance()->getEvent(this).graphicsSceneMouseEvent.scenePos = Vector2(event->scenePos().x(), event->scenePos().y());
 			QMessageHandler::instance()->onReceiveQGraphicsItemMessage( this, QSIGNAL(mouseDoubleClickEvent(QGraphicsSceneMouseEvent*)));
 		}
 	};

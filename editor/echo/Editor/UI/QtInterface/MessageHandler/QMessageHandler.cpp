@@ -85,9 +85,9 @@ namespace Echo
 	}
 
 	// get event
-	qEventAll& QMessageHandler::getEvent(QObject* sender)
+	qEventAll& QMessageHandler::getEvent(void* sender)
 	{
-		auto it = m_events.find((QWidget*)sender);
+		auto it = m_events.find(sender);
 		if (it != m_events.end())
 		{
 			return it->second;
