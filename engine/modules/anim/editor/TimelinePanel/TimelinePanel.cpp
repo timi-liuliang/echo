@@ -675,11 +675,16 @@ namespace Echo
 		{
 			if (i % 2 == 0)
 			{
-				QGraphicsItem* textItem = qGraphicsSceneAddSimpleText(m_graphicsScene, StringUtil::Format("%d", i).c_str(), m_rulerColor);
+				ui32 time;
+				float value;
+				Vector2 textPos(i * keyWidth, 5.f);
+				calcKeyTimeAndValueByPos( textPos, time, value);
+
+				QGraphicsItem* textItem = qGraphicsSceneAddSimpleText(m_graphicsScene, StringUtil::Format("%d", time).c_str(), m_rulerColor);
 				if (textItem)
 				{
 					float halfWidth = qGraphicsItemWidth(textItem) * 0.4f /*0.5f*/;
-					qGraphicsItemSetPos( textItem, float(i * keyWidth) - halfWidth, 5.f);
+					qGraphicsItemSetPos( textItem, textPos.x, textPos.y);
 				}
 			}
 		}
