@@ -3,6 +3,7 @@
 #include <engine/core/util/StringUtil.h>
 #include <QWidget>
 #include <QGraphicsItem>
+#include <engine/core/editor/qt/QWidgets.h>
 
 namespace Echo
 {
@@ -51,6 +52,9 @@ namespace Echo
 		// on receive QGraphicsItem message
 		void onReceiveQGraphicsItemMessage(QGraphicsItem* sender, const String& signal);
 
+		// get event
+		qEventAll& getEvent(QObject* sender);
+
 	private slots:
 		// on receive message
 		void onReceiveMessage();
@@ -60,5 +64,6 @@ namespace Echo
 
 	private:
 		map<void*, ConnectArray>::type		m_connects;
+		map<void*, qEventAll>::type			m_events;		// input event(mouse,key)
 	};
 }

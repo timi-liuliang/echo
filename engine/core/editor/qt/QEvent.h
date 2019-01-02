@@ -9,10 +9,14 @@ namespace Echo
 	struct qEventAll
 	{
 		// QGraphicsWheelEvent
-		struct qGraphicsSceneWheelEvent {
-
+		struct qGraphicsSceneWheelEvent 
+		{
+			int	delta = 0;
 		}	graphicsSceneWheelEvent;
 	};
+
+	// query widget's qEventAll
+	const qEventAll& qGetEventAll(QObject* sender);
 }
 
 #endif

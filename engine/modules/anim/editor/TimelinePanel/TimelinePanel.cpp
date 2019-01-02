@@ -731,9 +731,11 @@ namespace Echo
 
 	void TimelinePanel::onGraphicsSceneWheelEvent()
 	{
-		m_graphicsViewScale -= 0.01f;
-		m_graphicsViewScale = Math::Clamp(m_graphicsViewScale, 0.1f, 1.f);
-		qGraphicsViewSetScale(qFindChild(m_ui, "m_graphicsView"), m_graphicsViewScale, m_graphicsViewScale);
+		int delta = qGetEventAll(m_graphicsScene).graphicsSceneWheelEvent.delta;
+		
+		//m_graphicsViewScale = delta > 0 ? 0.09f : 1.01f;
+		//m_graphicsViewScale = Math::Clamp(m_graphicsViewScale, 0.1f, 1.f);
+		//qGraphicsViewSetScale(qFindChild(m_ui, "m_graphicsView"), m_graphicsViewScale, m_graphicsViewScale);
 	}
 
 	// get time and value by pos

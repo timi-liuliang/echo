@@ -1,6 +1,7 @@
 #pragma once
 
 #include "QWidget.h"
+#include "QEvent.h"
 #include "QAction.h"
 #include "QComboBox.h"
 #include "QCursor.h"

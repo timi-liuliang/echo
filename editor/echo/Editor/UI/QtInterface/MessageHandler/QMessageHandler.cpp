@@ -84,6 +84,19 @@ namespace Echo
 		}
 	}
 
+	// get event
+	qEventAll& QMessageHandler::getEvent(QObject* sender)
+	{
+		auto it = m_events.find((QWidget*)sender);
+		if (it != m_events.end())
+		{
+			return it->second;
+		}
+
+		m_events[sender] = qEventAll();
+		return getEvent(sender);
+	}
+
 	// on receive QWidget message
 	void QMessageHandler::onReceiveQObjectMessage(QObject* sender, const String& signal)
 	{
