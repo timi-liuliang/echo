@@ -12,7 +12,6 @@ namespace Echo
 	TimelinePanel::TimelinePanel(Object* obj)
 		: m_addObjectMenu(nullptr)
 		, m_nodeTreeWidgetWidth(0)
-		, m_rulerBottom(nullptr)
 		, m_rulerHeight( 25.f)
 		, m_rulerColor( 0.73f, 0.73f, 0.73f)
 		, m_curveKeyLineEdit(nullptr)
@@ -664,17 +663,23 @@ namespace Echo
 
 	void TimelinePanel::drawRuler()
 	{
-		const float keyWidth = 20;
+		for (QGraphicsItem* item : m_rulerItems)
+		{
+			qGraphicsSceneRemoveItem(m_graphicsScene, item);
+		}
+		m_rulerItems.clear();
+
+		const float keyWidth = 20;	// pixels
 		const int   keyCount = 100;
 
 		// rulder bottom
-		m_rulerBottom = qGraphicsSceneAddLine(m_graphicsScene, float(-keyWidth), m_rulerHeight, float(keyCount * keyWidth) + keyWidth, m_rulerHeight, m_rulerColor);
+		m_rulerItems.push_back( qGraphicsSceneAddLine(m_graphicsScene, float(-keyWidth), m_rulerHeight, float(keyCount * keyWidth) + keyWidth, m_rulerHeight, m_rulerColor));
 
 		// key line
 		for (int i = 0; i <= keyCount; i++)
 		{
 			float xPos = i * keyWidth;
-			qGraphicsSceneAddLine(m_graphicsScene, xPos, /*(i%10==0) ? 10.f :*/ 18.f, xPos, m_rulerHeight, m_rulerColor);
+			m_rulerItems.push_back(qGraphicsSceneAddLine(m_graphicsScene, xPos, /*(i%10==0) ? 10.f :*/ 18.f, xPos, m_rulerHeight, m_rulerColor));
 		}
 
 		// draw Text
@@ -692,6 +697,7 @@ namespace Echo
 				{
 					float halfWidth = qGraphicsItemWidth(textItem) * 0.4f /*0.5f*/;
 					qGraphicsItemSetPos( textItem, textPos.x, textPos.y);
+					m_rulerItems.push_back(textItem);
 				}
 			}
 		}
@@ -745,23 +751,30 @@ namespace Echo
 	{
 		int delta = qGetEventAll(m_graphicsScene).graphicsSceneWheelEvent.delta;
 		
-		//m_graphicsViewScale = delta > 0 ? 0.09f : 1.01f;
-		//m_graphicsViewScale = Math::Clamp(m_graphicsViewScale, 0.1f, 1.f);
-		//qGraphicsViewSetScale(qFindChild(m_ui, "m_graphicsView"), m_graphicsViewScale, m_graphicsViewScale);
+		m_millisecondPerPixel += delta > 0 ? -0.05f : 0.05f;
+		m_millisecondPerPixel = Math::Clamp(m_millisecondPerPixel, 1.f, 50.f);
+
+		m_unitsPerPixel += delta > 0 ? -0.05f : 0.05f;
+		m_unitsPerPixel = Math::Clamp(m_unitsPerPixel, 1.f, 50.f);
+
+		// refresh curve and key display
+		drawRuler();
+		refreshCurveDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
+		refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
 	}
 
 	// get time and value by pos
 	bool TimelinePanel::calcKeyTimeAndValueByPos(const Vector2& pos, ui32& time, float& value)
 	{
-		time = ui32(pos.x);
-		value = (pos.y - 5.f - m_rulerHeight) / 10.f;
+		time = ui32(pos.x * m_millisecondPerPixel);
+		value = (pos.y) * m_unitsPerPixel;
 
 		return true;
 	}
 
 	bool TimelinePanel::calcKeyPosByTimeAndValue(ui32 time, float value, Vector2& pos)
 	{
-		pos = Vector2(float(time), value * 10.f + m_rulerHeight + 5.f);
+		pos = Vector2(time / m_millisecondPerPixel, value / m_unitsPerPixel);
 
 		return true;
 	}

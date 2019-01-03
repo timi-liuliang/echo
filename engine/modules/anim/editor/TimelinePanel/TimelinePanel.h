@@ -128,7 +128,7 @@ namespace Echo
 		String						m_currentEditPropertyName;
 		float						m_rulerHeight;
 		Color						m_rulerColor;
-		QGraphicsLineItem*			m_rulerBottom;
+		QGraphicsItemArray			m_rulerItems;
 		float						m_keyRadius = 7.f;
 		array<QGraphicsItem*, 4>	m_curveItems;
 		array<QGraphicsItemArray, 4>m_curveKeyItems;
@@ -138,6 +138,8 @@ namespace Echo
 		QGraphicsItem*				m_curveKeyItem;
 		QWidget*					m_keyEditMenu;
 		Vector2						m_keyEditCursorScenePos;
+		float						m_millisecondPerPixel = 1.f;
+		float						m_unitsPerPixel = 1.f;
 	};
 }
 

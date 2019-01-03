@@ -17,7 +17,7 @@ namespace Echo
 		return graphicsScene ? graphicsScene->addWidget(widget) : nullptr;
 	}
 
-	QGraphicsLineItem* qGraphicsSceneAddLine(QObject* scene, float startX, float startY, float endX, float endY, const Color& color)
+	QGraphicsItem* qGraphicsSceneAddLine(QObject* scene, float startX, float startY, float endX, float endY, const Color& color)
 	{
 		QGraphicsScene* graphicsScene = qobject_cast<QGraphicsScene*>(scene);
 		if (graphicsScene)
