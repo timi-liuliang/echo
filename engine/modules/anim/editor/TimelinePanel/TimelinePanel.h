@@ -137,7 +137,7 @@ namespace Echo
 		QGraphicsProxyWidget*		m_curveKeyLineEditProxyWidget = nullptr;
 		QGraphicsItem*				m_curveKeyItem;
 		QWidget*					m_keyEditMenu;
-		Vector2						m_keyEditCursorPos;
+		Vector2						m_keyEditCursorScenePos;
 	};
 }
 

@@ -734,10 +734,11 @@ namespace Echo
 			qConnect(qFindChildAction(m_ui, "m_actionAddKeyToCurveBlue"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddKeyToCurveBlue));
 		}
 
-		qMenuExec(m_keyEditMenu);
-
 		// record cursor pos
-		m_keyEditCursorPos = qCursorPos();
+		m_keyEditCursorScenePos = qGetEventAll(m_graphicsScene).graphicsSceneMouseEvent.scenePos;
+
+		// show menu
+		qMenuExec(m_keyEditMenu);
 	}
 
 	void TimelinePanel::onGraphicsSceneWheelEvent()
@@ -789,7 +790,7 @@ namespace Echo
 	{
 		ui32 time;
 		float value;
-		if (calcKeyTimeAndValueByPos(m_keyEditCursorPos, time, value))
+		if (calcKeyTimeAndValueByPos(m_keyEditCursorScenePos, time, value))
 		{
 			m_timeline->addKey(m_currentEditAnim, m_currentEditObjectPath, m_currentEditPropertyName, curveIdx, time, value);
 		}

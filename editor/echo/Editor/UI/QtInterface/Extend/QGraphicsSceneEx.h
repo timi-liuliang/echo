@@ -10,6 +10,13 @@ namespace Echo
 	class QGraphicsSceneEx : public QGraphicsScene
 	{
 	protected:
+		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+		{
+			QGraphicsScene::mouseReleaseEvent(event);
+
+			QMessageHandler::instance()->getEvent(this).graphicsSceneMouseEvent.scenePos = Vector2(event->scenePos().x(), event->scenePos().y());
+		}
+
 		virtual void wheelEvent(QGraphicsSceneWheelEvent *event) override
 		{
 			QGraphicsScene::wheelEvent(event);
