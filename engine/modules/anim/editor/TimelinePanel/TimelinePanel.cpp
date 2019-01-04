@@ -491,8 +491,16 @@ namespace Echo
 							String userData = StringUtil::Format("%s,%s,%s,%d,%d", m_currentEditAnim.c_str(), objectPath.c_str(), propertyName.c_str(), curveIdx, keyIdx);
 							qGraphicsItemSetUserData(item, userData.c_str());
 
+							// set tooltip
+							String toolTip = StringUtil::Format("Time : %d\nValue: %.3f", t, value);
+							qGraphicsItemSetToolTip(item, toolTip.c_str());
+
+							// set moveable
+							qGraphicsItemSetMoveable(item, true);
+
 							// connect signal slots
 							qConnect(item, QSIGNAL(mouseDoubleClickEvent(QGraphicsSceneMouseEvent*)), this, createMethodBind(&TimelinePanel::onKeyDoubleClickedCurveKey));
+							qConnect(item, QSIGNAL(mouseMoveEvent(QGraphicsSceneMouseEvent*)), this, createMethodBind(&TimelinePanel::onKeyPositionChanged));
 
 							m_curveKeyItems[curveIdx].push_back(item);
 						}
@@ -588,6 +596,22 @@ namespace Echo
 		// refresh curve and key display
 		refreshCurveDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
 		refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
+	}
+
+	void TimelinePanel::onKeyPositionChanged()
+	{
+		QGraphicsItem* sender = qSenderItem();
+		if (sender)
+		{
+			Vector2 scenePos = qGraphicsItemPos(sender);
+			ui32 time;
+			float value;
+			calcKeyTimeAndValueByPos(scenePos, time, value);
+
+			// modify tooltip
+			String toolTip = StringUtil::Format("Time : %d\nValue: %.3f", time, value);
+			qGraphicsItemSetToolTip(sender, toolTip.c_str());
+		}
 	}
 
 	void TimelinePanel::onPlayAnim()

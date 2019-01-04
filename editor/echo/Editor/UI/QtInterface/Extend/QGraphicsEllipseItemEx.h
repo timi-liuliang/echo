@@ -14,6 +14,12 @@ namespace Echo
 	class QGraphicsEllipseItemEx : public QGraphicsEllipseItem
 	{
 	protected:
+		virtual void dragMoveEvent(QGraphicsSceneDragDropEvent *event) override
+		{
+			QGraphicsEllipseItem::dragMoveEvent(event);
+			QMessageHandler::instance()->onReceiveQGraphicsItemMessage(this, QSIGNAL(dragMoveEvent(QGraphicsSceneDragDropEvent*)));
+		}
+
 		virtual void focusInEvent(QFocusEvent *event) override
 		{
 			QGraphicsEllipseItem::focusInEvent(event);
@@ -27,6 +33,9 @@ namespace Echo
 		virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override
 		{
 			QGraphicsEllipseItem::mouseMoveEvent(event);
+
+			QMessageHandler::instance()->getEvent(this).graphicsSceneMouseEvent.scenePos = Vector2(event->scenePos().x(), event->scenePos().y());
+			QMessageHandler::instance()->onReceiveQGraphicsItemMessage(this, QSIGNAL(mouseMoveEvent(QGraphicsSceneMouseEvent*)));
 		}
 
 		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override

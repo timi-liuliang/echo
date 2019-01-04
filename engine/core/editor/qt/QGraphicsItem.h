@@ -12,7 +12,8 @@ namespace Echo
 	// get item width
 	float qGraphicsItemWidth(QGraphicsItem* item);
 
-	// set pos
+	// pos
+	Vector2 qGraphicsItemPos(QGraphicsItem* item);
 	void qGraphicsItemSetPos(QGraphicsItem* item, float posX, float posY);
 
 	// set pos
@@ -29,6 +30,12 @@ namespace Echo
 
 	// set user data
 	void qGraphicsItemSetUserData(QGraphicsItem* item, const char* userData);
+
+	// set tool tip
+	void qGraphicsItemSetToolTip(QGraphicsItem* item, const char* toolTip);
+
+	// set moveable
+	void qGraphicsItemSetMoveable(QGraphicsItem* item, bool isMoveable);
 }
 
 #endif

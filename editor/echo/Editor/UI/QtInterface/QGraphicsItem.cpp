@@ -1,6 +1,7 @@
 #include <QGraphicsItem>
 #include <QGraphicsProxywidget>
 #include <engine/core/util/StringUtil.h>
+#include <engine/core/math/Vector2.h>
 
 namespace Echo
 {
@@ -29,6 +30,11 @@ namespace Echo
 		{
 			item->setPos(QPointF(posX, posY));
 		}
+	}
+
+	Vector2 qGraphicsItemPos(QGraphicsItem* item)
+	{
+		return item ? Vector2(item->pos().x(), item->pos().y()) : Vector2::INVALID;
 	}
 	
 	void qGraphicsProxyWidgetSetPos(QGraphicsProxyWidget* item, float posX, float posY)
@@ -65,6 +71,22 @@ namespace Echo
 		if (item)
 		{
 			item->setData(Qt::UserRole, userData);
+		}
+	}
+
+	void qGraphicsItemSetToolTip(QGraphicsItem* item, const char* toolTip)
+	{
+		if (item)
+		{
+			item->setToolTip(toolTip);
+		}
+	}
+
+	void qGraphicsItemSetMoveable(QGraphicsItem* item, bool isMoveable)
+	{
+		if (item)
+		{
+			item->setFlag(QGraphicsItem::ItemIsMovable, isMoveable);
 		}
 	}
 }

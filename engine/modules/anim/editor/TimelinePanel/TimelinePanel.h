@@ -73,6 +73,7 @@ namespace Echo
 		// on double click curve key
 		void onKeyDoubleClickedCurveKey();
 		void onCurveKeyEditingFinished();
+		void onKeyPositionChanged();
 
 		// on add key
 		void onAddKeyToCurveRed();
