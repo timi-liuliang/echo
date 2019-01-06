@@ -21,6 +21,7 @@ namespace Echo
 
 	// set zvalue
 	void qGraphicsProxyWidgetSetZValue(QGraphicsProxyWidget* item, float zValue);
+	void qGraphicsItemSetZValue(QGraphicsItem* item, float zValue);
 
 	// set visible
 	void qGraphicsItemSetVisible(QGraphicsItem* item, bool visible);

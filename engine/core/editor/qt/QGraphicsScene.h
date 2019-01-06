@@ -15,6 +15,9 @@ namespace Echo
 	// add line
 	QGraphicsItem* qGraphicsSceneAddLine(QObject* scene, float startX, float startY, float endX, float endY, const Color& color);
 
+	// add rect
+	QGraphicsItem* qGraphicsSceneAddRect(QObject* scene, float left, float top, float width, float height, const Color& color);
+
 	// add path
 	QGraphicsItem* qGraphicsSceneAddPath(QObject* scene, const vector<Vector2>::type paths, float widthf, const Color& color);
 

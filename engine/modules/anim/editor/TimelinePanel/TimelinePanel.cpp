@@ -697,6 +697,8 @@ namespace Echo
 		const int   keyCount = 100;
 
 		// rulder bottom
+		Color bgColor; bgColor.setRGBA(83, 83, 83, 255);
+		m_rulerItems.push_back(qGraphicsSceneAddRect(m_graphicsScene, float(-keyWidth), 0, float(keyCount * keyWidth) + keyWidth, m_rulerHeight, bgColor));
 		m_rulerItems.push_back( qGraphicsSceneAddLine(m_graphicsScene, float(-keyWidth), m_rulerHeight, float(keyCount * keyWidth) + keyWidth, m_rulerHeight, m_rulerColor));
 
 		// key line
@@ -724,6 +726,12 @@ namespace Echo
 					m_rulerItems.push_back(textItem);
 				}
 			}
+		}
+
+		// set z value
+		for (QGraphicsItem* item : m_rulerItems)
+		{
+			qGraphicsItemSetZValue(item, 200.f);
 		}
 	}
 

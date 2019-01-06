@@ -53,6 +53,14 @@ namespace Echo
 		}
 	}
 
+	void qGraphicsItemSetZValue(QGraphicsItem* item, float zValue)
+	{
+		if (item)
+		{
+			item->setZValue(zValue);
+		}
+	}
+
 	void qGraphicsItemSetVisible(QGraphicsItem* item, bool visible)
 	{
 		if (item)

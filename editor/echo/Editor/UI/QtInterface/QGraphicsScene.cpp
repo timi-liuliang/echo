@@ -29,6 +29,20 @@ namespace Echo
 		return nullptr;
 	}
 
+	QGraphicsItem* qGraphicsSceneAddRect(QObject* scene, float left, float top, float width, float height, const Color& color)
+	{
+		QGraphicsScene* graphicsScene = qobject_cast<QGraphicsScene*>(scene);
+		if (graphicsScene)
+		{
+			QRectF rect(left, top, width, height);
+			QPen pen(QColor::fromRgbF(color.r, color.g, color.b, color.a));
+			QBrush brush(QColor::fromRgbF(color.r, color.g, color.b, color.a));
+			return graphicsScene->addRect(rect, pen, brush);
+		}
+
+		return nullptr;
+	}
+
 	QGraphicsItem* qGraphicsSceneAddPath(QObject* scene, const vector<Vector2>::type paths, float widthf, const Color& color)
 	{
 		QGraphicsScene* graphicsScene = qobject_cast<QGraphicsScene*>(scene);
