@@ -34,8 +34,8 @@ namespace Echo
 		{
 			QGraphicsEllipseItem::mouseMoveEvent(event);
 
-			QMessageHandler::instance()->getEvent(this).graphicsSceneMouseEvent.scenePos = Vector2(event->scenePos().x(), event->scenePos().y());
-			QMessageHandler::instance()->onReceiveQGraphicsItemMessage(this, QSIGNAL(mouseMoveEvent(QGraphicsSceneMouseEvent*)));
+			//QMessageHandler::instance()->getEvent(this).graphicsSceneMouseEvent.scenePos = Vector2(event->scenePos().x(), event->scenePos().y());
+			//QMessageHandler::instance()->onReceiveQGraphicsItemMessage(this, QSIGNAL(mouseMoveEvent(QGraphicsSceneMouseEvent*)));
 		}
 
 		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override
