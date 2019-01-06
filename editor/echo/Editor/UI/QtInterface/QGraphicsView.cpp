@@ -3,6 +3,28 @@
 
 namespace Echo
 {
+	void qGraphicsViewDisableViewportAutoUpdate(QWidget* view)
+	{
+		QGraphicsView* graphicsView = qobject_cast<QGraphicsView*>(view);
+		if (graphicsView)
+		{
+			graphicsView->setViewportUpdateMode(QGraphicsView::NoViewportUpdate);
+		}
+	}
+
+	void qGraphicsViewport(QWidget* view, float& left, float& top, float& width, float& height)
+	{
+		QGraphicsView* graphicsView = qobject_cast<QGraphicsView*>(view);
+		if (graphicsView)
+		{
+			QRectF rectF = graphicsView->mapToScene(graphicsView->viewport()->geometry()).boundingRect();
+			left = rectF.left();
+			top = rectF.top();
+			width = rectF.width();
+			height = rectF.height();
+		}
+	}
+
 	void qGraphicsViewSetScene(QWidget* view, QObject* scene)
 	{
 		QGraphicsView* graphicsView = qobject_cast<QGraphicsView*>(view);
