@@ -525,12 +525,10 @@ namespace Echo
 				AnimPropertyVec3* vec3Property = ECHO_DOWN_CAST<AnimPropertyVec3*>(animProperty);
 				if (vec3Property)
 				{
-					ui32 t = vec3Property->getKeyTime(keyIdx);
-					vec3Property->updateToTime(t);
-					const Vector3& value = vec3Property->getValue();
+					AnimCurve* curve = vec3Property->m_curves[curveIdx];
 
 					keyInfo.m_type = KeyInfo::Type::Float;
-					keyInfo.m_value = value[curveIdx];
+					keyInfo.m_value = curve->getValueByKeyIdx(keyIdx);
 
 					return true;
 				}
