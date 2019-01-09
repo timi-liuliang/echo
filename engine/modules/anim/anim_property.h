@@ -39,9 +39,6 @@ namespace Echo
 		// get length
 		virtual ui32 getLength() = 0;
 
-		// get key time
-		virtual ui32 getKeyTime(int idx) { return 0; }
-
 		// get key value str
 		virtual String getKeyValueStr(int idx) { return ""; }
 	};
