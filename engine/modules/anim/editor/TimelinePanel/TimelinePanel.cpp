@@ -604,7 +604,7 @@ namespace Echo
 		if (sender)
 		{
 			Vector2 scenePos = qGraphicsItemPos(sender);
-			ui32 time;
+			i32 time;
 			float value;
 			calcKeyTimeAndValueByPos(scenePos, time, value);
 
@@ -713,7 +713,7 @@ namespace Echo
 		{
 			if (i % 2 == 0)
 			{
-				ui32 time;
+				i32 time;
 				float value;
 				Vector2 textPos(i * keyWidth, 5.f);
 				calcKeyTimeAndValueByPos( textPos, time, value);
@@ -796,7 +796,7 @@ namespace Echo
 	}
 
 	// get time and value by pos
-	bool TimelinePanel::calcKeyTimeAndValueByPos(const Vector2& pos, ui32& time, float& value)
+	bool TimelinePanel::calcKeyTimeAndValueByPos(const Vector2& pos, i32& time, float& value)
 	{
 		time = ui32(pos.x * m_millisecondPerPixel);
 		value = (pos.y) * m_unitsPerPixel;
@@ -804,7 +804,7 @@ namespace Echo
 		return true;
 	}
 
-	bool TimelinePanel::calcKeyPosByTimeAndValue(ui32 time, float value, Vector2& pos)
+	bool TimelinePanel::calcKeyPosByTimeAndValue(i32 time, float value, Vector2& pos)
 	{
 		pos = Vector2(time / m_millisecondPerPixel, value / m_unitsPerPixel);
 
@@ -833,10 +833,11 @@ namespace Echo
 
 	void TimelinePanel::addKeyToCurve(int curveIdx)
 	{
-		ui32 time;
+		i32 time;
 		float value;
 		if (calcKeyTimeAndValueByPos(m_keyEditCursorScenePos, time, value))
 		{
+			time = Math::Clamp(time, 0, 1000 * 60 * 60 * 24);
 			m_timeline->addKey(m_currentEditAnim, m_currentEditObjectPath, m_currentEditPropertyName, curveIdx, time, value);
 		}
 
