@@ -328,7 +328,6 @@ namespace Echo
 					if (property)
 					{
 						property->setInterpolationType(AnimCurve::InterpolationType::Linear);
-						clip->m_length = 3000;
 					}
 
 					break;
