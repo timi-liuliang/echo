@@ -70,7 +70,7 @@ namespace Echo
 	// set key value
 	void AnimPropertyCurve::setKeyValue(int curveIdx, int keyIdx, float value)
 	{
-		m_curves[curveIdx]->setValue(keyIdx, value);
+		m_curves[curveIdx]->setValueByKeyIdx(keyIdx, value);
 	}
 
 	// add key

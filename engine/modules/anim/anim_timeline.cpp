@@ -340,36 +340,6 @@ namespace Echo
 		m_isAnimDataDirty = true;
 	}
 
-	void Timeline::addKey(const String& animName, const String& objectPath, const String& propertyName, ui32 time, const Variant& value)
-	{
-		AnimClip* clip = getClip(animName.c_str());
-		if (clip)
-		{
-			for (AnimObject* animNode : clip->m_objects)
-			{
-				const ObjectUserData& userData = any_cast<ObjectUserData>(animNode->m_userData);
-				if (userData.m_path == objectPath)
-				{
-					for (AnimProperty* property : animNode->m_properties)
-					{
-						if (any_cast<String>(property->m_userData) == propertyName)
-						{
-							AnimPropertyVec3* vec3Prop = ECHO_DOWN_CAST<AnimPropertyVec3*>(property);
-							vec3Prop->addKey(time, value.toVector3());
-						}
-
-						break;
-					}
-
-					break;
-				}
-			}
-		}
-
-		// dirty flag
-		m_isAnimDataDirty = true;
-	}
-
 	void Timeline::addKey(const String& animName, const String& objectPath, const String& propertyName, int curveIdx, ui32 time, float value)
 	{
 		AnimClip* clip = getClip(animName.c_str());
@@ -400,7 +370,7 @@ namespace Echo
 		m_isAnimDataDirty = true;
 	}
 
-	void Timeline::setKey(const String& animName, const String& objectPath, const String& propertyName, int curveIdx, int keyIdx, const Variant& value)
+	void Timeline::setKey(const String& animName, const String& objectPath, const String& propertyName, int curveIdx, int keyIdx, float value)
 	{
 		AnimProperty* animProperty = getProperty(animName, objectPath, propertyName);
 		if (animProperty)
@@ -412,7 +382,7 @@ namespace Echo
 				AnimPropertyVec3* vec3Property = ECHO_DOWN_CAST<AnimPropertyVec3*>(animProperty);
 				if (vec3Property)
 				{
-					vec3Property->setKeyValue(curveIdx, keyIdx, value.toReal());
+					vec3Property->setKeyValue(curveIdx, keyIdx, value);
 				}
 			}
 			break;

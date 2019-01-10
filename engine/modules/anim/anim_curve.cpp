@@ -50,6 +50,21 @@ namespace Echo
 		}
 	}
 
+	void AnimCurve::setValueByKeyIdx(i32 index, float value)
+	{
+		if (index < (int)m_keys.size())
+		{
+			KeyMap::iterator it = m_keys.begin();
+			while (index > 0)
+			{
+				it++;
+				index--;
+			}
+
+			it->second = value;
+		}
+	}
+
 	float AnimCurve::getValueByKeyIdx(i32 index)
 	{
 		if (index < (int)m_keys.size())
