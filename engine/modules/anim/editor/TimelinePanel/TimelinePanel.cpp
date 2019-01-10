@@ -81,7 +81,6 @@ namespace Echo
 		qConnect( m_graphicsScene, QSIGNAL(wheelEvent(QGraphicsSceneWheelEvent*)), this, createMethodBind(&TimelinePanel::onGraphicsSceneWheelEvent));
 
 		// draw ruler
-		drawRuler();
 		switchCurveEditor();
 	}
 
@@ -110,6 +109,9 @@ namespace Echo
 	void TimelinePanel::update()
 	{
 		onNodeTreeWidgetSizeChanged();
+
+		// update ruler draw
+		drawRuler();
 	}
 
 	void TimelinePanel::onDuplicateClip()
@@ -685,51 +687,60 @@ namespace Echo
 
 	void TimelinePanel::drawRuler()
 	{
-		for (QGraphicsItem* item : m_rulerItems)
+		// test view port rect
+		float vLeft, vTop, vWidth, vHeight;
+		qGraphicsViewport(qFindChild(m_ui, "m_graphicsView"), vLeft, vTop, vWidth, vHeight);
+		if (vLeft != m_rulerLeft || vTop != m_rulerTop)
 		{
-			qGraphicsSceneRemoveItem(m_graphicsScene, item);
-		}
-		m_rulerItems.clear();
+			m_rulerLeft = vLeft;
+			m_rulerTop = vTop;
 
-		const float keyWidth = 20;	// pixels
-		const int   keyCount = 100;
-
-		// rulder bottom
-		Color bgColor; bgColor.setRGBA(83, 83, 83, 255);
-		m_rulerItems.push_back(qGraphicsSceneAddRect(m_graphicsScene, float(-keyWidth), 0, float(keyCount * keyWidth) + keyWidth, m_rulerHeight, bgColor));
-		m_rulerItems.push_back( qGraphicsSceneAddLine(m_graphicsScene, float(-keyWidth), m_rulerHeight, float(keyCount * keyWidth) + keyWidth, m_rulerHeight, m_rulerColor));
-
-		// key line
-		for (int i = 0; i <= keyCount; i++)
-		{
-			float xPos = i * keyWidth;
-			m_rulerItems.push_back(qGraphicsSceneAddLine(m_graphicsScene, xPos, /*(i%10==0) ? 10.f :*/ 18.f, xPos, m_rulerHeight, m_rulerColor));
-		}
-
-		// draw Text
-		for (int i = 0; i <= keyCount; i++)
-		{
-			if (i % 2 == 0)
+			for (QGraphicsItem* item : m_rulerItems)
 			{
-				i32 time;
-				float value;
-				Vector2 textPos(i * keyWidth, 5.f);
-				calcKeyTimeAndValueByPos( textPos, time, value);
+				qGraphicsSceneRemoveItem(m_graphicsScene, item);
+			}
+			m_rulerItems.clear();
 
-				QGraphicsItem* textItem = qGraphicsSceneAddSimpleText(m_graphicsScene, StringUtil::Format("%d", time).c_str(), m_rulerColor);
-				if (textItem)
+			const float keyWidth = 20;	// pixels
+			const int   keyCount = 100;
+
+			// rulder bottom
+			Color bgColor; bgColor.setRGBA(83, 83, 83, 255);
+			m_rulerItems.push_back(qGraphicsSceneAddRect(m_graphicsScene, float(-keyWidth) + m_rulerLeft, -1 + m_rulerTop, float(keyCount * keyWidth) + keyWidth, m_rulerHeight, bgColor));
+			m_rulerItems.push_back(qGraphicsSceneAddLine(m_graphicsScene, float(-keyWidth) + m_rulerLeft, m_rulerHeight + m_rulerTop, float(keyCount * keyWidth) + keyWidth + m_rulerLeft, m_rulerHeight + m_rulerTop, m_rulerColor));
+
+			// key line
+			for (int i = 0; i <= keyCount; i++)
+			{
+				float xPos = i * keyWidth;
+				m_rulerItems.push_back(qGraphicsSceneAddLine(m_graphicsScene, xPos + m_rulerLeft, 18.f + m_rulerTop, xPos + m_rulerLeft, m_rulerHeight + m_rulerTop, m_rulerColor));
+			}
+
+			// draw Text
+			for (int i = 0; i <= keyCount; i++)
+			{
+				if (i % 2 == 0)
 				{
-					float halfWidth = qGraphicsItemWidth(textItem) * 0.4f /*0.5f*/;
-					qGraphicsItemSetPos( textItem, textPos.x, textPos.y);
-					m_rulerItems.push_back(textItem);
+					i32 time;
+					float value;
+					Vector2 textPos(i * keyWidth + m_rulerLeft, 5.f + m_rulerTop);
+					calcKeyTimeAndValueByPos(textPos, time, value);
+
+					QGraphicsItem* textItem = qGraphicsSceneAddSimpleText(m_graphicsScene, StringUtil::Format("%d", time).c_str(), m_rulerColor);
+					if (textItem)
+					{
+						float halfWidth = qGraphicsItemWidth(textItem) * 0.4f /*0.5f*/;
+						qGraphicsItemSetPos(textItem, textPos.x, textPos.y);
+						m_rulerItems.push_back(textItem);
+					}
 				}
 			}
-		}
 
-		// set z value
-		for (QGraphicsItem* item : m_rulerItems)
-		{
-			qGraphicsItemSetZValue(item, 200.f);
+			// set z value
+			for (QGraphicsItem* item : m_rulerItems)
+			{
+				qGraphicsItemSetZValue(item, 200.f);
+			}
 		}
 	}
 
@@ -788,7 +799,6 @@ namespace Echo
 		m_unitsPerPixel = Math::Clamp(m_unitsPerPixel, 1.f, 50.f);
 
 		// refresh curve and key display
-		drawRuler();
 		refreshCurveDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
 		refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
 	}

@@ -127,6 +127,8 @@ namespace Echo
 		QObject*					m_graphicsScene;
 		String						m_currentEditObjectPath;
 		String						m_currentEditPropertyName;
+		float						m_rulerLeft = 0.f;
+		float						m_rulerTop = 0.f;
 		float						m_rulerHeight;
 		Color						m_rulerColor;
 		QGraphicsItemArray			m_rulerItems;

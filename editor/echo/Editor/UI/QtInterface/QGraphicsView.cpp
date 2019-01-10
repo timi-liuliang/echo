@@ -17,7 +17,8 @@ namespace Echo
 		QGraphicsView* graphicsView = qobject_cast<QGraphicsView*>(view);
 		if (graphicsView)
 		{
-			QRectF rectF = graphicsView->mapToScene(graphicsView->viewport()->geometry()).boundingRect();
+			QRect viewRect = graphicsView->viewport()->geometry();
+			QRectF rectF = graphicsView->mapToScene(viewRect).boundingRect();
 			left = rectF.left();
 			top = rectF.top();
 			width = rectF.width();
