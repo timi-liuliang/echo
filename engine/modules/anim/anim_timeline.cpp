@@ -20,6 +20,7 @@ namespace Echo
 
 	void Timeline::bindMethods()
 	{
+		CLASS_BIND_METHOD(Timeline, play, DEF_METHOD("play"));
 		CLASS_BIND_METHOD(Timeline, getAnim, DEF_METHOD("getAnim"));
 		CLASS_BIND_METHOD(Timeline, setAnim, DEF_METHOD("setAnim"));
 		CLASS_BIND_METHOD(Timeline, getAnimData, DEF_METHOD("getAnimData"));
