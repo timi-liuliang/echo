@@ -37,8 +37,7 @@ namespace Echo
 		}
 		case InterpolationType::Discrete:
 		{
-			EchoLogError("AnimCure::Discrete not support yet");
-			return 0.f;
+			return curKey->second;
 		}
 		break;
 		default:

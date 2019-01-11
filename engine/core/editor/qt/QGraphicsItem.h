@@ -9,6 +9,9 @@ namespace Echo
 	// get sender item
 	QGraphicsItem* qSenderItem();
 
+	// get rect
+	bool qGraphicsItemSceneRect(QGraphicsItem* item, float& left, float& top, float& width, float& height);
+
 	// get item width
 	float qGraphicsItemWidth(QGraphicsItem* item);
 

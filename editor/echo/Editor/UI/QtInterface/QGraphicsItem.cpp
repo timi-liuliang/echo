@@ -18,6 +18,21 @@ namespace Echo
 		return g_senderItem;
 	}
 
+	bool qGraphicsItemSceneRect(QGraphicsItem* item, float& left, float& top, float& width, float& height)
+	{
+		if (item)
+		{
+			left = item->sceneBoundingRect().left();
+			top = item->sceneBoundingRect().top();
+			width = item->sceneBoundingRect().width();
+			height = item->sceneBoundingRect().height();
+
+			return true;
+		}
+
+		return false;
+	}
+
 	float qGraphicsItemWidth(QGraphicsItem* item)
 	{
 		return item ? item->sceneBoundingRect().width() : 0.f;
