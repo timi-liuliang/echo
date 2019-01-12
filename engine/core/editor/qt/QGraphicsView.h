@@ -1,6 +1,7 @@
 #pragma once
 
 #include "QWidget.h"
+#include "engine/core/math/Rect.h"
 
 #ifdef ECHO_EDITOR_MODE
 
@@ -10,7 +11,7 @@ namespace Echo
 	void qGraphicsViewDisableViewportAutoUpdate(QWidget* graphicsView);
 
 	// get view port
-	void qGraphicsViewport(QWidget* view, float& left, float& top, float& width, float& height);
+	void qGraphicsViewSceneRect(QWidget* view, Rect& rect);
 
 	// create a QGraphicsScene
 	void qGraphicsViewSetScene(QWidget* graphicsView, QObject* graphicsScene);

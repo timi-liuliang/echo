@@ -1,6 +1,7 @@
 #pragma once
 
 #include "QWidget.h"
+#include "engine/core/math/Rect.h"
 
 #ifdef ECHO_EDITOR_MODE
 
@@ -10,7 +11,7 @@ namespace Echo
 	QGraphicsItem* qSenderItem();
 
 	// get rect
-	bool qGraphicsItemSceneRect(QGraphicsItem* item, float& left, float& top, float& width, float& height);
+	bool qGraphicsItemSceneRect(QGraphicsItem* item, Rect& rect);
 
 	// get item width
 	float qGraphicsItemWidth(QGraphicsItem* item);

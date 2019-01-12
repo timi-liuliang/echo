@@ -91,6 +91,7 @@ namespace Echo
 
 		// enable or disable curve editor
 		void switchCurveEditor();
+		void zoomCurve();
 
 	private:
 		// get new name
@@ -116,6 +117,7 @@ namespace Echo
 	private:
 		// draw ruler
 		void drawRuler();
+		void drawRulerVertical();
 
 	protected:
 		Timeline*					m_timeline;
@@ -132,7 +134,9 @@ namespace Echo
 		float						m_rulerHeight;
 		Color						m_rulerColor;
 		QGraphicsItemArray			m_rulerItems;
+		QGraphicsItemArray			m_rulerHItems;
 		float						m_keyRadius = 7.f;
+		QGraphicsItem*				m_editAreaBoudingBox = nullptr;
 		array<QGraphicsItem*, 4>	m_curveItems;
 		array<QGraphicsItemArray, 4>m_curveKeyItems;
 		array<bool, 4>				m_curveVisibles;

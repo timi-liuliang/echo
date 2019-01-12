@@ -2,7 +2,6 @@
 
 namespace Echo
 {
-	// ºÏ²¢
 	Rect& Rect::merge(const Rect& rhs)
 	{
 		if(isNull())

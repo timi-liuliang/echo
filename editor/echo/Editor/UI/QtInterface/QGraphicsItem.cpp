@@ -2,6 +2,7 @@
 #include <QGraphicsProxywidget>
 #include <engine/core/util/StringUtil.h>
 #include <engine/core/math/Vector2.h>
+#include <engine/core/math/Rect.h>
 
 namespace Echo
 {
@@ -18,14 +19,14 @@ namespace Echo
 		return g_senderItem;
 	}
 
-	bool qGraphicsItemSceneRect(QGraphicsItem* item, float& left, float& top, float& width, float& height)
+	bool qGraphicsItemSceneRect(QGraphicsItem* item, Rect& rect)
 	{
 		if (item)
 		{
-			left = item->sceneBoundingRect().left();
-			top = item->sceneBoundingRect().top();
-			width = item->sceneBoundingRect().width();
-			height = item->sceneBoundingRect().height();
+			rect.left = item->sceneBoundingRect().left();
+			rect.top = item->sceneBoundingRect().top();
+			rect.right = item->sceneBoundingRect().right();
+			rect.bottom = item->sceneBoundingRect().bottom();
 
 			return true;
 		}

@@ -1,5 +1,6 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
+#include <engine/core/math/Rect.h>
 
 namespace Echo
 {
@@ -12,17 +13,17 @@ namespace Echo
 		}
 	}
 
-	void qGraphicsViewport(QWidget* view, float& left, float& top, float& width, float& height)
+	void qGraphicsViewSceneRect(QWidget* view, Rect& rect)
 	{
 		QGraphicsView* graphicsView = qobject_cast<QGraphicsView*>(view);
 		if (graphicsView)
 		{
 			QRect viewRect = graphicsView->viewport()->geometry();
 			QRectF rectF = graphicsView->mapToScene(viewRect).boundingRect();
-			left = rectF.left();
-			top = rectF.top();
-			width = rectF.width();
-			height = rectF.height();
+			rect.left = rectF.left();
+			rect.top = rectF.top();
+			rect.right = rectF.right();
+			rect.bottom = rectF.bottom();
 		}
 	}
 
