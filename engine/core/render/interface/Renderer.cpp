@@ -27,14 +27,12 @@ namespace Echo
 	Renderer::Renderer()
 		: m_bVSync(false)
 		, m_frameBuffer(NULL)
-		, m_startMipmap(0)
 		, m_pDefaultRasterizerState(NULL)
 		, m_pDefaultDepthStencilState(NULL)
 		, m_pDefaultBlendState(NULL)
 		, m_pRasterizerState(NULL)
 		, m_pDepthStencilState(NULL)
 		, m_pBlendState(NULL)
-		, m_dirtyTexSlot(false)
 		, m_renderableIdentifier(1)
 	{
 		EchoAssert(!g_render);

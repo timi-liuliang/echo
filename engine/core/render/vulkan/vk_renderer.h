@@ -12,7 +12,7 @@ namespace Echo
 		virtual ~VKRenderer();
 
 		// initialize
-		virtual bool initialize(const Config& config) override { return true; }
+        virtual bool initialize(const Config& config) override;
 
         // create buffer
         virtual GPUBuffer*	createVertexBuffer(Dword usage, const Buffer& buff) override { return nullptr;}
@@ -39,7 +39,7 @@ namespace Echo
         virtual Shader* createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const char* srcBuffer, ui32 size)  override {return nullptr;}
 
 		// create renderable
-		virtual Renderable* createRenderable(const String& renderStage, ShaderProgramRes* material) override { return nullptr; }
+        virtual Renderable* createRenderable(const String& renderStage, ShaderProgramRes* material) override;
         
         // convert matrix
         virtual void convertMatOrho(Matrix4& mat, const Matrix4& matOrth, Real zn, Real zf) override {}
@@ -73,10 +73,14 @@ namespace Echo
         virtual void getDepthRange(Vector2& vec) override {}
         
         // get screen width and height
-        virtual ui32 getScreenWidth() override { return 640;}
-        virtual ui32 getScreenHeight() override { return 480;}
+        virtual ui32 getScreenWidth() override { return m_screenWidth;}
+        virtual ui32 getScreenHeight() override { return m_screenHeight;}
 
 		// get view port
 		virtual void getViewportReal(Viewport& pViewport) override {}
+        
+    private:
+        ui32    m_screenWidth = 640;
+        ui32    m_screenHeight = 480;
 	};
 }

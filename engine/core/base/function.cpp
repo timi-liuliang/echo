@@ -1,4 +1,4 @@
-#include "Function.h"
+#include "function.h"
 #include <iostream>
 
 #ifdef _WIN32

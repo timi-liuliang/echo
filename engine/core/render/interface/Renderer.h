@@ -158,7 +158,7 @@ namespace Echo
 	protected:
 		Config				m_cfg;
 		bool				m_bVSync;
-		FrameBuffer*		m_frameBuffer;
+		FrameBuffer*		m_frameBuffer = nullptr;
 		RasterizerState*	m_pDefaultRasterizerState;
 		DepthStencilState*	m_pDefaultDepthStencilState;
 		BlendState*			m_pDefaultBlendState;
@@ -179,10 +179,10 @@ namespace Echo
 		PixelFormat			m_backBufferFormat;
 		ui16				m_bBind2RGBTexture;
 		ui16				m_bBind2RGBATexture;
-		int					m_renderableIdentifier;			// 渲染单元数量
-		std::map<ui32, Renderable*>	m_renderables;			// 可渲染单位
-		ui32				m_startMipmap;					// 设置纹理初始mipmap级别，控制运行期纹理质量
-		DeviceFeature		m_deviceFeature;				// 设备能力信息
-		bool				m_dirtyTexSlot;
+		int					m_renderableIdentifier;
+		std::map<ui32, Renderable*>	m_renderables;
+		ui32				m_startMipmap = 0;
+		DeviceFeature		m_deviceFeature;
+		bool				m_dirtyTexSlot = false;
 	};
 }

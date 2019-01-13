@@ -2,6 +2,7 @@
 #include "object.h"
 #include <map>
 #include "engine/core/log/Log.h"
+#include "engine/core/main/module.h"
 
 namespace Echo
 {
@@ -19,6 +20,11 @@ namespace Echo
 			EchoLogError("property [%s] already exist", property->m_name.c_str());
 		}
 	}
+    
+    const String& ObjectFactory::getCurrentRegisterModuleName()
+    {
+        return Module::getCurrentRegisterModuleName();
+    }
     
 #ifdef ECHO_EDITOR_MODE
     void ObjectFactory::initEditor(Object* obj)

@@ -7,7 +7,6 @@
 #include "engine/core/editor/object_editor.h"
 #include "engine/core/util/StringUtil.h"
 #include "engine/core/script/lua/lua_binder.h"
-#include "engine/core/main/module.h"
 
 namespace Echo
 {
@@ -72,6 +71,8 @@ namespace Echo
 #ifdef ECHO_EDITOR_MODE
         void initEditor(Object* obj);
 #endif
+        // get current module name
+        const String& getCurrentRegisterModuleName();
 	};
 
 	class Class
@@ -169,7 +170,7 @@ namespace Echo
             m_name = name;
             m_classInfo.m_singleton = false;
             m_classInfo.m_virtual = isVirtual;
-			m_classInfo.m_module = Module::getCurrentRegisterModuleName();
+			m_classInfo.m_module = getCurrentRegisterModuleName();
             m_classInfo.m_parent = parent;
             
             Class::addClass(name, this);
@@ -200,7 +201,7 @@ namespace Echo
             m_name = name;
             m_classInfo.m_singleton = true;
             m_classInfo.m_virtual = isVirtual;
-			m_classInfo.m_module = Module::getCurrentRegisterModuleName();
+			m_classInfo.m_module = getCurrentRegisterModuleName();
             m_classInfo.m_parent = parent;
             
             Class::addClass(name, this);

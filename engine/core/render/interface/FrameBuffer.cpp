@@ -8,11 +8,11 @@ namespace Echo
 {
 	FrameBuffer::FrameBuffer()
 		: m_pDSV(NULL)
-		, m_pViewport(NULL)
+		, m_pViewport(nullptr)
 	{
 		for(ui32 i = 0; i < MAX_RENDERTARGETS; ++i)
 		{
-			m_pRTVs[i] = NULL;
+			m_pRTVs[i] = nullptr;
 		}
 	}
 
