@@ -19,7 +19,7 @@
 #include "engine/core/render/interface/renderstage/RenderStage.h"
 #include "engine/core/render/gles/GLES.h"
 #include "engine/core/render/vulkan/VK.h"
-#include "engine/core/render/interface/ShaderProgramRes.h"
+#include "engine/core/render/interface/ShaderProgram.h"
 #include "engine/core/render/interface/TextureCube.h"
 #include "engine/core/gizmos/Gizmos.h"
 #include "engine/core/input/input.h"
@@ -117,7 +117,7 @@ namespace Echo
 		Class::registerType<Render>();
 		Class::registerType<Res>();
 		Class::registerType<Texture>();
-		Class::registerType<ShaderProgramRes>();
+		Class::registerType<ShaderProgram>();
 		Class::registerType<Material>();
 		Class::registerType<LuaScript>();
 		Class::registerType<TextureCube>();

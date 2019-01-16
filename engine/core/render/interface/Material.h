@@ -1,13 +1,13 @@
 #pragma once
 
-#include "engine/core/render/interface/ShaderProgram.h"
+#include "ShaderProgram.h"
 #include "engine/core/render/interface/RenderState.h"
 #include "engine/core/resource/Res.h"
 #include "Texture.h"
 
 namespace Echo
 {
-	class ShaderProgramRes;
+	class ShaderProgram;
 	class Material : public Res
 	{
 		ECHO_RES(Material, Res, ".material", Res::create<Material>, Res::load)
@@ -82,8 +82,8 @@ namespace Echo
 		// 设置宏定义
 		void setMacros(const String& macros);
 
-		// 获取渲染队列
-		ShaderProgramRes* getShader();
+		// get shader
+		ShaderProgram* getShader();
 
 		// operate uniform
 		bool isUniformExist(const String& name);
@@ -139,7 +139,7 @@ namespace Echo
 		const char*			m_shaderContent;			// 官方材质
 		StringOption		m_renderStage;				// 所处渲染阶段
 		StringArray			m_macros;					// 宏定义
-		ShaderProgramRes*	m_shaderProgramRes;			// 对应着色器
+		ShaderProgram*	    m_shaderProgram = nullptr;
 		ParamMap			m_uniforms;
 		TextureInfoMap 		m_textures;
 	};

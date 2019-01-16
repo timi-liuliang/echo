@@ -207,7 +207,7 @@ namespace Echo
 		virtual ~DepthStencilState();
 
 	public:
-		virtual void						active() = 0;
+        virtual void						active() {}
 		const DepthStencilDesc&				getDesc() const;
 
 	protected:
@@ -278,7 +278,7 @@ namespace Echo
 		virtual ~RasterizerState();
 
 	public:
-		virtual void					active() = 0;
+        virtual void					active() {}
 		const RasterizerDesc&			getDesc() const;
 
 	protected:
@@ -360,7 +360,7 @@ namespace Echo
 		};
 
 	public:
-		virtual void active(const SamplerState* pre) const = 0;
+        virtual void active(const SamplerState* pre) const {}
 		const SamplerDesc& getDesc() const;
 
 	protected:

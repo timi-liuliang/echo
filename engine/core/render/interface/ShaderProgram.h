@@ -1,148 +1,191 @@
 #pragma once
 
-#include <engine/core/util/AssertX.h>
-#include "engine/core/render/interface/mesh/MeshVertexData.h"
+#include "RenderState.h"
 #include "Shader.h"
+#include <utility>
+#include "engine/core/resource/Res.h"
 
 namespace Echo
 {
-	// Ö§³ÖµÄ×ÅÉ«Æ÷²ÎÊıÀàĞÍ
-	enum ShaderParamType
+    // Param Type
+    enum ShaderParamType
+    {
+        SPT_UNKNOWN,
+        SPT_INT,
+        SPT_FLOAT,
+        SPT_VEC2,
+        SPT_VEC3,
+        SPT_VEC4,
+        SPT_MAT4,
+        SPT_TEXTURE,
+        
+        SPT_MAX
+    };
+    
+	class Renderer;
+	class ShaderProgram : public Res
 	{
-		SPT_UNKNOWN,
-		SPT_INT,
-		SPT_FLOAT,
-		SPT_VEC2,
-		SPT_VEC3,
-		SPT_VEC4,
-		SPT_MAT4,
-		SPT_TEXTURE,
+		ECHO_RES(ShaderProgram, Res, ".shader", ShaderProgram::create, ShaderProgram::load);
 
-		SPT_MAX
-	};
-
-	/**
-	* ShaderProgram 2014-11-18
-	*/
-	class Renderable;
-	class ShaderProgramRes;
-	class ShaderProgram
-	{
 	public:
-		// ²ÎÊıÃèÊö
-		struct Uniform
+        // Uniform
+        struct Uniform
+        {
+            String              m_name;            // âˆšËšâ‰¥âˆ†
+            ShaderParamType     m_type;            // Â¿â€¡â€“Ã•
+            int                 m_count;        // Â¥Ã›â€“Â°
+            int                 m_sizeInBytes;    // Â¥Ã›â€“Â°
+            int                 m_location;        // Å’ÂªÃ·âˆš
+            Byte*               m_origin_value;
+            Byte*               m_value;        // ÂµÂ±Â«âˆÃ·Âµ
+            bool                m_isDirty;        // Ã·ÂµÂ Â«âˆ‘Ã’âˆ‘Â¢â€¦Ë™Â¡Ã€Â±â€°ÂªÃ˜
+            
+            // Ï€Ï€â€˜Ãâˆ«Ã˜Â Ë
+            Uniform()
+            : m_name("UnKnown")
+            , m_type(SPT_UNKNOWN)
+            , m_count(-1)
+            , m_location(-1)
+            , m_origin_value(NULL)
+            , m_value(NULL)
+            , m_isDirty(true)
+            {}
+            
+            // Å’Ë†Ï€Ï€âˆ«Ã˜Â Ë
+            ~Uniform()
+            {
+                ECHO_FREE(m_value);
+            }
+            
+            // Ã·Ã¿Ã·âˆšÂµÂ±Â«âˆÃ·Âµ
+            void resetValue()
+            {
+                m_isDirty = true;
+            }
+            
+            // â€¦Ã‹Ã·âˆšÃ·Âµ
+            void setValue(const void* value)
+            {
+                EchoAssert(value);
+                m_origin_value = (Byte*)value;
+                
+                // âˆ‘Ã·â‰ˆâ€°âˆ‚â€”Ã¸â€™Âºâ€°
+                if (!m_value)
+                {
+                    m_value = (Byte*)ECHO_MALLOC(m_sizeInBytes);
+                }
+                
+                // Â»Ã™â€˜â€¡Â±ÃÂºÂ«Å’â„¢true,â€˜Ãšâˆâ€™â‰¥Ä±Â ÂºÂªÃ˜Â£Â¨Ã·Â±Î©â€Ã¸Î©Â±Â¥ÂºÂ¥Ã¸â€¦
+                if (m_isDirty)
+                {
+                    memcpy(m_value, value, m_sizeInBytes);
+                }
+                else if ( memcmp(m_value, value, m_sizeInBytes) != 0)
+                {
+                    m_isDirty = true;
+                    memcpy(m_value, value, m_sizeInBytes);
+                }
+            }
+            
+        };
+        typedef std::map<int, Uniform> UniformArray;
+        
+		struct DefaultUniform
 		{
-			String			m_name;			// Ãû³Æ
-			ShaderParamType	m_type;			// ÀàĞÍ
-			int				m_count;		// ´óĞ¡
-			int				m_sizeInBytes;	// ´óĞ¡
-			int				m_location;		// Î»ÖÃ
-			Byte*			m_origin_value;
-			Byte*			m_value;		// µ±Ç°Öµ
-			bool			m_isDirty;		// ÖµÊÇ·ñ·¢ÉúÁË±ä»¯
+			i32 count;
+			ShaderParamType type;
+			ui32 sizeInByte;
+			void* value;
 
-			// ¹¹Ôìº¯Êı
-			Uniform()
-				: m_name("UnKnown")
-				, m_type(SPT_UNKNOWN)
-				, m_count(-1)
-				, m_location(-1)
-				, m_origin_value(NULL)
-				, m_value(NULL)
-				, m_isDirty(true)
-			{}
-
-			// Îö¹¹º¯Êı
-			~Uniform()
-			{
-				ECHO_FREE(m_value);
-			}
-
-			// ÖØÖÃµ±Ç°Öµ
-			void resetValue()
-			{
-				m_isDirty = true;
-			}
-
-			// ÉèÖÃÖµ
-			void setValue(const void* value)
-			{
-				EchoAssert(value);
-				m_origin_value = (Byte*)value;
-
-				// ·ÖÅä¶Ñ¿Õ¼ä
-				if (!m_value)
-				{
-					m_value = (Byte*)ECHO_MALLOC(m_sizeInBytes);
-				}
-
-				// ÈôÔà±ê¼ÇÎªtrue,Ôò¸Õ³õÊ¼»¯£¬Ö±½Ó¿½±´¼´¿É
-				if (m_isDirty)
-				{
-					memcpy(m_value, value, m_sizeInBytes);
-				}
-				else if ( memcmp(m_value, value, m_sizeInBytes) != 0)
-				{
-					m_isDirty = true;
-					memcpy(m_value, value, m_sizeInBytes);
-				}
-			}
-
+			~DefaultUniform();
 		};
-		typedef std::map<int, Uniform> UniformArray;
+		typedef map<String, DefaultUniform*>::type MapDefaultUniforms;
 
 	public:
-		ShaderProgram(ShaderProgramRes* material);
-		virtual ~ShaderProgram();
+		ShaderProgram();
+		ShaderProgram(const ResourcePath& path);
+		~ShaderProgram();
 
-		// »ñÈ¡¹ØÁ¬×ÅÉ«Æ÷
-		Shader* getShader(Shader::ShaderType type) const { return m_pShaders[(ui32)type]; }
+		// bind shader
+        virtual void bind() {}
 
-		virtual bool attachShader(Shader* pShader);
-		virtual Shader* detachShader(Shader::ShaderType type);
+		// get Blend state
+		BlendState* getBlendState() const { return m_blendState; }
 
-		// Á´½Ó×ÅÉ«Æ÷
-		virtual bool linkShaders() = 0;
+		// get depth state
+		DepthStencilState* getDepthState() const { return m_depthState; }
 
-		inline bool isLinked() const { return m_bLinked; }
+		// get rasterizer state
+		RasterizerState* getRasterizerState() const { return m_rasterizerState; }
 
-		// ¸ù¾İ²ÎÊıÃû»ñÈ¡²ÎÊıÎïÀíµØÖ·
-		virtual int	getParamPhysicsIndex(const String& paramName);
+		// is have macro
+		bool hasMacro(const char* const macro) const;
 
-		virtual void bind() = 0;
-		virtual void unbind() = 0;
+		// get editable macros
+		static StringArray getEditableMacros(const String& shaderFileName);
 
-		virtual i32 getAtrribLocation(VertexSemantic vertexSemantic);
+		// get default value of uniform
+		const DefaultUniform* getDefaultUniformValue(const String& name);
 
-		// °ó¶¨¼¸ºÎÌåÊı¾İ
-		virtual void bindRenderable(Renderable* renderInput) = 0;
+		// load and parse by file
+		bool loadFromFile(const String& filename, const String& macros);
+
+		// load from content
+		bool loadFromContent(const String& fileName, const char* content, const String& macros);
+
+		// save
+		virtual void save() override;
+
+		// clear
+		void clear();
+        
+    public:
+        // shaders operate
+        Shader* getShader(Shader::ShaderType type) const { return m_pShaders[(ui32)type]; }
+        virtual bool attachShader(Shader* pShader);
+        virtual Shader* detachShader(Shader::ShaderType type);
+        virtual bool linkShaders() {return false;}
+        
+        // get physics index by uniform name
+        virtual int getParamPhysicsIndex(const String& paramName);
+        
+        // set uniform
+        void setUniform(const char* name, const void* value, ShaderParamType uniformType, ui32 count);
+        virtual void setUniform(ui32 physicIdx, const void* value, ShaderParamType uniformType, ui32 count);
+        
+        // uniform operate
+        UniformArray* getUniforms(){ return &m_uniforms; }
 
 	public:
-		// ¸ù¾İ±äÁ¿Ãû³ÆÉèÖÃÖµ
-		void setUniform(const char* name, const void* value, ShaderParamType uniformType, ui32 count);
+        // create
+        static Res* create();
+        
+		// load
+		static Res* load(const ResourcePath& path);
 
-		// ¸ù¾İÎïÀíË÷ÒıÉèÖÃ±äÁ¿Öµ
-		virtual void setUniform(ui32 physicIdx, const void* value, ShaderParamType uniformType, ui32 count);
+	private:
+		// private functions
+		bool loadFromContent(char* content, const String& macros);
+		bool loadShaderFrom(void* node, const String& macros);
+		bool loadBlendState(void* pNode);
+		bool loadRasterizerState(void* pNode);
+		bool loadDepthStencilState(void* pNode);
+		bool loadDefaultUniform(void* pNode);
+		void createBlendState(BlendState::BlendDesc& desc);
+		void createDepthState(DepthStencilState::DepthStencilDesc& desc);
+		void createRasterizerState(RasterizerState::RasterizerDesc& desc);
+		bool createShaderProgram(const String& vsContent, const String& psContent);
+		void* createDefaultUniformValue(const String& strType, const i32 count, const String& strValue, ui32& outSize, ShaderParamType& outType);
 
-		// Ó¦ÓÃ±äÁ¿
-		virtual void bindUniforms() = 0;
-
-		// »ñÈ¡±äÁ¿ÃèÊö
-		UniformArray* getUniforms(){ return &m_uniforms; }
-
-		// ¸ù¾İ±äÁ¿ÀàĞÍ»ñÈ¡Æä¶ÔÓ¦ByteSize
-		static int getUniformByteSizeByUniformType(ShaderParamType uniformType);
-
-		// ¸ù¾İÃû³Æ»ñÈ¡Uniform
-		Uniform* getUniform(const String& name);
-
-		// ¼ì²â²ÎÊıºÏ·¨ĞÔ
-		bool checkValid();
-
-	protected:
-		ShaderProgramRes*	m_material;							// ¹ØÁª²ÄÖÊ
-		Shader*				m_pShaders[Shader::ST_SHADERCOUNT];
-		bool				m_bLinked;
-		UniformArray		m_uniforms;							// ²ÎÊıĞÅÏ¢
+	private:
+		Shader::ShaderDesc	m_shaderDesc;							// Shader info
+		BlendState*			m_blendState = nullptr;
+		DepthStencilState*	m_depthState = nullptr;
+		RasterizerState*	m_rasterizerState = nullptr;
+		MapDefaultUniforms	m_defaultUniforms;
+        Shader*             m_pShaders[Shader::ST_SHADERCOUNT];
+        bool                m_bLinked;
+        UniformArray        m_uniforms;
 	};
+	typedef ResRef<ShaderProgram> ShaderProgramPtr;
 }

@@ -28,18 +28,18 @@ namespace Echo
         virtual RenderTarget* createRenderTarget(ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const RenderTarget::Options& option) override {return nullptr;}
         
         // create states
-        virtual RasterizerState* createRasterizerState(const RasterizerState::RasterizerDesc& desc) override {return nullptr;}
-        virtual DepthStencilState* createDepthStencilState(const DepthStencilState::DepthStencilDesc& desc) override {return nullptr;}
-        virtual BlendState* createBlendState(const BlendState::BlendDesc& desc) override {return nullptr;}
-        virtual const SamplerState* getSamplerState(const SamplerState::SamplerDesc& desc) override {return nullptr;}
+        virtual RasterizerState* createRasterizerState(const RasterizerState::RasterizerDesc& desc) override;
+        virtual DepthStencilState* createDepthStencilState(const DepthStencilState::DepthStencilDesc& desc)override;
+        virtual BlendState* createBlendState(const BlendState::BlendDesc& desc) override;
+        virtual const SamplerState* getSamplerState(const SamplerState::SamplerDesc& desc) override;
         
         // create shaders
-        virtual ShaderProgram* createShaderProgram(ShaderProgramRes* material) override {return nullptr;}
+        virtual ShaderProgram* createShaderProgram() override;
         virtual Shader* createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const String& filename) override {return nullptr;}
         virtual Shader* createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const char* srcBuffer, ui32 size)  override {return nullptr;}
 
 		// create renderable
-        virtual Renderable* createRenderable(const String& renderStage, ShaderProgramRes* material) override;
+        virtual Renderable* createRenderable(const String& renderStage, ShaderProgram* material) override;
         
         // convert matrix
         virtual void convertMatOrho(Matrix4& mat, const Matrix4& matOrth, Real zn, Real zf) override {}

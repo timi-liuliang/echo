@@ -1,6 +1,8 @@
 #include "vk_renderer.h"
 #include "vk_frame_buffer.h"
 #include "vk_renderable.h"
+#include "vk_shader_program.h"
+#include "vk_render_state.h"
 
 namespace Echo
 {
@@ -39,7 +41,7 @@ namespace Echo
 
 	}
     
-    Renderable* VKRenderer::createRenderable(const String& renderStage, ShaderProgramRes* material)
+    Renderable* VKRenderer::createRenderable(const String& renderStage, ShaderProgram* material)
     {
         Renderable* renderable = EchoNew(VKRenderable(renderStage, material, m_renderableIdentifier++));
         ui32 id = renderable->getIdentifier();
@@ -47,5 +49,32 @@ namespace Echo
         m_renderables[id] = renderable;
         
         return renderable;
+    }
+    
+    ShaderProgram* VKRenderer::createShaderProgram()
+    {
+        return EchoNew(VKShaderProgram);
+    }
+    
+    // create states
+    RasterizerState* VKRenderer::createRasterizerState(const RasterizerState::RasterizerDesc& desc)
+    {
+        return EchoNew(VKRasterizerState);
+    }
+    
+    DepthStencilState* VKRenderer::createDepthStencilState(const DepthStencilState::DepthStencilDesc& desc)
+    {
+        return nullptr;
+        //return EchoNew(VKDepthStencilState);
+    }
+    
+    BlendState* VKRenderer::createBlendState(const BlendState::BlendDesc& desc)
+    {
+        return EchoNew(VKBlendState);
+    }
+    
+    const SamplerState* VKRenderer::getSamplerState(const SamplerState::SamplerDesc& desc)
+    {
+        return EchoNew(VKSamplerState);
     }
 }

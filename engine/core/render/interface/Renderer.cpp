@@ -60,8 +60,7 @@ namespace Echo
 
 	void Renderer::setDepthStencilState(DepthStencilState* pState)
 	{
-		EchoAssert(pState);
-		if (pState != m_pDepthStencilState)
+		if (pState && pState != m_pDepthStencilState)
 		{
 			pState->active();
 			m_pDepthStencilState = pState;

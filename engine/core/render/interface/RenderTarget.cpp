@@ -1,6 +1,6 @@
 #include "Renderer.h"
 #include "interface/RenderTarget.h"
-#include "interface/ShaderProgramRes.h"
+#include "interface/ShaderProgram.h"
 #include "engine/core/main/Engine.h"
 
 namespace Echo

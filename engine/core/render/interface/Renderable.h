@@ -4,7 +4,7 @@
 #include "ShaderProgram.h"
 #include "Texture.h"
 #include "RenderState.h"
-#include "ShaderProgramRes.h"
+#include "ShaderProgram.h"
 
 namespace Echo
 {
@@ -131,14 +131,14 @@ namespace Echo
 		virtual void link() = 0;
 
 	protected:
-		Renderable( const String& renderStage, ShaderProgramRes* shader, int identifier);
+		Renderable( const String& renderStage, ShaderProgram* shader, int identifier);
 		virtual ~Renderable();
 
 	public:
 		ui32									m_identifier;
 		Render*									m_node;
 		String									m_renderStage;
-		ShaderProgramResPtr						m_shaderProgram;		// material
+		ShaderProgramPtr						m_shaderProgram;		// material
 		Mesh*									m_mesh;
 		MaxTextureArray							m_textures;				// now only one texture sampler.
 		vector<ShaderParam>::type				m_shaderParams;			// third shader params

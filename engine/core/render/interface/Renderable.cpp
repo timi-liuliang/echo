@@ -2,7 +2,7 @@
 #include "interface/Renderable.h"
 #include "interface/ShaderProgram.h"
 #include "interface/Renderer.h"
-#include "interface/ShaderProgramRes.h"
+#include "interface/ShaderProgram.h"
 #include "engine/core/render/interface/renderstage/RenderStage.h"
 #include "engine/core/render/interface/Material.h"
 #include "engine/core/render/interface/mesh/Mesh.h"
@@ -10,7 +10,7 @@
 
 namespace Echo
 {
-	Renderable::Renderable(const String& renderStage, ShaderProgramRes* shader, int identifier)
+	Renderable::Renderable(const String& renderStage, ShaderProgram* shader, int identifier)
 		: m_renderStage(renderStage)
 		, m_mesh(nullptr)
 		, m_SParamWriteIndex(0)
@@ -38,8 +38,7 @@ namespace Echo
 
 	Renderable* Renderable::create(Mesh* mesh, Material* matInst, Render* node)
 	{
-		ShaderProgramRes* shaderRes = matInst->getShader();
-		ShaderProgram* shaderProgram = shaderRes->getShaderProgram();
+		ShaderProgram* shaderProgram = matInst->getShader();
 		if (!shaderProgram)
 			return nullptr;
 
@@ -136,7 +135,6 @@ namespace Echo
 			
 		if (m_shaderProgram)
 		{
-			ShaderProgram* shaderProgram = m_shaderProgram->getShaderProgram();
 			for (size_t i = 0; i < m_shaderParams.size(); ++i)
 			{
 				ShaderParam& param = m_shaderParams[i];
@@ -148,7 +146,7 @@ namespace Echo
 				case SPT_FLOAT:
 				case SPT_VEC2:
 				case SPT_VEC3:
-				case SPT_TEXTURE:	shaderProgram->setUniform(param.physicsIndex, param.pData, param.stype, param.ParamsLength);	break;
+				case SPT_TEXTURE:	m_shaderProgram->setUniform(param.physicsIndex, param.pData, param.stype, param.ParamsLength);	break;
 				default:			EchoLogError("unknow shader param format! %s", m_node->getName().c_str());							break;
 				}
 			}
@@ -217,7 +215,7 @@ namespace Echo
 	// get shader
 	ShaderProgram* Renderable::getShader()
 	{
-		return m_shaderProgram->getShaderProgram();
+		return m_shaderProgram;
 	}
 
 	void Renderable::setMesh(Mesh* mesh)

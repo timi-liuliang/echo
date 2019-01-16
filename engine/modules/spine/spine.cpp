@@ -2,7 +2,7 @@
 #include "engine/core/log/Log.h"
 #include "engine/core/scene/node_tree.h"
 #include "interface/renderer.h"
-#include "interface/ShaderProgramRes.h"
+#include "interface/ShaderProgram.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/math/color.h"
 #include "engine/core/main/Engine.h"

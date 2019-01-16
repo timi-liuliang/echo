@@ -7,7 +7,7 @@ namespace Echo
 	class VKRenderable : public Renderable
 	{
 	public:
-		VKRenderable(const String& renderStage, ShaderProgramRes* shader, int identifier);
+		VKRenderable(const String& renderStage, ShaderProgram* shader, int identifier);
         virtual ~VKRenderable() {}
 
         // link shader and program

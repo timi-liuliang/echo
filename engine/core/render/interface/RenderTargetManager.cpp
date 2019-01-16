@@ -2,7 +2,7 @@
 #include "RenderTargetManager.h"
 #include "Material.h"
 #include "engine/core/main/Engine.h"
-#include "interface/ShaderProgramRes.h"
+#include "interface/ShaderProgram.h"
 #include "interface/Texture.h"
 #include <algorithm>
 
@@ -64,43 +64,30 @@ namespace Echo
 		EchoAssert( _id != RTI_End );
 
 		RenderTarget* pRT = getRenderTargetByID( _id );
+        if(pRT)
+        {
+            RenderTarget* pUsingRT = m_currentRenderTarget != RTI_End ? getRenderTargetByID(m_currentRenderTarget) : 0;
+            pRT->m_bFrameBufferChange = m_currentRenderTarget != _id ? true : false;
+            if( m_currentRenderTarget == RTI_End )
+            {
+                pRT->m_bViewportChange = true;
+            }
+            else if( pUsingRT && ( pUsingRT->width() != pRT->width() || pUsingRT->height() != pRT->height() ) )
+            {
+                pRT->m_bViewportChange = true;
+            }
+            else
+            {
+                pRT->m_bViewportChange = false;
+            }
+            
+            m_currentRenderTarget = _id;
+            Renderer::instance()->dirtyTexSlot();
+            
+            return getRenderTargetByID(_id)->beginRender(_clearColor, _backgroundColor, _clearDepth, _depthValue, _clearStencil, stencilValue);
+        }
 
-		RenderTarget* pUsingRT = 0;
-
-		if(m_currentRenderTarget != RTI_End)
-		{
-			pUsingRT = getRenderTargetByID( m_currentRenderTarget );
-		}
-
-		EchoAssert( pRT );
-
-		if( m_currentRenderTarget != _id )
-		{
-			pRT->m_bFrameBufferChange = true;
-		}
-		else
-		{
-			pRT->m_bFrameBufferChange = false;
-		}
-
-		if( m_currentRenderTarget == RTI_End )
-		{
-			pRT->m_bViewportChange = true;
-		}
-		else if( pUsingRT && ( pUsingRT->width() != pRT->width() || pUsingRT->height() != pRT->height() ) )
-		{
-			pRT->m_bViewportChange = true;
-		}
-		else
-		{
-			pRT->m_bViewportChange = false;
-		}
-
-		m_currentRenderTarget = _id;
-
-		Renderer::instance()->dirtyTexSlot();
-
-		return getRenderTargetByID(_id)->beginRender(_clearColor, _backgroundColor, _clearDepth, _depthValue, _clearStencil, stencilValue);
+        return false;
 	}
 
 	void RenderTargetManager::onScreensizeChanged( ui32 _width, ui32 _height )
@@ -163,7 +150,7 @@ namespace Echo
 		RenderTargetMap::iterator fit = m_renderTargets.find(_id);
 		if (fit == m_renderTargets.end())
 		{
-			EchoLogError("Could not found RenderTarget[%d]", _id);
+			//EchoLogError("Could not found RenderTarget[%d]", _id);
 
 			return NULL;
 		}
@@ -173,9 +160,14 @@ namespace Echo
 
 	bool RenderTargetManager::endRenderTarget(ui32 _id)
 	{
-		EchoAssert(m_currentRenderTarget == _id);
-
-		return getRenderTargetByID(_id)->endRender();
+		if(m_currentRenderTarget == _id);
+        {
+            RenderTarget* renderTarget = getRenderTargetByID(_id);
+            if(renderTarget)
+                return renderTarget->endRender();
+        }
+        
+        return false;
 	}
 	
 	bool RenderTargetManager::invalidate(ui32 _id, bool invalidateColor, bool invalidateDepth, bool invalidateStencil)

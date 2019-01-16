@@ -107,7 +107,7 @@ namespace Echo
 		void dirtyTexSlot(){ m_dirtyTexSlot = true; }
 
 		// create shader
-		virtual ShaderProgram* createShaderProgram(ShaderProgramRes* material)=0;
+		virtual ShaderProgram* createShaderProgram()=0;
 		virtual Shader*	createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const String& filename) = 0;
 		virtual Shader*	createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const char* srcBuffer, ui32 size) = 0;
 		
@@ -123,7 +123,7 @@ namespace Echo
 		virtual const SamplerState*	getSamplerState(const SamplerState::SamplerDesc& desc) = 0;
 
 		// renderable operate
-		virtual Renderable* createRenderable(const String& renderStage, ShaderProgramRes* material)=0;
+		virtual Renderable* createRenderable(const String& renderStage, ShaderProgram* material)=0;
 		Renderable* getRenderable(RenderableID id);
 		void destroyRenderables(Renderable** renderables, int num);
 		void destroyRenderables(vector<Renderable*>::type& renderables);

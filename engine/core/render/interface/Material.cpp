@@ -1,7 +1,7 @@
 #include "engine/core/log/Log.h"
 #include "Material.h"
 #include "engine/core/scene/node_tree.h"
-#include "engine/core/render/interface/ShaderProgramRes.h"
+#include "engine/core/render/interface/ShaderProgram.h"
 #include "engine/core/render/interface/MaterialDesc.h"
 #include "engine/core/render/interface/Renderer.h"
 #include <thirdparty/pugixml/pugixml.hpp>
@@ -73,7 +73,6 @@ namespace Echo
 		, m_shaderPath("", ".shader")
 		, m_shaderContent(nullptr)
 		, m_renderStage("Opaque", { "Opaque", "Transparent" })
-        , m_shaderProgramRes(nullptr)
 	{
 	}
 
@@ -84,7 +83,6 @@ namespace Echo
 		, m_shaderPath("", ".shader")
 		, m_shaderContent(nullptr)
 		, m_renderStage("Opaque", { "Opaque", "Transparent" })
-        , m_shaderProgramRes(nullptr)
 	{
 	}
 
@@ -115,12 +113,11 @@ namespace Echo
 		ECHO_DELETE_T(this, Material);
 	}
 
-	// 复制材质实例
 	void Material::clone(Material* orig)
 	{
 		m_renderStage = orig->m_renderStage;
 		m_macros = orig->m_macros;
-		m_shaderProgramRes = orig->m_shaderProgramRes;
+		m_shaderProgram = orig->m_shaderProgram;
 
 		for (auto it : orig->m_uniforms)
 		{
@@ -131,7 +128,6 @@ namespace Echo
 		m_textures = orig->m_textures;
 	}
 
-	// 获取变量值
 	void* Material::getUniformValue(const String& name)
 	{
 		const auto& it = m_uniforms.find(name);
@@ -140,7 +136,7 @@ namespace Echo
 			return  it->second->m_value;
 		}
 
-		const ShaderProgramRes::DefaultUniform* dUniform = m_shaderProgramRes->getDefaultUniformValue(name);
+		const ShaderProgram::DefaultUniform* dUniform = m_shaderProgram->getDefaultUniformValue(name);
 		return dUniform ? dUniform->value : NULL;
 	}
 
@@ -190,12 +186,11 @@ namespace Echo
 		m_isDirty = true;
 	}
 
-	// 获取渲染队列
-	ShaderProgramRes* Material::getShader() 
+	ShaderProgram* Material::getShader()
 	{ 
 		buildShaderProgram();
 
-		return m_shaderProgramRes; 
+		return m_shaderProgram; 
 	}
 
 	// 判断变量是否存在
@@ -327,24 +322,22 @@ namespace Echo
 				finalMacros += "#define " + macro + "\n";
 
 			// create material
-			m_shaderProgramRes = EchoNew(ShaderProgramRes);
+            m_shaderProgram = (ShaderProgram*)ShaderProgram::create();
 			if (m_shaderContent)
-				m_shaderProgramRes->loadFromContent(m_shaderContentVirtualPath, m_shaderContent, finalMacros);
+				m_shaderProgram->loadFromContent(m_shaderContentVirtualPath, m_shaderContent, finalMacros);
 			else if (!m_shaderPath.getPath().empty())
-				m_shaderProgramRes->loadFromFile(m_shaderPath.getPath(), finalMacros);
+				m_shaderProgram->loadFromFile(m_shaderPath.getPath(), finalMacros);
 
 			// match uniforms
-			if (m_shaderProgramRes)
+			if (m_shaderProgram)
 			{
-				ShaderProgram* shaderProgram = m_shaderProgramRes->getShaderProgram();
-				if (shaderProgram)
-					matchUniforms();
+                matchUniforms();
 			}
 
 			// register uniform propertys
-			if (m_shaderProgramRes)
+			if (m_shaderProgram)
 			{
-				StringArray macros = ShaderProgramRes::getEditableMacros(m_shaderPath.getPath());
+				StringArray macros = ShaderProgram::getEditableMacros(m_shaderPath.getPath());
 				for (size_t i = 0; i < macros.size() / 2; i++)
 				{
 					registerProperty(ECHO_CLASS_NAME(Material), "Macros." + macros[i * 2], Variant::Type::Bool);
@@ -449,11 +442,10 @@ namespace Echo
 
 	void Material::matchUniforms()
 	{
-		ShaderProgram* shaderProgram = m_shaderProgramRes->getShaderProgram();
-		if (shaderProgram)
+		if (m_shaderProgram)
 		{
 			// 添加未设置参数
-			for (auto& it : *(shaderProgram->getUniforms()))
+			for (auto& it : *(m_shaderProgram->getUniforms()))
 			{
 				const ShaderProgram::Uniform& suniform = it.second;
 				{
@@ -475,7 +467,7 @@ namespace Echo
 					}
 
 					// default value
-					const ShaderProgramRes::DefaultUniform* defaultUniform = m_shaderProgramRes->getDefaultUniformValue(uniform->m_name);
+					const ShaderProgram::DefaultUniform* defaultUniform = m_shaderProgram->getDefaultUniformValue(uniform->m_name);
 					if (defaultUniform && uniform->m_count == defaultUniform->count && uniform->m_type == defaultUniform->type)
 						uniform->setValue(defaultUniform->value);
 
