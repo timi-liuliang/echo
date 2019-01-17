@@ -13,8 +13,8 @@ namespace Echo
 		{
 			Linear,
 			Discrete,
-		}						m_type;
-		map<ui32, float>::type	m_keys;
+		}		m_type;
+		KeyMap	m_keys;
 
 		AnimCurve() {}
 

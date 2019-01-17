@@ -13,10 +13,12 @@ namespace Echo
 		enum class Type
 		{
 			Unknown,
+			Bool,
 			Float,
 			Vector3,
 			Vector4,
 			Quaternion,
+			String,
 		}							 m_type;				// propert type
 
 		AnimCurve::InterpolationType m_interpolationType;	// interpolation type
@@ -114,6 +116,36 @@ namespace Echo
 
 		// update to time
 		virtual void updateToTime(ui32 time) override;
+	};
+
+	struct AnimPropertyBool : public AnimProperty
+	{
+		typedef map<ui32, bool>::type KeyMap;
+
+		KeyMap	m_keys;
+		bool	m_value;
+
+		AnimPropertyBool() : AnimProperty(Type::Bool) {}
+
+		// get value
+		bool getValue() { return m_value; }
+
+		// add key
+		void addKey(ui32 time, bool value);
+
+		// correct data
+		virtual void correct() {}
+
+		// optimize
+		virtual void optimize() override {}
+
+		// update to time
+		virtual void updateToTime(ui32 time) override;
+
+		// get length
+		virtual ui32 getLength() override;
+		ui32 getStartTime();
+		ui32 getEndTime();
 	};
 
 	struct AnimPropertyQuat : public AnimProperty

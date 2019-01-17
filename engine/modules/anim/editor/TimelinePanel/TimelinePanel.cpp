@@ -342,7 +342,8 @@ namespace Echo
 				String propertyName = Editor::instance()->selectAProperty( node);
 				if (!propertyName.empty())
 				{
-					m_timeline->addProperty(m_currentEditAnim, node->getNodePathRelativeTo(m_timeline), propertyName);
+					AnimProperty::Type propertyType = m_timeline->getAnimPropertyType(node->getNodePathRelativeTo(m_timeline), propertyName);
+					m_timeline->addProperty(m_currentEditAnim, node->getNodePathRelativeTo(m_timeline), propertyName, propertyType);
 
 					// addNodePropertyToEditor;
 					QTreeWidgetItem* propertyItem = qTreeWidgetItemNew();

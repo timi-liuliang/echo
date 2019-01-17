@@ -94,7 +94,7 @@ namespace Echo
 	public:
 		//property
 		AnimProperty* getProperty(const String& animName, const String& objectPath, const String& propertyName);
-		void addProperty(const String& animName, const String& objectPath, const String& propertyName);
+		void addProperty(const String& animName, const String& objectPath, const String& propertyName, AnimProperty::Type propertyType);
 
 		// add key frame
 		void addKey(const String& animName, const String& objectPath, const String& propertyName, int curveIdx, ui32 time, float value);
@@ -110,6 +110,9 @@ namespace Echo
 
 		// apply clip
 		void extractClipData(AnimClip* clip);
+
+		// get anim property type by node path and property name
+		AnimProperty::Type getAnimPropertyType(const String& objectPath, const String& propertyName);
 
 	private:
 		PlayState				m_playState;

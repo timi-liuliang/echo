@@ -100,7 +100,7 @@ namespace Echo
 
 	void Timeline::update_self()
 	{
-		if (m_animations.isValid() && m_playState==PlayState::Playing)
+		if (m_animations.isValid() && m_playState == PlayState::Playing)
 		{
 			ui32 deltaTime = Engine::instance()->getFrameTimeMS();
 			AnimClip* clip = m_clips[m_animations.getIdx()];
@@ -124,13 +124,21 @@ namespace Echo
 		return false;
 	}
 
+	static const char* AnimCurveInterpolationTypeStr[] = { "Linear", "Discrete" };
+	static const char* AnimPropertyTypeStr[] = { "Unknown", "Bool", "Float", "Vector3", "Vector4", "Quaternion", "String" };
+	static const char* ObjectTypeStr[] = { "Node", "Setting", "Resource" };
+
+	static AnimProperty::Type getAnimPropertyTypeByTypeStr(const String& typeStr)
+	{
+		if (typeStr == "Bool")	return AnimProperty::Type::Bool;
+		else if (typeStr == "Vector3") return AnimProperty::Type::Vector3;
+
+		return AnimProperty::Type::Unknown;
+	}
+
 	// get anim data
 	const Base64String& Timeline::getAnimData()
 	{ 
-		static const char* AnimCurveInterpolationTypeStr[] = { "Linear", "Discrete" };
-		static const char* AnimPropertyTypeStr[] = { "Unknown", "Float", "Vector3", "Vector4", "Quaternion" };
-		static const char* ObjectTypeStr[] = { "Node", "Setting", "Resource" };
-
 		if (m_isAnimDataDirty)
 		{
 			m_isAnimDataDirty = false;
@@ -228,8 +236,9 @@ namespace Echo
 						Echo::String propertyName = propertyNode.attribute("name").as_string();
 						Echo::String typeStr = propertyNode.attribute("type").as_string();
 						Echo::String interpolationType = propertyNode.attribute("interpolation_type").as_string();
+						AnimProperty::Type propertyType = getAnimPropertyTypeByTypeStr(typeStr);
 
-						addProperty(animClip->m_name, path, propertyName);
+						addProperty(animClip->m_name, path, propertyName, propertyType);
 
 						for (pugi::xml_node curveNode = propertyNode.child("curve"); curveNode; curveNode = curveNode.next_sibling("curve"))
 						{
@@ -315,7 +324,7 @@ namespace Echo
 		return nullptr;
 	}
 
-	void Timeline::addProperty(const String& animName, const String& objectPath, const String& propertyName)
+	void Timeline::addProperty(const String& animName, const String& objectPath, const String& propertyName, AnimProperty::Type propertyType)
 	{
 		AnimClip* clip = getClip(animName.c_str());
 		if (clip)
@@ -325,7 +334,7 @@ namespace Echo
 				const ObjectUserData& userData = any_cast<ObjectUserData>(animNode->m_userData);
 				if (userData.m_path == objectPath)
 				{
-					AnimProperty* property = animNode->addProperty( propertyName, AnimProperty::Type::Vector3);
+					AnimProperty* property = animNode->addProperty( propertyName, propertyType);
 					if (property)
 					{
 						property->setInterpolationType(AnimCurve::InterpolationType::Linear);
@@ -423,5 +432,23 @@ namespace Echo
 				}
 			}
 		}
+	}
+
+	// get anim property type by node path and property name
+	AnimProperty::Type Timeline::getAnimPropertyType(const String& objectPath, const String& propertyName)
+	{
+		Echo::Node* node = getNode(objectPath.c_str());
+		if (node)
+		{
+			Variant::Type type = Class::getPropertyType(node, propertyName);
+			switch (type)
+			{
+			case Variant::Type::Bool:		return AnimProperty::Type::Bool;
+			case Variant::Type::Vector3:	return AnimProperty::Type::Vector3;
+			default:						return AnimProperty::Type::Unknown;
+			}
+		}
+
+		return AnimProperty::Type::Unknown;
 	}
 }

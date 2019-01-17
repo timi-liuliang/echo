@@ -85,7 +85,7 @@ ELSE()
 ENDIF()
 
 # set module name
-SET(MODULE_NAME echo)
+SET(MODULE_NAME Echo)
 
 # set path
 SET(MODULE_HEADER_PATH ${ECHO_ROOT_PATH}/editor/${MODULE_NAME})

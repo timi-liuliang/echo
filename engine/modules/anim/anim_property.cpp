@@ -9,6 +9,7 @@ namespace Echo
 	{
 		switch (type)
 		{
+		case AnimProperty::Type::Bool:		return EchoNew(AnimPropertyBool);
 		case AnimProperty::Type::Float:		return EchoNew(AnimPropertyFloat);
 		case AnimProperty::Type::Vector3:	return EchoNew(AnimPropertyVec3);
 		case AnimProperty::Type::Vector4:	return EchoNew(AnimPropertyVec4);
@@ -129,6 +130,52 @@ namespace Echo
 	{
 		for (int i = 0; i < int(m_curves.size()); i++)
 			m_value[i] = m_curves[i]->getValue(time);
+	}
+
+	void AnimPropertyBool::addKey(ui32 time, bool value)
+	{
+		m_keys[time] = value;
+	}
+
+	void AnimPropertyBool::updateToTime(ui32 time)
+	{
+		if (m_keys.empty())
+		{
+			m_value = false;
+		}
+
+		if (m_keys.size() == 1)
+		{
+			m_value = m_keys.begin()->second;
+		}
+
+		// get base key and next key
+		KeyMap::iterator curKey = m_keys.begin();
+		KeyMap::iterator nextKey = ++m_keys.begin();
+		KeyMap::iterator lastKey = --m_keys.end();
+		for (; nextKey != lastKey; curKey++, nextKey++)
+		{
+			if (time >= curKey->first && time < nextKey->first)
+				break;
+		}
+
+		// calculate
+		m_value = curKey->second;
+	}
+
+	ui32 AnimPropertyBool::getLength()
+	{
+		return getEndTime() - getStartTime();
+	}
+
+	ui32 AnimPropertyBool::getStartTime()
+	{
+		return m_keys.size() ? m_keys.begin()->first : 0;
+	}
+
+	ui32 AnimPropertyBool::getEndTime()
+	{
+		return m_keys.size() ? m_keys.rbegin()->first : 0;
 	}
 
 	void AnimPropertyQuat::addKey(ui32 time, const Quaternion& value)
