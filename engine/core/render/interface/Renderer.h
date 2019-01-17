@@ -108,7 +108,6 @@ namespace Echo
 
 		// create shader
 		virtual ShaderProgram* createShaderProgram()=0;
-		virtual Shader*	createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const String& filename) = 0;
 		virtual Shader*	createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const char* srcBuffer, ui32 size) = 0;
 		
 		// create views
@@ -117,9 +116,9 @@ namespace Echo
 		virtual RenderTarget* createRenderTarget(ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const RenderTarget::Options& option) = 0;
 
 		// create states
-		virtual RasterizerState*	createRasterizerState(const RasterizerState::RasterizerDesc& desc) = 0;
-		virtual DepthStencilState*	createDepthStencilState(const DepthStencilState::DepthStencilDesc& desc) = 0;
-		virtual BlendState*			createBlendState(const BlendState::BlendDesc& desc) = 0;
+		virtual RasterizerState* createRasterizerState(const RasterizerState::RasterizerDesc& desc) = 0;
+		virtual DepthStencilState* createDepthStencilState(const DepthStencilState::DepthStencilDesc& desc) = 0;
+		virtual BlendState*	createBlendState(const BlendState::BlendDesc& desc) = 0;
 		virtual const SamplerState*	getSamplerState(const SamplerState::SamplerDesc& desc) = 0;
 
 		// renderable operate

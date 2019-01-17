@@ -3,6 +3,7 @@
 #include "RenderState.h"
 #include "Shader.h"
 #include <utility>
+#include "engine/core/util/Array.hpp"
 #include "engine/core/resource/Res.h"
 #include "mesh/MeshVertexData.h"
 
@@ -30,65 +31,28 @@ namespace Echo
 		ECHO_RES(ShaderProgram, Res, ".shader", ShaderProgram::create, ShaderProgram::load);
 
 	public:
+		typedef array<Shader*, Shader::ST_SHADERCOUNT> ShaderArray;
+
         // Uniform
         struct Uniform
         {
-            String              m_name;            // √˚≥∆
-            ShaderParamType     m_type;            // ¿‡–Õ
-            int                 m_count;        // ¥Û–°
-            int                 m_sizeInBytes;    // ¥Û–°
-            int                 m_location;        // Œª÷√
-            Byte*               m_origin_value;
-            Byte*               m_value;        // µ±«∞÷µ
-            bool                m_isDirty;        // ÷µ «∑Ò∑¢…˙¡À±‰ªØ
+            String              m_name = "UnKnown";
+            ShaderParamType     m_type = SPT_UNKNOWN;
+            int                 m_count = -1;
+            int                 m_sizeInBytes = 0;
+            int                 m_location = -1;
+            Byte*               m_origin_value = nullptr;
+            Byte*               m_value = nullptr;
+            bool                m_isDirty = true;
             
-            // ππ‘Ï∫Ø ˝
-            Uniform()
-            : m_name("UnKnown")
-            , m_type(SPT_UNKNOWN)
-            , m_count(-1)
-            , m_location(-1)
-            , m_origin_value(NULL)
-            , m_value(NULL)
-            , m_isDirty(true)
-            {}
+            Uniform() {}       
+            ~Uniform() { ECHO_FREE(m_value); }
             
-            // Œˆππ∫Ø ˝
-            ~Uniform()
-            {
-                ECHO_FREE(m_value);
-            }
+            // reset
+            void resetValue() { m_isDirty = true; }
             
-            // ÷ÿ÷√µ±«∞÷µ
-            void resetValue()
-            {
-                m_isDirty = true;
-            }
-            
-            // …Ë÷√÷µ
-            void setValue(const void* value)
-            {
-                EchoAssert(value);
-                m_origin_value = (Byte*)value;
-                
-                // ∑÷≈‰∂—ø’º‰
-                if (!m_value)
-                {
-                    m_value = (Byte*)ECHO_MALLOC(m_sizeInBytes);
-                }
-                
-                // »Ù‘‡±Íº«Œ™true,‘Ú∏’≥ı ºªØ£¨÷±Ω”øΩ±¥º¥ø…
-                if (m_isDirty)
-                {
-                    memcpy(m_value, value, m_sizeInBytes);
-                }
-                else if ( memcmp(m_value, value, m_sizeInBytes) != 0)
-                {
-                    m_isDirty = true;
-                    memcpy(m_value, value, m_sizeInBytes);
-                }
-            }
-            
+            // set value
+			void setValue(const void* value);
         };
         typedef std::map<int, Uniform> UniformArray;
         
@@ -143,7 +107,7 @@ namespace Echo
         
     public:
         // shaders operate
-        Shader* getShader(Shader::ShaderType type) const { return m_pShaders[(ui32)type]; }
+        Shader* getShader(Shader::ShaderType type) const { return m_shaders[(ui32)type]; }
         virtual bool attachShader(Shader* pShader);
         virtual Shader* detachShader(Shader::ShaderType type);
         virtual bool linkShaders() {return false;}
@@ -198,8 +162,8 @@ namespace Echo
 		DepthStencilState*	m_depthState = nullptr;
 		RasterizerState*	m_rasterizerState = nullptr;
 		MapDefaultUniforms	m_defaultUniforms;
-        Shader*             m_pShaders[Shader::ST_SHADERCOUNT];
-        bool                m_bLinked;
+		ShaderArray			m_shaders;
+        bool                m_isLinked = false;
         UniformArray        m_uniforms;
 	};
 	typedef ResRef<ShaderProgram> ShaderProgramPtr;

@@ -73,7 +73,6 @@ namespace Echo
 		TextureCube* createTextureCube(const String& name);
 
 		ShaderProgram*	createShaderProgram();
-		Shader*	createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const String& filename);
 		Shader*	createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const char* srcBuffer, ui32 size);
 		RenderTargetView* createRenderTargetView(PixelFormat fmt, ui32 width, ui32 height);
 		DepthStencilView* createDepthStencilView(PixelFormat fmt, ui32 width, ui32 height);

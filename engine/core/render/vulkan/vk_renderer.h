@@ -35,7 +35,6 @@ namespace Echo
         
         // create shaders
         virtual ShaderProgram* createShaderProgram() override;
-        virtual Shader* createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const String& filename) override {return nullptr;}
         virtual Shader* createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const char* srcBuffer, ui32 size)  override {return nullptr;}
 
 		// create renderable

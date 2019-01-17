@@ -334,32 +334,12 @@ namespace Echo
 
 	GPUBuffer* GLES2Renderer::createVertexBuffer(Dword usage, const Buffer& buff)
 	{
-		GPUBuffer* pGPUBuffer = NULL;
-		try
-		{
-			pGPUBuffer = EchoNew(GLES2GPUBuffer(GPUBuffer::GBT_VERTEX, usage, buff));
-		}
-		catch (Exception& e)
-		{
-			EchoLogError(e.getMessage().c_str());
-		}
-
-		return pGPUBuffer;
+		return EchoNew(GLES2GPUBuffer(GPUBuffer::GBT_VERTEX, usage, buff));
 	}
 
 	GPUBuffer* GLES2Renderer::createIndexBuffer(Dword usage, const Buffer& buff)
 	{
-		GPUBuffer* pGPUBuffer = NULL;
-		try
-		{
-			pGPUBuffer = EchoNew(GLES2GPUBuffer(GPUBuffer::GBT_INDEX, usage, buff));
-		}
-		catch (Exception& e)
-		{
-			EchoLogError(e.getMessage().c_str());
-		}
-
-		return pGPUBuffer;
+		return EchoNew(GLES2GPUBuffer(GPUBuffer::GBT_INDEX, usage, buff));
 	}
 
 	Texture* GLES2Renderer::createTexture2D(const String& name)
@@ -374,125 +354,39 @@ namespace Echo
 
 	ShaderProgram* GLES2Renderer::createShaderProgram()
 	{
-		ShaderProgram* pShaderProgram = NULL;
-		try
-		{
-			pShaderProgram = EchoNew(GLES2ShaderProgram);
-		}
-		catch (Exception& e)
-		{
-			EchoLogError(e.getMessage().c_str());
-		}
-
-		return pShaderProgram;
-	}
-
-	Shader* GLES2Renderer::createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const String& filename)
-	{
-		Shader* pShader = NULL;
-		try
-		{
-			pShader = EchoNew(GLES2Shader(type, desc, filename));
-		}
-		catch (Exception& e)
-		{
-			EchoLogError(e.getMessage().c_str());
-		}
-
-		return pShader;
+		return EchoNew(GLES2ShaderProgram);
 	}
 
 	Shader* GLES2Renderer::createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const char* srcBuffer, ui32 size)
 	{
-		Shader* pShader = NULL;
-		try
-		{
-			pShader = EchoNew(GLES2Shader(type, desc, srcBuffer, size));
-		}
-		catch (Exception& e)
-		{
-			EchoLogError(e.getMessage().c_str());
-		}
-
-		return pShader;
+		return EchoNew(GLES2Shader(type, desc, srcBuffer, size));
 	}
 
 	RenderTargetView* GLES2Renderer::createRenderTargetView(PixelFormat fmt, ui32 width, ui32 height)
 	{
-		RenderTargetView* pRTV = NULL;
-		try
-		{
-			pRTV = EchoNew(GLES2RenderTargetView(fmt, width, height));
-		}
-		catch (Exception& e)
-		{
-			EchoLogError(e.getMessage().c_str());
-		}
-
-		return pRTV;
+		return EchoNew(GLES2RenderTargetView(fmt, width, height));
 	}
 
 	DepthStencilView* GLES2Renderer::createDepthStencilView(PixelFormat fmt, ui32 width, ui32 height)
 	{
-		DepthStencilView* pDSV = NULL;
-		try
-		{
-			pDSV = EchoNew(GLES2DepthStencilView(fmt, width, height));
-		}
-		catch (Exception& e)
-		{
-			EchoLogError(e.getMessage().c_str());
-		}
-
-		return pDSV;
+		return EchoNew(GLES2DepthStencilView(fmt, width, height));
 	}
 
 	RasterizerState* GLES2Renderer::createRasterizerState(const RasterizerState::RasterizerDesc& desc)
 	{
-		RasterizerState* pState = NULL;
-		try
-		{
-			pState = EchoNew(GLES2RasterizerState(desc));
-		}
-		catch (Exception& e)
-		{
-			EchoLogError(e.getMessage().c_str());
-		}
-
-		return pState;
+		return EchoNew(GLES2RasterizerState(desc));
 	}
 
 	DepthStencilState* GLES2Renderer::createDepthStencilState(const DepthStencilState::DepthStencilDesc& desc)
 	{
-		DepthStencilState* pState = NULL;
-		try
-		{
-			pState = EchoNew(GLES2DepthStencilState(desc));
-		}
-		catch (Exception& e)
-		{
-			EchoLogError(e.getMessage().c_str());
-		}
-
-		return pState;
+		return EchoNew(GLES2DepthStencilState(desc));
 	}
 
 	BlendState* GLES2Renderer::createBlendState(const BlendState::BlendDesc& desc)
 	{
-		BlendState* pState = NULL;
-		try
-		{
-			pState = EchoNew(GLES2BlendState(desc));
-		}
-		catch (Exception& e)
-		{
-			EchoLogError(e.getMessage().c_str());
-		}
-
-		return pState;
+		return EchoNew(GLES2BlendState(desc));
 	}
 
-	// 获取采样状态
 	const SamplerState* GLES2Renderer::getSamplerState(const SamplerState::SamplerDesc& desc)
 	{
 		// 是否已存在
@@ -503,16 +397,8 @@ namespace Echo
 		}
 
 		// 新建
-		GLES2SamplerState* pState = NULL;
-		try
-		{
-			pState = EchoNew(GLES2SamplerState(desc));
-			m_vecSamlerStates.insert(pState);
-		}
-		catch (Exception& e)
-		{
-			EchoLogError(e.getMessage().c_str());
-		}
+		GLES2SamplerState* pState = EchoNew(GLES2SamplerState(desc));
+		m_vecSamlerStates.insert(pState);
 
 		return pState;
 	}
@@ -522,7 +408,6 @@ namespace Echo
 		if (m_pre_shader_program != program)
 		{
 			m_pre_shader_program = program;
-
 			return true;
 		}
 

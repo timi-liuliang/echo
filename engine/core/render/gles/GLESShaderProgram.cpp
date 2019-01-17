@@ -6,8 +6,6 @@
 #include <engine/core/log/Log.h>
 #include "engine/core/memory/MemAllocDef.h"
 
-#define UNIFORM_OPTIMIZE
-
 namespace Echo
 {
 	GLES2ShaderProgram::GLES2ShaderProgram()
@@ -15,8 +13,8 @@ namespace Echo
 	{
 		m_attribLocationMapping.assign(-1);
 
-		m_hProgram = OGLESDebug(glCreateProgram());
-		if (!m_hProgram)
+		m_glesProgram = OGLESDebug(glCreateProgram());
+		if (!m_glesProgram)
 		{
 			EchoLogError("Create GLES2ShaderProgram failed.");
 		}
@@ -33,22 +31,23 @@ namespace Echo
 		Shader* pPixelShader = detachShader(Shader::ST_PIXELSHADER);
 		EchoSafeDelete(pPixelShader, Shader);
 
-		OGLESDebug(glDeleteProgram(m_hProgram));
-		m_hProgram = 0;
+		OGLESDebug(glDeleteProgram(m_glesProgram));
+		m_glesProgram = 0;
 	}
 	
 	bool GLES2ShaderProgram::attachShader(Shader* pShader)
 	{
-		bool bRet = ShaderProgram::attachShader(pShader);
-		if(!bRet)
-			return false;
+		if (ShaderProgram::attachShader(pShader))
+		{
+			EchoAssert(pShader);
+			GLES2Shader* pGLES2Shader = (GLES2Shader*)pShader;
+			ui32 hShader = pGLES2Shader->getShaderHandle();
+			OGLESDebug(glAttachShader(m_glesProgram, hShader));
 
-		EchoAssert(pShader);
-		GLES2Shader* pGLES2Shader = (GLES2Shader*)pShader;
-		ui32 hShader = pGLES2Shader->getShaderHandle();
-		OGLESDebug(glAttachShader(m_hProgram, hShader));
-
-		return true;
+			return true;
+		}
+			
+		return false;
 	}
 	
 	Shader* GLES2ShaderProgram::detachShader(Shader::ShaderType type)
@@ -58,7 +57,7 @@ namespace Echo
 		{
 			GLES2Shader* pGLES2Shader = (GLES2Shader*)pShader;
 			ui32 hShader = pGLES2Shader->getShaderHandle();
-			OGLESDebug(glDetachShader(m_hProgram, hShader));
+			OGLESDebug(glDetachShader(m_glesProgram, hShader));
 		}
 
 		return pShader;
@@ -66,16 +65,16 @@ namespace Echo
 
 	bool GLES2ShaderProgram::linkShaders()
 	{
-		OGLESDebug(glLinkProgram(m_hProgram));
+		OGLESDebug(glLinkProgram(m_glesProgram));
 
 		// Check the status of the link.
 		GLint status;
-		OGLESDebug(glGetProgramiv(m_hProgram, GL_LINK_STATUS, &status));
+		OGLESDebug(glGetProgramiv(m_glesProgram, GL_LINK_STATUS, &status));
 		if (status != 1)
 		{
 			// get the size of the string containing the information log for the failed shader compilation message.
 			GLint logSize = 0;
-			OGLESDebug(glGetProgramiv(m_hProgram, GL_INFO_LOG_LENGTH, &logSize));
+			OGLESDebug(glGetProgramiv(m_glesProgram, GL_INFO_LOG_LENGTH, &logSize));
 
 			// increment the size by one to handle also the null terminator.
 			++logSize;
@@ -84,7 +83,7 @@ namespace Echo
 			char* szLogInfo = (char*)EchoMalloc(logSize);
 
 			// retrieve the info log.
-			OGLESDebug(glGetProgramInfoLog(m_hProgram, logSize, NULL, szLogInfo));
+			OGLESDebug(glGetProgramInfoLog(m_glesProgram, logSize, NULL, szLogInfo));
 
 			String errMsg = szLogInfo;
 			EchoSafeFree(szLogInfo);
@@ -93,12 +92,12 @@ namespace Echo
 			return false;
 		}
 
-		m_bLinked = true;
+		m_isLinked = true;
 		EchoLogDebug("Link shaders successd.");
 
 		// 记录常量信息
 		GLint activeUniformLength;
-		OGLESDebug(glGetProgramiv(m_hProgram, GL_ACTIVE_UNIFORMS, &activeUniformLength));
+		OGLESDebug(glGetProgramiv(m_glesProgram, GL_ACTIVE_UNIFORMS, &activeUniformLength));
 
 		// 记录常量信息
 		for (GLint i = 0; i < activeUniformLength; i++)
@@ -107,28 +106,28 @@ namespace Echo
 			GLint   uniformSize;
 			GLenum  uniformType;
 			GLsizei uniformLength;
-			OGLESDebug(glGetActiveUniform(m_hProgram, i, 512, &uniformLength, &uniformSize, &uniformType, unifromName));
+			OGLESDebug(glGetActiveUniform(m_glesProgram, i, 512, &uniformLength, &uniformSize, &uniformType, unifromName));
 
 			Uniform desc;
 			desc.m_name = StringUtil::Replace(unifromName, "[0]", "").c_str();
 			desc.m_type = GLES2Mapping::MapUniformType(uniformType);
 			desc.m_count = uniformSize;
 			desc.m_sizeInBytes = desc.m_count * getUniformByteSizeByUniformType(desc.m_type);
-			desc.m_location = glGetUniformLocation(m_hProgram, desc.m_name.c_str());
+			desc.m_location = glGetUniformLocation(m_glesProgram, desc.m_name.c_str());
 			m_uniforms[desc.m_location] = desc;
 		}
 
 		for (ui32 i = 0; i < VS_MAX; ++i)
 		{
 			String strName = GLES2Mapping::MapVertexSemanticString((VertexSemantic)i);
-			GLint loc = OGLESDebug(glGetAttribLocation(m_hProgram, strName.c_str()));
+			GLint loc = OGLESDebug(glGetAttribLocation(m_glesProgram, strName.c_str()));
 			if (loc != -1)
 			{
 				m_attribLocationMapping[i] = loc;
 			}
 		}
 
-		m_bLinked = true;
+		m_isLinked = true;
 
 		return true;
 	}
@@ -167,12 +166,12 @@ namespace Echo
 	
 	void GLES2ShaderProgram::bind()
 	{
-		if (m_bLinked)
+		if (m_isLinked)
 		{
 			// Install the shader program as part of the current rendering state.
 			if ((ECHO_DOWN_CAST<GLES2Renderer*>(Renderer::instance()))->bindShaderProgram(this))
 			{
-				OGLESDebug(glUseProgram(m_hProgram));
+				OGLESDebug(glUseProgram(m_glesProgram));
 
 				// set dirty flag
 				for (UniformArray::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++)

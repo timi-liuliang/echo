@@ -47,7 +47,7 @@ namespace Echo
 	private:
 		GLES2Renderable*	m_preRenderable;				// 几何体数据流
 		AttribLocationArray	m_attribLocationMapping;		// 属性物理位置映射
-		GLuint				m_hProgram;
+		GLuint				m_glesProgram;
 	};
 
 }

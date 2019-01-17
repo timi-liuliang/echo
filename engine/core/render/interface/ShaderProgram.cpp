@@ -11,14 +11,39 @@
 
 namespace Echo
 {
+	// set value
+	void ShaderProgram::Uniform::setValue(const void* value)
+	{
+		EchoAssert(value);
+		m_origin_value = (Byte*)value;
+
+		// ∑÷≈‰∂—ø’º‰
+		if (!m_value)
+		{
+			m_value = (Byte*)ECHO_MALLOC(m_sizeInBytes);
+		}
+
+		// »Ù‘‡±Íº«Œ™true,‘Ú∏’≥ı ºªØ£¨÷±Ω”øΩ±¥º¥ø…
+		if (m_isDirty)
+		{
+			memcpy(m_value, value, m_sizeInBytes);
+		}
+		else if (memcmp(m_value, value, m_sizeInBytes) != 0)
+		{
+			m_isDirty = true;
+			memcpy(m_value, value, m_sizeInBytes);
+		}
+	}
+
 	ShaderProgram::ShaderProgram()
 	{
+		m_shaders.assign(nullptr);
 	}
 
 	ShaderProgram::ShaderProgram(const ResourcePath& path)
 		: Res(path)
 	{
-
+		m_shaders.assign(nullptr);
 	}
 
 	ShaderProgram::~ShaderProgram()
@@ -349,18 +374,15 @@ namespace Echo
 		Shader *pVertexShader = pRenderer->createShader(Shader::ST_VERTEXSHADER, vsDesc, vsContent.data(), vsContent.size());
 		if(!pVertexShader)
 		{
-			String output = "Error in create vs file: ";
-			EchoLogError(output.c_str());
+			EchoLogError("Error in create vs file: ");
 			return false;
 		}
 
 		Shader::ShaderDesc psDesc(m_shaderDesc);
-
 		Shader *pPixelShader = pRenderer->createShader(Shader::ST_PIXELSHADER, psDesc, psContent.data(), psContent.size());
 		if(!pPixelShader)
 		{
-			String output = "Error in create ps file: ";
-			EchoLogError(output.c_str());
+			EchoLogError("Error in create ps file: ");
 			return false;
 		}
 
@@ -531,7 +553,6 @@ namespace Echo
 		return i != String::npos;
 	}
 
-	// save
 	void ShaderProgram::save()
 	{
 
@@ -576,25 +597,25 @@ namespace Echo
             return false;
         
         Shader::ShaderType type = pShader->getShaderType();
-        if(m_pShaders[(ui32)type])
+        if(m_shaders[(ui32)type])
         {
             EchoLogError("The shader [%s] has been already attached.", Shader::GetShaderTypeDesc(type).c_str());
             return false;
         }
         
-        m_pShaders[(ui32)type] = pShader;
+        m_shaders[(ui32)type] = pShader;
         pShader->setShaderProgram(this);
-        m_bLinked = false;
+        m_isLinked = false;
         
         return true;
     }
     
     Shader* ShaderProgram::detachShader(Shader::ShaderType type)
     {
-        Shader* pShader = m_pShaders[(ui32)type];
-        m_pShaders[(ui32)type] = NULL;
+        Shader* pShader = m_shaders[(ui32)type];
+        m_shaders[(ui32)type] = NULL;
         
-        m_bLinked = false;
+        m_isLinked = false;
         
         return pShader;
     }
