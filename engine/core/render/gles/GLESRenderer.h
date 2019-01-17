@@ -9,15 +9,15 @@ namespace Echo
 	{
 		GLenum				m_target;
 		GLuint				m_texture;
-		const GLES2SamplerState*	m_samplerState;	// ²ÉÑù×´Ì¬
+		const GLES2SamplerState*	m_samplerState;	// é‡‡æ ·çŠ¶æ€
 		
 
-		// ¹¹Ôìº¯Êı
+		// æ„é€ å‡½æ•°
 		TextureSlotInfo()
 			: m_target(-1), m_texture(NULL), m_samplerState( NULL)
 		{}
 
-		// ÖØÖÃ
+		// é‡ç½®
 		void reset()
 		{
 			m_target = -1;
@@ -72,7 +72,7 @@ namespace Echo
 		Texture*  createTexture2D(const String& name);
 		TextureCube* createTextureCube(const String& name);
 
-		ShaderProgram*	createShaderProgram(  ShaderProgramRes* material);
+		ShaderProgram*	createShaderProgram();
 		Shader*	createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const String& filename);
 		Shader*	createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const char* srcBuffer, ui32 size);
 		RenderTargetView* createRenderTargetView(PixelFormat fmt, ui32 width, ui32 height);
@@ -92,15 +92,15 @@ namespace Echo
 
 		bool bindShaderProgram(GLES2ShaderProgram* program);
 
-		// »ñÈ¡ÕæÊµÊÓ¿Ú´óĞ¡
+		// è·å–çœŸå®è§†å£å¤§å°
 		virtual void getViewportReal( Viewport& pViewport);
 		
-		// ¸üĞÂSize
+		// æ›´æ–°Size
 		virtual void onSize(int width, int height); 
 
 	protected:
 		//  interal implement
-		virtual Renderable* createRenderable(const String& renderStage, ShaderProgramRes* material) override;
+		virtual Renderable* createRenderable(const String& renderStage, ShaderProgram* material) override;
 
 		// preset to screen
 		virtual bool present() override;
@@ -119,14 +119,14 @@ namespace Echo
 
 	protected:
 		GLES2ShaderProgram*			m_pre_shader_program;
-		array<TextureSlotInfo, 8>	m_preTextures;		 // ÒÑÉèÖÃÎÆÀí	
+		array<TextureSlotInfo, 8>	m_preTextures;		 // å·²è®¾ç½®çº¹ç†	
 
 	private:
 		String				m_gpuDesc;
 		ui32				m_screenWidth;
 		ui32				m_screenHeight;
 		std::set<GLES2SamplerState*> m_vecSamlerStates;
-		NineBoolArray		m_isVertexAttribArrayEnable;	// ¼ÇÂ¼Ö¸¶¨AttribArrayÊÇ·ñ¿ÉÓÃ
+		NineBoolArray		m_isVertexAttribArrayEnable;	// è®°å½•æŒ‡å®šAttribArrayæ˜¯å¦å¯ç”¨
 
 #ifdef ECHO_PLATFORM_WINDOWS
 

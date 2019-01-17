@@ -14,7 +14,7 @@ namespace Echo
 {
 	extern GLES2Renderer* g_renderer;
 
-	GLES2Renderable::GLES2Renderable(const String& renderStage, ShaderProgramRes* shader, int identifier)
+	GLES2Renderable::GLES2Renderable(const String& renderStage, ShaderProgram* shader, int identifier)
 		: Renderable( renderStage, shader, identifier)
 		, m_vao( -1)
 	{
@@ -41,7 +41,7 @@ namespace Echo
 
 		m_vertexStreams.push_back(unit);
 
-		// …˙≥…Hash÷µ
+		// ÁîüÊàêHashÂÄº
 		if (flag & BS_END)
 			generateVertexStreamHash();
 
@@ -53,7 +53,7 @@ namespace Echo
 		GPUBuffer* idxBuffer = m_mesh->getIndexBuffer();
 		GPUBuffer* preIdxBuffer = pre ? pre->getMesh()->getIndexBuffer() : nullptr;
 
-		// 1.»∑∂®∂•µ„¡˜À˜“˝¡˜ «∑Ò–Ë“™…Ë÷√
+		// 1.Á°ÆÂÆöÈ°∂ÁÇπÊµÅÁ¥¢ÂºïÊµÅÊòØÂê¶ÈúÄË¶ÅËÆæÁΩÆ
 		bool isNeedSetVertexBuffer;
 		bool isNeedSetIdxBuffer;
 		if (!pre)
@@ -71,7 +71,7 @@ namespace Echo
 			isNeedSetIdxBuffer = (!idxBuffer || preIdxBuffer == idxBuffer) ? false : true;
 		}
 
-		// ∞Û∂®∂•µ„¡˜
+		// ÁªëÂÆöÈ°∂ÁÇπÊµÅ
 		if (isNeedSetVertexBuffer)
 		{
 			for (i32 i = (i32)(m_vertexStreams.size() - 1); i >= 0; i--)
@@ -106,7 +106,7 @@ namespace Echo
 	void GLES2Renderable::unbind()
 	{
 #ifndef ECHO_PLATFORM_MAC_IOS
-		// ∞Û∂®∂•µ„¡˜
+		// ÁªëÂÆöÈ°∂ÁÇπÊµÅ
   		for (size_t i = 0; i < m_vertexStreams.size(); i++)
   		{
   			const StreamUnit& streamUnit = m_vertexStreams[i];
@@ -141,7 +141,7 @@ namespace Echo
 		stream->m_vertDeclaration.reserve(numVertElms);
 		stream->m_vertDeclaration.resize(numVertElms);
 		
-		GLES2ShaderProgram* gles2Program = ECHO_DOWN_CAST<GLES2ShaderProgram*>(m_shaderProgram->getShaderProgram());
+		GLES2ShaderProgram* gles2Program = ECHO_DOWN_CAST<GLES2ShaderProgram*>(m_shaderProgram.ptr());
 		ui32 elmOffset = 0;
 		for (size_t i = 0; i < numVertElms; ++i)
 		{

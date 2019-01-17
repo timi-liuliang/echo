@@ -5,14 +5,13 @@
 #include <engine/core/Util/Exception.h>
 #include <engine/core/log/Log.h>
 #include "engine/core/memory/MemAllocDef.h"
-#include "interface/ShaderProgramRes.h"
 
 #define UNIFORM_OPTIMIZE
 
 namespace Echo
 {
-	GLES2ShaderProgram::GLES2ShaderProgram( ShaderProgramRes* material)
-		: ShaderProgram( material)
+	GLES2ShaderProgram::GLES2ShaderProgram()
+		: ShaderProgram()
 	{
 		m_attribLocationMapping.assign(-1);
 
@@ -97,11 +96,11 @@ namespace Echo
 		m_bLinked = true;
 		EchoLogDebug("Link shaders successd.");
 
-		// ¼ÇÂ¼³£Á¿ĞÅÏ¢
+		// è®°å½•å¸¸é‡ä¿¡æ¯
 		GLint activeUniformLength;
 		OGLESDebug(glGetProgramiv(m_hProgram, GL_ACTIVE_UNIFORMS, &activeUniformLength));
 
-		// ¼ÇÂ¼³£Á¿ĞÅÏ¢
+		// è®°å½•å¸¸é‡ä¿¡æ¯
 		for (GLint i = 0; i < activeUniformLength; i++)
 		{
 			char    unifromName[512];
@@ -155,13 +154,13 @@ namespace Echo
 						default:			EchoAssertX(0, "unknow shader param format!");													break;
 					}
 
-					// ĞŞ¸Ä×´Ì¬
+					// ä¿®æ”¹çŠ¶æ€
 					uniform.m_isDirty = false;
 				}
 			}
 			else
 			{
-				EchoLogError("Shader param [%s] is NULL, Material [%s]", uniform.m_name.c_str(), m_material->getName().c_str());
+				EchoLogError("Shader param is NULL, Material");
 			}
 		}
 	}
@@ -210,6 +209,6 @@ namespace Echo
 
 	const String& GLES2ShaderProgram::getMaterialName()
 	{
-		return m_material->getName();
+		return "MaterialName:";
 	}
 }

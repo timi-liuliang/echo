@@ -14,40 +14,40 @@ namespace Echo
 	public:
 		typedef array<GLint, VS_MAX> AttribLocationArray;
 	public:
-		GLES2ShaderProgram( ShaderProgramRes* material);
+		GLES2ShaderProgram();
 		~GLES2ShaderProgram();
 
-		// ¸½¼Óshader
+		// é™„åŠ shader
 		virtual bool attachShader(Shader* pShader) override;
 
-		// ÒÆ³ıshader
+		// ç§»é™¤shader
 		virtual Shader*	detachShader(Shader::ShaderType type) override;
 
-		// Á´½Óshader
+		// é“¾æ¥shader
 		virtual bool linkShaders() override;
 
-		// Ó¦ÓÃ±äÁ¿
+		// åº”ç”¨å˜é‡
 		virtual void bindUniforms() override;
 
-		// °ó¶¨
+		// ç»‘å®š
 		virtual void bind() override;
 
-		// ½â°ó
+		// è§£ç»‘
 		virtual void unbind() override;
 
-		// °ó¶¨¼¸ºÎÌåÊı¾İ
+		// ç»‘å®šå‡ ä½•ä½“æ•°æ®
 		virtual void bindRenderable(Renderable* renderable) override;
 
-		// »ñÈ¡¶¥µãÊôĞÔÎïÀíÎ»ÖÃ
-		i32 getAtrribLocation(VertexSemantic vertexSemantic) override;
+		// è·å–é¡¶ç‚¹å±æ€§ç‰©ç†ä½ç½®
+		virtual i32 getAtrribLocation(VertexSemantic vertexSemantic) override;
 
-		// »ñÈ¡²ÄÖÊÃû
+		// è·å–æè´¨å
 		const String& getMaterialName();
 	
 	private:
-		GLES2Renderable*	m_preRenderable;				// ¼¸ºÎÌåÊı¾İÁ÷
-		AttribLocationArray	m_attribLocationMapping;		// ÊôĞÔÎïÀíÎ»ÖÃÓ³Éä
-		GLuint			m_hProgram;
+		GLES2Renderable*	m_preRenderable;				// å‡ ä½•ä½“æ•°æ®æµ
+		AttribLocationArray	m_attribLocationMapping;		// å±æ€§ç‰©ç†ä½ç½®æ˜ å°„
+		GLuint				m_hProgram;
 	};
 
 }

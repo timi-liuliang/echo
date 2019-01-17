@@ -372,12 +372,12 @@ namespace Echo
 		return name.empty() ? EchoNew(GLESTextureCube) : EchoNew(GLESTextureCube(name));
 	}
 
-	ShaderProgram* GLES2Renderer::createShaderProgram(ShaderProgramRes* material)
+	ShaderProgram* GLES2Renderer::createShaderProgram()
 	{
 		ShaderProgram* pShaderProgram = NULL;
 		try
 		{
-			pShaderProgram = EchoNew(GLES2ShaderProgram(material));
+			pShaderProgram = EchoNew(GLES2ShaderProgram);
 		}
 		catch (Exception& e)
 		{
@@ -492,17 +492,17 @@ namespace Echo
 		return pState;
 	}
 
-	// »ñÈ¡²ÉÑù×´Ì¬
+	// è·å–é‡‡æ ·çŠ¶æ€
 	const SamplerState* GLES2Renderer::getSamplerState(const SamplerState::SamplerDesc& desc)
 	{
-		// ÊÇ·ñÒÑ´æÔÚ
+		// æ˜¯å¦å·²å­˜åœ¨
 		for (std::set<GLES2SamplerState*>::iterator it = m_vecSamlerStates.begin(); it != m_vecSamlerStates.end(); it++)
 		{
 			if ((*it)->getDesc() == desc)
 				return *it;
 		}
 
-		// ĞÂ½¨
+		// æ–°å»º
 		GLES2SamplerState* pState = NULL;
 		try
 		{
@@ -551,10 +551,10 @@ namespace Echo
 
 	bool GLES2Renderer::present()
 	{
-		// ÖØÖÃ×ÅÉ«Æ÷ĞÅÏ¢
+		// é‡ç½®ç€è‰²å™¨ä¿¡æ¯
 		m_pre_shader_program = nullptr;
 
-		// ÖØÖÃÎÆÀí²ÛĞÅÏ¢
+		// é‡ç½®çº¹ç†æ§½ä¿¡æ¯
 		for (size_t i = 0; i < m_preTextures.size(); i++)
 			m_preTextures[i].reset();
 
@@ -728,7 +728,7 @@ namespace Echo
 		return EchoNew(GLES2RenderTarget(_id, _width, _height, _pixelFormat, option));
 	}
 
-	Renderable* GLES2Renderer::createRenderable(const String& renderStage, ShaderProgramRes* material)
+	Renderable* GLES2Renderer::createRenderable(const String& renderStage, ShaderProgram* material)
 	{
 		Renderable* renderable = EchoNew(GLES2Renderable(renderStage, material, m_renderableIdentifier++));
 		ui32 id = renderable->getIdentifier();

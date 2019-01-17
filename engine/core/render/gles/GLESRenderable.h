@@ -27,13 +27,13 @@ namespace Echo
 		};
 		typedef vector<VertexDeclaration>::type	VertexDeclarationList;
 
-		// ¶¥µãÁ÷
+		// é¡¶ç‚¹æµ
 		struct StreamUnit
 		{
-			VertexElementList		m_vertElements;		// ¶¥µã¸ñÊ½ÉùÃ÷
-			VertexDeclarationList	m_vertDeclaration;	// ¶¥µãÉùÃ÷
-			ui32					m_vertStride;		// Ã¿¶¥µã´óĞ¡
-			GPUBuffer*				m_buffer;			// ¶¥µãÊı¾İ
+			VertexElementList		m_vertElements;		// é¡¶ç‚¹æ ¼å¼å£°æ˜
+			VertexDeclarationList	m_vertDeclaration;	// é¡¶ç‚¹å£°æ˜
+			ui32					m_vertStride;		// æ¯é¡¶ç‚¹å¤§å°
+			GPUBuffer*				m_buffer;			// é¡¶ç‚¹æ•°æ®
 
 			StreamUnit()
 				: m_buffer(NULL)
@@ -43,13 +43,13 @@ namespace Echo
 		};
 
 	public:
-		GLES2Renderable(const String& renderStage, ShaderProgramRes* shader, int identifier);
+		GLES2Renderable(const String& renderStage, ShaderProgram* shader, int identifier);
 		~GLES2Renderable();
 
-		// °ó¶¨¼¸ºÎÌåÊı¾İ
+		// ç»‘å®šå‡ ä½•ä½“æ•°æ®
 		void bind( Renderable* pre);
 
-		// ½â°ó¼¸ºÎÌåÊı¾İ
+		// è§£ç»‘å‡ ä½•ä½“æ•°æ®
 		void unbind();
 
 	private:
@@ -58,16 +58,16 @@ namespace Echo
 		// bind vertex stream
 		bool bindVertexStream(const VertexElementList& vertElements, GPUBuffer* vertexBuffer, int flag = BS_BEGIN | BS_END);
 
-		// ¼ÆËã¶¥µãÁ÷ÉùÃ÷
+		// è®¡ç®—é¡¶ç‚¹æµå£°æ˜
 		virtual bool buildVertStreamDeclaration(StreamUnit* stream);
 
-		// Éú³É¶¥µãÁ÷HashÖµ(BKDR Hash)
+		// ç”Ÿæˆé¡¶ç‚¹æµHashå€¼(BKDR Hash)
 		virtual void generateVertexStreamHash();
 
 	private:
 		vector<StreamUnit>::type	m_vertexStreams;
 		unsigned int				m_vertexStreamsHash;
 		bool						m_is_muti_stream;
-		GLuint						m_vao;					// ¶¥µãÊı×é(OpenGLES 3.0)
+		GLuint						m_vao;					// é¡¶ç‚¹æ•°ç»„(OpenGLES 3.0)
 	};
 }

@@ -452,12 +452,12 @@ namespace Echo
 
 	void* ShaderProgram::createDefaultUniformValue(const String& strType, const i32 count, const String& strValue, ui32& outSize, ShaderParamType& outType)
 	{
-		// ½âÎö×Ö·û´®£¬Êı¾İ·Ö¶Î
+		// è§£æå­—ç¬¦ä¸²ï¼Œæ•°æ®åˆ†æ®µ
 		StringArray valueStr = StringUtil::Split(strValue, ";");
 		ui32 size = valueStr.size();
 		EchoAssertX(size == count, "Material::createDefaultUniformValue");
 
-		// ¸ù¾İÀàĞÍ¼ÆËãÏà¹ØÊı¾İ
+		// æ ¹æ®ç±»å‹è®¡ç®—ç›¸å…³æ•°æ®
 		if (strType == "SPT_INT")
 		{
 			outType = SPT_INT;
@@ -498,13 +498,13 @@ namespace Echo
 			outType = SPT_UNKNOWN;
 		}
 
-		// ·ÖÅäÄÚ´æÊı¾İ
+		// åˆ†é…å†…å­˜æ•°æ®
 		void* value = nullptr;
 		if (outSize)
 		{
 			value = (void*)EchoMalloc(outSize);
 
-			// ¸³Öµ
+			// èµ‹å€¼
 			for (ui32 i = 0; i < size; ++i)
 			{
 				switch (outType)
@@ -598,4 +598,20 @@ namespace Echo
         
         return pShader;
     }
+
+	int ShaderProgram::getUniformByteSizeByUniformType(ShaderParamType uniformType)
+	{
+		switch (uniformType)
+		{
+		case SPT_UNKNOWN:			return 0;
+		case SPT_INT:				return 4;
+		case SPT_FLOAT:				return 4;
+		case SPT_VEC2:				return 8;
+		case SPT_VEC3:				return 12;
+		case SPT_VEC4:				return 16;
+		case SPT_MAT4:				return 64;
+		case SPT_TEXTURE:			return 4;
+		default:					return 0;
+		}
+	}
 }

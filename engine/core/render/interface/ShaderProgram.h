@@ -4,6 +4,7 @@
 #include "Shader.h"
 #include <utility>
 #include "engine/core/resource/Res.h"
+#include "mesh/MeshVertexData.h"
 
 namespace Echo
 {
@@ -23,6 +24,7 @@ namespace Echo
     };
     
 	class Renderer;
+	class Renderable;
 	class ShaderProgram : public Res
 	{
 		ECHO_RES(ShaderProgram, Res, ".shader", ShaderProgram::create, ShaderProgram::load);
@@ -156,6 +158,19 @@ namespace Echo
         // uniform operate
         UniformArray* getUniforms(){ return &m_uniforms; }
 
+		// uniforms
+		virtual void bindUniforms() {}
+		virtual void unbind() {}
+
+		// bind renderable
+		virtual void bindRenderable(Renderable* renderable) {}
+
+		// get attribute location
+		virtual i32 getAtrribLocation(VertexSemantic vertexSemantic) { return 0; }
+
+		// ByteSize
+		static int getUniformByteSizeByUniformType(ShaderParamType uniformType);
+
 	public:
         // create
         static Res* create();
@@ -177,7 +192,7 @@ namespace Echo
 		bool createShaderProgram(const String& vsContent, const String& psContent);
 		void* createDefaultUniformValue(const String& strType, const i32 count, const String& strValue, ui32& outSize, ShaderParamType& outType);
 
-	private:
+	protected:
 		Shader::ShaderDesc	m_shaderDesc;							// Shader info
 		BlendState*			m_blendState = nullptr;
 		DepthStencilState*	m_depthState = nullptr;
