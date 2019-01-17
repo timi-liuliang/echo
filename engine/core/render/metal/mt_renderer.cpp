@@ -6,17 +6,17 @@
 
 namespace Echo
 {
-    VKRenderer::VKRenderer()
+    MTRenderer::MTRenderer()
     {
         
     }
     
-    VKRenderer::~VKRenderer()
+    MTRenderer::~MTRenderer()
     {
         
     }
 
-    bool VKRenderer::initialize(const Config& config)
+    bool MTRenderer::initialize(const Config& config)
     {
         m_screenWidth = config.screenWidth;
         m_screenHeight = config.screenHeight;
@@ -31,17 +31,17 @@ namespace Echo
         return true;
     }
     
-	void VKRenderer::setViewport(Viewport* pViewport)
+	void MTRenderer::setViewport(Viewport* pViewport)
 	{
 
 	}
 
-	void VKRenderer::setTexture(ui32 index, Texture* texture, bool needUpdate)
+	void MTRenderer::setTexture(ui32 index, Texture* texture, bool needUpdate)
 	{
 
 	}
     
-    Renderable* VKRenderer::createRenderable(const String& renderStage, ShaderProgram* material)
+    Renderable* MTRenderer::createRenderable(const String& renderStage, ShaderProgram* material)
     {
         Renderable* renderable = EchoNew(VKRenderable(renderStage, material, m_renderableIdentifier++));
         ui32 id = renderable->getIdentifier();
@@ -51,29 +51,29 @@ namespace Echo
         return renderable;
     }
     
-    ShaderProgram* VKRenderer::createShaderProgram()
+    ShaderProgram* MTRenderer::createShaderProgram()
     {
         return EchoNew(VKShaderProgram);
     }
     
     // create states
-    RasterizerState* VKRenderer::createRasterizerState(const RasterizerState::RasterizerDesc& desc)
+    RasterizerState* MTRenderer::createRasterizerState(const RasterizerState::RasterizerDesc& desc)
     {
         return EchoNew(VKRasterizerState);
     }
     
-    DepthStencilState* VKRenderer::createDepthStencilState(const DepthStencilState::DepthStencilDesc& desc)
+    DepthStencilState* MTRenderer::createDepthStencilState(const DepthStencilState::DepthStencilDesc& desc)
     {
         return nullptr;
         //return EchoNew(VKDepthStencilState);
     }
     
-    BlendState* VKRenderer::createBlendState(const BlendState::BlendDesc& desc)
+    BlendState* MTRenderer::createBlendState(const BlendState::BlendDesc& desc)
     {
         return EchoNew(VKBlendState);
     }
     
-    const SamplerState* VKRenderer::getSamplerState(const SamplerState::SamplerDesc& desc)
+    const SamplerState* MTRenderer::getSamplerState(const SamplerState::SamplerDesc& desc)
     {
         return EchoNew(VKSamplerState);
     }

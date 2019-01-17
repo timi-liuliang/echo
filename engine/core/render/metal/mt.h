@@ -5,8 +5,8 @@
 namespace Echo
 {
 	// new vulkan painter
-	void LoadVKRenderer(Renderer*& render);
+	void LoadMTRenderer(Renderer*& render);
 
 	// unload vk painter
-	void UnLoadVKRenderer(Renderer* render);
+	void UnLoadMTRenderer(Renderer* render);
 }

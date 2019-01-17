@@ -21,12 +21,12 @@ namespace Studio
 		FILE* pFile = fopen( m_cfgFile.c_str(), "rb" );
 		if ( NULL == pFile )
 		{
-			// 路径不存在先创建路径
+			// create dir
 			Echo::String dir = Echo::PathUtil::GetFileDirPath( m_cfgFile);
 			if( !Echo::PathUtil::IsDirExist( dir))
 				Echo::PathUtil::CreateDir( dir);
 
-			// 不存在则直接创建
+			// open file
 			pFile = fopen( m_cfgFile.c_str(), "wb" );
 		}
 

@@ -18,7 +18,8 @@
 #include "module.h"
 #include "engine/core/render/interface/renderstage/RenderStage.h"
 #include "engine/core/render/gles/GLES.h"
-#include "engine/core/render/vulkan/VK.h"
+#include "engine/core/render/vulkan/vk.h"
+#include "engine/core/render/metal/mt.h"
 #include "engine/core/render/interface/ShaderProgram.h"
 #include "engine/core/render/interface/TextureCube.h"
 #include "engine/core/gizmos/Gizmos.h"
@@ -50,23 +51,14 @@ namespace Echo
 
 		// check root path
 		setlocale(LC_ALL, "zh_CN.UTF-8");
+        if (!PathUtil::IsFileExist( cfg.m_projectFile))
+        {
+            EchoLogError("Set root path failed [%s], initialise Echo Engine failed.", cfg.m_projectFile.c_str());
+            return false;
+        }
 
-		try
-		{
-			if (!PathUtil::IsFileExist( cfg.m_projectFile))
-			{
-				EchoLogError("Set root path failed [%s], initialise Echo Engine failed.", cfg.m_projectFile.c_str());
-				return false;
-			}
-
-			ImageCodecMgr::instance();
-			IO::instance();
-		}
-		catch (const Exception &e)
-		{
-			EchoLogError(e.getMessage().c_str());
-			return false;
-		}
+        ImageCodecMgr::instance();
+        IO::instance();
 
 		// lua script
 		{
@@ -218,7 +210,7 @@ namespace Echo
 	{
 		Renderer* renderer = nullptr;
 #ifdef ECHO_PLATFORM_MAC
-        LoadVKRenderer(renderer);
+        LoadMTRenderer(renderer);
 #else
 		LoadGLESRenderer(renderer);
 #endif

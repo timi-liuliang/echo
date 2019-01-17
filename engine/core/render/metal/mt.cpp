@@ -3,12 +3,12 @@
 
 namespace Echo
 {
-	void LoadVKRenderer(Renderer*& render)
+	void LoadMTRenderer(Renderer*& render)
 	{
-		render = EchoNew(VKRenderer);
+		render = EchoNew(MTRenderer);
 	}
 
-	void UnLoadVKRenderer(Renderer* render)
+	void UnLoadMTRenderer(Renderer* render)
 	{
 		EchoSafeDelete(render, Renderer);
 	}

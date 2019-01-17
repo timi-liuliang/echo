@@ -357,11 +357,12 @@ namespace Echo
 
 	bool PathUtil::IsDriveOrRoot(const String& path)
 	{
-		String tempPath = path;
-		FormatPath(tempPath);
-		if(	path[0] == SEPERATOR ||		// unix/linux mount point
-			((path.length() == 2 || path.length() ==3) && path[1] == ':')	// windows drive, like c:/
-			)
+        // unix
+        if(path.size()==1 && path[0] == SEPERATOR)
+            return true;
+        
+        // windows drive, like c:/
+		if((path.length() == 2 || path.length() ==3) && path[1] == ':')
 			return true;
 
 		return false;
