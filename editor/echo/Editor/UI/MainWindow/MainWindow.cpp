@@ -32,14 +32,15 @@ namespace Studio
 		: QMainWindow( parent)
 		, m_renderPanel(nullptr)
 		, m_resPanel(nullptr)
-		, m_gameProcess(nullptr)
 		, m_scriptEditorPanel(nullptr)
 		, m_aboutWindow(nullptr)
 	{
 		setupUi( this);
 
+#ifdef ECHO_PLATFORM_WINDOWS
 		// hide title
 		setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+#endif
 
 		// set menu icon
 		menubar->setTopLeftCornerIcon(":/icon/Icon/icon.png");
