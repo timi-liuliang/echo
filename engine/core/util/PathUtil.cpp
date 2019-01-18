@@ -644,9 +644,7 @@ namespace Echo
 		memcpy(pathBuf, dir.c_str(), dir.length());
 
 		token = strtok(pathBuf, seps);
-
 		String tempDir;
-
         while(token != NULL)
 		{
 			tempDir = token;
@@ -663,12 +661,7 @@ namespace Echo
 			token = strtok(NULL, seps);
 		}
         
-#ifdef ECHO_PLATFORM_WINDOWS
         tempDir = GetDriveOrRoot(dir);
-#else
-        tempDir.clear();
-#endif
-
 		for(size_t i=0; i < paths.size(); ++i)
 		{
 			tempDir += paths[i];
