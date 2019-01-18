@@ -78,14 +78,14 @@ namespace QT_UI
 		void OnEditFile( const QModelIndex& pIndex);
 
 	private:
-		QTreeView*						m_treeView;		// treeView
-		QSortFilterProxyModel*			m_proxy;		// 排序代理模型
-		string							m_rootPath;		// 主目录	
-		vector<string>					m_exts;			// 文件类型
-		IconMap							m_iconMaps;		// 图标
-		QStandardItem*					m_activeItem;	// active item
-		std::vector< QStandardItem*>	m_dirItems;		// 所有目录item
-		QModelIndex						m_currentSelect;// 当前选中
-		Echo::Dword						m_selectTime;	// 当前选中时间
+		QTreeView*						m_treeView = nullptr;	// treeView
+		QSortFilterProxyModel*			m_proxy = nullptr;	    // proxy
+		string							m_rootPath;		        // 主目录
+		vector<string>					m_exts;			        // 文件类型
+		IconMap							m_iconMaps;		        // 图标
+		QStandardItem*					m_activeItem = nullptr;	// active item
+		std::vector< QStandardItem*>	m_dirItems;		        // 所有目录item
+		QModelIndex						m_currentSelect;        // 当前选中
+		Echo::Dword						m_selectTime = 0;	    // 当前选中时间
 	};
 }

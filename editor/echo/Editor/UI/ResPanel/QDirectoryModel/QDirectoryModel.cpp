@@ -7,10 +7,6 @@ namespace QT_UI
 {
 	QDirectoryModel::QDirectoryModel()
 		: QStandardItemModel()
-		, m_treeView(NULL)
-		, m_activeItem(NULL)
-		, m_proxy(NULL)
-		, m_selectTime(0)
 	{
 	}
 

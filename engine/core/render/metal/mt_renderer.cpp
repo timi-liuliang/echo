@@ -3,6 +3,7 @@
 #include "mt_renderable.h"
 #include "mt_shader_program.h"
 #include "mt_render_state.h"
+#include "mt_render_target.h"
 
 namespace Echo
 {
@@ -76,5 +77,10 @@ namespace Echo
     const SamplerState* MTRenderer::getSamplerState(const SamplerState::SamplerDesc& desc)
     {
         return EchoNew(VKSamplerState);
+    }
+    
+    RenderTarget* MTRenderer::createRenderTarget(ui32 id, ui32 width, ui32 height, PixelFormat pixelFormat, const RenderTarget::Options& option)
+    {
+        return EchoNew(MTRenderTarget);
     }
 }

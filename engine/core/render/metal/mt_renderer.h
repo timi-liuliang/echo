@@ -25,7 +25,7 @@ namespace Echo
         // create views
         virtual RenderTargetView* createRenderTargetView(PixelFormat fmt, ui32 width, ui32 height) override {return nullptr;}
         virtual DepthStencilView* createDepthStencilView(PixelFormat fmt, ui32 width, ui32 height) override {return nullptr;}
-        virtual RenderTarget* createRenderTarget(ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const RenderTarget::Options& option) override {return nullptr;}
+        virtual RenderTarget* createRenderTarget(ui32 id, ui32 width, ui32 height, PixelFormat pixelFormat, const RenderTarget::Options& option) override;
         
         // create states
         virtual RasterizerState* createRasterizerState(const RasterizerState::RasterizerDesc& desc) override;

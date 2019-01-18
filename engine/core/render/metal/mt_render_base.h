@@ -1,4 +1,5 @@
-//#pragma once
+#pragma once
+
 //
 //#include <engine/core/base/EchoDef.h>
 //#include <engine/core/log/Log.h>
