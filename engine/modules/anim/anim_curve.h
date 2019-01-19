@@ -13,7 +13,7 @@ namespace Echo
 		{
 			Linear,
 			Discrete,
-		}		m_type;
+		}		m_type = InterpolationType::Linear;
 		KeyMap	m_keys;
 
 		AnimCurve() {}
