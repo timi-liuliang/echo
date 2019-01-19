@@ -32,9 +32,9 @@ namespace Studio
 		{
 			Echo::String appPath   = AStudio::instance()->getAppPath();
 			Echo::String ofileName = Echo::StringUtil::Format( "%sCache/thumbnail/%s.bmp", appPath.c_str(), fileName.c_str() ) ;
-			defauldBackTarget->saveTo( ofileName.c_str() );
+			defauldBackTarget->save( ofileName.c_str());
 
-			// Ìí¼ÓË®Ó¡
+			// æ·»åŠ æ°´å°
 			Echo::FreeImageHelper::addWaterMark( ofileName.c_str(), WaterMarkType[type].c_str() );
 
 			return true;
@@ -47,7 +47,7 @@ namespace Studio
 	{
 		//Echo::String project = EchoRoot->getConfig().projectFile;
 
-		//Éú³ÉËõÂÔÍ¼
+		//ç”Ÿæˆç¼©ç•¥å›¾
 		//ShellExecute(0, "open", "Thumbnail.exe", project.c_str(), "", SW_HIDE);
 	}
 }

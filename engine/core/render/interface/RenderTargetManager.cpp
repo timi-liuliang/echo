@@ -59,38 +59,37 @@ namespace Echo
 		m_renderTargets.erase(fit);
 	}
 
-	bool RenderTargetManager::beginRenderTarget( ui32 _id,bool _clearColor, const Color& _backgroundColor, bool _clearDepth, float _depthValue, bool _clearStencil, ui8 stencilValue, ui32 rbo)
+	bool RenderTargetManager::beginRenderTarget( ui32 id,bool _clearColor, const Color& _backgroundColor, bool _clearDepth, float _depthValue, bool _clearStencil, ui8 stencilValue, ui32 rbo)
 	{
-		EchoAssert( _id != RTI_End );
-
-		RenderTarget* pRT = getRenderTargetByID( _id );
+		EchoAssert( id != RTI_End );
+		RenderTarget* pRT = getRenderTargetByID( id);
         if(pRT)
         {
             RenderTarget* pUsingRT = m_currentRenderTarget != RTI_End ? getRenderTargetByID(m_currentRenderTarget) : 0;
-            pRT->m_bFrameBufferChange = m_currentRenderTarget != _id ? true : false;
+            pRT->m_isFrameBufferChange = m_currentRenderTarget != id ? true : false;
             if( m_currentRenderTarget == RTI_End )
             {
-                pRT->m_bViewportChange = true;
+                pRT->m_isViewportChange = true;
             }
             else if( pUsingRT && ( pUsingRT->width() != pRT->width() || pUsingRT->height() != pRT->height() ) )
             {
-                pRT->m_bViewportChange = true;
+                pRT->m_isViewportChange = true;
             }
             else
             {
-                pRT->m_bViewportChange = false;
+                pRT->m_isViewportChange = false;
             }
             
-            m_currentRenderTarget = _id;
+            m_currentRenderTarget = id;
             Renderer::instance()->dirtyTexSlot();
             
-            return getRenderTargetByID(_id)->beginRender(_clearColor, _backgroundColor, _clearDepth, _depthValue, _clearStencil, stencilValue);
+            return getRenderTargetByID(id)->beginRender(_clearColor, _backgroundColor, _clearDepth, _depthValue, _clearStencil, stencilValue);
         }
 
         return false;
 	}
 
-	void RenderTargetManager::onScreensizeChanged( ui32 _width, ui32 _height )
+	void RenderTargetManager::onScreensizeChanged( ui32 _width, ui32 _height)
 	{
 		for (RenderTargetMap::iterator bit = m_renderTargets.begin(); bit != m_renderTargets.end(); ++bit)
 		{
@@ -148,14 +147,11 @@ namespace Echo
 	RenderTarget* RenderTargetManager::getRenderTargetByID(ui32 _id)
 	{
 		RenderTargetMap::iterator fit = m_renderTargets.find(_id);
-		if (fit == m_renderTargets.end())
-		{
-			//EchoLogError("Could not found RenderTarget[%d]", _id);
+		if (fit != m_renderTargets.end())
+			return fit->second;
 
-			return NULL;
-		}
-
-		return fit->second;
+		//EchoLogError("Could not found RenderTarget[%d]", _id);
+		return nullptr;
 	}
 
 	bool RenderTargetManager::endRenderTarget(ui32 _id)

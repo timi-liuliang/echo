@@ -11,116 +11,72 @@ namespace Echo
 		{
 			bool					depth;
 			bool					msaa;
-			bool					multiResolution;
 			bool					cubemap;
 			RenderTarget*			depthTarget;
 
 			Options()
 				: depth(false)
 				, msaa(false)
-				, multiResolution(false)
 				, cubemap(false)
 				, depthTarget(nullptr)
 			{}
 		};
 
-		struct Tiled
-		{
-			float x_, y_;
-			float width_, height_;
-
-			Tiled( float x = 0.0f, float y = 0.0f, float w = 0.0f, float h = 0.0f )
-				: x_( x ),y_( y ),width_( w ),height_(h)
-			{
-			}
-		};
-
-		enum
-		{
-			Invalid_Value = 0xffffffff
-		};
-
 	public:
+		RenderTarget(ui32 id, ui32 width, ui32 height, PixelFormat format, const Options& option = Options());
+		virtual ~RenderTarget();
 
-		ui32& width(){ return m_width; }
-
-		const ui32& width() const { return m_width; }
-
-		ui32& height(){ return m_height; }
-
-		const ui32& height() const { return m_height; }
-
-		bool hasDepth() const { return m_bHasDepth; }
-
-		bool hasMSAA() const { return m_bHasMSAA; }
-
+		// get id
 		ui32 id() const { return m_id; }
 
+		// width and height
+		ui32 width() const { return m_width; }
+		ui32 height() const { return m_height; }
+
+		// has depth
+		bool hasDepth() const { return m_bHasDepth; }
+		bool hasMSAA() const { return m_bHasMSAA; }
+
+		// pixel format
 		PixelFormat pixelFormat() const { return m_pixelFormat; }
 
-		void setEnableTiled( bool _Val ) { m_tiledRender = _Val; }
-
-		bool getEnableTiled() const { return m_tiledRender; }
-
-		Tiled& curRenderTiled() { return m_curRenderTiled; }
-
-		const Tiled& curRenderTiled() const { return m_curRenderTiled; }
-
-		// 获取渲染目标绑定纹理
+		// get bind texture
 		Texture* getBindTexture() { return m_bindTexture; }
-
-		// 获取渲染目标深度图
 		Texture* getDepthTexture() { return m_depthTexture; }
 
-		// 是否为立方体贴图
+		// 鏄惁涓虹珛鏂逛綋璐村浘
 		bool isCubemap() const { return m_isCubemap; }
 
-		// 创建
-		bool create();
+		// create
+		virtual bool create()=0;
 
-		// 设置为当前渲染目标
-		bool beginRender(bool _clearColor, const Color& _backgroundColor, bool _clearDepth, float _depthValue, bool _clearStencil, ui8 _stencilValue);
+		// begin render
+		virtual bool beginRender(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue)=0;
 
-		// 结束渲染，将要切换为另外的渲染目标
-		bool endRender();
+		// clear
+		virtual void clear(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue)=0;
+
+		// end render
+		virtual bool endRender() = 0;
         
-        bool invalidateFrameBuffer(bool invalidateColor, bool invalidateDepth, bool invalidateStencil);
+		// disable frame buffer
+        virtual bool invalide(bool invalidateColor, bool invalidateDepth, bool invalidateStencil)=0;
 
-		// 清空
-		void clear(bool _clearColor, const Color& _backgroundColor, bool _clearDepth, float _depthValue, bool _clearStencil, ui8 _stencilValue);
+		// on resize
+		virtual void onResize(ui32 width, ui32 height) = 0;
 
-		// 修改尺寸大小
-		void onResize( ui32 _width, ui32 _height ) { return doOnResize(_width, _height); }
+		// save target
+		virtual bool save(const char* file) = 0;
 
-		// 保存绑定纹理
-		bool saveTo( const char* file ){ return doSaveTo( file ); }
-
-		// 此方法待移除
+		// 姝ゆ柟娉曞緟绉婚櫎
 		virtual bool doStoreDefaultRenderTarget()=0;
 
-		// 此方法待移除
+		// 姝ゆ柟娉曞緟绉婚櫎
 		virtual bool doRestoreDefaultRenderTarget()=0;
-
-		bool resolutionRelative() const { return m_handlerOnsize; }
-		void setResolutionRelative(bool relative) { m_handlerOnsize = relative; }
-		float scaleFactor() const { return m_scale; }
-		void setScaleFactor(float factor) { m_scale = factor; }
 
 		void reusageDepthTarget(RenderTarget* depthTarget);
 
 		ui32 getMemorySize();
-
-	public:
-		RenderTarget(ui32 _id, ui32 _width, ui32 _height, PixelFormat _format, const Options& option = Options());
-		virtual ~RenderTarget();
-		virtual bool doCreate() = 0;
-		virtual bool doCreateCubemap() = 0;
-		virtual bool doBeginRender( bool _clearColor, const Color& _backgroundColor,  bool _clearDepth, float _depthValue, bool _clearStencil, ui8 stencilValue ) = 0;
-		virtual bool doEndRender() = 0;
-        virtual bool doInvalidateFrameBuffer(bool invalidateColor, bool invalidateDepth, bool invalidateStencil) = 0;
-		virtual void doClear(bool clear_color, const Color& color, bool clear_depth, float depth_value, bool clear_stencil, ui8 stencil_value) = 0;
-		virtual void doOnResize( ui32 _width, ui32 _height ) = 0;
-		virtual bool doSaveTo( const char* file ) = 0;
 
 	protected:
 		bool					m_bHasMSAA;
@@ -133,16 +89,11 @@ namespace Echo
 		Texture*				m_bindTexture;
 		Texture*				m_depthTexture;
 		ui32					m_RenderFrameCount;
-		bool					m_bLogicResolution;
 		bool					m_isCubemap;
-		Tiled					m_curRenderTiled;
-		bool					m_tiledRender;
-		bool					m_handlerOnsize;
-		float					m_scale;
 		RenderTarget*			m_depthTarget;
 	public:
-		bool					m_bFrameBufferChange;
-		bool					m_bViewportChange;
+		bool					m_isFrameBufferChange;
+		bool					m_isViewportChange;
 	};
 	typedef map<ui32, RenderTarget*>::type	RenderTargetMap;
 }

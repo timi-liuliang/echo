@@ -7,6 +7,37 @@
 
 namespace Echo
 {
+#define INVALIDE  0xFFFFFFFF
+
+#ifdef ECHO_PLATFORM_WINDOWS
+	#define DIB_HEADER_MARKER   ((WORD) ('M' << 8) | 'B')
+	#define IS_WIN30_DIB(lpbi)  ((*(LPDWORD)(lpbi)) == sizeof(BITMAPINFOHEADER))
+
+	WORD  DIBNumColors(void* lpbi)
+	{
+		if (IS_WIN30_DIB(lpbi))
+		{
+			DWORD dwClrUsed = ((LPBITMAPINFOHEADER)lpbi)->biClrUsed;
+			if (dwClrUsed != 0)
+				return (WORD)dwClrUsed;
+		}
+
+		WORD wBitCount = IS_WIN30_DIB(lpbi) ? ((LPBITMAPINFOHEADER)lpbi)->biBitCount : ((LPBITMAPCOREHEADER)lpbi)->bcBitCount;
+		switch (wBitCount)
+		{
+		case 1:		return 2;
+		case 4:		return 16;
+		case 8:		return 256;
+		default:	return 0;
+		}
+	}
+
+	WORD  PaletteSize(void* lpbi)
+	{
+		return IS_WIN30_DIB(lpbi) ? (WORD)(DIBNumColors(lpbi) * sizeof(RGBQUAD)) : (WORD)(DIBNumColors(lpbi) * sizeof(RGBTRIPLE));
+	}
+#endif
+
 	GLES2RenderTarget::GLES2RenderTarget( ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const Options& option)
 		: RenderTarget(_id, _width, _height, _pixelFormat, option)
 		, m_fbo(0)
@@ -26,12 +57,12 @@ namespace Echo
 
 	GLES2RenderTarget::~GLES2RenderTarget()
 	{
-		if (m_fbo != Invalid_Value)
+		if (m_fbo != INVALIDE)
 		{
 			OGLESDebug(glDeleteFramebuffers(1, &m_fbo));
 		}
 
-		if (m_rbo != Invalid_Value)
+		if (m_rbo != INVALIDE)
 		{
 			OGLESDebug(glDeleteRenderbuffers(1, &m_rbo));
 		}
@@ -40,7 +71,21 @@ namespace Echo
 		m_depthTexture->subRefCount();
 	}
 
-	bool GLES2RenderTarget::doCreate()
+	bool GLES2RenderTarget::create()
+	{
+		EchoAssert(m_bindTexture);
+		Texture* texture = m_bindTexture;
+		texture->m_width = m_width;
+		texture->m_height = m_height;
+		texture->m_depth = 1;
+		texture->m_pixFmt = m_pixelFormat;
+		texture->m_isCompressed = false;
+		texture->m_compressType = Texture::CompressType_Unknown;
+
+		return m_isCubemap ? createCubemap() : createTexture2D();
+	}
+
+	bool GLES2RenderTarget::createTexture2D()
 	{
 		GLESTexture2D* texture = dynamic_cast<GLESTexture2D*>(m_bindTexture);
 		EchoAssert(texture);
@@ -65,7 +110,7 @@ namespace Echo
 			GLESTexture2D* depthTexture = dynamic_cast<GLESTexture2D*>(m_depthTexture);
 			EchoAssert(depthTexture);
 
-			// ½«Éî¶È»º³åÇøÓ³Éäµ½ÎÆÀíÉÏ(ÕâÀïÓ¦¸Ã·ÖÇé¿öÌÖÂÛ£¬rboÐ§ÂÊ¸ü¸ß£¬ÔÚ²»ÐèÒªdepth texÊ±Ó¦¸ÃÓÅÏÈÊ¹ÓÃ		
+			// å°†æ·±åº¦ç¼“å†²åŒºæ˜ å°„åˆ°çº¹ç†ä¸Š(è¿™é‡Œåº”è¯¥åˆ†æƒ…å†µè®¨è®ºï¼Œrboæ•ˆçŽ‡æ›´é«˜ï¼Œåœ¨ä¸éœ€è¦depth texæ—¶åº”è¯¥ä¼˜å…ˆä½¿ç”¨		
 			OGLESDebug(glGenTextures(1, &depthTexture->m_glesTexture));
 			OGLESDebug(glBindTexture(GL_TEXTURE_2D, depthTexture->m_glesTexture));
 			OGLESDebug(glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, m_width, m_height, 0,  GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, NULL));
@@ -105,7 +150,7 @@ namespace Echo
 		return true;
 	} 
 
-	bool GLES2RenderTarget::doCreateCubemap()
+	bool GLES2RenderTarget::createCubemap()
 	{
 		GLESTexture2D* texture = dynamic_cast<GLESTexture2D*>(m_bindTexture);
 		EchoAssert(texture);
@@ -146,39 +191,27 @@ namespace Echo
 		return true;
 	}
 
-	bool GLES2RenderTarget::doBeginRender( bool _clearColor, const Color& _backgroundColor,  bool _clearDepth, float _depthValue, bool _clearStencil, ui8 _stencilValue )
+	bool GLES2RenderTarget::beginRender(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue)
 	{
-		//EchoAssert( m_id == RenderTargetManager::Instance()->getInUsingRenderTargetID() );
-		if (m_bFrameBufferChange)
-		{
+		// bind frame buffer
+		if (m_isFrameBufferChange)
 			glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
-		}
-		GLint fbo, rbo;
-		OGLESDebug(glGetIntegerv(GL_FRAMEBUFFER_BINDING, &fbo));
-		OGLESDebug(glGetIntegerv(GL_RENDERBUFFER_BINDING, &rbo));
 
-		if (m_tiledRender)
-		{
-			OGLESDebug(glViewport(static_cast<GLint>(m_curRenderTiled.x_), static_cast<GLint>(m_curRenderTiled.y_), static_cast<GLsizei>(m_curRenderTiled.width_), static_cast<GLsizei>(m_curRenderTiled.height_)));
-		}
-
-		if (m_bViewportChange && !m_tiledRender)
-		{
+		if (m_isViewportChange)
 			OGLESDebug(glViewport(0, 0, m_width, m_height));
-		}
 
-		doClear( _clearColor, _backgroundColor, _clearDepth, _depthValue, _clearStencil, _stencilValue );
+		// clear
+		clear( clearColor, backgroundColor, clearDepth, depthValue, clearStencil, stencilValue );
 
 		return true;
 	}
 
-	bool GLES2RenderTarget::doEndRender()
+	bool GLES2RenderTarget::endRender()
 	{
-		//		RenderTargetManager::Instance()->beginRenderTarget( RTI_DefaultBackBuffer, true, Renderer::BGCOLOR, true, 1.0f, false, 0 );
 		return true;
 	}
 
-	bool GLES2RenderTarget::doInvalidateFrameBuffer(bool invalidateColor, bool invalidateDepth, bool invalidateStencil)
+	bool GLES2RenderTarget::invalide(bool invalidateColor, bool invalidateDepth, bool invalidateStencil)
 	{
 		int attachment_count = 0;
 		GLenum attachments[128] = { 0 };
@@ -200,24 +233,20 @@ namespace Echo
 		return true;
 	}
 
-	void GLES2RenderTarget::doClear(bool clear_color, const Color& color, bool clear_depth, float depth_value, bool clear_stencil, ui8 stencil_value)
+	void GLES2RenderTarget::clear(bool clear_color, const Color& color, bool clear_depth, float depth_value, bool clear_stencil, ui8 stencil_value)
 	{
 		GLbitfield mask = 0;
 
 		if (clear_color)
 		{
 			OGLESDebug(glClearColor(color.r, color.g, color.b, color.a));
-
 			mask |= GL_COLOR_BUFFER_BIT;
-
 		}
 
 		if (clear_depth)
 		{
 			OGLESDebug(glClearDepthf(depth_value));
-
 			mask |= GL_DEPTH_BUFFER_BIT;
-
 		}
 
 		OGLESDebug(glDepthMask(clear_depth));
@@ -225,7 +254,6 @@ namespace Echo
 		if (clear_stencil)
 		{
 			OGLESDebug(glClearStencil(stencil_value));
-
 			mask |= GL_STENCIL_BUFFER_BIT;
 		}
 
@@ -237,20 +265,20 @@ namespace Echo
 		Renderer::instance()->setDepthStencilState( Renderer::instance()->getDefaultDepthStencilState());
 	}
 
-	void GLES2RenderTarget::doOnResize( ui32 _width, ui32 _height )
+	void GLES2RenderTarget::onResize( ui32 _width, ui32 _height )
 	{
 		if( m_id != 0)
 		{
 			m_width = _width;
 			m_height = _height;
 
-			if (m_fbo != RenderTarget::Invalid_Value)
+			if (m_fbo != INVALIDE)
 			{
 				OGLESDebug(glDeleteFramebuffers(1, &m_fbo));
 				m_fbo = 0;
 			}
 
-			if (m_rbo != RenderTarget::Invalid_Value)
+			if (m_rbo != INVALIDE)
 			{
 				OGLESDebug(glDeleteRenderbuffers(1, &m_rbo));
 				m_rbo = 0;
@@ -264,7 +292,8 @@ namespace Echo
 			m_depthTexture->subRefCount();
 			m_depthTexture = Renderer::instance()->createTexture2D("rtDEPTH_" + StringUtil::ToString(m_id));
 
-			doCreate();
+			// recreate
+			create();
 		}
 		else
 		{
@@ -308,8 +337,7 @@ namespace Echo
 #endif
 	}
 
-	// ±£´æµ½ÎÆÀí
-	bool GLES2RenderTarget::doSaveTo( const char* file )
+	bool GLES2RenderTarget::save( const char* file)
 	{
 #ifdef ECHO_PLATFORM_WINDOWS
 		if( PathUtil::IsFileExist(file) )
@@ -350,10 +378,7 @@ namespace Echo
 
 
 		BITMAPFILEHEADER bmpfHeader = {0};
-
 		bmpfHeader.bfType = DIB_HEADER_MARKER;
-
-
 		BITMAPINFOHEADER bmpinfoHeader = {0};
 
 		size_t pixel_data_size = m_width * m_height * 4;
@@ -422,74 +447,4 @@ namespace Echo
 
 		return true;
 	}
-
-#ifdef ECHO_PLATFORM_WINDOWS
-	WORD  DIBNumColors(void* lpbi)
-	{
-		WORD wBitCount;
-
-		// ¶ÔÓÚWindowsµÄDIB, Êµ¼ÊÑÕÉ«µÄÊýÄ¿¿ÉÒÔ±ÈÏóËØµÄÎ»ÊýÒªÉÙ¡£
-		// ¶ÔÓÚÕâÖÖÇé¿ö£¬Ôò·µ»ØÒ»¸ö½üËÆµÄÊýÖµ¡£
-
-		// ÅÐ¶ÏÊÇ·ñÊÇWIN3.0 DIB
-		if (IS_WIN30_DIB(lpbi))
-		{
-			DWORD dwClrUsed;
-
-			// ¶ÁÈ¡dwClrUsedÖµ
-			dwClrUsed = ((LPBITMAPINFOHEADER)lpbi)->biClrUsed;
-
-			if (dwClrUsed != 0)
-			{
-				// Èç¹ûdwClrUsed£¨Êµ¼ÊÓÃµ½µÄÑÕÉ«Êý£©²»Îª0£¬Ö±½Ó·µ»Ø¸ÃÖµ
-				return (WORD)dwClrUsed;
-			}
-		}
-
-		// ¶ÁÈ¡ÏóËØµÄÎ»Êý
-		if (IS_WIN30_DIB(lpbi))
-		{
-			// ¶ÁÈ¡biBitCountÖµ
-			wBitCount = ((LPBITMAPINFOHEADER)lpbi)->biBitCount;
-		}
-		else
-		{
-			// ¶ÁÈ¡biBitCountÖµ
-			wBitCount = ((LPBITMAPCOREHEADER)lpbi)->bcBitCount;
-		}
-
-		// °´ÕÕÏóËØµÄÎ»Êý¼ÆËãÑÕÉ«ÊýÄ¿
-		switch (wBitCount)
-		{
-		case 1:
-			return 2;
-
-		case 4:
-			return 16;
-
-		case 8:
-			return 256;
-
-		default:
-			return 0;
-		}
-	}
-
-
-	WORD  PaletteSize(void* lpbi)
-	{
-		// ¼ÆËãDIBÖÐµ÷É«°åµÄ´óÐ¡
-		if (IS_WIN30_DIB (lpbi))
-		{
-			//·µ»ØÑÕÉ«ÊýÄ¿¡ÁRGBQUADµÄ´óÐ¡
-			return (WORD)(DIBNumColors(lpbi) * sizeof(RGBQUAD));
-		}
-		else
-
-		{
-			//·µ»ØÑÕÉ«ÊýÄ¿¡ÁRGBTRIPLEµÄ´óÐ¡
-			return (WORD)(DIBNumColors(lpbi) * sizeof(RGBTRIPLE));
-		}
-	}
-#endif
 }

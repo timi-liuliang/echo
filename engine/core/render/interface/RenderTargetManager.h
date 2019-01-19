@@ -18,31 +18,31 @@ namespace Echo
 	public:
 		virtual ~RenderTargetManager();
 
-		// »ñÈ¡äÖÈ¾ÊµÀı
+		// è·å–æ¸²æŸ“å®ä¾‹
 		static RenderTargetManager* instance();
 
-		// ³õÊ¼»¯
+		// åˆå§‹åŒ–
 		bool initialize();
 
-		// ¿ªÊ¼äÖÈ¾Ä¿±ê
-		bool beginRenderTarget( ui32 _id,bool _clearColor = true, const Color& _backgroundColor = Renderer::BGCOLOR,  bool _clearDepth = true, float _depthValue = 1.0f, bool _clearStencil = false, ui8 stencilValue = 0, ui32 rbo = RenderTarget::Invalid_Value );
+		// å¼€å§‹æ¸²æŸ“ç›®æ ‡
+		bool beginRenderTarget( ui32 id,bool clearColor = true, const Color& backgroundColor = Renderer::BGCOLOR,  bool clearDepth = true, float depthValue = 1.0f, bool clearStencil = false, ui8 stencilValue = 0, ui32 rbo=0xFFFFFFFF);
 
-		// ½áÊøäÖÈ¾Ä¿±ê
+		// ç»“æŸæ¸²æŸ“ç›®æ ‡
 		bool endRenderTarget(ui32 _id);
 
-		// ´´½¨äÖÈ¾Ä¿±ê
+		// åˆ›å»ºæ¸²æŸ“ç›®æ ‡
 		RenderTarget* createRenderTarget(ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, RenderTarget::Options option = RenderTarget::Options());
 
 		// destory render target
 		void destroyRenderTargetByID(ui32 _id);
 
-		// ¸ù¾İID»ñÈ¡äÖÈ¾Ä¿±ê
+		// æ ¹æ®IDè·å–æ¸²æŸ“ç›®æ ‡
 		RenderTarget* getRenderTargetByID(ui32 _id);
 
 		// get current render target
 		ui32 getCurrentRenderTarget() const { return m_currentRenderTarget; }
 
-		// µ±ÆÁÄ»´óĞ¡¸Ä±äÊ±µ÷ÓÃ 
+		// å½“å±å¹•å¤§å°æ”¹å˜æ—¶è°ƒç”¨ 
 		void onScreensizeChanged( ui32 _width, ui32 _height );
 
 	private:
@@ -52,7 +52,7 @@ namespace Echo
 		bool invalidate(ui32 id, bool invalidateColor, bool invalidateDepth, bool invalidateStencil);
 
 	protected:
-		RenderTargetMap			m_renderTargets;					// ËùÓĞäÖÈ¾Ä¿±ê
+		RenderTargetMap			m_renderTargets;					// æ‰€æœ‰æ¸²æŸ“ç›®æ ‡
 		ui32					m_currentRenderTarget;
 	};
 }
