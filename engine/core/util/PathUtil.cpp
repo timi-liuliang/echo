@@ -100,8 +100,11 @@ namespace Echo
 				}
 			}
 		}
-
+#ifdef ECHO_PLATFORM_WINDOWS
 		String realPath = "";
+#else
+        String realPath = path[0]== '/' ? "/" : "";
+#endif
 		for (size_t i = 0; i < size-1; ++i)
 		{
 			if (!pathArray[i].empty())
