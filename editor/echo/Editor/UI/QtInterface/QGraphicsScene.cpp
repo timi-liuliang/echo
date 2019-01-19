@@ -1,4 +1,5 @@
 #include <QGraphicsScene>
+#include <QGraphicsProxyWidget>
 #include <QGraphicsSimpleTextItem>
 #include <engine/core/math/color.h>
 #include "Extend/QGraphicsEllipseItemEx.h"
@@ -107,12 +108,12 @@ namespace Echo
 		return nullptr;
 	}
 
-	void qGraphicsSceneRemoveItem(QObject* scene, QGraphicsItem* item)
+	void qGraphicsSceneDeleteWidget(QObject* scene, QGraphicsProxyWidget* widget)
 	{
 		QGraphicsScene* graphicsScene = qobject_cast<QGraphicsScene*>(scene);
 		if (graphicsScene)
 		{
-			graphicsScene->removeItem(item);
+			graphicsScene->removeItem( widget);
 		}
 	}
 

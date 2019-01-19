@@ -28,7 +28,7 @@ namespace Echo
 	QGraphicsItem* qGraphicsSceneAddEclipse(QObject* scene, float left, float top, float width, float height, const Color& color);
 
 	// remove item
-	void qGraphicsSceneRemoveItem(QObject* scene, QGraphicsItem* item);
+	void qGraphicsSceneDeleteWidget(QObject* scene, QGraphicsProxyWidget* widget);
 
 	// delete item
 	void qGraphicsSceneDeleteItem(QObject* scene, QGraphicsItem* item);

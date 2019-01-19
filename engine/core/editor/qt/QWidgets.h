@@ -3,6 +3,7 @@
 #include "QWidget.h"
 #include "QEvent.h"
 #include "QAction.h"
+#include "QCheckBox.h"
 #include "QComboBox.h"
 #include "QCursor.h"
 #include "QGraphicsItem.h"

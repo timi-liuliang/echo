@@ -22,11 +22,11 @@ namespace Echo
 		}
 
 		// update
-		void updateToTime(ui32 time)
+		void updateToTime(ui32 time, ui32 deltaTime)
 		{
 			for (AnimProperty* property : m_properties)
 			{
-				property->updateToTime( time);
+				property->updateToTime( time, deltaTime);
 			}
 		}
 	};

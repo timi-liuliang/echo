@@ -29,7 +29,7 @@ namespace Echo
 		void setValueByKeyIdx(i32 keyIndex, float value);
 
 		// key size
-		i32 getKeySize() const { return i32(m_keys.size()); }
+		i32 getKeyCount() const { return i32(m_keys.size()); }
 
 		// get value
 		float getValue(ui32 time);

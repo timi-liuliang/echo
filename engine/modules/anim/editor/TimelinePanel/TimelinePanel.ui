@@ -386,6 +386,14 @@
     <string>Add Key To Curve White</string>
    </property>
   </action>
+  <action name="m_actionAddBoolKeyToCurve">
+   <property name="text">
+    <string>Add Bool Key To Curve</string>
+   </property>
+   <property name="toolTip">
+    <string>Add Bool Key To Curve</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

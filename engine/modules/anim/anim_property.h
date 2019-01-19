@@ -9,7 +9,7 @@ namespace Echo
 	class Node;
 	struct AnimProperty
 	{
-		any							m_userData;					// name
+		any							m_userData;														// name
 		enum class Type
 		{
 			Unknown,
@@ -19,9 +19,8 @@ namespace Echo
 			Vector4,
 			Quaternion,
 			String,
-		}							 m_type;				// propert type
-
-		AnimCurve::InterpolationType m_interpolationType;	// interpolation type
+		}							 m_type;														// propert type
+		AnimCurve::InterpolationType m_interpolationType = AnimCurve::InterpolationType::Linear;	// interpolation type
 
 		// constuctor
 		AnimProperty(Type type) : m_type(type) {}
@@ -36,7 +35,10 @@ namespace Echo
 		virtual void optimize() = 0;
 
 		// update to time
-		virtual void updateToTime(ui32 time) = 0;
+		virtual void updateToTime(ui32 time, ui32 deltaTime) = 0;
+
+		// get type
+		Type getType() const { return m_type; }
 
 		// get length
 		virtual ui32 getLength() = 0;
@@ -58,7 +60,7 @@ namespace Echo
 		virtual void optimize() override;
 
 		// update to time
-		virtual void updateToTime(ui32 time) override{}
+		virtual void updateToTime(ui32 time, ui32 deltaTime) override{}
 
 		// get length
 		virtual ui32 getLength() override;
@@ -83,7 +85,7 @@ namespace Echo
 		void addKey(ui32 time, const float value);
 
 		// update to time
-		virtual void updateToTime(ui32 time) override;
+		virtual void updateToTime(ui32 time, ui32 deltaTime) override;
 	};
 
 	struct AnimPropertyVec3 : public AnimPropertyCurve
@@ -99,7 +101,7 @@ namespace Echo
 		void addKey(ui32 time, const Vector3& value);
 
 		// update to time
-		virtual void updateToTime(ui32 time) override;
+		virtual void updateToTime(ui32 time, ui32 deltaTime) override;
 	};
 
 	struct AnimPropertyVec4 : public AnimPropertyCurve
@@ -115,7 +117,7 @@ namespace Echo
 		void addKey(ui32 time, const Vector4& value);
 
 		// update to time
-		virtual void updateToTime(ui32 time) override;
+		virtual void updateToTime(ui32 time, ui32 deltaTime) override;
 	};
 
 	struct AnimPropertyBool : public AnimProperty
@@ -124,8 +126,12 @@ namespace Echo
 
 		KeyMap	m_keys;
 		bool	m_value;
+		bool	m_isActive = false;
 
 		AnimPropertyBool() : AnimProperty(Type::Bool) {}
+
+		// is active
+		bool isActive() const { return m_isActive; }
 
 		// get value
 		bool getValue() { return m_value; }
@@ -140,7 +146,7 @@ namespace Echo
 		virtual void optimize() override {}
 
 		// update to time
-		virtual void updateToTime(ui32 time) override;
+		virtual void updateToTime(ui32 time, ui32 deltaTime) override;
 
 		// get length
 		virtual ui32 getLength() override;
@@ -173,7 +179,7 @@ namespace Echo
 		virtual void optimize() override {}
 
 		// update to time
-		virtual void updateToTime(ui32 time) override;
+		virtual void updateToTime(ui32 time, ui32 deltaTime) override;
 
 		// get length
 		virtual ui32 getLength() override;

@@ -92,7 +92,7 @@ namespace Echo
 	}
 
 	// update to time
-	void AnimPropertyFloat::updateToTime(ui32 time)
+	void AnimPropertyFloat::updateToTime(ui32 time, ui32 deltaTime)
 	{
 		for (size_t i = 0; i < m_curves.size(); i++)
 			m_value = m_curves[i]->getValue(time);
@@ -110,7 +110,7 @@ namespace Echo
 	}
 
 	// update to time
-	void AnimPropertyVec3::updateToTime(ui32 time)
+	void AnimPropertyVec3::updateToTime(ui32 time, ui32 deltaTime)
 	{
 		for (int i = 0; i < int(m_curves.size()); i++)
 			m_value[i] = m_curves[i]->getValue(time);
@@ -126,7 +126,7 @@ namespace Echo
 			m_curves[i]->addKey(time, value[i]);
 	}
 
-	void AnimPropertyVec4::updateToTime(ui32 time)
+	void AnimPropertyVec4::updateToTime(ui32 time, ui32 deltaTime)
 	{
 		for (int i = 0; i < int(m_curves.size()); i++)
 			m_value[i] = m_curves[i]->getValue(time);
@@ -137,30 +137,23 @@ namespace Echo
 		m_keys[time] = value;
 	}
 
-	void AnimPropertyBool::updateToTime(ui32 time)
+	void AnimPropertyBool::updateToTime(ui32 time, ui32 deltaTime)
 	{
-		if (m_keys.empty())
+		if (deltaTime)
 		{
-			m_value = false;
-		}
+			m_isActive = false;
 
-		if (m_keys.size() == 1)
-		{
-			m_value = m_keys.begin()->second;
+			for (auto it : m_keys)
+			{
+				ui32 preTime = time - deltaTime;
+				if (it.first >= preTime && it.first <= time)
+				{
+					m_value = it.second;
+					m_isActive = true;
+					break;
+				}
+			}
 		}
-
-		// get base key and next key
-		KeyMap::iterator curKey = m_keys.begin();
-		KeyMap::iterator nextKey = ++m_keys.begin();
-		KeyMap::iterator lastKey = --m_keys.end();
-		for (; nextKey != lastKey; curKey++, nextKey++)
-		{
-			if (time >= curKey->first && time < nextKey->first)
-				break;
-		}
-
-		// calculate
-		m_value = curKey->second;
 	}
 
 	ui32 AnimPropertyBool::getLength()
@@ -192,7 +185,7 @@ namespace Echo
 		return m_keys.size() ? m_keys.back().m_time : 0;
 	}
 
-	void AnimPropertyQuat::updateToTime(ui32 time)
+	void AnimPropertyQuat::updateToTime(ui32 time, ui32 deltaTime)
 	{
 		if (m_keys.empty())
 		{

@@ -11,6 +11,7 @@ namespace Echo
 	class TimelinePanel : public BottomPanelTab
 	{
 		typedef vector<QGraphicsItem*>::type QGraphicsItemArray;
+		typedef vector<QGraphicsProxyWidget*>::type QGraphicsWidgetArray;
 
 	public:
 		// key info
@@ -76,6 +77,7 @@ namespace Echo
 		void onKeyPositionChanged();
 
 		// on add key
+		void onAddBoolKeyToCurve();
 		void onAddKeyToCurveRed();
 		void onAddKeyToCurveGreen();
 		void onAddKeyToCurveBlue();
@@ -138,12 +140,13 @@ namespace Echo
 		float						m_keyRadius = 7.f;
 		QGraphicsItem*				m_editAreaBoudingBox = nullptr;
 		array<QGraphicsItem*, 4>	m_curveItems;
+		QGraphicsWidgetArray		m_curveKeyWidgets;
 		array<QGraphicsItemArray, 4>m_curveKeyItems;
 		array<bool, 4>				m_curveVisibles;
 		QWidget*					m_curveKeyLineEdit = nullptr;
 		QGraphicsProxyWidget*		m_curveKeyLineEditProxyWidget = nullptr;
 		QGraphicsItem*				m_curveKeyItem;
-		QWidget*					m_keyEditMenu;
+		QWidget*					m_keyEditMenu = nullptr;
 		Vector2						m_keyEditCursorScenePos;
 		float						m_millisecondPerPixel = 1.f;
 		float						m_unitsPerPixel = 1.f;

@@ -23,7 +23,7 @@ namespace Echo
 
 			for (AnimObject* animNode : m_objects)
 			{
-				animNode->updateToTime(m_time);
+				animNode->updateToTime(m_time, deltaTime);
 			}
 		}
 
