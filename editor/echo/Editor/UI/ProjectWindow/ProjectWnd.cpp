@@ -24,6 +24,7 @@ namespace Studio
 #elif defined(ECHO_PLATFORM_MAC)
         // set title bar color
         macChangeTitleBarColor( winId(), 0.0, 0.0, 0.0);
+        m_versionListWidget->setAttribute(Qt::WA_MacShowFocusRect,0);
 #endif
 
 		// set top left corner icon

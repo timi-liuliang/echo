@@ -22,6 +22,8 @@ namespace Studio
 		m_filterProxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
 		//m_filterProxyModel->setFilterKeyColumn(0);
 		m_treeView->setModel(m_filterProxyModel);
+        m_treeView->setAttribute(Qt::WA_MacShowFocusRect,0);
+        m_searchLineEdit->setAttribute(Qt::WA_MacShowFocusRect,0);
 
 		// connect signal slot
 		QObject::connect(m_treeView, SIGNAL(clicked(QModelIndex)), this, SLOT(onSelectNode(QModelIndex)));

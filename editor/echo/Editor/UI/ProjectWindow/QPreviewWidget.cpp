@@ -78,6 +78,7 @@ namespace QT_UI
 		m_listView->setViewMode(QListView::IconMode);
 		m_listView->setMovement(QListView::Static);
 		m_listView->setSpacing(10);
+        m_listView->setAttribute(Qt::WA_MacShowFocusRect,0);
 
 		// list model
 		m_listModel = new QStandardItemModel(m_listView);

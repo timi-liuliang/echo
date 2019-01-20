@@ -16,6 +16,9 @@ namespace Studio
 		, m_currentSelectItem(nullptr)
 	{
 		setupUi(this);
+        
+        // hide mac focus rect
+        m_logList->setAttribute(Qt::WA_MacShowFocusRect,0);
 
 		QObject::connect(this, SIGNAL(postMessage(int, QString)),this, SLOT(onLogMessage(int, QString)), Qt::QueuedConnection);
 		QObject::connect(m_clear, SIGNAL(clicked()), this, SLOT(onClearMessage()));

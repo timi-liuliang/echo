@@ -29,6 +29,9 @@ namespace Studio
 		g_inst = this;
 
 		setupUi( this);
+        
+        m_nodeTreeWidget->setAttribute(Qt::WA_MacShowFocusRect,0);
+        m_propertyTreeView->setAttribute(Qt::WA_MacShowFocusRect,0);
 
 		QObject::connect(m_newNodeButton,  SIGNAL(clicked()), this, SLOT(showNewNodeDialog()));
 		QObject::connect(m_actionAddNode,  SIGNAL(triggered()), this, SLOT(showNewNodeDialog()));
@@ -51,7 +54,7 @@ namespace Studio
 		QObject::connect(m_actionSaveBranchasScene, SIGNAL(triggered()), this, SLOT(onSaveBranchAsScene()));
 		QObject::connect(m_actionDiscardInstancing, SIGNAL(triggered()), this, SLOT(onDiscardInstancing()));
 
-		// 时间事件
+		// timer
 		m_timer = new QTimer(this);
 		connect(m_timer, SIGNAL(timeout()), this, SLOT(update()));
 		m_timer->start(50);

@@ -17,6 +17,7 @@ namespace QT_UI
 		m_listProxyModel->setFilterKeyColumn(0);
 
 		m_listView->setModel(m_listProxyModel);
+        m_listView->setAttribute(Qt::WA_MacShowFocusRect,0);
 
 		QObject::connect(m_listView, SIGNAL(clicked(QModelIndex)), this, SLOT(onClicked(QModelIndex)));
 		QObject::connect(m_listView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onDoubleClicked(QModelIndex)));
