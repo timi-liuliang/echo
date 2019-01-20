@@ -43,7 +43,7 @@ namespace Studio
         setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
 #elif defined(ECHO_PLATFORM_MAC)
         // set title bar color
-        macChangeTitleBarColor(effectiveWinId(), 255.0, 0.0, 0.0);
+        macChangeTitleBarColor(winId(), 0.f, 0.f, 0.f);
 #endif
 
 		// set menu icon

@@ -1,5 +1,6 @@
 #include <QWidget>
-#include <AppKit/AppKit.h>
+//#include <AppKit/AppKit.h>
+#include <Cocoa/Cocoa.h>
 
 extern "C" void macChangeTitleBarColor(WId winId, double red, double green, double blue)
 {
@@ -7,7 +8,7 @@ extern "C" void macChangeTitleBarColor(WId winId, double red, double green, doub
     {
         NSView* view = (NSView*)winId;
         NSWindow* window = [view window];
-        window.titlebarAppearsTransparent = YES;
-        window.backgroundColor = [NSColor colorWithRed:red green:green blue:blue alpha:1.];
+        window.titlebarAppearsTransparent = true;
+        [window setBackgroundColor:[NSColor colorWithSRGBRed:red green:green blue:blue alpha:1.0]];
     }
 }

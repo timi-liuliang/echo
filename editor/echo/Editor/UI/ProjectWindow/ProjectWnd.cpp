@@ -23,7 +23,7 @@ namespace Studio
 		setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
 #elif defined(ECHO_PLATFORM_MAC)
         // set title bar color
-        macChangeTitleBarColor(effectiveWinId(), 255.0, 0.0, 0.0);
+        macChangeTitleBarColor( winId(), 0.0, 0.0, 0.0);
 #endif
 
 		// set top left corner icon
@@ -98,7 +98,7 @@ namespace Studio
 
 	// new project file
 	Echo::String ProjectWnd::newProject()
-	{
+	{        
 		QString projectName = QFileDialog::getSaveFileName(this, tr("New Project"), "", tr("(*.echo)"));
 		if (!projectName.isEmpty())
 		{
