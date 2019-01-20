@@ -35,7 +35,6 @@ namespace Echo
 		RenderTarget* defautRT = Renderer::instance()->createRenderTarget(RTI_DefaultBackBuffer, Renderer::instance()->getScreenWidth(), Renderer::instance()->getScreenHeight(), Renderer::instance()->getBackBufferPixelFormat(), option);
 		if (defautRT)
 		{
-			defautRT->doStoreDefaultRenderTarget();
 			m_renderTargets.insert(RenderTargetMap::value_type(RTI_DefaultBackBuffer, defautRT));
 
 			return true;
@@ -125,11 +124,6 @@ namespace Echo
 		{
 			EchoLogError("Allocate RenderTarget Failed !");
 			return NULL;
-		}
-
-		if (option.depthTarget)
-		{
-			pNewRenderTarget->reusageDepthTarget(option.depthTarget);
 		}
 
 		if (!pNewRenderTarget->create())

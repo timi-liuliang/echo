@@ -1,3 +1,5 @@
+#include <Metal/Metal.h>
+
 //#include "GLES2RenderBase.h"
 //
 //ECHO_COMPILER_ASSERT(ECHO_STL_MEMORY_ALLOCATOR == ECHO_STL_MEMORY_ALLOCATOR_STANDARD);

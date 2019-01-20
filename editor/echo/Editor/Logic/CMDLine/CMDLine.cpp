@@ -58,7 +58,7 @@ namespace Echo
 		QTextCodec *codec = QTextCodec::codecForName("GB18030");
 		QTextCodec::setCodecForLocale(codec);
 
-		// 随机使用launch image
+		// launch image
 		//int idx = QTime(0, 0, 0).secsTo(QTime::currentTime()) % 4;
 		//Echo::String iconLocation = Echo::StringUtil::Format(":/icon/Icon/Launch/launch-%d.png", idx);
 
@@ -67,7 +67,7 @@ namespace Echo
 		//splash.show();
 		//splash.showMessage(QString::fromLocal8Bit("Echo (32 bit OpenGLES) Copyright @ 2018-2019 B-Lab"), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
 
-		// 设置界面风格
+		// qss
 		QFile qssFile(":/Qss/Qss/Ps.qss");
 		qssFile.open(QFile::ReadOnly);
 		if (qssFile.isOpen())
@@ -104,7 +104,7 @@ namespace Echo
 			//splash.finish(g_astudio->getProjectWindow());
 		)
 
-		// 执行
+		// run application
 		app.exec();
 
 		delete g_astudio;

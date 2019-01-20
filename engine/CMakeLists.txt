@@ -56,9 +56,15 @@ CONFIGURE_FILE(
 	${CMAKE_CURRENT_SOURCE_DIR}/core/base/echo_config.h
 )
 
+IF(${ECHO_PLATFORM_MAC})
+    SET(MAC_MM_FILES *.mm)
+ELSE()
+    SET(MAC_MM_FILES)
+ENDIF()
+
 # Get All Files
 FILE( GLOB_RECURSE HEADER_FILES  *.h *.hpp *.inl)
-FILE( GLOB_RECURSE SOURCE_FILES *.cpp *.c *.cc *.cxx)
+FILE( GLOB_RECURSE SOURCE_FILES *.cpp *.c *.cc *.cxx ${MAC_MM_FILES})
 
 SET(ALL_FILES ${HEADER_FILES} ${SOURCE_FILES} CMakeLists.txt)
 

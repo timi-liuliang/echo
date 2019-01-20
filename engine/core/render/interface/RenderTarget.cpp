@@ -5,11 +5,6 @@
 
 namespace Echo
 {
-	void RenderTarget::reusageDepthTarget(RenderTarget* depthTarget)
-	{
-		m_depthTarget = depthTarget;
-	}
-
 	Echo::ui32 RenderTarget::getMemorySize()
 	{
 		ui32 memorySize = 0;
@@ -25,8 +20,8 @@ namespace Echo
 	RenderTarget::RenderTarget( ui32 id, ui32 width, ui32 height, PixelFormat format, const Options& option )
 		: m_id( id )
 		, m_pixelFormat( format )
-		, m_bHasDepth(option.depth)
 		, m_bHasMSAA(option.msaa)
+        , m_bHasDepth(option.depth)
 		, m_width( width )
 		, m_height( height )
 		, m_isFrameBufferChange( 0 )

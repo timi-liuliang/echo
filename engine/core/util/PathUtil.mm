@@ -1,9 +1,7 @@
-﻿#if LORD_PLATFORM==LORD_PLATFORM_MAC_IOS
-
 #include "PathUtil.h"
-#import  <UIKit/UIKit.h>
+#include <AppKit/AppKit.h>
 
-namespace LORD
+namespace Echo
 {
     // 获取当前路径
     String PathUtil::GetCurrentDir()
@@ -12,4 +10,3 @@ namespace LORD
     }
 }
 
-#endif

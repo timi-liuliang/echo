@@ -18,6 +18,7 @@
 #include "ProjectWnd.h"
 #include "PathChooseDialog.h"
 #include "RenderWindow.h"
+#include "MacHelper.h"
 #include "About.h"
 #include <QTimer>
 #include <engine/core/util/PathUtil.h>
@@ -38,8 +39,11 @@ namespace Studio
 		setupUi( this);
 
 #ifdef ECHO_PLATFORM_WINDOWS
-		// hide title
-		setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+        // hide window hwnd
+        setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+#elif defined(ECHO_PLATFORM_MAC)
+        // set title bar color
+        macChangeTitleBarColor(effectiveWinId(), 255.0, 0.0, 0.0);
 #endif
 
 		// set menu icon

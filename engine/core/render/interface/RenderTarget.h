@@ -12,13 +12,11 @@ namespace Echo
 			bool					depth;
 			bool					msaa;
 			bool					cubemap;
-			RenderTarget*			depthTarget;
 
 			Options()
 				: depth(false)
 				, msaa(false)
 				, cubemap(false)
-				, depthTarget(nullptr)
 			{}
 		};
 
@@ -68,14 +66,7 @@ namespace Echo
 		// save target
 		virtual bool save(const char* file) = 0;
 
-		// 此方法待移除
-		virtual bool doStoreDefaultRenderTarget()=0;
-
-		// 此方法待移除
-		virtual bool doRestoreDefaultRenderTarget()=0;
-
-		void reusageDepthTarget(RenderTarget* depthTarget);
-
+        // get memory size
 		ui32 getMemorySize();
 
 	protected:
