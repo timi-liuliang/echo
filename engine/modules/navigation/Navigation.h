@@ -1,10 +1,10 @@
 #pragma once
 
-#include <Recast/Recast/Recast.h>
-#include <Recast/Recast/DetourNavMesh.h>
-#include <Recast/Recast/DetourNavMeshQuery.h>
-#include <Recast/Recast/DetourCrowd.h>
-#include <engine/core/Math/Math.h>
+#include <recast/Recast/Recast.h>
+#include <recast/Recast/DetourNavMesh.h>
+#include <recast/Recast/DetourNavMeshQuery.h>
+#include <recast/Recast/DetourCrowd.h>
+#include <engine/core/math/Math.h>
 
 class dtNavMesh;
 class dtNavMeshQuery;

@@ -11,6 +11,7 @@ namespace Echo
 	{
 	public:
 		ObjectEditor(Object* object);
+        virtual ~ObjectEditor() {}
 
 		// register editor
 		static void registerEditor(const char* objName, ObjectEditorFactory* factory);

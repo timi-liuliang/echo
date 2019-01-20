@@ -114,13 +114,13 @@ namespace Echo
 
 	protected:
 		// propertys (script property or dynamic property)
-		virtual const PropertyInfos& getPropertys();
+		virtual const PropertyInfos& getPropertys() override;
 
 		// get property value
-		virtual bool getPropertyValue(const String& propertyName, Variant& oVar);
+		virtual bool getPropertyValue(const String& propertyName, Variant& oVar) override;
 
 		// set property value
-		virtual bool setPropertyValue(const String& propertyName, const Variant& propertyValue);
+		virtual bool setPropertyValue(const String& propertyName, const Variant& propertyValue) override;
 
 	private:
 		// 添加贴图文件名

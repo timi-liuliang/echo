@@ -1,13 +1,13 @@
 #include "Update.h"
-#include <engine/core/Base/echo_def.h>
+#include <engine/core/base/echo_def.h>
 #include <engine/core/io/DataStream.h>
-#include <engine/core/Util/PathUtil.h>
+#include <engine/core/util/PathUtil.h>
 #include <QMessageBox>
 #include <QApplication>
 
 namespace Studio
 {
-	// 更新Astudio
+    /*
 	static void http_update_astudio_cb(void* arg, const char* url, void* data, size_t len, int responsecode)
 	{
 		// 写入当前目录Cache文件夹
@@ -19,7 +19,6 @@ namespace Studio
 		//WinExec(cmd.c_str(), SW_SHOW);
 	}
 
-	// 获取所有可更新版本
 	static void http_get_all_versions_cb(void* arg, const char* url, void* data, size_t len, int responsecode)
 	{
 		Echo::StringArray* oResult = (Echo::StringArray*)arg;
@@ -37,9 +36,8 @@ namespace Studio
 			beginPos = httpText.find(">astudio", 0);
 			endPos = httpText.find("setup.exe<", 0);
 		}
-	}
+	}*/
 
-	// 获取当前可更新版本
 	Echo::StringArray Update::getAllEnabledVersions()
 	{
 		Echo::StringArray result;

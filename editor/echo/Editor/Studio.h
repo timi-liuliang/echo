@@ -97,7 +97,7 @@ namespace Studio
 
 	public:
 		// get node icon by class name
-		virtual Echo::String getNodeIcon(Echo::Node* node);
+		virtual Echo::String getNodeIcon(Echo::Node* node) override;
 
 	private:
 		AStudio();
@@ -114,13 +114,13 @@ namespace Studio
 
 	private:
 		Echo::String					m_rootPath;			// root direcory
-		Echo::String					m_appPath;			// 程序运营目录
-		MainWindow*						m_mainWindow;		// 主窗口
-		ProjectWnd*						m_projectWindow;
-		RenderWindow*					m_renderWindow;		// 渲染窗口
-		Echo::LogDefault*				m_log;				// 日志实现
-		LogPanel*						m_logPanel;			// 日志面板
-		ConfigMgr*						m_projectCfg;		// 配置文件
+		Echo::String					m_appPath;
+		MainWindow*						m_mainWindow = nullptr;
+		ProjectWnd*						m_projectWindow = nullptr;
+		RenderWindow*					m_renderWindow = nullptr;
+		Echo::LogDefault*				m_log = nullptr;
+		LogPanel*						m_logPanel = nullptr;
+		ConfigMgr*						m_projectCfg = nullptr;
 	};
 }
 

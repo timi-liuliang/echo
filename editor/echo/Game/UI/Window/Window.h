@@ -57,9 +57,9 @@ namespace Game
 		void checkWindowSize();
 
 	private:
-		QSize					m_dx9Size;					// 调整后大小
-		QTimer*					m_timer;					// 计时器
+		QSize					m_dx9Size;
+		QTimer*					m_timer = nullptr;
 		QSize					m_ratio;
-		App*					m_app;
+		App*					m_app = nullptr;
 	};
 }

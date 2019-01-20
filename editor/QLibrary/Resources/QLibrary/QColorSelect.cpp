@@ -19,26 +19,22 @@ namespace QT_UI
 			SetColor( Echo::Color( color.red()/255.f, color.green()/255.f, color.blue()/255.f,color.alpha()/255.f));
 	}
 
-	// 设置路径
 	void QColorSelect::SetColor( string color) 
 	{ 
 		m_color = Echo::StringUtil::ParseColor(color.c_str());
 	}
 
-	// 设置颜色
 	void QColorSelect::SetColor( const Echo::Color& color)
 	{ 
 		m_color=color;
 	}
 
-	// 获取路径
 	string QColorSelect::GetColor() 
 	{
 		string color = Echo::StringUtil::ToString(m_color);
 		return color;
 	}
 
-	// MVC渲染
 	bool QColorSelect::ItemDelegatePaint( QPainter *painter, const QRect& rect, const string& val)
 	{
 		Echo::Color color = Echo::StringUtil::ParseColor(val.c_str());
@@ -62,15 +58,11 @@ namespace QT_UI
 		return true;
 	}
 
-	// 大小
 	QSize QColorSelect::sizeHint() const
 	{
-		QSize tsize = size();
-
 		return size();
 	}
 
-	// 重定义渲染
 	void QColorSelect::paintEvent( QPaintEvent* event)
 	{
 		QPainter painter( this);

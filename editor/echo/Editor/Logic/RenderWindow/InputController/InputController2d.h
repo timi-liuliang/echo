@@ -2,7 +2,7 @@
 
 #include "IInputController.h"
 #include <QPoint>
-#include "engine/core/Math/Vector3.h"
+#include "engine/core/math/Vector3.h"
 #include "engine/core/camera/Camera.h"
 
 class QWheelEvent;
@@ -100,12 +100,11 @@ namespace Studio
 		QPointF m_pos;
 
 	protected:
-		Echo::Camera*		m_camera;			// 主摄像机
-		float				m_cameraScale;		// 缩放值
-		Echo::Vector3		m_cameraMoveDir;	// 摄像机移动
-		Echo::Vector3		m_cameraForward;	// 朝向
-		Echo::Vector3		m_cameraPositon;	// 摄像机位置
-
-		bool				m_bNeedUpdateCamera;// 是否需要更新相机位置
+		Echo::Camera*		m_camera;
+		float				m_cameraScale;
+		Echo::Vector3		m_cameraMoveDir;
+		Echo::Vector3		m_cameraForward;
+		Echo::Vector3		m_cameraPositon;
+		bool				m_bNeedUpdateCamera = true;
 	};
 }

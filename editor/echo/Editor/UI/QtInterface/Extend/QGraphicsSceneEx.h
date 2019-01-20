@@ -10,7 +10,7 @@ namespace Echo
 	class QGraphicsSceneEx : public QGraphicsScene
 	{
 	protected:
-		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override
 		{
 			QGraphicsScene::mouseReleaseEvent(event);
 

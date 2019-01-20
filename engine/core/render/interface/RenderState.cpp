@@ -1,5 +1,5 @@
 #include "RenderState.h"
-#include "engine/core/Math/Math.h"
+#include "engine/core/math/Math.h"
 
 namespace Echo
 {

@@ -52,13 +52,7 @@ namespace QT_UI
 		}
 		else
 		{
-			bool a = Echo::PathUtil::IsFileExist(icon);
-
 			QPixmap pixmap(icon);
-			bool isNull = pixmap.isNull();
-			int w = pixmap.width();
-			int h = pixmap.height();
-
 			menuTopLeftButton->setIcon(QIcon(pixmap));
 		}
 

@@ -1,12 +1,9 @@
 #pragma once
 
-#include <engine/core/Util/StringUtil.h>
+#include <engine/core/util/StringUtil.h>
 
 namespace Studio
 {
-	/**
-	 * 更新相关逻辑
-	 */
 	class Update
 	{
 	public:

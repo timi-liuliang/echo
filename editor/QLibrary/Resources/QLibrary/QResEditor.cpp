@@ -12,9 +12,9 @@ namespace QT_UI
 {
 	QResEditor::QResEditor(class QPropertyModel* model, QString propertyName, const char* resType, QWidget* parent)
 		: QWidget( parent)
+        , m_resType(resType)
 		, m_propertyModel(model)
 		, m_propertyName(propertyName)
-		, m_resType(resType)
 		, m_menu(nullptr)
 	{
 		// 根据资源类型获取后缀

@@ -1,7 +1,7 @@
 #include "Shader.h"
 #include "engine/core/log/Log.h"
 #include <engine/core/io/IO.h>
-#include "engine/core/Util/PathUtil.h"
+#include "engine/core/util/PathUtil.h"
 #include "Renderer.h"
 #include "ShaderProgram.h"
 

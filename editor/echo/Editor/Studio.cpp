@@ -25,8 +25,6 @@
 namespace Studio
 {
 	AStudio::AStudio()
-		: m_logPanel(nullptr)
-		, m_mainWindow(nullptr)
 	{
 		m_renderWindow = NULL;
 		m_projectCfg = EchoNew( ConfigMgr);

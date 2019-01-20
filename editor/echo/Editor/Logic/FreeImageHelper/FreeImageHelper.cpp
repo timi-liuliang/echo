@@ -58,10 +58,6 @@ namespace Echo
 				imageInfo.m_width = FreeImage_GetWidth( fileHandle);
 				imageInfo.m_height= FreeImage_GetHeight( fileHandle);
 
-				BITMAPINFOHEADER*	  a0 = FreeImage_GetInfoHeader( fileHandle);
-				BITMAPINFO*			  a1 = FreeImage_GetInfo( fileHandle);
-				FREE_IMAGE_COLOR_TYPE a2 = FreeImage_GetColorType( fileHandle);
-
 				FreeImage_Unload( fileHandle);
 
 				return true;
@@ -575,16 +571,14 @@ namespace Echo
 			{
 				BITMAPINFO* _PimageInfo = FreeImage_GetInfo(fileHandle);
 				int textureNum = static_cast<int>((*srcFile).size());
-				int texelByte  = int(_PimageInfo->bmiHeader.biBitCount / 8);
+				//int texelByte  = int(_PimageInfo->bmiHeader.biBitCount / 8);
 				int oldWidth   = _PimageInfo->bmiHeader.biWidth;
 				int oldHeight  = _PimageInfo->bmiHeader.biHeight;
 				int newHeight  = oldHeight * textureNum;
 
 				// Ä¿±êÎÆÀí
 				FIBITMAP* finalHandle = FreeImage_Rescale(fileHandle, oldWidth, newHeight, FILTER_BSPLINE);
-				BYTE* finalPixels = (BYTE*)FreeImage_GetBits(finalHandle);
 				BYTE* pixels;
-				int imgByte = oldWidth*oldHeight*texelByte;
 				FreeImage_Unload(fileHandle);
 				for (int i = 0; i < textureNum; ++i)
 				{

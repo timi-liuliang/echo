@@ -135,10 +135,10 @@ namespace Studio
 
 	private:
 		int								m_width;
-		QTimer*							m_timer;				// 计时器
-		QT_UI::QPropertyConfigHelper	m_propertyHelper;		// 属性
-		Echo::Object*					m_nextEditObject;		
-		Echo::Object*					m_currentEditObject;
-		QMenu*							m_nodeTreeMenu;			// 结点树右键菜单
+		QTimer*							m_timer;
+		QT_UI::QPropertyConfigHelper	m_propertyHelper;
+		Echo::Object*					m_nextEditObject = nullptr;
+		Echo::Object*					m_currentEditObject = nullptr;
+		QMenu*							m_nodeTreeMenu = nullptr;
 	};
 }

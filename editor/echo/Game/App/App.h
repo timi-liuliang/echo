@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Engine/core/main/Engine.h>
+#include <engine/core/main/Engine.h>
 #include "Log.h"
 
 namespace Game

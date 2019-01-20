@@ -107,7 +107,7 @@ namespace Echo
 
 #define ECHO_RES(m_class, m_parent, extension, CREATE_FUNC, LOAD_FUNC)							\
 public:																							\
-	virtual const String& getClassName() const													\
+	virtual const String& getClassName() const override											\
 	{																							\
 		static String className=#m_class;														\
 		return className;																		\

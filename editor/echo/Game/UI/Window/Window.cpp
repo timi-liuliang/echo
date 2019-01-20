@@ -9,8 +9,6 @@ namespace Game
 {
 	Window::Window(QWidget* parent/* = NULL*/)
 		: QWidget(parent)
-		, m_app(nullptr)
-		, m_timer(nullptr)
 	{
 		setUpdatesEnabled(false);
 		setMouseTracking(true);

@@ -210,7 +210,6 @@ namespace QT_UI
 	// ÃÌº”œÓ
 	QStandardItem* QPreviewWidget::createItem( const QString& text, const QString& icon)
 	{
-		QStandardItem* newItem = NULL;
 		ItemInfo iteminfo;
 		iteminfo.m_text = text;
 		iteminfo.m_icon = icon;

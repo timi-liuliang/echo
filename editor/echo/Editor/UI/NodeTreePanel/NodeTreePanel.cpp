@@ -20,9 +20,6 @@ namespace Studio
 
 	NodeTreePanel::NodeTreePanel( QWidget* parent/*=0*/)
 		: QDockWidget( parent)
-		, m_nodeTreeMenu(nullptr)
-		, m_currentEditObject(nullptr)
-		, m_nextEditObject(nullptr)
 		, m_width(0)
 	{
 		EchoAssert(!g_inst);

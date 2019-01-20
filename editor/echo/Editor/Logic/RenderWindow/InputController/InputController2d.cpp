@@ -3,12 +3,11 @@
 #include <QWheelEvent>
 #include <QMouseEvent>
 #include "Studio.h"
-#include <engine/core/Math/EchoMathFunction.h>
+#include <engine/core/math/EchoMathFunction.h>
 
 namespace Studio
 {
 	static const float kCameraRotationYScalar = 0.08f;
-	static const float kCameraRotationZScalar = 0.3f;
 	static const float kCameraRadiusScalar = 0.003f;
 
 	InputController2d::InputController2d()
@@ -24,12 +23,11 @@ namespace Studio
 		, m_keyAltDown(false)
 		, m_keyCtrlDown(false)
 		, m_keyShiftDown(false)
-		, m_camera(NULL)
+		, m_camera(nullptr)
+        , m_cameraScale(1.f)
 		, m_cameraMoveDir(Echo::Vector3::UNIT_X)
 		, m_cameraForward(-Echo::Vector3::UNIT_Z)
 		, m_cameraPositon(Echo::Vector3::ZERO)
-		, m_bNeedUpdateCamera(true)
-		, m_cameraScale(1.f)
 	{
 		m_camera = Echo::NodeTree::instance()->get2dCamera();
 

@@ -12,7 +12,7 @@ namespace Studio
 	class EchoEngine
 	{
 	public:
-		~EchoEngine();
+		virtual ~EchoEngine();
 
 		// inst
 		static EchoEngine* instance();

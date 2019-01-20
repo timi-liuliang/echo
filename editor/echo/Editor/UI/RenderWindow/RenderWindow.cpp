@@ -10,12 +10,6 @@ namespace Studio
 {
 	RenderWindow::RenderWindow(QWidget* parent/* = NULL*/)
 		: QWidget(parent)
-		, m_mouseMenu(NULL)
-		, m_timer(NULL)
-		, m_inputController(nullptr)
-		, m_inputController2d(nullptr)
-		, m_inputController3d(nullptr)
-		, m_isLeftButtonDown(false)
 	{
 		setAttribute(Qt::WA_NativeWindow);
 		setUpdatesEnabled(false);
@@ -112,7 +106,6 @@ namespace Studio
 		if ( m_isLeftButtonDown)
 		{
 			static QPointF lastPos = e->localPos();
-			QPointF changedPos = e->localPos() - lastPos;
 
 			lastPos = e->localPos();
 		}

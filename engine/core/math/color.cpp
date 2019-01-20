@@ -1,4 +1,4 @@
-#include "Color.h"
+#include "color.h"
 #include "engine/core/memory/MemAllocDef.h"
 
 namespace Echo

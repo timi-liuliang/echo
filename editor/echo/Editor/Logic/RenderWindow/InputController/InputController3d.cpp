@@ -9,7 +9,6 @@
 namespace Studio
 {
 	static const float kCameraRotationYScalar = 0.08f;
-	static const float kCameraRotationZScalar = 0.3f;
 	static const float kCameraRadiusScalar = 0.003f;
 
 	InputController3d::InputController3d()

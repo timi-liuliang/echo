@@ -10,10 +10,10 @@ namespace QT_UI
 	// 构造函数
 	QResSelect::QResSelect(class QPropertyModel* model, QString propertyName, const char* exts, const char* files, QWidget* parent)
 		: QWidget( parent)
+        , m_exts(exts)
+        , m_files(files)
 		, m_propertyModel(model)
 		, m_propertyName(propertyName)
-		, m_exts(exts)
-		, m_files(files)
 	{
 		// 布局控件
 		m_horizonLayout = new QHBoxLayout( this);
