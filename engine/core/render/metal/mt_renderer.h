@@ -19,7 +19,7 @@ namespace Echo
         virtual GPUBuffer*	createIndexBuffer(Dword usage, const Buffer& buff) override { return nullptr; }
         
         // create texture
-        virtual Texture*     createTexture2D(const String& name) override { return nullptr; }
+        virtual Texture*     createTexture2D(const String& name) override;
         virtual TextureCube* createTextureCube(const String& name) override {return nullptr; }
         
         // create views

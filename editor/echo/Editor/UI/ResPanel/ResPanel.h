@@ -26,10 +26,10 @@ namespace Studio
 		void recoverEditSettings();
 
 	public slots:
-		// 选择文件夹
+		// when select dir
 		void onSelectDir(const char* dir);
 
-		// 重新选择当前文件夹
+		// reselect current dir
 		void reslectCurrentDir();
 
 		// click res

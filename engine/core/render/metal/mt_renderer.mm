@@ -4,6 +4,7 @@
 #include "mt_shader_program.h"
 #include "mt_render_state.h"
 #include "mt_render_target.h"
+#include "mt_texture.h"
 
 namespace Echo
 {
@@ -82,5 +83,10 @@ namespace Echo
     RenderTarget* MTRenderer::createRenderTarget(ui32 id, ui32 width, ui32 height, PixelFormat pixelFormat, const RenderTarget::Options& option)
     {
         return EchoNew(MTRenderTarget);
+    }
+    
+    Texture* MTRenderer::createTexture2D(const String& name)
+    {
+        return EchoNew(MTTexture2D);
     }
 }

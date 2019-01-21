@@ -8,23 +8,21 @@
 namespace QT_UI
 {
 	//----------------------------------
-	// QProperty 2013-1-21 帝林
-	// 记录Model,Delegate对
+	// QProperty 2013-1-21
 	//----------------------------------
 	struct QProperty
 	{
 		QPropertyModel*			m_model;
 		QPropertyDelegate*		m_delegate;
 
-		// 构造函数
+		// constructor
 		QProperty(const char* config, QWidget* parent = 0, bool isGB2312 = false)
 		{
-			// 设置
 			m_model			= EchoNew( QPropertyModel(config, isGB2312, parent));
 			m_delegate		= EchoNew( QPropertyDelegate( m_model));
 		}
 
-		// 析构函数
+		// destructor
 		~QProperty()
 		{
 			EchoSafeDelete( m_model, QPropertyModel);

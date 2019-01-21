@@ -63,6 +63,9 @@ namespace QT_UI
 
 	QSize QPropertyDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 	{
+        if(!index.model())
+            return QSize();
+        
 		Echo::String widgetType;
 		QString propertyName = index.model()->data(index, Qt::DisplayPropertyRole).toString();
 		QVariant userData = index.model()->data(index, Qt::UserRole);

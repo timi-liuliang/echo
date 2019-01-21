@@ -14,7 +14,6 @@ namespace QT_UI
 	{
 		updateRootPath(rootPath);
 
-		// 解析显示的文件类型
 		Echo::StringArray exts = Echo::StringUtil::Split(extFilter, "|");
 		for (size_t i = 0; i<exts.size(); i++)
 			m_exts.push_back(exts[i].c_str());

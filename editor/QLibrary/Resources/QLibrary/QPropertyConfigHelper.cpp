@@ -155,16 +155,16 @@ namespace QT_UI
 
 	void QPropertyConfigHelper::applyTo(const Echo::String& id, QTreeView* treeView, const QObject* receiver, const char* memeber, bool clear)
 	{
-		// 断开消息链接
+		// disconnect signals
 		if (m_property && m_property->m_model)
 		{
 			QObject::disconnect(m_signalConn);
 		}
 
-		// 刷新显示
+		// modify if change
 		if (m_lastResult != getResult() || ( m_property && treeView->model() != m_property->m_model) || m_id!=id)
 		{
-			// 删除之
+			// clear
 			EchoSafeDelete(m_property, QProperty);
 
 			static Echo::ui32 idx = 0; idx++;
@@ -183,13 +183,13 @@ namespace QT_UI
 			m_id = id;
 		}
 
-		// 应用所有初始值
+		// set value
 		for ( auto& iter : m_values)
 		{
 			m_property->m_model->setValue(iter.first, iter.second);
 		}
 
-		// 重置索引
+		// clear
 		m_curDepth = 0;
 		m_idxs.assign(0);
 		if (clear)
@@ -197,7 +197,7 @@ namespace QT_UI
 			m_result.clear();
 		}
 
-		// 消息链接
+		// connect signals
 		if (memeber)
 			m_signalConn = QObject::connect(m_property->m_model, SIGNAL(Signal_ValueChanged(const QString&, QVariant,int, int)), receiver, memeber);
 	}
