@@ -3,22 +3,22 @@
 
 namespace Echo
 {
-	static FreeImageHelper g_freeImageHelper;			// È«¾Ö±äÁ¿(FreeImageµÄ³õÊ¼»¯Óë·´³õÊ¼»¯)
+	static FreeImageHelper g_freeImageHelper;			// å…¨å±€å˜é‡(FreeImageçš„åˆå§‹åŒ–ä¸ååˆå§‹åŒ–)
 
-	// ¹¹Ôìº¯Êı
+	// æ„é€ å‡½æ•°
 	FreeImageHelper::FreeImageHelper()
 	{
 		FreeImage_Initialise();
 	}
 
-	// Îö¹¹º¯Êı
+	// ææ„å‡½æ•°
 	FreeImageHelper::~FreeImageHelper()
 	{
 		FreeImage_DeInitialise();
 	}
 
 
-	/** Ó³Éä±ê¼Ç */
+	/** æ˜ å°„æ ‡è®° */
 	int FreeImageHelper::MappingFlagsByFormat( FREE_IMAGE_FORMAT fmt)
 	{
 		int fiFlags = 0;
@@ -34,14 +34,14 @@ namespace Echo
 		return fiFlags;
 	}
 
-	/** »ñÈ¡Í¼ÏñĞÅÏ¢ */
+	/** è·å–å›¾åƒä¿¡æ¯ */
 	bool FreeImageHelper::getImageInfo( const char* filePath, ImageInfo& imageInfo)
 	{
 		FREE_IMAGE_FORMAT fileFMT = FreeImage_GetFIFFromFilename( filePath);
 		
 		int fiFlags = MappingFlagsByFormat( fileFMT);
 
-		// ¼ÓÔØ»ñÈ¡ÎÆÀíĞÅÏ¢
+		// åŠ è½½è·å–çº¹ç†ä¿¡æ¯
 		if( fileFMT!= FIF_UNKNOWN && FreeImage_FIFSupportsReading( fileFMT))
 		{
 			FIBITMAP* fileHandle = FreeImage_Load( fileFMT, filePath, fiFlags);
@@ -67,7 +67,7 @@ namespace Echo
 		return false;
 	}
 
-	/** ÖØĞÂËõ·ÅÎÆÀí */
+	/** é‡æ–°ç¼©æ”¾çº¹ç† */
 	bool FreeImageHelper::rescaleImage( const char* iFilePath, const char* oFilePath, bool isResale, float scaleValue)
 	{
 		std::string ext = PathUtil::GetFileExt( iFilePath).c_str();
@@ -76,7 +76,7 @@ namespace Echo
 
 		int fiFlags = MappingFlagsByFormat( fileFMT);
 
-		// ¼ÓÔØ»ñÈ¡ÎÆÀíĞÅÏ¢
+		// åŠ è½½è·å–çº¹ç†ä¿¡æ¯
 		if( fileFMT!= FIF_UNKNOWN && FreeImage_FIFSupportsReading( fileFMT))
 		{
 			FIBITMAP* dip = FreeImage_Load( fileFMT, iFilePath, fiFlags);
@@ -89,7 +89,7 @@ namespace Echo
 					width  = (ui32)(width * scaleValue);
 					height = (ui32)(height* scaleValue);
 
-					// Ëõ·ÅÎÆÀí
+					// ç¼©æ”¾çº¹ç†
 					FIBITMAP* dipScaled = FreeImage_Rescale( dip, width, height, FILTER_BSPLINE);
 
 					FreeImage_Save( FIF_TARGA, dipScaled, oFilePath, TARGA_DEFAULT);
@@ -111,14 +111,14 @@ namespace Echo
 		return false;
 	}
 
-	/** ±£´æÎªpng¸ñÊ½£¬ÎŞÑ¹Ëõ */
+	/** ä¿å­˜ä¸ºpngæ ¼å¼ï¼Œæ— å‹ç¼© */
 	bool FreeImageHelper::saveImageToTGA( const char* iFilePath, const char* oFilePath, bool isResale, float scaleValue)
 	{
 		FREE_IMAGE_FORMAT fileFMT = FreeImage_GetFIFFromFilename( iFilePath);
 
 		int fiFlags = MappingFlagsByFormat( fileFMT);
 
-		// ¼ÓÔØ»ñÈ¡ÎÆÀíĞÅÏ¢
+		// åŠ è½½è·å–çº¹ç†ä¿¡æ¯
 		if( fileFMT!= FIF_UNKNOWN && FreeImage_FIFSupportsReading( fileFMT))
 		{
 			FIBITMAP* dip = FreeImage_Load( fileFMT, iFilePath, fiFlags);
@@ -131,7 +131,7 @@ namespace Echo
 					width  = (ui32)(width * scaleValue);
 					height = (ui32)(height* scaleValue);
 
-					// Ëõ·ÅÎÆÀí
+					// ç¼©æ”¾çº¹ç†
 					FIBITMAP* dipScaled = FreeImage_Rescale( dip, width, height, FILTER_BOX);
 
 					FreeImage_Save( FIF_TARGA, dipScaled, oFilePath, TARGA_DEFAULT);
@@ -153,14 +153,14 @@ namespace Echo
 		return false;
 	}
 
-	/** ±£´æÎªbmp¸ñÊ½£¬ÎŞÑ¹Ëõ */
+	/** ä¿å­˜ä¸ºbmpæ ¼å¼ï¼Œæ— å‹ç¼© */
 	bool FreeImageHelper::saveImageToBmp( const char* iFilePath, const char* oFilePath, bool isResale, ui32 width, ui32 height)
 	{
 		FREE_IMAGE_FORMAT fileFMT = FreeImage_GetFIFFromFilename( iFilePath);
 
 		int fiFlags = MappingFlagsByFormat( fileFMT);
 
-		// ¼ÓÔØ»ñÈ¡ÎÆÀíĞÅÏ¢
+		// åŠ è½½è·å–çº¹ç†ä¿¡æ¯
 		if( fileFMT!= FIF_UNKNOWN && FreeImage_FIFSupportsReading( fileFMT))
 		{
 			FIBITMAP* dip = FreeImage_Load( fileFMT, iFilePath, fiFlags);
@@ -168,17 +168,17 @@ namespace Echo
 			{
 				if( isResale)
 				{
-					// Ëõ·ÅÎÆÀí
+					// ç¼©æ”¾çº¹ç†
 					FIBITMAP* dipScaled = FreeImage_Rescale( dip, width, height, FILTER_BOX);
 
-					// ÈôÂ·¾¶²»´æÔÚ,´´½¨Â·¾¶
+					// è‹¥è·¯å¾„ä¸å­˜åœ¨,åˆ›å»ºè·¯å¾„
 					Echo::String saveDir = Echo::PathUtil::GetFileDirPath( oFilePath);
 					if( !Echo::PathUtil::IsDirExist( saveDir))
 					{
 						Echo::PathUtil::CreateDir( saveDir);
 					}
 
-					// Ö´ĞĞ±£´æ
+					// æ‰§è¡Œä¿å­˜
 					FreeImage_Save( FIF_BMP, dipScaled, oFilePath, TARGA_DEFAULT);
 
 					FreeImage_Unload( dipScaled);
@@ -198,10 +198,10 @@ namespace Echo
 		return false;
 	}
 
-	/** ÌáÈ¡alphaÍ¨µÀµ½Ò»¸öĞÂÎÄ¼ş */
+	/** æå–alphaé€šé“åˆ°ä¸€ä¸ªæ–°æ–‡ä»¶ */
 	bool FreeImageHelper::extracRGBAlphaChannel( const char* srcPath, const char* oRgbFile, const char* oAlphaFile)
 	{
-		// ´æ´¢ÏñËØ
+		// å­˜å‚¨åƒç´ 
 		BYTE* alphaBits = NULL;
 		BYTE* rgbBits   = NULL;
 
@@ -210,7 +210,7 @@ namespace Echo
 
 		int fiFlags = MappingFlagsByFormat( fileFMT);
 		 
-		// ¼ÓÔØ»ñÈ¡ÎÆÀíĞÅÏ¢
+		// åŠ è½½è·å–çº¹ç†ä¿¡æ¯
 		if( fileFMT!= FIF_UNKNOWN && FreeImage_FIFSupportsReading( fileFMT))
 		{
 			FIBITMAP* fileHandle = FreeImage_Load( fileFMT, srcPath, fiFlags);
@@ -257,7 +257,7 @@ namespace Echo
 		return true;
 	}
 
-	/** ´ÓÎÄ¼şÖĞÌáÈ¡ÑÕÉ«Öµ */
+	/** ä»æ–‡ä»¶ä¸­æå–é¢œè‰²å€¼ */
 	bool FreeImageHelper::extractColors(const char* srcPath, std::vector<Echo::Color>& colors, int& width, int& height)
 	{
 		colors.clear();
@@ -267,7 +267,7 @@ namespace Echo
 
 		int fiFlags = MappingFlagsByFormat(fileFMT);
 
-		// ¼ÓÔØ»ñÈ¡ÎÆÀíĞÅÏ¢
+		// åŠ è½½è·å–çº¹ç†ä¿¡æ¯
 		if (fileFMT != FIF_UNKNOWN && FreeImage_FIFSupportsReading(fileFMT))
 		{
 			FIBITMAP* fileHandle = FreeImage_Load(fileFMT, srcPath, fiFlags);
@@ -295,7 +295,7 @@ namespace Echo
 				{		
 					for (size_t w = 0; w < imageInfo.m_width; w++)
 					{
-						// ×¢£¬FreeImageÖĞ¶Á³öÑÕÉ«ÖµÉÏÏÂµ¹ÖÃ
+						// æ³¨ï¼ŒFreeImageä¸­è¯»å‡ºé¢œè‰²å€¼ä¸Šä¸‹å€’ç½®
 						size_t pix = (imageInfo.m_height - h - 1) * imageInfo.m_width + w;
 						BYTE r = pixels[pix * 4 + 0];
 						Byte g = pixels[pix * 4 + 1];
@@ -322,12 +322,12 @@ namespace Echo
 
 	#define GCC_PACK(n)
 
-	/** ±£´æÎªbmp¸ñÊ½(½öÖ§³ÖRGB¸ñÊ½) Ô´×ÔUnreal3 Lightmass */
+	/** ä¿å­˜ä¸ºbmpæ ¼å¼(ä»…æ”¯æŒRGBæ ¼å¼) æºè‡ªUnreal3 Lightmass */
 	int FreeImageHelper::SaveImageToBmp( BYTE* pixelData, int width, int height, const char* savePath)
 	{
 		PathUtil::DelPath( savePath);
 
-		// ±£´æÎÆÀí
+		// ä¿å­˜çº¹ç†
 #pragma pack (push,1)
 		struct BITMAPFILEHEADER
 		{
@@ -385,7 +385,7 @@ namespace Echo
 		// Info header
 		fwrite( &IH, sizeof(IH), 1, fileHandle);
 
-		// ÏóËØÊı¾İ
+		// è±¡ç´ æ•°æ®
 		fwrite( pixelData, sizeof(BYTE)*width*height*3, 1, fileHandle);
 
 		fflush( fileHandle);
@@ -394,7 +394,7 @@ namespace Echo
 		return true;
 	}
 
-	//»ñÈ¡Í¼Æ¬ÏñËØÊı¾İ
+	//è·å–å›¾ç‰‡åƒç´ æ•°æ®
 	bool FreeImageHelper::getImageBits( const char* filePath,unsigned char* bits )
 	{
 		ImageInfo imageInfo;
@@ -402,7 +402,7 @@ namespace Echo
 
 		int fiFlags = MappingFlagsByFormat( fileFMT);
 
-		// ¼ÓÔØ»ñÈ¡ÎÆÀíĞÅÏ¢
+		// åŠ è½½è·å–çº¹ç†ä¿¡æ¯
 		if( fileFMT!= FIF_UNKNOWN && FreeImage_FIFSupportsReading( fileFMT))
 		{
 			FIBITMAP* fileHandle = FreeImage_Load( fileFMT, filePath, fiFlags);
@@ -465,7 +465,7 @@ namespace Echo
 		int dstFiFlags = MappingFlagsByFormat( dstFileFMT );
 		int srcFiFlags = MappingFlagsByFormat( srcFileFMT );
 
-		// ¼ÓÔØ»ñÈ¡ÎÆÀíĞÅÏ¢
+		// åŠ è½½è·å–çº¹ç†ä¿¡æ¯
 		if( dstFileFMT!= FIF_UNKNOWN && FreeImage_FIFSupportsReading( dstFileFMT)
 			&& srcFileFMT != FIF_UNKNOWN && FreeImage_FIFSupportsReading(srcFileFMT))
 		{
@@ -500,7 +500,7 @@ namespace Echo
 
 		int fiFlags = MappingFlagsByFormat(fileFMT);
 
-		// ¼ÓÔØ»ñÈ¡ÎÆÀíĞÅÏ¢
+		// åŠ è½½è·å–çº¹ç†ä¿¡æ¯
 		if (fileFMT != FIF_UNKNOWN && FreeImage_FIFSupportsReading(fileFMT))
 		{
 			FIBITMAP* fileHandle = FreeImage_Load(fileFMT, srcFile, fiFlags);
@@ -510,7 +510,7 @@ namespace Echo
 				if (_PimageInfo->bmiHeader.biBitCount != 32)
 					return false;
 
-				//¼ÇÂ¼Ô­Ê¼ÌùÍ¼ĞÅÏ¢
+				//è®°å½•åŸå§‹è´´å›¾ä¿¡æ¯
 				imageInfo.m_colorType = FreeImage_GetColorType(fileHandle);
 				imageInfo.m_width	  = _PimageInfo->bmiHeader.biWidth;
 				imageInfo.m_height	  = _PimageInfo->bmiHeader.biHeight;
@@ -525,11 +525,11 @@ namespace Echo
 				}
 
 				size_t  imgSize = imageInfo.m_width*imageInfo.m_height;
-				// Ëõ·ÅÎÆÀí
+				// ç¼©æ”¾çº¹ç†
 				FIBITMAP* dipScaled = FreeImage_Rescale(fileHandle, imageInfo.m_width, imageInfo.m_height * 2, FILTER_BSPLINE);
 				BYTE* pixels = (BYTE*)FreeImage_GetBits(fileHandle);
 				BYTE* pixelsScaled = (BYTE*)FreeImage_GetBits(dipScaled);
-				// ·ÖÀëalpha
+				// åˆ†ç¦»alpha
 				for (size_t pix = 0; pix < imgSize; pix++)
 				{
 					pixelsScaled[pix * 3 + 0] = pixels[pix * 4 + 0];
@@ -563,7 +563,7 @@ namespace Echo
 
 		int fiFlags = MappingFlagsByFormat(fileFMT);
 
-		// ¼ÓÔØ»ñÈ¡ÎÆÀíĞÅÏ¢
+		// åŠ è½½è·å–çº¹ç†ä¿¡æ¯
 		if (fileFMT != FIF_UNKNOWN && FreeImage_FIFSupportsReading(fileFMT))
 		{
 			FIBITMAP* fileHandle = FreeImage_Load(fileFMT, (*srcFile)[0].c_str(), fiFlags);
@@ -571,14 +571,16 @@ namespace Echo
 			{
 				BITMAPINFO* _PimageInfo = FreeImage_GetInfo(fileHandle);
 				int textureNum = static_cast<int>((*srcFile).size());
-				//int texelByte  = int(_PimageInfo->bmiHeader.biBitCount / 8);
+				int texelByte  = int(_PimageInfo->bmiHeader.biBitCount / 8);
 				int oldWidth   = _PimageInfo->bmiHeader.biWidth;
 				int oldHeight  = _PimageInfo->bmiHeader.biHeight;
 				int newHeight  = oldHeight * textureNum;
 
-				// Ä¿±êÎÆÀí
+				// ç›®æ ‡çº¹ç†
 				FIBITMAP* finalHandle = FreeImage_Rescale(fileHandle, oldWidth, newHeight, FILTER_BSPLINE);
+				BYTE* finalPixels = (BYTE*)FreeImage_GetBits(finalHandle);
 				BYTE* pixels;
+				int imgByte = oldWidth * oldHeight*texelByte;
 				FreeImage_Unload(fileHandle);
 				for (int i = 0; i < textureNum; ++i)
 				{
@@ -586,6 +588,8 @@ namespace Echo
 					pixels = (BYTE*)FreeImage_GetBits(fileHandle);
 #ifdef ECHO_PLATFORM_WINDOWS
 					memcpy_s(finalPixels + imgByte*(textureNum - i -1), oldWidth*newHeight*texelByte, pixels, imgByte);
+#else
+					memcpy(finalPixels + imgByte * (textureNum - i - 1), pixels, imgByte);
 #endif
                     FreeImage_Unload(fileHandle);
 				}
