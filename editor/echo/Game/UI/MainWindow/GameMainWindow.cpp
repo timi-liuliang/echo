@@ -2,6 +2,7 @@
 #include <QDesktopWidget>
 #include "GameMainWindow.h"
 #include "engine/core/util/PathUtil.h"
+#include "MacHelper.h"
 
 namespace Game
 {
@@ -16,10 +17,15 @@ namespace Game
 		m_renderWindow = new Window(this);
 		setCentralWidget(m_renderWindow);;
 
-		// 隐藏标题
-		setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+#ifdef ECHO_PLATFORM_WINDOWS
+        // hide window hwnd
+        setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+#elif defined(ECHO_PLATFORM_MAC)
+        // set title bar color
+        macChangeTitleBarColor(winId(), 66.f/255.f, 66.f/255.f, 66.f/255.f);
+#endif
 
-		// 设置菜单左上控件
+		// set icon
 		menubar->setTopLeftCornerIcon(":/icon/Icon/icon.png");
 
 		//resize(800, 490);
