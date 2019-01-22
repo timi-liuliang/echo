@@ -1,10 +1,12 @@
 #include <thread>
 #include "physx_world.h"
 #include "physx_cb.cxx"
+#include "engine/core/main/Engine.h"
 
 namespace Echo
 {
 	PhysxWorld::PhysxWorld()
+		: m_drawDebugOption("Editor", { "None","Editor","Game","All" })
 	{
 		if (initPhysx())
 		{
@@ -28,6 +30,11 @@ namespace Echo
 
 			// create scene
 			m_pxScene = m_pxPhysics->createScene(pxDesc);
+			m_pxScene->setVisualizationParameter(physx::PxVisualizationParameter::eSCALE, 1.f);
+			m_pxScene->setVisualizationParameter(physx::PxVisualizationParameter::eACTOR_AXES, 2.f);
+
+			// debug drawer
+			m_debugDraw = EchoNew(PhysxDebugDraw);
 		}
 	}
 
@@ -68,6 +75,14 @@ namespace Echo
 			{
 				m_pxScene->simulate(m_stepLength);
 				m_pxScene->fetchResults(true);
+
+				// draw debug data
+				bool isGame = Engine::instance()->getConfig().m_isGame;
+				if (m_drawDebugOption.getIdx() == 3 || (m_drawDebugOption.getIdx() == 1 && !isGame) || (m_drawDebugOption.getIdx() == 2 && isGame))
+				{
+					const physx::PxRenderBuffer& rb = m_pxScene->getRenderBuffer();
+					m_debugDraw->update(elapsedTime, rb);
+				}
 
 				m_accumulator -= m_stepLength;
 			}

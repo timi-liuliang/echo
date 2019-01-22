@@ -31,6 +31,10 @@ namespace Echo
 		// initialize
 		bool initPhysx();
 
+		// debug draw
+		const StringOption& getDebugDrawOption() const { return m_drawDebugOption; }
+		void setDebugDrawOption(const StringOption& option) { m_drawDebugOption.setValue(option.getValue()); }
+
 	private:
 		physx::PxAllocatorCallback*		m_pxAllocatorCb = nullptr;
 		physx::PxErrorCallback*			m_pxErrorCb = nullptr;
@@ -42,5 +46,8 @@ namespace Echo
 		physx::PxScene*					m_pxScene = nullptr;
 		float							m_stepLength = 0.025f;
 		float							m_accumulator = 0.f;
+
+		StringOption					m_drawDebugOption;
+		PhysxDebugDraw*					m_debugDraw = nullptr;
 	};
 }
