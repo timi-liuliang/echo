@@ -19,6 +19,6 @@ namespace Echo
 
 	private:
 		physx::PxMaterial*	m_pxMaterial = nullptr;
-		physx::PxActor*		m_pxActor = nullptr;
+		physx::PxRigidActor*m_pxBody = nullptr;
 	};
 }

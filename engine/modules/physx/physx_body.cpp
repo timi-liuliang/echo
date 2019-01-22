@@ -20,15 +20,20 @@ namespace Echo
 
 	void PhysxBody::update_self()
 	{
-		if (m_isEnable && !m_pxActor)
+		if (m_isEnable && !m_pxBody)
 		{
 			physx::PxPhysics* physics =	PhysxWorld::instance()->getPxPhysics();
 			if (physics)
 			{
+				physx::PxVec3 position( getWorldPosition().x, getWorldPosition().y, getWorldPosition().z);
 				m_pxMaterial = PhysxWorld::instance()->getPxPhysics()->createMaterial(0.5f, 0.5f, 0.5f);
-				m_pxActor = PxCreatePlane(*physics, physx::PxPlane( 0, 1, 0, 0), *m_pxMaterial);
+				m_pxBody = physics->createRigidStatic(physx::PxTransform(position));
 
-				PhysxWorld::instance()->getPxScene()->addActor(*m_pxActor);
+				// box shape
+				physx::PxShape* aBoxShape = physx::PxRigidActorExt::createExclusiveShape(*m_pxBody, physx::PxBoxGeometry(1.f / 2, 1.f / 2, 1.f / 2), *m_pxMaterial);
+				//physx::PxRigidBodyExt::updateMassAndInertia(*m_pxBody, 1.f);
+
+				PhysxWorld::instance()->getPxScene()->addActor(*m_pxBody);
 			}
 		}
 	}
