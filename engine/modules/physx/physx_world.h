@@ -18,6 +18,12 @@ namespace Echo
 		// step
 		void step(float elapsedTime);
 
+		// get pxPhysics
+		physx::PxPhysics* getPxPhysics() { return m_pxPhysics; }
+
+		// get scene
+		physx::PxScene* getPxScene() { return m_pxScene; }
+
 	private:
 		PhysxWorld();
 		virtual ~PhysxWorld();
