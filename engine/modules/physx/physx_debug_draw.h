@@ -1,6 +1,6 @@
 #pragma once
 
-#include <PxPhysicsAPI.h>
+#include "physx_base.h"
 
 namespace Echo
 {

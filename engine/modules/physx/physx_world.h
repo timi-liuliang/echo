@@ -3,7 +3,7 @@
 #include <engine/core/base/object.h>
 #include <engine/core/math/Math.h>
 #include "physx_debug_draw.h"
-#include <PxPhysicsAPI.h>
+#include "physx_base.h"
 
 namespace Echo
 {

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/core/scene/node.h"
-#include <PxPhysicsAPI.h>
+#include "physx_base.h"
 
 namespace Echo
 {

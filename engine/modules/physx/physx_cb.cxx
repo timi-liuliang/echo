@@ -1,4 +1,5 @@
 #include <engine/core/log/Log.h>
+#include "physx_base.h"
 #include <foundation/PxAllocatorCallback.h>
 #include <foundation/PxErrorCallback.h>
 
