@@ -42,8 +42,8 @@ namespace Echo
 		m_pxErrorCb = EchoNew(PhysxErrorReportCb);
 		m_pxFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, *m_pxAllocatorCb, *m_pxErrorCb);
 
-		//bool isRecordMemoryAllocations = false;
-		//m_pxPhysics = PxCreateBasePhysics(PX_PHYSICS_VERSION, *m_pxFoundation, physx::PxTolerancesScale(), isRecordMemoryAllocations, nullptr);
+		bool isRecordMemoryAllocations = false;
+		m_pxPhysics = PxCreateBasePhysics(PX_PHYSICS_VERSION, *m_pxFoundation, physx::PxTolerancesScale(), isRecordMemoryAllocations, nullptr);
 
 		return m_pxPhysics ? true : false;
 	}
