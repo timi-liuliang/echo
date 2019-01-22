@@ -10,6 +10,7 @@
 #include "engine/modules/ai/ai_module.h"
 #include "engine/modules/srp/srp_module.h"
 #include "engine/modules/light/light_module.h"
+#include "engine/modules/physx/physx_module.h"
 
 using namespace Echo;
 
@@ -25,3 +26,4 @@ REGISTER_MODULE(UIModule)
 REGISTER_MODULE(AIModule)
 REGISTER_MODULE(SRPModule);
 REGISTER_MODULE(LightModule);
+REGISTER_MODULE(PhysxModule);

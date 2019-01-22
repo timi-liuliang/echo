@@ -26,8 +26,8 @@ SET(INCLUDE_FILES
 	${ECHO_ROOT_PATH}/ThirdParty/Recast/DetourTileCache
 	${ECHO_ROOT_PATH}/ThirdParty/adrenoSDK/inc
 	${ECHO_DEP_PATH}/fbx_sdk/include
-	${ECHO_ROOT_PATH}/thirdparty/physx/PhysXSDK/Include
-	${ECHO_ROOT_PATH}/thirdparty/physx/APEXSDK/Include
+	${ECHO_ROOT_PATH}/thirdparty/physx/physx/include
+	${ECHO_ROOT_PATH}/thirdparty/physx/pxshared/include
 	${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/Core/include
 )
 

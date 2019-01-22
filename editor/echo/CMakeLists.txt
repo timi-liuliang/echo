@@ -133,7 +133,7 @@ ADD_EXECUTABLE(${MODULE_NAME}
 	CMakeLists.txt)
 
 # link libraries
-TARGET_LINK_LIBRARIES(${MODULE_NAME} zlib engine lua recast freeimage)
+TARGET_LINK_LIBRARIES(${MODULE_NAME} zlib engine lua recast freeimage physx)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} Qt5::Core Qt5::Widgets Qt5::UiTools)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} Live2DCubismCore pugixml spine box2d)
 
