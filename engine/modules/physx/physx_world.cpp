@@ -79,15 +79,15 @@ namespace Echo
 				m_pxScene->simulate(m_stepLength);
 				m_pxScene->fetchResults(true);
 
-				// draw debug data
-				bool isGame = Engine::instance()->getConfig().m_isGame;
-				if (m_drawDebugOption.getIdx() == 3 || (m_drawDebugOption.getIdx() == 1 && !isGame) || (m_drawDebugOption.getIdx() == 2 && isGame))
-				{
-					const physx::PxRenderBuffer& rb = m_pxScene->getRenderBuffer();
-					m_debugDraw->update(elapsedTime, rb);
-				}
-
 				m_accumulator -= m_stepLength;
+			}
+
+			// draw debug data
+			bool isGame = Engine::instance()->getConfig().m_isGame;
+			if (m_drawDebugOption.getIdx() == 3 || (m_drawDebugOption.getIdx() == 1 && !isGame) || (m_drawDebugOption.getIdx() == 2 && isGame))
+			{
+				const physx::PxRenderBuffer& rb = m_pxScene->getRenderBuffer();
+				m_debugDraw->update(elapsedTime, rb);
 			}
 		}
 	}
