@@ -5,7 +5,9 @@ namespace Echo
 {
 	PhysxShapePlane::PhysxShapePlane()
 	{
-
+		// set default rotation
+		Quaternion quat; quat.fromAxisAngle(Vector3::UNIT_Z, Math::PI_DIV2);
+		setLocalOrientation(quat);
 	}
 
 	PhysxShapePlane::~PhysxShapePlane()
@@ -25,7 +27,10 @@ namespace Echo
 		PxPhysics* physics = PhysxWorld::instance()->getPxPhysics();
 		if (physics)
 		{
+			physx::PxTransform pxTransform((physx::PxVec3&)getLocalPosition(), (physx::PxQuat&)getLocalOrientation());
 			PxShape* shape = physics->createShape(PxPlaneGeometry(), *m_pxMaterial);
+			shape->setLocalPose( pxTransform);
+
 			return shape;
 		}
 

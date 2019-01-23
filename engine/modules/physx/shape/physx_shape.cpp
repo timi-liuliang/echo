@@ -1,6 +1,7 @@
 #include "physx_shape.h"
 #include "../physx_world.h"
 #include "../physx_body.h"
+#include <engine/core/main/Engine.h>
 
 namespace Echo
 {
@@ -11,7 +12,16 @@ namespace Echo
 
 	PhysxShape::~PhysxShape()
 	{
-
+		if (m_pxShape)
+		{
+			PhysxBody* body = ECHO_DOWN_CAST<PhysxBody*>(getParent());
+			if (body && body->getPxBody())
+			{
+				body->getPxBody()->detachShape(*m_pxShape);
+				m_pxShape->release();
+				m_pxShape = nullptr;
+			}
+		}
 	}
 
 	void PhysxShape::bindMethods()
@@ -29,11 +39,20 @@ namespace Echo
 				m_pxShape = createPxShape();
 				if (m_pxShape)
 				{
-					physx::PxVec3 localPos(getLocalPosition().x, getLocalPosition().y, getLocalPosition().z);
-					physx::PxTransform localTm(localPos);
-					m_pxShape->setLocalPose(localTm);
+					physx::PxTransform localTransform((physx::PxVec3&)getLocalPosition(), (physx::PxQuat&)getLocalOrientation());
+					m_pxShape->setLocalPose(localTransform);
+
 					body->getPxBody()->attachShape(*m_pxShape);
 				}
+			}
+		}
+
+		if (m_pxShape)
+		{
+			if (!Engine::instance()->getConfig().m_isGame)
+			{
+				//physx::PxTransform pxTransform((physx::PxVec3&)getLocalPosition(), (physx::PxQuat&)getLocalOrientation());
+				//m_pxShape->setLocalPose(pxTransform);
 			}
 		}
 	}
