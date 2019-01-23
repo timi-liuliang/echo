@@ -53,7 +53,10 @@ namespace Echo
 
 	void PhysxWorld::bindMethods()
 	{
+		CLASS_BIND_METHOD(PhysxWorld, getDebugDrawOption, DEF_METHOD("getDebugDrawOption"));
+		CLASS_BIND_METHOD(PhysxWorld, setDebugDrawOption, DEF_METHOD("setDebugDrawOption"));
 
+		CLASS_REGISTER_PROPERTY(PhysxWorld, "DebugDraw", Variant::Type::StringOption, "getDebugDrawOption", "setDebugDrawOption");
 	}
 
 	PhysxWorld* PhysxWorld::instance()
@@ -66,17 +69,19 @@ namespace Echo
 	{
 		if (m_pxScene)
 		{
+			bool isGame = Engine::instance()->getConfig().m_isGame;
+
+			// step
 			m_accumulator += elapsedTime;
 			while (m_accumulator > m_stepLength)
 			{
-				m_pxScene->simulate(m_stepLength);
+				m_pxScene->simulate(isGame ? m_stepLength : 0.f);
 				m_pxScene->fetchResults(true);
 
 				m_accumulator -= m_stepLength;
 			}
 
 			// draw debug data
-			bool isGame = Engine::instance()->getConfig().m_isGame;
 			if (m_drawDebugOption.getIdx() == 3 || (m_drawDebugOption.getIdx() == 1 && !isGame) || (m_drawDebugOption.getIdx() == 2 && isGame))
 			{
 				const physx::PxRenderBuffer& rb = m_pxScene->getRenderBuffer();

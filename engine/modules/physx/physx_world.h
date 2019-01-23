@@ -24,16 +24,16 @@ namespace Echo
 		// get scene
 		physx::PxScene* getPxScene() { return m_pxScene; }
 
+		// debug draw
+		const StringOption& getDebugDrawOption() const { return m_drawDebugOption; }
+		void setDebugDrawOption(const StringOption& option) { m_drawDebugOption.setValue(option.getValue()); }
+
 	private:
 		PhysxWorld();
 		virtual ~PhysxWorld();
 
 		// initialize
 		bool initPhysx();
-
-		// debug draw
-		const StringOption& getDebugDrawOption() const { return m_drawDebugOption; }
-		void setDebugDrawOption(const StringOption& option) { m_drawDebugOption.setValue(option.getValue()); }
 
 	private:
 		physx::PxAllocatorCallback*		m_pxAllocatorCb = nullptr;

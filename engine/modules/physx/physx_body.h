@@ -13,6 +13,10 @@ namespace Echo
 		PhysxBody();
 		virtual ~PhysxBody();
 
+		// type
+		const StringOption& getType() { return m_type; }
+		void setType(const StringOption& type) { m_type.setValue(type.getValue()); }
+
 		// get physx body
 		physx::PxRigidActor* getPxBody() { return m_pxBody; }
 
@@ -22,5 +26,6 @@ namespace Echo
 
 	private:
 		physx::PxRigidActor*m_pxBody = nullptr;
+		StringOption		m_type;
 	};
 }
