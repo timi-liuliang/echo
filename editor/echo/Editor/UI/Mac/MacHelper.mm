@@ -1,6 +1,5 @@
 #include <QWidget>
-//#include <AppKit/AppKit.h>
-#include <Cocoa/Cocoa.h>
+#include <AppKit/AppKit.h>
 
 extern "C" void macChangeTitleBarColor(WId winId, double red, double green, double blue)
 {

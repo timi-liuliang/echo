@@ -79,7 +79,12 @@ namespace Echo
 		virtual void getViewportReal(Viewport& pViewport) override {}
         
     private:
-        ui32    m_screenWidth = 640;
-        ui32    m_screenHeight = 480;
+        // make view metal compatible
+        void makeViewMetalCompatible(void* handle);
+        
+    private:
+        ui32                m_screenWidth = 640;
+        ui32                m_screenHeight = 480;
+        struct MTStruct*    m_struct = nullptr;
 	};
 }

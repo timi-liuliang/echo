@@ -5,12 +5,22 @@
 #include "mt_render_state.h"
 #include "mt_render_target.h"
 #include "mt_texture.h"
+#include <AppKit/AppKit.h>
+#include <Metal/Metal.h>
+#include <QuartzCore/CAMetalLayer.h>
 
 namespace Echo
 {
+    struct MTStruct
+    {
+        // The device (aka GPU) we're using to render
+        id<MTLDevice> device;
+    };
+    
     MTRenderer::MTRenderer()
     {
-        
+        m_struct = EchoNew(MTStruct);
+        m_struct->device = MTLCreateSystemDefaultDevice();
     }
     
     MTRenderer::~MTRenderer()
@@ -24,6 +34,9 @@ namespace Echo
         m_screenHeight = config.screenHeight;
         
         m_frameBuffer = EchoNew(VKFrameBuffer);
+        
+        // make view support metal
+        makeViewMetalCompatible( (void*)config.windowHandle);
         
         // set view port
         Viewport* pViewport = EchoNew(Viewport(0, 0, m_screenWidth, m_screenHeight));
@@ -88,5 +101,16 @@ namespace Echo
     Texture* MTRenderer::createTexture2D(const String& name)
     {
         return EchoNew(MTTexture2D);
+    }
+    
+    void MTRenderer::makeViewMetalCompatible(void* handle)
+    {
+        NSView* view = (NSView*)handle;
+        
+        if (![view.layer isKindOfClass:[CAMetalLayer class]])
+        {
+            [view setLayer:[CAMetalLayer layer]];
+            [view setWantsLayer:YES];
+        }
     }
 }
