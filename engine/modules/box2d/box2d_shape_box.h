@@ -22,7 +22,7 @@ namespace Echo
 
 	protected:
 		// get shape
-		virtual b2Shape* createb2Shape();
+		virtual b2Shape* createb2Shape() override;
 
 	private:
 		float			m_width;

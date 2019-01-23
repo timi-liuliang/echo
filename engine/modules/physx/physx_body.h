@@ -13,12 +13,14 @@ namespace Echo
 		PhysxBody();
 		virtual ~PhysxBody();
 
+		// get physx body
+		physx::PxRigidActor* getPxBody() { return m_pxBody; }
+
 	private:
 		// update
 		virtual void update_self();
 
 	private:
-		physx::PxMaterial*	m_pxMaterial = nullptr;
 		physx::PxRigidActor*m_pxBody = nullptr;
 	};
 }

@@ -13,7 +13,7 @@ namespace Echo
 		{
 			scene->setVisualizationParameter(physx::PxVisualizationParameter::eSCALE, 1.f);
 			//m_pxScene->setVisualizationParameter(physx::PxVisualizationParameter::eACTOR_AXES, 1.f);
-			//scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_SHAPES, 1.f);
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_SHAPES, 1.f);
 			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_STATIC, 1.f);
 			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_DYNAMIC, 1.f);
 

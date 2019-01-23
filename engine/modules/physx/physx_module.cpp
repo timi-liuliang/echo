@@ -1,6 +1,8 @@
 #include "physx_module.h"
 #include "physx_world.h"
 #include "shape/physx_shape.h"
+#include "shape/physx_shape_sphere.h"
+#include "shape/physx_shape_capsule.h"
 #include "physx_body.h"
 
 namespace Echo
@@ -14,6 +16,9 @@ namespace Echo
 	{
 		Class::registerType<PhysxWorld>();
 		Class::registerType<PhysxBody>();
+		Class::registerType<PhysxShape>();
+		Class::registerType<PhysxShapeSphere>();
+		Class::registerType<PhysxShapeCapsule>();
 	}
 
 	void PhysxModule::update(float elapsedTime)
