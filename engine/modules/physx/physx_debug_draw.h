@@ -7,7 +7,7 @@ namespace Echo
 	class PhysxDebugDraw
 	{
 	public:
-		PhysxDebugDraw();
+		PhysxDebugDraw(physx::PxScene* scene);
 
 		// void step
 		void update(float elapsedTime, const physx::PxRenderBuffer& rb);

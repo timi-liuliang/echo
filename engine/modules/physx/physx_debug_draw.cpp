@@ -7,12 +7,21 @@
 
 namespace Echo
 {
-	PhysxDebugDraw::PhysxDebugDraw()
+	PhysxDebugDraw::PhysxDebugDraw(physx::PxScene* scene)
 	{
-		m_gizmosNode = ECHO_DOWN_CAST<Echo::Gizmos*>(Echo::Class::create("Gizmos"));
-		m_gizmosNode->set2d(false);
-		m_gizmosNode->setAutoClear(true);
-		m_gizmosNode->setLocalPosition(Vector3(0.f, 0.f, 0.f));
+		if (scene)
+		{
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eSCALE, 1.f);
+			//m_pxScene->setVisualizationParameter(physx::PxVisualizationParameter::eACTOR_AXES, 1.f);
+			//scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_SHAPES, 1.f);
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_STATIC, 1.f);
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_DYNAMIC, 1.f);
+
+			m_gizmosNode = ECHO_DOWN_CAST<Echo::Gizmos*>(Echo::Class::create("Gizmos"));
+			m_gizmosNode->set2d(false);
+			m_gizmosNode->setAutoClear(true);
+			m_gizmosNode->setLocalPosition(Vector3(0.f, 0.f, 0.f));
+		}
 	}
 
 	void PhysxDebugDraw::update(float elapsedTime, const physx::PxRenderBuffer& rb)
@@ -28,7 +37,10 @@ namespace Echo
 		for (physx::PxU32 i = 0; i < rb.getNbLines(); i++)
 		{
 			const physx::PxDebugLine& line = rb.getLines()[i];
-			m_gizmosNode->drawLine(Vector3(line.pos0.x, line.pos0.y, line.pos0.z), Vector3(line.pos1.x, line.pos1.y, line.pos1.z), Color::RED);
+			Vector3 pos0(line.pos0.x, line.pos0.y, line.pos0.z);
+			Vector3 pos1(line.pos1.x, line.pos1.y, line.pos1.z);
+			Color   color(line.color0);
+			m_gizmosNode->drawLine(pos0, pos1, color);
 		}
 	}
 
@@ -37,7 +49,11 @@ namespace Echo
 		for (physx::PxU32 i = 0; i < rb.getNbTriangles(); i++)
 		{
 			const physx::PxDebugTriangle& tri = rb.getTriangles()[i];
-			m_gizmosNode->drawTriangle(Vector3(tri.pos0.x, tri.pos0.y, tri.pos0.z), Vector3(tri.pos1.x, tri.pos1.y, tri.pos1.z), Vector3(tri.pos2.x, tri.pos2.y, tri.pos2.z), Color::RED);
+			Vector3 pos0(tri.pos0.x, tri.pos0.y, tri.pos0.z);
+			Vector3 pos1(tri.pos1.x, tri.pos1.y, tri.pos1.z);
+			Vector3 pos2(tri.pos2.x, tri.pos2.y, tri.pos2.z);
+			Color   color(tri.color0);
+			m_gizmosNode->drawTriangle( pos0, pos1, pos2, color);
 		}
 	}
 }

@@ -30,14 +30,7 @@ namespace Echo
 
 			// create scene
 			m_pxScene = m_pxPhysics->createScene(pxDesc);
-			m_pxScene->setVisualizationParameter(physx::PxVisualizationParameter::eSCALE, 1.f);
-			//m_pxScene->setVisualizationParameter(physx::PxVisualizationParameter::eACTOR_AXES, 1.f);
-			m_pxScene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_SHAPES, 1.f);
-			m_pxScene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_STATIC, 1.f);
-			m_pxScene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_DYNAMIC, 1.f);
-
-			// debug drawer
-			m_debugDraw = EchoNew(PhysxDebugDraw);
+			m_debugDraw = EchoNew(PhysxDebugDraw(m_pxScene));
 		}
 	}
 
