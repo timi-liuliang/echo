@@ -392,9 +392,14 @@ void IncrementalAABBPrunerCore::visualize(Cm::RenderOutput& out, PxU32 color) co
 			{
 				static void _Draw(const IncrementalAABBTreeNode* root, const IncrementalAABBTreeNode* node, Cm::RenderOutput& out_)
 				{
+					Vec3p minimum, maximum;
+					V4StoreU(node->mBVMin, &minimum.x);
+					V4StoreU(node->mBVMax, &maximum.x);
+
 					PxBounds3 bounds;
-					V4StoreU(node->mBVMin, &bounds.minimum.x);
-					V4StoreU(node->mBVMax, &bounds.maximum.x);
+					bounds.minimum = minimum;
+					bounds.maximum = maximum;
+
 					out_ << Cm::DebugBox(bounds, true);
 					if (node->isLeaf())
 						return;

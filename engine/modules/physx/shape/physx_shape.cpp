@@ -51,8 +51,8 @@ namespace Echo
 		{
 			if (!Engine::instance()->getConfig().m_isGame)
 			{
-				//physx::PxTransform pxTransform((physx::PxVec3&)getLocalPosition(), (physx::PxQuat&)getLocalOrientation());
-				//m_pxShape->setLocalPose(pxTransform);
+				physx::PxTransform pxTransform((physx::PxVec3&)getLocalPosition(), (physx::PxQuat&)getLocalOrientation());
+				m_pxShape->setLocalPose(pxTransform);
 			}
 		}
 	}

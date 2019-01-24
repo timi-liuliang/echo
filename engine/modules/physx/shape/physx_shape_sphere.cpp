@@ -25,7 +25,10 @@ namespace Echo
 		PxPhysics* physics = PhysxWorld::instance()->getPxPhysics();
 		if (physics)
 		{
+			physx::PxTransform pxTransform((physx::PxVec3&)getLocalPosition(), (physx::PxQuat&)getLocalOrientation());
 			PxShape* shape = physics->createShape(PxSphereGeometry(m_radius), *m_pxMaterial);
+			shape->setLocalPose(pxTransform);
+
 			return shape;
 		}
 

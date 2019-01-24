@@ -81,6 +81,8 @@ namespace Studio
 
 	MainWindow::~MainWindow()
 	{
+		m_gameProcess.terminate();
+		m_gameProcess.waitForFinished();
 	}
 
 	MainWindow* MainWindow::instance()
