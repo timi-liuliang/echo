@@ -26,7 +26,7 @@ namespace Echo
 
 		// debug draw
 		const StringOption& getDebugDrawOption() const { return m_drawDebugOption; }
-		void setDebugDrawOption(const StringOption& option) { m_drawDebugOption.setValue(option.getValue()); }
+		void setDebugDrawOption(const StringOption& option);
 
 	private:
 		PhysxWorld();

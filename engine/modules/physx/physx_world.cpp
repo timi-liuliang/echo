@@ -65,6 +65,21 @@ namespace Echo
 		return inst;
 	}
 
+	void PhysxWorld::setDebugDrawOption(const StringOption& option)
+	{ 
+		m_drawDebugOption.setValue(option.getValue());
+
+		bool isGame = Engine::instance()->getConfig().m_isGame;
+		if (m_drawDebugOption.getIdx() == 3 || (m_drawDebugOption.getIdx() == 1 && !isGame) || (m_drawDebugOption.getIdx() == 2 && isGame))
+		{
+			m_debugDraw->setEnable(true);
+		}
+		else
+		{
+			m_debugDraw->setEnable(false);
+		}
+	}
+
 	void PhysxWorld::step(float elapsedTime)
 	{
 		if (m_pxScene)

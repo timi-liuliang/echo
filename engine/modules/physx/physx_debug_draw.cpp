@@ -11,16 +11,27 @@ namespace Echo
 	{
 		if (scene)
 		{
-			scene->setVisualizationParameter(physx::PxVisualizationParameter::eSCALE, 1.f);
-			//m_pxScene->setVisualizationParameter(physx::PxVisualizationParameter::eACTOR_AXES, 1.f);
-			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_SHAPES, 1.f);
-			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_STATIC, 1.f);
-			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_DYNAMIC, 1.f);
+			m_pxScene = scene;
 
 			m_gizmosNode = ECHO_DOWN_CAST<Echo::Gizmos*>(Echo::Class::create("Gizmos"));
 			m_gizmosNode->set2d(false);
 			m_gizmosNode->setAutoClear(true);
 			m_gizmosNode->setLocalPosition(Vector3(0.f, 0.f, 0.f));
+		}
+	}
+
+	// set enable
+	void PhysxDebugDraw::setEnable(bool isEnable)
+	{
+		if (m_isEnable != isEnable)
+		{
+			m_pxScene->setVisualizationParameter(physx::PxVisualizationParameter::eSCALE, isEnable ? 1.f : 0.f);
+			//m_pxScene->setVisualizationParameter(physx::PxVisualizationParameter::eACTOR_AXES, 1.f);
+			m_pxScene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_SHAPES, isEnable ? 1.f : 0.f);
+			m_pxScene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_STATIC, isEnable ? 1.f : 0.f);
+			m_pxScene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_DYNAMIC, isEnable ? 1.f : 0.f);
+
+			m_isEnable = isEnable;
 		}
 	}
 
