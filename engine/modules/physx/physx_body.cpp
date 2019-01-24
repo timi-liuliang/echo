@@ -30,14 +30,14 @@ namespace Echo
 			physx::PxPhysics* physics =	PhysxWorld::instance()->getPxPhysics();
 			if (physics)
 			{
-				physx::PxVec3 position( getWorldPosition().x, getWorldPosition().y, getWorldPosition().z);
+				physx::PxTransform pxTransform((physx::PxVec3&)getWorldPosition(), (physx::PxQuat&)getWorldOrientation());
 				if (m_type.getIdx() == 0)
 				{
-					m_pxBody = physics->createRigidStatic(physx::PxTransform(position));
+					m_pxBody = physics->createRigidStatic(pxTransform);
 				}
 				else
 				{
-					physx::PxRigidDynamic* dyb = physics->createRigidDynamic(physx::PxTransform(position));
+					physx::PxRigidDynamic* dyb = physics->createRigidDynamic(pxTransform);
 					if(m_type.getIdx()==1)
 						dyb->setMass(0.f);
 					
