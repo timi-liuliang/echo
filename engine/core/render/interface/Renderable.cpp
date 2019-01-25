@@ -3,7 +3,7 @@
 #include "interface/ShaderProgram.h"
 #include "interface/Renderer.h"
 #include "interface/ShaderProgram.h"
-#include "engine/core/render/interface/renderstage/RenderStage.h"
+#include "engine/core/render/interface/pipeline/RenderStage.h"
 #include "engine/core/render/interface/Material.h"
 #include "engine/core/render/interface/mesh/Mesh.h"
 #include "engine/core/scene/render_node.h"

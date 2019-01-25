@@ -1,6 +1,6 @@
 #pragma once
 
-#include "RenderStageItem.h"
+#include "RenderQueue.h"
 
 namespace Echo
 {
@@ -24,6 +24,6 @@ namespace Echo
 		~RenderStage();
 
 	protected:
-		vector<RenderStageItem*>::type	m_items;				// äÖÈ¾½×¶Î
+		vector<RenderQueue*>::type	m_items;
 	};
 }

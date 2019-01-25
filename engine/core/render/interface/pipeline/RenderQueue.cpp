@@ -1,19 +1,19 @@
 #include "../Renderable.h"
 #include "engine/core/scene/render_node.h"
-#include "RenderStageItem.h"
-#include "engine/core/render/interface/RenderTargetManager.h"
+#include "../Renderer.h"
+#include "RenderQueue.h"
 
 namespace Echo
 {
-	RenderStageItem::RenderStageItem()
+	RenderQueue::RenderQueue()
 	{
 	}
 
-	RenderStageItem::~RenderStageItem()
+	RenderQueue::~RenderQueue()
 	{
 	}
 
-	void RenderStageItem::render()
+	void RenderQueue::render()
 	{
 		for (RenderableID id : m_renderables)
 		{
@@ -25,25 +25,24 @@ namespace Echo
 		m_renderables.clear();
 	}
 
-	DefaultRenderStageItemOpaque::DefaultRenderStageItemOpaque()
+	DefaultRenderQueueOpaque::DefaultRenderQueueOpaque()
 	{
 		setName("Opaque");
 	}
 
 	// render
-	void DefaultRenderStageItemOpaque::render()
+	void DefaultRenderQueueOpaque::render()
 	{
-		RenderTargetManager::instance()->beginRenderTarget(RTI_DefaultBackBuffer);
-		RenderStageItem::render();
+		RenderQueue::render();
 	}
 
-	DefaultRenderStageItemTransparent::DefaultRenderStageItemTransparent()
+	DefaultRenderQueueTransparent::DefaultRenderQueueTransparent()
 	{
 		setName("Transparent");
 	}
 
 	// sort
-	void DefaultRenderStageItemTransparent::sort()
+	void DefaultRenderQueueTransparent::sort()
 	{
 		std::sort(m_renderables.begin(), m_renderables.end(), [](RenderableID a, RenderableID b) -> bool
 		{
@@ -54,11 +53,9 @@ namespace Echo
 	}
 
 	// render
-	void DefaultRenderStageItemTransparent::render()
+	void DefaultRenderQueueTransparent::render()
 	{
 		sort();
-		RenderStageItem::render();
-
-		RenderTargetManager::instance()->endRenderTarget(RTI_DefaultBackBuffer);
+		RenderQueue::render();
 	}
 }

@@ -6,11 +6,11 @@
 
 namespace Echo
 {
-	class RenderStageItem
+	class RenderQueue
 	{
 	public:
-		RenderStageItem();
-		virtual ~RenderStageItem();
+		RenderQueue();
+		virtual ~RenderQueue();
 
 		// render
 		virtual void render();
@@ -30,19 +30,19 @@ namespace Echo
 	};
 
 
-	class DefaultRenderStageItemOpaque : public RenderStageItem
+	class DefaultRenderQueueOpaque : public RenderQueue
 	{
 	public:
-		DefaultRenderStageItemOpaque();
+		DefaultRenderQueueOpaque();
 
 		// render
 		virtual void render();
 	};
 
-	class DefaultRenderStageItemTransparent : public RenderStageItem
+	class DefaultRenderQueueTransparent : public RenderQueue
 	{
 	public:
-		DefaultRenderStageItemTransparent();
+		DefaultRenderQueueTransparent();
 
 		// sort
 		void sort();

@@ -1,12 +1,13 @@
 #include "RenderStage.h"
 #include "Engine/core/main/Engine.h"
+#include "engine/core/render/interface/RenderTargetManager.h"
 
 namespace Echo
 {
 	RenderStage::RenderStage()
 	{
-		m_items.push_back(EchoNew(DefaultRenderStageItemOpaque));
-		m_items.push_back(EchoNew(DefaultRenderStageItemTransparent));
+		m_items.push_back(EchoNew(DefaultRenderQueueOpaque));
+		m_items.push_back(EchoNew(DefaultRenderQueueTransparent));
 	}
 
 	RenderStage::~RenderStage()
@@ -31,7 +32,7 @@ namespace Echo
 	// add renderable
 	void RenderStage::addRenderable(const String& name, RenderableID id)
 	{
-		for (RenderStageItem* item : m_items)
+		for (RenderQueue* item : m_items)
 		{
 			if (item->getName() == name)
 				item->addRenderable(id);
@@ -41,9 +42,13 @@ namespace Echo
 	// process all render stage item
 	void RenderStage::process()
 	{
-		for (RenderStageItem* item : m_items)
+		RenderTargetManager::instance()->beginRenderTarget(RTI_DefaultBackBuffer);
+
+		for (RenderQueue* item : m_items)
 		{
 			item->render();
 		}
+
+		RenderTargetManager::instance()->endRenderTarget(RTI_DefaultBackBuffer);
 	}
 }
