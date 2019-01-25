@@ -68,10 +68,17 @@ namespace QT_UI
 
 	void QMenuBarEx::onMaxmized()
 	{
+#ifdef ECHO_PLATFORM_WINDOWS
 		if (m_parent->windowState()==Qt::WindowMaximized)
 			m_parent->setWindowState(Qt::WindowNoState);
 		else
 			m_parent->setWindowState(Qt::WindowMaximized);
+#else
+        if (m_parent->windowState()==Qt::WindowFullScreen)
+            m_parent->setWindowState(Qt::WindowNoState);
+        else
+            m_parent->setWindowState(Qt::WindowFullScreen);
+#endif
 	}
 
 	void QMenuBarEx::mouseMoveEvent(QMouseEvent *e)

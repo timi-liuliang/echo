@@ -23,7 +23,9 @@ namespace Studio
 		setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
 #elif defined(ECHO_PLATFORM_MAC)
         // set title bar color
-        macChangeTitleBarColor( winId(), 0.0, 0.0, 0.0);
+        setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+        //macChangeTitleBarColor( winId(), 0.0, 0.0, 0.0);
+        m_menuBar->setNativeMenuBar(false);
         m_versionListWidget->setAttribute(Qt::WA_MacShowFocusRect,0);
 #endif
 

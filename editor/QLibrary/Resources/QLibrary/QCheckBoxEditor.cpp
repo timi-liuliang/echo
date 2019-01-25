@@ -6,7 +6,6 @@
 
 namespace QT_UI
 {
-	// MVC‰÷»æ
 	bool QCheckBoxEditor::ItemDelegatePaint(QPainter *painter, const QRect& rect, const string& val)
 	{
 		QStyleOptionButton opt;
