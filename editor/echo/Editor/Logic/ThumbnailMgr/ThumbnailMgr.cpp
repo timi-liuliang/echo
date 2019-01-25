@@ -1,6 +1,5 @@
 #include "ThumbnailMgr.h"
 #include "FreeImageHelper.h"
-#include <engine/core/render/interface/RenderTargetManager.h>
 #include <engine/core/util/StringUtil.h>
 #include "Studio.h"
 
@@ -27,18 +26,18 @@ namespace Studio
 			AStudio::instance()->getAppPath() + Echo::String( "assets/watermark/att.bmp"),														
 		};
 
-		Echo::RenderTarget* defauldBackTarget = Echo::RenderTargetManager::instance()->getRenderTargetByID( Echo::RTI_DefaultBackBuffer);
-		if ( defauldBackTarget)
-		{
-			Echo::String appPath   = AStudio::instance()->getAppPath();
-			Echo::String ofileName = Echo::StringUtil::Format( "%sCache/thumbnail/%s.bmp", appPath.c_str(), fileName.c_str() ) ;
-			defauldBackTarget->save( ofileName.c_str());
+		//Echo::RenderTarget* defauldBackTarget = Echo::RenderTargetManager::instance()->getRenderTargetByID( Echo::RTI_DefaultBackBuffer);
+		//if ( defauldBackTarget)
+		//{
+		//	Echo::String appPath   = AStudio::instance()->getAppPath();
+		//	Echo::String ofileName = Echo::StringUtil::Format( "%sCache/thumbnail/%s.bmp", appPath.c_str(), fileName.c_str() ) ;
+		//	defauldBackTarget->save( ofileName.c_str());
 
-			// 添加水印
-			Echo::FreeImageHelper::addWaterMark( ofileName.c_str(), WaterMarkType[type].c_str() );
+		//	// 添加水印
+		//	Echo::FreeImageHelper::addWaterMark( ofileName.c_str(), WaterMarkType[type].c_str() );
 
-			return true;
-		}
+		//	return true;
+		//}
 
 		return false;
 	}

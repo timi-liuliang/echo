@@ -4,7 +4,6 @@
 #include <array>
 #include <engine/core/main/Engine.h>
 #include <engine/modules/navigation/Navigation.h>
-#include <interface/RenderTargetManager.h>
 #include <interface/RenderTarget.h>
 #include "engine/core/thread/Threading.h"
 #include "Studio.h"
@@ -19,7 +18,7 @@
 
 namespace Studio
 {
-	std::string	EchoEngine::m_projectFile;		// ÏîÄ¿Ãû³Æ
+	std::string	EchoEngine::m_projectFile;		// é¡¹ç›®åç§°
 	RenderWindow* EchoEngine::m_renderWindow = NULL;
 
 	EchoEngine::EchoEngine()

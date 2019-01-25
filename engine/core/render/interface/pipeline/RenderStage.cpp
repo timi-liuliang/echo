@@ -1,6 +1,6 @@
 #include "RenderStage.h"
+#include "RenderPipeline.h"
 #include "Engine/core/main/Engine.h"
-#include "engine/core/render/interface/RenderTargetManager.h"
 
 namespace Echo
 {
@@ -42,13 +42,13 @@ namespace Echo
 	// process all render stage item
 	void RenderStage::process()
 	{
-		RenderTargetManager::instance()->beginRenderTarget(RTI_DefaultBackBuffer);
+		RenderPipeline::instance()->beginRenderTarget(RenderPipeline::RTI_DefaultBackBuffer);
 
 		for (RenderQueue* item : m_items)
 		{
 			item->render();
 		}
 
-		RenderTargetManager::instance()->endRenderTarget(RTI_DefaultBackBuffer);
+		RenderPipeline::instance()->endRenderTarget(RenderPipeline::RTI_DefaultBackBuffer);
 	}
 }

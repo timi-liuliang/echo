@@ -14,9 +14,9 @@
 #include "engine/core/script/lua/register_core_to_lua.cxx"
 #include "engine/core/script/lua/lua_binder.h"
 #include "engine/core/script/lua/lua_script.h"
-#include "engine/core/render/interface/RenderTargetManager.h"
 #include "module.h"
-#include "engine/core/render/interface/renderstage/RenderStage.h"
+#include "engine/core/render/interface/pipeline/RenderPipeline.h"
+#include "engine/core/render/interface/pipeline/RenderStage.h"
 #include "engine/core/render/gles/GLES.h"
 #include "engine/core/render/vulkan/vk.h"
 #include "engine/core/render/metal/mt.h"
@@ -71,9 +71,6 @@ namespace Echo
 		if (initRenderer(cfg.m_windowHandle))
 		{
 			if (!NodeTree::instance()->init())
-				return false;
-
-			if (!RenderTargetManager::instance()->initialize())
 				return false;
 
 			// load project
@@ -248,10 +245,7 @@ namespace Echo
 		}
 
 		// render target
-		if (RenderTargetManager::instance())
-		{
-			RenderTargetManager::instance()->onScreensizeChanged(windowWidth, windowHeight);
-		}
+		RenderPipeline::instance()->onSize(windowWidth, windowHeight);
 
 		return true;
 	}
@@ -262,7 +256,6 @@ namespace Echo
 		EchoSafeDeleteInstance(ImageCodecMgr);
 		EchoSafeDeleteInstance(IO);
 		EchoSafeDeleteInstance(Time);	
-		EchoSafeDeleteInstance(RenderTargetManager);
 		EchoLogInfo("Echo Engine has been shutdown.");
 		EchoSafeDeleteInstance(Renderer);
 		EchoLogInfo("Echo Renderer has been shutdown.");

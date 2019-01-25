@@ -7,7 +7,7 @@ namespace Echo
 	class Engine
 	{	
 	public:
-		// ≈‰÷√
+		// config
 		struct Config
 		{
 			String			m_projectFile;

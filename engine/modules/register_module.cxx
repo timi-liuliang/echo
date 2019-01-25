@@ -8,7 +8,6 @@
 #include "engine/modules/gltf/gltf_module.h"
 #include "engine/modules/anim/anim_module.h"
 #include "engine/modules/ai/ai_module.h"
-#include "engine/modules/srp/srp_module.h"
 #include "engine/modules/light/light_module.h"
 #include "engine/modules/physx/physx_module.h"
 
@@ -24,6 +23,5 @@ REGISTER_MODULE(AnimModule)
 REGISTER_MODULE(EffectModule)
 REGISTER_MODULE(UIModule)
 REGISTER_MODULE(AIModule)
-REGISTER_MODULE(SRPModule);
 REGISTER_MODULE(LightModule);
 REGISTER_MODULE(PhysxModule);
