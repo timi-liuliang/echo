@@ -36,7 +36,7 @@ namespace Echo
 
 	PhysxWorld::~PhysxWorld()
 	{
-
+		physx::PxCloseVehicleSDK();
 	}
 
 	bool PhysxWorld::initPhysx()
@@ -47,6 +47,11 @@ namespace Echo
 
 		bool isRecordMemoryAllocations = false;
 		m_pxPhysics = PxCreateBasePhysics(PX_PHYSICS_VERSION, *m_pxFoundation, physx::PxTolerancesScale(), isRecordMemoryAllocations, nullptr);
+
+		// vehicle
+		PxInitVehicleSDK(*m_pxPhysics, nullptr);
+		PxVehicleSetBasisVectors((const physx::PxVec3&)Vector3::UNIT_Y, (const physx::PxVec3&)Vector3::UNIT_X);
+		PxVehicleSetUpdateMode(physx::PxVehicleUpdateMode::eVELOCITY_CHANGE);
 
 		return m_pxPhysics ? true : false;
 	}

@@ -7,3 +7,4 @@
 #endif
 
 #include <PxPhysicsAPI.h>
+#include <vehicle/PxVehicleSDK.h>
