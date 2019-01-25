@@ -1,11 +1,14 @@
 #pragma once
 
+#include "engine/core/scene/node.h"
 #include "Texture.h"
 
 namespace Echo
 {
-	class RenderTarget
+	class RenderTarget : public Node
 	{
+		ECHO_CLASS(RenderTarget, Node)
+
 	public:
 		struct Options
 		{
@@ -21,6 +24,7 @@ namespace Echo
 		};
 
 	public:
+		RenderTarget() {}
 		RenderTarget(ui32 id, ui32 width, ui32 height, PixelFormat format, const Options& option = Options());
 		virtual ~RenderTarget();
 
@@ -46,25 +50,25 @@ namespace Echo
 		bool isCubemap() const { return m_isCubemap; }
 
 		// create
-		virtual bool create()=0;
+		virtual bool create() { return false; }
 
 		// begin render
-		virtual bool beginRender(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue)=0;
+		virtual bool beginRender(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue) { return false; }
 
 		// clear
-		virtual void clear(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue)=0;
+		virtual void clear(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue) {}
 
 		// end render
-		virtual bool endRender() = 0;
+		virtual bool endRender() { return false; }
         
 		// disable frame buffer
-        virtual bool invalide(bool invalidateColor, bool invalidateDepth, bool invalidateStencil)=0;
+		virtual bool invalide(bool invalidateColor, bool invalidateDepth, bool invalidateStencil) { return false; }
 
 		// on resize
-		virtual void onResize(ui32 width, ui32 height) = 0;
+		virtual void onResize(ui32 width, ui32 height) {}
 
 		// save target
-		virtual bool save(const char* file) = 0;
+		virtual bool save(const char* file) { return false; }
 
         // get memory size
 		ui32 getMemorySize();

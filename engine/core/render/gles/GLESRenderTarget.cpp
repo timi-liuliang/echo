@@ -342,7 +342,7 @@ namespace Echo
 #ifdef ECHO_PLATFORM_WINDOWS
 		if( PathUtil::IsFileExist(file) )
 		{
-			if(0 != remove(file))
+			if(0 != ::remove(file))
 			{
 				EchoLogError( "save file[%s] Failed !", file );
 				return false;

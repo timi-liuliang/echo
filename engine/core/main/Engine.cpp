@@ -117,6 +117,7 @@ namespace Echo
 		Class::registerType<RenderPipeline>();
 		Class::registerType<RenderStage>();
 		Class::registerType<RenderQueue>();
+		Class::registerType<RenderTarget>();
 
 		// register all module class
 		Module::registerAllTypes();

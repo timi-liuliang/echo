@@ -37,4 +37,9 @@ namespace Echo
 		m_depthTexture = NULL;
 		m_depthTarget = nullptr;
 	}
+
+	void RenderTarget::bindMethods()
+	{
+
+	}
 }
