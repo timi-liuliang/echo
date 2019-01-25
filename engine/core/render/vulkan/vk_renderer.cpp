@@ -1,5 +1,4 @@
 #include "vk_renderer.h"
-#include "vk_frame_buffer.h"
 #include "vk_renderable.h"
 #include "vk_shader_program.h"
 #include "vk_render_state.h"
@@ -20,13 +19,10 @@ namespace Echo
     {
         m_screenWidth = config.screenWidth;
         m_screenHeight = config.screenHeight;
-        
-        m_frameBuffer = EchoNew(VKFrameBuffer);
-        
+            
         // set view port
-        Viewport* pViewport = EchoNew(Viewport(0, 0, m_screenWidth, m_screenHeight));
-        m_frameBuffer->setViewport(pViewport);
-        setViewport(pViewport);
+        Viewport viewport(0, 0, m_screenWidth, m_screenHeight);
+        setViewport(&viewport);
         
         return true;
     }

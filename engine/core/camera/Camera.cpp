@@ -18,19 +18,19 @@ namespace Echo
 		m_matView.identity();
 		m_isViewDirty = true;
 
-		Viewport* pViewport = Renderer::instance()->getFrameBuffer()->getViewport();
-		if(pViewport)
+		//Viewport* pViewport = Renderer::instance()->getViewport();
+		//if(pViewport)
 		{
-			m_width = (Real)pViewport->getWidth();
-			m_height = (Real)pViewport->getHeight();
+			m_width = (Real)Renderer::instance()->getScreenWidth();
+			m_height = (Real)Renderer::instance()->getScreenHeight();
 			m_aspect = (Real)m_width / (Real)m_height;
 		}
-		else
-		{
-			m_width = 0.f;
-			m_height = 0.f;
-			m_aspect = 1.0f;
-		}
+		//else
+		//{
+		//	m_width = 0.f;
+		//	m_height = 0.f;
+		//	m_aspect = 1.0f;
+		//}
 
 		m_fov = Math::PI_DIV4;
 

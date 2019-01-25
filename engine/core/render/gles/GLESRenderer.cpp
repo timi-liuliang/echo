@@ -2,7 +2,6 @@
 #include "GLESRenderer.h"
 #include "GLESMapping.h"
 #include "GLESRenderTarget.h"
-#include "GLESFrameBuffer.h"
 #include "GLESTexture2D.h"
 #include "GLESTextureCube.h"
 #include "GLESShaderProgram.h"
@@ -152,9 +151,6 @@ namespace Echo
 		m_cfg.bFullscreen = true;
 		m_bVSync = false;
 
-		// EGL created default framebuffer is Handle 0
-		m_frameBuffer = EchoNew(GLES2FrameBuffer);
-
 		// set default render states
 		RasterizerState::RasterizerDesc rsDesc;
 		m_pDefaultRasterizerState = createRasterizerState(rsDesc);
@@ -171,7 +167,6 @@ namespace Echo
 
 		// set view port
 		Viewport* pViewport = EchoNew(Viewport(0, 0, m_screenWidth, m_screenHeight));
-		m_frameBuffer->setViewport(pViewport);
 		setViewport(pViewport);
 	}
 
@@ -180,7 +175,6 @@ namespace Echo
 		EchoSafeDelete(m_pDefaultRasterizerState, RasterizerState);
 		EchoSafeDelete(m_pDefaultDepthStencilState, DepthStencilState);
 		EchoSafeDelete(m_pDefaultBlendState, BlendState);
-		EchoSafeDelete(m_frameBuffer, FrameBuffer);
 		EchoSafeDeleteContainer(m_vecSamlerStates, GLES2SamplerState);
 	}
 
@@ -198,8 +192,7 @@ namespace Echo
 	void GLES2Renderer::scissor(ui32 left, ui32 top, ui32 width, ui32 height)
 	{
 		OGLESDebug(glEnable(GL_SCISSOR_TEST));
-		Viewport* pViewport = m_frameBuffer->getViewport();
-		OGLESDebug(glScissor(left, pViewport->getHeight() - top - height, width, height));
+		OGLESDebug(glScissor(left, getScreenHeight() - top - height, width, height));
 	}
 
 	void GLES2Renderer::endScissor()
@@ -362,16 +355,6 @@ namespace Echo
 		return EchoNew(GLES2Shader(type, desc, srcBuffer, size));
 	}
 
-	RenderTargetView* GLES2Renderer::createRenderTargetView(PixelFormat fmt, ui32 width, ui32 height)
-	{
-		return EchoNew(GLES2RenderTargetView(fmt, width, height));
-	}
-
-	DepthStencilView* GLES2Renderer::createDepthStencilView(PixelFormat fmt, ui32 width, ui32 height)
-	{
-		return EchoNew(GLES2DepthStencilView(fmt, width, height));
-	}
-
 	RasterizerState* GLES2Renderer::createRasterizerState(const RasterizerState::RasterizerDesc& desc)
 	{
 		return EchoNew(GLES2RasterizerState(desc));
@@ -427,11 +410,8 @@ namespace Echo
 		m_screenWidth = width;
 		m_screenHeight = height;
 
-		Viewport* pViewport = m_frameBuffer->getViewport();
-		EchoAssert(pViewport);
-
-		pViewport->resize(0, 0, width, height);
-		setViewport(pViewport);
+		Viewport viewPort( 0, 0, m_screenWidth, m_screenHeight);
+		setViewport( &viewPort);
 	}
 
 	bool GLES2Renderer::present()

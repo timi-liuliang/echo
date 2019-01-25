@@ -26,7 +26,6 @@ namespace Echo
 
 	Renderer::Renderer()
 		: m_bVSync(false)
-		, m_frameBuffer(NULL)
 		, m_pDefaultRasterizerState(NULL)
 		, m_pDefaultDepthStencilState(NULL)
 		, m_pDefaultBlendState(NULL)
@@ -87,11 +86,6 @@ namespace Echo
 		return m_bVSync;
 	}
 
-	FrameBuffer* Renderer::getFrameBuffer() const
-	{
-		return m_frameBuffer;
-	}
-
 	RasterizerState* Renderer::getDefaultRasterizerState() const
 	{
 		return m_pDefaultRasterizerState;
@@ -124,8 +118,11 @@ namespace Echo
 
 	void Renderer::project(Vector3& screenPos, const Vector3& worldPos, const Matrix4& matVP, Viewport* pViewport)
 	{
+		Viewport viewPort(0, 0, getScreenWidth(), getScreenHeight());
 		if (!pViewport)
-			pViewport = m_frameBuffer->getViewport();
+		{
+			pViewport = &viewPort;
+		}
 
 		Vector4 vSSPos = Vector4(worldPos, 1.0);
 		vSSPos = matVP.transform(vSSPos);
@@ -142,8 +139,11 @@ namespace Echo
 
 	void Renderer::unproject(Vector3& worldPos, const Vector3& screenPos, const Matrix4& matVP, Viewport* pViewport)
 	{
+		Viewport viewPort(0, 0, getScreenWidth(), getScreenHeight());
 		if (!pViewport)
-			pViewport = m_frameBuffer->getViewport();
+		{
+			pViewport = &viewPort;
+		}
 
 		Matrix4 matVPInv = matVP;
 		matVPInv.detInverse();

@@ -2,13 +2,13 @@
 
 #include "device_features.h"
 #include "RenderState.h"
-#include "FrameBuffer.h"
 #include "Shader.h"
 #include "Texture.h"
 #include "TextureCube.h"
 #include "Renderable.h"
 #include "RenderTarget.h"
 #include "GPUBuffer.h"
+#include "Viewport.h"
 
 namespace Echo
 {
@@ -78,7 +78,6 @@ namespace Echo
 		const Config& getCfg() const { return m_cfg; }
 		virtual bool isVSync() const;
 		virtual ui32 getMaxStageNum() const = 0;
-		virtual FrameBuffer* getFrameBuffer() const;
 		virtual RasterizerState* getDefaultRasterizerState() const;
 		virtual DepthStencilState* getDefaultDepthStencilState() const;
 		virtual BlendState* getDefaultBlendState() const;
@@ -111,8 +110,6 @@ namespace Echo
 		virtual Shader*	createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const char* srcBuffer, ui32 size) = 0;
 		
 		// create views
-		virtual RenderTargetView* createRenderTargetView(PixelFormat fmt, ui32 width, ui32 height) = 0;
-		virtual DepthStencilView* createDepthStencilView(PixelFormat fmt, ui32 width, ui32 height) = 0;
 		virtual RenderTarget* createRenderTarget(ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const RenderTarget::Options& option) = 0;
 
 		// create states
@@ -157,7 +154,6 @@ namespace Echo
 	protected:
 		Config				m_cfg;
 		bool				m_bVSync;
-		FrameBuffer*		m_frameBuffer = nullptr;
 		RasterizerState*	m_pDefaultRasterizerState;
 		DepthStencilState*	m_pDefaultDepthStencilState;
 		BlendState*			m_pDefaultBlendState;
