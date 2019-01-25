@@ -13,6 +13,11 @@ namespace Echo
 	{
 	}
 
+	void RenderQueue::bindMethods()
+	{
+
+	}
+
 	void RenderQueue::render()
 	{
 		for (RenderableID id : m_renderables)

@@ -3,11 +3,14 @@
 #include <engine/core/memory/MemAllocDef.h>
 #include <engine/core/render/interface/RenderState.h>
 #include <engine/core/render/interface/Renderable.h>
+#include <engine/core/scene/node.h>
 
 namespace Echo
 {
-	class RenderQueue
+	class RenderQueue : public Node
 	{
+		ECHO_CLASS(RenderQueue, Node);
+
 	public:
 		RenderQueue();
 		virtual ~RenderQueue();

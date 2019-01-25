@@ -6,8 +6,6 @@ namespace Echo
 {
 	class GLES2RenderTarget : public RenderTarget
 	{
-		friend class GLES2RenderTargetManager;
-
 	public:
 		GLES2RenderTarget(ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const Options& option = Options());
 		virtual ~GLES2RenderTarget();
@@ -34,10 +32,6 @@ namespace Echo
 
 		// save
 		virtual bool save( const char* file) override;
-
-		virtual bool doStoreDefaultRenderTarget();
-
-		virtual bool doRestoreDefaultRenderTarget();
 
 	private:
 		// create texutre 2d

@@ -114,6 +114,9 @@ namespace Echo
 		Class::registerType<Gizmos>();
 		Class::registerType<Input>();
 		Class::registerType<Log>();
+		Class::registerType<RenderPipeline>();
+		Class::registerType<RenderStage>();
+		Class::registerType<RenderQueue>();
 
 		// register all module class
 		Module::registerAllTypes();

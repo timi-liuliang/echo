@@ -14,6 +14,11 @@ namespace Echo
 	{
 	}
 
+	void RenderStage::bindMethods()
+	{
+
+	}
+
 	// get instance
 	RenderStage* RenderStage::instance()
 	{

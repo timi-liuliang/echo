@@ -42,7 +42,7 @@ namespace Echo
 		Texture* getBindTexture() { return m_bindTexture; }
 		Texture* getDepthTexture() { return m_depthTexture; }
 
-		// 是否为立方体贴图
+		// is cubemap
 		bool isCubemap() const { return m_isCubemap; }
 
 		// create

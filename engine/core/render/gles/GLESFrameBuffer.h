@@ -14,11 +14,9 @@ namespace Echo
 
 		GLES2FrameBuffer(GLuint hFBO);
 	public:
-		void			clear(Dword clearFlags, const Color& color, float depth, int stencil);
-		inline void		swap();
-		void			bind();
+		//void			bind();
 
-		GLuint			getFBOHandle() const;
+		//GLuint			getFBOHandle() const;
 
 	private:
 		GLuint			m_hFBO;

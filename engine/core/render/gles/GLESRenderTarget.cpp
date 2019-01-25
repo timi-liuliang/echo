@@ -433,18 +433,4 @@ namespace Echo
 #endif
 		return true;
 	}
-
-	bool GLES2RenderTarget::doStoreDefaultRenderTarget()
-	{
-		OGLESDebug(glGetIntegerv(GL_FRAMEBUFFER_BINDING, (GLint*)&(m_fbo)));
-
-		return true;
-	}
-
-	bool GLES2RenderTarget::doRestoreDefaultRenderTarget()
-	{
-		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
-
-		return true;
-	}
 }

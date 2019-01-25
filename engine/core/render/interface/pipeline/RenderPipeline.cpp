@@ -18,6 +18,10 @@ namespace Echo
 
 	}
 
+	void RenderPipeline::bindMethods()
+	{
+	}
+
 	RenderPipeline* RenderPipeline::instance()
 	{
 		static RenderPipeline* inst = EchoNew(RenderPipeline);

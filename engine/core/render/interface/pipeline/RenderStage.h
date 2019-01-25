@@ -4,9 +4,14 @@
 
 namespace Echo
 {
-	class RenderStage
+	class RenderStage : public Node
 	{
+		ECHO_CLASS(RenderStage, Node)
+
 	public:
+		RenderStage();
+		~RenderStage();
+
 		// get instance
 		static RenderStage* instance();
 
@@ -18,10 +23,6 @@ namespace Echo
 
 		// process
 		void process();
-
-	protected:
-		RenderStage();
-		~RenderStage();
 
 	protected:
 		vector<RenderQueue*>::type	m_items;

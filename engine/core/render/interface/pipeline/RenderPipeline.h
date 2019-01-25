@@ -1,12 +1,15 @@
 #pragma once
 
+#include "engine/core/scene/node.h"
 #include "../RenderTarget.h"
 #include "../Renderer.h"
 
 namespace Echo
 {
-	class RenderPipeline
+	class RenderPipeline : public Node
 	{
+		ECHO_CLASS(RenderPipeline, Node)
+
 	public:
 		enum RenderTargetID
 		{
