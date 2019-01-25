@@ -1,5 +1,4 @@
 #include "mt_renderer.h"
-#include "mt_frame_buffer.h"
 #include "mt_renderable.h"
 #include "mt_shader_program.h"
 #include "mt_render_state.h"
@@ -33,15 +32,12 @@ namespace Echo
         m_screenWidth = config.screenWidth;
         m_screenHeight = config.screenHeight;
         
-        m_frameBuffer = EchoNew(VKFrameBuffer);
-        
         // make view support metal
         makeViewMetalCompatible( (void*)config.windowHandle);
         
         // set view port
-        Viewport* pViewport = EchoNew(Viewport(0, 0, m_screenWidth, m_screenHeight));
-        m_frameBuffer->setViewport(pViewport);
-        setViewport(pViewport);
+        Viewport viewport(0, 0, m_screenWidth, m_screenHeight);
+        setViewport(&viewport);
         
         return true;
     }

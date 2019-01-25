@@ -23,8 +23,6 @@ namespace Echo
         virtual TextureCube* createTextureCube(const String& name) override {return nullptr; }
         
         // create views
-        virtual RenderTargetView* createRenderTargetView(PixelFormat fmt, ui32 width, ui32 height) override {return nullptr;}
-        virtual DepthStencilView* createDepthStencilView(PixelFormat fmt, ui32 width, ui32 height) override {return nullptr;}
         virtual RenderTarget* createRenderTarget(ui32 id, ui32 width, ui32 height, PixelFormat pixelFormat, const RenderTarget::Options& option) override;
         
         // create states
