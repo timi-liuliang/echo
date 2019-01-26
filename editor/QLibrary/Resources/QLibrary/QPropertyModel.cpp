@@ -1,6 +1,6 @@
 #include "QPropertyModel.h"
 #include <vector>
-#include "engine/core/Util/AssertX.h"
+#include "engine/core/util/AssertX.h"
 #include <engine/core/log/Log.h>
 
 namespace QT_UI
@@ -14,7 +14,6 @@ namespace QT_UI
 	{
 		QByteArray fileContent(fileName);
 
-		// ´´½¨Item
 		m_cfg = new pugi::xml_document;
 		m_cfg->load(fileContent.data());
 

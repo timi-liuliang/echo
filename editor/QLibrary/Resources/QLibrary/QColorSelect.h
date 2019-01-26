@@ -11,7 +11,7 @@ using namespace std;
 namespace QT_UI
 {
 	//-------------------------------------------
-	// ColorSelect 颜色选择按钮 2013-3-4 帝林
+	// ColorSelect 2013-3-4
 	//-------------------------------------------
 	class QColorSelect : public QPushButton
 	{
