@@ -1,25 +1,19 @@
 #include "mt_renderer.h"
 #include "mt_renderable.h"
+#include "mt_shader.h"
 #include "mt_shader_program.h"
 #include "mt_render_state.h"
 #include "mt_render_target.h"
 #include "mt_texture.h"
-#include <AppKit/AppKit.h>
-#include <Metal/Metal.h>
-#include <QuartzCore/CAMetalLayer.h>
+#include "mt_gpu_buffer.h"
 
 namespace Echo
 {
-    struct MTStruct
-    {
-        // The device (aka GPU) we're using to render
-        id<MTLDevice> device;
-    };
-    
     MTRenderer::MTRenderer()
     {
-        m_struct = EchoNew(MTStruct);
-        m_struct->device = MTLCreateSystemDefaultDevice();
+        m_metalDevice = MTLCreateSystemDefaultDevice();
+        m_metalCommandQueue = [m_metalDevice newCommandQueue];
+        m_metalLibrary = [m_metalDevice newDefaultLibrary];
     }
     
     MTRenderer::~MTRenderer()
@@ -39,18 +33,40 @@ namespace Echo
         Viewport viewport(0, 0, m_screenWidth, m_screenHeight);
         setViewport(&viewport);
         
+        m_metalRenderPipelineDescriptor = [[MTLRenderPipelineDescriptor alloc] init];
+        
+        // assign vertex and frament shader
+        // [m_metalRenderPipelineDescriptor setVertexFunction:nil];
+        // [m_metalRenderPipelineDescriptor setFragmentFunction:nil];
+        
+        // specify the target-texture pixel format
+        m_metalRenderPipelineDescriptor.colorAttachments[0].pixelFormat = MTLPixelFormatBGRA8Unorm;
+        
+        // build the rendering pipeline object
+        m_metalRenderPipelineState = [m_metalDevice newRenderPipelineStateWithDescriptor:m_metalRenderPipelineDescriptor error:nil];
+        
         return true;
     }
     
-	void MTRenderer::setViewport(Viewport* pViewport)
+	void MTRenderer::setViewport(Viewport* viewport)
 	{
-
+        m_metalLayer.frame = CGRectMake( viewport->getLeft(), viewport->getTop(), viewport->getWidth(), viewport->getHeight());
 	}
 
 	void MTRenderer::setTexture(ui32 index, Texture* texture, bool needUpdate)
 	{
 
 	}
+    
+    GPUBuffer* MTRenderer::createVertexBuffer(Dword usage, const Buffer& buff)
+    {
+        return EchoNew(MTBuffer(GPUBuffer::GPUBufferType::GBT_VERTEX, usage, buff));
+    }
+    
+    GPUBuffer* MTRenderer::createIndexBuffer(Dword usage, const Buffer& buff)
+    {
+        return EchoNew(MTBuffer(GPUBuffer::GPUBufferType::GBT_INDEX, usage, buff));
+    }
     
     Renderable* MTRenderer::createRenderable(const String& renderStage, ShaderProgram* material)
     {
@@ -64,13 +80,18 @@ namespace Echo
     
     ShaderProgram* MTRenderer::createShaderProgram()
     {
-        return EchoNew(VKShaderProgram);
+        return EchoNew(MTShaderProgram);
+    }
+    
+    Shader* MTRenderer::createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const char* srcBuffer, ui32 size)
+    {
+        return EchoNew(MTShader( type, desc, srcBuffer, size));
     }
     
     // create states
     RasterizerState* MTRenderer::createRasterizerState(const RasterizerState::RasterizerDesc& desc)
     {
-        return EchoNew(VKRasterizerState);
+        return EchoNew(MTRasterizerState);
     }
     
     DepthStencilState* MTRenderer::createDepthStencilState(const DepthStencilState::DepthStencilDesc& desc)
@@ -81,12 +102,12 @@ namespace Echo
     
     BlendState* MTRenderer::createBlendState(const BlendState::BlendDesc& desc)
     {
-        return EchoNew(VKBlendState);
+        return EchoNew(MTBlendState);
     }
     
     const SamplerState* MTRenderer::getSamplerState(const SamplerState::SamplerDesc& desc)
     {
-        return EchoNew(VKSamplerState);
+        return EchoNew(MTSamplerState);
     }
     
     RenderTarget* MTRenderer::createRenderTarget(ui32 id, ui32 width, ui32 height, PixelFormat pixelFormat, const RenderTarget::Options& option)
@@ -99,14 +120,26 @@ namespace Echo
         return EchoNew(MTTexture2D);
     }
     
-    void MTRenderer::makeViewMetalCompatible(void* handle)
+    NSView* MTRenderer::makeViewMetalCompatible(void* handle)
     {
         NSView* view = (NSView*)handle;
         
         if (![view.layer isKindOfClass:[CAMetalLayer class]])
         {
-            [view setLayer:[CAMetalLayer layer]];
+            m_metalLayer = [CAMetalLayer layer];
+            m_metalLayer.device = m_metalDevice;
+            m_metalLayer.pixelFormat = MTLPixelFormatBGRA8Unorm;
+            
+            [view setLayer:m_metalLayer];
             [view setWantsLayer:YES];
         }
+        
+        return view;
+    }
+    
+    // present
+    bool MTRenderer::present()
+    {
+        
     }
 }

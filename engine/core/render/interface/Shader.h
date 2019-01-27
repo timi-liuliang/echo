@@ -18,7 +18,7 @@ namespace Echo
 
 		struct ShaderDesc
 		{
-			String		macros;		// 宏定义
+			String		macros;
 		};
 
 	public:
@@ -42,6 +42,6 @@ namespace Echo
 		String				m_srcData;
 		ui32				m_shaderSize;
 		bool				m_validata;
-		ShaderDesc			m_desc;					// 描述信息
+		ShaderDesc			m_desc;
 	};
 }

@@ -4,7 +4,7 @@
 
 namespace Echo
 {
-	class VKShaderProgram : public ShaderProgram
+	class MTShaderProgram : public ShaderProgram
 	{
     public:
         // link

@@ -86,9 +86,6 @@ namespace Echo
 		ui32					m_RenderFrameCount;
 		bool					m_isCubemap;
 		RenderTarget*			m_depthTarget;
-	public:
-		bool					m_isFrameBufferChange;
-		bool					m_isViewportChange;
 	};
 	typedef map<ui32, RenderTarget*>::type	RenderTargetMap;
 }

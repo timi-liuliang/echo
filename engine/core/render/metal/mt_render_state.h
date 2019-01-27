@@ -4,17 +4,17 @@
 
 namespace Echo
 {
-	class VKBlendState : public BlendState
+	class MTBlendState : public BlendState
 	{
 	public:
-        VKBlendState() {}
-        VKBlendState(const BlendDesc &desc){}
-        virtual ~VKBlendState(){}
+        MTBlendState() {}
+        MTBlendState(const BlendDesc &desc){}
+        virtual ~MTBlendState(){}
 
         void active(){}
 	};
 	
-	class VKDepthStencilState : public DepthStencilState
+	class MTDepthStencilState : public DepthStencilState
 	{
 	public:
        // VKDepthStencilState(){}
@@ -24,22 +24,22 @@ namespace Echo
 		void active();
 	};
 
-	class VKRasterizerState : public RasterizerState
+	class MTRasterizerState : public RasterizerState
 	{
 	public:
-        VKRasterizerState(){}
-        VKRasterizerState(const RasterizerDesc& desc){}
-        virtual ~VKRasterizerState(){}
+        MTRasterizerState(){}
+        MTRasterizerState(const RasterizerDesc& desc){}
+        virtual ~MTRasterizerState(){}
 
         void active() {}
 	};
 
-	class VKSamplerState : public SamplerState
+	class MTSamplerState : public SamplerState
 	{
 	public:
-        VKSamplerState(){}
-        VKSamplerState(const SamplerDesc& desc) {}
-        virtual ~VKSamplerState() {}
+        MTSamplerState(){}
+        MTSamplerState(const SamplerDesc& desc) {}
+        virtual ~MTSamplerState() {}
 
         void active(const SamplerState* pre) const{}
 	};

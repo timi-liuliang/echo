@@ -37,7 +37,7 @@ namespace Echo
 		: m_screenWidth(0)
 		, m_screenHeight(0)
 		, m_pre_shader_program(NULL)
-#ifdef ECHO_PLATFORM_WINDOWS 
+#ifdef ECHO_PLATFORM_WINDOWS
 		, m_eglConfig(0)
 		, m_eglDisplay(0)
 		, m_eglContext(0)
@@ -268,7 +268,7 @@ namespace Echo
 			// draw
 			OGLESDebug(glDrawElements(glTopologyType, idxCount, idxType, idxOffset));
 		}
-		else	// no using index buffer 
+		else	// no using index buffer
 		{
 			ui32 vertCount = mesh->getVertexCount();
 			if (vertCount > 0)
@@ -433,14 +433,8 @@ namespace Echo
 			OGLESDebug(glDiscardFramebufferEXT(GL_FRAMEBUFFER, currentAttachment, attachments));
 		}
 
-		eglSwapBuffers(static_cast<EGLDisplay>(getDisplay()), static_cast<EGLSurface>(getSurface()));
-		EGLint no_erro = eglGetError();
+		OGLESDebug(eglSwapBuffers(static_cast<EGLDisplay>(getDisplay()), static_cast<EGLSurface>(getSurface())));
 
-		if (no_erro != GL_NO_ERROR && no_erro != EGL_SUCCESS)
-		{
-			EchoLogError("GLES2Renderer: Present() Failed !");
-			return false;
-		}
 #elif defined(ECHO_PLATFORM_MAC_IOS)
 		PresentRenderBuffer();
 #endif

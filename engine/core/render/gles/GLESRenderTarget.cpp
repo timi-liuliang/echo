@@ -42,7 +42,7 @@ namespace Echo
 		: RenderTarget(_id, _width, _height, _pixelFormat, option)
 		, m_fbo(0)
 		, m_rbo(0)
-	{ 
+	{
 		SamplerState::SamplerDesc desc;
 		desc.addrUMode = SamplerState::AM_CLAMP;
 		desc.addrVMode = SamplerState::AM_CLAMP;
@@ -53,7 +53,7 @@ namespace Echo
 		m_bindTexture->setSamplerState(desc);
 		m_depthTexture = Renderer::instance()->createTexture2D(("rtDEPTH_") + StringUtil::ToString(_id));
 		m_depthTexture->setSamplerState(desc);
-	} 
+	}
 
 	GLES2RenderTarget::~GLES2RenderTarget()
 	{
@@ -110,7 +110,7 @@ namespace Echo
 			GLESTexture2D* depthTexture = dynamic_cast<GLESTexture2D*>(m_depthTexture);
 			EchoAssert(depthTexture);
 
-			// 将深度缓冲区映射到纹理上(这里应该分情况讨论，rbo效率更高，在不需要depth tex时应该优先使用		
+			// 将深度缓冲区映射到纹理上(这里应该分情况讨论，rbo效率更高，在不需要depth tex时应该优先使用
 			OGLESDebug(glGenTextures(1, &depthTexture->m_glesTexture));
 			OGLESDebug(glBindTexture(GL_TEXTURE_2D, depthTexture->m_glesTexture));
 			OGLESDebug(glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, m_width, m_height, 0,  GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, NULL));
@@ -148,7 +148,7 @@ namespace Echo
 #endif
 
 		return true;
-	} 
+	}
 
 	bool GLES2RenderTarget::createCubemap()
 	{
@@ -159,7 +159,7 @@ namespace Echo
 		OGLESDebug(glBindTexture(GL_TEXTURE_CUBE_MAP, texture->m_glesTexture));
 		for (int f = 0; f < 6; f++)
 		{
-			OGLESDebug(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + f, 0, GLES2Mapping::MapFormat(m_pixelFormat), 
+			OGLESDebug(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + f, 0, GLES2Mapping::MapFormat(m_pixelFormat),
 				m_width, m_height, 0, GLES2Mapping::MapFormat(m_pixelFormat), GL_UNSIGNED_BYTE, (GLvoid*)0));
 		}
 		OGLESDebug(glGenFramebuffers(1, &m_fbo));
@@ -194,11 +194,8 @@ namespace Echo
 	bool GLES2RenderTarget::beginRender(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue)
 	{
 		// bind frame buffer
-		if (m_isFrameBufferChange)
-			glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
-
-		if (m_isViewportChange)
-			OGLESDebug(glViewport(0, 0, m_width, m_height));
+		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
+		OGLESDebug(glViewport(0, 0, m_width, m_height));
 
 		// clear
 		clear( clearColor, backgroundColor, clearDepth, depthValue, clearStencil, stencilValue );
@@ -403,7 +400,7 @@ namespace Echo
 		{
 			return false;
 		}
-		
+
 		size_t palett_size = PaletteSize(&bmpinfoHeader);
 
 		size_t file_size = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + palett_size + pixel_data_size;
@@ -421,7 +418,7 @@ namespace Echo
 		memcpy( bmpfile + sizeof(BITMAPFILEHEADER)+sizeof(BITMAPINFOHEADER) + palett_size, pixels, pixel_data_size );
 
 		std::ofstream outputfile;
-		
+
 		outputfile.open(file,std::ios::binary | std::ios::out);
 
 		outputfile.write((char *)bmpfile, file_size);

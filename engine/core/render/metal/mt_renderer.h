@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/core/render/interface/Renderer.h"
+#include "mt_render_base.h"
 
 namespace Echo
 {
@@ -15,8 +16,8 @@ namespace Echo
         virtual bool initialize(const Config& config) override;
 
         // create buffer
-        virtual GPUBuffer*	createVertexBuffer(Dword usage, const Buffer& buff) override { return nullptr;}
-        virtual GPUBuffer*	createIndexBuffer(Dword usage, const Buffer& buff) override { return nullptr; }
+        virtual GPUBuffer*	createVertexBuffer(Dword usage, const Buffer& buff) override;
+        virtual GPUBuffer*	createIndexBuffer(Dword usage, const Buffer& buff) override;
         
         // create texture
         virtual Texture*     createTexture2D(const String& name) override;
@@ -33,7 +34,7 @@ namespace Echo
         
         // create shaders
         virtual ShaderProgram* createShaderProgram() override;
-        virtual Shader* createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const char* srcBuffer, ui32 size)  override {return nullptr;}
+        virtual Shader* createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const char* srcBuffer, ui32 size)  override;
 
 		// create renderable
         virtual Renderable* createRenderable(const String& renderStage, ShaderProgram* material) override;
@@ -53,7 +54,7 @@ namespace Echo
 		virtual void draw(Renderable* program) override {}
 
 		// present
-		virtual bool present() override { return false; }
+        virtual bool present() override;
         
     public:
         // set texture
@@ -78,11 +79,16 @@ namespace Echo
         
     private:
         // make view metal compatible
-        void makeViewMetalCompatible(void* handle);
+        NSView* makeViewMetalCompatible(void* handle);
         
     private:
-        ui32                m_screenWidth = 640;
-        ui32                m_screenHeight = 480;
-        struct MTStruct*    m_struct = nullptr;
+        ui32                            m_screenWidth = 640;
+        ui32                            m_screenHeight = 480;
+        id<MTLDevice>                   m_metalDevice;
+        id<MTLCommandQueue>             m_metalCommandQueue;
+        id<MTLLibrary>                  m_metalLibrary;
+        MTLRenderPipelineDescriptor*    m_metalRenderPipelineDescriptor = nullptr;
+        id<MTLRenderPipelineState>      m_metalRenderPipelineState;
+        CAMetalLayer*                   m_metalLayer = nullptr;
 	};
 }
