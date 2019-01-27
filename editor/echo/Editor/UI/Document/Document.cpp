@@ -8,6 +8,9 @@ namespace Studio
 		: QWidget(parent)
 	{
 		setupUi(this);
+        
+        // disable focus rect
+        m_treeWidget->setAttribute(Qt::WA_MacShowFocusRect,0);
 
 		// splitter stretch
 		m_splitter->setStretchFactor(0, 0);
