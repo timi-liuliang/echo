@@ -43,7 +43,7 @@ namespace Echo
         m_metalRenderPipelineDescriptor.colorAttachments[0].pixelFormat = MTLPixelFormatBGRA8Unorm;
         
         // build the rendering pipeline object
-        m_metalRenderPipelineState = [m_metalDevice newRenderPipelineStateWithDescriptor:m_metalRenderPipelineDescriptor error:nil];
+        //m_metalRenderPipelineState = [m_metalDevice newRenderPipelineStateWithDescriptor:m_metalRenderPipelineDescriptor error:nil];
         
         return true;
     }
@@ -140,6 +140,28 @@ namespace Echo
     // present
     bool MTRenderer::present()
     {
+        m_metalNextDrawable = [m_metalLayer nextDrawable];
         
+        // render pass descriptor
+        m_metalRenderPassDescriptor = [MTLRenderPassDescriptor renderPassDescriptor];
+        m_metalRenderPassDescriptor.colorAttachments[0].texture = m_metalNextDrawable.texture;
+        m_metalRenderPassDescriptor.colorAttachments[0].loadAction = MTLLoadActionClear;
+        m_metalRenderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(0.298f, 0.298f, 0.322f, 1.f);
+        m_metalRenderPassDescriptor.colorAttachments[0].storeAction = MTLStoreActionStore;
+        
+        // create command buffer
+        m_metalCommandBuffer = [m_metalCommandQueue commandBuffer];
+        
+        // creat a command encoder
+        id<MTLRenderCommandEncoder> renderEncoder = [m_metalCommandBuffer renderCommandEncoderWithDescriptor:m_metalRenderPassDescriptor];
+        //[renderEncoder setRenderPipelineState:m_metalRenderPipelineState];
+        //[renderEncoder setVertexBuffer:vertexBuffer offset:0 atIndex:0];
+        //[renderEncoder drawPrimitives:MTLPrimitiveTypeTriangle vertexStart:0 vertexCount:6];
+        [renderEncoder endEncoding];
+        
+        [m_metalCommandBuffer presentDrawable:m_metalNextDrawable];
+        [m_metalCommandBuffer commit];
+        
+        return true;
     }
 }

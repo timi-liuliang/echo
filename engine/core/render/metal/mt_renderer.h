@@ -90,5 +90,9 @@ namespace Echo
         MTLRenderPipelineDescriptor*    m_metalRenderPipelineDescriptor = nullptr;
         id<MTLRenderPipelineState>      m_metalRenderPipelineState;
         CAMetalLayer*                   m_metalLayer = nullptr;
+        
+        id<CAMetalDrawable>             m_metalNextDrawable;
+        MTLRenderPassDescriptor*        m_metalRenderPassDescriptor = nullptr;
+        id<MTLCommandBuffer>            m_metalCommandBuffer;
 	};
 }
