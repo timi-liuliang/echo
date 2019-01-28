@@ -14,6 +14,7 @@
 #include "engine/core/script/lua/register_core_to_lua.cxx"
 #include "engine/core/script/lua/lua_binder.h"
 #include "engine/core/script/lua/lua_script.h"
+#include "plugin.h"
 #include "module.h"
 #include "engine/core/render/interface/pipeline/RenderPipeline.h"
 #include "engine/core/render/interface/pipeline/RenderStage.h"
@@ -119,7 +120,10 @@ namespace Echo
 		Class::registerType<RenderQueue>();
 		Class::registerType<RenderTarget>();
 
-		// register all module class
+		// load all plugins
+		Plugin::loadAllPlugins();
+
+		// register all module
 		Module::registerAllTypes();
 	}
 
