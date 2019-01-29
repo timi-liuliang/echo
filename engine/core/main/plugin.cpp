@@ -42,7 +42,7 @@ namespace Echo
 	void Plugin::loadAllPlugins()
 	{
 #if defined(ECHO_PLATFORM_WINDOWS) && defined(ECHO_EDITOR_MODE)
-		typedef void(*LOAD_PLUGIN_FUN)();
+		typedef bool(*LOAD_PLUGIN_FUN)();
 
 		// get plugin path
 		String pluginDir = PathUtil::GetCurrentDir() + "/plugins";
