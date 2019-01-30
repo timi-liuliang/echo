@@ -55,22 +55,26 @@ namespace Echo
 		// iterate
 		for (String& pluginPath : plugins)
 		{
-			String name = PathUtil::GetPureFilename(pluginPath, false);
-			String symbolName = StringUtil::Format("load%sPlugin", name.c_str());
-
-			Plugin* plugin = EchoNew(Plugin);
-			plugin->load(pluginPath.c_str());
-			LOAD_PLUGIN_FUN pFunc = (LOAD_PLUGIN_FUN)plugin->getSymbol(symbolName.c_str());
-			if (pFunc)
+			String ext = PathUtil::GetFileExt(pluginPath, true);
+			if(ext==".dll")
 			{
-				(*pFunc)();
-			}
-			else
-			{
-				EchoLogError("Can't find symbol %s in plugin [%s]", symbolName.c_str(), pluginPath.c_str());
-			}
+				String name = PathUtil::GetPureFilename(pluginPath, false);
+				String symbolName = StringUtil::Format("load%sPlugin", name.c_str());
 
-			g_plugins[name] = plugin;
+				Plugin* plugin = EchoNew(Plugin);
+				plugin->load(pluginPath.c_str());
+				LOAD_PLUGIN_FUN pFunc = (LOAD_PLUGIN_FUN)plugin->getSymbol(symbolName.c_str());
+				if (pFunc)
+				{
+					(*pFunc)();
+				}
+				else
+				{
+					EchoLogError("Can't find symbol %s in plugin [%s]", symbolName.c_str(), pluginPath.c_str());
+				}
+
+				g_plugins[name] = plugin;
+			}
 		}
 #endif
 	}
