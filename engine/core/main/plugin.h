@@ -5,7 +5,7 @@
 #ifdef ECHO_PLATFORM_WINDOWS
 	#define DYNLIB_HANDLE         HMODULE
 #else
-	#define DYNLIB_HANDLE		  i32;
+	#define DYNLIB_HANDLE		  void*
 #endif
 
 namespace Echo
