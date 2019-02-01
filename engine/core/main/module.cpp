@@ -1,4 +1,5 @@
 #include "module.h"
+#include "engine/core/base/object.h"
 #include "engine/core/memory/MemAllocDef.h"
 #include "engine/modules/register_module.cxx"
 
@@ -27,13 +28,11 @@ namespace Echo
 		}
 	}
 
-	// get current register module name
-	const String& Module::getCurrentRegisterModuleName()
+	const char* Module::getCurrentRegisterModuleName()
 	{
-		return g_currentModule ? g_currentModule->getName() : StringUtil::BLANK;
+		return g_currentModule ? g_currentModule->getName() : "";
 	}
 
-	// update all modules every frame(ms)
 	void Module::updateAll(float elapsedTime)
 	{
 		if (g_modules)
@@ -44,4 +43,9 @@ namespace Echo
 			}
 		}
 	}
+    
+    void Module::setName(const char* name)
+    {
+        strcpy( m_name, name);
+    }
 }

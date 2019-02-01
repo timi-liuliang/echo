@@ -1,7 +1,5 @@
 #pragma once
 
-#include "engine/core/base/object.h"
-
 namespace Echo
 {
 	class Module
@@ -9,8 +7,10 @@ namespace Echo
 	public:
 		virtual ~Module() {}
 
+        // register all types of this module
 		virtual void registerTypes()=0;
 
+        // update this module
 		virtual void update(float elapsedTime) {}
 
 	public:
@@ -20,18 +20,18 @@ namespace Echo
 		static void registerAllTypes();
 
 		// get current register module name
-		static const String& getCurrentRegisterModuleName();
+		static const char* getCurrentRegisterModuleName();
 
 		// update all modules every frame(ms)
 		static void updateAll(float elapsedTime);
 
 	public:
 		// name
-		void setName(const char* name) { m_name = name; }
-		const String& getName() { return m_name; }
+        void setName(const char* name);
+		const char* getName() { return m_name; }
 
 	protected:
-		String		m_name;
+		char		m_name[128];
 	};
 
 	template<typename T>
