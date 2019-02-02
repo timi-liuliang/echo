@@ -1,6 +1,7 @@
 #pragma once
 
-#include "engine/core/render/interface/shaderprogram.h"
+#include "engine/core/render/interface/ShaderProgram.h"
+#include "mt_render_base.h"
 
 namespace Echo
 {
@@ -12,6 +13,10 @@ namespace Echo
     public:
         // link
         virtual bool linkShaders() override {return true;}
+        
+    private:
+        // create shader library
+        virtual bool createShaderProgram(const String& vsContent, const String& psContent) override;
         
     private:
         id<MTLLibrary>   m_metalLibrary;

@@ -9,16 +9,24 @@
 
 namespace Echo
 {
+    static MTRenderer* g_inst = nullptr;
+    
     MTRenderer::MTRenderer()
     {
         m_metalDevice = MTLCreateSystemDefaultDevice();
         m_metalCommandQueue = [m_metalDevice newCommandQueue];
-        m_metalLibrary = [m_metalDevice newDefaultLibrary];
+        
+        g_inst = nullptr;
     }
     
     MTRenderer::~MTRenderer()
     {
         
+    }
+    
+    MTRenderer* MTRenderer::instance()
+    {
+        return g_inst;
     }
 
     bool MTRenderer::initialize(const Config& config)

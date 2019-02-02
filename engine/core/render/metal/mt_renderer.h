@@ -11,6 +11,9 @@ namespace Echo
 	public:
 		MTRenderer();
 		virtual ~MTRenderer();
+        
+        // instance
+        static MTRenderer* instance();
 
 		// initialize
         virtual bool initialize(const Config& config) override;
@@ -77,6 +80,10 @@ namespace Echo
 		// get view port
 		virtual void getViewportReal(Viewport& pViewport) override {}
         
+    public:
+        // get metal native device
+        id<MTLDevice> getMetalDevice() { return m_metalDevice; }
+        
     private:
         // make view metal compatible
         NSView* makeViewMetalCompatible(void* handle);
@@ -86,7 +93,6 @@ namespace Echo
         ui32                            m_screenHeight = 480;
         id<MTLDevice>                   m_metalDevice;
         id<MTLCommandQueue>             m_metalCommandQueue;
-        id<MTLLibrary>                  m_metalLibrary;
         MTLRenderPipelineDescriptor*    m_metalRenderPipelineDescriptor = nullptr;
         id<MTLRenderPipelineState>      m_metalRenderPipelineState;
         CAMetalLayer*                   m_metalLayer = nullptr;

@@ -153,7 +153,7 @@ namespace Echo
 		void createBlendState(BlendState::BlendDesc& desc);
 		void createDepthState(DepthStencilState::DepthStencilDesc& desc);
 		void createRasterizerState(RasterizerState::RasterizerDesc& desc);
-		bool createShaderProgram(const String& vsContent, const String& psContent);
+		virtual bool createShaderProgram(const String& vsContent, const String& psContent);
 		void* createDefaultUniformValue(const String& strType, const i32 count, const String& strValue, ui32& outSize, ShaderParamType& outType);
 
 	protected:
