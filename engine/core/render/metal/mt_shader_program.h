@@ -19,6 +19,8 @@ namespace Echo
         virtual bool createShaderProgram(const String& vsContent, const String& psContent) override;
         
     private:
-        id<MTLLibrary>   m_metalLibrary;
+        id<MTLLibrary>      m_metalLibrary;
+        id<MTLFunction>     m_metalVertexShader;
+        id<MTLFunction>     m_metalFragmentShader;
 	};
 }

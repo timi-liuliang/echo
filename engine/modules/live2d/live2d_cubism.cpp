@@ -5,7 +5,6 @@
 #include "interface/ShaderProgram.h"
 #include "engine/core/main/Engine.h"
 
-// Ä¬ÈÏ²ÄÖÊ
 static const char* g_live2dDefaultMaterial = R"(
 <?xml version = "1.0" encoding = "utf-8"?>
 <Shader>

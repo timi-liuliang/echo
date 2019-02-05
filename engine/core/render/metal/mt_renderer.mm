@@ -1,6 +1,5 @@
 #include "mt_renderer.h"
 #include "mt_renderable.h"
-#include "mt_shader.h"
 #include "mt_shader_program.h"
 #include "mt_render_state.h"
 #include "mt_render_target.h"
@@ -16,7 +15,7 @@ namespace Echo
         m_metalDevice = MTLCreateSystemDefaultDevice();
         m_metalCommandQueue = [m_metalDevice newCommandQueue];
         
-        g_inst = nullptr;
+        g_inst = this;
     }
     
     MTRenderer::~MTRenderer()
@@ -93,7 +92,7 @@ namespace Echo
     
     Shader* MTRenderer::createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const char* srcBuffer, ui32 size)
     {
-        return EchoNew(MTShader( type, desc, srcBuffer, size));
+        return nullptr;// EchoNew(MTShader( type, desc, srcBuffer, size));
     }
     
     // create states
