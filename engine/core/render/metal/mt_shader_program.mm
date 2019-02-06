@@ -3,8 +3,12 @@
 #include "engine/core/log/Log.h"
 
 static const char* testMetalLibrary = R"(
+#include <metal_stdlib>
+
+using namespace metal;
+
 // vertex function
-vertex float4 vertexShader(device float4 *vertices [[buffer(0)]], uint vid [[vertex_id]])
+vertex float4 vertexShader(device float4* vertices [[buffer(0)]], uint vid [[vertex_id]])
 {
     return vertices[vid];
 }
