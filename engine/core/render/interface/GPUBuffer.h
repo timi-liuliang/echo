@@ -5,8 +5,7 @@
 namespace Echo
 {
 	class GPUBuffer
-	{	
-		friend class GPUBufferManager;
+	{
 	public:
 		// ¿‡–Õ
 		enum GPUBufferType

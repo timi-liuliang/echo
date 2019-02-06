@@ -20,7 +20,7 @@ namespace Echo
 	public:
 		enum class Type
 		{
-			Nil,
+			Unknown,
 			Bool,
 			Int,
 			Real,
@@ -52,7 +52,7 @@ namespace Echo
 		static const Variant INVALID;
 
 	public:
-		Variant():m_type(Type::Nil){}
+		Variant():m_type(Type::Unknown){}
 		Variant(bool value);
 		Variant(int value);
 		Variant(ui32 value);
@@ -111,7 +111,7 @@ namespace Echo
 		const RealVector& toRealVector() const { return any_cast<RealVector>(m_any); }
 
 		// is nil
-		bool isNil() const { return m_type == Type::Nil; }
+		bool isNil() const { return m_type == Type::Unknown; }
 
 		// string convert
 		Echo::String toString() const;

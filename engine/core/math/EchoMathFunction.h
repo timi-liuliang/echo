@@ -372,7 +372,7 @@ namespace Math
 	* Convert floating point color channel value between 0.0 and 1.0 (otherwise clamped) 
 	* to integer of a certain number of bits. Works for any value of bits between 0 and 31.
 	*/
-	inline ui32 FloatToFixed(float value, ui32 bits)
+	inline ui32 FloatToFixed(float value, i32 bits)
 	{
 		if(value <= 0.0f)
 			return 0;
@@ -383,7 +383,7 @@ namespace Math
 	}
 
 	// Fixed point to float
-	inline float FixedToFloat(ui32 value, ui32 bits)
+	inline float FixedToFloat(ui32 value, i32 bits)
 	{
 		return (float)value/(float)((1<<bits)-1);
 	}
