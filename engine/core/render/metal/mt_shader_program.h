@@ -14,6 +14,10 @@ namespace Echo
         // link
         virtual bool linkShaders() override {return true;}
         
+        // get mtl function
+        id<MTLFunction> getMetalVertexFunction() { return m_metalVertexShader; }
+        id<MTLFunction> getMetalFragmentFunction() { return m_metalFragmentShader; }
+        
     private:
         // create shader library
         virtual bool createShaderProgram(const String& vsContent, const String& psContent) override;

@@ -40,18 +40,6 @@ namespace Echo
         Viewport viewport(0, 0, m_screenWidth, m_screenHeight);
         setViewport(&viewport);
         
-        m_metalRenderPipelineDescriptor = [[MTLRenderPipelineDescriptor alloc] init];
-        
-        // assign vertex and frament shader
-        // [m_metalRenderPipelineDescriptor setVertexFunction:nil];
-        // [m_metalRenderPipelineDescriptor setFragmentFunction:nil];
-        
-        // specify the target-texture pixel format
-        m_metalRenderPipelineDescriptor.colorAttachments[0].pixelFormat = MTLPixelFormatBGRA8Unorm;
-        
-        // build the rendering pipeline object
-        //m_metalRenderPipelineState = [m_metalDevice newRenderPipelineStateWithDescriptor:m_metalRenderPipelineDescriptor error:nil];
-        
         return true;
     }
     

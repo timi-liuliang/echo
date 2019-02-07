@@ -93,8 +93,6 @@ namespace Echo
         ui32                            m_screenHeight = 480;
         id<MTLDevice>                   m_metalDevice;
         id<MTLCommandQueue>             m_metalCommandQueue;
-        MTLRenderPipelineDescriptor*    m_metalRenderPipelineDescriptor = nullptr;
-        id<MTLRenderPipelineState>      m_metalRenderPipelineState;
         CAMetalLayer*                   m_metalLayer = nullptr;
         
         id<CAMetalDrawable>             m_metalNextDrawable;
