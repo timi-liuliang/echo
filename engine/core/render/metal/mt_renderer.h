@@ -14,6 +14,9 @@ namespace Echo
         
         // instance
         static MTRenderer* instance();
+        
+        // get name
+        virtual const char* getName() override {return "Metal"; }
 
 		// initialize
         virtual bool initialize(const Config& config) override;
@@ -54,7 +57,7 @@ namespace Echo
 		virtual void onSize(int width, int height) override {}
 
 		// draw
-		virtual void draw(Renderable* program) override {}
+        virtual void draw(Renderable* renderable) override;
 
 		// present
         virtual bool present() override;
@@ -88,6 +91,9 @@ namespace Echo
         // make view metal compatible
         NSView* makeViewMetalCompatible(void* handle);
         
+        // make next drawable
+        void makeNextDrawable();
+        
     private:
         ui32                            m_screenWidth = 640;
         ui32                            m_screenHeight = 480;
@@ -97,6 +103,6 @@ namespace Echo
         
         id<CAMetalDrawable>             m_metalNextDrawable;
         MTLRenderPassDescriptor*        m_metalRenderPassDescriptor = nullptr;
-        id<MTLCommandBuffer>            m_metalCommandBuffer;
+        id<MTLCommandBuffer>            m_metalClearBGCommandBuffer;
 	};
 }

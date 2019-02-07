@@ -1,11 +1,14 @@
+#include "engine/core/render/interface/mesh/Mesh.h"
+#include "mt_gpu_buffer.h"
 #include "mt_renderable.h"
 #include "mt_shader_program.h"
+#include "mt_gpu_buffer.h"
 #include "mt_renderer.h"
 #include "engine/core/log/Log.h"
 
 namespace Echo
 {
-    VKRenderable::VKRenderable(const String& renderStage, ShaderProgram* shader, int identifier)
+    MTRenderable::MTRenderable(const String& renderStage, ShaderProgram* shader, int identifier)
         : Renderable( renderStage, shader, identifier)
     {
         id<MTLDevice> device = MTRenderer::instance()->getMetalDevice();
@@ -33,5 +36,11 @@ namespace Echo
                 EchoLogError("%s", [nsError UTF8String]);
             }
         }
+    }
+    
+    id<MTLBuffer> MTRenderable::getMetalVertexBuffer()
+    {
+        MTBuffer* mtBuffer = ECHO_DOWN_CAST<MTBuffer*>(m_mesh->getVertexBuffer());
+        return mtBuffer->getMetalBuffer();
     }
 }

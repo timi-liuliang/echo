@@ -56,6 +56,9 @@ namespace Echo
 
 		// replace instance
 		static bool replaceInstance(Renderer* inst);
+        
+        // get name
+        virtual const char* getName() {return "Unknown"; }
 
 		// initialize
 		virtual bool initialize(const Config& config)=0;

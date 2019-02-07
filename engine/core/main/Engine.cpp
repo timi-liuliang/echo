@@ -228,7 +228,7 @@ namespace Echo
 		EchoLogDebug("Canvas Size : %d x %d", renderCfg.screenWidth, renderCfg.screenHeight);
 		if (renderer && renderer->initialize(renderCfg))
 		{
-			EchoLogInfo("Init Renderer success.");
+			EchoLogInfo("Init %s Renderer success.", renderer->getName());
 			return true;
 		}
 		

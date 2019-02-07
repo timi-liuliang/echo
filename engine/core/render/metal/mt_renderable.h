@@ -5,18 +5,24 @@
 
 namespace Echo
 {
-	class VKRenderable : public Renderable
+	class MTRenderable : public Renderable
 	{
 	public:
-		VKRenderable(const String& renderStage, ShaderProgram* shader, int identifier);
-        virtual ~VKRenderable() {}
+		MTRenderable(const String& renderStage, ShaderProgram* shader, int identifier);
+        virtual ~MTRenderable() {}
 
         // link shader and program
         virtual void link() override {}
         
+    public:
+        // get render pipelinestate
+        id<MTLRenderPipelineState> getMetalRenderPipelineState() { return m_metalRenderPipelineState; }
+        
+        // get metal buffer
+        id<MTLBuffer> getMetalVertexBuffer();
+        
     private:
         MTLRenderPipelineDescriptor*    m_metalRenderPipelineDescriptor = nullptr;
         id<MTLRenderPipelineState>      m_metalRenderPipelineState;
-        id<MTLCommandBuffer>            m_metalCommandBuffer;
 	};
 }

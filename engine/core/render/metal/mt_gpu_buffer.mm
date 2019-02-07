@@ -9,7 +9,20 @@ namespace Echo
         id<MTLDevice> device = MTRenderer::instance()->getMetalDevice();
         if(device)
         {
-            m_metalBuffer = [device newBufferWithBytes:buff.getData() length:buff.getSize() options:MTLResourceOptionCPUCacheModeDefault];
+            // test
+            static float quadVertexData[] =
+            {
+                0.5, -0.5, 0.0, 1.0,
+                -0.5, -0.5, 0.0, 1.0,
+                -0.5,  0.5, 0.0, 1.0,
+                
+                0.5,  0.5, 0.0, 1.0,
+                0.5, -0.5, 0.0, 1.0,
+                -0.5,  0.5, 0.0, 1.0
+            };
+            m_metalBuffer = [device newBufferWithBytes:quadVertexData length:sizeof(quadVertexData) options:MTLResourceOptionCPUCacheModeDefault];
+            
+            //m_metalBuffer = [device newBufferWithBytes:buff.getData() length:buff.getSize() options:MTLResourceOptionCPUCacheModeDefault];
         }
 	}
 

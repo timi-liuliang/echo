@@ -51,19 +51,17 @@ namespace Echo
 		// 获取顶点数据
 		const MeshVertexData& getVertices() const { return m_vertData; }
 
-		// 获取顶点缓冲
+		// get buffer object
 		GPUBuffer* getVertexBuffer() const;
-
-		// 获取索引缓冲
 		GPUBuffer* getIndexBuffer() const;
 
-		// 获取面数量
+		// get face count
 		ui32 getFaceCount() const;
 
-		// 获取索引数量
+		// get index count
 		ui32 getIndexCount() const;
 
-		// 获取索引格式大小
+		// get index stride
 		ui32 getIndexStride() const;
 
 		// start vertex and index

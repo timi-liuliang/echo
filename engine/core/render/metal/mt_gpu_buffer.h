@@ -13,6 +13,10 @@ namespace Echo
 
 		bool updateData(const Buffer& buff);
         void bindBuffer();
+        
+    public:
+        // get metal buffer
+        id<MTLBuffer> getMetalBuffer() { return m_metalBuffer; }
 
 	private:
         id<MTLBuffer>       m_metalBuffer;
