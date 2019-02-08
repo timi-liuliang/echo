@@ -143,25 +143,32 @@ namespace Echo
             // render pass descriptor
             m_metalRenderPassDescriptor = [MTLRenderPassDescriptor renderPassDescriptor];
             m_metalRenderPassDescriptor.colorAttachments[0].texture = m_metalNextDrawable.texture;
-            m_metalRenderPassDescriptor.colorAttachments[0].loadAction = MTLLoadActionClear;
-            m_metalRenderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(0.298f, 0.298f, 0.322f, 1.f);
-            m_metalRenderPassDescriptor.colorAttachments[0].storeAction = MTLStoreActionStore;
-            
-            // create command buffer
-            m_metalClearBGCommandBuffer = [m_metalCommandQueue commandBuffer];
+            //m_metalRenderPassDescriptor.colorAttachments[0].loadAction = MTLLoadActionClear;
+            //m_metalRenderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(0.298f, 0.298f, 0.322f, 1.f);
+            //m_metalRenderPassDescriptor.colorAttachments[0].storeAction = MTLStoreActionStore;
         }
+    }
+    
+    void MTRenderer::beginRender()
+    {
+        makeNextDrawable();
+        
+        // create command buffer
+        id<MTLCommandBuffer> clearBGCommandBuffer = [m_metalCommandQueue commandBuffer];
+        
+        // creat a command encoder
+        id<MTLRenderCommandEncoder> renderEncoder = [clearBGCommandBuffer renderCommandEncoderWithDescriptor:m_metalRenderPassDescriptor];
+        [renderEncoder endEncoding];
+        
+        [clearBGCommandBuffer commit];
     }
     
     // draw
     void MTRenderer::draw(Renderable* renderable)
     {
-        makeNextDrawable();
-        
         MTRenderable* mtRenderable = ECHO_DOWN_CAST<MTRenderable*>(renderable);
         if(m_metalRenderPassDescriptor && mtRenderable)
         {
-            
-            
             // create command buffer
             id<MTLCommandBuffer> metalCommandBuffer = [m_metalCommandQueue commandBuffer];
             
@@ -172,36 +179,25 @@ namespace Echo
             [renderEncoder drawPrimitives:MTLPrimitiveTypeTriangle vertexStart:0 vertexCount:6];
             [renderEncoder endEncoding];
             
-            [metalCommandBuffer presentDrawable:m_metalNextDrawable];
             [metalCommandBuffer commit];
         }
-        
-        m_metalNextDrawable = nullptr;
-        m_metalRenderPassDescriptor = nullptr;
-        m_metalClearBGCommandBuffer = nullptr;
     }
     
     // present
     bool MTRenderer::present()
     {
-        /*
-        makeNextDrawable();
+        // create command buffer
+        id<MTLCommandBuffer> presentCommandBuffer = [m_metalCommandQueue commandBuffer];
         
         // creat a command encoder
-        id<MTLRenderCommandEncoder> renderEncoder = [m_metalClearBGCommandBuffer renderCommandEncoderWithDescriptor:m_metalRenderPassDescriptor];
+        id<MTLRenderCommandEncoder> renderEncoder = [presentCommandBuffer renderCommandEncoderWithDescriptor:m_metalRenderPassDescriptor];
         [renderEncoder endEncoding];
         
-        [m_metalClearBGCommandBuffer presentDrawable:m_metalNextDrawable];
-        [m_metalClearBGCommandBuffer commit];
-        
-        //[m_metalNextDrawable release];
-        //[m_metalRenderPassDescriptor release];
-        //[m_metalClearBGCommandBuffer release];
+        [presentCommandBuffer presentDrawable:m_metalNextDrawable];
+        [presentCommandBuffer commit];
         
         m_metalNextDrawable = nullptr;
         m_metalRenderPassDescriptor = nullptr;
-        m_metalClearBGCommandBuffer = nullptr;
-         */
         
         return true;
     }

@@ -56,6 +56,9 @@ namespace Echo
 		// on size
 		virtual void onSize(int width, int height) override {}
 
+        // begin render
+        virtual void beginRender() override;
+        
 		// draw
         virtual void draw(Renderable* renderable) override;
 
@@ -103,6 +106,5 @@ namespace Echo
         
         id<CAMetalDrawable>             m_metalNextDrawable;
         MTLRenderPassDescriptor*        m_metalRenderPassDescriptor = nullptr;
-        id<MTLCommandBuffer>            m_metalClearBGCommandBuffer;
 	};
 }

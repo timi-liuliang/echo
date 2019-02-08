@@ -308,9 +308,8 @@ namespace Echo
 		Input::instance()->update();
 
 		// render
+        Renderer::instance()->beginRender();
 		RenderStage::instance()->process();
-
-		// present to screen
 		Renderer::instance()->present();
 	}
 }

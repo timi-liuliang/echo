@@ -146,6 +146,9 @@ namespace Echo
 
 		// get framebuffer format
 		PixelFormat	getBackBufferPixelFormat() const { return m_backBufferFormat; }
+        
+        // begin render
+        virtual void beginRender() {}
 
 		// present
 		virtual bool present()=0;
