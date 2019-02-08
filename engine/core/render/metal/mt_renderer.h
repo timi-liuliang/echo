@@ -95,7 +95,7 @@ namespace Echo
         NSView* makeViewMetalCompatible(void* handle);
         
         // make next drawable
-        void makeNextDrawable();
+        MTLRenderPassDescriptor* makeNextRenderPassDescriptor();
         
     private:
         ui32                            m_screenWidth = 640;
@@ -106,5 +106,7 @@ namespace Echo
         
         id<CAMetalDrawable>             m_metalNextDrawable;
         MTLRenderPassDescriptor*        m_metalRenderPassDescriptor = nullptr;
+        id<MTLCommandBuffer>            m_metalCommandBuffer;
+        id<MTLRenderCommandEncoder>     m_metalCommandEncoder;
 	};
 }
