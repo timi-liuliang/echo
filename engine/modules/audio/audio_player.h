@@ -25,8 +25,10 @@ namespace Echo
 		bool isLoop() const { return m_isLoop; }
 		void setLoop(bool loop);
 
-		// play
+		// operates
 		void play();
+        void pause();
+        void stop();
 
 	protected:
 		// update

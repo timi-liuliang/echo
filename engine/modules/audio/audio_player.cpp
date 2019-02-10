@@ -49,5 +49,29 @@ namespace Echo
 	{
 		alGenSources(1, &m_source);
 		alGenBuffers(1, &m_buffer);
+        
+        //put the data into our sampleset buffer
+        ALenum  audioFormat = 0;
+        char*   audioBuffer = nullptr;
+        long    audioBufferLen = 0;
+        ALsizei audioFrequency = 0;
+        //alutLoadWAVFile("my_music.wav",&alFormat, (void **)&alBuffer,(unsigned int *)&alBufferLen, &alFreqBuffer, &alLoop);
+        alBufferData(m_buffer, audioFormat, audioBuffer, audioBufferLen, audioFrequency);
+        
+        //assign the buffer to this source
+        alSourcei(m_source, AL_BUFFER, m_buffer);
+        
+        // play
+        alSourcePlay( m_source);
 	}
+    
+    void AudioPlayer::pause()
+    {
+        
+    }
+    
+    void AudioPlayer::stop()
+    {
+        
+    }
 }
