@@ -72,7 +72,7 @@ namespace Echo
         void initEditor(Object* obj);
 #endif
         // get current module name
-        const String& getCurrentRegisterModuleName();
+        const char* getCurrentRegisterModuleName();
 	};
 
 	class Class
@@ -195,7 +195,7 @@ namespace Echo
         ObjectFactorySingletonT(const String& name, const String& parent, bool isVirtual = false)
         {
             // register class to lua
-            LuaBinder::instance()->registerClass(name, parent.c_str());
+            LuaBinder::instance()->registerClass(name.c_str(), parent.c_str());
 			LuaBinder::instance()->registerObject(name, name, T::instance());
             
             m_name = name;

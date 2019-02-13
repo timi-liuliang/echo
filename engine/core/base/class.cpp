@@ -21,7 +21,7 @@ namespace Echo
 		}
 	}
     
-    const String& ObjectFactory::getCurrentRegisterModuleName()
+    const char* ObjectFactory::getCurrentRegisterModuleName()
     {
         return Module::getCurrentRegisterModuleName();
     }

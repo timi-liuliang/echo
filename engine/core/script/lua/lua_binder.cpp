@@ -158,12 +158,12 @@ namespace Echo
 		return true;
 	}
 
-	bool LuaBinder::registerClass(const String& className, const char* parentClassName)
+	bool LuaBinder::registerClass(const char* className, const char* parentClassName)
 	{
 		LUA_STACK_CHECK(m_luaState);
 
 		//create metatable for class
-		luaL_newmetatable(m_luaState, className.c_str());
+		luaL_newmetatable(m_luaState, className);
 		const int metatable = lua_gettop(m_luaState);
 
 		//change the metatable's __index to metatable itself;
@@ -405,7 +405,7 @@ namespace Echo
 
 	void LuaBinder::outputError(int pop)
 	{
-		//´òÓ¡´íÎó½á¹û 
+		//æ‰“å°é”™è¯¯ç»“æžœ 
 		Log::instance()->error(lua_tostring(m_luaState, -1));
 		lua_pop(m_luaState, 1);
 

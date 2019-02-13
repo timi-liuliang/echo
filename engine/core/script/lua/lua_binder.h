@@ -21,7 +21,7 @@ namespace Echo
 		bool registerMethod(const String& methodName, MethodBind* method);
 
 		// register
-		bool registerClass(const String& className, const char* parentClassName);
+		bool registerClass(const char* className, const char* parentClassName);
 		bool registerClassMethod(const String& className, const String& methodName, ClassMethodBind* method);
 		bool registerObject(const String& className, const String& objectName, void* obj);
 
