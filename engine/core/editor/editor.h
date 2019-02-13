@@ -2,6 +2,7 @@
 
 #include "engine/core/base/echo_def.h"
 #include "bottom_panel_tab.h"
+#include "qt/QWidgets.h"
 
 #ifdef ECHO_EDITOR_MODE
 namespace Echo
@@ -38,6 +39,13 @@ namespace Echo
 	public:
 		// get node icon by class name
 		virtual Echo::String getNodeIcon(Node* node) = 0;
+        
+    public:
+        // new QCheckBox
+        qCheckBoxNewFun qCheckBoxNew = nullptr;
 	};
 }
+
+#define EditorApi (*Editor::instance())
+
 #endif

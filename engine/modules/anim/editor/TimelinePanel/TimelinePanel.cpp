@@ -500,7 +500,7 @@ namespace Echo
 							Vector2 center;
 							calcKeyPosByTimeAndValue(t, value, center);
 
-							QWidget* checkBox = qCheckBoxNew();
+							QWidget* checkBox = EditorApi.qCheckBoxNew();
 							QGraphicsProxyWidget* widget = qGraphicsSceneAddWidget(m_graphicsScene, checkBox);
 
 							qGraphicsProxyWidgetSetPos(widget, center.x, 0.f);

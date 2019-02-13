@@ -30,6 +30,9 @@ namespace Studio
 		m_projectCfg = EchoNew( ConfigMgr);
 
 		m_log = NULL;
+        
+        // init functions
+        initFunctions();
 
 		// set astudio as the echo editor
 		Editor::setInstance(this);

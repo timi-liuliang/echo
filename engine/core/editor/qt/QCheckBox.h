@@ -7,7 +7,7 @@
 namespace Echo
 {
 	// new QCheckBox
-	QWidget* qCheckBoxNew();
+	typedef QWidget* (*qCheckBoxNewFun)();
 }
 
 #endif

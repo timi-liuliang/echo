@@ -110,7 +110,11 @@ namespace Studio
 
 		bool replaceTraverseAllWidget(QWidget* parent, QWidget* from, QWidget* to);
 
+        // load all recent projects
 		void loadAllRecentProjects();
+        
+        // init functions
+        void initFunctions();
 
 	private:
 		Echo::String					m_rootPath;			// root direcory
