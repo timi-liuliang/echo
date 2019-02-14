@@ -1,6 +1,6 @@
 #include <thread>
 #include "physx_world.h"
-#include "physx_cb.cxx"
+#include "physx_cb.cx"
 #include "engine/core/main/Engine.h"
 
 namespace Echo

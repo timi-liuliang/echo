@@ -1,5 +1,5 @@
 #include "Studio.h"
-#include "QCheckBox.cxx"
+#include "QCheckBox.cx"
 
 namespace Studio
 {

@@ -64,7 +64,7 @@ ENDIF()
 
 # Get All Files
 FILE(GLOB_RECURSE HEADER_FILES  *.h *.hpp *.inl)
-FILE(GLOB_RECURSE SOURCE_FILES *.cpp *.c *.cc *.cxx ${MAC_MM_FILES})
+FILE(GLOB_RECURSE SOURCE_FILES *.cpp *.c *.cc *.cx ${MAC_MM_FILES})
 
 SET(ALL_FILES ${HEADER_FILES} ${SOURCE_FILES} CMakeLists.txt)
 

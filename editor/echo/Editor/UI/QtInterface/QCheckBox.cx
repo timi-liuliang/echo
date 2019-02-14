@@ -2,7 +2,7 @@
 
 namespace Echo
 {
-	inline QWidget* qCheckBoxNew()
+	QWidget* qCheckBoxNew()
 	{
 		return new QCheckBox;
 	}
