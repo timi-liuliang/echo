@@ -7,7 +7,7 @@
 namespace Echo
 {
 	// get cursor current pos
-	Vector2 qCursorPos();
+	typedef Vector2 (*qCursorPosFun)();
 }
 
 #endif

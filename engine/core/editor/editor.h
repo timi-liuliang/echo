@@ -65,6 +65,14 @@ namespace Echo
         
         // QComboBox->clear();
         qComboBoxClearFun qComboBoxClear = nullptr;
+        
+    public:
+        // get cursor current pos
+        qCursorPosFun qCursorPos = nullptr;
+        
+    public:
+        qObjectGetEventAllFun qObjectGetEventAll = nullptr;
+        qGraphicsItemGetEventAllFun qGraphicsItemGetEventAll = nullptr;
 	};
 }
 

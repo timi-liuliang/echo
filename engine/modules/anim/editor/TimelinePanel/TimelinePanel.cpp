@@ -623,7 +623,7 @@ namespace Echo
 
 				int halfWidth = qLineEditWidth(m_curveKeyLineEdit) / 2;
 				int halfHeight = qLineEditHeight(m_curveKeyLineEdit) / 2;
-				Vector2 mouseScenePos = qGetEventAll(sender).graphicsSceneMouseEvent.scenePos;
+				Vector2 mouseScenePos = EditorApi.qGraphicsItemGetEventAll(sender).graphicsSceneMouseEvent.scenePos;
 				qGraphicsProxyWidgetSetPos(m_curveKeyLineEditProxyWidget, mouseScenePos.x + m_keyRadius, mouseScenePos.y - halfHeight);
 				qGraphicsProxyWidgetSetZValue(m_curveKeyLineEditProxyWidget, 250.f);
 			}
@@ -912,7 +912,7 @@ namespace Echo
 		}
 
 		// record cursor pos
-		m_keyEditCursorScenePos = qGetEventAll(m_graphicsScene).graphicsSceneMouseEvent.scenePos;
+		m_keyEditCursorScenePos = EditorApi.qObjectGetEventAll(m_graphicsScene).graphicsSceneMouseEvent.scenePos;
 
 		// show menu
 		qMenuExec(m_keyEditMenu);
@@ -920,7 +920,7 @@ namespace Echo
 
 	void TimelinePanel::onGraphicsSceneWheelEvent()
 	{
-		int delta = qGetEventAll(m_graphicsScene).graphicsSceneWheelEvent.delta;
+		int delta = EditorApi.qObjectGetEventAll(m_graphicsScene).graphicsSceneWheelEvent.delta;
 		
 		m_millisecondPerPixel += delta > 0 ? -0.05f : 0.05f;
 		m_millisecondPerPixel = Math::Clamp(m_millisecondPerPixel, 1.f, 50.f);

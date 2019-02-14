@@ -22,8 +22,8 @@ namespace Echo
 	};
 
 	// query widget's qEventAll
-	const qEventAll& qGetEventAll(QObject* sender);
-	const qEventAll& qGetEventAll(QGraphicsItem* sender);
+	typedef const qEventAll& (*qObjectGetEventAllFun)(QObject* sender);
+	typedef const qEventAll& (*qGraphicsItemGetEventAllFun)(QGraphicsItem* sender);
 }
 
 #endif
