@@ -43,6 +43,28 @@ namespace Echo
     public:
         // new QCheckBox
         qCheckBoxNewFun qCheckBoxNew = nullptr;
+        
+    public:
+        // QComboBox->addItem(const QIcon &icon, const QString &text)
+        qComboBoxAddItemFun qComboBoxAddItem = nullptr;
+        
+        // int QComboBox->currentIndex() const;
+        qComboBoxCurrentIndexFun qComboBoxCurrentIndex = nullptr;
+        
+        // QString QComboBox->currentText() const;
+        qComboBoxCurrentTextFun qComboBoxCurrentText = nullptr;
+        
+        // QComboBox->setCurrentIndex(int index);
+        qComboBoxSetCurrentIndexFun qComboBoxSetCurrentIndex = nullptr;
+        
+        // QComboBox->setCurrentText(const QString &text);
+        qComboBoxSetCurrentTextFun qComboBoxSetCurrentText = nullptr;
+        
+        // void QComboBox->setItemText(int index, const QString &text);
+        qComboBoxSetItemTextFun qComboBoxSetItemText = nullptr;
+        
+        // QComboBox->clear();
+        qComboBoxClearFun qComboBoxClear = nullptr;
 	};
 }
 
