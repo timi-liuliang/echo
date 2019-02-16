@@ -8,39 +8,39 @@
 namespace Echo
 {
 	// get sender item
-	QGraphicsItem* qSenderItem();
+	typedef QGraphicsItem* (*qSenderItemFun)();
 
 	// get rect
-	bool qGraphicsItemSceneRect(QGraphicsItem* item, Rect& rect);
+	typedef bool (*qGraphicsItemSceneRectFun)(QGraphicsItem* item, Rect& rect);
 
 	// get item width
-	float qGraphicsItemWidth(QGraphicsItem* item);
+	typedef float (*qGraphicsItemWidthFun)(QGraphicsItem* item);
 
 	// pos
-	Vector2 qGraphicsItemPos(QGraphicsItem* item);
-	void qGraphicsItemSetPos(QGraphicsItem* item, float posX, float posY);
+	typedef Vector2 (*qGraphicsItemPosFun)(QGraphicsItem* item);
+	typedef void (*qGraphicsItemSetPosFun)(QGraphicsItem* item, float posX, float posY);
 
 	// set pos
-	void qGraphicsProxyWidgetSetPos(QGraphicsProxyWidget* item, float posX, float posY);
+	typedef void (*qGraphicsProxyWidgetSetPosFun)(QGraphicsProxyWidget* item, float posX, float posY);
 
 	// set zvalue
-	void qGraphicsProxyWidgetSetZValue(QGraphicsProxyWidget* item, float zValue);
-	void qGraphicsItemSetZValue(QGraphicsItem* item, float zValue);
+	typedef void (*qGraphicsProxyWidgetSetZValueFun)(QGraphicsProxyWidget* item, float zValue);
+	typedef void (*qGraphicsItemSetZValueFun)(QGraphicsItem* item, float zValue);
 
 	// set visible
-	void qGraphicsItemSetVisible(QGraphicsItem* item, bool visible);
+	typedef void (*qGraphicsItemSetVisibleFun)(QGraphicsItem* item, bool visible);
 
 	// user data
-	String qGraphicsItemUserData(QGraphicsItem* item);
+	typedef String (*qGraphicsItemUserDataFun)(QGraphicsItem* item);
 
 	// set user data
-	void qGraphicsItemSetUserData(QGraphicsItem* item, const char* userData);
+	typedef void (*qGraphicsItemSetUserDataFun)(QGraphicsItem* item, const char* userData);
 
 	// set tool tip
-	void qGraphicsItemSetToolTip(QGraphicsItem* item, const char* toolTip);
+	typedef void (*qGraphicsItemSetToolTipFun)(QGraphicsItem* item, const char* toolTip);
 
 	// set moveable
-	void qGraphicsItemSetMoveable(QGraphicsItem* item, bool isMoveable);
+	typedef void (*qGraphicsItemSetMoveableFun)(QGraphicsItem* item, bool isMoveable);
 }
 
 #endif

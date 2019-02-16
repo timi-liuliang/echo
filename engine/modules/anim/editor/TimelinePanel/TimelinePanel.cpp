@@ -503,8 +503,8 @@ namespace Echo
 							QWidget* checkBox = EditorApi.qCheckBoxNew();
 							QGraphicsProxyWidget* widget = qGraphicsSceneAddWidget(m_graphicsScene, checkBox);
 
-							qGraphicsProxyWidgetSetPos(widget, center.x, 0.f);
-							qGraphicsProxyWidgetSetZValue(widget, 250.f);
+							EditorApi.qGraphicsProxyWidgetSetPos(widget, center.x, 0.f);
+							EditorApi.qGraphicsProxyWidgetSetZValue(widget, 250.f);
 
 							// set userdata
 							//String userData = StringUtil::Format("%s,%s,%s,%d,%d", m_currentEditAnim.c_str(), objectPath.c_str(), propertyName.c_str(), 0, keyIdx++);
@@ -546,14 +546,14 @@ namespace Echo
 
 							// set userdata
 							String userData = StringUtil::Format("%s,%s,%s,%d,%d", m_currentEditAnim.c_str(), objectPath.c_str(), propertyName.c_str(), curveIdx, keyIdx);
-							qGraphicsItemSetUserData(item, userData.c_str());
+							EditorApi.qGraphicsItemSetUserData(item, userData.c_str());
 
 							// set tooltip
 							String toolTip = StringUtil::Format("Time : %d\nValue: %.3f", t, value);
-							qGraphicsItemSetToolTip(item, toolTip.c_str());
+							EditorApi.qGraphicsItemSetToolTip(item, toolTip.c_str());
 
 							// set moveable
-							qGraphicsItemSetMoveable(item, true);
+							EditorApi.qGraphicsItemSetMoveable(item, true);
 
 							// connect signal slots
 							qConnect(item, QSIGNAL(mouseDoubleClickEvent(QGraphicsSceneMouseEvent*)), this, createMethodBind(&TimelinePanel::onKeyDoubleClickedCurveKey));
@@ -610,10 +610,10 @@ namespace Echo
 		}
 
 		// get current key value
-		QGraphicsItem* sender = qSenderItem();
+		QGraphicsItem* sender = EditorApi.qSenderItem();
 		if (sender)
 		{
-			String userData = qGraphicsItemUserData(sender);
+			String userData = EditorApi.qGraphicsItemUserData(sender);
 			StringArray userDataSplits = StringUtil::Split(userData, ",");
 			KeyInfo keyInfo;
 			if (getKeyInfo(keyInfo, userDataSplits[0], userDataSplits[1], userDataSplits[2], StringUtil::ParseI32(userDataSplits[3]), StringUtil::ParseI32(userDataSplits[4])))
@@ -624,8 +624,8 @@ namespace Echo
 				int halfWidth = qLineEditWidth(m_curveKeyLineEdit) / 2;
 				int halfHeight = qLineEditHeight(m_curveKeyLineEdit) / 2;
 				Vector2 mouseScenePos = EditorApi.qGraphicsItemGetEventAll(sender).graphicsSceneMouseEvent.scenePos;
-				qGraphicsProxyWidgetSetPos(m_curveKeyLineEditProxyWidget, mouseScenePos.x + m_keyRadius, mouseScenePos.y - halfHeight);
-				qGraphicsProxyWidgetSetZValue(m_curveKeyLineEditProxyWidget, 250.f);
+				EditorApi.qGraphicsProxyWidgetSetPos(m_curveKeyLineEditProxyWidget, mouseScenePos.x + m_keyRadius, mouseScenePos.y - halfHeight);
+				EditorApi.qGraphicsProxyWidgetSetZValue(m_curveKeyLineEditProxyWidget, 250.f);
 			}
 		}
 
@@ -638,7 +638,7 @@ namespace Echo
 		String valueStr = qLineEditText(m_curveKeyLineEdit);
 		if (!valueStr.empty() && m_curveKeyItem)
 		{
-			String userData = qGraphicsItemUserData(m_curveKeyItem);
+			String userData = EditorApi.qGraphicsItemUserData(m_curveKeyItem);
 			StringArray userDataSplits = StringUtil::Split(userData, ",");
 
 			// modify key value
@@ -655,17 +655,17 @@ namespace Echo
 
 	void TimelinePanel::onKeyPositionChanged()
 	{
-		QGraphicsItem* sender = qSenderItem();
+		QGraphicsItem* sender = EditorApi.qSenderItem();
 		if (sender)
 		{
-			Vector2 scenePos = qGraphicsItemPos(sender);
+			Vector2 scenePos = EditorApi.qGraphicsItemPos(sender);
 			i32 time;
 			float value;
 			calcKeyTimeAndValueByPos(scenePos, time, value);
 
 			// modify tooltip
 			String toolTip = StringUtil::Format("Time : %d\nValue: %.3f", time, value);
-			qGraphicsItemSetToolTip(sender, toolTip.c_str());
+			EditorApi.qGraphicsItemSetToolTip(sender, toolTip.c_str());
 		}
 	}
 
@@ -786,8 +786,8 @@ namespace Echo
 						QGraphicsItem* textItem = qGraphicsSceneAddSimpleText(m_graphicsScene, StringUtil::Format("%d", time).c_str(), m_rulerColor);
 						if (textItem)
 						{
-							float halfWidth = qGraphicsItemWidth(textItem) * 0.4f /*0.5f*/;
-							qGraphicsItemSetPos(textItem, textPos.x, textPos.y);
+							float halfWidth = EditorApi.qGraphicsItemWidth(textItem) * 0.4f /*0.5f*/;
+							EditorApi.qGraphicsItemSetPos(textItem, textPos.x, textPos.y);
 							m_rulerItems.push_back(textItem);
 						}
 					}
@@ -797,7 +797,7 @@ namespace Echo
 			// set z value
 			for (QGraphicsItem* item : m_rulerItems)
 			{
-				qGraphicsItemSetZValue(item, 200.f);
+				EditorApi.qGraphicsItemSetZValue(item, 200.f);
 			}
 
 			// draw value
@@ -869,12 +869,12 @@ namespace Echo
 		{
 			if (m_curveItems[i])
 			{
-				qGraphicsItemSetVisible(m_curveItems[i], m_curveVisibles[i]);
+				EditorApi.qGraphicsItemSetVisible(m_curveItems[i], m_curveVisibles[i]);
 			}
 
 			for (QGraphicsItem* keyItem : m_curveKeyItems[i])
 			{
-				qGraphicsItemSetVisible( keyItem, m_curveVisibles[i]);
+				EditorApi.qGraphicsItemSetVisible( keyItem, m_curveVisibles[i]);
 			}
 		}
 	}
@@ -1019,7 +1019,7 @@ namespace Echo
 		for (QGraphicsItem* item : m_curveItems)
 		{
 			Rect itemRect;
-			qGraphicsItemSceneRect( item, itemRect);
+			EditorApi.qGraphicsItemSceneRect( item, itemRect);
 			totalRect.merge(itemRect);
 		}
 

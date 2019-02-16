@@ -73,6 +73,42 @@ namespace Echo
     public:
         qObjectGetEventAllFun qObjectGetEventAll = nullptr;
         qGraphicsItemGetEventAllFun qGraphicsItemGetEventAll = nullptr;
+        
+    public:
+        // get sender item
+        qSenderItemFun qSenderItem = nullptr;
+        
+        // get rect
+        qGraphicsItemSceneRectFun qGraphicsItemSceneRect = nullptr;
+        
+        // get item width
+        qGraphicsItemWidthFun qGraphicsItemWidth = nullptr;
+        
+        // pos
+        qGraphicsItemPosFun qGraphicsItemPos = nullptr;
+        qGraphicsItemSetPosFun qGraphicsItemSetPos = nullptr;
+        
+        // set pos
+        qGraphicsProxyWidgetSetPosFun qGraphicsProxyWidgetSetPos = nullptr;
+        
+        // set zvalue
+        qGraphicsProxyWidgetSetZValueFun qGraphicsProxyWidgetSetZValue = nullptr;
+        qGraphicsItemSetZValueFun qGraphicsItemSetZValue = nullptr;
+        
+        // set visible
+        qGraphicsItemSetVisibleFun qGraphicsItemSetVisible = nullptr;
+        
+        // user data
+        qGraphicsItemUserDataFun qGraphicsItemUserData = nullptr;
+        
+        // set user data
+        qGraphicsItemSetUserDataFun qGraphicsItemSetUserData = nullptr;
+        
+        // set tool tip
+        qGraphicsItemSetToolTipFun qGraphicsItemSetToolTip = nullptr;
+        
+        // set moveable
+        qGraphicsItemSetMoveableFun qGraphicsItemSetMoveable = nullptr;
 	};
 }
 
