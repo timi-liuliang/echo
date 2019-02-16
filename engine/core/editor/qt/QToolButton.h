@@ -9,16 +9,16 @@ class QWidget;
 namespace Echo
 {
 	// set tool button fixed width
-	void qToolButtonSetFixedWidth(QWidget* button, int width);
+	typedef void (*qToolButtonSetFixedWidthFun)(QWidget* button, int width);
 
 	// set tool button icon
-	void qToolButtonSetIcon(QWidget* button, const char* iconPath);
+	typedef void (*qToolButtonSetIconFun)(QWidget* button, const char* iconPath);
 
 	// set icon size
-	void qToolButtonSetIconSize(QWidget* widget, int width, int height);
+	typedef void (*qToolButtonSetIconSizeFun)(QWidget* widget, int width, int height);
 
 	// is toolbutton checked
-	bool qToolButtonIsChecked(QWidget* widget);
+	typedef bool (*qToolButtonIsCheckedFun)(QWidget* widget);
 }
 
 #endif

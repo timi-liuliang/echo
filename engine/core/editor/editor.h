@@ -193,6 +193,19 @@ namespace Echo
     public:
         // modify qsplitter stretch factor
         qSplitterSetStretchFactorFun qSplitterSetStretchFactor = nullptr;
+        
+    public:
+        // set tool button fixed width
+        qToolButtonSetFixedWidthFun qToolButtonSetFixedWidth = nullptr;
+        
+        // set tool button icon
+        qToolButtonSetIconFun qToolButtonSetIcon = nullptr;
+        
+        // set icon size
+        qToolButtonSetIconSizeFun qToolButtonSetIconSize = nullptr;
+        
+        // is toolbutton checked
+        qToolButtonIsCheckedFun qToolButtonIsChecked = nullptr;
 	};
 }
 
