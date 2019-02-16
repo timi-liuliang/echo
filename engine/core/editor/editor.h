@@ -189,6 +189,10 @@ namespace Echo
         
         // QAction *exec();
         qMenuExecFun qMenuExec = nullptr;
+        
+    public:
+        // modify qsplitter stretch factor
+        qSplitterSetStretchFactorFun qSplitterSetStretchFactor = nullptr;
 	};
 }
 

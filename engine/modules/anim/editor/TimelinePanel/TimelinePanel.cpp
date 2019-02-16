@@ -27,8 +27,8 @@ namespace Echo
 		QWidget* splitter = qFindChild(m_ui, "m_splitter");
 		if (splitter)
 		{
-			qSplitterSetStretchFactor(splitter, 0, 0);
-			qSplitterSetStretchFactor(splitter, 1, 1);
+			EditorApi.qSplitterSetStretchFactor(splitter, 0, 0);
+			EditorApi.qSplitterSetStretchFactor(splitter, 1, 1);
 		}
 
 		// Top toolbuttons icons

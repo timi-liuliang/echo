@@ -6,6 +6,6 @@ namespace Echo
 {
 #ifdef ECHO_EDITOR_MODE
 	// modify qsplitter stretch factor
-	void qSplitterSetStretchFactor(QWidget* widget, int index, int stretch);
+	typedef void (*qSplitterSetStretchFactorFun)(QWidget* widget, int index, int stretch);
 #endif
 }
