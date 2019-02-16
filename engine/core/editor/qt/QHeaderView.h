@@ -16,10 +16,10 @@ namespace Echo
 	};
 
 	// resize section
-	void qHeaderViewResizeSection(QWidget* header, int logicalIndex, int size);
+	typedef void (*qHeaderViewResizeSectionFun)(QWidget* header, int logicalIndex, int size);
 
 	// set section size mode
-	void qHeaderViewSetSectionResizeMode(QWidget* header, int logicalIndex, int mode);
+	typedef void (*qHeaderViewSetSectionResizeModeFun)(QWidget* header, int logicalIndex, int mode);
 }
 
 #endif

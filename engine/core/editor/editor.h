@@ -150,6 +150,13 @@ namespace Echo
         
         // scale
         qGraphicsViewSetScaleFun qGraphicsViewSetScale = nullptr;
+        
+    public:
+        // resize section
+        qHeaderViewResizeSectionFun qHeaderViewResizeSection = nullptr;
+        
+        // set section size mode
+        qHeaderViewSetSectionResizeModeFun qHeaderViewSetSectionResizeMode = nullptr;
 	};
 }
 

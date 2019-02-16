@@ -709,9 +709,9 @@ namespace Echo
 			{
 				QWidget* header = qTreeWidgetHeader(nodeTreeWidget);
 
-				qHeaderViewResizeSection(header, 1, 30);
-				qHeaderViewSetSectionResizeMode(header, 1, QHeaderViewResizeMode::Fixed);
-				qHeaderViewResizeSection(header, 0, curWidth - 30);
+				EditorApi.qHeaderViewResizeSection(header, 1, 30);
+				EditorApi.qHeaderViewSetSectionResizeMode(header, 1, QHeaderViewResizeMode::Fixed);
+				EditorApi.qHeaderViewResizeSection(header, 0, curWidth - 30);
 				m_nodeTreeWidgetWidth = qTreeWidgetWidth(nodeTreeWidget);
 			}
 		}
