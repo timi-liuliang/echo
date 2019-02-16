@@ -109,6 +109,34 @@ namespace Echo
         
         // set moveable
         qGraphicsItemSetMoveableFun qGraphicsItemSetMoveable = nullptr;
+        
+    public:
+        // create a QGraphicsScene
+        qGraphicsSceneNewFun qGraphicsSceneNew = nullptr;
+        
+        // add widget to QGraphicsScene
+        qGraphicsSceneAddWidgetFun qGraphicsSceneAddWidget = nullptr;
+        
+        // add line
+        qGraphicsSceneAddLineFun qGraphicsSceneAddLine = nullptr;
+        
+        // add rect
+        qGraphicsSceneAddRectFun qGraphicsSceneAddRect = nullptr;
+        
+        // add path
+        qGraphicsSceneAddPathFun qGraphicsSceneAddPath = nullptr;
+        
+        // add simple text
+        qGraphicsSceneAddSimpleTextFun qGraphicsSceneAddSimpleText = nullptr;
+        
+        // add eclipse
+        qGraphicsSceneAddEclipseFun qGraphicsSceneAddEclipse = nullptr;
+        
+        // remove item
+        qGraphicsSceneDeleteWidgetFun qGraphicsSceneDeleteWidget = nullptr;
+        
+        // delete item
+        qGraphicsSceneDeleteItemFun qGraphicsSceneDeleteItem = nullptr;
 	};
 }
 

@@ -73,7 +73,7 @@ namespace Echo
 		qConnect(qFindChild(m_ui, "m_graphicsView"), QSIGNAL(customContextMenuRequested(const QPoint&)), this, createMethodBind(&TimelinePanel::onRightClickGraphicsView));
 
 		// create QGraphicsScene
-		m_graphicsScene = qGraphicsSceneNew();
+		m_graphicsScene = EditorApi.qGraphicsSceneNew();
 		qGraphicsViewSetScene(qFindChild(m_ui, "m_graphicsView"), m_graphicsScene);
 
 		// wheel event
@@ -406,7 +406,7 @@ namespace Echo
 		{
 			if (m_curveItems[i])
 			{
-				qGraphicsSceneDeleteItem(m_graphicsScene, m_curveItems[i]);
+				EditorApi.qGraphicsSceneDeleteItem(m_graphicsScene, m_curveItems[i]);
 				m_curveItems[i] = nullptr;
 			}
 		}
@@ -421,7 +421,7 @@ namespace Echo
 				{
 					Vector2 keyPos;
 					calcKeyPosByTimeAndValue( animProperty->getLength(), 0.f, keyPos);
-					m_curveItems[0] = qGraphicsSceneAddLine(m_graphicsScene, 0.f, 0.f, keyPos.x, 0.f, Color(1.f, 0.f, 0.f, 0.7f));
+					m_curveItems[0] = EditorApi.qGraphicsSceneAddLine(m_graphicsScene, 0.f, 0.f, keyPos.x, 0.f, Color(1.f, 0.f, 0.f, 0.7f));
 				}
 				break;
 			case AnimProperty::Type::Vector3:
@@ -449,9 +449,9 @@ namespace Echo
 						}
 					}
 
-					m_curveItems[0] = qGraphicsSceneAddPath(m_graphicsScene, curvePaths[0], 2.5f, Color( 1.f, 0.f, 0.f, 0.7f));
-					m_curveItems[1] = qGraphicsSceneAddPath(m_graphicsScene, curvePaths[1], 2.5f, Color( 0.f, 1.f, 0.f, 0.7f));
-					m_curveItems[2] = qGraphicsSceneAddPath(m_graphicsScene, curvePaths[2], 2.5f, Color( 0.f, 0.f, 1.f, 0.7f));
+					m_curveItems[0] = EditorApi.qGraphicsSceneAddPath(m_graphicsScene, curvePaths[0], 2.5f, Color( 1.f, 0.f, 0.f, 0.7f));
+					m_curveItems[1] = EditorApi.qGraphicsSceneAddPath(m_graphicsScene, curvePaths[1], 2.5f, Color( 0.f, 1.f, 0.f, 0.7f));
+					m_curveItems[2] = EditorApi.qGraphicsSceneAddPath(m_graphicsScene, curvePaths[2], 2.5f, Color( 0.f, 0.f, 1.f, 0.7f));
 				}
 			}
 			break;
@@ -466,7 +466,7 @@ namespace Echo
 		{
 			for (QGraphicsItem* item : m_curveKeyItems[i])
 			{
-				qGraphicsSceneDeleteItem(m_graphicsScene, item);
+				EditorApi.qGraphicsSceneDeleteItem(m_graphicsScene, item);
 			}
 
 			m_curveKeyItems[i].clear();
@@ -474,7 +474,7 @@ namespace Echo
 
 		for (QGraphicsProxyWidget* widget : m_curveKeyWidgets)
 		{
-			qGraphicsSceneDeleteWidget(m_graphicsScene, widget);
+			EditorApi.qGraphicsSceneDeleteWidget(m_graphicsScene, widget);
 		}
 		m_curveKeyWidgets.clear();
 
@@ -501,7 +501,7 @@ namespace Echo
 							calcKeyPosByTimeAndValue(t, value, center);
 
 							QWidget* checkBox = EditorApi.qCheckBoxNew();
-							QGraphicsProxyWidget* widget = qGraphicsSceneAddWidget(m_graphicsScene, checkBox);
+							QGraphicsProxyWidget* widget = EditorApi.qGraphicsSceneAddWidget(m_graphicsScene, checkBox);
 
 							EditorApi.qGraphicsProxyWidgetSetPos(widget, center.x, 0.f);
 							EditorApi.qGraphicsProxyWidgetSetZValue(widget, 250.f);
@@ -542,7 +542,7 @@ namespace Echo
 							Vector2 center;
 							calcKeyPosByTimeAndValue(t, value, center);
 
-							QGraphicsItem* item = qGraphicsSceneAddEclipse(m_graphicsScene, center.x - m_keyRadius, center.y - m_keyRadius, m_keyRadius * 2.f, m_keyRadius*2.f, KeyColors[curveIdx]);
+							QGraphicsItem* item = EditorApi.qGraphicsSceneAddEclipse(m_graphicsScene, center.x - m_keyRadius, center.y - m_keyRadius, m_keyRadius * 2.f, m_keyRadius*2.f, KeyColors[curveIdx]);
 
 							// set userdata
 							String userData = StringUtil::Format("%s,%s,%s,%d,%d", m_currentEditAnim.c_str(), objectPath.c_str(), propertyName.c_str(), curveIdx, keyIdx);
@@ -604,7 +604,7 @@ namespace Echo
 		{
 			m_curveKeyLineEdit = qLineEditNew();
 			qLineEditSetMaximumWidth(m_curveKeyLineEdit, 100);
-			m_curveKeyLineEditProxyWidget = qGraphicsSceneAddWidget(m_graphicsScene, m_curveKeyLineEdit);
+			m_curveKeyLineEditProxyWidget = EditorApi.qGraphicsSceneAddWidget(m_graphicsScene, m_curveKeyLineEdit);
 
 			qConnect(m_curveKeyLineEdit, QSIGNAL(editingFinished()), this, createMethodBind(&TimelinePanel::onCurveKeyEditingFinished));
 		}
@@ -752,7 +752,7 @@ namespace Echo
 
 			for (QGraphicsItem* item : m_rulerItems)
 			{
-				qGraphicsSceneDeleteItem(m_graphicsScene, item);
+				EditorApi.qGraphicsSceneDeleteItem(m_graphicsScene, item);
 			}
 			m_rulerItems.clear();
 
@@ -761,15 +761,15 @@ namespace Echo
 
 			// rulder bottom
 			Color bgColor; bgColor.setRGBA(83, 83, 83, 255);
-			m_rulerItems.push_back(qGraphicsSceneAddRect(m_graphicsScene, std::max<float>(float(-keyWidth) + m_rulerLeft, -keyWidth), -1 + m_rulerTop, float(keyCount * keyWidth) + keyWidth, m_rulerHeight, bgColor));
-			m_rulerItems.push_back(qGraphicsSceneAddLine(m_graphicsScene, std::max<float>(float(-keyWidth) + m_rulerLeft, -keyWidth), m_rulerHeight + m_rulerTop, float(keyCount * keyWidth) + keyWidth + m_rulerLeft, m_rulerHeight + m_rulerTop, m_rulerColor));
+			m_rulerItems.push_back(EditorApi.qGraphicsSceneAddRect(m_graphicsScene, std::max<float>(float(-keyWidth) + m_rulerLeft, -keyWidth), -1 + m_rulerTop, float(keyCount * keyWidth) + keyWidth, m_rulerHeight, bgColor));
+			m_rulerItems.push_back(EditorApi.qGraphicsSceneAddLine(m_graphicsScene, std::max<float>(float(-keyWidth) + m_rulerLeft, -keyWidth), m_rulerHeight + m_rulerTop, float(keyCount * keyWidth) + keyWidth + m_rulerLeft, m_rulerHeight + m_rulerTop, m_rulerColor));
 
 			// key line
 			for (int i = 0; i <= keyCount; i++)
 			{
 				float xPos = i * keyWidth;
 				if(xPos+m_rulerLeft>=0)
-					m_rulerItems.push_back(qGraphicsSceneAddLine(m_graphicsScene, xPos + m_rulerLeft, 18.f + m_rulerTop, xPos + m_rulerLeft, m_rulerHeight + m_rulerTop, m_rulerColor));
+					m_rulerItems.push_back(EditorApi.qGraphicsSceneAddLine(m_graphicsScene, xPos + m_rulerLeft, 18.f + m_rulerTop, xPos + m_rulerLeft, m_rulerHeight + m_rulerTop, m_rulerColor));
 			}
 
 			// draw Text
@@ -783,7 +783,7 @@ namespace Echo
 					calcKeyTimeAndValueByPos(textPos, time, value);
 					if (time >= 0)
 					{
-						QGraphicsItem* textItem = qGraphicsSceneAddSimpleText(m_graphicsScene, StringUtil::Format("%d", time).c_str(), m_rulerColor);
+						QGraphicsItem* textItem = EditorApi.qGraphicsSceneAddSimpleText(m_graphicsScene, StringUtil::Format("%d", time).c_str(), m_rulerColor);
 						if (textItem)
 						{
 							float halfWidth = EditorApi.qGraphicsItemWidth(textItem) * 0.4f /*0.5f*/;
@@ -809,7 +809,7 @@ namespace Echo
 	{
 		for (QGraphicsItem* item : m_rulerHItems)
 		{
-			qGraphicsSceneDeleteItem(m_graphicsScene, item);
+			EditorApi.qGraphicsSceneDeleteItem(m_graphicsScene, item);
 		}
 		m_rulerHItems.clear();
 
@@ -819,7 +819,7 @@ namespace Echo
 		// rulder bottom
 		Color bgColor; bgColor.setRGBA(83, 83, 83, 255);
 		//m_rulerItems.push_back(qGraphicsSceneAddRect(m_graphicsScene, std::max<float>(float(-keyWidth) + m_rulerLeft, -keyWidth), -1 + m_rulerTop, float(keyCount * keyWidth) + keyWidth, m_rulerHeight, bgColor));
-		m_rulerItems.push_back(qGraphicsSceneAddLine(m_graphicsScene, std::max<float>(keyWidth + m_rulerLeft, -keyWidth), m_rulerHeight + m_rulerTop, std::max<float>(keyWidth + m_rulerLeft, -keyWidth), float(keyCount * keyWidth) + keyWidth + m_rulerLeft, m_rulerColor));
+		m_rulerItems.push_back(EditorApi.qGraphicsSceneAddLine(m_graphicsScene, std::max<float>(keyWidth + m_rulerLeft, -keyWidth), m_rulerHeight + m_rulerTop, std::max<float>(keyWidth + m_rulerLeft, -keyWidth), float(keyCount * keyWidth) + keyWidth + m_rulerLeft, m_rulerColor));
 
 		//// key line
 		//for (int i = 0; i <= keyCount; i++)
