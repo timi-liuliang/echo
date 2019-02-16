@@ -137,6 +137,19 @@ namespace Echo
         
         // delete item
         qGraphicsSceneDeleteItemFun qGraphicsSceneDeleteItem = nullptr;
+        
+    public:
+        // disable viewport update
+        qGraphicsViewDisableViewportAutoUpdateFun qGraphicsViewDisableViewportAutoUpdate = nullptr;
+        
+        // get view port
+        qGraphicsViewSceneRectFun qGraphicsViewSceneRect = nullptr;
+        
+        // create a QGraphicsScene
+        qGraphicsViewSetSceneFun qGraphicsViewSetScene = nullptr;
+        
+        // scale
+        qGraphicsViewSetScaleFun qGraphicsViewSetScale = nullptr;
 	};
 }
 

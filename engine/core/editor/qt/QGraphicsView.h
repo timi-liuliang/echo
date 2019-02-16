@@ -8,16 +8,16 @@
 namespace Echo
 {
 	// disable viewport update
-	void qGraphicsViewDisableViewportAutoUpdate(QWidget* graphicsView);
+	typedef void (*qGraphicsViewDisableViewportAutoUpdateFun)(QWidget* graphicsView);
 
 	// get view port
-	void qGraphicsViewSceneRect(QWidget* view, Rect& rect);
+	typedef void (*qGraphicsViewSceneRectFun)(QWidget* view, Rect& rect);
 
 	// create a QGraphicsScene
-	void qGraphicsViewSetScene(QWidget* graphicsView, QObject* graphicsScene);
+	typedef void (*qGraphicsViewSetSceneFun)(QWidget* graphicsView, QObject* graphicsScene);
 
 	// scale
-	void qGraphicsViewSetScale(QWidget* view, float scaleX, float scaleY);
+	typedef void (*qGraphicsViewSetScaleFun)(QWidget* view, float scaleX, float scaleY);
 }
 
 #endif

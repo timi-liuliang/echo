@@ -74,7 +74,7 @@ namespace Echo
 
 		// create QGraphicsScene
 		m_graphicsScene = EditorApi.qGraphicsSceneNew();
-		qGraphicsViewSetScene(qFindChild(m_ui, "m_graphicsView"), m_graphicsScene);
+		EditorApi.qGraphicsViewSetScene(qFindChild(m_ui, "m_graphicsView"), m_graphicsScene);
 
 		// wheel event
 		qConnect( m_graphicsScene, QSIGNAL(wheelEvent(QGraphicsSceneWheelEvent*)), this, createMethodBind(&TimelinePanel::onGraphicsSceneWheelEvent));
@@ -744,7 +744,7 @@ namespace Echo
 	{
 		// test view port rect
 		Rect viewRect;
-		qGraphicsViewSceneRect(qFindChild(m_ui, "m_graphicsView"), viewRect);
+		EditorApi.qGraphicsViewSceneRect(qFindChild(m_ui, "m_graphicsView"), viewRect);
 		if (viewRect.left != m_rulerLeft || viewRect.top != m_rulerTop)
 		{
 			m_rulerLeft = viewRect.left;
@@ -1024,7 +1024,7 @@ namespace Echo
 		}
 
 		Rect viewRect;
-		qGraphicsViewSceneRect(qFindChild( m_ui, "m_graphicsView"), viewRect);
+		EditorApi.qGraphicsViewSceneRect(qFindChild( m_ui, "m_graphicsView"), viewRect);
 
 		m_unitsPerPixel = (totalRect.getHeight() + 20.f) / viewRect.getHeight();
 
