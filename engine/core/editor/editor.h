@@ -179,6 +179,16 @@ namespace Echo
         
         // height
         qLineEditHeightFun qLineEditHeight = nullptr;
+        
+    public:
+        // create a new QMenu
+        qMenuNewFun qMenuNew = nullptr;
+        
+        // void addAction(QAction *action)
+        qMenuAddActionFun qMenuAddAction = nullptr;
+        
+        // QAction *exec();
+        qMenuExecFun qMenuExec = nullptr;
 	};
 }
 

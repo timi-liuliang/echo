@@ -7,13 +7,13 @@
 namespace Echo
 {
 	// create a new QMenu
-	QWidget* qMenuNew(QWidget* parent=nullptr);
+	typedef QWidget* (*qMenuNewFun)(QWidget* parent);
 
 	// void addAction(QAction *action)
-	void qMenuAddAction(QWidget* menu, QAction* action);
+	typedef void (*qMenuAddActionFun)(QWidget* menu, QAction* action);
 
 	// QAction *exec();
-	void qMenuExec(QWidget* menu);
+	typedef void (*qMenuExecFun)(QWidget* menu);
 }
 
 #endif

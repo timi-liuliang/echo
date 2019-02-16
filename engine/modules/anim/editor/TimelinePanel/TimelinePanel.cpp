@@ -162,18 +162,18 @@ namespace Echo
 	{
 		if (!m_addObjectMenu)
 		{
-			m_addObjectMenu = qMenuNew(m_ui);
+			m_addObjectMenu = EditorApi.qMenuNew(m_ui);
 
-			qMenuAddAction(m_addObjectMenu, qFindChildAction(m_ui, "m_actionAddNode"));
-			qMenuAddAction(m_addObjectMenu, qFindChildAction(m_ui, "m_actionAddSetting"));
-			qMenuAddAction(m_addObjectMenu, qFindChildAction(m_ui, "m_actionAddResource"));
+			EditorApi.qMenuAddAction(m_addObjectMenu, qFindChildAction(m_ui, "m_actionAddNode"));
+			EditorApi.qMenuAddAction(m_addObjectMenu, qFindChildAction(m_ui, "m_actionAddSetting"));
+			EditorApi.qMenuAddAction(m_addObjectMenu, qFindChildAction(m_ui, "m_actionAddResource"));
 
 			qConnect(qFindChildAction(m_ui, "m_actionAddNode"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddNode));
 			qConnect(qFindChildAction(m_ui, "m_actionAddSetting"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddSetting));
 			qConnect(qFindChildAction(m_ui, "m_actionAddResource"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddResource));
 		}
 
-		qMenuExec(m_addObjectMenu);
+		EditorApi.qMenuExec(m_addObjectMenu);
 	}
 
 	void TimelinePanel::onAddNode()
@@ -893,18 +893,18 @@ namespace Echo
 		{
 			if (animProperty->getType() == AnimProperty::Type::Bool)
 			{
-				m_keyEditMenu = qMenuNew(m_ui);
+				m_keyEditMenu = EditorApi.qMenuNew(m_ui);
 
-				qMenuAddAction(m_keyEditMenu, qFindChildAction(m_ui, "m_actionAddBoolKeyToCurve"));
+				EditorApi.qMenuAddAction(m_keyEditMenu, qFindChildAction(m_ui, "m_actionAddBoolKeyToCurve"));
 				qConnect(qFindChildAction(m_ui, "m_actionAddBoolKeyToCurve"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddBoolKeyToCurve));
 			}
 			else if (animProperty->getType() == AnimProperty::Type::Vector3)
 			{
-				m_keyEditMenu = qMenuNew(m_ui);
+				m_keyEditMenu = EditorApi.qMenuNew(m_ui);
 
-				qMenuAddAction(m_keyEditMenu, qFindChildAction(m_ui, "m_actionAddKeyToCurveRed"));
-				qMenuAddAction(m_keyEditMenu, qFindChildAction(m_ui, "m_actionAddKeyToCurveGreen"));
-				qMenuAddAction(m_keyEditMenu, qFindChildAction(m_ui, "m_actionAddKeyToCurveBlue"));
+				EditorApi.qMenuAddAction(m_keyEditMenu, qFindChildAction(m_ui, "m_actionAddKeyToCurveRed"));
+				EditorApi.qMenuAddAction(m_keyEditMenu, qFindChildAction(m_ui, "m_actionAddKeyToCurveGreen"));
+				EditorApi.qMenuAddAction(m_keyEditMenu, qFindChildAction(m_ui, "m_actionAddKeyToCurveBlue"));
 				qConnect(qFindChildAction(m_ui, "m_actionAddKeyToCurveRed"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddKeyToCurveRed));
 				qConnect(qFindChildAction(m_ui, "m_actionAddKeyToCurveGreen"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddKeyToCurveGreen));
 				qConnect(qFindChildAction(m_ui, "m_actionAddKeyToCurveBlue"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddKeyToCurveBlue));
@@ -915,7 +915,7 @@ namespace Echo
 		m_keyEditCursorScenePos = EditorApi.qObjectGetEventAll(m_graphicsScene).graphicsSceneMouseEvent.scenePos;
 
 		// show menu
-		qMenuExec(m_keyEditMenu);
+		EditorApi.qMenuExec(m_keyEditMenu);
 	}
 
 	void TimelinePanel::onGraphicsSceneWheelEvent()
