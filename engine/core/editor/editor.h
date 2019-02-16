@@ -157,6 +157,28 @@ namespace Echo
         
         // set section size mode
         qHeaderViewSetSectionResizeModeFun qHeaderViewSetSectionResizeMode = nullptr;
+        
+    public:
+        // new QLineEdit
+        qLineEditNewFun qLineEditNew = nullptr;
+        
+        // set text
+        qLineEditSetTextFun qLineEditSetText = nullptr;
+        
+        // set maximum width
+        qLineEditSetMaximumWidthFun qLineEditSetMaximumWidth = nullptr;
+        
+        // set cursor position
+        qLineEditSetCursorPositionFun qLineEditSetCursorPosition = nullptr;
+        
+        // get text of QLineEdit
+        qLineEditTextFun qLineEditText = nullptr;
+        
+        // width
+        qLineEditWidthFun qLineEditWidth = nullptr;
+        
+        // height
+        qLineEditHeightFun qLineEditHeight = nullptr;
 	};
 }
 

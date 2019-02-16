@@ -7,25 +7,25 @@
 namespace Echo
 {
 	// new QLineEdit
-	QWidget* qLineEditNew();
+	typedef QWidget* (*qLineEditNewFun)();
 
 	// set text
-	void qLineEditSetText(QWidget* widget, const String& text);
+	typedef void (*qLineEditSetTextFun)(QWidget* widget, const String& text);
 
 	// set maximum width
-	void qLineEditSetMaximumWidth(QWidget* widget, int width);
+	typedef void (*qLineEditSetMaximumWidthFun)(QWidget* widget, int width);
 
 	// set cursor position
-	void qLineEditSetCursorPosition(QWidget* widget, int position);
+	typedef void (*qLineEditSetCursorPositionFun)(QWidget* widget, int position);
 
 	// get text of QLineEdit
-	String qLineEditText(QWidget* widget);
+	typedef String (*qLineEditTextFun)(QWidget* widget);
 
 	// width
-	int qLineEditWidth(QWidget* widget);
+	typedef int (*qLineEditWidthFun)(QWidget* widget);
 
 	// height
-	int qLineEditHeight(QWidget* widget);
+	typedef int (*qLineEditHeightFun)(QWidget* widget);
 }
 
 #endif

@@ -229,7 +229,7 @@ namespace Echo
 	void TimelinePanel::syncClipTimeLength()
 	{
 		AnimClip* clip = m_timeline->getClip(m_currentEditAnim.c_str());
-		qLineEditSetText( qFindChild(m_ui, "m_clipLengthLineEdit"), clip ? StringUtil::Format("%d", clip->m_length) : StringUtil::BLANK);
+		EditorApi.qLineEditSetText( qFindChild(m_ui, "m_clipLengthLineEdit"), clip ? StringUtil::Format("%d", clip->m_length) : StringUtil::BLANK);
 	}
 
 	void TimelinePanel::syncClipListDataToEditor()
@@ -602,8 +602,8 @@ namespace Echo
 		// show key value editor widget
 		if (!m_curveKeyLineEdit)
 		{
-			m_curveKeyLineEdit = qLineEditNew();
-			qLineEditSetMaximumWidth(m_curveKeyLineEdit, 100);
+			m_curveKeyLineEdit = EditorApi.qLineEditNew();
+			EditorApi.qLineEditSetMaximumWidth(m_curveKeyLineEdit, 100);
 			m_curveKeyLineEditProxyWidget = EditorApi.qGraphicsSceneAddWidget(m_graphicsScene, m_curveKeyLineEdit);
 
 			qConnect(m_curveKeyLineEdit, QSIGNAL(editingFinished()), this, createMethodBind(&TimelinePanel::onCurveKeyEditingFinished));
@@ -619,10 +619,10 @@ namespace Echo
 			if (getKeyInfo(keyInfo, userDataSplits[0], userDataSplits[1], userDataSplits[2], StringUtil::ParseI32(userDataSplits[3]), StringUtil::ParseI32(userDataSplits[4])))
 			{
 				m_curveKeyItem = sender;
-				qLineEditSetText( m_curveKeyLineEdit, StringUtil::ToString( keyInfo.m_value));
+				EditorApi.qLineEditSetText( m_curveKeyLineEdit, StringUtil::ToString( keyInfo.m_value));
 
-				int halfWidth = qLineEditWidth(m_curveKeyLineEdit) / 2;
-				int halfHeight = qLineEditHeight(m_curveKeyLineEdit) / 2;
+				int halfWidth = EditorApi.qLineEditWidth(m_curveKeyLineEdit) / 2;
+				int halfHeight = EditorApi.qLineEditHeight(m_curveKeyLineEdit) / 2;
 				Vector2 mouseScenePos = EditorApi.qGraphicsItemGetEventAll(sender).graphicsSceneMouseEvent.scenePos;
 				EditorApi.qGraphicsProxyWidgetSetPos(m_curveKeyLineEditProxyWidget, mouseScenePos.x + m_keyRadius, mouseScenePos.y - halfHeight);
 				EditorApi.qGraphicsProxyWidgetSetZValue(m_curveKeyLineEditProxyWidget, 250.f);
@@ -630,12 +630,12 @@ namespace Echo
 		}
 
 		qWidgetSetVisible(m_curveKeyLineEdit, true);
-		qLineEditSetCursorPosition(m_curveKeyLineEdit, 0);
+		EditorApi.qLineEditSetCursorPosition(m_curveKeyLineEdit, 0);
 	}
 
 	void TimelinePanel::onCurveKeyEditingFinished()
 	{
-		String valueStr = qLineEditText(m_curveKeyLineEdit);
+		String valueStr = EditorApi.qLineEditText(m_curveKeyLineEdit);
 		if (!valueStr.empty() && m_curveKeyItem)
 		{
 			String userData = EditorApi.qGraphicsItemUserData(m_curveKeyItem);
@@ -733,7 +733,7 @@ namespace Echo
 			AnimClip* clip = m_timeline->getClip(m_currentEditAnim.c_str());
 			if (clip)
 			{
-				ui32 newLength = StringUtil::ParseUI32( qLineEditText(qFindChild(m_ui, "m_clipLengthLineEdit")), clip->m_length);
+				ui32 newLength = StringUtil::ParseUI32( EditorApi.qLineEditText(qFindChild(m_ui, "m_clipLengthLineEdit")), clip->m_length);
 				clip->setLength(newLength);
 			}
 			
