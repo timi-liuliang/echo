@@ -6,6 +6,6 @@ namespace Echo
 {
 #ifdef ECHO_EDITOR_MODE
 	// load ui file by path. then return the widget
-	QWidget* qLoadUi(const char* uiFilePath);
+	typedef QWidget* (*qLoadUiFun)(const char* uiFilePath);
 #endif
 }

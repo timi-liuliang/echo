@@ -22,7 +22,7 @@ namespace Echo
 
 		m_timeline = ECHO_DOWN_CAST<Timeline*>(obj);
 
-		m_ui = qLoadUi("engine/modules/anim/editor/TimelinePanel/TimelinePanel.ui");
+		m_ui = EditorApi.qLoadUi("engine/modules/anim/editor/TimelinePanel/TimelinePanel.ui");
 
 		QWidget* splitter = qFindChild(m_ui, "m_splitter");
 		if (splitter)

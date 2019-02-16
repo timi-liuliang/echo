@@ -206,6 +206,10 @@ namespace Echo
         
         // is toolbutton checked
         qToolButtonIsCheckedFun qToolButtonIsChecked = nullptr;
+        
+    public:
+        // load ui file by path. then return the widget
+        qLoadUiFun qLoadUi = nullptr;
 	};
 }
 
