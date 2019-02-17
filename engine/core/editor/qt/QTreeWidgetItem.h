@@ -7,31 +7,31 @@
 namespace Echo
 {
 	// create a new QTreeWidgetItem
-	QTreeWidgetItem* qTreeWidgetItemNew();
+	typedef QTreeWidgetItem* (*qTreeWidgetItemNewFun)();
 
 	// get parent
-	QTreeWidgetItem* qTreeWidgetItemParent(QTreeWidgetItem* item);
+	typedef QTreeWidgetItem* (*qTreeWidgetItemParentFun)(QTreeWidgetItem* item);
 
 	// add child item
-	void qTreeWidgetItemAddChild(QTreeWidgetItem* parent, QTreeWidgetItem* child);
+	typedef void (*qTreeWidgetItemAddChildFun)(QTreeWidgetItem* parent, QTreeWidgetItem* child);
 
 	// set text
-	void qTreeWidgetItemSetText(QTreeWidgetItem* item, int column, const char* text);
+	typedef void (*qTreeWidgetItemSetTextFun)(QTreeWidgetItem* item, int column, const char* text);
 	
 	// get text
-	String qTreeWidgetItemText(QTreeWidgetItem* item, int column);
+	typedef String (*qTreeWidgetItemTextFun)(QTreeWidgetItem* item, int column);
 
 	// set icon
-	void qTreeWidgetItemSetIcon(QTreeWidgetItem* item, int column, const char* iconPath);
+	typedef void (*qTreeWidgetItemSetIconFun)(QTreeWidgetItem* item, int column, const char* iconPath);
 
 	// get user data
-	String qTreeWidgetItemUserData(QTreeWidgetItem* item, int column);
+	typedef String (*qTreeWidgetItemUserDataFun)(QTreeWidgetItem* item, int column);
 
 	// set user data
-	void qTreeWidgetItemSetUserData(QTreeWidgetItem* item, int column, const char* userData);
+	typedef void (*qTreeWidgetItemSetUserDataFun)(QTreeWidgetItem* item, int column, const char* userData);
 
 	// expand QTreeWidgetItem
-	void qTreeWidgetItemSetExpanded(QTreeWidgetItem* item, bool aexpand);
+	typedef void (*qTreeWidgetItemSetExpandedFun)(QTreeWidgetItem* item, bool aexpand);
 }
 
 #endif

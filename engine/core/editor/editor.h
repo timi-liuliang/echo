@@ -229,6 +229,34 @@ namespace Echo
         
         // clear
         qTreeWidgetClearFun qTreeWidgetClear = nullptr;
+        
+    public:
+        // create a new QTreeWidgetItem
+        qTreeWidgetItemNewFun qTreeWidgetItemNew = nullptr;
+        
+        // get parent
+        qTreeWidgetItemParentFun qTreeWidgetItemParent = nullptr;
+        
+        // add child item
+        qTreeWidgetItemAddChildFun qTreeWidgetItemAddChild = nullptr;
+        
+        // set text
+        qTreeWidgetItemSetTextFun qTreeWidgetItemSetText = nullptr;
+        
+        // get text
+        qTreeWidgetItemTextFun qTreeWidgetItemText = nullptr;
+        
+        // set icon
+        qTreeWidgetItemSetIconFun qTreeWidgetItemSetIcon = nullptr;
+        
+        // get user data
+        qTreeWidgetItemUserDataFun qTreeWidgetItemUserData = nullptr;
+        
+        // set user data
+        qTreeWidgetItemSetUserDataFun qTreeWidgetItemSetUserData = nullptr;
+        
+        // expand QTreeWidgetItem
+        qTreeWidgetItemSetExpandedFun qTreeWidgetItemSetExpanded = nullptr;
 	};
 }
 

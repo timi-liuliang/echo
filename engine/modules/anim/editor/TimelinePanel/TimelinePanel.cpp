@@ -267,21 +267,21 @@ namespace Echo
 					{
 						const Timeline::ObjectUserData& userData = any_cast<Timeline::ObjectUserData>(animNode->m_userData);
 						Node* node = m_timeline->getNode(userData.m_path.c_str());
-						QTreeWidgetItem* objetcItem = qTreeWidgetItemNew();
-						qTreeWidgetItemSetText(objetcItem, 0, userData.m_path.c_str());
-						qTreeWidgetItemSetUserData(objetcItem, 0, "object");
-						qTreeWidgetItemSetIcon(objetcItem, 0, Editor::instance()->getNodeIcon(node).c_str());
-						qTreeWidgetItemSetIcon(objetcItem, 1, "engine/modules/anim/editor/icon/add.png");
-						qTreeWidgetItemAddChild(rootItem, objetcItem);
+						QTreeWidgetItem* objetcItem = EditorApi.qTreeWidgetItemNew();
+						EditorApi.qTreeWidgetItemSetText(objetcItem, 0, userData.m_path.c_str());
+						EditorApi.qTreeWidgetItemSetUserData(objetcItem, 0, "object");
+						EditorApi.qTreeWidgetItemSetIcon(objetcItem, 0, Editor::instance()->getNodeIcon(node).c_str());
+						EditorApi.qTreeWidgetItemSetIcon(objetcItem, 1, "engine/modules/anim/editor/icon/add.png");
+						EditorApi.qTreeWidgetItemAddChild(rootItem, objetcItem);
 
 						for (AnimProperty* property : animNode->m_properties)
 						{
 							const String& propertyName = any_cast<String>(property->m_userData);
-							QTreeWidgetItem* propertyItem = qTreeWidgetItemNew();
-							qTreeWidgetItemSetText(propertyItem, 0, propertyName.c_str());
-							qTreeWidgetItemSetUserData(propertyItem, 0, "property");
-							qTreeWidgetItemSetExpanded(objetcItem, true);
-							qTreeWidgetItemAddChild(objetcItem, propertyItem);
+							QTreeWidgetItem* propertyItem = EditorApi.qTreeWidgetItemNew();
+							EditorApi.qTreeWidgetItemSetText(propertyItem, 0, propertyName.c_str());
+							EditorApi.qTreeWidgetItemSetUserData(propertyItem, 0, "property");
+							EditorApi.qTreeWidgetItemSetExpanded(objetcItem, true);
+							EditorApi.qTreeWidgetItemAddChild(objetcItem, propertyItem);
 						}
 					}
 				}
@@ -333,7 +333,7 @@ namespace Echo
 		int column = EditorApi.qTreeWidgetCurrentColumn(qFindChild(m_ui, "m_nodeTreeWidget"));
 		if (column == 1)
 		{
-			String text = qTreeWidgetItemText(item, 0);
+			String text = EditorApi.qTreeWidgetItemText(item, 0);
 			Node* node = m_timeline->getNode(text.c_str());
 			if (node)
 			{
@@ -344,11 +344,11 @@ namespace Echo
 					m_timeline->addProperty(m_currentEditAnim, node->getNodePathRelativeTo(m_timeline), propertyName, propertyType);
 
 					// addNodePropertyToEditor;
-					QTreeWidgetItem* propertyItem = qTreeWidgetItemNew();
-					qTreeWidgetItemSetText(propertyItem, 0, propertyName.c_str());
-					qTreeWidgetItemSetUserData(propertyItem, 0, "property");
-					qTreeWidgetItemSetExpanded(item, true);
-					qTreeWidgetItemAddChild(item, propertyItem);
+					QTreeWidgetItem* propertyItem = EditorApi.qTreeWidgetItemNew();
+					EditorApi.qTreeWidgetItemSetText(propertyItem, 0, propertyName.c_str());
+					EditorApi.qTreeWidgetItemSetUserData(propertyItem, 0, "property");
+					EditorApi.qTreeWidgetItemSetExpanded(item, true);
+					EditorApi.qTreeWidgetItemAddChild(item, propertyItem);
 				}
 			}
 		}
@@ -360,12 +360,12 @@ namespace Echo
 		int column = EditorApi.qTreeWidgetCurrentColumn(qFindChild(m_ui, "m_nodeTreeWidget"));
 		if (column == 0)
 		{
-			String userData = qTreeWidgetItemUserData( item, column);
+			String userData = EditorApi.qTreeWidgetItemUserData( item, column);
 			if (userData == "property")
 			{
-				QTreeWidgetItem* parent = qTreeWidgetItemParent( item);
-				m_currentEditObjectPath = qTreeWidgetItemText( parent, 0);
-				m_currentEditPropertyName = qTreeWidgetItemText(item, 0);
+				QTreeWidgetItem* parent = EditorApi.qTreeWidgetItemParent( item);
+				m_currentEditObjectPath = EditorApi.qTreeWidgetItemText( parent, 0);
+				m_currentEditPropertyName = EditorApi.qTreeWidgetItemText(item, 0);
 			}
 			else
 			{
