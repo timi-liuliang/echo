@@ -259,6 +259,12 @@ namespace Echo
         qTreeWidgetItemSetExpandedFun qTreeWidgetItemSetExpanded = nullptr;
         
     public:
+        // connect signal slot
+        qConnectObjectFun qConnectObject = nullptr;
+        qConnectWidgetFun qConnectWidget = nullptr;
+        qConnectActionFun qConnectAction = nullptr;
+        qConnectGraphicsItemFun qConnectGraphicsItem = nullptr;
+        
         // find child widget by name
         qFindChildFun qFindChild = nullptr;
         

@@ -31,10 +31,10 @@ class QGraphicsTextItem;
 namespace Echo
 {
 	// connect signal slot
-	void qConnect(QObject* sender, const char* signal, void* receiver, ClassMethodBind* slot);
-	void qConnect(QWidget* sender, const char* signal, void* receiver, ClassMethodBind* slot);
-	void qConnect(QAction* sender, const char* signal, void* receiver, ClassMethodBind* slot);
-	void qConnect(QGraphicsItem* sender, const char* signal, void* receiver, ClassMethodBind* slot);
+	typedef void (*qConnectObjectFun)(QObject* sender, const char* signal, void* receiver, ClassMethodBind* slot);
+	typedef void (*qConnectWidgetFun)(QWidget* sender, const char* signal, void* receiver, ClassMethodBind* slot);
+	typedef void (*qConnectActionFun)(QAction* sender, const char* signal, void* receiver, ClassMethodBind* slot);
+	typedef void (*qConnectGraphicsItemFun)(QGraphicsItem* sender, const char* signal, void* receiver, ClassMethodBind* slot);
 
 	// find child widget by name
 	typedef QWidget* (*qFindChildFun)( QWidget* root, const char* name);

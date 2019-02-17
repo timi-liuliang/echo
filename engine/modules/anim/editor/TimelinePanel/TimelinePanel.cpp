@@ -52,32 +52,32 @@ namespace Echo
 		EditorApi.qToolButtonSetIcon(EditorApi.qFindChild(m_ui, "m_curveWVisible"), "engine/modules/anim/editor/icon/curve_white.png");
 
 		// connect signal slots
-		qConnect(EditorApi.qFindChild(m_ui, "NewClip"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onNewClip));
-		qConnect(EditorApi.qFindChild(m_ui, "DuplicateClip"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onDuplicateClip));
-		qConnect(EditorApi.qFindChild(m_ui, "DeleteClip"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onDeleteClip));
-		qConnect(EditorApi.qFindChild(m_ui, "m_clipLengthLineEdit"), QSIGNAL(editingFinished()), this, createMethodBind(&TimelinePanel::onCurrentEditAnimLengthChanged));
-		qConnect(EditorApi.qFindChild(m_ui, "m_clips"), QSIGNAL(editTextChanged(const QString &)), this, createMethodBind(&TimelinePanel::onRenameClip));
-		qConnect(EditorApi.qFindChild(m_ui, "m_clips"), QSIGNAL(currentIndexChanged(int)), this, createMethodBind(&TimelinePanel::onCurrentEditAnimChanged));
-		qConnect(EditorApi.qFindChild(m_ui, "AddNode"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onAddObject));
-		qConnect(EditorApi.qFindChild(m_ui, "m_nodeTreeWidget"), QSIGNAL(itemClicked(QTreeWidgetItem*, int)), this, createMethodBind(&TimelinePanel::onSelectItem));
-		qConnect(EditorApi.qFindChild(m_ui, "Play"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onPlayAnim));
-		qConnect(EditorApi.qFindChild(m_ui, "Stop"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onStopAnim));
-		qConnect(EditorApi.qFindChild(m_ui, "Restart"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onRestartAnim));
+		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "NewClip"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onNewClip));
+		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "DuplicateClip"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onDuplicateClip));
+		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "DeleteClip"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onDeleteClip));
+		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_clipLengthLineEdit"), QSIGNAL(editingFinished()), this, createMethodBind(&TimelinePanel::onCurrentEditAnimLengthChanged));
+		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_clips"), QSIGNAL(editTextChanged(const QString &)), this, createMethodBind(&TimelinePanel::onRenameClip));
+		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_clips"), QSIGNAL(currentIndexChanged(int)), this, createMethodBind(&TimelinePanel::onCurrentEditAnimChanged));
+		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "AddNode"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onAddObject));
+		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_nodeTreeWidget"), QSIGNAL(itemClicked(QTreeWidgetItem*, int)), this, createMethodBind(&TimelinePanel::onSelectItem));
+		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "Play"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onPlayAnim));
+		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "Stop"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onStopAnim));
+		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "Restart"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onRestartAnim));
 
-		qConnect(EditorApi.qFindChild(m_ui, "m_curveXVisible"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onSwitchCurveVisibility));
-		qConnect(EditorApi.qFindChild(m_ui, "m_curveYVisible"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onSwitchCurveVisibility));
-		qConnect(EditorApi.qFindChild(m_ui, "m_curveZVisible"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onSwitchCurveVisibility));
-		qConnect(EditorApi.qFindChild(m_ui, "m_curveWVisible"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onSwitchCurveVisibility));
+		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_curveXVisible"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onSwitchCurveVisibility));
+		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_curveYVisible"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onSwitchCurveVisibility));
+		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_curveZVisible"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onSwitchCurveVisibility));
+		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_curveWVisible"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onSwitchCurveVisibility));
 
 		// connect signals
-		qConnect(EditorApi.qFindChild(m_ui, "m_graphicsView"), QSIGNAL(customContextMenuRequested(const QPoint&)), this, createMethodBind(&TimelinePanel::onRightClickGraphicsView));
+		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_graphicsView"), QSIGNAL(customContextMenuRequested(const QPoint&)), this, createMethodBind(&TimelinePanel::onRightClickGraphicsView));
 
 		// create QGraphicsScene
 		m_graphicsScene = EditorApi.qGraphicsSceneNew();
 		EditorApi.qGraphicsViewSetScene(EditorApi.qFindChild(m_ui, "m_graphicsView"), m_graphicsScene);
 
 		// wheel event
-		qConnect( m_graphicsScene, QSIGNAL(wheelEvent(QGraphicsSceneWheelEvent*)), this, createMethodBind(&TimelinePanel::onGraphicsSceneWheelEvent));
+		EditorApi.qConnectObject( m_graphicsScene, QSIGNAL(wheelEvent(QGraphicsSceneWheelEvent*)), this, createMethodBind(&TimelinePanel::onGraphicsSceneWheelEvent));
 
 		// draw ruler
 		switchCurveEditor();
@@ -168,9 +168,9 @@ namespace Echo
 			EditorApi.qMenuAddAction(m_addObjectMenu, EditorApi.qFindChildAction(m_ui, "m_actionAddSetting"));
 			EditorApi.qMenuAddAction(m_addObjectMenu, EditorApi.qFindChildAction(m_ui, "m_actionAddResource"));
 
-			qConnect(EditorApi.qFindChildAction(m_ui, "m_actionAddNode"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddNode));
-			qConnect(EditorApi.qFindChildAction(m_ui, "m_actionAddSetting"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddSetting));
-			qConnect(EditorApi.qFindChildAction(m_ui, "m_actionAddResource"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddResource));
+			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionAddNode"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddNode));
+			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionAddSetting"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddSetting));
+			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionAddResource"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddResource));
 		}
 
 		EditorApi.qMenuExec(m_addObjectMenu);
@@ -556,8 +556,8 @@ namespace Echo
 							EditorApi.qGraphicsItemSetMoveable(item, true);
 
 							// connect signal slots
-							qConnect(item, QSIGNAL(mouseDoubleClickEvent(QGraphicsSceneMouseEvent*)), this, createMethodBind(&TimelinePanel::onKeyDoubleClickedCurveKey));
-							qConnect(item, QSIGNAL(mouseMoveEvent(QGraphicsSceneMouseEvent*)), this, createMethodBind(&TimelinePanel::onKeyPositionChanged));
+							EditorApi.qConnectGraphicsItem(item, QSIGNAL(mouseDoubleClickEvent(QGraphicsSceneMouseEvent*)), this, createMethodBind(&TimelinePanel::onKeyDoubleClickedCurveKey));
+							EditorApi.qConnectGraphicsItem(item, QSIGNAL(mouseMoveEvent(QGraphicsSceneMouseEvent*)), this, createMethodBind(&TimelinePanel::onKeyPositionChanged));
 
 							m_curveKeyItems[curveIdx].push_back(item);
 						}
@@ -606,7 +606,7 @@ namespace Echo
 			EditorApi.qLineEditSetMaximumWidth(m_curveKeyLineEdit, 100);
 			m_curveKeyLineEditProxyWidget = EditorApi.qGraphicsSceneAddWidget(m_graphicsScene, m_curveKeyLineEdit);
 
-			qConnect(m_curveKeyLineEdit, QSIGNAL(editingFinished()), this, createMethodBind(&TimelinePanel::onCurveKeyEditingFinished));
+			EditorApi.qConnectWidget(m_curveKeyLineEdit, QSIGNAL(editingFinished()), this, createMethodBind(&TimelinePanel::onCurveKeyEditingFinished));
 		}
 
 		// get current key value
@@ -896,7 +896,7 @@ namespace Echo
 				m_keyEditMenu = EditorApi.qMenuNew(m_ui);
 
 				EditorApi.qMenuAddAction(m_keyEditMenu, EditorApi.qFindChildAction(m_ui, "m_actionAddBoolKeyToCurve"));
-				qConnect(EditorApi.qFindChildAction(m_ui, "m_actionAddBoolKeyToCurve"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddBoolKeyToCurve));
+				EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionAddBoolKeyToCurve"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddBoolKeyToCurve));
 			}
 			else if (animProperty->getType() == AnimProperty::Type::Vector3)
 			{
@@ -905,9 +905,9 @@ namespace Echo
 				EditorApi.qMenuAddAction(m_keyEditMenu, EditorApi.qFindChildAction(m_ui, "m_actionAddKeyToCurveRed"));
 				EditorApi.qMenuAddAction(m_keyEditMenu, EditorApi.qFindChildAction(m_ui, "m_actionAddKeyToCurveGreen"));
 				EditorApi.qMenuAddAction(m_keyEditMenu, EditorApi.qFindChildAction(m_ui, "m_actionAddKeyToCurveBlue"));
-				qConnect(EditorApi.qFindChildAction(m_ui, "m_actionAddKeyToCurveRed"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddKeyToCurveRed));
-				qConnect(EditorApi.qFindChildAction(m_ui, "m_actionAddKeyToCurveGreen"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddKeyToCurveGreen));
-				qConnect(EditorApi.qFindChildAction(m_ui, "m_actionAddKeyToCurveBlue"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddKeyToCurveBlue));
+				EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionAddKeyToCurveRed"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddKeyToCurveRed));
+				EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionAddKeyToCurveGreen"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddKeyToCurveGreen));
+				EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionAddKeyToCurveBlue"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddKeyToCurveBlue));
 			}
 		}
 
