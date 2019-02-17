@@ -257,6 +257,22 @@ namespace Echo
         
         // expand QTreeWidgetItem
         qTreeWidgetItemSetExpandedFun qTreeWidgetItemSetExpanded = nullptr;
+        
+    public:
+        // find child widget by name
+        qFindChildFun qFindChild = nullptr;
+        
+        // find child action by name
+        qFindChildActionFun qFindChildAction = nullptr;
+        
+        // set visible
+        qWidgetSetVisibleFun qWidgetSetVisible = nullptr;
+        
+        // set enabled
+        qWidgetSetEnableFun qWidgetSetEnable = nullptr;
+        
+        // delete QWidget
+        qDeleteWidgetFun qDeleteWidget = nullptr;
 	};
 }
 

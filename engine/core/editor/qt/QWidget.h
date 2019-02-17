@@ -37,19 +37,19 @@ namespace Echo
 	void qConnect(QGraphicsItem* sender, const char* signal, void* receiver, ClassMethodBind* slot);
 
 	// find child widget by name
-	QWidget* qFindChild( QWidget* root, const char* name);
+	typedef QWidget* (*qFindChildFun)( QWidget* root, const char* name);
 
 	// find child action by name
-	QAction* qFindChildAction(QWidget* root, const char* name);
+	typedef QAction* (*qFindChildActionFun)(QWidget* root, const char* name);
 
 	// set visible
-	void qWidgetSetVisible(QWidget* widget, bool visible);
+	typedef void (*qWidgetSetVisibleFun)(QWidget* widget, bool visible);
 
 	// set enabled
-	void qWidgetSetEnable(QWidget* widget, bool enabled);
+	typedef void (*qWidgetSetEnableFun)(QWidget* widget, bool enabled);
 
 	// delete QWidget
-	void qDeleteWidget(QWidget*& widget);
+	typedef void (*qDeleteWidgetFun)(QWidget*& widget);
 }
 
 #endif

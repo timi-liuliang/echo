@@ -1,4 +1,5 @@
 #include "bottom_panel_tab.h"
+#include "editor.h"
 
 namespace Echo
 {
@@ -11,7 +12,7 @@ namespace Echo
 
 	BottomPanelTab::~BottomPanelTab()
 	{
-		qDeleteWidget(m_ui);
+		EditorApi.qDeleteWidget(m_ui);
 	}
 #endif
 }
