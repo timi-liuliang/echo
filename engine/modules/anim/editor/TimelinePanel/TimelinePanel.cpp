@@ -255,12 +255,12 @@ namespace Echo
 		QWidget* nodeTreeWidget = qFindChild(m_ui, "m_nodeTreeWidget");
 		if (nodeTreeWidget)
 		{
-			qTreeWidgetClear(nodeTreeWidget);
+			EditorApi.qTreeWidgetClear(nodeTreeWidget);
 
 			AnimClip* clip = m_timeline->getClip(m_currentEditAnim.c_str());
 			if (clip)
 			{
-				QTreeWidgetItem* rootItem = qTreeWidgetInvisibleRootItem(nodeTreeWidget);
+				QTreeWidgetItem* rootItem = EditorApi.qTreeWidgetInvisibleRootItem(nodeTreeWidget);
 				if (rootItem)
 				{
 					for (AnimObject* animNode : clip->m_objects)
@@ -316,7 +316,7 @@ namespace Echo
 	void TimelinePanel::onSelectItem()
 	{
 		//QTreeWidgetItem* item = qTreeWidgetCurrentItem(qFindChild(m_ui, "m_nodeTreeWidget"));
-		int column = qTreeWidgetCurrentColumn(qFindChild(m_ui, "m_nodeTreeWidget"));
+		int column = EditorApi.qTreeWidgetCurrentColumn(qFindChild(m_ui, "m_nodeTreeWidget"));
 		if (column == 1)
 		{
 			onAddProperty();
@@ -329,8 +329,8 @@ namespace Echo
 
 	void TimelinePanel::onAddProperty()
 	{
-		QTreeWidgetItem* item = qTreeWidgetCurrentItem(qFindChild(m_ui, "m_nodeTreeWidget"));
-		int column = qTreeWidgetCurrentColumn(qFindChild(m_ui, "m_nodeTreeWidget"));
+		QTreeWidgetItem* item = EditorApi.qTreeWidgetCurrentItem(qFindChild(m_ui, "m_nodeTreeWidget"));
+		int column = EditorApi.qTreeWidgetCurrentColumn(qFindChild(m_ui, "m_nodeTreeWidget"));
 		if (column == 1)
 		{
 			String text = qTreeWidgetItemText(item, 0);
@@ -356,8 +356,8 @@ namespace Echo
 
 	void TimelinePanel::onSelectProperty()
 	{
-		QTreeWidgetItem* item = qTreeWidgetCurrentItem(qFindChild(m_ui, "m_nodeTreeWidget"));
-		int column = qTreeWidgetCurrentColumn(qFindChild(m_ui, "m_nodeTreeWidget"));
+		QTreeWidgetItem* item = EditorApi.qTreeWidgetCurrentItem(qFindChild(m_ui, "m_nodeTreeWidget"));
+		int column = EditorApi.qTreeWidgetCurrentColumn(qFindChild(m_ui, "m_nodeTreeWidget"));
 		if (column == 0)
 		{
 			String userData = qTreeWidgetItemUserData( item, column);
@@ -704,15 +704,15 @@ namespace Echo
 		QWidget* nodeTreeWidget = qFindChild(m_ui, "m_nodeTreeWidget");
 		if (nodeTreeWidget)
 		{
-			int curWidth = qTreeWidgetWidth(nodeTreeWidget);
+			int curWidth = EditorApi.qTreeWidgetWidth(nodeTreeWidget);
 			if (m_nodeTreeWidgetWidth != curWidth)
 			{
-				QWidget* header = qTreeWidgetHeader(nodeTreeWidget);
+				QWidget* header = EditorApi.qTreeWidgetHeader(nodeTreeWidget);
 
 				EditorApi.qHeaderViewResizeSection(header, 1, 30);
 				EditorApi.qHeaderViewSetSectionResizeMode(header, 1, QHeaderViewResizeMode::Fixed);
 				EditorApi.qHeaderViewResizeSection(header, 0, curWidth - 30);
-				m_nodeTreeWidgetWidth = qTreeWidgetWidth(nodeTreeWidget);
+				m_nodeTreeWidgetWidth = EditorApi.qTreeWidgetWidth(nodeTreeWidget);
 			}
 		}
 	}

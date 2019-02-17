@@ -210,6 +210,25 @@ namespace Echo
     public:
         // load ui file by path. then return the widget
         qLoadUiFun qLoadUi = nullptr;
+        
+    public:
+        // invisible root item
+        qTreeWidgetInvisibleRootItemFun qTreeWidgetInvisibleRootItem = nullptr;
+        
+        // current select item
+        qTreeWidgetCurrentItemFun qTreeWidgetCurrentItem = nullptr;
+        
+        // header
+        qTreeWidgetHeaderFun qTreeWidgetHeader = nullptr;
+        
+        // current column
+        qTreeWidgetCurrentColumnFun qTreeWidgetCurrentColumn = nullptr;
+        
+        // get width
+        qTreeWidgetWidthFun qTreeWidgetWidth = nullptr;
+        
+        // clear
+        qTreeWidgetClearFun qTreeWidgetClear = nullptr;
 	};
 }
 

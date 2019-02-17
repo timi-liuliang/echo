@@ -7,22 +7,22 @@
 namespace Echo
 {
 	// invisible root item
-	QTreeWidgetItem* qTreeWidgetInvisibleRootItem(QWidget* treeWidget);
+	typedef QTreeWidgetItem* (*qTreeWidgetInvisibleRootItemFun)(QWidget* treeWidget);
 
 	// current select item
-	QTreeWidgetItem* qTreeWidgetCurrentItem(QWidget* treeWidget);
+	typedef QTreeWidgetItem* (*qTreeWidgetCurrentItemFun)(QWidget* treeWidget);
 
 	// header
-	QWidget* qTreeWidgetHeader(QWidget* widget);
+	typedef QWidget* (*qTreeWidgetHeaderFun)(QWidget* widget);
 
 	// current column
-	int qTreeWidgetCurrentColumn(QWidget* treeWidget);
+	typedef int (*qTreeWidgetCurrentColumnFun)(QWidget* treeWidget);
 
 	// get width
-	int qTreeWidgetWidth(QWidget* treeWidget);
+	typedef int (*qTreeWidgetWidthFun)(QWidget* treeWidget);
 
 	// clear
-	void qTreeWidgetClear(QWidget* widget);
+	typedef void (*qTreeWidgetClearFun)(QWidget* widget);
 }
 
 #endif
