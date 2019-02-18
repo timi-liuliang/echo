@@ -18,18 +18,22 @@ namespace QT_UI
 		QToolButton* minusButton = new QToolButton(menuTopRightButton);
 		minusButton->setIcon(QIcon(":/icon/Icon/minus.png"));
 		minusButton->setStyleSheet("background-color: #00535353;");
+		minusButton->setToolTip("Minimize");
 
 		QToolButton* minimizeButton = new QToolButton(menuTopRightButton);
 		minimizeButton->setIcon(QIcon(":/icon/Icon/minimize.png"));
 		minimizeButton->setStyleSheet("background-color: #00535353;");
+		minimizeButton->setToolTip("Maximize");
 
 		QToolButton* fullScreenButton = new QToolButton(menuTopRightButton);
 		fullScreenButton->setIcon(QIcon(":/icon/Icon/fullscreen.png"));
 		fullScreenButton->setStyleSheet("background-color: #00535353;");
+		fullScreenButton->setToolTip("FullScreen");
 
 		QToolButton* closeButton = new QToolButton(menuTopRightButton);
 		closeButton->setIcon(QIcon(":/icon/Icon/close.png"));
 		closeButton->setStyleSheet("background-color: #00535353;");
+		closeButton->setToolTip("Close");
 
 		QHBoxLayout* horizontalLayout = new QHBoxLayout(menuTopRightButton);
 		horizontalLayout->setSpacing(0);
