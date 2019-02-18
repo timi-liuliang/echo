@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/icon">
+    <file>Icon/fullscreen.png</file>
     <file>Icon/res/view_type_grid.png</file>
     <file>Icon/res/view_type_list.png</file>
     <file>node/gltfskeleton.png</file>

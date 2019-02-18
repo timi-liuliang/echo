@@ -25,6 +25,7 @@ namespace QT_UI
 	protected slots:
 		void onMinus();
 		void onMaxmized();
+		void onFullScreen();
 
 	protected:
 		// redefine paintEvent

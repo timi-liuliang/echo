@@ -23,6 +23,10 @@ namespace QT_UI
 		minimizeButton->setIcon(QIcon(":/icon/Icon/minimize.png"));
 		minimizeButton->setStyleSheet("background-color: #00535353;");
 
+		QToolButton* fullScreenButton = new QToolButton(menuTopRightButton);
+		fullScreenButton->setIcon(QIcon(":/icon/Icon/fullscreen.png"));
+		fullScreenButton->setStyleSheet("background-color: #00535353;");
+
 		QToolButton* closeButton = new QToolButton(menuTopRightButton);
 		closeButton->setIcon(QIcon(":/icon/Icon/close.png"));
 		closeButton->setStyleSheet("background-color: #00535353;");
@@ -33,6 +37,7 @@ namespace QT_UI
 		horizontalLayout->setContentsMargins(0, 0, 0, 0);
 		horizontalLayout->addWidget(minusButton);
 		horizontalLayout->addWidget(minimizeButton);
+		horizontalLayout->addWidget(fullScreenButton);
 		horizontalLayout->addWidget(closeButton);
 
 		setCornerWidget(menuTopRightButton, Qt::TopRightCorner);
@@ -40,6 +45,7 @@ namespace QT_UI
 		// connect signal slots
 		QObject::connect(minusButton, SIGNAL(clicked()), this, SLOT(onMinus()));
 		QObject::connect(minimizeButton, SIGNAL(clicked()), this, SLOT(onMaxmized()));
+		QObject::connect(fullScreenButton, SIGNAL(clicked()), this, SLOT(onFullScreen()));
 		QObject::connect(closeButton, SIGNAL(clicked()), parent, SLOT(close()));
 	}
 
@@ -68,17 +74,18 @@ namespace QT_UI
 
 	void QMenuBarEx::onMaxmized()
 	{
-#ifdef ECHO_PLATFORM_WINDOWS
-		if (m_parent->windowState()==Qt::WindowMaximized)
-			m_parent->setWindowState(Qt::WindowNoState);
-		else
+		if (m_parent->windowState()!=Qt::WindowMaximized)
 			m_parent->setWindowState(Qt::WindowMaximized);
-#else
-        if (m_parent->windowState()==Qt::WindowFullScreen)
-            m_parent->setWindowState(Qt::WindowNoState);
-        else
-            m_parent->setWindowState(Qt::WindowFullScreen);
-#endif
+		else
+			m_parent->setWindowState(Qt::WindowNoState);
+	}
+
+	void QMenuBarEx::onFullScreen()
+	{
+		if (m_parent->windowState() != Qt::WindowFullScreen)
+			m_parent->setWindowState(Qt::WindowFullScreen);
+		else
+			m_parent->setWindowState(Qt::WindowNoState);
 	}
 
 	void QMenuBarEx::mouseMoveEvent(QMouseEvent *e)
