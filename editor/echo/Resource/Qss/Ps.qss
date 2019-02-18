@@ -239,6 +239,16 @@ QTreeView
 	show-decoration-selected: 1;
 }
 
+QTreeView::branch
+{
+	background-color:rgba(0,0,0,0);
+}
+
+QTreeView::branch:selected
+{
+	background-color: rgb(14,99,156);
+}
+
 QTreeView::item
 {
 	font : bold;
@@ -253,7 +263,7 @@ QTreeView::item:selected
 	color : rgb(243,243,243);
 	font : bold;
 	padding: -1;
-	background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgb(14,99,156), stop:0.5 rgb(14,99,156), stop:1 rgb(14,99,156));
+	background-color: rgb(14,99,156);
 }
 
 QGraphicsView
