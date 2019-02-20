@@ -2,6 +2,9 @@
 
 namespace Echo
 {
+	// implement by application or dll
+	void registerModules();
+
 	class Module
 	{
 	public:

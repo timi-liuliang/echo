@@ -1,7 +1,6 @@
 #include "module.h"
 #include "engine/core/base/object.h"
 #include "engine/core/memory/MemAllocDef.h"
-#include "engine/modules/register_module.cx"
 
 namespace Echo
 {
@@ -18,6 +17,8 @@ namespace Echo
 
 	void Module::registerAllTypes()
 	{
+		registerModules();
+
 		if (g_modules)
 		{
 			for (Module* module : *g_modules)

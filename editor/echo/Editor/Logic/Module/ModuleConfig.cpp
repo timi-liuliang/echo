@@ -11,17 +11,22 @@
 #include "engine/modules/light/light_module.h"
 #include "engine/modules/physx/physx_module.h"
 
-using namespace Echo;
-
-REGISTER_MODULE(CameraModule)
-REGISTER_MODULE(Box2DModule)
-REGISTER_MODULE(AudioModule)
-REGISTER_MODULE(Live2DModule)
-REGISTER_MODULE(SpineModule)
-REGISTER_MODULE(GltfModule)
-REGISTER_MODULE(AnimModule)
-REGISTER_MODULE(EffectModule)
-REGISTER_MODULE(UIModule)
-REGISTER_MODULE(AIModule)
-REGISTER_MODULE(LightModule);
-REGISTER_MODULE(PhysxModule);
+namespace Echo
+{
+	// implement by application or dll
+	void registerModules()
+	{
+		REGISTER_MODULE(CameraModule)
+		REGISTER_MODULE(Box2DModule)
+		REGISTER_MODULE(AudioModule)
+		REGISTER_MODULE(Live2DModule)
+		REGISTER_MODULE(SpineModule)
+		REGISTER_MODULE(GltfModule)
+		REGISTER_MODULE(AnimModule)
+		REGISTER_MODULE(EffectModule)
+		REGISTER_MODULE(UIModule)
+		REGISTER_MODULE(AIModule)
+		REGISTER_MODULE(LightModule);
+		REGISTER_MODULE(PhysxModule);
+	}
+}
