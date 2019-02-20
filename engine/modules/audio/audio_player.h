@@ -33,6 +33,13 @@ namespace Echo
 	protected:
 		// update
 		virtual void update_self();
+        
+    private:
+        // load audio data from file
+        bool loadBuff();
+        bool loadWav();
+        bool loadFlac();
+        bool loadMp3();
 
 	private:
 		ALuint		m_source;
