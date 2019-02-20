@@ -6,7 +6,7 @@
 
 namespace Echo
 {
-	void qConnect(QObject* sender, const char* signal, void* receiver, ClassMethodBind* slot)
+	void qConnectObject(QObject* sender, const char* signal, void* receiver, ClassMethodBind* slot)
 	{
 		if (sender)
 		{
@@ -15,7 +15,7 @@ namespace Echo
 		}
 	}
 
-	void qConnect(QWidget* sender, const char* signal, void* receiver, ClassMethodBind* slot)
+	void qConnectWidget(QWidget* sender, const char* signal, void* receiver, ClassMethodBind* slot)
 	{
 		if (sender)
 		{
@@ -24,7 +24,7 @@ namespace Echo
 		}
 	}
 
-	void qConnect(QAction* sender, const char* signal, void* receiver, ClassMethodBind* slot)
+	void qConnectAction(QAction* sender, const char* signal, void* receiver, ClassMethodBind* slot)
 	{
 		if (sender)
 		{
@@ -33,7 +33,7 @@ namespace Echo
 		}
 	}
 
-	void qConnect(QGraphicsItem* sender, const char* signal, void* receiver, ClassMethodBind* slot)
+	void qConnectGraphicsItem(QGraphicsItem* sender, const char* signal, void* receiver, ClassMethodBind* slot)
 	{
 		if (sender)
 		{
