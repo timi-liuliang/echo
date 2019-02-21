@@ -14,6 +14,10 @@ namespace Echo
 
 	void AudioPlayer::bindMethods()
 	{
+        CLASS_BIND_METHOD(AudioPlayer, getAudio, DEF_METHOD("getAudio"));
+        CLASS_BIND_METHOD(AudioPlayer, setAudio, DEF_METHOD("setAudio"));
+
+        CLASS_REGISTER_PROPERTY(AudioPlayer, "Audio", Variant::Type::ResourcePath, "getAudio", "setAudio");
 	}
 
 	void AudioPlayer::setPitch(float pitch)

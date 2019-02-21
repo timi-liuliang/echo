@@ -70,26 +70,20 @@ namespace Echo
 		Live2dCubism();
 		virtual ~Live2dCubism();
 
-		// set moc
+		// moc
 		void setMoc(const ResourcePath& res);
-
-		// get moc
 		const ResourcePath& getMoc() { return m_mocRes; }
 
-		// set texture res path
+		// texture res path
 		void setTextureRes(const ResourcePath& path);
-
-		// get texture res
 		const ResourcePath& getTextureRes() { return m_textureRes; }
 
 		// material
 		Material* getMaterial() const { return m_material; }
 		void setMaterial( Object* material);
 
-		// set anim res path
+		// anim res path
 		void setMotionRes(const ResourcePath& path);
-
-		// get anim res path
 		const ResourcePath& getMotionRes() const { return m_curMotionRes; }
 
 		// set parameter value

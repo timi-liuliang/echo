@@ -29,6 +29,10 @@ namespace Echo
 		void play();
         void pause();
         void stop();
+        
+        // audio file
+        void setAudio(const ResourcePath& res) {m_audioRes=res;}
+        const ResourcePath& getAudio() const { return m_audioRes; }
 
 	protected:
 		// update
@@ -42,10 +46,11 @@ namespace Echo
         bool loadMp3();
 
 	private:
-		ALuint		m_source;
-		ALuint		m_buffer;
-		float		m_pitch;
-		float		m_gain;
-		bool		m_isLoop;
+		ALuint		    m_source;
+		ALuint		    m_buffer;
+		float		    m_pitch;
+		float		    m_gain;
+		bool		    m_isLoop;
+        ResourcePath    m_audioRes;
 	};
 }
