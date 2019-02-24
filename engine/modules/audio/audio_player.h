@@ -31,7 +31,7 @@ namespace Echo
         void stop();
         
         // audio file
-        void setAudio(const ResourcePath& res) {m_audioRes=res;}
+        void setAudio(const ResourcePath& res);
         const ResourcePath& getAudio() const { return m_audioRes; }
 
 	protected:
@@ -51,6 +51,6 @@ namespace Echo
 		float		    m_pitch;
 		float		    m_gain;
 		bool		    m_isLoop;
-        ResourcePath    m_audioRes;
+        ResourcePath    m_audioRes = ResourcePath("", ".mp3|.flac|.wav");
 	};
 }

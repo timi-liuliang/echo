@@ -1,4 +1,8 @@
 #include "audio_player.h"
+#include "drlibs/dr_mp3.h"
+#include "drlibs/dr_flac.h"
+#include "drlibs/dr_wav.h"
+#include "engine/core/io/DataStream.h"
 
 namespace Echo
 {
@@ -72,6 +76,17 @@ namespace Echo
     void AudioPlayer::stop()
     {
         
+    }
+    
+    void AudioPlayer::setAudio(const ResourcePath& res)
+    {
+        m_audioRes=res;
+        
+        MemoryReader memReader( m_audioRes.getPath());
+        if(memReader.getSize())
+        {
+            drmp3* mp3 = nullptr;
+        }
     }
     
     bool AudioPlayer::loadBuff()
