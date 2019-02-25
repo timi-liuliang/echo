@@ -71,7 +71,7 @@
 #else
     #include <GLES3/gl3.h>
     #ifndef ECHO_POWERVR_SDK
-        #include <GLES3/gl3ext.h>
+        //#include <GLES3/gl3ext.h>
     #endif
     #include <EGL/egl.h>
     #include <EGL/eglext.h>

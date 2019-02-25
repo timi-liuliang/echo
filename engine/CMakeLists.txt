@@ -24,7 +24,7 @@ SET(INCLUDE_FILES
 	${ECHO_ROOT_PATH}/ThirdParty/Recast/Detour
 	${ECHO_ROOT_PATH}/ThirdParty/Recast/DetourCrowd
 	${ECHO_ROOT_PATH}/ThirdParty/Recast/DetourTileCache
-	${ECHO_ROOT_PATH}/ThirdParty/adrenoSDK/inc
+	${ECHO_ROOT_PATH}/thirdparty/opengles/mali/include
 	${ECHO_DEP_PATH}/fbx_sdk/include
 	${ECHO_ROOT_PATH}/thirdparty/physx/physx/include
 	${ECHO_ROOT_PATH}/thirdparty/physx/pxshared/include
@@ -39,16 +39,6 @@ INCLUDE_DIRECTORIES(${INCLUDE_FILES})
 
 # Net
 INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/Dependencies/theoraplayer/SDK/include)
-
-IF(${ECHO_PLATFORM_WIN32})
-	LINK_DIRECTORIES(
-		${ECHO_DEP_PATH}/PhysX-3.3/PhysXSDK/Lib/vc12win32
-		${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-	)
-ELSEIF(${ECHO_PLATFORM_ANDROID})
-	ADD_DEFINITIONS(-D__ARM_ARCH_7A__ -D__ARM_ARCH_6__ -D__ARM_ARCH_5__ -D__ARM_ARCH_5T__ -D__ARM_ARCH_5E__ -D__ARM_ARCH_5TE__ -DHK_DISABLE_NEON)
-ELSEIF(${ECHO_PLATFORM_IOS})
-ENDIF()
 
 # Configure FILE
 CONFIGURE_FILE(

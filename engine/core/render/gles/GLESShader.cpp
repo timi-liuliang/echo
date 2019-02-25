@@ -57,7 +57,7 @@ namespace Echo
 					}
 				}
 
-				// 递归替换
+				// 閫掑綊鏇挎崲
 				replaceInclude();
 			}
 		}
@@ -73,7 +73,7 @@ namespace Echo
 			m_srcData.insert(pos, m_desc.macros);
 		}
 
-		// Windows平台，Debug模式，开启Nsight Shader调试
+		// Windows platform锛孌ebug mode锛宔nable Nsight Shader debug
 #if defined(ECHO_PLATFORM_WINDOWS) && defined(ECHO_DEBUG)
 		size_t pos = m_srcData.find_first_of('\n') + 1;
 		if (m_shaderType==ST_VERTEXSHADER)
@@ -140,7 +140,6 @@ namespace Echo
 			EchoLogError("Compile Shader [%s] Error: \n%s", filename.c_str(), errMsg.c_str());
 		}
 
-		// 移除数据
 		m_srcData.clear();
 		m_srcData.shrink_to_fit();
 	}
