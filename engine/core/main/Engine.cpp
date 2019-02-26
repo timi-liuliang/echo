@@ -11,6 +11,7 @@
 #include "engine/core/render/interface/Viewport.h"
 #include "engine/core/render/interface/Material.h"
 #include "GameSettings.h"
+#include "PluginSettings.h"
 #include "engine/core/script/lua/register_core_to_lua.cx"
 #include "engine/core/script/lua/lua_binder.h"
 #include "engine/core/script/lua/lua_script.h"
@@ -112,6 +113,7 @@ namespace Echo
 		Class::registerType<LuaScript>();
 		Class::registerType<TextureCube>();
 		Class::registerType<GameSettings>();
+		Class::registerType<PluginSettings>();
 		Class::registerType<Gizmos>();
 		Class::registerType<Input>();
 		Class::registerType<Log>();
