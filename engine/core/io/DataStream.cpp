@@ -710,7 +710,6 @@ namespace Echo
 
 	MemoryReader::MemoryReader(const String& file)
 	{
-		// 加载数据
 		DataStream* stream = IO::instance()->open(file);
 		if (stream)
 		{
@@ -752,7 +751,7 @@ namespace Echo
 
 	MemoryReaderAlign::MemoryReaderAlign(const String& file, int align)
 	{
-		// 加载数据
+		// 鍔犺浇鏁版嵁
 		DataStream* stream = IO::instance()->open(file);
 		if (stream)
 		{

@@ -17,7 +17,7 @@ namespace Echo
 		~Plugin();
 
 		// load/unload
-		void load(const char* path);
+		bool load(const char* path);
 		void unload();
 
 		// get symbol
