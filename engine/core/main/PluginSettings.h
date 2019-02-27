@@ -13,15 +13,6 @@ namespace Echo
 		ECHO_SINGLETON_CLASS(PluginSettings, Object);
 
 	public:
-		enum class KeepAspectType
-		{
-			None,
-			Stretch,
-			Width,
-			Height,
-		};
-
-	public:
 		PluginSettings();
 		~PluginSettings();
 
@@ -29,10 +20,10 @@ namespace Echo
 		static PluginSettings* instance();
 
 		// set plugin path
-		void setSearchPath(const ResourcePath& path) { m_pluginSearchPath.setPath(path.getPath()); }
-		const ResourcePath& getSearchPath() const { return m_pluginSearchPath; }
+		void setSearchPath(const String& path) { m_pluginSearchPath = path; }
+		const String& getSearchPath() const { return m_pluginSearchPath; }
 
 	private:
-		ResourcePath	m_pluginSearchPath;
+        String	m_pluginSearchPath = "${EchoDir}/plugins/;";
 	};
 }

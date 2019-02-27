@@ -26,6 +26,9 @@ namespace Echo
 	public:
 		// load all plugins
 		static void loadAllPlugins();
+        
+        // load plugin by path
+        static void loadPluginInPath(const String& pluginDir);
 
 	private:
 		String			m_path;

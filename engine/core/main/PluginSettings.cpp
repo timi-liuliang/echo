@@ -10,7 +10,6 @@
 namespace Echo
 {
 	PluginSettings::PluginSettings()
-		: m_pluginSearchPath("", ".scene")
 	{
 	}
 
@@ -31,6 +30,6 @@ namespace Echo
 		CLASS_BIND_METHOD(PluginSettings, getSearchPath, DEF_METHOD("getSearchPath"));
 		CLASS_BIND_METHOD(PluginSettings, setSearchPath, DEF_METHOD("setSearchPath"));
 
-		CLASS_REGISTER_PROPERTY(PluginSettings, "SearchPath", Variant::Type::ResourcePath, "getSearchPath", "setSearchPath");
+		CLASS_REGISTER_PROPERTY(PluginSettings, "SearchPath", Variant::Type::String, "getSearchPath", "setSearchPath");
 	}
 }

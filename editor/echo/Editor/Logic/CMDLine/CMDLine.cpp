@@ -96,7 +96,6 @@ namespace Echo
 			g_astudio->Start();
 		)
 
-		// ÏÔÊ¾Ö÷´°¿Ú
 		TIME_PROFILE
 		(
 			//ThreadSleepByMilliSecond(1000);

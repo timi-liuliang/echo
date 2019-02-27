@@ -1,4 +1,5 @@
 #include "Plugin.h"
+#include "PluginSettings.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/io/DataStream.h"
@@ -110,53 +111,58 @@ namespace Echo
 
 	void Plugin::loadAllPlugins()
 	{
-			// test
-	//::SetDllDirectory("C:/Program Files/Side Effects Software/Houdini 17.0.352/bin");
-
-#ifdef ECHO_EDITOR_MODE
-		typedef bool(*LOAD_PLUGIN_FUN)();
-
-		// get plugin path
-		String pluginDir = PathUtil::GetCurrentDir() + "/plugins";
-		PathUtil::FormatPath(pluginDir, false);
-
-		// get all plugins
-		StringArray plugins;
-		PathUtil::EnumFilesInDir( plugins, pluginDir, false, true, true);
-
-		// iterate
-		for (const String& pluginPath : plugins)
-		{
-			String ext = PathUtil::GetFileExt(pluginPath, true);
-			if(ext==".plugin")
-			{
-				PluginConfig pluginCfg(pluginPath);
-				if (pluginCfg.isLoaded())
-				{
-					String name = pluginCfg.m_name;
-					String symbolName = StringUtil::Format("load%sPlugin", name.c_str());
-
-				#ifdef ECHO_PLATFORM_WINDOWS
-					for (const String& dllPath : pluginCfg.m_dependLibraryPaths)
-					{
-						::SetDllDirectory(dllPath.c_str());
-					}
-				#endif
-
-					Plugin* plugin = EchoNew(Plugin);
-					if (plugin->load(pluginCfg.m_libraryPath.c_str()))
-					{
-						LOAD_PLUGIN_FUN pFunc = (LOAD_PLUGIN_FUN)plugin->getSymbol(symbolName.c_str());
-						if (pFunc)
-							(*pFunc)();
-						else
-							EchoLogError("Can't find symbol %s in plugin [%s]", symbolName.c_str(), pluginPath.c_str());
-					}
-
-					g_plugins[name] = plugin;
-				}
-			}
-		}
-#endif
+        StringArray pluginPaths = StringUtil::Split(PluginSettings::instance()->getSearchPath(), ";");
+        for(String& path : pluginPaths)
+        {
+            path = StringUtil::Replace(path, "${EchoDir}", PathUtil::GetCurrentDir());
+            PathUtil::FormatPath(path, false);
+            
+            loadPluginInPath( path);
+        }
 	}
+    
+    void Plugin::loadPluginInPath(const String& pluginDir)
+    {
+    #ifdef ECHO_EDITOR_MODE
+        typedef bool(*LOAD_PLUGIN_FUN)();
+        
+        // get all plugins
+        StringArray plugins;
+        PathUtil::EnumFilesInDir( plugins, pluginDir, false, true, true);
+        
+        // iterate
+        for (const String& pluginPath : plugins)
+        {
+            String ext = PathUtil::GetFileExt(pluginPath, true);
+            if(ext==".plugin")
+            {
+                PluginConfig pluginCfg(pluginPath);
+                if (pluginCfg.isLoaded())
+                {
+                    String name = pluginCfg.m_name;
+                    String symbolName = StringUtil::Format("load%sPlugin", name.c_str());
+                    
+                #ifdef ECHO_PLATFORM_WINDOWS
+                    for (const String& dllPath : pluginCfg.m_dependLibraryPaths)
+                    {
+                        ::SetDllDirectory(dllPath.c_str());
+                    }
+                #endif
+                    
+                    Plugin* plugin = EchoNew(Plugin);
+                    if (plugin->load(pluginCfg.m_libraryPath.c_str()))
+                    {
+                        LOAD_PLUGIN_FUN pFunc = (LOAD_PLUGIN_FUN)plugin->getSymbol(symbolName.c_str());
+                        if (pFunc)
+                            (*pFunc)();
+                        else
+                            EchoLogError("Can't find symbol %s in plugin [%s]", symbolName.c_str(), pluginPath.c_str());
+                    }
+                    
+                    g_plugins[name] = plugin;
+                }
+            }
+        }
+    #endif
+    }
 }

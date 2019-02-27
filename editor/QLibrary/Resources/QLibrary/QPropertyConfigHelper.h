@@ -6,10 +6,10 @@
 
 namespace QT_UI
 {
-	// 控件类型
+	// widget type
 	enum WidgetType
 	{
-		WT_None,		// 空，不可编辑
+		WT_None,
 		WT_Int,
 		WT_Real,
 		WT_Vector2,
