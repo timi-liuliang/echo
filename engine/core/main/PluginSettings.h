@@ -24,6 +24,6 @@ namespace Echo
 		const String& getSearchPath() const { return m_pluginSearchPath; }
 
 	private:
-        String	m_pluginSearchPath = "${EchoDir}/plugins/;";
+        String	m_pluginSearchPath = "${EchoDir}/plugins/;${ProjectDir}/plugins/;";
 	};
 }

@@ -1,5 +1,5 @@
 #include "QPropertyConfigHelper.h"
-#include <engine/core/Util/StringUtil.h>
+#include <engine/core/util/StringUtil.h>
 #include "QProperty.hpp"
 
 namespace QT_UI
@@ -135,6 +135,7 @@ namespace QT_UI
 		{
 		case WT_Int:			widgetStr = "Int";			 break;
 		case WT_Real:			widgetStr = "Real";			 break;
+        case WT_String:         widgetStr = "String";        break;
 		case WT_Vector2:		widgetStr = "Vector2";		 break;
 		case WT_Vector3:		widgetStr = "Vector3";		 break;
 		case WT_CheckBox:		widgetStr = "CheckBox";		 break;

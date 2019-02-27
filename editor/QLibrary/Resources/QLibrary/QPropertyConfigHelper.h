@@ -12,6 +12,7 @@ namespace QT_UI
 		WT_None,
 		WT_Int,
 		WT_Real,
+        WT_String,
 		WT_Vector2,
 		WT_Vector3,
 		WT_CheckBox,

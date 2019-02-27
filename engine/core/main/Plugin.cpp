@@ -1,3 +1,4 @@
+#include "Engine.h"
 #include "Plugin.h"
 #include "PluginSettings.h"
 #include "engine/core/util/PathUtil.h"
@@ -115,6 +116,8 @@ namespace Echo
         for(String& path : pluginPaths)
         {
             path = StringUtil::Replace(path, "${EchoDir}", PathUtil::GetCurrentDir());
+            path = StringUtil::Replace(path, "${ProjectDir}", Engine::instance()->getResPath());
+            path = StringUtil::Replace(path, "//", "/");
             PathUtil::FormatPath(path, false);
             
             loadPluginInPath( path);

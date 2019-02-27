@@ -50,10 +50,15 @@ namespace Echo
 	bool Engine::initialize(const Config& cfg)
 	{
 		m_config = cfg;
-
+        
 		// check root path
 		setlocale(LC_ALL, "zh_CN.UTF-8");
-        if (!PathUtil::IsFileExist( cfg.m_projectFile))
+        if (PathUtil::IsFileExist( m_config.m_projectFile))
+        {
+            m_resPath = PathUtil::GetFileDirPath(m_config.m_projectFile);
+            IO::instance()->setResPath(m_resPath);
+        }
+        else
         {
             EchoLogError("Set root path failed [%s], initialise Echo Engine failed.", cfg.m_projectFile.c_str());
             return false;
@@ -133,9 +138,6 @@ namespace Echo
 	{
 		if (PathUtil::IsFileExist(projectFile))
 		{
-			m_resPath = PathUtil::GetFileDirPath(projectFile);
-			IO::instance()->setResPath(m_resPath);
-		
 			loadSettings();	
 		}
 		else

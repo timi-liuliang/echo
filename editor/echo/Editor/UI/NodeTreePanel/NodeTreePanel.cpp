@@ -610,7 +610,7 @@ namespace Studio
 		case Echo::Variant::Type::Bool:			m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_CheckBox); break;
 		case Echo::Variant::Type::Int:			m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_Int); break;
 		case Echo::Variant::Type::Real:			m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_Real); break;
-		case Echo::Variant::Type::String:		m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_None); break;
+		case Echo::Variant::Type::String:		m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_String); break;
 		case Echo::Variant::Type::Vector2:		m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_Vector2); break;
 		case Echo::Variant::Type::Vector3:		m_propertyHelper.addItem(name.c_str(), var.toVector3(), QT_UI::WT_Vector3); break;
 		case Echo::Variant::Type::Color:		m_propertyHelper.addItem(name.c_str(), var.toColor(), QT_UI::WT_ColorSelect); break;

@@ -5,6 +5,7 @@
 #include "QResSelect.h"
 #include "QIntEditor.h"
 #include "QRealEditor.h"
+#include "QStringEditor.h"
 #include "QCheckBoxEditor.h"
 #include "QComboBoxEditor.h"
 #include "QVector2Editor.h"
@@ -177,6 +178,10 @@ namespace QT_UI
 		{
 			return new QRealEditor(m_model, propertyName, parent);
 		}
+        else if (widgetType=="String")
+        {
+            return new QStringEditor(m_model, propertyName, parent);
+        }
 		else if (widgetType == "Vector2")
 		{
 			return new QVector2Editor(m_model, propertyName, parent);
@@ -247,6 +252,11 @@ namespace QT_UI
 				QRealEditor* widget = qobject_cast<QRealEditor*>(editor);
 				widget->setValue(value.toString());
 			}
+            else if(widgetType == "String")
+            {
+                QStringEditor* widget = qobject_cast<QStringEditor*>(editor);
+                widget->setValue(value.toString());
+            }
 			else if (widgetType == "Vector2")
 			{
 				QVector2Editor* widget = qobject_cast<QVector2Editor*>(editor);
