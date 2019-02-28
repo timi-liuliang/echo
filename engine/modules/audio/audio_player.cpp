@@ -1,7 +1,7 @@
 #include "audio_player.h"
-#include "drlibs/dr_mp3.h"
-#include "drlibs/dr_flac.h"
-#include "drlibs/dr_wav.h"
+#include "dr_libs/dr_mp3.h"
+#include "dr_libs/dr_flac.h"
+#include "dr_libs/dr_wav.h"
 #include "engine/core/io/DataStream.h"
 
 namespace Echo
