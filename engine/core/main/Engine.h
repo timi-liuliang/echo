@@ -75,9 +75,6 @@ namespace Echo
 		// register all class types
 		void registerClassTypes();
 
-		// load project
-		void loadProject(const char* projectFile);
-
 		// load launch scene
 		void loadLaunchScene();
 

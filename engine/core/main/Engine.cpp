@@ -80,8 +80,8 @@ namespace Echo
 			if (!NodeTree::instance()->init())
 				return false;
 
-			// load project
-			loadProject(cfg.m_projectFile.c_str());
+			// load settings second time
+			loadSettings();
 			if (m_config.m_isGame)
 			{
 				loadLaunchScene();
@@ -109,6 +109,11 @@ namespace Echo
 
 	void Engine::registerClassTypes()
 	{
+		// load settings first
+		Class::registerType<PluginSettings>();
+		loadSettings();
+
+		// regiser class types in core
 		Class::registerType<Node>();
 		Class::registerType<Render>();
 		Class::registerType<Res>();
@@ -118,7 +123,6 @@ namespace Echo
 		Class::registerType<LuaScript>();
 		Class::registerType<TextureCube>();
 		Class::registerType<GameSettings>();
-		Class::registerType<PluginSettings>();
 		Class::registerType<Gizmos>();
 		Class::registerType<Input>();
 		Class::registerType<Log>();
@@ -134,48 +138,43 @@ namespace Echo
 		Module::registerAllTypes();
 	}
 
-	void Engine::loadProject(const char* projectFile)
-	{
-		if (PathUtil::IsFileExist(projectFile))
-		{
-			loadSettings();	
-		}
-		else
-		{
-			EchoLogError("Not found project file [%s], initialise Echo Engine failed.", projectFile);
-		}
-	}
-
 	void Engine::loadSettings()
 	{
-		String projectFile;
-		if (IO::instance()->covertFullPathToResPath(m_config.m_projectFile, projectFile))
+		if (PathUtil::IsFileExist(m_config.m_projectFile))
 		{
-			MemoryReader reader(projectFile);
-			if (reader.getSize())
+			String projectFile;
+			if (IO::instance()->covertFullPathToResPath(m_config.m_projectFile, projectFile))
 			{
-				pugi::xml_document doc;
-				if (doc.load_buffer(reader.getData<char*>(), reader.getSize()))
+				MemoryReader reader(projectFile);
+				if (reader.getSize())
 				{
-					pugi::xml_node root = doc.child("settings");
-					if (root)
+					pugi::xml_document doc;
+					if (doc.load_buffer(reader.getData<char*>(), reader.getSize()))
 					{
-						Echo::StringArray classes;
-						Echo::Class::getAllClasses(classes);
-						for (Echo::String& className : classes)
+						pugi::xml_node root = doc.child("settings");
+						if (root)
 						{
-							if (Echo::Class::isSingleton(className))
+							Echo::StringArray classes;
+							Echo::Class::getAllClasses(classes);
+							for (Echo::String& className : classes)
 							{
-								pugi::xml_node classNode = root.child(className.c_str());
-								if(classNode)
+								if (Echo::Class::isSingleton(className))
 								{
-									Echo::Object::instanceObject(&classNode);
+									pugi::xml_node classNode = root.child(className.c_str());
+									if (classNode)
+									{
+										Echo::Object::instanceObject(&classNode);
+									}
 								}
 							}
 						}
 					}
 				}
 			}
+		}
+		else
+		{
+			EchoLogError("Not found project file [%s], initialise Echo Engine failed.", m_config.m_projectFile.c_str());
 		}
 	}
 
