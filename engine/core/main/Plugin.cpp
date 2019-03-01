@@ -25,6 +25,7 @@ namespace Echo
 	{
 		i32			m_version = 0;
 		String		m_name;
+        String      m_pluginPath;
 		String		m_libraryPath;
 		StringArray	m_dependLibraryPaths;
 		bool		m_loaded = false;
@@ -40,7 +41,7 @@ namespace Echo
 			std::ifstream memReader(pluginPath.c_str());
 			if (memReader.is_open())
 			{
-				String pluginPurePath = PathUtil::GetFileDirPath(pluginPath);
+				m_pluginPath = PathUtil::GetFileDirPath(pluginPath);
 
 				using namespace nlohmann;
 				json j;
@@ -62,7 +63,9 @@ namespace Echo
 					String os = library[i]["OS"].get<std::string>().c_str();
 					if (os == currentOS)
 					{
-						m_libraryPath = pluginPurePath + library[i]["Path"].get<std::string>().c_str() + "/" + m_name +  ".dll";
+                        m_libraryPath = library[i]["Path"].get<std::string>().c_str();
+                        m_libraryPath = StringUtil::Replace(m_libraryPath, "${PluginDir}", m_pluginPath);
+                        m_libraryPath = StringUtil::Replace(m_libraryPath, "//", "/");
 						m_dependLibraryPaths = StringUtil::Split( library[i]["DependLibraryPaths"].get<std::string>().c_str(), ";");
 					}
 				}
@@ -73,6 +76,19 @@ namespace Echo
 
 		// is loaded succeed
 		bool isLoaded() const { return m_loaded; }
+        
+        // link depend library path
+        void linkDependLibrary()
+        {
+        #ifdef ECHO_PLATFORM_WINDOWS
+            for (String dllPath : m_dependLibraryPaths)
+            {
+                dllPath = StringUtil::Replace(dllPath, "${PluginDir}", m_pluginPath);
+                dllPath = StringUtil::Replace(dllPath, "//", "/");
+                ::SetDllDirectory(dllPath.c_str());
+            }
+        #endif
+        }
 	};
 
 	// plugins
@@ -145,12 +161,8 @@ namespace Echo
                     String name = pluginCfg.m_name;
                     String symbolName = StringUtil::Format("load%sPlugin", name.c_str());
                     
-                #ifdef ECHO_PLATFORM_WINDOWS
-                    for (const String& dllPath : pluginCfg.m_dependLibraryPaths)
-                    {
-                        ::SetDllDirectory(dllPath.c_str());
-                    }
-                #endif
+                    // link depend libray before load dll
+                    pluginCfg.linkDependLibrary();
                     
                     Plugin* plugin = EchoNew(Plugin);
                     if (plugin->load(pluginCfg.m_libraryPath.c_str()))
