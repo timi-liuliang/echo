@@ -64,8 +64,9 @@ namespace Echo
 				const Vector3&  up = camera->getUp();
 				const Vector3&  dir = camera->getDirection();
 
-				alListener3f(AL_POSITION, position.x, position.y, position.z);
-				alListener3f(AL_VELOCITY, velocity.x, velocity.y, velocity.z);
+				//alListener3f(AL_POSITION, position.x, position.y, position.z);
+                alListener3f(AL_POSITION, 0.f, 0.f, 0.f);
+                alListener3f(AL_VELOCITY, velocity.x, velocity.y, velocity.z);
 
 				ALfloat listenOri[] = { dir.x, dir.y, dir.z, up.x, up.y, up.z};
 				alListenerfv(AL_ORIENTATION, listenOri);
