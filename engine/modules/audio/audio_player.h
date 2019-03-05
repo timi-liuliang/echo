@@ -41,9 +41,6 @@ namespace Echo
     private:
         // load audio data from file
         bool loadBuff();
-        bool loadWav();
-        bool loadFlac();
-        bool loadMp3();
 
 	private:
 		ALuint		    m_source;
@@ -51,6 +48,8 @@ namespace Echo
 		float		    m_pitch;
 		float		    m_gain;
 		bool		    m_isLoop;
+		bool			m_isPlay = true;
+		bool			m_is2D = true;
         ResourcePath    m_audioRes = ResourcePath("", ".mp3|.flac|.wav");
 	};
 }

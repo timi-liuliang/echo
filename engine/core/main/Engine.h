@@ -91,3 +91,9 @@ namespace Echo
 		FrameState			m_frameState;
 	};
 }
+
+#ifdef ECHO_EDITOR_MODE
+#define IsGame Echo::Engine::instance()->getConfig().m_isGame
+#else
+#define IsGame true
+#endif

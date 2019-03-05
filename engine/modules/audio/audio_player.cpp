@@ -2,13 +2,17 @@
 #define DR_MP3_IMPLEMENTATION
 #include "dr_libs/dr_mp3.h"
 #include "dr_libs/dr_flac.h"
+#define DR_WAV_IMPLEMENTATION
 #include "dr_libs/dr_wav.h"
+#include "engine/core/main/Engine.h"
 #include "engine/core/io/DataStream.h"
 
 namespace Echo
 {
 	AudioPlayer::AudioPlayer()
 	{
+		alGenSources(1, &m_source);
+		alGenBuffers(1, &m_buffer);
 	}
 
 	AudioPlayer::~AudioPlayer()
@@ -55,16 +59,10 @@ namespace Echo
 	}
 
 	void AudioPlayer::play()
-	{
-		alGenSources(1, &m_source);
-		alGenBuffers(1, &m_buffer);
-        
-        //put the data into our sampleset buffer
-        loadBuff();
-        
-        //assign the buffer to this source
-        alSourcei(m_source, AL_BUFFER, m_buffer);
-        
+	{    
+		//assign the buffer to this source
+		alSourcei(m_source, AL_BUFFER, m_buffer);
+
         // play
         alSourcePlay( m_source);
 	}
@@ -82,66 +80,49 @@ namespace Echo
     void AudioPlayer::setAudio(const ResourcePath& res)
     {
         m_audioRes=res;
-        
-        MemoryReader memReader( m_audioRes.getPath());
-        if(memReader.getSize())
-        {
-            alGenSources(1, &m_source);
-            alGenBuffers(1, &m_buffer);
-            
-            drmp3 mp3;
-            drmp3_config config;
-            config.outputChannels = 1;
-            config.outputSampleRate = DR_MP3_DEFAULT_SAMPLE_RATE;
-            if(drmp3_init_memory( &mp3, memReader.getData<const void*>(), memReader.getSize(), &config))
-            {
-                drmp3_uint32 channels = mp3.channels;
-                ALchar* audioBuffer[4*10000];
-                drmp3_uint64 framesRead = drmp3_read_pcm_frames_f32(&mp3, 10000, (float*)audioBuffer);
-                if(framesRead>0)
-                {
-                    ALenum  audioFormat = AL_FORMAT_MONO16;
-                    ALint   audioBufferLen = framesRead * sizeof(float);
-                    ALint   audioFrequency = mp3.sampleRate;
-                    
-                    alBufferData(m_buffer, audioFormat, audioBuffer, audioBufferLen, audioFrequency);
-                    
-                    //framesRead = drmp3_read_pcm_frames_f32(&mp3, 100000, (float*)audioBuffer);
-                }
-                
-                //assign the buffer to this source
-                alSourcei(m_source, AL_BUFFER, m_buffer);
-                
-                // play
-                alSourcePlay(m_source);
-            }
-        }
+
+		loadBuff();
+
+		if (m_isPlay && IsGame)
+		{
+			play();
+		}
     }
     
     bool AudioPlayer::loadBuff()
     {
-        ALenum  audioFormat = 0;
-        ALchar* audioBuffer = nullptr;
-        ALint   audioBufferLen = 0;
-        ALint   audioFrequency = 0;
+		MemoryReader memReader(m_audioRes.getPath());
+		if (memReader.getSize())
+		{
+			drmp3 mp3;
+			drmp3_config config;
+			config.outputChannels = 1;
+			config.outputSampleRate = DR_MP3_DEFAULT_SAMPLE_RATE;
+			if (drmp3_init_memory(&mp3, memReader.getData<const void*>(), memReader.getSize(), &config))
+			{
+				drmp3_uint64 frameCount = drmp3_get_pcm_frame_count(&mp3);
+
+				drmp3_uint32 channels = mp3.channels;
+				float* audioBuffer = new float[frameCount];
+				i16* audioBuffer16 = new i16[frameCount];
+				drmp3_uint64 framesRead = drmp3_read_pcm_frames_f32(&mp3, frameCount, audioBuffer);
+				if (framesRead > 0)
+				{
+					ALenum  audioFormat = AL_FORMAT_MONO16;
+					ALint   audioBufferLen = framesRead * sizeof(i16);
+					ALint   audioFrequency = mp3.sampleRate;
+
+					drwav_f32_to_s16(audioBuffer16, audioBuffer, framesRead);
+					alBufferData(m_buffer, audioFormat, audioBuffer16, audioBufferLen, audioFrequency);
+				}
+
+				delete[] audioBuffer;
+				delete[] audioBuffer16;
+
+				return true;
+			}
+		}
         
-        alBufferData(m_buffer, audioFormat, audioBuffer, audioBufferLen, audioFrequency);
-        
-        return true;
-    }
-    
-    bool AudioPlayer::loadWav()
-    {
-         return false;
-    }
-    
-    bool AudioPlayer::loadFlac()
-    {
-        return false;
-    }
-    
-    bool AudioPlayer::loadMp3()
-    {
         return false;
     }
 }
