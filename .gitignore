@@ -1,6 +1,6 @@
 /solution
 /lib
-*/.DS_Store
+.DS_Store
 app/ios/.DS_Store
 app/ios/resources/data
 app/ios/.DS_Store
