@@ -75,7 +75,7 @@ namespace Echo
 		}
 
 		// init render
-		if (initRenderer(cfg.m_windowHandle))
+        if (Renderer::instance())
 		{
 			if (!NodeTree::instance()->init())
 				return false;
@@ -214,31 +214,6 @@ namespace Echo
 		doc.save_file(m_config.m_projectFile.c_str(), "\t", 1U, pugi::encoding_utf8);
 	}
 
-	bool Engine::initRenderer(size_t windowHandle)
-	{
-		Renderer* renderer = nullptr;
-#ifdef ECHO_PLATFORM_MAC
-        LoadMTRenderer(renderer);
-#else
-		LoadGLESRenderer(renderer);
-#endif
-
-		Echo::Renderer::Config renderCfg;
-		renderCfg.enableThreadedRendering = false;
-		renderCfg.windowHandle = windowHandle;
-		renderCfg.enableThreadedRendering = false;
-
-		EchoLogDebug("Canvas Size : %d x %d", renderCfg.screenWidth, renderCfg.screenHeight);
-		if (renderer && renderer->initialize(renderCfg))
-		{
-			EchoLogInfo("Init %s Renderer success.", renderer->getName());
-			return true;
-		}
-		
-		EchoLogError("Root::initRenderer failed...");
-		return false;
-	}
-
 	void Engine::onPlatformSuspend()
 	{
 	}
@@ -315,4 +290,13 @@ namespace Echo
 		RenderStage::instance()->process();
 		Renderer::instance()->present();
 	}
+    
+    // init engine
+    Engine* initEngine(const String& project, bool isGame)
+    {
+        Echo::Engine::Config rootcfg;
+        rootcfg.m_projectFile = project;
+        rootcfg.m_isGame = isGame;
+        Echo::Engine::instance()->initialize(rootcfg);
+    }
 }

@@ -11,7 +11,6 @@ namespace Echo
 		struct Config
 		{
 			String			m_projectFile;
-			size_t			m_windowHandle;
 			bool			m_isGame;
 
 			Config()
@@ -78,9 +77,6 @@ namespace Echo
 		// load launch scene
 		void loadLaunchScene();
 
-		// initialize render
-		bool initRenderer(size_t windowHandle);
-
 	private:
 		Config				m_config;
 		String				m_resPath;
@@ -90,6 +86,9 @@ namespace Echo
 		ui32				m_currentTime;
 		FrameState			m_frameState;
 	};
+    
+    // init engine
+    Engine* initEngine(const String& project, bool isGame);
 }
 
 #ifdef ECHO_EDITOR_MODE

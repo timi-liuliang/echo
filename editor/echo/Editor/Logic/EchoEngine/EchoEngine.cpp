@@ -42,12 +42,9 @@ namespace Studio
 
 	bool EchoEngine::Initialize(size_t hwnd)
 	{
-		// init engine by configure
-		Echo::Engine::Config rootcfg;
-		rootcfg.m_projectFile = !m_projectFile.empty() ? m_projectFile.c_str() : "";
-		rootcfg.m_isGame = false;
-		rootcfg.m_windowHandle = (size_t)hwnd;
-		Echo::Engine::instance()->initialize(rootcfg);
+        // init
+        Echo::initRender( hwnd);
+        Echo::initEngine(!m_projectFile.empty() ? m_projectFile.c_str() : "", false);
 
 		TIME_PROFILE
 		(

@@ -21,7 +21,6 @@ namespace Game
 		void onSize(Echo::ui32 width, Echo::ui32 height);
 
 	private:
-		Echo::Engine*		m_root;
 		GameLog*			m_log;
 	};
 }

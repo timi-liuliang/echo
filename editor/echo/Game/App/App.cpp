@@ -5,8 +5,7 @@
 namespace Game
 {
 	App::App()
-		: m_root(nullptr)
-		, m_log(nullptr)
+		: m_log(nullptr)
 	{
 
 	}
@@ -19,25 +18,21 @@ namespace Game
 	// init
 	void App::init(size_t hwnd, const Echo::String& echoProject)
 	{
-		m_root = Echo::Engine::instance();
-
 		m_log = EchoNew(GameLog("Game"));
 		Echo::Log::instance()->addOutput(m_log);
 
-		Echo::Engine::Config rootcfg;
-		rootcfg.m_projectFile = echoProject;
-		rootcfg.m_windowHandle = (size_t)hwnd;
-		m_root->initialize(rootcfg);
+        Echo::initRender(hwnd);
+        Echo::initEngine( echoProject, true);
 	}
 
 	void App::tick(float elapsedTime)
 	{
-		m_root->tick(elapsedTime);
+		Echo::Engine::instance()->tick(elapsedTime);
 	}
 
 	// onSize
 	void App::onSize(Echo::ui32 width, Echo::ui32 height)
 	{
-		m_root->onSize(width, height);
+		Echo::Engine::instance()->onSize(width, height);
 	}
 }

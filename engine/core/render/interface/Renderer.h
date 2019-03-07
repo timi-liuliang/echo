@@ -21,11 +21,8 @@ namespace Echo
 		{
 			ui32	screenWidth;
 			ui32	screenHeight;
-			float	nearClip;
-			float	farClip;
 			bool	bFullscreen;
 			bool	bVSync;
-			bool	bSeparatedAlpha;
 			bool	enableThreadedRendering;
 
 			// for Windows Editor.
@@ -34,11 +31,8 @@ namespace Echo
 			Config()
 				: screenWidth(800)
 				, screenHeight(600)
-				, nearClip(0.1f)
-				, farClip(10000.0f)
 				, bFullscreen(false)
 				, bVSync(false)
-				, bSeparatedAlpha(false)
 				, enableThreadedRendering(true)
                 , windowHandle(0)
 			{}
@@ -186,4 +180,7 @@ namespace Echo
 		DeviceFeature		m_deviceFeature;
 		bool				m_dirtyTexSlot = false;
 	};
+    
+    // initialize Renderer
+    Renderer* initRender(size_t hwnd, int width=800, int height=600);
 }
