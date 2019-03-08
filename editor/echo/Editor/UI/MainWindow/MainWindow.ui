@@ -38,7 +38,7 @@
      <x>0</x>
      <y>0</y>
      <width>1126</width>
-     <height>23</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile_F">
@@ -95,8 +95,23 @@
     <addaction name="m_actionSaveScene"/>
     <addaction name="m_actionSaveAsScene"/>
    </widget>
+   <widget class="QMenu" name="menu_Editor">
+    <property name="title">
+     <string>Editor(&amp;E)</string>
+    </property>
+    <widget class="QMenu" name="menuTheme">
+     <property name="title">
+      <string>Theme</string>
+     </property>
+     <addaction name="separator"/>
+    </widget>
+    <addaction name="m_actionThemeChoose"/>
+    <addaction name="m_actionThemeLibrary"/>
+    <addaction name="menuTheme"/>
+   </widget>
    <addaction name="menuFile_F"/>
    <addaction name="menuScene_S"/>
+   <addaction name="menu_Editor"/>
    <addaction name="menuGame"/>
    <addaction name="menuHelp_H"/>
   </widget>
@@ -234,6 +249,21 @@
   <action name="m_actionDocumentation">
    <property name="text">
     <string>Documentation</string>
+   </property>
+  </action>
+  <action name="m_actionThemeLibrary">
+   <property name="text">
+    <string>Library</string>
+   </property>
+  </action>
+  <action name="m_actionThemeChoose">
+   <property name="text">
+    <string>Choose...</string>
+   </property>
+  </action>
+  <action name="actionThemes">
+   <property name="text">
+    <string>Themes</string>
    </property>
   </action>
  </widget>
