@@ -1,4 +1,5 @@
 #include "ui_module.h"
+#include "base/text.h"
 
 namespace Echo
 {
@@ -8,5 +9,6 @@ namespace Echo
 
 	void UIModule::registerTypes()
 	{
+        Class::registerType<UiText>();
 	}
 }
