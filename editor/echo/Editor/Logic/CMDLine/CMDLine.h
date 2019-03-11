@@ -5,12 +5,12 @@
 namespace Echo
 {
 	/**
-	 * 命令行解析 2012-8-16 帝林
+	 * Command Parser 2012-8-16 Liang
 	 */
 	class CMDLine
 	{
 	public:
-		// 解析主入口
+		// Parse
 		static bool Parser(int argc, char* argv[]);
 	};
 

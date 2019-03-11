@@ -30,22 +30,22 @@ namespace Studio
 	static MainWindow* g_inst = nullptr;
 
 	MainWindow::MainWindow(QMainWindow* parent/*=0*/)
-		: QMainWindow( parent)
+		: QMainWindow(parent)
 		, m_renderPanel(nullptr)
 		, m_resPanel(nullptr)
 		, m_scriptEditorPanel(nullptr)
 		, m_aboutWindow(nullptr)
 	{
-		setupUi( this);
+		setupUi(this);
 
 #ifdef ECHO_PLATFORM_WINDOWS
-        // hide window hwnd
-        setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+		// hide window hwnd
+		setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
 #elif defined(ECHO_PLATFORM_MAC)
-        // set title bar color
-        //macChangeTitleBarColor(winId(), 0.f, 0.f, 0.f);
-        setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
-        menubar->setNativeMenuBar(false);
+		// set title bar color
+		//macChangeTitleBarColor(winId(), 0.f, 0.f, 0.f);
+		setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+		menubar->setNativeMenuBar(false);
 #endif
 
 		// set menu icon
@@ -61,6 +61,10 @@ namespace Studio
 		QObject::connect(m_actionNewScene, SIGNAL(triggered(bool)), this, SLOT(onNewScene()));
 		QObject::connect(m_actionSaveScene, SIGNAL(triggered(bool)), this, SLOT(onSaveScene()));
 		QObject::connect(m_actionSaveAsScene, SIGNAL(triggered(bool)), this, SLOT(onSaveAsScene()));
+
+		// editor
+		QObject::connect(m_actionThemeDark, SIGNAL(triggered(bool)), this, SLOT(onChooseThemeDark()));
+		QObject::connect(m_actionThemeChoose, SIGNAL(triggered(bool)), this, SLOT(onChooseTheme()));
 
 		// connect signal slot
 		QObject::connect(m_actionPlayGame, SIGNAL(triggered(bool)), this, SLOT(onPlayGame()));
@@ -101,9 +105,9 @@ namespace Studio
 		m_resPanel = EchoNew(ResPanel(this));
 		m_scenePanel = EchoNew(NodeTreePanel(this));
 		m_bottomPanel = EchoNew(BottomPanel(this));
-		m_scriptEditorPanel = EchoNew( LuaEditor(this));
+		m_scriptEditorPanel = EchoNew(LuaEditor(this));
 		m_scriptEditorPanel->setVisible(false);
-			
+
 		// add renderWindow to RenderDockWidget
 		QWidget* renderWindow = AStudio::instance()->getRenderWindow();
 		m_renderPanel->setWidget(renderWindow);
@@ -149,7 +153,7 @@ namespace Studio
 		Echo::String subEditType = AStudio::instance()->getConfigMgr()->getValue("main_window_sub_edit_type");
 		if (!subEditType.empty())
 		{
-			m_subEditComboBox->setCurrentText( subEditType.c_str());
+			m_subEditComboBox->setCurrentText(subEditType.c_str());
 		}
 
 		// recover last edit script
@@ -309,7 +313,7 @@ namespace Studio
 			AStudio::instance()->getConfigMgr()->setValue("main_window_sub_edit_type", subeditName.toStdString().c_str());
 		}
 		else if (renderType == "3D")
-		{ 
+		{
 			Echo::Render::setRenderTypes(Echo::Render::Type_3D);
 
 			RenderWindow* renderWindow = ECHO_DOWN_CAST<RenderWindow*>(AStudio::instance()->getRenderWindow());
@@ -317,7 +321,7 @@ namespace Studio
 				renderWindow->switchToController3d();
 
 			AStudio::instance()->getConfigMgr()->setValue("main_window_sub_edit_type", subeditName.toStdString().c_str());
-		}	
+		}
 	}
 
 	void MainWindow::onSaveProject()
@@ -342,9 +346,40 @@ namespace Studio
 
 		// save current edit res
 		m_scenePanel->saveCurrentEditRes();
-		
+
 		// refresh respanel display
 		m_resPanel->reslectCurrentDir();
+	}
+
+	// set theme
+	void MainWindow::setTheme(const char* theme)
+	{
+		QFile qssFile(theme);
+		qssFile.open(QFile::ReadOnly);
+		if (qssFile.isOpen())
+		{
+			QString qss = QLatin1String(qssFile.readAll());
+			qApp->setStyleSheet(qss);
+
+			qssFile.close();
+		}
+	}
+
+	// change theme
+	void MainWindow::onChooseTheme()
+	{
+		QString qssFile = QFileDialog::getOpenFileName(this, tr("Choose Theme"), "", tr("(*.qss)"));
+		if (!qssFile.isEmpty())
+		{
+			setTheme(qssFile.toStdString().c_str());
+			Studio::ConfigMgr::instance()->setValue("CurrentTheme", qssFile.toStdString().c_str());
+		}
+	}
+
+	void MainWindow::onChooseThemeDark()
+	{
+		setTheme(":/Qss/Qss/Ps.qss");
+		Studio::ConfigMgr::instance()->setValue("CurrentTheme", ":/Qss/Qss/Ps.qss");
 	}
 
 	// play game

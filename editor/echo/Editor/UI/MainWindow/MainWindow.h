@@ -26,10 +26,10 @@ namespace Studio
 		// instance
 		static MainWindow* instance();
 
-		// ´ò¿ªÏîÄ¿Ê±µ÷ÓÃ
+		// æ‰“å¼€é¡¹ç›®æ—¶è°ƒç”¨
 		void onOpenProject();
 
-		// ´ò¿ªÎÄ¼þ
+		// æ‰“å¼€æ–‡ä»¶
 		void OpenProject(const char* projectName);
 
 		// open node tree
@@ -37,6 +37,10 @@ namespace Studio
 
 		// open lua file for edit
 		void openLuaScript(const Echo::String& resPath);
+
+	public:
+		// set theme
+		static void setTheme(const char* theme);
 
 	public:
 		// panels
@@ -62,6 +66,10 @@ namespace Studio
 		// sub editor operate
 		void setSubEdit(const char* subEditName);
 		void onSubEditChanged(const QString& subeditName);
+
+		// change theme
+		void onChooseTheme();
+		void onChooseThemeDark();
 
 		// game mode
 		void onPlayGame();

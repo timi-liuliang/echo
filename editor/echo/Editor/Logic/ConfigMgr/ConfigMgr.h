@@ -12,62 +12,65 @@ namespace Studio
 		ConfigMgr();
 		~ConfigMgr();
 
+		// instance
+		static ConfigMgr* instance();
+
 	public:
-		// ¶ÁÈ¡ÅäÖÃÎÄ¼ş
+		// è¯»å–é…ç½®æ–‡ä»¶
 		bool loadCfgFile( );
 
-		// Ìí¼ÓÒ»¸ö×î½ü´ò¿ªµÄÏîÄ¿
+		// æ·»åŠ ä¸€ä¸ªæœ€è¿‘æ‰“å¼€çš„é¡¹ç›®
 		bool addRecentProject( const char* fileName);
 
-		// Ê¹Ä³ÏîÄ¿ÇĞ»»µ½×îÇ°
+		// ä½¿æŸé¡¹ç›®åˆ‡æ¢åˆ°æœ€å‰
 		void switchProjectToTop(const char* fileName);
 
-		// ±£´æÅäÖÃÎÄ¼ş
+		// ä¿å­˜é…ç½®æ–‡ä»¶
 
 		bool saveCfgFile( );
 
-		// ÎÄ¼şÊÇ·ñ´æÔÚ£¨Èç¹û²»´æÔÚÔò´´½¨£©
+		// æ–‡ä»¶æ˜¯å¦å­˜åœ¨ï¼ˆå¦‚æœä¸å­˜åœ¨åˆ™åˆ›å»ºï¼‰
 		bool isFileExit( );
 
-		// µ±Ç°¹¤³ÌÊÇ·ñÒÑ¾­´æÔÚ
+		// å½“å‰å·¥ç¨‹æ˜¯å¦å·²ç»å­˜åœ¨
 		bool isPathExist( Echo::String path );
 
-		// ÉèÖÃÊä³öÂ·¾¶
+		// è®¾ç½®è¾“å‡ºè·¯å¾„
 		void setOutPutDir( const char* path ) { m_outPutDir = path; }
 
-		// »ñÈ¡Êä³öÂ·¾¶
+		// è·å–è¾“å‡ºè·¯å¾„
 		const char* getOutPutDir( ) { return m_outPutDir.c_str(); }
 
-		// »ñÈ¡×î½ü´ò¿ªµÄÏîÄ¿ÎÄ¼ş
+		// è·å–æœ€è¿‘æ‰“å¼€çš„é¡¹ç›®æ–‡ä»¶
 		Echo::String getLastOpenProjectFile();
 
-		// ¸ù¾İÃû³Æ»ñÈ¡ÊôĞÔÖµ
+		// æ ¹æ®åç§°è·å–å±æ€§å€¼
 		Echo::String getValue( const char* property);
 
-		// ÉèÖÃÊôĞÔ
+		// è®¾ç½®å±æ€§
 		void setValue( const char* property, const char* value);
 
-		// »ñÈ¡ËùÓĞ×î½ü´ò¿ªµÄ¹¤³Ì
+		// è·å–æ‰€æœ‰æœ€è¿‘æ‰“å¼€çš„å·¥ç¨‹
 		void getAllRecentProject(Echo::list<Echo::String>::type& projects);
 
 	private:
-		// ±£´æµ½ÎÄ¼ş
+		// ä¿å­˜åˆ°æ–‡ä»¶
 		void saveData( pugi::xml_document& doc, pugi::xml_node* projectNode );
 
-		// ¶ÁÈ¡×î½ü´ò¿ªµÄ¹¤³Ì
+		// è¯»å–æœ€è¿‘æ‰“å¼€çš„å·¥ç¨‹
 		void loadRecentProject( pugi::xml_node* node);
 
-		// ¶ÁÈ¡×ÊÔ´Êä³öÂ·¾¶
+		// è¯»å–èµ„æºè¾“å‡ºè·¯å¾„
 		void loadOutPutDir( pugi::xml_node* node);
 
-		// ¼ÓÔØÊôĞÔÖµ
+		// åŠ è½½å±æ€§å€¼
 		void loadPropertys( pugi::xml_node* node);
 
 	private:
-		Echo::String						m_cfgFile;			// ÅäÖÃÎÄ¼ş
-		Echo::list<Echo::String>::type		m_recentProjects;	// ×î½ü´ò¿ªµÄ¹¤³Ì
-		Echo::String						m_outPutDir;		// ×ÊÔ´×ª»»Êä³öÂ·¾¶
-		size_t								m_maxRecentProjects;// ¼ÇÂ¼×î½ü´ò
-		std::map<Echo::String, Echo::String>m_propertys;		// ÅäÖÃ
+		Echo::String						m_cfgFile;			// é…ç½®æ–‡ä»¶
+		Echo::list<Echo::String>::type		m_recentProjects;	// æœ€è¿‘æ‰“å¼€çš„å·¥ç¨‹
+		Echo::String						m_outPutDir;		// èµ„æºè½¬æ¢è¾“å‡ºè·¯å¾„
+		size_t								m_maxRecentProjects;// è®°å½•æœ€è¿‘æ‰“
+		std::map<Echo::String, Echo::String>m_propertys;		// é…ç½®
 	};
 }

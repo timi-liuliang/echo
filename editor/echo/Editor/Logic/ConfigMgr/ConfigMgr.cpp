@@ -4,16 +4,25 @@
 
 namespace Studio
 {
+	static ConfigMgr* g_instance = nullptr;
+
 	ConfigMgr::ConfigMgr()
 		: m_outPutDir( "" )
 		, m_maxRecentProjects( 10)
 	{
 		m_cfgFile = Echo::PathUtil::GetCurrentDir() + "/cache/echo.cache";
+		g_instance = this;
 	}
 
 	ConfigMgr::~ConfigMgr()
 	{
 		saveCfgFile();
+	}
+
+	// instance
+	ConfigMgr* ConfigMgr::instance()
+	{
+		return g_instance;
 	}
 
 	bool ConfigMgr::isFileExit( )
@@ -45,7 +54,7 @@ namespace Studio
 			pugi::xml_document doc;
 			doc.load_file(m_cfgFile.c_str());
 
-			// root½Úµã
+			// rootèŠ‚ç‚¹
 			pugi::xml_node projectNode = doc.child( "project" );
 			if( projectNode)
 			{
@@ -106,7 +115,7 @@ namespace Studio
 			return true;
 		}
 
-		// ×î¶à±£ÁôÊ®¸ö£¬³¬¹ıÔòÈ¥µô×îÔçµÄ
+		// æœ€å¤šä¿ç•™åä¸ªï¼Œè¶…è¿‡åˆ™å»æ‰æœ€æ—©çš„
 		size_t size = m_recentProjects.size();
 		if ( size >= m_maxRecentProjects )
 		{
@@ -162,7 +171,7 @@ namespace Studio
 
 			outputDir.append_attribute("dir_value") = m_outPutDir.c_str();
 
-			// ±£´æËùÓĞÊôĞÔ
+			// ä¿å­˜æ‰€æœ‰å±æ€§
 			for( std::map<Echo::String, Echo::String>::iterator it=m_propertys.begin(); it!=m_propertys.end(); it++)
 			{
 				pugi::xml_node propertyNode = propertys.append_child("property");

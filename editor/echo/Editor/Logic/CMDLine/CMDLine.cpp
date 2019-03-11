@@ -7,8 +7,10 @@
 #include <QTime>
 #include "Studio.h"
 #include "EchoEngine.h"
+#include "MainWindow.h"
 #include "Window.h"
 #include "ProjectWnd.h"
+#include "ConfigMgr.h"
 #include "GameMainWindow.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/util/TimeProfiler.h>
@@ -17,7 +19,6 @@ namespace Echo
 {
 	Studio::AStudio* g_astudio = NULL;
 
-	// ½âÎöÖ÷Èë¿Ú
 	bool CMDLine::Parser(int argc, char* argv[])
 	{
 		if ( argc > 1 )
@@ -54,7 +55,7 @@ namespace Echo
 		QApplication app(argc, argv);
 		app.setAttribute(Qt::AA_NativeWindows);
 
-		// ÉèÖÃ±àÂë·½Ê½
+		// è®¾ç½®ç¼–ç æ–¹å¼
 		QTextCodec *codec = QTextCodec::codecForName("GB18030");
 		QTextCodec::setCodecForLocale(codec);
 
@@ -67,29 +68,28 @@ namespace Echo
 		//splash.show();
 		//splash.showMessage(QString::fromLocal8Bit("Echo (32 bit OpenGLES) Copyright @ 2018-2019 B-Lab"), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
 
-		// qss
-		QFile qssFile(":/Qss/Qss/Ps.qss");
-		qssFile.open(QFile::ReadOnly);
-		if (qssFile.isOpen())
-		{
-			QString qss = QLatin1String(qssFile.readAll());
-			app.setStyleSheet(qss);
-
-			qssFile.close();
-		}
-
-		// »ù´¡±à¼­Æ÷
+		// new astudio
 		TIME_PROFILE
 		(
 			g_astudio = Studio::AStudio::instance();
 			g_astudio->setAppPath(QDir::currentPath().toStdString().c_str());
 		)
 
-		// ¼ÓÔØÅäÖÃ
+		// load editor config
 		TIME_PROFILE
 		(
-			g_astudio->getConfigMgr()->loadCfgFile();
+			Studio::ConfigMgr::instance()->loadCfgFile();
 		)
+
+		// Qss
+		{
+			Echo::String theme = Studio::ConfigMgr::instance()->getValue("CurrentTheme");
+			theme = theme.empty() ? ":/Qss/Qss/Ps.qss" : theme;
+			if (!theme.empty())
+			{
+				Studio::MainWindow::setTheme(theme.c_str());
+			}
+		}
 
 		TIME_PROFILE
 		(
@@ -149,11 +149,11 @@ namespace Echo
 		QApplication app(argc, argv);
 		app.setAttribute(Qt::AA_NativeWindows);
 
-		// ÉèÖÃ±àÂë·½Ê½
+		// è®¾ç½®ç¼–ç æ–¹å¼
 		QTextCodec *codec = QTextCodec::codecForName("GB18030");
 		QTextCodec::setCodecForLocale(codec);
 
-		// ÉèÖÃ½çÃæ·ç¸ñ
+		// è®¾ç½®ç•Œé¢é£Žæ ¼
 		QFile qssFile(":/Qss/Qss/Ps.qss");
 		qssFile.open(QFile::ReadOnly);
 		if (qssFile.isOpen())
@@ -164,14 +164,14 @@ namespace Echo
 			qssFile.close();
 		}
 
-		// »ù´¡±à¼­Æ÷
+		// åŸºç¡€ç¼–è¾‘å™¨
 		TIME_PROFILE
 		(
 			g_astudio = Studio::AStudio::instance();
 			g_astudio->setAppPath(QDir::currentPath().toStdString().c_str());
 		)
 
-		// ¼ÓÔØÅäÖÃ
+		// åŠ è½½é…ç½®
 		TIME_PROFILE
 		(
 			g_astudio->getConfigMgr()->loadCfgFile();
@@ -182,7 +182,7 @@ namespace Echo
 			g_astudio->Start();
 		)
 
-		// ÏÔÊ¾Ö÷´°¿Ú
+		// æ˜¾ç¤ºä¸»çª—å£
 		TIME_PROFILE
 		(
 			Echo::String projectFile = argv[1];
@@ -190,7 +190,7 @@ namespace Echo
 			g_astudio->getProjectWindow()->openProject( projectFile);
 		)
 
-		// Ö´ÐÐ
+		// æ‰§è¡Œ
 		app.exec();
 
 		delete g_astudio;

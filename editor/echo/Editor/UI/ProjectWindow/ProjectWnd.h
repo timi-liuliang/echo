@@ -33,9 +33,9 @@ namespace Studio
 		// open new project
 		void openNewProject(int index);
 
-		void onDoubleClicked(const QString& name);
-
+		// clicked
 		void onClicked(const QString& name);
+		void onDoubleClicked(const QString& name);
 
 		// download
 		void onDownloadNewVersion(QListWidgetItem* item);
