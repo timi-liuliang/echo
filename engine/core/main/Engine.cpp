@@ -297,6 +297,8 @@ namespace Echo
         Echo::Engine::Config rootcfg;
         rootcfg.m_projectFile = project;
         rootcfg.m_isGame = isGame;
-        Echo::Engine::instance()->initialize(rootcfg);
+        Engine::instance()->initialize(rootcfg);
+
+		return Engine::instance();
     }
 }

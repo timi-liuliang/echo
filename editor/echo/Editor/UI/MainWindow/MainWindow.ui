@@ -38,7 +38,7 @@
      <x>0</x>
      <y>0</y>
      <width>1126</width>
-     <height>22</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile_F">
@@ -104,9 +104,9 @@
       <string>Theme</string>
      </property>
      <addaction name="separator"/>
+     <addaction name="m_actionThemeDark"/>
+     <addaction name="m_actionThemeChoose"/>
     </widget>
-    <addaction name="m_actionThemeChoose"/>
-    <addaction name="m_actionThemeLibrary"/>
     <addaction name="menuTheme"/>
    </widget>
    <addaction name="menuFile_F"/>
@@ -251,19 +251,17 @@
     <string>Documentation</string>
    </property>
   </action>
-  <action name="m_actionThemeLibrary">
+  <action name="m_actionThemeDark">
    <property name="text">
-    <string>Library</string>
+    <string>Dark</string>
+   </property>
+   <property name="toolTip">
+    <string>Dark Theme</string>
    </property>
   </action>
   <action name="m_actionThemeChoose">
    <property name="text">
     <string>Choose...</string>
-   </property>
-  </action>
-  <action name="actionThemes">
-   <property name="text">
-    <string>Themes</string>
    </property>
   </action>
  </widget>
