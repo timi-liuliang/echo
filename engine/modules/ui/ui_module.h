@@ -11,5 +11,8 @@ namespace Echo
 
 		// register all types of the module
 		virtual void registerTypes() override;
+
+		// get font
+
 	};
 }
