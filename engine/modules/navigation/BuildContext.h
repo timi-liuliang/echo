@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ThirdParty/Recast/Recast/Recast.h>
+#include <thirdparty/recast/Recast/Recast.h>
 #include "PerfTimer.h"
 
 namespace Echo

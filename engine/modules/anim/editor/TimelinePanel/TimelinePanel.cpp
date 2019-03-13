@@ -621,7 +621,7 @@ namespace Echo
 				m_curveKeyItem = sender;
 				EditorApi.qLineEditSetText( m_curveKeyLineEdit, StringUtil::ToString( keyInfo.m_value));
 
-				int halfWidth = EditorApi.qLineEditWidth(m_curveKeyLineEdit) / 2;
+				//int halfWidth = EditorApi.qLineEditWidth(m_curveKeyLineEdit) / 2;
 				int halfHeight = EditorApi.qLineEditHeight(m_curveKeyLineEdit) / 2;
 				Vector2 mouseScenePos = EditorApi.qGraphicsItemGetEventAll(sender).graphicsSceneMouseEvent.scenePos;
 				EditorApi.qGraphicsProxyWidgetSetPos(m_curveKeyLineEditProxyWidget, mouseScenePos.x + m_keyRadius, mouseScenePos.y - halfHeight);
@@ -786,7 +786,7 @@ namespace Echo
 						QGraphicsItem* textItem = EditorApi.qGraphicsSceneAddSimpleText(m_graphicsScene, StringUtil::Format("%d", time).c_str(), m_rulerColor);
 						if (textItem)
 						{
-							float halfWidth = EditorApi.qGraphicsItemWidth(textItem) * 0.4f /*0.5f*/;
+							//float halfWidth = EditorApi.qGraphicsItemWidth(textItem) * 0.4f /*0.5f*/;
 							EditorApi.qGraphicsItemSetPos(textItem, textPos.x, textPos.y);
 							m_rulerItems.push_back(textItem);
 						}

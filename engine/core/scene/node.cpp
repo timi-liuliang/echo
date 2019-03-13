@@ -1,4 +1,4 @@
-#include "Node.h"
+#include "node.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/io/IO.h"
 #include "engine/core/main/Engine.h"
@@ -89,10 +89,6 @@ namespace Echo
 	}
 
 	Node::Node()
-		: m_parent(NULL)
-		, m_isEnable(true)
-		, m_isLink(false)
-		, m_isTransformDirty(false)
 	{
 		m_matWorld = Matrix4::IDENTITY;
 		needUpdate();   

@@ -15,7 +15,7 @@
 #include "engine/core/script/lua/register_core_to_lua.cx"
 #include "engine/core/script/lua/lua_binder.h"
 #include "engine/core/script/lua/lua_script.h"
-#include "plugin.h"
+#include "Plugin.h"
 #include "module.h"
 #include "engine/core/render/interface/pipeline/RenderPipeline.h"
 #include "engine/core/render/interface/pipeline/RenderStage.h"

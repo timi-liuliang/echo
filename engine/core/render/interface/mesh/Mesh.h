@@ -130,20 +130,20 @@ namespace Echo
 		void buildIndexBuffer();
 
 	protected:
-		String						m_name;						// 名称
-		TopologyType				m_topologyType;				// 图元类型
-		AABB						m_box;						// 包围盒
-		ui32						m_startVert;
-		ui32						m_startIdx;
-		ui32						m_idxCount;					// 索引数量
-		ui32						m_idxStride;				// 索引格式大小
-		Byte*						m_indices;					// 索引数据
-		MeshVertexData				m_vertData;					// 顶点数据
-		bool						m_isDynamicVertexBuffer;	// 是否支持动态更新
-		GPUBuffer*					m_vertexBuffer;				// 顶点缓冲
-		bool						m_isDynamicIndicesBuffer;	// 索引缓冲
-		GPUBuffer*					m_indexBuffer;				// 索引缓冲
-		vector<ui32>::type			m_boneIdxs;					// 骨骼索引(mesh only use a part of bones of a skeleton)
+		String						m_name;
+		TopologyType				m_topologyType;
+		AABB						m_box;
+		ui32						m_startVert = 0;
+		ui32						m_startIdx = 0;
+		ui32						m_idxCount = 0;
+		ui32						m_idxStride = 0;
+		Byte*						m_indices = nullptr;
+		MeshVertexData				m_vertData;
+		bool						m_isDynamicVertexBuffer;
+		GPUBuffer*					m_vertexBuffer = nullptr;
+		bool						m_isDynamicIndicesBuffer;
+		GPUBuffer*					m_indexBuffer = nullptr;
+		vector<ui32>::type			m_boneIdxs;
 	};
 }
 

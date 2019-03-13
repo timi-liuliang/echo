@@ -2,7 +2,7 @@
 #include "engine/core/log/Log.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/io/IO.h"
-#include "engine/core/render/interface/renderer.h"
+#include "engine/core/render/interface/Renderer.h"
 #include "engine/core/main/Engine.h"
 #include "engine/core/scene/node_tree.h"
 #include <ostream>
@@ -14,8 +14,8 @@ namespace Echo
 		, m_designHeight(768)
 		, m_windowWidth(-1)
 		, m_windowHeight(-1)
-		, m_launchScene("", ".scene")
 		, m_aspect("stretch", {"none", "stretch", "keep width", "keep height", "keep in", "keep out"})
+        , m_launchScene("", ".scene")
 	{
 	}
 

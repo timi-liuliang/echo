@@ -136,18 +136,18 @@ namespace Echo
 
 	public:
 		ui32									m_identifier;
-		Render*									m_node;
+		Render*									m_node = nullptr;
 		String									m_renderStage;
 		ShaderProgramPtr						m_shaderProgram;		// material
-		Mesh*									m_mesh;
+		Mesh*									m_mesh = nullptr;
 		MaxTextureArray							m_textures;				// now only one texture sampler.
 		vector<ShaderParam>::type				m_shaderParams;			// third shader params
-		size_t									m_SParamWriteIndex;
+		size_t									m_SParamWriteIndex = 0;
 
-		bool									m_bRenderState;
-		BlendState*								m_pBlendState;
-		RasterizerState*						m_pRasterizerState;
-		DepthStencilState*						m_pDepthStencil;
+		bool									m_bRenderState = false;
+		BlendState*								m_pBlendState = nullptr;
+		RasterizerState*						m_pRasterizerState = nullptr;
+		DepthStencilState*						m_pDepthStencil = nullptr;
 	};
 	typedef ui32 RenderableID;
 }

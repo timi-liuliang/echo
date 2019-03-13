@@ -8,13 +8,13 @@
 
 namespace Echo
 {
-    class Text : public Render
+    class UiText : public Render
     {
-        ECHO_CLASS(Text, Render)
+        ECHO_CLASS(UiText, Render)
         
     public:
-        Text();
-        virtual ~Text();
+        UiText();
+        virtual ~UiText();
         
         // texture res path
         void setTextureRes(const ResourcePath& path);

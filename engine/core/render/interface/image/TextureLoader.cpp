@@ -1,5 +1,3 @@
-#pragma once
-
 #include "TextureLoader.h"
 
 namespace Echo

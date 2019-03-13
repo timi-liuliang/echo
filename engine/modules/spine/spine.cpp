@@ -68,7 +68,7 @@ namespace Echo
 {
 	static void animationCallback(spAnimationState* state, spEventType type, spTrackEntry* entry, spEvent* event)
 	{
-		int  a = 10;
+
 	}
 
 	static void trackEntryCallback(spAnimationState* state, int trackIndex, spEventType type, spEvent* event, int loopCount)

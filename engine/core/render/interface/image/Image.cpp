@@ -6,7 +6,7 @@
 #include "ImageResampler.h"
 #include "ImageCodec.h"
 #include "ImageCodecMgr.h"
-#include <freeimage/FreeImage.h>
+#include <thirdparty/FreeImage/FreeImage.h>
 
 namespace Echo
 {

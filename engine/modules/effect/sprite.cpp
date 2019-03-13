@@ -1,7 +1,7 @@
 #include "sprite.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/scene/node_tree.h"
-#include "interface/renderer.h"
+#include "interface/Renderer.h"
 #include "interface/ShaderProgram.h"
 #include "engine/core/main/Engine.h"
 

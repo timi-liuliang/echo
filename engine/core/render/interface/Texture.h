@@ -112,21 +112,21 @@ namespace Echo
 
 	public:
 		PixelFormat			m_pixFmt;
-		bool				m_isCompressed;
-		ui32				m_compressType;
-		Dword				m_usage;
-		ui32				m_width;
-		ui32				m_height;
-		ui32				m_depth;
+		bool				m_isCompressed = false;
+		ui32				m_compressType = CompressType_Unknown;
+		Dword				m_usage = TU_DYNAMIC;
+		ui32				m_width = 0;
+		ui32				m_height = 0;
+		ui32				m_depth = 1;
 		bool				m_isMipMapEnable;
-		ui32				m_numMipmaps;
-		ui32				m_faceNum;
-		ui32				m_blockSize;
-		ui32				m_xDimension;
-		ui32				m_yDimension;
-		ui32				m_zDimension;
+		ui32				m_numMipmaps = 1;
+		ui32				m_faceNum = 1;
+		ui32				m_blockSize = 0;
+		ui32				m_xDimension = 0;
+		ui32				m_yDimension = 0;
+		ui32				m_zDimension = 0;
 		ui32				m_surfaceNum;
-		const SamplerState*	m_samplerState;
+		const SamplerState*	m_samplerState = nullptr;
 	};
 	typedef ResRef<Texture> TexturePtr;
 }

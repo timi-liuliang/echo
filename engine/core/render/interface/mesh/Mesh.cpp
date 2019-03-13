@@ -17,13 +17,6 @@ namespace Echo
 
 	Mesh::Mesh(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer)
 		: m_topologyType(TT_TRIANGLELIST)
-		, m_vertexBuffer(NULL)
-		, m_indexBuffer(NULL)
-		, m_idxCount(0)
-		, m_idxStride(0)
-		, m_indices(NULL)
-		, m_startVert(0)
-		, m_startIdx(0)
 		, m_isDynamicVertexBuffer(isDynamicVertexBuffer)
 		, m_isDynamicIndicesBuffer(isDynamicIndicesBuffer)
 	{

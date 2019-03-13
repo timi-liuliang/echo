@@ -20,8 +20,8 @@ namespace Echo
 		virtual ui32 takeData(Byte* &pData);
 
 	protected:
-		Byte*		m_pData;
-		ui32		m_size;
-		bool		m_bAutoFree;
+		Byte*		m_data = nullptr;
+		ui32		m_size = 0;
+		bool		m_isAutoFree = false;
 	};
 }

@@ -167,15 +167,15 @@ namespace Echo
 		virtual void update_self() {}
 
 	protected:
-		bool			m_isEnable;
-		bool			m_isLink;			// belong to branch scene
-		Node*			m_parent;
+		bool			m_isEnable = true;
+		bool			m_isLink = false;	        // belong to branch scene
+		Node*			m_parent = nullptr;
 		NodeArray		m_children;
-		bool			m_isTransformDirty;	// for rendering.
+		bool			m_isTransformDirty = false;	// for rendering.
 		Transform		m_localTransform;
 		Transform		m_worldTransform;
-		Matrix4			m_matWorld;			// cached derived transform as a 4x4 matrix
-		AABB			m_localAABB;		// local aabb
-		LuaScript		m_script;			// bind script
+		Matrix4			m_matWorld;			        // cached derived transform as a 4x4 matrix
+		AABB			m_localAABB;		        // local aabb
+		LuaScript		m_script;			        // bind script
 	};
 }

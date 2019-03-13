@@ -1,13 +1,13 @@
 #pragma once
 
-#include <engine/core/Thread/Pool/CpuThreadPool.h>
-#include "engine/core/Base/echo_def.h"
+#include <engine/core/thread/pool/CpuThreadPool.h>
+#include "engine/core/base/echo_def.h"
 
 namespace Echo
 {
 	/**
-	 * 多线程任务处理管理器 2014-10-27 
-	 * 参考 http://www.openmp.org
+	 * OpenMPTaskManager 2014-10-27
+	 * http://www.openmp.org
 	 */
 	class OpenMPTaskMgr
 	{

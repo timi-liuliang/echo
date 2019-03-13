@@ -3,18 +3,12 @@
 
 namespace Echo
 {
-	// ¹¹Ôìº¯Êý
 	Buffer::Buffer()
-		: m_pData(NULL)
-		, m_size(0)
-		, m_bAutoFree(false)
 	{
 	}
 
 	Buffer::Buffer(ui32 size, void *pData, bool bAutoFree)
-		: m_bAutoFree(bAutoFree)
-		, m_pData(NULL)
-		, m_size(0)
+		: m_isAutoFree(bAutoFree)
 	{
 		set(size, pData, bAutoFree);
 	}
@@ -30,41 +24,41 @@ namespace Echo
 
 		clear();
 
-		m_pData = (Byte*)EchoMalloc(sizeof(Byte)*size);
+		m_data = (Byte*)EchoMalloc(sizeof(Byte)*size);
 		m_size = size;
-		m_bAutoFree = true;
+		m_isAutoFree = true;
 	}
 
 	void Buffer::clear()
 	{
-		if (m_bAutoFree && m_pData)
+		if (m_isAutoFree && m_data)
 		{
-			EchoSafeFree(m_pData);
+			EchoSafeFree(m_data);
 		}
 
-		m_pData = NULL;
+		m_data = NULL;
 		m_size = 0;
-		m_bAutoFree = false;
+		m_isAutoFree = false;
 	}
 
 	void Buffer::set(ui32 size, void* pData, bool bAutoFree)
 	{
 		clear();
 
-		m_pData = (Byte*)pData;
+		m_data = (Byte*)pData;
 		m_size = size;
-		m_bAutoFree = bAutoFree;
+		m_isAutoFree = bAutoFree;
 	}
 
 	void Buffer::copyBuffer(const Buffer& buff)
 	{
 		allocate(buff.getSize());
-		memcpy(m_pData, buff.getData(), buff.getSize());
+		memcpy(m_data, buff.getData(), buff.getSize());
 	}
 
 	Byte* Buffer::getData() const
 	{
-		return m_pData;
+		return m_data;
 	}
 
 	ui32 Buffer::getSize() const
@@ -74,11 +68,11 @@ namespace Echo
 
 	ui32 Buffer::takeData(Byte*& pData)
 	{
-		pData = m_pData;
-		m_pData = NULL;
+		pData = m_data;
+		m_data = NULL;
 		ui32 size = m_size;
 		m_size = 0;
-		m_bAutoFree = false;
+		m_isAutoFree = false;
 		return size;
 	}
 }

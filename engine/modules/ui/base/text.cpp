@@ -8,7 +8,7 @@
 
 namespace Echo
 {
-    Text::Text()
+    UiText::UiText()
     : m_textureRes("", ".png")
     , m_mesh(nullptr)
     , m_material(nullptr)
@@ -18,27 +18,27 @@ namespace Echo
     {
     }
     
-    Text::~Text()
+    UiText::~UiText()
     {
         clear();
     }
     
-    void Text::bindMethods()
+    void UiText::bindMethods()
     {
-        CLASS_BIND_METHOD(Text, getTextureRes,   DEF_METHOD("getTextureRes"));
-        CLASS_BIND_METHOD(Text, setTextureRes,   DEF_METHOD("setTextureRes"));
-        CLASS_BIND_METHOD(Text, getWidth,        DEF_METHOD("getWidth"));
-        CLASS_BIND_METHOD(Text, setWidth,        DEF_METHOD("setWidth"));
-        CLASS_BIND_METHOD(Text, getHeight,       DEF_METHOD("getHeight"));
-        CLASS_BIND_METHOD(Text, setHeight,       DEF_METHOD("setHeight"));
+        CLASS_BIND_METHOD(UiText, getTextureRes,   DEF_METHOD("getTextureRes"));
+        CLASS_BIND_METHOD(UiText, setTextureRes,   DEF_METHOD("setTextureRes"));
+        CLASS_BIND_METHOD(UiText, getWidth,        DEF_METHOD("getWidth"));
+        CLASS_BIND_METHOD(UiText, setWidth,        DEF_METHOD("setWidth"));
+        CLASS_BIND_METHOD(UiText, getHeight,       DEF_METHOD("getHeight"));
+        CLASS_BIND_METHOD(UiText, setHeight,       DEF_METHOD("setHeight"));
         
-        CLASS_REGISTER_PROPERTY(Text, "Width", Variant::Type::Int, "getWidth", "setWidth");
-        CLASS_REGISTER_PROPERTY(Text, "Height", Variant::Type::Int, "getHeight", "setHeight");
-        CLASS_REGISTER_PROPERTY(Text, "Texture", Variant::Type::ResourcePath, "getTextureRes", "setTextureRes");
+        CLASS_REGISTER_PROPERTY(UiText, "Width", Variant::Type::Int, "getWidth", "setWidth");
+        CLASS_REGISTER_PROPERTY(UiText, "Height", Variant::Type::Int, "getHeight", "setHeight");
+        CLASS_REGISTER_PROPERTY(UiText, "Texture", Variant::Type::ResourcePath, "getTextureRes", "setTextureRes");
     }
     
     // set texture res path
-    void Text::setTextureRes(const ResourcePath& path)
+    void UiText::setTextureRes(const ResourcePath& path)
     {
         if (m_textureRes.setPath(path.getPath()))
         {
@@ -46,7 +46,7 @@ namespace Echo
         }
     }
     
-    void Text::setWidth(i32 width)
+    void UiText::setWidth(i32 width)
     {
         if (m_width != width)
         {
@@ -57,7 +57,7 @@ namespace Echo
     }
     
     // width
-    void Text::setHeight(i32 height)
+    void UiText::setHeight(i32 height)
     {
         if (m_height != height)
         {
@@ -68,7 +68,7 @@ namespace Echo
     }
     
     // build drawable
-    void Text::buildRenderable()
+    void UiText::buildRenderable()
     {
         if (!m_textureRes.getPath().empty())
         {
@@ -98,7 +98,7 @@ namespace Echo
     }
     
     // update per frame
-    void Text::update_self()
+    void UiText::update_self()
     {
         if (isNeedRender())
         {
@@ -111,7 +111,7 @@ namespace Echo
     }
     
     // build mesh data by drawables data
-    void Text::buildMeshData(Ui::VertexArray& oVertices, Ui::IndiceArray& oIndices)
+    void UiText::buildMeshData(Ui::VertexArray& oVertices, Ui::IndiceArray& oIndices)
     {
         Texture* texture = m_material->getTexture(0);
         if (texture)
@@ -144,7 +144,7 @@ namespace Echo
     }
     
     // update vertex buffer
-    void Text::updateMeshBuffer()
+    void UiText::updateMeshBuffer()
     {
         Ui::VertexArray    vertices;
         Ui::IndiceArray    indices;
@@ -157,12 +157,12 @@ namespace Echo
         m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data(), m_localAABB);
     }
     
-    void Text::clear()
+    void UiText::clear()
     {
         clearRenderable();
     }
     
-    void Text::clearRenderable()
+    void UiText::clearRenderable()
     {
         EchoSafeRelease(m_renderable);
         EchoSafeRelease(m_material);

@@ -420,7 +420,6 @@ namespace Echo
 		}
 	}
 
-	// 射线检测(求射线与与某多边形相交点)
 	bool Navigation::rayDetectPoly(const Vector3& startPos, const Echo::Vector3& dir, float& oLength, dtPolyRef polyRef, Vector3& oHitPosition) const
 	{
 		const dtMeshTile* tile = 0;

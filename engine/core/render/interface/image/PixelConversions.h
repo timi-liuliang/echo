@@ -1,7 +1,6 @@
-#ifndef __ECHO_PIXELCONVERSIONS_H__
-#define __ECHO_PIXELCONVERSIONS_H__
+#pragma once
 
-#include <engine/core/Base/echo_def.h>
+#include <engine/core/base/echo_def.h>
 
 namespace Echo
 {
@@ -289,4 +288,3 @@ namespace Echo
 	}
 #undef CASECONVERTER
 }
-#endif

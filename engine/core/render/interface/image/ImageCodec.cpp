@@ -1,7 +1,7 @@
 #include "engine/core/log/Log.h"
 #include "engine/core/io/DataStream.h"
 #include "ImageCodec.h"
-#include <freeimage/FreeImage.h>
+#include <thirdparty/FreeImage/FreeImage.h>
 
 #ifdef _WINDOWS_
 #undef _WINDOWS_

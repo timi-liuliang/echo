@@ -275,7 +275,7 @@ namespace Echo
 			lua_getglobal(m_luaState, "package");
 			lua_getfield(m_luaState, -1, "searchers");
 
-			int b = lua_gettop(m_luaState);
+			lua_gettop(m_luaState);
 
 			// << loader func
 			for (int i = lua_rawlen(m_luaState, -1); i >= 1; --i)
@@ -375,9 +375,9 @@ namespace Echo
 #ifdef ECHO_EDITOR_MODE
 		if (lua_isnil(m_luaState, vars.size())) EchoLogError("lua global variable [%s == nil]", varName.c_str());
 #endif
-		int a = lua_gettop(m_luaState);
+		lua_gettop(m_luaState);
 		String result = lua_tostring(m_luaState, vars.size());
-		int b = lua_gettop(m_luaState);
+		lua_gettop(m_luaState);
 
 		// clear stack
 		lua_settop(m_luaState, 0);

@@ -11,14 +11,8 @@
 namespace Echo
 {
 	Renderable::Renderable(const String& renderStage, ShaderProgram* shader, int identifier)
-		: m_renderStage(renderStage)
-		, m_mesh(nullptr)
-		, m_SParamWriteIndex(0)
-		, m_bRenderState(false)
-		, m_pBlendState(NULL)
-		, m_pRasterizerState(NULL)
-		, m_pDepthStencil(NULL)
-		, m_identifier(identifier)
+		: m_identifier(identifier)
+        , m_renderStage(renderStage)
 	{
 		m_shaderProgram = shader;
 		m_textures.assign(nullptr);

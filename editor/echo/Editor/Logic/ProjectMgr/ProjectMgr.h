@@ -1,11 +1,11 @@
 #pragma once
 
-#include <Engine/core/main/GameSettings.h>
+#include <engine/core/main/GameSettings.h>
 
 namespace Studio
 {
 	/**
-	 * 项目文件分析器 2014-7-7
+	 * ProjectManager 2014-7-7
 	 */
 	class ProjectMgr
 	{

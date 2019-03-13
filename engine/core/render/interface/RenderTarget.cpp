@@ -18,9 +18,9 @@ namespace Echo
 	}
 
 	RenderTarget::RenderTarget( ui32 id, ui32 width, ui32 height, PixelFormat format, const Options& option )
-		: m_id( id)
+		: m_bHasMSAA(option.msaa)
+        , m_id( id)
 		, m_pixelFormat( format)
-		, m_bHasMSAA(option.msaa)
         , m_bHasDepth(option.depth)
 		, m_width( width)
 		, m_height( height)

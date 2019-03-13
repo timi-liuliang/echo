@@ -1,11 +1,11 @@
 #include <engine/core/io/IO.h>
 #include <engine/core/io/DataStream.h>
-#include <engine/core/Util/PathUtil.h>
-#include <engine/core/Base/echo_def.h>
+#include <engine/core/util/PathUtil.h>
+#include <engine/core/base/echo_def.h>
 #include "interface/Texture.h"
 #include "interface/Renderer.h"
 #include "engine/core/log/Log.h"
-#include "engine/core/Math/EchoMathFunction.h"
+#include "engine/core/math/EchoMathFunction.h"
 #include "image/PixelFormat.h"
 #include "image/Image.h"
 #include "image/TextureLoader.h"
@@ -17,19 +17,6 @@ namespace Echo
 
 	Texture::Texture()
 		: m_pixFmt(PF_UNKNOWN)
-		, m_usage(TU_DYNAMIC)
-		, m_width(0)
-		, m_height(0)
-		, m_depth(1)
-		, m_numMipmaps(1)
-		, m_compressType(CompressType_Unknown)
-		, m_isCompressed(false)
-		, m_faceNum(1)
-		, m_xDimension(0)
-		, m_yDimension(0)
-		, m_zDimension(0)
-		, m_blockSize(0)
-		, m_samplerState(NULL)
 		, m_isMipMapEnable(false)
 	{
 
@@ -38,19 +25,6 @@ namespace Echo
 	Texture::Texture(const String& name)
 		: Res(name)
 		, m_pixFmt(PF_UNKNOWN)
-		, m_usage(TU_DYNAMIC)
-		, m_width(0)
-		, m_height(0)
-		, m_depth(1)
-		, m_numMipmaps(1)
-		, m_compressType(CompressType_Unknown)
-		, m_isCompressed(false)
-		, m_faceNum(1)
-		, m_xDimension(0)
-		, m_yDimension(0)
-		, m_zDimension(0)
-		, m_blockSize(0)
-		, m_samplerState(NULL)
 		, m_isMipMapEnable(false)
 	{
 	}
