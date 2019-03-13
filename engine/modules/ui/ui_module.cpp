@@ -3,12 +3,12 @@
 
 namespace Echo
 {
-	UIModule::UIModule()
+	UiModule::UiModule()
 	{
 	}
 
-	void UIModule::registerTypes()
+	void UiModule::registerTypes()
 	{
-        Class::registerType<UiText>();
+        Class::registerType<Text>();
 	}
 }

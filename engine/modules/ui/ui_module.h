@@ -4,10 +4,10 @@
 
 namespace Echo
 {
-	class UIModule : public Module
+	class UiModule : public Module
 	{
 	public:
-		UIModule();
+		UiModule();
 
 		// register all types of the module
 		virtual void registerTypes() override;

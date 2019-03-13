@@ -24,7 +24,7 @@ namespace Echo
 		REGISTER_MODULE(GltfModule)
 		REGISTER_MODULE(AnimModule)
 		REGISTER_MODULE(EffectModule)
-		REGISTER_MODULE(UIModule)
+		REGISTER_MODULE(UiModule)
 		REGISTER_MODULE(AIModule)
 		REGISTER_MODULE(LightModule);
 		REGISTER_MODULE(PhysxModule);

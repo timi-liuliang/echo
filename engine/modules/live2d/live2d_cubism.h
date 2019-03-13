@@ -54,7 +54,7 @@ namespace Echo
 			float				m_opacitie;
 			vector<ui32>::type	m_masks;
 			VertexArray			m_vertices;
-			AABB					m_box;
+			AABB				m_box;
 			vector<Word>::type	m_indices;
 
 			void reset()
