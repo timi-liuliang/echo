@@ -1,3 +1,5 @@
+#pragma once
+
 #include "../audio_listener.h"
 
 namespace Echo

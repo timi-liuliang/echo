@@ -1,15 +1,15 @@
 #pragma once
 
-#include "../audio_player.h"
+#include "../base/image.h"
 
 namespace Echo
 {
 #ifdef ECHO_EDITOR_MODE
-	class AudioPlayerEditor : public ObjectEditor
+	class UiImageEditor : public ObjectEditor
 	{
 	public:
-		AudioPlayerEditor(Object* object);
-		virtual ~AudioPlayerEditor();
+		UiImageEditor(Object* object);
+		virtual ~UiImageEditor();
 
 		// get camera2d icon, used for editor
 		const char* getEditorIcon() const;
