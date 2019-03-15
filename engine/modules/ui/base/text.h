@@ -17,8 +17,8 @@ namespace Echo
         virtual ~UiText();
         
         // texture res path
-        void setTextureRes(const ResourcePath& path);
-        const ResourcePath& getTextureRes() { return m_textureRes; }
+        void setText(const String& text);
+        const String& getText() { return m_text; }
         
         // width
         i32 getWidth() const { return m_width; }
@@ -46,7 +46,7 @@ namespace Echo
         void clearRenderable();
         
     private:
-        ResourcePath            m_textureRes;
+        String                  m_text;
         Mesh*                   m_mesh;            // Geometry Data for render
         Material*               m_material;        // Material Instance
         Renderable*             m_renderable;

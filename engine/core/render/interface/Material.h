@@ -26,10 +26,10 @@ namespace Echo
 	public:
 		struct Uniform
 		{
-			String				m_name;				// 名称
-			ShaderParamType		m_type;				// 类型
-			i32					m_count;			// 数量
-			Byte*				m_value = nullptr;	// 值
+			String				m_name;
+			ShaderParamType		m_type;
+			i32					m_count;
+			Byte*				m_value = nullptr;
 
 			// destructor
 			~Uniform();
@@ -136,9 +136,9 @@ namespace Echo
 		bool				m_isDirty;					// need rebuild
 		ResourcePath		m_shaderPath;				// shader res path
 		String				m_shaderContentVirtualPath;	// virtual path of shader content
-		const char*			m_shaderContent;			// 官方材质
-		StringOption		m_renderStage;				// 所处渲染阶段
-		StringArray			m_macros;					// 宏定义
+		const char*			m_shaderContent;
+		StringOption		m_renderStage;
+		StringArray			m_macros;
 		ShaderProgram*	    m_shaderProgram = nullptr;
 		ParamMap			m_uniforms;
 		TextureInfoMap 		m_textures;

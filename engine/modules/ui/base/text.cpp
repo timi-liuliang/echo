@@ -9,8 +9,7 @@
 namespace Echo
 {
     UiText::UiText()
-    : m_textureRes("", ".png")
-    , m_mesh(nullptr)
+    : m_mesh(nullptr)
     , m_material(nullptr)
     , m_renderable(nullptr)
     , m_width(0)
@@ -25,8 +24,8 @@ namespace Echo
     
     void UiText::bindMethods()
     {
-        CLASS_BIND_METHOD(UiText, getTextureRes,   DEF_METHOD("getTextureRes"));
-        CLASS_BIND_METHOD(UiText, setTextureRes,   DEF_METHOD("setTextureRes"));
+        CLASS_BIND_METHOD(UiText, getText,         DEF_METHOD("getText"));
+        CLASS_BIND_METHOD(UiText, setText,         DEF_METHOD("setText"));
         CLASS_BIND_METHOD(UiText, getWidth,        DEF_METHOD("getWidth"));
         CLASS_BIND_METHOD(UiText, setWidth,        DEF_METHOD("setWidth"));
         CLASS_BIND_METHOD(UiText, getHeight,       DEF_METHOD("getHeight"));
@@ -34,16 +33,14 @@ namespace Echo
         
         CLASS_REGISTER_PROPERTY(UiText, "Width", Variant::Type::Int, "getWidth", "setWidth");
         CLASS_REGISTER_PROPERTY(UiText, "Height", Variant::Type::Int, "getHeight", "setHeight");
-        CLASS_REGISTER_PROPERTY(UiText, "Texture", Variant::Type::ResourcePath, "getTextureRes", "setTextureRes");
+        CLASS_REGISTER_PROPERTY(UiText, "Text", Variant::Type::ResourcePath, "getText", "setText");
     }
     
     // set texture res path
-    void UiText::setTextureRes(const ResourcePath& path)
+    void UiText::setText(const String& text)
     {
-        if (m_textureRes.setPath(path.getPath()))
-        {
-            buildRenderable();
-        }
+        m_text = text;
+        buildRenderable();
     }
     
     void UiText::setWidth(i32 width)
@@ -70,7 +67,7 @@ namespace Echo
     // build drawable
     void UiText::buildRenderable()
     {
-        if (!m_textureRes.getPath().empty())
+        if (!m_text.empty())
         {
             clearRenderable();
             
@@ -79,7 +76,7 @@ namespace Echo
             m_material->setShaderContent("echo_text_default_shader", UiMaterial::getDefault());
             m_material->setRenderStage("Transparent");
             
-            m_material->setTexture("u_BaseColorSampler", m_textureRes.getPath());
+            //m_material->setTexture("u_BaseColorSampler", m_textureRes.getPath());
             
             // mesh
             Ui::VertexArray vertices;
