@@ -37,7 +37,6 @@ namespace Echo
         CLASS_REGISTER_PROPERTY(UiImage, "Texture", Variant::Type::ResourcePath, "getTextureRes", "setTextureRes");
     }
     
-    // set texture res path
     void UiImage::setTextureRes(const ResourcePath& path)
     {
         if (m_textureRes.setPath(path.getPath()))

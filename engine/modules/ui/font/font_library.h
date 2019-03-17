@@ -1,22 +1,27 @@
 #pragma once
 
-#include <ft2build.h>
-#include FT_FREETYPE_H
+#include "font_glyph.h"
+#include "font_face.h"
 
 namespace Echo
 {
     class FontLibrary
     {
     public:
-        FontLibrary();
-        ~FontLibrary();
+        // instance
+        static FontLibrary* instance();
         
         // get glyph
+        FontGlyph getFontGlyph();
         
     public:
         // face manager
         bool loadFace(const char* filePath);
         bool unloadFace(const char* filePath);
+        
+    private:
+        FontLibrary();
+        ~FontLibrary();
         
     private:
         FT_Library m_library;

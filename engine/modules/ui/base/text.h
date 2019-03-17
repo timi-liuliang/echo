@@ -20,6 +20,10 @@ namespace Echo
         void setText(const String& text);
         const String& getText() { return m_text; }
         
+        // font res path
+        void setFont(const ResourcePath& path);
+        const ResourcePath& getFont() { return m_fontRes; }
+        
         // width
         i32 getWidth() const { return m_width; }
         void setWidth(i32 width);
@@ -47,6 +51,7 @@ namespace Echo
         
     private:
         String                  m_text;
+        ResourcePath            m_fontRes;
         Mesh*                   m_mesh;            // Geometry Data for render
         Material*               m_material;        // Material Instance
         Renderable*             m_renderable;

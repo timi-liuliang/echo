@@ -21,6 +21,17 @@ namespace Echo
         
     }
     
+    FontLibrary* FontLibrary::instance()
+    {
+        static FontLibrary* inst = EchoNew(FontLibrary);
+        return inst;
+    }
+    
+    FontGlyph FontLibrary::getFontGlyph()
+    {
+        return FontGlyph();
+    }
+    
     bool FontLibrary::loadFace(const char* filePath)
     {
         return true;
