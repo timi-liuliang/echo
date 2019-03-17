@@ -28,6 +28,7 @@ SET(INCLUDE_FILES
 	${ECHO_ROOT_PATH}/thirdparty/physx/physx/include
 	${ECHO_ROOT_PATH}/thirdparty/physx/pxshared/include
 	${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/Core/include
+    ${ECHO_ROOT_PATH}/thirdparty/freetype-2.6/include
 )
 
 IF(${ECHO_PLATFORM_WIN32})

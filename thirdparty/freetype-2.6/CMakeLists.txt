@@ -1,32 +1,27 @@
-MESSAGE(STATUS "configuring module: freetype...")
+# Set module name
+SET(MODULE_NAME freetype)
 
-# 附加包含目录
-SET(INCLUDE_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}
-	${ECHO_ROOT_PATH}/ThirdParty/FreeImage/LibPNG
-)
+#  Header Files
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/ThirdParty/FreeImage/LibPNG)
 
-INCLUDE_DIRECTORIES( ${INCLUDE_FILES})
-
-# 链接库
+# Library Directories
 LINK_DIRECTORIES(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
-LINK_LIBRARIES()
 
-# 设置项目路径
+# Define Module Path
 SET(MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 
-
-# 源文件路径
+# Header And Source Path
 SET(FREETYPE_HEADER_PATH ${MODULE_PATH}/include)
 SET(FREETYPE_SOURCE_PATH ${MODULE_PATH}/src)
 
-# 预定义宏
+# Pre Macros
 ADD_DEFINITIONS(-DFT_DEBUG_LEVEL_ERROR -DFT_DEBUG_LEVEL_TRACE -DFT2_BUILD_LIBRARY)
 IF(ECHO_BUILD_PLATFORM_ANDROID)
 	ADD_DEFINITIONS(-DFT_CONFIG_OPTION_SYSTEM_ZLIB)
 ENDIF()
 
-# Windows平台FreeType文件
+# FreeType files
 SET(FREETYPE_HEADER_FILES
 	${FREETYPE_HEADER_PATH}/ft2build.h
 	${FREETYPE_HEADER_PATH}/freetype/config/ftconfig.h
@@ -34,7 +29,8 @@ SET(FREETYPE_HEADER_FILES
 	${FREETYPE_HEADER_PATH}/freetype/config/ftmodule.h
 	${FREETYPE_HEADER_PATH}/freetype/config/ftoption.h
 	${FREETYPE_HEADER_PATH}/freetype/config/ftstdlib.h
-  )
+)
+
 SET(FREETYPE_SOURCE_FILES
 	${FREETYPE_SOURCE_PATH}/base/ftbbox.c
 	${FREETYPE_SOURCE_PATH}/base/ftfntfmt.c
@@ -80,18 +76,14 @@ SET(FREETYPE_SOURCE_FILES
 
 SET(ALL_FILES ${FREETYPE_HEADER_FILES} ${FREETYPE_SOURCE_FILES})
 
-# 分组文件
+# Group Files
 GROUP_FILES(ALL_FILES ${CMAKE_CURRENT_SOURCE_DIR})
 
-# 设置模块名称
-SET(MODULE_NAME freetype)
-
-# 新加库
+# Define Library
 ADD_LIBRARY(${MODULE_NAME} STATIC ${ALL_FILES} CMakeLists.txt)
 
-# 设置目标属性
+# Set Project Folder
 SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES FOLDER "thirdparty")
 
-MESSAGE(STATUS "baseserver configure success!")
-
-
+# Message Output
+MESSAGE(STATUS "${MODULE_NAME} configure success!")
