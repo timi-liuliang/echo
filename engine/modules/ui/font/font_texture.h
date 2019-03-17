@@ -1,16 +1,14 @@
 #pragma once
 
-#include <ft2build.h>
-
 namespace Echo
 {
-    class Font
+    class FontTexture
     {
     public:
-        Font();
-        ~Font();
+        FontTexture();
+        ~FontTexture();
         
     private:
-        
+
     };
 }
