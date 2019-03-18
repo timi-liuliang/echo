@@ -60,45 +60,8 @@ IF(WIN32)
 		SET(ECHO_PLATFORM_WIN32 TRUE)
 		MESSAGE(STATUS "Platform: Windows")
 
-		# compiler building setting
-		# Flags used by the compiler during all build types.
-		SET(CMAKE_CXX_FLAGS "/DWIN32 /D_WINDOWS /W3 /Zm1000 /EHsc /GR /MP /wd4996")
-		# Flags used by the compiler during debug builds.
-		SET(CMAKE_CXX_FLAGS_DEBUG "/D_DEBUG /MDd /Zi /Ob0 /Od /RTC1")
-		# Flags used by the compiler during release minsize builds.
-		SET(CMAKE_CXX_FLAGS_MINSIZEREL "/MD /O1 /Ob1 /D NDEBUG")
-		# Flags used by the compiler during release builds (/MD /Ob1 /Oi /Ot /Oy /Gs will produce slightly less optimized but smaller files).
-		SET(CMAKE_CXX_FLAGS_RELEASE "/MD /O2 /Ob2 /D NDEBUG")
-		# Flags used by the compiler during Release with Debug Info builds.
-		SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "/MD /Zi /O2 /Ob1 /D NDEBUG")
-		# Flags used by the compiler during all build types.
-		SET(CMAKE_C_FLAGS "/DWIN32 /D_WINDOWS /W3 /Zm1000 /wd4996")
-		# Flags used by the compiler during debug builds.
-		SET(CMAKE_C_FLAGS_DEBUG "/D_DEBUG /MDd /Zi  /Ob0 /Od /RTC1")
-		# Flags used by the compiler during release minsize builds.
-		SET(CMAKE_C_FLAGS_MINSIZEREL "/MD /O1 /Ob1 /D NDEBUG")
-		# Flags used by the compiler during release builds (/MD /Ob1 /Oi /Ot /Oy /Gs will produce slightly less optimized but smaller files).
-		SET(CMAKE_C_FLAGS_RELEASE "/MD /O2 /Ob2 /D NDEBUG")
-		# Flags used by the compiler during Release with Debug Info builds.
-		SET(CMAKE_C_FLAGS_RELWITHDEBINFO "/MD /Zi /O2 /Ob1 /D NDEBUG")
-
-		IF(MSVC)
-			SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /fp:fast")
-
-			# Enable intrinsics on MSVC in debug mode
-			SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Oi")
-			IF (CMAKE_CL_64)
-				# Visual Studio bails out on debug builds in 64bit mode unless
-				# this flag is set...
-				SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /bigobj")
-				SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /bigobj")
-			ENDIF ()
-
-		ENDIF()
-
-		# This seems to break Xcode projects so definitely don't enable on Apple builds
-		SET(CMAKE_USE_RELATIVE_PATHS true)
-		SET(CMAKE_SUPPRESS_REGENERATION true)
+		# Mutil Thread Compiling
+		SET(CMAKE_CXX_FLAGS "/DWIN32 /MP")
 
 	ENDIF()
 ELSEIF(UNIX)
