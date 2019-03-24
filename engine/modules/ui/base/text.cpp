@@ -5,6 +5,7 @@
 #include "interface/Renderer.h"
 #include "interface/ShaderProgram.h"
 #include "engine/core/main/Engine.h"
+#include "engine/modules/ui/font/font_library.h"
 
 namespace Echo
 {
@@ -50,7 +51,7 @@ namespace Echo
     {
         if (m_fontRes.setPath(path.getPath()))
         {
-
+            buildRenderable();
         }
     }
     
@@ -121,6 +122,14 @@ namespace Echo
     // build mesh data by drawables data
     void UiText::buildMeshData(Ui::VertexArray& oVertices, Ui::IndiceArray& oIndices)
     {
+        if(!m_text.empty())
+        {
+            for(char glyphCode : m_text)
+            {
+                FontGlyph fontGlyph = FontLibrary::instance()->getFontGlyph();
+            }
+        }
+        
         Texture* texture = m_material->getTexture(0);
         if (texture)
         {

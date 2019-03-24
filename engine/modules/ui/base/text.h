@@ -51,7 +51,7 @@ namespace Echo
         
     private:
         String                  m_text;
-        ResourcePath            m_fontRes;
+        ResourcePath            m_fontRes = ResourcePath("", ".ttf");
         Mesh*                   m_mesh;            // Geometry Data for render
         Material*               m_material;        // Material Instance
         Renderable*             m_renderable;

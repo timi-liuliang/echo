@@ -137,6 +137,7 @@ ADD_EXECUTABLE(${MODULE_NAME}
 TARGET_LINK_LIBRARIES(${MODULE_NAME} zlib engine lua recast freeimage physx)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} Qt5::Core Qt5::Widgets Qt5::UiTools)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} Live2DCubismCore pugixml spine box2d)
+TARGET_LINK_LIBRARIES(${MODULE_NAME} freetype)
 
 IF(${ECHO_PLATFORM_WIN32})
 	TARGET_LINK_LIBRARIES(${MODULE_NAME} 7zip winmm.lib imm32.lib dxgi.lib Shlwapi.lib)
