@@ -119,22 +119,16 @@ namespace Echo
         }
     }
     
-    // build mesh data by drawables data
     void UiText::buildMeshData(Ui::VertexArray& oVertices, Ui::IndiceArray& oIndices)
     {
         if(!m_text.empty())
         {
+            m_height = 20;
             for(char glyphCode : m_text)
             {
                 FontGlyph fontGlyph = FontLibrary::instance()->getFontGlyph();
+                m_width += 20;
             }
-        }
-        
-        Texture* texture = m_material->getTexture(0);
-        if (texture)
-        {
-            if(!m_width) m_width  = texture->getWidth();
-            if(!m_height) m_height = texture->getHeight();
         }
         
         float hw = m_width * 0.5f;
