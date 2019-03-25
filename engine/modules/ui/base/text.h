@@ -23,6 +23,10 @@ namespace Echo
         // font res path
         void setFont(const ResourcePath& path);
         const ResourcePath& getFont() { return m_fontRes; }
+
+		// font size
+		void setFontSize(i32 fontSize) { m_fontSize = fontSize; }
+		i32 getFontSize() const { return m_fontSize; }
         
         // width
         i32 getWidth() const { return m_width; }
@@ -52,6 +56,7 @@ namespace Echo
     private:
         String                  m_text;
         ResourcePath            m_fontRes = ResourcePath("", ".ttf");
+		i32						m_fontSize = 24;
         Mesh*                   m_mesh;            // Geometry Data for render
         Material*               m_material;        // Material Instance
         Renderable*             m_renderable;

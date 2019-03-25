@@ -6,11 +6,7 @@ namespace Echo
     FontLibrary::FontLibrary()
     {
         FT_Error result = FT_Init_FreeType(&m_library);
-        if(result==FT_Err_Ok)
-        {
-            
-        }
-        else
+        if(result!=FT_Err_Ok)
         {
             EchoLogError("UiModule FreeType init failed.");
         }
@@ -27,7 +23,7 @@ namespace Echo
         return inst;
     }
     
-    FontGlyph* FontLibrary::getFontGlyph(i32 id)
+    FontGlyph* FontLibrary::getFontGlyph(i32 charCode, const ResourcePath& fontPath, i32 fontSize)
     {
 		if (m_fontTextures.empty())
 		{
@@ -37,23 +33,28 @@ namespace Echo
 			m_fontTextures.push_back(newTexture);
 		}
 
-		if (m_glyphs.empty())
-		{
-			FontGlyph* fontGlyph = new FontGlyph;
-			fontGlyph->m_texture = m_fontTextures[0]->getTexture();
-			m_glyphs[id] = fontGlyph;
-		}
+		FontGlyph* fontGlyph = new FontGlyph;
+		fontGlyph->m_texture = m_fontTextures[0]->getTexture();
 
-		return m_glyphs[id];
+		return fontGlyph;
     }
     
-    bool FontLibrary::loadFace(const char* filePath)
+	FontFace* FontLibrary::loadFace(const char* filePath)
     {
-        return true;
+		FontFace* face = EchoNew(FontFace(m_library, filePath));
+		m_fontFaces.push_back(face);
+
+        return face;
     }
     
     bool FontLibrary::unloadFace(const char* filePath)
     {
         return true;
     }
+
+	// new glyph
+	void FontLibrary::newGlyph(i32 charCode, const ResourcePath& fontPath, i32 fontSize)
+	{
+		FontFace* fontFace = loadFace(fontPath.getPath().c_str());
+	}
 }

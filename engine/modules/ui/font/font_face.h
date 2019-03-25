@@ -3,6 +3,8 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include "engine/core/util/StringUtil.h"
+#include "engine/core/io/DataStream.h"
+#include "font_glyph.h"
 
 namespace Echo
 {
@@ -13,7 +15,9 @@ namespace Echo
         ~FontFace();
         
     private:
-        String      m_file;
-        FT_Face     m_face;
+        String						m_file;
+		MemoryReader*				m_memory = nullptr;
+        FT_Face						m_face;
+		map<i32, FontGlyph*>::type	m_glyphs;
     };
 }

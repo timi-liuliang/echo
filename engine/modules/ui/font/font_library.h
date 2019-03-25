@@ -13,20 +13,22 @@ namespace Echo
         static FontLibrary* instance();
         
         // get glyph
-        FontGlyph* getFontGlyph(i32 id);
+        FontGlyph* getFontGlyph(i32 charCode, const ResourcePath& fontPath, i32 fontSize);
         
     public:
         // face manager
-        bool loadFace(const char* filePath);
+		FontFace* loadFace(const char* filePath);
         bool unloadFace(const char* filePath);
         
     private:
         FontLibrary();
         ~FontLibrary();
+
+		// new glyph
+		void newGlyph(i32 charCode, const ResourcePath& fontPath, i32 fontSize);
         
     private:
         FT_Library					m_library;
-		map<i32, FontGlyph*>::type	m_glyphs;
 		vector<FontFace*>::type		m_fontFaces;
 		vector<FontTexture*>::type	m_fontTextures;
     };
