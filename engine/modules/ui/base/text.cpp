@@ -88,7 +88,8 @@ namespace Echo
             m_material->setShaderContent("echo_text_default_shader", UiMaterial::getDefault());
             m_material->setRenderStage("Transparent");
             
-            //m_material->setTexture("u_BaseColorSampler", m_textureRes.getPath());
+			FontGlyph* fontGlyph = FontLibrary::instance()->getFontGlyph(0);
+            m_material->setTexture("u_BaseColorSampler", fontGlyph->m_texture);
             
             // mesh
             Ui::VertexArray vertices;
@@ -126,7 +127,6 @@ namespace Echo
             m_height = 20;
             for(char glyphCode : m_text)
             {
-                FontGlyph fontGlyph = FontLibrary::instance()->getFontGlyph();
                 m_width += 20;
             }
         }

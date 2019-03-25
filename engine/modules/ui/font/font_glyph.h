@@ -2,13 +2,11 @@
 
 namespace Echo
 {
-    class FontGlyph
+    struct FontGlyph
     {
-    public:
-        FontGlyph();
-        ~FontGlyph();
-        
-    private:
+		class Texture*	m_texture = nullptr;
 
+		FontGlyph();
+		~FontGlyph();
     };
 }

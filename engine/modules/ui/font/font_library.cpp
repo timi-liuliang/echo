@@ -27,9 +27,24 @@ namespace Echo
         return inst;
     }
     
-    FontGlyph FontLibrary::getFontGlyph()
+    FontGlyph* FontLibrary::getFontGlyph(i32 id)
     {
-        return FontGlyph();
+		if (m_fontTextures.empty())
+		{
+			// create new texture
+			FontTexture* newTexture = EchoNew(FontTexture(512, 512));
+			newTexture->refreshTexture();
+			m_fontTextures.push_back(newTexture);
+		}
+
+		if (m_glyphs.empty())
+		{
+			FontGlyph* fontGlyph = new FontGlyph;
+			fontGlyph->m_texture = m_fontTextures[0]->getTexture();
+			m_glyphs[id] = fontGlyph;
+		}
+
+		return m_glyphs[id];
     }
     
     bool FontLibrary::loadFace(const char* filePath)

@@ -2,6 +2,7 @@
 
 #include "font_glyph.h"
 #include "font_face.h"
+#include "font_texture.h"
 
 namespace Echo
 {
@@ -12,7 +13,7 @@ namespace Echo
         static FontLibrary* instance();
         
         // get glyph
-        FontGlyph getFontGlyph();
+        FontGlyph* getFontGlyph(i32 id);
         
     public:
         // face manager
@@ -24,6 +25,9 @@ namespace Echo
         ~FontLibrary();
         
     private:
-        FT_Library m_library;
+        FT_Library					m_library;
+		map<i32, FontGlyph*>::type	m_glyphs;
+		vector<FontFace*>::type		m_fontFaces;
+		vector<FontTexture*>::type	m_fontTextures;
     };
 }
