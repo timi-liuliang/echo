@@ -26,7 +26,6 @@ namespace Echo
         
     }
     
-    // get glyph
     FontGlyph* FontFace::getGlyph(i32 charCode, i32 fontSize)
     {
         // if exist, return it
@@ -37,6 +36,30 @@ namespace Echo
         }
         
         // create new one
+        return loadGlyph( charCode, fontSize);
+    }
+    
+    FontGlyph* FontFace::loadGlyph(i32 charCode, i32 fontSize)
+    {
+        // get glyph index
+        i32 glyphIndex = FT_Get_Char_Index( m_face, charCode);
+        
+        // load glyph
+        i32 loadFlags = FT_LOAD_DEFAULT;
+        FT_Error error = FT_Load_Glyph( m_face, glyphIndex, loadFlags);
+        if(error)
+            return nullptr;
+        
+        // convert to an anti-aliased bitmap
+        error = FT_Render_Glyph(m_face->glyph, FT_RENDER_MODE_NORMAL);
+        if(error)
+            return nullptr;
+        
+        return copyGlyphToTexture(charCode, m_face->glyph);
+    }
+    
+    FontGlyph* FontFace::copyGlyphToTexture(i32 charCode, FT_GlyphSlot glyphSlot)
+    {
         if (m_fontTextures.empty())
         {
             // create new texture
@@ -44,10 +67,11 @@ namespace Echo
             newTexture->refreshTexture();
             m_fontTextures.push_back(newTexture);
         }
-         
+        
         FontGlyph* fontGlyph = new FontGlyph;
         fontGlyph->m_texture = m_fontTextures[0]->getTexture();
-         
+        m_glyphs[charCode] = fontGlyph;
+        
         return fontGlyph;
     }
 }

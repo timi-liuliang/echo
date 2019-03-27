@@ -22,6 +22,13 @@ namespace Echo
         FontGlyph* getGlyph(i32 charCode, i32 fontSize);
         
     private:
+        // load glyph
+        FontGlyph* loadGlyph(i32 charCode, i32 fontSize);
+        
+        // copy glyph bitmap to texture
+        FontGlyph* copyGlyphToTexture(i32 charCode, FT_GlyphSlot glyphSlot);
+        
+    private:
         String						m_file;
 		MemoryReader*				m_memory = nullptr;
         FT_Face						m_face;
