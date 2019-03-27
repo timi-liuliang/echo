@@ -23,13 +23,9 @@ namespace Echo
     private:
         FontLibrary();
         ~FontLibrary();
-
-		// new glyph
-		void newGlyph(i32 charCode, const ResourcePath& fontPath, i32 fontSize);
         
     private:
         FT_Library					m_library;
 		vector<FontFace*>::type		m_fontFaces;
-		vector<FontTexture*>::type	m_fontTextures;
     };
 }

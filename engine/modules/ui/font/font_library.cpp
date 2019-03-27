@@ -25,22 +25,25 @@ namespace Echo
     
     FontGlyph* FontLibrary::getFontGlyph(i32 charCode, const ResourcePath& fontPath, i32 fontSize)
     {
-		if (m_fontTextures.empty())
-		{
-			// create new texture
-			FontTexture* newTexture = EchoNew(FontTexture(512, 512));
-			newTexture->refreshTexture();
-			m_fontTextures.push_back(newTexture);
-		}
-
-		FontGlyph* fontGlyph = new FontGlyph;
-		fontGlyph->m_texture = m_fontTextures[0]->getTexture();
-
-		return fontGlyph;
+        FontFace* fontFace = loadFace( fontPath.getPath().c_str());
+        if(fontFace)
+        {
+            return fontFace->getGlyph(charCode, fontSize);
+        }
+        
+        return nullptr;
     }
     
 	FontFace* FontLibrary::loadFace(const char* filePath)
     {
+        // if exist, return it
+        for(FontFace* fontFace : m_fontFaces)
+        {
+            if(fontFace->getFile()==filePath)
+                return fontFace;
+        }
+        
+        // create new
 		FontFace* face = EchoNew(FontFace(m_library, filePath));
 		m_fontFaces.push_back(face);
 
@@ -51,10 +54,4 @@ namespace Echo
     {
         return true;
     }
-
-	// new glyph
-	void FontLibrary::newGlyph(i32 charCode, const ResourcePath& fontPath, i32 fontSize)
-	{
-		FontFace* fontFace = loadFace(fontPath.getPath().c_str());
-	}
 }

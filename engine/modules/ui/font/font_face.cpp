@@ -25,4 +25,29 @@ namespace Echo
     {
         
     }
+    
+    // get glyph
+    FontGlyph* FontFace::getGlyph(i32 charCode, i32 fontSize)
+    {
+        // if exist, return it
+        auto it = m_glyphs.find(charCode);
+        if(it!=m_glyphs.end())
+        {
+            return it->second;
+        }
+        
+        // create new one
+        if (m_fontTextures.empty())
+        {
+            // create new texture
+            FontTexture* newTexture = EchoNew(FontTexture(512, 512));
+            newTexture->refreshTexture();
+            m_fontTextures.push_back(newTexture);
+        }
+         
+        FontGlyph* fontGlyph = new FontGlyph;
+        fontGlyph->m_texture = m_fontTextures[0]->getTexture();
+         
+        return fontGlyph;
+    }
 }
