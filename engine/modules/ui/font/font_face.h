@@ -27,6 +27,7 @@ namespace Echo
         
         // copy glyph bitmap to texture
         FontGlyph* copyGlyphToTexture(i32 charCode, FT_GlyphSlot glyphSlot);
+        bool copyGlyphToBitmap(Color* oColor, i32& ioWidth, i32& ioHeight, i32 charCode, FT_GlyphSlot glyphSlot);
         
     private:
         String						m_file;
