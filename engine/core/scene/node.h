@@ -137,7 +137,7 @@ namespace Echo
 		String getNodePathRelativeTo(const Node* baseNode) const;
 
 		// queue free
-		virtual void queueFree();
+		virtual void queueFree() override;
 
 		// duplicate
 		Node* duplicate(bool recursive);

@@ -19,7 +19,8 @@
 namespace Echo
 {
 	// 标识三角形所区域
-	extern void EchoMarkWalkableTriangles(rcContext* ctx, const float* verts, int nv, const int* tris, int nt, const rcChunkyTriInfo* origTriInfos, unsigned char* areas);
+	extern void EchoMarkWalkableTriangles(rcContext* ctx, const float* verts, int nv, const int* tris, int nt, const rcChunkyTriInfo* origTriInfos, unsigned char* areas);
+
 	// This value specifies how many layers (or "floors") each navmesh tile is expected to have.
 	static const int EXPECTED_LAYERS_PER_TILE = 4;
 	static const int MAX_LAYERS = 32;
@@ -195,17 +196,12 @@ namespace Echo
 		int ntiles;
 	};
 
-	// 构造函数
 	NavigationTempObstacles::NavigationTempObstacles()
 		: Navigation()
 		, m_tileCache(nullptr)
-		, m_cacheCompressedSize(0)
-		, m_cacheLayerCount(0)
-		, m_cacheBuildMemUsage(0)
 		, m_maxTiles(0)
 		, m_maxPolysPerTile(0)
 		, m_tileSize(48)
-		, m_filterLedgeSpans(true)
 		, m_filterLowHangingObstacles(true)
 		, m_filterWalkableLowHeightSpans(true)
 		, m_tileCacheData(nullptr)
@@ -215,8 +211,7 @@ namespace Echo
 		m_tcomp = EchoNew(FastLZCompressor);
 		m_tmproc = EchoNew(MeshProcess);
 	}
-
-	// 析构
+    
 	NavigationTempObstacles::~NavigationTempObstacles()
 	{
 		cleanup();
@@ -534,8 +529,8 @@ namespace Echo
 		m_cacheCompressedSize = 0;
 		m_cacheRawSize = 0;
 
-		const float* verts = m_geom->getVerts();
-		const int nverts = m_geom->getVertCount();
+		//const float* verts = m_geom->getVerts();
+		//const int nverts = m_geom->getVertCount();
 		rcChunkyTriMesh* chunkyMesh = EchoNew(rcChunkyTriMesh);
 		if (!rcCreateChunkyTriMesh(m_geom->getVerts(), m_geom->getTris(), m_geom->getTriInfos(), m_geom->getTriCount(), 256, chunkyMesh))
 		{

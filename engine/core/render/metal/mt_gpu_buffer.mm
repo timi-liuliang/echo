@@ -37,7 +37,7 @@ namespace Echo
 
 	bool MTBuffer::updateData(const Buffer& buff)
 	{
-
+        return false;
 	}
 	
 	void MTBuffer::bindBuffer()

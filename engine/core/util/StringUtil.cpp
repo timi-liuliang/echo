@@ -911,7 +911,7 @@ static union { char c[2]; unsigned short a; } endian_test = { { 0, 1 } };
 			NULL,						//DefaultChar,    
 			NULL);						//UsedDefaultChar
     #elif defined(ECHO_PLATFORM_MAC)
-
+        return 0;
 	#else
 		iconv_t cd = iconv_open("UTF-8", WCHAR_TYPE);
 		if (cd == reinterpret_cast<iconv_t>(-1))
@@ -940,7 +940,7 @@ static union { char c[2]; unsigned short a; } endian_test = { { 0, 1 } };
 			utf16, 
 			utf16_len - 1);
     #elif defined(ECHO_PLATFORM_MAC)
-        
+        return 0;
 	#else
 		iconv_t cd = iconv_open(WCHAR_TYPE, "UTF-8");
 		if (cd == reinterpret_cast<iconv_t>(-1))

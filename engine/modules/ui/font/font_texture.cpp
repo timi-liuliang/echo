@@ -1,6 +1,7 @@
 #include "font_texture.h"
 #include "engine/core/util/Buffer.h"
 #include "engine/core/resource/Res.h"
+#include "engine/core/render/interface/Texture.h"
 
 #define INVALID -1
 
@@ -36,8 +37,6 @@ namespace Echo
 
 	const Vector4 FontTexture::getViewport(int nodeIdx) const
 	{
-		i32 size = static_cast<int>(m_nodes.size());
-
 		Vector4	result;
 		const IRect& tRc = m_nodes[nodeIdx].m_rc;
 		result.x = static_cast<float>(tRc.left) / static_cast<float>(m_width);
@@ -104,12 +103,11 @@ namespace Echo
 		Buffer buffer(m_width*m_height*pixelsize, m_textureData, false);
 		if (m_texture)
 		{
-			//m_texture->reCreate2D(PF_BGRA8_UNORM, Texture::TT_2D, m_width, m_height, 0, buffer);
+            m_texture->updateTexture2D(PF_BGRA8_UNORM, Texture::TU_GPU_READ, m_width, m_height, buffer.getData(), buffer.getSize());
 		}
 		else
 		{
-			m_texture = (Texture*)Res::get(ResourcePath("Res://icon.png"));
-			//m_texture = TextureResManager::instance()->createManual(s_TextureName + StringUtil::ToString(s_TextureSetID), Texture::TT_2D, PF_BGRA8_UNORM, Texture::TU_STATIC, m_width, m_height, 1, 0, buffer);
+            m_texture = Texture::createTexture2D(PF_BGRA8_UNORM, Texture::TU_GPU_READ, m_width, m_height, buffer.getData(), buffer.getSize());
 		}
 	}
 

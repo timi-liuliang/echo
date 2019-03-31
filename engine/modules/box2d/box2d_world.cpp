@@ -5,9 +5,7 @@
 namespace Echo
 {
 	Box2DWorld::Box2DWorld()
-		: m_gravity( 0.f, -9.8f)
-		, m_pixelsPerMeter( 32.f)
-		, m_drawDebugOption("Editor", {"None","Editor","Game","All"})
+		: m_drawDebugOption("Editor", {"None","Editor","Game","All"})
 	{
 		m_isEnable = Engine::instance()->getConfig().m_isGame;
 		m_b2World = EchoNew(b2World(b2Vec2(m_gravity.x, m_gravity.y)));

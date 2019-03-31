@@ -27,7 +27,7 @@ namespace Echo
 		void setVisible(bool isVisible) { m_isVisible = isVisible; }
 		bool isVisible() const { return m_isVisible; }
 
-		virtual void update(float delta, bool bUpdateChildren);
+		virtual void update(float delta, bool bUpdateChildren) override;
 
 	public:
 		// get global uniforms

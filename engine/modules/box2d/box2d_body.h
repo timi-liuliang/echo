@@ -26,7 +26,7 @@ namespace Echo
 
 	protected:
 		// update
-		virtual void update_self();
+		virtual void update_self() override;
 
 	private:
 		b2Body*			m_body;

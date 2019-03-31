@@ -221,7 +221,7 @@ namespace Echo
 public:																						\
 	typedef m_parent Super;																	\
 																							\
-	virtual const String& getClassName() const												\
+	virtual const String& getClassName() const override									    \
 	{																						\
 		static String className=#m_class;													\
 		return className;																	\
@@ -239,7 +239,7 @@ private:
 
 #define ECHO_VIRTUAL_CLASS(m_class, m_parent)												\
 public:																						\
-	virtual const String& getClassName() const												\
+	virtual const String& getClassName() const override									    \
 	{																						\
 		static String className=#m_class;													\
 		return className;																	\
@@ -257,7 +257,7 @@ private:
 
 #define ECHO_SINGLETON_CLASS(m_class, m_parent)												\
 public:																						\
-	virtual const String& getClassName() const												\
+	virtual const String& getClassName() const										        \
 	{																						\
 		static String className=#m_class;													\
 		return className;																	\

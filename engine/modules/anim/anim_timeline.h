@@ -120,7 +120,7 @@ namespace Echo
 		PlayState				m_playState;
 		vector<AnimClip*>::type	m_clips;
 		Base64String			m_animData;
-		bool					m_isAnimDataDirty;
-		StringOption			m_animations;
+		bool					m_isAnimDataDirty = false;
+		StringOption			m_animations = StringOption("");
 	};
 }

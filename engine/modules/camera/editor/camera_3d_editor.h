@@ -12,7 +12,7 @@ namespace Echo
 		virtual ~Camera3DEditor();
 
 		// get camera2d icon, used for editor
-		const char* getEditorIcon() const;
+		const char* getEditorIcon() const override;
 
 		// on editor select this node
 		virtual void onEditorSelectThisNode() override { m_isSelect = true; }

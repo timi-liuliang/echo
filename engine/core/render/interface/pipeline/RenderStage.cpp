@@ -1,6 +1,6 @@
 #include "RenderStage.h"
 #include "RenderPipeline.h"
-#include "Engine/core/main/Engine.h"
+#include "engine/core/main/Engine.h"
 
 namespace Echo
 {

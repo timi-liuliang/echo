@@ -426,7 +426,7 @@ namespace Echo
 		return false;
 	}
 
-	static bool MappingStringArrayIdx(const String* arry, int count, const String& value, int& idx)
+	/*static bool MappingStringArrayIdx(const String* arry, int count, const String& value, int& idx)
 	{
 		for (int i = 0; i < count; i++)
 		{
@@ -438,7 +438,7 @@ namespace Echo
 		}
 
 		return false;
-	}
+	}*/
 
 	void Material::matchUniforms()
 	{

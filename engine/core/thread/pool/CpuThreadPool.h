@@ -1,7 +1,7 @@
 #pragma once
 
 #include <thread>
-#include <engine/core/Util/Array.hpp>
+#include <engine/core/util/Array.hpp>
 
 namespace Echo
 {
@@ -106,6 +106,6 @@ namespace Echo
 		Cinfo						m_info;								// 当前线程数量
 		array<ThreadData, 32>		m_workerThreads;					// 工作线程数据
 		//array<scl::semaphore, 24>	m_semaphores;						// 信号量，用于主线程等待
-		array<int, 24>				m_numOfJobsProcessed;				// 工作线程处理的任务数量，对应工作类型
+		//array<int, 24>				m_numOfJobsProcessed;				// 工作线程处理的任务数量，对应工作类型
 	};
 }

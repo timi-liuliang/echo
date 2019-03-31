@@ -1,6 +1,6 @@
 #include "engine/core/util/PathUtil.h"
 #include "NavigationSolo.h"
-#include <thirdparty/recast/recast/recast.h>
+#include <thirdparty/recast/Recast/Recast.h>
 #include "DetourNavMeshBuilder.h"
 #include "DetourCommon.h"
 #include "InputGeometryData.h"

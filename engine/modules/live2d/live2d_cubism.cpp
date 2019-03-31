@@ -1,7 +1,7 @@
 #include "live2d_cubism.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/scene/node_tree.h"
-#include "interface/renderer.h"
+#include "interface/Renderer.h"
 #include "interface/ShaderProgram.h"
 #include "engine/core/main/Engine.h"
 
@@ -60,10 +60,6 @@ namespace Echo
 		, m_curMotion(nullptr)
 		, m_mocMemory(nullptr)
 		, m_moc(nullptr)
-		, m_model(nullptr)
-		, m_tableSize(0)
-		, m_tableMemory(nullptr)
-		, m_table(nullptr)
 		, m_modelSize(0)
 		, m_modelMemory(nullptr)
 		, m_mesh(nullptr)

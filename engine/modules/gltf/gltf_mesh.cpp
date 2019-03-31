@@ -1,7 +1,7 @@
 #include "gltf_mesh.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/scene/node_tree.h"
-#include "interface/renderer.h"
+#include "interface/Renderer.h"
 #include "interface/ShaderProgram.h"
 #include "engine/core/main/Engine.h"
 #include "engine/core/gizmos/Gizmos.h"
@@ -10,11 +10,7 @@
 namespace Echo
 {
 	GltfMesh::GltfMesh()
-		: m_assetPath("", ".gltf")
-		, m_renderableDirty(true)
-		, m_renderable(nullptr)
-		, m_nodeIdx(-1)
-		, m_meshIdx(-1)
+		: m_meshIdx(-1)
 		, m_skinIdx(-1)
 		, m_primitiveIdx(-1)
 		, m_material(nullptr)

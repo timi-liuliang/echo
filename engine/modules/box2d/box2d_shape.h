@@ -30,7 +30,7 @@ namespace Echo
 
 	protected:
 		// update self
-		virtual void update_self();
+		virtual void update_self() override;
 
 		// create shape
 		virtual b2Shape* createb2Shape() { return nullptr; }

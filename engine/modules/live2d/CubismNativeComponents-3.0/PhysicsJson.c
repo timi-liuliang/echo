@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Copyright(c) Live2D Inc. All rights reserved.
 *
 * Use of this source code is governed by the Live2D Open Software license
@@ -780,7 +780,7 @@ static int ParsePhysics3(const char* jsonString, csmJsonTokenType type, int begi
 {
   MetaParserContext metaParserContext;
   PhysicsParserContext* context;
-  int segmentType;
+  //int segmentType;
 
 
   // Recover context.

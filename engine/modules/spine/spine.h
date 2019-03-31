@@ -43,7 +43,7 @@ namespace Echo
 
 	protected:
 		// update
-		virtual void update_self();
+		virtual void update_self() override;
 
 		// submit to renderqueue
 		void submitToRenderQueue();

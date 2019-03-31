@@ -8,8 +8,7 @@
 namespace Echo
 {
 	Timeline::Timeline()
-		: m_animations("")
-		, m_playState(PlayState::Stop)
+		: m_playState(PlayState::Stop)
 		, m_isAnimDataDirty(false)
 	{
 	}

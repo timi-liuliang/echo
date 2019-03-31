@@ -1,7 +1,7 @@
-#include "engine/core/Util/AssertX.h"
+#include "engine/core/util/AssertX.h"
 #include "engine/core/log/Log.h"
 #include "CpuThreadPool.h"
-#include "engine/core/Thread/Threading.h"
+#include "engine/core/thread/Threading.h"
 
 namespace Echo
 {

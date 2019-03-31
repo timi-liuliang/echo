@@ -97,6 +97,7 @@ namespace Echo
 		virtual GPUBuffer* createIndexBuffer(Dword usage, const Buffer& buff) = 0;
 
 		// create texture
+        virtual Texture* createTexture2D() {return nullptr;}
 		virtual Texture* createTexture2D(const String& name)=0;
 		virtual TextureCube* createTextureCube(const String& name) = 0;
 

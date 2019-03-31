@@ -18,6 +18,6 @@ namespace Echo
 
 	protected:
 		// update self
-		virtual void update_self();
+		virtual void update_self() override;
 	};
 }

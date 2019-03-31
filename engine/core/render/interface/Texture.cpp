@@ -77,4 +77,16 @@ namespace Echo
 	{
 		return (size_t)PixelUtil::CalcSurfaceSize(m_width, m_height, m_depth, m_numMipmaps, m_pixFmt);
 	}
+    
+    Texture* Texture::createTexture2D(PixelFormat format, Texture::TexUsage usage, i32 width, i32 height, void* data, ui32 size)
+    {
+        Texture* texture = Renderer::instance()->createTexture2D();
+        if(texture)
+        {
+            texture->updateTexture2D(format, usage, width, height, data, size);
+            return texture;
+        }
+        
+        return nullptr;
+    }
 }

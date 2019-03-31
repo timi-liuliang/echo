@@ -66,7 +66,7 @@ namespace Echo
 
 	protected:
 		// update
-		virtual void update_self();
+		virtual void update_self() override;
 
 	protected:
 		bool						m_isInit;

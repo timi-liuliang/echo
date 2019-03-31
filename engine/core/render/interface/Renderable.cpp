@@ -104,18 +104,17 @@ namespace Echo
 	void Renderable::modifyShaderParam(ui32 physics, ShaderParamType type, void* param, size_t num/* =1 */)
 	{
 		EchoAssert(m_SParamWriteIndex == m_shaderParams.size());
-		ui32 modifyIndex = 0;
-		for (modifyIndex; modifyIndex < m_shaderParams.size(); modifyIndex++)
+		for (ui32 modifyIndex = 0; modifyIndex < m_shaderParams.size(); modifyIndex++)
 		{
 			if (m_shaderParams[modifyIndex].physicsIndex == physics)
-				break;
+            {
+                m_shaderParams[modifyIndex].stype = type;
+                m_shaderParams[modifyIndex].pData = param;
+                m_shaderParams[modifyIndex].ParamsLength = static_cast<ui32>(num);
+                
+                break;
+            }
 		}
-		EchoAssert(modifyIndex < m_shaderParams.size());
-		EchoAssert(m_shaderParams[modifyIndex].physicsIndex == physics);
-
-		m_shaderParams[modifyIndex].stype = type;
-		m_shaderParams[modifyIndex].pData = param;
-		m_shaderParams[modifyIndex].ParamsLength = static_cast<ui32>(num);
 	}
 
 	void Renderable::setTexture(ui32 stage, Texture* texture)

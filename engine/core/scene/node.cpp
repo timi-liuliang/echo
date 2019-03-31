@@ -575,8 +575,9 @@ namespace Echo
 		}
 
 		// get the same parent
-		int i = baseNodeListCount-1, j = curNodeListCount-1;
-		for (; i >= 0, j >= 0; i--, j--)
+        int i = baseNodeListCount-1;
+        int j = curNodeListCount-1;
+		for (; i >= 0 && j >= 0; i--, j--)
 		{
 			if(baseNodeList[i] != curNodeList[j])
 				break;

@@ -94,7 +94,7 @@ namespace Echo
 		void buildRenderable();
 
 		// update
-		virtual void update_self();
+		virtual void update_self() override;
 
 		// update vertex buffer
 		void updateMeshBuffer();
@@ -127,10 +127,10 @@ namespace Echo
 		csmMoc*					m_moc;
 		ui32					m_modelSize;
 		void*					m_modelMemory;
-		csmModel*				m_model;
-		ui32					m_tableSize;
-		void*					m_tableMemory;
-		csmModelHashTable*		m_table;
+		csmModel*				m_model = nullptr;
+		ui32					m_tableSize = 0;
+		void*					m_tableMemory = nullptr;
+		csmModelHashTable*		m_table = nullptr;
 		CanvasInfo				m_canvas;
 		vector<Paramter>::type	m_params;
 		vector<Part>::type		m_parts;

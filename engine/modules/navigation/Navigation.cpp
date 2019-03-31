@@ -2,8 +2,8 @@
 #include <float.h>
 #include "Navigation.h"
 #include "BuildContext.h"
-#include "Engine/core/Geom/Ray.h"
-#include <thirdparty/Recast/Recast/DetourCommon.h>
+#include "engine/core/geom/Ray.h"
+#include <thirdparty/recast/Recast/DetourCommon.h>
 
 namespace Echo
 {
@@ -177,7 +177,6 @@ namespace Echo
 		return npath;
 	}
 
-	// ¹¹Ôìº¯Êý
 	Navigation::Navigation()
 		: m_isLoaded(false)
 		, m_geom(nullptr)
@@ -441,7 +440,6 @@ namespace Echo
 			Echo::Vector3 v[3];
 			for (int k = 0; k < 3; ++k)
 			{
-				float* tv = NULL;
 				if (t[k] < poly->vertCount)
 					v[k] = (Echo::Vector3&)tile->verts[poly->verts[t[k]] * 3];
 				else

@@ -1,7 +1,7 @@
 #include "AttachmentLoader.h"
 #include <spine/extension.h>
 #include "engine/core/log/Log.h"
-#include "engine/core/render/interface/texture.h"
+#include "engine/core/render/interface/Texture.h"
 #include "engine/core/render/interface/mesh/Mesh.h"
 #include "engine/core/render/interface/Material.h"
 

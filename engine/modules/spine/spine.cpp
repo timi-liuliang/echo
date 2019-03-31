@@ -1,7 +1,7 @@
 #include "spine.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/scene/node_tree.h"
-#include "interface/renderer.h"
+#include "engine/core/render/interface/Renderer.h"
 #include "interface/ShaderProgram.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/math/color.h"
@@ -71,10 +71,10 @@ namespace Echo
 
 	}
 
-	static void trackEntryCallback(spAnimationState* state, int trackIndex, spEventType type, spEvent* event, int loopCount)
-	{
+	//static void trackEntryCallback(spAnimationState* state, int trackIndex, spEventType type, spEvent* event, int loopCount)
+	//{
 		//((SkeletonAnimation*)state->rendererObject)->onTrackEntryEvent(trackIndex, type, event, loopCount);
-	}
+	//}
 
 	Spine::Spine()
 		: m_spinRes("", ".json")

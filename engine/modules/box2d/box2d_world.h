@@ -40,8 +40,8 @@ namespace Echo
 		bool			m_isEnable;
 		StringOption	m_drawDebugOption;
 		Box2DDebugDraw*	m_debugDraw;
-		b2World*		m_b2World;			// we only support one b2World
-		Vector2			m_gravity;
-		float			m_pixelsPerMeter;
+		b2World*		m_b2World;			                // we only support one b2World
+		Vector2			m_gravity = Vector2( 0.f, -9.8f);
+		float			m_pixelsPerMeter = 32.f;
 	};
 }

@@ -43,10 +43,10 @@ namespace Echo
 		void buildRenderable();
 
 		// update
-		virtual void update_self();
+		virtual void update_self() override;
 
 		// get global uniforms
-		virtual void* getGlobalUniformValue(const String& name);
+		virtual void* getGlobalUniformValue(const String& name) override;
 
 		// clear
 		void clear();
@@ -60,18 +60,18 @@ namespace Echo
 		void syncLightData();
 
 	private:
-		bool					m_renderableDirty;
-		Renderable*				m_renderable;
+		bool					m_renderableDirty = true;
+		Renderable*				m_renderable = nullptr;
 		Matrix4					m_matWVP;
-		ResourcePath			m_assetPath;
-		GltfResPtr				m_asset;			// gltf asset ptr
-		i32						m_nodeIdx;			// node index in the asset, used by skeleton
-		i32						m_meshIdx;			// mesh index in the asset
+		ResourcePath			m_assetPath = ResourcePath("", ".gltf");
+		GltfResPtr				m_asset;			                        // gltf asset ptr
+		i32						m_nodeIdx = -1;			                       // node index in the asset, used by skeleton
+		i32						m_meshIdx;			                        // mesh index in the asset
 		i32						m_skinIdx;
-		int						m_primitiveIdx;		// sub mesh index
-		MaterialPtr				m_material;			// custom material
+		int						m_primitiveIdx;		                        // sub mesh index
+		MaterialPtr				m_material;			                        // custom material
 		NodePath				m_skeletonPath;
-		bool					m_skeletonDirty;	// dirty flag
+		bool					m_skeletonDirty;	                        // dirty flag
 		GltfSkeleton*			m_skeleton;
 		vector<Matrix4>::type	m_jointMatrixs;
 		i32						m_iblDiffuseSlot;

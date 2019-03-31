@@ -65,6 +65,9 @@ namespace Echo
 
 		// set global texture
 		static void setGlobal(ui32 globalTextureIdx, Texture* texture);
+        
+        // create by data
+        static Texture* createTexture2D(PixelFormat format, TexUsage usage, i32 width, i32 height, void* data, ui32 size);
 
 		// type
 		virtual TexType getType() const { return TT_Unknown; }
@@ -87,6 +90,7 @@ namespace Echo
 		ui32 getNumMipmaps() const { return m_numMipmaps; }
 
 		// update texture by rect
+        virtual bool updateTexture2D(PixelFormat format, TexUsage usage, i32 width, i32 height, void* data, ui32 size) { return false; }
 		virtual bool updateSubTex2D(ui32 level, const Rect& rect, void* pData, ui32 size) { return false; }
 		
 		// sampler state

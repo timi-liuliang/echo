@@ -71,16 +71,16 @@ namespace Echo
 		int							m_maxPolysPerTile;
 		float						m_tileSize;
 
-		int							m_cacheCompressedSize;
+		int							m_cacheCompressedSize = 0;
 		int							m_cacheRawSize;
-		int							m_cacheLayerCount;
-		int							m_cacheBuildMemUsage;
+		int							m_cacheLayerCount = 0;
+		int							m_cacheBuildMemUsage = 0;
 
 		bool						m_filterLowHangingObstacles;
-		bool						m_filterLedgeSpans;
+		bool						m_filterLedgeSpans = true;
 		bool						m_filterWalkableLowHeightSpans;
 
-		struct dtNavMeshData*		m_navMeshData;					// 导航网格数据
-		struct dtTileCacheData*		m_tileCacheData;				// 块缓存数据
+		struct dtNavMeshData*		m_navMeshData;
+		struct dtTileCacheData*		m_tileCacheData = nullptr;
 	};
 }
