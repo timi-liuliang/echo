@@ -79,7 +79,6 @@ namespace Echo
         }
     }
     
-    // build drawable
     void UiText::buildRenderable()
     {
         if (!m_text.empty())
@@ -124,40 +123,50 @@ namespace Echo
     {
         if(!m_text.empty() && !m_fontRes.isEmpty())
         {
+			m_width = 0;
             m_height = 20;
             for(char glyphCode : m_text)
             {
                 FontGlyph* fontGlyph = FontLibrary::instance()->getFontGlyph( glyphCode, m_fontRes, m_fontSize);
                 if(fontGlyph)
                 {
-                    m_material->setTexture("u_BaseColorSampler", fontGlyph->m_texture);
+					float left = m_width;
+					float right = left + 20;
+					float top = m_height;
+					float bottom = 0;
+
+					Vector4 uv = fontGlyph->getUV();
+					float uvLeft = uv.x;
+					float uvTop = uv.y;
+					float uvRight = uv.x + uv.z;
+					float uvBottom = uv.y + uv.w;
+
+					// vertices
+					Word vertBase = oVertices.size();
+					oVertices.push_back(Ui::VertexFormat(Vector3(left, top, 0.f), Vector2(uvLeft, uvTop)));
+					oVertices.push_back(Ui::VertexFormat(Vector3(left, bottom, 0.f), Vector2(uvLeft, uvBottom)));
+					oVertices.push_back(Ui::VertexFormat(Vector3(right, bottom, 0.f), Vector2(uvRight, uvBottom)));
+					oVertices.push_back(Ui::VertexFormat(Vector3(right, top, 0.f), Vector2(uvRight, uvTop)));
+
+					// indices
+					oIndices.push_back(vertBase + 0);
+					oIndices.push_back(vertBase + 1);
+					oIndices.push_back(vertBase + 2);
+					oIndices.push_back(vertBase + 0);
+					oIndices.push_back(vertBase + 2);
+					oIndices.push_back(vertBase + 3);
+
+                    m_material->setTexture("u_BaseColorSampler", fontGlyph->m_texture->getTexture());
                 }
-                
-                m_width += 20;
+
+				m_width += 20;
             }
         }
-        
-        float hw = m_width * 0.5f;
-        float hh = m_height * 0.5f;
-        
-        // vertices
-        oVertices.push_back(Ui::VertexFormat(Vector3(-hw, -hh, 0.f), Vector2(0.f, 1.f)));
-        oVertices.push_back(Ui::VertexFormat(Vector3(-hw,  hh, 0.f), Vector2(0.f, 0.f)));
-        oVertices.push_back(Ui::VertexFormat(Vector3(hw,   hh, 0.f), Vector2(1.f, 0.f)));
-        oVertices.push_back(Ui::VertexFormat(Vector3(hw,  -hh, 0.f), Vector2(1.f, 1.f)));
-        
+          
         // calc aabb
         m_localAABB.reset();
         for (Ui::VertexFormat& vert : oVertices)
             m_localAABB.addPoint(vert.m_position);
-        
-        // indices
-        oIndices.push_back(0);
-        oIndices.push_back(1);
-        oIndices.push_back(2);
-        oIndices.push_back(0);
-        oIndices.push_back(2);
-        oIndices.push_back(3);
     }
     
     // update vertex buffer

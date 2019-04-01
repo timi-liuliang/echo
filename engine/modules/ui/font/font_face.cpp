@@ -77,40 +77,25 @@ namespace Echo
             return nullptr;
         
         // try to insert to exist font texture
-        FontTexture* haveSpaceTexture = nullptr;
         for(FontTexture* fontTexture : m_fontTextures)
         {
-            if(fontTexture->insert(glyphBitmap, glyphWidth, glyphHeight)!=-1)
+			i32 nodeIndex = fontTexture->insert(glyphBitmap, glyphWidth, glyphHeight);
+            if(nodeIndex !=-1)
             {
-                haveSpaceTexture = fontTexture;
-                break;
+				fontTexture->refreshTexture();
+				return newGlyph(charCode, fontTexture, nodeIndex);
             }
         }
         
         // create new one
-        if (!haveSpaceTexture)
-        {
-            // create new texture
-            FontTexture* newTexture = EchoNew(FontTexture(512, 512));
-            m_fontTextures.push_back(newTexture);
-            if(newTexture->insert(glyphBitmap, glyphWidth, glyphHeight)!=-1)
-            {
-                haveSpaceTexture = newTexture;
-            }
-        }
-        
-        if(haveSpaceTexture)
-        {
-            // refresh texture
-            haveSpaceTexture->refreshTexture();
-            
-            // organize glyph data
-            FontGlyph* fontGlyph = new FontGlyph;
-            fontGlyph->m_texture = haveSpaceTexture->getTexture();
-            m_glyphs[charCode] = fontGlyph;
-            
-            return fontGlyph;
-        }
+        FontTexture* newTexture = EchoNew(FontTexture(512, 512));
+        m_fontTextures.push_back(newTexture);
+		i32 nodeIndex = newTexture->insert(glyphBitmap, glyphWidth, glyphHeight);
+		if (nodeIndex != -1)
+		{
+			newTexture->refreshTexture();
+			return newGlyph(charCode, newTexture, nodeIndex);
+		}
 
         return nullptr;
     }
@@ -140,4 +125,15 @@ namespace Echo
         
         return false;
     }
+
+	FontGlyph* FontFace::newGlyph(i32 charCode, FontTexture* texture, i32 nodeIndex)
+	{
+		// organize glyph data
+		FontGlyph* fontGlyph = new FontGlyph;
+		fontGlyph->m_texture = texture;
+		fontGlyph->m_nodeIndex = nodeIndex;
+		m_glyphs[charCode] = fontGlyph;
+
+		return fontGlyph;
+	}
 }
