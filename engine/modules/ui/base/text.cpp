@@ -57,6 +57,15 @@ namespace Echo
             buildRenderable();
         }
     }
+
+	void UiText::setFontSize(i32 fontSize)
+	{ 
+		m_fontSize = fontSize;
+		if (m_fontSize > 0)
+		{
+			buildRenderable();
+		}
+	}
     
     void UiText::setWidth(i32 width)
     {
@@ -124,14 +133,14 @@ namespace Echo
         if(!m_text.empty() && !m_fontRes.isEmpty())
         {
 			m_width = 0;
-            m_height = 20;
+            m_height = m_fontSize;
             for(char glyphCode : m_text)
             {
                 FontGlyph* fontGlyph = FontLibrary::instance()->getFontGlyph( glyphCode, m_fontRes, m_fontSize);
                 if(fontGlyph)
                 {
 					float left = m_width;
-					float right = left + 20;
+					float right = left + m_fontSize;
 					float top = m_height;
 					float bottom = 0;
 
@@ -159,7 +168,7 @@ namespace Echo
                     m_material->setTexture("u_BaseColorSampler", fontGlyph->m_texture->getTexture());
                 }
 
-				m_width += 20;
+				m_width += m_fontSize;
             }
         }
           

@@ -25,7 +25,7 @@ namespace Echo
         const ResourcePath& getFont() { return m_fontRes; }
 
 		// font size
-		void setFontSize(i32 fontSize) { m_fontSize = fontSize; }
+		void setFontSize(i32 fontSize);
 		i32 getFontSize() const { return m_fontSize; }
         
         // width
