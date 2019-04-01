@@ -72,7 +72,7 @@ namespace Echo
         // convert glyph to bitmap(color array)
         i32 glyphWidth = 128;
         i32 glyphHeight = 128;
-        Color glyphBitmap[glyphWidth*glyphHeight];
+        Color glyphBitmap[128*128];
         if(!copyGlyphToBitmap( glyphBitmap, glyphWidth, glyphHeight, charCode, glyphSlot))
             return nullptr;
         
