@@ -21,6 +21,32 @@ namespace Echo
 	{
 		unload();
 	}
+
+	bool GLESTexture2D::updateTexture2D(PixelFormat format, TexUsage usage, i32 width, i32 height, void* data, ui32 size)
+	{
+		create2DTexture();
+
+		m_isCompressed = false;
+		m_compressType = Texture::CompressType_Unknown;
+		m_width = width;
+		m_height = height;
+		m_depth = 1;
+		m_pixFmt = format;
+		m_numMipmaps = 1;
+		ui32 pixelsSize = PixelUtil::CalcSurfaceSize(m_width, m_height, m_depth, m_numMipmaps, m_pixFmt);
+		Buffer buff(pixelsSize, data, false);
+		set2DSurfaceData(0, m_pixFmt, m_usage, m_width, m_height, buff);
+
+		// generate mip maps
+		if (m_isMipMapEnable && !m_compressType)
+		{
+			OGLESDebug(glBindTexture(GL_TEXTURE_2D, m_glesTexture));
+			OGLESDebug(glGenerateMipmap(GL_TEXTURE_2D));
+			OGLESDebug(glBindTexture(GL_TEXTURE_2D, 0));
+		}
+
+		return true;
+	}
 	
 	bool GLESTexture2D::updateSubTex2D(ui32 level, const Rect& rect, void* pData, ui32 size)
 	{
@@ -40,14 +66,15 @@ namespace Echo
 
 	void GLESTexture2D::create2DTexture()
 	{
-		unload();
-
-		OGLESDebug(glGenTextures(1, &m_glesTexture));
-		OGLESDebug(glBindTexture(GL_TEXTURE_2D, m_glesTexture));
-		OGLESDebug(glPixelStorei(GL_UNPACK_ALIGNMENT, 1));
-		OGLESDebug(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-		OGLESDebug(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-		OGLESDebug(glBindTexture(GL_TEXTURE_2D, 0));
+		if (!m_glesTexture)
+		{
+			OGLESDebug(glGenTextures(1, &m_glesTexture));
+			OGLESDebug(glBindTexture(GL_TEXTURE_2D, m_glesTexture));
+			OGLESDebug(glPixelStorei(GL_UNPACK_ALIGNMENT, 1));
+			OGLESDebug(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+			OGLESDebug(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+			OGLESDebug(glBindTexture(GL_TEXTURE_2D, 0));
+		}
 	}
 
 	void GLESTexture2D::set2DSurfaceData(int level, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, const Buffer& buff)
@@ -83,11 +110,10 @@ namespace Echo
 			{
 				m_isCompressed = false;
 				m_compressType = Texture::CompressType_Unknown;
-				PixelFormat pixFmt = image->getPixelFormat();
 				m_width = image->getWidth();
 				m_height = image->getHeight();
 				m_depth = image->getDepth();
-				m_pixFmt = pixFmt;
+				m_pixFmt = image->getPixelFormat();
 				m_numMipmaps = image->getNumMipmaps() ? image->getNumMipmaps() : 1;
 				ui32 pixelsSize = PixelUtil::CalcSurfaceSize(m_width, m_height, m_depth, m_numMipmaps, m_pixFmt);
 				Buffer buff(pixelsSize, image->getData(), false);

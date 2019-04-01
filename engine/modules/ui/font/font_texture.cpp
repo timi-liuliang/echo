@@ -79,14 +79,7 @@ namespace Echo
 				{
 					int destIdx = (rc.top + h) * m_width + w + rc.left;
 					int srcIdx = h * width + w;
-					Color color = data[srcIdx];
-					// Determine the largest color component
-					float maxCeil = std::max<float>(std::max<float>(std::max<float>(color.r, color.g), color.b), 0.1f);
-					color.a = maxCeil / 8.0f;
-					color.r /= maxCeil;
-					color.g /= maxCeil;
-					color.b /= maxCeil;
-
+					const Color& color = data[srcIdx];
 					pDestData[destIdx] = color.getABGR();
 				}
 			}
@@ -103,11 +96,11 @@ namespace Echo
 		Buffer buffer(m_width*m_height*pixelsize, m_textureData, false);
 		if (m_texture)
 		{
-            m_texture->updateTexture2D(PF_BGRA8_UNORM, Texture::TU_GPU_READ, m_width, m_height, buffer.getData(), buffer.getSize());
+            m_texture->updateTexture2D(m_format, Texture::TU_GPU_READ, m_width, m_height, buffer.getData(), buffer.getSize());
 		}
 		else
 		{
-            m_texture = Texture::createTexture2D(PF_BGRA8_UNORM, Texture::TU_GPU_READ, m_width, m_height, buffer.getData(), buffer.getSize());
+            m_texture = Texture::createTexture2D(m_format, Texture::TU_GPU_READ, m_width, m_height, buffer.getData(), buffer.getSize());
 		}
 	}
 
