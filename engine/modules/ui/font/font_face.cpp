@@ -10,15 +10,6 @@ namespace Echo
 		if (m_memory->getSize())
 		{
 			FT_Error error = FT_New_Memory_Face(library, m_memory->getData<Byte*>(), m_memory->getSize(), 0, &m_face);
-            if(error == FT_Err_Ok)
-            {
-                //error = FT_Set_Char_Size( m_face, 50 * 64, 0, 100, 0);
-                error = FT_Set_Pixel_Sizes( m_face, 64, 64);
-                if(error!=FT_Err_Ok)
-                {
-                    EchoLogError("FT_Set_Char_Size failed");
-                }
-            }
 			if (error == FT_Err_Unknown_File_Format)
 			{
 				EchoLogError("the font file [%s] could be opened and read, but it appears that its font format is unsupported", filePath);
@@ -52,10 +43,15 @@ namespace Echo
     {
         // get glyph index
         i32 glyphIndex = FT_Get_Char_Index( m_face, charCode);
+
+		// set pixel size
+		FT_Error error = FT_Set_Pixel_Sizes(m_face, fontSize * 2, fontSize * 2);
+		if (error)
+			return nullptr;
         
         // load glyph
         i32 loadFlags = FT_LOAD_DEFAULT;
-        FT_Error error = FT_Load_Glyph( m_face, glyphIndex, loadFlags);
+        error = FT_Load_Glyph( m_face, glyphIndex, loadFlags);
         if(error)
             return nullptr;
         
