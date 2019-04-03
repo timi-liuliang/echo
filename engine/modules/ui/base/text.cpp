@@ -134,7 +134,8 @@ namespace Echo
         {
 			m_width = 0;
             m_height = m_fontSize;
-            for(char glyphCode : m_text)
+            WString wText = StringUtil::MBS2WCS( m_text);
+            for(wchar_t glyphCode : wText)
             {
                 FontGlyph* fontGlyph = FontLibrary::instance()->getFontGlyph( glyphCode, m_fontRes, m_fontSize);
                 if(fontGlyph)
