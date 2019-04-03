@@ -1,19 +1,19 @@
-/***************************************************************************/
-/*                                                                         */
-/*  pshalgo.c                                                              */
-/*                                                                         */
-/*    PostScript hinting algorithm (body).                                 */
-/*                                                                         */
-/*  Copyright 2001-2016 by                                                 */
-/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used        */
-/*  modified and distributed under the terms of the FreeType project       */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * pshalgo.c
+ *
+ *   PostScript hinting algorithm (body).
+ *
+ * Copyright (C) 2001-2019 by
+ * David Turner, Robert Wilhelm, and Werner Lemberg.
+ *
+ * This file is part of the FreeType project, and may only be used
+ * modified and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
 
 #include <ft2build.h>
@@ -26,7 +26,7 @@
 
 
 #undef  FT_COMPONENT
-#define FT_COMPONENT  trace_pshalgo2
+#define FT_COMPONENT  pshalgo
 
 
 #ifdef DEBUG_HINTER
@@ -53,8 +53,8 @@
   psh_hint_overlap( PSH_Hint  hint1,
                     PSH_Hint  hint2 )
   {
-    return hint1->org_pos + hint1->org_len >= hint2->org_pos &&
-           hint2->org_pos + hint2->org_len >= hint1->org_pos;
+    return ADD_INT( hint1->org_pos, hint1->org_len ) >= hint2->org_pos &&
+           ADD_INT( hint2->org_pos, hint2->org_len ) >= hint1->org_pos;
   }
 
 
@@ -479,7 +479,7 @@
 
       if ( dimension == 1 )
         psh_blues_snap_stem( &globals->blues,
-                             hint->org_pos + hint->org_len,
+                             ADD_INT( hint->org_pos, hint->org_len ),
                              hint->org_pos,
                              &align );
 
@@ -658,8 +658,8 @@
 #if 0  /* not used for now, experimental */
 
  /*
-  *  A variant to perform "light" hinting (i.e. FT_RENDER_MODE_LIGHT)
-  *  of stems
+  * A variant to perform "light" hinting (i.e. FT_RENDER_MODE_LIGHT)
+  * of stems
   */
   static void
   psh_hint_align_light( PSH_Hint     hint,
@@ -703,7 +703,7 @@
 
       if ( dimension == 1 )
         psh_blues_snap_stem( &globals->blues,
-                             hint->org_pos + hint->org_len,
+                             ADD_INT( hint->org_pos, hint->org_len ),
                              hint->org_pos,
                              &align );
 
@@ -779,7 +779,7 @@
            * It turns out though that minimizing the total number of lit
            * pixels is also important, so position C), with one edge
            * aligned with a pixel boundary is actually preferable
-           * to A).  There are also more possibile positions for C) than
+           * to A).  There are also more possible positions for C) than
            * for A) or B), so it involves less distortion of the overall
            * character shape.
            */
@@ -802,7 +802,7 @@
             }
 
             /* We choose between B) and C) above based on the amount
-             * of fractinal stem width; for small amounts, choose
+             * of fractional stem width; for small amounts, choose
              * C) always, for large amounts, B) always, and inbetween,
              * pick whichever one involves less stem movement.
              */
@@ -898,7 +898,7 @@
   static void
   psh_print_zone( PSH_Zone  zone )
   {
-    printf( "zone [scale,delta,min,max] = [%.3f,%.3f,%d,%d]\n",
+    printf( "zone [scale,delta,min,max] = [%.5f,%.2f,%d,%d]\n",
              zone->scale / 65536.0,
              zone->delta / 64.0,
              zone->min,
@@ -1162,7 +1162,7 @@
 
 
     /* clear all fields */
-    FT_MEM_ZERO( glyph, sizeof ( *glyph ) );
+    FT_ZERO( glyph );
 
     memory = glyph->memory = globals->memory;
 
@@ -1531,15 +1531,15 @@
           }
         }
 
-        if ( point->hint == NULL )
+        if ( !point->hint )
         {
           for ( nn = 0; nn < num_hints; nn++ )
           {
             PSH_Hint  hint = sort[nn];
 
 
-            if ( org_u >= hint->org_pos                 &&
-                org_u <= hint->org_pos + hint->org_len )
+            if ( org_u >=          hint->org_pos                  &&
+                 org_u <= ADD_INT( hint->org_pos, hint->org_len ) )
             {
               point->hint = hint;
               break;
@@ -1572,8 +1572,8 @@
     PS_Mask         mask      = table->hint_masks->masks;
     FT_UInt         num_masks = table->hint_masks->num_masks;
     FT_UInt         first     = 0;
-    FT_Int          major_dir = dimension == 0 ? PSH_DIR_VERTICAL
-                                               : PSH_DIR_HORIZONTAL;
+    FT_Int          major_dir = ( dimension == 0 ) ? PSH_DIR_VERTICAL
+                                                   : PSH_DIR_HORIZONTAL;
     PSH_Dimension   dim       = &glyph->globals->dimension[dimension];
     FT_Fixed        scale     = dim->scale_mult;
     FT_Int          threshold;

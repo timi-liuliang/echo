@@ -1,19 +1,19 @@
-/***************************************************************************/
-/*                                                                         */
-/*  ftutil.c                                                               */
-/*                                                                         */
-/*    FreeType utility file for memory and list management (body).         */
-/*                                                                         */
-/*  Copyright 2002-2016 by                                                 */
-/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * ftutil.c
+ *
+ *   FreeType utility file for memory and list management (body).
+ *
+ * Copyright (C) 2002-2019 by
+ * David Turner, Robert Wilhelm, and Werner Lemberg.
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
 
 #include <ft2build.h>
@@ -23,14 +23,14 @@
 #include FT_LIST_H
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* The macro FT_COMPONENT is used in trace mode.  It is an implicit      */
-  /* parameter of the FT_TRACE() and FT_ERROR() macros, used to print/log  */
-  /* messages during execution.                                            */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * The macro FT_COMPONENT is used in trace mode.  It is an implicit
+   * parameter of the FT_TRACE() and FT_ERROR() macros, used to print/log
+   * messages during execution.
+   */
 #undef  FT_COMPONENT
-#define FT_COMPONENT  trace_memory
+#define FT_COMPONENT  memory
 
 
   /*************************************************************************/
@@ -54,7 +54,7 @@
     FT_Error    error;
     FT_Pointer  block = ft_mem_qalloc( memory, size, &error );
 
-    if ( !error && size > 0 )
+    if ( !error && block && size > 0 )
       FT_MEM_ZERO( block, size );
 
     *p_error = error;
@@ -74,7 +74,7 @@
     if ( size > 0 )
     {
       block = memory->alloc( memory, size );
-      if ( block == NULL )
+      if ( !block )
         error = FT_THROW( Out_Of_Memory );
     }
     else if ( size < 0 )
@@ -101,7 +101,7 @@
 
     block = ft_mem_qrealloc( memory, item_size,
                              cur_count, new_count, block, &error );
-    if ( !error && new_count > cur_count )
+    if ( !error && block && new_count > cur_count )
       FT_MEM_ZERO( (char*)block + cur_count * item_size,
                    ( new_count - cur_count ) * item_size );
 
@@ -135,25 +135,27 @@
       ft_mem_free( memory, block );
       block = NULL;
     }
-    else if ( new_count > FT_INT_MAX/item_size )
+    else if ( new_count > FT_INT_MAX / item_size )
     {
       error = FT_THROW( Array_Too_Large );
     }
     else if ( cur_count == 0 )
     {
-      FT_ASSERT( block == NULL );
+      FT_ASSERT( !block );
 
-      block = ft_mem_alloc( memory, new_count*item_size, &error );
+      block = memory->alloc( memory, new_count * item_size );
+      if ( block == NULL )
+        error = FT_THROW( Out_Of_Memory );
     }
     else
     {
       FT_Pointer  block2;
-      FT_Long     cur_size = cur_count*item_size;
-      FT_Long     new_size = new_count*item_size;
+      FT_Long     cur_size = cur_count * item_size;
+      FT_Long     new_size = new_count * item_size;
 
 
       block2 = memory->realloc( memory, cur_size, new_size, block );
-      if ( block2 == NULL )
+      if ( !block2 )
         error = FT_THROW( Out_Of_Memory );
       else
         block = block2;
@@ -183,7 +185,7 @@
     FT_Pointer  p = ft_mem_qalloc( memory, (FT_Long)size, &error );
 
 
-    if ( !error && address )
+    if ( !error && address && size > 0 )
       ft_memcpy( p, address, size );
 
     *p_error = error;
@@ -234,7 +236,7 @@
   /*************************************************************************/
 
 #undef  FT_COMPONENT
-#define FT_COMPONENT  trace_list
+#define FT_COMPONENT  list
 
   /* documentation is in ftlist.h */
 

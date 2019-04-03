@@ -1,19 +1,19 @@
-/***************************************************************************/
-/*                                                                         */
-/*  ftmemory.h                                                             */
-/*                                                                         */
-/*    The FreeType memory management macros (specification).               */
-/*                                                                         */
-/*  Copyright 1996-2016 by                                                 */
-/*  David Turner, Robert Wilhelm, and Werner Lemberg                       */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * ftmemory.h
+ *
+ *   The FreeType memory management macros (specification).
+ *
+ * Copyright (C) 1996-2019 by
+ * David Turner, Robert Wilhelm, and Werner Lemberg
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
 
 #ifndef FTMEMORY_H_
@@ -28,16 +28,16 @@
 FT_BEGIN_HEADER
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* <Macro>                                                               */
-  /*    FT_SET_ERROR                                                       */
-  /*                                                                       */
-  /* <Description>                                                         */
-  /*    This macro is used to set an implicit `error' variable to a given  */
-  /*    expression's value (usually a function call), and convert it to a  */
-  /*    boolean which is set whenever the value is != 0.                   */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * @macro:
+   *   FT_SET_ERROR
+   *
+   * @description:
+   *   This macro is used to set an implicit 'error' variable to a given
+   *   expression's value (usually a function call), and convert it to a
+   *   boolean which is set whenever the value is != 0.
+   */
 #undef  FT_SET_ERROR
 #define FT_SET_ERROR( expression ) \
           ( ( error = (expression) ) != 0 )
@@ -58,20 +58,22 @@ FT_BEGIN_HEADER
 
 
   /*
-   *  C++ refuses to handle statements like p = (void*)anything, with `p' a
-   *  typed pointer.  Since we don't have a `typeof' operator in standard
-   *  C++, we have to use a template to emulate it.
+   * C++ refuses to handle statements like p = (void*)anything, with `p' a
+   * typed pointer.  Since we don't have a `typeof' operator in standard C++,
+   * we have to use a template to emulate it.
    */
 
 #ifdef __cplusplus
 
-  extern "C++"
+extern "C++"
+{
   template <typename T> inline T*
   cplusplus_typeof(        T*,
                     void  *v )
   {
     return static_cast <T*> ( v );
   }
+}
 
 #define FT_ASSIGNP( p, val )  (p) = cplusplus_typeof( (p), (val) )
 
@@ -105,10 +107,12 @@ FT_BEGIN_HEADER
 
 
   /*
-   *  The allocation functions return a pointer, and the error code
-   *  is written to through the `p_error' parameter.  See below for
-   *  for documentation.
+   * The allocation functions return a pointer, and the error code is written
+   * to through the `p_error' parameter.
    */
+
+  /* The `q' variants of the functions below (`q' for `quick') don't fill */
+  /* the allocated or reallocated memory with zero bytes.                 */
 
   FT_BASE( FT_Pointer )
   ft_mem_alloc( FT_Memory  memory,
@@ -140,6 +144,9 @@ FT_BEGIN_HEADER
   ft_mem_free( FT_Memory    memory,
                const void*  P );
 
+
+  /* The `Q' variants of the macros below (`Q' for `quick') don't fill */
+  /* the allocated or reallocated memory with zero bytes.              */
 
 #define FT_MEM_ALLOC( ptr, size )                               \
           FT_ASSIGNP_INNER( ptr, ft_mem_alloc( memory,          \
@@ -203,7 +210,7 @@ FT_BEGIN_HEADER
                                                   NULL,                 \
                                                   &error ) )
 
-#define FT_MEM_QREALLOC_MULT( ptr, oldcnt, newcnt, itmsz)            \
+#define FT_MEM_QREALLOC_MULT( ptr, oldcnt, newcnt, itmsz )           \
           FT_ASSIGNP_INNER( ptr, ft_mem_qrealloc( memory,            \
                                                   (FT_Long)(itmsz),  \
                                                   (FT_Long)(oldcnt), \
@@ -246,20 +253,19 @@ FT_BEGIN_HEADER
 
 
   /*
-   *  Return the maximum number of addressable elements in an array.
-   *  We limit ourselves to INT_MAX, rather than UINT_MAX, to avoid
-   *  any problems.
+   * Return the maximum number of addressable elements in an array.  We limit
+   * ourselves to INT_MAX, rather than UINT_MAX, to avoid any problems.
    */
 #define FT_ARRAY_MAX( ptr )           ( FT_INT_MAX / sizeof ( *(ptr) ) )
 
 #define FT_ARRAY_CHECK( ptr, count )  ( (count) <= FT_ARRAY_MAX( ptr ) )
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* The following functions macros expect that their pointer argument is  */
-  /* _typed_ in order to automatically compute array element sizes.        */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * The following functions macros expect that their pointer argument is
+   * _typed_ in order to automatically compute array element sizes.
+   */
 
 #define FT_MEM_NEW_ARRAY( ptr, count )                              \
           FT_ASSIGNP_INNER( ptr, ft_mem_realloc( memory,            \

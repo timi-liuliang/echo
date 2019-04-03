@@ -1,19 +1,19 @@
-/***************************************************************************/
-/*                                                                         */
-/*  otvmod.c                                                               */
-/*                                                                         */
-/*    FreeType's OpenType validation module implementation (body).         */
-/*                                                                         */
-/*  Copyright 2004-2016 by                                                 */
-/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * otvmod.c
+ *
+ *   FreeType's OpenType validation module implementation (body).
+ *
+ * Copyright (C) 2004-2019 by
+ * David Turner, Robert Wilhelm, and Werner Lemberg.
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
 
 #include <ft2build.h>
@@ -28,14 +28,14 @@
 #include "otvcommn.h"
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* The macro FT_COMPONENT is used in trace mode.  It is an implicit      */
-  /* parameter of the FT_TRACE() and FT_ERROR() macros, used to print/log  */
-  /* messages during execution.                                            */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * The macro FT_COMPONENT is used in trace mode.  It is an implicit
+   * parameter of the FT_TRACE() and FT_ERROR() macros, used to print/log
+   * messages during execution.
+   */
 #undef  FT_COMPONENT
-#define FT_COMPONENT  trace_otvmodule
+#define FT_COMPONENT  otvmodule
 
 
   static FT_Error
@@ -271,11 +271,11 @@
     0x10000L,
     0x20000L,
 
-    0,              /* module-specific interface */
+    NULL,              /* module-specific interface */
 
-    (FT_Module_Constructor)0,
-    (FT_Module_Destructor) 0,
-    (FT_Module_Requester)  otvalid_get_service
+    (FT_Module_Constructor)NULL,                /* module_init   */
+    (FT_Module_Destructor) NULL,                /* module_done   */
+    (FT_Module_Requester)  otvalid_get_service  /* get_interface */
   };
 
 

@@ -1,19 +1,19 @@
-/***************************************************************************/
-/*                                                                         */
-/*  ttinterp.h                                                             */
-/*                                                                         */
-/*    TrueType bytecode interpreter (specification).                       */
-/*                                                                         */
-/*  Copyright 1996-2016 by                                                 */
-/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * ttinterp.h
+ *
+ *   TrueType bytecode interpreter (specification).
+ *
+ * Copyright (C) 1996-2019 by
+ * David Turner, Robert Wilhelm, and Werner Lemberg.
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
 
 #ifndef TTINTERP_H_
@@ -26,10 +26,10 @@
 FT_BEGIN_HEADER
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* Rounding mode constants.                                              */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * Rounding mode constants.
+   */
 #define TT_Round_Off             5
 #define TT_Round_To_Half_Grid    0
 #define TT_Round_To_Grid         1
@@ -40,13 +40,13 @@ FT_BEGIN_HEADER
 #define TT_Round_Super_45        7
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* Function types used by the interpreter, depending on various modes    */
-  /* (e.g. the rounding mode, whether to render a vertical or horizontal   */
-  /* line etc).                                                            */
-  /*                                                                       */
-  /*************************************************************************/
+  /**************************************************************************
+   *
+   * Function types used by the interpreter, depending on various modes
+   * (e.g. the rounding mode, whether to render a vertical or horizontal
+   * line etc).
+   *
+   */
 
   /* Rounding function */
   typedef FT_F26Dot6
@@ -84,10 +84,10 @@ FT_BEGIN_HEADER
                       FT_F26Dot6      value );
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* This structure defines a call record, used to manage function calls.  */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * This structure defines a call record, used to manage function calls.
+   */
   typedef struct  TT_CallRec_
   {
     FT_Int   Caller_Range;
@@ -99,13 +99,13 @@ FT_BEGIN_HEADER
   } TT_CallRec, *TT_CallStack;
 
 
-#ifdef TT_CONFIG_OPTION_SUBPIXEL_HINTING
+#ifdef TT_SUPPORT_SUBPIXEL_HINTING_INFINALITY
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* These structures define rules used to tweak subpixel hinting for      */
-  /* various fonts.  "", 0, "", NULL value indicates to match any value.   */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * These structures define rules used to tweak subpixel hinting for
+   * various fonts.  "", 0, "", NULL value indicates to match any value.
+   */
 
 #define SPH_MAX_NAME_SIZE      32
 #define SPH_MAX_CLASS_MEMBERS  100
@@ -138,14 +138,14 @@ FT_BEGIN_HEADER
 
   } SPH_Font_Class;
 
-#endif /* TT_CONFIG_OPTION_SUBPIXEL_HINTING */
+#endif /* TT_SUPPORT_SUBPIXEL_HINTING_INFINALITY */
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* The main structure for the interpreter which collects all necessary   */
-  /* variables and states.                                                 */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * The main structure for the interpreter which collects all necessary
+   * variables and states.
+   */
   typedef struct  TT_ExecContextRec_
   {
     TT_Face            face;
@@ -170,6 +170,7 @@ FT_BEGIN_HEADER
                        pts,
                        twilight;
 
+    FT_Long            pointSize;  /* in 26.6 format */
     FT_Size_Metrics    metrics;
     TT_Size_Metrics    tt_metrics; /* size metrics */
 
@@ -247,9 +248,151 @@ FT_BEGIN_HEADER
     TT_Set_CVT_Func    func_write_cvt; /* write a cvt entry (in pixels) */
     TT_Set_CVT_Func    func_move_cvt;  /* incr a cvt entry (in pixels)  */
 
-    FT_Bool            grayscale;      /* are we hinting for grayscale? */
+    FT_Bool            grayscale;      /* bi-level hinting and */
+                                       /* grayscale rendering  */
 
-#ifdef TT_CONFIG_OPTION_SUBPIXEL_HINTING
+#ifdef TT_SUPPORT_SUBPIXEL_HINTING_MINIMAL
+    /*
+     * FreeType supports ClearType-like hinting of TrueType fonts through
+     * the version 40 interpreter.  This is achieved through several hacks
+     * in the base (v35) interpreter, as detailed below.
+     *
+     * ClearType is an umbrella term for several rendering techniques
+     * employed by Microsoft's various GUI and rendering toolkit
+     * implementations, most importantly: subpixel rendering for using the
+     * RGB subpixels of LCDs to approximately triple the perceived
+     * resolution on the x-axis and subpixel hinting for positioning stems
+     * on subpixel borders.  TrueType programming is explicit, i.e., fonts
+     * must be programmed to take advantage of ClearType's possibilities.
+     *
+     * When ClearType was introduced, it seemed unlikely that all fonts
+     * would be reprogrammed, so Microsoft decided to implement a backward
+     * compatibility mode.  It employs several simple to complicated
+     * assumptions and tricks, many of them font-dependent, that modify the
+     * interpretation of the bytecode contained in these fonts to retrofit
+     * them into a ClearType-y look.  The quality of the results varies.
+     * Most (web)fonts that were released since then have come to rely on
+     * these hacks to render correctly, even some of Microsoft's flagship
+     * fonts (e.g., Calibri, Cambria, Segoe UI).
+     *
+     * FreeType's minimal subpixel hinting code (interpreter version 40)
+     * employs a small list of font-agnostic hacks loosely based on the
+     * public information available on Microsoft's compatibility mode[2].
+     * The focus is on modern (web)fonts rather than legacy fonts that were
+     * made for monochrome rendering.  It will not match ClearType rendering
+     * exactly.  Unlike the `Infinality' code (interpreter version 38) that
+     * came before, it will not try to toggle hacks for specific fonts for
+     * performance and complexity reasons.  It will fall back to version 35
+     * behavior for tricky fonts[1] or when monochrome rendering is
+     * requested.
+     *
+     * Major hacks
+     *
+     * - Any point movement on the x axis is ignored (cf. `Direct_Move' and
+     *   `Direct_Move_X').  This has the smallest code footprint and single
+     *   biggest effect.  The ClearType way to increase resolution is
+     *   supersampling the x axis, the FreeType way is ignoring instructions
+     *   on the x axis, which gives the same result in the majority of
+     *   cases.
+     *
+     * - Points are not moved post-IUP (neither on the x nor on the y axis),
+     *   except the x component of diagonal moves post-IUP (cf.
+     *   `Direct_Move', `Direct_Move_Y', `Move_Zp2_Point').  Post-IUP
+     *   changes are commonly used to `fix' pixel patterns which has little
+     *   use outside monochrome rendering.
+     *
+     * - SHPIX and DELTAP don't execute unless moving a composite on the
+     *   y axis or moving a previously y touched point.  SHPIX additionally
+     *   denies movement on the x axis (cf. `Ins_SHPIX' and `Ins_DELTAP').
+     *   Both instructions are commonly used to `fix' pixel patterns for
+     *   monochrome or Windows's GDI rendering but make little sense for
+     *   FreeType rendering.  Both can distort the outline.  See [2] for
+     *   details.
+     *
+     * - The hdmx table and modifications to phantom points are ignored.
+     *   Bearings and advance widths remain unchanged (except rounding them
+     *   outside the interpreter!), cf. `compute_glyph_metrics' and
+     *   `TT_Hint_Glyph'.  Letting non-native-ClearType fonts modify spacing
+     *   might mess up spacing.
+     *
+     * Minor hacks
+     *
+     * - FLIPRGON, FLIPRGOFF, and FLIPPT don't execute post-IUP.  This
+     *   prevents dents in e.g. Arial-Regular's `D' and `G' glyphs at
+     *   various sizes.
+     *
+     * (Post-IUP is the state after both IUP[x] and IUP[y] have been
+     * executed.)
+     *
+     * The best results are achieved for fonts that were from the outset
+     * designed with ClearType in mind, meaning they leave the x axis mostly
+     * alone and don't mess with the `final' outline to produce more
+     * pleasing pixel patterns.  The harder the designer tried to produce
+     * very specific patterns (`superhinting') for pre-ClearType-displays,
+     * the worse the results.
+     *
+     * Microsoft defines a way to turn off backward compatibility and
+     * interpret instructions as before (called `native ClearType')[2][3].
+     * The font designer then regains full control and is responsible for
+     * making the font work correctly with ClearType without any
+     * hand-holding by the interpreter or rasterizer[4].  The v40
+     * interpreter assumes backward compatibility by default, which can be
+     * turned off the same way by executing the following in the control
+     * program (cf. `Ins_INSTCTRL').
+     *
+     *   #PUSH 4,3
+     *   INSTCTRL[]
+     *
+     * [1] Tricky fonts as FreeType defines them rely on the bytecode
+     *     interpreter to display correctly.  Hacks can interfere with them,
+     *     so they get treated like native ClearType fonts (v40 with
+     *     backward compatibility turned off).  Cf. `TT_RunIns'.
+     *
+     * [2] Proposed by Microsoft's Greg Hitchcock in
+     *     https://www.microsoft.com/typography/cleartype/truetypecleartype.aspx
+     *
+     * [3] Beat Stamm describes it in more detail:
+     *     http://rastertragedy.com/RTRCh4.htm#Sec12.
+     *
+     * [4] The list of `native ClearType' fonts is small at the time of this
+     *     writing; I found the following on a Windows 10 Update 1511
+     *     installation: Constantia, Corbel, Sitka, Malgun Gothic, Microsoft
+     *     JhengHei (Bold and UI Bold), Microsoft YaHei (Bold and UI Bold),
+     *     SimSun, NSimSun, and Yu Gothic.
+     *
+     */
+
+    /* Using v40 implies subpixel hinting, unless FT_RENDER_MODE_MONO has been
+     * requested.  Used to detect interpreter */
+    /* version switches.  `_lean' to differentiate from the Infinality */
+    /* `subpixel_hinting', which is managed differently.               */
+    FT_Bool            subpixel_hinting_lean;
+
+    /* Long side of a LCD subpixel is vertical (e.g., screen is rotated). */
+    /* `_lean' to differentiate from the Infinality `vertical_lcd', which */
+    /* is managed differently.                                            */
+    FT_Bool            vertical_lcd_lean;
+
+    /* Default to backward compatibility mode in v40 interpreter.  If   */
+    /* this is false, it implies the interpreter is in v35 or in native */
+    /* ClearType mode.                                                  */
+    FT_Bool            backward_compatibility;
+
+    /* Useful for detecting and denying post-IUP trickery that is usually */
+    /* used to fix pixel patterns (`superhinting').                       */
+    FT_Bool            iupx_called;
+    FT_Bool            iupy_called;
+
+    /* ClearType hinting and grayscale rendering, as used by Universal */
+    /* Windows Platform apps (Windows 8 and above).  Like the standard */
+    /* colorful ClearType mode, it utilizes a vastly increased virtual */
+    /* resolution on the x axis.  Different from bi-level hinting and  */
+    /* grayscale rendering, the old mode from Win9x days that roughly  */
+    /* adheres to the physical pixel grid on both axes.                */
+    FT_Bool            grayscale_cleartype;
+#endif /* TT_SUPPORT_SUBPIXEL_HINTING_MINIMAL */
+
+#ifdef TT_SUPPORT_SUBPIXEL_HINTING_INFINALITY
     TT_Round_Func      func_round_sphn;   /* subpixel rounding function */
 
     FT_Bool            subpixel_hinting;  /* Using subpixel hinting?       */
@@ -279,7 +422,15 @@ FT_BEGIN_HEADER
     FT_ULong           sph_in_func_flags;     /* flags to indicate if in   */
                                               /* special functions         */
 
-#endif /* TT_CONFIG_OPTION_SUBPIXEL_HINTING */
+#endif /* TT_SUPPORT_SUBPIXEL_HINTING_INFINALITY */
+
+    /* We maintain two counters (in addition to the instruction counter) */
+    /* that act as loop detectors for LOOPCALL and jump opcodes with     */
+    /* negative arguments.                                               */
+    FT_ULong           loopcall_counter;
+    FT_ULong           loopcall_counter_max;
+    FT_ULong           neg_jump_counter;
+    FT_ULong           neg_jump_counter_max;
 
   } TT_ExecContextRec;
 
@@ -313,26 +464,27 @@ FT_BEGIN_HEADER
 #endif /* TT_USE_BYTECODE_INTERPRETER */
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* <Function>                                                            */
-  /*    TT_New_Context                                                     */
-  /*                                                                       */
-  /* <Description>                                                         */
-  /*    Queries the face context for a given font.  Note that there is     */
-  /*    now a _single_ execution context in the TrueType driver which is   */
-  /*    shared among faces.                                                */
-  /*                                                                       */
-  /* <Input>                                                               */
-  /*    face :: A handle to the source face object.                        */
-  /*                                                                       */
-  /* <Return>                                                              */
-  /*    A handle to the execution context.  Initialized for `face'.        */
-  /*                                                                       */
-  /* <Note>                                                                */
-  /*    Only the glyph loader and debugger should call this function.      */
-  /*    (And right now only the glyph loader uses it.)                     */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * @Function:
+   *   TT_New_Context
+   *
+   * @Description:
+   *   Queries the face context for a given font.  Note that there is
+   *   now a _single_ execution context in the TrueType driver which is
+   *   shared among faces.
+   *
+   * @Input:
+   *   face ::
+   *     A handle to the source face object.
+   *
+   * @Return:
+   *   A handle to the execution context.  Initialized for `face'.
+   *
+   * @Note:
+   *   Only the glyph loader and debugger should call this function.
+   *   (And right now only the glyph loader uses it.)
+   */
   FT_EXPORT( TT_ExecContext )
   TT_New_Context( TT_Driver  driver );
 
@@ -355,27 +507,28 @@ FT_BEGIN_HEADER
 #endif /* TT_USE_BYTECODE_INTERPRETER */
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* <Function>                                                            */
-  /*    TT_RunIns                                                          */
-  /*                                                                       */
-  /* <Description>                                                         */
-  /*    Executes one or more instruction in the execution context.  This   */
-  /*    is the main function of the TrueType opcode interpreter.           */
-  /*                                                                       */
-  /* <Input>                                                               */
-  /*    exec :: A handle to the target execution context.                  */
-  /*                                                                       */
-  /* <Return>                                                              */
-  /*    FreeType error code.  0 means success.                             */
-  /*                                                                       */
-  /* <Note>                                                                */
-  /*    Only the object manager and debugger should call this function.    */
-  /*                                                                       */
-  /*    This function is publicly exported because it is directly          */
-  /*    invoked by the TrueType debugger.                                  */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * @Function:
+   *   TT_RunIns
+   *
+   * @Description:
+   *   Executes one or more instruction in the execution context.  This
+   *   is the main function of the TrueType opcode interpreter.
+   *
+   * @Input:
+   *   exec ::
+   *     A handle to the target execution context.
+   *
+   * @Return:
+   *   FreeType error code.  0 means success.
+   *
+   * @Note:
+   *   Only the object manager and debugger should call this function.
+   *
+   *   This function is publicly exported because it is directly
+   *   invoked by the TrueType debugger.
+   */
   FT_EXPORT( FT_Error )
   TT_RunIns( TT_ExecContext  exec );
 

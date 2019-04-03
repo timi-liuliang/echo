@@ -1,42 +1,42 @@
-/***************************************************************************/
-/*                                                                         */
-/*  gxvtrak.c                                                              */
-/*                                                                         */
-/*    TrueTypeGX/AAT trak table validation (body).                         */
-/*                                                                         */
-/*  Copyright 2004-2016 by                                                 */
-/*  suzuki toshiya, Masatake YAMATO, Red Hat K.K.,                         */
-/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * gxvtrak.c
+ *
+ *   TrueTypeGX/AAT trak table validation (body).
+ *
+ * Copyright (C) 2004-2019 by
+ * suzuki toshiya, Masatake YAMATO, Red Hat K.K.,
+ * David Turner, Robert Wilhelm, and Werner Lemberg.
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
-/***************************************************************************/
-/*                                                                         */
-/* gxvalid is derived from both gxlayout module and otvalid module.        */
-/* Development of gxlayout is supported by the Information-technology      */
-/* Promotion Agency(IPA), Japan.                                           */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * gxvalid is derived from both gxlayout module and otvalid module.
+ * Development of gxlayout is supported by the Information-technology
+ * Promotion Agency(IPA), Japan.
+ *
+ */
 
 
 #include "gxvalid.h"
 #include "gxvcommn.h"
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* The macro FT_COMPONENT is used in trace mode.  It is an implicit      */
-  /* parameter of the FT_TRACE() and FT_ERROR() macros, used to print/log  */
-  /* messages during execution.                                            */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * The macro FT_COMPONENT is used in trace mode.  It is an implicit
+   * parameter of the FT_TRACE() and FT_ERROR() macros, used to print/log
+   * messages during execution.
+   */
 #undef  FT_COMPONENT
-#define FT_COMPONENT  trace_gxvtrak
+#define FT_COMPONENT  gxvtrak
 
 
   /*************************************************************************/
@@ -111,7 +111,7 @@
 
     GXV_LIMIT_CHECK( nTracks * ( 4 + 2 + 2 ) );
 
-    for ( i = 0; i < nTracks; i ++ )
+    for ( i = 0; i < nTracks; i++ )
     {
       p = table + i * ( 4 + 2 + 2 );
       track     = FT_NEXT_LONG( p );
@@ -125,7 +125,7 @@
 
       gxv_sfntName_validate( nameIndex, 256, 32767, gxvalid );
 
-      for ( j = i; j < nTracks; j ++ )
+      for ( j = i; j < nTracks; j++ )
       {
          p = table + j * ( 4 + 2 + 2 );
          t = FT_NEXT_LONG( p );

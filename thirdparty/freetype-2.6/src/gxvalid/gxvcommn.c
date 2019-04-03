@@ -1,41 +1,41 @@
-/***************************************************************************/
-/*                                                                         */
-/*  gxvcommn.c                                                             */
-/*                                                                         */
-/*    TrueTypeGX/AAT common tables validation (body).                      */
-/*                                                                         */
-/*  Copyright 2004-2016 by                                                 */
-/*  suzuki toshiya, Masatake YAMATO, Red Hat K.K.,                         */
-/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * gxvcommn.c
+ *
+ *   TrueTypeGX/AAT common tables validation (body).
+ *
+ * Copyright (C) 2004-2019 by
+ * suzuki toshiya, Masatake YAMATO, Red Hat K.K.,
+ * David Turner, Robert Wilhelm, and Werner Lemberg.
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
-/***************************************************************************/
-/*                                                                         */
-/* gxvalid is derived from both gxlayout module and otvalid module.        */
-/* Development of gxlayout is supported by the Information-technology      */
-/* Promotion Agency(IPA), Japan.                                           */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * gxvalid is derived from both gxlayout module and otvalid module.
+ * Development of gxlayout is supported by the Information-technology
+ * Promotion Agency(IPA), Japan.
+ *
+ */
 
 
 #include "gxvcommn.h"
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* The macro FT_COMPONENT is used in trace mode.  It is an implicit      */
-  /* parameter of the FT_TRACE() and FT_ERROR() macros, used to print/log  */
-  /* messages during execution.                                            */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * The macro FT_COMPONENT is used in trace mode.  It is an implicit
+   * parameter of the FT_TRACE() and FT_ERROR() macros, used to print/log
+   * messages during execution.
+   */
 #undef  FT_COMPONENT
-#define FT_COMPONENT  trace_gxvcommon
+#define FT_COMPONENT  gxvcommon
 
 
   /*************************************************************************/
@@ -384,8 +384,8 @@
           ( P += 2, gxv_lookup_value_load( P - 2, SIGNSPEC ) )
 
   static GXV_LookupValueDesc
-  gxv_lookup_value_load( FT_Bytes  p,
-                         int       signspec )
+  gxv_lookup_value_load( FT_Bytes                  p,
+                         GXV_LookupValue_SignSpec  signspec )
   {
     GXV_LookupValueDesc  v;
 
@@ -454,7 +454,7 @@
   }
 
 
-  /* ================= Segment Single Format 2 Loolup Table ============== */
+  /* ================= Segment Single Format 2 Lookup Table ============== */
   /*
    * Apple spec says:
    *
@@ -789,7 +789,7 @@
       FT_INVALID_FORMAT;
 
     func = fmt_funcs_table[format];
-    if ( func == NULL )
+    if ( !func )
       FT_INVALID_FORMAT;
 
     func( p, limit, gxvalid );
@@ -900,7 +900,7 @@
     for ( i = 0; i < nnames; i++ )
     {
       if ( FT_Get_Sfnt_Name( gxvalid->face, i, &name ) != FT_Err_Ok )
-        continue ;
+        continue;
 
       if ( name.name_id == name_index )
         goto Out;
@@ -972,7 +972,7 @@
       FT_UShort  i;
 
 
-      ft_memset( nGlyphInClass, 0, 256 );
+      FT_MEM_ZERO( nGlyphInClass, 256 );
 
 
       for ( i = 0; i < nGlyphs; i++ )
@@ -1161,7 +1161,7 @@
         break;
       }
 
-      if ( NULL != gxvalid->statetable.entry_validate_func )
+      if ( gxvalid->statetable.entry_validate_func )
         gxvalid->statetable.entry_validate_func( state,
                                                  flags,
                                                  &glyphOffset,
@@ -1244,10 +1244,10 @@
     if ( stateSize > 0xFF )
       FT_INVALID_DATA;
 
-    if ( gxvalid->statetable.optdata_load_func != NULL )
+    if ( gxvalid->statetable.optdata_load_func )
       gxvalid->statetable.optdata_load_func( p, limit, gxvalid );
 
-    if ( gxvalid->statetable.subtable_setup_func != NULL)
+    if ( gxvalid->statetable.subtable_setup_func )
       setup_func = gxvalid->statetable.subtable_setup_func;
     else
       setup_func = gxv_StateTable_subtable_setup;
@@ -1472,7 +1472,7 @@
     if ( ( p + ( maxEntry + 1 ) * entrySize ) > limit )
       FT_INVALID_TOO_SHORT;
 
-    for (entry = 0; entry <= maxEntry ; entry++ )
+    for (entry = 0; entry <= maxEntry; entry++ )
     {
       FT_UShort                        newState_idx;
       FT_UShort                        flags;
@@ -1534,7 +1534,7 @@
         goto Exit;
       }
 
-      if ( NULL != gxvalid->xstatetable.entry_validate_func )
+      if ( gxvalid->xstatetable.entry_validate_func )
         gxvalid->xstatetable.entry_validate_func( state,
                                                   flags,
                                                   &glyphOffset,
@@ -1591,10 +1591,10 @@
 
     GXV_TRACE(( "StateTable Subtables\n" ));
 
-    if ( gxvalid->xstatetable.optdata_load_func != NULL )
+    if ( gxvalid->xstatetable.optdata_load_func )
       gxvalid->xstatetable.optdata_load_func( p, limit, gxvalid );
 
-    if ( gxvalid->xstatetable.subtable_setup_func != NULL )
+    if ( gxvalid->xstatetable.subtable_setup_func )
       setup_func = gxvalid->xstatetable.subtable_setup_func;
     else
       setup_func = gxv_XStateTable_subtable_setup;

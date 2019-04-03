@@ -1,6 +1,6 @@
 # FreeType 2 src/base Jamfile
 #
-# Copyright 2001-2016 by
+# Copyright (C) 2001-2019 by
 # David Turner, Robert Wilhelm, and Werner Lemberg.
 #
 # This file is part of the FreeType project, and may only be used, modified,
@@ -20,12 +20,17 @@ SubDir  FT2_TOP $(FT2_SRC_DIR) base ;
     _sources = basepic
                ftadvanc
                ftcalc
+               ftcolor
                ftdbgmem
+               fterrors
+               ftfntfmt
                ftgloadr
                fthash
+               ftlcdfil
                ftobjs
                ftoutln
                ftpic
+               ftpsprop
                ftrfork
                ftsnames
                ftstream
@@ -44,19 +49,16 @@ SubDir  FT2_TOP $(FT2_SRC_DIR) base ;
 # Add the optional/replaceable files.
 #
 {
-  local  _sources = ftapi
-                    ftbbox
+  local  _sources = ftbbox
                     ftbdf
                     ftbitmap
                     ftcid
                     ftdebug
-                    ftfntfmt
                     ftfstype
                     ftgasp
                     ftglyph
                     ftgxval
                     ftinit
-                    ftlcdfil
                     ftmm
                     ftotval
                     ftpatent

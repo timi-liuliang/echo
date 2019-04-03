@@ -1,19 +1,19 @@
-/***************************************************************************/
-/*                                                                         */
-/*  ftccache.h                                                             */
-/*                                                                         */
-/*    FreeType internal cache interface (specification).                   */
-/*                                                                         */
-/*  Copyright 2000-2016 by                                                 */
-/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * ftccache.h
+ *
+ *   FreeType internal cache interface (specification).
+ *
+ * Copyright (C) 2000-2019 by
+ * David Turner, Robert Wilhelm, and Werner Lemberg.
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
 
 #ifndef FTCCACHE_H_
@@ -42,17 +42,17 @@ FT_BEGIN_HEADER
   /*************************************************************************/
   /*************************************************************************/
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* Each cache controls one or more cache nodes.  Each node is part of    */
-  /* the global_lru list of the manager.  Its `data' field however is used */
-  /* as a reference count for now.                                         */
-  /*                                                                       */
-  /* A node can be anything, depending on the type of information held by  */
-  /* the cache.  It can be an individual glyph image, a set of bitmaps     */
-  /* glyphs for a given size, some metrics, etc.                           */
-  /*                                                                       */
-  /*************************************************************************/
+  /**************************************************************************
+   *
+   * Each cache controls one or more cache nodes.  Each node is part of
+   * the global_lru list of the manager.  Its `data' field however is used
+   * as a reference count for now.
+   *
+   * A node can be anything, depending on the type of information held by
+   * the cache.  It can be an individual glyph image, a set of bitmaps
+   * glyphs for a given size, some metrics, etc.
+   *
+   */
 
   /* structure size should be 20 bytes on 32-bits machines */
   typedef struct  FTC_NodeRec_
@@ -227,7 +227,7 @@ FT_BEGIN_HEADER
     for (;;)                                                             \
     {                                                                    \
       _node = *_pnode;                                                   \
-      if ( _node == NULL )                                               \
+      if ( !_node )                                                      \
         goto NewNode_;                                                   \
                                                                          \
       if ( _node->hash == _hash                             &&           \
@@ -245,7 +245,7 @@ FT_BEGIN_HEADER
       /* Update _pnode by possibly modified linked list */               \
       while ( *_pnode != _node )                                         \
       {                                                                  \
-        if ( *_pnode == NULL )                                           \
+        if ( !*_pnode )                                                  \
         {                                                                \
           FT_ERROR(( "FTC_CACHE_LOOKUP_CMP: oops!!! node missing\n" ));  \
           goto NewNode_;                                                 \
@@ -302,11 +302,11 @@ FT_BEGIN_HEADER
    *
    * Example:
    *
-   *   {
-   *     FTC_CACHE_TRYLOOP( cache )
-   *       error = load_data( ... );
-   *     FTC_CACHE_TRYLOOP_END()
-   *   }
+   * {
+   *   FTC_CACHE_TRYLOOP( cache )
+   *     error = load_data( ... );
+   *   FTC_CACHE_TRYLOOP_END()
+   * }
    *
    */
 #define FTC_CACHE_TRYLOOP( cache )                           \
@@ -325,7 +325,7 @@ FT_BEGIN_HEADER
         break;                                                    \
                                                                   \
       _try_done = FTC_Manager_FlushN( _try_manager, _try_count ); \
-      if ( _try_done > 0 && ( list_changed ) )                    \
+      if ( _try_done > 0 && list_changed != NULL )                \
         *(FT_Bool*)( list_changed ) = TRUE;                       \
                                                                   \
       if ( _try_done == 0 )                                       \

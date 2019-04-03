@@ -1,25 +1,26 @@
-/***************************************************************************/
-/*                                                                         */
-/*  cidriver.c                                                             */
-/*                                                                         */
-/*    CID driver interface (body).                                         */
-/*                                                                         */
-/*  Copyright 1996-2016 by                                                 */
-/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * cidriver.c
+ *
+ *   CID driver interface (body).
+ *
+ * Copyright (C) 1996-2019 by
+ * David Turner, Robert Wilhelm, and Werner Lemberg.
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
 
 #include <ft2build.h>
 #include "cidriver.h"
 #include "cidgload.h"
 #include FT_INTERNAL_DEBUG_H
+#include FT_INTERNAL_POSTSCRIPT_PROPS_H
 
 #include "ciderrs.h"
 
@@ -27,20 +28,24 @@
 #include FT_SERVICE_FONT_FORMAT_H
 #include FT_SERVICE_POSTSCRIPT_INFO_H
 #include FT_SERVICE_CID_H
+#include FT_SERVICE_PROPERTIES_H
+#include FT_DRIVER_H
+
+#include FT_INTERNAL_POSTSCRIPT_AUX_H
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* The macro FT_COMPONENT is used in trace mode.  It is an implicit      */
-  /* parameter of the FT_TRACE() and FT_ERROR() macros, used to print/log  */
-  /* messages during execution.                                            */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * The macro FT_COMPONENT is used in trace mode.  It is an implicit
+   * parameter of the FT_TRACE() and FT_ERROR() macros, used to print/log
+   * messages during execution.
+   */
 #undef  FT_COMPONENT
-#define FT_COMPONENT  trace_ciddriver
+#define FT_COMPONENT  ciddriver
 
 
   /*
-   *  POSTSCRIPT NAME SERVICE
+   * POSTSCRIPT NAME SERVICE
    *
    */
 
@@ -64,7 +69,7 @@
 
 
   /*
-   *  POSTSCRIPT INFO SERVICE
+   * POSTSCRIPT INFO SERVICE
    *
    */
 
@@ -100,7 +105,7 @@
 
 
   /*
-   *  CID INFO SERVICE
+   * CID INFO SERVICE
    *
    */
   static FT_Error
@@ -168,7 +173,19 @@
 
 
   /*
-   *  SERVICE LIST
+   * PROPERTY SERVICE
+   *
+   */
+
+  FT_DEFINE_SERVICE_PROPERTIESREC(
+    cid_service_properties,
+
+    (FT_Properties_SetFunc)ps_property_set,      /* set_property */
+    (FT_Properties_GetFunc)ps_property_get )     /* get_property */
+
+
+  /*
+   * SERVICE LIST
    *
    */
 
@@ -178,6 +195,7 @@
     { FT_SERVICE_ID_POSTSCRIPT_FONT_NAME, &cid_service_ps_name },
     { FT_SERVICE_ID_POSTSCRIPT_INFO,      &cid_service_ps_info },
     { FT_SERVICE_ID_CID,                  &cid_service_cid_info },
+    { FT_SERVICE_ID_PROPERTIES,           &cid_service_properties },
     { NULL, NULL }
   };
 
@@ -200,13 +218,13 @@
       FT_MODULE_FONT_DRIVER       |
       FT_MODULE_DRIVER_SCALABLE   |
       FT_MODULE_DRIVER_HAS_HINTER,
-      sizeof ( FT_DriverRec ),
+      sizeof ( PS_DriverRec ),
 
       "t1cid",   /* module name           */
       0x10000L,  /* version 1.0 of driver */
       0x20000L,  /* requires FreeType 2.0 */
 
-      0,    /* module-specific interface */
+      NULL,    /* module-specific interface */
 
       cid_driver_init,          /* FT_Module_Constructor  module_init   */
       cid_driver_done,          /* FT_Module_Destructor   module_done   */
@@ -226,12 +244,12 @@
 
     cid_slot_load_glyph,        /* FT_Slot_LoadFunc  load_glyph */
 
-    0,                          /* FT_Face_GetKerningFunc   get_kerning  */
-    0,                          /* FT_Face_AttachFunc       attach_file  */
-    0,                          /* FT_Face_GetAdvancesFunc  get_advances */
+    NULL,                       /* FT_Face_GetKerningFunc   get_kerning  */
+    NULL,                       /* FT_Face_AttachFunc       attach_file  */
+    NULL,                       /* FT_Face_GetAdvancesFunc  get_advances */
 
     cid_size_request,           /* FT_Size_RequestFunc  request_size */
-    0                           /* FT_Size_SelectFunc   select_size  */
+    NULL                        /* FT_Size_SelectFunc   select_size  */
   };
 
 
