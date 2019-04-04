@@ -46,7 +46,7 @@ namespace Echo
     // set texture res path
     void UiText::setText(const String& text)
     {
-        m_text = text;
+        m_text = StringUtil::MBS2WCS(text);
         buildRenderable();
     }
     
@@ -134,8 +134,7 @@ namespace Echo
         {
 			m_width = 0;
             m_height = m_fontSize;
-            WString wText = StringUtil::MBS2WCS( m_text);
-            for(wchar_t glyphCode : wText)
+            for(wchar_t glyphCode : m_text)
             {
                 FontGlyph* fontGlyph = FontLibrary::instance()->getFontGlyph( glyphCode, m_fontRes, m_fontSize);
                 if(fontGlyph)
