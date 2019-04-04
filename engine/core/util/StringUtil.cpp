@@ -3,16 +3,12 @@
 #include "engine/core/math/Vector3.h"
 #include "engine/core/math/Vector4.h"
 #include "engine/core/math/Quaternion.h"
-
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
 #include <codecvt>
-
 #include "internal_itoa.h"
 #include "internal_dtoa.h"
-
-
 #ifdef ECHO_PLATFORM_WINDOWS
 #	define WIN32_LEAN_AND_MEAN
 #	define _CRT_SECURE_NO_WARNINGS
@@ -25,7 +21,6 @@
 
 namespace Echo
 {
-
 	static char _HexToChar[] =
 	{
 		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
