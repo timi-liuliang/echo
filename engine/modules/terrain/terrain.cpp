@@ -98,16 +98,16 @@ namespace Echo
             m_material->setRenderStage("Transparent");
             
             // mesh
-            //Ui::VertexArray vertices;
-            //Ui::IndiceArray indices;
-            //buildMeshData(vertices, indices);
+            VertexArray vertices;
+            IndiceArray indices;
+            buildMeshData(vertices, indices);
             
             MeshVertexFormat define;
             define.m_isUseUV = true;
             
             m_mesh = Mesh::create(true, true);
-            //m_mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(Word), indices.data());
-            //m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data(), m_localAABB);
+            m_mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(Word), indices.data());
+            m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data(), m_localAABB);
             
             m_renderable = Renderable::create(m_mesh, m_material, this);
         }
@@ -125,7 +125,7 @@ namespace Echo
         }
     }
     
-    /*void Terrain::buildMeshData(Ui::VertexArray& oVertices, Ui::IndiceArray& oIndices)
+    void Terrain::buildMeshData(VertexArray& oVertices, IndiceArray& oIndices)
     {
         if(!m_text.empty() && !m_fontRes.isEmpty())
         {
@@ -149,10 +149,10 @@ namespace Echo
                     
                     // vertices
                     Word vertBase = oVertices.size();
-                    oVertices.push_back(Ui::VertexFormat(Vector3(left, top, 0.f), Vector2(uvLeft, uvTop)));
-                    oVertices.push_back(Ui::VertexFormat(Vector3(left, bottom, 0.f), Vector2(uvLeft, uvBottom)));
-                    oVertices.push_back(Ui::VertexFormat(Vector3(right, bottom, 0.f), Vector2(uvRight, uvBottom)));
-                    oVertices.push_back(Ui::VertexFormat(Vector3(right, top, 0.f), Vector2(uvRight, uvTop)));
+                    oVertices.push_back(VertexFormat(Vector3(left, top, 0.f), Vector2(uvLeft, uvTop)));
+                    oVertices.push_back(VertexFormat(Vector3(left, bottom, 0.f), Vector2(uvLeft, uvBottom)));
+                    oVertices.push_back(VertexFormat(Vector3(right, bottom, 0.f), Vector2(uvRight, uvBottom)));
+                    oVertices.push_back(VertexFormat(Vector3(right, top, 0.f), Vector2(uvRight, uvTop)));
                     
                     // indices
                     oIndices.push_back(vertBase + 0);
@@ -171,21 +171,21 @@ namespace Echo
         
         // calc aabb
         m_localAABB.reset();
-        //for (Terrain::VertexFormat& vert : oVertices)
-        //    m_localAABB.addPoint(vert.m_position);
-    }*/
+        for (Terrain::VertexFormat& vert : oVertices)
+            m_localAABB.addPoint(vert.m_position);
+    }
     
     void Terrain::updateMeshBuffer()
     {
-        //Ui::VertexArray    vertices;
-        //Ui::IndiceArray    indices;
-        //buildMeshData(vertices, indices);
+        VertexArray    vertices;
+        IndiceArray    indices;
+        buildMeshData(vertices, indices);
         
-        //MeshVertexFormat define;
-        //define.m_isUseUV = true;
+        MeshVertexFormat define;
+        define.m_isUseUV = true;
         
-        //m_mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(Word), indices.data());
-        //m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data(), m_localAABB);
+        m_mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(Word), indices.data());
+        m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data(), m_localAABB);
     }
     
     void Terrain::clear()
