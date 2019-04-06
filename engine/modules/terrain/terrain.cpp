@@ -13,9 +13,8 @@ namespace Echo
     : m_mesh(nullptr)
     , m_material(nullptr)
     , m_renderable(nullptr)
-    , m_width(0)
-    , m_height(0)
     {
+        set2d(false);
     }
     
     Terrain::~Terrain()
@@ -25,77 +24,32 @@ namespace Echo
     
     void Terrain::bindMethods()
     {
-        CLASS_BIND_METHOD(Terrain, getText,          DEF_METHOD("getText"));
-        CLASS_BIND_METHOD(Terrain, setText,          DEF_METHOD("setText"));
-        CLASS_BIND_METHOD(Terrain, getFont,          DEF_METHOD("getFont"));
-        CLASS_BIND_METHOD(Terrain, setFont,          DEF_METHOD("setFont"));
-        CLASS_BIND_METHOD(Terrain, getFontSize,        DEF_METHOD("getFontSize"));
-        CLASS_BIND_METHOD(Terrain, setFontSize,        DEF_METHOD("setFontSize"));
+        CLASS_BIND_METHOD(Terrain, getHeightmap,     DEF_METHOD("getHeightmap"));
+        CLASS_BIND_METHOD(Terrain, setHeightmap,     DEF_METHOD("setHeightmap"));
         CLASS_BIND_METHOD(Terrain, getWidth,         DEF_METHOD("getWidth"));
-        CLASS_BIND_METHOD(Terrain, setWidth,         DEF_METHOD("setWidth"));
         CLASS_BIND_METHOD(Terrain, getHeight,        DEF_METHOD("getHeight"));
-        CLASS_BIND_METHOD(Terrain, setHeight,        DEF_METHOD("setHeight"));
         
-        CLASS_REGISTER_PROPERTY(Terrain, "Width", Variant::Type::Int, "getWidth", "setWidth");
-        CLASS_REGISTER_PROPERTY(Terrain, "Height", Variant::Type::Int, "getHeight", "setHeight");
-        CLASS_REGISTER_PROPERTY(Terrain, "Text", Variant::Type::String, "getText", "setText");
-        CLASS_REGISTER_PROPERTY(Terrain, "Font", Variant::Type::ResourcePath, "getFont", "setFont");
-        CLASS_REGISTER_PROPERTY(Terrain, "FontSize", Variant::Type::Int, "getFontSize", "setFontSize");
+        CLASS_REGISTER_PROPERTY(Terrain, "Heightmap", Variant::Type::ResourcePath, "getHeightmap", "setHeightmap");
     }
     
-    void Terrain::setText(const String& text)
+    void Terrain::setHeightmap(const ResourcePath& path)
     {
-        m_text = StringUtil::MBS2WCS(text);
-        buildRenderable();
-    }
-    
-    void Terrain::setFont(const ResourcePath& path)
-    {
-        if (m_fontRes.setPath(path.getPath()))
+        if (m_heightmap.setPath(path.getPath()))
         {
-            buildRenderable();
-        }
-    }
-    
-    void Terrain::setFontSize(i32 fontSize)
-    {
-        m_fontSize = fontSize;
-        if (m_fontSize > 0)
-        {
-            buildRenderable();
-        }
-    }
-    
-    void Terrain::setWidth(i32 width)
-    {
-        if (m_width != width)
-        {
-            m_width = width;
-            
-            buildRenderable();
-        }
-    }
-    
-    void Terrain::setHeight(i32 height)
-    {
-        if (m_height != height)
-        {
-            m_height = height;
-            
             buildRenderable();
         }
     }
     
     void Terrain::buildRenderable()
     {
-        if (!m_text.empty())
+        if (!m_heightmap.getPath().empty())
         {
             clearRenderable();
             
             // material
             m_material = ECHO_CREATE_RES(Material);
-            m_material->setShaderContent("echo_text_default_shader", TerrainMaterial::getDefault());
-            m_material->setRenderStage("Transparent");
+            m_material->setShaderContent("echo_terrain_default_shader", TerrainMaterial::getDefault());
+            m_material->setRenderStage("Opaque");
             
             // mesh
             VertexArray vertices;
@@ -127,45 +81,37 @@ namespace Echo
     
     void Terrain::buildMeshData(VertexArray& oVertices, IndiceArray& oIndices)
     {
-        if(!m_text.empty() && !m_fontRes.isEmpty())
+        if(true)
         {
-            m_width = 0;
-            m_height = m_fontSize;
-            for(wchar_t glyphCode : m_text)
+            m_width = 128;
+            m_height = 128;
+            
+            // vertex buffer
+            for(i32 w=0; w<m_width; w++)
             {
-                FontGlyph* fontGlyph = FontLibrary::instance()->getFontGlyph( glyphCode, m_fontRes, m_fontSize);
-                if(fontGlyph)
+                for(i32 h=0; h<m_height; h++)
                 {
-                    float left = m_width;
-                    float right = left + m_fontSize;
-                    float top = m_height;
-                    float bottom = 0;
-                    
-                    Vector4 uv = fontGlyph->getUV();
-                    float uvLeft = uv.x;
-                    float uvTop = uv.y;
-                    float uvRight = uv.x + uv.z;
-                    float uvBottom = uv.y + uv.w;
-                    
-                    // vertices
-                    Word vertBase = oVertices.size();
-                    oVertices.push_back(VertexFormat(Vector3(left, top, 0.f), Vector2(uvLeft, uvTop)));
-                    oVertices.push_back(VertexFormat(Vector3(left, bottom, 0.f), Vector2(uvLeft, uvBottom)));
-                    oVertices.push_back(VertexFormat(Vector3(right, bottom, 0.f), Vector2(uvRight, uvBottom)));
-                    oVertices.push_back(VertexFormat(Vector3(right, top, 0.f), Vector2(uvRight, uvTop)));
-                    
-                    // indices
-                    oIndices.push_back(vertBase + 0);
-                    oIndices.push_back(vertBase + 1);
-                    oIndices.push_back(vertBase + 2);
-                    oIndices.push_back(vertBase + 0);
-                    oIndices.push_back(vertBase + 2);
-                    oIndices.push_back(vertBase + 3);
-                    
-                    m_material->setTexture("u_BaseColorSampler", fontGlyph->m_texture->getTexture());
+                    oVertices.push_back(VertexFormat(Vector3(w, h, 0.f), Vector2(w, h)));
                 }
-                
-                m_width += m_fontSize;
+            }
+            
+            // index buffer
+            for(i32 w=0; w<m_width; w++)
+            {
+                for(i32 h=0; h<m_height; h++)
+                {
+                    i32 indexLeftTop = h * m_width + w;
+                    i32 indexRightTop = indexLeftTop + 1;
+                    i32 indexLeftBottom = indexLeftTop + m_width;
+                    i32 indexRightBottom = indexRightTop + m_width;
+                    
+                    oIndices.push_back(indexLeftTop);
+                    oIndices.push_back(indexRightTop);
+                    oIndices.push_back(indexRightBottom);
+                    oIndices.push_back(indexLeftTop);
+                    oIndices.push_back(indexRightBottom);
+                    oIndices.push_back(indexLeftBottom);
+                }
             }
         }
         

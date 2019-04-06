@@ -30,25 +30,13 @@ namespace Echo
         Terrain();
         virtual ~Terrain();
         
-        // texture res path
-        void setText(const String& text);
-        const String getText() { return StringUtil::WCS2MBS(m_text); }
-        
         // font res path
-        void setFont(const ResourcePath& path);
-        const ResourcePath& getFont() { return m_fontRes; }
+        void setHeightmap(const ResourcePath& path);
+        const ResourcePath& getHeightmap() { return m_heightmap; }
         
-        // font size
-        void setFontSize(i32 fontSize);
-        i32 getFontSize() const { return m_fontSize; }
-        
-        // width
+        // width height
         i32 getWidth() const { return m_width; }
-        void setWidth(i32 width);
-        
-        // width
         i32 getHeight() const { return m_height; }
-        void setHeight(i32 height);
         
     protected:
         // build drawable
@@ -68,14 +56,12 @@ namespace Echo
         void clearRenderable();
         
     private:
-        WString                 m_text;
-        ResourcePath            m_fontRes = ResourcePath("", ".ttf");
-        i32                     m_fontSize = 24;
+        ResourcePath            m_heightmap = ResourcePath("", ".png");
         Mesh*                   m_mesh;            // Geometry Data for render
         Material*               m_material;        // Material Instance
         Renderable*             m_renderable;
         Matrix4                 m_matWVP;
-        i32                     m_width;
-        i32                     m_height;
+        i32                     m_width = 0;
+        i32                     m_height = 0;
     };
 }
