@@ -36,13 +36,20 @@ namespace Echo
     {
         if (m_heightmap.setPath(path.getPath()))
         {
-            buildRenderable();
+            m_heightmapImage = Image::loadFromFile( path.getPath());
+            if (m_heightmapImage)
+            {
+                m_width = m_heightmapImage->getWidth();
+                m_height = m_heightmapImage->getHeight();
+                if(m_width>0 && m_height>0)
+                    buildRenderable();
+            }
         }
     }
     
     void Terrain::buildRenderable()
     {
-        if (!m_heightmap.getPath().empty())
+        if (m_heightmapImage)
         {
             clearRenderable();
             
@@ -81,17 +88,15 @@ namespace Echo
     
     void Terrain::buildMeshData(VertexArray& oVertices, IndiceArray& oIndices)
     {
-        if(true)
+        if(m_width>0 && m_height>0)
         {
-            m_width = 128;
-            m_height = 128;
-            
             // vertex buffer
             for(i32 w=0; w<m_width; w++)
             {
                 for(i32 h=0; h<m_height; h++)
                 {
-                    oVertices.push_back(VertexFormat(Vector3(w, h, 0.f), Vector2(w, h)));
+                    float height = m_heightmapImage->getColor(w, h, 0).r;
+                    oVertices.push_back(VertexFormat(Vector3(w, h, height), Vector2(w, h)));
                 }
             }
             

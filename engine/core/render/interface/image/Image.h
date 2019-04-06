@@ -48,13 +48,12 @@ namespace Echo
 		};
 
 	public:
-
 		static String				GetImageFormatName(ImageFormat imgFmt);
 		static Image*				CreateFromMemory(const Buffer &inBuff, ImageFormat imgFmt);
 		static Image*				loadFromDataStream(DataStream* stream, const String& name);
 		static Image*				loadFromFile(const String& fileName);
 
-		// 保存为bmp格式(仅支持RGB格式) 源自Unreal3 Lightmass
+		// save to bmp
 		static bool saveToBmp( Byte* pixelData, int width, int height, const char* savePath);
 
 		virtual bool				saveToFile(const String &filename, ImageFormat imgFmt = IF_UNKNOWN);
@@ -76,7 +75,7 @@ namespace Echo
 		* Get color value from a certain location in the image. The z coordinate
 		* is only valid for cubemap and volume textures. This uses the first (largest) mipmap.
 		*/
-		virtual Color				getColor(int x, int y, int z) const;
+		virtual Color getColor(int x, int y, int z) const;
 
 		// Resize a 2D image, applying the appropriate filter.
 		virtual bool				scale(ui32 width, ui32 height, ImageFilter filter = IMGFILTER_BILINEAR);

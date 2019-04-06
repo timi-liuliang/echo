@@ -4,7 +4,7 @@
 #include "engine/core/render/interface/mesh/Mesh.h"
 #include "engine/core/render/interface/Material.h"
 #include "engine/core/render/interface/Renderable.h"
-//#include "vertex_format.h"
+#include "engine/core/render/interface/image/Image.h"
 
 namespace Echo
 {
@@ -57,8 +57,9 @@ namespace Echo
         
     private:
         ResourcePath            m_heightmap = ResourcePath("", ".png");
-        Mesh*                   m_mesh;            // Geometry Data for render
-        Material*               m_material;        // Material Instance
+        Image*                  m_heightmapImage = nullptr;
+        Mesh*                   m_mesh;                     // Geometry Data for render
+        Material*               m_material;                 // Material Instance
         Renderable*             m_renderable;
         Matrix4                 m_matWVP;
         i32                     m_width = 0;
