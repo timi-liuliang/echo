@@ -1,5 +1,5 @@
 #include "terrain.h"
-//#include "material.h"
+#include "terrain_material.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/scene/node_tree.h"
 #include "interface/Renderer.h"
@@ -94,7 +94,7 @@ namespace Echo
             
             // material
             m_material = ECHO_CREATE_RES(Material);
-            //m_material->setShaderContent("echo_text_default_shader", UiMaterial::getDefault());
+            m_material->setShaderContent("echo_text_default_shader", TerrainMaterial::getDefault());
             m_material->setRenderStage("Transparent");
             
             // mesh
