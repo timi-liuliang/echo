@@ -223,12 +223,13 @@ namespace Studio
 	void AStudio::setAppPath(const char* appPath)
 	{
 		m_appPath = appPath;
-		Echo::PathUtil::FormatPath(m_appPath, true);
+		Echo::PathUtil::FormatPath(m_appPath, false);
 
 		// calculate root path
 #ifdef ECHO_PLATFORM_WINDOWS
 		m_rootPath = m_appPath + "../../../../";
 #else
+        m_rootPath = m_appPath + "../../../../";
 #endif
 	}
 
