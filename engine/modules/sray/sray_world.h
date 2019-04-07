@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/core/scene/node.h"
+#include <radeon_rays.h>
 
 namespace Echo
 {
@@ -19,5 +20,6 @@ namespace Echo
         void step(float elapsedTime);
         
     private:
+        RadeonRays::IntersectionApi*    m_intersectionApi = nullptr;
     };
 }
