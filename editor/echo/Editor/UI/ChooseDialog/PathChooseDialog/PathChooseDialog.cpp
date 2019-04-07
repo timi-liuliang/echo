@@ -24,6 +24,7 @@ namespace Studio
 		m_dirModel->SetIcon("filter", QIcon(":/icon/Icon/folder_close.png"));
 		m_dirModel->SetIcon("filterexpend", QIcon(":/icon/Icon/folder_open.png"));
 		m_resDirView->setModel(m_dirModel);
+        m_resDirView->setAttribute(Qt::WA_MacShowFocusRect,0);
 		m_dirModel->Clean();
 
 		QStringList titleLable;
