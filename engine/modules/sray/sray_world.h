@@ -20,6 +20,8 @@ namespace Echo
         void step(float elapsedTime);
         
     private:
+        ui32                            m_deviceCount;
+        RadeonRays::DeviceInfo          m_deviceInfo;
         RadeonRays::IntersectionApi*    m_intersectionApi = nullptr;
     };
 }
