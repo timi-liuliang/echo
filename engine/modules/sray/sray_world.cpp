@@ -6,6 +6,7 @@ namespace Echo
 {
     SRayDevice::SRayDevice()
     {
+        m_intersectionApi = RadeonRays::IntersectionApi::Create( 0);
     }
     
     SRayDevice::~SRayDevice()
