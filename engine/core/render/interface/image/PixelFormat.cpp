@@ -1708,13 +1708,19 @@ namespace Echo
 		{
 			switch (pixFmt)
 			{
-			case PF_RGB8_UNORM:
+			case PF_R8_UNORM:
 				{
 					const Real f = 1.0f / 255.0f;
 					r = f * ((Byte*)pSrc)[0];
-					g = f * ((Byte*)pSrc)[1];
-					b = f * ((Byte*)pSrc)[2];
 					a = 1.f;
+				}break;
+			case PF_RGB8_UNORM:
+				{
+				const Real f = 1.0f / 255.0f;
+				r = f * ((Byte*)pSrc)[0];
+				g = f * ((Byte*)pSrc)[1];
+				b = f * ((Byte*)pSrc)[2];
+				a = 1.f;
 				}break;
 			case PF_RGBA8_UNORM:
 				{
