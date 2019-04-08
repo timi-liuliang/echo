@@ -35,12 +35,12 @@ THE SOFTWARE.
 #if !RR_STATIC_LIBRARY
 #ifdef WIN32
     #ifdef EXPORT_API
-        #define RRAPI __declspec(dllexport)
+        #define RRAPI //__declspec(dllexport)
     #else
-        #define RRAPI __declspec(dllimport)
+        #define RRAPI //__declspec(dllimport)
     #endif
 #else
-        #define RRAPI __attribute__((visibility ("default")))
+        #define RRAPI //__attribute__((visibility ("default")))
 #endif
 #else
     #define RRAPI

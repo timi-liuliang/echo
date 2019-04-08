@@ -1,40 +1,35 @@
 MESSAGE(STATUS "configuring module: radeonrays...")
 
-# 附加包含目录
-SET(INCLUDE_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}
-	${ECHO_SRC_PATH}
-)
+# Include Directories
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+INCLUDE_DIRECTORIES(${ECHO_SRC_PATH})
 
-INCLUDE_DIRECTORIES( ${INCLUDE_FILES})
-
-# 链接库
+# link directories
 LINK_DIRECTORIES(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
-LINK_LIBRARIES()
 
-# 设置项目路径
+# set project path
 SET(MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Add Definitions
 ADD_DEFINITIONS(-DRR_STATIC_LIBRARY)
 
-# 递归获取所有c++文件
+# rescursive get all files
 FILE(GLOB_RECURSE HEADER_FILES ${MODULE_PATH}/*.h ${MODULE_PATH}/*.inl)
 FILE(GLOB_RECURSE SOURCE_FILES ${MODULE_PATH}/*.cpp ${MODULE_PATH}/*.mm ${MODULE_PATH}/*.c)
 SET(ALL_FILES ${HEADER_FILES} ${SOURCE_FILES})
 
-# 分组文件
+# group files
 GROUP_FILES(ALL_FILES ${CMAKE_CURRENT_SOURCE_DIR})
 
-# 设置模块名称
+# set module name
 SET(MODULE_NAME radeonrays)
 
-# 新加库
+# add library
 ADD_LIBRARY(${MODULE_NAME} STATIC ${HEADER_FILES} ${SOURCE_FILES} CMakeLists.txt)
 
-# 设置目标属性
+# set folder
 SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES FOLDER "thirdparty")
 
-MESSAGE(STATUS "baseserver configure success!")
+MESSAGE(STATUS "radeonrays configure success!")
 
 
