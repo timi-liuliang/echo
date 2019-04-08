@@ -1786,6 +1786,11 @@ namespace Echo
 					r = g = b = Math::HalfToFloat(((ui16*)pSrc)[0]);
 					a = 1.0f;
 				} break;
+			case PF_R16_UINT:
+			{
+				r = (float)(((ui16*)pSrc)[0]);
+				a = 1.0f;
+			} break;
 			case PF_RG16_FLOAT:
 				{
 					g = Math::HalfToFloat(((ui16*)pSrc)[0]);

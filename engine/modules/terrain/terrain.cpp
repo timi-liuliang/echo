@@ -95,7 +95,8 @@ namespace Echo
             {
                 for(i32 row=0; row <m_height; row++)
                 {
-                    float height = m_heightmapImage->getColor(column, row, 0).r;
+					Color color = m_heightmapImage->getColor(column, row, 0);
+					float height = m_heightmapImage->getPixelFormat() == PF_R16_UINT ? color.r * 0.001f : color.r * 1000.f;			
                     oVertices.push_back(VertexFormat(Vector3(column, height, row), Vector2(column, row)));
                 }
             }
