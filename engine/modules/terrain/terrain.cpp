@@ -91,12 +91,12 @@ namespace Echo
         if(m_width>0 && m_height>0)
         {
             // vertex buffer
-            for(i32 w=0; w<m_width; w++)
+            for(i32 column=0; column <m_width; column++)
             {
-                for(i32 h=0; h<m_height; h++)
+                for(i32 row=0; row <m_height; row++)
                 {
-                    float height = m_heightmapImage->getColor(w, h, 0).r;
-                    oVertices.push_back(VertexFormat(Vector3(w, h, height), Vector2(w, h)));
+                    float height = m_heightmapImage->getColor(column, row, 0).r;
+                    oVertices.push_back(VertexFormat(Vector3(column, height, row), Vector2(column, row)));
                 }
             }
             

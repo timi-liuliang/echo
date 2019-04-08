@@ -30,16 +30,14 @@ void main(void)
 }
 </PS>
 <BlendState>
-    <BlendEnable value = "true" />
-    <SrcBlend value = "BF_SRC_ALPHA" />
-    <DstBlend value = "BF_INV_SRC_ALPHA" />
+    <BlendEnable value = "false" />
 </BlendState>
 <RasterizerState>
     <CullMode value = "CULL_NONE" />
 </RasterizerState>
-    <DepthStencilState>
-    <DepthEnable value = "false" />
-    <WriteDepth value = "false" />
+<DepthStencilState>
+    <DepthEnable value = "true" />
+    <WriteDepth value = "true" />
 </DepthStencilState>
 </Shader>
 )";
