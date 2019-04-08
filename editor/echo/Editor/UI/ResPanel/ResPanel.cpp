@@ -192,7 +192,11 @@ namespace Studio
 		QString openDir = m_currentDir.c_str();
 		if (!openDir.isEmpty())
 		{
+#ifdef ECHO_PLATFORM_WINDOWS
 			QDesktopServices::openUrl(openDir);
+#else
+            QDesktopServices::openUrl(QUrl("file://" + openDir));
+#endif
 		}		
 	}
 

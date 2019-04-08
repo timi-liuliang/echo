@@ -113,41 +113,14 @@ namespace Echo
 
 	Image* Image::loadFromFile(const String& fileName)
 	{
-		// load the file.
-		FILE* imageFile = fopen(fileName.c_str(), "rb");;
-
-		if(!imageFile)
-		{
-			String msg = StringUtil::Format("Image file: [%s] load failed!", fileName.c_str());
-			EchoLogError(msg.c_str());
-			return NULL;
-		}
-
-		ui32 buffSize = (ui32)PathUtil::GetFileSize(fileName);
-		Byte *pBuff = (Byte*)EchoMalloc(buffSize);
-
-		ui32 numRead = fread(pBuff, sizeof(Byte)*buffSize, 1, imageFile);
-		ECHO_UNUSED(numRead);
-
-		fclose(imageFile);
-
-		// decode the image.
-		Buffer inBuff(buffSize, pBuff);
-
-		ImageFormat imgFmt = GetImageFormat(fileName);
-
-		Image *pImage = CreateFromMemory(inBuff, imgFmt);
-		if (!pImage) 
-		{
-			String msg = StringUtil::Format("Load image file [%s] error!", fileName.c_str());
-			EchoLogError(msg.c_str());
-			EchoSafeFree(pBuff);
-			return NULL;
-		}
-
-		EchoSafeFree(pBuff);
-
-		return pImage;
+        MemoryReader memReader(fileName);
+        if (memReader.getSize())
+        {
+            Buffer commonTextureBuffer(memReader.getSize(), memReader.getData<ui8*>(), false);
+            return Image::CreateFromMemory(commonTextureBuffer, Image::GetImageFormat(fileName));
+        }
+        
+        return nullptr;
 	}
 
 	Image* Image::loadFromDataStream(DataStream* stream, const String& name)

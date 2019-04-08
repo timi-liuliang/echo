@@ -3,15 +3,12 @@
 #include "engine/core/math/Vector3.h"
 #include "engine/core/math/Vector4.h"
 #include "engine/core/math/Quaternion.h"
-
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
-
+#include <codecvt>
 #include "internal_itoa.h"
 #include "internal_dtoa.h"
-
-
 #ifdef ECHO_PLATFORM_WINDOWS
 #	define WIN32_LEAN_AND_MEAN
 #	define _CRT_SECURE_NO_WARNINGS
@@ -24,7 +21,6 @@
 
 namespace Echo
 {
-
 	static char _HexToChar[] =
 	{
 		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
@@ -348,41 +344,15 @@ namespace Echo
 	}
 
 	String StringUtil::WCS2MBS(const WString &str)
-	{	
-#ifdef ECHO_PLATFORM_WINDOWS
-		int size = WideCharToMultiByte(CP_ACP, 0, str.c_str(), -1, NULL, 0, NULL, NULL);
-		String mbstr(size, wchar_t(0));
-		wcstombs(const_cast<char*>(mbstr.c_str()), const_cast<wchar_t*>(str.c_str()), (size+1)*4);
-		return mbstr;
-#else
-		const int utf8_len = str.length() * 4 + 1;
-		char* buffer = new char[utf8_len];
-		memset(buffer, 0, utf8_len);
-		utf16_to_utf8(str.c_str(), str.length(), buffer, utf8_len);  
-		std::string ret(buffer);
-		delete [] buffer;
-		return ret;
-#	endif
-
+	{
+        std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> conv;
+        return conv.to_bytes(str);
 	}
 
 	WString StringUtil::MBS2WCS(const String& str)
 	{
-#	ifdef ECHO_PLATFORM_WINDOWS
-		int size = MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, NULL, 0)-1;
-		WString wstr(size, wchar_t(0));
-		mbstowcs(const_cast<wchar_t*>(wstr.c_str()), str.c_str(), size);
-		return wstr;
-#else
-		wchar_t* buffer = new wchar_t[str.length() + 1];
-		memset(buffer, 0, (str.length() + 1) * sizeof(wchar_t));
-		
-		utf8_to_utf16(str.c_str(), str.length(), buffer, str.length() + 1);
-		
-		std::wstring ret(buffer);
-		delete [] buffer;
-		return ret;
-#	endif
+        std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> conv;
+        return conv.from_bytes(str);
 	}
 
 	String StringUtil::ToString(float val, Word precision, Word width, char fill)
@@ -778,103 +748,6 @@ namespace Echo
 		return out;
 	}
 
-
-	// utf-8 to utf-32 
-	// return the utf-32 count
-	size_t encoded_size(const unsigned char* buf, size_t len)
-	{
-		unsigned char tcp;
-		size_t count = 0;
-
-		while (len--)
-		{
-			tcp = *buf++;
-			++count;
-			size_t size = 0;
-
-			if (tcp < 0x80)
-			{
-			}
-			else if (tcp < 0xE0)
-			{
-				size = 1;
-				++buf;
-			}
-			else if (tcp < 0xF0)
-			{
-				size = 2;
-				buf += 2;
-			}
-			else
-			{
-				size = 3;
-				buf += 3;
-			}
-
-			if (len >= size)
-				len -= size;
-			else 
-				break;
-		}
-
-		return count;
-	}
-
-	size_t utf_length(const unsigned char* utf8_str)
-	{
-		size_t cnt = 0;
-		while (*utf8_str++)
-			cnt++;
-
-		return cnt;
-	}
-
-
-	// -----utf 32 to utf 8
-	// calculate the buff size utf8 required
-	size_t utf_length(const utf32* utf32_str)
-	{
-		size_t cnt = 0;
-		while (*utf32_str++)
-			cnt++;
-
-		return cnt;
-	}
-
-	// return the number of utf8 code units required to encode the given utf32 code point
-	size_t encoded_size(utf32 code_point)
-	{
-		if (code_point < 0x80)
-			return 1;
-		else if (code_point < 0x0800)
-			return 2;
-		else if (code_point < 0x10000)
-			return 3;
-		else
-			//return 4;
-			return 0;
-	}
-
-	// return number of code units required to re-encode given utf32 data as utf8.   len is number of code units in 'buf'.
-	size_t encoded_size(const utf32* buf, size_t len)
-	{
-		size_t count = 0;
-
-		while (len--)
-		{
-			count += encoded_size(*buf++);
-		}
-
-		return count;
-	}
-
-	// return number of code units required to re-encode given null-terminated utf32 data as utf8.  return does not include terminating null.
-	size_t encoded_size(const utf32* buf)
-	{
-		return encoded_size(buf, utf_length(buf));
-	}
-
-
 	int sprintf_append(char* s, const int max, const char* const format, ...)
 	{
 		va_list arg;
@@ -889,71 +762,5 @@ namespace Echo
 		}
 		va_end(arg);
 		return copylen;
-	}
-
-
-#ifndef ECHO_PLATFORM_WINDOWS
-static union { char c[2]; unsigned short a; } endian_test = { { 0, 1 } };
-#define WCHAR_TYPE (((char)endian_test.a) ? "UTF-32BE" : "UTF-32LE")
-#endif
-
-	size_t utf16_to_utf8(const wchar_t* utf16, const size_t utf16_len, char* utf8, const size_t utf8_len)
-	{
-	#ifdef ECHO_PLATFORM_WINDOWS
-
-		return ::WideCharToMultiByte(
-			65001,						//CodePage, 				
-			0,							//Flags, 
-			utf16,						//WideCharStr,
-			utf16_len,					//WideCharCount,  
-			utf8,						//MultiByteStr, 
-			utf8_len - 1,				//MultiByteCount,
-			NULL,						//DefaultChar,    
-			NULL);						//UsedDefaultChar
-    #elif defined(ECHO_PLATFORM_MAC)
-        return 0;
-	#else
-		iconv_t cd = iconv_open("UTF-8", WCHAR_TYPE);
-		if (cd == reinterpret_cast<iconv_t>(-1))
-		{
-			return -1;
-		}
-		size_t utf16_byte   = utf16_len * sizeof(wchar_t);
-		size_t utf8_byte    = utf8_len - 1;
-		char* p16           = const_cast<char*>(reinterpret_cast<const char*>(utf16));
-		char* p8            = utf8;
-		size_t r = iconv(cd, &p16, &utf16_byte, &p8, &utf8_byte);
-		iconv_close(cd);
-		return r;
-	#endif
-	};
-
-	size_t utf8_to_utf16(const char* utf8, const size_t utf8_len, wchar_t* utf16, const size_t utf16_len)
-	{
-	#ifdef ECHO_PLATFORM_WINDOWS
-
-		return ::MultiByteToWideChar(
-			65001, 
-			0, 
-			utf8, 
-			utf8_len, 
-			utf16, 
-			utf16_len - 1);
-    #elif defined(ECHO_PLATFORM_MAC)
-        return 0;
-	#else
-		iconv_t cd = iconv_open(WCHAR_TYPE, "UTF-8");
-		if (cd == reinterpret_cast<iconv_t>(-1))
-		{
-			return -1;
-		}
-		size_t utf16_byte   = (utf16_len - 1) * sizeof(wchar_t);
-		size_t utf8_byte    = utf8_len;
-		char* p16           = reinterpret_cast<char*>(utf16);
-		char* p8            = const_cast<char*>(utf8);
-		size_t r = iconv(cd, &p8, &utf8_byte, &p16, &utf16_byte);
-		iconv_close(cd);
-		return r;
-	#endif
 	}
 }

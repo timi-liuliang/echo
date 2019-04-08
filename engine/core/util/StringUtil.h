@@ -79,9 +79,6 @@ namespace Echo
 		String			Hex2Char(Dword val);
 	};
 
-	size_t utf16_to_utf8(const wchar_t* utf16, const size_t utf16_len, char* utf8, const size_t utf8_len); //utf16_len is wcslen(utf16)
-	size_t utf8_to_utf16(const char* utf8, const size_t utf8_len, wchar_t* utf16, const size_t utf16_len); //utf16_len is wchar_t count of utf16*
-
 	int		sprintf_append	(char* s, const int maxByteSize, const char* const format, ...);
 }
 

@@ -10,6 +10,8 @@
 #include "engine/modules/ai/ai_module.h"
 #include "engine/modules/light/light_module.h"
 #include "engine/modules/physx/physx_module.h"
+#include "engine/modules/terrain/terrain_module.h"
+#include "engine/modules/sray/sray_module.h"
 
 namespace Echo
 {
@@ -28,5 +30,7 @@ namespace Echo
 		REGISTER_MODULE(AIModule)
 		REGISTER_MODULE(LightModule);
 		REGISTER_MODULE(PhysxModule);
+        REGISTER_MODULE(TerrainModule);
+        REGISTER_MODULE(SRayModule);
 	}
 }

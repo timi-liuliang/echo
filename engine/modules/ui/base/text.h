@@ -18,7 +18,7 @@ namespace Echo
         
         // texture res path
         void setText(const String& text);
-        const String& getText() { return m_text; }
+        const String getText() { return StringUtil::WCS2MBS(m_text); }
         
         // font res path
         void setFont(const ResourcePath& path);
@@ -54,7 +54,7 @@ namespace Echo
         void clearRenderable();
         
     private:
-        String                  m_text;
+        WString                 m_text;
         ResourcePath            m_fontRes = ResourcePath("", ".ttf");
 		i32						m_fontSize = 24;
         Mesh*                   m_mesh;            // Geometry Data for render
