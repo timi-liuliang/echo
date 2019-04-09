@@ -37,6 +37,10 @@ namespace Echo
         // width height
         i32 getWidth() const { return m_width; }
         i32 getHeight() const { return m_height; }
+
+		// height range
+		float getHeightRange() const { return m_heightRange; }
+		void setHeightRange(float range);
         
     protected:
         // build drawable
@@ -58,6 +62,7 @@ namespace Echo
     private:
         ResourcePath            m_heightmap = ResourcePath("", ".png");
         Image*                  m_heightmapImage = nullptr;
+		float					m_heightRange = 256.f;
         Mesh*                   m_mesh;                     // Geometry Data for render
         Material*               m_material;                 // Material Instance
         Renderable*             m_renderable;

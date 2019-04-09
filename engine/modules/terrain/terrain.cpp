@@ -28,8 +28,11 @@ namespace Echo
         CLASS_BIND_METHOD(Terrain, setHeightmap,     DEF_METHOD("setHeightmap"));
         CLASS_BIND_METHOD(Terrain, getWidth,         DEF_METHOD("getWidth"));
         CLASS_BIND_METHOD(Terrain, getHeight,        DEF_METHOD("getHeight"));
+		CLASS_BIND_METHOD(Terrain, getHeightRange,   DEF_METHOD("getHeightRange"));
+		CLASS_BIND_METHOD(Terrain, setHeightRange,   DEF_METHOD("setHeightRange"));
         
         CLASS_REGISTER_PROPERTY(Terrain, "Heightmap", Variant::Type::ResourcePath, "getHeightmap", "setHeightmap");
+		CLASS_REGISTER_PROPERTY(Terrain, "HeightRange", Variant::Type::Real, "getHeightRange", "setHeightRange");
     }
     
     void Terrain::setHeightmap(const ResourcePath& path)
@@ -41,15 +44,22 @@ namespace Echo
             {
                 m_width = m_heightmapImage->getWidth();
                 m_height = m_heightmapImage->getHeight();
-                if(m_width>0 && m_height>0)
-                    buildRenderable();
+
+                buildRenderable();
             }
         }
     }
+
+	void Terrain::setHeightRange(float range)
+	{ 
+		m_heightRange = range;
+
+		buildRenderable();
+	}
     
     void Terrain::buildRenderable()
     {
-        if (m_heightmapImage)
+        if (m_heightmapImage && m_width > 0 && m_height > 0)
         {
             clearRenderable();
             
@@ -96,7 +106,7 @@ namespace Echo
                 for(i32 row=0; row <m_height; row++)
                 {
 					Color color = m_heightmapImage->getColor(column, row, 0);
-					float height = m_heightmapImage->getPixelFormat() == PF_R16_UINT ? color.r * 0.001f : color.r * 1000.f;			
+					float height = (color.r * 2.f - 1.f) * m_heightRange;	
                     oVertices.push_back(VertexFormat(Vector3(column, height, row), Vector2(column, row)));
                 }
             }

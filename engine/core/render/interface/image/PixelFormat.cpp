@@ -1794,7 +1794,8 @@ namespace Echo
 				} break;
 			case PF_R16_UINT:
 			{
-				r = (float)(((ui16*)pSrc)[0]);
+				const Real f = 1.0f / 65535.0f;
+				r = f * (float)(((ui16*)pSrc)[0]);
 				a = 1.0f;
 			} break;
 			case PF_RG16_FLOAT:
