@@ -5,28 +5,36 @@ static const char* g_terrainDefaultMaterial = R"(<?xml version = "1.0" encoding 
 <VS>#version 100
 
 attribute vec3 a_Position;
+attribute vec4 a_Normal;
 attribute vec2 a_UV;
 
+uniform mat4 u_WorldMatrix;
 uniform mat4 u_WorldViewProjMatrix;
 
-varying vec2 texCoord;
+varying vec2 v_UV;
+varying vec3 v_Normal;
 
 void main(void)
 {
     vec4 position = u_WorldViewProjMatrix * vec4(a_Position, 1.0);
     gl_Position = position;
     
-    texCoord = a_UV;
+    v_UV = a_UV;
+    v_Normal = normalize(vec3(u_WorldMatrix * vec4(a_Normal.xyz, 0.0)));
 }
 </VS>
 <PS>#version 100
 
-varying mediump vec2 texCoord;
+varying mediump vec2 v_UV;
+varying mediump vec3 v_Normal;
 
 void main(void)
 {
-    mediump vec4 textureColor = vec4(1.0, 1.0, 1.0, 1.0);
-    gl_FragColor = textureColor;
+    mediump vec3 lightDir = normalize(vec3(1.0, 1.0, 1.0));
+    mediump vec3 lightColor = vec4(1.0, 1.0, 1.0)
+    mediump vec3 textureColor = dot(v_Normal, lightDir) * lightColor;
+    
+    gl_FragColor = vec4(textureColor, 1.0);
 }
 </PS>
 <BlendState>

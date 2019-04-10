@@ -17,11 +17,8 @@ namespace Echo
         struct VertexFormat
         {
             Vector3        m_position;
+            Vector3        m_normal;
             Vector2        m_uv;
-            
-            VertexFormat(const Vector3& pos, const Vector2& uv)
-            : m_position(pos), m_uv(uv)
-            {}
         };
         typedef vector<VertexFormat>::type  VertexArray;
         typedef vector<Word>::type          IndiceArray;
@@ -35,12 +32,18 @@ namespace Echo
         const ResourcePath& getHeightmap() { return m_heightmap; }
         
         // width height
-        i32 getWidth() const { return m_width; }
-        i32 getHeight() const { return m_height; }
+        i32 getColumns() const { return m_width; }
+        i32 getRows() const { return m_height; }
 
 		// height range
 		float getHeightRange() const { return m_heightRange; }
 		void setHeightRange(float range);
+        
+        // get height
+        float getHeight(i32 x, i32 z);
+        
+        // get normal
+        Vector3 getNormal(i32 x, i32 z);
         
     protected:
         // build drawable

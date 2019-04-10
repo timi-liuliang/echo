@@ -26,8 +26,8 @@ namespace Echo
     {
         CLASS_BIND_METHOD(Terrain, getHeightmap,     DEF_METHOD("getHeightmap"));
         CLASS_BIND_METHOD(Terrain, setHeightmap,     DEF_METHOD("setHeightmap"));
-        CLASS_BIND_METHOD(Terrain, getWidth,         DEF_METHOD("getWidth"));
-        CLASS_BIND_METHOD(Terrain, getHeight,        DEF_METHOD("getHeight"));
+        CLASS_BIND_METHOD(Terrain, getColumns,       DEF_METHOD("getColumns"));
+        CLASS_BIND_METHOD(Terrain, getRows,          DEF_METHOD("getRows"));
 		CLASS_BIND_METHOD(Terrain, getHeightRange,   DEF_METHOD("getHeightRange"));
 		CLASS_BIND_METHOD(Terrain, setHeightRange,   DEF_METHOD("setHeightRange"));
         
@@ -74,6 +74,7 @@ namespace Echo
             buildMeshData(vertices, indices);
             
             MeshVertexFormat define;
+            define.m_isUseNormal = true;
             define.m_isUseUV = true;
             
             m_mesh = Mesh::create(true, true);
@@ -105,9 +106,11 @@ namespace Echo
             {
                 for(i32 row=0; row <m_height; row++)
                 {
-					Color color = m_heightmapImage->getColor(column, row, 0);
-					float height = (color.r * 2.f - 1.f) * m_heightRange;	
-                    oVertices.push_back(VertexFormat(Vector3(column, height, row), Vector2(column, row)));
+                    VertexFormat vert;
+                    vert.m_position = Vector3(column, getHeight(column, row), row);
+                    vert.m_uv = Vector2(column, row);
+                    vert.m_normal = getNormal(column, row);
+                    oVertices.push_back(vert);
                 }
             }
             
@@ -144,6 +147,7 @@ namespace Echo
         buildMeshData(vertices, indices);
         
         MeshVertexFormat define;
+        define.m_isUseNormal = true;
         define.m_isUseUV = true;
         
         m_mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(Word), indices.data());
@@ -160,5 +164,39 @@ namespace Echo
         EchoSafeRelease(m_renderable);
         EchoSafeRelease(m_material);
         EchoSafeRelease(m_mesh);
+    }
+    
+    float Terrain::getHeight(i32 x, i32 z)
+    {
+        if(m_heightmapImage)
+        {
+            i32 column = Math::Clamp(x, 0, m_width);
+            i32 row = Math::Clamp(z, 0, m_height);
+            Color color = m_heightmapImage->getColor(column, row, 0);
+            float height = (color.r * 2.f - 1.f) * m_heightRange;
+            
+            return height;
+        }
+        
+        return 0.f;
+    }
+    
+    Vector3 Terrain::getNormal( i32 x, i32 z)
+    {
+        if(m_heightmapImage)
+        {
+            float h0 = getHeight(   x,   z);
+            float h1 = getHeight( x+1,   z) - h0;
+            float h2 = getHeight(   x, z-1) - h0;
+            float h3 = getHeight( x-1,   z) - h0;
+            float h4 = getHeight(   x, z+1) - h0;
+            
+            Vector3 normal( h3 - h1, 2, h2 - h4);
+            normal.normalize();
+            
+            return normal;
+        }
+
+        return Vector3::UNIT_Y;
     }
 }

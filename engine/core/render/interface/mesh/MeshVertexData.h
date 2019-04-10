@@ -51,22 +51,22 @@ namespace Echo
 	{
 		typedef VertexElementList RIVEL;
 
-		bool		m_isUseNormal;			// 是否使用法线
-		bool		m_isUseVertexColor;		// 是否使用顶点色
-		bool		m_isUseUV;				// 是否使用漫反射贴图UV 
-		bool		m_isUseLightmapUV;		// 是否使用光照图UV
-		bool		m_isUseBoneData;		// 是否使用骨骼数据(索引权重)
-		bool		m_isUseTangentBinormal;	// 是否使用切线与副线
-		ui32		m_stride;				// 顶点格式大小
-		Byte		m_posOffset;			// 顶点位置数据偏移量
-		Byte		m_normalOffset;			// 顶点法线数据偏移量
-		Byte		m_colorOffset;			// 顶点颜色数据偏移量
-		Byte		m_uv0Offset;			// 顶点纹理坐标0偏移量
-		Byte		m_uv1Offset;			// 顶点纹理坐标1偏移量
-		Byte		m_boneIndicesOffset;	// 顶点骨骼索引偏移量
-		Byte		m_boneWeightsOffset;	// 顶点骨骼权重偏移量
-		Byte		m_tangentOffset;		// 切线数据偏移量
-		RIVEL		m_vertexElements;		// 顶点格式
+		bool		m_isUseNormal;
+		bool		m_isUseVertexColor;
+		bool		m_isUseUV;
+		bool		m_isUseLightmapUV;
+		bool		m_isUseBoneData;
+		bool		m_isUseTangentBinormal;
+		ui32		m_stride;
+		Byte		m_posOffset;
+		Byte		m_normalOffset;
+		Byte		m_colorOffset;
+		Byte		m_uv0Offset;
+		Byte		m_uv1Offset;
+		Byte		m_boneIndicesOffset;
+		Byte		m_boneWeightsOffset;
+		Byte		m_tangentOffset;
+		RIVEL		m_vertexElements;
 
 		MeshVertexFormat();
 
