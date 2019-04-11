@@ -34,8 +34,8 @@ namespace Echo
 		m_3dCamera->setPosition(vCamPos);
 		m_3dCamera->setUp(Vector3::UNIT_Y);
 		m_3dCamera->setDirection(vCamDir);
-		m_3dCamera->setNearClip(1.f);
-		m_3dCamera->setFarClip(2500.f);
+		m_3dCamera->setNearClip(0.1f);
+		m_3dCamera->setFarClip(250.f);
 
 		// create 2D camera
 		Vector3 vCam2DPos(0, 0, 0);

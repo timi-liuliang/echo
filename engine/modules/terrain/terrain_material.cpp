@@ -31,8 +31,8 @@ varying mediump vec3 v_Normal;
 void main(void)
 {
     mediump vec3 lightDir = normalize(vec3(1.0, 1.0, 1.0));
-    mediump vec3 lightColor = vec4(1.0, 1.0, 1.0)
-    mediump vec3 textureColor = dot(v_Normal, lightDir) * lightColor;
+    mediump vec3 lightColor = vec3(1.0, 1.0, 1.0);
+    mediump vec3 textureColor = max(dot(v_Normal, lightDir), 0.0) * lightColor + vec3(0.2, 0.2, 0.2);
     
     gl_FragColor = vec4(textureColor, 1.0);
 }

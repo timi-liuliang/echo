@@ -42,7 +42,7 @@ namespace Studio
 
 		m_camera = Echo::NodeTree::instance()->get3dCamera();
 		m_camera->setNearClip(0.1f);
-		m_camera->setFarClip(250.f);
+		m_camera->setFarClip(2500.f);
 	}
 
 	InputController3d::~InputController3d()
@@ -51,10 +51,10 @@ namespace Studio
 
 	void InputController3d::tick(const InputContext& ctx)
 	{
-		// ÉãÏñ»úĞı×ª¸üĞÂ
+		// æ‘„åƒæœºæ—‹è½¬æ›´æ–°
 		SmoothRotation(ctx.elapsedTime);
 
-		// ÒÆ¶¯ÉãÏñ»ú
+		// ç§»åŠ¨æ‘„åƒæœº
 		Echo::Vector3 cameraMoveDir = Echo::Vector3::ZERO;
 		if ( m_keyADown ) 
 			cameraMoveDir.x += 1.f;
@@ -67,7 +67,7 @@ namespace Studio
 
 		SetCameraMoveDir(cameraMoveDir);
 
-		// ¸üĞÂÉãÏñ»ú
+		// æ›´æ–°æ‘„åƒæœº
 		UpdateCamera(ctx.elapsedTime);
 	}
 

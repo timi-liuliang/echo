@@ -69,18 +69,9 @@ namespace Echo
             m_material->setRenderStage("Opaque");
             
             // mesh
-            VertexArray vertices;
-            IndiceArray indices;
-            buildMeshData(vertices, indices);
+			updateMeshBuffer();
             
-            MeshVertexFormat define;
-            define.m_isUseNormal = true;
-            define.m_isUseUV = true;
-            
-            m_mesh = Mesh::create(true, true);
-            m_mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(Word), indices.data());
-            m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data(), m_localAABB);
-            
+			// create renderable
             m_renderable = Renderable::create(m_mesh, m_material, this);
         }
     }
@@ -102,24 +93,24 @@ namespace Echo
         if(m_width>0 && m_height>0)
         {
             // vertex buffer
-            for(i32 column=0; column <m_width; column++)
+			for (i32 row = 0; row < m_height; row++)
             {
-                for(i32 row=0; row <m_height; row++)
+				for (i32 column = 0; column < m_width; column++)
                 {
                     VertexFormat vert;
-                    vert.m_position = Vector3(column, getHeight(column, row), row);
-                    vert.m_uv = Vector2(column, row);
-                    vert.m_normal = getNormal(column, row);
+                    vert.m_position = Vector3(row, getHeight(row, column), column);
+                    vert.m_uv = Vector2(row, column);
+                    vert.m_normal = getNormal(row, column);
                     oVertices.push_back(vert);
                 }
             }
             
             // index buffer
-            for(i32 w=0; w<m_width; w++)
-            {
-                for(i32 h=0; h<m_height; h++)
+			for (i32 row = 0; row < m_height; row++)
+			{
+				for (i32 column = 0; column < m_width; column++)
                 {
-                    i32 indexLeftTop = h * m_width + w;
+                    i32 indexLeftTop = row * m_width + column;
                     i32 indexRightTop = indexLeftTop + 1;
                     i32 indexLeftBottom = indexLeftTop + m_width;
                     i32 indexRightBottom = indexRightTop + m_width;
@@ -142,6 +133,10 @@ namespace Echo
     
     void Terrain::updateMeshBuffer()
     {
+		// create mesh
+		if (!m_mesh) m_mesh = Mesh::create(true, true);
+
+		// update data
         VertexArray    vertices;
         IndiceArray    indices;
         buildMeshData(vertices, indices);
@@ -150,7 +145,7 @@ namespace Echo
         define.m_isUseNormal = true;
         define.m_isUseUV = true;
         
-        m_mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(Word), indices.data());
+        m_mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(ui32), indices.data());
         m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data(), m_localAABB);
     }
     

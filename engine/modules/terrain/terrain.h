@@ -21,7 +21,7 @@ namespace Echo
             Vector2        m_uv;
         };
         typedef vector<VertexFormat>::type  VertexArray;
-        typedef vector<Word>::type          IndiceArray;
+        typedef vector<ui32>::type          IndiceArray;
         
     public:
         Terrain();
