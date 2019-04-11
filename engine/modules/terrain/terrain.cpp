@@ -42,8 +42,8 @@ namespace Echo
             m_heightmapImage = Image::loadFromFile( path.getPath());
             if (m_heightmapImage)
             {
-                m_width = m_heightmapImage->getWidth();
-                m_height = m_heightmapImage->getHeight();
+                m_columns = m_heightmapImage->getWidth();
+                m_rows = m_heightmapImage->getHeight();
 
                 buildRenderable();
             }
@@ -59,7 +59,7 @@ namespace Echo
     
     void Terrain::buildRenderable()
     {
-        if (m_heightmapImage && m_width > 0 && m_height > 0)
+        if (m_heightmapImage && m_columns > 0 && m_rows > 0)
         {
             clearRenderable();
             
@@ -90,12 +90,12 @@ namespace Echo
     
     void Terrain::buildMeshData(VertexArray& oVertices, IndiceArray& oIndices)
     {
-        if(m_width>0 && m_height>0)
+        if(m_columns>0 && m_rows>0)
         {
             // vertex buffer
-			for (i32 row = 0; row < m_height; row++)
+			for (i32 row = 0; row < m_rows; row++)
             {
-				for (i32 column = 0; column < m_width; column++)
+				for (i32 column = 0; column < m_columns; column++)
                 {
                     VertexFormat vert;
                     vert.m_position = Vector3(row, getHeight(row, column), column);
@@ -106,14 +106,16 @@ namespace Echo
             }
             
             // index buffer
-			for (i32 row = 0; row < m_height; row++)
+			i32 rowLength = m_rows - 1;
+			i32 columnLength = m_columns - 1;
+			for (i32 row = 0; row < rowLength; row++)
 			{
-				for (i32 column = 0; column < m_width; column++)
+				for (i32 column = 0; column < columnLength; column++)
                 {
-                    i32 indexLeftTop = row * m_width + column;
+                    i32 indexLeftTop = row * m_columns + column;
                     i32 indexRightTop = indexLeftTop + 1;
-                    i32 indexLeftBottom = indexLeftTop + m_width;
-                    i32 indexRightBottom = indexRightTop + m_width;
+                    i32 indexLeftBottom = indexLeftTop + m_columns;
+                    i32 indexRightBottom = indexRightTop + m_columns;
                     
                     oIndices.push_back(indexLeftTop);
                     oIndices.push_back(indexRightTop);
@@ -165,8 +167,8 @@ namespace Echo
     {
         if(m_heightmapImage)
         {
-            i32 column = Math::Clamp(x, 0, m_width);
-            i32 row = Math::Clamp(z, 0, m_height);
+            i32 column = Math::Clamp(x, 0, m_columns);
+            i32 row = Math::Clamp(z, 0, m_rows);
             Color color = m_heightmapImage->getColor(column, row, 0);
             float height = (color.r * 2.f - 1.f) * m_heightRange;
             

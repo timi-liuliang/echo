@@ -32,8 +32,8 @@ namespace Echo
         const ResourcePath& getHeightmap() { return m_heightmap; }
         
         // width height
-        i32 getColumns() const { return m_width; }
-        i32 getRows() const { return m_height; }
+        i32 getColumns() const { return m_columns; }
+        i32 getRows() const { return m_rows; }
 
 		// height range
 		float getHeightRange() const { return m_heightRange; }
@@ -70,7 +70,7 @@ namespace Echo
         Material*               m_material;                 // Material Instance
         Renderable*             m_renderable;
         Matrix4                 m_matWVP;
-        i32                     m_width = 0;
-        i32                     m_height = 0;
+        i32                     m_columns = 0;
+        i32                     m_rows = 0;
     };
 }
