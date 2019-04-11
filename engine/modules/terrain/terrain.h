@@ -38,6 +38,10 @@ namespace Echo
 		// height range
 		float getHeightRange() const { return m_heightRange; }
 		void setHeightRange(float range);
+
+		// grid spacing
+		i32 getGridSpacing() const { return m_gridSpacing; }
+		void setGridSpacing(i32 gridSpacing);
         
         // get height
         float getHeight(i32 x, i32 z);
@@ -66,6 +70,7 @@ namespace Echo
         ResourcePath            m_heightmap = ResourcePath("", ".png");
         Image*                  m_heightmapImage = nullptr;
 		float					m_heightRange = 256.f;
+		i32						m_gridSpacing = 1;
         Mesh*                   m_mesh;                     // Geometry Data for render
         Material*               m_material;                 // Material Instance
         Renderable*             m_renderable;

@@ -30,9 +30,12 @@ namespace Echo
         CLASS_BIND_METHOD(Terrain, getRows,          DEF_METHOD("getRows"));
 		CLASS_BIND_METHOD(Terrain, getHeightRange,   DEF_METHOD("getHeightRange"));
 		CLASS_BIND_METHOD(Terrain, setHeightRange,   DEF_METHOD("setHeightRange"));
+		CLASS_BIND_METHOD(Terrain, getGridSpacing,   DEF_METHOD("getGridSpacing"));
+		CLASS_BIND_METHOD(Terrain, setGridSpacing,   DEF_METHOD("setGridSpacing"));
         
         CLASS_REGISTER_PROPERTY(Terrain, "Heightmap", Variant::Type::ResourcePath, "getHeightmap", "setHeightmap");
 		CLASS_REGISTER_PROPERTY(Terrain, "HeightRange", Variant::Type::Real, "getHeightRange", "setHeightRange");
+		CLASS_REGISTER_PROPERTY(Terrain, "GridSpacing", Variant::Type::Int, "getGridSpacing", "setGridSpacing");
     }
     
     void Terrain::setHeightmap(const ResourcePath& path)
@@ -53,6 +56,13 @@ namespace Echo
 	void Terrain::setHeightRange(float range)
 	{ 
 		m_heightRange = range;
+
+		buildRenderable();
+	}
+
+	void Terrain::setGridSpacing(i32 gridSpacing)
+	{ 
+		m_gridSpacing = Math::Clamp(gridSpacing, 1, 512);
 
 		buildRenderable();
 	}
@@ -98,7 +108,7 @@ namespace Echo
 				for (i32 column = 0; column < m_columns; column++)
                 {
                     VertexFormat vert;
-                    vert.m_position = Vector3(row, getHeight(row, column), column);
+                    vert.m_position = Vector3(row * m_gridSpacing, getHeight(row, column), column * m_gridSpacing);
                     vert.m_uv = Vector2(row, column);
                     vert.m_normal = getNormal(row, column);
                     oVertices.push_back(vert);
