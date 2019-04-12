@@ -1,4 +1,5 @@
 #include "ui_module.h"
+#include "base/event_region.h"
 #include "base/text.h"
 #include "base/image.h"
 #include "editor/text_editor.h"
@@ -12,6 +13,7 @@ namespace Echo
 
 	void UiModule::registerTypes()
 	{
+        Class::registerType<UiEventRegion>();
         Class::registerType<UiText>();
         Class::registerType<UiImage>();
 
