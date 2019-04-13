@@ -1,5 +1,6 @@
 #include <engine/core/log/Log.h>
 #include <engine/core/render/gles/GLES.h>
+#include <engine/core/render/metal/mt.h>
 
 namespace Echo
 {

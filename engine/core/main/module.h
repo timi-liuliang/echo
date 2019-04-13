@@ -1,5 +1,7 @@
 #pragma once
 
+#include "engine/core/memory/MemAllocDef.h"
+
 namespace Echo
 {
 	// implement by application or dll
@@ -17,6 +19,10 @@ namespace Echo
 		virtual void update(float elapsedTime) {}
 
 	public:
+        // add module by type
+        template<typename T> static void addModule(const char* name);
+        
+        // add module
 		static void addModule(Module* module);
 
 		// register all module types
@@ -36,18 +42,15 @@ namespace Echo
 	protected:
 		char		m_name[128];
 	};
-
-	template<typename T>
-	struct ModuleRegister
-	{
-		ModuleRegister(const char* name)
-		{
-			static T* module = new T;
-			module->setName(name);
-
-			Echo::Module::addModule(module);
-		}
-	};
+    
+    // add module by type
+    template<typename T> void Module::addModule(const char* name)
+    {
+        T* module = EchoNew(T);
+        module->setName(name);
+        
+        Echo::Module::addModule(module);
+    }
 }
 
-#define REGISTER_MODULE(T) static Echo::ModuleRegister<T> G_MODULE_##T##_REGISTER(#T);
+#define REGISTER_MODULE(T) Echo::Module::addModule<T>(#T);
