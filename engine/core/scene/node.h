@@ -162,8 +162,10 @@ namespace Echo
 		void registerToScript();
 
 	protected:
+        // dirty update flag
 		void needUpdate();
 
+        // update self
 		virtual void update_self() {}
 
 	protected:
