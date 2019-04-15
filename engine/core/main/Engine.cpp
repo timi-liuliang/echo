@@ -47,6 +47,12 @@ namespace Echo
 		return inst;
 	}
 
+	// initialize dll
+	void Engine::initializeDll()
+	{
+
+	}
+
 	bool Engine::initialize(const Config& cfg)
 	{
 		m_config = cfg;

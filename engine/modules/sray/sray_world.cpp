@@ -14,7 +14,7 @@ namespace Echo
             
             // set platform
             RadeonRays::IntersectionApi::SetPlatform( m_deviceInfo.platform);
-            m_intersectionApi = RadeonRays::IntersectionApi::Create( 0);
+            //m_intersectionApi = RadeonRays::IntersectionApi::Create( 0);
         }
     }
     

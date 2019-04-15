@@ -26,6 +26,9 @@ namespace Echo
 		// initialize
 		bool initialize(const Config& cfg);
 
+		// initialize dll
+		void initializeDll();
+
         // tick second
 		void tick(float elapsedTime);
 
