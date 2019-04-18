@@ -119,7 +119,6 @@
 #define ECHO_RENDER_THREAD_LOCK_FREE
 #endif
 
-// 提供两个down cast的安全版本，分引用版和指针版
 template<class To,class From>
 To ECHO_DOWN_CAST(From& parent)
 {

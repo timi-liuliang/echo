@@ -131,6 +131,9 @@ namespace Echo
 	public:
 		// get node by path
 		Node* getNode(const char* path);
+        
+        // get node by path
+        template<typename T> T getNodeT(const char* path);
 
 		// build node path
 		String getNodePath() const;
@@ -180,4 +183,12 @@ namespace Echo
 		AABB			m_localAABB;		        // local aabb
 		LuaScript		m_script;			        // bind script
 	};
+    
+    // get node by path
+    template<typename T>
+    T Node::getNodeT(const char* path)
+    {
+        Node* node = getNode(path);
+        return ECHO_DOWN_CAST<T>(node);
+    }
 }
