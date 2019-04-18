@@ -11,5 +11,11 @@ namespace Echo
     public:
         Box2DJointRevolute();
         ~Box2DJointRevolute();
+
+	protected:
+		// create shape
+		virtual b2Joint* createb2Joint();
+
+	private:
     };
 }
