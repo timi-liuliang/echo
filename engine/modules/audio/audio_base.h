@@ -2,7 +2,10 @@
 
 #include "engine/core/base/echo_def.h"
 
-#ifdef ECHO_PLATFORM_MAC
+#if defined(ECHO_PLATFORM_MAC)
+    #include <OpenAL/al.h>
+    #include <OpenAL/alc.h>
+#elif  defined(ECHO_PLATFORM_ANDROID)
     #include <OpenAL/al.h>
     #include <OpenAL/alc.h>
 #else
