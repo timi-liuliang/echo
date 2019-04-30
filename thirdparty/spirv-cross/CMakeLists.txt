@@ -1,7 +1,7 @@
 MESSAGE( STATUS "Configuring module: 7zip ...")
 
 # Set Module Name
-SET(MODULE_NAME lua)
+SET(MODULE_NAME spirv-cross)
 
 # Include Directories
 INCLUDE_DIRECTORIES( ${ECHO_SRC_PATH})

@@ -273,6 +273,7 @@ ADD_SUBDIRECTORY(thirdparty/freetype-2.10.0)
 ADD_SUBDIRECTORY(thirdparty/zlib)
 ADD_SUBDIRECTORY(thirdparty/Box2D)
 ADD_SUBDIRECTORY(thirdparty/RadeonRays)
+ADD_SUBDIRECTORY(thirdparty/spirv-cross)
 #ADD_SUBDIRECTORY(thirdparty/protobuf/src/google/protobuf)
 
 # Editor mode
