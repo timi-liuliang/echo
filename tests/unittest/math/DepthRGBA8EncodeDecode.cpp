@@ -38,11 +38,11 @@ TEST(DepthRGBA8EncodeDecode, encode)
 	float depth5 = DecodeRgbaToFloat(color5);
 	float depth6 = DecodeRgbaToFloat(color6);
 
-	EXPECT_EQ(depth0, 0.0f);
-	EXPECT_EQ(depth1, 0.1f);
-	EXPECT_EQ(depth2, 0.3f);
-	EXPECT_EQ(depth3, 0.5f);
-	EXPECT_EQ(depth4, 0.7f);
-	EXPECT_EQ(depth5, 0.9f);
-	EXPECT_EQ(depth6, 0.9999f);
+	EXPECT_FLOAT_EQ(depth0, 0.0);
+	EXPECT_FLOAT_EQ(depth1, 0.1);
+	EXPECT_FLOAT_EQ(depth2, 0.3);
+	EXPECT_FLOAT_EQ(depth3, 0.5);
+	EXPECT_FLOAT_EQ(depth4, 0.7);
+	EXPECT_FLOAT_EQ(depth5, 0.9);
+	EXPECT_FLOAT_EQ(depth6, 0.9999);
 }

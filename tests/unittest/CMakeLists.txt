@@ -29,19 +29,12 @@ ENDIF()
 ADD_EXECUTABLE(${MODULE_NAME} ${ALL_FILES} CMakeLists.txt)
 
 # link libararies
-TARGET_LINK_LIBRARIES(${MODULE_NAME} googletest engine)
-
-TARGET_LINK_LIBRARIES(${MODULE_NAME} zlib engine 7zip winmm.lib imm32.lib dxgi.lib Shlwapi.lib lua recast freeimage)
-
-IF(ECHO_ARCHIVE_SUPPORT_7ZIP)
-	TARGET_LINK_LIBRARIES(${MODULE_NAME} 7zip)
-ENDIF()
-
-TARGET_LINK_LIBRARIES(${MODULE_NAME} Live2DCubismCore.lib pugixml)
-
-# 性能分析服务
-IF(ECHO_PROFILER)
-	TARGET_LINK_LIBRARIES(${MODULE_NAME} ws2_32.lib)
+IF(ECHO_PLATFORM_WIN32)
+	TARGET_LINK_LIBRARIES(${MODULE_NAME} googletest engine)
+	TARGET_LINK_LIBRARIES(${MODULE_NAME} zlib engine winmm.lib imm32.lib dxgi.lib Shlwapi.lib lua recast freeimage)
+	TARGET_LINK_LIBRARIES(${MODULE_NAME} Live2DCubismCore.lib pugixml)
+ELSEIF(ECHO_PLATFORM_MAC)
+	TARGET_LINK_LIBRARIES(${MODULE_NAME} googletest engine)
 ENDIF()
 
 # set folder

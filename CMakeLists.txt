@@ -279,17 +279,19 @@ ADD_SUBDIRECTORY(thirdparty/spirv-cross)
 
 # Editor mode
 IF(ECHO_EDITOR_MODE)
+	# unit test
+	ADD_SUBDIRECTORY(thirdparty/googletest)
+	ADD_SUBDIRECTORY(tests/unittest)
+
 	IF(ECHO_PLATFORM_WIN32)
 		OPTION(ECHO_ARCHIVE_SUPPORT_7ZIP "Is support 7zip package" TRUE)
 		IF(ECHO_ARCHIVE_SUPPORT_7ZIP)
 			ADD_SUBDIRECTORY(thirdparty/7zip)
 		ENDIF()
-		ADD_SUBDIRECTORY("thirdparty/googletest")
 		IF(MLPACK)
 			ADD_SUBDIRECTORY("thirdparty/mlpack")
 		ENDIF()
 		ADD_SUBDIRECTORY("editor/echo")
-		ADD_SUBDIRECTORY("tests/unittest")
 	ELSEIF(ECHO_PLATFORM_MAC)
 		ADD_SUBDIRECTORY("editor/echo")
 	ENDIF()

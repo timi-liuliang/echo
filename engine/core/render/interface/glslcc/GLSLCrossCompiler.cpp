@@ -5,9 +5,9 @@ namespace Echo
     // set vs
     void GLSLCrossCompiler::setInput(const char* vs, const char* fs, const char* cs)
     {
-        m_inputVS = vs;
-        m_inputFS = fs;
-        m_inputCS = cs;
+        m_inputVS = vs ? vs : "";
+        m_inputFS = fs ? fs : "";
+        m_inputCS = cs ? cs : "";
         
     }
     
