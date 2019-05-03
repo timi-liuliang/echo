@@ -23,14 +23,18 @@ namespace Echo
         // set vs
         void setInput(const char* vs, const char* fs, const char* cs);
         
+        // get spirv
+        const vector<ui32>::type& getSPIRV();
+        
     private:
         // compile
         void compileGlslToSpirv();
         void compileSpirvToCross(ShaderLanguage language);
         
     private:
-        String      m_inputVS;      // vertex shader
-        String      m_inputFS;      // fragment shader
-        String      m_inputCS;      // compute shader
+        String              m_inputVS;      // vertex shader
+        String              m_inputFS;      // fragment shader
+        String              m_inputCS;      // compute shader
+        vector<ui32>::type  m_spirv;        // standard portabble intermediate representation
     };
 }

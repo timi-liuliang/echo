@@ -38,8 +38,6 @@ TEST(RANDOM, random_1_5)
 		assert(rand >= 1 && rand <= 5);
 		randCount_5[rand-1]++;
 	}
-
-	int a = 10;
 }
 
 TEST(RANDOM, random_1_7)
