@@ -61,7 +61,7 @@ IF(WIN32)
 		MESSAGE(STATUS "Platform: Windows")
 
 		# Mutil Thread Compiling
-		SET(CMAKE_CXX_FLAGS "/DWIN32 /MP")
+		SET(CMAKE_CXX_FLAGS "/DWIN32 /MP /EHsc")
 
 	ENDIF()
 ELSEIF(UNIX)

@@ -47,8 +47,6 @@ void main()
 }
 )";
 
-
-
 TEST(GLSLCrossCompiler, GLSLToSPIRV)
 {
     Echo::GLSLCrossCompiler glslCompiler;

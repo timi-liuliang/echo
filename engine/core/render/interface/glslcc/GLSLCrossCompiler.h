@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include "engine/core/util/StringUtil.h"
 
 namespace Echo
@@ -30,7 +31,14 @@ namespace Echo
         // compile
         void compileGlslToSpirv();
         void compileSpirvToCross(ShaderLanguage language);
+
+	private:
+		// get preambel
+		const std::string getPreamble();
         
+		// get processes
+		const std::vector<std::string> getProcesses();
+
     private:
         String              m_inputVS;      // vertex shader
         String              m_inputFS;      // fragment shader

@@ -121,21 +121,21 @@ namespace Echo
     public:
         virtual ~Includer() {}
         
-        IncludeResult* includeSystem(const char* headerName,
-                                     const char* includerName,
-                                     size_t inclusionDepth) override
+        IncludeResult* includeSystem(const char* headerName, const char* includerName, size_t inclusionDepth) override
         {
-            for (auto i = m_systemDirs.begin(); i != m_systemDirs.end(); ++i) {
+            for (auto i = m_systemDirs.begin(); i != m_systemDirs.end(); ++i) 
+			{
                 std::string header_path(*i);
                 if (header_path.back() != '/')
                     header_path += "/";
                 header_path += headerName;
                 
-                /*if (sx_os_stat(header_path.c_str()).type == SX_FILE_TYPE_REGULAR) {
+                /*if (sx_os_stat(header_path.c_str()).type == SX_FILE_TYPE_REGULAR) 
+				{
                     sx_mem_block* mem = sx_file_load_bin(g_alloc, header_path.c_str());
-                    if (mem)  {
-                        return new(sx_malloc(g_alloc, sizeof(IncludeResult)))
-                        IncludeResult(header_path, (const char*)mem->data, (size_t)mem->size, mem);
+                    if (mem)  
+					{
+                        return new IncludeResult(header_path, (const char*)mem->data, (size_t)mem->size, mem);
                     }
                 }*/
             }
@@ -227,6 +227,8 @@ namespace Echo
                 shader->setEnvInput(glslang::EShSourceGlsl, types[i], glslang::EShClientVulkan, defaultVersion);
                 shader->setEnvClient(glslang::EShClientVulkan, glslang::EShTargetVulkan_1_1);
                 shader->setEnvTarget(glslang::EShTargetSpv, glslang::EShTargetSpv_1_0);
+				shader->setPreamble(getPreamble().c_str());
+				shader->addProcesses(getProcesses());
                 
                 // parse
                 Includer  inc;
@@ -234,6 +236,12 @@ namespace Echo
                 {
                     prog->addShader(shader);
                 }
+				else
+				{
+					const char* infoLog = shader->getInfoLog();
+					const char* infoDebugLog = shader->getInfoDebugLog();
+					int a = 10;
+				}
             }
         }
         
@@ -272,4 +280,45 @@ namespace Echo
     {
         
     }
+
+	const std::string GLSLCrossCompiler::getPreamble()
+	{
+		std::string preambles;
+		preambles += "#extension GL_GOOGLE_include_directive : require\n";
+		preambles += "#define POSITION 0\n";
+		preambles += "#define NORMAL 1\n";
+		preambles += "#define TEXCOORD0 2\n";
+		preambles += "#define TEXCOORD1 3\n";
+		preambles += "#define TEXCOORD2 4\n";
+		preambles += "#define TEXCOORD3 5\n";
+		preambles += "#define TEXCOORD4 6\n";
+		preambles += "#define TEXCOORD5 7\n";
+		preambles += "#define TEXCOORD6 8\n";
+		preambles += "#define TEXCOORD7 9\n";
+		preambles += "#define COLOR0 10\n";
+		preambles += "#define COLOR1 11\n";
+		preambles += "#define COLOR2 12\n";
+		preambles += "#define COLOR3 13\n";
+		preambles += "#define TANGENT 14\n";
+		preambles += "#define BINORMAL 15\n";
+		preambles += "#define BLENDINDICES 16\n";
+		preambles += "#define BLENDWEIGHT 17\n";
+		preambles += "#define SV_Target0 0\n";
+		preambles += "#define SV_Target1 1\n";
+		preambles += "#define SV_Target2 2\n";
+		preambles += "#define SV_Target3 3\n";
+		preambles += "#define SV_Target4 4\n";
+		preambles += "#define SV_Target5 5\n";
+		preambles += "#define SV_Target6 6\n";
+		preambles += "#define SV_Target7 7\n";
+
+		return preambles;
+	}
+
+	const std::vector<std::string> GLSLCrossCompiler::getProcesses()
+	{
+		std::vector<std::string> processes;
+
+		return processes;
+	}
 }
