@@ -238,9 +238,7 @@ namespace Echo
                 }
 				else
 				{
-					const char* infoLog = shader->getInfoLog();
-					const char* infoDebugLog = shader->getInfoDebugLog();
-					int a = 10;
+					EchoLogError(shader->getInfoLog());
 				}
             }
         }

@@ -1,5 +1,14 @@
 #include <gtest/gtest.h>
 
+namespace Echo
+{
+	// implement by application or dll
+	void registerModules()
+	{
+
+	}
+}
+
 // main function
 int main(int argc, char* argv[])
 {
