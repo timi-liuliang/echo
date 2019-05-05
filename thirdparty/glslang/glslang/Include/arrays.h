@@ -260,7 +260,7 @@ struct TArraySizes {
     void addInnerSizes(const TArraySizes& s) { sizes.push_back(s.sizes); }
     void changeOuterSize(int s) { sizes.changeFront((unsigned)s); }
     int getImplicitSize() const { return implicitArraySize; }
-    void updateImplicitSize(int s) { implicitArraySize = std::max(implicitArraySize, s); }
+    void updateImplicitSize(int s) { implicitArraySize = std::max<int>(implicitArraySize, s); }
     bool isInnerUnsized() const
     {
         for (int d = 1; d < sizes.size(); ++d) {
