@@ -238,7 +238,11 @@ namespace Echo
                 }
 				else
 				{
-					EchoLogError(shader->getInfoLog());
+					StringArray lines = StringUtil::Split(shader->getInfoLog(), "\n");
+					for (String& line : lines)
+					{
+						EchoLogError(("[GLSLCrossCompiler] " + line).c_str());
+					}
 				}
             }
         }
