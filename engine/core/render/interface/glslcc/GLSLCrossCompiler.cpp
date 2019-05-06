@@ -203,6 +203,12 @@ namespace Echo
         return m_spirv[Type];
     }
     
+    // get output shader (for opengles metal)
+    const char* GLSLCrossCompiler::getOutput(ShaderLanguage language, ShaderType shaderType)
+    {
+        return nullptr;
+    }
+    
     void GLSLCrossCompiler::compileGlslToSpirv()
     {
         // initialize process (wrong place)

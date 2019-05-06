@@ -45,6 +45,7 @@ void main()
 }
 )";
 
+// for vulkan
 TEST(GLSLCrossCompiler, GLSLToSPIRV)
 {
     Echo::GLSLCrossCompiler glslCompiler;
@@ -59,4 +60,38 @@ TEST(GLSLCrossCompiler, GLSLToSPIRV)
     // expect
     EXPECT_EQ(spirvVS.size()>0, true);
 	EXPECT_EQ(spirvFS.size() > 0, true);
+}
+
+// for opengles
+TEST(GLSLCrossCompiler, SPIRVToESSL)
+{
+    Echo::GLSLCrossCompiler glslCompiler;
+    
+    // set input
+    glslCompiler.setInput( glslVS, glslPS, nullptr);
+    
+    // get gles
+    const char* vs = glslCompiler.getOutput(Echo::GLSLCrossCompiler::ShaderLanguage::GLES, Echo::GLSLCrossCompiler::ShaderType::VS);
+    const char* fs = glslCompiler.getOutput(Echo::GLSLCrossCompiler::ShaderLanguage::GLES, Echo::GLSLCrossCompiler::ShaderType::FS);
+    
+    // expect
+    EXPECT_NE(vs, nullptr);
+    EXPECT_EQ(fs, nullptr);
+}
+
+// for metal
+TEST(GLSLCrossCompiler, SPIRVToMSL)
+{
+    Echo::GLSLCrossCompiler glslCompiler;
+    
+    // set input
+    glslCompiler.setInput( glslVS, glslPS, nullptr);
+    
+    // get gles
+    const char* vs = glslCompiler.getOutput(Echo::GLSLCrossCompiler::ShaderLanguage::MSL, Echo::GLSLCrossCompiler::ShaderType::VS);
+    const char* fs = glslCompiler.getOutput(Echo::GLSLCrossCompiler::ShaderLanguage::MSL, Echo::GLSLCrossCompiler::ShaderType::FS);
+    
+    // expect
+    EXPECT_NE(vs, nullptr);
+    EXPECT_EQ(fs, nullptr);
 }

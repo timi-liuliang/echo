@@ -14,10 +14,10 @@ namespace Echo
     public:
         enum ShaderLanguage
         {
-            GLES = 0,
-            MSL,
-            HLSL,
-            GLSL,
+            GLES = 0,   // opengles
+            MSL,        // metal
+            HLSL,       // d3d
+            GLSL,       // opengl
         };
 
 		// ShaderType
@@ -30,11 +30,14 @@ namespace Echo
 		};
         
     public:
-        // set vs
+        // set input (glsl)
         void setInput(const char* vs, const char* fs, const char* cs);
         
-        // get spirv
+        // get spirv (for vulkan)
         const vector<ui32>::type& getSPIRV(ShaderType Type);
+        
+        // get output shader (for opengles metal)
+        const char* getOutput(ShaderLanguage language, ShaderType shaderType);
         
     private:
         // compile
