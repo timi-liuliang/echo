@@ -261,7 +261,11 @@ namespace Echo
                     spvOptions.validate = true;
                     spv::SpvBuildLogger spvBuildLogger;
                     glslang::GlslangToSpv(*intermediate, m_spirv[i], &spvBuildLogger, &spvOptions);
-                    const char* message = spvBuildLogger.getAllMessages().c_str();
+                    std::string messages = spvBuildLogger.getAllMessages();
+					if (!messages.empty())
+					{
+						EchoLogError(messages.c_str());
+					}
                 }
             }
         }
