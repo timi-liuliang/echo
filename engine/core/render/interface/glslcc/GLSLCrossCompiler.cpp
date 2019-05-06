@@ -190,17 +190,17 @@ namespace Echo
     
     void GLSLCrossCompiler::setInput(const char* vs, const char* fs, const char* cs)
     {
-        m_inputVS = vs ? vs : "";
-        m_inputFS = fs ? fs : "";
-        m_inputCS = cs ? cs : "";
+        m_inputGlsl[ShaderType::VS] = vs ? vs : "";
+		m_inputGlsl[ShaderType::FS] = fs ? fs : "";
+		m_inputGlsl[ShaderType::CS] = cs ? cs : "";
         
     }
     
-    const vector<ui32>::type& GLSLCrossCompiler::getSPIRV()
+    const vector<ui32>::type& GLSLCrossCompiler::getSPIRV(ShaderType Type)
     {
         compileGlslToSpirv();
         
-        return m_spirv;
+        return m_spirv[Type];
     }
     
     void GLSLCrossCompiler::compileGlslToSpirv()
@@ -212,22 +212,22 @@ namespace Echo
         glslang::TProgram* prog = EchoNew(glslang::TProgram);
         
         // shader
-        const char* shaders[3] = { m_inputVS.c_str(), m_inputFS.c_str(), m_inputCS.c_str()};
-        EShLanguage types[3]   = { EShLangVertex, EShLangFragment, EShLangCompute};
-        for(int i=0; i<3; i++)
+        EShLanguage types[ShaderType::Total]   = { EShLangVertex, EShLangFragment, EShLangCompute};
+        for(int i=0; i<ShaderType::Total; i++)
         {
-            if(strlen(shaders[i]))
+            if(!m_inputGlsl[i].empty())
             {
-                int shaderLen = strlen(shaders[i]);
+				const char* shaderSrc = m_inputGlsl[i].c_str();
+                int shaderLen = m_inputGlsl[i].size();
                 int defaultVersion = 100; // 110 for desktop
                 
                 glslang::TShader* shader = new glslang::TShader(types[i]);
-                shader->setStringsWithLengths(&shaders[i], &shaderLen, 1);
+                shader->setStringsWithLengths(&shaderSrc, &shaderLen, 1);
                 shader->setInvertY(false);
                 shader->setEnvInput(glslang::EShSourceGlsl, types[i], glslang::EShClientVulkan, defaultVersion);
                 shader->setEnvClient(glslang::EShClientVulkan, glslang::EShTargetVulkan_1_1);
                 shader->setEnvTarget(glslang::EShTargetSpv, glslang::EShTargetSpv_1_0);
-				shader->setPreamble(getPreamble().c_str());
+				shader->setPreamble(getPreamble());
 				shader->addProcesses(getProcesses());
                 
                 // parse
@@ -252,8 +252,7 @@ namespace Echo
         if (prog->link(messages))
         {
             // Output and save SPIR-V for each shader
-            std::vector<uint32_t> spirv;
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < ShaderType::Total; i++)
             {
                 glslang::TIntermediate* intermediate = prog->getIntermediate(types[i]);
                 if(intermediate)
@@ -261,10 +260,8 @@ namespace Echo
                     glslang::SpvOptions spvOptions;
                     spvOptions.validate = true;
                     spv::SpvBuildLogger spvBuildLogger;
-                    glslang::GlslangToSpv(*intermediate, spirv, &spvBuildLogger, &spvOptions);
+                    glslang::GlslangToSpv(*intermediate, m_spirv[i], &spvBuildLogger, &spvOptions);
                     const char* message = spvBuildLogger.getAllMessages().c_str();
-                    
-                    int a = 10;
                 }
             }
         }
@@ -283,9 +280,9 @@ namespace Echo
         
     }
 
-	const std::string GLSLCrossCompiler::getPreamble()
+	const char* GLSLCrossCompiler::getPreamble()
 	{
-		std::string preambles;
+		static std::string preambles;
 		preambles += "#extension GL_GOOGLE_include_directive : require\n";
 		preambles += "#define POSITION 0\n";
 		preambles += "#define NORMAL 1\n";
@@ -314,7 +311,7 @@ namespace Echo
 		preambles += "#define SV_Target6 6\n";
 		preambles += "#define SV_Target7 7\n";
 
-		return preambles;
+		return preambles.c_str();
 	}
 
 	const std::vector<std::string> GLSLCrossCompiler::getProcesses()

@@ -2,8 +2,7 @@
 #include <engine/core/render/interface/glslcc/GLSLCrossCompiler.h>
 
 // glsl vs for test
-static const char* glslVS =R"(
-#version 450
+static const char* glslVS =R"(#version 450
 
 layout (location = POSITION) in vec3 aPos;
 layout (location = COLOR0) in vec4 aColor;
@@ -28,8 +27,7 @@ void main()
 )";
 
 // glsl fragment for test
-static const char* glslPS = R"(
-#version 450
+static const char* glslPS = R"(#version 450
 
 precision mediump float;
 
@@ -55,8 +53,10 @@ TEST(GLSLCrossCompiler, GLSLToSPIRV)
     glslCompiler.setInput( glslVS, glslPS, nullptr);
     
     // get spirv
-    const Echo::vector<Echo::ui32>::type& spirv = glslCompiler.getSPIRV();
-    
+    const Echo::vector<Echo::ui32>::type& spirvVS = glslCompiler.getSPIRV(Echo::GLSLCrossCompiler::ShaderType::VS);
+	const Echo::vector<Echo::ui32>::type& spirvFS = glslCompiler.getSPIRV(Echo::GLSLCrossCompiler::ShaderType::FS);
+
     // expect
-    EXPECT_EQ(spirv.size()>0, true);
+    EXPECT_EQ(spirvVS.size()>0, true);
+	EXPECT_EQ(spirvFS.size() > 0, true);
 }

@@ -19,13 +19,22 @@ namespace Echo
             HLSL,
             GLSL,
         };
+
+		// ShaderType
+		enum ShaderType
+		{
+			VS = 0,
+			FS,
+			CS,
+			Total,
+		};
         
     public:
         // set vs
         void setInput(const char* vs, const char* fs, const char* cs);
         
         // get spirv
-        const vector<ui32>::type& getSPIRV();
+        const vector<ui32>::type& getSPIRV(ShaderType Type);
         
     private:
         // compile
@@ -34,15 +43,13 @@ namespace Echo
 
 	private:
 		// get preambel
-		const std::string getPreamble();
+		const char* getPreamble();
         
 		// get processes
 		const std::vector<std::string> getProcesses();
 
     private:
-        String              m_inputVS;      // vertex shader
-        String              m_inputFS;      // fragment shader
-        String              m_inputCS;      // compute shader
-        vector<ui32>::type  m_spirv;        // standard portabble intermediate representation
+        String              m_inputGlsl[ShaderType::Total];	// vertex shader
+        vector<ui32>::type  m_spirv[ShaderType::Total];		// standard portabble intermediate representation
     };
 }
