@@ -37,17 +37,17 @@ namespace Echo
         const vector<ui32>::type& getSPIRV(ShaderType Type);
         
         // get output shader (for opengles metal)
-        const char* getOutput(ShaderLanguage language, ShaderType shaderType);
+        std::string getOutput(ShaderLanguage language, ShaderType shaderType);
         
     private:
         // compile glsl to spirv
         void compileGlslToSpirv();
 
 		// compile spirv to cross
-		const char*  compileSpirvToGles(ShaderType shaderType);
-		const char*  compileSpirvToMsl(ShaderType shaderType);
-		const char*  compileSpirvToGlsl(ShaderType shaderType);
-		const char*  compileSpirvToHlsl(ShaderType shaderType);
+        std::string compileSpirvToGles(ShaderType shaderType);
+		std::string compileSpirvToMsl(ShaderType shaderType);
+		std::string compileSpirvToGlsl(ShaderType shaderType);
+		std::string compileSpirvToHlsl(ShaderType shaderType);
 
 	private:
 		// get preambel

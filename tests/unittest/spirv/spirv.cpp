@@ -71,12 +71,12 @@ TEST(GLSLCrossCompiler, SPIRVToESSL)
     glslCompiler.setInput( glslVS, glslPS, nullptr);
     
     // get gles
-    const char* vs = glslCompiler.getOutput(Echo::GLSLCrossCompiler::ShaderLanguage::GLES, Echo::GLSLCrossCompiler::ShaderType::VS);
-    const char* fs = glslCompiler.getOutput(Echo::GLSLCrossCompiler::ShaderLanguage::GLES, Echo::GLSLCrossCompiler::ShaderType::FS);
+    std::string vs = glslCompiler.getOutput(Echo::GLSLCrossCompiler::ShaderLanguage::GLES, Echo::GLSLCrossCompiler::ShaderType::VS);
+    std::string fs = glslCompiler.getOutput(Echo::GLSLCrossCompiler::ShaderLanguage::GLES, Echo::GLSLCrossCompiler::ShaderType::FS);
     
     // expect
-    EXPECT_NE(vs, nullptr);
-    EXPECT_EQ(fs, nullptr);
+    EXPECT_EQ(vs.empty(), false);
+    EXPECT_EQ(fs.empty(), false);
 }
 
 // for metal
@@ -88,10 +88,10 @@ TEST(GLSLCrossCompiler, SPIRVToMSL)
     glslCompiler.setInput( glslVS, glslPS, nullptr);
     
     // get gles
-    const char* vs = glslCompiler.getOutput(Echo::GLSLCrossCompiler::ShaderLanguage::MSL, Echo::GLSLCrossCompiler::ShaderType::VS);
-    const char* fs = glslCompiler.getOutput(Echo::GLSLCrossCompiler::ShaderLanguage::MSL, Echo::GLSLCrossCompiler::ShaderType::FS);
+    std::string vs = glslCompiler.getOutput(Echo::GLSLCrossCompiler::ShaderLanguage::MSL, Echo::GLSLCrossCompiler::ShaderType::VS);
+    std::string fs = glslCompiler.getOutput(Echo::GLSLCrossCompiler::ShaderLanguage::MSL, Echo::GLSLCrossCompiler::ShaderType::FS);
     
     // expect
-    EXPECT_NE(vs, nullptr);
-    EXPECT_EQ(fs, nullptr);
+    EXPECT_EQ(vs.empty(), false);
+    EXPECT_EQ(fs.empty(), false);
 }

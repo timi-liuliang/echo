@@ -209,7 +209,7 @@ namespace Echo
         return m_spirv[Type];
     }
     
-    const char* GLSLCrossCompiler::getOutput(ShaderLanguage language, ShaderType shaderType)
+    std::string GLSLCrossCompiler::getOutput(ShaderLanguage language, ShaderType shaderType)
     {
 		// compile gles to spirv
 		compileGlslToSpirv();
@@ -223,7 +223,7 @@ namespace Echo
 		case ShaderLanguage::HLSL: return compileSpirvToHlsl(shaderType);
 		}
 
-        return nullptr;
+        return std::string();
     }
     
     void GLSLCrossCompiler::compileGlslToSpirv()
@@ -307,33 +307,59 @@ namespace Echo
 		}
     }
 
-	const char*  GLSLCrossCompiler::compileSpirvToGles(ShaderType shaderType)
+    std::string GLSLCrossCompiler::compileSpirvToGles(ShaderType shaderType)
 	{
-		spirv_cross::Compiler* compiler = EchoNew(spirv_cross::CompilerGLSL(getSPIRV(shaderType)));
-		spirv_cross::ShaderResources shaderResources = compiler->get_shader_resources();
-
-		return nullptr;
+        const vector<ui32>::type& spirv = getSPIRV( shaderType);
+        if(!spirv.empty())
+        {
+            spirv_cross::CompilerGLSL* compiler = EchoNew(spirv_cross::CompilerGLSL(getSPIRV(shaderType)));
+            if(compiler)
+            {
+                spirv_cross::ShaderResources       shaderResources = compiler->get_shader_resources();
+                
+                // modify options
+                spirv_cross::CompilerGLSL::Options options = compiler->get_common_options();
+                options.flatten_multidimensional_arrays = true;
+                options.es = true;
+                options.version = 100;
+                if ( false/*args.flatten_ubos*/)
+                {
+                    for (spirv_cross::Resource& ubo : shaderResources.uniform_buffers)
+                        compiler->flatten_buffer_block(ubo.id);
+                    for (spirv_cross::Resource& ubo : shaderResources.push_constant_buffers)
+                        compiler->flatten_buffer_block(ubo.id);
+                }
+                compiler->set_common_options(options);
+                
+                return compiler->compile();
+            }
+        }
+        
+		return std::string();
 	}
-	const char*  GLSLCrossCompiler::compileSpirvToMsl(ShaderType shaderType)
+    
+	std::string  GLSLCrossCompiler::compileSpirvToMsl(ShaderType shaderType)
 	{
 		spirv_cross::Compiler* compiler = EchoNew(spirv_cross::CompilerGLSL(getSPIRV(shaderType)));
 		spirv_cross::ShaderResources shaderResources = compiler->get_shader_resources();
 
-		return nullptr;
+		return std::string();
 	}
-	const char*  GLSLCrossCompiler::compileSpirvToGlsl(ShaderType shaderType)
+    
+	std::string GLSLCrossCompiler::compileSpirvToGlsl(ShaderType shaderType)
 	{
 		spirv_cross::Compiler* compiler = EchoNew(spirv_cross::CompilerGLSL(getSPIRV(shaderType)));
 		spirv_cross::ShaderResources shaderResources = compiler->get_shader_resources();
 
-		return nullptr;
+		return std::string();
 	}
-	const char*  GLSLCrossCompiler::compileSpirvToHlsl(ShaderType shaderType)
+    
+	std::string GLSLCrossCompiler::compileSpirvToHlsl(ShaderType shaderType)
 	{
 		spirv_cross::Compiler* compiler = EchoNew(spirv_cross::CompilerGLSL(getSPIRV(shaderType)));
 		spirv_cross::ShaderResources shaderResources = compiler->get_shader_resources();
 
-		return nullptr;
+		return std::string();
 	}
 
 	const char* GLSLCrossCompiler::getPreamble()
