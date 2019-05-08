@@ -1,12 +1,10 @@
-#ifndef _MEM_STL_ALLOC_H__
-#define _MEM_STL_ALLOC_H__
+#pragma once
 
-#include <memory> // for std::allocator<> and std::ptrdiff_t
+#include <memory>
 #include "MemAllocDef.h"
 
 namespace Echo
 {
-
 	// Base STL allocator class.
 	template<typename T>
 	struct STLAllocatorBase
@@ -154,5 +152,3 @@ namespace Echo
 	}
 
 }
-
-#endif

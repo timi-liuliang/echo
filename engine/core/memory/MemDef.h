@@ -12,7 +12,7 @@
 
 // Echo Engine Memory Managed
 #ifdef ECHO_DEBUG
-	#define ECHO_MEMORY_TRACKER 0
+	#define ECHO_MEMORY_TRACKER 1
 #else
 	#define ECHO_MEMORY_TRACKER 0
 #endif
@@ -26,4 +26,4 @@
 // Echo STL memory allocator
 #define ECHO_STL_MEMORY_ALLOCATOR	ECHO_STL_MEMORY_ALLOCATOR_STANDARD
 
-#define ECHO_MEMORY_LEAKS_FILENAME	"MemoryLeaks.log"
+#define ECHO_MEMORY_LEAKS_FILENAME	"memory_leaks.log"

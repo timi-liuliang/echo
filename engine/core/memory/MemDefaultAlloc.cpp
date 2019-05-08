@@ -1,16 +1,15 @@
 #include "MemDefaultAlloc.h"
+#include "MemoryTracker.h"
 
 #if ECHO_MEMORY_ALLOCATOR==ECHO_MEMORY_ALLOCATOR_DEFAULT
 
 namespace Echo
 {
-	//////////////////////////////////////////////////////////////////////////
-    
 	void* DefaultImpl::allocBytes(size_t count, const char* file, int line, const char* func)
 	{
 		void* ptr = malloc(count);
 #if ECHO_MEMORY_TRACKER
-		MemTracker::get()._recordAlloc(ptr, count, 0, file, line, func);
+		MemoryTracker::get().recordAlloc(ptr, count, 0, file, line, func);
 #else
 		// avoid unused params warning
 		file = func = "";
@@ -23,7 +22,7 @@ namespace Echo
     {
         void* ret = realloc(ptr, count);
 #if ECHO_MEMORY_TRACKER
-		MemTracker::get()._recordAlloc(ret, count, 0, file, line, func);
+		MemoryTracker::get().recordAlloc(ret, count, 0, file, line, func);
 #else
 		// avoid unused params warning
 		file = func = "";
@@ -38,7 +37,7 @@ namespace Echo
 		if (!ptr)
 			return;
 #if ECHO_MEMORY_TRACKER
-		MemTracker::get()._recordDealloc(ptr);
+		MemoryTracker::get().recordDealloc(ptr);
 #endif
 		free(ptr);
 	}
@@ -56,7 +55,7 @@ namespace Echo
 		void * result = ::malloc(count);
 #endif
 #if ECHO_MEMORY_TRACKER
-		MemTracker::get()._recordAlloc(ptr, count, 0, file, line, func);
+		MemoryTracker::get().recordAlloc(result, count, 0, file, line, func);
 #else
 		// avoid unused params warning
 		file = func = "";
@@ -71,7 +70,7 @@ namespace Echo
 		if (!ptr)
 			return;
 #if ECHO_MEMORY_TRACKER
-		MemTracker::get()._recordDealloc(ptr);
+		MemoryTracker::get().recordDealloc(ptr);
 #endif
 #if defined(ECHO_PLATFORM_WINDOWS)
 		_aligned_free(ptr);

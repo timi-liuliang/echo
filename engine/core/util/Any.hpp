@@ -7,7 +7,7 @@
 namespace Echo
 {
 	/**s
-	 * Any µœ÷,≤Œøºboost, http://www.boost.org
+	 * Any Reference boost, http://www.boost.org
 	 */
     class any
     {

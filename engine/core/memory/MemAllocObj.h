@@ -1,5 +1,4 @@
-#ifndef __ECHO_MEMALLOCOBJ_H__
-#define __ECHO_MEMALLOCOBJ_H__
+#pragma once
 
 #include "engine/core/base/echo_def.h"
 
@@ -80,5 +79,3 @@ namespace Echo
 		}
 	};
 }
-
-#endif
