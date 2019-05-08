@@ -1,5 +1,5 @@
 <p align="center">
-    <img width="48" height="48" src="https://raw.githubusercontent.com/blab-liuliang/echo/master/editor/echo/Resource/App.ico">
+    <img width="48" height="48" src="https://raw.githubusercontent.com/timi-liuliang/echo/master/editor/echo/Resource/App.ico">
 </p>  
 
 # Echo
@@ -8,15 +8,15 @@
 
 **Echo** is a new game engine, which used more industry standard of nowadays for game development. The new design concept makes the engine simplicity to use. but more powerful.
 
-[Examples](https://github.com/blab-liuliang/echo-examples)  
-[Documentation](https://github.com/blab-liuliang/echo/wiki)  
+[Examples](https://github.com/timi-liuliang/echo-examples)  
+[Documentation](https://github.com/timi-liuliang/echo/wiki)  
 
 ## Download   
 |Description|Files|Previous|
 |---|---|---|   
-|Editor [Win32]|[echo-setup-2018.10.09.exe](https://media.githubusercontent.com/media/blab-liuliang/echo-download/master/download/echo-setup-2018.10.09.exe)|[old version](https://github.com/blab-liuliang/echo-download/tree/master/download)|
+|Editor [Win32]|[echo-setup-2018.10.09.exe](https://media.githubusercontent.com/media/timi-liuliang/echo-download/master/download/echo-setup-2018.10.09.exe)|[old version](https://github.com/timi-liuliang/echo-download/tree/master/download)|
 |Editor [Mac OS X 10.7 or later]|echo.dmg|
-|Examples|[echo-examples-master.zip](https://codeload.github.com/blab-liuliang/echo-examples/zip/master)|
+|Examples|[echo-examples-master.zip](https://codeload.github.com/timi-liuliang/echo-examples/zip/master)|
 
 ## Build
 ### [Windows Editor]   
@@ -32,7 +32,7 @@
 Scene manager is easy, No Entiy, No GameObject, No Component, No Prefab. Only Node and NodeTree. 
 
 ###  Highly Efficient Workflow   
-![](https://media.githubusercontent.com/media/blab-liuliang/echo-download/master/images/intro/echo.png)  
+![](https://media.githubusercontent.com/media/timi-liuliang/echo-download/master/images/intro/echo.png)  
 
 ### Multi-Platform Support  
 iOS Android Html5 Windows Mac Linux Steam  
@@ -48,7 +48,7 @@ Mostly, you'll use Lua as your main programming language. and also you can use c
 Except for Lua, You can also choose use embedded Scratch as the main development language. Which is a type of visual script inspired by [MIT](https://scratch.mit.edu/).  In the echo, Scratch is based on Lua, when running the app, It'll convert to Lua, Make sure it's good both at code merge and running efficiency.   
 If you really like other types of script language, you can tell us, or you can support it by modifying the c++ code directly.
 
-![](https://media.githubusercontent.com/media/blab-liuliang/echo-download/master/images/intro/echo1.png)   
+![](https://media.githubusercontent.com/media/timi-liuliang/echo-download/master/images/intro/echo1.png)   
 
 ### Configurable Module   
 Most of the engine's Functionality was implemented by configurable modules. that means when you release your app, you can just choose the module you really need. which makes your app have smaller size and more efficiency running speed.
