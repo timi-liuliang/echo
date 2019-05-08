@@ -2,6 +2,10 @@
 #include <thirdparty/glslang/glslang/Public/ShaderLang.h>
 #include <thirdparty/glslang/SPIRV/SpvTools.h>
 #include <thirdparty/glslang/SPIRV/GlslangToSpv.h>
+#include <thirdparty/spirv-cross/spirv_cross.hpp>
+#include <thirdparty/spirv-cross/spirv_glsl.hpp>
+#include <thirdparty/spirv-cross/spirv_hlsl.hpp>
+#include <thirdparty/spirv-cross/spirv_msl.hpp>
 #include "engine/core/log/Log.h"
 
 const TBuiltInResource k_defaultConf = {
@@ -193,7 +197,9 @@ namespace Echo
         m_inputGlsl[ShaderType::VS] = vs ? vs : "";
 		m_inputGlsl[ShaderType::FS] = fs ? fs : "";
 		m_inputGlsl[ShaderType::CS] = cs ? cs : "";
-        
+
+		m_isNeedUpdateSpriv = true;
+		m_isNeedUpdateOutput = true;
     }
     
     const vector<ui32>::type& GLSLCrossCompiler::getSPIRV(ShaderType Type)
@@ -203,92 +209,132 @@ namespace Echo
         return m_spirv[Type];
     }
     
-    // get output shader (for opengles metal)
     const char* GLSLCrossCompiler::getOutput(ShaderLanguage language, ShaderType shaderType)
     {
+		// compile gles to spirv
+		compileGlslToSpirv();
+
+		// cross compile spirv to target language
+		switch (language)
+		{
+		case ShaderLanguage::GLES: return compileSpirvToGles(shaderType);
+		case ShaderLanguage::GLSL: return compileSpirvToGlsl(shaderType);
+		case ShaderLanguage::MSL:  return compileSpirvToMsl(shaderType);
+		case ShaderLanguage::HLSL: return compileSpirvToHlsl(shaderType);
+		}
+
         return nullptr;
     }
     
     void GLSLCrossCompiler::compileGlslToSpirv()
     {
-        // initialize process (wrong place)
-        glslang::InitializeProcess();
-        
-        // create shader program
-        glslang::TProgram* prog = EchoNew(glslang::TProgram);
-        
-        // shader
-        EShLanguage types[ShaderType::Total]   = { EShLangVertex, EShLangFragment, EShLangCompute};
-        for(int i=0; i<ShaderType::Total; i++)
-        {
-            if(!m_inputGlsl[i].empty())
-            {
-				const char* shaderSrc = m_inputGlsl[i].c_str();
-                int shaderLen = m_inputGlsl[i].size();
-                int defaultVersion = 100; // 110 for desktop
-                
-                glslang::TShader* shader = new glslang::TShader(types[i]);
-                shader->setStringsWithLengths(&shaderSrc, &shaderLen, 1);
-                shader->setInvertY(false);
-                shader->setEnvInput(glslang::EShSourceGlsl, types[i], glslang::EShClientVulkan, defaultVersion);
-                shader->setEnvClient(glslang::EShClientVulkan, glslang::EShTargetVulkan_1_1);
-                shader->setEnvTarget(glslang::EShTargetSpv, glslang::EShTargetSpv_1_0);
-				shader->setPreamble(getPreamble());
-				shader->addProcesses(getProcesses());
-                
-                // parse
-                Includer  inc;
-                if(shader->parse(&k_defaultConf, defaultVersion, false, EShMsgDefault, inc))
-                {
-                    prog->addShader(shader);
-                }
-				else
+		if (m_isNeedUpdateSpriv)
+		{
+			// initialize process (wrong place)
+			glslang::InitializeProcess();
+
+			// create shader program
+			glslang::TProgram* prog = EchoNew(glslang::TProgram);
+
+			// shader
+			EShLanguage types[ShaderType::Total] = { EShLangVertex, EShLangFragment, EShLangCompute };
+			for (int i = 0; i < ShaderType::Total; i++)
+			{
+				if (!m_inputGlsl[i].empty())
 				{
-					StringArray lines = StringUtil::Split(shader->getInfoLog(), "\n");
-					for (String& line : lines)
+					const char* shaderSrc = m_inputGlsl[i].c_str();
+					int shaderLen = m_inputGlsl[i].size();
+					int defaultVersion = 100; // 110 for desktop
+
+					glslang::TShader* shader = new glslang::TShader(types[i]);
+					shader->setStringsWithLengths(&shaderSrc, &shaderLen, 1);
+					shader->setInvertY(false);
+					shader->setEnvInput(glslang::EShSourceGlsl, types[i], glslang::EShClientVulkan, defaultVersion);
+					shader->setEnvClient(glslang::EShClientVulkan, glslang::EShTargetVulkan_1_1);
+					shader->setEnvTarget(glslang::EShTargetSpv, glslang::EShTargetSpv_1_0);
+					shader->setPreamble(getPreamble());
+					shader->addProcesses(getProcesses());
+
+					// parse
+					Includer  inc;
+					if (shader->parse(&k_defaultConf, defaultVersion, false, EShMsgDefault, inc))
 					{
-						EchoLogError(("[GLSLCrossCompiler] " + line).c_str());
+						prog->addShader(shader);
+					}
+					else
+					{
+						StringArray lines = StringUtil::Split(shader->getInfoLog(), "\n");
+						for (String& line : lines)
+						{
+							EchoLogError(("[GLSLCrossCompiler] " + line).c_str());
+						}
 					}
 				}
-            }
-        }
-        
-        // link
-        EShMessages messages = EShMsgDefault;
-        if (prog->link(messages))
-        {
-            // Output and save SPIR-V for each shader
-            for (int i = 0; i < ShaderType::Total; i++)
-            {
-                glslang::TIntermediate* intermediate = prog->getIntermediate(types[i]);
-                if(intermediate)
-                {
-                    glslang::SpvOptions spvOptions;
-                    spvOptions.validate = true;
-                    spv::SpvBuildLogger spvBuildLogger;
-                    glslang::GlslangToSpv(*intermediate, m_spirv[i], &spvBuildLogger, &spvOptions);
-                    std::string messages = spvBuildLogger.getAllMessages();
-					if (!messages.empty())
+			}
+
+			// link
+			EShMessages messages = EShMsgDefault;
+			if (prog->link(messages))
+			{
+				// Output and save SPIR-V for each shader
+				for (int i = 0; i < ShaderType::Total; i++)
+				{
+					glslang::TIntermediate* intermediate = prog->getIntermediate(types[i]);
+					if (intermediate)
 					{
-						EchoLogError(messages.c_str());
+						glslang::SpvOptions spvOptions;
+						spvOptions.validate = true;
+						spv::SpvBuildLogger spvBuildLogger;
+						glslang::GlslangToSpv(*intermediate, m_spirv[i], &spvBuildLogger, &spvOptions);
+						std::string messages = spvBuildLogger.getAllMessages();
+						if (!messages.empty())
+						{
+							EchoLogError(messages.c_str());
+						}
 					}
-                }
-            }
-        }
-        
-        // delete shaders
-        
-        // deallocate program
-        prog->~TProgram();
-        
-        // finalize process (wrong place)
-        glslang::FinalizeProcess();
+				}
+			}
+
+			// delete shaders
+
+			// deallocate program
+			prog->~TProgram();
+
+			// finalize process (wrong place)
+			glslang::FinalizeProcess();
+
+			m_isNeedUpdateSpriv = false;
+		}
     }
-    
-    void GLSLCrossCompiler::compileSpirvToCross(ShaderLanguage language)
-    {
-        
-    }
+
+	const char*  GLSLCrossCompiler::compileSpirvToGles(ShaderType shaderType)
+	{
+		spirv_cross::Compiler* compiler = EchoNew(spirv_cross::CompilerGLSL(getSPIRV(shaderType)));
+		spirv_cross::ShaderResources shaderResources = compiler->get_shader_resources();
+
+		return nullptr;
+	}
+	const char*  GLSLCrossCompiler::compileSpirvToMsl(ShaderType shaderType)
+	{
+		spirv_cross::Compiler* compiler = EchoNew(spirv_cross::CompilerGLSL(getSPIRV(shaderType)));
+		spirv_cross::ShaderResources shaderResources = compiler->get_shader_resources();
+
+		return nullptr;
+	}
+	const char*  GLSLCrossCompiler::compileSpirvToGlsl(ShaderType shaderType)
+	{
+		spirv_cross::Compiler* compiler = EchoNew(spirv_cross::CompilerGLSL(getSPIRV(shaderType)));
+		spirv_cross::ShaderResources shaderResources = compiler->get_shader_resources();
+
+		return nullptr;
+	}
+	const char*  GLSLCrossCompiler::compileSpirvToHlsl(ShaderType shaderType)
+	{
+		spirv_cross::Compiler* compiler = EchoNew(spirv_cross::CompilerGLSL(getSPIRV(shaderType)));
+		spirv_cross::ShaderResources shaderResources = compiler->get_shader_resources();
+
+		return nullptr;
+	}
 
 	const char* GLSLCrossCompiler::getPreamble()
 	{

@@ -15,9 +15,9 @@ namespace Echo
         enum ShaderLanguage
         {
             GLES = 0,   // opengles
+			GLSL,       // opengl
             MSL,        // metal
             HLSL,       // d3d
-            GLSL,       // opengl
         };
 
 		// ShaderType
@@ -40,9 +40,14 @@ namespace Echo
         const char* getOutput(ShaderLanguage language, ShaderType shaderType);
         
     private:
-        // compile
+        // compile glsl to spirv
         void compileGlslToSpirv();
-        void compileSpirvToCross(ShaderLanguage language);
+
+		// compile spirv to cross
+		const char*  compileSpirvToGles(ShaderType shaderType);
+		const char*  compileSpirvToMsl(ShaderType shaderType);
+		const char*  compileSpirvToGlsl(ShaderType shaderType);
+		const char*  compileSpirvToHlsl(ShaderType shaderType);
 
 	private:
 		// get preambel
@@ -52,7 +57,9 @@ namespace Echo
 		const std::vector<std::string> getProcesses();
 
     private:
-        String              m_inputGlsl[ShaderType::Total];	// vertex shader
+		bool				m_isNeedUpdateSpriv = true;
+		bool				m_isNeedUpdateOutput= true;
+        String              m_inputGlsl[ShaderType::Total];	// input shaders (glsl vulkan)
         vector<ui32>::type  m_spirv[ShaderType::Total];		// standard portabble intermediate representation
     };
 }
