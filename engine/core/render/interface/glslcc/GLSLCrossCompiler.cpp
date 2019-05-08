@@ -312,7 +312,7 @@ namespace Echo
         const vector<ui32>::type& spirv = getSPIRV( shaderType);
         if(!spirv.empty())
         {
-            spirv_cross::CompilerGLSL* compiler = EchoNew(spirv_cross::CompilerGLSL(getSPIRV(shaderType)));
+            spirv_cross::CompilerGLSL* compiler = EchoNew(spirv_cross::CompilerGLSL(spirv));
             if(compiler)
             {
                 spirv_cross::ShaderResources       shaderResources = compiler->get_shader_resources();
@@ -340,24 +340,67 @@ namespace Echo
     
 	std::string  GLSLCrossCompiler::compileSpirvToMsl(ShaderType shaderType)
 	{
-		spirv_cross::Compiler* compiler = EchoNew(spirv_cross::CompilerGLSL(getSPIRV(shaderType)));
-		spirv_cross::ShaderResources shaderResources = compiler->get_shader_resources();
-
-		return std::string();
+        const vector<ui32>::type& spirv = getSPIRV( shaderType);
+        if(!spirv.empty())
+        {
+            spirv_cross::CompilerMSL* compiler = EchoNew(spirv_cross::CompilerMSL(spirv));
+            if(compiler)
+            {
+                spirv_cross::ShaderResources       shaderResources = compiler->get_shader_resources();
+                
+                // modify options
+                spirv_cross::CompilerGLSL::Options options = compiler->get_common_options();
+                options.flatten_multidimensional_arrays = true;
+                if ( false/*args.flatten_ubos*/)
+                {
+                    for (spirv_cross::Resource& ubo : shaderResources.uniform_buffers)
+                        compiler->flatten_buffer_block(ubo.id);
+                    for (spirv_cross::Resource& ubo : shaderResources.push_constant_buffers)
+                        compiler->flatten_buffer_block(ubo.id);
+                }
+                
+                // Reset vertex input locations for MSL
+                // std::vector<int> old_locs;
+                if (shaderType == ShaderType::VS)
+                {
+                    for (int i = 0; i < shaderResources.stage_inputs.size(); i++)
+                    {
+                        spirv_cross::Resource& res = shaderResources.stage_inputs[i];
+                        spirv_cross::Bitset mask = compiler->get_decoration_bitset(res.id);
+                        if (mask.get(spv::DecorationLocation))
+                        {
+                            //old_locs.push_back(compiler->get_decoration(res.id, spv::DecorationLocation));
+                            compiler->set_decoration(res.id, spv::DecorationLocation, (uint32_t)i);
+                        } else
+                        {
+                            //old_locs.push_back(-1);
+                        }
+                    }
+                }
+                
+                compiler->set_common_options(options);
+                
+                return compiler->compile();
+            }
+        }
+        
+        return std::string();
 	}
     
+    // don't have time implement this function, please learn from glslcc
+    // https://github.com/septag/glslcc/blob/master/src/glslcc.cpp
 	std::string GLSLCrossCompiler::compileSpirvToGlsl(ShaderType shaderType)
 	{
-		spirv_cross::Compiler* compiler = EchoNew(spirv_cross::CompilerGLSL(getSPIRV(shaderType)));
-		spirv_cross::ShaderResources shaderResources = compiler->get_shader_resources();
+		//spirv_cross::Compiler* compiler = EchoNew(spirv_cross::CompilerGLSL(getSPIRV(shaderType)));
 
 		return std::string();
 	}
     
+    // don't have time implement this function, please learn from glslcc
+    // https://github.com/septag/glslcc/blob/master/src/glslcc.cpp
 	std::string GLSLCrossCompiler::compileSpirvToHlsl(ShaderType shaderType)
 	{
-		spirv_cross::Compiler* compiler = EchoNew(spirv_cross::CompilerGLSL(getSPIRV(shaderType)));
-		spirv_cross::ShaderResources shaderResources = compiler->get_shader_resources();
+		//spirv_cross::Compiler* compiler = EchoNew(spirv_cross::CompilerGLSL(getSPIRV(shaderType)));
 
 		return std::string();
 	}
