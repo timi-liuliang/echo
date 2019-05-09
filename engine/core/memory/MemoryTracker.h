@@ -42,10 +42,8 @@ namespace Echo
 		// Return the name of the file which will contain the report at exit
 		const std::string& getReportFileName() const { return m_leakFileName; }
         
-		// Sets whether the memory report should be sent to stdout
+		// whether the memory report should be sent to stdout
 		void setReportToStdOut(bool rep) { m_isDumpToStdOut = rep; }
-        
-		// Gets whether the memory report should be sent to stdout
 		bool getReportToStdOut() const { return m_isDumpToStdOut; }
 
 		// Get the total amount of memory allocated currently.
@@ -66,7 +64,7 @@ namespace Echo
         
     protected:
         std::string         m_leakFileName;
-        bool                m_isDumpToStdOut;
+        bool                m_isDumpToStdOut = true;
         AllocationMap       m_allocations;
         size_t              m_totalAllocations;
         AllocationsByPool   m_allocationsByPool;

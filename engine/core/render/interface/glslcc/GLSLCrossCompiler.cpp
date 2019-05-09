@@ -237,6 +237,7 @@ namespace Echo
 			glslang::TProgram* prog = EchoNew(glslang::TProgram);
 
 			// shader
+			glslang::TShader* shaders[ShaderType::Total] = { nullptr, nullptr, nullptr };
 			EShLanguage types[ShaderType::Total] = { EShLangVertex, EShLangFragment, EShLangCompute };
 			for (int i = 0; i < ShaderType::Total; i++)
 			{
@@ -246,7 +247,7 @@ namespace Echo
 					int shaderLen = m_inputGlsl[i].size();
 					int defaultVersion = 100; // 110 for desktop
 
-					glslang::TShader* shader = new glslang::TShader(types[i]);
+					glslang::TShader* shader = shaders[i] = EchoNew(glslang::TShader(types[i]));
 					shader->setStringsWithLengths(&shaderSrc, &shaderLen, 1);
 					shader->setInvertY(false);
 					shader->setEnvInput(glslang::EShSourceGlsl, types[i], glslang::EShClientVulkan, defaultVersion);
@@ -295,10 +296,14 @@ namespace Echo
 				}
 			}
 
-			// delete shaders
+			// deallocate shaders
+			for (int i = 0; i < ShaderType::Total; i++)
+			{
+				EchoSafeDelete(shaders[i], TShader);
+			}
 
 			// deallocate program
-			prog->~TProgram();
+			EchoSafeDelete(prog, TProgram);;
 
 			// finalize process (wrong place)
 			glslang::FinalizeProcess();
@@ -312,27 +317,24 @@ namespace Echo
         const vector<ui32>::type& spirv = getSPIRV( shaderType);
         if(!spirv.empty())
         {
-            spirv_cross::CompilerGLSL* compiler = EchoNew(spirv_cross::CompilerGLSL(spirv));
-            if(compiler)
+            spirv_cross::CompilerGLSL compiler(spirv);
+            spirv_cross::ShaderResources       shaderResources = compiler.get_shader_resources();
+                
+            // modify options
+            spirv_cross::CompilerGLSL::Options options = compiler.get_common_options();
+            options.flatten_multidimensional_arrays = true;
+            options.es = true;
+            options.version = 100;
+            if ( false/*args.flatten_ubos*/)
             {
-                spirv_cross::ShaderResources       shaderResources = compiler->get_shader_resources();
-                
-                // modify options
-                spirv_cross::CompilerGLSL::Options options = compiler->get_common_options();
-                options.flatten_multidimensional_arrays = true;
-                options.es = true;
-                options.version = 100;
-                if ( false/*args.flatten_ubos*/)
-                {
-                    for (spirv_cross::Resource& ubo : shaderResources.uniform_buffers)
-                        compiler->flatten_buffer_block(ubo.id);
-                    for (spirv_cross::Resource& ubo : shaderResources.push_constant_buffers)
-                        compiler->flatten_buffer_block(ubo.id);
-                }
-                compiler->set_common_options(options);
-                
-                return compiler->compile();
+                for (spirv_cross::Resource& ubo : shaderResources.uniform_buffers)
+                    compiler.flatten_buffer_block(ubo.id);
+                for (spirv_cross::Resource& ubo : shaderResources.push_constant_buffers)
+                    compiler.flatten_buffer_block(ubo.id);
             }
+            compiler.set_common_options(options);
+                
+            return compiler.compile();
         }
         
 		return std::string();
@@ -343,45 +345,38 @@ namespace Echo
         const vector<ui32>::type& spirv = getSPIRV( shaderType);
         if(!spirv.empty())
         {
-            spirv_cross::CompilerMSL* compiler = EchoNew(spirv_cross::CompilerMSL(spirv));
-            if(compiler)
+            spirv_cross::CompilerMSL compiler(spirv);
+            spirv_cross::ShaderResources shaderResources = compiler.get_shader_resources();
+                
+            // modify options
+            spirv_cross::CompilerGLSL::Options options = compiler.get_common_options();
+            options.flatten_multidimensional_arrays = true;
+            if ( false/*args.flatten_ubos*/)
             {
-                spirv_cross::ShaderResources       shaderResources = compiler->get_shader_resources();
-                
-                // modify options
-                spirv_cross::CompilerGLSL::Options options = compiler->get_common_options();
-                options.flatten_multidimensional_arrays = true;
-                if ( false/*args.flatten_ubos*/)
-                {
-                    for (spirv_cross::Resource& ubo : shaderResources.uniform_buffers)
-                        compiler->flatten_buffer_block(ubo.id);
-                    for (spirv_cross::Resource& ubo : shaderResources.push_constant_buffers)
-                        compiler->flatten_buffer_block(ubo.id);
-                }
-                
-                // Reset vertex input locations for MSL
-                // std::vector<int> old_locs;
-                if (shaderType == ShaderType::VS)
-                {
-                    for (int i = 0; i < shaderResources.stage_inputs.size(); i++)
-                    {
-                        spirv_cross::Resource& res = shaderResources.stage_inputs[i];
-                        spirv_cross::Bitset mask = compiler->get_decoration_bitset(res.id);
-                        if (mask.get(spv::DecorationLocation))
-                        {
-                            //old_locs.push_back(compiler->get_decoration(res.id, spv::DecorationLocation));
-                            compiler->set_decoration(res.id, spv::DecorationLocation, (uint32_t)i);
-                        } else
-                        {
-                            //old_locs.push_back(-1);
-                        }
-                    }
-                }
-                
-                compiler->set_common_options(options);
-                
-                return compiler->compile();
+				for (spirv_cross::Resource& ubo : shaderResources.uniform_buffers)
+                    compiler.flatten_buffer_block(ubo.id);
+                for (spirv_cross::Resource& ubo : shaderResources.push_constant_buffers)
+                    compiler.flatten_buffer_block(ubo.id);
             }
+                
+            // Reset vertex input locations for MSL
+            if (shaderType == ShaderType::VS)
+            {
+                for (int i = 0; i < shaderResources.stage_inputs.size(); i++)
+                {
+                    spirv_cross::Resource& res = shaderResources.stage_inputs[i];
+                    spirv_cross::Bitset mask = compiler.get_decoration_bitset(res.id);
+                    if (mask.get(spv::DecorationLocation))
+                    {
+                        compiler.set_decoration(res.id, spv::DecorationLocation, (uint32_t)i);
+                    } 
+                }
+            }
+
+            compiler.set_common_options(options);
+				
+			// compile
+            return compiler.compile();
         }
         
         return std::string();

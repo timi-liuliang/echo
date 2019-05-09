@@ -33,7 +33,6 @@ namespace Echo
     
     MemoryTracker::MemoryTracker()
         : m_leakFileName(ECHO_MEMORY_LEAKS_FILENAME)
-        , m_isDumpToStdOut(false)
         , m_totalAllocations(0)
     {}
     
