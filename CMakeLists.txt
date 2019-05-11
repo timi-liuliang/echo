@@ -275,6 +275,9 @@ ADD_SUBDIRECTORY(thirdparty/Box2D)
 ADD_SUBDIRECTORY(thirdparty/RadeonRays)
 ADD_SUBDIRECTORY(thirdparty/glslang)
 ADD_SUBDIRECTORY(thirdparty/spirv-cross)
+IF(ECHO_PLATFORM_WIN32)
+	ADD_SUBDIRECTORY(thirdparty/libde265)
+ENDIF()
 #ADD_SUBDIRECTORY(thirdparty/protobuf/src/google/protobuf)
 
 # Editor mode
