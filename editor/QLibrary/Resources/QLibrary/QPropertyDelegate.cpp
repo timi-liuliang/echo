@@ -3,6 +3,7 @@
 #include <QLineEdit>
 #include "QFileSelect.h"
 #include "QResSelect.h"
+#include "QNodeSelect.h"
 #include "QIntEditor.h"
 #include "QRealEditor.h"
 #include "QStringEditor.h"
@@ -128,7 +129,7 @@ namespace QT_UI
 		Echo::StringArray userDatas = Echo::StringUtil::Split( userData1, ",");
 		
 		QString propertyName = index.model()->data(index, Qt::DisplayPropertyRole).toString();
-		// Î´Ö¸¶¨¿Ø¼þ,·µ»ØNULL
+		// æœªæŒ‡å®šæŽ§ä»¶,è¿”å›žNULL
 		if( !userDatas.size())
 			return NULL;
 
@@ -140,6 +141,12 @@ namespace QT_UI
 		else if( widgetType == "AssetsSelect")
 		{
 			QResSelect* widget = new QResSelect(m_model, propertyName, userDatas.size() > 1 ? userDatas[1].c_str() : nullptr, userDatas.size() > 2 ? userDatas[2].c_str() : nullptr, parent);
+
+			return widget;
+		}
+		else if (widgetType == "NodeSelect")
+		{
+			QNodeSelect* widget = new QNodeSelect(m_model, propertyName, userDatas.size() > 1 ? userDatas[1].c_str() : nullptr, userDatas.size() > 2 ? userDatas[2].c_str() : nullptr, parent);
 
 			return widget;
 		}
@@ -219,6 +226,11 @@ namespace QT_UI
 				QResSelect* widget = qobject_cast<QResSelect*>(editor);
 				widget->SetPath( value.toString().toStdString().c_str());
 			}
+			else if (widgetType == "NodeSelect")
+			{
+				QNodeSelect* widget = qobject_cast<QNodeSelect*>(editor);
+				widget->SetPath(value.toString().toStdString().c_str());
+			}
 			else if (widgetType == "ResEdit")
 			{
 				QResEditor* widget = qobject_cast<QResEditor*>(editor);
@@ -294,6 +306,11 @@ namespace QT_UI
 			{
 				QResSelect* widget = qobject_cast<QResSelect*>(editor);
 				m_model->setValue( propertyName, widget->GetPath());
+			}
+			else if (widgetType == "NodeSelect")
+			{
+				QNodeSelect* widget = qobject_cast<QNodeSelect*>(editor);
+				m_model->setValue(propertyName, widget->GetPath());
 			}
 			else if (widgetType == "ResEdit")
 			{

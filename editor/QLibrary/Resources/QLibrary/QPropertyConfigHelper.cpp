@@ -85,12 +85,12 @@ namespace QT_UI
 	{
 		Echo::ui32& curIdx = m_idxs[m_curDepth];
 
-		// ¸ù¾İ"_" È¡×î³¤µÄ×Ö·û´®
+		// æ ¹æ®"_" å–æœ€é•¿çš„å­—ç¬¦ä¸²
 		Echo::StringArray displayArr = Echo::StringUtil::Split(propertyName, ".");
 		Echo::String displayText = displayArr.back();
 
-		// ×éÖ¯¿Ø¼ş×Ö·û´®
-		Echo::String widgetStr = FormatUI(widget, widgetParams);
+		// ç»„ç»‡æ§ä»¶å­—ç¬¦ä¸²
+		Echo::String widgetStr = FormatUI(widget, widgetParams ? widgetParams : "");
 		Echo::String format = Echo::StringUtil::Format("<item text=\"%s\" row=\"%d\" col=\"0\" /><item text=\"\" row=\"%d\" col=\"1\" property=\"%s\" widget=\"%s\" />", displayText.c_str(), curIdx, curIdx, propertyName, widgetStr.c_str());
 		m_result += format;
 
@@ -103,7 +103,7 @@ namespace QT_UI
 	{
 		Echo::ui32& curIdx = m_idxs[m_curDepth];
 
-		// ×éÖ¯¿Ø¼ş×Ö·û´®
+		// ç»„ç»‡æ§ä»¶å­—ç¬¦ä¸²
 		Echo::String widgetStr = FormatUI( widget, widgetParams);
 
 		Echo::String propertyNameEx = Echo::StringUtil::Format("%s_co_%d", propertyName, 2);
@@ -117,7 +117,7 @@ namespace QT_UI
 	{
 		Echo::ui32& curIdx = m_idxs[m_curDepth];
 
-		// ×éÖ¯¿Ø¼ş×Ö·û´®
+		// ç»„ç»‡æ§ä»¶å­—ç¬¦ä¸²
 		Echo::String widgetStr = FormatUI(widget, widgetParams);
 
 		Echo::String propertyNameEx = Echo::StringUtil::Format("%s_co_%d", propertyName, 3);
@@ -129,7 +129,7 @@ namespace QT_UI
 
 	Echo::String QPropertyConfigHelper::FormatUI(WidgetType widget, const char* widgetParams)
 	{
-		// ×éÖ¯¿Ø¼ş×Ö·û´®
+		// ç»„ç»‡æ§ä»¶å­—ç¬¦ä¸²
 		Echo::String widgetStr;
 		switch (widget)
 		{
@@ -142,6 +142,7 @@ namespace QT_UI
 		case WT_ColorSelect:	widgetStr = "ColorSelect";	 break;
 		case WT_ComboBox:		widgetStr = Echo::String("ComboBox,") + widgetParams;		break;
 		case WT_AssetsSelect:	widgetStr = Echo::String("AssetsSelect,") + widgetParams;	break;
+		case WT_NodeSelect:		widgetStr = Echo::String("NodeSelect,") + widgetParams;		break;
 		case WT_Res:			widgetStr = Echo::String("ResEdit,") + widgetParams;		break;
 		default:				widgetStr = "";				 break;
 		}

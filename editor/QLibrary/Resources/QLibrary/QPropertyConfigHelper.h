@@ -19,6 +19,7 @@ namespace QT_UI
 		WT_ColorSelect,
 		WT_ComboBox,
 		WT_AssetsSelect,
+		WT_NodeSelect,
 		WT_Res,
 	};
 
@@ -29,16 +30,16 @@ namespace QT_UI
 		QPropertyConfigHelper();
 		~QPropertyConfigHelper();
 
-		// ÉèÖÃ±êÌâ
+		// è®¾ç½®æ ‡é¢˜
 		void setHeader( const char* header0, const char* header1, const char* header2=nullptr, const char* header3=nullptr);
 
-		// ¿ªÊ¼Ä³²Ëµ¥Ïî
+		// å¼€å§‹æŸèœå•é¡¹
 		void beginMenu( const char* text);
 
-		// ½áÊøÄ³²Ëµ¥Ïî
+		// ç»“æŸæŸèœå•é¡¹
 		void endMenu();
 
-		// Ìí¼Ó±à¼­Ïî
+		// æ·»åŠ ç¼–è¾‘é¡¹
 		void addItem(const char* propertyName, float value, WidgetType widget, const char* widgetParams = nullptr);
 		void addItem(const char* propertyName, Echo::i32 value, WidgetType widget, const char* widgetParams = nullptr);
 		void addItem(const char* propertyName, Echo::ui32 value, WidgetType widget, const char* widgetParams = nullptr);
@@ -55,28 +56,28 @@ namespace QT_UI
 			//static_assert(false, "ambiguous overload for function `addItem`.");
 		}
 
-		// »ñÈ¡½á¹û
+		// è·å–ç»“æœ
 		Echo::String getResult();
 
-		// Ó¦ÓÃµ½view,
+		// åº”ç”¨åˆ°view,
 		void applyTo(const Echo::String& id, QTreeView* treeView, const QObject* receiver, const char* memeber, bool clear = true);
 
-		// »ñÈ¡ÊôĞÔ¿Ø¼ş
+		// è·å–å±æ€§æ§ä»¶
 		QT_UI::QProperty* getQProperty() { return m_property; }
 
 		void clear() { m_result.clear(); }
 	private:
-		// UIÏÔÊ¾¸ñÊ½
+		// UIæ˜¾ç¤ºæ ¼å¼
 		Echo::String FormatUI(WidgetType widget, const char* widgetParams);
 
 	private:
 		Echo::String						m_id;
-		Echo::i32							m_curDepth;		// µ±Ç°Éî¶È
-		Echo::array<Echo::ui32, 25>			m_idxs;			// ¶ÔÓ¦Éî¶ÈĞĞºÅ
-		Echo::String						m_result;		// ½á¹û
-		Echo::String						m_lastResult;	// ÉÏ´ÎÊôĞÔ
-		Echo::map<QString, QVariant>::type	m_values;		// ËùÓĞ³õÊ¼Öµ
-		QT_UI::QProperty*					m_property;		// ÊôĞÔ
-		QMetaObject::Connection				m_signalConn;	// ÏûÏ¢Á´½Ó
+		Echo::i32							m_curDepth;		// å½“å‰æ·±åº¦
+		Echo::array<Echo::ui32, 25>			m_idxs;			// å¯¹åº”æ·±åº¦è¡Œå·
+		Echo::String						m_result;		// ç»“æœ
+		Echo::String						m_lastResult;	// ä¸Šæ¬¡å±æ€§
+		Echo::map<QString, QVariant>::type	m_values;		// æ‰€æœ‰åˆå§‹å€¼
+		QT_UI::QProperty*					m_property;		// å±æ€§
+		QMetaObject::Connection				m_signalConn;	// æ¶ˆæ¯é“¾æ¥
 	};
 }

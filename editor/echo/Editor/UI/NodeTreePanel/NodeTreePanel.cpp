@@ -616,6 +616,7 @@ namespace Studio
 		case Echo::Variant::Type::Color:		m_propertyHelper.addItem(name.c_str(), var.toColor(), QT_UI::WT_ColorSelect); break;
 		case Echo::Variant::Type::ResourcePath:	m_propertyHelper.addItem(name.c_str(), var.toResPath().getPath(), QT_UI::WT_AssetsSelect, var.toResPath().getSupportExts().c_str());break;
 		case Echo::Variant::Type::StringOption: m_propertyHelper.addItem(name.c_str(), var.toStringOption().getValue(), QT_UI::WT_ComboBox, var.toStringOption().getOptionsStr().c_str()); break;
+		case Echo::Variant::Type::NodePath:		m_propertyHelper.addItem(name.c_str(), var.toNodePath().getPath(), QT_UI::WT_NodeSelect); break;
 		case Echo::Variant::Type::Object:		m_propertyHelper.addItem(name.c_str(), var.toObj() ? var.toObj()->getId() : -1, QT_UI::WT_Res, propInfo->m_hintStr.c_str()); break;
 		default:								m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_None); break;
 		}
