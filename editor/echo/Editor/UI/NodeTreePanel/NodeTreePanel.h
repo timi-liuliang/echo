@@ -127,7 +127,7 @@ namespace Studio
 		void showObjectPropertyRecursive(Echo::Object* classPtr, const Echo::String& className);
 
 		// show property
-		void showPropertyByVariant(const Echo::String& name, const class Echo::Variant& var, const Echo::PropertyInfo* propInfo);
+		void showPropertyByVariant(Echo::Object* object, const Echo::String& name, const class Echo::Variant& var, const Echo::PropertyInfo* propInfo);
 
 	private:
 		// remove item

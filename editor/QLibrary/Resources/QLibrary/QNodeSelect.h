@@ -15,7 +15,7 @@ namespace QT_UI
 		Q_OBJECT
 
 	public:
-		QNodeSelect(class QPropertyModel* model, QString propertyName, const char* exts, const char* files, QWidget* parent = 0);
+		QNodeSelect(class QPropertyModel* model, QString propertyName, const char* selectNodeId, const char* files, QWidget* parent = 0);
 
 		// 设置路径
 		void SetPath( const Echo::String text) { m_lineEdit->setText( text.c_str());  }
@@ -30,9 +30,6 @@ namespace QT_UI
 		// redefine paintEvent
 		void paintEvent(QPaintEvent* event);
 
-		// is texture res
-		bool isTextureRes();
-
 		// correct size
 		void adjustHeightSize();
 
@@ -44,7 +41,7 @@ namespace QT_UI
 		void onEditFinished();
 
 	private:
-		Echo::String	m_exts;
+		Echo::String	m_selectNodeId;
 		QString			m_files;
 		QHBoxLayout*	m_horizonLayout;
 		QLineEdit*		m_lineEdit;
