@@ -5,9 +5,7 @@
 namespace Echo
 {
 	Box2DBody::Box2DBody()
-		: m_body(nullptr)
-		, m_type("Static", { "Static", "Kinematic", "Dynamic" })
-		, m_isFixRotation(false)
+		: m_type("Static", { "Static", "Kinematic", "Dynamic" })
 	{
 	}
 
@@ -26,9 +24,20 @@ namespace Echo
 		CLASS_BIND_METHOD(Box2DBody, setType, DEF_METHOD("setType"));
 		CLASS_BIND_METHOD(Box2DBody, isFixRotation, DEF_METHOD("isFixRotation"));
 		CLASS_BIND_METHOD(Box2DBody, setFixRotation, DEF_METHOD("setFixRotation"));
+		CLASS_BIND_METHOD(Box2DBody, getGravityScale, DEF_METHOD("getGravityScale"));
+		CLASS_BIND_METHOD(Box2DBody, setGravityScale, DEF_METHOD("setGravityScale"));
 
 		CLASS_REGISTER_PROPERTY(Box2DBody, "Type", Variant::Type::StringOption, "getType", "setType");
 		CLASS_REGISTER_PROPERTY(Box2DBody, "FixRotation", Variant::Type::Bool, "isFixRotation", "setFixRotation");
+		CLASS_REGISTER_PROPERTY(Box2DBody, "GravityScale", Variant::Type::Real, "getGravityScale", "setGravityScale");
+	}
+
+	void  Box2DBody::setGravityScale(float scale)
+	{
+		m_gravityScale = scale;
+
+		if (m_body)
+			m_body->SetGravityScale(scale);
 	}
 
 	// update
@@ -44,6 +53,7 @@ namespace Echo
 			bodyDef.position.Set(getWorldPosition().x, getWorldPosition().y);
 			bodyDef.userData = this;
 			bodyDef.fixedRotation = m_isFixRotation;
+			bodyDef.gravityScale = m_gravityScale;
 			bodyDef.position.Set(getWorldPosition().x / pixelsPerUnit, getWorldPosition().y / pixelsPerUnit);
 			m_body = Box2DWorld::instance()->getWorld()->CreateBody(&bodyDef);
 		}

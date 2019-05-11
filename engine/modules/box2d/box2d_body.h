@@ -21,6 +21,10 @@ namespace Echo
 		bool isFixRotation()const { return m_isFixRotation; }
 		void setFixRotation(bool isFixRotation) { m_isFixRotation = isFixRotation; }
 
+		// gravity scale
+		float getGravityScale() const { return m_gravityScale; }
+		void setGravityScale(float scale);
+
 		// get body
 		b2Body* getb2Body() { return m_body; }
 
@@ -29,8 +33,9 @@ namespace Echo
 		virtual void update_self() override;
 
 	private:
-		b2Body*			m_body;
+		b2Body*			m_body = nullptr;
 		StringOption	m_type;
-		bool			m_isFixRotation;
+		bool			m_isFixRotation = false;
+		float			m_gravityScale = 1.f;			// set 0 to cancel the gravity, and set -1 to reverse the gravity
 	};
 }
