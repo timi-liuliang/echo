@@ -6,9 +6,10 @@ namespace Echo
 {
 	struct StringOption
 	{
-		size_t			m_index;
+		size_t			m_index = -1;
 		StringArray		m_options;
 
+		StringOption();
 		StringOption(const char* value);
 		StringOption(const String& value);
 		StringOption(const String& value, const StringArray& options);

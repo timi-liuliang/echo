@@ -2,6 +2,10 @@
 
 namespace Echo
 {
+	StringOption::StringOption()
+	{
+	}
+
 	StringOption::StringOption(const char* value)
 	{
 		if (strlen(value))

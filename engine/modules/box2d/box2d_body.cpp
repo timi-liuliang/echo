@@ -55,14 +55,18 @@ namespace Echo
 		{
 			float pixelsPerUnit = Box2DWorld::instance()->getPixelsPerMeter();
 
+			// rotation
+			Echo::Vector3 pitchYawRoll;
+			getWorldOrientation().toEulerAngle(pitchYawRoll.x, pitchYawRoll.y, pitchYawRoll.z);
+
 			// create body
 			b2BodyDef bodyDef;
 			bodyDef.type = b2BodyType(m_type.getIdx());
-			bodyDef.position.Set(getWorldPosition().x, getWorldPosition().y);
 			bodyDef.userData = this;
 			bodyDef.fixedRotation = m_isFixRotation;
 			bodyDef.gravityScale = m_gravityScale;
 			bodyDef.position.Set(getWorldPosition().x / pixelsPerUnit, getWorldPosition().y / pixelsPerUnit);
+			bodyDef.angle = pitchYawRoll.z * Math::DEG2RAD;
 			m_body = Box2DWorld::instance()->getWorld()->CreateBody(&bodyDef);
 		}
 
@@ -70,14 +74,17 @@ namespace Echo
 		{
 			if (Engine::instance()->getConfig().m_isGame)
 			{
-				float pixelsPerUnit = Box2DWorld::instance()->getPixelsPerMeter();
+				if (m_body->GetType() != b2BodyType::b2_staticBody)
+				{
+					float pixelsPerUnit = Box2DWorld::instance()->getPixelsPerMeter();
 
-				Quaternion quat;
-				quat.fromEulerAngle( 0.f, 0.f, m_body->GetAngle()*Math::RAD2DEG);
-				
-				const b2Vec2& pos = m_body->GetPosition();
-				this->setWorldPosition(Vector3(pos.x * pixelsPerUnit, pos.y * pixelsPerUnit, getWorldPosition().z));
-				this->setWorldOrientation(quat);
+					Quaternion quat;
+					quat.fromEulerAngle(0.f, 0.f, m_body->GetAngle()*Math::RAD2DEG);
+
+					const b2Vec2& pos = m_body->GetPosition();
+					this->setWorldPosition(Vector3(pos.x * pixelsPerUnit, pos.y * pixelsPerUnit, getWorldPosition().z));
+					this->setWorldOrientation(quat);
+				}
 			}
 			else
 			{

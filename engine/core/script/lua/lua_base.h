@@ -39,6 +39,7 @@ namespace Echo
 
 	extern ObjectPool<Vector3>		LuaVec3Pool;
 	extern ObjectPool<String>		LuaStrPool;
+	extern ObjectPool<StringOption> LuaStrOptionPool;
 	extern ObjectPool<RealVector>	LuaRealVectorPool;
 	extern ObjectPool<Matrix>		LuaMatrixPool;
 
@@ -101,6 +102,19 @@ namespace Echo
 	{
 		String* ptr = (String*)&value;
 		LuaStrPool.deleteObj(ptr);
+	}
+
+	template<> INLINE const StringOption& lua_getvalue<const StringOption&>(lua_State* L, int index)
+	{
+		StringOption* result = LuaStrOptionPool.newObj();
+		*result = lua_tostring(L, index);
+		return *result;
+	}
+
+	template<> INLINE void lua_freevalue<const StringOption&>(const StringOption& value)
+	{
+		StringOption* ptr = (StringOption*)&value;
+		LuaStrOptionPool.deleteObj(ptr);
 	}
 
 	template<> INLINE const Vector3& lua_getvalue<const Vector3&>(lua_State* state, int idx) 
