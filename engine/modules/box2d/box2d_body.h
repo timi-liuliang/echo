@@ -15,7 +15,7 @@ namespace Echo
 
 		// type
 		const StringOption& getType() { return m_type; }
-		void setType(const StringOption& type) { m_type.setValue(type.getValue()); }
+		void setType(const StringOption& type);
 
 		// fix rotation
 		bool isFixRotation()const { return m_isFixRotation; }

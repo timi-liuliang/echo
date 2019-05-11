@@ -32,6 +32,14 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(Box2DBody, "GravityScale", Variant::Type::Real, "getGravityScale", "setGravityScale");
 	}
 
+	void Box2DBody::setType(const StringOption& type)
+	{ 
+		m_type.setValue(type.getValue());
+
+		if (m_body)
+			m_body->SetType(b2BodyType(m_type.getIdx()));
+	}
+
 	void  Box2DBody::setGravityScale(float scale)
 	{
 		m_gravityScale = scale;
