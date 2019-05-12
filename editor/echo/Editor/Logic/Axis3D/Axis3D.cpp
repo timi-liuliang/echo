@@ -12,8 +12,8 @@ namespace Studio
 		}
 
 		length = lineFirst.dot(lineSecond) / length;
-		length = max(-1.0f, length);
-		length = min(1.0f, length);
+        length = std::max<float>(-1.0f, length);
+        length = std::min<float>(1.0f, length);
 
 		return acos(length);
 	}
