@@ -141,6 +141,9 @@ namespace Echo
 		pugi::xml_node* rootNode = static_cast<pugi::xml_node*>(node);
 		try
 		{
+            // type glsl
+            String type = rootNode->attribute("type").as_string();
+            
 			pugi::xml_node vsNode = rootNode->child("VS");
 			String vsSrc, psSrc;
 			if (vsNode)

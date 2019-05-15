@@ -5,7 +5,7 @@
 // opaque material
 static const char* g_gizmoOpaqueMaterial = R"(
 <?xml version = "1.0" encoding = "utf-8"?>
-<Shader>
+<Shader type="glsl">
 	<VS>#version 100
 
 		attribute vec3 a_Position;
