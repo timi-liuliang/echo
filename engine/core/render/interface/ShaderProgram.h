@@ -72,13 +72,9 @@ namespace Echo
 		// bind shader
         virtual void bind() {}
 
-		// get Blend state
+		// get states
 		BlendState* getBlendState() const { return m_blendState; }
-
-		// get depth state
 		DepthStencilState* getDepthState() const { return m_depthState; }
-
-		// get rasterizer state
 		RasterizerState* getRasterizerState() const { return m_rasterizerState; }
 
 		// is have macro

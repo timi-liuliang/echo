@@ -39,9 +39,6 @@ namespace Echo
 		// get attribute location
 		virtual i32 getAtrribLocation(VertexSemantic vertexSemantic) override;
 
-		// get Material name
-		const String& getMaterialName();
-
 		// Create
 		virtual bool createShaderProgram(const String& vsContent, const String& psContent) override;
 

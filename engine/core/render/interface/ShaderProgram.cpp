@@ -17,13 +17,11 @@ namespace Echo
 		EchoAssert(value);
 		m_origin_value = (Byte*)value;
 
-		// ∑÷≈‰∂—ø’º‰
 		if (!m_value)
 		{
 			m_value = (Byte*)ECHO_MALLOC(m_sizeInBytes);
 		}
 
-		// »Ù‘‡±Íº«Œ™true,‘Ú∏’≥ı ºªØ£¨÷±Ω”øΩ±¥º¥ø…
 		if (m_isDirty)
 		{
 			memcpy(m_value, value, m_sizeInBytes);
@@ -115,13 +113,11 @@ namespace Echo
 		return loadShaderFrom(&rootNode, macros);
 	}
     
-    // create
     Res* ShaderProgram::create()
     {
         return Renderer::instance()->createShaderProgram();
     }
 
-	// load
 	Res* ShaderProgram::load(const ResourcePath& path)
 	{
 		ShaderProgram* res = (ShaderProgram*)create();

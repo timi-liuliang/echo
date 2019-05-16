@@ -217,11 +217,6 @@ namespace Echo
 	{
 	}
 
-	const String& GLES2ShaderProgram::getMaterialName()
-	{
-		return "MaterialName:";
-	}
-
 	bool GLES2ShaderProgram::createShaderProgram(const String& vsContent, const String& psContent)
 	{
 		Shader::ShaderDesc vsDesc; vsDesc.macros = m_macros;
