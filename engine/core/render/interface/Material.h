@@ -43,7 +43,7 @@ namespace Echo
 			// alloc Value
 			void allocValue();
 
-			// ¿ËÂ¡
+			// å…‹éš†
 			Uniform* clone();
 		};
 
@@ -57,29 +57,29 @@ namespace Echo
 		// release
 		void release();
 
-		// ¿ËÂ¡
+		// å…‹éš†
 		void clone(Material* orig);
 
-		// ¼ÓÔØÎÆÀí
+		// åŠ è½½çº¹ç†
 		void loadTexture();
 
-		// Ğ¶ÔØÎÆÀí
+		// å¸è½½çº¹ç†
 		void unloadTexture();
 
-		// »ñÈ¡ÎÆÀí
+		// è·å–çº¹ç†
 		Texture* getTexture(const int& index);
 		const String& getTexturePath(const int& index);
 
-		// ÉèÖÃÄ¬ÈÏäÖÈ¾¶ÓÁĞÃû
+		// è®¾ç½®é»˜è®¤æ¸²æŸ“é˜Ÿåˆ—å
 		void setShaderPath(const ResourcePath& path);
 		void setShaderContent(const String& virtualPath, const char* content);
 		const ResourcePath& getShaderPath() const { return m_shaderPath; }
 
-		// ½×¶ÎÏà¹Øº¯Êı
+		// é˜¶æ®µç›¸å…³å‡½æ•°
 		const StringOption& getRenderStage() { return m_renderStage; }
 		void setRenderStage(const StringOption& stage) { m_renderStage.setValue(stage.getValue()); }
 
-		// ÉèÖÃºê¶¨Òå
+		// è®¾ç½®å®å®šä¹‰
 		void setMacros(const String& macros);
 
 		// get shader
@@ -90,26 +90,26 @@ namespace Echo
 		void setUniformValue(const String& name, const ShaderParamType& type, const void* value);
 		Uniform* getUniform(const String& name);
 
-		// »ñÈ¡ÎÆÀíÊıÁ¿(²»°üº¬È«¾ÖÎÆÀí)
+		// è·å–çº¹ç†æ•°é‡(ä¸åŒ…å«å…¨å±€çº¹ç†)
 		int getTextureNum() { return static_cast<int>(m_textures.size()); }
 
 		// texture
 		Texture* setTexture(const String& name, const String& uri);
 		Texture* setTexture(const String& name, Texture* texture);
 
-		// »ñÈ¡ÊôĞÔ¶ÓÁĞ
+		// è·å–å±æ€§é˜Ÿåˆ—
 		ParamMap& GetUniformSet() { return m_uniforms; }
 
 		// get uniform value
 		void* getUniformValue(const String& name);
 
-		// ÊÇ·ñÊ¹ÓÃÁËºê¶¨Òå
+		// æ˜¯å¦ä½¿ç”¨äº†å®å®šä¹‰
 		bool isMacroUsed(const String& macro);
 
-		// ÉèÖÃºê¶¨Òå
+		// è®¾ç½®å®å®šä¹‰
 		void setMacro(const String& macro, bool enabled);
 
-		// ¹¹½¨äÖÈ¾¶ÓÁĞ
+		// æ„å»ºæ¸²æŸ“é˜Ÿåˆ—
 		void buildShaderProgram();
 
 	protected:
@@ -123,10 +123,10 @@ namespace Echo
 		virtual bool setPropertyValue(const String& propertyName, const Variant& propertyValue) override;
 
 	private:
-		// Ìí¼ÓÌùÍ¼ÎÄ¼şÃû
+		// æ·»åŠ è´´å›¾æ–‡ä»¶å
 		void addTexture(int idx, const String& name);
 
-		// ²ÎÊıÆ¥Åä
+		// å‚æ•°åŒ¹é…
 		void matchUniforms();
 
 		// is global uniform

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "interface/Shader.h"
+#include "Shader.h"
 
 namespace Echo
 {

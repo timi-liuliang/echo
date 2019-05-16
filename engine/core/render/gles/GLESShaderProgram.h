@@ -13,41 +13,46 @@ namespace Echo
 	{
 	public:
 		typedef array<GLint, VS_MAX> AttribLocationArray;
+		typedef array<Shader*, Shader::ST_SHADERCOUNT> ShaderArray;
+
 	public:
 		GLES2ShaderProgram();
 		~GLES2ShaderProgram();
 
-		// 附加shader
-		virtual bool attachShader(Shader* pShader) override;
+		// attch|detach shader
+		bool attachShader(Shader* pShader);
+		Shader*	detachShader(Shader::ShaderType type);
 
-		// 移除shader
-		virtual Shader*	detachShader(Shader::ShaderType type) override;
+		// link shader
+		bool linkShaders();
 
-		// 链接shader
-		virtual bool linkShaders() override;
-
-		// 应用变量
+		// bind Uniforms
 		virtual void bindUniforms() override;
 
-		// 绑定
+		// bind|unbind
 		virtual void bind() override;
-
-		// 解绑
 		virtual void unbind() override;
 
-		// 绑定几何体数据
+		// bind Renderable
 		virtual void bindRenderable(Renderable* renderable) override;
 
-		// 获取顶点属性物理位置
+		// get attribute location
 		virtual i32 getAtrribLocation(VertexSemantic vertexSemantic) override;
 
-		// 获取材质名
+		// get Material name
 		const String& getMaterialName();
+
+		// Create
+		virtual bool createShaderProgram(const String& vsContent, const String& psContent) override;
+
+	public:
+		// get shader
+		Shader* getShader(Shader::ShaderType type) const { return m_shaders[(ui32)type]; }
 	
 	private:
-		GLES2Renderable*	m_preRenderable;				// 几何体数据流
-		AttribLocationArray	m_attribLocationMapping;		// 属性物理位置映射
+		ShaderArray			m_shaders;
+		GLES2Renderable*	m_preRenderable;				// Geomerty
+		AttribLocationArray	m_attribLocationMapping;		// Attribute location
 		GLuint				m_glesProgram;
 	};
-
 }

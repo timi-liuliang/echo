@@ -2,8 +2,8 @@
 #include "engine/core/log/Log.h"
 #include <engine/core/io/IO.h>
 #include "engine/core/util/PathUtil.h"
-#include "Renderer.h"
-#include "ShaderProgram.h"
+//#include "interface/Renderer.h"
+//#include "interface/ShaderProgram.h"
 
 namespace Echo
 {

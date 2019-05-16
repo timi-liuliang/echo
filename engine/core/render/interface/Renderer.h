@@ -2,7 +2,6 @@
 
 #include "device_features.h"
 #include "RenderState.h"
-#include "Shader.h"
 #include "Texture.h"
 #include "TextureCube.h"
 #include "Renderable.h"
@@ -105,7 +104,6 @@ namespace Echo
 
 		// create shader
 		virtual ShaderProgram* createShaderProgram()=0;
-		virtual Shader*	createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const char* srcBuffer, ui32 size) = 0;
 		
 		// create views
 		virtual RenderTarget* createRenderTarget(ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const RenderTarget::Options& option) = 0;

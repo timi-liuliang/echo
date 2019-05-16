@@ -11,6 +11,7 @@ namespace Echo
 	GLES2ShaderProgram::GLES2ShaderProgram()
 		: ShaderProgram()
 	{
+		m_shaders.assign(nullptr);
 		m_attribLocationMapping.assign(-1);
 
 		m_glesProgram = OGLESDebug(glCreateProgram());
@@ -35,32 +36,42 @@ namespace Echo
 		m_glesProgram = 0;
 	}
 	
-	bool GLES2ShaderProgram::attachShader(Shader* pShader)
+	bool GLES2ShaderProgram::attachShader(Shader* shader)
 	{
-		if (ShaderProgram::attachShader(pShader))
+		if (shader)
 		{
-			EchoAssert(pShader);
-			GLES2Shader* pGLES2Shader = (GLES2Shader*)pShader;
-			ui32 hShader = pGLES2Shader->getShaderHandle();
-			OGLESDebug(glAttachShader(m_glesProgram, hShader));
+			Shader::ShaderType type = shader->getShaderType();
+			if (!m_shaders[(ui32)type])
+			{
+				m_shaders[(ui32)type] = shader;
+				shader->setShaderProgram(this);
+				m_isLinked = false;
 
-			return true;
+				GLES2Shader* glesShader = ECHO_DOWN_CAST<GLES2Shader*>(shader);
+				ui32 shaderHandle = glesShader->getShaderHandle();
+				OGLESDebug(glAttachShader(m_glesProgram, shaderHandle));
+
+				return true;
+			}
 		}
-			
+
+		EchoLogError("The shader [%s] has been already attached.", shader ? Shader::GetShaderTypeDesc(shader->getShaderType()).c_str() : "");
 		return false;
 	}
 	
 	Shader* GLES2ShaderProgram::detachShader(Shader::ShaderType type)
 	{
-		Shader* pShader = ShaderProgram::detachShader(type);
-		if(pShader)
+		Shader* shader = m_shaders[(ui32)type];
+		m_shaders[(ui32)type] = nullptr;
+		m_isLinked = false;
+		if(shader)
 		{
-			GLES2Shader* pGLES2Shader = (GLES2Shader*)pShader;
+			GLES2Shader* pGLES2Shader = (GLES2Shader*)shader;
 			ui32 hShader = pGLES2Shader->getShaderHandle();
 			OGLESDebug(glDetachShader(m_glesProgram, hShader));
 		}
 
-		return pShader;
+		return shader;
 	}
 
 	bool GLES2ShaderProgram::linkShaders()
@@ -209,5 +220,32 @@ namespace Echo
 	const String& GLES2ShaderProgram::getMaterialName()
 	{
 		return "MaterialName:";
+	}
+
+	bool GLES2ShaderProgram::createShaderProgram(const String& vsContent, const String& psContent)
+	{
+		Shader::ShaderDesc vsDesc; vsDesc.macros = m_macros;
+		GLES2Renderer* pRenderer = ECHO_DOWN_CAST<GLES2Renderer*>(Renderer::instance());
+		Shader *pVertexShader = pRenderer->createShader(Shader::ST_VERTEXSHADER, vsDesc, vsContent.data(), vsContent.size());
+		if (!pVertexShader)
+		{
+			EchoLogError("Error in create vs file: ");
+			return false;
+		}
+
+		Shader::ShaderDesc psDesc; psDesc.macros = m_macros;
+		Shader *pPixelShader = pRenderer->createShader(Shader::ST_PIXELSHADER, psDesc, psContent.data(), psContent.size());
+		if (!pPixelShader)
+		{
+			EchoLogError("Error in create ps file: ");
+			return false;
+		}
+
+		// create shader program
+		attachShader(pVertexShader);
+		attachShader(pPixelShader);
+		linkShaders();
+
+		return true;
 	}
 }

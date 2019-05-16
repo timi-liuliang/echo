@@ -37,13 +37,11 @@ namespace Echo
 
 	ShaderProgram::ShaderProgram()
 	{
-		m_shaders.assign(nullptr);
 	}
 
 	ShaderProgram::ShaderProgram(const ResourcePath& path)
 		: Res(path)
 	{
-		m_shaders.assign(nullptr);
 	}
 
 	ShaderProgram::~ShaderProgram()
@@ -76,7 +74,7 @@ namespace Echo
 			clear();
 
 			setPath( filename);
-			m_shaderDesc.macros = macros;
+			m_macros = macros;
 
 			MemoryReader memReader(filename.c_str());
 			if (!memReader.getData<char*>())
@@ -372,29 +370,8 @@ namespace Echo
 
 	bool ShaderProgram::createShaderProgram(const String& vsContent, const String& psContent)
 	{
-		Shader::ShaderDesc vsDesc(m_shaderDesc);
-		Renderer* pRenderer = Renderer::instance();
-		Shader *pVertexShader = pRenderer->createShader(Shader::ST_VERTEXSHADER, vsDesc, vsContent.data(), vsContent.size());
-		if(!pVertexShader)
-		{
-			EchoLogError("Error in create vs file: ");
-			return false;
-		}
-
-		Shader::ShaderDesc psDesc(m_shaderDesc);
-		Shader *pPixelShader = pRenderer->createShader(Shader::ST_PIXELSHADER, psDesc, psContent.data(), psContent.size());
-		if(!pPixelShader)
-		{
-			EchoLogError("Error in create ps file: ");
-			return false;
-		}
-
-		// create shader program
-        attachShader(pVertexShader);
-		attachShader(pPixelShader);
-		linkShaders();
-
-		return true;
+		EchoLogError("createShaderProgram function unimplement: ");
+		return false;
 	}
 
 	StringArray ShaderProgram::getEditableMacros(const String& shaderFileName)
@@ -477,12 +454,12 @@ namespace Echo
 
 	void* ShaderProgram::createDefaultUniformValue(const String& strType, const i32 count, const String& strValue, ui32& outSize, ShaderParamType& outType)
 	{
-		// 解析字符串，数据分段
+		// parse string
 		StringArray valueStr = StringUtil::Split(strValue, ";");
 		ui32 size = valueStr.size();
 		EchoAssertX(size == count, "Material::createDefaultUniformValue");
 
-		// 根据类型计算相关数据
+		// calculate data
 		if (strType == "SPT_INT")
 		{
 			outType = SPT_INT;
@@ -523,13 +500,13 @@ namespace Echo
 			outType = SPT_UNKNOWN;
 		}
 
-		// 分配内存数据
+		// allocate memory
 		void* value = nullptr;
 		if (outSize)
 		{
 			value = (void*)EchoMalloc(outSize);
 
-			// 赋值
+			// set value
 			for (ui32 i = 0; i < size; ++i)
 			{
 				switch (outType)
@@ -552,7 +529,7 @@ namespace Echo
 		fullMacro = "#define ";
 		fullMacro += macro;
 		fullMacro += "\n";
-		int i = m_shaderDesc.macros.find(fullMacro.c_str());
+		int i = m_macros.find(fullMacro.c_str());
 		return i != String::npos;
 	}
 
@@ -593,36 +570,7 @@ namespace Echo
             EchoLogError("ShaderProgram uniform [%d] not exist!", physicIdx);
         }
     }
-    
-    bool ShaderProgram::attachShader(Shader* pShader)
-    {
-        if(!pShader)
-            return false;
-        
-        Shader::ShaderType type = pShader->getShaderType();
-        if(m_shaders[(ui32)type])
-        {
-            EchoLogError("The shader [%s] has been already attached.", Shader::GetShaderTypeDesc(type).c_str());
-            return false;
-        }
-        
-        m_shaders[(ui32)type] = pShader;
-        pShader->setShaderProgram(this);
-        m_isLinked = false;
-        
-        return true;
-    }
-    
-    Shader* ShaderProgram::detachShader(Shader::ShaderType type)
-    {
-        Shader* pShader = m_shaders[(ui32)type];
-        m_shaders[(ui32)type] = NULL;
-        
-        m_isLinked = false;
-        
-        return pShader;
-    }
-
+ 
 	int ShaderProgram::getUniformByteSizeByUniformType(ShaderParamType uniformType)
 	{
 		switch (uniformType)

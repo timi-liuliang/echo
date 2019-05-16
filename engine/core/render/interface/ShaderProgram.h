@@ -1,7 +1,6 @@
 #pragma once
 
 #include "RenderState.h"
-#include "Shader.h"
 #include <utility>
 #include "engine/core/util/Array.hpp"
 #include "engine/core/resource/Res.h"
@@ -31,8 +30,6 @@ namespace Echo
 		ECHO_RES(ShaderProgram, Res, ".shader", ShaderProgram::create, ShaderProgram::load);
 
 	public:
-		typedef array<Shader*, Shader::ST_SHADERCOUNT> ShaderArray;
-
         // Uniform
         struct Uniform
         {
@@ -105,13 +102,7 @@ namespace Echo
 		// clear
 		void clear();
         
-    public:
-        // shaders operate
-        Shader* getShader(Shader::ShaderType type) const { return m_shaders[(ui32)type]; }
-        virtual bool attachShader(Shader* pShader);
-        virtual Shader* detachShader(Shader::ShaderType type);
-        virtual bool linkShaders() {return false;}
-        
+    public: 
         // get physics index by uniform name
         virtual int getParamPhysicsIndex(const String& paramName);
         
@@ -142,8 +133,11 @@ namespace Echo
 		// load
 		static Res* load(const ResourcePath& path);
 
+	protected:
+		// Create
+		virtual bool createShaderProgram(const String& vsContent, const String& psContent);
+
 	private:
-		// private functions
 		bool loadFromContent(char* content, const String& macros);
 		bool loadShaderFrom(void* node, const String& macros);
 		bool loadBlendState(void* pNode);
@@ -153,16 +147,14 @@ namespace Echo
 		void createBlendState(BlendState::BlendDesc& desc);
 		void createDepthState(DepthStencilState::DepthStencilDesc& desc);
 		void createRasterizerState(RasterizerState::RasterizerDesc& desc);
-		virtual bool createShaderProgram(const String& vsContent, const String& psContent);
 		void* createDefaultUniformValue(const String& strType, const i32 count, const String& strValue, ui32& outSize, ShaderParamType& outType);
 
 	protected:
-		Shader::ShaderDesc	m_shaderDesc;							// Shader info
+		String				m_macros;
 		BlendState*			m_blendState = nullptr;
 		DepthStencilState*	m_depthState = nullptr;
 		RasterizerState*	m_rasterizerState = nullptr;
 		MapDefaultUniforms	m_defaultUniforms;
-		ShaderArray			m_shaders;
         bool                m_isLinked = false;
         UniformArray        m_uniforms;
 	};
