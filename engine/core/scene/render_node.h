@@ -13,16 +13,18 @@ namespace Echo
 		{
 			Type_2D = 1 << 0,
 			Type_3D = 1 << 1,
+			Type_Ui = 1 << 2,
 		};
 
 	public:
 		Render();
 
-		static void setRenderTypes(i32 types = Type_2D | Type_3D) { m_renderTypes = types; }
+		static void setRenderTypes(i32 types = Type_2D | Type_3D | Type_Ui) { m_renderTypes = types; }
 		bool isNeedRender() const;
 
-		void set2d(bool is2d) { m_is2d = is2d; }
-		bool is2d() const { return m_is2d; }
+		// render type
+		const StringOption& getRenderType() { return m_renderType; }
+		void setRenderType(const StringOption& type);
 
 		void setVisible(bool isVisible) { m_isVisible = isVisible; }
 		bool isVisible() const { return m_isVisible; }
@@ -35,7 +37,7 @@ namespace Echo
 
 	protected:
 		static i32		m_renderTypes;
-		bool			m_is2d;
+		StringOption	m_renderType = StringOption("2d", { "2d", "3d", "ui"});
 		bool			m_isVisible;
 		Matrix4			m_matWVP;
 	};

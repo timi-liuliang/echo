@@ -196,7 +196,7 @@ namespace Studio
 		if (xOffset != xOffsetBefore || zOffset != zOffsetBefore)
 		{
 			m_gizmosNodeBackGrid->clear();
-			m_gizmosNodeBackGrid->set2d(false);
+			m_gizmosNodeBackGrid->setRenderType("3d");
 
 			// gray line
 			if (yOffset < endGrayFadeDistance)
@@ -246,7 +246,7 @@ namespace Studio
 		if (curWindowHalfWidth != windowHalfWidth || curWindowHalfHeight != windowHalfHeight)
 		{
 			m_gizmosNodeGrid2d->clear();
-			m_gizmosNodeGrid2d->set2d(true);
+			m_gizmosNodeGrid2d->setRenderType("2d");
 			m_gizmosNodeGrid2d->drawLine(Echo::Vector3(-windowHalfWidth, -windowHalfHeight, 0.0), Echo::Vector3(windowHalfWidth, -windowHalfHeight, 0.0), Echo::Color::RED);
 			m_gizmosNodeGrid2d->drawLine(Echo::Vector3(-windowHalfWidth, -windowHalfHeight, 0.0), Echo::Vector3(-windowHalfWidth, windowHalfHeight, 0.0), Echo::Color::RED);
 			m_gizmosNodeGrid2d->drawLine(Echo::Vector3(windowHalfWidth, windowHalfHeight, 0.0), Echo::Vector3(windowHalfWidth, -windowHalfHeight, 0.0), Echo::Color::RED);

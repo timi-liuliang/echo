@@ -13,7 +13,7 @@ namespace Echo
 	{
 		m_gizmo = ECHO_DOWN_CAST<Echo::Gizmos*>(Echo::Class::create("Gizmos"));
 		m_gizmo->setName( StringUtil::Format("gizmo_obj_%d", m_object->getId()));
-		m_gizmo->set2d(true);
+		m_gizmo->setRenderType("2d");
 	}
 
 	Camera2DEditor::~Camera2DEditor()

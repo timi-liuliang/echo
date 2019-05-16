@@ -66,6 +66,7 @@ namespace Echo
 	private:
 		// keep aspect
 		void keepAspect(ui32 windowWidth, ui32 windowHeight, KeepAspectType type);
+		void keepAspect(ui32 windowWidth, ui32 windowHeight, KeepAspectType type, class Camera* camera);
 
 	private:
 		i32				m_designWidth;

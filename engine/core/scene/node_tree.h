@@ -15,44 +15,45 @@ namespace Echo
 		// instance
 		static NodeTree* instance();
 
-		// 初始化
+		// init
 		bool init();
 
-		// 销毁
+		// destory
 		void destroy();
 
+		// root node
 		Node* getInvisibleRootNode() { return &m_invisibleRoot; }
 
 	public:
-		// 获取主摄像机
+		// get main 3d camera
 		Camera* get3dCamera() const { return m_3dCamera; }
 
-		// 设置主摄像机
+		// set main 3d camera
 		void set3dCamera(Camera* camera) { m_3dCamera = camera; }
 
-		// 获取2D摄像机
+		// get 2d camera
 		Camera* get2dCamera() const { return m_2dCamera; }
 
-		// 获取界面摄像机
-		Camera* getGUICamera() const { return m_uiCamera; }
+		// get ui camera
+		Camera* getUiCamera() const { return m_uiCamera; }
 
-		// 设置界面摄像机
-		void setGUICamera(Camera* pCamera) { m_uiCamera = pCamera; }
+		// set ui camera
+		void setUiCamera(Camera* pCamera) { m_uiCamera = pCamera; }
 
 	public:
 		void update( float elapsedTime);
 
-		// 获取阴影摄像机
+		// get shadow camera
 		CameraShadow& getShadowCamera() { EchoAssert( m_shadowCamera);  return *m_shadowCamera; }
 
 	private:
 		NodeTree();
 
 	protected:
-		Camera*			    m_3dCamera;			// 主摄像机
-		Camera*				m_2dCamera;			// 2D摄像机
-		Camera*				m_uiCamera;			// 界面摄像机
-		CameraShadow*		m_shadowCamera;		// 阴影图摄像机		
+		Camera*			    m_3dCamera;
+		Camera*				m_2dCamera;
+		Camera*				m_uiCamera;
+		CameraShadow*		m_shadowCamera;
 		Node				m_invisibleRoot;	// invisible root node
 	};
 }

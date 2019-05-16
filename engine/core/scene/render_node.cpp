@@ -4,22 +4,21 @@
 
 namespace Echo
 {
-	i32	Render::m_renderTypes = Render::Type_2D;
+	i32	Render::m_renderTypes = Render::Type_2D | Render::Type_3D | Render::Type_Ui;
 
 	Render::Render()
-		: m_is2d(true)
-		, m_isVisible(true)
+		: m_isVisible(true)
 	{
 	}
 
 	void Render::bindMethods()
 	{
-		CLASS_BIND_METHOD(Render, set2d,		DEF_METHOD("set2d"));
-		CLASS_BIND_METHOD(Render, is2d,			DEF_METHOD("is2d"));
+		CLASS_BIND_METHOD(Render, setRenderType,DEF_METHOD("setRenderType"));
+		CLASS_BIND_METHOD(Render, getRenderType,DEF_METHOD("getRenderType"));
 		CLASS_BIND_METHOD(Render, setVisible,	DEF_METHOD("setVisible"));
 		CLASS_BIND_METHOD(Render, isVisible,	DEF_METHOD("isVisible"));
 
-		CLASS_REGISTER_PROPERTY(Render, "Is2D", Variant::Type::Bool, "is2d", "set2d");
+		CLASS_REGISTER_PROPERTY(Render, "RenderType", Variant::Type::StringOption, "getRenderType", "setRenderType");
 		CLASS_REGISTER_PROPERTY(Render, "Visible", Variant::Type::Bool, "isVisible", "setVisible");
 	}
 
@@ -28,8 +27,9 @@ namespace Echo
 #ifdef ECHO_EDITOR_MODE
 		if (!Engine::instance()->getConfig().m_isGame)
 		{
-			if (m_is2d) return (m_renderTypes & Type_2D) != 0 && m_isVisible;
-			else		return (m_renderTypes & Type_3D) != 0 && m_isVisible;
+			if (m_renderType.getIdx()==0)			return (m_renderTypes & Type_2D) != 0 && m_isVisible;
+			else if (m_renderType.getIdx() == 1)	return (m_renderTypes & Type_3D) != 0 && m_isVisible;
+			else									return (m_renderTypes & Type_Ui) != 0 && m_isVisible;
 		}
 		else
 		{
@@ -40,6 +40,11 @@ namespace Echo
 #endif
 	}
 
+	void Render::setRenderType(const StringOption& type)
+	{
+		m_renderType.setValue(type.getValue());
+	}
+
 	void Render::update(float delta, bool bUpdateChildren)
 	{
 		if (!m_isEnable)
@@ -48,7 +53,7 @@ namespace Echo
 		Node::update(delta, bUpdateChildren);
 
 		// update world view project matrix
-		Camera* camera = is2d() ? NodeTree::instance()->get2dCamera() : NodeTree::instance()->get3dCamera();
+		Camera* camera = m_renderType.getIdx()==0 ? NodeTree::instance()->get2dCamera() : (m_renderType.getIdx() == 1 ? NodeTree::instance()->get3dCamera() : NodeTree::instance()->getUiCamera());
 		if (camera)
 		{
 			m_matWVP = getWorldMatrix() * camera->getViewProjMatrix();;
@@ -61,7 +66,7 @@ namespace Echo
 		if (name == "u_WorldMatrix")
 			return (void*)(&m_matWorld);
 
-		Camera* camera = is2d() ? NodeTree::instance()->get2dCamera() : NodeTree::instance()->get3dCamera();
+		Camera* camera = m_renderType.getIdx() == 0 ? NodeTree::instance()->get2dCamera() : (m_renderType.getIdx() == 1 ? NodeTree::instance()->get3dCamera() : NodeTree::instance()->getUiCamera());
 		if (camera)
 		{
 			if (name == "u_WorldViewProjMatrix")

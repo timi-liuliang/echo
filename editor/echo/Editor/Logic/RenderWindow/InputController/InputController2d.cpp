@@ -23,15 +23,11 @@ namespace Studio
 		, m_keyAltDown(false)
 		, m_keyCtrlDown(false)
 		, m_keyShiftDown(false)
-		, m_camera(nullptr)
         , m_cameraScale(1.f)
 		, m_cameraMoveDir(Echo::Vector3::UNIT_X)
 		, m_cameraForward(-Echo::Vector3::UNIT_Z)
 		, m_cameraPositon(Echo::Vector3::ZERO)
 	{
-		m_camera = Echo::NodeTree::instance()->get2dCamera();
-
-		// ³õÊ¼»¯ÉãÏñ»ú²ÎÊý
 		InitializeCameraSettings();
 	}
 
@@ -41,7 +37,7 @@ namespace Studio
 
 	void InputController2d::tick(const InputContext& ctx)
 	{
-		// ÒÆ¶¯ÉãÏñ»ú
+		// ç§»åŠ¨æ‘„åƒæœº
 		Echo::Vector3 cameraMoveDir = Echo::Vector3::ZERO;
 		if ( m_keyADown ) 
 			cameraMoveDir.x += -1.f;
@@ -55,7 +51,7 @@ namespace Studio
 		m_cameraMoveDir = cameraMoveDir;
 		m_cameraMoveDir.normalize();
 
-		// ¸üÐÂÉãÏñ»ú
+		// æ›´æ–°æ‘„åƒæœº
 		UpdateCamera(ctx.elapsedTime);
 	}
 
@@ -174,9 +170,14 @@ namespace Studio
 			m_cameraPositon += m_cameraMoveDir * elapsedTime * 300;
 
 			m_cameraForward.normalize();
-			m_camera->setScale(m_cameraScale);
-			m_camera->setPosition(m_cameraPositon);
-			m_camera->setDirection(Echo::Vector3::NEG_UNIT_Z);
+
+			std::vector<Echo::Camera*> cameras = { Echo::NodeTree::instance()->get2dCamera(), Echo::NodeTree::instance()->getUiCamera() };
+			for (Echo::Camera* camera : cameras)
+			{
+				camera->setScale(m_cameraScale);
+				camera->setPosition(m_cameraPositon);
+				camera->setDirection(Echo::Vector3::NEG_UNIT_Z);
+			}
 
 			// save config
 			static float totalElapsed = 0.f;
@@ -205,18 +206,17 @@ namespace Studio
 		float         diameter = (box.getSize().len() * 0.5f);
 		Echo::Vector3 center = ((box.vMin + box.vMax) * 0.5f);
 
-        m_cameraScale = std::max<float>(diameter / m_camera->getWidth(), diameter / m_camera->getHeight()) * scale;
+		Echo::Camera* camera = Echo::NodeTree::instance()->get2dCamera();
+        m_cameraScale = std::max<float>(diameter / camera->getWidth(), diameter / camera->getHeight()) * scale;
 		m_cameraPositon.x = center.x;
 		m_cameraPositon.y = center.y;
 	}
 
-	// ²Ù×÷ÉãÏñ»ú
 	void InputController2d::CameraZoom(float zValue)
 	{
 		m_cameraScale = Echo::Math::Clamp(m_cameraScale + zValue * 0.03f, 0.01f, 100.f);
 	}
 
-	// Ðý×ªÉãÏñ»ú
 	void InputController2d::MoveCamera(float xValue, float yValue)
 	{
 		if ( !xValue && !yValue )
@@ -232,7 +232,11 @@ namespace Studio
 
 	void InputController2d::UpdateCameraInfo()
 	{
-		m_camera->setPosition(m_cameraPositon);
+		std::vector<Echo::Camera*> cameras = { Echo::NodeTree::instance()->get2dCamera(), Echo::NodeTree::instance()->getUiCamera() };
+		for (Echo::Camera* camera : cameras)
+		{
+			camera->setPosition(m_cameraPositon);
+		}
 	}
 
 	bool InputController2d::isCameraMoving() const

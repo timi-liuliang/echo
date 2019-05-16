@@ -48,6 +48,15 @@ namespace Echo
 		m_2dCamera->setFarClip(256.0f);
 		m_2dCamera->update();
 
+		// create gui camera
+		m_uiCamera = EchoNew(Camera(Camera::PM_ORTHO));
+
+		m_uiCamera->setPosition(vCam2DPos);
+		m_uiCamera->setDirection(vCam2DDir);
+		m_uiCamera->setNearClip(-256.f);
+		m_uiCamera->setFarClip(256.0f);
+		m_uiCamera->update();
+
 		update(0.001f);
 
 		return true;
@@ -57,6 +66,7 @@ namespace Echo
 	{
 		EchoSafeDelete(m_3dCamera, Camera);
 		EchoSafeDelete(m_2dCamera, Camera);
+		EchoSafeDelete(m_uiCamera, Camera);
 		EchoSafeDelete(m_shadowCamera, CameraShadow);
 	}
 
@@ -65,6 +75,7 @@ namespace Echo
 		// update 3d camera
 		m_2dCamera->update();
 		m_3dCamera->update();
+		m_uiCamera->update();
 		
 		// update nodes
 		m_invisibleRoot.update(elapsedTime, true);

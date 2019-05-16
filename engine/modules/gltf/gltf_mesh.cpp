@@ -20,7 +20,7 @@ namespace Echo
 		, m_iblSpecularSlot(-1)
 		, m_iblBrdfSlot(-1)
 	{
-		set2d(false);
+		setRenderType("3d");
 	}
 
 	GltfMesh::~GltfMesh()

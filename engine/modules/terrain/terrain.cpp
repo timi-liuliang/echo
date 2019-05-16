@@ -14,7 +14,7 @@ namespace Echo
     , m_material(nullptr)
     , m_renderable(nullptr)
     {
-        set2d(false);
+        setRenderType("3d");
     }
     
     Terrain::~Terrain()
@@ -92,7 +92,6 @@ namespace Echo
         {
             if (m_renderable)
             {
-                m_matWVP = getWorldMatrix() * NodeTree::instance()->get2dCamera()->getViewProjMatrix();
                 m_renderable->submitToRenderQueue();
             }
         }

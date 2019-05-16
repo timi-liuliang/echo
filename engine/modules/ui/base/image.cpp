@@ -16,6 +16,7 @@ namespace Echo
     , m_width(0)
     , m_height(0)
     {
+		setRenderType("ui");
     }
     
     UiImage::~UiImage()
@@ -95,14 +96,12 @@ namespace Echo
         }
     }
     
-    // update per frame
     void UiImage::update_self()
     {
         if (isNeedRender())
         {
             if (m_renderable)
             {
-                m_matWVP = getWorldMatrix() * NodeTree::instance()->get2dCamera()->getViewProjMatrix();
                 m_renderable->submitToRenderQueue();
             }
         }

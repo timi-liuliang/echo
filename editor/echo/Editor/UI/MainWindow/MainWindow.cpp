@@ -304,7 +304,7 @@ namespace Studio
 		Echo::String renderType = subeditName.toStdString().c_str();
 		if (renderType == "2D")
 		{
-			Echo::Render::setRenderTypes(Echo::Render::Type_2D);
+			Echo::Render::setRenderTypes(Echo::Render::Type_2D | Echo::Render::Type_Ui);
 
 			RenderWindow* renderWindow = ECHO_DOWN_CAST<RenderWindow*>(AStudio::instance()->getRenderWindow());
 			if (renderWindow)
@@ -314,7 +314,7 @@ namespace Studio
 		}
 		else if (renderType == "3D")
 		{
-			Echo::Render::setRenderTypes(Echo::Render::Type_3D);
+			Echo::Render::setRenderTypes(Echo::Render::Type_3D | Echo::Render::Type_Ui);
 
 			RenderWindow* renderWindow = ECHO_DOWN_CAST<RenderWindow*>(AStudio::instance()->getRenderWindow());
 			if (renderWindow)

@@ -92,7 +92,37 @@ namespace Echo
 		onSize(Renderer::instance()->getScreenWidth(), Renderer::instance()->getScreenHeight());
 	}
 
-	// keep aspect
+	void GameSettings::keepAspect(ui32 windowWidth, ui32 windowHeight, KeepAspectType type, Camera* camera)
+	{
+		if (camera)
+		{
+			if (type == KeepAspectType::None)
+			{
+				camera->setWidth(Real(windowWidth));
+				camera->setHeight(Real(windowHeight));
+			}
+			else if (type == KeepAspectType::Stretch)
+			{
+				camera->setWidth(Real(getDesignWidth()));
+				camera->setHeight(Real(getDesignHeight()));
+			}
+			if (type == KeepAspectType::Width)
+			{
+				Real aspect = (Real)windowHeight / windowWidth;
+				camera->setWidth(Real(getDesignWidth()));
+				camera->setHeight(Real(getDesignWidth() * aspect));
+			}
+			else if (type == KeepAspectType::Height)
+			{
+				Real aspect = (Real)windowWidth / windowHeight;
+				camera->setWidth(Real(getDesignHeight() * aspect));
+				camera->setHeight(Real(getDesignHeight()));
+			}
+
+			camera->update();
+		}
+	}
+
 	void GameSettings::keepAspect(ui32 windowWidth, ui32 windowHeight, KeepAspectType type)
 	{
 		// 3d camera
@@ -102,31 +132,10 @@ namespace Echo
 		pMainCamera->update();
 
 		// 2d camera
-		Camera* p2DCamera = NodeTree::instance()->get2dCamera();
-		if (type == KeepAspectType::None)
-		{
-			p2DCamera->setWidth(Real(windowWidth));
-			p2DCamera->setHeight(Real(windowHeight));
-		}
-		else if (type == KeepAspectType::Stretch)
-		{
-			p2DCamera->setWidth(Real(getDesignWidth()));
-			p2DCamera->setHeight(Real(getDesignHeight()));
-		}
-		if (type==KeepAspectType::Width)
-		{
-			Real aspect = (Real)windowHeight / windowWidth;
-			p2DCamera->setWidth(Real(getDesignWidth()));
-			p2DCamera->setHeight(Real(getDesignWidth() * aspect));
-		}
-		else if (type == KeepAspectType::Height)
-		{
-			Real aspect = (Real)windowWidth / windowHeight;
-			p2DCamera->setWidth(Real(getDesignHeight() * aspect));
-			p2DCamera->setHeight(Real(getDesignHeight()));
-		}
+		keepAspect(windowWidth, windowHeight, type, NodeTree::instance()->get2dCamera());
 
-		p2DCamera->update();
+		// gui camera
+		keepAspect(windowWidth, windowHeight, type, NodeTree::instance()->getUiCamera());
 	}
 
 	// on size

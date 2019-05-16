@@ -16,6 +16,7 @@ namespace Echo
     , m_width(0)
     , m_height(0)
     {
+		setRenderType("ui");
     }
     
     UiText::~UiText()
@@ -122,7 +123,6 @@ namespace Echo
         {
             if (m_renderable)
             {
-                m_matWVP = getWorldMatrix() * NodeTree::instance()->get2dCamera()->getViewProjMatrix();
                 m_renderable->submitToRenderQueue();
             }
         }

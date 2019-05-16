@@ -17,7 +17,7 @@ namespace Studio
 		InputController2d();
 		virtual ~InputController2d();
 
-		// Ã¿Ö¡¸üĞÂ
+		// æ¯å¸§æ›´æ–°
 		virtual void tick(const InputContext& ctx) override;
 
 		// event
@@ -29,49 +29,46 @@ namespace Studio
 		virtual void keyPressEvent(QKeyEvent* e) override;
 		virtual void keyReleaseEvent(QKeyEvent* e) override;
 
-		// Êó±ê°´¼ü
+		// é¼ æ ‡æŒ‰é”®
 		virtual Qt::MouseButton pressedMouseButton() override;
 
-		// Êó±êÎ»ÖÃ
+		// é¼ æ ‡ä½ç½®
 		virtual QPointF mousePosition() override;
 
-		// Ïà»ú¸üĞÂsize
+		// ç›¸æœºæ›´æ–°size
 		virtual void onSizeCamera(unsigned int width, unsigned int height) override;
 
-		// ĞŞÕıÉãÏñ»ú
+		// ä¿®æ­£æ‘„åƒæœº
 		virtual void onAdaptCamera() override;
 
-		// ÊÊÓ¦Ä£ĞÍ
+		// é€‚åº”æ¨¡å‹
 		virtual void CameraZoom(const Echo::AABB& box, float scale);
 
 		void UpdateCameraInfo();
 
 		bool isCameraMoving() const;
 
-		// ¿ØÖÆÊÇ·ñ¸üĞÂÉãÏñ»ú
+		// æ§åˆ¶æ˜¯å¦æ›´æ–°æ‘„åƒæœº
 		void setNeedUpdateCamera(bool need) { m_bNeedUpdateCamera = need; UpdateCamera(0.01f); }
 
 		// on focuse node
 		virtual void onFocusNode(Echo::Node* node) override;
 
 	protected:
-		// ³õÊ¼»¯ÉãÏñ»ú²ÎÊı
+		// åˆå§‹åŒ–æ‘„åƒæœºå‚æ•°
 		void InitializeCameraSettings(float offsetdir = 5);
 
-		// ÉãÏñ»ú¸üĞÂ
+		// æ‘„åƒæœºæ›´æ–°
 		void UpdateCamera(float elapsedTime);
 
-		// ²Ù×÷ÉãÏñ»ú
+		// æ“ä½œæ‘„åƒæœº
 		void CameraZoom(float zValue);
 
-		// Î»ÒÆÉãÏñ»ú
+		// ä½ç§»æ‘„åƒæœº
 		void MoveCamera(float xValue, float yValue);
 
-		// ÉãÏñ»ú×ÔÊÊÓ¦
+		// æ‘„åƒæœºè‡ªé€‚åº”
 		void AdaptCamera();
-
-		// »ñÈ¡ÉãÏñ»ú
-		Echo::Camera* GetCamera() { return m_camera; }
 
 	protected:
 		void updateMouseButtonPressedStatus(QMouseEvent* e, bool pressed);
@@ -100,7 +97,6 @@ namespace Studio
 		QPointF m_pos;
 
 	protected:
-		Echo::Camera*		m_camera;
 		float				m_cameraScale;
 		Echo::Vector3		m_cameraMoveDir;
 		Echo::Vector3		m_cameraForward;
