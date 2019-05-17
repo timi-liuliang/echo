@@ -105,7 +105,8 @@ namespace Studio
     {
         QPlainTextEdit::mousePressEvent(e);
         
-        m_luaSyntaxHighLighter->removeRule( LuaSyntaxHighLighter::RG_SelectTextBlock);
+        if(m_luaSyntaxHighLighter->removeRule( LuaSyntaxHighLighter::RG_SelectTextBlock)>0)
+            m_luaSyntaxHighLighter->rehighlight();
     }
 
 	void LuaTextEdit::mouseDoubleClickEvent(QMouseEvent *e)
@@ -116,7 +117,8 @@ namespace Studio
         if(!selectText.empty() && m_luaSyntaxHighLighter)
         {
             m_luaSyntaxHighLighter->removeRule( LuaSyntaxHighLighter::RG_SelectTextBlock);
-            m_luaSyntaxHighLighter->appendBackgroundRule(192, 120, 221, Echo::StringUtil::Format("\\b%s\\b", selectText.c_str()), LuaSyntaxHighLighter::RG_SelectTextBlock);
+            m_luaSyntaxHighLighter->appendBackgroundRule(120, 160, 200, Echo::StringUtil::Format("\\b%s\\b", selectText.c_str()), LuaSyntaxHighLighter::RG_SelectTextBlock);
+            m_luaSyntaxHighLighter->rehighlight();
         }
 	}
 

@@ -73,22 +73,21 @@ namespace Studio
         //rehighlight();
 	}
     
-    void LuaSyntaxHighLighter::removeRule(RuleGroup group)
+    int LuaSyntaxHighLighter::removeRule(RuleGroup group)
     {
-        bool isNeedRehightlight = false;
+        int removeCount = 0;
         for(QVector<HighlightingRule>::iterator it=m_highLightRules.begin(); it!=m_highLightRules.end();)
         {
             if(it->group == group)
             {
                 it = m_highLightRules.erase(it);
-                isNeedRehightlight = true;
+                removeCount++;
             }
             else
                 it++;
         }
         
-        //if(isNeedRehightlight)
-        //    rehighlight();
+        return removeCount;
     }
 
 	void  LuaSyntaxHighLighter::highlightBlock(const QString& text)

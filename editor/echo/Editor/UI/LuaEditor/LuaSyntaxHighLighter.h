@@ -27,7 +27,7 @@ namespace Studio
         void appendBackgroundRule( int r, int g, int b, const Echo::String& regExp, RuleGroup group=RG_Default);
         
         // remove rule
-        void removeRule(RuleGroup group);
+        int removeRule(RuleGroup group);
 
 	protected:
 		// hight light block
