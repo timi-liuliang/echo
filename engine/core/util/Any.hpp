@@ -7,16 +7,15 @@
 namespace Echo
 {
 	/**s
-	 * Any蔙eference boost, http://www.boost.org
+	 * Any reference boost, http://www.boost.org
 	 */
     class any
     {
-		// 友元函数
 		template<typename ValueType> friend ValueType * any_cast(any*);
 
     public:
 		any() : content(0) {}    
-        template<typename ValueType> any(const ValueType & value) : content(new holder<ValueType>(value)){}
+        template<typename ValueType> any(const ValueType & value) : content(EchoNew( holder<ValueType>(value))){}
         any(const any & other) : content(other.content ? other.content->clone() : 0){}
         ~any(){ EchoSafeDelete(content, placeholder);}
 
@@ -31,14 +30,14 @@ namespace Echo
             return *this;
         }
 
-		// 运算符重载 "="
+		// operate "="
         template<typename ValueType> any & operator=(const ValueType & rhs)
         {
             any(rhs).swap(*this);
             return *this;
         }
 
-		// 运算符重载"="
+		// override "="
         any & operator=(any rhs)
         {
             rhs.swap(*this);
@@ -46,13 +45,13 @@ namespace Echo
         }
 
     public:
-		// 是否为空
+		// is empty
         bool empty() const
         {
             return !content;
         }
 
-		// 获取类型信息
+		// get type
         const std::type_info & type() const
         {
             return content ? content->type() : typeid(void);
@@ -64,10 +63,10 @@ namespace Echo
         public:
             virtual ~placeholder(){}
 
-			// 返回类型
+			// type
             virtual const std::type_info & type() const = 0;
 
-			// 复制函数
+			// clone
             virtual placeholder * clone() const = 0;
         };
 
@@ -77,20 +76,20 @@ namespace Echo
         public:
             holder(const ValueType & value) : held(value){}
 
-			// 返回值类型
+			// type
             virtual const std::type_info & type() const
             {
                 return typeid(ValueType);
             }
 
-			// 复制
+			// clone
             virtual placeholder * clone() const
             {
                 return new holder(held);
             }
 
 		private:
-			// 禁用运算符 "="
+			// override "="
 			holder& operator=(const holder &);
 
         public:
@@ -98,10 +97,10 @@ namespace Echo
         };
 
 	private:
-        placeholder * content;			// 存储内容
+        placeholder* content;
     };
 
-	// 转换失败
+	// bad cast
     class bad_any_cast : public std::bad_cast
     {
     public:
