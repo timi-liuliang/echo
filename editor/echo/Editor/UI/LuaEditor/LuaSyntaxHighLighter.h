@@ -19,10 +19,11 @@ namespace Studio
 		virtual void  highlightBlock( const QString& text) override;
 
 		// append rule
-		void appendRule( int r, int g, int b, const Echo::String& regExp);
+		void appendForegroundRule( int r, int g, int b, const Echo::String& regExp);
+		void appendBackgroundRule( int r, int g, int b, const Echo::String& regExp);
 
 	private:
-		// 高度规则
+		// High light rule
 		struct HighlightingRule
 		{
 			QRegExp			pattern;

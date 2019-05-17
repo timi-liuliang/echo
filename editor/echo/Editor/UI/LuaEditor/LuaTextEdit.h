@@ -38,6 +38,7 @@ namespace Studio
 	protected:
 		virtual void wheelEvent(QWheelEvent* e) override;
 		virtual void mouseMoveEvent(QMouseEvent* e) override;
+		virtual void mouseDoubleClickEvent(QMouseEvent *e) override;
 		virtual void keyPressEvent(QKeyEvent* e) override;
 		virtual void focusInEvent(QFocusEvent* e) override;
 		virtual void resizeEvent(QResizeEvent* e) override;

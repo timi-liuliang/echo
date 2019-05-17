@@ -100,6 +100,15 @@ namespace Studio
 		QPlainTextEdit::mouseMoveEvent(e);
 	}
 
+	void LuaTextEdit::mouseDoubleClickEvent(QMouseEvent *e)
+	{
+		QPlainTextEdit::mouseDoubleClickEvent(e);
+
+		Echo::String selectText = textUnderCursor().toStdString().c_str();
+
+		int a = 10;
+	}
+
 	void LuaTextEdit::keyPressEvent(QKeyEvent* e) 
 	{
 		if (m_completer->popup()->isVisible() && e->key() == Qt::Key_Return)

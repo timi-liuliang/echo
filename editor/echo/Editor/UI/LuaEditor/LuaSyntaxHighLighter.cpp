@@ -3,48 +3,45 @@
 
 namespace Studio
 {
-	// 构造函数
 	LuaSyntaxHighLighter::LuaSyntaxHighLighter(QTextDocument* parent)
 		: QSyntaxHighlighter( parent)
 	{
 		// function
-		appendRule(97, 175, 239, "\\b[A-Za-z0-9_]+(?=\\()");
+		appendForegroundRule(97, 175, 239, "\\b[A-Za-z0-9_]+(?=\\()");
 
 		// keywords
-		appendRule(192, 120, 221, "\\blocal\\b");
-		appendRule(192, 120, 221, "\\bfunction\\b");
-		appendRule(192, 120, 221, "\\bend\\b");
-		appendRule(192, 120, 221, "\\bif\\b");
-		appendRule(192, 120, 221, "\\bthen\\b");
-		appendRule(192, 120, 221, "\\belse\\b");
-		appendRule(192, 120, 221, "\\bdo\\b");
-		appendRule(192, 120, 221, "\\breturn\\b");
-		appendRule(192, 120, 221, "\\bfor\\b");
-		appendRule(192, 120, 221, "\\bin\\b");
+		appendForegroundRule(192, 120, 221, "\\blocal\\b");
+		appendForegroundRule(192, 120, 221, "\\bfunction\\b");
+		appendForegroundRule(192, 120, 221, "\\bend\\b");
+		appendForegroundRule(192, 120, 221, "\\bif\\b");
+		appendForegroundRule(192, 120, 221, "\\bthen\\b");
+		appendForegroundRule(192, 120, 221, "\\belse\\b");
+		appendForegroundRule(192, 120, 221, "\\bdo\\b");
+		appendForegroundRule(192, 120, 221, "\\breturn\\b");
+		appendForegroundRule(192, 120, 221, "\\bfor\\b");
+		appendForegroundRule(192, 120, 221, "\\bin\\b");
 
 		// false true ...
-		appendRule(209, 154, 102, "\\bnil\\b");
-		appendRule(209, 154, 102, "\\btrue\\b");
-		appendRule(209, 154, 102, "\\bfalse\\b");
-		appendRule( 97, 175, 239, "\\bQ[A-Za-z]+\\b");
+		appendForegroundRule(209, 154, 102, "\\bnil\\b");
+		appendForegroundRule(209, 154, 102, "\\btrue\\b");
+		appendForegroundRule(209, 154, 102, "\\bfalse\\b");
+		appendForegroundRule( 97, 175, 239, "\\bQ[A-Za-z]+\\b");
 
+		// command
+		appendForegroundRule(128, 138, 156, "--[^\n]*");
 
-		// 注释
-		appendRule(128, 138, 156, "--[^\n]*");
+		// strings
+		appendForegroundRule( 152, 195, 121, "\".*\"");
 
-		// 字符串
-		appendRule( 152, 195, 121, "\".*\"");
-
-		// 数字
-		appendRule(209, 154, 102, "\\b[0-9]+.?[0-9]+\\b");
-		appendRule(209, 154, 102, "\\b[0-9]+\\b");
+		// number
+		appendForegroundRule(209, 154, 102, "\\b[0-9]+.?[0-9]+\\b");
+		appendForegroundRule(209, 154, 102, "\\b[0-9]+\\b");
 
 		commentStartExpression = QRegExp("--[[");
 		commentEndExpression = QRegExp("]]--");
 	}
 
-	// append rule
-	void LuaSyntaxHighLighter::appendRule(int r, int g, int b, const Echo::String& regExp)
+	void LuaSyntaxHighLighter::appendForegroundRule(int r, int g, int b, const Echo::String& regExp)
 	{
 		QColor color;
 		color.setRgb(r, g, b);
@@ -56,7 +53,18 @@ namespace Studio
 		m_highLightRules.append(rule);
 	}
 
-	// 高度block
+	void LuaSyntaxHighLighter::appendBackgroundRule(int r, int g, int b, const Echo::String& regExp)
+	{
+		QColor color;
+		color.setRgb(r, g, b);
+
+		HighlightingRule rule;
+		rule.format.setBackground(color);
+		rule.pattern = QRegExp(regExp.c_str());
+
+		m_highLightRules.append(rule);
+	}
+
 	void  LuaSyntaxHighLighter::highlightBlock(const QString& text)
 	{
 		foreach (const HighlightingRule &rule, m_highLightRules) 
