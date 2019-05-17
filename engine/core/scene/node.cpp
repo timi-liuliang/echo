@@ -436,33 +436,34 @@ namespace Echo
 	void Node::bindMethods()
 	{
 		BIND_METHOD(Node::load,							DEF_METHOD("Node.load"));
-
+	
+		CLASS_BIND_METHOD(Node, queueFree,				DEF_METHOD("queueFree"));
 		CLASS_BIND_METHOD(Node, getNode,				DEF_METHOD("getNode"));
 		CLASS_BIND_METHOD(Node, addChild, 				DEF_METHOD("addChild"));
 		CLASS_BIND_METHOD(Node, setParent,				DEF_METHOD("setParent"));
-		CLASS_BIND_METHOD(Node, getWorldPosition,		DEF_METHOD("getPosition"));
-		CLASS_BIND_METHOD(Node, getWorldPositionX,		DEF_METHOD("getPositionX"));
-		CLASS_BIND_METHOD(Node, getWorldPositionY,		DEF_METHOD("getPositionY"));
-		CLASS_BIND_METHOD(Node, getWorldPositionZ,		DEF_METHOD("getPositionZ"));
-		CLASS_BIND_METHOD(Node, setWorldPosition,		DEF_METHOD("setPosition"));
-		CLASS_BIND_METHOD(Node, setWorldPositionX,		DEF_METHOD("setPositionX"));
-		CLASS_BIND_METHOD(Node, setWorldPositionY,		DEF_METHOD("setPositionY"));
-		CLASS_BIND_METHOD(Node, setWorldPositionZ,		DEF_METHOD("setPositionZ"));
-		CLASS_BIND_METHOD(Node, getLocalYawPitchRoll,	DEF_METHOD("getYawPitchRoll"));
-		CLASS_BIND_METHOD(Node, getLocalScaling,		DEF_METHOD("getScale"));
-		CLASS_BIND_METHOD(Node, getLocalPosition,		DEF_METHOD("getPos"));
+		CLASS_BIND_METHOD(Node, getWorldPosition,		DEF_METHOD("getWorldPosition"));
+		CLASS_BIND_METHOD(Node, getWorldPositionX,		DEF_METHOD("getWorldPositionX"));
+		CLASS_BIND_METHOD(Node, getWorldPositionY,		DEF_METHOD("getWorldPositionY"));
+		CLASS_BIND_METHOD(Node, getWorldPositionZ,		DEF_METHOD("getWorldPositionZ"));
+		CLASS_BIND_METHOD(Node, setWorldPosition,		DEF_METHOD("setWorldPosition"));
+		CLASS_BIND_METHOD(Node, setWorldPositionX,		DEF_METHOD("setWorldPositionX"));
+		CLASS_BIND_METHOD(Node, setWorldPositionY,		DEF_METHOD("setWorldPositionY"));
+		CLASS_BIND_METHOD(Node, setWorldPositionZ,		DEF_METHOD("setWorldPositionZ"));
+		CLASS_BIND_METHOD(Node, getLocalYawPitchRoll,	DEF_METHOD("getLocalYawPitchRoll"));
+		CLASS_BIND_METHOD(Node, getLocalScaling,		DEF_METHOD("getLocalScaling"));
+		CLASS_BIND_METHOD(Node, setLocalScaling,		DEF_METHOD("setLocalScaling"));
+		CLASS_BIND_METHOD(Node, getLocalPosition,		DEF_METHOD("getLocalPosition"));
 		CLASS_BIND_METHOD(Node, setLocalPosition,		DEF_METHOD("setLocalPosition"));
-		CLASS_BIND_METHOD(Node, setLocalScaling,		DEF_METHOD("setScale"));
-		CLASS_BIND_METHOD(Node, setLocalYawPitchRoll,	DEF_METHOD("setYawPitchRoll"));
+		CLASS_BIND_METHOD(Node, setLocalYawPitchRoll,	DEF_METHOD("setLocalYawPitchRoll"));
 		CLASS_BIND_METHOD(Node, setEnable,				DEF_METHOD("setEnable"));
 		CLASS_BIND_METHOD(Node, isEnable,				DEF_METHOD("isEnable"));
 		CLASS_BIND_METHOD(Node, setScript,				DEF_METHOD("setScript"));
 		CLASS_BIND_METHOD(Node, getScript,				DEF_METHOD("getScript"));
 
 		CLASS_REGISTER_PROPERTY(Node, "Enable", Variant::Type::Bool, "isEnable", "setEnable");
-		CLASS_REGISTER_PROPERTY(Node, "Position", Variant::Type::Vector3, "getPos", "setLocalPosition");
-		CLASS_REGISTER_PROPERTY(Node, "Rotation", Variant::Type::Vector3, "getYawPitchRoll", "setYawPitchRoll");
-		CLASS_REGISTER_PROPERTY(Node, "Scale",  Variant::Type::Vector3, "getScale", "setScale");
+		CLASS_REGISTER_PROPERTY(Node, "Position", Variant::Type::Vector3, "getLocalPosition", "setLocalPosition");
+		CLASS_REGISTER_PROPERTY(Node, "Rotation", Variant::Type::Vector3, "getLocalYawPitchRoll", "setLocalYawPitchRoll");
+		CLASS_REGISTER_PROPERTY(Node, "Scale",  Variant::Type::Vector3, "getLocalScaling", "setLocalScaling");
 		CLASS_REGISTER_PROPERTY(Node, "Script", Variant::Type::ResourcePath, "getScript", "setScript");
 	}
 
