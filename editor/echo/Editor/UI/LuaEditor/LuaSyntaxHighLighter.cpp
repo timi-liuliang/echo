@@ -41,29 +41,55 @@ namespace Studio
 		commentEndExpression = QRegExp("]]--");
 	}
 
-	void LuaSyntaxHighLighter::appendForegroundRule(int r, int g, int b, const Echo::String& regExp)
+	void LuaSyntaxHighLighter::appendForegroundRule(int r, int g, int b, const Echo::String& regExp, RuleGroup group)
 	{
 		QColor color;
 		color.setRgb(r, g, b);
 
 		HighlightingRule rule;
+        rule.group = group;
 		rule.format.setForeground(color);
 		rule.pattern = QRegExp(regExp.c_str());
 
 		m_highLightRules.append(rule);
+        
+        // update display immediately
+        //rehighlight();
 	}
 
-	void LuaSyntaxHighLighter::appendBackgroundRule(int r, int g, int b, const Echo::String& regExp)
+	void LuaSyntaxHighLighter::appendBackgroundRule(int r, int g, int b, const Echo::String& regExp, RuleGroup group)
 	{
 		QColor color;
 		color.setRgb(r, g, b);
 
 		HighlightingRule rule;
+        rule.group = group;
 		rule.format.setBackground(color);
 		rule.pattern = QRegExp(regExp.c_str());
 
 		m_highLightRules.append(rule);
+        
+        // update display immediately
+        //rehighlight();
 	}
+    
+    void LuaSyntaxHighLighter::removeRule(RuleGroup group)
+    {
+        bool isNeedRehightlight = false;
+        for(QVector<HighlightingRule>::iterator it=m_highLightRules.begin(); it!=m_highLightRules.end();)
+        {
+            if(it->group == group)
+            {
+                it = m_highLightRules.erase(it);
+                isNeedRehightlight = true;
+            }
+            else
+                it++;
+        }
+        
+        //if(isNeedRehightlight)
+        //    rehighlight();
+    }
 
 	void  LuaSyntaxHighLighter::highlightBlock(const QString& text)
 	{

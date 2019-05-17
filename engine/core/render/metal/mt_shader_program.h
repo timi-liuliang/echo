@@ -10,10 +10,7 @@ namespace Echo
      */
 	class MTShaderProgram : public ShaderProgram
 	{
-    public:
-        // link
-        virtual bool linkShaders() override {return true;}
-        
+    public:        
         // get mtl function
         id<MTLFunction> getMetalVertexFunction() { return m_metalVertexShader; }
         id<MTLFunction> getMetalFragmentFunction() { return m_metalFragmentShader; }

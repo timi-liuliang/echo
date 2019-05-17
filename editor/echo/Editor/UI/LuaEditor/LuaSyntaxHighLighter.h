@@ -10,22 +10,34 @@ namespace Studio
 	class LuaSyntaxHighLighter : public QSyntaxHighlighter
 	{
 		Q_OBJECT
+        
+    public:
+        // group
+        enum RuleGroup
+        {
+            RG_Default = 0,
+            RG_SelectTextBlock = 1,
+        };
 
 	public:
 		LuaSyntaxHighLighter(QTextDocument* parent = 0);
+        
+        // append rule
+        void appendForegroundRule( int r, int g, int b, const Echo::String& regExp, RuleGroup group=RG_Default);
+        void appendBackgroundRule( int r, int g, int b, const Echo::String& regExp, RuleGroup group=RG_Default);
+        
+        // remove rule
+        void removeRule(RuleGroup group);
 
 	protected:
 		// hight light block
 		virtual void  highlightBlock( const QString& text) override;
 
-		// append rule
-		void appendForegroundRule( int r, int g, int b, const Echo::String& regExp);
-		void appendBackgroundRule( int r, int g, int b, const Echo::String& regExp);
-
 	private:
 		// High light rule
 		struct HighlightingRule
 		{
+            RuleGroup       group;
 			QRegExp			pattern;
 			QTextCharFormat format;
 		};

@@ -14,6 +14,7 @@ namespace Studio
 
 		// syntax high lighter
 		m_luaSyntaxHighLighter = new LuaSyntaxHighLighter(m_plainTextEdit->document());
+        m_plainTextEdit->setSyntaxHighter(m_luaSyntaxHighLighter);
 
 		// connections
 		QObject::connect(m_plainTextEdit, SIGNAL(textChanged()), this, SLOT(onTextChanged()));

@@ -79,12 +79,6 @@ namespace Echo
         return EchoNew(MTShaderProgram);
     }
     
-    Shader* MTRenderer::createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const char* srcBuffer, ui32 size)
-    {
-        return nullptr;// EchoNew(MTShader( type, desc, srcBuffer, size));
-    }
-    
-    // create states
     RasterizerState* MTRenderer::createRasterizerState(const RasterizerState::RasterizerDesc& desc)
     {
         return EchoNew(MTRasterizerState);

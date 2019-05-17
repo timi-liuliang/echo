@@ -6,6 +6,7 @@
 
 namespace Studio
 {
+    class LuaSyntaxHighLighter;
 	class LuaTextEditLineNumberArea;
 	class LuaTextEdit : public  QPlainTextEdit
 	{
@@ -17,6 +18,10 @@ namespace Studio
 
 		void setModel(const QStringList& words);
 		QCompleter* getCompleter() const;
+        
+    public:
+        // set syntax hightlighter
+        void setSyntaxHighter(LuaSyntaxHighLighter* highLighter) { m_luaSyntaxHighLighter = highLighter; }
 
 	public:
 		// draw line number paint event
@@ -38,6 +43,7 @@ namespace Studio
 	protected:
 		virtual void wheelEvent(QWheelEvent* e) override;
 		virtual void mouseMoveEvent(QMouseEvent* e) override;
+        virtual void mousePressEvent(QMouseEvent* e) override;
 		virtual void mouseDoubleClickEvent(QMouseEvent *e) override;
 		virtual void keyPressEvent(QKeyEvent* e) override;
 		virtual void focusInEvent(QFocusEvent* e) override;
@@ -63,5 +69,6 @@ namespace Studio
 		QStringList					m_keyWords;
 		QCompleter*					m_completer;
 		LuaTextEditLineNumberArea*	m_lineNumberArea;
+        LuaSyntaxHighLighter*       m_luaSyntaxHighLighter = nullptr;
 	};
 }

@@ -12,6 +12,7 @@
 #include <engine/core/log/Log.h>
 #include "Studio.h"
 #include "LuaTextEditLineNumberArea.h"
+#include "LuaSyntaxHighLighter.h"
 
 namespace Studio
 {
@@ -99,14 +100,24 @@ namespace Studio
 	{
 		QPlainTextEdit::mouseMoveEvent(e);
 	}
+    
+    void LuaTextEdit::mousePressEvent(QMouseEvent* e)
+    {
+        QPlainTextEdit::mousePressEvent(e);
+        
+        m_luaSyntaxHighLighter->removeRule( LuaSyntaxHighLighter::RG_SelectTextBlock);
+    }
 
 	void LuaTextEdit::mouseDoubleClickEvent(QMouseEvent *e)
 	{
 		QPlainTextEdit::mouseDoubleClickEvent(e);
 
 		Echo::String selectText = textUnderCursor().toStdString().c_str();
-
-		int a = 10;
+        if(!selectText.empty() && m_luaSyntaxHighLighter)
+        {
+            m_luaSyntaxHighLighter->removeRule( LuaSyntaxHighLighter::RG_SelectTextBlock);
+            m_luaSyntaxHighLighter->appendBackgroundRule(192, 120, 221, Echo::StringUtil::Format("\\b%s\\b", selectText.c_str()), LuaSyntaxHighLighter::RG_SelectTextBlock);
+        }
 	}
 
 	void LuaTextEdit::keyPressEvent(QKeyEvent* e) 
