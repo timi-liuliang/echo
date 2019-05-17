@@ -163,6 +163,8 @@ namespace Echo
 		{
 			setLocalPosition(pos);
 		}
+        
+        m_worldTransform.m_pos = pos;
 	}
 
 	void Node::setWorldPositionX(float x)
