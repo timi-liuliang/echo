@@ -1,37 +1,27 @@
-MESSAGE(STATUS "configuring module: baseserver...")
-
-# 附加包含目录
-SET(INCLUDE_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}
-	${ECHO_SRC_PATH}
-)
-
-INCLUDE_DIRECTORIES( ${INCLUDE_FILES})
-
-# 链接库
-LINK_DIRECTORIES(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
-LINK_LIBRARIES()
-
-# 设置项目路径
-SET(MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
-
-# 递归获取所有c++文件
-FILE(GLOB_RECURSE HEADER_FILES ${MODULE_PATH}/*.h ${MODULE_PATH}/*.inl)
-FILE(GLOB_RECURSE SOURCE_FILES ${MODULE_PATH}/*.cpp ${MODULE_PATH}/*.mm ${MODULE_PATH}/*.c)
-SET(ALL_FILES ${HEADER_FILES} ${SOURCE_FILES})
-
-# 分组文件
-GROUP_FILES(ALL_FILES ${CMAKE_CURRENT_SOURCE_DIR})
-
-# 设置模块名称
+# Set Module Name
 SET(MODULE_NAME spine)
 
-# 新加库
-ADD_LIBRARY(${MODULE_NAME} STATIC ${HEADER_FILES} ${SOURCE_FILES} CMakeLists.txt)
+# Begin configure module
+MESSAGE( STATUS "Configuring module: ${MODULE_NAME}...")
 
-# 设置目标属性
+# Include Directories
+INCLUDE_DIRECTORIES( ${ECHO_SRC_PATH})
+INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR})
+
+# Link Directories
+LINK_DIRECTORIES(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+
+# Recursive get all files
+FILE( GLOB_RECURSE ALL_FILES *.h *.hpp *.inl *.c *.cpp *.mm)
+
+# Group
+GROUP_FILES(ALL_FILES ${CMAKE_CURRENT_SOURCE_DIR})
+
+# Add library
+ADD_LIBRARY(${MODULE_NAME} ${ALL_FILES} CMakeLists.txt)
+
+# Set Folder
 SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES FOLDER "thirdparty")
 
-MESSAGE(STATUS "baseserver configure success!")
-
-
+# Message
+MESSAGE(STATUS "Configure success!")
