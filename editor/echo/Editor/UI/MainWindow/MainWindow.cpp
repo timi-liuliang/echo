@@ -314,7 +314,7 @@ namespace Studio
 		}
 		else if (renderType == "3D")
 		{
-			Echo::Render::setRenderTypes(Echo::Render::Type_3D | Echo::Render::Type_Ui);
+			Echo::Render::setRenderTypes(Echo::Render::Type_3D);
 
 			RenderWindow* renderWindow = ECHO_DOWN_CAST<RenderWindow*>(AStudio::instance()->getRenderWindow());
 			if (renderWindow)
