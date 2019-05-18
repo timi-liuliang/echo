@@ -166,7 +166,7 @@ namespace Echo
 		if (it != m_renderables.end())
 			return it->second;
 
-		return NULL;
+		return nullptr;
 	}
 
 	void Renderer::destroyRenderables(Renderable** renderables, int num)
@@ -181,7 +181,7 @@ namespace Echo
 				m_renderables.erase(it);
 
 				EchoSafeDelete(renderable, Renderable);
-				renderables[i] = NULL;
+				renderables[i] = nullptr;
 			}
 		}
 	}

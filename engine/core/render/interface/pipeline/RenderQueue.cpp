@@ -53,7 +53,7 @@ namespace Echo
 		{
 			Renderable* renderableA = Renderer::instance()->getRenderable(a);
 			Renderable* renderableB = Renderer::instance()->getRenderable(b);
-			return renderableA->getNode()->getWorldPosition().z < renderableB->getNode()->getWorldPosition().z;
+			return renderableA && renderableB ? renderableA->getNode()->getWorldPosition().z < renderableB->getNode()->getWorldPosition().z : false;
 		});
 	}
 
