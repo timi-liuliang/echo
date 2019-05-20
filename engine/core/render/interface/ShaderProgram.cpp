@@ -8,9 +8,27 @@
 #include "engine/core/io/IO.h"
 #include "MaterialDesc.h"
 #include <thirdparty/pugixml/pugixml.hpp>
+#include "glslcc/GLSLCrossCompiler.h"
 
 namespace Echo
 {
+    static bool convert(String& vsSrc, String& psSrc)
+    {
+        // convert to metal
+        if(strcmp(Renderer::instance()->getName(), "Metal") == 0)
+        {
+            GLSLCrossCompiler glslCompiler;
+            
+            // set input
+            glslCompiler.setInput( vsSrc.c_str(), psSrc.c_str(), nullptr);
+            
+            vsSrc = glslCompiler.getOutput(Echo::GLSLCrossCompiler::ShaderLanguage::MSL, Echo::GLSLCrossCompiler::ShaderType::VS).c_str();
+            psSrc = glslCompiler.getOutput(Echo::GLSLCrossCompiler::ShaderLanguage::MSL, Echo::GLSLCrossCompiler::ShaderType::FS).c_str();
+        }
+        
+        return true;
+    }
+    
 	// set value
 	void ShaderProgram::Uniform::setValue(const void* value)
 	{
@@ -175,6 +193,11 @@ namespace Echo
 						throw false;
 				}
 			}
+            
+            if(type=="glsl")
+            {
+                convert( vsSrc, psSrc);
+            }
 
 			if(!createShaderProgram( vsSrc, psSrc))
 			{

@@ -2,10 +2,66 @@
 #include "engine/core/memory/MemAllocDef.h"
 #include "engine/core/scene/node_tree.h"
 
+#ifdef ECHO_PLATFORM_MAC
 // opaque material
 static const char* g_gizmoOpaqueMaterial = R"(
 <?xml version = "1.0" encoding = "utf-8"?>
 <Shader type="glsl">
+<VS>#version 100
+
+attribute vec3 a_Position;
+attribute vec4 a_Color;
+
+uniform mat4 u_WorldMatrix;
+uniform mat4 u_ViewProjMatrix;
+
+varying vec3 v_Position;
+varying vec4 v_Color;
+
+void main(void)
+{
+    vec4 position = /*u_WorldMatrix */ vec4(a_Position, 1.0);
+    
+    v_Position  = position.xyz;
+    gl_Position = u_ViewProjMatrix * position;
+    
+    v_Color = a_Color;
+}
+</VS>
+<PS>#version 100
+
+precision mediump float;
+
+uniform vec3  u_CameraPosition;
+uniform float u_CameraFar;
+
+varying vec3  v_Position;
+varying vec4  v_Color;
+
+void main(void)
+{
+    gl_FragColor    = v_Color;
+}
+</PS>
+<BlendState>
+<BlendEnable value = "true" />
+<SrcBlend value = "BF_SRC_ALPHA" />
+<DstBlend value = "BF_INV_SRC_ALPHA" />
+</BlendState>
+<RasterizerState>
+<CullMode value = "CULL_NONE" />
+</RasterizerState>
+<DepthStencilState>
+<DepthEnable value = "true" />
+<WriteDepth value = "false" />
+</DepthStencilState>
+</Shader>
+)";
+#else
+// opaque material
+static const char* g_gizmoOpaqueMaterial = R"(
+<?xml version = "1.0" encoding = "utf-8"?>
+<Shader>
 	<VS>#version 100
 
 		attribute vec3 a_Position;
@@ -56,6 +112,7 @@ static const char* g_gizmoOpaqueMaterial = R"(
 	</DepthStencilState>
 </Shader>
 )";
+#endif
 
 namespace Echo
 {
