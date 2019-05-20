@@ -3,44 +3,57 @@
 #include "engine/core/scene/node_tree.h"
 
 #ifdef ECHO_PLATFORM_MAC
-// opaque material
 static const char* g_gizmoOpaqueMaterial = R"(
 <?xml version = "1.0" encoding = "utf-8"?>
 <Shader type="glsl">
-<VS>#version 100
+<VS>#version 450
+// uniforms
+layout(binding = 0) uniform UBO
+{
+    mat4 u_WorldMatrix;
+    mat4 u_ViewProjMatrix;
+} ubo;
 
-attribute vec3 a_Position;
-attribute vec4 a_Color;
+// inputs
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec4 a_Color;
 
-uniform mat4 u_WorldMatrix;
-uniform mat4 u_ViewProjMatrix;
-
-varying vec3 v_Position;
-varying vec4 v_Color;
+// outputs
+layout(location = 0) out vec3 v_Position;
+layout(location = 1) out vec4 v_Color;
 
 void main(void)
 {
     vec4 position = /*u_WorldMatrix */ vec4(a_Position, 1.0);
     
     v_Position  = position.xyz;
-    gl_Position = u_ViewProjMatrix * position;
+    gl_Position = ubo.u_ViewProjMatrix * position;
     
     v_Color = a_Color;
 }
 </VS>
-<PS>#version 100
+<PS>#version 450
 
 precision mediump float;
 
-uniform vec3  u_CameraPosition;
-uniform float u_CameraFar;
+// uniforms
+layout(binding = 0) uniform UBO
+{
+    vec3  u_CameraPosition;
+    float u_CameraFar;
+} ubo;
 
-varying vec3  v_Position;
-varying vec4  v_Color;
+
+// inputs
+layout(location = 0) in vec3  v_Position;
+layout(location = 1) in vec4  v_Color;
+
+// outputs
+layout(location = 0) out vec4 o_FragColor;
 
 void main(void)
 {
-    gl_FragColor    = v_Color;
+    o_FragColor = v_Color;
 }
 </PS>
 <BlendState>
