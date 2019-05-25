@@ -1,12 +1,12 @@
 # How To Static Compile Qt 
 
-## 安装，只需安装源码即可。
+## Only Src in need to be installed
  
-## 指令
-#### Mac 平台
-../src/configure -static -release -ltcg -optimize-size -no-pch -no-opengl -no-angle -prefix "../static_output" -skip webengine -nomake tools -nomake tools -nomake tests -nomake examples 
+## Command
+#### Mac Platform
+./Src/configure -static -release -ltcg -optimize-size -no-pch -no-opengl -no-angle -prefix "./static_output" -skip webengine -nomake tools -nomake tools -nomake tests -nomake examples 
 
-#### Windows 平台
+#### Windows Platform
 ../src/configure -static -release -ltcg -optimize-size -no-pch -no-opengl -no-angle -prefix "../static_output" -skip webengine -nomake tools -nomake tools -nomake tests -nomake examples 
 
 # Reference
