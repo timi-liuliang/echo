@@ -14,7 +14,7 @@ configure -h
  
 ## Command
 #### Mac Platform
-./../Src/configure -static -release -platform macx-clang QMAKE_APPLE_DEVICE_ARCHS=x86_64 -ltcg -optimize-size -no-pch -no-opengl -no-angle -no-feature-accessibility -prefix "./../clang_64_static" -skip webengine -skip qtconnectivity -skip qtdoc -nomake tools -nomake tools -nomake tests -nomake examples 
+./../Src/configure -static -release -platform macx-clang QMAKE_APPLE_DEVICE_ARCHS=x86_64 -ltcg -optimize-size -no-pch -no-opengl -no-angle -prefix "./../clang_64_static" -skip webengine -skip doc -nomake tools -nomake tools -nomake tests -nomake examples 
 
 #### Windows Platform
 ./src/configure -static -release -ltcg -optimize-size -no-pch -no-opengl -no-angle -prefix "./static_output" -skip webengine -skip qtconnectivity -nomake tools -nomake tools -nomake tests -nomake examples 
