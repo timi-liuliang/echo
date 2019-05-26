@@ -1,0 +1,11 @@
+QT.positioningquick_private.VERSION = 5.12.3
+QT.positioningquick_private.name = QtPositioningQuick
+QT.positioningquick_private.module =
+QT.positioningquick_private.libs = $$QT_MODULE_LIB_BASE
+QT.positioningquick_private.includes = $$QT_MODULE_LIB_BASE/QtPositioningQuick.framework/Headers/5.12.3 $$QT_MODULE_LIB_BASE/QtPositioningQuick.framework/Headers/5.12.3/QtPositioningQuick
+QT.positioningquick_private.frameworks =
+QT.positioningquick_private.depends = quick_private positioning_private qml_private core_private positioningquick
+QT.positioningquick_private.uses =
+QT.positioningquick_private.module_config = v2 lib_bundle internal_module
+QT.positioningquick_private.enabled_features =
+QT.positioningquick_private.disabled_features =

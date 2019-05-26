@@ -1,0 +1,11 @@
+QT.webview_private.VERSION = 5.12.3
+QT.webview_private.name = QtWebView
+QT.webview_private.module =
+QT.webview_private.libs = $$QT_MODULE_LIB_BASE
+QT.webview_private.includes = $$QT_MODULE_LIB_BASE/QtWebView.framework/Headers/5.12.3 $$QT_MODULE_LIB_BASE/QtWebView.framework/Headers/5.12.3/QtWebView
+QT.webview_private.frameworks =
+QT.webview_private.depends = webview quick_private core_private gui_private
+QT.webview_private.uses =
+QT.webview_private.module_config = v2 lib_bundle internal_module
+QT.webview_private.enabled_features =
+QT.webview_private.disabled_features =

@@ -1,0 +1,7 @@
+
+add_library(Qt5::QGeoServiceProviderFactoryItemsOverlay MODULE IMPORTED)
+
+_populate_Location_plugin_properties(QGeoServiceProviderFactoryItemsOverlay RELEASE "geoservices/libqtgeoservices_itemsoverlay.dylib")
+_populate_Location_plugin_properties(QGeoServiceProviderFactoryItemsOverlay DEBUG "geoservices/libqtgeoservices_itemsoverlay.dylib")
+
+list(APPEND Qt5Location_PLUGINS Qt5::QGeoServiceProviderFactoryItemsOverlay)

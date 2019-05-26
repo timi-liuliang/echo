@@ -1,0 +1,11 @@
+QT.repparser_private.VERSION = 5.12.3
+QT.repparser_private.name = QtRepParser
+QT.repparser_private.module =
+QT.repparser_private.libs = $$QT_MODULE_LIB_BASE
+QT.repparser_private.includes = $$QT_MODULE_LIB_BASE/QtRepParser.framework/Headers/5.12.3 $$QT_MODULE_LIB_BASE/QtRepParser.framework/Headers/5.12.3/QtRepParser
+QT.repparser_private.frameworks =
+QT.repparser_private.depends = repparser
+QT.repparser_private.uses =
+QT.repparser_private.module_config = v2 lib_bundle internal_module
+QT.repparser_private.enabled_features =
+QT.repparser_private.disabled_features =
