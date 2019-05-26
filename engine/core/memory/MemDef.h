@@ -26,4 +26,4 @@
 // Echo STL memory allocator
 #define ECHO_STL_MEMORY_ALLOCATOR	ECHO_STL_MEMORY_ALLOCATOR_STANDARD
 
-#define ECHO_MEMORY_LEAKS_FILENAME	"memory_leaks.log"
+#define ECHO_MEMORY_LEAKS_FILENAME	"cache/memory_leaks.log"

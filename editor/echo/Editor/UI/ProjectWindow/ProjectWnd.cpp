@@ -29,7 +29,7 @@ namespace Studio
         m_versionListWidget->setAttribute(Qt::WA_MacShowFocusRect,0);
         
         // adjust size
-        adjustWidgetSizeByOS(this);
+        // adjustWidgetSizeByOS(this);
 #endif
 
 		// set top left corner icon
