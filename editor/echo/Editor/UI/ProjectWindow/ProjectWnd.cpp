@@ -27,6 +27,9 @@ namespace Studio
         //macChangeTitleBarColor( winId(), 0.0, 0.0, 0.0);
         m_menuBar->setNativeMenuBar(false);
         m_versionListWidget->setAttribute(Qt::WA_MacShowFocusRect,0);
+        
+        // adjust size
+        adjustWidgetSizeByOS(this);
 #endif
 
 		// set top left corner icon
