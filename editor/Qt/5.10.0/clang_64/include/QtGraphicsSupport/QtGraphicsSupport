@@ -1,5 +1,0 @@
-#ifndef QT_QTGRAPHICSSUPPORT_MODULE_H
-#define QT_QTGRAPHICSSUPPORT_MODULE_H
-#include <QtGraphicsSupport/QtGraphicsSupportDepends>
-#include "qtgraphicssupportversion.h"
-#endif

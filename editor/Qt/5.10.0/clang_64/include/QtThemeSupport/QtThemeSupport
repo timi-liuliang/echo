@@ -1,5 +1,0 @@
-#ifndef QT_QTTHEMESUPPORT_MODULE_H
-#define QT_QTTHEMESUPPORT_MODULE_H
-#include <QtThemeSupport/QtThemeSupportDepends>
-#include "qtthemesupportversion.h"
-#endif

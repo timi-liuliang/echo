@@ -1,5 +1,0 @@
-#ifndef QT_QTPLATFORMCOMPOSITORSUPPORT_MODULE_H
-#define QT_QTPLATFORMCOMPOSITORSUPPORT_MODULE_H
-#include <QtPlatformCompositorSupport/QtPlatformCompositorSupportDepends>
-#include "qtplatformcompositorsupportversion.h"
-#endif

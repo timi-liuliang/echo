@@ -1,5 +1,0 @@
-#ifndef QT_QTEVENTDISPATCHERSUPPORT_MODULE_H
-#define QT_QTEVENTDISPATCHERSUPPORT_MODULE_H
-#include <QtEventDispatcherSupport/QtEventDispatcherSupportDepends>
-#include "qteventdispatchersupportversion.h"
-#endif
