@@ -16,7 +16,7 @@ namespace Echo
     // get camera2d icon, used for editor
     const char* UiEventRegionRectEditor::getEditorIcon() const
     {
-        return "engine/modules/ui/editor/icon/image.png";
+        return "engine/modules/ui/editor/icon/event_region_rect.png";
     }
 #endif
 }

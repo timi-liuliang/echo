@@ -6,7 +6,7 @@ namespace Echo
 {
     class UiEventRegion : public Node
     {
-        ECHO_CLASS(UiEventRegion, Node)
+        ECHO_VIRTUAL_CLASS(UiEventRegion, Node)
         
     public:
         UiEventRegion();
