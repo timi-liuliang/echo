@@ -1,5 +1,5 @@
 #include "image.h"
-#include "material.h"
+#include "../render/material.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/scene/node_tree.h"
 #include "interface/Renderer.h"

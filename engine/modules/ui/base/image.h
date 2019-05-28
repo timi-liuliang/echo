@@ -4,7 +4,7 @@
 #include "engine/core/render/interface/mesh/Mesh.h"
 #include "engine/core/render/interface/Material.h"
 #include "engine/core/render/interface/Renderable.h"
-#include "vertex_format.h"
+#include "../render/vertex_format.h"
 
 namespace Echo
 {
