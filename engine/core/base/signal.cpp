@@ -4,7 +4,7 @@
 
 namespace Echo
 {
-	void Connect::emit(const Variant** args, int argCount)
+	void Connect::emitSignal(const Variant** args, int argCount)
 	{
 		Variant::CallError error;
 		m_method->call(m_target,  args, argCount, error);

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/core/base/object.h"
+#include "engine/core/base/signal.h"
 #include "mouse.h"
 
 namespace Echo
@@ -26,6 +27,10 @@ namespace Echo
 		// called by os
 		void notifyMouseButtonDown(Echo::ui32 id);
 		void notifyMouseButtonUp(Echo::ui32 id);
+        
+    public:
+        // on Mouse button down signal
+        Signal0  onMouseButtonDownEvent;
 
 	private:
 		Input();

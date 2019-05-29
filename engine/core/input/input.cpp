@@ -57,6 +57,9 @@ namespace Echo
 	{
 		m_mouseState.m_mouseButtonStates[id].m_isDown = true;
 		m_mouseState.m_mouseButtonStates[id].m_frame = m_frame;
+        
+        // emit Mouse button event
+        onMouseButtonDownEvent();
 	}
 
 	void Input::notifyMouseButtonUp(Echo::ui32 id)

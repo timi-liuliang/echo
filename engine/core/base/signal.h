@@ -23,7 +23,7 @@ namespace Echo
 		{}
 
 		// emit
-		void emit(const Variant** args, int argCount);
+		void emitSignal(const Variant** args, int argCount);
 	};
 
 	// Signal
@@ -48,7 +48,7 @@ namespace Echo
 		{
 			for (Connect& connect : m_connects)
 			{
-				connect.emit(nullptr, 0);
+				connect.emitSignal(nullptr, 0);
 			}
 		}
 	};

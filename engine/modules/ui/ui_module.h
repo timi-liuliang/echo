@@ -13,6 +13,5 @@ namespace Echo
 		virtual void registerTypes() override;
 
 		// get font
-
 	};
 }
