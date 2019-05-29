@@ -27,6 +27,8 @@ namespace Echo
 	};
 
 	// Signal
+    // Reference: https://github.com/pbhogan/Signals
+    // A lightweight signals and slots implementation
 	class Signal
 	{
 	public:
