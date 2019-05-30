@@ -110,7 +110,8 @@ namespace Game
 	void Window::mousePressEvent(QMouseEvent* e)
 	{
 		Echo::ui32 buttonId = e->button() == Qt::LeftButton ? 0 : ( e->button() == Qt::RightButton ? 1 : 2);
-		Echo::Input::instance()->notifyMouseButtonDown(buttonId);
+		const QPointF& windowPos = e->windowPos();
+		Echo::Input::instance()->notifyMouseButtonDown(buttonId, Echo::Vector2(windowPos.x(), windowPos.y()));
 	}
 
 	void Window::mouseDoubleClickEvent(QMouseEvent* e)
@@ -122,7 +123,8 @@ namespace Game
 	void Window::mouseReleaseEvent(QMouseEvent* e)
 	{
 		Echo::ui32 buttonId = e->button() == Qt::LeftButton ? 0 : (e->button() == Qt::RightButton ? 1 : 2);
-		Echo::Input::instance()->notifyMouseButtonUp(buttonId);
+		const QPointF& windowPos = e->windowPos();
+		Echo::Input::instance()->notifyMouseButtonUp(buttonId, Echo::Vector2(windowPos.x(), windowPos.y()));
 	}
 
 	void Window::keyPressEvent(QKeyEvent* e)

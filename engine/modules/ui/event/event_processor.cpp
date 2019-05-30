@@ -1,6 +1,11 @@
 #include "event_processor.h"
 #include "engine/core/input/input.h"
 #include "engine/core/log/Log.h"
+#include "event_region.h"
+#include "event_region_rect.h"
+#include "engine/core/camera/Camera.h"
+#include "engine/core/scene/node_tree.h"
+#include "engine/core/geom/Ray.h"
 
 namespace Echo
 {
@@ -25,6 +30,28 @@ namespace Echo
     
     void UiEventProcessor::onMouseButtonDown()
     {
-        EchoLogError("-------------");
+		Camera* camera = NodeTree::instance()->getUiCamera();
+		if (camera)
+		{
+			Ray ray;
+			camera->getCameraRay(ray, Input::instance()->getMousePosition());
+			for (UiEventRegion* eventRegion : m_eventRegions)
+			{
+				if (eventRegion->isIntersect( ray))
+				{
+					eventRegion->onMouseButtonDown();
+				}
+			}
+		}
     }
+
+	void UiEventProcessor::registerEventRegion(UiEventRegion* eventRegion)
+	{
+		m_eventRegions.insert(eventRegion);
+	}
+
+	void UiEventProcessor::unregisterEventRegion(UiEventRegion* eventRegion)
+	{
+		m_eventRegions.erase(eventRegion);
+	}
 }

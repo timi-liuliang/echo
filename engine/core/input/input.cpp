@@ -53,18 +53,20 @@ namespace Echo
 	}
 
 	// called by os
-	void Input::notifyMouseButtonDown(Echo::ui32 id)
+	void Input::notifyMouseButtonDown(Echo::ui32 id, const Vector2& pos)
 	{
 		m_mouseState.m_mouseButtonStates[id].m_isDown = true;
 		m_mouseState.m_mouseButtonStates[id].m_frame = m_frame;
+		m_mouseState.m_mouseButtonStates[id].m_position = pos;
         
         // emit Mouse button event
         onMouseButtonDownEvent();
 	}
 
-	void Input::notifyMouseButtonUp(Echo::ui32 id)
+	void Input::notifyMouseButtonUp(Echo::ui32 id, const Vector2& pos)
 	{
 		m_mouseState.m_mouseButtonStates[id].m_isDown = false;
 		m_mouseState.m_mouseButtonStates[id].m_frame = m_frame;
+		m_mouseState.m_mouseButtonStates[id].m_position = pos;
 	}
 }

@@ -24,9 +24,12 @@ namespace Echo
 		bool isMouseButtonUp(Echo::ui32 id);
 		bool getMouseButtonUp(Echo::ui32 id);
 
+		// get mouse position
+		const Vector2& getMousePosition() { return m_mouseState.m_mouseButtonStates[0].m_position; }
+
 		// called by os
-		void notifyMouseButtonDown(Echo::ui32 id);
-		void notifyMouseButtonUp(Echo::ui32 id);
+		void notifyMouseButtonDown(Echo::ui32 id, const Vector2& pos);
+		void notifyMouseButtonUp(Echo::ui32 id, const Vector2& pos);
         
     public:
         // on Mouse button down signal
