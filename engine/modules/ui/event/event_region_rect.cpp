@@ -26,6 +26,8 @@ namespace Echo
 		if (m_width != width)
 		{
 			m_width = width;
+
+			updateLocalAABB();
 		}
 	}
 
@@ -34,12 +36,35 @@ namespace Echo
 		if (m_height != height)
 		{
 			m_height = height;
+
+			updateLocalAABB();
 		}
 	}
 
 	// is intersect with screen coordinate
 	bool UiEventRegionRect::isIntersect(const Ray& ray)
 	{
-		return true;
+		AABB worldBox;
+		buildWorldAABB(worldBox);
+
+		return worldBox.isValid() ? ray.hitBox(worldBox) : false;
+	}
+
+	void UiEventRegionRect::updateLocalAABB()
+	{
+		Vector3 halfUp = Vector3::UNIT_Y * getHeight() * 0.5f;
+		Vector3 halfRight = Vector3::UNIT_X * getWidth() * 0.5f;
+		Vector3 center = Vector3::ZERO;
+
+		Vector3 v0 = center - halfRight + halfUp;
+		Vector3 v1 = center - halfRight - halfUp;
+		Vector3 v2 = center + halfRight - halfUp;
+		Vector3 v3 = center + halfRight + halfUp;
+
+		m_localAABB.reset();
+		m_localAABB.addPoint(v0);
+		m_localAABB.addPoint(v1);
+		m_localAABB.addPoint(v2);
+		m_localAABB.addPoint(v3);
 	}
 }

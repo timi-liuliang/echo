@@ -25,6 +25,10 @@ namespace Echo
 		virtual bool isIntersect(const Ray& ray) override;
 
 	private:
+		// update local aabb by width and height
+		void updateLocalAABB();
+
+	private:
 		i32     m_width = 64;
 		i32		m_height = 64;
     };
