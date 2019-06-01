@@ -583,6 +583,8 @@ namespace Studio
         {
             showObjectSignalRecursive( object, object->getClassName());
         }
+        
+        m_signalTreeWidget->expandAll();
     }
     
     void NodeTreePanel::showObjectSignalRecursive(Echo::Object* classPtr, const Echo::String& className)
@@ -606,7 +608,6 @@ namespace Studio
                 QTreeWidgetItem* classItem = new QTreeWidgetItem();
                 classItem->setText(0, className.c_str());
                 //classItem->setBold(true);
-                m_signalTreeWidget->invisibleRootItem()->addChild(classItem);
                 
                 // signals
                 for(auto it : classInfo->m_signals)
@@ -618,6 +619,8 @@ namespace Studio
                     //nodeItem->setFlags( nodeItem->flags() | Qt::ItemIsEditable);
                     classItem->addChild(nodeItem);
                 }
+                
+                m_signalTreeWidget->invisibleRootItem()->addChild(classItem);
             }
 
         }
