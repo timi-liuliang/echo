@@ -35,11 +35,15 @@ namespace Echo
 		// add lua loader
 		void addLoader(lua_CFunction func);
 
+    public:
 		// exec script
 		bool execString(const String& script, bool execute=true);
 
 		// exec fun
-		void execFunc(const String& funName);
+		void execFunction(const String& funName, const Variant** args, int argCount);
+        
+        // exec table fun
+        void execTableFunction(const String& tableName, const String& funName, const Variant** args, int argCount);
 
 	public:
 		// get global value

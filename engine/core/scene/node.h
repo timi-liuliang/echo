@@ -127,6 +127,9 @@ namespace Echo
 		// aabb
 		void buildWorldAABB(AABB& aabb);
 		const AABB& getLocalAABB() const { return m_localAABB; }
+        
+        // call lua function of this node
+        void callLuaFunction(const String& funName, const Variant** args, int argCount);
 		
 	public:
 		// get node by path

@@ -393,6 +393,14 @@ namespace Echo
 			m_script.m_isRegistered = true;
 		}
 	}
+    
+    void Node::callLuaFunction(const String& funName, const Variant** args, int argCount)
+    {
+        registerToScript();
+        
+        String tableName = StringUtil::Format("objs._%d", this->getId());
+        LuaBinder::instance()->execTableFunction(tableName, funName, args, argCount);
+    }
 
 	void Node::needUpdate()
 	{

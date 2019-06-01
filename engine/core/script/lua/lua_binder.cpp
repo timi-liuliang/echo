@@ -314,10 +314,16 @@ namespace Echo
 	}
 
 	// exec fun
-	void LuaBinder::execFunc(const String& funName)
+	void LuaBinder::execFunction(const String& funName, const Variant** args, int argCount)
 	{
 
 	}
+    
+    // exec table fun
+    void LuaBinder::execTableFunction(const String& tableName, const String& funName, const Variant** args, int argCount)
+    {
+        
+    }
 
 	// get global value(boolean)
 	bool LuaBinder::getGlobalVariableBoolean(const String& varName)
@@ -405,7 +411,7 @@ namespace Echo
 
 	void LuaBinder::outputError(int pop)
 	{
-		//打印错误结果 
+		// output error
 		Log::instance()->error(lua_tostring(m_luaState, -1));
 		lua_pop(m_luaState, 1);
 
