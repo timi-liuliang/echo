@@ -572,6 +572,56 @@ namespace Studio
 			m_propertyHelper.applyTo("empty", m_propertyTreeView, this, SLOT(refreshPropertyToObject(const QString&, QVariant)), false);
 		}	
 	}
+    
+    // update signals display
+    void NodeTreePanel::showSelectedObjectSignal()
+    {
+        m_signalTreeWidget->clear();
+        
+        Echo::Object* object = getCurrentEditObject();
+        if(object)
+        {
+            showObjectSignalRecursive( object, object->getClassName());
+        }
+    }
+    
+    void NodeTreePanel::showObjectSignalRecursive(Echo::Object* classPtr, const Echo::String& className)
+    {
+        // show parent property first
+        Echo::String parentClassName;
+        if (Echo::Class::getParentClass(parentClassName, className))
+        {
+            // don't display property of object
+            if(parentClassName!="Object")
+                showObjectSignalRecursive(classPtr, parentClassName);
+        }
+        
+        // add all signals
+        Echo::ClassInfo* classInfo = Echo::Class::getClassInfo(className);
+        if(classInfo)
+        {
+            // class name
+            if(!classInfo->m_signals.empty())
+            {
+                QTreeWidgetItem* classItem = new QTreeWidgetItem();
+                classItem->setText(0, className.c_str());
+                //classItem->setBold(true);
+                m_signalTreeWidget->invisibleRootItem()->addChild(classItem);
+                
+                // signals
+                for(auto it : classInfo->m_signals)
+                {
+                    QTreeWidgetItem* nodeItem = new QTreeWidgetItem();
+                    nodeItem->setText(0, it.first.c_str());
+                    //nodeItem->setIcon(0, QIcon( getNodeIcon(node).c_str()));
+                    //nodeItem->setData(0, Qt::UserRole, QVariant(node->getId()));
+                    //nodeItem->setFlags( nodeItem->flags() | Qt::ItemIsEditable);
+                    classItem->addChild(nodeItem);
+                }
+            }
+
+        }
+    }
 
 	// show property recursive
 	void NodeTreePanel::showObjectPropertyRecursive(Echo::Object* classPtr, const Echo::String& className)
@@ -690,6 +740,7 @@ namespace Studio
 
 		m_currentEditObject = getCurrentSelectNode();
 		showSelectedObjectProperty();
+        showSelectedObjectSignal();
 
 		// editor extension : select object
 		if (m_currentEditObject && m_currentEditObject->getEditor())

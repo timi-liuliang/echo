@@ -100,6 +100,13 @@ namespace Studio
 
 		// node tree drag drop operator
 		void onItemPositionChanged(QTreeWidgetItem* item);
+        
+    public slots:
+        // update signals display
+        void showSelectedObjectSignal();
+        
+        // update signal display recursively
+        void showObjectSignalRecursive(Echo::Object* classPtr, const Echo::String& className);
 
 	public slots:
 		// update
