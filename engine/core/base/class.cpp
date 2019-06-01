@@ -156,10 +156,27 @@ namespace Echo
 
 			// lua
 			LuaBinder::instance()->registerClassMethod(className, methodName, method);
+            
+            return true;
 		}
 
-		return true;
+		return false;
 	}
+    
+    // register signal
+    bool Class::registerSignal(const String& className, const String& signalName, ClassMethodBind* getSignalMethod)
+    {
+        auto it = g_classInfos->find(className);
+        if (it != g_classInfos->end())
+        {
+            // c
+            it->second->registerSignal(signalName, getSignalMethod);
+            
+            return true;
+        }
+        
+        return false;
+    }
 
 	// get method
 	ClassMethodBind* Class::getMethodBind(const String& className, const String& methodName)

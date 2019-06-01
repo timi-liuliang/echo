@@ -53,3 +53,9 @@ namespace Echo
 		}
 	};
 }
+
+#define DECLARE_SIGNAL(type, signal) \
+    Signal* getSignal##signal() { return &signal; } \
+    type    signal;
+
+

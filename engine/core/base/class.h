@@ -18,6 +18,7 @@ namespace Echo
 		String			m_module;
 		PropertyInfos	m_propertyInfos;
 		ClassMethodMap	m_methods;
+        ClassMethodMap  m_signals;
 	};
 
 	struct ObjectFactory
@@ -35,6 +36,12 @@ namespace Echo
 		{
 			m_classInfo.m_methods[methodName] = method;
 		}
+        
+        // register Signal
+        void registerSignal(const String& signalName, ClassMethodBind* getSignalMethod)
+        {
+            m_classInfo.m_signals[signalName] = getSignalMethod;
+        }
 
 		// return method bind
 		ClassMethodBind* getMethodBind(const String& methodName)
@@ -128,6 +135,9 @@ namespace Echo
 
 		// get method
 		static ClassMethodBind* getMethodBind(const String& className, const String& methodName);
+        
+        // register signal
+        static bool registerSignal(const String& className, const String& signalName, ClassMethodBind* getSignalMethod);
 
 		// add property
 		static bool registerProperty(const String& className, const String& propertyName, const Variant::Type type, PropertyHint hint, const String& hintStr, const String& getter, const String& setter);
@@ -157,6 +167,17 @@ namespace Echo
 
 			return bind;
 		}
+        
+        // register signal
+        template<typename M>
+        static ClassMethodBind* registerSignal(const String& className, const String& signalName, M getSignalMethod)
+        {
+            ClassMethodBind* bind = createMethodBind(getSignalMethod);
+            
+            registerSignal(className, signalName, bind);
+            
+            return bind;
+        }
 	};
     
     template<typename T>
@@ -281,3 +302,6 @@ private:
 
 #define CLASS_REGISTER_PROPERTY_WITH_HINT(m_class, name, type, hint, hintStr, getter, setter) \
 	Echo::Class::registerProperty(#m_class, name, type, hint, hintStr, getter, setter)
+
+#define CLASS_REGISTER_SIGNAL(class, signal) \
+    Echo::Class::registerSignal(#class, #signal, &class::getSignal##signal)
