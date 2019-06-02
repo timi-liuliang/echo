@@ -322,14 +322,32 @@ namespace Echo
         int upperTableCount = lua_get_upper_tables(m_luaState, funName, currentLayerName);
         int parentIdx = lua_gettop(m_luaState);
         
+        // push lua function to stack top
         if (upperTableCount != 0)
         {
-            //lua_setfield(m_luaState, parentIdx, currentLayerName.c_str());
-            //lua_pop(m_luaState, upperTableCount);
+            lua_getfield(m_luaState, parentIdx, currentLayerName.c_str());
+            if(!lua_isnil(m_luaState, -1))
+            {
+                // 1. push table self
+                lua_pushvalue(m_luaState, -2);
+                lua_call(m_luaState, 1, 0);
+            }
+            else
+            {
+                EchoLogError("object function %s is nil", currentLayerName.c_str());
+            }
         }
         else
         {
-            //lua_setglobal(m_luaState, methodName.c_str());
+            lua_getglobal(m_luaState, funName.c_str());
+            if(!lua_isnil(m_luaState, -1))
+            {
+                lua_call(m_luaState, 0, 0);
+            }
+            else
+            {
+                EchoLogError("global lua function %s is nil", funName.c_str());
+            }
         }
         
         lua_settop(m_luaState, 0);
