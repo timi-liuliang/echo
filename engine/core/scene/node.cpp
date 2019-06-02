@@ -398,8 +398,8 @@ namespace Echo
     {
         registerToScript();
         
-        String tableName = StringUtil::Format("objs._%d", this->getId());
-        LuaBinder::instance()->execTableFunction(tableName, funName, args, argCount);
+        String objectFun = StringUtil::Format("objs._%d.%s", this->getId(), funName.c_str());
+        LuaBinder::instance()->execFunction(objectFun, args, argCount);
     }
 
 	void Node::needUpdate()

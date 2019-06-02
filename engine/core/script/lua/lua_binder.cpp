@@ -196,7 +196,7 @@ namespace Echo
 		lua_settable(m_luaState, 1);
 		lua_pop(m_luaState, 1);
 
-		return false;
+		return true;
 	}
 
 	bool LuaBinder::registerObject(const String& className, const String& objectName, void* obj)
@@ -316,14 +316,24 @@ namespace Echo
 	// exec fun
 	void LuaBinder::execFunction(const String& funName, const Variant** args, int argCount)
 	{
-
-	}
-    
-    // exec table fun
-    void LuaBinder::execTableFunction(const String& tableName, const String& funName, const Variant** args, int argCount)
-    {
+        LUA_STACK_CHECK(m_luaState);
         
-    }
+        String currentLayerName;
+        int upperTableCount = lua_get_upper_tables(m_luaState, funName, currentLayerName);
+        int parentIdx = lua_gettop(m_luaState);
+        
+        if (upperTableCount != 0)
+        {
+            //lua_setfield(m_luaState, parentIdx, currentLayerName.c_str());
+            //lua_pop(m_luaState, upperTableCount);
+        }
+        else
+        {
+            //lua_setglobal(m_luaState, methodName.c_str());
+        }
+        
+        lua_settop(m_luaState, 0);
+	}
 
 	// get global value(boolean)
 	bool LuaBinder::getGlobalVariableBoolean(const String& varName)

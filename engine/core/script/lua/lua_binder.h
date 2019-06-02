@@ -41,9 +41,6 @@ namespace Echo
 
 		// exec fun
 		void execFunction(const String& funName, const Variant** args, int argCount);
-        
-        // exec table fun
-        void execTableFunction(const String& tableName, const String& funName, const Variant** args, int argCount);
 
 	public:
 		// get global value
