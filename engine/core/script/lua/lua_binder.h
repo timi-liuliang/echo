@@ -36,11 +36,41 @@ namespace Echo
 		void addLoader(lua_CFunction func);
 
     public:
-		// exec script
+		// exec script directly
 		bool execString(const String& script, bool execute=true);
 
-		// exec fun
-		void execFunction(const String& funName, const Variant** args, int argCount);
+		// call lua function with 0-10 parameters
+		template<typename ReturnT> ReturnT call(const char* const functionName);
+
+		// call lua function with 1 parameter
+		template<typename ReturnT, typename Param1T> ReturnT call(const char* const functionName, Param1T p1);
+
+		// call lua function with 2 parameter
+		template<typename ReturnT, typename Param1T, typename Param2T> ReturnT call(const char* const functionName, Param1T p1, Param2T p2);
+
+		// call lua function with 3 parameter
+		template<typename ReturnT, typename Param1T, typename Param2T, typename Param3T> ReturnT call(const char* const functionName, Param1T p1, Param2T p2, Param3T p3);
+
+		// call lua function with 4 parameter
+		template<typename ReturnT, typename Param1T, typename Param2T, typename Param3T, typename Param4T> ReturnT call(const char* const functionName, Param1T p1, Param2T p2, Param3T p3, Param4T p4);
+
+		// call lua function with 5 parameter
+		template<typename ReturnT, typename Param1T, typename Param2T, typename Param3T, typename Param4T, typename Param5T> ReturnT call(const char* const functionName, Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5);
+
+		// call lua function with 6 parameter
+		template<typename ReturnT, typename Param1T, typename Param2T, typename Param3T, typename Param4T, typename Param5T, typename Param6T> ReturnT call(const char* const functionName, Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6);
+
+		// call lua function with 7 parameter
+		template<typename ReturnT, typename Param1T, typename Param2T, typename Param3T, typename Param4T, typename Param5T, typename Param6T, typename Param7T> ReturnT call(const char* const functionName, Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6, Param7T p7);
+
+		// call lua function with 8 parameter
+		template<typename ReturnT, typename Param1T, typename Param2T, typename Param3T, typename Param4T, typename Param5T, typename Param6T, typename Param7T, typename Param8T> ReturnT call(const char* const functionName, Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6, Param7T p7, Param8T p8);
+
+		// call lua function with 9 parameter
+		template<typename ReturnT, typename Param1T, typename Param2T, typename Param3T, typename Param4T, typename Param5T, typename Param6T, typename Param7T, typename Param8T, typename Param9T> ReturnT call(const char* const functionName, Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6, Param7T p7, Param8T p8, Param9T p9);
+
+		// call lua function with 10 parameter
+		template<typename ReturnT, typename Param1T, typename Param2T, typename Param3T, typename Param4T, typename Param5T, typename Param6T, typename Param7T, typename Param8T, typename Param9T, typename Param10T> ReturnT call(const char* const functionName, Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6, Param7T p7, Param8T p8, Param9T p9, Param10T p10);
 
 	public:
 		// get global value
@@ -62,4 +92,74 @@ namespace Echo
 	private:
 		lua_State*		m_luaState;		// luaState
 	};
+
+	// call lua function with no parameter
+	template<typename ReturnT> ReturnT LuaBinder::call(const char* const functionName)
+	{
+		LUA_STACK_CHECK(m_luaState);
+
+		String currentLayerName;
+		int upperTableCount = lua_get_upper_tables(m_luaState, functionName, currentLayerName);
+		int parentIdx = lua_gettop(m_luaState);
+	}
+
+	// call lua function with one parameter
+	template<typename ReturnT, typename Param1T> ReturnT LuaBinder::call(const char* const functionName, Param1T p1)
+	{
+
+	}
+
+	// call lua function with 2 parameter
+	template<typename ReturnT, typename Param1T, typename Param2T> ReturnT LuaBinder::call(const char* const functionName, Param1T p1, Param2T p2)
+	{
+
+	}
+
+	// call lua function with 3 parameter
+	template<typename ReturnT, typename Param1T, typename Param2T, typename Param3T> ReturnT LuaBinder::call(const char* const functionName, Param1T p1, Param2T p2, Param3T p3)
+	{
+
+	}
+
+	// call lua function with 4 parameter
+	template<typename ReturnT, typename Param1T, typename Param2T, typename Param3T, typename Param4T> ReturnT LuaBinder::call(const char* const functionName, Param1T p1, Param2T p2, Param3T p3, Param4T p4)
+	{
+
+	}
+
+	// call lua function with 5 parameter
+	template<typename ReturnT, typename Param1T, typename Param2T, typename Param3T, typename Param4T, typename Param5T> ReturnT LuaBinder::call(const char* const functionName, Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5)
+	{
+
+	}
+
+	// call lua function with 6 parameter
+	template<typename ReturnT, typename Param1T, typename Param2T, typename Param3T, typename Param4T, typename Param5T, typename Param6T> ReturnT LuaBinder::call(const char* const functionName, Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6)
+	{
+
+	}
+
+	// call lua function with 7 parameter
+	template<typename ReturnT, typename Param1T, typename Param2T, typename Param3T, typename Param4T, typename Param5T, typename Param6T, typename Param7T> ReturnT LuaBinder::call(const char* const functionName, Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6, Param7T p7)
+	{
+
+	}
+
+	// call lua function with 8 parameter
+	template<typename ReturnT, typename Param1T, typename Param2T, typename Param3T, typename Param4T, typename Param5T, typename Param6T, typename Param7T, typename Param8T> ReturnT LuaBinder::call(const char* const functionName, Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6, Param7T p7, Param8T p8)
+	{
+
+	}
+
+	// call lua function with 9 parameter
+	template<typename ReturnT, typename Param1T, typename Param2T, typename Param3T, typename Param4T, typename Param5T, typename Param6T, typename Param7T, typename Param8T, typename Param9T> ReturnT LuaBinder::call(const char* const functionName, Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6, Param7T p7, Param8T p8, Param9T p9)
+	{
+
+	}
+
+	// call lua function with 10 parameter
+	template<typename ReturnT, typename Param1T, typename Param2T, typename Param3T, typename Param4T, typename Param5T, typename Param6T, typename Param7T, typename Param8T, typename Param9T, typename Param10T> ReturnT LuaBinder::call(const char* const functionName, Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6, Param7T p7, Param8T p8, Param9T p9, Param10T p10)
+	{
+
+	}
 }
