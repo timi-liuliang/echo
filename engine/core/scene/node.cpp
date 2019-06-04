@@ -398,7 +398,7 @@ namespace Echo
     {
         registerToScript();
         
-        String objectFun = StringUtil::Format("objs._%d:%s", this->getId(), funName.c_str());
+        String objectFun = StringUtil::Format("objs._%d.%s", this->getId(), funName.c_str());
         LuaBinder::instance()->call<void>(objectFun.c_str());
     }
 

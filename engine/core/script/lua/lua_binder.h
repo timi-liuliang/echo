@@ -86,6 +86,9 @@ namespace Echo
 		// output error and pop stack
 		void outputError(int pop=0);
 
+		// parse name
+		int parseName(char* name, char** result, const int resultSize, char* lastSeparator);
+
 	private:
 		LuaBinder() {}
 
@@ -98,9 +101,45 @@ namespace Echo
 	{
 		LUA_STACK_CHECK(m_luaState);
 
+		//char lastSeparator = 0;
+		//char* names[LUA_FUNCTION_MAX_NAME_COUNT] = { nullptr };
+
+		//String funName = functionName;
+		//int	 nameCount = parseName(funName.c_str(), names, LUA_FUNCTION_MAX_NAME_COUNT, &lastSeparator);
+
 		String currentLayerName;
 		int upperTableCount = lua_get_upper_tables(m_luaState, functionName, currentLayerName);
 		int parentIdx = lua_gettop(m_luaState);
+		int narg = 0;
+
+		if (upperTableCount > 0)
+		{
+			lua_getfield(m_luaState, -1, currentLayerName.c_str());
+			if (lua_isnil(m_luaState, -1))
+			{
+				int a = 10;
+			}
+		}
+		else
+		{
+
+		}
+
+		// push self
+		if (/*lastSeparator == ':'*/true)
+		{
+			lua_pushvalue(m_luaState, -2);
+			narg++;
+		}
+
+		int result = lua_pcall(m_luaState, narg, 0, 0);
+		if (result != 0)
+		{
+			outputError();
+		}
+
+		// clear stack
+		lua_settop(m_luaState, 0);
 	}
 
 	// call lua function with one parameter

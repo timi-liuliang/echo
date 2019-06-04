@@ -10,6 +10,8 @@ extern "C"
 #include <thirdparty/lua/lauxlib.h>
 }
 
+#define LUA_FUNCTION_MAX_NAME_COUNT 16
+
 namespace Echo
 {
 	class Object;

@@ -446,4 +446,51 @@ namespace Echo
 		if (pop > 0)
 			lua_pop(m_luaState, pop);
 	}
+
+	static bool isLuaIdentifier(char c)
+	{
+		if (c >= 'A' && c <= 'Z')
+			return true;
+		if (c >= 'a' && c <= 'z')
+			return true;
+		if (c >= '0' && c <= '9')
+			return true;
+		if (c == '_')
+			return true;
+		return false;
+	}
+
+	int LuaBinder::parseName(char* name, char** result, const int resultSize, char* lastSeparator)
+	{
+		char*	p = name;
+		int		count = 0;
+		bool	start = false;
+		while (true)
+		{
+			const char c = *p++;
+			if (isLuaIdentifier(c))
+			{
+				if (!start)
+				{
+					start = true;
+					result[count++] = p - 1;
+					if (count >= resultSize)
+						break;
+				}
+			}
+			else
+			{
+				if (NULL != lastSeparator && c != 0)
+					*lastSeparator = c;
+
+				*(p - 1) = 0;
+				start = false;
+			}
+
+			if (c == 0)
+				break;
+		}
+
+		return count;
+	}
 }
