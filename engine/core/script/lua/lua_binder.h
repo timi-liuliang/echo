@@ -101,12 +101,6 @@ namespace Echo
 	{
 		LUA_STACK_CHECK(m_luaState);
 
-		//char lastSeparator = 0;
-		//char* names[LUA_FUNCTION_MAX_NAME_COUNT] = { nullptr };
-
-		//String funName = functionName;
-		//int	 nameCount = parseName(funName.c_str(), names, LUA_FUNCTION_MAX_NAME_COUNT, &lastSeparator);
-
 		String currentLayerName;
 		int upperTableCount = lua_get_upper_tables(m_luaState, functionName, currentLayerName);
 		int parentIdx = lua_gettop(m_luaState);
@@ -114,15 +108,11 @@ namespace Echo
 
 		if (upperTableCount > 0)
 		{
-			lua_getfield(m_luaState, -1, currentLayerName.c_str());
-			if (lua_isnil(m_luaState, -1))
-			{
-				int a = 10;
-			}
+			lua_getfield(m_luaState, parentIdx, currentLayerName.c_str());
 		}
 		else
 		{
-
+			lua_getglobal(m_luaState, currentLayerName.c_str());
 		}
 
 		// push self
@@ -132,8 +122,7 @@ namespace Echo
 			narg++;
 		}
 
-		int result = lua_pcall(m_luaState, narg, 0, 0);
-		if (result != 0)
+		if (lua_pcall(m_luaState, narg, 0, 0) != 0)
 		{
 			outputError();
 		}

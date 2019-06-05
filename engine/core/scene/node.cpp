@@ -396,10 +396,13 @@ namespace Echo
     
     void Node::callLuaFunction(const String& funName, const Variant** args, int argCount)
     {
-        registerToScript();
-        
-        String objectFun = StringUtil::Format("objs._%d.%s", this->getId(), funName.c_str());
-        LuaBinder::instance()->call<void>(objectFun.c_str());
+		if (Engine::instance()->getConfig().m_isGame)
+		{
+			registerToScript();
+
+			String objectFun = StringUtil::Format("nodes._%d.%s", this->getId(), funName.c_str());
+			LuaBinder::instance()->call<void>(objectFun.c_str());
+		}
     }
 
 	void Node::needUpdate()

@@ -238,7 +238,7 @@ namespace Echo
 	{
 		LUA_STACK_CHECK(m_luaState);
 
-		//create metatable for class
+		// create metatable for class
 		luaL_getmetatable(m_luaState, className.c_str());
 		const int metatable = lua_gettop(m_luaState);
 	
@@ -460,6 +460,11 @@ namespace Echo
 		return false;
 	}
 
+	//char lastSeparator = 0;
+	//char* names[LUA_FUNCTION_MAX_NAME_COUNT] = { nullptr };
+
+	//String funName = functionName;
+	//int	 nameCount = parseName(funName.c_str(), names, LUA_FUNCTION_MAX_NAME_COUNT, &lastSeparator);
 	int LuaBinder::parseName(char* name, char** result, const int resultSize, char* lastSeparator)
 	{
 		char*	p = name;

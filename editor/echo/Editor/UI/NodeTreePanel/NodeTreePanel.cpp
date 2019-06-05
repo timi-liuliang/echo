@@ -729,8 +729,6 @@ namespace Studio
 			{
 				controller->onFocusNode( node);
 			}
-            
-            node->callLuaFunction("onFail", nullptr, 0);
 		}
 	}
 
