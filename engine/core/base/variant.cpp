@@ -76,6 +76,12 @@ namespace Echo
 	{
 		m_any = value;
 	}
+    
+    Variant::Variant(Signal* value)
+        : m_type(Type::Signal)
+    {
+        m_signal = value;
+    }
 
 	Variant::Variant(Object* value)
 		: m_type(Type::Object)

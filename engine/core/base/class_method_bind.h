@@ -1,6 +1,7 @@
 #pragma once
 
 #include "variant.h"
+#include "signal.h"
 #include "method_bind.h"
 
 namespace Echo
@@ -25,7 +26,10 @@ namespace Echo
 	class ClassMethodBind
 	{
 	public:
+        // call for c++
 		virtual Variant call(Object* obj, const Variant** args, int argCount, Variant::CallError& error) = 0;
+        
+        // call for lua
 		virtual int call(Object* obj, lua_State* luaState)=0;
 	};
 	// please use hash map

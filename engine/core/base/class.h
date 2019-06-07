@@ -1,6 +1,7 @@
 #pragma once
 
 #include "object.h"
+#include "signal.h"
 #include "variant.h"
 #include "class_method_bind.h"
 #include "property_info.h"
@@ -38,7 +39,7 @@ namespace Echo
 		}
         
         // register Signal
-        void registerSignal(const String& signalName, ClassMethodBind* getSignalMethod)
+        void registerSignalGetMethod(const String& signalName, ClassMethodBind* getSignalMethod)
         {
             m_classInfo.m_signals[signalName] = getSignalMethod;
         }
@@ -54,6 +55,18 @@ namespace Echo
 
 			return nullptr;
 		}
+        
+        // get signal
+        ClassMethodBind* getSignalGetMethod( const String& signalName)
+        {
+            auto it = m_classInfo.m_signals.find(signalName);
+            if (it != m_classInfo.m_signals.end())
+            {
+                return it->second;
+            }
+            
+            return nullptr;
+        }
 
 		// get propertys
 		const PropertyInfos& getPropertys()
@@ -138,6 +151,12 @@ namespace Echo
         
         // register signal
         static bool registerSignal(const String& className, const String& signalName, ClassMethodBind* getSignalMethod);
+        
+        // get signal by class name
+        static Signal* getSignal(const String& className, Object* classPtr, const String& signalName);
+        
+        // get signal
+        static Signal* getSignal(Object* classPtr, const String& signalName);
 
 		// add property
 		static bool registerProperty(const String& className, const String& propertyName, const Variant::Type type, PropertyHint hint, const String& hintStr, const String& getter, const String& setter);

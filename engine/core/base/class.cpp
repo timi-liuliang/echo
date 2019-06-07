@@ -170,7 +170,7 @@ namespace Echo
         if (it != g_classInfos->end())
         {
             // c
-            it->second->registerSignal(signalName, getSignalMethod);
+            it->second->registerSignalGetMethod(signalName, getSignalMethod);
             
             return true;
         }
@@ -189,6 +189,40 @@ namespace Echo
 
 		return nullptr;
 	}
+    
+    // get signal by class name
+    Signal* Class::getSignal(const String& className, Object* classPtr, const String& signalName)
+    {
+        auto it = g_classInfos->find(className);
+        if (it != g_classInfos->end())
+        {
+            ClassMethodBind* method = it->second->getSignalGetMethod(signalName);
+            if(method)
+            {
+                Variant::CallError error;
+                return method->call(classPtr, nullptr, 0, error);
+            }
+        }
+        
+        return nullptr;
+    }
+
+    // get signal
+    Signal* Class::getSignal(Object* classPtr, const String& signalName)
+    {
+        String className = classPtr->getClassName();
+        do
+        {
+            Signal* signal = getSignal(className, classPtr, signalName);
+            if (signal)
+            {
+                return signal;
+            }
+            
+        } while (getParentClass(className, className));
+        
+        return nullptr;
+    }
 
 	// add property
 	bool Class::registerProperty(const String& className, const String& propertyName, const Variant::Type type, PropertyHint hint, const String& hintStr, const String& getter, const String& setter)

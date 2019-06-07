@@ -13,6 +13,7 @@
 
 namespace Echo
 {
+    class Signal;
 	class Object;
     class Node;
 	class Variant
@@ -36,6 +37,7 @@ namespace Echo
 			NodePath,
 			Base64String,
 			StringOption,
+            Signal,
 			Object,
 		};
 
@@ -67,6 +69,7 @@ namespace Echo
 		Variant(const NodePath& value);
 		Variant(const Base64String& value);
 		Variant(const StringOption& value);
+        Variant(Signal* value);
 		Variant(Object* value);
 		Variant(const RealVector& value);
 		~Variant();
@@ -94,6 +97,7 @@ namespace Echo
 		operator const NodePath&() const { return any_cast<NodePath>(m_any); }
 		operator const Base64String&() const { return any_cast<Base64String>(m_any); }
 		operator const StringOption&() const { return any_cast<StringOption>(m_any); }
+        operator Signal*() const { return m_signal; }
 		operator Object*() const { return m_obj; }
 		operator const RealVector&() const { return any_cast<RealVector>(m_any); }
 
@@ -104,6 +108,7 @@ namespace Echo
 		const Vector3& toVector3() const { return any_cast<Vector3>(m_any); }
 		const Vector4& toVector4() const { return any_cast<Vector4>(m_any); }
 		const Color& toColor() const { return any_cast<Color>(m_any); }
+        Signal* toSignal() const { return m_signal; }
 		Object* toObj() const { return m_obj; }
 		const ResourcePath& toResPath() const { return any_cast<ResourcePath>(m_any); }
 		const NodePath& toNodePath() const { return any_cast<NodePath>(m_any); }
@@ -128,6 +133,7 @@ namespace Echo
 			ui32			m_uint;
 			float			m_real;
 			mutable Object*	m_obj;
+            mutable Signal* m_signal;
 		};
 	};
     

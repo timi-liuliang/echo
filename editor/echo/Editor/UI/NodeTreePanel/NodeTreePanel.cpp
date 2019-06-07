@@ -640,6 +640,8 @@ namespace Studio
             Echo::String itemType = item->data(0, Qt::UserRole).toString().toStdString().c_str();
             if (itemType == "signal")
             {
+                m_signalName = item->text(0).toStdString().c_str();
+                
                 EchoSafeDelete(m_signalTreeMenu, QMenu);
                 m_signalTreeMenu = EchoNew(QMenu);
                 m_signalTreeMenu->addAction(m_actionConnectSlot);
@@ -652,11 +654,20 @@ namespace Studio
     // connect Object slot
     void NodeTreePanel::onConnectOjectSlot()
     {
-        Echo::String nodePath;
-        Echo::String functionName = "onClick_UiEventRegionRect";
-        if(SlotChooseDialog::getSlot(this, nodePath, functionName))
+        Echo::Node* currentNode = ECHO_DOWN_CAST<Echo::Node*>(m_currentEditObject);
+        if(currentNode)
         {
-            int a = 10;
+            Echo::String nodePath;
+            Echo::String functionName = m_signalName + "_" + currentNode->getName();
+            if(SlotChooseDialog::getSlot(this, nodePath, functionName))
+            {
+                Echo:: Signal* signal = Echo::Class::getSignal( currentNode, m_signalName);
+                if(signal)
+                {
+                    Echo::Node* slotNode = currentNode->getNode(nodePath.c_str());
+                    signal->connect(slotNode, functionName);
+                }
+            }
         }
     }
 

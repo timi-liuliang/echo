@@ -155,5 +155,6 @@ namespace Studio
 		Echo::Object*					m_currentEditObject = nullptr;
 		QMenu*							m_nodeTreeMenu = nullptr;
         QMenu*                          m_signalTreeMenu = nullptr;
+        Echo::String                    m_signalName;
 	};
 }
