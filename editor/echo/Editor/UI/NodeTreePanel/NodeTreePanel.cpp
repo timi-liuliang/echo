@@ -10,6 +10,7 @@
 #include "ResPanel.h"
 #include "MainWindow.h"
 #include "RenderWindow.h"
+#include "SlotChooseDialog.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/io/IO.h>
 #include <engine/modules/gltf/gltf_res.h>
@@ -651,7 +652,11 @@ namespace Studio
     // connect Object slot
     void NodeTreePanel::onConnectOjectSlot()
     {
-        int a;
+        Echo::String nodePath = SlotChooseDialog::getSelectingNode(this);
+        if(!nodePath.empty())
+        {
+            
+        }
     }
 
 	// show property recursive
