@@ -614,8 +614,8 @@ namespace Studio
                 {
                     QTreeWidgetItem* nodeItem = new QTreeWidgetItem();
                     nodeItem->setText(0, it.first.c_str());
-                    //nodeItem->setIcon(0, QIcon( getNodeIcon(node).c_str()));
-                    //nodeItem->setData(0, Qt::UserRole, QVariant(node->getId()));
+                    nodeItem->setIcon(0, QIcon( ":/icon/Icon/signal/signal.png"));
+                    nodeItem->setData(0, Qt::UserRole, QVariant("signal"));
                     //nodeItem->setFlags( nodeItem->flags() | Qt::ItemIsEditable);
                     classItem->addChild(nodeItem);
                 }
