@@ -39,6 +39,9 @@ namespace Studio
 		QObject::connect(m_nodeTreeWidget, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, SLOT(onChangedNodeName(QTreeWidgetItem*)));
 		QObject::connect(m_nodeTreeWidget, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showMenu(const QPoint&)));
 		QObject::connect(m_nodeTreeWidget, SIGNAL(itemPositionChanged(QTreeWidgetItem*)), this, SLOT(onItemPositionChanged(QTreeWidgetItem*)));
+        
+        // signal widget
+        QObject::connect(m_signalTreeWidget, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showSignalTreeWidgetMenu(const QPoint&)));
 
 		// make the invisible item can't be drop
 		m_nodeTreeWidget->invisibleRootItem()->setFlags( Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled);
@@ -50,6 +53,7 @@ namespace Studio
 		QObject::connect(m_actionAddChildScene, SIGNAL(triggered()), this, SLOT(onInstanceChildScene()));
 		QObject::connect(m_actionSaveBranchasScene, SIGNAL(triggered()), this, SLOT(onSaveBranchAsScene()));
 		QObject::connect(m_actionDiscardInstancing, SIGNAL(triggered()), this, SLOT(onDiscardInstancing()));
+        QObject::connect(m_actionConnectSlot, SIGNAL(triggered()), this, SLOT(onConnectOjectSlot()));
 
 		// timer
 		m_timer = new QTimer(this);
@@ -300,7 +304,7 @@ namespace Studio
 			m_nodeTreeMenu->exec(QCursor::pos());
 		}
 	}
-
+    
 	// remove item
 	void NodeTreePanel::removeItem(QTreeWidgetItem* item)
 	{
@@ -615,7 +619,7 @@ namespace Studio
                     QTreeWidgetItem* nodeItem = new QTreeWidgetItem();
                     nodeItem->setText(0, it.first.c_str());
                     nodeItem->setIcon(0, QIcon( ":/icon/Icon/signal/signal.png"));
-                    nodeItem->setData(0, Qt::UserRole, QVariant("signal"));
+                    nodeItem->setData(0, Qt::UserRole, QString("signal"));
                     //nodeItem->setFlags( nodeItem->flags() | Qt::ItemIsEditable);
                     classItem->addChild(nodeItem);
                 }
@@ -624,6 +628,30 @@ namespace Studio
             }
 
         }
+    }
+    
+    // signal tree widget show menu
+    void NodeTreePanel::showSignalTreeWidgetMenu(const QPoint& point)
+    {
+        QTreeWidgetItem* item = m_signalTreeWidget->itemAt(point);
+        if (item)
+        {
+            Echo::String itemType = item->data(0, Qt::UserRole).toString().toStdString().c_str();
+            if (itemType == "signal")
+            {
+                EchoSafeDelete(m_signalTreeMenu, QMenu);
+                m_signalTreeMenu = EchoNew(QMenu);
+                m_signalTreeMenu->addAction(m_actionConnectSlot);
+                m_signalTreeMenu->exec(QCursor::pos());
+            }
+            
+        }
+    }
+    
+    // connect Object slot
+    void NodeTreePanel::onConnectOjectSlot()
+    {
+        int a;
     }
 
 	// show property recursive

@@ -112,7 +112,7 @@
         <enum>QTabWidget::Triangular</enum>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <property name="elideMode">
         <enum>Qt::ElideMiddle</enum>
@@ -162,6 +162,9 @@
          </property>
          <item>
           <widget class="QTreeWidget" name="m_signalTreeWidget">
+           <property name="contextMenuPolicy">
+            <enum>Qt::CustomContextMenu</enum>
+           </property>
            <property name="headerHidden">
             <bool>true</bool>
            </property>
@@ -240,6 +243,14 @@
   <action name="m_actionDuplicateNode">
    <property name="text">
     <string>Duplicate</string>
+   </property>
+  </action>
+  <action name="m_actionConnectSlot">
+   <property name="text">
+    <string>Connect Slot</string>
+   </property>
+   <property name="toolTip">
+    <string>Connect Signal Slot</string>
    </property>
   </action>
  </widget>
