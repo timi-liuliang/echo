@@ -652,10 +652,11 @@ namespace Studio
     // connect Object slot
     void NodeTreePanel::onConnectOjectSlot()
     {
-        Echo::String nodePath = SlotChooseDialog::getSelectingNode(this);
-        if(!nodePath.empty())
+        Echo::String nodePath;
+        Echo::String functionName = "onClick_UiEventRegionRect";
+        if(SlotChooseDialog::getSlot(this, nodePath, functionName))
         {
-            
+            int a = 10;
         }
     }
 

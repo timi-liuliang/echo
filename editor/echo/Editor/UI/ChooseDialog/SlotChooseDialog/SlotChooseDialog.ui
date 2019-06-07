@@ -39,6 +39,16 @@
     </widget>
    </item>
    <item>
+    <widget class="QLineEdit" name="m_functionNameLineEdit">
+     <property name="inputMask">
+      <string/>
+     </property>
+     <property name="placeholderText">
+      <string>Function</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <spacer name="horizontalSpacer">
@@ -55,6 +65,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="m_ok">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Confirm</string>
        </property>

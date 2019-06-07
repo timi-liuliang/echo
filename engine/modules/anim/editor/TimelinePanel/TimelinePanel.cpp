@@ -491,7 +491,7 @@ namespace Echo
 					AnimPropertyBool* boolProperty = ECHO_DOWN_CAST<AnimPropertyBool*>(animProperty);
 					if (boolProperty)
 					{
-						i32 keyIdx = 0;
+						//i32 keyIdx = 0;
 						for (auto& it : boolProperty->m_keys)
 						{
 							ui32 t = it.first;
