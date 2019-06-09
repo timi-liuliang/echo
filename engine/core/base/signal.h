@@ -12,19 +12,40 @@ namespace Echo
 	// Connect
 	struct Connect
 	{
-		Signal*				m_signal;
-		Object*				m_target;
-		ClassMethodBind*	m_method;
-
-		Connect(Signal* signal, Object* target, ClassMethodBind* method)
-			: m_signal(signal)
-			, m_target(target)
-			, m_method(method)
-		{}
-
-		// emit
-		void emitSignal(const Variant** args, int argCount);
+        virtual void emitSignal(const Variant** args, int argCount) {}
 	};
+    
+    struct ConnectClassMethod : public Connect
+    {
+        Signal*             m_signal;
+        Object*             m_target;
+        ClassMethodBind*    m_method;
+        
+        ConnectClassMethod(Signal* signal, Object* target, ClassMethodBind* method)
+        : m_signal(signal)
+        , m_target(target)
+        , m_method(method)
+        {}
+        
+        // emit
+        virtual void emitSignal(const Variant** args, int argCount) override;
+    };
+    
+    struct ConnectLuaMethod : public Connect
+    {
+        Signal*           m_signal;
+        Object*           m_target;
+        String            m_functionName;
+        
+        ConnectLuaMethod(Signal* signal, Object* target, const String& functionName)
+        : m_signal(signal)
+        , m_target(target)
+        , m_functionName(functionName)
+        {}
+        
+        // emit
+        virtual void emitSignal(const Variant** args, int argCount) override;
+    };
 
 	// Signal
     // Reference: https://github.com/pbhogan/Signals
@@ -34,7 +55,8 @@ namespace Echo
 	public:
 		// connect
 		bool connect(Object* obj, const Echo::String& methodName);
-		bool connect(Object* obj, ClassMethodBind* method);
+		bool connectClassMethod(Object* obj, ClassMethodBind* method);
+        bool connectLuaMethod(Object* obj, const Echo::String& luaMethodName);
 
 	protected:
 		vector<Connect>::type	m_connects;

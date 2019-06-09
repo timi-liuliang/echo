@@ -49,6 +49,9 @@ namespace Echo
 
 		// set property value
 		virtual bool setPropertyValue(const String& propertyName, const Variant& propertyValue) { return false; }
+        
+        // call lua function of this node
+        virtual void callLuaFunction(const String& funName, const Variant** args, int argCount) {}
 
 	public:
 		// instance object

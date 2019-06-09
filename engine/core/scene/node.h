@@ -129,7 +129,7 @@ namespace Echo
 		const AABB& getLocalAABB() const { return m_localAABB; }
         
         // call lua function of this node
-        void callLuaFunction(const String& funName, const Variant** args, int argCount);
+        virtual void callLuaFunction(const String& funName, const Variant** args, int argCount) override;
 		
 	public:
 		// get node by path
