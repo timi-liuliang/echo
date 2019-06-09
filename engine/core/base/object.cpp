@@ -216,4 +216,37 @@ namespace Echo
 			}
 		}
 	}
+    
+    // remember signal-slot connect recursive
+    void Object::saveSignalSlotConnects(void* pugiNode, Echo::Object* classPtr, const Echo::String& className)
+    {
+        pugi::xml_node* xmlNode = (pugi::xml_node*)pugiNode;
+        
+        // save parent property first
+        Echo::String parentClassName;
+        if (Echo::Class::getParentClass(parentClassName, className))
+        {
+            // don't display property of object
+            if (parentClassName != "Object")
+                saveSignalSlotConnects(pugiNode, classPtr, parentClassName);
+        }
+        
+        Echo::ClassInfo* classInfo = Echo::Class::getClassInfo(className);
+        if(classInfo && !classInfo->m_signals.empty())
+        {
+            // iterate signals
+            for(auto it : classInfo->m_signals)
+            {
+                Variant::CallError error;
+                Signal* signal = it.second->call(classPtr, nullptr, 0, error);
+                if(signal && signal->isHaveConnects())
+                {
+                    pugi::xml_node signalNode = xmlNode->append_child("signal");
+                    signalNode.append_attribute("name").set_value(it.first.c_str());
+                    
+                    // connects
+                }
+            }
+        }
+    }
 }

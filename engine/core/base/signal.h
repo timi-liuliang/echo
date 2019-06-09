@@ -57,6 +57,9 @@ namespace Echo
 		bool connect(Object* obj, const Echo::String& methodName);
 		bool connectClassMethod(Object* obj, ClassMethodBind* method);
         bool connectLuaMethod(Object* obj, const Echo::String& luaMethodName);
+        
+        // is have connect
+        bool isHaveConnects() { return !m_connects.empty(); }
 
 	protected:
 		vector<Connect>::type	m_connects;

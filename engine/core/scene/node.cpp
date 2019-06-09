@@ -674,6 +674,7 @@ namespace Echo
 		xmlNode->append_attribute("path").set_value(node->getPath().c_str());
 
 		savePropertyRecursive(pugiNode, node, node->getClassName());
+        saveSignalSlotConnects(pugiNode, node, node->getClassName());
 
 		if (recursive)
 		{
