@@ -665,7 +665,8 @@ namespace Studio
                 if(signal)
                 {
                     Echo::Node* slotNode = currentNode->getNode(nodePath.c_str());
-                    signal->connect(slotNode, functionName);
+                    Echo::String relativePath = slotNode->getNodePathRelativeTo(currentNode);
+                    signal->connectLuaMethod(relativePath, functionName);
                 }
             }
         }

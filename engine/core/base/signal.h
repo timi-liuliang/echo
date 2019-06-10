@@ -12,13 +12,10 @@ namespace Echo
 	// Connect
 	struct Connect
 	{
-        String        m_targetPath;
-        String        m_functionName;
-        
         virtual void emitSignal(const Variant** args, int argCount) {}
         
         // save
-        void save(void* pugiNode);
+        virtual void save(void* pugiNode) {}
 	};
     
     struct ConnectClassMethod : public Connect
@@ -40,17 +37,21 @@ namespace Echo
     struct ConnectLuaMethod : public Connect
     {
         Signal*           m_signal;
-        Object*           m_target;
+        String            m_targetPath;
+        String            m_functionName;
+        Object*           m_target = nullptr;
 
-        ConnectLuaMethod(Signal* signal, Object* target, const String& functionName)
+        ConnectLuaMethod(Signal* signal, const String& target, const String& functionName)
         : m_signal(signal)
-        , m_target(target)
-        {
-            m_functionName = functionName;
-        }
+        , m_targetPath(target)
+        , m_functionName(functionName)
+        {}
         
         // emit
         virtual void emitSignal(const Variant** args, int argCount) override;
+        
+        // save
+        virtual void save(void* pugiNode) override;
     };
 
 	// Signal
@@ -60,10 +61,8 @@ namespace Echo
 	{
 	public:
 		// connect
-        bool connect(const String& obj, const String& method);
-		bool connect(Object* obj, const Echo::String& methodName);
 		bool connectClassMethod(Object* obj, ClassMethodBind* method);
-        bool connectLuaMethod(Object* obj, const Echo::String& luaMethodName);
+        bool connectLuaMethod(const String& obj, const Echo::String& luaMethodName);
         
         // is have connect
         bool isHaveConnects() { return !m_connects.empty(); }
@@ -73,7 +72,7 @@ namespace Echo
         void save(void* pugiNode);
 
 	protected:
-		vector<Connect>::type	m_connects;
+		vector<Connect*>::type	m_connects;
 	};
 
 	class Signal0 : public Signal
@@ -82,9 +81,9 @@ namespace Echo
 		// operate ()
 		void operator() ()
 		{
-			for (Connect& connect : m_connects)
+			for (Connect* connect : m_connects)
 			{
-				connect.emitSignal(nullptr, 0);
+				connect->emitSignal(nullptr, 0);
 			}
 		}
 	};

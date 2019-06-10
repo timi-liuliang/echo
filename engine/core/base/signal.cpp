@@ -12,7 +12,7 @@ namespace Echo
 		m_method->call(m_target,  args, argCount, error);
 	}
     
-    void Connect::save(void* pugiNode)
+    void ConnectLuaMethod::save(void* pugiNode)
     {
         pugi::xml_node* signalNode = (pugi::xml_node*)pugiNode;
         
@@ -26,28 +26,17 @@ namespace Echo
         if(m_target)
             m_target->callLuaFunction( m_functionName, args, argCount);
     }
-    
-    bool Signal::connect(const String& obj, const String& method)
-    {
-        return true;
-    }
-
-	bool Signal::connect(Object* obj, const Echo::String& methodName)
-	{
-		ClassMethodBind* method = Class::getMethodBind(obj->getClassName(), methodName);
-		return method ? connectClassMethod(obj, method) : connectLuaMethod(obj, methodName);
-	}
 
 	bool Signal::connectClassMethod(Object* obj, ClassMethodBind* method)
 	{
-		m_connects.push_back(ConnectClassMethod(this, obj, method));
+		m_connects.push_back(EchoNew(ConnectClassMethod(this, obj, method)));
 
 		return true;
 	}
     
-    bool Signal::connectLuaMethod(Object* obj, const Echo::String& luaMethodName)
+    bool Signal::connectLuaMethod(const String& obj, const Echo::String& luaMethodName)
     {
-        m_connects.push_back(ConnectLuaMethod(this, obj, luaMethodName));
+        m_connects.push_back(EchoNew(ConnectLuaMethod(this, obj, luaMethodName)));
         
         return true;
     }
@@ -61,15 +50,15 @@ namespace Echo
             String target = connectNode.attribute("target").as_string();
             String method = connectNode.append_attribute("method").as_string();
             
-            connect( target, method);
+            connectLuaMethod( target, method);
         }
     }
     
     void Signal::save(void* pugiNode)
     {
-        for(Connect& conn : m_connects)
+        for(Connect* conn : m_connects)
         {
-            conn.save(pugiNode);
+            conn->save(pugiNode);
         }
     }
 }
