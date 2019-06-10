@@ -66,6 +66,9 @@ namespace Echo
 		// load propertys value
 		static void loadPropertyValue(void* pugiNode, Echo::Object* classPtr, const Echo::String& className, i32 flag);
         
+        // load signal slot connects
+        static void loadSignalSlotConnects(void* pugiNode, Echo::Object* classPtr, const Echo::String& className);
+        
         // remember signal-slot connect recursive
         static void saveSignalSlotConnects(void* pugiNode, Echo::Object* classPtr, const Echo::String& className);
 

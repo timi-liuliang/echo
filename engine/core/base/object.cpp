@@ -217,6 +217,19 @@ namespace Echo
 		}
 	}
     
+    // load signal slot connects
+    void Object::loadSignalSlotConnects(void* pugiNode, Echo::Object* classPtr, const Echo::String& className)
+    {
+        for (pugi::xml_node signalNode = ((pugi::xml_node*)pugiNode)->child("signal"); signalNode; signalNode = signalNode.next_sibling("signal"))
+        {
+            // get signal by class name
+            String signalName = signalNode.attribute("name").as_string();
+            Signal* signal = Class::getSignal(classPtr, signalName);
+            if(signal)
+                signal->load(&signalNode);
+        }
+    }
+    
     // remember signal-slot connect recursive
     void Object::saveSignalSlotConnects(void* pugiNode, Echo::Object* classPtr, const Echo::String& className)
     {
@@ -245,6 +258,7 @@ namespace Echo
                     signalNode.append_attribute("name").set_value(it.first.c_str());
                     
                     // connects
+                    signal->save(&signalNode);
                 }
             }
         }
