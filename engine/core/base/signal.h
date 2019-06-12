@@ -12,6 +12,9 @@ namespace Echo
 	// Connect
 	struct Connect
 	{
+        virtual ~Connect() {}
+        
+        // emit Signal
         virtual void emitSignal(const Variant** args, int argCount) {}
         
         // save
@@ -52,6 +55,10 @@ namespace Echo
         
         // save
         virtual void save(void* pugiNode) override;
+        
+    private:
+        // build target
+        void buildTarget();
     };
 
 	// Signal
@@ -60,37 +67,45 @@ namespace Echo
 	class Signal
 	{
 	public:
+        Signal(Object* owner);
+        virtual ~Signal();
+        
 		// connect
 		bool connectClassMethod(Object* obj, ClassMethodBind* method);
         bool connectLuaMethod(const String& obj, const Echo::String& luaMethodName);
         
         // is have connect
-        bool isHaveConnects() { return !m_connects.empty(); }
+        bool isHaveConnects() { return m_connects && !m_connects->empty(); }
+        
+        // owner
+        Object* getOwner() { return m_owner; }
         
         // load/save
         void load(void* pugiNode);
         void save(void* pugiNode);
 
 	protected:
-		vector<Connect*>::type	m_connects;
+        Object*                 m_owner = nullptr;
+		vector<Connect*>::type*	m_connects = nullptr;
 	};
 
 	class Signal0 : public Signal
 	{
 	public:
+        Signal0(Object* owner) : Signal(owner) {}
+        
 		// operate ()
 		void operator() ()
 		{
-			for (Connect* connect : m_connects)
-			{
-				connect->emitSignal(nullptr, 0);
-			}
+            if(m_connects)
+            {
+                for (Connect* connect : *m_connects)
+                    connect->emitSignal(nullptr, 0);
+            }
 		}
 	};
 }
 
 #define DECLARE_SIGNAL(type, signal) \
     Signal* getSignal##signal() { return &signal; } \
-    type    signal;
-
-
+    type    signal = type(this);

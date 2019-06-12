@@ -95,6 +95,7 @@ namespace Echo
 			res->setName(name);
 
 			loadPropertyRecursive(pugiNode, res, className);
+            loadSignalSlotConnects(xmlNode, res, className);
 
 			return res;
 		}

@@ -3,6 +3,7 @@
 #include "variant.h"
 #include <thirdparty/pugixml/pugixml.hpp>
 #include <thirdparty/pugixml/pugiconfig.hpp>
+#include "engine/core/scene/node.h"
 
 namespace Echo
 {
@@ -23,20 +24,56 @@ namespace Echo
     
     void ConnectLuaMethod::emitSignal(const Variant** args, int argCount)
     {
+        buildTarget();
+        
         if(m_target)
             m_target->callLuaFunction( m_functionName, args, argCount);
+    }
+    
+    void ConnectLuaMethod::buildTarget()
+    {
+        if(!m_target && m_signal)
+        {
+            Node* owner = ECHO_DOWN_CAST<Node*>(m_signal->getOwner());
+            if(owner)
+            {
+                m_target = owner->getNode(m_targetPath.c_str());
+            }
+        }
+    }
+    
+    Signal::Signal(Object* owner)
+        : m_owner(owner)
+    {
+    }
+    
+    Signal::~Signal()
+    {
+        if(m_connects)
+        {
+            for(Connect* conn : *m_connects)
+                EchoSafeDelete(conn, Connect);
+            
+            delete m_connects;
+        }
     }
 
 	bool Signal::connectClassMethod(Object* obj, ClassMethodBind* method)
 	{
-		m_connects.push_back(EchoNew(ConnectClassMethod(this, obj, method)));
+        if(!m_connects)
+            m_connects = new vector<Connect*>::type;
+            
+		m_connects->push_back(EchoNew(ConnectClassMethod(this, obj, method)));
 
 		return true;
 	}
     
     bool Signal::connectLuaMethod(const String& obj, const Echo::String& luaMethodName)
     {
-        m_connects.push_back(EchoNew(ConnectLuaMethod(this, obj, luaMethodName)));
+        if(!m_connects)
+            m_connects = new vector<Connect*>::type;
+        
+        m_connects->push_back(EchoNew(ConnectLuaMethod(this, obj, luaMethodName)));
         
         return true;
     }
@@ -56,9 +93,12 @@ namespace Echo
     
     void Signal::save(void* pugiNode)
     {
-        for(Connect* conn : m_connects)
+        if(m_connects)
         {
-            conn->save(pugiNode);
+            for(Connect* conn : *m_connects)
+            {
+                conn->save(pugiNode);
+            }
         }
     }
 }

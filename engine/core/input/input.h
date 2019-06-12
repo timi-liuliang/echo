@@ -33,7 +33,7 @@ namespace Echo
         
     public:
         // on Mouse button down signal
-        Signal0  onMouseButtonDownEvent;
+        DECLARE_SIGNAL(Signal0, onMouseButtonDownEvent);
 
 	private:
 		Input();
