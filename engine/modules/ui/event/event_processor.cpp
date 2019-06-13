@@ -39,7 +39,7 @@ namespace Echo
 			{
 				if (eventRegion->isIntersect( ray))
 				{
-					eventRegion->onMouseButtonDown();
+					eventRegion->clicked();
 				}
 			}
 		}

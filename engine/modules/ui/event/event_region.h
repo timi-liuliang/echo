@@ -23,7 +23,7 @@ namespace Echo
 
 	public:
 		// mouse button down event
-		DECLARE_SIGNAL(Signal0, onMouseButtonDown)
+		DECLARE_SIGNAL(Signal0, clicked)
 
 	protected:
 		StringOption	m_renderType = StringOption("2d", { "2d", "3d", "ui" });

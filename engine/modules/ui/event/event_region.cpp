@@ -15,6 +15,6 @@ namespace Echo
     
     void UiEventRegion::bindMethods()
     {
-        CLASS_REGISTER_SIGNAL(UiEventRegion, onMouseButtonDown);
+        CLASS_REGISTER_SIGNAL(UiEventRegion, clicked);
     }
 }
