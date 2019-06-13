@@ -85,7 +85,7 @@ namespace Echo
         for (pugi::xml_node connectNode = signalNode->child("connect"); connectNode; connectNode = connectNode.next_sibling("connect"))
         {
             String target = connectNode.attribute("target").as_string();
-            String method = connectNode.append_attribute("method").as_string();
+            String method = connectNode.attribute("method").as_string();
             
             connectLuaMethod( target, method);
         }
