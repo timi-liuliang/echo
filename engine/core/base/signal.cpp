@@ -49,13 +49,7 @@ namespace Echo
     
     Signal::~Signal()
     {
-        if(m_connects)
-        {
-            for(Connect* conn : *m_connects)
-                EchoSafeDelete(conn, Connect);
-            
-            delete m_connects;
-        }
+		disconnectAll();
     }
 
 	bool Signal::connectClassMethod(Object* obj, ClassMethodBind* method)
@@ -78,6 +72,28 @@ namespace Echo
         return true;
     }
     
+	void Signal::disconnectAll()
+	{
+		if (m_connects)
+		{
+			for (Connect* conn : *m_connects)
+				EchoSafeDelete(conn, Connect);
+
+			delete m_connects; m_connects = nullptr;
+		}
+	}
+
+	void Signal::disconnectLuaMethod(const String& obj, const Echo::String& luaMethodName)
+	{
+		if (m_connects)
+		{
+			for (auto it=m_connects->begin(); it!=m_connects->end(); it++)
+			{
+				
+			}
+		}
+	}
+
     void Signal::load(void* pugiNode)
     {
         pugi::xml_node* signalNode = (pugi::xml_node*)pugiNode;

@@ -43,6 +43,7 @@ namespace Studio
         
         // signal widget
         QObject::connect(m_signalTreeWidget, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showSignalTreeWidgetMenu(const QPoint&)));
+		QObject::connect(m_actionDisconnectAll, SIGNAL(triggered()), this, SLOT(onSignalDisconnectAll()));
 
 		// make the invisible item can't be drop
 		m_nodeTreeWidget->invisibleRootItem()->setFlags( Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled);
@@ -688,7 +689,7 @@ namespace Studio
         if(currentNode)
         {
             Echo::String nodePath;
-            Echo::String functionName = m_signalName + "_" + currentNode->getName();
+            Echo::String functionName = "on_" + m_signalName + "_" + currentNode->getName();
             if(SlotChooseDialog::getSlot(this, nodePath, functionName))
             {
                 Echo:: Signal* signal = Echo::Class::getSignal( currentNode, m_signalName);
@@ -697,10 +698,28 @@ namespace Studio
                     Echo::Node* slotNode = currentNode->getNode(nodePath.c_str());
                     Echo::String relativePath = slotNode->getNodePathRelativeTo(currentNode);
                     signal->connectLuaMethod(relativePath, functionName);
+
+					showSelectedObjectSignal();
                 }
             }
         }
     }
+
+	// on disconnect all
+	void NodeTreePanel::onSignalDisconnectAll()
+	{
+		Echo::Node* currentNode = ECHO_DOWN_CAST<Echo::Node*>(m_currentEditObject);
+		if (currentNode)
+		{
+			Echo::Signal* signal = Echo::Class::getSignal(currentNode, m_signalName);
+			if (signal)
+			{
+				signal->disconnectAll();
+
+				showSelectedObjectSignal();
+			}
+		}
+	}
 
 	// show property recursive
 	void NodeTreePanel::showObjectPropertyRecursive(Echo::Object* classPtr, const Echo::String& className)

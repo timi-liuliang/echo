@@ -31,6 +31,7 @@ namespace Studio
 		if (dialog.exec() == QDialog::Accepted)
 		{
 			nodePath = dialog.getSelectingNodePath();
+			functionName = dialog.getFunctionName();
             
             return true;
 		}

@@ -73,6 +73,10 @@ namespace Echo
 		// connect
 		bool connectClassMethod(Object* obj, ClassMethodBind* method);
         bool connectLuaMethod(const String& obj, const Echo::String& luaMethodName);
+
+		// disconnect
+		void disconnectLuaMethod(const String& obj, const Echo::String& luaMethodName);
+		void disconnectAll();
         
         // is have connect
         bool isHaveConnects() { return m_connects && !m_connects->empty(); }

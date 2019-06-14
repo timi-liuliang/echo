@@ -107,6 +107,9 @@ namespace Studio
         
         // connect Object slot
         void onConnectOjectSlot();
+
+		// on disconnect all
+		void onSignalDisconnectAll();
         
     public slots:
         // update signals display
