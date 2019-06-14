@@ -168,6 +168,9 @@
            <property name="headerHidden">
             <bool>true</bool>
            </property>
+           <property name="columnCount">
+            <number>1</number>
+           </property>
            <column>
             <property name="text">
              <string notr="true">1</string>
@@ -251,6 +254,38 @@
    </property>
    <property name="toolTip">
     <string>Connect Signal Slot</string>
+   </property>
+  </action>
+  <action name="m_actionDisconnect">
+   <property name="text">
+    <string>Disconnect</string>
+   </property>
+   <property name="toolTip">
+    <string>Disconnect</string>
+   </property>
+  </action>
+  <action name="m_actionDisconnectAll">
+   <property name="text">
+    <string>Disconnect All</string>
+   </property>
+   <property name="toolTip">
+    <string>Disconnect All</string>
+   </property>
+  </action>
+  <action name="m_actionConnectEdit">
+   <property name="text">
+    <string>Edit</string>
+   </property>
+   <property name="toolTip">
+    <string>Edit Connection</string>
+   </property>
+  </action>
+  <action name="m_actionGoToMethod">
+   <property name="text">
+    <string>Go to Method</string>
+   </property>
+   <property name="toolTip">
+    <string>Go To Method</string>
    </property>
   </action>
  </widget>

@@ -637,11 +637,9 @@ namespace Studio
 								if (luaConn)
 								{
 									QTreeWidgetItem* connItem = new QTreeWidgetItem();
-									connItem->setText(0, luaConn->m_targetPath.c_str());
-									connItem->setIcon(0, QIcon(":/icon/Icon/signal/conn.png"));
-									connItem->setText(1, luaConn->m_functionName.c_str());
-									connItem->setData(1, Qt::UserRole, QString("conn"));
-									connItem->setFlags(connItem->flags() | Qt::ItemIsEditable);
+									connItem->setText(0, Echo::StringUtil::Format("%s:%s()", luaConn->m_targetPath.c_str(), luaConn->m_functionName.c_str()).c_str());
+									connItem->setIcon(0, QIcon(":/icon/Icon/signal/connect.png"));
+									connItem->setData(0, Qt::UserRole, QString("connect"));
 									signalItem->addChild(connItem);
 								}
 							}
@@ -668,9 +666,18 @@ namespace Studio
                 EchoSafeDelete(m_signalTreeMenu, QMenu);
                 m_signalTreeMenu = EchoNew(QMenu);
                 m_signalTreeMenu->addAction(m_actionConnectSlot);
+				m_signalTreeMenu->addAction(m_actionDisconnectAll);
                 m_signalTreeMenu->exec(QCursor::pos());
             }
-            
+			else if (itemType == "connect")
+			{
+				EchoSafeDelete(m_signalTreeMenu, QMenu);
+				m_signalTreeMenu = EchoNew(QMenu);
+				m_signalTreeMenu->addAction(m_actionConnectEdit);
+				m_signalTreeMenu->addAction(m_actionGoToMethod);
+				m_signalTreeMenu->addAction(m_actionDisconnect);
+				m_signalTreeMenu->exec(QCursor::pos());
+			}
         }
     }
     
