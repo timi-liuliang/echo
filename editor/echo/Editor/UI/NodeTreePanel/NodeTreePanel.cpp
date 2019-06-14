@@ -617,17 +617,40 @@ namespace Studio
                 // signals
                 for(auto it : classInfo->m_signals)
                 {
-                    QTreeWidgetItem* nodeItem = new QTreeWidgetItem();
-                    nodeItem->setText(0, it.first.c_str());
-                    nodeItem->setIcon(0, QIcon( ":/icon/Icon/signal/signal.png"));
-                    nodeItem->setData(0, Qt::UserRole, QString("signal"));
-                    //nodeItem->setFlags( nodeItem->flags() | Qt::ItemIsEditable);
-                    classItem->addChild(nodeItem);
+					Echo::Signal* signal = Echo::Class::getSignal(classPtr, it.first);
+					if (signal)
+					{
+						QTreeWidgetItem* signalItem = new QTreeWidgetItem();
+						signalItem->setText(0, it.first.c_str());
+						signalItem->setIcon(0, QIcon(":/icon/Icon/signal/signal.png"));
+						signalItem->setData(0, Qt::UserRole, QString("signal"));
+						//nodeItem->setFlags( nodeItem->flags() | Qt::ItemIsEditable);
+						classItem->addChild(signalItem);
+
+						// show all connects
+						auto connects = signal->getConnects();
+						if (connects)
+						{
+							for (Echo::Connect* conn : *connects)
+							{
+								Echo::ConnectLuaMethod* luaConn = ECHO_DOWN_CAST<Echo::ConnectLuaMethod*>(conn);
+								if (luaConn)
+								{
+									QTreeWidgetItem* connItem = new QTreeWidgetItem();
+									connItem->setText(0, luaConn->m_targetPath.c_str());
+									connItem->setIcon(0, QIcon(":/icon/Icon/signal/conn.png"));
+									connItem->setText(1, luaConn->m_functionName.c_str());
+									connItem->setData(1, Qt::UserRole, QString("conn"));
+									connItem->setFlags(connItem->flags() | Qt::ItemIsEditable);
+									signalItem->addChild(connItem);
+								}
+							}
+						}
+					}
                 }
                 
                 m_signalTreeWidget->invisibleRootItem()->addChild(classItem);
             }
-
         }
     }
     

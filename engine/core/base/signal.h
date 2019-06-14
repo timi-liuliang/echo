@@ -76,6 +76,9 @@ namespace Echo
         
         // is have connect
         bool isHaveConnects() { return m_connects && !m_connects->empty(); }
+
+		// get all connects
+		vector<Connect*>::type* getConnects() { return m_connects; }
         
         // owner
         Object* getOwner() { return m_owner; }
