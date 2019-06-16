@@ -60,7 +60,7 @@ namespace Echo
         void clearChannels();
         
         // register channel
-        bool registerChannel(const String& propertyName, const String& objectPathFrom, const String& propertyNameFrom);
+        bool registerChannel(const String& propertyName, const String& expression);
 
 	public:
 		// instance object

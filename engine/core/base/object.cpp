@@ -68,7 +68,7 @@ namespace Echo
     }
     
     // register channel
-    bool Object::registerChannel(const String& propertyName, const String& objectPathFrom, const String& propertyNameFrom)
+    bool Object::registerChannel(const String& propertyName, const String& expression)
     {
         return true;
     }

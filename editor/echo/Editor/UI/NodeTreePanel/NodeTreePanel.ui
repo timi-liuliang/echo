@@ -112,7 +112,7 @@
         <enum>QTabWidget::Triangular</enum>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <property name="elideMode">
         <enum>Qt::ElideMiddle</enum>
@@ -136,6 +136,9 @@
          </property>
          <item>
           <widget class="QTreeView" name="m_propertyTreeView">
+           <property name="contextMenuPolicy">
+            <enum>Qt::CustomContextMenu</enum>
+           </property>
            <property name="editTriggers">
             <set>QAbstractItemView::AllEditTriggers</set>
            </property>
@@ -286,6 +289,19 @@
    </property>
    <property name="toolTip">
     <string>Go To Method</string>
+   </property>
+  </action>
+  <action name="m_actionPropertyReference">
+   <property name="text">
+    <string>Reference</string>
+   </property>
+   <property name="toolTip">
+    <string>Reference</string>
+   </property>
+  </action>
+  <action name="m_actionDeletePropertyReference">
+   <property name="text">
+    <string>Delete Reference</string>
    </property>
   </action>
  </widget>

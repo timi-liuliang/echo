@@ -85,7 +85,7 @@ namespace Echo
 			// clone
             virtual placeholder * clone() const
             {
-                return new holder(held);
+                return EchoNew( holder(held));
             }
 
 		private:

@@ -41,6 +41,9 @@ namespace Studio
 		QObject::connect(m_nodeTreeWidget, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showMenu(const QPoint&)));
 		QObject::connect(m_nodeTreeWidget, SIGNAL(itemPositionChanged(QTreeWidgetItem*)), this, SLOT(onItemPositionChanged(QTreeWidgetItem*)));
         
+        // property right
+        QObject::connect(m_propertyTreeView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showPropertyMenu(const QPoint&)));
+        
         // signal widget
         QObject::connect(m_signalTreeWidget, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showSignalTreeWidgetMenu(const QPoint&)));
 		QObject::connect(m_actionDisconnectAll, SIGNAL(triggered()), this, SLOT(onSignalDisconnectAll()));
@@ -247,6 +250,22 @@ namespace Studio
 		onSelectNode();
 	}
 
+    // property tree menu
+    void NodeTreePanel::showPropertyMenu(const QPoint& point)
+    {
+        QModelIndex index = m_propertyTreeView->indexAt(point);
+        if(index.isValid())
+        {
+            EchoSafeDelete(m_propertyMenu, QMenu);
+            m_propertyMenu = EchoNew(QMenu);
+            
+            m_propertyMenu->addAction(m_actionPropertyReference);
+            m_propertyMenu->addAction(m_actionDeletePropertyReference);
+            
+            m_propertyMenu->exec(QCursor::pos());
+        }
+    }
+    
 	// node tree widget show menu
 	void NodeTreePanel::showMenu(const QPoint& point)
 	{

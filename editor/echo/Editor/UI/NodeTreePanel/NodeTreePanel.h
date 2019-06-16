@@ -101,6 +101,10 @@ namespace Studio
 		// node tree drag drop operator
 		void onItemPositionChanged(QTreeWidgetItem* item);
         
+    public slots:
+        // property tree menu
+        void showPropertyMenu(const QPoint& point);
+        
     private slots:
         // signal tree widget show menu
         void showSignalTreeWidgetMenu(const QPoint& point);
@@ -157,6 +161,7 @@ namespace Studio
 		Echo::Object*					m_nextEditObject = nullptr;
 		Echo::Object*					m_currentEditObject = nullptr;
 		QMenu*							m_nodeTreeMenu = nullptr;
+        QMenu*                          m_propertyMenu = nullptr;
         QMenu*                          m_signalTreeMenu = nullptr;
         Echo::String                    m_signalName;
 	};

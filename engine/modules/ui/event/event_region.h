@@ -13,10 +13,14 @@ namespace Echo
     public:
         UiEventRegion();
         virtual ~UiEventRegion();
+        
+        // enable
+        bool isEnable() const { return m_enable; }
+        void setEnable(bool enable) { m_enable = enable; }
 
 		// render type
-		const StringOption& getRenderType() { return m_renderType; }
-		void setRenderType(const StringOption& type) { m_renderType.setValue(type.getValue()); }
+		const StringOption& getType() { return m_type; }
+		void setType(const StringOption& type) { m_type.setValue(type.getValue()); }
 
 		// is intersect with screen coordinate
 		virtual bool isIntersect(const Ray& ray) { return false; }
@@ -26,6 +30,7 @@ namespace Echo
 		DECLARE_SIGNAL(Signal0, clicked)
 
 	protected:
-		StringOption	m_renderType = StringOption("2d", { "2d", "3d", "ui" });
+        bool            m_enable = true;
+		StringOption	m_type = StringOption("ui", { "2d", "3d", "ui" });
     };
 }
