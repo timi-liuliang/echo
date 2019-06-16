@@ -3,6 +3,7 @@
 #include "engine/core/memory/MemAllocDef.h"
 #include "engine/core/base/class.h"
 #include "engine/core/base/property_info.h"
+#include "engine/core/base/channel.h"
 #include "engine/core/editor/object_editor.h"
 
 namespace Echo
@@ -52,6 +53,14 @@ namespace Echo
         
         // call lua function of this node
         virtual void callLuaFunction(const String& funName, const Variant** args, int argCount) {}
+        
+    public:
+        // clear channels
+        void clearChannel(const String& propertyName);
+        void clearChannels();
+        
+        // register channel
+        bool registerChannel(const String& propertyName, const String& objectPathFrom, const String& propertyNameFrom);
 
 	public:
 		// instance object
@@ -77,5 +86,6 @@ namespace Echo
 		String			m_name;
 		ResourcePath	m_path;
 		PropertyInfos	m_propertys;
+        ChannelsPtr     m_chanels = nullptr;
 	};
 }

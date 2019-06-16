@@ -56,6 +56,22 @@ namespace Echo
 		static String className = "Object";
 		return className;
 	}
+    
+    void Object::clearChannel(const String& propertyName)
+    {
+        
+    }
+    
+    void Object::clearChannels()
+    {
+        
+    }
+    
+    // register channel
+    bool Object::registerChannel(const String& propertyName, const String& objectPathFrom, const String& propertyNameFrom)
+    {
+        return true;
+    }
 
 	// propertys (script property or dynamic property)
 	const PropertyInfos& Object::getPropertys() 
