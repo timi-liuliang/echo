@@ -256,13 +256,17 @@ namespace Studio
         QModelIndex index = m_propertyTreeView->indexAt(point);
         if(index.isValid())
         {
-            EchoSafeDelete(m_propertyMenu, QMenu);
-            m_propertyMenu = EchoNew(QMenu);
-            
-            m_propertyMenu->addAction(m_actionPropertyReference);
-            m_propertyMenu->addAction(m_actionDeletePropertyReference);
-            
-            m_propertyMenu->exec(QCursor::pos());
+            Echo::String propertyName = m_propertyHelper.getPropertyName(index);
+            if(!propertyName.empty())
+            {
+                EchoSafeDelete(m_propertyMenu, QMenu);
+                m_propertyMenu = EchoNew(QMenu);
+                
+                m_propertyMenu->addAction(m_actionPropertyReference);
+                m_propertyMenu->addAction(m_actionDeletePropertyReference);
+                
+                m_propertyMenu->exec(QCursor::pos());
+            }
         }
     }
     

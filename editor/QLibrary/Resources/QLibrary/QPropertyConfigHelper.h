@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QStandardItemModel>
 #include <QtWidgets/QTreeView>
 #include <engine/core/util/Array.hpp>
 #include <engine/core/math/Math.h>
@@ -30,16 +31,14 @@ namespace QT_UI
 		QPropertyConfigHelper();
 		~QPropertyConfigHelper();
 
-		// 设置标题
+		// header
 		void setHeader( const char* header0, const char* header1, const char* header2=nullptr, const char* header3=nullptr);
 
-		// 开始某菜单项
+		// menu
 		void beginMenu( const char* text);
-
-		// 结束某菜单项
 		void endMenu();
 
-		// 添加编辑项
+		// add item
 		void addItem(const char* propertyName, float value, WidgetType widget, const char* widgetParams = nullptr);
 		void addItem(const char* propertyName, Echo::i32 value, WidgetType widget, const char* widgetParams = nullptr);
 		void addItem(const char* propertyName, Echo::ui32 value, WidgetType widget, const char* widgetParams = nullptr);
@@ -56,18 +55,27 @@ namespace QT_UI
 			//static_assert(false, "ambiguous overload for function `addItem`.");
 		}
 
-		// 获取结果
+		// get result
 		Echo::String getResult();
 
-		// 应用到view,
+		// apply
 		void applyTo(const Echo::String& id, QTreeView* treeView, const QObject* receiver, const char* memeber, bool clear = true);
 
-		// 获取属性控件
+		// get property
 		QT_UI::QProperty* getQProperty() { return m_property; }
 
+        // clear
 		void clear() { m_result.clear(); }
+        
+    public:
+        // get model
+        QStandardItemModel* getModel();
+        
+        // get property name
+        Echo::String getPropertyName(QModelIndex index);
+        
 	private:
-		// UI显示格式
+		// format
 		Echo::String FormatUI(WidgetType widget, const char* widgetParams);
 
 	private:

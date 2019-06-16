@@ -203,4 +203,14 @@ namespace QT_UI
 		if (memeber)
 			m_signalConn = QObject::connect(m_property->m_model, SIGNAL(Signal_ValueChanged(const QString&, QVariant,int, int)), receiver, memeber);
 	}
+    
+    QStandardItemModel* QPropertyConfigHelper::getModel()
+    {
+        return m_property->m_model;
+    }
+    
+    Echo::String QPropertyConfigHelper::getPropertyName(QModelIndex index)
+    {
+        return index.model()->data(index, Qt::DisplayPropertyRole).toString().toStdString().c_str();
+    }
 }

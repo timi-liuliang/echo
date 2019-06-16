@@ -13,7 +13,7 @@ namespace QT_UI
 	typedef std::function<void(const char*)> SubEditCb; 
 
 	//------------------------------------------
-	// 属性专用(用途有限) 2010-03-15  帝林
+	// 蔘PropertyModel 2010-03-15  captain
 	//------------------------------------------
 	class QPropertyModel : public QStandardItemModel
 	{
