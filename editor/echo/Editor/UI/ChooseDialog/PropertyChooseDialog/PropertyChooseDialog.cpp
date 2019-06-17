@@ -18,7 +18,7 @@ namespace Studio
 
 		// refresh propetys display
 		m_treeWidget->clear();
-		refreshPropertysDisplayRecursive( objectPtr, objectPtr->getClassName());
+		refreshPropertysDisplayRecursive( m_treeWidget, objectPtr, objectPtr->getClassName());
 		m_treeWidget->expandAll();
 		currentItemChanged();
 
@@ -58,7 +58,7 @@ namespace Studio
 	}
 
 	// refresh propertys display
-	void PropertyChooseDialog::refreshPropertysDisplayRecursive(Echo::Object* objectPtr, const Echo::String& className)
+	void PropertyChooseDialog::refreshPropertysDisplayRecursive(QTreeWidget* treeWidget, Echo::Object* objectPtr, const Echo::String& className)
 	{
 		// show parent property first
 		Echo::String parentClassName;
@@ -66,7 +66,7 @@ namespace Studio
 		{
 			// don't display property of object
 			if (parentClassName != "Object")
-				refreshPropertysDisplayRecursive( objectPtr, parentClassName);
+				refreshPropertysDisplayRecursive( treeWidget, objectPtr, parentClassName);
 		}
 
 		// show self property
@@ -84,7 +84,7 @@ namespace Studio
 			classNameItem->setData(0, Qt::UserRole, "class");
 
 			// append class name item
-			m_treeWidget->invisibleRootItem()->addChild(classNameItem);
+			treeWidget->invisibleRootItem()->addChild(classNameItem);
 
 			// all propertys
 			for (const Echo::PropertyInfo* prop : propertys)

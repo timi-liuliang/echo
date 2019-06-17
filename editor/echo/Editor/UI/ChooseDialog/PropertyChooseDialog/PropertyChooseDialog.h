@@ -17,13 +17,13 @@ namespace Studio
 
 		// get selecting node
 		static Echo::String getSelectingProperty( QWidget* parent, Echo::Object* objectPtr);
+        
+        // refresh propertys display
+        static void refreshPropertysDisplayRecursive(QTreeWidget* treeWidget, Echo::Object* objectPtr, const Echo::String& className);
 
 	private:
 		// get selecting node path
 		const Echo::String getSelectingProperty() const;
-
-		// refresh propertys display
-		void refreshPropertysDisplayRecursive(Echo::Object* objectPtr, const Echo::String& className);
 
 	private slots:
 		// on current item changed

@@ -1,5 +1,6 @@
 #include "ReferenceChooseDialog.h"
 #include "NodeTreePanel.h"
+#include "PropertyChooseDialog.h"
 
 namespace Studio
 {
@@ -16,6 +17,7 @@ namespace Studio
         
         // connect signal slot
         //QObject::connect(m_functionNameLineEdit, SIGNAL(textChanged(QString)), this, SLOT(onFunctionNameChanged()));
+        QObject::connect(m_treeWidget, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(onClickedNodeItem(QTreeWidgetItem*, int)));
 	}
 
 	ReferenceChooseDialog::~ReferenceChooseDialog()
@@ -61,5 +63,17 @@ namespace Studio
     {
         Echo::String functionName = getFunctionName();
         m_ok->setEnabled(!functionName.empty());
+    }
+    
+    void ReferenceChooseDialog::onClickedNodeItem(QTreeWidgetItem* item, int column)
+    {
+        Echo::i32 nodeId = item->data(0, Qt::UserRole).toInt();
+        Echo::Node* node = (Echo::Node*)Echo::Node::getById(nodeId);
+        if(node)
+        {
+            m_treeWidgetProperty->clear();
+            PropertyChooseDialog::refreshPropertysDisplayRecursive(m_treeWidgetProperty, node, node->getClassName());
+            m_treeWidgetProperty->expandAll();
+        }
     }
 }

@@ -27,5 +27,8 @@ namespace Studio
     private slots:
         // on function name changed slot
         void onFunctionNameChanged();
+        
+        // on click node item
+        void onClickedNodeItem(QTreeWidgetItem* item, int column);
 	};
 }
