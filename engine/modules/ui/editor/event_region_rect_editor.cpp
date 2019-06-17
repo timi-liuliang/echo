@@ -27,7 +27,8 @@ namespace Echo
 
 	void UiEventRegionRectEditor::editor_update_self()
 	{
-		if (m_object)
+		UiEventRegion* eventRegion = ECHO_DOWN_CAST<UiEventRegion*>(m_object);
+		if (eventRegion && eventRegion->isEnable())
 		{
 			if (!Engine::instance()->getConfig().m_isGame)
 			{

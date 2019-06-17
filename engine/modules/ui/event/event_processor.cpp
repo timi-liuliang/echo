@@ -37,7 +37,7 @@ namespace Echo
 			camera->getCameraRay(ray, Input::instance()->getMousePosition());
 			for (UiEventRegion* eventRegion : m_eventRegions)
 			{
-				if (eventRegion->isIntersect( ray))
+				if (eventRegion->isEnable() && eventRegion->isIntersect( ray))
 				{
 					eventRegion->clicked();
 				}

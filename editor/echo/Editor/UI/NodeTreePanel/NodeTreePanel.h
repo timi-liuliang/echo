@@ -104,6 +104,9 @@ namespace Studio
     public slots:
         // property tree menu
         void showPropertyMenu(const QPoint& point);
+
+		// on reference other property
+		void onReferenceProperty();
         
     private slots:
         // signal tree widget show menu

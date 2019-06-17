@@ -7,6 +7,7 @@
 #include "EchoEngine.h"
 #include "ResChooseDialog.h"
 #include "PathChooseDialog.h"
+#include "ReferenceChooseDialog.h"
 #include "ResPanel.h"
 #include "MainWindow.h"
 #include "RenderWindow.h"
@@ -43,6 +44,7 @@ namespace Studio
         
         // property right
         QObject::connect(m_propertyTreeView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showPropertyMenu(const QPoint&)));
+		QObject::connect(m_actionPropertyReference, SIGNAL(triggered()), this, SLOT(onReferenceProperty()));
         
         // signal widget
         QObject::connect(m_signalTreeWidget, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showSignalTreeWidgetMenu(const QPoint&)));
@@ -269,6 +271,16 @@ namespace Studio
             }
         }
     }
+
+	void NodeTreePanel::onReferenceProperty()
+	{
+		Echo::String nodePath;
+		Echo::String propertyName;
+		if (ReferenceChooseDialog::getReference(this, nodePath, propertyName))
+		{
+			int a = 10;
+		}
+	}
     
 	// node tree widget show menu
 	void NodeTreePanel::showMenu(const QPoint& point)
@@ -877,7 +889,6 @@ namespace Studio
 		}
 	}
 
-	// edit res
 	void NodeTreePanel::onSelectRes(const Echo::String& resPath)
 	{
 		Echo::String extWithDot = Echo::PathUtil::GetFileExt(resPath, true);
