@@ -16,8 +16,11 @@ namespace Studio
 		NodeTreePanel::refreshNodeTreeDisplay(m_treeWidget);
         
         // connect signal slot
-        //QObject::connect(m_functionNameLineEdit, SIGNAL(textChanged(QString)), this, SLOT(onFunctionNameChanged()));
-        QObject::connect(m_treeWidget, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(onClickedNodeItem(QTreeWidgetItem*, int)));
+        QObject::connect(m_treeWidgetProperty, SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)), this, SLOT(currentItemChanged()));
+        QObject::connect(m_treeWidget, SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)), this, SLOT(onClickedNodeItem()));
+        
+        // simulate event
+        onClickedNodeItem();
 	}
 
 	ReferenceChooseDialog::~ReferenceChooseDialog()
@@ -28,12 +31,11 @@ namespace Studio
 	bool ReferenceChooseDialog::getReference(QWidget* parent, Echo::String& nodePath, Echo::String& propertyName)
 	{
 		ReferenceChooseDialog dialog(parent);
-        dialog.setFunctionName(propertyName);
 		dialog.show();
 		if (dialog.exec() == QDialog::Accepted)
 		{
 			nodePath = dialog.getSelectingNodePath();
-			propertyName = dialog.getFunctionName();
+			propertyName = dialog.getPropertyName();
             
             return true;
 		}
@@ -49,24 +51,29 @@ namespace Studio
 		return node ? node->getNodePath() : Echo::StringUtil::BLANK;
 	}
     
-    const Echo::String ReferenceChooseDialog::getFunctionName() const
+    const Echo::String ReferenceChooseDialog::getPropertyName() const
     {
-		return "";// m_functionNameLineEdit->text().toStdString().c_str();
+		return m_propertyName;
     }
     
-    void ReferenceChooseDialog::setFunctionName(const Echo::String& functionName)
+    void ReferenceChooseDialog::currentItemChanged()
     {
-        //m_functionNameLineEdit->setText(functionName.c_str());
+        QTreeWidgetItem* item = m_treeWidgetProperty->currentItem();
+        if (item && item->data(0, Qt::UserRole).toString()=="property")
+        {
+            m_propertyName = item->text(0).toStdString().c_str();
+            m_ok->setEnabled(true);
+        }
+        else
+        {
+            m_propertyName = "";
+            m_ok->setEnabled(false);
+        }
     }
     
-    void ReferenceChooseDialog::onFunctionNameChanged()
+    void ReferenceChooseDialog::onClickedNodeItem()
     {
-        Echo::String functionName = getFunctionName();
-        m_ok->setEnabled(!functionName.empty());
-    }
-    
-    void ReferenceChooseDialog::onClickedNodeItem(QTreeWidgetItem* item, int column)
-    {
+        QTreeWidgetItem* item = m_treeWidget->currentItem();
         Echo::i32 nodeId = item->data(0, Qt::UserRole).toInt();
         Echo::Node* node = (Echo::Node*)Echo::Node::getById(nodeId);
         if(node)

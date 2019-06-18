@@ -21,14 +21,16 @@ namespace Studio
 		const Echo::String getSelectingNodePath() const;
         
         // function name
-        const Echo::String getFunctionName() const;
-        void setFunctionName(const Echo::String& functionName);
+        const Echo::String getPropertyName() const;
         
     private slots:
         // on function name changed slot
-        void onFunctionNameChanged();
+        void currentItemChanged();
         
         // on click node item
-        void onClickedNodeItem(QTreeWidgetItem* item, int column);
+        void onClickedNodeItem();
+        
+    private:
+        Echo::String    m_propertyName;
 	};
 }
