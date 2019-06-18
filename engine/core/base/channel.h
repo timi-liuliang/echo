@@ -14,7 +14,7 @@ namespace Echo
         
     public:
         Channel(Object* owner, const String& name, const String& expression);
-        ~Channel() {}
+        ~Channel();
         
         // get name
         const String& getName() const { return m_name; }

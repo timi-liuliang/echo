@@ -82,5 +82,8 @@ namespace Echo
 
 		// update scripts
 		LuaBinder::instance()->execString("update_all_nodes()", true);
-	}
+        
+        // update channels
+        Channel::syncAll();
+    }
 }
