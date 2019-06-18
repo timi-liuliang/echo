@@ -743,6 +743,7 @@ namespace Echo
 					// overwrite property
 					loadPropertyRecursive(xmlNode, node, node->getClassName());
                     loadSignalSlotConnects(xmlNode, node, node->getClassName());
+                    loadChannels(xmlNode, node);
 				}
 
 				if (parent)

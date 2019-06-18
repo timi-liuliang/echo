@@ -72,22 +72,19 @@ namespace Echo
 		// instance object
 		static Object* instanceObject(void* pugiNode);
 
-		// remember property recursive
-		static void loadPropertyRecursive(void* pugiNode, Echo::Object* classPtr, const Echo::String& className);
-
-		// remember property recursive
+		// load/save property recursive
+        static void loadPropertyRecursive(void* pugiNode, Echo::Object* classPtr, const Echo::String& className);
 		static void savePropertyRecursive(void* pugiNode, Echo::Object* classPtr, const Echo::String& className);
 
 		// load propertys value
 		static void loadPropertyValue(void* pugiNode, Echo::Object* classPtr, const Echo::String& className, i32 flag);
         
-        // load signal slot connects
+        // load/save signal slot connects
         static void loadSignalSlotConnects(void* pugiNode, Echo::Object* classPtr, const Echo::String& className);
-        
-        // remember signal-slot connect recursive
         static void saveSignalSlotConnects(void* pugiNode, Echo::Object* classPtr, const Echo::String& className);
         
-        // save channels
+        // load/save channels
+        static void loadChannels(void* pugiNode, Echo::Object* classPtr);
         static void saveChannels(void* pugiNode, Echo::Object* classPtr);
 
 	protected:

@@ -136,6 +136,7 @@ namespace Echo
 
 			loadPropertyRecursive(pugiNode, res, className);
             loadSignalSlotConnects(xmlNode, res, className);
+            loadChannels(xmlNode, res);
 
 			return res;
 		}
@@ -302,6 +303,18 @@ namespace Echo
                     signal->save(&signalNode);
                 }
             }
+        }
+    }
+    
+    void Object::loadChannels(void* pugiNode, Echo::Object* classPtr)
+    {
+        for (pugi::xml_node channelNode = ((pugi::xml_node*)pugiNode)->child("channel"); channelNode; channelNode = channelNode.next_sibling("channel"))
+        {
+            // get signal by class name
+            String name = channelNode.attribute("name").as_string();
+            String expression = channelNode.attribute("expression").as_string();
+            
+            classPtr->registerChannel( name, expression);
         }
     }
     
