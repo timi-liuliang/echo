@@ -675,6 +675,7 @@ namespace Echo
 
 		savePropertyRecursive(pugiNode, node, node->getClassName());
         saveSignalSlotConnects(pugiNode, node, node->getClassName());
+        saveChannels(pugiNode, node);
 
 		if (recursive)
 		{

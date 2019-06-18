@@ -55,9 +55,15 @@ namespace Echo
         virtual void callLuaFunction(const String& funName, const Variant** args, int argCount) {}
         
     public:
+        // get channels
+        ChannelsPtr getChannels() { return m_chanels; }
+        
         // clear channels
         void clearChannel(const String& propertyName);
         void clearChannels();
+        
+        // is channel exist
+        bool isChannelExist(const String& propertyName);
         
         // register channel
         bool registerChannel(const String& propertyName, const String& expression);
@@ -80,6 +86,9 @@ namespace Echo
         
         // remember signal-slot connect recursive
         static void saveSignalSlotConnects(void* pugiNode, Echo::Object* classPtr, const Echo::String& className);
+        
+        // save channels
+        static void saveChannels(void* pugiNode, Echo::Object* classPtr);
 
 	protected:
 		i32				m_id;

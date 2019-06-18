@@ -70,7 +70,31 @@ namespace Echo
     // register channel
     bool Object::registerChannel(const String& propertyName, const String& expression)
     {
+        if(!m_chanels)
+            m_chanels = new std::vector<Channel*>;
+        
+        if(!isChannelExist(propertyName))
+        {
+            Channel* channel = EchoNew(Channel(this, propertyName, expression));
+            m_chanels->push_back(channel);
+        }
+        
         return true;
+    }
+    
+    // is channel exist
+    bool Object::isChannelExist(const String& propertyName)
+    {
+        if(!m_chanels)
+            return false;
+        
+        for(Channel* channel : *m_chanels)
+        {
+            if(channel->getName() == propertyName)
+                return true;
+        }
+        
+        return false;
     }
 
 	// propertys (script property or dynamic property)
@@ -277,6 +301,22 @@ namespace Echo
                     // connects
                     signal->save(&signalNode);
                 }
+            }
+        }
+    }
+    
+    // save channels
+    void Object::saveChannels(void* pugiNode, Echo::Object* classPtr)
+    {
+        ChannelsPtr channels = classPtr->getChannels();
+        if(channels)
+        {
+            pugi::xml_node* xmlNode = (pugi::xml_node*)pugiNode;
+            for(Channel* channel : *channels)
+            {
+                pugi::xml_node channelNode = xmlNode->append_child("channel");
+                channelNode.append_attribute("name").set_value(channel->getName().c_str());
+                channelNode.append_attribute("expression").set_value(channel->getExpression().c_str());
             }
         }
     }
