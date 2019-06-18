@@ -167,5 +167,6 @@ namespace Studio
         QMenu*                          m_propertyMenu = nullptr;
         QMenu*                          m_signalTreeMenu = nullptr;
         Echo::String                    m_signalName;
+        Echo::String                    m_channelPropertyTarget;
 	};
 }

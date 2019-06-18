@@ -258,8 +258,8 @@ namespace Studio
         QModelIndex index = m_propertyTreeView->indexAt(point);
         if(index.isValid())
         {
-            Echo::String propertyName = m_propertyHelper.getPropertyName(index);
-            if(!propertyName.empty())
+            m_channelPropertyTarget = m_propertyHelper.getPropertyName(index);
+            if(!m_channelPropertyTarget.empty())
             {
                 EchoSafeDelete(m_propertyMenu, QMenu);
                 m_propertyMenu = EchoNew(QMenu);
@@ -278,7 +278,15 @@ namespace Studio
 		Echo::String propertyName;
 		if (ReferenceChooseDialog::getReference(this, nodePath, propertyName))
 		{
-			int a = 10;
+            Echo::Node* currentNode = getCurrentSelectNode();
+            if(currentNode)
+            {
+                Echo::Node* fromNode = currentNode->getNode(nodePath.c_str());
+                Echo::String relativePath = fromNode->getNodePathRelativeTo(currentNode);
+    
+                Echo::String expression = Echo::StringUtil::Format("ch(%s, %s)", relativePath.c_str(), propertyName.c_str());
+                currentNode->registerChannel( m_channelPropertyTarget, expression);
+            }
 		}
 	}
     
