@@ -12,10 +12,17 @@ end
 
 objs = {}
 nodes = {}
+channels = {}
 		
 function update_all_nodes()
     for k, v in pairs(nodes) do
         v:update()
+    end
+end
+
+function update_all_channels()
+    for k, v in pairs(channels) do
+        v()
     end
 end
 )";

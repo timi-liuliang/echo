@@ -1,27 +1,47 @@
 #include "channel.h"
+#include "engine/core/script/lua/lua_binder.h"
+#include "object.h"
 
 namespace Echo
 {
-    static std::vector<Channel*> g_channels;
-    
     Channel::Channel(Object* owner, const String& name, const String& expression)
         : m_owner(owner)
         , m_name(name)
         , m_expression(expression)
     {
-        g_channels.push_back(this);
+        // unique id
+        static i32 id = 0;
+        m_id = id++;
+        
+        // register to lua
+        registerToLua();
     }
     
     Channel::~Channel()
     {
-        std::remove(g_channels.begin(), g_channels.end(), this);
+        unregisterFromLua();
     }
     
-    i32 Channel::syncAll()
+    void Channel::registerToLua()
     {
-        for(Channel* channel : g_channels)
-        {
-            int a = 10;
-        }
+        String luaStr = StringUtil::Format(
+            "channels._%d = function()\n"\
+                "local self_node = objs._%d"\
+                "\n"\
+                "\n" \
+            "end\n", m_id, m_owner->getId());
+        
+        LuaBinder::instance()->execString(luaStr);
+    }
+    
+    void Channel::unregisterFromLua()
+    {
+        String luaStr = StringUtil::Format("channels._%d = nil", m_id);
+        LuaBinder::instance()->execString(luaStr);
+    }
+    
+    void Channel::syncAll()
+    {
+        LuaBinder::instance()->execString("update_all_channels()", true);
     }
 }
