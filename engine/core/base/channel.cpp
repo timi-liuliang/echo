@@ -1,6 +1,7 @@
 #include "channel.h"
 #include "engine/core/script/lua/lua_binder.h"
 #include "object.h"
+#include <thirdparty/tinyexpr/tinyexpr.h>
 
 namespace Echo
 {
