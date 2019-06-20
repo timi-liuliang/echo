@@ -33,8 +33,10 @@ IF(ECHO_PLATFORM_WIN32)
 	TARGET_LINK_LIBRARIES(${MODULE_NAME} googletest engine pugixml)
 	TARGET_LINK_LIBRARIES(${MODULE_NAME} zlib engine winmm.lib imm32.lib dxgi.lib Shlwapi.lib lua recast freeimage)
 	TARGET_LINK_LIBRARIES(${MODULE_NAME} glslang spirv-cross)
+	TARGET_LINK_LIBRARIES(${MODULE_NAME} tinyexpr)
 ELSEIF(ECHO_PLATFORM_MAC)
 	TARGET_LINK_LIBRARIES(${MODULE_NAME} googletest engine glslang spirv-cross pugixml freeimage lua zlib)
+	TARGET_LINK_LIBRARIES(${MODULE_NAME} tinyexpr)
 ENDIF()
 
 # set folder
