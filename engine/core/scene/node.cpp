@@ -472,6 +472,8 @@ namespace Echo
 		CLASS_BIND_METHOD(Node, isEnable,				DEF_METHOD("isEnable"));
 		CLASS_BIND_METHOD(Node, setScript,				DEF_METHOD("setScript"));
 		CLASS_BIND_METHOD(Node, getScript,				DEF_METHOD("getScript"));
+		CLASS_BIND_METHOD(Node, getPropertyValue,		DEF_METHOD("getPropertyValue"));
+		CLASS_BIND_METHOD(Node, ch,						DEF_METHOD("ch"));
 
 		CLASS_REGISTER_PROPERTY(Node, "Enable", Variant::Type::Bool, "isEnable", "setEnable");
 		CLASS_REGISTER_PROPERTY(Node, "Position", Variant::Type::Vector3, "getLocalPosition", "setLocalPosition");
@@ -642,6 +644,20 @@ namespace Echo
 		Node* duplicateNode = instanceNodeTree(&root, nullptr);
 
 		return duplicateNode;
+	}
+
+	Variant Node::getPropertyValue(const String& propertyName)
+	{
+		Variant value;
+		Class::getPropertyValue(this, propertyName, value);
+		return value;
+	}
+
+	// ch
+	Variant Node::ch(const String& path, const String& propertyName)
+	{
+		Node* targetNode = getNode(path.c_str());
+		return targetNode ? targetNode->getPropertyValue(propertyName) : Variant();
 	}
 
 	// save

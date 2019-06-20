@@ -324,4 +324,14 @@ namespace Echo
 			lua_pushnil(state);
 		}
 	}
+
+	template<> INLINE void lua_pushvalue<Variant>(lua_State* state, Variant value)
+	{
+		switch (value.getType())
+		{
+		case Variant::Type::Bool:	lua_pushvalue<bool>(state, value.toBool()); break;
+		case Variant::Type::Real:	lua_pushvalue<float>(state, value.toReal()); break;
+		default:					lua_pushnil(state); lua_binder_error("lua stack push value error, unknow c type"); break;
+		}
+	}
 }

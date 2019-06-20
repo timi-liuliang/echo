@@ -130,6 +130,13 @@ namespace Echo
         
         // call lua function of this node
         virtual void callLuaFunction(const String& funName, const Variant** args, int argCount) override;
+
+	public:
+		// get property value
+		Variant getPropertyValue(const String& propertyName);
+
+		// ch
+		Variant ch(const String& path, const String& propertyName);
 		
 	public:
 		// get node by path
