@@ -1,7 +1,6 @@
 #include "channel.h"
 #include "engine/core/script/lua/lua_binder.h"
 #include "object.h"
-#include <thirdparty/tinyexpr/tinyexpr.h>
 
 namespace Echo
 {
@@ -25,14 +24,20 @@ namespace Echo
     
     void Channel::registerToLua()
     {
-        String luaStr = StringUtil::Format(
-            "channels._%d = function()\n"\
-                "local self_node = objs._%d"\
-                "\n"\
-                "\n" \
-            "end\n", m_id, m_owner->getId());
-        
-        LuaBinder::instance()->execString(luaStr);
+        String getExpression = StringUtil::Replace(m_expression, "ch(", StringUtil::Format("objs._%d:ch(", m_owner->getId()));
+        PropertyInfoStatic* propertyInfo = ECHO_DOWN_CAST<PropertyInfoStatic*>(Class::getProperty(m_owner, m_name));
+        if(propertyInfo)
+        {
+            String luaStr = StringUtil::Format
+            (
+                "channels._%d = function()\n"\
+                "    local result = %s\n"\
+                "    objs._%d:%s(result)\n"\
+                "end\n", m_id, getExpression.c_str(), m_owner->getId(), propertyInfo->m_setter.c_str()
+             );
+            
+            LuaBinder::instance()->execString(luaStr);
+        }
     }
     
     void Channel::unregisterFromLua()

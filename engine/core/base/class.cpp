@@ -277,6 +277,22 @@ namespace Echo
 
 		return static_cast<ui32>(propertys.size());
 	}
+    
+    PropertyInfo* Class::getProperty(Object* classPtr, const String& propertyName)
+    {
+        String className = classPtr->getClassName();
+        do
+        {
+            PropertyInfo* pi = getProperty(className, classPtr, propertyName);
+            if (pi)
+            {
+                return pi;
+            }
+            
+        } while (getParentClass(className, className));
+        
+        return nullptr;
+    }
 
 	// get property
 	PropertyInfo* Class::getProperty(const String& className, Object* classPtr, const String& propertyName)

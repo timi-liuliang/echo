@@ -13,10 +13,6 @@ namespace Echo
     public:
         UiEventRegion();
         virtual ~UiEventRegion();
-        
-        // enable
-        bool isEnable() const { return m_enable; }
-        void setEnable(bool enable) { m_enable = enable; }
 
 		// render type
 		const StringOption& getType() { return m_type; }
@@ -30,7 +26,6 @@ namespace Echo
 		DECLARE_SIGNAL(Signal0, clicked)
 
 	protected:
-        bool            m_enable = true;
 		StringOption	m_type = StringOption("ui", { "2d", "3d", "ui" });
     };
 }

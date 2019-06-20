@@ -31,6 +31,9 @@ namespace Echo
 		// path
 		const String& getPath() const { return m_path.getPath(); }
 		void setPath(const String& path) { m_path.setPath(path); }
+        
+        // register to script
+        virtual void registerToScript() {}
 
 		// free this object from memory
 		virtual void queueFree() { ECHO_DELETE_T(this, Object); }

@@ -165,6 +165,7 @@ namespace Echo
 		static ui32 getPropertys(const String& className, Object* classPtr, PropertyInfos& propertys, i32 flag=PropertyInfo::Static | PropertyInfo::Dynamic);
 
 		// get property
+        static PropertyInfo* getProperty(Object* classPtr, const String& propertyName);
 		static PropertyInfo* getProperty(const String& className, Object* classPtr, const String& propertyName);
 
 		// get property value

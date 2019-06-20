@@ -67,9 +67,11 @@ namespace Echo
         
     }
     
-    // register channel
     bool Object::registerChannel(const String& propertyName, const String& expression)
     {
+        // channel depends on lua
+        registerToScript();
+        
         if(!m_chanels)
             m_chanels = new std::vector<Channel*>;
         

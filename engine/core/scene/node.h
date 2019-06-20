@@ -172,7 +172,7 @@ namespace Echo
 		static Node* instanceNodeTree(void* pugiNode, Node* parent);
 
 		// register to script
-		void registerToScript();
+		virtual void registerToScript() override;
 
 	protected:
         // dirty update flag
