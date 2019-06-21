@@ -59,7 +59,14 @@ namespace Echo
     
     void Object::clearChannel(const String& propertyName)
     {
-        
+		//if (m_chanels)
+		//{
+		//	for (auto it = *m_chanels->begin(); it != *m_chanels->end(); it++)
+		//	{
+		//		if (it->getName() == propertyName)
+		//			(*m_chanels)->erase(it++);
+		//	}
+		//}
     }
     
     void Object::clearChannels()

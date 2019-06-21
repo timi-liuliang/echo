@@ -284,7 +284,7 @@ namespace Studio
                 Echo::Node* fromNode = currentNode->getNode(nodePath.c_str());
                 Echo::String relativePath = fromNode->getNodePathRelativeTo(currentNode);
     
-                Echo::String expression = Echo::StringUtil::Format("ch(%s, %s)", relativePath.c_str(), propertyName.c_str());
+                Echo::String expression = Echo::StringUtil::Format("ch(\"%s\", \"%s\")", relativePath.c_str(), propertyName.c_str());
                 currentNode->registerChannel( m_channelPropertyTarget, expression);
             }
 		}

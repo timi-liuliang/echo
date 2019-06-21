@@ -353,6 +353,7 @@ namespace Echo
 
 			// free value
 			lua_freevalue<P0>(p0);
+			lua_freevalue<P1>(p1);
 
 			// push the results
 			lua_pushvalue<R>(luaState, result);
