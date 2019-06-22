@@ -40,18 +40,18 @@ namespace QT_UI
 		void endMenu();
 
 		// add item
-		void addItem(const char* propertyName, float value, WidgetType widget, const char* widgetParams = nullptr);
-		void addItem(const char* propertyName, Echo::i32 value, WidgetType widget, const char* widgetParams = nullptr);
-		void addItem(const char* propertyName, Echo::ui32 value, WidgetType widget, const char* widgetParams = nullptr);
-		void addItem(const char* propertyName, bool value, WidgetType widget, const char* widgetParams = nullptr);
-		void addItem(const char* propertyName, const Echo::Vector3& value, WidgetType widget, const char* widgetParams = nullptr);
-		void addItem(const char* propertyName, const Echo::Color& value, WidgetType widget, const char* widgetParams = nullptr);
-		void addItem(const char* propertyName, const Echo::String& value, WidgetType widget, const char* widgetParams = nullptr);
-		void addItem_c2(const char* propertyName, const Echo::String& value, WidgetType widget, const char* widgetParams = nullptr);
-		void addItem_c3(const char* propertyName, const Echo::String& value, WidgetType widget, const char* widgetParams = nullptr);
+		void addItem(const char* propertyName, float value, WidgetType widget, const char* widgetParams = nullptr, const char* toolTip="");
+		void addItem(const char* propertyName, Echo::i32 value, WidgetType widget, const char* widgetParams = nullptr, const char* toolTip = "");
+		void addItem(const char* propertyName, Echo::ui32 value, WidgetType widget, const char* widgetParams = nullptr, const char* toolTip = "");
+		void addItem(const char* propertyName, bool value, WidgetType widget, const char* widgetParams = nullptr, const char* toolTip = "");
+		void addItem(const char* propertyName, const Echo::Vector3& value, WidgetType widget, const char* widgetParams = nullptr, const char* toolTip = "");
+		void addItem(const char* propertyName, const Echo::Color& value, WidgetType widget, const char* widgetParams = nullptr, const char* toolTip = "");
+		void addItem(const char* propertyName, const Echo::String& value, WidgetType widget, const char* widgetParams = nullptr, const char* toolTip = "");
+		void addItem_c2(const char* propertyName, const Echo::String& value, WidgetType widget, const char* widgetParams = nullptr, const char* toolTip = "");
+		void addItem_c3(const char* propertyName, const Echo::String& value, WidgetType widget, const char* widgetParams = nullptr, const char* toolTip = "");
 
 		template<typename T>
-		void addItem(const char* propertyName, T value, WidgetType widget, const char* widgetParams = nullptr)
+		void addItem(const char* propertyName, T value, WidgetType widget, const char* widgetParams = nullptr, const char* toolTip = "")
 		{
 			//static_assert(false, "ambiguous overload for function `addItem`.");
 		}
@@ -77,7 +77,7 @@ namespace QT_UI
         
 	private:
 		// format
-		Echo::String FormatUI(WidgetType widget, const char* widgetParams);
+		static Echo::String FormatUI(WidgetType widget, const char* widgetParams);
 
 	private:
 		Echo::String						m_id;

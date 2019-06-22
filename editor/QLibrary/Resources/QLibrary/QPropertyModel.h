@@ -45,7 +45,7 @@ namespace QT_UI
 		QStandardItem* findItemByText(const char* text);
 
 		// 添加子结点
-		QStandardItem* addChildItem(QStandardItem* parent, const char* text, bool bold, int row, int col, const char* widget, const char* property);
+		QStandardItem* addChildItem(QStandardItem* parent, const char* text, bool bold, int row, int col, const char* widget, const char* property, const char* toolTip);
 
 		// 除除子结点
 		void removeChildItem(QStandardItem* parent);

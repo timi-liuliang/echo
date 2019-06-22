@@ -51,37 +51,37 @@ namespace QT_UI
 		EchoAssert(m_curDepth >= 0);
 	}
 
-	void QPropertyConfigHelper::addItem(const char* propertyName, float value, WidgetType widget, const char* widgetParams)
+	void QPropertyConfigHelper::addItem(const char* propertyName, float value, WidgetType widget, const char* widgetParams, const char* toolTip)
 	{
-		addItem(propertyName, Echo::StringUtil::ToString(value), widget, widgetParams);
+		addItem(propertyName, Echo::StringUtil::ToString(value), widget, widgetParams, toolTip);
 	}
 
-	void QPropertyConfigHelper::addItem(const char* propertyName, const Echo::ui32 value, WidgetType widget, const char* widgetParams)
+	void QPropertyConfigHelper::addItem(const char* propertyName, const Echo::ui32 value, WidgetType widget, const char* widgetParams, const char* toolTip)
 	{
-		addItem(propertyName, Echo::StringUtil::ToString(value), widget, widgetParams);
+		addItem(propertyName, Echo::StringUtil::ToString(value), widget, widgetParams, toolTip);
 	}
 
-	void QPropertyConfigHelper::addItem(const char* propertyName, const Echo::i32 value, WidgetType widget, const char* widgetParams)
+	void QPropertyConfigHelper::addItem(const char* propertyName, const Echo::i32 value, WidgetType widget, const char* widgetParams, const char* toolTip)
 	{
-		addItem(propertyName, Echo::StringUtil::ToString(value), widget, widgetParams);
+		addItem(propertyName, Echo::StringUtil::ToString(value), widget, widgetParams, toolTip);
 	}
 
-	void QPropertyConfigHelper::addItem(const char* propertyName, bool value, WidgetType widget, const char* widgetParams)
+	void QPropertyConfigHelper::addItem(const char* propertyName, bool value, WidgetType widget, const char* widgetParams, const char* toolTip)
 	{
-		addItem(propertyName, Echo::StringUtil::ToString(value), widget, widgetParams);
+		addItem(propertyName, Echo::StringUtil::ToString(value), widget, widgetParams, toolTip);
 	}
 
-	void QPropertyConfigHelper::addItem(const char* propertyName, const Echo::Vector3& value, WidgetType widget, const char* widgetParams)
+	void QPropertyConfigHelper::addItem(const char* propertyName, const Echo::Vector3& value, WidgetType widget, const char* widgetParams, const char* toolTip)
 	{
-		addItem(propertyName, Echo::StringUtil::ToString(value), widget, widgetParams);
+		addItem(propertyName, Echo::StringUtil::ToString(value), widget, widgetParams, toolTip);
 	}
 
-	void QPropertyConfigHelper::addItem(const char* propertyName, const Echo::Color& value, WidgetType widget, const char* widgetParams)
+	void QPropertyConfigHelper::addItem(const char* propertyName, const Echo::Color& value, WidgetType widget, const char* widgetParams, const char* toolTip)
 	{
-		addItem(propertyName, Echo::StringUtil::ToString(value), widget, widgetParams);
+		addItem(propertyName, Echo::StringUtil::ToString(value), widget, widgetParams, toolTip);
 	}
 
-	void QPropertyConfigHelper::addItem(const char* propertyName, const Echo::String& value, WidgetType widget, const char* widgetParams)
+	void QPropertyConfigHelper::addItem(const char* propertyName, const Echo::String& value, WidgetType widget, const char* widgetParams, const char* toolTip)
 	{
 		Echo::ui32& curIdx = m_idxs[m_curDepth];
 
@@ -91,7 +91,7 @@ namespace QT_UI
 
 		// 组织控件字符串
 		Echo::String widgetStr = FormatUI(widget, widgetParams ? widgetParams : "");
-		Echo::String format = Echo::StringUtil::Format("<item text=\"%s\" row=\"%d\" col=\"0\" /><item text=\"\" row=\"%d\" col=\"1\" property=\"%s\" widget=\"%s\" />", displayText.c_str(), curIdx, curIdx, propertyName, widgetStr.c_str());
+		Echo::String format = Echo::StringUtil::Format("<item text=\"%s\" row=\"%d\" col=\"0\" /><item text=\"\" row=\"%d\" col=\"1\" property=\"%s\" widget=\"%s\" toolTip=\"%s\" />", displayText.c_str(), curIdx, curIdx, propertyName, widgetStr.c_str(), toolTip);
 		m_result += format;
 
 		curIdx++;
@@ -99,7 +99,7 @@ namespace QT_UI
 		m_values[QString::fromLocal8Bit(propertyName)] = value.c_str();
 	}
 
-	void QPropertyConfigHelper::addItem_c2(const char* propertyName, const Echo::String& value, WidgetType widget, const char* widgetParams)
+	void QPropertyConfigHelper::addItem_c2(const char* propertyName, const Echo::String& value, WidgetType widget, const char* widgetParams, const char* toolTip)
 	{
 		Echo::ui32& curIdx = m_idxs[m_curDepth];
 
@@ -107,13 +107,13 @@ namespace QT_UI
 		Echo::String widgetStr = FormatUI( widget, widgetParams);
 
 		Echo::String propertyNameEx = Echo::StringUtil::Format("%s_co_%d", propertyName, 2);
-		Echo::String format = Echo::StringUtil::Format("<item text=\"\" row=\"%d\" col=\"%d\" property=\"%s\" widget=\"%s\" />", curIdx-1, 2, propertyNameEx.c_str(), widgetStr.c_str());
+		Echo::String format = Echo::StringUtil::Format("<item text=\"\" row=\"%d\" col=\"%d\" property=\"%s\" widget=\"%s\" toolTip=\"%s\" />", curIdx-1, 2, propertyNameEx.c_str(), widgetStr.c_str(), toolTip);
 		m_result += format;
 
 		m_values[QString::fromLocal8Bit(propertyNameEx.c_str())] = value.c_str();
 	}
 
-	void QPropertyConfigHelper::addItem_c3(const char* propertyName, const Echo::String& value, WidgetType widget, const char* widgetParams)
+	void QPropertyConfigHelper::addItem_c3(const char* propertyName, const Echo::String& value, WidgetType widget, const char* widgetParams, const char* toolTip)
 	{
 		Echo::ui32& curIdx = m_idxs[m_curDepth];
 
@@ -121,7 +121,7 @@ namespace QT_UI
 		Echo::String widgetStr = FormatUI(widget, widgetParams);
 
 		Echo::String propertyNameEx = Echo::StringUtil::Format("%s_co_%d", propertyName, 3);
-		Echo::String format = Echo::StringUtil::Format("<item text=\"\" row=\"%d\" col=\"%d\" property=\"%s\" widget=\"%s\" />", curIdx - 1, 3, propertyNameEx.c_str(), widgetStr.c_str());
+		Echo::String format = Echo::StringUtil::Format("<item text=\"\" row=\"%d\" col=\"%d\" property=\"%s\" widget=\"%s\" toolTip=\"%s\" />", curIdx - 1, 3, propertyNameEx.c_str(), widgetStr.c_str(), toolTip);
 		m_result += format;
 
 		m_values[QString::fromLocal8Bit(propertyNameEx.c_str())] = value.c_str();
@@ -129,7 +129,6 @@ namespace QT_UI
 
 	Echo::String QPropertyConfigHelper::FormatUI(WidgetType widget, const char* widgetParams)
 	{
-		// 组织控件字符串
 		Echo::String widgetStr;
 		switch (widget)
 		{

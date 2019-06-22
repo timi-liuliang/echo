@@ -817,7 +817,8 @@ namespace Studio
 		else
 		{
 			Echo::String expression = object->getChannel(name)->getExpression();
-			m_propertyHelper.addItem(name.c_str(), expression, QT_UI::WT_ChannelEditor);
+			Echo::String info = Echo::StringUtil::Format("%s#%s#%d", expression.c_str(), var.toString().c_str(), int(var.getType()));
+			m_propertyHelper.addItem(name.c_str(), info, QT_UI::WT_ChannelEditor, nullptr);
 		}
 	}
 

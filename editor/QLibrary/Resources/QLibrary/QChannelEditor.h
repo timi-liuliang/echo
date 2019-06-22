@@ -5,6 +5,7 @@
 #include <QPushButton>
 #include <QWidget>
 #include <engine/core/math/color.h>
+#include <engine/core/base/variant.h>
 
 using namespace std;
 
@@ -17,8 +18,8 @@ namespace QT_UI
 		QChannelEditor( QWidget* parent = 0);
 
 		// set|get expression
-		void SetExpression( string color);
-		string GetExpression();
+		void setInfo( const string& info);
+		const string& getInfo();
 
 		// paint
 		static bool ItemDelegatePaint( QPainter *painter, const QRect& rect, const string& val);
@@ -35,6 +36,6 @@ namespace QT_UI
 		void onSelectColor();
 
 	private:
-		Echo::String		m_expression;
+		Echo::String		m_info;
 	};
 }

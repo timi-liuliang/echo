@@ -253,9 +253,9 @@ namespace QT_UI
 			else if (widgetType == "ChannelEditor")
 			{
 				QChannelEditor* widget = qobject_cast<QChannelEditor*>(editor);
-				widget->SetExpression(value.toString().toStdString());
+				widget->setInfo(value.toString().toStdString());
 				widget->onSelectColor();
-				m_model->setValue(propertyName, widget->GetExpression().c_str());
+				m_model->setValue(propertyName, widget->getInfo().c_str());
 			}
 			else if( widgetType == "CheckBox")
 			{
@@ -339,7 +339,7 @@ namespace QT_UI
 			else if (widgetType == "QChannelEditor")
 			{
 				QChannelEditor* widget = qobject_cast<QChannelEditor*>(editor);
-				m_model->setValue(propertyName, widget->GetExpression().c_str());
+				m_model->setValue(propertyName, widget->getInfo().c_str());
 			}
 			else if( widgetType == "CheckBox")
 			{

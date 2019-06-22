@@ -70,13 +70,14 @@ namespace QT_UI
 		while (elementNode)
 		{
 			QString text = m_isEnableGB2312 ? QString::fromLocal8Bit(elementNode.attribute("text").value()) : QString::fromUtf8(elementNode.attribute("text").value());
+			QString toolTip = elementNode.attribute("toolTip").as_string("");
 
 			bool bold = elementNode.attribute("bold").as_bool(false);
 
 			int row = elementNode.attribute("row").as_int(0);
 			int col = elementNode.attribute("col").as_int(0);
 
-			QStandardItem* item = addChildItem(pParentItem, text.toStdString().c_str(), bold, row, col, elementNode.attribute("widget").as_string(""), elementNode.attribute("property").as_string(""));
+			QStandardItem* item = addChildItem(pParentItem, text.toStdString().c_str(), bold, row, col, elementNode.attribute("widget").as_string(""), elementNode.attribute("property").as_string(""), toolTip.toStdString().c_str());
 			item->setData(constraintCondition(firstChildElement), kConstraint);
 
 			pugi::xml_node childNode = elementNode.child("item");
@@ -87,11 +88,12 @@ namespace QT_UI
 		}
 	}
 
-	QStandardItem* QPropertyModel::addChildItem(QStandardItem* parent, const char* text, bool bold, int row, int col, const char* widget, const char* propertyName)
+	QStandardItem* QPropertyModel::addChildItem(QStandardItem* parent, const char* text, bool bold, int row, int col, const char* widget, const char* propertyName, const char* toolTip)
 	{
 		QString propertyNamelocal = m_isEnableGB2312 ? QString::fromLocal8Bit(propertyName) : QString::fromUtf8(propertyName);
 		QStandardItem* item = new QStandardItem(text);
 		QFont font = item->font(); font.setBold(bold);
+		item->setToolTip(toolTip);
 		item->setFont(font);
 		item->setData(QString::fromUtf8(widget), Qt::UserRole);
 		item->setData(propertyNamelocal, Qt::DisplayPropertyRole);

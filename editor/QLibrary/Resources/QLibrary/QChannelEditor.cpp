@@ -1,4 +1,5 @@
 #include "QChannelEditor.h"
+#include "QCheckBoxEditor.h"
 #include <QColorDialog>
 #include <engine/core/util/StringUtil.h>
 
@@ -17,33 +18,44 @@ namespace QT_UI
 		//	SetColor( Echo::Color( color.red()/255.f, color.green()/255.f, color.blue()/255.f,color.alpha()/255.f));
 	}
 
-	void QChannelEditor::SetExpression( string expression)
+	void QChannelEditor::setInfo( const string& info)
 	{ 
-		m_expression = expression.c_str();
+		m_info = info.c_str();
 	}
 
-	string QChannelEditor::GetExpression()
+	const string& QChannelEditor::getInfo()
 	{
-		string color = m_expression.c_str();
-		return color;
+		return m_info;
 	}
 
 	bool QChannelEditor::ItemDelegatePaint( QPainter *painter, const QRect& rect, const string& val)
 	{
+		Echo::StringArray	dataArray = Echo::StringUtil::Split(val.c_str(), "#");
+		Echo::String		expression = dataArray[0];
+		Echo::String		value = dataArray[1];
+		Echo::Variant::Type type = Echo::Variant::Type(Echo::StringUtil::ParseI32(dataArray[2]));
+
 		// color rect
 		QRect tRect =  QRect( rect.left()+1, rect.top()+1, rect.width()-2, rect.height()-2);
 		painter->setBrush(QColor(70, 140, 70));
 		painter->drawRect( tRect);
 		painter->setPen( QColor( 0, 0, 0));
-		painter->drawRect(QRect(rect.left(), rect.top(), rect.width() - 1, rect.height()));
+		painter->drawRect(QRect(rect.left(), rect.top(), rect.width() - 1, rect.height()-1));
 
-		// text
-		Echo::String text = val.c_str();
-		QRect textRect( rect.left()+6, rect.top()+3, rect.width()-6, rect.height()-6);
-		QFont font = painter->font(); font.setBold(false);
-		painter->setFont(font);
-		painter->setPen(QColor( 232, 232, 232));
-		painter->drawText( textRect, Qt::AlignLeft, text.c_str());
+		if (type == Echo::Variant::Type::Bool)
+		{
+			QCheckBoxEditor::ItemDelegatePaint(painter, rect, value);
+		}
+		else
+		{
+			// text
+			Echo::String text = value.c_str();
+			QRect textRect(rect.left() + 6, rect.top() + 3, rect.width() - 6, rect.height() - 6);
+			QFont font = painter->font(); font.setBold(false);
+			painter->setFont(font);
+			painter->setPen(QColor(232, 232, 232));
+			painter->drawText(textRect, Qt::AlignLeft, text.c_str());
+		}
 
 		return true;
 	}
@@ -57,6 +69,6 @@ namespace QT_UI
 	{
 		QPainter painter( this);
 
-		ItemDelegatePaint( &painter, rect(), m_expression.c_str());
+		ItemDelegatePaint( &painter, rect(), m_info.c_str());
 	}
 }
