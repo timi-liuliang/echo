@@ -56,5 +56,8 @@ Most of the engine's Functionality was implemented by configurable modules. that
 ### Animate Everything   
 With Timeline, You can animate everything. You can not only animate any Object's(Node, Setting, Res) any property. But also you can call any Object's any function.
 
+### Channel References
+You can compute the value of one property based on the value of another property, possibly on a different node. This lets you duplicate values, or make values relative to other values, and have Echo automatically update them whenever they change.
+
 ### Open Source  
 Echo is licensed under MIT license. You can just do what you want as your wish.
