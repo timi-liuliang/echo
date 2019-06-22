@@ -30,7 +30,6 @@ namespace QT_UI
 		g_qModels.erase( remove(g_qModels.begin(), g_qModels.end(), this), g_qModels.end());
 	}
 
-	// 设置数据
 	void  QPropertyModel::setupModelData(pugi::xml_document* cfg)
 	{
 		if (!cfg)
@@ -41,7 +40,6 @@ namespace QT_UI
 		ParseCfg();
 	}
 
-	// 解析配置文件
 	void  QPropertyModel::ParseCfg()
 	{
 		clear();
@@ -89,7 +87,6 @@ namespace QT_UI
 		}
 	}
 
-	// 添加子结点
 	QStandardItem* QPropertyModel::addChildItem(QStandardItem* parent, const char* text, bool bold, int row, int col, const char* widget, const char* propertyName)
 	{
 		QString propertyNamelocal = m_isEnableGB2312 ? QString::fromLocal8Bit(propertyName) : QString::fromUtf8(propertyName);
@@ -135,7 +132,6 @@ namespace QT_UI
 	{
 		foreach(QStandardItem* item, m_standItems)
 		{
-			QString xx = item->text();
 			if (item->text() == text)
 				return item;
 		}
@@ -158,16 +154,13 @@ namespace QT_UI
 
 	void QPropertyModel::setValue(const QString& propertyName, QVariant value)
 	{
-		// 正则表达式验证
-		//if( value.mmdfkdf)
-		//	return;
 		if (m_valueList[propertyName] != value)
 		{
 			m_valueList[propertyName] = value;
 
 			updateConstraint(propertyName, value);
 
-			// 修改值
+			// modify value
 			map<QString, QStandardItem*>::iterator it = m_propertyStandItmes.find(propertyName);
 			if (it != m_propertyStandItmes.end())
 			{
@@ -230,21 +223,5 @@ namespace QT_UI
 	void QPropertyModel::ThrowSelfDefineSig(QString sigName, QString propertyName, QVariant value)
 	{
 		emit Signal_ThrowSelfDefineSig(sigName,propertyName,value);
-	}
-
-	void QPropertyModel::set2ndSubEditorCallback(SubEditCb cb)
-	{
-		m_2ndSubEditorCallback = cb; 
-	}
-
-	void QPropertyModel::on2ndSubEditorCallback(const char* fileName)
-	{
-		if (!m_2ndSubEditorCallback)
-		{
-			// EchoLogError("[QPropertyModel::on2ndSubEditorCallback:%d]::No Callback Setted.", __LINE__); 
-			return; 
-		}
-
-		m_2ndSubEditorCallback(fileName);
 	}
 }

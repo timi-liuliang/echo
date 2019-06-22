@@ -10,11 +10,9 @@ using namespace std;
 
 namespace QT_UI
 {
-	typedef std::function<void(const char*)> SubEditCb; 
-
-	//------------------------------------------
-	// 蔘PropertyModel 2010-03-15  captain
-	//------------------------------------------
+	/**
+	 * PropertyModel 2010-03-15  captain
+	 */
 	class QPropertyModel : public QStandardItemModel
 	{
 		Q_OBJECT
@@ -55,12 +53,6 @@ namespace QT_UI
 		// 抛出自定义Signal
 		void ThrowSelfDefineSig(QString sigName, QString propertyName, QVariant value);
 
-		// 设置回调;
-		void set2ndSubEditorCallback(SubEditCb cb);
-
-		// 触发回调;
-		void on2ndSubEditorCallback(const char* fileName); 
-
 	private:
 		// 解析配置文件
 		void ParseCfg();
@@ -89,7 +81,5 @@ namespace QT_UI
 		vector<QStandardItem*>		m_standItems;			// 表项
 		map<QString, QStandardItem*>m_propertyStandItmes;	// 属性对应的StandItem
 		bool						m_isEnableGB2312;
-
-		SubEditCb					m_2ndSubEditorCallback; 
 	};
 }

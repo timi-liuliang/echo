@@ -18,33 +18,32 @@ namespace QT_UI
 	};
 	typedef map<Echo::String, QPropertyWidgetInfo>	QPropertyWidgetInfoMap;
 
-	//------------------------------------------
-	// 属性专用(用途有限) 2010-03-15  帝林
-	//------------------------------------------
+	/**
+	 * PropertyDelegate 2010-03-15 Captain
+	 */
 	class QPropertyDelegate : public QStyledItemDelegate
 	{
 		Q_OBJECT
 
 	public:
-		// 构造函数
 		QPropertyDelegate(QPropertyModel* model, QObject *parent = 0);
 
 		// size
 		virtual QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
-		// 绘制函数
+		// paint
 		virtual void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
-		// 创建编辑器控件
+		// create editor
 		virtual QWidget* createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
 
-		// 设置控件数据
+		// set data
 		virtual void  setEditorData( QWidget* editor, const QModelIndex& index) const override;
 
-		// 设置模型数据
+		// set model data
 		virtual void  setModelData( QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const override;
 
-		// 设置编辑器Geometry
+		// update geometry
 		virtual void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex& index ) const override;
 
 	public:
@@ -55,10 +54,10 @@ namespace QT_UI
 		bool eventFilter(QObject *object, QEvent *event) Q_DECL_OVERRIDE{ return event->type() == QEvent::FocusOut; }
 
 	private:
-		// 是否拥有自定义渲染
+		// is support custom paint
 		bool IsSupportCustomPaint( const Echo::String& widgetType, const QVariant& value) const;
 
-		// 自定义渲染
+		// item paint
 		bool ItemDelegatePaint(  QPainter *painter, const Echo::String& widgetType, const QRect& rect, const QVariant& val) const;
 	
 	private slots:
