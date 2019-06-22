@@ -45,6 +45,7 @@ namespace Studio
         // property right
         QObject::connect(m_propertyTreeView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showPropertyMenu(const QPoint&)));
 		QObject::connect(m_actionPropertyReference, SIGNAL(triggered()), this, SLOT(onReferenceProperty()));
+		QObject::connect(m_actionDeletePropertyReference, SIGNAL(triggered()), this, SLOT(onDeletePropertyReference()));
         
         // signal widget
         QObject::connect(m_signalTreeWidget, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showSignalTreeWidgetMenu(const QPoint&)));
@@ -255,6 +256,8 @@ namespace Studio
     // property tree menu
     void NodeTreePanel::showPropertyMenu(const QPoint& point)
     {
+		Echo::Node* currentNode = getCurrentSelectNode();
+
         QModelIndex index = m_propertyTreeView->indexAt(point);
         if(index.isValid())
         {
@@ -265,7 +268,9 @@ namespace Studio
                 m_propertyMenu = EchoNew(QMenu);
                 
                 m_propertyMenu->addAction(m_actionPropertyReference);
-                m_propertyMenu->addAction(m_actionDeletePropertyReference);
+
+				if(currentNode && currentNode->isChannelExist(m_channelPropertyTarget))
+					m_propertyMenu->addAction(m_actionDeletePropertyReference);
                 
                 m_propertyMenu->exec(QCursor::pos());
             }
@@ -286,7 +291,23 @@ namespace Studio
     
                 Echo::String expression = Echo::StringUtil::Format("ch(\"%s\", \"%s\")", relativePath.c_str(), propertyName.c_str());
                 currentNode->registerChannel( m_channelPropertyTarget, expression);
+
+				// refresh property display
+				showSelectedObjectProperty();
             }
+		}
+	}
+
+	// on delete reference
+	void NodeTreePanel::onDeletePropertyReference()
+	{
+		Echo::Node* currentNode = getCurrentSelectNode();
+		if (currentNode)
+		{
+			currentNode->clearChannel(m_channelPropertyTarget);
+
+			// refresh property display
+			showSelectedObjectProperty();
 		}
 	}
     

@@ -107,6 +107,9 @@ namespace Studio
 
 		// on reference other property
 		void onReferenceProperty();
+
+		// on delete reference
+		void onDeletePropertyReference();
         
     private slots:
         // signal tree widget show menu
