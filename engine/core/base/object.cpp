@@ -90,8 +90,21 @@ namespace Echo
         
         return true;
     }
+
+	Channel* Object::getChannel(const String& propertyName)
+	{
+		if (m_chanels)
+		{
+			for (Channel* channel : *m_chanels)
+			{
+				if (channel->getName() == propertyName)
+					return channel;
+			}
+		}
+
+		return nullptr;
+	}
     
-    // is channel exist
     bool Object::isChannelExist(const String& propertyName)
     {
         if(!m_chanels)

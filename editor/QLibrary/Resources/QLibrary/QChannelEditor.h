@@ -16,33 +16,25 @@ namespace QT_UI
 	public:
 		QChannelEditor( QWidget* parent = 0);
 
-		// 设置颜色
-		void SetColor( string color);
+		// set|get expression
+		void SetExpression( string color);
+		string GetExpression();
 
-		// 设置颜色
-		void SetColor( const Echo::Color& color);
-
-		// 获取颜色
-		string GetColor();
-
-		// 获取颜色
-		const Echo::Color& GetColor() const { return m_color; }
-
-		// MVC渲染
+		// paint
 		static bool ItemDelegatePaint( QPainter *painter, const QRect& rect, const string& val);
 
 	protected:
-		// 重定义渲染
+		// paint event
 		void paintEvent( QPaintEvent* event); 
 
-		// 大小
+		// size
 		QSize sizeHint() const;
 
 	public slots:
-		// 选择颜色
-		void OnSelectColor();
+		// edit event
+		void onSelectColor();
 
 	private:
-		Echo::Color		m_color;
+		Echo::String		m_expression;
 	};
 }

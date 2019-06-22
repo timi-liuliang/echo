@@ -796,20 +796,28 @@ namespace Studio
 	// show property
 	void NodeTreePanel::showPropertyByVariant(Echo::Object* object, const Echo::String& name, const Echo::Variant& var, const Echo::PropertyInfo* propInfo)
 	{
-		switch (var.getType())
+		if (!object->isChannelExist(name))
 		{
-		case Echo::Variant::Type::Bool:			m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_CheckBox); break;
-		case Echo::Variant::Type::Int:			m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_Int); break;
-		case Echo::Variant::Type::Real:			m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_Real); break;
-		case Echo::Variant::Type::String:		m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_String); break;
-		case Echo::Variant::Type::Vector2:		m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_Vector2); break;
-		case Echo::Variant::Type::Vector3:		m_propertyHelper.addItem(name.c_str(), var.toVector3(), QT_UI::WT_Vector3); break;
-		case Echo::Variant::Type::Color:		m_propertyHelper.addItem(name.c_str(), var.toColor(), QT_UI::WT_ColorSelect); break;
-		case Echo::Variant::Type::ResourcePath:	m_propertyHelper.addItem(name.c_str(), var.toResPath().getPath(), QT_UI::WT_AssetsSelect, var.toResPath().getSupportExts().c_str());break;
-		case Echo::Variant::Type::StringOption: m_propertyHelper.addItem(name.c_str(), var.toStringOption().getValue(), QT_UI::WT_ComboBox, var.toStringOption().getOptionsStr().c_str()); break;
-		case Echo::Variant::Type::NodePath:		m_propertyHelper.addItem(name.c_str(), var.toNodePath().getPath(), QT_UI::WT_NodeSelect, Echo::StringUtil::ToString(object->getId()).c_str()); break;
-		case Echo::Variant::Type::Object:		m_propertyHelper.addItem(name.c_str(), var.toObj() ? var.toObj()->getId() : -1, QT_UI::WT_Res, propInfo->m_hintStr.c_str()); break;
-		default:								m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_None); break;
+			switch (var.getType())
+			{
+			case Echo::Variant::Type::Bool:			m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_CheckBox); break;
+			case Echo::Variant::Type::Int:			m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_Int); break;
+			case Echo::Variant::Type::Real:			m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_Real); break;
+			case Echo::Variant::Type::String:		m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_String); break;
+			case Echo::Variant::Type::Vector2:		m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_Vector2); break;
+			case Echo::Variant::Type::Vector3:		m_propertyHelper.addItem(name.c_str(), var.toVector3(), QT_UI::WT_Vector3); break;
+			case Echo::Variant::Type::Color:		m_propertyHelper.addItem(name.c_str(), var.toColor(), QT_UI::WT_ColorSelect); break;
+			case Echo::Variant::Type::ResourcePath:	m_propertyHelper.addItem(name.c_str(), var.toResPath().getPath(), QT_UI::WT_AssetsSelect, var.toResPath().getSupportExts().c_str()); break;
+			case Echo::Variant::Type::StringOption: m_propertyHelper.addItem(name.c_str(), var.toStringOption().getValue(), QT_UI::WT_ComboBox, var.toStringOption().getOptionsStr().c_str()); break;
+			case Echo::Variant::Type::NodePath:		m_propertyHelper.addItem(name.c_str(), var.toNodePath().getPath(), QT_UI::WT_NodeSelect, Echo::StringUtil::ToString(object->getId()).c_str()); break;
+			case Echo::Variant::Type::Object:		m_propertyHelper.addItem(name.c_str(), var.toObj() ? var.toObj()->getId() : -1, QT_UI::WT_Res, propInfo->m_hintStr.c_str()); break;
+			default:								m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_None); break;
+			}
+		}
+		else
+		{
+			Echo::String expression = object->getChannel(name)->getExpression();
+			m_propertyHelper.addItem(name.c_str(), expression, QT_UI::WT_ChannelEditor);
 		}
 	}
 

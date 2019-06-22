@@ -59,6 +59,7 @@ namespace Echo
         
     public:
         // get channels
+		Channel* getChannel(const String& propertyName);
         ChannelsPtr getChannels() { return m_chanels; }
         
         // clear channels

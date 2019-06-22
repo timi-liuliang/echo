@@ -144,6 +144,7 @@ namespace QT_UI
 		case WT_AssetsSelect:	widgetStr = Echo::String("AssetsSelect,") + widgetParams;	break;
 		case WT_NodeSelect:		widgetStr = Echo::String("NodeSelect,") + widgetParams;		break;
 		case WT_Res:			widgetStr = Echo::String("ResEdit,") + widgetParams;		break;
+		case WT_ChannelEditor:  widgetStr = "ChannelEditor"; break;
 		default:				widgetStr = "";				 break;
 		}
 

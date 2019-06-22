@@ -13,6 +13,7 @@
 #include "QVector3Editor.h"
 #include "QColorSelect.h"
 #include "QResEditor.h"
+#include "QChannelEditor.h"
 #include <QCheckBox>
 #include <QApplication>
 #include <engine/core/util/PathUtil.h>
@@ -28,6 +29,7 @@ namespace QT_UI
 		registerWidget("CheckBox", true, QCheckBoxEditor::ItemDelegatePaint);
 		registerWidget("ResEdit", true, nullptr);
 		registerWidget("AssetsSelect", true, QResSelect::ItemDelegatePaint);
+		registerWidget("ChannelEditor", true, QChannelEditor::ItemDelegatePaint);
 	}
 
 	// register widget
@@ -129,7 +131,6 @@ namespace QT_UI
 		Echo::StringArray userDatas = Echo::StringUtil::Split( userData1, ",");
 		
 		QString propertyName = index.model()->data(index, Qt::DisplayPropertyRole).toString();
-		// 未指定控件,返回NULL
 		if( !userDatas.size())
 			return NULL;
 
@@ -158,6 +159,12 @@ namespace QT_UI
 		else if (widgetType == "ColorSelect")
 		{
 			QColorSelect* widget = new QColorSelect(parent);
+			QObject::connect(widget, SIGNAL(clicked()), this, SLOT(commitEditor()));
+			return widget;
+		}
+		else if (widgetType == "ChannelEditor")
+		{
+			QChannelEditor* widget = new QChannelEditor(parent);
 			QObject::connect(widget, SIGNAL(clicked()), this, SLOT(commitEditor()));
 			return widget;
 		}
@@ -243,6 +250,13 @@ namespace QT_UI
 				widget->OnSelectColor();
 				m_model->setValue(propertyName, widget->GetColor().c_str());
 			}
+			else if (widgetType == "ChannelEditor")
+			{
+				QChannelEditor* widget = qobject_cast<QChannelEditor*>(editor);
+				widget->SetExpression(value.toString().toStdString());
+				widget->onSelectColor();
+				m_model->setValue(propertyName, widget->GetExpression().c_str());
+			}
 			else if( widgetType == "CheckBox")
 			{
 				QCheckBox* widget = qobject_cast<QCheckBox*>(editor);
@@ -321,6 +335,11 @@ namespace QT_UI
 			{
 				QColorSelect* widget = qobject_cast<QColorSelect*>(editor);
 				m_model->setValue( propertyName, widget->GetColor().c_str());
+			}
+			else if (widgetType == "QChannelEditor")
+			{
+				QChannelEditor* widget = qobject_cast<QChannelEditor*>(editor);
+				m_model->setValue(propertyName, widget->GetExpression().c_str());
 			}
 			else if( widgetType == "CheckBox")
 			{
