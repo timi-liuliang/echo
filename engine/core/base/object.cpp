@@ -27,6 +27,8 @@ namespace Echo
 		EchoSafeDelete(m_objectEditor, ObjectEditor);
 #endif
 
+		unregisterChannels();
+
 		auto it = g_objs.find(m_id);
 		if (it != g_objs.end())
 		{
@@ -57,7 +59,7 @@ namespace Echo
 		return className;
 	}
     
-    void Object::clearChannel(const String& propertyName)
+    void Object::unregisterChannel(const String& propertyName)
     {
 		if (m_chanels)
 		{
@@ -73,9 +75,12 @@ namespace Echo
 		}
     }
     
-    void Object::clearChannels()
+    void Object::unregisterChannels()
     {
-        
+		if (m_chanels)
+		{
+			EchoSafeDeleteContainer((*m_chanels), Channel);
+		}
     }
     
     bool Object::registerChannel(const String& propertyName, const String& expression)

@@ -63,8 +63,8 @@ namespace Echo
         ChannelsPtr getChannels() { return m_chanels; }
         
         // clear channels
-        void clearChannel(const String& propertyName);
-        void clearChannels();
+        void unregisterChannel(const String& propertyName);
+        void unregisterChannels();
         
         // is channel exist
         bool isChannelExist(const String& propertyName);

@@ -304,7 +304,7 @@ namespace Studio
 		Echo::Node* currentNode = getCurrentSelectNode();
 		if (currentNode)
 		{
-			currentNode->clearChannel(m_channelPropertyTarget);
+			currentNode->unregisterChannel(m_channelPropertyTarget);
 
 			// refresh property display
 			showSelectedObjectProperty();
