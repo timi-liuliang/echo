@@ -2,6 +2,7 @@
 #include "QCheckBoxEditor.h"
 #include <QColorDialog>
 #include <engine/core/util/StringUtil.h>
+#include "ChannelExpressionDialog.h"
 
 namespace QT_UI
 {
@@ -13,9 +14,14 @@ namespace QT_UI
 
 	void QChannelEditor::onSelectColor()
 	{
-		//QColor color = QColorDialog::getColor(QColor((int)(m_color.r*255.f), (int)(m_color.g*255.f), (int)(m_color.b*255.f), (int)(m_color.a*255.f)), this, QString("Ñ¡ÔñÑÕÉ«"), QColorDialog::ShowAlphaChannel);
-		//if( color.isValid())
-		//	SetColor( Echo::Color( color.red()/255.f, color.green()/255.f, color.blue()/255.f,color.alpha()/255.f));
+		Echo::StringArray	dataArray = Echo::StringUtil::Split(m_info.c_str(), "#");
+		Echo::String		expression = dataArray[0];
+		if (Studio::ChannelExpressionDialog::getExpression(this, expression))
+		{
+			dataArray[0] = expression;
+
+			setInfo(Echo::StringUtil::Format("%s#%s#%s", dataArray[0].c_str(), dataArray[1].c_str() ,dataArray[2].c_str()).c_str());
+		}
 	}
 
 	void QChannelEditor::setInfo( const string& info)
