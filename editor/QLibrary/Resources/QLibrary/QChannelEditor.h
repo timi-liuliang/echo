@@ -23,6 +23,7 @@ namespace QT_UI
 
 		// paint
 		static bool ItemDelegatePaint( QPainter *painter, const QRect& rect, const string& val);
+		static bool ItemDelegatePaintExpression(QPainter *painter, const QRect& rect, const string& val, bool isRenderExpressionOnly);
 
 	protected:
 		// paint event
