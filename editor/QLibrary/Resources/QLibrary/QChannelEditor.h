@@ -33,7 +33,7 @@ namespace QT_UI
 
 	public slots:
 		// edit event
-		void onSelectColor();
+		void onEditExpression();
 
 	private:
 		Echo::String		m_info;

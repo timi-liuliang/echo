@@ -849,21 +849,39 @@ namespace Studio
 		Echo::String valStr = value.toString().toStdString().c_str();
 		Echo::Object* object = getCurrentEditObject();
 		Echo::Variant::Type type = Echo::Class::getPropertyType(object, propertyName);
-
-		Echo::Variant propertyValue;
-		if(propertyValue.fromString(type, valStr))
+		if (!object->isChannelExist(propertyName))
 		{
-			Echo::Class::setPropertyValue(object, propertyName, propertyValue);
+			Echo::Variant propertyValue;
+			if (propertyValue.fromString(type, valStr))
+			{
+				Echo::Class::setPropertyValue(object, propertyName, propertyValue);
+
+				// refresh property display
+				showSelectedObjectProperty();
+
+				// update select item display
+				updateNodeTreeWidgetItemDisplay(m_nodeTreeWidget, nullptr);
+			}
+			else
+			{
+				EchoLogError("Can't set property [%s] value [%s]", propertyName.c_str(), valStr.c_str());
+			}
+		}
+		else
+		{
+			Echo::StringArray infos = Echo::StringUtil::Split(valStr, "#");
+			Echo::String expression = infos[0];
+
+			object->registerChannel(propertyName, expression);
+
+			// sync channel
+			Echo::Channel::syncAll();
 
 			// refresh property display
 			showSelectedObjectProperty();
 
 			// update select item display
 			updateNodeTreeWidgetItemDisplay(m_nodeTreeWidget, nullptr);
-		}
-		else
-		{
-			EchoLogError("Can't set property [%s] value [%s]", propertyName.c_str(), valStr.c_str());
 		}
 	}
 

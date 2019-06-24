@@ -16,16 +16,13 @@ namespace Studio
 
 		// get selecting node
         static bool getExpression(QWidget* parent, Echo::String& expression);
-
-		// get selecting node path
-		const Echo::String getSelectingNodePath() const;
         
         // function name
-        const Echo::String getFunctionName() const;
-        void setFunctionName(const Echo::String& functionName);
+        const Echo::String getExpressionText() const;
+        void setExpressionText(const Echo::String& functionName);
         
     private slots:
         // on function name changed slot
-        void onFunctionNameChanged();
+        void onExpressionChanged();
 	};
 }

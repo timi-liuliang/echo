@@ -9,10 +9,10 @@ namespace QT_UI
 	QChannelEditor::QChannelEditor( QWidget* parent)
 		: QPushButton( parent)
 	{ 
-		connect( this, SIGNAL(clicked()), this, SLOT(OnSelectColor()));
+		connect( this, SIGNAL(clicked()), this, SLOT(onEditExpression()));
 	}
 
-	void QChannelEditor::onSelectColor()
+	void QChannelEditor::onEditExpression()
 	{
 		Echo::StringArray	dataArray = Echo::StringUtil::Split(m_info.c_str(), "#");
 		Echo::String		expression = dataArray[0];

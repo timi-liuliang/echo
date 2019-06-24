@@ -6,47 +6,16 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>664</width>
-    <height>438</height>
+    <width>637</width>
+    <height>301</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Node Path Choose</string>
+   <string>Dialog</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="leftMargin">
-    <number>9</number>
-   </property>
-   <property name="topMargin">
-    <number>9</number>
-   </property>
-   <property name="rightMargin">
-    <number>9</number>
-   </property>
-   <property name="bottomMargin">
-    <number>9</number>
-   </property>
    <item>
-    <widget class="QTreeWidget" name="m_treeWidget">
-     <property name="headerHidden">
-      <bool>true</bool>
-     </property>
-     <column>
-      <property name="text">
-       <string notr="true">1</string>
-      </property>
-     </column>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLineEdit" name="m_functionNameLineEdit">
-     <property name="inputMask">
-      <string/>
-     </property>
-     <property name="placeholderText">
-      <string>Function</string>
-     </property>
-    </widget>
+    <widget class="QTextEdit" name="m_textEditExression"/>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -66,7 +35,7 @@
      <item>
       <widget class="QPushButton" name="m_ok">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="text">
         <string>Confirm</string>
@@ -97,24 +66,10 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../../../Resource/App.qrc"/>
+ </resources>
  <connections>
-  <connection>
-   <sender>m_ok</sender>
-   <signal>clicked()</signal>
-   <receiver>ChannelExpressionDialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>182</x>
-     <y>302</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>257</x>
-     <y>300</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>m_cancel</sender>
    <signal>clicked()</signal>
@@ -122,12 +77,28 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>81</x>
-     <y>299</y>
+     <x>358</x>
+     <y>276</y>
     </hint>
     <hint type="destinationlabel">
-     <x>16</x>
-     <y>299</y>
+     <x>455</x>
+     <y>300</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_ok</sender>
+   <signal>clicked()</signal>
+   <receiver>ChannelExpressionDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>276</x>
+     <y>283</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>205</x>
+     <y>283</y>
     </hint>
    </hints>
   </connection>

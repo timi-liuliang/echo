@@ -10,12 +10,9 @@ namespace Studio
 
 		// hide default window title
 		setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
-
-		// update node tree widget
-		NodeTreePanel::refreshNodeTreeDisplay(m_treeWidget);
         
         // connect signal slot
-        QObject::connect(m_functionNameLineEdit, SIGNAL(textChanged(QString)), this, SLOT(onFunctionNameChanged()));
+        QObject::connect(m_textEditExression, SIGNAL(textChanged()), this, SLOT(onExpressionChanged()));
 	}
 
 	ChannelExpressionDialog::~ChannelExpressionDialog()
@@ -26,12 +23,11 @@ namespace Studio
 	bool ChannelExpressionDialog::getExpression(QWidget* parent, Echo::String& expression)
 	{
 		ChannelExpressionDialog dialog(parent);
-        dialog.setFunctionName(expression);
+        dialog.setExpressionText(expression);
 		dialog.show();
 		if (dialog.exec() == QDialog::Accepted)
 		{
-			//nodePath = dialog.getSelectingNodePath();
-			//functionName = dialog.getFunctionName();
+			expression = dialog.getExpressionText();
             
             return true;
 		}
@@ -40,26 +36,20 @@ namespace Studio
 			return false;
 		}
 	}
-
-	const Echo::String ChannelExpressionDialog::getSelectingNodePath() const
-	{
-		Echo::Node* node = NodeTreePanel::getNode(m_treeWidget->currentItem());
-		return node ? node->getNodePath() : Echo::StringUtil::BLANK;
-	}
     
-    const Echo::String ChannelExpressionDialog::getFunctionName() const
+    const Echo::String ChannelExpressionDialog::getExpressionText() const
     {
-        return m_functionNameLineEdit->text().toStdString().c_str();
+        return m_textEditExression->toPlainText().toStdString().c_str();
     }
     
-    void ChannelExpressionDialog::setFunctionName(const Echo::String& functionName)
+    void ChannelExpressionDialog::setExpressionText(const Echo::String& functionName)
     {
-        m_functionNameLineEdit->setText(functionName.c_str());
+		m_textEditExression->setText(functionName.c_str());
     }
     
-    void ChannelExpressionDialog::onFunctionNameChanged()
+    void ChannelExpressionDialog::onExpressionChanged()
     {
-        Echo::String functionName = getFunctionName();
-        m_ok->setEnabled(!functionName.empty());
+        Echo::String expression = getExpressionText();
+        m_ok->setEnabled(!expression.empty());
     }
 }

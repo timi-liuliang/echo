@@ -88,14 +88,13 @@ namespace Echo
         // channel depends on lua
         registerToScript();
         
-        if(!m_chanels)
-            m_chanels = new std::vector<Channel*>;
-        
-        if(!isChannelExist(propertyName))
-        {
-            Channel* channel = EchoNew(Channel(this, propertyName, expression));
-            m_chanels->push_back(channel);
-        }
+		if (!m_chanels)
+			m_chanels = new std::vector<Channel*>;
+		else
+			unregisterChannel(propertyName);
+
+        Channel* channel = EchoNew(Channel(this, propertyName, expression));
+        m_chanels->push_back(channel);
         
         return true;
     }
