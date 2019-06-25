@@ -193,9 +193,9 @@ namespace Echo
 		return m_parent;
 	}
 
-	Node* Node::getChild(ui32 idx)
+	Node* Node::getChildByIndex(ui32 idx)
 	{
-		return *std::next(m_children.begin(), idx);
+		return idx<m_children.size() ? *std::next(m_children.begin(), idx) : nullptr;
 	}
 
 	Node* Node::getChild(const char* name)
@@ -454,6 +454,8 @@ namespace Echo
 		CLASS_BIND_METHOD(Node, getNode,				DEF_METHOD("getNode"));
 		CLASS_BIND_METHOD(Node, addChild, 				DEF_METHOD("addChild"));
 		CLASS_BIND_METHOD(Node, setParent,				DEF_METHOD("setParent"));
+		CLASS_BIND_METHOD(Node, getChildNum,			DEF_METHOD("getChildNum"));
+		CLASS_BIND_METHOD(Node, getChildByIndex,		DEF_METHOD("getChildByIndex"));
 		CLASS_BIND_METHOD(Node, getWorldPosition,		DEF_METHOD("getWorldPosition"));
 		CLASS_BIND_METHOD(Node, getWorldPositionX,		DEF_METHOD("getWorldPositionX"));
 		CLASS_BIND_METHOD(Node, getWorldPositionY,		DEF_METHOD("getWorldPositionY"));
@@ -697,7 +699,7 @@ namespace Echo
 		{
 			for (ui32 idx = 0; idx < node->getChildNum(); idx++)
 			{
-				Node* child = node->getChild(idx);
+				Node* child = node->getChildByIndex(idx);
 				if (child && !child->isLink())
 				{
 					pugi::xml_node newNode = xmlNode->append_child("node");
@@ -732,7 +734,7 @@ namespace Echo
 					rootNode->setPath(path);
 					for (Echo::ui32 idx = 0; idx < rootNode->getChildNum(); idx++)
 					{
-						rootNode->getChild(idx)->setLink(true);
+						rootNode->getChildByIndex(idx)->setLink(true);
 					}
 				}
 				rootNode->registerToScript();

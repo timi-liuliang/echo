@@ -60,7 +60,7 @@ namespace Echo
 		Node* getParent() const;
 
 		ui32 getChildNum() const { return static_cast<ui32>(m_children.size()); }
-		Node* getChild(ui32 idx);
+		Node* getChildByIndex(ui32 idx);
 		Node* getChild(const char* name);
 		i32   getChildIdx(Node* node);
 		const NodeArray& getChildren() { return m_children; }

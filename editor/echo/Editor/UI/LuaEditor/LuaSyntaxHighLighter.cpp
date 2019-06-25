@@ -19,6 +19,7 @@ namespace Studio
 		appendForegroundRule(192, 120, 221, "\\bdo\\b");
 		appendForegroundRule(192, 120, 221, "\\breturn\\b");
 		appendForegroundRule(192, 120, 221, "\\bfor\\b");
+		appendForegroundRule(192, 120, 221, "\\bwhile\\b");
 		appendForegroundRule(192, 120, 221, "\\bin\\b");
 
 		// false true ...

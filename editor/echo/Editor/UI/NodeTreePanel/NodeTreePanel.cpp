@@ -160,7 +160,7 @@ namespace Studio
 		{
 			for (Echo::ui32 i = 0; i < node->getChildNum(); i++)
 			{
-				Echo::Node* childNode = node->getChild(i);
+				Echo::Node* childNode = node->getChildByIndex(i);
 				if(!childNode->isLink())
 					addNode(treeWidget, childNode, nodeItem, recursive);
 			}
@@ -496,7 +496,7 @@ namespace Studio
 					node->setPath(resPath);
 					for (Echo::ui32 idx = 0; idx < node->getChildNum(); idx++)
 					{
-						node->getChild(idx)->setLink(true);
+						node->getChildByIndex(idx)->setLink(true);
 					}
 				}
 
@@ -531,7 +531,7 @@ namespace Studio
 			node->setPath("");
 			for (Echo::ui32 idx =0; idx < node->getChildNum(); idx++)
 			{
-				node->getChild(idx)->setLink(false);
+				node->getChildByIndex(idx)->setLink(false);
 			}
 
 			refreshNodeDisplay(item);
