@@ -11,19 +11,16 @@ namespace Echo
 	class Object
 	{
 		ECHO_EDITOR_INTERFACE
-
+																				
 	public:
 		Object();
 		virtual ~Object();
 
-		// is valid
-		bool isValid();
-
 		// get by id
 		static Object* getById(i32 id);
 
-		// get class name
-		virtual const String& getClassName() const;
+		// is valid
+		bool isValid();
 
 		// get id
 		i32 getId() const { return m_id; }
@@ -93,6 +90,16 @@ namespace Echo
         // load/save channels
         static void loadChannels(void* pugiNode, Echo::Object* classPtr);
         static void saveChannels(void* pugiNode, Echo::Object* classPtr);
+
+	public:
+		// get class name
+		virtual const String& getClassName() const;
+
+		// init class info
+		static void initClassInfo() { static Echo::ObjectFactoryT<Object> G_OBJECT_FACTORY("Object", ""); }
+
+		// bind methods
+		static void bindMethods();
 
 	protected:
 		i32				m_id;

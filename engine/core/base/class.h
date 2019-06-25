@@ -1,6 +1,5 @@
 #pragma once
 
-#include "object.h"
 #include "signal.h"
 #include "variant.h"
 #include "class_method_bind.h"
@@ -22,6 +21,7 @@ namespace Echo
         ClassMethodMap  m_signals;
 	};
 
+	class object;
 	struct ObjectFactory
 	{
 		String		m_name;

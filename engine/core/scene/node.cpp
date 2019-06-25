@@ -9,6 +9,17 @@
 
 namespace Echo
 {
+	void Node::LuaScript::release(Node* obj)
+	{
+		if (m_isRegistered)
+		{
+			String luaStr = StringUtil::Format(
+				"nodes._%d = nil\n"\
+				"objs._%d = nil", obj->getId(), obj->getId());
+			LuaBinder::instance()->execString(luaStr);
+		}
+	}
+
 	void Node::LuaScript::start(Node* obj)
 	{
 		m_isHaveScript = IO::instance()->isResourceExists(m_file.getPath());
@@ -97,6 +108,7 @@ namespace Echo
 
 	Node::~Node()
 	{
+		m_script.release(this);
 	}
 
 	void Node::rotate(const Quaternion& rot)

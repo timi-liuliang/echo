@@ -6,7 +6,7 @@
 
 namespace Echo
 {
-	static map<i32, Object*>::type g_objs;
+	static std::unordered_map<i32, Object*> g_objs;
 
 	Object::Object()
 	{
@@ -38,6 +38,12 @@ namespace Echo
 		{
 			EchoLogError("Object isn't exist. destruct failed.");
 		}
+	}
+
+	void Object::bindMethods()
+	{
+		CLASS_BIND_METHOD(Object, getId,			"getId");
+		CLASS_BIND_METHOD(Object, isChannelExist,	"isChannelExist");
 	}
 
 	bool Object::isValid()

@@ -49,6 +49,7 @@ namespace Echo
 			LuaScript() : m_isStart(false), m_isRegistered(false), m_isHaveScript(false), m_file("", ".lua"){}
 			void start(Node* obj);
 			void update(Node* obj);
+			void release(Node* obj);
 		};
 
 	public:
