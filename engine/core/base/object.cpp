@@ -40,6 +40,12 @@ namespace Echo
 		}
 	}
 
+	bool Object::isValid()
+	{
+		Object* obj = getById(m_id);
+		return obj && obj==this ? true : false;
+	}
+
 	// get by id
 	Object* Object::getById(i32 id)
 	{

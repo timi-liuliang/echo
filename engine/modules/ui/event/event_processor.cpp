@@ -35,9 +35,12 @@ namespace Echo
 		{
 			Ray ray;
 			camera->getCameraRay(ray, Input::instance()->getMousePosition());
-			for (UiEventRegion* eventRegion : m_eventRegions)
+
+			// when process event regions, m_eventRegions maybe change, so we make a copy of m_eventRegions
+			set<UiEventRegion*>::type eventRegions = m_eventRegions;
+			for (UiEventRegion* eventRegion : eventRegions)
 			{
-				if (eventRegion->isEnable() && eventRegion->isIntersect( ray))
+				if (eventRegion->isValid() && eventRegion->isEnable() && eventRegion->isIntersect( ray))
 				{
 					eventRegion->clicked();
 				}

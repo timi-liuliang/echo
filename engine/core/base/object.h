@@ -16,6 +16,9 @@ namespace Echo
 		Object();
 		virtual ~Object();
 
+		// is valid
+		bool isValid();
+
 		// get by id
 		static Object* getById(i32 id);
 
