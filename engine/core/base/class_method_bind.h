@@ -196,8 +196,8 @@ namespace Echo
 			(instance->*method)(p0);
 
 			// free value
-			lua_freevalue<P0>(p0)
-				;
+			lua_freevalue<P0>(p0);
+
 			// return number of results
 			return 0;
 		}
