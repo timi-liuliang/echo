@@ -122,7 +122,7 @@ namespace Echo
 		luaL_openlibs(m_luaState);
 
 		addLoader(luaLoaderEcho);
-		setSearchPath("User://");
+		setSearchPath("Res://");
 	}
 
 	// set search path

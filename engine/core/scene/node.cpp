@@ -39,7 +39,8 @@ namespace Echo
 					"nodes._%d = objs._%d\n"\
 					"local script_table = require \"%s\"\n"\
 					"utils.append_table(%s, script_table)\n" \
-					"%s:start()\n", obj->getId(), obj->getId(), moduleName.c_str(), m_globalTableName.c_str(), m_globalTableName.c_str());
+					"package.loaded[\"%s\"] = nil\n" \
+					"%s:start()\n", obj->getId(), obj->getId(), moduleName.c_str(), m_globalTableName.c_str(), moduleName.c_str(), m_globalTableName.c_str());
 
 				LuaBinder::instance()->execString(luaStr);
 			}
