@@ -5,26 +5,58 @@
 #include "engine/core/memory/MemAllocDef.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/io/DataStream.h"
+#include "engine/core/script/scratch/scratch.h"
 
 namespace Echo
 {
+	bool tryLuaFile(lua_State* L, const String& fileName, int& errCode)
+	{
+		String luaFile = "Res://" + fileName + ".lua";
+		MemoryReader memReader(luaFile);
+		if (memReader.getSize())
+		{
+			errCode = luaL_loadbuffer(L, memReader.getData<char*>(), memReader.getSize(), luaFile.c_str());
+			return errCode ? false : true;
+		}
+
+		return false;
+	}
+
+	bool tryScratchFile(lua_State* L, const String& fileName, int& errCode)
+	{
+		String scratchFile = "Res://" + fileName + ".scratch";
+		Scratch scratch;
+		scratch.load(scratchFile.c_str());
+		if(scratch.compile() && scratch.getLua().size()>0)
+		{
+			errCode = luaL_loadbuffer(L, scratch.getLua().c_str(), scratch.getLua().size(), scratchFile.c_str());
+			return errCode ? false : true;
+		}
+
+		return false;
+	}
+
 	int luaLoaderEcho(lua_State* L)
 	{
 		String fileName(luaL_checkstring(L, 1));
 		fileName = StringUtil::Replace(fileName, ".", "/");
-		fileName = "Res://" + fileName + ".lua";
 
-		MemoryReader memReader(fileName);
-		if (memReader.getSize())
+		int errCode;
+		if (tryLuaFile(L, fileName, errCode))
 		{
-			int loader = luaL_loadbuffer(L, memReader.getData<char*>(), memReader.getSize(), fileName.c_str());
-			if (loader)
-			{
-				int top = lua_gettop(L);
-				EchoLogError("lua load [%s] failed", lua_tostring(L, -1));
-				lua_settop(L, top);
-				return loader;
-			}
+			return 1;
+		}
+		else if (tryScratchFile(L, fileName, errCode))
+		{
+			return 1;
+		}
+
+		if (errCode)
+		{
+			int top = lua_gettop(L);
+			EchoLogError("lua load [%s] failed", lua_tostring(L, -1));
+			lua_settop(L, top);
+			return errCode;
 		}
 
 		return 1;
