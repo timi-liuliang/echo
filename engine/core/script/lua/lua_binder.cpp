@@ -345,47 +345,6 @@ namespace Echo
 		return false;
 	}
 
-	//// exec fun
-	//void LuaBinder::execFunction(const String& funName, const Variant** args, int argCount)
-	//{
- //       LUA_STACK_CHECK(m_luaState);
- //       
- //       String currentLayerName;
- //       int upperTableCount = lua_get_upper_tables(m_luaState, funName, currentLayerName);
- //       int parentIdx = lua_gettop(m_luaState);
- //       
- //       // push lua function to stack top
- //       if (upperTableCount != 0)
- //       {
- //           lua_getfield(m_luaState, parentIdx, currentLayerName.c_str());
- //           if(!lua_isnil(m_luaState, -1))
- //           {
- //               // 1. push table self
- //               lua_pushvalue(m_luaState, -2);
- //               lua_call(m_luaState, 1, 0);
- //           }
- //           else
- //           {
- //               EchoLogError("object function %s is nil", currentLayerName.c_str());
- //           }
- //       }
- //       else
- //       {
- //           lua_getglobal(m_luaState, funName.c_str());
- //           if(!lua_isnil(m_luaState, -1))
- //           {
- //               lua_call(m_luaState, 0, 0);
- //           }
- //           else
- //           {
- //               EchoLogError("global lua function %s is nil", funName.c_str());
- //           }
- //       }
- //       
- //       lua_settop(m_luaState, 0);
-	//}
-
-	// get global value(boolean)
 	bool LuaBinder::getGlobalVariableBoolean(const String& varName)
 	{
 		LUA_STACK_CHECK(m_luaState);
@@ -492,11 +451,6 @@ namespace Echo
 		return false;
 	}
 
-	//char lastSeparator = 0;
-	//char* names[LUA_FUNCTION_MAX_NAME_COUNT] = { nullptr };
-
-	//String funName = functionName;
-	//int	 nameCount = parseName(funName.c_str(), names, LUA_FUNCTION_MAX_NAME_COUNT, &lastSeparator);
 	int LuaBinder::parseName(char* name, char** result, const int resultSize, char* lastSeparator)
 	{
 		char*	p = name;
