@@ -30,6 +30,8 @@ namespace Echo
 		CLASS_BIND_METHOD(Input, getMouseButtonDown, "getMouseButtonDown");
 		CLASS_BIND_METHOD(Input, isMouseButtonUp, "isMouseButtonUp");
 		CLASS_BIND_METHOD(Input, getMouseButtonUp, "getMouseButtonUp");
+
+		CLASS_REGISTER_SIGNAL(Input, clicked);
 	}
 
 	bool Input::isMouseButtonDown(Echo::ui32 id)
@@ -60,7 +62,7 @@ namespace Echo
 		m_mouseState.m_mouseButtonStates[id].m_position = pos;
         
         // emit Mouse button event
-        onMouseButtonDownEvent();
+        clicked();
 	}
 
 	void Input::notifyMouseButtonUp(Echo::ui32 id, const Vector2& pos)

@@ -11,7 +11,7 @@ namespace Echo
 {
     UiEventProcessor::UiEventProcessor()
     {
-        Input::instance()->onMouseButtonDownEvent.connectClassMethod( this, createMethodBind(&UiEventProcessor::onMouseButtonDown));
+        Input::instance()->clicked.connectClassMethod( this, createMethodBind(&UiEventProcessor::onMouseButtonDown));
     }
     
     UiEventProcessor::~UiEventProcessor()

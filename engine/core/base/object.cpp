@@ -42,6 +42,8 @@ namespace Echo
 
 	void Object::bindMethods()
 	{
+		BIND_METHOD(Object::connect, DEF_METHOD("Object.connect"));
+
 		CLASS_BIND_METHOD(Object, getId,			"getId");
 		CLASS_BIND_METHOD(Object, isChannelExist,	"isChannelExist");
 	}
@@ -69,6 +71,20 @@ namespace Echo
 	{
 		static String className = "Object";
 		return className;
+	}
+
+	bool Object::connect(Object* from, const char* signalName, Object* to, const char* luaFunName)
+	{
+		Signal* signal = Class::getSignal(from, signalName);
+		if (signal)
+		{
+			return signal->connectLuaMethod(to, luaFunName);
+		}
+		else
+		{
+			EchoLogError("Signal [%s] not found in class [%s]", signalName, from->getClassName().c_str());
+			return false;
+		}
 	}
     
     void Object::unregisterChannel(const String& propertyName)

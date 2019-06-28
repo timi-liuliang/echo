@@ -53,9 +53,13 @@ namespace Echo
 
 		// set property value
 		virtual bool setPropertyValue(const String& propertyName, const Variant& propertyValue) { return false; }
-        
-        // call lua function of this node
-        virtual void callLuaFunction(const String& funName, const Variant** args, int argCount) {}
+
+	public:
+		// connect signal slot
+		static bool connect(Object* from, const char* signalName, Object* to, const char* luaFunName);
+
+		// call lua function of this node
+		virtual void callLuaFunction(const String& funName, const Variant** args, int argCount) {}
         
     public:
         // get channels

@@ -191,6 +191,17 @@ namespace Echo
 		LuaMatrixPool.deleteObj(ptr);
 	}
 
+	template<> INLINE Object* lua_getvalue<Object*>(lua_State* state, int idx)
+	{
+		LUA_STACK_CHECK(state);
+
+		lua_getfield(state, idx, "this");
+		Object* ptr = static_cast<Object*>(lua_touserdata(state, -1));
+		lua_pop(state, 1);
+
+		return ptr;
+	}
+
 	template<> INLINE Node* lua_getvalue<Node*>(lua_State* state, int idx)
 	{
 		LUA_STACK_CHECK(state);

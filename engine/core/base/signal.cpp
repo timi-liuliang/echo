@@ -7,11 +7,30 @@
 
 namespace Echo
 {
+	ConnectClassMethod::ConnectClassMethod(Signal* signal, Object* target, ClassMethodBind* method)
+		: m_signal(signal)
+		, m_target(target)
+		, m_method(method)
+	{}
+
 	void ConnectClassMethod::emitSignal(const Variant** args, int argCount)
 	{
 		Variant::CallError error;
 		m_method->call(m_target,  args, argCount, error);
 	}
+
+
+	ConnectLuaMethod::ConnectLuaMethod(Signal* signal, Object* target, const String& functionName)
+		: m_signal(signal)
+		, m_target(target)
+		, m_functionName(functionName)
+	{}
+
+	ConnectLuaMethod::ConnectLuaMethod(Signal* signal, const String& target, const String& functionName)
+		: m_signal(signal)
+		, m_targetPath(target)
+		, m_functionName(functionName)
+	{}
     
     void ConnectLuaMethod::save(void* pugiNode)
     {
@@ -26,8 +45,13 @@ namespace Echo
     {
         buildTarget();
         
-        if(m_target)
-            m_target->callLuaFunction( m_functionName, args, argCount);
+		if (m_target)
+		{
+			if (m_target->isValid())
+				m_target->callLuaFunction(m_functionName, args, argCount);
+			else
+				m_signal->disconnect(this);
+		}
     }
     
     void ConnectLuaMethod::buildTarget()
@@ -61,6 +85,16 @@ namespace Echo
 
 		return true;
 	}
+
+	bool Signal::connectLuaMethod(Object* obj, const Echo::String& luaMethodName)
+	{
+		if (!m_connects)
+			m_connects = new vector<Connect*>::type;
+
+		m_connects->push_back(EchoNew(ConnectLuaMethod(this, obj, luaMethodName)));
+
+		return true;
+	}
     
     bool Signal::connectLuaMethod(const String& obj, const Echo::String& luaMethodName)
     {
@@ -71,6 +105,23 @@ namespace Echo
         
         return true;
     }
+
+	void Signal::disconnect(Connect* connect)
+	{
+		if (m_connects)
+		{
+			for (vector<Connect*>::type::iterator it = m_connects->begin(); it != m_connects->end(); it++)
+			{
+				Connect* curConn = *it;
+				if (curConn == connect)
+				{
+					EchoSafeDelete(curConn, Connect);
+					m_connects->erase(it);
+					break;
+				}
+			}
+		}
+	}
     
 	void Signal::disconnectAll()
 	{
@@ -87,9 +138,15 @@ namespace Echo
 	{
 		if (m_connects)
 		{
-			for (auto it=m_connects->begin(); it!=m_connects->end(); it++)
+			for (vector<Connect*>::type::iterator it = m_connects->begin(); it != m_connects->end(); it++)
 			{
-				
+				ConnectLuaMethod* luaConn = ECHO_DOWN_CAST<ConnectLuaMethod*>(*it);
+				if (luaConn && luaConn->m_targetPath == obj && luaConn->m_functionName == luaMethodName)
+				{
+					EchoSafeDelete(luaConn, ConnectLuaMethod);
+					m_connects->erase(it);
+					break;
+				}
 			}
 		}
 	}

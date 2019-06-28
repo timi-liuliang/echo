@@ -27,11 +27,7 @@ namespace Echo
         Object*             m_target;
         ClassMethodBind*    m_method;
         
-        ConnectClassMethod(Signal* signal, Object* target, ClassMethodBind* method)
-        : m_signal(signal)
-        , m_target(target)
-        , m_method(method)
-        {}
+		ConnectClassMethod(Signal* signal, Object* target, ClassMethodBind* method);
         
         // emit
         virtual void emitSignal(const Variant** args, int argCount) override;
@@ -44,11 +40,8 @@ namespace Echo
         String            m_functionName;
         Object*           m_target = nullptr;
 
-        ConnectLuaMethod(Signal* signal, const String& target, const String& functionName)
-        : m_signal(signal)
-        , m_targetPath(target)
-        , m_functionName(functionName)
-        {}
+		ConnectLuaMethod(Signal* signal, Object* target, const String& functionName);
+		ConnectLuaMethod(Signal* signal, const String& target, const String& functionName);
         
         // emit
         virtual void emitSignal(const Variant** args, int argCount) override;
@@ -72,10 +65,12 @@ namespace Echo
         
 		// connect
 		bool connectClassMethod(Object* obj, ClassMethodBind* method);
+		bool connectLuaMethod(Object* obj, const Echo::String& luaMethodName);
         bool connectLuaMethod(const String& obj, const Echo::String& luaMethodName);
 
 		// disconnect
 		void disconnectLuaMethod(const String& obj, const Echo::String& luaMethodName);
+		void disconnect(Connect* connect);
 		void disconnectAll();
         
         // is have connect
