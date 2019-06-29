@@ -133,7 +133,7 @@ namespace Echo
 			clearRenderable();
 
 			// material
-			m_material = ECHO_CREATE_RES(Material);
+			m_material = EchoNew(Material(Echo::StringUtil::Format("SpriteMaterial_%d", getId())));
 			m_material->setShaderContent("echo_sprite_default_shader", g_spriteDefaultMaterial);
 			m_material->setRenderStage("Transparent");
 

@@ -48,14 +48,14 @@ namespace Echo
     void UiText::setText(const String& text)
     {
         m_text = StringUtil::MBS2WCS(text);
-        buildRenderable();
+		updateMeshBuffer();
     }
     
     void UiText::setFont(const ResourcePath& path)
     {
         if (m_fontRes.setPath(path.getPath()))
         {
-            buildRenderable();
+			updateMeshBuffer();
         }
     }
 
@@ -64,7 +64,7 @@ namespace Echo
 		m_fontSize = fontSize;
 		if (m_fontSize > 0)
 		{
-			buildRenderable();
+			updateMeshBuffer();
 		}
 	}
     
@@ -74,7 +74,7 @@ namespace Echo
         {
             m_width = width;
             
-            buildRenderable();
+			updateMeshBuffer();
         }
     }
     
@@ -85,18 +85,18 @@ namespace Echo
         {
             m_height = height;
             
-            buildRenderable();
+            updateMeshBuffer();
         }
     }
     
     void UiText::buildRenderable()
     {
-        if (!m_text.empty())
+        if (!m_text.empty() && !m_fontRes.isEmpty())
         {
             clearRenderable();
             
             // material
-            m_material = ECHO_CREATE_RES(Material);
+            m_material = EchoNew(Material(StringUtil::Format("UiTextMaterial_%d", getId())));
             m_material->setShaderContent("echo_text_default_shader", UiMaterial::getDefault());
             m_material->setRenderStage("Transparent");
             
@@ -181,15 +181,23 @@ namespace Echo
     // update vertex buffer
     void UiText::updateMeshBuffer()
     {
-        Ui::VertexArray    vertices;
-        Ui::IndiceArray    indices;
-        buildMeshData(vertices, indices);
-        
-        MeshVertexFormat define;
-        define.m_isUseUV = true;
-        
-        m_mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(Word), indices.data());
-        m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data(), m_localAABB);
+		if (!m_mesh)
+		{
+			buildRenderable();
+		}
+
+		if (m_mesh)
+		{
+			Ui::VertexArray    vertices;
+			Ui::IndiceArray    indices;
+			buildMeshData(vertices, indices);
+
+			MeshVertexFormat define;
+			define.m_isUseUV = true;
+
+			m_mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(Word), indices.data());
+			m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data(), m_localAABB);
+		}
     }
     
     void UiText::clear()
