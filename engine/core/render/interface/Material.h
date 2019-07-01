@@ -139,7 +139,7 @@ namespace Echo
 		const char*			m_shaderContent;
 		StringOption		m_renderStage;
 		StringArray			m_macros;
-		ShaderProgram*	    m_shaderProgram = nullptr;
+		ShaderProgram*		m_shaderProgram = nullptr;
 		ParamMap			m_uniforms;
 		TextureInfoMap 		m_textures;
 	};

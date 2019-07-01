@@ -7,8 +7,34 @@
 
 namespace Echo
 {
-	static map<String, Res*>::type	g_ress;
-	static map<String, Res::ResFun>::type g_resFuncs;
+	static std::unordered_map<String, Res*>			g_ress;
+	static std::unordered_map<String, Res::ResFun>	g_resFuncs;
+
+	static void addResToCache(const String& path, Res* res)
+	{
+		auto it = g_ress.find(path);
+		if (it == g_ress.end())
+		{
+			g_ress[path] = res;
+		}
+		else
+		{
+			EchoLogError("create resource multi times");
+		}
+	}
+
+	static void removeResFromCache(const String& path)
+	{
+		auto it = g_ress.find(path);
+		if (it != g_ress.end())
+		{
+			g_ress.erase(it);
+		}
+		else
+		{
+			EchoLogError("can't delete resource for cache");
+		}
+	}
 
 	Res::Res()
 		: m_refCount(1)
@@ -21,30 +47,12 @@ namespace Echo
 		: m_refCount(1)
 		, m_isLoaded(false)
 	{
-		m_path = path;
-
-		auto it = g_ress.find(path.getPath());
-		if (it == g_ress.end())
-		{
-			g_ress[path.getPath()] = this;
-		}
-		else
-		{
-			EchoLogError("create resource multi times");
-		}
+		setPath(path.getPath());
 	}
 
 	Res::~Res()
 	{
-		auto it = g_ress.find(m_path.getPath());
-		if (it != g_ress.end())
-		{
-			g_ress.erase(it);
-		}
-		else
-		{
-			EchoLogError("can't delete resource for cache");
-		}
+		removeResFromCache(m_path.getPath());
 	}
 
 	// bind methods to script
@@ -54,6 +62,19 @@ namespace Echo
 		CLASS_BIND_METHOD(Res, setPath, DEF_METHOD("setPath"));
 
 		CLASS_REGISTER_PROPERTY(Res, "Path", Variant::Type::String, "getPath", "setPath");
+	}
+
+	void Res::setPath(const String& path)
+	{
+		// remove res cache
+		if (!m_path.getPath().empty())
+			removeResFromCache(path);
+
+		// add to res cache
+		if (!path.empty() && m_path.setPath(path))
+			addResToCache(path, this);
+		else
+			EchoLogError("setPath [%s] failed", path.c_str());
 	}
 
 	// resister res
@@ -84,20 +105,24 @@ namespace Echo
 
 		// get load fun
 		String ext = PathUtil::GetFileExt(path.getPath(), true);
-		StringUtil::LowerCase(ext);
-		map<String, Res::ResFun>::type::iterator itfun = g_resFuncs.find(ext);
-		if (itfun != g_resFuncs.end())
+		if (!ext.empty())
 		{
-			Res* res = itfun->second.m_lfun(path);
-			if (!res)
+			StringUtil::LowerCase(ext);
+			std::unordered_map<String, Res::ResFun>::iterator itfun = g_resFuncs.find(ext);
+			if (itfun != g_resFuncs.end())
 			{
-				EchoLogError("Res::get file [%s] failed.", path.getPath().c_str());
+				Res* res = itfun->second.m_lfun(path);
+				if (!res)
+				{
+					EchoLogError("Res::get file [%s] failed.", path.getPath().c_str());
+				}
+
+				return res;
 			}
 
-			return res;
+			EchoLogError("Res::get file [%s] failed. can't find load method for this type of resource", path.getPath().c_str());
 		}
 
-		EchoLogError("Res::get file [%s] failed. can't find load method for this type of resource", path.getPath().c_str());
 		return nullptr;
 	}
 
@@ -105,7 +130,7 @@ namespace Echo
 	ResPtr Res::createByFileExtension(const String& extWithDot)
 	{
 		String ext = extWithDot;
-		map<String, Res::ResFun>::type::iterator itfun = g_resFuncs.find(ext);
+		std::unordered_map<String, Res::ResFun>::iterator itfun = g_resFuncs.find(ext);
 		if (itfun != g_resFuncs.end())
 		{
 			Res* res = itfun->second.m_cfun();
@@ -117,13 +142,12 @@ namespace Echo
 		return nullptr;
 	}
 
-	// get res fun by extension
 	const Res::ResFun* Res::getResFunByExtension(const String& extWithDot)
 	{
 		// get load fun
 		String ext = extWithDot;
 		StringUtil::LowerCase(ext);
-		map<String, Res::ResFun>::type::iterator it = g_resFuncs.find(ext);
+		std::unordered_map<String, Res::ResFun>::iterator it = g_resFuncs.find(ext);
 		if (it != g_resFuncs.end())
 		{
 			return &it->second;
@@ -132,7 +156,6 @@ namespace Echo
 		return nullptr;
 	}
 
-	// get res fun by class
 	const Res::ResFun* Res::getResFunByClassName(const String& className)
 	{
 		for (auto& it : g_resFuncs)

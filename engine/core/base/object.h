@@ -30,7 +30,7 @@ namespace Echo
 
 		// path
 		const String& getPath() const { return m_path.getPath(); }
-		void setPath(const String& path) { m_path.setPath(path); }
+		virtual void setPath(const String& path) { m_path.setPath(path); }
         
         // register to script
         virtual void registerToScript() {}

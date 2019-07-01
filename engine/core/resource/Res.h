@@ -27,6 +27,9 @@ namespace Echo
 		Res(const ResourcePath& path);
 		virtual ~Res();
 
+		// set path
+		virtual void setPath(const String& path) override;
+
 		// resister res
 		static void registerRes(const String& className, const String& exts, RES_CREATE_FUNC cfun, RES_LOAD_FUNC lfun);
 

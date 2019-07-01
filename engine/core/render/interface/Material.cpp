@@ -24,10 +24,8 @@ namespace Echo
 		return result;
 	}
 
-	// get value bytes
 	ui32 Material::Uniform::getValueBytes()
 	{
-		// 计算所需内存大小
 		ui32 bytes = 0;
 		switch (m_type)
 		{
@@ -56,7 +54,6 @@ namespace Echo
 		}
 	}
 
-	// alloc Value
 	void Material::Uniform::allocValue()
 	{
 		if (!m_value)
@@ -76,7 +73,6 @@ namespace Echo
 	{
 	}
 
-	// 构造函数
 	Material::Material(const ResourcePath& path)
 		: Res(path)
 		, m_isDirty(false)
@@ -86,7 +82,6 @@ namespace Echo
 	{
 	}
 
-	// 析构函数
 	Material::~Material()
 	{
 		m_uniforms.clear();
@@ -153,7 +148,6 @@ namespace Echo
 		m_textures.clear();
 	}
 
-	// 根据索引获取纹理
 	Texture* Material::getTexture(const int& index)
 	{
 		auto it = m_textures.find(index);
@@ -177,7 +171,6 @@ namespace Echo
 		return blank;
 	}
 
-	// 设置宏定义
 	void Material::setMacros(const String& macros) 
 	{ 
 		m_macros = StringUtil::Split(macros, ";");
@@ -193,13 +186,11 @@ namespace Echo
 		return m_shaderProgram; 
 	}
 
-	// 判断变量是否存在
 	bool Material::isUniformExist(const String& name)
 	{
 		return m_uniforms.find(name)!=m_uniforms.end();
 	}
 
-	// 修改变量
 	void Material::setUniformValue(const String& name, const ShaderParamType& type, const void* value)
 	{
 		buildShaderProgram();
@@ -214,7 +205,6 @@ namespace Echo
 		}
 	}
 
-	// is global uniform
 	bool Material::isGlobalUniform(const String& name)
 	{
 		if (name == "u_WVPMaterix")
@@ -322,11 +312,15 @@ namespace Echo
 				finalMacros += "#define " + macro + "\n";
 
 			// create material
-            m_shaderProgram = (ShaderProgram*)ShaderProgram::create();
-			if (m_shaderContent)
-				m_shaderProgram->loadFromContent(m_shaderContentVirtualPath, m_shaderContent, finalMacros);
-			else if (!m_shaderPath.getPath().empty())
-				m_shaderProgram->loadFromFile(m_shaderPath.getPath(), finalMacros);
+			m_shaderProgram = ECHO_DOWN_CAST<ShaderProgram*>(ShaderProgram::get(m_shaderContent ? m_shaderContentVirtualPath : m_shaderPath));
+			if(!m_shaderProgram)
+			{
+				m_shaderProgram = (ShaderProgram*)ShaderProgram::create();
+				if (m_shaderContent)
+					m_shaderProgram->loadFromContent(m_shaderContentVirtualPath, m_shaderContent, finalMacros);
+				else if (!m_shaderPath.getPath().empty())
+					m_shaderProgram->loadFromFile(m_shaderPath.getPath(), finalMacros);
+			}
 
 			// match uniforms
 			if (m_shaderProgram)
