@@ -75,6 +75,7 @@ namespace Echo
             
             // material
             m_material = ECHO_CREATE_RES(Material);
+			m_material->setPath(StringUtil::Format("UiImageMaterial_%d", getId()));
             m_material->setShaderContent("echo_text_default_shader", UiMaterial::getDefault());
             m_material->setRenderStage("Transparent");
             
