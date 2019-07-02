@@ -298,7 +298,6 @@ namespace Studio
 		}
 	}
 
-	// on delete reference
 	void NodeTreePanel::onDeletePropertyReference()
 	{
 		Echo::Node* currentNode = getCurrentSelectNode();
@@ -311,7 +310,6 @@ namespace Studio
 		}
 	}
     
-	// node tree widget show menu
 	void NodeTreePanel::showMenu(const QPoint& point)
 	{
 		QTreeWidgetItem* item = m_nodeTreeWidget->itemAt(point);
@@ -655,6 +653,30 @@ namespace Studio
         }
         
         m_signalTreeWidget->expandAll();
+        
+        // update signal tab visible
+        updateSignaltabVisible();
+    }
+    
+    // because Qt has no easy method hide|show tab, we have to remove and add it frquently.
+    // https://stackoverflow.com/questions/18394706/show-hide-sub-tab-on-qtabwidget
+    void NodeTreePanel::updateSignaltabVisible()
+    {
+        // hide tab when there are no signals
+        int signalCount = m_signalTreeWidget->invisibleRootItem()->childCount();
+        m_tabSignal->setVisible(signalCount>0);
+        if(signalCount == 0)
+        {
+            // hide tab
+            if(m_tabWidget->count()==2)
+                m_tabWidget->removeTab(1);
+        }
+        else
+        {
+            // show tab
+            if(m_tabWidget->count()==1)
+                m_tabWidget->addTab(m_tabSignal, QString("Signal"));
+        }
     }
     
     void NodeTreePanel::showObjectSignalRecursive(Echo::Object* classPtr, const Echo::String& className)

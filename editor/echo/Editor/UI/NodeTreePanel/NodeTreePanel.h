@@ -159,6 +159,9 @@ namespace Studio
 	private:
 		// remove item
 		void removeItem(QTreeWidgetItem* item);
+        
+        // update signal tab visible
+        void updateSignaltabVisible();
 
 	private:
 		int								m_width;

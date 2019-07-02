@@ -104,7 +104,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QTabWidget" name="tabWidget">
+      <widget class="QTabWidget" name="m_tabWidget">
        <property name="tabPosition">
         <enum>QTabWidget::South</enum>
        </property>
@@ -112,12 +112,12 @@
         <enum>QTabWidget::Triangular</enum>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <property name="elideMode">
         <enum>Qt::ElideMiddle</enum>
        </property>
-       <widget class="QWidget" name="tab">
+       <widget class="QWidget" name="m_tabProperty">
         <attribute name="title">
          <string>Property</string>
         </attribute>
@@ -146,7 +146,7 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="tab_2">
+       <widget class="QWidget" name="m_tabSignal">
         <attribute name="title">
          <string>Signal</string>
         </attribute>
