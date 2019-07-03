@@ -14,6 +14,10 @@ namespace Echo
 		m_debugDraw = EchoNew(Box2DDebugDraw);
 		m_debugDraw->SetFlags(b2Draw::e_shapeBit | b2Draw::e_jointBit /* |b2Draw::e_aabbBit | b2Draw::e_pairBit | b2Draw::e_centerOfMassBit*/);
 		m_b2World->SetDebugDraw(m_debugDraw);
+        
+        // contact listener
+        m_contactListener = EchoNew(Box2DContactListener);
+        m_b2World->SetContactListener(m_contactListener);
 	}
 
 	Box2DWorld::~Box2DWorld()

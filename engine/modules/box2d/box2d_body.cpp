@@ -30,6 +30,8 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(Box2DBody, "Type", Variant::Type::StringOption, "getType", "setType");
 		CLASS_REGISTER_PROPERTY(Box2DBody, "FixRotation", Variant::Type::Bool, "isFixRotation", "setFixRotation");
 		CLASS_REGISTER_PROPERTY(Box2DBody, "GravityScale", Variant::Type::Real, "getGravityScale", "setGravityScale");
+        
+        CLASS_REGISTER_SIGNAL(Box2DBody, clicked);
 	}
 
 	void Box2DBody::setType(const StringOption& type)

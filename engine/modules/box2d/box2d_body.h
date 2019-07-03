@@ -27,7 +27,12 @@ namespace Echo
 
 		// get body
 		b2Body* getb2Body() { return m_body; }
-
+        
+        // events
+    public:
+        // mouse button down event
+        DECLARE_SIGNAL(Signal0, clicked)
+        
 	protected:
 		// update
 		virtual void update_self() override;

@@ -3,6 +3,7 @@
 #include <engine/core/base/object.h>
 #include <engine/core/math/Math.h>
 #include "box2d_debug_draw.h"
+#include "box2d_contact_listener.h"
 
 namespace Echo
 {
@@ -37,11 +38,12 @@ namespace Echo
 		virtual ~Box2DWorld();
 
 	private:
-		bool			m_isEnable;
-		StringOption	m_drawDebugOption;
-		Box2DDebugDraw*	m_debugDraw;
-		b2World*		m_b2World;			                // we only support one b2World
-		Vector2			m_gravity = Vector2( 0.f, -9.8f);
-		float			m_pixelsPerMeter = 32.f;
+		bool			        m_isEnable;
+		StringOption	        m_drawDebugOption;
+		Box2DDebugDraw*	        m_debugDraw = nullptr;
+        Box2DContactListener*   m_contactListener = nullptr;
+		b2World*		        m_b2World = nullptr;			                // we only support one b2World
+		Vector2			        m_gravity = Vector2( 0.f, -9.8f);
+		float			        m_pixelsPerMeter = 32.f;
 	};
 }
