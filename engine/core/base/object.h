@@ -55,8 +55,9 @@ namespace Echo
 		virtual bool setPropertyValue(const String& propertyName, const Variant& propertyValue) { return false; }
 
 	public:
-		// connect signal slot
+		// connect|disconnect signal slot
 		static bool connect(Object* from, const char* signalName, Object* to, const char* luaFunName);
+		static bool disconnect(Object* from, const char* signalName, Object* to, const char* luaFunName);
 
 		// call lua function of this node
 		virtual void callLuaFunction(const String& funName, const Variant** args, int argCount) {}

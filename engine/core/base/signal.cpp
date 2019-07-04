@@ -134,6 +134,23 @@ namespace Echo
 		}
 	}
 
+	void Signal::disconnectLuaMethod(Object* obj, const String& luaMethodName)
+	{
+		if (m_connects)
+		{
+			for (vector<Connect*>::type::iterator it = m_connects->begin(); it != m_connects->end(); it++)
+			{
+				ConnectLuaMethod* luaConn = ECHO_DOWN_CAST<ConnectLuaMethod*>(*it);
+				if (luaConn && luaConn->m_target == obj && luaConn->m_functionName == luaMethodName)
+				{
+					EchoSafeDelete(luaConn, ConnectLuaMethod);
+					m_connects->erase(it);
+					break;
+				}
+			}
+		}
+	}
+
 	void Signal::disconnectLuaMethod(const String& obj, const Echo::String& luaMethodName)
 	{
 		if (m_connects)

@@ -31,7 +31,8 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(Box2DBody, "FixRotation", Variant::Type::Bool, "isFixRotation", "setFixRotation");
 		CLASS_REGISTER_PROPERTY(Box2DBody, "GravityScale", Variant::Type::Real, "getGravityScale", "setGravityScale");
         
-        CLASS_REGISTER_SIGNAL(Box2DBody, clicked);
+        CLASS_REGISTER_SIGNAL(Box2DBody, beginContact);
+		CLASS_REGISTER_SIGNAL(Box2DBody, endContact);
 	}
 
 	void Box2DBody::setType(const StringOption& type)
@@ -70,6 +71,7 @@ namespace Echo
 			bodyDef.position.Set(getWorldPosition().x / pixelsPerUnit, getWorldPosition().y / pixelsPerUnit);
 			bodyDef.angle = pitchYawRoll.z * Math::DEG2RAD;
 			m_body = Box2DWorld::instance()->getWorld()->CreateBody(&bodyDef);
+			m_body->SetUserData(this);
 		}
 
 		if (m_body)

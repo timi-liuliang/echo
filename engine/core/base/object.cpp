@@ -43,6 +43,7 @@ namespace Echo
 	void Object::bindMethods()
 	{
 		BIND_METHOD(Object::connect, DEF_METHOD("Object.connect"));
+		BIND_METHOD(Object::disconnect, DEF_METHOD("Object.disconnect"));
 
 		CLASS_BIND_METHOD(Object, getId,			"getId");
 		CLASS_BIND_METHOD(Object, isChannelExist,	"isChannelExist");
@@ -79,6 +80,21 @@ namespace Echo
 		if (signal)
 		{
 			return signal->connectLuaMethod(to, luaFunName);
+		}
+		else
+		{
+			EchoLogError("Signal [%s] not found in class [%s]", signalName, from->getClassName().c_str());
+			return false;
+		}
+	}
+
+	bool Object::disconnect(Object* from, const char* signalName, Object* to, const char* luaFunName)
+	{
+		Signal* signal = Class::getSignal(from, signalName);
+		if (signal)
+		{
+			signal->disconnectLuaMethod(to, luaFunName);
+			return true;
 		}
 		else
 		{

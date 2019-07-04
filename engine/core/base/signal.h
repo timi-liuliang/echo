@@ -65,11 +65,12 @@ namespace Echo
         
 		// connect
 		bool connectClassMethod(Object* obj, ClassMethodBind* method);
-		bool connectLuaMethod(Object* obj, const Echo::String& luaMethodName);
-        bool connectLuaMethod(const String& obj, const Echo::String& luaMethodName);
+		bool connectLuaMethod(Object* obj, const String& luaMethodName);
+        bool connectLuaMethod(const String& obj, const String& luaMethodName);
 
 		// disconnect
-		void disconnectLuaMethod(const String& obj, const Echo::String& luaMethodName);
+		void disconnectLuaMethod(Object* obj, const String& luaMethodName);
+		void disconnectLuaMethod(const String& obj, const String& luaMethodName);
 		void disconnect(Connect* connect);
 		void disconnectAll();
         

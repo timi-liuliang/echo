@@ -31,7 +31,10 @@ namespace Echo
         // events
     public:
         // mouse button down event
-        DECLARE_SIGNAL(Signal0, clicked)
+		DECLARE_SIGNAL(Signal0, beginContact)
+
+		// end contact
+		DECLARE_SIGNAL(Signal0, endContact)
         
 	protected:
 		// update

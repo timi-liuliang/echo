@@ -14,7 +14,5 @@ namespace Echo
         
         /// Called when two fixtures cease to touch.
         virtual void EndContact(b2Contact* contact) override;
-        
-	private:
 	};
 }
