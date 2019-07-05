@@ -23,9 +23,12 @@ namespace Echo
 
 	void AudioPlayer::bindMethods()
 	{
-        CLASS_BIND_METHOD(AudioPlayer, getAudio, DEF_METHOD("getAudio"));
-        CLASS_BIND_METHOD(AudioPlayer, setAudio, DEF_METHOD("setAudio"));
+		CLASS_BIND_METHOD(AudioPlayer, is2d,		DEF_METHOD("is2d"));
+		CLASS_BIND_METHOD(AudioPlayer, set2d,		DEF_METHOD("set2d"));
+        CLASS_BIND_METHOD(AudioPlayer, getAudio,	DEF_METHOD("getAudio"));
+        CLASS_BIND_METHOD(AudioPlayer, setAudio,	DEF_METHOD("setAudio"));
 
+		CLASS_REGISTER_PROPERTY(AudioPlayer, "Is2D", Variant::Type::Bool, "is2d", "set2d");
         CLASS_REGISTER_PROPERTY(AudioPlayer, "Audio", Variant::Type::ResourcePath, "getAudio", "setAudio");
 	}
 
@@ -50,10 +53,43 @@ namespace Echo
 		alSourcei( m_source, AL_LOOPING, m_isLoop);
 	}
 
+	bool AudioPlayer::isPlaying()
+	{
+		ALenum state;
+
+		alGetSourcei(m_source, AL_SOURCE_STATE, &state);
+
+		return (state == AL_PLAYING);
+	}
+
 	void AudioPlayer::update_self()
 	{
 		const Vector3& position = getWorldPosition();
+		
+		// update self position
+		updatePosition(position);
 
+		// one shot players
+		if (!m_oneShotPlayers.empty())
+		{
+			for (AudioPlayerArray::iterator it=m_oneShotPlayers.begin(); it!=m_oneShotPlayers.end(); )
+			{
+				AudioPlayer* player = *it;
+				if (player->isPlaying())
+				{
+					player->updatePosition(position);
+					it++;
+				}
+				else
+				{
+					m_oneShotPlayers.erase(it++);
+				}
+			}
+		}
+	}
+
+	void AudioPlayer::updatePosition(const Vector3& position)
+	{
 		alSource3f(m_source, AL_POSITION, position.x, position.y, position.z);
 		alSource3f(m_source, AL_VELOCITY, 0.f, 0.f, 0.f);
 	}
@@ -125,4 +161,19 @@ namespace Echo
         
         return false;
     }
+
+	void AudioPlayer::playOneShot(const char* res)
+	{
+		AudioPlayer* newPlayer = EchoNew(AudioPlayer);
+		if(newPlayer)
+		{
+			newPlayer->setAudio(ResourcePath(res));
+			newPlayer->updatePosition(getWorldPosition());
+			newPlayer->setLoop(false);
+			newPlayer->set2d(is2d());
+			newPlayer->play();
+
+			m_oneShotPlayers.push_back(newPlayer);
+		}
+	}
 }

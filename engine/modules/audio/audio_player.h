@@ -10,6 +10,9 @@ namespace Echo
 		ECHO_CLASS(AudioPlayer, Node)
 
 	public:
+		typedef vector<AudioPlayer*>::type AudioPlayerArray;
+
+	public:
 		AudioPlayer();
 		virtual ~AudioPlayer();
 
@@ -25,6 +28,13 @@ namespace Echo
 		bool isLoop() const { return m_isLoop; }
 		void setLoop(bool loop);
 
+		// 2d
+		bool is2d() const { return m_is2D; }
+		void set2d(bool is2d) { m_is2D = is2d; }
+
+		// is playing
+		bool isPlaying();
+
 		// operates
 		void play();
         void pause();
@@ -34,22 +44,29 @@ namespace Echo
         void setAudio(const ResourcePath& res);
         const ResourcePath& getAudio() const { return m_audioRes; }
 
+		// special operate
+		void playOneShot(const char* res);
+
 	protected:
 		// update
 		virtual void update_self() override;
+
+		// update position
+		void updatePosition(const Vector3& position);
         
     private:
         // load audio data from file
         bool loadBuff();
 
 	private:
-		ALuint		    m_source;
-		ALuint		    m_buffer;
-		float		    m_pitch;
-		float		    m_gain;
-		bool		    m_isLoop;
-		bool			m_isPlay = true;
-		bool			m_is2D = true;
-        ResourcePath    m_audioRes = ResourcePath("", ".mp3|.flac|.wav");
+		ALuint				m_source;
+		ALuint				m_buffer;
+		float				m_pitch;
+		float				m_gain;
+		bool				m_isLoop = false;
+		bool				m_isPlay = true;
+		bool				m_is2D = true;
+        ResourcePath		m_audioRes = ResourcePath("", ".mp3|.flac|.wav");
+		AudioPlayerArray	m_oneShotPlayers;
 	};
 }
