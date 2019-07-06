@@ -23,6 +23,7 @@ namespace Echo
 
 	void AudioPlayer::bindMethods()
 	{
+        CLASS_BIND_METHOD(AudioPlayer, playOneShot,         DEF_METHOD("playOneShot"));
 		CLASS_BIND_METHOD(AudioPlayer, is2d,		        DEF_METHOD("is2d"));
 		CLASS_BIND_METHOD(AudioPlayer, set2d,		        DEF_METHOD("set2d"));
         CLASS_BIND_METHOD(AudioPlayer, isLoop,              DEF_METHOD("isLoop"));
