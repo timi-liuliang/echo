@@ -178,6 +178,9 @@ namespace Echo
 	protected:
         // dirty update flag
 		void needUpdate();
+        
+        // start (the first time update the node)
+        virtual void start() {}
 
         // update self
 		virtual void update_self() {}

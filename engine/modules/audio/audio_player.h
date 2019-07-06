@@ -31,6 +31,10 @@ namespace Echo
 		// 2d
 		bool is2d() const { return m_is2D; }
 		void set2d(bool is2d) { m_is2D = is2d; }
+        
+        // is play on awake
+        bool isPlayOnAwake() const { return m_isPlayOnAwake; }
+        void setPlayOnAwake(bool isPlayOnAwake) { m_isPlayOnAwake = isPlayOnAwake;}
 
 		// is playing
 		bool isPlaying();
@@ -48,6 +52,9 @@ namespace Echo
 		void playOneShot(const char* res);
 
 	protected:
+        // start
+        virtual void start() override;
+        
 		// update
 		virtual void update_self() override;
 
@@ -64,7 +71,7 @@ namespace Echo
 		float				m_pitch;
 		float				m_gain;
 		bool				m_isLoop = false;
-		bool				m_isPlay = true;
+		bool				m_isPlayOnAwake = true;
 		bool				m_is2D = true;
         ResourcePath		m_audioRes = ResourcePath("", ".mp3|.flac|.wav");
 		AudioPlayerArray	m_oneShotPlayers;

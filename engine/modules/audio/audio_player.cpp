@@ -23,12 +23,18 @@ namespace Echo
 
 	void AudioPlayer::bindMethods()
 	{
-		CLASS_BIND_METHOD(AudioPlayer, is2d,		DEF_METHOD("is2d"));
-		CLASS_BIND_METHOD(AudioPlayer, set2d,		DEF_METHOD("set2d"));
-        CLASS_BIND_METHOD(AudioPlayer, getAudio,	DEF_METHOD("getAudio"));
-        CLASS_BIND_METHOD(AudioPlayer, setAudio,	DEF_METHOD("setAudio"));
+		CLASS_BIND_METHOD(AudioPlayer, is2d,		        DEF_METHOD("is2d"));
+		CLASS_BIND_METHOD(AudioPlayer, set2d,		        DEF_METHOD("set2d"));
+        CLASS_BIND_METHOD(AudioPlayer, isLoop,              DEF_METHOD("isLoop"));
+        CLASS_BIND_METHOD(AudioPlayer, setLoop,             DEF_METHOD("setLoop"));
+        CLASS_BIND_METHOD(AudioPlayer, isPlayOnAwake,       DEF_METHOD("isPlayOnAwake"));
+        CLASS_BIND_METHOD(AudioPlayer, setPlayOnAwake,      DEF_METHOD("setPlayOnAwake"));
+        CLASS_BIND_METHOD(AudioPlayer, getAudio,	        DEF_METHOD("getAudio"));
+        CLASS_BIND_METHOD(AudioPlayer, setAudio,	        DEF_METHOD("setAudio"));
 
 		CLASS_REGISTER_PROPERTY(AudioPlayer, "Is2D", Variant::Type::Bool, "is2d", "set2d");
+        CLASS_REGISTER_PROPERTY(AudioPlayer, "Loop", Variant::Type::Bool, "isLoop", "setLoop");
+        CLASS_REGISTER_PROPERTY(AudioPlayer, "PlayOnAwake", Variant::Type::Bool, "isPlayOnAwake", "setPlayOnAwake");
         CLASS_REGISTER_PROPERTY(AudioPlayer, "Audio", Variant::Type::ResourcePath, "getAudio", "setAudio");
 	}
 
@@ -61,6 +67,14 @@ namespace Echo
 
 		return (state == AL_PLAYING);
 	}
+    
+    void AudioPlayer::start()
+    {
+        if (m_isPlayOnAwake && IsGame)
+        {
+            play();
+        }
+    }
 
 	void AudioPlayer::update_self()
 	{
@@ -118,11 +132,6 @@ namespace Echo
         m_audioRes=res;
 
 		loadBuff();
-
-		if (m_isPlay && IsGame)
-		{
-			play();
-		}
     }
     
     bool AudioPlayer::loadBuff()

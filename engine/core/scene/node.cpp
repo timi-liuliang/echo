@@ -51,7 +51,11 @@ namespace Echo
 	{
 		if (!m_isStart)
 		{
+            // lua:start
 			start(obj);
+            
+            // c++:start
+            obj->start();
 			m_isStart = true;
 		}
 	}
