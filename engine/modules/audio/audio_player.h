@@ -20,9 +20,9 @@ namespace Echo
 		float getPitch() const { return m_pitch; }
 		void setPitch(float pitch);
 
-		// gain
-		float getGain() const { return m_gain; }
-		void setGain(float gain);
+		// gain, AL_GAIN defines a scalar amplitude multiplier
+		float getVolume() const { return m_gain; }
+		void setVolume(float gain);
 
 		// loop
 		bool isLoop() const { return m_isLoop; }
@@ -69,7 +69,7 @@ namespace Echo
 		ALuint				m_source = -1;
 		ALuint				m_buffer;
 		float				m_pitch;
-		float				m_gain;
+		float				m_gain = 1.f;
 		bool				m_isLoop = false;
 		bool				m_isPlayOnAwake = true;
 		bool				m_is2D = true;

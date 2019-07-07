@@ -33,6 +33,8 @@ namespace Echo
 		CLASS_BIND_METHOD(AudioPlayer, set2d,		        DEF_METHOD("set2d"));
         CLASS_BIND_METHOD(AudioPlayer, isLoop,              DEF_METHOD("isLoop"));
         CLASS_BIND_METHOD(AudioPlayer, setLoop,             DEF_METHOD("setLoop"));
+        CLASS_BIND_METHOD(AudioPlayer, getVolume,           DEF_METHOD("getVolume"));
+        CLASS_BIND_METHOD(AudioPlayer, setVolume,           DEF_METHOD("setVolume"));
         CLASS_BIND_METHOD(AudioPlayer, isPlayOnAwake,       DEF_METHOD("isPlayOnAwake"));
         CLASS_BIND_METHOD(AudioPlayer, setPlayOnAwake,      DEF_METHOD("setPlayOnAwake"));
         CLASS_BIND_METHOD(AudioPlayer, getAudio,	        DEF_METHOD("getAudio"));
@@ -41,6 +43,7 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(AudioPlayer, "Is2D", Variant::Type::Bool, "is2d", "set2d");
         CLASS_REGISTER_PROPERTY(AudioPlayer, "Loop", Variant::Type::Bool, "isLoop", "setLoop");
         CLASS_REGISTER_PROPERTY(AudioPlayer, "PlayOnAwake", Variant::Type::Bool, "isPlayOnAwake", "setPlayOnAwake");
+        CLASS_REGISTER_PROPERTY(AudioPlayer, "Volume", Variant::Type::Real, "getVolume", "setVolume");
         CLASS_REGISTER_PROPERTY(AudioPlayer, "Audio", Variant::Type::ResourcePath, "getAudio", "setAudio");
 	}
 
@@ -51,11 +54,11 @@ namespace Echo
 		alSourcef(m_source, AL_PITCH, 1);
 	}
 
-	void AudioPlayer::setGain(float gain)
+	void AudioPlayer::setVolume(float gain)
 	{
 		m_gain = gain;
 
-		alSourcef(m_source, AL_GAIN, 1);
+		alSourcef(m_source, AL_GAIN, m_gain);
 	}
 
 	void AudioPlayer::setLoop(bool loop)
