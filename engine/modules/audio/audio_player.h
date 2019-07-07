@@ -30,7 +30,7 @@ namespace Echo
 
 		// 2d
 		bool is2d() const { return m_is2D; }
-		void set2d(bool is2d) { m_is2D = is2d; }
+        void set2d(bool is2d);
         
         // is play on awake
         bool isPlayOnAwake() const { return m_isPlayOnAwake; }
@@ -66,14 +66,14 @@ namespace Echo
         bool loadBuff();
 
 	private:
-		ALuint				m_source;
+		ALuint				m_source = -1;
 		ALuint				m_buffer;
 		float				m_pitch;
 		float				m_gain;
 		bool				m_isLoop = false;
 		bool				m_isPlayOnAwake = true;
 		bool				m_is2D = true;
-        ResourcePath		m_audioRes = ResourcePath("", ".mp3|.flac|.wav");
+        ResourcePath		m_audioRes = ResourcePath("", ".mp3|.flac|.wav|.audio");
 		AudioPlayerArray	m_oneShotPlayers;
 	};
 }

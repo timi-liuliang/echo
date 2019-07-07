@@ -17,8 +17,13 @@ namespace Echo
 
 	AudioPlayer::~AudioPlayer()
 	{
-		alDeleteSources(1, &m_source);
-		alDeleteBuffers(1, &m_buffer);
+        if(m_source!=-1)
+        {
+            stop();
+            
+            alDeleteSources(1, &m_source);
+            alDeleteBuffers(1, &m_buffer);
+        }
 	}
 
 	void AudioPlayer::bindMethods()
@@ -59,6 +64,21 @@ namespace Echo
 
 		alSourcei( m_source, AL_LOOPING, m_isLoop);
 	}
+    
+    void AudioPlayer::set2d(bool is2d)
+    {
+        if(is2d)
+        {
+            alSourcei( m_source, AL_SOURCE_RELATIVE, AL_TRUE);
+            alSource3f(m_source, AL_POSITION, 0.0f, 0.0f, 0.0f);
+        }
+        else
+        {
+            alSourcei( m_source, AL_SOURCE_RELATIVE, AL_FALSE);
+        }
+        
+        m_is2D = is2d;
+    }
 
 	bool AudioPlayer::isPlaying()
 	{
@@ -105,8 +125,11 @@ namespace Echo
 
 	void AudioPlayer::updatePosition(const Vector3& position)
 	{
-		alSource3f(m_source, AL_POSITION, position.x, position.y, position.z);
-		alSource3f(m_source, AL_VELOCITY, 0.f, 0.f, 0.f);
+        if(!m_is2D)
+        {
+            alSource3f(m_source, AL_POSITION, position.x, position.y, position.z);
+            alSource3f(m_source, AL_VELOCITY, 0.f, 0.f, 0.f);
+        }
 	}
 
 	void AudioPlayer::play()
@@ -120,12 +143,12 @@ namespace Echo
     
     void AudioPlayer::pause()
     {
-        
+        alSourcePause( m_source);
     }
     
     void AudioPlayer::stop()
     {
-        
+        alSourceStop( m_source);
     }
     
     void AudioPlayer::setAudio(const ResourcePath& res)
