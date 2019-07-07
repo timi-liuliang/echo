@@ -13,6 +13,9 @@ namespace Echo
 
 	NodeTree::~NodeTree()
 	{
+        EchoSafeDelete(m_2dCamera, Camera);
+        EchoSafeDelete(m_3dCamera, Camera);
+        EchoSafeDelete(m_uiCamera, Camera);
 	}
 
 	NodeTree* NodeTree::instance()

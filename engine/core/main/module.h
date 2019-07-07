@@ -33,6 +33,9 @@ namespace Echo
 
 		// update all modules every frame(ms)
 		static void updateAll(float elapsedTime);
+        
+        // clear all
+        static void clear();
 
 	public:
 		// name

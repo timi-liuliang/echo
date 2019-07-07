@@ -39,15 +39,15 @@ namespace Echo
 
 	Engine::~Engine()
 	{
+        destroy();
 	}
 
 	Engine* Engine::instance()
 	{
-		static Engine* inst = new Engine();
+		static Engine* inst = EchoNew(Engine);
 		return inst;
 	}
 
-	// initialize dll
 	void Engine::initializeDll()
 	{
 
@@ -254,6 +254,9 @@ namespace Echo
 		EchoLogInfo("Echo Renderer has been shutdown.");
 		EchoSafeDeleteInstance(Log);
 		EchoSafeDeleteInstance(LuaBinder);
+        
+        Module::clear();
+        Class::clear();
 	}
 
 	const String& Engine::getResPath() const

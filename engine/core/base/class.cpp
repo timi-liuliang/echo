@@ -7,6 +7,15 @@
 namespace Echo
 {
 	static std::map<String, ObjectFactory*>*	g_classInfos = nullptr;
+    
+    void ObjectFactory::destroy()
+    {
+        // property infos
+        for(PropertyInfo* info : m_classInfo.m_propertyInfos)
+            EchoSafeDelete(info, PropertyInfo);
+        
+        m_classInfo.m_propertyInfos.clear();
+    }
 
 	void ObjectFactory::registerProperty(PropertyInfo* property)
 	{
@@ -32,6 +41,21 @@ namespace Echo
         obj->initEditor();
     }
 #endif
+    
+    // clear all classinfos
+    void Class::clear()
+    {
+        if(g_classInfos)
+        {
+            for(auto it : *g_classInfos)
+            {
+                ObjectFactory* objFactory = it.second;
+                objFactory->destroy();
+            }
+            
+            g_classInfos->clear();
+        }
+    }
 
 	// add class
 	void Class::addClass(const String& className, ObjectFactory* objFactory)

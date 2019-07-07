@@ -12,6 +12,11 @@ namespace Echo
 	{
 
 	}
+    
+    PhysxModule::~PhysxModule()
+    {
+        EchoSafeDeleteInstance(PhysxWorld);
+    }
 
 	void PhysxModule::registerTypes()
 	{

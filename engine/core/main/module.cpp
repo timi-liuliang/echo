@@ -14,6 +14,24 @@ namespace Echo
 
 		g_modules->push_back(module);
 	}
+    
+    void Module::clear()
+    {
+        if(g_modules)
+        {
+            // clear modules
+            for(Module* module : *g_modules)
+                EchoSafeDelete( module, Module);
+            
+            g_modules->clear();
+            
+            // delete self
+            delete g_modules;
+            g_modules = nullptr;
+        }
+        
+        g_currentModule = nullptr;
+    }
 
 	void Module::registerAllTypes()
 	{

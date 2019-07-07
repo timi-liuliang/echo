@@ -20,6 +20,8 @@ namespace Echo
 		};
 
 	public:
+        ~Engine();
+        
 		// instance
 		static Engine* instance();
 
@@ -61,7 +63,6 @@ namespace Echo
 
 		// screen size changed
 		bool onSize(ui32 windowWidth, ui32 windowHeight);
-		void destroy();
 
 		// config
 		const Config& getConfig() const { return m_config; }
@@ -72,7 +73,9 @@ namespace Echo
 
 	private:
 		Engine();
-		~Engine();
+        
+        // destroy
+        void destroy();
 
 		// register all class types
 		void registerClassTypes();

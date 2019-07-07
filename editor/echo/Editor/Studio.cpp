@@ -40,7 +40,9 @@ namespace Studio
 
 	AStudio::~AStudio()
 	{
-		Echo::Engine::instance()->destroy();
+        using namespace Echo;
+        
+        EchoSafeDeleteInstance(Engine);
 		EchoSafeDelete(m_logPanel, LogPanel);
 
 		EchoSafeDelete(m_projectWindow, ProjectWnd);
@@ -64,7 +66,7 @@ namespace Studio
 	{
 		Echo::Engine::instance();
 
-		// 添加默认日志处理
+		// log config
 		Echo::LogDefault::LogConfig logConfig;
 		logConfig.logName = "echo.log";
 		logConfig.logLevel = Echo::LogOutput::LL_INVALID;

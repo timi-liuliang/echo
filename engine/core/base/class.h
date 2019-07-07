@@ -27,6 +27,10 @@ namespace Echo
 		String		m_name;
 		ClassInfo	m_classInfo;
 
+        // free
+        void destroy();
+        
+        // create object
 		virtual Object* create() = 0;
 
 		// register property
@@ -198,6 +202,9 @@ namespace Echo
             
             return bind;
         }
+        
+        // clear all classinfos
+        static void clear();
 	};
     
     template<typename T>

@@ -12,6 +12,8 @@ namespace Echo
 		ECHO_SINGLETON_CLASS(PhysxWorld, Object)
 
 	public:
+        virtual ~PhysxWorld();
+        
 		// instance
 		static PhysxWorld* instance();
 
@@ -30,7 +32,6 @@ namespace Echo
 
 	private:
 		PhysxWorld();
-		virtual ~PhysxWorld();
 
 		// initialize
 		bool initPhysx();

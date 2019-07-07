@@ -8,6 +8,7 @@ namespace Echo
 	{
 	public:
 		PhysxModule();
+        virtual ~PhysxModule();
 
 		// resister all types of the module
 		virtual void registerTypes() override;
