@@ -27,14 +27,12 @@ namespace Echo
 		return true;
 	}
 
-	// 设置路径
 	void FileSystem::setPath(const String& path, const String& prefix)
 	{
 		m_path = path;
 		m_prefix = prefix;
 	}
 
-	// 打开资源
 	DataStream* FileSystem::open(const String& filename)
 	{
 		String fullPath = getFullPath( filename);
@@ -73,7 +71,6 @@ namespace Echo
 		return ret;
 	}
 
-	// 全路径
 	String FileSystem::getFullPath(const String& resPath)
 	{
 		String fullPath = StringUtil::Replace(resPath, m_prefix, m_path);

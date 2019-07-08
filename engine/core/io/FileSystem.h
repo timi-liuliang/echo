@@ -5,7 +5,7 @@
 namespace Echo
 {
 	/**
-	 * 文件系统存档
+	 * FileSystem
 	 */
 	class FileSystem 
 	{

@@ -7,17 +7,18 @@
 
 namespace Echo
 {
-	// 构造函数
 	IO::IO()
 	{
 		m_resFileSystem = EchoNew(FileSystem);
 		m_userFileSystem = EchoNew(FileSystem);
 	}
 
-	// 析构函数
 	IO::~IO()
 	{
 		reset();
+
+		EchoSafeDelete(m_resFileSystem, FileSystem);
+		EchoSafeDelete(m_userFileSystem, FileSystem);
 	}
 
 	// get instance
@@ -86,14 +87,12 @@ namespace Echo
 		return  nullptr;
 	}
 
-	// 重置
 	void IO::reset()
 	{
 		EchoSafeDeleteContainer(m_archives, Archive);
 		m_resourceIndexCaseSensitive.clear();
 	}
 
-	// 添加资源存档
 	void IO::addArchive(const String& name, const String& locType, bool isOverWrite)
 	{
 		TIME_PROFILE

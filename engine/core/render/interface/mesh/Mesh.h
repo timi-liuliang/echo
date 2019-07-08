@@ -27,28 +27,30 @@ namespace Echo
 		};
 
 	public:
-		// 创建
+		~Mesh();
+
+		// create
 		static Mesh* create(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer);
 
-		// 释放
+		// release
 		void release();
 
-		// 获取名称
+		// name
 		const String& getName() const { return m_name; }
 
-		// 图元类型
+		// topology type
 		TopologyType getTopologyType() { return m_topologyType; }
 
-		// 获取顶点信息
+		// vertex data
 		MeshVertexData& getVertexData() { return m_vertData; }
 
-		// 获取顶点格式大小
+		// vertex stride
 		ui32 getVertexStride() const { return m_vertData.getVertexStride(); }
 
-		// 获取顶点数量
+		// vertex count
 		ui32 getVertexCount() const { return m_vertData.getVertexCount(); }
 
-		// 获取顶点数据
+		// vertex data ptr
 		const MeshVertexData& getVertices() const { return m_vertData; }
 
 		// get buffer object
@@ -112,7 +114,6 @@ namespace Echo
 
 	protected:
 		Mesh(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer);
-		~Mesh();
 
 		// get memory usage
 		ui32 getMemeoryUsage() const;

@@ -146,6 +146,8 @@ namespace Echo
 			m_renderable->release();
 			m_renderable = nullptr;
 		}
+
+		EchoSafeDelete(m_mesh, Mesh);
 	}
 
 	void Gizmos::Batch::addVertex(const Gizmos::VertexFormat& vert)
