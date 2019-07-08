@@ -32,9 +32,6 @@ namespace Echo
 		// create
 		static Mesh* create(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer);
 
-		// release
-		void release();
-
 		// name
 		const String& getName() const { return m_name; }
 
@@ -109,7 +106,7 @@ namespace Echo
 		void updateVertexs(const MeshVertexFormat& format, ui32 vertCount, const Byte* vertices, const AABB& box);
 		void updateVertexs(const MeshVertexData& vertexData, const AABB& box);
 
-		// 清空数据
+		// clear
 		void clear();
 
 	protected:
@@ -118,16 +115,14 @@ namespace Echo
 		// get memory usage
 		ui32 getMemeoryUsage() const;
 
-		// 计算切线数据
+		// calc tangent data
 		void buildTangentData();
 
-		// 建立顶点与索引缓冲
+		// build buffer
 		bool buildBuffer();
 
-		// 新建顶点缓冲
+		// build Vertex|Index buffer
 		void buildVertexBuffer();
-
-		// 建立索引缓冲
 		void buildIndexBuffer();
 
 	protected:
@@ -138,7 +133,7 @@ namespace Echo
 		ui32						m_startIdx = 0;
 		ui32						m_idxCount = 0;
 		ui32						m_idxStride = 0;
-		Byte*						m_indices = nullptr;
+		vector<Byte>::type			m_indices;
 		MeshVertexData				m_vertData;
 		bool						m_isDynamicVertexBuffer;
 		GPUBuffer*					m_vertexBuffer = nullptr;

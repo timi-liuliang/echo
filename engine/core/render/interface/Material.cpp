@@ -88,6 +88,8 @@ namespace Echo
 
 		unloadTexture();
 		m_textures.clear();
+
+		m_shaderProgram->subRefCount();
 	}
 
 	// bind methods to script
@@ -102,17 +104,13 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(Material, "Stage", Variant::Type::StringOption, "getRenderStage", "setRenderStage");
 	}
 
-	// release
-	void Material::release()
-	{
-		ECHO_DELETE_T(this, Material);
-	}
-
 	void Material::clone(Material* orig)
 	{
 		m_renderStage = orig->m_renderStage;
 		m_macros = orig->m_macros;
 		m_shaderProgram = orig->m_shaderProgram;
+		if (m_shaderProgram)
+			m_shaderProgram->addRefCount();
 
 		for (auto it : orig->m_uniforms)
 		{
@@ -316,6 +314,7 @@ namespace Echo
 			if(!m_shaderProgram)
 			{
 				m_shaderProgram = (ShaderProgram*)ShaderProgram::create();
+				m_shaderProgram->addRefCount();
 				if (m_shaderContent)
 					m_shaderProgram->loadFromContent(m_shaderContentVirtualPath, m_shaderContent, finalMacros);
 				else if (!m_shaderPath.getPath().empty())
@@ -419,20 +418,6 @@ namespace Echo
 
 		return false;
 	}
-
-	/*static bool MappingStringArrayIdx(const String* arry, int count, const String& value, int& idx)
-	{
-		for (int i = 0; i < count; i++)
-		{
-			if (value == arry[i])
-			{
-				idx = i;
-				return true;
-			}
-		}
-
-		return false;
-	}*/
 
 	void Material::matchUniforms()
 	{

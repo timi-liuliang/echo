@@ -10,11 +10,6 @@ namespace Echo
 		return EchoNew(Mesh(isDynamicVertexBuffer, isDynamicIndicesBuffer));
 	}
 
-	void Mesh::release()
-	{
-		ECHO_DELETE_T(this, Mesh);
-	}
-
 	Mesh::Mesh(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer)
 		: m_topologyType(TT_TRIANGLELIST)
 		, m_isDynamicVertexBuffer(isDynamicVertexBuffer)
@@ -46,11 +41,13 @@ namespace Echo
 		vector<Vector3>::type binormalDatas;  binormalDatas.resize(m_vertData.getVertexCount(), Vector3::ZERO);
 		for (ui32 i = 0; i < faceCount; i++)
 		{
+			Word* indices = (Word*)m_indices.data();
+
 			// only support trang list topology
 			Word baseIdx = i * 3;
-			Word vertIdx0 = ((Word*)m_indices)[baseIdx + 0];
-			Word vertIdx1 = ((Word*)m_indices)[baseIdx + 1];
-			Word vertIdx2 = ((Word*)m_indices)[baseIdx + 2];
+			Word vertIdx0 = indices[baseIdx + 0];
+			Word vertIdx1 = indices[baseIdx + 1];
+			Word vertIdx2 = indices[baseIdx + 2];
 
 			const Vector3& pos0 = m_vertData.getPosition(vertIdx0);
 			const Vector3& pos1 = m_vertData.getPosition(vertIdx1);
@@ -89,7 +86,8 @@ namespace Echo
 
 	void Mesh::clear()
 	{
-		EchoSafeFree(m_indices);
+		m_indices.clear();
+		m_indices.shrink_to_fit();
 
 		EchoSafeDelete(m_vertexBuffer, GPUBuffer);
 		EchoSafeDelete(m_indexBuffer, GPUBuffer);
@@ -123,7 +121,7 @@ namespace Echo
 
 	Word* Mesh::getIndices() const
 	{
-		return (Word*)m_indices;
+		return (Word*)m_indices.data();
 	}
 
 	ui32 Mesh::getMemeoryUsage() const
@@ -160,7 +158,7 @@ namespace Echo
 
 	void Mesh::buildIndexBuffer()
 	{
-		Buffer indexBuff(m_idxCount*m_idxStride, m_indices);
+		Buffer indexBuff(m_idxCount*m_idxStride, m_indices.data());
 		if (m_isDynamicIndicesBuffer)
 		{
 			if (!m_indexBuffer)
@@ -196,7 +194,6 @@ namespace Echo
 		}	
 	}
 
-	// update indices data
 	void Mesh::updateIndices(ui32 indicesCount, ui32 indicesStride, const void* indices)
 	{
 		// load indices
@@ -204,12 +201,9 @@ namespace Echo
 		m_idxStride = indicesStride;
 		if (m_idxCount)
 		{
-			// process data
-			EchoSafeFree(m_indices);
-
+			const Byte* indicesInByte = (const Byte*)indices;
 			ui32 idxBuffSize = m_idxCount * m_idxStride;
-			m_indices = EchoAlloc(Byte, idxBuffSize);
-			memcpy(m_indices, indices, idxBuffSize);
+			m_indices.assign(indicesInByte, indicesInByte +idxBuffSize);
 
 			buildIndexBuffer();
 		}

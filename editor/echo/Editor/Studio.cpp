@@ -44,12 +44,12 @@ namespace Studio
         
         EchoSafeDeleteInstance(Engine);
 		EchoSafeDelete(m_logPanel, LogPanel);
+		EchoSafeDelete(m_log, LogDefault);
 
 		EchoSafeDelete(m_projectWindow, ProjectWnd);
 		EchoSafeDelete(m_renderWindow, RenderWindow);
 		EchoSafeDelete(m_projectCfg, ConfigMgr);
-		EchoSafeDelete(m_mainWindow, MainWindow);
-	}
+		EchoSafeDelete(m_mainWindow, MainWindow);	}
 
 	AStudio* AStudio::instance()
 	{

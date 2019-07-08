@@ -202,7 +202,6 @@ namespace Echo
 		}
 	}
 
-	// constructor
 	Gizmos::Gizmos()
 		: m_isAutoClear(false)
 	{
@@ -215,6 +214,14 @@ namespace Echo
 
 		m_triangleBatch = EchoNew(Batch(m_material, this));
 		m_triangleBatch->m_mesh->setTopologyType(Mesh::TT_TRIANGLELIST);
+	}
+
+	Gizmos::~Gizmos()
+	{
+		m_material.reset();
+
+		EchoSafeDelete(m_lineBatch, Batch);
+		EchoSafeDelete(m_triangleBatch, Batch);
 	}
 
 	void Gizmos::bindMethods()

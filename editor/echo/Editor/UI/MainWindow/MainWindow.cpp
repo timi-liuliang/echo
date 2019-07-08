@@ -89,6 +89,8 @@ namespace Studio
 	{
 		m_gameProcess.terminate();
 		m_gameProcess.waitForFinished();
+
+		EchoSafeDelete(m_scriptEditorPanel, LuaEditor);
 	}
 
 	MainWindow* MainWindow::instance()
@@ -197,7 +199,6 @@ namespace Studio
 		}
 	}
 
-	// new
 	void MainWindow::onNewAnotherProject()
 	{
 		Echo::String newProjectPathName = AStudio::instance()->getProjectWindow()->newProject();

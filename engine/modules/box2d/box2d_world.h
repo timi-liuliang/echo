@@ -12,6 +12,8 @@ namespace Echo
 		ECHO_SINGLETON_CLASS(Box2DWorld, Object);
 
 	public:
+		virtual ~Box2DWorld();
+
 		// instance
 		static Box2DWorld* instance();
 
@@ -35,7 +37,6 @@ namespace Echo
 
 	private:
 		Box2DWorld();
-		virtual ~Box2DWorld();
 
 	private:
 		bool			        m_isEnable;

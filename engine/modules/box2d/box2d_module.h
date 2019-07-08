@@ -8,6 +8,7 @@ namespace Echo
 	{
 	public:
 		Box2DModule();
+		~Box2DModule();
 
 		// register all types of the module
 		virtual void registerTypes() override;

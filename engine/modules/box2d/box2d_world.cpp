@@ -22,7 +22,9 @@ namespace Echo
 
 	Box2DWorld::~Box2DWorld()
 	{
-
+		EchoSafeDelete(m_b2World, b2World);
+		EchoSafeDelete(m_debugDraw, Box2DDebugDraw);
+		EchoSafeDelete(m_contactListener, Box2DContactListener);
 	}
 
 	void Box2DWorld::bindMethods()

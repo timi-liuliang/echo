@@ -168,8 +168,7 @@ namespace Echo
     void Terrain::clearRenderable()
     {
         EchoSafeRelease(m_renderable);
-        EchoSafeRelease(m_material);
-        EchoSafeRelease(m_mesh);
+        EchoSafeDelete(m_mesh, Mesh);
     }
     
     float Terrain::getHeight(i32 x, i32 z)

@@ -22,6 +22,11 @@ namespace Echo
 	{
 	}
 
+	Box2DModule::~Box2DModule()
+	{
+		EchoSafeDeleteInstance(Box2DWorld);
+	}
+
 	void Box2DModule::registerTypes()
 	{
 		Class::registerType<Box2DWorld>();

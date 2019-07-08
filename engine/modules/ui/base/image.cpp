@@ -163,7 +163,8 @@ namespace Echo
     void UiImage::clearRenderable()
     {
         EchoSafeRelease(m_renderable);
-        EchoSafeRelease(m_material);
-        EchoSafeRelease(m_mesh);
+        EchoSafeDelete(m_mesh, Mesh);
+
+		m_material.reset();
     }
 }

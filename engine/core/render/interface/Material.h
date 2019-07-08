@@ -7,7 +7,6 @@
 
 namespace Echo
 {
-	class ShaderProgram;
 	class Material : public Res
 	{
 		ECHO_RES(Material, Res, ".material", Res::create<Material>, Res::load)
@@ -43,7 +42,7 @@ namespace Echo
 			// alloc Value
 			void allocValue();
 
-			// 克隆
+			// clone
 			Uniform* clone();
 		};
 
@@ -54,10 +53,7 @@ namespace Echo
 		Material(const ResourcePath& path);
 		~Material();
 
-		// release
-		void release();
-
-		// 克隆
+		// clone
 		void clone(Material* orig);
 
 		// 加载纹理
@@ -139,7 +135,7 @@ namespace Echo
 		const char*			m_shaderContent;
 		StringOption		m_renderStage;
 		StringArray			m_macros;
-		ShaderProgram*		m_shaderProgram = nullptr;
+		ShaderProgram*		m_shaderProgram;
 		ParamMap			m_uniforms;
 		TextureInfoMap 		m_textures;
 	};

@@ -48,7 +48,7 @@ namespace Echo
     private:
         ResourcePath            m_textureRes;
         Mesh*                   m_mesh;            // Geometry Data for render
-        Material*               m_material;        // Material Instance
+        MaterialPtr             m_material;        // Material Instance
         Renderable*             m_renderable;
         Matrix4                 m_matWVP;
         i32                     m_width;

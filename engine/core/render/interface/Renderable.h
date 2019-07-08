@@ -34,7 +34,7 @@ namespace Echo
 		friend class Renderer;
 		typedef array<Texture*, MAX_TEXTURE_SAMPLER> MaxTextureArray;
 	public:
-		// 着色器参数
+		// Param structure
 		struct ShaderParam
 		{
 			ui32			physicsIndex;
@@ -57,55 +57,39 @@ namespace Echo
 		Mesh* getMesh() { return m_mesh; }
 		void setMesh(Mesh* mesh);
 
-		// 开始参数
+		// param operate
 		void beginShaderParams(size_t paramNum);
-
-		// 结束参数绑定
 		void endShaderParams();
-
-		// 设置参数
 		void setShaderParam(size_t physicsIndex, ShaderParamType type, const void* param, size_t num=1);
-		
-		// 修改参数
 		void modifyShaderParam(ui32 physics, ShaderParamType type, void* param, size_t num=1);
 
-		// 设置纹理
+		// texture
 		void setTexture( ui32 stage, Texture* texture);
-
-		// 获取纹理
 		Texture* getTexture(ui32 stage) const { return m_textures[stage]; }
 
-		// 执行渲染
-		virtual void render();
-		
-		// 设置渲染队列
-		void setRenderStage(const String& renderStage) { m_renderStage = renderStage; }
-
-		// 获取渲染队列
-		const String& getRenderStage(void){ return m_renderStage; }
-
-		// 提交到渲染队列
+		// submit to renderqueue
 		void submitToRenderQueue();
 
-		// 是否有自己的渲染状态
+		// exec render
+		virtual void render();
+		
+		// render stage
+		void setRenderStage(const String& renderStage) { m_renderStage = renderStage; }
+		const String& getRenderStage(void){ return m_renderStage; }
+
+		// is have render state
 		bool isHaveRenderState( ) { return m_bRenderState; }
 
-		// 设置渲染状态
+		// blend state
 		void setBlendState( BlendState* state );
-
-		// 设置光栅化状态
-		void setRasterizerState( RasterizerState* state );
-
-		// 设置深度模板状态
-		void setDepthStencilState(DepthStencilState* state);
-
-		// 获取渲染状态
 		BlendState*	getBlendState() { return m_pBlendState; }
 
-		// 获取光栅化状态
+		// rasterizer state
+		void setRasterizerState( RasterizerState* state );
 		RasterizerState* getRasterizerState() { return m_pRasterizerState; }
 
-		// 获取深度模板状态
+		// depth stencil state
+		void setDepthStencilState(DepthStencilState* state);
 		DepthStencilState* getDepthStencilState() { return m_pDepthStencil; }
 
 		// set node
@@ -118,13 +102,9 @@ namespace Echo
 		ShaderProgram* getShader();
 
 	protected:
-		// 向纹理槽中设置纹理
+		// bind
 		void bindTextures();
-
-		// 绑定参数
 		void bindShaderParams();
-
-		// 绑定渲染状态
 		void bindRenderState();
 
 		// link shader and program

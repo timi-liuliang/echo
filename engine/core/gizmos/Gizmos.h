@@ -49,6 +49,7 @@ namespace Echo
 
 	public:
 		Gizmos();
+		~Gizmos();
 
 		// draw line
 		void drawLine(const Vector3& from, const Vector3& to, const Color& color);
@@ -72,7 +73,7 @@ namespace Echo
 	private:
 		bool			m_isAutoClear;
 		MaterialPtr		m_material;
-		Batch*			m_lineBatch;
-		Batch*			m_triangleBatch;
+		Batch*			m_lineBatch = nullptr;
+		Batch*			m_triangleBatch = nullptr;
 	};
 }

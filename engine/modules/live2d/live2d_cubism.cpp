@@ -391,6 +391,6 @@ namespace Echo
 	void Live2dCubism::clearRenderable()
 	{
 		EchoSafeRelease(m_renderable);
-		EchoSafeRelease(m_mesh);
+		EchoSafeDelete(m_mesh, Mesh);
 	}
 }

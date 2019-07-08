@@ -72,7 +72,7 @@ namespace Echo
 		float					m_heightRange = 256.f;
 		i32						m_gridSpacing = 1;
         Mesh*                   m_mesh;                     // Geometry Data for render
-        Material*               m_material;                 // Material Instance
+        MaterialPtr             m_material;                 // Material Instance
         Renderable*             m_renderable;
         Matrix4                 m_matWVP;
         i32                     m_columns = 0;
