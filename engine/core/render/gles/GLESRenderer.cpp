@@ -166,8 +166,8 @@ namespace Echo
 		setBlendState(m_pDefaultBlendState);
 
 		// set view port
-		Viewport* pViewport = EchoNew(Viewport(0, 0, m_screenWidth, m_screenHeight));
-		setViewport(pViewport);
+		Viewport viewport(0, 0, m_screenWidth, m_screenHeight);
+		setViewport(&viewport);
 	}
 
 	void GLES2Renderer::cleanSystemResource()
