@@ -41,7 +41,7 @@ namespace Echo
 		physx::PxErrorCallback*			m_pxErrorCb = nullptr;
 		physx::PxFoundation*			m_pxFoundation = nullptr;
 		physx::PxPhysics*				m_pxPhysics = nullptr;
-		physx::PxCpuDispatcher*			m_pxCPUDispatcher = nullptr;
+		physx::PxDefaultCpuDispatcher*	m_pxCPUDispatcher = nullptr;
 
 		Vector3							m_gravity = Vector3(0.f, -9.8f, 0.f);
 		physx::PxScene*					m_pxScene = nullptr;

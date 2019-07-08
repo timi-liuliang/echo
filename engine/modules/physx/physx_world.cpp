@@ -37,6 +37,15 @@ namespace Echo
 	PhysxWorld::~PhysxWorld()
 	{
 		physx::PxCloseVehicleSDK();
+
+		m_pxScene->release();
+		m_pxPhysics->release();
+		m_pxCPUDispatcher->release();
+		m_pxFoundation->release();
+
+		EchoSafeDelete(m_pxAllocatorCb, PxAllocatorCallback);
+		EchoSafeDelete(m_pxErrorCb, PxErrorCallback);
+		EchoSafeDelete(m_debugDraw, PhysxDebugDraw);
 	}
 
 	bool PhysxWorld::initPhysx()
