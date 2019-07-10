@@ -8,6 +8,7 @@ namespace Echo
 	{
 	public:
 		UiModule();
+		virtual ~UiModule();
 
 		// register all types of the module
 		virtual void registerTypes() override;

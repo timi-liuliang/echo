@@ -38,7 +38,6 @@ namespace Echo
             int                 m_count = -1;
             int                 m_sizeInBytes = 0;
             int                 m_location = -1;
-            Byte*               m_origin_value = nullptr;
             Byte*               m_value = nullptr;
             bool                m_isDirty = true;
             

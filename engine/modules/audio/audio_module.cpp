@@ -12,6 +12,11 @@ namespace Echo
 
 	}
 
+	AudioModule::~AudioModule()
+	{
+		EchoSafeDeleteInstance(AudioDevice);
+	}
+
 	void AudioModule::registerTypes()
 	{
 		Class::registerType<AudioPlayer>();

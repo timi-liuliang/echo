@@ -29,11 +29,9 @@ namespace Echo
         return true;
     }
     
-	// set value
 	void ShaderProgram::Uniform::setValue(const void* value)
 	{
 		EchoAssert(value);
-		m_origin_value = (Byte*)value;
 
 		if (!m_value)
 		{

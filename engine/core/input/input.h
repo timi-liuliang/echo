@@ -11,6 +11,8 @@ namespace Echo
 		ECHO_SINGLETON_CLASS(Input, Object);
 
 	public:
+		~Input();
+
 		// instance
 		static Input* instance();
 
@@ -37,7 +39,6 @@ namespace Echo
 
 	private:
 		Input();
-		~Input();
 
 	private:
 		ui32			m_frame;			// frame id

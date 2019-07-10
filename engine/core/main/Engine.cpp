@@ -254,6 +254,11 @@ namespace Echo
 		EchoLogInfo("Echo Renderer has been shutdown.");
 		EchoSafeDeleteInstance(Log);
 		EchoSafeDeleteInstance(LuaBinder);
+		EchoSafeDeleteInstance(GameSettings);
+		EchoSafeDeleteInstance(Input);
+		EchoSafeDeleteInstance(PluginSettings);
+		EchoSafeDeleteInstance(RenderStage);
+		EchoSafeDeleteInstance(RenderPipeline);
         
         Module::clear();
         Class::clear();

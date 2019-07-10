@@ -14,6 +14,11 @@ namespace Echo
 	{
 	}
 
+	UiModule::~UiModule()
+	{
+		EchoSafeDeleteInstance(UiEventProcessor);
+	}
+
 	void UiModule::registerTypes()
 	{
         Class::registerType<UiEventProcessor>();

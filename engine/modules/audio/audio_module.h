@@ -8,6 +8,7 @@ namespace Echo
 	{
 	public:
 		AudioModule();
+		virtual ~AudioModule();
 
 		// register all types of the module
 		virtual void registerTypes();
