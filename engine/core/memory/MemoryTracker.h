@@ -17,14 +17,19 @@ namespace Echo
 		// Allocation record
 		struct Alloc
 		{
-			size_t          bytes;
-			unsigned int    pool;
-			std::string     filename;
-			size_t          line;
-			std::string     function;
+			size_t          m_bytes;
+			unsigned int    m_pool;
+			std::string     m_filename;
+			size_t          m_line;
+			std::string     m_function;
+            void*           m_callstack[128];
+            i32             m_stackDepth = 0;
 
             Alloc();
             Alloc(size_t sz, unsigned int p, const char *file, size_t ln, const char *func);
+            
+            // stack to string
+            std::string getStackDesc();
 		};
 		typedef EchoHashMap<void*, Alloc> AllocationMap;
 		typedef std::vector<size_t> AllocationsByPool;

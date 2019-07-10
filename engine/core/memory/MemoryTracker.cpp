@@ -1,5 +1,6 @@
 #include "engine/core/util/AssertX.h"
 #include "engine/core/memory/MemoryTracker.h"
+#include "engine/core/util/StackTrace.h"
 #include <iostream>
 #include <fstream>
 
@@ -17,18 +18,26 @@ namespace Echo
 {
 #if ECHO_MEMORY_TRACKER
     MemoryTracker::Alloc::Alloc()
-        : bytes(0)
-        , line(0)
+        : m_bytes(0)
+        , m_line(0)
     {
     }
     
     MemoryTracker::Alloc::Alloc(size_t sz, unsigned int p, const char *file, size_t ln, const char *func)
-        : bytes(sz)
-        , pool(p)
-        , line(ln)
+        : m_bytes(sz)
+        , m_pool(p)
+        , m_line(ln)
     {
-        if (file)   filename = file;
-        if (func)   function = func;
+        if(file)    m_filename = file;
+        if(func)    m_function = func;
+        
+        m_stackDepth = StackTrace( m_callstack, 128);
+    }
+    
+    // stack to string
+    std::string MemoryTracker::Alloc::getStackDesc()
+    {
+        return StackTraceDesc(m_callstack, 128, m_stackDepth, 6);
     }
     
     MemoryTracker::MemoryTracker()
@@ -81,8 +90,8 @@ namespace Echo
             AllocationMap::iterator it = m_allocations.find(ptr);
             if(it!=m_allocations.end())
             {
-                m_allocationsByPool[it->second.pool] -= it->second.bytes;
-                m_totalAllocations -= it->second.bytes;
+                m_allocationsByPool[it->second.m_pool] -= it->second.m_bytes;
+                m_totalAllocations -= it->second.m_bytes;
                 m_allocations.erase(it);
             }
             else
@@ -118,10 +127,11 @@ namespace Echo
 
             for (auto it : m_allocations)
 			{
-				const Alloc& alloc = it.second;
+                Alloc& alloc = it.second;
 
-                os << (!alloc.filename.empty() ? alloc.filename : "(unknown source):");
-				os << "(" << alloc.line << ") : {" << alloc.bytes << " bytes}" << " function: " << alloc.function << std::endl;
+                os << (!alloc.m_filename.empty() ? alloc.m_filename : "(unknown source):");
+                os << "(" << alloc.m_line << ") : {" << alloc.m_bytes << " bytes}" << " function: " << alloc.m_function;
+                os << "\n" << alloc.getStackDesc() << std::endl;
 			}
             
 			os << std::endl;			
