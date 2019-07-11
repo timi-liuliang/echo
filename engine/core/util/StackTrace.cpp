@@ -1,23 +1,31 @@
 #include "StackTrace.h"
+#include <string>
+#include <sstream>
+
+#ifndef ECHO_PLATFORM_WINDOWS
 #include <execinfo.h>
 #include <dlfcn.h>
 #include <cxxabi.h>
 #include <cstdio>
 #include <cstdlib>
-#include <string>
-#include <sstream>
+#endif
 
 namespace Echo
 {
     // remember call trace stack
     i32 StackTrace(void **callstack, i32 maxStackDepth)
     {
+#ifndef ECHO_PLATFORM_WINDOWS
         return backtrace(callstack, maxStackDepth);
+#else
+        return 0;
+#endif
     }
     
     // This function produces a stack backtrace with demangled function & method names.
     std::string StackTraceDesc( void **callstack, int maxStackDepth, int stackDepth, int skip)
     {
+#ifndef ECHO_PLATFORM_WINDOWS
         char buf[1024];
         char **symbols = backtrace_symbols(callstack, stackDepth);
         std::ostringstream trace_buf;
@@ -46,5 +54,8 @@ namespace Echo
             trace_buf << "[truncated]\n";
         
         return trace_buf.str();
+#else
+        return "";
+#endif
     }
 }
