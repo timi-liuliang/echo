@@ -9,6 +9,7 @@ namespace Echo
 	{
 	public:
 		Box2DDebugDraw();
+        ~Box2DDebugDraw();
 
 		// void step
 		void Update(float elapsedTime);

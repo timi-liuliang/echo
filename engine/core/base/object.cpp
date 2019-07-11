@@ -124,6 +124,7 @@ namespace Echo
 		if (m_chanels)
 		{
 			EchoSafeDeleteContainer((*m_chanels), Channel);
+            delete m_chanels; m_chanels = nullptr;
 		}
     }
     

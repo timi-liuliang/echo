@@ -26,10 +26,13 @@ namespace Studio
 		// instance
 		static MainWindow* instance();
 
-		// 打开项目时调用
+		// call when open project
 		void onOpenProject();
+        
+        // call before quit engine
+        void onPrepareQuit();
 
-		// 打开文件
+		// open
 		void OpenProject(const char* projectName);
 
 		// open node tree

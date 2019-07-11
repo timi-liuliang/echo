@@ -29,9 +29,6 @@ namespace Studio
 		// …Ë÷√project
 		static bool SetProject( const char* projectFile);
 
-		// –∂‘ÿ
-		void Release();
-
 	public:
 		// on open node tree
 		bool onOpenNodeTree(const Echo::String& resPath);

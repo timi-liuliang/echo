@@ -177,11 +177,13 @@ namespace Echo
 			if (renderable)
 			{
 				std::map<ui32, Renderable*>::iterator it = m_renderables.find(renderable->getIdentifier());
-				EchoAssert(it != m_renderables.end());
-				m_renderables.erase(it);
-
-				EchoSafeDelete(renderable, Renderable);
-				renderables[i] = nullptr;
+				if(it != m_renderables.end())
+                {
+                    m_renderables.erase(it);
+                    
+                    EchoSafeDelete(renderable, Renderable);
+                    renderables[i] = nullptr;
+                }
 			}
 		}
 	}

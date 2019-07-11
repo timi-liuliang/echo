@@ -21,7 +21,6 @@ namespace Studio
 	{
 		delete m_timer; m_timer = NULL;
 
-		EchoEngine::instance()->Release();
 		delete m_inputController2d;
 		delete m_inputController3d;
 	}

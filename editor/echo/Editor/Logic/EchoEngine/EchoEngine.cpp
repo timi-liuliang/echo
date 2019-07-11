@@ -32,11 +32,13 @@ namespace Studio
 
 	EchoEngine::~EchoEngine()
 	{
+        if(m_invisibleNodeForEditor)
+            m_invisibleNodeForEditor->queueFree();
 	}
 
 	EchoEngine* EchoEngine::instance()
 	{
-		static EchoEngine* inst = new EchoEngine;
+		static EchoEngine* inst = EchoNew(EchoEngine);
 		return inst;
 	}
 
@@ -68,11 +70,6 @@ namespace Studio
 		m_currentEditNode = nullptr;
 
 		return true;
-	}
-
-	void EchoEngine::Release()
-	{
-		delete this;
 	}
 
 	void EchoEngine::Render(float elapsedTime, bool isRenderWindowVisible)

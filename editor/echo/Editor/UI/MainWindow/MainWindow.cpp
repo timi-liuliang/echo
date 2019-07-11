@@ -140,6 +140,11 @@ namespace Studio
 		QObject::connect(m_scriptEditorPanel, SIGNAL(visibilityChanged(bool)), this, SLOT(onScriptEditVisibleChanged()));
 		QObject::connect(m_renderPanel, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(onDockWidgetLocationChanged()));
 	}
+    
+    void MainWindow::onPrepareQuit()
+    {
+        EchoSafeDelete(m_scriptEditorPanel, LuaEditor);
+    }
 
 	// recover edit settings
 	void MainWindow::recoverEditSettings()

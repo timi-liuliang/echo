@@ -45,12 +45,27 @@ namespace Echo
 				m_ptr = nullptr;
 			}
 
-			if (orig->m_ptr)
+			if (orig.m_ptr)
 			{
-				orig->addRefCount();
-				m_ptr = orig->m_ptr;
+				m_ptr = orig.m_ptr;
+                m_ptr->addRefCount();
 			}
 		}
+        
+        void operator = (const ResRef<T>& orig)
+        {
+            if (m_ptr)
+            {
+                m_ptr->subRefCount();
+                m_ptr = nullptr;
+            }
+            
+            if (orig.m_ptr)
+            {
+                m_ptr = orig.m_ptr;
+                m_ptr->addRefCount();
+            }
+        }
 
 		void operator = (T* orig)
 		{

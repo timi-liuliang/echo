@@ -1,5 +1,4 @@
-#ifndef __ECHO_MEMALLOCDEF_H__
-#define __ECHO_MEMALLOCDEF_H__
+#pragma once
 
 #include "MemDef.h"
 #include "MemAllocObj.h"
@@ -463,4 +462,3 @@ namespace Echo
 #define EchoSafeFreeVector(v)					{ for ( size_t i=0; i<v.size(); i++) EchoSafeFree( v[i]); v.clear();}
 #define EchoSafeRelease(ptr)					{ if(ptr) { ptr->release(); ptr = NULL; } }
 
-#endif

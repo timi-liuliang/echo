@@ -31,7 +31,7 @@ namespace Echo
                 if (info.dli_sname[0] == '_')
                     demangled = abi::__cxa_demangle(info.dli_sname, NULL, 0, &status);
                 
-                snprintf(buf, sizeof(buf), "%-3d %*p %s + %zd\n", i, int(2 + sizeof(void*) * 2), callstack[i], status == 0 ? demangled : info.dli_sname == 0 ? symbols[i] : info.dli_sname, (char *)callstack[i] - (char *)info.dli_saddr);
+                snprintf(buf, sizeof(buf), "%-3d %*p %s + %zd\n", i-skip+1, int(2 + sizeof(void*) * 2), callstack[i], status == 0 ? demangled : info.dli_sname == 0 ? symbols[i] : info.dli_sname, (char *)callstack[i] - (char *)info.dli_saddr);
                 free(demangled);
             }
             else

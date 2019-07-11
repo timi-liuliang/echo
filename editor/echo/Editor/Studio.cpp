@@ -42,6 +42,10 @@ namespace Studio
 	{
         using namespace Echo;
         
+        // do something before quit
+        m_mainWindow->onPrepareQuit();
+        
+        EchoSafeDeleteInstance(EchoEngine);
         EchoSafeDeleteInstance(Engine);
 		EchoSafeDelete(m_logPanel, LogPanel);
 		EchoSafeDelete(m_log, LogDefault);
@@ -152,17 +156,14 @@ namespace Studio
 
 	RenderWindow* AStudio::getRenderWindow()
 	{
-		// 新建渲染窗口
 		if ( !m_renderWindow )
 		{
-			// 新建EchoEngine
 			TIME_PROFILE
 			(
 				EchoEngine::instance();
 				ThumbnailMgr::instance();
 			)
 
-			// 新建渲染窗口
 			TIME_PROFILE
 			(
 				m_renderWindow = EchoNew(RenderWindow);
