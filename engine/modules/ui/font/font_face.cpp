@@ -23,7 +23,9 @@ namespace Echo
     
     FontFace::~FontFace()
     {
-        
+        EchoSafeDelete(m_memory, MemoryReader);
+        EchoSafeDeleteContainer(m_fontTextures, FontTexture);
+        EchoSafeDeleteMap(m_glyphs, FontGlyph);
     }
     
     FontGlyph* FontFace::getGlyph(i32 charCode, i32 fontSize)

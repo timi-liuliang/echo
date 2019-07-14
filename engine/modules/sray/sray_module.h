@@ -10,6 +10,7 @@ namespace Echo
 	{
 	public:
 		SRayModule();
+        ~SRayModule();
 
 		// register all types of the module
 		virtual void registerTypes();

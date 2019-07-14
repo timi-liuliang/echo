@@ -9,6 +9,8 @@ namespace Echo
     class FontLibrary
     {
     public:
+        ~FontLibrary();
+        
         // instance
         static FontLibrary* instance();
         
@@ -22,7 +24,6 @@ namespace Echo
         
     private:
         FontLibrary();
-        ~FontLibrary();
         
     private:
         FT_Library					m_library;

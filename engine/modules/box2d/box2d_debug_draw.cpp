@@ -16,7 +16,7 @@ namespace Echo
     
     Box2DDebugDraw::~Box2DDebugDraw()
     {
-        EchoSafeDelete(m_gizmosNode, Gizmos);
+        m_gizmosNode->queueFree();
     }
 
 	void Box2DDebugDraw::Update(float elapsedTime)

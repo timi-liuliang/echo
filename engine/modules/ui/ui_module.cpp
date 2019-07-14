@@ -4,6 +4,7 @@
 #include "event/event_region_rect.h"
 #include "base/text.h"
 #include "base/image.h"
+#include "font/font_library.h"
 #include "editor/text_editor.h"
 #include "editor/image_editor.h"
 #include "editor/event_region_rect_editor.h"
@@ -17,6 +18,7 @@ namespace Echo
 	UiModule::~UiModule()
 	{
 		EchoSafeDeleteInstance(UiEventProcessor);
+        EchoSafeDeleteInstance(FontLibrary);
 	}
 
 	void UiModule::registerTypes()

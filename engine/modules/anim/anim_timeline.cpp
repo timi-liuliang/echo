@@ -15,6 +15,7 @@ namespace Echo
 
 	Timeline::~Timeline()
 	{
+        EchoSafeDeleteContainer(m_clips, AnimClip);
 	}
 
 	void Timeline::bindMethods()

@@ -2,6 +2,11 @@
 
 namespace Echo
 {
+    AnimClip::~AnimClip()
+    {
+        EchoSafeDeleteContainer(m_objects, AnimObject);
+    }
+    
 	ui32 AnimClip::calcLength()
 	{
 		m_length = 0;

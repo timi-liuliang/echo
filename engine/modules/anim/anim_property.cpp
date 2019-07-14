@@ -35,6 +35,11 @@ namespace Echo
 			m_curves.push_back(EchoNew(AnimCurve));
 		}
 	}
+    
+    AnimPropertyCurve::~AnimPropertyCurve()
+    {
+        EchoSafeDeleteContainer(m_curves, AnimCurve);
+    }
 
 	// set interpolation type
 	void AnimPropertyCurve::setInterpolationType(AnimCurve::InterpolationType type)

@@ -18,11 +18,8 @@ namespace Echo
 		// init
 		bool init();
 
-		// destory
-		void destroy();
-
 		// root node
-		Node* getInvisibleRootNode() { return &m_invisibleRoot; }
+        Node* getInvisibleRootNode();
 
 	public:
 		// get main 3d camera
@@ -54,6 +51,6 @@ namespace Echo
 		Camera*				m_2dCamera;
 		Camera*				m_uiCamera;
 		CameraShadow*		m_shadowCamera;
-		Node				m_invisibleRoot;	// invisible root node
+        Node*				m_invisibleRoot = nullptr;	// invisible root node
 	};
 }

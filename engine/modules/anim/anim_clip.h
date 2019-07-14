@@ -13,6 +13,8 @@ namespace Echo
 
 		AnimClip() : m_time(0), m_length(0)
 		{}
+        
+        ~AnimClip();
 
 		// update
 		void update( ui32 deltaTime)

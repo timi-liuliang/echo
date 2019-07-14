@@ -11,6 +11,8 @@ namespace Echo
 		any							m_userData;
 		vector<AnimProperty*>::type	m_properties;		// property need to update for this node
 
+        ~AnimObject();
+        
 		// add property
 		AnimProperty* addProperty( const any& userData, AnimProperty::Type type)
 		{

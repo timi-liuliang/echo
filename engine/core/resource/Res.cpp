@@ -173,7 +173,7 @@ namespace Echo
 	void Res::subRefCount()
 	{
 		m_refCount--;
-		if (m_refCount <= 0)
+		if (m_refCount <= 1)
 		{
 			ECHO_DELETE_T(this, Res);
 		}

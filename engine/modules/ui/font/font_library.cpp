@@ -14,7 +14,7 @@ namespace Echo
     
     FontLibrary::~FontLibrary()
     {
-        
+        EchoSafeDeleteContainer(m_fontFaces, FontFace);
     }
     
     FontLibrary* FontLibrary::instance()

@@ -24,6 +24,7 @@ namespace Echo
 
 		// constuctor
 		AnimProperty(Type type) : m_type(type) {}
+        virtual ~AnimProperty() {}
 
 		// create
 		static AnimProperty* create(Type type);
@@ -52,6 +53,7 @@ namespace Echo
 		vector<AnimCurve*>::type m_curves;
 
 		AnimPropertyCurve(Type type, i32 curveCount);
+        virtual ~AnimPropertyCurve();
 
 		// set interpolation type
 		virtual void setInterpolationType(AnimCurve::InterpolationType type) override;

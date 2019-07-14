@@ -19,6 +19,11 @@ namespace Echo
 			m_gizmosNode->setLocalPosition(Vector3(0.f, 0.f, 0.f));
 		}
 	}
+    
+    PhysxDebugDraw::~PhysxDebugDraw()
+    {
+        m_gizmosNode->queueFree();
+    }
 
 	// set enable
 	void PhysxDebugDraw::setEnable(bool isEnable)

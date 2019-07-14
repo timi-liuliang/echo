@@ -55,7 +55,7 @@ namespace Studio
 		//设置显示或隐藏背景网格
 		virtual void setBackGridVisibleOrNot(bool showFlag);
 
-		//调整背景网格的参数
+		// resize grid
 		void resizeBackGrid3d();
 		void resizeBackGrid2d();
 

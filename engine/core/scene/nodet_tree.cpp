@@ -9,10 +9,13 @@ namespace Echo
 		, m_uiCamera(nullptr)
 		, m_shadowCamera(nullptr)
 	{
+        m_invisibleRoot = EchoNew(Node);
 	}
 
 	NodeTree::~NodeTree()
 	{
+        m_invisibleRoot->queueFree();
+        
         EchoSafeDelete(m_shadowCamera, CameraShadow);
         EchoSafeDelete(m_2dCamera, Camera);
         EchoSafeDelete(m_3dCamera, Camera);
@@ -25,6 +28,12 @@ namespace Echo
 		return inst;
 	}
 
+    // root node
+    Node* NodeTree::getInvisibleRootNode()
+    {
+        return m_invisibleRoot;
+    }
+    
 	bool NodeTree::init()
 	{
 		// create main camera
@@ -66,14 +75,6 @@ namespace Echo
 		return true;
 	}
 
-	void NodeTree::destroy()
-	{
-		EchoSafeDelete(m_3dCamera, Camera);
-		EchoSafeDelete(m_2dCamera, Camera);
-		EchoSafeDelete(m_uiCamera, Camera);
-		EchoSafeDelete(m_shadowCamera, CameraShadow);
-	}
-
 	void NodeTree::update(float elapsedTime)
 	{
 		// update 3d camera
@@ -82,7 +83,7 @@ namespace Echo
 		m_uiCamera->update();
 		
 		// update nodes
-		m_invisibleRoot.update(elapsedTime, true);
+		m_invisibleRoot->update(elapsedTime, true);
 
 		// update scripts
 		LuaBinder::instance()->execString("update_all_nodes()", true);

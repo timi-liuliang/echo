@@ -87,9 +87,6 @@ namespace Echo
 		m_uniforms.clear();
 
 		unloadTexture();
-		m_textures.clear();
-
-		m_shaderProgram->subRefCount();
 	}
 
 	// bind methods to script
@@ -109,9 +106,7 @@ namespace Echo
 		m_renderStage = orig->m_renderStage;
 		m_macros = orig->m_macros;
 		m_shaderProgram = orig->m_shaderProgram;
-		if (m_shaderProgram)
-			m_shaderProgram->addRefCount();
-
+        
 		for (auto it : orig->m_uniforms)
 		{
 			Uniform* uniform = it.second;
@@ -181,7 +176,7 @@ namespace Echo
 	{ 
 		buildShaderProgram();
 
-		return m_shaderProgram; 
+		return m_shaderProgram;
 	}
 
 	bool Material::isUniformExist(const String& name)
@@ -314,7 +309,6 @@ namespace Echo
 			if(!m_shaderProgram)
 			{
 				m_shaderProgram = (ShaderProgram*)ShaderProgram::create();
-				m_shaderProgram->addRefCount();
 				if (m_shaderContent)
 					m_shaderProgram->loadFromContent(m_shaderContentVirtualPath, m_shaderContent, finalMacros);
 				else if (!m_shaderPath.getPath().empty())
@@ -423,7 +417,6 @@ namespace Echo
 	{
 		if (m_shaderProgram)
 		{
-			// 添加未设置参数
 			for (auto& it : *(m_shaderProgram->getUniforms()))
 			{
 				const ShaderProgram::Uniform& suniform = it.second;

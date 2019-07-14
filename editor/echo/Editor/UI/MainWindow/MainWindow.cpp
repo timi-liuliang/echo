@@ -91,6 +91,10 @@ namespace Studio
 		m_gameProcess.waitForFinished();
 
 		EchoSafeDelete(m_scriptEditorPanel, LuaEditor);
+        EchoSafeDelete(m_bottomPanel, BottomPanel);
+        EchoSafeDelete(m_scenePanel, NodeTreePanel);
+        EchoSafeDelete(m_resPanel, ResPanel);
+        EchoSafeDelete(m_renderPanel, QDockWidget);
 	}
 
 	MainWindow* MainWindow::instance()

@@ -7,6 +7,11 @@ namespace Echo
 	{
 	}
 
+    SRayModule::~SRayModule()
+    {
+        EchoSafeDeleteInstance(SRayDevice);
+    }
+    
 	void SRayModule::registerTypes()
 	{
         Class::registerType<SRayDevice>();

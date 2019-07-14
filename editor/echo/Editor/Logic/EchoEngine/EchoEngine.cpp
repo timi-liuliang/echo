@@ -137,7 +137,15 @@ namespace Studio
 	}
 
 	void EchoEngine::setCurrentEditNode(Echo::Node* node) 
-	{ 
+	{
+        // clear
+        if(m_currentEditNode)
+        {
+            m_currentEditNode->queueFree();
+            m_currentEditNode = nullptr;
+        }
+        
+        // set new
 		m_currentEditNode = node; 
 		m_currentEditNode->setParent(m_invisibleNodeForEditor); 
 	}
