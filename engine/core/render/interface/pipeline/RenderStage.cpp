@@ -12,6 +12,7 @@ namespace Echo
 
 	RenderStage::~RenderStage()
 	{
+        EchoSafeDeleteContainer(m_items, RenderQueue);
 	}
 
 	void RenderStage::bindMethods()

@@ -15,7 +15,7 @@ namespace Echo
 
 	RenderPipeline::~RenderPipeline()
 	{
-
+        EchoSafeDeleteMap(m_renderTargets, RenderTarget);
 	}
 
 	void RenderPipeline::bindMethods()

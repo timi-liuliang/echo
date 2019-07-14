@@ -13,6 +13,8 @@ namespace Echo
 		friend class CubeLightCapture;
 
 	public:
+        virtual ~Light();
+        
 		// instance
 		static Light* instance();
 
@@ -31,7 +33,6 @@ namespace Echo
 
 	private:
 		Light();
-		virtual ~Light();
 
 	protected:
 		bool			m_isIBLEnable;

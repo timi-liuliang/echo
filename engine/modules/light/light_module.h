@@ -8,6 +8,7 @@ namespace Echo
 	{
 	public:
 		LightModule();
+        ~LightModule();
 
 		// register all types of the module
 		virtual void registerTypes() override;

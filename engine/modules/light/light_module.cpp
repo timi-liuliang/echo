@@ -9,6 +9,11 @@ namespace Echo
 	{
 
 	}
+    
+    LightModule::~LightModule()
+    {
+        EchoSafeDeleteInstance(Light);
+    }
 
 	void LightModule::registerTypes()
 	{

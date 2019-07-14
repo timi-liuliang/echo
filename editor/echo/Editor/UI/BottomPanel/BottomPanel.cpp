@@ -30,6 +30,10 @@ namespace Studio
 
 	BottomPanel::~BottomPanel()
 	{
+        m_tabWidget->disconnect();
+        
+        EchoSafeDelete( m_debuggerPanel, DebuggerPanel);
+        EchoSafeDelete( m_documentPanel, DocumentPanel);
 	}
 
 	QWidget* BottomPanel::getTab(const Echo::String& tabName)
