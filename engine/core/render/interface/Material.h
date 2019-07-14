@@ -95,7 +95,7 @@ namespace Echo
 
 		// texture
 		Texture* setTexture(const String& name, const String& uri);
-		Texture* setTexture(const String& name, Texture* texture);
+		Texture* setTexture(const String& name, TexturePtr texture);
 
 		// build shader program
 		void buildShaderProgram();

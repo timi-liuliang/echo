@@ -219,7 +219,7 @@ namespace Echo
 		return setTexture( name, (Texture*)Res::get(uri));
 	}
 
-	Texture* Material::setTexture(const String& name, Texture* texture)
+	Texture* Material::setTexture(const String& name, TexturePtr texture)
 	{
 		buildShaderProgram();
 
