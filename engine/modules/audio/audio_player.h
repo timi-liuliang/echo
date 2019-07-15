@@ -49,7 +49,7 @@ namespace Echo
         const ResourcePath& getAudio() const { return m_audioRes; }
 
 		// special operate
-		void playOneShot(const char* res);
+		void playOneShot(const char* res, float volumeScale);
 
 	protected:
         // start

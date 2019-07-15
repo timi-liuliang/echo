@@ -295,7 +295,7 @@ namespace Echo
 
 			//check and fetch the arguments
 			P0 p0 = lua_getvalue<P0>(luaState, 2);
-			P0 p1 = lua_getvalue<P1>(luaState, 3);
+			P1 p1 = lua_getvalue<P1>(luaState, 3);
 
 			// exec method
 			(instance->*method)(p0, p1);

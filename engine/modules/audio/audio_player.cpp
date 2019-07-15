@@ -120,7 +120,7 @@ namespace Echo
 				}
 				else
 				{
-					m_oneShotPlayers.erase(it++);
+					it = m_oneShotPlayers.erase(it);
 				}
 			}
 		}
@@ -198,7 +198,7 @@ namespace Echo
         return false;
     }
 
-	void AudioPlayer::playOneShot(const char* res)
+	void AudioPlayer::playOneShot(const char* res, float volumeScale)
 	{
 		AudioPlayer* newPlayer = EchoNew(AudioPlayer);
 		if(newPlayer)
@@ -207,6 +207,7 @@ namespace Echo
 			newPlayer->updatePosition(getWorldPosition());
 			newPlayer->setLoop(false);
 			newPlayer->set2d(is2d());
+			newPlayer->setVolume(volumeScale);
 			newPlayer->play();
 
 			m_oneShotPlayers.push_back(newPlayer);
