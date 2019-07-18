@@ -7,6 +7,11 @@ namespace Echo
     TerrainModule::TerrainModule()
     {
     }
+
+	TerrainModule::~TerrainModule()
+	{
+
+	}
     
     void TerrainModule::registerTypes()
     {

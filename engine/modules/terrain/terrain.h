@@ -5,6 +5,7 @@
 #include "engine/core/render/interface/Material.h"
 #include "engine/core/render/interface/Renderable.h"
 #include "engine/core/render/interface/image/Image.h"
+#include "terrain_tile.h"
 
 namespace Echo
 {
@@ -77,5 +78,6 @@ namespace Echo
         Matrix4                 m_matWVP;
         i32                     m_columns = 0;
         i32                     m_rows = 0;
+		TerrainTiles			m_tiles;
     };
 }
