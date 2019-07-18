@@ -106,6 +106,6 @@ namespace Echo
         id<CAMetalDrawable>             m_metalNextDrawable;
         MTLRenderPassDescriptor*        m_metalRenderPassDescriptor = nullptr;
         id<MTLCommandBuffer>            m_metalCommandBuffer;
-        id<MTLRenderCommandEncoder>     m_metalCommandEncoder;
+        id<MTLRenderCommandEncoder>     m_metalRenderCommandEncoder;
 	};
 }

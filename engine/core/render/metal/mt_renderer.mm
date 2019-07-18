@@ -1,3 +1,4 @@
+#include "interface/mesh/Mesh.h"
 #include "mt_renderer.h"
 #include "mt_renderable.h"
 #include "mt_shader_program.h"
@@ -6,6 +7,7 @@
 #include "mt_texture.h"
 #include "mt_gpu_buffer.h"
 #include "mt_renderable.h"
+#include "mt_mapping.h"
 
 namespace Echo
 {
@@ -156,7 +158,7 @@ namespace Echo
         m_metalCommandBuffer = [m_metalCommandQueue commandBuffer];
         
         // creat a command encoder
-        m_metalCommandEncoder = [m_metalCommandBuffer renderCommandEncoderWithDescriptor:m_metalRenderPassDescriptor];
+        m_metalRenderCommandEncoder = [m_metalCommandBuffer renderCommandEncoderWithDescriptor:m_metalRenderPassDescriptor];
     }
     
     // draw
@@ -165,16 +167,30 @@ namespace Echo
         MTRenderable* mtRenderable = ECHO_DOWN_CAST<MTRenderable*>(renderable);
         if(m_metalRenderPassDescriptor && mtRenderable)
         {
-            [m_metalCommandEncoder setRenderPipelineState: mtRenderable->getMetalRenderPipelineState()];
-            [m_metalCommandEncoder setVertexBuffer:mtRenderable->getMetalVertexBuffer() offset:0 atIndex:0];
-            [m_metalCommandEncoder drawPrimitives:MTLPrimitiveTypeTriangle vertexStart:0 vertexCount:6];
+            Mesh* mesh = renderable->getMesh();
+            GPUBuffer* indexBuffer = mesh->getIndexBuffer();
+            MTLPrimitiveType primitiveType = MTMapping::MapPrimitiveTopology(mesh->getTopologyType());
+            
+            if(indexBuffer)
+            {
+                
+            }
+            else
+            {
+                ui32 startVert = mesh->getStartVertex();
+                ui32 vertCount = mesh->getVertexCount();
+                
+                [m_metalRenderCommandEncoder setRenderPipelineState: mtRenderable->getMetalRenderPipelineState()];
+                [m_metalRenderCommandEncoder setVertexBuffer:mtRenderable->getMetalVertexBuffer() offset:0 atIndex:0];
+                [m_metalRenderCommandEncoder drawPrimitives:primitiveType vertexStart:startVert vertexCount:vertCount];
+            }
         }
     }
     
     // present
     bool MTRenderer::present()
     {
-        [m_metalCommandEncoder endEncoding];
+        [m_metalRenderCommandEncoder endEncoding];
         [m_metalCommandBuffer presentDrawable:m_metalNextDrawable];
         [m_metalCommandBuffer commit];
         
