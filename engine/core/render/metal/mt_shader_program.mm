@@ -7,10 +7,16 @@ static const char* testMetalLibrary = R"(
 
 using namespace metal;
 
-// vertex function
-vertex float4 vertexShader(device float4* vertices [[buffer(0)]], uint vid [[vertex_id]])
+struct VertexIn
 {
-    return vertices[vid];
+    float3 position;
+    float4 color;
+};
+
+// vertex function
+vertex float4 vertexShader(device VertexIn* vertices [[buffer(0)]], uint vid [[vertex_id]])
+{
+    return float4(vertices[vid].position, 1.0);
 }
 
 // fragment function

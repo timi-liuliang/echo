@@ -6,11 +6,9 @@ namespace Echo
 	MTBuffer::MTBuffer(GPUBufferType type, Dword usage, const Buffer& buff)
 		: GPUBuffer(type, usage, buff)
 	{
-        id<MTLDevice> device = MTRenderer::instance()->getMetalDevice();
-        if(device)
-        {
-            m_metalBuffer = [device newBufferWithBytes:buff.getData() length:buff.getSize() options:MTLResourceOptionCPUCacheModeDefault];
-        }
+        m_metalBuffer = nullptr;
+        
+        updateData(buff);
 	}
 
 	MTBuffer::~MTBuffer()
@@ -19,6 +17,20 @@ namespace Echo
 
 	bool MTBuffer::updateData(const Buffer& buff)
 	{
+        // clear
+        if(m_metalBuffer)
+        {
+            [m_metalBuffer release];
+        }
+        
+        // create new one
+        id<MTLDevice> device = MTRenderer::instance()->getMetalDevice();
+        if(device)
+        {
+            m_metalBuffer = [device newBufferWithBytes:buff.getData() length:buff.getSize() options:MTLResourceOptionCPUCacheModeDefault];
+            return true;
+        }
+        
         return false;
 	}
 	
