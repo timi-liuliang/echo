@@ -19,6 +19,7 @@ namespace Echo
         id<MTLRenderPipelineState> getMetalRenderPipelineState() { return m_metalRenderPipelineState; }
         
         // get metal buffer
+        id<MTLBuffer> getMetalIndexBuffer();
         id<MTLBuffer> getMetalVertexBuffer();
         
     private:

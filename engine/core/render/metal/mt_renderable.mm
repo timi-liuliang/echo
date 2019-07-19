@@ -38,6 +38,12 @@ namespace Echo
         }
     }
     
+    id<MTLBuffer> MTRenderable::getMetalIndexBuffer()
+    {
+        MTBuffer* mtBuffer = ECHO_DOWN_CAST<MTBuffer*>(m_mesh->getIndexBuffer());
+        return mtBuffer->getMetalBuffer();
+    }
+    
     id<MTLBuffer> MTRenderable::getMetalVertexBuffer()
     {
         MTBuffer* mtBuffer = ECHO_DOWN_CAST<MTBuffer*>(m_mesh->getVertexBuffer());

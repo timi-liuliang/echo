@@ -173,7 +173,21 @@ namespace Echo
             
             if(indexBuffer)
             {
+                // map index type
+                MTLIndexType idxType;
+                if (mesh->getIndexStride() == sizeof(ui32))         idxType = MTLIndexTypeUInt32;
+                else if(mesh->getIndexStride() == sizeof(ui16))     idxType = MTLIndexTypeUInt16;
+                else                                                idxType = MTLIndexTypeUInt16;
                 
+                // index count
+                ui32 idxCount = mesh->getIndexCount();
+                
+                // index offset
+                NSUInteger idxOffset = mesh->getStartIndex() * mesh->getIndexStride();
+                
+                [m_metalRenderCommandEncoder setRenderPipelineState: mtRenderable->getMetalRenderPipelineState()];
+                [m_metalRenderCommandEncoder setVertexBuffer:mtRenderable->getMetalVertexBuffer() offset:0 atIndex:0];
+                [m_metalRenderCommandEncoder drawIndexedPrimitives:primitiveType indexCount:idxCount indexType:idxType indexBuffer:mtRenderable->getMetalIndexBuffer() indexBufferOffset:idxOffset];
             }
             else
             {
