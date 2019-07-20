@@ -1,4 +1,5 @@
 #include "engine/core/render/interface/mesh/Mesh.h"
+#include "mt_mapping.h"
 #include "mt_gpu_buffer.h"
 #include "mt_renderable.h"
 #include "mt_shader_program.h"
@@ -20,11 +21,8 @@ namespace Echo
             MTShaderProgram* mtShaderProgram = ECHO_DOWN_CAST<MTShaderProgram*>(shader);
             if(mtShaderProgram)
             {
-                buildVertexDescriptor();
-                
                 [m_metalRenderPipelineDescriptor setVertexFunction:mtShaderProgram->getMetalVertexFunction()];
                 [m_metalRenderPipelineDescriptor setFragmentFunction:mtShaderProgram->getMetalFragmentFunction()];
-                [m_metalRenderPipelineDescriptor setVertexDescriptor:m_metalVertexDescriptor];
             }
             
             // specify the target-texture pixel format
@@ -53,11 +51,51 @@ namespace Echo
         return mtBuffer->getMetalBuffer();
     }
     
-    void MTRenderable::buildVertexDescriptor()
+    void MTRenderable::link()
     {
-        if(!m_metalVertexDescriptor)
+        bindVertexStream(m_mesh->getVertexElements(), m_mesh->getVertexBuffer());
+    }
+    
+    bool MTRenderable::bindVertexStream(const VertexElementList& vertElements, GPUBuffer* vertexBuffer, int flag)
+    {
+        if (flag & BS_BEGIN)
+            m_vertexStreams.clear();
+        
+        StreamUnit unit;
+        unit.m_vertElements = vertElements;
+        unit.m_buffer = vertexBuffer;
+        buildVertexDescriptor(&unit);
+        
+        m_vertexStreams.push_back(unit);
+        
+        return true;
+    }
+    
+    void MTRenderable::buildVertexDescriptor(StreamUnit* stream)
+    {
+        if( m_metalVertexDescriptor)
+            [m_metalVertexDescriptor release];
+        
+        ui32 numVertElms = static_cast<ui32>(stream->m_vertElements.size());
+        if (numVertElms > 0)
         {
+            m_metalVertexDescriptor = [[MTLVertexDescriptor alloc] init];
             
+            ui32 elementOffset = 0;
+            for (size_t i = 0; i < numVertElms; ++i)
+            {
+                ui32 attributeIdx = i;
+                m_metalVertexDescriptor.attributes[attributeIdx].format = MTMapping::MapVertexFormat(stream->m_vertElements[i].m_pixFmt);
+                m_metalVertexDescriptor.attributes[attributeIdx].bufferIndex = 0;
+                m_metalVertexDescriptor.attributes[attributeIdx].offset = elementOffset;
+                
+                elementOffset += PixelUtil::GetPixelSize(stream->m_vertElements[i].m_pixFmt);
+            }
+
+            stream->m_vertStride = elementOffset;
+            
+            m_metalVertexDescriptor.layouts[0].stride = stream->m_vertStride;
+            [m_metalRenderPipelineDescriptor setVertexDescriptor:m_metalVertexDescriptor];
         }
     }
 }

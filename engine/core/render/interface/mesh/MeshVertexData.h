@@ -8,30 +8,15 @@ namespace Echo
 	enum VertexSemantic
 	{
 		VS_UNKNOWN = -1,
-		// Position (Vector3)
-		VS_POSITION,
-		// Normal (Vector3)
-		VS_NORMAL,
-		// Diffuse & specular color (Dword)
-		VS_COLOR,
-		// Texture coordinates 0(Vector2)
-		VS_TEXCOORD0,
-		// Texture coordinates 1(Vector2)
-		VS_TEXCOORD1,
-		// Blending indices	(Dword)
-		VS_BLENDINDICES,
-		// Blending weights(Vector4)
-		VS_BLENDWEIGHTS,
-		// Tangent (X axis if normal is Z)
-		VS_TANGENT,
+		VS_POSITION,                // Position (Vector3)
+		VS_NORMAL,                  // Normal (Vector3)
+		VS_COLOR,                   // Diffuse & specular color (Dword)
+		VS_TEXCOORD0,               // Texture coordinates 0(Vector2)
+		VS_TEXCOORD1,               // Texture coordinates 1(Vector2)
+		VS_BLENDINDICES,            // Blending indices    (Dword)
+		VS_BLENDWEIGHTS,            // Blending weights(Vector4)
+		VS_TANGENT,                 // Tangent (X axis if normal is Z)
 		VS_BINORMAL,
-
-		// VR Mode
-		VS_SCREEN_POS_NDC,
-		VS_TAN_EYE_ANGLE_R,
-		VS_TAN_EYE_ANGLE_G,
-		VS_TAN_EYE_ANGLE_B,
-
 		VS_MAX
 	};
 
@@ -80,13 +65,13 @@ namespace Echo
 		void reset();
 	};
 
-	// 顶点数据
+	// vertex data for mesh
 	class MeshVertexData
 	{
+    public:
+        typedef vector<Byte>::type ByteArray;
+        
 	public:
-		typedef vector<Byte>::type ByteArray;
-
-		// 构造函数
 		MeshVertexData();
 
 		// set
@@ -144,9 +129,9 @@ namespace Echo
 		void reset();
 
 	private:
-		ui32				m_count;		// 顶点数量
-		MeshVertexFormat	m_format;		// 顶点格式
-		ByteArray			m_vertices;		// 顶点数据
-		AABB				m_aabb;			// 轴向包围盒
+		ui32				m_count;
+		MeshVertexFormat	m_format;
+		ByteArray			m_vertices;
+		AABB				m_aabb;
 	};
 }

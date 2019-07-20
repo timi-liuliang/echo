@@ -14,4 +14,32 @@ namespace Echo
             default:                        return MTLPrimitiveTypeTriangle;
         }
     }
+    
+    String MTMapping::MapVertexSemanticString(VertexSemantic semantic)
+    {
+        switch(semantic)
+        {
+            case VS_POSITION:            return "a_Position";
+            case VS_BLENDINDICES:        return "a_Joint";
+            case VS_BLENDWEIGHTS:        return "a_Weight";
+            case VS_COLOR:               return "a_Color";
+            case VS_NORMAL:              return "a_Normal";
+            case VS_TEXCOORD0:           return "a_UV";
+            case VS_TEXCOORD1:           return "a_UV1";
+            case VS_TANGENT:             return "a_Tangent";
+            case VS_BINORMAL:            return "a_Binormal";
+            default:                     return "";
+        }
+    }
+    
+    MTLVertexFormat MTMapping::MapVertexFormat(PixelFormat pixelFormat)
+    {
+        switch (pixelFormat)
+        {
+            case PF_RGBA8_UNORM:    return MTLVertexFormatUChar4;
+            case PF_RGB32_FLOAT:    return MTLVertexFormatFloat3;
+            case PF_RGBA32_FLOAT:   return MTLVertexFormatFloat4;
+            default:                return MTLVertexFormatInvalid;
+        }
+    }
 }

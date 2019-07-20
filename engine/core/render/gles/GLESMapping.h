@@ -35,19 +35,19 @@ namespace Echo
 	#ifndef GL_ATC_RGBA_INTERPOLATED_ALPHA_AMD
 	#define GL_ATC_RGBA_INTERPOLATED_ALPHA_AMD                      0x87EE
 	#endif
-	
+
 	#ifndef GL_COMPRESSED_RGB8_ETC2
 	#define GL_COMPRESSED_RGB8_ETC2         0X9274
 	#endif
-	
+
 	#ifndef GL_COMPRESSED_SRGB8_ETC2
 	#define GL_COMPRESSED_SRGB8_ETC2        0x9275
 	#endif
-	
+
 	#ifndef GL_COMPRESSED_RGBA8_ETC2_EAC
 	#define GL_COMPRESSED_RGBA8_ETC2_EAC        0x9278
 	#endif
-	
+
 	#ifndef GL_COMRRESSED_SRGB8_ALPHA8_ETC2_EAC
 	#define GL_COMRRESSED_SRGB8_ALPHA8_ETC2_EAC 0x9279
 	#endif
@@ -226,7 +226,7 @@ namespace Echo
 			case PF_RGBA16_FLOAT:			return g_halfFloatInternalFormat;
 
 			case PF_PVRTC_RGBA_4444:
-			case PF_RGBA32_FLOAT:			
+			case PF_RGBA32_FLOAT:
 				return GL_RGBA;
 
 				//case PF_R32_UNORM:
@@ -253,7 +253,7 @@ namespace Echo
 				//case PF_RGBA32_SINT:
 
 			case PF_D16_UNORM:				return GL_DEPTH_COMPONENT16;
-			case PF_ETC1:					return GL_ETC1_RGB8_OES; 
+			case PF_ETC1:					return GL_ETC1_RGB8_OES;
 			case PF_ETC2_RGB:				return GL_COMPRESSED_RGB8_ETC2;
 			case PF_ETC2_RGBA:				return GL_COMPRESSED_RGBA8_ETC2_EAC;
 			default:
@@ -416,15 +416,10 @@ namespace Echo
 			case VS_TEXCOORD1:			return "a_UV1";
 			case VS_TANGENT:			return "a_Tangent";
 			case VS_BINORMAL:			return "a_Binormal";
-			case VS_SCREEN_POS_NDC:		return "ScreenPosNDC";
-			case VS_TAN_EYE_ANGLE_R:	return "TAN_EYE_ANGLE_R";
-			case VS_TAN_EYE_ANGLE_G:	return "TAN_EYE_ANGLE_G";
-			case VS_TAN_EYE_ANGLE_B:	return "TAN_EYE_ANGLE_B";
             default:                    return "";
 			}
 		}
 
-		// 映射着色器参数类型
 		INLINE static ShaderParamType MapUniformType( GLenum uniformType)
 		{
 			switch( uniformType)

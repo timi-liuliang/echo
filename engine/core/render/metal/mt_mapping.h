@@ -10,5 +10,11 @@ namespace Echo
     public:
         // Mapping Primitive Type
         static MTLPrimitiveType MapPrimitiveTopology(Mesh::TopologyType type);
+        
+        // Mapping vertex semantic string
+        static String MapVertexSemanticString(VertexSemantic semantic);
+        
+        // Mapping MTLVertexFormat
+        static MTLVertexFormat MapVertexFormat(PixelFormat pixelFormat);
     };
 }

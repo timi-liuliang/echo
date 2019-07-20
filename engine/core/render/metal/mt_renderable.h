@@ -7,12 +7,32 @@ namespace Echo
 {
 	class MTRenderable : public Renderable
 	{
+    public:
+        // vertex stream bind state(for multi stream)
+        enum BindState
+        {
+            BS_NORMAL = 0,
+            BS_BEGIN = 1 << 0,
+            BS_END = 1 << 1,
+        };
+        
+        // stream unit
+        struct StreamUnit
+        {
+            VertexElementList        m_vertElements;
+            ui32                     m_vertStride;
+            GPUBuffer*               m_buffer;
+            
+            StreamUnit()
+            : m_buffer(NULL)
+            {}
+            
+            bool isUsedFor(VertexSemantic);
+        };
+        
 	public:
 		MTRenderable(const String& renderStage, ShaderProgram* shader, int identifier);
         virtual ~MTRenderable() {}
-
-        // link shader and program
-        virtual void link() override {}
         
     public:
         // get render pipelinestate
@@ -23,10 +43,17 @@ namespace Echo
         id<MTLBuffer> getMetalVertexBuffer();
         
     private:
+        // link
+        virtual void link() override;
+        
+        // bind vertex stream
+        bool bindVertexStream(const VertexElementList& vertElements, GPUBuffer* vertexBuffer, int flag = BS_BEGIN | BS_END);
+        
         // build vertex descriptor
-        void buildVertexDescriptor();
+        void buildVertexDescriptor(StreamUnit* stream);
         
     private:
+        vector<StreamUnit>::type        m_vertexStreams;
         MTLVertexDescriptor*            m_metalVertexDescriptor = nullptr;
         MTLRenderPipelineDescriptor*    m_metalRenderPipelineDescriptor = nullptr;
         id<MTLRenderPipelineState>      m_metalRenderPipelineState;

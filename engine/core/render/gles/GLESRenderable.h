@@ -27,7 +27,7 @@ namespace Echo
 		};
 		typedef vector<VertexDeclaration>::type	VertexDeclarationList;
 
-		// 顶点流
+		// stream unit
 		struct StreamUnit
 		{
 			VertexElementList		m_vertElements;		// 顶点格式声明
