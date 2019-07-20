@@ -20,8 +20,11 @@ namespace Echo
             MTShaderProgram* mtShaderProgram = ECHO_DOWN_CAST<MTShaderProgram*>(shader);
             if(mtShaderProgram)
             {
+                buildVertexDescriptor();
+                
                 [m_metalRenderPipelineDescriptor setVertexFunction:mtShaderProgram->getMetalVertexFunction()];
                 [m_metalRenderPipelineDescriptor setFragmentFunction:mtShaderProgram->getMetalFragmentFunction()];
+                [m_metalRenderPipelineDescriptor setVertexDescriptor:m_metalVertexDescriptor];
             }
             
             // specify the target-texture pixel format
@@ -48,5 +51,13 @@ namespace Echo
     {
         MTBuffer* mtBuffer = ECHO_DOWN_CAST<MTBuffer*>(m_mesh->getVertexBuffer());
         return mtBuffer->getMetalBuffer();
+    }
+    
+    void MTRenderable::buildVertexDescriptor()
+    {
+        if(!m_metalVertexDescriptor)
+        {
+            
+        }
     }
 }

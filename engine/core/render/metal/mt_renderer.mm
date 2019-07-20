@@ -129,7 +129,6 @@ namespace Echo
         return view;
     }
     
-    // make next drawable
     MTLRenderPassDescriptor* MTRenderer::makeNextRenderPassDescriptor()
     {
         if(!m_metalRenderPassDescriptor)
@@ -161,7 +160,6 @@ namespace Echo
         m_metalRenderCommandEncoder = [m_metalCommandBuffer renderCommandEncoderWithDescriptor:m_metalRenderPassDescriptor];
     }
     
-    // draw
     void MTRenderer::draw(Renderable* renderable)
     {
         MTRenderable* mtRenderable = ECHO_DOWN_CAST<MTRenderable*>(renderable);
@@ -201,7 +199,6 @@ namespace Echo
         }
     }
     
-    // present
     bool MTRenderer::present()
     {
         [m_metalRenderCommandEncoder endEncoding];

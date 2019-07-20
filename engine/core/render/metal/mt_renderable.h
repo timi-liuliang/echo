@@ -23,6 +23,11 @@ namespace Echo
         id<MTLBuffer> getMetalVertexBuffer();
         
     private:
+        // build vertex descriptor
+        void buildVertexDescriptor();
+        
+    private:
+        MTLVertexDescriptor*            m_metalVertexDescriptor = nullptr;
         MTLRenderPipelineDescriptor*    m_metalRenderPipelineDescriptor = nullptr;
         id<MTLRenderPipelineState>      m_metalRenderPipelineState;
 	};
