@@ -46,6 +46,8 @@ namespace Echo
                 m_metalVertexShader   = [m_metalLibrary newFunctionWithName:@"vertexShader"];
                 m_metalFragmentShader = [m_metalLibrary newFunctionWithName:@"fragmentShader"];
                 
+                parseUniforms();
+                
                 return m_metalVertexShader && m_metalFragmentShader ? true : false;
             }
             else
@@ -58,5 +60,46 @@ namespace Echo
         }
         
         return false;
+    }
+    
+    void MTShaderProgram::parseUniforms()
+    {
+        
+    }
+    
+    void MTShaderProgram::bindUniforms()
+    {
+        for (UniformArray::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++)
+        {
+            Uniform& uniform = it->second;
+            if (uniform.m_value)
+            {
+                if (uniform.m_isDirty && uniform.m_type != SPT_UNKNOWN)
+                {
+                    switch (uniform.m_type)
+                    {
+                        case SPT_VEC4:      break;
+                        case SPT_MAT4:      break;
+                        case SPT_INT:       break;
+                        case SPT_FLOAT:     break;
+                        case SPT_VEC2:      break;
+                        case SPT_VEC3:      break;
+                        case SPT_TEXTURE:   break;
+                        default:            EchoAssertX(0, "unknow shader param format!");                                                    break;
+                    }
+                    
+                    uniform.m_isDirty = false;
+                }
+            }
+            else
+            {
+                EchoLogError("Shader param is NULL, Material");
+            }
+        }
+    }
+    
+    void MTShaderProgram::bindRenderable(Renderable* renderable)
+    {
+        
     }
 }

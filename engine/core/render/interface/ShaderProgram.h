@@ -85,10 +85,8 @@ namespace Echo
 		// get default value of uniform
 		const DefaultUniform* getDefaultUniformValue(const String& name);
 
-		// load and parse by file
+		// load and parse by file|content
 		bool loadFromFile(const String& filename, const String& macros);
-
-		// load from content
 		bool loadFromContent(const String& fileName, const char* content, const String& macros);
 
 		// save

@@ -174,8 +174,12 @@ namespace Echo
 			m_shaderProgram->bind();
 			bindRenderState();
 			bindShaderParams();
+            m_shaderProgram->bindUniforms();
+            m_shaderProgram->bindRenderable(this);
 
 			Renderer::instance()->draw( this);
+            
+            m_shaderProgram->unbind();
 		}
 	}
 

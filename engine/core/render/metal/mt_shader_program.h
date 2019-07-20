@@ -15,9 +15,16 @@ namespace Echo
         id<MTLFunction> getMetalVertexFunction() { return m_metalVertexShader; }
         id<MTLFunction> getMetalFragmentFunction() { return m_metalFragmentShader; }
         
+        // bind
+        virtual void bindUniforms() override;
+        virtual void bindRenderable(Renderable* renderable);
+        
     private:
         // create shader library
         virtual bool createShaderProgram(const String& vsContent, const String& psContent) override;
+        
+        // parse uniforms
+        void parseUniforms();
         
     private:
         id<MTLLibrary>      m_metalLibrary;

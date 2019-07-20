@@ -239,12 +239,6 @@ namespace Echo
 	void GLES2Renderer::draw(Renderable* renderable)
 	{
 		Mesh* mesh = renderable->getMesh();
-		ShaderProgram* shader = renderable->getShader();
-
-		EchoAssert(mesh);
-		EchoAssert(shader);
-		shader->bindUniforms();
-		shader->bindRenderable(renderable);
 
 		// set the type of primitive that should be rendered from this vertex buffer
 		GLenum glTopologyType = GLES2Mapping::MapPrimitiveTopology(mesh->getTopologyType());
@@ -281,8 +275,6 @@ namespace Echo
 				EchoLogError("GLES2Renderer::render failed!");
 			}
 		}
-
-		shader->unbind();
 	}
 
 	void GLES2Renderer::getDepthRange(Vector2& vec)
