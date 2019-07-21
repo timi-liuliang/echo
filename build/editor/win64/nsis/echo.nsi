@@ -24,9 +24,9 @@ Section
 
 	# create desktop shortcut
 	SetShellVarContext all
-	CreateShortCut "$DESKTOP\echo.lnk" "$INSTDIR\bin\editor\Win32\Release\echo.exe" ""
+	CreateShortCut "$DESKTOP\echo.lnk" "$INSTDIR\bin\editor\Win64\Release\echo.exe" ""
 	
 	# associate echo file
-	${registerExtension} "$INSTDIR\bin\editor\Win32\Release\echo.exe" ".echo" "echo project file"
+	${registerExtension} "$INSTDIR\bin\editor\Win64\Release\echo.exe" ".echo" "echo project file"
 
 SectionEnd

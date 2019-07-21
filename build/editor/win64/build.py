@@ -117,7 +117,7 @@ def release_echo(version):
     # define copy list
     copy_dir_list = [
         "app/",
-        "bin/editor/Win32/Release/",
+        "bin/editor/Win64/Release/",
         "build/windows/",
         "build/ios/",
         "build/android/",
