@@ -78,7 +78,26 @@ namespace Echo
     
     void MTShaderProgram::parseUniforms()
     {
-        
+        NSDictionary<NSString *, MTLFunctionConstant *>* functionConstantsDictionary = m_metalVertexShader.functionConstantsDictionary;
+        if(functionConstantsDictionary && functionConstantsDictionary.count>0)
+        {
+            //for (GLint i = 0; i < activeUniformLength; i++)
+            //{
+            //    char    unifromName[512];
+            //    GLint   uniformSize;
+            //    GLenum  uniformType;
+            //    GLsizei uniformLength;
+            //    OGLESDebug(glGetActiveUniform(m_glesProgram, i, 512, &uniformLength, &uniformSize, &uniformType, unifromName));
+                
+                Uniform desc;
+           //     desc.m_name = StringUtil::Replace(unifromName, "[0]", "").c_str();
+           //     desc.m_type = GLES2Mapping::MapUniformType(uniformType);
+           //     desc.m_count = uniformSize;
+           //     desc.m_sizeInBytes = desc.m_count * getUniformByteSizeByUniformType(desc.m_type);
+           //     desc.m_location = glGetUniformLocation(m_glesProgram, desc.m_name.c_str());
+                m_uniforms[desc.m_location] = desc;
+           // }
+        }
     }
     
     void MTShaderProgram::bindUniforms()
