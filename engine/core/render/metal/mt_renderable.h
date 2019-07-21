@@ -20,14 +20,11 @@ namespace Echo
         struct StreamUnit
         {
             VertexElementList        m_vertElements;
-            ui32                     m_vertStride;
             GPUBuffer*               m_buffer;
             
             StreamUnit()
             : m_buffer(NULL)
             {}
-            
-            bool isUsedFor(VertexSemantic);
         };
         
 	public:
@@ -51,11 +48,17 @@ namespace Echo
         
         // build vertex descriptor
         void buildVertexDescriptor(StreamUnit* stream);
+
+        // get vertex attribute by semantic
+        MTLVertexAttribute* getMTLVertexAttributeBySemantic(VertexSemantic semantic);
+        
+        // build render pipeline state
+        void buildRenderPipelineState();
         
     private:
         vector<StreamUnit>::type        m_vertexStreams;
         MTLVertexDescriptor*            m_metalVertexDescriptor = nullptr;
         MTLRenderPipelineDescriptor*    m_metalRenderPipelineDescriptor = nullptr;
-        id<MTLRenderPipelineState>      m_metalRenderPipelineState;
+        id<MTLRenderPipelineState>      m_metalRenderPipelineState = nullptr;
 	};
 }

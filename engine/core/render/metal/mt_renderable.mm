@@ -12,23 +12,30 @@ namespace Echo
     MTRenderable::MTRenderable(const String& renderStage, ShaderProgram* shader, int identifier)
         : Renderable( renderStage, shader, identifier)
     {
+        m_metalRenderPipelineDescriptor = [[MTLRenderPipelineDescriptor alloc] init];
+        
+        // assign vertex and frament shader
+        MTShaderProgram* mtShaderProgram = ECHO_DOWN_CAST<MTShaderProgram*>(shader);
+        if(mtShaderProgram)
+        {
+            [m_metalRenderPipelineDescriptor setVertexFunction:mtShaderProgram->getMetalVertexFunction()];
+            [m_metalRenderPipelineDescriptor setFragmentFunction:mtShaderProgram->getMetalFragmentFunction()];
+        }
+        
+        // specify the target-texture pixel format
+        m_metalRenderPipelineDescriptor.colorAttachments[0].pixelFormat = MTLPixelFormatBGRA8Unorm;
+    }
+    
+    void MTRenderable::buildRenderPipelineState()
+    {
         id<MTLDevice> device = MTRenderer::instance()->getMetalDevice();
         if(device)
         {
-            m_metalRenderPipelineDescriptor = [[MTLRenderPipelineDescriptor alloc] init];
+            // clear
+            if(m_metalRenderPipelineState)
+                [m_metalRenderPipelineState release];
             
-            // assign vertex and frament shader
-            MTShaderProgram* mtShaderProgram = ECHO_DOWN_CAST<MTShaderProgram*>(shader);
-            if(mtShaderProgram)
-            {
-                [m_metalRenderPipelineDescriptor setVertexFunction:mtShaderProgram->getMetalVertexFunction()];
-                [m_metalRenderPipelineDescriptor setFragmentFunction:mtShaderProgram->getMetalFragmentFunction()];
-            }
-            
-            // specify the target-texture pixel format
-            m_metalRenderPipelineDescriptor.colorAttachments[0].pixelFormat = MTLPixelFormatBGRA8Unorm;
-            
-            // build the rendering pipeline object
+            // create new one
             NSError* buildError = nullptr;
             m_metalRenderPipelineState = [device newRenderPipelineStateWithDescriptor:m_metalRenderPipelineDescriptor error:&buildError];
             if(buildError)
@@ -71,31 +78,55 @@ namespace Echo
         return true;
     }
     
+    MTLVertexAttribute* MTRenderable::getMTLVertexAttributeBySemantic(VertexSemantic semantic)
+    {
+        String attributeName = MTMapping::MapVertexSemanticString(semantic);
+        MTShaderProgram* mtShaderProgram = ECHO_DOWN_CAST<MTShaderProgram*>(m_shaderProgram.ptr());
+        if(mtShaderProgram)
+        {
+            id<MTLFunction> vertexShader = mtShaderProgram->getMetalVertexFunction();
+            for(i32 idx=0; idx<vertexShader.vertexAttributes.count; idx++)
+            {
+                MTLVertexAttribute* attribute = vertexShader.vertexAttributes[idx];
+                if([attribute.name UTF8String] == attributeName)
+                    return attribute;
+            }
+        }
+        
+        return nullptr;
+    }
+    
     void MTRenderable::buildVertexDescriptor(StreamUnit* stream)
     {
         if( m_metalVertexDescriptor)
             [m_metalVertexDescriptor release];
         
+        m_metalVertexDescriptor = [[MTLVertexDescriptor alloc] init];
+        
+        // iterate all elements
         ui32 numVertElms = static_cast<ui32>(stream->m_vertElements.size());
         if (numVertElms > 0)
         {
-            m_metalVertexDescriptor = [[MTLVertexDescriptor alloc] init];
-            
             ui32 elementOffset = 0;
             for (size_t i = 0; i < numVertElms; ++i)
             {
-                ui32 attributeIdx = i;
-                m_metalVertexDescriptor.attributes[attributeIdx].format = MTMapping::MapVertexFormat(stream->m_vertElements[i].m_pixFmt);
-                m_metalVertexDescriptor.attributes[attributeIdx].bufferIndex = 0;
-                m_metalVertexDescriptor.attributes[attributeIdx].offset = elementOffset;
+                MTLVertexAttribute* mtlAttribute = getMTLVertexAttributeBySemantic(stream->m_vertElements[i].m_semantic);
+                if(mtlAttribute)
+                {
+                    ui32 attributeIdx = mtlAttribute.attributeIndex;
+                    m_metalVertexDescriptor.attributes[attributeIdx].format = MTMapping::MapVertexFormat(stream->m_vertElements[i].m_pixFmt);
+                    m_metalVertexDescriptor.attributes[attributeIdx].bufferIndex = 0;
+                    m_metalVertexDescriptor.attributes[attributeIdx].offset = elementOffset;
+                }
                 
                 elementOffset += PixelUtil::GetPixelSize(stream->m_vertElements[i].m_pixFmt);
             }
-
-            stream->m_vertStride = elementOffset;
             
-            m_metalVertexDescriptor.layouts[0].stride = stream->m_vertStride;
+            m_metalVertexDescriptor.layouts[0].stride = elementOffset;
             [m_metalRenderPipelineDescriptor setVertexDescriptor:m_metalVertexDescriptor];
+            
+            // update render pipeline state
+            buildRenderPipelineState();
         }
     }
 }

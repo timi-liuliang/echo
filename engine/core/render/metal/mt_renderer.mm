@@ -163,7 +163,7 @@ namespace Echo
     void MTRenderer::draw(Renderable* renderable)
     {
         MTRenderable* mtRenderable = ECHO_DOWN_CAST<MTRenderable*>(renderable);
-        if(m_metalRenderPassDescriptor && mtRenderable)
+        if(m_metalRenderPassDescriptor && mtRenderable && mtRenderable->getMetalRenderPipelineState())
         {
             Mesh* mesh = renderable->getMesh();
             GPUBuffer* indexBuffer = mesh->getIndexBuffer();

@@ -9,21 +9,30 @@ using namespace metal;
 
 struct VertexIn
 {
-    float3 position;
-    float4 color;
+    float3 a_Position [[ attribute(0) ]];
+    float4 a_Color [[ attribute(1) ]];
+};
+
+struct RasterizerData
+{
+    float4 v_Position [[ position ]];
+    float4 v_Color;
 };
 
 // vertex function
-vertex float4 vertexShader(device VertexIn* vertices [[buffer(0)]], uint vid [[vertex_id]])
+vertex RasterizerData vertexShader(const VertexIn vIn [[ stage_in ]])
 {
-    return float4(vertices[vid].position, 1.0);
+    RasterizerData rd;
+    rd.v_Position = float4(vIn.a_Position, 1.0);
+    rd.v_Color = vIn.a_Color;
+    
+    return rd;
 }
 
 // fragment function
-fragment float4 fragmentShader(float4 in [[stage_in]])
+fragment float4 fragmentShader(RasterizerData rd [[stage_in]])
 {
-    //set color fragment to red
-    return float4(1.0,0.0,0.0,1.0);
+    return rd.v_Color;
 }
 )";
 
