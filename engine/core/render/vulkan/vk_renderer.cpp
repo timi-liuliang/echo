@@ -7,7 +7,7 @@ namespace Echo
 {
     VKRenderer::VKRenderer()
     {
-        
+		createVkInstance();
     }
     
     VKRenderer::~VKRenderer()
@@ -73,4 +73,27 @@ namespace Echo
     {
         return EchoNew(VKSamplerState);
     }
+
+	void VKRenderer::createVkInstance()
+	{
+		VkApplicationInfo appInfo;
+		appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+		appInfo.pApplicationName = "echo";
+		appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
+		appInfo.pEngineName = "echo";
+		appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
+		appInfo.apiVersion = VK_API_VERSION_1_1;
+
+		VkInstanceCreateInfo createInfo;
+		createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+		createInfo.pApplicationInfo = &appInfo;
+		createInfo.enabledExtensionCount = 0;
+		createInfo.enabledLayerCount = 0;
+
+		// create instance
+		if (VK_SUCCESS != vkCreateInstance(&createInfo, nullptr, m_vkInstance))
+		{
+			EchoLogError("create vulkan instance failed");
+		}
+	}
 }

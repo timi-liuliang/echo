@@ -38,8 +38,9 @@ ENDIF()
 
 INCLUDE_DIRECTORIES(${INCLUDE_FILES})
 
-# Net
-INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/Dependencies/theoraplayer/SDK/include)
+IF(${ECHO_PLATFORM_WIN32})
+	INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/vulkan/windows/src/vulkan/include)
+ENDIF()
 
 # Configure FILE
 CONFIGURE_FILE(

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/core/render/interface/Renderer.h"
+#include "vk_render_base.h"
 
 namespace Echo
 {
@@ -74,9 +75,14 @@ namespace Echo
 
 		// get view port
 		virtual void getViewportReal(Viewport& pViewport) override {}
+
+	private:
+		// create vk instance
+		void createVkInstance();
         
     private:
-        ui32    m_screenWidth = 640;
-        ui32    m_screenHeight = 480;
+        ui32		m_screenWidth = 640;
+        ui32		m_screenHeight = 480;
+		VkInstance* m_vkInstance = nullptr;
 	};
 }

@@ -1,6 +1,7 @@
 #include <engine/core/log/Log.h>
-#include <engine/core/render/gles/GLES.h>
+#include <engine/core/render/vulkan/vk.h>
 #include <engine/core/render/metal/mt.h>
+#include <engine/core/render/gles/GLES.h>
 
 namespace Echo
 {
@@ -10,8 +11,11 @@ namespace Echo
 		Renderer* renderer = nullptr;
 #ifdef ECHO_PLATFORM_MAC
 		LoadMTRenderer(renderer);
+#elif defined ECHO_PLATFORM_HTML5
+		LoadGLESRenderer(renderer);
 #else
 		LoadGLESRenderer(renderer);
+		//LoadVKRenderer(renderer);
 #endif
 
 		Echo::Renderer::Config renderCfg;
