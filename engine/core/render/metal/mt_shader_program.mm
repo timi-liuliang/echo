@@ -19,12 +19,17 @@ struct RasterizerData
     float4 v_Color;
 };
 
+struct UBO
+{
+    float alphaScale;
+};
+
 // vertex function
-vertex RasterizerData vertexShader(const VertexIn vIn [[ stage_in ]])
+vertex RasterizerData vertexShader(const VertexIn vIn [[ stage_in ]], constant UBO& ubo [[ buffer(0) ]])
 {
     RasterizerData rd;
     rd.v_Position = float4(vIn.a_Position, 1.0);
-    rd.v_Color = vIn.a_Color;
+    rd.v_Color = vIn.a_Color * ubo.alphaScale;
     
     return rd;
 }
