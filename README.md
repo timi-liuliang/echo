@@ -14,7 +14,7 @@
 ## Download   
 |Description|Files|Previous|
 |---|---|---|   
-|Editor [Win32]|[echo-setup-2018.10.09.exe](https://media.githubusercontent.com/media/timi-liuliang/echo-download/master/download/echo-setup-2018.10.09.exe)|[old version](https://github.com/timi-liuliang/echo-download/tree/master/download)|
+|Editor [Win64]|[echo-setup-2019.07.21.exe](https://media.githubusercontent.com/media/timi-liuliang/echo-download/master/download/echo-setup-2019.07.21.exe)|[old version](https://github.com/timi-liuliang/echo-download/tree/master/download)|
 |Editor [Mac OS X 10.7 or later]|echo.dmg|
 |Examples|[echo-examples-master.zip](https://codeload.github.com/timi-liuliang/echo-examples/zip/master)|
 
@@ -29,7 +29,7 @@
 ## Features
 
 ### Easy Concept  
-Scene manager is easy, No Entiy, No GameObject, No Component, No Prefab. Only Node and NodeTree. 
+Scene manager is easy, No Entiy, No GameObject, No Component, No Prefab. Only Node and NodeTree.
 
 ###  Highly Efficient Workflow   
 ![](https://media.githubusercontent.com/media/timi-liuliang/echo-download/master/images/intro/echo.png)  
@@ -37,11 +37,11 @@ Scene manager is easy, No Entiy, No GameObject, No Component, No Prefab. Only No
 ### Multi-Platform Support  
 iOS Android Html5 Windows Mac Linux Steam  
 
-### New Industry Standard Support 
+### New Industry Standard Support
 gLtf2.0, Vulkan, Pbr, Real time ray tracing.
 
 ### 2D And 3D Seamless Transition  
-Every node can be 2d or 3d. The core difference is the camera and the unit the node use. So you can just switch a node to 2d or 3d easily. 
+Every node can be 2d or 3d. The core difference is the camera and the unit the node use. So you can just switch a node to 2d or 3d easily.
 
 ### Easy To Program  
 Mostly, you'll use Lua as your main programming language. and also you can use c++ directly. the design of node tree makes the Lua logic code more easy to write. and the embedded Lua editor and embedded document help you write code just in the echo editor.   
