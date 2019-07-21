@@ -278,6 +278,7 @@ ADD_SUBDIRECTORY(thirdparty/spirv-cross)
 ADD_SUBDIRECTORY(thirdparty/tinyexpr)
 IF(ECHO_PLATFORM_WIN32)
 	ADD_SUBDIRECTORY(thirdparty/libde265)
+	ADD_SUBDIRECTORY(thirdparty/openal-soft)
 ENDIF()
 #ADD_SUBDIRECTORY(thirdparty/protobuf/src/google/protobuf)
 
