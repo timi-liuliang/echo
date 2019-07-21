@@ -91,10 +91,10 @@ namespace Echo
 
 		bool bindShaderProgram(GLES2ShaderProgram* program);
 
-		// 获取真实视口大小
+		// get viewport
 		virtual void getViewportReal( Viewport& pViewport);
 		
-		// 更新Size
+		// on size
 		virtual void onSize(int width, int height); 
 
 	protected:
