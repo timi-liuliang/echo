@@ -93,14 +93,21 @@ namespace Echo
     
     void MTShaderProgram::addUniform(MTLArgument* arg)
     {
-        MTLArgumentType type = arg.type;
-        Uniform desc;
-        //     desc.m_name = StringUtil::Replace(unifromName, "[0]", "").c_str();
-        //desc.m_type = GLES2Mapping::MapUniformType(uniformType);
-        //     desc.m_count = uniformSize;
-        //     desc.m_sizeInBytes = desc.m_count * getUniformByteSizeByUniformType(desc.m_type);
-        //     desc.m_location = glGetUniformLocation(m_glesProgram, desc.m_name.c_str());
-        m_uniforms[desc.m_location] = desc;
+        MTLStructType* structType = arg.bufferStructType;
+        for(i32 i=0; i<structType.members.count; i++)
+        {
+            MTLStructMember* member = structType.members[i];
+            i32 offset = member.offset;
+            MTLDataType dataType = member.dataType;
+            
+            Uniform desc;
+            desc.m_name = [member.name UTF8String];
+            //desc.m_type = GLES2Mapping::MapUniformType(uniformType);
+            //     desc.m_count = uniformSize;
+            //     desc.m_sizeInBytes = desc.m_count * getUniformByteSizeByUniformType(desc.m_type);
+            //     desc.m_location = glGetUniformLocation(m_glesProgram, desc.m_name.c_str());
+            m_uniforms[desc.m_location] = desc;
+        }
     }
     
     void MTShaderProgram::bindUniforms()
