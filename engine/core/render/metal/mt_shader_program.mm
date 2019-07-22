@@ -60,8 +60,6 @@ namespace Echo
                 m_metalVertexShader   = [m_metalLibrary newFunctionWithName:@"vertexShader"];
                 m_metalFragmentShader = [m_metalLibrary newFunctionWithName:@"fragmentShader"];
                 
-                parseUniforms();
-                
                 return m_metalVertexShader && m_metalFragmentShader ? true : false;
             }
             else
@@ -76,28 +74,33 @@ namespace Echo
         return false;
     }
     
-    void MTShaderProgram::parseUniforms()
+    // reference https://github.com/bkaradzic/bgfx/issues/960
+    void MTShaderProgram::parseUniforms(MTLRenderPipelineReflection* reflection)
     {
-        NSDictionary<NSString *, MTLFunctionConstant *>* functionConstantsDictionary = m_metalVertexShader.functionConstantsDictionary;
-        if(functionConstantsDictionary && functionConstantsDictionary.count>0)
+        if(reflection)
         {
-            //for (GLint i = 0; i < activeUniformLength; i++)
-            //{
-            //    char    unifromName[512];
-            //    GLint   uniformSize;
-            //    GLenum  uniformType;
-            //    GLsizei uniformLength;
-            //    OGLESDebug(glGetActiveUniform(m_glesProgram, i, 512, &uniformLength, &uniformSize, &uniformType, unifromName));
-                
-                Uniform desc;
-           //     desc.m_name = StringUtil::Replace(unifromName, "[0]", "").c_str();
-           //     desc.m_type = GLES2Mapping::MapUniformType(uniformType);
-           //     desc.m_count = uniformSize;
-           //     desc.m_sizeInBytes = desc.m_count * getUniformByteSizeByUniformType(desc.m_type);
-           //     desc.m_location = glGetUniformLocation(m_glesProgram, desc.m_name.c_str());
-                m_uniforms[desc.m_location] = desc;
-           // }
+            m_uniforms.clear();
+            
+            // vertex arguments
+            for(i32 i=0; i<reflection.vertexArguments.count; i++)
+                addUniform(reflection.vertexArguments[i]);
+            
+            // fragment arguments
+            for(i32 i=0; i<reflection.fragmentArguments.count; i++)
+                addUniform( reflection.fragmentArguments[i]);
         }
+    }
+    
+    void MTShaderProgram::addUniform(MTLArgument* arg)
+    {
+        MTLArgumentType type = arg.type;
+        Uniform desc;
+        //     desc.m_name = StringUtil::Replace(unifromName, "[0]", "").c_str();
+        //desc.m_type = GLES2Mapping::MapUniformType(uniformType);
+        //     desc.m_count = uniformSize;
+        //     desc.m_sizeInBytes = desc.m_count * getUniformByteSizeByUniformType(desc.m_type);
+        //     desc.m_location = glGetUniformLocation(m_glesProgram, desc.m_name.c_str());
+        m_uniforms[desc.m_location] = desc;
     }
     
     void MTShaderProgram::bindUniforms()

@@ -37,8 +37,13 @@ namespace Echo
             
             // create new one
             NSError* buildError = nullptr;
-            m_metalRenderPipelineState = [device newRenderPipelineStateWithDescriptor:m_metalRenderPipelineDescriptor error:&buildError];
-            if(buildError)
+            m_metalRenderPipelineState = [device newRenderPipelineStateWithDescriptor:m_metalRenderPipelineDescriptor options:MTLPipelineOptionArgumentInfo reflection:&m_metalRenderPipelineReflection error:&buildError];
+            if(!buildError)
+            {
+                MTShaderProgram* mtShaderProgram = ECHO_DOWN_CAST<MTShaderProgram*>(m_shaderProgram.ptr());
+                mtShaderProgram->parseUniforms(m_metalRenderPipelineReflection);
+            }
+            else
             {
                 NSString* nsError = [NSString stringWithFormat:@"%@", buildError];
                 EchoLogError("%s", [nsError UTF8String]);

@@ -19,12 +19,16 @@ namespace Echo
         virtual void bindUniforms() override;
         virtual void bindRenderable(Renderable* renderable);
         
+    public:
+        // parse uniforms
+        void parseUniforms(MTLRenderPipelineReflection* reflection);
+        
     private:
         // create shader library
         virtual bool createShaderProgram(const String& vsContent, const String& psContent) override;
         
-        // parse uniforms
-        void parseUniforms();
+        // add uniform
+        void addUniform(MTLArgument* arg);
         
     private:
         id<MTLLibrary>      m_metalLibrary;

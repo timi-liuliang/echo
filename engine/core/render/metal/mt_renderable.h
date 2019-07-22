@@ -60,5 +60,6 @@ namespace Echo
         MTLVertexDescriptor*            m_metalVertexDescriptor = nullptr;
         MTLRenderPipelineDescriptor*    m_metalRenderPipelineDescriptor = nullptr;
         id<MTLRenderPipelineState>      m_metalRenderPipelineState = nullptr;
+        MTLRenderPipelineReflection*    m_metalRenderPipelineReflection = nil;
 	};
 }
