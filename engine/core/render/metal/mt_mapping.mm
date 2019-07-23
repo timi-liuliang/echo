@@ -44,4 +44,20 @@ namespace Echo
             default:  EchoLogError("MapingVertexFormat failed");  return MTLVertexFormatInvalid;
         }
     }
+    
+    ShaderParamType MTMapping::MapUniformType(MTLDataType uniformType)
+    {
+        switch( uniformType)
+        {
+            case MTLDataTypeFloat:          return SPT_FLOAT;
+            case MTLDataTypeFloat2:         return SPT_VEC2;
+            case MTLDataTypeFloat3:         return SPT_VEC3;
+            case MTLDataTypeFloat4:         return SPT_VEC4;
+            case MTLDataTypeInt:            return SPT_INT;
+            case MTLDataTypeFloat4x4:       return SPT_MAT4;
+            case MTLDataTypeTexture:        return SPT_TEXTURE;
+            case MTLDataTypeSampler:        return SPT_TEXTURE;
+            default:                        return SPT_UNKNOWN;
+        }
+    }
 }

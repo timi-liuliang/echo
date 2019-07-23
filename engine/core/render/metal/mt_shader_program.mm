@@ -1,5 +1,6 @@
 #include "mt_shader_program.h"
 #include "mt_renderer.h"
+#include "mt_mapping.h"
 #include "engine/core/log/Log.h"
 
 static const char* testMetalLibrary = R"(
@@ -97,15 +98,14 @@ namespace Echo
         for(i32 i=0; i<structType.members.count; i++)
         {
             MTLStructMember* member = structType.members[i];
-            i32 offset = member.offset;
-            MTLDataType dataType = member.dataType;
-            
+            MTLArrayType*    arrayInfo = member.arrayType;
+
             Uniform desc;
             desc.m_name = [member.name UTF8String];
-            //desc.m_type = GLES2Mapping::MapUniformType(uniformType);
-            //     desc.m_count = uniformSize;
-            //     desc.m_sizeInBytes = desc.m_count * getUniformByteSizeByUniformType(desc.m_type);
-            //     desc.m_location = glGetUniformLocation(m_glesProgram, desc.m_name.c_str());
+            desc.m_type = MTMapping::MapUniformType( arrayInfo ? arrayInfo.dataType : member.dataType);
+            desc.m_count = arrayInfo ? arrayInfo.arrayLength : 1;
+            desc.m_sizeInBytes = desc.m_count * getUniformByteSizeByUniformType(desc.m_type);
+            desc.m_location = member.offset;
             m_uniforms[desc.m_location] = desc;
         }
     }

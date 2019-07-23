@@ -1,6 +1,7 @@
 #pragma once
 
-#include "engine/core/render/interface/mesh/Mesh.h"
+#include "interface/mesh/Mesh.h"
+#include "interface/ShaderProgram.h"
 #include "mt_render_base.h"
 
 namespace Echo
@@ -16,5 +17,8 @@ namespace Echo
         
         // Mapping MTLVertexFormat
         static MTLVertexFormat MapVertexFormat(PixelFormat pixelFormat);
+        
+        // Mapping Uniform type
+        static ShaderParamType MapUniformType( MTLDataType uniformType);
     };
 }
