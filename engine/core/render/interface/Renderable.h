@@ -39,8 +39,8 @@ namespace Echo
 		{
 			ui32			physicsIndex;
 			ShaderParamType stype;
-			const void*		pData;
-			ui32			ParamsLength;  // shader constance register num.
+			const void*		data;
+			ui32			length;  // shader constance register num.
 		};
 
 	public:
@@ -61,7 +61,7 @@ namespace Echo
 		void beginShaderParams(size_t paramNum);
 		void endShaderParams();
 		void setShaderParam(size_t physicsIndex, ShaderParamType type, const void* param, size_t num=1);
-		void modifyShaderParam(ui32 physics, ShaderParamType type, void* param, size_t num=1);
+		void modifyShaderParam(ui32 physicsIndex, ShaderParamType type, void* param, size_t num=1);
 
 		// texture
 		void setTexture( ui32 stage, Texture* texture);
@@ -77,20 +77,17 @@ namespace Echo
 		void setRenderStage(const String& renderStage) { m_renderStage = renderStage; }
 		const String& getRenderStage(void){ return m_renderStage; }
 
-		// is have render state
-		bool isHaveRenderState( ) { return m_bRenderState; }
-
 		// blend state
 		void setBlendState( BlendState* state );
-		BlendState*	getBlendState() { return m_pBlendState; }
+		BlendState*	getBlendState() { return m_blendState; }
 
 		// rasterizer state
 		void setRasterizerState( RasterizerState* state );
-		RasterizerState* getRasterizerState() { return m_pRasterizerState; }
+		RasterizerState* getRasterizerState() { return m_rasterizerState; }
 
 		// depth stencil state
 		void setDepthStencilState(DepthStencilState* state);
-		DepthStencilState* getDepthStencilState() { return m_pDepthStencil; }
+		DepthStencilState* getDepthStencilState() { return m_depthStencil; }
 
 		// set node
 		void setNode( Render* node) { m_node = node; }
@@ -122,12 +119,10 @@ namespace Echo
 		Mesh*									m_mesh = nullptr;
 		MaxTextureArray							m_textures;				// now only one texture sampler.
 		vector<ShaderParam>::type				m_shaderParams;			// third shader params
-		size_t									m_SParamWriteIndex = 0;
-
-		bool									m_bRenderState = false;
-		BlendState*								m_pBlendState = nullptr;
-		RasterizerState*						m_pRasterizerState = nullptr;
-		DepthStencilState*						m_pDepthStencil = nullptr;
+		size_t									m_paramWriteIndex = 0;
+		BlendState*								m_blendState = nullptr;
+		RasterizerState*						m_rasterizerState = nullptr;
+		DepthStencilState*						m_depthStencil = nullptr;
 	};
 	typedef ui32 RenderableID;
 }

@@ -23,7 +23,6 @@ namespace Echo
 		m_shaderParams.clear();
 	}
 
-	// release
 	void Renderable::release()
 	{
 		Renderable* ptr = this;
@@ -74,26 +73,26 @@ namespace Echo
 	void Renderable::beginShaderParams(size_t paramNum)
 	{
 		m_shaderParams.resize(paramNum);
-		m_SParamWriteIndex = 0;
+		m_paramWriteIndex = 0;
 	}
 
 	void Renderable::endShaderParams()
 	{
-		if (m_SParamWriteIndex != m_shaderParams.size())
+		if (m_paramWriteIndex != m_shaderParams.size())
 		{
-			EchoLogError("[Renderable:%d]:: index == %d, shader size == %d Node [%s]", __LINE__, m_SParamWriteIndex, m_shaderParams.size(), m_node->getName().c_str());
+			EchoLogError("[Renderable:%d]:: index == %d, shader size == %d Node [%s]", __LINE__, m_paramWriteIndex, m_shaderParams.size(), m_node->getName().c_str());
 		}
 	}
 
 	void Renderable::setShaderParam(size_t physicsIndex, ShaderParamType type, const void* param, size_t num/* =1 */)
 	{
-		if (m_SParamWriteIndex < m_shaderParams.size() && param)
+		if (m_paramWriteIndex < m_shaderParams.size() && param)
 		{
-			m_shaderParams[m_SParamWriteIndex].physicsIndex = static_cast<ui32>(physicsIndex);
-			m_shaderParams[m_SParamWriteIndex].stype = type;
-			m_shaderParams[m_SParamWriteIndex].pData = param;
-			m_shaderParams[m_SParamWriteIndex].ParamsLength = static_cast<ui32>(num);
-			m_SParamWriteIndex++;
+			m_shaderParams[m_paramWriteIndex].physicsIndex = static_cast<ui32>(physicsIndex);
+			m_shaderParams[m_paramWriteIndex].stype = type;
+			m_shaderParams[m_paramWriteIndex].data = param;
+			m_shaderParams[m_paramWriteIndex].length = static_cast<ui32>(num);
+			m_paramWriteIndex++;
 		}
 		else
 		{
@@ -103,14 +102,13 @@ namespace Echo
 
 	void Renderable::modifyShaderParam(ui32 physics, ShaderParamType type, void* param, size_t num/* =1 */)
 	{
-		EchoAssert(m_SParamWriteIndex == m_shaderParams.size());
-		for (ui32 modifyIndex = 0; modifyIndex < m_shaderParams.size(); modifyIndex++)
+		for (ui32 i = 0; i < m_shaderParams.size(); i++)
 		{
-			if (m_shaderParams[modifyIndex].physicsIndex == physics)
+			if (m_shaderParams[i].physicsIndex == physics)
             {
-                m_shaderParams[modifyIndex].stype = type;
-                m_shaderParams[modifyIndex].pData = param;
-                m_shaderParams[modifyIndex].ParamsLength = static_cast<ui32>(num);
+                m_shaderParams[i].stype = type;
+                m_shaderParams[i].data = param;
+                m_shaderParams[i].length = static_cast<ui32>(num);
                 
                 break;
             }
@@ -139,7 +137,7 @@ namespace Echo
 				case SPT_FLOAT:
 				case SPT_VEC2:
 				case SPT_VEC3:
-				case SPT_TEXTURE:	m_shaderProgram->setUniform(param.physicsIndex, param.pData, param.stype, param.ParamsLength);	break;
+				case SPT_TEXTURE:	m_shaderProgram->setUniform(param.physicsIndex, param.data, param.stype, param.length);	break;
 				default:			EchoLogError("unknow shader param format! %s", m_node->getName().c_str());							break;
 				}
 			}
@@ -161,9 +159,9 @@ namespace Echo
 		if (m_shaderProgram)
 		{
 			Renderer* pRenderer = Renderer::instance();
-			pRenderer->setDepthStencilState(m_pDepthStencil ? m_pDepthStencil : m_shaderProgram->getDepthState());
-			pRenderer->setRasterizerState(m_pRasterizerState ? m_pRasterizerState : m_shaderProgram->getRasterizerState());
-			pRenderer->setBlendState(m_pBlendState ? m_pBlendState : m_shaderProgram->getBlendState());
+			pRenderer->setDepthStencilState(m_depthStencil ? m_depthStencil : m_shaderProgram->getDepthState());
+			pRenderer->setRasterizerState(m_rasterizerState ? m_rasterizerState : m_shaderProgram->getRasterizerState());
+			pRenderer->setBlendState(m_blendState ? m_blendState : m_shaderProgram->getBlendState());
 		}
 	}
 
@@ -193,23 +191,19 @@ namespace Echo
 
 	void Renderable::setBlendState(BlendState* pState)
 	{
-		m_pBlendState = pState;
-		m_bRenderState = pState ? true : false;
+		m_blendState = pState;
 	}
 
 	void Renderable::setRasterizerState(RasterizerState* state)
 	{
-		m_pRasterizerState = state;
-		m_bRenderState = state ? true : false;
+		m_rasterizerState = state;
 	}
 
 	void Renderable::setDepthStencilState(DepthStencilState* state)
 	{
-		m_pDepthStencil = state;
-		m_bRenderState = state ? true : false;
+		m_depthStencil = state;
 	}
 
-	// get shader
 	ShaderProgram* Renderable::getShader()
 	{
 		return m_shaderProgram;

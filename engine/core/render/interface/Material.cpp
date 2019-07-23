@@ -124,7 +124,7 @@ namespace Echo
 		}
 
 		const ShaderProgram::DefaultUniform* dUniform = m_shaderProgram->getDefaultUniformValue(name);
-		return dUniform ? dUniform->value : NULL;
+		return dUniform ? dUniform->value : nullptr;
 	}
 
 	void Material::loadTexture()
