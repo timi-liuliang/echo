@@ -1,6 +1,7 @@
 #include "ShaderProgram.h"
 #include "engine/core/util/StringUtil.h"
 #include "engine/core/util/PathUtil.h"
+#include "engine/core/util/magic_enum.hpp"
 #include "engine/core/log/Log.h"
 #include "engine/core/util/Exception.h"
 #include "Renderer.h"
@@ -279,11 +280,11 @@ namespace Echo
 			{
 				String strName = elementNode.name();
 				if (strName == "PolygonMode")
-					rasterizerState.polygonMode = (RasterizerState::PolygonMode)(MappingStringArrayIdx(s_PolygonMode, 3, elementNode.attribute("value").as_string("")));
+					rasterizerState.polygonMode = magic_enum::enum_cast<RasterizerState::PolygonMode>(elementNode.attribute("value").as_string("")).value();
 				else if (strName == "ShadeModel")
-					rasterizerState.shadeModel = (RasterizerState::ShadeModel)(MappingStringArrayIdx(s_ShadeModel, 2, elementNode.attribute("value").as_string("")));
+					rasterizerState.shadeModel = magic_enum::enum_cast<RasterizerState::ShadeModel>(elementNode.attribute("value").as_string("")).value();
 				else if (strName == "CullMode")
-					rasterizerState.cullMode = (RasterizerState::CullMode)(MappingStringArrayIdx(s_CullMode, 3, elementNode.attribute("value").as_string()));
+					rasterizerState.cullMode = magic_enum::enum_cast<RasterizerState::CullMode>( elementNode.attribute("value").as_string()).value();
 				else if (strName == "FrontFaceCCW")
 					rasterizerState.bFrontFaceCCW = StringUtil::ParseBool(elementNode.attribute("value").as_string());
 				else if (strName == "DepthBias")

@@ -63,26 +63,6 @@ namespace Echo
 		"BF_SRC_ALPHA_SAT", 
 	};
 
-	static const String s_CullMode[3] =
-	{
-		"CULL_NONE", 
-		"CULL_FRONT", 
-		"CULL_BACK"
-	};
-
-	static const String s_ShadeModel[2] =
-	{
-		"SM_FLAT", 
-		"SM_GOURAND"
-	};
-
-	static const String s_PolygonMode[3] =
-	{
-		"PM_POINT", 
-		"PM_LINE", 
-		"PM_FILL"
-	};
-
 	static const String s_StencilOperation[8] = 
 	{
 		"SOP_KEEP",
