@@ -2,7 +2,6 @@
 #include "Material.h"
 #include "engine/core/scene/node_tree.h"
 #include "engine/core/render/interface/ShaderProgram.h"
-#include "engine/core/render/interface/MaterialDesc.h"
 #include "engine/core/render/interface/Renderer.h"
 #include <thirdparty/pugixml/pugixml.hpp>
 

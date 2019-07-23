@@ -7,7 +7,6 @@
 #include "Renderer.h"
 #include "image/PixelFormat.h"
 #include "engine/core/io/IO.h"
-#include "MaterialDesc.h"
 #include <thirdparty/pugixml/pugixml.hpp>
 #include "glslcc/GLSLCrossCompiler.h"
 
@@ -213,17 +212,39 @@ namespace Echo
 		}
 	}
 
-	static int MappingStringArrayIdx(const String* array, int count, const String& value)
+	static const String s_ColorMask[6] =
 	{
-		for (int i = 0; i < count; i++)
+		"CMASK_NONE"
+		"CMASK_RED",
+		"CMASK_GREEN",
+		"CMASK_BLUE",
+		"CMASK_ALPHA",
+		"CMASK_COLOR",
+		"CMASK_ALL",
+	};
+
+	INLINE RenderState::ColorMask MappingColorMask(const String& strValue)
+	{
+		RenderState::ColorMask results[] =
 		{
-			if (value == array[i])
-				return i;
+			RenderState::CMASK_NONE,
+			RenderState::CMASK_RED,
+			RenderState::CMASK_GREEN,
+			RenderState::CMASK_BLUE,
+			RenderState::CMASK_ALPHA,
+			RenderState::CMASK_COLOR,
+			RenderState::CMASK_ALL
+		};
+
+		i32 result = 0;
+		for (int i = 0; i < sizeof(results); i++)
+		{
+			if (StringUtil::Contain(strValue, s_ColorMask[i]))
+				if (strValue == s_ColorMask[i])
+					result |= results[i];
 		}
 
-		EchoLogError("Mapping string array idx failed [%s]", value.c_str());
-
-		return 0;
+		return RenderState::ColorMask(result);
 	}
 
 	bool ShaderProgram::loadBlendState( void* pNode )
@@ -238,17 +259,17 @@ namespace Echo
 				if(strName == "BlendEnable")
 					blendDesc.bBlendEnable = elementNode.attribute("value").as_bool();
 				else if (strName == "SrcBlend")
-					blendDesc.srcBlend = (BlendState::BlendFactor)(MappingStringArrayIdx(s_BlendFactor, BlendState::BF_MAX, elementNode.attribute("value").as_string("")));
+					blendDesc.srcBlend = magic_enum::enum_cast<BlendState::BlendFactor>(elementNode.attribute("value").as_string("")).value();
 				else if (strName == "DstBlend")
-					blendDesc.dstBlend = (BlendState::BlendFactor)(MappingStringArrayIdx(s_BlendFactor, BlendState::BF_MAX, elementNode.attribute("value").as_string("")));
+					blendDesc.dstBlend = magic_enum::enum_cast<BlendState::BlendFactor>(elementNode.attribute("value").as_string("")).value();
 				else if (strName == "BlendOP")
-					blendDesc.blendOP = (BlendState::BlendOperation)(MappingStringArrayIdx(s_BlendOperation, 6, elementNode.attribute("value").as_string("")));
+					blendDesc.blendOP = magic_enum::enum_cast<BlendState::BlendOperation>( elementNode.attribute("value").as_string("")).value();
 				else if (strName == "SrcAlphaBlend")
-					blendDesc.srcAlphaBlend = (BlendState::BlendFactor)(MappingStringArrayIdx(s_BlendFactor, 6, elementNode.attribute("value").as_string("")));
+					blendDesc.srcAlphaBlend = magic_enum::enum_cast<BlendState::BlendFactor>(elementNode.attribute("value").as_string("")).value();
 				else if (strName == "DstAlphaBlend")
-					blendDesc.dstAlphaBlend = (BlendState::BlendFactor)(MappingStringArrayIdx(s_BlendFactor, 6, elementNode.attribute("value").as_string("")));
+					blendDesc.dstAlphaBlend = magic_enum::enum_cast<BlendState::BlendFactor>(elementNode.attribute("value").as_string("")).value();
 				else if (strName == "AlphaBlendOP")
-					blendDesc.alphaBlendOP = (BlendState::BlendOperation)(MappingStringArrayIdx(s_BlendOperation, 6, elementNode.attribute("value").as_string("")));
+					blendDesc.alphaBlendOP = magic_enum::enum_cast<BlendState::BlendOperation>(elementNode.attribute("value").as_string("")).value();
 				else if (strName == "ColorWriteMask")
 					blendDesc.colorWriteMask = MappingColorMask(elementNode.attribute("value").as_string(""));
 				else if (strName == "A2CEnable")
@@ -323,37 +344,37 @@ namespace Echo
 				else if (strName == "WriteDepth")
 					depthStencilState.bWriteDepth = StringUtil::ParseBool(elementNode.attribute("value").as_string());
 				else if (strName == "DepthFunc")
-					depthStencilState.depthFunc = (RenderState::ComparisonFunc)(MappingStringArrayIdx(s_ComparisonFunc, RenderState::CF_MAXNUM, elementNode.attribute("value").as_string("")));
+					depthStencilState.depthFunc = magic_enum::enum_cast<RenderState::ComparisonFunc>(elementNode.attribute("value").as_string("")).value();
 				else if (strName == "FrontStencilEnable")
 					depthStencilState.bFrontStencilEnable = StringUtil::ParseBool(elementNode.attribute("value").as_string());
 				else if (strName == "FrontStencilFunc")
-					depthStencilState.frontStencilFunc = (RenderState::ComparisonFunc)(MappingStringArrayIdx(s_ComparisonFunc, RenderState::CF_MAXNUM, elementNode.attribute("value").as_string("")));
+					depthStencilState.frontStencilFunc = magic_enum::enum_cast<RenderState::ComparisonFunc>(elementNode.attribute("value").as_string("")).value();
 				else if (strName == "FrontStencilReadMask")
 					depthStencilState.frontStencilReadMask = (ui16)elementNode.attribute("value").as_uint();
 				else if (strName == "FrontStencilWriteMask")
 					depthStencilState.frontStencilWriteMask = (ui16)elementNode.attribute("value").as_uint();
 				else if (strName == "FrontStencilFailOP")
-					depthStencilState.frontStencilFailOP = (DepthStencilState::StencilOperation)(MappingStringArrayIdx(s_StencilOperation, DepthStencilState::SOP_MAX, elementNode.attribute("value").as_string("")));
+					depthStencilState.frontStencilFailOP = magic_enum::enum_cast<DepthStencilState::StencilOperation>(elementNode.attribute("value").as_string("")).value();
 				else if (strName == "FrontStencilDepthFailOP")
-					depthStencilState.frontStencilDepthFailOP = (DepthStencilState::StencilOperation)(MappingStringArrayIdx(s_StencilOperation, DepthStencilState::SOP_MAX, elementNode.attribute("value").as_string("")));
+					depthStencilState.frontStencilDepthFailOP = magic_enum::enum_cast<DepthStencilState::StencilOperation>( elementNode.attribute("value").as_string("")).value();
 				else if (strName == "FrontStencilPassOP")
-					depthStencilState.frontStencilPassOP = (DepthStencilState::StencilOperation)(MappingStringArrayIdx(s_StencilOperation, DepthStencilState::SOP_MAX, elementNode.attribute("value").as_string("")));
+					depthStencilState.frontStencilPassOP = magic_enum::enum_cast<DepthStencilState::StencilOperation>( elementNode.attribute("value").as_string("")).value();
 				else if (strName == "FrontStencilRef")
 					depthStencilState.frontStencilRef = elementNode.attribute("value").as_uint();
 				else if (strName == "BackStencilEnable")
 					depthStencilState.bBackStencilEnable = StringUtil::ParseBool(elementNode.attribute("value").as_string());
 				else if (strName == "BackStencilFunc")
-					depthStencilState.backStencilFunc = (RenderState::ComparisonFunc)(MappingStringArrayIdx(s_ComparisonFunc, RenderState::CF_MAXNUM, elementNode.attribute("value").as_string("")));
+					depthStencilState.backStencilFunc = magic_enum::enum_cast<RenderState::ComparisonFunc>(elementNode.attribute("value").as_string("")).value();
 				else if (strName == "BackStencilReadMask")
 					depthStencilState.backStencilReadMask = (ui16)elementNode.attribute("value").as_uint();
 				else if (strName == "BackStencilWriteMask")
 					depthStencilState.backStencilWriteMask = (ui16)elementNode.attribute("value").as_uint();
 				else if (strName == "BackStencilFailOP")
-					depthStencilState.backStencilFailOP = (DepthStencilState::StencilOperation)(MappingStringArrayIdx(s_StencilOperation, DepthStencilState::SOP_MAX, elementNode.attribute("value").as_string("")));
+					depthStencilState.backStencilFailOP = magic_enum::enum_cast<DepthStencilState::StencilOperation>( elementNode.attribute("value").as_string("")).value();
 				else if (strName == "BackStencilDepthFailOP")
-					depthStencilState.backStencilDepthFailOP = (DepthStencilState::StencilOperation)(MappingStringArrayIdx(s_StencilOperation, DepthStencilState::SOP_MAX, elementNode.attribute("value").as_string("")));
+					depthStencilState.backStencilDepthFailOP = magic_enum::enum_cast<DepthStencilState::StencilOperation>(elementNode.attribute("value").as_string("")).value();
 				else if (strName == "BackStencilPassOP")
-					depthStencilState.backStencilPassOP = (DepthStencilState::StencilOperation)(MappingStringArrayIdx(s_StencilOperation, DepthStencilState::SOP_MAX, elementNode.attribute("value").as_string("")));
+					depthStencilState.backStencilPassOP = magic_enum::enum_cast<DepthStencilState::StencilOperation>(elementNode.attribute("value").as_string("")).value();
 				else if (strName == "BackStencilRef")
 					depthStencilState.backStencilRef = elementNode.attribute("value").as_int();
 			}
