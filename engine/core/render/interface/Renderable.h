@@ -38,7 +38,7 @@ namespace Echo
 		struct ShaderParam
 		{
 			ui32			physicsIndex;
-			ShaderParamType stype;
+			ShaderParamType type;
 			const void*		data;
 			ui32			length;  // shader constance register num.
 		};
@@ -115,10 +115,10 @@ namespace Echo
 		ui32									m_identifier;
 		Render*									m_node = nullptr;
 		String									m_renderStage;
-		ShaderProgramPtr						m_shaderProgram;		// material
+		ShaderProgramPtr						m_shaderProgram;
 		Mesh*									m_mesh = nullptr;
-		MaxTextureArray							m_textures;				// now only one texture sampler.
-		vector<ShaderParam>::type				m_shaderParams;			// third shader params
+		MaxTextureArray							m_textures;
+		vector<ShaderParam>::type				m_shaderParams;
 		size_t									m_paramWriteIndex = 0;
 		BlendState*								m_blendState = nullptr;
 		RasterizerState*						m_rasterizerState = nullptr;

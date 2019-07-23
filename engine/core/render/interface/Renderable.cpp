@@ -89,7 +89,7 @@ namespace Echo
 		if (m_paramWriteIndex < m_shaderParams.size() && param)
 		{
 			m_shaderParams[m_paramWriteIndex].physicsIndex = static_cast<ui32>(physicsIndex);
-			m_shaderParams[m_paramWriteIndex].stype = type;
+			m_shaderParams[m_paramWriteIndex].type = type;
 			m_shaderParams[m_paramWriteIndex].data = param;
 			m_shaderParams[m_paramWriteIndex].length = static_cast<ui32>(num);
 			m_paramWriteIndex++;
@@ -106,7 +106,7 @@ namespace Echo
 		{
 			if (m_shaderParams[i].physicsIndex == physics)
             {
-                m_shaderParams[i].stype = type;
+                m_shaderParams[i].type = type;
                 m_shaderParams[i].data = param;
                 m_shaderParams[i].length = static_cast<ui32>(num);
                 
@@ -129,7 +129,7 @@ namespace Echo
 			for (size_t i = 0; i < m_shaderParams.size(); ++i)
 			{
 				ShaderParam& param = m_shaderParams[i];
-				switch (param.stype)
+				switch (param.type)
 				{
 				case SPT_VEC4:
 				case SPT_MAT4:
@@ -137,7 +137,7 @@ namespace Echo
 				case SPT_FLOAT:
 				case SPT_VEC2:
 				case SPT_VEC3:
-				case SPT_TEXTURE:	m_shaderProgram->setUniform(param.physicsIndex, param.data, param.stype, param.length);	break;
+				case SPT_TEXTURE:	m_shaderProgram->setUniform(param.physicsIndex, param.data, param.type, param.length);	break;
 				default:			EchoLogError("unknow shader param format! %s", m_node->getName().c_str());							break;
 				}
 			}
