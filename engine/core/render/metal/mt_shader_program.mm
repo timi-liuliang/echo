@@ -3,65 +3,23 @@
 #include "mt_mapping.h"
 #include "engine/core/log/Log.h"
 
-static const char* testMetalLibrary = R"(
-#include <metal_stdlib>
-
-using namespace metal;
-
-struct VertexIn
-{
-    float3 a_Position [[ attribute(0) ]];
-    float4 a_Color [[ attribute(1) ]];
-};
-
-struct RasterizerData
-{
-    float4 v_Position [[ position ]];
-    float4 v_Color;
-};
-
-struct UBO
-{
-    float alphaScale;
-};
-
-// vertex function
-vertex RasterizerData vertexShader(const VertexIn vIn [[ stage_in ]], constant UBO& ubo [[ buffer(0) ]])
-{
-    RasterizerData rd;
-    rd.v_Position = float4(vIn.a_Position, 1.0);
-    rd.v_Color = vIn.a_Color * ubo.alphaScale;
-    
-    return rd;
-}
-
-// fragment function
-fragment float4 fragmentShader(RasterizerData rd [[stage_in]])
-{
-    return rd.v_Color;
-}
-)";
-
 namespace Echo
 {
-    // create shader library
-    // https://fuchsia.googlesource.com/third_party/glfw/+/70297aeb493541072545760c379dd170ba54acbb/examples/metal.m
-    bool MTShaderProgram::createShaderProgram(const String& vsContent, const String& psContent)
+    static boolean_t createShader(const String& content, id<MTLLibrary>& oLibrary, id<MTLFunction>& oFunction)
     {
         id<MTLDevice> device = MTRenderer::instance()->getMetalDevice();
         if(device)
         {
-            NSString* sourceCode = [NSString stringWithUTF8String:testMetalLibrary];
+            NSString* sourceCode = [NSString stringWithUTF8String:content.c_str()];
             MTLCompileOptions* compileOptions = [MTLCompileOptions new];
             compileOptions.languageVersion = MTLLanguageVersion1_1;
             NSError* compileError = nullptr;
-            m_metalLibrary = [device newLibraryWithSource:sourceCode options:compileOptions error:&compileError];
+            oLibrary = [device newLibraryWithSource:sourceCode options:compileOptions error:&compileError];
             if(!compileError)
             {
-                m_metalVertexShader   = [m_metalLibrary newFunctionWithName:@"vertexShader"];
-                m_metalFragmentShader = [m_metalLibrary newFunctionWithName:@"fragmentShader"];
-                
-                return m_metalVertexShader && m_metalFragmentShader ? true : false;
+                oFunction   = [oLibrary newFunctionWithName:@"main0"];
+
+                return oFunction ? true : false;
             }
             else
             {
@@ -73,6 +31,17 @@ namespace Echo
         }
         
         return false;
+    }
+    
+    // create shader library
+    // https://fuchsia.googlesource.com/third_party/glfw/+/70297aeb493541072545760c379dd170ba54acbb/examples/metal.m
+    bool MTShaderProgram::createShaderProgram(const String& vsContent, const String& psContent)
+    {
+        bool isCreateVSSucceed = createShader(vsContent, m_metalVertexLibrary, m_metalVertexShader);
+        bool isCreatePSSucceed = createShader(psContent, m_metalFragmentLibrary, m_metalFragmentShader);
+        m_isValid = isCreateVSSucceed && isCreatePSSucceed;
+        
+        return m_isValid;
     }
     
     // reference https://github.com/bkaradzic/bgfx/issues/960

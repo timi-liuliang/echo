@@ -12,24 +12,23 @@ namespace Echo
     MTRenderable::MTRenderable(const String& renderStage, ShaderProgram* shader, int identifier)
         : Renderable( renderStage, shader, identifier)
     {
-        m_metalRenderPipelineDescriptor = [[MTLRenderPipelineDescriptor alloc] init];
-        
         // assign vertex and frament shader
         MTShaderProgram* mtShaderProgram = ECHO_DOWN_CAST<MTShaderProgram*>(shader);
-        if(mtShaderProgram)
+        if(mtShaderProgram && mtShaderProgram->isValid())
         {
+            m_metalRenderPipelineDescriptor = [[MTLRenderPipelineDescriptor alloc] init];
             [m_metalRenderPipelineDescriptor setVertexFunction:mtShaderProgram->getMetalVertexFunction()];
             [m_metalRenderPipelineDescriptor setFragmentFunction:mtShaderProgram->getMetalFragmentFunction()];
+            
+            // specify the target-texture pixel format
+            m_metalRenderPipelineDescriptor.colorAttachments[0].pixelFormat = MTLPixelFormatBGRA8Unorm;
         }
-        
-        // specify the target-texture pixel format
-        m_metalRenderPipelineDescriptor.colorAttachments[0].pixelFormat = MTLPixelFormatBGRA8Unorm;
     }
     
     void MTRenderable::buildRenderPipelineState()
     {
         id<MTLDevice> device = MTRenderer::instance()->getMetalDevice();
-        if(device)
+        if(device && m_metalRenderPipelineDescriptor)
         {
             // clear
             if(m_metalRenderPipelineState)
@@ -87,7 +86,7 @@ namespace Echo
     {
         String attributeName = MTMapping::MapVertexSemanticString(semantic);
         MTShaderProgram* mtShaderProgram = ECHO_DOWN_CAST<MTShaderProgram*>(m_shaderProgram.ptr());
-        if(mtShaderProgram)
+        if(mtShaderProgram && mtShaderProgram->isValid())
         {
             id<MTLFunction> vertexShader = mtShaderProgram->getMetalVertexFunction();
             for(i32 idx=0; idx<vertexShader.vertexAttributes.count; idx++)

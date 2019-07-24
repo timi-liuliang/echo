@@ -10,14 +10,17 @@ namespace Echo
      */
 	class MTShaderProgram : public ShaderProgram
 	{
-    public:        
+    public:
+        // is valid
+        bool isValid() { m_isValid; }
+        
         // get mtl function
         id<MTLFunction> getMetalVertexFunction() { return m_metalVertexShader; }
         id<MTLFunction> getMetalFragmentFunction() { return m_metalFragmentShader; }
         
         // bind
         virtual void bindUniforms() override;
-        virtual void bindRenderable(Renderable* renderable);
+        virtual void bindRenderable(Renderable* renderable) override;
         
     public:
         // parse uniforms
@@ -31,8 +34,10 @@ namespace Echo
         void addUniform(MTLArgument* arg);
         
     private:
-        id<MTLLibrary>      m_metalLibrary;
-        id<MTLFunction>     m_metalVertexShader;
-        id<MTLFunction>     m_metalFragmentShader;
+        bool                m_isValid = false;
+        id<MTLLibrary>      m_metalVertexLibrary = nullptr;
+        id<MTLLibrary>      m_metalFragmentLibrary = nullptr;
+        id<MTLFunction>     m_metalVertexShader = nullptr;
+        id<MTLFunction>     m_metalFragmentShader = nullptr;
 	};
 }
