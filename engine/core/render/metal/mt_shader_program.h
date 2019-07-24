@@ -12,7 +12,7 @@ namespace Echo
 	{
     public:
         // is valid
-        bool isValid() { m_isValid; }
+        bool isValid() { return m_isValid; }
         
         // get mtl function
         id<MTLFunction> getMetalVertexFunction() { return m_metalVertexShader; }
