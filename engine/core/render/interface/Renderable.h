@@ -34,16 +34,6 @@ namespace Echo
 		friend class Renderer;
 		typedef array<Texture*, MAX_TEXTURE_SAMPLER> MaxTextureArray;
 	public:
-		// Param structure
-		struct ShaderParam
-		{
-			ui32			physicsIndex;
-			ShaderParamType type;
-			const void*		data;
-			ui32			length;  // shader constance register num.
-		};
-
-	public:
 		// identifier
 		ui32 getIdentifier() const { return m_identifier; }
 
@@ -58,10 +48,7 @@ namespace Echo
 		void setMesh(Mesh* mesh);
 
 		// param operate
-		void beginShaderParams(size_t paramNum);
-		void endShaderParams();
-		void setShaderParam(size_t physicsIndex, ShaderParamType type, const void* param, size_t num=1);
-		void modifyShaderParam(ui32 physicsIndex, ShaderParamType type, void* param, size_t num=1);
+		virtual void setShaderParam(const String& name, ShaderParamType type, const void* param, size_t num=1)=0;
 
 		// texture
 		void setTexture( ui32 stage, Texture* texture);
@@ -89,10 +76,8 @@ namespace Echo
 		void setDepthStencilState(DepthStencilState* state);
 		DepthStencilState* getDepthStencilState() { return m_depthStencil; }
 
-		// set node
+		// node(owner)
 		void setNode( Render* node) { m_node = node; }
-
-		// get node
 		Render* getNode() { return m_node; }
 
 		// get shader
@@ -101,7 +86,7 @@ namespace Echo
 	protected:
 		// bind
 		void bindTextures();
-		void bindShaderParams();
+		virtual void bindShaderParams() = 0;
 		void bindRenderState();
 
 		// link shader and program
@@ -118,8 +103,6 @@ namespace Echo
 		ShaderProgramPtr						m_shaderProgram;
 		Mesh*									m_mesh = nullptr;
 		MaxTextureArray							m_textures;
-		vector<ShaderParam>::type				m_shaderParams;
-		size_t									m_paramWriteIndex = 0;
 		BlendState*								m_blendState = nullptr;
 		RasterizerState*						m_rasterizerState = nullptr;
 		DepthStencilState*						m_depthStencil = nullptr;

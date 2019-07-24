@@ -8,6 +8,15 @@ namespace Echo
 	class GLES2Renderable : public Renderable
 	{
 	public:
+		// Param structure
+		struct ShaderParam
+		{
+			ui32			physicsIndex;
+			ShaderParamType type;
+			const void*		data;
+			ui32			length;  // shader constance register num.
+		};
+
 		// vertex stream bind state(for multi stream)
 		enum BindState
 		{
@@ -46,11 +55,17 @@ namespace Echo
 		GLES2Renderable(const String& renderStage, ShaderProgram* shader, int identifier);
 		~GLES2Renderable();
 
-		// 绑定几何体数据
+		// bind geometry data
 		void bind( Renderable* pre);
 
-		// 解绑几何体数据
+		// unbind geometry data
 		void unbind();
+
+		// param operate
+		virtual void setShaderParam(const String& name, ShaderParamType type, const void* param, size_t num=1) override;
+
+		// bind shader params
+		virtual void bindShaderParams() = 0;
 
 	private:
 		virtual void link() override;
@@ -58,16 +73,17 @@ namespace Echo
 		// bind vertex stream
 		bool bindVertexStream(const VertexElementList& vertElements, GPUBuffer* vertexBuffer, int flag = BS_BEGIN | BS_END);
 
-		// 计算顶点流声明
+		// build vertex declaration
 		virtual bool buildVertStreamDeclaration(StreamUnit* stream);
 
-		// 生成顶点流Hash值(BKDR Hash)
+		// generate stream hash
 		virtual void generateVertexStreamHash();
 
 	private:
-		vector<StreamUnit>::type	m_vertexStreams;
-		unsigned int				m_vertexStreamsHash;
-		bool						m_is_muti_stream;
-		GLuint						m_vao;					// 顶点数组(OpenGLES 3.0)
+		map<String, ShaderParam>::type	m_shaderParams;
+		vector<StreamUnit>::type		m_vertexStreams;
+		unsigned int					m_vertexStreamsHash;
+		bool							m_is_muti_stream;
+		GLuint							m_vao;
 	};
 }

@@ -19,9 +19,50 @@ namespace Echo
 		, m_vao( -1)
 	{
 	}
-	
+
 	GLES2Renderable::~GLES2Renderable()
 	{
+		m_shaderParams.clear();
+	}
+
+	void GLES2Renderable::setShaderParam(const String& name, ShaderParamType type, const void* param, size_t num/* =1 */)
+	{
+		if (m_paramWriteIndex < m_shaderParams.size() && param)
+		{
+			m_shaderParams[m_paramWriteIndex].physicsIndex = static_cast<ui32>(physicsIndex);
+			m_shaderParams[m_paramWriteIndex].type = type;
+			m_shaderParams[m_paramWriteIndex].data = param;
+			m_shaderParams[m_paramWriteIndex].length = static_cast<ui32>(num);
+			m_paramWriteIndex++;
+		}
+		else
+		{
+			EchoLogError("Renderable::setShaderParam failed %s", m_node->getName().c_str());
+		}
+	}
+
+	void GLES2Renderable::bindShaderParams()
+	{
+		bindTextures();
+
+		if (m_shaderProgram)
+		{
+			for (size_t i = 0; i < m_shaderParams.size(); ++i)
+			{
+				ShaderParam& param = m_shaderParams[i];
+				switch (param.type)
+				{
+				case SPT_VEC4:
+				case SPT_MAT4:
+				case SPT_INT:
+				case SPT_FLOAT:
+				case SPT_VEC2:
+				case SPT_VEC3:
+				case SPT_TEXTURE:	m_shaderProgram->setUniform(param.physicsIndex, param.data, param.type, param.length);	break;
+				default:			EchoLogError("unknow shader param format! %s", m_node->getName().c_str());							break;
+				}
+			}
+		}
 	}
 
 	void GLES2Renderable::link()
@@ -47,7 +88,7 @@ namespace Echo
 
 		return true;
 	}
-	
+
 	void GLES2Renderable::bind(Renderable* pre)
 	{
 		GPUBuffer* idxBuffer = m_mesh->getIndexBuffer();
@@ -101,7 +142,7 @@ namespace Echo
 			((GLES2GPUBuffer*)idxBuffer)->bindBuffer();
 		}
 	}
-	
+
 	// unbind
 	void GLES2Renderable::unbind()
 	{
@@ -137,10 +178,10 @@ namespace Echo
 			EchoLogError("Vertex elements size error, buildVertStreamDeclaration failed.");
 			return false;
 		}
-			
+
 		stream->m_vertDeclaration.reserve(numVertElms);
 		stream->m_vertDeclaration.resize(numVertElms);
-		
+
 		GLES2ShaderProgram* gles2Program = ECHO_DOWN_CAST<GLES2ShaderProgram*>(m_shaderProgram.ptr());
 		ui32 elmOffset = 0;
 		for (size_t i = 0; i < numVertElms; ++i)

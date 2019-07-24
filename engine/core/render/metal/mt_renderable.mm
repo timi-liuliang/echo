@@ -134,4 +134,14 @@ namespace Echo
             buildRenderPipelineState();
         }
     }
+    
+    void MTRenderable::setShaderParam(const String& name, ShaderParamType type, const void* data, size_t num)
+    {
+        int a = 10;
+    }
+    
+    void MTRenderable::bindShaderParams()
+    {
+        
+    }
 }
