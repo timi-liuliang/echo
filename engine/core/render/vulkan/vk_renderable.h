@@ -12,5 +12,8 @@ namespace Echo
 
         // link shader and program
         virtual void link() override {}
+
+		// param operate
+		virtual void setShaderParam(const String& name, ShaderParamType type, const void* param, size_t num = 1) {}
 	};
 }

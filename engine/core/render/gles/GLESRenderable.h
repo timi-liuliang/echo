@@ -65,7 +65,7 @@ namespace Echo
 		virtual void setShaderParam(const String& name, ShaderParamType type, const void* param, size_t num=1) override;
 
 		// bind shader params
-		virtual void bindShaderParams() = 0;
+		virtual void bindShaderParams();
 
 	private:
 		virtual void link() override;

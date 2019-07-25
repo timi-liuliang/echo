@@ -6,7 +6,9 @@
 #include "GLESGPUBuffer.h"
 #include <engine/core/util/AssertX.h>
 #include <engine/core/util/Exception.h>
+#include "engine/core/scene/render_node.h"
 #include "interface/image/PixelFormat.h"
+#include "interface/Renderer.h"
 #include "GLESMapping.h"
 
 
@@ -27,18 +29,13 @@ namespace Echo
 
 	void GLES2Renderable::setShaderParam(const String& name, ShaderParamType type, const void* param, size_t num/* =1 */)
 	{
-		if (m_paramWriteIndex < m_shaderParams.size() && param)
-		{
-			m_shaderParams[m_paramWriteIndex].physicsIndex = static_cast<ui32>(physicsIndex);
-			m_shaderParams[m_paramWriteIndex].type = type;
-			m_shaderParams[m_paramWriteIndex].data = param;
-			m_shaderParams[m_paramWriteIndex].length = static_cast<ui32>(num);
-			m_paramWriteIndex++;
-		}
-		else
-		{
-			EchoLogError("Renderable::setShaderParam failed %s", m_node->getName().c_str());
-		}
+		ShaderParam sp;
+		sp.physicsIndex = m_shaderProgram->getParamPhysicsIndex(name);
+		sp.type = type;
+		sp.data = param;
+		sp.length = num;
+
+		m_shaderParams[name] = sp;
 	}
 
 	void GLES2Renderable::bindShaderParams()
@@ -47,9 +44,9 @@ namespace Echo
 
 		if (m_shaderProgram)
 		{
-			for (size_t i = 0; i < m_shaderParams.size(); ++i)
+			for (auto& it : m_shaderParams)
 			{
-				ShaderParam& param = m_shaderParams[i];
+				ShaderParam& param = it.second;
 				switch (param.type)
 				{
 				case SPT_VEC4:
@@ -59,7 +56,7 @@ namespace Echo
 				case SPT_VEC2:
 				case SPT_VEC3:
 				case SPT_TEXTURE:	m_shaderProgram->setUniform(param.physicsIndex, param.data, param.type, param.length);	break;
-				default:			EchoLogError("unknow shader param format! %s", m_node->getName().c_str());							break;
+				default:			EchoLogError("unknow shader param format! %s", m_node->getName().c_str());				break;
 				}
 			}
 		}

@@ -86,7 +86,7 @@ namespace Echo
 	protected:
 		// bind
 		void bindTextures();
-		virtual void bindShaderParams() = 0;
+		virtual void bindShaderParams() {}
 		void bindRenderState();
 
 		// link shader and program
