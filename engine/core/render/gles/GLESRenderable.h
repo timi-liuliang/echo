@@ -8,15 +8,6 @@ namespace Echo
 	class GLES2Renderable : public Renderable
 	{
 	public:
-		// Param structure
-		struct ShaderParam
-		{
-			ui32			physicsIndex;
-			ShaderParamType type;
-			const void*		data;
-			ui32			length;  // shader constance register num.
-		};
-
 		// vertex stream bind state(for multi stream)
 		enum BindState
 		{
@@ -61,9 +52,6 @@ namespace Echo
 		// unbind geometry data
 		void unbind();
 
-		// param operate
-		virtual void setShaderParam(const String& name, ShaderParamType type, const void* param, size_t num=1) override;
-
 		// bind shader params
 		virtual void bindShaderParams();
 
@@ -80,7 +68,6 @@ namespace Echo
 		virtual void generateVertexStreamHash();
 
 	private:
-		map<String, ShaderParam>::type	m_shaderParams;
 		vector<StreamUnit>::type		m_vertexStreams;
 		unsigned int					m_vertexStreamsHash;
 		bool							m_is_muti_stream;

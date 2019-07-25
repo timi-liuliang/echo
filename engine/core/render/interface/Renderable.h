@@ -34,6 +34,16 @@ namespace Echo
 		friend class Renderer;
 		typedef array<Texture*, MAX_TEXTURE_SAMPLER> MaxTextureArray;
 	public:
+		// Param structure
+		struct ShaderParam
+		{
+			ui32			physicsIndex;
+			ShaderParamType type;
+			const void*		data;
+			ui32			length;  // shader constance register num.
+		};
+
+	public:
 		// identifier
 		ui32 getIdentifier() const { return m_identifier; }
 
@@ -48,7 +58,7 @@ namespace Echo
 		void setMesh(Mesh* mesh);
 
 		// param operate
-		virtual void setShaderParam(const String& name, ShaderParamType type, const void* param, size_t num=1)=0;
+		virtual void setShaderParam(const String& name, ShaderParamType type, const void* param, size_t num=1);
 
 		// texture
 		void setTexture( ui32 stage, Texture* texture);
@@ -101,6 +111,7 @@ namespace Echo
 		Render*									m_node = nullptr;
 		String									m_renderStage;
 		ShaderProgramPtr						m_shaderProgram;
+		map<String, ShaderParam>::type			m_shaderParams;
 		Mesh*									m_mesh = nullptr;
 		MaxTextureArray							m_textures;
 		BlendState*								m_blendState = nullptr;
