@@ -31,9 +31,6 @@ namespace Echo
 		MTRenderable(const String& renderStage, ShaderProgram* shader, int identifier);
         virtual ~MTRenderable() {}
         
-        // param operate
-        virtual void setShaderParam(const String& name, ShaderParamType type, const void* data, size_t num=1) override;
-        
     public:
         // get render pipelinestate
         id<MTLRenderPipelineState> getMetalRenderPipelineState() { return m_metalRenderPipelineState; }

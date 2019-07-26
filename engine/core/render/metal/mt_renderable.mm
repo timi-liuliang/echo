@@ -134,13 +134,17 @@ namespace Echo
         }
     }
     
-    void MTRenderable::setShaderParam(const String& name, ShaderParamType type, const void* data, size_t num)
-    {
-        int a = 10;
-    }
-    
     void MTRenderable::bindShaderParams()
     {
+        bindTextures();
         
+        if(m_shaderProgram)
+        {
+            for(auto& it : m_shaderParams)
+            {
+                ShaderParam& uniform = it.second;
+                m_shaderProgram->setUniform( uniform.name.c_str(), uniform.data, uniform.type, uniform.length);
+            }
+        }
     }
 }

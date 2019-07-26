@@ -183,9 +183,6 @@ namespace Echo
                 // index offset
                 NSUInteger idxOffset = mesh->getStartIndex() * mesh->getIndexStride();
                 
-                float CA = 0;
-                
-                [m_metalRenderCommandEncoder setVertexBytes:&CA length:sizeof(float) atIndex:0];
                 [m_metalRenderCommandEncoder setRenderPipelineState: mtRenderable->getMetalRenderPipelineState()];
                 [m_metalRenderCommandEncoder setVertexBuffer:mtRenderable->getMetalVertexBuffer() offset:0 atIndex:0];
                 [m_metalRenderCommandEncoder drawIndexedPrimitives:primitiveType indexCount:idxCount indexType:idxType indexBuffer:mtRenderable->getMetalIndexBuffer() indexBufferOffset:idxOffset];
@@ -195,8 +192,6 @@ namespace Echo
                 ui32 startVert = mesh->getStartVertex();
                 ui32 vertCount = mesh->getVertexCount();
                 
-                float CA = 0;
-                [m_metalRenderCommandEncoder setVertexBytes:&CA length:sizeof(float) atIndex:0];
                 [m_metalRenderCommandEncoder setRenderPipelineState: mtRenderable->getMetalRenderPipelineState()];
                 [m_metalRenderCommandEncoder setVertexBuffer:mtRenderable->getMetalVertexBuffer() offset:0 atIndex:0];
                 [m_metalRenderCommandEncoder drawPrimitives:primitiveType vertexStart:startVert vertexCount:vertCount];

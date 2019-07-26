@@ -31,7 +31,10 @@ namespace Echo
         virtual bool createShaderProgram(const String& vsContent, const String& psContent) override;
         
         // add uniform
-        void addUniform(MTLArgument* arg);
+        void addUniform(MTLArgument* arg, ShaderType shaderType);
+        
+        // alloc uniform bytes
+        void allocUniformBytes();
         
     private:
         bool                m_isValid = false;
@@ -39,5 +42,7 @@ namespace Echo
         id<MTLLibrary>      m_metalFragmentLibrary = nullptr;
         id<MTLFunction>     m_metalVertexShader = nullptr;
         id<MTLFunction>     m_metalFragmentShader = nullptr;
+        vector<Byte>::type  m_vertexShaderUniformBytes;
+        vector<Byte>::type  m_fragmentShaderUniformBytes;
 	};
 }

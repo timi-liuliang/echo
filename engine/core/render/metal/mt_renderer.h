@@ -89,6 +89,9 @@ namespace Echo
         // get metal native device
         id<MTLDevice> getMetalDevice() { return m_metalDevice; }
         
+        // get metal render command encoder
+        id<MTLRenderCommandEncoder> getMetalRenderCommandEncoder() { return m_metalRenderCommandEncoder; }
+        
     private:
         // make view metal compatible
         NSView* makeViewMetalCompatible(void* handle);
