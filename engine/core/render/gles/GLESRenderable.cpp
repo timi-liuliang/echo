@@ -44,7 +44,7 @@ namespace Echo
 				case SPT_FLOAT:
 				case SPT_VEC2:
 				case SPT_VEC3:
-				case SPT_TEXTURE:	m_shaderProgram->setUniform(param.physicsIndex, param.data, param.type, param.length);	break;
+				case SPT_TEXTURE:	m_shaderProgram->setUniform(param.name.c_str(), param.data, param.type, param.length);	break;
 				default:			EchoLogError("unknow shader param format! %s", m_node->getName().c_str());				break;
 				}
 			}

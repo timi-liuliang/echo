@@ -146,7 +146,7 @@ namespace Echo
 	void Renderable::setShaderParam(const String& name, ShaderParamType type, const void* param, size_t num/* =1 */)
 	{
 		ShaderParam sp;
-		sp.physicsIndex = m_shaderProgram->getParamPhysicsIndex(name);
+		sp.name = name;
 		sp.type = type;
 		sp.data = param;
 		sp.length = num;

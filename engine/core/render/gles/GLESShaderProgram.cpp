@@ -106,11 +106,9 @@ namespace Echo
 		m_isLinked = true;
 		EchoLogDebug("Link shaders successd.");
 
-		// 记录常量信息
+		// remember uniforms info
 		GLint activeUniformLength;
 		OGLESDebug(glGetProgramiv(m_glesProgram, GL_ACTIVE_UNIFORMS, &activeUniformLength));
-
-		// 记录常量信息
 		for (GLint i = 0; i < activeUniformLength; i++)
 		{
 			char    unifromName[512];
@@ -125,7 +123,7 @@ namespace Echo
 			desc.m_count = uniformSize;
 			desc.m_sizeInBytes = desc.m_count * getUniformByteSizeByUniformType(desc.m_type);
 			desc.m_location = glGetUniformLocation(m_glesProgram, desc.m_name.c_str());
-			m_uniforms[desc.m_location] = desc;
+			m_uniforms[desc.m_name] = desc;
 		}
 
 		for (ui32 i = 0; i < VS_MAX; ++i)
@@ -164,7 +162,7 @@ namespace Echo
 						default:			EchoAssertX(0, "unknow shader param format!");													break;
 					}
 
-					// 修改状态
+					// dirty flag
 					uniform.m_isDirty = false;
 				}
 			}

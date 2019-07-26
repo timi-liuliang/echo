@@ -30,10 +30,20 @@ namespace Echo
 		ECHO_RES(ShaderProgram, Res, ".shader", ShaderProgram::create, ShaderProgram::load);
 
 	public:
+		// ShaderType
+		enum ShaderType
+		{
+			VS = 0,
+			FS,
+			CS,
+			Total,
+		};
+
         // Uniform
         struct Uniform
         {
             String              m_name = "UnKnown";
+			ShaderType			m_shader = ShaderType::Total;
             ShaderParamType     m_type = SPT_UNKNOWN;
             int                 m_count = -1;
             int                 m_sizeInBytes = 0;
@@ -50,7 +60,7 @@ namespace Echo
             // set value
 			void setValue(const void* value);
         };
-        typedef std::map<int, Uniform> UniformArray;
+        typedef std::map<String, Uniform> UniformArray;
         
 		struct DefaultUniform
 		{
@@ -95,13 +105,9 @@ namespace Echo
 		// clear
 		void clear();
         
-    public: 
-        // get physics index by uniform name
-        virtual int getParamPhysicsIndex(const String& paramName);
-        
+    public:   
         // set uniform
         void setUniform(const char* name, const void* value, ShaderParamType uniformType, ui32 count);
-        virtual void setUniform(ui32 physicIdx, const void* value, ShaderParamType uniformType, ui32 count);
         
         // uniform operate
         UniformArray* getUniforms(){ return &m_uniforms; }
@@ -112,9 +118,6 @@ namespace Echo
 
 		// bind renderable
 		virtual void bindRenderable(Renderable* renderable) {}
-
-		// get attribute location
-		virtual i32 getAtrribLocation(VertexSemantic vertexSemantic) { return 0; }
 
 		// ByteSize
 		static int getUniformByteSizeByUniformType(ShaderParamType uniformType);

@@ -37,7 +37,7 @@ namespace Echo
 		virtual void bindRenderable(Renderable* renderable) override;
 
 		// get attribute location
-		virtual i32 getAtrribLocation(VertexSemantic vertexSemantic) override;
+		i32 getAtrribLocation(VertexSemantic vertexSemantic);
 
 		// Create
 		virtual bool createShaderProgram(const String& vsContent, const String& psContent) override;

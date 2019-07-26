@@ -37,7 +37,7 @@ namespace Echo
 		// Param structure
 		struct ShaderParam
 		{
-			ui32			physicsIndex;
+			String			name;
 			ShaderParamType type;
 			const void*		data;
 			ui32			length;  // shader constance register num.

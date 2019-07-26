@@ -577,37 +577,18 @@ namespace Echo
 
 	}
     
-    int ShaderProgram::getParamPhysicsIndex(const String& paramName)
-    {
-        for (UniformArray::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++)
-        {
-            if (it->second.m_name == paramName)
-                return it->second.m_location;
-        }
-        
-        EchoLogError("%getParamPhysicsIndex failed");
-        return 0;
-    }
-    
     void ShaderProgram::setUniform( const char* name, const void* value, ShaderParamType uniformType, ui32 count)
     {
-        setUniform(getParamPhysicsIndex(name), value, uniformType, count);
-    }
-    
-    void ShaderProgram::setUniform(ui32 physicIdx, const void* value, ShaderParamType uniformType, ui32 count)
-    {
-        EchoAssert(value);
-        
-        UniformArray::iterator it = m_uniforms.find(physicIdx);
-        if (it != m_uniforms.end())
-        {
-            Uniform& uniform = it->second;
-            uniform.setValue(value);
-        }
-        else
-        {
-            EchoLogError("ShaderProgram uniform [%d] not exist!", physicIdx);
-        }
+		UniformArray::iterator it = m_uniforms.find(name);
+		if (it != m_uniforms.end())
+		{
+			Uniform& uniform = it->second;
+			uniform.setValue(value);
+		}
+		else
+		{
+			EchoLogError("ShaderProgram uniform [%d] not exist!", name);
+		}
     }
  
 	int ShaderProgram::getUniformByteSizeByUniformType(ShaderParamType uniformType)
