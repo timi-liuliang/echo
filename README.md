@@ -38,7 +38,7 @@ Scene manager is easy, No Entiy, No GameObject, No Component, No Prefab. Only No
 iOS Android Html5 Windows Mac Linux Steam  
 
 ### New Industry Standard Support
-gLtf2.0, Vulkan, Pbr, Real time ray tracing.
+gLtf2.0, Vulkan, Metal, Pbr, Real time ray tracing.
 
 ### 2D And 3D Seamless Transition  
 Every node can be 2d or 3d. The core difference is the camera and the unit the node use. So you can just switch a node to 2d or 3d easily.
