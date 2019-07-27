@@ -26,7 +26,7 @@ void main(void)
 {
     vec4 position = /*u_WorldMatrix */ vec4(a_Position, 1.0);
     
-    v_Position  = position.xyz;
+    v_Position  = (ubo.u_WorldMatrix * position).xyz;
     gl_Position = ubo.u_ViewProjMatrix * position;
     
     v_Color = a_Color;

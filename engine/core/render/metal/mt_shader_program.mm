@@ -110,7 +110,7 @@ namespace Echo
                 vector<Byte>::type& uniformBytes = uniform.m_shader == ShaderType::VS ? m_vertexShaderUniformBytes : m_fragmentShaderUniformBytes;
                 if(uniform.m_type != SPT_TEXTURE)
                 {
-                    std::memcpy(uniformBytes.data()+uniform.m_location, uniform.m_value, uniform.m_sizeInBytes);
+                    std::memcpy(uniformBytes.data()+uniform.m_location, uniform.m_value, uniform.m_sizeInBytes*sizeof(Byte));
                 }
                 else
                 {

@@ -111,6 +111,8 @@ namespace Echo
         ui32 numVertElms = static_cast<ui32>(stream->m_vertElements.size());
         if (numVertElms > 0)
         {
+            // buffer 0 was used by uniform buffer
+            const i32 bufferIdx = 1;
             ui32 elementOffset = 0;
             for (size_t i = 0; i < numVertElms; ++i)
             {
@@ -119,14 +121,14 @@ namespace Echo
                 {
                     ui32 attributeIdx = mtlAttribute.attributeIndex;
                     m_metalVertexDescriptor.attributes[attributeIdx].format = MTMapping::MapVertexFormat(stream->m_vertElements[i].m_pixFmt);
-                    m_metalVertexDescriptor.attributes[attributeIdx].bufferIndex = 0;
+                    m_metalVertexDescriptor.attributes[attributeIdx].bufferIndex = bufferIdx;
                     m_metalVertexDescriptor.attributes[attributeIdx].offset = elementOffset;
                 }
                 
                 elementOffset += PixelUtil::GetPixelSize(stream->m_vertElements[i].m_pixFmt);
             }
             
-            m_metalVertexDescriptor.layouts[0].stride = elementOffset;
+            m_metalVertexDescriptor.layouts[bufferIdx].stride = elementOffset;
             [m_metalRenderPipelineDescriptor setVertexDescriptor:m_metalVertexDescriptor];
             
             // update render pipeline state
