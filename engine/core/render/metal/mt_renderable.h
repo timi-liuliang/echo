@@ -39,12 +39,12 @@ namespace Echo
         id<MTLBuffer> getMetalIndexBuffer();
         id<MTLBuffer> getMetalVertexBuffer();
         
+        // bind shader uniforms
+        void bindShaderParams();
+        
     private:
         // link
         virtual void link() override;
-        
-        // bind shader uniforms
-        virtual void bindShaderParams() override;
         
         // bind vertex stream
         bool bindVertexStream(const VertexElementList& vertElements, GPUBuffer* vertexBuffer, int flag = BS_BEGIN | BS_END);

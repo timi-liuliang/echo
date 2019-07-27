@@ -163,6 +163,14 @@ namespace Echo
     void MTRenderer::draw(Renderable* renderable)
     {
         MTRenderable* mtRenderable = ECHO_DOWN_CAST<MTRenderable*>(renderable);
+        ShaderProgram* shaderProgram = renderable->getShader();
+        shaderProgram->bind();
+        mtRenderable->bindRenderState();
+        mtRenderable->bindShaderParams();
+        shaderProgram->bindUniforms();
+        shaderProgram->bindRenderable(renderable);
+        
+
         if(m_metalRenderPassDescriptor && mtRenderable && mtRenderable->getMetalRenderPipelineState())
         {
             Mesh* mesh = renderable->getMesh();
@@ -197,6 +205,8 @@ namespace Echo
                 [m_metalRenderCommandEncoder drawPrimitives:primitiveType vertexStart:startVert vertexCount:vertCount];
             }
         }
+        
+        shaderProgram->unbind();
     }
     
     bool MTRenderer::present()
