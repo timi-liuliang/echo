@@ -38,8 +38,6 @@ namespace Echo
 			StreamUnit()
 				: m_buffer(NULL)
 			{}
-
-			bool isUsedFor(VertexSemantic);
 		};
 
 	public:
@@ -53,7 +51,7 @@ namespace Echo
 		void unbind();
 
 		// bind shader params
-		virtual void bindShaderParams();
+		void bindShaderParams();
 
 	private:
 		virtual void link() override;
