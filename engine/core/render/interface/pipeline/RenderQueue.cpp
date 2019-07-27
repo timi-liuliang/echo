@@ -20,12 +20,17 @@ namespace Echo
 
 	void RenderQueue::render()
 	{
-		for (RenderableID id : m_renderables)
+		Renderer* render = Renderer::instance();
+		if (render)
 		{
-			Renderable* renderable = Renderer::instance()->getRenderable( id);
-			if( renderable)
-				renderable->render();
+			for (RenderableID id : m_renderables)
+			{
+				Renderable* renderable = Renderer::instance()->getRenderable(id);
+				if (renderable)
+					render->draw(renderable);
+			}
 		}
+
 
 		m_renderables.clear();
 	}

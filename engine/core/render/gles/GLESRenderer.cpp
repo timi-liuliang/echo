@@ -238,6 +238,16 @@ namespace Echo
 
 	void GLES2Renderer::draw(Renderable* renderable)
 	{
+		GLES2Renderable* glesRenderable = (GLES2Renderable*)renderable;
+
+		ShaderProgram* shaderProgram = renderable->getShader();
+		shaderProgram->bind();
+		glesRenderable->bindRenderState();
+		glesRenderable->bindShaderParams();
+		shaderProgram->bindUniforms();
+		shaderProgram->bindRenderable(renderable);
+
+
 		Mesh* mesh = renderable->getMesh();
 
 		// set the type of primitive that should be rendered from this vertex buffer
@@ -275,6 +285,8 @@ namespace Echo
 				EchoLogError("GLES2Renderer::render failed!");
 			}
 		}
+
+		shaderProgram->unbind();
 	}
 
 	void GLES2Renderer::getDepthRange(Vector2& vec)

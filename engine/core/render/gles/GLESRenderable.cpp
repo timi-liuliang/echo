@@ -68,7 +68,7 @@ namespace Echo
 
 		m_vertexStreams.push_back(unit);
 
-		// 生成Hash值
+		// generate hash value
 		if (flag & BS_END)
 			generateVertexStreamHash();
 
@@ -80,7 +80,7 @@ namespace Echo
 		GPUBuffer* idxBuffer = m_mesh->getIndexBuffer();
 		GPUBuffer* preIdxBuffer = pre ? pre->getMesh()->getIndexBuffer() : nullptr;
 
-		// 1.确定顶点流索引流是否需要设置
+		// 1. is need set vertex buffer
 		bool isNeedSetVertexBuffer;
 		bool isNeedSetIdxBuffer;
 		if (!pre)
@@ -98,7 +98,7 @@ namespace Echo
 			isNeedSetIdxBuffer = (!idxBuffer || preIdxBuffer == idxBuffer) ? false : true;
 		}
 
-		// 绑定顶点流
+		// bind vertex stream
 		if (isNeedSetVertexBuffer)
 		{
 			for (i32 i = (i32)(m_vertexStreams.size() - 1); i >= 0; i--)
@@ -133,7 +133,7 @@ namespace Echo
 	void GLES2Renderable::unbind()
 	{
 #ifndef ECHO_PLATFORM_MAC_IOS
-		// 绑定顶点流
+		// bind vertex stream
   		for (size_t i = 0; i < m_vertexStreams.size(); i++)
   		{
   			const StreamUnit& streamUnit = m_vertexStreams[i];
@@ -149,11 +149,6 @@ namespace Echo
   			}
   		}
 #endif
-
-		//OGLESDebug(glBindBuffer(GL_ARRAY_BUFFER, 0));
-
-		//if(m_pIdxBuff)
-		//	OGLESDebug(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 	}
 
 	bool GLES2Renderable::buildVertStreamDeclaration(StreamUnit* stream)
@@ -178,12 +173,6 @@ namespace Echo
 			stream->m_vertDeclaration[i].bNormalize = PixelUtil::IsNormalized(stream->m_vertElements[i].m_pixFmt);
 			stream->m_vertDeclaration[i].elementOffset = elmOffset;
 			elmOffset += PixelUtil::GetPixelSize(stream->m_vertElements[i].m_pixFmt);
-
-			//if (stream->m_vertDeclaration[i].m_attribute == -1)
-			//{
-				//String name = GLES2Mapping::MapVertexSemanticString(stream->m_vertElements[i].m_semantic);
-				//EchoLogError("Vertex Attribute [%s] is not enable in [%s] Material", name.c_str(), gles2Program->getMaterialName().c_str());
-			//}
 		}
 
 		if (false == m_is_muti_stream)

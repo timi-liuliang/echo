@@ -93,22 +93,6 @@ namespace Echo
 		}
 	}
 
-	void Renderable::render()
-	{
-		if (m_shaderProgram)
-		{
-			m_shaderProgram->bind();
-			bindRenderState();
-			bindShaderParams();
-            m_shaderProgram->bindUniforms();
-            m_shaderProgram->bindRenderable(this);
-
-			Renderer::instance()->draw( this);
-            
-            m_shaderProgram->unbind();
-		}
-	}
-
 	void Renderable::submitToRenderQueue()
 	{
 		if (m_mesh->isValid())

@@ -66,9 +66,6 @@ namespace Echo
 
 		// submit to renderqueue
 		void submitToRenderQueue();
-
-		// exec render
-		virtual void render();
 		
 		// render stage
 		void setRenderStage(const String& renderStage) { m_renderStage = renderStage; }
@@ -93,11 +90,13 @@ namespace Echo
 		// get shader
 		ShaderProgram* getShader();
 
+		// bind render state
+		void bindRenderState();
+
 	protected:
 		// bind
 		void bindTextures();
 		virtual void bindShaderParams() {}
-		void bindRenderState();
 
 		// link shader and program
 		virtual void link() = 0;
