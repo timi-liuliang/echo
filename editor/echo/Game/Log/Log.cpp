@@ -1,6 +1,9 @@
 #include "Log.h"
 #include <QFile>
 #include <engine/core/util/StringUtil.h>
+#ifdef ECHO_PLATFORM_WINDOWS
+#include <windows.h>
+#endif
 
 namespace Game
 {

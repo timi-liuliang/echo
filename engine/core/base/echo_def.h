@@ -264,7 +264,3 @@ __GNUC_PATCHLEVEL__)
 #include <sstream>
 #include <algorithm>
 #include <exception>
-
-#ifdef ECHO_PLATFORM_WINDOWS
-	#include <windows.h>
-#endif

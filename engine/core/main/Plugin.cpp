@@ -5,6 +5,9 @@
 #include "engine/core/log/Log.h"
 #include "engine/core/io/DataStream.h"
 #include <nlohmann/json.hpp>
+#ifdef ECHO_PLATFORM_WINDOWS
+#include <windows.h>
+#endif
 
 #ifdef ECHO_PLATFORM_WINDOWS
 #define DYNLIB_HANDLE         HMODULE
@@ -118,12 +121,12 @@ namespace Echo
 
 	void Plugin::unload()
 	{
-		DYNLIB_UNLOAD(m_handle);
+		DYNLIB_UNLOAD((DYNLIB_HANDLE)m_handle);
 	}
 
 	void* Plugin::getSymbol(const char* symbolName)
 	{
-		return (void*)DYNLIB_GETSYM(m_handle, symbolName);
+		return (void*)DYNLIB_GETSYM((DYNLIB_HANDLE)m_handle, symbolName);
 	}
 
 	void Plugin::loadAllPlugins()

@@ -2,12 +2,6 @@
 
 #include "engine/core/util/StringUtil.h"
 
-#ifdef ECHO_PLATFORM_WINDOWS
-	#define DYNLIB_HANDLE         HMODULE
-#else
-	#define DYNLIB_HANDLE		  void*
-#endif
-
 namespace Echo
 {
 	class Plugin
@@ -32,6 +26,6 @@ namespace Echo
 
 	private:
 		String			m_path;
-		DYNLIB_HANDLE	m_handle;
+		void*			m_handle;
 	};
 }

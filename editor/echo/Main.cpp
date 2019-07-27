@@ -7,8 +7,8 @@
 #include "CMDLine.h"
 #include "Studio.h"
 #ifdef ECHO_PLATFORM_WINDOWS
-    #include <shellapi.h>
-    #include <windows.h>
+#include <windows.h>
+#include <shellapi.h>
 #endif
 #include <engine/core/base/echo_def.h>
 
