@@ -13,7 +13,7 @@ namespace Echo
         virtual bool create() override { return true; }
         
         // begin render
-        virtual bool beginRender(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue) override {return true;}
+        virtual bool beginRender(bool clearColor, const Color& bgColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue) override {return true;}
         
         // clear
         virtual void clear(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue) override {}
@@ -25,7 +25,7 @@ namespace Echo
         virtual bool invalide(bool invalidateColor, bool invalidateDepth, bool invalidateStencil) override {return true;}
         
         // on resize
-        virtual void onResize(ui32 width, ui32 height) override { }
+        virtual void onResize(ui32 width, ui32 height);
         
         // save target
         virtual bool save(const char* file) override { return true;}

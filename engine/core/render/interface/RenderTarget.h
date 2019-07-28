@@ -36,8 +36,8 @@ namespace Echo
 		ui32 height() const { return m_height; }
 
 		// has depth
-		bool hasDepth() const { return m_bHasDepth; }
-		bool hasMSAA() const { return m_bHasMSAA; }
+		bool isHasDepth() const { return m_isHasDepth; }
+		bool isHasMSAA() const { return m_isHasMSAA; }
 
 		// pixel format
 		PixelFormat pixelFormat() const { return m_pixelFormat; }
@@ -53,7 +53,7 @@ namespace Echo
 		virtual bool create() { return false; }
 
 		// begin render
-		virtual bool beginRender(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue) { return false; }
+		virtual bool beginRender(bool clearColor, const Color& bgColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue) { return false; }
 
 		// clear
 		virtual void clear(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue) {}
@@ -74,10 +74,10 @@ namespace Echo
 		ui32 getMemorySize();
 
 	protected:
-		bool					m_bHasMSAA;
+		bool					m_isHasMSAA;
 		ui32					m_id;
         PixelFormat             m_pixelFormat;
-		bool					m_bHasDepth;
+		bool					m_isHasDepth;
 		ui32					m_width;
 		ui32					m_height;
 		ui32					m_clearFlags;

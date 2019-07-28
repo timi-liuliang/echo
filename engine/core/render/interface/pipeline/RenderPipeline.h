@@ -26,7 +26,7 @@ namespace Echo
 
 	public:
 		// render target operate
-		bool beginRenderTarget(ui32 id, bool clearColor = true, const Color& backgroundColor = Renderer::BGCOLOR, bool clearDepth = true, float depthValue = 1.0f, bool clearStencil = false, ui8 stencilValue = 0, ui32 rbo = 0xFFFFFFFF);
+		bool beginRenderTarget(ui32 id, bool clearColor = true, const Color& bgColor = Renderer::BGCOLOR, bool clearDepth = true, float depthValue = 1.0f, bool clearStencil = false, ui8 stencilValue = 0, ui32 rbo = 0xFFFFFFFF);
 		bool endRenderTarget(ui32 id);
 
 		// on Resize

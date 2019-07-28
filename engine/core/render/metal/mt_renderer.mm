@@ -50,6 +50,11 @@ namespace Echo
 	{
         m_metalLayer.frame = CGRectMake( viewport->getLeft(), viewport->getTop(), viewport->getWidth(), viewport->getHeight());
 	}
+    
+    void MTRenderer::onSize(int width, int height)
+    {
+        
+    }
 
 	void MTRenderer::setTexture(ui32 index, Texture* texture, bool needUpdate)
 	{

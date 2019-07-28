@@ -31,7 +31,6 @@ namespace Echo
 		MTRenderable(const String& renderStage, ShaderProgram* shader, int identifier);
         virtual ~MTRenderable() {}
         
-    public:
         // get render pipelinestate
         id<MTLRenderPipelineState> getMetalRenderPipelineState() { return m_metalRenderPipelineState; }
         
@@ -44,7 +43,7 @@ namespace Echo
         
     private:
         // link
-        virtual void link() override;
+        virtual void setMesh(Mesh* mesh) override;
         
         // bind vertex stream
         bool bindVertexStream(const VertexElementList& vertElements, GPUBuffer* vertexBuffer, int flag = BS_BEGIN | BS_END);

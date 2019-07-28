@@ -62,8 +62,9 @@ namespace Echo
         return mtBuffer->getMetalBuffer();
     }
     
-    void MTRenderable::link()
+    void MTRenderable::setMesh(Mesh* mesh)
     {
+        m_mesh = mesh;
         bindVertexStream(m_mesh->getVertexElements(), m_mesh->getVertexBuffer());
     }
     

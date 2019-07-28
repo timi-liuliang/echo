@@ -121,12 +121,6 @@ namespace Echo
 		return m_shaderProgram;
 	}
 
-	void Renderable::setMesh(Mesh* mesh)
-	{
-		m_mesh = mesh;
-		link();
-	}
-
 	void Renderable::setShaderParam(const String& name, ShaderParamType type, const void* param, size_t num/* =1 */)
 	{
 		ShaderParam sp;

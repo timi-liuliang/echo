@@ -55,7 +55,7 @@ namespace Echo
 
 		// set mesh
 		Mesh* getMesh() { return m_mesh; }
-		void setMesh(Mesh* mesh);
+		virtual void setMesh(Mesh* mesh)=0;
 
 		// param operate
 		virtual void setShaderParam(const String& name, ShaderParamType type, const void* param, size_t num=1);
@@ -96,9 +96,6 @@ namespace Echo
 	protected:
 		// bind
 		void bindTextures();
-
-		// link shader and program
-		virtual void link() = 0;
 
 	protected:
 		Renderable( const String& renderStage, ShaderProgram* shader, int identifier);

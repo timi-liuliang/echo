@@ -25,8 +25,9 @@ namespace Echo
 		// instance
 		static Engine* instance();
 
-		// initialize
+		// initialize with config
 		bool initialize(const Config& cfg);
+        const Config& getConfig() const { return m_config; }
 
 		// initialize dll
 		void initializeDll();
@@ -55,17 +56,12 @@ namespace Echo
 		FrameState&	getFrameState() { return m_frameState; }
 		const FrameState& getFrameState() const { return m_frameState; }
 
-		// on platform suspend
+		// on platform event
 		void onPlatformSuspend();
-
-		// on platform resume
 		void onPlatformResume();
 
 		// screen size changed
 		bool onSize(ui32 windowWidth, ui32 windowHeight);
-
-		// config
-		const Config& getConfig() const { return m_config; }
 
 		// settings
 		void loadSettings();

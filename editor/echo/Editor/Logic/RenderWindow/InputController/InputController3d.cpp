@@ -284,8 +284,7 @@ namespace Studio
 		m_verticleAngleGoal += yValue;
 
         m_verticleAngleGoal = std::min<float>(m_verticleAngleGoal, Echo::Math::PI - 0.01f);
-        m_verticleAngleGoal = std::max<float>(m_verticleAngleGoal, 0.01f);
-		
+        m_verticleAngleGoal = std::max<float>(m_verticleAngleGoal, 0.01f);		
 	}
 
 	void InputController3d::AdaptCamera()

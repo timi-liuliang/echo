@@ -28,10 +28,10 @@ namespace Echo
 		return inst;
 	}
 
-	bool RenderPipeline::beginRenderTarget(ui32 id, bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue, ui32 rbo)
+	bool RenderPipeline::beginRenderTarget(ui32 id, bool clearColor, const Color& bgColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue, ui32 rbo)
 	{
 		RenderTargetMap::iterator it = m_renderTargets.find(id);
-		return it != m_renderTargets.end() ? it->second->beginRender(clearColor, backgroundColor, clearDepth, depthValue, clearStencil, stencilValue) : false;
+		return it != m_renderTargets.end() ? it->second->beginRender(clearColor, bgColor, clearDepth, depthValue, clearStencil, stencilValue) : false;
 	}
 
 	bool RenderPipeline::endRenderTarget(ui32 id)
