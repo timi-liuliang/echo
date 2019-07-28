@@ -104,6 +104,7 @@ namespace Echo
         ui32                            m_screenHeight = 480;
         id<MTLDevice>                   m_metalDevice;
         id<MTLCommandQueue>             m_metalCommandQueue;
+        NSView*                         m_metalView = nullptr;
         CAMetalLayer*                   m_metalLayer = nullptr;
         
         id<CAMetalDrawable>             m_metalNextDrawable;

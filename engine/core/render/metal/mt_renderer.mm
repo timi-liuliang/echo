@@ -33,15 +33,11 @@ namespace Echo
 
     bool MTRenderer::initialize(const Config& config)
     {
-        m_screenWidth = config.screenWidth;
-        m_screenHeight = config.screenHeight;
-        
         // make view support metal
         makeViewMetalCompatible( (void*)config.windowHandle);
         
         // set view port
-        Viewport viewport(0, 0, m_screenWidth, m_screenHeight);
-        setViewport(&viewport);
+        onSize( config.screenWidth, config.screenHeight);
         
         return true;
     }
@@ -49,11 +45,17 @@ namespace Echo
 	void MTRenderer::setViewport(Viewport* viewport)
 	{
         m_metalLayer.frame = CGRectMake( viewport->getLeft(), viewport->getTop(), viewport->getWidth(), viewport->getHeight());
+        
+       // [m_metalView updateLayer];
 	}
     
     void MTRenderer::onSize(int width, int height)
     {
+        m_screenWidth = width;
+        m_screenHeight = height;
         
+        Viewport viewport(0, 0, m_screenWidth, m_screenHeight);
+        setViewport(&viewport);
     }
 
 	void MTRenderer::setTexture(ui32 index, Texture* texture, bool needUpdate)
@@ -119,19 +121,21 @@ namespace Echo
     
     NSView* MTRenderer::makeViewMetalCompatible(void* handle)
     {
-        NSView* view = (NSView*)handle;
+        m_metalView = (NSView*)handle;
         
-        if (![view.layer isKindOfClass:[CAMetalLayer class]])
+        if (![m_metalView.layer isKindOfClass:[CAMetalLayer class]])
         {
             m_metalLayer = [CAMetalLayer layer];
             m_metalLayer.device = m_metalDevice;
+            m_metalLayer.framebufferOnly = true;
             m_metalLayer.pixelFormat = MTLPixelFormatBGRA8Unorm;
+            m_metalLayer.frame = m_metalView.layer.frame;
             
-            [view setLayer:m_metalLayer];
-            [view setWantsLayer:YES];
+            [m_metalView setLayer:m_metalLayer];
+            [m_metalView setWantsLayer:YES];
         }
         
-        return view;
+        return m_metalView;
     }
     
     MTLRenderPassDescriptor* MTRenderer::makeNextRenderPassDescriptor()
@@ -174,7 +178,6 @@ namespace Echo
         mtRenderable->bindShaderParams();
         shaderProgram->bindUniforms();
         shaderProgram->bindRenderable(renderable);
-        
 
         if(m_metalRenderPassDescriptor && mtRenderable && mtRenderable->getMetalRenderPipelineState())
         {
