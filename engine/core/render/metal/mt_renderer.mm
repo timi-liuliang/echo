@@ -44,9 +44,10 @@ namespace Echo
     
 	void MTRenderer::setViewport(Viewport* viewport)
 	{
-        m_metalLayer.frame = CGRectMake( viewport->getLeft(), viewport->getTop(), viewport->getWidth(), viewport->getHeight());
+        float  contentsScale = m_metalLayer.contentsScale;
+        CGSize newSize = { viewport->getWidth() * contentsScale, viewport->getHeight() * contentsScale};
         
-       // [m_metalView updateLayer];
+        [m_metalLayer setDrawableSize: newSize];
 	}
     
     void MTRenderer::onSize(int width, int height)
@@ -129,7 +130,6 @@ namespace Echo
             m_metalLayer.device = m_metalDevice;
             m_metalLayer.framebufferOnly = true;
             m_metalLayer.pixelFormat = MTLPixelFormatBGRA8Unorm;
-            m_metalLayer.frame = m_metalView.layer.frame;
             
             [m_metalView setLayer:m_metalLayer];
             [m_metalView setWantsLayer:YES];
