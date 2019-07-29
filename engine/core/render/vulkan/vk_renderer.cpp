@@ -12,7 +12,7 @@ namespace Echo
     
     VKRenderer::~VKRenderer()
     {
-        
+		vkDestroyInstance(m_vkInstance, nullptr);
     }
 
     bool VKRenderer::initialize(const Config& config)
@@ -74,8 +74,33 @@ namespace Echo
         return EchoNew(VKSamplerState);
     }
 
+	void VKRenderer::enumerateExtensions()
+	{
+		ui32 extensionCount = 0;
+		vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
+		m_vkExtensions.resize(extensionCount);
+		vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, m_vkExtensions.data());
+	}
+
+	void VKRenderer::prepareVkExtensions(vector<const char*>::type& extensions)
+	{
+		extensions = { VK_KHR_SURFACE_EXTENSION_NAME };
+	#if defined(_WIN32)
+		extensions.push_back(VK_KHR_WIN32_SURFACE_EXTENSION_NAME);
+	#elif defined(__ANDROID__)
+		extensions.push_back(VK_KHR_ANDROID_SURFACE_EXTENSION_NAME);
+	#elif defined(__linux__)
+		extensions.push_back(VK_KHR_XCB_SURFACE_EXTENSION_NAME);
+	#endif
+	}
+
 	void VKRenderer::createVkInstance()
 	{
+		enumerateExtensions();
+
+		vector<const char*>::type enabledExtensions;
+		prepareVkExtensions(enabledExtensions);
+
 		VkApplicationInfo appInfo;
 		appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
 		appInfo.pApplicationName = "echo";
@@ -83,15 +108,18 @@ namespace Echo
 		appInfo.pEngineName = "echo";
 		appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
 		appInfo.apiVersion = VK_API_VERSION_1_1;
+		appInfo.pNext = nullptr;
 
 		VkInstanceCreateInfo createInfo;
 		createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+		createInfo.pNext = nullptr;
 		createInfo.pApplicationInfo = &appInfo;
-		createInfo.enabledExtensionCount = 0;
+		createInfo.enabledExtensionCount = enabledExtensions.size();
+		createInfo.ppEnabledExtensionNames = enabledExtensions.data();
 		createInfo.enabledLayerCount = 0;
 
 		// create instance
-		if (VK_SUCCESS != vkCreateInstance(&createInfo, nullptr, m_vkInstance))
+		if (VK_SUCCESS != vkCreateInstance(&createInfo, nullptr, &m_vkInstance))
 		{
 			EchoLogError("create vulkan instance failed");
 		}

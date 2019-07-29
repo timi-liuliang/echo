@@ -8,6 +8,8 @@ namespace Echo
     class GPUBuffer;
 	class VKRenderer: public Renderer
 	{
+		typedef vector<VkExtensionProperties>::type ExtensionProperties;
+
 	public:
 		VKRenderer();
 		virtual ~VKRenderer();
@@ -79,10 +81,15 @@ namespace Echo
 	private:
 		// create vk instance
 		void createVkInstance();
+
+		// vk extensions
+		void enumerateExtensions();
+		void prepareVkExtensions(vector<const char*>::type& extensions);
         
     private:
-        ui32		m_screenWidth = 640;
-        ui32		m_screenHeight = 480;
-		VkInstance* m_vkInstance = nullptr;
+        ui32				m_screenWidth = 640;
+        ui32				m_screenHeight = 480;
+		VkInstance			m_vkInstance;
+		ExtensionProperties	m_vkExtensions;
 	};
 }
