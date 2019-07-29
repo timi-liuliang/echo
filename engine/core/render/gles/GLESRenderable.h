@@ -54,7 +54,8 @@ namespace Echo
 		void bindShaderParams();
 
 	private:
-		virtual void link() override;
+		// set mesh
+		virtual void setMesh(Mesh* mesh) override;
 
 		// bind vertex stream
 		bool bindVertexStream(const VertexElementList& vertElements, GPUBuffer* vertexBuffer, int flag = BS_BEGIN | BS_END);

@@ -105,7 +105,7 @@ namespace Echo
 		EchoAssert(sampleState);
 		sampleState->active(NULL);
 
-		if( m_bHasDepth )
+		if( m_isHasDepth )
 		{
 			GLESTexture2D* depthTexture = dynamic_cast<GLESTexture2D*>(m_depthTexture);
 			EchoAssert(depthTexture);
@@ -159,8 +159,7 @@ namespace Echo
 		OGLESDebug(glBindTexture(GL_TEXTURE_CUBE_MAP, texture->m_glesTexture));
 		for (int f = 0; f < 6; f++)
 		{
-			OGLESDebug(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + f, 0, GLES2Mapping::MapFormat(m_pixelFormat),
-				m_width, m_height, 0, GLES2Mapping::MapFormat(m_pixelFormat), GL_UNSIGNED_BYTE, (GLvoid*)0));
+			OGLESDebug(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + f, 0, GLES2Mapping::MapFormat(m_pixelFormat), m_width, m_height, 0, GLES2Mapping::MapFormat(m_pixelFormat), GL_UNSIGNED_BYTE, (GLvoid*)0));
 		}
 		OGLESDebug(glGenFramebuffers(1, &m_fbo));
 		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
@@ -170,7 +169,7 @@ namespace Echo
 		EchoAssert(sampleState);
 		sampleState->active(NULL);
 
-		if( m_bHasDepth )
+		if( m_isHasDepth)
 		{
 			OGLESDebug(glGenRenderbuffers(1, &m_rbo));
 			OGLESDebug(glBindRenderbuffer(GL_RENDERBUFFER, m_rbo));

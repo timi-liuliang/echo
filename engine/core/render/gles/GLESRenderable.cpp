@@ -51,8 +51,10 @@ namespace Echo
 		}
 	}
 
-	void GLES2Renderable::link()
+	void GLES2Renderable::setMesh(Mesh* mesh)
 	{
+		m_mesh = mesh;
+
 		bindVertexStream(m_mesh->getVertexElements(), m_mesh->getVertexBuffer());
 	}
 
