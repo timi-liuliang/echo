@@ -5,6 +5,13 @@
 
 namespace Echo
 {
+	static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData)
+	{
+		EchoLogError(pCallbackData->pMessage);
+
+		return VK_FALSE;
+	}
+
     VKRenderer::VKRenderer()
     {
 		createVkInstance();
@@ -74,12 +81,29 @@ namespace Echo
         return EchoNew(VKSamplerState);
     }
 
-	void VKRenderer::enumerateExtensions()
+	void VKRenderer::enumerateVkValidationLayers()
 	{
+#if FALSE
+		ui32 layerCount;
+		vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
+		m_vkLayers.resize(layerCount);
+		vkEnumerateInstanceLayerProperties(&layerCount, m_vkLayers.data());
+#endif
+	}
+
+	void VKRenderer::prepareVkValidationLayers(vector<const char*>::type& validationLayers)
+	{
+		validationLayers = { "VK_LAYER_KHRONOS_validation" };
+	}
+
+	void VKRenderer::enumerateVkExtensions()
+	{
+#if FALSE
 		ui32 extensionCount = 0;
 		vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
 		m_vkExtensions.resize(extensionCount);
 		vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, m_vkExtensions.data());
+#endif
 	}
 
 	void VKRenderer::prepareVkExtensions(vector<const char*>::type& extensions)
@@ -96,10 +120,14 @@ namespace Echo
 
 	void VKRenderer::createVkInstance()
 	{
-		enumerateExtensions();
+		enumerateVkValidationLayers();
+		enumerateVkExtensions();
 
 		vector<const char*>::type enabledExtensions;
 		prepareVkExtensions(enabledExtensions);
+
+		vector<const char*>::type validationLayers;
+		prepareVkValidationLayers(validationLayers);
 
 		VkApplicationInfo appInfo;
 		appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -116,6 +144,8 @@ namespace Echo
 		createInfo.pApplicationInfo = &appInfo;
 		createInfo.enabledExtensionCount = enabledExtensions.size();
 		createInfo.ppEnabledExtensionNames = enabledExtensions.data();
+		createInfo.enabledLayerCount = validationLayers.size();
+		createInfo.ppEnabledLayerNames = validationLayers.data();
 		createInfo.enabledLayerCount = 0;
 
 		// create instance

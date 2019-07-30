@@ -69,31 +69,31 @@ namespace Echo
 		ui32 getStartVertex() const { return m_startVert; }
 		ui32 getStartIndex() const { return m_startIdx; }
 
-		// 获取索引数据
+		// get indices
 		Word* getIndices() const;
 
 		// is valid
 		bool isValid() const { return getFaceCount() > 0; }
 
-		// 是否为蒙皮
+		// is have bone data
 		bool isSkin() const { return isVertexUsage(VS_BLENDINDICES); }
 
-		// 判断顶点格式中是否含有指定类型的数据
+		// is vertex useage
 		bool isVertexUsage(VertexSemantic semantic) const { return m_vertData.isVertexUsage(semantic); }
 
-		// 获取顶点格式
+		// get vertex elements
 		const VertexElementList& getVertexElements() const;
 
-		// 生成切线数据
+		// generate tangent
 		void generateTangentData(bool useNormalMap);
 
-		// 获取本地包围盒
+		// get local aabb
 		const AABB& getLocalBox() const { return m_box; }
 
-		// 获取受影响的骨骼数量
+		// get bone count
 		ui32 getBoneNum() const { return static_cast<ui32>(m_boneIdxs.size()); }
 
-		// 获取受影响的骨骼索引
+		// get bone index
 		ui32 getBoneIdx(int idx) { return m_boneIdxs[idx]; }
 
 		// set primitive type

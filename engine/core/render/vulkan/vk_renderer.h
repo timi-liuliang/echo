@@ -9,6 +9,7 @@ namespace Echo
 	class VKRenderer: public Renderer
 	{
 		typedef vector<VkExtensionProperties>::type ExtensionProperties;
+		typedef vector<VkLayerProperties>::type		LayerProperties;
 
 	public:
 		VKRenderer();
@@ -83,13 +84,18 @@ namespace Echo
 		void createVkInstance();
 
 		// vk extensions
-		void enumerateExtensions();
+		void enumerateVkExtensions();
 		void prepareVkExtensions(vector<const char*>::type& extensions);
+
+		// vk validation layers
+		void enumerateVkValidationLayers();
+		void prepareVkValidationLayers(vector<const char*>::type& validationLayers);
         
     private:
         ui32				m_screenWidth = 640;
         ui32				m_screenHeight = 480;
 		VkInstance			m_vkInstance;
 		ExtensionProperties	m_vkExtensions;
+		LayerProperties		m_vkLayers;
 	};
 }
