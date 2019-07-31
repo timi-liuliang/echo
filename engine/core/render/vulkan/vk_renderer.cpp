@@ -15,8 +15,10 @@ namespace Echo
     VKRenderer::VKRenderer()
     {
 		createVkInstance();
+
+		pickPhysicalDevice();
     }
-    
+
     VKRenderer::~VKRenderer()
     {
 		vkDestroyInstance(m_vkInstance, nullptr);
@@ -26,14 +28,14 @@ namespace Echo
     {
         m_screenWidth = config.screenWidth;
         m_screenHeight = config.screenHeight;
-            
+
         // set view port
         Viewport viewport(0, 0, m_screenWidth, m_screenHeight);
         setViewport(&viewport);
-        
+
         return true;
     }
-    
+
 	void VKRenderer::setViewport(Viewport* pViewport)
 	{
 
@@ -43,39 +45,39 @@ namespace Echo
 	{
 
 	}
-    
+
     Renderable* VKRenderer::createRenderable(const String& renderStage, ShaderProgram* material)
     {
         Renderable* renderable = EchoNew(VKRenderable(renderStage, material, m_renderableIdentifier++));
         ui32 id = renderable->getIdentifier();
         assert(!m_renderables.count(id));
         m_renderables[id] = renderable;
-        
+
         return renderable;
     }
-    
+
     ShaderProgram* VKRenderer::createShaderProgram()
     {
         return EchoNew(VKShaderProgram);
     }
-    
+
     // create states
     RasterizerState* VKRenderer::createRasterizerState(const RasterizerState::RasterizerDesc& desc)
     {
         return EchoNew(VKRasterizerState);
     }
-    
+
     DepthStencilState* VKRenderer::createDepthStencilState(const DepthStencilState::DepthStencilDesc& desc)
     {
         return nullptr;
         //return EchoNew(VKDepthStencilState);
     }
-    
+
     BlendState* VKRenderer::createBlendState(const BlendState::BlendDesc& desc)
     {
         return EchoNew(VKBlendState);
     }
-    
+
     const SamplerState* VKRenderer::getSamplerState(const SamplerState::SamplerDesc& desc)
     {
         return EchoNew(VKSamplerState);
@@ -152,6 +154,44 @@ namespace Echo
 		if (VK_SUCCESS != vkCreateInstance(&createInfo, nullptr, &m_vkInstance))
 		{
 			EchoLogError("create vulkan instance failed");
+		}
+	}
+
+	bool VKRenderer::isVkDeviceSuitable(const VkPhysicalDevice& device)
+	{
+		// query device properties
+		VkPhysicalDeviceProperties deviceProperties;
+		vkGetPhysicalDeviceProperties(device, &deviceProperties);
+
+		// query device features
+		VkPhysicalDeviceFeatures deviceFeatures;
+		vkGetPhysicalDeviceFeatures(device, &deviceFeatures);
+		
+		return true;
+	}
+
+	void VKRenderer::pickPhysicalDevice()
+	{
+		ui32 deviceCount = 0;
+		vkEnumeratePhysicalDevices(m_vkInstance, &deviceCount, nullptr);
+		if(deviceCount>0)
+		{
+			vector<VkPhysicalDevice>::type devices(deviceCount);
+			vkEnumeratePhysicalDevices(m_vkInstance, &deviceCount, devices.data());
+			for(VkPhysicalDevice& device : devices)
+			{
+				if(isVkDeviceSuitable(device))
+				{
+					m_vkDevice = device;
+					break;
+				}
+			}
+		}
+
+		// output error
+		if(m_vkDevice==VK_NULL_HANDLE)
+		{
+			EchoLogError("Failed to find GPUs with Vulkan support!");
 		}
 	}
 }
