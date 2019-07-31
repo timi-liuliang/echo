@@ -8,8 +8,9 @@ namespace Echo
     class GPUBuffer;
 	class VKRenderer: public Renderer
 	{
-		typedef vector<VkExtensionProperties>::type ExtensionProperties;
-		typedef vector<VkLayerProperties>::type		LayerProperties;
+		typedef vector<VkExtensionProperties>::type     ExtensionProperties;
+		typedef vector<VkLayerProperties>::type		    LayerProperties;
+        typedef vector<VkQueueFamilyProperties>::type   QueueFamilies;
 
 	public:
 		VKRenderer();
@@ -95,6 +96,10 @@ namespace Echo
         void pickPhysicalDevice();
         i32  calcVkDeviceScore(const VkPhysicalDevice& device);
 
+        // queue famalies
+        void enumerateQueueFamalies();
+        const VkQueueFamilyProperties* getQueueFamilyByFlag(ui32 flag);
+
     private:
         ui32				m_screenWidth = 640;
         ui32				m_screenHeight = 480;
@@ -102,5 +107,6 @@ namespace Echo
 		ExtensionProperties	m_vkExtensions;
 		LayerProperties		m_vkLayers;
         VkPhysicalDevice    m_vkDevice = VK_NULL_HANDLE;
+        QueueFamilies       m_vkQueueFamilies;
 	};
 }

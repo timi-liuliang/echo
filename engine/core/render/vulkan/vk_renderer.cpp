@@ -17,6 +17,8 @@ namespace Echo
 		createVkInstance();
 
 		pickPhysicalDevice();
+
+		enumerateQueueFamalies();
     }
 
     VKRenderer::~VKRenderer()
@@ -157,7 +159,7 @@ namespace Echo
 		}
 	}
 
-	bool VKRenderer::isVkDeviceSuitable(const VkPhysicalDevice& device)
+	i32 VKRenderer::calcVkDeviceScore(const VkPhysicalDevice& device)
 	{
 		// query device properties
 		VkPhysicalDeviceProperties deviceProperties;
@@ -166,8 +168,19 @@ namespace Echo
 		// query device features
 		VkPhysicalDeviceFeatures deviceFeatures;
 		vkGetPhysicalDeviceFeatures(device, &deviceFeatures);
-		
-		return true;
+
+		int score = 0;
+
+		// Discrete GPUs have a significant performance advantage
+		score += deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU ? 1000 : 0;
+
+		// Maximum possible size of textures affects graphics quality
+		score += deviceProperties.limits.maxImageDimension2D;
+
+		// Application can't function without geometry shaders
+		score += deviceFeatures.geometryShader ? 1000 : 0;
+
+		return score;
 	}
 
 	void VKRenderer::pickPhysicalDevice()
@@ -178,12 +191,15 @@ namespace Echo
 		{
 			vector<VkPhysicalDevice>::type devices(deviceCount);
 			vkEnumeratePhysicalDevices(m_vkInstance, &deviceCount, devices.data());
+
+			i32 score = 0;
 			for(VkPhysicalDevice& device : devices)
 			{
-				if(isVkDeviceSuitable(device))
+				i32 curScore = calcVkDeviceScore(device);
+				if(curScore>score)
 				{
 					m_vkDevice = device;
-					break;
+					score = curScore;
 				}
 			}
 		}
@@ -193,5 +209,26 @@ namespace Echo
 		{
 			EchoLogError("Failed to find GPUs with Vulkan support!");
 		}
+	}
+
+	void VKRenderer::enumerateQueueFamalies()
+	{
+		ui32 queueFamilyCount = 0;
+		vkGetPhysicalDeviceQueueFamilyProperties(m_vkDevice, &queueFamilyCount, nullptr);
+
+		m_vkQueueFamilies.resize(queueFamilyCount);
+		vkGetPhysicalDeviceQueueFamilyProperties(m_vkDevice, &queueFamilyCount, m_queueFamilies.data());
+	}
+
+	const VkQueueFamilyProperties* VKRenderer::getQueueFamilyByFlag(ui32 flag)
+	{
+		// VK_QUEUE_GRAPHICS_BIT etc
+		for(VkQueueFamilyProperties& queueFamily : m_queueFamilies)
+		{
+			if(queueFamily.queueFlags & flag)
+				return &queueFamily;
+		}
+
+		return nullptr;
 	}
 }
