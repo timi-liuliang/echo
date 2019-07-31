@@ -38,7 +38,8 @@ namespace Echo
         switch (pixelFormat)
         {
             case PF_RG32_FLOAT:     return MTLVertexFormatFloat2;
-            case PF_RGBA8_UNORM:    return MTLVertexFormatUChar4;
+            case PF_RGBA8_UNORM:    return MTLVertexFormatUChar4Normalized;
+            case PF_RGBA8_SNORM:    return MTLVertexFormatChar4Normalized;
             case PF_RGB32_FLOAT:    return MTLVertexFormatFloat3;
             case PF_RGBA32_FLOAT:   return MTLVertexFormatFloat4;
             default:  EchoLogError("MapingVertexFormat failed");  return MTLVertexFormatInvalid;
