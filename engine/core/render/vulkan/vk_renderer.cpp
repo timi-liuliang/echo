@@ -217,13 +217,13 @@ namespace Echo
 		vkGetPhysicalDeviceQueueFamilyProperties(m_vkDevice, &queueFamilyCount, nullptr);
 
 		m_vkQueueFamilies.resize(queueFamilyCount);
-		vkGetPhysicalDeviceQueueFamilyProperties(m_vkDevice, &queueFamilyCount, m_queueFamilies.data());
+		vkGetPhysicalDeviceQueueFamilyProperties(m_vkDevice, &queueFamilyCount, m_vkQueueFamilies.data());
 	}
 
 	const VkQueueFamilyProperties* VKRenderer::getQueueFamilyByFlag(ui32 flag)
 	{
 		// VK_QUEUE_GRAPHICS_BIT etc
-		for(VkQueueFamilyProperties& queueFamily : m_queueFamilies)
+		for(VkQueueFamilyProperties& queueFamily : m_vkQueueFamilies)
 		{
 			if(queueFamily.queueFlags & flag)
 				return &queueFamily;
