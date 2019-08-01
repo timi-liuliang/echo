@@ -93,12 +93,15 @@ namespace Echo
 		void prepareVkValidationLayers(vector<const char*>::type& validationLayers);
 
         // choose a device
-        void pickPhysicalDevice();
-        i32  calcVkDeviceScore(const VkPhysicalDevice& device);
+        void pickVkPhysicalDevice();
+        i32  calcVkPhysicalDeviceScore(const VkPhysicalDevice& device);
 
         // queue famalies
         void enumerateQueueFamalies();
-        const VkQueueFamilyProperties* getQueueFamilyByFlag(ui32 flag);
+        const i32 getQueueFamilyIndexByFlag(ui32 flag);
+
+        // create vk logical device
+        void createVkLogicalDevice();
 
     private:
         ui32				m_screenWidth = 640;
@@ -106,7 +109,9 @@ namespace Echo
 		VkInstance			m_vkInstance;
 		ExtensionProperties	m_vkExtensions;
 		LayerProperties		m_vkLayers;
-        VkPhysicalDevice    m_vkDevice = VK_NULL_HANDLE;
+        VkPhysicalDevice    m_vkPhysicalDevice = VK_NULL_HANDLE;
         QueueFamilies       m_vkQueueFamilies;
+        VkDevice            m_vkDevice;
+        VkQueue             m_vkGraphicsQueue;
 	};
 }

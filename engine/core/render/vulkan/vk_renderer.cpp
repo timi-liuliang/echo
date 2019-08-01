@@ -16,13 +16,14 @@ namespace Echo
     {
 		createVkInstance();
 
-		pickPhysicalDevice();
+		pickVkPhysicalDevice();
 
-		enumerateQueueFamalies();
+		createVkLogicalDevice();
     }
 
     VKRenderer::~VKRenderer()
     {
+		vkDestroyDevice(m_vkDevice, nullptr);
 		vkDestroyInstance(m_vkInstance, nullptr);
     }
 
@@ -159,7 +160,7 @@ namespace Echo
 		}
 	}
 
-	i32 VKRenderer::calcVkDeviceScore(const VkPhysicalDevice& device)
+	i32 VKRenderer::calcVkPhysicalDeviceScore(const VkPhysicalDevice& device)
 	{
 		// query device properties
 		VkPhysicalDeviceProperties deviceProperties;
@@ -183,7 +184,7 @@ namespace Echo
 		return score;
 	}
 
-	void VKRenderer::pickPhysicalDevice()
+	void VKRenderer::pickVkPhysicalDevice()
 	{
 		ui32 deviceCount = 0;
 		vkEnumeratePhysicalDevices(m_vkInstance, &deviceCount, nullptr);
@@ -195,17 +196,21 @@ namespace Echo
 			i32 score = 0;
 			for(VkPhysicalDevice& device : devices)
 			{
-				i32 curScore = calcVkDeviceScore(device);
+				i32 curScore = calcVkPhysicalDeviceScore(device);
 				if(curScore>score)
 				{
-					m_vkDevice = device;
+					m_vkPhysicalDevice = device;
 					score = curScore;
 				}
 			}
 		}
 
 		// output error
-		if(m_vkDevice==VK_NULL_HANDLE)
+		if(m_vkPhysicalDevice!=VK_NULL_HANDLE)
+		{
+			enumerateQueueFamalies();
+		}
+		else
 		{
 			EchoLogError("Failed to find GPUs with Vulkan support!");
 		}
@@ -214,21 +219,51 @@ namespace Echo
 	void VKRenderer::enumerateQueueFamalies()
 	{
 		ui32 queueFamilyCount = 0;
-		vkGetPhysicalDeviceQueueFamilyProperties(m_vkDevice, &queueFamilyCount, nullptr);
+		vkGetPhysicalDeviceQueueFamilyProperties(m_vkPhysicalDevice, &queueFamilyCount, nullptr);
 
 		m_vkQueueFamilies.resize(queueFamilyCount);
-		vkGetPhysicalDeviceQueueFamilyProperties(m_vkDevice, &queueFamilyCount, m_vkQueueFamilies.data());
+		vkGetPhysicalDeviceQueueFamilyProperties(m_vkPhysicalDevice, &queueFamilyCount, m_vkQueueFamilies.data());
 	}
 
-	const VkQueueFamilyProperties* VKRenderer::getQueueFamilyByFlag(ui32 flag)
+	const i32 VKRenderer::getQueueFamilyIndexByFlag(ui32 flag)
 	{
-		// VK_QUEUE_GRAPHICS_BIT etc
-		for(VkQueueFamilyProperties& queueFamily : m_vkQueueFamilies)
+		for(size_t i=0; i<m_vkQueueFamilies.size(); i++)
 		{
-			if(queueFamily.queueFlags & flag)
-				return &queueFamily;
+			if(m_vkQueueFamilies[i].queueFlags & flag)
+				return i;
 		}
 
-		return nullptr;
+		return -1;
+	}
+
+	void VKRenderer::createVkLogicalDevice()
+	{
+		float queuePriority = 1.0f;
+		i32   queueFamilyIndex = getQueueFamilyIndexByFlag(VK_QUEUE_GRAPHICS_BIT);
+
+		VkDeviceQueueCreateInfo queueCreateInfo = {};
+		queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+		queueCreateInfo.queueFamilyIndex = queueFamilyIndex;
+		queueCreateInfo.queueCount = 1;
+		queueCreateInfo.pQueuePriorities = &queuePriority;
+
+		VkPhysicalDeviceFeatures deviceFeatures = {};
+
+		VkDeviceCreateInfo createInfo = {};
+		createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+		createInfo.pQueueCreateInfos = &queueCreateInfo;
+		createInfo.queueCreateInfoCount = 1;
+		createInfo.pEnabledFeatures = &deviceFeatures;
+		createInfo.enabledExtensionCount = 0;
+
+		// create logical device and retirve graphics queue
+		if (VK_SUCCESS == vkCreateDevice(m_vkPhysicalDevice, &createInfo, nullptr, &m_vkDevice))
+		{
+			vkGetDeviceQueue(m_vkDevice, queueFamilyIndex, 0, &m_vkGraphicsQueue);
+		}
+		else
+		{
+    		EchoLogError("Failed to create vulkan logical device!");
+		}
 	}
 }
