@@ -18,7 +18,7 @@
 
 namespace Studio
 {
-	std::string	EchoEngine::m_projectFile;		// 项目名称
+	std::string	EchoEngine::m_projectFile;
 	RenderWindow* EchoEngine::m_renderWindow = NULL;
 
 	EchoEngine::EchoEngine()
