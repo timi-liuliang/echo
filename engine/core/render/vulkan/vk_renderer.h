@@ -84,6 +84,9 @@ namespace Echo
 		// create vk instance
 		void createVkInstance();
 
+        // create window surface
+        void createSurface(void* handle);
+
 		// vk extensions
 		void enumerateVkExtensions();
 		void prepareVkExtensions(vector<const char*>::type& extensions);
@@ -98,7 +101,8 @@ namespace Echo
 
         // queue famalies
         void enumerateQueueFamalies();
-        const i32 getQueueFamilyIndexByFlag(ui32 flag);
+        const i32 getGraphicsQueueFamilyIndex();
+        const i32 getPresentQueueFamilyIndex();
 
         // create vk logical device
         void createVkLogicalDevice();
@@ -113,5 +117,7 @@ namespace Echo
         QueueFamilies       m_vkQueueFamilies;
         VkDevice            m_vkDevice;
         VkQueue             m_vkGraphicsQueue;
+        VkSurfaceKHR        m_vkWindowSurface;
+        VkQueue             m_vkPresentQueue;
 	};
 }

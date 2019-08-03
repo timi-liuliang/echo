@@ -14,21 +14,26 @@ namespace Echo
 
     VKRenderer::VKRenderer()
     {
-		createVkInstance();
-
-		pickVkPhysicalDevice();
-
-		createVkLogicalDevice();
     }
 
     VKRenderer::~VKRenderer()
     {
 		vkDestroyDevice(m_vkDevice, nullptr);
+		vkDestroySurfaceKHR(m_vkInstance, m_vkWindowSurface, nullptr);
 		vkDestroyInstance(m_vkInstance, nullptr);
     }
 
     bool VKRenderer::initialize(const Config& config)
     {
+		createVkInstance();
+
+		createSurface((void*)config.windowHandle);
+
+		pickVkPhysicalDevice();
+
+		createVkLogicalDevice();
+
+		// window width height
         m_screenWidth = config.screenWidth;
         m_screenHeight = config.screenHeight;
 
@@ -38,6 +43,24 @@ namespace Echo
 
         return true;
     }
+
+	// create window surface
+	void createSurface(void* handle)
+	{
+		// create window surface
+	#if ECHO_PLATFORM_WINDOWS
+		VkWin32SurfaceCreateInfoKHR createInfo = {};
+		createInfo.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
+		createInfo.hwnd = handle;
+		createInfo.hinstance = GetModuleHandle(nullptr);
+
+		// create surface
+		if (VK_SUCCESS != vkCreateWin32SurfaceKHR(m_vkInstance, &createInfo, nullptr, &m_vkWindowSurface))
+		{
+			EchoLogError("Vulkan Renderer failed to create window surface!");
+		}
+	#endif
+	}
 
 	void VKRenderer::setViewport(Viewport* pViewport)
 	{
@@ -225,11 +248,24 @@ namespace Echo
 		vkGetPhysicalDeviceQueueFamilyProperties(m_vkPhysicalDevice, &queueFamilyCount, m_vkQueueFamilies.data());
 	}
 
-	const i32 VKRenderer::getQueueFamilyIndexByFlag(ui32 flag)
+	const i32 VKRenderer::getGraphicsQueueFamilyIndex()
 	{
 		for(size_t i=0; i<m_vkQueueFamilies.size(); i++)
 		{
-			if(m_vkQueueFamilies[i].queueFlags & flag)
+			if(m_vkQueueFamilies[i].queueFlags & VK_QUEUE_GRAPHICS_BIT)
+				return i;
+		}
+
+		return -1;
+	}
+
+	const i32 VKRenderer::getPresentQueueFamilyIndex()
+	{
+		for(size_t i=0; i<m_vkQueueFamilies.size(); i++)
+		{
+			VkBool32 presentSupport = false;
+			vkGetPhysicalDeviceSurfaceSupportKHR(m_vkDevice, i, m_vkWindowSurface, &presentSupport);
+			if(presentSupport)
 				return i;
 		}
 
@@ -238,32 +274,40 @@ namespace Echo
 
 	void VKRenderer::createVkLogicalDevice()
 	{
-		float queuePriority = 1.0f;
-		i32   queueFamilyIndex = getQueueFamilyIndexByFlag(VK_QUEUE_GRAPHICS_BIT);
+		float queuePrioritys[2] = { 1.f, 1.f};
+		VkDeviceQueueCreateInfo queueCreateInfos[2];
 
-		VkDeviceQueueCreateInfo queueCreateInfo = {};
-		queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-		queueCreateInfo.queueFamilyIndex = queueFamilyIndex;
-		queueCreateInfo.queueCount = 1;
-		queueCreateInfo.pQueuePriorities = &queuePriority;
+		// graphics queue
+		queueCreateInfos[0].sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+		queueCreateInfos[0].queueFamilyIndex = getGraphicsQueueFamilyIndex();
+		queueCreateInfos[0].queueCount = 1;
+		queueCreateInfos[0].pQueuePriorities = &queuePrioritys[0];
 
+		// present queue
+		queueCreateInfos[1].sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+		queueCreateInfos[1].queueFamilyIndex = getPresentQueueFamilyIndex();
+		queueCreateInfos[1].queueCount = 1;
+		queueCreateInfos[1].pQueuePriorities = &queuePrioritys[1];
+
+		// device features
 		VkPhysicalDeviceFeatures deviceFeatures = {};
 
 		VkDeviceCreateInfo createInfo = {};
 		createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-		createInfo.pQueueCreateInfos = &queueCreateInfo;
-		createInfo.queueCreateInfoCount = 1;
+		createInfo.pQueueCreateInfos = queueCreateInfos;
+		createInfo.queueCreateInfoCount = 2;
 		createInfo.pEnabledFeatures = &deviceFeatures;
 		createInfo.enabledExtensionCount = 0;
 
 		// create logical device and retirve graphics queue
 		if (VK_SUCCESS == vkCreateDevice(m_vkPhysicalDevice, &createInfo, nullptr, &m_vkDevice))
 		{
-			vkGetDeviceQueue(m_vkDevice, queueFamilyIndex, 0, &m_vkGraphicsQueue);
+			vkGetDeviceQueue(m_vkDevice, getGraphicsQueueFamilyIndex(), 0, &m_vkGraphicsQueue);
+			vkGetDeviceQueue(m_vkDevice, getPresentQueueFamilyIndex(), 0, &m_vkPresentQueue);
 		}
 		else
-		{
-    		EchoLogError("Failed to create vulkan logical device!");
+    	{
+			EchoLogError("Failed to create vulkan logical device!");
 		}
 	}
 }
