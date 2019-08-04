@@ -107,6 +107,9 @@ namespace Echo
         // create vk logical device
         void createVkLogicalDevice();
 
+        // create swapChain
+        void createVkSwapChain();
+
     private:
         ui32				m_screenWidth = 640;
         ui32				m_screenHeight = 480;

@@ -33,6 +33,8 @@ namespace Echo
 
 		createVkLogicalDevice();
 
+		createVkSwapChain();
+
 		// window width height
         m_screenWidth = config.screenWidth;
         m_screenHeight = config.screenHeight;
@@ -319,5 +321,12 @@ namespace Echo
     	{
 			EchoLogError("Failed to create vulkan logical device!");
 		}
+	}
+
+	void VKRenderer::createVkSwapChain()
+	{
+		VkSwapchainCreateInfoKHR createInfo = {};
+		createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+		createInfo.surface = surface;
 	}
 }
