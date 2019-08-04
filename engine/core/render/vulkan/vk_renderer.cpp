@@ -44,6 +44,16 @@ namespace Echo
         return true;
     }
 
+	GPUBuffer* VKRenderer::createVertexBuffer(Dword usage, const Buffer& buff)
+	{
+		return EchoNew(VKBuffer(GPUBuffer::GPUBufferType::GBT_VERTEX, usage, buff));
+	}
+
+	GPUBuffer* VKRenderer::createIndexBuffer(Dword usage, const Buffer& buff)
+	{
+		return EchoNew(VKBuffer(GPUBuffer::GPUBufferType::GBT_INDEX, usage, buff));
+	}
+
 	// create window surface
 	void createSurface(void* handle)
 	{

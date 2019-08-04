@@ -20,8 +20,8 @@ namespace Echo
         virtual bool initialize(const Config& config) override;
 
         // create buffer
-        virtual GPUBuffer*	createVertexBuffer(Dword usage, const Buffer& buff) override { return nullptr;}
-        virtual GPUBuffer*	createIndexBuffer(Dword usage, const Buffer& buff) override { return nullptr; }
+        virtual GPUBuffer*	createVertexBuffer(Dword usage, const Buffer& buff) override;
+        virtual GPUBuffer*	createIndexBuffer(Dword usage, const Buffer& buff) override;
 
         // create texture
         virtual Texture*     createTexture2D(const String& name) override { return nullptr; }
