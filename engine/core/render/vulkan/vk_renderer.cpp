@@ -292,23 +292,25 @@ namespace Echo
 
 		// graphics queue
 		queueCreateInfos[0].sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+		queueCreateInfos[0].pNext = nullptr;
 		queueCreateInfos[0].queueFamilyIndex = getGraphicsQueueFamilyIndex();
 		queueCreateInfos[0].queueCount = 1;
 		queueCreateInfos[0].pQueuePriorities = &queuePrioritys[0];
 
-		// present queue
-		queueCreateInfos[1].sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-		queueCreateInfos[1].queueFamilyIndex = getPresentQueueFamilyIndex();
-		queueCreateInfos[1].queueCount = 1;
-		queueCreateInfos[1].pQueuePriorities = &queuePrioritys[1];
+		//// present queue
+		//queueCreateInfos[1].sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+		//queueCreateInfos[1].queueFamilyIndex = getPresentQueueFamilyIndex();
+		//queueCreateInfos[1].queueCount = 1;
+		//queueCreateInfos[1].pQueuePriorities = &queuePrioritys[1];
 
 		// device features
 		VkPhysicalDeviceFeatures deviceFeatures = {};
 
 		VkDeviceCreateInfo createInfo = {};
 		createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-		createInfo.pQueueCreateInfos = queueCreateInfos;
-		createInfo.queueCreateInfoCount = 2;
+		createInfo.pNext = nullptr;
+		createInfo.pQueueCreateInfos = &queueCreateInfos[0];
+		createInfo.queueCreateInfoCount = 1;
 		createInfo.pEnabledFeatures = &deviceFeatures;
 		createInfo.enabledExtensionCount = 0;
 
