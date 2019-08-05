@@ -81,12 +81,23 @@ namespace Echo
 		// get view port
 		virtual void getViewportReal(Viewport& pViewport) override {}
 
+	public:
+		// get physical device
+		VkPhysicalDevice getVkPhysicalDevice() { return m_vkPhysicalDevice; }
+
+		// get windows surface
+		VkSurfaceKHR getVkSurface() { return m_vkWindowSurface; }
+
+		// get queue family index
+		const ui32 getGraphicsQueueFamilyIndex();
+		const ui32 getPresentQueueFamilyIndex();
+
 	private:
 		// create vk instance
 		void createVkInstance();
 
         // create window surface
-        void createSurface(void* handle);
+        void createVkSurface(void* handle);
 
 		// vk extensions
 		void enumerateVkExtensions();
@@ -96,14 +107,12 @@ namespace Echo
 		void enumerateVkValidationLayers();
 		void prepareVkValidationLayers(vector<const char*>::type& validationLayers);
 
-        // choose a device
+        // choose a physical device
         void pickVkPhysicalDevice();
         i32  calcVkPhysicalDeviceScore(const VkPhysicalDevice& device);
 
         // queue famalies
         void enumerateQueueFamalies();
-        const i32 getGraphicsQueueFamilyIndex();
-        const i32 getPresentQueueFamilyIndex();
 
         // create vk logical device
         void createVkLogicalDevice();

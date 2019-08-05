@@ -28,7 +28,7 @@ namespace Echo
     {
 		createVkInstance();
 
-		createSurface((void*)config.windowHandle);
+		createVkSurface((void*)config.windowHandle);
 
 		pickVkPhysicalDevice();
 
@@ -58,7 +58,7 @@ namespace Echo
 	}
 
 	// create window surface
-	void VKRenderer::createSurface(void* handle)
+	void VKRenderer::createVkSurface(void* handle)
 	{
 		// create window surface
 	#ifdef ECHO_PLATFORM_WINDOWS
@@ -261,7 +261,7 @@ namespace Echo
 		vkGetPhysicalDeviceQueueFamilyProperties(m_vkPhysicalDevice, &queueFamilyCount, m_vkQueueFamilies.data());
 	}
 
-	const i32 VKRenderer::getGraphicsQueueFamilyIndex()
+	const ui32 VKRenderer::getGraphicsQueueFamilyIndex()
 	{
 		for(size_t i=0; i<m_vkQueueFamilies.size(); i++)
 		{
@@ -272,7 +272,7 @@ namespace Echo
 		return -1;
 	}
 
-	const i32 VKRenderer::getPresentQueueFamilyIndex()
+	const ui32 VKRenderer::getPresentQueueFamilyIndex()
 	{
 		for(size_t i=0; i<m_vkQueueFamilies.size(); i++)
 		{
