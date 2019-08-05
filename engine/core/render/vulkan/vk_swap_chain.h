@@ -11,14 +11,14 @@ namespace Echo
 		~VKSwapChain();
 
 		// create
-		void create();
+		void create(VkDevice vkDevice);
 
 	private:
 		// create swap chain
-		void createSwapChain();
+		void createSwapChain(VkDevice vkDevice);
 
 		// create image views
-		void createImageViews();
+		void createImageViews(VkDevice vkDevice);
 
 	private:
 		VkSwapchainKHR				m_vkSwapChain = VK_NULL_HANDLE;

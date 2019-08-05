@@ -2,6 +2,7 @@
 #include "vk_renderable.h"
 #include "vk_shader_program.h"
 #include "vk_render_state.h"
+#include "vk_gpu_buffer.h"
 
 namespace Echo
 {
@@ -57,13 +58,13 @@ namespace Echo
 	}
 
 	// create window surface
-	void createSurface(void* handle)
+	void VKRenderer::createSurface(void* handle)
 	{
 		// create window surface
-	#if ECHO_PLATFORM_WINDOWS
+	#ifdef ECHO_PLATFORM_WINDOWS
 		VkWin32SurfaceCreateInfoKHR createInfo = {};
 		createInfo.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
-		createInfo.hwnd = handle;
+		createInfo.hwnd = (HWND)handle;
 		createInfo.hinstance = GetModuleHandle(nullptr);
 
 		// create surface
@@ -276,7 +277,7 @@ namespace Echo
 		for(size_t i=0; i<m_vkQueueFamilies.size(); i++)
 		{
 			VkBool32 presentSupport = false;
-			vkGetPhysicalDeviceSurfaceSupportKHR(m_vkDevice, i, m_vkWindowSurface, &presentSupport);
+			vkGetPhysicalDeviceSurfaceSupportKHR(m_vkPhysicalDevice, i, m_vkWindowSurface, &presentSupport);
 			if(presentSupport)
 				return i;
 		}
@@ -325,8 +326,6 @@ namespace Echo
 
 	void VKRenderer::createVkSwapChain()
 	{
-		VkSwapchainCreateInfoKHR createInfo = {};
-		createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-		createInfo.surface = surface;
+		m_swapChain.create(m_vkDevice);
 	}
 }

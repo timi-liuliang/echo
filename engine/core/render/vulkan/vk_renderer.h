@@ -2,6 +2,7 @@
 
 #include "engine/core/render/interface/Renderer.h"
 #include "vk_render_base.h"
+#include "vk_swap_chain.h"
 
 namespace Echo
 {
@@ -122,5 +123,6 @@ namespace Echo
         VkQueue             m_vkGraphicsQueue;
         VkSurfaceKHR        m_vkWindowSurface;
         VkQueue             m_vkPresentQueue;
+		VKSwapChain			m_swapChain;
 	};
 }

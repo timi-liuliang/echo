@@ -1,8 +1,9 @@
-##include "vk_gpu_buffer.h"
+#include "vk_gpu_buffer.h"
 
 namespace Echo
 {
-    VKBuffer::VKBuffer(GPUBufferType type, Dword usage, const Buffer& buff)
+	VKBuffer::VKBuffer(GPUBufferType type, Dword usage, const Buffer& buff)
+		: GPUBuffer(type, usage, buff)
     {
 
     }

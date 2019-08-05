@@ -7,7 +7,7 @@ namespace Echo
 	class GPUBuffer
 	{
 	public:
-		// 类型
+		// Buffer Type
 		enum GPUBufferType
 		{
 			GBT_VERTEX,
@@ -29,7 +29,7 @@ namespace Echo
 			GBU_DYNAMIC			= GBU_GPU_READ | GBU_CPU_WRITE,
 		};
 
-		// 读写权限
+		// Read|Write Access
 		enum GPUBufferAccess
 		{
 			GBA_READ,
