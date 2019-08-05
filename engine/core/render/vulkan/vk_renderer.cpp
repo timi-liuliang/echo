@@ -28,6 +28,8 @@ namespace Echo
     {
 		createVkInstance();
 
+		createVkValidation();
+
 		createVkSurface((void*)config.windowHandle);
 
 		pickVkPhysicalDevice();
@@ -329,5 +331,10 @@ namespace Echo
 	void VKRenderer::createVkSwapChain()
 	{
 		m_swapChain.create(m_vkDevice);
+	}
+
+	void VKRenderer::createVkValidation()
+	{
+		m_validation.create();
 	}
 }

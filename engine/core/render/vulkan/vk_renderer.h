@@ -3,6 +3,7 @@
 #include "engine/core/render/interface/Renderer.h"
 #include "vk_render_base.h"
 #include "vk_swap_chain.h"
+#include "vk_validation.h"
 
 namespace Echo
 {
@@ -120,6 +121,9 @@ namespace Echo
         // create swapChain
         void createVkSwapChain();
 
+		// set up validation
+		void createVkValidation();
+
     private:
         ui32				m_screenWidth = 640;
         ui32				m_screenHeight = 480;
@@ -129,6 +133,7 @@ namespace Echo
         VkPhysicalDevice    m_vkPhysicalDevice = VK_NULL_HANDLE;
         QueueFamilies       m_vkQueueFamilies;
         VkDevice            m_vkDevice;
+		VKValidation		m_validation;
         VkQueue             m_vkGraphicsQueue;
         VkSurfaceKHR        m_vkWindowSurface;
         VkQueue             m_vkPresentQueue;
