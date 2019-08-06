@@ -38,6 +38,9 @@ namespace Echo
 		// swap chain extent
 		VkExtent2D swapChainExtent = surfaceCapabilities.currentExtent;
 
+		// surface format
+		VkSurfaceFormatKHR surfaceFormat = pickSurfaceSupportFormat();
+
 		// The FIFO present mode is guaranteed by the spec to be supported
 		// Also note that current Android driver only supports FIFO
 		VkPresentModeKHR swapChainPresentMode = VK_PRESENT_MODE_FIFO_KHR;
@@ -60,9 +63,9 @@ namespace Echo
 		createInfo.pNext = nullptr;
 		createInfo.surface = vkRenderer->getVkSurface();
 		createInfo.minImageCount = desiredNumberOfSwapChainImages;
-		createInfo.imageFormat = VK_FORMAT_B8G8R8A8_UNORM;
+		createInfo.imageFormat = surfaceFormat.format;
+		createInfo.imageColorSpace = surfaceFormat.colorSpace;
 		createInfo.imageExtent = { swapChainExtent.width, swapChainExtent.height };
-		createInfo.imageColorSpace = VK_COLORSPACE_SRGB_NONLINEAR_KHR;
 		createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
 		createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 		createInfo.preTransform = presentTransform;
@@ -72,8 +75,16 @@ namespace Echo
 		createInfo.oldSwapchain = VK_NULL_HANDLE;
 		createInfo.clipped = VK_TRUE;
 		createInfo.compositeAlpha = compositeAlpha;
-		createInfo.queueFamilyIndexCount = 1;
-		createInfo.pQueueFamilyIndices = &queueFamilyIndices[0];
+
+		// queue family index config
+		createInfo.queueFamilyIndexCount = 0;
+		createInfo.pQueueFamilyIndices = nullptr;
+		if (queueFamilyIndices[0] != queueFamilyIndices[1])
+		{
+			createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
+			createInfo.queueFamilyIndexCount = 2;
+			createInfo.pQueueFamilyIndices = queueFamilyIndices;
+		}
 
 		if (vkCreateSwapchainKHR(vkDevice, &createInfo, nullptr, &m_vkSwapChain) != VK_SUCCESS)
 		{
@@ -117,5 +128,18 @@ namespace Echo
 				EchoLogError("Failed to create image views!");
 			}
 		}
+	}
+
+	VkSurfaceFormatKHR VKSwapChain::pickSurfaceSupportFormat()
+	{
+		VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
+
+		ui32 formatCount;
+		vkGetPhysicalDeviceSurfaceFormatsKHR(vkRenderer->getVkPhysicalDevice(), vkRenderer->getVkSurface(), &formatCount, nullptr);
+
+		vector<VkSurfaceFormatKHR>::type surfaceFormats(formatCount);
+		vkGetPhysicalDeviceSurfaceFormatsKHR(vkRenderer->getVkPhysicalDevice(), vkRenderer->getVkSurface(), &formatCount, &surfaceFormats[0]);
+
+		return surfaceFormats[0];
 	}
 }

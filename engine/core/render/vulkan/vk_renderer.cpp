@@ -32,6 +32,8 @@ namespace Echo
 
 		createVkSwapChain();
 
+		createVkCommandPool();
+
 		// window width height
         m_screenWidth = config.screenWidth;
         m_screenHeight = config.screenHeight;
@@ -60,11 +62,22 @@ namespace Echo
 	#ifdef ECHO_PLATFORM_WINDOWS
 		VkWin32SurfaceCreateInfoKHR createInfo = {};
 		createInfo.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
+		createInfo.pNext = nullptr;
 		createInfo.hwnd = (HWND)handle;
 		createInfo.hinstance = GetModuleHandle(nullptr);
 
 		// create surface
 		if (VK_SUCCESS != vkCreateWin32SurfaceKHR(m_vkInstance, &createInfo, nullptr, &m_vkWindowSurface))
+		{
+			EchoLogError("Vulkan Renderer failed to create window surface!");
+		}
+	#elif defined(ECHO_PLATFORM_ANDROID)
+		VkAndroidSurfaceCreateInfoKHR createInfo;
+		createInfo.sType = VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR;
+		createInfo.pNext = nullptr;
+		createInfo.flags = 0;
+		createInfo.window = AndroidGetApplicationWindow();
+		if (VK_SUCCESS != vkCreateAndroidSurfaceKHR(m_vkInstance, &createInfo, nullptr, &m_vkWindowSurface))
 		{
 			EchoLogError("Vulkan Renderer failed to create window surface!");
 		}
@@ -147,9 +160,7 @@ namespace Echo
 	void VKRenderer::createVkInstance()
 	{
 		enumerateVkExtensions();
-
-		vector<const char*>::type enabledExtensions;
-		prepareVkExtensions(enabledExtensions);
+		prepareVkExtensions(m_enabledExtensions);
 
 		vector<const char*>::type validationLayers;
 		m_validation.prepareVkValidationLayers(validationLayers);
@@ -167,8 +178,8 @@ namespace Echo
 		createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
 		createInfo.pNext = nullptr;
 		createInfo.pApplicationInfo = &appInfo;
-		createInfo.enabledExtensionCount = enabledExtensions.size();
-		createInfo.ppEnabledExtensionNames = enabledExtensions.data();
+		createInfo.enabledExtensionCount = m_enabledExtensions.size();
+		createInfo.ppEnabledExtensionNames = m_enabledExtensions.data();
 		createInfo.enabledLayerCount = validationLayers.size();
 		createInfo.ppEnabledLayerNames = validationLayers.data();
 		createInfo.enabledLayerCount = 0;
@@ -271,21 +282,19 @@ namespace Echo
 
 	void VKRenderer::createVkLogicalDevice()
 	{
+		// device extensions
+		vector<const char*>::type deviceExtensionNames = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
+
+		// priorities
 		float queuePrioritys[2] = { 1.f, 1.f};
-		VkDeviceQueueCreateInfo queueCreateInfos[2];
 
 		// graphics queue
-		queueCreateInfos[0].sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-		queueCreateInfos[0].pNext = nullptr;
-		queueCreateInfos[0].queueFamilyIndex = getGraphicsQueueFamilyIndex();
-		queueCreateInfos[0].queueCount = 1;
-		queueCreateInfos[0].pQueuePriorities = &queuePrioritys[0];
-
-		//// present queue
-		//queueCreateInfos[1].sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-		//queueCreateInfos[1].queueFamilyIndex = getPresentQueueFamilyIndex();
-		//queueCreateInfos[1].queueCount = 1;
-		//queueCreateInfos[1].pQueuePriorities = &queuePrioritys[1];
+		VkDeviceQueueCreateInfo queueCreateInfos;
+		queueCreateInfos.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+		queueCreateInfos.pNext = nullptr;
+		queueCreateInfos.queueFamilyIndex = getGraphicsQueueFamilyIndex();
+		queueCreateInfos.queueCount = 1;
+		queueCreateInfos.pQueuePriorities = &queuePrioritys[0];
 
 		// device features
 		VkPhysicalDeviceFeatures deviceFeatures = {};
@@ -293,10 +302,11 @@ namespace Echo
 		VkDeviceCreateInfo createInfo = {};
 		createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
 		createInfo.pNext = nullptr;
-		createInfo.pQueueCreateInfos = &queueCreateInfos[0];
+		createInfo.pQueueCreateInfos = &queueCreateInfos;
 		createInfo.queueCreateInfoCount = 1;
 		createInfo.pEnabledFeatures = &deviceFeatures;
-		createInfo.enabledExtensionCount = 0;
+		createInfo.enabledExtensionCount = deviceExtensionNames.size();
+		createInfo.ppEnabledExtensionNames = deviceExtensionNames.data();
 
 		// create logical device and retirve graphics queue
 		if (VK_SUCCESS == vkCreateDevice(m_vkPhysicalDevice, &createInfo, nullptr, &m_vkDevice))
@@ -318,5 +328,19 @@ namespace Echo
 	void VKRenderer::createVkValidation()
 	{
 		m_validation.create();
+	}
+
+	void VKRenderer::createVkCommandPool()
+	{
+		VkCommandPoolCreateInfo createInfo = {};
+		createInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+		createInfo.pNext = NULL;
+		createInfo.queueFamilyIndex = getGraphicsQueueFamilyIndex();
+		createInfo.flags = 0;
+
+		if (VK_SUCCESS != vkCreateCommandPool(m_vkDevice, &createInfo, nullptr, &m_vkCommandPool))
+		{
+			EchoLogError("Vulkan create command pool failed");
+		}
 	}
 }

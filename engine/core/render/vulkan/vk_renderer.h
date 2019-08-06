@@ -10,6 +10,7 @@ namespace Echo
     class GPUBuffer;
 	class VKRenderer: public Renderer
 	{
+		typedef vector<const char*>::type				Extensions;
 		typedef vector<VkExtensionProperties>::type     ExtensionProperties;
         typedef vector<VkQueueFamilyProperties>::type   QueueFamilies;
 
@@ -121,9 +122,13 @@ namespace Echo
 		// set up validation
 		void createVkValidation();
 
+		// create command pool
+		void createVkCommandPool();
+
     private:
         ui32				m_screenWidth = 640;
         ui32				m_screenHeight = 480;
+		Extensions			m_enabledExtensions;
 		VkInstance			m_vkInstance;
 		ExtensionProperties	m_vkExtensions;
         VkPhysicalDevice    m_vkPhysicalDevice = VK_NULL_HANDLE;
@@ -134,5 +139,6 @@ namespace Echo
         VkSurfaceKHR        m_vkWindowSurface;
         VkQueue             m_vkPresentQueue;
 		VKSwapChain			m_swapChain;
+		VkCommandPool		m_vkCommandPool;
 	};
 }

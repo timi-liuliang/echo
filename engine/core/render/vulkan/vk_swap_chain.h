@@ -20,6 +20,9 @@ namespace Echo
 		// create image views
 		void createImageViews(VkDevice vkDevice);
 
+		// check surface format
+		VkSurfaceFormatKHR pickSurfaceSupportFormat();
+
 	private:
 		VkSwapchainKHR				m_vkSwapChain = VK_NULL_HANDLE;
 		vector<VkImageView>::type	m_vkSwapChainImageViews;

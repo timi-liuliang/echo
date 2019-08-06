@@ -95,7 +95,7 @@ namespace Echo
 
 	void Renderable::submitToRenderQueue()
 	{
-		if (m_mesh->isValid())
+		if (m_mesh && m_mesh->isValid())
 		{
 			RenderStage::instance()->addRenderable(m_renderStage, getIdentifier());
 		}
