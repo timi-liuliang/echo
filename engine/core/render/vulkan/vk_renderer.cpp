@@ -6,13 +6,6 @@
 
 namespace Echo
 {
-	static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData)
-	{
-		EchoLogError(pCallbackData->pMessage);
-
-		return VK_FALSE;
-	}
-
     VKRenderer::VKRenderer()
     {
     }
@@ -124,21 +117,6 @@ namespace Echo
         return EchoNew(VKSamplerState);
     }
 
-	void VKRenderer::enumerateVkValidationLayers()
-	{
-#if FALSE
-		ui32 layerCount;
-		vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
-		m_vkLayers.resize(layerCount);
-		vkEnumerateInstanceLayerProperties(&layerCount, m_vkLayers.data());
-#endif
-	}
-
-	void VKRenderer::prepareVkValidationLayers(vector<const char*>::type& validationLayers)
-	{
-		validationLayers = { "VK_LAYER_KHRONOS_validation" };
-	}
-
 	void VKRenderer::enumerateVkExtensions()
 	{
 #if FALSE
@@ -163,14 +141,13 @@ namespace Echo
 
 	void VKRenderer::createVkInstance()
 	{
-		enumerateVkValidationLayers();
 		enumerateVkExtensions();
 
 		vector<const char*>::type enabledExtensions;
 		prepareVkExtensions(enabledExtensions);
 
 		vector<const char*>::type validationLayers;
-		prepareVkValidationLayers(validationLayers);
+		m_validation.prepareVkValidationLayers(validationLayers);
 
 		VkApplicationInfo appInfo;
 		appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;

@@ -11,7 +11,6 @@ namespace Echo
 	class VKRenderer: public Renderer
 	{
 		typedef vector<VkExtensionProperties>::type     ExtensionProperties;
-		typedef vector<VkLayerProperties>::type		    LayerProperties;
         typedef vector<VkQueueFamilyProperties>::type   QueueFamilies;
 
 	public:
@@ -83,6 +82,8 @@ namespace Echo
 		virtual void getViewportReal(Viewport& pViewport) override {}
 
 	public:
+		VkInstance getVkInstance() { return m_vkInstance; }
+
 		// get physical device
 		VkPhysicalDevice getVkPhysicalDevice() { return m_vkPhysicalDevice; }
 
@@ -103,10 +104,6 @@ namespace Echo
 		// vk extensions
 		void enumerateVkExtensions();
 		void prepareVkExtensions(vector<const char*>::type& extensions);
-
-		// vk validation layers
-		void enumerateVkValidationLayers();
-		void prepareVkValidationLayers(vector<const char*>::type& validationLayers);
 
         // choose a physical device
         void pickVkPhysicalDevice();
@@ -129,7 +126,6 @@ namespace Echo
         ui32				m_screenHeight = 480;
 		VkInstance			m_vkInstance;
 		ExtensionProperties	m_vkExtensions;
-		LayerProperties		m_vkLayers;
         VkPhysicalDevice    m_vkPhysicalDevice = VK_NULL_HANDLE;
         QueueFamilies       m_vkQueueFamilies;
         VkDevice            m_vkDevice;
