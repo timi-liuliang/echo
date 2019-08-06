@@ -21,11 +21,15 @@ namespace Echo
 		// create
 		void create();
 
+		// cleanup
+		void cleanup();
+
 	private:
 		// vk validation layers
 		void enumerateVkValidationLayers();
 
 	private:
-		LayerProperties		m_vkLayers;
+		LayerProperties				m_vkLayers;
+		VkDebugReportCallbackEXT	m_vkDebugReportCB;
 	};
 }

@@ -12,6 +12,7 @@ namespace Echo
 
     VKRenderer::~VKRenderer()
     {
+		m_validation.cleanup();
 		vkDestroyDevice(m_vkDevice, nullptr);
 		vkDestroySurfaceKHR(m_vkInstance, m_vkWindowSurface, nullptr);
 		vkDestroyInstance(m_vkInstance, nullptr);
@@ -136,6 +137,10 @@ namespace Echo
 		extensions.push_back(VK_KHR_ANDROID_SURFACE_EXTENSION_NAME);
 	#elif defined(__linux__)
 		extensions.push_back(VK_KHR_XCB_SURFACE_EXTENSION_NAME);
+	#endif
+
+	#if defined(ECHO_EDITOR_MODE)
+		extensions.push_back(VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
 	#endif
 	}
 

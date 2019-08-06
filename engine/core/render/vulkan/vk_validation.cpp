@@ -79,12 +79,27 @@ namespace Echo
 
 		// Callback addr
 		PFN_vkCreateDebugReportCallbackEXT  vkCDRC = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(vkRenderer->getVkInstance(), "vkCreateDebugReportCallbackEXT");
-		PFN_vkDestroyDebugReportCallbackEXT vkDDRC = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(vkRenderer->getVkInstance(), "vkDestroyDebugReportCallbackEXT");
+		if (vkCDRC)
+		{
+			VkDebugReportCallbackCreateInfoEXT createInfo = {};
+			createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT;
+			createInfo.pNext = nullptr;
+			createInfo.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT;
+			createInfo.pfnCallback = debugCb;
+			createInfo.pUserData = nullptr;
 
-		VkDebugReportCallbackCreateInfoEXT createInfo = {};
-		createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT;
-		createInfo.pNext = nullptr;
-		createInfo.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT;
-		createInfo.pfnCallback = debugCb;
+			// create
+			vkCDRC(vkRenderer->getVkInstance(), &createInfo, nullptr, &m_vkDebugReportCB);
+		}
+	}
+
+	void VKValidation::cleanup()
+	{
+		VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
+		PFN_vkDestroyDebugReportCallbackEXT vkDDRC = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(vkRenderer->getVkInstance(), "vkDestroyDebugReportCallbackEXT");
+		if (vkDDRC)
+		{
+			vkDDRC(vkRenderer->getVkInstance(), m_vkDebugReportCB, nullptr);
+		}
 	}
 }
