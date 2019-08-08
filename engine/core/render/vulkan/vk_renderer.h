@@ -88,6 +88,9 @@ namespace Echo
 		// get physical device
 		VkPhysicalDevice getVkPhysicalDevice() { return m_vkPhysicalDevice; }
 
+		// get logical device
+		VkDevice getVkDevice() { return m_vkDevice; }
+
 		// get windows surface
 		VkSurfaceKHR getVkSurface() { return m_vkWindowSurface; }
 
