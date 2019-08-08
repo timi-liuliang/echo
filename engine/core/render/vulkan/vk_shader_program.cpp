@@ -25,6 +25,14 @@ namespace Echo
 		return true;
 	}
 
+	VKShaderProgram::~VKShaderProgram()
+	{
+		VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
+
+		vkDestroyShaderModule(vkRenderer->getVkDevice(), m_vkVertexShader, nullptr);
+		vkDestroyShaderModule(vkRenderer->getVkDevice(), m_vkFragmentShader, nullptr);
+	}
+
 	bool VKShaderProgram::createShaderProgram(const String& vsSrc, const String& psSrc)
 	{
 		GLSLCrossCompiler glslCompiler;
@@ -33,6 +41,22 @@ namespace Echo
 		bool isCreateVSSucceed = createShader(glslCompiler.getSPIRV(GLSLCrossCompiler::ShaderType::VS), m_vkVertexShader);
 		bool isCreateFSSucceed = createShader(glslCompiler.getSPIRV(GLSLCrossCompiler::ShaderType::FS), m_vkFragmentShader);
 		m_isValid = isCreateVSSucceed && isCreateFSSucceed;
+
+		// create shader stage
+		if (m_isValid)
+		{
+			VkPipelineShaderStageCreateInfo shaderStagesInfo[2] = { {}, {} };
+
+			shaderStagesInfo[0].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+			shaderStagesInfo[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
+			shaderStagesInfo[0].module = m_vkVertexShader;
+			shaderStagesInfo[0].pName = "main";
+
+			shaderStagesInfo[1].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+			shaderStagesInfo[1].stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+			shaderStagesInfo[1].module = m_vkFragmentShader;
+			shaderStagesInfo[1].pName = "main";
+		}
 
 		return m_isValid;
 	}

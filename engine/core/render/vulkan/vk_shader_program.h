@@ -8,6 +8,7 @@ namespace Echo
 	class VKShaderProgram : public ShaderProgram
 	{
     public:
+		virtual ~VKShaderProgram();
 
 	private:
 		// create shader library
