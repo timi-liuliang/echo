@@ -19,5 +19,5 @@ namespace Echo
 
     private:
         VkBuffer    m_vkBuffer = nullptr;
-	};
+    };
 }
