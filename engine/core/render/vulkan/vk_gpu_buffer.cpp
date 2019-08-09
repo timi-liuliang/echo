@@ -4,8 +4,28 @@
 
 namespace Echo
 {
-	VKBuffer::VKBuffer(GPUBufferType type, Dword usage, const Buffer& buff)
-		: GPUBuffer(type, usage, buff)
+    static ui32 findMemoryType(VkPhysicalDevice vkPhysicalDevice, ui32 typeBits, VkFlags requirementsMask)
+    {
+        VkPhysicalDeviceMemoryProperties memProperties;
+        vkGetPhysicalDeviceMemoryProperties(vkPhysicalDevice, &memProperties);
+
+        for (ui32 i = 0; i < memProperties.memoryTypeCount; i++)
+        {
+            if ((typeBits & 1) == 1)
+            {
+                if ((memProperties.memoryTypes[i].propertyFlags & requirementsMask) == requirementsMask)
+                    return i;
+            }
+
+            typeBits >>= 1;
+        }
+
+        // no memory types matched, return failure
+        return 0;
+    }
+
+    VKBuffer::VKBuffer(GPUBufferType type, Dword usage, const Buffer& buff)
+        : GPUBuffer(type, usage, buff)
     {
 		updateData(buff);
     }
@@ -33,11 +53,28 @@ namespace Echo
         
         if (VK_SUCCESS == vkCreateBuffer(vkRenderer->getVkDevice(), &createInfo, nullptr, &m_vkBuffer))
         {
-            // memory requirements
             VkMemoryRequirements memRequirements;
             vkGetBufferMemoryRequirements(vkRenderer->getVkDevice(), m_vkBuffer, &memRequirements);
 
-            return true;
+            VkMemoryAllocateInfo allocInfo = {};
+            allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+            allocInfo.pNext = nullptr;
+            allocInfo.memoryTypeIndex = 0;
+            allocInfo.allocationSize = memRequirements.size;
+            allocInfo.memoryTypeIndex = findMemoryType(vkRenderer->getVkPhysicalDevice(), memRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+            if (VK_SUCCESS == vkAllocateMemory(vkRenderer->getVkDevice(), &allocInfo, nullptr, &m_vkBufferMemory))
+            {
+                vkBindBufferMemory(vkRenderer->getVkDevice(), m_vkBuffer, m_vkBufferMemory, 0);
+
+                // filling the buffer
+                void* data = nullptr;
+                vkMapMemory(vkRenderer->getVkDevice(), m_vkBufferMemory, 0, memRequirements.size, 0, &data);
+                memcpy(data, buff.getData(), buff.getSize());
+                vkUnmapMemory(vkRenderer->getVkDevice(), m_vkBufferMemory);
+
+                return true;
+            }
         }
 
         EchoLogError("vulkan crete gpu buffer failed");
