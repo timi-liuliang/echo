@@ -12,12 +12,9 @@ namespace Echo
 	{
 		switch (type)
 		{
-			case GBT_VERTEX:		m_target = GL_ARRAY_BUFFER;			break;
-			case GBT_INDEX:			m_target = GL_ELEMENT_ARRAY_BUFFER;	break;
-			default:
-			{
-				EchoLogError("Unknown GPUBufferType.");
-			}
+			case GBT_VERTEX:	m_target = GL_ARRAY_BUFFER;				break;
+			case GBT_INDEX:		m_target = GL_ELEMENT_ARRAY_BUFFER;		break;
+			default:			EchoLogError("Unknown GPUBufferType."); break;
 		}
 
 		m_glUsage = GLES2Mapping::MapGPUBufferUsage(m_usage);
@@ -49,7 +46,7 @@ namespace Echo
 		EchoLogWarning("GLES2GPUBuffer::updateSubData failed");
 		return false;
 	}
-	
+
 	void GLES2GPUBuffer::bindBuffer()
 	{
 		OGLESDebug(glBindBuffer(m_target, m_hVBO));

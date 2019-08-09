@@ -11,7 +11,7 @@ namespace Echo
         virtual ~VKRenderable() {}
 
         // link shader and program
-        virtual void setMesh(Mesh* mesh) override {}
+		virtual void setMesh(Mesh* mesh) override;
 
 		// param operate
 		virtual void setShaderParam(const String& name, ShaderParamType type, const void* param, size_t num = 1) {}

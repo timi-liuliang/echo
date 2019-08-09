@@ -5,16 +5,19 @@
 
 namespace Echo
 {
-	class VKBuffer : public GPUBuffer
-	{
-	public:
+    class VKBuffer : public GPUBuffer
+    {
+    public:
 		VKBuffer(GPUBufferType type, Dword usage, const Buffer& buff);
 		~VKBuffer();
 
-		bool updateData(const Buffer& buff);
-		void bindBuffer();
+        bool updateData(const Buffer& buff);
+        void bindBuffer();
 
-	private:
-        VkBuffer    m_vkBuffer;
+        // clear
+        void clear();
+
+    private:
+        VkBuffer    m_vkBuffer = nullptr;
 	};
 }

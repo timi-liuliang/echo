@@ -1,5 +1,5 @@
 #include "Buffer.h"
-#include "AssertX.h"
+#include "engine/core/log/Log.h"
 
 namespace Echo
 {
@@ -20,13 +20,18 @@ namespace Echo
 
 	void Buffer::allocate(ui32 size)
 	{
-		EchoAssertX(size > 0, "Buffer allocated 0 size.");
+        if (size > 0)
+        {
+            clear();
 
-		clear();
-
-		m_data = (Byte*)EchoMalloc(sizeof(Byte)*size);
-		m_size = size;
-		m_isAutoFree = true;
+            m_data = (Byte*)EchoMalloc(sizeof(Byte)*size);
+            m_size = size;
+            m_isAutoFree = true;
+        }
+        else
+        {
+            EchoLogError("Buffer allocated 0 size.");
+        }
 	}
 
 	void Buffer::clear()
@@ -50,7 +55,7 @@ namespace Echo
 		m_isAutoFree = bAutoFree;
 	}
 
-	void Buffer::copyBuffer(const Buffer& buff)
+	void Buffer::set(const Buffer& buff)
 	{
 		allocate(buff.getSize());
 		memcpy(m_data, buff.getData(), buff.getSize());

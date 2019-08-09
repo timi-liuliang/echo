@@ -7,17 +7,22 @@ namespace Echo
 	class Buffer
 	{
 	public:
-		Buffer();
-		Buffer(ui32 size, void* pData = nullptr, bool bAutoFree = false);
-		virtual ~Buffer();
+        Buffer();
+		Buffer(ui32 size, void* pData = nullptr, bool isAutoFree = false);
+		~Buffer();
 
-		virtual void allocate(ui32 size);
-		virtual void clear();
-		virtual void set(ui32 size, void *pData, bool bAutoFree = false);
-		virtual void copyBuffer(const Buffer &buff);
-		virtual Byte* getData() const;
-		virtual ui32 getSize() const;
-		virtual ui32 takeData(Byte* &pData);
+        // allocate|clear
+		void allocate(ui32 size);
+		void clear();
+
+        // data operate
+        void set(const Buffer &buff);
+		void set(ui32 size, void *pData, bool bAutoFree = false);
+		Byte* getData() const;
+
+        // size in bytes
+		ui32 getSize() const;
+		ui32 takeData(Byte* &pData);
 
 	protected:
 		Byte*		m_data = nullptr;

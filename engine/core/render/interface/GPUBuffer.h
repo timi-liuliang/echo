@@ -12,16 +12,15 @@ namespace Echo
 		{
 			GBT_VERTEX,
 			GBT_INDEX,
+            GBT_UNIFORM,
 		};
 
 		enum GPUBufferUsage
 		{
 			GBU_CPU_READ		= 0x00000001,
 			GBU_CPU_WRITE		= 0x00000002,
-			// texture is used as shader resource
-			GBU_GPU_READ		= 0x00000004,
-			// texture is used as depth or render target (depend on pixel format)
-			GBU_GPU_WRITE		= 0x00000008,
+			GBU_GPU_READ		= 0x00000004,       // texture is used as shader resource
+			GBU_GPU_WRITE		= 0x00000008,       // texture is used as depth or render target (depend on pixel format)
 			GBU_GPU_UNORDERED	= 0x00000010,
 
 			GBU_DEFAULT			= GBU_GPU_READ | GBU_GPU_WRITE,
