@@ -343,4 +343,26 @@ namespace Echo
 			EchoLogError("Vulkan create command pool failed");
 		}
 	}
+
+    bool VKRenderer::present()
+    {
+        VkPresentInfoKHR present;
+        present.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+        present.pNext = nullptr;
+        present.swapchainCount = 1;
+        present.pSwapchains = m_swapChain.getVkSwapchain();
+        present.pImageIndices = 0;
+        present.pWaitSemaphores = nullptr;
+        present.waitSemaphoreCount = 0;
+        present.pResults = nullptr;
+
+        //if (VK_SUCCESS != vkQueuePresentKHR(m_vkPresentQueue, &present))
+        {
+            //EchoLogError("vulkan present failed");
+
+            return false;
+        }
+
+        return true;
+    }
 }

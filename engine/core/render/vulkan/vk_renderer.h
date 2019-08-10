@@ -59,7 +59,7 @@ namespace Echo
 		virtual void draw(Renderable* program) override {}
 
 		// present
-		virtual bool present() override { return false; }
+        virtual bool present() override;
 
     public:
         // set texture

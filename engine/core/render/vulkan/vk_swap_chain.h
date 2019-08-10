@@ -13,6 +13,9 @@ namespace Echo
 		// create
 		void create(VkDevice vkDevice);
 
+        // get vk swapchain
+        VkSwapchainKHR* getVkSwapchain() { return &m_vkSwapChain; }
+
 	private:
 		// create swap chain
 		void createSwapChain(VkDevice vkDevice);
