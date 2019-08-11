@@ -132,6 +132,9 @@ namespace Echo
         void createVkCommandBuffer();
         void executeBeginVkCommandBuffer();
 
+        // create depth buffer
+        void createVkDepthBuffer(ui32 width, ui32 height);
+
     private:
         ui32				m_screenWidth = 640;
         ui32				m_screenHeight = 480;
@@ -148,5 +151,12 @@ namespace Echo
 		VKSwapChain			m_swapChain;
 		VkCommandPool		m_vkCommandPool;
         VkCommandBuffer     m_vkCommandBuffer;
+        struct 
+        {
+            VkFormat format;
+            VkImage image;
+            VkDeviceMemory memory;
+            VkImageView view;
+        }                   m_vkDepth;
 	};
 }
