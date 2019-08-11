@@ -11,5 +11,7 @@ namespace Echo
     void VKRenderable::setMesh(Mesh* mesh)
     {
         m_mesh = mesh;
+
+
     }
 }

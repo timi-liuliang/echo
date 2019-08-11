@@ -33,6 +33,8 @@ namespace Echo
 		createVkSwapChain();
 
 		createVkCommandPool();
+        createVkCommandBuffer();
+        executeBeginVkCommandBuffer();
 
 		// window width height
         m_screenWidth = config.screenWidth;
@@ -343,6 +345,35 @@ namespace Echo
 			EchoLogError("Vulkan create command pool failed");
 		}
 	}
+
+    void VKRenderer::createVkCommandBuffer()
+    {
+        VkCommandBufferAllocateInfo createInfo = {};
+        createInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+        createInfo.pNext = nullptr;
+        createInfo.commandPool = m_vkCommandPool;
+        createInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+        createInfo.commandBufferCount = 1;
+
+        if (VK_SUCCESS != vkAllocateCommandBuffers(m_vkDevice, &createInfo, &m_vkCommandBuffer))
+        {
+            EchoLogError("vulkan create command buffer failed");
+        }
+    }
+
+    void VKRenderer::executeBeginVkCommandBuffer()
+    {
+        VkCommandBufferBeginInfo commandBufferBeginInfo = {};
+        commandBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+        commandBufferBeginInfo.pNext = nullptr;
+        commandBufferBeginInfo.flags = 0;
+        commandBufferBeginInfo.pInheritanceInfo = nullptr;
+
+        if (VK_SUCCESS != vkBeginCommandBuffer(m_vkCommandBuffer, &commandBufferBeginInfo))
+        {
+            EchoLogError("vulkan begin command buffer failed.");
+        }
+    }
 
     bool VKRenderer::present()
     {

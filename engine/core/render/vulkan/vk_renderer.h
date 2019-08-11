@@ -128,6 +128,10 @@ namespace Echo
 		// create command pool
 		void createVkCommandPool();
 
+        // create command buffer
+        void createVkCommandBuffer();
+        void executeBeginVkCommandBuffer();
+
     private:
         ui32				m_screenWidth = 640;
         ui32				m_screenHeight = 480;
@@ -143,5 +147,6 @@ namespace Echo
         VkQueue             m_vkPresentQueue;
 		VKSwapChain			m_swapChain;
 		VkCommandPool		m_vkCommandPool;
+        VkCommandBuffer     m_vkCommandBuffer;
 	};
 }
