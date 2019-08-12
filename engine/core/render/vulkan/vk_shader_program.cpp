@@ -74,6 +74,54 @@ namespace Echo
         m_vkFragmentShaderUniformBuffer = EchoNew(VKBuffer(GPUBuffer::GPUBufferType::GBT_UNIFORM, GPUBuffer::GBU_DYNAMIC, fragmentUniformBuffer));
     }
 
+    void VKShaderProgram::createVkDescriptorAndPipelineLayouts()
+    {
+        VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
+
+        VkDescriptorSetLayoutBinding layoutBindings[2];
+        layoutBindings[0].binding = 0;
+        layoutBindings[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        layoutBindings[0].descriptorCount = 1;
+        layoutBindings[0].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+        layoutBindings[0].pImmutableSamplers = nullptr;
+
+        if (false /*use texture*/)
+        {
+            layoutBindings[1].binding = 1;
+            layoutBindings[1].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+            layoutBindings[1].descriptorCount = 1;
+            layoutBindings[1].stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+            layoutBindings[1].pImmutableSamplers = nullptr;
+        }
+
+        // create a descriptor set layout based on layout bindings
+        VkDescriptorSetLayoutCreateInfo dslCreateInfo = {};
+        dslCreateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+        dslCreateInfo.pNext = nullptr;
+        dslCreateInfo.flags = 0;
+        dslCreateInfo.bindingCount = 1;
+        dslCreateInfo.pBindings = layoutBindings;
+
+        if (VK_SUCCESS != vkCreateDescriptorSetLayout(vkRenderer->getVkDevice(), &dslCreateInfo, nullptr, &m_vkDescriptorSetLayout))
+        {
+            EchoLogError("create descriptor set layout.");
+            return;
+        }
+
+        VkPipelineLayoutCreateInfo plCreateInfo = {};
+        plCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+        plCreateInfo.pNext = nullptr;
+        plCreateInfo.pushConstantRangeCount = 0;
+        plCreateInfo.pPushConstantRanges = nullptr;
+        plCreateInfo.setLayoutCount = 1;
+        plCreateInfo.pSetLayouts = &m_vkDescriptorSetLayout;
+
+        if (VK_SUCCESS != vkCreatePipelineLayout(vkRenderer->getVkDevice(), &plCreateInfo, nullptr, &m_vkPipelineLayout))
+        {
+            EchoLogError("vulkan create pipeline layout failed");
+        }
+    }
+
     void VKShaderProgram::parseUniforms()
     {
         allocUniformBytes();
@@ -94,6 +142,7 @@ namespace Echo
         createVkUniformBuffer();
 
         // set uniforms
+        createVkDescriptorAndPipelineLayouts();
     }
 
     void VKShaderProgram::bindRenderable(Renderable* renderable)

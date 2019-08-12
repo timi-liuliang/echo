@@ -26,16 +26,21 @@ namespace Echo
         // create uniform buffer
         void createVkUniformBuffer();
 
+        // create descriptor and pipeline layouts
+        void createVkDescriptorAndPipelineLayouts();
+
         // alloc uniform bytes
         void allocUniformBytes();
 
 	private:
-		bool			    m_isValid = false;
-		VkShaderModule	    m_vkVertexShader;
-		VkShaderModule	    m_vkFragmentShader;
-        vector<Byte>::type  m_vertexShaderUniformBytes;
-        vector<Byte>::type  m_fragmentShaderUniformBytes;
-        VKBuffer*           m_vkVertexShaderUniformBuffer = nullptr;
-        VKBuffer*           m_vkFragmentShaderUniformBuffer = nullptr;
+		bool			        m_isValid = false;
+		VkShaderModule	        m_vkVertexShader;
+		VkShaderModule	        m_vkFragmentShader;
+        vector<Byte>::type      m_vertexShaderUniformBytes;
+        vector<Byte>::type      m_fragmentShaderUniformBytes;
+        VKBuffer*               m_vkVertexShaderUniformBuffer = nullptr;
+        VKBuffer*               m_vkFragmentShaderUniformBuffer = nullptr;
+        VkDescriptorSetLayout   m_vkDescriptorSetLayout;
+        VkPipelineLayout        m_vkPipelineLayout;
 	};
 }
