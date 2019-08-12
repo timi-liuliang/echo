@@ -2,6 +2,7 @@
 
 #include "engine/core/render/interface/shaderprogram.h"
 #include "vk_render_base.h"
+#include "vk_gpu_buffer.h"
 
 namespace Echo
 {
@@ -10,13 +11,31 @@ namespace Echo
     public:
 		virtual ~VKShaderProgram();
 
+        // bind
+        virtual void bindUniforms() override;
+        virtual void bindRenderable(Renderable* renderable) override;
+
+    public:
+        // parse uniforms
+        void parseUniforms();
+
 	private:
 		// create shader library
 		virtual bool createShaderProgram(const String& vsContent, const String& psContent) override;
 
+        // create uniform buffer
+        void createVkUniformBuffer();
+
+        // alloc uniform bytes
+        void allocUniformBytes();
+
 	private:
-		bool			m_isValid = false;
-		VkShaderModule	m_vkVertexShader;
-		VkShaderModule	m_vkFragmentShader;
+		bool			    m_isValid = false;
+		VkShaderModule	    m_vkVertexShader;
+		VkShaderModule	    m_vkFragmentShader;
+        vector<Byte>::type  m_vertexShaderUniformBytes;
+        vector<Byte>::type  m_fragmentShaderUniformBytes;
+        VKBuffer*           m_vkVertexShaderUniformBuffer = nullptr;
+        VKBuffer*           m_vkFragmentShaderUniformBuffer = nullptr;
 	};
 }

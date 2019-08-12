@@ -60,4 +60,44 @@ namespace Echo
 
 		return m_isValid;
 	}
+
+    void VKShaderProgram::createVkUniformBuffer()
+    {
+        // this is not good here, reuse VkBuffer afterwards
+        EchoSafeDelete(m_vkVertexShaderUniformBuffer, VKBuffer);
+        EchoSafeDelete(m_vkFragmentShaderUniformBuffer, VKBuffer);
+
+        Buffer vertUniformBuffer(m_vertexShaderUniformBytes.size(), m_vertexShaderUniformBytes.data(), false);
+        m_vkVertexShaderUniformBuffer = EchoNew(VKBuffer(GPUBuffer::GPUBufferType::GBT_UNIFORM, GPUBuffer::GBU_DYNAMIC, vertUniformBuffer));
+
+        Buffer fragmentUniformBuffer(m_fragmentShaderUniformBytes.size(), m_fragmentShaderUniformBytes.data(), false);
+        m_vkFragmentShaderUniformBuffer = EchoNew(VKBuffer(GPUBuffer::GPUBufferType::GBT_UNIFORM, GPUBuffer::GBU_DYNAMIC, fragmentUniformBuffer));
+    }
+
+    void VKShaderProgram::parseUniforms()
+    {
+        allocUniformBytes();
+    }
+
+    // alloc uniform bytes
+    void VKShaderProgram::allocUniformBytes()
+    {
+        m_vertexShaderUniformBytes.clear();
+        m_fragmentShaderUniformBytes.clear();
+    }
+
+    void VKShaderProgram::bindUniforms()
+    {
+        // organize uniform bytes
+
+        // update uniform VkBuffer by memory
+        createVkUniformBuffer();
+
+        // set uniforms
+    }
+
+    void VKShaderProgram::bindRenderable(Renderable* renderable)
+    {
+
+    }
 }
