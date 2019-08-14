@@ -2,6 +2,7 @@
 
 #include "engine/core/scene/node.h"
 #include "Texture.h"
+#include "RenderView.h"
 
 namespace Echo
 {
@@ -22,6 +23,20 @@ namespace Echo
 				, cubemap(false)
 			{}
 		};
+
+        // Type
+        enum class Attachment
+        {
+            Color0 = 0,
+            Color1,
+            Color2,
+            Color3,
+            Color4,
+            Color5,
+            Color6,
+            Color7,
+            DepthStencil
+        };
 
 	public:
 		FrameBuffer() {}
@@ -74,6 +89,9 @@ namespace Echo
 		ui32 getMemorySize();
 
 	protected:
+        vector<RenderView*>     m_colorViews;       // color views
+        RenderView*             m_dsView;           // depth stencial views
+
 		bool					m_isHasMSAA;
 		ui32					m_id;
         PixelFormat             m_pixelFormat;
@@ -87,5 +105,5 @@ namespace Echo
 		bool					m_isCubemap;
 		FrameBuffer*			m_depthTarget;
 	};
-	typedef map<ui32, FrameBuffer*>::type	RenderTargetMap;
+	typedef map<ui32, FrameBuffer*>::type	FramebufferMap;
 }

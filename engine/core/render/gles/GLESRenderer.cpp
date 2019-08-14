@@ -1,7 +1,7 @@
 #include "GLESRenderBase.h"
 #include "GLESRenderer.h"
 #include "GLESMapping.h"
-#include "GLESRenderTarget.h"
+#include "GLESFramebuffer.h"
 #include "GLESTexture2D.h"
 #include "GLESTextureCube.h"
 #include "GLESShaderProgram.h"
@@ -592,9 +592,9 @@ namespace Echo
 	}
 #endif
 
-	FrameBuffer* GLES2Renderer::createRenderTarget(ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const FrameBuffer::Options& option)
+	FrameBuffer* GLES2Renderer::createFramebuffer(ui32 id, ui32 width, ui32 height, PixelFormat pixelFormat, const FrameBuffer::Options& option)
 	{
-		return EchoNew(GLES2RenderTarget(_id, _width, _height, _pixelFormat, option));
+		return EchoNew(GLES2RenderTarget(id, width, height, pixelFormat, option));
 	}
 
 	Renderable* GLES2Renderer::createRenderable(const String& renderStage, ShaderProgram* material)

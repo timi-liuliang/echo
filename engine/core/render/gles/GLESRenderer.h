@@ -12,13 +12,10 @@ namespace Echo
 		GLuint				m_texture;
 		const GLES2SamplerState*	m_samplerState;	// 采样状态
 		
-
-		// 构造函数
 		TextureSlotInfo()
 			: m_target(-1), m_texture(NULL), m_samplerState( NULL)
 		{}
 
-		// 重置
 		void reset()
 		{
 			m_target = -1;
@@ -83,9 +80,10 @@ namespace Echo
 		BlendState*	createBlendState(const BlendState::BlendDesc& desc);
 		const SamplerState*	getSamplerState(const SamplerState::SamplerDesc& desc);
 	
-		// render target
-		virtual FrameBuffer* createRenderTarget(ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const FrameBuffer::Options& option);
+		// frame buffer
+		virtual FrameBuffer* createFramebuffer(ui32 id, ui32 width, ui32 height, PixelFormat pixelFormat, const FrameBuffer::Options& option);
 
+        // screen size
 		virtual ui32 getScreenWidth() { return m_screenWidth; }
 		virtual ui32 getScreenHeight() { return m_screenHeight; }
 

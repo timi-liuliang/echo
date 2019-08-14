@@ -48,13 +48,13 @@ namespace Echo
 	// process all render stage item
 	void RenderStage::process()
 	{
-		RenderPipeline::instance()->beginRenderTarget(RenderPipeline::RTI_DefaultBackBuffer);
+		RenderPipeline::instance()->beginFramebuffer(RenderPipeline::RTI_DefaultBackBuffer);
 
 		for (RenderQueue* item : m_items)
 		{
 			item->render();
 		}
 
-		RenderPipeline::instance()->endRenderTarget(RenderPipeline::RTI_DefaultBackBuffer);
+		RenderPipeline::instance()->endFramebuffer(RenderPipeline::RTI_DefaultBackBuffer);
 	}
 }

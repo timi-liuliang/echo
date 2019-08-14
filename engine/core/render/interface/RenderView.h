@@ -7,24 +7,15 @@ namespace Echo
 	class RenderView
 	{
 	public:
-		enum RenderViewType
-		{
-			RVT_RENDERTARGET, 
-			RVT_DEPTHSTENCIL, 
-		};
-
-	public:
-		RenderView(RenderViewType type, PixelFormat pixFmt);
+		RenderView();
 		virtual ~RenderView();
-
-		// get view type
-		virtual RenderViewType getRenderViewType() const { return m_type; }
 
 		// get pixel format
 		virtual PixelFormat	getPixelFormat() const { return m_pixFmt; }
 
 	protected:
-		RenderViewType		m_type;
+        ui32				m_width;
+        ui32				m_height;
 		PixelFormat			m_pixFmt;
 	};
 }
