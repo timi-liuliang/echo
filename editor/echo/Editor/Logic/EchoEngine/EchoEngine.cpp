@@ -4,7 +4,7 @@
 #include <array>
 #include <engine/core/main/Engine.h>
 #include <engine/modules/navigation/Navigation.h>
-#include <interface/RenderTarget.h>
+#include <interface/FrameBuffer.h>
 #include "engine/core/thread/Threading.h"
 #include "Studio.h"
 #include "RenderWindow.h"

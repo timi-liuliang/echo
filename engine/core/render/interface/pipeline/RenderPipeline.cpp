@@ -1,21 +1,21 @@
 #include "RenderPipeline.h"
 #include "../Renderer.h"
-#include "../RenderTarget.h"
+#include "../FrameBuffer.h"
 
 namespace Echo
 {
 	RenderPipeline::RenderPipeline()
 	{
 		// default backbuffer
-		RenderTarget::Options option; option.depth = true;
-		RenderTarget* defautRT = Renderer::instance()->createRenderTarget(RTI_DefaultBackBuffer, Renderer::instance()->getScreenWidth(), Renderer::instance()->getScreenHeight(), Renderer::instance()->getBackBufferPixelFormat(), option);
+		FrameBuffer::Options option; option.depth = true;
+		FrameBuffer* defautRT = Renderer::instance()->createRenderTarget(RTI_DefaultBackBuffer, Renderer::instance()->getScreenWidth(), Renderer::instance()->getScreenHeight(), Renderer::instance()->getBackBufferPixelFormat(), option);
 		if (defautRT)
 			m_renderTargets.insert(RenderTargetMap::value_type(RTI_DefaultBackBuffer, defautRT));
 	}
 
 	RenderPipeline::~RenderPipeline()
 	{
-        EchoSafeDeleteMap(m_renderTargets, RenderTarget);
+        EchoSafeDeleteMap(m_renderTargets, FrameBuffer);
 	}
 
 	void RenderPipeline::bindMethods()

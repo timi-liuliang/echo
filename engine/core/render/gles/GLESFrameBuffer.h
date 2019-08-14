@@ -1,10 +1,10 @@
 #pragma once
 
-#include "interface/RenderTarget.h"
+#include "interface/FrameBuffer.h"
 
 namespace Echo
 {
-	class GLES2RenderTarget : public RenderTarget
+	class GLES2RenderTarget : public FrameBuffer
 	{
 	public:
 		GLES2RenderTarget(ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const Options& option = Options());

@@ -136,7 +136,7 @@ namespace Echo
 		Class::registerType<RenderPipeline>();
 		Class::registerType<RenderStage>();
 		Class::registerType<RenderQueue>();
-		Class::registerType<RenderTarget>();
+		Class::registerType<FrameBuffer>();
 
 		// load all plugins
 		Plugin::loadAllPlugins();

@@ -1,11 +1,11 @@
 #include "Renderer.h"
-#include "interface/RenderTarget.h"
+#include "interface/FrameBuffer.h"
 #include "interface/ShaderProgram.h"
 #include "engine/core/main/Engine.h"
 
 namespace Echo
 {
-	Echo::ui32 RenderTarget::getMemorySize()
+	Echo::ui32 FrameBuffer::getMemorySize()
 	{
 		ui32 memorySize = 0;
 		if (m_bindTexture)
@@ -17,7 +17,7 @@ namespace Echo
 		return memorySize;
 	}
 
-	RenderTarget::RenderTarget( ui32 id, ui32 width, ui32 height, PixelFormat format, const Options& option )
+	FrameBuffer::FrameBuffer( ui32 id, ui32 width, ui32 height, PixelFormat format, const Options& option )
 		: m_isHasMSAA(option.msaa)
         , m_id( id)
 		, m_pixelFormat( format)
@@ -29,14 +29,14 @@ namespace Echo
 	{
 	}
 
-	RenderTarget::~RenderTarget()
+	FrameBuffer::~FrameBuffer()
 	{
 		m_bindTexture = NULL;
 		m_depthTexture = NULL;
 		m_depthTarget = nullptr;
 	}
 
-	void RenderTarget::bindMethods()
+	void FrameBuffer::bindMethods()
 	{
 
 	}

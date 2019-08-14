@@ -30,7 +30,7 @@ namespace Echo
         virtual TextureCube* createTextureCube(const String& name) override {return nullptr; }
 
         // create views
-        virtual RenderTarget* createRenderTarget(ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const RenderTarget::Options& option) override {return nullptr;}
+        virtual FrameBuffer* createRenderTarget(ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const FrameBuffer::Options& option) override {return nullptr;}
 
         // create states
         virtual RasterizerState* createRasterizerState(const RasterizerState::RasterizerDesc& desc) override;

@@ -84,7 +84,7 @@ namespace Echo
 		const SamplerState*	getSamplerState(const SamplerState::SamplerDesc& desc);
 	
 		// render target
-		virtual RenderTarget* createRenderTarget(ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const RenderTarget::Options& option);
+		virtual FrameBuffer* createRenderTarget(ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const FrameBuffer::Options& option);
 
 		virtual ui32 getScreenWidth() { return m_screenWidth; }
 		virtual ui32 getScreenHeight() { return m_screenHeight; }

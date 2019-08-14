@@ -592,7 +592,7 @@ namespace Echo
 	}
 #endif
 
-	RenderTarget* GLES2Renderer::createRenderTarget(ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const RenderTarget::Options& option)
+	FrameBuffer* GLES2Renderer::createRenderTarget(ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const FrameBuffer::Options& option)
 	{
 		return EchoNew(GLES2RenderTarget(_id, _width, _height, _pixelFormat, option));
 	}

@@ -14,7 +14,7 @@ namespace Echo
 		ECHO_RES(Texture, Res, ".png|.jpeg|.bmp|.tga|.jpg", nullptr, Texture::load);
 
 		friend class Renderer;
-		friend class RenderTarget;
+		friend class FrameBuffer;
 
 	public:
 		enum TexType

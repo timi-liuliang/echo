@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/core/scene/node.h"
-#include "../RenderTarget.h"
+#include "../FrameBuffer.h"
 #include "../Renderer.h"
 
 namespace Echo

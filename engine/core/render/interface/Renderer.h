@@ -1,11 +1,11 @@
 #pragma once
 
-#include "device_features.h"
+#include "DeviceFeatures.h"
 #include "RenderState.h"
 #include "Texture.h"
 #include "TextureCube.h"
 #include "Renderable.h"
-#include "RenderTarget.h"
+#include "FrameBuffer.h"
 #include "GPUBuffer.h"
 #include "Viewport.h"
 
@@ -106,7 +106,7 @@ namespace Echo
 		virtual ShaderProgram* createShaderProgram()=0;
 		
 		// create views
-		virtual RenderTarget* createRenderTarget(ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const RenderTarget::Options& option) = 0;
+		virtual FrameBuffer* createRenderTarget(ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const FrameBuffer::Options& option) = 0;
 
 		// create states
 		virtual RasterizerState* createRasterizerState(const RasterizerState::RasterizerDesc& desc) = 0;

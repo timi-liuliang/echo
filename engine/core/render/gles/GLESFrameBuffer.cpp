@@ -2,7 +2,7 @@
 #include "interface/Renderer.h"
 #include "GLESRenderBase.h"
 #include "GLESMapping.h"
-#include "GLESRenderTarget.h"
+#include "GLESFrameBuffer.h"
 #include "GLESTexture2D.h"
 
 namespace Echo
@@ -39,7 +39,7 @@ namespace Echo
 #endif
 
 	GLES2RenderTarget::GLES2RenderTarget( ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const Options& option)
-		: RenderTarget(_id, _width, _height, _pixelFormat, option)
+		: FrameBuffer(_id, _width, _height, _pixelFormat, option)
 		, m_fbo(0)
 		, m_rbo(0)
 	{

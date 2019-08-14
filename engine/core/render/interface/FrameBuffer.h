@@ -5,9 +5,9 @@
 
 namespace Echo
 {
-	class RenderTarget : public Node
+	class FrameBuffer : public Node
 	{
-		ECHO_CLASS(RenderTarget, Node)
+		ECHO_CLASS(FrameBuffer, Node)
 
 	public:
 		struct Options
@@ -24,9 +24,9 @@ namespace Echo
 		};
 
 	public:
-		RenderTarget() {}
-		RenderTarget(ui32 id, ui32 width, ui32 height, PixelFormat format, const Options& option = Options());
-		virtual ~RenderTarget();
+		FrameBuffer() {}
+		FrameBuffer(ui32 id, ui32 width, ui32 height, PixelFormat format, const Options& option = Options());
+		virtual ~FrameBuffer();
 
 		// get id
 		ui32 id() const { return m_id; }
@@ -85,7 +85,7 @@ namespace Echo
 		Texture*				m_depthTexture;
 		ui32					m_RenderFrameCount;
 		bool					m_isCubemap;
-		RenderTarget*			m_depthTarget;
+		FrameBuffer*			m_depthTarget;
 	};
-	typedef map<ui32, RenderTarget*>::type	RenderTargetMap;
+	typedef map<ui32, FrameBuffer*>::type	RenderTargetMap;
 }
