@@ -8,23 +8,23 @@ namespace Echo
 	class RenderView
 	{
 	public:
-		RenderView(ui32 width, ui32 height, PixelFormat pixelFormat);
 		virtual ~RenderView();
 
-		// get pixel format
-		virtual PixelFormat	getPixelFormat() const { return m_format; }
+        // width & height
+        ui32 getWidth() const { return m_width; }
+        ui32 getHeight() const { return m_height; }
 
-        // create
-        virtual bool create() { return false; }
+		// pixel format
+		PixelFormat	getPixelFormat() const { return m_format; }
 
-        // begin render
-        virtual bool beginRender(bool clearColor, const Color& bgColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue) { return false; }
+        // texture
+        Texture* getTexture() { return m_bindTexture; }
 
-        // clear
-        virtual void clear(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue) {}
+        // on resize
+        virtual void onSize(ui32 width, ui32 height)=0;
 
-        // end render
-        virtual bool endRender() { return false; }
+    protected:
+        RenderView(ui32 width, ui32 height, PixelFormat pixelFormat);
 
 	protected:
         ui32				m_width;
