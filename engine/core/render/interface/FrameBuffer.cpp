@@ -12,8 +12,6 @@ namespace Echo
         , m_isHasDepth(option.depth)
 		, m_width( width)
 		, m_height( height)
-		, m_isCubemap(option.cubemap)
-		, m_depthTarget(nullptr)
 	{
 	}
 
@@ -21,7 +19,6 @@ namespace Echo
 	{
 		m_bindTexture = NULL;
 		m_depthTexture = NULL;
-		m_depthTarget = nullptr;
 	}
 
 	void FrameBuffer::bindMethods()

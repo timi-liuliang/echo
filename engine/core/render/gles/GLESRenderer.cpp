@@ -382,14 +382,14 @@ namespace Echo
 
 	const SamplerState* GLES2Renderer::getSamplerState(const SamplerState::SamplerDesc& desc)
 	{
-		// 是否已存在
+		// is exist
 		for (std::set<GLES2SamplerState*>::iterator it = m_vecSamlerStates.begin(); it != m_vecSamlerStates.end(); it++)
 		{
 			if ((*it)->getDesc() == desc)
 				return *it;
 		}
 
-		// 新建
+		// new one
 		GLES2SamplerState* pState = EchoNew(GLES2SamplerState(desc));
 		m_vecSamlerStates.insert(pState);
 
@@ -426,10 +426,8 @@ namespace Echo
 
 	bool GLES2Renderer::present()
 	{
-		// 重置着色器信息
 		m_pre_shader_program = nullptr;
 
-		// 重置纹理槽信息
 		for (size_t i = 0; i < m_preTextures.size(); i++)
 			m_preTextures[i].reset();
 
@@ -599,14 +597,13 @@ namespace Echo
 
 	FrameBuffer* GLES2Renderer::createFramebuffer(ui32 id, ui32 width, ui32 height, PixelFormat pixelFormat, const FrameBuffer::Options& option)
 	{
-		return EchoNew(GLES2RenderTarget(id, width, height, pixelFormat, option));
+		return EchoNew(GLESFramebuffer(id, width, height, pixelFormat, option));
 	}
 
 	Renderable* GLES2Renderer::createRenderable(const String& renderStage, ShaderProgram* material)
 	{
 		Renderable* renderable = EchoNew(GLES2Renderable(renderStage, material, m_renderableIdentifier++));
 		ui32 id = renderable->getIdentifier();
-		assert(!m_renderables.count(id));
 		m_renderables[id] = renderable;
 
 		return renderable;

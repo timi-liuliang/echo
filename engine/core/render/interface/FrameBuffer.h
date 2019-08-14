@@ -61,9 +61,6 @@ namespace Echo
 		Texture* getBindTexture() { return m_bindTexture; }
 		Texture* getDepthTexture() { return m_depthTexture; }
 
-		// is cubemap
-		bool isCubemap() const { return m_isCubemap; }
-
 		// create
 		virtual bool create() { return false; }
 
@@ -102,8 +99,6 @@ namespace Echo
 		Texture*				m_bindTexture;
 		Texture*				m_depthTexture;
 		ui32					m_RenderFrameCount;
-		bool					m_isCubemap;
-		FrameBuffer*			m_depthTarget;
 	};
 	typedef map<ui32, FrameBuffer*>::type	FramebufferMap;
 }

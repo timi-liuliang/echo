@@ -9,7 +9,7 @@ namespace Echo
 {
     #define INVALIDE  0xFFFFFFFF
 
-	GLES2RenderTarget::GLES2RenderTarget( ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const Options& option)
+    GLESFramebuffer::GLESFramebuffer( ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const Options& option)
 		: FrameBuffer(_id, _width, _height, _pixelFormat, option)
 		, m_fbo(0)
 	{
@@ -25,7 +25,7 @@ namespace Echo
 		m_depthTexture->setSamplerState(desc);
 	}
 
-	GLES2RenderTarget::~GLES2RenderTarget()
+    GLESFramebuffer::~GLESFramebuffer()
 	{
 		if (m_fbo != INVALIDE)
 		{
@@ -36,7 +36,7 @@ namespace Echo
 		m_depthTexture->subRefCount();
 	}
 
-	bool GLES2RenderTarget::create()
+	bool GLESFramebuffer::create()
 	{
 		EchoAssert(m_bindTexture);
 		Texture* texture = m_bindTexture;
@@ -50,7 +50,7 @@ namespace Echo
 		return createTexture2D();
 	}
 
-	bool GLES2RenderTarget::createTexture2D()
+	bool GLESFramebuffer::createTexture2D()
 	{
 		GLESTexture2D* texture = dynamic_cast<GLESTexture2D*>(m_bindTexture);
 		EchoAssert(texture);
@@ -90,17 +90,6 @@ namespace Echo
 			EchoAssert(depthSampleState);
 			depthSampleState->active(NULL);
 		}
-		else if (m_depthTarget)
-		{
-			GLESTexture2D* depthTexture = dynamic_cast<GLESTexture2D*>(m_depthTarget->getDepthTexture());
-
-			OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
-			OGLESDebug(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture->m_glesTexture, 0));
-
-			const SamplerState* depthSampleState = m_depthTexture->getSamplerState();
-			EchoAssert(depthSampleState);
-			depthSampleState->active(NULL);
-		}
 
 		GLuint uStatus = OGLESDebug(glCheckFramebufferStatus(GL_FRAMEBUFFER));
 		if (uStatus != GL_FRAMEBUFFER_COMPLETE)
@@ -115,7 +104,7 @@ namespace Echo
 		return true;
 	}
 
-	bool GLES2RenderTarget::beginRender(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue)
+	bool GLESFramebuffer::beginRender(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue)
 	{
 		// bind frame buffer
 		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
@@ -127,12 +116,12 @@ namespace Echo
 		return true;
 	}
 
-	bool GLES2RenderTarget::endRender()
+	bool GLESFramebuffer::endRender()
 	{
 		return true;
 	}
 
-	bool GLES2RenderTarget::invalide(bool invalidateColor, bool invalidateDepth, bool invalidateStencil)
+	bool GLESFramebuffer::invalide(bool invalidateColor, bool invalidateDepth, bool invalidateStencil)
 	{
 		int attachment_count = 0;
 		GLenum attachments[128] = { 0 };
@@ -154,7 +143,7 @@ namespace Echo
 		return true;
 	}
 
-	void GLES2RenderTarget::clear(bool clear_color, const Color& color, bool clear_depth, float depth_value, bool clear_stencil, ui8 stencil_value)
+	void GLESFramebuffer::clear(bool clear_color, const Color& color, bool clear_depth, float depth_value, bool clear_stencil, ui8 stencil_value)
 	{
 		GLbitfield mask = 0;
 
@@ -186,7 +175,7 @@ namespace Echo
 		Renderer::instance()->setDepthStencilState( Renderer::instance()->getDefaultDepthStencilState());
 	}
 
-	void GLES2RenderTarget::onResize( ui32 _width, ui32 _height )
+	void GLESFramebuffer::onResize( ui32 _width, ui32 _height )
 	{
 		if( m_id != 0)
 		{
@@ -215,40 +204,5 @@ namespace Echo
 			m_width  = _width;
 			m_height = _height;
 		}
-	}
-
-	void GLES2RenderTarget::doSetCubeFace( Texture::CubeFace cf )
-	{
-#ifdef ECHO_PLATFORM_WINDOWS
-		EchoAssert( m_isCubemap );
-
-		if( cf == 1 )
-		{
-			EchoAssert( GL_TEXTURE_CUBE_MAP_POSITIVE_X+cf == GL_TEXTURE_CUBE_MAP_NEGATIVE_X );
-		}
-		else if( cf == 2 )
-		{
-			EchoAssert( GL_TEXTURE_CUBE_MAP_POSITIVE_X+cf == GL_TEXTURE_CUBE_MAP_POSITIVE_Y );
-		}
-		else if( cf == 3 )
-		{
-			EchoAssert( GL_TEXTURE_CUBE_MAP_POSITIVE_X+cf == GL_TEXTURE_CUBE_MAP_NEGATIVE_Y );
-		}
-		else if( cf == 4 )
-		{
-			EchoAssert( GL_TEXTURE_CUBE_MAP_POSITIVE_X+cf == GL_TEXTURE_CUBE_MAP_POSITIVE_Z );
-		}
-		else if( cf == 5 )
-		{
-			EchoAssert( GL_TEXTURE_CUBE_MAP_POSITIVE_X+cf == GL_TEXTURE_CUBE_MAP_NEGATIVE_Z );
-		}
-
-		GLESTexture2D* texture = ECHO_DOWN_CAST<GLESTexture2D*>(m_bindTexture);
-
-		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
-		OGLESDebug(glBindTexture(GL_TEXTURE_CUBE_MAP, texture->m_glesTexture));
-		OGLESDebug(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + cf, texture->m_glesTexture, 0));
-		OGLESDebug(glCheckFramebufferStatus(GL_FRAMEBUFFER));
-#endif
 	}
 }
