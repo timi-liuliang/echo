@@ -3,6 +3,7 @@
 #include "interface/Renderer.h"
 #include "Shader.h"
 #include "GLESRenderState.h"
+#include "GLESRenderView.h"
 
 namespace Echo
 {
@@ -10,7 +11,7 @@ namespace Echo
 	{
 		GLenum				m_target;
 		GLuint				m_texture;
-		const GLES2SamplerState*	m_samplerState;	// 采样状态
+		const GLES2SamplerState*	m_samplerState;
 		
 		TextureSlotInfo()
 			: m_target(-1), m_texture(NULL), m_samplerState( NULL)
@@ -81,6 +82,7 @@ namespace Echo
 		const SamplerState*	getSamplerState(const SamplerState::SamplerDesc& desc);
 	
 		// frame buffer
+        virtual RenderView*  createRenderView(ui32 width, ui32 height, PixelFormat pixelFormat) override;
 		virtual FrameBuffer* createFramebuffer(ui32 id, ui32 width, ui32 height, PixelFormat pixelFormat, const FrameBuffer::Options& option);
 
         // screen size

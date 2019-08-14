@@ -1,14 +1,14 @@
 #pragma once
 
-#include "interface/FrameBuffer.h"
+#include "interface/RenderView.h"
 
 namespace Echo
 {
-	class GLES2RenderTarget : public FrameBuffer
+	class GLESRenderView : public RenderView
 	{
 	public:
-		GLES2RenderTarget(ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const Options& option = Options());
-		virtual ~GLES2RenderTarget();
+        GLESRenderView(ui32 width, ui32 height, PixelFormat pixelFormat);
+		virtual ~GLESRenderView();
 
 	protected:
 		// create
@@ -28,7 +28,6 @@ namespace Echo
 
 		// on resize
 		virtual void onResize( ui32 width, ui32 height );
-		virtual void doSetCubeFace( Texture::CubeFace cf );
 
 	private:
 		// create texutre 2d

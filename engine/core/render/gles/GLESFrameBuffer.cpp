@@ -7,41 +7,11 @@
 
 namespace Echo
 {
-#define INVALIDE  0xFFFFFFFF
-
-#ifdef ECHO_PLATFORM_WINDOWS
-	#define DIB_HEADER_MARKER   ((WORD) ('M' << 8) | 'B')
-	#define IS_WIN30_DIB(lpbi)  ((*(LPDWORD)(lpbi)) == sizeof(BITMAPINFOHEADER))
-
-	WORD  DIBNumColors(void* lpbi)
-	{
-		if (IS_WIN30_DIB(lpbi))
-		{
-			DWORD dwClrUsed = ((LPBITMAPINFOHEADER)lpbi)->biClrUsed;
-			if (dwClrUsed != 0)
-				return (WORD)dwClrUsed;
-		}
-
-		WORD wBitCount = IS_WIN30_DIB(lpbi) ? ((LPBITMAPINFOHEADER)lpbi)->biBitCount : ((LPBITMAPCOREHEADER)lpbi)->bcBitCount;
-		switch (wBitCount)
-		{
-		case 1:		return 2;
-		case 4:		return 16;
-		case 8:		return 256;
-		default:	return 0;
-		}
-	}
-
-	WORD  PaletteSize(void* lpbi)
-	{
-		return IS_WIN30_DIB(lpbi) ? (WORD)(DIBNumColors(lpbi) * sizeof(RGBQUAD)) : (WORD)(DIBNumColors(lpbi) * sizeof(RGBTRIPLE));
-	}
-#endif
+    #define INVALIDE  0xFFFFFFFF
 
 	GLES2RenderTarget::GLES2RenderTarget( ui32 _id, ui32 _width, ui32 _height, PixelFormat _pixelFormat, const Options& option)
 		: FrameBuffer(_id, _width, _height, _pixelFormat, option)
 		, m_fbo(0)
-		, m_rbo(0)
 	{
 		SamplerState::SamplerDesc desc;
 		desc.addrUMode = SamplerState::AM_CLAMP;
@@ -62,11 +32,6 @@ namespace Echo
 			OGLESDebug(glDeleteFramebuffers(1, &m_fbo));
 		}
 
-		if (m_rbo != INVALIDE)
-		{
-			OGLESDebug(glDeleteRenderbuffers(1, &m_rbo));
-		}
-
 		m_bindTexture->subRefCount();
 		m_depthTexture->subRefCount();
 	}
@@ -82,7 +47,7 @@ namespace Echo
 		texture->m_isCompressed = false;
 		texture->m_compressType = Texture::CompressType_Unknown;
 
-		return m_isCubemap ? createCubemap() : createTexture2D();
+		return createTexture2D();
 	}
 
 	bool GLES2RenderTarget::createTexture2D()
@@ -135,46 +100,6 @@ namespace Echo
 			const SamplerState* depthSampleState = m_depthTexture->getSamplerState();
 			EchoAssert(depthSampleState);
 			depthSampleState->active(NULL);
-		}
-
-		GLuint uStatus = OGLESDebug(glCheckFramebufferStatus(GL_FRAMEBUFFER));
-		if (uStatus != GL_FRAMEBUFFER_COMPLETE)
-		{
-			EchoLogError("Create RenderTarget Failed !");
-		}
-
-#if defined(ECHO_PLATFORM_WINDOWS) || defined(ECHO_PLATFORM_ANDROID)
-		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, 0));
-#endif
-
-		return true;
-	}
-
-	bool GLES2RenderTarget::createCubemap()
-	{
-		GLESTexture2D* texture = dynamic_cast<GLESTexture2D*>(m_bindTexture);
-		EchoAssert(texture);
-
-		OGLESDebug(glGenTextures(1, &texture->m_glesTexture));
-		OGLESDebug(glBindTexture(GL_TEXTURE_CUBE_MAP, texture->m_glesTexture));
-		for (int f = 0; f < 6; f++)
-		{
-			OGLESDebug(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + f, 0, GLES2Mapping::MapFormat(m_pixelFormat), m_width, m_height, 0, GLES2Mapping::MapFormat(m_pixelFormat), GL_UNSIGNED_BYTE, (GLvoid*)0));
-		}
-		OGLESDebug(glGenFramebuffers(1, &m_fbo));
-		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
-		OGLESDebug(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X, texture->m_glesTexture, 0));
-
-		const SamplerState* sampleState = m_bindTexture->getSamplerState();
-		EchoAssert(sampleState);
-		sampleState->active(NULL);
-
-		if( m_isHasDepth)
-		{
-			OGLESDebug(glGenRenderbuffers(1, &m_rbo));
-			OGLESDebug(glBindRenderbuffer(GL_RENDERBUFFER, m_rbo));
-			OGLESDebug(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, m_width, m_height));
-			OGLESDebug(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_rbo));
 		}
 
 		GLuint uStatus = OGLESDebug(glCheckFramebufferStatus(GL_FRAMEBUFFER));
@@ -274,12 +199,6 @@ namespace Echo
 				m_fbo = 0;
 			}
 
-			if (m_rbo != INVALIDE)
-			{
-				OGLESDebug(glDeleteRenderbuffers(1, &m_rbo));
-				m_rbo = 0;
-			}
-
 			EchoAssert(m_bindTexture);
 			m_bindTexture->subRefCount();
 			m_bindTexture = Renderer::instance()->createTexture2D("rt_" + StringUtil::ToString(m_id));
@@ -331,102 +250,5 @@ namespace Echo
 		OGLESDebug(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + cf, texture->m_glesTexture, 0));
 		OGLESDebug(glCheckFramebufferStatus(GL_FRAMEBUFFER));
 #endif
-	}
-
-	bool GLES2RenderTarget::save( const char* file)
-	{
-#ifdef ECHO_PLATFORM_WINDOWS
-		if( PathUtil::IsFileExist(file) )
-		{
-			if(0 != ::remove(file))
-			{
-				EchoLogError( "save file[%s] Failed !", file );
-				return false;
-			}
-		}
-
-		struct SPixel
-		{
-			unsigned char r_, g_, b_, a_;
-
-			void convertBGRA()
-			{
-				unsigned char tmp = r_;
-				r_ = b_;
-				b_ = tmp;
-			}
-		};
-
-
-		GLvoid* pixels = new char[m_width * m_height * sizeof(int)];
-		EchoAssert( pixels );
-
-		OGLESDebug(glReadPixels(0, 0, m_width, m_height, GL_RGBA, GL_UNSIGNED_BYTE, pixels));
-
-		SPixel* rgbaPixel = (SPixel*)pixels;
-
-		for( ui32 i = 0; i < m_width * m_height; i++ )
-		{
-			SPixel& rgba = *(rgbaPixel + i);
-
-			rgba.convertBGRA();
-		}
-
-
-		BITMAPFILEHEADER bmpfHeader = {0};
-		bmpfHeader.bfType = DIB_HEADER_MARKER;
-		BITMAPINFOHEADER bmpinfoHeader = {0};
-
-		size_t pixel_data_size = m_width * m_height * 4;
-
-		bmpinfoHeader.biWidth = m_width;
-		bmpinfoHeader.biHeight = m_height;
-		bmpinfoHeader.biSizeImage = static_cast<DWORD>(pixel_data_size);
-		bmpinfoHeader.biSize = 40;
-		bmpinfoHeader.biPlanes = 1;
-		bmpinfoHeader.biBitCount = 4 * 8;
-		bmpinfoHeader.biCompression = 0;
-		bmpinfoHeader.biXPelsPerMeter = 0;
-		bmpinfoHeader.biYPelsPerMeter = 0;
-		bmpinfoHeader.biClrUsed = 0;
-		bmpinfoHeader.biClrImportant = 0;
-
-		unsigned char* bmpImage = new unsigned char[sizeof(BITMAPINFOHEADER)+pixel_data_size];
-
-		memcpy( bmpImage, &bmpinfoHeader, sizeof(BITMAPINFOHEADER) );
-
-		if( ((*(LPDWORD)(&bmpinfoHeader)) != sizeof(BITMAPINFOHEADER)) )
-		{
-			return false;
-		}
-
-		size_t palett_size = PaletteSize(&bmpinfoHeader);
-
-		size_t file_size = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + palett_size + pixel_data_size;
-
-		bmpfHeader.bfSize = static_cast<DWORD>(file_size);
-
-		bmpfHeader.bfReserved1 = 0;
-		bmpfHeader.bfReserved2 = 0;
-		bmpfHeader.bfOffBits = static_cast<DWORD>(sizeof(BITMAPFILEHEADER) + bmpinfoHeader.biSize + palett_size);
-
-		unsigned char *bmpfile = new unsigned char[file_size];
-		EchoAssert( bmpfile );
-		memcpy( bmpfile, &bmpfHeader, sizeof(BITMAPFILEHEADER) );
-		memcpy( bmpfile + sizeof(BITMAPFILEHEADER), &bmpinfoHeader, sizeof(BITMAPINFOHEADER) );
-		memcpy( bmpfile + sizeof(BITMAPFILEHEADER)+sizeof(BITMAPINFOHEADER) + palett_size, pixels, pixel_data_size );
-
-		std::ofstream outputfile;
-
-		outputfile.open(file,std::ios::binary | std::ios::out);
-
-		outputfile.write((char *)bmpfile, file_size);
-
-		outputfile.close();
-
-		delete [] bmpfile;
-		delete [] pixels;
-#endif
-		return true;
 	}
 }

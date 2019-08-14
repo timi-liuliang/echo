@@ -3,7 +3,10 @@
 
 namespace Echo
 {
-	RenderView::RenderView()
+	RenderView::RenderView(ui32 width, ui32 height, PixelFormat pixelFormat)
+        : m_width(width)
+        , m_height(height)
+        , m_format(pixelFormat)
 	{
 	}
 
