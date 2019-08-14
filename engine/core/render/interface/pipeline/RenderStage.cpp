@@ -20,7 +20,6 @@ namespace Echo
 
 	}
 
-	// get instance
 	RenderStage* RenderStage::instance()
 	{
 		static RenderStage* inst = EchoNew(RenderStage);
@@ -28,14 +27,12 @@ namespace Echo
 		return inst;
 	}
 
-	// destroy
 	void RenderStage::destroy()
 	{
 		RenderStage* inst = instance();
 		EchoSafeDelete(inst, RenderStage);
 	}
 
-	// add renderable
 	void RenderStage::addRenderable(const String& name, RenderableID id)
 	{
 		for (RenderQueue* item : m_items)
@@ -45,7 +42,6 @@ namespace Echo
 		}
 	}
 
-	// process all render stage item
 	void RenderStage::process()
 	{
 		RenderPipeline::instance()->beginFramebuffer(RenderPipeline::RTI_DefaultBackBuffer);
