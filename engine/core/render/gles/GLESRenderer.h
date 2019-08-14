@@ -83,7 +83,7 @@ namespace Echo
 	
 		// frame buffer
         virtual RenderView*  createRenderView(ui32 width, ui32 height, PixelFormat pixelFormat) override;
-		virtual FrameBuffer* createFramebuffer(ui32 id, ui32 width, ui32 height, PixelFormat pixelFormat, const FrameBuffer::Options& option);
+		virtual FrameBuffer* createFramebuffer(ui32 id, ui32 width, ui32 height, PixelFormat pixelFormat);
 
         // screen size
 		virtual ui32 getScreenWidth() { return m_screenWidth; }

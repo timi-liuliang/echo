@@ -107,7 +107,7 @@ namespace Echo
 		
 		// create views
         virtual RenderView*  createRenderView(ui32 width, ui32 height, PixelFormat pixelFormat)=0;
-		virtual FrameBuffer* createFramebuffer(ui32 id, ui32 width, ui32 height, PixelFormat pixelFormat, const FrameBuffer::Options& option)=0;
+		virtual FrameBuffer* createFramebuffer(ui32 id, ui32 width, ui32 height, PixelFormat pixelFormat)=0;
 
 		// create states
 		virtual RasterizerState* createRasterizerState(const RasterizerState::RasterizerDesc& desc) = 0;

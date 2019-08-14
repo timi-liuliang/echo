@@ -6,11 +6,21 @@ namespace Echo
 {
 	RenderPipeline::RenderPipeline()
 	{
-		// default backbuffer
-		FrameBuffer::Options option; option.depth = true;
-		FrameBuffer* defautFB = Renderer::instance()->createFramebuffer(RTI_DefaultBackBuffer, Renderer::instance()->getScreenWidth(), Renderer::instance()->getScreenHeight(), Renderer::instance()->getBackBufferPixelFormat(), option);
-		if (defautFB)
-			m_framebuffers.insert(FramebufferMap::value_type(RTI_DefaultBackBuffer, defautFB));
+        Renderer* renderer = Renderer::instance();
+        ui32 screenWidth = renderer->getScreenWidth();
+        ui32 screenHeight = renderer->getScreenHeight();
+
+        // create default framebuffer
+		FrameBuffer* defaultFB = Renderer::instance()->createFramebuffer(RTI_DefaultBackBuffer, screenWidth, screenHeight, Renderer::instance()->getBackBufferPixelFormat());
+        if (defaultFB)
+        {
+            RenderView* colorView = renderer->createRenderView(screenWidth, screenHeight, Renderer::instance()->getBackBufferPixelFormat());
+            RenderView* depthView = renderer->createRenderView(screenWidth, screenHeight, PF_D32_FLOAT);
+            defaultFB->attach(FrameBuffer::Attachment::Color0, colorView);
+            defaultFB->attach(FrameBuffer::Attachment::DepthStencil, depthView);
+
+            m_framebuffers.insert(FramebufferMap::value_type(RTI_DefaultBackBuffer, defaultFB));
+        }
 	}
 
 	RenderPipeline::~RenderPipeline()
@@ -44,7 +54,7 @@ namespace Echo
 	{
 		for (auto& it : m_framebuffers)
 		{
-			it.second->onResize(width, height);
+			it.second->onSize(width, height);
 		}
 	}
 }
