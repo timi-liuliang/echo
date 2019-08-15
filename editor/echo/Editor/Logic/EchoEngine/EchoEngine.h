@@ -65,7 +65,6 @@ namespace Studio
 		// 保存缩略图
 		void SaveSceneThumbnail(bool setCam = true);
 
-		// 场景相关
 	public:
 		// new
 		void newEditNodeTree();
@@ -80,17 +79,17 @@ namespace Studio
 	private:
 		EchoEngine();
 
-		// 初始化背景网格
+		// init back grid
 		void InitializeBackGrid();
 
 	protected:
-		Echo::LogOutput*		m_log;						// 日志
-		Echo::Node*				m_currentEditNode;			// 当前编辑场景
-		Echo::String			m_currentEditNodeSavePath;	// 当前场景存储路径
-		Echo::Node*				m_invisibleNodeForEditor;	// 编辑器结点
-		Echo::Gizmos*			m_gizmosNodeBackGrid;
-		Echo::Gizmos*			m_gizmosNodeGrid2d;			// 2d 框
-		static std::string		m_projectFile;				// 项目名称
-		static RenderWindow*	m_renderWindow;				// 渲染窗口
+		Echo::LogOutput*		m_log;
+		Echo::Node*				m_currentEditNode;
+		Echo::String			m_currentEditNodeSavePath;
+		Echo::Node*				m_invisibleNodeForEditor;
+		Echo::Gizmos*			m_gizmosNodeGrid3d;
+		Echo::Gizmos*			m_gizmosNodeGrid2d;
+		static std::string		m_projectFile;
+		static RenderWindow*	m_renderWindow;
 	};
 }

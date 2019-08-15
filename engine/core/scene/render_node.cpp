@@ -4,7 +4,7 @@
 
 namespace Echo
 {
-	i32	Render::m_renderTypes = Render::Type_2D | Render::Type_3D | Render::Type_Ui;
+	i32	Render::m_renderTypes = Render::Type_2D | Render::Type_Ui;
 
 	Render::Render()
 		: m_isVisible(true)

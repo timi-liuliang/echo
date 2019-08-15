@@ -602,8 +602,8 @@ namespace Echo
 
 	Renderable* GLES2Renderer::createRenderable(const String& renderStage, ShaderProgram* material)
 	{
-        static ui32 id = 1;
-		Renderable* renderable = EchoNew(GLES2Renderable(renderStage, material, id++));
+        static ui32 id = 0; id++;
+		Renderable* renderable = EchoNew(GLES2Renderable(renderStage, material, id));
 		m_renderables[id] = renderable;
 
 		return renderable;

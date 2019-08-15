@@ -25,7 +25,7 @@ namespace Studio
 		: m_log(NULL)
 		, m_currentEditNode(nullptr)
 		, m_invisibleNodeForEditor(nullptr)
-		, m_gizmosNodeBackGrid(nullptr)
+		, m_gizmosNodeGrid3d(nullptr)
 		, m_gizmosNodeGrid2d(nullptr)
 	{
 	}
@@ -54,9 +54,9 @@ namespace Studio
 			m_invisibleNodeForEditor = ECHO_DOWN_CAST<Echo::Node*>(Echo::Class::create("Node"));
 
 			// gizmos node
-			m_gizmosNodeBackGrid = ECHO_DOWN_CAST<Echo::Gizmos*>(Echo::Class::create("Gizmos"));
-			m_gizmosNodeBackGrid->setName("Gizmos");
-			m_gizmosNodeBackGrid->setParent(m_invisibleNodeForEditor);
+			m_gizmosNodeGrid3d = ECHO_DOWN_CAST<Echo::Gizmos*>(Echo::Class::create("Gizmos"));
+			m_gizmosNodeGrid3d->setName("Gizmos 3d grid");
+			m_gizmosNodeGrid3d->setParent(m_invisibleNodeForEditor);
 
 			// gizmos node 2d
 			m_gizmosNodeGrid2d = ECHO_DOWN_CAST<Echo::Gizmos*>(Echo::Class::create("Gizmos"));
@@ -200,8 +200,8 @@ namespace Studio
 			
 		if (xOffset != xOffsetBefore || zOffset != zOffsetBefore)
 		{
-			m_gizmosNodeBackGrid->clear();
-			m_gizmosNodeBackGrid->setRenderType("3d");
+			m_gizmosNodeGrid3d->clear();
+			m_gizmosNodeGrid3d->setRenderType("3d");
 
 			// gray line
 			if (yOffset < endGrayFadeDistance)
@@ -214,11 +214,11 @@ namespace Studio
 					// xaxis
 					int xAxis = xOffset + i;
 					if (xAxis % 10 != 0)
-						m_gizmosNodeBackGrid->drawLine(Echo::Vector3(xAxis, 0.f, -lineNum + zOffset), Echo::Vector3(xAxis, 0.f, lineNum + zOffset), color);
+						m_gizmosNodeGrid3d->drawLine(Echo::Vector3(xAxis, 0.f, -lineNum + zOffset), Echo::Vector3(xAxis, 0.f, lineNum + zOffset), color);
 
 					int zAxis = zOffset + i;
 					if (zAxis % 10 != 0)
-						m_gizmosNodeBackGrid->drawLine(Echo::Vector3(-lineNum + xOffset, 0.f, zAxis), Echo::Vector3(lineNum + xOffset, 0.f, zAxis), color);
+						m_gizmosNodeGrid3d->drawLine(Echo::Vector3(-lineNum + xOffset, 0.f, zAxis), Echo::Vector3(lineNum + xOffset, 0.f, zAxis), color);
 				}
 			}
 
@@ -231,10 +231,10 @@ namespace Studio
 				// xaxis
 				int xAxis = xOffset10 + i;
 				Echo::Color color = Echo::Color(0.8f, 0.5, 0.5f, 0.5f * yBlueAlphaScale);
-				m_gizmosNodeBackGrid->drawLine(Echo::Vector3(xAxis * 10.f, 0.f, (-lineNum + zOffset10)*10.f), Echo::Vector3(xAxis * 10.f, 0.f, (lineNum + zOffset10)*10.f), color);
+				m_gizmosNodeGrid3d->drawLine(Echo::Vector3(xAxis * 10.f, 0.f, (-lineNum + zOffset10)*10.f), Echo::Vector3(xAxis * 10.f, 0.f, (lineNum + zOffset10)*10.f), color);
 
 				int zAxis = zOffset10 + i;
-				m_gizmosNodeBackGrid->drawLine(Echo::Vector3((-lineNum + xOffset10)*10.f, 0.f, zAxis * 10.f), Echo::Vector3((lineNum + xOffset10)*10.f, 0.f, zAxis*10.f), color);
+				m_gizmosNodeGrid3d->drawLine(Echo::Vector3((-lineNum + xOffset10)*10.f, 0.f, zAxis * 10.f), Echo::Vector3((lineNum + xOffset10)*10.f, 0.f, zAxis*10.f), color);
 			}
 
 			xOffsetBefore = xOffset;

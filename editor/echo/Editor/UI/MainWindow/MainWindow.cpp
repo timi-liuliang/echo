@@ -277,7 +277,6 @@ namespace Studio
 		}
 	}
 
-	// Open rencent project
 	void MainWindow::onOpenRencentProject()
 	{
 		QAction* action = qobject_cast<QAction*>(sender());
