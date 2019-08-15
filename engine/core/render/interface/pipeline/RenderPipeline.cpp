@@ -40,7 +40,9 @@ namespace Echo
 	{
 		for (auto& it : m_framebuffers)
 		{
-			it.second->onSize(width, height);
+            FrameBuffer* fb = it.second;
+            if(fb)
+                fb->onSize(width, height);
 		}
 	}
 }

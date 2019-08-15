@@ -30,7 +30,8 @@ namespace Echo
         virtual TextureCube* createTextureCube(const String& name) override {return nullptr; }
         
         // create views
-        virtual RenderTarget* createRenderTarget(ui32 id, ui32 width, ui32 height, PixelFormat pixelFormat, const RenderTarget::Options& option) override;
+        virtual RenderView*  createRenderView(ui32 width, ui32 height, PixelFormat pixelFormat) override;
+        virtual FrameBuffer* createFramebuffer(ui32 id, ui32 width, ui32 height) override;
         
         // create states
         virtual RasterizerState* createRasterizerState(const RasterizerState::RasterizerDesc& desc) override;
@@ -70,6 +71,14 @@ namespace Echo
         
         // view port
         virtual void setViewport(Viewport* pViewport) override;
+        
+    public:
+        // screen width and height
+        virtual ui32 getWindowWidth() override { return m_windowWidth;}
+        virtual ui32 getWindowHeight() override { return m_windowHeight;}
+        
+        // get screen frame buffer
+        virtual FrameBuffer* getWindowFrameBuffer() override;
       
     public:
         // get max stage number
@@ -77,10 +86,6 @@ namespace Echo
         
         // get depth range
         virtual void getDepthRange(Vector2& vec) override {}
-        
-        // get screen width and height
-        virtual ui32 getScreenWidth() override { return m_screenWidth;}
-        virtual ui32 getScreenHeight() override { return m_screenHeight;}
 
 		// get view port
 		virtual void getViewportReal(Viewport& pViewport) override {}
@@ -100,16 +105,16 @@ namespace Echo
         MTLRenderPassDescriptor* makeNextRenderPassDescriptor();
         
     private:
-        ui32                            m_screenWidth = 640;
-        ui32                            m_screenHeight = 480;
+        ui32                            m_windowWidth = 640;
+        ui32                            m_windowHeight = 480;
         id<MTLDevice>                   m_metalDevice;
         id<MTLCommandQueue>             m_metalCommandQueue;
         NSView*                         m_metalView = nullptr;
         CAMetalLayer*                   m_metalLayer = nullptr;
-        
         id<CAMetalDrawable>             m_metalNextDrawable;
         MTLRenderPassDescriptor*        m_metalRenderPassDescriptor = nullptr;
         id<MTLCommandBuffer>            m_metalCommandBuffer;
         id<MTLRenderCommandEncoder>     m_metalRenderCommandEncoder;
+        FrameBuffer*                    m_framebufferWindow = nullptr;
 	};
 }

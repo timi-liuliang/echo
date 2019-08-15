@@ -3,7 +3,8 @@
 #include "mt_renderable.h"
 #include "mt_shader_program.h"
 #include "mt_render_state.h"
-#include "mt_render_target.h"
+#include "mt_framebuffer.h"
+#include "mt_framebuffer_window.h"
 #include "mt_texture.h"
 #include "mt_gpu_buffer.h"
 #include "mt_renderable.h"
@@ -52,10 +53,10 @@ namespace Echo
     
     void MTRenderer::onSize(int width, int height)
     {
-        m_screenWidth = width;
-        m_screenHeight = height;
+        m_windowWidth = width;
+        m_windowHeight = height;
         
-        Viewport viewport(0, 0, m_screenWidth, m_screenHeight);
+        Viewport viewport(0, 0, m_windowWidth, m_windowHeight);
         setViewport(&viewport);
     }
 
@@ -76,9 +77,8 @@ namespace Echo
     
     Renderable* MTRenderer::createRenderable(const String& renderStage, ShaderProgram* material)
     {
-        Renderable* renderable = EchoNew(MTRenderable(renderStage, material, m_renderableIdentifier++));
-        ui32 id = renderable->getIdentifier();
-        assert(!m_renderables.count(id));
+        static ui32 id = 0; id++;
+        Renderable* renderable = EchoNew(MTRenderable(renderStage, material, id));
         m_renderables[id] = renderable;
         
         return renderable;
@@ -110,9 +110,24 @@ namespace Echo
         return EchoNew(MTSamplerState);
     }
     
-    RenderTarget* MTRenderer::createRenderTarget(ui32 id, ui32 width, ui32 height, PixelFormat pixelFormat, const RenderTarget::Options& option)
+    RenderView* MTRenderer::createRenderView(ui32 width, ui32 height, PixelFormat pixelFormat)
     {
-        return EchoNew(MTRenderTarget);
+        return nullptr;
+    }
+    
+    FrameBuffer* MTRenderer::createFramebuffer(ui32 id, ui32 width, ui32 height)
+    {
+        return EchoNew(MTFrameBuffer);
+    }
+    
+    FrameBuffer* MTRenderer::getWindowFrameBuffer()
+    {
+        if(!m_framebufferWindow)
+        {
+            m_framebufferWindow = EchoNew(MTFrameBufferWindow(m_windowWidth, m_windowHeight));
+        }
+        
+        return m_framebufferWindow;
     }
     
     Texture* MTRenderer::createTexture2D(const String& name)

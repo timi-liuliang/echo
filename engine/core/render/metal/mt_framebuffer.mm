@@ -1,8 +1,8 @@
-#include "mt_render_target.h"
+#include "mt_framebuffer.h"
 
 namespace Echo
 {
-    void MTRenderTarget::onResize(ui32 width, ui32 height)
+    void MTFrameBuffer::onSize(ui32 width, ui32 height)
     {
         
     }
