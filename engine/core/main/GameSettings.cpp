@@ -74,7 +74,7 @@ namespace Echo
 	{ 
 		m_designWidth = width;
 
-		onSize( Renderer::instance()->getScreenWidth(), Renderer::instance()->getScreenHeight());
+		onSize( Renderer::instance()->getWindowWidth(), Renderer::instance()->getWindowHeight());
 	}
 
 	// set design height
@@ -82,14 +82,14 @@ namespace Echo
 	{ 
 		m_designHeight = height;
 
-		onSize(Renderer::instance()->getScreenWidth(), Renderer::instance()->getScreenHeight());
+		onSize(Renderer::instance()->getWindowWidth(), Renderer::instance()->getWindowHeight());
 	}
 
 	void GameSettings::setAspect(const StringOption& option)
 	{
 		m_aspect.setValue(option.getValue());
 
-		onSize(Renderer::instance()->getScreenWidth(), Renderer::instance()->getScreenHeight());
+		onSize(Renderer::instance()->getWindowWidth(), Renderer::instance()->getWindowHeight());
 	}
 
 	void GameSettings::keepAspect(ui32 windowWidth, ui32 windowHeight, KeepAspectType type, Camera* camera)

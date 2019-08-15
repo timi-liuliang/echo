@@ -45,7 +45,8 @@ namespace Echo
         OGLESDebug(glTexImage2D(GL_TEXTURE_2D, 0, GLES2Mapping::MapInternalFormat(m_format), m_width, m_height, 0, GLES2Mapping::MapFormat(m_format), GLES2Mapping::MapDataType(m_format), (GLvoid*)0));
 
         const SamplerState* sampleState = m_bindTexture->getSamplerState();
-        sampleState->active(NULL);
+        if(sampleState)
+            sampleState->active(NULL);
 
         return true;
 	}

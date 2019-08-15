@@ -44,13 +44,13 @@ namespace Echo
 
 	void RenderStage::process()
 	{
-		RenderPipeline::instance()->beginFramebuffer(RenderPipeline::RTI_DefaultBackBuffer);
+		RenderPipeline::instance()->beginFramebuffer(RenderPipeline::FB_Window);
 
 		for (RenderQueue* item : m_items)
 		{
 			item->render();
 		}
 
-		RenderPipeline::instance()->endFramebuffer(RenderPipeline::RTI_DefaultBackBuffer);
+		RenderPipeline::instance()->endFramebuffer(RenderPipeline::FB_Window);
 	}
 }

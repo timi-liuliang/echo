@@ -7,10 +7,9 @@
 
 namespace Echo
 {
-    #define INVALIDE  0xFFFFFFFF
-
-    GLESFramebuffer::GLESFramebuffer( ui32 id, ui32 width, ui32 height, PixelFormat pixelFormat)
+    GLESFramebuffer::GLESFramebuffer( ui32 id, ui32 width, ui32 height)
 		: FrameBuffer(id, width, height)
+        , m_fbo(0)
 	{
         OGLESDebug(glGenFramebuffers(1, &m_fbo));
 	}
@@ -33,49 +32,26 @@ namespace Echo
         m_views[(ui8)attachment] = renderView;
     }
 
-	bool GLESFramebuffer::beginRender(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue)
+	bool GLESFramebuffer::begin(bool isClearColor, const Color& bgColor, bool isClearDepth, float depthValue, bool isClearStencil, ui8 stencilValue)
 	{
 		// bind frame buffer
 		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
 		OGLESDebug(glViewport(0, 0, m_width, m_height));
 
 		// clear
-		clear( clearColor, backgroundColor, clearDepth, depthValue, clearStencil, stencilValue );
+		clear( isClearColor, bgColor, isClearDepth, depthValue, isClearStencil, stencilValue );
 
 		return true;
 	}
 
-	bool GLESFramebuffer::endRender()
+	bool GLESFramebuffer::end()
 	{
-		return true;
-	}
-
-	bool GLESFramebuffer::invalide(bool invalidateColor, bool invalidateDepth, bool invalidateStencil)
-	{
-		int attachment_count = 0;
-		GLenum attachments[128] = { 0 };
-		if (invalidateColor)
-			attachments[attachment_count++] = GL_COLOR_ATTACHMENT0;
-		if (invalidateDepth)
-			attachments[attachment_count++] = GL_DEPTH_ATTACHMENT;
-		if (invalidateStencil)
-			attachments[attachment_count++] = GL_STENCIL_ATTACHMENT;
-
-		if (attachment_count > 0)
-		{
-			OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
-
-#ifndef ECHO_PLATFORM_ANDROID
-			OGLESDebug(glInvalidateFramebuffer(GL_FRAMEBUFFER, attachment_count, attachments));
-#endif
-		}
 		return true;
 	}
 
 	void GLESFramebuffer::clear(bool clear_color, const Color& color, bool clear_depth, float depth_value, bool clear_stencil, ui8 stencil_value)
 	{
 		GLbitfield mask = 0;
-
 		if (clear_color)
 		{
 			OGLESDebug(glClearColor(color.r, color.g, color.b, color.a));

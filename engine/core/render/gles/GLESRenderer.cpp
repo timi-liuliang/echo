@@ -2,6 +2,7 @@
 #include "GLESRenderer.h"
 #include "GLESMapping.h"
 #include "GLESFramebuffer.h"
+#include "GLESFrameBufferWindow.h"
 #include "GLESTexture2D.h"
 #include "GLESTextureCube.h"
 #include "GLESShaderProgram.h"
@@ -149,21 +150,20 @@ namespace Echo
 	void GLES2Renderer::createSystemResource()
 	{
 		m_cfg.bFullscreen = true;
-		m_bVSync = false;
 
 		// set default render states
 		RasterizerState::RasterizerDesc rsDesc;
-		m_pDefaultRasterizerState = createRasterizerState(rsDesc);
+		m_defaultRasterizerState = createRasterizerState(rsDesc);
 
 		DepthStencilState::DepthStencilDesc dssDesc;
-		m_pDefaultDepthStencilState = createDepthStencilState(dssDesc);
+		m_defaultDepthStencilState = createDepthStencilState(dssDesc);
 
 		BlendState::BlendDesc bsDesc;
-		m_pDefaultBlendState = createBlendState(bsDesc);
+		m_defaultBlendState = createBlendState(bsDesc);
 
-		setRasterizerState(m_pDefaultRasterizerState);
-		setDepthStencilState(m_pDefaultDepthStencilState);
-		setBlendState(m_pDefaultBlendState);
+		setRasterizerState(m_defaultRasterizerState);
+		setDepthStencilState(m_defaultDepthStencilState);
+		setBlendState(m_defaultBlendState);
 
 		// set view port
 		Viewport viewport(0, 0, m_screenWidth, m_screenHeight);
@@ -172,9 +172,9 @@ namespace Echo
 
 	void GLES2Renderer::cleanSystemResource()
 	{
-		EchoSafeDelete(m_pDefaultRasterizerState, RasterizerState);
-		EchoSafeDelete(m_pDefaultDepthStencilState, DepthStencilState);
-		EchoSafeDelete(m_pDefaultBlendState, BlendState);
+		EchoSafeDelete(m_defaultRasterizerState, RasterizerState);
+		EchoSafeDelete(m_defaultDepthStencilState, DepthStencilState);
+		EchoSafeDelete(m_defaultBlendState, BlendState);
 		EchoSafeDeleteContainer(m_vecSamlerStates, GLES2SamplerState);
 	}
 
@@ -192,7 +192,7 @@ namespace Echo
 	void GLES2Renderer::scissor(ui32 left, ui32 top, ui32 width, ui32 height)
 	{
 		OGLESDebug(glEnable(GL_SCISSOR_TEST));
-		OGLESDebug(glScissor(left, getScreenHeight() - top - height, width, height));
+		OGLESDebug(glScissor(left, getWindowHeight() - top - height, width, height));
 	}
 
 	void GLES2Renderer::endScissor()
@@ -595,17 +595,27 @@ namespace Echo
         return EchoNew(GLESRenderView(width, height, pixelFormat));
     }
 
-	FrameBuffer* GLES2Renderer::createFramebuffer(ui32 id, ui32 width, ui32 height, PixelFormat pixelFormat)
+	FrameBuffer* GLES2Renderer::createFramebuffer(ui32 id, ui32 width, ui32 height)
 	{
-		return EchoNew(GLESFramebuffer(id, width, height, pixelFormat));
+		return EchoNew(GLESFramebuffer(id, width, height));
 	}
 
 	Renderable* GLES2Renderer::createRenderable(const String& renderStage, ShaderProgram* material)
 	{
-		Renderable* renderable = EchoNew(GLES2Renderable(renderStage, material, m_renderableIdentifier++));
-		ui32 id = renderable->getIdentifier();
+        static ui32 id = 1;
+		Renderable* renderable = EchoNew(GLES2Renderable(renderStage, material, id++));
 		m_renderables[id] = renderable;
 
 		return renderable;
 	}
+
+    FrameBuffer* GLES2Renderer::getWindowFrameBuffer()
+    {
+        if (!m_windowFramebuffer)
+        {
+            m_windowFramebuffer = EchoNew(GLESFramebufferWindow( m_screenWidth, m_screenHeight));
+        }
+
+        return m_windowFramebuffer;
+    }
 }

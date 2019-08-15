@@ -19,7 +19,6 @@ namespace Echo
 #endif
 
 		Echo::Renderer::Config renderCfg;
-		renderCfg.enableThreadedRendering = false;
 		renderCfg.windowHandle = hwnd;
 
 		EchoLogDebug("Canvas Size : %d x %d", renderCfg.screenWidth, renderCfg.screenHeight);

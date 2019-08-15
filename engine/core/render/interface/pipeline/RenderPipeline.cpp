@@ -6,21 +6,7 @@ namespace Echo
 {
 	RenderPipeline::RenderPipeline()
 	{
-        Renderer* renderer = Renderer::instance();
-        ui32 screenWidth = renderer->getScreenWidth();
-        ui32 screenHeight = renderer->getScreenHeight();
-
-        // create default framebuffer
-		FrameBuffer* defaultFB = Renderer::instance()->createFramebuffer(RTI_DefaultBackBuffer, screenWidth, screenHeight, Renderer::instance()->getBackBufferPixelFormat());
-        if (defaultFB)
-        {
-            RenderView* colorView = renderer->createRenderView(screenWidth, screenHeight, Renderer::instance()->getBackBufferPixelFormat());
-            RenderView* depthView = renderer->createRenderView(screenWidth, screenHeight, PF_D32_FLOAT);
-            defaultFB->attach(FrameBuffer::Attachment::Color0, colorView);
-            defaultFB->attach(FrameBuffer::Attachment::DepthStencil, depthView);
-
-            m_framebuffers.insert(FramebufferMap::value_type(RTI_DefaultBackBuffer, defaultFB));
-        }
+        m_framebuffers.insert(FramebufferMap::value_type(FB_Window, Renderer::instance()->getWindowFrameBuffer()));
 	}
 
 	RenderPipeline::~RenderPipeline()
@@ -41,13 +27,13 @@ namespace Echo
 	bool RenderPipeline::beginFramebuffer(ui32 id, bool clearColor, const Color& bgColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue, ui32 rbo)
 	{
 		FramebufferMap::iterator it = m_framebuffers.find(id);
-		return it != m_framebuffers.end() ? it->second->beginRender(clearColor, bgColor, clearDepth, depthValue, clearStencil, stencilValue) : false;
+		return it != m_framebuffers.end() ? it->second->begin(clearColor, bgColor, clearDepth, depthValue, clearStencil, stencilValue) : false;
 	}
 
 	bool RenderPipeline::endFramebuffer(ui32 id)
 	{
 		FramebufferMap::iterator it = m_framebuffers.find(id);
-		return it != m_framebuffers.end() ? it->second->endRender() : false;
+		return it != m_framebuffers.end() ? it->second->end() : false;
 	}
 
 	void RenderPipeline::onSize(ui32 width, ui32 height)

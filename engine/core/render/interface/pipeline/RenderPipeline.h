@@ -11,10 +11,10 @@ namespace Echo
 		ECHO_CLASS(RenderPipeline, Node)
 
 	public:
-		enum RenderTargetID
+		enum FrameBufferType
 		{
-			RTI_DefaultBackBuffer,
-			RTI_End
+			FB_Window = 0,
+			FB_End
 		};
 
 	public:

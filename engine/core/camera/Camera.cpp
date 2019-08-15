@@ -21,8 +21,8 @@ namespace Echo
 		//Viewport* pViewport = Renderer::instance()->getViewport();
 		//if(pViewport)
 		{
-			m_width = (Real)Renderer::instance()->getScreenWidth();
-			m_height = (Real)Renderer::instance()->getScreenHeight();
+			m_width = (Real)Renderer::instance()->getWindowWidth();
+			m_height = (Real)Renderer::instance()->getWindowHeight();
 			m_aspect = (Real)m_width / (Real)m_height;
 		}
 		//else

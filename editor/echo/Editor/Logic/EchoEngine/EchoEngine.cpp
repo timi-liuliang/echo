@@ -88,7 +88,7 @@ namespace Studio
 	{
 		Echo::Engine::instance()->onSize(cx, cy);
 
-		m_renderWindow->getInputController()->onSizeCamera(Echo::Renderer::instance()->getScreenWidth(), Echo::Renderer::instance()->getScreenHeight());
+		m_renderWindow->getInputController()->onSizeCamera(Echo::Renderer::instance()->getWindowWidth(), Echo::Renderer::instance()->getWindowHeight());
 	}
 
 	bool EchoEngine::SetProject(const char* projectFile)

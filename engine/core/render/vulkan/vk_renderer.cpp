@@ -100,9 +100,8 @@ namespace Echo
 
     Renderable* VKRenderer::createRenderable(const String& renderStage, ShaderProgram* material)
     {
-        Renderable* renderable = EchoNew(VKRenderable(renderStage, material, m_renderableIdentifier++));
-        ui32 id = renderable->getIdentifier();
-        assert(!m_renderables.count(id));
+        static ui32 id = 1;
+        Renderable* renderable = EchoNew(VKRenderable(renderStage, material, id++));
         m_renderables[id] = renderable;
 
         return renderable;
@@ -113,7 +112,6 @@ namespace Echo
         return EchoNew(VKShaderProgram);
     }
 
-    // create states
     RasterizerState* VKRenderer::createRasterizerState(const RasterizerState::RasterizerDesc& desc)
     {
         return EchoNew(VKRasterizerState);

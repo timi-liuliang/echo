@@ -27,7 +27,7 @@ namespace Echo
         };
 
 	public:
-		FrameBuffer() {}
+        FrameBuffer();
 		FrameBuffer(ui32 id, ui32 width, ui32 height);
 		virtual ~FrameBuffer();
 
@@ -36,10 +36,11 @@ namespace Echo
 
         // attach render view
         virtual void attach(Attachment attachment, RenderView* renderView) {}
+        virtual void detach(Attachment attachment) {}
 
 		// begin|end render
-		virtual bool beginRender(bool clearColor, const Color& bgColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue) { return false; }
-        virtual bool endRender() { return false; }
+		virtual bool begin(bool isClearColor, const Color& bgColor, bool isClearDepth, float depthValue, bool isClearStencil, ui8 stencilValue) { return false; }
+        virtual bool end() { return false; }
 
 		// on resize
         virtual void onSize(ui32 width, ui32 height) {}

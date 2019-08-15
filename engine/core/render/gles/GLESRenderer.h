@@ -83,12 +83,16 @@ namespace Echo
 	
 		// frame buffer
         virtual RenderView*  createRenderView(ui32 width, ui32 height, PixelFormat pixelFormat) override;
-		virtual FrameBuffer* createFramebuffer(ui32 id, ui32 width, ui32 height, PixelFormat pixelFormat);
+		virtual FrameBuffer* createFramebuffer(ui32 id, ui32 width, ui32 height);
 
         // screen size
-		virtual ui32 getScreenWidth() { return m_screenWidth; }
-		virtual ui32 getScreenHeight() { return m_screenHeight; }
+		virtual ui32 getWindowWidth() { return m_screenWidth; }
+		virtual ui32 getWindowHeight() { return m_screenHeight; }
 
+        // get screen frame buffer
+        virtual FrameBuffer* getWindowFrameBuffer() override;
+
+        // bind shader program
 		bool bindShaderProgram(GLES2ShaderProgram* program);
 
 		// get viewport
@@ -126,6 +130,7 @@ namespace Echo
 		ui32				m_screenHeight;
 		std::set<GLES2SamplerState*> m_vecSamlerStates;
 		NineBoolArray		m_isVertexAttribArrayEnable;	// 记录指定AttribArray是否可用
+        FrameBuffer*        m_windowFramebuffer = nullptr;
 
 #ifdef ECHO_PLATFORM_WINDOWS
 

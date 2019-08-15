@@ -27,14 +27,12 @@ namespace Echo
 	}
 
 	Renderer::Renderer()
-		: m_bVSync(false)
-		, m_pDefaultRasterizerState(NULL)
-		, m_pDefaultDepthStencilState(NULL)
-		, m_pDefaultBlendState(NULL)
-		, m_pRasterizerState(NULL)
-		, m_pDepthStencilState(NULL)
-		, m_pBlendState(NULL)
-		, m_renderableIdentifier(1)
+		: m_defaultRasterizerState(NULL)
+		, m_defaultDepthStencilState(NULL)
+		, m_defaultBlendState(NULL)
+		, m_rasterizerState(NULL)
+		, m_depthStencilState(NULL)
+		, m_blendState(NULL)
 	{
 		EchoAssert(!g_render);
 		g_render = this;
@@ -49,32 +47,31 @@ namespace Echo
 		m_renderables.clear();
 	}
 
-	void Renderer::setRasterizerState(RasterizerState* pState)
+	void Renderer::setRasterizerState(RasterizerState* state)
 	{
-		EchoAssert(pState);
-		if (pState != m_pRasterizerState)
+		EchoAssert(state);
+		if (state != m_rasterizerState)
 		{
-			pState->active();
-			m_pRasterizerState = pState;
+			state->active();
+			m_rasterizerState = state;
 		}
 	}
 
-	void Renderer::setDepthStencilState(DepthStencilState* pState)
+	void Renderer::setDepthStencilState(DepthStencilState* state)
 	{
-		if (pState && pState != m_pDepthStencilState)
+		if (state && state != m_depthStencilState)
 		{
-			pState->active();
-			m_pDepthStencilState = pState;
+			state->active();
+			m_depthStencilState = state;
 		}
 	}
 
-	void Renderer::setBlendState(BlendState* pState)
+	void Renderer::setBlendState(BlendState* state)
 	{
-		EchoAssert(pState);
-		if (pState != m_pBlendState)
+		if (state != m_blendState)
 		{
-			pState->active();
-			m_pBlendState = pState;
+			state->active();
+			m_blendState = state;
 		}
 	}
 
@@ -83,44 +80,39 @@ namespace Echo
 		return m_cfg.bFullscreen;
 	}
 
-	bool Renderer::isVSync() const
-	{
-		return m_bVSync;
-	}
-
 	RasterizerState* Renderer::getDefaultRasterizerState() const
 	{
-		return m_pDefaultRasterizerState;
+		return m_defaultRasterizerState;
 	}
 
 	DepthStencilState* Renderer::getDefaultDepthStencilState() const
 	{
-		return m_pDefaultDepthStencilState;
+		return m_defaultDepthStencilState;
 	}
 
 	BlendState* Renderer::getDefaultBlendState() const
 	{
-		return m_pDefaultBlendState;
+		return m_defaultBlendState;
 	}
 
 	RasterizerState* Renderer::getRasterizerState() const
 	{
-		return m_pRasterizerState;
+		return m_rasterizerState;
 	}
 
 	DepthStencilState* Renderer::getDepthStencilState() const
 	{
-		return m_pDepthStencilState;
+		return m_depthStencilState;
 	}
 
 	BlendState* Renderer::getBlendState() const
 	{
-		return m_pBlendState;
+		return m_blendState;
 	}
 
 	void Renderer::project(Vector3& screenPos, const Vector3& worldPos, const Matrix4& matVP, Viewport* pViewport)
 	{
-		Viewport viewPort(0, 0, getScreenWidth(), getScreenHeight());
+		Viewport viewPort(0, 0, getWindowWidth(), getWindowHeight());
 		if (!pViewport)
 		{
 			pViewport = &viewPort;
@@ -141,7 +133,7 @@ namespace Echo
 
 	void Renderer::unproject(Vector3& worldPos, const Vector3& screenPos, const Matrix4& matVP, Viewport* pViewport)
 	{
-		Viewport viewPort(0, 0, getScreenWidth(), getScreenHeight());
+		Viewport viewPort(0, 0, getWindowWidth(), getWindowHeight());
 		if (!pViewport)
 		{
 			pViewport = &viewPort;

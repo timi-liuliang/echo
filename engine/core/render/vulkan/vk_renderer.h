@@ -31,7 +31,7 @@ namespace Echo
 
         // create views
         virtual RenderView*  createRenderView(ui32 width, ui32 height, PixelFormat pixelFormat) override { return nullptr; }
-        virtual FrameBuffer* createFramebuffer(ui32 id, ui32 width, ui32 height, PixelFormat pixelFormat) override {return nullptr;}
+        virtual FrameBuffer* createFramebuffer(ui32 id, ui32 width, ui32 height) override {return nullptr;}
 
         // create states
         virtual RasterizerState* createRasterizerState(const RasterizerState::RasterizerDesc& desc) override;
@@ -77,8 +77,11 @@ namespace Echo
         virtual void getDepthRange(Vector2& vec) override {}
 
         // get screen width and height
-        virtual ui32 getScreenWidth() override { return m_screenWidth;}
-        virtual ui32 getScreenHeight() override { return m_screenHeight;}
+        virtual ui32 getWindowWidth() override { return m_screenWidth;}
+        virtual ui32 getWindowHeight() override { return m_screenHeight;}
+
+        // get screen frame buffer
+        virtual FrameBuffer* getWindowFrameBuffer() override { return nullptr; }
 
 		// get view port
 		virtual void getViewportReal(Viewport& pViewport) override {}

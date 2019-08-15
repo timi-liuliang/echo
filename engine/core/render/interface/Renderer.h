@@ -14,6 +14,7 @@ namespace Echo
 	class Renderer
 	{
 		typedef RasterizerState::PolygonMode PolygonFillMode;
+
 	public:
 		// config
 		struct Config
@@ -21,8 +22,6 @@ namespace Echo
 			ui32	screenWidth;
 			ui32	screenHeight;
 			bool	bFullscreen;
-			bool	bVSync;
-			bool	enableThreadedRendering;
 
 			// for Windows Editor.
 			size_t windowHandle;
@@ -31,14 +30,11 @@ namespace Echo
 				: screenWidth(800)
 				, screenHeight(600)
 				, bFullscreen(false)
-				, bVSync(false)
-				, enableThreadedRendering(true)
                 , windowHandle(0)
 			{}
 		};
 
 		static Color BGCOLOR;
-		typedef map<ui32, SamplerState*>::type	StageSamplerMap;
 
 	public:
 		Renderer();
@@ -72,7 +68,6 @@ namespace Echo
 
 		// get render config
 		const Config& getCfg() const { return m_cfg; }
-		virtual bool isVSync() const;
 		virtual ui32 getMaxStageNum() const = 0;
 		virtual RasterizerState* getDefaultRasterizerState() const;
 		virtual DepthStencilState* getDefaultDepthStencilState() const;
@@ -107,7 +102,7 @@ namespace Echo
 		
 		// create views
         virtual RenderView*  createRenderView(ui32 width, ui32 height, PixelFormat pixelFormat)=0;
-		virtual FrameBuffer* createFramebuffer(ui32 id, ui32 width, ui32 height, PixelFormat pixelFormat)=0;
+		virtual FrameBuffer* createFramebuffer(ui32 id, ui32 width, ui32 height)=0;
 
 		// create states
 		virtual RasterizerState* createRasterizerState(const RasterizerState::RasterizerDesc& desc) = 0;
@@ -127,19 +122,20 @@ namespace Echo
 		// draw
 		virtual void draw(Renderable* program) = 0;
 
+    public:
+        // screen width and height
+        virtual ui32 getWindowWidth() = 0;
+        virtual ui32 getWindowHeight() = 0;
+
+        // get screen frame buffer
+        virtual FrameBuffer* getWindowFrameBuffer() = 0;
+
 	public:
 		// device features
 		DeviceFeature&	getDeviceFeatures() { return m_deviceFeature; }
 
-		// screen width and height
-		virtual ui32 getScreenWidth() = 0;
-		virtual ui32 getScreenHeight() = 0;
-
 		// get viewport size
 		virtual void getViewportReal(Viewport& pViewport)=0;
-
-		// get framebuffer format
-		PixelFormat	getBackBufferPixelFormat() const { return m_backBufferFormat; }
         
         // begin render
         virtual void beginRender() {}
@@ -153,28 +149,12 @@ namespace Echo
 
 	protected:
 		Config				m_cfg;
-		bool				m_bVSync;
-		RasterizerState*	m_pDefaultRasterizerState;
-		DepthStencilState*	m_pDefaultDepthStencilState;
-		BlendState*			m_pDefaultBlendState;
-		RasterizerState*	m_pRasterizerState;
-		DepthStencilState*	m_pDepthStencilState;
-		BlendState*			m_pBlendState;
-		bool				m_bSupportsDXT;
-		bool				m_bSupportsPVRTC;
-		bool				m_bSupportsATITC;
-		bool				m_bSupportsDepthTextures;
-		bool				m_bSupportsAnisotropy;
-		ui32				m_backBufferBlueBits;
-		ui32				m_backBufferRedBits;
-		ui32				m_backBufferGreenBits;
-		ui32				m_backBufferAlphaBits;
-		ui32				m_backBufferBits;
-		ui32				m_depthBufferBits;
-		PixelFormat			m_backBufferFormat;
-		ui16				m_bBind2RGBTexture;
-		ui16				m_bBind2RGBATexture;
-		int					m_renderableIdentifier;
+		RasterizerState*	m_defaultRasterizerState;
+		DepthStencilState*	m_defaultDepthStencilState;
+		BlendState*			m_defaultBlendState;
+		RasterizerState*	m_rasterizerState;
+		DepthStencilState*	m_depthStencilState;
+		BlendState*			m_blendState;
 		std::map<ui32, Renderable*>	m_renderables;
 		ui32				m_startMipmap = 0;
 		DeviceFeature		m_deviceFeature;
