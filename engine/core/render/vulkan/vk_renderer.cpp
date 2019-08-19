@@ -3,6 +3,7 @@
 #include "vk_shader_program.h"
 #include "vk_render_state.h"
 #include "vk_gpu_buffer.h"
+#include "vk_framebuffer_window.h"
 
 namespace Echo
 {
@@ -492,5 +493,15 @@ namespace Echo
         }
 
         return true;
+    }
+
+    FrameBuffer* VKRenderer::getWindowFrameBuffer()
+    {
+        if (!m_windowFramebuffer)
+        {
+            m_windowFramebuffer = EchoNew(VKFramebufferWindow(m_screenWidth, m_screenHeight));
+        }
+
+        return m_windowFramebuffer;
     }
 }

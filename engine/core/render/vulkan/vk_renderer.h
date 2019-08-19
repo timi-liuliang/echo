@@ -81,7 +81,7 @@ namespace Echo
         virtual ui32 getWindowHeight() override { return m_screenHeight;}
 
         // get screen frame buffer
-        virtual FrameBuffer* getWindowFrameBuffer() override { return nullptr; }
+        virtual FrameBuffer* getWindowFrameBuffer() override;
 
 		// get view port
 		virtual void getViewportReal(Viewport& pViewport) override {}
@@ -142,6 +142,7 @@ namespace Echo
     private:
         ui32				m_screenWidth = 640;
         ui32				m_screenHeight = 480;
+        FrameBuffer*        m_windowFramebuffer = nullptr;
 		Extensions			m_enabledExtensions;
 		VkInstance			m_vkInstance;
 		ExtensionProperties	m_vkExtensions;
