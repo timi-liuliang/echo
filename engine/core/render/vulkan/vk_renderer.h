@@ -96,12 +96,18 @@ namespace Echo
 		// get logical device
 		VkDevice getVkDevice() { return m_vkDevice; }
 
+        // get vk swapchain
+        VkSwapchainKHR* getVkSwapChain() { return m_swapChain.getVkSwapchain(); }
+
 		// get windows surface
 		VkSurfaceKHR getVkSurface() { return m_vkWindowSurface; }
 
 		// get queue family index
 		const ui32 getGraphicsQueueFamilyIndex();
 		const ui32 getPresentQueueFamilyIndex();
+
+        // semaphore
+        VkSemaphore getImageAvailableSemaphore() { return m_vkImageAvailableSemaphore; }
 
 	private:
 		// create vk instance
@@ -125,7 +131,7 @@ namespace Echo
         void createVkLogicalDevice();
 
         // create swapChain
-        void createVkSwapChain();
+        void createSwapChain();
 
 		// set up validation
 		void createVkValidation();
@@ -136,6 +142,9 @@ namespace Echo
         // create command buffer
         void createVkCommandBuffer();
         void executeBeginVkCommandBuffer();
+
+        // create semaphores
+        void createVkSemaphores();
 
         // create depth buffer
         void createVkDepthBuffer(ui32 width, ui32 height);
@@ -157,12 +166,7 @@ namespace Echo
 		VKSwapChain			m_swapChain;
 		VkCommandPool		m_vkCommandPool;
         VkCommandBuffer     m_vkCommandBuffer;
-        struct 
-        {
-            VkFormat format;
-            VkImage image;
-            VkDeviceMemory memory;
-            VkImageView view;
-        }                   m_vkDepth;
+        VkSemaphore         m_vkImageAvailableSemaphore;
+        VkSemaphore         m_vkRenderFinishedSemaphore;
 	};
 }

@@ -1,4 +1,5 @@
 #include "vk_framebuffer_window.h"
+#include "vk_renderer.h"
 
 namespace Echo
 {
@@ -13,6 +14,10 @@ namespace Echo
 
     bool VKFramebufferWindow::begin(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue)
     {
+        VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
+
+        ui32 imageIndex;
+        vkAcquireNextImageKHR(vkRenderer->getVkDevice(), *vkRenderer->getVkSwapChain(), Math::MAX_UI64, vkRenderer->getImageAvailableSemaphore(), VK_NULL_HANDLE, &imageIndex);
 
         return true;
     }

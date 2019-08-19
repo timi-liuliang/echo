@@ -1,6 +1,7 @@
 #pragma once
 
 #include "interface/FrameBuffer.h"
+#include "vk_render_base.h"
 
 namespace Echo
 {
