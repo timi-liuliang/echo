@@ -3,6 +3,7 @@
 #include "vk_shader_program.h"
 #include "vk_render_state.h"
 #include "vk_gpu_buffer.h"
+#include "vk_render_view.h"
 #include "vk_framebuffer_window.h"
 
 namespace Echo
@@ -378,6 +379,8 @@ namespace Echo
 
     void VKRenderer::createVkDepthBuffer(ui32 width, ui32 height)
     {
+        RenderView* depthView = EchoNew(VKRenderView);
+
 #ifdef ECHO_PLATFORM_ANDROID
         m_vkDepth.format = VK_FORMAT_D24_UNORM_S8_UINT;
 #else
