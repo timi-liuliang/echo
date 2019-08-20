@@ -101,8 +101,8 @@ namespace Echo
 		vkGetSwapchainImagesKHR(vkDevice, m_vkSwapChain, &swapChainImageCount, nullptr);
 
 		// Vk image
-		vector<VkImage>::type swapChainImages(swapChainImageCount);
-		vkGetSwapchainImagesKHR(vkDevice, m_vkSwapChain, &swapChainImageCount, &swapChainImages[0]);
+        m_vkSwapChainImages.resize(swapChainImageCount);
+		vkGetSwapchainImagesKHR(vkDevice, m_vkSwapChain, &swapChainImageCount, &m_vkSwapChainImages[0]);
 
 		// create ImageViews
 		m_vkSwapChainImageViews.resize(swapChainImageCount);
@@ -110,7 +110,7 @@ namespace Echo
 		{
 			VkImageViewCreateInfo createInfo = {};
 			createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-			createInfo.image = swapChainImages[i];
+			createInfo.image = m_vkSwapChainImages[i];
 			createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
 			createInfo.format = VK_FORMAT_B8G8R8A8_UNORM;
 			createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;

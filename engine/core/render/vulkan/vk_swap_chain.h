@@ -16,6 +16,9 @@ namespace Echo
         // get vk swapchain
         VkSwapchainKHR* getVkSwapchain() { return &m_vkSwapChain; }
 
+        // get vk image
+        VkImage getVkImage(ui32 idx) { return m_vkSwapChainImages[idx]; }
+
 	private:
 		// create swap chain
 		void createSwapChain(VkDevice vkDevice);
@@ -28,6 +31,7 @@ namespace Echo
 
 	private:
 		VkSwapchainKHR				m_vkSwapChain = VK_NULL_HANDLE;
+        vector<VkImage>::type       m_vkSwapChainImages;
 		vector<VkImageView>::type	m_vkSwapChainImageViews;
 	};
 }

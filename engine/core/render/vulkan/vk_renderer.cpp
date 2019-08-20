@@ -373,13 +373,27 @@ namespace Echo
         VkCommandBufferBeginInfo commandBufferBeginInfo = {};
         commandBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
         commandBufferBeginInfo.pNext = nullptr;
-        commandBufferBeginInfo.flags = 0;
+        commandBufferBeginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
         commandBufferBeginInfo.pInheritanceInfo = nullptr;
 
         if (VK_SUCCESS != vkBeginCommandBuffer(m_vkCommandBuffer, &commandBufferBeginInfo))
         {
             EchoLogError("vulkan begin command buffer failed.");
         }
+
+        // clear
+        VkClearColorValue clearColor = { Renderer::BGCOLOR.r, Renderer::BGCOLOR.g, Renderer::BGCOLOR.b, Renderer::BGCOLOR.a };
+        VkClearValue clearValue = {};
+        clearValue.color = clearColor;
+
+        VkImageSubresourceRange imageRange = {};
+        imageRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        imageRange.levelCount = 1;
+        imageRange.layerCount = 1;
+
+        vkCmdClearColorImage(m_vkCommandBuffer, m_swapChain.getVkImage(0), VK_IMAGE_LAYOUT_GENERAL, &clearColor, 1, &imageRange);
+
+        vkEndCommandBuffer(m_vkCommandBuffer);
     }
 
     void VKRenderer::createVkSemaphores()
@@ -401,12 +415,14 @@ namespace Echo
 
     bool VKRenderer::present()
     {
+        ui32 imageIndex = 0;
+
         VkPresentInfoKHR present;
         present.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
         present.pNext = nullptr;
         present.swapchainCount = 1;
         present.pSwapchains = m_swapChain.getVkSwapchain();
-        present.pImageIndices = 0;
+        present.pImageIndices = &imageIndex;
         present.pWaitSemaphores = nullptr;
         present.waitSemaphoreCount = 0;
         present.pResults = nullptr;

@@ -19,6 +19,18 @@ namespace Echo
         ui32 imageIndex;
         vkAcquireNextImageKHR(vkRenderer->getVkDevice(), *vkRenderer->getVkSwapChain(), Math::MAX_UI64, vkRenderer->getImageAvailableSemaphore(), VK_NULL_HANDLE, &imageIndex);
 
+        VkCommandBuffer clearCommandBuffer = vkRenderer->getVkCommandBuffer();
+
+        VkSubmitInfo submitInfo = {};
+        submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+        submitInfo.commandBufferCount = 1;
+        submitInfo.pCommandBuffers = &clearCommandBuffer;
+
+        if (VK_SUCCESS != vkQueueSubmit(vkRenderer->getVkGraphicsQueue(), 1, &submitInfo, nullptr))
+        {
+            EchoLogError("vulkan queue submit failed");
+        }
+
         return true;
     }
 

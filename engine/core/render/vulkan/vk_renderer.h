@@ -106,6 +106,12 @@ namespace Echo
 		const ui32 getGraphicsQueueFamilyIndex();
 		const ui32 getPresentQueueFamilyIndex();
 
+        // get queue
+        VkQueue getVkGraphicsQueue() { return m_vkGraphicsQueue; }
+
+        // get clear command buffer
+        VkCommandBuffer getVkCommandBuffer() { return m_vkCommandBuffer; }
+
         // semaphore
         VkSemaphore getImageAvailableSemaphore() { return m_vkImageAvailableSemaphore; }
 
