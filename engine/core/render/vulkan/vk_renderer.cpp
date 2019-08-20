@@ -41,6 +41,8 @@ namespace Echo
         createVkCommandBuffer();
         executeBeginVkCommandBuffer();
 
+        createVkSemaphores();
+
         createVkDepthBuffer(640, 480);
 
 		// window width height
