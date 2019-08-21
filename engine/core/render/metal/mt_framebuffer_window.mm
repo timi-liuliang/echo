@@ -1,4 +1,3 @@
-#include "mt_framebuffer.h"
 #include "mt_framebuffer_window.h"
 
 namespace Echo

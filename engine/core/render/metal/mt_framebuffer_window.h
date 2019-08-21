@@ -1,6 +1,7 @@
 #pragma once
 
-#include "interface/FrameBuffer.h"
+#include "engine/core/render/interface/FrameBuffer.h"
+#include "mt_render_base.h"
 
 namespace Echo
 {
@@ -15,6 +16,8 @@ namespace Echo
         virtual bool end() override;
 
         // on resize
-        virtual void onSize(ui32 width, ui32 height);
+        virtual void onSize(ui32 width, ui32 height) override;
+        
+    private:
     };
 }
