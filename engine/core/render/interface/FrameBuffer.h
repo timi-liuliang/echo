@@ -33,6 +33,10 @@ namespace Echo
 
 		// get id
 		ui32 id() const { return m_id; }
+        
+        // width && height
+        ui32 getWidth() const { return m_width; }
+        ui32 getHeight() const { return m_height; }
 
         // attach render view
         virtual void attach(Attachment attachment, RenderView* renderView) {}

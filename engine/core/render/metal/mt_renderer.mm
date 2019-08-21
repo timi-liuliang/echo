@@ -34,8 +34,8 @@ namespace Echo
 
     bool MTRenderer::initialize(const Config& config)
     {
-        // make view support metal
-        makeViewMetalCompatible( (void*)config.windowHandle);
+        // new frame buffer window
+        m_framebufferWindow = EchoNew(MTFrameBufferWindow(config.screenWidth, config.screenHeight, (void*)config.windowHandle));
         
         // set view port
         onSize( config.screenWidth, config.screenHeight);
@@ -43,21 +43,9 @@ namespace Echo
         return true;
     }
     
-	void MTRenderer::setViewport(Viewport* viewport)
-	{
-        float  contentsScale = m_metalLayer.contentsScale;
-        CGSize newSize = { viewport->getWidth() * contentsScale, viewport->getHeight() * contentsScale};
-        
-        [m_metalLayer setDrawableSize: newSize];
-	}
-    
     void MTRenderer::onSize(int width, int height)
     {
-        m_windowWidth = width;
-        m_windowHeight = height;
-        
-        Viewport viewport(0, 0, m_windowWidth, m_windowHeight);
-        setViewport(&viewport);
+        m_framebufferWindow->onSize( width, height);
     }
 
 	void MTRenderer::setTexture(ui32 index, Texture* texture, bool needUpdate)
@@ -122,11 +110,6 @@ namespace Echo
     
     FrameBuffer* MTRenderer::getWindowFrameBuffer()
     {
-        if(!m_framebufferWindow)
-        {
-            m_framebufferWindow = EchoNew(MTFrameBufferWindow(m_windowWidth, m_windowHeight));
-        }
-        
         return m_framebufferWindow;
     }
     
@@ -135,29 +118,12 @@ namespace Echo
         return EchoNew(MTTexture2D);
     }
     
-    NSView* MTRenderer::makeViewMetalCompatible(void* handle)
-    {
-        m_metalView = (NSView*)handle;
-        
-        if (![m_metalView.layer isKindOfClass:[CAMetalLayer class]])
-        {
-            m_metalLayer = [CAMetalLayer layer];
-            m_metalLayer.device = m_metalDevice;
-            m_metalLayer.framebufferOnly = true;
-            m_metalLayer.pixelFormat = MTLPixelFormatBGRA8Unorm;
-            
-            [m_metalView setLayer:m_metalLayer];
-            [m_metalView setWantsLayer:YES];
-        }
-        
-        return m_metalView;
-    }
-    
     MTLRenderPassDescriptor* MTRenderer::makeNextRenderPassDescriptor()
     {
         if(!m_metalRenderPassDescriptor)
         {
-            m_metalNextDrawable = [m_metalLayer nextDrawable];
+            CAMetalLayer* metalLayer = m_framebufferWindow->getMetalLayer();
+            m_metalNextDrawable = [metalLayer nextDrawable];
             
             // render pass descriptor
             MTLRenderPassDescriptor* metalRenderPassDescriptor = [MTLRenderPassDescriptor renderPassDescriptor];

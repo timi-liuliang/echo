@@ -52,9 +52,6 @@ namespace Echo
 		// initialize
 		virtual bool initialize(const Config& config)=0;
 
-		// set view port
-		virtual void setViewport(Viewport* pViewport) = 0;
-
 		// states
 		virtual void setRasterizerState(RasterizerState* pState);
 		virtual void setDepthStencilState(DepthStencilState* pState);

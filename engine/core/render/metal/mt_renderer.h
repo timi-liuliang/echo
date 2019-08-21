@@ -2,6 +2,7 @@
 
 #include "engine/core/render/interface/Renderer.h"
 #include "mt_render_base.h"
+#include "mt_framebuffer_window.h"
 
 namespace Echo
 {
@@ -69,13 +70,10 @@ namespace Echo
         // set texture
         virtual void setTexture(ui32 index, Texture* texture, bool needUpdate = false) override;
         
-        // view port
-        virtual void setViewport(Viewport* pViewport) override;
-        
     public:
         // screen width and height
-        virtual ui32 getWindowWidth() override { return m_windowWidth;}
-        virtual ui32 getWindowHeight() override { return m_windowHeight;}
+        virtual ui32 getWindowWidth() override { return m_framebufferWindow->getWidth();}
+        virtual ui32 getWindowHeight() override { return m_framebufferWindow->getHeight();}
         
         // get screen frame buffer
         virtual FrameBuffer* getWindowFrameBuffer() override;
@@ -98,23 +96,16 @@ namespace Echo
         id<MTLRenderCommandEncoder> getMetalRenderCommandEncoder() { return m_metalRenderCommandEncoder; }
         
     private:
-        // make view metal compatible
-        NSView* makeViewMetalCompatible(void* handle);
-        
         // make next drawable
         MTLRenderPassDescriptor* makeNextRenderPassDescriptor();
         
     private:
-        ui32                            m_windowWidth = 640;
-        ui32                            m_windowHeight = 480;
         id<MTLDevice>                   m_metalDevice;
         id<MTLCommandQueue>             m_metalCommandQueue;
-        NSView*                         m_metalView = nullptr;
-        CAMetalLayer*                   m_metalLayer = nullptr;
         id<CAMetalDrawable>             m_metalNextDrawable;
         MTLRenderPassDescriptor*        m_metalRenderPassDescriptor = nullptr;
         id<MTLCommandBuffer>            m_metalCommandBuffer;
         id<MTLRenderCommandEncoder>     m_metalRenderCommandEncoder;
-        FrameBuffer*                    m_framebufferWindow = nullptr;
+        MTFrameBufferWindow*            m_framebufferWindow = nullptr;
 	};
 }
