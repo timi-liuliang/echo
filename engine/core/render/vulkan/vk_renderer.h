@@ -27,7 +27,7 @@ namespace Echo
         virtual GPUBuffer*	createIndexBuffer(Dword usage, const Buffer& buff) override;
 
         // create texture
-        virtual Texture*     createTexture2D(const String& name) override { return nullptr; }
+        virtual Texture*     createTexture2D(const String& name) override;
         virtual TextureCube* createTextureCube(const String& name) override {return nullptr; }
 
         // create views
@@ -66,9 +66,6 @@ namespace Echo
     public:
         // set texture
         virtual void setTexture(ui32 index, Texture* texture, bool needUpdate = false) override;
-
-        // view port
-        virtual void setViewport(Viewport* pViewport) override;
 
     public:
         // get max stage number

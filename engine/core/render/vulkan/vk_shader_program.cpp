@@ -6,23 +6,23 @@ namespace Echo
 {
 	static bool createShader(const vector<ui32>::type& spirv, VkShaderModule& vkShader)
 	{
-		VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
+        if (!spirv.empty())
+        {
+            VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
 
-		VkShaderModuleCreateInfo createInfo;
-		createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-		createInfo.pNext = nullptr;
-		createInfo.flags = 0;
-		createInfo.codeSize = spirv.size() * sizeof(ui32);
-		createInfo.pCode = spirv.data();
+            VkShaderModuleCreateInfo createInfo;
+            createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+            createInfo.pNext = nullptr;
+            createInfo.flags = 0;
+            createInfo.codeSize = spirv.size() * sizeof(ui32);
+            createInfo.pCode = spirv.data();
 
-		if (VK_SUCCESS != vkCreateShaderModule(vkRenderer->getVkDevice(), &createInfo, nullptr, &vkShader))
-		{
-			EchoLogError("Vulkan create shader failed");
+            if (VK_SUCCESS == vkCreateShaderModule(vkRenderer->getVkDevice(), &createInfo, nullptr, &vkShader))
+                return true;
+        }
 
-			return false;
-		}
-
-		return true;
+        EchoLogError("Vulkan create shader failed");
+        return false;
 	}
 
 	VKShaderProgram::~VKShaderProgram()

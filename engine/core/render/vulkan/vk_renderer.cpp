@@ -5,6 +5,7 @@
 #include "vk_gpu_buffer.h"
 #include "vk_render_view.h"
 #include "vk_framebuffer_window.h"
+#include "vk_texture.h"
 
 namespace Echo
 {
@@ -51,7 +52,6 @@ namespace Echo
 
         // set view port
         Viewport viewport(0, 0, m_screenWidth, m_screenHeight);
-        setViewport(&viewport);
 
         return true;
     }
@@ -66,7 +66,11 @@ namespace Echo
 		return EchoNew(VKBuffer(GPUBuffer::GPUBufferType::GBT_INDEX, usage, buff));
 	}
 
-	// create window surface
+    Texture* VKRenderer::createTexture2D(const String& name)
+    {
+        return EchoNew(VKTexture2D);
+    }
+
 	void VKRenderer::createVkSurface(void* handle)
 	{
 		// create window surface
@@ -93,11 +97,6 @@ namespace Echo
 			EchoLogError("Vulkan Renderer failed to create window surface!");
 		}
 	#endif
-	}
-
-	void VKRenderer::setViewport(Viewport* pViewport)
-	{
-
 	}
 
 	void VKRenderer::setTexture(ui32 index, Texture* texture, bool needUpdate)
