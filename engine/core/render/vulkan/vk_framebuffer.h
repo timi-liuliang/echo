@@ -22,5 +22,6 @@ namespace Echo
         virtual void onSize(ui32 width, ui32 height);
 
     private:
+        VkFramebuffer   m_vkFramebuffer;
     };
 }

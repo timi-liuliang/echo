@@ -171,5 +171,7 @@ namespace Echo
         VkCommandBuffer     m_vkCommandBuffer;
         VkSemaphore         m_vkImageAvailableSemaphore;
         VkSemaphore         m_vkRenderFinishedSemaphore;
+        VkRenderPass        m_vkRenderPass;
+        VkPipeline          m_vkPipeline;
 	};
 }

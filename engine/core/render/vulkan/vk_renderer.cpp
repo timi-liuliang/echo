@@ -46,6 +46,8 @@ namespace Echo
 
         createVkDepthBuffer(640, 480);
 
+        createVkRenderPass();
+
 		// window width height
         m_screenWidth = config.screenWidth;
         m_screenHeight = config.screenHeight;
@@ -444,5 +446,38 @@ namespace Echo
         }
 
         return m_windowFramebuffer;
+    }
+
+    void VKRenderer::createVkRenderPass()
+    {
+        VkAttachmentReference attachRef = {};
+        attachRef.attachment = 0;
+        attachRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+        VkSubpassDescription subpassDesc = {};
+        subpassDesc.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+        subpassDesc.colorAttachmentCount = 1;
+        subpassDesc.pColorAttachments = &attachRef;
+
+        VkAttachmentDescription attachDesc = {};
+        attachDesc.format = m_core.GetSurfaceFormat().format;
+        attachDesc.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+        attachDesc.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+        attachDesc.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+        attachDesc.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        attachDesc.initialLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+        attachDesc.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+
+        VkRenderPassCreateInfo renderPassCreateInfo = {};
+        renderPassCreateInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+        renderPassCreateInfo.attachmentCount = 1;
+        renderPassCreateInfo.pAttachments = &attachDesc;
+        renderPassCreateInfo.subpassCount = 1;
+        renderPassCreateInfo.pSubpasses = &subpassDesc;
+
+        if(VK_SUCCESS != vkCreateRenderPass(m_vkDevice, &renderPassCreateInfo, nullptr, &m_vkRenderPass))
+        {
+            EchoLogError("vulkan create render pass failed.");
+        }
     }
 }
