@@ -15,5 +15,12 @@ namespace Echo
 
 		// param operate
 		virtual void setShaderParam(const String& name, ShaderParamType type, const void* param, size_t num = 1) {}
+
+	private:
+		// create vk pipeline
+		void createVkPipeline();
+
+	private:
+		VkPipeline          m_vkPipeline;
 	};
 }

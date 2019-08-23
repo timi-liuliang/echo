@@ -14,6 +14,20 @@ namespace Echo
         // on resize
         virtual void onSize(ui32 width, ui32 height) override;
 
+	public:
+		// get vk image view
+		VkImageView getVkImageView() { return m_vkImageView; }
+
+	private:
+		// mapping vk format
+		void mappingVkFormat();
+
+		// create vulkan image
+		void createVkImage();
+
+		// create vulkan image view
+		void createVkImageView();
+
     private:
         VkFormat        m_vkFormat;
         VkImage         m_vkImage;

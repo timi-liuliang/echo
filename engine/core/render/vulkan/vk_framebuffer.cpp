@@ -41,4 +41,61 @@ namespace Echo
                 colorView->onSize(width, height);
         }
     }
+
+    void VkFramebuffer::createVkRenderPass()
+    {
+        VkAttachmentReference attachRef = {};
+        attachRef.attachment = 0;
+        attachRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+        VkSubpassDescription subpassDesc = {};
+        subpassDesc.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+        subpassDesc.colorAttachmentCount = 1;
+        subpassDesc.pColorAttachments = &attachRef;
+
+        VkAttachmentDescription attachDesc = {};
+        //attachDesc.format = m_core.GetSurfaceFormat().format;
+        attachDesc.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+        attachDesc.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+        attachDesc.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+        attachDesc.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        attachDesc.initialLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+        attachDesc.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+
+        VkRenderPassCreateInfo renderPassCreateInfo = {};
+        renderPassCreateInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+        renderPassCreateInfo.attachmentCount = 1;
+        renderPassCreateInfo.pAttachments = &attachDesc;
+        renderPassCreateInfo.subpassCount = 1;
+        renderPassCreateInfo.pSubpasses = &subpassDesc;
+
+        if(VK_SUCCESS != vkCreateRenderPass(m_vkDevice, &renderPassCreateInfo, nullptr, &m_vkRenderPass))
+        {
+            EchoLogError("vulkan create render pass failed.");
+        }
+    }
+
+    void VkFramebuffer::createVkFramebuffer()
+    {
+        VKRenderView* colorView = ECHO_DOWN_CAST<VKRenderView*>(m_views[Attachment::Color0]);
+        if(colorView)
+        {
+            VKRenderer* vkRenderer  = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
+            VkImageView vkImageView = colorView->getVkImageView();
+
+            VkFramebufferCreateInfo fbCreateInfo = {};
+            fbCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+            fbCreateInfo.renderPass = m_vkRenderPass;
+            fbCreateInfo.attachmentCount = 1;
+            fbCreateInfo.pAttachments = &vkImageView;
+            fbCreateInfo.width = m_width;
+            fbCreateInfo.height = m_height;
+            fbCreateInfo.layers = 1;
+
+            if(VK_SUCCESS != vkCreateFramebuffer(vkRenderer->getVkDevice(), &fbCreateInfo, NULL, &m_vkFramebuffer))
+            {
+                EchoLogError("vulkan create frame buffer failed");
+            }
+        }
+    }
 }

@@ -22,6 +22,14 @@ namespace Echo
         virtual void onSize(ui32 width, ui32 height);
 
     private:
+        // create render pass
+        void createVkRenderPass();
+
+        // create vk frame buffer
+        void createVkFramebuffer();
+
+    private:
+        VkRenderPass    m_vkRenderPass;
         VkFramebuffer   m_vkFramebuffer;
     };
 }
