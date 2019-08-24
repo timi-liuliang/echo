@@ -12,7 +12,7 @@ namespace Echo
     MTRenderable::MTRenderable(const String& renderStage, ShaderProgram* shader, int identifier)
         : Renderable( renderStage, shader, identifier)
     {
-        // assign vertex and frament shader
+        // assign vertex and fragment shader
         MTShaderProgram* mtShaderProgram = ECHO_DOWN_CAST<MTShaderProgram*>(shader);
         if(mtShaderProgram && mtShaderProgram->isValid())
         {
