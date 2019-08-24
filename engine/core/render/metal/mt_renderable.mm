@@ -65,22 +65,8 @@ namespace Echo
     void MTRenderable::setMesh(Mesh* mesh)
     {
         m_mesh = mesh;
-        bindVertexStream(m_mesh->getVertexElements(), m_mesh->getVertexBuffer());
-    }
-    
-    bool MTRenderable::bindVertexStream(const VertexElementList& vertElements, GPUBuffer* vertexBuffer, int flag)
-    {
-        if (flag & BS_BEGIN)
-            m_vertexStreams.clear();
         
-        StreamUnit unit;
-        unit.m_vertElements = vertElements;
-        unit.m_buffer = vertexBuffer;
-        buildVertexDescriptor(&unit);
-        
-        m_vertexStreams.push_back(unit);
-        
-        return true;
+        buildVertexDescriptor();
     }
     
     MTLVertexAttribute* MTRenderable::getMTLVertexAttributeBySemantic(VertexSemantic semantic)
@@ -101,7 +87,7 @@ namespace Echo
         return nullptr;
     }
     
-    void MTRenderable::buildVertexDescriptor(StreamUnit* stream)
+    void MTRenderable::buildVertexDescriptor()
     {
         if( m_metalVertexDescriptor)
             [m_metalVertexDescriptor release];
@@ -109,7 +95,8 @@ namespace Echo
         m_metalVertexDescriptor = [[MTLVertexDescriptor alloc] init];
         
         // iterate all elements
-        ui32 numVertElms = static_cast<ui32>(stream->m_vertElements.size());
+        const VertexElementList& vertElments = m_mesh->getVertexElements();
+        ui32 numVertElms = static_cast<ui32>(vertElments.size());
         if (numVertElms > 0)
         {
             // buffer 0 was used by uniform buffer
@@ -117,16 +104,16 @@ namespace Echo
             ui32 elementOffset = 0;
             for (size_t i = 0; i < numVertElms; ++i)
             {
-                MTLVertexAttribute* mtlAttribute = getMTLVertexAttributeBySemantic(stream->m_vertElements[i].m_semantic);
+                MTLVertexAttribute* mtlAttribute = getMTLVertexAttributeBySemantic(vertElments[i].m_semantic);
                 if(mtlAttribute)
                 {
                     ui32 attributeIdx = mtlAttribute.attributeIndex;
-                    m_metalVertexDescriptor.attributes[attributeIdx].format = MTMapping::MapVertexFormat(stream->m_vertElements[i].m_pixFmt);
+                    m_metalVertexDescriptor.attributes[attributeIdx].format = MTMapping::MapVertexFormat(vertElments[i].m_pixFmt);
                     m_metalVertexDescriptor.attributes[attributeIdx].bufferIndex = bufferIdx;
                     m_metalVertexDescriptor.attributes[attributeIdx].offset = elementOffset;
                 }
                 
-                elementOffset += PixelUtil::GetPixelSize(stream->m_vertElements[i].m_pixFmt);
+                elementOffset += PixelUtil::GetPixelSize(vertElments[i].m_pixFmt);
             }
             
             m_metalVertexDescriptor.layouts[bufferIdx].stride = elementOffset;
