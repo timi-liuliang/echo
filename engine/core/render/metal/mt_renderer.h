@@ -17,7 +17,7 @@ namespace Echo
         static MTRenderer* instance();
         
         // get name
-        virtual const char* getName() override {return "Metal"; }
+        virtual Type getType() override { return Type::Metal; }
 
 		// initialize
         virtual bool initialize(const Config& config) override;
