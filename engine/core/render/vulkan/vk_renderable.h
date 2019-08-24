@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/core/render/interface/Renderable.h"
+#include "vk_render_base.h"
 
 namespace Echo
 {

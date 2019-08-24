@@ -19,6 +19,9 @@ namespace Echo
 		VKRenderer();
 		virtual ~VKRenderer();
 
+        // get
+        static VKRenderer* instance();
+
 		// initialize
         virtual bool initialize(const Config& config) override;
 

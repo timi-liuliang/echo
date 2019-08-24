@@ -9,8 +9,11 @@
 
 namespace Echo
 {
+    VKRenderer* g_inst = nullptr;
+
     VKRenderer::VKRenderer()
     {
+        g_inst = this;
     }
 
     VKRenderer::~VKRenderer()
@@ -22,6 +25,11 @@ namespace Echo
 		vkDestroyDevice(m_vkDevice, nullptr);
 		vkDestroySurfaceKHR(m_vkInstance, m_vkWindowSurface, nullptr);
 		vkDestroyInstance(m_vkInstance, nullptr);
+    }
+
+    VKRenderer* VKRenderer::instance()
+    {
+        return g_inst;
     }
 
     bool VKRenderer::initialize(const Config& config)

@@ -1,6 +1,7 @@
 #include "engine/core/Util/PathUtil.h"
 #include "interface/Renderer.h"
 #include "vk_render_view.h"
+#include "vk_renderer.h"
 
 namespace Echo
 {
@@ -42,8 +43,8 @@ namespace Echo
         imageInfo.pNext = nullptr;
         imageInfo.imageType = VK_IMAGE_TYPE_2D;
         imageInfo.format = m_vkFormat;
-        imageInfo.extent.width = width;
-        imageInfo.extent.height = height;
+        imageInfo.extent.width = m_width;
+        imageInfo.extent.height = m_height;
         imageInfo.extent.depth = 1;
         imageInfo.mipLevels = 1;
         imageInfo.arrayLayers = 1;
@@ -55,39 +56,36 @@ namespace Echo
         imageInfo.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
         imageInfo.flags = 0;
 
-        if(VK_SUCCESS != vkCreateImage(vkRenderer->getVkDevice(), &imageInfo, nullptr, &m_vkImage))
-        {
+        if(VK_SUCCESS != vkCreateImage(VKRenderer::instance()->getVkDevice(), &imageInfo, nullptr, &m_vkImage))
             EchoLogError("vulkan create image failed.");
-        }
     }
 
     void VKRenderView::createVkImageView()
     {
-        VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
-
-        VkImageViewCreateInfo imageViewCreateInfo = {};
-        imageViewCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-        imageViewCreateInfo.pNext = nullptr;
-        imageViewCreateInfo.image = m_vkImage;
-        imageViewCreateInfo.format = m_vkFormat;
-        imageViewCreateInfo.viewType = VK=VK_IMAGE_VIEW_TYPE_2D;
-        imageViewCreateInfo.components.r = VK_COMPONENT_SWIZZLE_R;
-        imageViewCreateInfo.components.g = VK_COMPONENT_SWIZZLE_G;
-        imageViewCreateInfo.components.b = VK_COMPONENT_SWIZZLE_B;
-        imageViewCreateInfo.components.a = VK_COMPONENT_SWIZZLE_A;
-        imageViewCreateInfo.subresourceRange.aspectMask = PixelUtil::IsDepth(m_format) ? VK_IMAGE_ASPECT_COLOR_BIT : VK_IMAGE_ASPECT_DEPTH_BIT;
-        imageViewCreateInfo.subresourceRange.baseMipLevel = 0;
-        imageViewCreateInfo.subresourceRange.levelCount = 1;
-        imageViewCreateInfo.subresourceRange.baseArrayLayer = 0;
-        imageViewCreateInfo.subresourceRange.layerCount = 1;
-        imageViewCreateInfo.flags = 0;
-
-        if(PixelUtil::IsStencil(m_format))
-            imageViewCreateInfo.subresourceRange.aspectMask |= VK_IMAGE_ASPECT_STENCIL_BIT;
-
-        if(VK_SUCCESS != vkCreateImageView(vkRenderer->getVkDevice(), &imageViewCreateInfo, nullptr, &m_vkImageView))
+        if (m_vkImage)
         {
-            EchoLogError("vulkan create image view failed.");
+            VkImageViewCreateInfo imageViewCreateInfo = {};
+            imageViewCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+            imageViewCreateInfo.pNext = nullptr;
+            imageViewCreateInfo.image = m_vkImage;
+            imageViewCreateInfo.format = m_vkFormat;
+            imageViewCreateInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+            imageViewCreateInfo.components.r = VK_COMPONENT_SWIZZLE_R;
+            imageViewCreateInfo.components.g = VK_COMPONENT_SWIZZLE_G;
+            imageViewCreateInfo.components.b = VK_COMPONENT_SWIZZLE_B;
+            imageViewCreateInfo.components.a = VK_COMPONENT_SWIZZLE_A;
+            imageViewCreateInfo.subresourceRange.aspectMask = PixelUtil::IsDepth(m_format) ? VK_IMAGE_ASPECT_COLOR_BIT : VK_IMAGE_ASPECT_DEPTH_BIT;
+            imageViewCreateInfo.subresourceRange.baseMipLevel = 0;
+            imageViewCreateInfo.subresourceRange.levelCount = 1;
+            imageViewCreateInfo.subresourceRange.baseArrayLayer = 0;
+            imageViewCreateInfo.subresourceRange.layerCount = 1;
+            imageViewCreateInfo.flags = 0;
+
+            if (PixelUtil::IsStencil(m_format))
+                imageViewCreateInfo.subresourceRange.aspectMask |= VK_IMAGE_ASPECT_STENCIL_BIT;
+
+            if (VK_SUCCESS != vkCreateImageView(VKRenderer::instance()->getVkDevice(), &imageViewCreateInfo, nullptr, &m_vkImageView))
+                EchoLogError("vulkan create image view failed.");
         }
     }
 }

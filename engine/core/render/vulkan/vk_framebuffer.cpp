@@ -1,6 +1,8 @@
 #include "engine/core/Util/PathUtil.h"
 #include "interface/Renderer.h"
+#include "vk_render_view.h"
 #include "vk_framebuffer.h"
+#include "vk_renderer.h"
 
 namespace Echo
 {
@@ -42,8 +44,10 @@ namespace Echo
         }
     }
 
-    void VkFramebuffer::createVkRenderPass()
+    void VKFramebuffer::createVkRenderPass()
     {
+        VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
+
         VkAttachmentReference attachRef = {};
         attachRef.attachment = 0;
         attachRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
@@ -69,15 +73,15 @@ namespace Echo
         renderPassCreateInfo.subpassCount = 1;
         renderPassCreateInfo.pSubpasses = &subpassDesc;
 
-        if(VK_SUCCESS != vkCreateRenderPass(m_vkDevice, &renderPassCreateInfo, nullptr, &m_vkRenderPass))
+        if(VK_SUCCESS != vkCreateRenderPass(vkRenderer->getVkDevice(), &renderPassCreateInfo, nullptr, &m_vkRenderPass))
         {
             EchoLogError("vulkan create render pass failed.");
         }
     }
 
-    void VkFramebuffer::createVkFramebuffer()
+    void VKFramebuffer::createVkFramebuffer()
     {
-        VKRenderView* colorView = ECHO_DOWN_CAST<VKRenderView*>(m_views[Attachment::Color0]);
+        VKRenderView* colorView = ECHO_DOWN_CAST<VKRenderView*>(m_views[ui8(Attachment::Color0)]);
         if(colorView)
         {
             VKRenderer* vkRenderer  = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
