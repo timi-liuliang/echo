@@ -38,7 +38,7 @@ namespace Echo
 
         // create views
         virtual RenderView*  createRenderView(ui32 width, ui32 height, PixelFormat pixelFormat) override { return nullptr; }
-        virtual FrameBuffer* createFramebuffer(ui32 id, ui32 width, ui32 height) override { return EchoNew(VKFramebuffer(id, width, height));}
+        virtual FrameBuffer* createFramebuffer(ui32 id, ui32 width, ui32 height) override { return EchoNew(VKFramebufferOffscreen(id, width, height));}
 
         // create states
         virtual RasterizerState* createRasterizerState(const RasterizerState::RasterizerDesc& desc) override;

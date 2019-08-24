@@ -4,7 +4,7 @@
 #include "vk_render_state.h"
 #include "vk_gpu_buffer.h"
 #include "vk_render_view.h"
-#include "vk_framebuffer_window.h"
+#include "vk_framebuffer.h"
 #include "vk_texture.h"
 
 namespace Echo

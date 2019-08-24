@@ -8,6 +8,8 @@ namespace Echo
 {
 	class VKShaderProgram : public ShaderProgram
 	{
+        typedef VkPipelineShaderStageCreateInfo VkPipelineSSCI;
+
     public:
 		virtual ~VKShaderProgram();
 
@@ -36,6 +38,7 @@ namespace Echo
 		bool			        m_isValid = false;
 		VkShaderModule	        m_vkVertexShader;
 		VkShaderModule	        m_vkFragmentShader;
+        VkPipelineSSCI          m_shaderStagesCreateInfo[2] = { {}, {} };
         vector<Byte>::type      m_vertexShaderUniformBytes;
         vector<Byte>::type      m_fragmentShaderUniformBytes;
         VKBuffer*               m_vkVertexShaderUniformBuffer = nullptr;

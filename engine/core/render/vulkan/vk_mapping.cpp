@@ -2,6 +2,19 @@
 
 namespace Echo
 {
+    VkPrimitiveTopology VKMapping::MapPrimitiveTopology(Mesh::TopologyType type)
+    {
+        switch (type)
+        {
+        case Mesh::TT_POINTLIST:        return VK_PRIMITIVE_TOPOLOGY_POINT_LIST;
+        case Mesh::TT_LINELIST:         return VK_PRIMITIVE_TOPOLOGY_LINE_LIST;
+        case Mesh::TT_LINESTRIP:        return VK_PRIMITIVE_TOPOLOGY_LINE_STRIP;
+        case Mesh::TT_TRIANGLELIST:     return VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+        case Mesh::TT_TRIANGLESTRIP:    return VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP;
+        default:                        return VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+        }
+    }
+
     VkBufferUsageFlags VKMapping::MapGpuBufferType(GPUBuffer::GPUBufferType type)
     {
         switch (type)

@@ -11,11 +11,15 @@ namespace Echo
 		VKRenderable(const String& renderStage, ShaderProgram* shader, int identifier);
         virtual ~VKRenderable() {}
 
-        // link shader and program
-		virtual void setMesh(Mesh* mesh) override;
-
 		// param operate
 		virtual void setShaderParam(const String& name, ShaderParamType type, const void* param, size_t num = 1) {}
+
+    private:
+        // link shader and program
+        virtual void setMesh(Mesh* mesh) override;
+
+        // bind vertex stream
+        bool buildVertexDescriptor();
 
 	private:
 		// create vk pipeline

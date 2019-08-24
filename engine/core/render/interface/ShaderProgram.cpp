@@ -12,18 +12,29 @@
 
 namespace Echo
 {
-    static bool convert(String& vsSrc, String& psSrc)
+    static bool convert(String& type, String& vsSrc, String& psSrc)
     {
-        // convert to metal
-        if(Renderer::instance()->getType() == Renderer::Type::Metal)
+        if (type == "glsl")
         {
-            GLSLCrossCompiler glslCompiler;
-            
-            // set input
-            glslCompiler.setInput( vsSrc.c_str(), psSrc.c_str(), nullptr);
-            
-            vsSrc = glslCompiler.getOutput(Echo::GLSLCrossCompiler::ShaderLanguage::MSL, Echo::GLSLCrossCompiler::ShaderType::VS).c_str();
-            psSrc = glslCompiler.getOutput(Echo::GLSLCrossCompiler::ShaderLanguage::MSL, Echo::GLSLCrossCompiler::ShaderType::FS).c_str();
+            // convert to metal
+            if (Renderer::instance()->getType() == Renderer::Type::Metal)
+            {
+                GLSLCrossCompiler glslCompiler;
+
+                // set input
+                glslCompiler.setInput(vsSrc.c_str(), psSrc.c_str(), nullptr);
+
+                vsSrc = glslCompiler.getOutput(Echo::GLSLCrossCompiler::ShaderLanguage::MSL, Echo::GLSLCrossCompiler::ShaderType::VS).c_str();
+                psSrc = glslCompiler.getOutput(Echo::GLSLCrossCompiler::ShaderLanguage::MSL, Echo::GLSLCrossCompiler::ShaderType::FS).c_str();
+            }
+        }
+        else
+        {
+            if (Renderer::instance()->getType() == Renderer::Type::Vulkan)
+            {
+                vsSrc.clear();
+                psSrc.clear();
+            }
         }
         
         return true;
@@ -192,10 +203,8 @@ namespace Echo
 				}
 			}
             
-            if(type=="glsl")
-            {
-                convert( vsSrc, psSrc);
-            }
+            // convert based on renderer type
+            convert(type, vsSrc, psSrc);
 
 			if(!createShaderProgram( vsSrc, psSrc))
 			{

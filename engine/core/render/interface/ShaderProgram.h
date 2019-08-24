@@ -134,15 +134,22 @@ namespace Echo
 		virtual bool createShaderProgram(const String& vsContent, const String& psContent);
 
 	private:
+        // load
 		bool loadFromContent(char* content, const String& macros);
 		bool loadShaderFrom(void* node, const String& macros);
+
+        // load states
 		bool loadBlendState(void* pNode);
 		bool loadRasterizerState(void* pNode);
 		bool loadDepthStencilState(void* pNode);
+
+        // create states
+        void createBlendState(BlendState::BlendDesc& desc);
+        void createDepthState(DepthStencilState::DepthStencilDesc& desc);
+        void createRasterizerState(RasterizerState::RasterizerDesc& desc);
+
+        // uniforms
 		bool loadDefaultUniform(void* pNode);
-		void createBlendState(BlendState::BlendDesc& desc);
-		void createDepthState(DepthStencilState::DepthStencilDesc& desc);
-		void createRasterizerState(RasterizerState::RasterizerDesc& desc);
 		void* createDefaultUniformValue(const String& strType, const i32 count, const String& strValue, ui32& outSize, ShaderParamType& outType);
 
 	protected:

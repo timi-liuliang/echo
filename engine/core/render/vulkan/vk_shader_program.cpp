@@ -45,17 +45,15 @@ namespace Echo
 		// create shader stage
 		if (m_isValid)
 		{
-			VkPipelineShaderStageCreateInfo shaderStagesInfo[2] = { {}, {} };
+            m_shaderStagesCreateInfo[0].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+            m_shaderStagesCreateInfo[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
+            m_shaderStagesCreateInfo[0].module = m_vkVertexShader;
+            m_shaderStagesCreateInfo[0].pName = "main";
 
-			shaderStagesInfo[0].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-			shaderStagesInfo[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
-			shaderStagesInfo[0].module = m_vkVertexShader;
-			shaderStagesInfo[0].pName = "main";
-
-			shaderStagesInfo[1].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-			shaderStagesInfo[1].stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-			shaderStagesInfo[1].module = m_vkFragmentShader;
-			shaderStagesInfo[1].pName = "main";
+            m_shaderStagesCreateInfo[1].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+            m_shaderStagesCreateInfo[1].stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+            m_shaderStagesCreateInfo[1].module = m_vkFragmentShader;
+            m_shaderStagesCreateInfo[1].pName = "main";
 		}
 
 		return m_isValid;
