@@ -2,7 +2,7 @@
 
 #include "engine/core/render/interface/Renderer.h"
 #include "mt_render_base.h"
-#include "mt_framebuffer_window.h"
+#include "mt_framebuffer.h"
 
 namespace Echo
 {

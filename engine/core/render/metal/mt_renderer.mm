@@ -4,7 +4,6 @@
 #include "mt_shader_program.h"
 #include "mt_render_state.h"
 #include "mt_framebuffer.h"
-#include "mt_framebuffer_window.h"
 #include "mt_texture.h"
 #include "mt_gpu_buffer.h"
 #include "mt_renderable.h"
@@ -105,7 +104,7 @@ namespace Echo
     
     FrameBuffer* MTRenderer::createFramebuffer(ui32 id, ui32 width, ui32 height)
     {
-        return EchoNew(MTFrameBuffer);
+        return EchoNew(MTFrameBufferOffscreen(id, width, height));
     }
     
     FrameBuffer* MTRenderer::getWindowFrameBuffer()
