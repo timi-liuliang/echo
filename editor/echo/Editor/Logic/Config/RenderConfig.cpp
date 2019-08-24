@@ -2,6 +2,7 @@
 #include <engine/core/render/vulkan/vk.h>
 #include <engine/core/render/metal/mt.h>
 #include <engine/core/render/gles/GLES.h>
+#include <engine/core/util/magic_enum.hpp>
 
 namespace Echo
 {
@@ -24,7 +25,9 @@ namespace Echo
 		EchoLogDebug("Canvas Size : %d x %d", renderCfg.screenWidth, renderCfg.screenHeight);
 		if (renderer && renderer->initialize(renderCfg))
 		{
-			EchoLogInfo("Init %s Renderer success.", renderer->getName());
+            auto name = magic_enum::enum_name<Renderer::Type>(renderer->getType());
+			EchoLogInfo("Init %s Renderer success.", std::string(name).c_str());
+
 			return renderer;
 		}
 

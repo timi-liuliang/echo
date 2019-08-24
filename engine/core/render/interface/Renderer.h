@@ -16,6 +16,14 @@ namespace Echo
 		typedef RasterizerState::PolygonMode PolygonFillMode;
 
 	public:
+        // type
+        enum class Type
+        {
+            Vulkan,
+            Metal,
+            OpenGLES,
+        };
+
 		// config
 		struct Config
 		{
@@ -46,8 +54,8 @@ namespace Echo
 		// replace instance
 		static bool replaceInstance(Renderer* inst);
         
-        // get name
-        virtual const char* getName() {return "Unknown"; }
+        // get type
+        virtual Type getType() = 0;
 
 		// initialize
 		virtual bool initialize(const Config& config)=0;

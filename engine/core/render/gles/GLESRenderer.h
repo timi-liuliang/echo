@@ -40,6 +40,9 @@ namespace Echo
 
 		// initialize
 		virtual bool initialize(const Config& config) override;
+
+        // get type
+        virtual Type getType() { return Renderer::Type::OpenGLES; }
 	
 		void checkOpenGLExtensions();
 

@@ -1,8 +1,9 @@
 #include "Gizmos.h"
 #include "engine/core/memory/MemAllocDef.h"
 #include "engine/core/scene/node_tree.h"
+#include "engine/core/render/interface/Renderer.h"
 
-#ifdef ECHO_PLATFORM_MAC
+// material for vulkan or metal or opengles
 static const char* g_gizmoOpaqueMaterial = R"(
 <?xml version = "1.0" encoding = "utf-8"?>
 <Shader type="glsl">
@@ -70,9 +71,9 @@ void main(void)
 </DepthStencilState>
 </Shader>
 )";
-#else
-// opaque material
-static const char* g_gizmoOpaqueMaterial = R"(
+
+// opaque material for opengles
+static const char* g_gizmoOpaqueMaterialGLES = R"(
 <?xml version = "1.0" encoding = "utf-8"?>
 <Shader>
 	<VS>#version 100
@@ -125,7 +126,6 @@ static const char* g_gizmoOpaqueMaterial = R"(
 	</DepthStencilState>
 </Shader>
 )";
-#endif
 
 namespace Echo
 {
@@ -206,7 +206,7 @@ namespace Echo
 		: m_isAutoClear(false)
 	{
 		m_material = ECHO_CREATE_RES(Material);
-		m_material->setShaderContent( "echo_gizmo_default_shader", g_gizmoOpaqueMaterial);
+		m_material->setShaderContent( "echo_gizmo_default_shader", Renderer::instance()->getType()!=Renderer::Type::OpenGLES ? g_gizmoOpaqueMaterial : g_gizmoOpaqueMaterialGLES);
 		m_material->setRenderStage("Transparent");
 
 		m_lineBatch = EchoNew(Batch(m_material, this));

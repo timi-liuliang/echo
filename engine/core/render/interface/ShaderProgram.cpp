@@ -15,7 +15,7 @@ namespace Echo
     static bool convert(String& vsSrc, String& psSrc)
     {
         // convert to metal
-        if(strcmp(Renderer::instance()->getName(), "Metal") == 0)
+        if(Renderer::instance()->getType() == Renderer::Type::Metal)
         {
             GLSLCrossCompiler glslCompiler;
             
