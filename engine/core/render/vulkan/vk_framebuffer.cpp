@@ -6,6 +6,8 @@
 
 namespace Echo
 {
+    static VkFramebuffer* g_current = nullptr;
+
     VKFramebuffer::VKFramebuffer(ui32 id, ui32 width, ui32 height)
         : FrameBuffer(id, width, height)
     {
@@ -15,6 +17,11 @@ namespace Echo
     {
     }
 
+    VkFramebuffer* VkFramebuffer::current()
+    {
+        return g_current;
+    }
+
     void VKFramebuffer::attach(Attachment attachment, RenderView* renderView)
     {
         m_views[(ui8)attachment] = renderView;
@@ -22,7 +29,7 @@ namespace Echo
 
     bool VKFramebuffer::begin(bool isClearColor, const Color& bgColor, bool isClearDepth, float depthValue, bool isClearStencil, ui8 stencilValue)
     {
-        Renderer::instance()->setDepthStencilState(Renderer::instance()->getDefaultDepthStencilState());
+        g_current = this;
 
         return true;
     }
@@ -132,22 +139,7 @@ namespace Echo
 
     bool VKFramebufferOffscreen::begin(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue)
     {
-        VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
-
-        ui32 imageIndex;
-        vkAcquireNextImageKHR(vkRenderer->getVkDevice(), *vkRenderer->getVkSwapChain(), Math::MAX_UI64, vkRenderer->getImageAvailableSemaphore(), VK_NULL_HANDLE, &imageIndex);
-
-        VkCommandBuffer clearCommandBuffer = vkRenderer->getVkCommandBuffer();
-
-        VkSubmitInfo submitInfo = {};
-        submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-        submitInfo.commandBufferCount = 1;
-        submitInfo.pCommandBuffers = &clearCommandBuffer;
-
-        if (VK_SUCCESS != vkQueueSubmit(vkRenderer->getVkGraphicsQueue(), 1, &submitInfo, nullptr))
-        {
-            EchoLogError("vulkan queue submit failed");
-        }
+        VkFramebuffer::begin(clearColor, backgroundColor, clearDepth, depthValue, clearStencil, stencilValue);
 
         return true;
     }
@@ -174,6 +166,8 @@ namespace Echo
 
     bool VKFramebufferWindow::begin(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue)
     {
+        VkFramebuffer::begin(clearColor, backgroundColor, clearDepth, depthValue, clearStencil, stencilValue);
+
         VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
 
         ui32 imageIndex;

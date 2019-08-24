@@ -11,6 +11,9 @@ namespace Echo
         VKFramebuffer(ui32 id, ui32 width, ui32 height);
         virtual ~VKFramebuffer();
 
+        // current frame buffer
+        static VkFramebuffer* current();
+
         // attach render view
         virtual void attach(Attachment attachment, RenderView* renderView) override;
 
