@@ -52,6 +52,16 @@ namespace Echo
         m_vkViewport.maxDepth = 1.f;
     }
 
+    VkPipelineViewportStateCreateInfo VKFramebuffer::getVkViewportStateCreateInfo()
+    {
+        VkPipelineViewportStateCreateInfo createInfo = {};
+        createInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+        createInfo.viewportCount = 1;
+        createInfo.pViewports = &m_vkViewport;
+
+        return createInfo;
+    }
+
     void VKFramebuffer::createVkRenderPass()
     {
         VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());

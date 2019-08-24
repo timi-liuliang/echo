@@ -21,6 +21,10 @@ namespace Echo
         // parse uniforms
         void parseUniforms();
 
+    public:
+        // get shader stage create info
+        const array<VkPipelineSSCI, 2>& getVkShaderStageCreateInfo() { return m_vkShaderStagesCreateInfo; }
+
 	private:
 		// create shader library
 		virtual bool createShaderProgram(const String& vsContent, const String& psContent) override;
@@ -38,7 +42,7 @@ namespace Echo
 		bool			        m_isValid = false;
 		VkShaderModule	        m_vkVertexShader;
 		VkShaderModule	        m_vkFragmentShader;
-        VkPipelineSSCI          m_shaderStagesCreateInfo[2] = { {}, {} };
+        array<VkPipelineSSCI, 2>m_vkShaderStagesCreateInfo;
         vector<Byte>::type      m_vertexShaderUniformBytes;
         vector<Byte>::type      m_fragmentShaderUniformBytes;
         VKBuffer*               m_vkVertexShaderUniformBuffer = nullptr;

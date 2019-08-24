@@ -18,9 +18,6 @@ namespace Echo
         // link shader and program
         virtual void setMesh(Mesh* mesh) override;
 
-        // bind vertex stream
-        bool buildVertexDescriptor();
-
 	private:
 		// create vk pipeline
 		void createVkPipeline();

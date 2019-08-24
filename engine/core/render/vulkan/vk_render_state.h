@@ -11,7 +11,7 @@ namespace Echo
         VKBlendState(const BlendDesc &desc){}
         virtual ~VKBlendState(){}
 
-        void active(){}
+        void active();
 	};
 	
 	class VKDepthStencilState : public DepthStencilState
@@ -31,7 +31,7 @@ namespace Echo
         VKRasterizerState(const RasterizerDesc& desc){}
         virtual ~VKRasterizerState(){}
 
-        void active() {}
+        void active();
 	};
 
 	class VKSamplerState : public SamplerState
@@ -41,6 +41,6 @@ namespace Echo
         VKSamplerState(const SamplerDesc& desc) {}
         virtual ~VKSamplerState() {}
 
-        void active(const SamplerState* pre) const{}
+        void active(const SamplerState* pre) const;
 	};
 }

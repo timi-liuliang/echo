@@ -254,6 +254,8 @@ namespace Echo
 			bool				bScissor;
 			bool				bMultisample;
 
+            float               lineWidth = 1.f;
+
 			void reset()
 			{
 				polygonMode		= PM_FILL;
@@ -288,7 +290,7 @@ namespace Echo
 	class SamplerState : public RenderState
 	{
 	public:
-		// 采样算法
+		// texture filter option
 		enum FilterOption
 		{
 			FO_NONE,		// No filtering, used for FILT_MIP to turn off mipmapping
@@ -298,17 +300,17 @@ namespace Echo
 			FO_MAX
 		};
 
-		// 寻址模式
+		// texture address mode
 		enum AddressMode
 		{
-			AM_WRAP,		// 环绕
-			AM_MIRROR,		// 镜像
-			AM_CLAMP,		// 裁切
-			AM_BORDER,		// 边界
+			AM_WRAP,
+			AM_MIRROR,
+			AM_CLAMP,
+			AM_BORDER,
 			AM_MAX
 		};
 
-		// 采样描述
+		// sampler description
 		struct SamplerDesc
 		{
 			FilterOption	minFilter;
@@ -324,13 +326,13 @@ namespace Echo
 			float			maxLOD;
 			float			mipLODBias;
 
-			// 构造函数
+			// constructor
 			SamplerDesc()
 			{
 				reset();
 			}
 
-			// 重置默认参数
+			// reset
 			void reset()
 			{
 				minFilter = FO_LINEAR;

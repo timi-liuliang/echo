@@ -21,6 +21,10 @@ namespace Echo
         // on resize
         virtual void onSize(ui32 width, ui32 height);
 
+    public:
+        // get vk view port create info
+        VkPipelineViewportStateCreateInfo getVkViewportStateCreateInfo();
+
     private:
         // create render pass
         void createVkRenderPass();
