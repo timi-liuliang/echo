@@ -25,6 +25,12 @@ namespace Echo
         virtual void onSize(ui32 width, ui32 height);
 
     public:
+        // get vk viewPort
+        VkViewport getVkViewport() { return m_vkViewport; }
+
+        // get vk render pass
+        VkRenderPass getVkRenderPass() { return m_vkRenderPass; }
+
         // get vk view port create info
         VkPipelineViewportStateCreateInfo getVkViewportStateCreateInfo();
 
