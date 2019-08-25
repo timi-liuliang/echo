@@ -34,15 +34,20 @@ namespace Echo
         // get vk view port create info
         VkPipelineViewportStateCreateInfo* getVkViewportStateCreateInfo() { return &m_vkViewportStateCreateInfo; }
 
-    private:
+    protected:
+        // clear color image
+        virtual VkImage getVkColorImage() { return nullptr; }
+
+    protected:
         // create render pass
         void createVkRenderPass();
 
         // create vk frame buffer
         void createVkFramebuffer();
 
-        // create vk command buffer
+        // vk command buffer
         void createVkCommandBuffer();
+        void submitCommandBuffer();
 
     protected:
         VkRenderPass                        m_vkRenderPass;
@@ -92,6 +97,9 @@ namespace Echo
 
         // create window surface
         void createVkSurface(void* handle);
+
+        // clear color image
+        virtual VkImage getVkColorImage() { return m_vkSwapChainImages[m_imageIndex]; }
 
         // present
         void present();

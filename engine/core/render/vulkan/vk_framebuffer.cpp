@@ -33,7 +33,31 @@ namespace Echo
     {
         g_current = this;
 
-        return true;
+        VkCommandBufferBeginInfo commandBufferBeginInfo = {};
+        commandBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+        commandBufferBeginInfo.pNext = nullptr;
+        commandBufferBeginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
+        commandBufferBeginInfo.pInheritanceInfo = nullptr;
+
+        if (VK_SUCCESS == vkBeginCommandBuffer(m_vkCommandBuffer, &commandBufferBeginInfo))
+        {
+            // clear
+            VkClearColorValue clearColor = { Renderer::BGCOLOR.r, Renderer::BGCOLOR.g, Renderer::BGCOLOR.b, Renderer::BGCOLOR.a };
+            VkClearValue clearValue = {};
+            clearValue.color = clearColor;
+
+            VkImageSubresourceRange imageRange = {};
+            imageRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            imageRange.levelCount = 1;
+            imageRange.layerCount = 1;
+
+            vkCmdClearColorImage(m_vkCommandBuffer, getVkColorImage(), VK_IMAGE_LAYOUT_GENERAL, &clearColor, 1, &imageRange);    
+
+            return true;
+        }
+
+        EchoLogError("vulkan begin command buffer failed.");
+        return false;
     }
 
     bool VKFramebuffer::end()
@@ -142,33 +166,20 @@ namespace Echo
         }
     }
 
-    //void VKRenderer::executeBeginVkCommandBuffer()
-    //{
-    //    VkCommandBufferBeginInfo commandBufferBeginInfo = {};
-    //    commandBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-    //    commandBufferBeginInfo.pNext = nullptr;
-    //    commandBufferBeginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
-    //    commandBufferBeginInfo.pInheritanceInfo = nullptr;
+    void VKFramebuffer::submitCommandBuffer()
+    {
+        vkEndCommandBuffer(m_vkCommandBuffer);
 
-    //    if (VK_SUCCESS != vkBeginCommandBuffer(m_vkCommandBuffer, &commandBufferBeginInfo))
-    //    {
-    //        EchoLogError("vulkan begin command buffer failed.");
-    //    }
+        VkSubmitInfo submitInfo = {};
+        submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+        submitInfo.commandBufferCount = 1;
+        submitInfo.pCommandBuffers = &m_vkCommandBuffer;
 
-    //    // clear
-    //    VkClearColorValue clearColor = { Renderer::BGCOLOR.r, Renderer::BGCOLOR.g, Renderer::BGCOLOR.b, Renderer::BGCOLOR.a };
-    //    VkClearValue clearValue = {};
-    //    clearValue.color = clearColor;
-
-    //    VkImageSubresourceRange imageRange = {};
-    //    imageRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-    //    imageRange.levelCount = 1;
-    //    imageRange.layerCount = 1;
-
-    //    vkCmdClearColorImage(m_vkCommandBuffer, m_swapChain.getVkImage(0), VK_IMAGE_LAYOUT_GENERAL, &clearColor, 1, &imageRange);
-
-    //    vkEndCommandBuffer(m_vkCommandBuffer);
-    //}
+        if (VK_SUCCESS != vkQueueSubmit(VKRenderer::instance()->getVkGraphicsQueue(), 1, &submitInfo, nullptr))
+        {
+            EchoLogError("vulkan queue submit failed");
+        }
+    }
 
     VKFramebufferOffscreen::VKFramebufferOffscreen(ui32 id, ui32 width, ui32 height)
         : VKFramebuffer(id, width, height)
@@ -218,25 +229,17 @@ namespace Echo
     {
         VKFramebuffer::begin(clearColor, backgroundColor, clearDepth, depthValue, clearStencil, stencilValue);
 
-        VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
+        vkAcquireNextImageKHR(VKRenderer::instance()->getVkDevice(), m_vkSwapChain, Math::MAX_UI64, VKRenderer::instance()->getImageAvailableSemaphore(), VK_NULL_HANDLE, &m_imageIndex);
 
-        vkAcquireNextImageKHR(vkRenderer->getVkDevice(), m_vkSwapChain, Math::MAX_UI64, vkRenderer->getImageAvailableSemaphore(), VK_NULL_HANDLE, &m_imageIndex);
 
-        VkSubmitInfo submitInfo = {};
-        submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-        submitInfo.commandBufferCount = 1;
-        submitInfo.pCommandBuffers = &m_vkCommandBuffer;
-
-        if (VK_SUCCESS != vkQueueSubmit(vkRenderer->getVkGraphicsQueue(), 1, &submitInfo, nullptr))
-        {
-            EchoLogError("vulkan queue submit failed");
-        }
 
         return true;
     }
 
     bool VKFramebufferWindow::end()
     {
+        submitCommandBuffer();
+
         present();
 
         return true;
@@ -247,7 +250,6 @@ namespace Echo
         m_width = width;
         m_height = height;
     }
-
 
     void VKFramebufferWindow::createVkSurface(void* handle)
     {
