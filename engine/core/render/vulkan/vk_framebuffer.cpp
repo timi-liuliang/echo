@@ -6,7 +6,7 @@
 
 namespace Echo
 {
-    static VkFramebuffer* g_current = nullptr;
+    static VKFramebuffer* g_current = nullptr;
 
     VKFramebuffer::VKFramebuffer(ui32 id, ui32 width, ui32 height)
         : FrameBuffer(id, width, height)
@@ -17,7 +17,7 @@ namespace Echo
     {
     }
 
-    VkFramebuffer* VkFramebuffer::current()
+    VKFramebuffer* VKFramebuffer::current()
     {
         return g_current;
     }
@@ -139,7 +139,7 @@ namespace Echo
 
     bool VKFramebufferOffscreen::begin(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue)
     {
-        VkFramebuffer::begin(clearColor, backgroundColor, clearDepth, depthValue, clearStencil, stencilValue);
+        VKFramebuffer::begin(clearColor, backgroundColor, clearDepth, depthValue, clearStencil, stencilValue);
 
         return true;
     }
@@ -166,7 +166,7 @@ namespace Echo
 
     bool VKFramebufferWindow::begin(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue)
     {
-        VkFramebuffer::begin(clearColor, backgroundColor, clearDepth, depthValue, clearStencil, stencilValue);
+        VKFramebuffer::begin(clearColor, backgroundColor, clearDepth, depthValue, clearStencil, stencilValue);
 
         VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
 

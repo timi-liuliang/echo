@@ -12,7 +12,7 @@ namespace Echo
         virtual ~VKFramebuffer();
 
         // current frame buffer
-        static VkFramebuffer* current();
+        static VKFramebuffer* current();
 
         // attach render view
         virtual void attach(Attachment attachment, RenderView* renderView) override;
