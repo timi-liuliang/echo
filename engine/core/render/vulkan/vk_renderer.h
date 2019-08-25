@@ -63,7 +63,7 @@ namespace Echo
 		virtual void onSize(int width, int height) override {}
 
 		// draw
-		virtual void draw(Renderable* program) override {}
+        virtual void draw(Renderable* renderable) override;
 
 		// present
         virtual bool present() override;

@@ -1,3 +1,4 @@
+#include "interface/mesh/Mesh.h"
 #include "vk_renderer.h"
 #include "vk_renderable.h"
 #include "vk_shader_program.h"
@@ -322,6 +323,31 @@ namespace Echo
             vkCreateSemaphore(m_vkDevice, &semaphoreCreateInfo, nullptr, &m_vkRenderFinishedSemaphore) != VK_SUCCESS)
         {
             EchoLogError("vulkan failed to create semaphores!");
+        }
+    }
+
+    void VKRenderer::draw(Renderable* renderable)
+    {
+        VKRenderable*   vkRenderable = ECHO_DOWN_CAST<VKRenderable*>(renderable);
+        VKFramebuffer*  vkFramebuffer = VKFramebuffer::current();
+        VkCommandBuffer vkCommandbuffer = vkFramebuffer->getVkCommandbuffer();
+        
+        vkCmdBindPipeline(vkCommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkRenderable->getVkPipeline());
+
+        Mesh* mesh = renderable->getMesh();
+        if (mesh->getIndexBuffer())
+        {
+            ui32 idxCount = mesh->getIndexCount();
+            ui32 idxOffset = mesh->getStartIndex();
+
+            vkCmdDrawIndexed(vkCommandbuffer, idxCount, 1, idxOffset, 0, 0);
+        }
+        else
+        {
+            ui32 vertCount = mesh->getVertexCount();
+            ui32 startVert = mesh->getStartVertex();
+
+            vkCmdDraw(vkCommandbuffer, vertCount, 1, startVert, 0);
         }
     }
 

@@ -14,6 +14,10 @@ namespace Echo
 		// param operate
 		virtual void setShaderParam(const String& name, ShaderParamType type, const void* param, size_t num = 1) {}
 
+    public:
+        // get vk pipeline
+        VkPipeline getVkPipeline() { return m_vkPipeline; }
+
     private:
         // link shader and program
         virtual void setMesh(Mesh* mesh) override;
@@ -23,6 +27,6 @@ namespace Echo
 		void createVkPipeline();
 
 	private:
-		VkPipeline          m_vkPipeline;
+		VkPipeline          m_vkPipeline = nullptr;
 	};
 }

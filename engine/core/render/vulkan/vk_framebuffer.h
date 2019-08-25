@@ -34,6 +34,9 @@ namespace Echo
         // get vk view port create info
         VkPipelineViewportStateCreateInfo* getVkViewportStateCreateInfo() { return &m_vkViewportStateCreateInfo; }
 
+        // get vk command buffer
+        VkCommandBuffer getVkCommandbuffer() { return m_vkCommandBuffer; }
+
     protected:
         // clear color image
         virtual VkImage getVkColorImage() { return nullptr; }
@@ -55,7 +58,7 @@ namespace Echo
         VkFramebuffer                       m_vkFramebuffer;
         VkViewport                          m_vkViewport;
         VkPipelineViewportStateCreateInfo   m_vkViewportStateCreateInfo;
-        VkCommandBuffer                     m_vkCommandBuffer;
+        VkCommandBuffer                     m_vkCommandBuffer = nullptr;
     };
 
     class VKFramebufferOffscreen : public VKFramebuffer
