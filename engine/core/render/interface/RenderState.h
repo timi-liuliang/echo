@@ -372,4 +372,9 @@ namespace Echo
 
 		SamplerDesc		m_desc;
 	};
+
+    class MultisampleState : public RenderState
+    {
+    public:
+    };
 }

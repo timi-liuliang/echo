@@ -43,4 +43,14 @@ namespace Echo
 
         void active(const SamplerState* pre) const;
 	};
+
+    class VKMultisampleState : public MultisampleState
+    {
+    public:
+        VKMultisampleState() {}
+        ~VKMultisampleState() {}
+
+        // active
+        void active(VKMultisampleState* pre) const {}
+    };
 }

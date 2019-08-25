@@ -32,7 +32,7 @@ namespace Echo
         VkRenderPass getVkRenderPass() { return m_vkRenderPass; }
 
         // get vk view port create info
-        VkPipelineViewportStateCreateInfo getVkViewportStateCreateInfo();
+        VkPipelineViewportStateCreateInfo* getVkViewportStateCreateInfo() { return &m_vkViewportStateCreateInfo; }
 
     private:
         // create render pass
@@ -42,9 +42,10 @@ namespace Echo
         void createVkFramebuffer();
 
     private:
-        VkRenderPass    m_vkRenderPass;
-        VkFramebuffer   m_vkFramebuffer;
-        VkViewport      m_vkViewport;
+        VkRenderPass                        m_vkRenderPass;
+        VkFramebuffer                       m_vkFramebuffer;
+        VkViewport                          m_vkViewport;
+        VkPipelineViewportStateCreateInfo   m_vkViewportStateCreateInfo;
     };
 
     class VKFramebufferOffscreen : public VKFramebuffer

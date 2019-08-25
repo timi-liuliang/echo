@@ -81,7 +81,7 @@ namespace Echo
 
 		// depth stencil state
 		void setDepthStencilState(DepthStencilState* state);
-		DepthStencilState* getDepthStencilState() { return m_depthStencil; }
+		DepthStencilState* getDepthStencilState() { return m_depthStencilState; }
 
 		// node(owner)
 		void setNode( Render* node) { m_node = node; }
@@ -111,7 +111,8 @@ namespace Echo
 		MaxTextureArray							m_textures;
 		BlendState*								m_blendState = nullptr;
 		RasterizerState*						m_rasterizerState = nullptr;
-		DepthStencilState*						m_depthStencil = nullptr;
+		DepthStencilState*						m_depthStencilState = nullptr;
+        MultisampleState*                       m_multiSampleState = nullptr;
 	};
 	typedef ui32 RenderableID;
 }

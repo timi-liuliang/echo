@@ -11,6 +11,7 @@ namespace Echo
     VKFramebuffer::VKFramebuffer(ui32 id, ui32 width, ui32 height)
         : FrameBuffer(id, width, height)
     {
+        createVkRenderPass();
     }
 
     VKFramebuffer::~VKFramebuffer()
@@ -57,16 +58,11 @@ namespace Echo
         m_vkViewport.height = m_height;
         m_vkViewport.minDepth = 0.f;
         m_vkViewport.maxDepth = 1.f;
-    }
 
-    VkPipelineViewportStateCreateInfo VKFramebuffer::getVkViewportStateCreateInfo()
-    {
-        VkPipelineViewportStateCreateInfo createInfo = {};
-        createInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-        createInfo.viewportCount = 1;
-        createInfo.pViewports = &m_vkViewport;
-
-        return createInfo;
+        m_vkViewportStateCreateInfo = {};
+        m_vkViewportStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+        m_vkViewportStateCreateInfo.viewportCount = 1;
+        m_vkViewportStateCreateInfo.pViewports = &m_vkViewport;
     }
 
     void VKFramebuffer::createVkRenderPass()

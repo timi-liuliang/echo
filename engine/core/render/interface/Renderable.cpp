@@ -87,7 +87,7 @@ namespace Echo
 		if (m_shaderProgram)
 		{
 			Renderer* pRenderer = Renderer::instance();
-			pRenderer->setDepthStencilState(m_depthStencil ? m_depthStencil : m_shaderProgram->getDepthState());
+			pRenderer->setDepthStencilState(m_depthStencilState ? m_depthStencilState : m_shaderProgram->getDepthState());
 			pRenderer->setRasterizerState(m_rasterizerState ? m_rasterizerState : m_shaderProgram->getRasterizerState());
 			pRenderer->setBlendState(m_blendState ? m_blendState : m_shaderProgram->getBlendState());
 		}
@@ -113,7 +113,7 @@ namespace Echo
 
 	void Renderable::setDepthStencilState(DepthStencilState* state)
 	{
-		m_depthStencil = state;
+		m_depthStencilState = state;
 	}
 
 	ShaderProgram* Renderable::getShader()
