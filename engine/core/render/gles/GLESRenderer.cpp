@@ -83,8 +83,8 @@ namespace Echo
 		}
 #endif
 
-		m_screenWidth = config.screenWidth;
-		m_screenHeight = config.screenHeight;
+		m_screenWidth = config.m_windowWidth;
+		m_screenHeight = config.m_windowHeight;
 
 		checkOpenGLExtensions();
 
@@ -149,7 +149,7 @@ namespace Echo
 
 	void GLES2Renderer::createSystemResource()
 	{
-		m_cfg.bFullscreen = true;
+		m_cfg.m_isFullscreen = true;
 
 		// set default render states
 		RasterizerState::RasterizerDesc rsDesc;
@@ -454,7 +454,7 @@ namespace Echo
 
 	bool GLES2Renderer::createRenderContext(const Renderer::Config& config)
 	{
-		m_hWnd = (HWND)config.windowHandle;
+		m_hWnd = (HWND)config.m_windowHandle;
 		m_hDC = GetDC(m_hWnd);
 
 		RECT rect;

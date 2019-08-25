@@ -41,11 +41,16 @@ namespace Echo
         // create vk frame buffer
         void createVkFramebuffer();
 
-    private:
+        // create vk command buffer
+        void createVkCommandBuffer();
+
+    protected:
         VkRenderPass                        m_vkRenderPass;
+        VkRenderPassBeginInfo               m_vkRenderPassBeginInfo;
         VkFramebuffer                       m_vkFramebuffer;
         VkViewport                          m_vkViewport;
         VkPipelineViewportStateCreateInfo   m_vkViewportStateCreateInfo;
+        VkCommandBuffer                     m_vkCommandBuffer;
     };
 
     class VKFramebufferOffscreen : public VKFramebuffer
@@ -65,7 +70,7 @@ namespace Echo
     class VKFramebufferWindow : public VKFramebuffer
     {
     public:
-        VKFramebufferWindow(ui32 width, ui32 height);
+        VKFramebufferWindow(ui32 width, ui32 height, void* handle);
         virtual ~VKFramebufferWindow();
 
         // begin render
@@ -74,5 +79,29 @@ namespace Echo
 
         // on resize
         virtual void onSize(ui32 width, ui32 height);
+
+    private:
+        // create swap chain
+        void createSwapChain(VkDevice vkDevice);
+
+        // create image views
+        void createImageViews(VkDevice vkDevice);
+
+        // check surface format
+        VkSurfaceFormatKHR pickSurfaceSupportFormat();
+
+        // create window surface
+        void createVkSurface(void* handle);
+
+        // present
+        void present();
+
+    protected:
+        ui32                        m_imageIndex = 0;
+        VkSurfaceKHR                m_vkWindowSurface;
+        VkSwapchainKHR				m_vkSwapChain = VK_NULL_HANDLE;
+        vector<VkImage>::type       m_vkSwapChainImages;
+        vector<VkImageView>::type	m_vkSwapChainImageViews;
+        VkQueue                     m_vkPresentQueue;
     };
 }

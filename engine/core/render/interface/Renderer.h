@@ -27,19 +27,10 @@ namespace Echo
 		// config
 		struct Config
 		{
-			ui32	screenWidth;
-			ui32	screenHeight;
-			bool	bFullscreen;
-
-			// for Windows Editor.
-			size_t windowHandle;
-
-			Config()
-				: screenWidth(800)
-				, screenHeight(600)
-				, bFullscreen(false)
-                , windowHandle(0)
-			{}
+			ui32	m_windowWidth = 800;
+			ui32	m_windowHeight = 600;
+			bool	m_isFullscreen = false;
+			size_t  m_windowHandle = 0;       // window handle
 		};
 
 		static Color BGCOLOR;

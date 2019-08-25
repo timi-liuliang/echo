@@ -23,7 +23,6 @@ namespace Echo
 
 		m_validation.cleanup();
 		vkDestroyDevice(m_vkDevice, nullptr);
-		vkDestroySurfaceKHR(m_vkInstance, m_vkWindowSurface, nullptr);
 		vkDestroyInstance(m_vkInstance, nullptr);
     }
 
@@ -38,28 +37,16 @@ namespace Echo
 
 		createVkValidation();
 
-		createVkSurface((void*)config.windowHandle);
-
 		pickVkPhysicalDevice();
 
 		createVkLogicalDevice();
 
-		createSwapChain();
-
 		createVkCommandPool();
-        createVkCommandBuffer();
-        executeBeginVkCommandBuffer();
 
         createVkSemaphores();
 
-        createVkDepthBuffer(640, 480);
-
-		// window width height
-        m_screenWidth = config.screenWidth;
-        m_screenHeight = config.screenHeight;
-
-        // set view port
-        Viewport viewport(0, 0, m_screenWidth, m_screenHeight);
+        // window frame buffer
+        m_framebufferWindow = EchoNew(VKFramebufferWindow(config.m_windowWidth, config.m_windowHeight, (void*)config.m_windowHandle));
 
         return true;
     }
@@ -78,34 +65,6 @@ namespace Echo
     {
         return EchoNew(VKTexture2D);
     }
-
-	void VKRenderer::createVkSurface(void* handle)
-	{
-		// create window surface
-	#ifdef ECHO_PLATFORM_WINDOWS
-		VkWin32SurfaceCreateInfoKHR createInfo = {};
-		createInfo.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
-		createInfo.pNext = nullptr;
-		createInfo.hwnd = (HWND)handle;
-		createInfo.hinstance = GetModuleHandle(nullptr);
-
-		// create surface
-		if (VK_SUCCESS != vkCreateWin32SurfaceKHR(m_vkInstance, &createInfo, nullptr, &m_vkWindowSurface))
-		{
-			EchoLogError("Vulkan Renderer failed to create window surface!");
-		}
-	#elif defined(ECHO_PLATFORM_ANDROID)
-		VkAndroidSurfaceCreateInfoKHR createInfo;
-		createInfo.sType = VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR;
-		createInfo.pNext = nullptr;
-		createInfo.flags = 0;
-		createInfo.window = AndroidGetApplicationWindow();
-		if (VK_SUCCESS != vkCreateAndroidSurfaceKHR(m_vkInstance, &createInfo, nullptr, &m_vkWindowSurface))
-		{
-			EchoLogError("Vulkan Renderer failed to create window surface!");
-		}
-	#endif
-	}
 
 	void VKRenderer::setTexture(ui32 index, Texture* texture, bool needUpdate)
 	{
@@ -283,18 +242,18 @@ namespace Echo
 		return -1;
 	}
 
-	const ui32 VKRenderer::getPresentQueueFamilyIndex()
-	{
-		for(size_t i=0; i<m_vkQueueFamilies.size(); i++)
-		{
-			VkBool32 presentSupport = false;
-			vkGetPhysicalDeviceSurfaceSupportKHR(m_vkPhysicalDevice, i, m_vkWindowSurface, &presentSupport);
-			if(presentSupport)
-				return i;
-		}
+    const ui32 VKRenderer::getPresentQueueFamilyIndex(VkSurfaceKHR vkSurface)
+    {
+        for (size_t i = 0; i < m_vkQueueFamilies.size(); i++)
+        {
+            VkBool32 presentSupport = false;
+            vkGetPhysicalDeviceSurfaceSupportKHR(m_vkPhysicalDevice, i, vkSurface, &presentSupport);
+            if (presentSupport)
+                return i;
+        }
 
-		return -1;
-	}
+        return -1;
+    }
 
 	void VKRenderer::createVkLogicalDevice()
 	{
@@ -328,17 +287,11 @@ namespace Echo
 		if (VK_SUCCESS == vkCreateDevice(m_vkPhysicalDevice, &createInfo, nullptr, &m_vkDevice))
 		{
 			vkGetDeviceQueue(m_vkDevice, getGraphicsQueueFamilyIndex(), 0, &m_vkGraphicsQueue);
-			vkGetDeviceQueue(m_vkDevice, getPresentQueueFamilyIndex(), 0, &m_vkPresentQueue);
 		}
 		else
     	{
 			EchoLogError("Failed to create vulkan logical device!");
 		}
-	}
-
-	void VKRenderer::createSwapChain()
-	{
-		m_swapChain.create(m_vkDevice);
 	}
 
 	void VKRenderer::createVkValidation()
@@ -360,49 +313,6 @@ namespace Echo
 		}
 	}
 
-    void VKRenderer::createVkCommandBuffer()
-    {
-        VkCommandBufferAllocateInfo createInfo = {};
-        createInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-        createInfo.pNext = nullptr;
-        createInfo.commandPool = m_vkCommandPool;
-        createInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-        createInfo.commandBufferCount = 1;
-
-        if (VK_SUCCESS != vkAllocateCommandBuffers(m_vkDevice, &createInfo, &m_vkCommandBuffer))
-        {
-            EchoLogError("vulkan create command buffer failed");
-        }
-    }
-
-    void VKRenderer::executeBeginVkCommandBuffer()
-    {
-        VkCommandBufferBeginInfo commandBufferBeginInfo = {};
-        commandBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-        commandBufferBeginInfo.pNext = nullptr;
-        commandBufferBeginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
-        commandBufferBeginInfo.pInheritanceInfo = nullptr;
-
-        if (VK_SUCCESS != vkBeginCommandBuffer(m_vkCommandBuffer, &commandBufferBeginInfo))
-        {
-            EchoLogError("vulkan begin command buffer failed.");
-        }
-
-        // clear
-        VkClearColorValue clearColor = { Renderer::BGCOLOR.r, Renderer::BGCOLOR.g, Renderer::BGCOLOR.b, Renderer::BGCOLOR.a };
-        VkClearValue clearValue = {};
-        clearValue.color = clearColor;
-
-        VkImageSubresourceRange imageRange = {};
-        imageRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-        imageRange.levelCount = 1;
-        imageRange.layerCount = 1;
-
-        vkCmdClearColorImage(m_vkCommandBuffer, m_swapChain.getVkImage(0), VK_IMAGE_LAYOUT_GENERAL, &clearColor, 1, &imageRange);
-
-        vkEndCommandBuffer(m_vkCommandBuffer);
-    }
-
     void VKRenderer::createVkSemaphores()
     {
         VkSemaphoreCreateInfo semaphoreCreateInfo = {};
@@ -415,42 +325,13 @@ namespace Echo
         }
     }
 
-    void VKRenderer::createVkDepthBuffer(ui32 width, ui32 height)
-    {
-        RenderView* depthView = EchoNew(VKRenderView(width, height, PF_D24_UNORM_S8_UINT));
-    }
-
     bool VKRenderer::present()
     {
-        ui32 imageIndex = 0;
-
-        VkPresentInfoKHR present;
-        present.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-        present.pNext = nullptr;
-        present.swapchainCount = 1;
-        present.pSwapchains = m_swapChain.getVkSwapchain();
-        present.pImageIndices = &imageIndex;
-        present.pWaitSemaphores = nullptr;
-        present.waitSemaphoreCount = 0;
-        present.pResults = nullptr;
-
-        if (VK_SUCCESS != vkQueuePresentKHR(m_vkPresentQueue, &present))
-        {
-            EchoLogError("vulkan present failed");
-
-            return false;
-        }
-
-        return true;
+        return false;
     }
 
     FrameBuffer* VKRenderer::getWindowFrameBuffer()
     {
-        if (!m_windowFramebuffer)
-        {
-            m_windowFramebuffer = EchoNew(VKFramebufferWindow(m_screenWidth, m_screenHeight));
-        }
-
-        return m_windowFramebuffer;
+        return m_framebufferWindow;
     }
 }

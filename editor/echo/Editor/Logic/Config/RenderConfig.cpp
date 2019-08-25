@@ -15,14 +15,14 @@ namespace Echo
 #elif defined ECHO_PLATFORM_HTML5
 		LoadGLESRenderer(renderer);
 #else
-		LoadGLESRenderer(renderer);
-		//LoadVKRenderer(renderer);
+		//LoadGLESRenderer(renderer);
+		LoadVKRenderer(renderer);
 #endif
 
 		Echo::Renderer::Config renderCfg;
-		renderCfg.windowHandle = hwnd;
+		renderCfg.m_windowHandle = hwnd;
 
-		EchoLogDebug("Canvas Size : %d x %d", renderCfg.screenWidth, renderCfg.screenHeight);
+		EchoLogDebug("Canvas Size : %d x %d", renderCfg.m_windowWidth, renderCfg.m_windowHeight);
 		if (renderer && renderer->initialize(renderCfg))
 		{
             auto name = magic_enum::enum_name<Renderer::Type>(renderer->getType());

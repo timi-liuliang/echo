@@ -2,7 +2,6 @@
 
 #include "engine/core/render/interface/Renderer.h"
 #include "vk_render_base.h"
-#include "vk_swap_chain.h"
 #include "vk_validation.h"
 #include "vk_framebuffer.h"
 
@@ -81,8 +80,8 @@ namespace Echo
         virtual void getDepthRange(Vector2& vec) override {}
 
         // get screen width and height
-        virtual ui32 getWindowWidth() override { return m_screenWidth;}
-        virtual ui32 getWindowHeight() override { return m_screenHeight;}
+        virtual ui32 getWindowWidth() override { return m_framebufferWindow->getWidth();}
+        virtual ui32 getWindowHeight() override { return m_framebufferWindow->getHeight();}
 
         // get screen frame buffer
         virtual FrameBuffer* getWindowFrameBuffer() override;
@@ -99,21 +98,15 @@ namespace Echo
 		// get logical device
 		VkDevice getVkDevice() { return m_vkDevice; }
 
-        // get vk swapchain
-        VkSwapchainKHR* getVkSwapChain() { return m_swapChain.getVkSwapchain(); }
-
-		// get windows surface
-		VkSurfaceKHR getVkSurface() { return m_vkWindowSurface; }
-
 		// get queue family index
 		const ui32 getGraphicsQueueFamilyIndex();
-		const ui32 getPresentQueueFamilyIndex();
+		const ui32 getPresentQueueFamilyIndex(VkSurfaceKHR vkSurface);
 
         // get queue
         VkQueue getVkGraphicsQueue() { return m_vkGraphicsQueue; }
 
         // get clear command buffer
-        VkCommandBuffer getVkCommandBuffer() { return m_vkCommandBuffer; }
+        VkCommandPool getVkCommandPool() { return m_vkCommandPool; }
 
         // semaphore
         VkSemaphore getImageAvailableSemaphore() { return m_vkImageAvailableSemaphore; }
@@ -121,9 +114,6 @@ namespace Echo
 	private:
 		// create vk instance
 		void createVkInstance();
-
-        // create window surface
-        void createVkSurface(void* handle);
 
 		// vk extensions
 		void enumerateVkExtensions();
@@ -139,42 +129,26 @@ namespace Echo
         // create vk logical device
         void createVkLogicalDevice();
 
-        // create swapChain
-        void createSwapChain();
-
 		// set up validation
 		void createVkValidation();
 
 		// create command pool
 		void createVkCommandPool();
 
-        // create command buffer
-        void createVkCommandBuffer();
-        void executeBeginVkCommandBuffer();
-
         // create semaphores
         void createVkSemaphores();
 
-        // create depth buffer
-        void createVkDepthBuffer(ui32 width, ui32 height);
-
     private:
-        ui32				m_screenWidth = 640;
-        ui32				m_screenHeight = 480;
-        FrameBuffer*        m_windowFramebuffer = nullptr;
+        FrameBuffer*        m_framebufferWindow = nullptr;
 		Extensions			m_enabledExtensions;
 		VkInstance			m_vkInstance;
 		ExtensionProperties	m_vkExtensions;
-        VkPhysicalDevice    m_vkPhysicalDevice = VK_NULL_HANDLE;
+        VkPhysicalDevice    m_vkPhysicalDevice = nullptr;
         QueueFamilies       m_vkQueueFamilies;
-        VkDevice            m_vkDevice;
+        VkDevice            m_vkDevice = nullptr;
 		VKValidation		m_validation;
         VkQueue             m_vkGraphicsQueue;
-        VkSurfaceKHR        m_vkWindowSurface;
-        VkQueue             m_vkPresentQueue;
-		VKSwapChain			m_swapChain;
 		VkCommandPool		m_vkCommandPool;
-        VkCommandBuffer     m_vkCommandBuffer;
         VkSemaphore         m_vkImageAvailableSemaphore;
         VkSemaphore         m_vkRenderFinishedSemaphore;
 	};
