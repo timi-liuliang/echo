@@ -45,7 +45,7 @@ namespace Echo
             pipelineInfo.pColorBlendState = m_blendState ? nullptr : nullptr;
             pipelineInfo.renderPass = vkFrameBuffer->getVkRenderPass();
             pipelineInfo.basePipelineIndex = -1;
-            if (VK_SUCCESS != vkCreateGraphicsPipelines(VKRenderer::instance()->getVkDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_vkPipeline))
+            //if (VK_SUCCESS != vkCreateGraphicsPipelines(VKRenderer::instance()->getVkDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_vkPipeline))
             {
                 EchoLogError("vulkan create pipeline failed");
             }
