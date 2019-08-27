@@ -3,6 +3,7 @@
 #include "engine/core/render/interface/shaderprogram.h"
 #include "vk_render_base.h"
 #include "vk_gpu_buffer.h"
+#include <thirdparty/spirv-cross/spirv_cross.hpp>
 
 namespace Echo
 {
@@ -13,17 +14,19 @@ namespace Echo
     public:
 		virtual ~VKShaderProgram();
 
+        // is valid
+        bool isLinked() const { return m_isLinked; }
+
         // bind
         virtual void bindUniforms() override;
         virtual void bindRenderable(Renderable* renderable) override;
 
     public:
-        // parse uniforms
-        void parseUniforms();
-
-    public:
         // get shader stage create info
         const array<VkPipelineSSCI, 2>& getVkShaderStageCreateInfo() { return m_vkShaderStagesCreateInfo; }
+
+        // get shader resources
+        const spirv_cross::ShaderResources& getSpirvShaderResources(ShaderType type);
 
 	private:
 		// create shader library
@@ -38,16 +41,21 @@ namespace Echo
         // alloc uniform bytes
         void allocUniformBytes();
 
+        // parse uniforms
+        void parseUniforms();
+
 	private:
-		bool			        m_isValid = false;
-		VkShaderModule	        m_vkVertexShader;
-		VkShaderModule	        m_vkFragmentShader;
-        array<VkPipelineSSCI, 2>m_vkShaderStagesCreateInfo;
-        vector<Byte>::type      m_vertexShaderUniformBytes;
-        vector<Byte>::type      m_fragmentShaderUniformBytes;
-        VKBuffer*               m_vkVertexShaderUniformBuffer = nullptr;
-        VKBuffer*               m_vkFragmentShaderUniformBuffer = nullptr;
-        VkDescriptorSetLayout   m_vkDescriptorSetLayout;
-        VkPipelineLayout        m_vkPipelineLayout;
+		bool			                m_isLinked = false;
+		VkShaderModule	                m_vkVertexShader;
+		VkShaderModule	                m_vkFragmentShader;
+        spirv_cross::ShaderResources    m_vertexShaderResources;
+        spirv_cross::ShaderResources    m_fragmentShaderResources;
+        array<VkPipelineSSCI, 2>        m_vkShaderStagesCreateInfo;
+        vector<Byte>::type              m_vertexShaderUniformBytes;
+        vector<Byte>::type              m_fragmentShaderUniformBytes;
+        VKBuffer*                       m_vkVertexShaderUniformBuffer = nullptr;
+        VKBuffer*                       m_vkFragmentShaderUniformBuffer = nullptr;
+        VkDescriptorSetLayout           m_vkDescriptorSetLayout;
+        VkPipelineLayout                m_vkPipelineLayout;
 	};
 }

@@ -4,7 +4,7 @@
 
 namespace Echo
 {
-	static bool createShader(const vector<ui32>::type& spirv, VkShaderModule& vkShader)
+	static bool createShader(const vector<ui32>::type& spirv, VkShaderModule& vkShader, spirv_cross::ShaderResources& shaderResources)
 	{
         if (!spirv.empty())
         {
@@ -16,6 +16,10 @@ namespace Echo
             createInfo.flags = 0;
             createInfo.codeSize = spirv.size() * sizeof(ui32);
             createInfo.pCode = spirv.data();
+
+            // reflect
+            spirv_cross::Compiler compiler(spirv);
+            shaderResources = compiler.get_shader_resources();
 
             if (VK_SUCCESS == vkCreateShaderModule(vkRenderer->getVkDevice(), &createInfo, nullptr, &vkShader))
                 return true;
@@ -38,12 +42,12 @@ namespace Echo
 		GLSLCrossCompiler glslCompiler;
 		glslCompiler.setInput(vsSrc.c_str(), psSrc.c_str(), nullptr);
 
-		bool isCreateVSSucceed = createShader(glslCompiler.getSPIRV(GLSLCrossCompiler::ShaderType::VS), m_vkVertexShader);
-		bool isCreateFSSucceed = createShader(glslCompiler.getSPIRV(GLSLCrossCompiler::ShaderType::FS), m_vkFragmentShader);
-		m_isValid = isCreateVSSucceed && isCreateFSSucceed;
+		bool isCreateVSSucceed = createShader(glslCompiler.getSPIRV(GLSLCrossCompiler::ShaderType::VS), m_vkVertexShader, m_vertexShaderResources);
+		bool isCreateFSSucceed = createShader(glslCompiler.getSPIRV(GLSLCrossCompiler::ShaderType::FS), m_vkFragmentShader, m_fragmentShaderResources);
+		m_isLinked = isCreateVSSucceed && isCreateFSSucceed;
 
 		// create shader stage
-		if (m_isValid)
+		if (m_isLinked)
 		{
             m_vkShaderStagesCreateInfo.assign({});
             m_vkShaderStagesCreateInfo[0].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -57,7 +61,7 @@ namespace Echo
             m_vkShaderStagesCreateInfo[1].pName = "main";
 		}
 
-		return m_isValid;
+		return m_isLinked;
 	}
 
     void VKShaderProgram::createVkUniformBuffer()
@@ -176,5 +180,10 @@ namespace Echo
     void VKShaderProgram::bindRenderable(Renderable* renderable)
     {
 
+    }
+
+    const spirv_cross::ShaderResources& VKShaderProgram::getSpirvShaderResources(ShaderType type)
+    {
+        return type == ShaderType::VS ? m_vertexShaderResources : m_fragmentShaderResources;
     }
 }

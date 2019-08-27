@@ -47,6 +47,7 @@ namespace Echo
 		Shader* getShader(Shader::ShaderType type) const { return m_shaders[(ui32)type]; }
 	
 	private:
+        bool                m_isLinked = false;
 		ShaderArray			m_shaders;
 		GLES2Renderable*	m_preRenderable;				// Geomerty
 		AttribLocationArray	m_attribLocationMapping;		// Attribute location

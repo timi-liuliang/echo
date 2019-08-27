@@ -154,7 +154,6 @@ namespace Echo
 		void* createDefaultUniformValue(const String& strType, const i32 count, const String& strValue, ui32& outSize, ShaderParamType& outType);
 
 	protected:
-        bool                m_isLinked = false;
 		String				m_macros;
 		BlendState*			m_blendState = nullptr;
 		DepthStencilState*	m_depthState = nullptr;

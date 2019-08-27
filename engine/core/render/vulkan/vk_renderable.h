@@ -2,6 +2,7 @@
 
 #include "engine/core/render/interface/Renderable.h"
 #include "vk_render_base.h"
+#include "vk_shader_program.h"
 
 namespace Echo
 {
@@ -25,6 +26,9 @@ namespace Echo
 	private:
 		// create vk pipeline
 		void createVkPipeline();
+
+        // build vertex input attribute
+        void buildVkVertexInputAttributeDescriptions(VKShaderProgram* vkShaderProgram, const VertexElementList& vertElements, vector<VkVertexInputAttributeDescription>::type& viAttributeDescriptions);
 
 	private:
 		VkPipeline          m_vkPipeline = nullptr;
