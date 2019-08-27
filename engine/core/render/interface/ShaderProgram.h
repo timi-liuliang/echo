@@ -62,16 +62,17 @@ namespace Echo
         };
         typedef std::map<String, Uniform> UniformArray;
         
-		struct DefaultUniform
+        // UniformValue
+		struct UniformValue
 		{
 			i32 count;
 			ShaderParamType type;
 			ui32 sizeInByte;
 			void* value;
 
-			~DefaultUniform();
+			~UniformValue();
 		};
-		typedef map<String, DefaultUniform*>::type MapDefaultUniforms;
+		typedef map<String, UniformValue*>::type UniformValuesMap;
 
 	public:
 		ShaderProgram();
@@ -93,7 +94,7 @@ namespace Echo
 		static StringArray getEditableMacros(const String& shaderFileName);
 
 		// get default value of uniform
-		const DefaultUniform* getDefaultUniformValue(const String& name);
+		const UniformValue* getDefaultUniformValue(const String& name);
 
 		// load and parse by file|content
 		bool loadFromFile(const String& filename, const String& macros);
@@ -153,13 +154,13 @@ namespace Echo
 		void* createDefaultUniformValue(const String& strType, const i32 count, const String& strValue, ui32& outSize, ShaderParamType& outType);
 
 	protected:
+        bool                m_isLinked = false;
 		String				m_macros;
 		BlendState*			m_blendState = nullptr;
 		DepthStencilState*	m_depthState = nullptr;
 		RasterizerState*	m_rasterizerState = nullptr;
-		MapDefaultUniforms	m_defaultUniforms;
-        bool                m_isLinked = false;
         UniformArray        m_uniforms;
+        UniformValuesMap	m_uniformDefaultValues;
 	};
 	typedef ResRef<ShaderProgram> ShaderProgramPtr;
 }

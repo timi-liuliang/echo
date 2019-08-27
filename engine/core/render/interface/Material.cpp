@@ -123,7 +123,7 @@ namespace Echo
 			return  it->second->m_value;
 		}
 
-		const ShaderProgram::DefaultUniform* dUniform = m_shaderProgram->getDefaultUniformValue(name);
+		const ShaderProgram::UniformValue* dUniform = m_shaderProgram->getDefaultUniformValue(name);
 		return dUniform ? dUniform->value : nullptr;
 	}
 
@@ -438,7 +438,7 @@ namespace Echo
 					}
 
 					// default value
-					const ShaderProgram::DefaultUniform* defaultUniform = m_shaderProgram->getDefaultUniformValue(uniform->m_name);
+					const ShaderProgram::UniformValue* defaultUniform = m_shaderProgram->getDefaultUniformValue(uniform->m_name);
 					if (defaultUniform && uniform->m_count == defaultUniform->count && uniform->m_type == defaultUniform->type)
 						uniform->setValue(defaultUniform->value);
 

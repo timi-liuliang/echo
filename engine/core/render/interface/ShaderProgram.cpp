@@ -85,11 +85,11 @@ namespace Echo
 		EchoSafeDelete(m_depthState, DepthStencilState);
 		EchoSafeDelete(m_rasterizerState, RasterizerState);
 
-		for (MapDefaultUniforms::iterator iter = m_defaultUniforms.begin(); iter != m_defaultUniforms.end(); ++iter)
+		for (UniformValuesMap::iterator iter = m_uniformDefaultValues.begin(); iter != m_uniformDefaultValues.end(); ++iter)
 		{
-			EchoSafeDelete(iter->second, DefaultUniform);
+			EchoSafeDelete(iter->second, UniformValue);
 		}
-		m_defaultUniforms.clear();
+		m_uniformDefaultValues.clear();
 	}
 
 	bool ShaderProgram::loadFromFile(const String& filename, const String& macros)
@@ -448,7 +448,7 @@ namespace Echo
 		return macros;
 	}
 
-	ShaderProgram::DefaultUniform::~DefaultUniform()
+	ShaderProgram::UniformValue::~UniformValue()
 	{
 		EchoSafeFree(value);
 	}
@@ -465,18 +465,18 @@ namespace Echo
 				i32 count = pUniform.attribute("count").as_int();
 				String strValueValue = pUniform.attribute("value").as_string();
 
-				DefaultUniform* uniform = EchoNew(DefaultUniform);
+				UniformValue* uniform = EchoNew(UniformValue);
 				void* value = createDefaultUniformValue(strTypeValue, count, strValueValue, uniform->sizeInByte, uniform->type);
 				if (value)
 				{
 					uniform->count = count;
 					uniform->value = value;
 
-					m_defaultUniforms[strNameValue] = uniform;
+					m_uniformDefaultValues[strNameValue] = uniform;
 				}
 				else
 				{
-					EchoSafeDelete(uniform, DefaultUniform);
+					EchoSafeDelete(uniform, UniformValue);
 				}
 			}
 
@@ -489,10 +489,10 @@ namespace Echo
 		}
 	}
 
-	const ShaderProgram::DefaultUniform* ShaderProgram::getDefaultUniformValue(const String& name)
+	const ShaderProgram::UniformValue* ShaderProgram::getDefaultUniformValue(const String& name)
 	{
-		MapDefaultUniforms::iterator iter = m_defaultUniforms.find(name);
-		if (iter != m_defaultUniforms.end())
+		UniformValuesMap::iterator iter = m_uniformDefaultValues.find(name);
+		if (iter != m_uniformDefaultValues.end())
 		{
 			return iter->second;
 		}

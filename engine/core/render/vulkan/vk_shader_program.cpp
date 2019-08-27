@@ -62,6 +62,24 @@ namespace Echo
 
     void VKShaderProgram::createVkUniformBuffer()
     {
+        // organize uniform bytes
+        for (UniformArray::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++)
+        {
+            Uniform& uniform = it->second;
+            if (uniform.m_value && uniform.m_type != SPT_UNKNOWN)
+            {
+                vector<Byte>::type& uniformBytes = uniform.m_shader == ShaderType::VS ? m_vertexShaderUniformBytes : m_fragmentShaderUniformBytes;
+                if (uniform.m_type != SPT_TEXTURE)
+                {
+                    std::memcpy(uniformBytes.data() + uniform.m_location, uniform.m_value, uniform.m_sizeInBytes * sizeof(Byte));
+                }
+                else
+                {
+
+                }
+            }
+        }
+
         // this is not good here, reuse VkBuffer afterwards
         EchoSafeDelete(m_vkVertexShaderUniformBuffer, VKBuffer);
         EchoSafeDelete(m_vkFragmentShaderUniformBuffer, VKBuffer);
@@ -123,6 +141,8 @@ namespace Echo
 
     void VKShaderProgram::parseUniforms()
     {
+
+
         allocUniformBytes();
     }
 
@@ -131,12 +151,21 @@ namespace Echo
     {
         m_vertexShaderUniformBytes.clear();
         m_fragmentShaderUniformBytes.clear();
+
+        for (auto& it : m_uniforms)
+        {
+            const Uniform& uniform = it.second;
+            vector<Byte>::type& uniformBytes = uniform.m_shader == ShaderType::VS ? m_vertexShaderUniformBytes : m_fragmentShaderUniformBytes;
+            i32 bytes = uniform.m_location + uniform.m_sizeInBytes;
+            while (uniformBytes.size() < bytes)
+            {
+                uniformBytes.push_back(0);
+            }
+        }
     }
 
     void VKShaderProgram::bindUniforms()
     {
-        // organize uniform bytes
-
         // update uniform VkBuffer by memory
         createVkUniformBuffer();
 

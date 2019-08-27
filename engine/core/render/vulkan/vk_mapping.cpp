@@ -29,4 +29,17 @@ namespace Echo
             }
         }
     }
+
+    VkFormat VKMapping::MapVertexFormat(PixelFormat pixelFormat)
+    {
+        switch (pixelFormat)
+        {
+        case PF_RG32_FLOAT:     return VK_FORMAT_R32G32_SFLOAT;
+        case PF_RGBA8_UNORM:    return VK_FORMAT_R8G8B8A8_UNORM;
+        case PF_RGBA8_SNORM:    return VK_FORMAT_R8G8B8A8_SNORM;
+        case PF_RGB32_FLOAT:    return VK_FORMAT_R32G32B32_SFLOAT;
+        case PF_RGBA32_FLOAT:   return VK_FORMAT_R32G32B32A32_SFLOAT;
+        default:  EchoLogError("MapingVertexFormat failed");  return VK_FORMAT_UNDEFINED;
+        }
+    }
 }

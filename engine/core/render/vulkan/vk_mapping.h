@@ -14,5 +14,8 @@ namespace Echo
 
         // mapping gpubffer type
         static VkBufferUsageFlags MapGpuBufferType(GPUBuffer::GPUBufferType type);
+
+        // Mapping VkFormat
+        static VkFormat MapVertexFormat(PixelFormat pixelFormat);
     };
 }
