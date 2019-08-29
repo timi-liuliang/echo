@@ -89,4 +89,18 @@ namespace Echo
             }
         }
     }
+
+    void VKRenderable::bindShaderParams()
+    {
+        bindTextures();
+
+        if (m_shaderProgram)
+        {
+            for (auto& it : m_shaderParams)
+            {
+                ShaderParam& uniform = it.second;
+                m_shaderProgram->setUniform(uniform.name.c_str(), uniform.data, uniform.type, uniform.length);
+            }
+        }
+    }
 }

@@ -12,8 +12,8 @@ namespace Echo
 		VKRenderable(const String& renderStage, ShaderProgram* shader, int identifier);
         virtual ~VKRenderable() {}
 
-		// param operate
-		virtual void setShaderParam(const String& name, ShaderParamType type, const void* param, size_t num = 1) {}
+        // bind shader uniforms
+        void bindShaderParams();
 
     public:
         // get vk pipeline
