@@ -4,7 +4,7 @@
 
 namespace Echo
 {
-	static bool createShader(const vector<ui32>::type& spirv, VkShaderModule& vkShader, spirv_cross::ShaderResources& shaderResources)
+	static bool createShader(const vector<ui32>::type& spirv, VkShaderModule& vkShader, spirv_cross::Compiler*& shaderCompiler)
 	{
         if (!spirv.empty())
         {
@@ -18,8 +18,7 @@ namespace Echo
             createInfo.pCode = spirv.data();
 
             // reflect
-            spirv_cross::Compiler compiler(spirv);
-            shaderResources = compiler.get_shader_resources();
+            shaderCompiler = EchoNew(spirv_cross::Compiler(spirv));
 
             if (VK_SUCCESS == vkCreateShaderModule(vkRenderer->getVkDevice(), &createInfo, nullptr, &vkShader))
                 return true;
@@ -42,8 +41,8 @@ namespace Echo
 		GLSLCrossCompiler glslCompiler;
 		glslCompiler.setInput(vsSrc.c_str(), psSrc.c_str(), nullptr);
 
-		bool isCreateVSSucceed = createShader(glslCompiler.getSPIRV(GLSLCrossCompiler::ShaderType::VS), m_vkVertexShader, m_vertexShaderResources);
-		bool isCreateFSSucceed = createShader(glslCompiler.getSPIRV(GLSLCrossCompiler::ShaderType::FS), m_vkFragmentShader, m_fragmentShaderResources);
+		bool isCreateVSSucceed = createShader(glslCompiler.getSPIRV(GLSLCrossCompiler::ShaderType::VS), m_vkVertexShader, m_vertexShaderCompiler);
+		bool isCreateFSSucceed = createShader(glslCompiler.getSPIRV(GLSLCrossCompiler::ShaderType::FS), m_vkFragmentShader, m_fragmentShaderCompiler);
 		m_isLinked = isCreateVSSucceed && isCreateFSSucceed;
 
 		// create shader stage
@@ -59,6 +58,8 @@ namespace Echo
             m_vkShaderStagesCreateInfo[1].stage = VK_SHADER_STAGE_FRAGMENT_BIT;
             m_vkShaderStagesCreateInfo[1].module = m_vkFragmentShader;
             m_vkShaderStagesCreateInfo[1].pName = "main";
+
+            parseUniforms();
 		}
 
 		return m_isLinked;
@@ -145,12 +146,37 @@ namespace Echo
 
     void VKShaderProgram::parseUniforms()
     {
+        m_uniforms.clear();
 
+        // vertex uniforms
+        for (auto& resource : m_vertexShaderCompiler->get_shader_resources().uniform_buffers)
+            addUniform(resource, ShaderType::VS);
+
+        // fragment uniforms
+        for (auto& resource : m_fragmentShaderCompiler->get_shader_resources().uniform_buffers)
+            addUniform(resource, ShaderType::FS);
 
         allocUniformBytes();
     }
 
-    // alloc uniform bytes
+    void VKShaderProgram::addUniform(spirv_cross::Resource& resource, ShaderType shaderType)
+    {
+        spirv_cross::Compiler* compiler = shaderType == ShaderType::VS ? m_vertexShaderCompiler : m_fragmentShaderCompiler;
+        const spirv_cross::SPIRType& type = compiler->get_type(resource.base_type_id);
+        size_t memberCount = type.member_types.size();
+        for (size_t i = 0; i < memberCount; i++)
+        {
+            Uniform desc;
+            desc.m_name = compiler->get_member_name(type.self, i);
+            desc.m_shader = shaderType;
+            //desc.m_type = VKMapping::MapUniformType(compiler->get_type(type.member_types[i]));
+            //desc.m_count = 
+            desc.m_sizeInBytes = compiler->get_declared_struct_member_size(type, i);
+            desc.m_location = compiler->type_struct_member_offset(type, i);
+            m_uniforms[desc.m_name] = desc;
+        }
+    }
+
     void VKShaderProgram::allocUniformBytes()
     {
         m_vertexShaderUniformBytes.clear();
@@ -184,6 +210,6 @@ namespace Echo
 
     const spirv_cross::ShaderResources& VKShaderProgram::getSpirvShaderResources(ShaderType type)
     {
-        return type == ShaderType::VS ? m_vertexShaderResources : m_fragmentShaderResources;
+        return type == ShaderType::VS ? m_vertexShaderCompiler->get_shader_resources() : m_fragmentShaderCompiler->get_shader_resources();
     }
 }

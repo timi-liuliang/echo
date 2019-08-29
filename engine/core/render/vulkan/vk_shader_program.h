@@ -38,6 +38,9 @@ namespace Echo
         // create descriptor and pipeline layouts
         void createVkDescriptorAndPipelineLayouts();
 
+        // add uniform
+        void addUniform(spirv_cross::Resource& resource, ShaderType shaderType);
+
         // alloc uniform bytes
         void allocUniformBytes();
 
@@ -48,8 +51,8 @@ namespace Echo
 		bool			                m_isLinked = false;
 		VkShaderModule	                m_vkVertexShader;
 		VkShaderModule	                m_vkFragmentShader;
-        spirv_cross::ShaderResources    m_vertexShaderResources;
-        spirv_cross::ShaderResources    m_fragmentShaderResources;
+        spirv_cross::Compiler*          m_vertexShaderCompiler = nullptr;
+        spirv_cross::Compiler*          m_fragmentShaderCompiler = nullptr;
         array<VkPipelineSSCI, 2>        m_vkShaderStagesCreateInfo;
         vector<Byte>::type              m_vertexShaderUniformBytes;
         vector<Byte>::type              m_fragmentShaderUniformBytes;
