@@ -600,7 +600,7 @@ namespace Echo
 		}
     }
  
-	int ShaderProgram::getUniformByteSizeByUniformType(ShaderParamType uniformType)
+	int ShaderProgram::MapUniformTypeSize(ShaderParamType uniformType)
 	{
 		switch (uniformType)
 		{

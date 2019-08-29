@@ -26,7 +26,7 @@ namespace Echo
         const array<VkPipelineSSCI, 2>& getVkShaderStageCreateInfo() { return m_vkShaderStagesCreateInfo; }
 
         // get shader resources
-        const spirv_cross::ShaderResources& getSpirvShaderResources(ShaderType type);
+        const spirv_cross::ShaderResources getSpirvShaderResources(ShaderType type);
 
 	private:
 		// create shader library

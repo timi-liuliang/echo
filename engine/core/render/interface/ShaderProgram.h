@@ -121,7 +121,7 @@ namespace Echo
 		virtual void bindRenderable(Renderable* renderable) {}
 
 		// ByteSize
-		static int getUniformByteSizeByUniformType(ShaderParamType uniformType);
+		static int MapUniformTypeSize(ShaderParamType uniformType);
 
 	public:
         // create

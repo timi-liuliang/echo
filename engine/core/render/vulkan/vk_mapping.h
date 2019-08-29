@@ -1,6 +1,7 @@
 #pragma once
 
-#include "engine/core/render/interface/mesh/Mesh.h"
+#include "interface/mesh/Mesh.h"
+#include "interface/ShaderProgram.h"
 #include "engine/core/render/interface/GPUBuffer.h"
 #include "vk_render_base.h"
 
@@ -17,5 +18,8 @@ namespace Echo
 
         // Mapping VkFormat
         static VkFormat MapVertexFormat(PixelFormat pixelFormat);
+
+        // Mapping Uniform type
+        static ShaderParamType MapUniformType(const spirv_cross::SPIRType& spirType);
     };
 }

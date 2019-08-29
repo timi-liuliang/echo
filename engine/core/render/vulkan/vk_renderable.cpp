@@ -66,7 +66,7 @@ namespace Echo
 
     void VKRenderable::buildVkVertexInputAttributeDescriptions(VKShaderProgram* vkShaderProgram, const VertexElementList& vertElements, vector<VkVertexInputAttributeDescription>::type& viAttributeDescriptions)
     {
-        const spirv_cross::ShaderResources& vertexShaderResources = vkShaderProgram->getSpirvShaderResources(ShaderProgram::VS);
+        spirv_cross::ShaderResources vertexShaderResources = vkShaderProgram->getSpirvShaderResources(ShaderProgram::VS);
         for (auto& resource : vertexShaderResources.stage_inputs)
         {
             int a = 10;

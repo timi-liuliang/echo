@@ -1,5 +1,6 @@
 #include "vk_shader_program.h"
 #include "vk_renderer.h"
+#include "vk_mapping.h"
 #include "engine/core/render/interface/glslcc/GLSLCrossCompiler.h"
 
 namespace Echo
@@ -169,9 +170,9 @@ namespace Echo
             Uniform desc;
             desc.m_name = compiler->get_member_name(type.self, i);
             desc.m_shader = shaderType;
-            //desc.m_type = VKMapping::MapUniformType(compiler->get_type(type.member_types[i]));
-            //desc.m_count = 
             desc.m_sizeInBytes = compiler->get_declared_struct_member_size(type, i);
+            desc.m_type = VKMapping::MapUniformType(compiler->get_type(type.member_types[i]));
+            desc.m_count = desc.m_sizeInBytes / MapUniformTypeSize(desc.m_type);
             desc.m_location = compiler->type_struct_member_offset(type, i);
             m_uniforms[desc.m_name] = desc;
         }
@@ -208,7 +209,7 @@ namespace Echo
 
     }
 
-    const spirv_cross::ShaderResources& VKShaderProgram::getSpirvShaderResources(ShaderType type)
+    const spirv_cross::ShaderResources VKShaderProgram::getSpirvShaderResources(ShaderType type)
     {
         return type == ShaderType::VS ? m_vertexShaderCompiler->get_shader_resources() : m_fragmentShaderCompiler->get_shader_resources();
     }

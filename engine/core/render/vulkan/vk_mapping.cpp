@@ -42,4 +42,31 @@ namespace Echo
         default:  EchoLogError("MapingVertexFormat failed");  return VK_FORMAT_UNDEFINED;
         }
     }
+
+    ShaderParamType VKMapping::MapUniformType(const spirv_cross::SPIRType& spirType)
+    {
+        switch (spirType.basetype)
+        {
+        case spirv_cross::SPIRType::BaseType::Int:             return SPT_INT;
+        case spirv_cross::SPIRType::BaseType::Float:
+        {
+            if (spirType.columns == 1)
+            {
+                if      (spirType.vecsize == 1) return SPT_FLOAT;
+                else if (spirType.vecsize == 2) return SPT_VEC2;
+                else if (spirType.vecsize == 3) return SPT_VEC3;
+                else if (spirType.vecsize == 4) return SPT_VEC4;
+            }
+            else if (spirType.columns == 4)
+            {
+                if      (spirType.vecsize == 4) return SPT_MAT4;
+            }
+
+            EchoLogError("vulkan MapUniformType failed"); return SPT_UNKNOWN;
+        }
+        case spirv_cross::SPIRType::Image:      return SPT_TEXTURE;
+        case spirv_cross::SPIRType::Sampler:    return SPT_TEXTURE;
+        default:  EchoLogError("vulkan MapUniformType failed"); return SPT_UNKNOWN;
+        }
+    }
 }
