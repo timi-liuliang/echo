@@ -213,4 +213,9 @@ namespace Echo
     {
         return type == ShaderType::VS ? m_vertexShaderCompiler->get_shader_resources() : m_fragmentShaderCompiler->get_shader_resources();
     }
+
+    const spirv_cross::Compiler* VKShaderProgram::getSpirvShaderCompiler(ShaderType type)
+    {
+        return type == ShaderType::VS ? m_vertexShaderCompiler : m_fragmentShaderCompiler;
+    }
 }

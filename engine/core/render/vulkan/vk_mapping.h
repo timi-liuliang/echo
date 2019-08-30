@@ -13,6 +13,9 @@ namespace Echo
         // mapping primitive topology type
         static VkPrimitiveTopology MapPrimitiveTopology(Mesh::TopologyType type);
 
+        // mapping vertex semantic
+        static String VKMapping::MapVertexSemanticString(VertexSemantic semantic);
+
         // mapping gpubffer type
         static VkBufferUsageFlags MapGpuBufferType(GPUBuffer::GPUBufferType type);
 

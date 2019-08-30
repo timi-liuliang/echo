@@ -64,26 +64,46 @@ namespace Echo
         }
     }
 
-    void VKRenderable::buildVkVertexInputAttributeDescriptions(VKShaderProgram* vkShaderProgram, const VertexElementList& vertElements, vector<VkVertexInputAttributeDescription>::type& viAttributeDescriptions)
+    bool VKRenderable::getVkVertexAttributeBySemantic(VertexSemantic semantic, spirv_cross::Resource& oResource)
     {
-        spirv_cross::ShaderResources vertexShaderResources = vkShaderProgram->getSpirvShaderResources(ShaderProgram::VS);
-        for (auto& resource : vertexShaderResources.stage_inputs)
+        String attributeName = VKMapping::MapVertexSemanticString(semantic);
+        VKShaderProgram* vkShaderProgram = ECHO_DOWN_CAST<VKShaderProgram*>(m_shaderProgram.ptr());
+        if (vkShaderProgram && vkShaderProgram->isLinked())
         {
-            int a = 10;
+            spirv_cross::ShaderResources vertexShaderResources = vkShaderProgram->getSpirvShaderResources(ShaderProgram::VS);
+            for (auto& resource : vertexShaderResources.stage_inputs)
+            {
+                if (resource.name == attributeName)
+                {
+                    oResource = resource;
+                    return true;
+                }
+            }
         }
 
+        return false;
+    }
+
+    void VKRenderable::buildVkVertexInputAttributeDescriptions(VKShaderProgram* vkShaderProgram, const VertexElementList& vertElements, vector<VkVertexInputAttributeDescription>::type& viAttributeDescriptions)
+    {
         if (!vertElements.empty())
         {
             const i32 bufferIdx = 1;
             ui32 elementOffset = 0;
             for (size_t i = 0; i < vertElements.size(); i++)
             {
-                VkVertexInputAttributeDescription attributeDescription;
-                attributeDescription.binding = 0;
-                attributeDescription.location = 0;
-                attributeDescription.format = VKMapping::MapVertexFormat(vertElements[i].m_pixFmt);
-                attributeDescription.offset = elementOffset;
-                viAttributeDescriptions.push_back(attributeDescription);
+                spirv_cross::Resource spirvResource = {};
+                if (getVkVertexAttributeBySemantic(vertElements[i].m_semantic, spirvResource))
+                {
+                    const spirv_cross::Compiler* compiler = vkShaderProgram->getSpirvShaderCompiler(ShaderProgram::VS);
+
+                    VkVertexInputAttributeDescription attributeDescription;
+                    attributeDescription.binding = compiler->get_decoration(spirvResource.id, spv::DecorationBinding);
+                    attributeDescription.location = compiler->get_decoration(spirvResource.id, spv::DecorationLocation);
+                    attributeDescription.format = VKMapping::MapVertexFormat(vertElements[i].m_pixFmt);
+                    attributeDescription.offset = elementOffset;
+                    viAttributeDescriptions.push_back(attributeDescription);
+                }
 
                 elementOffset += PixelUtil::GetPixelSize(vertElements[i].m_pixFmt);
             }

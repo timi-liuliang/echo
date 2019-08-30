@@ -28,6 +28,9 @@ namespace Echo
         // get shader resources
         const spirv_cross::ShaderResources getSpirvShaderResources(ShaderType type);
 
+        // get shader compiler
+        const spirv_cross::Compiler* getSpirvShaderCompiler(ShaderType type);
+
 	private:
 		// create shader library
 		virtual bool createShaderProgram(const String& vsContent, const String& psContent) override;

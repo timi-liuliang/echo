@@ -30,6 +30,9 @@ namespace Echo
         // build vertex input attribute
         void buildVkVertexInputAttributeDescriptions(VKShaderProgram* vkShaderProgram, const VertexElementList& vertElements, vector<VkVertexInputAttributeDescription>::type& viAttributeDescriptions);
 
+        // get vertex attribute by semantic
+        bool getVkVertexAttributeBySemantic(VertexSemantic semantic, spirv_cross::Resource& oResource);
+
 	private:
 		VkPipeline          m_vkPipeline = nullptr;
 	};
