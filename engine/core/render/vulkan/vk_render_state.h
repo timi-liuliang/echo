@@ -1,47 +1,60 @@
 #pragma once
 
 #include "engine/core/render/interface/RenderState.h"
+#include "vk_render_base.h"
 
 namespace Echo
 {
 	class VKBlendState : public BlendState
 	{
 	public:
-        VKBlendState() {}
-        VKBlendState(const BlendDesc &desc){}
+        VKBlendState(const BlendDesc &desc);
         virtual ~VKBlendState(){}
 
-        void active();
+        // get vk create info
+        const VkPipelineColorBlendStateCreateInfo* getVkCreateInfo() { return &m_vkCreateInfo; }
+
+    private:
+        VkPipelineColorBlendStateCreateInfo     m_vkCreateInfo;
 	};
 	
 	class VKDepthStencilState : public DepthStencilState
 	{
 	public:
-       // VKDepthStencilState(){}
-        //VKDepthStencilState(const DepthStencilDesc& desc){}
-        //virtual ~VKDepthStencilState() {}
+        VKDepthStencilState(const DepthStencilDesc& desc);
+        virtual ~VKDepthStencilState() {}
 
-		void active();
+        // get vk create info
+        const VkPipelineDepthStencilStateCreateInfo* getVkCreateInfo() { return &m_vkCreateInfo; }
+
+    private:
+        VkPipelineDepthStencilStateCreateInfo m_vkCreateInfo;
 	};
 
 	class VKRasterizerState : public RasterizerState
 	{
 	public:
-        VKRasterizerState(){}
-        VKRasterizerState(const RasterizerDesc& desc){}
+        VKRasterizerState(const RasterizerDesc& desc);
         virtual ~VKRasterizerState(){}
 
-        void active();
+        // get vk create info
+        const VkPipelineRasterizationStateCreateInfo* getVkCreateInfo() { return &m_vkCreateInfo; }
+
+    private:
+        VkPipelineRasterizationStateCreateInfo m_vkCreateInfo;
 	};
 
 	class VKSamplerState : public SamplerState
 	{
 	public:
-        VKSamplerState(){}
-        VKSamplerState(const SamplerDesc& desc) {}
+        VKSamplerState(const SamplerDesc& desc);
         virtual ~VKSamplerState() {}
 
-        void active(const SamplerState* pre) const;
+        // get vk create info
+        const VkPipelineMultisampleStateCreateInfo* getVkCrateInfo() { return &m_vkCreateInfo; }
+
+    private:
+        VkPipelineMultisampleStateCreateInfo m_vkCreateInfo;
 	};
 
     class VKMultisampleState : public MultisampleState
@@ -49,8 +62,5 @@ namespace Echo
     public:
         VKMultisampleState() {}
         ~VKMultisampleState() {}
-
-        // active
-        void active(VKMultisampleState* pre) const {}
     };
 }

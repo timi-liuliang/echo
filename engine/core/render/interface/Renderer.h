@@ -65,9 +65,8 @@ namespace Echo
 		// get render config
 		const Config& getCfg() const { return m_cfg; }
 		virtual ui32 getMaxStageNum() const = 0;
-		virtual RasterizerState* getDefaultRasterizerState() const;
-		virtual DepthStencilState* getDefaultDepthStencilState() const;
-		virtual BlendState* getDefaultBlendState() const;
+        
+        // current states
 		virtual RasterizerState* getRasterizerState() const;
 		virtual DepthStencilState* getDepthStencilState() const;
 		virtual BlendState*	getBlendState() const;
@@ -145,12 +144,9 @@ namespace Echo
 
 	protected:
 		Config				m_cfg;
-		RasterizerState*	m_defaultRasterizerState;
-		DepthStencilState*	m_defaultDepthStencilState;
-		BlendState*			m_defaultBlendState;
-		RasterizerState*	m_rasterizerState;
-		DepthStencilState*	m_depthStencilState;
-		BlendState*			m_blendState;
+		RasterizerState*	m_rasterizerState = nullptr;
+		DepthStencilState*	m_depthStencilState = nullptr;
+		BlendState*			m_blendState = nullptr;
 		std::map<ui32, Renderable*>	m_renderables;
 		ui32				m_startMipmap = 0;
 		DeviceFeature		m_deviceFeature;

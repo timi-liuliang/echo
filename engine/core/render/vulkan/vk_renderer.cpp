@@ -88,23 +88,22 @@ namespace Echo
 
     RasterizerState* VKRenderer::createRasterizerState(const RasterizerState::RasterizerDesc& desc)
     {
-        return EchoNew(VKRasterizerState);
+        return EchoNew(VKRasterizerState(desc));
     }
 
     DepthStencilState* VKRenderer::createDepthStencilState(const DepthStencilState::DepthStencilDesc& desc)
     {
-        return nullptr;
-        //return EchoNew(VKDepthStencilState);
+        return EchoNew(VKDepthStencilState(desc));
     }
 
     BlendState* VKRenderer::createBlendState(const BlendState::BlendDesc& desc)
     {
-        return EchoNew(VKBlendState);
+        return EchoNew(VKBlendState(desc));
     }
 
     const SamplerState* VKRenderer::getSamplerState(const SamplerState::SamplerDesc& desc)
     {
-        return EchoNew(VKSamplerState);
+        return EchoNew(VKSamplerState(desc));
     }
 
 	void VKRenderer::enumerateVkExtensions()

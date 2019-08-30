@@ -83,9 +83,9 @@ namespace Echo
         virtual void bind() {}
 
 		// get states
-		BlendState* getBlendState() const { return m_blendState; }
-		DepthStencilState* getDepthState() const { return m_depthState; }
-		RasterizerState* getRasterizerState() const { return m_rasterizerState; }
+        BlendState* getBlendState();
+        DepthStencilState* getDepthState();
+        RasterizerState* getRasterizerState();
 
 		// is have macro
 		bool hasMacro(const char* const macro) const;

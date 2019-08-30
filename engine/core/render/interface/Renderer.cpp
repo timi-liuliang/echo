@@ -27,10 +27,7 @@ namespace Echo
 	}
 
 	Renderer::Renderer()
-		: m_defaultRasterizerState(NULL)
-		, m_defaultDepthStencilState(NULL)
-		, m_defaultBlendState(NULL)
-		, m_rasterizerState(NULL)
+		: m_rasterizerState(NULL)
 		, m_depthStencilState(NULL)
 		, m_blendState(NULL)
 	{
@@ -78,21 +75,6 @@ namespace Echo
 	bool Renderer::isFullscreen() const
 	{
 		return m_cfg.m_isFullscreen;
-	}
-
-	RasterizerState* Renderer::getDefaultRasterizerState() const
-	{
-		return m_defaultRasterizerState;
-	}
-
-	DepthStencilState* Renderer::getDefaultDepthStencilState() const
-	{
-		return m_defaultDepthStencilState;
-	}
-
-	BlendState* Renderer::getDefaultBlendState() const
-	{
-		return m_defaultBlendState;
 	}
 
 	RasterizerState* Renderer::getRasterizerState() const

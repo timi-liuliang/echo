@@ -77,7 +77,7 @@ namespace Echo
 		if (mask != 0)
 			OGLESDebug(glClear(mask));
 
-		Renderer::instance()->setDepthStencilState( Renderer::instance()->getDefaultDepthStencilState());
+		//Renderer::instance()->setDepthStencilState( Renderer::instance()->getDefaultDepthStencilState());
 	}
 
 	void GLESFramebuffer::onSize( ui32 width, ui32 height )

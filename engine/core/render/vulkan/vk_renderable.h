@@ -33,6 +33,18 @@ namespace Echo
         // get vertex attribute by semantic
         bool getVkVertexAttributeBySemantic(VertexSemantic semantic, spirv_cross::Resource& oResource);
 
+        // get blend state create info
+        const VkPipelineColorBlendStateCreateInfo* getVkColorBlendStateCreateInfo();
+
+        // get rasterization state create info
+        const VkPipelineRasterizationStateCreateInfo* getVkRasterizationStateCreateInfo();
+
+        // get depth stencil state create info
+        const VkPipelineDepthStencilStateCreateInfo* getVkDepthStencilStateCrateInfo();
+
+        // get multisample state create creteinfo
+        const VkPipelineMultisampleStateCreateInfo* getVkMultiSampleStateCreateInfo();
+
 	private:
 		VkPipeline          m_vkPipeline = nullptr;
 	};

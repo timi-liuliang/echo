@@ -571,6 +571,39 @@ namespace Echo
 		return value;
 	}
 
+    BlendState* ShaderProgram::getBlendState()
+    { 
+        if (!m_blendState)
+        {
+            BlendState::BlendDesc desc;
+            createBlendState(desc);
+        }
+
+        return m_blendState; 
+    }
+
+    DepthStencilState* ShaderProgram::getDepthState()
+    { 
+        if (!m_depthState)
+        {
+            DepthStencilState::DepthStencilDesc desc;
+            createDepthState(desc);
+        }
+
+        return m_depthState; 
+    }
+
+    RasterizerState* ShaderProgram::getRasterizerState()
+    { 
+        if (!m_rasterizerState)
+        {
+            RasterizerState::RasterizerDesc desc;
+            createRasterizerState(desc);
+        }
+
+        return m_rasterizerState; 
+    }
+
 	bool ShaderProgram::hasMacro(const char* const macro) const
 	{
 		String fullMacro;

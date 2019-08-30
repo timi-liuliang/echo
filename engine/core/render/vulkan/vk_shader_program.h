@@ -31,6 +31,9 @@ namespace Echo
         // get shader compiler
         const spirv_cross::Compiler* getSpirvShaderCompiler(ShaderType type);
 
+        // get vk pipeline layout
+        VkPipelineLayout getVkPipelineLayout() { return m_vkPipelineLayout; }
+
 	private:
 		// create shader library
 		virtual bool createShaderProgram(const String& vsContent, const String& psContent) override;

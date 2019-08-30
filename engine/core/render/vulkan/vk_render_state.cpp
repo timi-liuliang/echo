@@ -3,31 +3,50 @@
 
 namespace Echo
 {
-    void VKBlendState::active()
+    VKBlendState::VKBlendState(const BlendDesc &desc)
+        : BlendState(desc)
     {
         VkPipelineColorBlendAttachmentState blendAttachState = {};
         blendAttachState.colorWriteMask = 0xf;
 
-        VkPipelineColorBlendStateCreateInfo createInfo = {};
-        createInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-        createInfo.logicOp = VK_LOGIC_OP_COPY;
-        createInfo.attachmentCount = 1;
-        createInfo.pAttachments = &blendAttachState;
+        m_vkCreateInfo = {};
+        m_vkCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+        m_vkCreateInfo.logicOp = VK_LOGIC_OP_COPY;
+        m_vkCreateInfo.attachmentCount = 1;
+        m_vkCreateInfo.pAttachments = &blendAttachState;
     }
 
-    void VKRasterizerState::active()
+    VKDepthStencilState::VKDepthStencilState(const DepthStencilDesc& desc)
+        : DepthStencilState(desc)
     {
-        VkPipelineRasterizationStateCreateInfo createInfo = {};
-        createInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
-        createInfo.polygonMode = VK_POLYGON_MODE_FILL;
-        createInfo.cullMode = VK_CULL_MODE_BACK_BIT;
-        createInfo.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
-        createInfo.lineWidth = m_desc.lineWidth;
+        m_vkCreateInfo = {};
+        m_vkCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+        m_vkCreateInfo.depthTestEnable = VK_TRUE;
+        m_vkCreateInfo.depthWriteEnable = VK_TRUE;
+        m_vkCreateInfo.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
+        m_vkCreateInfo.depthBoundsTestEnable = VK_FALSE;
+        m_vkCreateInfo.back.failOp = VK_STENCIL_OP_KEEP;
+        m_vkCreateInfo.back.passOp = VK_STENCIL_OP_KEEP;
+        m_vkCreateInfo.back.compareOp = VK_COMPARE_OP_ALWAYS;
+        m_vkCreateInfo.stencilTestEnable = VK_FALSE;
+        m_vkCreateInfo.front = m_vkCreateInfo.back;
     }
 
-    void VKSamplerState::active(const SamplerState* pre) const
+    VKRasterizerState::VKRasterizerState(const RasterizerDesc& desc)
+        : RasterizerState(desc)
     {
-        VkPipelineMultisampleStateCreateInfo createInfo = {};
-        createInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
+        m_vkCreateInfo = {};
+        m_vkCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+        m_vkCreateInfo.polygonMode = VK_POLYGON_MODE_FILL;
+        m_vkCreateInfo.cullMode = VK_CULL_MODE_BACK_BIT;
+        m_vkCreateInfo.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
+        m_vkCreateInfo.lineWidth = m_desc.lineWidth;
+    }
+
+    VKSamplerState::VKSamplerState(const SamplerDesc& desc)
+        : SamplerState(desc)
+    {
+        m_vkCreateInfo = {};
+        m_vkCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
     }
 }

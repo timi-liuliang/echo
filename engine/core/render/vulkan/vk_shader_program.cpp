@@ -60,6 +60,7 @@ namespace Echo
             m_vkShaderStagesCreateInfo[1].module = m_vkFragmentShader;
             m_vkShaderStagesCreateInfo[1].pName = "main";
 
+            createVkDescriptorAndPipelineLayouts();
             parseUniforms();
 		}
 
@@ -199,9 +200,6 @@ namespace Echo
     {
         // update uniform VkBuffer by memory
         createVkUniformBuffer();
-
-        // set uniforms
-        createVkDescriptorAndPipelineLayouts();
     }
 
     void VKShaderProgram::bindRenderable(Renderable* renderable)

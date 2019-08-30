@@ -63,7 +63,6 @@ namespace Echo
 			BF_MAX,
 		};
 
-
 		struct RenderTargetBlendDesc
 		{
 			
@@ -110,13 +109,12 @@ namespace Echo
 			}
 		};
 
-		BlendState();
 		BlendState(const BlendDesc& desc);
 		virtual ~BlendState();
 
 	public:
-		virtual void					active() = 0;
-		const BlendDesc&				getDesc() const;
+		virtual void		active() {}
+		const BlendDesc&	getDesc() const;
 
 	protected:
 		BlendDesc		m_desc;
@@ -202,7 +200,6 @@ namespace Echo
 			}
 		};
 
-		DepthStencilState();
 		DepthStencilState(const DepthStencilDesc& desc);
 		virtual ~DepthStencilState();
 
@@ -275,7 +272,6 @@ namespace Echo
 			}
 		};
 
-		RasterizerState();
 		RasterizerState(const RasterizerDesc& desc);
 		virtual ~RasterizerState();
 
@@ -366,7 +362,6 @@ namespace Echo
 		const SamplerDesc& getDesc() const;
 
 	protected:
-		SamplerState();
 		virtual ~SamplerState();
 		SamplerState(const SamplerDesc &desc);
 

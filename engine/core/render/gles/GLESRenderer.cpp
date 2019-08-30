@@ -151,20 +151,6 @@ namespace Echo
 	{
 		m_cfg.m_isFullscreen = true;
 
-		// set default render states
-		RasterizerState::RasterizerDesc rsDesc;
-		m_defaultRasterizerState = createRasterizerState(rsDesc);
-
-		DepthStencilState::DepthStencilDesc dssDesc;
-		m_defaultDepthStencilState = createDepthStencilState(dssDesc);
-
-		BlendState::BlendDesc bsDesc;
-		m_defaultBlendState = createBlendState(bsDesc);
-
-		setRasterizerState(m_defaultRasterizerState);
-		setDepthStencilState(m_defaultDepthStencilState);
-		setBlendState(m_defaultBlendState);
-
 		// set view port
 		Viewport viewport(0, 0, m_screenWidth, m_screenHeight);
 		setViewport(&viewport);
@@ -172,9 +158,6 @@ namespace Echo
 
 	void GLES2Renderer::cleanSystemResource()
 	{
-		EchoSafeDelete(m_defaultRasterizerState, RasterizerState);
-		EchoSafeDelete(m_defaultDepthStencilState, DepthStencilState);
-		EchoSafeDelete(m_defaultBlendState, BlendState);
 		EchoSafeDeleteContainer(m_vecSamlerStates, GLES2SamplerState);
 	}
 

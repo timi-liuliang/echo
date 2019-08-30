@@ -11,10 +11,6 @@ namespace Echo
 	{
 	}
 
-	BlendState::BlendState()
-	{
-	}
-
 	BlendState::BlendState(const BlendDesc& desc)
 		: m_desc(desc)
 	{
@@ -27,10 +23,6 @@ namespace Echo
 	const BlendState::BlendDesc& BlendState::getDesc() const
 	{
 		return m_desc;
-	}
-
-	DepthStencilState::DepthStencilState()
-	{
 	}
 
 	DepthStencilState::DepthStencilState(const DepthStencilDesc& desc)
@@ -47,10 +39,6 @@ namespace Echo
 		return m_desc;
 	}
 
-	RasterizerState::RasterizerState()
-	{
-	}
-
 	RasterizerState::RasterizerState(const RasterizerDesc& desc)
 		: m_desc(desc)
 	{
@@ -65,26 +53,8 @@ namespace Echo
 		return m_desc;
 	}
 
-	SamplerState::SamplerState()
-	{
-		m_desc.minFilter		= FO_LINEAR;
-		m_desc.magFilter		= FO_LINEAR;
-		m_desc.mipFilter		= FO_LINEAR;
-		m_desc.addrUMode		= AM_CLAMP;
-		m_desc.addrVMode		= AM_CLAMP;
-		m_desc.addrWMode		= AM_CLAMP;
-		m_desc.maxAnisotropy	= 16;
-		m_desc.cmpFunc			= CF_NEVER;
-		m_desc.borderColor		= Color::BLACK;
-		m_desc.minLOD			= -Math::MAX_FLOAT;
-		m_desc.maxLOD			= Math::MAX_FLOAT;
-		m_desc.mipLODBias		= 0.0f;
-		//m_pTexture				= NULL;
-	}
-
 	SamplerState::SamplerState(const SamplerDesc& desc)
 		: m_desc(desc)
-		//, m_pTexture(NULL)
 	{
 	}
 

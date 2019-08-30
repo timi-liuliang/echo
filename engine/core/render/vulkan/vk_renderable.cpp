@@ -2,6 +2,7 @@
 #include "vk_renderer.h"
 #include "vk_mapping.h"
 #include "vk_shader_program.h"
+#include "vk_render_state.h"
 
 namespace Echo
 {
@@ -43,20 +44,26 @@ namespace Echo
             pipelineInputAssemblyStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
             pipelineInputAssemblyStateCreateInfo.topology = VKMapping::MapPrimitiveTopology(m_mesh->getTopologyType());
 
+            vector<VkDynamicState>::type dynamicStateEnables = { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR };
+            VkPipelineDynamicStateCreateInfo dynamicState = {};
+            dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+            dynamicState.dynamicStateCount = dynamicStateEnables.size();
+            dynamicState.pDynamicStates = dynamicStateEnables.data();
+
             VkGraphicsPipelineCreateInfo pipelineInfo = {};
             pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-            pipelineInfo.pNext = nullptr;
+            pipelineInfo.layout = vkShaderProgram->getVkPipelineLayout();
+            pipelineInfo.renderPass = vkFrameBuffer->getVkRenderPass();
             pipelineInfo.stageCount = vkShaderProgram->getVkShaderStageCreateInfo().size();
             pipelineInfo.pStages = vkShaderProgram->getVkShaderStageCreateInfo().data();
             pipelineInfo.pVertexInputState = &vertexInputStateCreateInfo;
             pipelineInfo.pInputAssemblyState = &pipelineInputAssemblyStateCreateInfo;
             pipelineInfo.pViewportState = vkFrameBuffer->getVkViewportStateCreateInfo();
-            pipelineInfo.pDepthStencilState = m_depthStencilState ? nullptr : nullptr;
-            pipelineInfo.pRasterizationState = m_rasterizerState ? nullptr : nullptr;
+            pipelineInfo.pDepthStencilState = getVkDepthStencilStateCrateInfo();
+            pipelineInfo.pRasterizationState = getVkRasterizationStateCreateInfo();
             pipelineInfo.pMultisampleState = m_multiSampleState ? nullptr : nullptr;
-            pipelineInfo.pColorBlendState = m_blendState ? nullptr : nullptr;
-            pipelineInfo.renderPass = vkFrameBuffer->getVkRenderPass();
-            pipelineInfo.basePipelineIndex = -1;
+            pipelineInfo.pColorBlendState = getVkColorBlendStateCreateInfo();
+            pipelineInfo.pDynamicState = &dynamicState;
             if (VK_SUCCESS != vkCreateGraphicsPipelines(VKRenderer::instance()->getVkDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_vkPipeline))
             {
                 EchoLogError("vulkan create pipeline failed");
@@ -122,5 +129,30 @@ namespace Echo
                 m_shaderProgram->setUniform(uniform.name.c_str(), uniform.data, uniform.type, uniform.length);
             }
         }
+    }
+
+    const VkPipelineColorBlendStateCreateInfo* VKRenderable::getVkColorBlendStateCreateInfo()
+    {
+        VKBlendState* vkState = ECHO_DOWN_CAST<VKBlendState*>(m_blendState ? m_blendState : m_shaderProgram->getBlendState());
+        return vkState->getVkCreateInfo();
+    }
+
+    const VkPipelineRasterizationStateCreateInfo* VKRenderable::getVkRasterizationStateCreateInfo()
+    {
+        VKRasterizerState* vkState = ECHO_DOWN_CAST<VKRasterizerState*>(m_rasterizerState ? m_rasterizerState : m_shaderProgram->getRasterizerState());
+        return vkState->getVkCreateInfo();
+    }
+
+    const VkPipelineDepthStencilStateCreateInfo* VKRenderable::getVkDepthStencilStateCrateInfo()
+    {
+        VKDepthStencilState* vkState = ECHO_DOWN_CAST<VKDepthStencilState*>(m_depthStencilState ? m_depthStencilState : m_shaderProgram->getDepthState());
+        return vkState->getVkCreateInfo();
+    }
+
+    const VkPipelineMultisampleStateCreateInfo* VKRenderable::getVkMultiSampleStateCreateInfo()
+    {
+        //VKSamplerState* vkState = ECHO_DOWN_CAST<VKSamplerState*>(m_blendState ? m_blendState : m_shaderProgram->getSa());
+        //return vkState->getVkCreateInfo();
+        return nullptr;
     }
 }

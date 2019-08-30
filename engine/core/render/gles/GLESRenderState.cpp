@@ -7,12 +7,6 @@
 
 namespace Echo
 {
-	/////////////////////////////////////////////////////////////////////////////////////////
-	GLES2BlendState::GLES2BlendState()
-	{
-		create();
-	}
-
 	GLES2BlendState::GLES2BlendState(const BlendDesc& desc)
 		: BlendState(desc)
 	{
@@ -151,12 +145,6 @@ namespace Echo
 		m_glGreenMask = (m_desc.colorWriteMask & CMASK_GREEN) != 0;
 		m_glBlueMask = (m_desc.colorWriteMask & CMASK_BLUE) != 0;
 		m_glAlphaMask = (m_desc.colorWriteMask & CMASK_ALPHA) != 0;
-	}
-
-	/////////////////////////////////////////////////////////////////////////////////////////
-	GLES2DepthStencilState::GLES2DepthStencilState()
-	{
-		create();
 	}
 
 	GLES2DepthStencilState::GLES2DepthStencilState(const DepthStencilDesc &desc)
@@ -349,25 +337,16 @@ namespace Echo
 		m_glBackStencilPassOP = GLES2Mapping::MapStencilOperation(m_desc.backStencilPassOP);
 	}
 
-	// 构造函数
-	GLES2RasterizerState::GLES2RasterizerState()
-	{
-		create();
-	}
-
-	// 构造函数
 	GLES2RasterizerState::GLES2RasterizerState(const RasterizerDesc& desc)
 		: RasterizerState(desc)
 	{
 		create();
 	}
 
-	// 析构函数
 	GLES2RasterizerState::~GLES2RasterizerState()
 	{
 	}
 
-	// 设置光栅化状态
 	void GLES2RasterizerState::active()
 	{
 		RasterizerState* pCurState = Renderer::instance()->getRasterizerState();
@@ -493,7 +472,6 @@ namespace Echo
 		}
 	}
 
-	// 创建光栅化状态
 	void GLES2RasterizerState::create()
 	{
 		if(m_desc.polygonMode != PM_FILL)
@@ -505,20 +483,12 @@ namespace Echo
 		m_glFrontFace = m_desc.bFrontFaceCCW ? GL_CCW : GL_CW;
 	}
 
-	// 构造函数
-	GLES2SamplerState::GLES2SamplerState()
-	{
-		create();
-	}
-
-	// 构造函数
 	GLES2SamplerState::GLES2SamplerState(const SamplerDesc& desc)
 		: SamplerState(desc)
 	{
 		create();
 	}
 
-	// 析构函数
 	GLES2SamplerState::~GLES2SamplerState()
 	{
 	}
@@ -565,7 +535,6 @@ namespace Echo
 		}
 	}
 
-	// 新建
 	void GLES2SamplerState::create()
 	{
 		if (m_desc.minFilter == FO_NONE)

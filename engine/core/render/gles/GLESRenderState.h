@@ -65,7 +65,6 @@ namespace Echo
 	class GLES2BlendState: public BlendState
 	{
 	public:
-		GLES2BlendState();
 		GLES2BlendState(const BlendDesc &desc);
 		~GLES2BlendState();
 
@@ -91,7 +90,6 @@ namespace Echo
 	class GLES2DepthStencilState: public DepthStencilState
 	{
 	public:
-		GLES2DepthStencilState();
 		GLES2DepthStencilState(const DepthStencilDesc& desc);
 		~GLES2DepthStencilState();
 
@@ -117,7 +115,6 @@ namespace Echo
 	class GLES2RasterizerState: public RasterizerState
 	{
 	public:
-		GLES2RasterizerState();
 		GLES2RasterizerState(const RasterizerDesc& desc);
 		~GLES2RasterizerState();
 
@@ -137,7 +134,6 @@ namespace Echo
 	{
 		friend class GLES2Renderer;
 	private:
-		GLES2SamplerState();
 		GLES2SamplerState(const SamplerDesc& desc);
 		~GLES2SamplerState();
 

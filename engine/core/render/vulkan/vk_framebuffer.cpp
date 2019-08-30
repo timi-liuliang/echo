@@ -88,6 +88,8 @@ namespace Echo
         m_vkViewportStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
         m_vkViewportStateCreateInfo.viewportCount = 1;
         m_vkViewportStateCreateInfo.pViewports = &m_vkViewport;
+        m_vkViewportStateCreateInfo.scissorCount = 0;
+        m_vkViewportStateCreateInfo.pScissors = nullptr;
     }
 
     void VKFramebuffer::createVkRenderPass()
@@ -218,6 +220,8 @@ namespace Echo
         createImageViews(VKRenderer::instance()->getVkDevice());
 
         vkGetDeviceQueue(VKRenderer::instance()->getVkDevice(), VKRenderer::instance()->getPresentQueueFamilyIndex(m_vkWindowSurface), 0, &m_vkPresentQueue);
+
+        onSize(width, height);
     }
 
     VKFramebufferWindow::~VKFramebufferWindow()
@@ -247,8 +251,7 @@ namespace Echo
 
     void VKFramebufferWindow::onSize(ui32 width, ui32 height)
     {
-        m_width = width;
-        m_height = height;
+        VKFramebuffer::onSize(width, height);
     }
 
     void VKFramebufferWindow::createVkSurface(void* handle)
