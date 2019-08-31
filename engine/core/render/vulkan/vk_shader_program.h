@@ -55,8 +55,8 @@ namespace Echo
 
 	private:
 		bool			                m_isLinked = false;
-		VkShaderModule	                m_vkVertexShader;
-		VkShaderModule	                m_vkFragmentShader;
+		VkShaderModule	                m_vkVertexShader = nullptr;
+		VkShaderModule	                m_vkFragmentShader = nullptr;
         spirv_cross::Compiler*          m_vertexShaderCompiler = nullptr;
         spirv_cross::Compiler*          m_fragmentShaderCompiler = nullptr;
         array<VkPipelineSSCI, 2>        m_vkShaderStagesCreateInfo;

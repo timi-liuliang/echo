@@ -74,8 +74,8 @@ namespace Echo
 
     Renderable* VKRenderer::createRenderable(const String& renderStage, ShaderProgram* material)
     {
-        static ui32 id = 1;
-        Renderable* renderable = EchoNew(VKRenderable(renderStage, material, id++));
+        static ui32 id = 0; id++;
+        Renderable* renderable = EchoNew(VKRenderable(renderStage, material, id));
         m_renderables[id] = renderable;
 
         return renderable;
