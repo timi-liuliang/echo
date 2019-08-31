@@ -129,6 +129,8 @@ namespace Echo
                 m_shaderProgram->setUniform(uniform.name.c_str(), uniform.data, uniform.type, uniform.length);
             }
         }
+
+        m_shaderProgram->bindUniforms();
     }
 
     const VkPipelineColorBlendStateCreateInfo* VKRenderable::getVkColorBlendStateCreateInfo()

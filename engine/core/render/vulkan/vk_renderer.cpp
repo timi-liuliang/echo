@@ -332,29 +332,32 @@ namespace Echo
 
     void VKRenderer::draw(Renderable* renderable)
     {
-        VKRenderable*   vkRenderable = ECHO_DOWN_CAST<VKRenderable*>(renderable);
-        VKFramebuffer*  vkFramebuffer = VKFramebuffer::current();
-        VkCommandBuffer vkCommandbuffer = vkFramebuffer->getVkCommandbuffer();
-
-        vkRenderable->bindRenderState();
-        vkRenderable->bindShaderParams();
-        
-        vkCmdBindPipeline(vkCommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkRenderable->getVkPipeline());
-
-        Mesh* mesh = renderable->getMesh();
-        if (mesh->getIndexBuffer())
+        VKRenderable* vkRenderable = ECHO_DOWN_CAST<VKRenderable*>(renderable);
+        if (vkRenderable->getVkPipeline())
         {
-            ui32 idxCount = mesh->getIndexCount();
-            ui32 idxOffset = mesh->getStartIndex();
+            VKFramebuffer* vkFramebuffer = VKFramebuffer::current();
+            VkCommandBuffer vkCommandbuffer = vkFramebuffer->getVkCommandbuffer();
 
-            vkCmdDrawIndexed(vkCommandbuffer, idxCount, 1, idxOffset, 0, 0);
-        }
-        else
-        {
-            ui32 vertCount = mesh->getVertexCount();
-            ui32 startVert = mesh->getStartVertex();
+            vkRenderable->bindRenderState();
+            vkRenderable->bindShaderParams();
 
-            vkCmdDraw(vkCommandbuffer, vertCount, 1, startVert, 0);
+            vkCmdBindPipeline(vkCommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkRenderable->getVkPipeline());
+
+            Mesh* mesh = renderable->getMesh();
+            if (mesh->getIndexBuffer())
+            {
+                ui32 idxCount = mesh->getIndexCount();
+                ui32 idxOffset = mesh->getStartIndex();
+
+                vkCmdDrawIndexed(vkCommandbuffer, idxCount, 1, idxOffset, 0, 0);
+            }
+            else
+            {
+                ui32 vertCount = mesh->getVertexCount();
+                ui32 startVert = mesh->getStartVertex();
+
+                vkCmdDraw(vkCommandbuffer, vertCount, 1, startVert, 0);
+            }
         }
     }
 

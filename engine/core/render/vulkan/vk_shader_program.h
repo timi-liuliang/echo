@@ -39,7 +39,7 @@ namespace Echo
 		virtual bool createShaderProgram(const String& vsContent, const String& psContent) override;
 
         // create uniform buffer
-        void createVkUniformBuffer();
+        void updateVkUniformBuffer();
 
         // create descriptor and pipeline layouts
         void createVkDescriptorAndPipelineLayouts();

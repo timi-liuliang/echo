@@ -19,12 +19,12 @@ namespace Echo
             m_metalRenderPipelineDescriptor = [[MTLRenderPipelineDescriptor alloc] init];
             [m_metalRenderPipelineDescriptor setVertexFunction:mtShaderProgram->getMetalVertexFunction()];
             [m_metalRenderPipelineDescriptor setFragmentFunction:mtShaderProgram->getMetalFragmentFunction()];
-            
+
             // specify the target-texture pixel format
             m_metalRenderPipelineDescriptor.colorAttachments[0].pixelFormat = MTLPixelFormatBGRA8Unorm;
         }
     }
-    
+
     void MTRenderable::buildRenderPipelineState()
     {
         id<MTLDevice> device = MTRenderer::instance()->getMetalDevice();
@@ -33,7 +33,7 @@ namespace Echo
             // clear
             if(m_metalRenderPipelineState)
                 [m_metalRenderPipelineState release];
-            
+
             // create new one
             NSError* buildError = nullptr;
             m_metalRenderPipelineState = [device newRenderPipelineStateWithDescriptor:m_metalRenderPipelineDescriptor options:MTLPipelineOptionArgumentInfo reflection:&m_metalRenderPipelineReflection error:&buildError];
@@ -49,26 +49,26 @@ namespace Echo
             }
         }
     }
-    
+
     id<MTLBuffer> MTRenderable::getMetalIndexBuffer()
     {
         MTBuffer* mtBuffer = ECHO_DOWN_CAST<MTBuffer*>(m_mesh->getIndexBuffer());
         return mtBuffer->getMetalBuffer();
     }
-    
+
     id<MTLBuffer> MTRenderable::getMetalVertexBuffer()
     {
         MTBuffer* mtBuffer = ECHO_DOWN_CAST<MTBuffer*>(m_mesh->getVertexBuffer());
         return mtBuffer->getMetalBuffer();
     }
-    
+
     void MTRenderable::setMesh(Mesh* mesh)
     {
         m_mesh = mesh;
-        
+
         buildVertexDescriptor();
     }
-    
+
     MTLVertexAttribute* MTRenderable::getMTLVertexAttributeBySemantic(VertexSemantic semantic)
     {
         String attributeName = MTMapping::MapVertexSemanticString(semantic);
@@ -83,17 +83,17 @@ namespace Echo
                     return attribute;
             }
         }
-        
+
         return nullptr;
     }
-    
+
     void MTRenderable::buildVertexDescriptor()
     {
         if( m_metalVertexDescriptor)
             [m_metalVertexDescriptor release];
-        
+
         m_metalVertexDescriptor = [[MTLVertexDescriptor alloc] init];
-        
+
         // iterate all elements
         const VertexElementList& vertElments = m_mesh->getVertexElements();
         ui32 numVertElms = static_cast<ui32>(vertElments.size());
@@ -112,22 +112,22 @@ namespace Echo
                     m_metalVertexDescriptor.attributes[attributeIdx].bufferIndex = bufferIdx;
                     m_metalVertexDescriptor.attributes[attributeIdx].offset = elementOffset;
                 }
-                
+
                 elementOffset += PixelUtil::GetPixelSize(vertElments[i].m_pixFmt);
             }
-            
+
             m_metalVertexDescriptor.layouts[bufferIdx].stride = elementOffset;
             [m_metalRenderPipelineDescriptor setVertexDescriptor:m_metalVertexDescriptor];
-            
+
             // update render pipeline state
             buildRenderPipelineState();
         }
     }
-    
+
     void MTRenderable::bindShaderParams()
     {
         bindTextures();
-        
+
         if(m_shaderProgram)
         {
             for(auto& it : m_shaderParams)
@@ -136,5 +136,7 @@ namespace Echo
                 m_shaderProgram->setUniform( uniform.name.c_str(), uniform.data, uniform.type, uniform.length);
             }
         }
+
+        m_shaderProgram->bindUniforms();
     }
 }

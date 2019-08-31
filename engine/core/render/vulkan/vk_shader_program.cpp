@@ -67,8 +67,10 @@ namespace Echo
 		return m_isLinked;
 	}
 
-    void VKShaderProgram::createVkUniformBuffer()
+    void VKShaderProgram::updateVkUniformBuffer()
     {
+        if (!m_isLinked) return;
+
         // organize uniform bytes
         for (UniformArray::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++)
         {
@@ -199,7 +201,7 @@ namespace Echo
     void VKShaderProgram::bindUniforms()
     {
         // update uniform VkBuffer by memory
-        createVkUniformBuffer();
+        updateVkUniformBuffer();
     }
 
     void VKShaderProgram::bindRenderable(Renderable* renderable)
