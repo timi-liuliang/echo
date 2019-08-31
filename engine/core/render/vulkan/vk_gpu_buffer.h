@@ -14,6 +14,10 @@ namespace Echo
         bool updateData(const Buffer& buff);
         void bindBuffer();
 
+    private:
+        // create
+        bool create(ui32 sizeInBytes);
+
         // clear
         void clear();
 
