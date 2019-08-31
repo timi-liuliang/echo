@@ -86,6 +86,7 @@ namespace Echo
         BlendState* getBlendState();
         DepthStencilState* getDepthState();
         RasterizerState* getRasterizerState();
+        MultisampleState* getMultisampleState();
 
 		// is have macro
 		bool hasMacro(const char* const macro) const;
@@ -148,6 +149,7 @@ namespace Echo
         void createBlendState(BlendState::BlendDesc& desc);
         void createDepthState(DepthStencilState::DepthStencilDesc& desc);
         void createRasterizerState(RasterizerState::RasterizerDesc& desc);
+        void createMultisampleState();
 
         // uniforms
 		bool loadDefaultUniform(void* pNode);
@@ -158,6 +160,7 @@ namespace Echo
 		BlendState*			m_blendState = nullptr;
 		DepthStencilState*	m_depthState = nullptr;
 		RasterizerState*	m_rasterizerState = nullptr;
+        MultisampleState*   m_multiSampleState = nullptr;
         UniformArray        m_uniforms;
         UniformValuesMap	m_uniformDefaultValues;
 	};

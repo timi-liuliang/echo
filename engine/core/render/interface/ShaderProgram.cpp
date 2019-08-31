@@ -416,6 +416,12 @@ namespace Echo
 		m_rasterizerState = Renderer::instance()->createRasterizerState(desc);
 	}
 
+    void ShaderProgram::createMultisampleState()
+    {
+        EchoSafeDelete(m_multiSampleState, MultisampleState);
+        m_multiSampleState = Renderer::instance()->createMultisampleState();
+    }
+
 	bool ShaderProgram::createShaderProgram(const String& vsContent, const String& psContent)
 	{
 		EchoLogError("createShaderProgram function unimplement: ");
@@ -602,6 +608,16 @@ namespace Echo
         }
 
         return m_rasterizerState; 
+    }
+
+    MultisampleState* ShaderProgram::getMultisampleState()
+    {
+        if (!m_multiSampleState)
+        {
+            createMultisampleState();
+        }
+
+        return m_multiSampleState;
     }
 
 	bool ShaderProgram::hasMacro(const char* const macro) const

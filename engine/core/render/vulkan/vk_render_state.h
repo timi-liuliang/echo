@@ -60,7 +60,13 @@ namespace Echo
     class VKMultisampleState : public MultisampleState
     {
     public:
-        VKMultisampleState() {}
+        VKMultisampleState();
         ~VKMultisampleState() {}
+
+        // get vk create info
+        const VkPipelineMultisampleStateCreateInfo* getVkCreateInfo() { return &m_vkCreateInfo; }
+
+    private:
+        VkPipelineMultisampleStateCreateInfo m_vkCreateInfo;
     };
 }

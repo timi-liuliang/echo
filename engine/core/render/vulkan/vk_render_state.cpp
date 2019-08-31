@@ -49,4 +49,12 @@ namespace Echo
         m_vkCreateInfo = {};
         m_vkCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
     }
+
+    VKMultisampleState::VKMultisampleState()
+    {
+        m_vkCreateInfo = {};
+        m_vkCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
+        m_vkCreateInfo.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
+        m_vkCreateInfo.pSampleMask = nullptr;
+    }
 }

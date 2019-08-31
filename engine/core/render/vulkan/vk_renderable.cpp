@@ -61,7 +61,7 @@ namespace Echo
             pipelineInfo.pViewportState = vkFrameBuffer->getVkViewportStateCreateInfo();
             pipelineInfo.pDepthStencilState = getVkDepthStencilStateCrateInfo();
             pipelineInfo.pRasterizationState = getVkRasterizationStateCreateInfo();
-            pipelineInfo.pMultisampleState = m_multiSampleState ? nullptr : nullptr;
+            pipelineInfo.pMultisampleState = getVkMultiSampleStateCreateInfo();
             pipelineInfo.pColorBlendState = getVkColorBlendStateCreateInfo();
             pipelineInfo.pDynamicState = &dynamicState;
             if (VK_SUCCESS != vkCreateGraphicsPipelines(VKRenderer::instance()->getVkDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_vkPipeline))
@@ -151,8 +151,7 @@ namespace Echo
 
     const VkPipelineMultisampleStateCreateInfo* VKRenderable::getVkMultiSampleStateCreateInfo()
     {
-        //VKSamplerState* vkState = ECHO_DOWN_CAST<VKSamplerState*>(m_blendState ? m_blendState : m_shaderProgram->getSa());
-        //return vkState->getVkCreateInfo();
-        return nullptr;
+        VKMultisampleState* vkState = ECHO_DOWN_CAST<VKMultisampleState*>(m_multiSampleState ? m_multiSampleState : m_shaderProgram->getMultisampleState());
+        return vkState->getVkCreateInfo();
     }
 }

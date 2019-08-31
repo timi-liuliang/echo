@@ -103,6 +103,7 @@ namespace Echo
 		virtual RasterizerState* createRasterizerState(const RasterizerState::RasterizerDesc& desc) = 0;
 		virtual DepthStencilState* createDepthStencilState(const DepthStencilState::DepthStencilDesc& desc) = 0;
 		virtual BlendState*	createBlendState(const BlendState::BlendDesc& desc) = 0;
+        virtual MultisampleState* createMultisampleState() = 0;
 		virtual const SamplerState*	getSamplerState(const SamplerState::SamplerDesc& desc) = 0;
 
 		// renderable operate

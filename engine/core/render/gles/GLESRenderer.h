@@ -79,10 +79,11 @@ namespace Echo
 		Shader*	createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const char* srcBuffer, ui32 size);
 
 		// states
-		RasterizerState* createRasterizerState(const RasterizerState::RasterizerDesc& desc);
-		DepthStencilState* createDepthStencilState(const DepthStencilState::DepthStencilDesc& desc);
-		BlendState*	createBlendState(const BlendState::BlendDesc& desc);
-		const SamplerState*	getSamplerState(const SamplerState::SamplerDesc& desc);
+		virtual RasterizerState* createRasterizerState(const RasterizerState::RasterizerDesc& desc) override;
+		virtual DepthStencilState* createDepthStencilState(const DepthStencilState::DepthStencilDesc& desc) override;
+		virtual BlendState*	createBlendState(const BlendState::BlendDesc& desc) override;
+        virtual MultisampleState* createMultisampleState() override { return nullptr; }
+		const SamplerState*	getSamplerState(const SamplerState::SamplerDesc& desc) override;
 	
 		// frame buffer
         virtual RenderView*  createRenderView(ui32 width, ui32 height, PixelFormat pixelFormat) override;
