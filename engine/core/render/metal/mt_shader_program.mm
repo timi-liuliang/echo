@@ -76,7 +76,7 @@ namespace Echo
             desc.m_shader = shaderType;
             desc.m_type = MTMapping::MapUniformType( arrayInfo ? arrayInfo.dataType : member.dataType);
             desc.m_count = arrayInfo ? arrayInfo.arrayLength : 1;
-            desc.m_sizeInBytes = desc.m_count * getUniformByteSizeByUniformType(desc.m_type);
+            desc.m_sizeInBytes = desc.m_count * MapUniformTypeSize(desc.m_type);
             desc.m_location = member.offset;
             m_uniforms[desc.m_name] = desc;
         }

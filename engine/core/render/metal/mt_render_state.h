@@ -7,8 +7,7 @@ namespace Echo
 	class MTBlendState : public BlendState
 	{
 	public:
-        MTBlendState() {}
-        MTBlendState(const BlendDesc &desc){}
+        MTBlendState(const BlendDesc &desc);
         virtual ~MTBlendState(){}
 
         void active(){}
@@ -27,8 +26,7 @@ namespace Echo
 	class MTRasterizerState : public RasterizerState
 	{
 	public:
-        MTRasterizerState(){}
-        MTRasterizerState(const RasterizerDesc& desc){}
+        MTRasterizerState(const RasterizerDesc& desc);
         virtual ~MTRasterizerState(){}
 
         void active() {}
@@ -37,8 +35,7 @@ namespace Echo
 	class MTSamplerState : public SamplerState
 	{
 	public:
-        MTSamplerState(){}
-        MTSamplerState(const SamplerDesc& desc) {}
+        MTSamplerState(const SamplerDesc& desc);
         virtual ~MTSamplerState() {}
 
         void active(const SamplerState* pre) const{}

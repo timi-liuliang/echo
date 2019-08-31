@@ -38,6 +38,7 @@ namespace Echo
         virtual RasterizerState* createRasterizerState(const RasterizerState::RasterizerDesc& desc) override;
         virtual DepthStencilState* createDepthStencilState(const DepthStencilState::DepthStencilDesc& desc)override;
         virtual BlendState* createBlendState(const BlendState::BlendDesc& desc) override;
+        virtual MultisampleState* createMultisampleState() override { return nullptr; }
         virtual const SamplerState* getSamplerState(const SamplerState::SamplerDesc& desc) override;
         
         // create shaders

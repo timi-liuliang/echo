@@ -34,10 +34,10 @@ namespace Echo
     bool MTRenderer::initialize(const Config& config)
     {
         // new frame buffer window
-        m_framebufferWindow = EchoNew(MTFrameBufferWindow(config.screenWidth, config.screenHeight, (void*)config.windowHandle));
+        m_framebufferWindow = EchoNew(MTFrameBufferWindow(config.m_windowWidth, config.m_windowHeight, (void*)config.m_windowHandle));
 
         // set view port
-        onSize( config.screenWidth, config.screenHeight);
+        onSize( config.m_windowWidth, config.m_windowHeight);
 
         return true;
     }
@@ -78,7 +78,7 @@ namespace Echo
 
     RasterizerState* MTRenderer::createRasterizerState(const RasterizerState::RasterizerDesc& desc)
     {
-        return EchoNew(MTRasterizerState);
+        return EchoNew(MTRasterizerState(desc));
     }
 
     DepthStencilState* MTRenderer::createDepthStencilState(const DepthStencilState::DepthStencilDesc& desc)
@@ -89,12 +89,12 @@ namespace Echo
 
     BlendState* MTRenderer::createBlendState(const BlendState::BlendDesc& desc)
     {
-        return EchoNew(MTBlendState);
+        return EchoNew(MTBlendState(desc));
     }
 
     const SamplerState* MTRenderer::getSamplerState(const SamplerState::SamplerDesc& desc)
     {
-        return EchoNew(MTSamplerState);
+        return EchoNew(MTSamplerState(desc));
     }
 
     RenderView* MTRenderer::createRenderView(ui32 width, ui32 height, PixelFormat pixelFormat)
