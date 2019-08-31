@@ -104,6 +104,7 @@ namespace Echo
         {
             VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
             vkDestroyBuffer(vkRenderer->getVkDevice(), m_vkBuffer, nullptr);
+            vkFreeMemory(vkRenderer->getVkDevice(), m_vkBufferMemory, nullptr);
             m_vkBuffer = nullptr;
         }
 

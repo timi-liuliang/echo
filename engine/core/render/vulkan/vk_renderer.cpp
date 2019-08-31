@@ -335,6 +335,7 @@ namespace Echo
         VKRenderable* vkRenderable = ECHO_DOWN_CAST<VKRenderable*>(renderable);
         if (vkRenderable->getVkPipeline())
         {
+            ShaderProgram* shaderProgram = renderable->getShader();
             VKFramebuffer* vkFramebuffer = VKFramebuffer::current();
             VkCommandBuffer vkCommandbuffer = vkFramebuffer->getVkCommandbuffer();
 

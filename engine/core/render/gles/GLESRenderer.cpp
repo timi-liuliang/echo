@@ -223,13 +223,12 @@ namespace Echo
 	{
 		GLES2Renderable* glesRenderable = (GLES2Renderable*)renderable;
 
-		ShaderProgram* shaderProgram = renderable->getShader();
+        GLES2ShaderProgram* shaderProgram = ECHO_DOWN_CAST<GLES2ShaderProgram*>(renderable->getShader());
 		shaderProgram->bind();
 		glesRenderable->bindRenderState();
 		glesRenderable->bindShaderParams();
 		shaderProgram->bindUniforms();
 		shaderProgram->bindRenderable(renderable);
-
 
 		Mesh* mesh = renderable->getMesh();
 

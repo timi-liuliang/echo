@@ -25,14 +25,14 @@ namespace Echo
             {
                 NSString* nsError = [NSString stringWithFormat:@"%@", compileError];
                 EchoLogError("%s", [nsError UTF8String]);
-                
+
                 return false;
             }
         }
-        
+
         return false;
     }
-    
+
     // create shader library
     // https://fuchsia.googlesource.com/third_party/glfw/+/70297aeb493541072545760c379dd170ba54acbb/examples/metal.m
     bool MTShaderProgram::createShaderProgram(const String& vsContent, const String& psContent)
@@ -40,29 +40,29 @@ namespace Echo
         bool isCreateVSSucceed = createShader(vsContent, m_metalVertexLibrary, m_metalVertexShader);
         bool isCreatePSSucceed = createShader(psContent, m_metalFragmentLibrary, m_metalFragmentShader);
         m_isValid = isCreateVSSucceed && isCreatePSSucceed;
-        
+
         return m_isValid;
     }
-    
+
     // reference https://github.com/bkaradzic/bgfx/issues/960
     void MTShaderProgram::parseUniforms(MTLRenderPipelineReflection* reflection)
     {
         if(reflection)
         {
             m_uniforms.clear();
-            
+
             // vertex arguments
             for(i32 i=0; i<reflection.vertexArguments.count; i++)
                 addUniform(reflection.vertexArguments[i], ShaderType::VS);
-            
+
             // fragment arguments
             for(i32 i=0; i<reflection.fragmentArguments.count; i++)
                 addUniform( reflection.fragmentArguments[i], ShaderType::FS);
-            
+
             allocUniformBytes();
         }
     }
-    
+
     void MTShaderProgram::addUniform(MTLArgument* arg, ShaderType shaderType)
     {
         MTLStructType* structType = arg.bufferStructType;
@@ -81,12 +81,12 @@ namespace Echo
             m_uniforms[desc.m_name] = desc;
         }
     }
-    
+
     void MTShaderProgram::allocUniformBytes()
     {
         m_vertexShaderUniformBytes.clear();
         m_fragmentShaderUniformBytes.clear();
-        
+
         for(auto& it : m_uniforms)
         {
             const Uniform& uniform = it.second;
@@ -98,7 +98,7 @@ namespace Echo
             }
         }
     }
-    
+
     void MTShaderProgram::bindUniforms()
     {
         // organize uniform bytes
@@ -114,11 +114,11 @@ namespace Echo
                 }
                 else
                 {
-                    
+
                 }
             }
         }
-        
+
         // set uniforms
         MTRenderer* render = ECHO_DOWN_CAST<MTRenderer*>(Renderer::instance());
         if(render)
@@ -126,14 +126,9 @@ namespace Echo
             id<MTLRenderCommandEncoder> commandEncoder = render->getMetalRenderCommandEncoder();
             if(m_vertexShaderUniformBytes.size())
                 [commandEncoder setVertexBytes:m_vertexShaderUniformBytes.data() length:m_vertexShaderUniformBytes.size() atIndex:0];
-            
+
             if(m_fragmentShaderUniformBytes.size())
                 [commandEncoder setFragmentBytes:m_fragmentShaderUniformBytes.data() length:m_fragmentShaderUniformBytes.size() atIndex:0];
         }
-    }
-    
-    void MTShaderProgram::bindRenderable(Renderable* renderable)
-    {
-        
     }
 }

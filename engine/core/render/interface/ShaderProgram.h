@@ -19,10 +19,10 @@ namespace Echo
         SPT_VEC4,
         SPT_MAT4,
         SPT_TEXTURE,
-        
+
         SPT_MAX
     };
-    
+
 	class Renderer;
 	class Renderable;
 	class ShaderProgram : public Res
@@ -50,18 +50,18 @@ namespace Echo
             int                 m_location = -1;
             Byte*               m_value = nullptr;
             bool                m_isDirty = true;
-            
-            Uniform() {}       
+
+            Uniform() {}
             ~Uniform() { ECHO_FREE(m_value); }
-            
+
             // reset
             void resetValue() { m_isDirty = true; }
-            
+
             // set value
 			void setValue(const void* value);
         };
         typedef std::map<String, Uniform> UniformArray;
-        
+
         // UniformValue
 		struct UniformValue
 		{
@@ -106,11 +106,11 @@ namespace Echo
 
 		// clear
 		void clear();
-        
-    public:   
+
+    public:
         // set uniform
         void setUniform(const char* name, const void* value, ShaderParamType uniformType, ui32 count);
-        
+
         // uniform operate
         UniformArray* getUniforms(){ return &m_uniforms; }
 
@@ -118,16 +118,13 @@ namespace Echo
 		virtual void bindUniforms() {}
 		virtual void unbind() {}
 
-		// bind renderable
-		virtual void bindRenderable(Renderable* renderable) {}
-
 		// ByteSize
 		static int MapUniformTypeSize(ShaderParamType uniformType);
 
 	public:
         // create
         static Res* create();
-        
+
 		// load
 		static Res* load(const ResourcePath& path);
 

@@ -19,7 +19,6 @@ namespace Echo
 
         // bind
         virtual void bindUniforms() override;
-        virtual void bindRenderable(Renderable* renderable) override;
 
     public:
         // get shader stage create info
@@ -63,8 +62,11 @@ namespace Echo
         vector<Byte>::type              m_vertexShaderUniformBytes;
         vector<Byte>::type              m_fragmentShaderUniformBytes;
         VKBuffer*                       m_vkVertexShaderUniformBuffer = nullptr;
+        VkDescriptorBufferInfo          m_vkVertexShaderUniformBufferDescriptor;
         VKBuffer*                       m_vkFragmentShaderUniformBuffer = nullptr;
+        VkDescriptorBufferInfo          m_vkFragmentShaderUniformBufferDescriptor;
         VkDescriptorSetLayout           m_vkDescriptorSetLayout;
+        VkDescriptorSet                 m_vkDescriptorSet;
         VkPipelineLayout                m_vkPipelineLayout;
 	};
 }

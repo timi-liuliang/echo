@@ -202,11 +202,9 @@ namespace Echo
     {
         // update uniform VkBuffer by memory
         updateVkUniformBuffer();
-    }
 
-    void VKShaderProgram::bindRenderable(Renderable* renderable)
-    {
-
+        // Bind descriptor sets describing shader binding points
+        //vkCmdBindDescriptorSets(vkCommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_vkPipelineLayout, 0, 1, &m_vkDescriptorSet, 0, nullptr);
     }
 
     const spirv_cross::ShaderResources VKShaderProgram::getSpirvShaderResources(ShaderType type)

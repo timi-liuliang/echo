@@ -13,29 +13,28 @@ namespace Echo
     public:
         // is valid
         bool isValid() { return m_isValid; }
-        
+
         // get mtl function
         id<MTLFunction> getMetalVertexFunction() { return m_metalVertexShader; }
         id<MTLFunction> getMetalFragmentFunction() { return m_metalFragmentShader; }
-        
+
         // bind
         virtual void bindUniforms() override;
-        virtual void bindRenderable(Renderable* renderable) override;
-        
+
     public:
         // parse uniforms
         void parseUniforms(MTLRenderPipelineReflection* reflection);
-        
+
     private:
         // create shader library
         virtual bool createShaderProgram(const String& vsContent, const String& psContent) override;
-        
+
         // add uniform
         void addUniform(MTLArgument* arg, ShaderType shaderType);
-        
+
         // alloc uniform bytes
         void allocUniformBytes();
-        
+
     private:
         bool                m_isValid = false;
         id<MTLLibrary>      m_metalVertexLibrary = nullptr;

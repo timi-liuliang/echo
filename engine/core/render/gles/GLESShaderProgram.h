@@ -34,7 +34,7 @@ namespace Echo
 		virtual void unbind() override;
 
 		// bind Renderable
-		virtual void bindRenderable(Renderable* renderable) override;
+		void bindRenderable(Renderable* renderable);
 
 		// get attribute location
 		i32 getAtrribLocation(VertexSemantic vertexSemantic);
