@@ -7,39 +7,30 @@ SET(MODULE_NAME engine)
 SET(MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 
 # set include files
-SET(INCLUDE_FILES
-	${ECHO_ROOT_PATH}
-	${ECHO_ROOT_PATH}/engine
-	${ECHO_ROOT_PATH}/engine/core/render
-	${ECHO_ROOT_PATH}/engine/core/render/render
-	${ECHO_ROOT_PATH}/engine/core/render/gles
-	${ECHO_ROOT_PATH}/engine/core/render/gles/RenderTask
-	${ECHO_ROOT_PATH}/engine/core/render/gles/GPUProxy
-	${ECHO_ROOT_PATH}/engine/core/render/gles/Android
-	${ECHO_ROOT_PATH}/engine/core/script/lua
-	${ECHO_ROOT_PATH}/thirdparty/
-	${ECHO_ROOT_PATH}/thirdparty/spine/
-	${ECHO_SRC_PATH}/ThirdParty/FreeImage
-	${ECHO_ROOT_PATH}/ThirdParty/Recast/Recast
-	${ECHO_ROOT_PATH}/ThirdParty/Recast/Detour
-	${ECHO_ROOT_PATH}/ThirdParty/Recast/DetourCrowd
-	${ECHO_ROOT_PATH}/ThirdParty/Recast/DetourTileCache
-	${ECHO_ROOT_PATH}/thirdparty/opengles/mali/include
-	${ECHO_ROOT_PATH}/thirdparty/physx/physx/include
-	${ECHO_ROOT_PATH}/thirdparty/physx/pxshared/include
-	${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/Core/include
-    ${ECHO_ROOT_PATH}/thirdparty/freetype-2.10.0/include
-    ${ECHO_ROOT_PATH}/thirdparty/radeonrays/RadeonRays/include
-)
+INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH})
+INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/engine)
+INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/engine/core/render)
+INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/engine/core/render/render)
+INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/engine/core/render/gles)
+INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/engine/core/script/lua)
+INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/)
+INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/spine/)
+INCLUDE_DIRECTORIES(${ECHO_SRC_PATH}/ThirdParty/FreeImage)
+INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/ThirdParty/Recast/Recast)
+INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/ThirdParty/Recast/Detour)
+INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/ThirdParty/Recast/DetourCrowd)
+INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/ThirdParty/Recast/DetourTileCache)
+INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/opengles/mali/include)
+INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/physx/physx/include)
+INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/physx/pxshared/include)
+INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/Core/include)
+INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/freetype-2.10.0/include)
+INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/radeonrays/RadeonRays/include)
+
 
 IF(${ECHO_PLATFORM_WIN32})
-	LIST(APPEND INCLUDE_FILES ${ECHO_ROOT_PATH}/thirdparty/openal-1.1/windows/include)
-ENDIF()
-
-INCLUDE_DIRECTORIES(${INCLUDE_FILES})
-
-IF(${ECHO_PLATFORM_WIN32})
-	INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/vulkan/windows/src/vulkan/include)
+	INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/openal-1.1/windows/include)
+    INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/vulkan-1.1.114.0/windows/x64/include)
 ENDIF()
 
 # Configure FILE

@@ -258,7 +258,7 @@ ENDMACRO(APPEND_FILES)
 # config vulkan
 OPTION(VULKAN "is support vulkan" TRUE)
 IF(VULKAN)
-	INCLUDE(thirdparty/cmake-vulkan-sdk.txt)
+	#INCLUDE(thirdparty/cmake-vulkan-sdk.txt)
 ENDIF(VULKAN)
 
 
