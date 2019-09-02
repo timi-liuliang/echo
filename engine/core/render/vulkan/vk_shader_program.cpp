@@ -100,6 +100,13 @@ namespace Echo
         m_vkFragmentShaderUniformBuffer = EchoNew(VKBuffer(GPUBuffer::GPUBufferType::GBT_UNIFORM, GPUBuffer::GBU_DYNAMIC, fragmentUniformBuffer));
     }
 
+    void VKShaderProgram::setVkDescriptorSet()
+    {
+        VkDescriptorSetAllocateInfo allocInfo = {};
+        allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+        //allocInfo.descriptorPool = descriptor
+    }
+
     void VKShaderProgram::createVkDescriptorAndPipelineLayouts()
     {
         VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
@@ -204,7 +211,7 @@ namespace Echo
         updateVkUniformBuffer();
 
         // Bind descriptor sets describing shader binding points
-        //vkCmdBindDescriptorSets(vkCommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_vkPipelineLayout, 0, 1, &m_vkDescriptorSet, 0, nullptr);
+        vkCmdBindDescriptorSets(VKFramebuffer::current()->getVkCommandbuffer(), VK_PIPELINE_BIND_POINT_GRAPHICS, m_vkPipelineLayout, 0, 1, &m_vkDescriptorSet, 0, nullptr);
     }
 
     const spirv_cross::ShaderResources VKShaderProgram::getSpirvShaderResources(ShaderType type)

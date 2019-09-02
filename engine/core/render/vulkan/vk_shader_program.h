@@ -40,6 +40,9 @@ namespace Echo
         // create uniform buffer
         void updateVkUniformBuffer();
 
+        // setup descriptor set
+        void setVkDescriptorSet();
+
         // create descriptor and pipeline layouts
         void createVkDescriptorAndPipelineLayouts();
 
