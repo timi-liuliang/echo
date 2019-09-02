@@ -14,6 +14,7 @@ namespace Echo
 
         // bind shader uniforms
         void bindShaderParams();
+        void bindGeometry();
 
     public:
         // get vk pipeline

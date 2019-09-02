@@ -14,6 +14,9 @@ namespace Echo
         bool updateData(const Buffer& buff);
         void bindBuffer();
 
+        // get vk buffer
+        VkBuffer getVkBuffer() { return m_vkBuffer; }
+
     private:
         // create
         bool create(ui32 sizeInBytes);

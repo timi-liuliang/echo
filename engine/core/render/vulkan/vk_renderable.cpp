@@ -133,6 +133,23 @@ namespace Echo
         m_shaderProgram->bindUniforms();
     }
 
+    void VKRenderable::bindGeometry()
+    {
+        VKBuffer* vertexBuffer = ECHO_DOWN_CAST<VKBuffer*>(m_mesh->getVertexBuffer());
+        if (vertexBuffer)
+        {
+            VkDeviceSize offsets[1] = { 0 };
+            VkBuffer vkBuffer = vertexBuffer->getVkBuffer();
+            vkCmdBindVertexBuffers(VKFramebuffer::current()->getVkCommandbuffer(), 0, 1, &vkBuffer, offsets);
+        }
+
+        VKBuffer* indexBuffer = ECHO_DOWN_CAST<VKBuffer*>(m_mesh->getIndexBuffer());
+        if (indexBuffer)
+        {
+            vkCmdBindIndexBuffer(VKFramebuffer::current()->getVkCommandbuffer(), indexBuffer->getVkBuffer(), 0, VK_INDEX_TYPE_UINT32);
+        }
+    }
+
     const VkPipelineColorBlendStateCreateInfo* VKRenderable::getVkColorBlendStateCreateInfo()
     {
         VKBlendState* vkState = ECHO_DOWN_CAST<VKBlendState*>(m_blendState ? m_blendState : m_shaderProgram->getBlendState());

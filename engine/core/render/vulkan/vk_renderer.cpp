@@ -367,6 +367,7 @@ namespace Echo
 
             vkRenderable->bindRenderState();
             vkRenderable->bindShaderParams();
+            vkRenderable->bindGeometry();
 
             vkCmdBindPipeline(vkCommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkRenderable->getVkPipeline());
 
