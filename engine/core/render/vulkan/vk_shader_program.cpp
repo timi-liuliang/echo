@@ -9,20 +9,20 @@ namespace Echo
 	{
         if (!spirv.empty())
         {
-VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
+            VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
 
-VkShaderModuleCreateInfo createInfo;
-createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-createInfo.pNext = nullptr;
-createInfo.flags = 0;
-createInfo.codeSize = spirv.size() * sizeof(ui32);
-createInfo.pCode = spirv.data();
+            VkShaderModuleCreateInfo createInfo;
+            createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+            createInfo.pNext = nullptr;
+            createInfo.flags = 0;
+            createInfo.codeSize = spirv.size() * sizeof(ui32);
+            createInfo.pCode = spirv.data();
 
-// reflect
-shaderCompiler = EchoNew(spirv_cross::Compiler(spirv));
+            // reflect
+            shaderCompiler = EchoNew(spirv_cross::Compiler(spirv));
 
-if (VK_SUCCESS == vkCreateShaderModule(vkRenderer->getVkDevice(), &createInfo, nullptr, &vkShader))
-return true;
+            if (VK_SUCCESS == vkCreateShaderModule(vkRenderer->getVkDevice(), &createInfo, nullptr, &vkShader))
+                return true;
         }
 
         EchoLogError("Vulkan create shader failed");
@@ -60,8 +60,12 @@ return true;
             m_vkShaderStagesCreateInfo[1].module = m_vkFragmentShader;
             m_vkShaderStagesCreateInfo[1].pName = "main";
 
-            createVkDescriptorAndPipelineLayouts();
             parseUniforms();
+
+            createVkDescriptorSetLayout(ShaderType::VS);
+            createVkDescriptorSetLayout(ShaderType::FS);
+
+            createVkPipelineLayout();
         }
 
         return m_isLinked;
@@ -117,48 +121,39 @@ return true;
         allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
         allocInfo.descriptorPool = VKRenderer::instance()->getVkDescriptorPool();
         allocInfo.descriptorSetCount = 1;
-        allocInfo.pSetLayouts = &m_vkDescriptorSetLayout;
+        allocInfo.pSetLayouts = m_vkDescriptorSetLayouts.data();
 
         if (VK_SUCCESS != vkAllocateDescriptorSets(VKRenderer::instance()->getVkDevice(), &allocInfo, &m_vkDescriptorSet))
         {
+            // Update the descriptor set determining the shader binding points
+            // For every binding point used in a shader there needs to be one
+            // descriptor set matching that binding point
+            VkWriteDescriptorSet writeDescriptorSet = {};
+
+            // Binding 0 : Uniform buffer
+            writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            writeDescriptorSet.dstSet = m_vkDescriptorSet;
+            writeDescriptorSet.descriptorCount = 1;
+            writeDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+            writeDescriptorSet.pBufferInfo = m_vkShaderUniformBufferDescriptor.data();
+            writeDescriptorSet.dstBinding = 0;
+
+            vkUpdateDescriptorSets(VKRenderer::instance()->getVkDevice(), 1, &writeDescriptorSet, 0, nullptr);
+        }
+        else
+        {
             EchoLogError("vulkan set descriptor set failed.");
         }
-
-        // Update the descriptor set determining the shader binding points
-        // For every binding point used in a shader there needs to be one
-        // descriptor set matching that binding point
-        VkWriteDescriptorSet writeDescriptorSet = {};
-
-        // Binding 0 : Uniform buffer
-        writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-        writeDescriptorSet.dstSet = m_vkDescriptorSet;
-        writeDescriptorSet.descriptorCount = 1;
-        writeDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        writeDescriptorSet.pBufferInfo = m_vkShaderUniformBufferDescriptor.data();
-        writeDescriptorSet.dstBinding = 0;
-
-        vkUpdateDescriptorSets(VKRenderer::instance()->getVkDevice(), 1, &writeDescriptorSet, 0, nullptr);
     }
 
-    void VKShaderProgram::createVkDescriptorAndPipelineLayouts()
+    void VKShaderProgram::createVkDescriptorSetLayout(ShaderType type)
     {
-        VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
-
-        VkDescriptorSetLayoutBinding layoutBindings[2];
-        layoutBindings[0].binding = 0;
-        layoutBindings[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        layoutBindings[0].descriptorCount = 1;
-        layoutBindings[0].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
-        layoutBindings[0].pImmutableSamplers = nullptr;
-
-        if (false /*use texture*/)
-        {
-            layoutBindings[1].binding = 1;
-            layoutBindings[1].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-            layoutBindings[1].descriptorCount = 1;
-            layoutBindings[1].stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-            layoutBindings[1].pImmutableSamplers = nullptr;
-        }
+        VkDescriptorSetLayoutBinding layoutBindings;
+        layoutBindings.binding = 0;
+        layoutBindings.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        layoutBindings.descriptorCount = 1;
+        layoutBindings.stageFlags = type == ShaderType::VS ? VK_SHADER_STAGE_VERTEX_BIT : VK_SHADER_STAGE_FRAGMENT_BIT;
+        layoutBindings.pImmutableSamplers = nullptr;
 
         // create a descriptor set layout based on layout bindings
         VkDescriptorSetLayoutCreateInfo dslCreateInfo = {};
@@ -166,23 +161,25 @@ return true;
         dslCreateInfo.pNext = nullptr;
         dslCreateInfo.flags = 0;
         dslCreateInfo.bindingCount = 1;
-        dslCreateInfo.pBindings = layoutBindings;
+        dslCreateInfo.pBindings = &layoutBindings;
 
-        if (VK_SUCCESS != vkCreateDescriptorSetLayout(vkRenderer->getVkDevice(), &dslCreateInfo, nullptr, &m_vkDescriptorSetLayout))
+        if (VK_SUCCESS != vkCreateDescriptorSetLayout(VKRenderer::instance()->getVkDevice(), &dslCreateInfo, nullptr, &m_vkDescriptorSetLayouts[type]))
         {
-            EchoLogError("create descriptor set layout.");
-            return;
+            EchoLogError("create descriptor set layout failed.");
         }
+    }
 
+    void VKShaderProgram::createVkPipelineLayout()
+    {
         VkPipelineLayoutCreateInfo plCreateInfo = {};
         plCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
         plCreateInfo.pNext = nullptr;
         plCreateInfo.pushConstantRangeCount = 0;
         plCreateInfo.pPushConstantRanges = nullptr;
-        plCreateInfo.setLayoutCount = 1;
-        plCreateInfo.pSetLayouts = &m_vkDescriptorSetLayout;
+        plCreateInfo.setLayoutCount = m_vkDescriptorSetLayouts.size();
+        plCreateInfo.pSetLayouts = m_vkDescriptorSetLayouts.data();
 
-        if (VK_SUCCESS != vkCreatePipelineLayout(vkRenderer->getVkDevice(), &plCreateInfo, nullptr, &m_vkPipelineLayout))
+        if (VK_SUCCESS != vkCreatePipelineLayout(VKRenderer::instance()->getVkDevice(), &plCreateInfo, nullptr, &m_vkPipelineLayout))
         {
             EchoLogError("vulkan create pipeline layout failed");
         }

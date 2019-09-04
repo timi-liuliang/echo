@@ -43,8 +43,11 @@ namespace Echo
         // setup descriptor set
         void setVkDescriptorSet();
 
+        // create vk descriptor set layout
+        void createVkDescriptorSetLayout(ShaderType type);
+
         // create descriptor and pipeline layouts
-        void createVkDescriptorAndPipelineLayouts();
+        void createVkPipelineLayout();
 
         // add uniform
         void addUniform(spirv_cross::Resource& resource, ShaderType shaderType);
@@ -67,8 +70,8 @@ namespace Echo
         VKBuffer*                       m_vkVertexShaderUniformBuffer = nullptr;
         VKBuffer*                       m_vkFragmentShaderUniformBuffer = nullptr;
         array<VkDescriptorBufferInfo, 2>m_vkShaderUniformBufferDescriptor;
-        VkDescriptorSetLayout           m_vkDescriptorSetLayout;
-        VkDescriptorSet                 m_vkDescriptorSet;
-        VkPipelineLayout                m_vkPipelineLayout;
+        array<VkDescriptorSetLayout, 2> m_vkDescriptorSetLayouts = {};
+        VkDescriptorSet                 m_vkDescriptorSet = VK_NULL_HANDLE;
+        VkPipelineLayout                m_vkPipelineLayout = VK_NULL_HANDLE;
 	};
 }
