@@ -13,10 +13,12 @@ namespace Echo
     {
         createVkCommandBuffer();
         createVkRenderPass();
+        createVkDescriptorPool();
     }
 
     VKFramebuffer::~VKFramebuffer()
     {
+        vkDestroyDescriptorPool(VKRenderer::instance()->getVkDevice(), m_vkDescriptorPool, nullptr);
     }
 
     VKFramebuffer* VKFramebuffer::current()
@@ -168,6 +170,30 @@ namespace Echo
         }
     }
 
+    void VKFramebuffer::createVkDescriptorPool()
+    {
+        array<VkDescriptorPoolSize, 1> typeCounts;
+        typeCounts[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        typeCounts[0].descriptorCount = 512;
+
+        // For additional type you need to add new entries in the type count list
+        //typeCounts[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+        //typeCounts[1].descriptorCount = 2;
+
+        // Create the global descriptor pool
+        VkDescriptorPoolCreateInfo descriptorPoolInfo = {};
+        descriptorPoolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+        descriptorPoolInfo.pNext = nullptr;
+        descriptorPoolInfo.poolSizeCount = typeCounts.size();
+        descriptorPoolInfo.pPoolSizes = typeCounts.data();
+        descriptorPoolInfo.maxSets = 512;
+
+        if (VK_SUCCESS != vkCreateDescriptorPool(VKRenderer::instance()->getVkDevice(), &descriptorPoolInfo, nullptr, &m_vkDescriptorPool))
+        {
+            EchoLogError("vulkan renderer setup descriptor pool failed.");
+        }
+    }
+
     void VKFramebuffer::submitCommandBuffer()
     {
         vkEndCommandBuffer(m_vkCommandBuffer);
@@ -222,6 +248,8 @@ namespace Echo
         vkGetDeviceQueue(VKRenderer::instance()->getVkDevice(), VKRenderer::instance()->getPresentQueueFamilyIndex(m_vkWindowSurface), 0, &m_vkPresentQueue);
 
         onSize(width, height);
+
+        g_current = this;
     }
 
     VKFramebufferWindow::~VKFramebufferWindow()

@@ -37,11 +37,12 @@ namespace Echo
 		// create shader library
 		virtual bool createShaderProgram(const String& vsContent, const String& psContent) override;
 
-        // create uniform buffer
+        // create|update uniform buffer
+        void createVkUniformBuffer();
         void updateVkUniformBuffer();
 
         // setup descriptor set
-        void setVkDescriptorSet();
+        void createVkDescriptorSet();
 
         // create vk descriptor set layout
         void createVkDescriptorSetLayout(ShaderType type);
@@ -56,7 +57,7 @@ namespace Echo
         void allocUniformBytes();
 
         // parse uniforms
-        void parseUniforms();
+        bool parseUniforms();
 
 	private:
 		bool			                m_isLinked = false;
@@ -69,9 +70,9 @@ namespace Echo
         vector<Byte>::type              m_fragmentShaderUniformBytes;
         VKBuffer*                       m_vkVertexShaderUniformBuffer = nullptr;
         VKBuffer*                       m_vkFragmentShaderUniformBuffer = nullptr;
-        array<VkDescriptorBufferInfo, 2>m_vkShaderUniformBufferDescriptor;
+        array<VkDescriptorBufferInfo, 2>m_vkShaderUniformBufferDescriptors;
         array<VkDescriptorSetLayout, 2> m_vkDescriptorSetLayouts = {};
-        VkDescriptorSet                 m_vkDescriptorSet = VK_NULL_HANDLE;
+        array<VkDescriptorSet, 2>       m_vkDescriptorSets = {};
         VkPipelineLayout                m_vkPipelineLayout = VK_NULL_HANDLE;
 	};
 }

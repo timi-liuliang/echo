@@ -37,6 +37,9 @@ namespace Echo
         // get vk command buffer
         VkCommandBuffer getVkCommandbuffer() { return m_vkCommandBuffer; }
 
+        // get vk descriptor pool
+        VkDescriptorPool getVkDescriptorPool() { return m_vkDescriptorPool; }
+
     protected:
         // clear color image
         virtual VkImage getVkColorImage() { return nullptr; }
@@ -47,6 +50,9 @@ namespace Echo
 
         // create vk frame buffer
         void createVkFramebuffer();
+
+        // create vk descriptor pool
+        void createVkDescriptorPool();
 
         // vk command buffer
         void createVkCommandBuffer();
@@ -59,6 +65,7 @@ namespace Echo
         VkViewport                          m_vkViewport;
         VkPipelineViewportStateCreateInfo   m_vkViewportStateCreateInfo;
         VkCommandBuffer                     m_vkCommandBuffer = nullptr;
+        VkDescriptorPool                    m_vkDescriptorPool = nullptr;
     };
 
     class VKFramebufferOffscreen : public VKFramebuffer

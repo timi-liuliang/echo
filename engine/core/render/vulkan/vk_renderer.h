@@ -112,9 +112,6 @@ namespace Echo
         // semaphore
         VkSemaphore getImageAvailableSemaphore() { return m_vkImageAvailableSemaphore; }
 
-        // get vk descriptor pool
-        VkDescriptorPool getVkDescriptorPool() { return m_vkDescriptorPool; }
-
 	private:
 		// create vk instance
 		void createVkInstance();
@@ -142,9 +139,6 @@ namespace Echo
         // create semaphores
         void createVkSemaphores();
 
-        // setup descriptor pool
-        void setupDescriptorPool();
-
     private:
         FrameBuffer*        m_framebufferWindow = nullptr;
 		Extensions			m_enabledExtensions;
@@ -156,7 +150,6 @@ namespace Echo
 		VKValidation		m_validation;
         VkQueue             m_vkGraphicsQueue;
 		VkCommandPool		m_vkCommandPool;
-        VkDescriptorPool    m_vkDescriptorPool = VK_NULL_HANDLE;
         VkSemaphore         m_vkImageAvailableSemaphore;
         VkSemaphore         m_vkRenderFinishedSemaphore;
 	};

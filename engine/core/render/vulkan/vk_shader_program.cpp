@@ -60,15 +60,42 @@ namespace Echo
             m_vkShaderStagesCreateInfo[1].module = m_vkFragmentShader;
             m_vkShaderStagesCreateInfo[1].pName = "main";
 
-            parseUniforms();
+            if (parseUniforms())
+            {
+                createVkUniformBuffer();
 
-            createVkDescriptorSetLayout(ShaderType::VS);
-            createVkDescriptorSetLayout(ShaderType::FS);
+                createVkDescriptorSetLayout(ShaderType::VS);
+                createVkDescriptorSetLayout(ShaderType::FS);
 
-            createVkPipelineLayout();
+                createVkDescriptorSet();
+
+                createVkPipelineLayout();
+            }
         }
 
         return m_isLinked;
+    }
+
+    void VKShaderProgram::createVkUniformBuffer()
+    {
+        // this is not good here, reuse VkBuffer afterwards
+        EchoSafeDelete(m_vkVertexShaderUniformBuffer, VKBuffer);
+        EchoSafeDelete(m_vkFragmentShaderUniformBuffer, VKBuffer);
+
+        Buffer vertUniformBuffer(m_vertexShaderUniformBytes.size(), m_vertexShaderUniformBytes.data(), false);
+        m_vkVertexShaderUniformBuffer = EchoNew(VKBuffer(GPUBuffer::GPUBufferType::GBT_UNIFORM, GPUBuffer::GBU_DYNAMIC, vertUniformBuffer));
+
+        Buffer fragmentUniformBuffer(m_fragmentShaderUniformBytes.size(), m_fragmentShaderUniformBytes.data(), false);
+        m_vkFragmentShaderUniformBuffer = EchoNew(VKBuffer(GPUBuffer::GPUBufferType::GBT_UNIFORM, GPUBuffer::GBU_DYNAMIC, fragmentUniformBuffer));
+
+        // Store information in the uniform's descriptor that is used by the descriptor set
+        m_vkShaderUniformBufferDescriptors[ShaderType::VS].buffer = m_vkVertexShaderUniformBuffer->getVkBuffer();
+        m_vkShaderUniformBufferDescriptors[ShaderType::VS].offset = 0;
+        m_vkShaderUniformBufferDescriptors[ShaderType::VS].range = m_vkVertexShaderUniformBuffer->getSize();
+
+        m_vkShaderUniformBufferDescriptors[ShaderType::FS].buffer = m_vkFragmentShaderUniformBuffer->getVkBuffer();
+        m_vkShaderUniformBufferDescriptors[ShaderType::FS].offset = 0;
+        m_vkShaderUniformBufferDescriptors[ShaderType::FS].range = m_vkFragmentShaderUniformBuffer->getSize();
     }
 
     void VKShaderProgram::updateVkUniformBuffer()
@@ -93,52 +120,40 @@ namespace Echo
             }
         }
 
-        // this is not good here, reuse VkBuffer afterwards
-        EchoSafeDelete(m_vkVertexShaderUniformBuffer, VKBuffer);
-        EchoSafeDelete(m_vkFragmentShaderUniformBuffer, VKBuffer);
-
         Buffer vertUniformBuffer(m_vertexShaderUniformBytes.size(), m_vertexShaderUniformBytes.data(), false);
-        m_vkVertexShaderUniformBuffer = EchoNew(VKBuffer(GPUBuffer::GPUBufferType::GBT_UNIFORM, GPUBuffer::GBU_DYNAMIC, vertUniformBuffer));
+        m_vkVertexShaderUniformBuffer->updateData(vertUniformBuffer);
 
         Buffer fragmentUniformBuffer(m_fragmentShaderUniformBytes.size(), m_fragmentShaderUniformBytes.data(), false);
-        m_vkFragmentShaderUniformBuffer = EchoNew(VKBuffer(GPUBuffer::GPUBufferType::GBT_UNIFORM, GPUBuffer::GBU_DYNAMIC, fragmentUniformBuffer));
-    
-        // Store information in the uniform's descriptor that is used by the descriptor set
-        m_vkShaderUniformBufferDescriptor[ShaderType::VS].buffer = m_vkVertexShaderUniformBuffer->getVkBuffer();
-        m_vkShaderUniformBufferDescriptor[ShaderType::VS].offset = 0;
-        m_vkShaderUniformBufferDescriptor[ShaderType::VS].range = m_vkVertexShaderUniformBuffer->getSize();
-
-        m_vkShaderUniformBufferDescriptor[ShaderType::FS].buffer = m_vkFragmentShaderUniformBuffer->getVkBuffer();
-        m_vkShaderUniformBufferDescriptor[ShaderType::FS].offset = 0;
-        m_vkShaderUniformBufferDescriptor[ShaderType::FS].range = m_vkFragmentShaderUniformBuffer->getSize();
-
-        setVkDescriptorSet();
+        m_vkFragmentShaderUniformBuffer->updateData( fragmentUniformBuffer);
     }
 
-    void VKShaderProgram::setVkDescriptorSet()
+    void VKShaderProgram::createVkDescriptorSet()
     {
         VkDescriptorSetAllocateInfo allocInfo = {};
         allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-        allocInfo.descriptorPool = VKRenderer::instance()->getVkDescriptorPool();
-        allocInfo.descriptorSetCount = 1;
+        allocInfo.descriptorPool = VKFramebuffer::current()->getVkDescriptorPool();
+        allocInfo.descriptorSetCount = m_vkDescriptorSetLayouts.size();
         allocInfo.pSetLayouts = m_vkDescriptorSetLayouts.data();
 
-        if (VK_SUCCESS != vkAllocateDescriptorSets(VKRenderer::instance()->getVkDevice(), &allocInfo, &m_vkDescriptorSet))
+        VkResult result = vkAllocateDescriptorSets(VKRenderer::instance()->getVkDevice(), &allocInfo, &m_vkDescriptorSets[0]);
+        if (VK_SUCCESS == result)
         {
             // Update the descriptor set determining the shader binding points
             // For every binding point used in a shader there needs to be one
             // descriptor set matching that binding point
-            VkWriteDescriptorSet writeDescriptorSet = {};
+            array<VkWriteDescriptorSet, 2> writeDescriptorSets = {};
+            for (size_t i = 0; i < writeDescriptorSets.size(); i++)
+            {
+                // Binding 0 : Uniform buffer
+                writeDescriptorSets[i].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                writeDescriptorSets[i].dstSet = m_vkDescriptorSets[i];
+                writeDescriptorSets[i].descriptorCount = 1;
+                writeDescriptorSets[i].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+                writeDescriptorSets[i].pBufferInfo = &m_vkShaderUniformBufferDescriptors[i];
+                writeDescriptorSets[i].dstBinding = 0;
+            }
 
-            // Binding 0 : Uniform buffer
-            writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-            writeDescriptorSet.dstSet = m_vkDescriptorSet;
-            writeDescriptorSet.descriptorCount = 1;
-            writeDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-            writeDescriptorSet.pBufferInfo = m_vkShaderUniformBufferDescriptor.data();
-            writeDescriptorSet.dstBinding = 0;
-
-            vkUpdateDescriptorSets(VKRenderer::instance()->getVkDevice(), 1, &writeDescriptorSet, 0, nullptr);
+            vkUpdateDescriptorSets(VKRenderer::instance()->getVkDevice(), writeDescriptorSets.size(), writeDescriptorSets.data(), 0, nullptr);
         }
         else
         {
@@ -185,7 +200,7 @@ namespace Echo
         }
     }
 
-    void VKShaderProgram::parseUniforms()
+    bool VKShaderProgram::parseUniforms()
     {
         m_uniforms.clear();
 
@@ -198,6 +213,8 @@ namespace Echo
             addUniform(resource, ShaderType::FS);
 
         allocUniformBytes();
+
+        return !m_uniforms.empty();
     }
 
     void VKShaderProgram::addUniform(spirv_cross::Resource& resource, ShaderType shaderType)
@@ -241,7 +258,7 @@ namespace Echo
         updateVkUniformBuffer();
 
         // Bind descriptor sets describing shader binding points
-        vkCmdBindDescriptorSets(VKFramebuffer::current()->getVkCommandbuffer(), VK_PIPELINE_BIND_POINT_GRAPHICS, m_vkPipelineLayout, 0, 1, &m_vkDescriptorSet, 0, nullptr);
+        vkCmdBindDescriptorSets(VKFramebuffer::current()->getVkCommandbuffer(), VK_PIPELINE_BIND_POINT_GRAPHICS, m_vkPipelineLayout, 0, m_vkDescriptorSets.size(), m_vkDescriptorSets.data(), 0, nullptr);
     }
 
     const spirv_cross::ShaderResources VKShaderProgram::getSpirvShaderResources(ShaderType type)
