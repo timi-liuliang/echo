@@ -198,10 +198,17 @@ namespace Echo
     {
         vkEndCommandBuffer(m_vkCommandBuffer);
 
+        VkSemaphore imageAvailableSemaphore = VKRenderer::instance()->getImageAvailableSemaphore();
+        VkSemaphore renderCompleteSemaphore = VKRenderer::instance()->getRenderFinishedSemaphore();
+
         VkSubmitInfo submitInfo = {};
         submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
         submitInfo.commandBufferCount = 1;
         submitInfo.pCommandBuffers = &m_vkCommandBuffer;
+        submitInfo.pWaitSemaphores = &imageAvailableSemaphore;							// Semaphore(s) to wait upon before the submitted command buffer starts executing
+        submitInfo.waitSemaphoreCount = 1;
+        submitInfo.pSignalSemaphores = &renderCompleteSemaphore;						// Semaphore(s) to be signaled when command buffers have completed
+        submitInfo.signalSemaphoreCount = 1;
 
         if (VK_SUCCESS != vkQueueSubmit(VKRenderer::instance()->getVkGraphicsQueue(), 1, &submitInfo, nullptr))
         {
@@ -312,14 +319,16 @@ namespace Echo
 
     void VKFramebufferWindow::present()
     {
+        VkSemaphore waitSemaphore = VKRenderer::instance()->getRenderFinishedSemaphore();
+
         VkPresentInfoKHR present;
         present.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
         present.pNext = nullptr;
         present.swapchainCount = 1;
         present.pSwapchains = &m_vkSwapChain;
         present.pImageIndices = &m_imageIndex;
-        present.pWaitSemaphores = nullptr;
-        present.waitSemaphoreCount = 0;
+        present.pWaitSemaphores = &waitSemaphore;
+        present.waitSemaphoreCount = 1;
         present.pResults = nullptr;
 
         if (VK_SUCCESS != vkQueuePresentKHR(m_vkPresentQueue, &present))

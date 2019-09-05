@@ -111,6 +111,7 @@ namespace Echo
 
         // semaphore
         VkSemaphore getImageAvailableSemaphore() { return m_vkImageAvailableSemaphore; }
+        VkSemaphore getRenderFinishedSemaphore() { return m_vkRenderFinishedSemaphore; }
 
 	private:
 		// create vk instance
