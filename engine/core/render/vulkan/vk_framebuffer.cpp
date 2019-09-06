@@ -194,28 +194,6 @@ namespace Echo
         }
     }
 
-    void VKFramebuffer::submitCommandBuffer()
-    {
-        vkEndCommandBuffer(m_vkCommandBuffer);
-
-        VkSemaphore imageAvailableSemaphore = VKRenderer::instance()->getImageAvailableSemaphore();
-        VkSemaphore renderCompleteSemaphore = VKRenderer::instance()->getRenderFinishedSemaphore();
-
-        VkSubmitInfo submitInfo = {};
-        submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-        submitInfo.commandBufferCount = 1;
-        submitInfo.pCommandBuffers = &m_vkCommandBuffer;
-        submitInfo.pWaitSemaphores = &imageAvailableSemaphore;							// Semaphore(s) to wait upon before the submitted command buffer starts executing
-        submitInfo.waitSemaphoreCount = 1;
-        submitInfo.pSignalSemaphores = &renderCompleteSemaphore;						// Semaphore(s) to be signaled when command buffers have completed
-        submitInfo.signalSemaphoreCount = 1;
-
-        if (VK_SUCCESS != vkQueueSubmit(VKRenderer::instance()->getVkGraphicsQueue(), 1, &submitInfo, nullptr))
-        {
-            EchoLogError("vulkan queue submit failed");
-        }
-    }
-
     VKFramebufferOffscreen::VKFramebufferOffscreen(ui32 id, ui32 width, ui32 height)
         : VKFramebuffer(id, width, height)
     {
@@ -246,6 +224,8 @@ namespace Echo
     VKFramebufferWindow::VKFramebufferWindow(ui32 width, ui32 height, void* handle)
         : VKFramebuffer(0, width, height)
     {
+        createVkSemaphores();
+
         createVkSurface(handle);
 
         createSwapChain(VKRenderer::instance()->getVkDevice());
@@ -262,13 +242,15 @@ namespace Echo
     VKFramebufferWindow::~VKFramebufferWindow()
     {
         vkDestroySurfaceKHR(VKRenderer::instance()->getVkInstance(), m_vkWindowSurface, nullptr);
+        vkDestroySemaphore(VKRenderer::instance()->getVkDevice(), m_vkRenderFinishedSemaphore, nullptr);
+        vkDestroySemaphore(VKRenderer::instance()->getVkDevice(), m_vkImageAvailableSemaphore, nullptr);
     }
 
     bool VKFramebufferWindow::begin(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue)
     {
         VKFramebuffer::begin(clearColor, backgroundColor, clearDepth, depthValue, clearStencil, stencilValue);
 
-        vkAcquireNextImageKHR(VKRenderer::instance()->getVkDevice(), m_vkSwapChain, Math::MAX_UI64, VKRenderer::instance()->getImageAvailableSemaphore(), VK_NULL_HANDLE, &m_imageIndex);
+        vkAcquireNextImageKHR(VKRenderer::instance()->getVkDevice(), m_vkSwapChain, Math::MAX_UI64, m_vkImageAvailableSemaphore, VK_NULL_HANDLE, &m_imageIndex);
 
 
 
@@ -287,6 +269,18 @@ namespace Echo
     void VKFramebufferWindow::onSize(ui32 width, ui32 height)
     {
         VKFramebuffer::onSize(width, height);
+    }
+
+    void VKFramebufferWindow::createVkSemaphores()
+    {
+        VkSemaphoreCreateInfo semaphoreCreateInfo = {};
+        semaphoreCreateInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+
+        if (vkCreateSemaphore(VKRenderer::instance()->getVkDevice(), &semaphoreCreateInfo, nullptr, &m_vkImageAvailableSemaphore) != VK_SUCCESS ||
+            vkCreateSemaphore(VKRenderer::instance()->getVkDevice(), &semaphoreCreateInfo, nullptr, &m_vkRenderFinishedSemaphore) != VK_SUCCESS)
+        {
+            EchoLogError("vulkan failed to create semaphores!");
+        }
     }
 
     void VKFramebufferWindow::createVkSurface(void* handle)
@@ -317,9 +311,27 @@ namespace Echo
 #endif
     }
 
+    void VKFramebufferWindow::submitCommandBuffer()
+    {
+        vkEndCommandBuffer(m_vkCommandBuffer);
+
+        VkSubmitInfo submitInfo = {};
+        submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+        submitInfo.commandBufferCount = 1;
+        submitInfo.pCommandBuffers = &m_vkCommandBuffer;
+        submitInfo.pWaitSemaphores = &m_vkImageAvailableSemaphore;							// Semaphore(s) to wait upon before the submitted command buffer starts executing
+        submitInfo.waitSemaphoreCount = 1;
+        submitInfo.pSignalSemaphores = &m_vkRenderFinishedSemaphore;						// Semaphore(s) to be signaled when command buffers have completed
+        submitInfo.signalSemaphoreCount = 1;
+
+        if (VK_SUCCESS != vkQueueSubmit(VKRenderer::instance()->getVkGraphicsQueue(), 1, &submitInfo, nullptr))
+        {
+            EchoLogError("vulkan queue submit failed");
+        }
+    }
+
     void VKFramebufferWindow::present()
     {
-        VkSemaphore waitSemaphore = VKRenderer::instance()->getRenderFinishedSemaphore();
 
         VkPresentInfoKHR present;
         present.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
@@ -327,7 +339,7 @@ namespace Echo
         present.swapchainCount = 1;
         present.pSwapchains = &m_vkSwapChain;
         present.pImageIndices = &m_imageIndex;
-        present.pWaitSemaphores = &waitSemaphore;
+        present.pWaitSemaphores = &m_vkRenderFinishedSemaphore;
         present.waitSemaphoreCount = 1;
         present.pResults = nullptr;
 

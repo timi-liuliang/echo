@@ -19,9 +19,6 @@ namespace Echo
 
     VKRenderer::~VKRenderer()
     {
-        vkDestroySemaphore(m_vkDevice, m_vkRenderFinishedSemaphore, nullptr);
-        vkDestroySemaphore(m_vkDevice, m_vkImageAvailableSemaphore, nullptr);
-
 		m_validation.cleanup();
 		vkDestroyDevice(m_vkDevice, nullptr);
 		vkDestroyInstance(m_vkInstance, nullptr);
@@ -43,8 +40,6 @@ namespace Echo
 		createVkLogicalDevice();
 
 		createVkCommandPool();
-
-        createVkSemaphores();
 
         // window frame buffer
         m_framebufferWindow = EchoNew(VKFramebufferWindow(config.m_windowWidth, config.m_windowHeight, (void*)config.m_windowHandle));
@@ -317,18 +312,6 @@ namespace Echo
 			EchoLogError("Vulkan create command pool failed");
 		}
 	}
-
-    void VKRenderer::createVkSemaphores()
-    {
-        VkSemaphoreCreateInfo semaphoreCreateInfo = {};
-        semaphoreCreateInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
-
-        if (vkCreateSemaphore(m_vkDevice, &semaphoreCreateInfo, nullptr, &m_vkImageAvailableSemaphore) != VK_SUCCESS ||
-            vkCreateSemaphore(m_vkDevice, &semaphoreCreateInfo, nullptr, &m_vkRenderFinishedSemaphore) != VK_SUCCESS)
-        {
-            EchoLogError("vulkan failed to create semaphores!");
-        }
-    }
 
     void VKRenderer::draw(Renderable* renderable)
     {

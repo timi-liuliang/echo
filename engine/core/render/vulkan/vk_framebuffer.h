@@ -56,7 +56,6 @@ namespace Echo
 
         // vk command buffer
         void createVkCommandBuffer();
-        void submitCommandBuffer();
 
     protected:
         VkRenderPass                        m_vkRenderPass;
@@ -96,6 +95,9 @@ namespace Echo
         virtual void onSize(ui32 width, ui32 height);
 
     private:
+        // create semaphores
+        void createVkSemaphores();
+
         // create swap chain
         void createSwapChain(VkDevice vkDevice);
 
@@ -111,11 +113,16 @@ namespace Echo
         // clear color image
         virtual VkImage getVkColorImage() { return m_vkSwapChainImages[m_imageIndex]; }
 
+        // submit command buffer
+        void submitCommandBuffer();
+
         // present
         void present();
 
     protected:
         ui32                        m_imageIndex = 0;
+        VkSemaphore                 m_vkImageAvailableSemaphore;
+        VkSemaphore                 m_vkRenderFinishedSemaphore;
         VkSurfaceKHR                m_vkWindowSurface;
         VkSwapchainKHR				m_vkSwapChain = VK_NULL_HANDLE;
         vector<VkImage>::type       m_vkSwapChainImages;

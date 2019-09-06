@@ -109,10 +109,6 @@ namespace Echo
         // get clear command buffer
         VkCommandPool getVkCommandPool() { return m_vkCommandPool; }
 
-        // semaphore
-        VkSemaphore getImageAvailableSemaphore() { return m_vkImageAvailableSemaphore; }
-        VkSemaphore getRenderFinishedSemaphore() { return m_vkRenderFinishedSemaphore; }
-
 	private:
 		// create vk instance
 		void createVkInstance();
@@ -137,9 +133,6 @@ namespace Echo
 		// create command pool
 		void createVkCommandPool();
 
-        // create semaphores
-        void createVkSemaphores();
-
     private:
         FrameBuffer*        m_framebufferWindow = nullptr;
 		Extensions			m_enabledExtensions;
@@ -151,7 +144,5 @@ namespace Echo
 		VKValidation		m_validation;
         VkQueue             m_vkGraphicsQueue;
 		VkCommandPool		m_vkCommandPool;
-        VkSemaphore         m_vkImageAvailableSemaphore;
-        VkSemaphore         m_vkRenderFinishedSemaphore;
 	};
 }
