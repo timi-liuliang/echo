@@ -178,10 +178,7 @@ namespace Echo
         dslCreateInfo.bindingCount = 1;
         dslCreateInfo.pBindings = &layoutBindings;
 
-        if (VK_SUCCESS != vkCreateDescriptorSetLayout(VKRenderer::instance()->getVkDevice(), &dslCreateInfo, nullptr, &m_vkDescriptorSetLayouts[type]))
-        {
-            EchoLogError("create descriptor set layout failed.");
-        }
+        VKDebug(vkCreateDescriptorSetLayout(VKRenderer::instance()->getVkDevice(), &dslCreateInfo, nullptr, &m_vkDescriptorSetLayouts[type]));
     }
 
     void VKShaderProgram::createVkPipelineLayout()
@@ -194,10 +191,7 @@ namespace Echo
         plCreateInfo.setLayoutCount = m_vkDescriptorSetLayouts.size();
         plCreateInfo.pSetLayouts = m_vkDescriptorSetLayouts.data();
 
-        if (VK_SUCCESS != vkCreatePipelineLayout(VKRenderer::instance()->getVkDevice(), &plCreateInfo, nullptr, &m_vkPipelineLayout))
-        {
-            EchoLogError("vulkan create pipeline layout failed");
-        }
+        VKDebug(vkCreatePipelineLayout(VKRenderer::instance()->getVkDevice(), &plCreateInfo, nullptr, &m_vkPipelineLayout));
     }
 
     bool VKShaderProgram::parseUniforms()

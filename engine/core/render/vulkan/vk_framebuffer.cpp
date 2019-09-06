@@ -44,7 +44,7 @@ namespace Echo
         if (VK_SUCCESS == vkBeginCommandBuffer(m_vkCommandBuffer, &commandBufferBeginInfo))
         {
             // clear
-            VkClearColorValue clearColor = { Renderer::BGCOLOR.r, Renderer::BGCOLOR.g, Renderer::BGCOLOR.b, Renderer::BGCOLOR.a };
+            VkClearColorValue clearColor = { 1.f, 0.f, 0.f, 1.f};// { Renderer::BGCOLOR.r, Renderer::BGCOLOR.g, Renderer::BGCOLOR.b, Renderer::BGCOLOR.a };
             VkClearValue clearValue = {};
             clearValue.color = clearColor;
 
@@ -123,10 +123,7 @@ namespace Echo
         renderPassCreateInfo.subpassCount = 1;
         renderPassCreateInfo.pSubpasses = &subpassDesc;
 
-        if(VK_SUCCESS != vkCreateRenderPass(vkRenderer->getVkDevice(), &renderPassCreateInfo, nullptr, &m_vkRenderPass))
-        {
-            EchoLogError("vulkan create render pass failed.");
-        }
+        VKDebug(vkCreateRenderPass(vkRenderer->getVkDevice(), &renderPassCreateInfo, nullptr, &m_vkRenderPass));
     }
 
     void VKFramebuffer::createVkFramebuffer()
@@ -146,10 +143,7 @@ namespace Echo
             fbCreateInfo.height = m_height;
             fbCreateInfo.layers = 1;
 
-            if(VK_SUCCESS != vkCreateFramebuffer(vkRenderer->getVkDevice(), &fbCreateInfo, NULL, &m_vkFramebuffer))
-            {
-                EchoLogError("vulkan create frame buffer failed");
-            }
+            VKDebug(vkCreateFramebuffer(vkRenderer->getVkDevice(), &fbCreateInfo, NULL, &m_vkFramebuffer));
         }
     }
 
@@ -164,10 +158,7 @@ namespace Echo
         createInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
         createInfo.commandBufferCount = 1;
 
-        if (VK_SUCCESS != vkAllocateCommandBuffers(vkRenderer->getVkDevice(), &createInfo, &m_vkCommandBuffer))
-        {
-            EchoLogError("vulkan create command buffer failed");
-        }
+        VKDebug(vkAllocateCommandBuffers(vkRenderer->getVkDevice(), &createInfo, &m_vkCommandBuffer));
     }
 
     void VKFramebuffer::createVkDescriptorPool()
@@ -188,10 +179,7 @@ namespace Echo
         descriptorPoolInfo.pPoolSizes = typeCounts.data();
         descriptorPoolInfo.maxSets = 512;
 
-        if (VK_SUCCESS != vkCreateDescriptorPool(VKRenderer::instance()->getVkDevice(), &descriptorPoolInfo, nullptr, &m_vkDescriptorPool))
-        {
-            EchoLogError("vulkan renderer setup descriptor pool failed.");
-        }
+        VKDebug(vkCreateDescriptorPool(VKRenderer::instance()->getVkDevice(), &descriptorPoolInfo, nullptr, &m_vkDescriptorPool));
     }
 
     VKFramebufferOffscreen::VKFramebufferOffscreen(ui32 id, ui32 width, ui32 height)
@@ -250,7 +238,7 @@ namespace Echo
     {
         VKFramebuffer::begin(clearColor, backgroundColor, clearDepth, depthValue, clearStencil, stencilValue);
 
-        vkAcquireNextImageKHR(VKRenderer::instance()->getVkDevice(), m_vkSwapChain, Math::MAX_UI64, m_vkImageAvailableSemaphore, VK_NULL_HANDLE, &m_imageIndex);
+        VKDebug(vkAcquireNextImageKHR(VKRenderer::instance()->getVkDevice(), m_vkSwapChain, Math::MAX_UI64, m_vkImageAvailableSemaphore, VK_NULL_HANDLE, &m_imageIndex));
 
         return true;
     }
@@ -274,11 +262,8 @@ namespace Echo
         VkSemaphoreCreateInfo semaphoreCreateInfo = {};
         semaphoreCreateInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
 
-        if (vkCreateSemaphore(VKRenderer::instance()->getVkDevice(), &semaphoreCreateInfo, nullptr, &m_vkImageAvailableSemaphore) != VK_SUCCESS ||
-            vkCreateSemaphore(VKRenderer::instance()->getVkDevice(), &semaphoreCreateInfo, nullptr, &m_vkRenderFinishedSemaphore) != VK_SUCCESS)
-        {
-            EchoLogError("vulkan failed to create semaphores!");
-        }
+        VKDebug(vkCreateSemaphore(VKRenderer::instance()->getVkDevice(), &semaphoreCreateInfo, nullptr, &m_vkImageAvailableSemaphore));
+        VKDebug(vkCreateSemaphore(VKRenderer::instance()->getVkDevice(), &semaphoreCreateInfo, nullptr, &m_vkRenderFinishedSemaphore));
     }
 
     void VKFramebufferWindow::createVkSurface(void* handle)
@@ -292,10 +277,8 @@ namespace Echo
         createInfo.hinstance = GetModuleHandle(nullptr);
 
         // create surface
-        if (VK_SUCCESS != vkCreateWin32SurfaceKHR(VKRenderer::instance()->getVkInstance(), &createInfo, nullptr, &m_vkWindowSurface))
-        {
-            EchoLogError("Vulkan Renderer failed to create window surface!");
-        }
+        VKDebug(vkCreateWin32SurfaceKHR(VKRenderer::instance()->getVkInstance(), &createInfo, nullptr, &m_vkWindowSurface));
+
 #elif defined(ECHO_PLATFORM_ANDROID)
         VkAndroidSurfaceCreateInfoKHR createInfo;
         createInfo.sType = VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR;
@@ -327,8 +310,7 @@ namespace Echo
 
     void VKFramebufferWindow::present()
     {
-
-        VkPresentInfoKHR present;
+        VkPresentInfoKHR present = {};
         present.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
         present.pNext = nullptr;
         present.swapchainCount = 1;
@@ -407,10 +389,7 @@ namespace Echo
             createInfo.pQueueFamilyIndices = queueFamilyIndices;
         }
 
-        if (vkCreateSwapchainKHR(vkDevice, &createInfo, nullptr, &m_vkSwapChain) != VK_SUCCESS)
-        {
-            EchoLogError("Failed to create vulkan swap chain!");
-        }
+        VKDebug(vkCreateSwapchainKHR(vkDevice, &createInfo, nullptr, &m_vkSwapChain));
     }
 
     void VKFramebufferWindow::createImageViews(VkDevice vkDevice)
@@ -419,11 +398,11 @@ namespace Echo
 
         // image count
         ui32 swapChainImageCount = 0;
-        vkGetSwapchainImagesKHR(vkDevice, m_vkSwapChain, &swapChainImageCount, nullptr);
+        VKDebug(vkGetSwapchainImagesKHR(vkDevice, m_vkSwapChain, &swapChainImageCount, nullptr));
 
         // Vk image
         m_vkSwapChainImages.resize(swapChainImageCount);
-        vkGetSwapchainImagesKHR(vkDevice, m_vkSwapChain, &swapChainImageCount, &m_vkSwapChainImages[0]);
+        VKDebug(vkGetSwapchainImagesKHR(vkDevice, m_vkSwapChain, &swapChainImageCount, &m_vkSwapChainImages[0]));
 
         // create ImageViews
         m_vkSwapChainImageViews.resize(swapChainImageCount);
@@ -444,10 +423,7 @@ namespace Echo
             createInfo.subresourceRange.baseArrayLayer = 0;
             createInfo.subresourceRange.layerCount = 1;
 
-            if (vkCreateImageView(vkDevice, &createInfo, nullptr, &m_vkSwapChainImageViews[i]) != VK_SUCCESS)
-            {
-                EchoLogError("Failed to create image views!");
-            }
+            VKDebug(vkCreateImageView(vkDevice, &createInfo, nullptr, &m_vkSwapChainImageViews[i]));
         }
     }
 

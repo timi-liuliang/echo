@@ -56,8 +56,7 @@ namespace Echo
         imageInfo.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
         imageInfo.flags = 0;
 
-        if(VK_SUCCESS != vkCreateImage(VKRenderer::instance()->getVkDevice(), &imageInfo, nullptr, &m_vkImage))
-            EchoLogError("vulkan create image failed.");
+        VKDebug(vkCreateImage(VKRenderer::instance()->getVkDevice(), &imageInfo, nullptr, &m_vkImage));
     }
 
     void VKRenderView::createVkImageView()
@@ -84,8 +83,7 @@ namespace Echo
             if (PixelUtil::IsStencil(m_format))
                 imageViewCreateInfo.subresourceRange.aspectMask |= VK_IMAGE_ASPECT_STENCIL_BIT;
 
-            if (VK_SUCCESS != vkCreateImageView(VKRenderer::instance()->getVkDevice(), &imageViewCreateInfo, nullptr, &m_vkImageView))
-                EchoLogError("vulkan create image view failed.");
+            VKDebug(vkCreateImageView(VKRenderer::instance()->getVkDevice(), &imageViewCreateInfo, nullptr, &m_vkImageView));
         }
     }
 }

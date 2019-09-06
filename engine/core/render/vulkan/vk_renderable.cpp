@@ -64,10 +64,8 @@ namespace Echo
             pipelineInfo.pMultisampleState = getVkMultiSampleStateCreateInfo();
             pipelineInfo.pColorBlendState = getVkColorBlendStateCreateInfo();
             pipelineInfo.pDynamicState = &dynamicState;
-            if (VK_SUCCESS != vkCreateGraphicsPipelines(VKRenderer::instance()->getVkDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_vkPipeline))
-            {
-                EchoLogError("vulkan create pipeline failed");
-            }
+
+            VKDebug(vkCreateGraphicsPipelines(VKRenderer::instance()->getVkDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_vkPipeline));
         }
     }
 

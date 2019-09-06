@@ -160,10 +160,7 @@ namespace Echo
 		createInfo.enabledLayerCount = 0;
 
 		// create instance
-		if (VK_SUCCESS != vkCreateInstance(&createInfo, nullptr, &m_vkInstance))
-		{
-			EchoLogError("create vulkan instance failed");
-		}
+        VKDebug(vkCreateInstance(&createInfo, nullptr, &m_vkInstance));
 	}
 
 	i32 VKRenderer::calcVkPhysicalDeviceScore(const VkPhysicalDevice& device)
@@ -247,7 +244,7 @@ namespace Echo
         for (size_t i = 0; i < m_vkQueueFamilies.size(); i++)
         {
             VkBool32 presentSupport = false;
-            vkGetPhysicalDeviceSurfaceSupportKHR(m_vkPhysicalDevice, i, vkSurface, &presentSupport);
+            VKDebug(vkGetPhysicalDeviceSurfaceSupportKHR(m_vkPhysicalDevice, i, vkSurface, &presentSupport));
             if (presentSupport)
                 return i;
         }
@@ -284,14 +281,8 @@ namespace Echo
 		createInfo.ppEnabledExtensionNames = deviceExtensionNames.data();
 
 		// create logical device and retirve graphics queue
-		if (VK_SUCCESS == vkCreateDevice(m_vkPhysicalDevice, &createInfo, nullptr, &m_vkDevice))
-		{
-			vkGetDeviceQueue(m_vkDevice, getGraphicsQueueFamilyIndex(), 0, &m_vkGraphicsQueue);
-		}
-		else
-    	{
-			EchoLogError("Failed to create vulkan logical device!");
-		}
+        VKDebug(vkCreateDevice(m_vkPhysicalDevice, &createInfo, nullptr, &m_vkDevice));
+		vkGetDeviceQueue(m_vkDevice, getGraphicsQueueFamilyIndex(), 0, &m_vkGraphicsQueue);
 	}
 
 	void VKRenderer::createVkValidation()
@@ -307,10 +298,7 @@ namespace Echo
 		createInfo.queueFamilyIndex = getGraphicsQueueFamilyIndex();
 		createInfo.flags = 0;
 
-		if (VK_SUCCESS != vkCreateCommandPool(m_vkDevice, &createInfo, nullptr, &m_vkCommandPool))
-		{
-			EchoLogError("Vulkan create command pool failed");
-		}
+        VKDebug(vkCreateCommandPool(m_vkDevice, &createInfo, nullptr, &m_vkCommandPool));
 	}
 
     void VKRenderer::draw(Renderable* renderable)

@@ -39,11 +39,11 @@ namespace Echo
     {
         if (create(buff.getSize()))
         {
-            vkBindBufferMemory(VKRenderer::instance()->getVkDevice(), m_vkBuffer, m_vkBufferMemory, 0);
+            VKDebug(vkBindBufferMemory(VKRenderer::instance()->getVkDevice(), m_vkBuffer, m_vkBufferMemory, 0));
 
             // filling the buffer
             void* data = nullptr;
-            vkMapMemory(VKRenderer::instance()->getVkDevice(), m_vkBufferMemory, 0, buff.getSize(), 0, &data);
+            VKDebug(vkMapMemory(VKRenderer::instance()->getVkDevice(), m_vkBufferMemory, 0, buff.getSize(), 0, &data));
             memcpy(data, buff.getData(), buff.getSize());
             vkUnmapMemory(VKRenderer::instance()->getVkDevice(), m_vkBufferMemory);
 
@@ -81,11 +81,10 @@ namespace Echo
                 allocInfo.allocationSize = memRequirements.size;
                 allocInfo.memoryTypeIndex = findMemoryType(VKRenderer::instance()->getVkPhysicalDevice(), memRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
-                if (VK_SUCCESS == vkAllocateMemory(VKRenderer::instance()->getVkDevice(), &allocInfo, nullptr, &m_vkBufferMemory))
-                {
-                    m_size = sizeInBytes;
-                    return true;
-                }
+                VKDebug(vkAllocateMemory(VKRenderer::instance()->getVkDevice(), &allocInfo, nullptr, &m_vkBufferMemory));
+
+                m_size = sizeInBytes;
+                return true;
             }
 
             EchoLogError("vulkan crete gpu buffer failed");

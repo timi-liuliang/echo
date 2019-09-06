@@ -19,7 +19,7 @@ namespace Echo
 }
 
 #ifdef ECHO_DEBUG
-#define VKDebug(Func) VkResult result = Func; Echo::OutputVKError( result, __FILE__, __LINE__ );
+#define VKDebug(Func) { VkResult result = Func; Echo::OutputVKError( result, __FILE__, __LINE__ ); }
 #else
 #define VKDebug(Func)  Func;
 #endif
