@@ -11,3 +11,15 @@
 #include <vulkan/vulkan.h>
 #include <vulkan/vk_sdk_platform.h>
 #include <thirdparty/spirv-cross/spirv_cross.hpp>
+
+namespace Echo
+{
+    // Debug Vk Error
+    void OutputVKError(VkResult vkResult, const char* filename, int lineNum);
+}
+
+#ifdef ECHO_DEBUG
+#define VKDebug(Func) VkResult result = Func; Echo::OutputVKError( result, __FILE__, __LINE__ );
+#else
+#define VKDebug(Func)  Func;
+#endif

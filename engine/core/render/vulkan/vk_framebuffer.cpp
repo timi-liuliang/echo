@@ -252,8 +252,6 @@ namespace Echo
 
         vkAcquireNextImageKHR(VKRenderer::instance()->getVkDevice(), m_vkSwapChain, Math::MAX_UI64, m_vkImageAvailableSemaphore, VK_NULL_HANDLE, &m_imageIndex);
 
-
-
         return true;
     }
 
@@ -324,10 +322,7 @@ namespace Echo
         submitInfo.pSignalSemaphores = &m_vkRenderFinishedSemaphore;						// Semaphore(s) to be signaled when command buffers have completed
         submitInfo.signalSemaphoreCount = 1;
 
-        if (VK_SUCCESS != vkQueueSubmit(VKRenderer::instance()->getVkGraphicsQueue(), 1, &submitInfo, nullptr))
-        {
-            EchoLogError("vulkan queue submit failed");
-        }
+        VKDebug(vkQueueSubmit(VKRenderer::instance()->getVkGraphicsQueue(), 1, &submitInfo, nullptr));
     }
 
     void VKFramebufferWindow::present()
@@ -343,10 +338,7 @@ namespace Echo
         present.waitSemaphoreCount = 1;
         present.pResults = nullptr;
 
-        if (VK_SUCCESS != vkQueuePresentKHR(m_vkPresentQueue, &present))
-        {
-            EchoLogError("vulkan present failed");
-        }
+        VKDebug(vkQueuePresentKHR(m_vkPresentQueue, &present));
     }
 
     void VKFramebufferWindow::createSwapChain(VkDevice vkDevice)

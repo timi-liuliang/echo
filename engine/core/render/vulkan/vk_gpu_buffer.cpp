@@ -64,27 +64,24 @@ namespace Echo
         {
             clear();
 
-            VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
-
-            VkBufferCreateInfo createInfo;
+            VkBufferCreateInfo createInfo = {};
             createInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-            createInfo.pNext = nullptr;
             createInfo.size = sizeInBytes;
-            createInfo.usage = VKMapping::MapGpuBufferType(m_type);
+            createInfo.usage = VKMapping::MapGpuBufferUsageFlags(m_type);
 
-            if (VK_SUCCESS == vkCreateBuffer(vkRenderer->getVkDevice(), &createInfo, nullptr, &m_vkBuffer))
+            if (VK_SUCCESS == vkCreateBuffer(VKRenderer::instance()->getVkDevice(), &createInfo, nullptr, &m_vkBuffer))
             {
                 VkMemoryRequirements memRequirements;
-                vkGetBufferMemoryRequirements(vkRenderer->getVkDevice(), m_vkBuffer, &memRequirements);
+                vkGetBufferMemoryRequirements(VKRenderer::instance()->getVkDevice(), m_vkBuffer, &memRequirements);
 
                 VkMemoryAllocateInfo allocInfo = {};
                 allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
                 allocInfo.pNext = nullptr;
                 allocInfo.memoryTypeIndex = 0;
                 allocInfo.allocationSize = memRequirements.size;
-                allocInfo.memoryTypeIndex = findMemoryType(vkRenderer->getVkPhysicalDevice(), memRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+                allocInfo.memoryTypeIndex = findMemoryType(VKRenderer::instance()->getVkPhysicalDevice(), memRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
-                if (VK_SUCCESS == vkAllocateMemory(vkRenderer->getVkDevice(), &allocInfo, nullptr, &m_vkBufferMemory))
+                if (VK_SUCCESS == vkAllocateMemory(VKRenderer::instance()->getVkDevice(), &allocInfo, nullptr, &m_vkBufferMemory))
                 {
                     m_size = sizeInBytes;
                     return true;

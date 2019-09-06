@@ -17,7 +17,7 @@ namespace Echo
         static String VKMapping::MapVertexSemanticString(VertexSemantic semantic);
 
         // mapping gpubffer type
-        static VkBufferUsageFlags MapGpuBufferType(GPUBuffer::GPUBufferType type);
+        static VkBufferUsageFlags MapGpuBufferUsageFlags(GPUBuffer::GPUBufferType type);
 
         // Mapping VkFormat
         static VkFormat MapVertexFormat(PixelFormat pixelFormat);

@@ -32,7 +32,7 @@ namespace Echo
         }
     }
 
-    VkBufferUsageFlags VKMapping::MapGpuBufferType(GPUBuffer::GPUBufferType type)
+    VkBufferUsageFlags VKMapping::MapGpuBufferUsageFlags(GPUBuffer::GPUBufferType type)
     {
         switch (type)
         {
