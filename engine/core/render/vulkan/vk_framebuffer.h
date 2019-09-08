@@ -98,6 +98,9 @@ namespace Echo
         // create semaphores
         void createVkSemaphores();
 
+        // create fences
+        void createVkFences();
+
         // create swap chain
         void createSwapChain(VkDevice vkDevice);
 
@@ -121,6 +124,7 @@ namespace Echo
 
     protected:
         ui32                        m_imageIndex = 0;
+        vector<VkFence>::type       m_waitFences;
         VkSemaphore                 m_vkImageAvailableSemaphore;
         VkSemaphore                 m_vkRenderFinishedSemaphore;
         VkSurfaceKHR                m_vkWindowSurface;

@@ -37,9 +37,9 @@ namespace Echo
 
         VkCommandBufferBeginInfo commandBufferBeginInfo = {};
         commandBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-        commandBufferBeginInfo.pNext = nullptr;
-        commandBufferBeginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
-        commandBufferBeginInfo.pInheritanceInfo = nullptr;
+        //commandBufferBeginInfo.pNext = nullptr;
+        //commandBufferBeginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
+        //commandBufferBeginInfo.pInheritanceInfo = nullptr;
 
         if (VK_SUCCESS == vkBeginCommandBuffer(m_vkCommandBuffer, &commandBufferBeginInfo))
         {
@@ -90,8 +90,8 @@ namespace Echo
         m_vkViewportStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
         m_vkViewportStateCreateInfo.viewportCount = 1;
         m_vkViewportStateCreateInfo.pViewports = &m_vkViewport;
-        m_vkViewportStateCreateInfo.scissorCount = 0;
-        m_vkViewportStateCreateInfo.pScissors = nullptr;
+        //m_vkViewportStateCreateInfo.scissorCount = 1;
+        //m_vkViewportStateCreateInfo.pScissors = nullptr;
     }
 
     void VKFramebuffer::createVkRenderPass()
@@ -214,6 +214,8 @@ namespace Echo
     {
         createVkSemaphores();
 
+        createVkFences();
+
         createVkSurface(handle);
 
         createSwapChain(VKRenderer::instance()->getVkDevice());
@@ -236,11 +238,9 @@ namespace Echo
 
     bool VKFramebufferWindow::begin(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue)
     {
-        VKFramebuffer::begin(clearColor, backgroundColor, clearDepth, depthValue, clearStencil, stencilValue);
-
         VKDebug(vkAcquireNextImageKHR(VKRenderer::instance()->getVkDevice(), m_vkSwapChain, Math::MAX_UI64, m_vkImageAvailableSemaphore, VK_NULL_HANDLE, &m_imageIndex));
 
-        return true;
+        return VKFramebuffer::begin(clearColor, backgroundColor, clearDepth, depthValue, clearStencil, stencilValue);
     }
 
     bool VKFramebufferWindow::end()
@@ -266,9 +266,23 @@ namespace Echo
         VKDebug(vkCreateSemaphore(VKRenderer::instance()->getVkDevice(), &semaphoreCreateInfo, nullptr, &m_vkRenderFinishedSemaphore));
     }
 
+    void VKFramebufferWindow::createVkFences()
+    {
+        // Fences (Used to check draw command buffer completion)
+        VkFenceCreateInfo fenceCreateInfo = {};
+        fenceCreateInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+
+        // Create in signaled state so we don't wait on first render of each command buffer
+        fenceCreateInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
+
+        m_waitFences.resize(1);
+        for (VkFence& fence : m_waitFences)
+            VKDebug(vkCreateFence(VKRenderer::instance()->getVkDevice(), &fenceCreateInfo, nullptr, &fence));
+    }
+
     void VKFramebufferWindow::createVkSurface(void* handle)
     {
-        // create window surface
+        // Create window surface
 #ifdef ECHO_PLATFORM_WINDOWS
         VkWin32SurfaceCreateInfoKHR createInfo = {};
         createInfo.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
@@ -294,18 +308,27 @@ namespace Echo
 
     void VKFramebufferWindow::submitCommandBuffer()
     {
+        // end command buffer before submit
         vkEndCommandBuffer(m_vkCommandBuffer);
+
+        // Use a fence to wait until the command buffer has finished execution before using it again
+        VKDebug(vkWaitForFences(VKRenderer::instance()->getVkDevice(), 1, &m_waitFences[m_imageIndex], VK_TRUE, UINT64_MAX));
+        VKDebug(vkResetFences(VKRenderer::instance()->getVkDevice(), 1, &m_waitFences[m_imageIndex]));
+
+        // wait stage flags
+        VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
 
         VkSubmitInfo submitInfo = {};
         submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
         submitInfo.commandBufferCount = 1;
         submitInfo.pCommandBuffers = &m_vkCommandBuffer;
-        submitInfo.pWaitSemaphores = &m_vkImageAvailableSemaphore;							// Semaphore(s) to wait upon before the submitted command buffer starts executing
         submitInfo.waitSemaphoreCount = 1;
-        submitInfo.pSignalSemaphores = &m_vkRenderFinishedSemaphore;						// Semaphore(s) to be signaled when command buffers have completed
+        submitInfo.pWaitSemaphores = &m_vkImageAvailableSemaphore;							// Semaphore(s) to wait upon before the submitted command buffer starts executing
         submitInfo.signalSemaphoreCount = 1;
+        submitInfo.pSignalSemaphores = &m_vkRenderFinishedSemaphore;						// Semaphore(s) to be signaled when command buffers have completed
+        submitInfo.pWaitDstStageMask = waitStages;
 
-        VKDebug(vkQueueSubmit(VKRenderer::instance()->getVkGraphicsQueue(), 1, &submitInfo, nullptr));
+        VKDebug(vkQueueSubmit(VKRenderer::instance()->getVkGraphicsQueue(), 1, &submitInfo, m_waitFences[m_imageIndex]));
     }
 
     void VKFramebufferWindow::present()
@@ -321,6 +344,7 @@ namespace Echo
         present.pResults = nullptr;
 
         VKDebug(vkQueuePresentKHR(m_vkPresentQueue, &present));
+        VKDebug(vkQueueWaitIdle(m_vkPresentQueue));
     }
 
     void VKFramebufferWindow::createSwapChain(VkDevice vkDevice)
