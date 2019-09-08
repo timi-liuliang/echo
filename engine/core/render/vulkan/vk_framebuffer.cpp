@@ -13,6 +13,7 @@ namespace Echo
     {
         createVkCommandBuffer();
         createVkRenderPass();
+        createVkFramebuffer();
         createVkDescriptorPool();
     }
 
@@ -43,17 +44,23 @@ namespace Echo
 
         if (VK_SUCCESS == vkBeginCommandBuffer(m_vkCommandBuffer, &commandBufferBeginInfo))
         {
-            // clear
-            VkClearColorValue clearColor = { 1.f, 0.f, 0.f, 1.f};// { Renderer::BGCOLOR.r, Renderer::BGCOLOR.g, Renderer::BGCOLOR.b, Renderer::BGCOLOR.a };
-            VkClearValue clearValue = {};
-            clearValue.color = clearColor;
+            VkClearValue clearValues[2];
+            clearValues[0].color = { { 1.0f, 0.0f, 0.2f, 1.0f } }; // { Renderer::BGCOLOR.r, Renderer::BGCOLOR.g, Renderer::BGCOLOR.b, Renderer::BGCOLOR.a };
+            clearValues[1].depthStencil = { 1.0f, 0 };
 
-            VkImageSubresourceRange imageRange = {};
-            imageRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-            imageRange.levelCount = 1;
-            imageRange.layerCount = 1;
+            VkRenderPassBeginInfo renderPassBeginInfo = {};
+            renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+            renderPassBeginInfo.pNext = nullptr;
+            renderPassBeginInfo.renderPass = m_vkRenderPass;
+            renderPassBeginInfo.renderArea.offset.x = 0;
+            renderPassBeginInfo.renderArea.offset.y = 0;
+            renderPassBeginInfo.renderArea.extent.width = m_width;
+            renderPassBeginInfo.renderArea.extent.height = m_height;
+            renderPassBeginInfo.clearValueCount = 1;
+            renderPassBeginInfo.pClearValues = clearValues;
+            renderPassBeginInfo.framebuffer = m_vkFramebuffer;
 
-            vkCmdClearColorImage(m_vkCommandBuffer, getVkColorImage(), VK_IMAGE_LAYOUT_GENERAL, &clearColor, 1, &imageRange);    
+            vkCmdBeginRenderPass(m_vkCommandBuffer, &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
 
             return true;
         }
@@ -222,6 +229,8 @@ namespace Echo
 
         createImageViews(VKRenderer::instance()->getVkDevice());
 
+        createVkWindowFramebuffer();
+
         vkGetDeviceQueue(VKRenderer::instance()->getVkDevice(), VKRenderer::instance()->getPresentQueueFamilyIndex(m_vkWindowSurface), 0, &m_vkPresentQueue);
 
         onSize(width, height);
@@ -308,6 +317,8 @@ namespace Echo
 
     void VKFramebufferWindow::submitCommandBuffer()
     {
+        vkCmdEndRenderPass(m_vkCommandBuffer);
+
         // end command buffer before submit
         vkEndCommandBuffer(m_vkCommandBuffer);
 
@@ -449,6 +460,23 @@ namespace Echo
 
             VKDebug(vkCreateImageView(vkDevice, &createInfo, nullptr, &m_vkSwapChainImageViews[i]));
         }
+    }
+
+    void VKFramebufferWindow::createVkWindowFramebuffer()
+    {
+        VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
+        VkImageView vkImageView = m_vkSwapChainImageViews[ui8(Attachment::Color0)];
+
+        VkFramebufferCreateInfo fbCreateInfo = {};
+        fbCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+        fbCreateInfo.renderPass = m_vkRenderPass;
+        fbCreateInfo.attachmentCount = 1;
+        fbCreateInfo.pAttachments = &vkImageView;
+        fbCreateInfo.width = m_width;
+        fbCreateInfo.height = m_height;
+        fbCreateInfo.layers = 1;
+
+        VKDebug(vkCreateFramebuffer(vkRenderer->getVkDevice(), &fbCreateInfo, NULL, &m_vkFramebuffer));
     }
 
     VkSurfaceFormatKHR VKFramebufferWindow::pickSurfaceSupportFormat()

@@ -60,7 +60,7 @@ namespace Echo
     protected:
         VkRenderPass                        m_vkRenderPass;
         VkRenderPassBeginInfo               m_vkRenderPassBeginInfo;
-        VkFramebuffer                       m_vkFramebuffer;
+        VkFramebuffer                       m_vkFramebuffer = nullptr;
         VkViewport                          m_vkViewport;
         VkPipelineViewportStateCreateInfo   m_vkViewportStateCreateInfo;
         VkCommandBuffer                     m_vkCommandBuffer = nullptr;
@@ -95,6 +95,9 @@ namespace Echo
         virtual void onSize(ui32 width, ui32 height);
 
     private:
+        // create vk frame buffer
+        void createVkWindowFramebuffer();
+
         // create semaphores
         void createVkSemaphores();
 
