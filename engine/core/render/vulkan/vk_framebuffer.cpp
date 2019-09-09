@@ -11,7 +11,6 @@ namespace Echo
     VKFramebuffer::VKFramebuffer(ui32 id, ui32 width, ui32 height)
         : FrameBuffer(id, width, height)
     {
-        createVkRenderPass();
         createVkDescriptorPool();
     }
 
@@ -56,7 +55,7 @@ namespace Echo
             renderPassBeginInfo.renderArea.extent.height = m_height;
             renderPassBeginInfo.clearValueCount = 1;
             renderPassBeginInfo.pClearValues = clearValues;
-            renderPassBeginInfo.framebuffer = m_vkFramebuffer;
+            renderPassBeginInfo.framebuffer = getVkFramebuffer();
 
             vkCmdBeginRenderPass(getVkCommandbuffer(), &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
 
@@ -179,25 +178,25 @@ namespace Echo
         m_height = height;
     }
 
-    void VKFramebufferOffscreen::createVkFramebuffer()
+    void VKFramebufferOffscreen::createVkFramebuffers()
     {
-        VKRenderView* colorView = ECHO_DOWN_CAST<VKRenderView*>(m_views[ui8(Attachment::Color0)]);
-        if (colorView)
-        {
-            VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
-            VkImageView vkImageView = colorView->getVkImageView();
+        //VKRenderView* colorView = ECHO_DOWN_CAST<VKRenderView*>(m_views[ui8(Attachment::Color0)]);
+        //if (colorView)
+        //{
+        //    VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
+        //    VkImageView vkImageView = colorView->getVkImageView();
 
-            VkFramebufferCreateInfo fbCreateInfo = {};
-            fbCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-            fbCreateInfo.renderPass = m_vkRenderPass;
-            fbCreateInfo.attachmentCount = 1;
-            fbCreateInfo.pAttachments = &vkImageView;
-            fbCreateInfo.width = m_width;
-            fbCreateInfo.height = m_height;
-            fbCreateInfo.layers = 1;
+        //    VkFramebufferCreateInfo fbCreateInfo = {};
+        //    fbCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+        //    fbCreateInfo.renderPass = m_vkRenderPass;
+        //    fbCreateInfo.attachmentCount = 1;
+        //    fbCreateInfo.pAttachments = &vkImageView;
+        //    fbCreateInfo.width = m_width;
+        //    fbCreateInfo.height = m_height;
+        //    fbCreateInfo.layers = 1;
 
-            VKDebug(vkCreateFramebuffer(vkRenderer->getVkDevice(), &fbCreateInfo, NULL, &m_vkFramebuffer));
-        }
+        //    VKDebug(vkCreateFramebuffer(vkRenderer->getVkDevice(), &fbCreateInfo, NULL, &m_vkFramebuffers));
+        //}
     }
 
     VKFramebufferWindow::VKFramebufferWindow(ui32 width, ui32 height, void* handle)
@@ -206,16 +205,6 @@ namespace Echo
         createVkSemaphores();
 
         createVkSurface(handle);
-
-        createSwapChain(VKRenderer::instance()->getVkDevice());
-
-        createImageViews(VKRenderer::instance()->getVkDevice());
-
-        createVkFramebuffer();
-
-        createVkCommandBuffer();
-
-        createVkFences();
 
         vkGetDeviceQueue(VKRenderer::instance()->getVkDevice(), VKRenderer::instance()->getPresentQueueFamilyIndex(m_vkWindowSurface), 0, &m_vkPresentQueue);
 
@@ -250,9 +239,28 @@ namespace Echo
     void VKFramebufferWindow::onSize(ui32 width, ui32 height)
     {
         VKFramebuffer::onSize(width, height);
+
+        recreateVkSwapChain();
     }
 
-    void VKFramebufferWindow::createVkCommandBuffer()
+    void VKFramebufferWindow::recreateVkSwapChain()
+    {
+        vkDeviceWaitIdle(VKRenderer::instance()->getVkDevice());
+
+        createSwapChain(VKRenderer::instance()->getVkDevice());
+        createImageViews(VKRenderer::instance()->getVkDevice());
+        createVkRenderPass();
+        createVkFramebuffers();
+        createVkCommandBuffers();
+        createVkFences();
+    }
+
+    void VKFramebufferWindow::cleanupSwapChain()
+    {
+
+    }
+
+    void VKFramebufferWindow::createVkCommandBuffers()
     {
         m_vkCommandBuffers.resize(m_vkSwapChainImages.size());
 
@@ -465,21 +473,24 @@ namespace Echo
         }
     }
 
-    void VKFramebufferWindow::createVkFramebuffer()
+    void VKFramebufferWindow::createVkFramebuffers()
     {
-        VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
-        VkImageView vkImageView = m_vkSwapChainImageViews[ui8(Attachment::Color0)];
+        m_vkFramebuffers.resize(m_vkSwapChainImages.size());
+        for (size_t i = 0; i < m_vkFramebuffers.size(); i++)
+        {
+            VkImageView vkImageView = m_vkSwapChainImageViews[i];
 
-        VkFramebufferCreateInfo fbCreateInfo = {};
-        fbCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-        fbCreateInfo.renderPass = m_vkRenderPass;
-        fbCreateInfo.attachmentCount = 1;
-        fbCreateInfo.pAttachments = &vkImageView;
-        fbCreateInfo.width = m_width;
-        fbCreateInfo.height = m_height;
-        fbCreateInfo.layers = 1;
+            VkFramebufferCreateInfo fbCreateInfo = {};
+            fbCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+            fbCreateInfo.renderPass = m_vkRenderPass;
+            fbCreateInfo.attachmentCount = 1;
+            fbCreateInfo.pAttachments = &vkImageView;
+            fbCreateInfo.width = m_width;
+            fbCreateInfo.height = m_height;
+            fbCreateInfo.layers = 1;
 
-        VKDebug(vkCreateFramebuffer(vkRenderer->getVkDevice(), &fbCreateInfo, NULL, &m_vkFramebuffer));
+            VKDebug(vkCreateFramebuffer(VKRenderer::instance()->getVkDevice(), &fbCreateInfo, NULL, &m_vkFramebuffers[i]));
+        }
     }
 
     VkSurfaceFormatKHR VKFramebufferWindow::pickSurfaceSupportFormat()

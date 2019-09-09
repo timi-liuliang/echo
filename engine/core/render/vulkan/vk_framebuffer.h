@@ -37,6 +37,9 @@ namespace Echo
         // get vk command buffer
         virtual VkCommandBuffer getVkCommandbuffer() { return nullptr; }
 
+        // get vk frame buffer
+        virtual VkFramebuffer getVkFramebuffer() { return nullptr; }
+
         // get vk descriptor pool
         VkDescriptorPool getVkDescriptorPool() { return m_vkDescriptorPool; }
 
@@ -54,7 +57,7 @@ namespace Echo
     protected:
         VkRenderPass                        m_vkRenderPass;
         VkRenderPassBeginInfo               m_vkRenderPassBeginInfo;
-        VkFramebuffer                       m_vkFramebuffer = nullptr;
+        vector<VkFramebuffer>::type         m_vkFramebuffers;
         VkViewport                          m_vkViewport;
         VkPipelineViewportStateCreateInfo   m_vkViewportStateCreateInfo;
         VkDescriptorPool                    m_vkDescriptorPool = nullptr;
@@ -75,7 +78,7 @@ namespace Echo
 
     protected:
         // create vk frame buffer
-        void createVkFramebuffer();
+        void createVkFramebuffers();
     };
 
     class VKFramebufferWindow : public VKFramebuffer
@@ -95,12 +98,19 @@ namespace Echo
         // get vk command buffer
         virtual VkCommandBuffer getVkCommandbuffer() { return m_vkCommandBuffers[m_imageIndex]; }
 
+        // get vk frame buffer
+        virtual VkFramebuffer getVkFramebuffer() { return m_vkFramebuffers[m_imageIndex]; }
+
     private:
+        // recreate swap chain
+        void recreateVkSwapChain();
+        void cleanupSwapChain();
+
         // create vk frame buffer
-        void createVkFramebuffer();
+        void createVkFramebuffers();
 
         // vk command buffer
-        void createVkCommandBuffer();
+        void createVkCommandBuffers();
 
         // create semaphores
         void createVkSemaphores();
