@@ -14,6 +14,5 @@ namespace Echo
             default:                        EchoLogError("[%s:%d] Vulkan unknown error.", filename, lineNum);       break;
             }
         }
-
     }
 }

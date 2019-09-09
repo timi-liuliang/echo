@@ -11,9 +11,7 @@ namespace Echo
     VKFramebuffer::VKFramebuffer(ui32 id, ui32 width, ui32 height)
         : FrameBuffer(id, width, height)
     {
-        createVkCommandBuffer();
         createVkRenderPass();
-        createVkFramebuffer();
         createVkDescriptorPool();
     }
 
@@ -42,7 +40,7 @@ namespace Echo
         //commandBufferBeginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
         //commandBufferBeginInfo.pInheritanceInfo = nullptr;
 
-        if (VK_SUCCESS == vkBeginCommandBuffer(m_vkCommandBuffer, &commandBufferBeginInfo))
+        if (VK_SUCCESS == vkBeginCommandBuffer(getVkCommandbuffer(), &commandBufferBeginInfo))
         {
             VkClearValue clearValues[2];
             clearValues[0].color = { { 1.0f, 0.0f, 0.2f, 1.0f } }; // { Renderer::BGCOLOR.r, Renderer::BGCOLOR.g, Renderer::BGCOLOR.b, Renderer::BGCOLOR.a };
@@ -60,7 +58,7 @@ namespace Echo
             renderPassBeginInfo.pClearValues = clearValues;
             renderPassBeginInfo.framebuffer = m_vkFramebuffer;
 
-            vkCmdBeginRenderPass(m_vkCommandBuffer, &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
+            vkCmdBeginRenderPass(getVkCommandbuffer(), &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
 
             return true;
         }
@@ -133,41 +131,6 @@ namespace Echo
         VKDebug(vkCreateRenderPass(vkRenderer->getVkDevice(), &renderPassCreateInfo, nullptr, &m_vkRenderPass));
     }
 
-    void VKFramebuffer::createVkFramebuffer()
-    {
-        VKRenderView* colorView = ECHO_DOWN_CAST<VKRenderView*>(m_views[ui8(Attachment::Color0)]);
-        if(colorView)
-        {
-            VKRenderer* vkRenderer  = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
-            VkImageView vkImageView = colorView->getVkImageView();
-
-            VkFramebufferCreateInfo fbCreateInfo = {};
-            fbCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-            fbCreateInfo.renderPass = m_vkRenderPass;
-            fbCreateInfo.attachmentCount = 1;
-            fbCreateInfo.pAttachments = &vkImageView;
-            fbCreateInfo.width = m_width;
-            fbCreateInfo.height = m_height;
-            fbCreateInfo.layers = 1;
-
-            VKDebug(vkCreateFramebuffer(vkRenderer->getVkDevice(), &fbCreateInfo, NULL, &m_vkFramebuffer));
-        }
-    }
-
-    void VKFramebuffer::createVkCommandBuffer()
-    {
-        VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
-
-        VkCommandBufferAllocateInfo createInfo = {};
-        createInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-        createInfo.pNext = nullptr;
-        createInfo.commandPool = vkRenderer->getVkCommandPool();
-        createInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-        createInfo.commandBufferCount = 1;
-
-        VKDebug(vkAllocateCommandBuffers(vkRenderer->getVkDevice(), &createInfo, &m_vkCommandBuffer));
-    }
-
     void VKFramebuffer::createVkDescriptorPool()
     {
         array<VkDescriptorPoolSize, 1> typeCounts;
@@ -216,6 +179,27 @@ namespace Echo
         m_height = height;
     }
 
+    void VKFramebufferOffscreen::createVkFramebuffer()
+    {
+        VKRenderView* colorView = ECHO_DOWN_CAST<VKRenderView*>(m_views[ui8(Attachment::Color0)]);
+        if (colorView)
+        {
+            VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
+            VkImageView vkImageView = colorView->getVkImageView();
+
+            VkFramebufferCreateInfo fbCreateInfo = {};
+            fbCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+            fbCreateInfo.renderPass = m_vkRenderPass;
+            fbCreateInfo.attachmentCount = 1;
+            fbCreateInfo.pAttachments = &vkImageView;
+            fbCreateInfo.width = m_width;
+            fbCreateInfo.height = m_height;
+            fbCreateInfo.layers = 1;
+
+            VKDebug(vkCreateFramebuffer(vkRenderer->getVkDevice(), &fbCreateInfo, NULL, &m_vkFramebuffer));
+        }
+    }
+
     VKFramebufferWindow::VKFramebufferWindow(ui32 width, ui32 height, void* handle)
         : VKFramebuffer(0, width, height)
     {
@@ -227,7 +211,9 @@ namespace Echo
 
         createImageViews(VKRenderer::instance()->getVkDevice());
 
-        createVkWindowFramebuffer();
+        createVkFramebuffer();
+
+        createVkCommandBuffer();
 
         createVkFences();
 
@@ -264,6 +250,20 @@ namespace Echo
     void VKFramebufferWindow::onSize(ui32 width, ui32 height)
     {
         VKFramebuffer::onSize(width, height);
+    }
+
+    void VKFramebufferWindow::createVkCommandBuffer()
+    {
+        m_vkCommandBuffers.resize(m_vkSwapChainImages.size());
+
+        VkCommandBufferAllocateInfo createInfo = {};
+        createInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+        createInfo.pNext = nullptr;
+        createInfo.commandPool = VKRenderer::instance()->getVkCommandPool();
+        createInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+        createInfo.commandBufferCount = m_vkCommandBuffers.size();
+
+        VKDebug(vkAllocateCommandBuffers(VKRenderer::instance()->getVkDevice(), &createInfo, &m_vkCommandBuffers[0]));
     }
 
     void VKFramebufferWindow::createVkSemaphores()
@@ -317,10 +317,10 @@ namespace Echo
 
     void VKFramebufferWindow::submitCommandBuffer()
     {
-        vkCmdEndRenderPass(m_vkCommandBuffer);
+        vkCmdEndRenderPass(getVkCommandbuffer());
 
         // end command buffer before submit
-        vkEndCommandBuffer(m_vkCommandBuffer);
+        vkEndCommandBuffer(getVkCommandbuffer());
 
         // Use a fence to wait until the command buffer has finished execution before using it again
         VKDebug(vkWaitForFences(VKRenderer::instance()->getVkDevice(), 1, &m_waitFences[m_imageIndex], VK_TRUE, UINT64_MAX));
@@ -332,7 +332,7 @@ namespace Echo
         VkSubmitInfo submitInfo = {};
         submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
         submitInfo.commandBufferCount = 1;
-        submitInfo.pCommandBuffers = &m_vkCommandBuffer;
+        submitInfo.pCommandBuffers = &m_vkCommandBuffers[m_imageIndex];
         submitInfo.waitSemaphoreCount = 1;
         submitInfo.pWaitSemaphores = &m_vkImageAvailableSemaphore;							// Semaphore(s) to wait upon before the submitted command buffer starts executing
         submitInfo.signalSemaphoreCount = 1;
@@ -355,7 +355,10 @@ namespace Echo
         present.pResults = nullptr;
 
         VKDebug(vkQueuePresentKHR(m_vkPresentQueue, &present));
-        //VKDebug(vkQueueWaitIdle(m_vkPresentQueue));
+
+        // vkQueueWaitIdle is equivalent to submitting a fence to a queue
+        // and waiting with an infinite timeout for that fence to signal.
+        // VKDebug(vkQueueWaitIdle(m_vkPresentQueue));
     }
 
     void VKFramebufferWindow::createSwapChain(VkDevice vkDevice)
@@ -462,7 +465,7 @@ namespace Echo
         }
     }
 
-    void VKFramebufferWindow::createVkWindowFramebuffer()
+    void VKFramebufferWindow::createVkFramebuffer()
     {
         VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
         VkImageView vkImageView = m_vkSwapChainImageViews[ui8(Attachment::Color0)];

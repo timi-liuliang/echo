@@ -35,7 +35,7 @@ namespace Echo
         VkPipelineViewportStateCreateInfo* getVkViewportStateCreateInfo() { return &m_vkViewportStateCreateInfo; }
 
         // get vk command buffer
-        VkCommandBuffer getVkCommandbuffer() { return m_vkCommandBuffer; }
+        virtual VkCommandBuffer getVkCommandbuffer() { return nullptr; }
 
         // get vk descriptor pool
         VkDescriptorPool getVkDescriptorPool() { return m_vkDescriptorPool; }
@@ -48,14 +48,8 @@ namespace Echo
         // create render pass
         void createVkRenderPass();
 
-        // create vk frame buffer
-        void createVkFramebuffer();
-
         // create vk descriptor pool
         void createVkDescriptorPool();
-
-        // vk command buffer
-        void createVkCommandBuffer();
 
     protected:
         VkRenderPass                        m_vkRenderPass;
@@ -63,7 +57,6 @@ namespace Echo
         VkFramebuffer                       m_vkFramebuffer = nullptr;
         VkViewport                          m_vkViewport;
         VkPipelineViewportStateCreateInfo   m_vkViewportStateCreateInfo;
-        VkCommandBuffer                     m_vkCommandBuffer = nullptr;
         VkDescriptorPool                    m_vkDescriptorPool = nullptr;
     };
 
@@ -79,6 +72,10 @@ namespace Echo
 
         // on resize
         virtual void onSize(ui32 width, ui32 height);
+
+    protected:
+        // create vk frame buffer
+        void createVkFramebuffer();
     };
 
     class VKFramebufferWindow : public VKFramebuffer
@@ -94,9 +91,16 @@ namespace Echo
         // on resize
         virtual void onSize(ui32 width, ui32 height);
 
+    public:
+        // get vk command buffer
+        virtual VkCommandBuffer getVkCommandbuffer() { return m_vkCommandBuffers[m_imageIndex]; }
+
     private:
         // create vk frame buffer
-        void createVkWindowFramebuffer();
+        void createVkFramebuffer();
+
+        // vk command buffer
+        void createVkCommandBuffer();
 
         // create semaphores
         void createVkSemaphores();
@@ -126,14 +130,15 @@ namespace Echo
         void present();
 
     protected:
-        ui32                        m_imageIndex = 0;
-        vector<VkFence>::type       m_waitFences;
-        VkSemaphore                 m_vkImageAvailableSemaphore;
-        VkSemaphore                 m_vkRenderFinishedSemaphore;
-        VkSurfaceKHR                m_vkWindowSurface;
-        VkSwapchainKHR				m_vkSwapChain = VK_NULL_HANDLE;
-        vector<VkImage>::type       m_vkSwapChainImages;
-        vector<VkImageView>::type	m_vkSwapChainImageViews;
-        VkQueue                     m_vkPresentQueue;
+        ui32                            m_imageIndex = 0;
+        vector<VkFence>::type           m_waitFences;
+        VkSemaphore                     m_vkImageAvailableSemaphore;
+        VkSemaphore                     m_vkRenderFinishedSemaphore;
+        VkSurfaceKHR                    m_vkWindowSurface;
+        VkSwapchainKHR				    m_vkSwapChain = VK_NULL_HANDLE;
+        vector<VkImage>::type           m_vkSwapChainImages;
+        vector<VkImageView>::type	    m_vkSwapChainImageViews;
+        vector<VkCommandBuffer>::type   m_vkCommandBuffers;
+        VkQueue                         m_vkPresentQueue;
     };
 }
