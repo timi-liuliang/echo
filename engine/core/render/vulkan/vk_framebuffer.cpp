@@ -221,8 +221,6 @@ namespace Echo
     {
         createVkSemaphores();
 
-        createVkFences();
-
         createVkSurface(handle);
 
         createSwapChain(VKRenderer::instance()->getVkDevice());
@@ -230,6 +228,8 @@ namespace Echo
         createImageViews(VKRenderer::instance()->getVkDevice());
 
         createVkWindowFramebuffer();
+
+        createVkFences();
 
         vkGetDeviceQueue(VKRenderer::instance()->getVkDevice(), VKRenderer::instance()->getPresentQueueFamilyIndex(m_vkWindowSurface), 0, &m_vkPresentQueue);
 
@@ -284,7 +284,7 @@ namespace Echo
         // Create in signaled state so we don't wait on first render of each command buffer
         fenceCreateInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 
-        m_waitFences.resize(1);
+        m_waitFences.resize(m_vkSwapChainImages.size());
         for (VkFence& fence : m_waitFences)
             VKDebug(vkCreateFence(VKRenderer::instance()->getVkDevice(), &fenceCreateInfo, nullptr, &fence));
     }
@@ -355,7 +355,7 @@ namespace Echo
         present.pResults = nullptr;
 
         VKDebug(vkQueuePresentKHR(m_vkPresentQueue, &present));
-        VKDebug(vkQueueWaitIdle(m_vkPresentQueue));
+        //VKDebug(vkQueueWaitIdle(m_vkPresentQueue));
     }
 
     void VKFramebufferWindow::createSwapChain(VkDevice vkDevice)
