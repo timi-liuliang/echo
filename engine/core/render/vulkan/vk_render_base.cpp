@@ -8,10 +8,10 @@ namespace Echo
         {
             switch (vkResult)
             {
-            case VK_NOT_READY:              EchoLogError("File Line Number[%s:%d] Vulkan not ready.", filename, lineNum);           break;
-            case VK_ERROR_DEVICE_LOST:      EchoLogError("File Line Number[%s:%d] Vulkan device lost error", filename, lineNum);    break;
-            case VK_ERROR_OUT_OF_DATE_KHR:  EchoLogError("File Line Number[%s:%d] Vulkan error out of date khr", filename, lineNum);break;
-            default:                        EchoLogError("File Line Number[%s:%d] Vulkan unknown error.", filename, lineNum);       break;
+            case VK_NOT_READY:              EchoLogError("[%s:%d] Vulkan not ready.", filename, lineNum);           break;
+            case VK_ERROR_DEVICE_LOST:      EchoLogError("[%s:%d] Vulkan device lost error", filename, lineNum);    break;
+            case VK_ERROR_OUT_OF_DATE_KHR:  EchoLogError("[%s:%d] Vulkan error out of date khr", filename, lineNum);break;
+            default:                        EchoLogError("[%s:%d] Vulkan unknown error.", filename, lineNum);       break;
             }
         }
 
