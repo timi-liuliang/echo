@@ -97,7 +97,7 @@ namespace Echo
         Echo::initEngine(echoProject, true);
 
 		// default window size
-		resizeWindow( m_hWnd, Echo::GameSettings::instance()->getWindowWidth(), Echo::GameSettings::instance()->getWindowHeight());
+		//resizeWindow( m_hWnd, Echo::GameSettings::instance()->getWindowWidth(), Echo::GameSettings::instance()->getWindowHeight());
 	}
 
 	void App::resizeWindow(HWND hwnd, int width, int height)
@@ -136,7 +136,10 @@ namespace Echo
 			{
 				Echo::ui32 width = (Echo::ui32)LOWORD(lParam);
 				Echo::ui32 height = (Echo::ui32)HIWORD(lParam);
-				Echo::Engine::instance()->onSize(width, height);
+                if (Echo::Engine::instance()->isInited())
+                {
+                    Echo::Engine::instance()->onSize(width, height);
+                }
 			}
 			break;
 			case WM_EXITSIZEMOVE:
