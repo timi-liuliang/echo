@@ -306,7 +306,6 @@ namespace Echo
 		Renderer::instance()->present();
 	}
     
-    // init engine
     Engine* initEngine(const String& project, bool isGame)
     {
         Echo::Engine::Config rootcfg;

@@ -2,6 +2,7 @@
 
 #include "Log.h"
 #include <engine/core/main/Engine.h>
+#include <windows.h>
 
 namespace Echo
 {
@@ -46,7 +47,6 @@ namespace Echo
 		Echo::i32		m_Style;
 		bool			m_bFullscreen;
 		Echo::String	m_projectFile;
-		Echo::Engine*	m_engine;
 		App::AppLog*	m_log;
 	};
 }

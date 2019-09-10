@@ -2,6 +2,7 @@
 #include "Log.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/main/GameSettings.h>
+#include <engine/core/render/interface/Renderer.h>
 
 namespace Echo
 {
@@ -9,27 +10,10 @@ namespace Echo
 
 	void CreateDumpFile(LPCSTR lpstrDumpFilePathName, EXCEPTION_POINTERS *pException)
 	{
-		//// 创建Dump文件
-		//HANDLE hDumpFile = CreateFile(lpstrDumpFilePathName, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-
-		//// Dump信息
-		//MINIDUMP_EXCEPTION_INFORMATION dumpInfo;
-		//dumpInfo.ExceptionPointers = pException;
-		//dumpInfo.ThreadId = GetCurrentThreadId();
-		//dumpInfo.ClientPointers = TRUE;
-
-		//// 写入Dump文件内容
-		//MiniDumpWriteDump(GetCurrentProcess(), GetCurrentProcessId(), hDumpFile, MiniDumpNormal, &dumpInfo, NULL, NULL);
-
-		//CloseHandle(hDumpFile);
 	}
 
 	LONG CrashHandler(EXCEPTION_POINTERS *pException)
 	{
-		//String strRoot = g_pApp->getRootPath();
-		//String strDump = strRoot + "\\Dump.dmp";
-		//CreateDumpFile(strDump.c_str(), pException);
-
 		return EXCEPTION_EXECUTE_HANDLER;
 	}
 
@@ -39,8 +23,7 @@ namespace Echo
 	}
 
 	App::App(const Echo::String& rootPath)
-		: m_engine(nullptr)
-		, m_log(nullptr)
+		: m_log(nullptr)
 	{
 		m_bFullscreen = false;
 		m_projectFile = rootPath + "data/app.echo";
@@ -105,24 +88,18 @@ namespace Echo
 #endif
 	}
 
-	// init
 	void App::initEngine(HWND hwnd, const Echo::String& echoProject)
 	{
-		m_engine = Echo::Engine::instance();
-
 		m_log = EchoNew(Echo::AppLog("Game"));
 		Echo::Log::instance()->addOutput(m_log);
 
-		Echo::Engine::Config rootcfg;
-		rootcfg.m_projectFile = echoProject;
-		rootcfg.m_windowHandle = (unsigned int)hwnd;
-		m_engine->initialize(rootcfg);
+        Echo::initRender((size_t)hwnd);
+        Echo::initEngine(echoProject, true);
 
 		// default window size
 		resizeWindow( m_hWnd, Echo::GameSettings::instance()->getWindowWidth(), Echo::GameSettings::instance()->getWindowHeight());
 	}
 
-	// resize window
 	void App::resizeWindow(HWND hwnd, int width, int height)
 	{
 		RECT rcClient, rcWindow;
@@ -145,7 +122,8 @@ namespace Echo
 
 	void App::destroy()
 	{
-		Echo::Engine::instance()->destroy();
+        Echo::Engine* engine = Echo::Engine::instance();
+        EchoSafeDelete(engine, Engine);
 
 		destroyWindow();
 	}
@@ -214,13 +192,12 @@ namespace Echo
 
 	BOOL App::setFullScreen()
 	{
-		//获得并储存当前窗口信息，用于以后恢复
 		RECT wndRect;
-		GetWindowRect(m_hWnd, &wndRect); //获得当前窗口RECT
-		LONG style = GetWindowLong(m_hWnd, GWL_STYLE); //获得当前窗口的类型
+		GetWindowRect(m_hWnd, &wndRect);
+		LONG style = GetWindowLong(m_hWnd, GWL_STYLE);
 		m_Style = style;
-		//m_Style = style; //储存当前的窗口类型
-		//设置窗口显示类型
+		//m_Style = style; 
+
 		style &= ~WS_CAPTION;
 		SetWindowLong(m_hWnd, GWL_STYLE, style);
 
@@ -337,7 +314,7 @@ namespace Echo
 
 	void App::tick(float elapsedTime)
 	{
-		m_engine->tick(elapsedTime);
+		Echo::Engine::instance()->tick(elapsedTime);
 	}
 }
 

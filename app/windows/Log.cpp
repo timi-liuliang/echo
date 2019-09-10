@@ -1,3 +1,4 @@
+#include <windows.h>
 #include "Log.h"
 #include <engine/core/util/StringUtil.h>
 

@@ -18,6 +18,8 @@ ELSEIF(CMAKE_SIZEOF_VOID_P EQUAL 8)
 	LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/AdrenoSDK/Lib/x64)
 	LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/Core/lib/windows/x86_64)
 	LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/openal-1.1/windows/libs/Win64)
+    LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/vulkan-1.1.114.0/windows/x64/lib)
+    LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/opencl/windows/lib/x64)
 ENDIF()
 
 # recursive get all module files
@@ -35,9 +37,15 @@ ADD_EXECUTABLE(${MODULE_NAME} ${ALL_FILES} CMakeLists.txt)
 # link libraries
 TARGET_LINK_LIBRARIES(${MODULE_NAME} zlib engine winmm.lib imm32.lib dxgi.lib Shlwapi.lib lua recast freeimage)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} Live2DCubismCore.lib pugixml spine box2d)
-TARGET_LINK_LIBRARIES(${MODULE_NAME} debug libEGL_d.lib optimized libEGL.lib)
+#TARGET_LINK_LIBRARIES(${MODULE_NAME} debug libEGL_d.lib optimized libEGL.lib)
+#TARGET_LINK_LIBRARIES(${MODULE_NAME} debug libGLESv2_d.lib optimized libGLESv2.lib)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} OpenAL32.lib)
-TARGET_LINK_LIBRARIES(${MODULE_NAME} debug libGLESv2_d.lib optimized libGLESv2.lib dbghelp.lib Psapi.lib)
+TARGET_LINK_LIBRARIES(${MODULE_NAME} dbghelp.lib Psapi.lib)
+TARGET_LINK_LIBRARIES(${MODULE_NAME} glslang spirv-cross)
+TARGET_LINK_LIBRARIES(${MODULE_NAME} vulkan-1.lib)
+TARGET_LINK_LIBRARIES(${MODULE_NAME} freetype physx)
+TARGET_LINK_LIBRARIES(${MODULE_NAME} radeonrays)
+TARGET_LINK_LIBRARIES(${MODULE_NAME} OpenCL)
 
 # no cmd window
 SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES LINK_FLAGS_DEBUG "/SUBSYSTEM:WINDOWS /entry:mainCRTStartup")
