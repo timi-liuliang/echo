@@ -35,14 +35,11 @@ namespace Echo
 
         VkCommandBufferBeginInfo commandBufferBeginInfo = {};
         commandBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-        //commandBufferBeginInfo.pNext = nullptr;
-        //commandBufferBeginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
-        //commandBufferBeginInfo.pInheritanceInfo = nullptr;
 
         if (VK_SUCCESS == vkBeginCommandBuffer(getVkCommandbuffer(), &commandBufferBeginInfo))
         {
             VkClearValue clearValues[2];
-            clearValues[0].color = { { 1.0f, 0.0f, 0.2f, 1.0f } }; // { Renderer::BGCOLOR.r, Renderer::BGCOLOR.g, Renderer::BGCOLOR.b, Renderer::BGCOLOR.a };
+            clearValues[0].color = { Renderer::BGCOLOR.r, Renderer::BGCOLOR.g, Renderer::BGCOLOR.b, Renderer::BGCOLOR.a };
             clearValues[1].depthStencil = { 1.0f, 0 };
 
             VkRenderPassBeginInfo renderPassBeginInfo = {};
