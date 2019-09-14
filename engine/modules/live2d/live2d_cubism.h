@@ -1,5 +1,6 @@
 #pragma once
 
+#include "engine/core/io/IO.h"
 #include "engine/core/scene/render_node.h"
 #include "engine/core/render/interface/mesh/Mesh.h"
 #include "engine/core/render/interface/Material.h"

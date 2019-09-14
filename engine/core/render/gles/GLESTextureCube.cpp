@@ -78,7 +78,7 @@ namespace Echo
 		// check
 		for (size_t i = 0; i < m_surfaces.size(); i++)
 		{
-			if (!IO::instance()->isResourceExists(m_surfaces[i].getPath()))
+			if (!IO::instance()->isExist(m_surfaces[i].getPath()))
 				return false;
 		}
 

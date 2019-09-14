@@ -22,7 +22,7 @@ namespace Echo
 
 	void Node::LuaScript::start(Node* obj)
 	{
-		m_isHaveScript = IO::instance()->isResourceExists(m_file.getPath());
+		m_isHaveScript = IO::instance()->isExist(m_file.getPath());
 		if ( Engine::instance()->getConfig().m_isGame )
 		{
 			if ( m_isHaveScript)

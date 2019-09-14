@@ -1,12 +1,9 @@
 #pragma once
 
-#include "DataStream.h"
+#include "../DataStream.h"
 
 namespace Echo
 {
-	/**
-	 * FileSystem
-	 */
 	class FileSystem 
 	{
 	public:

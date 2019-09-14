@@ -48,9 +48,9 @@ namespace Echo
 		// 静态方法，压缩资源包
 		static void updateArchive(const String& szip, const String& inPath);
 	private:
-		String						m_name;			// 名称
-		map<String, int>::type		m_files;		// 文件名与索引映射
-		void*						m_7zipHandle;	// 7zip操作
-		Echo::Mutex					m_7zipMutexLock;// 线程锁
+		String						m_name;
+		map<String, int>::type		m_files;
+		void*						m_7zipHandle;
+		Echo::Mutex					m_7zipMutexLock;
 	};
 }

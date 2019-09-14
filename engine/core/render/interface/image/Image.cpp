@@ -1,7 +1,7 @@
 #include <engine/core/log/Log.h>
 #include <engine/core/util/Exception.h>
 #include <engine/core/util/PathUtil.h>
-#include <engine/core/io/DataStream.h>
+#include <engine/core/io/IO.h>
 #include "Image.h"
 #include "ImageResampler.h"
 #include "ImageCodec.h"

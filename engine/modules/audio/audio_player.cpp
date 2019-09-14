@@ -5,7 +5,7 @@
 #define DR_WAV_IMPLEMENTATION
 #include "dr_libs/dr_wav.h"
 #include "engine/core/main/Engine.h"
-#include "engine/core/io/DataStream.h"
+#include "engine/core/io/IO.h"
 
 namespace Echo
 {

@@ -4,7 +4,7 @@
 #include "engine/core/base/class_method_bind.h"
 #include "engine/core/memory/MemAllocDef.h"
 #include "engine/core/util/PathUtil.h"
-#include "engine/core/io/DataStream.h"
+#include "engine/core/io/IO.h"
 #include "engine/core/script/scratch/scratch.h"
 
 namespace Echo

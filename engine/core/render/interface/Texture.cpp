@@ -43,7 +43,7 @@ namespace Echo
 
 	Res* Texture::load(const ResourcePath& path)
 	{
-		if (IO::instance()->isResourceExists(path.getPath()))
+		if (IO::instance()->isExist(path.getPath()))
 		{
 			Texture* texture = Renderer::instance()->createTexture2D(path.getPath());
 			texture->load();

@@ -1,7 +1,7 @@
 #include "GLESRenderBase.h"
 #include "GLESShader.h"
 #include <engine/core/util/Exception.h>
-#include "engine/core/io/DataStream.h"
+#include "engine/core/io/IO.h"
 
 namespace Echo
 {
@@ -57,7 +57,6 @@ namespace Echo
 					}
 				}
 
-				// 递归替换
 				replaceInclude();
 			}
 		}

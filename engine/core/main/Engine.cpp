@@ -135,6 +135,8 @@ namespace Echo
 		Class::registerType<GameSettings>();
 		Class::registerType<Gizmos>();
 		Class::registerType<Input>();
+        Class::registerType<IO>();
+        Class::registerType<DataStream>();
 		Class::registerType<Log>();
 		Class::registerType<RenderPipeline>();
 		Class::registerType<RenderStage>();

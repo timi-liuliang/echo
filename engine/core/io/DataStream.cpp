@@ -22,6 +22,16 @@ namespace Echo
 		return *this;
 	}
 
+    void DataStream::bindMethods()
+    {
+        CLASS_BIND_METHOD(DataStream, test, "test");
+    }
+
+    void DataStream::test(const char* msg)
+    {
+        EchoLogError("Data Stream test succeed");
+    }
+
 	size_t DataStream::write(const void* buf, size_t count)
 	{
 		(void)buf;
@@ -646,13 +656,13 @@ namespace Echo
 		else if (accessMode == (READ | WRITE))
 			mode = "rb+";
 
-		mFileHandle = fopen(name.c_str(), mode.c_str());
-		if (mFileHandle)
+        m_fileHandle = fopen(name.c_str(), mode.c_str());
+		if (m_fileHandle)
 		{
 			// Determine size
-			fseek(mFileHandle, 0, SEEK_END);
-			mSize = ftell(mFileHandle);
-			fseek(mFileHandle, 0, SEEK_SET);
+			fseek(m_fileHandle, 0, SEEK_END);
+			mSize = ftell(m_fileHandle);
+			fseek(m_fileHandle, 0, SEEK_SET);
 		}
 		else
 		{
@@ -667,7 +677,7 @@ namespace Echo
 
 	size_t FileHandleDataStream::read(void* buf, size_t count)
 	{
-		return fread(buf, 1, count, mFileHandle);
+		return fread(buf, 1, count, m_fileHandle);
 	}
 
 	size_t FileHandleDataStream::write(const void* buf, size_t count)
@@ -675,106 +685,36 @@ namespace Echo
 		if (!isWriteable())
 			return 0;
 		else
-			return fwrite(buf, 1, count, mFileHandle);
+			return fwrite(buf, 1, count, m_fileHandle);
 	}
 
 	void FileHandleDataStream::skip(long count)
 	{
-		fseek(mFileHandle, count, SEEK_CUR);
+		fseek(m_fileHandle, count, SEEK_CUR);
 	}
 
 	void FileHandleDataStream::seek(size_t pos, int origin)
 	{
-		fseek(mFileHandle, static_cast<long>(pos), origin);
+		fseek(m_fileHandle, static_cast<long>(pos), origin);
 	}
 
 	size_t FileHandleDataStream::tell(void) const
 	{
-		return ftell( mFileHandle );
+		return ftell(m_fileHandle);
 	}
 
 	bool FileHandleDataStream::eof(void) const
 	{
-		return feof(mFileHandle) != 0;
+		return feof(m_fileHandle) != 0;
 	}
 
 	void FileHandleDataStream::close(void)
 	{
-		if (mFileHandle != 0)
+		if (m_fileHandle != 0)
 		{
-			fflush(mFileHandle);
-			fclose(mFileHandle);
-			mFileHandle = 0;
+			fflush(m_fileHandle);
+			fclose(m_fileHandle);
+            m_fileHandle = 0;
 		}
-	}
-
-	MemoryReader::MemoryReader(const String& file)
-	{
-		DataStream* stream = IO::instance()->open(file);
-		if (stream)
-		{
-			m_size = (ui32)stream->size();
-			m_data = (char*)EchoMalloc(m_size + 1);
-			stream->read(m_data, m_size);
-			m_data[m_size] = '\0';
-
-			EchoSafeDelete(stream, DataStream);
-		}
-		else
-		{
-			m_size = 0;
-			m_data = nullptr;
-		}
-	}
-
-	MemoryReader::MemoryReader(const char* data, ui32 size)
-	{
-		if (size > 0)
-		{
-			m_size = size;
-			m_data = (char*)EchoMalloc(m_size + 1);
-			std::memcpy(m_data, data, m_size);
-			m_data[m_size] = '\0';
-		}
-		else
-		{
-			m_size = 0;
-			m_data = nullptr;
-		}
-	}
-
-	MemoryReader::~MemoryReader()
-	{
-		EchoSafeFree( m_data);
-		m_size = 0;
-	}
-
-	MemoryReaderAlign::MemoryReaderAlign(const String& file, int align)
-	{
-		// 加载数据
-		DataStream* stream = IO::instance()->open(file);
-		if (stream)
-		{
-			m_size = (ui32)stream->size();
-			m_data = (char*)EchoMalloc(m_size + align + 1);
-			m_dataAlign = (char*)((size_t(m_data) + align)&~(align - 1));
-			stream->read(m_dataAlign, m_size);
-			m_dataAlign[m_size] = '\0';
-
-			EchoSafeDelete(stream, DataStream);
-		}
-		else
-		{
-			m_size = 0;
-			m_data = nullptr;
-			m_dataAlign = nullptr;
-		}
-	}
-
-	MemoryReaderAlign::~MemoryReaderAlign()
-	{
-		EchoSafeFree(m_data);
-		m_dataAlign = nullptr;
-		m_size = 0;
 	}
 }

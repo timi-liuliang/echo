@@ -3,7 +3,7 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include "engine/core/util/StringUtil.h"
-#include "engine/core/io/DataStream.h"
+#include "engine/core/io/IO.h"
 #include "font_glyph.h"
 #include "font_texture.h"
 
