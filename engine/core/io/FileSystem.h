@@ -13,25 +13,25 @@ namespace Echo
 		FileSystem();
 		~FileSystem();
 
-		// 设置路径
+		// prefix+path
 		void setPath(const String& path, const String& prefix);
 
-		// 打开文件
+		// open
 		DataStream* open(const String& filename);
 
-		// 是否大小写敏感
+		// is case sensitive
 		bool isCaseSensitive() const;
 
-		// 是否存在
+		// is exist
 		bool isExist(const String& filename);
 
-		// 获取前缀
+		// get prefix
 		const String& getPrefix() const { return m_prefix; }
 
-		// 获取路径
+		// get path
 		const String& getPath() const { return m_path; }
 
-		// 全路径
+		// get full path
 		String getFullPath(const String& resPath);
 
 	private:

@@ -11,6 +11,7 @@ namespace Echo
 		struct Config
 		{
 			String			m_projectFile;
+            String          m_userPath;
 			bool			m_isGame;
 
 			Config()

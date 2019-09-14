@@ -21,42 +21,26 @@ namespace Echo
 		EchoSafeDelete(m_userFileSystem, FileSystem);
 	}
 
-	// get instance
 	IO* IO::instance()
 	{
 		static IO* inst = EchoNew(IO);
 		return inst;
 	}
 
-	// 设置引擎资源路径
 	void IO::setResPath(const String& resPath)
 	{
 		m_resFileSystem->setPath(resPath, "Res://");
 	}
 
-	// 设置用户资源路径
 	void IO::setUserPath(const String& userPath)
 	{
 		m_userFileSystem->setPath(userPath, "User://");
 	}
 
-	// 打开资源
 	DataStream* IO::open(const String& resourceName)
 	{
-		if (StringUtil::StartWith(resourceName, "Res://"))
-		{
-			DataStream* stream = m_resFileSystem->open(resourceName);
-			if (!stream)
-			{
-
-			}
-
-			return stream;
-		}
-		else if (StringUtil::StartWith(resourceName, "User://"))
-		{
-
-		}
+		if (StringUtil::StartWith(resourceName, "Res://"))          return m_resFileSystem->open(resourceName);
+		else if (StringUtil::StartWith(resourceName, "User://"))    return m_userFileSystem->open(resourceName);
 
 		//// 打开资源
 		//String  lcResourceName = resourceName;
@@ -115,7 +99,6 @@ namespace Echo
 		)
 	}
 
-	// 移除资源存档
 	void IO::removeArchive(const String& name)
 	{
 		EE_LOCK_MUTEX(AUTO_MUTEX_NAME)
@@ -147,7 +130,6 @@ namespace Echo
 		EchoLogInfo("Removed resource [%s] location", name.c_str());
 	}
 
-	// 获取文件所在的存档
 	Archive* IO::getArchiveByFileName(const char* fileName)
 	{
 		String  lcResourceName = fileName;
@@ -165,7 +147,6 @@ namespace Echo
 		return pArch;
 	}
 
-	// 根据存档名称获取存档
 	Archive* IO::getArchiveByName(const char* archiveName)
 	{
 		for (Archive* archive : m_archives)
@@ -189,7 +170,6 @@ namespace Echo
 		}
 	}
 
-	// 是否为异步资源
 	bool IO::isAsync(const char* fileName)
 	{
 		Archive* archive = getArchiveByFileName(fileName);
@@ -197,7 +177,6 @@ namespace Echo
 		return archive ? archive->isAsync(fileName) : false;
 	}
 
-	// 判断资源是否存在
 	bool IO::isResourceExists(const String& resourceName)
 	{
 		EE_LOCK_MUTEX(AUTO_MUTEX_NAME)
@@ -214,7 +193,6 @@ namespace Echo
 		return false;
 	}
 
-	// 获取文件位置
 	String IO::getFullPath(const String& filename)
 	{
 		EE_LOCK_AUTO_MUTEX
@@ -235,7 +213,6 @@ namespace Echo
 		return ret; 
 	}
 
-	// 通过全路径获取资源路径
 	bool IO::covertFullPathToResPath(const String& fullPath, String& resPath)
 	{
 		String result = StringUtil::Replace(fullPath, m_resFileSystem->getPath(), m_resFileSystem->getPrefix());
@@ -248,7 +225,6 @@ namespace Echo
 		return false;
 	}
 
-	// 获取指定后缀名的所有文件
 	void IO::listFilesWithExt( StringArray& oFiles, const char* extWithDot)
 	{
 		oFiles.clear();
@@ -293,8 +269,6 @@ namespace Echo
 		}
 	}
 
-
-	// 添加索引
 	void IO::addToIndex(const String& filename, Archive* arch, bool isOverWrite)
 	{
 		EE_LOCK_AUTO_MUTEX
@@ -311,7 +285,6 @@ namespace Echo
 		}
 	}
 
-	// 获取存档
 	Archive* IO::FindFileArchive(const String& filename)
 	{
 		EE_LOCK_AUTO_MUTEX
@@ -324,7 +297,6 @@ namespace Echo
 		return NULL;
 	}
 
-	// 移除到索引
 	void IO::removeFromIndex(const String& filename)
 	{
 		EE_LOCK_AUTO_MUTEX
@@ -334,7 +306,6 @@ namespace Echo
 			m_resourceIndexCaseSensitive.erase(it);
 	}
 
-	// 添加文件(运行期添加文件)
 	void IO::addFile(const String& archiveType, const String& fullPath)
 	{
 #ifdef ECHO_EDITOR_MODE
@@ -360,7 +331,6 @@ namespace Echo
 #endif
 	}
 
-	// 移除文件
 	void IO::removeFile(const String& _fileName)
 	{
 		String fileName = _fileName;

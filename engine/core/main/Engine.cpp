@@ -1,6 +1,7 @@
 #include "engine/core/base/class.h"
 #include "engine/core/main/Engine.h"
 #include "engine/core/util/PathUtil.h"
+#include "engine/core/util/HashGenerator.h"
 #include "engine/core/util/Exception.h"
 #include "engine/core/io/IO.h"
 #include "engine/core/log/Log.h"
@@ -56,6 +57,9 @@ namespace Echo
 	bool Engine::initialize(const Config& cfg)
 	{
 		m_config = cfg;
+
+        ImageCodecMgr::instance();
+        IO::instance();
         
 		// check root path
 		setlocale(LC_ALL, "zh_CN.UTF-8");
@@ -70,8 +74,7 @@ namespace Echo
             return false;
         }
 
-        ImageCodecMgr::instance();
-        IO::instance();
+        IO::instance()->setUserPath( m_config.m_userPath);
 
 		// lua script
 		{
@@ -311,6 +314,14 @@ namespace Echo
         Echo::Engine::Config rootcfg;
         rootcfg.m_projectFile = project;
         rootcfg.m_isGame = isGame;
+
+#ifdef ECHO_PLATFORM_WINDOWS
+        rootcfg.m_userPath = PathUtil::GetCurrentDir() + "/user/" + StringUtil::Format("u%d/", BKDRHash(project.c_str()));
+        PathUtil::FormatPath(rootcfg.m_userPath);
+#else
+
+#endif
+
         Engine::instance()->initialize(rootcfg);
 
 		return Engine::instance();
