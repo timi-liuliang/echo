@@ -14,7 +14,7 @@ namespace Echo
 		void setPath(const String& path, const String& prefix);
 
 		// open
-		DataStream* open(const String& filename);
+		DataStream* open(const String& filename, ui32 accessMode = DataStream::READ);
 
 		// is case sensitive
 		bool isCaseSensitive() const;

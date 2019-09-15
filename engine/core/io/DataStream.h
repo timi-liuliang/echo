@@ -115,47 +115,10 @@ namespace Echo
 		bool	mFreeOnClose;
 	};
 
-	class FileStreamDataStream : public DataStream
-	{
-	public:
-		FileStreamDataStream(std::ifstream* s, bool freeOnClose = true);
-		FileStreamDataStream(std::fstream* s, bool freeOnClose = true);
-		FileStreamDataStream(const String& name, std::ifstream* s, bool freeOnClose = true);
-		FileStreamDataStream(const String& name, std::fstream* s, bool freeOnClose = true);
-		FileStreamDataStream(const String& name, std::ifstream* s, size_t size, bool freeOnClose = true);
-		FileStreamDataStream(const String& name, std::fstream* s, size_t size, bool freeOnClose = true);
-		~FileStreamDataStream();
-
-		size_t read(void* buf, size_t count);
-
-		size_t write(const void* buf, size_t count);
-
-		size_t readLine(char* buf, size_t maxCount, const String& delim = "\n");
-
-		void skip(long count);
-
-		void seek(size_t pos, int origin = SEEK_SET);
-
-		size_t tell(void) const;
-
-		bool eof(void) const;
-
-		void close(void);
-
-	protected:
-		void determineAccess();
-
-	protected:
-		std::istream*	mpInStream;
-		std::ifstream*	mpFStreamRO;
-		std::fstream*	mpFStream;
-		bool			mFreeOnClose;	
-	};
-
 	class FileHandleDataStream : public DataStream
 	{
 	public:
-		FileHandleDataStream(const String& name, ui16 accessMode = READ);
+		FileHandleDataStream(const String& name, ui32 accessMode = READ);
 		~FileHandleDataStream();
 
 		size_t read(void* buf, size_t count);

@@ -16,6 +16,7 @@ namespace Echo
 {
 	class Object;
 	class Node;
+    class DataStream;
 	struct LuaStackCheck
 	{
 		int			m_elementNum;
@@ -335,6 +336,13 @@ namespace Echo
 			lua_pushnil(state);
 		}
 	}
+
+
+    template<> INLINE void lua_pushvalue<DataStream*>(lua_State* state, DataStream* value)
+    {
+        Object* obj = (Object*)value;
+        lua_pushvalue<Object*>(state, obj);
+    }
 
 	template<> INLINE void lua_pushvalue<Variant>(lua_State* state, Variant value)
 	{

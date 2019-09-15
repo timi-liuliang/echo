@@ -33,32 +33,29 @@ namespace Echo
 		m_prefix = prefix;
 	}
 
-	DataStream* FileSystem::open(const String& filename)
+	DataStream* FileSystem::open(const String& filename, ui32 accessMode)
 	{
 		String fullPath = getFullPath( filename);
 
-		// Use filesystem to determine size 
-		// (quicker than streaming to the end and back)
-		struct stat tagStat;
-		int ret = stat(fullPath.c_str(), &tagStat);
-		if (ret == 0)
-		{
-			std::ifstream* origStream = EchoNew(std::ifstream);
-			origStream->open(fullPath.c_str(), std::ios::in | std::ios::binary);
-			if (!origStream->fail())
-			{
-				FileStreamDataStream* stream = EchoNew(FileStreamDataStream(filename, origStream, tagStat.st_size, true));
-				return stream;
-			}
-			else
-			{
-				EchoSafeDelete(origStream, basic_ifstream);
-			}
-		}
+        // create dir
+        if (accessMode != DataStream::READ)
+        {
+            String dirPath = PathUtil::GetFileDirPath(fullPath);
+            if (!PathUtil::IsDirExist(dirPath))
+                PathUtil::CreateDir(dirPath);
+        }
 
-		EchoLogError("Error: Cannot open file: %s in FileSystem::open[%s]", filename.c_str(), strerror(errno));
+        // open file
+		FileHandleDataStream* stream = EchoNew(FileHandleDataStream(fullPath, accessMode));
+        if (stream->fail())
+        {
+            EchoSafeDelete(stream, FileHandleDataStream);
 
-		return nullptr;
+            EchoLogError("Error: Cannot open file: %s in FileSystem::open[%s]", filename.c_str(), strerror(errno));
+            return nullptr;
+        }
+
+		return stream;
 	}
 
 	bool FileSystem::isExist(const String& filename)

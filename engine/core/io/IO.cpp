@@ -40,10 +40,10 @@ namespace Echo
 		m_userFileSystem->setPath(userPath, "User://");
 	}
 
-	DataStream* IO::open(const String& resourceName)
+	DataStream* IO::open(const String& resourceName, ui32 accessMode)
 	{
-		if (StringUtil::StartWith(resourceName, "Res://"))          return m_resFileSystem->open(resourceName);
-		else if (StringUtil::StartWith(resourceName, "User://"))    return m_userFileSystem->open(resourceName);
+		if (StringUtil::StartWith(resourceName, "Res://"))          return m_resFileSystem->open(resourceName, accessMode);
+		else if (StringUtil::StartWith(resourceName, "User://"))    return m_userFileSystem->open(resourceName, accessMode);
 
 		EchoLogError("Cannot locate a resource [%s] ResourceGroupManager::openResource", resourceName.c_str());
 		return  nullptr;

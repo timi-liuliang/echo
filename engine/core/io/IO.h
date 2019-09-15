@@ -25,7 +25,7 @@ namespace Echo
 		void setUserPath(const String& userPath);
 
 		// open
-		DataStream* open(const String& resourceName);
+		DataStream* open(const String& resourceName, ui32 accessMode = DataStream::READ);
 
 		// is resource exist
 		bool isExist(const String& filename);
