@@ -197,22 +197,15 @@ namespace Echo
 		if(IsDriveOrRoot(dir))
 			return true;
 
-		struct stat st;
-
 		String tempPath = dir;
 		if(IsEndWithSeperator(tempPath))
 		{
 			tempPath = tempPath.substr(0, tempPath.length() - 1);
 		}
 
-		const char* filename = tempPath.c_str();
-
-		///* ignore hidden files */
-		//if(filename[0] == '.')
-		//	return true;
-
 		/* get dirent status */
-		if(stat(filename, &st) == -1)
+        struct stat st;
+		if(stat(tempPath.c_str(), &st) == -1)
 			return false;
 
 		if(S_ISDIR(st.st_mode))

@@ -109,29 +109,6 @@ namespace Echo
 
 	void StringUtil::Trim(String& str, bool bLeft, bool bRight)
 	{
-		/*
-		size_t lspaces, rspaces, len = length(), i;
-
-		lspaces = rspaces = 0;
-
-		if( left )
-		{
-		// Find spaces / tabs on the left
-		for( i = 0;
-		i < len && ( at(i) == ' ' || at(i) == '\t' || at(i) == '\r');
-		++lspaces, ++i );
-		}
-
-		if( right && lspaces < len )
-		{
-		// Find spaces / tabs on the right
-		for( i = len - 1;
-		i >= 0 && ( at(i) == ' ' || at(i) == '\t' || at(i) == '\r');
-		rspaces++, i-- );
-		}
-
-		*this = substr(lspaces, len-lspaces-rspaces);
-		*/
 		static const String delims = " \t\r\n";
 		if(bRight)
 			str.erase(str.find_last_not_of(delims)+1); // trim right
@@ -268,23 +245,6 @@ namespace Echo
 
 		return szBuffer;
 	}
-
-	/*WString StringUtil::Format( const wchar_t* formats, ... )
-	{
-		va_list args;
-		va_start(args,formats);
-		const int bufferLength = 8192;
-		wchar_t buffer[bufferLength] = { 0 };
-
-		int numforwrite = 0;
-#ifdef WIN32
-		numforwrite = _vsnwprintf( buffer, bufferLength, formats, args );
-#else
-		numforwrite = vsnwprintf_x( buffer, bufferLength, formats, args );
-#endif
-		va_end(args);
-		return buffer;
-	}*/
 
 	bool StringUtil::StartWith(const String& str, const String& pattern, bool lowCase)
 	{

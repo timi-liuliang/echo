@@ -443,7 +443,7 @@ namespace Echo
 		else if (accessMode == WRITE)
 			mode = "wb";
 		else if (accessMode == (READ | WRITE))
-			mode = "rb+";
+			mode = "wb+";
 
         m_fileHandle = fopen(name.c_str(), mode.c_str());
 		if (m_fileHandle)
