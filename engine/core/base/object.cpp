@@ -27,6 +27,7 @@ namespace Echo
 		EchoSafeDelete(m_objectEditor, ObjectEditor);
 #endif
 
+        unregisterFromScript();
 		unregisterChannels();
 
 		auto it = g_objs.find(m_id);
@@ -73,6 +74,26 @@ namespace Echo
 		static String className = "Object";
 		return className;
 	}
+
+    void Object::registerToScript() 
+    {
+        if (!m_isRegisteredToScript)
+        {
+            String globalTableName = StringUtil::Format("objs._%d", this->getId());
+            LuaBinder::instance()->registerObject(getClassName(), globalTableName.c_str(), this);
+
+            m_isRegisteredToScript = true;
+        }
+    }
+
+    void Object::unregisterFromScript()
+    {
+        if (m_isRegisteredToScript)
+        {
+            String luaStr = StringUtil::Format("objs._%d = nil", getId());
+            LuaBinder::instance()->execString(luaStr);
+        }
+    }
 
 	bool Object::connect(Object* from, const char* signalName, Object* to, const char* luaFunName)
 	{

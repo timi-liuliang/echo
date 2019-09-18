@@ -50,7 +50,7 @@ namespace Echo
 	void lua_binder_warning(const char* msg);
 	void lua_binder_error(const char* msg);
 	void lua_get_obj_name(Object* obj, char* buffer, int len);
-	void lua_get_node_name(Node* obj, char* buffer, int len);
+    void lua_register_object(Object* obj);
 
 	// lua stack to value
 	template<typename T> INLINE T lua_getvalue(lua_State* L, int index)			
@@ -307,6 +307,8 @@ namespace Echo
 	{
 		if (value)
 		{
+            lua_register_object(value);
+
 			char obj_name[128] = "_";
 			lua_get_obj_name(value, obj_name + 1, 127);
 
@@ -322,21 +324,9 @@ namespace Echo
 
 	template<> INLINE void lua_pushvalue<Node*>(lua_State* state, Node* value)
 	{
-		if (value)
-		{
-			char obj_name[128] = "_";
-			lua_get_node_name(value, obj_name + 1, 127);
-
-			lua_getglobal(state, "objs");
-			lua_getfield(state, -1, obj_name);
-			lua_remove(state, -2);
-		}
-		else
-		{
-			lua_pushnil(state);
-		}
+        Object* obj = (Object*)value;
+        lua_pushvalue<Object*>(state, obj);
 	}
-
 
     template<> INLINE void lua_pushvalue<DataStream*>(lua_State* state, DataStream* value)
     {

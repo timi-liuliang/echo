@@ -26,10 +26,10 @@ namespace Echo
         sprintf(buffer, "%d", obj->getId());
 	}
 
-	void lua_get_node_name(Node* obj, char* buffer, int len)
-	{
-        sprintf(buffer, "%d", obj->getId());
-	}
+    void lua_register_object(Object* obj)
+    {
+        obj->registerToScript();
+    }
 
 	int lua_get_upper_tables(lua_State* luaState, const String& objectName, String& currentLayerName)
 	{

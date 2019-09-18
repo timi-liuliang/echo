@@ -11,11 +11,9 @@ namespace Echo
 {
 	void Node::LuaScript::release(Node* obj)
 	{
-		if (m_isRegistered)
+		if (obj->isRegisteredToScript())
 		{
-			String luaStr = StringUtil::Format(
-				"nodes._%d = nil\n"\
-				"objs._%d = nil", obj->getId(), obj->getId());
+			String luaStr = StringUtil::Format("nodes._%d = nil", obj->getId());
 			LuaBinder::instance()->execString(luaStr);
 		}
 	}
@@ -265,7 +263,6 @@ namespace Echo
 		needUpdate();
 	}
 
-	// remove from tree
 	void Node::remove()
 	{
 		Node* parent = getParent();
@@ -273,7 +270,6 @@ namespace Echo
 			parent->removeChild(this);
 	}
 
-	// remove child
 	bool Node::isChildExist(const String& name)
 	{
 		for (Node* child : m_children)
@@ -285,13 +281,11 @@ namespace Echo
 		return false;
 	}
 
-	// remove child
 	void Node::addChild(Node* node)
 	{
 		node->setParent(this);
 	}
 
-	// remove child
 	bool Node::removeChild(Node* node)
 	{
 		for( NodeArray::iterator it = m_children.begin(); it!=m_children.end(); it++)
@@ -399,16 +393,14 @@ namespace Echo
 		m_script.m_file.setPath(path.getPath());
 	}
 
-	// register to script
 	void Node::registerToScript()
 	{
-		if (!m_script.m_isRegistered)
-		{
-			m_script.m_globalTableName = StringUtil::Format("objs._%d", this->getId());
-			LuaBinder::instance()->registerObject( getClassName(), m_script.m_globalTableName.c_str(), this);
+        if (!m_isRegisteredToScript)
+        {
+            Object::registerToScript();
 
-			m_script.m_isRegistered = true;
-		}
+            m_script.m_globalTableName = StringUtil::Format("objs._%d", this->getId());
+        }
 	}
     
     void Node::callLuaFunction(const String& funName, const Variant** args, int argCount)
@@ -462,7 +454,6 @@ namespace Echo
 		}
 	}
 
-	// bind methods
 	void Node::bindMethods()
 	{
 		BIND_METHOD(Node::load,							DEF_METHOD("Node.load"));
@@ -501,7 +492,6 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(Node, "Script", Variant::Type::ResourcePath, "getScript", "setScript");
 	}
 
-	// get node by path
 	Node* Node::getNode(const char* path)
 	{
 		if (path)
@@ -568,7 +558,6 @@ namespace Echo
 		return nullptr;
 	}
 
-	// build node path
 	String Node::getNodePath() const
 	{
 		String result;
@@ -585,7 +574,6 @@ namespace Echo
 		return result;
 	}
 
-	// get relative path
 	String Node::getNodePathRelativeTo(const Node* baseNode) const
 	{
 		int         baseNodeListCount = 0;
@@ -634,7 +622,6 @@ namespace Echo
 		return result;
 	}
 
-	// queue free
 	void Node::queueFree()
 	{
 		if (m_parent)
@@ -651,7 +638,6 @@ namespace Echo
 		ECHO_DELETE_T(this, Node);
 	}
 
-	// duplicate
 	Node* Node::duplicate(bool recursive)
 	{
 		// save
@@ -672,14 +658,12 @@ namespace Echo
 		return value;
 	}
 
-	// ch
 	Variant Node::ch(const String& path, const String& propertyName)
 	{
 		Node* targetNode = getNode(path.c_str());
 		return targetNode ? targetNode->getPropertyValue(propertyName) : Variant();
 	}
 
-	// save
 	void Node::save(const String& path)
 	{
 		String fullPath = IO::instance()->getFullPath(path);
@@ -699,7 +683,6 @@ namespace Echo
 		doc.save_file(fullPath.c_str(), "\t", 1U, pugi::encoding_utf8);
 	}
 
-	// save xml recursive
 	void Node::saveXml(void* pugiNode, Node* node, bool recursive)
 	{
 		pugi::xml_node* xmlNode = (pugi::xml_node*)pugiNode;
@@ -726,7 +709,6 @@ namespace Echo
 		}
 	}
 
-	// instance
 	Node* Node::load(const char* path)
 	{
 		Node* result = loadLink(path, false);
@@ -735,7 +717,6 @@ namespace Echo
 		return result;
 	}
 
-	// load
 	Node* Node::loadLink(const String& path, bool isLink)
 	{
 		MemoryReader reader(path);

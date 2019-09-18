@@ -33,7 +33,9 @@ namespace Echo
 		virtual void setPath(const String& path) { m_path.setPath(path); }
         
         // register to script
-        virtual void registerToScript() {}
+        bool isRegisteredToScript() { return m_isRegisteredToScript; }
+        virtual void registerToScript();
+        virtual void unregisterFromScript();
 
 		// free this object from memory
 		virtual void queueFree() { ECHO_DELETE_T(this, Object); }
@@ -112,5 +114,6 @@ namespace Echo
 		ResourcePath	m_path;
 		PropertyInfos	m_propertys;
         ChannelsPtr     m_chanels = nullptr;
+        bool			m_isRegisteredToScript = false;
 	};
 }
