@@ -71,10 +71,6 @@ namespace Echo
 	public:
 		MemoryDataStream(void* pMem, size_t size, bool freeOnClose = false, bool readOnly = false);
 		MemoryDataStream(const String& name, void* pMem, size_t size, bool freeOnClose = false, bool readOnly = false);
-		MemoryDataStream(DataStream& sourceStream, bool freeOnClose = true, bool readOnly = false);
-		MemoryDataStream(DataStream* sourceStream, bool freeOnClose = true, bool readOnly = false);
-		MemoryDataStream(const String& name, DataStream& sourceStream, bool freeOnClose = true, bool readOnly = false);
-		MemoryDataStream(const String& name, DataStream* sourceStream, bool freeOnClose = true, bool readOnly = false);
 		MemoryDataStream(size_t size, bool freeOnClose = true, bool readOnly = false);
 		MemoryDataStream(const String& name, size_t size, bool freeOnClose = true, bool readOnly = false);
 		~MemoryDataStream();

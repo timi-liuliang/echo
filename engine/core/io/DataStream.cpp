@@ -221,58 +221,6 @@ namespace Echo
 		EchoAssert(mEnd >= mPos);
 	}
 
-	MemoryDataStream::MemoryDataStream(DataStream& sourceStream, 
-		bool freeOnClose, bool readOnly)
-		: DataStream(static_cast<ui16>(readOnly ? READ : (READ | WRITE)))
-	{
-		// Copy data from incoming stream
-		mSize = sourceStream.size();
-		mData = (ui8*)EchoMalloc(mSize);
-		mPos = mData;
-		mEnd = mData + sourceStream.read(mData, mSize);
-		mFreeOnClose = freeOnClose;
-		EchoAssert(mEnd >= mPos);
-	}
-
-	MemoryDataStream::MemoryDataStream(DataStream* sourceStream, 
-		bool freeOnClose, bool readOnly)
-		: DataStream(static_cast<ui16>(readOnly ? READ : (READ | WRITE)))
-	{
-		// Copy data from incoming stream
-		mSize = sourceStream->size();
-		mData = (ui8*)EchoMalloc(mSize);
-		mPos = mData;
-		mEnd = mData + sourceStream->read(mData, mSize);
-		mFreeOnClose = freeOnClose;
-		EchoAssert(mEnd >= mPos);
-	}
-
-	MemoryDataStream::MemoryDataStream(const String& name, DataStream& sourceStream, 
-		bool freeOnClose, bool readOnly)
-		: DataStream(name, static_cast<ui8>(readOnly ? READ : (READ | WRITE)))
-	{
-		// Copy data from incoming stream
-		mSize = sourceStream.size();
-		mData = (ui8*)EchoMalloc(mSize);
-		mPos = mData;
-		mEnd = mData + sourceStream.read(mData, mSize);
-		mFreeOnClose = freeOnClose;
-		EchoAssert(mEnd >= mPos);
-	}
-
-	MemoryDataStream::MemoryDataStream(const String& name, DataStream* sourceStream, 
-		bool freeOnClose, bool readOnly)
-		: DataStream(name, static_cast<ui16>(readOnly ? READ : (READ | WRITE)))
-	{
-		// Copy data from incoming stream
-		mSize = sourceStream->size();
-		mData = (ui8*)EchoMalloc(mSize);
-		mPos = mData;
-		mEnd = mData + sourceStream->read(mData, mSize);
-		mFreeOnClose = freeOnClose;
-		EchoAssert(mEnd >= mPos);
-	}
-
 	MemoryDataStream::MemoryDataStream(size_t size, bool freeOnClose, bool readOnly)
 		: DataStream(static_cast<ui16>(readOnly ? READ : (READ | WRITE)))
 	{

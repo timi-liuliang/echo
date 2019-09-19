@@ -97,7 +97,7 @@ namespace Echo
         Echo::initEngine(echoProject, true);
 
 		// default window size
-		//resizeWindow( m_hWnd, Echo::GameSettings::instance()->getWindowWidth(), Echo::GameSettings::instance()->getWindowHeight());
+		resizeWindow( m_hWnd, Echo::GameSettings::instance()->getWindowWidth(), Echo::GameSettings::instance()->getWindowHeight());
 	}
 
 	void App::resizeWindow(HWND hwnd, int width, int height)

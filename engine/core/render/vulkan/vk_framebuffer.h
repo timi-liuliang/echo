@@ -55,7 +55,7 @@ namespace Echo
         void createVkDescriptorPool();
 
     protected:
-        VkRenderPass                        m_vkRenderPass;
+        VkRenderPass                        m_vkRenderPass = nullptr;
         VkRenderPassBeginInfo               m_vkRenderPassBeginInfo;
         vector<VkFramebuffer>::type         m_vkFramebuffers;
         VkViewport                          m_vkViewport;
@@ -104,25 +104,29 @@ namespace Echo
     private:
         // recreate swap chain
         void recreateVkSwapChain();
-        void cleanupSwapChain();
+        void destroyVkSwapChain(VkSwapchainKHR vkSwapChain);
 
         // create vk frame buffer
         void createVkFramebuffers();
+        void destroyVkFramebuffers();
 
         // vk command buffer
         void createVkCommandBuffers();
+        void destroyVkCommandBuffers();
 
         // create semaphores
         void createVkSemaphores();
 
         // create fences
         void createVkFences();
+        void destroyVkFences();
 
         // create swap chain
         void createSwapChain(VkDevice vkDevice);
 
         // create image views
-        void createImageViews(VkDevice vkDevice);
+        void createVkImageViews(VkDevice vkDevice);
+        void destroyVkImageViews();
 
         // check surface format
         VkSurfaceFormatKHR pickSurfaceSupportFormat();

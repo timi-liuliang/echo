@@ -97,34 +97,37 @@ namespace Echo
 
     void VKFramebuffer::createVkRenderPass()
     {
-        VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
+        if (!m_vkRenderPass)
+        {
+            VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
 
-        VkAttachmentReference attachRef = {};
-        attachRef.attachment = 0;
-        attachRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            VkAttachmentReference attachRef = {};
+            attachRef.attachment = 0;
+            attachRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
-        VkSubpassDescription subpassDesc = {};
-        subpassDesc.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-        subpassDesc.colorAttachmentCount = 1;
-        subpassDesc.pColorAttachments = &attachRef;
+            VkSubpassDescription subpassDesc = {};
+            subpassDesc.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+            subpassDesc.colorAttachmentCount = 1;
+            subpassDesc.pColorAttachments = &attachRef;
 
-        VkAttachmentDescription attachDesc = {};
-        //attachDesc.format = ;
-        attachDesc.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-        attachDesc.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-        attachDesc.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-        attachDesc.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-        attachDesc.initialLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-        attachDesc.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+            VkAttachmentDescription attachDesc = {};
+            //attachDesc.format = ;
+            attachDesc.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            attachDesc.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+            attachDesc.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+            attachDesc.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+            attachDesc.initialLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+            attachDesc.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 
-        VkRenderPassCreateInfo renderPassCreateInfo = {};
-        renderPassCreateInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-        renderPassCreateInfo.attachmentCount = 1;
-        renderPassCreateInfo.pAttachments = &attachDesc;
-        renderPassCreateInfo.subpassCount = 1;
-        renderPassCreateInfo.pSubpasses = &subpassDesc;
+            VkRenderPassCreateInfo renderPassCreateInfo = {};
+            renderPassCreateInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+            renderPassCreateInfo.attachmentCount = 1;
+            renderPassCreateInfo.pAttachments = &attachDesc;
+            renderPassCreateInfo.subpassCount = 1;
+            renderPassCreateInfo.pSubpasses = &subpassDesc;
 
-        VKDebug(vkCreateRenderPass(vkRenderer->getVkDevice(), &renderPassCreateInfo, nullptr, &m_vkRenderPass));
+            VKDebug(vkCreateRenderPass(vkRenderer->getVkDevice(), &renderPassCreateInfo, nullptr, &m_vkRenderPass));
+        }
     }
 
     void VKFramebuffer::createVkDescriptorPool()
@@ -212,6 +215,10 @@ namespace Echo
 
     VKFramebufferWindow::~VKFramebufferWindow()
     {
+        destroyVkFramebuffers();
+        destroyVkImageViews();
+        destroyVkSwapChain(m_vkSwapChain);
+
         vkDestroySurfaceKHR(VKRenderer::instance()->getVkInstance(), m_vkWindowSurface, nullptr);
         vkDestroySemaphore(VKRenderer::instance()->getVkDevice(), m_vkRenderFinishedSemaphore, nullptr);
         vkDestroySemaphore(VKRenderer::instance()->getVkDevice(), m_vkImageAvailableSemaphore, nullptr);
@@ -242,23 +249,32 @@ namespace Echo
 
     void VKFramebufferWindow::recreateVkSwapChain()
     {
-        vkDeviceWaitIdle(VKRenderer::instance()->getVkDevice());
+        VkDevice vkDevice = VKRenderer::instance()->getVkDevice();
+        if (vkDevice)
+        {
+            vkDeviceWaitIdle(vkDevice);
 
-        createSwapChain(VKRenderer::instance()->getVkDevice());
-        createImageViews(VKRenderer::instance()->getVkDevice());
-        createVkRenderPass();
-        createVkFramebuffers();
-        createVkCommandBuffers();
-        createVkFences();
+            createSwapChain(vkDevice);
+            createVkImageViews(vkDevice);
+            createVkRenderPass();
+            createVkFramebuffers();
+            createVkCommandBuffers();
+            createVkFences();
+
+            vkDeviceWaitIdle(vkDevice);
+        }
     }
 
-    void VKFramebufferWindow::cleanupSwapChain()
+    void VKFramebufferWindow::destroyVkSwapChain(VkSwapchainKHR vkSwapChain)
     {
-
+        if (vkSwapChain != VK_NULL_HANDLE)
+            vkDestroySwapchainKHR(VKRenderer::instance()->getVkDevice(), vkSwapChain, nullptr);
     }
 
     void VKFramebufferWindow::createVkCommandBuffers()
     {
+        destroyVkCommandBuffers();
+
         m_vkCommandBuffers.resize(m_vkSwapChainImages.size());
 
         VkCommandBufferAllocateInfo createInfo = {};
@@ -269,6 +285,12 @@ namespace Echo
         createInfo.commandBufferCount = m_vkCommandBuffers.size();
 
         VKDebug(vkAllocateCommandBuffers(VKRenderer::instance()->getVkDevice(), &createInfo, &m_vkCommandBuffers[0]));
+    }
+
+    void VKFramebufferWindow::destroyVkCommandBuffers()
+    {
+        if (m_vkCommandBuffers.empty())
+            vkFreeCommandBuffers(VKRenderer::instance()->getVkDevice(), VKRenderer::instance()->getVkCommandPool(), m_vkCommandBuffers.size(), m_vkCommandBuffers.data());
     }
 
     void VKFramebufferWindow::createVkSemaphores()
@@ -282,6 +304,8 @@ namespace Echo
 
     void VKFramebufferWindow::createVkFences()
     {
+        destroyVkFences();
+
         // Fences (Used to check draw command buffer completion)
         VkFenceCreateInfo fenceCreateInfo = {};
         fenceCreateInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
@@ -292,6 +316,14 @@ namespace Echo
         m_waitFences.resize(m_vkSwapChainImages.size());
         for (VkFence& fence : m_waitFences)
             VKDebug(vkCreateFence(VKRenderer::instance()->getVkDevice(), &fenceCreateInfo, nullptr, &fence));
+    }
+
+    void VKFramebufferWindow::destroyVkFences()
+    {
+        for (VkFence& fence : m_waitFences)
+            vkDestroyFence(VKRenderer::instance()->getVkDevice(), fence, nullptr);
+
+        m_waitFences.clear();
     }
 
     void VKFramebufferWindow::createVkSurface(void* handle)
@@ -370,6 +402,9 @@ namespace Echo
     {
         VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
 
+        // remember old swapchain
+        VkSwapchainKHR oldVkSwapChain = m_vkSwapChain;
+
         // surface capabilities
         VkSurfaceCapabilitiesKHR surfaceCapabilities;
         vkGetPhysicalDeviceSurfaceCapabilitiesKHR(vkRenderer->getVkPhysicalDevice(), m_vkWindowSurface, &surfaceCapabilities);
@@ -418,7 +453,7 @@ namespace Echo
         createInfo.imageArrayLayers = 1;
         createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
         createInfo.presentMode = swapChainPresentMode;
-        createInfo.oldSwapchain = VK_NULL_HANDLE;
+        createInfo.oldSwapchain = oldVkSwapChain;
         createInfo.clipped = VK_TRUE;
         createInfo.compositeAlpha = compositeAlpha;
 
@@ -433,9 +468,13 @@ namespace Echo
         }
 
         VKDebug(vkCreateSwapchainKHR(vkDevice, &createInfo, nullptr, &m_vkSwapChain));
+
+        // destroy old vk swapchain and clearsup all the presentable images
+        destroyVkImageViews();
+        destroyVkSwapChain(oldVkSwapChain);
     }
 
-    void VKFramebufferWindow::createImageViews(VkDevice vkDevice)
+    void VKFramebufferWindow::createVkImageViews(VkDevice vkDevice)
     {
         VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
 
@@ -470,8 +509,18 @@ namespace Echo
         }
     }
 
+    void VKFramebufferWindow::destroyVkImageViews()
+    {
+        for (VkImageView imageView : m_vkSwapChainImageViews)
+            vkDestroyImageView(VKRenderer::instance()->getVkDevice(), imageView, nullptr);
+
+        m_vkSwapChainImageViews.clear();
+    }
+
     void VKFramebufferWindow::createVkFramebuffers()
     {
+        destroyVkFramebuffers();
+
         m_vkFramebuffers.resize(m_vkSwapChainImages.size());
         for (size_t i = 0; i < m_vkFramebuffers.size(); i++)
         {
@@ -488,6 +537,14 @@ namespace Echo
 
             VKDebug(vkCreateFramebuffer(VKRenderer::instance()->getVkDevice(), &fbCreateInfo, NULL, &m_vkFramebuffers[i]));
         }
+    }
+
+    void VKFramebufferWindow::destroyVkFramebuffers()
+    {
+        for (VkFramebuffer frameBuffer : m_vkFramebuffers)
+            vkDestroyFramebuffer(VKRenderer::instance()->getVkDevice(), frameBuffer, nullptr);
+
+        m_vkFramebuffers.clear();
     }
 
     VkSurfaceFormatKHR VKFramebufferWindow::pickSurfaceSupportFormat()
