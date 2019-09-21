@@ -142,7 +142,7 @@ namespace Echo
         QueueFamilies       m_vkQueueFamilies;
         VkDevice            m_vkDevice = nullptr;
 		VKValidation		m_validation;
-        VkQueue             m_vkGraphicsQueue;
+        VkQueue             m_vkGraphicsQueue = nullptr;
 		VkCommandPool		m_vkCommandPool;
 	};
 }

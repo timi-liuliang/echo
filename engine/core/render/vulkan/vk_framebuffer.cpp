@@ -355,7 +355,7 @@ namespace Echo
         vkCmdEndRenderPass(getVkCommandbuffer());
 
         // end command buffer before submit
-        vkEndCommandBuffer(getVkCommandbuffer());
+        VKDebug(vkEndCommandBuffer(getVkCommandbuffer()));
 
         // Use a fence to wait until the command buffer has finished execution before using it again
         VKDebug(vkWaitForFences(VKRenderer::instance()->getVkDevice(), 1, &m_waitFences[m_imageIndex], VK_TRUE, UINT64_MAX));

@@ -327,10 +327,9 @@ namespace Echo
             VkCommandBuffer vkCommandbuffer = vkFramebuffer->getVkCommandbuffer();
 
             vkRenderable->bindRenderState();
+            vkCmdBindPipeline(vkCommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkRenderable->getVkPipeline());
             vkRenderable->bindShaderParams();
             vkRenderable->bindGeometry();
-
-            vkCmdBindPipeline(vkCommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkRenderable->getVkPipeline());
 
             Mesh* mesh = renderable->getMesh();
             if (mesh->getIndexBuffer())

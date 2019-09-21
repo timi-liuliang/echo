@@ -89,7 +89,7 @@ namespace Echo
 			createInfo.pUserData = nullptr;
 
 			// create
-			vkCDRC(vkRenderer->getVkInstance(), &createInfo, nullptr, &m_vkDebugReportCB);
+			VKDebug(vkCDRC(vkRenderer->getVkInstance(), &createInfo, nullptr, &m_vkDebugReportCB));
 		}
 	}
 
