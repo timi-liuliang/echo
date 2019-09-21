@@ -1,4 +1,5 @@
 #include "interface/mesh/Mesh.h"
+#include "interface/pipeline/RenderPipeline.h"
 #include "vk_renderer.h"
 #include "vk_renderable.h"
 #include "vk_shader_program.h"
@@ -300,6 +301,21 @@ namespace Echo
 
         VKDebug(vkCreateCommandPool(m_vkDevice, &createInfo, nullptr, &m_vkCommandPool));
 	}
+
+    void VKRenderer::onSize(int width, int height)
+    {
+        // render target
+        RenderPipeline::instance()->onSize(width, height);
+
+        for (auto& it : m_renderables)
+        {
+            VKRenderable* vkRenderable = ECHO_DOWN_CAST<VKRenderable*>(it.second);
+            if (vkRenderable)
+            {
+                vkRenderable->createVkPipeline();
+            }
+        }
+    }
 
     void VKRenderer::draw(Renderable* renderable)
     {

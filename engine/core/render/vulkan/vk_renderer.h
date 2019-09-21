@@ -61,7 +61,7 @@ namespace Echo
 		virtual void endScissor() override {}
 
 		// on size
-		virtual void onSize(int width, int height) override {}
+        virtual void onSize(int width, int height) override;
 
 		// draw
         virtual void draw(Renderable* renderable) override;

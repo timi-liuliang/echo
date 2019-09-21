@@ -91,8 +91,6 @@ namespace Echo
         m_vkViewportStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
         m_vkViewportStateCreateInfo.viewportCount = 1;
         m_vkViewportStateCreateInfo.pViewports = &m_vkViewport;
-        //m_vkViewportStateCreateInfo.scissorCount = 1;
-        //m_vkViewportStateCreateInfo.pScissors = nullptr;
     }
 
     void VKFramebuffer::createVkRenderPass()
@@ -392,10 +390,6 @@ namespace Echo
         present.pResults = nullptr;
 
         VKDebug(vkQueuePresentKHR(m_vkPresentQueue, &present));
-
-        // vkQueueWaitIdle is equivalent to submitting a fence to a queue
-        // and waiting with an infinite timeout for that fence to signal.
-        // VKDebug(vkQueueWaitIdle(m_vkPresentQueue));
     }
 
     void VKFramebufferWindow::createSwapChain(VkDevice vkDevice)

@@ -16,6 +16,10 @@ namespace Echo
         void bindShaderParams();
         void bindGeometry();
 
+        // create|destroy vk pipeline
+        void createVkPipeline();
+        void destroyVkPipeline();
+
     public:
         // get vk pipeline
         VkPipeline getVkPipeline() { return m_vkPipeline; }
@@ -25,9 +29,6 @@ namespace Echo
         virtual void setMesh(Mesh* mesh) override;
 
 	private:
-		// create vk pipeline
-		void createVkPipeline();
-
         // build vertex input attribute
         void buildVkVertexInputAttributeDescriptions(VKShaderProgram* vkShaderProgram, const VertexElementList& vertElements, vector<VkVertexInputAttributeDescription>::type& viAttributeDescriptions);
 

@@ -242,9 +242,6 @@ namespace Echo
 			GameSettings::instance()->onSize(windowWidth, windowHeight);
 		}
 
-		// render target
-		RenderPipeline::instance()->onSize(windowWidth, windowHeight);
-
 		return true;
 	}
 

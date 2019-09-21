@@ -20,6 +20,8 @@ namespace Echo
 
     void VKRenderable::createVkPipeline()
     {
+        destroyVkPipeline();
+
         VKShaderProgram* vkShaderProgram = ECHO_DOWN_CAST<VKShaderProgram*>(m_shaderProgram.ptr());
         if (m_mesh && vkShaderProgram && vkShaderProgram->isLinked() && VKFramebuffer::current())
         {
@@ -66,6 +68,15 @@ namespace Echo
             pipelineInfo.pDynamicState = &dynamicState;
 
             VKDebug(vkCreateGraphicsPipelines(VKRenderer::instance()->getVkDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_vkPipeline));
+        }
+    }
+
+    void VKRenderable::destroyVkPipeline()
+    {
+        if (m_vkPipeline)
+        {
+            vkDestroyPipeline(VKRenderer::instance()->getVkDevice(), m_vkPipeline, nullptr);
+            m_vkPipeline = nullptr;
         }
     }
 

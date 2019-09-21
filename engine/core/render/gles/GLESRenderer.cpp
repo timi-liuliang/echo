@@ -10,6 +10,7 @@
 #include <engine/core/log/Log.h>
 #include <engine/core/util/Exception.h>
 #include "engine/core/render/interface/mesh/Mesh.h"
+#include "interface/pipeline/RenderPipeline.h"
 #include "GLESGPUBuffer.h"
 #include "interface/Viewport.h"
 
@@ -404,6 +405,9 @@ namespace Echo
 
 		Viewport viewPort( 0, 0, m_screenWidth, m_screenHeight);
 		setViewport( &viewPort);
+
+        // render target
+        RenderPipeline::instance()->onSize(width, height);
 	}
 
 	bool GLES2Renderer::present()
