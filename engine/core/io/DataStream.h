@@ -56,9 +56,6 @@ namespace Echo
 
         void readAll( void* buffer );
 
-        // lua test
-        void test(const char* msg);
-
 	protected:
 		String	mName;
 		size_t	mSize;

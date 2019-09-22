@@ -27,7 +27,8 @@ namespace Echo
 
     void IO::bindMethods()
     {
-        CLASS_BIND_METHOD(IO, open, "open");
+        CLASS_BIND_METHOD(IO, loadFileToString, "loadFileToString");
+        CLASS_BIND_METHOD(IO, saveStringToFile, "saveStringToFile");
     }
 
 	void IO::setResPath(const String& resPath)
@@ -101,5 +102,26 @@ namespace Echo
 		
 		return false;
 	}
+
+    String IO::loadFileToString(const String& filename)
+    {
+        MemoryReader reader(filename);
+        return reader.getSize() ? reader.getData<const char*>() : StringUtil::BLANK;
+    }
+
+    bool IO::saveStringToFile(const String& filename, const String& content)
+    {
+        DataStream* stream = open(filename, DataStream::WRITE);
+        if (stream && stream->isWriteable())
+        {
+            stream->write(content.data(), content.size());
+            stream->close();
+            EchoSafeDelete(stream, DataStream);
+
+            return true;
+        }
+
+        return false;
+    }
 }
 

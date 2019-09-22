@@ -24,12 +24,6 @@ namespace Echo
 
     void DataStream::bindMethods()
     {
-        CLASS_BIND_METHOD(DataStream, test, "test");
-    }
-
-    void DataStream::test(const char* msg)
-    {
-        EchoLogError("Data Stream test succeed");
     }
 
 	size_t DataStream::write(const void* buf, size_t count)

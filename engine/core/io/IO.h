@@ -34,6 +34,11 @@ namespace Echo
 		String getFullPath(const String& filename);
 		bool covertFullPathToResPath(const String& fullPath, String& resPath);
 
+    public:
+        // load|save string from|to file
+        String loadFileToString(const String& filename);
+        bool saveStringToFile(const String& filename, const String& content);
+
 	private:
 		IO();
 

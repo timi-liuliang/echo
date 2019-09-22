@@ -229,6 +229,16 @@ namespace Echo
 		lua_pushfstring(state, value); 
 	}
 
+    template<> INLINE void lua_pushvalue<String>(lua_State* state, String value)
+    {
+        lua_pushfstring(state, value.c_str());
+    }
+
+    template<> INLINE void lua_pushvalue<const String&>(lua_State* state, const String& value)
+    {
+        lua_pushfstring(state, value.c_str());
+    }
+
 	template<> INLINE void lua_pushvalue<bool>(lua_State* state, bool value) 
 	{ 
 		lua_pushboolean(state, value); 
