@@ -27,6 +27,7 @@ namespace Echo
 
     void IO::bindMethods()
     {
+        CLASS_BIND_METHOD(IO, isExist,          "isExist");
         CLASS_BIND_METHOD(IO, loadFileToString, "loadFileToString");
         CLASS_BIND_METHOD(IO, saveStringToFile, "saveStringToFile");
     }

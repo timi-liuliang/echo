@@ -11,7 +11,7 @@ namespace Echo
 
 	RenderPipeline::~RenderPipeline()
 	{
-        EchoSafeDeleteMap(m_framebuffers, FrameBuffer);
+        m_framebuffers.clear();
 	}
 
 	void RenderPipeline::bindMethods()
@@ -27,7 +27,14 @@ namespace Echo
 	bool RenderPipeline::beginFramebuffer(ui32 id, bool clearColor, const Color& bgColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue, ui32 rbo)
 	{
 		FramebufferMap::iterator it = m_framebuffers.find(id);
-		return it != m_framebuffers.end() ? it->second->begin(clearColor, bgColor, clearDepth, depthValue, clearStencil, stencilValue) : false;
+        if (it != m_framebuffers.end())
+        {
+            FrameBuffer* frameBuffer = it->second;
+            if (frameBuffer)
+                return frameBuffer->begin(clearColor, bgColor, clearDepth, depthValue, clearStencil, stencilValue);
+        }
+
+		return false;
 	}
 
 	bool RenderPipeline::endFramebuffer(ui32 id)
