@@ -152,11 +152,10 @@ namespace Echo
     void MTRenderer::draw(Renderable* renderable)
     {
         MTRenderable* mtRenderable = ECHO_DOWN_CAST<MTRenderable*>(renderable);
-        ShaderProgram* shaderProgram = renderable->getShader();
+        MTShaderProgram* shaderProgram = ECHO_DOWN_CAST<MTShaderProgram*>(renderable->getShader());
         shaderProgram->bind();
         mtRenderable->bindRenderState();
         mtRenderable->bindShaderParams();
-        shaderProgram->bindRenderable(renderable);
 
         if(m_metalRenderPassDescriptor && mtRenderable && mtRenderable->getMetalRenderPipelineState())
         {

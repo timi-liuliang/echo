@@ -12,12 +12,14 @@
 #include "engine/modules/physx/physx_module.h"
 #include "engine/modules/terrain/terrain_module.h"
 #include "engine/modules/sray/sray_module.h"
+#include "engine/modules/geom/geom_module.h"
 
 namespace Echo
 {
 	// implement by application or dll
 	void registerModules()
 	{
+        REGISTER_MODULE(GeomModule)
 		REGISTER_MODULE(CameraModule)
 		REGISTER_MODULE(Box2DModule)
 		REGISTER_MODULE(AudioModule)
