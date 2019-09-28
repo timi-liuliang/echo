@@ -1,5 +1,5 @@
 #include "anim_curve.h"
-#include "engine/core/math/EchoMathFunction.h"
+#include "engine/core/math/Function.h"
 #include "engine/core/log/Log.h"
 
 namespace Echo

@@ -2,7 +2,7 @@
 
 #include "engine/core/base/echo_def.h"
 #include "engine/core/util/AssertX.h"
-#include "EchoMathFunction.h"
+#include "Function.h"
 
 namespace Echo
 {

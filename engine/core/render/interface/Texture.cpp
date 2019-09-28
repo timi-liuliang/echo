@@ -5,7 +5,7 @@
 #include "interface/Texture.h"
 #include "interface/Renderer.h"
 #include "engine/core/log/Log.h"
-#include "engine/core/math/EchoMathFunction.h"
+#include "engine/core/math/Function.h"
 #include "image/PixelFormat.h"
 #include "image/Image.h"
 #include "image/TextureLoader.h"

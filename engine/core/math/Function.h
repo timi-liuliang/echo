@@ -1,6 +1,6 @@
 #pragma once
 
-#include "EchoMathDef.h"
+#include "Def.h"
 #include <algorithm>
 #include <cmath>
 

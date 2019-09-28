@@ -3,7 +3,7 @@
 #include <QWheelEvent>
 #include <QMouseEvent>
 #include "Studio.h"
-#include <engine/core/math/EchoMathFunction.h>
+#include <engine/core/math/Function.h>
 
 namespace Studio
 {
