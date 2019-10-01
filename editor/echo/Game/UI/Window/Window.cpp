@@ -24,7 +24,6 @@ namespace Game
 	{
 		m_app->init((size_t)winId(), echoProject);
 
-		// 设置初始宽高
 		Echo::i32 thisW = width();
 		Echo::i32 thisH = height();
 		Echo::i32 mainW = GameMainWindow::instance()->width();
@@ -35,23 +34,21 @@ namespace Game
 		Echo::i32 mainNewHeight = mainH + (aimH - thisH);
 		GameMainWindow::instance()->resize(mainNewWidth, mainNewHeight);
 
-		// 居中
 		GameMainWindow::instance()->moveToCenter();
 
-		// 时间事件
 		m_timer = new QTimer(this);
 		connect(m_timer, SIGNAL(timeout()), this, SLOT(Render()));
 		m_timer->start(10);
 	}
 
-	void  Window::Render()
+	void  Window::render()
 	{
 		// 蔯heck window size
 		checkWindowSize();
 
         static Echo::Dword lastTime = QDateTime::currentMSecsSinceEpoch();
 
-		// 计算delta Time
+		// calc delta Time
         Echo::Dword curTime = QDateTime::currentMSecsSinceEpoch();
         Echo::Dword elapsedTime = curTime - lastTime;
 
@@ -74,12 +71,12 @@ namespace Game
 		}
 	}
 
-	void Window::SetAspectRatio(const QSize& size)
+	void Window::setAspectRatio(const QSize& size)
 	{
 		m_ratio = size;
 	}
 
-	void  Window::ResetDevice()
+	void  Window::resetDevice()
 	{
 	}
 

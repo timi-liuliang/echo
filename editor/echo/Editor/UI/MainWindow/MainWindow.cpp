@@ -19,6 +19,7 @@
 #include "PathChooseDialog.h"
 #include "RenderWindow.h"
 #include "MacHelper.h"
+#include "BuildWindow.h"
 #include "About.h"
 #include <QTimer>
 #include <engine/core/util/PathUtil.h>
@@ -305,7 +306,8 @@ namespace Studio
     
     void MainWindow::onBuildProject()
     {
-        int a = 10;
+        BuildWindow* buildWindow = EchoNew(BuildWindow(nullptr));
+        buildWindow->show();
     }
 
 	void MainWindow::setSubEdit(const char* subEditName)
