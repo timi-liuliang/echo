@@ -65,6 +65,7 @@ namespace Studio
 		void onSaveasProject();
 		void onOpenRencentProject();
 		void onEditSingletonSettings();
+        void onBuildProject();
 
 		// sub editor operate
 		void setSubEdit(const char* subEditName);

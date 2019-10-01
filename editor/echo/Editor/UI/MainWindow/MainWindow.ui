@@ -38,7 +38,7 @@
      <x>0</x>
      <y>0</y>
      <width>1126</width>
-     <height>23</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile_F">
@@ -67,6 +67,8 @@
     <addaction name="separator"/>
     <addaction name="m_actionSaveProject"/>
     <addaction name="m_actionSaveAsProject"/>
+    <addaction name="separator"/>
+    <addaction name="m_actionBuild"/>
     <addaction name="separator"/>
     <addaction name="m_actionExitEditor"/>
    </widget>
@@ -262,6 +264,11 @@
   <action name="m_actionThemeChoose">
    <property name="text">
     <string>Choose...</string>
+   </property>
+  </action>
+  <action name="m_actionBuild">
+   <property name="text">
+    <string>Build</string>
    </property>
   </action>
  </widget>

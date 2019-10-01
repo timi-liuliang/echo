@@ -56,6 +56,7 @@ namespace Studio
 		QObject::connect(m_actionOpenProject, SIGNAL(triggered(bool)), this, SLOT(onOpenAnotherProject()));
 		QObject::connect(m_actionSaveProject, SIGNAL(triggered(bool)), this, SLOT(onSaveProject()));
 		QObject::connect(m_actionSaveAsProject, SIGNAL(triggered(bool)), this, SLOT(onSaveasProject()));
+        QObject::connect(m_actionBuild, SIGNAL(triggered(bool)), this, SLOT(onBuildProject()));
 
 		// connect scene operate signal slot
 		QObject::connect(m_actionNewScene, SIGNAL(triggered(bool)), this, SLOT(onNewScene()));
@@ -301,6 +302,11 @@ namespace Studio
 				Studio::NodeTreePanel::instance()->setNextEditObject(obj);
 		}
 	}
+    
+    void MainWindow::onBuildProject()
+    {
+        int a = 10;
+    }
 
 	void MainWindow::setSubEdit(const char* subEditName)
 	{
