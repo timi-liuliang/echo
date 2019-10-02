@@ -1,6 +1,6 @@
-﻿#pragma once
+#pragma once
 
-#include <engine/core/Util/StringUtil.h>
+#include <engine/core/util/StringUtil.h>
 #include <QDialog>
 #include <QStandardItemModel>
 #include <QSortFilterProxyModel>

@@ -228,7 +228,6 @@ namespace Studio
 		}
 	}
 
-	// open another project
 	void MainWindow::openAnotherProject(const Echo::String& fullPathName)
 	{
 		Echo::String app = QCoreApplication::applicationFilePath().toStdString().c_str();
@@ -368,7 +367,6 @@ namespace Studio
 		m_resPanel->reslectCurrentDir();
 	}
 
-	// set theme
 	void MainWindow::setTheme(const char* theme)
 	{
 		QFile qssFile(theme);
@@ -382,7 +380,6 @@ namespace Studio
 		}
 	}
 
-	// change theme
 	void MainWindow::onChooseTheme()
 	{
 		QString qssFile = QFileDialog::getOpenFileName(this, tr("Choose Theme"), "", tr("(*.qss)"));
@@ -399,7 +396,6 @@ namespace Studio
 		Studio::ConfigMgr::instance()->setValue("CurrentTheme", ":/Qss/Qss/Ps.qss");
 	}
 
-	// play game
 	void MainWindow::onPlayGame()
 	{
 		// if launch scene not exist, set it
@@ -458,7 +454,6 @@ namespace Studio
 		AStudio::instance()->getRenderWindow();
 	}
 
-	// open node tree
 	void MainWindow::openNodeTree(const Echo::String& resPath)
 	{
 		// clear
@@ -470,14 +465,12 @@ namespace Studio
 		m_renderPanel->setWindowTitle( resPath.c_str());
 	}
 
-	// open lua file for edit
 	void MainWindow::openLuaScript(const Echo::String& fileName)
 	{
 		m_scriptEditorPanel->open(fileName);
 		m_scriptEditorPanel->setVisible(true);
 	}
 
-	// on display script edit panel
 	void MainWindow::onScriptEditVisibleChanged()
 	{
 		if (m_scriptEditorPanel->isVisible())
@@ -489,7 +482,6 @@ namespace Studio
 		AStudio::instance()->getConfigMgr()->setValue("luascripteditor_current_file", m_scriptEditorPanel->getCurrentLuaFilePath().c_str());
 	}
 
-	// on Dockwidget location changed
 	void MainWindow::onDockWidgetLocationChanged()
 	{
 		//centralWidget()->setMaximumHeight(200);
@@ -504,13 +496,11 @@ namespace Studio
 		m_scriptEditorPanel->disconnect();
 	}
 
-	// game process exit
 	void MainWindow::onGameProcessFinished(int id, QProcess::ExitStatus status)
 	{
 		EchoLogWarning("stop game debug");
 	}
 
-	// open help dialog
 	void MainWindow::onOpenHelpDialog()
 	{
 		m_bottomPanel->setTabVisible( "DocumentPanel", !m_bottomPanel->isTabVisible("DocumentPanel"));
@@ -597,11 +587,17 @@ namespace Studio
 		{
 			if (Echo::Class::isSingleton(className))
 			{
-				QAction* action = new QAction(this);
-				action->setText(className.c_str());
-				m_menuSettings->addAction(action);
-
-				QObject::connect(action, SIGNAL(triggered()), this, SLOT(onEditSingletonSettings()));
+                Echo::Object* obj = Echo::Class::create(className);
+                
+                Echo::PropertyInfos propertys;
+                if(Echo::Class::getPropertys(className, obj, propertys) > 0)
+                {
+                    QAction* action = new QAction(this);
+                    action->setText(className.c_str());
+                    m_menuSettings->addAction(action);
+                    
+                    QObject::connect(action, SIGNAL(triggered()), this, SLOT(onEditSingletonSettings()));
+                }
 			}
 		}
 	}

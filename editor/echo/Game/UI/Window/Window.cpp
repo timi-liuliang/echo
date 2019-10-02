@@ -82,26 +82,11 @@ namespace Game
 
 	void Window::wheelEvent(QWheelEvent * e)
 	{
-		//auto controller = m_inputController ? m_inputController : m_defaultInputController;
-		//controller->wheelEvent(e);
+
 	}
 
 	void Window::mouseMoveEvent(QMouseEvent* e)
 	{
-		// UI事件
-		//if ( m_isLeftButtonDown)
-		//{
-			// 初始上次位置
-		//	static QPointF lastPos = e->localPos();
-
-			// 计算位移
-		//	QPointF changedPos = e->localPos() - lastPos;
-
-		//	lastPos = e->localPos();
-		//}
-
-		//auto controller = m_inputController ? m_inputController : m_defaultInputController;
-		//controller->mouseMoveEvent(e);
 	}
 
 	void Window::mousePressEvent(QMouseEvent* e)
@@ -113,8 +98,7 @@ namespace Game
 
 	void Window::mouseDoubleClickEvent(QMouseEvent* e)
 	{
-		//const auto& controller = m_inputController ? m_inputController : m_defaultInputController; 
-		//controller->mouseDoubleClickEvent(e); 
+
 	}
 
 	void Window::mouseReleaseEvent(QMouseEvent* e)
@@ -126,13 +110,11 @@ namespace Game
 
 	void Window::keyPressEvent(QKeyEvent* e)
 	{
-		//auto controller = m_inputController ? m_inputController : m_defaultInputController;
-		//controller->keyPressEvent(e);
+
 	}
 
 	void Window::keyReleaseEvent(QKeyEvent* e)
 	{
-		//auto controller = m_inputController ? m_inputController : m_defaultInputController;
-		//controller->keyReleaseEvent(e);
+
 	}
 }
