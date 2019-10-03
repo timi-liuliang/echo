@@ -21,9 +21,32 @@ namespace Studio
 
 		// set icon
 		menubar->setTopLeftCornerIcon(":/icon/Icon/icon.png");
+        
+        // splitter stretch
+        m_splitter->setStretchFactor(0, 0);
+        m_splitter->setStretchFactor(1, 1);
+        
+        initPlatformList();
+        
+        QObject::connect(m_buildButton, SIGNAL(clicked()), this, SLOT(onBuild()));
 	}
 
 	BuildWindow::~BuildWindow()
 	{
 	}
+
+    void BuildWindow::initPlatformList()
+    {
+        m_platformList->setIconSize(QSize(28, 28));
+        
+        m_platformList->addItem(new QListWidgetItem(QIcon(":/icon/Icon/build/android.png"), "Android"));
+        m_platformList->addItem(new QListWidgetItem(QIcon(":/icon/Icon/build/ios.png"),     "iOS"));
+        m_platformList->addItem(new QListWidgetItem(QIcon(":/icon/Icon/build/mac.png"),     "Mac"));
+        m_platformList->addItem(new QListWidgetItem(QIcon(":/icon/Icon/build/windows.png"), "Windows"));
+    }
+
+    void BuildWindow::onBuild()
+    {
+        int a = 10;
+    }
 }

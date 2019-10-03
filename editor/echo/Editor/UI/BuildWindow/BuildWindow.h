@@ -15,6 +15,13 @@ namespace Studio
 		~BuildWindow();
 
 	private:
+        // init target platform list
+        void initPlatformList();
+        
+    private slots:
+        // on build
+        void onBuild();
+        
 
 	};
 }
