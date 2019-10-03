@@ -577,8 +577,35 @@ namespace Studio
 		}
 	}
 
+    QMenu* getParentMenu(Echo::map<Echo::String, QMenu*>::type& allMenus, const Echo::String& className)
+    {
+        Echo::String parentClass;
+        if(Echo::Class::getParentClass(parentClass, className))
+        {
+            auto it = allMenus.find(parentClass);
+            if(it!=allMenus.end())
+            {
+                return it->second;
+            }
+            else
+            {
+                QMenu* parentMenu = getParentMenu(allMenus, parentClass);
+                QMenu* curMenu = parentMenu->addMenu(parentClass.c_str());
+                
+                allMenus[parentClass] = curMenu;
+                
+                return curMenu;
+            }
+        }
+        
+        return allMenus["Object"];
+    }
+
 	void MainWindow::updateSettingDisplay()
 	{
+        Echo::map<Echo::String, QMenu*>::type allMenus;
+        allMenus["Object"] = m_menuSettings;
+        
 		m_menuSettings->clear();
 
 		Echo::StringArray classes;
@@ -594,7 +621,9 @@ namespace Studio
                 {
                     QAction* action = new QAction(this);
                     action->setText(className.c_str());
-                    m_menuSettings->addAction(action);
+                    
+                    QMenu* menu = getParentMenu(allMenus, className);
+                    menu->addAction(action);
                     
                     QObject::connect(action, SIGNAL(triggered()), this, SLOT(onEditSingletonSettings()));
                 }
