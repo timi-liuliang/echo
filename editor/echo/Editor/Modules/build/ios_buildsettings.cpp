@@ -1,4 +1,5 @@
 #include "ios_buildsettings.h"
+#include <engine/core/util/PathUtil.h>
 
 namespace Echo
 {
@@ -26,13 +27,48 @@ namespace Echo
         CLASS_REGISTER_PROPERTY(iOSBuildSettings, "Icon", Variant::Type::ResourcePath, "getIconRes", "setIconRes");
     }
 
+    bool iOSBuildSettings::prepare()
+    {
+        m_outputDir = PathUtil::GetCurrentDir() + "/build/ios/";
+        
+        return true;
+    }
+
     void iOSBuildSettings::setIconRes(const ResourcePath& path)
+    {
+        
+    }
+
+    void iOSBuildSettings::copySrc()
+    {
+    
+    }
+
+    void iOSBuildSettings::copyRes()
+    {
+        
+    }
+
+    void iOSBuildSettings::cmake()
+    {
+        
+    }
+
+    void iOSBuildSettings::compile()
     {
         
     }
 
     void iOSBuildSettings::build()
     {
-        int  a = 10;
+        if(prepare())
+        {
+            copySrc();
+            copyRes();
+            
+            cmake();
+            
+            compile();
+        }
     }
 }

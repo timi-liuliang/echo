@@ -23,6 +23,21 @@ namespace Echo
         const ResourcePath& getIconRes() { return m_iconRes; }
         
     private:
+        // output directory
+        bool prepare();
+        
+        // copy
+        void copySrc();
+        void copyRes();
+        
+        // cmake
+        void cmake();
+        
+        // compile
+        void compile();
+        
+    private:
+        String                  m_outputDir;
         ResourcePath            m_iconRes;
     };
 }
