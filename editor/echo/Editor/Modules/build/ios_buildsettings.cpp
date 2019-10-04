@@ -30,4 +30,9 @@ namespace Echo
     {
         
     }
+
+    void iOSBuildSettings::build()
+    {
+        int  a = 10;
+    }
 }

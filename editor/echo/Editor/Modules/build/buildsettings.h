@@ -9,6 +9,10 @@ namespace Echo
         ECHO_VIRTUAL_CLASS(BuildSettings, Object)
         
     public:
+        BuildSettings() {}
+        virtual ~BuildSettings() {}
         
+        // build
+        virtual void build() {}
     };
 }

@@ -15,6 +15,9 @@ namespace Echo
         // instance
         static iOSBuildSettings* instance();
         
+        // build
+        virtual void build() override;
+        
         // icon res path
         void setIconRes(const ResourcePath& path);
         const ResourcePath& getIconRes() { return m_iconRes; }

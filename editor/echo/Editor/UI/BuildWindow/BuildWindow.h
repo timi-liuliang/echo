@@ -22,6 +22,10 @@ namespace Studio
         // on build
         void onBuild();
         
-
+        // switch target platform
+        void onPlatformChanged();
+        
+    private:
+        Echo::String    m_targetPlatform = "Android";
 	};
 }

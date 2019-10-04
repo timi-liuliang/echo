@@ -3,6 +3,10 @@
 #include "BuildWindow.h"
 #include "engine/core/util/PathUtil.h"
 #include "MacHelper.h"
+#include "ios_buildsettings.h"
+#include "mac_buildsettings.h"
+#include "android_buildsettings.h"
+#include "windows_buildsettings.h"
 
 namespace Studio
 {
@@ -29,6 +33,7 @@ namespace Studio
         initPlatformList();
         
         QObject::connect(m_buildButton, SIGNAL(clicked()), this, SLOT(onBuild()));
+        QObject::connect(m_platformList, SIGNAL(currentRowChanged(int)), this, SLOT(onPlatformChanged()));
 	}
 
 	BuildWindow::~BuildWindow()
@@ -45,8 +50,20 @@ namespace Studio
         m_platformList->addItem(new QListWidgetItem(QIcon(":/icon/Icon/build/windows.png"), "Windows"));
     }
 
+    void BuildWindow::onPlatformChanged()
+    {
+        m_targetPlatform = m_platformList->currentItem()->text().toStdString().c_str();
+    }
+
     void BuildWindow::onBuild()
     {
-        int a = 10;
+        if(m_targetPlatform=="iOS")
+        {
+            Echo::BuildSettings* buildSettings = ECHO_DOWN_CAST<Echo::BuildSettings*>(Echo::Class::create(ECHO_CLASS_NAME(iOSBuildSettings)));
+            if(buildSettings)
+            {
+                buildSettings->build();
+            }
+        }
     }
 }
