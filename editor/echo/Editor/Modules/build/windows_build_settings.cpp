@@ -1,4 +1,4 @@
-#include "windows_buildsettings.h"
+#include "windows_build_settings.h"
 
 namespace Echo
 {

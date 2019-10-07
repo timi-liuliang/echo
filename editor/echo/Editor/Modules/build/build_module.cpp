@@ -1,8 +1,8 @@
 #include "build_module.h"
-#include "ios_buildsettings.h"
-#include "mac_buildsettings.h"
-#include "android_buildsettings.h"
-#include "windows_buildsettings.h"
+#include "ios_build_settings.h"
+#include "mac_build_settings.h"
+#include "android_build_settings.h"
+#include "windows_build_settings.h"
 
 namespace Echo
 {

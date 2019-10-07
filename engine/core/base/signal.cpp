@@ -22,8 +22,8 @@ namespace Echo
 
 	ConnectLuaMethod::ConnectLuaMethod(Signal* signal, Object* target, const String& functionName)
 		: m_signal(signal)
-		, m_target(target)
 		, m_functionName(functionName)
+        , m_target(target)
 	{}
 
 	ConnectLuaMethod::ConnectLuaMethod(Signal* signal, const String& target, const String& functionName)

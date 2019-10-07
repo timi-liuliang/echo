@@ -1,4 +1,4 @@
-#include "android_buildsettings.h"
+#include "android_build_settings.h"
 
 namespace Echo
 {

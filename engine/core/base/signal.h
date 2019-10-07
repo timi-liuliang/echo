@@ -107,6 +107,24 @@ namespace Echo
             }
 		}
 	};
+
+    template<typename T>
+    class Signal1 : public Signal
+    {
+    public:
+        Signal1(Object* owner) : Signal(owner) {}
+        
+        // operator ()
+        void operator() (T arg0)
+        {
+            if(m_connects)
+            {
+//                Variant args[1] = { variant_cast<T>(arg0) };
+//                for (Connect* connect : *m_connects)
+//                    connect->emitSignal(&args[0], 1);
+            }
+        }
+    };
 }
 
 #define DECLARE_SIGNAL(type, signal) \

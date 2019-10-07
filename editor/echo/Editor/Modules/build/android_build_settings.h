@@ -1,19 +1,19 @@
 #pragma once
 
-#include "buildsettings.h"
+#include "build_settings.h"
 
 namespace Echo
 {
-    class MacBuildSettings : public BuildSettings
+    class AndroidBuildSettings : public BuildSettings
     {
-        ECHO_SINGLETON_CLASS(MacBuildSettings, BuildSettings)
+        ECHO_SINGLETON_CLASS(AndroidBuildSettings, BuildSettings)
         
     public:
-        MacBuildSettings();
-        virtual ~MacBuildSettings();
+        AndroidBuildSettings();
+        virtual ~AndroidBuildSettings();
         
         // instance
-        static MacBuildSettings* instance();
+        static AndroidBuildSettings* instance();
         
         // icon res path
         void setIconRes(const ResourcePath& path);

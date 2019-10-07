@@ -3,10 +3,10 @@
 #include "BuildWindow.h"
 #include "engine/core/util/PathUtil.h"
 #include "MacHelper.h"
-#include "ios_buildsettings.h"
-#include "mac_buildsettings.h"
-#include "android_buildsettings.h"
-#include "windows_buildsettings.h"
+#include "ios_build_settings.h"
+#include "mac_build_settings.h"
+#include "android_build_settings.h"
+#include "windows_build_settings.h"
 
 namespace Studio
 {
@@ -62,8 +62,14 @@ namespace Studio
             Echo::BuildSettings* buildSettings = ECHO_DOWN_CAST<Echo::BuildSettings*>(Echo::Class::create(ECHO_CLASS_NAME(iOSBuildSettings)));
             if(buildSettings)
             {
+                buildSettings->setLog(this);
                 buildSettings->build();
             }
         }
+    }
+
+    void BuildWindow::log(const char* msg)
+    {
+        m_log->append( msg);
     }
 }

@@ -1,4 +1,4 @@
-#include "ios_buildsettings.h"
+#include "ios_build_settings.h"
 #include <engine/core/util/PathUtil.h>
 
 namespace Echo
@@ -31,6 +31,13 @@ namespace Echo
     {
         m_outputDir = PathUtil::GetCurrentDir() + "/build/ios/";
         
+        // create dir
+        if(!PathUtil::IsDirExist(m_outputDir))
+        {
+            log("Create output directory : [%s]", m_outputDir.c_str());
+            PathUtil::CreateDir(m_outputDir);
+        }
+        
         return true;
     }
 
@@ -61,6 +68,8 @@ namespace Echo
 
     void iOSBuildSettings::build()
     {
+        log("Build App for iOS platform.");
+        
         if(prepare())
         {
             copySrc();

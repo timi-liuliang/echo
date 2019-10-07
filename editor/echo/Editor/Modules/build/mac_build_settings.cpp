@@ -1,4 +1,4 @@
-#include "mac_buildsettings.h"
+#include "mac_build_settings.h"
 
 namespace Echo
 {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "buildsettings.h"
+#include "build_settings.h"
 
 namespace Echo
 {
