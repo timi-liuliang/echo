@@ -37,6 +37,8 @@ namespace Echo
         void compile();
         
     private:
+        String                  m_rootDir;
+        String                  m_projectDir;
         String                  m_outputDir;
         ResourcePath            m_iconRes;
     };
