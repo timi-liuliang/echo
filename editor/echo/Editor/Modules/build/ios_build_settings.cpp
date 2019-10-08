@@ -92,6 +92,8 @@ namespace Echo
     {
         log("Build App for iOS platform.");
         
+        m_listener->onBegin();
+        
         if(prepare())
         {
             copySrc();
@@ -101,6 +103,8 @@ namespace Echo
             
             compile();
         }
+        
+        m_listener->onEnd();
     }
 
     String iOSBuildSettings::getFinalResultPath()

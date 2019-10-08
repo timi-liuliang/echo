@@ -18,6 +18,6 @@ namespace Echo
 
         szBuffer[bufferLength - 1] = 0;
 
-        m_log->log(szBuffer);
+        m_listener->log(szBuffer);
     }
 }

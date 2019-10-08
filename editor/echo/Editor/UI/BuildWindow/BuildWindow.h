@@ -16,8 +16,13 @@ namespace Studio
 		BuildWindow(QWidget* parent=0);
 		~BuildWindow();
         
+    public:
         // log
         virtual void log(const char* msg) override;
+        
+        // on begin|finished
+        virtual void onBegin() override;
+        virtual void onEnd() override;
 
 	private:
         // init target platform list

@@ -79,7 +79,7 @@ namespace Studio
         Echo::BuildSettings* buildSettings = getBuildSettings();
         if(buildSettings)
         {
-            buildSettings->setLog(this);
+            buildSettings->setListener(this);
             buildSettings->build();
         }
     }
@@ -93,5 +93,17 @@ namespace Studio
     void BuildWindow::log(const char* msg)
     {
         m_log->append( msg);
+    }
+
+    void BuildWindow::onBegin()
+    {
+        m_showInExplorerButton->setEnabled(false);
+    }
+
+    void BuildWindow::onEnd()
+    {
+        m_showInExplorerButton->setEnabled(true);
+        
+        onShowResultInExplorer();
     }
 }

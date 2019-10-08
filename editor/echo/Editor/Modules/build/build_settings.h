@@ -22,10 +22,10 @@ namespace Echo
         
     public:
         // log
-        void setLog(BuildLog* log) { m_log = log; }
+        void setListener(BuildLog* log) { m_listener = log; }
         void log(const char* formats, ...);
         
     protected:
-        BuildLog*    m_log = nullptr;
+        BuildLog*    m_listener = nullptr;
     };
 }

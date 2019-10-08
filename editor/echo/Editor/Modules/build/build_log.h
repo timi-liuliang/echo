@@ -9,5 +9,9 @@ namespace Echo
     public:
         // output
         virtual void log(const char* msg) {}
+        
+        // on begin|end
+        virtual void onBegin() {}
+        virtual void onEnd() {}
     };
 }
