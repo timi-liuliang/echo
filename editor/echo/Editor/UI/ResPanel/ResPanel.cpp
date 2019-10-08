@@ -62,7 +62,6 @@ namespace Studio
 		return g_inst;
 	}
 
-	// call when open project
 	void ResPanel::onOpenProject()
 	{
 		m_dirModel->clear();

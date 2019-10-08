@@ -4,6 +4,7 @@
 #include "ui_BuildWindow.h"
 #include <engine/core/util/StringUtil.h>
 #include "build_log.h"
+#include "build_settings.h"
 
 namespace Studio
 {
@@ -22,12 +23,18 @@ namespace Studio
         // init target platform list
         void initPlatformList();
         
+        // get build settings
+        Echo::BuildSettings* getBuildSettings();
+        
     private slots:
         // on build
         void onBuild();
         
         // switch target platform
         void onPlatformChanged();
+        
+        // show result
+        void onShowResultInExplorer();
         
     private:
         Echo::String    m_targetPlatform = "Android";

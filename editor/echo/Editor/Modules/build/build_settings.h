@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/core/base/object.h"
+#include "engine/core/util/StringUtil.h"
 #include "build_log.h"
 
 namespace Echo
@@ -15,6 +16,9 @@ namespace Echo
         
         // build
         virtual void build() {}
+        
+        // get final result path
+        virtual String getFinalResultPath() { return StringUtil::BLANK; }
         
     public:
         // log

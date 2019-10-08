@@ -102,4 +102,10 @@ namespace Echo
             compile();
         }
     }
+
+    String iOSBuildSettings::getFinalResultPath()
+    {
+        String FinalResultPath = m_outputDir + "bin/app/";
+        return PathUtil::IsDirExist(FinalResultPath) ? FinalResultPath : m_outputDir;
+    }
 }

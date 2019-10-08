@@ -1,5 +1,6 @@
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QDesktopServices>
 #include "BuildWindow.h"
 #include "engine/core/util/PathUtil.h"
 #include "MacHelper.h"
@@ -33,6 +34,7 @@ namespace Studio
         initPlatformList();
         
         QObject::connect(m_buildButton, SIGNAL(clicked()), this, SLOT(onBuild()));
+        QObject::connect(m_showInExplorerButton, SIGNAL(clicked()), this, SLOT(onShowResultInExplorer()));
         QObject::connect(m_platformList, SIGNAL(currentRowChanged(int)), this, SLOT(onPlatformChanged()));
 	}
 
@@ -55,17 +57,37 @@ namespace Studio
         m_targetPlatform = m_platformList->currentItem()->text().toStdString().c_str();
     }
 
-    void BuildWindow::onBuild()
+    void BuildWindow::onShowResultInExplorer()
     {
-        if(m_targetPlatform=="iOS")
+        Echo::BuildSettings* buildSettings = getBuildSettings();
+        if(buildSettings)
         {
-            Echo::BuildSettings* buildSettings = ECHO_DOWN_CAST<Echo::BuildSettings*>(Echo::Class::create(ECHO_CLASS_NAME(iOSBuildSettings)));
-            if(buildSettings)
+            QString FinalResultPath = buildSettings->getFinalResultPath().c_str();
+            if (!FinalResultPath.isEmpty())
             {
-                buildSettings->setLog(this);
-                buildSettings->build();
+            #ifdef ECHO_PLATFORM_WINDOWS
+                QDesktopServices::openUrl(openDir);
+            #else
+                QDesktopServices::openUrl(QUrl("file://" + FinalResultPath));
+            #endif
             }
         }
+    }
+
+    void BuildWindow::onBuild()
+    {
+        Echo::BuildSettings* buildSettings = getBuildSettings();
+        if(buildSettings)
+        {
+            buildSettings->setLog(this);
+            buildSettings->build();
+        }
+    }
+
+    Echo::BuildSettings* BuildWindow::getBuildSettings()
+    {
+        if(m_targetPlatform=="iOS") return ECHO_DOWN_CAST<Echo::BuildSettings*>(Echo::Class::create(ECHO_CLASS_NAME(iOSBuildSettings)));
+        else                        return nullptr;
     }
 
     void BuildWindow::log(const char* msg)
