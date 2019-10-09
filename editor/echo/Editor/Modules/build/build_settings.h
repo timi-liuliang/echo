@@ -2,7 +2,7 @@
 
 #include "engine/core/base/object.h"
 #include "engine/core/util/StringUtil.h"
-#include "build_log.h"
+#include "build_listener.h"
 
 namespace Echo
 {
@@ -22,10 +22,10 @@ namespace Echo
         
     public:
         // log
-        void setListener(BuildLog* log) { m_listener = log; }
+        void setListener(BuildListener* listener) { m_listener = listener; }
         void log(const char* formats, ...);
         
     protected:
-        BuildLog*    m_listener = nullptr;
+        BuildListener*    m_listener = nullptr;
     };
 }

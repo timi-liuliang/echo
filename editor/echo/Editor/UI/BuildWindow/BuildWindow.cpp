@@ -26,16 +26,17 @@ namespace Studio
 
 		// set icon
 		menubar->setTopLeftCornerIcon(":/icon/Icon/icon.png");
-        
+
         // splitter stretch
         m_splitter->setStretchFactor(0, 0);
         m_splitter->setStretchFactor(1, 1);
-        
+
         initPlatformList();
-        
+
         QObject::connect(m_buildButton, SIGNAL(clicked()), this, SLOT(onBuild()));
         QObject::connect(m_showInExplorerButton, SIGNAL(clicked()), this, SLOT(onShowResultInExplorer()));
         QObject::connect(m_platformList, SIGNAL(currentRowChanged(int)), this, SLOT(onPlatformChanged()));
+        QObject::connect(&m_cmdProcess, SIGNAL(readyRead()), this, SLOT(onReadMsgFromCmdProcess()));
 	}
 
 	BuildWindow::~BuildWindow()
@@ -45,7 +46,7 @@ namespace Studio
     void BuildWindow::initPlatformList()
     {
         m_platformList->setIconSize(QSize(28, 28));
-        
+
         m_platformList->addItem(new QListWidgetItem(QIcon(":/icon/Icon/build/android.png"), "Android"));
         m_platformList->addItem(new QListWidgetItem(QIcon(":/icon/Icon/build/ios.png"),     "iOS"));
         m_platformList->addItem(new QListWidgetItem(QIcon(":/icon/Icon/build/mac.png"),     "Mac"));
@@ -103,7 +104,22 @@ namespace Studio
     void BuildWindow::onEnd()
     {
         m_showInExplorerButton->setEnabled(true);
-        
+
         onShowResultInExplorer();
+    }
+
+    void BuildWindow::onExecCmd(const char* cmd, const char* workingDir)
+    {
+        if(workingDir)
+            m_cmdProcess.setWorkingDirectory(workingDir);
+        
+        m_cmdProcess.start(cmd);
+    }
+
+    void BuildWindow::onReadMsgFromCmdProcess()
+    {
+        Echo::String msg = m_cmdProcess.readAllStandardOutput().toStdString().c_str();
+        if (!msg.empty())
+            log( msg.c_str());
     }
 }
