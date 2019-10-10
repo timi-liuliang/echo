@@ -13,6 +13,7 @@
 #include "engine/modules/terrain/terrain_module.h"
 #include "engine/modules/sray/sray_module.h"
 #include "engine/modules/geom/geom_module.h"
+#include "engine/modules/video/video_module.h"
 #include "build_module.h"
 
 namespace Echo
@@ -35,6 +36,7 @@ namespace Echo
 		REGISTER_MODULE(PhysxModule);
         REGISTER_MODULE(TerrainModule);
         REGISTER_MODULE(SRayModule);
+		REGISTER_MODULE(VideoModule);
         REGISTER_MODULE(BuildModule);
 	}
 }

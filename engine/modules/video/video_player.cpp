@@ -1,0 +1,88 @@
+#include "video_player.h"
+#include "engine/core/main/Engine.h"
+#include "engine/core/io/IO.h"
+
+namespace Echo
+{
+	VideoPlayer::VideoPlayer()
+	{
+	}
+
+	VideoPlayer::~VideoPlayer()
+	{
+	}
+
+	void VideoPlayer::bindMethods()
+	{
+		CLASS_BIND_METHOD(VideoPlayer, is2d,		        DEF_METHOD("is2d"));
+		CLASS_BIND_METHOD(VideoPlayer, set2d,		        DEF_METHOD("set2d"));
+        CLASS_BIND_METHOD(VideoPlayer, isLoop,              DEF_METHOD("isLoop"));
+        CLASS_BIND_METHOD(VideoPlayer, setLoop,             DEF_METHOD("setLoop"));
+        CLASS_BIND_METHOD(VideoPlayer, isPlayOnAwake,       DEF_METHOD("isPlayOnAwake"));
+        CLASS_BIND_METHOD(VideoPlayer, setPlayOnAwake,      DEF_METHOD("setPlayOnAwake"));
+        CLASS_BIND_METHOD(VideoPlayer, getVideo,	        DEF_METHOD("getVideo"));
+        CLASS_BIND_METHOD(VideoPlayer, setVideo,	        DEF_METHOD("setVideo"));
+
+		CLASS_REGISTER_PROPERTY(VideoPlayer, "Is2D", Variant::Type::Bool, "is2d", "set2d");
+        CLASS_REGISTER_PROPERTY(VideoPlayer, "Loop", Variant::Type::Bool, "isLoop", "setLoop");
+        CLASS_REGISTER_PROPERTY(VideoPlayer, "PlayOnAwake", Variant::Type::Bool, "isPlayOnAwake", "setPlayOnAwake");
+        CLASS_REGISTER_PROPERTY(VideoPlayer, "Volume", Variant::Type::Real, "getVolume", "setVolume");
+        CLASS_REGISTER_PROPERTY(VideoPlayer, "Video", Variant::Type::ResourcePath, "getVideo", "setVideo");
+	}
+
+	void VideoPlayer::setLoop(bool loop)
+	{
+		m_isLoop = loop;
+	}
+    
+    void VideoPlayer::set2d(bool is2d)
+    {     
+        m_is2D = is2d;
+    }
+
+	bool VideoPlayer::isPlaying()
+	{
+		return false;
+	}
+    
+    void VideoPlayer::start()
+    {
+        if (m_isPlayOnAwake && IsGame)
+        {
+            play();
+        }
+    }
+
+	void VideoPlayer::update_self()
+	{
+		const Vector3& position = getWorldPosition();
+		
+		// update self position
+		updatePosition(position);
+	}
+
+	void VideoPlayer::updatePosition(const Vector3& position)
+	{
+
+	}
+
+	void VideoPlayer::play()
+	{    
+
+	}
+    
+    void VideoPlayer::pause()
+    {
+
+    }
+    
+    void VideoPlayer::stop()
+    {
+
+    }
+    
+    void VideoPlayer::setVideo(const ResourcePath& res)
+    {
+        m_videoRes=res;
+    }
+}
