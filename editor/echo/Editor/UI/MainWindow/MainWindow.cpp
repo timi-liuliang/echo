@@ -306,8 +306,8 @@ namespace Studio
     void MainWindow::onBuildProject()
     {
         BuildWindow* buildWindow = EchoNew(BuildWindow(nullptr));
-        buildWindow->show();
-        //buildWindow->exec();
+        //buildWindow->show();
+        buildWindow->exec();
     }
 
 	void MainWindow::setSubEdit(const char* subEditName)

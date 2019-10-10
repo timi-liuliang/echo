@@ -12,7 +12,7 @@
 namespace Studio
 {
 	BuildWindow::BuildWindow(QWidget* parent/*=0*/)
-		: QMainWindow( parent)
+		: QDialog( parent)
 	{
 		setupUi( this);
 
@@ -25,7 +25,7 @@ namespace Studio
 #endif
 
 		// set icon
-		menubar->setTopLeftCornerIcon(":/icon/Icon/icon.png");
+		//menubar->setTopLeftCornerIcon(":/icon/Icon/icon.png");
 
         // splitter stretch
         m_splitter->setStretchFactor(0, 0);
@@ -67,7 +67,7 @@ namespace Studio
             if (!FinalResultPath.isEmpty())
             {
             #ifdef ECHO_PLATFORM_WINDOWS
-                QDesktopServices::openUrl(openDir);
+                QDesktopServices::openUrl(FinalResultPath);
             #else
                 QDesktopServices::openUrl(QUrl("file://" + FinalResultPath));
             #endif
@@ -87,8 +87,9 @@ namespace Studio
 
     Echo::BuildSettings* BuildWindow::getBuildSettings()
     {
-        if(m_targetPlatform=="iOS") return ECHO_DOWN_CAST<Echo::BuildSettings*>(Echo::Class::create(ECHO_CLASS_NAME(iOSBuildSettings)));
-        else                        return nullptr;
+        if(m_targetPlatform=="iOS")				return ECHO_DOWN_CAST<Echo::BuildSettings*>(Echo::Class::create(ECHO_CLASS_NAME(iOSBuildSettings)));
+		else if(m_targetPlatform == "Windows")	return ECHO_DOWN_CAST<Echo::BuildSettings*>(Echo::Class::create(ECHO_CLASS_NAME(WindowsBuildSettings)));
+        else									return nullptr;
     }
 
     void BuildWindow::log(const char* msg)

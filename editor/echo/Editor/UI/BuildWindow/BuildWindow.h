@@ -7,7 +7,7 @@
 
 namespace Studio
 {
-	class BuildWindow : public QMainWindow, public Ui_BuildWindow, public Echo::BuildListener
+	class BuildWindow : public QDialog, public Ui_BuildWindow, public Echo::BuildListener
 	{
         Q_OBJECT
 
