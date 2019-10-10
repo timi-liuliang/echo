@@ -37,13 +37,12 @@ namespace Game
 		GameMainWindow::instance()->moveToCenter();
 
 		m_timer = new QTimer(this);
-		connect(m_timer, SIGNAL(timeout()), this, SLOT(Render()));
+		connect(m_timer, SIGNAL(timeout()), this, SLOT(render()));
 		m_timer->start(10);
 	}
 
 	void  Window::render()
 	{
-		// Êcheck window size
 		checkWindowSize();
 
         static Echo::Dword lastTime = QDateTime::currentMSecsSinceEpoch();
