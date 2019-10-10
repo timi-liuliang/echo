@@ -2,6 +2,7 @@
 
 #include "engine/core/scene/node.h"
 #include "video_base.h"
+#include <thirdparty/jplayer/player.h>
 
 namespace Echo
 {
@@ -55,5 +56,8 @@ namespace Echo
 		bool				m_isPlayOnAwake = true;
 		bool				m_is2D = true;
         ResourcePath		m_videoRes = ResourcePath("", ".mp4|.video");
+		cmpeg::player*		m_jplayer = nullptr;
+		bool				m_isCustomRender = false;
+		cmpeg::render_base* m_videoRender = nullptr;
 	};
 }

@@ -13,7 +13,7 @@ INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/libde265)
 LINK_DIRECTORIES(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 
 # Recursive get all files
-FILE( GLOB_RECURSE ALL_FILES *.h *.hpp *.inl *.c *.cpp *.mm)
+FILE( GLOB_RECURSE ALL_FILES *.h *.hpp *.inl *.c *.cc *.cpp *.mm)
 
 # Group
 GROUP_FILES(ALL_FILES ${CMAKE_CURRENT_SOURCE_DIR})

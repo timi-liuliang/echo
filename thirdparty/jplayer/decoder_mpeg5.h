@@ -14,6 +14,6 @@ namespace cmpeg
 		virtual bool decode();
 
 	private:
-		de265_decoder_context*			m_ctx;		// 解码器上下文
+		de265_decoder_context*			m_ctx;
 	};
 }

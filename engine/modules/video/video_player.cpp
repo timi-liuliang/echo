@@ -67,8 +67,14 @@ namespace Echo
 	}
 
 	void VideoPlayer::play()
-	{    
+	{
+		if (m_isCustomRender)
+		{
+			m_videoRender = nullptr;
+		}
 
+		m_jplayer = EchoNew(cmpeg::player(m_videoRender, m_videoRes.getPath().c_str()));
+		m_jplayer->play();
 	}
     
     void VideoPlayer::pause()
