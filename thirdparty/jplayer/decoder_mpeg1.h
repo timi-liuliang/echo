@@ -29,7 +29,7 @@ namespace cmpeg
 		void fill(int* block_data, int value);
 
 	private:
-		template<typename T> T decoder_mpeg1::read_huffman(T* code_table)
+		template<typename T> T read_huffman(T* code_table)
 		{
 			int state = 0;
 			do
