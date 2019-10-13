@@ -90,7 +90,7 @@ namespace Echo
     void iOSBuildSettings::cmake()
     {
         String solutionDir = m_outputDir + "solution/";
-        String cmakeCmd = "cmake -DCMAKE_BUILD_TYPE=RELEASE -DECHO_EDITOR_MODE=FALSE -DECHO_BUILD_PLATFORM_IOS=TRUE -DECHO_BUILD_PLATFORM_MAC=FALSE -G\"Xcode\" ../";
+        String cmakeCmd = "/Applications/CMake.app/Contents/bin/cmake -DCMAKE_BUILD_TYPE=RELEASE -DECHO_EDITOR_MODE=FALSE -DECHO_BUILD_PLATFORM_IOS=TRUE -DECHO_BUILD_PLATFORM_MAC=FALSE -G\"Xcode\" ../";
 
         if(!m_listener->onExecCmd(cmakeCmd.c_str(), solutionDir.c_str()))
         {

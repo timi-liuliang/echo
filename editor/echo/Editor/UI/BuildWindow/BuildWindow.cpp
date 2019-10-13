@@ -115,6 +115,11 @@ namespace Studio
         if(workingDir)
             m_cmdProcess.setWorkingDirectory(workingDir);
         
+        // modify process environment
+        QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+        env.insert("PATH", env.value("PATH") + ":/Applications/CMake.app/Contents/bin/:");
+        m_cmdProcess.setProcessEnvironment(env);
+        
         m_cmdProcess.start(cmd);
 
         if(!m_cmdProcess.waitForStarted())
