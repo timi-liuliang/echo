@@ -37,6 +37,7 @@ namespace Studio
         QObject::connect(m_showInExplorerButton, SIGNAL(clicked()), this, SLOT(onShowResultInExplorer()));
         QObject::connect(m_platformList, SIGNAL(currentRowChanged(int)), this, SLOT(onPlatformChanged()));
         QObject::connect(&m_cmdProcess, SIGNAL(readyRead()), this, SLOT(onReadMsgFromCmdProcess()));
+        QObject::connect(&m_cmdProcess, SIGNAL(errorOccurred(QProcess::ProcessError)), this, SLOT(onProcessError(QProcess::ProcessError)));
 	}
 
 	BuildWindow::~BuildWindow()
@@ -130,5 +131,14 @@ namespace Studio
         Echo::String msg = m_cmdProcess.readAllStandardOutput().toStdString().c_str();
         if (!msg.empty())
             log( msg.c_str());
+    }
+    
+    void BuildWindow::onProcessError(QProcess::ProcessError error)
+    {
+        switch(error)
+        {
+            case QProcess::FailedToStart:   log("build process failed to start.");  break;
+            default:                        log("build process failed.");           break;
+        }
     }
 }

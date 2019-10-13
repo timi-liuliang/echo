@@ -45,6 +45,9 @@ namespace Studio
 
         // receive msg from other process
         void onReadMsgFromCmdProcess();
+        
+        // on process error
+        void onProcessError(QProcess::ProcessError error);
 
     private:
         Echo::String    m_targetPlatform = "Android";
