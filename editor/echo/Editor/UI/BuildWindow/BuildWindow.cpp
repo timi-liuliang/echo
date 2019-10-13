@@ -109,12 +109,20 @@ namespace Studio
         onShowResultInExplorer();
     }
 
-    void BuildWindow::onExecCmd(const char* cmd, const char* workingDir)
+    bool BuildWindow::onExecCmd(const char* cmd, const char* workingDir)
     {
         if(workingDir)
             m_cmdProcess.setWorkingDirectory(workingDir);
         
         m_cmdProcess.start(cmd);
+
+        if(!m_cmdProcess.waitForStarted())
+            return false;
+        
+        if(!m_cmdProcess.waitForFinished())
+            return false;
+        
+        return true;
     }
 
     void BuildWindow::onReadMsgFromCmdProcess()

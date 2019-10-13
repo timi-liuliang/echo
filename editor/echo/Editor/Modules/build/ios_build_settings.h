@@ -43,6 +43,7 @@ namespace Echo
         String                  m_rootDir;
         String                  m_projectDir;
         String                  m_outputDir;
+        String                  m_solutionDir;
         ResourcePath            m_iconRes;
     };
 }

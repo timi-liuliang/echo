@@ -24,7 +24,7 @@ namespace Studio
         virtual void onEnd() override;
 
         // on exec cmd
-        virtual void onExecCmd(const char* cmd, const char* workingDir) override;
+        virtual bool onExecCmd(const char* cmd, const char* workingDir) override;
 
 	private:
         // init target platform list

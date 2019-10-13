@@ -36,7 +36,9 @@ namespace Echo
 		REGISTER_MODULE(PhysxModule);
         REGISTER_MODULE(TerrainModule);
         REGISTER_MODULE(SRayModule);
+#ifdef ECHO_PLATFORM_WINDOWS
 		REGISTER_MODULE(VideoModule);
+#endif
         REGISTER_MODULE(BuildModule);
 	}
 }

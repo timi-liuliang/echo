@@ -34,12 +34,20 @@ namespace Echo
         m_rootDir   = PathUtil::GetCurrentDir() + "/../../../../";
         m_projectDir = Engine::instance()->getResPath();
         m_outputDir = PathUtil::GetCurrentDir() + "/build/ios/";
+        m_solutionDir = m_outputDir + "solution/";
 
         // create dir
         if(!PathUtil::IsDirExist(m_outputDir))
         {
             log("Create output directory : [%s]", m_outputDir.c_str());
             PathUtil::CreateDir(m_outputDir);
+        }
+        
+        // create solution dir
+        if(!PathUtil::IsDirExist(m_solutionDir))
+        {
+            log("Create solution directory : [%s]", m_solutionDir.c_str());
+            PathUtil::CreateDir(m_solutionDir);
         }
 
         return true;
@@ -84,7 +92,10 @@ namespace Echo
         String solutionDir = m_outputDir + "solution/";
         String cmakeCmd = "cmake -DCMAKE_BUILD_TYPE=RELEASE -DECHO_EDITOR_MODE=FALSE -DECHO_BUILD_PLATFORM_IOS=TRUE -DECHO_BUILD_PLATFORM_MAC=FALSE -G\"Xcode\" ../";
 
-        m_listener->onExecCmd(cmakeCmd.c_str(), solutionDir.c_str());
+        if(!m_listener->onExecCmd(cmakeCmd.c_str(), solutionDir.c_str()))
+        {
+            log("exec command [%s] failed.", cmakeCmd.c_str());
+        }
     }
 
     void iOSBuildSettings::compile()
