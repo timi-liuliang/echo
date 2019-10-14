@@ -35,6 +35,12 @@ namespace Echo
         m_projectDir = Engine::instance()->getResPath();
         m_outputDir = PathUtil::GetCurrentDir() + "/build/ios/";
         m_solutionDir = m_outputDir + "solution/";
+        
+        // delete output dir
+        if(PathUtil::IsDirExist(m_outputDir))
+        {
+            PathUtil::DelPath(m_outputDir);
+        }
 
         // create dir
         if(!PathUtil::IsDirExist(m_outputDir))
