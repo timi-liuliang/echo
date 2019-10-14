@@ -64,6 +64,9 @@ namespace Echo
 
         // copy app
         PathUtil::CopyDir( m_rootDir + "app/ios/", m_outputDir + "app/ios/");
+        
+        // copy build script
+        PathUtil::CopyDir( m_rootDir + "build/", m_outputDir + "build/");
 
         // copy engine
         PathUtil::CopyDir( m_rootDir + "engine/", m_outputDir + "engine/");
@@ -89,10 +92,9 @@ namespace Echo
 
     void iOSBuildSettings::cmake()
     {
-        String solutionDir = m_outputDir + "solution/";
-        String cmakeCmd = "/Applications/CMake.app/Contents/bin/cmake -DCMAKE_BUILD_TYPE=RELEASE -DECHO_EDITOR_MODE=FALSE -DECHO_BUILD_PLATFORM_IOS=TRUE -DECHO_BUILD_PLATFORM_MAC=FALSE -G\"Xcode\" ../";
-
-        if(!m_listener->onExecCmd(cmakeCmd.c_str(), solutionDir.c_str()))
+        String workingDir = m_outputDir + "build/ios/";
+        String cmakeCmd = "sh cmake.sh";
+        if(!m_listener->onExecCmd(cmakeCmd.c_str(), workingDir.c_str()))
         {
             log("exec command [%s] failed.", cmakeCmd.c_str());
         }
