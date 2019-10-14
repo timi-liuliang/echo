@@ -17,7 +17,7 @@ namespace Studio
 
     public:
         // log
-        virtual void log(const char* msg) override;
+        virtual void log(const char* msg, bool isWrap=true) override;
 
         // on begin|finished
         virtual void onBegin() override;

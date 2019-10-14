@@ -93,9 +93,25 @@ namespace Studio
         else									return nullptr;
     }
 
-    void BuildWindow::log(const char* msg)
+    void BuildWindow::log(const char* msg, bool isWrap)
     {
-        m_log->append( msg);
+        static bool isNeedAddSpace = false;
+        if(isWrap)
+        {
+            m_log->append( msg);
+            isNeedAddSpace = true;
+        }
+        else
+        {
+            if(isNeedAddSpace)
+            {
+                m_log->insertPlainText("\n");
+                isNeedAddSpace = false;
+            }
+            
+            m_log->moveCursor(QTextCursor::End);
+            m_log->insertPlainText( msg);
+        }
     }
 
     void BuildWindow::onBegin()
@@ -117,9 +133,10 @@ namespace Studio
         
         // modify process environment
         QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-        env.insert("PATH", env.value("PATH") + ":/Applications/CMake.app/Contents/bin/:");
-        m_cmdProcess.setProcessEnvironment(env);
-        
+        //env.insert("PATH", env.value("PATH") + ":/Applications/CMake.app/Contents/bin/:");
+//        m_cmdProcess.setProcessEnvironment(env);
+        //log(env.value("PATH").toStdString().c_str());
+
         m_cmdProcess.start(cmd);
 
         if(!m_cmdProcess.waitForStarted())
@@ -135,7 +152,7 @@ namespace Studio
     {
         Echo::String msg = m_cmdProcess.readAllStandardOutput().toStdString().c_str();
         if (!msg.empty())
-            log( msg.c_str());
+            log(msg.c_str(), false);
     }
     
     void BuildWindow::onProcessError(QProcess::ProcessError error)

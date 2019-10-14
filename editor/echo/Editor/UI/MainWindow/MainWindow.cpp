@@ -306,7 +306,6 @@ namespace Studio
     void MainWindow::onBuildProject()
     {
         BuildWindow* buildWindow = EchoNew(BuildWindow(nullptr));
-        //buildWindow->show();
         buildWindow->exec();
     }
 

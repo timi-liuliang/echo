@@ -8,7 +8,7 @@ namespace Echo
     {
     public:
         // output
-        virtual void log(const char* msg) {}
+        virtual void log(const char* msg, bool isWrap=true) {}
 
         // on begin|end
         virtual void onBegin() {}
