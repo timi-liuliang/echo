@@ -1,5 +1,6 @@
 #include "MainWindow.h"
 #include "Studio.h"
+#include "UndoHistory.h"
 #include "LogPanel.h"
 #include "ResPanel.h"
 #include "NodeTreePanel.h"
@@ -63,6 +64,10 @@ namespace Studio
 		QObject::connect(m_actionNewScene, SIGNAL(triggered(bool)), this, SLOT(onNewScene()));
 		QObject::connect(m_actionSaveScene, SIGNAL(triggered(bool)), this, SLOT(onSaveScene()));
 		QObject::connect(m_actionSaveAsScene, SIGNAL(triggered(bool)), this, SLOT(onSaveAsScene()));
+        
+        // redo|undo
+        QObject::connect(m_actionUndo, SIGNAL(triggered(bool)), this, SLOT(onUndo()));
+        QObject::connect(m_actionRedo, SIGNAL(triggered(bool)), this, SLOT(onRedo()));
 
 		// editor
 		QObject::connect(m_actionThemeDark, SIGNAL(triggered(bool)), this, SLOT(onChooseThemeDark()));
@@ -630,4 +635,14 @@ namespace Studio
 			}
 		}
 	}
+
+    void MainWindow::onUndo()
+    {
+        UndoHistory::instance()->undo();
+    }
+
+    void MainWindow::onRedo()
+    {
+        UndoHistory::instance()->redo();
+    }
 }

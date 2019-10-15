@@ -98,6 +98,11 @@ namespace Studio
 
 		// on Dockwidget location changed
 		void onDockWidgetLocationChanged();
+        
+    public slots:
+        // undo
+        void onUndo();
+        void onRedo();
 
 	protected slots:
 		// open another project

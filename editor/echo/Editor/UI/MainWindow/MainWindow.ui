@@ -96,6 +96,9 @@
     <addaction name="separator"/>
     <addaction name="m_actionSaveScene"/>
     <addaction name="m_actionSaveAsScene"/>
+    <addaction name="separator"/>
+    <addaction name="m_actionUndo"/>
+    <addaction name="m_actionRedo"/>
    </widget>
    <widget class="QMenu" name="menu_Editor">
     <property name="title">
@@ -269,6 +272,22 @@
   <action name="m_actionBuild">
    <property name="text">
     <string>Build</string>
+   </property>
+  </action>
+  <action name="m_actionUndo">
+   <property name="text">
+    <string>Undo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="m_actionRedo">
+   <property name="text">
+    <string>Redo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
    </property>
   </action>
  </widget>
