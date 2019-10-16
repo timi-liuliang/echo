@@ -5,7 +5,10 @@
 #if defined(ECHO_PLATFORM_MAC)
     #include <OpenAL/al.h>
     #include <OpenAL/alc.h>
-#elif  defined(ECHO_PLATFORM_ANDROID)
+#elif defined(ECHO_PLATFORM_IOS)
+    #include <OpenAL/al.h>
+    #include <OpenAL/alc.h>
+#elif defined(ECHO_PLATFORM_ANDROID)
     #include <OpenAL/al.h>
     #include <OpenAL/alc.h>
 #else

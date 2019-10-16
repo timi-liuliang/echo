@@ -7,13 +7,13 @@
 #  define  GL_GLEXT_PROTOTYPES
 #endif
 
-#ifdef ECHO_PLATFORM_MAC_IOS
+#ifdef ECHO_PLATFORM_IOS
     #include <OpenGLES/ES3/gl.h>
     #include <OpenGLES/ES3/glext.h>
     #ifdef __OBJC__
         #include <OpenGLES/EAGL.h>
     #endif
-#elif defined(ECHO_PLATFORM_MAC_OSX)
+#elif defined(ECHO_PLATFORM_MAC)
     //#include <EGL/egl.h>
 #elif defined(ECHO_PLATFORM_ANDROID) || defined(ECHO_PLATFORM_NACL)
     #	include <GLES3/gl3.h>
