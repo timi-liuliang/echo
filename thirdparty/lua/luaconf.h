@@ -781,12 +781,12 @@
 ** Local configuration. You can use this space to add your redefinitions
 ** without modifying the main part of the file.
 */
-#if defined(__APPLE__)
-    #include "TargetConditionals.h"
-    #define system(s) ((s)==NULL ? 0 : -1)
-#elif defined(__ANDROID__)
-    #define system(s) ((s)==NULL ? 0 : -1)
-#endif
+//#if defined(__APPLE__)
+//    #include "TargetConditionals.h"
+//    #define system(s) ((s)==NULL ? 0 : -1)
+//#elif defined(__ANDROID__)
+//    #define system(s) ((s)==NULL ? 0 : -1)
+//#endif
 
 
 #endif
