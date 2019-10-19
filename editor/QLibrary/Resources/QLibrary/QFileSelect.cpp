@@ -3,7 +3,6 @@
 
 namespace QT_UI
 {
-	// 构造函数
 	QFileSelect::QFileSelect( QWidget* parent)
 		: QWidget( parent)
 	{
@@ -28,11 +27,10 @@ namespace QT_UI
 
 		setFocusProxy( m_toolButton);
 
-		// 消息
+		// connect
 		connect( m_toolButton, SIGNAL(clicked()), this, SLOT(OnSelectPath()));
 	}
 
-	// 选择路径
 	void QFileSelect::OnSelectPath()
 	{
 		QString qFileName = QFileDialog::getOpenFileName( this, tr("Open Picture"), "", tr("*.tga;; *.png;; *.*"));

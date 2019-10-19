@@ -1,6 +1,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QDesktopServices>
+#include <QFileDialog>
 #include "BuildWindow.h"
 #include "engine/core/util/PathUtil.h"
 #include "MacHelper.h"
@@ -78,11 +79,16 @@ namespace Studio
 
     void BuildWindow::onBuild()
     {
-        Echo::BuildSettings* buildSettings = getBuildSettings();
-        if(buildSettings)
+        QString outputDir = QFileDialog::getExistingDirectory(this, "Choose output directory");
+        if(!outputDir.isEmpty())
         {
-            buildSettings->setListener(this);
-            buildSettings->build();
+            Echo::BuildSettings* buildSettings = getBuildSettings();
+            if(buildSettings)
+            {
+                buildSettings->setListener(this);
+                buildSettings->setOutputDir(outputDir.toStdString().c_str());
+                buildSettings->build();
+            }
         }
     }
 

@@ -12,7 +12,6 @@
 
 namespace Studio
 {
-	// constructor
 	ProjectWnd::ProjectWnd(QMainWindow* parent /* = 0 */)
 		: QMainWindow(parent)
 	{
@@ -102,7 +101,6 @@ namespace Studio
 		}
 	}
 
-	// new project file
 	Echo::String ProjectWnd::newProject()
 	{        
 		QString projectName = QFileDialog::getSaveFileName(this, tr("New Project"), "", tr("(*.echo)"));
@@ -160,7 +158,6 @@ namespace Studio
 		return "";
 	}
 
-	// open project
 	void ProjectWnd::openProject(const Echo::String& projectFile)
 	{
 		AStudio::instance()->getMainWindow()->showMaximized();
@@ -201,7 +198,6 @@ namespace Studio
 
 	void ProjectWnd::showAllUpdateableVersion()
 	{
-		// 检测更新
 		Studio::Update updater;
 		Echo::StringArray allVersions = updater.getAllEnabledVersions();
 		for (Echo::String& version : allVersions)
@@ -225,7 +221,6 @@ namespace Studio
 		Studio::Update updater;
 		updater.downloadVersion(resName);
 
-		// 关闭当前程序
 		close();
 	}
 }

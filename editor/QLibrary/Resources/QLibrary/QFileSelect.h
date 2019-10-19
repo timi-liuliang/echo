@@ -7,23 +7,23 @@
 
 namespace QT_UI
 {
-	//-------------------------------------------
-	// FileSelect 文件选择控件 2013-1-22 帝林
-	//-------------------------------------------
+	/**
+	 * FileSelect captain 2013-1-22
+	 */
 	class QFileSelect : public QWidget
 	{
 		Q_OBJECT
 	public:
 		QFileSelect( QWidget* parent = 0);
 
-		// 设置路径
+		// set path
 		void SetPath( QString text) { m_lineEdit->setText( text);  }
 
-		// 获取路径
+		// get path
 		QString GetPath() { return m_lineEdit->text(); }
 
 	private slots:
-		// 选择路径
+		// onn select
 		void OnSelectPath();
 
 	private:

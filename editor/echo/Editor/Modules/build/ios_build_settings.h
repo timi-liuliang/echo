@@ -15,6 +15,9 @@ namespace Echo
         // instance
         static iOSBuildSettings* instance();
         
+        // set output directory
+        virtual void setOutputDir(const String& outputDir) override;
+        
         // build
         virtual void build() override;
         

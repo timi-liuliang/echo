@@ -28,12 +28,18 @@ namespace Echo
 
         CLASS_REGISTER_PROPERTY(iOSBuildSettings, "Icon", Variant::Type::ResourcePath, "getIconRes", "setIconRes");
     }
+    
+    void iOSBuildSettings::setOutputDir(const String& outputDir)
+    {
+        m_outputDir = outputDir;
+        PathUtil::FormatPath(m_outputDir, false);
+    }
 
     bool iOSBuildSettings::prepare()
     {
         m_rootDir   = PathUtil::GetCurrentDir() + "/../../../../";
         m_projectDir = Engine::instance()->getResPath();
-        m_outputDir = PathUtil::GetCurrentDir() + "/build/ios/";
+        m_outputDir = m_outputDir.empty() ? PathUtil::GetCurrentDir() + "/build/ios/" : m_outputDir;
         m_solutionDir = m_outputDir + "xcode/";
         
         // delete output dir

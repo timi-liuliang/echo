@@ -14,6 +14,9 @@ namespace Echo
         BuildSettings() {}
         virtual ~BuildSettings() {}
         
+        // set
+        virtual void setOutputDir(const String& outputDir) {}
+        
         // build
         virtual void build() {}
         
