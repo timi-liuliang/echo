@@ -8,15 +8,15 @@ id -un
 xcodebuild -version
 
 # modify environment
-# :
-export PATH="$PATH:/Applications/CMake.app/Contents/bin:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+export PATH="$PATH:/Applications/CMake.app/Contents/bin"
 echo $PATH
 
 # show cmake version
 cmake -version
 
 # cmake - change to output directory
-cd ../../solution
+mkdir xcode
+cd xcode
 
 # show solution dir
 echo "build dir :" $(pwd)

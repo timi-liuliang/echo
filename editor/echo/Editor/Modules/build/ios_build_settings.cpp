@@ -34,7 +34,7 @@ namespace Echo
         m_rootDir   = PathUtil::GetCurrentDir() + "/../../../../";
         m_projectDir = Engine::instance()->getResPath();
         m_outputDir = PathUtil::GetCurrentDir() + "/build/ios/";
-        m_solutionDir = m_outputDir + "solution/";
+        m_solutionDir = m_outputDir + "xcode/";
         
         // delete output dir
         if(PathUtil::IsDirExist(m_outputDir))
@@ -49,13 +49,6 @@ namespace Echo
             PathUtil::CreateDir(m_outputDir);
         }
         
-        // create solution dir
-        if(!PathUtil::IsDirExist(m_solutionDir))
-        {
-            log("Create solution directory : [%s]", m_solutionDir.c_str());
-            PathUtil::CreateDir(m_solutionDir);
-        }
-
         return true;
     }
 
@@ -70,9 +63,6 @@ namespace Echo
 
         // copy app
         PathUtil::CopyDir( m_rootDir + "app/ios/", m_outputDir + "app/ios/");
-        
-        // copy build script
-        PathUtil::CopyDir( m_rootDir + "build/", m_outputDir + "build/");
 
         // copy engine
         PathUtil::CopyDir( m_rootDir + "engine/", m_outputDir + "engine/");
@@ -82,6 +72,9 @@ namespace Echo
 
         // copy CMakeLists.txt
         PathUtil::CopyFilePath( m_rootDir + "CMakeLists.txt", m_outputDir + "CMakeLists.txt");
+        
+        // copy build script
+        PathUtil::CopyFilePath( m_rootDir + "build/ios/cmake.sh", m_outputDir + "cmake.sh");
     }
 
     void iOSBuildSettings::copyRes()
@@ -122,9 +115,9 @@ namespace Echo
             copySrc();
             copyRes();
 
-            cmake();
+            //cmake();
 
-            compile();
+            //compile();
         }
 
         m_listener->onEnd();
