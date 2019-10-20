@@ -131,6 +131,7 @@ namespace Echo
 
 	void Plugin::loadAllPlugins()
 	{
+    #if defined(ECHO_PLATFORM_WINDOWS) || defined(ECHO_PLATFORM_MAC)
         StringArray pluginPaths = StringUtil::Split(PluginSettings::instance()->getSearchPath(), ";");
         for(String& path : pluginPaths)
         {
@@ -141,6 +142,7 @@ namespace Echo
             
             loadPluginInPath( path);
         }
+    #endif
 	}
     
     void Plugin::loadPluginInPath(const String& pluginDir)
