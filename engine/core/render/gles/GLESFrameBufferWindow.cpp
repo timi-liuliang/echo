@@ -15,7 +15,10 @@ namespace Echo
     bool GLESFramebufferWindow::begin(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue)
     {
         // bind frame buffer
+    #if defined(ECHO_PLATFORM_WINDOWS) || defined(ECHO_PLATFORM_ANDROID)
         OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+    #endif
+
         OGLESDebug(glViewport(0, 0, m_width, m_height));
 
         // clear
