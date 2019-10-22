@@ -92,7 +92,7 @@ namespace Echo
 		}
 		else
 		{
-#ifdef ECHO_PLATFORM_MAC_IOS
+#ifdef ECHO_PLATFORM_IOS
             isNeedSetVertexBuffer = true;//pre->getVertexStreamHash() != m_vertexStreamsHash ? true : false;
 #else
 			isNeedSetVertexBuffer = true;
@@ -134,7 +134,7 @@ namespace Echo
 	// unbind
 	void GLES2Renderable::unbind()
 	{
-#ifndef ECHO_PLATFORM_MAC_IOS
+#ifndef ECHO_PLATFORM_IOS
 		// bind vertex stream
   		for (size_t i = 0; i < m_vertexStreams.size(); i++)
   		{

@@ -4,7 +4,6 @@ ECHO_COMPILER_ASSERT(ECHO_STL_MEMORY_ALLOCATOR == ECHO_STL_MEMORY_ALLOCATOR_STAN
 
 namespace Echo
 {
-	// Debug GL º¯Êýµ÷ÓÃ
 	void DebugGLError(const char* filename, int lineNum)
 	{
 		GLenum err = glGetError();

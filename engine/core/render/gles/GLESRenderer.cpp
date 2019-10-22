@@ -19,7 +19,7 @@ namespace Echo
 	GLES2Renderer* g_renderer = nullptr;
 }
 
-#if defined(ECHO_PLATFORM_MAC_IOS)
+#if defined(ECHO_PLATFORM_IOS)
 extern void makeContextCurrent();
 extern void PresentRenderBuffer();
 #elif defined(ECHO_PLATFORM_WINDOWS)
@@ -429,7 +429,7 @@ namespace Echo
 
 		OGLESDebug(eglSwapBuffers(static_cast<EGLDisplay>(getDisplay()), static_cast<EGLSurface>(getSurface())));
 
-#elif defined(ECHO_PLATFORM_MAC_IOS)
+#elif defined(ECHO_PLATFORM_IOS)
 		PresentRenderBuffer();
 #endif
 
