@@ -51,7 +51,7 @@ float iOSGetScreenHeight()
     g_viewWidth = screen_orig_rect.size.width * screenScale;
     g_viewHeight = screen_orig_rect.size.height * screenScale;
     g_nativeScale = screenScale;
-    
+
     CADisplayLink* display_link = [CADisplayLink displayLinkWithTarget:self selector:@selector(drawView:)];
     [display_link addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
@@ -66,12 +66,13 @@ float iOSGetScreenHeight()
     if( g_isInited)
     {
         NSSet* allTouches = [event allTouches];
-        
+
         int touchIdx = 0;
         for(UITouch* touch in allTouches)
         {
             CGPoint touchPoint = [touch locationInView:[touch view]];
-            //g_app->mouseLBProc( touchPoint.x * g_nativeScale, touchPoint.y * g_nativeScale);
+            Echo::ui32 buttonId = 0;
+            Echo::Input::instance()->notifyMouseButtonDown(buttonId, Echo::Vector2(touchPoint.x * g_nativeScale, touchPoint.y * g_nativeScale));
         }
     }
 }
@@ -86,19 +87,20 @@ float iOSGetScreenHeight()
     if( g_isInited)
     {
         NSSet* allTouches = [event allTouches];
-        
+
         int touchIdx = 0;
         for(UITouch* touch in allTouches)
         {
             CGPoint touchPoint = [touch locationInView:[touch view]];
-            //g_app->mouseLBProc( touchPoint.x * g_nativeScale, touchPoint.y * g_nativeScale, true);
+            Echo::ui32 buttonId = 0;
+            Echo::Input::instance()->notifyMouseButtonUp(buttonId, Echo::Vector2(touchPoint.x * g_nativeScale, touchPoint.y * g_nativeScale));
         }
     }
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    
+
 }
 
 - (void)drawView: (CADisplayLink*)display_link
@@ -107,7 +109,7 @@ float iOSGetScreenHeight()
     {
         Echo::String rootPath = [[[NSBundle mainBundle] resourcePath] UTF8String];
         Echo::Application::instance()->init( g_viewWidth, g_viewHeight, rootPath);
-        
+
         g_isInited = true;
     }
     else
