@@ -29,8 +29,8 @@ GROUP_FILES(ALL_FILES ${CMAKE_CURRENT_SOURCE_DIR})
 
 # iOS platorm resources
 SET(IOS_RESOURCE_FILES
-	${MODULE_PATH}/frame/Platform/iOS/Icon.png
-	${MODULE_PATH}/frame/Platform/iOS/launch.png
+	${MODULE_PATH}/frame/Platform/iOS/Icon/Icon.png
+	${MODULE_PATH}/frame/Platform/iOS/Launch/Default-IPhone6-Landscape.png
 	${MODULE_PATH}/resources/data
 )
 SET_SOURCE_FILES_PROPERTIES(${IOS_RESOURCE_FILES} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
