@@ -4,6 +4,7 @@
 #include <OpenGLES/ES3/gl.h>
 #include <OpenGLES/ES3/glext.h>
 #include <engine/core/util/StringUtil.h>
+#include <engine/core/input/input.h>
 
 static CGFloat g_viewWidth = 0.0f;
 static CGFloat g_viewHeight = 0.0f;
@@ -26,18 +27,18 @@ float iOSGetScreenHeight()
 
 - (void)loadView
 {
-	CGRect frame = [[UIScreen mainScreen] bounds];
-	self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3];
+    CGRect frame = [[UIScreen mainScreen] bounds];
+    self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3];
     if (!self.context || ![EAGLContext setCurrentContext:self.context])
     {
         return;
     }
 
-	IOSView* view = [[IOSView alloc] initWithFrame:frame];
-	view->context = self.context;
+    IOSView* view = [[IOSView alloc] initWithFrame:frame];
+    view->context = self.context;
     [view CreateFrameBuffer];
 
-	self.view = view;
+    self.view = view;
 }
 
 - (void)viewDidLoad
@@ -51,7 +52,7 @@ float iOSGetScreenHeight()
     g_viewWidth = screen_orig_rect.size.width * screenScale;
     g_viewHeight = screen_orig_rect.size.height * screenScale;
     g_nativeScale = screenScale;
-    
+
     CADisplayLink* display_link = [CADisplayLink displayLinkWithTarget:self selector:@selector(drawView:)];
     [display_link addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
@@ -59,6 +60,8 @@ float iOSGetScreenHeight()
 - (void)dealloc
 {
     [EAGLContext setCurrentContext: nil];
+    
+    [super dealloc];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -66,12 +69,17 @@ float iOSGetScreenHeight()
     if( g_isInited)
     {
         NSSet* allTouches = [event allTouches];
-        
+
         int touchIdx = 0;
         for(UITouch* touch in allTouches)
         {
-            CGPoint touchPoint = [touch locationInView:[touch view]];
-            //g_app->mouseLBProc( touchPoint.x * g_nativeScale, touchPoint.y * g_nativeScale);
+            if(touchIdx==0)
+            {
+                CGPoint touchPoint = [touch locationInView:[touch view]];
+                Echo::Input::instance()->notifyMouseButtonDown(0, Echo::Vector2(touchPoint.x * g_nativeScale, touchPoint.y * g_nativeScale));
+            }
+
+            touchIdx++;
         }
     }
 }
@@ -86,28 +94,33 @@ float iOSGetScreenHeight()
     if( g_isInited)
     {
         NSSet* allTouches = [event allTouches];
-        
+
         int touchIdx = 0;
         for(UITouch* touch in allTouches)
         {
-            CGPoint touchPoint = [touch locationInView:[touch view]];
-            //g_app->mouseLBProc( touchPoint.x * g_nativeScale, touchPoint.y * g_nativeScale, true);
+            if(touchIdx==0)
+            {
+                CGPoint touchPoint = [touch locationInView:[touch view]];
+                Echo::Input::instance()->notifyMouseButtonUp(0, Echo::Vector2(touchPoint.x * g_nativeScale, touchPoint.y * g_nativeScale));
+            }
+
+            touchIdx++;
         }
     }
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    
+
 }
 
 - (void)drawView: (CADisplayLink*)display_link
 {
-	if( !g_isInited)
+    if( !g_isInited)
     {
         Echo::String rootPath = [[[NSBundle mainBundle] resourcePath] UTF8String];
         Echo::Application::instance()->init( g_viewWidth, g_viewHeight, rootPath);
-        
+
         g_isInited = true;
     }
     else
@@ -125,7 +138,7 @@ float iOSGetScreenHeight()
 
 - (void)MakeCurrent
 {
-	[EAGLContext setCurrentContext:self.context];
+    [EAGLContext setCurrentContext:self.context];
 }
 
 - (void)SwapBuffers

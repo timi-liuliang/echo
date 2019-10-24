@@ -228,6 +228,7 @@ namespace Echo
     
     void GLSLCrossCompiler::compileGlslToSpirv()
     {
+    #ifdef ECHO_EDITOR_MODE
 		if (m_isNeedUpdateSpriv)
 		{
 			// initialize process (wrong place)
@@ -310,10 +311,13 @@ namespace Echo
 
 			m_isNeedUpdateSpriv = false;
 		}
+    #else
+    #endif
     }
 
     std::string GLSLCrossCompiler::compileSpirvToGles(ShaderType shaderType)
 	{
+    #ifdef ECHO_EDITOR_MODE
         const vector<ui32>::type& spirv = getSPIRV( shaderType);
         if(!spirv.empty())
         {
@@ -336,12 +340,16 @@ namespace Echo
                 
             return compiler.compile();
         }
+    #else
+        
+    #endif
         
 		return std::string();
 	}
     
 	std::string  GLSLCrossCompiler::compileSpirvToMsl(ShaderType shaderType)
 	{
+    #ifdef ECHO_EDITOR_MODE
         const vector<ui32>::type& spirv = getSPIRV( shaderType);
         if(!spirv.empty())
         {
@@ -378,6 +386,9 @@ namespace Echo
 			// compile
             return compiler.compile();
         }
+    #else
+        
+    #endif
         
         return std::string();
 	}

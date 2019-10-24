@@ -27,7 +27,6 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(Camera3D, "Far", Variant::Type::Real, "getFar", "setFar");
 	}
 
-	// sync data to camera
 	void Camera3D::syncDataToCamera(Camera* camera)
 	{
 		Vector3 direction = getWorldOrientation() * Vector3::UNIT_Z;
@@ -37,7 +36,6 @@ namespace Echo
 		camera->setFarClip(m_far);
 	}
 
-	// update self
 	void Camera3D::update_self()
 	{
 		if (Engine::instance()->getConfig().m_isGame)

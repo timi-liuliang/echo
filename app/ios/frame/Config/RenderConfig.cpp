@@ -6,18 +6,10 @@
 
 namespace Echo
 {
-	// initialize Renderer
 	Renderer* initRender(size_t hwnd, int width, int height)
 	{
 		Renderer* renderer = nullptr;
-#ifdef ECHO_PLATFORM_MAC
-		LoadMTRenderer(renderer);
-#elif defined ECHO_PLATFORM_HTML5
 		LoadGLESRenderer(renderer);
-#else
-		LoadGLESRenderer(renderer);
-		//LoadVKRenderer(renderer);
-#endif
 
 		Echo::Renderer::Config renderCfg;
 		renderCfg.m_windowHandle = hwnd;
