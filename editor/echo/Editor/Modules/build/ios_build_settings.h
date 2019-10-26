@@ -28,6 +28,10 @@ namespace Echo
         void setIconRes(const ResourcePath& path);
         const ResourcePath& getIconRes() { return m_iconRes; }
         
+        // app name
+        void setAppName(const String& appName) { m_appName = appName; }
+        const String& getAppName() { return m_appName; }
+        
     private:
         // output directory
         bool prepare();
@@ -42,11 +46,16 @@ namespace Echo
         // compile
         void compile();
         
+        // write
+        void writeInfoPlist();
+        void writeCMakeList();
+        
     private:
         String                  m_rootDir;
         String                  m_projectDir;
         String                  m_outputDir;
         String                  m_solutionDir;
         ResourcePath            m_iconRes;
+        String                  m_appName;
     };
 }

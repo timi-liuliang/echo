@@ -1,6 +1,7 @@
 #include "ios_build_settings.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/main/Engine.h>
+#include <thirdparty/pugixml/pugixml.hpp>
 #include <QProcess>
 
 namespace Echo
@@ -23,9 +24,12 @@ namespace Echo
 
     void iOSBuildSettings::bindMethods()
     {
+        CLASS_BIND_METHOD(iOSBuildSettings, getAppName,   DEF_METHOD("getAppName"));
+        CLASS_BIND_METHOD(iOSBuildSettings, setAppName,   DEF_METHOD("setAppName"));
         CLASS_BIND_METHOD(iOSBuildSettings, getIconRes,   DEF_METHOD("getIconRes"));
         CLASS_BIND_METHOD(iOSBuildSettings, setIconRes,   DEF_METHOD("setIconRes"));
 
+        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "AppName", Variant::Type::String, "getAppName", "setAppName");
         CLASS_REGISTER_PROPERTY(iOSBuildSettings, "Icon", Variant::Type::ResourcePath, "getIconRes", "setIconRes");
     }
     
@@ -120,6 +124,10 @@ namespace Echo
         {
             copySrc();
             copyRes();
+            
+            // overwrite config
+            writeInfoPlist();
+            writeCMakeList();
 
             //cmake();
 
@@ -133,5 +141,56 @@ namespace Echo
     {
         String FinalResultPath = m_outputDir + "bin/app/";
         return PathUtil::IsDirExist(FinalResultPath) ? FinalResultPath : m_outputDir;
+    }
+
+    void iOSBuildSettings::writeInfoPlist()
+    {
+        pugi::xml_document doc;
+        pugi::xml_node dec = doc.prepend_child(pugi::node_declaration);
+        dec.append_attribute("version") = "1.0";
+        dec.append_attribute("encoding") = "utf-8";
+
+        pugi::xml_node root_node= doc.append_child("plist" );
+        root_node.append_attribute("version").set_value("1.0");
+        
+        pugi::xml_node root_dict = root_node.append_child("dict");
+        
+        root_dict.append_child("key").append_child(pugi::node_pcdata).set_value("CFBundleDevelopmentRegion");
+        root_dict.append_child("string").append_child(pugi::node_pcdata).set_value("English");
+        
+        root_dict.append_child("key").append_child(pugi::node_pcdata).set_value("CFBundleExecutable");
+        root_dict.append_child("string").append_child(pugi::node_pcdata).set_value("$(EXECUTABLE_NAME)");
+        
+        root_dict.append_child("key").append_child(pugi::node_pcdata).set_value("CFBundleGetInfoString");
+        root_dict.append_child("string").append_child(pugi::node_pcdata).set_value("");
+        
+        root_dict.append_child("key").append_child(pugi::node_pcdata).set_value("CFBundleIconFile");
+        root_dict.append_child("string").append_child(pugi::node_pcdata).set_value("Icon.png");
+        
+        root_dict.append_child("key").append_child(pugi::node_pcdata).set_value("CFBundleIdentifier");
+        root_dict.append_child("string").append_child(pugi::node_pcdata).set_value("com.echo.app");
+        
+        root_dict.append_child("key").append_child(pugi::node_pcdata).set_value("CFBundleInfoDictionaryVersion");
+        root_dict.append_child("string").append_child(pugi::node_pcdata).set_value("6.0");
+        
+        String appName = m_appName.empty() ? PathUtil::GetPureFilename( Engine::instance()->getConfig().m_projectFile, false): m_appName ;
+        root_dict.append_child("key").append_child(pugi::node_pcdata).set_value("CFBundleName");
+        root_dict.append_child("string").append_child(pugi::node_pcdata).set_value(appName.c_str());
+        
+        root_dict.append_child("key").append_child(pugi::node_pcdata).set_value("CFBundlePackageType");
+        root_dict.append_child("string").append_child(pugi::node_pcdata).set_value("APPL");
+        
+        root_dict.append_child("key").append_child(pugi::node_pcdata).set_value("UISupportedInterfaceOrientations");
+        pugi::xml_node orient_node = root_dict.append_child("array");
+        orient_node.append_child("string").append_child(pugi::node_pcdata).set_value("UIInterfaceOrientationLandscapeRight");
+        orient_node.append_child("string").append_child(pugi::node_pcdata).set_value("UIInterfaceOrientationLandscapeLeft");
+
+        Echo::String savePath = m_outputDir + "app/ios/frame/Platform/iOS/Info.plist";
+        doc.save_file(savePath.c_str(), "\t", 1U, pugi::encoding_utf8);
+    }
+
+    void iOSBuildSettings::writeCMakeList()
+    {
+    
     }
 }
