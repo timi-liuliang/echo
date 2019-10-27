@@ -36,6 +36,23 @@ namespace Echo
         void setIdentifier(const String& identifier) { m_identifier = identifier; }
         String getIdentifier() const;
         
+    public:
+        // ui interface orientation portrait
+        bool isUIInterfaceOrientationPortrait() const { return m_uiInterfaceOrientationPortrait; }
+        void setUIInterfaceOrientationPortrait( bool value) { m_uiInterfaceOrientationPortrait = value;}
+        
+        // ui interface orientation upside down
+        bool isUIInterfaceOrientationPortraitUpsideDown() const { return m_uiInterfaceOrientationPortraitUpsideDown; }
+        void setUIInterfaceOrientationPortraitUpsideDown( bool value) { m_uiInterfaceOrientationPortraitUpsideDown = value;}
+        
+        // ui interface orientation landscape left
+        bool isUIInterfaceOrientationLandscapeLeft() const { return m_uiInterfaceOrientationLandscapeLeft; }
+        void setUIInterfaceOrientationLandscapeLeft( bool value) { m_uiInterfaceOrientationLandscapeLeft = value;}
+        
+        // ui interface orientation landscape right
+        bool isUIInterfaceOrientationLandscapeRight() const { return m_uiInterfaceOrientationLandscapeRight; }
+        void setUIInterfaceOrientationLandscapeRight( bool value) { m_uiInterfaceOrientationLandscapeRight = value;}
+        
     private:
         // output directory
         bool prepare();
@@ -49,9 +66,13 @@ namespace Echo
         
         // compile
         void compile();
-        
+       
+    private:
         // write
         void writeInfoPlist();
+        void writeUIInterfaceOrientationInfo(void* parent);
+        
+    private:
         void writeCMakeList();
         
     private:
@@ -62,5 +83,9 @@ namespace Echo
         ResourcePath            m_iconRes;
         String                  m_appName;
         String                  m_identifier;
+        bool                    m_uiInterfaceOrientationPortrait = true;
+        bool                    m_uiInterfaceOrientationPortraitUpsideDown = true;
+        bool                    m_uiInterfaceOrientationLandscapeLeft = true;
+        bool                    m_uiInterfaceOrientationLandscapeRight = true;
     };
 }

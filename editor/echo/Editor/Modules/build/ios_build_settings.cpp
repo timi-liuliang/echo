@@ -31,9 +31,24 @@ namespace Echo
         CLASS_BIND_METHOD(iOSBuildSettings, getIconRes,   DEF_METHOD("getIconRes"));
         CLASS_BIND_METHOD(iOSBuildSettings, setIconRes,   DEF_METHOD("setIconRes"));
 
-        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "AppName", Variant::Type::String, "getAppName", "setAppName");
-        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "Identifier", Variant::Type::String, "getIdentifier", "setIdentifier");
-        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "Icon", Variant::Type::ResourcePath, "getIconRes", "setIconRes");
+        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "AppName",    Variant::Type::String,          "getAppName",       "setAppName");
+        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "Identifier", Variant::Type::String,          "getIdentifier",    "setIdentifier");
+        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "Icon",       Variant::Type::ResourcePath,    "getIconRes",       "setIconRes");
+        
+        // Ui interface orientation
+        CLASS_BIND_METHOD(iOSBuildSettings, isUIInterfaceOrientationPortrait,           DEF_METHOD("isUIInterfaceOrientationPortrait"));
+        CLASS_BIND_METHOD(iOSBuildSettings, setUIInterfaceOrientationPortrait,          DEF_METHOD("setUIInterfaceOrientationPortrait"));
+        CLASS_BIND_METHOD(iOSBuildSettings, isUIInterfaceOrientationPortraitUpsideDown, DEF_METHOD("isUIInterfaceOrientationPortraitUpsideDown"));
+        CLASS_BIND_METHOD(iOSBuildSettings, setUIInterfaceOrientationPortraitUpsideDown,DEF_METHOD("setUIInterfaceOrientationPortraitUpsideDown"));
+        CLASS_BIND_METHOD(iOSBuildSettings, isUIInterfaceOrientationLandscapeLeft,      DEF_METHOD("isUIInterfaceOrientationLandscapeLeft"));
+        CLASS_BIND_METHOD(iOSBuildSettings, setUIInterfaceOrientationLandscapeLeft,     DEF_METHOD("setUIInterfaceOrientationLandscapeLeft"));
+        CLASS_BIND_METHOD(iOSBuildSettings, isUIInterfaceOrientationLandscapeRight,     DEF_METHOD("isUIInterfaceOrientationLandscapeRight"));
+        CLASS_BIND_METHOD(iOSBuildSettings, setUIInterfaceOrientationLandscapeRight,    DEF_METHOD("setUIInterfaceOrientationLandscapeRight"));
+        
+        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "Portrait",           Variant::Type::Bool, "isUIInterfaceOrientationPortrait",            "setUIInterfaceOrientationPortrait");
+        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "PortraitUpsideDown", Variant::Type::Bool, "isUIInterfaceOrientationPortraitUpsideDown",  "setUIInterfaceOrientationPortraitUpsideDown");
+        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "LandscapeLeft",      Variant::Type::Bool, "isUIInterfaceOrientationLandscapeLeft",       "setUIInterfaceOrientationLandscapeLeft");
+        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "LandscapeRight",     Variant::Type::Bool, "isUIInterfaceOrientationLandscapeRight",      "setUIInterfaceOrientationLandscapeRight");
     }
     
     void iOSBuildSettings::setOutputDir(const String& outputDir)
@@ -168,6 +183,27 @@ namespace Echo
         return PathUtil::IsDirExist(FinalResultPath) ? FinalResultPath : m_outputDir;
     }
 
+    void iOSBuildSettings::writeUIInterfaceOrientationInfo(void* parent)
+    {
+        pugi::xml_node* root_dict = (pugi::xml_node*)(parent);
+        
+        // https://developer.apple.com/documentation/uikit/uiinterfaceorientation?language=objc
+        root_dict->append_child("key").append_child(pugi::node_pcdata).set_value("UISupportedInterfaceOrientations");
+        pugi::xml_node orient_node = root_dict->append_child("array");
+        
+        if(m_uiInterfaceOrientationPortrait)
+            orient_node.append_child("string").append_child(pugi::node_pcdata).set_value("UIInterfaceOrientationPortrait");
+        
+        if(m_uiInterfaceOrientationPortraitUpsideDown)
+            orient_node.append_child("string").append_child(pugi::node_pcdata).set_value("UIInterfaceOrientationPortraitUpsideDown");
+        
+        if(m_uiInterfaceOrientationLandscapeLeft)
+            orient_node.append_child("string").append_child(pugi::node_pcdata).set_value("UIInterfaceOrientationLandscapeLeft");
+        
+        if(m_uiInterfaceOrientationLandscapeRight)
+            orient_node.append_child("string").append_child(pugi::node_pcdata).set_value("UIInterfaceOrientationLandscapeRight");
+    }
+
     void iOSBuildSettings::writeInfoPlist()
     {
         pugi::xml_document doc;
@@ -204,11 +240,7 @@ namespace Echo
         root_dict.append_child("key").append_child(pugi::node_pcdata).set_value("CFBundlePackageType");
         root_dict.append_child("string").append_child(pugi::node_pcdata).set_value("APPL");
         
-        // https://developer.apple.com/documentation/uikit/uiinterfaceorientation?language=objc
-        root_dict.append_child("key").append_child(pugi::node_pcdata).set_value("UISupportedInterfaceOrientations");
-        pugi::xml_node orient_node = root_dict.append_child("array");
-        orient_node.append_child("string").append_child(pugi::node_pcdata).set_value("UIInterfaceOrientationLandscapeRight");
-        orient_node.append_child("string").append_child(pugi::node_pcdata).set_value("UIInterfaceOrientationLandscapeLeft");
+        writeUIInterfaceOrientationInfo(&root_dict);
 
         Echo::String savePath = m_outputDir + "app/ios/frame/Platform/iOS/Info.plist";
         doc.save_file(savePath.c_str(), "\t", 1U, pugi::encoding_utf8);
