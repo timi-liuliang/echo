@@ -204,6 +204,7 @@ namespace Echo
         root_dict.append_child("key").append_child(pugi::node_pcdata).set_value("CFBundlePackageType");
         root_dict.append_child("string").append_child(pugi::node_pcdata).set_value("APPL");
         
+        // https://developer.apple.com/documentation/uikit/uiinterfaceorientation?language=objc
         root_dict.append_child("key").append_child(pugi::node_pcdata).set_value("UISupportedInterfaceOrientations");
         pugi::xml_node orient_node = root_dict.append_child("array");
         orient_node.append_child("string").append_child(pugi::node_pcdata).set_value("UIInterfaceOrientationLandscapeRight");
