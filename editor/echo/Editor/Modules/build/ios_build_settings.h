@@ -30,7 +30,11 @@ namespace Echo
         
         // app name
         void setAppName(const String& appName) { m_appName = appName; }
-        const String& getAppName() { return m_appName; }
+        String getAppName() const;
+
+        // identifier
+        void setIdentifier(const String& identifier) { m_identifier = identifier; }
+        String getIdentifier() const;
         
     private:
         // output directory
@@ -57,5 +61,6 @@ namespace Echo
         String                  m_solutionDir;
         ResourcePath            m_iconRes;
         String                  m_appName;
+        String                  m_identifier;
     };
 }

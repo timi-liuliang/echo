@@ -26,10 +26,13 @@ namespace Echo
     {
         CLASS_BIND_METHOD(iOSBuildSettings, getAppName,   DEF_METHOD("getAppName"));
         CLASS_BIND_METHOD(iOSBuildSettings, setAppName,   DEF_METHOD("setAppName"));
+        CLASS_BIND_METHOD(iOSBuildSettings, getIdentifier,DEF_METHOD("getIdentifier"));
+        CLASS_BIND_METHOD(iOSBuildSettings, setIdentifier,DEF_METHOD("setIdentifier"));
         CLASS_BIND_METHOD(iOSBuildSettings, getIconRes,   DEF_METHOD("getIconRes"));
         CLASS_BIND_METHOD(iOSBuildSettings, setIconRes,   DEF_METHOD("setIconRes"));
 
         CLASS_REGISTER_PROPERTY(iOSBuildSettings, "AppName", Variant::Type::String, "getAppName", "setAppName");
+        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "Identifier", Variant::Type::String, "getIdentifier", "setIdentifier");
         CLASS_REGISTER_PROPERTY(iOSBuildSettings, "Icon", Variant::Type::ResourcePath, "getIconRes", "setIconRes");
     }
     
@@ -137,6 +140,28 @@ namespace Echo
         m_listener->onEnd();
     }
 
+    String iOSBuildSettings::getAppName() const
+    {
+        if(m_appName.empty())   return PathUtil::GetPureFilename( Engine::instance()->getConfig().m_projectFile, false);
+        else                    return m_appName;
+    }
+
+    String iOSBuildSettings::getIdentifier() const
+    {
+        if(m_identifier.empty())
+        {
+            String appName = PathUtil::GetPureFilename( Engine::instance()->getConfig().m_projectFile, false);
+            String identifier = "com.echo." + appName;
+            identifier = StringUtil::Replace( identifier, ' ', '_');
+            
+            return identifier;
+        }
+        else
+        {
+            return m_identifier;
+        }
+    }
+
     String iOSBuildSettings::getFinalResultPath()
     {
         String FinalResultPath = m_outputDir + "bin/app/";
@@ -168,14 +193,13 @@ namespace Echo
         root_dict.append_child("string").append_child(pugi::node_pcdata).set_value("Icon.png");
         
         root_dict.append_child("key").append_child(pugi::node_pcdata).set_value("CFBundleIdentifier");
-        root_dict.append_child("string").append_child(pugi::node_pcdata).set_value("com.echo.app");
+        root_dict.append_child("string").append_child(pugi::node_pcdata).set_value(getIdentifier().c_str());
         
         root_dict.append_child("key").append_child(pugi::node_pcdata).set_value("CFBundleInfoDictionaryVersion");
         root_dict.append_child("string").append_child(pugi::node_pcdata).set_value("6.0");
         
-        String appName = m_appName.empty() ? PathUtil::GetPureFilename( Engine::instance()->getConfig().m_projectFile, false): m_appName ;
         root_dict.append_child("key").append_child(pugi::node_pcdata).set_value("CFBundleName");
-        root_dict.append_child("string").append_child(pugi::node_pcdata).set_value(appName.c_str());
+        root_dict.append_child("string").append_child(pugi::node_pcdata).set_value(getAppName().c_str());
         
         root_dict.append_child("key").append_child(pugi::node_pcdata).set_value("CFBundlePackageType");
         root_dict.append_child("string").append_child(pugi::node_pcdata).set_value("APPL");
