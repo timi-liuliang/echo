@@ -1,5 +1,6 @@
 #include "ios_build_settings.h"
 #include <engine/core/util/PathUtil.h>
+#include <engine/core/io/IO.h>
 #include <engine/core/main/Engine.h>
 #include <thirdparty/pugixml/pugixml.hpp>
 #include <QProcess>
@@ -246,8 +247,105 @@ namespace Echo
         doc.save_file(savePath.c_str(), "\t", 1U, pugi::encoding_utf8);
     }
 
+    static void writeLine(String& str, const String& line)
+    {
+        str += line + "\n";
+    }
+
     void iOSBuildSettings::writeCMakeList()
     {
-    
+        String  cmakeStr;
+        
+        // module
+        String moduleName = StringUtil::Replace(getAppName(), " ", "");
+        writeLine( cmakeStr, StringUtil::Format("SET(MODULE_NAME %s)", moduleName.c_str()));
+        
+        // set module path
+        writeLine( cmakeStr, "SET(MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})");
+        
+        // include directories
+        writeLine( cmakeStr, "INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})");
+        writeLine( cmakeStr, "INCLUDE_DIRECtORIES(${ECHO_ROOT_PATH})");
+        
+        // link directories
+        writeLine( cmakeStr, "LINK_DIRECTORIES(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})");
+        writeLine( cmakeStr, "LINK_DIRECTORIES(${ECHO_LIB_PATH})");
+        writeLine( cmakeStr, "LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/Core/lib/ios/)");
+        
+        // AddFrameWork Macro
+        writeLine( cmakeStr, "MACRO(ADD_FRAMEWORK fwname)");
+        writeLine( cmakeStr, "    SET(FRAMEWORKS \"${FRAMEWORKS} -framework ${fwname}\")");
+        writeLine( cmakeStr, "ENDMACRO(ADD_FRAMEWORK)");
+        
+        // Get all project files recursively
+        writeLine( cmakeStr, "FILE(GLOB_RECURSE HEADER_FILES *.h *.inl)");
+        writeLine( cmakeStr, "FILE(GLOB_RECURSE SOURCE_FILES *.cpp *.m *.mm)");
+        
+        writeLine( cmakeStr, "SET(ALL_FILES ${HEADER_FILES} ${SOURCE_FILES})");
+        
+        // group source files
+        writeLine( cmakeStr, "GROUP_FILES(ALL_FILES ${CMAKE_CURRENT_SOURCE_DIR})");
+        
+        // iOS platform resources
+        writeLine( cmakeStr, "SET(IOS_RESOURCE_FILES");
+        writeLine( cmakeStr, "    ${MODULE_PATH}/frame/Platform/iOS/Icon/Icon.png");
+        writeLine( cmakeStr, "    ${MODULE_PATH}/frame/Platform/iOS/Launch/Default-Portrait-375x667@2x.png");
+        writeLine( cmakeStr, "    ${MODULE_PATH}/resources/data");
+        writeLine( cmakeStr, ")");
+        writeLine( cmakeStr, "SET_SOURCE_FILES_PROPERTIES(${IOS_RESOURCE_FILES} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)");
+        
+        // add framework
+        writeLine( cmakeStr, "ADD_FRAMEWORK(MediaPlayer)");
+        writeLine( cmakeStr, "ADD_FRAMEWORK(AudioToolbox)");
+        writeLine( cmakeStr, "ADD_FRAMEWORK(CoreGraphics)");
+        writeLine( cmakeStr, "ADD_FRAMEWORK(QuartzCore)");
+        writeLine( cmakeStr, "ADD_FRAMEWORK(UIKit)");
+        writeLine( cmakeStr, "ADD_FRAMEWORK(GLKit)");
+        writeLine( cmakeStr, "ADD_FRAMEWORK(OpenGLES)");
+        writeLine( cmakeStr, "ADD_FRAMEWORK(OpenAL)");
+        writeLine( cmakeStr, "ADD_FRAMEWORK(CFNetwork)");
+        writeLine( cmakeStr, "ADD_FRAMEWORK(MobileCoreServices)");
+        writeLine( cmakeStr, "ADD_FRAMEWORK(SystemConfiguration)");
+        writeLine( cmakeStr, "ADD_FRAMEWORK(AVFoundation)");
+        writeLine( cmakeStr, "ADD_FRAMEWORK(AdSupport)");
+        writeLine( cmakeStr, "ADD_FRAMEWORK(CoreFoundation)");
+        writeLine( cmakeStr, "ADD_FRAMEWORK(CoreTelephony)");
+        writeLine( cmakeStr, "ADD_FRAMEWORK(CoreText)");
+        writeLine( cmakeStr, "ADD_FRAMEWORK(iAd)");
+        writeLine( cmakeStr, "ADD_FRAMEWORK(StoreKit)");
+        writeLine( cmakeStr, "ADD_FRAMEWORK(CoreData)");
+        writeLine( cmakeStr, "ADD_FRAMEWORK(CoreMedia)");
+        writeLine( cmakeStr, "ADD_FRAMEWORK(CoreMotion)");
+        writeLine( cmakeStr, "ADD_FRAMEWORK(Security)");
+        
+        // settings
+        writeLine( cmakeStr, "SET(FRAMEWORKS \"${FRAMEWORKS} -ObjC\")");
+        writeLine( cmakeStr, "SET(CMAKE_EXE_LINKER_FLAGS ${FRAMEWORKS})");
+        writeLine( cmakeStr, "SET(CMAKE_OSX_ARCHITECTURES \"${ARCHS_STANDARD}\")");
+        
+        writeLine( cmakeStr, "ADD_EXECUTABLE(${MODULE_NAME} MACOSX_BUNDLE ${HEADER_FILES} ${SOURCE_FILES} ${IOS_RESOURCE_FILES} CMakeLists.txt)");
+        
+        // link libraries
+        writeLine( cmakeStr, "TARGET_LINK_LIBRARIES(${MODULE_NAME} engine)");
+        writeLine( cmakeStr, "TARGET_LINK_LIBRARIES(${MODULE_NAME} pugixml physx spine recast lua freeimage freetype zlib box2d)");
+        writeLine( cmakeStr, "TARGET_LINK_LIBRARIES(${MODULE_NAME} Live2DCubismCore)");
+        writeLine( cmakeStr, "TARGET_LINK_LIBRARIES(${MODULE_NAME} glslang spirv-cross)");
+        
+        // set target properties
+        writeLine( cmakeStr, "SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${MODULE_PATH}/Frame/Platform/iOS/Info.plist)");
+        writeLine( cmakeStr, "SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD \"c++14\")");
+        writeLine( cmakeStr, "SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY \"1,2\")");
+        
+        // messages
+        writeLine( cmakeStr, "MESSAGE(STATUS \"Configure iOS App success!\")");
+        
+        // write to file
+        String savePath = m_outputDir + "app/ios/CMakeLists.txt";
+        FileHandleDataStream stream(savePath, DataStream::WRITE);
+        if(!stream.fail())
+        {
+            stream.write(cmakeStr.data(), cmakeStr.size());
+            stream.close();
+        }
     }
 }
