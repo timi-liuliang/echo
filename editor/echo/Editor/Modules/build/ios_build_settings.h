@@ -9,18 +9,30 @@ namespace Echo
         ECHO_SINGLETON_CLASS(iOSBuildSettings, BuildSettings)
         
     public:
+        // Device type
+        enum DeviceType
+        {
+            iPhone,
+            iPad,
+        };
+        
         // launch image
         struct LaunchImageItem
         {
-            i32     m_width;
-            i32     m_height;
-            i32     m_scale;
+            i32         m_width;
+            i32         m_height;
+            i32         m_scale;
+            DeviceType  m_type;
             
-            LaunchImageItem(i32 width, i32 height, i32 scale);
+            LaunchImageItem(i32 width, i32 height, i32 scale, DeviceType type);
             
-            // get path
+            // get path for cmake
             String getPortraitPath() const;
-            String getLandscapePath() const;            
+            String getLandscapePath() const;
+            
+            // get name
+            String getPortraitName() const;
+            String getLandscapeName() const;
         };
         typedef vector<LaunchImageItem>::type LaunchImageArray;
         
@@ -51,6 +63,10 @@ namespace Echo
         // identifier
         void setIdentifier(const String& identifier) { m_identifier = identifier; }
         String getIdentifier() const;
+        
+        // status bar
+        void setHiddenStatusBar(bool hiddenStatusBar) { m_hiddenStatusBar = hiddenStatusBar; }
+        bool isHiddenStatusBar() const { return m_hiddenStatusBar; }
         
     public:
         // ui interface orientation portrait
@@ -87,6 +103,7 @@ namespace Echo
         // write
         void writeInfoPlist();
         void writeUIInterfaceOrientationInfo(void* parent);
+        void writeLaunchImageInfo(void* parent);
         
     private:
         void writeCMakeList();
@@ -104,5 +121,6 @@ namespace Echo
         bool                    m_uiInterfaceOrientationLandscapeLeft = true;
         bool                    m_uiInterfaceOrientationLandscapeRight = true;
         LaunchImageArray        m_launchImages;
+        bool                    m_hiddenStatusBar = true;
     };
 }

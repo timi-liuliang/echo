@@ -7,28 +7,43 @@
 
 namespace Echo
 {
-    iOSBuildSettings::LaunchImageItem::LaunchImageItem(i32 width, i32 height, i32 scale)
-        : m_width(width), m_height(height), m_scale(scale)
+    iOSBuildSettings::LaunchImageItem::LaunchImageItem(i32 width, i32 height, i32 scale, iOSBuildSettings::DeviceType type)
+        : m_width(width)
+        , m_height(height)
+        , m_scale(scale)
+        , m_type(type)
     {}
 
     String iOSBuildSettings::LaunchImageItem::getPortraitPath() const
     {
-        i32 width = std::min<i32>(m_width, m_height);
-        i32 height = std::max<i32>(m_width, m_height);
-        return StringUtil::Format("    ${MODULE_PATH}/frame/Platform/iOS/Launch/Default-Portrait-%dx%d@%dx.png", width, height, m_scale);
+        return "    ${MODULE_PATH}/frame/Platform/iOS/Launch/" + getPortraitName();
     }
 
     String iOSBuildSettings::LaunchImageItem::getLandscapePath() const
     {
+        return "    ${MODULE_PATH}/frame/Platform/iOS/Launch/" + getLandscapeName();
+    }
+
+    String iOSBuildSettings::LaunchImageItem::getPortraitName() const
+    {
+        i32 width = std::min<i32>(m_width, m_height);
+        i32 height = std::max<i32>(m_width, m_height);
+        return StringUtil::Format("Default-Portrait-%dx%d@%dx.png", width, height, m_scale);
+    }
+
+    String iOSBuildSettings::LaunchImageItem::getLandscapeName() const
+    {
         i32 width = std::max<i32>(m_width, m_height);
         i32 height = std::min<i32>(m_width, m_height);
-        return StringUtil::Format("    ${MODULE_PATH}/frame/Platform/iOS/Launch/Default-Landscape-%dx%d@%dx.png", width, height, m_scale);
+        return StringUtil::Format("Default-Landscape-%dx%d@%dx.png", width, height, m_scale);
     }
 
     iOSBuildSettings::iOSBuildSettings()
     {
+        // https://developer.apple.com/design/human-interface-guidelines/ios/icons-and-images/launch-screen/
+        
         // iphone6,iphone7
-        m_launchImages.push_back(LaunchImageItem(375, 667, 2));
+        m_launchImages.push_back(LaunchImageItem(375, 667, 2, DeviceType::iPhone));
     }
 
     iOSBuildSettings::~iOSBuildSettings()
@@ -44,16 +59,19 @@ namespace Echo
 
     void iOSBuildSettings::bindMethods()
     {
-        CLASS_BIND_METHOD(iOSBuildSettings, getAppName,   DEF_METHOD("getAppName"));
-        CLASS_BIND_METHOD(iOSBuildSettings, setAppName,   DEF_METHOD("setAppName"));
-        CLASS_BIND_METHOD(iOSBuildSettings, getIdentifier,DEF_METHOD("getIdentifier"));
-        CLASS_BIND_METHOD(iOSBuildSettings, setIdentifier,DEF_METHOD("setIdentifier"));
-        CLASS_BIND_METHOD(iOSBuildSettings, getIconRes,   DEF_METHOD("getIconRes"));
-        CLASS_BIND_METHOD(iOSBuildSettings, setIconRes,   DEF_METHOD("setIconRes"));
+        CLASS_BIND_METHOD(iOSBuildSettings, getAppName,         DEF_METHOD("getAppName"));
+        CLASS_BIND_METHOD(iOSBuildSettings, setAppName,         DEF_METHOD("setAppName"));
+        CLASS_BIND_METHOD(iOSBuildSettings, getIdentifier,      DEF_METHOD("getIdentifier"));
+        CLASS_BIND_METHOD(iOSBuildSettings, setIdentifier,      DEF_METHOD("setIdentifier"));
+        CLASS_BIND_METHOD(iOSBuildSettings, getIconRes,         DEF_METHOD("getIconRes"));
+        CLASS_BIND_METHOD(iOSBuildSettings, setIconRes,         DEF_METHOD("setIconRes"));
+        CLASS_BIND_METHOD(iOSBuildSettings, isHiddenStatusBar,  DEF_METHOD("isHiddenStatusBar"));
+        CLASS_BIND_METHOD(iOSBuildSettings, setHiddenStatusBar, DEF_METHOD("setHiddenStatusBar"));
 
         CLASS_REGISTER_PROPERTY(iOSBuildSettings, "AppName",    Variant::Type::String,          "getAppName",       "setAppName");
         CLASS_REGISTER_PROPERTY(iOSBuildSettings, "Identifier", Variant::Type::String,          "getIdentifier",    "setIdentifier");
         CLASS_REGISTER_PROPERTY(iOSBuildSettings, "Icon",       Variant::Type::ResourcePath,    "getIconRes",       "setIconRes");
+        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "HiddenStatusBar", Variant::Type::Bool,       "isHiddenStatusBar", "setHiddenStatusBar");
         
         // Ui interface orientation
         CLASS_BIND_METHOD(iOSBuildSettings, isUIInterfaceOrientationPortrait,           DEF_METHOD("isUIInterfaceOrientationPortrait"));
@@ -224,6 +242,60 @@ namespace Echo
             orient_node.append_child("string").append_child(pugi::node_pcdata).set_value("UIInterfaceOrientationLandscapeRight");
     }
 
+    void iOSBuildSettings::writeLaunchImageInfo(void* parent)
+    {
+        pugi::xml_node* root_dict = (pugi::xml_node*)(parent);
+        
+        // iphone
+        root_dict->append_child("key").append_child(pugi::node_pcdata).set_value("UILaunchImages~iphone");
+        pugi::xml_node iphone_node = root_dict->append_child("array");
+        
+        // ipad
+        root_dict->append_child("key").append_child(pugi::node_pcdata).set_value("UILaunchImages~ipad");
+        pugi::xml_node ipad_node = root_dict->append_child("array");
+        
+        for(const LaunchImageItem& image : m_launchImages)
+        {
+            i32 minDimension = std::min<i32>(image.m_width, image.m_height);
+            i32 maxDimension = std::max<i32>(image.m_width, image.m_height);
+            pugi::xml_node dict_parent = image.m_type == DeviceType::iPhone ? iphone_node : ipad_node;
+            
+            if(m_uiInterfaceOrientationPortrait || m_uiInterfaceOrientationPortraitUpsideDown)
+            {
+                pugi::xml_node dict_node = dict_parent.append_child("dict");
+                
+                dict_node.append_child("key").append_child(pugi::node_pcdata).set_value("UILaunchImageMinimumOSVersion");
+                dict_node.append_child("string").append_child(pugi::node_pcdata).set_value("8.0");
+                
+                dict_node.append_child("key").append_child(pugi::node_pcdata).set_value("UILaunchImageName");
+                dict_node.append_child("string").append_child(pugi::node_pcdata).set_value(image.getPortraitName().c_str());
+                
+                dict_node.append_child("key").append_child(pugi::node_pcdata).set_value("UILaunchImageOrientation");
+                dict_node.append_child("string").append_child(pugi::node_pcdata).set_value("Portrait");
+                
+                dict_node.append_child("key").append_child(pugi::node_pcdata).set_value("UILaunchImageSize");
+                dict_node.append_child("string").append_child(pugi::node_pcdata).set_value(StringUtil::Format("{%d, %d}", minDimension, maxDimension).c_str());
+            }
+            
+            if(m_uiInterfaceOrientationLandscapeLeft || m_uiInterfaceOrientationLandscapeRight)
+            {
+                pugi::xml_node dict_node = dict_parent.append_child("dict");
+                
+                dict_node.append_child("key").append_child(pugi::node_pcdata).set_value("UILaunchImageMinimumOSVersion");
+                dict_node.append_child("string").append_child(pugi::node_pcdata).set_value("8.0");
+                
+                dict_node.append_child("key").append_child(pugi::node_pcdata).set_value("UILaunchImageName");
+                dict_node.append_child("string").append_child(pugi::node_pcdata).set_value(image.getLandscapeName().c_str());
+                
+                dict_node.append_child("key").append_child(pugi::node_pcdata).set_value("UILaunchImageOrientation");
+                dict_node.append_child("string").append_child(pugi::node_pcdata).set_value("Landscape");
+                
+                dict_node.append_child("key").append_child(pugi::node_pcdata).set_value("UILaunchImageSize");
+                dict_node.append_child("string").append_child(pugi::node_pcdata).set_value(StringUtil::Format("{%d, %d}", maxDimension, minDimension).c_str());
+            }
+        }
+    }
+
     void iOSBuildSettings::writeInfoPlist()
     {
         pugi::xml_document doc;
@@ -260,7 +332,17 @@ namespace Echo
         root_dict.append_child("key").append_child(pugi::node_pcdata).set_value("CFBundlePackageType");
         root_dict.append_child("string").append_child(pugi::node_pcdata).set_value("APPL");
         
+        if(m_hiddenStatusBar)
+        {
+            root_dict.append_child("key").append_child(pugi::node_pcdata).set_value("UIStatusBarHidden");
+            root_dict.append_child("true");
+            
+            root_dict.append_child("key").append_child(pugi::node_pcdata).set_value("UIViewControllerBasedStatusBarAppearance");
+            root_dict.append_child("false");
+        }
+        
         writeUIInterfaceOrientationInfo(&root_dict);
+        writeLaunchImageInfo(&root_dict);
 
         Echo::String savePath = m_outputDir + "app/ios/frame/Platform/iOS/Info.plist";
         doc.save_file(savePath.c_str(), "\t", 1U, pugi::encoding_utf8);
