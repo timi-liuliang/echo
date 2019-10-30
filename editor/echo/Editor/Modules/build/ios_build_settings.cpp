@@ -7,9 +7,28 @@
 
 namespace Echo
 {
+    iOSBuildSettings::LaunchImageItem::LaunchImageItem(i32 width, i32 height, i32 scale)
+        : m_width(width), m_height(height), m_scale(scale)
+    {}
+
+    String iOSBuildSettings::LaunchImageItem::getPortraitPath() const
+    {
+        i32 width = std::min<i32>(m_width, m_height);
+        i32 height = std::max<i32>(m_width, m_height);
+        return StringUtil::Format("    ${MODULE_PATH}/frame/Platform/iOS/Launch/Default-Portrait-%dx%d@%dx.png", width, height, m_scale);
+    }
+
+    String iOSBuildSettings::LaunchImageItem::getLandscapePath() const
+    {
+        i32 width = std::max<i32>(m_width, m_height);
+        i32 height = std::min<i32>(m_width, m_height);
+        return StringUtil::Format("    ${MODULE_PATH}/frame/Platform/iOS/Launch/Default-Landscape-%dx%d@%dx.png", width, height, m_scale);
+    }
+
     iOSBuildSettings::iOSBuildSettings()
     {
-
+        // iphone6,iphone7
+        m_launchImages.push_back(LaunchImageItem(375, 667, 2));
     }
 
     iOSBuildSettings::~iOSBuildSettings()
@@ -288,8 +307,21 @@ namespace Echo
         
         // iOS platform resources
         writeLine( cmakeStr, "SET(IOS_RESOURCE_FILES");
+        
+        // icon
         writeLine( cmakeStr, "    ${MODULE_PATH}/frame/Platform/iOS/Icon/Icon.png");
-        writeLine( cmakeStr, "    ${MODULE_PATH}/frame/Platform/iOS/Launch/Default-Portrait-375x667@2x.png");
+        
+        // launch images
+        for(const LaunchImageItem& image : m_launchImages)
+        {
+            if(m_uiInterfaceOrientationPortrait || m_uiInterfaceOrientationPortraitUpsideDown)
+                writeLine( cmakeStr, image.getPortraitPath());
+            
+            if(m_uiInterfaceOrientationLandscapeLeft || m_uiInterfaceOrientationLandscapeRight)
+                writeLine(cmakeStr, image.getLandscapePath());
+        }
+        
+        // data
         writeLine( cmakeStr, "    ${MODULE_PATH}/resources/data");
         writeLine( cmakeStr, ")");
         writeLine( cmakeStr, "SET_SOURCE_FILES_PROPERTIES(${IOS_RESOURCE_FILES} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)");

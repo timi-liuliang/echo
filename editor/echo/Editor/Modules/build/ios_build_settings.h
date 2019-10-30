@@ -9,6 +9,22 @@ namespace Echo
         ECHO_SINGLETON_CLASS(iOSBuildSettings, BuildSettings)
         
     public:
+        // launch image
+        struct LaunchImageItem
+        {
+            i32     m_width;
+            i32     m_height;
+            i32     m_scale;
+            
+            LaunchImageItem(i32 width, i32 height, i32 scale);
+            
+            // get path
+            String getPortraitPath() const;
+            String getLandscapePath() const;            
+        };
+        typedef vector<LaunchImageItem>::type LaunchImageArray;
+        
+    public:
         iOSBuildSettings();
         virtual ~iOSBuildSettings();
         
@@ -87,5 +103,6 @@ namespace Echo
         bool                    m_uiInterfaceOrientationPortraitUpsideDown = true;
         bool                    m_uiInterfaceOrientationLandscapeLeft = true;
         bool                    m_uiInterfaceOrientationLandscapeRight = true;
+        LaunchImageArray        m_launchImages;
     };
 }
