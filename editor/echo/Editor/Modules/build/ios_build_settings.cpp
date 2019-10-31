@@ -42,8 +42,35 @@ namespace Echo
     {
         // https://developer.apple.com/design/human-interface-guidelines/ios/icons-and-images/launch-screen/
         
-        // iphone6,iphone7
+        // iphone se
+        m_launchImages.push_back(LaunchImageItem(320, 568, 2, DeviceType::iPhone));
+        
+        // iphone6s,iphone7,iphone8
         m_launchImages.push_back(LaunchImageItem(375, 667, 2, DeviceType::iPhone));
+        
+        // iphone6s plus, iphone7 plus, iphone8 plus
+        m_launchImages.push_back(LaunchImageItem(414, 736, 3, DeviceType::iPhone));
+        
+        // iphoneX, iphoneXs 1125px × 2436px
+        m_launchImages.push_back(LaunchImageItem(375, 812, 3, DeviceType::iPhone));
+        
+        // iphone XR
+        m_launchImages.push_back(LaunchImageItem(414, 896, 2, DeviceType::iPhone));
+        
+        // iphone Xs Max
+        m_launchImages.push_back(LaunchImageItem(414, 896, 3, DeviceType::iPhone));
+        
+        // ipad mini, ipad
+        m_launchImages.push_back(LaunchImageItem(1024, 768, 2, DeviceType::iPad));
+        
+        // 10.5 iPad pro
+        m_launchImages.push_back(LaunchImageItem(1112, 834, 2, DeviceType::iPad));
+        
+        // 11 iPad pro
+        m_launchImages.push_back(LaunchImageItem(1194, 834, 2, DeviceType::iPad));
+    
+        // 12.9 iPad pro
+        m_launchImages.push_back(LaunchImageItem(1366, 1024, 2, DeviceType::iPad));
     }
 
     iOSBuildSettings::~iOSBuildSettings()
@@ -307,6 +334,12 @@ namespace Echo
         root_node.append_attribute("version").set_value("1.0");
         
         pugi::xml_node root_dict = root_node.append_child("dict");
+        
+        root_dict.append_child("key").append_child(pugi::node_pcdata).set_value("CFBundleVersion");
+        root_dict.append_child("string").append_child(pugi::node_pcdata).set_value("1.0.0");
+        
+        root_dict.append_child("key").append_child(pugi::node_pcdata).set_value("CFBundleShortVersionString");
+        root_dict.append_child("string").append_child(pugi::node_pcdata).set_value("1.0.0");
         
         root_dict.append_child("key").append_child(pugi::node_pcdata).set_value("CFBundleDevelopmentRegion");
         root_dict.append_child("string").append_child(pugi::node_pcdata).set_value("English");
