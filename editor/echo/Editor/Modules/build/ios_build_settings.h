@@ -64,6 +64,10 @@ namespace Echo
         void setIdentifier(const String& identifier) { m_identifier = identifier; }
         String getIdentifier() const;
         
+        // version
+        void setVersion(const String& version) { m_version = version; }
+        const String& getVersion() const { return m_version; }
+        
         // status bar
         void setHiddenStatusBar(bool hiddenStatusBar) { m_hiddenStatusBar = hiddenStatusBar; }
         bool isHiddenStatusBar() const { return m_hiddenStatusBar; }
@@ -116,6 +120,7 @@ namespace Echo
         ResourcePath            m_iconRes;
         String                  m_appName;
         String                  m_identifier;
+        String                  m_version = "1.0.0";
         bool                    m_uiInterfaceOrientationPortrait = true;
         bool                    m_uiInterfaceOrientationPortraitUpsideDown = true;
         bool                    m_uiInterfaceOrientationLandscapeLeft = true;

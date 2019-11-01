@@ -90,6 +90,8 @@ namespace Echo
         CLASS_BIND_METHOD(iOSBuildSettings, setAppName,         DEF_METHOD("setAppName"));
         CLASS_BIND_METHOD(iOSBuildSettings, getIdentifier,      DEF_METHOD("getIdentifier"));
         CLASS_BIND_METHOD(iOSBuildSettings, setIdentifier,      DEF_METHOD("setIdentifier"));
+        CLASS_BIND_METHOD(iOSBuildSettings, getVersion,         DEF_METHOD("getVersion"));
+        CLASS_BIND_METHOD(iOSBuildSettings, setVersion,         DEF_METHOD("setVersion"));
         CLASS_BIND_METHOD(iOSBuildSettings, getIconRes,         DEF_METHOD("getIconRes"));
         CLASS_BIND_METHOD(iOSBuildSettings, setIconRes,         DEF_METHOD("setIconRes"));
         CLASS_BIND_METHOD(iOSBuildSettings, isHiddenStatusBar,  DEF_METHOD("isHiddenStatusBar"));
@@ -97,8 +99,9 @@ namespace Echo
 
         CLASS_REGISTER_PROPERTY(iOSBuildSettings, "AppName",    Variant::Type::String,          "getAppName",       "setAppName");
         CLASS_REGISTER_PROPERTY(iOSBuildSettings, "Identifier", Variant::Type::String,          "getIdentifier",    "setIdentifier");
+        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "Version",    Variant::Type::String,          "getVersion",       "setVersion");
         CLASS_REGISTER_PROPERTY(iOSBuildSettings, "Icon",       Variant::Type::ResourcePath,    "getIconRes",       "setIconRes");
-        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "HiddenStatusBar", Variant::Type::Bool,       "isHiddenStatusBar", "setHiddenStatusBar");
+        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "HiddenStatusBar", Variant::Type::Bool,       "isHiddenStatusBar","setHiddenStatusBar");
         
         // Ui interface orientation
         CLASS_BIND_METHOD(iOSBuildSettings, isUIInterfaceOrientationPortrait,           DEF_METHOD("isUIInterfaceOrientationPortrait"));
@@ -336,10 +339,10 @@ namespace Echo
         pugi::xml_node root_dict = root_node.append_child("dict");
         
         root_dict.append_child("key").append_child(pugi::node_pcdata).set_value("CFBundleVersion");
-        root_dict.append_child("string").append_child(pugi::node_pcdata).set_value("1.0.0");
+        root_dict.append_child("string").append_child(pugi::node_pcdata).set_value(m_version.c_str());
         
         root_dict.append_child("key").append_child(pugi::node_pcdata).set_value("CFBundleShortVersionString");
-        root_dict.append_child("string").append_child(pugi::node_pcdata).set_value("1.0.0");
+        root_dict.append_child("string").append_child(pugi::node_pcdata).set_value(m_version.c_str());
         
         root_dict.append_child("key").append_child(pugi::node_pcdata).set_value("CFBundleDevelopmentRegion");
         root_dict.append_child("string").append_child(pugi::node_pcdata).set_value("English");
