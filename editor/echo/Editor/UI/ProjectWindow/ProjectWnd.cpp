@@ -6,7 +6,6 @@
 #include "Update.h"
 #include "MacHelper.h"
 #include <engine/core/log/Log.h>
-#include <engine/core/io/archive/7zipArchive.h>
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/main/GameSettings.h>
 
@@ -101,6 +100,23 @@ namespace Studio
 		}
 	}
 
+    static void copyQtFile(const Echo::String& qtFile, const Echo::String& writePath)
+    {
+        QFile qfile(qtFile.c_str());
+        if (qfile.open(QIODevice::ReadOnly))
+        {
+            // write files
+            QFile writeFile(writePath.c_str());
+            if (writeFile.open(QIODevice::WriteOnly))
+            {
+                writeFile.write(qfile.readAll());
+                writeFile.close();
+            }
+
+            qfile.close();
+        }
+    }
+
 	Echo::String ProjectWnd::newProject()
 	{        
 		QString projectName = QFileDialog::getSaveFileName(this, tr("New Project"), "", tr("(*.echo)"));
@@ -117,31 +133,11 @@ namespace Studio
 			{
 				Echo::PathUtil::CreateDir(newFilePath);
 
-				// 2.copy zip
-				Echo::String writePath = newFilePath + "blank_project.7z";
-				QFile qfile(":/Project/Project/blank_project.7z");
-				if (qfile.open(QIODevice::ReadOnly))
-				{
-					// write files
-					QFile writeFile(writePath.c_str());
-					if (writeFile.open(QIODevice::WriteOnly))
-					{
-						writeFile.write(qfile.readAll());
-						writeFile.close();
-					}
+				// 2.copy file
+                copyQtFile(":/project/project/blank.echo", newFilePath + "blank.echo");
+                copyQtFile(":/project/project/icon.png",   newFilePath + "icon.png");
 
-					qfile.close();
-				}
-
-				// 3.unzip
-				if (Echo::PathUtil::IsFileExist(writePath))
-				{
-					Echo::SzArchive::extractTo(writePath, newFilePath);
-
-					Echo::PathUtil::DelPath(writePath);
-				}
-
-				// 4.rename
+				// 3.rename
 				Echo::String projectPathName = newFilePath + "blank.echo";
 				Echo::String destProjectPathName = newFilePath + fileName + ".echo";
 				if (Echo::PathUtil::IsFileExist(projectPathName))

@@ -58,7 +58,8 @@
         <file>Qss/Default.qss</file>
         <file>Qss/Ps.qss</file>
     </qresource>
-    <qresource prefix="/Project">
-        <file>Project/blank_project.7z</file>
+    <qresource prefix="/project">
+        <file>project/blank.echo</file>
+        <file>project/icon.png</file>
     </qresource>
 </RCC>
