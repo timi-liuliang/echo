@@ -914,7 +914,7 @@ namespace Studio
 			Echo::Node* node = getNode(item);
 			if (node)
 			{
-				const Echo::String& path = node->getPath();
+				Echo::String path = node->getPath();
 				if (!path.empty())
 				{
 					MainWindow::instance()->openNodeTree(path);
