@@ -145,7 +145,7 @@ TARGET_LINK_LIBRARIES(${MODULE_NAME} radeonrays)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} glslang spirv-cross)
 
 IF(${ECHO_PLATFORM_WIN32})
-	TARGET_LINK_LIBRARIES(${MODULE_NAME} 7zip winmm.lib imm32.lib dxgi.lib Shlwapi.lib)
+	TARGET_LINK_LIBRARIES(${MODULE_NAME} winmm.lib imm32.lib dxgi.lib Shlwapi.lib)
 	TARGET_LINK_LIBRARIES(${MODULE_NAME} libEGL.lib libGLESv2.lib libMaliEmulator.lib)
 	TARGET_LINK_LIBRARIES(${MODULE_NAME} dbghelp.lib Psapi.lib)
 	TARGET_LINK_LIBRARIES(${MODULE_NAME} OpenAL32.lib)

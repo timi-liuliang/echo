@@ -15,6 +15,6 @@ namespace Echo
         virtual void onEnd() {}
 
         // on exec cmd
-        virtual bool onExecCmd(const char* cmd, const char* workingDir) {}
+		virtual bool onExecCmd(const char* cmd, const char* workingDir) { return false; }
     };
 }
