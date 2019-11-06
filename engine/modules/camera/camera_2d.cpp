@@ -16,10 +16,22 @@ namespace Echo
 
 	void Camera2D::bindMethods()
 	{
-
+		CLASS_BIND_METHOD(Camera2D, getWidth, DEF_METHOD("getWidth"));
+		CLASS_BIND_METHOD(Camera2D, getHeight, DEF_METHOD("getHeight"));
 	}
 
-	// sync data to camera
+	float Camera2D::getWidth() const
+	{
+		Camera* camera = NodeTree::instance()->get2dCamera();
+		return camera ? camera->getWidth() : 640;
+	}
+
+	float Camera2D::getHeight() const
+	{
+		Camera* camera = NodeTree::instance()->get2dCamera();
+		return camera ? camera->getHeight() : 480;
+	}
+
 	void Camera2D::syncDataToCamera(Camera* camera)
 	{
 		// position
@@ -32,7 +44,6 @@ namespace Echo
 		camera->update();
 	}
 
-	// update self
 	void Camera2D::update_self()
 	{
 		if (Engine::instance()->getConfig().m_isGame)

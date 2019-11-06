@@ -13,6 +13,10 @@ namespace Echo
 		Camera2D();
 		virtual ~Camera2D();
 
+		// width|height
+		float getWidth() const;
+		float getHeight() const;
+
 		// sync data to camera
 		void syncDataToCamera(Camera* camera);
 
