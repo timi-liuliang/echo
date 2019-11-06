@@ -1,7 +1,8 @@
-MESSAGE( STATUS "Configuring module: 7zip ...")
-
 # Set Module Name
 SET(MODULE_NAME lua)
+
+# message
+MESSAGE( STATUS "Configuring module: ${MODULE_NAME} ...")
 
 # Include Directories
 INCLUDE_DIRECTORIES( ${ECHO_SRC_PATH})

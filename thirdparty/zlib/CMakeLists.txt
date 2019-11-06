@@ -1,7 +1,8 @@
-﻿MESSAGE( STATUS "Configuring module: 7zip ...")
-
-# Set Module Name
+﻿# Set Module Name
 SET(MODULE_NAME zlib)
+
+# message
+MESSAGE( STATUS "Configuring module: ${MODULE_NAME} ...")
 
 # 包含目录
 INCLUDE_DIRECTORIES( ${ECHO_SRC_PATH})
@@ -29,7 +30,7 @@ SET(HEADER_FILES
 	${ZLIB_HEADER_PATH}/trees.h
 	${ZLIB_HEADER_PATH}/zutil.h
 )
-		
+
 SET(SOURCE_FILES
 	${ZLIB_SOURTH_PATH}/adler32.c
 	${ZLIB_SOURTH_PATH}/compress.c

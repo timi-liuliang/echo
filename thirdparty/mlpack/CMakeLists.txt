@@ -1,7 +1,8 @@
-﻿MESSAGE( STATUS "Configuring module: mlpack")
-
-# set module name
+﻿# set module name
 SET(MODULE_NAME mlpack)
+
+# message
+MESSAGE( STATUS "Configuring module: ${MODULE_NAME} ...")
 
 # include directories
 INCLUDE_DIRECTORIES( ${ECHO_ROOT_PATH}/thirdparty)

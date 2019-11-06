@@ -1,7 +1,8 @@
-﻿MESSAGE( STATUS "Configuring module: Recast ...")
-
-# Set Module Name
+﻿# Set Module Name
 SET(MODULE_NAME recast)
+
+# message
+MESSAGE( STATUS "Configuring module: ${MODULE_NAME} ...")
 
 # 包含目录
 INCLUDE_DIRECTORIES( ${ECHO_SRC_PATH})

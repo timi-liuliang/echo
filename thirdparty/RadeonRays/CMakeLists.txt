@@ -1,4 +1,8 @@
-MESSAGE(STATUS "configuring module: radeonrays...")
+# set module name
+SET(MODULE_NAME radeonrays)
+
+# message
+MESSAGE( STATUS "Configuring module: ${MODULE_NAME} ...")
 
 # Include Directories
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
@@ -25,9 +29,6 @@ FILE(GLOB_RECURSE ALL_FILES ${MODULE_PATH}/*.h ${MODULE_PATH}/*.inl ${MODULE_PAT
 
 # group files
 GROUP_FILES(ALL_FILES ${CMAKE_CURRENT_SOURCE_DIR})
-
-# set module name
-SET(MODULE_NAME radeonrays)
 
 # add library
 ADD_LIBRARY(${MODULE_NAME} STATIC ${ALL_FILES} CMakeLists.txt)

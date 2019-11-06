@@ -1,6 +1,10 @@
-MESSAGE(STATUS "configuring module: physx...")
+# set module name
+SET(MODULE_NAME physx)
 
-# include directories 
+# message
+MESSAGE( STATUS "Configuring module: ${MODULE_NAME} ...")
+
+# include directories
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/pxshared/include)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/physx/source/common/include)
@@ -56,9 +60,6 @@ ADD_DEFINITIONS(-DPX_FOUNDATION_NO_EXPORTS)
 ADD_DEFINITIONS(-DPX_PHYSX_GPU_STATIC)
 ADD_DEFINITIONS(-DPX_COOKING)
 ADD_DEFINITIONS(-DDISABLE_CUDA_PHYSX)
-
-# set module name
-SET(MODULE_NAME physx)
 
 # add new library
 ADD_LIBRARY(${MODULE_NAME} STATIC ${ALL_FILES} CMakeLists.txt)

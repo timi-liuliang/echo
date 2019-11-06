@@ -1,7 +1,8 @@
-﻿MESSAGE( STATUS "Configuring module: box2d")
-
-# set module name
+﻿# set module name
 SET(MODULE_NAME box2d)
+
+# message
+MESSAGE( STATUS "Configuring module: ${MODULE_NAME} ...")
 
 # include directories
 INCLUDE_DIRECTORIES( ${ECHO_ROOT_PATH}/thirdparty)
