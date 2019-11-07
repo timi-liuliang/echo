@@ -25,7 +25,10 @@ namespace Echo
 		CLASS_BIND_METHOD(Timeline, setAnim, DEF_METHOD("setAnim"));
 		CLASS_BIND_METHOD(Timeline, getAnimData, DEF_METHOD("getAnimData"));
 		CLASS_BIND_METHOD(Timeline, setAnimData, DEF_METHOD("setAnimData"));
+		CLASS_BIND_METHOD(Timeline, getTimeScale, DEF_METHOD("getTimeScale"));
+		CLASS_BIND_METHOD(Timeline, setTimeScale, DEF_METHOD("setTimeScale"));
 
+		CLASS_REGISTER_PROPERTY(Timeline, "TimeScale", Variant::Type::Real, "getTimeScale", "setTimeScale");
 		CLASS_REGISTER_PROPERTY(Timeline, "Anim", Variant::Type::StringOption, "getAnim", "setAnim");
 		CLASS_REGISTER_PROPERTY(Timeline, "AnimData", Variant::Type::Base64String, "getAnimData", "setAnimData");
 	}
@@ -106,7 +109,7 @@ namespace Echo
 			AnimClip* clip = m_clips[m_animations.getIdx()];
 			if (clip)
 			{
-				clip->update(ui32(deltaTime));
+				clip->update(ui32(deltaTime * m_timeScale));
 
 				extractClipData(clip);
 			}
