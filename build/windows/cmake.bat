@@ -1,16 +1,21 @@
-# build ios app
+echo off
 
-echo "cmake - generate visual studio project"
+:: start in current directory 
+cd /D "%~dp0"
 
-# show cmake version
-cmake -version
+:: view cmake version
+call cmake.exe -version
 
-# cmake - change to output directory
-mkdir build
+:: create dir
+if not exist build mkdir build
 cd build
 
-# show solution dir
-# echo "build dir :" $(pwd)
+:: generate visual studio solution
+call cmake.exe -DCMAKE_BUILD_TYPE=RELEASE -DECHO_EDITOR_MODE=FALSE -G"Visual Studio 15 2017 Win64" ../
 
-# cmake - generate xcode project
-cmake -DCMAKE_BUILD_TYPE=RELEASE -DECHO_EDITOR_MODE=FALSE -G"Visual Studio 15 2017 Win64" ../
+:: mklink data
+cd /D "%~dp0"
+if not exist .\bin\app\win64\Debug\data mklink /D .\bin\app\win64\Debug\data ..\Release\data
+
+:: dely close
+timeout /t 10
