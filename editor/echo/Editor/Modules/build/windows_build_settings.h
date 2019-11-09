@@ -18,6 +18,9 @@ namespace Echo
 		// build
 		virtual void build() override;
 
+		// set
+		virtual void setOutputDir(const String& outputDir) override;
+
 		// icon res path
 		void setIconRes(const ResourcePath& path);
 		const ResourcePath& getIconRes() { return m_iconRes; }

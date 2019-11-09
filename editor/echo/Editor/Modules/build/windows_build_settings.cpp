@@ -28,11 +28,17 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(WindowsBuildSettings, "Icon", Variant::Type::ResourcePath, "getIconRes", "setIconRes");
 	}
 
+	void WindowsBuildSettings::setOutputDir(const String& outputDir)
+	{
+		m_outputDir = outputDir;
+		PathUtil::FormatPath(m_outputDir, false);
+	}
+
 	bool WindowsBuildSettings::prepare()
 	{
 		m_rootDir = PathUtil::GetCurrentDir() + "/../../../../";
 		m_projectDir = Engine::instance()->getResPath();
-		m_outputDir = PathUtil::GetCurrentDir() + "/build/windows/";
+		m_outputDir = m_outputDir.empty() ? PathUtil::GetCurrentDir() + "/build/windows/" : m_outputDir;
 
 		// create dir
 		if (!PathUtil::IsDirExist(m_outputDir))
@@ -64,11 +70,18 @@ namespace Echo
 
 		// copy CMakeLists.txt
 		PathUtil::CopyFilePath(m_rootDir + "CMakeLists.txt", m_outputDir + "CMakeLists.txt");
+
+		// copy build script
+		PathUtil::CopyFilePath(m_rootDir + "build/windows/cmake.bat", m_outputDir + "cmake.bat");
 	}
 
 	void WindowsBuildSettings::copyRes()
 	{
 		log("Convert Project File ...");
+
+		// copy release used dlls
+		PathUtil::CopyDir(m_rootDir + "bin/app/Win64/Release/", m_outputDir + "bin/app/win64/Release/");
+		PathUtil::CopyDir(m_rootDir + "bin/app/Win64/Debug/", m_outputDir + "bin/app/win64/Debug/");
 
 		// copy res
 		PathUtil::CopyDir(m_projectDir, m_outputDir + "bin/app/win64/Release/data/");
@@ -92,6 +105,8 @@ namespace Echo
 	{
 		log("Build App for Windows x64 platform.");
 
+		m_listener->onBegin();
+
 		if (prepare())
 		{
 			copySrc();
@@ -101,5 +116,7 @@ namespace Echo
 
 			compile();
 		}
+
+		m_listener->onEnd();
 	}
 }
