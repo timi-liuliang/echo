@@ -44,7 +44,6 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(UiText, "FontSize", Variant::Type::Int, "getFontSize", "setFontSize");
     }
     
-    // set texture res path
     void UiText::setText(const String& text)
     {
         m_text = StringUtil::MBS2WCS(text);
@@ -172,13 +171,12 @@ namespace Echo
             }
         }
           
-        // calc aabb
+        // Calculate aabb
         m_localAABB.reset();
         for (Ui::VertexFormat& vert : oVertices)
             m_localAABB.addPoint(vert.m_position);
     }
     
-    // update vertex buffer
     void UiText::updateMeshBuffer()
     {
 		if (!m_mesh)

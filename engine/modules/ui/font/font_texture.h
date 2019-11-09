@@ -66,7 +66,7 @@ namespace Echo
 		// get texture
 		Texture* getTexture() { return m_texture; }
  
-		// refersh texture
+		// refresh texture
 		void refreshTexture();
 
 	private:
@@ -79,6 +79,6 @@ namespace Echo
 		vector<Node>::type	m_nodes;
 		void*				m_textureData = nullptr;
 		PixelFormat			m_format = PF_RGBA8_UNORM;
-		class Texture*		m_texture = nullptr;
+		TexturePtr			m_texture;
     };
 }

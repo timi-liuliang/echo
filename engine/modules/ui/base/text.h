@@ -20,11 +20,11 @@ namespace Echo
         void setText(const String& text);
         const String getText() { return StringUtil::WCS2MBS(m_text); }
         
-        // font res path
+        // Font res path
         void setFont(const ResourcePath& path);
         const ResourcePath& getFont() { return m_fontRes; }
 
-		// font size
+		// Font size
 		void setFontSize(i32 fontSize);
 		i32 getFontSize() const { return m_fontSize; }
         
@@ -46,7 +46,7 @@ namespace Echo
         // update vertex buffer
         void updateMeshBuffer();
         
-        // build mesh data by drawables data
+        // build mesh data by drawable data
         void buildMeshData(Ui::VertexArray& oVertices, Ui::IndiceArray& oIndices);
         
         // clear

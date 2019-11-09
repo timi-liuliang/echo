@@ -1,6 +1,8 @@
 #include "font_face.h"
 #include "engine/core/log/Log.h"
 
+#define DEFAULT_FONT_TEXTURE_SIZE	1024
+
 namespace Echo
 {
     FontFace::FontFace(FT_Library& library, const char* filePath)
@@ -62,22 +64,22 @@ namespace Echo
         if(error)
             return nullptr;
         
-        return copyGlyphToTexture(charCode, m_face->glyph);
+        return copyGlyphToTexture(charCode, m_face->glyph, fontSize);
     }
     
-    FontGlyph* FontFace::copyGlyphToTexture(i32 charCode, FT_GlyphSlot glyphSlot)
+    FontGlyph* FontFace::copyGlyphToTexture(i32 charCode, FT_GlyphSlot glyphSlot, i32 fontSize)
     {
         // convert glyph to bitmap(color array)
-        i32 glyphWidth = 128;
-        i32 glyphHeight = 128;
-        Color glyphBitmap[128*128];
-        if(!copyGlyphToBitmap( glyphBitmap, glyphWidth, glyphHeight, charCode, glyphSlot))
+        i32 glyphWidth = fontSize * 2;
+        i32 glyphHeight = fontSize * 2;
+        vector<Color>::type glyphBitmap(glyphWidth * glyphHeight, Color(0.f, 0.f, 0.f, 0.f));
+        if(!copyGlyphToBitmap( &glyphBitmap[0], glyphWidth, glyphHeight, charCode, glyphSlot))
             return nullptr;
         
         // try to insert to exist font texture
         for(FontTexture* fontTexture : m_fontTextures)
         {
-			i32 nodeIndex = fontTexture->insert(glyphBitmap, glyphWidth, glyphHeight);
+			i32 nodeIndex = fontTexture->insert(glyphBitmap.data(), glyphWidth, glyphHeight);
             if(nodeIndex !=-1)
             {
 				fontTexture->refreshTexture();
@@ -86,9 +88,9 @@ namespace Echo
         }
         
         // create new one
-        FontTexture* newTexture = EchoNew(FontTexture(512, 512));
+        FontTexture* newTexture = EchoNew(FontTexture(DEFAULT_FONT_TEXTURE_SIZE, DEFAULT_FONT_TEXTURE_SIZE));
         m_fontTextures.push_back(newTexture);
-		i32 nodeIndex = newTexture->insert(glyphBitmap, glyphWidth, glyphHeight);
+		i32 nodeIndex = newTexture->insert(glyphBitmap.data(), glyphWidth, glyphHeight);
 		if (nodeIndex != -1)
 		{
 			newTexture->refreshTexture();
@@ -98,25 +100,26 @@ namespace Echo
         return nullptr;
     }
     
-    bool FontFace::copyGlyphToBitmap(Color* oColor, i32& ioWidth, i32& ioHeight, i32 charCode, FT_GlyphSlot glyphSlot)
+    bool FontFace::copyGlyphToBitmap(Color* oColor, i32 ioWidth, i32 ioHeight, i32 charCode, FT_GlyphSlot glyphSlot)
     {
         FT_Bitmap* bitmap = &glyphSlot->bitmap;
         if(ioWidth>=bitmap->width && ioHeight>=bitmap->rows)
         {
+			i32 wOffset = (ioWidth - bitmap->width) / 2;
+			i32 hOffset = (ioHeight - bitmap->rows) / 2;
+
             for(i32 w=0; w<bitmap->width; w++)
             {
                 for(i32 h=0; h<bitmap->rows; h++)
                 {
-                    i32 index = h * bitmap->width + w;
-                    oColor[index].r = bitmap->buffer[index];
-                    oColor[index].g = bitmap->buffer[index];
-                    oColor[index].b = bitmap->buffer[index];
-                    oColor[index].a = bitmap->buffer[index];
+                    i32 index0 = h * bitmap->width + w;
+					i32 index1 = (h + hOffset) * ioWidth + w + wOffset;
+                    oColor[index1].r = bitmap->buffer[index0];
+                    oColor[index1].g = bitmap->buffer[index0];
+                    oColor[index1].b = bitmap->buffer[index0];
+                    oColor[index1].a = bitmap->buffer[index0];
                 }
             }
-            
-            ioWidth = bitmap->width;
-            ioHeight = bitmap->rows;
             
             return true;
         }
