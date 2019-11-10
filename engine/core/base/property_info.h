@@ -4,20 +4,27 @@
 
 namespace Echo
 {
-	enum class PropertyHint
+	enum class PropertyHintType
 	{
 		None,
 		Range,				// variable range
+        Category,           // property category
 		ResourceType,		// resource object type
 	};
+
+    struct PropertyHint
+    {
+        PropertyHintType    m_type;
+        String              m_value;
+    };
+    typedef vector<PropertyHint>::type PropertyHintArray;
 
 	class Object;
 	struct PropertyInfo
 	{
-		String			m_name;
-		Variant::Type	m_type;
-		PropertyHint	m_hint;
-		String			m_hintStr;
+		String			    m_name;
+		Variant::Type	    m_type;
+        PropertyHintArray   m_hints;
 		enum Type
 		{
 			Static = 1<<0,
@@ -33,6 +40,9 @@ namespace Echo
 
 		// set property value
 		virtual void setPropertyValue(Object* classPtr, const String& propertyName, const Variant& propertyValue) = 0;
+        
+        // get property hint
+        const String& getHint(PropertyHintType hintType) const;
 	};
 	typedef vector<PropertyInfo*>::type PropertyInfos;
 

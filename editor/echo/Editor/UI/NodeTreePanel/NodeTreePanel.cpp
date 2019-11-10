@@ -824,23 +824,38 @@ namespace Studio
 		Echo::Class::getPropertys(className, classPtr, propertys);
 		if (propertys.size())
 		{
-			m_propertyHelper.beginMenu(className.c_str());
-			for (const Echo::PropertyInfo* prop : propertys)
-			{
-				Echo::Variant var;
-				Echo::Class::getPropertyValue(classPtr, prop->m_name, var);
+            // collect all categories
+            std::set<Echo::String> categorySet;
+            for (const Echo::PropertyInfo* prop : propertys)
+            {
+                categorySet.insert(prop->getHint(Echo::PropertyHintType::Category));
+            }
+            
+            // show propertys by category
+            for(const Echo::String& category : categorySet)
+            {
+                m_propertyHelper.beginMenu(category.empty() ? className.c_str() : category.c_str());
+                for (const Echo::PropertyInfo* prop : propertys)
+                {
+                    if(prop->getHint(Echo::PropertyHintType::Category)==category)
+                    {
+                        Echo::Variant var;
+                        Echo::Class::getPropertyValue(classPtr, prop->m_name, var);
 
-				showPropertyByVariant(classPtr, prop->m_name, var, prop);
-			}
-			m_propertyHelper.endMenu();
+                        showPropertyByVariant(classPtr, prop->m_name, var, prop);
+                    }
+                }
+                m_propertyHelper.endMenu();
+            }
 		}
 	}
 
-	// show property
 	void NodeTreePanel::showPropertyByVariant(Echo::Object* object, const Echo::String& name, const Echo::Variant& var, const Echo::PropertyInfo* propInfo)
 	{
 		if (!object->isChannelExist(name))
 		{
+            Echo::String resourceHint = propInfo->getHint(Echo::PropertyHintType::ResourceType);
+            
 			switch (var.getType())
 			{
 			case Echo::Variant::Type::Bool:			m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_CheckBox); break;
@@ -853,7 +868,7 @@ namespace Studio
 			case Echo::Variant::Type::ResourcePath:	m_propertyHelper.addItem(name.c_str(), var.toResPath().getPath(), QT_UI::WT_AssetsSelect, var.toResPath().getSupportExts().c_str()); break;
 			case Echo::Variant::Type::StringOption: m_propertyHelper.addItem(name.c_str(), var.toStringOption().getValue(), QT_UI::WT_ComboBox, var.toStringOption().getOptionsStr().c_str()); break;
 			case Echo::Variant::Type::NodePath:		m_propertyHelper.addItem(name.c_str(), var.toNodePath().getPath(), QT_UI::WT_NodeSelect, Echo::StringUtil::ToString(object->getId()).c_str()); break;
-			case Echo::Variant::Type::Object:		m_propertyHelper.addItem(name.c_str(), var.toObj() ? var.toObj()->getId() : -1, QT_UI::WT_Res, propInfo->m_hintStr.c_str()); break;
+			case Echo::Variant::Type::Object:		m_propertyHelper.addItem(name.c_str(), var.toObj() ? var.toObj()->getId() : -1, QT_UI::WT_Res, resourceHint.c_str()); break;
 			default:								m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_None); break;
 			}
 		}

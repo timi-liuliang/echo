@@ -163,7 +163,8 @@ namespace Echo
         static Signal* getSignal(Object* classPtr, const String& signalName);
 
 		// add property
-		static bool registerProperty(const String& className, const String& propertyName, const Variant::Type type, PropertyHint hint, const String& hintStr, const String& getter, const String& setter);
+		static bool registerProperty(const String& className, const String& propertyName, const Variant::Type type, const String& getter, const String& setter);
+        static bool registerPropertyHint(const String& className, const String& propertyName, PropertyHintType hintType, const String& hintStr);
 
 		// get propertys
 		static ui32 getPropertys(const String& className, Object* classPtr, PropertyInfos& propertys, i32 flag=PropertyInfo::Static | PropertyInfo::Dynamic);
@@ -325,10 +326,10 @@ private:
 	Echo::Class::bindMethod(#m_class, &m_class::method, methodName)
 
 #define CLASS_REGISTER_PROPERTY(m_class, name, type, getter, setter) \
-	Echo::Class::registerProperty(#m_class, name, type, PropertyHint::None, "", getter, setter)
+	Echo::Class::registerProperty(#m_class, name, type, getter, setter)
 
-#define CLASS_REGISTER_PROPERTY_WITH_HINT(m_class, name, type, hint, hintStr, getter, setter) \
-	Echo::Class::registerProperty(#m_class, name, type, hint, hintStr, getter, setter)
+#define CLASS_REGISTER_PROPERTY_HINT(m_class, name, hintType, hintStr) \
+	Echo::Class::registerPropertyHint(#m_class, name, hintType, hintStr)
 
 #define CLASS_REGISTER_SIGNAL(class, signal) \
     Echo::Class::registerSignal(#class, #signal, &class::getSignal##signal)

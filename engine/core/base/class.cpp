@@ -248,8 +248,7 @@ namespace Echo
         return nullptr;
     }
 
-	// add property
-	bool Class::registerProperty(const String& className, const String& propertyName, const Variant::Type type, PropertyHint hint, const String& hintStr, const String& getter, const String& setter)
+	bool Class::registerProperty(const String& className, const String& propertyName, const Variant::Type type, const String& getter, const String& setter)
 	{
 		auto it = g_classInfos->find(className);
 		if (it != g_classInfos->end())
@@ -257,8 +256,6 @@ namespace Echo
 			PropertyInfoStatic* info = EchoNew(PropertyInfoStatic);
 			info->m_name = propertyName;
 			info->m_type = type;
-			info->m_hint = hint;
-			info->m_hintStr = hintStr;
 			info->m_setter = setter;
 			info->m_getter = getter;
 			info->m_setterMethod = getMethodBind(className, setter);
@@ -270,7 +267,22 @@ namespace Echo
 		return true;
 	}
 
-	// get propertys
+    bool Class::registerPropertyHint(const String& className, const String& propertyName, PropertyHintType hintType, const String& hintStr)
+    {
+        PropertyInfo* pi = getProperty(className, nullptr, propertyName);
+        if (pi)
+        {
+            PropertyHint hint;
+            hint.m_type = hintType;
+            hint.m_value = hintStr;
+            pi->m_hints.push_back(hint);
+            
+            return true;
+        }
+        
+        return false;
+    }
+
 	ui32 Class::getPropertys(const String& className, Object* classPtr, PropertyInfos& propertys, i32 flag)
 	{
 		// static
@@ -287,7 +299,7 @@ namespace Echo
 		}
 
 		// dynamic
-		if (flag & PropertyInfo::Dynamic)
+		if (classPtr && (flag & PropertyInfo::Dynamic))
 		{
 			const PropertyInfos& dynamicPropertys = classPtr->getPropertys();
 			for (PropertyInfo* pi : dynamicPropertys)
