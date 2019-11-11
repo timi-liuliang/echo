@@ -119,4 +119,9 @@ namespace Echo
 
 		m_listener->onEnd();
 	}
+
+	String WindowsBuildSettings::getFinalResultPath()
+	{
+		return m_outputDir;
+	}
 }

@@ -3,6 +3,7 @@
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/main/GameSettings.h>
 #include <engine/core/render/interface/Renderer.h>
+#include <engine/core/input/input.h>
 
 namespace Echo
 {
@@ -160,14 +161,24 @@ namespace Echo
 			break;
 			case WM_LBUTTONDOWN:
 			{
+				// https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-lbuttondown
+				Echo::ui32 buttonId = wParam == MK_LBUTTON ? 0 : (wParam == MK_RBUTTON ? 1 : 2);
+
 				Echo::ui32 x = (Echo::ui32)LOWORD(lParam);
 				Echo::ui32 y = (Echo::ui32)HIWORD(lParam);
+
+				Echo::Input::instance()->notifyMouseButtonDown(0, Echo::Vector2(x, y));
 			}
 			break;
 			case WM_LBUTTONUP:
 			{
+				// https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-lbuttondown
+				Echo::ui32 buttonId = wParam == MK_LBUTTON ? 0 : (wParam == MK_RBUTTON ? 1 : 2);
+
 				Echo::ui32 x = (Echo::ui32)LOWORD(lParam);
 				Echo::ui32 y = (Echo::ui32)HIWORD(lParam);
+
+				Echo::Input::instance()->notifyMouseButtonUp(0, Echo::Vector2(x, y));
 			}
 			break;
 			case WM_MOUSEMOVE:
