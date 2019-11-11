@@ -99,6 +99,9 @@ namespace Echo
 
 		// default window size
 		resizeWindow( m_hWnd, Echo::GameSettings::instance()->getWindowWidth(), Echo::GameSettings::instance()->getWindowHeight());
+
+		// show windows
+		ShowWindow(m_hWnd, SW_SHOW);
 	}
 
 	void App::resizeWindow(HWND hwnd, int width, int height)
@@ -295,7 +298,7 @@ namespace Echo
 			posX, posY, /*screenWidth*/loRt.right - loRt.left, /*screenHeight*/loRt.bottom - loRt.top,
 			NULL, NULL, m_hInstance, NULL);
 		// Bring the window up on the screen and set it as main focus.
-		ShowWindow(m_hWnd, SW_SHOW);
+		ShowWindow(m_hWnd, SW_HIDE);
 		SetForegroundWindow(m_hWnd);
 		SetFocus(m_hWnd);
 
