@@ -118,10 +118,10 @@ namespace Echo
         CLASS_REGISTER_PROPERTY(iOSBuildSettings, "LandscapeLeft",      Variant::Type::Bool, "isUIInterfaceOrientationLandscapeLeft",       "setUIInterfaceOrientationLandscapeLeft");
         CLASS_REGISTER_PROPERTY(iOSBuildSettings, "LandscapeRight",     Variant::Type::Bool, "isUIInterfaceOrientationLandscapeRight",      "setUIInterfaceOrientationLandscapeRight");
         
-        CLASS_REGISTER_PROPERTY_HINT(iOSBuildSettings, "Portrait",           PropertyHintType::Category, "UIInterfaceOrientation");
-        CLASS_REGISTER_PROPERTY_HINT(iOSBuildSettings, "PortraitUpsideDown", PropertyHintType::Category, "UIInterfaceOrientation");
-        CLASS_REGISTER_PROPERTY_HINT(iOSBuildSettings, "LandscapeLeft",      PropertyHintType::Category, "UIInterfaceOrientation");
-        CLASS_REGISTER_PROPERTY_HINT(iOSBuildSettings, "LandscapeRight",     PropertyHintType::Category, "UIInterfaceOrientation");
+        CLASS_REGISTER_PROPERTY_HINT(iOSBuildSettings, "Portrait",           PropertyHintType::Category, "Device Orientation");
+        CLASS_REGISTER_PROPERTY_HINT(iOSBuildSettings, "PortraitUpsideDown", PropertyHintType::Category, "Device Orientation");
+        CLASS_REGISTER_PROPERTY_HINT(iOSBuildSettings, "LandscapeLeft",      PropertyHintType::Category, "Device Orientation");
+        CLASS_REGISTER_PROPERTY_HINT(iOSBuildSettings, "LandscapeRight",     PropertyHintType::Category, "Device Orientation");
     }
     
     void iOSBuildSettings::setOutputDir(const String& outputDir)

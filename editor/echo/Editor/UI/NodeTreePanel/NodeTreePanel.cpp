@@ -827,14 +827,15 @@ namespace Studio
             // collect all categories
             std::set<Echo::String> categorySet;
             for (const Echo::PropertyInfo* prop : propertys)
-            {
                 categorySet.insert(prop->getHint(Echo::PropertyHintType::Category));
-            }
             
             // show propertys by category
+			m_propertyHelper.beginMenu(className.c_str());
             for(const Echo::String& category : categorySet)
             {
-                m_propertyHelper.beginMenu(category.empty() ? className.c_str() : category.c_str());
+				if(!category.empty())
+					m_propertyHelper.beginMenu(category.c_str());
+
                 for (const Echo::PropertyInfo* prop : propertys)
                 {
                     if(prop->getHint(Echo::PropertyHintType::Category)==category)
@@ -845,8 +846,11 @@ namespace Studio
                         showPropertyByVariant(classPtr, prop->m_name, var, prop);
                     }
                 }
-                m_propertyHelper.endMenu();
+
+				if (!category.empty())
+					m_propertyHelper.endMenu();
             }
+			m_propertyHelper.endMenu();
 		}
 	}
 
