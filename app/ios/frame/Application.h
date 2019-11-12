@@ -15,7 +15,7 @@ namespace Echo
         static Application* instance();
 
         // init
-        void init(int width, int height, const String& rootPath);
+        void init(int width, int height, const String& rootPath, const String& userPath);
 
         // tick ms
         void tick(float elapsedTime);

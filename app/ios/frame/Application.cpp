@@ -23,7 +23,7 @@ namespace Echo
         return inst;
     }
 
-    void Application::init(int width, int height, const String& rootPath)
+    void Application::init(int width, int height, const String& rootPath, const String& userPath)
     {
         m_log = EchoNew(GameLog("Game"));
         Echo::Log::instance()->addOutput(m_log);
@@ -32,6 +32,7 @@ namespace Echo
 
         Engine::Config rootcfg;
         rootcfg.m_projectFile = rootPath + "/data/app.echo";
+        rootcfg.m_userPath = userPath;
         Engine::instance()->initialize(rootcfg);
     }
 

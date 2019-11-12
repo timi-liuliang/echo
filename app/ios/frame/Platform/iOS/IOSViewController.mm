@@ -118,8 +118,12 @@ float iOSGetScreenHeight()
 {
     if( !g_isInited)
     {
-        Echo::String rootPath = [[[NSBundle mainBundle] resourcePath] UTF8String];
-        Echo::Application::instance()->init( g_viewWidth, g_viewHeight, rootPath);
+        Echo::String rootPath    = [[[NSBundle mainBundle] resourcePath] UTF8String];
+        NSURL*       userPathUrl = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+        Echo::String userPath    = [[NSFileManager defaultManager] fileSystemRepresentationWithPath:[userPathUrl absoluteString]];
+                     userPath    = Echo::StringUtil::Replace(userPath, "file://", "");
+        
+        Echo::Application::instance()->init( g_viewWidth, g_viewHeight, rootPath, userPath);
 
         g_isInited = true;
     }
