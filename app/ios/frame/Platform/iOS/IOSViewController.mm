@@ -54,6 +54,8 @@ float iOSGetScreenHeight()
     g_nativeScale = screenScale;
 
     CADisplayLink* display_link = [CADisplayLink displayLinkWithTarget:self selector:@selector(drawView:)];
+    display_link.preferredFramesPerSecond = 60;     // 30|60
+    
     [display_link addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
