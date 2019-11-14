@@ -16,7 +16,9 @@ channels = {}
 		
 function update_all_nodes()
     for k, v in pairs(nodes) do
-        v:update()
+		if v.update ~= nil then
+			v:update()
+		end
     end
 end
 
