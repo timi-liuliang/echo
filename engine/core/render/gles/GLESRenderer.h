@@ -42,16 +42,16 @@ namespace Echo
 		virtual bool initialize(const Config& config) override;
 
         // get type
-        virtual Type getType() { return Renderer::Type::OpenGLES; }
+        virtual Type getType() override { return Renderer::Type::OpenGLES; }
 	
 		void checkOpenGLExtensions();
 
 		void setViewport(Viewport* pViewport);
 
-		ui32 getMaxStageNum() const;
+		ui32 getMaxStageNum() const override;
 
-		void scissor(ui32 left, ui32 top, ui32 width, ui32 height);
-		void endScissor();
+		void scissor(ui32 left, ui32 top, ui32 width, ui32 height) override;
+		void endScissor() override;
 
 		// set texture to the slot
 		virtual void setTexture(ui32 index, Texture* texture,bool needUpdate = false) override;
@@ -59,23 +59,23 @@ namespace Echo
 		// draw
 		virtual void draw(Renderable* renderable) override;
 
-		void getDepthRange(Vector2& vec);
-		void convertMatOrho(Matrix4& mat, const Matrix4& matOrth, Real zn, Real zf);
-		void convertMatProj(Matrix4& mat, const Matrix4& matProj);
+		void getDepthRange(Vector2& vec) override;
+		void convertMatOrho(Matrix4& mat, const Matrix4& matOrth, Real zn, Real zf) override;
+		void convertMatProj(Matrix4& mat, const Matrix4& matProj) override;
 
 		void enableAttribLocation(ui32 attribLocation);
 		void disableAttribLocation(ui32 attribLocation);
 
 		// gpu buffer
-		GPUBuffer*	createVertexBuffer(Dword usage, const Buffer& buff);
-		GPUBuffer*	createIndexBuffer(Dword usage, const Buffer& buff);
+		GPUBuffer*	createVertexBuffer(Dword usage, const Buffer& buff) override;
+		GPUBuffer*	createIndexBuffer(Dword usage, const Buffer& buff) override;
 
 		// textures
 		virtual Texture* createTexture2D() override;
-		Texture*  createTexture2D(const String& name);
-		TextureCube* createTextureCube(const String& name);
+		Texture*  createTexture2D(const String& name) override;
+		TextureCube* createTextureCube(const String& name) override;
 
-		ShaderProgram*	createShaderProgram();
+		ShaderProgram*	createShaderProgram() override;
 		Shader*	createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const char* srcBuffer, ui32 size);
 
 		// states
@@ -87,11 +87,11 @@ namespace Echo
 	
 		// frame buffer
         virtual RenderView*  createRenderView(ui32 width, ui32 height, PixelFormat pixelFormat) override;
-		virtual FrameBuffer* createFramebuffer(ui32 id, ui32 width, ui32 height);
+		virtual FrameBuffer* createFramebuffer(ui32 id, ui32 width, ui32 height) override;
 
         // screen size
-		virtual ui32 getWindowWidth() { return m_screenWidth; }
-		virtual ui32 getWindowHeight() { return m_screenHeight; }
+		virtual ui32 getWindowWidth() override { return m_screenWidth; }
+		virtual ui32 getWindowHeight() override { return m_screenHeight; }
 
         // get screen frame buffer
         virtual FrameBuffer* getWindowFrameBuffer() override;
@@ -100,10 +100,10 @@ namespace Echo
 		bool bindShaderProgram(GLES2ShaderProgram* program);
 
 		// get viewport
-		virtual void getViewportReal( Viewport& pViewport);
+		virtual void getViewportReal( Viewport& pViewport) override;
 		
 		// on size
-		virtual void onSize(int width, int height); 
+		virtual void onSize(int width, int height) override;
 
 	protected:
 		//  interal implement
