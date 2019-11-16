@@ -24,7 +24,7 @@ namespace Echo
     struct ConnectClassMethod : public Connect
     {
         Signal*             m_signal;
-        Object*             m_target;
+        i32                 m_targetId;
         ClassMethodBind*    m_method;
         
 		ConnectClassMethod(Signal* signal, Object* target, ClassMethodBind* method);
@@ -38,7 +38,7 @@ namespace Echo
         Signal*           m_signal;
         String            m_targetPath;
         String            m_functionName;
-        Object*           m_target = nullptr;
+        i32               m_targetId = 0;
 
 		ConnectLuaMethod(Signal* signal, Object* target, const String& functionName);
 		ConnectLuaMethod(Signal* signal, const String& target, const String& functionName);
