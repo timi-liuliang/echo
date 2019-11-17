@@ -1,7 +1,7 @@
 #include "GLESRenderBase.h"
 #include "GLESRenderer.h"
 #include "GLESMapping.h"
-#include "GLESFramebuffer.h"
+#include "GLESFrameBuffer.h"
 #include "GLESFrameBufferWindow.h"
 #include "GLESTexture2D.h"
 #include "GLESTextureCube.h"
@@ -36,9 +36,7 @@ extern void PresentRenderBuffer();
 namespace Echo
 {
 	GLES2Renderer::GLES2Renderer()
-		: m_screenWidth(0)
-		, m_screenHeight(0)
-		, m_pre_shader_program(NULL)
+		: m_pre_shader_program(NULL)
 #ifdef ECHO_PLATFORM_WINDOWS
 		, m_eglConfig(0)
 		, m_eglDisplay(0)

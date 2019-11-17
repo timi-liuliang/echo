@@ -694,7 +694,7 @@ namespace Studio
 		m_fScale = fScale;
 		for (int i = 0; i < 3; i++)
 		{
-			/*m_pAxes[i]->GetTransform()->SetScale( fScale);
+			//m_pAxes[i]->GetTransform()->SetScale( fScale);
 			m_pPlaneLine[i]->GetTransform()->SetScale( fScale);
 			m_pPlaneLine[3+i]->GetTransform()->SetScale( fScale);
 			m_pCone[i]->GetTransform()->SetScale( fScale);

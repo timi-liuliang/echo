@@ -713,7 +713,7 @@ namespace Echo
 		va_list arg;
 		va_start(arg, format);
 		int copylen = 0;
-		int len = strlen(s);
+		int len = int(strlen(s));
 		int freelen = max - len;
 		if (freelen > 0)
 		{

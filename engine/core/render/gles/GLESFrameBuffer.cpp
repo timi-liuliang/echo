@@ -1,4 +1,4 @@
-#include "engine/core/Util/PathUtil.h"
+#include "engine/core/util/PathUtil.h"
 #include "interface/Renderer.h"
 #include "GLESRenderBase.h"
 #include "GLESMapping.h"

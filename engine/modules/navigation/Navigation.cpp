@@ -178,8 +178,7 @@ namespace Echo
 	}
 
 	Navigation::Navigation()
-		: m_isLoaded(false)
-		, m_geom(nullptr)
+		: m_geom(nullptr)
 		, m_navMesh(nullptr)
 		, m_navQuery(nullptr)
 		, m_startRef(0)

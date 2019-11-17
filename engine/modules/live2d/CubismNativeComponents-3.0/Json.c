@@ -14,13 +14,13 @@
 // ------- //
 
 /// JSON 'true' token as string.
-static const char True[] = "true";
+static const char TrueStr[] = "true";
 
 /// JSON 'false' token as string.
-static const char False[] = "false";
+static const char FalseStr[] = "false";
 
 /// JSON 'null' token as string.
-static const char Null[] = "null";
+static const char NullStr[] = "null";
 
 
 /// Value identifying invalid token.
@@ -110,7 +110,7 @@ void csmLexJson(const char* jsonString, csmJsonTokenHandler onToken, void* userD
       {
         tokenType = csmJsonTrue;
         tokenBegin = (int)(string - base);
-        tokenEnd = tokenBegin + (int)sizeof(True);
+        tokenEnd = tokenBegin + (int)sizeof(TrueStr);
 
 
         string += (tokenEnd - tokenBegin);
@@ -122,7 +122,7 @@ void csmLexJson(const char* jsonString, csmJsonTokenHandler onToken, void* userD
       {
         tokenType = csmJsonFalse;
         tokenBegin = (int)(string - base);
-        tokenEnd = tokenBegin + (int)sizeof(False);
+        tokenEnd = tokenBegin + (int)sizeof(FalseStr);
 
 
         string += (tokenEnd - tokenBegin);
@@ -134,7 +134,7 @@ void csmLexJson(const char* jsonString, csmJsonTokenHandler onToken, void* userD
       {
         tokenType = csmJsonNull;
         tokenBegin = (int)(string - base);
-        tokenEnd = tokenBegin + (int)sizeof(Null);
+        tokenEnd = tokenBegin + (int)sizeof(NullStr);
 
 
         string += (tokenEnd - tokenBegin);

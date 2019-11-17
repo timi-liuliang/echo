@@ -213,9 +213,9 @@ namespace Echo
 		bool rayDetect(dtNavMeshQuery* query, const Vector3& startPos, const Vector3& dir, float& oLength, const dtQueryFilter* filter, Echo::Vector3& oHitPosition) const;
 	
 	protected:
-		InputGeometryData*			m_geom;					// 用于生成寻路数据的几何体
-		bool						m_isLoaded;				// 是否已加载导航网格
-		dtNavMesh*					m_navMesh;				// 导航网格
+		InputGeometryData*			m_geom;
+		bool						m_isLoaded = false;
+		dtNavMesh*					m_navMesh;
 		dtNavMeshQuery*				m_navQuery;
 
 		dtObstacleAvoidanceDebugData*m_vod;

@@ -216,7 +216,7 @@ namespace Echo
 					spMeshAttachment* attachment = (spMeshAttachment*)slot->attachment;
 					attachmentVertices = (AttachmentVertices*)attachment->rendererObject;
 
-					int count = attachmentVertices->m_verticesData.size() * sizeof(SpineVertexFormat) / 4;
+					int count = int(attachmentVertices->m_verticesData.size() * sizeof(SpineVertexFormat) / 4);
 					int stride = sizeof(SpineVertexFormat) / 4;
 					spVertexAttachment_computeWorldVertices(SUPER(attachment), slot, 0, count, (float*)attachmentVertices->m_verticesData.data(), 0, stride);
 				}
@@ -273,8 +273,8 @@ namespace Echo
 			define.m_isUseUV = true;
 
 			m_mesh = Mesh::create(true, true);
-			m_mesh->updateIndices(m_batch.m_indicesData.size(), sizeof(Word), m_batch.m_indicesData.data());
-			m_mesh->updateVertexs(define, m_batch.m_verticesData.size(), (const Byte*)m_batch.m_verticesData.data(), AABB());
+			m_mesh->updateIndices(ui32(m_batch.m_indicesData.size()), sizeof(Word), m_batch.m_indicesData.data());
+			m_mesh->updateVertexs(define, ui32(m_batch.m_verticesData.size()), (const Byte*)m_batch.m_verticesData.data(), AABB());
 
 			m_material = ECHO_CREATE_RES(Material);
 			m_material->setShaderContent("echo_spine_default_shader", g_spinDefaultMaterial);
@@ -290,8 +290,8 @@ namespace Echo
 			define.m_isUseVertexColor = true;
 			define.m_isUseUV = true;
 
-			m_mesh->updateIndices(m_batch.m_indicesData.size(), sizeof(Word), m_batch.m_indicesData.data());
-			m_mesh->updateVertexs(define, m_batch.m_verticesData.size(), (const Byte*)m_batch.m_verticesData.data(), AABB());
+			m_mesh->updateIndices(ui32(m_batch.m_indicesData.size()), sizeof(Word), m_batch.m_indicesData.data());
+			m_mesh->updateVertexs(define, ui32(m_batch.m_verticesData.size()), (const Byte*)m_batch.m_verticesData.data(), AABB());
 		}
 	}
 

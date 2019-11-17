@@ -174,14 +174,14 @@ namespace Echo
 			{
 				drmp3_uint64 frameCount = drmp3_get_pcm_frame_count(&mp3);
 
-				drmp3_uint32 channels = mp3.channels;
+				//drmp3_uint32 channels = mp3.channels;
 				float* audioBuffer = new float[frameCount];
 				i16* audioBuffer16 = new i16[frameCount];
 				drmp3_uint64 framesRead = drmp3_read_pcm_frames_f32(&mp3, frameCount, audioBuffer);
 				if (framesRead > 0)
 				{
 					ALenum  audioFormat = AL_FORMAT_MONO16;
-					ALint   audioBufferLen = framesRead * sizeof(i16);
+					ALint   audioBufferLen = static_cast<ALint>(framesRead * sizeof(i16));
 					ALint   audioFrequency = mp3.sampleRate;
 
 					drwav_f32_to_s16(audioBuffer16, audioBuffer, framesRead);

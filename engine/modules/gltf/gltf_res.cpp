@@ -727,6 +727,7 @@ namespace Echo
 						case GltfAccessorInfo::Type::Scalar:	addKeyToAnimProperty<float, AnimPropertyFloat>(timeAccess, keyAccess, animProperty);	break;
 						case GltfAccessorInfo::Type::Vec3:		addKeyToAnimProperty<Vector3, AnimPropertyVec3>(timeAccess, keyAccess, animProperty);	break;
 						case GltfAccessorInfo::Type::Vec4:		addKeyToAnimProperty<Quaternion, AnimPropertyQuat>(timeAccess, keyAccess, animProperty);break;
+                        default: break;
 						}
 					}
 

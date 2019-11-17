@@ -10,7 +10,7 @@ namespace Echo
 		~TerrainTile();
 
 	private:
-		Terrain*	m_terrain;
+		//Terrain*	m_terrain;
     };
 	typedef map<String, TerrainTile*> TerrainTiles;
 }

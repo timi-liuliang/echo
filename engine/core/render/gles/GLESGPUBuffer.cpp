@@ -2,7 +2,7 @@
 #include "GLESGPUBuffer.h"
 #include "GLESMapping.h"
 #include "GLESRenderer.h"
-#include <engine/core/Util/Exception.h>
+#include <engine/core/util/Exception.h>
 #include <engine/core/log/Log.h>
 
 namespace Echo

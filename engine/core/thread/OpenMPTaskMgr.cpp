@@ -48,7 +48,6 @@ namespace Echo
 		}
 	}
 
-	// 执行任务
 	void OpenMPTaskMgr::execTasks(TaskType type)
 	{
 		switch (type)
@@ -59,7 +58,7 @@ namespace Echo
 				{
 					m_animationUpdateTasksFinished = m_animationUpdateTasks;
 					m_animationUpdateTasks.clear();
-					m_threadPool->processJobs(m_animationUpdateTasksFinished.data(), m_animationUpdateTasksFinished.size());
+					m_threadPool->processJobs(m_animationUpdateTasksFinished.data(), int(m_animationUpdateTasksFinished.size()));
 				}
 			}
 			break;
@@ -70,14 +69,13 @@ namespace Echo
 				{
 					m_effectSystemUpdateTasksFinished = m_effectSystemUpdateTasks;
 					m_effectSystemUpdateTasks.clear();
-					m_threadPool->processJobs(m_effectSystemUpdateTasksFinished.data(), m_effectSystemUpdateTasksFinished.size());
+					m_threadPool->processJobs(m_effectSystemUpdateTasksFinished.data(), int(m_effectSystemUpdateTasksFinished.size()));
 				}
 			}
 			break;
 		}
 	}
 
-	// 等待任务完成
 	void OpenMPTaskMgr::waitForAnimationUpdateComplete()
 	{
 		m_threadPool->waitForComplete(TT_AnimationUpdate);

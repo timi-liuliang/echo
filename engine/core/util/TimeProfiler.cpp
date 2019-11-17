@@ -30,7 +30,7 @@ namespace Echo
 	void TimeProfiler::reset()
 	{
 		m_traces.clear();
-		m_totalStartTime = Time::instance()->getMilliseconds();
+		m_totalStartTime = Dword(Time::instance()->getMilliseconds());
 	}
 
 	void TimeProfiler::beginSection(std::size_t section, const String& tag, const char* func)
@@ -94,7 +94,7 @@ namespace Echo
 
 	void TimeProfiler::output()
 	{
-		Dword totalEndTime = Time::instance()->getMilliseconds();
+		Dword totalEndTime = Dword(Time::instance()->getMilliseconds());
 		ulong totalTime    = totalEndTime - m_totalStartTime;
 
 		String result = StringUtil::Format( "TimeProfiler Total:%d\n", totalTime);

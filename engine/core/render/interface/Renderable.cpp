@@ -127,7 +127,7 @@ namespace Echo
 		sp.name = name;
 		sp.type = type;
 		sp.data = param;
-		sp.length = num;
+		sp.length = ui32(num);
 
 		m_shaderParams[name] = sp;
 	}

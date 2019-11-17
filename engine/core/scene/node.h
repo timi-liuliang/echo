@@ -133,7 +133,7 @@ namespace Echo
 
 	public:
 		// get property value
-		Variant getPropertyValue(const String& propertyName);
+		Variant getPropertyValueR(const String& propertyName);
 
 		// ch
 		Variant ch(const String& path, const String& propertyName);

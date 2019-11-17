@@ -125,15 +125,15 @@ namespace Echo
 		GLuint getGlesTexture(Texture* texture);
 
 	protected:
-		GLES2ShaderProgram*			m_pre_shader_program;
-		array<TextureSlotInfo, 8>	m_preTextures;		 // 已设置纹理	
+		GLES2ShaderProgram*			m_pre_shader_program = nullptr;
+		array<TextureSlotInfo, 8>	m_preTextures;
 
 	private:
 		String				m_gpuDesc;
-		ui32				m_screenWidth;
-		ui32				m_screenHeight;
+		ui32				m_screenWidth = 0;
+		ui32				m_screenHeight = 0;
 		std::set<GLES2SamplerState*> m_vecSamlerStates;
-		NineBoolArray		m_isVertexAttribArrayEnable;	// 记录指定AttribArray是否可用
+		NineBoolArray		m_isVertexAttribArrayEnable;
         FrameBuffer*        m_windowFramebuffer = nullptr;
 
 #ifdef ECHO_PLATFORM_WINDOWS

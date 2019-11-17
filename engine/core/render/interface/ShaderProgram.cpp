@@ -121,7 +121,7 @@ namespace Echo
 	{
 		setPath(fileName);
 
-		MemoryReader memReader(content, strlen(content));
+		MemoryReader memReader(content, ui32(strlen(content)));
 		return loadFromContent(memReader.getData<char*>(), macros);
 	}
 
@@ -510,7 +510,7 @@ namespace Echo
 	{
 		// parse string
 		StringArray valueStr = StringUtil::Split(strValue, ";");
-		ui32 size = valueStr.size();
+		ui32 size = static_cast<ui32>(valueStr.size());
 		EchoAssertX(size == count, "Material::createDefaultUniformValue");
 
 		// calculate data
@@ -570,6 +570,7 @@ namespace Echo
 				case Echo::SPT_VEC2: ((Vector2*)value)[i] = StringUtil::ParseVec2(valueStr[i]);	break;
 				case Echo::SPT_VEC3: ((Vector3*)value)[i] = StringUtil::ParseVec3(valueStr[i]);	break;
 				case Echo::SPT_VEC4: ((Vector4*)value)[i] = StringUtil::ParseVec4(valueStr[i]); break;
+                default:                                                                        break;
 				}
 			}
 		}
@@ -626,8 +627,7 @@ namespace Echo
 		fullMacro = "#define ";
 		fullMacro += macro;
 		fullMacro += "\n";
-		int i = m_macros.find(fullMacro.c_str());
-		return i != String::npos;
+		return m_macros.find(fullMacro.c_str()) != String::npos;
 	}
 
 	void ShaderProgram::save()

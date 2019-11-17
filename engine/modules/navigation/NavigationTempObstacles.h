@@ -80,7 +80,7 @@ namespace Echo
 		bool						m_filterLedgeSpans = true;
 		bool						m_filterWalkableLowHeightSpans;
 
-		struct dtNavMeshData*		m_navMeshData;
+		struct dtNavMeshData*		m_navMeshData = nullptr;
 		struct dtTileCacheData*		m_tileCacheData = nullptr;
 	};
 }

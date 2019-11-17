@@ -93,7 +93,7 @@ namespace Echo
 	void FontTexture::refreshTexture()
 	{
 		size_t pixelsize = PixelUtil::GetPixelSize(m_format);
-		Buffer buffer(m_width*m_height*pixelsize, m_textureData, false);
+		Buffer buffer(ui32(m_width*m_height*pixelsize), m_textureData, false);
 		if (m_texture)
 		{
             m_texture->updateTexture2D(m_format, Texture::TU_GPU_READ, m_width, m_height, buffer.getData(), buffer.getSize());
@@ -167,12 +167,12 @@ namespace Echo
 			// add to subnode with space
 			if (node0.m_rc.getArea() > 0)
 			{
-				m_nodes[nodeIdx].m_child[0] = m_nodes.size();
+				m_nodes[nodeIdx].m_child[0] = int(m_nodes.size());
 				m_nodes.push_back(node0);
 			}
 			if (node1.m_rc.getArea() > 0)
 			{
-				m_nodes[nodeIdx].m_child[1] = m_nodes.size();
+				m_nodes[nodeIdx].m_child[1] = int(m_nodes.size());
 				m_nodes.push_back(node1);
 			}
 

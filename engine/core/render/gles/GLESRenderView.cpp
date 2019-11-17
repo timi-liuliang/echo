@@ -1,4 +1,4 @@
-#include "engine/core/Util/PathUtil.h"
+#include "engine/core/util/PathUtil.h"
 #include "interface/Renderer.h"
 #include "GLESRenderBase.h"
 #include "GLESMapping.h"
@@ -30,8 +30,6 @@ namespace Echo
 
 	bool GLESRenderView::create()
 	{
-        bool isDepthForamt = PixelUtil::IsDepth(m_format);
-
         GLESTexture2D* texture = dynamic_cast<GLESTexture2D*>(m_bindTexture);
 		texture->m_width = m_width;
 		texture->m_height = m_height;

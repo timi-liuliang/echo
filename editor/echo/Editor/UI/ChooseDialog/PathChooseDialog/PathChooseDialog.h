@@ -1,16 +1,13 @@
 #pragma once
 
 #include <QDialog>
-#include <engine/core/Util/StringUtil.h>
+#include <engine/core/util/StringUtil.h>
 #include "ui_PathChooseDialog.h"
 #include "QDirectoryModel.h"
 #include "QPreviewHelper.h"
 
 namespace Studio
 {
-	/**
-	 * 资源选择对话框
-	 */
 	class PathChooseDialog : public QDialog, public Ui_PathChooseDialog
 	{
 		Q_OBJECT

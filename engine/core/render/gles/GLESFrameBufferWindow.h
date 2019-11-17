@@ -15,6 +15,6 @@ namespace Echo
         virtual bool end() override;
 
         // on resize
-        virtual void onSize(ui32 width, ui32 height);
+        virtual void onSize(ui32 width, ui32 height) override;
     };
 }

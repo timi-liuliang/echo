@@ -482,7 +482,7 @@ namespace Echo
 		CLASS_BIND_METHOD(Node, isEnable,				DEF_METHOD("isEnable"));
 		CLASS_BIND_METHOD(Node, setScript,				DEF_METHOD("setScript"));
 		CLASS_BIND_METHOD(Node, getScript,				DEF_METHOD("getScript"));
-		CLASS_BIND_METHOD(Node, getPropertyValue,		DEF_METHOD("getPropertyValue"));
+		CLASS_BIND_METHOD(Node, getPropertyValueR,		DEF_METHOD("getPropertyValue"));
 		CLASS_BIND_METHOD(Node, ch,						DEF_METHOD("ch"));
 
 		CLASS_REGISTER_PROPERTY(Node, "Enable", Variant::Type::Bool, "isEnable", "setEnable");
@@ -651,7 +651,7 @@ namespace Echo
 		return duplicateNode;
 	}
 
-	Variant Node::getPropertyValue(const String& propertyName)
+	Variant Node::getPropertyValueR(const String& propertyName)
 	{
 		Variant value;
 		Class::getPropertyValue(this, propertyName, value);
@@ -661,7 +661,7 @@ namespace Echo
 	Variant Node::ch(const String& path, const String& propertyName)
 	{
 		Node* targetNode = getNode(path.c_str());
-		return targetNode ? targetNode->getPropertyValue(propertyName) : Variant();
+		return targetNode ? targetNode->getPropertyValueR(propertyName) : Variant();
 	}
 
 	void Node::save(const String& path)

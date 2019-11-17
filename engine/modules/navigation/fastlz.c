@@ -231,7 +231,7 @@ static FASTLZ_INLINE int FASTLZ_COMPRESSOR(const void* input, int length, void* 
     ref = htab[hval];
 
     /* calculate distance to the match */
-    distance = anchor - ref;
+    distance = (unsigned int)(anchor - ref);
 
     /* update hash table */
     *hslot = anchor;

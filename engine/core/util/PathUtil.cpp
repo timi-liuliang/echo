@@ -80,7 +80,7 @@ namespace Echo
 		if (size == 0)
 			return;
 		int backTraceNum = 0;
-		for (int i = size - 1; i >= 0; --i)
+		for (int i = int(size - 1); i >= 0; --i)
 		{
 			if (pathArray[i] == "..")
 			{

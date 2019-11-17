@@ -455,6 +455,7 @@ namespace Echo
 				}
 			}
 			break;
+            default: break;
 			}
 		}
 	}
@@ -565,11 +566,12 @@ namespace Echo
 				}
 			}
 			break;
+                    
+            default: break;
 			}
 		}
 	}
 
-	// get key info
 	bool TimelinePanel::getKeyInfo(TimelinePanel::KeyInfo& keyInfo, const String& animName, const String& objectPath, const String& propertyName, int curveIdx, int keyIdx)
 	{
 		AnimProperty* animProperty = m_timeline->getProperty(m_currentEditAnim, objectPath, propertyName);
@@ -591,6 +593,8 @@ namespace Echo
 				}
 			}
 			break;
+                    
+            default: break;
 			}
 		}
 

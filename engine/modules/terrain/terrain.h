@@ -78,6 +78,6 @@ namespace Echo
         Matrix4                 m_matWVP;
         i32                     m_columns = 0;
         i32                     m_rows = 0;
-		TerrainTiles			m_tiles;
+		//TerrainTiles			m_tiles;
     };
 }

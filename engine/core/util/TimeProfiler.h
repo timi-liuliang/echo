@@ -44,9 +44,9 @@ namespace Echo
 		static size_t lordStrHash(const char *str);
 
 	private:
-		int							m_tab;					// 当前缩进(进栈出栈)
+		int							m_tab;
 		map<std::size_t, Trace>::type	m_traces;
-		Dword						m_totalStartTime;		// 总分析开始时间
+		Dword						m_totalStartTime;
 	};
 }
 //vs2010 only takes a subset of the string's characters to determine the hash value.so we have to implement it ourselves

@@ -7,13 +7,9 @@
 
 namespace Echo
 {
-	/**
-	 * FreeImage¿â·â×° 2014-6-25
-	 */
 	class FreeImageHelper
 	{
 	public:
-		/** Í¼ÏñÐÅÏ¢ */
 		struct ImageInfo
 		{
 			ui32					m_width;		// ¿í

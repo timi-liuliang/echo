@@ -204,8 +204,6 @@ namespace Echo
 		, m_tileSize(48)
 		, m_filterLowHangingObstacles(true)
 		, m_filterWalkableLowHeightSpans(true)
-		, m_tileCacheData(nullptr)
-		, m_navMeshData(nullptr)
 	{
 		m_talloc = EchoNew(LinearAllocator(32000));
 		m_tcomp = EchoNew(FastLZCompressor);
@@ -569,7 +567,7 @@ namespace Echo
 			for (int x = 0; x < tw; ++x)
 				m_tileCache->buildNavMeshTilesAt(x, y, m_navMesh);
 
-		m_cacheBuildMemUsage = m_talloc->high;
+		m_cacheBuildMemUsage = int(m_talloc->high);
 
 		const dtNavMesh* nav = m_navMesh;
 		int navmeshMemUsage = 0;

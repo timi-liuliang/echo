@@ -24,7 +24,7 @@ namespace Echo
 	Base64Encode::Base64Encode(const String& data)
 	{
 		int input_length = static_cast<int>(data.length());
-		int output_length = 4 * ((data.length() + 2) / 3);
+		int output_length = 4 * (int(data.length() + 2) / 3);
 		m_encoded.resize(output_length);
 
 

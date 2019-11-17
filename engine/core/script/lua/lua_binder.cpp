@@ -62,51 +62,50 @@ namespace Echo
 		return 1;
 	}
 
-	// stack dump for debug
-	static void stackDump(lua_State *L)
-	{
-#ifdef ECHO_EDITOR_MODE
-		struct Element
-		{
-			int		m_idx;
-			String  m_type;
-			String  m_value;
-		};
-		static vector<Element>::type  luaStack;
-		luaStack.clear();
-
-		int top = lua_gettop(L);
-		for (int i = 1; i <= top; i++) 
-		{
-			Element elem;
-			elem.m_idx = i;
-
-			int t = lua_type(L, i);
-			elem.m_type = lua_typename(L, t);
-
-			switch (t)
-			{
-			case LUA_TSTRING:  /* strings */
-				elem.m_value = lua_tostring(L, i);
-				break;
-
-			case LUA_TBOOLEAN:  /* booleans */
-				elem.m_value = (lua_toboolean(L, i) ? "true" : "false");
-				break;
-
-			case LUA_TNUMBER:  /* numbers */
-				elem.m_value =StringUtil::Format("%g", lua_tonumber(L, i));
-				break;
-
-			default:  /* other values */
-				elem.m_value = lua_typename(L, t);
-				break;
-			}
-
-			luaStack.push_back(elem);
-		}
-#endif
-	}
+//	static void stackDump(lua_State *L)
+//	{
+//#ifdef ECHO_EDITOR_MODE
+//		struct Element
+//		{
+//			int		m_idx;
+//			String  m_type;
+//			String  m_value;
+//		};
+//		static vector<Element>::type  luaStack;
+//		luaStack.clear();
+//
+//		int top = lua_gettop(L);
+//		for (int i = 1; i <= top; i++)
+//		{
+//			Element elem;
+//			elem.m_idx = i;
+//
+//			int t = lua_type(L, i);
+//			elem.m_type = lua_typename(L, t);
+//
+//			switch (t)
+//			{
+//			case LUA_TSTRING:
+//				elem.m_value = lua_tostring(L, i);
+//				break;
+//
+//			case LUA_TBOOLEAN:
+//				elem.m_value = (lua_toboolean(L, i) ? "true" : "false");
+//				break;
+//
+//			case LUA_TNUMBER:
+//				elem.m_value =StringUtil::Format("%g", lua_tonumber(L, i));
+//				break;
+//
+//			default:
+//				elem.m_value = lua_typename(L, t);
+//				break;
+//			}
+//
+//			luaStack.push_back(elem);
+//		}
+//#endif
+//	}
 
 	static int method_cb(lua_State* L)
 	{
@@ -299,7 +298,6 @@ namespace Echo
 		setGlobalVariableStr("package.path", StringUtil::Format("%s?.lua;%s", path.c_str(), curPath.c_str()));
 	}
 
-	// add lua loader
 	void LuaBinder::addLoader(lua_CFunction func)
 	{
 		if (func)
@@ -310,7 +308,8 @@ namespace Echo
 			lua_gettop(m_luaState);
 
 			// << loader func
-			for (int i = lua_rawlen(m_luaState, -1); i >= 1; --i)
+            int rawLen = static_cast<int>(lua_rawlen(m_luaState, -1));
+			for (int i = rawLen; i >= 1; --i)
 			{
 				lua_rawgeti(m_luaState, -1, i);
 				lua_rawseti(m_luaState, -2, i+1);
@@ -401,7 +400,7 @@ namespace Echo
 		if (lua_isnil(m_luaState, vars.size())) EchoLogError("lua global variable [%s == nil]", varName.c_str());
 #endif
 		lua_gettop(m_luaState);
-		String result = lua_tostring(m_luaState, vars.size());
+		String result = lua_tostring(m_luaState, int(vars.size()));
 		lua_gettop(m_luaState);
 
 		// clear stack

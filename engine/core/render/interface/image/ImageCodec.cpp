@@ -615,7 +615,7 @@ namespace Echo
 			size_t pixNum = imgInfo.width*imgInfo.height;
 			for (size_t pix = 0; pix < pixNum; pix++)
 			{
-				int baseIdx = pix * 3;
+				int baseIdx = int(pix) * 3;
 				Echo::Math::Swap<Byte>(pDst[baseIdx + FI_RGBA_RED], pDst[baseIdx + FI_RGBA_BLUE]);
 			}
 			imgInfo.pixFmt = PF_RGB8_UNORM;
@@ -625,7 +625,7 @@ namespace Echo
 			size_t pixNum = imgInfo.width*imgInfo.height;
 			for (size_t pix = 0; pix < pixNum; pix++)
 			{
-				int baseIdx = pix * 4;
+				int baseIdx = int(pix) * 4;
 				Echo::Math::Swap<Byte>(pDst[baseIdx + FI_RGBA_RED], pDst[baseIdx + FI_RGBA_BLUE]);
 			}
 
@@ -803,7 +803,7 @@ namespace Echo
 			size_t pixNum = imgInfo.width*imgInfo.height;
 			for (size_t pix = 0; pix < pixNum; pix++)
 			{
-				int baseIdx = pix * 3;
+				int baseIdx = int(pix * 3);
 				Echo::Math::Swap<Byte>(pDst[baseIdx + FI_RGBA_RED], pDst[baseIdx + FI_RGBA_BLUE]);
 			}
 			imgInfo.pixFmt = PF_RGB8_UNORM;
@@ -813,7 +813,7 @@ namespace Echo
 			size_t pixNum = imgInfo.width*imgInfo.height;
 			for (size_t pix = 0; pix < pixNum; pix++)
 			{
-				int baseIdx = pix * 4;
+				int baseIdx = int(pix * 4);
 				Echo::Math::Swap<Byte>(pDst[baseIdx + FI_RGBA_RED], pDst[baseIdx + FI_RGBA_BLUE]);
 			}
 

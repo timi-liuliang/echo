@@ -68,7 +68,6 @@ namespace Echo
 		}
 	}
 
-	// update self
 	void Box2DShape::update_self()
 	{
 		if (m_isEnable && !m_fixture)
@@ -76,8 +75,6 @@ namespace Echo
 			Box2DBody* body = ECHO_DOWN_CAST<Box2DBody*>(getParent());
 			if (body && body->getb2Body())
 			{
-				float pixelsPerUnit = Box2DWorld::instance()->getPixelsPerMeter();
-
 				// create fixture
 				b2FixtureDef fixtureDef;
 				fixtureDef.density = m_density;

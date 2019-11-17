@@ -70,6 +70,6 @@ namespace Echo
 		vector<StreamUnit>::type		m_vertexStreams;
 		unsigned int					m_vertexStreamsHash;
 		bool							m_is_muti_stream;
-		GLuint							m_vao;
+		//GLuint							m_vao = -1;
 	};
 }

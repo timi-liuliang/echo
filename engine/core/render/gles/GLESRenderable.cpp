@@ -18,7 +18,6 @@ namespace Echo
 
 	GLES2Renderable::GLES2Renderable(const String& renderStage, ShaderProgram* shader, int identifier)
 		: Renderable( renderStage, shader, identifier)
-		, m_vao( -1)
 	{
 	}
 
@@ -217,7 +216,7 @@ namespace Echo
 		{
 			const StreamUnit& streamUnit = m_vertexStreams[i];
 
-			hash = hash * seed + (size_t)(streamUnit.m_buffer);
+			hash = hash * seed + int((size_t)(streamUnit.m_buffer));
 
 			size_t declarationSize = streamUnit.m_vertDeclaration.size();
 			for (size_t i = 0; i < declarationSize; ++i)

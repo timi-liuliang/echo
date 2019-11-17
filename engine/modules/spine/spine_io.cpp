@@ -25,7 +25,7 @@ char* _spUtil_readFile(const char* path, int* length)
 	if (stream)
 	{
 		char* data = MALLOC(char, stream->size() + 1);
-		*length = stream->size();
+		*length = int(stream->size());
 
 		stream->read(data, stream->size());
 		data[stream->size()] = '\0';

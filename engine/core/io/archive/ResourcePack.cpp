@@ -40,7 +40,7 @@ namespace Echo
 			inflateEnd(&stream);
 			return err == Z_OK ? Z_BUF_ERROR : err;
 		}
-		*destLen = stream.total_out;
+		*destLen = static_cast<unsigned int>(stream.total_out);
 
 		err = inflateEnd(&stream);
 		return err;
@@ -69,7 +69,7 @@ namespace Echo
 			deflateEnd(&stream);
 			return err == Z_OK ? Z_BUF_ERROR : err;
 		}
-		*destLen = stream.total_out;
+		*destLen = static_cast<unsigned int>(stream.total_out);
 
 		err = deflateEnd(&stream);
 		return err;
