@@ -23,3 +23,7 @@ echo "build dir :" $(pwd)
 
 # cmake - generate xcode project
 cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_BUILD_TYPE=RELEASE -DECHO_EDITOR_MODE=FALSE -DECHO_BUILD_PLATFORM_IOS=TRUE -DECHO_BUILD_PLATFORM_MAC=FALSE -G"Xcode" ../
+
+# link
+cd ../
+ln -s ./xcode/echo.xcodeproj ./echo.xcodeproj
