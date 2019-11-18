@@ -83,7 +83,7 @@ namespace Echo
 
 	Material::~Material()
 	{
-		m_uniforms.clear();
+		EchoSafeDeleteMap(m_uniforms, Uniform);
 
 		unloadTexture();
 	}

@@ -24,6 +24,8 @@ namespace Echo
             alDeleteSources(1, &m_source);
             alDeleteBuffers(1, &m_buffer);
         }
+
+		EchoSafeDeleteContainer(m_oneShotPlayers, AudioPlayer);
 	}
 
 	void AudioPlayer::bindMethods()
@@ -121,6 +123,7 @@ namespace Echo
 				else
 				{
 					it = m_oneShotPlayers.erase(it);
+					EchoSafeDelete(player, AudioPlayer);
 				}
 			}
 		}

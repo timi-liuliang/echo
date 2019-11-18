@@ -27,6 +27,8 @@ namespace Echo
 		EchoSafeDelete(m_objectEditor, ObjectEditor);
 #endif
 
+		clearPropertys();
+
         unregisterFromScript();
 		unregisterChannels();
 
@@ -202,7 +204,7 @@ namespace Echo
 	// clear propertys
 	void Object::clearPropertys()
 	{
-		m_propertys.clear();
+		EchoSafeDeleteContainer(m_propertys, PropertyInfo);
 	}
 
 	// register property

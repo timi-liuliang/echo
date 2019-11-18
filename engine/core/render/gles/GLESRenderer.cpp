@@ -56,6 +56,8 @@ namespace Echo
 		cleanSystemResource();
 		destroyImpl();
 
+		EchoSafeDelete(m_windowFramebuffer, FrameBuffer);
+
 		g_renderer = nullptr;
 	}
 
