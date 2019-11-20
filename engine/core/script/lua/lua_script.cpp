@@ -57,7 +57,7 @@ namespace Echo
 		const char* content = m_srcData.empty() ? luaScriptTemplate : m_srcData.data();
 		if (content)
 		{
-			String fullPath = IO::instance()->getFullPath(m_path.getPath());
+			String fullPath = IO::instance()->convertResPathToFullPath(m_path.getPath());
 			std::ofstream f(fullPath.c_str());
 
 			f << content;

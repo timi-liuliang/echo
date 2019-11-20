@@ -97,6 +97,10 @@ namespace Echo
         void copySrc();
         void copyRes();
         
+        // replace
+        void replaceIcon();
+        void replaceLaunchImage();
+        
         // cmake
         void cmake();
         
@@ -117,7 +121,7 @@ namespace Echo
         String                  m_projectDir;
         String                  m_outputDir;
         String                  m_solutionDir;
-        ResourcePath            m_iconRes;
+        ResourcePath            m_iconRes  = ResourcePath("Res://icon.png", ".png");
         String                  m_appName;
         String                  m_identifier;
         String                  m_version = "1.0.0";

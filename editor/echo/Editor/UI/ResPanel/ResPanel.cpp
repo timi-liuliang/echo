@@ -103,7 +103,7 @@ namespace Studio
 		if (!Echo::PathUtil::IsDir(res))
 		{
 			Echo::String resPath;
-			if (Echo::IO::instance()->covertFullPathToResPath(res, resPath))
+			if (Echo::IO::instance()->convertFullPathToResPath(res, resPath))
 			{
 				NodeTreePanel::instance()->onSelectRes(resPath);
 			}
@@ -119,7 +119,7 @@ namespace Studio
 		else
 		{
 			Echo::String resPath;
-			if (Echo::IO::instance()->covertFullPathToResPath(res, resPath))
+			if (Echo::IO::instance()->convertFullPathToResPath(res, resPath))
 			{
 				// edit res
 				NodeTreePanel::instance()->onSelectRes(resPath);
@@ -225,7 +225,7 @@ namespace Studio
 				Echo::String newPath = Echo::StringUtil::Format("%sNew%s_%d%s", currentDir.c_str(), className.c_str(), i, extension.c_str());
 				if (!Echo::PathUtil::IsFileExist(newPath))
 				{
-					if(Echo::IO::instance()->covertFullPathToResPath( newPath,outNewPath))
+					if(Echo::IO::instance()->convertFullPathToResPath( newPath,outNewPath))
 						return true;
 				}
 			}

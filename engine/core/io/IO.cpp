@@ -67,7 +67,7 @@ namespace Echo
 		return false;
 	}
 
-	String IO::getFullPath(const String& filename)
+	String IO::convertResPathToFullPath(const String& filename)
 	{
 		EE_LOCK_AUTO_MUTEX
 
@@ -85,7 +85,7 @@ namespace Echo
 		return ""; 
 	}
 
-	bool IO::covertFullPathToResPath(const String& fullPath, String& resPath)
+	bool IO::convertFullPathToResPath(const String& fullPath, String& resPath)
 	{
 		String result = StringUtil::Replace(fullPath, m_resFileSystem->getPath(), m_resFileSystem->getPrefix());
 		if (StringUtil::StartWith(result, "Res://"))
@@ -94,12 +94,12 @@ namespace Echo
 			return true;
 		}
 
-        //result = StringUtil::Replace(fullPath, m_userFileSystem->getPath(), m_userFileSystem->getPrefix());
-        //if (StringUtil::StartWith(result, "User://"))
-        //{
-        //    resPath = result;
-        //    return true;
-        //}
+        result = StringUtil::Replace(fullPath, m_userFileSystem->getPath(), m_userFileSystem->getPrefix());
+        if (StringUtil::StartWith(result, "User://"))
+        {
+            resPath = result;
+            return true;
+        }
 		
 		return false;
 	}

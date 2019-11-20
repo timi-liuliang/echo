@@ -207,7 +207,7 @@ namespace Studio
 		if (!savePath.empty() && !Echo::PathUtil::IsDir(savePath))
 		{
 			Echo::String resPath;
-			if (Echo::IO::instance()->covertFullPathToResPath(savePath, resPath))
+			if (Echo::IO::instance()->convertFullPathToResPath(savePath, resPath))
 				EchoEngine::instance()->saveCurrentEditNodeTreeAs(resPath.c_str());
 
 			// refresh respanel display
@@ -260,7 +260,7 @@ namespace Studio
 			{
 				Echo::PathUtil::CreateDir(saveasPath);
 
-				Echo::String currentProject = Echo::IO::instance()->getFullPath(Echo::GameSettings::instance()->getPath());
+				Echo::String currentProject = Echo::IO::instance()->convertResPathToFullPath(Echo::GameSettings::instance()->getPath());
 				Echo::String currentPath = Echo::PathUtil::GetFileDirPath(currentProject);
 				Echo::String currentName = Echo::PathUtil::GetPureFilename(currentProject, true);
 
@@ -354,7 +354,7 @@ namespace Studio
 			if (!savePath.empty() && !Echo::PathUtil::IsDir(savePath))
 			{
 				Echo::String resPath;
-				if (Echo::IO::instance()->covertFullPathToResPath(savePath, resPath))
+				if (Echo::IO::instance()->convertFullPathToResPath(savePath, resPath))
 					EchoEngine::instance()->setCurrentEditNodeSavePath(resPath.c_str());
 			}
 		}

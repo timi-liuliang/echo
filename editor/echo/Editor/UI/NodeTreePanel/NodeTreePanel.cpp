@@ -488,7 +488,7 @@ namespace Studio
 			if (node && !savePath.empty() && !Echo::PathUtil::IsDir(savePath))
 			{
 				Echo::String resPath;
-				if (Echo::IO::instance()->covertFullPathToResPath(savePath, resPath))
+				if (Echo::IO::instance()->convertFullPathToResPath(savePath, resPath))
 				{
 					EchoEngine::instance()->saveBranchAsScene(resPath.c_str(), node);
 					node->setPath(resPath);

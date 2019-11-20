@@ -207,7 +207,7 @@ namespace Echo
 	// save
 	void Res::save()
 	{
-		String fullPath = IO::instance()->getFullPath(m_path.getPath());
+		String fullPath = IO::instance()->convertResPathToFullPath(m_path.getPath());
 
 		pugi::xml_document doc;
 

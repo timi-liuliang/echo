@@ -666,7 +666,7 @@ namespace Echo
 
 	void Node::save(const String& path)
 	{
-		String fullPath = IO::instance()->getFullPath(path);
+		String fullPath = IO::instance()->convertResPathToFullPath(path);
 
 		pugi::xml_document doc;
 

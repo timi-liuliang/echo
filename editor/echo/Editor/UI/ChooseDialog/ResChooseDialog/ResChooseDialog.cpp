@@ -89,7 +89,7 @@ namespace Studio
 		else
 		{
 			Echo::String resPath;
-			if (Echo::IO::instance()->covertFullPathToResPath(res, resPath))
+			if (Echo::IO::instance()->convertFullPathToResPath(res, resPath))
 			{
 				m_selectedFile = resPath.c_str();
 			}
@@ -106,7 +106,7 @@ namespace Studio
 		else
 		{
 			Echo::String resPath;
-			if (Echo::IO::instance()->covertFullPathToResPath(res, resPath))
+			if (Echo::IO::instance()->convertFullPathToResPath(res, resPath))
 			{
 				m_selectedFile = resPath.c_str();
 			}

@@ -155,7 +155,7 @@ namespace Echo
 		if (PathUtil::IsFileExist(m_config.m_projectFile))
 		{
 			String projectFile;
-			if (IO::instance()->covertFullPathToResPath(m_config.m_projectFile, projectFile))
+			if (IO::instance()->convertFullPathToResPath(m_config.m_projectFile, projectFile))
 			{
 				MemoryReader reader(projectFile);
 				if (reader.getSize())

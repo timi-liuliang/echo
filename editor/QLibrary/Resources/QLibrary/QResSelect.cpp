@@ -7,7 +7,6 @@
 
 namespace QT_UI
 {
-	// 构造函数
 	QResSelect::QResSelect(class QPropertyModel* model, QString propertyName, const char* exts, const char* files, QWidget* parent)
 		: QWidget( parent)
         , m_exts(exts)
@@ -43,7 +42,6 @@ namespace QT_UI
 		adjustHeightSize();
 	}
 
-	// 选择路径
 	void QResSelect::OnSelectPath()
 	{
 		Echo::String qFileName = Studio::ResChooseDialog::getSelectingFile(this, m_exts.c_str(), m_files.toStdString().c_str(), "");
@@ -54,7 +52,6 @@ namespace QT_UI
 		}
 	}
 
-	// is texture res
 	bool QResSelect::isTextureRes()
 	{
 		Echo::StringArray exts = Echo::StringUtil::Split(m_exts, "|");
@@ -67,7 +64,6 @@ namespace QT_UI
 		return false;
 	}
 
-	// correct size
 	void QResSelect::adjustHeightSize()
 	{
 		if (isTextureRes())
@@ -77,7 +73,6 @@ namespace QT_UI
 		}
 	}
 
-	// redefine paintEvent
 	void QResSelect::paintEvent(QPaintEvent* event)
 	{
 		if (isTextureRes())
@@ -90,20 +85,18 @@ namespace QT_UI
 		}
 	}
 
-	// edit finished
 	void QResSelect::onEditFinished()
 	{
 		Echo::String value = m_lineEdit->text().toStdString().c_str();
 		m_propertyModel->setValue(m_propertyName, value.c_str());
 	}
 
-	// MVC渲染
 	bool QResSelect::ItemDelegatePaint(QPainter *painter, const QRect& rect, const Echo::String& val)
 	{
 		Echo::String path = val;
 		if (!path.empty())
 		{
-			Echo::String fullPath = Echo::IO::instance()->getFullPath(path);
+			Echo::String fullPath = Echo::IO::instance()->convertResPathToFullPath(path);
 			Echo::String ext = Echo::PathUtil::GetFileExt(path, true);
 			if (Echo::StringUtil::Equal(ext, ".png", false))
 			{

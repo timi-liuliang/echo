@@ -31,8 +31,8 @@ namespace Echo
 		bool isExist(const String& filename);
 
 		// convert between fullpath|respath
-		String getFullPath(const String& filename);
-		bool covertFullPathToResPath(const String& fullPath, String& resPath);
+		String convertResPathToFullPath(const String& filename);
+		bool convertFullPathToResPath(const String& fullPath, String& resPath);
 
     public:
         // load|save string from|to file

@@ -190,6 +190,20 @@ namespace Echo
         PathUtil::RenameFile(m_outputDir + "app/ios/resources/data/" + projectFile, m_outputDir + "app/ios/resources/data/app.echo");
     }
 
+    void iOSBuildSettings::replaceIcon()
+    {
+        String iconFullPath = IO::instance()->convertResPathToFullPath( m_iconRes.getPath());
+        if(PathUtil::IsFileExist(iconFullPath))
+        {
+            PathUtil::CopyFilePath( iconFullPath, m_outputDir + "app/ios/frame/Platform/iOS/Icon/Icon.png");
+        }
+    }
+
+    void iOSBuildSettings::replaceLaunchImage()
+    {
+        
+    }
+
     void iOSBuildSettings::cmake()
     {
         String workingDir = m_outputDir + "build/ios/";
@@ -215,6 +229,9 @@ namespace Echo
         {
             copySrc();
             copyRes();
+            
+            replaceIcon();
+            replaceLaunchImage();
             
             // overwrite config
             writeInfoPlist();
