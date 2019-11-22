@@ -2,8 +2,8 @@
 #include <engine/core/io/DataStream.h>
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/base/echo_def.h>
-#include "interface/Texture.h"
-#include "interface/Renderer.h"
+#include "base/Texture.h"
+#include "base/Renderer.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/math/Function.h"
 #include "image/PixelFormat.h"

@@ -1,9 +1,9 @@
 #pragma once
 
 #include <spine/spine.h>
-#include <interface/GPUBuffer.h>
-#include <interface/Renderable.h>
-#include "interface/Texture.h"
+#include <base/GPUBuffer.h>
+#include <base/Renderable.h>
+#include "base/Texture.h"
 
 extern "C"
 {

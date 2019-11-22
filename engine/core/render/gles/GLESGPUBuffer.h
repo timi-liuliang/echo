@@ -1,6 +1,6 @@
 #pragma once
 
-#include "interface/GPUBuffer.h"
+#include "base/GPUBuffer.h"
 
 namespace Echo
 {

@@ -1,7 +1,7 @@
 #include "vk_shader_program.h"
 #include "vk_renderer.h"
 #include "vk_mapping.h"
-#include "engine/core/render/interface/glslcc/GLSLCrossCompiler.h"
+#include "base/glslcc/GLSLCrossCompiler.h"
 
 namespace Echo
 {

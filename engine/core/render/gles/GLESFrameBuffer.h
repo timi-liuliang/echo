@@ -1,6 +1,6 @@
 #pragma once
 
-#include "interface/FrameBuffer.h"
+#include "base/FrameBuffer.h"
 #include "GLESRenderBase.h"
 
 namespace Echo

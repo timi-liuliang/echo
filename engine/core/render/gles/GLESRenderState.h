@@ -1,6 +1,6 @@
 #pragma once
 
-#include "interface/RenderState.h"
+#include "base/RenderState.h"
 #include "GLESRenderBase.h"
 
 namespace Echo

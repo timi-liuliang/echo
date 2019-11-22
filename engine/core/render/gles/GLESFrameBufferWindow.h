@@ -1,6 +1,6 @@
 #pragma once
 
-#include "interface/FrameBuffer.h"
+#include "base/FrameBuffer.h"
 
 namespace Echo
 {

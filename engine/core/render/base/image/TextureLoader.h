@@ -184,9 +184,4 @@ namespace Echo
 		unsigned char  imdesc;   //image attribute flags
 	};
 	#pragma pack(pop)			 // targa header has non-aligned uint16 data and needs tight packing
-
-	class TextureLoader
-	{
-
-	};
 }

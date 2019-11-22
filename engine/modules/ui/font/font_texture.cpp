@@ -1,7 +1,7 @@
 #include "font_texture.h"
 #include "engine/core/util/Buffer.h"
 #include "engine/core/resource/Res.h"
-#include "engine/core/render/interface/Texture.h"
+#include "engine/core/render/base/Texture.h"
 
 #define INVALID -1
 

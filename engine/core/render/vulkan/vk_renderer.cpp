@@ -1,5 +1,5 @@
-#include "interface/mesh/Mesh.h"
-#include "interface/pipeline/RenderPipeline.h"
+#include "base/mesh/Mesh.h"
+#include "base/pipeline/RenderPipeline.h"
 #include "vk_renderer.h"
 #include "vk_renderable.h"
 #include "vk_shader_program.h"

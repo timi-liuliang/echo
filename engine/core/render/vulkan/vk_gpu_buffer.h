@@ -1,6 +1,6 @@
 #pragma once
 
-#include <engine/core/render/interface/GPUBuffer.h>
+#include <engine/core/render/base/GPUBuffer.h>
 #include "vk_render_base.h"
 
 namespace Echo

@@ -1,10 +1,10 @@
 #pragma once
 
 #include "engine/core/scene/render_node.h"
-#include "engine/core/render/interface/mesh/Mesh.h"
-#include "engine/core/render/interface/Material.h"
-#include "engine/core/render/interface/Renderable.h"
-#include "engine/core/render/interface/image/Image.h"
+#include "engine/core/render/base/mesh/Mesh.h"
+#include "engine/core/render/base/Material.h"
+#include "engine/core/render/base/Renderable.h"
+#include "engine/core/render/base/image/Image.h"
 #include "terrain_tile.h"
 
 namespace Echo

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <interface/TextureCube.h>
+#include <base/TextureCube.h>
 
 namespace Echo
 {

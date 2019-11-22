@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ShaderProgram.h"
-#include "engine/core/render/interface/RenderState.h"
+#include "engine/core/render/base/RenderState.h"
 #include "engine/core/resource/Res.h"
 #include "Texture.h"
 

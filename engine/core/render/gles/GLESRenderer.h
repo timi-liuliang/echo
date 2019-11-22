@@ -1,6 +1,6 @@
 #pragma once
 
-#include "interface/Renderer.h"
+#include "engine/core/render/base/Renderer.h"
 #include "Shader.h"
 #include "GLESRenderState.h"
 #include "GLESRenderView.h"

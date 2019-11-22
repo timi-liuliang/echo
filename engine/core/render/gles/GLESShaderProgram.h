@@ -1,9 +1,9 @@
 #pragma once
 
 #include <engine/core/util/Array.hpp>
-#include "interface/ShaderProgram.h"
-#include "interface/Renderable.h"
-#include "interface/mesh/Mesh.h"
+#include "base/ShaderProgram.h"
+#include "base/Renderable.h"
+#include "base/mesh/Mesh.h"
 #include "GLESShader.h"
 #include "GLESRenderable.h"
 

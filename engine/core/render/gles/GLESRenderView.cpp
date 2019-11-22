@@ -1,5 +1,5 @@
 #include "engine/core/util/PathUtil.h"
-#include "interface/Renderer.h"
+#include "base/Renderer.h"
 #include "GLESRenderBase.h"
 #include "GLESMapping.h"
 #include "GLESRenderView.h"

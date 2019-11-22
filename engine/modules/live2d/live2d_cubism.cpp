@@ -1,8 +1,8 @@
 #include "live2d_cubism.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/scene/node_tree.h"
-#include "interface/Renderer.h"
-#include "interface/ShaderProgram.h"
+#include "base/Renderer.h"
+#include "base/ShaderProgram.h"
 #include "engine/core/main/Engine.h"
 
 static const char* g_live2dDefaultMaterial = R"(

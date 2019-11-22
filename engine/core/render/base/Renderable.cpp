@@ -1,11 +1,11 @@
 #include "engine/core/log/Log.h"
-#include "interface/Renderable.h"
-#include "interface/ShaderProgram.h"
-#include "interface/Renderer.h"
-#include "interface/ShaderProgram.h"
-#include "engine/core/render/interface/pipeline/RenderStage.h"
-#include "engine/core/render/interface/Material.h"
-#include "engine/core/render/interface/mesh/Mesh.h"
+#include "base/Renderable.h"
+#include "base/ShaderProgram.h"
+#include "base/Renderer.h"
+#include "base/ShaderProgram.h"
+#include "base/pipeline/RenderStage.h"
+#include "base/Material.h"
+#include "base/mesh/Mesh.h"
 #include "engine/core/scene/render_node.h"
 
 namespace Echo

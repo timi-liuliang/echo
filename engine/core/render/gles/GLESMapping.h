@@ -1,9 +1,9 @@
 #pragma once
 
-#include <interface/Texture.h>
-#include <interface/ShaderProgram.h>
-#include "engine/core/render/interface/GPUBuffer.h"
-#include "engine/core/render/interface/mesh/Mesh.h"
+#include <base/Texture.h>
+#include <base/ShaderProgram.h>
+#include "engine/core/render/base/GPUBuffer.h"
+#include "engine/core/render/base/mesh/Mesh.h"
 #include "GLESRenderState.h"
 
 namespace Echo

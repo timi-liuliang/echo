@@ -7,8 +7,8 @@
 #include <engine/core/util/AssertX.h>
 #include <engine/core/util/Exception.h>
 #include "engine/core/scene/render_node.h"
-#include "interface/image/PixelFormat.h"
-#include "interface/Renderer.h"
+#include "base/image/PixelFormat.h"
+#include "base/Renderer.h"
 #include "GLESMapping.h"
 
 

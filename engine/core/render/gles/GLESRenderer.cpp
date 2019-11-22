@@ -9,10 +9,10 @@
 #include "GLESRenderable.h"
 #include <engine/core/log/Log.h>
 #include <engine/core/util/Exception.h>
-#include "engine/core/render/interface/mesh/Mesh.h"
-#include "interface/pipeline/RenderPipeline.h"
+#include "engine/core/render/base/mesh/Mesh.h"
+#include "base/pipeline/RenderPipeline.h"
 #include "GLESGPUBuffer.h"
-#include "interface/Viewport.h"
+#include "base/Viewport.h"
 
 namespace Echo
 {

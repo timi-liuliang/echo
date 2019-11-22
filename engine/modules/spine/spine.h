@@ -2,9 +2,9 @@
 
 #include "engine/core/util/StringOption.h"
 #include "engine/core/scene/render_node.h"
-#include "engine/core/render/interface/mesh/Mesh.h"
-#include "engine/core/render/interface/Material.h"
-#include "engine/core/render/interface/Renderable.h"
+#include "engine/core/render/base/mesh/Mesh.h"
+#include "engine/core/render/base/Material.h"
+#include "engine/core/render/base/Renderable.h"
 #include "AttachmentLoader.h"
 
 struct spAtlas;

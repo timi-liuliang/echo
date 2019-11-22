@@ -1,8 +1,8 @@
 #pragma once
 
 #include "engine/core/math/color.h"
-#include "engine/core/render/interface/image/PixelFormat.h"
-#include "engine/core/render/interface/Texture.h"
+#include "engine/core/render/base/image/PixelFormat.h"
+#include "engine/core/render/base/Texture.h"
 
 namespace Echo
 {

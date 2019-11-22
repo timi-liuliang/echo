@@ -1,6 +1,6 @@
 #include "Renderer.h"
-#include "interface/FrameBuffer.h"
-#include "interface/ShaderProgram.h"
+#include "base/FrameBuffer.h"
+#include "base/ShaderProgram.h"
 #include "engine/core/main/Engine.h"
 
 namespace Echo

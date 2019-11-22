@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/core/geom/AABB.h"
-#include "engine/core/render/interface/image/PixelFormat.h"
+#include "engine/core/render/base/image/PixelFormat.h"
 
 namespace Echo
 {

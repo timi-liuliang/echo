@@ -1,8 +1,8 @@
 #include "engine/core/log/Log.h"
 #include "Material.h"
 #include "engine/core/scene/node_tree.h"
-#include "engine/core/render/interface/ShaderProgram.h"
-#include "engine/core/render/interface/Renderer.h"
+#include "engine/core/render/base/ShaderProgram.h"
+#include "engine/core/render/base/Renderer.h"
 #include <thirdparty/pugixml/pugixml.hpp>
 
 namespace Echo
