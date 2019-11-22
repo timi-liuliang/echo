@@ -18,6 +18,7 @@
 #include "engine/core/script/lua/lua_script.h"
 #include "Plugin.h"
 #include "module.h"
+#include "engine/core/render/interface/image/ImageSet.h"
 #include "engine/core/render/interface/pipeline/RenderPipeline.h"
 #include "engine/core/render/interface/pipeline/RenderStage.h"
 #include "engine/core/render/gles/GLES.h"
@@ -138,6 +139,7 @@ namespace Echo
         Class::registerType<IO>();
         Class::registerType<DataStream>();
 		Class::registerType<Log>();
+		Class::registerType<ImageSet>();
 		Class::registerType<RenderPipeline>();
 		Class::registerType<RenderStage>();
 		Class::registerType<RenderQueue>();
