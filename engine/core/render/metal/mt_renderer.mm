@@ -1,4 +1,4 @@
-#include "interface/mesh/Mesh.h"
+#include "base/mesh/Mesh.h"
 #include "mt_renderer.h"
 #include "mt_renderable.h"
 #include "mt_shader_program.h"

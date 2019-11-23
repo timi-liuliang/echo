@@ -1,6 +1,6 @@
 #pragma once
 
-#include <engine/core/render/interface/GPUBuffer.h>
+#include <base/GPUBuffer.h>
 #include "mt_render_base.h"
 
 namespace Echo

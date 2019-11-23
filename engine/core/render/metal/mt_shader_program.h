@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/core/render/interface/ShaderProgram.h"
+#include "base/ShaderProgram.h"
 #include "mt_render_base.h"
 
 namespace Echo
