@@ -449,7 +449,7 @@ namespace Echo
         writeLine( cmakeStr, "SET(IOS_RESOURCE_FILES");
         
         // icon
-        writeLine( cmakeStr, "    ${MODULE_PATH}/frame/Platform/iOS/Icon/Icon.png");
+        writeLine( cmakeStr, "    ${MODULE_PATH}/Assets.xcassets");
         
         // launch images
         for(const LaunchImageItem& image : m_launchImages)

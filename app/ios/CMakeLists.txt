@@ -29,7 +29,7 @@ GROUP_FILES(ALL_FILES ${CMAKE_CURRENT_SOURCE_DIR})
 
 # iOS platorm resources
 SET(IOS_RESOURCE_FILES
-	${MODULE_PATH}/frame/Platform/iOS/Icon/Icon.png
+	${MODULE_PATH}/Assets.xcassets
 	${MODULE_PATH}/frame/Platform/iOS/Launch/Default-Portrait-375x667@2x.png
 	${MODULE_PATH}/resources/data
 )

@@ -1,7 +1,7 @@
 #include "Application.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/main/Engine.h>
-#include <engine/core/render/interface/Renderer.h>
+#include <engine/core/render/base/Renderer.h>
 
 extern float iOSGetScreenWidth();
 extern float iOSGetScreenHeight();
