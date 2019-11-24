@@ -16,6 +16,15 @@ namespace Echo
             iPad,
         };
         
+        // icon
+        struct AppIconItem
+        {
+            i32     m_size;
+            
+            AppIconItem(i32 size);
+        };
+        typedef vector<AppIconItem>::type AppIconArray;
+        
         // launch image
         struct LaunchImageItem
         {
@@ -106,6 +115,11 @@ namespace Echo
         
         // compile
         void compile();
+        
+    private:
+        // conifg icon and launchimage
+        void configAppIcons();
+        void configLaunchImages();
        
     private:
         // write
@@ -129,6 +143,7 @@ namespace Echo
         bool                    m_uiInterfaceOrientationPortraitUpsideDown = true;
         bool                    m_uiInterfaceOrientationLandscapeLeft = true;
         bool                    m_uiInterfaceOrientationLandscapeRight = true;
+        AppIconArray            m_appIcons;
         LaunchImageArray        m_launchImages;
         bool                    m_hiddenStatusBar = true;
     };

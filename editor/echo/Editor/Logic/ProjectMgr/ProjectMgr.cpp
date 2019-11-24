@@ -28,19 +28,16 @@ namespace Studio
 
 	void ProjectMgr::CheckProject()
 	{
-		// 清空
+		// clear
 		m_files.clear();
 
-		// 检测纹理
+		// check textures
 		checkTextures();
 	}
 
 	void ProjectMgr::checkTextures()
 	{
-		// 分解后缀
 		Echo::StringArray exts = Echo::StringUtil::Split(".tga|.bmp|.jpg|.png", "|");
-
-		// 检测纹理
 		for ( Echo::map<Echo::String, Echo::String>::type::iterator it = m_files.begin(); it != m_files.end(); it++ )
 		{
 			for ( size_t k = 0; k < exts.size(); k++ )
@@ -50,7 +47,7 @@ namespace Studio
 				{
 					Echo::String fileLocation = it->second;
 					Echo::FreeImageHelper::ImageInfo info;
-					Echo::FreeImageHelper::getImageInfo(fileLocation.c_str(), info);
+					Echo::FreeImageHelper::instance()->getImageInfo(fileLocation.c_str(), info);
 					if ( info.m_width != info.m_height )
 					{
 						Echo::String msg = Echo::StringUtil::Format("Texture [%s] width [%d] is not equal to height [%d]!", it->first.c_str(), info.m_width, info.m_height);

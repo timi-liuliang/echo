@@ -3,22 +3,24 @@
 
 namespace Echo
 {
-	static FreeImageHelper g_freeImageHelper;			// 全局变量(FreeImage的初始化与反初始化)
+	static FreeImageHelper g_freeImageHelper;
 
-	// 构造函数
 	FreeImageHelper::FreeImageHelper()
 	{
 		FreeImage_Initialise();
 	}
 
-	// 析构函数
 	FreeImageHelper::~FreeImageHelper()
 	{
 		FreeImage_DeInitialise();
 	}
 
+    FreeImageHelper* FreeImageHelper::instance()
+    {
+        static FreeImageHelper* inst = EchoNew(FreeImageHelper);
+        return inst;
+    }
 
-	/** 映射标记 */
 	int FreeImageHelper::MappingFlagsByFormat( FREE_IMAGE_FORMAT fmt)
 	{
 		int fiFlags = 0;
@@ -34,7 +36,6 @@ namespace Echo
 		return fiFlags;
 	}
 
-	/** 获取图像信息 */
 	bool FreeImageHelper::getImageInfo( const char* filePath, ImageInfo& imageInfo)
 	{
 		FREE_IMAGE_FORMAT fileFMT = FreeImage_GetFIFFromFilename( filePath);
@@ -67,16 +68,13 @@ namespace Echo
 		return false;
 	}
 
-	/** 重新缩放纹理 */
-	bool FreeImageHelper::rescaleImage( const char* iFilePath, const char* oFilePath, bool isResale, float scaleValue)
+	bool FreeImageHelper::rescaleImage( const char* iFilePath, const char* oFilePath, float scaleValue)
 	{
 		std::string ext = PathUtil::GetFileExt( iFilePath).c_str();
-
 		FREE_IMAGE_FORMAT fileFMT = FreeImage_GetFIFFromFilename( iFilePath);
-
 		int fiFlags = MappingFlagsByFormat( fileFMT);
 
-		// 加载获取纹理信息
+		// Load
 		if( fileFMT!= FIF_UNKNOWN && FreeImage_FIFSupportsReading( fileFMT))
 		{
 			FIBITMAP* dip = FreeImage_Load( fileFMT, iFilePath, fiFlags);
@@ -84,25 +82,17 @@ namespace Echo
 			{
 				ui32 width = FreeImage_GetWidth( dip);
 				ui32 height= FreeImage_GetHeight( dip);
-				if( isResale)
-				{
-					width  = (ui32)(width * scaleValue);
-					height = (ui32)(height* scaleValue);
 
-					// 缩放纹理
-					FIBITMAP* dipScaled = FreeImage_Rescale( dip, width, height, FILTER_BSPLINE);
+                width  = (ui32)(width * scaleValue);
+                height = (ui32)(height* scaleValue);
 
-					FreeImage_Save( FIF_TARGA, dipScaled, oFilePath, TARGA_DEFAULT);
+                // scale
+                FIBITMAP* dipScaled = FreeImage_Rescale( dip, width, height, FILTER_BSPLINE);
 
-					FreeImage_Unload( dipScaled);
-					FreeImage_Unload( dip);
-				}
-				else
-				{
-					FreeImage_Save( FIF_TARGA, dip, oFilePath, TARGA_DEFAULT);
+                FreeImage_Save( FIF_TARGA, dipScaled, oFilePath, TARGA_DEFAULT);
 
-					FreeImage_Unload( dip);
-				}
+                FreeImage_Unload( dipScaled);
+                FreeImage_Unload( dip);
 
 				return true;
 			}
@@ -111,7 +101,32 @@ namespace Echo
 		return false;
 	}
 
-	/** 保存为png格式，无压缩 */
+    bool FreeImageHelper::rescaleImage( const char* iFilePath, const char* oFilePath, ui32 targetWidth, ui32 targetHeight)
+    {
+        std::string ext = PathUtil::GetFileExt( iFilePath).c_str();
+        FREE_IMAGE_FORMAT fileFMT = FreeImage_GetFIFFromFilename( iFilePath);
+        int fiFlags = MappingFlagsByFormat( fileFMT);
+
+        // Load
+        if( fileFMT!= FIF_UNKNOWN && FreeImage_FIFSupportsReading( fileFMT))
+        {
+            FIBITMAP* dip = FreeImage_Load( fileFMT, iFilePath, fiFlags);
+            if( dip)
+            {
+                FIBITMAP* dipScaled = FreeImage_Rescale( dip, targetWidth, targetHeight, FILTER_BSPLINE);
+
+                FreeImage_Save( FIF_TARGA, dipScaled, oFilePath, TARGA_DEFAULT);
+
+                FreeImage_Unload( dipScaled);
+                FreeImage_Unload( dip);
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 	bool FreeImageHelper::saveImageToTGA( const char* iFilePath, const char* oFilePath, bool isResale, float scaleValue)
 	{
 		FREE_IMAGE_FORMAT fileFMT = FreeImage_GetFIFFromFilename( iFilePath);
@@ -153,7 +168,6 @@ namespace Echo
 		return false;
 	}
 
-	/** 保存为bmp格式，无压缩 */
 	bool FreeImageHelper::saveImageToBmp( const char* iFilePath, const char* oFilePath, bool isResale, ui32 width, ui32 height)
 	{
 		FREE_IMAGE_FORMAT fileFMT = FreeImage_GetFIFFromFilename( iFilePath);
@@ -198,7 +212,6 @@ namespace Echo
 		return false;
 	}
 
-	/** 提取alpha通道到一个新文件 */
 	bool FreeImageHelper::extracRGBAlphaChannel( const char* srcPath, const char* oRgbFile, const char* oAlphaFile)
 	{
 		// 存储像素
@@ -257,7 +270,6 @@ namespace Echo
 		return true;
 	}
 
-	/** 从文件中提取颜色值 */
 	bool FreeImageHelper::extractColors(const char* srcPath, std::vector<Echo::Color>& colors, int& width, int& height)
 	{
 		colors.clear();
@@ -394,7 +406,6 @@ namespace Echo
 		return true;
 	}
 
-	//获取图片像素数据
 	bool FreeImageHelper::getImageBits( const char* filePath,unsigned char* bits )
 	{
 		ImageInfo imageInfo;

@@ -4,9 +4,16 @@
 #include <engine/core/main/Engine.h>
 #include <thirdparty/pugixml/pugixml.hpp>
 #include <QProcess>
+#include "FreeImageHelper.h"
 
 namespace Echo
 {
+    iOSBuildSettings::AppIconItem::AppIconItem(i32 size)
+        : m_size(size)
+    {
+        
+    }
+
     iOSBuildSettings::LaunchImageItem::LaunchImageItem(i32 width, i32 height, i32 scale, iOSBuildSettings::DeviceType type)
         : m_width(width)
         , m_height(height)
@@ -40,37 +47,8 @@ namespace Echo
 
     iOSBuildSettings::iOSBuildSettings()
     {
-        // https://developer.apple.com/design/human-interface-guidelines/ios/icons-and-images/launch-screen/
-        
-        // iphone se
-        m_launchImages.push_back(LaunchImageItem(320, 568, 2, DeviceType::iPhone));
-        
-        // iphone6s,iphone7,iphone8
-        m_launchImages.push_back(LaunchImageItem(375, 667, 2, DeviceType::iPhone));
-        
-        // iphone6s plus, iphone7 plus, iphone8 plus
-        m_launchImages.push_back(LaunchImageItem(414, 736, 3, DeviceType::iPhone));
-        
-        // iphoneX, iphoneXs 1125px × 2436px
-        m_launchImages.push_back(LaunchImageItem(375, 812, 3, DeviceType::iPhone));
-        
-        // iphone XR
-        m_launchImages.push_back(LaunchImageItem(414, 896, 2, DeviceType::iPhone));
-        
-        // iphone Xs Max
-        m_launchImages.push_back(LaunchImageItem(414, 896, 3, DeviceType::iPhone));
-        
-        // ipad mini, ipad
-        m_launchImages.push_back(LaunchImageItem(1024, 768, 2, DeviceType::iPad));
-        
-        // 10.5 iPad pro
-        m_launchImages.push_back(LaunchImageItem(1112, 834, 2, DeviceType::iPad));
-        
-        // 11 iPad pro
-        m_launchImages.push_back(LaunchImageItem(1194, 834, 2, DeviceType::iPad));
-    
-        // 12.9 iPad pro
-        m_launchImages.push_back(LaunchImageItem(1366, 1024, 2, DeviceType::iPad));
+        configAppIcons();
+        configLaunchImages();
     }
 
     iOSBuildSettings::~iOSBuildSettings()
@@ -122,6 +100,62 @@ namespace Echo
         CLASS_REGISTER_PROPERTY_HINT(iOSBuildSettings, "PortraitUpsideDown", PropertyHintType::Category, "Device Orientation");
         CLASS_REGISTER_PROPERTY_HINT(iOSBuildSettings, "LandscapeLeft",      PropertyHintType::Category, "Device Orientation");
         CLASS_REGISTER_PROPERTY_HINT(iOSBuildSettings, "LandscapeRight",     PropertyHintType::Category, "Device Orientation");
+    }
+
+    void iOSBuildSettings::configAppIcons()
+    {
+        m_appIcons.push_back(AppIconItem(20));
+        m_appIcons.push_back(AppIconItem(29));
+        
+        m_appIcons.push_back(AppIconItem(40));
+        m_appIcons.push_back(AppIconItem(58));
+        m_appIcons.push_back(AppIconItem(60));
+        m_appIcons.push_back(AppIconItem(76));
+        
+        m_appIcons.push_back(AppIconItem(80));
+        m_appIcons.push_back(AppIconItem(87));
+        
+        m_appIcons.push_back(AppIconItem(120));
+        m_appIcons.push_back(AppIconItem(152));
+        m_appIcons.push_back(AppIconItem(167));
+        m_appIcons.push_back(AppIconItem(180));
+        
+        m_appIcons.push_back(AppIconItem(1024));
+    }
+
+    void iOSBuildSettings::configLaunchImages()
+    {
+        // https://developer.apple.com/design/human-interface-guidelines/ios/icons-and-images/launch-screen/
+        
+        // iphone se
+        m_launchImages.push_back(LaunchImageItem(320, 568, 2, DeviceType::iPhone));
+        
+        // iphone6s,iphone7,iphone8
+        m_launchImages.push_back(LaunchImageItem(375, 667, 2, DeviceType::iPhone));
+        
+        // iphone6s plus, iphone7 plus, iphone8 plus
+        m_launchImages.push_back(LaunchImageItem(414, 736, 3, DeviceType::iPhone));
+        
+        // iphoneX, iphoneXs 1125px × 2436px
+        m_launchImages.push_back(LaunchImageItem(375, 812, 3, DeviceType::iPhone));
+        
+        // iphone XR
+        m_launchImages.push_back(LaunchImageItem(414, 896, 2, DeviceType::iPhone));
+        
+        // iphone Xs Max
+        m_launchImages.push_back(LaunchImageItem(414, 896, 3, DeviceType::iPhone));
+        
+        // ipad mini, ipad
+        m_launchImages.push_back(LaunchImageItem(1024, 768, 2, DeviceType::iPad));
+        
+        // 10.5 iPad pro
+        m_launchImages.push_back(LaunchImageItem(1112, 834, 2, DeviceType::iPad));
+        
+        // 11 iPad pro
+        m_launchImages.push_back(LaunchImageItem(1194, 834, 2, DeviceType::iPad));
+    
+        // 12.9 iPad pro
+        m_launchImages.push_back(LaunchImageItem(1366, 1024, 2, DeviceType::iPad));
     }
     
     void iOSBuildSettings::setOutputDir(const String& outputDir)
@@ -195,7 +229,13 @@ namespace Echo
         String iconFullPath = IO::instance()->convertResPathToFullPath( m_iconRes.getPath());
         if(PathUtil::IsFileExist(iconFullPath))
         {
-            PathUtil::CopyFilePath( iconFullPath, m_outputDir + "app/ios/frame/Platform/iOS/Icon/Icon.png");
+            for(const AppIconItem& item : m_appIcons)
+            {
+                String outputPath = m_outputDir + StringUtil::Format("app/ios/Assets.xcassets/AppIcon.appiconset/Icon%dx%d.png", item.m_size, item.m_size);
+                PathUtil::DelPath(outputPath);
+                
+                FreeImageHelper::instance()->rescaleImage( iconFullPath.c_str(), outputPath.c_str(), item.m_size, item.m_size);
+            }
         }
     }
 
@@ -375,8 +415,8 @@ namespace Echo
         root_dict.append_child("key").append_child(pugi::node_pcdata).set_value("CFBundleGetInfoString");
         root_dict.append_child("string").append_child(pugi::node_pcdata).set_value("");
         
-        root_dict.append_child("key").append_child(pugi::node_pcdata).set_value("CFBundleIconFile");
-        root_dict.append_child("string").append_child(pugi::node_pcdata).set_value("Icon.png");
+        root_dict.append_child("key").append_child(pugi::node_pcdata).set_value("CFBundleIconName");
+        root_dict.append_child("string").append_child(pugi::node_pcdata).set_value("AppIcon");
         
         root_dict.append_child("key").append_child(pugi::node_pcdata).set_value("CFBundleIdentifier");
         root_dict.append_child("string").append_child(pugi::node_pcdata).set_value(getIdentifier().c_str());
@@ -507,6 +547,7 @@ namespace Echo
         writeLine( cmakeStr, "SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${MODULE_PATH}/Frame/Platform/iOS/Info.plist)");
         writeLine( cmakeStr, "SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD \"c++14\")");
         writeLine( cmakeStr, "SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY \"1,2\")");
+        //writeLine( cmakeStr, "SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES RESOURCE \"Resources/Assets.xcassets\")");
         
         // messages
         writeLine( cmakeStr, "MESSAGE(STATUS \"Configure iOS App success!\")");
