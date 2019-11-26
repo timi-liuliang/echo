@@ -11,6 +11,17 @@ namespace Echo
 
 	}
 
+	CameraModule* CameraModule::instance()
+	{
+		static CameraModule* inst = EchoNew(CameraModule);
+		return inst;
+	}
+
+	void CameraModule::bindMethods()
+	{
+
+	}
+
 	void CameraModule::registerTypes()
 	{
 		Class::registerType<Camera2D>();

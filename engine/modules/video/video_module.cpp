@@ -13,6 +13,17 @@ namespace Echo
 	{
 	}
 
+	VideoModule* VideoModule::instance()
+	{
+		static VideoModule* inst = EchoNew(VideoModule);
+		return inst;
+	}
+
+	void VideoModule::bindMethods()
+	{
+
+	}
+
 	void VideoModule::registerTypes()
 	{
 		Class::registerType<VideoPlayer>();

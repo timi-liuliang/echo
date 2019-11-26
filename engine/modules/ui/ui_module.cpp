@@ -21,6 +21,17 @@ namespace Echo
         EchoSafeDeleteInstance(FontLibrary);
 	}
 
+	UiModule* UiModule::instance()
+	{
+		static UiModule* inst = EchoNew(UiModule);
+		return inst;
+	}
+
+	void UiModule::bindMethods()
+	{
+
+	}
+
 	void UiModule::registerTypes()
 	{
         Class::registerType<UiEventProcessor>();

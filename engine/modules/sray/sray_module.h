@@ -8,9 +8,14 @@ namespace Echo
 	// 2. real time painter
 	class SRayModule : public Module
 	{
+		ECHO_SINGLETON_CLASS(SRayModule, Module)
+
 	public:
 		SRayModule();
         ~SRayModule();
+
+		// instance
+		static SRayModule* instance();
 
 		// register all types of the module
 		virtual void registerTypes();

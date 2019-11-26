@@ -126,6 +126,7 @@ namespace Echo
 		// regiser class types in core
 		Class::registerType<Object>();
 		Class::registerType<Node>();
+		Class::registerType<Module>();
 		Class::registerType<Render>();
 		Class::registerType<Res>();
 		Class::registerType<Texture>();

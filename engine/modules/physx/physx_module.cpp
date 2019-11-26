@@ -18,6 +18,17 @@ namespace Echo
         EchoSafeDeleteInstance(PhysxWorld);
     }
 
+	PhysxModule* PhysxModule::instance()
+	{
+		static PhysxModule* inst = EchoNew(PhysxModule);
+		return inst;
+	}
+
+	void PhysxModule::bindMethods()
+	{
+
+	}
+
 	void PhysxModule::registerTypes()
 	{
 		Class::registerType<PhysxWorld>();

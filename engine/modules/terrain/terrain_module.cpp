@@ -12,6 +12,17 @@ namespace Echo
 	{
 
 	}
+
+	TerrainModule* TerrainModule::instance()
+	{
+		static TerrainModule* inst = EchoNew(TerrainModule);
+		return inst;
+	}
+
+	void TerrainModule::bindMethods()
+	{
+
+	}
     
     void TerrainModule::registerTypes()
     {

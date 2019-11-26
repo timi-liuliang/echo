@@ -8,6 +8,17 @@ namespace Echo
 	{
 	}
 
+	AnimModule* AnimModule::instance()
+	{
+		static AnimModule* inst = EchoNew(AnimModule);
+		return inst;
+	}
+
+	void AnimModule::bindMethods()
+	{
+
+	}
+
 	void AnimModule::registerTypes()
 	{
 		Class::registerType<Timeline>();

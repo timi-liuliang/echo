@@ -7,6 +7,14 @@ namespace Echo
 	static Module*				  g_currentModule = nullptr;
 	static vector<Module*>::type* g_modules = nullptr;
 
+	void Module::bindMethods()
+	{
+		CLASS_BIND_METHOD(Module, setEnable, DEF_METHOD("setEnable"));
+		CLASS_BIND_METHOD(Module, isEnable, DEF_METHOD("isEnable"));
+
+		CLASS_REGISTER_PROPERTY(Module, "Enable", Variant::Type::Bool, "isEnable", "setEnable");
+	}
+
 	void Module::addModule(Module* module)
 	{
 		if (!g_modules)
@@ -49,7 +57,7 @@ namespace Echo
 
 	const char* Module::getCurrentRegisterModuleName()
 	{
-		return g_currentModule ? g_currentModule->getName() : "";
+		return g_currentModule ? g_currentModule->getName().c_str() : "";
 	}
 
 	void Module::updateAll(float elapsedTime)
@@ -62,9 +70,4 @@ namespace Echo
 			}
 		}
 	}
-    
-    void Module::setName(const char* name)
-    {
-        strcpy( m_name, name);
-    }
 }

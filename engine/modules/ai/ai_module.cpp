@@ -12,6 +12,17 @@ namespace Echo
 	{
 	}
 
+	AIModule* AIModule::instance()
+	{
+		static AIModule* inst = EchoNew(AIModule);
+		return inst;
+	}
+
+	void AIModule::bindMethods()
+	{
+
+	}
+
 	void AIModule::registerTypes()
 	{
 		//Class::registerType<Neuron>();

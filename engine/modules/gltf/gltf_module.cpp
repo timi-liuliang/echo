@@ -8,6 +8,17 @@ namespace Echo
 	{
 	}
 
+	GltfModule* GltfModule::instance()
+	{
+		static GltfModule* inst = EchoNew(GltfModule);
+		return inst;
+	}
+
+	void GltfModule::bindMethods()
+	{
+
+	}
+
 	void GltfModule::registerTypes()
 	{
 		Class::registerType<GltfRes>();

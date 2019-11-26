@@ -17,6 +17,17 @@ namespace Echo
 		EchoSafeDeleteInstance(AudioDevice);
 	}
 
+	AudioModule* AudioModule::instance()
+	{
+		static AudioModule* inst = EchoNew(AudioModule);
+		return inst;
+	}
+
+	void AudioModule::bindMethods()
+	{
+
+	}
+
 	void AudioModule::registerTypes()
 	{
 		Class::registerType<AudioPlayer>();

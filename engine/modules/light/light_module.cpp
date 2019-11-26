@@ -15,6 +15,17 @@ namespace Echo
         EchoSafeDeleteInstance(Light);
     }
 
+	LightModule* LightModule::instance()
+	{
+		static LightModule* inst = EchoNew(LightModule);
+		return inst;
+	}
+
+	void LightModule::bindMethods()
+	{
+
+	}
+
 	void LightModule::registerTypes()
 	{
 		Class::registerType<Light>();

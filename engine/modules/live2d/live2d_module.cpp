@@ -17,6 +17,17 @@ namespace Echo
 		csmSetLogFunction(log_cb);
 	}
 
+	Live2DModule* Live2DModule::instance()
+	{
+		static Live2DModule* inst = EchoNew(Live2DModule);
+		return inst;
+	}
+
+	void Live2DModule::bindMethods()
+	{
+
+	}
+
 	void Live2DModule::registerTypes()
 	{
 		Class::registerType<Live2dCubism>();

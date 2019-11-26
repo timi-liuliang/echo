@@ -11,6 +11,17 @@ namespace Echo
     {
         EchoSafeDeleteInstance(SRayDevice);
     }
+
+	SRayModule* SRayModule::instance()
+	{
+		static SRayModule* inst = EchoNew(SRayModule);
+		return inst;
+	}
+
+	void SRayModule::bindMethods()
+	{
+
+	}
     
 	void SRayModule::registerTypes()
 	{

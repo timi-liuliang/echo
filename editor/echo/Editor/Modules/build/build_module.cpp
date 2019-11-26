@@ -15,6 +15,17 @@ namespace Echo
 
     }
 
+	BuildModule* BuildModule::instance()
+	{
+		static BuildModule* inst = EchoNew(BuildModule);
+		return inst;
+	}
+
+	void BuildModule::bindMethods()
+	{
+
+	}
+
     void BuildModule::registerTypes()
     {
         Class::registerType<BuildSettings>();

@@ -9,6 +9,17 @@ namespace Echo
 
 	}
 
+	GeomModule* GeomModule::instance()
+	{
+		GeomModule* inst = EchoNew(GeomModule);
+		return inst;
+	}
+
+	void GeomModule::bindMethods()
+	{
+
+	}
+
 	void GeomModule::registerTypes()
 	{
 		Class::registerType<Curve>();

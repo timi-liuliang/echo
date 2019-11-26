@@ -7,6 +7,17 @@ namespace Echo
 	{
 	}
 
+	EffectModule* EffectModule::instance()
+	{
+		static EffectModule* inst = EchoNew(EffectModule);
+		return inst;
+	}
+
+	void EffectModule::bindMethods()
+	{
+
+	}
+
 	void EffectModule::registerTypes()
 	{
 		Class::registerType<Sprite>();

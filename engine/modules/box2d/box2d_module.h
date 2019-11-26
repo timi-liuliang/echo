@@ -6,9 +6,14 @@ namespace Echo
 {
 	class Box2DModule : public Module
 	{
+		ECHO_SINGLETON_CLASS(Box2DModule, Module)
+
 	public:
 		Box2DModule();
 		~Box2DModule();
+
+		// instance
+		static Box2DModule* instance();
 
 		// register all types of the module
 		virtual void registerTypes() override;

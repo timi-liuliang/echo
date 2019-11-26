@@ -1,22 +1,28 @@
 #pragma once
 
-#include "engine/core/memory/MemAllocDef.h"
+#include "engine/core/base/object.h"
 
 namespace Echo
 {
 	// implement by application or dll
 	void registerModules();
 
-	class Module
+	class Module : public Object
 	{
+		ECHO_VIRTUAL_CLASS(Module, Object);
+
 	public:
 		virtual ~Module() {}
 
         // register all types of this module
-		virtual void registerTypes()=0;
+		virtual void registerTypes() {}
 
         // update this module
 		virtual void update(float elapsedTime) {}
+
+		// enable
+		virtual void setEnable(bool isEnable) { m_isEnable = isEnable; }
+		bool isEnable() const { return m_isEnable; }
 
 	public:
         // add module by type
@@ -37,19 +43,16 @@ namespace Echo
         // clear all
         static void clear();
 
-	public:
-		// name
-        void setName(const char* name);
-		const char* getName() { return m_name; }
-
 	protected:
-		char		m_name[128];
+		bool			m_isEnable = true;
 	};
     
     // add module by type
     template<typename T> void Module::addModule(const char* name)
     {
-        T* module = EchoNew(T);
+		Class::registerType<T>();
+
+		Echo::Module* module = ECHO_DOWN_CAST<Module*>(Echo::Class::create(name));
         module->setName(name);
         
         Echo::Module::addModule(module);

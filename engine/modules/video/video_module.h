@@ -6,9 +6,14 @@ namespace Echo
 {
 	class VideoModule : public Module
 	{
+		ECHO_SINGLETON_CLASS(VideoModule, Module)
+
 	public:
 		VideoModule();
 		virtual ~VideoModule();
+
+		// instance
+		static VideoModule* instance();
 
 		// register all types of the module
 		virtual void registerTypes();
