@@ -283,8 +283,18 @@ namespace Echo
         return false;
     }
 
-	ui32 Class::getPropertys(const String& className, Object* classPtr, PropertyInfos& propertys, i32 flag)
+	ui32 Class::getPropertys(const String& className, Object* classPtr, PropertyInfos& propertys, i32 flag, bool withParent)
 	{
+		// parent properties
+		if (withParent)
+		{
+			String parentClassName;
+			if (getParentClass(parentClassName, className))
+			{
+				getPropertys(parentClassName, classPtr, propertys, flag, withParent);
+			}
+		}
+
 		// static
 		if (flag & PropertyInfo::Static)
 		{

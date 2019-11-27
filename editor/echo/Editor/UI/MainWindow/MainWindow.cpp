@@ -622,7 +622,7 @@ namespace Studio
                 Echo::Object* obj = Echo::Class::create(className);
                 
                 Echo::PropertyInfos propertys;
-                if(Echo::Class::getPropertys(className, obj, propertys) > 0)
+                if(Echo::Class::getPropertys(className, obj, propertys, Echo::PropertyInfo::All, true) > 0)
                 {
                     QAction* action = new QAction(this);
                     action->setText(className.c_str());

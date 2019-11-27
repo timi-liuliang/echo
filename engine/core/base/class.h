@@ -167,7 +167,7 @@ namespace Echo
         static bool registerPropertyHint(const String& className, const String& propertyName, PropertyHintType hintType, const String& hintStr);
 
 		// get propertys
-		static ui32 getPropertys(const String& className, Object* classPtr, PropertyInfos& propertys, i32 flag=PropertyInfo::Static | PropertyInfo::Dynamic);
+		static ui32 getPropertys(const String& className, Object* classPtr, PropertyInfos& propertys, i32 flag=PropertyInfo::Static | PropertyInfo::Dynamic, bool withParent=false);
 
 		// get property
         static PropertyInfo* getProperty(Object* classPtr, const String& propertyName);

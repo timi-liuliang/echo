@@ -30,6 +30,7 @@ namespace Echo
 			Static = 1<<0,
 			Dynamic = 1<<1,
 			Script = 1<<2,
+			All = Static | Dynamic | Script
 		}				m_infoType;
 
 		PropertyInfo(Type type) : m_infoType(type) {}
