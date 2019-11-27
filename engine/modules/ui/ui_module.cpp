@@ -11,6 +11,8 @@
 
 namespace Echo
 {
+	DECLARE_MODULE(UiModule)
+
 	UiModule::UiModule()
 	{
 	}

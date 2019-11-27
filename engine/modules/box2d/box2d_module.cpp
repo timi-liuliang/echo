@@ -18,6 +18,8 @@
 
 namespace Echo
 {
+	DECLARE_MODULE(Box2DModule)
+
 	Box2DModule::Box2DModule()
 	{
 	}

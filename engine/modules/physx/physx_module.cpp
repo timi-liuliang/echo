@@ -8,6 +8,8 @@
 
 namespace Echo
 {
+	DECLARE_MODULE(PhysxModule)
+
 	PhysxModule::PhysxModule()
 	{
 

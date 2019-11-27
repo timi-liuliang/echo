@@ -7,6 +7,8 @@
 
 namespace Echo
 {
+	DECLARE_MODULE(AudioModule)
+
 	AudioModule::AudioModule()
 	{
 

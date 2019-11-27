@@ -6,6 +6,8 @@
 
 namespace Echo
 {
+	DECLARE_MODULE(BuildModule)
+
     BuildModule::BuildModule()
     {
     }

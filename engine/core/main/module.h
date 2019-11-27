@@ -59,4 +59,12 @@ namespace Echo
     }
 }
 
-#define REGISTER_MODULE(T) Echo::Module::addModule<T>(#T);
+#define DECLARE_MODULE(T) \
+void LoadModule_##T() \
+{ \
+	Echo::Module::addModule<T>(#T); \
+}
+
+#define REGISTER_MODULE(T) \
+extern void LoadModule_##T(); \
+LoadModule_##T();	\

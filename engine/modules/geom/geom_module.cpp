@@ -4,6 +4,8 @@
 
 namespace Echo
 {
+	DECLARE_MODULE(GeomModule)
+
 	GeomModule::GeomModule()
 	{
 

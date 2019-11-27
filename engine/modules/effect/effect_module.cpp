@@ -3,6 +3,8 @@
 
 namespace Echo
 {
+	DECLARE_MODULE(EffectModule)
+
 	EffectModule::EffectModule()
 	{
 	}

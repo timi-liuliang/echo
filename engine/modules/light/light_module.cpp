@@ -5,6 +5,8 @@
 
 namespace Echo
 {
+	DECLARE_MODULE(LightModule)
+
 	LightModule::LightModule()
 	{
 
