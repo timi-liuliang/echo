@@ -126,6 +126,9 @@ namespace Echo
         void writeInfoPlist();
         void writeUIInterfaceOrientationInfo(void* parent);
         void writeLaunchImageInfo(void* parent);
+
+		// write config
+		void writeModuleConfig();
         
     private:
         void writeCMakeList();

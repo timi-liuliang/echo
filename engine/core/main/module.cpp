@@ -15,6 +15,11 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(Module, "Enable", Variant::Type::Bool, "isEnable", "setEnable");
 	}
 
+	vector<Module*>::type* Module::getAllModules()
+	{
+		return g_modules;
+	}
+
 	void Module::addModule(Module* module)
 	{
 		if (!g_modules)

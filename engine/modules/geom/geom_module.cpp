@@ -13,7 +13,7 @@ namespace Echo
 
 	GeomModule* GeomModule::instance()
 	{
-		GeomModule* inst = EchoNew(GeomModule);
+		static GeomModule* inst = EchoNew(GeomModule);
 		return inst;
 	}
 

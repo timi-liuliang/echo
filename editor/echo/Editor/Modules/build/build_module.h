@@ -20,5 +20,8 @@ namespace Echo
 
 		// always enable this module
 		virtual void setEnable(bool isEnable) override { m_isEnable = true; }
+
+		// is for editor
+		virtual bool isEditorOnly() override { return true; }
     };
 }

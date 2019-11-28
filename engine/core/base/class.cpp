@@ -390,7 +390,6 @@ namespace Echo
 	}
 
 	// set property value
-	// set property value
 	bool Class::setPropertyValue(Object* classPtr, const String& propertyName, const Variant& propertyValue)
 	{
 		String className = classPtr->getClassName();

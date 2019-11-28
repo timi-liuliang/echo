@@ -24,7 +24,13 @@ namespace Echo
 		virtual void setEnable(bool isEnable) { m_isEnable = isEnable; }
 		bool isEnable() const { return m_isEnable; }
 
+		// is for editor
+		virtual bool isEditorOnly() { return false; }
+
 	public:
+		// get all modules
+		static vector<Module*>::type* getAllModules();
+
         // add module by type
         template<typename T> static void addModule(const char* name);
         
