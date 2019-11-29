@@ -3,6 +3,7 @@
 #include "EchoEngine.h"
 #include "NodeTreePanel.h"
 #include <engine/core/base/class.h>
+#include <engine/core/main/module.h>
 
 namespace Studio
 {
@@ -95,7 +96,6 @@ namespace Studio
 		return getModuleItem( nodeName);
 	}
 
-	// create QTreewidgetItem by nodename
 	QStandardItem* NewNodeDialog::createQTreeWidgetItemByNodeName(const Echo::String& nodeName, QStandardItem* parent, bool isCreateWhenNodeIsVirtual)
 	{
 		bool isNodeVirtual = Echo::Class::isVirtual(nodeName);
@@ -170,11 +170,28 @@ namespace Studio
 		}
 	}
 
+	static bool isModuleEnable(const Echo::String& nodeName)
+	{
+		Echo::ClassInfo* cinfo = Echo::Class::getClassInfo(nodeName);
+		if (!cinfo->m_module.empty())
+		{
+			Echo::Object* obj = Echo::Class::create(cinfo->m_module);
+			if (obj)
+			{
+				Echo::Module* module = dynamic_cast<Echo::Module*>(obj);
+				if (module)
+					return module->isEnable();
+			}
+		}
+
+		return true;
+	}
+
 	void NewNodeDialog::onSelectNode(QModelIndex index)
 	{
 		Echo::String text = m_filterProxyModel->data(index, Qt::DisplayRole).toString().toStdString().c_str();
 		Echo::String userData = m_filterProxyModel->data(index, Qt::UserRole).toString().toStdString().c_str();
-		m_confirm->setEnabled( userData == "node" && !Echo::Class::isVirtual(text));
+		m_confirm->setEnabled( userData == "node" && !Echo::Class::isVirtual(text) && isModuleEnable(text));
 	}
 
 	void NewNodeDialog::onConfirmNode()
