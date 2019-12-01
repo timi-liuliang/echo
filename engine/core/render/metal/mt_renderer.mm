@@ -114,7 +114,7 @@ namespace Echo
 
     Texture* MTRenderer::createTexture2D(const String& name)
     {
-        return EchoNew(MTTexture2D);
+        return EchoNew(MTTexture2D(name));
     }
 
     MTLRenderPassDescriptor* MTRenderer::makeNextRenderPassDescriptor()
