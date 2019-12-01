@@ -18,6 +18,9 @@ namespace Echo
         // Mapping MTLVertexFormat
         static MTLVertexFormat MapVertexFormat(PixelFormat pixelFormat);
         
+        // Mapping pixel format
+        static MTLPixelFormat MapPixelFormat(PixelFormat pixFmt);
+        
         // Mapping Uniform type
         static ShaderParamType MapUniformType( MTLDataType uniformType);
     };

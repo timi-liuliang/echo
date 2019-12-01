@@ -381,7 +381,7 @@ namespace Echo
 			else
 			{
 				EchoLogError(	"Don't support the image type ( ImageFormat [%s], BPP [%d], PixelFormat [%s] ).", 
-					Image::GetImageFormatName(imgFmt).c_str(), 
+					Image::getImageFormatName(imgFmt).c_str(), 
 					PixelUtil::GetPixelBits(requiredFormat), 
 					PixelUtil::GetPixelFormatName(requiredFormat).c_str());
 				return false;
@@ -464,7 +464,7 @@ namespace Echo
 		FIBITMAP* fiBitmap = FreeImage_LoadFromMemory(fiImgFmt, fiMem);
 		if (!fiBitmap)
 		{
-			EchoLogError("Error decoding image format [%s].", Image::GetImageFormatName(imgFmt).c_str());
+			EchoLogError("Error decoding image format [%s].", Image::getImageFormatName(imgFmt).c_str());
 			return NULL;
 		}
 
@@ -487,7 +487,7 @@ namespace Echo
 		case FIT_DOUBLE:
 		default:
 			{
-				EchoLogError("Unknown or unsupported image format [%s].", Image::GetImageFormatName(imgFmt).c_str());
+				EchoLogError("Unknown or unsupported image format [%s].", Image::getImageFormatName(imgFmt).c_str());
 				return NULL;
 			}
 			break;
@@ -650,7 +650,7 @@ namespace Echo
 		FIBITMAP* fiBitmap = FreeImage_LoadFromMemory(fiImgFmt, fiMem);
 		if (!fiBitmap)
 		{
-			EchoLogError("Error decoding image format [%s].", Image::GetImageFormatName(imgFmt).c_str());
+			EchoLogError("Error decoding image format [%s].", Image::getImageFormatName(imgFmt).c_str());
 			return false;
 		}
 
@@ -674,7 +674,7 @@ namespace Echo
 		case FIT_DOUBLE:
 		default:
 			{
-				EchoLogError("Unknown or unsupported image format [%s].", Image::GetImageFormatName(imgFmt).c_str());
+				EchoLogError("Unknown or unsupported image format [%s].", Image::getImageFormatName(imgFmt).c_str());
 				return false;
 			}
 			break;

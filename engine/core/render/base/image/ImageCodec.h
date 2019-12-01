@@ -12,7 +12,6 @@ namespace Echo
 		ImageCodec(ImageFormat imgFmt);
 		virtual ~ImageCodec();
 
-	public:
 		virtual ImageFormat			getImageFormat() const;
 		virtual bool				codeToFile(ImageFormat imgFmt, const Buffer &buff, const Image::ImageInfo &imgInfo, const String &filename) const;
 		virtual bool				encode(const Buffer &inBuff, Buffer &outBuff, const Image::ImageInfo &imgInfo) const;

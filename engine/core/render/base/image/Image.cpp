@@ -65,7 +65,7 @@ namespace Echo
 		destroy();
 	}
 
-	String Image::GetImageFormatName(ImageFormat imgFmt)
+	String Image::getImageFormatName(ImageFormat imgFmt)
 	{
 		switch(imgFmt)
 		{
@@ -79,12 +79,12 @@ namespace Echo
 		}
 	}
 
-	Image* Image::CreateFromMemory(const Buffer &inBuff, ImageFormat imgFmt)
+	Image* Image::createFromMemory(const Buffer &inBuff, ImageFormat imgFmt)
 	{
 		ImageCodec* pImgCodec = ImageCodecMgr::instance()->getCodec(imgFmt);
 		if(!pImgCodec)
 		{
-			EchoLogError("Unable to load image: Image format [%s] is unknown. Unable to identify codec.", GetImageFormatName(imgFmt).c_str());
+			EchoLogError("Unable to load image: Image format [%s] is unknown. Unable to identify codec.", getImageFormatName(imgFmt).c_str());
 			return NULL;
 		}
 
@@ -117,7 +117,7 @@ namespace Echo
         if (memReader.getSize())
         {
             Buffer commonTextureBuffer(memReader.getSize(), memReader.getData<ui8*>(), false);
-            return Image::CreateFromMemory(commonTextureBuffer, Image::GetImageFormat(fileName));
+            return Image::createFromMemory(commonTextureBuffer, Image::GetImageFormat(fileName));
         }
         
         return nullptr;
@@ -129,7 +129,7 @@ namespace Echo
 		ImageCodec* pImgCodec = ImageCodecMgr::instance()->getCodec(imgFmt);
 		if(!pImgCodec)
 		{
-			EchoLogError("Unable to load image: Image format [%s] is unknown. Unable to identify codec.", GetImageFormatName(imgFmt).c_str());
+			EchoLogError("Unable to load image: Image format [%s] is unknown. Unable to identify codec.", getImageFormatName(imgFmt).c_str());
 			return NULL;
 		}
 		ImageInfo imgInfo;
@@ -178,7 +178,7 @@ namespace Echo
 		ImageCodec* pCodec = ImageCodecMgr::instance()->getCodec(imgFmt);
 		if(!pCodec)
 		{
-			EchoLogError("Not found the image format [%s] codec.", Image::GetImageFormatExt(imgFmt).c_str());
+			EchoLogError("Not found the image format [%s] codec.", Image::getImageFormatExt(imgFmt).c_str());
 			return false;
 		}
 
@@ -370,7 +370,7 @@ namespace Echo
 		return true;
 	}
 
-	String Image::GetImageFormatExt(ImageFormat imgFmt)
+	String Image::getImageFormatExt(ImageFormat imgFmt)
 	{
 		switch(imgFmt)
 		{

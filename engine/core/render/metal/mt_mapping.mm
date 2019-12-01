@@ -32,7 +32,7 @@ namespace Echo
             default:                     return "";
         }
     }
-    
+
     MTLVertexFormat MTMapping::MapVertexFormat(PixelFormat pixelFormat)
     {
         switch (pixelFormat)
@@ -45,7 +45,81 @@ namespace Echo
             default:  EchoLogError("MapingVertexFormat failed");  return MTLVertexFormatInvalid;
         }
     }
-    
+
+    MTLPixelFormat MTMapping::MapPixelFormat(PixelFormat pixFmt)
+    {
+        switch(pixFmt)
+        {
+        case PF_R8_UNORM:               return MTLPixelFormatR8Unorm;
+        case PF_R8_SNORM:               return MTLPixelFormatR8Snorm;
+        case PF_R8_UINT:                return MTLPixelFormatR8Uint;
+        case PF_R8_SINT:                return MTLPixelFormatR8Sint;
+
+        case PF_A8_UNORM:               return MTLPixelFormatA8Unorm;
+
+        case PF_RG8_UNORM:              return MTLPixelFormatRG8Unorm;
+        case PF_RG8_SNORM:              return MTLPixelFormatRG8Snorm;
+        case PF_RG8_UINT:               return MTLPixelFormatRG8Uint;
+        case PF_RG8_SINT:               return MTLPixelFormatRG8Sint;
+                
+//        case PF_RGB8_UNORM:             return MTLPixelFormatRGB8Unorm;
+//        case PF_RGB8_SNORM:             return MTLPixelFormatRGB8Snorm;
+//        case PF_RGB8_UINT:              return MTLPixelFormatRGB8Uint;
+//        case PF_RGB8_SINT:              return MTLPixelFormatRGB8Sint;
+
+        case PF_RGBA8_UNORM:            return MTLPixelFormatRGBA8Unorm;
+        case PF_RGBA8_SNORM:            return MTLPixelFormatRGBA8Snorm;
+        case PF_RGBA8_UINT:             return MTLPixelFormatRGBA8Uint;
+        case PF_RGBA8_SINT:             return MTLPixelFormatRGBA8Sint;
+
+            //case PF_R16_UNORM:
+            //case PF_R16_SNORM:
+            //case PF_R16_UINT:
+            //case PF_R16_SINT:
+        case PF_R16_FLOAT:              return MTLPixelFormatR16Float;
+
+            //case PF_RG16_UNORM:
+            //case PF_RG16_SNORM:
+            //case PF_RG16_UINT:
+            //case PF_RG16_SINT:
+        case PF_RG16_FLOAT:             return MTLPixelFormatRG16Float;
+
+
+            //case PF_RGBA16_UNORM:
+            //case PF_RGBA16_SNORM:
+            //case PF_RGBA16_UINT:
+            //case PF_RGBA16_SINT:
+        case PF_PVRTC_RGBA_4444:
+        case PF_RGBA16_FLOAT:           return MTLPixelFormatRGBA16Float;
+
+            //case PF_R32_UNORM:
+            //case PF_R32_SNORM:
+            //case PF_R32_UINT:
+            //case PF_R32_SINT:
+        case PF_R32_FLOAT:              return MTLPixelFormatR32Float;
+
+            //case PF_RG32_UNORM:
+            //case PF_RG32_SNORM:
+            //case PF_RG32_UINT:
+            //case PF_RG32_SINT:
+        case PF_RG32_FLOAT:             return MTLPixelFormatRG32Float;
+
+            //case PF_RGBA32_UNORM:
+            //case PF_RGBA32_SNORM:
+            //case PF_RGBA32_UINT:
+            //case PF_RGBA32_SINT:
+        case PF_RGBA32_FLOAT:           return MTLPixelFormatRGBA32Float;
+
+        case PF_D16_UNORM:              return MTLPixelFormatDepth16Unorm;
+        case PF_D32_FLOAT:              return MTLPixelFormatDepth32Float;
+        default:
+            {
+                EchoAssertX("Unsupported pixel format [%s].", PixelUtil::GetPixelFormatName(pixFmt).c_str());
+                return MTLPixelFormatInvalid;
+            }
+        }
+    }
+
     ShaderParamType MTMapping::MapUniformType(MTLDataType uniformType)
     {
         switch( uniformType)

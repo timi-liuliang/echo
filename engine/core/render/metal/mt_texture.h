@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/core/render/base/Texture.h"
+#include "mt_render_base.h"
 
 namespace Echo
 {
@@ -19,5 +20,9 @@ namespace Echo
     protected:
         // set surface data
         void setSurfaceData(int level, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, const Buffer& buff);
+        
+    private:
+        MTLTextureDescriptor*   m_mtTextureDescriptor = nullptr;
+        id<MTLTexture>          m_mtTexture;
     };
 }

@@ -1,4 +1,6 @@
 #include "mt_texture.h"
+#include "mt_mapping.h"
+#include "mt_renderer.h"
 #include "engine/core/io/IO.h"
 #include "base/image/Image.h"
 
@@ -21,7 +23,7 @@ namespace Echo
         if (memReader.getSize())
         {
             Buffer commonTextureBuffer(memReader.getSize(), memReader.getData<ui8*>(), false);
-            Image* image = Image::CreateFromMemory(commonTextureBuffer, Image::GetImageFormat(getPath()));
+            Image* image = Image::createFromMemory(commonTextureBuffer, Image::GetImageFormat(getPath()));
             if (image)
             {
                 m_isCompressed = false;
@@ -47,6 +49,30 @@ namespace Echo
 
     void MTTexture2D::setSurfaceData(int level, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, const Buffer& buff)
     {
+        if(!m_mtTextureDescriptor)
+        {
+            m_mtTextureDescriptor = [[MTLTextureDescriptor alloc] init];
+            
+            // Indicate that each pixel has a blue, green, red, and alpha channel, where each channel is
+            // an 8-bit unsigned normalized value (i.e. 0 maps to 0.0 and 255 maps to 1.0)
+            m_mtTextureDescriptor.pixelFormat = MTMapping::MapPixelFormat(pixFmt);
 
+             // Set the pixel dimensions of the texture
+            m_mtTextureDescriptor.width = width;
+            m_mtTextureDescriptor.height = height;
+            
+            // Create the texture from the device by using the descriptor
+            id<MTLDevice> device = MTRenderer::instance()->getMetalDevice();
+            if(device)
+                m_mtTexture = [device newTextureWithDescriptor:m_mtTextureDescriptor];
+            
+            if(m_mtTexture)
+            {
+                MTLRegion region = { { 0, 0, 0 }, { width, height, 1}};
+                i32 bytesPerRow = PixelUtil::GetPixelSize(pixFmt) * width;
+                
+                [m_mtTexture replaceRegion:region mipmapLevel:0 withBytes:buff.getData() bytesPerRow:bytesPerRow];
+            }
+        }
     }
 }
