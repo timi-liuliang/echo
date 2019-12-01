@@ -30,7 +30,7 @@ namespace Echo
         }
         else
         {
-            if (Renderer::instance()->getType() == Renderer::Type::Vulkan)
+            if (Renderer::instance()->getType() != Renderer::Type::OpenGLES)
             {
                 vsSrc.clear();
                 psSrc.clear();
