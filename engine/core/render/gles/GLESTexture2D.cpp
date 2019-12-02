@@ -106,7 +106,7 @@ namespace Echo
 		if (memReader.getSize())
 		{
 			Buffer commonTextureBuffer(memReader.getSize(), memReader.getData<ui8*>(), false);
-			Image* image = Image::CreateFromMemory(commonTextureBuffer, Image::GetImageFormat(getPath()));
+			Image* image = Image::createFromMemory(commonTextureBuffer, Image::GetImageFormat(getPath()));
 			if (image)
 			{
 				m_isCompressed = false;
@@ -122,7 +122,7 @@ namespace Echo
 				set2DSurfaceData( 0, m_pixFmt, m_usage, m_width, m_height, buff);
 				EchoSafeDelete(image, Image);
 
-				// generate mip maps
+				// Generate mipmaps
 				if (m_isMipMapEnable && !m_compressType)
 				{
 					OGLESDebug(glBindTexture(GL_TEXTURE_2D, m_glesTexture));

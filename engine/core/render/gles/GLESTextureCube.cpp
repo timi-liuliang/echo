@@ -93,7 +93,7 @@ namespace Echo
 			if (memReader.getSize())
 			{
 				Buffer commonTextureBuffer(memReader.getSize(), memReader.getData<ui8*>(), false);
-				Image* image = Image::CreateFromMemory(commonTextureBuffer, Image::GetImageFormat(path));
+				Image* image = Image::createFromMemory(commonTextureBuffer, Image::GetImageFormat(path));
 				if (image)
 				{
 					m_isCompressed = false;

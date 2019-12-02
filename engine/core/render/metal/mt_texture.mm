@@ -49,6 +49,8 @@ namespace Echo
 
     void MTTexture2D::setSurfaceData(int level, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, const Buffer& buff)
     {
+		return;
+
         if(!m_mtTextureDescriptor)
         {
             m_mtTextureDescriptor = [[MTLTextureDescriptor alloc] init];
