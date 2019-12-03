@@ -17,7 +17,6 @@ namespace Studio
 		~ShaderEditor();
 
 	private:
-		QHBoxLayout*		m_horizonLayout = nullptr;
 		QGraphicsScene*		m_graphicsScene = nullptr;
 		QGraphicsView*		m_graphicsView = nullptr;
 	};

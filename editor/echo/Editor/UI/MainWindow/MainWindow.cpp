@@ -141,6 +141,8 @@ namespace Studio
 		this->addDockWidget(Qt::RightDockWidgetArea, m_scenePanel);
 		this->addDockWidget(Qt::BottomDockWidgetArea, m_bottomPanel);
 
+		this->tabifyDockWidget(m_scriptEditorPanel, m_shaderEditorPanel);
+
 		m_resPanel->onOpenProject();
 
 		// menu [Project(P)]
