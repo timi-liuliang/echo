@@ -11,6 +11,7 @@ namespace Studio
 	class ResPanel;
 	class NodeTreePanel;
 	class LuaEditor;
+	class ShaderEditor;
 	class TimelinePanel;
 	class DebuggerPanel;
 	class BottomPanel;
@@ -121,7 +122,8 @@ namespace Studio
 		QDockWidget*	m_renderPanel;
 		ResPanel*		m_resPanel;
 		NodeTreePanel*	m_scenePanel;
-		LuaEditor*		m_scriptEditorPanel;
+		LuaEditor*		m_scriptEditorPanel = nullptr;
+		ShaderEditor*	m_shaderEditorPanel = nullptr;
 		BottomPanel*	m_bottomPanel;
 		QProcess		m_gameProcess;
 		QComboBox*		m_subEditComboBox;

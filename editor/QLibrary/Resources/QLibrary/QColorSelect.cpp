@@ -7,11 +7,9 @@ namespace QT_UI
 	QColorSelect::QColorSelect( QWidget* parent)
 		: QPushButton( parent)
 	{ 
-		// 消息
 		connect( this, SIGNAL(clicked()), this, SLOT(OnSelectColor()));
 	}
 
-	// 选择颜色
 	void QColorSelect::OnSelectColor()
 	{
 		QColor color = QColorDialog::getColor(QColor((int)(m_color.r*255.f), (int)(m_color.g*255.f), (int)(m_color.b*255.f), (int)(m_color.a*255.f)), this, QString("选择颜色"), QColorDialog::ShowAlphaChannel);

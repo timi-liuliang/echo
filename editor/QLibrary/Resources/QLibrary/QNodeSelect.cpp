@@ -43,7 +43,6 @@ namespace QT_UI
 		adjustHeightSize();
 	}
 
-	// 选择路径
 	void QNodeSelect::OnSelectPath()
 	{
 		Echo::String qFileName = Studio::NodePathChooseDialog::getSelectingNode(nullptr);
@@ -68,20 +67,17 @@ namespace QT_UI
 		}
 	}
 
-	// correct size
 	void QNodeSelect::adjustHeightSize()
 	{
 		//m_lineEdit->setMinimumHeight(m_lineEdit->geometry().height()*1.6);
 		//m_toolButton->setMinimumHeight(m_toolButton->geometry().height() * 1.6);
 	}
 
-	// redefine paintEvent
 	void QNodeSelect::paintEvent(QPaintEvent* event)
 	{
 		QWidget::paintEvent(event);
 	}
 
-	// edit finished
 	void QNodeSelect::onEditFinished()
 	{
 		Echo::String value = m_lineEdit->text().toStdString().c_str();
