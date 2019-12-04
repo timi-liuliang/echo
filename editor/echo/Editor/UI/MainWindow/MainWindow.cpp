@@ -16,6 +16,7 @@
 #include "ResChooseDialog.h"
 #include "LuaEditor.h"
 #include "ShaderEditor.h"
+#include "ScratchEditor.h"
 #include "BottomPanel.h"
 #include "ProjectWnd.h"
 #include "PathChooseDialog.h"
@@ -99,6 +100,7 @@ namespace Studio
 
 		EchoSafeDelete(m_scriptEditorPanel, LuaEditor);
 		EchoSafeDelete(m_shaderEditorPanel, ShaderEditor);
+		EchoSafeDelete(m_scratchEditorPanel, ScratchEditor);
         EchoSafeDelete(m_bottomPanel, BottomPanel);
         EchoSafeDelete(m_scenePanel, NodeTreePanel);
         EchoSafeDelete(m_resPanel, ResPanel);
@@ -121,8 +123,10 @@ namespace Studio
 		m_bottomPanel = EchoNew(BottomPanel(this));
 		m_scriptEditorPanel = EchoNew(LuaEditor(this));
 		m_shaderEditorPanel = EchoNew(ShaderEditor(this));
+		m_scratchEditorPanel = EchoNew(ScratchEditor(this));
 		m_scriptEditorPanel->setVisible(false);
 		m_shaderEditorPanel->setVisible(false);
+		m_scratchEditorPanel->setVisible(false);
 
 		// add renderWindow to RenderDockWidget
 		QWidget* renderWindow = AStudio::instance()->getRenderWindow();
@@ -136,12 +140,14 @@ namespace Studio
 
 		this->addDockWidget(Qt::TopDockWidgetArea, m_scriptEditorPanel);
 		this->addDockWidget(Qt::TopDockWidgetArea, m_shaderEditorPanel);
+		this->addDockWidget(Qt::TopDockWidgetArea, m_scratchEditorPanel);
 		this->addDockWidget(Qt::TopDockWidgetArea, m_renderPanel);
 		this->addDockWidget(Qt::LeftDockWidgetArea, m_resPanel);
 		this->addDockWidget(Qt::RightDockWidgetArea, m_scenePanel);
 		this->addDockWidget(Qt::BottomDockWidgetArea, m_bottomPanel);
 
 		this->tabifyDockWidget(m_scriptEditorPanel, m_shaderEditorPanel);
+		this->tabifyDockWidget(m_shaderEditorPanel, m_scratchEditorPanel);
 
 		m_resPanel->onOpenProject();
 
@@ -162,6 +168,7 @@ namespace Studio
     {
         EchoSafeDelete(m_scriptEditorPanel, LuaEditor);
 		EchoSafeDelete(m_shaderEditorPanel, ShaderEditor);
+		EchoSafeDelete(m_scratchEditorPanel, ScratchEditor);
     }
 
 	// recover edit settings
