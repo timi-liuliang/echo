@@ -3,6 +3,7 @@
 #include <nodeeditor/FlowScene>
 #include <nodeeditor/FlowView>
 #include <nodeeditor/DataModelRegistry>
+#include "NumberSourceDataModel.h"
 
 namespace Studio
 {
@@ -10,6 +11,7 @@ namespace Studio
 	{
 		auto ret = std::make_shared<QtNodes::DataModelRegistry>();
 
+        ret->registerModel<NumberSourceDataModel>("Sources");
 		//ret->registerModel<TextSourceDataModel>();
 		//ret->registerModel<TextDisplayDataModel>();
 
