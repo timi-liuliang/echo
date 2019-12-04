@@ -62,4 +62,7 @@
         <file>project/blank.echo</file>
         <file>project/icon.png</file>
     </qresource>
+    <qresource prefix="/style">
+        <file>DefaultStyle.json</file>
+    </qresource>
 </RCC>

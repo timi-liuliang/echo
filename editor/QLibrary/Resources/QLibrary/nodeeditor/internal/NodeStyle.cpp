@@ -24,7 +24,7 @@ NodeStyle()
   //initResources();
 
   // This configuration is stored inside the compiled unit and is loaded statically
-  loadJsonFile(":DefaultStyle.json");
+  loadJsonFile(":/style/DefaultStyle.json");
 }
 
 
