@@ -100,6 +100,9 @@ namespace Studio
 
 		// on Dockwidget location changed
 		void onDockWidgetLocationChanged();
+
+		// open camera settings panel
+		void onClickEditorCameraSettings();
         
     public slots:
         // undo
@@ -130,5 +133,6 @@ namespace Studio
 		QProcess		m_gameProcess;
 		QComboBox*		m_subEditComboBox;
 		AboutWindow*	m_aboutWindow;
+		QMenu*			m_cameraSettingsMenu = nullptr;
 	};
 }

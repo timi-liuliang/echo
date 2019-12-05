@@ -38,7 +38,7 @@
      <x>0</x>
      <y>0</y>
      <width>1126</width>
-     <height>22</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile_F">
@@ -288,6 +288,15 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Y</string>
+   </property>
+  </action>
+  <action name="m_actionEditorCameraSettings">
+   <property name="icon">
+    <iconset resource="../../../Resource/App.qrc">
+     <normaloff>:/icon/Icon/action/camera.png</normaloff>:/icon/Icon/action/camera.png</iconset>
+   </property>
+   <property name="text">
+    <string>Editor Camera Settings</string>
    </property>
   </action>
  </widget>

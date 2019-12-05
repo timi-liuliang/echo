@@ -24,5 +24,6 @@ namespace Echo
 		REGISTER_MODULE(VideoModule);
 #endif
         REGISTER_MODULE(BuildModule);
+		REGISTER_MODULE(EditorSettingsModule);
 	}
 }

@@ -4,6 +4,7 @@
 #include <QMouseEvent>
 #include <engine/core/render/base/Renderer.h>
 #include <engine/core/math/Function.h>
+#include "Modules/settings/editor_camera_settings.h"
 #include "Studio.h"
 
 namespace Studio
@@ -180,7 +181,8 @@ namespace Studio
 	{
 		if (m_bNeedUpdateCamera)
 		{
-			m_cameraLookAt += m_cameraMoveDir * elapsedTime;
+			float moveSpeed = Echo::EditorCameraSettings::instance()->getMoveSpeed();
+			m_cameraLookAt += m_cameraMoveDir * elapsedTime * moveSpeed;
 
 			m_cameraForward.normalize();
 			m_cameraPositon = m_cameraLookAt - m_cameraForward * m_cameraRadius;

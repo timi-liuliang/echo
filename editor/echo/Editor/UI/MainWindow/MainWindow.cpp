@@ -89,6 +89,10 @@ namespace Studio
 		m_toolBar->addWidget(m_subEditComboBox);
 		QObject::connect(m_subEditComboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(onSubEditChanged(const QString&)));
 
+		// Camera settings
+		//m_toolBar->addAction(m_actionEditorCameraSettings);
+		//QObject::connect(m_actionEditorCameraSettings, SIGNAL(triggered(bool)), this, SLOT(onClickEditorCameraSettings()));
+
 		EchoAssert(!g_inst);
 		g_inst = this;
 	}
@@ -505,6 +509,16 @@ namespace Studio
 	{
 		//centralWidget()->setMaximumHeight(200);
 		//centralWidget()->setMinimumHeight(200);
+	}
+
+	void MainWindow::onClickEditorCameraSettings()
+	{
+		EchoSafeDelete(m_cameraSettingsMenu, QMenu);
+		m_cameraSettingsMenu = EchoNew(QMenu);
+
+		m_cameraSettingsMenu->addAction(m_actionEditorCameraSettings);
+
+		m_cameraSettingsMenu->exec(QCursor::pos());
 	}
 
 	void MainWindow::closeEvent(QCloseEvent *event)
