@@ -19,14 +19,12 @@ namespace Studio
 		// 读取配置文件
 		bool loadCfgFile( );
 
-		// 添加一个最近打开的项目
+		// Rencent Projects operate
 		bool addRecentProject( const char* fileName);
-
-		// 使某项目切换到最前
+        void removeRencentProject(const Echo::String& fileName);
 		void switchProjectToTop(const char* fileName);
 
 		// 保存配置文件
-
 		bool saveCfgFile( );
 
 		// 文件是否存在（如果不存在则创建）

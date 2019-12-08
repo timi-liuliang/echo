@@ -1,4 +1,5 @@
 #include <QMessageBox>
+#include <QStandardItem>
 #include <QPainter>
 #include "ProjectWnd.h"
 #include <qfiledialog.h>
@@ -42,7 +43,9 @@ namespace Studio
 		QObject::connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(openNewProject(int)));
 		QObject::connect(m_previewerWidget, SIGNAL(Signal_onDoubleClickedItem(const QString&)), this, SLOT(onDoubleClicked(const QString&)));
 		QObject::connect(m_previewerWidget, SIGNAL(Signal_onClickedItem(const QString&)), this, SLOT(onClicked(const QString&)));
+        QObject::connect(m_previewerWidget, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showMenu(const QPoint&)));
 		QObject::connect(m_versionListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(onDownloadNewVersion(QListWidgetItem*)));
+        QObject::connect(m_actionRemoveProject, SIGNAL(triggered()), this, SLOT(onRemoveProject()));
 
 		// show all updateable version echo
 		showAllUpdateableVersion();
@@ -53,6 +56,18 @@ namespace Studio
 		delete m_previewerWidget;
 		m_previewerWidget = NULL;
 	}
+
+    void ProjectWnd::loadAllRecentProjects()
+    {
+        Echo::list<Echo::String>::type recentProjects;
+        ConfigMgr::instance()->getAllRecentProject(recentProjects);
+
+        m_previewerWidget->clearAllItems();
+        for ( Echo::String& project : recentProjects)
+        {
+            addRecentProject(project.c_str());
+        }
+    }
 
 	void ProjectWnd::addRecentProject(const char* project)
 	{
@@ -184,6 +199,32 @@ namespace Studio
 			msgBox.exec();
 		}
 	}
+
+    void ProjectWnd::onRemoveProject()
+    {
+        if(!m_removeProject.empty())
+        {
+            ConfigMgr::instance()->removeRencentProject(m_removeProject.c_str());
+            
+            loadAllRecentProjects();
+        }
+    }
+
+    void ProjectWnd::showMenu(const QPoint& point)
+    {
+        QStandardItem* item = m_previewerWidget->itemAt( point);
+        if(item)
+        {
+            m_removeProject = item->data(Qt::UserRole).toString().toStdString().c_str();// data(Qt::UserRole).toString()
+            
+            EchoSafeDelete(m_projectMenu, QMenu);
+            m_projectMenu = EchoNew(QMenu);
+            
+            m_projectMenu->addAction(m_actionRemoveProject);
+
+            m_projectMenu->exec(QCursor::pos());
+        }
+    }
 
 	void ProjectWnd::onClicked(const QString& name)
 	{

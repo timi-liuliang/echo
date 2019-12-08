@@ -71,7 +71,7 @@ namespace QT_UI
 		, m_listModel(NULL)
 		, m_listProxyModel(NULL)
 	{
-		// 初始化ListWidget
+		// Create ListWidget
 		m_listView = new QDragListWidget(this);
 		m_listView->setIconSize(QSize(120, 120));
 		m_listView->setResizeMode(QListView::Adjust);
@@ -91,7 +91,7 @@ namespace QT_UI
 
 		m_listView->setModel(m_listProxyModel);
 
-		// 设置图标
+		// icon
 		SetIcon("lightarray", ":/icon/Icon/lightarray.png");
 		SetIcon("scenario", ":/icon/Icon/SpriteAnimation.png");
 		SetIcon("project", ":/icon/Icon/project.png");
@@ -99,14 +99,12 @@ namespace QT_UI
 		SetIcon("cpp", ":/icon/Icon/cplusplus_cpp.png");
 		SetIcon("lua", ":/icon/Icon/lua_icon.png");
 
-		// 添加布局
 		QHBoxLayout* hLayout = new QHBoxLayout(this);
 		hLayout->setSpacing(0);
 		hLayout->setContentsMargins(0, 0, 0, 0);
 		this->setLayout(hLayout);
 		this->layout()->addWidget(m_listView);
 
-		// 消息链接
 		QObject::connect(m_listView, &QListView::clicked, this, &QPreviewWidget::onClicked);
 		QObject::connect(m_listView, &QListView::doubleClicked, this, &QPreviewWidget::onDoubleClicked);
 		QObject::connect(this, SIGNAL(Signal_ThumbChange(const QString&, const QString&)), this, SLOT(onThumbnailChanged(const QString&, const QString&)));
@@ -132,7 +130,6 @@ namespace QT_UI
 			m_listModel->appendRow(*it);
 	}
 
-	// 添加项
 	void QPreviewWidget::createItem(const char* filePath, std::vector<QStandardItem*>& results)
 	{
 		QStandardItem* newItem = NULL;
@@ -207,7 +204,6 @@ namespace QT_UI
 		m_listModel->appendRow(newItem);
 	}
 
-	// 添加项
 	QStandardItem* QPreviewWidget::createItem( const QString& text, const QString& icon)
 	{
 		ItemInfo iteminfo;
@@ -271,7 +267,6 @@ namespace QT_UI
 		//m_thumbnailThread->addTask(name, thumbNailFile);
 	}
 
-	// 获取当前选中项
 	QString QPreviewWidget::getCurrentSelect()
 	{
 		//QListWidgetItem* item = m_listWidget->currentItem();
@@ -314,13 +309,11 @@ namespace QT_UI
 		item->setToolTip(qtFileInfos);
 	}
 
-	// 设置缩略图
 	void QPreviewWidget::setThumbnail( const char* text, const char* texture)
 	{
 		emit Signal_ThumbChange( text, texture);
 	}
 
-	// 缩略图修改
 	void QPreviewWidget::onThumbnailChanged(const QString& text, const QString& texture)
 	{
 		for ( int i = 0; i < m_listModel->rowCount(); i++ )
@@ -343,7 +336,6 @@ namespace QT_UI
 		}
 	}
 
-	// 清空所有项
 	void QPreviewWidget::clearAllItems()
 	{
 		m_itemInfos.clear();
@@ -353,7 +345,6 @@ namespace QT_UI
 		//m_thumbnailThread->clear();
 	}
 
-	// 单击时触发
 	void QPreviewWidget::onClicked(const QModelIndex& index)
 	{
 		//if( item)
@@ -363,7 +354,6 @@ namespace QT_UI
 		}
 	}
 
-	// 双击是触发
 	void QPreviewWidget::onDoubleClicked(const QModelIndex& index)
 	{
 		//if( item)

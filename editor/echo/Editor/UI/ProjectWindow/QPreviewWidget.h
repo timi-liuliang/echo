@@ -43,8 +43,8 @@ namespace QT_UI
 			{
 
 			}
-			QString		m_text;		// 文件名
-			QString		m_icon;		// 图标
+			QString		m_text;
+			QString		m_icon;
 		};
 
 	public:

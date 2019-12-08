@@ -115,7 +115,6 @@ namespace Studio
 			return true;
 		}
 
-		// 最多保留十个，超过则去掉最早的
 		size_t size = m_recentProjects.size();
 		if ( size >= m_maxRecentProjects )
 		{
@@ -127,6 +126,13 @@ namespace Studio
 
 		return true;
 	}
+
+    void ConfigMgr::removeRencentProject(const Echo::String& fileName)
+    {
+        m_recentProjects.remove(fileName);
+        
+        saveCfgFile();
+    }
 
 	Echo::String ConfigMgr::getLastOpenProjectFile()
 	{

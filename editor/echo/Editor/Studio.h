@@ -109,9 +109,6 @@ namespace Studio
 		bool isThumbnailExists(const Echo::String& name);
 
 		bool replaceTraverseAllWidget(QWidget* parent, QWidget* from, QWidget* to);
-
-        // load all recent projects
-		void loadAllRecentProjects();
         
         // init functions
         void initFunctions();

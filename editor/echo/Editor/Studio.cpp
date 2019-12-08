@@ -89,16 +89,12 @@ namespace Studio
 
 	void AStudio::Start()
 	{
-		// 初始日志系统
 		initLogSystem();
 
-		// 启动主界面
 		m_mainWindow = EchoNew( MainWindow);
 		m_projectWindow = EchoNew( ProjectWnd);
+		m_projectWindow->loadAllRecentProjects();
 
-		loadAllRecentProjects();
-
-		// 启动日志面板
 		m_logPanel = EchoNew(LogPanel( m_mainWindow));
 		Echo::Log::instance()->addOutput(m_logPanel);
 	}
@@ -106,18 +102,6 @@ namespace Studio
 	void AStudio::Close()
 	{
 
-	}
-
-	void AStudio::loadAllRecentProjects()
-	{
-		Echo::list<Echo::String>::type recentProjects;
-		m_projectCfg->getAllRecentProject(recentProjects);
-
-		Echo::list<Echo::String>::iterator iter = recentProjects.begin();
-		for ( ; iter != recentProjects.end(); ++iter )
-		{
-			m_projectWindow->addRecentProject((*iter).c_str());
-		}
 	}
 
 	bool AStudio::isThumbnailExists(const Echo::String& name)

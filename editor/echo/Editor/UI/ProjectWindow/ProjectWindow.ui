@@ -131,11 +131,19 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>23</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="m_statusBar"/>
+  <action name="m_actionRemoveProject">
+   <property name="text">
+    <string>Remove</string>
+   </property>
+   <property name="toolTip">
+    <string>Remove Project</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
