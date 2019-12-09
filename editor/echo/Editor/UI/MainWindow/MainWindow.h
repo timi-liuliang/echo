@@ -96,7 +96,9 @@ namespace Studio
 		void onAbout();
 
 		// on display script edit panel
-		void onScriptEditVisibleChanged();
+		void onScriptEditVisibilityChanged();
+		void onShaderEditVisibilityChanged();
+		void onScratchEditVisibilityChanged();
 
 		// on Dockwidget location changed
 		void onDockWidgetLocationChanged();

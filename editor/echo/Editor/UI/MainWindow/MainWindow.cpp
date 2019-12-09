@@ -164,7 +164,9 @@ namespace Studio
 
 		// signals & slots
 		QObject::connect(m_actionSaveProject, SIGNAL(triggered(bool)), m_scriptEditorPanel, SLOT(save()));
-		QObject::connect(m_scriptEditorPanel, SIGNAL(visibilityChanged(bool)), this, SLOT(onScriptEditVisibleChanged()));
+		QObject::connect(m_scriptEditorPanel, SIGNAL(visibilityChanged(bool)), this, SLOT(onScriptEditVisibilityChanged()));
+		QObject::connect(m_shaderEditorPanel, SIGNAL(visibilityChanged(bool)), this, SLOT(onShaderEditVisibilityChanged()));
+		QObject::connect(m_scratchEditorPanel, SIGNAL(visibilityChanged(bool)), this, SLOT(onScratchEditVisibilityChanged()));
 		QObject::connect(m_renderPanel, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(onDockWidgetLocationChanged()));
 	}
     
@@ -494,15 +496,25 @@ namespace Studio
 		m_scriptEditorPanel->setVisible(true);
 	}
 
-	void MainWindow::onScriptEditVisibleChanged()
+	void MainWindow::onScriptEditVisibilityChanged()
 	{
 		if (m_scriptEditorPanel->isVisible())
-		{
 			resizeDocks({ m_scriptEditorPanel, m_renderPanel }, { 70 , 30 }, Qt::Horizontal);
-		}
 
 		AStudio::instance()->getConfigMgr()->setValue("luascripteditor_visible", m_scriptEditorPanel->isVisible() ? "true" : "false");
 		AStudio::instance()->getConfigMgr()->setValue("luascripteditor_current_file", m_scriptEditorPanel->getCurrentLuaFilePath().c_str());
+	}
+
+	void MainWindow::onShaderEditVisibilityChanged()
+	{
+		if (m_shaderEditorPanel->isVisible())
+			resizeDocks({ m_shaderEditorPanel, m_renderPanel }, { 70 , 30 }, Qt::Horizontal);
+	}
+
+	void MainWindow::onScratchEditVisibilityChanged()
+	{
+		if (m_scratchEditorPanel->isVisible())
+			resizeDocks({ m_scratchEditorPanel, m_renderPanel }, { 70 , 30 }, Qt::Horizontal);
 	}
 
 	void MainWindow::onDockWidgetLocationChanged()
