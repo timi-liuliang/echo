@@ -38,7 +38,7 @@ namespace Echo
             ui32                    size;
             Word                    numMipmaps;            //!< used for dds.
             ui32                    flags;
-            PixelFormat                pixFmt;
+            PixelFormat             pixFmt;
         };
         
 	public:
@@ -49,13 +49,12 @@ namespace Echo
 		static String getImageFormatName(ImageFormat imgFmt);
 		static Image* createFromMemory(const Buffer &inBuff, ImageFormat imgFmt);
 		static Image* loadFromDataStream(DataStream* stream, const String& name);
+
+		// load|save
 		static Image* loadFromFile(const String& fileName);
-
-		// save to bmp
-		static bool saveToBmp( Byte* pixelData, int width, int height, const char* savePath);
-
 		virtual bool saveToFile(const String &filename, ImageFormat imgFmt = IF_UNKNOWN);
-		virtual void destroy();
+
+		virtual void clear();
 
 		virtual bool hasFlag(ImageFlags imgFlag) const;
 		virtual PixelFormat getPixelFormat() const;
@@ -76,6 +75,9 @@ namespace Echo
 		// Resize a 2D image, applying the appropriate filter.
 		virtual bool scale(ui32 width, ui32 height, ImageFilter filter = IMGFILTER_BILINEAR);
 
+		// convert format
+		bool convertFormat(PixelFormat targetFormat);
+
 		static String getImageFormatExt(ImageFormat imgFmt);
 		static ImageFormat GetImageFormat(const String &filename);
 		static ImageFormat GetImageFormatByExt(const String &imgExt);
@@ -93,7 +95,7 @@ namespace Echo
 		static bool	Scale(const PixelBox &src, const PixelBox &dst, ImageFilter filter = IMGFILTER_BILINEAR);
 
 	protected:
-		PixelFormat			m_pixFmt;			// The pixel format of the image
+		PixelFormat			m_format;			// The pixel format of the image
 		ui32				m_width;			// The width of the image in pixels
 		ui32				m_height;			// The height of the image in pixels
 		ui32				m_depth;			// The depth of the image
@@ -101,7 +103,7 @@ namespace Echo
 		int					m_flags;			// Image specific flags.
 		ui32				m_pixelSize;		// The number of bytes per pixel
 		ui32				m_size;
-		Byte*				m_pData;
+		Byte*				m_data;
 	};
 }
 

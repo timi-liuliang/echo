@@ -11,7 +11,7 @@
 namespace Echo
 {
 	Image::Image()
-		: m_pixFmt(PF_UNKNOWN)
+		: m_format(PF_UNKNOWN)
 		, m_width(0)
 		, m_height(0)
 		, m_depth(0)
@@ -19,7 +19,7 @@ namespace Echo
 		, m_flags(0)
 		, m_pixelSize(0)
 		, m_size(0)
-		, m_pData(NULL)
+		, m_data(NULL)
 	{
 	}
 
@@ -27,7 +27,7 @@ namespace Echo
 		PixelFormat pixFmt, ui32 numFaces, ui32 numMipMaps)
 	{
 		// Set image metadata
-		m_pixFmt = pixFmt;
+		m_format = pixFmt;
 		m_width = width;
 		m_height = height;
 		m_depth = depth;
@@ -49,20 +49,20 @@ namespace Echo
 
 		numMipMaps = numMipMaps > 0? numMipMaps : 1;
 		m_size = CalculateSize(numMipMaps, numFaces, width, height, depth, pixFmt);
-		m_pData = EchoNewArray(Byte, m_size);
+		m_data = EchoNewArray(Byte, m_size);
 		if(pData)
 		{
-			memcpy(m_pData, pData, m_size);
+			memcpy(m_data, pData, m_size);
 		}
 		else
 		{
-			memset(m_pData, 0, m_size);
+			memset(m_data, 0, m_size);
 		}
 	}
 
 	Image::~Image()
 	{
-		destroy();
+		clear();
 	}
 
 	String Image::getImageFormatName(ImageFormat imgFmt)
@@ -103,10 +103,10 @@ namespace Echo
 		pImage->m_flags = imgInfo.flags;
 
 		// Get the format and compute the pixel size
-		pImage->m_pixFmt = imgInfo.pixFmt;
+		pImage->m_format = imgInfo.pixFmt;
 		pImage->m_pixelSize = static_cast<Byte>(PixelUtil::GetPixelSize(imgInfo.pixFmt));
 		// Just use internal buffer of returned memory stream
-		outBuff.takeData(pImage->m_pData);
+		outBuff.takeData(pImage->m_data);
 
 		return pImage;
 	}
@@ -149,9 +149,9 @@ namespace Echo
 		pImage->m_flags = imgInfo.flags;
 
 		// Get the format and compute the pixel size
-		pImage->m_pixFmt = imgInfo.pixFmt;
+		pImage->m_format = imgInfo.pixFmt;
 		pImage->m_pixelSize = static_cast<Byte>(PixelUtil::GetPixelSize(imgInfo.pixFmt));
-		pImage->m_pData = pResult->getPtr();
+		pImage->m_data = pResult->getPtr();
 		EchoSafeDelete(pResult, MemoryDataStream);
 
 		return pImage;
@@ -159,7 +159,7 @@ namespace Echo
 
 	bool Image::saveToFile(const String& filename, ImageFormat imgFmt)
 	{
-		if(!m_pData)
+		if(!m_data)
 		{
 			EchoLogError("No image data loaded.");
 			return false;
@@ -187,23 +187,19 @@ namespace Echo
 		imgInfo.height = m_height;
 		imgInfo.depth = m_depth;
 		imgInfo.size = m_size;
-		imgInfo.pixFmt = m_pixFmt;
+		imgInfo.pixFmt = m_format;
 
-		Buffer buff(m_size, m_pData);
+		Buffer buff(m_size, m_data);
 		if(!pCodec->codeToFile(imgFmt, buff, imgInfo, filename))
 			return false;
 
 		return true;
 	}
 
-	void Image::destroy()
+	void Image::clear()
 	{
-		if (m_pData) 
-		{
-			EchoSafeFree(m_pData);
-		}
-
-		m_pixFmt = PF_UNKNOWN;
+		EchoSafeFree(m_data);
+		m_format = PF_UNKNOWN;
 		m_width = 0;
 		m_height = 0;
 		m_depth = 0;
@@ -225,16 +221,16 @@ namespace Echo
 	{
 		if (ECHO_ENDIAN == ECHO_ENDIAN_LITTLE)
 		{
-			switch (m_pixFmt)
+			switch (m_format)
 			{
 			case PF_BGR8_UNORM:		return PF_RGB8_UNORM;
 			case PF_BGRA8_UNORM:	return PF_RGBA8_UNORM;
-			default:				return m_pixFmt;
+			default:				return m_format;
 			}
 		}
 		else
 		{
-			return m_pixFmt;
+			return m_format;
 		}
 	}
 
@@ -268,12 +264,12 @@ namespace Echo
 
 	bool Image::hasAlpha() const
 	{
-		return PixelUtil::HasAlpha(m_pixFmt);
+		return PixelUtil::HasAlpha(m_format);
 	}
 
 	Byte Image::getBPP() const
 	{
-		return PixelUtil::GetPixelBits(m_pixFmt);
+		return PixelUtil::GetPixelBits(m_format);
 	}
 
 	PixelBox Image::getPixelBox(ui32 face, ui32 mipmap) const
@@ -297,7 +293,7 @@ namespace Echo
 		}
 
 		// Calculate mipmap offset and size
-		ui8* offset = const_cast<ui8*>(m_pData);
+		ui8* offset = const_cast<ui8*>(m_data);
 
 		// Base offset is number of full faces
 		ui32 width = getWidth(), height = getHeight(), depth = getDepth();
@@ -318,7 +314,7 @@ namespace Echo
 				finalDepth = depth;
 			}
 
-			fullFaceSize += PixelUtil::GetMemorySize(width, height, depth, m_pixFmt);
+			fullFaceSize += PixelUtil::GetMemorySize(width, height, depth, m_format);
 
 			/// Half size in each dimension
 			if(width != 1) width /= 2;
@@ -330,7 +326,7 @@ namespace Echo
 		offset += face * fullFaceSize;
 		offset += finalFaceSize;
 		// Return subface as pixelbox
-		PixelBox src(finalWidth, finalHeight, finalDepth, m_pixFmt, offset);
+		PixelBox src(finalWidth, finalHeight, finalDepth, m_format, offset);
 
 		return src;
 	}
@@ -338,7 +334,7 @@ namespace Echo
 	Color Image::getColor(int x, int y, int z) const
 	{
 		Color rval;
-		PixelUtil::UnpackColor(rval, m_pixFmt, &m_pData[m_pixelSize * (z * m_width * m_height + m_width * y + x)]);
+		PixelUtil::UnpackColor(rval, m_format, &m_data[m_pixelSize * (z * m_width * m_height + m_width * y + x)]);
 
 		// reset color by pixel format
 		//rval = PixelUtil::ConvertColor(rval, m_pixFmt);
@@ -352,20 +348,41 @@ namespace Echo
 		EchoAssert(m_depth == 1);
 
 		// reassign buffer to temp image, make sure auto-delete is true
-		Image tempImg(m_pData, m_width, m_height, 1, m_pixFmt);
+		Image tempImg(m_data, m_width, m_height, 1, m_format);
 
 		// do not delete[] m_pBuffer!  temp will destroy it
 
 		// set new dimensions, allocate new buffer
 		m_width = width;
 		m_height = height;
-		m_size = PixelUtil::GetMemorySize(m_width, m_height, 1, m_pixFmt);
-		m_pData = ECHO_ALLOC_T(Byte, m_size);
+		m_size = PixelUtil::GetMemorySize(m_width, m_height, 1, m_format);
+		m_data = ECHO_ALLOC_T(Byte, m_size);
 		m_numMipmaps = 0; // Loses precomputed mipmaps
 
 		// scale the image from temp into our resized buffer
 		if(!Image::Scale(tempImg.getPixelBox(), getPixelBox(), filter))
 			return false;
+
+		return true;
+	}
+
+	bool Image::convertFormat(PixelFormat targetFormat)
+	{
+		PixelBox destBox( m_width, m_height, 1, targetFormat);
+		if (targetFormat != m_format)
+		{
+			destBox.pData = ECHO_ALLOC_T(Byte, destBox.getConsecutiveSize());
+
+			PixelBox srcBox(m_width, m_height, 1, m_format, m_data);
+			PixelUtil::BulkPixelConversion(srcBox, destBox);
+
+			EchoSafeFree(m_data);
+
+			m_format = targetFormat;
+			m_pixelSize = PixelUtil::GetPixelSize(m_format);
+			m_size = PixelUtil::GetMemorySize(m_width, m_height, 1, m_format);
+			m_data = static_cast<Byte*>(destBox.pData);
+		}
 
 		return true;
 	}
@@ -552,85 +569,6 @@ namespace Echo
 
 	Byte* Image::getData() const
 	{
-		return m_pData;
-	}
-
-
-	/** 保存为bmp格式(仅支持RGB格式) 源自Unreal3 Lightmass */
-	bool Image::saveToBmp(BYTE* pixelData, int width, int height, const char* savePath)
-	{
-#ifdef ECHO_EDITOR_MODE
-		#define GCC_PACK(n)
-
-		PathUtil::DelPath(savePath);
-
-		// 保存纹理
-#pragma pack (push,1)
-		struct BITMAPFILEHEADER
-		{
-			Word	bfType GCC_PACK(1);
-			DWORD	bfSize GCC_PACK(1);
-			Word	bfReserved1 GCC_PACK(1);
-			WORD	bfReserved2 GCC_PACK(1);
-			DWORD	bfOffBits GCC_PACK(1);
-		} FH;
-		struct BITMAPINFOHEADER
-		{
-			DWORD	biSize GCC_PACK(1);
-			i32		biWidth GCC_PACK(1);
-			i32		biHeight GCC_PACK(1);
-			WORD	biPlanes GCC_PACK(1);
-			WORD	biBitCount GCC_PACK(1);
-			DWORD	biCompression GCC_PACK(1);
-			DWORD	biSizeImage GCC_PACK(1);
-			i32		biXPelsPerMeter GCC_PACK(1);
-			i32		biYPelsPerMeter GCC_PACK(1);
-			DWORD	biClrUsed GCC_PACK(1);
-			DWORD	biClrImportant GCC_PACK(1);
-		} IH;
-#pragma pack (pop)
-
-		i32 BytesPerLine = Align(width * 3, 4);
-
-		FILE* fileHandle = fopen(savePath, "wb");
-		if (!fileHandle)
-			return false;
-
-		// File header.
-		FH.bfType = (WORD)('B' + 256 * 'M');
-		FH.bfSize = (DWORD)(sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + BytesPerLine * height);
-		FH.bfReserved1 = (WORD)0;
-		FH.bfReserved2 = (WORD)0;
-		FH.bfOffBits = (DWORD)(sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER));
-
-		// Info header.
-		IH.biSize = (DWORD) sizeof(BITMAPINFOHEADER);
-		IH.biWidth = (DWORD)width;
-		IH.biHeight = (DWORD)height;
-		IH.biPlanes = (WORD)1;
-		IH.biBitCount = (WORD)24;
-		IH.biCompression = (DWORD)0; //BI_RGB
-		IH.biSizeImage = (DWORD)BytesPerLine * height;
-		IH.biXPelsPerMeter = (DWORD)0;
-		IH.biYPelsPerMeter = (DWORD)0;
-		IH.biClrUsed = (DWORD)0;
-		IH.biClrImportant = (DWORD)0;
-
-		// file header
-		fwrite(&FH, sizeof(FH), 1, fileHandle);
-
-		// Info header
-		fwrite(&IH, sizeof(IH), 1, fileHandle);
-
-		// 象素数据
-		fwrite(pixelData, sizeof(BYTE)*width*height * 3, 1, fileHandle);
-
-		fflush(fileHandle);
-		fclose(fileHandle);
-
-		return true;
-#else
-		return false;
-#endif
+		return m_data;
 	}
 }

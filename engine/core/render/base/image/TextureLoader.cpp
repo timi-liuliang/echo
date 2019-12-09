@@ -34,7 +34,6 @@ namespace Echo
 		return PF_UNKNOWN; 
 	}
 
-	// PVR 像素分量
 	void pvrPixelDimension( ui64 pixelFormat, ui32& xDimension, ui32& yDimension, ui32& zDimension )
 	{
 		switch( pixelFormat )
@@ -105,7 +104,6 @@ namespace Echo
 		return ;
 	}
 
-	// 像素位数映射
 	ui32 pvrBitsPerPixel( ui64 pixelFormat )
 	{
 		switch ( pixelFormat )
