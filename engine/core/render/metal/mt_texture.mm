@@ -17,6 +17,15 @@ namespace Echo
         
     }
 
+    void MTTexture2D::convertFormat(Image* image)
+    {
+        PixelFormat format = image->getPixelFormat();
+        if(format == PixelFormat::PF_RGB8_SNORM)        image->convertFormat( PixelFormat::PF_RGBA8_SNORM);
+        else if(format == PixelFormat::PF_RGB8_UNORM)   image->convertFormat( PixelFormat::PF_RGBA8_UNORM);
+        else if(format == PixelFormat::PF_RGB8_UINT)    image->convertFormat( PixelFormat::PF_RGBA8_UINT);
+        else if(format == PixelFormat::PF_RGB8_SINT)    image->convertFormat( PixelFormat::PF_RGBA8_SINT);
+    }
+
     bool MTTexture2D::load()
     {
         MemoryReader memReader(getPath());
@@ -26,6 +35,9 @@ namespace Echo
             Image* image = Image::createFromMemory(commonTextureBuffer, Image::GetImageFormat(getPath()));
             if (image)
             {
+                // metal doesn't support rgb format
+                convertFormat(image);
+                
                 m_isCompressed = false;
                 m_compressType = Texture::CompressType_Unknown;
                 m_width = image->getWidth();
@@ -49,8 +61,6 @@ namespace Echo
 
     void MTTexture2D::setSurfaceData(int level, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, const Buffer& buff)
     {
-		return;
-
         if(!m_mtTextureDescriptor)
         {
             m_mtTextureDescriptor = [[MTLTextureDescriptor alloc] init];
