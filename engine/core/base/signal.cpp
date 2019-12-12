@@ -50,17 +50,15 @@ namespace Echo
     }
     
     void ConnectLuaMethod::emitSignal(const Variant** args, int argCount)
-    {
-        buildTarget();
-        
-        Object* target = Object::getById(m_targetId);
+    { 
+        Object* target = getTarget();
 		if (target)
             target->callLuaFunction(m_functionName, args, argCount);
         else
             m_signal->disconnect(this);
     }
     
-    void ConnectLuaMethod::buildTarget()
+    Object* ConnectLuaMethod::getTarget()
     {
         if(!m_targetId && m_signal)
         {
@@ -70,8 +68,12 @@ namespace Echo
                 Object* target = owner->getNode(m_targetPath.c_str());
                 if(target)
                     m_targetId = target->getId();
+
+				return target;
             }
         }
+
+		return Object::getById(m_targetId);
     }
     
     Signal::Signal(Object* owner)

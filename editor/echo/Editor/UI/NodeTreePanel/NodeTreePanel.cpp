@@ -50,6 +50,8 @@ namespace Studio
         // signal widget
         QObject::connect(m_signalTreeWidget, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showSignalTreeWidgetMenu(const QPoint&)));
 		QObject::connect(m_actionDisconnectAll, SIGNAL(triggered()), this, SLOT(onSignalDisconnectAll()));
+		QObject::connect(m_actionDisconnect, SIGNAL(triggered()), this, SLOT(onSignalDisconnect()));
+		QObject::connect(m_actionGoToMethod, SIGNAL(triggered()), this, SLOT(onSignalGotoMethod()));
 
 		// make the invisible item can't be drop
 		m_nodeTreeWidget->invisibleRootItem()->setFlags( Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled);
@@ -758,6 +760,9 @@ namespace Studio
             }
 			else if (itemType == "connect")
 			{
+				m_signalName = item->parent()->text(0).toStdString().c_str();
+				m_connectStr = item->text(0).toStdString().c_str();
+
 				EchoSafeDelete(m_signalTreeMenu, QMenu);
 				m_signalTreeMenu = EchoNew(QMenu);
 				m_signalTreeMenu->addAction(m_actionConnectEdit);
@@ -791,7 +796,6 @@ namespace Studio
         }
     }
 
-	// on disconnect all
 	void NodeTreePanel::onSignalDisconnectAll()
 	{
 		Echo::Node* currentNode = ECHO_DOWN_CAST<Echo::Node*>(m_currentEditObject);
@@ -801,6 +805,72 @@ namespace Studio
 			if (signal)
 			{
 				signal->disconnectAll();
+
+				showSelectedObjectSignal();
+			}
+		}
+	}
+
+	void NodeTreePanel::onSignalDisconnect()
+	{
+		Echo::Node* currentNode = ECHO_DOWN_CAST<Echo::Node*>(m_currentEditObject);
+		if (currentNode)
+		{
+			Echo::Signal* signal = Echo::Class::getSignal(currentNode, m_signalName);
+			if (signal)
+			{
+				auto connects = signal->getConnects();
+				if (connects)
+				{
+					for (Echo::Connect* conn : *connects)
+					{
+						Echo::ConnectLuaMethod* luaConn = ECHO_DOWN_CAST<Echo::ConnectLuaMethod*>(conn);
+						if (luaConn)
+						{
+							Echo::String connStr = Echo::StringUtil::Format("%s:%s()", luaConn->m_targetPath.c_str(), luaConn->m_functionName.c_str()).c_str();
+							if (connStr == m_connectStr)
+								signal->disconnect(conn);
+						}
+					}
+				}
+
+				showSelectedObjectSignal();
+			}
+		}
+	}
+
+	void NodeTreePanel::onSignalGotoMethod()
+	{
+		Echo::Node* currentNode = ECHO_DOWN_CAST<Echo::Node*>(m_currentEditObject);
+		if (currentNode)
+		{
+			Echo::Signal* signal = Echo::Class::getSignal(currentNode, m_signalName);
+			if (signal)
+			{
+				auto connects = signal->getConnects();
+				if (connects)
+				{
+					for (Echo::Connect* conn : *connects)
+					{
+						Echo::ConnectLuaMethod* luaConn = ECHO_DOWN_CAST<Echo::ConnectLuaMethod*>(conn);
+						if (luaConn)
+						{
+							Echo::String connStr = Echo::StringUtil::Format("%s:%s()", luaConn->m_targetPath.c_str(), luaConn->m_functionName.c_str()).c_str();
+							if (connStr == m_connectStr)
+							{
+								Echo::Node* target = dynamic_cast<Echo::Node*>(luaConn->getTarget());
+								if (target)
+								{
+									const Echo::ResourcePath& script = target->getScript();
+									if (!script.isEmpty())
+									{
+										MainWindow::instance()->openLuaScript(script.getPath());
+									}
+								}
+							}
+						}
+					}
+				}
 
 				showSelectedObjectSignal();
 			}

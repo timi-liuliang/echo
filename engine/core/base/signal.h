@@ -49,9 +49,8 @@ namespace Echo
         // save
         virtual void save(void* pugiNode) override;
         
-    private:
         // build target
-        void buildTarget();
+        Object* getTarget();
     };
 
 	// Signal

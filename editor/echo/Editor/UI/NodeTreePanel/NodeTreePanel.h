@@ -120,6 +120,8 @@ namespace Studio
 
 		// on disconnect all
 		void onSignalDisconnectAll();
+		void onSignalDisconnect();
+		void onSignalGotoMethod();
         
     public slots:
         // update signals display
@@ -173,6 +175,7 @@ namespace Studio
         QMenu*                          m_propertyMenu = nullptr;
         QMenu*                          m_signalTreeMenu = nullptr;
         Echo::String                    m_signalName;
+		Echo::String					m_connectStr;
         Echo::String                    m_channelPropertyTarget;
 	};
 }
