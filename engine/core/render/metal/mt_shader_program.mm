@@ -65,20 +65,38 @@ namespace Echo
 
     void MTShaderProgram::addUniform(MTLArgument* arg, ShaderType shaderType)
     {
-        MTLStructType* structType = arg.bufferStructType;
-        for(i32 i=0; i<structType.members.count; i++)
+        if(arg.type == MTLArgumentTypeBuffer)
         {
-            MTLStructMember* member = structType.members[i];
-            MTLArrayType*    arrayInfo = member.arrayType;
+            MTLStructType* structType = arg.bufferStructType;
+            if(structType)
+            {
+                for(i32 i=0; i<structType.members.count; i++)
+                {
+                    MTLStructMember* member = structType.members[i];
+                    MTLArrayType*    arrayInfo = member.arrayType;
 
-            Uniform desc;
-            desc.m_name = [member.name UTF8String];
-            desc.m_shader = shaderType;
-            desc.m_type = MTMapping::MapUniformType( arrayInfo ? arrayInfo.dataType : member.dataType);
-            desc.m_count = arrayInfo ? arrayInfo.arrayLength : 1;
-            desc.m_sizeInBytes = desc.m_count * MapUniformTypeSize(desc.m_type);
-            desc.m_location = member.offset;
-            m_uniforms[desc.m_name] = desc;
+                    Uniform desc;
+                    desc.m_name = [member.name UTF8String];
+                    desc.m_shader = shaderType;
+                    desc.m_type = MTMapping::MapUniformType( arrayInfo ? arrayInfo.dataType : member.dataType);
+                    desc.m_count = arrayInfo ? arrayInfo.arrayLength : 1;
+                    desc.m_sizeInBytes = desc.m_count * MapUniformTypeSize(desc.m_type);
+                    desc.m_location = member.offset;
+                    m_uniforms[desc.m_name] = desc;
+                }
+            }
+        }
+        else if(arg.type == MTLArgumentTypeTexture)
+        {
+            int  a = 10;
+        }
+        else if(arg.type == MTLArgumentTypeSampler)
+        {
+            int a = 10;
+        }
+        else
+        {
+            EchoLogError("UnProcessored MTLArgumentType %d", arg.type);
         }
     }
 

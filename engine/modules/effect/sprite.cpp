@@ -5,8 +5,7 @@
 #include "base/ShaderProgram.h"
 #include "engine/core/main/Engine.h"
 
-// Ä¬ÈÏ²ÄÖÊ
-static const char* g_spriteDefaultMaterial = R"(<?xml version = "1.0" encoding = "utf-8"?>
+static const char* g_spriteDefaultMaterialGLES = R"(<?xml version = "1.0" encoding = "utf-8"?>
 <Shader>
 <VS>#version 100
 
@@ -64,6 +63,78 @@ void main(void)
 </Shader>
 )";
 
+static const char* g_spriteDefaultMaterial = R"(<?xml version = "1.0" encoding = "utf-8"?>
+<Shader type="glsl">
+<VS>#version 450
+
+// uniforms
+layout(binding = 0) uniform UBO
+{
+    mat4 u_WorldViewProjMatrix;
+} ubo;
+
+// inputs
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec2 a_UV;
+
+// outputs
+layout(location = 0) out vec2 v_TexCoord;
+
+void main(void)
+{
+    vec4 position = ubo.u_WorldViewProjMatrix * vec4(a_Position, 1.0);
+    gl_Position = position;
+    
+    v_TexCoord = a_UV;
+}
+</VS>
+<PS>#version 450
+
+precision mediump float;
+
+// uniforms
+layout(binding = 1) uniform sampler2D u_BaseColorSampler;
+
+// inputs
+layout(location = 0) in vec2  v_TexCoord;
+
+// outputs
+layout(location = 0) out vec4 o_FragColor;
+
+void main(void)
+{
+    mediump vec4 textureColor = texture(u_BaseColorSampler, v_TexCoord);
+    o_FragColor = textureColor;
+}
+
+</PS>
+<BlendState>
+    <BlendEnable value = "true" />
+    <SrcBlend value = "BF_SRC_ALPHA" />
+    <DstBlend value = "BF_INV_SRC_ALPHA" />
+</BlendState>
+<RasterizerState>
+    <CullMode value = "CULL_NONE" />
+</RasterizerState>
+<DepthStencilState>
+    <DepthEnable value = "false" />
+    <WriteDepth value = "false" />
+</DepthStencilState>
+<SamplerState>
+    <BiLinearMirror>
+        <MinFilter value = "FO_LINEAR" />
+        <MagFilter value = "FO_LINEAR" />
+        <MipFilter value = "FO_NONE" />
+        <AddrUMode value = "AM_CLAMP" />
+        <AddrVMode value = "AM_CLAMP" />
+    </BiLinearMirror>
+</SamplerState>
+<Texture>
+    <stage no = "0" sampler = "BiLinearMirror" />
+</Texture>
+</Shader>
+)";
+
 namespace Echo
 {
 	Sprite::Sprite()
@@ -85,8 +156,8 @@ namespace Echo
 	{
 		CLASS_BIND_METHOD(Sprite, getTextureRes,	DEF_METHOD("getTextureRes"));
 		CLASS_BIND_METHOD(Sprite, setTextureRes,	DEF_METHOD("setTextureRes"));
-		CLASS_BIND_METHOD(Sprite, getWidth,		DEF_METHOD("getWidth"));
-		CLASS_BIND_METHOD(Sprite, setWidth,		DEF_METHOD("setWidth"));
+		CLASS_BIND_METHOD(Sprite, getWidth,		    DEF_METHOD("getWidth"));
+		CLASS_BIND_METHOD(Sprite, setWidth,		    DEF_METHOD("setWidth"));
 		CLASS_BIND_METHOD(Sprite, getHeight,		DEF_METHOD("getHeight"));
 		CLASS_BIND_METHOD(Sprite, setHeight,		DEF_METHOD("setHeight"));
 
@@ -95,7 +166,6 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(Sprite, "Texture", Variant::Type::ResourcePath, "getTextureRes", "setTextureRes");
 	}
 
-	// set texture res path
 	void Sprite::setTextureRes(const ResourcePath& path)
 	{
 		if (m_textureRes.setPath(path.getPath()))
@@ -114,7 +184,6 @@ namespace Echo
 		}
 	}
 
-	// width
 	void Sprite::setHeight(i32 height) 
 	{
 		if (m_height != height)
@@ -125,7 +194,6 @@ namespace Echo
 		}
 	}
 
-	// build drawable
 	void Sprite::buildRenderable()
 	{
 		if (!m_textureRes.getPath().empty())
@@ -134,7 +202,7 @@ namespace Echo
 
 			// material
 			m_material = EchoNew(Material(Echo::StringUtil::Format("SpriteMaterial_%d", getId())));
-			m_material->setShaderContent("echo_sprite_default_shader", g_spriteDefaultMaterial);
+			m_material->setShaderContent("echo_sprite_default_shader", /*Renderer::instance()->getType()!=Renderer::Type::OpenGLES ? g_spriteDefaultMaterial :*/ g_spriteDefaultMaterialGLES);
 			m_material->setRenderStage("Transparent");
 
 			m_material->setTexture("u_BaseColorSampler", m_textureRes.getPath());
