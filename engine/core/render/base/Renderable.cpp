@@ -123,12 +123,12 @@ namespace Echo
 
 	void Renderable::setShaderParam(const String& name, ShaderParamType type, const void* param, size_t num/* =1 */)
 	{
-		ShaderParam sp;
-		sp.name = name;
-		sp.type = type;
-		sp.data = param;
-		sp.length = ui32(num);
+		ShaderParam shaderParam;
+		shaderParam.name = name;
+		shaderParam.type = type;
+		shaderParam.data = param;
+		shaderParam.length = ui32(num);
 
-		m_shaderParams[name] = sp;
+		m_shaderParams[name] = shaderParam;
 	}
 }

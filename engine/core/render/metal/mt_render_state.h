@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/core/render/base/RenderState.h"
+#include "mt_render_base.h"
 
 namespace Echo
 {
@@ -37,7 +38,12 @@ namespace Echo
 	public:
         MTSamplerState(const SamplerDesc& desc);
         virtual ~MTSamplerState() {}
-
-        void active(const SamplerState* pre) const{}
+        
+        // get metal sampler state
+        id<MTLSamplerState> getMTSamplerState() const { return m_mtSamplerState; }
+        
+    private:
+        MTLSamplerDescriptor*   m_mtSamplerDescriptor = nullptr;
+        id<MTLSamplerState>     m_mtSamplerState;
 	};
 }

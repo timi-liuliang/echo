@@ -350,7 +350,6 @@ namespace Echo
 		}
 	}
 
-	// propertys (script property or dynamic property)
 	const PropertyInfos& Material::getPropertys()
 	{
 		buildShaderProgram();
@@ -358,7 +357,6 @@ namespace Echo
 		return m_propertys;
 	}
 
-	// get property value
 	bool Material::getPropertyValue(const String& propertyName, Variant& oVar) 
 	{ 
 		buildShaderProgram();

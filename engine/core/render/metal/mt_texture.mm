@@ -1,6 +1,7 @@
 #include "mt_texture.h"
 #include "mt_mapping.h"
 #include "mt_renderer.h"
+#include "mt_render_state.h"
 #include "engine/core/io/IO.h"
 #include "base/image/Image.h"
 
@@ -15,6 +16,12 @@ namespace Echo
     MTTexture2D::~MTTexture2D()
     {
         
+    }
+
+    id<MTLSamplerState> MTTexture2D::getMTSamplerState()
+    {
+        const MTSamplerState* mtSamplerState = ECHO_DOWN_CAST<const MTSamplerState*>(m_samplerState);
+        return mtSamplerState ? mtSamplerState->getMTSamplerState() : id<MTLSamplerState>();
     }
 
     void MTTexture2D::convertFormat(Image* image)

@@ -8,6 +8,7 @@ namespace Echo
     /**
      * https://developer.apple.com/library/archive/documentation/Miscellaneous/Conceptual/MetalProgrammingGuide/Prog-Func/Prog-Func.html
      */
+    class MTRenderable;
 	class MTShaderProgram : public ShaderProgram
 	{
     public:
@@ -19,7 +20,7 @@ namespace Echo
         id<MTLFunction> getMetalFragmentFunction() { return m_metalFragmentShader; }
 
         // bind
-        virtual void bindUniforms() override;
+        void bindUniforms(MTRenderable* renderable);
 
     public:
         // parse uniforms

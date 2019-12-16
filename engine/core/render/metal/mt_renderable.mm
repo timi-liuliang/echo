@@ -5,6 +5,7 @@
 #include "mt_shader_program.h"
 #include "mt_gpu_buffer.h"
 #include "mt_renderer.h"
+#include "mt_shader_program.h"
 #include "engine/core/log/Log.h"
 
 namespace Echo
@@ -126,17 +127,16 @@ namespace Echo
 
     void MTRenderable::bindShaderParams()
     {
-        bindTextures();
-
-        if(m_shaderProgram)
+        MTShaderProgram* mtShaderProgram = dynamic_cast<MTShaderProgram*>(m_shaderProgram.ptr());
+        if(mtShaderProgram)
         {
             for(auto& it : m_shaderParams)
             {
                 ShaderParam& uniform = it.second;
-                m_shaderProgram->setUniform( uniform.name.c_str(), uniform.data, uniform.type, uniform.length);
+                mtShaderProgram->setUniform( uniform.name.c_str(), uniform.data, uniform.type, uniform.length);
             }
-        }
 
-        m_shaderProgram->bindUniforms();
+            mtShaderProgram->bindUniforms(this);
+        }
     }
 }

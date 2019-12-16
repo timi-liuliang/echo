@@ -115,7 +115,6 @@ namespace Echo
         UniformArray* getUniforms(){ return &m_uniforms; }
 
 		// uniforms
-		virtual void bindUniforms() {}
 		virtual void unbind() {}
 
 		// ByteSize

@@ -15,6 +15,12 @@ namespace Echo
         // type
         virtual TexType getType() const override { return TT_2D; }
         
+        // get mtl texture
+        id<MTLTexture> getMTTexture() { return m_mtTexture; }
+        
+        // get sampler state
+        id<MTLSamplerState> getMTSamplerState();
+        
         // load
         virtual bool load() override;
         

@@ -131,7 +131,6 @@ namespace Echo
             case MTLDataTypeInt:            return SPT_INT;
             case MTLDataTypeFloat4x4:       return SPT_MAT4;
             case MTLDataTypeTexture:        return SPT_TEXTURE;
-            case MTLDataTypeSampler:        return SPT_TEXTURE;
             default:                        return SPT_UNKNOWN;
         }
     }

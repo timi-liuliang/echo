@@ -93,7 +93,7 @@ void main(void)
 precision mediump float;
 
 // uniforms
-layout(binding = 1) uniform sampler2D u_BaseColorSampler;
+layout(binding = 3) uniform sampler2D u_BaseColorSampler;
 
 // inputs
 layout(location = 0) in vec2  v_TexCoord;
@@ -202,7 +202,7 @@ namespace Echo
 
 			// material
 			m_material = EchoNew(Material(Echo::StringUtil::Format("SpriteMaterial_%d", getId())));
-			m_material->setShaderContent("echo_sprite_default_shader", /*Renderer::instance()->getType()!=Renderer::Type::OpenGLES ? g_spriteDefaultMaterial :*/ g_spriteDefaultMaterialGLES);
+			m_material->setShaderContent("echo_sprite_default_shader", Renderer::instance()->getType()!=Renderer::Type::OpenGLES ? g_spriteDefaultMaterial : g_spriteDefaultMaterialGLES);
 			m_material->setRenderStage("Transparent");
 
 			m_material->setTexture("u_BaseColorSampler", m_textureRes.getPath());

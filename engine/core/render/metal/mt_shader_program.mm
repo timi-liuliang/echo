@@ -1,6 +1,8 @@
 #include "mt_shader_program.h"
+#include "mt_renderable.h"
 #include "mt_renderer.h"
 #include "mt_mapping.h"
+#include "mt_texture.h"
 #include "engine/core/log/Log.h"
 
 namespace Echo
@@ -88,11 +90,27 @@ namespace Echo
         }
         else if(arg.type == MTLArgumentTypeTexture)
         {
-            int  a = 10;
+            Uniform desc;
+            desc.m_name = [arg.name UTF8String];
+            desc.m_shader = shaderType;
+            desc.m_type = MTMapping::MapUniformType(MTLDataTypeTexture);
+            desc.m_count = 1;
+            desc.m_sizeInBytes = 4;
+            desc.m_location = arg.index;
+            
+            m_uniforms[desc.m_name] = desc;
         }
         else if(arg.type == MTLArgumentTypeSampler)
         {
-            int a = 10;
+//            Uniform desc;
+//            desc.m_name = [arg.name UTF8String];
+//            desc.m_shader = shaderType;
+//            desc.m_type = MTMapping::MapUniformType(MTLDataTypeSampler);
+//            desc.m_count = 1;
+//            desc.m_sizeInBytes = 4;
+//            desc.m_location = arg.index;
+//
+//            m_uniforms[desc.m_name] = desc;
         }
         else
         {
@@ -108,31 +126,30 @@ namespace Echo
         for(auto& it : m_uniforms)
         {
             const Uniform& uniform = it.second;
-            vector<Byte>::type& uniformBytes = uniform.m_shader == ShaderType::VS ? m_vertexShaderUniformBytes : m_fragmentShaderUniformBytes;
-            i32 bytes = uniform.m_location + uniform.m_sizeInBytes;
-            while(uniformBytes.size()<bytes)
+            if(uniform.m_type!=SPT_TEXTURE)
             {
-                uniformBytes.push_back(0);
+                vector<Byte>::type& uniformBytes = uniform.m_shader == ShaderType::VS ? m_vertexShaderUniformBytes : m_fragmentShaderUniformBytes;
+                i32 bytes = uniform.m_location + uniform.m_sizeInBytes;
+                while(uniformBytes.size()<bytes)
+                {
+                    uniformBytes.push_back(0);
+                }
             }
         }
     }
 
-    void MTShaderProgram::bindUniforms()
+    void MTShaderProgram::bindUniforms(MTRenderable* renderable)
     {
         // organize uniform bytes
         for (UniformArray::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++)
         {
             Uniform& uniform = it->second;
-            if (uniform.m_value && uniform.m_type != SPT_UNKNOWN)
+            if (uniform.m_value && uniform.m_type != SPT_UNKNOWN && uniform.m_type!=SPT_TEXTURE)
             {
                 vector<Byte>::type& uniformBytes = uniform.m_shader == ShaderType::VS ? m_vertexShaderUniformBytes : m_fragmentShaderUniformBytes;
                 if(uniform.m_type != SPT_TEXTURE)
                 {
                     std::memcpy(uniformBytes.data()+uniform.m_location, uniform.m_value, uniform.m_sizeInBytes*sizeof(Byte));
-                }
-                else
-                {
-
                 }
             }
         }
@@ -147,6 +164,22 @@ namespace Echo
 
             if(m_fragmentShaderUniformBytes.size())
                 [commandEncoder setFragmentBytes:m_fragmentShaderUniformBytes.data() length:m_fragmentShaderUniformBytes.size() atIndex:0];
+            
+            // textues
+            for (UniformArray::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++)
+            {
+                Uniform& uniform = it->second;
+                if (uniform.m_shader == ShaderType::FS && uniform.m_type == SPT_TEXTURE)
+                {
+                    i32 texSlot = *(i32*)(uniform.m_value);
+                    MTTexture2D* texture = ECHO_DOWN_CAST<MTTexture2D*>(renderable->getTexture(texSlot));
+                    if(texture)
+                    {
+                        [commandEncoder setFragmentSamplerState:texture->getMTSamplerState() atIndex:uniform.m_location];
+                        [commandEncoder setFragmentTexture:texture->getMTTexture() atIndex:uniform.m_location];
+                    }
+                }
+            }
         }
     }
 }
