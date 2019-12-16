@@ -27,7 +27,7 @@ namespace Echo
 		bool linkShaders();
 
 		// bind Uniforms
-		virtual void bindUniforms() override;
+		void bindUniforms();
 
 		// bind|unbind
 		virtual void bind() override;

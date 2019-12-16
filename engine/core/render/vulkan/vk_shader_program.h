@@ -18,7 +18,7 @@ namespace Echo
         bool isLinked() const { return m_isLinked; }
 
         // bind
-        virtual void bindUniforms() override;
+        void bindUniforms();
 
     public:
         // get shader stage create info

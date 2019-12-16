@@ -128,18 +128,22 @@ namespace Echo
 
     void VKRenderable::bindShaderParams()
     {
-        bindTextures();
+		VKShaderProgram* vkShaderProgram = ECHO_DOWN_CAST<VKShaderProgram*>(m_shaderProgram.ptr());
+		if (vkShaderProgram)
+		{
+			bindTextures();
 
-        if (m_shaderProgram)
-        {
-            for (auto& it : m_shaderParams)
-            {
-                ShaderParam& uniform = it.second;
-                m_shaderProgram->setUniform(uniform.name.c_str(), uniform.data, uniform.type, uniform.length);
-            }
-        }
+			if (vkShaderProgram)
+			{
+				for (auto& it : m_shaderParams)
+				{
+					ShaderParam& uniform = it.second;
+					vkShaderProgram->setUniform(uniform.name.c_str(), uniform.data, uniform.type, uniform.length);
+				}
+			}
 
-        m_shaderProgram->bindUniforms();
+			vkShaderProgram->bindUniforms();
+		}
     }
 
     void VKRenderable::bindGeometry()
