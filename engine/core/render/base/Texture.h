@@ -95,7 +95,7 @@ namespace Echo
 		
 		// sampler state
 		void setSamplerState( const SamplerState::SamplerDesc& desc);
-		const SamplerState* getSamplerState() const { return m_samplerState; }
+        const SamplerState* getSamplerState();
 
 		// get compress type
 		ui32 getCompressType() { return m_compressType; }

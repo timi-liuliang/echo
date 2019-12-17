@@ -68,6 +68,17 @@ namespace Echo
 		g_globalTextures[globalTextureIdx] = texture;
 	}
 
+    const SamplerState* Texture::getSamplerState()
+    {
+        if(!m_samplerState)
+        {
+            SamplerState::SamplerDesc desc;
+            setSamplerState(desc);
+        }
+        
+        return m_samplerState;
+    }
+
 	void Texture::setSamplerState(const SamplerState::SamplerDesc& desc)
 	{
 		m_samplerState = Renderer::instance()->getSamplerState(desc);

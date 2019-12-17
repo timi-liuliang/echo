@@ -20,7 +20,7 @@ namespace Echo
 
     id<MTLSamplerState> MTTexture2D::getMTSamplerState()
     {
-        const MTSamplerState* mtSamplerState = ECHO_DOWN_CAST<const MTSamplerState*>(m_samplerState);
+        const MTSamplerState* mtSamplerState = ECHO_DOWN_CAST<const MTSamplerState*>(getSamplerState());
         return mtSamplerState ? mtSamplerState->getMTSamplerState() : id<MTLSamplerState>();
     }
 
