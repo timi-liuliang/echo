@@ -42,8 +42,97 @@ namespace Echo
         bool isCreateVSSucceed = createShader(vsContent, m_metalVertexLibrary, m_metalVertexShader);
         bool isCreatePSSucceed = createShader(psContent, m_metalFragmentLibrary, m_metalFragmentShader);
         m_isValid = isCreateVSSucceed && isCreatePSSucceed;
+        
+        if(m_isValid)
+            parseUniforms();
 
         return m_isValid;
+    }
+
+    MTLVertexAttribute* MTShaderProgram::getMTLVertexAttributeBySemantic(VertexSemantic semantic)
+    {
+        String attributeName = MTMapping::MapVertexSemanticString(semantic);
+        if(isValid())
+        {
+            id<MTLFunction> vertexShader = getMetalVertexFunction();
+            for(i32 idx=0; idx<vertexShader.vertexAttributes.count; idx++)
+            {
+                MTLVertexAttribute* attribute = vertexShader.vertexAttributes[idx];
+                if([attribute.name UTF8String] == attributeName)
+                    return attribute;
+            }
+        }
+
+        return nullptr;
+    }
+
+    MTLVertexDescriptor* MTShaderProgram::buildVertexDescriptor(const VertexElementList& vertElments)
+    {
+        MTLVertexDescriptor* metalVertexDescriptor = [[MTLVertexDescriptor alloc] init];
+
+        // iterate all elements
+        ui32 numVertElms = static_cast<ui32>(vertElments.size());
+        if (numVertElms > 0)
+        {
+            // buffer 0 was used by uniform buffer
+            const i32 bufferIdx = 1;
+            ui32 elementOffset = 0;
+            for (size_t i = 0; i < numVertElms; ++i)
+            {
+                MTLVertexAttribute* mtlAttribute = getMTLVertexAttributeBySemantic(vertElments[i].m_semantic);
+                if(mtlAttribute)
+                {
+                    ui32 attributeIdx = mtlAttribute.attributeIndex;
+                    metalVertexDescriptor.attributes[attributeIdx].format = MTMapping::MapVertexFormat(vertElments[i].m_pixFmt);
+                    metalVertexDescriptor.attributes[attributeIdx].bufferIndex = bufferIdx;
+                    metalVertexDescriptor.attributes[attributeIdx].offset = elementOffset;
+                }
+
+                elementOffset += PixelUtil::GetPixelSize(vertElments[i].m_pixFmt);
+            }
+
+            metalVertexDescriptor.layouts[bufferIdx].stride = elementOffset;
+        }
+        
+        return metalVertexDescriptor;
+    }
+
+    void MTShaderProgram::parseUniforms()
+    {
+        // Init Descriptor
+        m_metalRenderPipelineDescriptor = [[MTLRenderPipelineDescriptor alloc] init];
+        [m_metalRenderPipelineDescriptor setVertexFunction:getMetalVertexFunction()];
+        [m_metalRenderPipelineDescriptor setFragmentFunction:getMetalFragmentFunction()];
+
+        // specify the target-texture pixel format
+        m_metalRenderPipelineDescriptor.colorAttachments[0].pixelFormat = MTLPixelFormatBGRA8Unorm;
+        
+        // Specify vertex descriptor
+        MeshVertexFormat define;
+        define.m_isUseNormal = true;
+        define.m_isUseVertexColor = true;
+        define.m_isUseUV = true;
+        define.m_isUseLightmapUV = true;
+        define.m_isUseBoneData = true;
+        define.m_isUseTangentBinormal = true;
+        define.build();
+        
+        MTLVertexDescriptor* mtVertexDescriptor = buildVertexDescriptor( define.m_vertexElements);
+        [m_metalRenderPipelineDescriptor setVertexDescriptor:mtVertexDescriptor];
+        
+        id<MTLDevice> device = MTRenderer::instance()->getMetalDevice();
+        if(device && m_metalRenderPipelineDescriptor)
+        {
+            NSError* buildError = nullptr;
+            id<MTLRenderPipelineState> mtRenderPipelineState = [device newRenderPipelineStateWithDescriptor:m_metalRenderPipelineDescriptor options:MTLPipelineOptionArgumentInfo reflection:&m_metalRenderPipelineReflection error:&buildError];
+            if(!buildError)
+            {
+                parseUniforms(m_metalRenderPipelineReflection);
+                
+                [mtRenderPipelineState release];
+                [mtVertexDescriptor release];
+            }
+        }
     }
 
     // reference https://github.com/bkaradzic/bgfx/issues/960

@@ -23,8 +23,11 @@ namespace Echo
         void bindUniforms(MTRenderable* renderable);
 
     public:
-        // parse uniforms
-        void parseUniforms(MTLRenderPipelineReflection* reflection);
+        // get metal render pipeline descriptor
+        MTLRenderPipelineDescriptor* getMTRenderPipelineDescriptor() { return m_metalRenderPipelineDescriptor; }
+        
+        // build vertex descriptor
+        MTLVertexDescriptor* buildVertexDescriptor(const VertexElementList& vertElments);
 
     private:
         // create shader library
@@ -35,14 +38,24 @@ namespace Echo
 
         // alloc uniform bytes
         void allocUniformBytes();
+        
+    private:
+        // parse uniforms
+        void parseUniforms();
+        void parseUniforms(MTLRenderPipelineReflection* reflection);
+        
+        // get vertex attribute by semantic
+        MTLVertexAttribute* getMTLVertexAttributeBySemantic(VertexSemantic semantic);
 
     private:
-        bool                m_isValid = false;
-        id<MTLLibrary>      m_metalVertexLibrary = nullptr;
-        id<MTLLibrary>      m_metalFragmentLibrary = nullptr;
-        id<MTLFunction>     m_metalVertexShader = nullptr;
-        id<MTLFunction>     m_metalFragmentShader = nullptr;
-        vector<Byte>::type  m_vertexShaderUniformBytes;
-        vector<Byte>::type  m_fragmentShaderUniformBytes;
+        bool                            m_isValid = false;
+        id<MTLLibrary>                  m_metalVertexLibrary = nullptr;
+        id<MTLLibrary>                  m_metalFragmentLibrary = nullptr;
+        id<MTLFunction>                 m_metalVertexShader = nullptr;
+        id<MTLFunction>                 m_metalFragmentShader = nullptr;
+        vector<Byte>::type              m_vertexShaderUniformBytes;
+        vector<Byte>::type              m_fragmentShaderUniformBytes;
+        MTLRenderPipelineDescriptor*    m_metalRenderPipelineDescriptor = nullptr;
+        MTLRenderPipelineReflection*    m_metalRenderPipelineReflection = nil;
 	};
 }

@@ -34,31 +34,29 @@ namespace Echo
 
 	struct MeshVertexFormat
 	{
-		typedef VertexElementList RIVEL;
-
-		bool		m_isUseNormal;
-		bool		m_isUseVertexColor;
-		bool		m_isUseUV;
-		bool		m_isUseLightmapUV;
-		bool		m_isUseBoneData;
-		bool		m_isUseTangentBinormal;
-		ui32		m_stride;
-		Byte		m_posOffset;
-		Byte		m_normalOffset;
-		Byte		m_colorOffset;
-		Byte		m_uv0Offset;
-		Byte		m_uv1Offset;
-		Byte		m_boneIndicesOffset;
-		Byte		m_boneWeightsOffset;
-		Byte		m_tangentOffset;
-		RIVEL		m_vertexElements;
+		bool		        m_isUseNormal;
+		bool		        m_isUseVertexColor;
+		bool		        m_isUseUV;
+		bool		        m_isUseLightmapUV;
+		bool		        m_isUseBoneData;
+		bool		        m_isUseTangentBinormal;
+		ui32		        m_stride;
+		Byte		        m_posOffset;
+		Byte		        m_normalOffset;
+		Byte		        m_colorOffset;
+		Byte		        m_uv0Offset;
+		Byte		        m_uv1Offset;
+		Byte		        m_boneIndicesOffset;
+		Byte		        m_boneWeightsOffset;
+		Byte		        m_tangentOffset;
+		VertexElementList	m_vertexElements;
 
 		MeshVertexFormat();
 
-		// build
+		// Build
 		void build();
 
-		// 判断顶点格式中是否含有指定类型的数据
+		// Is used
 		bool isVertexUsage(VertexSemantic semantic) const;
 
 		// reset

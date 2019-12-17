@@ -27,17 +27,12 @@ namespace Echo
         
         // build vertex descriptor
         void buildVertexDescriptor();
-
-        // get vertex attribute by semantic
-        MTLVertexAttribute* getMTLVertexAttributeBySemantic(VertexSemantic semantic);
         
         // build render pipeline state
         void buildRenderPipelineState();
         
     private:
         MTLVertexDescriptor*            m_metalVertexDescriptor = nullptr;
-        MTLRenderPipelineDescriptor*    m_metalRenderPipelineDescriptor = nullptr;
         id<MTLRenderPipelineState>      m_metalRenderPipelineState = nullptr;
-        MTLRenderPipelineReflection*    m_metalRenderPipelineReflection = nil;
 	};
 }

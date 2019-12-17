@@ -21,7 +21,6 @@ namespace Echo
 
 	}
 
-	// 计算偏移量,顶点格式
 	void MeshVertexFormat::build()
 	{
 		m_posOffset = 0;
@@ -70,7 +69,6 @@ namespace Echo
 		}
 	}
 
-	// 判断顶点格式中是否含有指定类型的数据
 	bool MeshVertexFormat::isVertexUsage(VertexSemantic semantic) const
 	{
 		size_t num = m_vertexElements.size();
@@ -83,7 +81,6 @@ namespace Echo
 		return false;
 	}
 
-	// reset
 	void MeshVertexFormat::reset()
 	{
 		m_isUseNormal = false;
@@ -102,12 +99,10 @@ namespace Echo
 		m_boneWeightsOffset = 0;
 	}
 
-	// 构造函数
 	MeshVertexData::MeshVertexData()
 		: m_count(0)
 	{}
 
-	// set
 	void MeshVertexData::set(const MeshVertexFormat& format, ui32 count)
 	{
 		m_format = format;
@@ -117,19 +112,16 @@ namespace Echo
 		m_vertices.resize(m_count * m_format.m_stride);
 	}
 
-	// 获取顶点格式大小
 	ui32 MeshVertexData::getVertexStride() const
 	{
 		return m_format.m_stride;
 	}
 
-	// 获取顶点数量
 	ui32 MeshVertexData::getVertexCount() const
 	{
 		return m_count;
 	}
 
-	// 获取顶点数据
 	Byte* MeshVertexData::getVertices()
 	{
 		if (m_vertices.size())
@@ -138,20 +130,17 @@ namespace Echo
 			return nullptr;
 	}
 
-	// 获取顶点地址
 	Byte* MeshVertexData::getVertice(int idx)
 	{
 		Byte* verticesPtr = m_vertices.data();
 		return verticesPtr + idx * m_format.m_stride;
 	}
 
-	// 判断顶点格式中是否含有指定类型的数据
 	bool MeshVertexData::isVertexUsage(VertexSemantic semantic) const
 	{
 		return m_format.isVertexUsage(semantic);
 	}
 
-	// 获取顶点位置数据
 	Vector3& MeshVertexData::getPosition(Word index)
 	{
 		EchoAssert(index < m_count && isVertexUsage(VS_POSITION));
@@ -159,7 +148,6 @@ namespace Echo
 		return *(Vector3*)(getVertice(index) + m_format.m_posOffset);
 	}
 
-	// set position
 	void MeshVertexData::setPosition(int idx, const Vector3& pos)
 	{
 		*(Vector3*)(getVertice(idx) + m_format.m_posOffset) = pos;
@@ -173,21 +161,18 @@ namespace Echo
 			*(Dword*)(getVertice(idx) + m_format.m_colorOffset) = color;
 	}
 
-	// set skin weight
 	void MeshVertexData::setJoint(int idx, Dword weight)
 	{
 		if(m_format.m_isUseBoneData)
 			*(Dword*)(getVertice(idx) + m_format.m_boneIndicesOffset) = weight;
 	}
 
-	// set skin joint
 	void MeshVertexData::setWeight(int idx, const Vector4& joint)
 	{
 		if (m_format.m_isUseBoneData)
 			*(Vector4*)(getVertice(idx) + m_format.m_boneWeightsOffset) = joint;
 	}
 
-	// 获取顶点法线数据
 	const Vector3& MeshVertexData::getNormal(Word index)
 	{
 		EchoAssert(index < m_count && isVertexUsage(VS_NORMAL));
@@ -200,7 +185,6 @@ namespace Echo
 		Vector3::Normalize(*(Vector3*)(getVertice(idx) + m_format.m_normalOffset),normal);
 	}
 
-	// 获取顶点颜色数据
 	Dword& MeshVertexData::getColor(Word index)
 	{
 		EchoAssert(index < m_count && VS_COLOR);
@@ -208,7 +192,6 @@ namespace Echo
 		return *(Dword*)(getVertice(index) + m_format.m_colorOffset);
 	}
 
-	// 获取顶点UV数据0
 	const Vector2& MeshVertexData::getUV0(Word index)
 	{
 		EchoAssert(index < m_count && isVertexUsage(VS_TEXCOORD0));
@@ -221,7 +204,6 @@ namespace Echo
 		*(Vector2*)(getVertice(idx) + m_format.m_uv0Offset) = uv0;
 	}
 
-	// 获取顶点UV数据1
 	const Vector2& MeshVertexData::getUV1(Word index)
 	{
 		EchoAssert(index < m_count && isVertexUsage(VS_TEXCOORD1));
@@ -229,7 +211,6 @@ namespace Echo
 		return *(Vector2*)(getVertice(index) + m_format.m_uv1Offset);
 	}
 
-	// 获取切线
 	Vector3& MeshVertexData::getTangent(Word index)
 	{
 		EchoAssert(index < m_count && isVertexUsage(VS_TANGENT));
