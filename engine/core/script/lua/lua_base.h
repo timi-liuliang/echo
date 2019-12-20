@@ -259,6 +259,20 @@ namespace Echo
 		lua_pushnumber(state, value);
 	}
 
+	template<> INLINE void lua_pushvalue<const Vector2&>(lua_State* state, const Vector2& value)
+	{
+		lua_newtable(state);
+		lua_pushnumber(state, value.x);
+		lua_setfield(state, -2, "x");
+		lua_pushnumber(state, value.y);
+		lua_setfield(state, -2, "y");
+	}
+
+	template<> INLINE void lua_pushvalue<const Vector2>(lua_State* state, const Vector2 value)
+	{
+		lua_pushvalue<const Vector2&>(state, value);
+	}
+
 	template<> INLINE void lua_pushvalue<const Vector3&>(lua_State* state, const Vector3& value)
 	{
 		lua_newtable(state);

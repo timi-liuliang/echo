@@ -42,7 +42,7 @@ namespace Echo
 			{
 				if (eventRegion->isValid() && eventRegion->isEnable() && eventRegion->isIntersect( ray))
 				{
-					eventRegion->clicked();
+					eventRegion->notifyClicked(ray, Input::instance()->getMousePosition());
 				}
 			}
 		}

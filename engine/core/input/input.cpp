@@ -30,6 +30,7 @@ namespace Echo
 		CLASS_BIND_METHOD(Input, getMouseButtonDown, "getMouseButtonDown");
 		CLASS_BIND_METHOD(Input, isMouseButtonUp, "isMouseButtonUp");
 		CLASS_BIND_METHOD(Input, getMouseButtonUp, "getMouseButtonUp");
+		CLASS_BIND_METHOD(Input, getMousePosition, "getMousePosition");
 
 		CLASS_REGISTER_SIGNAL(Input, clicked);
 	}

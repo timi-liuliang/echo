@@ -2,7 +2,7 @@
 
 #include "engine/core/base/object.h"
 #include "engine/core/base/signal.h"
-#include "mouse.h"
+#include "mouse_state.h"
 
 namespace Echo
 {
