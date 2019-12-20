@@ -32,10 +32,14 @@ namespace Echo
 		// called by os
 		void notifyMouseButtonDown(Echo::ui32 id, const Vector2& pos);
 		void notifyMouseButtonUp(Echo::ui32 id, const Vector2& pos);
+		void notifyMouseMove(Echo::ui32 id, const Vector2& pos);
         
     public:
         // on Mouse button down signal
         DECLARE_SIGNAL(Signal0, clicked);
+
+		// on Mouse move signal
+		DECLARE_SIGNAL(Signal0, moved);
 
 	private:
 		Input();
