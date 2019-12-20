@@ -27,7 +27,11 @@ namespace Echo
         // width
         i32 getHeight() const { return m_height; }
         void setHeight(i32 height);
-        
+
+		// alpha
+		float getAlpha() const { return m_alpha; }
+		void setAlpha(float alpha) { m_alpha = alpha; }
+
     protected:
         // build drawable
         void buildRenderable();
@@ -53,5 +57,6 @@ namespace Echo
         Matrix4                 m_matWVP;
         i32                     m_width;
         i32                     m_height;
+		float					m_alpha = 1.f;
     };
 }

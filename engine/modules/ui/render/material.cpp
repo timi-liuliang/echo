@@ -21,14 +21,17 @@ void main(void)
 </VS>
 <PS>#version 100
 
-uniform sampler2D u_BaseColorSampler;
+uniform mediump float	u_UiAlpha;
+uniform sampler2D		u_BaseColorSampler;
 
 varying mediump vec2 texCoord;
 
 void main(void)
 {
     mediump vec4 textureColor = texture2D(u_BaseColorSampler, texCoord);
-    gl_FragColor = textureColor;
+    gl_FragColor.rgb = textureColor.rgb;
+
+	gl_FragColor.a = textureColor.a * u_UiAlpha;
 }
 </PS>
 <BlendState>
