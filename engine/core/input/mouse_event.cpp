@@ -14,6 +14,8 @@ namespace Echo
 
 	void MouseEvent::bindMethods()
 	{
-		CLASS_BIND_METHOD(MouseEvent, getScreenPos, DEF_METHOD("getScreenPos"));
+		CLASS_BIND_METHOD(MouseEvent, getScreenPosition, DEF_METHOD("getScreenPosition"));
+		CLASS_BIND_METHOD(MouseEvent, getWorldPosition, DEF_METHOD("getWorldPosition"));
+		CLASS_BIND_METHOD(MouseEvent, getLocalPosition, DEF_METHOD("getLocalPosition"));
 	}
 }

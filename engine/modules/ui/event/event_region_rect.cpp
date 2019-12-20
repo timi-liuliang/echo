@@ -41,13 +41,47 @@ namespace Echo
 		}
 	}
 
-	// is intersect with screen coordinate
 	bool UiEventRegionRect::isIntersect(const Ray& ray)
 	{
 		AABB worldBox;
 		buildWorldAABB(worldBox);
 
 		return worldBox.isValid() ? ray.hitBox(worldBox) : false;
+	}
+
+	bool UiEventRegionRect::getHitPosition(const Ray& ray, Vector3& worldPos)
+	{
+		AABB worldBox;
+		buildWorldAABB(worldBox);
+		if (worldBox.isValid())
+		{
+			float min;
+			Ray::HitInfo hitInfo;
+			if (ray.hitBox(worldBox, min, hitInfo))
+			{
+				worldPos = hitInfo.hitPos;
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	bool UiEventRegionRect::notifyClicked(const Ray& ray, const Vector2& screenPos)
+	{
+		Vector3 worldPos;
+		if (getHitPosition(ray, worldPos))
+		{
+			m_mouseEvent.setScreenPosition(screenPos);
+			m_mouseEvent.setWorldPosition(worldPos);
+			m_mouseEvent.setLocalPosition(worldPos - getWorldPosition());
+
+			clicked();
+
+			return true;
+		}
+
+		return false;
 	}
 
 	void UiEventRegionRect::updateLocalAABB()

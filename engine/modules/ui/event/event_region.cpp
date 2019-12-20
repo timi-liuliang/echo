@@ -28,13 +28,4 @@ namespace Echo
 	{ 
 		return &m_mouseEvent; 
 	}
-
-	bool UiEventRegion::notifyClicked(const Ray& ray, const Vector2& screenPos)
-	{
-		m_mouseEvent.setScreenPos(screenPos);
-
-		clicked();
-
-		return true;
-	}
 }

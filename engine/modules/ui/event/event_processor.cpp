@@ -40,7 +40,7 @@ namespace Echo
 			set<UiEventRegion*>::type eventRegions = m_eventRegions;
 			for (UiEventRegion* eventRegion : eventRegions)
 			{
-				if (eventRegion->isValid() && eventRegion->isEnable() && eventRegion->isIntersect( ray))
+				if (eventRegion->isValid() && eventRegion->isEnable())
 				{
 					eventRegion->notifyClicked(ray, Input::instance()->getMousePosition());
 				}

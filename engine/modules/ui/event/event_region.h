@@ -24,7 +24,7 @@ namespace Echo
 
 	public:
 		// get mouse event
-		bool notifyClicked(const Ray& ray, const Vector2& screenPos);
+		virtual bool notifyClicked(const Ray& ray, const Vector2& screenPos) { return false; }
 
 		// get mouse event
 		Object* getMouseEvent();

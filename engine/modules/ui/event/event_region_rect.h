@@ -21,10 +21,16 @@ namespace Echo
 		void setHeight(i32 height);
 
 	public:
+		// get mouse event
+		virtual bool notifyClicked(const Ray& ray, const Vector2& screenPos);
+
 		// is intersect with screen coordinate
 		virtual bool isIntersect(const Ray& ray) override;
 
 	private:
+		// get intersect position
+		bool getHitPosition(const Ray& ray, Vector3& worldPos);
+
 		// update local aabb by width and height
 		void updateLocalAABB();
 

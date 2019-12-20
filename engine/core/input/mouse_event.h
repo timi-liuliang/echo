@@ -14,8 +14,16 @@ namespace Echo
 		~MouseEvent();
 
 		// screen pos
-		void setScreenPos(const Vector2& screenPos) { m_screenPos = screenPos; }
-		const Vector2& getScreenPos() { return m_screenPos; }
+		void setScreenPosition(const Vector2& screenPos) { m_screenPos = screenPos; }
+		const Vector2& getScreenPosition() { return m_screenPos; }
+
+		// world pos
+		void setWorldPosition(const Vector3& worldPos) { m_worldPosition = worldPos; }
+		const Vector3& getWorldPosition() { return m_worldPosition; }
+
+		// local pos
+		void setLocalPosition(const Vector3& localPos) { m_localPosition = localPos; }
+		const Vector3& getLocalPosition() { return m_localPosition; }
 
 	private:
 		Vector2		m_screenPos;
