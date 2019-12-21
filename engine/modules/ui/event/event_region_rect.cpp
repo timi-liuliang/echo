@@ -67,23 +67,6 @@ namespace Echo
 		return false;
 	}
 
-	bool UiEventRegionRect::notifyClicked(const Ray& ray, const Vector2& screenPos)
-	{
-		Vector3 worldPos;
-		if (getHitPosition(ray, worldPos))
-		{
-			m_mouseEvent.setScreenPosition(screenPos);
-			m_mouseEvent.setWorldPosition(worldPos);
-			m_mouseEvent.setLocalPosition(worldPos - getWorldPosition());
-
-			clicked();
-
-			return true;
-		}
-
-		return false;
-	}
-
 	void UiEventRegionRect::updateLocalAABB()
 	{
 		Vector3 halfUp = Vector3::UNIT_Y * getHeight() * 0.5f;

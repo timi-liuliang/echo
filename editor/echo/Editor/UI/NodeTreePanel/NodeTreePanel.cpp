@@ -780,7 +780,7 @@ namespace Studio
         if(currentNode)
         {
             Echo::String nodePath;
-            Echo::String functionName = "on_" + m_signalName + "_" + currentNode->getName();
+            Echo::String functionName = m_signalName + "_" + currentNode->getName();
             if(SlotChooseDialog::getSlot(this, nodePath, functionName))
             {
                 Echo:: Signal* signal = Echo::Class::getSignal( currentNode, m_signalName);
@@ -877,7 +877,6 @@ namespace Studio
 		}
 	}
 
-	// show property recursive
 	void NodeTreePanel::showObjectPropertyRecursive(Echo::Object* classPtr, const Echo::String& className)
 	{
 		// show parent property first

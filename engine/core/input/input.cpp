@@ -32,7 +32,7 @@ namespace Echo
 		CLASS_BIND_METHOD(Input, getMouseButtonUp, "getMouseButtonUp");
 		CLASS_BIND_METHOD(Input, getMousePosition, "getMousePosition");
 
-		CLASS_REGISTER_SIGNAL(Input, clicked);
+		CLASS_REGISTER_SIGNAL(Input, onMouseButtonDown);
 	}
 
 	bool Input::isMouseButtonDown(Echo::ui32 id)
@@ -61,7 +61,7 @@ namespace Echo
 		m_mouseState.m_mouseButtonStates[id].m_frame = m_frame;
 		m_mouseState.m_mouseButtonStates[id].m_position = pos;
         
-        clicked();
+        onMouseButtonDown();
 	}
 
 	void Input::notifyMouseButtonUp(Echo::ui32 id, const Vector2& pos)
@@ -69,10 +69,15 @@ namespace Echo
 		m_mouseState.m_mouseButtonStates[id].m_isDown = false;
 		m_mouseState.m_mouseButtonStates[id].m_frame = m_frame;
 		m_mouseState.m_mouseButtonStates[id].m_position = pos;
+
+		onMouseButtonUp();
 	}
 
 	void Input::notifyMouseMove(Echo::ui32 id, const Vector2& pos)
 	{
-		moved();
+		m_mouseState.m_mouseButtonStates[id].m_frame = m_frame;
+		m_mouseState.m_mouseButtonStates[id].m_position = pos;
+
+		onMouseMove();
 	}
 }

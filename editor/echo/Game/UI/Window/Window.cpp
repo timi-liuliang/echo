@@ -86,9 +86,9 @@ namespace Game
 
 	void Window::mouseMoveEvent(QMouseEvent* e)
 	{
-		Echo::ui32 buttonId = e->button() == Qt::LeftButton ? 0 : (e->button() == Qt::RightButton ? 1 : 2);
+		//Echo::ui32 buttonId = e->button() == Qt::LeftButton ? 0 : (e->button() == Qt::RightButton ? 1 : 2);
 		const QPointF& windowPos = e->windowPos();
-		Echo::Input::instance()->notifyMouseMove(buttonId, Echo::Vector2(windowPos.x(), windowPos.y()));
+		Echo::Input::instance()->notifyMouseMove(0, Echo::Vector2(windowPos.x(), windowPos.y()));
 	}
 
 	void Window::mousePressEvent(QMouseEvent* e)

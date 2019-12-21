@@ -35,11 +35,10 @@ namespace Echo
 		void notifyMouseMove(Echo::ui32 id, const Vector2& pos);
         
     public:
-        // on Mouse button down signal
-        DECLARE_SIGNAL(Signal0, clicked);
-
-		// on Mouse move signal
-		DECLARE_SIGNAL(Signal0, moved);
+        // on Mouse signal
+        DECLARE_SIGNAL(Signal0, onMouseButtonDown);
+		DECLARE_SIGNAL(Signal0, onMouseButtonUp)
+		DECLARE_SIGNAL(Signal0, onMouseMove);
 
 	private:
 		Input();

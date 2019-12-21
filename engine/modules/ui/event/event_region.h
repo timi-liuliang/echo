@@ -22,15 +22,22 @@ namespace Echo
 		// is intersect with screen coordinate
 		virtual bool isIntersect(const Ray& ray) { return false; }
 
+		// get intersect position
+		virtual bool getHitPosition(const Ray& ray, Vector3& worldPos) { return false; }
+
 	public:
 		// get mouse event
-		virtual bool notifyClicked(const Ray& ray, const Vector2& screenPos) { return false; }
+		virtual bool notifyMouseButtonDown(const Ray& ray, const Vector2& screenPos);
+		virtual bool notifyMouseButtonUp(const Ray& ray, const Vector2& screenPos);
+		virtual bool notifyMouseMoved(const Ray& ray, const Vector2& screenPos);
 
 		// get mouse event
 		Object* getMouseEvent();
 
-		// mouse button down event
-		DECLARE_SIGNAL(Signal0, clicked)
+		// mouse event
+		DECLARE_SIGNAL(Signal0, onMouseButtonDown)
+		DECLARE_SIGNAL(Signal0, onMouseButtonUp)
+		DECLARE_SIGNAL(Signal0, onMouseButtonMove)
 
 	protected:
 		StringOption	m_type = StringOption("ui", { "2d", "3d", "ui" });

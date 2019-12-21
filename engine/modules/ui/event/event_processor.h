@@ -21,8 +21,10 @@ namespace Echo
 		void unregisterEventRegion(UiEventRegion* eventRegion);
         
     public:
-        // on mouse button down
+        // on mouse event
         void onMouseButtonDown();
+		void onMouseButtonUp();
+		void onMouseMove();
 
 	private:
 		set<UiEventRegion*>::type	m_eventRegions;		// registered regions

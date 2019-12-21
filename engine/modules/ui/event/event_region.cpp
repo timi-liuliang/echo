@@ -21,8 +21,70 @@ namespace Echo
         
         CLASS_REGISTER_PROPERTY(UiEventRegion, "Type", Variant::Type::StringOption, "getType", "setType");
         
-        CLASS_REGISTER_SIGNAL(UiEventRegion, clicked);
+        CLASS_REGISTER_SIGNAL(UiEventRegion, onMouseButtonDown);
+		CLASS_REGISTER_SIGNAL(UiEventRegion, onMouseButtonUp);
+		CLASS_REGISTER_SIGNAL(UiEventRegion, onMouseButtonMove);
     }
+
+	bool UiEventRegion::notifyMouseButtonDown(const Ray& ray, const Vector2& screenPos)
+	{
+		if (onMouseButtonDown.isHaveConnects())
+		{
+			Vector3 worldPos;
+			if (getHitPosition(ray, worldPos))
+			{
+				m_mouseEvent.setScreenPosition(screenPos);
+				m_mouseEvent.setWorldPosition(worldPos);
+				m_mouseEvent.setLocalPosition(worldPos - getWorldPosition());
+
+				onMouseButtonDown();
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	bool UiEventRegion::notifyMouseButtonUp(const Ray& ray, const Vector2& screenPos)
+	{
+		if (onMouseButtonUp.isHaveConnects())
+		{
+			Vector3 worldPos;
+			if (getHitPosition(ray, worldPos))
+			{
+				m_mouseEvent.setScreenPosition(screenPos);
+				m_mouseEvent.setWorldPosition(worldPos);
+				m_mouseEvent.setLocalPosition(worldPos - getWorldPosition());
+
+				onMouseButtonUp();
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	bool UiEventRegion::notifyMouseMoved(const Ray& ray, const Vector2& screenPos)
+	{
+		if (onMouseButtonMove.isHaveConnects())
+		{
+			Vector3 worldPos;
+			if (getHitPosition(ray, worldPos))
+			{
+				m_mouseEvent.setScreenPosition(screenPos);
+				m_mouseEvent.setWorldPosition(worldPos);
+				m_mouseEvent.setLocalPosition(worldPos - getWorldPosition());
+
+				onMouseButtonMove();
+
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 	Object* UiEventRegion::getMouseEvent()
 	{ 
