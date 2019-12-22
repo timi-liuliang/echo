@@ -34,8 +34,10 @@ const char* math = R"(
 local metatable = { x = 0, y = 0, z = 0 }
 metatable.__index = metatable
 
-function metatable:add()
-  self.x = self.y + self.z
+function metatable:add(other)
+    self.x = self.x + other.x
+    self.y = self.y + other.y
+    self.z = self.z + other.z
 end
 
 function vec3(xv, yv, zv) 

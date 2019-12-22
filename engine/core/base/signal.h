@@ -118,9 +118,9 @@ namespace Echo
         {
             if(m_connects)
             {
-                Variant args[1] = { variant_cast<T>(arg0) };
-                for (Connect* connect : *m_connects)
-                    connect->emitSignal(&args[0], 1);
+                //Variant args[1] = { variant_cast<T>(arg0) };
+                //for (Connect* connect : *m_connects)
+                //    connect->emitSignal(&args[0], 1);
             }
         }
     };
