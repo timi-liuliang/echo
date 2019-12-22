@@ -1,4 +1,5 @@
 #include "mt_shader_program.h"
+#include "mt_render_state.h"
 #include "mt_renderable.h"
 #include "mt_renderer.h"
 #include "mt_mapping.h"
@@ -105,7 +106,15 @@ namespace Echo
         [m_metalRenderPipelineDescriptor setFragmentFunction:getMetalFragmentFunction()];
 
         // specify the target-texture pixel format
-        m_metalRenderPipelineDescriptor.colorAttachments[0].pixelFormat = MTLPixelFormatBGRA8Unorm;
+        MTLRenderPipelineColorAttachmentDescriptor* colorAttachmentDescriptor = m_metalRenderPipelineDescriptor.colorAttachments[0];
+        if(colorAttachmentDescriptor)
+        {
+            colorAttachmentDescriptor.pixelFormat = MTLPixelFormatBGRA8Unorm;
+            
+            MTBlendState* mtBlendState = ECHO_DOWN_CAST<MTBlendState*>(m_blendState);
+            if(mtBlendState)
+                mtBlendState->active(colorAttachmentDescriptor);
+        }
         
         // Specify vertex descriptor
         MeshVertexFormat define;

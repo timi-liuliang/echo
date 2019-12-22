@@ -6,7 +6,17 @@ namespace Echo
     MTBlendState::MTBlendState(const BlendDesc &desc)
         : BlendState(desc)
     {
-        
+    }
+
+    void MTBlendState::active(MTLRenderPipelineColorAttachmentDescriptor* colorAttachmentDescriptor)
+    {
+        colorAttachmentDescriptor.blendingEnabled             = m_desc.bBlendEnable;
+        colorAttachmentDescriptor.rgbBlendOperation           = MTLBlendOperationAdd;
+        colorAttachmentDescriptor.alphaBlendOperation         = MTLBlendOperationAdd;
+        colorAttachmentDescriptor.sourceRGBBlendFactor        = MTLBlendFactorSourceAlpha;
+        colorAttachmentDescriptor.sourceAlphaBlendFactor      = MTLBlendFactorSourceAlpha;
+        colorAttachmentDescriptor.destinationRGBBlendFactor   = MTLBlendFactorOneMinusSourceAlpha;
+        colorAttachmentDescriptor.destinationAlphaBlendFactor = MTLBlendFactorOneMinusSourceAlpha;
     }
     
     MTRasterizerState::MTRasterizerState(const RasterizerDesc& desc)

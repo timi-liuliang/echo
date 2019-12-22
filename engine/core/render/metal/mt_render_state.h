@@ -11,7 +11,7 @@ namespace Echo
         MTBlendState(const BlendDesc &desc);
         virtual ~MTBlendState(){}
 
-        void active(){}
+        void active(MTLRenderPipelineColorAttachmentDescriptor* colorAttachmentDescriptor);
 	};
 	
 	class MTDepthStencilState : public DepthStencilState
