@@ -34,10 +34,29 @@ const char* math = R"(
 metatable_vec3 = { x = 0, y = 0, z = 0 }
 metatable_vec3.__index = metatable_vec3
 
-function metatable_vec3:add(other)
-    self.x = self.x + other.x
-    self.y = self.y + other.y
-    self.z = self.z + other.z
+function metatable_vec3:new(xv, yv, zv)
+	return setmetatable({x=xv, y=yv, z=zv}, metatable_vec3)
+end
+
+function metatable_vec3:length()
+	return math.sqrt(self.x * self.x + self.y * self.y + self.z * self.z)
+end
+
+function metatable_vec3:normalize()
+	local len = self:length()
+	return metatable_vec3:new(self.x/len, self.y/len, self.z/len)
+end
+
+function metatable_vec3:__add(other)
+	return metatable_vec3:new(self.x+other.x, self.y+other.y, self.z+other.z)
+end
+
+function metatable_vec3:__sub(other)
+	return metatable_vec3:new(self.x-other.x, self.y-other.y, self.z-other.z)
+end
+
+function metatable_vec3:__mul(scale)
+	return metatable_vec3:new(self.x * scale, self.y * scale, self.z * scale)
 end
 
 function vec3(xv, yv, zv) 
