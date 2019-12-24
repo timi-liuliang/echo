@@ -1,6 +1,23 @@
 /*相关API:
 	http://pgl.yoyo.org/luai/i/_
 
+	Lua stack
+	You can imagine the stack as growing from the bottom, with the bottom (i.e., the first pushed) element having index 1, 
+	then you push another element (index 2), then another one (index 3), etc.. So you have this situation:
+	+-----------------------+
+	| element with index 6  | <-- top ("relative" index -1)
+	+-----------------------+
+	| element with index 5  | <-- -2
+	+-----------------------+
+	| element with index 4  | <-- -3
+	+-----------------------+
+	| element with index 3  | <-- -4
+	+-----------------------+
+	| element with index 2  | <-- -5
+	+-----------------------+
+	| element with index 1  | <-- bottom ("relative" index -6 )
+	+-----------------------+
+
 	lua_createtable
 	原型: void lua_createtable (lua_State *L, int narr, int nrec);
 	描述: 创建一个新的table并将之放在栈顶.narr是该table数组部分的长度,nrec是该table hash部分的长度.

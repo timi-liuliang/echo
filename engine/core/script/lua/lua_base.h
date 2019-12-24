@@ -276,12 +276,16 @@ namespace Echo
 	template<> INLINE void lua_pushvalue<const Vector3&>(lua_State* state, const Vector3& value)
 	{
 		lua_newtable(state);
+		int idx = lua_gettop(state);
 		lua_pushnumber(state, value.x);
-		lua_setfield(state, -2, "x");
+		lua_setfield(state, idx, "x");
 		lua_pushnumber(state, value.y);
-		lua_setfield(state, -2, "y");
+		lua_setfield(state, idx, "y");
 		lua_pushnumber(state, value.z);
-		lua_setfield(state, -2, "z");
+		lua_setfield(state, idx, "z");
+
+		lua_getglobal(state, "metatable_vec3");
+		lua_setmetatable(state, idx);
 	}
 
 	template<> INLINE void lua_pushvalue<const Vector3>(lua_State* state, const Vector3 value)
