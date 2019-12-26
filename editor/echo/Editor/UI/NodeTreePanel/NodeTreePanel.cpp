@@ -16,6 +16,11 @@
 #include <engine/core/io/IO.h>
 #include <engine/modules/gltf/gltf_res.h>
 
+#define NodeScriptIndex		1
+#define NodeLinkIndex		2
+#define NodeDisableIndex	3
+#define NodeIconWidth		24
+
 namespace Studio
 {
 	static NodeTreePanel* g_inst = nullptr;
@@ -91,12 +96,14 @@ namespace Studio
 
 		if (m_width != m_nodeTreeWidget->width())
 		{
-			m_nodeTreeWidget->header()->resizeSection(1, 32);
+			m_nodeTreeWidget->header()->resizeSection(1, NodeIconWidth);
 			m_nodeTreeWidget->header()->setSectionResizeMode(1, QHeaderView::Fixed);
-			m_nodeTreeWidget->header()->resizeSection(0, m_nodeTreeWidget->width() - 32);
+			m_nodeTreeWidget->header()->resizeSection(2, NodeIconWidth);
+			m_nodeTreeWidget->header()->setSectionResizeMode(1, QHeaderView::Fixed);
+			m_nodeTreeWidget->header()->resizeSection(3, NodeIconWidth);
+			m_nodeTreeWidget->header()->setSectionResizeMode(2, QHeaderView::Fixed);
+			m_nodeTreeWidget->header()->resizeSection(0, max<int>( 16, m_nodeTreeWidget->width() - (NodeIconWidth + 1) * 3));
 			m_width = m_nodeTreeWidget->width();
-
-			//m_propertyTreeView->header()->resizeSection(0, std::max<int>(140, m_propertyTreeView->header()->sectionSize(0)));
 		}
 	}
 
@@ -113,7 +120,6 @@ namespace Studio
 		}
 	}
 
-	// clear
 	void NodeTreePanel::clear()
 	{
 		m_nodeTreeWidget->clear();
@@ -148,9 +154,16 @@ namespace Studio
 		nodeItem->setFlags( nodeItem->flags() | Qt::ItemIsEditable);
 		parent->insertChild(nodeIdx, nodeItem);
 
-		// child scene
+		if (node->isEnable())
+			nodeItem->setIcon(NodeDisableIndex, QIcon(":/icon/Icon/eye_open.png"));
+		else
+			nodeItem->setIcon(NodeDisableIndex, QIcon(":/icon/Icon/eye_close.png"));
+
+		if (!node->getScript().isEmpty())
+			nodeItem->setIcon(NodeScriptIndex, QIcon(":/icon/Icon/file/lua.png"));
+
 		if (!node->getPath().empty())
-			nodeItem->setIcon(1, QIcon(":/icon/node/link_child_scene.png"));
+			nodeItem->setIcon(NodeLinkIndex, QIcon(":/icon/node/link_child_scene.png"));
 
 		// change foreground color based on node state
 		updateNodeTreeWidgetItemDisplay(treeWidget, nodeItem);
@@ -207,7 +220,6 @@ namespace Studio
 		return  item  ? getNode(item) : nullptr;
 	}
 
-	// update item display
 	void NodeTreePanel::updateNodeTreeWidgetItemDisplay(QTreeWidget* treeWidget, QTreeWidgetItem* item)
 	{
 		if (treeWidget->invisibleRootItem()->childCount() == 0)
@@ -219,7 +231,6 @@ namespace Studio
 			Echo::Node* node = getNode(curItem);
 			if (node)
 			{
-				// change color
 				curItem->setForeground(0, QBrush(node->isEnable() ? QColor(220, 220, 220) : QColor(120, 120, 120)));
 			}
 		}
@@ -255,7 +266,6 @@ namespace Studio
 		onSelectNode();
 	}
 
-    // property tree menu
     void NodeTreePanel::showPropertyMenu(const QPoint& point)
     {
 		Echo::Node* currentNode = getCurrentSelectNode();
@@ -371,7 +381,6 @@ namespace Studio
 		}
 	}
     
-	// remove item
 	void NodeTreePanel::removeItem(QTreeWidgetItem* item)
 	{
 		Echo::Node* node = getNode(item);
@@ -385,7 +394,6 @@ namespace Studio
 		node->queueFree();
 	}
 
-	// on trigger delete nodes
 	void NodeTreePanel::onDeleteNodes()
 	{
 		if (QMessageBox::Yes == QMessageBox(QMessageBox::Warning, "Warning", "Do you really want to delete selected nodes ?", QMessageBox::Yes | QMessageBox::No).exec())
@@ -412,7 +420,6 @@ namespace Studio
 		}
 	}
 
-	// on trigger rename node
 	void NodeTreePanel::onRenameNode()
 	{
 		QTreeWidgetItem* item = m_nodeTreeWidget->currentItem();
@@ -422,7 +429,6 @@ namespace Studio
 		}
 	}
 
-	// on duplicate node
 	void NodeTreePanel::onDuplicateNode()
 	{
 		QTreeWidgetItem* item = m_nodeTreeWidget->currentItem();
@@ -521,7 +527,6 @@ namespace Studio
 		}
 	}
 
-	// on discard instancing
 	void NodeTreePanel::onDiscardInstancing()
 	{
 		QTreeWidgetItem* item = m_nodeTreeWidget->currentItem();
@@ -538,7 +543,6 @@ namespace Studio
 		}
 	}
 
-	// refresh node display
 	void NodeTreePanel::refreshNodeDisplay(QTreeWidgetItem* item)
 	{
 		if (item)
@@ -560,7 +564,6 @@ namespace Studio
 		}
 	}
 
-	// node tree drag drop operator
 	void NodeTreePanel::onItemPositionChanged(QTreeWidgetItem* item)
 	{
 		QTreeWidgetItem* itemParent = item->parent();
@@ -578,7 +581,6 @@ namespace Studio
 		}
 	}
 
-	// when modifyd item name
 	void NodeTreePanel::onChangedNodeName(QTreeWidgetItem* item)
 	{
 		if (item)
@@ -610,7 +612,6 @@ namespace Studio
 		}
 	}
 
-	// import gltf scene
 	void NodeTreePanel::importGltfScene()
 	{
 		Echo::String gltfFile = ResChooseDialog::getSelectingFile(this, ".gltf");
@@ -625,7 +626,6 @@ namespace Studio
 		}
 	}
 
-	// show object property when select a new object
 	void NodeTreePanel::showSelectedObjectProperty()
 	{
 		m_propertyHelper.clear();
@@ -643,7 +643,6 @@ namespace Studio
 		}	
 	}
     
-    // update signals display
     void NodeTreePanel::showSelectedObjectSignal()
     {
         m_signalTreeWidget->clear();
@@ -741,7 +740,6 @@ namespace Studio
         }
     }
     
-    // signal tree widget show menu
     void NodeTreePanel::showSignalTreeWidgetMenu(const QPoint& point)
     {
         QTreeWidgetItem* item = m_signalTreeWidget->itemAt(point);
@@ -773,7 +771,6 @@ namespace Studio
         }
     }
     
-    // connect Object slot
     void NodeTreePanel::onConnectOjectSlot()
     {
         Echo::Node* currentNode = ECHO_DOWN_CAST<Echo::Node*>(m_currentEditObject);
@@ -997,7 +994,32 @@ namespace Studio
 
 	void NodeTreePanel::onClickedNodeItem(QTreeWidgetItem* item, int column)
 	{
-		if (column == 1)
+		if (column == NodeDisableIndex)
+		{
+			Echo::Node* node = getNode(item);
+			if (node)
+			{
+				node->setEnable(!node->isEnable());
+				if (node->isEnable())
+					item->setIcon(NodeDisableIndex, QIcon(":/icon/Icon/eye_open.png"));
+				else
+					item->setIcon(NodeDisableIndex, QIcon(":/icon/Icon/eye_close.png"));
+
+			}
+		}
+		if (column == NodeScriptIndex)
+		{
+			Echo::Node* node = getNode(item);
+			if (node)
+			{
+				const Echo::ResourcePath& script = node->getScript();
+				if (!script.isEmpty())
+				{
+					MainWindow::instance()->openLuaScript(script.getPath());
+				}
+			}
+		}
+		else if (column == NodeLinkIndex)
 		{
 			Echo::Node* node = getNode(item);
 			if (node)
@@ -1028,7 +1050,6 @@ namespace Studio
 		}
 	}
 
-	// on select node
 	void NodeTreePanel::onSelectNode()
 	{
 		// editor extension : unselect object
@@ -1063,7 +1084,6 @@ namespace Studio
 		showSelectedObjectProperty();
 	}
 
-	// edit res
 	void NodeTreePanel::onEditObject(Echo::Object* res)
 	{
 		m_currentEditObject = res;
