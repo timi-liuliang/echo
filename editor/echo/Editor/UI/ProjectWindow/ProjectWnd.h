@@ -45,6 +45,7 @@ namespace Studio
         
         // remove project
         void onRemoveProject();
+		void onShowProjectInExplorer();
 
 		// download
 		void onDownloadNewVersion(QListWidgetItem* item);
@@ -55,6 +56,6 @@ namespace Studio
 	private:
 		QT_UI::QPreviewWidget*  m_previewerWidget;
         QMenu*                  m_projectMenu = nullptr;
-        Echo::String            m_removeProject;
+        Echo::String            m_selectedProject;
 	};
 }

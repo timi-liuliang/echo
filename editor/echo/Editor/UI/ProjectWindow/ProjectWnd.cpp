@@ -1,5 +1,6 @@
 #include <QMessageBox>
 #include <QStandardItem>
+#include <QDesktopServices>
 #include <QPainter>
 #include "ProjectWnd.h"
 #include <qfiledialog.h>
@@ -46,6 +47,7 @@ namespace Studio
         QObject::connect(m_previewerWidget, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showMenu(const QPoint&)));
 		QObject::connect(m_versionListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(onDownloadNewVersion(QListWidgetItem*)));
         QObject::connect(m_actionRemoveProject, SIGNAL(triggered()), this, SLOT(onRemoveProject()));
+		QObject::connect(m_actionShowInExplorer, SIGNAL(triggered()), this, SLOT(onShowProjectInExplorer()));
 
 		// show all updateable version echo
 		showAllUpdateableVersion();
@@ -202,25 +204,40 @@ namespace Studio
 
     void ProjectWnd::onRemoveProject()
     {
-        if(!m_removeProject.empty())
+        if(!m_selectedProject.empty())
         {
-            ConfigMgr::instance()->removeRencentProject(m_removeProject.c_str());
+            ConfigMgr::instance()->removeRencentProject(m_selectedProject.c_str());
             
             loadAllRecentProjects();
         }
     }
+
+	void ProjectWnd::onShowProjectInExplorer()
+	{
+		QString openDir = Echo::PathUtil::GetFileDirPath(m_selectedProject).c_str();
+		if (!openDir.isEmpty())
+		{
+#ifdef ECHO_PLATFORM_WINDOWS
+			QDesktopServices::openUrl(openDir);
+#else
+			QDesktopServices::openUrl(QUrl("file://" + openDir));
+#endif
+		}
+	}
 
     void ProjectWnd::showMenu(const QPoint& point)
     {
         QStandardItem* item = m_previewerWidget->itemAt( point);
         if(item)
         {
-            m_removeProject = item->data(Qt::UserRole).toString().toStdString().c_str();// data(Qt::UserRole).toString()
+            m_selectedProject = item->data(Qt::UserRole).toString().toStdString().c_str();// data(Qt::UserRole).toString()
             
             EchoSafeDelete(m_projectMenu, QMenu);
             m_projectMenu = EchoNew(QMenu);
             
             m_projectMenu->addAction(m_actionRemoveProject);
+			m_projectMenu->addSeparator();
+			m_projectMenu->addAction(m_actionShowInExplorer);
 
             m_projectMenu->exec(QCursor::pos());
         }

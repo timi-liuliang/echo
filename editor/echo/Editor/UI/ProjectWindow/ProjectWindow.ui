@@ -144,6 +144,11 @@
     <string>Remove Project</string>
    </property>
   </action>
+  <action name="m_actionShowInExplorer">
+   <property name="text">
+    <string>Show In Explorer</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
