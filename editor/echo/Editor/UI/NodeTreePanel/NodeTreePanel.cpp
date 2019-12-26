@@ -160,7 +160,7 @@ namespace Studio
 			nodeItem->setIcon(NodeDisableIndex, QIcon(":/icon/Icon/eye_close.png"));
 
 		if (!node->getScript().isEmpty())
-			nodeItem->setIcon(NodeScriptIndex, QIcon(":/icon/Icon/file/lua.png"));
+			nodeItem->setIcon(NodeScriptIndex, QIcon(":/icon/Icon/node_lua_script.png"));
 
 		if (!node->getPath().empty())
 			nodeItem->setIcon(NodeLinkIndex, QIcon(":/icon/node/link_child_scene.png"));
