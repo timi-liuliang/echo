@@ -30,7 +30,7 @@ end
 )";
 
 // 2.math
-const char* math = R"(
+const char* math_vec3 = R"(
 metatable_vec3 = { x = 0, y = 0, z = 0 }
 metatable_vec3.__index = metatable_vec3
 
@@ -60,7 +60,42 @@ function metatable_vec3:__mul(scale)
 end
 
 function vec3(xv, yv, zv) 
-  return setmetatable( {x=xv, y=yv, z=zv}, metatable_vec3)
+	return metatable_vec3:new(xv, yv, zv)
+end
+)";
+
+// 2.math
+const char* math_quaternion = R"(
+metatable_quaternion = { x = 0, y = 0, z = 0 }
+metatable_quaternion.__index = metatable_quaternion
+
+function metatable_quaternion:new(xv, yv, zv, wv)
+	return setmetatable({x=xv, y=yv, z=zv, w=wv}, metatable_quaternion)
+end
+
+function metatable_quaternion:length()
+	return math.sqrt(self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w)
+end
+
+function metatable_quaternion:normalize()
+	local len = self:length()
+	return metatable_quaternion:new(self.x/len, self.y/len, self.z/len, self.w/len)
+end
+
+function metatable_quaternion:__add(other)
+	return metatable_quaternion:new(self.x+other.x, self.y+other.y, self.z+other.z, self.w+other.w)
+end
+
+function metatable_quaternion:__sub(other)
+	return metatable_quaternion:new(self.x-other.x, self.y-other.y, self.z-other.z, self.w-other.w)
+end
+
+function metatable_quaternion:__mul(scale)
+	return metatable_quaternion:new(self.x * scale, self.y * scale, self.z * scale, self.w*scale)
+end
+
+function quaternion(xv, yv, zv, wv) 
+	return metatable_quaternion:new(xv, yv, zv, wv)
 end
 )";
 
@@ -71,7 +106,10 @@ namespace Echo
 		// core library
 		{
 			LuaBinder::instance()->execString(utils, true);
-			LuaBinder::instance()->execString(math, true);
+			LuaBinder::instance()->execString(math_vec3, true);
+
+			LuaBinder::instance()->execString(math_quaternion, true);
+			BIND_METHOD(Quaternion::fromVec3ToVec3, DEF_METHOD("quaternionx.fromVec3ToVec3"));
 		}
 	}
 }

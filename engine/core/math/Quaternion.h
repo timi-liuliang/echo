@@ -532,7 +532,7 @@ namespace Echo
 			}
 		}
 
-		void fromVec3ToVec3(const Vector3& from, const Vector3& to);
+		static Quaternion fromVec3ToVec3(const Vector3& from, const Vector3& to);
 
 		inline void fromAxes(const Vector3& xAxis, const Vector3& yAxis, const Vector3& zAxis)
 		{
@@ -684,18 +684,21 @@ namespace Echo
 			return Math::ACos(w) * 2.0f;
 		}
 
-		inline void fromAxisAngle(const Vector3& axis, Real radian)
+		static Quaternion fromAxisAngle(const Vector3& axis, Real radian)
 		{
+			Quaternion result;
 			// assert:  axis is unit length
 			// The quaternion representing the rotation is
 			//   q = cos(A / 2) + sin(A / 2 ) * (x * i + y * j + z * k)
 
 			Real alpha = 0.5f * radian;
 			Real sina = Math::Sin(alpha);
-			w = Math::Cos(alpha);
-			x = sina * axis.x;
-			y = sina * axis.y;
-			z = sina * axis.z;
+			result.w = Math::Cos(alpha);
+			result.x = sina * axis.x;
+			result.y = sina * axis.y;
+			result.z = sina * axis.z;
+
+			return result;
 		}
 
 		inline void fromEulerAngle(Real pitch, Real yaw, Real roll)

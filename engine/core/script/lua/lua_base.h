@@ -41,6 +41,7 @@ namespace Echo
 #endif 
 
 	extern ObjectPool<Vector3>		LuaVec3Pool;
+	extern ObjectPool<Quaternion>	LuaQuaternionPool;
 	extern ObjectPool<String>		LuaStrPool;
 	extern ObjectPool<StringOption> LuaStrOptionPool;
 	extern ObjectPool<RealVector>	LuaRealVectorPool;
@@ -137,6 +138,27 @@ namespace Echo
 	{
 		Vector3* ptr = (Vector3*)&value;
 		LuaVec3Pool.deleteObj(ptr);
+	}
+
+	template<> INLINE const Quaternion& lua_getvalue<const Quaternion&>(lua_State* state, int idx)
+	{
+		Quaternion& result = *LuaQuaternionPool.newObj();
+		lua_getfield(state, idx, "x");
+		lua_getfield(state, idx, "y");
+		lua_getfield(state, idx, "z");
+		lua_getfield(state, idx, "w");
+		result.x = (float)lua_tonumber(state, idx + 1);
+		result.y = (float)lua_tonumber(state, idx + 2);
+		result.z = (float)lua_tonumber(state, idx + 3);
+		result.w = (float)lua_tonumber(state, idx + 4);
+		lua_pop(state, 4);
+		return result;
+	}
+
+	template<> INLINE void lua_freevalue<const Quaternion&>(const Quaternion& value)
+	{
+		Quaternion* ptr = (Quaternion*)&value;
+		LuaQuaternionPool.deleteObj(ptr);
 	}
 
 	template<> INLINE const RealVector& lua_getvalue<const RealVector&>(lua_State* state, int idx)
@@ -291,6 +313,33 @@ namespace Echo
 	template<> INLINE void lua_pushvalue<const Vector3>(lua_State* state, const Vector3 value)
 	{
 		lua_pushvalue<const Vector3&>(state, value);
+	}
+
+	template<> INLINE void lua_pushvalue<const Quaternion&>(lua_State* state, const Quaternion& value)
+	{
+		lua_newtable(state);
+		int idx = lua_gettop(state);
+		lua_pushnumber(state, value.x);
+		lua_setfield(state, idx, "x");
+		lua_pushnumber(state, value.y);
+		lua_setfield(state, idx, "y");
+		lua_pushnumber(state, value.z);
+		lua_setfield(state, idx, "z");
+		lua_pushnumber(state, value.w);
+		lua_setfield(state, idx, "w");
+
+		lua_getglobal(state, "metatable_quaternion");
+		lua_setmetatable(state, idx);
+	}
+
+	template<> INLINE void lua_pushvalue<Quaternion>(lua_State* state, Quaternion value)
+	{
+		lua_pushvalue<const Quaternion&>(state, value);
+	}
+
+	template<> INLINE void lua_pushvalue<const Quaternion>(lua_State* state, const Quaternion value)
+	{
+		lua_pushvalue<const Quaternion&>(state, value);
 	}
 
 	template<> INLINE void lua_pushvalue<const RealVector&>(lua_State* state, const RealVector& value)

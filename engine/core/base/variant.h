@@ -28,6 +28,7 @@ namespace Echo
 			Vector2,
 			Vector3,
 			Vector4,
+			Quaternion,
 			VectorN,
 			Matrix4,
 			MatrixN,
@@ -63,6 +64,7 @@ namespace Echo
 		Variant(const Vector2& value);
 		Variant(const Vector3& value);
 		Variant(const Vector4& value);
+		Variant(const Quaternion& value);
 		Variant(const Matrix& value);
 		Variant(const Color& value);
 		Variant(const ResourcePath& value);
@@ -89,6 +91,7 @@ namespace Echo
 		operator const Vector2&() const { return any_cast<Vector2>(m_any); }
 		operator const Vector3&() const { return any_cast<Vector3>(m_any); }
 		operator const Vector4&() const { return any_cast<Vector4>(m_any); }
+		operator const Quaternion&() const { return any_cast<Quaternion>(m_any); }
 		operator const Matrix&() const  { return any_cast<Matrix>(m_any); }
 		operator const Color&() const { return any_cast<Color>(m_any); }
 		operator const char*() const { return any_cast<String>(m_any).c_str(); }
@@ -107,6 +110,7 @@ namespace Echo
 		const Vector2& toVector2() const { return any_cast<Vector2>(m_any); }
 		const Vector3& toVector3() const { return any_cast<Vector3>(m_any); }
 		const Vector4& toVector4() const { return any_cast<Vector4>(m_any); }
+		const Quaternion& toQuaternion() const { return any_cast<Quaternion>(m_any); }
 		const Color& toColor() const { return any_cast<Color>(m_any); }
         Signal* toSignal() const { return m_signal; }
 		Object* toObj() const { return m_obj; }

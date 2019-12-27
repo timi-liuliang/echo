@@ -70,9 +70,10 @@ namespace Echo
 		quan = q2 * Exp((Log(q * q1) + Log(q * q3)) / -4);
 	}
 
-	// 通过两个单位朝向构造旋转
-	void Quaternion::fromVec3ToVec3(const Vector3& from, const Vector3& to)
+	Quaternion Quaternion::fromVec3ToVec3(const Vector3& from, const Vector3& to)
 	{
+		Quaternion result;
+
 		Vector3 s = from;
 		s.normalize();
 		Vector3 t = to;
@@ -87,12 +88,12 @@ namespace Echo
 
 			// 04/7/6 added. fix bug.
 			if (dot > 0.0)
-				*this = IDENTITY;
+				result = IDENTITY;
 			else
 				// inverse.
-				fromAxisAngle(from.perpendicular(), Math::PI);
+				result = fromAxisAngle(from.perpendicular(), Math::PI);
 
-			return;
+			return result;
 		}
 
 		Vector3 u = sxt / sxtLen;
@@ -102,9 +103,11 @@ namespace Echo
 		Real sina = Math::Sin(angle2);
 		Real cosa = Math::Cos(angle2);
 
-		x = u.x * sina;
-		y = u.y * sina;
-		z = u.z * sina;
-		w = cosa;
+		result.x = u.x * sina;
+		result.y = u.y * sina;
+		result.z = u.z * sina;
+		result.w = cosa;
+
+		return result;
 	}
 }

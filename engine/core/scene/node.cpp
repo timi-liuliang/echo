@@ -478,6 +478,7 @@ namespace Echo
 		CLASS_BIND_METHOD(Node, getLocalPosition,		DEF_METHOD("getLocalPosition"));
 		CLASS_BIND_METHOD(Node, setLocalPosition,		DEF_METHOD("setLocalPosition"));
 		CLASS_BIND_METHOD(Node, setLocalYawPitchRoll,	DEF_METHOD("setLocalYawPitchRoll"));
+		CLASS_BIND_METHOD(Node, setLocalOrientation,	DEF_METHOD("setLocalOrientation"));
 		CLASS_BIND_METHOD(Node, setEnable,				DEF_METHOD("setEnable"));
 		CLASS_BIND_METHOD(Node, isEnable,				DEF_METHOD("isEnable"));
 		CLASS_BIND_METHOD(Node, setScript,				DEF_METHOD("setScript"));

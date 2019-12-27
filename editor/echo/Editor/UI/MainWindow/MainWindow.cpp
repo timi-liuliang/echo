@@ -339,7 +339,6 @@ namespace Studio
 		m_subEditComboBox->setCurrentText(subEditName);
 	}
 
-	// sub editor operate
 	void MainWindow::onSubEditChanged(const QString& subeditName)
 	{
 		Echo::String renderType = subeditName.toStdString().c_str();
