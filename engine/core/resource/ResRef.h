@@ -69,16 +69,19 @@ namespace Echo
 
 		void operator = (T* orig)
 		{
-			if (m_ptr)
+			if (m_ptr != orig)
 			{
-				m_ptr->subRefCount();
-				m_ptr = nullptr;
-			}
+				if (m_ptr)
+				{
+					m_ptr->subRefCount();
+					m_ptr = nullptr;
+				}
 
-			if (orig)
-			{
-				orig->addRefCount();
-				m_ptr = orig;
+				if (orig)
+				{
+					orig->addRefCount();
+					m_ptr = orig;
+				}
 			}
 		}
 

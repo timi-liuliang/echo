@@ -34,6 +34,7 @@ namespace Studio
 
 		setupUi( this);
         
+		m_nodeTreeWidget->setMouseTracking(true);
         m_nodeTreeWidget->setAttribute(Qt::WA_MacShowFocusRect,0);
         m_propertyTreeView->setAttribute(Qt::WA_MacShowFocusRect,0);
 
@@ -160,7 +161,10 @@ namespace Studio
 			nodeItem->setIcon(NodeDisableIndex, QIcon(":/icon/Icon/eye_close.png"));
 
 		if (!node->getScript().isEmpty())
+		{
 			nodeItem->setIcon(NodeScriptIndex, QIcon(":/icon/Icon/node_lua_script.png"));
+			nodeItem->setStatusTip(NodeScriptIndex, node->getScript().getPath().c_str());
+		}
 
 		if (!node->getPath().empty())
 			nodeItem->setIcon(NodeLinkIndex, QIcon(":/icon/node/link_child_scene.png"));
