@@ -9,7 +9,6 @@ namespace Echo
 		struct ButtonState
 		{
 			bool	m_isDown;
-			ui32	m_frame;		// remember the frame when button is down
 			Vector2 m_position;		// clicked screen position
 
 			ButtonState()
@@ -20,7 +19,6 @@ namespace Echo
 			void reset()
 			{
 				m_isDown = false;
-				m_frame = 0;
 				m_position = Vector2::INVALID;
 			}
 		};

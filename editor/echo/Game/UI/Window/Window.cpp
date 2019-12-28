@@ -12,6 +12,7 @@ namespace Game
 	{
 		setUpdatesEnabled(false);
 		setMouseTracking(true);
+		setFocusPolicy(Qt::StrongFocus);
 
 		m_app = new App;
 	}
@@ -112,11 +113,11 @@ namespace Game
 
 	void Window::keyPressEvent(QKeyEvent* e)
 	{
-
+		Echo::Input::instance()->notifyKeyDown(e->key());
 	}
 
 	void Window::keyReleaseEvent(QKeyEvent* e)
 	{
-
+		Echo::Input::instance()->notifyKeyUp(e->key());
 	}
 }

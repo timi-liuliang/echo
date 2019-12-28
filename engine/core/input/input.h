@@ -3,6 +3,7 @@
 #include "engine/core/base/object.h"
 #include "engine/core/base/signal.h"
 #include "mouse_state.h"
+#include "key_state.h"
 
 namespace Echo
 {
@@ -21,18 +22,24 @@ namespace Echo
 
 	public:
 		// 0 for left button, 1 for right button, 2 for the middle button.
-		bool isMouseButtonDown(Echo::ui32 id);
-		bool getMouseButtonDown(Echo::ui32 id);
-		bool isMouseButtonUp(Echo::ui32 id);
-		bool getMouseButtonUp(Echo::ui32 id);
+		bool isMouseButtonDown(ui32 id);
+		bool isMouseButtonUp(ui32 id);
 
 		// get mouse position
 		const Vector2& getMousePosition() { return m_mouseState.m_mouseButtonStates[0].m_position; }
 
+		// is key down
+		bool isKeyDown(ui32 id);
+
+	public:
 		// called by os
 		void notifyMouseButtonDown(Echo::ui32 id, const Vector2& pos);
 		void notifyMouseButtonUp(Echo::ui32 id, const Vector2& pos);
 		void notifyMouseMove(Echo::ui32 id, const Vector2& pos);
+
+		// called by os
+		void notifyKeyDown(Echo::ui32 id);
+		void notifyKeyUp(Echo::ui32 id);
         
     public:
         // on Mouse signal
@@ -40,11 +47,15 @@ namespace Echo
 		DECLARE_SIGNAL(Signal0, onMouseButtonUp)
 		DECLARE_SIGNAL(Signal0, onMouseMove);
 
+		// on Key signal
+		DECLARE_SIGNAL(Signal0, onKeyDown);
+		DECLARE_SIGNAL(Signal0, onKeyUp);
+
 	private:
 		Input();
 
 	private:
-		ui32			m_frame;			// frame id
 		MouseState		m_mouseState;
+		KeyStates		m_keyStates;
 	};
 }
