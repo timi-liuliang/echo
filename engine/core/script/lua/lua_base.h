@@ -306,7 +306,7 @@ namespace Echo
 		lua_pushnumber(state, value.z);
 		lua_setfield(state, idx, "z");
 
-		lua_getglobal(state, "metatable_vec3");
+		lua_getglobal(state, "vec3");
 		lua_setmetatable(state, idx);
 	}
 
@@ -328,7 +328,7 @@ namespace Echo
 		lua_pushnumber(state, value.w);
 		lua_setfield(state, idx, "w");
 
-		lua_getglobal(state, "metatable_quaternion");
+		lua_getglobal(state, "quaternion");
 		lua_setmetatable(state, idx);
 	}
 
