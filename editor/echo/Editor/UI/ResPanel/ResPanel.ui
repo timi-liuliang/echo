@@ -143,6 +143,14 @@
     <string>Duplicate</string>
    </property>
   </action>
+  <action name="m_actionCopyPath">
+   <property name="text">
+    <string>Copy Path</string>
+   </property>
+   <property name="toolTip">
+    <string>Copy Resource Path</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="../../../Resource/App.qrc"/>

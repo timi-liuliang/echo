@@ -46,6 +46,7 @@ namespace Studio
 		QObject::connect(m_actionRenameRes, SIGNAL(triggered()), this, SLOT(onRenameRes()));
 		QObject::connect(m_actionDeleteRes, SIGNAL(triggered()), this, SLOT(onDeleteRes()));
 		QObject::connect(m_actionDuplicateRes, SIGNAL(triggered()), this, SLOT(onDuplicateRes()));
+		QObject::connect(m_actionCopyPath, SIGNAL(triggered()), this, SLOT(onCopyResPath()));
 		QObject::connect(m_viewTypeButton, SIGNAL(clicked()), this, SLOT(onSwitchResVeiwType()));
 		QObject::connect(m_searchLineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(onSearchTextChanged()));
 
@@ -181,6 +182,9 @@ namespace Studio
 		}
 
 		m_resMenu->addSeparator();
+		m_resMenu->addAction(m_actionCopyPath);
+
+		m_resMenu->addSeparator();
 		m_resMenu->addAction(m_actionShowInExplorer);
 
 		m_resMenu->exec(QCursor::pos());
@@ -309,6 +313,19 @@ namespace Studio
 
 
 			reslectCurrentDir();
+		}
+	}
+
+	void ResPanel::onCopyResPath()
+	{
+		if (m_menuEditItem)
+		{
+			Echo::String path = m_menuEditItem->data(Qt::UserRole).toString().toStdString().c_str();
+			if (Echo::IO::instance()->convertFullPathToResPath(path, path))
+			{
+				QClipboard* clipboard = QApplication::clipboard();
+				clipboard->setText(path.c_str());
+			}
 		}
 	}
 

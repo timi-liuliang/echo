@@ -59,6 +59,9 @@ namespace Studio
 		// duplicate res
 		void onDuplicateRes();
 
+		// copy res path
+		void onCopyResPath();
+
 		// on renamed res
 		void onRenamedRes(const QString src, const QString dest);
 

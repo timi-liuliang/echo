@@ -44,7 +44,11 @@ end
 
 function vec3:normalize()
 	local len = self:length()
-	return vec3:new(self.x/len, self.y/len, self.z/len)
+	if len > 0.000001 then
+		return vec3:new(self.x/len, self.y/len, self.z/len)
+	else
+		return vec3:new(0.0, 0.0, 0.0)
+	end
 end
 
 function vec3:__call(xv, yv, zv)
