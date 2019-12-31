@@ -713,7 +713,7 @@ namespace Echo
 	Node* Node::load(const char* path)
 	{
 		Node* result = loadLink(path, false);
-		result->registerToScript();
+		result->update(0.f, true);
 
 		return result;
 	}
