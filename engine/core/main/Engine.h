@@ -1,11 +1,14 @@
 #pragma once
 
 #include "FrameState.h"
+#include "engine/core/base/object.h"
 
 namespace Echo
 {
-	class Engine
+	class Engine : public Object
 	{	
+		ECHO_SINGLETON_CLASS(Engine, Object);
+
 	public:
 		// config
 		struct Config
@@ -21,7 +24,7 @@ namespace Echo
 		};
 
 	public:
-        ~Engine();
+        virtual ~Engine();
         
 		// instance
 		static Engine* instance();

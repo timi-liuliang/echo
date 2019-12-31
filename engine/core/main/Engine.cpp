@@ -51,6 +51,11 @@ namespace Echo
 		return inst;
 	}
 
+	void Engine::bindMethods()
+	{
+		CLASS_BIND_METHOD(Engine, getFrameTime, "getFrameTime");
+	}
+
 	void Engine::initializeDll()
 	{
 
@@ -124,8 +129,9 @@ namespace Echo
 		Class::registerType<PluginSettings>();
 		loadSettings();
 
-		// regiser class types in core
+		// register class types in core
 		Class::registerType<Object>();
+		Class::registerType<Engine>();
 		Class::registerType<Node>();
 		Class::registerType<Module>();
 		Class::registerType<Render>();
@@ -148,7 +154,7 @@ namespace Echo
 		Class::registerType<RenderQueue>();
 		Class::registerType<FrameBuffer>();
 
-		// load all plugins
+		// load all plugin
 		Plugin::loadAllPlugins();
 
 		// register all module
