@@ -84,7 +84,7 @@ namespace Echo
         virtual ui32 getMaxStageNum() const override { return 32;}
         
         // get depth range
-        virtual void getDepthRange(Vector2& vec) override {}
+        virtual void getDepthRange(Vector2& vec) override { vec = Vector2(-1.f, 1.f); }
 
 		// get view port
 		virtual void getViewportReal(Viewport& pViewport) override {}
