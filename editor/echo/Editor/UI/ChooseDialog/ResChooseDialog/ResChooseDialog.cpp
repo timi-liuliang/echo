@@ -47,7 +47,6 @@ namespace Studio
 			onSelectDir(Echo::Engine::instance()->getResPath().c_str());
 	}
 
-	// get file
 	Echo::String ResChooseDialog::getSelectingFile(QWidget* parent, const char* exts, const char* filesFilter, const char* startPath)
 	{
 		Echo::String selectFile;
@@ -62,13 +61,11 @@ namespace Studio
 		return selectFile;
 	}
 
-	// get select file
 	const Echo::String& ResChooseDialog::getSelectedFile()
 	{
 		return m_selectedFile;
 	}
 
-	// Ñ¡ÔñÎÄ¼þ¼Ð
 	void ResChooseDialog::onSelectDir(const char* dir)
 	{
 		bool isIncludePreDir = dir == Echo::Engine::instance()->getResPath() ? false : true;
@@ -79,14 +76,9 @@ namespace Studio
 		g_lastSelectDir = dir;
 	}
 
-	// on click res
 	void ResChooseDialog::onClickPreviewRes(const char* res)
 	{
-		if (Echo::PathUtil::IsDir(res))
-		{
-			m_dirModel->setCurrentSelect(res);
-		}
-		else
+		if (!Echo::PathUtil::IsDir(res))
 		{
 			Echo::String resPath;
 			if (Echo::IO::instance()->convertFullPathToResPath(res, resPath))
@@ -96,7 +88,6 @@ namespace Studio
 		}
 	}
 
-	// double click res
 	void ResChooseDialog::onDoubleClickPreviewRes(const char* res)
 	{
 		if (Echo::PathUtil::IsDir(res))

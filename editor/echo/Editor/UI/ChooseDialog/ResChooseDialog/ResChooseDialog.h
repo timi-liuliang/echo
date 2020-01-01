@@ -22,7 +22,7 @@ namespace Studio
 		const Echo::String& getSelectedFile();
 
 	public slots:
-		// Ñ¡ÔñÎÄ¼þ¼Ð
+		// on select direction
 		void onSelectDir(const char* dir);
 
 		// on click res
