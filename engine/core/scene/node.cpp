@@ -18,6 +18,32 @@ namespace Echo
 		}
 	}
 
+    void Node::LuaScript::bind(Node* obj)
+    {
+        if(Engine::instance()->getConfig().m_isGame)
+        {
+            m_isHaveScript = IO::instance()->isExist(m_file.getPath());
+            if(m_isHaveScript)
+            {
+                obj->registerToScript();
+                
+                String fileName = PathUtil::GetPureFilename(m_file.getPath(), false);
+                String moduleName = StringUtil::Replace(m_file.getPath(), "Res://", "");
+                moduleName = StringUtil::Replace(moduleName, "/", ".");
+                moduleName = StringUtil::Replace(moduleName, "\\", ".");
+                moduleName = StringUtil::Replace(moduleName, ".lua", "");
+
+                String luaStr = StringUtil::Format(
+                    "nodes._%d = objs._%d\n"\
+                    "local script_table = require \"%s\"\n"\
+                    "utils.append_table(%s, script_table)\n" \
+                    "package.loaded[\"%s\"] = nil\n", obj->getId(), obj->getId(), moduleName.c_str(), m_globalTableName.c_str(), moduleName.c_str());
+
+                LuaBinder::instance()->execString(luaStr);
+            }
+        }
+    }
+
 	void Node::LuaScript::start(Node* obj)
 	{
 		m_isHaveScript = IO::instance()->isExist(m_file.getPath());
@@ -25,21 +51,7 @@ namespace Echo
 		{
 			if ( m_isHaveScript)
 			{
-				obj->registerToScript();
-
-				String fileName = PathUtil::GetPureFilename(m_file.getPath(), false);
-				String moduleName = StringUtil::Replace(m_file.getPath(), "Res://", "");
-				moduleName = StringUtil::Replace(moduleName, "/", ".");
-				moduleName = StringUtil::Replace(moduleName, "\\", ".");
-				moduleName = StringUtil::Replace(moduleName, ".lua", "");
-
-				String luaStr = StringUtil::Format(
-					"nodes._%d = objs._%d\n"\
-					"local script_table = require \"%s\"\n"\
-					"utils.append_table(%s, script_table)\n" \
-					"package.loaded[\"%s\"] = nil\n" \
-					"%s:start()\n", obj->getId(), obj->getId(), moduleName.c_str(), m_globalTableName.c_str(), moduleName.c_str(), m_globalTableName.c_str());
-
+				String luaStr = StringUtil::Format("%s:start()", m_globalTableName.c_str());
 				LuaBinder::instance()->execString(luaStr);
 			}
 		}
@@ -391,6 +403,7 @@ namespace Echo
 	void Node::setScript(const ResourcePath& path)
 	{
 		m_script.m_file.setPath(path.getPath());
+        m_script.bind(this);
 	}
 
 	void Node::registerToScript()
@@ -713,7 +726,6 @@ namespace Echo
 	Node* Node::load(const char* path)
 	{
 		Node* result = loadLink(path, false);
-		result->update(0.f, true);
 
 		return result;
 	}

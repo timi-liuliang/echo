@@ -46,6 +46,7 @@ namespace Echo
 			String			m_globalTableName;		// global table name
 
 			LuaScript() : m_isStart(false), m_isHaveScript(false), m_file("", ".lua"){}
+            void bind(Node* obj);
 			void start(Node* obj);
 			void update(Node* obj);
 			void release(Node* obj);
