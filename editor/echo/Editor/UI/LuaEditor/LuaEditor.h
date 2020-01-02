@@ -8,7 +8,7 @@
 
 namespace Studio
 {
-	class LuaEditor : public QDockWidget, public Ui_ScriptEditorPanel
+	class LuaEditor : public QWidget, public Ui_ScriptEditorPanel
 	{
 		Q_OBJECT
 
@@ -17,15 +17,16 @@ namespace Studio
 		~LuaEditor();
 
 		// open lua file
-		void open( const Echo::String& tex);
+		void open( const Echo::String& fullPath);
 
 		// get current edit lua file path
 		const Echo::String& getCurrentLuaFilePath();
 
-	protected slots:
+	public slots :
 		// save
 		void save();
 
+	protected slots:
 		// on text changed
 		void onTextChanged();
 

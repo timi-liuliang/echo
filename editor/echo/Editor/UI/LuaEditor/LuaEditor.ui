@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>ScriptEditorPanel</class>
- <widget class="QDockWidget" name="ScriptEditorPanel">
+ <widget class="QWidget" name="ScriptEditorPanel">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,34 +11,32 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Lua</string>
+   <string>Form</string>
   </property>
-  <widget class="QWidget" name="dockWidgetContents">
-   <layout class="QVBoxLayout" name="verticalLayout" stretch="0">
-    <property name="spacing">
-     <number>0</number>
-    </property>
-    <property name="leftMargin">
-     <number>0</number>
-    </property>
-    <property name="topMargin">
-     <number>0</number>
-    </property>
-    <property name="rightMargin">
-     <number>0</number>
-    </property>
-    <property name="bottomMargin">
-     <number>0</number>
-    </property>
-    <item>
-     <widget class="Studio::LuaTextEdit" name="m_plainTextEdit">
-      <property name="frameShape">
-       <enum>QFrame::NoFrame</enum>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="Studio::LuaTextEdit" name="m_plainTextEdit">
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <customwidgets>
   <customwidget>
@@ -47,8 +45,6 @@
    <header>LuaTextEdit.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../../../Resource/App.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

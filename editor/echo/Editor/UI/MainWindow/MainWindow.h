@@ -11,6 +11,7 @@ namespace Studio
 	class ResPanel;
 	class NodeTreePanel;
 	class LuaEditor;
+	class LuaEditorMdiArea;
 	class ShaderEditor;
 	class ScratchEditor;
 	class TimelinePanel;
@@ -125,16 +126,16 @@ namespace Studio
 		void recoverEditSettings();
 
 	protected:
-		QDockWidget*	m_renderPanel;
-		ResPanel*		m_resPanel;
-		NodeTreePanel*	m_scenePanel;
-		LuaEditor*		m_scriptEditorPanel = nullptr;
-		ShaderEditor*	m_shaderEditorPanel = nullptr;
-		ScratchEditor*	m_scratchEditorPanel = nullptr;
-		BottomPanel*	m_bottomPanel;
-		QProcess		m_gameProcess;
-		QComboBox*		m_subEditComboBox;
-		AboutWindow*	m_aboutWindow;
-		QMenu*			m_cameraSettingsMenu = nullptr;
+		QDockWidget*		m_renderPanel;
+		ResPanel*			m_resPanel;
+		NodeTreePanel*		m_scenePanel;
+		LuaEditorMdiArea*	m_scriptEditorMdiArea = nullptr;
+		ShaderEditor*		m_shaderEditorPanel = nullptr;
+		ScratchEditor*		m_scratchEditorPanel = nullptr;
+		BottomPanel*		m_bottomPanel;
+		QProcess			m_gameProcess;
+		QComboBox*			m_subEditComboBox;
+		AboutWindow*		m_aboutWindow;
+		QMenu*				m_cameraSettingsMenu = nullptr;
 	};
 }

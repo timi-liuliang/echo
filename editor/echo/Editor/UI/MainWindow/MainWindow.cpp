@@ -15,6 +15,7 @@
 #include "QResSelect.h"
 #include "ResChooseDialog.h"
 #include "LuaEditor.h"
+#include "LuaEditorMdiArea.h"
 #include "ShaderEditor.h"
 #include "ScratchEditor.h"
 #include "BottomPanel.h"
@@ -102,7 +103,7 @@ namespace Studio
 		m_gameProcess.terminate();
 		m_gameProcess.waitForFinished();
 
-		EchoSafeDelete(m_scriptEditorPanel, LuaEditor);
+		EchoSafeDelete(m_scriptEditorMdiArea, LuaEditorMdiArea);
 		EchoSafeDelete(m_shaderEditorPanel, ShaderEditor);
 		EchoSafeDelete(m_scratchEditorPanel, ScratchEditor);
         EchoSafeDelete(m_bottomPanel, BottomPanel);
@@ -125,10 +126,10 @@ namespace Studio
 		m_resPanel = EchoNew(ResPanel(this));
 		m_scenePanel = EchoNew(NodeTreePanel(this));
 		m_bottomPanel = EchoNew(BottomPanel(this));
-		m_scriptEditorPanel = EchoNew(LuaEditor(this));
+		m_scriptEditorMdiArea = EchoNew(LuaEditorMdiArea);
 		m_shaderEditorPanel = EchoNew(ShaderEditor(this));
 		m_scratchEditorPanel = EchoNew(ScratchEditor(this));
-		m_scriptEditorPanel->setVisible(false);
+		m_scriptEditorMdiArea->setVisible(false);
 		m_shaderEditorPanel->setVisible(false);
 		m_scratchEditorPanel->setVisible(false);
 
@@ -142,7 +143,7 @@ namespace Studio
 		this->setCorner(Qt::BottomLeftCorner, Qt::LeftDockWidgetArea);
 		this->setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
 
-		this->addDockWidget(Qt::TopDockWidgetArea, m_scriptEditorPanel);
+		this->addDockWidget(Qt::TopDockWidgetArea, m_scriptEditorMdiArea);
 		this->addDockWidget(Qt::TopDockWidgetArea, m_shaderEditorPanel);
 		this->addDockWidget(Qt::TopDockWidgetArea, m_scratchEditorPanel);
 		this->addDockWidget(Qt::TopDockWidgetArea, m_renderPanel);
@@ -150,7 +151,7 @@ namespace Studio
 		this->addDockWidget(Qt::RightDockWidgetArea, m_scenePanel);
 		this->addDockWidget(Qt::BottomDockWidgetArea, m_bottomPanel);
 
-		this->tabifyDockWidget(m_scriptEditorPanel, m_shaderEditorPanel);
+		this->tabifyDockWidget(m_scriptEditorMdiArea, m_shaderEditorPanel);
 		this->tabifyDockWidget(m_shaderEditorPanel, m_scratchEditorPanel);
 
 		m_resPanel->onOpenProject();
@@ -163,8 +164,8 @@ namespace Studio
 		QTimer::singleShot(100, this, SLOT(recoverEditSettings()));
 
 		// signals & slots
-		QObject::connect(m_actionSaveProject, SIGNAL(triggered(bool)), m_scriptEditorPanel, SLOT(save()));
-		QObject::connect(m_scriptEditorPanel, SIGNAL(visibilityChanged(bool)), this, SLOT(onScriptEditVisibilityChanged()));
+		QObject::connect(m_actionSaveProject, SIGNAL(triggered(bool)), m_scriptEditorMdiArea, SLOT(save()));
+		QObject::connect(m_scriptEditorMdiArea, SIGNAL(visibilityChanged(bool)), this, SLOT(onScriptEditVisibilityChanged()));
 		QObject::connect(m_shaderEditorPanel, SIGNAL(visibilityChanged(bool)), this, SLOT(onShaderEditVisibilityChanged()));
 		QObject::connect(m_scratchEditorPanel, SIGNAL(visibilityChanged(bool)), this, SLOT(onScratchEditVisibilityChanged()));
 		QObject::connect(m_renderPanel, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(onDockWidgetLocationChanged()));
@@ -172,7 +173,7 @@ namespace Studio
     
     void MainWindow::onPrepareQuit()
     {
-        EchoSafeDelete(m_scriptEditorPanel, LuaEditor);
+        EchoSafeDelete(m_scriptEditorMdiArea, LuaEditorMdiArea);
 		EchoSafeDelete(m_shaderEditorPanel, ShaderEditor);
 		EchoSafeDelete(m_scratchEditorPanel, ScratchEditor);
     }
@@ -491,17 +492,18 @@ namespace Studio
 
 	void MainWindow::openLuaScript(const Echo::String& fileName)
 	{
-		m_scriptEditorPanel->open(fileName);
-		m_scriptEditorPanel->setVisible(true);
+		m_scriptEditorMdiArea->open(fileName);
+		m_scriptEditorMdiArea->setVisible(true);
+
+		AStudio::instance()->getConfigMgr()->setValue("luascripteditor_current_file", fileName.c_str());
 	}
 
 	void MainWindow::onScriptEditVisibilityChanged()
 	{
-		if (m_scriptEditorPanel->isVisible())
-			resizeDocks({ m_scriptEditorPanel, m_renderPanel }, { 70 , 30 }, Qt::Horizontal);
+		if (m_scriptEditorMdiArea->isVisible())
+			resizeDocks({ m_scriptEditorMdiArea, m_renderPanel }, { 70 , 30 }, Qt::Horizontal);
 
-		AStudio::instance()->getConfigMgr()->setValue("luascripteditor_visible", m_scriptEditorPanel->isVisible() ? "true" : "false");
-		AStudio::instance()->getConfigMgr()->setValue("luascripteditor_current_file", m_scriptEditorPanel->getCurrentLuaFilePath().c_str());
+		AStudio::instance()->getConfigMgr()->setValue("luascripteditor_visible", m_scriptEditorMdiArea->isVisible() ? "true" : "false");
 	}
 
 	void MainWindow::onShaderEditVisibilityChanged()
@@ -537,7 +539,7 @@ namespace Studio
 		AStudio::instance()->getLogPanel()->close();
 
 		// disconnect connections
-		m_scriptEditorPanel->disconnect();
+		m_scriptEditorMdiArea->disconnect();
 	}
 
 	void MainWindow::onGameProcessFinished(int id, QProcess::ExitStatus status)

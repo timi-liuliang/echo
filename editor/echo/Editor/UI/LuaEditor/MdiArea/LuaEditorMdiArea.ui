@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ScriptEditorPanel</class>
+ <widget class="QDockWidget" name="ScriptEditorPanel">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>624</width>
+    <height>545</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Lua</string>
+  </property>
+  <widget class="QWidget" name="dockWidgetContents">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="0">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QMdiArea" name="m_mdiArea"/>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../../../Resource/App.qrc"/>
+ </resources>
+ <connections/>
+</ui>
