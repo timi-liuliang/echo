@@ -46,7 +46,7 @@ namespace Studio
 		font.setFamily("Courier New");
 		font.setStyleHint(QFont::Monospace);
 		font.setFixedPitch(true);
-		font.setPointSize( fontSize.empty() ? 10 : Echo::StringUtil::ParseI32(fontSize));
+		font.setPixelSize( fontSize.empty() ? 10 : Echo::StringUtil::ParseI32(fontSize));
 		setFont(font);
 
 		// Tab Space
@@ -85,7 +85,7 @@ namespace Studio
 			else
 				fontPointSize = Echo::Math::Clamp(fontPointSize - 1, 5, 32);
 
-			font.setPointSize(fontPointSize);
+			font.setPixelSize(fontPointSize);
 			setFont(font);
 
 			AStudio::instance()->getConfigMgr()->setValue("lua_edit_font_size", Echo::StringUtil::ToString(fontPointSize).c_str());
