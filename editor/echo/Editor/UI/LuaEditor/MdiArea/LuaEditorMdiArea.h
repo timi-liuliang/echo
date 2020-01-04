@@ -16,6 +16,9 @@ namespace Studio
 
 		// open lua file
 		void open(const Echo::String& fullPath);
+        
+        // get tab index
+        bool getTabIndex(const Echo::String& fullPath, int& index);
 
 	protected slots:
 		// save

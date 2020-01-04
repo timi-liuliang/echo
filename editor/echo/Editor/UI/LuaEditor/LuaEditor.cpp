@@ -44,7 +44,6 @@ namespace Studio
 		}
 	}
 
-	// get current edit lua file path
 	const Echo::String& LuaEditor::getCurrentLuaFilePath()
 	{
 		if (m_luaRes)

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ScriptEditorPanel</class>
- <widget class="QDockWidget" name="ScriptEditorPanel">
+ <class>LuaEditorMdiArea</class>
+ <widget class="QDockWidget" name="LuaEditorMdiArea">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Lua</string>
+   <string>Script</string>
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QVBoxLayout" name="verticalLayout" stretch="0">
@@ -31,7 +31,11 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="QMdiArea" name="m_mdiArea"/>
+     <widget class="QTabWidget" name="m_tabWidgetScript">
+      <property name="tabPosition">
+       <enum>QTabWidget::North</enum>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
