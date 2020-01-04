@@ -197,10 +197,9 @@ namespace Studio
 
 		// recover last edit script
 		Echo::String isScriptEditVisible = AStudio::instance()->getConfigMgr()->getValue("luascripteditor_visible");
-		Echo::String currentEditLuaScript = AStudio::instance()->getConfigMgr()->getValue("luascripteditor_current_file");
-		if (isScriptEditVisible == "true" && !currentEditLuaScript.empty())
+		if (isScriptEditVisible == "true")
 		{
-			openLuaScript(currentEditLuaScript);
+            m_scriptEditorMdiArea->recoverScriptOpenStates();
 		}
 
 		// save config
@@ -493,9 +492,6 @@ namespace Studio
 	void MainWindow::openLuaScript(const Echo::String& fileName)
 	{
 		m_scriptEditorMdiArea->open(fileName);
-		m_scriptEditorMdiArea->setVisible(true);
-
-		AStudio::instance()->getConfigMgr()->setValue("luascripteditor_current_file", fileName.c_str());
 	}
 
 	void MainWindow::onScriptEditVisibilityChanged()

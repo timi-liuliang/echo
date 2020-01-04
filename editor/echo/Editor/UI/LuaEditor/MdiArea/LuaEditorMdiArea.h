@@ -15,14 +15,21 @@ namespace Studio
 		~LuaEditorMdiArea();
 
 		// open lua file
-		void open(const Echo::String& fullPath);
+		void open(const Echo::String& fullPath, bool isRememberOpenStates=true);
         
         // get tab index
         bool getTabIndex(const Echo::String& fullPath, int& index);
+        
+        // remember|recover script open states
+        void rememberScriptOpenStates();
+        void recoverScriptOpenStates();
 
 	protected slots:
 		// save
 		void save();
+        
+        // on tab index changed
+        void onTabIdxChanged(int idx);
 
 	private:
 		Echo::vector<LuaEditor*>::type	m_luaEditors;

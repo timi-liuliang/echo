@@ -37,6 +37,8 @@ namespace Studio
         this->setStyleSheet(customStyleSheet);
         
         m_tabWidgetScript->clear();
+        
+        QObject::connect(m_tabWidgetScript, SIGNAL(currentChanged(int)), this, SLOT(onTabIdxChanged(int)));
 	}
 
 	LuaEditorMdiArea::~LuaEditorMdiArea()
@@ -44,7 +46,7 @@ namespace Studio
 		EchoSafeDeleteContainer(m_luaEditors, LuaEditor);
 	}
 
-	void LuaEditorMdiArea::open(const Echo::String& fullPath)
+	void LuaEditorMdiArea::open(const Echo::String& fullPath, bool isRememberOpenStates)
 	{
         int tabIndex = 0;
         if(getTabIndex(fullPath, tabIndex))
@@ -68,7 +70,40 @@ namespace Studio
         }
         
         m_tabWidgetScript->setTabToolTip(tabIndex, fullPath.c_str());
+        this->setVisible(true);
+        
+        rememberScriptOpenStates();
 	}
+
+    void LuaEditorMdiArea::rememberScriptOpenStates()
+    {
+        Echo::StringArray openedFiles;
+        for(int i=0; i<m_tabWidgetScript->count(); i++)
+        {
+            LuaEditor* luaEditor = qobject_cast<LuaEditor*>(m_tabWidgetScript->widget(i));
+            if(luaEditor)
+                openedFiles.push_back(luaEditor->getCurrentLuaFilePath());
+        }
+        
+        ConfigMgr* configMgr = AStudio::instance()->getConfigMgr();
+        if(configMgr)
+        {
+            configMgr->setValue("luascripteditor_current_file", Echo::StringUtil::ToString(openedFiles,";").c_str());
+            configMgr->setValue("luascripteditor_current_file_index", Echo::StringUtil::ToString(m_tabWidgetScript->currentIndex()).c_str());
+        }
+    }
+
+    void LuaEditorMdiArea::recoverScriptOpenStates()
+    {
+        Echo::String currentEditLuaScript = AStudio::instance()->getConfigMgr()->getValue("luascripteditor_current_file");
+        Echo::String currentIndex = AStudio::instance()->getConfigMgr()->getValue("luascripteditor_current_file_index");
+        Echo::StringArray luaScripts = Echo::StringUtil::Split(currentEditLuaScript, ";");
+        for(Echo::String& luaScript : luaScripts)
+            open(luaScript, false);
+        
+        if(!currentIndex.empty())
+            m_tabWidgetScript->setCurrentIndex(Echo::StringUtil::ParseI32( currentIndex));
+    }
 
     bool LuaEditorMdiArea::getTabIndex(const Echo::String& fullPath, int& index)
     {
@@ -83,6 +118,11 @@ namespace Studio
         }
         
         return false;
+    }
+
+    void LuaEditorMdiArea::onTabIdxChanged(int idx)
+    {
+        rememberScriptOpenStates();
     }
 
 	void LuaEditorMdiArea::save()
