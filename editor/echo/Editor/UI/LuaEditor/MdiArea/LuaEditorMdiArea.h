@@ -30,6 +30,9 @@ namespace Studio
         
         // on tab index changed
         void onTabIdxChanged(int idx);
+        
+        // on lua editor title changed
+        void onLuaEditorTitleChanged(LuaEditor* editor);
 
 	private:
 		Echo::vector<LuaEditor*>::type	m_luaEditors;

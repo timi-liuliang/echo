@@ -76,19 +76,18 @@ namespace Studio
 		}
 	}
 
-	// update title display
 	void LuaEditor::updateTitle()
 	{
 		if (m_luaRes)
 		{
 			if (m_luaRes->getSrc() == m_plainTextEdit->toPlainText())
 			{
-				Echo::String fileName = m_luaRes->getPath();
+				Echo::String fileName = Echo::PathUtil::GetPureFilename(m_luaRes->getPath());
 				setWindowTitle( fileName.c_str());
 			}
 			else
 			{
-				Echo::String fileName = m_luaRes->getPath();
+				Echo::String fileName = Echo::PathUtil::GetPureFilename(m_luaRes->getPath());
 				setWindowTitle((fileName + "*").c_str());
 			}
 		}
@@ -96,5 +95,7 @@ namespace Studio
 		{
 			setWindowTitle("LuaEditor");
 		}
+        
+        emit titleChanged(this);
 	}
 }

@@ -65,6 +65,8 @@ namespace Studio
                 newEditor->open(fullPath);
                 newEditor->show();
 
+                QObject::connect(newEditor, SIGNAL(titleChanged(LuaEditor*)), this, SLOT(onLuaEditorTitleChanged(LuaEditor*)));
+                
                 m_luaEditors.push_back(newEditor);
             }
         }
@@ -123,6 +125,18 @@ namespace Studio
     void LuaEditorMdiArea::onTabIdxChanged(int idx)
     {
         rememberScriptOpenStates();
+    }
+
+    void LuaEditorMdiArea::onLuaEditorTitleChanged(LuaEditor* editor)
+    {
+        if(editor)
+        {
+            int tabIndex = 0;
+            if(getTabIndex(editor->getCurrentLuaFilePath(), tabIndex))
+            {
+                m_tabWidgetScript->setTabText(tabIndex, editor->windowTitle());
+            }
+        }
     }
 
 	void LuaEditorMdiArea::save()

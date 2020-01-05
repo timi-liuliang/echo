@@ -53,6 +53,9 @@ namespace Studio
 		const int tabStop = 4;  // 4 characters
 		QFontMetrics metrics(font);
 		setTabStopWidth(tabStop * metrics.width(' '));
+        
+        // No wrap
+        setLineWrapMode(LineWrapMode::NoWrap);
 	}
 
 	LuaTextEdit::~LuaTextEdit()
@@ -79,16 +82,16 @@ namespace Studio
 		{
 			QFont font = this->font();
 			font.setStyleHint(QFont::Monospace);
-			int fontPointSize = font.pointSize();
+			int fontPixelSize = font.pixelSize();
 			if (e->delta() < 0)
-				fontPointSize  = Echo::Math::Clamp(fontPointSize + 1, 5, 32);
+				fontPixelSize  = Echo::Math::Clamp(fontPixelSize + 1, 5, 32);
 			else
-				fontPointSize = Echo::Math::Clamp(fontPointSize - 1, 5, 32);
+				fontPixelSize = Echo::Math::Clamp(fontPixelSize - 1, 5, 32);
 
-			font.setPixelSize(fontPointSize);
+			font.setPixelSize(fontPixelSize);
 			setFont(font);
 
-			AStudio::instance()->getConfigMgr()->setValue("lua_edit_font_size", Echo::StringUtil::ToString(fontPointSize).c_str());
+			AStudio::instance()->getConfigMgr()->setValue("lua_edit_font_size", Echo::StringUtil::ToString(fontPixelSize).c_str());
 		}
 		else
 		{

@@ -32,6 +32,10 @@ namespace Studio
 
 		// update title display
 		void updateTitle();
+        
+    public: signals:
+        // title changed
+        void titleChanged(LuaEditor* editor);
 
 	protected:
 		// size hint
