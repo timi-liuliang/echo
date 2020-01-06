@@ -24,13 +24,16 @@ namespace Echo
 		// gravity scale
 		float getGravityScale() const { return m_gravityScale; }
 		void setGravityScale(float scale);
+        
+        // set b2Body transform
+        void syncTransformTob2Body();
 
 		// get body
 		b2Body* getb2Body() { return m_body; }
         
         // events
     public:
-        // mouse button down event
+        // begin contact
 		DECLARE_SIGNAL(Signal0, beginContact)
 
 		// end contact

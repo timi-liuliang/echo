@@ -29,6 +29,47 @@ function update_all_channels()
 end
 )";
 
+// 2.math vec2
+const char* vec2 = R"(
+vec2 = {}
+vec2.__index = vec2
+
+function vec2:new(xv, yv)
+    return setmetatable({x=xv, y=yv}, vec2)
+end
+
+function vec2:length()
+    return math.sqrt(self.x * self.x + self.y * self.y)
+end
+
+function vec2:normalize()
+    local len = self:length()
+    if len > 0.000001 then
+        return vec2:new(self.x/len, self.y/len)
+    else
+        return vec2:new(0.0, 0.0)
+    end
+end
+
+function vec2:__call(xv, yv)
+    return vec2:new(xv, yv)
+end
+
+function vec2:__add(other)
+    return vec2:new(self.x+other.x, self.y+other.y)
+end
+
+function vec2:__sub(other)
+    return vec2:new(self.x-other.x, self.y-other.y)
+end
+
+function vec2:__mul(scale)
+    return vec2:new(self.x * scale, self.y * scale)
+end
+
+setmetatable(vec2, vec2)
+)";
+
 // 2.math
 const char* vec3 = R"(
 vec3 = {}
@@ -114,6 +155,7 @@ namespace Echo
 		// core library
 		{
 			LuaBinder::instance()->execString(utils, true);
+            LuaBinder::instance()->execString(vec2, true);
 			LuaBinder::instance()->execString(vec3, true);
 
 			LuaBinder::instance()->execString(math_quaternion, true);

@@ -26,6 +26,7 @@ namespace Echo
 		CLASS_BIND_METHOD(Box2DBody, setFixRotation, DEF_METHOD("setFixRotation"));
 		CLASS_BIND_METHOD(Box2DBody, getGravityScale, DEF_METHOD("getGravityScale"));
 		CLASS_BIND_METHOD(Box2DBody, setGravityScale, DEF_METHOD("setGravityScale"));
+        CLASS_BIND_METHOD(Box2DBody, syncTransformTob2Body, DEF_METHOD("syncTransformTob2Body"));
 
 		CLASS_REGISTER_PROPERTY(Box2DBody, "Type", Variant::Type::StringOption, "getType", "setType");
 		CLASS_REGISTER_PROPERTY(Box2DBody, "FixRotation", Variant::Type::Bool, "isFixRotation", "setFixRotation");
@@ -51,7 +52,20 @@ namespace Echo
 			m_body->SetGravityScale(scale);
 	}
 
-	// update
+    void Box2DBody::syncTransformTob2Body()
+    {
+        if(m_body)
+        {
+            getWorldMatrix();
+            
+            float pixelsPerUnit = Box2DWorld::instance()->getPixelsPerMeter();
+
+            Echo::Vector3 pitchYawRoll;
+            getWorldOrientation().toEulerAngle(pitchYawRoll.x, pitchYawRoll.y, pitchYawRoll.z);
+            m_body->SetTransform( b2Vec2(getWorldPosition().x / pixelsPerUnit, getWorldPosition().y / pixelsPerUnit) , pitchYawRoll.z * Math::DEG2RAD);
+        }
+    }
+
 	void Box2DBody::update_self()
 	{
 		if (m_isEnable && !m_body)
@@ -92,11 +106,7 @@ namespace Echo
 			}
 			else
 			{
-				float pixelsPerUnit = Box2DWorld::instance()->getPixelsPerMeter();
-
-				Echo::Vector3 pitchYawRoll;
-				getWorldOrientation().toEulerAngle(pitchYawRoll.x, pitchYawRoll.y, pitchYawRoll.z);
-				m_body->SetTransform( b2Vec2(getWorldPosition().x / pixelsPerUnit, getWorldPosition().y / pixelsPerUnit) , pitchYawRoll.z * Math::DEG2RAD);
+                syncTransformTob2Body();
 			}
 		}
 	}

@@ -39,12 +39,15 @@ namespace Echo
 		CLASS_BIND_METHOD(Box2DShape, setCategoryBits, DEF_METHOD("setCategoryBits"));
 		CLASS_BIND_METHOD(Box2DShape, getMaskBits, DEF_METHOD("getMaskBits"));
 		CLASS_BIND_METHOD(Box2DShape, setMaskBits, DEF_METHOD("setMaskBits"));
+        CLASS_BIND_METHOD(Box2DShape, isSensor, DEF_METHOD("isSensor"));
+        CLASS_BIND_METHOD(Box2DShape, setSensor, DEF_METHOD("setSensor"));
 
 		CLASS_REGISTER_PROPERTY(Box2DShape, "Density", Variant::Type::Real, "getDensity", "setDensity");
 		CLASS_REGISTER_PROPERTY(Box2DShape, "Friction", Variant::Type::Real, "getFriction", "getFriction");
 		CLASS_REGISTER_PROPERTY(Box2DShape, "Restitution", Variant::Type::Real, "getRestitution", "setRestitution");
 		CLASS_REGISTER_PROPERTY(Box2DShape, "CategoryBits", Variant::Type::Int, "getCategoryBits", "setCategoryBits");
 		CLASS_REGISTER_PROPERTY(Box2DShape, "MaskBits", Variant::Type::Int, "getMaskBits", "setMaskBits");
+        CLASS_REGISTER_PROPERTY(Box2DShape, "IsSensor", Variant::Type::Bool, "isSensor", "setSensor");
 	}
 
 	void Box2DShape::setRestitution(float restitution)
@@ -92,6 +95,15 @@ namespace Echo
 		}
 	}
 
+    void Box2DShape::setSensor(bool isSensor)
+    {
+        m_isSensor = isSensor;
+        if(m_fixture)
+        {
+            m_fixture->SetSensor(m_isSensor);
+        }
+    }
+
 	void Box2DShape::update_self()
 	{
 		if (m_isEnable && !m_fixture)
@@ -106,6 +118,7 @@ namespace Echo
 				fixtureDef.restitution = m_restitution;
 				fixtureDef.filter.categoryBits = m_filter.categoryBits;
 				fixtureDef.filter.maskBits = m_filter.maskBits;
+                fixtureDef.isSensor = m_isSensor;
 
 				// set fixture shape
 				b2Shape* shape = createb2Shape();

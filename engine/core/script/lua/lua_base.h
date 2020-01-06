@@ -284,10 +284,14 @@ namespace Echo
 	template<> INLINE void lua_pushvalue<const Vector2&>(lua_State* state, const Vector2& value)
 	{
 		lua_newtable(state);
+        int idx = lua_gettop(state);
 		lua_pushnumber(state, value.x);
-		lua_setfield(state, -2, "x");
+		lua_setfield(state, idx, "x");
 		lua_pushnumber(state, value.y);
-		lua_setfield(state, -2, "y");
+		lua_setfield(state, idx, "y");
+        
+        lua_getglobal(state, "vec2");
+        lua_setmetatable(state, idx);
 	}
 
 	template<> INLINE void lua_pushvalue<const Vector2>(lua_State* state, const Vector2 value)
