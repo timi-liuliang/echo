@@ -25,6 +25,14 @@ namespace Echo
 		float getFriction() const { return m_friction; }
 		void setFriction(float friction);
 
+		// category bits
+		ui32 getCategoryBits() const { return m_filter.categoryBits; }
+		void setCategoryBits(ui32 categoryBits);
+
+		// mask bits
+		ui32 getMaskBits() const { return m_filter.maskBits; }
+		void setMaskBits(ui32 maskBits);
+
 		// get b2Shape
 		template<typename T> T getb2Shape() { return ECHO_DOWN_CAST<T>(m_shape); }
 
@@ -39,7 +47,8 @@ namespace Echo
 		b2Fixture*		m_fixture;
 		float			m_density;
 		float			m_friction;
-		float			m_restitution;
+		float			m_restitution = 0;
+		b2Filter		m_filter;
 		b2Shape*		m_shape;
 	};
 }

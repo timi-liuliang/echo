@@ -35,10 +35,16 @@ namespace Echo
 		CLASS_BIND_METHOD(Box2DShape, setDensity, DEF_METHOD("setDensity"));
 		CLASS_BIND_METHOD(Box2DShape, getFriction, DEF_METHOD("getFriction"));
 		CLASS_BIND_METHOD(Box2DShape, setFriction, DEF_METHOD("setFriction"));
+		CLASS_BIND_METHOD(Box2DShape, getCategoryBits, DEF_METHOD("getCategoryBits"));
+		CLASS_BIND_METHOD(Box2DShape, setCategoryBits, DEF_METHOD("setCategoryBits"));
+		CLASS_BIND_METHOD(Box2DShape, getMaskBits, DEF_METHOD("getMaskBits"));
+		CLASS_BIND_METHOD(Box2DShape, setMaskBits, DEF_METHOD("setMaskBits"));
 
 		CLASS_REGISTER_PROPERTY(Box2DShape, "Density", Variant::Type::Real, "getDensity", "setDensity");
 		CLASS_REGISTER_PROPERTY(Box2DShape, "Friction", Variant::Type::Real, "getFriction", "getFriction");
 		CLASS_REGISTER_PROPERTY(Box2DShape, "Restitution", Variant::Type::Real, "getRestitution", "setRestitution");
+		CLASS_REGISTER_PROPERTY(Box2DShape, "CategoryBits", Variant::Type::Int, "getCategoryBits", "setCategoryBits");
+		CLASS_REGISTER_PROPERTY(Box2DShape, "MaskBits", Variant::Type::Int, "getMaskBits", "setMaskBits");
 	}
 
 	void Box2DShape::setRestitution(float restitution)
@@ -68,6 +74,24 @@ namespace Echo
 		}
 	}
 
+	void Box2DShape::setCategoryBits(ui32 categoryBits)
+	{
+		m_filter.categoryBits = categoryBits;
+		if (m_fixture)
+		{
+			m_fixture->SetFilterData(m_filter);
+		}
+	}
+
+	void Box2DShape::setMaskBits(ui32 maskBits)
+	{
+		m_filter.maskBits = maskBits;
+		if (m_fixture)
+		{
+			m_fixture->SetFilterData(m_filter);
+		}
+	}
+
 	void Box2DShape::update_self()
 	{
 		if (m_isEnable && !m_fixture)
@@ -80,6 +104,8 @@ namespace Echo
 				fixtureDef.density = m_density;
 				fixtureDef.friction = m_friction;
 				fixtureDef.restitution = m_restitution;
+				fixtureDef.filter.categoryBits = m_filter.categoryBits;
+				fixtureDef.filter.maskBits = m_filter.maskBits;
 
 				// set fixture shape
 				b2Shape* shape = createb2Shape();
