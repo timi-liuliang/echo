@@ -25,6 +25,9 @@ namespace Echo
 		float getGravityScale() const { return m_gravityScale; }
 		void setGravityScale(float scale);
         
+        // set linear velocity
+        void setLinearVelocity(const Vector3& velocity);
+        
         // set b2Body transform
         void syncTransformTob2Body();
 

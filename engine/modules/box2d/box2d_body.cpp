@@ -26,6 +26,7 @@ namespace Echo
 		CLASS_BIND_METHOD(Box2DBody, setFixRotation, DEF_METHOD("setFixRotation"));
 		CLASS_BIND_METHOD(Box2DBody, getGravityScale, DEF_METHOD("getGravityScale"));
 		CLASS_BIND_METHOD(Box2DBody, setGravityScale, DEF_METHOD("setGravityScale"));
+        CLASS_BIND_METHOD(Box2DBody, setLinearVelocity, DEF_METHOD("setLinearVelocity"));
         CLASS_BIND_METHOD(Box2DBody, syncTransformTob2Body, DEF_METHOD("syncTransformTob2Body"));
 
 		CLASS_REGISTER_PROPERTY(Box2DBody, "Type", Variant::Type::StringOption, "getType", "setType");
@@ -51,6 +52,15 @@ namespace Echo
 		if (m_body)
 			m_body->SetGravityScale(scale);
 	}
+
+    void Box2DBody::setLinearVelocity(const Vector3& velocity)
+    {
+        if(m_body)
+        {
+            float pixelsPerUnit = Box2DWorld::instance()->getPixelsPerMeter();
+            m_body->SetLinearVelocity(b2Vec2(velocity.x / pixelsPerUnit, velocity.y / pixelsPerUnit));
+        }
+    }
 
     void Box2DBody::syncTransformTob2Body()
     {

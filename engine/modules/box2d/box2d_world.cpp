@@ -83,5 +83,8 @@ namespace Echo
 			m_b2World->DrawDebugData();
 			m_debugDraw->Update(elapsedTime);
 		}
+        
+        // emit signals
+        m_contactListener->EmitSignals();
 	}
 }
