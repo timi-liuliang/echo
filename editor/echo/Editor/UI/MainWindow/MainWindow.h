@@ -11,7 +11,7 @@ namespace Studio
 	class ResPanel;
 	class NodeTreePanel;
 	class LuaEditor;
-	class LuaEditorMdiArea;
+	class TextEditorArea;
 	class ShaderEditor;
 	class ScratchEditor;
 	class TimelinePanel;
@@ -129,7 +129,7 @@ namespace Studio
 		QDockWidget*		m_renderPanel;
 		ResPanel*			m_resPanel;
 		NodeTreePanel*		m_scenePanel;
-		LuaEditorMdiArea*	m_scriptEditorMdiArea = nullptr;
+		TextEditorArea*	m_scriptEditorMdiArea = nullptr;
 		ShaderEditor*		m_shaderEditorPanel = nullptr;
 		ScratchEditor*		m_scratchEditorPanel = nullptr;
 		BottomPanel*		m_bottomPanel;

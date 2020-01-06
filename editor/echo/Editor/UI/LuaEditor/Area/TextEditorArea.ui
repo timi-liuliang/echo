@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>LuaEditorMdiArea</class>
- <widget class="QDockWidget" name="LuaEditorMdiArea">
+ <class>TextEditorArea</class>
+ <widget class="QDockWidget" name="TextEditorArea">
   <property name="geometry">
    <rect>
     <x>0</x>

@@ -1,7 +1,7 @@
 #include "ProjectMgr.h"
 #include <QFileDialog>
 #include "MainWindow.h"
-#include "LuaEditorMdiArea.h"
+#include "TextEditorArea.h"
 #include "Studio.h"
 #include <engine/core/util/PathUtil.h>
 
@@ -29,7 +29,7 @@ QTabBar::tab:selected,QTabBar::tab:hover
 
 namespace Studio
 {
-	LuaEditorMdiArea::LuaEditorMdiArea(QWidget* parent)
+	TextEditorArea::TextEditorArea(QWidget* parent)
 		: QDockWidget(parent)
 	{
 		setupUi( this);
@@ -41,12 +41,12 @@ namespace Studio
         QObject::connect(m_tabWidgetScript, SIGNAL(currentChanged(int)), this, SLOT(onTabIdxChanged(int)));
 	}
 
-	LuaEditorMdiArea::~LuaEditorMdiArea()
+	TextEditorArea::~TextEditorArea()
 	{
 		EchoSafeDeleteContainer(m_luaEditors, LuaEditor);
 	}
 
-	void LuaEditorMdiArea::open(const Echo::String& fullPath, bool isRememberOpenStates)
+	void TextEditorArea::open(const Echo::String& fullPath, bool isRememberOpenStates)
 	{
         int tabIndex = 0;
         if(getTabIndex(fullPath, tabIndex))
@@ -77,7 +77,7 @@ namespace Studio
         rememberScriptOpenStates();
 	}
 
-    void LuaEditorMdiArea::rememberScriptOpenStates()
+    void TextEditorArea::rememberScriptOpenStates()
     {
         Echo::StringArray openedFiles;
         for(int i=0; i<m_tabWidgetScript->count(); i++)
@@ -95,7 +95,7 @@ namespace Studio
         }
     }
 
-    void LuaEditorMdiArea::recoverScriptOpenStates()
+    void TextEditorArea::recoverScriptOpenStates()
     {
         Echo::String currentEditLuaScript = AStudio::instance()->getConfigMgr()->getValue("luascripteditor_current_file");
         Echo::String currentIndex = AStudio::instance()->getConfigMgr()->getValue("luascripteditor_current_file_index");
@@ -107,7 +107,7 @@ namespace Studio
             m_tabWidgetScript->setCurrentIndex(Echo::StringUtil::ParseI32( currentIndex));
     }
 
-    bool LuaEditorMdiArea::getTabIndex(const Echo::String& fullPath, int& index)
+    bool TextEditorArea::getTabIndex(const Echo::String& fullPath, int& index)
     {
         for(int i=0; i<m_tabWidgetScript->count(); i++)
         {
@@ -122,12 +122,12 @@ namespace Studio
         return false;
     }
 
-    void LuaEditorMdiArea::onTabIdxChanged(int idx)
+    void TextEditorArea::onTabIdxChanged(int idx)
     {
         rememberScriptOpenStates();
     }
 
-    void LuaEditorMdiArea::onLuaEditorTitleChanged(LuaEditor* editor)
+    void TextEditorArea::onLuaEditorTitleChanged(LuaEditor* editor)
     {
         if(editor)
         {
@@ -139,7 +139,7 @@ namespace Studio
         }
     }
 
-	void LuaEditorMdiArea::save()
+	void TextEditorArea::save()
 	{
 		for (LuaEditor* luaEditor : m_luaEditors)
 		{

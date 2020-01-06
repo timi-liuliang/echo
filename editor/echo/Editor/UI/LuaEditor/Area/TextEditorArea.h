@@ -2,17 +2,17 @@
 
 #include <QMainWindow>
 #include "LuaEditor.h"
-#include "ui_LuaEditorMdiArea.h"
+#include "ui_TextEditorArea.h"
 
 namespace Studio
 {
-	class LuaEditorMdiArea : public QDockWidget, public Ui_LuaEditorMdiArea
+	class TextEditorArea : public QDockWidget, public Ui_TextEditorArea
 	{
 		Q_OBJECT
 
 	public:
-		LuaEditorMdiArea(QWidget* parent = 0);
-		~LuaEditorMdiArea();
+		TextEditorArea(QWidget* parent = 0);
+		~TextEditorArea();
 
 		// open lua file
 		void open(const Echo::String& fullPath, bool isRememberOpenStates=true);

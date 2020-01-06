@@ -15,7 +15,7 @@
 #include "QResSelect.h"
 #include "ResChooseDialog.h"
 #include "LuaEditor.h"
-#include "LuaEditorMdiArea.h"
+#include "TextEditorArea.h"
 #include "ShaderEditor.h"
 #include "ScratchEditor.h"
 #include "BottomPanel.h"
@@ -103,7 +103,7 @@ namespace Studio
 		m_gameProcess.terminate();
 		m_gameProcess.waitForFinished();
 
-		EchoSafeDelete(m_scriptEditorMdiArea, LuaEditorMdiArea);
+		EchoSafeDelete(m_scriptEditorMdiArea, TextEditorArea);
 		EchoSafeDelete(m_shaderEditorPanel, ShaderEditor);
 		EchoSafeDelete(m_scratchEditorPanel, ScratchEditor);
         EchoSafeDelete(m_bottomPanel, BottomPanel);
@@ -126,7 +126,7 @@ namespace Studio
 		m_resPanel = EchoNew(ResPanel(this));
 		m_scenePanel = EchoNew(NodeTreePanel(this));
 		m_bottomPanel = EchoNew(BottomPanel(this));
-		m_scriptEditorMdiArea = EchoNew(LuaEditorMdiArea);
+		m_scriptEditorMdiArea = EchoNew(TextEditorArea);
 		m_shaderEditorPanel = EchoNew(ShaderEditor(this));
 		m_scratchEditorPanel = EchoNew(ScratchEditor(this));
 		m_scriptEditorMdiArea->setVisible(false);
@@ -173,7 +173,7 @@ namespace Studio
     
     void MainWindow::onPrepareQuit()
     {
-        EchoSafeDelete(m_scriptEditorMdiArea, LuaEditorMdiArea);
+        EchoSafeDelete(m_scriptEditorMdiArea, TextEditorArea);
 		EchoSafeDelete(m_shaderEditorPanel, ShaderEditor);
 		EchoSafeDelete(m_scratchEditorPanel, ScratchEditor);
     }

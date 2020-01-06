@@ -46,7 +46,7 @@ namespace Studio
 		font.setFamily("Courier New");
 		font.setStyleHint(QFont::Monospace);
 		font.setFixedPitch(true);
-		font.setPixelSize( fontSize.empty() ? 10 : Echo::StringUtil::ParseI32(fontSize));
+		font.setPixelSize( fontSize.empty() ? 12 : Echo::StringUtil::ParseI32(fontSize));
 		setFont(font);
 
 		// Tab Space
