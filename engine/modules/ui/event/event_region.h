@@ -38,9 +38,12 @@ namespace Echo
 		DECLARE_SIGNAL(Signal0, onMouseButtonDown)
 		DECLARE_SIGNAL(Signal0, onMouseButtonUp)
 		DECLARE_SIGNAL(Signal0, onMouseButtonMove)
+        DECLARE_SIGNAL(Signal0, onMouseButtonEnter)
+        DECLARE_SIGNAL(Signal0, onMouseButtonLeave)
 
 	protected:
 		StringOption	m_type = StringOption("ui", { "2d", "3d", "ui" });
 		MouseEvent		m_mouseEvent;
+        bool            m_isMouseButtonOn = false;
     };
 }

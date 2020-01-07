@@ -24,6 +24,8 @@ namespace Echo
         CLASS_REGISTER_SIGNAL(UiEventRegion, onMouseButtonDown);
 		CLASS_REGISTER_SIGNAL(UiEventRegion, onMouseButtonUp);
 		CLASS_REGISTER_SIGNAL(UiEventRegion, onMouseButtonMove);
+        CLASS_REGISTER_SIGNAL(UiEventRegion, onMouseButtonEnter);
+        CLASS_REGISTER_SIGNAL(UiEventRegion, onMouseButtonLeave);
     }
 
 	bool UiEventRegion::notifyMouseButtonDown(const Ray& ray, const Vector2& screenPos)
@@ -77,10 +79,22 @@ namespace Echo
 				m_mouseEvent.setWorldPosition(worldPos);
 				m_mouseEvent.setLocalPosition(worldPos - getWorldPosition());
 
+                if(!m_isMouseButtonOn)
+                    onMouseButtonEnter();
+                
+                m_isMouseButtonOn = true;
+                    
 				onMouseButtonMove();
 
 				return true;
 			}
+            else
+            {
+                if(m_isMouseButtonOn)
+                    onMouseButtonLeave();
+                
+                m_isMouseButtonOn = false;
+            }
 		}
 
 		return false;

@@ -781,7 +781,7 @@ namespace Studio
         if(currentNode)
         {
             Echo::String nodePath;
-            Echo::String functionName = m_signalName + "_" + currentNode->getName();
+            Echo::String functionName = m_signalName;
             if(SlotChooseDialog::getSlot(this, nodePath, functionName))
             {
                 Echo:: Signal* signal = Echo::Class::getSignal( currentNode, m_signalName);
