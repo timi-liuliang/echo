@@ -21,6 +21,6 @@ namespace Echo
 		virtual b2Shape* createb2Shape() override;
 
 	private:
-		float				m_radius;
+		float	m_radius = 100.f;
 	};
 }

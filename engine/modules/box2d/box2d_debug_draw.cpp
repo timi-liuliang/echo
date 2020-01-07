@@ -43,18 +43,43 @@ namespace Echo
 			const b2Vec2& v0 = vertices[0];
 			const b2Vec2& v1 = vertices[idx-1];
 			const b2Vec2& v2 = vertices[idx];
-			m_gizmosNode->drawTriangle(Vector3(v0.x, v0.y, 0.f) * pixelsPerMeter, Vector3(v1.x, v1.y, 0.f) * pixelsPerMeter, Vector3(v2.x, v2.y, 0.f) * pixelsPerMeter, Color(color.r, color.g, color.b, color.a * 0.8f));
+			m_gizmosNode->drawTriangle(Vector3(v0.x, v0.y, 0.f) * pixelsPerMeter, Vector3(v1.x, v1.y, 0.f) * pixelsPerMeter, Vector3(v2.x, v2.y, 0.f) * pixelsPerMeter, Color(color.r, color.g, color.b, color.a * 0.7f));
 		}
 	}
 
-	void Box2DDebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color)
+	void Box2DDebugDraw::DrawCircle(const b2Vec2& b2Center, float32 radius, const b2Color& color)
 	{
-		EchoLogError("Box2DDebugDraw::DrawCircle not implented");
+        float degreeStep = 10.f;
+        float pixelsPerMeter = Box2DWorld::instance()->getPixelsPerMeter();
+        for (float degree = 0.f; degree < 360.f; degree+=degreeStep)
+        {
+            Quaternion quat0 = Quaternion::fromAxisAngle(Vector3::UNIT_Z, degree * Math::DEG2RAD);
+            Quaternion quat1 = Quaternion::fromAxisAngle(Vector3::UNIT_Z, (degree + degreeStep) * Math::DEG2RAD);
+            Vector3    dir0  = quat0.rotateVec3(Vector3::UNIT_X);
+            Vector3    dir1  = quat1.rotateVec3(Vector3::UNIT_X);
+            Vector3    center= Vector3(b2Center.x, b2Center.y, 0.f);
+            Vector3    from  = center + dir0 * radius;
+            Vector3    to    = center + dir1 * radius;
+            m_gizmosNode->drawLine(from * pixelsPerMeter, to * pixelsPerMeter, Color(color.r, color.g, color.b, color.a));
+        }
 	}
     
-	void Box2DDebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color)
+	void Box2DDebugDraw::DrawSolidCircle(const b2Vec2& b2Center, float32 radius, const b2Vec2& axis, const b2Color& color)
 	{
-		EchoLogError("Box2DDebugDraw::DrawSolidCircle not implented");
+        float degreeStep = 10.f;
+        float pixelsPerMeter = Box2DWorld::instance()->getPixelsPerMeter();
+        for (float degree = 0.f; degree < 360.f; degree+=degreeStep)
+        {
+            Quaternion quat0 = Quaternion::fromAxisAngle(Vector3::UNIT_Z, degree * Math::DEG2RAD);
+            Quaternion quat1 = Quaternion::fromAxisAngle(Vector3::UNIT_Z, (degree + degreeStep) * Math::DEG2RAD);
+            Vector3    dir0  = quat0.rotateVec3(Vector3::UNIT_X);
+            Vector3    dir1  = quat1.rotateVec3(Vector3::UNIT_X);
+            Vector3    center= Vector3(b2Center.x, b2Center.y, 0.f);
+            Vector3    from  = center + dir0 * radius;
+            Vector3    to    = center + dir1 * radius;
+            
+            m_gizmosNode->drawTriangle(center * pixelsPerMeter, from * pixelsPerMeter, to * pixelsPerMeter, Color(color.r, color.g, color.b, color.a * 0.7f));
+        }
 	}
 
 	void Box2DDebugDraw::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color)
