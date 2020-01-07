@@ -583,19 +583,9 @@ namespace Echo
 				*apkQuat[k] = (kRot[k][i]+kRot[i][k])*fRoot;
 			}
 		}
-
-		inline void rotateVec3(Vector3& outVec, const Vector3& vec) const
-		{
-			// nVidia SDK implementation
-			Vector3 uv, uuv;
-			Vector3 qvec(x, y, z);
-			uv = qvec.cross(vec);
-			uuv = qvec.cross(uv);
-			uv *= 2.0f * w;
-			uuv *= 2.0f;
-
-			outVec = vec + uv + uuv;
-		}
+        
+        // rotate direction
+        Vector3 rotateVec3( const Vector3& vec) const;
 
 		inline void diff(const Quaternion& q1, const Quaternion& q2)
 		{

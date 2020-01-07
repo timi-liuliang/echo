@@ -330,8 +330,8 @@ namespace Studio
 		{
 			Echo::Quaternion camRightQuat;
 			camRightQuat.fromAxisAngle(camRight, -vertRotAngle);
-			camRightQuat.rotateVec3(forward, forward);
-			camRightQuat.rotateVec3(rotVec, rotVec);
+			forward = camRightQuat.rotateVec3(forward);
+			rotVec = camRightQuat.rotateVec3(rotVec);
 			m_cameraForward = forward;
 		}
 

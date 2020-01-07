@@ -481,6 +481,7 @@ namespace Echo
 		CLASS_BIND_METHOD(Node, getWorldPositionX,		DEF_METHOD("getWorldPositionX"));
 		CLASS_BIND_METHOD(Node, getWorldPositionY,		DEF_METHOD("getWorldPositionY"));
 		CLASS_BIND_METHOD(Node, getWorldPositionZ,		DEF_METHOD("getWorldPositionZ"));
+        CLASS_BIND_METHOD(Node, getWorldOrientation,    DEF_METHOD("getWorldOrientation"));
 		CLASS_BIND_METHOD(Node, setWorldPosition,		DEF_METHOD("setWorldPosition"));
 		CLASS_BIND_METHOD(Node, setWorldPositionX,		DEF_METHOD("setWorldPositionX"));
 		CLASS_BIND_METHOD(Node, setWorldPositionY,		DEF_METHOD("setWorldPositionY"));

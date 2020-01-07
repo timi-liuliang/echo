@@ -8,6 +8,19 @@ namespace Echo
 	const Quaternion Quaternion::IDENTITY(0, 0, 0, 1);
 	const Quaternion Quaternion::INVALID(Math::MAX_REAL, Math::MAX_REAL, Math::MAX_REAL, Math::MAX_REAL);
 
+    Vector3 Quaternion::rotateVec3( const Vector3& vec) const
+    {
+        // nVidia SDK implementation
+        Vector3 uv, uuv;
+        Vector3 qvec(x, y, z);
+        uv = qvec.cross(vec);
+        uuv = qvec.cross(uv);
+        uv *= 2.0f * w;
+        uuv *= 2.0f;
+
+        return vec + uv + uuv;
+    }
+
 	void Quaternion::Slerp(Quaternion& quan, const Quaternion& q1, const Quaternion& q2, Real t, bool bShortestPath)
 	{
 		Real fCos = q1.dot(q2);

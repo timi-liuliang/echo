@@ -92,6 +92,16 @@ function vec3:normalize()
 	end
 end
 
+function vec3:cross(rhs)
+    vec = vec3(0.0, 0.0, 0.0)
+
+    vec.x = self.y * rhs.z - self.z * rhs.y
+    vec.y = self.z * rhs.x - self.x * rhs.z
+    vec.z = self.x * rhs.y - self.y * rhs.x
+
+    return vec
+end
+
 function vec3:__call(xv, yv, zv)
 	return vec3:new(xv, yv, zv)
 end
@@ -143,6 +153,16 @@ end
 
 function quaternion:__mul(scale)
 	return quaternion:new(self.x * scale, self.y * scale, self.z * scale, self.w*scale)
+end
+
+function quaternion:rotateVec3(vec)
+    qvec = vec3(self.x, self.y, self.z)
+    uv = qvec:cross(vec)
+    uuv = qvec:cross(uv)
+    uv = uv * 2.0 * self.w
+    uuv = uuv * 2.0
+
+    return vec + uv + uuv
 end
 
 setmetatable(quaternion, quaternion)
