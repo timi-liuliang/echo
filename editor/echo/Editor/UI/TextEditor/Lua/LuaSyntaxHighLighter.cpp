@@ -21,6 +21,7 @@ namespace Studio
 		appendForegroundRule(192, 120, 221, "\\bfor\\b");
 		appendForegroundRule(192, 120, 221, "\\bwhile\\b");
 		appendForegroundRule(192, 120, 221, "\\bin\\b");
+        appendForegroundRule(192, 120, 221, "\\bbreak\\b");
 
 		// false true ...
 		appendForegroundRule(209, 154, 102, "\\bnil\\b");
