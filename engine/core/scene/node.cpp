@@ -222,7 +222,9 @@ namespace Echo
 
 	Node* Node::getChildByIndex(ui32 idx)
 	{
-		return idx<m_children.size() ? *std::next(m_children.begin(), idx) : nullptr;
+        Node* result = idx<m_children.size() ? *std::next(m_children.begin(), idx) : nullptr;
+        
+        return result;
 	}
 
 	Node* Node::getChild(const char* name)
@@ -475,6 +477,7 @@ namespace Echo
 		CLASS_BIND_METHOD(Node, getNode,				DEF_METHOD("getNode"));
 		CLASS_BIND_METHOD(Node, addChild, 				DEF_METHOD("addChild"));
 		CLASS_BIND_METHOD(Node, setParent,				DEF_METHOD("setParent"));
+        CLASS_BIND_METHOD(Node, getParent,              DEF_METHOD("getParent"));
 		CLASS_BIND_METHOD(Node, getChildNum,			DEF_METHOD("getChildNum"));
 		CLASS_BIND_METHOD(Node, getChildByIndex,		DEF_METHOD("getChildByIndex"));
 		CLASS_BIND_METHOD(Node, getWorldPosition,		DEF_METHOD("getWorldPosition"));

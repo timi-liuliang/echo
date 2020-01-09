@@ -48,8 +48,9 @@ namespace Echo
 		BIND_METHOD(Object::connect, DEF_METHOD("Object.connect"));
 		BIND_METHOD(Object::disconnect, DEF_METHOD("Object.disconnect"));
 
-		CLASS_BIND_METHOD(Object, getId,			"getId");
-		CLASS_BIND_METHOD(Object, isChannelExist,	"isChannelExist");
+		CLASS_BIND_METHOD(Object, getId, DEF_METHOD("getId"));
+        CLASS_BIND_METHOD(Object, getName, DEF_METHOD("getName"));
+		CLASS_BIND_METHOD(Object, isChannelExist,	DEF_METHOD("isChannelExist"));
 	}
 
 	bool Object::isValid()

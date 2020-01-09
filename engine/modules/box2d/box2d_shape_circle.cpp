@@ -37,8 +37,11 @@ namespace Echo
 
 	b2Shape* Box2DShapeCircle::createb2Shape()
 	{
+        float pixelsPerUnit = Box2DWorld::instance()->getPixelsPerMeter();
+        
 		b2CircleShape* shape = EchoNew(b2CircleShape);
-		shape->m_radius = m_radius / Box2DWorld::instance()->getPixelsPerMeter();
+		shape->m_radius = m_radius / pixelsPerUnit;
+        //shape->m_p = b2Vec2(getWorldPosition().x / pixelsPerUnit, getWorldPosition().y / pixelsPerUnit);
 		return shape;
 	}
 }
