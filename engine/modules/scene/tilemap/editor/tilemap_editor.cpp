@@ -16,7 +16,7 @@ namespace Echo
     // get camera2d icon, used for editor
     const char* TileMapEditor::getEditorIcon() const
     {
-        return "engine/modules/scene/terrain/editor/icon/terrain.png";
+        return "engine/modules/scene/tilemap/editor/icon/tilemap.png";
     }
 #endif
 }
