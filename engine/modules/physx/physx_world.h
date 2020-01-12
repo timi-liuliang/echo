@@ -26,10 +26,6 @@ namespace Echo
 		// get scene
 		physx::PxScene* getPxScene() { return m_pxScene; }
 
-		// debug draw
-		const StringOption& getDebugDrawOption() const { return m_drawDebugOption; }
-		void setDebugDrawOption(const StringOption& option);
-
 	private:
 		PhysxWorld();
 
@@ -48,7 +44,6 @@ namespace Echo
 		float							m_stepLength = 0.025f;
 		float							m_accumulator = 0.f;
 
-		StringOption					m_drawDebugOption;
 		PhysxDebugDraw*					m_debugDraw = nullptr;
 	};
 }

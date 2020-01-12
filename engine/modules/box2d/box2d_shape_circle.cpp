@@ -1,5 +1,5 @@
 #include "box2d_shape_circle.h"
-#include "box2d_world.h"
+#include "box2d_module.h"
 
 namespace Echo
 {
@@ -31,13 +31,13 @@ namespace Echo
 		b2CircleShape* shape = getb2Shape<b2CircleShape*>();
 		if (shape)
 		{
-			shape->m_radius = radius / Box2DWorld::instance()->getPixelsPerMeter();
+			shape->m_radius = radius / Box2DModule::instance()->getPixelsPerMeter();
 		}
 	}
 
 	b2Shape* Box2DShapeCircle::createb2Shape()
 	{
-        float pixelsPerUnit = Box2DWorld::instance()->getPixelsPerMeter();
+        float pixelsPerUnit = Box2DModule::instance()->getPixelsPerMeter();
         
 		b2CircleShape* shape = EchoNew(b2CircleShape);
 		shape->m_radius = m_radius / pixelsPerUnit;

@@ -5,6 +5,7 @@
 #include "shape/physx_shape_capsule.h"
 #include "shape/physx_shape_plane.h"
 #include "physx_body.h"
+#include "engine/core/main/Engine.h"
 
 namespace Echo
 {
@@ -28,7 +29,10 @@ namespace Echo
 
 	void PhysxModule::bindMethods()
 	{
+        CLASS_BIND_METHOD(PhysxModule, getDebugDrawOption, DEF_METHOD("getDebugDrawOption"));
+        CLASS_BIND_METHOD(PhysxModule, setDebugDrawOption, DEF_METHOD("setDebugDrawOption"));
 
+        CLASS_REGISTER_PROPERTY(PhysxModule, "DebugDraw", Variant::Type::StringOption, "getDebugDrawOption", "setDebugDrawOption");
 	}
 
 	void PhysxModule::registerTypes()
@@ -45,4 +49,9 @@ namespace Echo
 	{
 		PhysxWorld::instance()->step(elapsedTime);
 	}
+
+    void PhysxModule::setDebugDrawOption(const StringOption& option)
+    {
+        m_drawDebugOption.setValue(option.getValue());
+    }
 }

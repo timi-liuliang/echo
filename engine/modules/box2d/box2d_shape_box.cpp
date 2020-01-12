@@ -1,5 +1,5 @@
 #include "box2d_shape_box.h"
-#include "box2d_world.h"
+#include "box2d_module.h"
 #include "engine/core/main/Engine.h"
 
 namespace Echo
@@ -31,7 +31,7 @@ namespace Echo
 		b2PolygonShape* shape = getb2Shape<b2PolygonShape*>();
 		if (shape)
 		{
-			float invPixelsPerUnit = 1.f / Box2DWorld::instance()->getPixelsPerMeter();
+			float invPixelsPerUnit = 1.f / Box2DModule::instance()->getPixelsPerMeter();
 			shape->SetAsBox(m_width*0.5f*invPixelsPerUnit, m_height*.5f*invPixelsPerUnit);
 		}
 	}
@@ -42,14 +42,14 @@ namespace Echo
 		b2PolygonShape* shape = getb2Shape<b2PolygonShape*>();
 		if (shape)
 		{
-			float invPixelsPerUnit = 1.f / Box2DWorld::instance()->getPixelsPerMeter();
+			float invPixelsPerUnit = 1.f / Box2DModule::instance()->getPixelsPerMeter();
 			shape->SetAsBox(m_width*0.5f*invPixelsPerUnit, m_height*.5f*invPixelsPerUnit);
 		}
 	}
 
 	b2Shape* Box2DShapeBox::createb2Shape()
 	{ 
-		float invPixelsPerUnit = 1.f / Box2DWorld::instance()->getPixelsPerMeter();
+		float invPixelsPerUnit = 1.f / Box2DModule::instance()->getPixelsPerMeter();
 		b2PolygonShape* shape = EchoNew(b2PolygonShape);
 		shape->SetAsBox(m_width*0.5f*invPixelsPerUnit, m_height*.5f*invPixelsPerUnit);		
 		return shape;

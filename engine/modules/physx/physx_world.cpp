@@ -1,12 +1,12 @@
 #include <thread>
 #include "physx_world.h"
 #include "physx_cb.cx"
+#include "physx_module.h"
 #include "engine/core/main/Engine.h"
 
 namespace Echo
 {
 	PhysxWorld::PhysxWorld()
-		: m_drawDebugOption("Editor", { "None","Editor","Game","All" })
 	{
 		if (initPhysx())
 		{
@@ -67,31 +67,12 @@ namespace Echo
 
 	void PhysxWorld::bindMethods()
 	{
-		CLASS_BIND_METHOD(PhysxWorld, getDebugDrawOption, DEF_METHOD("getDebugDrawOption"));
-		CLASS_BIND_METHOD(PhysxWorld, setDebugDrawOption, DEF_METHOD("setDebugDrawOption"));
-
-		CLASS_REGISTER_PROPERTY(PhysxWorld, "DebugDraw", Variant::Type::StringOption, "getDebugDrawOption", "setDebugDrawOption");
 	}
 
 	PhysxWorld* PhysxWorld::instance()
 	{
 		static PhysxWorld* inst = EchoNew(PhysxWorld);
 		return inst;
-	}
-
-	void PhysxWorld::setDebugDrawOption(const StringOption& option)
-	{ 
-		m_drawDebugOption.setValue(option.getValue());
-
-		bool isGame = Engine::instance()->getConfig().m_isGame;
-		if (m_drawDebugOption.getIdx() == 3 || (m_drawDebugOption.getIdx() == 1 && !isGame) || (m_drawDebugOption.getIdx() == 2 && isGame))
-		{
-			m_debugDraw->setEnable(true);
-		}
-		else
-		{
-			m_debugDraw->setEnable(false);
-		}
 	}
 
 	void PhysxWorld::step(float elapsedTime)
@@ -111,11 +92,18 @@ namespace Echo
 			}
 
 			// draw debug data
-			if (m_drawDebugOption.getIdx() == 3 || (m_drawDebugOption.getIdx() == 1 && !isGame) || (m_drawDebugOption.getIdx() == 2 && isGame))
+            const StringOption& debugDrawOption = PhysxModule::instance()->getDebugDrawOption();
+			if (debugDrawOption.getIdx() == 3 || (debugDrawOption.getIdx() == 1 && !isGame) || (debugDrawOption.getIdx() == 2 && isGame))
 			{
+                m_debugDraw->setEnable(true);
+                
 				const physx::PxRenderBuffer& rb = m_pxScene->getRenderBuffer();
 				m_debugDraw->update(elapsedTime, rb);
 			}
+            else
+            {
+                m_debugDraw->setEnable(false);
+            }
 		}
 	}
 }

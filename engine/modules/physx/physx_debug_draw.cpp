@@ -25,7 +25,6 @@ namespace Echo
         m_gizmosNode->queueFree();
     }
 
-	// set enable
 	void PhysxDebugDraw::setEnable(bool isEnable)
 	{
 		if (m_isEnable != isEnable)

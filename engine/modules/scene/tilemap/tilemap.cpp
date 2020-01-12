@@ -19,5 +19,14 @@ namespace Echo
     
     void TileMap::bindMethods()
     {
+        CLASS_BIND_METHOD(TileMap, getTileShape, DEF_METHOD("getTileShape"));
+        CLASS_BIND_METHOD(TileMap, setTileShape, DEF_METHOD("setTileShape"));
+
+        CLASS_REGISTER_PROPERTY(TileMap, "TileShape", Variant::Type::StringOption, "getTileShape", "setTileShape");
+    }
+
+    void TileMap::setTileShape(const StringOption& option)
+    {
+        m_tileShape.setValue(option.getValue());
     }
 }

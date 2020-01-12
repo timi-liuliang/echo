@@ -1,5 +1,5 @@
 #include "box2d_body.h"
-#include "box2d_world.h"
+#include "box2d_module.h"
 #include "engine/core/main/Engine.h"
 
 namespace Echo
@@ -13,7 +13,7 @@ namespace Echo
 	{
 		if (m_body)
 		{
-			Box2DWorld::instance()->getWorld()->DestroyBody(m_body);
+			Box2DModule::instance()->getWorld()->DestroyBody(m_body);
 			m_body = nullptr;
 		}
 	}
@@ -57,7 +57,7 @@ namespace Echo
     {
         if(m_body)
         {
-            float pixelsPerUnit = Box2DWorld::instance()->getPixelsPerMeter();
+            float pixelsPerUnit = Box2DModule::instance()->getPixelsPerMeter();
             m_body->SetLinearVelocity(b2Vec2(velocity.x / pixelsPerUnit, velocity.y / pixelsPerUnit));
         }
     }
@@ -68,7 +68,7 @@ namespace Echo
         {
             getWorldMatrix();
             
-            float pixelsPerUnit = Box2DWorld::instance()->getPixelsPerMeter();
+            float pixelsPerUnit = Box2DModule::instance()->getPixelsPerMeter();
 
             Echo::Vector3 pitchYawRoll;
             getWorldOrientation().toEulerAngle(pitchYawRoll.x, pitchYawRoll.y, pitchYawRoll.z);
@@ -80,7 +80,7 @@ namespace Echo
 	{
 		if (m_isEnable && !m_body)
 		{
-			float pixelsPerUnit = Box2DWorld::instance()->getPixelsPerMeter();
+			float pixelsPerUnit = Box2DModule::instance()->getPixelsPerMeter();
 
 			// rotation
 			Echo::Vector3 pitchYawRoll;
@@ -94,7 +94,7 @@ namespace Echo
 			bodyDef.gravityScale = m_gravityScale;
 			bodyDef.position.Set(getWorldPosition().x / pixelsPerUnit, getWorldPosition().y / pixelsPerUnit);
 			bodyDef.angle = pitchYawRoll.z * Math::DEG2RAD;
-			m_body = Box2DWorld::instance()->getWorld()->CreateBody(&bodyDef);
+			m_body = Box2DModule::instance()->getWorld()->CreateBody(&bodyDef);
 			m_body->SetUserData(this);
 		}
 
@@ -104,7 +104,7 @@ namespace Echo
 			{
 				if (m_body->GetType() != b2BodyType::b2_staticBody)
 				{
-					float pixelsPerUnit = Box2DWorld::instance()->getPixelsPerMeter();
+					float pixelsPerUnit = Box2DModule::instance()->getPixelsPerMeter();
 
 					Quaternion quat;
 					quat.fromEulerAngle(0.f, 0.f, m_body->GetAngle()*Math::RAD2DEG);

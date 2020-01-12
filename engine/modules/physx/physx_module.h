@@ -20,5 +20,13 @@ namespace Echo
 
 		// update physx world
 		virtual  void update(float elapsedTime) override;
+        
+    public:
+        // debug draw
+        const StringOption& getDebugDrawOption() const { return m_drawDebugOption; }
+        void setDebugDrawOption(const StringOption& option);
+        
+    private:
+        StringOption    m_drawDebugOption = StringOption("Editor", { "None","Editor","Game","All" });
 	};
 }

@@ -1,10 +1,6 @@
 #pragma once
 
-#include "engine/core/scene/render_node.h"
-#include "engine/core/render/base/mesh/Mesh.h"
-#include "engine/core/render/base/Material.h"
-#include "engine/core/render/base/Renderable.h"
-#include "engine/core/render/base/image/Image.h"
+#include "engine/core/scene/node.h"
 
 namespace Echo
 {
@@ -16,6 +12,11 @@ namespace Echo
         TileMap();
         virtual ~TileMap();
         
+        // tile shape
+        const StringOption& getTileShape() const { return m_tileShape; }
+        void setTileShape(const StringOption& option);
+        
     private:
+        StringOption        m_tileShape = StringOption("Square", { "Square","Isometric","Hexagon" });
     };
 }

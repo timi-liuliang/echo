@@ -3,7 +3,7 @@
 #include "engine/core/log/Log.h"
 #include "engine/core/gizmos/Gizmos.h"
 #include "engine/core/math/Math.h"
-#include "box2d_world.h"
+#include "box2d_module.h"
 
 namespace Echo
 {
@@ -26,7 +26,7 @@ namespace Echo
 
 	void Box2DDebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 	{ 
-		float pixelsPerMeter = Box2DWorld::instance()->getPixelsPerMeter();
+		float pixelsPerMeter = Box2DModule::instance()->getPixelsPerMeter();
 		for (i32 idx = 0; idx < vertexCount; idx++)
 		{
 			const b2Vec2& from = vertices[idx % vertexCount];
@@ -37,7 +37,7 @@ namespace Echo
 
 	void Box2DDebugDraw::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 	{
-		float pixelsPerMeter = Box2DWorld::instance()->getPixelsPerMeter();
+		float pixelsPerMeter = Box2DModule::instance()->getPixelsPerMeter();
 		for (i32 idx = 2; idx < vertexCount; idx++)
 		{
 			const b2Vec2& v0 = vertices[0];
@@ -50,7 +50,7 @@ namespace Echo
 	void Box2DDebugDraw::DrawCircle(const b2Vec2& b2Center, float32 radius, const b2Color& color)
 	{
         float degreeStep = 10.f;
-        float pixelsPerMeter = Box2DWorld::instance()->getPixelsPerMeter();
+        float pixelsPerMeter = Box2DModule::instance()->getPixelsPerMeter();
         for (float degree = 0.f; degree < 360.f; degree+=degreeStep)
         {
             Quaternion quat0 = Quaternion::fromAxisAngle(Vector3::UNIT_Z, degree * Math::DEG2RAD);
@@ -67,7 +67,7 @@ namespace Echo
 	void Box2DDebugDraw::DrawSolidCircle(const b2Vec2& b2Center, float32 radius, const b2Vec2& axis, const b2Color& color)
 	{
         float degreeStep = 10.f;
-        float pixelsPerMeter = Box2DWorld::instance()->getPixelsPerMeter();
+        float pixelsPerMeter = Box2DModule::instance()->getPixelsPerMeter();
         for (float degree = 0.f; degree < 360.f; degree+=degreeStep)
         {
             Quaternion quat0 = Quaternion::fromAxisAngle(Vector3::UNIT_Z, degree * Math::DEG2RAD);

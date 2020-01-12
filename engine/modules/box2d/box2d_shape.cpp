@@ -1,6 +1,5 @@
 #include "box2d_shape.h"
 #include "box2d_body.h"
-#include "box2d_world.h"
 #include "engine/core/main/Engine.h"
 
 namespace Echo
