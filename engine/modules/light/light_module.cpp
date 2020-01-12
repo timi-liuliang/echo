@@ -14,7 +14,6 @@ namespace Echo
     
     LightModule::~LightModule()
     {
-        EchoSafeDeleteInstance(Light);
     }
 
 	LightModule* LightModule::instance()
@@ -25,7 +24,13 @@ namespace Echo
 
 	void LightModule::bindMethods()
 	{
+        CLASS_BIND_METHOD(LightModule, isIBLEnable, DEF_METHOD("isIBLEnable"));
+        CLASS_BIND_METHOD(LightModule, setIBLEnable, DEF_METHOD("setIBLEnable"));
+        CLASS_BIND_METHOD(LightModule, getIBLBrdfPath, DEF_METHOD("getIBLBrdfPath"));
+        CLASS_BIND_METHOD(LightModule, setIBLBrdfPath, DEF_METHOD("setIBLBrdfPath"));
 
+        CLASS_REGISTER_PROPERTY(LightModule, "ImageBasedLighting", Variant::Type::Bool, "isIBLEnable", "setIBLEnable");
+        CLASS_REGISTER_PROPERTY(LightModule, "Brdf", Variant::Type::ResourcePath, "getIBLBrdfPath", "setIBLBrdfPath");
 	}
 
 	void LightModule::registerTypes()
@@ -34,4 +39,27 @@ namespace Echo
 		Class::registerType<CubeLightCustom>();
 		Class::registerType<CubeLightCapture>();
 	}
+
+    void LightModule::setIBLBrdfPath(const ResourcePath& brdf)
+    {
+        if (m_iblBrdfPath.setPath(brdf.getPath()))
+        {
+            m_iblBrdfTexture = ECHO_DOWN_CAST<Texture*>(Res::get(m_iblBrdfPath));
+        }
+    }
+
+    Texture* LightModule::getIBLDiffuseTexture()
+    {
+        return m_iblDiffuseTexture;
+    }
+
+    Texture* LightModule::getIBLSpecularTexture()
+    {
+        return m_iblSpecularTexture;
+    }
+
+    Texture* LightModule::getIBLBrdfTexture()
+    {
+        return m_iblBrdfTexture;
+    }
 }

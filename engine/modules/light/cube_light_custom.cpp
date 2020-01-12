@@ -1,4 +1,5 @@
 #include "light.h"
+#include "light_module.h"
 #include "cube_light_custom.h"
 
 namespace Echo
@@ -33,16 +34,16 @@ namespace Echo
 			Texture* cubeTexture = (Texture*)Res::get(m_cubeMap);
 			if (m_usage.getIdx() == 0)
 			{
-				Light::instance()->m_iblDiffuseTexture = cubeTexture;
+				LightModule::instance()->m_iblDiffuseTexture = cubeTexture;
 			}
 			else if(m_usage.getIdx() == 1)
 			{
-				Light::instance()->m_iblSpecularTexture = cubeTexture;
+				LightModule::instance()->m_iblSpecularTexture = cubeTexture;
 			}
 			else if(m_usage.getIdx() == 2)
 			{
-				Light::instance()->m_iblDiffuseTexture = cubeTexture;
-				Light::instance()->m_iblSpecularTexture = cubeTexture;
+				LightModule::instance()->m_iblDiffuseTexture = cubeTexture;
+				LightModule::instance()->m_iblSpecularTexture = cubeTexture;
 			}
 		}
 	}

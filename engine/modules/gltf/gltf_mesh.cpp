@@ -5,7 +5,7 @@
 #include "base/ShaderProgram.h"
 #include "engine/core/main/Engine.h"
 #include "engine/core/gizmos/Gizmos.h"
-#include "engine/modules/light/light.h"
+#include "engine/modules/light/light_module.h"
 
 namespace Echo
 {
@@ -194,9 +194,9 @@ namespace Echo
 			Material* material = m_material ? m_material : m_asset->m_meshes[m_meshIdx].m_primitives[m_primitiveIdx].m_materialInst;
 			if (material->isMacroUsed("USE_IBL"))
 			{
-				m_renderable->setTexture(m_iblDiffuseSlot, Light::instance()->getIBLDiffuseTexture());
-				m_renderable->setTexture(m_iblSpecularSlot, Light::instance()->getIBLSpecularTexture());
-				m_renderable->setTexture(m_iblBrdfSlot, Light::instance()->getIBLBrdfTexture());
+				m_renderable->setTexture(m_iblDiffuseSlot, LightModule::instance()->getIBLDiffuseTexture());
+				m_renderable->setTexture(m_iblSpecularSlot, LightModule::instance()->getIBLSpecularTexture());
+				m_renderable->setTexture(m_iblBrdfSlot, LightModule::instance()->getIBLBrdfTexture());
 			}
 		}
 	}

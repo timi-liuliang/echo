@@ -6,7 +6,7 @@
 #include "engine/core/log/Log.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/util/base64.h"
-#include "engine/modules/light/light.h"
+#include "engine/modules/light/light_module.h"
 
 namespace Echo
 {
@@ -1069,7 +1069,7 @@ namespace Echo
 		primitive.m_materialInst->setMacro("HAS_NORMALMAP", normalTextureIdx != -1);
 		primitive.m_materialInst->setMacro("HAS_EMISSIVEMAP", emissiveTextureIdx != -1);
 		primitive.m_materialInst->setMacro("HAS_OCCLUSIONMAP", occusionTextureIdx != -1);
-		primitive.m_materialInst->setMacro("USE_IBL", Light::instance()->isIBLEnable());
+		primitive.m_materialInst->setMacro("USE_IBL", LightModule::instance()->isIBLEnable());
 		//primitive.m_materialInst->setMacro("USE_TEX_LOD", true);
 
         // temp variables
