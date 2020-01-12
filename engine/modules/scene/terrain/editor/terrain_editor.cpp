@@ -16,7 +16,7 @@ namespace Echo
     // get camera2d icon, used for editor
     const char* TerrainEditor::getEditorIcon() const
     {
-        return "engine/modules/terrain/editor/icon/terrain.png";
+        return "engine/modules/scene/terrain/editor/icon/terrain.png";
     }
 #endif
 }

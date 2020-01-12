@@ -4,16 +4,16 @@
 
 namespace Echo
 {
-    class TerrainModule : public Module
+    class SceneModule : public Module
     {
-		ECHO_SINGLETON_CLASS(TerrainModule, Module)
+		ECHO_SINGLETON_CLASS(SceneModule, Module)
 
     public:
-        TerrainModule();
-		virtual ~TerrainModule();
+        SceneModule();
+		virtual ~SceneModule();
 
 		// instance
-		static TerrainModule* instance();
+		static SceneModule* instance();
         
         // register all types of the module
         virtual void registerTypes() override;
