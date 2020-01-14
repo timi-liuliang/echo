@@ -9,14 +9,14 @@
 namespace Echo
 {
     UiImage::UiImage()
-    : m_textureRes("", ".png")
+    : UiRender()
+	, m_textureRes("", ".png")
     , m_mesh(nullptr)
     , m_material(nullptr)
     , m_renderable(nullptr)
     , m_width(0)
     , m_height(0)
     {
-		setRenderType("ui");
     }
     
     UiImage::~UiImage()
@@ -32,12 +32,9 @@ namespace Echo
         CLASS_BIND_METHOD(UiImage, setWidth,        DEF_METHOD("setWidth"));
         CLASS_BIND_METHOD(UiImage, getHeight,       DEF_METHOD("getHeight"));
         CLASS_BIND_METHOD(UiImage, setHeight,       DEF_METHOD("setHeight"));
-		CLASS_BIND_METHOD(UiImage, getAlpha,		DEF_METHOD("getAlpha"));
-		CLASS_BIND_METHOD(UiImage, setAlpha,		DEF_METHOD("setAlpha"));
         
         CLASS_REGISTER_PROPERTY(UiImage, "Width", Variant::Type::Int, "getWidth", "setWidth");
         CLASS_REGISTER_PROPERTY(UiImage, "Height", Variant::Type::Int, "getHeight", "setHeight");
-		CLASS_REGISTER_PROPERTY(UiImage, "Alpha", Variant::Type::Real, "getAlpha", "setAlpha");
         CLASS_REGISTER_PROPERTY(UiImage, "Texture", Variant::Type::ResourcePath, "getTextureRes", "setTextureRes");
     }
     
@@ -96,7 +93,6 @@ namespace Echo
             m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data(), m_localAABB);
             
             m_renderable = Renderable::create(m_mesh, m_material, this);
-			m_renderable->setShaderParam("u_UiAlpha", ShaderParamType::SPT_FLOAT, &m_alpha, 1);
         }
     }
     

@@ -39,6 +39,7 @@ namespace Echo
         Class::registerType<UiEventProcessor>();
         Class::registerType<UiEventRegion>();
         Class::registerType<UiEventRegionRect>();
+		Class::registerType<UiRender>();
         Class::registerType<UiText>();
         Class::registerType<UiImage>();
 

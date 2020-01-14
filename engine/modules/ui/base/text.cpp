@@ -10,13 +10,13 @@
 namespace Echo
 {
     UiText::UiText()
-    : m_mesh(nullptr)
+    : UiRender()
+	, m_mesh(nullptr)
     , m_material(nullptr)
     , m_renderable(nullptr)
     , m_width(0)
     , m_height(0)
     {
-		setRenderType("ui");
     }
     
     UiText::~UiText()
@@ -77,7 +77,6 @@ namespace Echo
         }
     }
     
-    // width
     void UiText::setHeight(i32 height)
     {
         if (m_height != height)
@@ -115,7 +114,6 @@ namespace Echo
         }
     }
     
-    // update per frame
     void UiText::update_self()
     {
         if (isNeedRender())

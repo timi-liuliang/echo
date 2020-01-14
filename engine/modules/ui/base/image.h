@@ -1,16 +1,16 @@
 #pragma once
 
-#include "engine/core/scene/render_node.h"
 #include "engine/core/render/base/mesh/Mesh.h"
 #include "engine/core/render/base/Material.h"
 #include "engine/core/render/base/Renderable.h"
 #include "../render/vertex_format.h"
+#include "render.h"
 
 namespace Echo
 {
-    class UiImage : public Render
+    class UiImage : public UiRender
     {
-        ECHO_CLASS(UiImage, Render)
+        ECHO_CLASS(UiImage, UiRender)
         
     public:
         UiImage();
@@ -27,10 +27,6 @@ namespace Echo
         // width
         i32 getHeight() const { return m_height; }
         void setHeight(i32 height);
-
-		// alpha
-		float getAlpha() const { return m_alpha; }
-		void setAlpha(float alpha) { m_alpha = alpha; }
 
     protected:
         // build drawable
@@ -57,6 +53,5 @@ namespace Echo
         Matrix4                 m_matWVP;
         i32                     m_width;
         i32                     m_height;
-		float					m_alpha = 1.f;
     };
 }
