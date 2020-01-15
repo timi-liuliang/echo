@@ -34,7 +34,6 @@ namespace Echo
 {
 	Engine::Engine()
 		: m_isInited(false)
-		, m_currentTime(0)
 	{
 		Time::instance();
 		Log::instance();
@@ -131,6 +130,7 @@ namespace Echo
 
 		// register class types in core
 		Class::registerType<Object>();
+        Class::registerType<FrameState>();
 		Class::registerType<Engine>();
 		Class::registerType<Node>();
 		Class::registerType<Module>();
@@ -294,17 +294,14 @@ namespace Echo
 		IO::instance()->setUserPath(m_userPath);
 	}
 
-	const ui32& Engine::getCurrentTime() const
-	{
-		return m_currentTime;
-	}
-
 	void Engine::tick(float elapsedTime)
 	{
+        FrameState::instance()->reset();
+        FrameState::instance()->tick(elapsedTime);
+        
 		// calculate time
 		elapsedTime = Math::Clamp( elapsedTime, 0.f, 1.f);
 		m_frameTime = elapsedTime;
-		m_currentTime = static_cast<ui32>(Time::instance()->getMilliseconds());
 
 		// update logic
 		Module::updateAll(m_frameTime);

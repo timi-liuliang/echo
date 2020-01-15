@@ -2,94 +2,67 @@
 
 #include "engine/core/base/type_def.h"
 #include "engine/core/memory/MemAllocDef.h"
+#include "engine/core/base/object.h"
 
 namespace Echo
 {
-	class FrameState
+	class FrameState : public Object
 	{
+        ECHO_SINGLETON_CLASS(FrameState, Object);
+        
 	public:
-		FrameState()
-			: m_uploadedTextureSizeInBytes(0)
-			, m_uploadedGeometricSize(0)
-			, m_rendertargetSize(0)
-			, m_drawCallTimes(0)
-			, m_lockTimes(0)
-			, m_fps(0)
-			, m_triangleNum(0)
-		{}
+        FrameState();
+        ~FrameState();
+        
+        // instance
+        static FrameState* instance();
 
-		~FrameState()
-		{}
+        // reset
+        void reset();
+        
+        // tick
+        void tick(float elapsedTime);
+        
+        // get fps
+        ui32 getFps() const { return m_fps; }
 
-		// 重置
-		void reset()
-		{
-			m_triangleNum = 0;
-			m_drawCallTimes = 0;
-			m_lockTimes = 0;
-			m_fps = 0;
-			m_maxFrameTimePerSecond = 0;
-		}
-
-		// 增加纹理占用大小(单位：字节)
+		// texture size
+        ui32 getTextureSizeInBytes() const { return m_uploadedTextureSizeInBytes; }
 		void incrUploadTextureSizeInBytes(ui32 _sizeInBytes) { m_uploadedTextureSizeInBytes += _sizeInBytes; }
-
-		// 减少纹理占用大小(单位：字节)
 		void decrUploadTextureSizeInBytes(ui32 _sizeInBytes) { m_uploadedTextureSizeInBytes -= _sizeInBytes; }
 
-		// 增加几何体三角形大小
-		void incrUploadGeometricSize(ui32 _sizeInBytes) { m_uploadedGeometricSize += _sizeInBytes; }
+		// vertex count
+        ui32 getVertexSize() const { return m_uploadedVertexSize; }
+		void incrUploadVertexSize(ui32 _sizeInBytes) { m_uploadedVertexSize += _sizeInBytes; }
+		void decrUploadVertexSize(ui32 _sizeInBytes) { m_uploadedVertexSize -= _sizeInBytes; }
 
-		// 减少几何体内记录大小
-		void decrUploadGeometricSize(ui32 _sizeInBytes) { m_uploadedGeometricSize -= _sizeInBytes; }
-
-		// 增加渲染批次
-		void incrDrawCallTimes(ui32 _times) { m_drawCallTimes += _times; }
-
-		// 增加锁次数
-		void incrLockTimes(ui32 _time) { m_lockTimes += _time; }
-
-		// 增加三角形数量
+		// triangle number
+        ui32 getTriangleNum() const { return m_triangleNum; }
 		void incrTriangleNum(ui32 _triangles) { m_triangleNum += _triangles; }
 
-		// 获取渲染批次
-		ui32 getDrawCalls() const { return m_drawCallTimes; }
-
-		// 获取纹理尺寸
-		ui32 getTextureSizeInBytes() const { return m_uploadedTextureSizeInBytes; }
-
-		// 获取顶点大小
-		ui32 getVertexSize() const { return m_uploadedGeometricSize; }
-
-		// 获取三角形数量
-		ui32 getTriangleNum() const { return m_triangleNum; }
-
-		// 设置rendertarget内存大小
+		// render target
+        ui32 getRendertargetSize() const { return m_rendertargetSize; }
 		void incrRendertargetSize(const ui32 size) { m_rendertargetSize += size; }
 		void decrRendertargetSize(const ui32 size) { m_rendertargetSize -= size; }
-
-		// 获取rendertarget内存大小
-		ui32 getRendertargetSize() const { return m_rendertargetSize; }
+        
+        // draw calls
+        void incrDrawCallTimes(ui32 _times) { m_drawCallTimes += _times; }
+        ui32 getDrawCalls() const { return m_drawCallTimes; }
+        
+        // get current time
+        const ui32& getCurrentTime() const;
+        
+    private:
+        // calculate fps
+        void calcuateFps(float elapsedTime);
 
 	protected:
-		ui32	m_uploadedTextureSizeInBytes;
-		ui32	m_uploadedGeometricSize;
-		ui32	m_rendertargetSize;
-		ui32	m_drawCallTimes;
-		ui32	m_lockTimes;
-		ui32	m_fps;
-		ui32	m_maxFrameTimePerSecond;
-		ui32	m_minTimeFrame;
-		ui32	m_maxTimeFrame;
-		ui32	m_triangleNum;
-		String	m_fpsMsg;
-		String	m_maxFrameTimeMsg;
-		String	m_lockTimesMsg;
-		String	m_drawCallTimesMsg;
-		String	m_triangleNumMsg;
-		String	m_uploadedTextureSizeInBytesMsg;
-		String	m_uploadedGeometricSizeMsg;
-		String	m_streamThreadCount;
-		String	m_mathOpCount;
+        ui32    m_currentTime = 0.0;
+        ui32    m_fps = 0;
+		ui32	m_uploadedTextureSizeInBytes = 0;
+		ui32	m_uploadedVertexSize = 0;
+        ui32    m_triangleNum = 0;
+		ui32	m_rendertargetSize = 0;
+		ui32	m_drawCallTimes = 0;
 	};
 }

@@ -39,6 +39,10 @@ namespace Echo
         const StringOption& getDebugDrawOption() const { return m_drawDebugOption; }
         void setDebugDrawOption(const StringOption& option) { m_drawDebugOption.setValue( option.getValue()); }
         
+        // frames per second
+        i32 getFramesPerSecond() const { return m_framesPerSecond; }
+        void setFramesPerSecond(i32 framesPerSecond) { m_framesPerSecond = Math::Clamp<i32>(framesPerSecond, 20, 240); }
+        
     private:
         bool                    m_isGame;
         StringOption            m_drawDebugOption;
@@ -47,5 +51,6 @@ namespace Echo
         b2World*                m_b2World = nullptr;                            // we only support one b2World
         Vector2                 m_gravity = Vector2( 0.f, -9.8f);
         float                   m_pixelsPerMeter = 32.f;
+        i32                     m_framesPerSecond = 60;
 	};
 }

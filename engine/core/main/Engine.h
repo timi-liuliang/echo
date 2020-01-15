@@ -53,13 +53,6 @@ namespace Echo
 		const String& getUserPath() const;
 		void setUserPath(const String& strPath);
 
-		// get current time
-		const ui32&	getCurrentTime() const;
-
-		// frame state
-		FrameState&	getFrameState() { return m_frameState; }
-		const FrameState& getFrameState() const { return m_frameState; }
-
 		// on platform event
 		void onPlatformSuspend();
 		void onPlatformResume();
@@ -89,8 +82,6 @@ namespace Echo
 		String				m_userPath;
 		bool				m_isInited;
 		float				m_frameTime;
-		ui32				m_currentTime;
-		FrameState			m_frameState;
 	};
     
     // init engine
