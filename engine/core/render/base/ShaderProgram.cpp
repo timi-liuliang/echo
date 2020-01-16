@@ -27,6 +27,16 @@ namespace Echo
                 vsSrc = glslCompiler.getOutput(Echo::GLSLCrossCompiler::ShaderLanguage::MSL, Echo::GLSLCrossCompiler::ShaderType::VS).c_str();
                 psSrc = glslCompiler.getOutput(Echo::GLSLCrossCompiler::ShaderLanguage::MSL, Echo::GLSLCrossCompiler::ShaderType::FS).c_str();
             }
+			else if (Renderer::instance()->getType() == Renderer::Type::OpenGLES)
+			{
+				GLSLCrossCompiler glslCompiler;
+
+				// set input
+				glslCompiler.setInput(vsSrc.c_str(), psSrc.c_str(), nullptr);
+
+				vsSrc = glslCompiler.getOutput(Echo::GLSLCrossCompiler::ShaderLanguage::GLES, Echo::GLSLCrossCompiler::ShaderType::VS).c_str();
+				psSrc = glslCompiler.getOutput(Echo::GLSLCrossCompiler::ShaderLanguage::GLES, Echo::GLSLCrossCompiler::ShaderType::FS).c_str();
+			}
         }
         else
         {
