@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="-1" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            border: 0;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <script>
+        var width = 360;
+        var height = 640;
+
+        var canvas = document.getElementById('canvas');
+        canvas.width = width;
+        canvas.height = height;
+
+        window.onload = function(){
+            window._onload();
+        }
+    </script>
+
+    <!-- include your js files ( without weapp-adapter & wx) -->
+    <!-- <script src="./js/my-game.js"></script> -->
+</body>
+</html>
