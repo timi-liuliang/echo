@@ -13,7 +13,7 @@ layout(binding = 0) uniform UBO
 {
     mat4 u_WorldMatrix;
     mat4 u_ViewProjMatrix;
-} ubo;
+} vs_ubo;
 
 // inputs
 layout(location = 0) in vec3 a_Position;
@@ -27,8 +27,8 @@ void main(void)
 {
     vec4 position = /*u_WorldMatrix */ vec4(a_Position, 1.0);
     
-    v_Position  = (ubo.u_WorldMatrix * position).xyz;
-    gl_Position = ubo.u_ViewProjMatrix * position;
+    v_Position  = (vs_ubo.u_WorldMatrix * position).xyz;
+    gl_Position = vs_ubo.u_ViewProjMatrix * position;
     
     v_Color = a_Color;
 }
@@ -42,7 +42,7 @@ layout(binding = 0) uniform UBO
 {
     vec3  u_CameraPosition;
     float u_CameraFar;
-} ubo;
+} fs_ubo;
 
 
 // inputs
@@ -69,61 +69,6 @@ void main(void)
 <DepthEnable value = "true" />
 <WriteDepth value = "false" />
 </DepthStencilState>
-</Shader>
-)";
-
-// opaque material for opengles
-static const char* g_gizmoOpaqueMaterialGLES = R"(
-<?xml version = "1.0" encoding = "utf-8"?>
-<Shader>
-	<VS>#version 100
-
-		attribute vec3 a_Position;
-		attribute vec4 a_Color;
-
-		uniform mat4 u_WorldMatrix;
-		uniform mat4 u_ViewProjMatrix;
-
-		varying vec3 v_Position;
-		varying vec4 v_Color;
-
-		void main(void)
-		{
-			vec4 position = /*u_WorldMatrix */ vec4(a_Position, 1.0);
-
-			v_Position  = position.xyz;
-			gl_Position = u_ViewProjMatrix * position;
-
-			v_Color = a_Color;
-		}
-	</VS>
-	<PS>#version 100
-
-		precision mediump float;
-
-		uniform vec3  u_CameraPosition;
-		uniform float u_CameraFar;
-
-		varying vec3  v_Position;
-		varying vec4  v_Color;
-
-		void main(void)
-		{
-			gl_FragColor    = v_Color;
-		}
-	</PS>
-	<BlendState>
-		<BlendEnable value = "true" />
-		<SrcBlend value = "BF_SRC_ALPHA" />
-		<DstBlend value = "BF_INV_SRC_ALPHA" />
-	</BlendState>
-	<RasterizerState>
-		<CullMode value = "CULL_NONE" />
-	</RasterizerState>
-	<DepthStencilState>
-		<DepthEnable value = "true" />
-		<WriteDepth value = "false" />
-	</DepthStencilState>
 </Shader>
 )";
 
@@ -206,7 +151,7 @@ namespace Echo
 		: m_isAutoClear(false)
 	{
 		m_material = ECHO_CREATE_RES(Material);
-		m_material->setShaderContent( "echo_gizmo_default_shader", Renderer::instance()->getType()!=Renderer::Type::OpenGLES ? g_gizmoOpaqueMaterial : g_gizmoOpaqueMaterialGLES);
+		m_material->setShaderContent( "echo_gizmo_default_shader", g_gizmoOpaqueMaterial);
 		m_material->setRenderStage("Transparent");
 
 		m_lineBatch = EchoNew(Batch(m_material, this));
