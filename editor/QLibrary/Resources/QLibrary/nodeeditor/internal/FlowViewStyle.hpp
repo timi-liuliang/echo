@@ -7,31 +7,24 @@
 
 namespace QtNodes
 {
+    class NODE_EDITOR_PUBLIC FlowViewStyle : public Style
+    {
+    public:
+        FlowViewStyle();
+        FlowViewStyle(QString jsonText);
 
-class NODE_EDITOR_PUBLIC FlowViewStyle : public Style
-{
-public:
+        // modify style
+        static void setStyle(QString jsonText);
 
-  FlowViewStyle();
+    private:
+        // load
+        void loadJsonText(QString jsonText) override;
+        void loadJsonFile(QString fileName) override;
+        void loadJsonFromByteArray(QByteArray const &byteArray) override;
 
-  FlowViewStyle(QString jsonText);
-
-public:
-
-  static void setStyle(QString jsonText);
-
-private:
-
-  void loadJsonText(QString jsonText) override;
-
-  void loadJsonFile(QString fileName) override;
-
-  void loadJsonFromByteArray(QByteArray const &byteArray) override;
-
-public:
-
-  QColor BackgroundColor;
-  QColor FineGridColor;
-  QColor CoarseGridColor;
-};
+    public:
+        QColor BackgroundColor;
+        QColor FineGridColor;
+        QColor CoarseGridColor;
+    };
 }

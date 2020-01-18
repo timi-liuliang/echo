@@ -32,16 +32,11 @@ FlowViewStyle(QString jsonText)
   loadJsonText(jsonText);
 }
 
-
-void
-FlowViewStyle::
-setStyle(QString jsonText)
-{
-  FlowViewStyle style(jsonText);
-
-  StyleCollection::setFlowViewStyle(style);
-}
-
+    void FlowViewStyle::setStyle(QString jsonText)
+    {
+        FlowViewStyle style(jsonText);
+        StyleCollection::setFlowViewStyle(style);
+    }
 
 #ifdef STYLE_DEBUG
   #define FLOW_VIEW_STYLE_CHECK_UNDEFINED_VALUE(v, variable) { \

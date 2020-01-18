@@ -7,54 +7,44 @@
 
 namespace QtNodes
 {
+    class NODE_EDITOR_PUBLIC ConnectionStyle : public Style
+    {
+    public:
+        ConnectionStyle();
+        ConnectionStyle(QString jsonText);
 
-class NODE_EDITOR_PUBLIC ConnectionStyle : public Style
-{
-public:
+    public:
+        static void setConnectionStyle(QString jsonText);
 
-  ConnectionStyle();
+    private:
+        // load
+        void loadJsonText(QString jsonText) override;
+        void loadJsonFile(QString fileName) override;
+        void loadJsonFromByteArray(QByteArray const &byteArray) override;
 
-  ConnectionStyle(QString jsonText);
+    public:
+        QColor constructionColor() const;
+        QColor normalColor() const;
+        QColor normalColor(QString typeId) const;
+        QColor selectedColor() const;
+        QColor selectedHaloColor() const;
+        QColor hoveredColor() const;
 
-public:
+        float lineWidth() const;
+        float constructionLineWidth() const;
+        float pointDiameter() const;
 
-  static void setConnectionStyle(QString jsonText);
+        bool useDataDefinedColors() const;
 
-private:
-
-  void loadJsonText(QString jsonText) override;
-
-  void loadJsonFile(QString fileName) override;
-
-  void loadJsonFromByteArray(QByteArray const &byteArray) override;
-
-public:
-
-  QColor constructionColor() const;
-  QColor normalColor() const;
-  QColor normalColor(QString typeId) const;
-  QColor selectedColor() const;
-  QColor selectedHaloColor() const;
-  QColor hoveredColor() const;
-
-  float lineWidth() const;
-  float constructionLineWidth() const;
-  float pointDiameter() const;
-
-  bool useDataDefinedColors() const;
-
-private:
-
-  QColor ConstructionColor;
-  QColor NormalColor;
-  QColor SelectedColor;
-  QColor SelectedHaloColor;
-  QColor HoveredColor;
-
-  float LineWidth;
-  float ConstructionLineWidth;
-  float PointDiameter;
-
-  bool UseDataDefinedColors;
-};
+    private:
+        QColor ConstructionColor;
+        QColor NormalColor;
+        QColor SelectedColor;
+        QColor SelectedHaloColor;
+        QColor HoveredColor;
+        float LineWidth;
+        float ConstructionLineWidth;
+        float PointDiameter;
+        bool UseDataDefinedColors;
+    };
 }
