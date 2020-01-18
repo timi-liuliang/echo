@@ -5,63 +5,50 @@
 
 namespace QtNodes
 {
+    enum class PortType
+    {
+        None,
+        In,
+        Out
+    };
 
-enum class PortType
-{
-  None,
-  In,
-  Out
-};
+    static const int INVALID = -1;
 
-static const int INVALID = -1;
+    using PortIndex = int;
 
-using PortIndex = int;
+    struct Port
+    {
+        PortType  type;
+        PortIndex index;
 
-struct Port
-{
-  PortType type;
+        Port()
+            : type(PortType::None)
+            , index(INVALID)
+        {}
 
-  PortIndex index;
+        Port(PortType t, PortIndex i)
+            : type(t)
+            , index(i)
+        {}
 
-  Port()
-    : type(PortType::None)
-    , index(INVALID)
-  {}
+        // is index valid
+        bool indexIsValid() { return index != INVALID; }
 
-  Port(PortType t, PortIndex i)
-    : type(t)
-    , index(i)
-  {}
+        // is port valid
+        bool portTypeIsValid() { return type != PortType::None; }
+    };
 
-  bool
-  indexIsValid() { return index != INVALID; }
+    // using PortAddress = std::pair<QUuid, PortIndex>;
+    inline PortType oppositePort(PortType port)
+    {
+        PortType result = PortType::None;
+        switch (port)
+        {
+            case PortType::In: result = PortType::Out; break;
+            case PortType::Out: result = PortType::In; break;
+            default: break;
+        }
 
-  bool
-  portTypeIsValid() { return type != PortType::None; }
-};
-
-//using PortAddress = std::pair<QUuid, PortIndex>;
-
-inline
-PortType
-oppositePort(PortType port)
-{
-  PortType result = PortType::None;
-
-  switch (port)
-  {
-    case PortType::In:
-      result = PortType::Out;
-      break;
-
-    case PortType::Out:
-      result = PortType::In;
-      break;
-
-    default:
-      break;
-  }
-
-  return result;
-}
+        return result;
+    }
 }
