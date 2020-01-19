@@ -8,30 +8,24 @@
 
 #include <QtCore/QString>
 
-#include "NodeDataModel.hpp"
-#include "TypeConverter.hpp"
-#include "Export.hpp"
-#include "QStringStdHash.hpp"
-#include "memory.hpp"
+#include "node/NodeDataModel.hpp"
+#include "base/TypeConverter.hpp"
+#include "base/Export.hpp"
+#include "base/QStringStdHash.hpp"
+#include "base/memory.hpp"
 
 namespace QtNodes
 {
-
-inline
-bool
-operator<(QtNodes::NodeDataType const & d1,
-          QtNodes::NodeDataType const & d2)
-{
-  return d1.id < d2.id;
-}
+	inline bool operator<(QtNodes::NodeDataType const & d1, QtNodes::NodeDataType const & d2)
+	{
+		return d1.id < d2.id;
+	}
 
 
 /// Class uses map for storing models (name, model)
 class NODE_EDITOR_PUBLIC DataModelRegistry
 {
-
 public:
-
   using RegistryItemPtr     = std::unique_ptr<NodeDataModel>;
   using RegistryItemCreator = std::function<RegistryItemPtr()>;
   using RegisteredModelCreatorsMap = std::unordered_map<QString, RegistryItemCreator>;

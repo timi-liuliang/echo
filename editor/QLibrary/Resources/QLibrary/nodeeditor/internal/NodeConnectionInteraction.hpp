@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Node.hpp"
-#include "Connection.hpp"
+#include "node/Node.hpp"
+#include "connection/Connection.hpp"
 
 namespace QtNodes
 {

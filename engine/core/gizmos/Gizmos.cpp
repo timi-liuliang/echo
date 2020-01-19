@@ -173,7 +173,6 @@ namespace Echo
 	{
 	}
 
-	// draw line
 	void Gizmos::drawLine(const Vector3& from, const Vector3& to, const Color& color)
 	{
 		m_lineBatch->addIndex((Word)m_lineBatch->m_vertexs.size());
@@ -183,7 +182,6 @@ namespace Echo
 		m_lineBatch->addVertex(VertexFormat(to, color));
 	}
 
-	// draw trangle
 	void Gizmos::drawTriangle(const Vector3& v0, const Vector3& v1, const Vector3& v2, const Color& color)
 	{
 		m_triangleBatch->addIndex((Word)m_triangleBatch->m_vertexs.size());
@@ -195,14 +193,12 @@ namespace Echo
 		m_triangleBatch->addVertex(VertexFormat(v2, color));
 	}
 
-	// clear mesh data
 	void Gizmos::clear()
 	{
 		m_lineBatch->clear();
 		m_triangleBatch->clear();
 	}
 
-	// update
 	void Gizmos::update_self()
 	{
 		if (isNeedRender())
