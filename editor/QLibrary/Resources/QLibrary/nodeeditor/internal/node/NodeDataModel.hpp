@@ -47,19 +47,19 @@ namespace QtNodes
       virtual QString name() const = 0;
 
     public:
-      QJsonObject save() const override;
+        QJsonObject save() const override;
 
     public:
-      virtual unsigned int nPorts(PortType portType) const = 0;
+        virtual unsigned int nPorts(PortType portType) const = 0;
 
-      virtual NodeDataType dataType(PortType portType, PortIndex portIndex) const = 0;
+        virtual NodeDataType dataType(PortType portType, PortIndex portIndex) const = 0;
 
     public:
-      enum class ConnectionPolicy
-      {
-        One,
-        Many,
-      };
+        enum class ConnectionPolicy
+        {
+            One,
+            Many,
+        };
 
         // connection policy
         virtual ConnectionPolicy portOutConnectionPolicy(PortIndex) const {   return ConnectionPolicy::Many; }
@@ -70,14 +70,9 @@ namespace QtNodes
 
     public:
       /// Triggers the algorithm
-      virtual
-      void
-      setInData(std::shared_ptr<NodeData> nodeData,
-                PortIndex port) = 0;
+      virtual void setInData(std::shared_ptr<NodeData> nodeData, PortIndex port) = 0;
 
-      virtual
-      std::shared_ptr<NodeData>
-      outData(PortIndex port) = 0;
+      virtual std::shared_ptr<NodeData> outData(PortIndex port) = 0;
 
       virtual
       QWidget *
