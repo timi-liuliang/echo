@@ -5,7 +5,6 @@
 #include <nodeeditor/NodeDataModel>
 #include <iostream>
 #include "DataFloat.h"
-#include "DataText.h"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -17,48 +16,47 @@ using QtNodes::NodeValidationState;
 namespace ShaderEditor
 {
     /// The model dictates the number of inputs and outputs for the Node.
-    class ShaderTemplateDataModel : public NodeDataModel
+    /// In this example it has no logic.
+    class Vector3DataModel : public NodeDataModel
     {
-        Q_OBJECT
+      Q_OBJECT
 
     public:
-        ShaderTemplateDataModel();
-        virtual ~ShaderTemplateDataModel() {}
+        Vector3DataModel();
+        virtual ~Vector3DataModel() {}
 
         // caption
-        QString caption() const override { return QStringLiteral("Shader Template"); }
+        QString caption() const override { return QStringLiteral("Vector3"); }
+        bool captionVisible() const override { return false; }
 
-        // is caption visible
-        bool captionVisible() const override { return true; }
-
-        // name
-        QString name() const override { return QStringLiteral("ShaderTemplate"); }
+        QString name() const override { return QStringLiteral("Vector3"); }
 
     public:
         // load|save
-        virtual QJsonObject save() const override;
-        virtual void restore(QJsonObject const &p) override;
+        QJsonObject save() const override;
+        void restore(QJsonObject const &p) override;
 
     public:
-        // number ports
+        // get port type
         unsigned int nPorts(PortType portType) const override;
 
-        // get port data type
+        // get data type
         NodeDataType dataType(PortType portType, PortIndex portIndex) const override;
 
-        // get port data
         std::shared_ptr<NodeData> outData(PortIndex port) override;
 
         void setInData(std::shared_ptr<NodeData>, int) override { }
 
-        // widget
-        QWidget* embeddedWidget() override { return nullptr; }
+        // get embedded widget
+        QWidget* embeddedWidget() override { return _lineEdit; }
 
     private Q_SLOTS:
-        // slots
+        // on value changed
         void onTextEdited(QString const &string);
 
     private:
-        std::shared_ptr<DataText>       m_source;
+      std::shared_ptr<DataFloat> _number;
+      QLineEdit *                _lineEdit;
     };
 }
+

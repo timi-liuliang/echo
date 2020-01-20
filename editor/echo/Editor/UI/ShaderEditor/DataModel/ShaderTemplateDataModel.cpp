@@ -1,47 +1,22 @@
 #include "ShaderTemplateDataModel.h"
 #include <QtCore/QJsonValue>
 #include <QtGui/QDoubleValidator>
-#include "DecimalData.h"
+#include "DataFloat.h"
 
 namespace ShaderEditor
 {
     ShaderTemplateDataModel::ShaderTemplateDataModel()
-     : m_lineEdit(new QLineEdit())
     {
-        m_lineEdit->setValidator(new QDoubleValidator());
-        m_lineEdit->setMaximumSize(m_lineEdit->sizeHint());
-
-        QObject::connect(m_lineEdit, &QLineEdit::textChanged, this, &ShaderTemplateDataModel::onTextEdited);
-
-        m_lineEdit->setText("0.0");
     }
 
     QJsonObject ShaderTemplateDataModel::save() const
     {
         QJsonObject modelJson = NodeDataModel::save();
-
-        if (m_number)
-            modelJson["number"] = QString::number(m_number->number());
-
         return modelJson;
     }
 
     void ShaderTemplateDataModel::restore(QJsonObject const &p)
     {
-        QJsonValue v = p["number"];
-
-        if (!v.isUndefined())
-        {
-            QString strNum = v.toString();
-
-            bool   ok;
-            double d = strNum.toDouble(&ok);
-            if (ok)
-            {
-                m_number = std::make_shared<DecimalData>(d);
-                m_lineEdit->setText(strNum);
-            }
-        }
     }
 
     unsigned int ShaderTemplateDataModel::nPorts(PortType portType) const
@@ -50,40 +25,49 @@ namespace ShaderEditor
 
         switch (portType)
         {
-            case PortType::In: result = 0; break;
-            case PortType::Out:result = 1; break;
+            case PortType::In: result = 5; break;
+            case PortType::Out:result = 0; break;
             default:                       break;
         }
 
-      return result;
+        return result;
     }
 
     void ShaderTemplateDataModel:: onTextEdited(QString const &string)
     {
-        Q_UNUSED(string);
-
-        bool ok = false;
-
-        double number = m_lineEdit->text().toDouble(&ok);
-        if (ok)
-        {
-            m_number = std::make_shared<DecimalData>(number);
-
-            Q_EMIT dataUpdated(0);
-        }
-        else
-        {
-            Q_EMIT dataInvalidated(0);
-        }
+//        Q_UNUSED(string);
+//
+//        bool ok = false;
+//
+//        double number = m_lineEdit->text().toDouble(&ok);
+//        if (ok)
+//        {
+//            m_number = std::make_shared<DecimalData>(number);
+//
+//            Q_EMIT dataUpdated(0);
+//        }
+//        else
+//        {
+//            Q_EMIT dataInvalidated(0);
+//        }
     }
 
-    NodeDataType ShaderTemplateDataModel::dataType(PortType, PortIndex) const
+    NodeDataType ShaderTemplateDataModel::dataType(PortType portType, PortIndex portIndex) const
     {
-        return NodeDataType {"decimal", "Decimal"};
+        if(portType==PortType::In)
+        {
+            if      (portIndex==0) return NodeDataType {"vec3", "Diffuse"};
+            else if (portIndex==1) return NodeDataType {"vec3", "Normal"};
+            else if (portIndex==2) return NodeDataType {"float", "Metalic"};
+            else if (portIndex==3) return NodeDataType {"float", "Roughness"};
+            else if (portIndex==4) return NodeDataType {"float", "Opacity"};
+        }
+        
+        return NodeDataType {"unknown", "Unknown"};
     }
 
     std::shared_ptr<NodeData> ShaderTemplateDataModel::outData(PortIndex)
     {
-        return m_number;
+        return m_source;
     }
 }

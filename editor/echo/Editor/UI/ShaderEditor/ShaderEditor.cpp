@@ -4,7 +4,8 @@
 #include <nodeeditor/FlowView>
 #include <nodeeditor/DataModelRegistry>
 #include "ShaderTemplateDataModel.h"
-#include "NumberSourceDataModel.h"
+#include "FloatDataModel.h"
+#include "Vector3DataModel.h"
 
 using namespace ShaderEditor;
 
@@ -14,8 +15,9 @@ namespace Studio
 	{
 		auto ret = std::make_shared<QtNodes::DataModelRegistry>();
 
-        ret->registerModel<NumberSourceDataModel>("Sources");
-        ret->registerModel<ShaderTemplateDataModel>("None");
+        ret->registerModel<FloatDataModel>("Variable");
+        ret->registerModel<Vector3DataModel>("Variable");
+        ret->registerModel<ShaderTemplateDataModel>("Template");
 		//ret->registerModel<TextSourceDataModel>();
 		//ret->registerModel<TextDisplayDataModel>();
 
