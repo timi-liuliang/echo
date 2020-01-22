@@ -6,6 +6,8 @@
 #include "ShaderTemplateDataModel.h"
 #include "FloatDataModel.h"
 #include "Vector3DataModel.h"
+#include "ColorDataModel.h"
+#include "TextureDataModel.h"
 
 using namespace ShaderEditor;
 
@@ -17,9 +19,9 @@ namespace Studio
 
         ret->registerModel<FloatDataModel>("Variable");
         ret->registerModel<Vector3DataModel>("Variable");
+        ret->registerModel<ColorDataModel>("Variable");
+        ret->registerModel<TextureDataModel>("Variable");
         ret->registerModel<ShaderTemplateDataModel>("Template");
-		//ret->registerModel<TextSourceDataModel>();
-		//ret->registerModel<TextDisplayDataModel>();
 
 		return ret;
 	}

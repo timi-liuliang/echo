@@ -4,9 +4,6 @@
 
 namespace Echo
 {
-	/**
-	 * ÑÕÉ«¶¨Òå
-	 */
 	class Color
 	{
 	public:	

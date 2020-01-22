@@ -18,34 +18,34 @@ namespace QT_UI
 		Q_OBJECT
 	public:
 		QColorSelect( QWidget* parent = 0);
+        
+        // draw text
+        void setDrawText(bool isDrawText) { m_isDrawText = isDrawText; }
 
-		// 设置颜色
+		// color by string
 		void SetColor( string color);
-
-		// 设置颜色
+        string GetColor();
+        
+        // color
 		void SetColor( const Echo::Color& color);
-
-		// 获取颜色
-		string GetColor();
-
-		// 获取颜色
 		const Echo::Color& GetColor() const { return m_color; }
 
-		// MVC渲染
+		// MVC
 		static bool ItemDelegatePaint( QPainter *painter, const QRect& rect, const string& val);
 
 	protected:
-		// 重定义渲染
-		void paintEvent( QPaintEvent* event); 
+		// paint event
+		void paintEvent( QPaintEvent* event);
 
-		// 大小
+		// size hint
 		QSize sizeHint() const;
 
 	public slots:
-		// 选择颜色
+		// on select color
 		void OnSelectColor();
 
 	private:
+        bool            m_isDrawText = true;
 		Echo::Color		m_color;
 	};
 }
