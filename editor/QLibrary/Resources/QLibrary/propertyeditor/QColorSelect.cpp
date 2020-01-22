@@ -36,7 +36,9 @@ namespace QT_UI
     static bool ItemDelegatePaintColor( QPainter *painter, const QRect& rect, const string& val)
     {
         Echo::Color color = Echo::StringUtil::ParseColor(val.c_str());
-        QColor qColor((int)(color.r*255.f), (int)(color.g*255.f), (int)(color.b*255.f), (int)(color.a*255.f));
+        color = color * color.a + Echo::Color::WHITE * (1.f - color.a);
+        
+        QColor qColor((int)(color.r*255.f), (int)(color.g*255.f), (int)(color.b*255.f));
 
         // color rect
         QRect tRect = QRect( rect.left()+3, rect.top()+3, rect.height()-6, rect.height()-6);
@@ -48,7 +50,7 @@ namespace QT_UI
         return true;
     }
 
-    bool ItemDelegatePaintText( QPainter *painter, const QRect& rect, const string& val)
+    static bool ItemDelegatePaintText( QPainter *painter, const QRect& rect, const string& val)
     {
         Echo::Color color = Echo::StringUtil::ParseColor(val.c_str());
         QColor qColor((int)(color.r*255.f), (int)(color.g*255.f), (int)(color.b*255.f));

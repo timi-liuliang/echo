@@ -7,8 +7,8 @@ namespace ShaderEditor
 {
     TextureDataModel::TextureDataModel()
     {
-        m_colorSelect = new QT_UI::QColorSelect();
-        m_colorSelect->setDrawText(false);
+        m_textureSelect = new QT_UI::QTextureSelect();
+        m_textureSelect->setFixedSize(155, 155);
     }
 
     QJsonObject TextureDataModel::save() const

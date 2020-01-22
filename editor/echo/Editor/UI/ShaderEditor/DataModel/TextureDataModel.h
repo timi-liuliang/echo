@@ -5,7 +5,7 @@
 #include <nodeeditor/NodeDataModel>
 #include <iostream>
 #include "DataFloat.h"
-#include "QColorSelect.h"
+#include "QTextureSelect.h"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -49,15 +49,15 @@ namespace ShaderEditor
         void setInData(std::shared_ptr<NodeData>, int) override { }
 
         // get embedded widget
-        QWidget* embeddedWidget() override { return m_colorSelect; }
+        QWidget* embeddedWidget() override { return m_textureSelect; }
 
     private Q_SLOTS:
         // on value changed
         void onTextEdited(QString const &string);
 
     private:
-      std::shared_ptr<DataFloat> _number;
-      QT_UI::QColorSelect*       m_colorSelect = nullptr;
+        std::shared_ptr<DataFloat> _number;
+        QT_UI::QTextureSelect*     m_textureSelect = nullptr;
     };
 }
 
