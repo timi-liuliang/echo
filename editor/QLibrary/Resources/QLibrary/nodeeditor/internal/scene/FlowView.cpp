@@ -61,11 +61,9 @@ FlowView(FlowScene *scene, QWidget *parent)
 }
 
 
-QAction*
-FlowView::
-clearSelectionAction() const
+QAction* FlowView::clearSelectionAction() const
 {
-  return _clearSelectionAction;
+    return _clearSelectionAction;
 }
 
 
@@ -77,30 +75,26 @@ deleteSelectionAction() const
 }
 
 
-void
-FlowView::setScene(FlowScene *scene)
+void FlowView::setScene(FlowScene *scene)
 {
-  _scene = scene;
-  QGraphicsView::setScene(_scene);
+    _scene = scene;
+    QGraphicsView::setScene(_scene);
 
-  // setup actions
-  delete _clearSelectionAction;
-  _clearSelectionAction = new QAction(QStringLiteral("Clear Selection"), this);
-  _clearSelectionAction->setShortcut(Qt::Key_Escape);
-  connect(_clearSelectionAction, &QAction::triggered, _scene, &QGraphicsScene::clearSelection);
-  addAction(_clearSelectionAction);
+    // setup actions
+    delete _clearSelectionAction;
+    _clearSelectionAction = new QAction(QStringLiteral("Clear Selection"), this);
+    _clearSelectionAction->setShortcut(Qt::Key_Escape);
+    connect(_clearSelectionAction, &QAction::triggered, _scene, &QGraphicsScene::clearSelection);
+    addAction(_clearSelectionAction);
 
-  delete _deleteSelectionAction;
-  _deleteSelectionAction = new QAction(QStringLiteral("Delete Selection"), this);
-  _deleteSelectionAction->setShortcut(Qt::Key_Delete);
-  connect(_deleteSelectionAction, &QAction::triggered, this, &FlowView::deleteSelectedNodes);
-  addAction(_deleteSelectionAction);
+    delete _deleteSelectionAction;
+    _deleteSelectionAction = new QAction(QStringLiteral("Delete Selection"), this);
+    _deleteSelectionAction->setShortcut(Qt::Key_Delete);
+    connect(_deleteSelectionAction, &QAction::triggered, this, &FlowView::deleteSelectedNodes);
+    addAction(_deleteSelectionAction);
 }
 
-
-void
-FlowView::
-contextMenuEvent(QContextMenuEvent *event)
+void FlowView::contextMenuEvent(QContextMenuEvent *event)
 {
   if (itemAt(event->pos()))
   {
@@ -204,57 +198,46 @@ contextMenuEvent(QContextMenuEvent *event)
 }
 
 
-void
-FlowView::
-wheelEvent(QWheelEvent *event)
+void FlowView::wheelEvent(QWheelEvent *event)
 {
-  QPoint delta = event->angleDelta();
+    QPoint delta = event->angleDelta();
 
-  if (delta.y() == 0)
-  {
-    event->ignore();
-    return;
-  }
+    if (delta.y() == 0)
+    {
+        event->ignore();
+        return;
+    }
 
-  double const d = delta.y() / std::abs(delta.y());
+    double const d = delta.y() / std::abs(delta.y());
 
-  if (d > 0.0)
-    scaleUp();
-  else
-    scaleDown();
+    if (d > 0.0)
+        scaleUp();
+    else
+        scaleDown();
 }
 
-
-void
-FlowView::
-scaleUp()
+void FlowView::scaleUp()
 {
-  double const step   = 1.2;
-  double const factor = std::pow(step, 1.0);
+    double const step   = 1.2;
+    double const factor = std::pow(step, 1.0);
 
-  QTransform t = transform();
+    QTransform t = transform();
 
-  if (t.m11() > 2.0)
-    return;
+    if (t.m11() > 2.0)
+        return;
 
-  scale(factor, factor);
+    scale(factor, factor);
 }
 
-
-void
-FlowView::
-scaleDown()
+void FlowView::scaleDown()
 {
-  double const step   = 1.2;
-  double const factor = std::pow(step, -1.0);
+    double const step   = 1.2;
+    double const factor = std::pow(step, -1.0);
 
-  scale(factor, factor);
+    scale(factor, factor);
 }
 
-
-void
-FlowView::
-deleteSelectedNodes()
+void FlowView::deleteSelectedNodes()
 {
   // Delete the selected connections first, ensuring that they won't be
   // automatically deleted when selected nodes are deleted (deleting a node
@@ -393,18 +376,14 @@ drawBackground(QPainter* painter, const QRectF& r)
 }
 
 
-void
-FlowView::
-showEvent(QShowEvent *event)
+void FlowView::showEvent(QShowEvent *event)
 {
-  _scene->setSceneRect(this->rect());
-  QGraphicsView::showEvent(event);
+    _scene->setSceneRect(this->rect());
+    QGraphicsView::showEvent(event);
 }
 
 
-FlowScene *
-FlowView::
-scene()
+FlowScene* FlowView::scene()
 {
-  return _scene;
+    return _scene;
 }

@@ -15,18 +15,14 @@ using QtNodes::Connection;
 using QtNodes::NodeDataModel;
 using QtNodes::TypeConverter;
 
-
-NodeConnectionInteraction::
-NodeConnectionInteraction(Node& node, Connection& connection, FlowScene& scene)
+NodeConnectionInteraction::NodeConnectionInteraction(Node& node, Connection& connection, FlowScene& scene)
   : _node(&node)
   , _connection(&connection)
   , _scene(&scene)
 {}
 
 
-bool
-NodeConnectionInteraction::
-canConnect(PortIndex &portIndex, TypeConverter & converter) const
+bool NodeConnectionInteraction::canConnect(PortIndex &portIndex, TypeConverter & converter) const
 {
   // 1) Connection requires a port
 
@@ -87,10 +83,7 @@ canConnect(PortIndex &portIndex, TypeConverter & converter) const
   return true;
 }
 
-
-bool
-NodeConnectionInteraction::
-tryConnect() const
+bool NodeConnectionInteraction::tryConnect() const
 {
   // 1) Check conditions from 'canConnect'
   PortIndex portIndex = INVALID;
@@ -139,9 +132,7 @@ tryConnect() const
 /// 1) Node and Connection should be already connected
 /// 2) If so, clear Connection entry in the NodeState
 /// 3) Set Connection end to 'requiring a port'
-bool
-NodeConnectionInteraction::
-disconnect(PortType portToDisconnect) const
+bool NodeConnectionInteraction::disconnect(PortType portToDisconnect) const
 {
   PortIndex portIndex =
     _connection->getPortIndex(portToDisconnect);
@@ -223,16 +214,14 @@ nodePortIndexUnderScenePoint(PortType portType,
 }
 
 
-bool
-NodeConnectionInteraction::
-nodePortIsEmpty(PortType portType, PortIndex portIndex) const
+bool NodeConnectionInteraction::nodePortIsEmpty(PortType portType, PortIndex portIndex) const
 {
-  NodeState const & nodeState = _node->nodeState();
+    NodeState const & nodeState = _node->nodeState();
 
-  auto const & entries = nodeState.getEntries(portType);
+    auto const & entries = nodeState.getEntries(portType);
 
-  if (entries[portIndex].empty()) return true;
+    if (entries[portIndex].empty()) return true;
 
-  const auto outPolicy = _node->nodeDataModel()->portOutConnectionPolicy(portIndex);
-  return ( portType == PortType::Out && outPolicy == NodeDataModel::ConnectionPolicy::Many);
+    const auto outPolicy = _node->nodeDataModel()->portOutConnectionPolicy(portIndex);
+    return ( portType == PortType::Out && outPolicy == NodeDataModel::ConnectionPolicy::Many);
 }

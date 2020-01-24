@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Compiler.hpp"
+#include "Compiler.hpp"
 #include "OperatingSystem.hpp"
 
 #define NODE_EDITOR_STATIC
