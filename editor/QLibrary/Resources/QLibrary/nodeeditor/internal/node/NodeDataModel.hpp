@@ -69,70 +69,44 @@ namespace QtNodes
         void setNodeStyle(NodeStyle const& style);
 
     public:
-      /// Triggers the algorithm
-      virtual void setInData(std::shared_ptr<NodeData> nodeData, PortIndex port) = 0;
+        /// Triggers the algorithm
+        virtual void setInData(std::shared_ptr<NodeData> nodeData, PortIndex port) = 0;
 
-      virtual std::shared_ptr<NodeData> outData(PortIndex port) = 0;
+        virtual std::shared_ptr<NodeData> outData(PortIndex port) = 0;
 
-      virtual
-      QWidget *
-      embeddedWidget() = 0;
+        virtual QWidget* embeddedWidget() = 0;
 
-      virtual
-      bool
-      resizable() const { return false; }
+        virtual bool resizable() const { return false; }
 
-      virtual
-      NodeValidationState
-      validationState() const { return NodeValidationState::Valid; }
+        virtual NodeValidationState validationState() const { return NodeValidationState::Valid; }
 
-      virtual
-      QString
-      validationMessage() const { return QString(""); }
+        virtual QString validationMessage() const { return QString(""); }
 
-      virtual
-      NodePainterDelegate* painterDelegate() const { return nullptr; }
+        // paint delegate
+        virtual NodePainterDelegate* painterDelegate() const { return nullptr; }
 
     public Q_SLOTS:
+        // input connection
+        virtual void inputConnectionCreated(Connection const&) {}
+        virtual void inputConnectionDeleted(Connection const&) {}
 
-      virtual void
-      inputConnectionCreated(Connection const&)
-      {
-      }
-
-      virtual void
-      inputConnectionDeleted(Connection const&)
-      {
-      }
-
-      virtual void
-      outputConnectionCreated(Connection const&)
-      {
-      }
-
-      virtual void
-      outputConnectionDeleted(Connection const&)
-      {
-      }
+        // output connection
+        virtual void outputConnectionCreated(Connection const&) {}
+        virtual void outputConnectionDeleted(Connection const&) {}
 
     Q_SIGNALS:
+        // data change signal
+        void dataUpdated(PortIndex index);
+        void dataInvalidated(PortIndex index);
 
-      void
-      dataUpdated(PortIndex index);
+        // computing signal
+        void computingStarted();
+        void computingFinished();
 
-      void
-      dataInvalidated(PortIndex index);
-
-      void
-      computingStarted();
-
-      void
-      computingFinished();
-
-      void embeddedWidgetSizeUpdated();
+        // widget size changed
+        void embeddedWidgetSizeUpdated();
 
     private:
-
-      NodeStyle _nodeStyle;
+        NodeStyle _nodeStyle;
     };
 }

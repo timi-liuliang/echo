@@ -53,7 +53,7 @@ namespace ShaderEditor
 
     private Q_SLOTS:
         // on value changed
-        void onTextEdited(QString const &string);
+        void onColorEdited();
 
     private:
       std::shared_ptr<DataFloat> _number;

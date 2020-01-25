@@ -197,19 +197,15 @@ nodePortScenePosition(PortType portType, PortIndex portIndex) const
 }
 
 
-PortIndex
-NodeConnectionInteraction::
-nodePortIndexUnderScenePoint(PortType portType,
-                             QPointF const & scenePoint) const
+PortIndex NodeConnectionInteraction::nodePortIndexUnderScenePoint(PortType portType, QPointF const & scenePoint) const
 {
   NodeGeometry const &nodeGeom = _node->nodeGeometry();
 
   QTransform sceneTransform =
     _node->nodeGraphicsObject().sceneTransform();
 
-  PortIndex portIndex = nodeGeom.checkHitScenePoint(portType,
-                                                    scenePoint,
-                                                    sceneTransform);
+  PortIndex portIndex = nodeGeom.checkHitScenePoint(portType, scenePoint, sceneTransform);
+    
   return portIndex;
 }
 

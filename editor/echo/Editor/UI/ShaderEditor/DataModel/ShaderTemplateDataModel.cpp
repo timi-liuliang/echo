@@ -33,25 +33,6 @@ namespace ShaderEditor
         return result;
     }
 
-    void ShaderTemplateDataModel:: onTextEdited(QString const &string)
-    {
-//        Q_UNUSED(string);
-//
-//        bool ok = false;
-//
-//        double number = m_lineEdit->text().toDouble(&ok);
-//        if (ok)
-//        {
-//            m_number = std::make_shared<DecimalData>(number);
-//
-//            Q_EMIT dataUpdated(0);
-//        }
-//        else
-//        {
-//            Q_EMIT dataInvalidated(0);
-//        }
-    }
-
     NodeDataType ShaderTemplateDataModel::dataType(PortType portType, PortIndex portIndex) const
     {
         if(portType==PortType::In)
@@ -69,5 +50,10 @@ namespace ShaderEditor
     std::shared_ptr<NodeData> ShaderTemplateDataModel::outData(PortIndex)
     {
         return m_source;
+    }
+
+    void ShaderTemplateDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex port)
+    {
+        int a = 10;
     }
 }

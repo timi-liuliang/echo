@@ -49,14 +49,11 @@ namespace ShaderEditor
         // get port data
         std::shared_ptr<NodeData> outData(PortIndex port) override;
 
-        void setInData(std::shared_ptr<NodeData>, int) override { }
+        // when input changed
+        void setInData(std::shared_ptr<NodeData> nodeData, PortIndex port) override;
 
         // widget
         QWidget* embeddedWidget() override { return nullptr; }
-
-    private Q_SLOTS:
-        // slots
-        void onTextEdited(QString const &string);
 
     private:
         std::shared_ptr<DataText>       m_source;

@@ -43,6 +43,10 @@ namespace QT_UI
 	public slots:
 		// on select color
 		void OnSelectColor();
+        
+    signals:
+        //  signal color changed
+        void Signal_ColorChanged();
 
 	private:
         bool            m_isDrawText = true;

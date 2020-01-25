@@ -20,11 +20,15 @@ namespace QT_UI
 	void QColorSelect::SetColor( string color) 
 	{ 
 		m_color = Echo::StringUtil::ParseColor(color.c_str());
+        
+        emit Signal_ColorChanged();
 	}
 
 	void QColorSelect::SetColor( const Echo::Color& color)
 	{ 
 		m_color=color;
+        
+        emit Signal_ColorChanged();
 	}
 
 	string QColorSelect::GetColor() 

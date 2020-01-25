@@ -15,6 +15,9 @@ namespace Studio
 	public:
 		ShaderEditor(QWidget* parent = 0);
 		~ShaderEditor();
+        
+        // compile
+        void compile();
 
 	private:
 		QGraphicsScene*		m_graphicsScene = nullptr;

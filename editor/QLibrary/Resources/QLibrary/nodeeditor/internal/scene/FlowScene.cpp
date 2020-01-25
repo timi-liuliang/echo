@@ -297,9 +297,7 @@ iterateOverNodeData(std::function<void(NodeDataModel*)> const & visitor)
 }
 
 
-void
-FlowScene::
-iterateOverNodeDataDependentOrder(std::function<void(NodeDataModel*)> const & visitor)
+void FlowScene::iterateOverNodeDataDependentOrder(std::function<void(NodeDataModel*)> const & visitor)
 {
   std::set<QUuid> visitedNodesSet;
 

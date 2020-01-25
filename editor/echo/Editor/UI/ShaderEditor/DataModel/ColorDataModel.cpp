@@ -10,6 +10,8 @@ namespace ShaderEditor
         m_colorSelect = new QT_UI::QColorSelect();
         m_colorSelect->setFixedSize(155, 155);
         m_colorSelect->setDrawText(false);
+        
+        QObject::connect(m_colorSelect, SIGNAL(Signal_ColorChanged()), this, SLOT(onColorEdited()));
     }
 
     QJsonObject ColorDataModel::save() const
@@ -63,11 +65,9 @@ namespace ShaderEditor
     }
 
 
-    void ColorDataModel::onTextEdited(QString const &string)
+    void ColorDataModel::onColorEdited()
     {
-      Q_UNUSED(string);
-
-      bool ok = false;
+      bool ok = true;
 
         double number = 0.f;//_lineEdit->text().toDouble(&ok);
 
@@ -101,6 +101,6 @@ namespace ShaderEditor
 
     std::shared_ptr<NodeData> ColorDataModel::outData(PortIndex)
     {
-      return _number;
+        return _number;
     }
 }

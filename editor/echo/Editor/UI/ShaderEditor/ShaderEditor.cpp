@@ -40,4 +40,13 @@ namespace Studio
 	ShaderEditor::~ShaderEditor()
 	{
 	}
+
+    void ShaderEditor::compile()
+    {
+        QtNodes::FlowScene* flowScene = (QtNodes::FlowScene*)m_graphicsScene;
+        if(flowScene)
+        {
+            
+        }
+    }
 }
