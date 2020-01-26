@@ -18,6 +18,10 @@ namespace Studio
         
         // compile
         void compile();
+        
+    public slots:
+        // save
+        void save();
 
 	private:
 		QGraphicsScene*		m_graphicsScene = nullptr;

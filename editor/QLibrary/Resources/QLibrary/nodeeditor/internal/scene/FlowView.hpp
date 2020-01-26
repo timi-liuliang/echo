@@ -1,69 +1,62 @@
 #pragma once
 
 #include <QtWidgets/QGraphicsView>
-
 #include "../base/Export.hpp"
 
 namespace QtNodes
 {
+    class FlowScene;
+    class NODE_EDITOR_PUBLIC FlowView : public QGraphicsView
+    {
+        Q_OBJECT
+        
+    public:
+        FlowView(QWidget *parent = Q_NULLPTR);
+        FlowView(FlowScene *scene, QWidget *parent = Q_NULLPTR);
 
-class FlowScene;
+        FlowView(const FlowView&) = delete;
+        FlowView operator=(const FlowView&) = delete;
 
-class NODE_EDITOR_PUBLIC FlowView
-  : public QGraphicsView
-{
-  Q_OBJECT
-public:
+        // delete|clear action
+        QAction* clearSelectionAction() const;
+        QAction* deleteSelectionAction() const;
 
-  FlowView(QWidget *parent = Q_NULLPTR);
-  FlowView(FlowScene *scene, QWidget *parent = Q_NULLPTR);
+        // flow scene
+        void setScene(FlowScene *scene);
+        FlowScene * scene();
 
-  FlowView(const FlowView&) = delete;
-  FlowView operator=(const FlowView&) = delete;
+    public Q_SLOTS:
+        // scale
+        void scaleUp();
+        void scaleDown();
 
-  QAction* clearSelectionAction() const;
+        // delete selected nodes
+        void deleteSelectedNodes();
 
-  QAction* deleteSelectionAction() const;
+    protected:
 
-  void setScene(FlowScene *scene);
+        void contextMenuEvent(QContextMenuEvent *event) override;
 
-public Q_SLOTS:
+        void wheelEvent(QWheelEvent *event) override;
 
-  void scaleUp();
+        void keyPressEvent(QKeyEvent *event) override;
 
-  void scaleDown();
+        void keyReleaseEvent(QKeyEvent *event) override;
 
-  void deleteSelectedNodes();
+        void mousePressEvent(QMouseEvent *event) override;
 
-protected:
+        void mouseMoveEvent(QMouseEvent *event) override;
 
-  void contextMenuEvent(QContextMenuEvent *event) override;
+        void drawBackground(QPainter* painter, const QRectF& r) override;
 
-  void wheelEvent(QWheelEvent *event) override;
+        void showEvent(QShowEvent *event) override;
 
-  void keyPressEvent(QKeyEvent *event) override;
+    private:
+        QAction* _clearSelectionAction;
+        QAction* _deleteSelectionAction;
 
-  void keyReleaseEvent(QKeyEvent *event) override;
+        QPointF _clickPos;
 
-  void mousePressEvent(QMouseEvent *event) override;
-
-  void mouseMoveEvent(QMouseEvent *event) override;
-
-  void drawBackground(QPainter* painter, const QRectF& r) override;
-
-  void showEvent(QShowEvent *event) override;
-
-protected:
-
-  FlowScene * scene();
-
-private:
-
-  QAction* _clearSelectionAction;
-  QAction* _deleteSelectionAction;
-
-  QPointF _clickPos;
-
-  FlowScene* _scene;
-};
+        FlowScene* _scene;
+    };
 }

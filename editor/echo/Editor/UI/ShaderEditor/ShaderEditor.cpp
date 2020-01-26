@@ -17,11 +17,14 @@ namespace Studio
 	{
 		auto ret = std::make_shared<QtNodes::DataModelRegistry>();
 
+        // shader template
+        ret->registerModel<ShaderTemplateDataModel>("");
+        
+        // variables
         ret->registerModel<FloatDataModel>("Variable");
         ret->registerModel<Vector3DataModel>("Variable");
         ret->registerModel<ColorDataModel>("Variable");
         ret->registerModel<TextureDataModel>("Variable");
-        ret->registerModel<ShaderTemplateDataModel>("Template");
 
 		return ret;
 	}
@@ -48,5 +51,10 @@ namespace Studio
         {
             
         }
+    }
+
+    void ShaderEditor::save()
+    {
+        compile();
     }
 }

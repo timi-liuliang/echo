@@ -30,20 +30,16 @@ class NODE_EDITOR_PUBLIC FlowScene
 {
   Q_OBJECT
 public:
+    FlowScene(std::shared_ptr<DataModelRegistry> registry, QObject * parent = Q_NULLPTR);
+    FlowScene(QObject * parent = Q_NULLPTR);
 
-  FlowScene(std::shared_ptr<DataModelRegistry> registry,
-            QObject * parent = Q_NULLPTR);
-
-  FlowScene(QObject * parent = Q_NULLPTR);
-
-  ~FlowScene();
+    ~FlowScene();
 
 public:
-
-  std::shared_ptr<Connection>
-  createConnection(PortType connectedPort,
-                   Node& node,
-                   PortIndex portIndex);
+    std::shared_ptr<Connection>
+    createConnection(PortType connectedPort,
+                     Node& node,
+                     PortIndex portIndex);
 
   std::shared_ptr<Connection>
   createConnection(Node& nodeIn,
@@ -56,9 +52,9 @@ public:
 
   void deleteConnection(Connection& connection);
 
-  Node&createNode(std::unique_ptr<NodeDataModel> && dataModel);
+  Node& createNode(std::unique_ptr<NodeDataModel> && dataModel);
 
-  Node&restoreNode(QJsonObject const& nodeJson);
+  Node& restoreNode(QJsonObject const& nodeJson);
 
   void removeNode(Node& node);
 

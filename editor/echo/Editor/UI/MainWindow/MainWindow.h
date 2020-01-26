@@ -129,7 +129,7 @@ namespace Studio
 		QDockWidget*		m_renderPanel;
 		ResPanel*			m_resPanel;
 		NodeTreePanel*		m_scenePanel;
-		TextEditorArea*	m_scriptEditorMdiArea = nullptr;
+		TextEditorArea*	    m_scriptEditorMdiArea = nullptr;
 		ShaderEditor*		m_shaderEditorPanel = nullptr;
 		ScratchEditor*		m_scratchEditorPanel = nullptr;
 		BottomPanel*		m_bottomPanel;

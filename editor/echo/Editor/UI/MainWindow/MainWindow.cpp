@@ -165,6 +165,7 @@ namespace Studio
 
 		// signals & slots
 		QObject::connect(m_actionSaveProject, SIGNAL(triggered(bool)), m_scriptEditorMdiArea, SLOT(save()));
+        QObject::connect(m_actionSaveProject, SIGNAL(triggered(bool)), m_shaderEditorPanel, SLOT(save()));
 		QObject::connect(m_scriptEditorMdiArea, SIGNAL(visibilityChanged(bool)), this, SLOT(onScriptEditVisibilityChanged()));
 		QObject::connect(m_shaderEditorPanel, SIGNAL(visibilityChanged(bool)), this, SLOT(onShaderEditVisibilityChanged()));
 		QObject::connect(m_scratchEditorPanel, SIGNAL(visibilityChanged(bool)), this, SLOT(onScratchEditVisibilityChanged()));
