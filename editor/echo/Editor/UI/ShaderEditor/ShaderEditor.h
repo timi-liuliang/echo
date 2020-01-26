@@ -4,6 +4,7 @@
 #include <QDockWidget>
 #include <QGraphicsScene>
 #include <QGraphicsView>
+#include <nodeeditor/NodeDataModel>
 #include "ui_ShaderEditor.h"
 
 namespace Studio
@@ -15,6 +16,8 @@ namespace Studio
 	public:
 		ShaderEditor(QWidget* parent = 0);
 		~ShaderEditor();
+        
+        void visitorAllNodes(QtNodes::NodeDataModel* dataModel);
         
         // compile
         void compile();

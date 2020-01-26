@@ -52,11 +52,9 @@ namespace QtNodes
         void showEvent(QShowEvent *event) override;
 
     private:
-        QAction* _clearSelectionAction;
-        QAction* _deleteSelectionAction;
-
-        QPointF _clickPos;
-
-        FlowScene* _scene;
+        QAction*    _clearSelectionAction;
+        QAction*    _deleteSelectionAction;
+        QPointF     _clickPos;
+        FlowScene*  _scene;
     };
 }

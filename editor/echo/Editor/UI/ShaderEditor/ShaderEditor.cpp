@@ -44,12 +44,18 @@ namespace Studio
 	{
 	}
 
+    void ShaderEditor::visitorAllNodes(QtNodes::NodeDataModel* dataModel)
+    {
+        int a =10;
+    }
+
     void ShaderEditor::compile()
     {
         QtNodes::FlowScene* flowScene = (QtNodes::FlowScene*)m_graphicsScene;
         if(flowScene)
         {
-            
+            using namespace std::placeholders;
+            flowScene->iterateOverNodeDataDependentOrder(std::bind(&ShaderEditor::visitorAllNodes, this, _1));
         }
     }
 
