@@ -495,6 +495,14 @@ namespace Studio
 		m_scriptEditorMdiArea->open(fileName);
 	}
 
+    void MainWindow::openShaderEditor(const Echo::String& resPath)
+    {
+        if(m_shaderEditorPanel)
+        {
+            m_shaderEditorPanel->open(resPath);
+        }
+    }
+
 	void MainWindow::onScriptEditVisibilityChanged()
 	{
 		if (m_scriptEditorMdiArea->isVisible())

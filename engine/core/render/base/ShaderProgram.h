@@ -101,9 +101,6 @@ namespace Echo
 		bool loadFromFile(const String& filename, const String& macros);
 		bool loadFromContent(const String& fileName, const char* content, const String& macros);
 
-		// save
-		virtual void save() override;
-
 		// clear
 		void clear();
 
@@ -124,8 +121,9 @@ namespace Echo
         // create
         static Res* create();
 
-		// load
+		// load|save
 		static Res* load(const ResourcePath& path);
+        virtual void save() override;
 
 	protected:
 		// Create

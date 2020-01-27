@@ -134,6 +134,10 @@ namespace Studio
 				{
 					MainWindow::instance()->openLuaScript(resPath);
 				}
+                else if (ext == ".shader")
+                {
+                    MainWindow::instance()->openShaderEditor(resPath);
+                }
 			}
 		}
 	}

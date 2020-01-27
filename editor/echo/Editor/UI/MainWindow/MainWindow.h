@@ -43,6 +43,9 @@ namespace Studio
 
 		// open lua file for edit
 		void openLuaScript(const Echo::String& resPath);
+        
+        // open shader editor
+        void openShaderEditor(const Echo::String& resPath);
 
 	public:
 		// set theme

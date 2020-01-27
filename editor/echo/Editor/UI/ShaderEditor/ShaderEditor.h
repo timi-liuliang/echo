@@ -24,10 +24,14 @@ namespace Studio
         void compile();
         
     public slots:
+        // open
+        void open(const Echo::String& resPath);
+        
         // save
         void save();
 
 	private:
+        Echo::String        m_resPath;
 		QGraphicsScene*		m_graphicsScene = nullptr;
 		QGraphicsView*		m_graphicsView = nullptr;
         std::string         m_paramCode;

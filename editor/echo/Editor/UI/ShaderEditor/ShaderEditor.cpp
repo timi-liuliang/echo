@@ -148,17 +148,23 @@ namespace Studio
         }
     }
 
+    void ShaderEditor::open(const Echo::String& resPath)
+    {
+        m_resPath = resPath;
+        
+        this->setVisible(true);
+    }
+
     void ShaderEditor::save()
     {
         compile();
         
-        const char* content = m_result.c_str();
-        if (content)
+        if (!m_resPath.empty() && !m_result.empty())
         {
-            Echo::String fullPath = Echo::IO::instance()->convertResPathToFullPath("Res://temp.shader");
+            Echo::String fullPath = Echo::IO::instance()->convertResPathToFullPath(m_resPath);
             std::ofstream f(fullPath.c_str());
 
-            f << content;
+            f << m_result.c_str();
 
             f.flush();
             f.close();
