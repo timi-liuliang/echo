@@ -1076,7 +1076,7 @@ namespace Studio
 		Echo::Render* renderNode = dynamic_cast<Echo::Render*>(m_currentEditObject);
 		if (renderNode)
 		{
-			MainWindow::instance()->setSubEdit( renderNode->getRenderType().getValue()!="3D" ? "2D" : "3D");
+			MainWindow::instance()->setSubEdit( renderNode->getRenderType().getValue()!="3d" ? "2D" : "3D");
 		}
 	}
 

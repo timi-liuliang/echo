@@ -5,6 +5,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <nodeeditor/NodeDataModel>
+#include <engine/core/util/StringUtil.h>
 #include "ui_ShaderEditor.h"
 
 namespace Studio
@@ -29,5 +30,8 @@ namespace Studio
 	private:
 		QGraphicsScene*		m_graphicsScene = nullptr;
 		QGraphicsView*		m_graphicsView = nullptr;
+        std::string         m_paramCode;
+        std::string         m_shaderCode;
+        Echo::String        m_result;
 	};
 }

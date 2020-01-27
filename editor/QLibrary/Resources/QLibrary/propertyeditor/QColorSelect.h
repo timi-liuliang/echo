@@ -24,7 +24,7 @@ namespace QT_UI
 
 		// color by string
 		void SetColor( string color);
-        string GetColor();
+        string GetColorStr();
         
         // color
 		void SetColor( const Echo::Color& color);

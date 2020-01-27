@@ -103,4 +103,12 @@ namespace ShaderEditor
     {
         return _number;
     }
+
+    bool ColorDataModel::generateCode(std::string& paramCode, std::string& shaderCode)
+    {
+        const Echo::Color& color = m_colorSelect->GetColor();
+        shaderCode += Echo::StringUtil::Format("\tvec4 __BaseColor = vec4(%f, %f, %f, %f);\n", color.r, color.g, color.b, color.a);
+        
+        return true;
+    }
 }

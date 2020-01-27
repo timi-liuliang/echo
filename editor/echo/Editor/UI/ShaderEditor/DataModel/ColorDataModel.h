@@ -6,6 +6,7 @@
 #include <iostream>
 #include "DataFloat.h"
 #include "QColorSelect.h"
+#include "ShaderDataModel.h"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -18,7 +19,7 @@ namespace ShaderEditor
 {
     /// The model dictates the number of inputs and outputs for the Node.
     /// In this example it has no logic.
-    class ColorDataModel : public NodeDataModel
+    class ColorDataModel : public ShaderDataModel
     {
       Q_OBJECT
 
@@ -28,10 +29,13 @@ namespace ShaderEditor
 
         // caption
         QString caption() const override { return QStringLiteral("Color"); }
-        bool captionVisible() const override { return false; }
+        bool captionVisible() const override { return true; }
 
         QString name() const override { return QStringLiteral("Color"); }
 
+        // generat code
+        virtual bool generateCode(std::string& paramCode, std::string& shaderCode) override;
+        
     public:
         // load|save
         QJsonObject save() const override;

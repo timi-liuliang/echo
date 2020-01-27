@@ -69,7 +69,10 @@ namespace Echo
 
 	void Renderable::setTexture(ui32 stage, Texture* texture)
 	{
-		m_textures[stage] = texture;
+        if(stage<m_textures.size())
+            m_textures[stage] = texture;
+        else
+            EchoLogError("Renderable set texture failed");
 	}
 
 	void Renderable::bindTextures()

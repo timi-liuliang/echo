@@ -31,7 +31,7 @@ namespace QT_UI
         emit Signal_ColorChanged();
 	}
 
-	string QColorSelect::GetColor() 
+	string QColorSelect::GetColorStr()
 	{
 		string color = Echo::StringUtil::ToString(m_color);
 		return color;
@@ -88,9 +88,9 @@ namespace QT_UI
 	{
 		QPainter painter( this);
 
-		ItemDelegatePaintColor( &painter, rect(), GetColor());
+		ItemDelegatePaintColor( &painter, rect(), GetColorStr());
         
         if(m_isDrawText)
-            ItemDelegatePaintText(&painter, rect(), GetColor());
+            ItemDelegatePaintText(&painter, rect(), GetColorStr());
 	}
 }

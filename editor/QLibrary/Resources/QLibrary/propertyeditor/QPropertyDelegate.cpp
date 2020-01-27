@@ -248,7 +248,7 @@ namespace QT_UI
 				QColorSelect* widget = qobject_cast<QColorSelect*>( editor);
 				widget->SetColor( value.toString().toStdString());
 				widget->OnSelectColor();
-				m_model->setValue(propertyName, widget->GetColor().c_str());
+				m_model->setValue(propertyName, widget->GetColorStr().c_str());
 			}
 			else if (widgetType == "ChannelEditor")
 			{
@@ -334,7 +334,7 @@ namespace QT_UI
 			else if( widgetType == "ColorSelect")
 			{
 				QColorSelect* widget = qobject_cast<QColorSelect*>(editor);
-				m_model->setValue( propertyName, widget->GetColor().c_str());
+				m_model->setValue( propertyName, widget->GetColorStr().c_str());
 			}
 			else if (widgetType == "QChannelEditor")
 			{
