@@ -53,7 +53,7 @@ namespace Studio
 		static Echo::Node* getNode(QTreeWidgetItem* item);
 
 		// get node icon
-		static Echo::String getNodeIcon(Echo::Node* node);
+		static Echo::String getNodeIcon(Echo::Object* node);
 
 	private slots:
 		// show new node dialog

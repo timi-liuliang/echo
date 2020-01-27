@@ -186,7 +186,7 @@ namespace Studio
 		}
 	}
 
-	Echo::String NodeTreePanel::getNodeIcon(Echo::Node* node)
+	Echo::String NodeTreePanel::getNodeIcon(Echo::Object* node)
 	{
 		Echo::String iconPath = node->getEditor() ? node->getEditor()->getEditorIcon() : "";
 

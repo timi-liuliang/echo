@@ -131,7 +131,7 @@ namespace Echo
 	{
 		String ext = extWithDot;
 		std::unordered_map<String, Res::ResFun>::iterator itfun = g_resFuncs.find(ext);
-		if (itfun != g_resFuncs.end())
+		if (itfun != g_resFuncs.end() && itfun->second.m_cfun)
 		{
 			Res* res = itfun->second.m_cfun();
 			if (res)

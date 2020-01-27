@@ -3,6 +3,7 @@
 #include <QDateTime>
 #include <engine/core/util/StringUtil.h>
 #include <engine/core/util/PathUtil.h>
+#include <engine/core/resource/Res.h>
 
 namespace QT_UI
 {
@@ -113,8 +114,27 @@ namespace QT_UI
 		item->setToolTip(tips.c_str());	
 	}
 
+    static Echo::String getResIcon(const char* fullPath/*Echo::Object* node*/)
+    {
+//        Echo::String fileExt = Echo::PathUtil::GetFileExt(fullPath, true);
+//        const Echo::Res::ResFun* resFun = Echo::Res::getResFunByExtension(fileExt);
+//        if(resFun && resFun->m_cfun)
+//        {
+//            Echo::ResPtr res = Echo::Res::createByFileExtension(fileExt);
+//            Echo::String iconPath = res && res->getEditor() ? res->getEditor()->getEditorIcon() : "";
+//            
+//            return iconPath;
+//        }
+        
+        return "";
+    }
+
 	QIcon QPreviewHelper::getFileIcon(const char* fullPath)
 	{
+        Echo::String resIcon = getResIcon(fullPath);
+        if(!resIcon.empty())
+            return QIcon(resIcon.c_str());
+        
 		Echo::String fileExt = Echo::PathUtil::GetFileExt(fullPath, true);
 		if (Echo::StringUtil::Equal(fileExt, ".png", false))
 		{

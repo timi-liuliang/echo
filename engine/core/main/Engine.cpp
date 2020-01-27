@@ -12,6 +12,7 @@
 #include "engine/core/render/base/pipeline/RenderPipeline.h"
 #include "engine/core/render/base/pipeline/RenderStage.h"
 #include "engine/core/render/base/ShaderProgram.h"
+#include "engine/core/render/base/editor/shader_editor.h"
 #include "engine/core/render/base/TextureCube.h"
 #include "engine/core/scene/render_node.h"
 #include "engine/core/scene/node_tree.h"
@@ -153,6 +154,8 @@ namespace Echo
 		Class::registerType<RenderStage>();
 		Class::registerType<RenderQueue>();
 		Class::registerType<FrameBuffer>();
+        
+        REGISTER_OBJECT_EDITOR(ShaderProgram, ShaderEditor)
 
 		// load all plugin
 		Plugin::loadAllPlugins();
