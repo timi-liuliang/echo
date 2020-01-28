@@ -63,6 +63,9 @@ namespace Studio
 		void onNewScene();
 		void onSaveScene();
 		void onSaveAsScene();
+        
+        // update render window title
+        void updateRenderWindowTitle();
 
 		// project operate
 		void onNewAnotherProject();

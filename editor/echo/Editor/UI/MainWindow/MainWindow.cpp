@@ -207,15 +207,22 @@ namespace Studio
 		m_resPanel->recoverEditSettings();
 	}
 
-	// new scene
+    void MainWindow::updateRenderWindowTitle()
+    {
+        Echo::String scenePath = EchoEngine::instance()->getCurrentEditNodeSavePath();
+        Echo::String title     = !scenePath.empty() ? scenePath.c_str() : "Render";
+        m_renderPanel->setWindowTitle(title.c_str());
+    }
+
 	void MainWindow::onNewScene()
 	{
 		onSaveProject();
 		m_scenePanel->clear();
 		EchoEngine::instance()->newEditNodeTree();
+        
+        updateRenderWindowTitle();
 	}
 
-	// on save scene
 	void MainWindow::onSaveScene()
 	{
 		onSaveProject();
@@ -390,6 +397,9 @@ namespace Studio
 
 		// refresh respanel display
 		m_resPanel->reslectCurrentDir();
+        
+        // update title
+        updateRenderWindowTitle();
 	}
 
 	void MainWindow::setTheme(const char* theme)
@@ -487,7 +497,8 @@ namespace Studio
 		Studio::EchoEngine::instance()->onOpenNodeTree(resPath);
 
 		NodeTreePanel::instance()->refreshNodeTreeDisplay();
-		m_renderPanel->setWindowTitle( resPath.c_str());
+        
+        updateRenderWindowTitle();
 	}
 
 	void MainWindow::openLuaScript(const Echo::String& fileName)
