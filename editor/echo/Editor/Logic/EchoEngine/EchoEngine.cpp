@@ -146,11 +146,13 @@ namespace Studio
         }
         
         // set new
-		m_currentEditNode = node; 
-		m_currentEditNode->setParent(m_invisibleNodeForEditor); 
+		m_currentEditNode = node;
+        if(m_currentEditNode)
+        {
+            m_currentEditNode->setParent(m_invisibleNodeForEditor);
+        }
 	}
 
-	// save current node tree
 	void EchoEngine::saveCurrentEditNodeTree()
 	{
 		if (m_currentEditNode && !m_currentEditNodeSavePath.empty())

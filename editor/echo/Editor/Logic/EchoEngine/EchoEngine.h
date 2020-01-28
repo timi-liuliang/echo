@@ -33,16 +33,12 @@ namespace Studio
 		// on open node tree
 		bool onOpenNodeTree(const Echo::String& resPath);
 
-		// set current edit node
+		// current edit node
 		void setCurrentEditNode(Echo::Node* node);
-
-		// 获取当前编辑结点
 		Echo::Node* getCurrentEditNode() { return m_currentEditNode; }
 
-		// 设置当前结点树存储路径
+		// save path
 		void setCurrentEditNodeSavePath(const Echo::String& savePath);
-
-		// 获取当前结点树存储路径
 		const Echo::String& getCurrentEditNodeSavePath() { return m_currentEditNodeSavePath; }
 
 	public:

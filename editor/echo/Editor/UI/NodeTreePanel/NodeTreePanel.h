@@ -135,6 +135,7 @@ namespace Studio
 		void  update();
 
 		// on select node
+        void onUnselectCurrentEditObject();
 		void onSelectNode();
 
 		// on clicked node item

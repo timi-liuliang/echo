@@ -332,6 +332,7 @@ namespace Studio
 		if (item)
 		{
 			Echo::Node* node = getNode(item);
+            bool isRootNode = EchoEngine::instance()->getCurrentEditNode() == node ? true : false;
 			if (node->getPath().empty())
 			{
 				m_nodeTreeWidget->setCurrentItem(item);
@@ -349,7 +350,8 @@ namespace Studio
 				m_nodeTreeMenu->addSeparator();
 				m_nodeTreeMenu->addAction(m_actionSaveBranchasScene);
 				m_nodeTreeMenu->addSeparator();
-				m_nodeTreeMenu->addAction(m_actionDeleteNode);
+                if(!isRootNode)
+                    m_nodeTreeMenu->addAction(m_actionDeleteNode);
 				m_nodeTreeMenu->exec(QCursor::pos());
 			}
 			else
@@ -370,7 +372,8 @@ namespace Studio
 				m_nodeTreeMenu->addAction(m_actionSaveBranchasScene);
 				m_nodeTreeMenu->addAction(m_actionDiscardInstancing);
 				m_nodeTreeMenu->addSeparator();
-				m_nodeTreeMenu->addAction(m_actionDeleteNode);
+                if(!isRootNode)
+                    m_nodeTreeMenu->addAction(m_actionDeleteNode);
 				m_nodeTreeMenu->exec(QCursor::pos());
 			}
 		}
@@ -390,12 +393,21 @@ namespace Studio
 		Echo::Node* node = getNode(item);
 		QTreeWidgetItem* parentItem = item->parent();
 		if (parentItem)
+        {
 			parentItem->removeChild(item);
+            if(node==m_currentEditObject)
+                onUnselectCurrentEditObject();
+            
+            node->queueFree();
+        }
 		else
+        {
 			m_nodeTreeWidget->invisibleRootItem()->removeChild(item);
-
-		node->remove();
-		node->queueFree();
+            if(node==m_currentEditObject)
+                onUnselectCurrentEditObject();
+            
+            EchoEngine::instance()->setCurrentEditNode(nullptr);
+        }
 	}
 
 	void NodeTreePanel::onDeleteNodes()
@@ -411,12 +423,6 @@ namespace Studio
 				removeItem(item);
 
 				items = m_nodeTreeWidget->selectedItems();
-			}
-
-			// set as nullptr
-			if (m_nodeTreeWidget->invisibleRootItem()->childCount() == 0)
-			{
-				EchoEngine::instance()->setCurrentEditNode(nullptr);
 			}
 
 			// update property panel display
@@ -1054,13 +1060,20 @@ namespace Studio
 		}
 	}
 
+    void NodeTreePanel::onUnselectCurrentEditObject()
+    {
+        // editor extension : unselect object
+        if (m_currentEditObject && m_currentEditObject->getEditor())
+        {
+            m_currentEditObject->getEditor()->onEditorUnSelectThisNode();
+        }
+        
+        m_currentEditObject = nullptr;
+    }
+
 	void NodeTreePanel::onSelectNode()
 	{
-		// editor extension : unselect object
-		if (m_currentEditObject && m_currentEditObject->getEditor())
-		{
-			m_currentEditObject->getEditor()->onEditorUnSelectThisNode();
-		}
+        onUnselectCurrentEditObject();
 
 		m_currentEditObject = getCurrentSelectNode();
 		showSelectedObjectProperty();
