@@ -4,6 +4,7 @@
 #include <engine/core/util/StringUtil.h>
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/resource/Res.h>
+#include "Studio.h"
 
 namespace QT_UI
 {
@@ -116,16 +117,30 @@ namespace QT_UI
 
     static Echo::String getResIcon(const char* fullPath/*Echo::Object* node*/)
     {
-//        Echo::String fileExt = Echo::PathUtil::GetFileExt(fullPath, true);
-//        const Echo::Res::ResFun* resFun = Echo::Res::getResFunByExtension(fileExt);
-//        if(resFun && resFun->m_cfun)
-//        {
-//            Echo::ResPtr res = Echo::Res::createByFileExtension(fileExt);
-//            Echo::String iconPath = res && res->getEditor() ? res->getEditor()->getEditorIcon() : "";
-//            
-//            return iconPath;
-//        }
+        static std::map<Echo::String, Echo::String> resIconMap;
         
+        Echo::String fileExt = Echo::PathUtil::GetFileExt(fullPath, true);
+        auto it = resIconMap.find(fileExt);
+        if(it==resIconMap.end())
+        {
+            Echo::String iconPath;
+            const Echo::Res::ResFun* resFun = Echo::Res::getResFunByExtension(fileExt);
+            if(resFun && resFun->m_cfun)
+            {
+                Echo::ResPtr res = Echo::Res::createByFileExtension(fileExt);
+                iconPath = res && res->getEditor() ? res->getEditor()->getEditorIcon() : "";
+                if(!iconPath.empty())
+                    iconPath = Studio::AStudio::instance()->getRootPath() + iconPath;
+            }
+            
+            resIconMap[fileExt] = iconPath;
+            return iconPath;
+        }
+        else
+        {
+            return it->second;
+        }
+
         return "";
     }
 

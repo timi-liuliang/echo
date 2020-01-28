@@ -35,13 +35,6 @@ namespace Echo
         return Module::getCurrentRegisterModuleName();
     }
     
-#ifdef ECHO_EDITOR_MODE
-    void ObjectFactory::initEditor(Object* obj)
-    {
-        obj->initEditor();
-    }
-#endif
-    
     // clear all classinfos
     void Class::clear()
     {

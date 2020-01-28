@@ -70,7 +70,13 @@ public:															\
 	}															\
 																\
 	/* on editor select this node*/								\
-	Echo::ObjectEditor* getEditor() { return m_objectEditor; }	\
+	Echo::ObjectEditor* getEditor()                             \
+    {                                                           \
+        if(!m_objectEditor)                                     \
+            initEditor();                                       \
+                                                                \
+        return m_objectEditor;                                  \
+    }	                                                        \
 																\
 protected:														\
 	Echo::ObjectEditor*			m_objectEditor;					\

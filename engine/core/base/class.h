@@ -91,10 +91,7 @@ namespace Echo
 
 			return nullptr;
 		}
-        
-#ifdef ECHO_EDITOR_MODE
-        void initEditor(Object* obj);
-#endif
+
         // get current module name
         const char* getCurrentRegisterModuleName();
 	};
@@ -229,10 +226,6 @@ namespace Echo
         virtual Object* create()
         {
 			Object* obj = EchoNew(T);
-
-		#ifdef ECHO_EDITOR_MODE
-            initEditor(obj);
-		#endif
 
 			return obj;
         }

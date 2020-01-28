@@ -97,10 +97,6 @@ namespace Echo
 		{
 			Object* obj = m_cfun ? (*m_cfun)() : EchoNew(T);
 
-#ifdef ECHO_EDITOR_MODE
-			initEditor(obj);
-#endif
-
 			return obj;
 		}
 	};
