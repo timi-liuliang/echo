@@ -123,7 +123,6 @@ namespace Echo
 
 		// load|save
 		static Res* load(const ResourcePath& path);
-        virtual void save() override;
 
 	protected:
 		// Create
@@ -148,9 +147,30 @@ namespace Echo
         // uniforms
 		bool loadDefaultUniform(void* pNode);
 		void* createDefaultUniformValue(const String& strType, const i32 count, const String& strValue, ui32& outSize, ShaderParamType& outType);
+        
+    public:
+        // type
+        const String& getType() const { return m_type; }
+        void setType(const String& type) { }
+        
+        // vs code
+        const String& getVsCode() const { return m_vsCode; }
+        void setVsCode(const String& vsCode) { m_vsCode=vsCode; }
+        
+        // ps code
+        const String& getPsCode() const { return m_psCode; }
+        void setPsCode(const String& psCode) { m_psCode=psCode; }
+        
+        // data flow programming shader graph
+        const String& getGraph() const { return m_graph; }
+        void setGraph(const String& graph) { m_graph = graph; }
 
 	protected:
 		String				m_macros;
+        String              m_type = "glsl";
+        String              m_vsCode;
+        String              m_psCode;
+        String              m_graph;
 		BlendState*			m_blendState = nullptr;
 		DepthStencilState*	m_depthState = nullptr;
 		RasterizerState*	m_rasterizerState = nullptr;

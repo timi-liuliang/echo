@@ -204,7 +204,6 @@ namespace Echo
 		return nullptr;
 	}
 
-	// save
 	void Res::save()
 	{
 		String fullPath = IO::instance()->convertResPathToFullPath(m_path.getPath());

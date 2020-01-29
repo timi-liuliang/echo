@@ -84,9 +84,21 @@ namespace Echo
 		clear();
 	}
 
-	// bind methods to script
 	void ShaderProgram::bindMethods()
 	{
+        CLASS_BIND_METHOD(ShaderProgram, getType, DEF_METHOD("getType"));
+        CLASS_BIND_METHOD(ShaderProgram, setType, DEF_METHOD("setType"));
+        CLASS_BIND_METHOD(ShaderProgram, getVsCode, DEF_METHOD("getVsCode"));
+        CLASS_BIND_METHOD(ShaderProgram, setVsCode, DEF_METHOD("setVsCode"));
+        CLASS_BIND_METHOD(ShaderProgram, getPsCode, DEF_METHOD("getPsCode"));
+        CLASS_BIND_METHOD(ShaderProgram, setPsCode, DEF_METHOD("setPsCode"));
+        CLASS_BIND_METHOD(ShaderProgram, getGraph, DEF_METHOD("getGraph"));
+        CLASS_BIND_METHOD(ShaderProgram, setGraph, DEF_METHOD("setGraph"));
+
+        CLASS_REGISTER_PROPERTY(ShaderProgram, "Type", Variant::Type::String, "getType", "setType");
+        CLASS_REGISTER_PROPERTY(ShaderProgram, "VertexShader", Variant::Type::String, "getVsCode", "setVsCode");
+        CLASS_REGISTER_PROPERTY(ShaderProgram, "FragmentShader", Variant::Type::String, "getPsCode", "setPsCode");
+        CLASS_REGISTER_PROPERTY(ShaderProgram, "Graph", Variant::Type::String, "getGraph", "setGraph");
 	}
 
 	void ShaderProgram::clear()
@@ -173,7 +185,7 @@ namespace Echo
 		try
 		{
             // type glsl
-            String type = rootNode->attribute("type").as_string();
+            m_type = rootNode->attribute("type").as_string();
             
 			pugi::xml_node vsNode = rootNode->child("VS");
 			String vsSrc, psSrc;
@@ -214,7 +226,7 @@ namespace Echo
 			}
             
             // convert based on renderer type
-            convert(type, vsSrc, psSrc);
+            convert(m_type, vsSrc, psSrc);
 
 			if(!createShaderProgram( vsSrc, psSrc))
 			{
@@ -638,11 +650,6 @@ namespace Echo
 		fullMacro += macro;
 		fullMacro += "\n";
 		return m_macros.find(fullMacro.c_str()) != String::npos;
-	}
-
-	void ShaderProgram::save()
-	{
-
 	}
     
     void ShaderProgram::setUniform( const char* name, const void* value, ShaderParamType uniformType, ui32 count)
