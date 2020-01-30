@@ -1,32 +1,45 @@
 #include "terrain_material.h"
 
-static const char* g_terrainDefaultMaterial = R"(<?xml version = "1.0" encoding = "utf-8"?>
-<Shader>
-<VS>#version 100
+static const char* g_terrainVsCode = R"(
+#version 450
 
-attribute vec3 a_Position;
-attribute vec4 a_Normal;
-attribute vec2 a_UV;
+// uniforms
+layout(binding = 0) uniform UBO
+{
+    mat4 u_WorldMatrix;
+    mat4 u_WorldViewProjMatrix;
+} vs_ubo;
 
-uniform mat4 u_WorldMatrix;
-uniform mat4 u_WorldViewProjMatrix;
+// input
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec4 a_Normal;
+layout(location = 2) in vec2 a_UV;
 
-varying vec2 v_UV;
-varying vec3 v_Normal;
+// outputs
+layout(location = 0) out vec2 v_UV;
+layout(location = 1) out vec2 v_Normal;
 
 void main(void)
 {
-    vec4 position = u_WorldViewProjMatrix * vec4(a_Position, 1.0);
+    vec4 position = vs_ubo.u_WorldViewProjMatrix * vec4(a_Position, 1.0);
     gl_Position = position;
     
     v_UV = a_UV;
-    v_Normal = normalize(vec3(u_WorldMatrix * vec4(a_Normal.xyz, 0.0)));
+    v_Normal = normalize(vec3(vs_ubo.u_WorldMatrix * vec4(a_Normal.xyz, 0.0)));
 }
-</VS>
-<PS>#version 100
+)";
 
-varying mediump vec2 v_UV;
-varying mediump vec3 v_Normal;
+static const char* g_terrainPsCode = R"(
+#version 450
+
+precision mediump float;
+
+// inputs
+layout(location = 0) in vec2  v_UV;
+layout(location = 0) in vec3  v_Normal;
+
+// outputs
+layout(location = 0) out vec4 o_FragColor;
 
 void main(void)
 {
@@ -34,28 +47,26 @@ void main(void)
     mediump vec3 lightColor = vec3(0.8, 0.8, 0.8);
     mediump vec3 textureColor = max(dot(v_Normal, lightDir), 0.0) * lightColor + vec3(0.2, 0.2, 0.2);
     
-    gl_FragColor = vec4(textureColor, 1.0);
+    o_FragColor = vec4(textureColor, 1.0);
 }
-</PS>
-<BlendState>
-    <BlendEnable value = "false" />
-</BlendState>
-<RasterizerState>
-    <CullMode value = "CULL_NONE" />
-</RasterizerState>
-<DepthStencilState>
-    <DepthEnable value = "true" />
-    <WriteDepth value = "true" />
-</DepthStencilState>
-</Shader>
 )";
 
 namespace Echo
 {
-    // get shader
-    const char* TerrainMaterial::getDefault()
+    ShaderProgramPtr TerrainMaterial::getDefaultShader()
     {
-        return g_terrainDefaultMaterial;
+        ResourcePath shaderVirtualPath = ResourcePath("echo_terrain_default_shader");
+        ShaderProgramPtr shader = ECHO_DOWN_CAST<ShaderProgram*>(ShaderProgram::get(shaderVirtualPath));
+        if(!shader)
+        {
+            shader = ECHO_CREATE_RES(ShaderProgram);
+            shader->setPath(shaderVirtualPath.getPath());
+            shader->setType("glsl");
+            shader->setVsCode(g_terrainVsCode);
+            shader->setPsCode(g_terrainPsCode);
+        }
+        
+        return shader;
     }
 }
 

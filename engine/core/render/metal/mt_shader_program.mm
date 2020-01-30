@@ -113,7 +113,7 @@ namespace Echo
             
             MTBlendState* mtBlendState = ECHO_DOWN_CAST<MTBlendState*>(m_blendState);
             if(mtBlendState)
-                mtBlendState->active(colorAttachmentDescriptor);
+                mtBlendState->activeMtColorAttachmentDescriptor(colorAttachmentDescriptor);
         }
         
         // Specify vertex descriptor

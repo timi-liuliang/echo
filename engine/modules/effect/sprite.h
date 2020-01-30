@@ -59,6 +59,7 @@ namespace Echo
 	private:
 		ResourcePath			m_textureRes;
 		Mesh*					m_mesh;			// Geometry Data for render
+        ShaderProgramPtr        m_shader;
 		MaterialPtr				m_material;		// Material Instance
 		Renderable*				m_renderable;
 		Matrix4					m_matWVP;

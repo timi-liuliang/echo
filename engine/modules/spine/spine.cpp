@@ -10,60 +10,6 @@
 #include <spine/extension.h>
 #include "AttachmentLoader.h"
 
-// spine default material
-static const char* g_spinDefaultMaterial = R"(
-<?xml version = "1.0" encoding = "utf-8"?>
-<Shader>
-	<VS>#version 100
-
-		attribute vec3 a_Position;
-		attribute vec4 a_Color;
-		attribute vec2 a_UV;
-
-		uniform mat4 u_WorldViewProjMatrix;
-
-		varying vec4 v_Color;
-		varying vec2 v_UV;
-
-		void main(void)
-		{
-			vec4 position = u_WorldViewProjMatrix * vec4(a_Position, 1.0);
-			gl_Position = position;
-
-			v_Color = a_Color;
-			v_UV = a_UV;
-		}
-	</VS>
-	<PS>#version 100
-
-		precision mediump float;
-
-		uniform sampler2D u_BaseColorSampler;
-
-		varying vec4	  v_Color;
-		varying vec2	  v_UV;
-
-		void main(void)
-		{
-			vec4 textureColor = texture2D(u_BaseColorSampler, v_UV);
-			gl_FragColor = textureColor * v_Color;
-		}
-	</PS>
-	<BlendState>
-		<BlendEnable value = "true" />
-		<SrcBlend value = "BF_SRC_ALPHA" />
-		<DstBlend value = "BF_INV_SRC_ALPHA" />
-	</BlendState>
-	<RasterizerState>
-		<CullMode value = "CULL_NONE" />
-	</RasterizerState>
-	<DepthStencilState>
-		<DepthEnable value = "false" />
-		<WriteDepth value = "false" />
-	</DepthStencilState>
-</Shader>
-)";
-
 namespace Echo
 {
 	static void animationCallback(spAnimationState* state, spEventType type, spTrackEntry* entry, spEvent* event)
@@ -275,9 +221,12 @@ namespace Echo
 			m_mesh = Mesh::create(true, true);
 			m_mesh->updateIndices(ui32(m_batch.m_indicesData.size()), sizeof(Word), m_batch.m_indicesData.data());
 			m_mesh->updateVertexs(define, ui32(m_batch.m_verticesData.size()), (const Byte*)m_batch.m_verticesData.data(), AABB());
-
+            
+            StringArray macros;
+            m_shader = ShaderProgram::getDefault2D(macros);
+            
 			m_material = ECHO_CREATE_RES(Material);
-			m_material->setShaderContent("echo_spine_default_shader", g_spinDefaultMaterial);
+			m_material->setShaderPath(m_shader->getPath());
 			m_material->setRenderStage("Transparent");
 
 			m_material->setTexture("u_BaseColorSampler", m_batch.m_texture);

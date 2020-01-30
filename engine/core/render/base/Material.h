@@ -66,8 +66,7 @@ namespace Echo
 
 		// set shader
 		void setShaderPath(const ResourcePath& path);
-		void setShaderContent(const String& virtualPath, const char* content);
-		const ResourcePath& getShaderPath() const { return m_shaderPath; }
+        const ResourcePath& getShaderPath() const { return m_shaderPath; }
 
 		// render stage
 		const StringOption& getRenderStage() { return m_renderStage; }
@@ -121,8 +120,6 @@ namespace Echo
 	private:
 		bool				m_isDirty;					// need rebuild
 		ResourcePath		m_shaderPath;				// shader res path
-		String				m_shaderContentVirtualPath;	// virtual path of shader content
-		const char*			m_shaderContent;
 		StringOption		m_renderStage;
 		StringArray			m_macros;
 		ShaderProgramPtr	m_shaderProgram;

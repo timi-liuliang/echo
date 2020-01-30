@@ -69,11 +69,15 @@ namespace Echo
 	protected:
 		// update
 		virtual void update_self() override;
+        
+        // get default shader
+        void initDefaultShader();
 
 	private:
-		bool			m_isAutoClear;
-		MaterialPtr		m_material;
-		Batch*			m_lineBatch = nullptr;
-		Batch*			m_triangleBatch = nullptr;
+		bool			    m_isAutoClear;
+        ShaderProgramPtr    m_shader;
+		MaterialPtr		    m_material;
+		Batch*			    m_lineBatch = nullptr;
+		Batch*			    m_triangleBatch = nullptr;
 	};
 }

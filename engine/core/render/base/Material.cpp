@@ -67,7 +67,6 @@ namespace Echo
 		: Res()
 		, m_isDirty(false)
 		, m_shaderPath("", ".shader")
-		, m_shaderContent(nullptr)
 		, m_renderStage("Opaque", { "Opaque", "Transparent" })
 	{
 	}
@@ -76,7 +75,6 @@ namespace Echo
 		: Res(path)
 		, m_isDirty(false)
 		, m_shaderPath("", ".shader")
-		, m_shaderContent(nullptr)
 		, m_renderStage("Opaque", { "Opaque", "Transparent" })
 	{
 	}
@@ -304,14 +302,11 @@ namespace Echo
 				finalMacros += "#define " + macro + "\n";
 
 			// create material
-			m_shaderProgram = ECHO_DOWN_CAST<ShaderProgram*>(ShaderProgram::get(m_shaderContent ? m_shaderContentVirtualPath : m_shaderPath));
+			m_shaderProgram = ECHO_DOWN_CAST<ShaderProgram*>(ShaderProgram::get(m_shaderPath));
 			if(!m_shaderProgram)
 			{
 				m_shaderProgram = (ShaderProgram*)ShaderProgram::create();
-				if (m_shaderContent)
-					m_shaderProgram->loadFromContent(m_shaderContentVirtualPath, m_shaderContent, finalMacros);
-				else if (!m_shaderPath.getPath().empty())
-					m_shaderProgram->loadFromFile(m_shaderPath.getPath(), finalMacros);
+                m_shaderProgram->load(m_shaderPath);
 			}
 
 			// match uniforms
@@ -323,7 +318,7 @@ namespace Echo
 			// register uniform propertys
 			if (m_shaderProgram)
 			{
-				StringArray macros = ShaderProgram::getEditableMacros(m_shaderPath.getPath());
+				StringArray macros = ShaderProgram::getEditableMacros();
 				for (size_t i = 0; i < macros.size() / 2; i++)
 				{
 					registerProperty(ECHO_CLASS_NAME(Material), "Macros." + macros[i * 2], Variant::Type::Bool);
@@ -449,14 +444,6 @@ namespace Echo
 	void Material::setShaderPath(const ResourcePath& path) 
 	{ 
 		m_shaderPath = path;
-
-		m_isDirty = true;
-	}
-
-	void Material::setShaderContent(const String& virtualPath, const char* content)
-	{
-		m_shaderContentVirtualPath = virtualPath;
-		m_shaderContent = content;
 
 		m_isDirty = true;
 	}

@@ -8,7 +8,7 @@ namespace Echo
     {
     }
 
-    void MTBlendState::active(MTLRenderPipelineColorAttachmentDescriptor* colorAttachmentDescriptor)
+    void MTBlendState::activeMtColorAttachmentDescriptor(MTLRenderPipelineColorAttachmentDescriptor* colorAttachmentDescriptor)
     {
         colorAttachmentDescriptor.blendingEnabled             = m_desc.bBlendEnable;
         colorAttachmentDescriptor.rgbBlendOperation           = MTLBlendOperationAdd;
@@ -17,6 +17,12 @@ namespace Echo
         colorAttachmentDescriptor.sourceAlphaBlendFactor      = MTLBlendFactorSourceAlpha;
         colorAttachmentDescriptor.destinationRGBBlendFactor   = MTLBlendFactorOneMinusSourceAlpha;
         colorAttachmentDescriptor.destinationAlphaBlendFactor = MTLBlendFactorOneMinusSourceAlpha;
+    }
+
+    MTDepthStencilState::MTDepthStencilState(const DepthStencilDesc& desc)
+        : DepthStencilState(desc)
+    {
+        
     }
     
     MTRasterizerState::MTRasterizerState(const RasterizerDesc& desc)

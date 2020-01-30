@@ -5,52 +5,6 @@
 #include "base/ShaderProgram.h"
 #include "engine/core/main/Engine.h"
 
-static const char* g_live2dDefaultMaterial = R"(
-<?xml version = "1.0" encoding = "utf-8"?>
-<Shader>
-<VS>#version 100
-
-attribute vec3 a_Position;
-attribute vec2 a_UV;
-
-uniform mat4 u_WorldViewProjMatrix;
-
-varying vec2 texCoord;
-
-void main(void)
-{
-	vec4 position = u_WorldViewProjMatrix * vec4(a_Position, 1.0);
-	gl_Position = position;
-
-	texCoord = a_UV;
-}
-</VS>
-<PS>#version 100
-
-uniform sampler2D u_BaseColorSampler;
-varying mediump vec2 texCoord;
-
-void main(void)
-{
-	mediump vec4 textureColor = texture2D(u_BaseColorSampler, texCoord);
-	gl_FragColor = textureColor;
-}
-	</PS>
-	<BlendState>
-		<BlendEnable value = "true" />
-		<SrcBlend value = "BF_SRC_ALPHA" />
-		<DstBlend value = "BF_INV_SRC_ALPHA" />
-	</BlendState>
-	<RasterizerState>
-		<CullMode value = "CULL_NONE" />
-	</RasterizerState>
-	<DepthStencilState>
-		<DepthEnable value = "false" />
-		<WriteDepth value = "false" />
-	</DepthStencilState>
-</Shader>
-)";
-
 namespace Echo
 {
 	Live2dCubism::Live2dCubism()
@@ -66,8 +20,11 @@ namespace Echo
 		, m_materialDefault(nullptr)
 		, m_renderable(nullptr)
 	{
+        StringArray macros;
+        m_shaderDefault = ShaderProgram::getDefault2D(macros);
+        
 		m_materialDefault = ECHO_CREATE_RES(Material);
-		m_materialDefault->setShaderContent("echo_live2d_default_shader",g_live2dDefaultMaterial);
+		m_materialDefault->setShaderPath(m_shaderDefault->getPath());
 		m_materialDefault->setRenderStage("Transparent");
 	}
 

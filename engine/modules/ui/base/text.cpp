@@ -1,5 +1,4 @@
 #include "text.h"
-#include "../render/material.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/scene/node_tree.h"
 #include "base/Renderer.h"
@@ -93,9 +92,12 @@ namespace Echo
         {
             clearRenderable();
             
+            StringArray macros = {"ALPHA_ADJUST"};
+            m_shader = ShaderProgram::getDefault2D(macros);
+            
             // material
             m_material = EchoNew(Material(StringUtil::Format("UiTextMaterial_%d", getId())));
-            m_material->setShaderContent("echo_text_default_shader", UiMaterial::getDefault());
+            m_material->setShaderPath(m_shader->getPath());
             m_material->setRenderStage("Transparent");
             
             // mesh

@@ -73,9 +73,11 @@ namespace Echo
         {
             clearRenderable();
             
+            m_shader = TerrainMaterial::getDefaultShader();
+            
             // material
             m_material = ECHO_CREATE_RES(Material);
-            m_material->setShaderContent("echo_terrain_default_shader", TerrainMaterial::getDefault());
+            m_material->setShaderPath(m_shader->getPath());
             m_material->setRenderStage("Opaque");
             
             // mesh

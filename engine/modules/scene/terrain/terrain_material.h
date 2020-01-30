@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/core/util/StringUtil.h"
+#include "engine/core/render/base/ShaderProgram.h"
 
 namespace Echo
 {
@@ -8,6 +9,6 @@ namespace Echo
     {
     public:
         // get shader
-        static const char* getDefault();
+        static ShaderProgramPtr getDefaultShader();
     };
 }

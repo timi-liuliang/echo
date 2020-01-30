@@ -4,10 +4,8 @@
 #include "engine/core/render/base/Renderer.h"
 
 // material for vulkan or metal or opengles
-static const char* g_gizmoOpaqueMaterial = R"(
-<?xml version = "1.0" encoding = "utf-8"?>
-<Shader type="glsl">
-<VS>#version 450
+static const char* g_gizmoVsCode = R"(
+#version 450
 // uniforms
 layout(binding = 0) uniform UBO
 {
@@ -32,8 +30,10 @@ void main(void)
     
     v_Color = a_Color;
 }
-</VS>
-<PS>#version 450
+)";
+
+static const char* g_gizmoPsCode = R"(
+#version 450
 
 precision mediump float;
 
@@ -56,20 +56,6 @@ void main(void)
 {
     o_FragColor = v_Color;
 }
-</PS>
-<BlendState>
-<BlendEnable value = "true" />
-<SrcBlend value = "BF_SRC_ALPHA" />
-<DstBlend value = "BF_INV_SRC_ALPHA" />
-</BlendState>
-<RasterizerState>
-<CullMode value = "CULL_NONE" />
-</RasterizerState>
-<DepthStencilState>
-<DepthEnable value = "true" />
-<WriteDepth value = "false" />
-</DepthStencilState>
-</Shader>
 )";
 
 namespace Echo
@@ -150,8 +136,10 @@ namespace Echo
 	Gizmos::Gizmos()
 		: m_isAutoClear(false)
 	{
+        initDefaultShader();
+        
 		m_material = ECHO_CREATE_RES(Material);
-		m_material->setShaderContent( "echo_gizmo_default_shader", g_gizmoOpaqueMaterial);
+		m_material->setShaderPath( m_shader->getPath());
 		m_material->setRenderStage("Transparent");
 
 		m_lineBatch = EchoNew(Batch(m_material, this));
@@ -172,6 +160,20 @@ namespace Echo
 	void Gizmos::bindMethods()
 	{
 	}
+
+    void Gizmos::initDefaultShader()
+    {
+        ResourcePath shaderVirtualPath = ResourcePath("echo_gizmo_default_shader");
+        m_shader = ECHO_DOWN_CAST<ShaderProgram*>(ShaderProgram::get(shaderVirtualPath));
+        if(!m_shader)
+        {
+            m_shader = ECHO_CREATE_RES(ShaderProgram);
+            m_shader->setPath(shaderVirtualPath.getPath());
+            m_shader->setType("glsl");
+            m_shader->setVsCode(g_gizmoVsCode);
+            m_shader->setPsCode(g_gizmoPsCode);
+        }
+    }
 
 	void Gizmos::drawLine(const Vector3& from, const Vector3& to, const Color& color)
 	{

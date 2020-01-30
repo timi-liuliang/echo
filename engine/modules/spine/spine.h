@@ -66,6 +66,7 @@ namespace Echo
 
 		AttachmentVertices	m_batch;
 		Mesh*				m_mesh;
+        ShaderProgramPtr    m_shader;
 		Material*			m_material;
 		Renderable*			m_renderable;
 	};

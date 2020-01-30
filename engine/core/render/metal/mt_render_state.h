@@ -11,17 +11,16 @@ namespace Echo
         MTBlendState(const BlendDesc &desc);
         virtual ~MTBlendState(){}
 
-        void active(MTLRenderPipelineColorAttachmentDescriptor* colorAttachmentDescriptor);
+        void activeMtColorAttachmentDescriptor(MTLRenderPipelineColorAttachmentDescriptor* colorAttachmentDescriptor);
 	};
 	
 	class MTDepthStencilState : public DepthStencilState
 	{
 	public:
-       // VKDepthStencilState(){}
-        //VKDepthStencilState(const DepthStencilDesc& desc){}
-        //virtual ~VKDepthStencilState() {}
+        MTDepthStencilState(const DepthStencilDesc& desc);
+        virtual ~MTDepthStencilState() {}
 
-		void active();
+        virtual void active() override {}
 	};
 
 	class MTRasterizerState : public RasterizerState
@@ -30,7 +29,7 @@ namespace Echo
         MTRasterizerState(const RasterizerDesc& desc);
         virtual ~MTRasterizerState(){}
 
-        void active() {}
+        virtual void active() override {}
 	};
 
 	class MTSamplerState : public SamplerState

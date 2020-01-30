@@ -414,40 +414,21 @@ void main()
 }
 )";
 
-// Ä¬ÈÏ²ÄÖÊ
-static const char* g_generalPbrMetalicRoughnessMaterial = 
-R"(<?xml version = "1.0" encoding = "utf-8"?>
-<Shader> 
-	<VS>VS_PLACE_HOLDER</VS>
-	<PS>PS_PLACE_HOLDER</PS>
-	<BlendState>
-		<!--BlendEnable value = "true" />
-		<SrcBlend value = "BF_SRC_ALPHA" />
-		<DstBlend value = "BF_INV_SRC_ALPHA" /-->
-	</BlendState>
-	<RasterizerState>
-		<CullMode value = "CULL_NONE" />
-	</RasterizerState>
-	<DepthStencilState>
-		<DepthEnable value = "true" />
-		<WriteDepth value = "true" />
-	</DepthStencilState>
-</Shader>
-)";
-
 namespace Echo
 {
-	// get shader
-	const char* GltfMaterial::getPbrMetalicRoughnessContent()
+    ShaderProgramPtr GltfMaterial::getPbrMetalicRoughnessContent()
 	{
-		static String PbrMetalicRoughnessMaterial;
-		if (PbrMetalicRoughnessMaterial.empty())
-		{
-			PbrMetalicRoughnessMaterial = g_generalPbrMetalicRoughnessMaterial;
-			StringUtil::ReplaceRet(PbrMetalicRoughnessMaterial, "VS_PLACE_HOLDER", pbrMetalicRoughnessVS);
-			StringUtil::ReplaceRet(PbrMetalicRoughnessMaterial, "PS_PLACE_HOLDER", pbrMetalicRoughnessPS);
-		}
-
-		return PbrMetalicRoughnessMaterial.c_str();
+        ResourcePath shaderVirtualPath = ResourcePath("_echo_gltf_default_shader_");
+        ShaderProgramPtr shader = ECHO_DOWN_CAST<ShaderProgram*>(ShaderProgram::get(shaderVirtualPath));
+        if(!shader)
+        {
+            shader = ECHO_CREATE_RES(ShaderProgram);
+            shader->setPath(shaderVirtualPath.getPath());
+            shader->setType("gles");
+            shader->setVsCode(pbrMetalicRoughnessVS);
+            shader->setPsCode(pbrMetalicRoughnessPS);
+        }
+        
+        return shader;
 	}
 }

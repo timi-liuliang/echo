@@ -83,8 +83,7 @@ namespace Echo
 
     DepthStencilState* MTRenderer::createDepthStencilState(const DepthStencilState::DepthStencilDesc& desc)
     {
-        return nullptr;
-        //return EchoNew(VKDepthStencilState);
+        return EchoNew(MTDepthStencilState(desc));
     }
 
     BlendState* MTRenderer::createBlendState(const BlendState::BlendDesc& desc)

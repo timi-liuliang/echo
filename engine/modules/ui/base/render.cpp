@@ -1,5 +1,4 @@
 #include "render.h"
-#include "../render/material.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/scene/node_tree.h"
 #include "base/Renderer.h"
@@ -31,7 +30,7 @@ namespace Echo
 		if (value)
 			return value;
 
-		if (name == "u_UiAlpha")
+		if (name == "u_Alpha")
 			return (void*)(&m_alpha);
 
 		return nullptr;

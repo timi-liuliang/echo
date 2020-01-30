@@ -55,7 +55,6 @@ namespace Echo
 		removeResFromCache(m_path.getPath());
 	}
 
-	// bind methods to script
 	void Res::bindMethods()
 	{
 		CLASS_BIND_METHOD(Res, getPath, DEF_METHOD("getPath"));
@@ -68,16 +67,15 @@ namespace Echo
 	{
 		// remove res cache
 		if (!m_path.getPath().empty())
-			removeResFromCache(path);
+			removeResFromCache(m_path.getPath());
 
 		// add to res cache
 		if (!path.empty() && m_path.setPath(path))
-			addResToCache(path, this);
+			addResToCache(m_path.getPath(), this);
 		else
 			EchoLogError("setPath [%s] failed", path.c_str());
 	}
 
-	// resister res
 	void Res::registerRes(const String& className, const String& exts, RES_CREATE_FUNC cfun, RES_LOAD_FUNC lfun)
 	{
 		ResFun fun;
@@ -94,7 +92,6 @@ namespace Echo
 		}
 	}
 
-	// get res
 	Res* Res::get(const ResourcePath& path)
 	{
 		auto it = g_ress.find(path.getPath());
@@ -126,7 +123,6 @@ namespace Echo
 		return nullptr;
 	}
 
-	// create by extension
 	ResPtr Res::createByFileExtension(const String& extWithDot)
 	{
 		String ext = extWithDot;
@@ -169,17 +165,15 @@ namespace Echo
 		return nullptr;
 	}
 
-	// release
 	void Res::subRefCount()
 	{
 		m_refCount--;
-		if (m_refCount <= 1)
+		if (m_refCount <= 0)
 		{
 			ECHO_DELETE_T(this, Res);
 		}
 	}
 
-	// load
 	Res* Res::load(const ResourcePath& path)
 	{
 		MemoryReader reader(path.getPath());

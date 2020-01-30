@@ -77,38 +77,26 @@ namespace Echo
 	public:
 		ShaderProgram();
 		ShaderProgram(const ResourcePath& path);
-		~ShaderProgram();
+		virtual ~ShaderProgram();
 
 		// bind shader
         virtual void bind() {}
-
-		// get states
-        BlendState* getBlendState();
-        DepthStencilState* getDepthState();
-        RasterizerState* getRasterizerState();
-        MultisampleState* getMultisampleState();
 
 		// is have macro
 		bool hasMacro(const char* const macro) const;
 
 		// get editable macros
-		static StringArray getEditableMacros(const String& shaderFileName);
+		static StringArray getEditableMacros();
 
 		// get default value of uniform
 		const UniformValue* getDefaultUniformValue(const String& name);
-
-		// load and parse by file|content
-		bool loadFromFile(const String& filename, const String& macros);
-		bool loadFromContent(const String& fileName, const char* content, const String& macros);
 
 		// clear
 		void clear();
 
     public:
-        // set uniform
+        // uniform
         void setUniform(const char* name, const void* value, ShaderParamType uniformType, ui32 count);
-
-        // uniform operate
         UniformArray* getUniforms(){ return &m_uniforms; }
 
 		// uniforms
@@ -116,54 +104,55 @@ namespace Echo
 
 		// ByteSize
 		static int MapUniformTypeSize(ShaderParamType uniformType);
-
-	public:
-        // create
-        static Res* create();
-
-		// load|save
-		static Res* load(const ResourcePath& path);
-
-	protected:
-		// Create
-		virtual bool createShaderProgram(const String& vsContent, const String& psContent);
-
-	private:
-        // load
-		bool loadFromContent(char* content, const String& macros);
-		bool loadShaderFrom(void* node, const String& macros);
-
-        // load states
-		bool loadBlendState(void* pNode);
-		bool loadRasterizerState(void* pNode);
-		bool loadDepthStencilState(void* pNode);
-
-        // create states
-        void createBlendState(BlendState::BlendDesc& desc);
-        void createDepthState(DepthStencilState::DepthStencilDesc& desc);
-        void createRasterizerState(RasterizerState::RasterizerDesc& desc);
-        void createMultisampleState();
-
-        // uniforms
-		bool loadDefaultUniform(void* pNode);
-		void* createDefaultUniformValue(const String& strType, const i32 count, const String& strValue, ui32& outSize, ShaderParamType& outType);
         
     public:
         // type
         const String& getType() const { return m_type; }
-        void setType(const String& type) { }
+        void setType(const String& type) { m_type = type; }
         
         // vs code
         const String& getVsCode() const { return m_vsCode; }
-        void setVsCode(const String& vsCode) { m_vsCode=vsCode; }
+        void setVsCode(const String& vsCode);
         
         // ps code
         const String& getPsCode() const { return m_psCode; }
-        void setPsCode(const String& psCode) { m_psCode=psCode; }
+        void setPsCode(const String& psCode);
         
         // data flow programming shader graph
         const String& getGraph() const { return m_graph; }
         void setGraph(const String& graph) { m_graph = graph; }
+        
+    public:
+        // blend sate
+        BlendState* getBlendState();
+        void setBlendState(BlendState* blendState) { m_blendState = blendState; }
+        
+        // depth state
+        DepthStencilState* getDepthState();
+        void setDepthState(DepthStencilState* depthState) { m_depthState = depthState; }
+        
+        // rasterizer state
+        RasterizerState* getRasterizerState();
+        void setRasterizerState(RasterizerState* rasterState) { m_rasterizerState = rasterState; }
+        
+        // smaple state
+        MultisampleState* getMultisampleState();
+        void setMultisampleState(MultisampleState* sampleState) { m_multiSampleState = sampleState; }
+        
+    public:
+        // create
+        static Res* create();
+        
+        // default shader
+        static ResRef<ShaderProgram> getDefault2D(const StringArray& macros);
+        static ResRef<ShaderProgram> getDefault3D(const StringArray& macros);
+        
+    protected:
+        // Create
+        virtual bool createShaderProgram(const String& vsContent, const String& psContent);
+
+        // build
+        bool build();
 
 	protected:
 		String				m_macros;

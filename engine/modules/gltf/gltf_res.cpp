@@ -1049,9 +1049,11 @@ namespace Echo
 		i32 normalTextureIdx = matInfo.m_normalTexture.m_index;
 		i32 emissiveTextureIdx = matInfo.m_emissiveTexture.m_index;
 		i32 occusionTextureIdx = matInfo.m_occlusionTexture.m_index;
+        
+        primitive.m_shader = GltfMaterial::getPbrMetalicRoughnessContent();
 
 		primitive.m_materialInst = ECHO_CREATE_RES(Material);
-		primitive.m_materialInst->setShaderContent("echo_gltf_default_shader", GltfMaterial::getPbrMetalicRoughnessContent());
+		primitive.m_materialInst->setShaderPath(primitive.m_shader->getPath());
 
 		// render stage
 		primitive.m_materialInst->setRenderStage("Opaque");

@@ -58,6 +58,7 @@ namespace Echo
         ResourcePath            m_fontRes = ResourcePath("", ".ttf");
 		i32						m_fontSize = 24;
         Mesh*                   m_mesh;            // Geometry Data for render
+        ShaderProgramPtr        m_shader;
         MaterialPtr             m_material;        // Material Instance
         Renderable*             m_renderable;
         Matrix4                 m_matWVP;

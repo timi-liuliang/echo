@@ -140,6 +140,7 @@ namespace Echo
 
 		Mesh*					m_mesh;				// Geometry Data for render
 		MaterialPtr				m_material;			// Custom Material
+        ShaderProgramPtr        m_shaderDefault;
 		MaterialPtr				m_materialDefault;
 		Renderable*				m_renderable;
 	};
