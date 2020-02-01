@@ -60,10 +60,6 @@ namespace Echo
 			}
 		}
 
-		//renderable->setRasterizerState(matInst->getRasterizerState());
-		//renderable->setBlendState(matInst->getBlendState());
-		//renderable->setDepthStencilState(matInst->getDepthStencilState());
-
 		return renderable;
 	}
 

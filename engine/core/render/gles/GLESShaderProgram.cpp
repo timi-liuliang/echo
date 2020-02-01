@@ -104,7 +104,7 @@ namespace Echo
 		}
 
 		m_isLinked = true;
-		EchoLogDebug("Link shaders successd.");
+		EchoLogDebug("Link shaders succeed.");
 
 		// remember uniforms info
 		GLint activeUniformLength;
