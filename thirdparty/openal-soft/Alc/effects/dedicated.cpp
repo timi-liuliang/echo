@@ -24,10 +24,9 @@
 #include <cmath>
 #include <algorithm>
 
-#include "alMain.h"
+#include "al/auxeffectslot.h"
+#include "alcmain.h"
 #include "alcontext.h"
-#include "alAuxEffectSlot.h"
-#include "alError.h"
 #include "alu.h"
 
 
@@ -40,18 +39,18 @@ struct DedicatedState final : public EffectState {
 
     ALboolean deviceUpdate(const ALCdevice *device) override;
     void update(const ALCcontext *context, const ALeffectslot *slot, const EffectProps *props, const EffectTarget target) override;
-    void process(const ALsizei samplesToDo, const FloatBufferLine *RESTRICT samplesIn, const ALsizei numInput, const al::span<FloatBufferLine> samplesOut) override;
+    void process(const size_t samplesToDo, const al::span<const FloatBufferLine> samplesIn, const al::span<FloatBufferLine> samplesOut) override;
 
     DEF_NEWDEL(DedicatedState)
 };
 
-ALboolean DedicatedState::deviceUpdate(const ALCdevice *UNUSED(device))
+ALboolean DedicatedState::deviceUpdate(const ALCdevice*)
 {
     std::fill(std::begin(mCurrentGains), std::end(mCurrentGains), 0.0f);
     return AL_TRUE;
 }
 
-void DedicatedState::update(const ALCcontext* UNUSED(context), const ALeffectslot *slot, const EffectProps *props, const EffectTarget target)
+void DedicatedState::update(const ALCcontext*, const ALeffectslot *slot, const EffectProps *props, const EffectTarget target)
 {
     std::fill(std::begin(mTargetGains), std::end(mTargetGains), 0.0f);
 
@@ -59,8 +58,9 @@ void DedicatedState::update(const ALCcontext* UNUSED(context), const ALeffectslo
 
     if(slot->Params.EffectType == AL_EFFECT_DEDICATED_LOW_FREQUENCY_EFFECT)
     {
-        const int idx{!target.RealOut ? -1 : GetChannelIdxByName(*target.RealOut, LFE)};
-        if(idx != -1)
+        const ALuint idx{!target.RealOut ? INVALID_CHANNEL_INDEX :
+            GetChannelIdxByName(*target.RealOut, LFE)};
+        if(idx != INVALID_CHANNEL_INDEX)
         {
             mOutTarget = target.RealOut->Buffer;
             mTargetGains[idx] = Gain;
@@ -70,8 +70,9 @@ void DedicatedState::update(const ALCcontext* UNUSED(context), const ALeffectslo
     {
         /* Dialog goes to the front-center speaker if it exists, otherwise it
          * plays from the front-center location. */
-        const int idx{!target.RealOut ? -1 : GetChannelIdxByName(*target.RealOut, FrontCenter)};
-        if(idx != -1)
+        const ALuint idx{!target.RealOut ? INVALID_CHANNEL_INDEX :
+            GetChannelIdxByName(*target.RealOut, FrontCenter)};
+        if(idx != INVALID_CHANNEL_INDEX)
         {
             mOutTarget = target.RealOut->Buffer;
             mTargetGains[idx] = Gain;
@@ -87,17 +88,17 @@ void DedicatedState::update(const ALCcontext* UNUSED(context), const ALeffectslo
     }
 }
 
-void DedicatedState::process(const ALsizei samplesToDo, const FloatBufferLine *RESTRICT samplesIn, const ALsizei /*numInput*/, const al::span<FloatBufferLine> samplesOut)
+void DedicatedState::process(const size_t samplesToDo, const al::span<const FloatBufferLine> samplesIn, const al::span<FloatBufferLine> samplesOut)
 {
-    MixSamples(samplesIn[0].data(), samplesOut, mCurrentGains, mTargetGains, samplesToDo, 0,
-        samplesToDo);
+    MixSamples({samplesIn[0].data(), samplesToDo}, samplesOut, mCurrentGains, mTargetGains,
+        samplesToDo, 0);
 }
 
 
 void Dedicated_setParami(EffectProps*, ALCcontext *context, ALenum param, ALint)
-{ alSetError(context, AL_INVALID_ENUM, "Invalid dedicated integer property 0x%04x", param); }
+{ context->setError(AL_INVALID_ENUM, "Invalid dedicated integer property 0x%04x", param); }
 void Dedicated_setParamiv(EffectProps*, ALCcontext *context, ALenum param, const ALint*)
-{ alSetError(context, AL_INVALID_ENUM, "Invalid dedicated integer-vector property 0x%04x", param); }
+{ context->setError(AL_INVALID_ENUM, "Invalid dedicated integer-vector property 0x%04x", param); }
 void Dedicated_setParamf(EffectProps *props, ALCcontext *context, ALenum param, ALfloat val)
 {
     switch(param)
@@ -109,16 +110,16 @@ void Dedicated_setParamf(EffectProps *props, ALCcontext *context, ALenum param, 
             break;
 
         default:
-            alSetError(context, AL_INVALID_ENUM, "Invalid dedicated float property 0x%04x", param);
+            context->setError(AL_INVALID_ENUM, "Invalid dedicated float property 0x%04x", param);
     }
 }
 void Dedicated_setParamfv(EffectProps *props, ALCcontext *context, ALenum param, const ALfloat *vals)
 { Dedicated_setParamf(props, context, param, vals[0]); }
 
 void Dedicated_getParami(const EffectProps*, ALCcontext *context, ALenum param, ALint*)
-{ alSetError(context, AL_INVALID_ENUM, "Invalid dedicated integer property 0x%04x", param); }
+{ context->setError(AL_INVALID_ENUM, "Invalid dedicated integer property 0x%04x", param); }
 void Dedicated_getParamiv(const EffectProps*, ALCcontext *context, ALenum param, ALint*)
-{ alSetError(context, AL_INVALID_ENUM, "Invalid dedicated integer-vector property 0x%04x", param); }
+{ context->setError(AL_INVALID_ENUM, "Invalid dedicated integer-vector property 0x%04x", param); }
 void Dedicated_getParamf(const EffectProps *props, ALCcontext *context, ALenum param, ALfloat *val)
 {
     switch(param)
@@ -128,7 +129,7 @@ void Dedicated_getParamf(const EffectProps *props, ALCcontext *context, ALenum p
             break;
 
         default:
-            alSetError(context, AL_INVALID_ENUM, "Invalid dedicated float property 0x%04x", param);
+            context->setError(AL_INVALID_ENUM, "Invalid dedicated float property 0x%04x", param);
     }
 }
 void Dedicated_getParamfv(const EffectProps *props, ALCcontext *context, ALenum param, ALfloat *vals)

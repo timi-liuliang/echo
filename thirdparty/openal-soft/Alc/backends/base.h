@@ -1,12 +1,15 @@
 #ifndef ALC_BACKENDS_BASE_H
 #define ALC_BACKENDS_BASE_H
 
-#include <memory>
 #include <chrono>
-#include <string>
+#include <memory>
 #include <mutex>
+#include <string>
 
-#include "alMain.h"
+#include "AL/alc.h"
+
+#include "alcmain.h"
+#include "albyte.h"
 
 
 struct ClockLatency {
@@ -29,13 +32,13 @@ inline std::chrono::nanoseconds GetDeviceClockTime(ALCdevice *device)
 ClockLatency GetClockLatency(ALCdevice *device);
 
 struct BackendBase {
-    virtual ALCenum open(const ALCchar *name) = 0;
+    virtual void open(const ALCchar *name) = 0;
 
-    virtual ALCboolean reset();
-    virtual ALCboolean start() = 0;
+    virtual bool reset();
+    virtual bool start() = 0;
     virtual void stop() = 0;
 
-    virtual ALCenum captureSamples(void *buffer, ALCuint samples);
+    virtual ALCenum captureSamples(al::byte *buffer, ALCuint samples);
     virtual ALCuint availableSamples();
 
     virtual ClockLatency getClockLatency();
@@ -73,6 +76,9 @@ struct BackendFactory {
     virtual void probe(DevProbe type, std::string *outnames) = 0;
 
     virtual BackendPtr createBackend(ALCdevice *device, BackendType type) = 0;
+
+protected:
+    virtual ~BackendFactory() = default;
 };
 
 #endif /* ALC_BACKENDS_BASE_H */

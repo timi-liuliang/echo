@@ -29,7 +29,7 @@ INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/radeonrays/RadeonRays/include)
 
 IF(${ECHO_PLATFORM_WIN32})
     INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/engine/core/render/gles)
-	INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/openal-1.1/windows/include)
+	INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/openal-soft/include)
     INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/vulkan-1.1.114.0/windows/x64/include)
 ENDIF()
 

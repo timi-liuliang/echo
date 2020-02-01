@@ -3,7 +3,7 @@
 
 #include "AL/al.h"
 
-#include "alMain.h"
+#include "alcmain.h"
 #include "almalloc.h"
 
 
@@ -46,7 +46,7 @@ struct Uhj2Encoder {
      * signal. The input must use FuMa channel ordering and scaling.
      */
     void encode(FloatBufferLine &LeftOut, FloatBufferLine &RightOut, FloatBufferLine *InSamples,
-        const ALsizei SamplesToDo);
+        const size_t SamplesToDo);
 
     DEF_NEWDEL(Uhj2Encoder)
 };

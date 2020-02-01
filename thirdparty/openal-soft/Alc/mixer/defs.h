@@ -1,56 +1,65 @@
 #ifndef MIXER_DEFS_H
 #define MIXER_DEFS_H
 
-#include "AL/alc.h"
 #include "AL/al.h"
-#include "alMain.h"
-#include "alu.h"
 
+#include "alcmain.h"
 #include "alspan.h"
+#include "hrtf.h"
 
-
-struct MixGains;
+union InterpState;
 struct MixHrtfFilter;
-struct HrtfState;
-struct DirectHrtfState;
 
 
-struct CTag { };
-struct SSETag { };
-struct SSE2Tag { };
-struct SSE3Tag { };
-struct SSE4Tag { };
-struct NEONTag { };
+enum InstSetType {
+    CTag,
+    SSETag,
+    SSE2Tag,
+    SSE3Tag,
+    SSE4Tag,
+    NEONTag
+};
 
-struct CopyTag { };
-struct PointTag { };
-struct LerpTag { };
-struct CubicTag { };
-struct BSincTag { };
+enum ResampleType {
+    CopyTag,
+    PointTag,
+    LerpTag,
+    CubicTag,
+    BSincTag,
+    FastBSincTag
+};
 
-template<typename TypeTag, typename InstTag>
-const ALfloat *Resample_(const InterpState *state, const ALfloat *RESTRICT src, ALsizei frac, ALint increment, ALfloat *RESTRICT dst, ALsizei dstlen);
+template<ResampleType TypeTag, InstSetType InstTag>
+const ALfloat *Resample_(const InterpState *state, const ALfloat *RESTRICT src, ALuint frac,
+    ALuint increment, const al::span<float> dst);
 
-template<typename InstTag>
-void Mix_(const ALfloat *data, const al::span<FloatBufferLine> OutBuffer, ALfloat *CurrentGains, const ALfloat *TargetGains, const ALsizei Counter, const ALsizei OutPos, const ALsizei BufferSize);
-template<typename InstTag>
-void MixRow_(FloatBufferLine &OutBuffer, const ALfloat *Gains, const al::span<const FloatBufferLine> InSamples, const ALsizei InPos, const ALsizei BufferSize);
+template<InstSetType InstTag>
+void Mix_(const al::span<const float> InSamples, const al::span<FloatBufferLine> OutBuffer,
+    float *CurrentGains, const float *TargetGains, const size_t Counter, const size_t OutPos);
+template<InstSetType InstTag>
+void MixRow_(const al::span<float> OutBuffer, const al::span<const float> Gains,
+    const float *InSamples, const size_t InStride);
 
-template<typename InstTag>
-void MixHrtf_(FloatBufferLine &LeftOut, FloatBufferLine &RightOut, const ALfloat *InSamples, float2 *AccumSamples, const ALsizei OutPos, const ALsizei IrSize, MixHrtfFilter *hrtfparams, const ALsizei BufferSize);
-template<typename InstTag>
-void MixHrtfBlend_(FloatBufferLine &LeftOut, FloatBufferLine &RightOut, const ALfloat *InSamples, float2 *AccumSamples, const ALsizei OutPos, const ALsizei IrSize, const HrtfFilter *oldparams, MixHrtfFilter *newparams, const ALsizei BufferSize);
-template<typename InstTag>
-void MixDirectHrtf_(FloatBufferLine &LeftOut, FloatBufferLine &RightOut, const al::span<const FloatBufferLine> InSamples, float2 *AccumSamples, DirectHrtfState *State, const ALsizei BufferSize);
+template<InstSetType InstTag>
+void MixHrtf_(const float *InSamples, float2 *AccumSamples, const ALuint IrSize,
+    const MixHrtfFilter *hrtfparams, const size_t BufferSize);
+template<InstSetType InstTag>
+void MixHrtfBlend_(const float *InSamples, float2 *AccumSamples, const ALuint IrSize,
+    const HrtfFilter *oldparams, const MixHrtfFilter *newparams, const size_t BufferSize);
+template<InstSetType InstTag>
+void MixDirectHrtf_(FloatBufferLine &LeftOut, FloatBufferLine &RightOut,
+    const al::span<const FloatBufferLine> InSamples, float2 *AccumSamples, DirectHrtfState *State,
+    const size_t BufferSize);
 
 /* Vectorized resampler helpers */
-inline void InitiatePositionArrays(ALsizei frac, ALint increment, ALsizei *RESTRICT frac_arr, ALsizei *RESTRICT pos_arr, ALsizei size)
+inline void InitPosArrays(ALuint frac, ALuint increment, ALuint *frac_arr, ALuint *pos_arr,
+    size_t size)
 {
     pos_arr[0] = 0;
     frac_arr[0] = frac;
-    for(ALsizei i{1};i < size;i++)
+    for(size_t i{1};i < size;i++)
     {
-        ALint frac_tmp = frac_arr[i-1] + increment;
+        const ALuint frac_tmp{frac_arr[i-1] + increment};
         pos_arr[i] = pos_arr[i-1] + (frac_tmp>>FRACTIONBITS);
         frac_arr[i] = frac_tmp&FRACTIONMASK;
     }

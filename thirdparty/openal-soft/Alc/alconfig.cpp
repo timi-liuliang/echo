@@ -28,6 +28,8 @@
 
 #include "config.h"
 
+#include "alconfig.h"
+
 #include <cstdlib>
 #include <cctype>
 #include <cstring>
@@ -39,14 +41,17 @@
 #include <CoreFoundation/CoreFoundation.h>
 #endif
 
-#include <vector>
-#include <string>
 #include <algorithm>
+#include <cstdio>
+#include <string>
+#include <utility>
 
-#include "alMain.h"
-#include "alconfig.h"
-#include "logging.h"
+#include "alfstream.h"
+#include "alstring.h"
 #include "compat.h"
+#include "logging.h"
+#include "strutils.h"
+#include "vector.h"
 
 
 namespace {
@@ -75,10 +80,11 @@ bool readline(std::istream &f, std::string &output)
     return std::getline(f, output) && !output.empty();
 }
 
-std:: string expdup(const char *str)
+std::string expdup(const char *str)
 {
     std::string output;
 
+    std::string envval;
     while(*str != '\0')
     {
         const char *addstr;
@@ -105,20 +111,20 @@ std:: string expdup(const char *str)
             }
             else
             {
-                bool hasbraces{(*str == '{')};
+                const bool hasbraces{(*str == '{')};
+
                 if(hasbraces) str++;
-
-                std::string envname;
-                while((std::isalnum(*str) || *str == '_'))
-                    envname += *(str++);
-
+                const char *envstart = str;
+                while(std::isalnum(*str) || *str == '_')
+                    ++str;
                 if(hasbraces && *str != '}')
                     continue;
-
+                const std::string envname{envstart, str};
                 if(hasbraces) str++;
-                if((addstr=std::getenv(envname.c_str())) == nullptr)
-                    continue;
-                addstrlen = std::strlen(addstr);
+
+                envval = al::getenv(envname.c_str()).value_or(std::string{});
+                addstr = envval.data();
+                addstrlen = envval.length();
             }
         }
         if(addstrlen == 0)
@@ -137,23 +143,19 @@ void LoadConfigFromFile(std::istream &f)
 
     while(readline(f, buffer))
     {
-        while(!buffer.empty() && std::isspace(buffer.back()))
-            buffer.pop_back();
         if(lstrip(buffer).empty())
             continue;
 
-        buffer.push_back(0);
-        char *line{&buffer[0]};
-
-        if(line[0] == '[')
+        if(buffer[0] == '[')
         {
+            char *line{&buffer[0]};
             char *section = line+1;
             char *endsection;
 
             endsection = std::strchr(section, ']');
             if(!endsection || section == endsection)
             {
-                ERR("config parse error: bad line \"%s\"\n", line);
+                ERR(" config parse error: bad line \"%s\"\n", line);
                 continue;
             }
             if(endsection[1] != 0)
@@ -163,14 +165,14 @@ void LoadConfigFromFile(std::istream &f)
                     ++end;
                 if(*end != 0 && *end != '#')
                 {
-                    ERR("config parse error: bad line \"%s\"\n", line);
+                    ERR(" config parse error: bad line \"%s\"\n", line);
                     continue;
                 }
             }
             *endsection = 0;
 
             curSection.clear();
-            if(strcasecmp(section, "general") != 0)
+            if(al::strcasecmp(section, "general") != 0)
             {
                 do {
                     char *nextp = std::strchr(section, '%');
@@ -190,7 +192,7 @@ void LoadConfigFromFile(std::istream &f)
                         (section[2] >= 'a' && section[2] <= 'f') ||
                         (section[2] >= 'A' && section[2] <= 'F')))
                     {
-                        unsigned char b = 0;
+                        int b{0};
                         if(section[1] >= '0' && section[1] <= '9')
                             b = (section[1]-'0') << 4;
                         else if(section[1] >= 'a' && section[1] <= 'f')
@@ -222,31 +224,28 @@ void LoadConfigFromFile(std::istream &f)
             continue;
         }
 
-        char *comment{std::strchr(line, '#')};
-        if(comment) *(comment++) = 0;
-        if(!line[0]) continue;
+        auto cmtpos = std::min(buffer.find('#'), buffer.size());
+        while(cmtpos > 0 && std::isspace(buffer[cmtpos-1]))
+            --cmtpos;
+        if(!cmtpos) continue;
+        buffer.erase(cmtpos);
 
-        char key[256]{};
-        char value[256]{};
-        if(std::sscanf(line, "%255[^=] = \"%255[^\"]\"", key, value) == 2 ||
-           std::sscanf(line, "%255[^=] = '%255[^\']'", key, value) == 2 ||
-           std::sscanf(line, "%255[^=] = %255[^\n]", key, value) == 2)
+        auto sep = buffer.find('=');
+        if(sep == std::string::npos)
         {
-            /* sscanf doesn't handle '' or "" as empty values, so clip it
-             * manually. */
-            if(std::strcmp(value, "\"\"") == 0 || std::strcmp(value, "''") == 0)
-                value[0] = 0;
-        }
-        else if(sscanf(line, "%255[^=] %255[=]", key, value) == 2)
-        {
-            /* Special case for 'key =' */
-            value[0] = 0;
-        }
-        else
-        {
-            ERR("config parse error: malformed option line: \"%s\"\n\n", line);
+            ERR(" config parse error: malformed option line: \"%s\"\n", buffer.c_str());
             continue;
         }
+        auto keyend = sep++;
+        while(keyend > 0 && std::isspace(buffer[keyend-1]))
+            --keyend;
+        if(!keyend)
+        {
+            ERR(" config parse error: malformed option line: \"%s\"\n", buffer.c_str());
+            continue;
+        }
+        while(sep < buffer.size() && std::isspace(buffer[sep]))
+            sep++;
 
         std::string fullKey;
         if(!curSection.empty())
@@ -254,24 +253,34 @@ void LoadConfigFromFile(std::istream &f)
             fullKey += curSection;
             fullKey += '/';
         }
-        fullKey += key;
-        while(!fullKey.empty() && std::isspace(fullKey.back()))
-            fullKey.pop_back();
+        fullKey += buffer.substr(0u, keyend);
 
-        /* Check if we already have this option set */
-        auto ent = std::find_if(ConfOpts.begin(), ConfOpts.end(),
-            [&fullKey](const ConfigEntry &entry) -> bool
-            { return entry.key == fullKey; }
-        );
-        if(ent != ConfOpts.end())
-            ent->value = expdup(value);
-        else
+        std::string value{(sep < buffer.size()) ? buffer.substr(sep) : std::string{}};
+        if(value.size() > 1)
         {
-            ConfOpts.emplace_back(ConfigEntry{std::move(fullKey), expdup(value)});
-            ent = ConfOpts.end()-1;
+            if((value.front() == '"' && value.back() == '"')
+                || (value.front() == '\'' && value.back() == '\''))
+            {
+                value.pop_back();
+                value.erase(value.begin());
+            }
         }
 
-        TRACE("found '%s' = '%s'\n", ent->key.c_str(), ent->value.c_str());
+        TRACE(" found '%s' = '%s'\n", fullKey.c_str(), value.c_str());
+
+        /* Check if we already have this option set */
+        auto find_key = [&fullKey](const ConfigEntry &entry) -> bool
+        { return entry.key == fullKey; };
+        auto ent = std::find_if(ConfOpts.begin(), ConfOpts.end(), find_key);
+        if(ent != ConfOpts.end())
+        {
+            if(!value.empty())
+                ent->value = expdup(value.c_str());
+            else
+                ConfOpts.erase(ent);
+        }
+        else if(!value.empty())
+            ConfOpts.emplace_back(ConfigEntry{std::move(fullKey), expdup(value.c_str())});
     }
     ConfOpts.shrink_to_fit();
 }
@@ -304,18 +313,17 @@ void ReadALConfig()
             LoadConfigFromFile(f);
     }
 
-    const WCHAR *str{_wgetenv(L"ALSOFT_CONF")};
-    if(str != nullptr && *str)
+    if(auto confpath = al::getenv(L"ALSOFT_CONF"))
     {
-        std::string filepath{wstr_to_utf8(str)};
-
-        TRACE("Loading config %s...\n", filepath.c_str());
-        al::ifstream f{filepath};
+        TRACE("Loading config %s...\n", wstr_to_utf8(confpath->c_str()).c_str());
+        al::ifstream f{*confpath};
         if(f.is_open())
             LoadConfigFromFile(f);
     }
 }
+
 #else
+
 void ReadALConfig()
 {
     const char *str{"/etc/openal/alsoft.conf"};
@@ -326,9 +334,7 @@ void ReadALConfig()
         LoadConfigFromFile(f);
     f.close();
 
-    if(!(str=getenv("XDG_CONFIG_DIRS")) || str[0] == 0)
-        str = "/etc/xdg";
-    std::string confpaths = str;
+    std::string confpaths{al::getenv("XDG_CONFIG_DIRS").value_or("/etc/xdg")};
     /* Go through the list in reverse, since "the order of base directories
      * denotes their importance; the first directory listed is the most
      * important". Ergo, we need to load the settings from the later dirs
@@ -357,7 +363,7 @@ void ReadALConfig()
             else fname += "alsoft.conf";
 
             TRACE("Loading config %s...\n", fname.c_str());
-            al::ifstream f{fname};
+            f = al::ifstream{fname};
             if(f.is_open())
                 LoadConfigFromFile(f);
         }
@@ -374,37 +380,37 @@ void ReadALConfig()
         if((configURL=CFBundleCopyResourceURL(mainBundle, CFSTR(".alsoftrc"), CFSTR(""), nullptr)) &&
            CFURLGetFileSystemRepresentation(configURL, true, fileName, sizeof(fileName)))
         {
-            al::ifstream f{reinterpret_cast<char*>(fileName)};
+            f = al::ifstream{reinterpret_cast<char*>(fileName)};
             if(f.is_open())
                 LoadConfigFromFile(f);
         }
     }
 #endif
 
-    if((str=getenv("HOME")) != nullptr && *str)
+    if(auto homedir = al::getenv("HOME"))
     {
-        fname = str;
+        fname = *homedir;
         if(fname.back() != '/') fname += "/.alsoftrc";
         else fname += ".alsoftrc";
 
         TRACE("Loading config %s...\n", fname.c_str());
-        al::ifstream f{fname};
+        f = al::ifstream{fname};
         if(f.is_open())
             LoadConfigFromFile(f);
     }
 
-    if((str=getenv("XDG_CONFIG_HOME")) != nullptr && str[0] != 0)
+    if(auto configdir = al::getenv("XDG_CONFIG_HOME"))
     {
-        fname = str;
+        fname = *configdir;
         if(fname.back() != '/') fname += "/alsoft.conf";
         else fname += "alsoft.conf";
     }
     else
     {
         fname.clear();
-        if((str=getenv("HOME")) != nullptr && str[0] != 0)
+        if(auto homedir = al::getenv("HOME"))
         {
-            fname = str;
+            fname = *homedir;
             if(fname.back() != '/') fname += "/.config/alsoft.conf";
             else fname += ".config/alsoft.conf";
         }
@@ -412,7 +418,7 @@ void ReadALConfig()
     if(!fname.empty())
     {
         TRACE("Loading config %s...\n", fname.c_str());
-        al::ifstream f{fname};
+        f = al::ifstream{fname};
         if(f.is_open())
             LoadConfigFromFile(f);
     }
@@ -424,15 +430,15 @@ void ReadALConfig()
         else ppath += "alsoft.conf";
 
         TRACE("Loading config %s...\n", ppath.c_str());
-        al::ifstream f{ppath};
+        f = al::ifstream{ppath};
         if(f.is_open())
             LoadConfigFromFile(f);
     }
 
-    if((str=getenv("ALSOFT_CONF")) != nullptr && *str)
+    if(auto confname = al::getenv("ALSOFT_CONF"))
     {
-        TRACE("Loading config %s...\n", str);
-        al::ifstream f{str};
+        TRACE("Loading config %s...\n", confname->c_str());
+        f = al::ifstream{*confname};
         if(f.is_open())
             LoadConfigFromFile(f);
     }
@@ -445,7 +451,7 @@ const char *GetConfigValue(const char *devName, const char *blockName, const cha
         return def;
 
     std::string key;
-    if(blockName && strcasecmp(blockName, "general") != 0)
+    if(blockName && al::strcasecmp(blockName, "general") != 0)
     {
         key = blockName;
         if(devName)
@@ -530,8 +536,8 @@ al::optional<bool> ConfigValueBool(const char *devName, const char *blockName, c
     if(!val[0]) return al::nullopt;
 
     return al::make_optional(
-        strcasecmp(val, "true") == 0 || strcasecmp(val, "yes") == 0 ||
-        strcasecmp(val, "on") == 0 || atoi(val) != 0);
+        al::strcasecmp(val, "true") == 0 || al::strcasecmp(val, "yes") == 0 ||
+        al::strcasecmp(val, "on") == 0 || atoi(val) != 0);
 }
 
 int GetConfigValueBool(const char *devName, const char *blockName, const char *keyName, int def)
@@ -539,6 +545,6 @@ int GetConfigValueBool(const char *devName, const char *blockName, const char *k
     const char *val = GetConfigValue(devName, blockName, keyName, "");
 
     if(!val[0]) return def != 0;
-    return (strcasecmp(val, "true") == 0 || strcasecmp(val, "yes") == 0 ||
-            strcasecmp(val, "on") == 0 || atoi(val) != 0);
+    return (al::strcasecmp(val, "true") == 0 || al::strcasecmp(val, "yes") == 0 ||
+            al::strcasecmp(val, "on") == 0 || atoi(val) != 0);
 }

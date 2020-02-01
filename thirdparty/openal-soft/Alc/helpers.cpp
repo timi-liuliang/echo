@@ -28,60 +28,17 @@
 
 #include "config.h"
 
-#include <cstdlib>
-#include <ctime>
+#include <algorithm>
 #include <cerrno>
 #include <cstdarg>
-#include <cctype>
-#ifdef HAVE_MALLOC_H
-#include <malloc.h>
-#endif
+#include <cstdlib>
+#include <cstdio>
+#include <cstring>
+#include <mutex>
+#include <string>
+
 #ifdef HAVE_DIRENT_H
 #include <dirent.h>
-#endif
-#ifdef HAVE_PROC_PIDPATH
-#include <libproc.h>
-#endif
-
-#ifdef __FreeBSD__
-#include <sys/types.h>
-#include <sys/sysctl.h>
-#endif
-
-#ifndef AL_NO_UID_DEFS
-#if defined(HAVE_GUIDDEF_H) || defined(HAVE_INITGUID_H)
-#define INITGUID
-#include <windows.h>
-#ifdef HAVE_GUIDDEF_H
-#include <guiddef.h>
-#else
-#include <initguid.h>
-#endif
-
-DEFINE_GUID(KSDATAFORMAT_SUBTYPE_PCM,        0x00000001, 0x0000, 0x0010, 0x80,0x00, 0x00,0xaa,0x00,0x38,0x9b,0x71);
-DEFINE_GUID(KSDATAFORMAT_SUBTYPE_IEEE_FLOAT, 0x00000003, 0x0000, 0x0010, 0x80,0x00, 0x00,0xaa,0x00,0x38,0x9b,0x71);
-
-DEFINE_GUID(IID_IDirectSoundNotify,   0xb0210783, 0x89cd, 0x11d0, 0xaf,0x08, 0x00,0xa0,0xc9,0x25,0xcd,0x16);
-
-DEFINE_GUID(CLSID_MMDeviceEnumerator, 0xbcde0395, 0xe52f, 0x467c, 0x8e,0x3d, 0xc4,0x57,0x92,0x91,0x69,0x2e);
-DEFINE_GUID(IID_IMMDeviceEnumerator,  0xa95664d2, 0x9614, 0x4f35, 0xa7,0x46, 0xde,0x8d,0xb6,0x36,0x17,0xe6);
-DEFINE_GUID(IID_IAudioClient,         0x1cb9ad4c, 0xdbfa, 0x4c32, 0xb1,0x78, 0xc2,0xf5,0x68,0xa7,0x03,0xb2);
-DEFINE_GUID(IID_IAudioRenderClient,   0xf294acfc, 0x3146, 0x4483, 0xa7,0xbf, 0xad,0xdc,0xa7,0xc2,0x60,0xe2);
-DEFINE_GUID(IID_IAudioCaptureClient,  0xc8adbd64, 0xe71e, 0x48a0, 0xa4,0xde, 0x18,0x5c,0x39,0x5c,0xd3,0x17);
-
-#ifdef HAVE_WASAPI
-#include <wtypes.h>
-#include <devpropdef.h>
-#include <propkeydef.h>
-DEFINE_DEVPROPKEY(DEVPKEY_Device_FriendlyName, 0xa45c254e, 0xdf1c, 0x4efd, 0x80,0x20, 0x67,0xd1,0x46,0xa8,0x50,0xe0, 14);
-DEFINE_PROPERTYKEY(PKEY_AudioEndpoint_FormFactor, 0x1da5d803, 0xd492, 0x4edd, 0x8c,0x23, 0xe0,0xc0,0xff,0xee,0x7f,0x0e, 0);
-DEFINE_PROPERTYKEY(PKEY_AudioEndpoint_GUID, 0x1da5d803, 0xd492, 0x4edd, 0x8c, 0x23,0xe0, 0xc0,0xff,0xee,0x7f,0x0e, 4 );
-#endif
-#endif
-#endif /* AL_NO_UID_DEFS */
-
-#ifdef HAVE_DLFCN_H
-#include <dlfcn.h>
 #endif
 #ifdef HAVE_INTRIN_H
 #include <intrin.h>
@@ -95,47 +52,45 @@ DEFINE_PROPERTYKEY(PKEY_AudioEndpoint_GUID, 0x1da5d803, 0xd492, 0x4edd, 0x8c, 0x
 #ifdef HAVE_SYS_SYSCONF_H
 #include <sys/sysconf.h>
 #endif
-#ifdef HAVE_FLOAT_H
-#include <cfloat>
+
+#ifdef HAVE_PROC_PIDPATH
+#include <libproc.h>
 #endif
-#ifdef HAVE_IEEEFP_H
-#include <ieeefp.h>
+
+#ifdef __FreeBSD__
+#include <sys/types.h>
+#include <sys/sysctl.h>
 #endif
 
 #ifndef _WIN32
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/mman.h>
-#include <fcntl.h>
 #include <unistd.h>
 #elif defined(_WIN32_IE)
 #include <shlobj.h>
 #endif
 
-#include <mutex>
-#include <vector>
-#include <string>
-#include <algorithm>
-
-#include "alMain.h"
-#include "alu.h"
+#include "alcmain.h"
+#include "almalloc.h"
+#include "alfstream.h"
+#include "alspan.h"
+#include "alstring.h"
+#include "compat.h"
 #include "cpu_caps.h"
 #include "fpu_modes.h"
+#include "logging.h"
+#include "strutils.h"
 #include "vector.h"
-#include "compat.h"
-#include "threads.h"
 
 
 #if defined(HAVE_GCC_GET_CPUID) && (defined(__i386__) || defined(__x86_64__) || \
                                     defined(_M_IX86) || defined(_M_X64))
 using reg_type = unsigned int;
-static inline void get_cpuid(int f, reg_type *regs)
+static inline void get_cpuid(unsigned int f, reg_type *regs)
 { __get_cpuid(f, &regs[0], &regs[1], &regs[2], &regs[3]); }
 #define CAN_GET_CPUID
 #elif defined(HAVE_CPUID_INTRINSIC) && (defined(__i386__) || defined(__x86_64__) || \
                                         defined(_M_IX86) || defined(_M_X64))
 using reg_type = int;
-static inline void get_cpuid(int f, reg_type *regs)
+static inline void get_cpuid(unsigned int f, reg_type *regs)
 { (__cpuid)(regs, f); }
 #define CAN_GET_CPUID
 #endif
@@ -152,7 +107,7 @@ void FillCPUCaps(int capfilter)
     union {
         reg_type regs[4];
         char str[sizeof(reg_type[4])];
-    } cpuinf[3] = {{ { 0, 0, 0, 0 } }};
+    } cpuinf[3]{};
 
     get_cpuid(0, cpuinf[0].regs);
     if(cpuinf[0].regs[0] == 0)
@@ -295,143 +250,6 @@ void FPUCtl::leave()
 
 #ifdef _WIN32
 
-namespace al {
-
-auto filebuf::underflow() -> int_type
-{
-    if(mFile != INVALID_HANDLE_VALUE && gptr() == egptr())
-    {
-        // Read in the next chunk of data, and set the pointers on success
-        DWORD got{};
-        if(ReadFile(mFile, mBuffer.data(), (DWORD)mBuffer.size(), &got, nullptr))
-            setg(mBuffer.data(), mBuffer.data(), mBuffer.data()+got);
-    }
-    if(gptr() == egptr())
-        return traits_type::eof();
-    return traits_type::to_int_type(*gptr());
-}
-
-auto filebuf::seekoff(off_type offset, std::ios_base::seekdir whence, std::ios_base::openmode mode) -> pos_type
-{
-    if(mFile == INVALID_HANDLE_VALUE || (mode&std::ios_base::out) || !(mode&std::ios_base::in))
-        return traits_type::eof();
-
-    LARGE_INTEGER fpos{};
-    switch(whence)
-    {
-        case std::ios_base::beg:
-            fpos.QuadPart = offset;
-            if(!SetFilePointerEx(mFile, fpos, &fpos, FILE_BEGIN))
-                return traits_type::eof();
-            break;
-
-        case std::ios_base::cur:
-            // If the offset remains in the current buffer range, just
-            // update the pointer.
-            if((offset >= 0 && offset < off_type(egptr()-gptr())) ||
-                (offset < 0 && -offset <= off_type(gptr()-eback())))
-            {
-                // Get the current file offset to report the correct read
-                // offset.
-                fpos.QuadPart = 0;
-                if(!SetFilePointerEx(mFile, fpos, &fpos, FILE_CURRENT))
-                    return traits_type::eof();
-                setg(eback(), gptr()+offset, egptr());
-                return fpos.QuadPart - off_type(egptr()-gptr());
-            }
-            // Need to offset for the file offset being at egptr() while
-            // the requested offset is relative to gptr().
-            offset -= off_type(egptr()-gptr());
-            fpos.QuadPart = offset;
-            if(!SetFilePointerEx(mFile, fpos, &fpos, FILE_CURRENT))
-                return traits_type::eof();
-            break;
-
-        case std::ios_base::end:
-            fpos.QuadPart = offset;
-            if(!SetFilePointerEx(mFile, fpos, &fpos, FILE_END))
-                return traits_type::eof();
-            break;
-
-        default:
-            return traits_type::eof();
-    }
-    setg(nullptr, nullptr, nullptr);
-    return fpos.QuadPart;
-}
-
-auto filebuf::seekpos(pos_type pos, std::ios_base::openmode mode) -> pos_type
-{
-    // Simplified version of seekoff
-    if(mFile == INVALID_HANDLE_VALUE || (mode&std::ios_base::out) || !(mode&std::ios_base::in))
-        return traits_type::eof();
-
-    LARGE_INTEGER fpos{};
-    fpos.QuadPart = pos;
-    if(!SetFilePointerEx(mFile, fpos, &fpos, FILE_BEGIN))
-        return traits_type::eof();
-
-    setg(nullptr, nullptr, nullptr);
-    return fpos.QuadPart;
-}
-
-filebuf::~filebuf()
-{
-    if(mFile != INVALID_HANDLE_VALUE)
-        CloseHandle(mFile);
-    mFile = INVALID_HANDLE_VALUE;
-}
-
-bool filebuf::open(const wchar_t *filename, std::ios_base::openmode mode)
-{
-    if((mode&std::ios_base::out) || !(mode&std::ios_base::in))
-        return false;
-    HANDLE f{CreateFileW(filename, GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING,
-        FILE_ATTRIBUTE_NORMAL, nullptr)};
-    if(f == INVALID_HANDLE_VALUE) return false;
-
-    if(mFile != INVALID_HANDLE_VALUE)
-        CloseHandle(mFile);
-    mFile = f;
-
-    setg(nullptr, nullptr, nullptr);
-    return true;
-}
-bool filebuf::open(const char *filename, std::ios_base::openmode mode)
-{
-    std::wstring wname{utf8_to_wstr(filename)};
-    return open(wname.c_str(), mode);
-}
-
-
-ifstream::ifstream(const wchar_t *filename, std::ios_base::openmode mode)
-  : std::istream{nullptr}
-{
-    init(&mStreamBuf);
-
-    // Set the failbit if the file failed to open.
-    if((mode&std::ios_base::out) || !mStreamBuf.open(filename, mode|std::ios_base::in))
-        clear(failbit);
-}
-
-ifstream::ifstream(const char *filename, std::ios_base::openmode mode)
-  : std::istream{nullptr}
-{
-    init(&mStreamBuf);
-
-    // Set the failbit if the file failed to open.
-    if((mode&std::ios_base::out) || !mStreamBuf.open(filename, mode|std::ios_base::in))
-        clear(failbit);
-}
-
-/* This is only here to ensure the compiler doesn't define an implicit
- * destructor, which it tries to automatically inline and subsequently complain
- * it can't inline without excessive code growth.
- */
-ifstream::~ifstream() { }
-
-} // namespace al
-
 const PathNamePair &GetProcBinary()
 {
     static PathNamePair ret;
@@ -468,21 +286,6 @@ const PathNamePair &GetProcBinary()
 }
 
 
-void *LoadLib(const char *name)
-{
-    std::wstring wname{utf8_to_wstr(name)};
-    return LoadLibraryW(wname.c_str());
-}
-void CloseLib(void *handle)
-{ FreeLibrary(static_cast<HMODULE>(handle)); }
-void *GetSymbol(void *handle, const char *name)
-{
-    void *ret{reinterpret_cast<void*>(GetProcAddress(static_cast<HMODULE>(handle), name))};
-    if(!ret) ERR("Failed to load %s\n", name);
-    return ret;
-}
-
-
 void al_print(FILE *logfile, const char *fmt, ...)
 {
     al::vector<char> dynmsg;
@@ -493,7 +296,7 @@ void al_print(FILE *logfile, const char *fmt, ...)
     va_start(args, fmt);
     va_copy(args2, args);
     int msglen{std::vsnprintf(str, sizeof(stcmsg), fmt, args)};
-    if(UNLIKELY(msglen >= 0 && static_cast<size_t>(msglen) >= sizeof(stcmsg)))
+    if UNLIKELY(msglen >= 0 && static_cast<size_t>(msglen) >= sizeof(stcmsg))
     {
         dynmsg.resize(static_cast<size_t>(msglen) + 1u);
         str = dynmsg.data();
@@ -503,7 +306,7 @@ void al_print(FILE *logfile, const char *fmt, ...)
     va_end(args);
 
     std::wstring wstr{utf8_to_wstr(str)};
-    fprintf(logfile, "%ls", wstr.c_str());
+    fputws(wstr.c_str(), logfile);
     fflush(logfile);
 }
 
@@ -521,21 +324,23 @@ static void DirectorySearch(const char *path, const char *ext, al::vector<std::s
     std::wstring wpath{utf8_to_wstr(pathstr.c_str())};
     WIN32_FIND_DATAW fdata;
     HANDLE hdl{FindFirstFileW(wpath.c_str(), &fdata)};
-    if(hdl != INVALID_HANDLE_VALUE)
-    {
-        size_t base = results->size();
-        do {
-            results->emplace_back();
-            std::string &str = results->back();
-            str = path;
-            str += '\\';
-            str += wstr_to_utf8(fdata.cFileName);
-            TRACE("Got result %s\n", str.c_str());
-        } while(FindNextFileW(hdl, &fdata));
-        FindClose(hdl);
+    if(hdl == INVALID_HANDLE_VALUE) return;
 
-        std::sort(results->begin()+base, results->end());
-    }
+    const auto base = results->size();
+
+    do {
+        results->emplace_back();
+        std::string &str = results->back();
+        str = path;
+        str += '\\';
+        str += wstr_to_utf8(fdata.cFileName);
+    } while(FindNextFileW(hdl, &fdata));
+    FindClose(hdl);
+
+    const al::span<std::string> newlist{results->data()+base, results->size()-base};
+    std::sort(newlist.begin(), newlist.end());
+    for(const auto &name : newlist)
+        TRACE(" got %s\n", name.c_str());
 }
 
 al::vector<std::string> SearchDataFiles(const char *ext, const char *subdir)
@@ -561,27 +366,26 @@ al::vector<std::string> SearchDataFiles(const char *ext, const char *subdir)
     std::string path;
 
     /* Search the app-local directory. */
-    WCHAR *cwdbuf{_wgetenv(L"ALSOFT_LOCAL_PATH")};
-    if(cwdbuf && *cwdbuf != '\0')
+    if(auto localpath = al::getenv(L"ALSOFT_LOCAL_PATH"))
     {
-        path = wstr_to_utf8(cwdbuf);
+        path = wstr_to_utf8(localpath->c_str());
         if(is_slash(path.back()))
             path.pop_back();
     }
-    else if(!(cwdbuf=_wgetcwd(nullptr, 0)))
-        path = ".";
-    else
+    else if(WCHAR *cwdbuf{_wgetcwd(nullptr, 0)})
     {
         path = wstr_to_utf8(cwdbuf);
         if(is_slash(path.back()))
             path.pop_back();
         free(cwdbuf);
     }
+    else
+        path = ".";
     std::replace(path.begin(), path.end(), '/', '\\');
     DirectorySearch(path.c_str(), ext, &results);
 
     /* Search the local and global data dirs. */
-    static constexpr int ids[2]{ CSIDL_APPDATA, CSIDL_COMMON_APPDATA };
+    static const int ids[2]{ CSIDL_APPDATA, CSIDL_COMMON_APPDATA };
     for(int id : ids)
     {
         WCHAR buffer[MAX_PATH];
@@ -609,6 +413,11 @@ void SetRTPriority(void)
 }
 
 #else
+
+#if defined(HAVE_PTHREAD_SETSCHEDPARAM) && !defined(__OpenBSD__)
+#include <pthread.h>
+#include <sched.h>
+#endif
 
 const PathNamePair &GetProcBinary()
 {
@@ -673,7 +482,7 @@ const PathNamePair &GetProcBinary()
             return ret;
         }
 
-        pathname.resize(len);
+        pathname.resize(static_cast<size_t>(len));
     }
     while(!pathname.empty() && pathname.back() == 0)
         pathname.pop_back();
@@ -692,33 +501,6 @@ const PathNamePair &GetProcBinary()
 }
 
 
-#ifdef HAVE_DLFCN_H
-
-void *LoadLib(const char *name)
-{
-    dlerror();
-    void *handle{dlopen(name, RTLD_NOW)};
-    const char *err{dlerror()};
-    if(err) handle = nullptr;
-    return handle;
-}
-void CloseLib(void *handle)
-{ dlclose(handle); }
-void *GetSymbol(void *handle, const char *name)
-{
-    dlerror();
-    void *sym{dlsym(handle, name)};
-    const char *err{dlerror()};
-    if(err)
-    {
-        WARN("Failed to load %s: %s\n", name, err);
-        sym = nullptr;
-    }
-    return sym;
-}
-
-#endif /* HAVE_DLFCN_H */
-
 void al_print(FILE *logfile, const char *fmt, ...)
 {
     va_list ap;
@@ -735,34 +517,35 @@ static void DirectorySearch(const char *path, const char *ext, al::vector<std::s
 {
     TRACE("Searching %s for *%s\n", path, ext);
     DIR *dir{opendir(path)};
-    if(dir != nullptr)
+    if(!dir) return;
+
+    const auto base = results->size();
+    const size_t extlen{strlen(ext)};
+
+    struct dirent *dirent;
+    while((dirent=readdir(dir)) != nullptr)
     {
-        const size_t extlen = strlen(ext);
-        size_t base = results->size();
+        if(strcmp(dirent->d_name, ".") == 0 || strcmp(dirent->d_name, "..") == 0)
+            continue;
 
-        struct dirent *dirent;
-        while((dirent=readdir(dir)) != nullptr)
-        {
-            if(strcmp(dirent->d_name, ".") == 0 || strcmp(dirent->d_name, "..") == 0)
-                continue;
+        const size_t len{strlen(dirent->d_name)};
+        if(len <= extlen) continue;
+        if(al::strcasecmp(dirent->d_name+len-extlen, ext) != 0)
+            continue;
 
-            size_t len{strlen(dirent->d_name)};
-            if(len <= extlen) continue;
-            if(strcasecmp(dirent->d_name+len-extlen, ext) != 0)
-                continue;
-
-            results->emplace_back();
-            std::string &str = results->back();
-            str = path;
-            if(str.back() != '/')
-                str.push_back('/');
-            str += dirent->d_name;
-            TRACE("Got result %s\n", str.c_str());
-        }
-        closedir(dir);
-
-        std::sort(results->begin()+base, results->end());
+        results->emplace_back();
+        std::string &str = results->back();
+        str = path;
+        if(str.back() != '/')
+            str.push_back('/');
+        str += dirent->d_name;
     }
+    closedir(dir);
+
+    const al::span<std::string> newlist{results->data()+base, results->size()-base};
+    std::sort(newlist.begin(), newlist.end());
+    for(const auto &name : newlist)
+        TRACE(" got %s\n", name.c_str());
 }
 
 al::vector<std::string> SearchDataFiles(const char *ext, const char *subdir)
@@ -778,9 +561,8 @@ al::vector<std::string> SearchDataFiles(const char *ext, const char *subdir)
     }
 
     /* Search the app-local directory. */
-    const char *str{getenv("ALSOFT_LOCAL_PATH")};
-    if(str && *str != '\0')
-        DirectorySearch(str, ext, &results);
+    if(auto localpath = al::getenv("ALSOFT_LOCAL_PATH"))
+        DirectorySearch(localpath->c_str(), ext, &results);
     else
     {
         al::vector<char> cwdbuf(256);
@@ -803,17 +585,17 @@ al::vector<std::string> SearchDataFiles(const char *ext, const char *subdir)
     }
 
     // Search local data dir
-    if((str=getenv("XDG_DATA_HOME")) != nullptr && str[0] != '\0')
+    if(auto datapath = al::getenv("XDG_DATA_HOME"))
     {
-        std::string path{str};
+        std::string &path = *datapath;
         if(path.back() != '/')
             path += '/';
         path += subdir;
         DirectorySearch(path.c_str(), ext, &results);
     }
-    else if((str=getenv("HOME")) != nullptr && str[0] != '\0')
+    else if(auto homepath = al::getenv("HOME"))
     {
-        std::string path{str};
+        std::string &path = *homepath;
         if(path.back() == '/')
             path.pop_back();
         path += "/.local/share/";
@@ -822,17 +604,18 @@ al::vector<std::string> SearchDataFiles(const char *ext, const char *subdir)
     }
 
     // Search global data dirs
-    if((str=getenv("XDG_DATA_DIRS")) == nullptr || str[0] == '\0')
-        str = "/usr/local/share/:/usr/share/";
+    std::string datadirs{al::getenv("XDG_DATA_DIRS").value_or("/usr/local/share/:/usr/share/")};
 
-    const char *next{str};
-    while((str=next) != nullptr && str[0] != '\0')
+    size_t curpos{0u};
+    while(curpos < datadirs.size())
     {
-        next = strchr(str, ':');
+        size_t nextpos{datadirs.find(':', curpos)};
 
-        std::string path = (next ? std::string(str, next++) : std::string(str));
+        std::string path{(nextpos != std::string::npos) ?
+            datadirs.substr(curpos, nextpos++ - curpos) : datadirs.substr(curpos)};
+        curpos = nextpos;
+
         if(path.empty()) continue;
-
         if(path.back() != '/')
             path += '/';
         path += subdir;

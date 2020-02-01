@@ -20,15 +20,13 @@
 
 #include "config.h"
 
+#include <algorithm>
 #include <cmath>
 #include <cstdlib>
 
-#include <cmath>
-
-#include "alMain.h"
+#include "al/auxeffectslot.h"
+#include "alcmain.h"
 #include "alcontext.h"
-#include "alAuxEffectSlot.h"
-#include "alError.h"
 #include "alu.h"
 #include "filters/biquad.h"
 
@@ -50,12 +48,12 @@ struct DistortionState final : public EffectState {
 
     ALboolean deviceUpdate(const ALCdevice *device) override;
     void update(const ALCcontext *context, const ALeffectslot *slot, const EffectProps *props, const EffectTarget target) override;
-    void process(const ALsizei samplesToDo, const FloatBufferLine *RESTRICT samplesIn, const ALsizei numInput, const al::span<FloatBufferLine> samplesOut) override;
+    void process(const size_t samplesToDo, const al::span<const FloatBufferLine> samplesIn, const al::span<FloatBufferLine> samplesOut) override;
 
     DEF_NEWDEL(DistortionState)
 };
 
-ALboolean DistortionState::deviceUpdate(const ALCdevice *UNUSED(device))
+ALboolean DistortionState::deviceUpdate(const ALCdevice*)
 {
     mLowpass.clear();
     mBandpass.clear();
@@ -64,7 +62,7 @@ ALboolean DistortionState::deviceUpdate(const ALCdevice *UNUSED(device))
 
 void DistortionState::update(const ALCcontext *context, const ALeffectslot *slot, const EffectProps *props, const EffectTarget target)
 {
-    const ALCdevice *device{context->Device};
+    const ALCdevice *device{context->mDevice.get()};
 
     /* Store waveshaper edge settings. */
     const ALfloat edge{
@@ -74,18 +72,16 @@ void DistortionState::update(const ALCcontext *context, const ALeffectslot *slot
     ALfloat cutoff{props->Distortion.LowpassCutoff};
     /* Bandwidth value is constant in octaves. */
     ALfloat bandwidth{(cutoff / 2.0f) / (cutoff * 0.67f)};
-    /* Multiply sampling frequency by the amount of oversampling done during
+    /* Divide normalized frequency by the amount of oversampling done during
      * processing.
      */
     auto frequency = static_cast<ALfloat>(device->Frequency);
-    mLowpass.setParams(BiquadType::LowPass, 1.0f, cutoff / (frequency*4.0f),
-        mLowpass.rcpQFromBandwidth(cutoff / (frequency*4.0f), bandwidth));
+    mLowpass.setParamsFromBandwidth(BiquadType::LowPass, cutoff/frequency/4.0f, 1.0f, bandwidth);
 
     cutoff = props->Distortion.EQCenter;
     /* Convert bandwidth in Hz to octaves. */
     bandwidth = props->Distortion.EQBandwidth / (cutoff * 0.67f);
-    mBandpass.setParams(BiquadType::BandPass, 1.0f, cutoff / (frequency*4.0f),
-        mBandpass.rcpQFromBandwidth(cutoff / (frequency*4.0f), bandwidth));
+    mBandpass.setParamsFromBandwidth(BiquadType::BandPass, cutoff/frequency/4.0f, 1.0f, bandwidth);
 
     ALfloat coeffs[MAX_AMBI_CHANNELS];
     CalcDirectionCoeffs({0.0f, 0.0f, -1.0f}, 0.0f, coeffs);
@@ -94,22 +90,22 @@ void DistortionState::update(const ALCcontext *context, const ALeffectslot *slot
     ComputePanGains(target.Main, coeffs, slot->Params.Gain*props->Distortion.Gain, mGain);
 }
 
-void DistortionState::process(const ALsizei samplesToDo, const FloatBufferLine *RESTRICT samplesIn, const ALsizei /*numInput*/, const al::span<FloatBufferLine> samplesOut)
+void DistortionState::process(const size_t samplesToDo, const al::span<const FloatBufferLine> samplesIn, const al::span<FloatBufferLine> samplesOut)
 {
     const ALfloat fc{mEdgeCoeff};
-    for(ALsizei base{0};base < samplesToDo;)
+    for(size_t base{0u};base < samplesToDo;)
     {
         /* Perform 4x oversampling to avoid aliasing. Oversampling greatly
          * improves distortion quality and allows to implement lowpass and
          * bandpass filters using high frequencies, at which classic IIR
          * filters became unstable.
          */
-        ALsizei todo{mini(BUFFERSIZE, (samplesToDo-base) * 4)};
+        size_t todo{minz(BUFFERSIZE, (samplesToDo-base) * 4)};
 
         /* Fill oversample buffer using zero stuffing. Multiply the sample by
          * the amount of oversampling to maintain the signal's power.
          */
-        for(ALsizei i{0};i < todo;i++)
+        for(size_t i{0u};i < todo;i++)
             mBuffer[0][i] = !(i&3) ? samplesIn[0][(i>>2)+base] * 4.0f : 0.0f;
 
         /* First step, do lowpass filtering of original signal. Additionally
@@ -117,26 +113,25 @@ void DistortionState::process(const ALsizei samplesToDo, const FloatBufferLine *
          * (which is fortunately first step of distortion). So combine three
          * operations into the one.
          */
-        mLowpass.process(mBuffer[1], mBuffer[0], todo);
+        mLowpass.process({mBuffer[0], todo}, mBuffer[1]);
 
         /* Second step, do distortion using waveshaper function to emulate
          * signal processing during tube overdriving. Three steps of
          * waveshaping are intended to modify waveform without boost/clipping/
          * attenuation process.
          */
-        for(ALsizei i{0};i < todo;i++)
+        auto proc_sample = [fc](float smp) -> float
         {
-            ALfloat smp{mBuffer[1][i]};
-
-            smp = (1.0f + fc) * smp/(1.0f + fc*fabsf(smp));
-            smp = (1.0f + fc) * smp/(1.0f + fc*fabsf(smp)) * -1.0f;
-            smp = (1.0f + fc) * smp/(1.0f + fc*fabsf(smp));
-
-            mBuffer[0][i] = smp;
-        }
+            smp = (1.0f + fc) * smp/(1.0f + fc*std::abs(smp));
+            smp = (1.0f + fc) * smp/(1.0f + fc*std::abs(smp)) * -1.0f;
+            smp = (1.0f + fc) * smp/(1.0f + fc*std::abs(smp));
+            return smp;
+        };
+        std::transform(std::begin(mBuffer[1]), std::begin(mBuffer[1])+todo, std::begin(mBuffer[0]),
+            proc_sample);
 
         /* Third step, do bandpass filtering of distorted signal. */
-        mBandpass.process(mBuffer[1], mBuffer[0], todo);
+        mBandpass.process({mBuffer[0], todo}, mBuffer[1]);
 
         todo >>= 2;
         const ALfloat *outgains{mGain};
@@ -149,7 +144,7 @@ void DistortionState::process(const ALsizei samplesToDo, const FloatBufferLine *
             if(!(std::fabs(gain) > GAIN_SILENCE_THRESHOLD))
                 continue;
 
-            for(ALsizei i{0};i < todo;i++)
+            for(size_t i{0u};i < todo;i++)
                 output[base+i] += gain * mBuffer[1][i*4];
         }
 
@@ -159,9 +154,9 @@ void DistortionState::process(const ALsizei samplesToDo, const FloatBufferLine *
 
 
 void Distortion_setParami(EffectProps*, ALCcontext *context, ALenum param, ALint)
-{ alSetError(context, AL_INVALID_ENUM, "Invalid distortion integer property 0x%04x", param); }
+{ context->setError(AL_INVALID_ENUM, "Invalid distortion integer property 0x%04x", param); }
 void Distortion_setParamiv(EffectProps*, ALCcontext *context, ALenum param, const ALint*)
-{ alSetError(context, AL_INVALID_ENUM, "Invalid distortion integer-vector property 0x%04x", param); }
+{ context->setError(AL_INVALID_ENUM, "Invalid distortion integer-vector property 0x%04x", param); }
 void Distortion_setParamf(EffectProps *props, ALCcontext *context, ALenum param, ALfloat val)
 {
     switch(param)
@@ -197,17 +192,16 @@ void Distortion_setParamf(EffectProps *props, ALCcontext *context, ALenum param,
             break;
 
         default:
-            alSetError(context, AL_INVALID_ENUM, "Invalid distortion float property 0x%04x",
-                       param);
+            context->setError(AL_INVALID_ENUM, "Invalid distortion float property 0x%04x", param);
     }
 }
 void Distortion_setParamfv(EffectProps *props, ALCcontext *context, ALenum param, const ALfloat *vals)
 { Distortion_setParamf(props, context, param, vals[0]); }
 
 void Distortion_getParami(const EffectProps*, ALCcontext *context, ALenum param, ALint*)
-{ alSetError(context, AL_INVALID_ENUM, "Invalid distortion integer property 0x%04x", param); }
+{ context->setError(AL_INVALID_ENUM, "Invalid distortion integer property 0x%04x", param); }
 void Distortion_getParamiv(const EffectProps*, ALCcontext *context, ALenum param, ALint*)
-{ alSetError(context, AL_INVALID_ENUM, "Invalid distortion integer-vector property 0x%04x", param); }
+{ context->setError(AL_INVALID_ENUM, "Invalid distortion integer-vector property 0x%04x", param); }
 void Distortion_getParamf(const EffectProps *props, ALCcontext *context, ALenum param, ALfloat *val)
 {
     switch(param)
@@ -233,8 +227,7 @@ void Distortion_getParamf(const EffectProps *props, ALCcontext *context, ALenum 
             break;
 
         default:
-            alSetError(context, AL_INVALID_ENUM, "Invalid distortion float property 0x%04x",
-                       param);
+            context->setError(AL_INVALID_ENUM, "Invalid distortion float property 0x%04x", param);
     }
 }
 void Distortion_getParamfv(const EffectProps *props, ALCcontext *context, ALenum param, ALfloat *vals)

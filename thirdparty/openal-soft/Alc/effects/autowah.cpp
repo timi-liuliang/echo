@@ -25,10 +25,9 @@
 
 #include <algorithm>
 
-#include "alMain.h"
+#include "al/auxeffectslot.h"
+#include "alcmain.h"
 #include "alcontext.h"
-#include "alAuxEffectSlot.h"
-#include "alError.h"
 #include "alu.h"
 #include "filters/biquad.h"
 #include "vecmat.h"
@@ -39,7 +38,7 @@ namespace {
 #define MAX_FREQ 2500.0f
 #define Q_FACTOR 5.0f
 
-struct ALautowahState final : public EffectState {
+struct AutowahState final : public EffectState {
     /* Effect parameters */
     ALfloat mAttackRate;
     ALfloat mReleaseRate;
@@ -72,12 +71,12 @@ struct ALautowahState final : public EffectState {
 
     ALboolean deviceUpdate(const ALCdevice *device) override;
     void update(const ALCcontext *context, const ALeffectslot *slot, const EffectProps *props, const EffectTarget target) override;
-    void process(const ALsizei samplesToDo, const FloatBufferLine *RESTRICT samplesIn, const ALsizei numInput, const al::span<FloatBufferLine> samplesOut) override;
+    void process(const size_t samplesToDo, const al::span<const FloatBufferLine> samplesIn, const al::span<FloatBufferLine> samplesOut) override;
 
-    DEF_NEWDEL(ALautowahState)
+    DEF_NEWDEL(AutowahState)
 };
 
-ALboolean ALautowahState::deviceUpdate(const ALCdevice *UNUSED(device))
+ALboolean AutowahState::deviceUpdate(const ALCdevice*)
 {
     /* (Re-)initializing parameters and clear the buffers. */
 
@@ -105,19 +104,20 @@ ALboolean ALautowahState::deviceUpdate(const ALCdevice *UNUSED(device))
     return AL_TRUE;
 }
 
-void ALautowahState::update(const ALCcontext *context, const ALeffectslot *slot, const EffectProps *props, const EffectTarget target)
+void AutowahState::update(const ALCcontext *context, const ALeffectslot *slot, const EffectProps *props, const EffectTarget target)
 {
-    const ALCdevice *device{context->Device};
+    const ALCdevice *device{context->mDevice.get()};
+    const auto frequency = static_cast<float>(device->Frequency);
 
     const ALfloat ReleaseTime{clampf(props->Autowah.ReleaseTime, 0.001f, 1.0f)};
 
-    mAttackRate    = expf(-1.0f / (props->Autowah.AttackTime*device->Frequency));
-    mReleaseRate   = expf(-1.0f / (ReleaseTime*device->Frequency));
+    mAttackRate    = std::exp(-1.0f / (props->Autowah.AttackTime*frequency));
+    mReleaseRate   = std::exp(-1.0f / (ReleaseTime*frequency));
     /* 0-20dB Resonance Peak gain */
     mResonanceGain = std::sqrt(std::log10(props->Autowah.Resonance)*10.0f / 3.0f);
     mPeakGain      = 1.0f - std::log10(props->Autowah.PeakGain/AL_AUTOWAH_MAX_PEAK_GAIN);
-    mFreqMinNorm   = MIN_FREQ / device->Frequency;
-    mBandwidthNorm = (MAX_FREQ-MIN_FREQ) / device->Frequency;
+    mFreqMinNorm   = MIN_FREQ / frequency;
+    mBandwidthNorm = (MAX_FREQ-MIN_FREQ) / frequency;
 
     mOutTarget = target.Main->Buffer;
     for(size_t i{0u};i < slot->Wet.Buffer.size();++i)
@@ -127,7 +127,7 @@ void ALautowahState::update(const ALCcontext *context, const ALeffectslot *slot,
     }
 }
 
-void ALautowahState::process(const ALsizei samplesToDo, const FloatBufferLine *RESTRICT samplesIn, const ALsizei numInput, const al::span<FloatBufferLine> samplesOut)
+void AutowahState::process(const size_t samplesToDo, const al::span<const FloatBufferLine> samplesIn, const al::span<FloatBufferLine> samplesOut)
 {
     const ALfloat attack_rate = mAttackRate;
     const ALfloat release_rate = mReleaseRate;
@@ -137,7 +137,7 @@ void ALautowahState::process(const ALsizei samplesToDo, const FloatBufferLine *R
     const ALfloat bandwidth = mBandwidthNorm;
 
     ALfloat env_delay{mEnvDelay};
-    for(ALsizei i{0};i < samplesToDo;i++)
+    for(size_t i{0u};i < samplesToDo;i++)
     {
         ALfloat w0, sample, a;
 
@@ -155,8 +155,8 @@ void ALautowahState::process(const ALsizei samplesToDo, const FloatBufferLine *R
     }
     mEnvDelay = env_delay;
 
-    ASSUME(numInput > 0);
-    for(ALsizei c{0};c < numInput;++c)
+    auto chandata = std::addressof(mChans[0]);
+    for(const auto &insamples : samplesIn)
     {
         /* This effectively inlines BiquadFilter_setParams for a peaking
          * filter and BiquadFilter_processC. The alpha and cosine components
@@ -164,10 +164,10 @@ void ALautowahState::process(const ALsizei samplesToDo, const FloatBufferLine *R
          * envelope. Because the filter changes for each sample, the
          * coefficients are transient and don't need to be held.
          */
-        ALfloat z1{mChans[c].Filter.z1};
-        ALfloat z2{mChans[c].Filter.z2};
+        ALfloat z1{chandata->Filter.z1};
+        ALfloat z2{chandata->Filter.z2};
 
-        for(ALsizei i{0};i < samplesToDo;i++)
+        for(size_t i{0u};i < samplesToDo;i++)
         {
             const ALfloat alpha = mEnv[i].alpha;
             const ALfloat cos_w0 = mEnv[i].cos_w0;
@@ -181,23 +181,24 @@ void ALautowahState::process(const ALsizei samplesToDo, const FloatBufferLine *R
             a[1] = -2.0f * cos_w0;
             a[2] =  1.0f - alpha/res_gain;
 
-            input = samplesIn[c][i];
+            input = insamples[i];
             output = input*(b[0]/a[0]) + z1;
             z1 = input*(b[1]/a[0]) - output*(a[1]/a[0]) + z2;
             z2 = input*(b[2]/a[0]) - output*(a[2]/a[0]);
             mBufferOut[i] = output;
         }
-        mChans[c].Filter.z1 = z1;
-        mChans[c].Filter.z2 = z2;
+        chandata->Filter.z1 = z1;
+        chandata->Filter.z2 = z2;
 
         /* Now, mix the processed sound data to the output. */
-        MixSamples(mBufferOut, samplesOut, mChans[c].CurrentGains, mChans[c].TargetGains,
-            samplesToDo, 0, samplesToDo);
+        MixSamples({mBufferOut, samplesToDo}, samplesOut, chandata->CurrentGains,
+            chandata->TargetGains, samplesToDo, 0);
+        ++chandata;
     }
 }
 
 
-void ALautowah_setParamf(EffectProps *props, ALCcontext *context, ALenum param, ALfloat val)
+void Autowah_setParamf(EffectProps *props, ALCcontext *context, ALenum param, ALfloat val)
 {
     switch(param)
     {
@@ -226,18 +227,18 @@ void ALautowah_setParamf(EffectProps *props, ALCcontext *context, ALenum param, 
             break;
 
         default:
-            alSetError(context, AL_INVALID_ENUM, "Invalid autowah float property 0x%04x", param);
+            context->setError(AL_INVALID_ENUM, "Invalid autowah float property 0x%04x", param);
     }
 }
-void ALautowah_setParamfv(EffectProps *props, ALCcontext *context, ALenum param, const ALfloat *vals)
-{ ALautowah_setParamf(props, context, param, vals[0]); }
+void Autowah_setParamfv(EffectProps *props, ALCcontext *context, ALenum param, const ALfloat *vals)
+{ Autowah_setParamf(props, context, param, vals[0]); }
 
-void ALautowah_setParami(EffectProps*, ALCcontext *context, ALenum param, ALint)
-{ alSetError(context, AL_INVALID_ENUM, "Invalid autowah integer property 0x%04x", param); }
-void ALautowah_setParamiv(EffectProps*, ALCcontext *context, ALenum param, const ALint*)
-{ alSetError(context, AL_INVALID_ENUM, "Invalid autowah integer vector property 0x%04x", param); }
+void Autowah_setParami(EffectProps*, ALCcontext *context, ALenum param, ALint)
+{ context->setError(AL_INVALID_ENUM, "Invalid autowah integer property 0x%04x", param); }
+void Autowah_setParamiv(EffectProps*, ALCcontext *context, ALenum param, const ALint*)
+{ context->setError(AL_INVALID_ENUM, "Invalid autowah integer vector property 0x%04x", param); }
 
-void ALautowah_getParamf(const EffectProps *props, ALCcontext *context, ALenum param, ALfloat *val)
+void Autowah_getParamf(const EffectProps *props, ALCcontext *context, ALenum param, ALfloat *val)
 {
     switch(param)
     {
@@ -258,25 +259,25 @@ void ALautowah_getParamf(const EffectProps *props, ALCcontext *context, ALenum p
             break;
 
         default:
-            alSetError(context, AL_INVALID_ENUM, "Invalid autowah float property 0x%04x", param);
+            context->setError(AL_INVALID_ENUM, "Invalid autowah float property 0x%04x", param);
     }
 
 }
-void ALautowah_getParamfv(const EffectProps *props, ALCcontext *context, ALenum param, ALfloat *vals)
-{ ALautowah_getParamf(props, context, param, vals); }
+void Autowah_getParamfv(const EffectProps *props, ALCcontext *context, ALenum param, ALfloat *vals)
+{ Autowah_getParamf(props, context, param, vals); }
 
-void ALautowah_getParami(const EffectProps*, ALCcontext *context, ALenum param, ALint*)
-{ alSetError(context, AL_INVALID_ENUM, "Invalid autowah integer property 0x%04x", param); }
-void ALautowah_getParamiv(const EffectProps*, ALCcontext *context, ALenum param, ALint*)
-{ alSetError(context, AL_INVALID_ENUM, "Invalid autowah integer vector property 0x%04x", param); }
+void Autowah_getParami(const EffectProps*, ALCcontext *context, ALenum param, ALint*)
+{ context->setError(AL_INVALID_ENUM, "Invalid autowah integer property 0x%04x", param); }
+void Autowah_getParamiv(const EffectProps*, ALCcontext *context, ALenum param, ALint*)
+{ context->setError(AL_INVALID_ENUM, "Invalid autowah integer vector property 0x%04x", param); }
 
-DEFINE_ALEFFECT_VTABLE(ALautowah);
+DEFINE_ALEFFECT_VTABLE(Autowah);
 
 
 struct AutowahStateFactory final : public EffectStateFactory {
-    EffectState *create() override { return new ALautowahState{}; }
+    EffectState *create() override { return new AutowahState{}; }
     EffectProps getDefaultProps() const noexcept override;
-    const EffectVtable *getEffectVtable() const noexcept override { return &ALautowah_vtable; }
+    const EffectVtable *getEffectVtable() const noexcept override { return &Autowah_vtable; }
 };
 
 EffectProps AutowahStateFactory::getDefaultProps() const noexcept

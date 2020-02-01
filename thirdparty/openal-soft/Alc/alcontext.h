@@ -1,33 +1,34 @@
 #ifndef ALCONTEXT_H
 #define ALCONTEXT_H
 
-#include <mutex>
 #include <atomic>
+#include <cstddef>
+#include <cstdint>
 #include <memory>
+#include <mutex>
 #include <thread>
+#include <utility>
 
 #include "AL/al.h"
 #include "AL/alc.h"
-#include "AL/alext.h"
-#include "inprogext.h"
 
-#include "atomic.h"
-#include "vector.h"
-#include "threads.h"
+#include "al/listener.h"
 #include "almalloc.h"
 #include "alnumeric.h"
-
-#include "alListener.h"
 #include "alu.h"
+#include "atomic.h"
+#include "inprogext.h"
+#include "intrusive_ptr.h"
+#include "logging.h"
+#include "threads.h"
+#include "vector.h"
+#include "voice.h"
 
-
-struct ALsource;
 struct ALeffectslot;
-struct ALcontextProps;
-struct ALlistenerProps;
-struct ALvoiceProps;
 struct ALeffectslotProps;
+struct ALsource;
 struct RingBuffer;
+
 
 enum class DistanceModel {
     InverseClamped  = AL_INVERSE_DISTANCE_CLAMPED,
@@ -40,6 +41,20 @@ enum class DistanceModel {
 
     Default = InverseClamped
 };
+
+
+struct ALcontextProps {
+    ALfloat DopplerFactor;
+    ALfloat DopplerVelocity;
+    ALfloat SpeedOfSound;
+    ALboolean SourceDistanceModel;
+    DistanceModel mDistanceModel;
+
+    std::atomic<ALcontextProps*> next;
+
+    DEF_NEWDEL(ALcontextProps)
+};
+
 
 struct SourceSubList {
     uint64_t FreeMask{~0_u64};
@@ -72,146 +87,110 @@ struct EffectSlotSubList {
     { std::swap(FreeMask, rhs.FreeMask); std::swap(EffectSlots, rhs.EffectSlots); return *this; }
 };
 
-struct ALCcontext {
-    RefCount ref{1u};
+struct ALCcontext : public al::intrusive_ref<ALCcontext> {
+    al::vector<SourceSubList> mSourceList;
+    ALuint mNumSources{0};
+    std::mutex mSourceLock;
 
-    al::vector<SourceSubList> SourceList;
-    ALuint NumSources{0};
-    std::mutex SourceLock;
+    al::vector<EffectSlotSubList> mEffectSlotList;
+    ALuint mNumEffectSlots{0u};
+    std::mutex mEffectSlotLock;
 
-    al::vector<EffectSlotSubList> EffectSlotList;
-    ALuint NumEffectSlots{0u};
-    std::mutex EffectSlotLock;
-
-    std::atomic<ALenum> LastError{AL_NO_ERROR};
+    std::atomic<ALenum> mLastError{AL_NO_ERROR};
 
     DistanceModel mDistanceModel{DistanceModel::Default};
-    ALboolean SourceDistanceModel{AL_FALSE};
+    ALboolean mSourceDistanceModel{AL_FALSE};
 
-    ALfloat DopplerFactor{1.0f};
-    ALfloat DopplerVelocity{1.0f};
-    ALfloat SpeedOfSound{};
-    ALfloat MetersPerUnit{1.0f};
+    ALfloat mDopplerFactor{1.0f};
+    ALfloat mDopplerVelocity{1.0f};
+    ALfloat mSpeedOfSound{SPEEDOFSOUNDMETRESPERSEC};
 
-    std::atomic_flag PropsClean;
-    std::atomic<bool> DeferUpdates{false};
+    std::atomic_flag mPropsClean;
+    std::atomic<bool> mDeferUpdates{false};
 
-    std::mutex PropLock;
+    std::mutex mPropLock;
 
     /* Counter for the pre-mixing updates, in 31.1 fixed point (lowest bit
      * indicates if updates are currently happening).
      */
-    RefCount UpdateCount{0u};
-    std::atomic<bool> HoldUpdates{false};
+    RefCount mUpdateCount{0u};
+    std::atomic<bool> mHoldUpdates{false};
 
-    ALfloat GainBoost{1.0f};
+    ALfloat mGainBoost{1.0f};
 
-    std::atomic<ALcontextProps*> Update{nullptr};
+    std::atomic<ALcontextProps*> mUpdate{nullptr};
 
     /* Linked lists of unused property containers, free to use for future
      * updates.
      */
-    std::atomic<ALcontextProps*> FreeContextProps{nullptr};
-    std::atomic<ALlistenerProps*> FreeListenerProps{nullptr};
-    std::atomic<ALvoiceProps*> FreeVoiceProps{nullptr};
-    std::atomic<ALeffectslotProps*> FreeEffectslotProps{nullptr};
+    std::atomic<ALcontextProps*> mFreeContextProps{nullptr};
+    std::atomic<ALlistenerProps*> mFreeListenerProps{nullptr};
+    std::atomic<ALvoiceProps*> mFreeVoiceProps{nullptr};
+    std::atomic<ALeffectslotProps*> mFreeEffectslotProps{nullptr};
 
-    std::unique_ptr<al::FlexArray<ALvoice>> Voices{nullptr};
-    std::atomic<ALuint> VoiceCount{0u};
+    al::vector<ALvoice> mVoices;
 
     using ALeffectslotArray = al::FlexArray<ALeffectslot*>;
-    std::atomic<ALeffectslotArray*> ActiveAuxSlots{nullptr};
+    std::atomic<ALeffectslotArray*> mActiveAuxSlots{nullptr};
 
-    std::thread EventThread;
-    al::semaphore EventSem;
-    std::unique_ptr<RingBuffer> AsyncEvents;
-    std::atomic<ALbitfieldSOFT> EnabledEvts{0u};
-    std::mutex EventCbLock;
-    ALEVENTPROCSOFT EventCb{};
-    void *EventParam{nullptr};
+    std::thread mEventThread;
+    al::semaphore mEventSem;
+    std::unique_ptr<RingBuffer> mAsyncEvents;
+    std::atomic<ALbitfieldSOFT> mEnabledEvts{0u};
+    std::mutex mEventCbLock;
+    ALEVENTPROCSOFT mEventCb{};
+    void *mEventParam{nullptr};
 
     /* Default effect slot */
-    std::unique_ptr<ALeffectslot> DefaultSlot;
+    std::unique_ptr<ALeffectslot> mDefaultSlot;
 
-    ALCdevice *const Device;
-    const ALCchar *ExtensionList{nullptr};
+    const al::intrusive_ptr<ALCdevice> mDevice;
+    const ALCchar *mExtensionList{nullptr};
 
-    ALlistener Listener{};
+    ALlistener mListener{};
 
 
-    ALCcontext(ALCdevice *device);
+    ALCcontext(al::intrusive_ptr<ALCdevice> device);
     ALCcontext(const ALCcontext&) = delete;
     ALCcontext& operator=(const ALCcontext&) = delete;
     ~ALCcontext();
 
+    void init();
+    /**
+     * Removes the context from its device and removes it from being current on
+     * the running thread or globally. Returns true if other contexts still
+     * exist on the device.
+     */
+    bool deinit();
+
+    /**
+     * Defers/suspends updates for the given context's listener and sources.
+     * This does *NOT* stop mixing, but rather prevents certain property
+     * changes from taking effect.
+     */
+    void deferUpdates() noexcept { mDeferUpdates.store(true); }
+
+    /** Resumes update processing after being deferred. */
+    void processUpdates();
+
+    void setError(ALenum errorCode, const char *msg, ...) DECL_FORMAT(printf, 3, 4);
+
     DEF_NEWDEL(ALCcontext)
 };
 
-void ALCcontext_DecRef(ALCcontext *context);
-
-void UpdateContextProps(ALCcontext *context);
-
-void ALCcontext_DeferUpdates(ALCcontext *context);
-void ALCcontext_ProcessUpdates(ALCcontext *context);
+#define SETERR_RETURN(ctx, err, retval, ...) do {                             \
+    (ctx)->setError((err), __VA_ARGS__);                                      \
+    return retval;                                                            \
+} while(0)
 
 
-/* Simple RAII context reference. Takes the reference of the provided
- * ALCcontext, and decrements it when leaving scope. Movable (transfer
- * reference) but not copyable (no new references).
- */
-class ContextRef {
-    ALCcontext *mCtx{nullptr};
-
-    void reset() noexcept
-    {
-        if(mCtx)
-            ALCcontext_DecRef(mCtx);
-        mCtx = nullptr;
-    }
-
-public:
-    ContextRef() noexcept = default;
-    ContextRef(ContextRef&& rhs) noexcept : mCtx{rhs.mCtx}
-    { rhs.mCtx = nullptr; }
-    explicit ContextRef(ALCcontext *ctx) noexcept : mCtx(ctx) { }
-    ~ContextRef() { reset(); }
-
-    ContextRef& operator=(const ContextRef&) = delete;
-    ContextRef& operator=(ContextRef&& rhs) noexcept
-    { std::swap(mCtx, rhs.mCtx); return *this; }
-
-    operator bool() const noexcept { return mCtx != nullptr; }
-
-    ALCcontext* operator->() const noexcept { return mCtx; }
-    ALCcontext* get() const noexcept { return mCtx; }
-
-    ALCcontext* release() noexcept
-    {
-        ALCcontext *ret{mCtx};
-        mCtx = nullptr;
-        return ret;
-    }
-};
-
-inline bool operator==(const ContextRef &lhs, const ALCcontext *rhs) noexcept
-{ return lhs.get() == rhs; }
-inline bool operator!=(const ContextRef &lhs, const ALCcontext *rhs) noexcept
-{ return !(lhs == rhs); }
-inline bool operator<(const ContextRef &lhs, const ALCcontext *rhs) noexcept
-{ return lhs.get() < rhs; }
+using ContextRef = al::intrusive_ptr<ALCcontext>;
 
 ContextRef GetContextRef(void);
 
+void UpdateContextProps(ALCcontext *context);
 
-struct ALcontextProps {
-    ALfloat DopplerFactor;
-    ALfloat DopplerVelocity;
-    ALfloat SpeedOfSound;
-    ALboolean SourceDistanceModel;
-    DistanceModel mDistanceModel;
-    ALfloat MetersPerUnit;
 
-    std::atomic<ALcontextProps*> next;
-};
+extern bool TrapALError;
 
 #endif /* ALCONTEXT_H */

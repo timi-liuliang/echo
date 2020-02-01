@@ -22,7 +22,7 @@
 
 #include "backends/loopback.h"
 
-#include "alMain.h"
+#include "alcmain.h"
 #include "alu.h"
 
 
@@ -31,29 +31,28 @@ namespace {
 struct LoopbackBackend final : public BackendBase {
     LoopbackBackend(ALCdevice *device) noexcept : BackendBase{device} { }
 
-    ALCenum open(const ALCchar *name) override;
-    ALCboolean reset() override;
-    ALCboolean start() override;
+    void open(const ALCchar *name) override;
+    bool reset() override;
+    bool start() override;
     void stop() override;
 
     DEF_NEWDEL(LoopbackBackend)
 };
 
 
-ALCenum LoopbackBackend::open(const ALCchar *name)
+void LoopbackBackend::open(const ALCchar *name)
 {
     mDevice->DeviceName = name;
-    return ALC_NO_ERROR;
 }
 
-ALCboolean LoopbackBackend::reset()
+bool LoopbackBackend::reset()
 {
     SetDefaultWFXChannelOrder(mDevice);
-    return ALC_TRUE;
+    return true;
 }
 
-ALCboolean LoopbackBackend::start()
-{ return ALC_TRUE; }
+bool LoopbackBackend::start()
+{ return true; }
 
 void LoopbackBackend::stop()
 { }
@@ -64,13 +63,13 @@ void LoopbackBackend::stop()
 bool LoopbackBackendFactory::init()
 { return true; }
 
-bool LoopbackBackendFactory::querySupport(BackendType UNUSED(type))
+bool LoopbackBackendFactory::querySupport(BackendType)
 { return true; }
 
 void LoopbackBackendFactory::probe(DevProbe, std::string*)
 { }
 
-BackendPtr LoopbackBackendFactory::createBackend(ALCdevice *device, BackendType UNUSED(type))
+BackendPtr LoopbackBackendFactory::createBackend(ALCdevice *device, BackendType)
 { return BackendPtr{new LoopbackBackend{device}}; }
 
 BackendFactory &LoopbackBackendFactory::getFactory()

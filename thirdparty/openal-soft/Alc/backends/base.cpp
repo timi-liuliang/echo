@@ -1,14 +1,17 @@
 
 #include "config.h"
 
-#include <cstdlib>
+#include "base.h"
 
+#include <atomic>
 #include <thread>
 
-#include "alMain.h"
-#include "alu.h"
+#include "AL/al.h"
 
-#include "backends/base.h"
+#include "alcmain.h"
+#include "alexcpt.h"
+#include "alnumeric.h"
+#include "atomic.h"
 
 
 ClockLatency GetClockLatency(ALCdevice *device)
@@ -26,10 +29,10 @@ BackendBase::BackendBase(ALCdevice *device) noexcept : mDevice{device}
 
 BackendBase::~BackendBase() = default;
 
-ALCboolean BackendBase::reset()
-{ return ALC_FALSE; }
+bool BackendBase::reset()
+{ throw al::backend_exception{ALC_INVALID_DEVICE, "Invalid BackendBase call"}; }
 
-ALCenum BackendBase::captureSamples(void* UNUSED(buffer), ALCuint UNUSED(samples))
+ALCenum BackendBase::captureSamples(al::byte*, ALCuint)
 { return ALC_INVALID_DEVICE; }
 
 ALCuint BackendBase::availableSamples()
@@ -41,17 +44,18 @@ ClockLatency BackendBase::getClockLatency()
 
     ALuint refcount;
     do {
-        while(((refcount=mDevice->MixCount.load(std::memory_order_acquire))&1))
+        while(((refcount=ReadRef(mDevice->MixCount))&1) != 0)
             std::this_thread::yield();
         ret.ClockTime = GetDeviceClockTime(mDevice);
         std::atomic_thread_fence(std::memory_order_acquire);
-    } while(refcount != mDevice->MixCount.load(std::memory_order_relaxed));
+    } while(refcount != ReadRef(mDevice->MixCount));
 
     /* NOTE: The device will generally have about all but one periods filled at
      * any given time during playback. Without a more accurate measurement from
      * the output, this is an okay approximation.
      */
-    ret.Latency  = std::chrono::seconds{maxi(mDevice->BufferSize-mDevice->UpdateSize, 0)};
+    ret.Latency = std::max(std::chrono::seconds{mDevice->BufferSize-mDevice->UpdateSize},
+        std::chrono::seconds::zero());
     ret.Latency /= mDevice->Frequency;
 
     return ret;

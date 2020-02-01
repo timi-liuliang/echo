@@ -25,11 +25,10 @@
 
 #include <algorithm>
 
-#include "alMain.h"
+#include "al/auxeffectslot.h"
+#include "al/filter.h"
+#include "alcmain.h"
 #include "alcontext.h"
-#include "alFilter.h"
-#include "alAuxEffectSlot.h"
-#include "alError.h"
 #include "alu.h"
 #include "filters/biquad.h"
 #include "vector.h"
@@ -43,9 +42,9 @@ struct EchoState final : public EffectState {
     // The echo is two tap. The delay is the number of samples from before the
     // current offset
     struct {
-        ALsizei delay{0};
+        size_t delay{0u};
     } mTap[2];
-    ALsizei mOffset{0};
+    size_t mOffset{0u};
 
     /* The panning gains for the two taps */
     struct {
@@ -60,22 +59,19 @@ struct EchoState final : public EffectState {
 
     ALboolean deviceUpdate(const ALCdevice *device) override;
     void update(const ALCcontext *context, const ALeffectslot *slot, const EffectProps *props, const EffectTarget target) override;
-    void process(const ALsizei samplesToDo, const FloatBufferLine *RESTRICT samplesIn, const ALsizei numInput, const al::span<FloatBufferLine> samplesOut) override;
+    void process(const size_t samplesToDo, const al::span<const FloatBufferLine> samplesIn, const al::span<FloatBufferLine> samplesOut) override;
 
     DEF_NEWDEL(EchoState)
 };
 
 ALboolean EchoState::deviceUpdate(const ALCdevice *Device)
 {
-    ALuint maxlen;
+    const auto frequency = static_cast<float>(Device->Frequency);
 
     // Use the next power of 2 for the buffer length, so the tap offsets can be
     // wrapped using a mask instead of a modulo
-    maxlen = float2int(AL_ECHO_MAX_DELAY*Device->Frequency + 0.5f) +
-             float2int(AL_ECHO_MAX_LRDELAY*Device->Frequency + 0.5f);
-    maxlen = NextPowerOf2(maxlen);
-    if(maxlen <= 0) return AL_FALSE;
-
+    const ALuint maxlen{NextPowerOf2(float2uint(AL_ECHO_MAX_DELAY*frequency + 0.5f) +
+        float2uint(AL_ECHO_MAX_LRDELAY*frequency + 0.5f))};
     if(maxlen != mSampleBuffer.size())
     {
         mSampleBuffer.resize(maxlen);
@@ -94,15 +90,14 @@ ALboolean EchoState::deviceUpdate(const ALCdevice *Device)
 
 void EchoState::update(const ALCcontext *context, const ALeffectslot *slot, const EffectProps *props, const EffectTarget target)
 {
-    const ALCdevice *device = context->Device;
+    const ALCdevice *device{context->mDevice.get()};
     const auto frequency = static_cast<ALfloat>(device->Frequency);
 
-    mTap[0].delay = maxi(float2int(props->Echo.Delay*frequency + 0.5f), 1);
-    mTap[1].delay = float2int(props->Echo.LRDelay*frequency + 0.5f) + mTap[0].delay;
+    mTap[0].delay = maxu(float2uint(props->Echo.Delay*frequency + 0.5f), 1);
+    mTap[1].delay = float2uint(props->Echo.LRDelay*frequency + 0.5f) + mTap[0].delay;
 
     const ALfloat gainhf{maxf(1.0f - props->Echo.Damping, 0.0625f)}; /* Limit -24dB */
-    mFilter.setParams(BiquadType::HighShelf, gainhf, LOWPASSFREQREF/frequency,
-        mFilter.rcpQFromSlope(gainhf, 1.0f));
+    mFilter.setParamsFromSlope(BiquadType::HighShelf, LOWPASSFREQREF/frequency, gainhf, 1.0f);
 
     mFeedGain = props->Echo.Feedback;
 
@@ -118,26 +113,26 @@ void EchoState::update(const ALCcontext *context, const ALeffectslot *slot, cons
     ComputePanGains(target.Main, coeffs[1], slot->Params.Gain, mGains[1].Target);
 }
 
-void EchoState::process(const ALsizei samplesToDo, const FloatBufferLine *RESTRICT samplesIn, const ALsizei /*numInput*/, const al::span<FloatBufferLine> samplesOut)
+void EchoState::process(const size_t samplesToDo, const al::span<const FloatBufferLine> samplesIn, const al::span<FloatBufferLine> samplesOut)
 {
-    const auto mask = static_cast<ALsizei>(mSampleBuffer.size()-1);
+    const size_t mask{mSampleBuffer.size()-1};
     ALfloat *RESTRICT delaybuf{mSampleBuffer.data()};
-    ALsizei offset{mOffset};
-    ALsizei tap1{offset - mTap[0].delay};
-    ALsizei tap2{offset - mTap[1].delay};
+    size_t offset{mOffset};
+    size_t tap1{offset - mTap[0].delay};
+    size_t tap2{offset - mTap[1].delay};
     ALfloat z1, z2;
 
     ASSUME(samplesToDo > 0);
-    ASSUME(mask > 0);
 
+    const BiquadFilter filter{mFilter};
     std::tie(z1, z2) = mFilter.getComponents();
-    for(ALsizei i{0};i < samplesToDo;)
+    for(size_t i{0u};i < samplesToDo;)
     {
         offset &= mask;
         tap1 &= mask;
         tap2 &= mask;
 
-        ALsizei td{mini(mask+1 - maxi(offset, maxi(tap1, tap2)), samplesToDo-i)};
+        size_t td{minz(mask+1 - maxz(offset, maxz(tap1, tap2)), samplesToDo-i)};
         do {
             /* Feed the delay buffer's input first. */
             delaybuf[offset] = samplesIn[0][i];
@@ -150,22 +145,22 @@ void EchoState::process(const ALsizei samplesToDo, const FloatBufferLine *RESTRI
             const float feedb{mTempBuffer[1][i++]};
 
             /* Add feedback to the delay buffer with damping and attenuation. */
-            delaybuf[offset++] += mFilter.processOne(feedb, z1, z2) * mFeedGain;
+            delaybuf[offset++] += filter.processOne(feedb, z1, z2) * mFeedGain;
         } while(--td);
     }
     mFilter.setComponents(z1, z2);
     mOffset = offset;
 
     for(ALsizei c{0};c < 2;c++)
-        MixSamples(mTempBuffer[c], samplesOut, mGains[c].Current, mGains[c].Target, samplesToDo, 0,
-            samplesToDo);
+        MixSamples({mTempBuffer[c], samplesToDo}, samplesOut, mGains[c].Current, mGains[c].Target,
+            samplesToDo, 0);
 }
 
 
 void Echo_setParami(EffectProps*, ALCcontext *context, ALenum param, ALint)
-{ alSetError(context, AL_INVALID_ENUM, "Invalid echo integer property 0x%04x", param); }
+{ context->setError(AL_INVALID_ENUM, "Invalid echo integer property 0x%04x", param); }
 void Echo_setParamiv(EffectProps*, ALCcontext *context, ALenum param, const ALint*)
-{ alSetError(context, AL_INVALID_ENUM, "Invalid echo integer-vector property 0x%04x", param); }
+{ context->setError(AL_INVALID_ENUM, "Invalid echo integer-vector property 0x%04x", param); }
 void Echo_setParamf(EffectProps *props, ALCcontext *context, ALenum param, ALfloat val)
 {
     switch(param)
@@ -201,16 +196,16 @@ void Echo_setParamf(EffectProps *props, ALCcontext *context, ALenum param, ALflo
             break;
 
         default:
-            alSetError(context, AL_INVALID_ENUM, "Invalid echo float property 0x%04x", param);
+            context->setError(AL_INVALID_ENUM, "Invalid echo float property 0x%04x", param);
     }
 }
 void Echo_setParamfv(EffectProps *props, ALCcontext *context, ALenum param, const ALfloat *vals)
 { Echo_setParamf(props, context, param, vals[0]); }
 
 void Echo_getParami(const EffectProps*, ALCcontext *context, ALenum param, ALint*)
-{ alSetError(context, AL_INVALID_ENUM, "Invalid echo integer property 0x%04x", param); }
+{ context->setError(AL_INVALID_ENUM, "Invalid echo integer property 0x%04x", param); }
 void Echo_getParamiv(const EffectProps*, ALCcontext *context, ALenum param, ALint*)
-{ alSetError(context, AL_INVALID_ENUM, "Invalid echo integer-vector property 0x%04x", param); }
+{ context->setError(AL_INVALID_ENUM, "Invalid echo integer-vector property 0x%04x", param); }
 void Echo_getParamf(const EffectProps *props, ALCcontext *context, ALenum param, ALfloat *val)
 {
     switch(param)
@@ -236,7 +231,7 @@ void Echo_getParamf(const EffectProps *props, ALCcontext *context, ALenum param,
             break;
 
         default:
-            alSetError(context, AL_INVALID_ENUM, "Invalid echo float property 0x%04x", param);
+            context->setError(AL_INVALID_ENUM, "Invalid echo float property 0x%04x", param);
     }
 }
 void Echo_getParamfv(const EffectProps *props, ALCcontext *context, ALenum param, ALfloat *vals)

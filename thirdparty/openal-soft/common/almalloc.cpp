@@ -10,19 +10,16 @@
 #ifdef HAVE_MALLOC_H
 #include <malloc.h>
 #endif
-#ifdef HAVE_WINDOWS_H
-#include <windows.h>
-#else
-#include <unistd.h>
-#endif
 
+
+#define ALIGNED_ALLOC_AVAILABLE (__STDC_VERSION__ >= 201112L || __cplusplus >= 201703L)
 
 void *al_malloc(size_t alignment, size_t size)
 {
     assert((alignment & (alignment-1)) == 0);
     alignment = std::max(alignment, alignof(std::max_align_t));
 
-#if defined(HAVE_ALIGNED_ALLOC)
+#if ALIGNED_ALLOC_AVAILABLE
     size = (size+(alignment-1))&~(alignment-1);
     return aligned_alloc(alignment, size);
 #elif defined(HAVE_POSIX_MEMALIGN)
@@ -33,11 +30,11 @@ void *al_malloc(size_t alignment, size_t size)
 #elif defined(HAVE__ALIGNED_MALLOC)
     return _aligned_malloc(size, alignment);
 #else
-    char *ret = static_cast<char*>(malloc(size+alignment));
+    auto *ret = static_cast<char*>(malloc(size+alignment));
     if(ret != nullptr)
     {
         *(ret++) = 0x00;
-        while(((ptrdiff_t)ret&(alignment-1)) != 0)
+        while((reinterpret_cast<uintptr_t>(ret)&(alignment-1)) != 0)
             *(ret++) = 0x55;
     }
     return ret;
@@ -53,14 +50,14 @@ void *al_calloc(size_t alignment, size_t size)
 
 void al_free(void *ptr) noexcept
 {
-#if defined(HAVE_ALIGNED_ALLOC) || defined(HAVE_POSIX_MEMALIGN)
+#if ALIGNED_ALLOC_AVAILABLE || defined(HAVE_POSIX_MEMALIGN)
     free(ptr);
 #elif defined(HAVE__ALIGNED_MALLOC)
     _aligned_free(ptr);
 #else
     if(ptr != nullptr)
     {
-        char *finder = static_cast<char*>(ptr);
+        auto *finder = static_cast<char*>(ptr);
         do {
             --finder;
         } while(*finder == 0x55);

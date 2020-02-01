@@ -29,25 +29,23 @@
 
 
 template<>
-const ALfloat *Resample_<LerpTag,SSE4Tag>(const InterpState* UNUSED(state),
-  const ALfloat *RESTRICT src, ALsizei frac, ALint increment,
-  ALfloat *RESTRICT dst, ALsizei dstlen)
+const ALfloat *Resample_<LerpTag,SSE4Tag>(const InterpState*, const ALfloat *RESTRICT src,
+    ALuint frac, ALuint increment, const al::span<float> dst)
 {
-    const __m128i increment4{_mm_set1_epi32(increment*4)};
+    const __m128i increment4{_mm_set1_epi32(static_cast<int>(increment*4))};
     const __m128 fracOne4{_mm_set1_ps(1.0f/FRACTIONONE)};
     const __m128i fracMask4{_mm_set1_epi32(FRACTIONMASK)};
 
-    ASSUME(frac > 0);
-    ASSUME(increment > 0);
-    ASSUME(dstlen >= 0);
+    alignas(16) ALuint pos_[4], frac_[4];
+    InitPosArrays(frac, increment, frac_, pos_, 4);
+    __m128i frac4{_mm_setr_epi32(static_cast<int>(frac_[0]), static_cast<int>(frac_[1]),
+        static_cast<int>(frac_[2]), static_cast<int>(frac_[3]))};
+    __m128i pos4{_mm_setr_epi32(static_cast<int>(pos_[0]), static_cast<int>(pos_[1]),
+        static_cast<int>(pos_[2]), static_cast<int>(pos_[3]))};
 
-    alignas(16) ALsizei pos_[4], frac_[4];
-    InitiatePositionArrays(frac, increment, frac_, pos_, 4);
-    __m128i frac4{_mm_setr_epi32(frac_[0], frac_[1], frac_[2], frac_[3])};
-    __m128i pos4{_mm_setr_epi32(pos_[0], pos_[1], pos_[2], pos_[3])};
-
-    const ALsizei todo{dstlen & ~3};
-    for(ALsizei i{0};i < todo;i += 4)
+    auto dst_iter = dst.begin();
+    const auto aligned_end = (dst.size()&~3u) + dst_iter;
+    while(dst_iter != aligned_end)
     {
         const int pos0{_mm_extract_epi32(pos4, 0)};
         const int pos1{_mm_extract_epi32(pos4, 1)};
@@ -61,26 +59,30 @@ const ALfloat *Resample_<LerpTag,SSE4Tag>(const InterpState* UNUSED(state),
         const __m128 mu{_mm_mul_ps(_mm_cvtepi32_ps(frac4), fracOne4)};
         const __m128 out{_mm_add_ps(val1, _mm_mul_ps(mu, r0))};
 
-        _mm_store_ps(&dst[i], out);
+        _mm_store_ps(dst_iter, out);
+        dst_iter += 4;
 
         frac4 = _mm_add_epi32(frac4, increment4);
         pos4 = _mm_add_epi32(pos4, _mm_srli_epi32(frac4, FRACTIONBITS));
         frac4 = _mm_and_si128(frac4, fracMask4);
     }
 
-    /* NOTE: These four elements represent the position *after* the last four
-     * samples, so the lowest element is the next position to resample.
-     */
-    ALsizei pos{_mm_cvtsi128_si32(pos4)};
-    frac = _mm_cvtsi128_si32(frac4);
-
-    for(ALsizei i{todo};i < dstlen;++i)
+    if(dst_iter != dst.end())
     {
-        dst[i] = lerp(src[pos], src[pos+1], frac * (1.0f/FRACTIONONE));
+        /* NOTE: These four elements represent the position *after* the last
+         * four samples, so the lowest element is the next position to
+         * resample.
+         */
+        src += static_cast<ALuint>(_mm_cvtsi128_si32(pos4));
+        frac = static_cast<ALuint>(_mm_cvtsi128_si32(frac4));
 
-        frac += increment;
-        pos  += frac>>FRACTIONBITS;
-        frac &= FRACTIONMASK;
+        do {
+            *(dst_iter++) = lerp(src[0], src[1], static_cast<float>(frac) * (1.0f/FRACTIONONE));
+
+            frac += increment;
+            src  += frac>>FRACTIONBITS;
+            frac &= FRACTIONMASK;
+        } while(dst_iter != dst.end());
     }
-    return dst;
+    return dst.begin();
 }

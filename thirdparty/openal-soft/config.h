@@ -8,12 +8,6 @@
 /* Define if HRTF data is embedded in the library */
 #define ALSOFT_EMBED_HRTF_DATA
 
-/* Define if we have the sysconf function */
-/* #undef HAVE_SYSCONF */
-
-/* Define if we have the C11 aligned_alloc function */
-/* #undef HAVE_ALIGNED_ALLOC */
-
 /* Define if we have the posix_memalign function */
 /* #undef HAVE_POSIX_MEMALIGN */
 
@@ -27,10 +21,10 @@
 /* #undef HAVE_GETOPT */
 
 /* Define if we have SSE CPU extensions */
-#define HAVE_SSE
-#define HAVE_SSE2
-#define HAVE_SSE3
-#define HAVE_SSE4_1
+/* #define HAVE_SSE */
+/* #define HAVE_SSE2 */
+/* #define HAVE_SSE3 */
+/* #define HAVE_SSE4_1 */
 
 /* Define if we have ARM Neon CPU extensions */
 /* #undef HAVE_NEON */
@@ -54,7 +48,7 @@
 #define HAVE_WASAPI
 
 /* Define if we have the DSound backend */
-#define HAVE_DSOUND
+/* #define HAVE_DSOUND */
 
 /* Define if we have the Windows Multimedia backend */
 #define HAVE_WINMM
@@ -86,20 +80,8 @@
 /* Define to the size of a long int type */
 #define SIZEOF_LONG 4
 
-/* Define to the size of a long long int type */
-#define SIZEOF_LONG_LONG 8
-
-/* Define if we have GCC's destructor attribute */
-/* #undef HAVE_GCC_DESTRUCTOR */
-
 /* Define if we have GCC's format attribute */
 /* #undef HAVE_GCC_FORMAT */
-
-/* Define if we have stdint.h */
-#define HAVE_STDINT_H
-
-/* Define if we have windows.h */
-#define HAVE_WINDOWS_H
 
 /* Define if we have dlfcn.h */
 /* #undef HAVE_DLFCN_H */
@@ -112,9 +94,6 @@
 
 /* Define if we have dirent.h */
 /* #undef HAVE_DIRENT_H */
-
-/* Define if we have strings.h */
-/* #undef HAVE_STRINGS_H */
 
 /* Define if we have cpuid.h */
 /* #undef HAVE_CPUID_H */
@@ -131,15 +110,6 @@
 /* Define if we have initguid.h */
 /* #undef HAVE_INITGUID_H */
 
-/* Define if we have ieeefp.h */
-/* #undef HAVE_IEEEFP_H */
-
-/* Define if we have float.h */
-#define HAVE_FLOAT_H
-
-/* Define if we have fenv.h */
-#define HAVE_FENV_H
-
 /* Define if we have GCC's __get_cpuid() */
 /* #undef HAVE_GCC_GET_CPUID */
 
@@ -147,7 +117,7 @@
 #define HAVE_CPUID_INTRINSIC
 
 /* Define if we have the _BitScanForward64() intrinsic */
-/* #undef HAVE_BITSCANFORWARD64_INTRINSIC */
+#define HAVE_BITSCANFORWARD64_INTRINSIC
 
 /* Define if we have the _BitScanForward() intrinsic */
 #define HAVE_BITSCANFORWARD_INTRINSIC

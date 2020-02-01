@@ -26,10 +26,9 @@
 #include <cmath>
 #include <algorithm>
 
-#include "alMain.h"
+#include "al/auxeffectslot.h"
+#include "alcmain.h"
 #include "alcontext.h"
-#include "alAuxEffectSlot.h"
-#include "alError.h"
 #include "alu.h"
 #include "filters/biquad.h"
 #include "vecmat.h"
@@ -43,32 +42,24 @@ namespace {
 #define WAVEFORM_FRACONE   (1<<WAVEFORM_FRACBITS)
 #define WAVEFORM_FRACMASK  (WAVEFORM_FRACONE-1)
 
-inline ALfloat Sin(ALsizei index)
+inline float Sin(ALuint index)
 {
-    return std::sin(static_cast<ALfloat>(index) *
-        (al::MathDefs<float>::Tau() / ALfloat{WAVEFORM_FRACONE}));
+    constexpr float scale{al::MathDefs<float>::Tau() / WAVEFORM_FRACONE};
+    return std::sin(static_cast<float>(index) * scale);
 }
 
-inline ALfloat Saw(ALsizei index)
-{
-    return static_cast<ALfloat>(index)*(2.0f/WAVEFORM_FRACONE) - 1.0f;
-}
+inline float Saw(ALuint index)
+{ return static_cast<float>(index)*(2.0f/WAVEFORM_FRACONE) - 1.0f; }
 
-inline ALfloat Square(ALsizei index)
-{
-    return static_cast<ALfloat>(((index>>(WAVEFORM_FRACBITS-2))&2) - 1);
-}
+inline float Square(ALuint index)
+{ return static_cast<float>(static_cast<int>((index>>(WAVEFORM_FRACBITS-2))&2) - 1); }
 
-inline ALfloat One(ALsizei UNUSED(index))
-{
-    return 1.0f;
-}
+inline float One(ALuint) { return 1.0f; }
 
-template<ALfloat func(ALsizei)>
-void Modulate(ALfloat *RESTRICT dst, ALsizei index, const ALsizei step, ALsizei todo)
+template<float (&func)(ALuint)>
+void Modulate(float *RESTRICT dst, ALuint index, const ALuint step, size_t todo)
 {
-    ALsizei i;
-    for(i = 0;i < todo;i++)
+    for(size_t i{0u};i < todo;i++)
     {
         index += step;
         index &= WAVEFORM_FRACMASK;
@@ -78,10 +69,10 @@ void Modulate(ALfloat *RESTRICT dst, ALsizei index, const ALsizei step, ALsizei 
 
 
 struct ModulatorState final : public EffectState {
-    void (*mGetSamples)(ALfloat*RESTRICT, ALsizei, const ALsizei, ALsizei){};
+    void (*mGetSamples)(float*RESTRICT, ALuint, const ALuint, size_t){};
 
-    ALsizei mIndex{0};
-    ALsizei mStep{1};
+    ALuint mIndex{0};
+    ALuint mStep{1};
 
     struct {
         BiquadFilter Filter;
@@ -93,12 +84,12 @@ struct ModulatorState final : public EffectState {
 
     ALboolean deviceUpdate(const ALCdevice *device) override;
     void update(const ALCcontext *context, const ALeffectslot *slot, const EffectProps *props, const EffectTarget target) override;
-    void process(const ALsizei samplesToDo, const FloatBufferLine *RESTRICT samplesIn, const ALsizei numInput, const al::span<FloatBufferLine> samplesOut) override;
+    void process(const size_t samplesToDo, const al::span<const FloatBufferLine> samplesIn, const al::span<FloatBufferLine> samplesOut) override;
 
     DEF_NEWDEL(ModulatorState)
 };
 
-ALboolean ModulatorState::deviceUpdate(const ALCdevice *UNUSED(device))
+ALboolean ModulatorState::deviceUpdate(const ALCdevice*)
 {
     for(auto &e : mChans)
     {
@@ -110,10 +101,10 @@ ALboolean ModulatorState::deviceUpdate(const ALCdevice *UNUSED(device))
 
 void ModulatorState::update(const ALCcontext *context, const ALeffectslot *slot, const EffectProps *props, const EffectTarget target)
 {
-    const ALCdevice *device{context->Device};
+    const ALCdevice *device{context->mDevice.get()};
 
     const float step{props->Modulator.Frequency / static_cast<ALfloat>(device->Frequency)};
-    mStep = fastf2i(clampf(step*WAVEFORM_FRACONE, 0.0f, ALfloat{WAVEFORM_FRACONE-1}));
+    mStep = fastf2u(clampf(step*WAVEFORM_FRACONE, 0.0f, ALfloat{WAVEFORM_FRACONE-1}));
 
     if(mStep == 0)
         mGetSamples = Modulate<One>;
@@ -124,11 +115,10 @@ void ModulatorState::update(const ALCcontext *context, const ALeffectslot *slot,
     else /*if(props->Modulator.Waveform == AL_RING_MODULATOR_SQUARE)*/
         mGetSamples = Modulate<Square>;
 
-    ALfloat f0norm{props->Modulator.HighPassCutoff / static_cast<ALfloat>(device->Frequency)};
+    float f0norm{props->Modulator.HighPassCutoff / static_cast<ALfloat>(device->Frequency)};
     f0norm = clampf(f0norm, 1.0f/512.0f, 0.49f);
     /* Bandwidth value is constant in octaves. */
-    mChans[0].Filter.setParams(BiquadType::HighPass, 1.0f, f0norm,
-        BiquadFilter::rcpQFromBandwidth(f0norm, 0.75f));
+    mChans[0].Filter.setParamsFromBandwidth(BiquadType::HighPass, f0norm, 1.0f, 0.75f);
     for(size_t i{1u};i < slot->Wet.Buffer.size();++i)
         mChans[i].Filter.copyParamsFrom(mChans[0].Filter);
 
@@ -140,29 +130,29 @@ void ModulatorState::update(const ALCcontext *context, const ALeffectslot *slot,
     }
 }
 
-void ModulatorState::process(const ALsizei samplesToDo, const FloatBufferLine *RESTRICT samplesIn, const ALsizei numInput, const al::span<FloatBufferLine> samplesOut)
+void ModulatorState::process(const size_t samplesToDo, const al::span<const FloatBufferLine> samplesIn, const al::span<FloatBufferLine> samplesOut)
 {
-    for(ALsizei base{0};base < samplesToDo;)
+    for(size_t base{0u};base < samplesToDo;)
     {
         alignas(16) ALfloat modsamples[MAX_UPDATE_SAMPLES];
-        ALsizei td = mini(MAX_UPDATE_SAMPLES, samplesToDo-base);
-        ALsizei c, i;
+        size_t td{minz(MAX_UPDATE_SAMPLES, samplesToDo-base)};
 
         mGetSamples(modsamples, mIndex, mStep, td);
-        mIndex += (mStep*td) & WAVEFORM_FRACMASK;
+        mIndex += static_cast<ALuint>(mStep * td);
         mIndex &= WAVEFORM_FRACMASK;
 
-        ASSUME(numInput > 0);
-        for(c = 0;c < numInput;c++)
+        auto chandata = std::addressof(mChans[0]);
+        for(const auto &input : samplesIn)
         {
             alignas(16) ALfloat temps[MAX_UPDATE_SAMPLES];
 
-            mChans[c].Filter.process(temps, &samplesIn[c][base], td);
-            for(i = 0;i < td;i++)
+            chandata->Filter.process({&input[base], td}, temps);
+            for(size_t i{0u};i < td;i++)
                 temps[i] *= modsamples[i];
 
-            MixSamples(temps, samplesOut, mChans[c].CurrentGains, mChans[c].TargetGains,
-                samplesToDo-base, base, td);
+            MixSamples({temps, td}, samplesOut, chandata->CurrentGains, chandata->TargetGains,
+                samplesToDo-base, base);
+            ++chandata;
         }
 
         base += td;
@@ -187,7 +177,7 @@ void Modulator_setParamf(EffectProps *props, ALCcontext *context, ALenum param, 
             break;
 
         default:
-            alSetError(context, AL_INVALID_ENUM, "Invalid modulator float property 0x%04x", param);
+            context->setError(AL_INVALID_ENUM, "Invalid modulator float property 0x%04x", param);
     }
 }
 void Modulator_setParamfv(EffectProps *props, ALCcontext *context, ALenum param, const ALfloat *vals)
@@ -208,7 +198,7 @@ void Modulator_setParami(EffectProps *props, ALCcontext *context, ALenum param, 
             break;
 
         default:
-            alSetError(context, AL_INVALID_ENUM, "Invalid modulator integer property 0x%04x", param);
+            context->setError(AL_INVALID_ENUM, "Invalid modulator integer property 0x%04x", param);
     }
 }
 void Modulator_setParamiv(EffectProps *props, ALCcontext *context, ALenum param, const ALint *vals)
@@ -229,7 +219,7 @@ void Modulator_getParami(const EffectProps *props, ALCcontext *context, ALenum p
             break;
 
         default:
-            alSetError(context, AL_INVALID_ENUM, "Invalid modulator integer property 0x%04x", param);
+            context->setError(AL_INVALID_ENUM, "Invalid modulator integer property 0x%04x", param);
     }
 }
 void Modulator_getParamiv(const EffectProps *props, ALCcontext *context, ALenum param, ALint *vals)
@@ -246,7 +236,7 @@ void Modulator_getParamf(const EffectProps *props, ALCcontext *context, ALenum p
             break;
 
         default:
-            alSetError(context, AL_INVALID_ENUM, "Invalid modulator float property 0x%04x", param);
+            context->setError(AL_INVALID_ENUM, "Invalid modulator float property 0x%04x", param);
     }
 }
 void Modulator_getParamfv(const EffectProps *props, ALCcontext *context, ALenum param, ALfloat *vals)

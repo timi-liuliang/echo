@@ -1,12 +1,13 @@
 #ifndef EFFECTS_BASE_H
 #define EFFECTS_BASE_H
 
-#include "alMain.h"
+#include <cstddef>
 
+#include "alcmain.h"
 #include "almalloc.h"
 #include "alspan.h"
 #include "atomic.h"
-
+#include "intrusive_ptr.h"
 
 struct ALeffectslot;
 
@@ -26,7 +27,7 @@ union EffectProps {
         ALfloat LateReverbDelay;
         ALfloat AirAbsorptionGainHF;
         ALfloat RoomRolloffFactor;
-        ALboolean DecayHFLimit;
+        bool DecayHFLimit;
 
         // Additional EAX Reverb Properties
         ALfloat GainLF;
@@ -58,7 +59,7 @@ union EffectProps {
     } Chorus; /* Also Flanger */
 
     struct {
-        ALboolean OnOff;
+        bool OnOff;
     } Compressor;
 
     struct {
@@ -150,9 +151,7 @@ struct EffectTarget {
     RealMixParams *RealOut;
 };
 
-struct EffectState {
-    RefCount mRef{1u};
-
+struct EffectState : public al::intrusive_ref<EffectState> {
     al::span<FloatBufferLine> mOutTarget;
 
 
@@ -160,10 +159,7 @@ struct EffectState {
 
     virtual ALboolean deviceUpdate(const ALCdevice *device) = 0;
     virtual void update(const ALCcontext *context, const ALeffectslot *slot, const EffectProps *props, const EffectTarget target) = 0;
-    virtual void process(const ALsizei samplesToDo, const FloatBufferLine *RESTRICT samplesIn, const ALsizei numInput, const al::span<FloatBufferLine> samplesOut) = 0;
-
-    void IncRef() noexcept;
-    void DecRef() noexcept;
+    virtual void process(const size_t samplesToDo, const al::span<const FloatBufferLine> samplesIn, const al::span<FloatBufferLine> samplesOut) = 0;
 };
 
 
