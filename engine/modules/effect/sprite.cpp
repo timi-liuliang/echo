@@ -166,5 +166,6 @@ namespace Echo
 	{
 		EchoSafeRelease(m_renderable);
 		EchoSafeDelete(m_mesh, Mesh);
+        EchoSafeDelete(m_material, Material);
 	}
 }

@@ -19,7 +19,7 @@ namespace Echo
 		}
 		else
 		{
-			EchoLogError("create resource multi times");
+			EchoLogError("create resource [%s] multi times", path.c_str());
 		}
 	}
 
@@ -32,7 +32,7 @@ namespace Echo
 		}
 		else
 		{
-			EchoLogError("can't delete resource for cache");
+			EchoLogError("can't delete resource [%s] from cache", path.c_str());
 		}
 	}
 
