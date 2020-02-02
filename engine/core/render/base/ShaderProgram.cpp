@@ -10,6 +10,30 @@
 #include <thirdparty/pugixml/pugixml.hpp>
 #include "glslcc/GLSLCrossCompiler.h"
 
+static const char* g_2dVsGLES = R"(#version 100
+attribute vec3 a_Position;
+attribute vec2 a_UV;
+uniform mat4 u_WorldViewProjMatrix;
+varying vec2 v_UV;
+void main(void)
+{
+	vec4 position = u_WorldViewProjMatrix * vec4(a_Position, 1.0);
+	gl_Position = position;
+	v_UV = a_UV;
+}
+)";
+
+static const char* g_2dFsGLES = R"(#version 100
+precision mediump float;
+uniform sampler2D u_BaseColorSampler;
+varying vec2	  v_UV;
+void main(void)
+{
+	vec4 textureColor = texture2D(u_BaseColorSampler, v_UV);
+	gl_FragColor = textureColor;
+}
+)";
+
 static const char* g_2dVsCode = R"(
 #version 450
 
@@ -188,7 +212,7 @@ namespace Echo
 	{
         EchoSafeDeleteMap(m_uniformDefaultValues, UniformValue);
         
-        if(!m_vsCode.empty() && !m_psCode.empty() && m_type=="glsl")
+        if(!m_vsCode.empty() && !m_psCode.empty())
         {
             String vsSrc = m_vsCode;
             String psSrc = m_psCode;
@@ -338,6 +362,12 @@ namespace Echo
             depthDesc.bWriteDepth = false;
             DepthStencilState* depthState = Renderer::instance()->createDepthStencilState(depthDesc);
             shader->setDepthState(depthState);
+
+            // reaster state
+            RasterizerState::RasterizerDesc rasterDesc;
+            rasterDesc.cullMode = RasterizerState::CULL_NONE;
+            RasterizerState* rasterState = Renderer::instance()->createRasterizerState(rasterDesc);
+            shader->setRasterizerState(rasterState);
             
             shader->setPath(shaderVirtualPath);
             shader->setType("glsl");

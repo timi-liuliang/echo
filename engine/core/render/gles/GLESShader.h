@@ -25,11 +25,9 @@ namespace Echo
 		GLenum GLenumMap(const String& name);
 
 	public:
-		void setProgramHandle(ui32 hProgram);
 		GLuint getShaderHandle() const;
 
 	private:
 		GLuint			m_hShader;
-		GLuint			m_hProgram;
 	};
 }

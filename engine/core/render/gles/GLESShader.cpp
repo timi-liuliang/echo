@@ -143,11 +143,6 @@ namespace Echo
 		m_srcData.shrink_to_fit();
 	}
 
-	void GLES2Shader::setProgramHandle(ui32 hProgram)
-	{
-		m_hProgram = hProgram;
-	}
-
 	GLuint GLES2Shader::getShaderHandle() const
 	{
 		return m_hShader;
