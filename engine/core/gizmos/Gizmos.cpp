@@ -168,6 +168,14 @@ namespace Echo
         if(!m_shader)
         {
             m_shader = ECHO_CREATE_RES(ShaderProgram);
+
+			// set render state
+			RasterizerState::RasterizerDesc rasterDesc;
+			rasterDesc.cullMode = RasterizerState::CULL_NONE;
+			RasterizerState* rasterState = Renderer::instance()->createRasterizerState(rasterDesc);
+			m_shader->setRasterizerState(rasterState);
+
+			// set code
             m_shader->setPath(shaderVirtualPath.getPath());
             m_shader->setType("glsl");
             m_shader->setVsCode(g_gizmoVsCode);
