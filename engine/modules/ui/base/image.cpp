@@ -75,11 +75,14 @@ namespace Echo
             m_shader = ShaderProgram::getDefault2D(macros);
             
             // material
-            m_material = ECHO_CREATE_RES(Material);
-			m_material->setPath(StringUtil::Format("UiImageMaterial_%d", getId()));
-            m_material->setShaderPath(m_shader->getPath());
-            m_material->setRenderStage("Transparent");
-            
+            if(!m_material)
+            {
+                m_material = ECHO_CREATE_RES(Material);
+                m_material->setPath(StringUtil::Format("UiImageMaterial_%d", getId()));
+                m_material->setShaderPath(m_shader->getPath());
+                m_material->setRenderStage("Transparent");
+            }
+
             m_material->setTexture("u_BaseColorSampler", m_textureRes.getPath());
             
             // mesh

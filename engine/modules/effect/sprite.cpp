@@ -8,12 +8,7 @@
 namespace Echo
 {
 	Sprite::Sprite()
-		: m_textureRes("", ".png")
-		, m_mesh(nullptr)
-		, m_material(nullptr)
-		, m_renderable(nullptr)
-		, m_width(0)
-		, m_height(0)
+        : Render()
 	{
 	}
 
@@ -38,10 +33,11 @@ namespace Echo
 
 	void Sprite::setTextureRes(const ResourcePath& path)
 	{
-		if (m_textureRes.setPath(path.getPath()))
-		{
-			buildRenderable();
-		}
+        if(!path.isEmpty())
+        {
+            if (m_textureRes.setPath(path.getPath()))
+                buildMaterial();
+        }
 	}
 
 	void Sprite::setWidth(i32 width) 
@@ -50,7 +46,7 @@ namespace Echo
 		{
 			m_width = width;
 
-			buildRenderable();
+			updateMeshBuffer();
 		}
 	}
 
@@ -60,48 +56,48 @@ namespace Echo
 		{
 			m_height = height;
 
-			buildRenderable();
+			updateMeshBuffer();
 		}
 	}
 
-	void Sprite::buildRenderable()
+	void Sprite::buildMaterial()
 	{
 		if (!m_textureRes.getPath().empty())
 		{
-			clearRenderable();
-            
-            // default shader
-            StringArray macros;
-            m_shader = ShaderProgram::getDefault2D(macros);
+            if(!m_material)
+            {
+                // default shader
+                StringArray macros;
+                m_shader = ShaderProgram::getDefault2D(macros);
 
-			// material
-			m_material = EchoNew(Material(Echo::StringUtil::Format("SpriteMaterial_%d", getId())));
-			m_material->setShaderPath(m_shader->getPath());
-			m_material->setRenderStage("Transparent");
+                // material
+                m_material = EchoNew(Material(Echo::StringUtil::Format("SpriteMaterial_%d", getId())));
+                m_material->setShaderPath(m_shader->getPath());
+                m_material->setRenderStage("Transparent");
+            }
 
 			m_material->setTexture("u_BaseColorSampler", m_textureRes.getPath());
-
-			// mesh
-			VertexArray	vertices;
-			IndiceArray	indices;
-			buildMeshData(vertices, indices);
-
-			MeshVertexFormat define;
-			define.m_isUseUV = true;
-
-			m_mesh = Mesh::create(true, true);
-			m_mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(Word), indices.data());
-			m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data(), m_localAABB);
-
-			m_renderable = Renderable::create(m_mesh, m_material, this);
+            
+            // update width and height
+            Texture* texture = m_material->getTexture(0);
+            if (texture)
+            {
+                if(!m_width) setWidth( texture->getWidth());
+                if(!m_height) setHeight( texture->getHeight());
+            }
 		}
 	}
 
-	// update per frame
 	void Sprite::update_self()
 	{
 		if (isNeedRender())
 		{
+            if(!m_renderable)
+            {
+                if(m_mesh && m_material)
+                    m_renderable = Renderable::create(m_mesh, m_material, this);
+            }
+            
 			if (m_renderable)
 			{
 				m_matWVP = getWorldMatrix() * NodeTree::instance()->get2dCamera()->getViewProjMatrix();
@@ -110,62 +106,48 @@ namespace Echo
 		}
 	}
 
-	// build mesh data by drawables data
-	void Sprite::buildMeshData(VertexArray& oVertices, IndiceArray& oIndices)
-	{
-		Texture* texture = m_material->getTexture(0);
-		if (texture)
-		{
-			if(!m_width) m_width  = texture->getWidth();
-			if(!m_height) m_height = texture->getHeight();
-		}
-
-		float hw = m_width * 0.5f;
-		float hh = m_height * 0.5f;
-
-		// vertices
-		oVertices.push_back(VertexFormat(Vector3(-hw, -hh, 0.f), Vector2(0.f, 1.f)));
-		oVertices.push_back(VertexFormat(Vector3(-hw,  hh, 0.f), Vector2(0.f, 0.f)));
-		oVertices.push_back(VertexFormat(Vector3(hw,   hh, 0.f), Vector2(1.f, 0.f)));
-		oVertices.push_back(VertexFormat(Vector3(hw,  -hh, 0.f), Vector2(1.f, 1.f)));
-
-		// calc aabb
-		m_localAABB.reset();
-		for (VertexFormat& vert : oVertices)
-			m_localAABB.addPoint(vert.m_position);
-
-		// indices
-		oIndices.push_back(0);
-		oIndices.push_back(1);
-		oIndices.push_back(2);
-		oIndices.push_back(0);
-		oIndices.push_back(2);
-		oIndices.push_back(3);
-	}
-
-	// update vertex buffer
 	void Sprite::updateMeshBuffer()
 	{
-		VertexArray	vertices;
-		IndiceArray	indices;
-		buildMeshData(vertices, indices);
+        if(!m_mesh)
+        {
+            if(m_width && m_height)
+            {
+                m_mesh = Mesh::create(true, true);
+                
+                // indices
+                IndiceArray indices = { 0, 1, 2, 0, 2, 3};
+                m_mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(Word), indices.data());
+            }
+        }
+        
+        if(m_mesh)
+        {
+            float hw = m_width * 0.5f;
+            float hh = m_height * 0.5f;
 
-		MeshVertexFormat define;
-		define.m_isUseUV = true;
+            // vertices
+            VertexArray vertices;
+            vertices.push_back(VertexFormat(Vector3(-hw, -hh, 0.f), Vector2(0.f, 1.f)));
+            vertices.push_back(VertexFormat(Vector3(-hw,  hh, 0.f), Vector2(0.f, 0.f)));
+            vertices.push_back(VertexFormat(Vector3(hw,   hh, 0.f), Vector2(1.f, 0.f)));
+            vertices.push_back(VertexFormat(Vector3(hw,  -hh, 0.f), Vector2(1.f, 1.f)));
 
-		m_mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(Word), indices.data());
-		m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data(), m_localAABB);
+            // calc aabb
+            m_localAABB.reset();
+            for (VertexFormat& vert : vertices)
+                m_localAABB.addPoint(vert.m_position);
+
+            // format
+            MeshVertexFormat define;
+            define.m_isUseUV = true;
+
+            m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data(), m_localAABB);
+        }
 	}
 
 	void Sprite::clear()
 	{
-		clearRenderable();
-	}
-
-	void Sprite::clearRenderable()
-	{
-		EchoSafeRelease(m_renderable);
-		EchoSafeDelete(m_mesh, Mesh);
-        EchoSafeDelete(m_material, Material);
+        EchoSafeRelease(m_renderable);
+        EchoSafeDelete(m_mesh, Mesh);
 	}
 }
