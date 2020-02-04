@@ -81,12 +81,11 @@ namespace Echo
 
 		// bind shader
         virtual void bind() {}
-
-		// is have macro
-		bool hasMacro(const char* const macro) const;
+        virtual void unbind() {}
 
 		// get editable macros
 		static StringArray getEditableMacros();
+        void setMacros(const StringArray& macros) { m_macros = macros; }
 
 		// get default value of uniform
 		const UniformValue* getDefaultUniformValue(const String& name);
@@ -98,9 +97,6 @@ namespace Echo
         // uniform
         void setUniform(const char* name, const void* value, ShaderParamType uniformType, ui32 count);
         UniformArray* getUniforms(){ return &m_uniforms; }
-
-		// uniforms
-		virtual void unbind() {}
 
 		// ByteSize
 		static int MapUniformTypeSize(ShaderParamType uniformType);
@@ -153,9 +149,12 @@ namespace Echo
 
         // build
         bool build();
+        
+        // insert macros
+        void insertMacros(String& code);
 
 	protected:
-		String				m_macros;
+		StringArray			m_macros;
         String              m_type = "glsl";
         String              m_vsCode;
         String              m_psCode;

@@ -34,8 +34,7 @@ void main(void)
 }
 )";
 
-static const char* g_2dVsCode = R"(
-#version 450
+static const char* g_2dVsCode = R"(#version 450
 
 // uniforms
 layout(binding = 0) uniform UBO
@@ -59,8 +58,7 @@ void main(void)
 }
 )";
 
-static const char* g_2dPsCode = R"(
-#version 450
+static const char* g_2dPsCode = R"(#version 450
 
 precision mediump float;
 
@@ -208,6 +206,22 @@ namespace Echo
         build();
     }
 
+    void ShaderProgram::insertMacros(String& code)
+    {
+        // make sure macros
+        String finalMacros; finalMacros.reserve(512);
+        for (const String& macro : m_macros)
+            finalMacros += "#define " + macro + "\n";
+        
+        if (!finalMacros.empty())
+        {
+            finalMacros = "\r\n" + finalMacros + "\r\n";
+
+            size_t pos = code.find_first_of('\n') + 1;
+            code.insert(pos, finalMacros);
+        }
+    }
+
 	bool ShaderProgram::build()
 	{
         EchoSafeDeleteMap(m_uniformDefaultValues, UniformValue);
@@ -216,6 +230,9 @@ namespace Echo
         {
             String vsSrc = m_vsCode;
             String psSrc = m_psCode;
+            
+            insertMacros(vsSrc);
+            insertMacros(psSrc);
             
             // convert based on renderer type
             convert(m_type, vsSrc, psSrc);
@@ -300,15 +317,6 @@ namespace Echo
 
         return m_multiSampleState;
     }
-
-	bool ShaderProgram::hasMacro(const char* const macro) const
-	{
-		String fullMacro;
-		fullMacro = "#define ";
-		fullMacro += macro;
-		fullMacro += "\n";
-		return m_macros.find(fullMacro.c_str()) != String::npos;
-	}
     
     void ShaderProgram::setUniform( const char* name, const void* value, ShaderParamType uniformType, ui32 count)
     {
@@ -347,6 +355,7 @@ namespace Echo
         if(!shader)
         {
             shader = ECHO_CREATE_RES(ShaderProgram);
+            shader->setMacros(macros);
             
             // blend state
             BlendState::BlendDesc desc;

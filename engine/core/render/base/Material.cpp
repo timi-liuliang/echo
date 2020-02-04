@@ -269,22 +269,9 @@ namespace Echo
 		}
 		else
 		{
-			if (isMacroUsed(macro))
-			{
-				m_macros.erase(std::remove(m_macros.begin(), m_macros.end(), macro), m_macros.end());
-			}
-			else
-			{
-				for(const String& curMacro : m_macros)
-				{
-					if (StringUtil::StartWith(curMacro, macro))
-					{
-						m_macros.erase(std::remove(m_macros.begin(), m_macros.end(), curMacro), m_macros.end());
-						break;
-					}
-				}
-			}
+            m_macros.erase(std::remove(m_macros.begin(), m_macros.end(), macro), m_macros.end());
 		}
+        
 		std::sort(m_macros.begin(), m_macros.end());
 
 		m_isDirty = true;
@@ -296,16 +283,12 @@ namespace Echo
 		{
 			clearPropertys();
 
-			// make sure macros
-			String finalMacros; finalMacros.reserve(512);
-			for (const String& macro : m_macros)
-				finalMacros += "#define " + macro + "\n";
-
 			// create material
 			m_shaderProgram = ECHO_DOWN_CAST<ShaderProgram*>(ShaderProgram::get(m_shaderPath));
 			if(!m_shaderProgram)
 			{
 				m_shaderProgram = (ShaderProgram*)ShaderProgram::create();
+                m_shaderProgram->setMacros(m_macros);
                 m_shaderProgram->load(m_shaderPath);
 			}
 
