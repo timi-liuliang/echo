@@ -145,12 +145,28 @@ namespace Studio
             
             using namespace std::placeholders;
             flowScene->iterateOverNodeDataDependentOrder(std::bind(&ShaderEditor::visitorAllNodes, this, _1));
+            
+            // remember graph
+            if(m_shaderProgram)
+            {
+                Echo::String graph = flowScene->saveToMemory().toStdString().c_str();
+                m_shaderProgram->setGraph(graph);
+            }
         }
     }
 
     void ShaderEditor::open(const Echo::String& resPath)
     {
         m_shaderProgram = dynamic_cast<Echo::ShaderProgram*>(Echo::Res::get(resPath));
+        if(m_shaderProgram)
+        {
+            QtNodes::FlowScene* flowScene = (QtNodes::FlowScene*)m_graphicsScene;
+            if(flowScene)
+            {
+                Echo::String graph = m_shaderProgram->getGraph();
+                flowScene->loadFromMemory(graph.c_str());
+            }
+        }
         
         this->setVisible(true);
     }
