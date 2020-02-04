@@ -31,10 +31,14 @@ namespace Echo
         CLASS_BIND_METHOD(UiImage, setWidth,        DEF_METHOD("setWidth"));
         CLASS_BIND_METHOD(UiImage, getHeight,       DEF_METHOD("getHeight"));
         CLASS_BIND_METHOD(UiImage, setHeight,       DEF_METHOD("setHeight"));
+        CLASS_BIND_METHOD(UiImage, getMaterial,     DEF_METHOD("getMaterial"));
+        CLASS_BIND_METHOD(UiImage, setMaterial,     DEF_METHOD("setMaterial"));
         
         CLASS_REGISTER_PROPERTY(UiImage, "Width", Variant::Type::Int, "getWidth", "setWidth");
         CLASS_REGISTER_PROPERTY(UiImage, "Height", Variant::Type::Int, "getHeight", "setHeight");
         CLASS_REGISTER_PROPERTY(UiImage, "Texture", Variant::Type::ResourcePath, "getTextureRes", "setTextureRes");
+        CLASS_REGISTER_PROPERTY(UiImage, "Material", Variant::Type::Object, "getMaterial", "setMaterial");
+        CLASS_REGISTER_PROPERTY_HINT(UiImage, "Material", PropertyHintType::ResourceType, "Material");
     }
     
     void UiImage::setTextureRes(const ResourcePath& path)
@@ -75,15 +79,14 @@ namespace Echo
             m_shader = ShaderProgram::getDefault2D(macros);
             
             // material
-            if(!m_material)
+            if(!m_materialDefault)
             {
-                m_material = ECHO_CREATE_RES(Material);
-                m_material->setPath(StringUtil::Format("UiImageMaterial_%d", getId()));
-                m_material->setShaderPath(m_shader->getPath());
-                m_material->setRenderStage("Transparent");
+                m_materialDefault = ECHO_CREATE_RES(Material);
+                m_materialDefault->setShaderPath(m_shader->getPath());
+                m_materialDefault->setRenderStage("Transparent");
             }
 
-            m_material->setTexture("u_BaseColorSampler", m_textureRes.getPath());
+            m_materialDefault->setTexture("u_BaseColorSampler", m_textureRes.getPath());
             
             // mesh
             Ui::VertexArray vertices;
@@ -97,7 +100,7 @@ namespace Echo
             m_mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(Word), indices.data());
             m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data(), m_localAABB);
             
-            m_renderable = Renderable::create(m_mesh, m_material, this);
+            m_renderable = Renderable::create(m_mesh, m_materialDefault, this);
         }
     }
     
@@ -114,7 +117,7 @@ namespace Echo
     
     void UiImage::buildMeshData(Ui::VertexArray& oVertices, Ui::IndiceArray& oIndices)
     {
-        Texture* texture = m_material->getTexture(0);
+        Texture* texture = m_materialDefault->getTexture(0);
         if (texture)
         {
             if(!m_width) m_width  = texture->getWidth();

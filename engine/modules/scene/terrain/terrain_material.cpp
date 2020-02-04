@@ -1,7 +1,6 @@
 #include "terrain_material.h"
 
-static const char* g_terrainVsCode = R"(
-#version 450
+static const char* g_terrainVsCode = R"(#version 450
 
 // uniforms
 layout(binding = 0) uniform UBO
@@ -17,7 +16,7 @@ layout(location = 2) in vec2 a_UV;
 
 // outputs
 layout(location = 0) out vec2 v_UV;
-layout(location = 1) out vec2 v_Normal;
+layout(location = 1) out vec3 v_Normal;
 
 void main(void)
 {
@@ -29,14 +28,13 @@ void main(void)
 }
 )";
 
-static const char* g_terrainPsCode = R"(
-#version 450
+static const char* g_terrainPsCode = R"(#version 450
 
 precision mediump float;
 
 // inputs
 layout(location = 0) in vec2  v_UV;
-layout(location = 0) in vec3  v_Normal;
+layout(location = 1) in vec3  v_Normal;
 
 // outputs
 layout(location = 0) out vec4 o_FragColor;

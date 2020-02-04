@@ -42,26 +42,26 @@ namespace Echo
 	}
 
 	LogOutput* Log::getOutput(const String& name) const
-							{
+    {
 		for( size_t i=0; i<m_logArray.size(); i++)
-				{
+        {
 			if( m_logArray[i]->getName() == name)
 				return m_logArray[i];
-				}
+        }
 
-			return NULL;
+        return NULL;
 	}
 
 	void Log::removeOutput( const String &name)
 	{
 		for(OutputArray::iterator it=m_logArray.begin(); it!=m_logArray.end(); it++)
-	{
+        {
 			if( (*it)->getName() == name)
-		{
+            {
 				m_logArray.erase( it);
 				return;
-		}
-	}
+            }
+        }
 	}
 
 	void Log::removeOutput( LogOutput* pLog)

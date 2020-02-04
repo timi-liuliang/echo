@@ -27,6 +27,10 @@ namespace Echo
         // width
         i32 getHeight() const { return m_height; }
         void setHeight(i32 height);
+        
+        // material
+        Material* getMaterial() const { return m_material; }
+        void setMaterial( Object* material) { m_material = (Material*)material; }
 
     protected:
         // build drawable
@@ -49,7 +53,8 @@ namespace Echo
         ResourcePath            m_textureRes;
         Mesh*                   m_mesh;            // Geometry Data for render
         ShaderProgramPtr        m_shader;
-        MaterialPtr             m_material;        // Material Instance
+        MaterialPtr             m_material;
+        MaterialPtr             m_materialDefault;
         Renderable*             m_renderable;
         Matrix4                 m_matWVP;
         i32                     m_width;

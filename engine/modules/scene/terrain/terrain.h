@@ -44,6 +44,10 @@ namespace Echo
 		i32 getGridSpacing() const { return m_gridSpacing; }
 		void setGridSpacing(i32 gridSpacing);
         
+        // material
+        Material* getMaterial() const { return m_material; }
+        void setMaterial( Object* material);
+        
         // get height
         float getHeight(i32 x, i32 z);
         
@@ -68,14 +72,16 @@ namespace Echo
         void clearRenderable();
         
     private:
+        bool                    m_isRenderableDirty = true;
         ResourcePath            m_heightmap = ResourcePath("", ".png");
         Image*                  m_heightmapImage = nullptr;
 		float					m_heightRange = 256.f;
 		i32						m_gridSpacing = 1;
-        Mesh*                   m_mesh;                     // Geometry Data for render
+        Mesh*                   m_mesh = nullptr;
         ShaderProgramPtr        m_shader;
-        MaterialPtr             m_material;                 // Material Instance
-        Renderable*             m_renderable;
+        MaterialPtr             m_material;
+        MaterialPtr             m_materialDefault;
+        Renderable*             m_renderable = nullptr;
         Matrix4                 m_matWVP;
         i32                     m_columns = 0;
         i32                     m_rows = 0;
