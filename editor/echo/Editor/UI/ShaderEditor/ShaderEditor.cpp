@@ -150,7 +150,7 @@ namespace Studio
 
     void ShaderEditor::open(const Echo::String& resPath)
     {
-        m_resPath = resPath;
+        m_shaderProgram = dynamic_cast<Echo::ShaderProgram*>(Echo::Res::get(resPath));
         
         this->setVisible(true);
     }
@@ -159,15 +159,9 @@ namespace Studio
     {
         compile();
         
-        if (!m_resPath.empty() && !m_result.empty())
+        if (m_shaderProgram)
         {
-            Echo::String fullPath = Echo::IO::instance()->convertResPathToFullPath(m_resPath);
-            std::ofstream f(fullPath.c_str());
-
-            f << m_result.c_str();
-
-            f.flush();
-            f.close();
+            m_shaderProgram->save();
         }
     }
 }
