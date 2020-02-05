@@ -37,6 +37,5 @@ namespace Studio
 		QGraphicsView*		    m_graphicsView = nullptr;
         std::string             m_paramCode;
         std::string             m_shaderCode;
-        Echo::String            m_result;
 	};
 }

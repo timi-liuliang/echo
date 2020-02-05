@@ -12,10 +12,7 @@
 
 using namespace ShaderEditor;
 
-static const char* g_textTemplate = R"(<?xml version = "1.0" encoding = "utf-8"?>
-<Shader type="glsl">
-<VS>
-#version 450
+static const char* g_VsTemplate = R"(#version 450
 
 // uniforms
 layout(binding = 0) uniform UBO
@@ -37,9 +34,9 @@ void main(void)
     
     v_TexCoord = a_UV;
 }
-</VS>
-<PS>
-#version 450
+)";
+
+static const char* g_PsTemplate = R"(#version 450
 
 precision mediump float;
 
@@ -61,33 +58,6 @@ ${FS_SHADER_CODE}
 
     o_FragColor = vec4(__BaseColor.rgb, 1.0);
 }
-
-</PS>
-<BlendState>
-    <BlendEnable value = "true" />
-    <SrcBlend value = "BF_SRC_ALPHA" />
-    <DstBlend value = "BF_INV_SRC_ALPHA" />
-</BlendState>
-<RasterizerState>
-    <CullMode value = "CULL_NONE" />
-</RasterizerState>
-<DepthStencilState>
-    <DepthEnable value = "false" />
-    <WriteDepth value = "false" />
-</DepthStencilState>
-<SamplerState>
-    <BiLinearMirror>
-        <MinFilter value = "FO_LINEAR" />
-        <MagFilter value = "FO_LINEAR" />
-        <MipFilter value = "FO_NONE" />
-        <AddrUMode value = "AM_CLAMP" />
-        <AddrVMode value = "AM_CLAMP" />
-    </BiLinearMirror>
-</SamplerState>
-<Texture>
-    <stage no = "0" sampler = "BiLinearMirror" />
-</Texture>
-</Shader>
 )";
 
 namespace Studio
@@ -130,9 +100,6 @@ namespace Studio
         {
             shaderDataModel->generateCode(m_paramCode, m_shaderCode);
         }
-        
-        m_result = g_textTemplate;
-        m_result = Echo::StringUtil::Replace(m_result, "${FS_SHADER_CODE}", m_shaderCode.c_str());
     }
 
     void ShaderEditor::compile()
@@ -146,11 +113,20 @@ namespace Studio
             using namespace std::placeholders;
             flowScene->iterateOverNodeDataDependentOrder(std::bind(&ShaderEditor::visitorAllNodes, this, _1));
             
+            Echo::String vsCode = g_VsTemplate;
+            
+            Echo::String psCode = g_PsTemplate;
+            psCode = Echo::StringUtil::Replace(psCode, "${FS_SHADER_CODE}", m_shaderCode.c_str());
+            
             // remember graph
             if(m_shaderProgram)
             {
                 Echo::String graph = flowScene->saveToMemory().toStdString().c_str();
                 m_shaderProgram->setGraph(graph);
+                
+                m_shaderProgram->setVsCode(vsCode);
+                
+                m_shaderProgram->setPsCode(psCode);
             }
         }
     }
