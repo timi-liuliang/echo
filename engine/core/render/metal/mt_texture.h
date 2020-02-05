@@ -24,7 +24,7 @@ namespace Echo
         // load
         virtual bool load() override;
         
-    protected:
+    public:
         // set surface data
         void setSurfaceData(int level, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, const Buffer& buff);
         

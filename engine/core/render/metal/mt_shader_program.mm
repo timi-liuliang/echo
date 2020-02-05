@@ -116,6 +116,9 @@ namespace Echo
                 mtBlendState->activeMtColorAttachmentDescriptor(colorAttachmentDescriptor);
         }
         
+        // specify depth pixel format
+        m_metalRenderPipelineDescriptor.depthAttachmentPixelFormat = MTLPixelFormatDepth32Float_Stencil8;
+        
         // Specify vertex descriptor
         MeshVertexFormat define;
         define.m_isUseNormal = true;

@@ -116,7 +116,7 @@ namespace Echo
         return EchoNew(MTTexture2D(name));
     }
 
-    MTLRenderPassDescriptor* MTRenderer::makeNextRenderPassDescriptor()
+    void MTRenderer::makeNextRenderPassDescriptor()
     {
         if(!m_metalRenderPassDescriptor)
         {
@@ -130,16 +130,28 @@ namespace Echo
             metalRenderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(0.298f, 0.298f, 0.322f, 1.f);
             metalRenderPassDescriptor.colorAttachments[0].storeAction = MTLStoreActionStore;
 
-            return metalRenderPassDescriptor;
+            if(!m_depthTexture)
+            {
+                ui32 width = m_metalNextDrawable.texture.width;
+                ui32 height = m_metalNextDrawable.texture.height;
+                
+                m_depthTexture = EchoNew(MTTexture2D("_RenderTargetDetpth_0_"));
+                m_depthTexture->setSurfaceData(0, PF_D24_UNORM_S8_UINT, 0, width, height, Buffer());
+            }
+            
+            metalRenderPassDescriptor.depthAttachment.texture = m_depthTexture->getMTTexture();
+            metalRenderPassDescriptor.depthAttachment.loadAction = MTLLoadActionClear;
+            metalRenderPassDescriptor.depthAttachment.clearDepth = 1.0f;
+            metalRenderPassDescriptor.depthAttachment.storeAction = MTLStoreActionDontCare;
+            
+            m_metalRenderPassDescriptor = metalRenderPassDescriptor;
         }
-
-        return nullptr;
     }
 
     void MTRenderer::beginRender()
     {
         // create render pass descriptor
-        m_metalRenderPassDescriptor = makeNextRenderPassDescriptor();
+        makeNextRenderPassDescriptor();
 
         // create command buffer
         m_metalCommandBuffer = [m_metalCommandQueue commandBuffer];
@@ -201,6 +213,8 @@ namespace Echo
         [m_metalCommandBuffer commit];
 
         m_metalNextDrawable = nullptr;
+
+        //[m_metalRenderPassDescriptor release];
         m_metalRenderPassDescriptor = nullptr;
 
         return true;

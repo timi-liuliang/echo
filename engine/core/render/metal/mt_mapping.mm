@@ -111,6 +111,7 @@ namespace Echo
         case PF_RGBA32_FLOAT:           return MTLPixelFormatRGBA32Float;
 
         case PF_D16_UNORM:              return MTLPixelFormatDepth16Unorm;
+        case PF_D24_UNORM_S8_UINT:      return MTLPixelFormatDepth32Float_Stencil8;
         case PF_D32_FLOAT:              return MTLPixelFormatDepth32Float;
         default:
             {

@@ -80,12 +80,19 @@ namespace Echo
             m_mtTextureDescriptor.width = width;
             m_mtTextureDescriptor.height = height;
             
+            // usage
+            if(PixelUtil::IsDepth(pixFmt))
+            {
+                m_mtTextureDescriptor.usage = MTLTextureUsageRenderTarget | MTLTextureUsageShaderRead;
+                m_mtTextureDescriptor.storageMode = MTLStorageModePrivate;
+            }
+            
             // Create the texture from the device by using the descriptor
             id<MTLDevice> device = MTRenderer::instance()->getMetalDevice();
             if(device)
                 m_mtTexture = [device newTextureWithDescriptor:m_mtTextureDescriptor];
             
-            if(m_mtTexture)
+            if(m_mtTexture && buff.getData())
             {
                 MTLRegion region = { { 0, 0, 0 }, { width, height, 1}};
                 i32 bytesPerRow = PixelUtil::GetPixelSize(pixFmt) * width;

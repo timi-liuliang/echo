@@ -98,12 +98,13 @@ namespace Echo
         
     private:
         // make next drawable
-        MTLRenderPassDescriptor* makeNextRenderPassDescriptor();
+        void makeNextRenderPassDescriptor();
         
     private:
         id<MTLDevice>                   m_metalDevice;
         id<MTLCommandQueue>             m_metalCommandQueue;
         id<CAMetalDrawable>             m_metalNextDrawable;
+        class MTTexture2D*              m_depthTexture = nullptr;
         MTLRenderPassDescriptor*        m_metalRenderPassDescriptor = nullptr;
         id<MTLCommandBuffer>            m_metalCommandBuffer;
         id<MTLRenderCommandEncoder>     m_metalRenderCommandEncoder;
