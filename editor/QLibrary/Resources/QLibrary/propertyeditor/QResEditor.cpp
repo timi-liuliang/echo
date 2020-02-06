@@ -3,6 +3,7 @@
 #include "QPropertyModel.h"
 #include "ResChooseDialog.h"
 #include "NodeTreePanel.h"
+#include "PathChooseDialog.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/io/IO.h>
 #include <engine/core/resource/Res.h>
@@ -17,7 +18,6 @@ namespace QT_UI
 		, m_propertyName(propertyName)
 		, m_menu(nullptr)
 	{
-		// 根据资源类型获取后缀
 		m_exts = Echo::Res::getResFunByClassName(m_resType)->m_ext;
 
 		// 布局控件
@@ -42,7 +42,7 @@ namespace QT_UI
 
 		setFocusProxy( m_toolButton);
 
-		// 消息
+		// connect signal and slot
 		QObject::connect( m_toolButton, SIGNAL(clicked()), this, SLOT(onShowMenu()));
 		QObject::connect(m_lineEdit, SIGNAL(returnPressed()), this, SLOT(onEditFinished()));
 
@@ -54,7 +54,6 @@ namespace QT_UI
 		showMenu(QCursor::pos());
 	}
 
-	// is texture res
 	bool QResEditor::isTextureRes()
 	{
 		Echo::StringArray exts = Echo::StringUtil::Split(m_exts, "|");
@@ -67,7 +66,6 @@ namespace QT_UI
 		return false;
 	}
 
-	// correct size
 	void QResEditor::adjustHeightSize()
 	{
 		if (isTextureRes())
@@ -77,7 +75,6 @@ namespace QT_UI
 		}
 	}
 
-	// redefine paintEvent
 	void QResEditor::paintEvent(QPaintEvent* event)
 	{
 		if (isTextureRes())
@@ -90,13 +87,11 @@ namespace QT_UI
 		}
 	}
 
-	// edit finished
 	void QResEditor::onEditFinished()
 	{
 		m_propertyModel->setValue(m_propertyName, m_lineEdit->text().toStdString().c_str());
 	}
 
-	// MVC渲染
 	bool QResEditor::ItemDelegatePaint(QPainter *painter, const QRect& rect, const Echo::String& val)
 	{
 		Echo::String id = val;
@@ -112,8 +107,6 @@ namespace QT_UI
 		return false;
 	}
 
-
-	// node tree widget show menu
 	void QResEditor::showMenu(const QPoint& point)
 	{
 		EchoSafeDelete(m_menu, QMenu);
@@ -123,6 +116,7 @@ namespace QT_UI
 		QAction* createAction = new QAction(m_menu);
 		createAction->setText(("New " + m_resType).c_str());
 		m_menu->addAction(createAction);
+        QObject::connect(createAction, SIGNAL(triggered()), this, SLOT(onCreateRes()));
 
 		m_menu->addSeparator();
 
@@ -147,12 +141,29 @@ namespace QT_UI
 			clearAction->setText("Clear");
 			m_menu->addAction(clearAction);
 			QObject::connect(clearAction, SIGNAL(triggered()), this, SLOT(onClearRes()));
+            
+            m_menu->addSeparator();
+            
+            // save
+            QAction* saveAction = new QAction(m_menu);
+            saveAction->setText("Save");
+            m_menu->addAction(saveAction);
+            QObject::connect(saveAction, SIGNAL(triggered()), this, SLOT(onSaveRes()));
 		}
 
 		m_menu->exec(QCursor::pos());
 	}
 
-	// on load
+    void QResEditor::onCreateRes()
+    {
+        Echo::Res* res = Echo::Res::createByFileExtension(m_exts.c_str());
+        if (res)
+        {
+            m_lineEdit->setText(Echo::StringUtil::ToString(res->getId()).c_str());
+            onEditFinished();
+        }
+    }
+
 	void QResEditor::onLoad()
 	{
 		Echo::String qFileName = Studio::ResChooseDialog::getSelectingFile(this, m_exts.c_str(), "", "");
@@ -167,7 +178,6 @@ namespace QT_UI
 		}
 	}
 
-	// on edit
 	void QResEditor::onEdit()
 	{
 		Echo::ui32 id = Echo::StringUtil::ParseI32(GetId().toStdString().c_str());
@@ -180,10 +190,39 @@ namespace QT_UI
 		}
 	}
 
-	// on clear
 	void QResEditor::onClearRes()
 	{
 		m_lineEdit->setText(Echo::StringUtil::ToString(Echo::i32(-1)).c_str());
 		onEditFinished();
 	}
+
+    void QResEditor::onSaveRes()
+    {
+        Echo::ui32 id = Echo::StringUtil::ParseI32(GetId().toStdString().c_str());
+        Echo::Object* obj = Echo::Object::getById(id);
+        if (obj)
+        {
+            Echo::Res* res = ECHO_DOWN_CAST<Echo::Res*>(obj);
+            if(res)
+            {
+                if(res->getPath().empty())
+                {
+                    Echo::String savePath = Studio::PathChooseDialog::getExistingPathName(this, m_exts.c_str(), "Save").toStdString().c_str();
+                    if (!savePath.empty() && !Echo::PathUtil::IsDir(savePath))
+                    {
+                        Echo::String resPath;
+                        if(Echo::IO::instance()->convertFullPathToResPath(savePath, resPath))
+                        {
+                            res->setPath(resPath);
+                            res->save();
+                        }
+                    }
+                }
+                else
+                {
+                    res->save();
+                }
+            }
+        }
+    }
 }

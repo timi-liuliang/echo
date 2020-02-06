@@ -705,10 +705,6 @@ namespace Echo
 	{
 		pugi::xml_node* xmlNode = (pugi::xml_node*)pugiNode;
 
-		xmlNode->append_attribute("name").set_value(node->getName().c_str());
-		xmlNode->append_attribute("class").set_value(node->getClassName().c_str());
-		xmlNode->append_attribute("path").set_value(node->getPath().c_str());
-
 		savePropertyRecursive(pugiNode, node, node->getClassName());
         saveSignalSlotConnects(pugiNode, node, node->getClassName());
         saveChannels(pugiNode, node);

@@ -57,10 +57,6 @@ namespace Echo
 
 	void Res::bindMethods()
 	{
-		CLASS_BIND_METHOD(Res, getPath, DEF_METHOD("getPath"));
-		CLASS_BIND_METHOD(Res, setPath, DEF_METHOD("setPath"));
-
-		CLASS_REGISTER_PROPERTY(Res, "Path", Variant::Type::String, "getPath", "setPath");
 	}
 
 	void Res::setPath(const String& path)
@@ -109,12 +105,13 @@ namespace Echo
 			if (itfun != g_resFuncs.end())
 			{
 				Res* res = itfun->second.m_lfun(path);
-				if (!res)
+				if (res)
 				{
-					EchoLogError("Res::get file [%s] failed.", path.getPath().c_str());
+                    res->setPath(path.getPath());
+                    return res;
 				}
 
-				return res;
+                EchoLogError("Res::get file [%s] failed.", path.getPath().c_str());
 			}
 
 			EchoLogError("Res::get file [%s] failed. can't find load method for this type of resource", path.getPath().c_str());

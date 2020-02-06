@@ -47,14 +47,12 @@ namespace QT_UI
 		// node tree widget show menu
 		void showMenu(const QPoint& point);
 
-		// on load
+		// res operation
+        void onCreateRes();
 		void onLoad();
-
-		// on edit
 		void onEdit();
-
-		// on clear
 		void onClearRes();
+        void onSaveRes();
 
 	private:
 		Echo::String	m_id;

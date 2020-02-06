@@ -322,8 +322,16 @@ namespace Echo
 		if (Echo::Class::getParentClass(parentClassName, className))
 		{
 			// don't display property of object
-			if (parentClassName != "Object")
-				savePropertyRecursive(pugiNode, classPtr, parentClassName);
+			if (parentClassName == "Object")
+            {
+                xmlNode->append_attribute("name").set_value(classPtr->getName().c_str());
+                xmlNode->append_attribute("class").set_value(classPtr->getClassName().c_str());
+                xmlNode->append_attribute("path").set_value(classPtr->getPath().c_str());
+            }
+            else
+            {
+                savePropertyRecursive(pugiNode, classPtr, parentClassName);
+            }
 		}
 
 		Echo::PropertyInfos propertys;
