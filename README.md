@@ -6,7 +6,7 @@
 
 ## Introduction  
 
-**Echo** is a new game engine, which used more industry standard of nowadays for game development. The new design concept makes the engine simplicity to use. but more powerful.
+**Echo** is a new game engine, which used more industry-standard of nowadays for game development. The new design concept makes the engine simplicity to use. but more powerful.
 
 [Examples](https://github.com/timi-liuliang/echo-examples)  
 [Documentation](https://github.com/timi-liuliang/echo/wiki)  
@@ -20,7 +20,7 @@
 
 ## Build
 ### [Windows Editor]   
-1. Install [Visual Studio 2017] [CMake] [Python 3]...
+1. Install [Visual Studio 2019] [CMake] [Python 3]...
 2. EnterFolder "${echo_root_path}/build/editor/windows"  
 3. Double click "cmake.bat"
 4. Double click "echo.sln"   
