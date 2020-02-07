@@ -76,7 +76,7 @@ namespace Echo
 		TextureCube* createTextureCube(const String& name) override;
 
 		ShaderProgram*	createShaderProgram() override;
-		Shader*	createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const char* srcBuffer, ui32 size);
+		Shader*	createShader(Shader::ShaderType type, const char* srcBuffer, ui32 size);
 
 		// states
 		virtual RasterizerState* createRasterizerState(const RasterizerState::RasterizerDesc& desc) override;

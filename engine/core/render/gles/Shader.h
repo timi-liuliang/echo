@@ -16,14 +16,9 @@ namespace Echo
 			ST_SHADERCOUNT, 
 		};
 
-		struct ShaderDesc
-		{
-			String		macros;
-		};
-
 	public:
-		Shader(ShaderType type, const ShaderDesc& desc, const String& filename);
-		Shader(ShaderType type, const ShaderDesc& desc, const char* srcBuffer, ui32 size);
+		Shader(ShaderType type, const String& filename);
+		Shader(ShaderType type, const char* srcBuffer, ui32 size);
 		virtual ~Shader();
 
 		const String& getName() { return m_filename; }
@@ -42,6 +37,5 @@ namespace Echo
 		String				m_srcData;
 		ui32				m_shaderSize;
 		bool				m_validata;
-		ShaderDesc			m_desc;
 	};
 }

@@ -7,7 +7,7 @@
 
 namespace Echo
 {
-	Shader::Shader(ShaderType type, const ShaderDesc &desc, const String &filename)
+	Shader::Shader(ShaderType type, const String &filename)
 		: m_pProgram(NULL)
 		, m_filename(filename)
 	{
@@ -19,7 +19,6 @@ namespace Echo
 
 		m_validata = true;
 		m_shaderType = type;
-		m_desc = desc;
 		m_shaderSize =  static_cast<ui32>(pShaderStream->size()+1);
 		m_srcData.resize( m_shaderSize);
 		m_srcData[m_shaderSize - 1] = '\0';
@@ -29,12 +28,11 @@ namespace Echo
 		EchoSafeDelete(pShaderStream, DataStream);
 	}
 
-	Shader::Shader(ShaderType type, const ShaderDesc& desc, const char* srcBuffer, ui32 size)
+	Shader::Shader(ShaderType type, const char* srcBuffer, ui32 size)
 		: m_pProgram(NULL)
 	{
 		m_validata	 = true;
 		m_shaderType = type;
-		m_desc		 = desc;
 		m_shaderSize = size;
 		
 		m_srcData.resize( m_shaderSize);

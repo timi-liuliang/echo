@@ -219,17 +219,15 @@ namespace Echo
 
 	bool GLES2ShaderProgram::createShaderProgram(const String& vsContent, const String& psContent)
 	{
-		Shader::ShaderDesc vsDesc; vsDesc.macros = m_macros;
 		GLES2Renderer* pRenderer = ECHO_DOWN_CAST<GLES2Renderer*>(Renderer::instance());
-		Shader *pVertexShader = pRenderer->createShader(Shader::ST_VERTEXSHADER, vsDesc, vsContent.data(), (ui32)vsContent.size());
+		Shader *pVertexShader = pRenderer->createShader(Shader::ST_VERTEXSHADER, vsContent.data(), (ui32)vsContent.size());
 		if (!pVertexShader)
 		{
 			EchoLogError("Error in create vs file: ");
 			return false;
 		}
 
-		Shader::ShaderDesc psDesc; psDesc.macros = m_macros;
-		Shader *pPixelShader = pRenderer->createShader(Shader::ST_PIXELSHADER, psDesc, psContent.data(), (ui32)psContent.size());
+		Shader *pPixelShader = pRenderer->createShader(Shader::ST_PIXELSHADER, psContent.data(), (ui32)psContent.size());
 		if (!pPixelShader)
 		{
 			EchoLogError("Error in create ps file: ");

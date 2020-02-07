@@ -5,15 +5,15 @@
 
 namespace Echo
 {
-	GLES2Shader::GLES2Shader(ShaderType type, const ShaderDesc& desc, const String& filename)
-		: Shader(type, desc, filename)
+	GLES2Shader::GLES2Shader(ShaderType type, const String& filename)
+		: Shader(type, filename)
 	{
 		replaceInclude();
 		create(filename);
 	}
 
-	GLES2Shader::GLES2Shader(ShaderType type, const ShaderDesc& desc, const char* srcBuffer, ui32 size)
-		: Shader(type, desc, srcBuffer, size)
+	GLES2Shader::GLES2Shader(ShaderType type, const char* srcBuffer, ui32 size)
+		: Shader(type, srcBuffer, size)
 	{
 		create("");
 	}
@@ -64,14 +64,6 @@ namespace Echo
 
 	void GLES2Shader::create(const String& filename)
 	{
-		if (!m_desc.macros.empty())
-		{
-			m_desc.macros = "\r\n" + m_desc.macros + "\r\n";
-
-			size_t pos = m_srcData.find_first_of('\n') + 1;
-			m_srcData.insert(pos, m_desc.macros);
-		}
-
 		// Windows platform，Debug mode，enable Nsight Shader debug
 #if defined(ECHO_PLATFORM_WINDOWS) && defined(ECHO_DEBUG)
 		size_t pos = m_srcData.find_first_of('\n') + 1;

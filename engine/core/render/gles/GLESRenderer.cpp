@@ -343,9 +343,9 @@ namespace Echo
 		return EchoNew(GLES2ShaderProgram);
 	}
 
-	Shader* GLES2Renderer::createShader(Shader::ShaderType type, const Shader::ShaderDesc& desc, const char* srcBuffer, ui32 size)
+	Shader* GLES2Renderer::createShader(Shader::ShaderType type, const char* srcBuffer, ui32 size)
 	{
-		return EchoNew(GLES2Shader(type, desc, srcBuffer, size));
+		return EchoNew(GLES2Shader(type, srcBuffer, size));
 	}
 
 	RasterizerState* GLES2Renderer::createRasterizerState(const RasterizerState::RasterizerDesc& desc)
