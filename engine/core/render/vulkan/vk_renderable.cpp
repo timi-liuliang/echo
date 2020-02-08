@@ -6,8 +6,8 @@
 
 namespace Echo
 {
-    VKRenderable::VKRenderable(const String& renderStage, ShaderProgram* shader, int identifier)
-        : Renderable( renderStage, shader, identifier)
+    VKRenderable::VKRenderable(const MaterialPtr& material, int identifier)
+        : Renderable( material, identifier)
     {
     }
 
@@ -22,7 +22,7 @@ namespace Echo
     {
         destroyVkPipeline();
 
-        VKShaderProgram* vkShaderProgram = ECHO_DOWN_CAST<VKShaderProgram*>(m_shaderProgram.ptr());
+        VKShaderProgram* vkShaderProgram = ECHO_DOWN_CAST<VKShaderProgram*>(m_material->getShader());
         if (m_mesh && vkShaderProgram && vkShaderProgram->isLinked() && VKFramebuffer::current())
         {
             VKFramebuffer* vkFrameBuffer = VKFramebuffer::current();
@@ -83,7 +83,7 @@ namespace Echo
     bool VKRenderable::getVkVertexAttributeBySemantic(VertexSemantic semantic, spirv_cross::Resource& oResource)
     {
         String attributeName = VKMapping::MapVertexSemanticString(semantic);
-        VKShaderProgram* vkShaderProgram = ECHO_DOWN_CAST<VKShaderProgram*>(m_shaderProgram.ptr());
+        VKShaderProgram* vkShaderProgram = ECHO_DOWN_CAST<VKShaderProgram*>(m_material->getShader());
         if (vkShaderProgram && vkShaderProgram->isLinked())
         {
             spirv_cross::ShaderResources vertexShaderResources = vkShaderProgram->getSpirvShaderResources(ShaderProgram::VS);
@@ -128,7 +128,7 @@ namespace Echo
 
     void VKRenderable::bindShaderParams()
     {
-		VKShaderProgram* vkShaderProgram = ECHO_DOWN_CAST<VKShaderProgram*>(m_shaderProgram.ptr());
+		VKShaderProgram* vkShaderProgram = ECHO_DOWN_CAST<VKShaderProgram*>(m_material->getShader());
 		if (vkShaderProgram)
 		{
 			bindTextures();
@@ -165,25 +165,25 @@ namespace Echo
 
     const VkPipelineColorBlendStateCreateInfo* VKRenderable::getVkColorBlendStateCreateInfo()
     {
-        VKBlendState* vkState = ECHO_DOWN_CAST<VKBlendState*>(m_blendState ? m_blendState : m_shaderProgram->getBlendState());
+        VKBlendState* vkState = ECHO_DOWN_CAST<VKBlendState*>( m_material->getShader()->getBlendState());
         return vkState->getVkCreateInfo();
     }
 
     const VkPipelineRasterizationStateCreateInfo* VKRenderable::getVkRasterizationStateCreateInfo()
     {
-        VKRasterizerState* vkState = ECHO_DOWN_CAST<VKRasterizerState*>(m_rasterizerState ? m_rasterizerState : m_shaderProgram->getRasterizerState());
+        VKRasterizerState* vkState = ECHO_DOWN_CAST<VKRasterizerState*>(m_material->getShader()->getRasterizerState());
         return vkState->getVkCreateInfo();
     }
 
     const VkPipelineDepthStencilStateCreateInfo* VKRenderable::getVkDepthStencilStateCrateInfo()
     {
-        VKDepthStencilState* vkState = ECHO_DOWN_CAST<VKDepthStencilState*>(m_depthStencilState ? m_depthStencilState : m_shaderProgram->getDepthState());
+        VKDepthStencilState* vkState = ECHO_DOWN_CAST<VKDepthStencilState*>(m_material->getShader()->getDepthState());
         return vkState->getVkCreateInfo();
     }
 
     const VkPipelineMultisampleStateCreateInfo* VKRenderable::getVkMultiSampleStateCreateInfo()
     {
-        VKMultisampleState* vkState = ECHO_DOWN_CAST<VKMultisampleState*>(m_multiSampleState ? m_multiSampleState : m_shaderProgram->getMultisampleState());
+        VKMultisampleState* vkState = ECHO_DOWN_CAST<VKMultisampleState*>(m_material->getShader()->getMultisampleState());
         return vkState->getVkCreateInfo();
     }
 }

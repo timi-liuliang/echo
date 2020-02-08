@@ -224,7 +224,7 @@ namespace Echo
 	{
 		GLES2Renderable* glesRenderable = (GLES2Renderable*)renderable;
 
-        GLES2ShaderProgram* shaderProgram = ECHO_DOWN_CAST<GLES2ShaderProgram*>(renderable->getShader());
+        GLES2ShaderProgram* shaderProgram = ECHO_DOWN_CAST<GLES2ShaderProgram*>(renderable->getMaterial()->getShader());
 		shaderProgram->bind();
 		glesRenderable->bindRenderState();
 		glesRenderable->bindShaderParams();
@@ -586,10 +586,10 @@ namespace Echo
 		return EchoNew(GLESFramebuffer(id, width, height));
 	}
 
-	Renderable* GLES2Renderer::createRenderable(const String& renderStage, ShaderProgram* material)
+	Renderable* GLES2Renderer::createRenderable(const MaterialPtr& material)
 	{
         static ui32 id = 0; id++;
-		Renderable* renderable = EchoNew(GLES2Renderable(renderStage, material, id));
+		Renderable* renderable = EchoNew(GLES2Renderable(material, id));
 		m_renderables[id] = renderable;
 
 		return renderable;

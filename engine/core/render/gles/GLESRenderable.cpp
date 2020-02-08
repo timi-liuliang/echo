@@ -16,8 +16,8 @@ namespace Echo
 {
 	extern GLES2Renderer* g_renderer;
 
-	GLES2Renderable::GLES2Renderable(const String& renderStage, ShaderProgram* shader, int identifier)
-		: Renderable( renderStage, shader, identifier)
+	GLES2Renderable::GLES2Renderable(const MaterialPtr& material, int identifier)
+		: Renderable(material, identifier)
 	{
 	}
 
@@ -30,7 +30,8 @@ namespace Echo
 	{
 		bindTextures();
 
-		if (m_shaderProgram)
+		ShaderProgram* shaderProgram = m_material->getShader();
+		if (shaderProgram)
 		{
 			for (auto& it : m_shaderParams)
 			{
@@ -43,7 +44,7 @@ namespace Echo
 				case SPT_FLOAT:
 				case SPT_VEC2:
 				case SPT_VEC3:
-				case SPT_TEXTURE:	m_shaderProgram->setUniform(param.name.c_str(), param.data, param.type, param.length);	break;
+				case SPT_TEXTURE:	shaderProgram->setUniform(param.name.c_str(), param.data, param.type, param.length);	break;
 				default:			EchoLogError("unknow shader param format! %s", m_node->getName().c_str());				break;
 				}
 			}
@@ -164,7 +165,7 @@ namespace Echo
 		stream->m_vertDeclaration.reserve(numVertElms);
 		stream->m_vertDeclaration.resize(numVertElms);
 
-		GLES2ShaderProgram* gles2Program = ECHO_DOWN_CAST<GLES2ShaderProgram*>(m_shaderProgram.ptr());
+		GLES2ShaderProgram* gles2Program = ECHO_DOWN_CAST<GLES2ShaderProgram*>(m_material->getShader());
 		ui32 elmOffset = 0;
 		for (size_t i = 0; i < numVertElms; ++i)
 		{

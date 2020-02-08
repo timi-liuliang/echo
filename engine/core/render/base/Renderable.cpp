@@ -10,11 +10,10 @@
 
 namespace Echo
 {
-	Renderable::Renderable(const String& renderStage, ShaderProgram* shader, int identifier)
+	Renderable::Renderable(const MaterialPtr& material, int identifier)
 		: m_identifier(identifier)
-        , m_renderStage(renderStage)
 	{
-		m_shaderProgram = shader;
+		m_material = material;
 		m_textures.assign(nullptr);
 	}
 
@@ -37,7 +36,7 @@ namespace Echo
 		ShaderProgram::UniformArray* uniforms = shaderProgram->getUniforms();
 
 		// bind shader param
-		Renderable* renderable = Renderer::instance()->createRenderable(matInst->getRenderStage(), matInst->getShader());
+		Renderable* renderable = Renderer::instance()->createRenderable(matInst);
 		renderable->setNode(node);
 		renderable->setMesh(mesh);
 		for (auto& it : *uniforms)
@@ -83,12 +82,13 @@ namespace Echo
 
 	void Renderable::bindRenderState()
 	{
-		if (m_shaderProgram)
+		ShaderProgram* shaderProgram = m_material->getShader();
+		if (shaderProgram)
 		{
 			Renderer* pRenderer = Renderer::instance();
-			pRenderer->setDepthStencilState(m_depthStencilState ? m_depthStencilState : m_shaderProgram->getDepthState());
-			pRenderer->setRasterizerState(m_rasterizerState ? m_rasterizerState : m_shaderProgram->getRasterizerState());
-			pRenderer->setBlendState(m_blendState ? m_blendState : m_shaderProgram->getBlendState());
+			pRenderer->setDepthStencilState(shaderProgram->getDepthState());
+			pRenderer->setRasterizerState(shaderProgram->getRasterizerState());
+			pRenderer->setBlendState(shaderProgram->getBlendState());
 		}
 	}
 
@@ -96,28 +96,13 @@ namespace Echo
 	{
 		if (m_mesh && m_mesh->isValid())
 		{
-			RenderStage::instance()->addRenderable(m_renderStage, getIdentifier());
+			RenderStage::instance()->addRenderable(m_material->getRenderStage(), getIdentifier());
 		}
 	}
 
-	void Renderable::setBlendState(BlendState* pState)
+	Material* Renderable::getMaterial()
 	{
-		m_blendState = pState;
-	}
-
-	void Renderable::setRasterizerState(RasterizerState* state)
-	{
-		m_rasterizerState = state;
-	}
-
-	void Renderable::setDepthStencilState(DepthStencilState* state)
-	{
-		m_depthStencilState = state;
-	}
-
-	ShaderProgram* Renderable::getShader()
-	{
-		return m_shaderProgram;
+		return m_material;
 	}
 
 	void Renderable::setShaderParam(const String& name, ShaderParamType type, const void* param, size_t num/* =1 */)

@@ -4,7 +4,7 @@
 #include "ShaderProgram.h"
 #include "Texture.h"
 #include "RenderState.h"
-#include "ShaderProgram.h"
+#include "Material.h"
 
 namespace Echo
 {
@@ -66,29 +66,13 @@ namespace Echo
 
 		// submit to renderqueue
 		void submitToRenderQueue();
-		
-		// render stage
-		void setRenderStage(const String& renderStage) { m_renderStage = renderStage; }
-		const String& getRenderStage(void){ return m_renderStage; }
-
-		// blend state
-		void setBlendState( BlendState* state );
-		BlendState*	getBlendState() { return m_blendState; }
-
-		// rasterizer state
-		void setRasterizerState( RasterizerState* state );
-		RasterizerState* getRasterizerState() { return m_rasterizerState; }
-
-		// depth stencil state
-		void setDepthStencilState(DepthStencilState* state);
-		DepthStencilState* getDepthStencilState() { return m_depthStencilState; }
 
 		// node(owner)
 		void setNode( Render* node) { m_node = node; }
 		Render* getNode() { return m_node; }
 
 		// get shader
-		ShaderProgram* getShader();
+		Material* getMaterial();
 
 		// bind render state
 		void bindRenderState();
@@ -98,21 +82,16 @@ namespace Echo
 		void bindTextures();
 
 	protected:
-		Renderable( const String& renderStage, ShaderProgram* shader, int identifier);
+		Renderable(const MaterialPtr& material, int identifier);
 		virtual ~Renderable();
 
 	public:
 		ui32									m_identifier;
 		Render*									m_node = nullptr;
-		String									m_renderStage;
-		ShaderProgramPtr						m_shaderProgram;
+		MaterialPtr								m_material;
 		map<String, ShaderParam>::type			m_shaderParams;
 		Mesh*									m_mesh = nullptr;
 		MaxTextureArray							m_textures;
-		BlendState*								m_blendState = nullptr;
-		RasterizerState*						m_rasterizerState = nullptr;
-		DepthStencilState*						m_depthStencilState = nullptr;
-        MultisampleState*                       m_multiSampleState = nullptr;
 	};
 	typedef ui32 RenderableID;
 }

@@ -99,6 +99,11 @@ namespace Echo
 		// build shader program
 		void buildShaderProgram();
 
+	public:
+		// Modified signal
+		DECLARE_SIGNAL(Signal0, onShaderChanged)
+		DECLARE_SIGNAL(Signal0, onParamValueChanged)
+
 	protected:
 		// propertys (script property or dynamic property)
 		virtual const PropertyInfos& getPropertys() override;

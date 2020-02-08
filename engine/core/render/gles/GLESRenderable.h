@@ -41,7 +41,7 @@ namespace Echo
 		};
 
 	public:
-		GLES2Renderable(const String& renderStage, ShaderProgram* shader, int identifier);
+		GLES2Renderable(const MaterialPtr& material, int identifier);
 		~GLES2Renderable();
 
 		// bind geometry data

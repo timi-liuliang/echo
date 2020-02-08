@@ -247,6 +247,13 @@ namespace Echo
 		return NULL;
 	}
 
+	void Material::setShaderPath(const ResourcePath& path)
+	{
+		m_shaderPath = path;
+
+		m_isDirty = true;
+	}
+
 	bool Material::isMacroUsed(const String& macro)
 	{
 		for (const String& _macro : m_macros)
@@ -323,6 +330,9 @@ namespace Echo
 					}
 				}
 			}
+
+			// emit signal
+			onShaderChanged();
 
 			m_isDirty = false;
 		}
@@ -422,12 +432,5 @@ namespace Echo
 				}
 			}
 		}
-	}
-
-	void Material::setShaderPath(const ResourcePath& path) 
-	{ 
-		m_shaderPath = path;
-
-		m_isDirty = true;
 	}
 }

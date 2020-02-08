@@ -68,10 +68,10 @@ namespace Echo
 
 	}
 
-    Renderable* VKRenderer::createRenderable(const String& renderStage, ShaderProgram* material)
+    Renderable* VKRenderer::createRenderable(const MaterialPtr& material)
     {
         static ui32 id = 0; id++;
-        Renderable* renderable = EchoNew(VKRenderable(renderStage, material, id));
+        Renderable* renderable = EchoNew(VKRenderable( material, id));
         m_renderables[id] = renderable;
 
         return renderable;
@@ -322,7 +322,7 @@ namespace Echo
         VKRenderable* vkRenderable = ECHO_DOWN_CAST<VKRenderable*>(renderable);
         if (vkRenderable->getVkPipeline())
         {
-            ShaderProgram* shaderProgram = renderable->getShader();
+            ShaderProgram* shaderProgram = renderable->getMaterial()->getShader();
             VKFramebuffer* vkFramebuffer = VKFramebuffer::current();
             VkCommandBuffer vkCommandbuffer = vkFramebuffer->getVkCommandbuffer();
 

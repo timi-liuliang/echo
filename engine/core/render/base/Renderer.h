@@ -107,7 +107,7 @@ namespace Echo
 		virtual const SamplerState*	getSamplerState(const SamplerState::SamplerDesc& desc) = 0;
 
 		// renderable operate
-		virtual Renderable* createRenderable(const String& renderStage, ShaderProgram* material)=0;
+		virtual Renderable* createRenderable(const MaterialPtr& material)=0;
 		Renderable* getRenderable(RenderableID id);
 		void destroyRenderables(Renderable** renderables, int num);
 		void destroyRenderables(vector<Renderable*>::type& renderables);
