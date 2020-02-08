@@ -14,7 +14,7 @@
 ## Download   
 |Description|Files|Previous|
 |---|---|---|   
-|Editor [Win64]|[echo-setup-2019.07.21.exe](https://media.githubusercontent.com/media/timi-liuliang/echo-download/master/download/echo-setup-2019.07.21.exe)|[old version](https://github.com/timi-liuliang/echo-download/tree/master/download)|
+|Editor [Win64]|[echo-setup-2020.02.08.exe](https://gzc-download.weiyun.com/ftn_handler/abad3ceaf2d58d3a058fd2a9d0548cbeccb4dcc5bb43943de2d8ef5f2bd725f99428e14e07b87bb103898495a0ce100820e646ee15cde9245fe3455649865ceb/echo-setup-2020.02.08.exe?fname=echo-setup-2020.02.08.exe&from=30113&version=3.3.3.3)|[old version](https://share.weiyun.com/5XoIpdC)|
 |Editor [Mac OS X 10.7 or later]|echo.dmg|
 |Examples|[echo-examples-master.zip](https://codeload.github.com/timi-liuliang/echo-examples/zip/master)|
 
