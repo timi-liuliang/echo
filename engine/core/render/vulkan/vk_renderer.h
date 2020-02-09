@@ -50,7 +50,7 @@ namespace Echo
         virtual ShaderProgram* createShaderProgram() override;
 
 		// create renderable
-        virtual Renderable* createRenderable(const MaterialPtr& material) override;
+        virtual Renderable* createRenderable() override;
 
         // convert matrix
         virtual void convertMatOrho(Matrix4& mat, const Matrix4& matOrth, Real zn, Real zf) override {}

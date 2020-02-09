@@ -68,10 +68,10 @@ namespace Echo
 
 	}
 
-    Renderable* VKRenderer::createRenderable(const MaterialPtr& material)
+    Renderable* VKRenderer::createRenderable()
     {
         static ui32 id = 0; id++;
-        Renderable* renderable = EchoNew(VKRenderable( material, id));
+        Renderable* renderable = EchoNew(VKRenderable(id));
         m_renderables[id] = renderable;
 
         return renderable;

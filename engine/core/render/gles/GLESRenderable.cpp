@@ -16,36 +16,41 @@ namespace Echo
 {
 	extern GLES2Renderer* g_renderer;
 
-	GLES2Renderable::GLES2Renderable(const MaterialPtr& material, int identifier)
-		: Renderable(material, identifier)
+	GLES2Renderable::GLES2Renderable(int identifier)
+		: Renderable(identifier)
 	{
 	}
 
 	GLES2Renderable::~GLES2Renderable()
 	{
-		m_shaderParams.clear();
 	}
 
 	void GLES2Renderable::bindShaderParams()
 	{
-		bindTextures();
-
 		ShaderProgram* shaderProgram = m_material->getShader();
 		if (shaderProgram)
 		{
-			for (auto& it : m_shaderParams)
+			ShaderProgram::UniformArray* uniforms = shaderProgram->getUniforms();
+			for (auto& it : *uniforms)
 			{
-				ShaderParam& param = it.second;
-				switch (param.type)
+				const ShaderProgram::Uniform& uniform = it.second;
+				if (uniform.m_type != SPT_TEXTURE)
 				{
-				case SPT_VEC4:
-				case SPT_MAT4:
-				case SPT_INT:
-				case SPT_FLOAT:
-				case SPT_VEC2:
-				case SPT_VEC3:
-				case SPT_TEXTURE:	shaderProgram->setUniform(param.name.c_str(), param.data, param.type, param.length);	break;
-				default:			EchoLogError("unknow shader param format! %s", m_node->getName().c_str());				break;
+					void* value = m_node ? m_node->getGlobalUniformValue(uniform.m_name) : nullptr;
+					if (!value) value = m_material->getUniformValue(uniform.m_name);
+
+					shaderProgram->setUniform(uniform.m_name.c_str(), value, uniform.m_type, uniform.m_count);
+				}
+				else
+				{
+					i32* slotIdxPtr = (i32*)m_material->getUniformValue(uniform.m_name);
+					Texture* texture = m_material->getTexture(*slotIdxPtr);
+					if (texture)
+					{
+						Renderer::instance()->setTexture(*slotIdxPtr, texture);
+					}
+
+					shaderProgram->setUniform(uniform.m_name.c_str(), slotIdxPtr, uniform.m_type, uniform.m_count);
 				}
 			}
 		}

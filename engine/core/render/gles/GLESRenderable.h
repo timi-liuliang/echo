@@ -41,7 +41,7 @@ namespace Echo
 		};
 
 	public:
-		GLES2Renderable(const MaterialPtr& material, int identifier);
+		GLES2Renderable(int identifier);
 		~GLES2Renderable();
 
 		// bind geometry data

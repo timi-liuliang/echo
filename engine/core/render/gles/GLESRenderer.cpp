@@ -586,10 +586,10 @@ namespace Echo
 		return EchoNew(GLESFramebuffer(id, width, height));
 	}
 
-	Renderable* GLES2Renderer::createRenderable(const MaterialPtr& material)
+	Renderable* GLES2Renderer::createRenderable()
 	{
         static ui32 id = 0; id++;
-		Renderable* renderable = EchoNew(GLES2Renderable(material, id));
+		Renderable* renderable = EchoNew(GLES2Renderable(id));
 		m_renderables[id] = renderable;
 
 		return renderable;

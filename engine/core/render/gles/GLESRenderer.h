@@ -107,7 +107,7 @@ namespace Echo
 
 	protected:
 		//  interal implement
-		virtual Renderable* createRenderable(const MaterialPtr& material) override;
+		virtual Renderable* createRenderable() override;
 
 		// preset to screen
 		virtual bool present() override;

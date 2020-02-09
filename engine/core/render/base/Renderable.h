@@ -8,40 +8,12 @@
 
 namespace Echo
 {
-	static const int MAX_TEXTURE_SAMPLER = 16;
-	static const int SHADER_TEXTURE_SLOT0= 0;
-	static const int SHADER_TEXTURE_SLOT1= 1;
-	static const int SHADER_TEXTURE_SLOT2= 2;
-	static const int SHADER_TEXTURE_SLOT3= 3;
-	static const int SHADER_TEXTURE_SLOT4= 4;
-	static const int SHADER_TEXTURE_SLOT5= 5;
-	static const int SHADER_TEXTURE_SLOT6= 6;
-	static const int SHADER_TEXTURE_SLOT7= 7;
-	static const int SHADER_TEXTURE_SLOT8 = 8;
-	static const int SHADER_TEXTURE_SLOT9 = 9;
-	static const int SHADER_TEXTURE_SLOT10 = 10;
-	static const int SHADER_TEXTURE_SLOT11 = 11;
-	static const int SHADER_TEXTURE_SLOT12 = 12;
-	static const int SHADER_TEXTURE_SLOT13 = 13;
-	static const int SHADER_TEXTURE_SLOT14 = 14;
-	static const int SHADER_TEXTURE_SLOT15 = 15;
-
 	class Render;
 	class Mesh;
 	class Material;
 	class Renderable
 	{
 		friend class Renderer;
-		typedef array<Texture*, MAX_TEXTURE_SAMPLER> MaxTextureArray;
-	public:
-		// Param structure
-		struct ShaderParam
-		{
-			String			name;
-			ShaderParamType type;
-			const void*		data;
-			ui32			length;  // shader constance register num.
-		};
 
 	public:
 		// identifier
@@ -55,43 +27,32 @@ namespace Echo
 
 		// set mesh
 		Mesh* getMesh() { return m_mesh; }
-		virtual void setMesh(Mesh* mesh)=0;
+		virtual void setMesh(Mesh* mesh) = 0;
 
-		// param operate
-		virtual void setShaderParam(const String& name, ShaderParamType type, const void* param, size_t num=1);
-
-		// texture
-		void setTexture( ui32 stage, Texture* texture);
-		Texture* getTexture(ui32 stage) const { return m_textures[stage]; }
-
-		// submit to renderqueue
-		void submitToRenderQueue();
+		// set material
+		void setMaterial(Material* material) { m_material = material; }
+		Material* getMaterial() { return m_material; }
 
 		// node(owner)
 		void setNode( Render* node) { m_node = node; }
 		Render* getNode() { return m_node; }
 
-		// get shader
-		Material* getMaterial();
+		// submit to renderqueue
+		void submitToRenderQueue();
 
+	protected:
+		Renderable(int identifier);
+		virtual ~Renderable();
+
+	public:
 		// bind render state
 		void bindRenderState();
-
-	protected:
-		// bind
-		void bindTextures();
-
-	protected:
-		Renderable(const MaterialPtr& material, int identifier);
-		virtual ~Renderable();
 
 	public:
 		ui32									m_identifier;
 		Render*									m_node = nullptr;
-		MaterialPtr								m_material;
-		map<String, ShaderParam>::type			m_shaderParams;
 		Mesh*									m_mesh = nullptr;
-		MaxTextureArray							m_textures;
+		MaterialPtr								m_material;
 	};
 	typedef ui32 RenderableID;
 }

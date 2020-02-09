@@ -194,9 +194,9 @@ namespace Echo
 			Material* material = m_material ? m_material : m_asset->m_meshes[m_meshIdx].m_primitives[m_primitiveIdx].m_materialInst;
 			if (material->isMacroUsed("USE_IBL"))
 			{
-				m_renderable->setTexture(m_iblDiffuseSlot, LightModule::instance()->getIBLDiffuseTexture());
-				m_renderable->setTexture(m_iblSpecularSlot, LightModule::instance()->getIBLSpecularTexture());
-				m_renderable->setTexture(m_iblBrdfSlot, LightModule::instance()->getIBLBrdfTexture());
+				//m_renderable->setTexture(m_iblDiffuseSlot, LightModule::instance()->getIBLDiffuseTexture());
+				//m_renderable->setTexture(m_iblSpecularSlot, LightModule::instance()->getIBLSpecularTexture());
+				//m_renderable->setTexture(m_iblBrdfSlot, LightModule::instance()->getIBLBrdfTexture());
 			}
 		}
 	}

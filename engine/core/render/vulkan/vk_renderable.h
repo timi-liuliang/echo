@@ -9,7 +9,7 @@ namespace Echo
 	class VKRenderable : public Renderable
 	{
 	public:
-		VKRenderable(const MaterialPtr& material, int identifier);
+		VKRenderable(int identifier);
         virtual ~VKRenderable() {}
 
         // bind shader uniforms
