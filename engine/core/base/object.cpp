@@ -59,7 +59,6 @@ namespace Echo
 		return obj && obj==this ? true : false;
 	}
 
-	// get by id
 	Object* Object::getById(i32 id)
 	{
 		auto it = g_objs.find(id);
@@ -71,7 +70,6 @@ namespace Echo
 		return nullptr;
 	}
 
-	// get class name
 	const String& Object::getClassName() const
 	{
 		static String className = "Object";

@@ -65,7 +65,6 @@ namespace Echo
 
 	Material::Material()
 		: Res()
-		, m_isDirty(false)
 		, m_shaderPath("", ".shader")
 		, m_renderStage("Opaque", { "Opaque", "Transparent" })
 	{
@@ -73,7 +72,6 @@ namespace Echo
 
 	Material::Material(const ResourcePath& path)
 		: Res(path)
-		, m_isDirty(false)
 		, m_shaderPath("", ".shader")
 		, m_renderStage("Opaque", { "Opaque", "Transparent" })
 	{
@@ -86,7 +84,6 @@ namespace Echo
 		unloadTexture();
 	}
 
-	// bind methods to script
 	void Material::bindMethods()
 	{
 		CLASS_BIND_METHOD(Material, getShaderPath, DEF_METHOD("getShaderPath"));
@@ -166,13 +163,11 @@ namespace Echo
 		m_macros = StringUtil::Split(macros, ";");
 		std::sort(m_macros.begin(), m_macros.end());
 
-		m_isDirty = true;
+		buildShaderProgram();
 	}
 
 	ShaderProgram* Material::getShader()
 	{ 
-		buildShaderProgram();
-
 		return m_shaderProgram;
 	}
 
@@ -183,8 +178,6 @@ namespace Echo
 
 	void Material::setUniformValue(const String& name, const ShaderParamType& type, const void* value)
 	{
-		buildShaderProgram();
-
 		const auto& it = m_uniforms.find(name);
 		if (it != m_uniforms.end())
 		{
@@ -218,8 +211,6 @@ namespace Echo
 
 	Texture* Material::setTexture(const String& name, TexturePtr texture)
 	{
-		buildShaderProgram();
-
 		if (!texture)
 			return nullptr;
 
@@ -251,7 +242,7 @@ namespace Echo
 	{
 		m_shaderPath = path;
 
-		m_isDirty = true;
+		buildShaderProgram();
 	}
 
 	bool Material::isMacroUsed(const String& macro)
@@ -281,12 +272,12 @@ namespace Echo
         
 		std::sort(m_macros.begin(), m_macros.end());
 
-		m_isDirty = true;
+		buildShaderProgram();
 	}
 
 	void Material::buildShaderProgram()
 	{
-		if (m_isDirty)
+		if (!m_shaderPath.isEmpty())
 		{
 			clearPropertys();
 
@@ -333,22 +324,16 @@ namespace Echo
 
 			// emit signal
 			onShaderChanged();
-
-			m_isDirty = false;
 		}
 	}
 
 	const PropertyInfos& Material::getPropertys()
 	{
-		buildShaderProgram();
-
 		return m_propertys;
 	}
 
 	bool Material::getPropertyValue(const String& propertyName, Variant& oVar) 
 	{ 
-		buildShaderProgram();
-
 		StringArray ops = StringUtil::Split(propertyName, ".");
 		if (ops[0] == "Uniforms")
 		{
@@ -371,11 +356,8 @@ namespace Echo
 		return false; 
 	}
 
-	// set property value
 	bool Material::setPropertyValue(const String& propertyName, const Variant& propertyValue)
 	{
-		buildShaderProgram();
-
 		StringArray ops = StringUtil::Split(propertyName, ".");
 		if (ops[0] == "Uniforms")
 		{

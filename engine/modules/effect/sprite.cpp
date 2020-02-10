@@ -71,7 +71,7 @@ namespace Echo
                 m_shader = ShaderProgram::getDefault2D(macros);
 
                 // material
-                m_material = EchoNew(Material(Echo::StringUtil::Format("SpriteMaterial_%d", getId())));
+                m_material = ECHO_CREATE_RES(Material);
                 m_material->setShaderPath(m_shader->getPath());
                 m_material->setRenderStage("Transparent");
             }

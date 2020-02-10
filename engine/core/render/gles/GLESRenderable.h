@@ -8,14 +8,6 @@ namespace Echo
 	class GLES2Renderable : public Renderable
 	{
 	public:
-		// vertex stream bind state(for multi stream)
-		enum BindState
-		{
-			BS_NORMAL = 0,
-			BS_BEGIN = 1 << 0,
-			BS_END = 1 << 1,
-		};
-
 		// vertex declaration
 		struct VertexDeclaration
 		{
@@ -57,19 +49,17 @@ namespace Echo
 		// set mesh
 		virtual void setMesh(Mesh* mesh) override;
 
+		// set material
+		virtual void setMaterial(Material* material) override;
+
 		// bind vertex stream
-		bool bindVertexStream(const VertexElementList& vertElements, GPUBuffer* vertexBuffer, int flag = BS_BEGIN | BS_END);
+		void bindVertexStream();
 
 		// build vertex declaration
 		virtual bool buildVertStreamDeclaration(StreamUnit* stream);
 
-		// generate stream hash
-		virtual void generateVertexStreamHash();
-
 	private:
 		vector<StreamUnit>::type		m_vertexStreams;
-		unsigned int					m_vertexStreamsHash;
-		bool							m_is_muti_stream;
-		//GLuint							m_vao = -1;
+		//GLuint						m_vao = -1;
 	};
 }

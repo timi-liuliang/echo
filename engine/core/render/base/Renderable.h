@@ -30,7 +30,7 @@ namespace Echo
 		virtual void setMesh(Mesh* mesh) = 0;
 
 		// set material
-		void setMaterial(Material* material) { m_material = material; }
+		virtual void setMaterial(Material* material) { m_material = material; }
 		Material* getMaterial() { return m_material; }
 
 		// node(owner)

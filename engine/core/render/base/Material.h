@@ -102,7 +102,6 @@ namespace Echo
 	public:
 		// Modified signal
 		DECLARE_SIGNAL(Signal0, onShaderChanged)
-		DECLARE_SIGNAL(Signal0, onParamValueChanged)
 
 	protected:
 		// propertys (script property or dynamic property)
@@ -123,7 +122,6 @@ namespace Echo
 		bool isGlobalUniform( const String& name);
 
 	private:
-		bool				m_isDirty;					// need rebuild
 		ResourcePath		m_shaderPath;				// shader res path
 		StringOption		m_renderStage;
 		StringArray			m_macros;

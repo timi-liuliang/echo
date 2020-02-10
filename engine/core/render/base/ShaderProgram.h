@@ -142,6 +142,10 @@ namespace Echo
         // default shader
         static ResRef<ShaderProgram> getDefault2D(const StringArray& macros);
         static ResRef<ShaderProgram> getDefault3D(const StringArray& macros);
+
+    public:
+		// Modified signal
+		DECLARE_SIGNAL(Signal0, onShaderChanged)
         
     protected:
         // Create

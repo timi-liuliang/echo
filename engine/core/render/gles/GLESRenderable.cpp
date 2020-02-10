@@ -60,26 +60,31 @@ namespace Echo
 	{
 		m_mesh = mesh;
 
-		bindVertexStream(m_mesh->getVertexElements(), m_mesh->getVertexBuffer());
+		bindVertexStream();
 	}
 
-	bool GLES2Renderable::bindVertexStream(const VertexElementList& vertElements, GPUBuffer* vertexBuffer, int flag)
+	void GLES2Renderable::setMaterial(Material* material)
 	{
-		if (flag & BS_BEGIN)
+		m_material = material;
+
+		bindVertexStream();		
+
+		//material->onShaderChanged.connectClassMethod(this, createMethodBind(&GLES2Renderable::bindVertexStream));
+	}
+
+	void GLES2Renderable::bindVertexStream()
+	{
+		if (m_mesh && m_material)
+		{
 			m_vertexStreams.clear();
 
-		StreamUnit unit;
-		unit.m_vertElements = vertElements;
-		unit.m_buffer = vertexBuffer;
-		buildVertStreamDeclaration(&unit);
+			StreamUnit unit;
+			unit.m_vertElements = m_mesh->getVertexElements();
+			unit.m_buffer = m_mesh->getVertexBuffer();
+			buildVertStreamDeclaration(&unit);
 
-		m_vertexStreams.push_back(unit);
-
-		// generate hash value
-		if (flag & BS_END)
-			generateVertexStreamHash();
-
-		return true;
+			m_vertexStreams.push_back(unit);
+		}
 	}
 
 	void GLES2Renderable::bind(Renderable* pre)
@@ -182,29 +187,27 @@ namespace Echo
 			elmOffset += PixelUtil::GetPixelSize(stream->m_vertElements[i].m_pixFmt);
 		}
 
-		if (false == m_is_muti_stream)
+		// check
+		for (i32 i = 0; i < VS_MAX; ++i)
 		{
-			for (i32 i = 0; i < VS_MAX; ++i)
+			i32 loc = gles2Program->getAtrribLocation((VertexSemantic)i);
+			if (loc >= 0)
 			{
-				i32 loc = gles2Program->getAtrribLocation((VertexSemantic)i);
-				if (loc >= 0)
+				bool found = false;
+				for (size_t size = 0; size < numVertElms; ++size)
 				{
-					bool found = false;
-					for (size_t size = 0; size < numVertElms; ++size)
+					if (stream->m_vertElements[size].m_semantic == i)
 					{
-						if (stream->m_vertElements[size].m_semantic == i)
-						{
-							found = true;
-							break;
-						}
+						found = true;
+						break;
 					}
+				}
 
-					if (!found)
-					{
-						String errorInfo = StringUtil::Format("Vertex Attribute [%s] name is NOT in Vertex Stream", GLES2Mapping::MapVertexSemanticString((VertexSemantic)i).c_str());
-						EchoLogFatal(errorInfo.c_str());
-						EchoAssertX(false, errorInfo.c_str());
-					}
+				if (!found)
+				{
+					String errorInfo = StringUtil::Format("Vertex Attribute [%s] name is NOT in Vertex Stream", GLES2Mapping::MapVertexSemanticString((VertexSemantic)i).c_str());
+					EchoLogFatal(errorInfo.c_str());
+					EchoAssertX(false, errorInfo.c_str());
 				}
 			}
 		}
@@ -212,35 +215,5 @@ namespace Echo
 		stream->m_vertStride = elmOffset;
 
 		return true;
-	}
-
-	void GLES2Renderable::generateVertexStreamHash()
-	{
-		unsigned int seed = 131; // 31 131 1313 13131 131313 etc..
-		unsigned int hash = 0;
-		for (int i = (int)(m_vertexStreams.size() - 1); i >= 0; i--)
-		{
-			const StreamUnit& streamUnit = m_vertexStreams[i];
-
-			hash = hash * seed + int((size_t)(streamUnit.m_buffer));
-
-			size_t declarationSize = streamUnit.m_vertDeclaration.size();
-			for (size_t i = 0; i < declarationSize; ++i)
-			{
-				const VertexDeclaration& declaration = streamUnit.m_vertDeclaration[i];
-				if (declaration.m_attribute != -1)
-				{
-					// Enable the vertex array attributes.
-					hash = hash * seed + declaration.m_attribute;
-					hash = hash * seed + declaration.count;
-					hash = hash * seed + declaration.type;
-					hash = hash * seed + declaration.bNormalize;
-					hash = hash * seed + streamUnit.m_vertStride;
-					hash = hash * seed + declaration.elementOffset;
-				}
-			}
-		}
-
-		m_vertexStreamsHash = (hash & 0x7FFFFFFF);
 	}
 }

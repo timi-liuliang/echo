@@ -76,6 +76,8 @@ namespace Echo
 
 	bool GLES2ShaderProgram::linkShaders()
 	{
+		m_uniforms.clear();
+
 		OGLESDebug(glLinkProgram(m_glesProgram));
 
 		// Check the status of the link.

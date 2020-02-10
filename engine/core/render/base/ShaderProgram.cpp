@@ -242,6 +242,8 @@ namespace Echo
                 EchoLogError("create shader program failed");
                 return false;
             }
+
+            onShaderChanged();
         }
         
         return true;
