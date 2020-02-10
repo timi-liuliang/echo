@@ -67,7 +67,7 @@ namespace Echo
 	{
 		m_material = material;
 
-		bindVertexStream();		
+		bindVertexStream();
 
 		//material->onShaderChanged.connectClassMethod(this, createMethodBind(&GLES2Renderable::bindVertexStream));
 	}

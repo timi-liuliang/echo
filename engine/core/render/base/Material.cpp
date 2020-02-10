@@ -7,20 +7,16 @@
 
 namespace Echo
 {
-	Material::Uniform::~Uniform()
+	Material::Uniform::Uniform(const String& name, ShaderParamType type, i32 count)
+		: m_name(name)
+		, m_type(type)
+		, m_count(count)
 	{
-		EchoSafeDeleteArray(m_value, Byte, getValueBytes());
+		m_value.resize(getValueBytes(), 0);
 	}
 
-	Material::Uniform* Material::Uniform::clone()
+	Material::Uniform::~Uniform()
 	{
-		Uniform* result = EchoNew(Uniform);
-		result->m_name = m_name;
-		result->m_type = m_type;
-		result->m_count = m_count;
-		result->setValue( m_value);
-
-		return result;
 	}
 
 	ui32 Material::Uniform::getValueBytes()
@@ -46,20 +42,7 @@ namespace Echo
 		if (value)
 		{
 			i32 bytes = getValueBytes();
-			if (!m_value)
-				m_value = EchoNewArray(Byte, bytes);
-
-			std::memcpy(m_value, value, bytes);
-		}
-	}
-
-	void Material::Uniform::allocValue()
-	{
-		if (!m_value)
-		{
-			i32 bytes = getValueBytes();
-			m_value = EchoNewArray(Byte, bytes);
-			std::memset(m_value, 0, bytes);
+			std::memcpy(m_value.data(), value, bytes);
 		}
 	}
 
@@ -95,27 +78,12 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(Material, "Stage", Variant::Type::StringOption, "getRenderStage", "setRenderStage");
 	}
 
-	void Material::clone(Material* orig)
-	{
-		m_renderStage = orig->m_renderStage;
-		m_macros = orig->m_macros;
-		m_shaderProgram = orig->m_shaderProgram;
-        
-		for (auto it : orig->m_uniforms)
-		{
-			Uniform* uniform = it.second;
-			m_uniforms[uniform->m_name] = uniform->clone();
-		}
-
-		m_textures = orig->m_textures;
-	}
-
 	void* Material::getUniformValue(const String& name)
 	{
 		const auto& it = m_uniforms.find(name);
 		if (it != m_uniforms.end())
 		{
-			return  it->second->m_value;
+			return  it->second->m_value.data();
 		}
 
 		const ShaderProgram::UniformValue* dUniform = m_shaderProgram->getDefaultUniformValue(name);
@@ -124,9 +92,9 @@ namespace Echo
 
 	void Material::loadTexture()
 	{
-		for (const auto& element : m_textures)
+		for (auto& info : m_textures)
 		{
-			m_textures[element.first].m_texture = (Texture*)Res::get(element.second.m_uri);
+			info.m_texture = (Texture*)(Res::get(info.m_uri));
 		}
 	}
 
@@ -137,10 +105,9 @@ namespace Echo
 
 	Texture* Material::getTexture(const int& index)
 	{
-		auto it = m_textures.find(index);
-		if (it != m_textures.end())
+		if (index < m_textures.size())
 		{
-			return it->second.m_texture;
+			return m_textures[index].m_texture;
 		}
 
 		return nullptr;
@@ -148,10 +115,9 @@ namespace Echo
 
 	const String& Material::getTexturePath(const int& index)
 	{
-		auto it = m_textures.find(index);
-		if (it != m_textures.end())
+		if (index < m_textures.size())
 		{
-			return it->second.m_uri;
+			return m_textures[index].m_uri;
 		}
 
 		static String blank = "";
@@ -214,9 +180,8 @@ namespace Echo
 		if (!texture)
 			return nullptr;
 
-		for (auto& it : m_textures)
+		for (TextureInfo& info : m_textures)
 		{
-			TextureInfo& info = it.second;
 			if (info.m_name == name)
 			{
 				info.m_uri = texture->getPath();
@@ -243,6 +208,11 @@ namespace Echo
 		m_shaderPath = path;
 
 		buildShaderProgram();
+
+		if (m_shaderProgram)
+		{
+			m_shaderProgram->onShaderChanged.connectClassMethod(this, createMethodBind(&Material::buildShaderProgram));
+		}
 	}
 
 	bool Material::isMacroUsed(const String& macro)
@@ -340,12 +310,12 @@ namespace Echo
 			Uniform* uniform = getUniform(ops[1]);
 			switch (uniform->m_type)
 			{
-			case ShaderParamType::SPT_FLOAT:	oVar = *(float*)(uniform->m_value); break;
-			case ShaderParamType::SPT_VEC2:		oVar = *(Vector2*)(uniform->m_value); break;
-			case ShaderParamType::SPT_VEC3:		oVar = *(Vector3*)(uniform->m_value); break;
-			case ShaderParamType::SPT_VEC4:		oVar = *(Color*)(uniform->m_value); break;
-			case ShaderParamType::SPT_TEXTURE : oVar = ResourcePath(getTexturePath(*(int*)uniform->m_value), ".png"); break;
-			default:							oVar = *(float*)(uniform->m_value); break;
+			case ShaderParamType::SPT_FLOAT:	oVar = *(float*)(uniform->m_value.data()); break;
+			case ShaderParamType::SPT_VEC2:		oVar = *(Vector2*)(uniform->m_value.data()); break;
+			case ShaderParamType::SPT_VEC3:		oVar = *(Vector3*)(uniform->m_value.data()); break;
+			case ShaderParamType::SPT_VEC4:		oVar = *(Color*)(uniform->m_value.data()); break;
+			case ShaderParamType::SPT_TEXTURE : oVar = ResourcePath(getTexturePath(*(int*)uniform->m_value.data()), ".png"); break;
+			default:							oVar = *(float*)(uniform->m_value.data()); break;
 			}
 		}
 		else if (ops[0] == "Macros")
@@ -384,14 +354,17 @@ namespace Echo
 	{
 		if (m_shaderProgram)
 		{
+			ParamMap oldUniforms = m_uniforms;
+			TextureInfoArray oldTextureInfos = m_textures;
+
+			m_uniforms.clear();
+			m_textures.clear();
+
 			for (auto& it : *(m_shaderProgram->getUniforms()))
 			{
 				const ShaderProgram::Uniform& suniform = it.second;
 				{
-					Uniform* uniform = EchoNew(Uniform);
-					uniform->m_name = suniform.m_name;
-					uniform->m_type = suniform.m_type;
-					uniform->m_count = suniform.m_count;
+					Uniform* uniform = EchoNew(Uniform(suniform.m_name, suniform.m_type, suniform.m_count));
 
 					// auto set texture value
 					if (uniform->m_type == SPT_TEXTURE)
@@ -399,16 +372,39 @@ namespace Echo
 						i32 textureNum = getTextureNum();
 						uniform->setValue(&textureNum);
 						addTexture(getTextureNum(), uniform->m_name);
+
+						// use old values
+						for (TextureInfo& info : oldTextureInfos)
+						{
+							if (info.m_name == uniform->m_name)
+							{
+								setTexture(uniform->m_name, info.m_texture);
+								break;
+							}
+						}
 					}
 					else
 					{
-						uniform->allocValue();
+						// old value
+						auto it = oldUniforms.find(uniform->m_name);
+						if (it != oldUniforms.end())
+						{
+							Uniform* oldUniform = it->second;
+							if (oldUniform && uniform->m_count == oldUniform->m_count && uniform->m_type == oldUniform->m_type)
+							{
+								uniform->setValue(oldUniform->m_value.data());
+							}
+						}
+						else
+						{
+							// default value
+							const ShaderProgram::UniformValue* defaultUniform = m_shaderProgram->getDefaultUniformValue(uniform->m_name);
+							if (defaultUniform && uniform->m_count == defaultUniform->count && uniform->m_type == defaultUniform->type)
+							{
+								uniform->setValue(defaultUniform->value);
+							}
+						}
 					}
-
-					// default value
-					const ShaderProgram::UniformValue* defaultUniform = m_shaderProgram->getDefaultUniformValue(uniform->m_name);
-					if (defaultUniform && uniform->m_count == defaultUniform->count && uniform->m_type == defaultUniform->type)
-						uniform->setValue(defaultUniform->value);
 
 					m_uniforms[uniform->m_name] = uniform;
 				}

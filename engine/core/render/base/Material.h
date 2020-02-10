@@ -20,7 +20,7 @@ namespace Echo
 			String		m_uri;
 			TexturePtr	m_texture;
 		};
-		typedef map<int, TextureInfo>::type TextureInfoMap;
+		typedef vector<TextureInfo>::type TextureInfoArray;
 
 	public:
 		struct Uniform
@@ -28,9 +28,10 @@ namespace Echo
 			String				m_name;
 			ShaderParamType		m_type;
 			i32					m_count;
-			Byte*				m_value = nullptr;
+			vector<Byte>::type	m_value;
 
 			// destructor
+			Uniform(const String& name, ShaderParamType type, i32 count);
 			~Uniform();
 
 			// get value bytes
@@ -38,23 +39,13 @@ namespace Echo
 
 			// set value
 			void setValue(const void* value);
-
-			// alloc Value
-			void allocValue();
-
-			// clone
-			Uniform* clone();
 		};
-
 		typedef map<String, Uniform*>::type ParamMap;
 
 	public:
 		Material();
 		Material(const ResourcePath& path);
 		~Material();
-
-		// clone
-		void clone(Material* orig);
 
 		// load|unload texture
 		void loadTexture();
@@ -127,7 +118,7 @@ namespace Echo
 		StringArray			m_macros;
 		ShaderProgramPtr	m_shaderProgram;
 		ParamMap			m_uniforms;
-		TextureInfoMap 		m_textures;
+		TextureInfoArray 	m_textures;
 	};
 	typedef ResRef<Material> MaterialPtr;
 }
