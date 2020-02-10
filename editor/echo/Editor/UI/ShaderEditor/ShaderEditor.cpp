@@ -8,9 +8,10 @@
 #include "Vector3DataModel.h"
 #include "ColorDataModel.h"
 #include "TextureDataModel.h"
+#include "ShaderScene.h"
 #include "engine/core/io/IO.h"
 
-using namespace ShaderEditor;
+using namespace DataFlowProgramming;
 
 static const char* g_VsTemplate = R"(#version 450
 
@@ -83,7 +84,9 @@ namespace Studio
 	{
 		setupUi(this);
 
-		m_graphicsScene = new QtNodes::FlowScene(registerDataModels());
+		m_graphicsScene = new DataFlowProgramming::ShaderScene(registerDataModels());
+        ((DataFlowProgramming::ShaderScene*)m_graphicsScene)->setShaderEditor(this);
+
 		m_graphicsView = new QtNodes::FlowView((QtNodes::FlowScene*)m_graphicsScene, dockWidgetContents);
 		m_graphicsView->setFrameShape(QFrame::NoFrame);
 		verticalLayout->addWidget(m_graphicsView);
@@ -104,6 +107,9 @@ namespace Studio
 
     void ShaderEditor::compile()
     {
+        if (m_isLoading)
+            return;
+
         QtNodes::FlowScene* flowScene = (QtNodes::FlowScene*)m_graphicsScene;
         if(flowScene)
         {
@@ -133,6 +139,8 @@ namespace Studio
 
     void ShaderEditor::open(const Echo::String& resPath)
     {
+        m_isLoading = true;
+
         m_shaderProgram = dynamic_cast<Echo::ShaderProgram*>(Echo::Res::get(resPath));
         if(m_shaderProgram)
         {
@@ -145,6 +153,8 @@ namespace Studio
         }
         
         this->setVisible(true);
+
+        m_isLoading = false;
     }
 
     void ShaderEditor::save()

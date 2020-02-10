@@ -196,16 +196,18 @@ Node&
 FlowScene::
 createNode(std::unique_ptr<NodeDataModel> && dataModel)
 {
-  auto node = detail::make_unique<Node>(std::move(dataModel));
-  auto ngo  = detail::make_unique<NodeGraphicsObject>(*this, *node);
+    dataModel->setScene(this);
 
-  node->setGraphicsObject(std::move(ngo));
+    auto node = detail::make_unique<Node>(std::move(dataModel));
+    auto ngo  = detail::make_unique<NodeGraphicsObject>(*this, *node);
 
-  auto nodePtr = node.get();
-  _nodes[node->id()] = std::move(node);
+    node->setGraphicsObject(std::move(ngo));
 
-  nodeCreated(*nodePtr);
-  return *nodePtr;
+    auto nodePtr = node.get();
+    _nodes[node->id()] = std::move(node);
+
+    nodeCreated(*nodePtr);
+    return *nodePtr;
 }
 
 
@@ -216,6 +218,7 @@ restoreNode(QJsonObject const& nodeJson)
   QString modelName = nodeJson["model"].toObject()["name"].toString();
 
   auto dataModel = registry().create(modelName);
+  dataModel->setScene(this);
 
   if (!dataModel)
     throw std::logic_error(std::string("No registered model with name ") +

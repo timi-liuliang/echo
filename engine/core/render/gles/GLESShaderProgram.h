@@ -41,6 +41,7 @@ namespace Echo
 
 		// Create
 		virtual bool createShaderProgram(const String& vsContent, const String& psContent) override;
+		void clearShaderProgram();
 
 	public:
 		// get shader
@@ -51,6 +52,6 @@ namespace Echo
 		ShaderArray			m_shaders;
 		GLES2Renderable*	m_preRenderable;				// Geomerty
 		AttribLocationArray	m_attribLocationMapping;		// Attribute location
-		GLuint				m_glesProgram;
+		GLuint				m_glesProgram = 0;
 	};
 }

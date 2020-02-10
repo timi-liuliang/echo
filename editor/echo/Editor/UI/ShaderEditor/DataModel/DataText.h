@@ -5,7 +5,7 @@
 using QtNodes::NodeDataType;
 using QtNodes::NodeData;
 
-namespace ShaderEditor
+namespace DataFlowProgramming
 {
     /// The class can potentially incapsulate any user data which
     /// need to be transferred within the Node Editor graph

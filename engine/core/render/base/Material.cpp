@@ -162,12 +162,11 @@ namespace Echo
 		return false;
 	}
 
-	void Material::addTexture(int idx, const String& name)
+	void Material::addTexture(const String& name)
 	{
 		TextureInfo info;
-		info.m_idx = idx;
 		info.m_name = name;
-		m_textures[idx] = info;
+		m_textures.push_back(info);
 	}
 
 	Texture* Material::setTexture(const String& name, const String& uri)
@@ -371,7 +370,7 @@ namespace Echo
 					{
 						i32 textureNum = getTextureNum();
 						uniform->setValue(&textureNum);
-						addTexture(getTextureNum(), uniform->m_name);
+						addTexture(uniform->m_name);
 
 						// use old values
 						for (TextureInfo& info : oldTextureInfos)

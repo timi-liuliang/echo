@@ -21,6 +21,7 @@ namespace QtNodes
       Error
     };
 
+    class FlowScene;
     class Connection;
     class StyleCollection;
     class NODE_EDITOR_PUBLIC NodeDataModel : public QObject, public Serializable
@@ -68,6 +69,10 @@ namespace QtNodes
         NodeStyle const& nodeStyle() const;
         void setNodeStyle(NodeStyle const& style);
 
+        // scene
+        FlowScene* scene() { return _scene; }
+        void setScene(FlowScene* scene) { _scene = scene; }
+
     public:
         /// Triggers the algorithm
         virtual void setInData(std::shared_ptr<NodeData> nodeData, PortIndex port) = 0;
@@ -106,7 +111,9 @@ namespace QtNodes
         // widget size changed
         void embeddedWidgetSizeUpdated();
 
-    private:
+     protected:
         NodeStyle _nodeStyle;
+
+        FlowScene* _scene = nullptr;
     };
 }

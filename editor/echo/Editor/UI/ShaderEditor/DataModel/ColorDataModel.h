@@ -15,7 +15,7 @@ using QtNodes::NodeDataType;
 using QtNodes::NodeDataModel;
 using QtNodes::NodeValidationState;
 
-namespace ShaderEditor
+namespace DataFlowProgramming
 {
     /// The model dictates the number of inputs and outputs for the Node.
     /// In this example it has no logic.

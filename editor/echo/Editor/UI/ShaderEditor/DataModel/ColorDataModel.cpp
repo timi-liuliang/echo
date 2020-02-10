@@ -3,7 +3,7 @@
 #include <QtGui/QDoubleValidator>
 #include "DataFloat.h"
 
-namespace ShaderEditor
+namespace DataFlowProgramming
 {
     ColorDataModel::ColorDataModel()
     {

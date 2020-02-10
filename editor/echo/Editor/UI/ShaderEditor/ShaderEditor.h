@@ -32,6 +32,7 @@ namespace Studio
         void save();
 
 	private:
+        bool                    m_isLoading = false;
         Echo::ShaderProgramPtr  m_shaderProgram;
 		QGraphicsScene*		    m_graphicsScene = nullptr;
 		QGraphicsView*		    m_graphicsView = nullptr;

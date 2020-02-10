@@ -2,8 +2,9 @@
 #include <QtCore/QJsonValue>
 #include <QtGui/QDoubleValidator>
 #include "DataFloat.h"
+#include "ShaderScene.h"
 
-namespace ShaderEditor
+namespace DataFlowProgramming
 {
     ShaderTemplateDataModel::ShaderTemplateDataModel()
     {
@@ -54,6 +55,10 @@ namespace ShaderEditor
 
     void ShaderTemplateDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex port)
     {
-        int a = 10;
+        ShaderScene* shaderScene = qobject_cast<ShaderScene*>(_scene);
+        if (shaderScene)
+        {
+            shaderScene->compile();
+        }
     }
 }

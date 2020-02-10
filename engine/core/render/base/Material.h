@@ -16,7 +16,6 @@ namespace Echo
 		struct TextureInfo
 		{
 			String		m_name;
-			int			m_idx = -1;
 			String		m_uri;
 			TexturePtr	m_texture;
 		};
@@ -104,7 +103,7 @@ namespace Echo
 
 	private:
 		// add texture
-		void addTexture(int idx, const String& name);
+		void addTexture(const String& name);
 
 		// match uniforms
 		void matchUniforms();

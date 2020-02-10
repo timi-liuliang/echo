@@ -11,7 +11,7 @@ namespace Echo
 	class Render;
 	class Mesh;
 	class Material;
-	class Renderable
+	class Renderable : public Object
 	{
 		friend class Renderer;
 

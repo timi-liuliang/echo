@@ -14,26 +14,12 @@ namespace Echo
 		m_shaders.assign(nullptr);
 		m_attribLocationMapping.assign(-1);
 
-		m_glesProgram = OGLESDebug(glCreateProgram());
-		if (!m_glesProgram)
-		{
-			EchoLogError("Create GLES2ShaderProgram failed.");
-		}
 		m_preRenderable = NULL;
 	}
 
 	GLES2ShaderProgram::~GLES2ShaderProgram()
 	{
-		(ECHO_DOWN_CAST<GLES2Renderer*>(Renderer::instance()))->bindShaderProgram(nullptr);
-
-		Shader* pVertexShader = detachShader(Shader::ST_VERTEXSHADER);
-		EchoSafeDelete(pVertexShader, Shader);
-
-		Shader* pPixelShader = detachShader(Shader::ST_PIXELSHADER);
-		EchoSafeDelete(pPixelShader, Shader);
-
-		OGLESDebug(glDeleteProgram(m_glesProgram));
-		m_glesProgram = 0;
+		clearShaderProgram();
 	}
 	
 	bool GLES2ShaderProgram::attachShader(Shader* shader)
@@ -221,6 +207,15 @@ namespace Echo
 
 	bool GLES2ShaderProgram::createShaderProgram(const String& vsContent, const String& psContent)
 	{
+		clearShaderProgram();
+
+		m_glesProgram = OGLESDebug(glCreateProgram());
+		if (!m_glesProgram)
+		{
+			EchoLogError("Create GLES2ShaderProgram failed.");
+			return false;
+		}
+
 		GLES2Renderer* pRenderer = ECHO_DOWN_CAST<GLES2Renderer*>(Renderer::instance());
 		Shader *pVertexShader = pRenderer->createShader(Shader::ST_VERTEXSHADER, vsContent.data(), (ui32)vsContent.size());
 		if (!pVertexShader)
@@ -242,5 +237,22 @@ namespace Echo
 		linkShaders();
 
 		return true;
+	}
+
+	void GLES2ShaderProgram::clearShaderProgram()
+	{
+		(ECHO_DOWN_CAST<GLES2Renderer*>(Renderer::instance()))->bindShaderProgram(nullptr);
+
+		Shader* pVertexShader = detachShader(Shader::ST_VERTEXSHADER);
+		EchoSafeDelete(pVertexShader, Shader);
+
+		Shader* pPixelShader = detachShader(Shader::ST_PIXELSHADER);
+		EchoSafeDelete(pPixelShader, Shader);
+
+		if (m_glesProgram)
+		{
+			OGLESDebug(glDeleteProgram(m_glesProgram));
+			m_glesProgram = 0;
+		}
 	}
 }
