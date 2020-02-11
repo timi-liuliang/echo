@@ -32,7 +32,7 @@ namespace QT_UI
 		virtual void paintEvent(QPaintEvent* event) override;
 
 	private:
-		QPointF			m_lastPos;
-		QMainWindow*	m_parent;
+		QPointF		m_lastPos;
+		QWidget*	m_parent;
 	};
 }

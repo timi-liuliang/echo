@@ -204,6 +204,14 @@ QListWidget
     outline-style: none;
 }
 
+QDialog
+{
+	border-top : 1px solid rgb(56,56,56);
+	border-left : 1px solid rgb(56,56,56);
+	border-right : 1px solid rgb(56,56,56);
+	border-bottom: 2px solid rgb(202,81,0);
+}
+
 /* QHeaderView */
 QHeaderView
 {

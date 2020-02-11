@@ -4,8 +4,11 @@
 XColorDialog::XColorDialog(QWidget *parent) :
     QDialog(parent)
 {
-    setFixedSize(552,274);
+    setFixedSize(540,300);
     SetupUI();
+
+	// hide default window title
+	setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 
     QVector<QColor> rainbow;
     for ( int i = 0; i < 360; i+= 360/6 )
@@ -19,6 +22,14 @@ XColorDialog::XColorDialog(QWidget *parent) :
 
 void XColorDialog::SetupUI()
 {
+    vLayoutAll = new QVBoxLayout(this);
+    vLayoutAll->setSpacing(0);
+    vLayoutAll->setContentsMargins(0, 0, 0, 0);
+	menubar = new QT_UI::QMenuBarEx(this);
+	menubar->setObjectName(QStringLiteral("menubar"));
+	menubar->setTopLeftCornerIcon(":/icon/Icon/icon.png");
+    vLayoutAll->addWidget(menubar);
+
     hLayoutAll = new QHBoxLayout(this);
     hLayoutAll->setContentsMargins(8,10,8,10);
     colorSquare = new XColorSquare(this);
@@ -56,7 +67,7 @@ void XColorDialog::SetupUI()
 
     gLayoutSlider = new QGridLayout;
 
-    labelAlpha = new QLabel("   α");
+    labelAlpha = new QLabel("   A:");
     spinAlpha = new QSpinBox(this);
     spinAlpha->setMaximum(100);
     labelAlphaSuffix = new QLabel("%");
@@ -150,7 +161,9 @@ void XColorDialog::SetupUI()
     vLayoutPreviewSlider->addLayout(gLayoutSlider);
     hLayoutAll->addLayout(vLayoutPreviewSlider);
 
-    this->setLayout(hLayoutAll);
+    vLayoutAll->addLayout(hLayoutAll);
+
+    this->setLayout(vLayoutAll);
 
     SetConnect();
     SetVerticalSlider();

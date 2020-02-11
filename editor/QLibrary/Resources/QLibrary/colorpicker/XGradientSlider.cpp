@@ -1,6 +1,7 @@
 #include "XGradientSlider.hpp"
 #include <QPainter>
 #include <QStyleOptionSlider>
+#include <QMouseEvent>
 
 XGradientSlider::XGradientSlider(QWidget *parent) :
     QSlider(parent), back( Qt::darkGray, Qt::DiagCrossPattern )
@@ -149,4 +150,18 @@ void XGradientSlider::paintEvent(QPaintEvent *)
     painter.setBrush(Qt::white);
     painter.drawPolygon(tickPts,3);
 
+}
+
+void XGradientSlider::mousePressEvent(QMouseEvent* event)
+{
+	if (event->button() == Qt::LeftButton)
+	{
+		if (orientation() == Qt::Vertical)
+			setValue(minimum() + ((maximum() - minimum()) * (height() - event->y())) / height());
+		else
+			setValue(minimum() + ((maximum() - minimum()) * event->x()) / width());
+
+		event->accept();
+	}
+	QSlider::mousePressEvent(event);
 }

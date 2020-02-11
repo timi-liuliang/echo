@@ -11,7 +11,7 @@ namespace QT_UI
 	QMenuBarEx::QMenuBarEx(QWidget* parent)
 		: QMenuBar(parent)
 	{
-		m_parent = dynamic_cast<QMainWindow*>(parent);
+		m_parent = parent;
 
 		// set menu bar corner icon
 		QWidget* menuTopRightButton = new QWidget(this);

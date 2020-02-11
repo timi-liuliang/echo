@@ -34,6 +34,8 @@ public:
     
 protected:
     void paintEvent(QPaintEvent *ev);
+
+    void mousePressEvent(QMouseEvent* ev);
 };
 
 #endif // XGRADIENTSLIDER_HPP

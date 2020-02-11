@@ -13,11 +13,8 @@ namespace QT_UI
 
 	void QColorSelect::OnSelectColor()
 	{
-	#ifdef ECHO_PLATFORM_WINDOWS
 		QColor color = XColorDialog::getColor(QColor((int)(m_color.r * 255.f), (int)(m_color.g * 255.f), (int)(m_color.b * 255.f), (int)(m_color.a * 255.f)), nullptr);
-	#else
-		QColor color = QColorDialog::getColor(QColor((int)(m_color.r*255.f), (int)(m_color.g*255.f), (int)(m_color.b*255.f), (int)(m_color.a*255.f)), this, QString("Select Color"), QColorDialog::ShowAlphaChannel);
-	#endif
+		//QColor color = QColorDialog::getColor(QColor((int)(m_color.r*255.f), (int)(m_color.g*255.f), (int)(m_color.b*255.f), (int)(m_color.a*255.f)), this, QString("Select Color"), QColorDialog::ShowAlphaChannel);
 		if( color.isValid())
 			SetColor( Echo::Color( color.red()/255.f, color.green()/255.f, color.blue()/255.f,color.alpha()/255.f));
 	}

@@ -5,6 +5,7 @@
 #include "XColorPreview.hpp"
 #include "XColorSquare.h"
 #include "XGradientSlider.hpp"
+#include "QMenubarEx.h"
 #include <QLayout>
 #include <QLabel>
 #include <QPushButton>
@@ -27,6 +28,9 @@ private:
     {
         H,S,V,R,G,B
     }checkedColor;
+
+    QVBoxLayout*        vLayoutAll = nullptr;
+    QT_UI::QMenuBarEx*  menubar = nullptr;
 
     QHBoxLayout*        hLayoutAll;
     XColorSquare*       colorSquare;
