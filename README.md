@@ -19,12 +19,10 @@
 |Examples|[echo-examples-master.zip](https://codeload.github.com/timi-liuliang/echo-examples/zip/master)|
 
 ## Build
-### [Windows Editor]   
-1. Install [Visual Studio 2019] [CMake] [Python 3]...
-2. EnterFolder "${echo_root_path}/build/editor/windows"  
-3. Double click "cmake.bat"
-4. Double click "echo.sln"   
-### [Windows App]   
+### [Editor]   
+[How to Compile "Echo Engine" From Source Code](https://github.com/timi-liuliang/echo/wiki/Compile-Echo-From-Source-Code)
+
+### [App]   
 
 ## Features
 
