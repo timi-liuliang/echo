@@ -53,6 +53,7 @@ namespace Echo
 	bool EditorMode::exec(int argc, char* argv[])
 	{
 		QApplication app(argc, argv);
+
 		app.setAttribute(Qt::AA_NativeWindows);
 
 		// 设置编码方式
