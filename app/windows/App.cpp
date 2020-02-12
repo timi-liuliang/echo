@@ -2,7 +2,7 @@
 #include "Log.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/main/GameSettings.h>
-#include <engine/core/render/interface/Renderer.h>
+#include <engine/core/render/base/Renderer.h>
 #include <engine/core/input/input.h>
 
 namespace Echo

@@ -42,6 +42,9 @@ namespace Echo
 		// compile
 		void compile();
 
+		// write config
+		void writeModuleConfig();
+
 	private:
 		String                  m_rootDir;
 		String                  m_projectDir;

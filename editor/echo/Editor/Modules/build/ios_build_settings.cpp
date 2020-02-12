@@ -449,11 +449,6 @@ namespace Echo
         doc.save_file(savePath.c_str(), "\t", 1U, pugi::encoding_utf8);
     }
 
-    static void writeLine(String& str, const String& line)
-    {
-        str += line + "\n";
-    }
-
     void iOSBuildSettings::writeCMakeList()
     {
         String  cmakeStr;

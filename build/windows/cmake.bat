@@ -11,7 +11,7 @@ if not exist build mkdir build
 cd build
 
 :: generate visual studio solution
-call cmake.exe -DECHO_EDITOR_MODE=FALSE -G"Visual Studio 15 2017 Win64" ../
+call cmake.exe -DECHO_EDITOR_MODE=FALSE -G"Visual Studio 16 2019" -A x64 ../
 
 :: mklink data
 cd /D "%~dp0"
