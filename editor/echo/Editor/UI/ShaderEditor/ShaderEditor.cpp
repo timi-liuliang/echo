@@ -9,6 +9,7 @@
 #include "ColorDataModel.h"
 #include "TextureDataModel.h"
 #include "ShaderScene.h"
+#include "ShaderView.h"
 #include "engine/core/io/IO.h"
 
 using namespace DataFlowProgramming;
@@ -68,7 +69,7 @@ namespace Studio
 		auto ret = std::make_shared<QtNodes::DataModelRegistry>();
 
         // shader template
-        ret->registerModel<ShaderTemplateDataModel>("Template");
+        ret->registerModel<ShaderTemplateDataModel>("skip me");
         
         // variables
         ret->registerModel<FloatDataModel>("Variable");
@@ -87,7 +88,7 @@ namespace Studio
 		m_graphicsScene = new DataFlowProgramming::ShaderScene(registerDataModels());
         ((DataFlowProgramming::ShaderScene*)m_graphicsScene)->setShaderEditor(this);
 
-		m_graphicsView = new QtNodes::FlowView((QtNodes::FlowScene*)m_graphicsScene, dockWidgetContents);
+		m_graphicsView = new DataFlowProgramming::ShaderView((QtNodes::FlowScene*)m_graphicsScene, dockWidgetContents);
 		m_graphicsView->setFrameShape(QFrame::NoFrame);
 		verticalLayout->addWidget(m_graphicsView);
 	}
@@ -147,8 +148,25 @@ namespace Studio
             QtNodes::FlowScene* flowScene = (QtNodes::FlowScene*)m_graphicsScene;
             if(flowScene)
             {
+                flowScene->clearScene();
+
                 Echo::String graph = m_shaderProgram->getGraph();
-                flowScene->loadFromMemory(graph.c_str());
+                if (!graph.empty())
+                {
+                    flowScene->loadFromMemory(graph.c_str());
+                }
+                else
+                {
+                    // Create one ShaderTemplate node
+					std::unique_ptr<NodeDataModel> type = flowScene->registry().create("ShaderTemplate");
+                    if (type)
+                    {
+                        auto& node = flowScene->createNode(std::move(type));
+                        flowScene->nodePlaced(node);
+                    }
+                }
+
+                m_graphicsView->centerOn(m_graphicsView->sceneRect().center());
             }
         }
         

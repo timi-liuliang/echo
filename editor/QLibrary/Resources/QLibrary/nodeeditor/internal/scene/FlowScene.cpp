@@ -192,9 +192,7 @@ deleteConnection(Connection& connection)
 }
 
 
-Node&
-FlowScene::
-createNode(std::unique_ptr<NodeDataModel> && dataModel)
+Node& FlowScene::createNode(std::unique_ptr<NodeDataModel> && dataModel)
 {
     dataModel->setScene(this);
 
@@ -211,9 +209,7 @@ createNode(std::unique_ptr<NodeDataModel> && dataModel)
 }
 
 
-Node&
-FlowScene::
-restoreNode(QJsonObject const& nodeJson)
+Node& FlowScene::restoreNode(QJsonObject const& nodeJson)
 {
   QString modelName = nodeJson["model"].toObject()["name"].toString();
 
@@ -221,8 +217,7 @@ restoreNode(QJsonObject const& nodeJson)
   dataModel->setScene(this);
 
   if (!dataModel)
-    throw std::logic_error(std::string("No registered model with name ") +
-                           modelName.toLocal8Bit().data());
+    throw std::logic_error(std::string("No registered model with name ") + modelName.toLocal8Bit().data());
 
   auto node = detail::make_unique<Node>(std::move(dataModel));
   auto ngo  = detail::make_unique<NodeGraphicsObject>(*this, *node);
@@ -238,35 +233,29 @@ restoreNode(QJsonObject const& nodeJson)
   return *nodePtr;
 }
 
-
-void
-FlowScene::
-removeNode(Node& node)
+void FlowScene::removeNode(Node& node)
 {
-  // call signal
-  nodeDeleted(node);
+      // call signal
+      nodeDeleted(node);
 
-  for(auto portType: {PortType::In,PortType::Out})
-  {
-    auto nodeState = node.nodeState();
-    auto const & nodeEntries = nodeState.getEntries(portType);
+      for(auto portType: {PortType::In,PortType::Out})
+      {
+        auto nodeState = node.nodeState();
+        auto const & nodeEntries = nodeState.getEntries(portType);
 
-    for (auto &connections : nodeEntries)
-    {
-      for (auto const &pair : connections)
-        deleteConnection(*pair.second);
-    }
-  }
+        for (auto &connections : nodeEntries)
+        {
+          for (auto const &pair : connections)
+            deleteConnection(*pair.second);
+        }
+      }
 
-  _nodes.erase(node.id());
+      _nodes.erase(node.id());
 }
 
-
-DataModelRegistry&
-FlowScene::
-registry() const
+DataModelRegistry& FlowScene::registry() const
 {
-  return *_registry;
+    return *_registry;
 }
 
 
@@ -406,17 +395,13 @@ nodes() const
 }
 
 
-std::unordered_map<QUuid, std::shared_ptr<Connection> > const &
-FlowScene::
-connections() const
+std::unordered_map<QUuid, std::shared_ptr<Connection> > const& FlowScene::connections() const
 {
-  return _connections;
+    return _connections;
 }
 
 
-std::vector<Node*>
-FlowScene::
-allNodes() const
+std::vector<Node*>FlowScene::allNodes() const
 {
   std::vector<Node*> nodes;
 
@@ -451,31 +436,23 @@ selectedNodes() const
   return ret;
 }
 
-
-//------------------------------------------------------------------------------
-
-void
-FlowScene::
-clearScene()
+void FlowScene::clearScene()
 {
-  //Manual node cleanup. Simply clearing the holding datastructures doesn't work, the code crashes when
-  // there are both nodes and connections in the scene. (The data propagation internal logic tries to propagate
-  // data through already freed connections.)
-  while (_connections.size() > 0)
-  {
-    deleteConnection( *_connections.begin()->second );
-  }
+    //Manual node cleanup. Simply clearing the holding datastructures doesn't work, the code crashes when
+    // there are both nodes and connections in the scene. (The data propagation internal logic tries to propagate
+    // data through already freed connections.)
+    while (_connections.size() > 0)
+    {
+        deleteConnection( *_connections.begin()->second );
+    }
 
-  while (_nodes.size() > 0)
-  {
-    removeNode( *_nodes.begin()->second );
-  }
+    while (_nodes.size() > 0)
+    {
+        removeNode( *_nodes.begin()->second );
+    }
 }
 
-
-void
-FlowScene::
-save() const
+void FlowScene::save() const
 {
   QString fileName =
     QFileDialog::getSaveFileName(nullptr,

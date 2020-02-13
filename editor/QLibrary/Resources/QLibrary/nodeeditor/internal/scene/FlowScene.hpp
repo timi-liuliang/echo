@@ -48,7 +48,7 @@ namespace QtNodes
 
       Node& restoreNode(QJsonObject const& nodeJson);
 
-      void removeNode(Node& node);
+      virtual void removeNode(Node& node);
 
       DataModelRegistry&registry() const;
 

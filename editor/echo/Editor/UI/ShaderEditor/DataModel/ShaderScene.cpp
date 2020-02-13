@@ -1,5 +1,7 @@
 #include "ShaderScene.h"
 #include "ShaderEditor.h"
+#include "ShaderTemplateDataModel.h"
+#include "nodeeditor/internal/node/Node.hpp"
 
 namespace DataFlowProgramming
 {
@@ -25,6 +27,16 @@ namespace DataFlowProgramming
 		if (m_shaderEditor)
 		{
 			m_shaderEditor->compile();
+		}
+	}
+
+	void ShaderScene::removeNode(QtNodes::Node& node)
+	{
+		// Can't delete ShaderTemplate
+		ShaderTemplateDataModel* shaderTempateNode = qobject_cast<ShaderTemplateDataModel*>(node.nodeDataModel());
+		if (!shaderTempateNode)
+		{
+			FlowScene::removeNode(node);
 		}
 	}
 }
