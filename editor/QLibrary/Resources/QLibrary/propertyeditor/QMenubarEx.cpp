@@ -15,42 +15,42 @@ namespace QT_UI
 
 		// set menu bar corner icon
 		QWidget* menuTopRightButton = new QWidget(this);
-		QToolButton* minusButton = new QToolButton(menuTopRightButton);
-		minusButton->setIcon(QIcon(":/icon/Icon/minus.png"));
-		minusButton->setStyleSheet("background-color: #00535353;");
-		minusButton->setToolTip("Minimize");
+		m_minusButton = new QToolButton(menuTopRightButton);
+		m_minusButton->setIcon(QIcon(":/icon/Icon/minus.png"));
+		m_minusButton->setStyleSheet("background-color: #00535353;");
+		m_minusButton->setToolTip("Minimize");
 
-		QToolButton* minimizeButton = new QToolButton(menuTopRightButton);
-		minimizeButton->setIcon(QIcon(":/icon/Icon/minimize.png"));
-		minimizeButton->setStyleSheet("background-color: #00535353;");
-		minimizeButton->setToolTip("Maximize");
+		m_minimizeButton = new QToolButton(menuTopRightButton);
+		m_minimizeButton->setIcon(QIcon(":/icon/Icon/minimize.png"));
+		m_minimizeButton->setStyleSheet("background-color: #00535353;");
+		m_minimizeButton->setToolTip("Maximize");
 
-		QToolButton* fullScreenButton = new QToolButton(menuTopRightButton);
-		fullScreenButton->setIcon(QIcon(":/icon/Icon/fullscreen.png"));
-		fullScreenButton->setStyleSheet("background-color: #00535353;");
-		fullScreenButton->setToolTip("FullScreen");
+		m_fullScreenButton = new QToolButton(menuTopRightButton);
+		m_fullScreenButton->setIcon(QIcon(":/icon/Icon/fullscreen.png"));
+		m_fullScreenButton->setStyleSheet("background-color: #00535353;");
+		m_fullScreenButton->setToolTip("FullScreen");
 
-		QToolButton* closeButton = new QToolButton(menuTopRightButton);
-		closeButton->setIcon(QIcon(":/icon/Icon/close.png"));
-		closeButton->setStyleSheet("background-color: #00535353;");
-		closeButton->setToolTip("Close");
+		m_closeButton = new QToolButton(menuTopRightButton);
+		m_closeButton->setIcon(QIcon(":/icon/Icon/close.png"));
+		m_closeButton->setStyleSheet("background-color: #00535353;");
+		m_closeButton->setToolTip("Close");
 
 		QHBoxLayout* horizontalLayout = new QHBoxLayout(menuTopRightButton);
 		horizontalLayout->setSpacing(0);
 		horizontalLayout->setObjectName(QStringLiteral("horizontalLayoutTR"));
 		horizontalLayout->setContentsMargins(0, 0, 0, 0);
-		horizontalLayout->addWidget(minusButton);
-		horizontalLayout->addWidget(minimizeButton);
-		horizontalLayout->addWidget(fullScreenButton);
-		horizontalLayout->addWidget(closeButton);
+		horizontalLayout->addWidget(m_minusButton);
+		horizontalLayout->addWidget(m_minimizeButton);
+		horizontalLayout->addWidget(m_fullScreenButton);
+		horizontalLayout->addWidget(m_closeButton);
 
 		setCornerWidget(menuTopRightButton, Qt::TopRightCorner);
 		
 		// connect signal slots
-		QObject::connect(minusButton, SIGNAL(clicked()), this, SLOT(onMinus()));
-		QObject::connect(minimizeButton, SIGNAL(clicked()), this, SLOT(onMaxmized()));
-		QObject::connect(fullScreenButton, SIGNAL(clicked()), this, SLOT(onFullScreen()));
-		QObject::connect(closeButton, SIGNAL(clicked()), parent, SLOT(close()));
+		QObject::connect(m_minusButton, SIGNAL(clicked()), this, SLOT(onMinus()));
+		QObject::connect(m_minimizeButton, SIGNAL(clicked()), this, SLOT(onMaxmized()));
+		QObject::connect(m_fullScreenButton, SIGNAL(clicked()), this, SLOT(onFullScreen()));
+		QObject::connect(m_closeButton, SIGNAL(clicked()), parent, SLOT(close()));
 	}
 
 	void QMenuBarEx::setTopLeftCornerIcon(const char* icon)
@@ -69,6 +69,14 @@ namespace QT_UI
 		menuTopLeftButton->setIconSize(QSize(22, 22));
 		menuTopLeftButton->setStyleSheet("background-color: #00535353;");
 		setCornerWidget(menuTopLeftButton, Qt::TopLeftCorner);
+	}
+
+	void QMenuBarEx::setCornderButtonVisible(QMenuBarEx::ButtonType type, bool visible)
+	{
+		if		(type == Minus)		m_minusButton->setVisible(visible);
+		else if (type == Minimize)	m_minimizeButton->setVisible(visible);
+		else if (type == FullScreen)m_fullScreenButton->setVisible(visible);
+		else if (type == Close)		m_closeButton->setVisible(visible);
 	}
 
 	void QMenuBarEx::onMinus()

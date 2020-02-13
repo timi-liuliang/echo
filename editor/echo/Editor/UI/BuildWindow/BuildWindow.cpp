@@ -17,16 +17,11 @@ namespace Studio
 	{
 		setupUi( this);
 
-#ifdef ECHO_PLATFORM_WINDOWS
         // hide window hwnd
         setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
-#elif defined(ECHO_PLATFORM_MAC)
-        // set title bar color
-        macChangeTitleBarColor(winId(), 66.f/255.f, 66.f/255.f, 66.f/255.f);
-#endif
 
 		// set icon
-		//menubar->setTopLeftCornerIcon(":/icon/Icon/icon.png");
+        m_menuBar->setTopLeftCornerIcon(":/icon/Icon/icon.png");
 
         // splitter stretch
         m_splitter->setStretchFactor(0, 0);

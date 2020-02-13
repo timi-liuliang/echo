@@ -10,11 +10,24 @@ namespace QT_UI
 		Q_OBJECT
 
 	public:
+		// Button type
+		enum ButtonType
+		{
+			Minus,
+			Minimize,
+			FullScreen,
+			Close,
+		};
+
+	public:
 		QMenuBarEx(QWidget* parent);
 		~QMenuBarEx(){}
 
 		// set top left corner icon
 		void setTopLeftCornerIcon(const char* icon);
+
+		// set button visible
+		void setCornderButtonVisible(ButtonType type, bool visible);
 
 	protected:
 		virtual void mouseMoveEvent(QMouseEvent *e) override;
@@ -32,7 +45,11 @@ namespace QT_UI
 		virtual void paintEvent(QPaintEvent* event) override;
 
 	private:
-		QPointF		m_lastPos;
-		QWidget*	m_parent;
+		QPointF			m_lastPos;
+		QWidget*		m_parent;
+		QToolButton*	m_minusButton = nullptr;
+		QToolButton*	m_minimizeButton = nullptr;
+		QToolButton*	m_fullScreenButton = nullptr;
+		QToolButton*	m_closeButton = nullptr;
 	};
 }
