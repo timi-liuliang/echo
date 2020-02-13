@@ -18,19 +18,19 @@ namespace Echo
 		static Time* instance();
 
 	public:
-		// ÖØÖÃ
+		// reset
 		void reset();
 
-		/** Returns milliseconds since initialisation or last reset */
+		/** Returns milliseconds since initialization or last reset */
 		unsigned long getMilliseconds();
 
-		/** Returns microseconds since initialisation or last reset */
+		/** Returns microseconds since initialization or last reset */
 		unsigned long getMicroseconds();
 
-		/** Returns milliseconds since initialisation or last reset, only CPU time measured */	
+		/** Returns milliseconds since initialization or last reset, only CPU time measured */	
 		unsigned long getMillisecondsCPU();
 
-		/** Returns microseconds since initialisation or last reset, only CPU time measured */	
+		/** Returns microseconds since initialization or last reset, only CPU time measured */	
 		unsigned long getMicrosecondsCPU();
 
 	private:
