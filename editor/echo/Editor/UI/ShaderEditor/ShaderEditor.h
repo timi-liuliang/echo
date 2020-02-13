@@ -7,6 +7,8 @@
 #include <nodeeditor/NodeDataModel>
 #include <engine/core/util/StringUtil.h>
 #include <engine/core/render/base/ShaderProgram.h>
+#include "DataModel/ShaderScene.h"
+#include "DataModel/ShaderView.h"
 #include "ui_ShaderEditor.h"
 
 namespace Studio
@@ -31,12 +33,16 @@ namespace Studio
         // save
         void save();
 
+    protected:
+        // adjust view
+        void adjustViewRect();
+
 	private:
-        bool                    m_isLoading = false;
-        Echo::ShaderProgramPtr  m_shaderProgram;
-		QGraphicsScene*		    m_graphicsScene = nullptr;
-		QGraphicsView*		    m_graphicsView = nullptr;
-        std::string             m_paramCode;
-        std::string             m_shaderCode;
+        bool                                m_isLoading = false;
+        Echo::ShaderProgramPtr              m_shaderProgram;
+		DataFlowProgramming::ShaderScene*	m_graphicsScene = nullptr;
+		DataFlowProgramming::ShaderView*	m_graphicsView = nullptr;
+        std::string                         m_paramCode;
+        std::string                         m_shaderCode;
 	};
 }

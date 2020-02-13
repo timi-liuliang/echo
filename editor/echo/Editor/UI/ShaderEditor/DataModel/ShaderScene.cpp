@@ -39,4 +39,19 @@ namespace DataFlowProgramming
 			FlowScene::removeNode(node);
 		}
 	}
+
+	QtNodes::Node* ShaderScene::getShaderTemplateNode()
+	{
+		for (QtNodes::Node* node : allNodes())
+		{
+			// Can't delete ShaderTemplate
+			ShaderTemplateDataModel* shaderTempateNode = qobject_cast<ShaderTemplateDataModel*>(node->nodeDataModel());
+			if (shaderTempateNode)
+			{
+				return node;
+			}
+		}
+
+		return nullptr;
+	}
 }

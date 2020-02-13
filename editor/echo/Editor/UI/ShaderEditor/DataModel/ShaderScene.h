@@ -1,7 +1,8 @@
 #pragma once
 
 #include <nodeeditor/FlowScene>
-#include "ShaderEditor.h"
+
+namespace Studio { class ShaderEditor; }
 
 namespace DataFlowProgramming
 {
@@ -15,17 +16,20 @@ namespace DataFlowProgramming
         virtual ~ShaderScene();
 
         // shader editor
-        void setShaderEditor(Studio::ShaderEditor* editor) { m_shaderEditor = editor; }
+        void setShaderEditor(class Studio::ShaderEditor* editor) { m_shaderEditor = editor; }
 
         // compile
         void compile();
+
+        // get shader template node
+        QtNodes::Node* getShaderTemplateNode();
 
     public:
         // override remove node
         virtual void removeNode(QtNodes::Node& node) override;
 
     protected:
-        Studio::ShaderEditor* m_shaderEditor = nullptr;
+        class Studio::ShaderEditor* m_shaderEditor = nullptr;
     };
 }
 

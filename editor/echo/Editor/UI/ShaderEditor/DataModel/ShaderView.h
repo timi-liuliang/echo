@@ -2,7 +2,6 @@
 
 #include <nodeeditor/FlowScene>
 #include <nodeeditor/FlowView>
-#include "ShaderEditor.h"
 
 namespace DataFlowProgramming
 {

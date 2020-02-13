@@ -1,4 +1,5 @@
 #include "ShaderEditor.h"
+#include <nodeeditor/internal/node/Node.hpp>
 #include <nodeeditor/NodeData>
 #include <nodeeditor/FlowScene>
 #include <nodeeditor/FlowView>
@@ -154,6 +155,8 @@ namespace Studio
                 if (!graph.empty())
                 {
                     flowScene->loadFromMemory(graph.c_str());
+
+                    this->setVisible(true);
                 }
                 else
                 {
@@ -161,18 +164,35 @@ namespace Studio
 					std::unique_ptr<NodeDataModel> type = flowScene->registry().create("ShaderTemplate");
                     if (type)
                     {
+                        this->setVisible(true);
+
                         auto& node = flowScene->createNode(std::move(type));
+						QPoint pos(m_graphicsView->sceneRect().center().x(), m_graphicsView->sceneRect().center().y() - node.nodeGraphicsObject().boundingRect().height() * 0.5f);
+						QPointF posView = m_graphicsView->mapToScene(pos);
+
+						node.nodeGraphicsObject().setPos(posView);
                         flowScene->nodePlaced(node);
+
+                        node.nodeGraphicsObject().setVisible(false);
+                        node.nodeGraphicsObject().setVisible(true);
                     }
                 }
-
-                m_graphicsView->centerOn(m_graphicsView->sceneRect().center());
             }
         }
-        
-        this->setVisible(true);
 
         m_isLoading = false;
+    }
+
+    void ShaderEditor::adjustViewRect()
+    {
+   //     QtNodes::Node* shaderTemplateNode = m_graphicsScene->getShaderTemplateNode();
+   //     if (shaderTemplateNode)
+   //     {
+   //         QRectF stRect = shaderTemplateNode->nodeGraphicsObject().sceneBoundingRect();
+
+			//QRectF viewRect = m_graphicsView->sceneRect();
+			//m_graphicsView->centerOn(&shaderTemplateNode->nodeGraphicsObject());
+   //     }
     }
 
     void ShaderEditor::save()
