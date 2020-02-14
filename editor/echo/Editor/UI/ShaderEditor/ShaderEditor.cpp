@@ -169,11 +169,12 @@ namespace Studio
 						std::unique_ptr<NodeDataModel> type = flowScene->registry().create("ShaderTemplate");
 						if (type)
 						{
-							auto& node = flowScene->createNode(std::move(type));
-							QPoint pos(flowView->sceneRect().center().x(), flowView->sceneRect().center().y() - node.nodeGraphicsObject().boundingRect().height() * 0.5f);
-							QPointF posView = flowView->mapToScene(pos);
+                            QRectF sceneRect = flowView->sceneRect();
 
-							node.nodeGraphicsObject().setPos(posView);
+							auto& node = flowScene->createNode(std::move(type));
+							QPoint pos(node.nodeGraphicsObject().x(), sceneRect.center().y() - node.nodeGraphicsObject().boundingRect().height() * 0.5f);
+
+							node.nodeGraphicsObject().setPos(QPointF(pos.x(), pos.y()));
 							flowScene->nodePlaced(node);
 						}
 					});
