@@ -27,6 +27,34 @@ namespace Echo
 
 	}
 
+	void Time::tick()
+	{
+		if (!m_tasks.empty())
+		{
+			ulong currentTime = getMilliseconds();
+			for (auto it = m_tasks.begin(); it != m_tasks.end();)
+			{
+				if (currentTime >= it->m_startTime)
+				{
+					it->m_cb();
+					it = m_tasks.erase(it);
+				}
+				else
+				{
+					it++;
+				}
+			}
+		}
+	}
+
+	void Time::addDelayTask(ulong delayMilliseconds, std::function<void()> cb)
+	{
+		Task task;
+		task.m_startTime = getMilliseconds() + delayMilliseconds;
+		task.m_cb = cb;
+		m_tasks.push_back(task);
+	}
+
 	void Time::reset()
 	{
 #ifdef ECHO_PLATFORM_WINDOWS

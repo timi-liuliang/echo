@@ -299,6 +299,8 @@ namespace Echo
 
 	void Engine::tick(float elapsedTime)
 	{
+		Time::instance()->tick();
+
         FrameState::instance()->reset();
         FrameState::instance()->tick(elapsedTime);
         

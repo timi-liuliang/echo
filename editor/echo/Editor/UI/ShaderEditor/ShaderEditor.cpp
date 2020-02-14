@@ -12,6 +12,7 @@
 #include "ShaderScene.h"
 #include "ShaderView.h"
 #include "engine/core/io/IO.h"
+#include "engine/core/util/Timer.h"
 
 using namespace DataFlowProgramming;
 
@@ -146,7 +147,7 @@ namespace Studio
         m_shaderProgram = dynamic_cast<Echo::ShaderProgram*>(Echo::Res::get(resPath));
         if(m_shaderProgram)
         {
-            QtNodes::FlowScene* flowScene = (QtNodes::FlowScene*)m_graphicsScene;
+            QtNodes::FlowScene* flowScene = m_graphicsScene;
             if(flowScene)
             {
                 flowScene->clearScene();
@@ -160,22 +161,22 @@ namespace Studio
                 }
                 else
                 {
+                    this->setVisible(true);
+
                     // Create one ShaderTemplate node
-					std::unique_ptr<NodeDataModel> type = flowScene->registry().create("ShaderTemplate");
-                    if (type)
-                    {
-                        this->setVisible(true);
+					QtNodes::FlowView* flowView = m_graphicsView;
+					Echo::Time::instance()->addDelayTask(200, [flowScene, flowView]() {
+						std::unique_ptr<NodeDataModel> type = flowScene->registry().create("ShaderTemplate");
+						if (type)
+						{
+							auto& node = flowScene->createNode(std::move(type));
+							QPoint pos(flowView->sceneRect().center().x(), flowView->sceneRect().center().y() - node.nodeGraphicsObject().boundingRect().height() * 0.5f);
+							QPointF posView = flowView->mapToScene(pos);
 
-                        auto& node = flowScene->createNode(std::move(type));
-						QPoint pos(m_graphicsView->sceneRect().center().x(), m_graphicsView->sceneRect().center().y() - node.nodeGraphicsObject().boundingRect().height() * 0.5f);
-						QPointF posView = m_graphicsView->mapToScene(pos);
-
-						node.nodeGraphicsObject().setPos(posView);
-                        flowScene->nodePlaced(node);
-
-                        node.nodeGraphicsObject().setVisible(false);
-                        node.nodeGraphicsObject().setVisible(true);
-                    }
+							node.nodeGraphicsObject().setPos(posView);
+							flowScene->nodePlaced(node);
+						}
+					});
                 }
             }
         }

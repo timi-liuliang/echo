@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/core/memory/MemAllocDef.h"
+#include <functional>
 
 #ifdef ECHO_PLATFORM_WINDOWS
 	#include <windows.h>
@@ -14,8 +15,19 @@ namespace Echo
 	class Time
 	{	
 	public:
+		// Task
+		struct Task
+		{
+			ulong				  m_startTime;
+			std::function<void()> m_cb;
+		};
+
+	public:
 		~Time();
 		static Time* instance();
+
+		// tick
+		void tick();
 
 	public:
 		// reset
@@ -32,6 +44,10 @@ namespace Echo
 
 		/** Returns microseconds since initialization or last reset, only CPU time measured */	
 		unsigned long getMicrosecondsCPU();
+
+	public:
+		// add event
+		void addDelayTask(ulong delayMilliseconds, std::function<void()> cb);
 
 	private:
 		Time();
@@ -57,5 +73,6 @@ namespace Echo
 #else 
 		struct timeval	m_startTime;
 #endif
+		vector<Task>::type		m_tasks;
 	};
 }
