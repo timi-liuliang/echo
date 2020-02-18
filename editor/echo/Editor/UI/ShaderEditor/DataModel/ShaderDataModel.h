@@ -28,14 +28,17 @@ namespace DataFlowProgramming
         virtual ~ShaderDataModel() {}
 
 		/// Caption is used in GUI
-        virtual QString caption() const { return "variable"; }
+        virtual QString caption() const = 0;
 
-        // generat code
+        // variable name
+        const Echo::String getVariableName();
+
+        // generate code
         virtual bool generateCode(std::string& macroCode, std::string& paramCode, std::string& shaderCode)=0;
 
-    protected:
+    private:
         Echo::ui32        m_id = 0;
-        Echo::String      m_name;
+        Echo::String      m_variableName;
     };
 }
 

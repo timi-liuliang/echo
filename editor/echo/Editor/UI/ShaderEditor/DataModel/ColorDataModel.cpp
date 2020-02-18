@@ -2,6 +2,7 @@
 #include <QtCore/QJsonValue>
 #include <QtGui/QDoubleValidator>
 #include "DataFloat.h"
+#include "DataVector3.h"
 
 namespace DataFlowProgramming
 {
@@ -10,7 +11,14 @@ namespace DataFlowProgramming
         m_colorSelect = new QT_UI::QColorSelect();
         m_colorSelect->setFixedSize(155, 155);
         m_colorSelect->setDrawText(false);
-        
+
+        m_outputs.resize(5);
+        m_outputs[0] = std::make_shared<DataVector3>("rgb");
+        m_outputs[1] = std::make_shared<DataFloat>("r");
+        m_outputs[2] = std::make_shared<DataFloat>("g");
+        m_outputs[3] = std::make_shared<DataFloat>("b");
+        m_outputs[4] = std::make_shared<DataFloat>("a");
+
         QObject::connect(m_colorSelect, SIGNAL(Signal_ColorChanged()), this, SLOT(onColorEdited()));
     }
 
@@ -18,12 +26,8 @@ namespace DataFlowProgramming
     {
       QJsonObject modelJson = NodeDataModel::save();
 
-      if (_number)
-        modelJson["number"] = QString::number(_number->number());
-
       return modelJson;
     }
-
 
     void ColorDataModel::restore(QJsonObject const &p)
     {
@@ -37,7 +41,7 @@ namespace DataFlowProgramming
         double d = strNum.toDouble(&ok);
         if (ok)
         {
-          _number = std::make_shared<DataFloat>(d);
+          //_number = std::make_shared<DataFloat>(d);
           //m_colorSelect->setText(strNum);
         }
       }
@@ -67,37 +71,28 @@ namespace DataFlowProgramming
 
     void ColorDataModel::onColorEdited()
     {
-      bool ok = true;
+        bool ok = true;
+        if (ok)
+        {
+            m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s.rgb", getVariableName().c_str()));
 
-        double number = 0.f;//_lineEdit->text().toDouble(&ok);
-
-      if (ok)
-      {
-        _number = std::make_shared<DataFloat>(number);
-
-        Q_EMIT dataUpdated(0);
-      }
-      else
-      {
-        Q_EMIT dataInvalidated(0);
-      }
+            Q_EMIT dataUpdated(0);
+        }
+        else
+        {
+            Q_EMIT dataInvalidated(0);
+        }
     }
-
 
     NodeDataType ColorDataModel::dataType(PortType portType, PortIndex portIndex) const
     {
         if(portType==PortType::Out)
         {
-            if(portIndex==0)      return NodeDataType {"vec3", "rgb"};
-            else if(portIndex==1) return NodeDataType {"float", "r"};
-            else if(portIndex==2) return NodeDataType {"float", "g"};
-            else if(portIndex==3) return NodeDataType {"float", "b"};
-            else if(portIndex==4) return NodeDataType {"float", "a"};
+            return m_outputs[portIndex]->type();
         }
         
         return NodeDataType {"unknown", "Unknown"};
     }
-
 
     std::shared_ptr<NodeData> ColorDataModel::outData(PortIndex portIndex)
     {
@@ -106,13 +101,13 @@ namespace DataFlowProgramming
             return m_outputs[portIndex];
         }
 
-        return _number;
+        return nullptr;
     }
 
     bool ColorDataModel::generateCode(std::string& macroCode, std::string& paramCode, std::string& shaderCode)
     {
         const Echo::Color& color = m_colorSelect->GetColor();
-        shaderCode += Echo::StringUtil::Format("\tvec4 %s = vec4(%f, %f, %f, %f);\n", m_name.c_str(), color.r, color.g, color.b, color.a);
+        shaderCode += Echo::StringUtil::Format("\tvec4 %s = vec4(%f, %f, %f, %f);\n", getVariableName().c_str(), color.r, color.g, color.b, color.a);
         
         return true;
     }

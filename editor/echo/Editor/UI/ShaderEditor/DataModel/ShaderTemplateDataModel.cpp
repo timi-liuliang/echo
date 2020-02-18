@@ -70,9 +70,9 @@ namespace DataFlowProgramming
     {
         if (m_inputs[0])
         {
-            macroCode = "#define ENABLE_BASE_COLOR\n";
+            macroCode = "#define ENABLE_BASE_COLOR";
 
-            shaderCode += "__BaseColor = vec3(0.0)";
+            shaderCode += Echo::StringUtil::Format("\tvec3 __BaseColor = %s;", dynamic_cast<ShaderData*>(m_inputs[0].get())->getVariableName().c_str());
         }
 
         return true;

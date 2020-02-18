@@ -28,7 +28,7 @@ namespace DataFlowProgramming
         virtual ~ColorDataModel() {}
 
         // caption
-        QString caption() const override { return QStringLiteral("Color"); }
+        virtual QString caption() const override { return QStringLiteral("Color"); }
         bool captionVisible() const override { return true; }
 
         QString name() const override { return QStringLiteral("Color"); }
@@ -60,10 +60,8 @@ namespace DataFlowProgramming
         void onColorEdited();
 
     private:
-      std::shared_ptr<DataFloat> _number;
-      QT_UI::QColorSelect*       m_colorSelect = nullptr;
-
-        vector<std::shared_ptr<NodeData>>  m_outputs;
+        QT_UI::QColorSelect*                 m_colorSelect = nullptr;
+        vector<std::shared_ptr<ShaderData>>  m_outputs;
     };
 }
 

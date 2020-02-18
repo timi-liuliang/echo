@@ -13,12 +13,9 @@ namespace DataFlowProgramming
 
     QJsonObject TextureDataModel::save() const
     {
-      QJsonObject modelJson = NodeDataModel::save();
+        QJsonObject modelJson = NodeDataModel::save();
 
-      if (_number)
-        modelJson["number"] = QString::number(_number->number());
-
-      return modelJson;
+        return modelJson;
     }
 
 
@@ -34,7 +31,7 @@ namespace DataFlowProgramming
         double d = strNum.toDouble(&ok);
         if (ok)
         {
-          _number = std::make_shared<DataFloat>(d);
+          //_number = std::make_shared<DataFloat>(d);
           //m_colorSelect->setText(strNum);
         }
       }
@@ -72,7 +69,7 @@ namespace DataFlowProgramming
 
       if (ok)
       {
-        _number = std::make_shared<DataFloat>(number);
+        _number = std::make_shared<DataFloat>("rgba");
 
         Q_EMIT dataUpdated(0);
       }

@@ -20,14 +20,10 @@ namespace DataFlowProgramming
 
     QJsonObject FloatDataModel::save() const
     {
-      QJsonObject modelJson = NodeDataModel::save();
+        QJsonObject modelJson = NodeDataModel::save();
 
-      if (_number)
-        modelJson["number"] = QString::number(_number->number());
-
-      return modelJson;
+        return modelJson;
     }
-
 
     void FloatDataModel::restore(QJsonObject const &p)
     {
@@ -41,8 +37,8 @@ namespace DataFlowProgramming
         double d = strNum.toDouble(&ok);
         if (ok)
         {
-          _number = std::make_shared<DataFloat>(d);
-          _lineEdit->setText(strNum);
+          _number = std::make_shared<DataFloat>("float");
+          //_lineEdit->setText(strNum);
         }
       }
     }
@@ -79,7 +75,7 @@ namespace DataFlowProgramming
 
       if (ok)
       {
-        _number = std::make_shared<DataFloat>(number);
+        //_number = std::make_shared<DataFloat>(number);
 
         Q_EMIT dataUpdated(0);
       }
