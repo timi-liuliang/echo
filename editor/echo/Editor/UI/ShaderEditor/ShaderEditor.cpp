@@ -63,7 +63,7 @@ void main(void)
 ${FS_SHADER_CODE}
 
 #ifndef ENABLE_BASE_COLOR 
-    vec3 __BaseColor.rgb = vec3(0.75);
+    vec3 __BaseColor = vec3(0.75);
 #endif
 
     o_FragColor = vec4(__BaseColor.rgb, 1.0);

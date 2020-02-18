@@ -24,29 +24,22 @@ namespace DataFlowProgramming
 
     QJsonObject ColorDataModel::save() const
     {
-      QJsonObject modelJson = NodeDataModel::save();
+        QJsonObject modelJson = NodeDataModel::save();
 
-      return modelJson;
+        modelJson["color"] = Echo::StringUtil::ToString(m_colorSelect->GetColor()).c_str();
+
+        return modelJson;
     }
 
     void ColorDataModel::restore(QJsonObject const &p)
     {
-      QJsonValue v = p["number"];
-
-      if (!v.isUndefined())
-      {
-        QString strNum = v.toString();
-
-        bool   ok;
-        double d = strNum.toDouble(&ok);
-        if (ok)
+         QJsonValue v = p["color"];
+        if (!v.isUndefined())
         {
-          //_number = std::make_shared<DataFloat>(d);
-          //m_colorSelect->setText(strNum);
+            Echo::String colorStr = v.toString().toStdString().c_str();
+            m_colorSelect->SetColor(Echo::StringUtil::ParseColor(colorStr));
         }
-      }
     }
-
 
     unsigned int ColorDataModel::nPorts(PortType portType) const
     {
