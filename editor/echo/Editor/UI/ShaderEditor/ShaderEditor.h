@@ -42,7 +42,8 @@ namespace Studio
         Echo::ShaderProgramPtr              m_shaderProgram;
 		DataFlowProgramming::ShaderScene*	m_graphicsScene = nullptr;
 		DataFlowProgramming::ShaderView*	m_graphicsView = nullptr;
-        std::string                         m_paramCode;
-        std::string                         m_shaderCode;
+        std::string                         m_psParams;
+        std::string                         m_psMacros;
+        std::string                         m_psCode;
 	};
 }

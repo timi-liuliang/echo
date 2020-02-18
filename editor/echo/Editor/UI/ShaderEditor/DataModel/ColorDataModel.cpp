@@ -99,15 +99,20 @@ namespace DataFlowProgramming
     }
 
 
-    std::shared_ptr<NodeData> ColorDataModel::outData(PortIndex)
+    std::shared_ptr<NodeData> ColorDataModel::outData(PortIndex portIndex)
     {
+        if (portIndex == 0)
+        {
+            return m_outputs[portIndex];
+        }
+
         return _number;
     }
 
-    bool ColorDataModel::generateCode(std::string& paramCode, std::string& shaderCode)
+    bool ColorDataModel::generateCode(std::string& macroCode, std::string& paramCode, std::string& shaderCode)
     {
         const Echo::Color& color = m_colorSelect->GetColor();
-        shaderCode += Echo::StringUtil::Format("\tvec4 __BaseColor = vec4(%f, %f, %f, %f);\n", color.r, color.g, color.b, color.a);
+        shaderCode += Echo::StringUtil::Format("\tvec4 %s = vec4(%f, %f, %f, %f);\n", m_name.c_str(), color.r, color.g, color.b, color.a);
         
         return true;
     }

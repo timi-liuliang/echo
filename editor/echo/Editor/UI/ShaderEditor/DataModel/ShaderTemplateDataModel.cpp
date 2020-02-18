@@ -8,6 +8,7 @@ namespace DataFlowProgramming
 {
     ShaderTemplateDataModel::ShaderTemplateDataModel()
     {
+        m_inputs.resize(5);
     }
 
     QJsonObject ShaderTemplateDataModel::save() const
@@ -26,7 +27,7 @@ namespace DataFlowProgramming
 
         switch (portType)
         {
-            case PortType::In: result = 5; break;
+            case PortType::In: result = m_inputs.size(); break;
             case PortType::Out:result = 0; break;
             default:                       break;
         }
@@ -50,15 +51,30 @@ namespace DataFlowProgramming
 
     std::shared_ptr<NodeData> ShaderTemplateDataModel::outData(PortIndex)
     {
-        return m_source;
+        return nullptr;
     }
 
     void ShaderTemplateDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex port)
     {
+        m_inputs[port] = nodeData;
+
         ShaderScene* shaderScene = qobject_cast<ShaderScene*>(_scene);
         if (shaderScene)
         {
             shaderScene->compile();
         }
+    }
+
+	// generate code
+    bool ShaderTemplateDataModel::generateCode(std::string& macroCode, std::string& paramCode, std::string& shaderCode)
+    {
+        if (m_inputs[0])
+        {
+            macroCode = "#define ENABLE_BASE_COLOR\n";
+
+            shaderCode += "__BaseColor = vec3(0.0)";
+        }
+
+        return true;
     }
 }

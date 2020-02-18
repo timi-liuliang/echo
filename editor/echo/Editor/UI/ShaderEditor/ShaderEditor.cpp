@@ -42,6 +42,8 @@ void main(void)
 
 static const char* g_PsTemplate = R"(#version 450
 
+${FS_MACROS}
+
 precision mediump float;
 
 // uniforms
@@ -59,6 +61,12 @@ layout(location = 0) out vec4 o_FragColor;
 void main(void)
 {
 ${FS_SHADER_CODE}
+
+#ifdef ENABLE_BASE_COLOR 
+
+#else
+    __BaseColor.rgb = vec3(0.75);
+#endif
 
     o_FragColor = vec4(__BaseColor.rgb, 1.0);
 }
@@ -104,7 +112,7 @@ namespace Studio
         ShaderDataModel* shaderDataModel = dynamic_cast<ShaderDataModel*>(dataModel);
         if(shaderDataModel)
         {
-            shaderDataModel->generateCode(m_paramCode, m_shaderCode);
+            shaderDataModel->generateCode(m_psMacros, m_psParams, m_psCode);
         }
     }
 
@@ -116,8 +124,8 @@ namespace Studio
         QtNodes::FlowScene* flowScene = (QtNodes::FlowScene*)m_graphicsScene;
         if(flowScene)
         {
-            m_paramCode.clear();
-            m_shaderCode.clear();
+            m_psParams.clear();
+            m_psCode.clear();
             
             using namespace std::placeholders;
             flowScene->iterateOverNodeDataDependentOrder(std::bind(&ShaderEditor::visitorAllNodes, this, _1));
@@ -125,7 +133,8 @@ namespace Studio
             Echo::String vsCode = g_VsTemplate;
             
             Echo::String psCode = g_PsTemplate;
-            psCode = Echo::StringUtil::Replace(psCode, "${FS_SHADER_CODE}", m_shaderCode.c_str());
+            psCode = Echo::StringUtil::Replace(psCode, "${FS_MACROS}", m_psMacros.c_str());
+            psCode = Echo::StringUtil::Replace(psCode, "${FS_SHADER_CODE}", m_psCode.c_str());
             
             // remember graph
             if(m_shaderProgram)

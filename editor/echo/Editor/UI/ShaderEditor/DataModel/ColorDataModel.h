@@ -34,7 +34,7 @@ namespace DataFlowProgramming
         QString name() const override { return QStringLiteral("Color"); }
 
         // generat code
-        virtual bool generateCode(std::string& paramCode, std::string& shaderCode) override;
+        virtual bool generateCode(std::string& macroCode, std::string& paramCode, std::string& shaderCode) override;
         
     public:
         // load|save
@@ -62,6 +62,8 @@ namespace DataFlowProgramming
     private:
       std::shared_ptr<DataFloat> _number;
       QT_UI::QColorSelect*       m_colorSelect = nullptr;
+
+        vector<std::shared_ptr<NodeData>>  m_outputs;
     };
 }
 

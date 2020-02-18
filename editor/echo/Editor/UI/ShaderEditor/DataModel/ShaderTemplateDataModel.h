@@ -4,6 +4,7 @@
 #include <QtWidgets/QLineEdit>
 #include <nodeeditor/NodeDataModel>
 #include <iostream>
+#include "ShaderDataModel.h"
 #include "DataFloat.h"
 #include "DataText.h"
 
@@ -17,7 +18,7 @@ using QtNodes::NodeValidationState;
 namespace DataFlowProgramming
 {
     /// The model dictates the number of inputs and outputs for the Node.
-    class ShaderTemplateDataModel : public NodeDataModel
+    class ShaderTemplateDataModel : public ShaderDataModel
     {
         Q_OBJECT
 
@@ -33,6 +34,9 @@ namespace DataFlowProgramming
 
         // name
         QString name() const override { return QStringLiteral("ShaderTemplate"); }
+
+		// generate code
+		virtual bool generateCode(std::string& macroCode, std::string& paramCode, std::string& shaderCode) override;
 
     public:
         // load|save
@@ -56,6 +60,7 @@ namespace DataFlowProgramming
         QWidget* embeddedWidget() override { return nullptr; }
 
     private:
-        std::shared_ptr<DataText>       m_source;
+        std::vector<std::shared_ptr<NodeData>>      m_inputs;
+        std::vector<std::shared_ptr<NodeData>>      m_outputs;
     };
 }

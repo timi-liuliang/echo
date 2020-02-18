@@ -24,11 +24,18 @@ namespace DataFlowProgramming
       Q_OBJECT
 
     public:
-        ShaderDataModel(){}
+        ShaderDataModel();
         virtual ~ShaderDataModel() {}
 
+		/// Caption is used in GUI
+        virtual QString caption() const { return "variable"; }
+
         // generat code
-        virtual bool generateCode(std::string& paramCode, std::string& shaderCode)=0;
+        virtual bool generateCode(std::string& macroCode, std::string& paramCode, std::string& shaderCode)=0;
+
+    protected:
+        Echo::ui32        m_id = 0;
+        Echo::String      m_name;
     };
 }
 
