@@ -27,11 +27,24 @@ namespace Echo
 		// grid size
 		const Vector2& getTileSize() const { return m_tileSize; }
         void setTileSize(const Vector2& tileSize) { m_tileSize = tileSize; }
+
+		// flip x
+		bool isFlipX() const { return m_isFlipX; }
+		void setFlipX(bool isFlipX) { m_isFlipX = isFlipX; }
+
+		// flip y
+		bool isFlipY() const { return m_isFlipY; }
+		void setFlipY(bool isFlipY) { m_isFlipY = isFlipY; }
+
+        // flip
+        Vector3 flip(const Vector3& pos);
         
     private:
         StringOption        m_tileShape = StringOption("Square", { "Square"/*,"Isometric","Hexagon"*/ });
 		i32                 m_width = 8;
 		i32                 m_height = 8;
         Vector2             m_tileSize = Vector2(60.f, 60.f);
+        bool                m_isFlipX = false;
+        bool                m_isFlipY = false;
     };
 }
