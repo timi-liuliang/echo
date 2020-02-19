@@ -169,6 +169,14 @@ namespace Echo
         {
             m_shader = ECHO_CREATE_RES(ShaderProgram);
 
+			// blend state
+			BlendState::BlendDesc desc;
+			desc.bBlendEnable = true;
+			desc.srcBlend = BlendState::BF_SRC_ALPHA;
+			desc.dstBlend = BlendState::BF_INV_SRC_ALPHA;
+			BlendState* blendState = Renderer::instance()->createBlendState(desc);
+			m_shader->setBlendState(blendState);
+
 			// set render state
 			RasterizerState::RasterizerDesc rasterDesc;
 			rasterDesc.cullMode = RasterizerState::CULL_NONE;
