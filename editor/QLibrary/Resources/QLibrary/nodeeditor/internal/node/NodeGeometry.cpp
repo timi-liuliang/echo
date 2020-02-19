@@ -350,7 +350,7 @@ portWidth(PortType portType) const
     }
     else
     {
-      name = _dataModel->dataType(portType, i).name;
+      name = _dataModel->dataType(portType, i).name.c_str();
     }
 
     width = std::max(unsigned(_fontMetrics.width(name)),

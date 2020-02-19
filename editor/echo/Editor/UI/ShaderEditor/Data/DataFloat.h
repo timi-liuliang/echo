@@ -13,8 +13,9 @@ namespace DataFlowProgramming
     class DataFloat : public ShaderData
     {
     public:
-        DataFloat(const Echo::String& displayText)
-            : m_displayText(displayText)
+        DataFloat(ShaderDataModel* dataModel, const Echo::String& displayText)
+            : ShaderData(dataModel)
+            , m_displayText(displayText)
         {}
 
 
@@ -22,7 +23,6 @@ namespace DataFlowProgramming
         {
             return NodeDataType {"float", m_displayText.c_str()};
         }
-
 
     private:
         Echo::String    m_displayText;

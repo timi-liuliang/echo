@@ -37,7 +37,7 @@ namespace DataFlowProgramming
         double d = strNum.toDouble(&ok);
         if (ok)
         {
-          _number = std::make_shared<DataFloat>("float");
+          //_number = std::make_shared<DataFloat>("float");
           //_lineEdit->setText(strNum);
         }
       }

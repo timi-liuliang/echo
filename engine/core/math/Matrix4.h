@@ -28,7 +28,7 @@ namespace Echo
 		static const Matrix4 D3D2GL_PROJ;
 
 	public:
-		inline Matrix4()
+		Matrix4()
 		{
 		}
 

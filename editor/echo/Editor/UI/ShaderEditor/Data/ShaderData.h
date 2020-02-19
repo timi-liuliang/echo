@@ -1,6 +1,6 @@
 #pragma once
 
-#include <nodeeditor/NodeDataModel>
+#include <nodeeditor/NodeData>
 #include "Engine/core/util/StringUtil.h"
 
 using QtNodes::NodeDataType;
@@ -8,10 +8,11 @@ using QtNodes::NodeData;
 
 namespace DataFlowProgramming
 {
+	class ShaderDataModel;
 	class ShaderData : public NodeData
 	{
 	public:
-		ShaderData() {}
+		ShaderData(ShaderDataModel* dataModel) : m_dataModel(dataModel) {}
 		virtual ~ShaderData() {}
 
 		// name
@@ -19,6 +20,7 @@ namespace DataFlowProgramming
 		const Echo::String& getVariableName() const { return m_variableName; }
 
 	protected:
-		Echo::String	m_variableName;
+		ShaderDataModel*	m_dataModel = nullptr;
+		Echo::String		m_variableName;
 	};
 }

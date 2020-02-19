@@ -3,6 +3,7 @@
 #include <QtGui/QDoubleValidator>
 #include "DataFloat.h"
 #include "DataVector3.h"
+#include "Engine/core/util/StringUtil.h"
 
 namespace DataFlowProgramming
 {
@@ -13,11 +14,11 @@ namespace DataFlowProgramming
         m_colorSelect->setDrawText(false);
 
         m_outputs.resize(5);
-        m_outputs[0] = std::make_shared<DataVector3>("rgb");
-        m_outputs[1] = std::make_shared<DataFloat>("r");
-        m_outputs[2] = std::make_shared<DataFloat>("g");
-        m_outputs[3] = std::make_shared<DataFloat>("b");
-        m_outputs[4] = std::make_shared<DataFloat>("a");
+        m_outputs[0] = std::make_shared<DataVector3>(this, "rgb");
+        m_outputs[1] = std::make_shared<DataFloat>(this, "r");
+        m_outputs[2] = std::make_shared<DataFloat>(this, "g");
+        m_outputs[3] = std::make_shared<DataFloat>(this, "b");
+        m_outputs[4] = std::make_shared<DataFloat>(this, "a");
 
         QObject::connect(m_colorSelect, SIGNAL(Signal_ColorChanged()), this, SLOT(onColorEdited()));
     }

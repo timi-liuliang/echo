@@ -13,24 +13,17 @@ namespace DataFlowProgramming
     class DataColor : public ShaderData
     {
     public:
-        DataColor()
-            : _number(0.0)
-        {}
-
-        DataColor(double const number)
-            : _number(number)
-        {}
+        DataColor(ShaderDataModel* dataModel, Echo::String& displayText)
+			: ShaderData(dataModel)
+			, m_displayText(displayText)
+		{}
 
         NodeDataType type() const override
         {
-            return NodeDataType {"color", "Color"};
+            return NodeDataType {"color", m_displayText.c_str() };
         }
 
-        double number() const { return _number; }
-
-        QString numberAsText() const { return QString::number(_number, 'f'); }
-
     private:
-        double _number;
+        Echo::String    m_displayText;
     };
 }

@@ -171,7 +171,7 @@ drawConnectionPoints(QPainter* painter,
 
       if (connectionStyle.useDataDefinedColors())
       {
-        painter->setBrush(connectionStyle.normalColor(dataType.id));
+        painter->setBrush(connectionStyle.normalColor(dataType.id.c_str()));
       }
       else
       {
@@ -212,7 +212,7 @@ drawFilledConnectionPoints(QPainter * painter,
 
         if (connectionStyle.useDataDefinedColors())
         {
-          QColor const c = connectionStyle.normalColor(dataType.id);
+          QColor const c = connectionStyle.normalColor(dataType.id.c_str());
           painter->setPen(c);
           painter->setBrush(c);
         }
@@ -302,7 +302,7 @@ drawEntryLabels(QPainter * painter,
       }
       else
       {
-        s = model->dataType(portType, i).name;
+        s = model->dataType(portType, i).name.c_str();
       }
 
       auto rect = metrics.boundingRect(s);

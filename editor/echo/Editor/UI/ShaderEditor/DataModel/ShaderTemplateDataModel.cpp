@@ -2,13 +2,24 @@
 #include <QtCore/QJsonValue>
 #include <QtGui/QDoubleValidator>
 #include "DataFloat.h"
+#include "DataVector3.h"
 #include "ShaderScene.h"
 
 namespace DataFlowProgramming
 {
     ShaderTemplateDataModel::ShaderTemplateDataModel()
     {
-        m_inputs.resize(5);
+        m_inputDataTypes = 
+        {
+            {"vec3", "Diffuse"},
+            {"vec3", "Normal"},
+            {"float", "Metallic"},
+            {"float", "Roughness"},
+            {"float", "Opacity"},
+            {"vec3", "Emissive"}
+        };
+
+        m_inputs.resize(m_inputDataTypes.size());
     }
 
     QJsonObject ShaderTemplateDataModel::save() const
@@ -39,11 +50,7 @@ namespace DataFlowProgramming
     {
         if(portType==PortType::In)
         {
-            if      (portIndex==0) return NodeDataType {"vec3", "Diffuse"};
-            else if (portIndex==1) return NodeDataType {"vec3", "Normal"};
-            else if (portIndex==2) return NodeDataType {"float", "Metalic"};
-            else if (portIndex==3) return NodeDataType {"float", "Roughness"};
-            else if (portIndex==4) return NodeDataType {"float", "Opacity"};
+            return m_inputDataTypes[portIndex];
         }
         
         return NodeDataType {"unknown", "Unknown"};

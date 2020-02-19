@@ -101,8 +101,8 @@ save() const
       {
         QJsonObject typeJson;
         NodeDataType nodeType = this->dataType(type);
-        typeJson["id"] = nodeType.id;
-        typeJson["name"] = nodeType.name;
+        typeJson["id"] = nodeType.id.c_str();
+        typeJson["name"] = nodeType.name.c_str();
 
         return typeJson;
       };

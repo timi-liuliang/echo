@@ -2,13 +2,14 @@
 
 #include <QtCore/QString>
 #include "../base/Export.hpp"
+#include "Engine/core/util/StringUtil.h"
 
 namespace QtNodes
 {
     struct NodeDataType
     {
-        QString id;
-        QString name;
+        Echo::String id;
+        Echo::String name;
     };
 
     /// Class represents data transferred between nodes.

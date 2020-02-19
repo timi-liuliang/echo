@@ -13,8 +13,9 @@ namespace DataFlowProgramming
     class DataVector3 : public ShaderData
     {
     public:
-        DataVector3(const Echo::String& displayText)
-            : m_displayText(displayText)
+        DataVector3(ShaderDataModel* dataModel, const Echo::String& displayText)
+            : ShaderData(dataModel)
+            , m_displayText(displayText)
         {}
 
         NodeDataType type() const override

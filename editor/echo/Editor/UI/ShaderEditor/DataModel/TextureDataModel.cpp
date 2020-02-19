@@ -69,7 +69,7 @@ namespace DataFlowProgramming
 
       if (ok)
       {
-        _number = std::make_shared<DataFloat>("rgba");
+        _number = std::make_shared<DataFloat>(this, "rgba");
 
         Q_EMIT dataUpdated(0);
       }

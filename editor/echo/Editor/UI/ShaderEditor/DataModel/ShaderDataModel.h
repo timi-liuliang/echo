@@ -38,6 +38,7 @@ namespace DataFlowProgramming
 
     private:
         Echo::ui32        m_id = 0;
+        bool              m_isUsed = true;
         Echo::String      m_variableName;
     };
 }
