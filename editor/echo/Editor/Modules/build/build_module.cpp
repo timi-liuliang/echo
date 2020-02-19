@@ -3,6 +3,7 @@
 #include "mac_build_settings.h"
 #include "android_build_settings.h"
 #include "windows_build_settings.h"
+#include "wechat_build_settings.h"
 
 namespace Echo
 {
@@ -35,5 +36,6 @@ namespace Echo
         Class::registerType<MacBuildSettings>();
         Class::registerType<AndroidBuildSettings>();
         Class::registerType<WindowsBuildSettings>();
+        Class::registerType<WeChatBuildSettings>();
     }
 }

@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/icon">
+    <file>Icon/build/wechat.png</file>
     <file>Icon/node_lua_script.png</file>
     <file>Icon/eye_open.png</file>
     <file>Icon/eye_close.png</file>
