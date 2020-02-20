@@ -142,11 +142,11 @@ namespace Echo
                     i32 indexRightBottom = indexRightTop + m_columns;
                     
                     oIndices.push_back(indexLeftTop);
+                    oIndices.push_back(indexRightBottom);
                     oIndices.push_back(indexRightTop);
-                    oIndices.push_back(indexRightBottom);
                     oIndices.push_back(indexLeftTop);
-                    oIndices.push_back(indexRightBottom);
                     oIndices.push_back(indexLeftBottom);
+                    oIndices.push_back(indexRightBottom);
                 }
             }
         }

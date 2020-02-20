@@ -157,6 +157,7 @@ namespace Echo
 	ShaderProgram::ShaderProgram(const ResourcePath& path)
 		: Res(path)
 	{
+
 	}
 
 	ShaderProgram::~ShaderProgram()
@@ -174,11 +175,16 @@ namespace Echo
         CLASS_BIND_METHOD(ShaderProgram, setPsCode, DEF_METHOD("setPsCode"));
         CLASS_BIND_METHOD(ShaderProgram, getGraph, DEF_METHOD("getGraph"));
         CLASS_BIND_METHOD(ShaderProgram, setGraph, DEF_METHOD("setGraph"));
+        CLASS_BIND_METHOD(ShaderProgram, getCullMode, DEF_METHOD("getCullMode"));
+		CLASS_BIND_METHOD(ShaderProgram, setCullMode, DEF_METHOD("setCullMode"));
 
         CLASS_REGISTER_PROPERTY(ShaderProgram, "Type", Variant::Type::String, "getType", "setType");
         CLASS_REGISTER_PROPERTY(ShaderProgram, "VertexShader", Variant::Type::String, "getVsCode", "setVsCode");
         CLASS_REGISTER_PROPERTY(ShaderProgram, "FragmentShader", Variant::Type::String, "getPsCode", "setPsCode");
         CLASS_REGISTER_PROPERTY(ShaderProgram, "Graph", Variant::Type::String, "getGraph", "setGraph");
+        CLASS_REGISTER_PROPERTY(ShaderProgram, "CullMode", Variant::Type::StringOption, "getCullMode", "setCullMode");
+
+        CLASS_REGISTER_PROPERTY_HINT(ShaderProgram, "CullMode", PropertyHintType::Category, "RasterizerState");
 	}
 
 	void ShaderProgram::clear()
@@ -277,6 +283,14 @@ namespace Echo
 		return NULL;
 	}
 
+    void ShaderProgram::setCullMode(const StringOption& option)
+    { 
+        if (m_cullMode.setValue(option.getValue()))
+        {
+            m_rasterizerState = nullptr;
+        }
+    }
+
     BlendState* ShaderProgram::getBlendState()
     { 
         if (!m_blendState)
@@ -304,6 +318,7 @@ namespace Echo
         if (!m_rasterizerState)
         {
             RasterizerState::RasterizerDesc desc;
+            desc.cullMode = magic_enum::enum_cast<RasterizerState::CullMode>(m_cullMode.getValue().c_str()).value();
             m_rasterizerState = Renderer::instance()->createRasterizerState(desc);
         }
 

@@ -134,6 +134,11 @@ namespace Echo
         // smaple state
         MultisampleState* getMultisampleState();
         void setMultisampleState(MultisampleState* sampleState) { m_multiSampleState = sampleState; }
+
+    public:
+		// debug draw
+		const StringOption& getCullMode() const { return m_cullMode; }
+        void setCullMode(const StringOption& option);
         
     public:
         // create
@@ -169,6 +174,9 @@ namespace Echo
         MultisampleState*   m_multiSampleState = nullptr;
         UniformArray        m_uniforms;
         UniformValuesMap	m_uniformDefaultValues;
+
+    protected:
+        StringOption        m_cullMode = StringOption("CULL_BACK", { "CULL_NONE", "CULL_FRONT", "CULL_BACK"});
 	};
 	typedef ResRef<ShaderProgram> ShaderProgramPtr;
 }
