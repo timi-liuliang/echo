@@ -229,8 +229,6 @@ namespace Echo
 					Object* obj = Echo::Class::create(className);
 					if (obj)
 					{
-						classNode.append_attribute("name").set_value(className.c_str());
-						classNode.append_attribute("class").set_value(className.c_str());
 						Object::savePropertyRecursive(&classNode, obj, obj->getClassName());
 					}
 				}
