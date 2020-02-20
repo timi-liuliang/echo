@@ -83,7 +83,6 @@ namespace Echo
             {
                 m_materialDefault = ECHO_CREATE_RES(Material);
                 m_materialDefault->setShaderPath(m_shader->getPath());
-                m_materialDefault->setRenderStage("Transparent");
             }
 
             m_materialDefault->setTexture("u_BaseColorSampler", m_textureRes.getPath());

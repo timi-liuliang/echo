@@ -1051,12 +1051,10 @@ namespace Echo
 		i32 occusionTextureIdx = matInfo.m_occlusionTexture.m_index;
         
         primitive.m_shader = GltfMaterial::getPbrMetalicRoughnessContent();
+		primitive.m_shader->setBlendMode("Opaque");
 
 		primitive.m_materialInst = ECHO_CREATE_RES(Material);
 		primitive.m_materialInst->setShaderPath(primitive.m_shader->getPath());
-
-		// render stage
-		primitive.m_materialInst->setRenderStage("Opaque");
 
 		// macros
 		const MeshVertexFormat& vertexFormat = primitive.m_mesh->getVertexData().getFormat();

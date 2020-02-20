@@ -177,14 +177,18 @@ namespace Echo
         CLASS_BIND_METHOD(ShaderProgram, setGraph, DEF_METHOD("setGraph"));
         CLASS_BIND_METHOD(ShaderProgram, getCullMode, DEF_METHOD("getCullMode"));
 		CLASS_BIND_METHOD(ShaderProgram, setCullMode, DEF_METHOD("setCullMode"));
+		CLASS_BIND_METHOD(ShaderProgram, getBlendMode, DEF_METHOD("getBlendMode"));
+		CLASS_BIND_METHOD(ShaderProgram, setBlendMode, DEF_METHOD("setBlendMode"));
 
         CLASS_REGISTER_PROPERTY(ShaderProgram, "Type", Variant::Type::String, "getType", "setType");
         CLASS_REGISTER_PROPERTY(ShaderProgram, "VertexShader", Variant::Type::String, "getVsCode", "setVsCode");
         CLASS_REGISTER_PROPERTY(ShaderProgram, "FragmentShader", Variant::Type::String, "getPsCode", "setPsCode");
         CLASS_REGISTER_PROPERTY(ShaderProgram, "Graph", Variant::Type::String, "getGraph", "setGraph");
         CLASS_REGISTER_PROPERTY(ShaderProgram, "CullMode", Variant::Type::StringOption, "getCullMode", "setCullMode");
+        CLASS_REGISTER_PROPERTY(ShaderProgram, "BlendMode", Variant::Type::StringOption, "getBlendMode", "setBlendMode");
 
         CLASS_REGISTER_PROPERTY_HINT(ShaderProgram, "CullMode", PropertyHintType::Category, "RasterizerState");
+        CLASS_REGISTER_PROPERTY_HINT(ShaderProgram, "BlendMode", PropertyHintType::Category, "BlendState");
 	}
 
 	void ShaderProgram::clear()
@@ -291,11 +295,26 @@ namespace Echo
         }
     }
 
+	void ShaderProgram::setBlendMode(const StringOption& option)
+	{
+		if (m_blendMode.setValue(option.getValue()))
+		{
+			m_blendState = nullptr;
+		}
+	}
+
     BlendState* ShaderProgram::getBlendState()
     { 
         if (!m_blendState)
         {
             BlendState::BlendDesc desc;
+            if (m_blendMode.getIdx() == 1)
+            {
+                desc.bBlendEnable = true;
+				desc.srcBlend = BlendState::BF_SRC_ALPHA;
+				desc.dstBlend = BlendState::BF_INV_SRC_ALPHA;
+            }
+
             m_blendState = Renderer::instance()->createBlendState(desc);
         }
 
@@ -375,12 +394,7 @@ namespace Echo
             shader->setMacros(macros);
             
             // blend state
-            BlendState::BlendDesc desc;
-            desc.bBlendEnable = true;
-            desc.srcBlend = BlendState::BF_SRC_ALPHA;
-            desc.dstBlend = BlendState::BF_INV_SRC_ALPHA;
-            BlendState* blendState = Renderer::instance()->createBlendState(desc);
-            shader->setBlendState(blendState);
+            shader->setBlendMode("Transparent");
             
             // depth state
             DepthStencilState::DepthStencilDesc depthDesc;
@@ -390,10 +404,7 @@ namespace Echo
             shader->setDepthState(depthState);
 
             // reaster state
-            RasterizerState::RasterizerDesc rasterDesc;
-            rasterDesc.cullMode = RasterizerState::CULL_NONE;
-            RasterizerState* rasterState = Renderer::instance()->createRasterizerState(rasterDesc);
-            shader->setRasterizerState(rasterState);
+            shader->setCullMode("CULL_NONE");
             
             shader->setPath(shaderVirtualPath);
             shader->setType("glsl");

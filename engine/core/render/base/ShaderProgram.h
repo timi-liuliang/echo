@@ -136,9 +136,13 @@ namespace Echo
         void setMultisampleState(MultisampleState* sampleState) { m_multiSampleState = sampleState; }
 
     public:
-		// debug draw
+		// cull mode
 		const StringOption& getCullMode() const { return m_cullMode; }
         void setCullMode(const StringOption& option);
+
+        // blend mode
+		const StringOption& getBlendMode() const { return m_blendMode; }
+		void setBlendMode(const StringOption& option);
         
     public:
         // create
@@ -177,6 +181,7 @@ namespace Echo
 
     protected:
         StringOption        m_cullMode = StringOption("CULL_BACK", { "CULL_NONE", "CULL_FRONT", "CULL_BACK"});
+        StringOption        m_blendMode = StringOption("Opaque", { "Opaque", "Transparent" });
 	};
 	typedef ResRef<ShaderProgram> ShaderProgramPtr;
 }

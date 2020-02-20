@@ -1,5 +1,6 @@
 #include "engine/core/log/Log.h"
 #include "Material.h"
+#include "ShaderProgram.h"
 #include "engine/core/scene/node_tree.h"
 #include "engine/core/render/base/ShaderProgram.h"
 #include "engine/core/render/base/Renderer.h"
@@ -49,14 +50,12 @@ namespace Echo
 	Material::Material()
 		: Res()
 		, m_shaderPath("", ".shader")
-		, m_renderStage("Opaque", { "Opaque", "Transparent" })
 	{
 	}
 
 	Material::Material(const ResourcePath& path)
 		: Res(path)
 		, m_shaderPath("", ".shader")
-		, m_renderStage("Opaque", { "Opaque", "Transparent" })
 	{
 	}
 
@@ -71,11 +70,9 @@ namespace Echo
 	{
 		CLASS_BIND_METHOD(Material, getShaderPath, DEF_METHOD("getShaderPath"));
 		CLASS_BIND_METHOD(Material, setShaderPath, DEF_METHOD("setShaderPath"));
-		CLASS_BIND_METHOD(Material, setRenderStage, DEF_METHOD("setRenderStage"));
 		CLASS_BIND_METHOD(Material, getRenderStage, DEF_METHOD("getRenderStage"));
 
 		CLASS_REGISTER_PROPERTY(Material, "Shader", Variant::Type::ResourcePath, "getShaderPath", "setShaderPath");
-		CLASS_REGISTER_PROPERTY(Material, "Stage", Variant::Type::StringOption, "getRenderStage", "setRenderStage");
 	}
 
 	void* Material::getUniformValue(const String& name)
@@ -212,6 +209,11 @@ namespace Echo
 		{
 			m_shaderProgram->onShaderChanged.connectClassMethod(this, createMethodBind(&Material::buildShaderProgram));
 		}
+	}
+
+	const String& Material::getRenderStage()
+	{ 
+		return m_shaderProgram ? m_shaderProgram->getBlendMode().getValue() : StringUtil::BLANK;
 	}
 
 	bool Material::isMacroUsed(const String& macro)

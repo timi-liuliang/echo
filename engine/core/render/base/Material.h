@@ -59,8 +59,7 @@ namespace Echo
         const ResourcePath& getShaderPath() const { return m_shaderPath; }
 
 		// render stage
-		const StringOption& getRenderStage() { return m_renderStage; }
-		void setRenderStage(const StringOption& stage) { m_renderStage.setValue(stage.getValue()); }
+		const String& getRenderStage();
 
 		// macro
         bool isMacroUsed(const String& macro);
@@ -113,7 +112,6 @@ namespace Echo
 
 	private:
 		ResourcePath		m_shaderPath;				// shader res path
-		StringOption		m_renderStage;
 		StringArray			m_macros;
 		ShaderProgramPtr	m_shaderProgram;
 		ParamMap			m_uniforms;

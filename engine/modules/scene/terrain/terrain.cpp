@@ -89,7 +89,6 @@ namespace Echo
                 // material
                 m_materialDefault = ECHO_CREATE_RES(Material);
                 m_materialDefault->setShaderPath(m_shader->getPath());
-                m_materialDefault->setRenderStage("Opaque");
             }
             
             // mesh

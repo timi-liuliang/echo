@@ -66,7 +66,11 @@ ${FS_SHADER_CODE}
     vec3 __BaseColor = vec3(0.75);
 #endif
 
-    o_FragColor = vec4(__BaseColor.rgb, 1.0);
+#ifndef ENABLE_OPACITY
+    float __Opacity = 1.0;
+#endif
+
+    o_FragColor = vec4(__BaseColor.rgb, __Opacity);
 }
 )";
 
@@ -133,6 +137,7 @@ namespace Studio
             Echo::String psCode = g_PsTemplate;
             psCode = Echo::StringUtil::Replace(psCode, "${FS_MACROS}", m_psMacros.c_str());
             psCode = Echo::StringUtil::Replace(psCode, "${FS_SHADER_CODE}", m_psCode.c_str());
+            psCode = Echo::StringUtil::Replace(psCode, "\t", "    ");
             
             // remember graph
             if(m_shaderProgram)

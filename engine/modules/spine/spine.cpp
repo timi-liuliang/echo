@@ -209,7 +209,6 @@ namespace Echo
 		m_renderable->submitToRenderQueue();
 	}
 
-	// update renderable
 	void Spine::updateRenderable()
 	{
 		if (!m_renderable)
@@ -227,7 +226,6 @@ namespace Echo
             
 			m_material = ECHO_CREATE_RES(Material);
 			m_material->setShaderPath(m_shader->getPath());
-			m_material->setRenderStage("Transparent");
 
 			m_material->setTexture("u_BaseColorSampler", m_batch.m_texture);
 

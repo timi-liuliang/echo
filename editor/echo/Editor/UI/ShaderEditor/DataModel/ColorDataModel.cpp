@@ -69,8 +69,16 @@ namespace DataFlowProgramming
         if (ok)
         {
             m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s.rgb", getVariableName().c_str()));
+            m_outputs[1]->setVariableName(Echo::StringUtil::Format("%s.r", getVariableName().c_str()));
+            m_outputs[2]->setVariableName(Echo::StringUtil::Format("%s.g", getVariableName().c_str()));
+            m_outputs[3]->setVariableName(Echo::StringUtil::Format("%s.b", getVariableName().c_str()));
+            m_outputs[4]->setVariableName(Echo::StringUtil::Format("%s.a", getVariableName().c_str()));
 
             Q_EMIT dataUpdated(0);
+            Q_EMIT dataUpdated(1);
+            Q_EMIT dataUpdated(2);
+            Q_EMIT dataUpdated(3);
+            Q_EMIT dataUpdated(4);
         }
         else
         {
@@ -90,12 +98,7 @@ namespace DataFlowProgramming
 
     std::shared_ptr<NodeData> ColorDataModel::outData(PortIndex portIndex)
     {
-        if (portIndex == 0)
-        {
-            return m_outputs[portIndex];
-        }
-
-        return nullptr;
+        return m_outputs[portIndex];
     }
 
     bool ColorDataModel::generateCode(std::string& macroCode, std::string& paramCode, std::string& shaderCode)

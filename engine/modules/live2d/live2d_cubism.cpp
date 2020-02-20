@@ -25,7 +25,6 @@ namespace Echo
         
 		m_materialDefault = ECHO_CREATE_RES(Material);
 		m_materialDefault->setShaderPath(m_shaderDefault->getPath());
-		m_materialDefault->setRenderStage("Transparent");
 	}
 
 	Live2dCubism::~Live2dCubism()

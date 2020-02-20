@@ -140,7 +140,6 @@ namespace Echo
         
 		m_material = ECHO_CREATE_RES(Material);
 		m_material->setShaderPath( m_shader->getPath());
-		m_material->setRenderStage("Transparent");
 
 		m_lineBatch = EchoNew(Batch(m_material, this));
 		m_lineBatch->m_mesh->setTopologyType(Mesh::TT_LINELIST);
@@ -169,19 +168,9 @@ namespace Echo
         {
             m_shader = ECHO_CREATE_RES(ShaderProgram);
 
-			// blend state
-			BlendState::BlendDesc desc;
-			desc.bBlendEnable = true;
-			desc.srcBlend = BlendState::BF_SRC_ALPHA;
-			desc.dstBlend = BlendState::BF_INV_SRC_ALPHA;
-			BlendState* blendState = Renderer::instance()->createBlendState(desc);
-			m_shader->setBlendState(blendState);
-
-			// set render state
-			RasterizerState::RasterizerDesc rasterDesc;
-			rasterDesc.cullMode = RasterizerState::CULL_NONE;
-			RasterizerState* rasterState = Renderer::instance()->createRasterizerState(rasterDesc);
-			m_shader->setRasterizerState(rasterState);
+			// render state
+			m_shader->setBlendMode("Transparent");
+			m_shader->setCullMode("CULL_NONE");
 
 			// set code
             m_shader->setPath(shaderVirtualPath.getPath());

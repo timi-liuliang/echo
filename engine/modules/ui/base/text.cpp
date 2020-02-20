@@ -98,7 +98,6 @@ namespace Echo
             // material
             m_material = EchoNew(Material(StringUtil::Format("UiTextMaterial_%d", getId())));
             m_material->setShaderPath(m_shader->getPath());
-            m_material->setRenderStage("Transparent");
             
             // mesh
             Ui::VertexArray vertices;
