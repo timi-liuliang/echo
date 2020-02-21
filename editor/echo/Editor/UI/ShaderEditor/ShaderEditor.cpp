@@ -47,10 +47,7 @@ ${FS_MACROS}
 precision mediump float;
 
 // uniforms
-layout(binding = 0) uniform UBO
-{
 ${FS_UNIFORMS}
-} fs_ubo;
 
 // inputs
 layout(location = 0) in vec2  v_TexCoord;
@@ -132,9 +129,13 @@ namespace Studio
             
             using namespace std::placeholders;
             flowScene->iterateOverNodeDataDependentOrder(std::bind(&ShaderEditor::visitorAllNodes, this, _1));
+
+            if (!m_psParams.empty())
+            {
+                m_psParams = "layout(binding = 0) uniform UBO \n{\n" + m_psParams + "} fs_ubo;";
+            }
             
-            Echo::String vsCode = g_VsTemplate;
-            
+            Echo::String vsCode = g_VsTemplate;     
             Echo::String psCode = g_PsTemplate;
             psCode = Echo::StringUtil::Replace(psCode, "${FS_MACROS}", m_psMacros.c_str());
             psCode = Echo::StringUtil::Replace(psCode, "${FS_UNIFORMS}", m_psParams.c_str());
