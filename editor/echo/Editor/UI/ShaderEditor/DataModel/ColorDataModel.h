@@ -29,7 +29,7 @@ namespace DataFlowProgramming
 
         // caption
         virtual QString caption() const override { return QStringLiteral("Color"); }
-        bool captionVisible() const override { return true; }
+        bool captionVisible() const override { return m_isParameter; }
 
         QString name() const override { return QStringLiteral("Color"); }
 
@@ -58,11 +58,23 @@ namespace DataFlowProgramming
         // get embedded widget
         QWidget* embeddedWidget() override { return m_colorSelect; }
 
+    private:
+        // update outputs variable name
+        void updateOutputDataVariableName();
+
     private Q_SLOTS:
         // on value changed
         void onColorEdited();
 
+        // switch between parameter with constant
+        void onSetAsParameter();
+        void onSetAsConstant();
+
     private:
+        QMenu*                               m_menu = nullptr;
+        QAction*                             m_setAsParameter = nullptr;
+		QAction*                             m_setAsConstant = nullptr;
+        bool                                 m_isParameter = false;
         QT_UI::QColorSelect*                 m_colorSelect = nullptr;
         vector<std::shared_ptr<ShaderData>>  m_outputs;
     };

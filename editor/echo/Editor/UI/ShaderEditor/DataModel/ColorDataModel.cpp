@@ -23,11 +23,7 @@ namespace DataFlowProgramming
         m_outputs[3] = std::make_shared<DataFloat>(this, "b");
         m_outputs[4] = std::make_shared<DataFloat>(this, "a");
 
-		m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s.rgb", getVariableName().c_str()));
-		m_outputs[1]->setVariableName(Echo::StringUtil::Format("%s.r", getVariableName().c_str()));
-		m_outputs[2]->setVariableName(Echo::StringUtil::Format("%s.g", getVariableName().c_str()));
-		m_outputs[3]->setVariableName(Echo::StringUtil::Format("%s.b", getVariableName().c_str()));
-		m_outputs[4]->setVariableName(Echo::StringUtil::Format("%s.a", getVariableName().c_str()));
+        updateOutputDataVariableName();
     }
 
     QJsonObject ColorDataModel::save() const
@@ -61,19 +57,11 @@ namespace DataFlowProgramming
 
     void ColorDataModel::onColorEdited()
     {
-        bool ok = true;
-        if (ok)
-        {
-            Q_EMIT dataUpdated(0);
-            Q_EMIT dataUpdated(1);
-            Q_EMIT dataUpdated(2);
-            Q_EMIT dataUpdated(3);
-            Q_EMIT dataUpdated(4);
-        }
-        else
-        {
-            Q_EMIT dataInvalidated(0);
-        }
+        Q_EMIT dataUpdated(0);
+        Q_EMIT dataUpdated(1);
+        Q_EMIT dataUpdated(2);
+        Q_EMIT dataUpdated(3);
+        Q_EMIT dataUpdated(4);
     }
 
     NodeDataType ColorDataModel::dataType(PortType portType, PortIndex portIndex) const
@@ -93,17 +81,61 @@ namespace DataFlowProgramming
 
     bool ColorDataModel::generateCode(std::string& macroCode, std::string& paramCode, std::string& shaderCode)
     {
-        const Echo::Color& color = m_colorSelect->GetColor();
-        shaderCode += Echo::StringUtil::Format("\tvec4 %s = vec4(%f, %f, %f, %f);\n", getVariableName().c_str(), color.r, color.g, color.b, color.a);
+        if (m_isParameter)
+        {
+            paramCode += Echo::StringUtil::Format("\tvec4 %s;\n", getVariableName().c_str());
+        }
+        else
+        {
+			const Echo::Color& color = m_colorSelect->GetColor();
+			shaderCode += Echo::StringUtil::Format("\tvec4 %s = vec4(%f, %f, %f, %f);\n", getVariableName().c_str(), color.r, color.g, color.b, color.a);
+        }
         
         return true;
     }
 
     void ColorDataModel::showMenu(const QPointF& pos)
     {
-        QMenu* m_menu = new QMenu();
-        m_menu->addAction("SwitchToParameter");
+        if (!m_menu)
+        {
+			m_menu = new QMenu();
+            m_setAsParameter = new QAction("Switch to Parameter");
+			m_setAsConstant = new QAction("Switch to Constant");
+
+            QObject::connect(m_setAsParameter, SIGNAL(triggered()), this, SLOT(onSetAsParameter()));
+            QObject::connect(m_setAsConstant, SIGNAL(triggered()), this, SLOT(onSetAsConstant()));
+        }
+
+        m_menu->clear();
+        m_menu->addAction(m_isParameter ? m_setAsConstant : m_setAsParameter);
 
         m_menu->exec(QCursor::pos());
+    }
+
+	void ColorDataModel::onSetAsParameter()
+    {
+		m_isParameter = true;
+		updateOutputDataVariableName();
+
+        onColorEdited();
+	}
+
+	void ColorDataModel::onSetAsConstant()
+    {
+		m_isParameter = false;
+		updateOutputDataVariableName();
+
+        onColorEdited();
+	}
+
+    void ColorDataModel::updateOutputDataVariableName()
+    {
+        Echo::String variableName = m_isParameter ? "fs_ubo." + getVariableName() : getVariableName();
+
+		m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s.rgb", variableName.c_str()));
+		m_outputs[1]->setVariableName(Echo::StringUtil::Format("%s.r", variableName.c_str()));
+		m_outputs[2]->setVariableName(Echo::StringUtil::Format("%s.g", variableName.c_str()));
+		m_outputs[3]->setVariableName(Echo::StringUtil::Format("%s.b", variableName.c_str()));
+		m_outputs[4]->setVariableName(Echo::StringUtil::Format("%s.a", variableName.c_str()));
     }
 }

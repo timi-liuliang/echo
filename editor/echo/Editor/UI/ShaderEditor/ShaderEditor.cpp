@@ -49,7 +49,7 @@ precision mediump float;
 // uniforms
 layout(binding = 0) uniform UBO
 {
-    float u_UiAlpha;
+${FS_UNIFORMS}
 } fs_ubo;
 
 // inputs
@@ -137,6 +137,7 @@ namespace Studio
             
             Echo::String psCode = g_PsTemplate;
             psCode = Echo::StringUtil::Replace(psCode, "${FS_MACROS}", m_psMacros.c_str());
+            psCode = Echo::StringUtil::Replace(psCode, "${FS_UNIFORMS}", m_psParams.c_str());
             psCode = Echo::StringUtil::Replace(psCode, "${FS_SHADER_CODE}", m_psCode.c_str());
             psCode = Echo::StringUtil::Replace(psCode, "\t", "    ");
             
