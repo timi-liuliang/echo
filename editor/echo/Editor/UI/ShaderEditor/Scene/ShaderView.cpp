@@ -88,22 +88,17 @@ namespace DataFlowProgramming
 		connect(treeView, &QTreeWidget::itemClicked, [&](QTreeWidgetItem* item, int)
 		{
 			QString modelName = item->data(0, Qt::UserRole).toString();
-
 			if (modelName == skipText)
 			{
 				return;
 			}
 
 			auto type = _scene->registry().create(modelName);
-
 			if (type)
 			{
 				auto& node = _scene->createNode(std::move(type));
-
 				QPoint pos = event->pos();
-
 				QPointF posView = this->mapToScene(pos);
-
 				node.nodeGraphicsObject().setPos(posView);
 
 				_scene->nodePlaced(node);

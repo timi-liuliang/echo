@@ -8,7 +8,7 @@ namespace DataFlowProgramming
 	ShaderScene::ShaderScene(std::shared_ptr<QtNodes::DataModelRegistry> registry, QObject* parent)
 		: FlowScene(registry, parent)
 	{
-
+		QObject::connect(this, &FlowScene::nodeContextMenu, this, &ShaderScene::onShowShaderNodeMenu);
 	}
 
 	ShaderScene::ShaderScene(QObject* parent)
@@ -53,5 +53,14 @@ namespace DataFlowProgramming
 		}
 
 		return nullptr;
+	}
+
+	void ShaderScene::onShowShaderNodeMenu(QtNodes::Node& node, const QPointF& pos)
+	{
+		ShaderDataModel* shaderDataModel = qobject_cast<ShaderDataModel*>(node.nodeDataModel());
+		if (shaderDataModel)
+		{
+			shaderDataModel->showMenu(pos);
+		}
 	}
 }

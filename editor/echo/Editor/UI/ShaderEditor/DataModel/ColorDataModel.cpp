@@ -4,6 +4,7 @@
 #include "DataFloat.h"
 #include "DataVector3.h"
 #include "Engine/core/util/StringUtil.h"
+#include <QMenu>
 
 namespace DataFlowProgramming
 {
@@ -96,5 +97,13 @@ namespace DataFlowProgramming
         shaderCode += Echo::StringUtil::Format("\tvec4 %s = vec4(%f, %f, %f, %f);\n", getVariableName().c_str(), color.r, color.g, color.b, color.a);
         
         return true;
+    }
+
+    void ColorDataModel::showMenu(const QPointF& pos)
+    {
+        QMenu* m_menu = new QMenu();
+        m_menu->addAction("SwitchToParameter");
+
+        m_menu->exec(QCursor::pos());
     }
 }

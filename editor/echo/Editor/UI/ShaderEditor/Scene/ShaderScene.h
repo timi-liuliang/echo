@@ -28,6 +28,10 @@ namespace DataFlowProgramming
         // override remove node
         virtual void removeNode(QtNodes::Node& node) override;
 
+    public slots:
+        // show menu
+        void onShowShaderNodeMenu(QtNodes::Node& node, const QPointF& pos);
+
     protected:
         class Studio::ShaderEditor* m_shaderEditor = nullptr;
     };

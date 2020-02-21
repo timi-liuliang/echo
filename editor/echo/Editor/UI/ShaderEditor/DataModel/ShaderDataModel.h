@@ -36,6 +36,9 @@ namespace DataFlowProgramming
         // generate code
         virtual bool generateCode(std::string& macroCode, std::string& paramCode, std::string& shaderCode)=0;
 
+        // show menu
+        virtual void showMenu(const QPointF& pos) {}
+
     private:
         Echo::ui32        m_id = 0;
         bool              m_isUsed = true;
