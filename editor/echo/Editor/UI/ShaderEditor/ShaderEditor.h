@@ -7,8 +7,8 @@
 #include <nodeeditor/NodeDataModel>
 #include <engine/core/util/StringUtil.h>
 #include <engine/core/render/base/ShaderProgram.h>
-#include "DataModel/ShaderScene.h"
-#include "DataModel/ShaderView.h"
+#include "Scene/ShaderScene.h"
+#include "Scene/ShaderView.h"
 #include "ui_ShaderEditor.h"
 
 namespace Studio
