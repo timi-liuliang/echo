@@ -13,6 +13,8 @@ namespace DataFlowProgramming
         m_colorSelect->setFixedSize(155, 155);
         m_colorSelect->setDrawText(false);
 
+        QObject::connect(m_colorSelect, SIGNAL(Signal_ColorChanged()), this, SLOT(onColorEdited()));
+
         m_outputs.resize(5);
         m_outputs[0] = std::make_shared<DataVector3>(this, "rgb");
         m_outputs[1] = std::make_shared<DataFloat>(this, "r");
@@ -20,12 +22,16 @@ namespace DataFlowProgramming
         m_outputs[3] = std::make_shared<DataFloat>(this, "b");
         m_outputs[4] = std::make_shared<DataFloat>(this, "a");
 
-        QObject::connect(m_colorSelect, SIGNAL(Signal_ColorChanged()), this, SLOT(onColorEdited()));
+		m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s.rgb", getVariableName().c_str()));
+		m_outputs[1]->setVariableName(Echo::StringUtil::Format("%s.r", getVariableName().c_str()));
+		m_outputs[2]->setVariableName(Echo::StringUtil::Format("%s.g", getVariableName().c_str()));
+		m_outputs[3]->setVariableName(Echo::StringUtil::Format("%s.b", getVariableName().c_str()));
+		m_outputs[4]->setVariableName(Echo::StringUtil::Format("%s.a", getVariableName().c_str()));
     }
 
     QJsonObject ColorDataModel::save() const
     {
-        QJsonObject modelJson = NodeDataModel::save();
+        QJsonObject modelJson = ShaderDataModel::save();
 
         modelJson["color"] = Echo::StringUtil::ToString(m_colorSelect->GetColor()).c_str();
 
@@ -44,36 +50,19 @@ namespace DataFlowProgramming
 
     unsigned int ColorDataModel::nPorts(PortType portType) const
     {
-      unsigned int result = 1;
-
       switch (portType)
       {
-        case PortType::In:
-          result = 0;
-          break;
-
-        case PortType::Out:
-          result = 5;
-
-        default:
-          break;
+      case PortType::In:    return 0;
+      case PortType::Out:   return m_outputs.size();
+      default:              return 0;
       }
-
-      return result;
     }
-
 
     void ColorDataModel::onColorEdited()
     {
         bool ok = true;
         if (ok)
         {
-            m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s.rgb", getVariableName().c_str()));
-            m_outputs[1]->setVariableName(Echo::StringUtil::Format("%s.r", getVariableName().c_str()));
-            m_outputs[2]->setVariableName(Echo::StringUtil::Format("%s.g", getVariableName().c_str()));
-            m_outputs[3]->setVariableName(Echo::StringUtil::Format("%s.b", getVariableName().c_str()));
-            m_outputs[4]->setVariableName(Echo::StringUtil::Format("%s.a", getVariableName().c_str()));
-
             Q_EMIT dataUpdated(0);
             Q_EMIT dataUpdated(1);
             Q_EMIT dataUpdated(2);

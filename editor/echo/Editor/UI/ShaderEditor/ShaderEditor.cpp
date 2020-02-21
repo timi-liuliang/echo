@@ -126,6 +126,7 @@ namespace Studio
         QtNodes::FlowScene* flowScene = (QtNodes::FlowScene*)m_graphicsScene;
         if(flowScene)
         {
+            m_psMacros.clear();
             m_psParams.clear();
             m_psCode.clear();
             

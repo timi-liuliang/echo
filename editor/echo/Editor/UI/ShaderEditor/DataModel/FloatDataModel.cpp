@@ -6,95 +6,70 @@
 namespace DataFlowProgramming
 {
     FloatDataModel::FloatDataModel()
-      : _lineEdit(new QLineEdit())
+      : m_lineEdit(new QLineEdit())
     {
-      _lineEdit->setValidator(new QDoubleValidator());
+        m_lineEdit->setValidator(new QDoubleValidator());
+        m_lineEdit->setMaximumSize(m_lineEdit->sizeHint());
+        m_lineEdit->setText("0.0");
 
-      _lineEdit->setMaximumSize(_lineEdit->sizeHint());
+        QObject::connect(m_lineEdit, SIGNAL(editingFinished()), this, SLOT(onTextEdited()));
 
-      connect(_lineEdit, &QLineEdit::textChanged, this, &FloatDataModel::onTextEdited);
-
-      _lineEdit->setText("0.0");
+        m_outputs.resize(1);
+        m_outputs[0] = std::make_shared<DataFloat>(this, "float");
+        m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s", getVariableName().c_str()));
     }
-
 
     QJsonObject FloatDataModel::save() const
     {
-        QJsonObject modelJson = NodeDataModel::save();
+        QJsonObject modelJson = ShaderDataModel::save();
+
+        modelJson["number"] = m_lineEdit->text().toStdString().c_str();
 
         return modelJson;
     }
 
     void FloatDataModel::restore(QJsonObject const &p)
     {
-      QJsonValue v = p["number"];
-
-      if (!v.isUndefined())
-      {
-        QString strNum = v.toString();
-
-        bool   ok;
-        double d = strNum.toDouble(&ok);
-        if (ok)
+        QJsonValue v = p["number"];
+        if (!v.isUndefined())
         {
-          //_number = std::make_shared<DataFloat>("float");
-          //_lineEdit->setText(strNum);
+            m_lineEdit->setText(v.toString());
         }
-      }
     }
-
 
     unsigned int FloatDataModel::nPorts(PortType portType) const
     {
-      unsigned int result = 1;
-
       switch (portType)
       {
-        case PortType::In:
-          result = 0;
-          break;
-
-        case PortType::Out:
-          result = 1;
-
-        default:
-          break;
+        case PortType::In:      return 0;
+        case PortType::Out:     return m_outputs.size();
+        default:                return 0;
       }
-
-      return result;
     }
 
-
-    void FloatDataModel::onTextEdited(QString const &string)
+    void FloatDataModel::onTextEdited()
     {
-      Q_UNUSED(string);
-
-      bool ok = false;
-
-      double number = _lineEdit->text().toDouble(&ok);
-
-      if (ok)
-      {
-        //_number = std::make_shared<DataFloat>(number);
+        float number = Echo::StringUtil::ParseFloat(m_lineEdit->text().toStdString().c_str());
+        m_lineEdit->setText(Echo::StringUtil::ToString(number).c_str());
 
         Q_EMIT dataUpdated(0);
-      }
-      else
-      {
-        Q_EMIT dataInvalidated(0);
-      }
     }
 
-
-    NodeDataType FloatDataModel::dataType(PortType, PortIndex) const
+    NodeDataType FloatDataModel::dataType(PortType portType, PortIndex portIndex) const
     {
-        return NodeDataType {"float", "float"};
+        return portType == PortType::Out ? m_outputs[portIndex]->type() : NodeDataType{ "unknown", "Unknown" };
     }
 
-
-    std::shared_ptr<NodeData> FloatDataModel::outData(PortIndex)
+    std::shared_ptr<NodeData> FloatDataModel::outData(PortIndex portIndex)
     {
-      return _number;
+        return m_outputs[portIndex];
     }
 
+    bool FloatDataModel::generateCode(std::string& macroCode, std::string& paramCode, std::string& shaderCode)
+    {
+		float number = Echo::StringUtil::ParseFloat(m_lineEdit->text().toStdString().c_str());
+		shaderCode += Echo::StringUtil::Format("\tfloat %s = %f;\n", getVariableName().c_str(), number);
+
+		return true;
+    }
 }

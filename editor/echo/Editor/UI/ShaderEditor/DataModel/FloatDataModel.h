@@ -2,9 +2,9 @@
 
 #include <QtCore/QObject>
 #include <QtWidgets/QLineEdit>
-#include <nodeeditor/NodeDataModel>
 #include <iostream>
 #include "DataFloat.h"
+#include "ShaderDataModel.h"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -17,7 +17,7 @@ namespace DataFlowProgramming
 {
     /// The model dictates the number of inputs and outputs for the Node.
     /// In this example it has no logic.
-    class FloatDataModel : public NodeDataModel
+    class FloatDataModel : public ShaderDataModel
     {
       Q_OBJECT
 
@@ -30,6 +30,9 @@ namespace DataFlowProgramming
         bool captionVisible() const override { return false; }
 
         QString name() const override { return QStringLiteral("Float"); }
+
+		// generate code
+		virtual bool generateCode(std::string& macroCode, std::string& paramCode, std::string& shaderCode) override;
 
     public:
         // load|save
@@ -48,15 +51,15 @@ namespace DataFlowProgramming
         void setInData(std::shared_ptr<NodeData>, int) override { }
 
         // get embedded widget
-        QWidget* embeddedWidget() override { return _lineEdit; }
+        QWidget* embeddedWidget() override { return m_lineEdit; }
 
     private Q_SLOTS:
         // on value changed
-        void onTextEdited(QString const &string);
+        void onTextEdited();
 
     private:
-      std::shared_ptr<DataFloat> _number;
-      QLineEdit *                _lineEdit;
+      QLineEdit*                            m_lineEdit;
+      vector<std::shared_ptr<ShaderData>>   m_outputs;
     };
 }
 

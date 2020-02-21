@@ -33,7 +33,7 @@ namespace DataFlowProgramming
 
         QString name() const override { return QStringLiteral("Color"); }
 
-        // generat code
+        // generate code
         virtual bool generateCode(std::string& macroCode, std::string& paramCode, std::string& shaderCode) override;
         
     public:
