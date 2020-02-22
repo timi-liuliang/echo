@@ -32,7 +32,7 @@ namespace DataFlowProgramming
         QString name() const override { return QStringLiteral("Float"); }
 
 		// generate code
-		virtual bool generateCode(std::string& macroCode, std::string& unformBufferCode, std::string& textureUniformCode, std::string& shaderCode) override;
+		virtual bool generateCode(ShaderCompiler& compiler) override;
 
     public:
         // load|save

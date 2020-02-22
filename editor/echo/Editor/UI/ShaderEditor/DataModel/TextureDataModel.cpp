@@ -80,11 +80,11 @@ namespace DataFlowProgramming
         return m_outputs[portIndex];
     }
 
-    bool TextureDataModel::generateCode(std::string& macroCode, std::string& unformBufferCode, std::string& textureUniformCode, std::string& shaderCode)
+    bool TextureDataModel::generateCode(ShaderCompiler& compiler)
     {
-        textureUniformCode += Echo::StringUtil::Format("layout(binding = 1) uniform sampler2D %s;\n", getVariableName().c_str());
+        compiler.addTextureUniform(getVariableName());
 
-		shaderCode += Echo::StringUtil::Format("\tvec4 %s_Color = texture( %s, v_UV);\n", getVariableName().c_str(), getVariableName().c_str());
+        compiler.addCode(Echo::StringUtil::Format("\tvec4 %s_Color = texture( %s, v_UV);\n", getVariableName().c_str(), getVariableName().c_str()));
 
         return true;
     }

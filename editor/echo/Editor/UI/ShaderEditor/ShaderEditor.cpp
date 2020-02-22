@@ -16,64 +16,6 @@
 
 using namespace DataFlowProgramming;
 
-static const char* g_VsTemplate = R"(#version 450
-
-// uniforms
-layout(binding = 0) uniform UBO
-{
-    mat4 u_WorldViewProjMatrix;
-} vs_ubo;
-
-// inputs
-layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec2 a_UV;
-
-// outputs
-layout(location = 0) out vec2 v_UV;
-
-void main(void)
-{
-    vec4 position = vs_ubo.u_WorldViewProjMatrix * vec4(a_Position, 1.0);
-    gl_Position = position;
-    
-    v_UV = a_UV;
-}
-)";
-
-static const char* g_PsTemplate = R"(#version 450
-
-${FS_MACROS}
-
-precision mediump float;
-
-// uniforms
-${FS_UNIFORMS}
-
-// texture uniforms
-${FS_TEXTURE_UNIFORMS}
-
-// inputs
-layout(location = 0) in vec2  v_UV;
-
-// outputs
-layout(location = 0) out vec4 o_FragColor;
-
-void main(void)
-{
-${FS_SHADER_CODE}
-
-#ifndef ENABLE_BASE_COLOR 
-    vec3 __BaseColor = vec3(0.75);
-#endif
-
-#ifndef ENABLE_OPACITY
-    float __Opacity = 1.0;
-#endif
-
-    o_FragColor = vec4(__BaseColor.rgb, __Opacity);
-}
-)";
-
 namespace Studio
 {
 	static std::shared_ptr<QtNodes::DataModelRegistry> registerDataModels()
@@ -114,7 +56,7 @@ namespace Studio
         ShaderDataModel* shaderDataModel = dynamic_cast<ShaderDataModel*>(dataModel);
         if(shaderDataModel)
         {
-            shaderDataModel->generateCode(m_fsMacros, m_fsUniforms, m_fsTextureUniforms, m_fsCode);
+            shaderDataModel->generateCode(m_shaderCompiler);
         }
     }
 
@@ -126,36 +68,21 @@ namespace Studio
         QtNodes::FlowScene* flowScene = (QtNodes::FlowScene*)m_graphicsScene;
         if(flowScene)
         {
-            m_fsMacros.clear();
-            m_fsUniforms.clear();
-            m_fsTextureUniforms.clear();
-            m_fsCode.clear();
+            m_shaderCompiler.reset();
             
             using namespace std::placeholders;
             flowScene->iterateOverNodeDataDependentOrder(std::bind(&ShaderEditor::visitorAllNodes, this, _1));
 
-            if (!m_fsUniforms.empty())
+            if (m_shaderCompiler.compile())
             {
-                m_fsUniforms = "layout(binding = 0) uniform UBO \n{\n" + m_fsUniforms + "} fs_ubo;";
-            }
-            
-            Echo::String vsCode = g_VsTemplate;     
-            Echo::String psCode = g_PsTemplate;
-            psCode = Echo::StringUtil::Replace(psCode, "${FS_MACROS}", m_fsMacros.c_str());
-            psCode = Echo::StringUtil::Replace(psCode, "${FS_UNIFORMS}", m_fsUniforms.c_str());
-            psCode = Echo::StringUtil::Replace(psCode, "${FS_TEXTURE_UNIFORMS}", m_fsTextureUniforms.c_str());
-            psCode = Echo::StringUtil::Replace(psCode, "${FS_SHADER_CODE}", m_fsCode.c_str());
-            psCode = Echo::StringUtil::Replace(psCode, "\t", "    ");
-            
-            // remember graph
-            if(m_shaderProgram)
-            {
-                Echo::String graph = flowScene->saveToMemory().toStdString().c_str();
-                m_shaderProgram->setGraph(graph);
-                
-                m_shaderProgram->setVsCode(vsCode);
-                
-                m_shaderProgram->setPsCode(psCode);
+				if (m_shaderProgram)
+				{
+					Echo::String graph = flowScene->saveToMemory().toStdString().c_str();
+					m_shaderProgram->setGraph(graph);
+
+					m_shaderProgram->setVsCode(m_shaderCompiler.getVsCode());
+					m_shaderProgram->setPsCode(m_shaderCompiler.getPsCode());
+				}
             }
         }
     }

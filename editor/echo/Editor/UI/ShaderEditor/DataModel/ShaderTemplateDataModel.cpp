@@ -73,20 +73,18 @@ namespace DataFlowProgramming
     }
 
 	// generate code
-    bool ShaderTemplateDataModel::generateCode(std::string& macroCode, std::string& unformBufferCode, std::string& textureUniformCode, std::string& shaderCode)
+    bool ShaderTemplateDataModel::generateCode(ShaderCompiler& compiler)
     {
         if (m_inputs[0])
         {
-            macroCode += "#define ENABLE_BASE_COLOR\n";
-
-            shaderCode += Echo::StringUtil::Format("\tvec3 __BaseColor = %s;\n", dynamic_cast<ShaderData*>(m_inputs[0].get())->getVariableName().c_str());
+            compiler.addMacro("ENABLE_BASE_COLOR");
+            compiler.addCode(Echo::StringUtil::Format("\tvec3 __BaseColor = %s;\n", dynamic_cast<ShaderData*>(m_inputs[0].get())->getVariableName().c_str()));
         }
 
         if (m_inputs[4])
         {
-			macroCode += "#define ENABLE_OPACITY\n";
-
-			shaderCode += Echo::StringUtil::Format("\tfloat __Opacity = %s;\n", dynamic_cast<ShaderData*>(m_inputs[4].get())->getVariableName().c_str());
+            compiler.addMacro("ENABLE_OPACITY");
+            compiler.addCode(Echo::StringUtil::Format("\tfloat __Opacity = %s;\n", dynamic_cast<ShaderData*>(m_inputs[4].get())->getVariableName().c_str()));
         }
 
         return true;

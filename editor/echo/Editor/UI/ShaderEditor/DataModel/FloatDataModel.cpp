@@ -65,10 +65,10 @@ namespace DataFlowProgramming
         return m_outputs[portIndex];
     }
 
-    bool FloatDataModel::generateCode(std::string& macroCode, std::string& unformBufferCode, std::string& textureUniformCode, std::string& shaderCode)
+    bool FloatDataModel::generateCode(ShaderCompiler& compiler)
     {
 		float number = Echo::StringUtil::ParseFloat(m_lineEdit->text().toStdString().c_str());
-		shaderCode += Echo::StringUtil::Format("\tfloat %s = %f;\n", getVariableName().c_str(), number);
+		compiler.addCode(Echo::StringUtil::Format("\tfloat %s = %f;\n", getVariableName().c_str(), number));
 
 		return true;
     }

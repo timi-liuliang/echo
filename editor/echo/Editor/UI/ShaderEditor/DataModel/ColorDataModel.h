@@ -37,7 +37,7 @@ namespace DataFlowProgramming
         virtual void showMenu(const QPointF& pos) override;
 
         // generate code
-        virtual bool generateCode(std::string& macroCode, std::string& unformBufferCode, std::string& textureUniformCode, std::string& shaderCode) override;
+        virtual bool generateCode(ShaderCompiler& compiler) override;
         
     public:
         // load|save
