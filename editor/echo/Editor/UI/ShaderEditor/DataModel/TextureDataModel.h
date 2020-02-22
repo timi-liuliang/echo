@@ -29,12 +29,12 @@ namespace DataFlowProgramming
 
         // caption
         QString caption() const override { return QStringLiteral("Texture"); }
-        bool captionVisible() const override { return false; }
+        bool captionVisible() const override { return true; }
 
         QString name() const override { return QStringLiteral("Texture"); }
 
 		// generate code
-        virtual bool generateCode(std::string& macroCode, std::string& paramCode, std::string& shaderCode) { return false; }
+        virtual bool generateCode(std::string& macroCode, std::string& unformBufferCode, std::string& textureUniformCode, std::string& shaderCode);
 
     public:
         // load|save
@@ -57,11 +57,15 @@ namespace DataFlowProgramming
 
     private Q_SLOTS:
         // on value changed
-        void onTextEdited(QString const &string);
+        void onTextureEdited();
 
     private:
-        std::shared_ptr<DataFloat> _number;
-        QT_UI::QTextureSelect*     m_textureSelect = nullptr;
+        // update output
+        void updateOutputDataVariableName();
+
+    private:
+        QT_UI::QTextureSelect*              m_textureSelect = nullptr;
+        vector<std::shared_ptr<ShaderData>> m_outputs;
     };
 }
 

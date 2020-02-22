@@ -79,11 +79,11 @@ namespace DataFlowProgramming
         return m_outputs[portIndex];
     }
 
-    bool ColorDataModel::generateCode(std::string& macroCode, std::string& paramCode, std::string& shaderCode)
+    bool ColorDataModel::generateCode(std::string& macroCode, std::string& unformBufferCode, std::string& textureUniformCode, std::string& shaderCode)
     {
         if (m_isParameter)
         {
-            paramCode += Echo::StringUtil::Format("\tvec4 %s;\n", getVariableName().c_str());
+            unformBufferCode += Echo::StringUtil::Format("\tvec4 %s;\n", getVariableName().c_str());
         }
         else
         {

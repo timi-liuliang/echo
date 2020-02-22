@@ -36,7 +36,7 @@ namespace DataFlowProgramming
         QString name() const override { return QStringLiteral("ShaderTemplate"); }
 
 		// generate code
-		virtual bool generateCode(std::string& macroCode, std::string& paramCode, std::string& shaderCode) override;
+		virtual bool generateCode(std::string& macroCode, std::string& unformBufferCode, std::string& textureUniformCode, std::string& shaderCode) override;
 
     public:
         // load|save

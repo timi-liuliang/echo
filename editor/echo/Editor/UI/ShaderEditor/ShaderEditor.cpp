@@ -29,14 +29,14 @@ layout(location = 0) in vec3 a_Position;
 layout(location = 1) in vec2 a_UV;
 
 // outputs
-layout(location = 0) out vec2 v_TexCoord;
+layout(location = 0) out vec2 v_UV;
 
 void main(void)
 {
     vec4 position = vs_ubo.u_WorldViewProjMatrix * vec4(a_Position, 1.0);
     gl_Position = position;
     
-    v_TexCoord = a_UV;
+    v_UV = a_UV;
 }
 )";
 
@@ -49,8 +49,11 @@ precision mediump float;
 // uniforms
 ${FS_UNIFORMS}
 
+// texture uniforms
+${FS_TEXTURE_UNIFORMS}
+
 // inputs
-layout(location = 0) in vec2  v_TexCoord;
+layout(location = 0) in vec2  v_UV;
 
 // outputs
 layout(location = 0) out vec4 o_FragColor;
@@ -111,7 +114,7 @@ namespace Studio
         ShaderDataModel* shaderDataModel = dynamic_cast<ShaderDataModel*>(dataModel);
         if(shaderDataModel)
         {
-            shaderDataModel->generateCode(m_psMacros, m_psParams, m_psCode);
+            shaderDataModel->generateCode(m_fsMacros, m_fsUniforms, m_fsTextureUniforms, m_fsCode);
         }
     }
 
@@ -123,23 +126,25 @@ namespace Studio
         QtNodes::FlowScene* flowScene = (QtNodes::FlowScene*)m_graphicsScene;
         if(flowScene)
         {
-            m_psMacros.clear();
-            m_psParams.clear();
-            m_psCode.clear();
+            m_fsMacros.clear();
+            m_fsUniforms.clear();
+            m_fsTextureUniforms.clear();
+            m_fsCode.clear();
             
             using namespace std::placeholders;
             flowScene->iterateOverNodeDataDependentOrder(std::bind(&ShaderEditor::visitorAllNodes, this, _1));
 
-            if (!m_psParams.empty())
+            if (!m_fsUniforms.empty())
             {
-                m_psParams = "layout(binding = 0) uniform UBO \n{\n" + m_psParams + "} fs_ubo;";
+                m_fsUniforms = "layout(binding = 0) uniform UBO \n{\n" + m_fsUniforms + "} fs_ubo;";
             }
             
             Echo::String vsCode = g_VsTemplate;     
             Echo::String psCode = g_PsTemplate;
-            psCode = Echo::StringUtil::Replace(psCode, "${FS_MACROS}", m_psMacros.c_str());
-            psCode = Echo::StringUtil::Replace(psCode, "${FS_UNIFORMS}", m_psParams.c_str());
-            psCode = Echo::StringUtil::Replace(psCode, "${FS_SHADER_CODE}", m_psCode.c_str());
+            psCode = Echo::StringUtil::Replace(psCode, "${FS_MACROS}", m_fsMacros.c_str());
+            psCode = Echo::StringUtil::Replace(psCode, "${FS_UNIFORMS}", m_fsUniforms.c_str());
+            psCode = Echo::StringUtil::Replace(psCode, "${FS_TEXTURE_UNIFORMS}", m_fsTextureUniforms.c_str());
+            psCode = Echo::StringUtil::Replace(psCode, "${FS_SHADER_CODE}", m_fsCode.c_str());
             psCode = Echo::StringUtil::Replace(psCode, "\t", "    ");
             
             // remember graph

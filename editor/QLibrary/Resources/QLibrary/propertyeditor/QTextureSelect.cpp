@@ -10,16 +10,23 @@ namespace QT_UI
 	QTextureSelect::QTextureSelect( QWidget* parent)
 		: QPushButton( parent)
 	{ 
-		connect( this, SIGNAL(clicked()), this, SLOT(OnSelectColor()));
+		connect( this, SIGNAL(clicked()), this, SLOT(OnSelectTexture()));
 	}
 
-	void QTextureSelect::OnSelectColor()
+	void QTextureSelect::OnSelectTexture()
 	{
         Echo::String qFileName = Studio::ResChooseDialog::getSelectingFile(nullptr, ".png", "", "");
         if (!qFileName.empty())
         {
-            m_texturePath = qFileName.c_str();
+			setTexture(qFileName);
         }
+	}
+
+	void QTextureSelect::setTexture(const Echo::String& texturePath)
+	{
+		m_texturePath = texturePath; 
+
+		emit Signal_TextureChagned();
 	}
 
 	bool QTextureSelect::ItemDelegatePaint( QPainter *painter, const QRect& rect, const string& val)

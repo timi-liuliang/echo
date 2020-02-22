@@ -16,6 +16,10 @@ namespace QT_UI
 	public:
 		QTextureSelect( QWidget* parent = 0);
 
+		// texture path
+		const Echo::String& getTexture() { return m_texturePath; }
+		void setTexture(const Echo::String& texturePath);
+
 		// MVC
 		static bool ItemDelegatePaint( QPainter *painter, const QRect& rect, const string& val);
 
@@ -28,7 +32,11 @@ namespace QT_UI
 
 	public slots:
 		// on select color
-		void OnSelectColor();
+		void OnSelectTexture();
+
+	signals:
+		//  texturePath changed
+		void Signal_TextureChagned();
 
 	private:
 		Echo::String		m_texturePath;

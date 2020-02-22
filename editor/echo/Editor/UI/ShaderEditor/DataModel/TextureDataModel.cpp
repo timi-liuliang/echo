@@ -2,6 +2,7 @@
 #include <QtCore/QJsonValue>
 #include <QtGui/QDoubleValidator>
 #include "DataFloat.h"
+#include "DataVector3.h"
 
 namespace DataFlowProgramming
 {
@@ -9,74 +10,55 @@ namespace DataFlowProgramming
     {
         m_textureSelect = new QT_UI::QTextureSelect();
         m_textureSelect->setFixedSize(155, 155);
+
+       QObject::connect(m_textureSelect, SIGNAL(Signal_TextureChagned()), this, SLOT(onTextureEdited()));
+
+		m_outputs.resize(5);
+		m_outputs[0] = std::make_shared<DataVector3>(this, "rgb");
+		m_outputs[1] = std::make_shared<DataFloat>(this, "r");
+		m_outputs[2] = std::make_shared<DataFloat>(this, "g");
+		m_outputs[3] = std::make_shared<DataFloat>(this, "b");
+		m_outputs[4] = std::make_shared<DataFloat>(this, "a");
+
+        updateOutputDataVariableName();
     }
 
     QJsonObject TextureDataModel::save() const
     {
         QJsonObject modelJson = NodeDataModel::save();
 
+        modelJson["texture"] = m_textureSelect->getTexture().c_str();
+
         return modelJson;
     }
 
-
     void TextureDataModel::restore(QJsonObject const &p)
     {
-      QJsonValue v = p["number"];
-
-      if (!v.isUndefined())
-      {
-        QString strNum = v.toString();
-
-        bool   ok;
-        double d = strNum.toDouble(&ok);
-        if (ok)
+        QJsonValue v = p["texture"];
+        if (!v.isUndefined())
         {
-          //_number = std::make_shared<DataFloat>(d);
-          //m_colorSelect->setText(strNum);
+            Echo::String texturePath = v.toString().toStdString().c_str();
+            m_textureSelect->setTexture(texturePath);
         }
-      }
     }
-
 
     unsigned int TextureDataModel::nPorts(PortType portType) const
     {
-      unsigned int result = 1;
-
-      switch (portType)
-      {
-        case PortType::In:
-          result = 0;
-          break;
-
-        case PortType::Out:
-          result = 5;
-
-        default:
-          break;
-      }
-
-      return result;
+		switch (portType)
+		{
+		case PortType::In:    return 0;
+		case PortType::Out:   return m_outputs.size();
+		default:              return 0;
+		}
     }
 
-
-    void TextureDataModel::onTextEdited(QString const &string)
+    void TextureDataModel::onTextureEdited()
     {
-      Q_UNUSED(string);
-
-      bool ok = false;
-
-        double number = 0.f;//_lineEdit->text().toDouble(&ok);
-
-      if (ok)
-      {
-        _number = std::make_shared<DataFloat>(this, "rgba");
-
-        Q_EMIT dataUpdated(0);
-      }
-      else
-      {
-        Q_EMIT dataInvalidated(0);
-      }
+		Q_EMIT dataUpdated(0);
+		Q_EMIT dataUpdated(1);
+		Q_EMIT dataUpdated(2);
+		Q_EMIT dataUpdated(3);
+		Q_EMIT dataUpdated(4);
     }
 
     NodeDataType TextureDataModel::dataType(PortType portType, PortIndex portIndex) const
@@ -93,8 +75,28 @@ namespace DataFlowProgramming
         return NodeDataType {"unknown", "Unknown"};
     }
 
-    std::shared_ptr<NodeData> TextureDataModel::outData(PortIndex)
+    std::shared_ptr<NodeData> TextureDataModel::outData(PortIndex portIndex)
     {
-      return _number;
+        return m_outputs[portIndex];
     }
+
+    bool TextureDataModel::generateCode(std::string& macroCode, std::string& unformBufferCode, std::string& textureUniformCode, std::string& shaderCode)
+    {
+        textureUniformCode += Echo::StringUtil::Format("layout(binding = 1) uniform sampler2D %s;\n", getVariableName().c_str());
+
+		shaderCode += Echo::StringUtil::Format("\tvec4 %s_Color = texture( %s, v_UV);\n", getVariableName().c_str(), getVariableName().c_str());
+
+        return true;
+    }
+
+	void TextureDataModel::updateOutputDataVariableName()
+	{
+		Echo::String variableName = getVariableName();
+
+		m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s_Color.rgb", variableName.c_str()));
+		m_outputs[1]->setVariableName(Echo::StringUtil::Format("%s_Color.r", variableName.c_str()));
+		m_outputs[2]->setVariableName(Echo::StringUtil::Format("%s_Color.g", variableName.c_str()));
+		m_outputs[3]->setVariableName(Echo::StringUtil::Format("%s_Color.b", variableName.c_str()));
+		m_outputs[4]->setVariableName(Echo::StringUtil::Format("%s_Color.a", variableName.c_str()));
+	}
 }

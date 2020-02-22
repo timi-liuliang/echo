@@ -37,7 +37,7 @@ namespace DataFlowProgramming
         virtual void showMenu(const QPointF& pos) override;
 
         // generate code
-        virtual bool generateCode(std::string& macroCode, std::string& paramCode, std::string& shaderCode) override;
+        virtual bool generateCode(std::string& macroCode, std::string& unformBufferCode, std::string& textureUniformCode, std::string& shaderCode) override;
         
     public:
         // load|save
@@ -71,12 +71,12 @@ namespace DataFlowProgramming
         void onSetAsConstant();
 
     private:
-        QMenu*                               m_menu = nullptr;
-        QAction*                             m_setAsParameter = nullptr;
-		QAction*                             m_setAsConstant = nullptr;
-        bool                                 m_isParameter = false;
-        QT_UI::QColorSelect*                 m_colorSelect = nullptr;
-        vector<std::shared_ptr<ShaderData>>  m_outputs;
+        QMenu*                              m_menu = nullptr;
+        QAction*                            m_setAsParameter = nullptr;
+		QAction*                            m_setAsConstant = nullptr;
+        bool                                m_isParameter = false;
+        QT_UI::QColorSelect*                m_colorSelect = nullptr;
+        vector<std::shared_ptr<ShaderData>> m_outputs;
     };
 }
 

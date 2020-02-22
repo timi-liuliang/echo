@@ -73,7 +73,7 @@ namespace DataFlowProgramming
     }
 
 	// generate code
-    bool ShaderTemplateDataModel::generateCode(std::string& macroCode, std::string& paramCode, std::string& shaderCode)
+    bool ShaderTemplateDataModel::generateCode(std::string& macroCode, std::string& unformBufferCode, std::string& textureUniformCode, std::string& shaderCode)
     {
         if (m_inputs[0])
         {
