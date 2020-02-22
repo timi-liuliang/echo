@@ -48,6 +48,13 @@ If you really like other types of script language, you can tell us, or you can s
 
 ![](https://media.githubusercontent.com/media/timi-liuliang/echo-download/master/images/intro/echo1.png)   
 
+### Data Flow Programming based ShaderEditor
+Programming visualization is a very import concept for nonprogrammer, with the help of DataFlowProgramming framework [nodeeditor](https://github.com/paceholder/nodeeditor) we successfully make the work of shader programming enabled for everyone.   
+“It turns the dark and strange arts of shader programming into something understandable and non-evil”   
+Nicklas 'Nifflas' Nygren, developer of the Knytt series
+
+![](https://media.githubusercontent.com/media/timi-liuliang/echo-download/master/images/intro/shadereditor.png)   
+
 ### Configurable Module   
 Most of the engine's Functionality was implemented by configurable modules. that means when you release your app, you can just choose the module you really need. which makes your app have smaller size and more efficiency running speed.
 
