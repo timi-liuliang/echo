@@ -14,7 +14,7 @@ layout(binding = 0) uniform UBO
 // inputs
 layout(location = 0) in vec3 a_Position;
 
-#ifdef ENABLE_VERTEX_POSITON
+#ifdef ENABLE_VERTEX_POSITION
 layout(location = 0) out vec3 v_Position;
 #endif
 

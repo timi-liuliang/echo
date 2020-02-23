@@ -183,7 +183,6 @@ namespace Echo
     void ShaderProgram::setVsCode(const String& vsCode)
     {
         m_vsCode=vsCode;
-        build();
     }
 
     void ShaderProgram::setPsCode(const String& psCode)

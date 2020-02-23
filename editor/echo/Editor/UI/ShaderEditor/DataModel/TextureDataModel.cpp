@@ -82,6 +82,8 @@ namespace DataFlowProgramming
 
     bool TextureDataModel::generateCode(ShaderCompiler& compiler)
     {
+        compiler.addMacro("ENABLE_VERTEX_UV0");
+
         compiler.addTextureUniform(getVariableName());
 
         compiler.addCode(Echo::StringUtil::Format("\tvec4 %s_Color = texture( %s, v_UV);\n", getVariableName().c_str(), getVariableName().c_str()));
