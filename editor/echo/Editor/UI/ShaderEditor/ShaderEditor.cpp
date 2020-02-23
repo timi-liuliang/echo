@@ -5,6 +5,7 @@
 #include <nodeeditor/FlowView>
 #include <nodeeditor/DataModelRegistry>
 #include "ShaderTemplateDataModel.h"
+#include "InputDataModel.h"
 #include "FloatDataModel.h"
 #include "Vector3DataModel.h"
 #include "ColorDataModel.h"
@@ -26,10 +27,13 @@ namespace Studio
         ret->registerModel<ShaderTemplateDataModel>("skip me");
         
         // variables
-        ret->registerModel<FloatDataModel>("Variable");
-        ret->registerModel<Vector3DataModel>("Variable");
-        ret->registerModel<ColorDataModel>("Variable");
-        ret->registerModel<TextureDataModel>("Variable");
+        ret->registerModel<FloatDataModel>("Uniforms");
+        ret->registerModel<Vector3DataModel>("Uniforms");
+        ret->registerModel<ColorDataModel>("Uniforms");
+        ret->registerModel<TextureDataModel>("Uniforms");
+
+        // Inputs
+        ret->registerModel<InputDataModel>("Inputs");
 
 		return ret;
 	}

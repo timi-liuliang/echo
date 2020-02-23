@@ -30,7 +30,7 @@ namespace DataFlowProgramming
 	private:
 		Echo::i32		m_texturesCount = 0;
 
-		Echo::String	m_fsMacros;
+		Echo::String	m_macros;
 		Echo::String	m_fsUniforms;
 		Echo::String	m_fsTextureUniforms;
 		Echo::String	m_fsCode;

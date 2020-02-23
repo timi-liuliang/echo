@@ -356,7 +356,7 @@ namespace Echo
 		if (m_shaderProgram)
 		{
 			ParamMap oldUniforms = m_uniforms;
-			TextureInfoArray oldTextureInfos = m_textures;
+			TextureInfoArray oldTextureInfos = std::move(m_textures);
 
 			m_uniforms.clear();
 			m_textures.clear();
