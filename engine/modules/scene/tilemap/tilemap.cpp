@@ -31,6 +31,9 @@ namespace Echo
 		CLASS_BIND_METHOD(TileMap, setFlipX, DEF_METHOD("setFlipX"));
 		CLASS_BIND_METHOD(TileMap, isFlipY, DEF_METHOD("isFlipY"));
 		CLASS_BIND_METHOD(TileMap, setFlipY, DEF_METHOD("setFlipY"));
+        CLASS_BIND_METHOD(TileMap, getTileCenter, DEF_METHOD("getTileCenter"));
+        CLASS_BIND_METHOD(TileMap, getTile, DEF_METHOD("getTile"));
+        CLASS_BIND_METHOD(TileMap, setTile, DEF_METHOD("setTile"));
 
         CLASS_REGISTER_PROPERTY(TileMap, "TileShape", Variant::Type::StringOption, "getTileShape", "setTileShape");
         CLASS_REGISTER_PROPERTY(TileMap, "Width", Variant::Type::Int, "getWidth", "setWidth");
@@ -73,9 +76,12 @@ namespace Echo
         }
 
         node = Echo::Node::loadLink(nodePath, false);
-        node->setLocalPosition(position + node->getLocalPosition());
-        node->setParent(this);
-        node->setName(getTileName(x, y));
+        if (node)
+        {
+			node->setLocalPosition(position + node->getLocalPosition());
+			node->setParent(this);
+			node->setName(getTileName(x, y));
+        }
     }
 
     Node* TileMap::getTile(i32 x, i32 y)
