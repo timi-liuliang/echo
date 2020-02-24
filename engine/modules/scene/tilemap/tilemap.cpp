@@ -62,7 +62,7 @@ namespace Echo
 
     Vector3 TileMap::getTileCenter(i32 x, i32 y)
     {
-        return Vector3( (x+0.5)*getTileSize().x, (y+0.5)*getTileSize().y, 0.f);
+        return flip(Vector3( (x+0.5)*getTileSize().x, (y+0.5)*getTileSize().y, 0.f));
     }
 
     void TileMap::setTile(i32 x, i32 y, const String& nodePath)
