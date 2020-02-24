@@ -56,4 +56,30 @@ namespace Echo
 
         return result;
     }
+
+    Vector3 TileMap::getTileCenter(i32 x, i32 y)
+    {
+        return Vector3( (x+0.5)*getTileSize().x, (y+0.5)*getTileSize().y, 0.f);
+    }
+
+    void TileMap::setTile(i32 x, i32 y, const String& nodePath)
+    {
+        Vector3 position = getTileCenter(x, y);
+
+        Node* node = getTile(x, y);
+        if (node)
+        {
+            EchoSafeDelete(node, Node);
+        }
+
+        node = Echo::Node::loadLink(nodePath, false);
+        node->setLocalPosition(position + node->getLocalPosition());
+        node->setParent(this);
+        node->setName(getTileName(x, y));
+    }
+
+    Node* TileMap::getTile(i32 x, i32 y)
+    {
+        return getChild(getTileName(x, y).c_str());
+    }
 }

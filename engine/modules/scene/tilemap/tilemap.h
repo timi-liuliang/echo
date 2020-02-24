@@ -7,7 +7,9 @@ namespace Echo
     class TileMap : public Node
     {
         ECHO_CLASS(TileMap, Node)
-        
+
+        typedef std::unordered_map<i32, Node*> Tiles;
+
     public:
         TileMap();
         virtual ~TileMap();
@@ -38,7 +40,17 @@ namespace Echo
 
         // flip
         Vector3 flip(const Vector3& pos);
-        
+
+        // position
+        Vector3 getTileCenter(i32 x, i32 y);
+
+        // tile
+        void setTile(i32 x, i32 y, const String& nodePath);
+        Node* getTile(i32 x, i32 y);
+
+        // tile name
+        String getTileName(i32 x, i32 y) const { return StringUtil::Format("tile_x%d_y%d", x, y); }
+   
     private:
         StringOption        m_tileShape = StringOption("Square", { "Square"/*,"Isometric","Hexagon"*/ });
 		i32                 m_width = 8;
