@@ -81,6 +81,12 @@ namespace DataFlowProgramming
             compiler.addCode(Echo::StringUtil::Format("\tvec3 __BaseColor = %s;\n", dynamic_cast<ShaderData*>(m_inputs[0].get())->getVariableName().c_str()));
         }
 
+        if (m_inputs[1])
+        {
+            compiler.addMacro("ENABLE_VERTEX_NORMAL");
+            compiler.addMacro("ENABLE_LIGHTING_CALCULATION");
+        }
+
         if (m_inputs[4])
         {
             compiler.addMacro("ENABLE_OPACITY");

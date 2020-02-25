@@ -101,6 +101,12 @@ ${FS_SHADER_CODE}
     float __Opacity = 1.0;
 #endif
 
+#ifdef ENABLE_LIGHTING_CALCULATION
+    vec3 _lightDir = normalize(vec3(1.0, 1.0, 1.0));
+    vec3 _lightColor = vec3(0.8, 0.8, 0.8);
+    __BaseColor = max(dot(v_Normal, _lightDir), 0.0) * _lightColor * __BaseColor;
+#endif
+
     o_FragColor = vec4(__BaseColor.rgb, __Opacity);
 }
 )";
