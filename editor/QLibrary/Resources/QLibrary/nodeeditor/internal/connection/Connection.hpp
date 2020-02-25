@@ -24,27 +24,16 @@ namespace QtNodes
     class ConnectionGraphicsObject;
 
     ///
-    class NODE_EDITOR_PUBLIC Connection
-      : public QObject
-      , public Serializable
+    class NODE_EDITOR_PUBLIC Connection : public QObject, public Serializable
     {
       Q_OBJECT
 
     public:
       /// New Connection is attached to the port of the given Node.
       /// The port has parameters (portType, portIndex).
-      /// The opposite connection end will require anothre port.
-      Connection(PortType portType,
-                 Node& node,
-                 PortIndex portIndex);
-
-      Connection(Node& nodeIn,
-                 PortIndex portIndexIn,
-                 Node& nodeOut,
-                 PortIndex portIndexOut,
-                 TypeConverter converter =
-                   TypeConverter{});
-
+      /// The opposite connection end will require another port.
+      Connection(PortType portType, Node& node,PortIndex portIndex);
+      Connection(Node& nodeIn,PortIndex portIndexIn, Node& nodeOut,PortIndex portIndexOut, TypeConverter converter =TypeConverter{});
       Connection(const Connection&) = delete;
       Connection operator=(const Connection&) = delete;
 
@@ -72,14 +61,10 @@ namespace QtNodes
         void removeFromNodes() const;
 
     public:
+      ConnectionGraphicsObject& getConnectionGraphicsObject() const;
 
-      ConnectionGraphicsObject&
-      getConnectionGraphicsObject() const;
-
-      ConnectionState const &
-      connectionState() const;
-      ConnectionState&
-      connectionState();
+      ConnectionState const & connectionState() const;
+      ConnectionState& connectionState();
 
       ConnectionGeometry&
       connectionGeometry();

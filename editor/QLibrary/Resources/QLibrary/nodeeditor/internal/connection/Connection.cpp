@@ -44,12 +44,7 @@ Connection(PortType portType,
 }
 
 
-Connection::
-Connection(Node& nodeIn,
-           PortIndex portIndexIn,
-           Node& nodeOut,
-           PortIndex portIndexOut,
-           TypeConverter typeConverter)
+Connection::Connection(Node& nodeIn,PortIndex portIndexIn, Node& nodeOut, PortIndex portIndexOut, TypeConverter typeConverter)
   : _uid(QUuid::createUuid())
   , _outNode(&nodeOut)
   , _inNode(&nodeIn)
@@ -58,8 +53,8 @@ Connection(Node& nodeIn,
   , _connectionState()
   , _converter(std::move(typeConverter))
 {
-  setNodeToPort(nodeIn, PortType::In, portIndexIn);
-  setNodeToPort(nodeOut, PortType::Out, portIndexOut);
+	setNodeToPort(nodeIn, PortType::In, portIndexIn);
+	setNodeToPort(nodeOut, PortType::Out, portIndexOut);
 }
 
 
@@ -120,25 +115,17 @@ save() const
 }
 
 
-QUuid
-Connection::
-id() const
+QUuid Connection::id() const
 {
-  return _uid;
+    return _uid;
 }
 
-
-bool
-Connection::
-complete() const
+bool Connection::complete() const
 {
   return _inNode != nullptr && _outNode != nullptr;
 }
 
-
-void
-Connection::
-setRequiredPort(PortType dragging)
+void Connection::setRequiredPort(PortType dragging)
 {
   _connectionState.setRequiredPort(dragging);
 
@@ -230,29 +217,26 @@ getPortIndex(PortType portType) const
 }
 
 
-void
-Connection::
-setNodeToPort(Node& node,
-              PortType portType,
-              PortIndex portIndex)
+void Connection::setNodeToPort(Node& node, PortType portType, PortIndex portIndex)
 {
-  bool wasIncomplete = !complete();
+	bool wasIncomplete = !complete();
 
-  auto& nodeWeak = getNode(portType);
+	auto& nodeWeak = getNode(portType);
 
-  nodeWeak = &node;
+	nodeWeak = &node;
 
-  if (portType == PortType::Out)
-    _outPortIndex = portIndex;
-  else
-    _inPortIndex = portIndex;
+	if (portType == PortType::Out)
+		_outPortIndex = portIndex;
+	else
+		_inPortIndex = portIndex;
 
-  _connectionState.setNoRequiredPort();
+	_connectionState.setNoRequiredPort();
 
-  updated(*this);
-  if (complete() && wasIncomplete) {
-    connectionCompleted(*this);
-  }
+	updated(*this);
+	if (complete() && wasIncomplete) 
+    {
+		connectionCompleted(*this);
+	}
 }
 
 

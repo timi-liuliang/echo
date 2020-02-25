@@ -97,37 +97,26 @@ createConnection(PortType connectedPort,
 }
 
 
-std::shared_ptr<Connection>
-FlowScene::
-createConnection(Node& nodeIn,
-                 PortIndex portIndexIn,
-                 Node& nodeOut,
-                 PortIndex portIndexOut,
-                 TypeConverter const &converter)
+std::shared_ptr<Connection> FlowScene::createConnection(Node& nodeIn, PortIndex portIndexIn, Node& nodeOut, PortIndex portIndexOut, TypeConverter const &converter)
 {
-  auto connection =
-    std::make_shared<Connection>(nodeIn,
-                                 portIndexIn,
-                                 nodeOut,
-                                 portIndexOut,
-                                 converter);
+    auto connection = std::make_shared<Connection>(nodeIn, portIndexIn, nodeOut, portIndexOut, converter);
 
-  auto cgo = detail::make_unique<ConnectionGraphicsObject>(*this, *connection);
+    auto cgo = detail::make_unique<ConnectionGraphicsObject>(*this, *connection);
 
-  nodeIn.nodeState().setConnection(PortType::In, portIndexIn, *connection);
-  nodeOut.nodeState().setConnection(PortType::Out, portIndexOut, *connection);
+    nodeIn.nodeState().setConnection(PortType::In, portIndexIn, *connection);
+    nodeOut.nodeState().setConnection(PortType::Out, portIndexOut, *connection);
 
-  // after this function connection points are set to node port
-  connection->setGraphicsObject(std::move(cgo));
+    // after this function connection points are set to node port
+    connection->setGraphicsObject(std::move(cgo));
 
-  // trigger data propagation
-  nodeOut.onDataUpdated(portIndexOut);
+    // trigger data propagation
+    nodeOut.onDataUpdated(portIndexOut);
 
-  _connections[connection->id()] = connection;
+    _connections[connection->id()] = connection;
 
-  connectionCreated(*connection);
+    connectionCreated(*connection);
 
-  return connection;
+    return connection;
 }
 
 
@@ -180,15 +169,14 @@ restoreConnection(QJsonObject const &connectionJson)
 }
 
 
-void
-FlowScene::
-deleteConnection(Connection& connection)
+void FlowScene::deleteConnection(Connection& connection)
 {
-  auto it = _connections.find(connection.id());
-  if (it != _connections.end()) {
-    connection.removeFromNodes();
-    _connections.erase(it);
-  }
+	auto it = _connections.find(connection.id());
+	if (it != _connections.end())
+	{
+		connection.removeFromNodes();
+		_connections.erase(it);
+	}
 }
 
 

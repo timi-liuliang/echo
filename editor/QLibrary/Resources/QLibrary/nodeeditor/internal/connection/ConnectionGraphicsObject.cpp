@@ -195,27 +195,25 @@ mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 }
 
 
-void
-ConnectionGraphicsObject::
-mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
+void ConnectionGraphicsObject::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 {
-  ungrabMouse();
-  event->accept();
+	ungrabMouse();
+	event->accept();
 
-  auto node = locateNodeAt(event->scenePos(), _scene,
-                           _scene.views()[0]->transform());
+	auto node = locateNodeAt(event->scenePos(), _scene,
+		_scene.views()[0]->transform());
 
-  NodeConnectionInteraction interaction(*node, _connection, _scene);
+	NodeConnectionInteraction interaction(*node, _connection, _scene);
 
-  if (node && interaction.tryConnect())
-  {
-    node->resetReactionToConnection();
-  }
+	if (node && interaction.tryConnect())
+	{
+		node->resetReactionToConnection();
+	}
 
-  if (_connection.connectionState().requiresPort())
-  {
-    _scene.deleteConnection(_connection);
-  }
+	if (_connection.connectionState().requiresPort())
+	{
+		_scene.deleteConnection(_connection);
+	}
 }
 
 
