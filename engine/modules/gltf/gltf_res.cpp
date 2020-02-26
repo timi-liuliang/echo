@@ -845,7 +845,7 @@ namespace Echo
 		vertFormat.m_isUseNormal = attributes.find("NORMAL") != attributes.end();
 		vertFormat.m_isUseUV = attributes.find("TEXCOORD_0") != attributes.end();
 		vertFormat.m_isUseVertexColor = attributes.find("COLOR_0") != attributes.end();
-		vertFormat.m_isUseBoneData = attributes.find("WEIGHTS_0") != attributes.end() && attributes.find("JOINTS_0") != attributes.end();
+		vertFormat.m_isUseBlendingData = attributes.find("WEIGHTS_0") != attributes.end() && attributes.find("JOINTS_0") != attributes.end();
 
 		// parse vertex count
 		int vertCount = 0;
@@ -1063,7 +1063,7 @@ namespace Echo
 		primitive.m_materialInst->setMacro("HAS_NORMALS", vertexFormat.m_isUseNormal);
 		primitive.m_materialInst->setMacro("HAS_VERTEX_COLOR", vertexFormat.m_isUseVertexColor);
 		primitive.m_materialInst->setMacro("HAS_UV", vertexFormat.m_isUseUV);
-		primitive.m_materialInst->setMacro("HAS_SKIN", vertexFormat.m_isUseBoneData);
+		primitive.m_materialInst->setMacro("HAS_SKIN", vertexFormat.m_isUseBlendingData);
 		primitive.m_materialInst->setMacro("HAS_BASECOLORMAP", baseColorTextureIdx != -1);
 		primitive.m_materialInst->setMacro("HAS_METALROUGHNESSMAP", metalicRoughnessIdx != -1);
 		primitive.m_materialInst->setMacro("HAS_NORMALMAP", normalTextureIdx != -1);

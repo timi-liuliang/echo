@@ -5,11 +5,12 @@
 #include <nodeeditor/FlowView>
 #include <nodeeditor/DataModelRegistry>
 #include "ShaderTemplateDataModel.h"
-#include "InputDataModel.h"
+#include "VertexAttributeDataModel.h"
 #include "FloatDataModel.h"
 #include "Vector3DataModel.h"
 #include "ColorDataModel.h"
 #include "TextureDataModel.h"
+#include "LayerBlendDataModel.h"
 #include "ShaderScene.h"
 #include "ShaderView.h"
 #include "engine/core/io/IO.h"
@@ -33,7 +34,8 @@ namespace Studio
         ret->registerModel<TextureDataModel>("Uniforms");
 
         // Inputs
-        ret->registerModel<InputDataModel>("Inputs");
+        ret->registerModel<VertexAttributeDataModel>("Inputs");
+        ret->registerModel<LayerBlendDataModel>("Inputs");
 
 		return ret;
 	}

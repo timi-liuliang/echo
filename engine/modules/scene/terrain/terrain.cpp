@@ -124,6 +124,10 @@ namespace Echo
                     vert.m_position = Vector3(row * m_gridSpacing, getHeight(row, column), column * m_gridSpacing);
                     vert.m_uv = Vector2(row, column);
                     vert.m_normal = getNormal(row, column);
+                    vert.m_layerIndices = Color(1, 2, 3, 4).getABGR();
+
+                    float weight = Math::IntervalRandom(0.f, 1.f);
+                    vert.m_layerWeights = Vector4(weight, 1.f-weight, 0.f, 0.f);
                     oVertices.push_back(vert);
                 }
             }
@@ -169,6 +173,7 @@ namespace Echo
         MeshVertexFormat define;
         define.m_isUseNormal = true;
         define.m_isUseUV = true;
+        define.m_isUseBlendingData = true;
         
         m_mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(ui32), indices.data());
         m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data(), m_localAABB);
@@ -189,8 +194,8 @@ namespace Echo
     {
         if(m_heightmapImage)
         {
-            i32 column = Math::Clamp(x, 0, m_columns);
-            i32 row = Math::Clamp(z, 0, m_rows);
+            i32 column = Math::Clamp(x, 0, m_columns-1);
+            i32 row = Math::Clamp(z, 0, m_rows-1);
             Color color = m_heightmapImage->getColor(column, row, 0);
             float height = (color.r * 2.f - 1.f) * m_heightRange;
             

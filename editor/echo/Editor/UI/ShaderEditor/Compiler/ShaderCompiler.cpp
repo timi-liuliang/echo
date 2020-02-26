@@ -33,6 +33,14 @@ layout(location = 3) in vec2 a_UV;
 layout(location = 3) out vec2 v_UV;
 #endif
 
+#ifdef ENABLE_VERTEX_BLENDING
+layout(location = 4) in vec4 a_Weight;
+layout(location = 4) out vec4 v_Weight;
+
+layout(location = 5) in vec4 a_Joint;
+layout(location = 5) out vec4 v_Joint;
+#endif
+
 void main(void)
 {
     vec4 position = vs_ubo.u_WorldViewProjMatrix * vec4(a_Position, 1.0);
@@ -54,6 +62,12 @@ void main(void)
 #ifdef ENABLE_VERTEX_UV0    
     v_UV = a_UV;
 #endif
+
+#ifdef ENABLE_VERTEX_BLENDING
+	v_Weight = a_Weight;
+	v_Joint = a_Joint;
+#endif
+
 }
 )";
 
@@ -84,6 +98,11 @@ layout(location = 2) in vec4  v_Color;
 
 #ifdef ENABLE_VERTEX_UV0
 layout(location = 3) in vec2  v_UV;
+#endif
+
+#ifdef ENABLE_VERTEX_BLENDING
+layout(location = 4) in vec4 v_Weight;
+layout(location = 5) in vec4 v_Joint;
 #endif
 
 // outputs

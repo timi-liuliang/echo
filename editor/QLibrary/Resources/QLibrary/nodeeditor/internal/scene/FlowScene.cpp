@@ -202,10 +202,10 @@ Node& FlowScene::restoreNode(QJsonObject const& nodeJson)
   QString modelName = nodeJson["model"].toObject()["name"].toString();
 
   auto dataModel = registry().create(modelName);
-  dataModel->setScene(this);
-
   if (!dataModel)
     throw std::logic_error(std::string("No registered model with name ") + modelName.toLocal8Bit().data());
+
+  dataModel->setScene(this);
 
   auto node = detail::make_unique<Node>(std::move(dataModel));
   auto ngo  = detail::make_unique<NodeGraphicsObject>(*this, *node);

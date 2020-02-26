@@ -181,6 +181,9 @@ namespace Studio
 	{
 		if (m_bNeedUpdateCamera)
 		{
+			m_camera->setNearClip(Echo::EditorCameraSettings::instance()->getNearClip());
+			m_camera->setFarClip(Echo::EditorCameraSettings::instance()->getFarClip());
+
 			float moveSpeed = Echo::EditorCameraSettings::instance()->getMoveSpeed();
 			m_cameraLookAt += m_cameraMoveDir * elapsedTime * moveSpeed;
 

@@ -13,8 +13,8 @@ namespace Echo
 		VS_COLOR,                   // Diffuse & specular color (Dword)
 		VS_TEXCOORD0,               // Texture coordinates 0(Vector2)
 		VS_TEXCOORD1,               // Texture coordinates 1(Vector2)
-		VS_BLENDINDICES,            // Blending indices    (Dword)
-		VS_BLENDWEIGHTS,            // Blending weights(Vector4)
+		VS_BLENDINDICES,            // Blending indices    (Dword) Bone + Height field
+		VS_BLENDWEIGHTS,            // Blending weights(Vector4) Bone + Height field
 		VS_TANGENT,                 // Tangent (X axis if normal is Z)
 		VS_BINORMAL,
 		VS_MAX
@@ -38,7 +38,7 @@ namespace Echo
 		bool		        m_isUseVertexColor;
 		bool		        m_isUseUV;
 		bool		        m_isUseLightmapUV;
-		bool		        m_isUseBoneData;
+		bool		        m_isUseBlendingData;
 		bool		        m_isUseTangentBinormal;
 		ui32		        m_stride;
 		Byte		        m_posOffset;
@@ -83,32 +83,30 @@ namespace Echo
 		ui32 getVertexCount() const;
 		ui32 getByteSize() const { return m_count * m_format.m_stride; }
 
-		// 获取顶点数据
+		// data point
 		Byte* getVertices();
-
-		// 获取顶点地址
 		Byte* getVertice(int idx);
 
-		// 判断顶点格式中是否含有指定类型的数据
+		// is Vertex use
 		bool isVertexUsage(VertexSemantic semantic) const;
 
-		// 获取顶点位置数据
+		// Position
 		Vector3& getPosition(Word index);
 		void setPosition(int idx, const Vector3& pos);
 
-		// 获取顶点法线数据
+		// Normal
 		const Vector3& getNormal(Word index);
 		void setNormal(int idx, const Vector3& normal);
 
-		// 获取顶点颜色数据
+		// Color
 		Dword& getColor(Word index);
 		void setColor(i32 idx, Dword color);
 
-		// 获取顶点UV数据0
+		// UV0
 		const Vector2& getUV0(Word index);
 		void setUV0(int idx, const Vector2& uv0);
 
-		// 获取顶点UV数据1
+		// UV1
 		const Vector2& getUV1(Word index);
 
 		 // set skin weight
@@ -117,13 +115,13 @@ namespace Echo
 		// set skin joint
 		void setWeight(int idx, const Vector4& joint);
 
-		// 获取切线
+		// tangent
 		Vector3& getTangent(Word index);
 
-		// 获取包围盒
+		// box
 		const AABB& getAABB() const { return m_aabb; }
 
-		//状态置空
+		// reset
 		void reset();
 
 	private:

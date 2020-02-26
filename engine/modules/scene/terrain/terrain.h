@@ -20,6 +20,8 @@ namespace Echo
             Vector3        m_position;
             Vector3        m_normal;
             Vector2        m_uv;
+            Dword          m_layerIndices;
+            Vector4        m_layerWeights;
         };
         typedef vector<VertexFormat>::type  VertexArray;
         typedef vector<ui32>::type          IndiceArray;

@@ -15,19 +15,19 @@ using QtNodes::NodeValidationState;
 
 namespace DataFlowProgramming
 {
-    class InputDataModel : public ShaderDataModel
+    class VertexAttributeDataModel : public ShaderDataModel
     {
       Q_OBJECT
 
     public:
-        InputDataModel();
-        virtual ~InputDataModel() {}
+        VertexAttributeDataModel();
+        virtual ~VertexAttributeDataModel() {}
 
         // caption
-        QString caption() const override { return QStringLiteral("Input"); }
+        QString caption() const override { return QStringLiteral("Vertex Attribute"); }
         bool captionVisible() const override { return true; }
 
-        QString name() const override { return QStringLiteral("Input"); }
+        QString name() const override { return QStringLiteral("VertexAttribute"); }
 
 		// generate code
 		virtual bool generateCode(ShaderCompiler& compiler) override;

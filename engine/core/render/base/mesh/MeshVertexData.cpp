@@ -7,7 +7,7 @@ namespace Echo
 		, m_isUseVertexColor(false)
 		, m_isUseUV(false)
 		, m_isUseLightmapUV(false)
-		, m_isUseBoneData(false)
+		, m_isUseBlendingData(false)
 		, m_isUseTangentBinormal(false)
 		, m_stride(0)
 		, m_posOffset(0)
@@ -29,8 +29,8 @@ namespace Echo
 		m_uv0Offset = m_colorOffset + (m_isUseVertexColor ? sizeof(Dword) : 0);
 		m_uv1Offset = m_uv0Offset + (m_isUseUV ? sizeof(Vector2) : 0);
 		m_boneIndicesOffset = m_uv1Offset + (m_isUseLightmapUV ? sizeof(Vector2) : 0);
-		m_boneWeightsOffset = m_boneIndicesOffset + (m_isUseBoneData ? sizeof(Dword) : 0);
-		m_tangentOffset = m_boneWeightsOffset + (m_isUseBoneData ? sizeof(Vector4) : 0);
+		m_boneWeightsOffset = m_boneIndicesOffset + (m_isUseBlendingData ? sizeof(Dword) : 0);
+		m_tangentOffset = m_boneWeightsOffset + (m_isUseBlendingData ? sizeof(Vector4) : 0);
 		m_stride = m_tangentOffset + (m_isUseTangentBinormal ? sizeof(Vector3) * 2 : 0);
 
 		m_vertexElements.clear();
@@ -55,7 +55,7 @@ namespace Echo
 			m_vertexElements.push_back(VertexElement(VS_TEXCOORD1, PF_RG32_FLOAT));
 
 		// 动画数据(骨骼权重与索引)
-		if (m_isUseBoneData)
+		if (m_isUseBlendingData)
 		{
 			m_vertexElements.push_back(VertexElement(VS_BLENDINDICES, PF_RGBA8_UINT));
 			m_vertexElements.push_back(VertexElement(VS_BLENDWEIGHTS, PF_RGBA32_FLOAT));
@@ -87,7 +87,7 @@ namespace Echo
 		m_isUseVertexColor = false;
 		m_isUseUV = false;
 		m_isUseLightmapUV = false;
-		m_isUseBoneData = false;
+		m_isUseBlendingData = false;
 		m_isUseTangentBinormal = false;
 		m_stride = 0;
 		m_posOffset = 0;
@@ -163,13 +163,13 @@ namespace Echo
 
 	void MeshVertexData::setJoint(int idx, Dword weight)
 	{
-		if(m_format.m_isUseBoneData)
+		if(m_format.m_isUseBlendingData)
 			*(Dword*)(getVertice(idx) + m_format.m_boneIndicesOffset) = weight;
 	}
 
 	void MeshVertexData::setWeight(int idx, const Vector4& joint)
 	{
-		if (m_format.m_isUseBoneData)
+		if (m_format.m_isUseBlendingData)
 			*(Vector4*)(getVertice(idx) + m_format.m_boneWeightsOffset) = joint;
 	}
 

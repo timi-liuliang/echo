@@ -1,4 +1,4 @@
-#include "InputDataModel.h"
+#include "VertexAttributeDataModel.h"
 #include <QtCore/QJsonValue>
 #include <QtGui/QDoubleValidator>
 #include "DataFloat.h"
@@ -8,12 +8,12 @@
 
 namespace DataFlowProgramming
 {
-    InputDataModel::InputDataModel()
+    VertexAttributeDataModel::VertexAttributeDataModel()
       : m_comboBox(new QComboBox())
     {
         m_comboBox->setMinimumWidth(m_comboBox->sizeHint().width() * 1.7);
 
-        m_outputs.resize(7);
+        m_outputs.resize(8);
 
         // position
         m_comboBox->addItem("position");
@@ -43,12 +43,20 @@ namespace DataFlowProgramming
 		m_outputs[5] = std::make_shared<DataVector4>(this, "vec3");
 		m_outputs[5]->setVariableName("v_Tangent");
 
+        m_comboBox->addItem("weights");
+		m_outputs[6] = std::make_shared<DataVector4>(this, "vec4");
+		m_outputs[6]->setVariableName("v_Weight");
+
+        m_comboBox->addItem("joints");
+		m_outputs[7] = std::make_shared<DataVector4>(this, "vec4");
+		m_outputs[7]->setVariableName("v_Joint");
+
         m_comboBox->setCurrentIndex(0);
 
         QObject::connect(m_comboBox, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(onIndexChanged()));
     }
 
-    QJsonObject InputDataModel::save() const
+    QJsonObject VertexAttributeDataModel::save() const
     {
         QJsonObject modelJson = ShaderDataModel::save();
 
@@ -57,7 +65,7 @@ namespace DataFlowProgramming
         return modelJson;
     }
 
-    void InputDataModel::restore(QJsonObject const &p)
+    void VertexAttributeDataModel::restore(QJsonObject const &p)
     {
         QJsonValue v = p["option"];
         if (!v.isUndefined())
@@ -66,7 +74,7 @@ namespace DataFlowProgramming
         }
     }
 
-    unsigned int InputDataModel::nPorts(PortType portType) const
+    unsigned int VertexAttributeDataModel::nPorts(PortType portType) const
     {
       switch (portType)
       {
@@ -76,24 +84,24 @@ namespace DataFlowProgramming
       }
     }
 
-    void InputDataModel::onIndexChanged()
+    void VertexAttributeDataModel::onIndexChanged()
     {
         Q_EMIT dataUpdated(0);
     }
 
-    NodeDataType InputDataModel::dataType(PortType portType, PortIndex portIndex) const
+    NodeDataType VertexAttributeDataModel::dataType(PortType portType, PortIndex portIndex) const
     {
         int index = m_comboBox->currentIndex();
         return portType == PortType::Out ? m_outputs[index]->type() : NodeDataType{ "unknown", "Unknown" };
     }
 
-    std::shared_ptr<NodeData> InputDataModel::outData(PortIndex portIndex)
+    std::shared_ptr<NodeData> VertexAttributeDataModel::outData(PortIndex portIndex)
     {
         int index = m_comboBox->currentIndex();
         return m_outputs[index];
     }
 
-    bool InputDataModel::generateCode(ShaderCompiler& compiler)
+    bool VertexAttributeDataModel::generateCode(ShaderCompiler& compiler)
     {
         Echo::String text = m_comboBox->currentText().toStdString().c_str();
         if (text == "position")
@@ -120,6 +128,10 @@ namespace DataFlowProgramming
 		{
 			compiler.addMacro("ENABLE_VERTEX_TANGENT");
 		}
+        if (text == "weights" || text == "joints")
+        {
+            compiler.addMacro("ENABLE_VERTEX_BLENDING");
+        }
 
 		return true;
     }
