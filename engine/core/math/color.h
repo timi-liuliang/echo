@@ -294,6 +294,26 @@ namespace Echo
 			return *this;
 		}
 
+		Color& toLinear()
+		{
+			Real exponent = 2.2f;
+			r = Math::Pow(r, exponent);
+			g = Math::Pow(g, exponent);
+			b = Math::Pow(b, exponent);
+
+			return *this;
+		}
+
+		Color& toSRgb()
+		{
+			Real exponent = 1.f / 2.2f;
+			r = Math::Pow(r, exponent);
+			g = Math::Pow(g, exponent);
+			b = Math::Pow(b, exponent);
+
+			return *this;
+		}
+
 		inline static bool HSV_to_RGB(Vector3& HSV)
 		{
 			// H and S and V are given on [0, 1].

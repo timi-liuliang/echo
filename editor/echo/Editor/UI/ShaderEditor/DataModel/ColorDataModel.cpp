@@ -79,21 +79,6 @@ namespace DataFlowProgramming
         return m_outputs[portIndex];
     }
 
-    bool ColorDataModel::generateCode(ShaderCompiler& compiler)
-    {
-        if (m_isParameter)
-        {
-            compiler.addUniform(Echo::StringUtil::Format("\tvec4 %s;\n", getVariableName().c_str()));
-        }
-        else
-        {
-			const Echo::Color& color = m_colorSelect->GetColor();
-			compiler.addCode( Echo::StringUtil::Format("\tvec4 %s = vec4(%f, %f, %f, %f);\n", getVariableName().c_str(), color.r, color.g, color.b, color.a));
-        }
-        
-        return true;
-    }
-
     void ColorDataModel::showMenu(const QPointF& pos)
     {
         if (!m_menu)
@@ -132,10 +117,29 @@ namespace DataFlowProgramming
     {
         Echo::String variableName = m_isParameter ? "fs_ubo." + getVariableName() : getVariableName();
 
-		m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s.rgb", variableName.c_str()));
-		m_outputs[1]->setVariableName(Echo::StringUtil::Format("%s.r", variableName.c_str()));
-		m_outputs[2]->setVariableName(Echo::StringUtil::Format("%s.g", variableName.c_str()));
-		m_outputs[3]->setVariableName(Echo::StringUtil::Format("%s.b", variableName.c_str()));
-		m_outputs[4]->setVariableName(Echo::StringUtil::Format("%s.a", variableName.c_str()));
+		m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s_Value.rgb", variableName.c_str()));
+		m_outputs[1]->setVariableName(Echo::StringUtil::Format("%s_Value.r", variableName.c_str()));
+		m_outputs[2]->setVariableName(Echo::StringUtil::Format("%s_Value.g", variableName.c_str()));
+		m_outputs[3]->setVariableName(Echo::StringUtil::Format("%s_Value.b", variableName.c_str()));
+		m_outputs[4]->setVariableName(Echo::StringUtil::Format("%s_Value.a", variableName.c_str()));
     }
+
+	bool ColorDataModel::generateCode(ShaderCompiler& compiler)
+	{
+		if (m_isParameter)
+		{
+			compiler.addUniform(Echo::StringUtil::Format("\tvec4 %s;\n", getVariableName().c_str()));
+
+            compiler.addCode(Echo::StringUtil::Format("\t%s_Value.rgb = SRgbToLinear(%s.rgb);\n", getVariableName().c_str(), getVariableName().c_str()));
+		}
+		else
+		{
+			Echo::Color color = m_colorSelect->GetColor();
+            color.toLinear();
+
+			compiler.addCode(Echo::StringUtil::Format("\tvec4 %s_Value = vec4(%f, %f, %f, %f);\n", getVariableName().c_str(), color.r, color.g, color.b, color.a));
+		}
+
+		return true;
+	}
 }

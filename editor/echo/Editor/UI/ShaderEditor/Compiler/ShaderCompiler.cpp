@@ -108,12 +108,33 @@ layout(location = 5) in vec4 v_Joint;
 // outputs
 layout(location = 0) out vec4 o_FragColor;
 
+// functions
+#define SRGB_FAST_APPROXIMATION
+
+vec3 SRgbToLinear(vec3 srgbIn)
+{
+#ifdef SRGB_FAST_APPROXIMATION
+    return pow(srgbIn,vec3(2.2));
+#else
+    return srgbIn;
+#endif
+}
+
+vec3 LinearToSRgb(vec3 linearIn)
+{
+#ifdef SRGB_FAST_APPROXIMATION
+    return pow(linearIn,vec3(1.0/2.2));
+#else
+    return srgbIn;
+#endif
+}
+
 void main(void)
 {
 ${FS_SHADER_CODE}
 
 #ifndef ENABLE_BASE_COLOR 
-    vec3 __BaseColor = vec3(0.75);
+    vec3 __BaseColor = SRgbToLinear(vec3(0.75));
 #endif
 
 #ifndef ENABLE_OPACITY
@@ -122,11 +143,15 @@ ${FS_SHADER_CODE}
 
 #ifdef ENABLE_LIGHTING_CALCULATION
     vec3 _lightDir = normalize(vec3(1.0, 1.0, 1.0));
-    vec3 _lightColor = vec3(0.8, 0.8, 0.8);
+    vec3 _lightColor = SRgbToLinear(vec3(0.8, 0.8, 0.8));
     __BaseColor = max(dot(v_Normal, _lightDir), 0.0) * _lightColor * __BaseColor;
 #endif
 
-    o_FragColor = vec4(__BaseColor.rgb, __Opacity);
+#ifdef ENABLE_EMISSIVE
+	__BaseColor.rgb += __EMISSIVE;
+#endif  
+
+    o_FragColor = vec4(LinearToSRgb(__BaseColor.rgb), __Opacity);
 }
 )";
 

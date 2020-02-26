@@ -93,6 +93,12 @@ namespace DataFlowProgramming
             compiler.addCode(Echo::StringUtil::Format("\tfloat __Opacity = %s;\n", dynamic_cast<ShaderData*>(m_inputs[4].get())->getVariableName().c_str()));
         }
 
+        if (m_inputs[5])
+        {
+            compiler.addMacro("ENABLE_EMISSIVE");
+            compiler.addCode(Echo::StringUtil::Format("\tvec3 __EMISSIVE = %s;\n", dynamic_cast<ShaderData*>(m_inputs[5].get())->getVariableName().c_str()));
+        }
+
         return true;
     }
 }

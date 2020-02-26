@@ -80,17 +80,6 @@ namespace DataFlowProgramming
         return m_outputs[portIndex];
     }
 
-    bool TextureDataModel::generateCode(ShaderCompiler& compiler)
-    {
-        compiler.addMacro("ENABLE_VERTEX_UV0");
-
-        compiler.addTextureUniform(getVariableName());
-
-        compiler.addCode(Echo::StringUtil::Format("\tvec4 %s_Color = texture( %s, v_UV);\n", getVariableName().c_str(), getVariableName().c_str()));
-
-        return true;
-    }
-
 	void TextureDataModel::updateOutputDataVariableName()
 	{
 		Echo::String variableName = getVariableName();
@@ -100,5 +89,17 @@ namespace DataFlowProgramming
 		m_outputs[2]->setVariableName(Echo::StringUtil::Format("%s_Color.g", variableName.c_str()));
 		m_outputs[3]->setVariableName(Echo::StringUtil::Format("%s_Color.b", variableName.c_str()));
 		m_outputs[4]->setVariableName(Echo::StringUtil::Format("%s_Color.a", variableName.c_str()));
+	}
+
+	bool TextureDataModel::generateCode(ShaderCompiler& compiler)
+	{
+		compiler.addMacro("ENABLE_VERTEX_UV0");
+
+		compiler.addTextureUniform(getVariableName());
+
+		compiler.addCode(Echo::StringUtil::Format("\tvec4 %s_Color = texture( %s, v_UV);\n", getVariableName().c_str(), getVariableName().c_str()));
+        compiler.addCode(Echo::StringUtil::Format("\t%s_Color.rgb = SRgbToLinear(%s_Color.rgb);\n", getVariableName().c_str(), getVariableName().c_str()));
+
+		return true;
 	}
 }
