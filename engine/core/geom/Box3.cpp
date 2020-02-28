@@ -2,13 +2,11 @@
 
 namespace Echo
 {
-	// initialized
 	Box3::Box3( const Vector3& center, const Vector3& axis0, const Vector3& axis1, const Vector3& axis2, float extent0, float extent1, float extent2)
 	{
 		Set( center, axis0, axis1, axis2, extent0, extent1, extent2);
 	}
 
-	// Set
 	void Box3::Set( const Vector3& center, const Vector3& axis0, const Vector3& axis1, const Vector3& axis2, float extent0, float extent1, float extent2)
 	{
 		m_center = center;
@@ -26,7 +24,6 @@ namespace Echo
 		m_extent[2] = std::abs(extent2);
 	}
 
-	// 构建AABB包围盒
 	void Box3::buildAABB( AABB& aabb)
 	{
 		Vector3 eightPoints[8];
@@ -36,7 +33,6 @@ namespace Echo
 			aabb.addPoint( eightPoints[i]);
 	}
 
-	// 构建八个顶点
 	void Box3::buildEightPoints( Vector3* points)
 	{
 		Vector3 extAxis0 = m_extent[0] * m_axis[0];

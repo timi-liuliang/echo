@@ -100,7 +100,6 @@ namespace Echo
 			vMax.x = vMax.y = vMax.z = -1e30f;// Math::MAX_REAL容易出现计算溢出，放弃使用
 		}
 
-		// 添加点
 		inline void addPoint(const Vector3 &point)
 		{
 			vMax.x = Math::Max(point.x,vMax.x);
@@ -112,7 +111,6 @@ namespace Echo
 			vMin.z = Math::Min(point.z,vMin.z);
 		}
 
-		// 融合box
 		inline void unionBox(const AABB &box)
 		{
 			if (box.isValid())
@@ -146,7 +144,6 @@ namespace Echo
 			return true;
 		}
 
-		// 是否在内部
 		bool isContain( const AABB& box) const
 		{
 			if( isPointInside( box.vMin) && isPointInside( box.vMax))
@@ -302,7 +299,6 @@ namespace Echo
 		static AABB fromString(const String& val);
 		String& toString(String& s) const;
 
-		// 扩展
 		void expandBy( float w)
 		{
 			vMin -= Vector3(w, w, w);

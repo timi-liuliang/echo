@@ -50,7 +50,7 @@ namespace DataFlowProgramming
 
         std::shared_ptr<NodeData> outData(PortIndex port) override;
 
-        void setInData(std::shared_ptr<NodeData>, int) override { }
+        void setInData(std::shared_ptr<NodeData>, int) override;
 
         // get embedded widget
         QWidget* embeddedWidget() override { return m_textureSelect; }
@@ -64,8 +64,10 @@ namespace DataFlowProgramming
         void updateOutputDataVariableName();
 
     private:
-        QT_UI::QTextureSelect*              m_textureSelect = nullptr;
-        vector<std::shared_ptr<ShaderData>> m_outputs;
+        QT_UI::QTextureSelect*                  m_textureSelect = nullptr;
+		std::vector<NodeDataType>               m_inputDataTypes;
+		std::vector<std::shared_ptr<NodeData>>  m_inputs;
+        vector<std::shared_ptr<ShaderData>>     m_outputs;
     };
 }
 

@@ -13,6 +13,13 @@ namespace DataFlowProgramming
 
        QObject::connect(m_textureSelect, SIGNAL(Signal_TextureChagned()), this, SLOT(onTextureEdited()));
 
+	   m_inputDataTypes =
+	   {
+		   {"vec2", "UV"},
+	   };
+
+	   m_inputs.resize(m_inputDataTypes.size());
+
 		m_outputs.resize(5);
 		m_outputs[0] = std::make_shared<DataVector3>(this, "rgb");
 		m_outputs[1] = std::make_shared<DataFloat>(this, "r");
@@ -46,7 +53,7 @@ namespace DataFlowProgramming
     {
 		switch (portType)
 		{
-		case PortType::In:    return 0;
+		case PortType::In:    return m_inputs.size();
 		case PortType::Out:   return m_outputs.size();
 		default:              return 0;
 		}
@@ -63,14 +70,8 @@ namespace DataFlowProgramming
 
     NodeDataType TextureDataModel::dataType(PortType portType, PortIndex portIndex) const
     {
-        if(portType==PortType::Out)
-        {
-            if(portIndex==0)      return NodeDataType {"vec3", "rgb"};
-            else if(portIndex==1) return NodeDataType {"float", "r"};
-            else if(portIndex==2) return NodeDataType {"float", "g"};
-            else if(portIndex==3) return NodeDataType {"float", "b"};
-            else if(portIndex==4) return NodeDataType {"float", "a"};
-        }
+        if (portType == PortType::In)       return m_inputDataTypes[portIndex];
+        else if (portType == PortType::Out) return m_outputs[portIndex]->type();
         
         return NodeDataType {"unknown", "Unknown"};
     }
@@ -79,6 +80,13 @@ namespace DataFlowProgramming
     {
         return m_outputs[portIndex];
     }
+
+	void TextureDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex port)
+	{
+		m_inputs[port] = nodeData;
+
+        onTextureEdited();
+	}
 
 	void TextureDataModel::updateOutputDataVariableName()
 	{
@@ -92,12 +100,20 @@ namespace DataFlowProgramming
 	}
 
 	bool TextureDataModel::generateCode(ShaderCompiler& compiler)
-	{
+	{                   
 		compiler.addMacro("ENABLE_VERTEX_UV0");
 
 		compiler.addTextureUniform(getVariableName());
 
-		compiler.addCode(Echo::StringUtil::Format("\tvec4 %s_Color = texture( %s, v_UV);\n", getVariableName().c_str(), getVariableName().c_str()));
+        if (m_inputs[0])
+        {
+            compiler.addCode(Echo::StringUtil::Format("\tvec4 %s_Color = texture( %s, %s);\n", getVariableName().c_str(), getVariableName().c_str(), dynamic_cast<ShaderData*>(m_inputs[0].get())->getVariableName().c_str()));
+        }
+        else
+        {
+            compiler.addCode(Echo::StringUtil::Format("\tvec4 %s_Color = texture( %s, v_UV);\n", getVariableName().c_str(), getVariableName().c_str()));
+        }
+
         compiler.addCode(Echo::StringUtil::Format("\t%s_Color.rgb = SRgbToLinear(%s_Color.rgb);\n", getVariableName().c_str(), getVariableName().c_str()));
 
 		return true;
