@@ -51,27 +51,20 @@ namespace Echo
 			return;
 
 		Node::update(delta, bUpdateChildren);
-
-		// update world view project matrix
-		Camera* camera = m_renderType.getIdx()==0 ? NodeTree::instance()->get2dCamera() : (m_renderType.getIdx() == 1 ? NodeTree::instance()->get3dCamera() : NodeTree::instance()->getUiCamera());
-		if (camera)
-		{
-			m_matWVP = getWorldMatrix() * camera->getViewProjMatrix();;
-		}
 	}
 
-	// get global uniforms
 	void* Render::getGlobalUniformValue(const String& name)
 	{
 		if (name == "u_WorldMatrix")
 			return (void*)(&m_matWorld);
 
+		if (name == "u_Time")
+			return (void*)FrameState::instance()->getCurrentTimeSecondsPtr();
+
 		Camera* camera = m_renderType.getIdx() == 0 ? NodeTree::instance()->get2dCamera() : (m_renderType.getIdx() == 1 ? NodeTree::instance()->get3dCamera() : NodeTree::instance()->getUiCamera());
 		if (camera)
 		{
-			if (name == "u_WorldViewProjMatrix")
-				return (void*)(&m_matWVP);
-			else if (name == "u_ViewProjMatrix")
+			if (name == "u_ViewProjMatrix")
 				return (void*)(&camera->getViewProjMatrix());
 			else if (name == "u_CameraPosition")
 				return (void*)(&camera->getPosition());

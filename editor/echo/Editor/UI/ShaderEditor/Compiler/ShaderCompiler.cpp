@@ -8,7 +8,7 @@ ${VS_MACROS}
 layout(binding = 0) uniform UBO
 {
 	mat4 u_WorldMatrix;
-    mat4 u_WorldViewProjMatrix;
+	mat4 u_ViewProjMatrix;
 } vs_ubo;
 
 // inputs
@@ -43,12 +43,12 @@ layout(location = 5) out vec4 v_Joint;
 
 void main(void)
 {
-    vec4 position = vs_ubo.u_WorldViewProjMatrix * vec4(a_Position, 1.0);
+	vec4 position = vs_ubo.u_WorldMatrix * vec4(a_Position, 1.0);
+    position = vs_ubo.u_ViewProjMatrix * position;
     gl_Position = position;
 
 #ifdef ENABLE_VERTEX_POSITION
-	vec4 pos   = vs_ubo.u_WorldMatrix * vec4(a_Position, 1.0);
-	v_Position = vec3(pos.xyz) / pos.w;
+	v_Position = position.xyz;
 #endif
 
 #ifdef ENABLE_VERTEX_NORMAL

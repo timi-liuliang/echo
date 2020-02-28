@@ -31,6 +31,7 @@ namespace Echo
         calcuateFps(elapsedTime);
         
         m_currentTime = static_cast<ui32>(Time::instance()->getMilliseconds());
+        m_currentTimeSeconds = m_currentTime * 0.01f;
     }
 
     void FrameState::calcuateFps(float elapsedTime)

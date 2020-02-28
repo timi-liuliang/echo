@@ -50,7 +50,8 @@ namespace Echo
         ui32 getDrawCalls() const { return m_drawCallTimes; }
         
         // get current time
-        const ui32& getCurrentTime() const;
+        const ui32& getCurrentTime() const { return m_currentTime; }
+        float* getCurrentTimeSecondsPtr() { return &m_currentTimeSeconds; }
         
     private:
         // calculate fps
@@ -58,6 +59,7 @@ namespace Echo
 
 	protected:
         ui32    m_currentTime = 0.0;
+        float   m_currentTimeSeconds;
         ui32    m_fps = 0;
 		ui32	m_uploadedTextureSizeInBytes = 0;
 		ui32	m_uploadedVertexSize = 0;

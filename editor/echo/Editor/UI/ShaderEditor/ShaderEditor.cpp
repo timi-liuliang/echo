@@ -11,6 +11,7 @@
 #include "ColorDataModel.h"
 #include "TextureDataModel.h"
 #include "LayerBlendDataModel.h"
+#include "SharedUniformDataModel.h"
 #include "ShaderScene.h"
 #include "ShaderView.h"
 #include "engine/core/io/IO.h"
@@ -28,6 +29,7 @@ namespace Studio
         ret->registerModel<ShaderTemplateDataModel>("skip me");
         
         // variables
+        ret->registerModel<SharedUniformDataModel>("Uniforms");
         ret->registerModel<FloatDataModel>("Uniforms");
         ret->registerModel<Vector3DataModel>("Uniforms");
         ret->registerModel<ColorDataModel>("Uniforms");

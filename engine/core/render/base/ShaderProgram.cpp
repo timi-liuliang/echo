@@ -15,7 +15,8 @@ static const char* g_2dVsCode = R"(#version 450
 // uniforms
 layout(binding = 0) uniform UBO
 {
-    mat4 u_WorldViewProjMatrix;
+	mat4 u_WorldMatrix;
+	mat4 u_ViewProjMatrix;
 } vs_ubo;
 
 // inputs
@@ -27,7 +28,8 @@ layout(location = 0) out vec2 v_TexCoord;
 
 void main(void)
 {
-    vec4 position = vs_ubo.u_WorldViewProjMatrix * vec4(a_Position, 1.0);
+    vec4 position = vs_ubo.u_WorldMatrix * vec4(a_Position, 1.0);
+    position = vs_ubo.u_ViewProjMatrix * position;
     gl_Position = position;
     
     v_TexCoord = a_UV;

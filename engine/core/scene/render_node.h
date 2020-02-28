@@ -39,6 +39,5 @@ namespace Echo
 		static i32		m_renderTypes;
 		StringOption	m_renderType = StringOption("2d", { "2d", "3d", "ui"});
 		bool			m_isVisible;
-		Matrix4			m_matWVP;
 	};
 }

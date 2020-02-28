@@ -41,6 +41,7 @@ namespace Echo
 
 		// get frame time
 		float getFrameTime() { return m_frameTime; }
+		float* getFrameTimePtr() { return &m_frameTime; }
 		ui32 getFrameTimeMS() { return ui32(m_frameTime*1000.f); }
 
 		// is inited
@@ -49,7 +50,7 @@ namespace Echo
 		// res path
 		const String& getResPath() const;
 
-		// urse path
+		// user path
 		const String& getUserPath() const;
 		void setUserPath(const String& strPath);
 
