@@ -12,6 +12,7 @@
 #include "TextureDataModel.h"
 #include "LayerBlendDataModel.h"
 #include "SharedUniformDataModel.h"
+#include "DataModel/Math/AddDataModel.h"
 #include "ShaderScene.h"
 #include "ShaderView.h"
 #include "engine/core/io/IO.h"
@@ -38,6 +39,9 @@ namespace Studio
         // Inputs
         ret->registerModel<VertexAttributeDataModel>("Inputs");
         ret->registerModel<LayerBlendDataModel>("Inputs");
+
+        // Maths
+        ret->registerModel<AddDataModel>("Math");
 
 		return ret;
 	}

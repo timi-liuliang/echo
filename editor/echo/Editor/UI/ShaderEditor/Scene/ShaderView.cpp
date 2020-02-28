@@ -116,12 +116,15 @@ namespace DataFlowProgramming
 		{
 			for (auto& topLvlItem : topLevelItems)
 			{
-				for (int i = 0; i < topLvlItem->childCount(); ++i)
+				if (topLvlItem)
 				{
-					auto child = topLvlItem->child(i);
-					auto modelName = child->data(0, Qt::UserRole).toString();
-					const bool match = (modelName.contains(text, Qt::CaseInsensitive));
-					child->setHidden(!match);
+					for (int i = 0; i < topLvlItem->childCount(); ++i)
+					{
+						auto child = topLvlItem->child(i);
+						auto modelName = child->data(0, Qt::UserRole).toString();
+						const bool match = (modelName.contains(text, Qt::CaseInsensitive));
+						child->setHidden(!match);
+					}
 				}
 			}
 		});
