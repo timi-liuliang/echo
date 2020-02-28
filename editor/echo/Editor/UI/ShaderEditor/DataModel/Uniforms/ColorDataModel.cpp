@@ -11,7 +11,7 @@ namespace DataFlowProgramming
     ColorDataModel::ColorDataModel()
     {
         m_colorSelect = new QT_UI::QColorSelect();
-        m_colorSelect->setFixedSize(155, 155);
+        m_colorSelect->setFixedSize(80, 80);
         m_colorSelect->setDrawText(false);
 
         QObject::connect(m_colorSelect, SIGNAL(Signal_ColorChanged()), this, SLOT(onColorEdited()));

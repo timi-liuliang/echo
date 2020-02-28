@@ -153,10 +153,7 @@ namespace Echo
 
 	bool Material::isGlobalUniform(const String& name)
 	{
-		if (name == "u_WVPMaterix")
-			return true;
-
-		return false;
+		return StringUtil::StartWith(name, "u_") ? true : false;
 	}
 
 	void Material::addTexture(const String& name)

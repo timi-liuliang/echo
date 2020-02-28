@@ -19,22 +19,22 @@ using QtNodes::NodeValidationState;
 namespace DataFlowProgramming
 {
     /// The model dictates the number of inputs and outputs for the Node.
-    class AddDataModel : public ShaderDataModel
+    class SubstractionDataModel : public ShaderDataModel
     {
         Q_OBJECT
 
     public:
-        AddDataModel();
-        virtual ~AddDataModel() {}
+        SubstractionDataModel();
+        virtual ~SubstractionDataModel() {}
 
         // caption
-        QString caption() const override { return QStringLiteral("Addition"); }
+        QString caption() const override { return QStringLiteral("Substraction"); }
 
         // is caption visible
         bool captionVisible() const override { return true; }
 
         // name
-        QString name() const override { return QStringLiteral("Add"); }
+        QString name() const override { return QStringLiteral("Substraction"); }
 
 		// generate code
 		virtual bool generateCode(ShaderCompiler& compiler) override;
@@ -62,7 +62,7 @@ namespace DataFlowProgramming
 
     private:
         std::vector<NodeDataType>                   m_inputDataTypes;
-        std::vector<std::shared_ptr<ShaderData>>    m_inputs;
+        std::vector<std::shared_ptr<DataAny>>       m_inputs;
         std::vector<std::shared_ptr<ShaderData>>    m_outputs;
     };
 }

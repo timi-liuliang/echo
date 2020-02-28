@@ -120,52 +120,48 @@ std::shared_ptr<Connection> FlowScene::createConnection(Node& nodeIn, PortIndex 
 }
 
 
-std::shared_ptr<Connection>
-FlowScene::
-restoreConnection(QJsonObject const &connectionJson)
+std::shared_ptr<Connection> FlowScene::restoreConnection(QJsonObject const &connectionJson)
 {
-  QUuid nodeInId  = QUuid(connectionJson["in_id"].toString());
-  QUuid nodeOutId = QUuid(connectionJson["out_id"].toString());
+    QUuid nodeInId  = QUuid(connectionJson["in_id"].toString());
+    QUuid nodeOutId = QUuid(connectionJson["out_id"].toString());
 
-  PortIndex portIndexIn  = connectionJson["in_index"].toInt();
-  PortIndex portIndexOut = connectionJson["out_index"].toInt();
+    PortIndex portIndexIn  = connectionJson["in_index"].toInt();
+    PortIndex portIndexOut = connectionJson["out_index"].toInt();
 
-  auto nodeIn  = _nodes[nodeInId].get();
-  auto nodeOut = _nodes[nodeOutId].get();
+    if (_nodes.find(nodeInId) == _nodes.end() || _nodes.find(nodeOutId) == _nodes.end())
+        return nullptr;
 
-  auto getConverter = [&]()
-  {
-    QJsonValue converterVal = connectionJson["converter"];
+    auto nodeIn  = _nodes[nodeInId].get();
+    auto nodeOut = _nodes[nodeOutId].get();
 
-    if (!converterVal.isUndefined())
+    auto getConverter = [&]()
     {
-      QJsonObject converterJson = converterVal.toObject();
+		QJsonValue converterVal = connectionJson["converter"];
 
-      NodeDataType inType { converterJson["in"].toObject()["id"].toString().toStdString().c_str(),
-                            converterJson["in"].toObject()["name"].toString().toStdString().c_str() };
+		if (!converterVal.isUndefined())
+		{
+			QJsonObject converterJson = converterVal.toObject();
 
-      NodeDataType outType { converterJson["out"].toObject()["id"].toString().toStdString().c_str(),
-                             converterJson["out"].toObject()["name"].toString().toStdString().c_str() };
+			NodeDataType inType{ converterJson["in"].toObject()["id"].toString().toStdString().c_str(),
+								converterJson["in"].toObject()["name"].toString().toStdString().c_str() };
 
-      auto converter  =
-        registry().getTypeConverter(outType, inType);
+			NodeDataType outType{ converterJson["out"].toObject()["id"].toString().toStdString().c_str(),
+									converterJson["out"].toObject()["name"].toString().toStdString().c_str() };
 
-      if (converter)
-        return converter;
-    }
+			auto converter = registry().getTypeConverter(outType, inType);
+			if (converter)
+				return converter;
+		}
 
-    return TypeConverter{};
-  };
+		return TypeConverter{};
+    };
 
-  std::shared_ptr<Connection> connection =
-    createConnection(*nodeIn, portIndexIn,
-                     *nodeOut, portIndexOut,
-                     getConverter());
+    std::shared_ptr<Connection> connection = createConnection(*nodeIn, portIndexIn, *nodeOut, portIndexOut, getConverter());
 
-  // Note: the connectionCreated(...) signal has already been sent
-  // by createConnection(...)
+    // Note: the connectionCreated(...) signal has already been sent
+    // by createConnection(...)
 
-  return connection;
+    return connection;
 }
 
 
@@ -197,28 +193,28 @@ Node& FlowScene::createNode(std::unique_ptr<NodeDataModel> && dataModel)
 }
 
 
-Node& FlowScene::restoreNode(QJsonObject const& nodeJson)
+Node* FlowScene::restoreNode(QJsonObject const& nodeJson)
 {
-  QString modelName = nodeJson["model"].toObject()["name"].toString();
+	QString modelName = nodeJson["model"].toObject()["name"].toString();
 
-  auto dataModel = registry().create(modelName);
-  if (!dataModel)
-    throw std::logic_error(std::string("No registered model with name ") + modelName.toLocal8Bit().data());
+	auto dataModel = registry().create(modelName);
+    if (!dataModel)
+        return nullptr;
 
-  dataModel->setScene(this);
+	dataModel->setScene(this);
 
-  auto node = detail::make_unique<Node>(std::move(dataModel));
-  auto ngo  = detail::make_unique<NodeGraphicsObject>(*this, *node);
-  node->setGraphicsObject(std::move(ngo));
+	auto node = detail::make_unique<Node>(std::move(dataModel));
+	auto ngo = detail::make_unique<NodeGraphicsObject>(*this, *node);
+	node->setGraphicsObject(std::move(ngo));
 
-  node->restore(nodeJson);
+	node->restore(nodeJson);
 
-  auto nodePtr = node.get();
-  _nodes[node->id()] = std::move(node);
+	auto nodePtr = node.get();
+	_nodes[node->id()] = std::move(node);
 
-  nodePlaced(*nodePtr);
-  nodeCreated(*nodePtr);
-  return *nodePtr;
+	nodePlaced(*nodePtr);
+	nodeCreated(*nodePtr);
+	return nodePtr;
 }
 
 void FlowScene::removeNode(Node& node)

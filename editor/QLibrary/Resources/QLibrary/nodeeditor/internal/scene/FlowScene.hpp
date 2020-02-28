@@ -46,7 +46,7 @@ namespace QtNodes
     public:
       Node& createNode(std::unique_ptr<NodeDataModel> && dataModel);
 
-      Node& restoreNode(QJsonObject const& nodeJson);
+      Node* restoreNode(QJsonObject const& nodeJson);
 
       virtual void removeNode(Node& node);
 

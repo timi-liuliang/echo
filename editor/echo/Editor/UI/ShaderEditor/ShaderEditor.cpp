@@ -13,7 +13,10 @@
 #include "TextureDataModel.h"
 #include "LayerBlendDataModel.h"
 #include "SharedUniformDataModel.h"
-#include "DataModel/Math/AddDataModel.h"
+#include "DataModel/Math/AdditionDataModel.h"
+#include "DataModel/Math/SubstractionDataModel.h"
+#include "DataModel/Math/MultiplicationDataModel.h"
+#include "DataModel/Math/DivisionDataModel.h"
 #include "Data/DataFloat.h"
 #include "Data/DataVector2.h"
 #include "Data/DataVector3.h"
@@ -48,7 +51,10 @@ namespace Studio
         ret->registerModel<LayerBlendDataModel>("Inputs");
 
         // Maths
-        ret->registerModel<AddDataModel>("Math");
+        ret->registerModel<AdditionDataModel>("Math");
+        ret->registerModel<SubstractionDataModel>("Math");
+        ret->registerModel<MultiplicationDataModel>("Math");
+        ret->registerModel<DivisionDataModel>("Math");
 
         // Converts
         ret->registerTypeConverter(std::make_pair(DataFloat(nullptr, "").type(), DataAny(nullptr).type()), QtNodes::TypeConverter{ FloatToAny() });

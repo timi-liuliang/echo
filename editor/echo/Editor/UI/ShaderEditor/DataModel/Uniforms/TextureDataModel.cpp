@@ -9,7 +9,7 @@ namespace DataFlowProgramming
     TextureDataModel::TextureDataModel()
     {
         m_textureSelect = new QT_UI::QTextureSelect();
-        m_textureSelect->setFixedSize(155, 155);
+        m_textureSelect->setFixedSize(80, 80);
 
        QObject::connect(m_textureSelect, SIGNAL(Signal_TextureChagned()), this, SLOT(onTextureEdited()));
 
