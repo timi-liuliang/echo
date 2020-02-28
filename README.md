@@ -48,10 +48,8 @@ If you really like other types of script language, you can tell us, or you can s
 
 ![](https://media.githubusercontent.com/media/timi-liuliang/echo-download/master/images/intro/echo1.png)   
 
-### Data Flow Programming based ShaderEditor
-Programming visualization is a very import concept for nonprogrammer, with the help of DataFlowProgramming framework [nodeeditor](https://github.com/paceholder/nodeeditor) we successfully make the work of shader programming enabled for everyone.   
-“It turns the dark and strange arts of shader programming into something understandable and non-evil”   
-Nicklas 'Nifflas' Nygren, developer of the Knytt series
+### Data Flow Programming Based ShaderEditor
+Programming visualization is a very import concept for non-programmers, with the help of DataFlowProgramming framework [nodeeditor](https://github.com/paceholder/nodeeditor), shader programming is understandable and non-evil now.   
 
 ![](https://media.githubusercontent.com/media/timi-liuliang/echo-download/master/images/intro/shadereditor.png)   
 
