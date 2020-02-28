@@ -10,20 +10,17 @@ namespace DataFlowProgramming
 {
     /// The class can potentially encapsulate any user data which
     /// need to be transferred within the Node Editor graph
-    class DataColor : public ShaderData
+    class DataInvalid : public ShaderData
     {
     public:
-        DataColor(ShaderDataModel* dataModel,const Echo::String& displayText)
-			: ShaderData(dataModel)
-			, m_displayText(displayText)
-		{}
+        DataInvalid(ShaderDataModel* dataModel)
+            : ShaderData(dataModel)
+        {}
+
 
         NodeDataType type() const override
         {
-            return NodeDataType {"color", m_displayText.c_str() };
+            return NodeDataType {"invalid", "invalid"};
         }
-
-    private:
-        Echo::String    m_displayText;
     };
 }

@@ -15,6 +15,9 @@ namespace DataFlowProgramming
 		ShaderData(ShaderDataModel* dataModel) : m_dataModel(dataModel) {}
 		virtual ~ShaderData() {}
 
+		// data model
+		ShaderDataModel* getDataModel() { return m_dataModel; }
+
 		// name
 		void setVariableName(const Echo::String& name) { m_variableName = name; }
 		const Echo::String& getVariableName() const { return m_variableName; }

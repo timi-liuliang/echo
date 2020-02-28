@@ -4,6 +4,7 @@
 #include "DataFloat.h"
 #include "DataVector3.h"
 #include "DataVector4.h"
+#include "DataInvalid.h"
 #include "ShaderScene.h"
 
 namespace DataFlowProgramming
@@ -12,14 +13,14 @@ namespace DataFlowProgramming
     {
         m_inputDataTypes = 
         {
-            {"vec4", "A"},
-            {"vec4", "B"},
+            {"any", "A"},
+            {"any", "B"},
         };
 
         m_inputs.resize(m_inputDataTypes.size());
 
         m_outputs.resize(1);
-        m_outputs[0] = std::make_shared<DataVector4>(this, "");
+        m_outputs[0] = std::make_shared<DataInvalid>(this);
         m_outputs[0]->setVariableName(getVariableName());
     }
 

@@ -6,7 +6,6 @@
 #include <iostream>
 #include "ShaderDataModel.h"
 #include "DataFloat.h"
-#include "DataText.h"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;

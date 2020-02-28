@@ -4,6 +4,7 @@
 #include <nodeeditor/FlowScene>
 #include <nodeeditor/FlowView>
 #include <nodeeditor/DataModelRegistry>
+#include <nodeeditor/TypeConverter>
 #include "ShaderTemplateDataModel.h"
 #include "VertexAttributeDataModel.h"
 #include "FloatDataModel.h"
@@ -13,6 +14,12 @@
 #include "LayerBlendDataModel.h"
 #include "SharedUniformDataModel.h"
 #include "DataModel/Math/AddDataModel.h"
+#include "Data/DataFloat.h"
+#include "Data/DataVector2.h"
+#include "Data/DataVector3.h"
+#include "Data/DataVector4.h"
+#include "Data/DataColor.h"
+#include "Data/Converter/Converters.h"
 #include "ShaderScene.h"
 #include "ShaderView.h"
 #include "engine/core/io/IO.h"
@@ -42,6 +49,13 @@ namespace Studio
 
         // Maths
         ret->registerModel<AddDataModel>("Math");
+
+        // Converts
+        ret->registerTypeConverter(std::make_pair(DataFloat(nullptr, "").type(), DataAny(nullptr).type()), QtNodes::TypeConverter{ FloatToAny() });
+        ret->registerTypeConverter(std::make_pair(DataVector2(nullptr, "").type(), DataAny(nullptr).type()), QtNodes::TypeConverter{ Vector2ToAny() });
+        ret->registerTypeConverter(std::make_pair(DataVector3(nullptr, "").type(), DataAny(nullptr).type()), QtNodes::TypeConverter{ Vector3ToAny() });
+        ret->registerTypeConverter(std::make_pair(DataVector4(nullptr, "").type(), DataAny(nullptr).type()), QtNodes::TypeConverter{ Vector4ToAny() });
+        ret->registerTypeConverter(std::make_pair(DataColor(nullptr, "").type(), DataAny(nullptr).type()), QtNodes::TypeConverter{ ColorToAny() });
 
 		return ret;
 	}

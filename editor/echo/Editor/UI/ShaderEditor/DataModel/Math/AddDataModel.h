@@ -6,7 +6,7 @@
 #include <iostream>
 #include "ShaderDataModel.h"
 #include "DataFloat.h"
-#include "DataText.h"
+#include "DataAny.h"
 #include "ShaderData.h"
 
 using QtNodes::PortType;
@@ -28,7 +28,7 @@ namespace DataFlowProgramming
         virtual ~AddDataModel() {}
 
         // caption
-        QString caption() const override { return QStringLiteral("Add"); }
+        QString caption() const override { return QStringLiteral("Addition"); }
 
         // is caption visible
         bool captionVisible() const override { return true; }
