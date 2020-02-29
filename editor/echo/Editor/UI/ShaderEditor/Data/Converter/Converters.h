@@ -4,7 +4,6 @@
 #include "DataVector2.h"
 #include "DataVector3.h"
 #include "DataVector4.h"
-#include "DataColor.h"
 #include "DataAny.h"
 
 namespace DataFlowProgramming
@@ -15,16 +14,44 @@ namespace DataFlowProgramming
 		std::shared_ptr<NodeData> operator()(std::shared_ptr<NodeData> data);
 
 	private:
-		std::shared_ptr<NodeData> m_result;
+		std::shared_ptr<ShaderData> m_result;
 	};
 
+	//class FloatToVector2
+	//{
+	//public:
+	//	std::shared_ptr<NodeData> operator()(std::shared_ptr<NodeData> data);
+
+	//private:
+	//	std::shared_ptr<ShaderData> m_result;
+	//};
+
+	//class FloatToVector3
+	//{
+	//public:
+	//	std::shared_ptr<NodeData> operator()(std::shared_ptr<NodeData> data);
+
+	//private:
+	//	std::shared_ptr<ShaderData> m_result;
+	//};
+
+	//class FloatToVector4
+	//{
+	//public:
+	//	std::shared_ptr<NodeData> operator()(std::shared_ptr<NodeData> data);
+
+	//private:
+	//	std::shared_ptr<ShaderData> m_result;
+	//};
+
+	// Vector2
 	class Vector2ToAny
 	{
 	public:
 		std::shared_ptr<NodeData> operator()(std::shared_ptr<NodeData> data);
 
 	private:
-		std::shared_ptr<NodeData> m_result;
+		std::shared_ptr<ShaderData> m_result;
 	};
 
 	class Vector3ToAny
@@ -33,7 +60,7 @@ namespace DataFlowProgramming
 		std::shared_ptr<NodeData> operator()(std::shared_ptr<NodeData> data);
 
 	private:
-		std::shared_ptr<NodeData> m_result;
+		std::shared_ptr<ShaderData> m_result;
 	};
 
 	class Vector4ToAny
@@ -42,7 +69,7 @@ namespace DataFlowProgramming
 		std::shared_ptr<NodeData> operator()(std::shared_ptr<NodeData> data);
 
 	private:
-		std::shared_ptr<NodeData> m_result;
+		std::shared_ptr<ShaderData> m_result;
 	};
 
 	class ColorToAny
@@ -51,7 +78,7 @@ namespace DataFlowProgramming
 		std::shared_ptr<NodeData> operator()(std::shared_ptr<NodeData> data);
 
 	private:
-		std::shared_ptr<NodeData> m_result;
+		std::shared_ptr<ShaderData> m_result;
 	};
 }
 

@@ -7,6 +7,7 @@
 #include "DataVector4.h"
 #include "DataInvalid.h"
 #include "ShaderScene.h"
+#include "OperationRules.h"
 
 namespace DataFlowProgramming
 {
@@ -68,22 +69,23 @@ namespace DataFlowProgramming
         return m_outputs[portIndex];
     }
 
-    void SubstractionDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex port)
+    void SubstractionDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
     {
-        m_inputs[port] = std::dynamic_pointer_cast<DataAny>(nodeData);
-        if (m_inputs[0] && m_inputs[1])
-        {
-            if (m_inputs[0]->getInternalData()->type().id == "float")
-            {
-				m_outputs[0] = std::make_shared<DataVector2>(this, "vec2");
-				m_outputs[0]->setVariableName(getVariableName());
-            }
-        }
-        else
-        {
+		m_inputs[portIndex] = std::dynamic_pointer_cast<ShaderData>(nodeData);
+		if (m_inputs[0] && m_inputs[1])
+		{
+			m_outputs[0] = OperationRules::instance().NewSubstractionOutput(DataAny::getInternalData(m_inputs[0])->type().id, DataAny::getInternalData(m_inputs[1])->type().id, this);
+			m_outputs[0]->setVariableName(getVariableName());
+		}
+		else
+		{
 			m_outputs[0] = std::make_shared<DataInvalid>(this);
 			m_outputs[0]->setVariableName(getVariableName());
-        }
+		}
+
+		checkValidation();
+
+        Q_EMIT dataUpdated(0);
     }
 
     bool SubstractionDataModel::generateCode(ShaderCompiler& compiler)
@@ -93,8 +95,8 @@ namespace DataFlowProgramming
             compiler.addCode(Echo::StringUtil::Format("\t%s %s = %s - %s;\n",
                 m_outputs[0]->type().id.c_str(),
                 m_outputs[0]->getVariableName().c_str(),
-                m_inputs[0]->getInternalData()->getVariableName().c_str(),
-                m_inputs[1]->getInternalData()->getVariableName().c_str()));
+                DataAny::getInternalData(m_inputs[0])->getVariableName().c_str(),
+                DataAny::getInternalData(m_inputs[1])->getVariableName().c_str()));
         }
 
         return true;

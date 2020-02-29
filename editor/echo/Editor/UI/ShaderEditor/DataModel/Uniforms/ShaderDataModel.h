@@ -40,10 +40,25 @@ namespace DataFlowProgramming
         // show menu
         virtual void showMenu(const QPointF& pos) {}
 
-    private:
-        Echo::ui32        m_id = 0;
-        bool              m_isUsed = true;
-        Echo::String      m_variableName;
+    public:
+		// validation
+        virtual NodeValidationState validationState() const override { return m_modelValidationState; }
+        virtual QString validationMessage() const override { return m_modelValidationError; }
+
+        // check validation
+        bool checkValidation();
+
+	protected:
+        Echo::ui32                              m_id = 0;
+        bool                                    m_isUsed = true;
+        Echo::String                            m_variableName;
+
+		std::vector<NodeDataType>               m_inputDataTypes;
+		std::vector<std::shared_ptr<ShaderData>>m_inputs;
+		vector<std::shared_ptr<ShaderData>>     m_outputs;
+
+		NodeValidationState                     m_modelValidationState = NodeValidationState::Valid;
+		QString                                 m_modelValidationError = QStringLiteral("");
     };
 }
 

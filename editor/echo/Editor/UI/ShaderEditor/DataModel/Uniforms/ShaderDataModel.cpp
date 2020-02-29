@@ -16,4 +16,58 @@ namespace DataFlowProgramming
 
 		return m_variableName; 
 	}
+
+	bool ShaderDataModel::checkValidation()
+	{
+		m_modelValidationState = NodeValidationState::Valid;
+		m_modelValidationError = QStringLiteral("");
+
+		// check 
+		if (m_inputDataTypes.size() != m_inputs.size())
+		{
+			m_modelValidationState = NodeValidationState::Error;
+			m_modelValidationError = QStringLiteral("Inputs count error");
+
+			return false;
+		}
+
+		// input type check
+		for (size_t i = 0; i < m_inputDataTypes.size(); i++)
+		{
+			if (m_inputs[i] && m_inputs[i]->type().id != m_inputDataTypes[i].id)
+			{
+				m_modelValidationState = NodeValidationState::Error;
+				m_modelValidationError = Echo::StringUtil::Format("Input [%d] type error", i).c_str();
+
+				return false;
+			}
+		}
+
+		// check invalid input
+		for (size_t i = 0; i < m_inputs.size(); i++)
+		{
+			if (m_inputs[i] && m_inputs[i]->type().id == "invalid")
+			{
+				m_modelValidationState = NodeValidationState::Error;
+				m_modelValidationError = Echo::StringUtil::Format("Input [%d] is invalid", i).c_str();
+
+				return false;
+			}
+		}
+
+		// check invalid output
+		for (size_t i = 0; i < m_outputs.size(); i++)
+		{
+			if (m_outputs[i] && m_outputs[i]->type().id == "invalid")
+			{
+				m_modelValidationState = NodeValidationState::Error;
+				m_modelValidationError = Echo::StringUtil::Format("Output [%d] is invalid", i).c_str();
+
+				return false;
+			}
+		}
+
+
+		return true;
+	}
 }

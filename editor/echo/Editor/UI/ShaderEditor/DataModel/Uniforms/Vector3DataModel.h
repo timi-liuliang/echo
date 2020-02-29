@@ -5,6 +5,7 @@
 #include <nodeeditor/NodeDataModel>
 #include <iostream>
 #include "DataFloat.h"
+#include "ShaderDataModel.h"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -17,7 +18,7 @@ namespace DataFlowProgramming
 {
     /// The model dictates the number of inputs and outputs for the Node.
     /// In this example it has no logic.
-    class Vector3DataModel : public NodeDataModel
+    class Vector3DataModel : public ShaderDataModel
     {
       Q_OBJECT
 
@@ -30,6 +31,9 @@ namespace DataFlowProgramming
         bool captionVisible() const override { return false; }
 
         QString name() const override { return QStringLiteral("Vector3"); }
+
+		// generate code
+        virtual bool generateCode(ShaderCompiler& compiler) override { return false; }
 
     public:
         // load|save

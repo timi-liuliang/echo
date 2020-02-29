@@ -18,7 +18,14 @@ namespace DataFlowProgramming
         QtNodes::NodeDataType type() const override { return NodeDataType {"any", "Any"}; }
 
         // origin
-        std::shared_ptr<ShaderData> getInternalData() { return m_internalData; }
+        static std::shared_ptr<ShaderData> getInternalData(std::shared_ptr<ShaderData> input)
+        {
+            auto anyData = std::dynamic_pointer_cast<DataAny>(input);
+            if (anyData)
+                return anyData->m_internalData;
+
+            return nullptr;
+        }
 
     private:
         std::shared_ptr<ShaderData> m_internalData;

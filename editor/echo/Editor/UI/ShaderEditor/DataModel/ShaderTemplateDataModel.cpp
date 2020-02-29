@@ -4,6 +4,8 @@
 #include "DataFloat.h"
 #include "DataVector3.h"
 #include "ShaderScene.h"
+#include "nodeeditor/internal/node/Node.hpp"
+#include <Engine/core/log/Log.h>
 
 namespace DataFlowProgramming
 {
@@ -63,13 +65,22 @@ namespace DataFlowProgramming
 
     void ShaderTemplateDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex port)
     {
-        m_inputs[port] = nodeData;
+		m_inputs[port] = std::dynamic_pointer_cast<ShaderData>(nodeData);
 
-        ShaderScene* shaderScene = qobject_cast<ShaderScene*>(_scene);
-        if (shaderScene)
-        {
-            shaderScene->compile();
-        }
+		ShaderScene* shaderScene = qobject_cast<ShaderScene*>(_scene);
+		if (shaderScene)
+		{
+            // check validation
+            for (QtNodes::Node* node : shaderScene->allNodes())
+            {
+                auto shaderDataModel = dynamic_cast<ShaderDataModel*>(node->nodeDataModel());
+                if (!shaderDataModel->checkValidation())
+                    return;
+            }
+
+            // compile
+			shaderScene->compile();
+		}
     }
 
 	// generate code

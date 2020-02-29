@@ -65,9 +65,6 @@ namespace DataFlowProgramming
 
     private:
         QT_UI::QTextureSelect*                  m_textureSelect = nullptr;
-		std::vector<NodeDataType>               m_inputDataTypes;
-		std::vector<std::shared_ptr<NodeData>>  m_inputs;
-        vector<std::shared_ptr<ShaderData>>     m_outputs;
     };
 }
 

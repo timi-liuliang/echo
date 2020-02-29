@@ -9,7 +9,7 @@ namespace DataFlowProgramming
     TextureDataModel::TextureDataModel()
     {
         m_textureSelect = new QT_UI::QTextureSelect();
-        m_textureSelect->setFixedSize(80, 80);
+        m_textureSelect->setFixedSize(128, 128);
 
        QObject::connect(m_textureSelect, SIGNAL(Signal_TextureChagned()), this, SLOT(onTextureEdited()));
 
@@ -83,7 +83,9 @@ namespace DataFlowProgramming
 
 	void TextureDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex port)
 	{
-		m_inputs[port] = nodeData;
+		m_inputs[port] = std::dynamic_pointer_cast<ShaderData>(nodeData);
+        
+        checkValidation();
 
         onTextureEdited();
 	}

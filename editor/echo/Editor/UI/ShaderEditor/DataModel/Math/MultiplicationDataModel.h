@@ -59,10 +59,5 @@ namespace DataFlowProgramming
 
         // widget
         QWidget* embeddedWidget() override { return nullptr; }
-
-    private:
-        std::vector<NodeDataType>                   m_inputDataTypes;
-        std::vector<std::shared_ptr<DataAny>>       m_inputs;
-        std::vector<std::shared_ptr<ShaderData>>    m_outputs;
     };
 }
