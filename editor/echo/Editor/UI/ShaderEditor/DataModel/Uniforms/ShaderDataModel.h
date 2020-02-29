@@ -46,7 +46,7 @@ namespace DataFlowProgramming
         virtual QString validationMessage() const override { return m_modelValidationError; }
 
         // check validation
-        bool checkValidation();
+        virtual bool checkValidation();
 
 	protected:
         Echo::ui32                              m_id = 0;

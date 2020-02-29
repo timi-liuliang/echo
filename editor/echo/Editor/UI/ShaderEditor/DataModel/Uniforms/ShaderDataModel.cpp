@@ -1,4 +1,5 @@
 #include "ShaderDataModel.h"
+#include "Data/DataAny.h"
 
 namespace DataFlowProgramming
 {
@@ -56,17 +57,27 @@ namespace DataFlowProgramming
 		}
 
 		// check invalid output
-		for (size_t i = 0; i < m_outputs.size(); i++)
+		for (size_t i = 0; i < m_inputs.size(); i++)
 		{
-			if (m_outputs[i] && m_outputs[i]->type().id == "invalid")
+			if (m_inputs[i] && m_inputs[i]->type().id == "invalid")
 			{
 				m_modelValidationState = NodeValidationState::Error;
-				m_modelValidationError = Echo::StringUtil::Format("Output [%d] is invalid", i).c_str();
+				m_modelValidationError = Echo::StringUtil::Format("Input [%d] is invalid", i).c_str();
 
 				return false;
 			}
-		}
+			else if (m_inputs[i] && m_inputs[i]->type().id == "any")
+			{
+				std::shared_ptr<ShaderData> internalData = DataAny::getInternalData(m_inputs[i]);
+				if (internalData && internalData->type().id == "invalid")
+				{
+					m_modelValidationState = NodeValidationState::Error;
+					m_modelValidationError = Echo::StringUtil::Format("Input [%d] is invalid", i).c_str();
 
+					return false;
+				}
+			}
+		}
 
 		return true;
 	}

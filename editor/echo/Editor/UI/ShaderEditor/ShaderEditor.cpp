@@ -17,6 +17,8 @@
 #include "DataModel/Math/SubstractionDataModel.h"
 #include "DataModel/Math/MultiplicationDataModel.h"
 #include "DataModel/Math/DivisionDataModel.h"
+#include "DataModel/Math/Utils/SplitDataModel.h"
+#include "DataModel/Math/Utils/CombineDataModel.h"
 #include "Data/DataFloat.h"
 #include "Data/DataVector2.h"
 #include "Data/DataVector3.h"
@@ -54,6 +56,10 @@ namespace Studio
         ret->registerModel<SubstractionDataModel>("Math");
         ret->registerModel<MultiplicationDataModel>("Math");
         ret->registerModel<DivisionDataModel>("Math");
+
+        // Math.Utils
+        ret->registerModel<SplitDataModel>("Math.Utils");
+        ret->registerModel<CombineDataModel>("Math.Utils");
 
         // Converts
         ret->registerTypeConverter(std::make_pair(DataFloat(nullptr, "").type(), DataAny(nullptr).type()), QtNodes::TypeConverter{ FloatToAny() });
