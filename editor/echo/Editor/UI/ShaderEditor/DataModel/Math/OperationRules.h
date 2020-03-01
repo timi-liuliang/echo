@@ -34,6 +34,8 @@ namespace DataFlowProgramming
 		std::shared_ptr<ShaderData> NewSubstractionOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel);
 		std::shared_ptr<ShaderData> NewMultiplicationOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel);
 		std::shared_ptr<ShaderData> NewDivisionOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel);
+		std::shared_ptr<ShaderData> NewDotProductOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel);
+		std::shared_ptr<ShaderData> NewCrossProductOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel);
 
 	private:
 		// get output
@@ -47,5 +49,7 @@ namespace DataFlowProgramming
 		std::vector<OperationRule>	m_substractionRules;
 		std::vector<OperationRule>	m_multiplicationRules;
 		std::vector<OperationRule>	m_divisionRules;
+		std::vector<OperationRule>	m_dotProductRules;
+		std::vector<OperationRule>	m_crossProductRules;
 	};
 }

@@ -64,6 +64,12 @@ namespace DataFlowProgramming
 		m_divisionRules.push_back(OperationRule(true, "vec4", "color", "vec4"));
 
 		m_divisionRules.push_back(OperationRule(true, "color", "color", "vec4"));
+
+		// dot product
+		m_dotProductRules.push_back(OperationRule(true, "vec3", "vec3", "float"));
+
+		// cross product
+		m_crossProductRules.push_back(OperationRule(true, "vec3", "vec3", "vec3"));
 	}
 
 	OperationRules::~OperationRules()
@@ -101,6 +107,20 @@ namespace DataFlowProgramming
 	std::shared_ptr<ShaderData> OperationRules::NewDivisionOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel)
 	{
 		Echo::String outputType = getOutput(inputA, inputB, m_divisionRules);
+
+		return NewShaderData(outputType, dataModel);
+	}
+
+	std::shared_ptr<ShaderData> OperationRules::NewDotProductOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel)
+	{
+		Echo::String outputType = getOutput(inputA, inputB, m_dotProductRules);
+
+		return NewShaderData(outputType, dataModel);
+	}
+
+	std::shared_ptr<ShaderData> OperationRules::NewCrossProductOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel)
+	{
+		Echo::String outputType = getOutput(inputA, inputB, m_crossProductRules);
 
 		return NewShaderData(outputType, dataModel);
 	}
