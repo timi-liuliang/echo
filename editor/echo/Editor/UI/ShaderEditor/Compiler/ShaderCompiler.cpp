@@ -148,8 +148,12 @@ ${FS_SHADER_CODE}
     __BaseColor = max(dot(v_Normal, _lightDir), 0.0) * _lightColor * __BaseColor;
 #endif
 
+#ifdef ENABLE_OCCLUSION
+	__BaseColor.rgb = __BaseColor.rgb * __AmbientOcclusion;
+#endif
+
 #ifdef ENABLE_EMISSIVE
-	__BaseColor.rgb += __EMISSIVE;
+	__BaseColor.rgb += __Emissive;
 #endif  
 
     o_FragColor = vec4(LinearToSRgb(__BaseColor.rgb), __Opacity);

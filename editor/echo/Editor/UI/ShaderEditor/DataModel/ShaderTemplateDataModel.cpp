@@ -14,10 +14,11 @@ namespace DataFlowProgramming
         m_inputDataTypes = 
         {
             {"vec3", "Diffuse"},
+            {"float", "Opacity"},
             {"vec3", "Normal"},
             {"float", "Metallic"},
             {"float", "Roughness"},
-            {"float", "Opacity"},
+            {"float", "Occlusion"},
             {"vec3", "Emissive"}
         };
 
@@ -36,31 +37,31 @@ namespace DataFlowProgramming
 
     unsigned int ShaderTemplateDataModel::nPorts(PortType portType) const
     {
-        unsigned int result = 1;
-
         switch (portType)
         {
-            case PortType::In: result = m_inputs.size(); break;
-            case PortType::Out:result = 0; break;
-            default:                       break;
+        case PortType::In: return m_inputs.size();
+        case PortType::Out:return m_outputs.size();
+        default:           return 0;
         }
-
-        return result;
     }
 
     NodeDataType ShaderTemplateDataModel::dataType(PortType portType, PortIndex portIndex) const
     {
-        if(portType==PortType::In)
-        {
-            return m_inputDataTypes[portIndex];
-        }
-        
-        return NodeDataType {"unknown", "Unknown"};
+		if (portType == PortType::In)
+		{
+			return m_inputDataTypes[portIndex];
+		}
+		else if (portType == PortType::Out)
+		{
+			return m_outputs[portIndex]->type();
+		}
+
+		return NodeDataType{ "invalid", "invalid" };
     }
 
-    std::shared_ptr<NodeData> ShaderTemplateDataModel::outData(PortIndex)
+    std::shared_ptr<NodeData> ShaderTemplateDataModel::outData(PortIndex portIndex)
     {
-        return nullptr;
+        return m_outputs[portIndex];
     }
 
     void ShaderTemplateDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex port)
@@ -86,28 +87,40 @@ namespace DataFlowProgramming
 	// generate code
     bool ShaderTemplateDataModel::generateCode(ShaderCompiler& compiler)
     {
-        if (m_inputs[0])
+        for (size_t i = 0; i < m_inputs.size(); i++)
         {
-            compiler.addMacro("ENABLE_BASE_COLOR");
-            compiler.addCode(Echo::StringUtil::Format("\tvec3 __BaseColor = %s;\n", dynamic_cast<ShaderData*>(m_inputs[0].get())->getVariableName().c_str()));
-        }
+            if (m_inputs[i])
+            {
+				if (m_inputDataTypes[i].name == "Diffuse")
+				{
+					compiler.addMacro("ENABLE_BASE_COLOR");
+					compiler.addCode(Echo::StringUtil::Format("\tvec3 __BaseColor = %s;\n", dynamic_cast<ShaderData*>(m_inputs[i].get())->getVariableName().c_str()));
+				}
 
-        if (m_inputs[1])
-        {
-            compiler.addMacro("ENABLE_VERTEX_NORMAL");
-            compiler.addMacro("ENABLE_LIGHTING_CALCULATION");
-        }
+				if (m_inputDataTypes[i].name == "Opacity")
+				{
+					compiler.addMacro("ENABLE_OPACITY");
+					compiler.addCode(Echo::StringUtil::Format("\tfloat __Opacity = %s;\n", dynamic_cast<ShaderData*>(m_inputs[i].get())->getVariableName().c_str()));
+				}
 
-        if (m_inputs[4])
-        {
-            compiler.addMacro("ENABLE_OPACITY");
-            compiler.addCode(Echo::StringUtil::Format("\tfloat __Opacity = %s;\n", dynamic_cast<ShaderData*>(m_inputs[4].get())->getVariableName().c_str()));
-        }
+				if (m_inputDataTypes[i].name == "Normal")
+				{
+					compiler.addMacro("ENABLE_VERTEX_NORMAL");
+					compiler.addMacro("ENABLE_LIGHTING_CALCULATION");
+				}
 
-        if (m_inputs[5])
-        {
-            compiler.addMacro("ENABLE_EMISSIVE");
-            compiler.addCode(Echo::StringUtil::Format("\tvec3 __EMISSIVE = %s;\n", dynamic_cast<ShaderData*>(m_inputs[5].get())->getVariableName().c_str()));
+				if (m_inputDataTypes[i].name == "Occlusion")
+				{
+					compiler.addMacro("ENABLE_OCCLUSION");
+					compiler.addCode(Echo::StringUtil::Format("\tfloat __AmbientOcclusion = %s;\n", dynamic_cast<ShaderData*>(m_inputs[i].get())->getVariableName().c_str()));
+				}
+
+				if (m_inputDataTypes[i].name == "Emissive")
+				{
+					compiler.addMacro("ENABLE_EMISSIVE");
+					compiler.addCode(Echo::StringUtil::Format("\tvec3 __Emissive = %s;\n", dynamic_cast<ShaderData*>(m_inputs[i].get())->getVariableName().c_str()));
+				}
+            }
         }
 
         return true;

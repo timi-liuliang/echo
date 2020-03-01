@@ -61,7 +61,7 @@ namespace DataFlowProgramming
             return m_outputs[portIndex]->type();
         }
         
-        return NodeDataType {"unknown", "Unknown"};
+        return NodeDataType {"invalid", "invalid"};
     }
 
     std::shared_ptr<NodeData> AdditionDataModel::outData(PortIndex portIndex)
