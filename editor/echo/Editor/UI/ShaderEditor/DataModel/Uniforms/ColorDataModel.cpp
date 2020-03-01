@@ -17,11 +17,6 @@ namespace DataFlowProgramming
         QObject::connect(m_colorSelect, SIGNAL(Signal_ColorChanged()), this, SLOT(onColorEdited()));
 
         m_outputs.resize(5);
-        m_outputs[0] = std::make_shared<DataVector3>(this, "rgb");
-        m_outputs[1] = std::make_shared<DataFloat>(this, "r");
-        m_outputs[2] = std::make_shared<DataFloat>(this, "g");
-        m_outputs[3] = std::make_shared<DataFloat>(this, "b");
-        m_outputs[4] = std::make_shared<DataFloat>(this, "a");
 
         updateOutputDataVariableName();
     }
@@ -116,6 +111,12 @@ namespace DataFlowProgramming
     void ColorDataModel::updateOutputDataVariableName()
     {
         Echo::String variableName = m_isParameter ? "fs_ubo." + getVariableName() : getVariableName();
+
+		m_outputs[0] = std::make_shared<DataVector3>(this, "rgb");
+		m_outputs[1] = std::make_shared<DataFloat>(this, "r");
+		m_outputs[2] = std::make_shared<DataFloat>(this, "g");
+		m_outputs[3] = std::make_shared<DataFloat>(this, "b");
+		m_outputs[4] = std::make_shared<DataFloat>(this, "a");
 
 		m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s_Value.rgb", variableName.c_str()));
 		m_outputs[1]->setVariableName(Echo::StringUtil::Format("%s_Value.r", variableName.c_str()));

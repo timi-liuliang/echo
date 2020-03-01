@@ -9,7 +9,7 @@ namespace DataFlowProgramming
       : m_lineEdit(new QLineEdit())
     {
         m_lineEdit->setValidator(new QDoubleValidator());
-        m_lineEdit->setMaximumSize(m_lineEdit->sizeHint());
+        m_lineEdit->setMaximumSize(QSize(m_lineEdit->sizeHint().width() * 0.4f, m_lineEdit->sizeHint().height()));
         m_lineEdit->setText("0.0");
 
         QObject::connect(m_lineEdit, SIGNAL(editingFinished()), this, SLOT(onTextEdited()));

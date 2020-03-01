@@ -64,6 +64,20 @@ namespace QT_UI
 		m_lineEditZ->setText(Echo::StringUtil::ToString(result.z).c_str());
 	}
 
+	Echo::Vector3 QVector3Editor::getValue()
+	{
+		Echo::String xText = m_lineEditX->text().toStdString().c_str();
+		Echo::String yText = m_lineEditY->text().toStdString().c_str();
+		Echo::String zText = m_lineEditZ->text().toStdString().c_str();
+
+		Echo::Vector3 result;
+		result.x = Echo::StringUtil::ParseFloat(xText);
+		result.y = Echo::StringUtil::ParseFloat(yText);
+		result.z = Echo::StringUtil::ParseFloat(zText);
+
+		return result;
+	}
+
 	// redefine paintEvent
 	void QVector3Editor::paintEvent(QPaintEvent* event)
 	{
@@ -103,8 +117,11 @@ namespace QT_UI
 			inst->execString("__editor_calc_result_z = nil");
 
 			Vector3 vec3(x, y, z);
-			m_propertyModel->setValue(m_propertyName, StringUtil::ToString(vec3).c_str());
+			if(m_propertyModel)
+				m_propertyModel->setValue(m_propertyName, StringUtil::ToString(vec3).c_str());
 		}
+
+		emit Signal_ValueChanged();
 	}
 
 	// editing

@@ -3,6 +3,7 @@
 #include <QtCore/QObject>
 #include <QtWidgets/QLineEdit>
 #include <nodeeditor/NodeDataModel>
+#include "propertyeditor/QVector3Editor.h"
 #include <iostream>
 #include "DataFloat.h"
 #include "ShaderDataModel.h"
@@ -33,7 +34,7 @@ namespace DataFlowProgramming
         QString name() const override { return QStringLiteral("Vector3"); }
 
 		// generate code
-        virtual bool generateCode(ShaderCompiler& compiler) override { return false; }
+        virtual bool generateCode(ShaderCompiler& compiler) override;
 
     public:
         // load|save
@@ -52,15 +53,14 @@ namespace DataFlowProgramming
         void setInData(std::shared_ptr<NodeData>, int) override { }
 
         // get embedded widget
-        QWidget* embeddedWidget() override { return _lineEdit; }
+        QWidget* embeddedWidget() override { return m_vector3Editor; }
 
     private Q_SLOTS:
         // on value changed
-        void onTextEdited(QString const &string);
+        void onTextEdited();
 
     private:
-      std::shared_ptr<DataFloat> _number;
-      QLineEdit *                _lineEdit;
+        QT_UI::QVector3Editor*   m_vector3Editor;
     };
 }
 

@@ -1,104 +1,73 @@
 #include "Vector3DataModel.h"
 #include <QtCore/QJsonValue>
 #include <QtGui/QDoubleValidator>
-#include "DataFloat.h"
+#include "DataVector3.h"
 
 namespace DataFlowProgramming
 {
     Vector3DataModel::Vector3DataModel()
-      : _lineEdit(new QLineEdit())
     {
-      _lineEdit->setValidator(new QDoubleValidator());
+        m_vector3Editor = (new QT_UI::QVector3Editor(nullptr, "", nullptr));
+        m_vector3Editor->setMaximumSize(QSize(m_vector3Editor->sizeHint().width() * 0.4f, m_vector3Editor->sizeHint().height()));
+        m_vector3Editor->setValue(Echo::StringUtil::ToString(Echo::Vector3::ONE).c_str());
 
-      _lineEdit->setMaximumSize(_lineEdit->sizeHint());
+        QObject::connect(m_vector3Editor, SIGNAL(Signal_ValueChanged()), this, SLOT(onTextEdited()));
 
-      connect(_lineEdit, &QLineEdit::textChanged, this, &Vector3DataModel::onTextEdited);
-
-      _lineEdit->setText("0.0");
+		m_outputs.resize(1);
+		m_outputs[0] = std::make_shared<DataVector3>(this, "vec3");
+		m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s", getVariableName().c_str()));
     }
 
 
     QJsonObject Vector3DataModel::save() const
     {
-      QJsonObject modelJson = NodeDataModel::save();
+        QJsonObject modelJson = NodeDataModel::save();
 
-	  //if (_number)
-		 // modelJson["number"] = QString::number(_number->number());
+		modelJson["number"] = Echo::StringUtil::ToString(m_vector3Editor->getValue()).c_str();
 
-      return modelJson;
+        return modelJson;
     }
-
 
     void Vector3DataModel::restore(QJsonObject const &p)
     {
-      QJsonValue v = p["number"];
-
-      if (!v.isUndefined())
-      {
-        QString strNum = v.toString();
-
-        bool   ok;
-        double d = strNum.toDouble(&ok);
-        if (ok)
+        QJsonValue v = p["number"];
+        if (!v.isUndefined())
         {
-          //_number = std::make_shared<DataFloat>(d);
-          //_lineEdit->setText(strNum);
+            QString strNum = v.toString();
+            m_vector3Editor->setValue(v.toString());
         }
-      }
     }
-
 
     unsigned int Vector3DataModel::nPorts(PortType portType) const
     {
-      unsigned int result = 1;
-
       switch (portType)
       {
-        case PortType::In:
-          result = 0;
-          break;
-
-        case PortType::Out:
-          result = 1;
-
-        default:
-          break;
+      case PortType::In:  return m_inputs.size();
+      case PortType::Out: return m_outputs.size();
+      default:            return 0;
       }
-
-      return result;
     }
 
-
-    void Vector3DataModel::onTextEdited(QString const &string)
+    void Vector3DataModel::onTextEdited()
     {
-      Q_UNUSED(string);
-
-      bool ok = false;
-
-      double number = _lineEdit->text().toDouble(&ok);
-
-      if (ok)
-      {
-        //_number = std::make_shared<DataFloat>(number);
-
         Q_EMIT dataUpdated(0);
-      }
-      else
-      {
-        Q_EMIT dataInvalidated(0);
-      }
     }
 
-
-    NodeDataType Vector3DataModel::dataType(PortType, PortIndex) const
+    NodeDataType Vector3DataModel::dataType(PortType portType, PortIndex portIndex) const
     {
-        return NodeDataType {"vec3", "vec3"};
+        return portType == PortType::Out ? m_outputs[portIndex]->type() : NodeDataType{ "invalid", "invalid" };
     }
 
-
-    std::shared_ptr<NodeData> Vector3DataModel::outData(PortIndex)
+    std::shared_ptr<NodeData> Vector3DataModel::outData(PortIndex portIndex)
     {
-      return _number;
+        return m_outputs[portIndex];
     }
 
+	bool Vector3DataModel::generateCode(ShaderCompiler& compiler)
+	{
+		Echo::Vector3 number = m_vector3Editor->getValue();
+		compiler.addCode(Echo::StringUtil::Format("\tvec3 %s = vec3(%f, %f, %f);\n", getVariableName().c_str(), number.x, number.y, number.z));
+
+		return true;
+	}
 }

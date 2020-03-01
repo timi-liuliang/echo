@@ -18,6 +18,9 @@ namespace QT_UI
 		// set value
 		void setValue(const QString& val);
 
+		// get value
+		Echo::Vector3 getValue();
+
 	public slots:
 		// edit finished
 		void onEditFinished();
@@ -28,6 +31,10 @@ namespace QT_UI
 	protected:
 		// redefine paintEvent
 		void paintEvent(QPaintEvent* event);
+
+	signals:
+		// signal
+		void Signal_ValueChanged();
 
 	private:
 		QHBoxLayout*	m_horizonLayout;
