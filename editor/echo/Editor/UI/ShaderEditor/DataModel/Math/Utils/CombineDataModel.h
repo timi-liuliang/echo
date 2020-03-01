@@ -18,46 +18,46 @@ using QtNodes::NodeValidationState;
 
 namespace DataFlowProgramming
 {
-    /// The model dictates the number of inputs and outputs for the Node.
-    class CombineDataModel : public ShaderDataModel
-    {
-        Q_OBJECT
+	/// The model dictates the number of inputs and outputs for the Node.
+	class CombineDataModel : public ShaderDataModel
+	{
+		Q_OBJECT
 
-    public:
-        CombineDataModel();
-        virtual ~CombineDataModel() {}
+	public:
+		CombineDataModel();
+		virtual ~CombineDataModel() {}
 
-        // caption
-        QString caption() const override { return QStringLiteral("Combine"); }
+		// caption
+		QString caption() const override { return QStringLiteral("Combine"); }
 
-        // is caption visible
-        bool captionVisible() const override { return true; }
+		// is caption visible
+		bool captionVisible() const override { return true; }
 
-        // name
-        QString name() const override { return QStringLiteral("Combine"); }
+		// name
+		QString name() const override { return QStringLiteral("Combine"); }
 
 		// generate code
 		virtual bool generateCode(ShaderCompiler& compiler) override;
 
-    public:
-        // load|save
-        virtual QJsonObject save() const override;
-        virtual void restore(QJsonObject const &p) override;
+	public:
+		// load|save
+		virtual QJsonObject save() const override;
+		virtual void restore(QJsonObject const& p) override;
 
-    public:
-        // number ports
-        unsigned int nPorts(PortType portType) const override;
+	public:
+		// number ports
+		unsigned int nPorts(PortType portType) const override;
 
-        // get port data type
-        NodeDataType dataType(PortType portType, PortIndex portIndex) const override;
+		// get port data type
+		NodeDataType dataType(PortType portType, PortIndex portIndex) const override;
 
-        // get port data
-        std::shared_ptr<NodeData> outData(PortIndex port) override;
+		// get port data
+		std::shared_ptr<NodeData> outData(PortIndex port) override;
 
-        // when input changed
-        void setInData(std::shared_ptr<NodeData> nodeData, PortIndex port) override;
+		// when input changed
+		void setInData(std::shared_ptr<NodeData> nodeData, PortIndex port) override;
 
-        // widget
-        QWidget* embeddedWidget() override { return nullptr; }
-    };
+		// widget
+		QWidget* embeddedWidget() override { return nullptr; }
+	};
 }

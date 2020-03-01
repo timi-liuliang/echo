@@ -11,94 +11,88 @@
 
 namespace DataFlowProgramming
 {
-    CombineDataModel::CombineDataModel()
-    {
-        m_inputDataTypes = 
-        {
-            {"any", "A"},
-            {"any", "B"},
-        };
+	CombineDataModel::CombineDataModel()
+	{
+		m_inputDataTypes =
+		{
+			{"float", "r"},
+			{"float", "g"},
+			{"float", "b"},
+			{"float", "a"},
+		};
 
-        m_inputs.resize(m_inputDataTypes.size());
+		m_inputs.resize(m_inputDataTypes.size());
 
-        m_outputs.resize(1);
-        m_outputs[0] = std::make_shared<DataInvalid>(this);
-        m_outputs[0]->setVariableName(getVariableName());
-    }
+		m_outputs.resize(3);
+		m_outputs[0] = std::make_shared<DataVector4>(this, "rgba");
+		m_outputs[1] = std::make_shared<DataVector3>(this, "rgb");
+		m_outputs[2] = std::make_shared<DataVector2>(this, "rg");
+	}
 
-    QJsonObject CombineDataModel::save() const
-    {
-        QJsonObject modelJson = NodeDataModel::save();
-        return modelJson;
-    }
+	QJsonObject CombineDataModel::save() const
+	{
+		QJsonObject modelJson = NodeDataModel::save();
+		return modelJson;
+	}
 
-    void CombineDataModel::restore(QJsonObject const &p)
-    {
-    }
+	void CombineDataModel::restore(QJsonObject const& p)
+	{
+	}
 
-    unsigned int CombineDataModel::nPorts(PortType portType) const
-    {
-        unsigned int result = 1;
+	unsigned int CombineDataModel::nPorts(PortType portType) const
+	{
+		switch (portType)
+		{
+		case PortType::In: return m_inputs.size();
+		case PortType::Out:return m_outputs.size();
+		default:           return 0;
+		}
+	}
 
-        switch (portType)
-        {
-            case PortType::In: result = m_inputs.size(); break;
-            case PortType::Out:result = m_outputs.size(); break;
-            default:                       break;
-        }
+	NodeDataType CombineDataModel::dataType(PortType portType, PortIndex portIndex) const
+	{
+		if (portType == PortType::In)
+		{
+			return m_inputDataTypes[portIndex];
+		}
+		else if (portType == PortType::Out)
+		{
+			return m_outputs[portIndex]->type();
+		}
 
-        return result;
-    }
+		return NodeDataType{ "invalid", "invalid" };
+	}
 
-    NodeDataType CombineDataModel::dataType(PortType portType, PortIndex portIndex) const
-    {
-        if(portType==PortType::In)
-        {
-            return m_inputDataTypes[portIndex];
-        }
-        else if (portType == PortType::Out)
-        {
-            return m_outputs[portIndex]->type();
-        }
-        
-        return NodeDataType {"unknown", "Unknown"};
-    }
+	std::shared_ptr<NodeData> CombineDataModel::outData(PortIndex portIndex)
+	{
+		return m_outputs[portIndex];
+	}
 
-    std::shared_ptr<NodeData> CombineDataModel::outData(PortIndex portIndex)
-    {
-        return m_outputs[portIndex];
-    }
+	void CombineDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
+	{
+		m_inputs[portIndex] = std::dynamic_pointer_cast<ShaderData>(nodeData);
 
-    void CombineDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
-    {
-        m_inputs[portIndex] = std::dynamic_pointer_cast<ShaderData>(nodeData);
-        if (m_inputs[0] && m_inputs[1])
-        {
-            m_outputs[0] = OperationRules::instance().NewAdditionOutput( DataAny::getInternalData(m_inputs[0])->type().id, DataAny::getInternalData(m_inputs[1])->type().id, this);
-            m_outputs[0]->setVariableName(getVariableName());
-        }
-        else
-        {
-			m_outputs[0] = std::make_shared<DataInvalid>(this);
-			m_outputs[0]->setVariableName(getVariableName());
-        }
+		m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s", getVariableName().c_str()));
+		m_outputs[1]->setVariableName(Echo::StringUtil::Format("%s.xyz", getVariableName().c_str()));
+		m_outputs[2]->setVariableName(Echo::StringUtil::Format("%s.xy", getVariableName().c_str()));
 
-        checkValidation();
+		for (size_t i = 0; i < m_outputs.size(); i++)
+		{
+			Q_EMIT dataUpdated(i);
+		}
 
-		Q_EMIT dataUpdated(0);
-    }
+		checkValidation();
+	}
 
-    bool CombineDataModel::generateCode(ShaderCompiler& compiler)
-    {
-        if (m_inputs[0] && m_inputs[1])
-        {
-            compiler.addCode(Echo::StringUtil::Format("\t%s %s = %s + %s;\n",
-                m_outputs[0]->type().id.c_str(),
-                m_outputs[0]->getVariableName().c_str(),
-                DataAny::getInternalData(m_inputs[0])->getVariableName().c_str(),
-                DataAny::getInternalData(m_inputs[1])->getVariableName().c_str()));
-        }
+	bool CombineDataModel::generateCode(ShaderCompiler& compiler)
+	{
+		Echo::String x = m_inputs[0] ? m_inputs[0]->getVariableName() : "0.0";
+		Echo::String y = m_inputs[1] ? m_inputs[1]->getVariableName() : "0.0";
+		Echo::String z = m_inputs[2] ? m_inputs[2]->getVariableName() : "0.0";
+		Echo::String w = m_inputs[3] ? m_inputs[3]->getVariableName() : "0.0";
 
-        return true;
-    }
+		compiler.addCode(Echo::StringUtil::Format("\tvec4 %s = vec4(%s, %s, %s, %s);\n", getVariableName().c_str(), x.c_str(), y.c_str(), z.c_str(), w.c_str()));
+
+		return true;
+	}
 }
