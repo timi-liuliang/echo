@@ -8,18 +8,18 @@
 
 namespace QT_UI
 {
-	class QVector2Editor : public QWidget
+	class QVector4Editor : public QWidget
 	{
 		Q_OBJECT
 
 	public:
-		QVector2Editor(class QPropertyModel* model, QString propertyName, QWidget* parent = 0);
+		QVector4Editor(class QPropertyModel* model, QString propertyName, QWidget* parent = 0);
 
 		// set value
 		void setValue(const QString& val);
 
 		// get value
-		Echo::Vector2 getValue();
+		Echo::Vector4 getValue();
 
 	public slots:
 		// edit finished
@@ -42,6 +42,10 @@ namespace QT_UI
 		QLineEdit*		m_lineEditX;
 		QLabel*			m_labelY;
 		QLineEdit*		m_lineEditY;
+		QLabel*			m_labelZ;
+		QLineEdit*		m_lineEditZ;
+		QLabel*			m_labelW;
+		QLineEdit*		m_lineEditW;
 
 		QPropertyModel* m_propertyModel;
 		QString			m_propertyName;

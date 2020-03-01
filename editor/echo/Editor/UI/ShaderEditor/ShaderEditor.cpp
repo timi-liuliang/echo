@@ -13,6 +13,8 @@
 #include "TextureDataModel.h"
 #include "LayerBlendDataModel.h"
 #include "SharedUniformDataModel.h"
+#include "DataModel/Uniforms/Vector2DataModel.h"
+#include "DataModel/Uniforms/Vector4DataModel .h"
 #include "DataModel/Math/AdditionDataModel.h"
 #include "DataModel/Math/SubstractionDataModel.h"
 #include "DataModel/Math/MultiplicationDataModel.h"
@@ -43,7 +45,9 @@ namespace Studio
         // variables
         ret->registerModel<SharedUniformDataModel>("Uniforms");
         ret->registerModel<FloatDataModel>("Uniforms");
+        ret->registerModel<Vector2DataModel>("Uniforms");
         ret->registerModel<Vector3DataModel>("Uniforms");
+        ret->registerModel<Vector4DataModel>("Uniforms");
         ret->registerModel<ColorDataModel>("Uniforms");
         ret->registerModel<TextureDataModel>("Uniforms");
 

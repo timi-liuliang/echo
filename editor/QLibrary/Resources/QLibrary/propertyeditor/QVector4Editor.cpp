@@ -1,5 +1,5 @@
 #include <QPainter>
-#include "QVector2Editor.h"
+#include "QVector4Editor.h"
 #include "QPropertyModel.h"
 #include <engine/core/math/Vector3.h>
 #include <engine/core/util/StringUtil.h>
@@ -7,7 +7,7 @@
 
 namespace QT_UI
 {
-	QVector2Editor::QVector2Editor(QPropertyModel* model, QString propertyName, QWidget* parent)
+	QVector4Editor::QVector4Editor(QPropertyModel* model, QString propertyName, QWidget* parent)
 		: QWidget(parent)
 		, m_propertyModel(model)
 		, m_propertyName(propertyName)
@@ -35,37 +35,65 @@ namespace QT_UI
 		m_lineEditY->setObjectName(QString::fromUtf8("lineEditY"));
 		m_horizonLayout->addWidget(m_lineEditY);
 
+		m_labelZ = new QLabel(this);
+		m_labelZ->setObjectName(QString::fromUtf8("labelZ"));
+		m_labelZ->setText("z");
+		m_horizonLayout->addWidget(m_labelZ);
+
+		m_lineEditZ = new QLineEdit(this);
+		m_lineEditZ->setObjectName(QString::fromUtf8("lineEditZ"));
+		m_horizonLayout->addWidget(m_lineEditZ);
+
+		m_labelW = new QLabel(this);
+		m_labelW->setObjectName(QString::fromUtf8("labelW"));
+		m_labelW->setText("w");
+		m_horizonLayout->addWidget(m_labelW);
+
+		m_lineEditW = new QLineEdit(this);
+		m_lineEditW->setObjectName(QString::fromUtf8("lineEditZ"));
+		m_horizonLayout->addWidget(m_lineEditW);
+
 		QObject::connect(m_lineEditX, SIGNAL(returnPressed()), this, SLOT(onEditFinished()));
 		QObject::connect(m_lineEditY, SIGNAL(returnPressed()), this, SLOT(onEditFinished()));
+		QObject::connect(m_lineEditZ, SIGNAL(returnPressed()), this, SLOT(onEditFinished()));
+		QObject::connect(m_lineEditW, SIGNAL(returnPressed()), this, SLOT(onEditFinished()));
 
 		QObject::connect(m_lineEditX, SIGNAL(textEdited(const QString&)), this, SLOT(onEditing()));
 		QObject::connect(m_lineEditY, SIGNAL(textEdited(const QString&)), this, SLOT(onEditing()));
+		QObject::connect(m_lineEditZ, SIGNAL(textEdited(const QString&)), this, SLOT(onEditing()));
+		QObject::connect(m_lineEditW, SIGNAL(textEdited(const QString&)), this, SLOT(onEditing()));
 	}
 
 	// set value
-	void QVector2Editor::setValue(const QString& val)
+	void QVector4Editor::setValue(const QString& val)
 	{
-		Echo::String vec3Str = val.toStdString().c_str();
-		Echo::Vector2 result = Echo::StringUtil::ParseVec2(vec3Str);
+		Echo::String vec4Str = val.toStdString().c_str();
+		Echo::Vector4 result = Echo::StringUtil::ParseVec4(vec4Str);
 
 		m_lineEditX->setText(Echo::StringUtil::ToString(result.x).c_str());
 		m_lineEditY->setText(Echo::StringUtil::ToString(result.y).c_str());
+		m_lineEditZ->setText(Echo::StringUtil::ToString(result.z).c_str());
+		m_lineEditW->setText(Echo::StringUtil::ToString(result.w).c_str());
 	}
 
-	Echo::Vector2 QVector2Editor::getValue()
+	Echo::Vector4 QVector4Editor::getValue()
 	{
 		Echo::String xText = m_lineEditX->text().toStdString().c_str();
 		Echo::String yText = m_lineEditY->text().toStdString().c_str();
+		Echo::String zText = m_lineEditZ->text().toStdString().c_str();
+		Echo::String wText = m_lineEditW->text().toStdString().c_str();
 
-		Echo::Vector2 result;
+		Echo::Vector4 result;
 		result.x = Echo::StringUtil::ParseFloat(xText);
 		result.y = Echo::StringUtil::ParseFloat(yText);
+		result.z = Echo::StringUtil::ParseFloat(zText);
+		result.w = Echo::StringUtil::ParseFloat(wText);
 
 		return result;
 	}
 
 	// redefine paintEvent
-	void QVector2Editor::paintEvent(QPaintEvent* event)
+	void QVector4Editor::paintEvent(QPaintEvent* event)
 	{
 		// get label background color
 		QColor background = m_labelX->palette().color(QPalette::Window);
@@ -81,7 +109,7 @@ namespace QT_UI
 	}
 
 	// edit finished
-	void QVector2Editor::onEditFinished()
+	void QVector4Editor::onEditFinished()
 	{
 		using namespace Echo;
 
@@ -89,28 +117,42 @@ namespace QT_UI
 
 		String xText = m_lineEditX->text().toStdString().c_str();
 		String yText = m_lineEditY->text().toStdString().c_str();
+		String zText = m_lineEditZ->text().toStdString().c_str();
+		String wText = m_lineEditW->text().toStdString().c_str();
 		
 		if (inst->execString("__editor_calc_result_x = " + xText) &&
-			inst->execString("__editor_calc_result_y = " + yText))
+			inst->execString("__editor_calc_result_y = " + yText) &&
+			inst->execString("__editor_calc_result_z = " + zText) &&
+			inst->execString("__editor_calc_result_w = " + wText))
 		{
 			float x = inst->getGlobalVariableFloat("__editor_calc_result_x");
 			float y = inst->getGlobalVariableFloat("__editor_calc_result_y");
+			float z = inst->getGlobalVariableFloat("__editor_calc_result_z");
+			float w = inst->getGlobalVariableFloat("__editor_calc_result_w");
 			inst->execString("__editor_calc_result_x = nil");
 			inst->execString("__editor_calc_result_y = nil");
+			inst->execString("__editor_calc_result_z = nil");
+			inst->execString("__editor_calc_result_w = nil");
 
-			Vector2 vec2(x, y);
-			m_propertyModel->setValue(m_propertyName, StringUtil::ToString(vec2).c_str());
+			Vector4 vec4(x, y, z, w);
+			if(m_propertyModel)
+				m_propertyModel->setValue(m_propertyName, StringUtil::ToString(vec4).c_str());
 		}
+
+		emit Signal_ValueChanged();
 	}
 
-	// editing
-	void QVector2Editor::onEditing()
+	void QVector4Editor::onEditing()
 	{
 		if (m_lineEditX == sender())
 		{
 
 		}
 		else if (m_lineEditY == sender())
+		{
+
+		}
+		else if (m_lineEditZ == sender())
 		{
 
 		}
