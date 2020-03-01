@@ -1,4 +1,5 @@
 #include "ShaderCompiler.h"
+#include <engine/core/render/base/glslcc/GLSLCrossCompiler.h>
 
 static const char* g_VsTemplate = R"(#version 450
 
@@ -195,8 +196,14 @@ namespace DataFlowProgramming
 		psCode = Echo::StringUtil::Replace(psCode, "${FS_SHADER_CODE}", m_fsCode.c_str());
 		psCode = Echo::StringUtil::Replace(psCode, "\t", "    ");
 
-		m_finalVsCode = vsCode;
-		m_finalPsCode = psCode;
+		// convert to GLSL
+		Echo::GLSLCrossCompiler glslCompiler;
+
+		// set input
+		glslCompiler.setInput(vsCode.c_str(), psCode.c_str(), nullptr);
+
+		m_finalVsCode = glslCompiler.getOutput(Echo::GLSLCrossCompiler::ShaderLanguage::GLSL, Echo::GLSLCrossCompiler::ShaderType::VS).c_str();
+		m_finalPsCode = glslCompiler.getOutput(Echo::GLSLCrossCompiler::ShaderLanguage::GLSL, Echo::GLSLCrossCompiler::ShaderType::FS).c_str();
 
 		return true;
 	}
@@ -209,6 +216,11 @@ namespace DataFlowProgramming
 	Echo::String ShaderCompiler::getPsCode()
 	{
 		return m_finalPsCode;
+	}
+
+	bool ShaderCompiler::isValid()
+	{
+		return !m_finalVsCode.empty() && !m_finalPsCode.empty();
 	}
 
 	void ShaderCompiler::addMacro(const Echo::String& macroName)

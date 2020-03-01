@@ -114,7 +114,7 @@ namespace Studio
 
             if (m_shaderCompiler.compile())
             {
-				if (m_shaderProgram)
+				if (m_shaderCompiler.isValid() && m_shaderProgram)
 				{
 					Echo::String graph = flowScene->saveToMemory().toStdString().c_str();
 					m_shaderProgram->setGraph(graph);

@@ -20,6 +20,9 @@ namespace DataFlowProgramming
 		Echo::String getVsCode();
 		Echo::String getPsCode();
 
+		// is valid
+		bool isValid();
+
 	public:
 		// add
 		void addMacro(const Echo::String& macroName);

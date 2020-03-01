@@ -382,11 +382,23 @@ namespace Echo
         return std::string();
 	}
     
-    // don't have time implement this function, please learn from glslcc
-    // https://github.com/septag/glslcc/blob/master/src/glslcc.cpp
 	std::string GLSLCrossCompiler::compileSpirvToGlsl(ShaderType shaderType)
 	{
-		//spirv_cross::Compiler* compiler = EchoNew(spirv_cross::CompilerGLSL(getSPIRV(shaderType)));
+		const vector<ui32>::type& spirv = getSPIRV(shaderType);
+		if (!spirv.empty())
+		{
+			spirv_cross::CompilerGLSL compiler(spirv);
+			spirv_cross::ShaderResources       shaderResources = compiler.get_shader_resources();
+
+			// modify options
+			spirv_cross::CompilerGLSL::Options options = compiler.get_common_options();
+			options.flatten_multidimensional_arrays = true;
+			options.es = false;
+			options.version = 450;
+			compiler.set_common_options(options);
+
+			return compiler.compile();
+		}
 
 		return std::string();
 	}
