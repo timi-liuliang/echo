@@ -4,15 +4,15 @@
 
 namespace Echo
 {
-	class PCGModule : public Module
+	class ProceduralModule : public Module
 	{
-		ECHO_SINGLETON_CLASS(PCGModule, Module)
+		ECHO_SINGLETON_CLASS(ProceduralModule, Module)
 
 	public:
-		PCGModule();
+		ProceduralModule();
 
 		// instance
-		static PCGModule* instance();
+		static ProceduralModule* instance();
 
 		// register all types of the module
 		virtual void registerTypes();

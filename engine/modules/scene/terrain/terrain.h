@@ -84,7 +84,6 @@ namespace Echo
         MaterialPtr             m_material;
         MaterialPtr             m_materialDefault;
         Renderable*             m_renderable = nullptr;
-        Matrix4                 m_matWVP;
         i32                     m_columns = 0;
         i32                     m_rows = 0;
 		//TerrainTiles			m_tiles;

@@ -68,6 +68,48 @@ void main(void)
 }
 )";
 
+static const char* g_3dVsCode = R"(
+#version 450
+// uniforms
+layout(binding = 0) uniform UBO
+{
+    mat4 u_WorldMatrix;
+    mat4 u_ViewProjMatrix;
+} vs_ubo;
+
+// inputs
+layout(location = 0) in vec3 a_Position;
+
+// outputs
+layout(location = 0) out vec3 v_Position;
+
+void main(void)
+{
+    vec4 position = vec4(a_Position, 1.0);
+    position = vs_ubo.u_WorldMatrix * position;
+
+    v_Position  = position.xyz;
+    gl_Position = vs_ubo.u_ViewProjMatrix * position;
+}
+)";
+
+static const char* g_3dPsCode = R"(
+#version 450
+
+precision mediump float;
+
+// inputs
+layout(location = 0) in vec3  v_Position;
+
+// outputs
+layout(location = 0) out vec4 o_FragColor;
+
+void main(void)
+{
+    o_FragColor = vec4(0.7, 0.7, 0.7, 1.0);
+}
+)";
+
 namespace Echo
 {
     static bool convert(String& type, String& vsSrc, String& psSrc)
@@ -394,6 +436,32 @@ namespace Echo
 
     ResRef<ShaderProgram> ShaderProgram::getDefault3D(const StringArray& macros)
     {
-        return nullptr;
+		String shaderVirtualPath = "_echo_default_3d_shader_" + StringUtil::ToString(macros);
+		ShaderProgramPtr shader = ECHO_DOWN_CAST<ShaderProgram*>(ShaderProgram::get(shaderVirtualPath));
+		if (!shader)
+		{
+			shader = ECHO_CREATE_RES(ShaderProgram);
+			shader->setMacros(macros);
+
+			// blend state
+			shader->setBlendMode("Transparent");
+
+			// depth state
+			DepthStencilState::DepthStencilDesc depthDesc;
+			depthDesc.bDepthEnable = false;
+			depthDesc.bWriteDepth = false;
+			DepthStencilState* depthState = Renderer::instance()->createDepthStencilState(depthDesc);
+			shader->setDepthState(depthState);
+
+			// reaster state
+			shader->setCullMode("CULL_NONE");
+
+			shader->setPath(shaderVirtualPath);
+			shader->setType("glsl");
+			shader->setVsCode(g_3dVsCode);
+			shader->setPsCode(g_3dPsCode);
+		}
+
+		return shader;
     }
 }
