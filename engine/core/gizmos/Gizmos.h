@@ -31,7 +31,6 @@ namespace Echo
 		struct Batch
 		{
 			Gizmos*			m_gizmos;
-			AABB			m_aabb;
 			VertexArray		m_vertexs;
 			IndiceArray		m_indices;
 			MaterialPtr		m_material;

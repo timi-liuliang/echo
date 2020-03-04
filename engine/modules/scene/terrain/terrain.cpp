@@ -176,7 +176,7 @@ namespace Echo
         define.m_isUseBlendingData = true;
         
         m_mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(ui32), indices.data());
-        m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data(), m_localAABB);
+        m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data());
     }
     
     void Terrain::clear()

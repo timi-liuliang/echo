@@ -209,25 +209,36 @@ namespace Echo
 		}
 	}
 
-	// update vertex data
-	void Mesh::updateVertexs(const MeshVertexFormat& format, ui32 vertCount, const Byte* vertices, const AABB& box)
+	void Mesh::updateVertexs(const MeshVertexFormat& format, ui32 vertCount, const Byte* vertices)
 	{
 		m_vertData.set(format, vertCount);
 		if (vertCount)
 		{
 			// copy data
 			memcpy(m_vertData.getVertices(), vertices, vertCount * m_vertData.getVertexStride());
-			m_box = box;
 
+			// calculate local aabb
+			m_box.reset();
+			for (i32 i = 0; i < m_vertData.getVertexCount(); i++)
+			{
+				m_box.addPoint(m_vertData.getPosition(i));
+			}
+
+			// update vertex buffer
 			buildVertexBuffer();
 		}
 	}
 
-	// update vertex data
-	void Mesh::updateVertexs(const MeshVertexData& vertexData, const AABB& box)
+	void Mesh::updateVertexs(const MeshVertexData& vertexData)
 	{
 		m_vertData = vertexData;
-		m_box = box;
+
+		// calculate local aabb
+		m_box.reset();
+		for (i32 i = 0; i < m_vertData.getVertexCount(); i++)
+		{
+			m_box.addPoint(m_vertData.getPosition(i));
+		}
 
 		buildVertexBuffer();
 	}

@@ -219,7 +219,7 @@ namespace Echo
 
 			m_mesh = Mesh::create(true, true);
 			m_mesh->updateIndices(ui32(m_batch.m_indicesData.size()), sizeof(Word), m_batch.m_indicesData.data());
-			m_mesh->updateVertexs(define, ui32(m_batch.m_verticesData.size()), (const Byte*)m_batch.m_verticesData.data(), AABB());
+			m_mesh->updateVertexs(define, ui32(m_batch.m_verticesData.size()), (const Byte*)m_batch.m_verticesData.data());
             
             StringArray macros;
             m_shader = ShaderProgram::getDefault2D(macros);
@@ -238,7 +238,7 @@ namespace Echo
 			define.m_isUseUV = true;
 
 			m_mesh->updateIndices(ui32(m_batch.m_indicesData.size()), sizeof(Word), m_batch.m_indicesData.data());
-			m_mesh->updateVertexs(define, ui32(m_batch.m_verticesData.size()), (const Byte*)m_batch.m_verticesData.data(), AABB());
+			m_mesh->updateVertexs(define, ui32(m_batch.m_verticesData.size()), (const Byte*)m_batch.m_verticesData.data());
 		}
 	}
 

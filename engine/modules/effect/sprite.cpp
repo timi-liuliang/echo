@@ -140,7 +140,7 @@ namespace Echo
             MeshVertexFormat define;
             define.m_isUseUV = true;
 
-            m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data(), m_localAABB);
+            m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data());
         }
 	}
 

@@ -110,7 +110,7 @@ namespace Echo
 			define.m_isUseVertexColor = true;
 
 			m_mesh->updateIndices((ui32)m_indices.size(), sizeof(Word), m_indices.data());
-			m_mesh->updateVertexs(define, (ui32)m_vertexs.size(), (const Byte*)m_vertexs.data(), m_aabb);
+			m_mesh->updateVertexs(define, (ui32)m_vertexs.size(), (const Byte*)m_vertexs.data());
 
 			m_meshDirty = false;
 		}

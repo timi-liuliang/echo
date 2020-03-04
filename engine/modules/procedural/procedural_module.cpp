@@ -2,6 +2,7 @@
 #include "procedural_texture.h"
 #include "procedural_geometry.h"
 #include "procedural_grid.h"
+#include "procedural_sphere.h"
 #include "procedural_depend_graph.h"
 
 namespace Echo
@@ -29,6 +30,7 @@ namespace Echo
 		Class::registerType<ProceduralTexture>();
         Class::registerType<ProceduralGeometry>();
 		Class::registerType<ProceduralGird>();
+		Class::registerType<ProceduralSphere>();
 
 //		REGISTER_OBJECT_EDITOR(Curve, CurveEditor)
 	}

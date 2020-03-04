@@ -152,7 +152,7 @@ namespace Echo
 	{
 		*(Vector3*)(getVertice(idx) + m_format.m_posOffset) = pos;
 
-		m_aabb.addPoint(pos);
+		//m_aabb.addPoint(pos);
 	}
 
 	void MeshVertexData::setColor(i32 idx, Dword color)
@@ -222,6 +222,6 @@ namespace Echo
 	{
 		m_count = 0;
 		m_vertices.clear();
-		m_aabb.reset();
+		//m_aabb.reset();
 	}
 }

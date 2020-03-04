@@ -103,8 +103,8 @@ namespace Echo
 		void updateIndices(ui32 indicesCount, ui32 indicesStride, const void* indices);
 
 		// update vertex data
-		void updateVertexs(const MeshVertexFormat& format, ui32 vertCount, const Byte* vertices, const AABB& box);
-		void updateVertexs(const MeshVertexData& vertexData, const AABB& box);
+		void updateVertexs(const MeshVertexFormat& format, ui32 vertCount, const Byte* vertices);
+		void updateVertexs(const MeshVertexData& vertexData);
 
 		// clear
 		void clear();

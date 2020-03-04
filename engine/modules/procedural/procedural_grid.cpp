@@ -39,17 +39,19 @@ namespace Echo
 			if (!m_mesh)
 				m_mesh = Mesh::create(true, true);
 
-			i32 columns = 2;
-			i32 rows = 2;
+			i32 columns = 11;
+			i32 rows = 11;
 			if (columns > 0 && rows > 0)
 			{
+				Vector3 basePosition(-0.5f * (rows - 1), 0.f, -0.5f * (columns - 1));
+
 				// vertex buffer
 				for (i32 row = 0; row < rows; row++)
 				{
 					for (i32 column = 0; column < columns; column++)
 					{
 						VertexFormat vert;
-						vert.m_position = Vector3(row, 0.f, column);
+						vert.m_position = Vector3(row, 0.f, column) + basePosition;
 						vert.m_uv = Vector2(row / (rows - 1), column / (columns - 1));
 						vert.m_normal = Vector3::UNIT_Y;
 
@@ -84,12 +86,10 @@ namespace Echo
 			define.m_isUseUV = true;
 
 			m_mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(ui32), indices.data());
-			m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data(), m_localAABB);
+			m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data());
 
 			// calculate aabb
-			m_localAABB.reset();
-			for (VertexFormat& vert : vertices)
-				m_localAABB.addPoint(vert.m_position);
+			m_localAABB = m_mesh->getLocalBox();
 		}
 	}
 }

@@ -119,7 +119,7 @@ namespace Echo
 		Vector3& getTangent(Word index);
 
 		// box
-		const AABB& getAABB() const { return m_aabb; }
+		//const AABB& getAABB() const { return m_aabb; }
 
 		// reset
 		void reset();
@@ -128,6 +128,6 @@ namespace Echo
 		ui32				m_count;
 		MeshVertexFormat	m_format;
 		ByteArray			m_vertices;
-		AABB				m_aabb;
+		//AABB				m_aabb;
 	};
 }
