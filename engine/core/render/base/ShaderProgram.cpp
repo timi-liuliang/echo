@@ -70,6 +70,9 @@ void main(void)
 
 static const char* g_3dVsCode = R"(
 #version 450
+
+#define ENABLE_VERTEX_NORMAL
+
 // uniforms
 layout(binding = 0) uniform UBO
 {
@@ -83,6 +86,11 @@ layout(location = 0) in vec3 a_Position;
 // outputs
 layout(location = 0) out vec3 v_Position;
 
+#ifdef ENABLE_VERTEX_NORMAL
+layout(location = 1) in vec3 a_Normal;
+layout(location = 1) out vec3 v_Normal;
+#endif
+
 void main(void)
 {
     vec4 position = vec4(a_Position, 1.0);
@@ -90,23 +98,60 @@ void main(void)
 
     v_Position  = position.xyz;
     gl_Position = vs_ubo.u_ViewProjMatrix * position;
+
+#ifdef ENABLE_VERTEX_NORMAL
+	v_Normal = normalize(vec3(vs_ubo.u_WorldMatrix * vec4(a_Normal.xyz, 0.0)));
+#endif
 }
 )";
 
 static const char* g_3dPsCode = R"(
 #version 450
 
+#define ENABLE_VERTEX_NORMAL
+
 precision mediump float;
 
 // inputs
 layout(location = 0) in vec3  v_Position;
 
+#ifdef ENABLE_VERTEX_NORMAL
+layout(location = 1) in vec3 v_Normal;
+#endif
+
 // outputs
 layout(location = 0) out vec4 o_FragColor;
 
+// functions
+#define SRGB_FAST_APPROXIMATION
+
+vec3 SRgbToLinear(vec3 srgbIn)
+{
+#ifdef SRGB_FAST_APPROXIMATION
+    return pow(srgbIn,vec3(2.2));
+#else
+    return srgbIn;
+#endif
+}
+
+vec3 LinearToSRgb(vec3 linearIn)
+{
+#ifdef SRGB_FAST_APPROXIMATION
+    return pow(linearIn,vec3(1.0/2.2));
+#else
+    return srgbIn;
+#endif
+}
+
 void main(void)
 {
-    o_FragColor = vec4(0.7, 0.7, 0.7, 1.0);
+	vec3 __BaseColor = SRgbToLinear(vec3(0.75));
+
+    vec3 _lightDir = normalize(vec3(1.0, 1.0, 1.0));
+    vec3 _lightColor = SRgbToLinear(vec3(0.8, 0.8, 0.8));
+    __BaseColor = max(dot(v_Normal, _lightDir), 0.0) * _lightColor * __BaseColor;
+
+    o_FragColor = vec4(__BaseColor.xyz, 1.0);
 }
 )";
 
