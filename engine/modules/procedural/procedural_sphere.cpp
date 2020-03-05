@@ -24,7 +24,7 @@ namespace Echo
 
 		if (!m_mesh)
 		{
-			m_mesh = PCGSphere::buildUvSphere(1.f, 20, 20);
+			m_mesh = PCGSphere::buildUvSphere(1.f, 50, 50);
 
 			m_localAABB = m_mesh->getLocalBox();
 		}

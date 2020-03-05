@@ -148,10 +148,11 @@ void main(void)
 	vec3 __BaseColor = SRgbToLinear(vec3(0.75));
 
     vec3 _lightDir = normalize(vec3(1.0, 1.0, 1.0));
-    vec3 _lightColor = SRgbToLinear(vec3(0.8, 0.8, 0.8));
-    __BaseColor = max(dot(v_Normal, _lightDir), 0.0) * _lightColor * __BaseColor;
+    vec3 _lightColor = SRgbToLinear(vec3(1.2, 1.2, 1.2));
+    vec3 _AmbientColor = SRgbToLinear(vec3(0.4, 0.4, 0.4));
+    __BaseColor = max(dot(v_Normal, _lightDir), 0.0) * _lightColor * __BaseColor + _AmbientColor;
 
-    o_FragColor = vec4(__BaseColor.xyz, 1.0);
+    o_FragColor = vec4(LinearToSRgb(__BaseColor.rgb), 1.0);
 }
 )";
 
@@ -493,8 +494,8 @@ namespace Echo
 
 			// depth state
 			DepthStencilState::DepthStencilDesc depthDesc;
-			depthDesc.bDepthEnable = false;
-			depthDesc.bWriteDepth = false;
+			depthDesc.bDepthEnable = true;
+			depthDesc.bWriteDepth = true;
 			DepthStencilState* depthState = Renderer::instance()->createDepthStencilState(depthDesc);
 			shader->setDepthState(depthState);
 

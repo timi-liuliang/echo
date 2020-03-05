@@ -90,6 +90,10 @@ namespace Studio
 		m_toolBar->addWidget(m_subEditComboBox);
 		QObject::connect(m_subEditComboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(onSubEditChanged(const QString&)));
 
+
+		m_toolBar->addAction(m_actionPlayGame);
+		m_toolBar->addAction(m_actionStopGame);
+
 		// Camera settings
 		//m_toolBar->addAction(m_actionEditorCameraSettings);
 		//QObject::connect(m_actionEditorCameraSettings, SIGNAL(triggered(bool)), this, SLOT(onClickEditorCameraSettings()));
