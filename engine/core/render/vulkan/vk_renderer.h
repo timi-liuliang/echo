@@ -22,7 +22,7 @@ namespace Echo
         static VKRenderer* instance();
 
 		// initialize
-        virtual bool initialize(const Config& config) override;
+        virtual bool initialize(const Settings& config) override;
 
         // get type
         virtual Type getType() { return Renderer::Type::Vulkan; }

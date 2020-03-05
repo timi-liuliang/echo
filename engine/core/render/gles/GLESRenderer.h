@@ -39,7 +39,7 @@ namespace Echo
 		~GLES2Renderer();
 
 		// initialize
-		virtual bool initialize(const Config& config) override;
+		virtual bool initialize(const Settings& config) override;
 
         // get type
         virtual Type getType() override { return Renderer::Type::OpenGLES; }
@@ -58,6 +58,9 @@ namespace Echo
 
 		// draw
 		virtual void draw(Renderable* renderable) override;
+
+		// draw in WireFrame mode
+		bool drawWireframe(Renderable* renderable);
 
 		void getDepthRange(Vector2& vec) override;
 		void convertMatOrho(Matrix4& mat, const Matrix4& matOrth, Real zn, Real zf) override;
@@ -115,7 +118,7 @@ namespace Echo
 		// bind texture to slot
 		void bindTexture(GLenum slot, GLenum target, GLuint texture, bool needReset = false);
 
-		bool initializeImpl(const Config& config);
+		bool initializeImpl(const Settings& config);
 		void destroyImpl();
 		virtual void createSystemResource();
 		virtual void cleanSystemResource();
@@ -136,6 +139,10 @@ namespace Echo
 		NineBoolArray		m_isVertexAttribArrayEnable;
         FrameBuffer*        m_windowFramebuffer = nullptr;
 
+#ifdef ECHO_EDITOR_MODE
+		GPUBuffer*			m_wireFrameIndexBuffer = nullptr;
+#endif
+
 #ifdef ECHO_PLATFORM_WINDOWS
 
 	public:
@@ -143,7 +150,7 @@ namespace Echo
 
 		void* getSurface() const { return m_eglSurface; }
 
-		bool createRenderContext( const Config& config );
+		bool createRenderContext( const Settings& config );
 
 		void destroyRenderContext();
 

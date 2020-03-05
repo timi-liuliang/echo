@@ -30,7 +30,7 @@ namespace Echo
         return g_inst;
     }
 
-    bool VKRenderer::initialize(const Config& config)
+    bool VKRenderer::initialize(const Settings& config)
     {
 		createVkInstance();
 

@@ -153,11 +153,6 @@ namespace Echo
                 }
             }
         }
-        
-        // calc aabb
-        m_localAABB.reset();
-        for (Terrain::VertexFormat& vert : oVertices)
-            m_localAABB.addPoint(vert.m_position);
     }
     
     void Terrain::updateMeshBuffer()
@@ -177,6 +172,8 @@ namespace Echo
         
         m_mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(ui32), indices.data());
         m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data());
+
+        m_localAABB = m_mesh->getLocalBox();
     }
     
     void Terrain::clear()

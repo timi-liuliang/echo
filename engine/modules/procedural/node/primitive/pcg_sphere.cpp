@@ -30,7 +30,7 @@ namespace Echo
 	
 		Mesh* mesh = Mesh::create(true, true);
 
-		float x, y, z, xy;                              // vertex position
+		float x, y, z, xz;                              // vertex position
 		float nx, ny, nz, lengthInv = 1.0f / radius;    // vertex normal
 		float s, t;                                     // vertex texCoord
 
@@ -41,8 +41,8 @@ namespace Echo
 		for (int i = 0; i <= stackCount; ++i)
 		{
 			stackAngle = Math::PI / 2 - i * stackStep;        // starting from pi/2 to -pi/2
-			xy = radius * cosf(stackAngle);             // r * cos(u)
-			z = radius * sinf(stackAngle);              // r * sin(u)
+			xz = radius * cosf(stackAngle);             // r * cos(u)
+			y = radius * sinf(stackAngle);              // r * sin(u)
 
 			// add (sectorCount+1) vertices per stack
 			// the first and last vertices have same position and normal, but different tex coords
@@ -53,8 +53,8 @@ namespace Echo
 				VertexFormat vertex;
 
 				// vertex position (x, y, z)
-				x = xy * cosf(sectorAngle);             // r * cos(u) * cos(v)
-				y = xy * sinf(sectorAngle);             // r * cos(u) * sin(v)
+				x = xz * cosf(sectorAngle);             // r * cos(u) * cos(v)
+				z = xz * sinf(sectorAngle);             // r * cos(u) * sin(v)
 				vertex.m_position = Vector3(x, y, z);
 
 				// normalized vertex normal (nx, ny, nz)

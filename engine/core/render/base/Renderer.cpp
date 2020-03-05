@@ -74,7 +74,7 @@ namespace Echo
 
 	bool Renderer::isFullscreen() const
 	{
-		return m_cfg.m_isFullscreen;
+		return m_settings.m_isFullscreen;
 	}
 
 	RasterizerState* Renderer::getRasterizerState() const

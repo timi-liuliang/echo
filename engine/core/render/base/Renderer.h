@@ -25,12 +25,13 @@ namespace Echo
         };
 
 		// config
-		struct Config
+		struct Settings
 		{
-			ui32	m_windowWidth = 800;
-			ui32	m_windowHeight = 600;
-			bool	m_isFullscreen = false;
-			size_t  m_windowHandle = 0;       // window handle
+			ui32							m_windowWidth = 800;
+			ui32							m_windowHeight = 600;
+			bool							m_isFullscreen = false;
+			size_t							m_windowHandle = 0;								// window handle
+			RasterizerState::PolygonMode	m_polygonMode = RasterizerState::PM_FILL;		// Global Settings
 		};
 
 		static Color BGCOLOR;
@@ -49,7 +50,7 @@ namespace Echo
         virtual Type getType() = 0;
 
 		// initialize
-		virtual bool initialize(const Config& config)=0;
+		virtual bool initialize(const Settings& config)=0;
 
 		// states
 		virtual void setRasterizerState(RasterizerState* pState);
@@ -62,8 +63,11 @@ namespace Echo
 		// is full screen
 		virtual bool isFullscreen() const;
 
-		// get render config
-		const Config& getCfg() const { return m_cfg; }
+		// render config
+		const Settings& getSettings() const { return m_settings; }
+		void setSettings(const Settings& settings) { m_settings = settings; }
+
+		// max stage number
 		virtual ui32 getMaxStageNum() const = 0;
         
         // current states
@@ -144,7 +148,7 @@ namespace Echo
 		ui32 getStartMipmap() const { return m_startMipmap; }
 
 	protected:
-		Config				m_cfg;
+		Settings				m_settings;
 		RasterizerState*	m_rasterizerState = nullptr;
 		DepthStencilState*	m_depthStencilState = nullptr;
 		BlendState*			m_blendState = nullptr;

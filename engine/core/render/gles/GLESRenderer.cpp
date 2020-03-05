@@ -61,9 +61,9 @@ namespace Echo
 		g_renderer = nullptr;
 	}
 
-	bool GLES2Renderer::initialize(const Config& config)
+	bool GLES2Renderer::initialize(const Settings& config)
 	{
-		m_cfg = config;
+		m_settings = config;
 
 		if (!initializeImpl(config))
 			return false;
@@ -73,7 +73,7 @@ namespace Echo
 		return true;
 	}
 
-	bool GLES2Renderer::initializeImpl(const Renderer::Config& config)
+	bool GLES2Renderer::initializeImpl(const Renderer::Settings& config)
 	{
 #ifdef ECHO_PLATFORM_WINDOWS
 		// create render context
@@ -150,7 +150,7 @@ namespace Echo
 
 	void GLES2Renderer::createSystemResource()
 	{
-		m_cfg.m_isFullscreen = true;
+		m_settings.m_isFullscreen = true;
 
 		// set view port
 		Viewport viewport(0, 0, m_screenWidth, m_screenHeight);
@@ -220,8 +220,93 @@ namespace Echo
 		}
 	}
 
+	bool GLES2Renderer::drawWireframe(Renderable* renderable)
+	{
+#ifdef ECHO_EDITOR_MODE
+		if (m_settings.m_polygonMode != RasterizerState::PM_FILL)
+		{
+			Mesh* mesh = renderable->getMesh();
+			if (mesh->getTopologyType() == Mesh::TT_TRIANGLELIST && mesh->getIndexBuffer())
+			{
+				vector<i32>::type newIndices;
+				for (i32 i = 0; i < mesh->getFaceCount(); i++)
+				{
+					i32 v0, v1, v2;
+					if (mesh->getIndexStride() == sizeof(Dword))
+					{
+						v0 = ((i32*)mesh->getIndices())[i * 3 + 0];
+						v1 = ((i32*)mesh->getIndices())[i * 3 + 1];
+						v2 = ((i32*)mesh->getIndices())[i * 3 + 2];
+					}
+					else if (mesh->getIndexStride() == sizeof(Word))
+					{
+						v0 = ((Word*)mesh->getIndices())[i * 3 + 0];
+						v1 = ((Word*)mesh->getIndices())[i * 3 + 1];
+						v2 = ((Word*)mesh->getIndices())[i * 3 + 2];
+					}
+
+					newIndices.push_back(v0);
+					newIndices.push_back(v1);
+					newIndices.push_back(v1);
+					newIndices.push_back(v2);
+					newIndices.push_back(v2);
+					newIndices.push_back(v0);
+				}
+
+				i32 idxCount = newIndices.size();
+				i32 idxStride = sizeof(i32);
+				Buffer indexBuff(idxCount * idxStride, newIndices.data());
+				if (!m_wireFrameIndexBuffer)
+					m_wireFrameIndexBuffer = Renderer::instance()->createIndexBuffer(GPUBuffer::GBU_DYNAMIC, indexBuff);
+				else
+					m_wireFrameIndexBuffer->updateData(indexBuff);
+
+				// draw
+				GLES2Renderable* glesRenderable = (GLES2Renderable*)renderable;
+
+				GLES2ShaderProgram* shaderProgram = ECHO_DOWN_CAST<GLES2ShaderProgram*>(renderable->getMaterial()->getShader());
+				shaderProgram->bind();
+				glesRenderable->bindRenderState();
+				glesRenderable->bindShaderParams();
+				shaderProgram->bindUniforms();
+				shaderProgram->bindRenderable(renderable);
+
+				// set the type of primitive that should be rendered from this vertex buffer
+				GLenum glTopologyType = GLES2Mapping::MapPrimitiveTopology(Mesh::TT_LINELIST);
+
+				//set the index buffer to active in the input assembler
+				if (m_wireFrameIndexBuffer)
+				{
+					// map index type
+					GLenum idxType = GL_UNSIGNED_INT;
+
+					// index offset
+					Byte* idxOffset = 0;
+
+					// bind buffer
+					((GLES2GPUBuffer*)m_wireFrameIndexBuffer)->bindBuffer();
+
+					// draw
+					OGLESDebug(glDrawElements(glTopologyType, idxCount, idxType, idxOffset));
+				}
+
+				shaderProgram->unbind();
+
+				return true;
+			}
+		}
+#endif
+
+		return false;
+	}
+
 	void GLES2Renderer::draw(Renderable* renderable)
 	{
+#ifdef ECHO_EDITOR_MODE
+		if (drawWireframe(renderable))
+			return;
+#endif
+
 		GLES2Renderable* glesRenderable = (GLES2Renderable*)renderable;
 
         GLES2ShaderProgram* shaderProgram = ECHO_DOWN_CAST<GLES2ShaderProgram*>(renderable->getMaterial()->getShader());
@@ -438,7 +523,7 @@ namespace Echo
 
 #ifdef ECHO_PLATFORM_WINDOWS
 
-	bool GLES2Renderer::createRenderContext(const Renderer::Config& config)
+	bool GLES2Renderer::createRenderContext(const Renderer::Settings& config)
 	{
 		m_hWnd = (HWND)config.m_windowHandle;
 		m_hDC = GetDC(m_hWnd);
