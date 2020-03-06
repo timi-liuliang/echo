@@ -24,52 +24,25 @@ namespace DataFlowProgramming
 		m_additionRules.push_back(OperationRule(true, "color", "color", "vec4"));
 
 		// subtraction
-		m_substractionRules.push_back(OperationRule(true, "float", "float", "float"));
-		m_substractionRules.push_back(OperationRule(true, "float", "vec2", "vec2"));
-		m_substractionRules.push_back(OperationRule(true, "float", "vec3", "vec3"));
-		m_substractionRules.push_back(OperationRule(true, "float", "vec4", "vec4"));
-		m_substractionRules.push_back(OperationRule(true, "float", "color", "vec4"));
-
-		m_substractionRules.push_back(OperationRule(true, "vec2", "vec2", "vec2"));
-		m_substractionRules.push_back(OperationRule(true, "vec3", "vec3", "vec3"));
-		m_substractionRules.push_back(OperationRule(true, "vec4", "vec4", "vec4"));
-		m_substractionRules.push_back(OperationRule(true, "vec4", "color", "vec4"));
-
-		m_substractionRules.push_back(OperationRule(true, "color", "color", "vec4"));
+		m_substractionRules = m_additionRules;
 
 		// multiplication
-		m_multiplicationRules.push_back(OperationRule(true, "float", "float", "float"));
-		m_multiplicationRules.push_back(OperationRule(true, "float", "vec2", "vec2"));
-		m_multiplicationRules.push_back(OperationRule(true, "float", "vec3", "vec3"));
-		m_multiplicationRules.push_back(OperationRule(true, "float", "vec4", "vec4"));
-		m_multiplicationRules.push_back(OperationRule(true, "float", "color", "vec4"));
-
-		m_multiplicationRules.push_back(OperationRule(true, "vec2", "vec2", "vec2"));
-		m_multiplicationRules.push_back(OperationRule(true, "vec3", "vec3", "vec3"));
-		m_multiplicationRules.push_back(OperationRule(true, "vec4", "vec4", "vec4"));
-		m_multiplicationRules.push_back(OperationRule(true, "vec4", "color", "vec4"));
-
-		m_multiplicationRules.push_back(OperationRule(true, "color", "color", "vec4"));
+		m_multiplicationRules = m_additionRules;
 
 		// division
-		m_divisionRules.push_back(OperationRule(true, "float", "float", "float"));
-		m_divisionRules.push_back(OperationRule(true, "float", "vec2", "vec2"));
-		m_divisionRules.push_back(OperationRule(true, "float", "vec3", "vec3"));
-		m_divisionRules.push_back(OperationRule(true, "float", "vec4", "vec4"));
-		m_divisionRules.push_back(OperationRule(true, "float", "color", "vec4"));
-
-		m_divisionRules.push_back(OperationRule(true, "vec2", "vec2", "vec2"));
-		m_divisionRules.push_back(OperationRule(true, "vec3", "vec3", "vec3"));
-		m_divisionRules.push_back(OperationRule(true, "vec4", "vec4", "vec4"));
-		m_divisionRules.push_back(OperationRule(true, "vec4", "color", "vec4"));
-
-		m_divisionRules.push_back(OperationRule(true, "color", "color", "vec4"));
+		m_divisionRules = m_additionRules;
 
 		// dot product
 		m_dotProductRules.push_back(OperationRule(true, "vec3", "vec3", "float"));
 
 		// cross product
 		m_crossProductRules.push_back(OperationRule(true, "vec3", "vec3", "vec3"));
+
+		// min rules
+		m_minRules = m_additionRules;
+
+		// max rules
+		m_maxRules = m_additionRules;
 	}
 
 	OperationRules::~OperationRules()
@@ -121,6 +94,20 @@ namespace DataFlowProgramming
 	std::shared_ptr<ShaderData> OperationRules::NewCrossProductOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel)
 	{
 		Echo::String outputType = getOutput(inputA, inputB, m_crossProductRules);
+
+		return NewShaderData(outputType, dataModel);
+	}
+
+	std::shared_ptr<ShaderData> OperationRules::NewMinOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel)
+	{
+		Echo::String outputType = getOutput(inputA, inputB, m_minRules);
+
+		return NewShaderData(outputType, dataModel);
+	}
+
+	std::shared_ptr<ShaderData> OperationRules::NewMaxOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel)
+	{
+		Echo::String outputType = getOutput(inputA, inputB, m_maxRules);
 
 		return NewShaderData(outputType, dataModel);
 	}

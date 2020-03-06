@@ -40,6 +40,16 @@ namespace DataFlowProgramming
         // show menu
         virtual void showMenu(const QPointF& pos) {}
 
+	public:
+		// number ports
+		unsigned int nPorts(PortType portType) const override;
+
+		// get port data type
+		NodeDataType dataType(PortType portType, PortIndex portIndex) const override;
+
+		// get port data
+		std::shared_ptr<NodeData> outData(PortIndex port) override;
+
     public:
 		// validation
         virtual NodeValidationState validationState() const override { return m_modelValidationState; }

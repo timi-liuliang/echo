@@ -21,6 +21,8 @@
 #include "DataModel/Math/DivisionDataModel.h"
 #include "DataModel/Math/Utils/SplitDataModel.h"
 #include "DataModel/Math/Utils/CombineDataModel.h"
+#include "DataModel/Math/Functions/MaxDataModel.h"
+#include "DataModel/Math/Functions/MinDataModel.h"
 #include "DataModel/Math/Functions/DotProductDataModel.h"
 #include "DataModel/Math/Functions/CrossProductDataModel.h"
 #include "Data/DataFloat.h"
@@ -70,6 +72,8 @@ namespace Studio
         // Math.Functions
 		ret->registerModel<DotProductDataModel>("Math.Functions");
 		ret->registerModel<CrossProductDataModel>("Math.Functions");
+		ret->registerModel<MinDataModel>("Math.Functions");
+		ret->registerModel<MaxDataModel>("Math.Functions");
 
         // Converts
         ret->registerTypeConverter(std::make_pair(DataFloat(nullptr, "").type(), DataAny(nullptr).type()), QtNodes::TypeConverter{ FloatToAny() });

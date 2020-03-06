@@ -504,7 +504,7 @@ namespace Echo
 			shader->setMacros(macros);
 
 			// blend state
-			shader->setBlendMode("Transparent");
+			shader->setBlendMode("Opaque");
 
 			// depth state
 			DepthStencilState::DepthStencilDesc depthDesc;

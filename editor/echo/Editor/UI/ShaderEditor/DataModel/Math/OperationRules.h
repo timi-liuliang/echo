@@ -36,6 +36,8 @@ namespace DataFlowProgramming
 		std::shared_ptr<ShaderData> NewDivisionOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel);
 		std::shared_ptr<ShaderData> NewDotProductOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel);
 		std::shared_ptr<ShaderData> NewCrossProductOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel);
+		std::shared_ptr<ShaderData> NewMinOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel);
+		std::shared_ptr<ShaderData> NewMaxOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel);
 
 	private:
 		// get output
@@ -51,5 +53,7 @@ namespace DataFlowProgramming
 		std::vector<OperationRule>	m_divisionRules;
 		std::vector<OperationRule>	m_dotProductRules;
 		std::vector<OperationRule>	m_crossProductRules;
+		std::vector<OperationRule>	m_minRules;
+		std::vector<OperationRule>	m_maxRules;
 	};
 }
