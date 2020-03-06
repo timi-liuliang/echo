@@ -250,12 +250,16 @@ namespace Echo
 			clearPropertys();
 
 			// create material
-			m_shaderProgram = ECHO_DOWN_CAST<ShaderProgram*>(ShaderProgram::get(m_shaderPath));
+			m_shaderProgram = ShaderProgram::getDefault(m_shaderPath.getPath());
 			if(!m_shaderProgram)
 			{
-				m_shaderProgram = (ShaderProgram*)ShaderProgram::create();
-                m_shaderProgram->setMacros(m_macros);
-                m_shaderProgram->load(m_shaderPath);
+				m_shaderProgram = ECHO_DOWN_CAST<ShaderProgram*>(ShaderProgram::get(m_shaderPath));
+				if (!m_shaderProgram)
+				{
+					m_shaderProgram = (ShaderProgram*)ShaderProgram::create();
+					m_shaderProgram->setMacros(m_macros);
+					m_shaderProgram->load(m_shaderPath);
+				}
 			}
 
 			// match uniforms

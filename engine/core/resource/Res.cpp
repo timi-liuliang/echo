@@ -113,8 +113,10 @@ namespace Echo
 
                 EchoLogError("Res::get file [%s] failed.", path.getPath().c_str());
 			}
-
-			EchoLogError("Res::get file [%s] failed. can't find load method for this type of resource", path.getPath().c_str());
+			else
+			{
+				EchoLogError("Res::get file [%s] failed. can't find load method for this type of resource", path.getPath().c_str());
+			}
 		}
 
 		return nullptr;

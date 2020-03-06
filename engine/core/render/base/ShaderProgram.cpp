@@ -449,6 +449,20 @@ namespace Echo
 		}
 	}
 
+	ResRef<ShaderProgram> ShaderProgram::getDefault(const String& shaderPath)
+	{
+		if (StringUtil::StartWith(shaderPath, "_echo_default_2d_shader_"))
+		{
+			return ShaderProgram::getDefault2D(StringArray());
+		}
+		else if (StringUtil::StartWith(shaderPath, "_echo_default_3d_shader_"))
+		{
+			return ShaderProgram::getDefault3D(StringArray());
+		}
+
+		return nullptr;
+	}
+
     ResRef<ShaderProgram> ShaderProgram::getDefault2D(const StringArray& macros)
     {
         String shaderVirtualPath = "_echo_default_2d_shader_" + StringUtil::ToString(macros);

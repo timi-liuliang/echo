@@ -131,7 +131,7 @@ namespace Echo
         RasterizerState* getRasterizerState();
         void setRasterizerState(RasterizerState* rasterState) { m_rasterizerState = rasterState; }
         
-        // smaple state
+        // sample state
         MultisampleState* getMultisampleState();
         void setMultisampleState(MultisampleState* sampleState) { m_multiSampleState = sampleState; }
 
@@ -149,6 +149,7 @@ namespace Echo
         static Res* create();
         
         // default shader
+		static ResRef<ShaderProgram> getDefault(const String& shaderPath);
         static ResRef<ShaderProgram> getDefault2D(const StringArray& macros);
         static ResRef<ShaderProgram> getDefault3D(const StringArray& macros);
 
