@@ -74,7 +74,7 @@ namespace Echo
 
 	void GLES2Renderable::bindVertexStream()
 	{
-		if (m_mesh && m_material)
+		if (m_mesh && m_material && m_material->getShader())
 		{
 			m_vertexStreams.clear();
 

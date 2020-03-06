@@ -23,6 +23,19 @@ namespace Echo
 			}
 		}
 
+		ResRef(const ResRef<T>& orig)
+		{
+			if (orig.m_ptr)
+			{
+				m_ptr = orig.m_ptr;
+				m_ptr->addRefCount();
+			}
+			else
+			{
+				m_ptr = nullptr;
+			}
+		}
+
 		~ResRef()
 		{
 			reset();

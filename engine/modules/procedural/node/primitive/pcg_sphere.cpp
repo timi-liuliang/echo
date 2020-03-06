@@ -89,25 +89,16 @@ namespace Echo
 				if (i != 0)
 				{
 					indices.push_back(k1);
-					indices.push_back(k1 + 1);
 					indices.push_back(k2);
+					indices.push_back(k1 + 1);
 				}
 
 				if (i != (stackCount - 1))
 				{
 					indices.push_back(k1+1);
-					indices.push_back(k2 + 1);
 					indices.push_back(k2);
+					indices.push_back(k2 + 1);
 				}
-
-				//// vertical lines for all stacks
-				//indices.push_back(k1);
-				//indices.push_back(k2);
-				//if (i != 0)  // horizontal lines except 1st stack
-				//{
-				//	indices.push_back(k1);
-				//	indices.push_back(k1 + 1);
-				//}
 			}
 		}
 

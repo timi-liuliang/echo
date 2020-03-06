@@ -198,13 +198,14 @@ namespace Echo
 
 	void Material::setShaderPath(const ResourcePath& path)
 	{
-		m_shaderPath = path;
-
-		buildShaderProgram();
-
-		if (m_shaderProgram)
+		if (m_shaderPath.setPath(path.getPath(), true))
 		{
-			m_shaderProgram->onShaderChanged.connectClassMethod(this, createMethodBind(&Material::buildShaderProgram));
+			buildShaderProgram();
+
+			if (m_shaderProgram)
+			{
+				m_shaderProgram->onShaderChanged.connectClassMethod(this, createMethodBind(&Material::buildShaderProgram));
+			}
 		}
 	}
 

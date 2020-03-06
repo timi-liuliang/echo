@@ -17,10 +17,10 @@ namespace Echo
 			setPath(path);
 	}
 
-	bool ResourcePath::setPath(const String& path)
+	bool ResourcePath::setPath(const String& path, bool isIgnoreExt)
 	{
 		String ext = PathUtil::GetFileExt(path, true);
-		if (path.empty() || isSupportExt(ext))
+		if (path.empty() || isSupportExt(ext) || isIgnoreExt)
 		{
 			m_path = path;
 			return true;
@@ -35,6 +35,7 @@ namespace Echo
 	{
 		if (m_supportExts.empty())
 			return true;
+
 
 		StringArray exts = StringUtil::Split(m_supportExts, "|");
 		for (const String& supportExt : exts)

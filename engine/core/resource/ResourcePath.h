@@ -13,7 +13,7 @@ namespace Echo
 		ResourcePath(const String& path, const char* exts = nullptr);
 		~ResourcePath() {}
 
-		bool setPath(const String& path);
+		bool setPath(const String& path, bool isIgnoreExt=false);
 		const String& getPath() const { return m_path; }
 
 		const String& getSupportExts() const { return m_supportExts; }
