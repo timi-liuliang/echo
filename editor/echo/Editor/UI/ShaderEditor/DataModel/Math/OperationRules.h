@@ -29,6 +29,9 @@ namespace DataFlowProgramming
 		static OperationRules& instance();
 
 	public:
+		// new shaderData
+		std::shared_ptr<ShaderData> NewShaderData(const Echo::String& type, ShaderDataModel* dataModel);
+
 		// addition
 		std::shared_ptr<ShaderData> NewAdditionOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel);
 		std::shared_ptr<ShaderData> NewSubstractionOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel);
@@ -43,9 +46,6 @@ namespace DataFlowProgramming
 	private:
 		// get output
 		Echo::String getOutput(const Echo::String& inputA, const Echo::String& inputB, const std::vector<OperationRule>& rules);
-
-		// new shaderData
-		std::shared_ptr<ShaderData> NewShaderData(const Echo::String& type, ShaderDataModel* dataModel);
 
 	private:
 		std::vector<OperationRule>	m_additionRules;

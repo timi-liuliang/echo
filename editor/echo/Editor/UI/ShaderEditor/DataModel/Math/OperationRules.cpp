@@ -46,10 +46,10 @@ namespace DataFlowProgramming
 
 		// pow rules
 		m_powRules.push_back(OperationRule(false, "float", "float", "float"));
-		m_additionRules.push_back(OperationRule(false, "vec2", "float", "vec2"));
-		m_additionRules.push_back(OperationRule(false, "vec3", "float", "vec3"));
-		m_additionRules.push_back(OperationRule(false, "vec4", "float", "vec4"));
-		m_additionRules.push_back(OperationRule(false, "color", "float", "vec4"));
+		m_powRules.push_back(OperationRule(false, "vec2", "vec2", "vec2"));
+		m_powRules.push_back(OperationRule(false, "vec3", "vec3", "vec3"));
+		m_powRules.push_back(OperationRule(false, "vec4", "vec4", "vec4"));
+		m_powRules.push_back(OperationRule(false, "color", "vec4", "vec4"));
 	}
 
 	OperationRules::~OperationRules()

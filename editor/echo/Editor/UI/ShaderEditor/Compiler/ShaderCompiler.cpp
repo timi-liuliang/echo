@@ -178,15 +178,16 @@ namespace DataFlowProgramming
 
 		m_macros.clear();
 		m_fsUniforms.clear();
+		m_fsUniformsCode.clear();
 		m_fsTextureUniforms.clear();
 		m_fsCode.clear();
 	}
 
 	bool ShaderCompiler::compile()
 	{
-		if (!m_fsUniforms.empty())
+		if (!m_fsUniformsCode.empty())
 		{
-			m_fsUniforms = "layout(binding = 0) uniform UBO \n{\n" + m_fsUniforms + "} fs_ubo;";
+			m_fsUniformsCode = "layout(binding = 0) uniform UBO \n{\n" + m_fsUniformsCode + "} fs_ubo;";
 		}
 
 		Echo::String vsCode = g_VsTemplate;
@@ -195,7 +196,7 @@ namespace DataFlowProgramming
 
 		Echo::String psCode = g_PsTemplate;
 		psCode = Echo::StringUtil::Replace(psCode, "${FS_MACROS}", m_macros.c_str());
-		psCode = Echo::StringUtil::Replace(psCode, "${FS_UNIFORMS}", m_fsUniforms.c_str());
+		psCode = Echo::StringUtil::Replace(psCode, "${FS_UNIFORMS}", m_fsUniformsCode.c_str());
 		psCode = Echo::StringUtil::Replace(psCode, "${FS_TEXTURE_UNIFORMS}", m_fsTextureUniforms.c_str());
 		psCode = Echo::StringUtil::Replace(psCode, "${FS_SHADER_CODE}", m_fsCode.c_str());
 		psCode = Echo::StringUtil::Replace(psCode, "\t", "    ");
@@ -235,9 +236,22 @@ namespace DataFlowProgramming
 		}
 	}
 
-	void ShaderCompiler::addUniform(const Echo::String& codeChunk)
+	void ShaderCompiler::addUniform(const Echo::String& type, const Echo::String& name)
 	{
-		m_fsUniforms += codeChunk;
+		for (const Uniform& uniform : m_fsUniforms)
+		{
+			if (uniform.m_name == name && uniform.m_type == type)
+				return;
+		}
+
+		m_fsUniforms.push_back(Uniform(type, name));
+
+		// refresh code
+		m_fsUniformsCode.clear();
+		for (const Uniform& uniform : m_fsUniforms)
+		{
+			m_fsUniformsCode += Echo::StringUtil::Format("\t%s %s;\n", uniform.m_type.c_str(), uniform.m_name.c_str());
+		}
 	}
 
 	void ShaderCompiler::addTextureUniform(const Echo::String& uniformName)
