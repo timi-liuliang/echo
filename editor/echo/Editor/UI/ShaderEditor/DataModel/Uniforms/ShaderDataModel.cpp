@@ -20,16 +20,12 @@ namespace DataFlowProgramming
 
 	unsigned int ShaderDataModel::nPorts(PortType portType) const
 	{
-		unsigned int result = 1;
-
 		switch (portType)
 		{
-		case PortType::In: result = m_inputs.size(); break;
-		case PortType::Out:result = m_outputs.size(); break;
-		default:                       break;
+		case PortType::In: return m_inputs.size();
+		case PortType::Out:return m_outputs.size();
+		default:           return 0;
 		}
-
-		return result;
 	}
 
 	NodeDataType ShaderDataModel::dataType(PortType portType, PortIndex portIndex) const

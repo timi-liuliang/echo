@@ -43,15 +43,6 @@ namespace DataFlowProgramming
         virtual void restore(QJsonObject const &p) override;
 
     public:
-        // number ports
-        unsigned int nPorts(PortType portType) const override;
-
-        // get port data type
-        NodeDataType dataType(PortType portType, PortIndex portIndex) const override;
-
-        // get port data
-        std::shared_ptr<NodeData> outData(PortIndex port) override;
-
         // when input changed
         void setInData(std::shared_ptr<NodeData> nodeData, PortIndex port) override;
 
