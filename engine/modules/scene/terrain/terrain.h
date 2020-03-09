@@ -80,9 +80,7 @@ namespace Echo
 		float					m_heightRange = 256.f;
 		i32						m_gridSpacing = 1;
         Mesh*                   m_mesh = nullptr;
-        ShaderProgramPtr        m_shader;
         MaterialPtr             m_material;
-        MaterialPtr             m_materialDefault;
         Renderable*             m_renderable = nullptr;
         i32                     m_columns = 0;
         i32                     m_rows = 0;

@@ -82,20 +82,20 @@ namespace Echo
             clearRenderable();
             
             // make sure one material is valid
-            if(!m_material && !m_materialDefault)
+            if(!m_material)
             {
-                m_shader = TerrainMaterial::getDefaultShader();
+                ShaderProgramPtr shader = ShaderProgram::getDefault3D(StringArray());
                 
                 // material
-                m_materialDefault = ECHO_CREATE_RES(Material);
-                m_materialDefault->setShaderPath(m_shader->getPath());
+                m_material = ECHO_CREATE_RES(Material);
+                m_material->setShaderPath(shader->getPath());
             }
             
             // mesh
 			updateMeshBuffer();
             
 			// create renderable
-            m_renderable = Renderable::create(m_mesh, m_material ? m_material : m_materialDefault, this);
+            m_renderable = Renderable::create(m_mesh, m_material, this);
             
             m_isRenderableDirty = false;
         }
@@ -124,7 +124,7 @@ namespace Echo
                     vert.m_position = Vector3(row * m_gridSpacing, getHeight(row, column), column * m_gridSpacing);
                     vert.m_uv = Vector2(row, column);
                     vert.m_normal = getNormal(row, column);
-                    vert.m_layerIndices = Color(1, 2, 3, 4).getABGR();
+                    vert.m_layerIndices = Color(0, 1, 2, 3).getABGR();
 
                     float weight = Math::IntervalRandom(0.f, 1.f);
                     vert.m_layerWeights = Vector4(weight, 1.f-weight, 0.f, 0.f);
