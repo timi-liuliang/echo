@@ -20,8 +20,8 @@ namespace Echo
     
     void Terrain::bindMethods()
     {
-        CLASS_BIND_METHOD(Terrain, getHeightmap,     DEF_METHOD("getHeightmap"));
-        CLASS_BIND_METHOD(Terrain, setHeightmap,     DEF_METHOD("setHeightmap"));
+        CLASS_BIND_METHOD(Terrain, getDataPath,     DEF_METHOD("getDataPath"));
+        CLASS_BIND_METHOD(Terrain, setDataPath,     DEF_METHOD("setDataPath"));
         CLASS_BIND_METHOD(Terrain, getColumns,       DEF_METHOD("getColumns"));
         CLASS_BIND_METHOD(Terrain, getRows,          DEF_METHOD("getRows"));
 		CLASS_BIND_METHOD(Terrain, getHeightRange,   DEF_METHOD("getHeightRange"));
@@ -31,18 +31,18 @@ namespace Echo
         CLASS_BIND_METHOD(Terrain, getMaterial,      DEF_METHOD("getMaterial"));
         CLASS_BIND_METHOD(Terrain, setMaterial,      DEF_METHOD("setMaterial"));
         
-        CLASS_REGISTER_PROPERTY(Terrain, "Heightmap", Variant::Type::ResourcePath, "getHeightmap", "setHeightmap");
+        CLASS_REGISTER_PROPERTY(Terrain, "Data", Variant::Type::ResourcePath, "getDataPath", "setDataPath");
 		CLASS_REGISTER_PROPERTY(Terrain, "HeightRange", Variant::Type::Real, "getHeightRange", "setHeightRange");
 		CLASS_REGISTER_PROPERTY(Terrain, "GridSpacing", Variant::Type::Int, "getGridSpacing", "setGridSpacing");
         CLASS_REGISTER_PROPERTY(Terrain, "Material", Variant::Type::Object, "getMaterial", "setMaterial");
         CLASS_REGISTER_PROPERTY_HINT(Terrain, "Material", PropertyHintType::ResourceType, "Material");
     }
     
-    void Terrain::setHeightmap(const ResourcePath& path)
+    void Terrain::setDataPath(const ResourcePath& path)
     {
-        if (m_heightmap.setPath(path.getPath()))
+        if (m_dataPath.setPath(path.getPath()))
         {
-            m_heightmapImage = Image::loadFromFile( path.getPath());
+            m_heightmapImage = Image::loadFromFile( m_dataPath.getPath() + "heightmap.png");
             if (m_heightmapImage)
             {
                 m_columns = m_heightmapImage->getWidth();

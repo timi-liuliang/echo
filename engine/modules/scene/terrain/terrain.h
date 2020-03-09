@@ -31,8 +31,8 @@ namespace Echo
         virtual ~Terrain();
         
         // font res path
-        void setHeightmap(const ResourcePath& path);
-        const ResourcePath& getHeightmap() { return m_heightmap; }
+        void setDataPath(const ResourcePath& path);
+        const ResourcePath& getDataPath() { return m_dataPath; }
         
         // width height
         i32 getColumns() const { return m_columns; }
@@ -75,7 +75,7 @@ namespace Echo
         
     private:
         bool                    m_isRenderableDirty = true;
-        ResourcePath            m_heightmap = ResourcePath("", "");
+        ResourcePath            m_dataPath = ResourcePath("", "");
         Image*                  m_heightmapImage = nullptr;
 		float					m_heightRange = 256.f;
 		i32						m_gridSpacing = 1;
