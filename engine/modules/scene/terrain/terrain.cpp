@@ -40,15 +40,36 @@ namespace Echo
     
     void Terrain::setDataPath(const ResourcePath& path)
     {
+        EchoSafeDelete(m_heightmapImage, Image);
+        EchoSafeDeleteContainer(m_layerImages, Image);
+
         if (m_dataPath.setPath(path.getPath()))
         {
-            m_heightmapImage = Image::loadFromFile( m_dataPath.getPath() + "heightmap.png");
-            if (m_heightmapImage)
+            String heightmapPath = m_dataPath.getPath() + "heightmap.png";
+            if (IO::instance()->isExist(heightmapPath))
             {
-                m_columns = m_heightmapImage->getWidth();
-                m_rows = m_heightmapImage->getHeight();
+				m_heightmapImage = Image::loadFromFile(heightmapPath);
+				if (m_heightmapImage)
+				{
+					m_columns = m_heightmapImage->getWidth();
+					m_rows = m_heightmapImage->getHeight();
 
-                m_isRenderableDirty = true;
+					m_isRenderableDirty = true;
+				}
+            }
+
+            for (i32 i = 0; i < 4; i++)
+            {
+                String layerImagePath = m_dataPath.getPath() + StringUtil::Format("layer_%i.png", i);
+                if (IO::instance()->isExist(layerImagePath))
+                {
+					Image* layerImage = Image::loadFromFile(layerImagePath);
+					m_layerImages.push_back(layerImage);
+                }
+                else
+                {
+                    m_layerImages.push_back(nullptr);
+                }
             }
         }
     }
@@ -126,7 +147,7 @@ namespace Echo
                     vert.m_layerIndices = Color(0, 1, 2, 3).getABGR();
 
                     float weight = Math::IntervalRandom(0.f, 1.f);
-                    vert.m_layerWeights = Vector4(weight, 1.f-weight, 0.f, 0.f);
+                    vert.m_layerWeights = Vector4(getWeight(row, column, 0), getWeight(row, column, 1), getWeight(row, column, 2), getWeight(row, column, 3));
                     oVertices.push_back(vert);
                 }
             }
@@ -219,4 +240,20 @@ namespace Echo
 
         return Vector3::UNIT_Y;
     }
+
+    float Terrain::getWeight(i32 x, i32 z, i32 index)
+    {
+        if (m_layerImages[index])
+        {
+			i32 column = Math::Clamp(x, 0, m_columns - 1);
+			i32 row = Math::Clamp(z, 0, m_rows - 1);
+			Color color = m_layerImages[index]->getColor(column, row, 0);
+			float height = (color.r * 2.f - 1.f) * m_heightRange;
+
+			return height;
+        }
+
+        return 0.f;
+    }
 }
+

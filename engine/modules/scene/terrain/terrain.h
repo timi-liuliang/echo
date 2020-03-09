@@ -55,6 +55,9 @@ namespace Echo
         
         // get normal
         Vector3 getNormal(i32 x, i32 z);
+
+        // get weight
+        float getWeight(i32 x, i32 z, i32 index);
         
     protected:
         // build drawable
@@ -77,6 +80,7 @@ namespace Echo
         bool                    m_isRenderableDirty = true;
         ResourcePath            m_dataPath = ResourcePath("", "");
         Image*                  m_heightmapImage = nullptr;
+        vector<Image*>::type    m_layerImages;
 		float					m_heightRange = 256.f;
 		i32						m_gridSpacing = 1;
         Mesh*                   m_mesh = nullptr;
