@@ -58,17 +58,22 @@ namespace Studio
 		return m_selectedDir + m_fileNameLine->text().toStdString().c_str() + m_supportExts; 
 	}
 
+	Echo::String PathChooseDialog::getSelectPath() const
+	{
+		return m_selectedDir;
+	}
+
 	QString PathChooseDialog::getExistingPath(QWidget* parent)
 	{
 		QString selectFile;
 
 		PathChooseDialog* dialog = new PathChooseDialog(parent, "none");
-		dialog->setFileNameVisible(false);
+		dialog->setSelectingType(SelectingType::Folder);
 		dialog->setWindowModality( Qt::WindowModal);
 		dialog->show();
 		if( dialog->exec()==QDialog::Accepted)
 		{
-			selectFile = dialog->getSelectFile().c_str();
+			selectFile = dialog->getSelectPath().c_str();
 		}
 
 		delete dialog;
@@ -78,7 +83,7 @@ namespace Studio
 	QString PathChooseDialog::getExistingPathName(QWidget* parent, const char* ext, const char* title)
 	{
 		PathChooseDialog dialog(parent, ext);
-		dialog.setFileNameVisible(true);
+		dialog.setSelectingType(SelectingType::File);
 		dialog.setWindowModality(Qt::WindowModal);
 		dialog.setWindowTitle(title);
 		if (dialog.exec() == QDialog::Accepted)
@@ -92,10 +97,23 @@ namespace Studio
 		return "";
 	}
 
-	void PathChooseDialog::setFileNameVisible(bool _val)
+	void PathChooseDialog::setSelectingType(PathChooseDialog::SelectingType type)
 	{
-		m_fileNameLine->setVisible(_val);
-		m_fileName->setVisible(_val);
+		m_selectingType = type;
+		if (m_selectingType == SelectingType::File)
+		{
+			m_fileNameLine->setVisible(true);
+			m_fileName->setVisible(true);
+			m_labelType->setVisible(true);
+			m_comboBoxExts->setVisible(true);
+		}
+		else
+		{
+			m_fileNameLine->setVisible(false);
+			m_fileName->setVisible(false);
+			m_labelType->setVisible(false);
+			m_comboBoxExts->setVisible(false);
+		}
 	}
 
 	void PathChooseDialog::onSelectDir(const char* dir)
@@ -106,6 +124,11 @@ namespace Studio
 		m_previewHelper->setPath(dir, m_supportExts.c_str(), isIncludePreDir);
 
 		m_selectedDir = dir;
+
+		if (m_selectingType==Folder)
+		{
+			m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+		}
 	}
 
 	void PathChooseDialog::onDoubleClickPreviewRes(const char* res)
@@ -123,13 +146,16 @@ namespace Studio
 
 	void PathChooseDialog::onFileNameChanged()
 	{
-		if (m_fileNameLine->text().isEmpty())
+		if (m_selectingType==File)
 		{
-			m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
-		}
-		else
-		{
-			m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+			if (m_fileNameLine->text().isEmpty())
+			{
+				m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+			}
+			else
+			{
+				m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+			}
 		}
 	}
 }

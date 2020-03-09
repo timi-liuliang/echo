@@ -18,13 +18,11 @@ namespace QT_UI
 	public:
 		QResEditor(class QPropertyModel* model, QString propertyName, const char* resType, QWidget* parent);
 
-		// 设置路径
+		// Id
 		void SetId( QString text) { m_lineEdit->setText( text);  }
-
-		// 获取路径
 		QString GetId() { return m_lineEdit->text(); }
 
-		// MVC渲染
+		// MVC Paint
 		static bool ItemDelegatePaint(QPainter *painter, const QRect& rect, const Echo::String& val);
 
 	protected:
@@ -38,7 +36,7 @@ namespace QT_UI
 		void adjustHeightSize();
 
 	private slots:
-		// 选择路径
+		// show menu
 		void onShowMenu();
 
 		// edit finished

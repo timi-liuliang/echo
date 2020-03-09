@@ -75,7 +75,7 @@ namespace Echo
         
     private:
         bool                    m_isRenderableDirty = true;
-        ResourcePath            m_heightmap = ResourcePath("", ".png");
+        ResourcePath            m_heightmap = ResourcePath("", "");
         Image*                  m_heightmapImage = nullptr;
 		float					m_heightRange = 256.f;
 		i32						m_gridSpacing = 1;

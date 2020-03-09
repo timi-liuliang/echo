@@ -2,6 +2,7 @@
 #include <QFileDialog>
 #include "QPropertyModel.h"
 #include "ResChooseDialog.h"
+#include "PathChooseDialog.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/io/IO.h>
 
@@ -9,7 +10,7 @@ namespace QT_UI
 {
 	QResSelect::QResSelect(class QPropertyModel* model, QString propertyName, const char* exts, const char* files, QWidget* parent)
 		: QWidget( parent)
-        , m_exts(exts)
+        , m_exts(exts ? exts : "")
         , m_files(files)
 		, m_propertyModel(model)
 		, m_propertyName(propertyName)
@@ -44,11 +45,27 @@ namespace QT_UI
 
 	void QResSelect::OnSelectPath()
 	{
-		Echo::String qFileName = Studio::ResChooseDialog::getSelectingFile(this, m_exts.c_str(), m_files.toStdString().c_str(), "");
-		if (!qFileName.empty())
+		if (m_exts.empty())
 		{
-			m_lineEdit->setText(qFileName.c_str());
-			onEditFinished();
+			QString qFileName = Studio::PathChooseDialog::getExistingPath(this);
+			if (!qFileName.isEmpty())
+			{
+				Echo::String resPath;
+				if (Echo::IO::instance()->convertFullPathToResPath(qFileName.toStdString().c_str(), resPath))
+				{
+					m_lineEdit->setText(resPath.c_str());
+					onEditFinished();
+				}
+			}
+		}
+		else
+		{
+			Echo::String qFileName = Studio::ResChooseDialog::getSelectingFile(this, m_exts.c_str(), m_files.toStdString().c_str(), "");
+			if (!qFileName.empty())
+			{
+				m_lineEdit->setText(qFileName.c_str());
+				onEditFinished();
+			}
 		}
 	}
 
