@@ -27,7 +27,7 @@ namespace QT_UI
 
 		registerWidget("ColorSelect", true, QColorSelect::ItemDelegatePaint);
 		registerWidget("CheckBox", true, QCheckBoxEditor::ItemDelegatePaint);
-		registerWidget("ResEdit", true, nullptr);
+		registerWidget("ResEdit", true, QResEditor::ItemDelegatePaint);
 		registerWidget("AssetsSelect", true, QResSelect::ItemDelegatePaint);
 		registerWidget("ChannelEditor", true, QChannelEditor::ItemDelegatePaint);
 	}

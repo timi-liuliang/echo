@@ -94,17 +94,29 @@ namespace QT_UI
 
 	bool QResEditor::ItemDelegatePaint(QPainter *painter, const QRect& rect, const Echo::String& val)
 	{
-		Echo::String id = val;
-		//Echo::String fullPath = Echo::IO::instance()->getFullPath(path);
-		//Echo::String ext = Echo::PathUtil::GetFileExt(path, true);
-		//if (Echo::StringUtil::Equal(ext, ".png", false))
-		//{
-		//	QPixmap pixmap(fullPath.c_str());
-		//	QRect tRect = QRect(rect.left() + 3, rect.top() + 2, rect.height() - 4, rect.height() - 4);
-		//	painter->drawPixmap( tRect, pixmap);
-		//}
+		Echo::String text = "None";
 
-		return false;
+		Echo::ui32 id = Echo::StringUtil::ParseI32(val);
+		Echo::Object* obj = Echo::Object::getById(id);
+		if (obj)
+		{
+			Echo::Res* res = ECHO_DOWN_CAST<Echo::Res*>(obj);
+			if (res)
+			{
+				if(res->getPath().empty())
+					text = Echo::StringUtil::Format("%s:[%d]", res->getClassName().c_str(), res->getId());
+				else
+					text = Echo::StringUtil::Format("%s", res->getPath().c_str());
+			}
+		}
+
+		QRect textRect(rect.left() + 3, rect.top() + 3, rect.width() - 6, rect.height() - 6);
+		QFont font = painter->font(); font.setBold(false);
+		painter->setFont(font);
+		painter->setPen(QColor(232, 232, 232));
+		painter->drawText(textRect, Qt::AlignLeft, text.c_str());
+
+		return true;
 	}
 
 	void QResEditor::showMenu(const QPoint& point)
