@@ -1,5 +1,4 @@
 #include "terrain.h"
-#include "terrain_material.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/scene/node_tree.h"
 #include "base/Renderer.h"
