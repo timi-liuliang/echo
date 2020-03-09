@@ -690,6 +690,7 @@ namespace Echo
 					fiBitmap = pNewBitmap;
 					// get new formats
 					bpp = FreeImage_GetBPP(fiBitmap);
+					pSrcData = FreeImage_GetBits(fiBitmap);
 				}
 				// Perform any color conversions for RGB
 				else if(bpp < 8 || fiColorType == FIC_PALETTE || fiColorType == FIC_CMYK)

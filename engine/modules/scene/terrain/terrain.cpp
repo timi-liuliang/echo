@@ -248,7 +248,7 @@ namespace Echo
 			i32 column = Math::Clamp(x, 0, m_columns - 1);
 			i32 row = Math::Clamp(z, 0, m_rows - 1);
 			Color color = m_layerImages[index]->getColor(column, row, 0);
-			float height = (color.r * 2.f - 1.f) * m_heightRange;
+			float height = color.r;
 
 			return height;
         }
