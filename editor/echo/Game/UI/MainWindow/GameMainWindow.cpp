@@ -18,11 +18,10 @@ namespace Game
 		setCentralWidget(m_renderWindow);;
 
 #ifdef ECHO_PLATFORM_WINDOWS
-        // hide window hwnd
-        setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+		setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
 #elif defined(ECHO_PLATFORM_MAC)
-        // set title bar color
-        macChangeTitleBarColor(winId(), 66.f/255.f, 66.f/255.f, 66.f/255.f);
+		setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+		menubar->setNativeMenuBar(false);
 #endif
 
 		// set icon
@@ -47,8 +46,8 @@ namespace Game
 	{
 		Echo::String iconPath = Echo::PathUtil::GetFileDirPath(echoProject);
 
-		setWindowTitle(echoProject.c_str());
-		menubar->setTopLeftCornerIcon((iconPath + "icon.png").c_str());
+		//setWindowTitle(echoProject.c_str());
+		//menubar->setTopLeftCornerIcon((iconPath + "icon.png").c_str());
 
 		m_renderWindow->start(echoProject);
 	}
