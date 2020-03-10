@@ -15,7 +15,6 @@ namespace Game
 
 	}
 
-	// init
 	void App::init(size_t hwnd, const Echo::String& echoProject)
 	{
 		m_log = EchoNew(GameLog("Game"));
@@ -30,7 +29,6 @@ namespace Game
 		Echo::Engine::instance()->tick(elapsedTime);
 	}
 
-	// onSize
 	void App::onSize(Echo::ui32 width, Echo::ui32 height)
 	{
 		Echo::Engine::instance()->onSize(width, height);

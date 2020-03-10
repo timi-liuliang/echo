@@ -9,6 +9,8 @@ namespace Game
 {
 	class GameMainWindow : public QMainWindow, public Ui_GameMainWindow
 	{
+		Q_OBJECT
+
 	public:
 		GameMainWindow(QWidget* parent=0);
 		~GameMainWindow();
@@ -16,11 +18,22 @@ namespace Game
 		// get instance
 		static GameMainWindow* instance();
 
-		// ¿ªÊ¼äÖÈ¾
+		// begin render
 		void start(const Echo::String& echoProject);
 
 		// move to center
 		void moveToCenter();
+
+		// set render window resolution
+		void setRenderWindowSize(Echo::i32 width, Echo::i32 height);
+
+	private:
+		// config window sizes
+		void configWindowSizes();
+
+	private slots:
+		// on switch resolution
+		void onSwitchResolution();
 
 	private:
 		Window*		m_renderWindow;

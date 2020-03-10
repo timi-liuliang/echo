@@ -27,7 +27,9 @@ namespace Game
 		// set icon
 		menubar->setTopLeftCornerIcon(":/icon/Icon/icon.png");
 
-		//resize(800, 490);
+		// windows size
+		configWindowSizes();
+
 		assert(!g_inst);
 		g_inst = this;
 
@@ -56,5 +58,33 @@ namespace Game
 	{
 		move((qApp->desktop()->availableGeometry().width() - width()) / 2 + qApp->desktop()->availableGeometry().x(),
 			(qApp->desktop()->availableGeometry().height() - height()) / 2 + qApp->desktop()->availableGeometry().y());
+	}
+
+	void GameMainWindow::setRenderWindowSize(Echo::i32 width, Echo::i32 height)
+	{
+		Echo::i32 thisW = m_renderWindow->width();
+		Echo::i32 thisH = m_renderWindow->height();
+		Echo::i32 mainW = this->width();
+		Echo::i32 mainH = this->height();
+		Echo::i32 aimW = width;
+		Echo::i32 aimH = height;
+		Echo::i32 mainNewWidth = mainW + (aimW - thisW);
+		Echo::i32 mainNewHeight = mainH + (aimH - thisH);
+
+		resize(mainNewWidth, mainNewHeight);
+		moveToCenter();
+	}
+
+	void GameMainWindow::configWindowSizes()
+	{
+		QAction* Action = new QAction("Deisgn", this);
+		m_menuSize->addAction(Action);
+
+		QObject::connect(Action, SIGNAL(triggered()), this, SLOT(onSwitchResolution()));
+	}
+
+	void GameMainWindow::onSwitchResolution()
+	{
+		setRenderWindowSize(1024, 768);
 	}
 }
