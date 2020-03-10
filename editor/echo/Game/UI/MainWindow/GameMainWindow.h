@@ -12,6 +12,19 @@ namespace Game
 		Q_OBJECT
 
 	public:
+		// Window Size
+		struct WindowSize
+		{
+			Echo::i32		m_width;
+			Echo::i32		m_height;
+			Echo::String	m_displayText;
+
+			WindowSize(Echo::i32 width, Echo::i32 height, const Echo::String& displayText)
+				: m_width(width), m_height(height), m_displayText(displayText)
+			{}
+		};
+
+	public:
 		GameMainWindow(QWidget* parent=0);
 		~GameMainWindow();
 
@@ -33,9 +46,11 @@ namespace Game
 
 	private slots:
 		// on switch resolution
-		void onSwitchResolution();
+		void onSwitchResolutionHorizontal();
+		void onSwitchResolutionVertical();
 
 	private:
-		Window*		m_renderWindow;
+		Window*							m_renderWindow;
+		Echo::vector<WindowSize>::type	m_windowSizes;
 	};
 }

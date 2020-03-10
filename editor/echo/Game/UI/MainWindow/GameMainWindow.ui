@@ -49,6 +49,18 @@
      <property name="title">
       <string>Size</string>
      </property>
+     <widget class="QMenu" name="m_menuHorizontal">
+      <property name="title">
+       <string>Horizontal</string>
+      </property>
+     </widget>
+     <widget class="QMenu" name="m_menuVertical">
+      <property name="title">
+       <string>Vertical</string>
+      </property>
+     </widget>
+     <addaction name="m_menuHorizontal"/>
+     <addaction name="m_menuVertical"/>
     </widget>
     <addaction name="m_menuSize"/>
    </widget>

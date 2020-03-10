@@ -2,6 +2,7 @@
 #include <QDesktopWidget>
 #include "GameMainWindow.h"
 #include "engine/core/util/PathUtil.h"
+#include "engine/core/main/GameSettings.h"
 #include "MacHelper.h"
 
 namespace Game
@@ -27,9 +28,6 @@ namespace Game
 		// set icon
 		menubar->setTopLeftCornerIcon(":/icon/Icon/icon.png");
 
-		// windows size
-		configWindowSizes();
-
 		assert(!g_inst);
 		g_inst = this;
 
@@ -52,6 +50,9 @@ namespace Game
 		//menubar->setTopLeftCornerIcon((iconPath + "icon.png").c_str());
 
 		m_renderWindow->start(echoProject);
+
+		// windows size
+		configWindowSizes();
 	}
 
 	void GameMainWindow::moveToCenter()
@@ -77,14 +78,57 @@ namespace Game
 
 	void GameMainWindow::configWindowSizes()
 	{
-		QAction* Action = new QAction("Deisgn", this);
-		m_menuSize->addAction(Action);
+		m_windowSizes.push_back(WindowSize(Echo::GameSettings::instance()->getWindowWidth(), Echo::GameSettings::instance()->getWindowHeight(), "Design"));
+		m_windowSizes.push_back(WindowSize(320, 568, "iPhoneSE @2x"));
+		m_windowSizes.push_back(WindowSize(375, 667, "iPhone6s iPhone7 iPhone8 @2x"));
+		m_windowSizes.push_back(WindowSize(414, 736, "iPhone6s Plus iPhone7 Plus iPhone8 Plus @3x"));
+		m_windowSizes.push_back(WindowSize(375, 812, "iPhoneX iPhoneXs @3x"));
+		m_windowSizes.push_back(WindowSize(414, 896, "iPhoneXR @2x"));
+		m_windowSizes.push_back(WindowSize(414, 896, "iPhoneXs Max @3x"));
 
-		QObject::connect(Action, SIGNAL(triggered()), this, SLOT(onSwitchResolution()));
+		m_windowSizes.push_back(WindowSize(768, 1024, "iPad Mini, iPad @2x"));
+		m_windowSizes.push_back(WindowSize(834, 1112, "10.5 iPad pro @2x"));
+		m_windowSizes.push_back(WindowSize(834, 1194, "11 iPad pro @2x"));
+		m_windowSizes.push_back(WindowSize(1024, 1366,"12.9 iPad pro @2x"));
+
+		// Horizontal
+		for (size_t i = 0; i < m_windowSizes.size(); i++)
+		{
+			QAction* action = new QAction(Echo::StringUtil::Format("%s [%dx%d]", m_windowSizes[i].m_displayText.c_str(), m_windowSizes[i].m_height, m_windowSizes[i].m_width).c_str(), this);
+			action->setData(i);
+			m_menuHorizontal->addAction(action);
+
+			QObject::connect(action, SIGNAL(triggered()), this, SLOT(onSwitchResolutionHorizontal()));
+		}
+
+		// Vertical
+		for (size_t i=0; i<m_windowSizes.size(); i++)
+		{
+			QAction* action = new QAction(Echo::StringUtil::Format("%s [%dx%d]", m_windowSizes[i].m_displayText.c_str(), m_windowSizes[i].m_width, m_windowSizes[i].m_height).c_str(), this);
+			action->setData(i);
+			m_menuVertical->addAction(action);
+
+			QObject::connect(action, SIGNAL(triggered()), this, SLOT(onSwitchResolutionVertical()));
+		}
 	}
 
-	void GameMainWindow::onSwitchResolution()
+	void GameMainWindow::onSwitchResolutionHorizontal()
 	{
-		setRenderWindowSize(1024, 768);
+		QAction* action = qobject_cast<QAction*>(sender());
+		if (action)
+		{
+			Echo::i32 index = action->data().toInt();
+			setRenderWindowSize(m_windowSizes[index].m_height, m_windowSizes[index].m_width);
+		}
+	}
+
+	void GameMainWindow::onSwitchResolutionVertical()
+	{
+		QAction* action = qobject_cast<QAction*>(sender());
+		if (action)
+		{
+			Echo::i32 index = action->data().toInt();
+			setRenderWindowSize(m_windowSizes[index].m_width, m_windowSizes[index].m_height);
+		}
 	}
 }
