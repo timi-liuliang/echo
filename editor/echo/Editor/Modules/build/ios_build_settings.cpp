@@ -320,6 +320,9 @@ namespace Echo
     {
         pugi::xml_node* root_dict = (pugi::xml_node*)(parent);
         
+        root_dict->append_child("key").append_child(pugi::node_pcdata).set_value("UIRequiresFullScreen");
+        root_dict->append_child("true");
+        
         // https://developer.apple.com/documentation/uikit/uiinterfaceorientation?language=objc
         root_dict->append_child("key").append_child(pugi::node_pcdata).set_value("UISupportedInterfaceOrientations");
         pugi::xml_node orient_node = root_dict->append_child("array");
