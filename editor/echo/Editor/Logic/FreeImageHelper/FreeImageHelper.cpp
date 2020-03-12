@@ -89,7 +89,7 @@ namespace Echo
                 // scale
                 FIBITMAP* dipScaled = FreeImage_Rescale( dip, width, height, FILTER_BSPLINE);
 
-                FreeImage_Save( FIF_TARGA, dipScaled, oFilePath, TARGA_DEFAULT);
+                FreeImage_Save(fileFMT, dipScaled, oFilePath, TARGA_DEFAULT);
 
                 FreeImage_Unload( dipScaled);
                 FreeImage_Unload( dip);
@@ -115,7 +115,7 @@ namespace Echo
             {
                 FIBITMAP* dipScaled = FreeImage_Rescale( dip, targetWidth, targetHeight, FILTER_BSPLINE);
 
-                FreeImage_Save( FIF_TARGA, dipScaled, oFilePath, TARGA_DEFAULT);
+                FreeImage_Save(fileFMT, dipScaled, oFilePath, TARGA_DEFAULT);
 
                 FreeImage_Unload( dipScaled);
                 FreeImage_Unload( dip);
