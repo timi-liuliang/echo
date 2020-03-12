@@ -95,7 +95,7 @@ namespace Game
 		for (size_t i = 0; i < m_windowSizes.size(); i++)
 		{
 			QAction* action = new QAction(Echo::StringUtil::Format("%s [%dx%d]", m_windowSizes[i].m_displayText.c_str(), m_windowSizes[i].m_height, m_windowSizes[i].m_width).c_str(), this);
-			action->setData(i);
+			action->setData(int(i));
 			m_menuHorizontal->addAction(action);
 
 			QObject::connect(action, SIGNAL(triggered()), this, SLOT(onSwitchResolutionHorizontal()));
@@ -105,7 +105,7 @@ namespace Game
 		for (size_t i=0; i<m_windowSizes.size(); i++)
 		{
 			QAction* action = new QAction(Echo::StringUtil::Format("%s [%dx%d]", m_windowSizes[i].m_displayText.c_str(), m_windowSizes[i].m_width, m_windowSizes[i].m_height).c_str(), this);
-			action->setData(i);
+			action->setData(int(i));
 			m_menuVertical->addAction(action);
 
 			QObject::connect(action, SIGNAL(triggered()), this, SLOT(onSwitchResolutionVertical()));

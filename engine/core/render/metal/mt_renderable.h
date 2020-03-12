@@ -8,7 +8,7 @@ namespace Echo
 	class MTRenderable : public Renderable
 	{
 	public:
-		MTRenderable(const String& renderStage, ShaderProgram* shader, int identifier);
+		MTRenderable(int identifier);
         virtual ~MTRenderable() {}
         
         // get render pipelinestate

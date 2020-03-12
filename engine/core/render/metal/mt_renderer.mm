@@ -31,7 +31,7 @@ namespace Echo
         return g_inst;
     }
 
-    bool MTRenderer::initialize(const Config& config)
+    bool MTRenderer::initialize(const Settings& config)
     {
         // new frame buffer window
         m_framebufferWindow = EchoNew(MTFrameBufferWindow(config.m_windowWidth, config.m_windowHeight, (void*)config.m_windowHandle));
@@ -62,10 +62,10 @@ namespace Echo
         return EchoNew(MTBuffer(GPUBuffer::GPUBufferType::GBT_INDEX, usage, buff));
     }
 
-    Renderable* MTRenderer::createRenderable(const String& renderStage, ShaderProgram* material)
+    Renderable* MTRenderer::createRenderable()
     {
         static ui32 id = 0; id++;
-        Renderable* renderable = EchoNew(MTRenderable(renderStage, material, id));
+        Renderable* renderable = EchoNew(MTRenderable(id));
         m_renderables[id] = renderable;
 
         return renderable;
@@ -163,7 +163,7 @@ namespace Echo
     void MTRenderer::draw(Renderable* renderable)
     {
         MTRenderable* mtRenderable = ECHO_DOWN_CAST<MTRenderable*>(renderable);
-        MTShaderProgram* shaderProgram = ECHO_DOWN_CAST<MTShaderProgram*>(renderable->getShader());
+        MTShaderProgram* shaderProgram = ECHO_DOWN_CAST<MTShaderProgram*>(mtRenderable->getMaterial()->getShader());
         shaderProgram->bind();
         mtRenderable->bindRenderState();
         mtRenderable->bindShaderParams();
