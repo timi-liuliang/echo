@@ -133,6 +133,9 @@ namespace Echo
     private:
         void writeCMakeList();
         
+        // utils function
+        bool rescaleIcon( const char* iFilePath, const char* oFilePath, ui32 targetWidth, ui32 targetHeight);
+        
     private:
         String                  m_rootDir;
         String                  m_projectDir;
