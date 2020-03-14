@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../ShaderProgram.h"
+#include "panel/TextureAtlasPanel.h"
 
 namespace Echo
 {
@@ -13,8 +14,15 @@ namespace Echo
         
         // get icon, used for editor
         const char* getEditorIcon() const;
+
+		// on editor select this node
+		virtual void onEditorSelectThisNode() override;
+
+        // update self
+        void editor_update_self();
         
     private:
+        TextureAtlasPanel* m_panel = nullptr;
     };
     
 #endif

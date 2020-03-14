@@ -1099,6 +1099,12 @@ namespace Studio
 		m_currentEditObject = Echo::Res::getResFunByExtension(extWithDot) ? Echo::Res::get(resPath) : nullptr;
 
 		showSelectedObjectProperty();
+
+		// editor extension : select object
+		if (m_currentEditObject && m_currentEditObject->getEditor())
+		{
+			m_currentEditObject->getEditor()->onEditorSelectThisNode();
+		}
 	}
 
 	void NodeTreePanel::onEditObject(Echo::Object* res)

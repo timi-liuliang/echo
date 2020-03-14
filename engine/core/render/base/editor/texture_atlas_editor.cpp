@@ -7,17 +7,31 @@ namespace Echo
     TextureAtlasEditor::TextureAtlasEditor(Object* object)
     : ObjectEditor(object)
     {
+        m_panel = EchoNew(TextureAtlasPanel(object));
     }
     
     TextureAtlasEditor::~TextureAtlasEditor()
     {
+        EchoSafeDelete(m_panel, TextureAtlasPanel);
     }
     
-    // get camera2d icon, used for editor
     const char* TextureAtlasEditor::getEditorIcon() const
     {
         return "engine/core/render/base/editor/icon/texture_atlas.png";
     }
+
+	void TextureAtlasEditor::onEditorSelectThisNode()
+	{
+		Editor::instance()->showBottomPanel(m_panel);
+	}
+
+	void TextureAtlasEditor::editor_update_self()
+	{
+		if (m_panel)
+		{
+			m_panel->update();
+		}
+	}
 #endif
 }
 
