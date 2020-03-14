@@ -1,42 +1,42 @@
-#include "ImageSet.h"
+#include "TextureAtlas.h"
 #include "engine/core/io/IO.h"
 
 namespace Echo
 {
-    ImageSet::ImageSet()
+    TextureAtlas::TextureAtlas()
     {
         //EchoAssert(false);
     }
 
-    ImageSet::ImageSet(const ResourcePath& path)
+    TextureAtlas::TextureAtlas(const ResourcePath& path)
         : Res( path)
     {
 
     }
     
-    ImageSet::~ImageSet()
+    TextureAtlas::~TextureAtlas()
     {
 
     }
 
-    void ImageSet::bindMethods()
+    void TextureAtlas::bindMethods()
     {
 
     }
 
-    Res* ImageSet::load(const ResourcePath& path)
+    Res* TextureAtlas::load(const ResourcePath& path)
     {
         MemoryReader reader(path.getPath());
         if (reader.getSize())
         {
-            ImageSet* res = EchoNew(ImageSet(path));
+            TextureAtlas* res = EchoNew(TextureAtlas(path));
             return res;
         }
 
         return nullptr;
     }
 
-    void ImageSet::save()
+    void TextureAtlas::save()
     {
         const char* content = "Empty ImageSet";
         if (content)

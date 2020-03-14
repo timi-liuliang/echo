@@ -6,7 +6,8 @@
 #include "engine/core/io/IO.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/render/base/image/ImageCodecMgr.h"
-#include "engine/core/render/base/image/ImageSet.h"
+#include "engine/core/render/base/TextureAtlas.h"
+#include "engine/core/render/base/editor/texture_atlas_editor.h"
 #include "engine/core/render/base/Viewport.h"
 #include "engine/core/render/base/Material.h"
 #include "engine/core/render/base/pipeline/RenderPipeline.h"
@@ -149,13 +150,14 @@ namespace Echo
         Class::registerType<IO>();
         Class::registerType<DataStream>();
 		Class::registerType<Log>();
-		Class::registerType<ImageSet>();
+		Class::registerType<TextureAtlas>();
 		Class::registerType<RenderPipeline>();
 		Class::registerType<RenderStage>();
 		Class::registerType<RenderQueue>();
 		Class::registerType<FrameBuffer>();
         
-        REGISTER_OBJECT_EDITOR(ShaderProgram, ShaderEditor)
+		REGISTER_OBJECT_EDITOR(ShaderProgram, ShaderEditor)
+		REGISTER_OBJECT_EDITOR(TextureAtlas, TextureAtlasEditor)
 
 		// load all plugin
 		Plugin::loadAllPlugins();
