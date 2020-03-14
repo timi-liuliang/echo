@@ -13,6 +13,13 @@ namespace Echo
 		m_textureAtlas = ECHO_DOWN_CAST<TextureAtlas*>(obj);
 
 		m_ui = EditorApi.qLoadUi("engine/core/render/base/editor/panel/TextureAtlasPanel.ui");
+
+		QWidget* splitter = EditorApi.qFindChild(m_ui, "m_splitter");
+		if (splitter)
+		{
+			EditorApi.qSplitterSetStretchFactor(splitter, 0, 0);
+			EditorApi.qSplitterSetStretchFactor(splitter, 1, 1);
+		}
 	}
 
 	void TextureAtlasPanel::update()
