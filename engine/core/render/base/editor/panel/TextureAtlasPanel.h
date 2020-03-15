@@ -19,8 +19,14 @@ namespace Echo
 		// update
 		void update();
 
+	public:
+		// import
+		void onImport();
+		void onImportFromImages();
+
 	protected:
 		TextureAtlas*				m_textureAtlas;
+		QWidget*					m_importMenu = nullptr;
 	};
 }
 

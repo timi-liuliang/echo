@@ -20,10 +20,39 @@ namespace Echo
 			EditorApi.qSplitterSetStretchFactor(splitter, 0, 0);
 			EditorApi.qSplitterSetStretchFactor(splitter, 1, 1);
 		}
+
+		// Tool button icons
+		EditorApi.qToolButtonSetIcon(EditorApi.qFindChild(m_ui, "m_import"), "engine/core/render/base/editor/icon/import.png");
+
+		// connect signal slots
+		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_import"), QSIGNAL(clicked()), this, createMethodBind(&TextureAtlasPanel::onImport));
 	}
 
 	void TextureAtlasPanel::update()
 	{
+	}
+
+	void TextureAtlasPanel::onImport()
+	{
+		if (!m_importMenu)
+		{
+			m_importMenu = EditorApi.qMenuNew(m_ui);
+
+			EditorApi.qMenuAddAction(m_importMenu, EditorApi.qFindChildAction(m_ui, "m_actionImportFromImages"));
+			//EditorApi.qMenuAddAction(m_importMenu, EditorApi.qFindChildAction(m_ui, "m_actionAddSetting"));
+			//EditorApi.qMenuAddAction(m_importMenu, EditorApi.qFindChildAction(m_ui, "m_actionAddResource"));
+
+			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionImportFromImages"), QSIGNAL(triggered()), this, createMethodBind(&TextureAtlasPanel::onImportFromImages));
+			//EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionAddSetting"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddSetting));
+			//EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionAddResource"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddResource));
+		}
+
+		EditorApi.qMenuExec(m_importMenu);
+	}
+
+	void TextureAtlasPanel::onImportFromImages()
+	{
+
 	}
 #endif
 }

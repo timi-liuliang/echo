@@ -57,39 +57,24 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QToolButton" name="AddNode">
+       <widget class="QToolButton" name="m_import">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="toolTip">
+         <string>Import</string>
+        </property>
+        <property name="statusTip">
+         <string>Import</string>
+        </property>
         <property name="text">
          <string>...</string>
         </property>
         <property name="popupMode">
          <enum>QToolButton::DelayedPopup</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="Play">
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="Stop">
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="Restart">
-        <property name="text">
-         <string>...</string>
         </property>
        </widget>
       </item>
@@ -105,58 +90,6 @@
          </size>
         </property>
        </spacer>
-      </item>
-      <item>
-       <widget class="QToolButton" name="m_curveXVisible">
-        <property name="text">
-         <string>...</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="m_curveYVisible">
-        <property name="text">
-         <string>...</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="m_curveZVisible">
-        <property name="text">
-         <string>...</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="m_curveWVisible">
-        <property name="text">
-         <string>...</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
       </item>
      </layout>
     </widget>
@@ -231,71 +164,9 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QComboBox" name="m_clips">
-        <property name="minimumSize">
-         <size>
-          <width>145</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="NewClip">
-        <property name="toolTip">
-         <string extracomment="New Clip">New Animation</string>
-        </property>
-        <property name="statusTip">
-         <string/>
-        </property>
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="DuplicateClip">
-        <property name="toolTip">
-         <string>Duplicate Animation</string>
-        </property>
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="DeleteClip">
-        <property name="toolTip">
-         <string>Delete Animation</string>
-        </property>
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>  Length(ms):</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="m_clipLengthLineEdit">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>95</width>
-          <height>16777215</height>
-         </size>
+         <string>Status</string>
         </property>
        </widget>
       </item>
@@ -316,82 +187,12 @@
     </widget>
    </item>
   </layout>
-  <action name="m_actionAddNode">
+  <action name="m_actionImportFromImages">
    <property name="text">
-    <string>Add Node</string>
-   </property>
-  </action>
-  <action name="m_actionAddSetting">
-   <property name="text">
-    <string>Add Setting</string>
-   </property>
-  </action>
-  <action name="m_actionAddResource">
-   <property name="text">
-    <string>Add Resource</string>
-   </property>
-  </action>
-  <action name="m_actionCurveRed">
-   <property name="text">
-    <string>Curve Red(X)</string>
-   </property>
-  </action>
-  <action name="m_actionCurveGreen">
-   <property name="text">
-    <string>Curve Green(Y)</string>
-   </property>
-  </action>
-  <action name="m_actionCurveBlue">
-   <property name="text">
-    <string>Curve Blue(Z)</string>
+    <string>Import From Image Files</string>
    </property>
    <property name="toolTip">
-    <string>Curve Blue(Z)</string>
-   </property>
-  </action>
-  <action name="m_actionCurveWhite">
-   <property name="text">
-    <string>Curve White(W)</string>
-   </property>
-   <property name="toolTip">
-    <string>Curve White(W)</string>
-   </property>
-  </action>
-  <action name="m_actionAddKeyToCurveRed">
-   <property name="text">
-    <string>Add Key To Curve Red (X)</string>
-   </property>
-  </action>
-  <action name="m_actionAddKeyToCurveGreen">
-   <property name="text">
-    <string>Add Key To Curve Green (Y)</string>
-   </property>
-   <property name="toolTip">
-    <string>Add Key To Curve Green</string>
-   </property>
-  </action>
-  <action name="m_actionAddKeyToCurveBlue">
-   <property name="text">
-    <string>Add Key To Curve Blue (Z)</string>
-   </property>
-   <property name="toolTip">
-    <string>Add Key To Curve Blue</string>
-   </property>
-  </action>
-  <action name="m_actionAddKeyToCurveWhite">
-   <property name="text">
-    <string>Add Key To Curve White (W)</string>
-   </property>
-   <property name="toolTip">
-    <string>Add Key To Curve White</string>
-   </property>
-  </action>
-  <action name="m_actionAddBoolKeyToCurve">
-   <property name="text">
-    <string>Add Bool Key To Curve</string>
-   </property>
-   <property name="toolTip">
-    <string>Add Bool Key To Curve</string>
+    <string>Import form images</string>
    </property>
   </action>
  </widget>
