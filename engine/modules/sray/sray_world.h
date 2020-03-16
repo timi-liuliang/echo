@@ -2,19 +2,20 @@
 
 #include "engine/core/scene/node.h"
 #include <radeon_rays.h>
+#include "sray_camera.h"
 
 namespace Echo
 {
-    class SRayDevice : public Object
+    class SRayWorld : public Object
     {
-        ECHO_SINGLETON_CLASS(SRayDevice, Object)
+        ECHO_SINGLETON_CLASS(SRayWorld, Object)
         
     public:
-        SRayDevice();
-        virtual ~SRayDevice();
+        SRayWorld();
+        virtual ~SRayWorld();
         
         // instance
-        static SRayDevice* instance();
+        static SRayWorld* instance();
         
         // step
         void step(float elapsedTime);
@@ -23,5 +24,6 @@ namespace Echo
         ui32                            m_deviceCount;
         RadeonRays::DeviceInfo          m_deviceInfo;
         RadeonRays::IntersectionApi*    m_intersectionApi = nullptr;
+		SRayCamera						m_camera;
     };
 }

@@ -4,17 +4,17 @@
 
 namespace Echo
 {
-    SRayDevice::SRayDevice()
+    SRayWorld::SRayWorld()
     {
         try
         {
             m_deviceCount = RadeonRays::IntersectionApi::GetDeviceCount();
             if(m_deviceCount>0)
             {
-                // set prefrence platform
+                // set preference platform
                 m_deviceInfo.platform = RadeonRays::DeviceInfo::Platform::kAny;
                 
-                // use first endable device
+                // use first enable device
                 RadeonRays::IntersectionApi::GetDeviceInfo( 0, m_deviceInfo);
                 
                 // set platform
@@ -28,22 +28,22 @@ namespace Echo
         }
     }
     
-    SRayDevice::~SRayDevice()
+    SRayWorld::~SRayWorld()
     {
     }
     
-    void SRayDevice::bindMethods()
+    void SRayWorld::bindMethods()
     {
     }
     
-    SRayDevice* SRayDevice::instance()
+    SRayWorld* SRayWorld::instance()
     {
-        static SRayDevice* inst = EchoNew(SRayDevice);
+        static SRayWorld* inst = EchoNew(SRayWorld);
         return inst;
     }
     
-    // step
-    void SRayDevice::step(float elapsedTime)
+    void SRayWorld::step(float elapsedTime)
     {
+		m_camera.update();
     }
 }

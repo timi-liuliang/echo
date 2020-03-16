@@ -1,4 +1,6 @@
 #include "sray_module.h"
+#include "sray_mesh.h"
+#include "sray_camera.h"
 #include "sray_world.h"
 
 namespace Echo
@@ -11,7 +13,7 @@ namespace Echo
 
     SRayModule::~SRayModule()
     {
-        EchoSafeDeleteInstance(SRayDevice);
+        EchoSafeDeleteInstance(SRayWorld);
     }
 
 	SRayModule* SRayModule::instance()
@@ -27,6 +29,7 @@ namespace Echo
     
 	void SRayModule::registerTypes()
 	{
-        Class::registerType<SRayDevice>();
+		Class::registerType<SRayMesh>();
+        Class::registerType<SRayWorld>();
 	}
 }
