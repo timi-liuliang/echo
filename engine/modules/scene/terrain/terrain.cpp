@@ -1,5 +1,4 @@
 #include "terrain.h"
-#include "terrain_material.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/scene/node_tree.h"
 #include "base/Renderer.h"
@@ -21,8 +20,8 @@ namespace Echo
     
     void Terrain::bindMethods()
     {
-        CLASS_BIND_METHOD(Terrain, getHeightmap,     DEF_METHOD("getHeightmap"));
-        CLASS_BIND_METHOD(Terrain, setHeightmap,     DEF_METHOD("setHeightmap"));
+        CLASS_BIND_METHOD(Terrain, getDataPath,     DEF_METHOD("getDataPath"));
+        CLASS_BIND_METHOD(Terrain, setDataPath,     DEF_METHOD("setDataPath"));
         CLASS_BIND_METHOD(Terrain, getColumns,       DEF_METHOD("getColumns"));
         CLASS_BIND_METHOD(Terrain, getRows,          DEF_METHOD("getRows"));
 		CLASS_BIND_METHOD(Terrain, getHeightRange,   DEF_METHOD("getHeightRange"));
@@ -32,24 +31,45 @@ namespace Echo
         CLASS_BIND_METHOD(Terrain, getMaterial,      DEF_METHOD("getMaterial"));
         CLASS_BIND_METHOD(Terrain, setMaterial,      DEF_METHOD("setMaterial"));
         
-        CLASS_REGISTER_PROPERTY(Terrain, "Heightmap", Variant::Type::ResourcePath, "getHeightmap", "setHeightmap");
+        CLASS_REGISTER_PROPERTY(Terrain, "Data", Variant::Type::ResourcePath, "getDataPath", "setDataPath");
 		CLASS_REGISTER_PROPERTY(Terrain, "HeightRange", Variant::Type::Real, "getHeightRange", "setHeightRange");
 		CLASS_REGISTER_PROPERTY(Terrain, "GridSpacing", Variant::Type::Int, "getGridSpacing", "setGridSpacing");
         CLASS_REGISTER_PROPERTY(Terrain, "Material", Variant::Type::Object, "getMaterial", "setMaterial");
         CLASS_REGISTER_PROPERTY_HINT(Terrain, "Material", PropertyHintType::ResourceType, "Material");
     }
     
-    void Terrain::setHeightmap(const ResourcePath& path)
+    void Terrain::setDataPath(const ResourcePath& path)
     {
-        if (m_heightmap.setPath(path.getPath()))
-        {
-            m_heightmapImage = Image::loadFromFile( path.getPath());
-            if (m_heightmapImage)
-            {
-                m_columns = m_heightmapImage->getWidth();
-                m_rows = m_heightmapImage->getHeight();
+        EchoSafeDelete(m_heightmapImage, Image);
+        EchoSafeDeleteContainer(m_layerImages, Image);
 
-                m_isRenderableDirty = true;
+        if (m_dataPath.setPath(path.getPath()))
+        {
+            String heightmapPath = m_dataPath.getPath() + "heightmap.png";
+            if (IO::instance()->isExist(heightmapPath))
+            {
+				m_heightmapImage = Image::loadFromFile(heightmapPath);
+				if (m_heightmapImage)
+				{
+					m_columns = m_heightmapImage->getWidth();
+					m_rows = m_heightmapImage->getHeight();
+
+					m_isRenderableDirty = true;
+				}
+            }
+
+            for (i32 i = 0; i < 4; i++)
+            {
+                String layerImagePath = m_dataPath.getPath() + StringUtil::Format("layer_%i.png", i);
+                if (IO::instance()->isExist(layerImagePath))
+                {
+					Image* layerImage = Image::loadFromFile(layerImagePath);
+					m_layerImages.push_back(layerImage);
+                }
+                else
+                {
+                    m_layerImages.push_back(nullptr);
+                }
             }
         }
     }
@@ -82,20 +102,20 @@ namespace Echo
             clearRenderable();
             
             // make sure one material is valid
-            if(!m_material && !m_materialDefault)
+            if(!m_material)
             {
-                m_shader = TerrainMaterial::getDefaultShader();
+                ShaderProgramPtr shader = ShaderProgram::getDefault3D(StringArray());
                 
                 // material
-                m_materialDefault = ECHO_CREATE_RES(Material);
-                m_materialDefault->setShaderPath(m_shader->getPath());
+                m_material = ECHO_CREATE_RES(Material);
+                m_material->setShaderPath(shader->getPath());
             }
             
             // mesh
 			updateMeshBuffer();
             
 			// create renderable
-            m_renderable = Renderable::create(m_mesh, m_material ? m_material : m_materialDefault, this);
+            m_renderable = Renderable::create(m_mesh, m_material, this);
             
             m_isRenderableDirty = false;
         }
@@ -124,10 +144,10 @@ namespace Echo
                     vert.m_position = Vector3(row * m_gridSpacing, getHeight(row, column), column * m_gridSpacing);
                     vert.m_uv = Vector2(row, column);
                     vert.m_normal = getNormal(row, column);
-                    vert.m_layerIndices = Color(1, 2, 3, 4).getABGR();
+                    vert.m_layerIndices = Color(0, 1, 2, 3).getABGR();
 
                     float weight = Math::IntervalRandom(0.f, 1.f);
-                    vert.m_layerWeights = Vector4(weight, 1.f-weight, 0.f, 0.f);
+                    vert.m_layerWeights = Vector4(getWeight(row, column, 0), getWeight(row, column, 1), getWeight(row, column, 2), getWeight(row, column, 3));
                     oVertices.push_back(vert);
                 }
             }
@@ -220,4 +240,20 @@ namespace Echo
 
         return Vector3::UNIT_Y;
     }
+
+    float Terrain::getWeight(i32 x, i32 z, i32 index)
+    {
+        if (m_layerImages[index])
+        {
+			i32 column = Math::Clamp(x, 0, m_columns - 1);
+			i32 row = Math::Clamp(z, 0, m_rows - 1);
+			Color color = m_layerImages[index]->getColor(column, row, 0);
+			float height = color.r;
+
+			return height;
+        }
+
+        return 0.f;
+    }
 }
+

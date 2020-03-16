@@ -6,7 +6,7 @@ namespace QT_UI
 	QFileSelect::QFileSelect( QWidget* parent)
 		: QWidget( parent)
 	{
-		// ²¼¾Ö¿Ø¼ş
+		// layout
 		m_horizonLayout = new QHBoxLayout( this);
 		m_horizonLayout->setSpacing( 0);
 		m_horizonLayout->setContentsMargins(0, 0, 0, 0);

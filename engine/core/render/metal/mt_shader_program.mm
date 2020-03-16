@@ -125,7 +125,7 @@ namespace Echo
         define.m_isUseVertexColor = true;
         define.m_isUseUV = true;
         define.m_isUseLightmapUV = true;
-        define.m_isUseBoneData = true;
+        define.m_isUseBlendingData = true;
         define.m_isUseTangentBinormal = true;
         define.build();
         
@@ -273,7 +273,7 @@ namespace Echo
                 if (uniform.m_shader == ShaderType::FS && uniform.m_type == SPT_TEXTURE)
                 {
                     i32 texSlot = *(i32*)(uniform.m_value);
-                    MTTexture2D* texture = ECHO_DOWN_CAST<MTTexture2D*>(renderable->getTexture(texSlot));
+                    MTTexture2D* texture = ECHO_DOWN_CAST<MTTexture2D*>(renderable->getMaterial()->getTexture(texSlot));
                     if(texture)
                     {
                         [commandEncoder setFragmentSamplerState:texture->getMTSamplerState() atIndex:uniform.m_location];

@@ -95,23 +95,23 @@ namespace DataFlowProgramming
         Echo::String text = m_comboBox->currentText().toStdString().c_str();
         if (text == "u_Time")
         {
-            compiler.addUniform(Echo::StringUtil::Format("\tfloat %s;\n", text.c_str()));
+            compiler.addUniform("float", text.c_str());
         }
         else if (text == "u_CameraPosition")
         {
-            compiler.addUniform(Echo::StringUtil::Format("\tvec3 %s;\n", text.c_str()));
+            compiler.addUniform("vec3", text.c_str());
         }
 		else if (text == "u_CameraDirection")
 		{
-			compiler.addUniform(Echo::StringUtil::Format("\tvec3 %s;\n", text.c_str()));
+			compiler.addUniform("vec3", text.c_str());
 		}
 		else if (text == "u_CameraNear")
 		{
-			compiler.addUniform(Echo::StringUtil::Format("\tfloat %s;\n", text.c_str()));
+			compiler.addUniform("float", text.c_str());
 		}
 		else if (text == "u_CameraFar")
 		{
-			compiler.addUniform(Echo::StringUtil::Format("\tfloat %s;\n", text.c_str()));
+			compiler.addUniform("float", text.c_str());
 		}
 
 		return true;

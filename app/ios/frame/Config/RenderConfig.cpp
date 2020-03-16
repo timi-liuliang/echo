@@ -11,7 +11,7 @@ namespace Echo
 		Renderer* renderer = nullptr;
 		LoadGLESRenderer(renderer);
 
-		Echo::Renderer::Config renderCfg;
+		Echo::Renderer::Settings renderCfg;
 		renderCfg.m_windowHandle = hwnd;
 
 		EchoLogDebug("Canvas Size : %d x %d", renderCfg.m_windowWidth, renderCfg.m_windowHeight);

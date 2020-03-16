@@ -29,6 +29,9 @@ namespace DataFlowProgramming
 		static OperationRules& instance();
 
 	public:
+		// new shaderData
+		std::shared_ptr<ShaderData> NewShaderData(const Echo::String& type, ShaderDataModel* dataModel);
+
 		// addition
 		std::shared_ptr<ShaderData> NewAdditionOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel);
 		std::shared_ptr<ShaderData> NewSubstractionOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel);
@@ -38,13 +41,11 @@ namespace DataFlowProgramming
 		std::shared_ptr<ShaderData> NewCrossProductOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel);
 		std::shared_ptr<ShaderData> NewMinOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel);
 		std::shared_ptr<ShaderData> NewMaxOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel);
+		std::shared_ptr<ShaderData> NewPowOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel);
 
 	private:
 		// get output
 		Echo::String getOutput(const Echo::String& inputA, const Echo::String& inputB, const std::vector<OperationRule>& rules);
-
-		// new shaderData
-		std::shared_ptr<ShaderData> NewShaderData(const Echo::String& type, ShaderDataModel* dataModel);
 
 	private:
 		std::vector<OperationRule>	m_additionRules;
@@ -55,5 +56,6 @@ namespace DataFlowProgramming
 		std::vector<OperationRule>	m_crossProductRules;
 		std::vector<OperationRule>	m_minRules;
 		std::vector<OperationRule>	m_maxRules;
+		std::vector<OperationRule>	m_powRules;
 	};
 }

@@ -63,6 +63,7 @@ namespace QT_UI
 		else
 		{
 			QPixmap pixmap(icon);
+			pixmap.scaled(QSize(22, 22));
 			menuTopLeftButton->setIcon(QIcon(pixmap));
 		}
 

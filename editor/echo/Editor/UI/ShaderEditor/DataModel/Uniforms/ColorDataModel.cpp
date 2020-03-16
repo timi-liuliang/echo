@@ -129,7 +129,7 @@ namespace DataFlowProgramming
 	{
 		if (m_isParameter)
 		{
-			compiler.addUniform(Echo::StringUtil::Format("\tvec4 %s;\n", getVariableName().c_str()));
+			compiler.addUniform("vec4", getVariableName().c_str());
 
             compiler.addCode(Echo::StringUtil::Format("\tfs_ubo.%s_Value.rgb = SRgbToLinear(fs_ubo.%s.rgb);\n", getVariableName().c_str(), getVariableName().c_str()));
 		}

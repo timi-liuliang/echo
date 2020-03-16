@@ -25,17 +25,8 @@ namespace Game
 	{
 		m_app->init((size_t)winId(), echoProject);
 
-		Echo::i32 thisW = width();
-		Echo::i32 thisH = height();
-		Echo::i32 mainW = GameMainWindow::instance()->width();
-		Echo::i32 mainH = GameMainWindow::instance()->height();
-		Echo::i32 aimW = Echo::GameSettings::instance()->getWindowWidth();
-		Echo::i32 aimH = Echo::GameSettings::instance()->getWindowHeight();
-		Echo::i32 mainNewWidth = mainW + (aimW - thisW);
-		Echo::i32 mainNewHeight = mainH + (aimH - thisH);
-		GameMainWindow::instance()->resize(mainNewWidth, mainNewHeight);
-
-		GameMainWindow::instance()->moveToCenter();
+		// change window size
+		GameMainWindow::instance()->setRenderWindowSize(Echo::GameSettings::instance()->getWindowWidth(), Echo::GameSettings::instance()->getWindowHeight());
 
 		m_timer = new QTimer(this);
 		connect(m_timer, SIGNAL(timeout()), this, SLOT(render()));

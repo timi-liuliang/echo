@@ -35,35 +35,6 @@ namespace DataFlowProgramming
     {
     }
 
-    unsigned int ShaderTemplateDataModel::nPorts(PortType portType) const
-    {
-        switch (portType)
-        {
-        case PortType::In: return m_inputs.size();
-        case PortType::Out:return m_outputs.size();
-        default:           return 0;
-        }
-    }
-
-    NodeDataType ShaderTemplateDataModel::dataType(PortType portType, PortIndex portIndex) const
-    {
-		if (portType == PortType::In)
-		{
-			return m_inputDataTypes[portIndex];
-		}
-		else if (portType == PortType::Out)
-		{
-			return m_outputs[portIndex]->type();
-		}
-
-		return NodeDataType{ "invalid", "invalid" };
-    }
-
-    std::shared_ptr<NodeData> ShaderTemplateDataModel::outData(PortIndex portIndex)
-    {
-        return m_outputs[portIndex];
-    }
-
     void ShaderTemplateDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex port)
     {
 		m_inputs[port] = std::dynamic_pointer_cast<ShaderData>(nodeData);
@@ -105,8 +76,23 @@ namespace DataFlowProgramming
 
 				if (m_inputDataTypes[i].name == "Normal")
 				{
+                    compiler.addUniform("vec3", "u_CameraPosition");
+
+                    compiler.addMacro("ENABLE_VERTEX_POSITION");
 					compiler.addMacro("ENABLE_VERTEX_NORMAL");
 					compiler.addMacro("ENABLE_LIGHTING_CALCULATION");
+				}
+
+				if (m_inputDataTypes[i].name == "Metallic")
+				{
+					compiler.addMacro("ENABLE_METALIC");
+					compiler.addCode(Echo::StringUtil::Format("\tfloat __Metalic = %s;\n", dynamic_cast<ShaderData*>(m_inputs[i].get())->getVariableName().c_str()));
+				}
+
+				if (m_inputDataTypes[i].name == "Roughness")
+				{
+					compiler.addMacro("ENABLE_ROUGHNESS");
+					compiler.addCode(Echo::StringUtil::Format("\tfloat __PerceptualRoughness = %s;\n", dynamic_cast<ShaderData*>(m_inputs[i].get())->getVariableName().c_str()));
 				}
 
 				if (m_inputDataTypes[i].name == "Occlusion")

@@ -225,6 +225,35 @@ namespace Echo
         PathUtil::RenameFile(m_outputDir + "app/ios/resources/data/" + projectFile, m_outputDir + "app/ios/resources/data/app.echo");
     }
 
+    bool iOSBuildSettings::rescaleIcon( const char* iFilePath, const char* oFilePath, ui32 targetWidth, ui32 targetHeight)
+     {
+         std::string ext = PathUtil::GetFileExt( iFilePath).c_str();
+         FREE_IMAGE_FORMAT fileFMT = FreeImage_GetFIFFromFilename( iFilePath);
+         int fiFlags = FreeImageHelper::instance()->MappingFlagsByFormat( fileFMT);
+
+         // Load
+         if( fileFMT!= FIF_UNKNOWN && FreeImage_FIFSupportsReading( fileFMT))
+         {
+             FIBITMAP* dip = FreeImage_Load( fileFMT, iFilePath, fiFlags);
+             if( dip)
+             {
+                 FIBITMAP* dipScaled = FreeImage_Rescale( dip, targetWidth, targetHeight, FILTER_BSPLINE);
+                 
+                 // iOS icons can't have alpha channel
+                 dipScaled = FreeImage_ConvertTo24Bits(dipScaled);
+
+                 FreeImage_Save(fileFMT, dipScaled, oFilePath, TARGA_DEFAULT);
+
+                 FreeImage_Unload( dipScaled);
+                 FreeImage_Unload( dip);
+
+                 return true;
+             }
+         }
+
+         return false;
+     }
+
     void iOSBuildSettings::replaceIcon()
     {
         String iconFullPath = IO::instance()->convertResPathToFullPath( m_iconRes.getPath());
@@ -235,7 +264,7 @@ namespace Echo
                 String outputPath = m_outputDir + StringUtil::Format("app/ios/Assets.xcassets/AppIcon.appiconset/Icon%dx%d.png", item.m_size, item.m_size);
                 PathUtil::DelPath(outputPath);
                 
-                FreeImageHelper::instance()->rescaleImage( iconFullPath.c_str(), outputPath.c_str(), item.m_size, item.m_size);
+                rescaleIcon( iconFullPath.c_str(), outputPath.c_str(), item.m_size, item.m_size);
             }
         }
     }
@@ -319,6 +348,9 @@ namespace Echo
     void iOSBuildSettings::writeUIInterfaceOrientationInfo(void* parent)
     {
         pugi::xml_node* root_dict = (pugi::xml_node*)(parent);
+        
+        root_dict->append_child("key").append_child(pugi::node_pcdata).set_value("UIRequiresFullScreen");
+        root_dict->append_child("true");
         
         // https://developer.apple.com/documentation/uikit/uiinterfaceorientation?language=objc
         root_dict->append_child("key").append_child(pugi::node_pcdata).set_value("UISupportedInterfaceOrientations");

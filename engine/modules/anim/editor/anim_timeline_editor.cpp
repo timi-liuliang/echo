@@ -16,13 +16,11 @@ namespace Echo
 		EchoSafeDelete(m_timelinePanel, TimelinePanel);
 	}
 
-	// get camera2d icon, used for editor
 	const char* TimelineEditor::getEditorIcon() const
 	{
 		return "engine/modules/anim/editor/icon/animtimeline.png";
 	}
 
-	// on editor select this node
 	void TimelineEditor::onEditorSelectThisNode()
 	{
 		Editor::instance()->showBottomPanel(m_timelinePanel);
@@ -30,7 +28,6 @@ namespace Echo
 		m_timelinePanel->syncDataToEditor();
 	}
 
-	// editor update self
 	void TimelineEditor::editor_update_self()
 	{
 		if (m_timelinePanel)

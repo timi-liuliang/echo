@@ -1,4 +1,5 @@
 #include "engine/core/render/base/mesh/Mesh.h"
+#include "engine/core/scene/render_node.h"
 #include "mt_mapping.h"
 #include "mt_gpu_buffer.h"
 #include "mt_renderable.h"
@@ -10,14 +11,14 @@
 
 namespace Echo
 {
-    MTRenderable::MTRenderable(const String& renderStage, ShaderProgram* shader, int identifier)
-        : Renderable( renderStage, shader, identifier)
+    MTRenderable::MTRenderable(int identifier)
+        : Renderable(identifier)
     {
     }
 
     void MTRenderable::buildRenderPipelineState()
     {
-        MTShaderProgram* mtShaderProgram = ECHO_DOWN_CAST<MTShaderProgram*>(m_shaderProgram.ptr());
+        MTShaderProgram* mtShaderProgram = ECHO_DOWN_CAST<MTShaderProgram*>(m_material->getShader());
         if(mtShaderProgram && mtShaderProgram->isValid())
         {
             MTLRenderPipelineDescriptor* mtRenderPipelineDescriptor = mtShaderProgram->getMTRenderPipelineDescriptor();
@@ -63,7 +64,7 @@ namespace Echo
 
     void MTRenderable::buildVertexDescriptor()
     {
-        MTShaderProgram* mtShaderProgram = ECHO_DOWN_CAST<MTShaderProgram*>(m_shaderProgram.ptr());
+        MTShaderProgram* mtShaderProgram = ECHO_DOWN_CAST<MTShaderProgram*>(m_material->getShader());
         if(mtShaderProgram && mtShaderProgram->isValid())
         {
             if( m_metalVertexDescriptor)
@@ -78,16 +79,34 @@ namespace Echo
 
     void MTRenderable::bindShaderParams()
     {
-        MTShaderProgram* mtShaderProgram = dynamic_cast<MTShaderProgram*>(m_shaderProgram.ptr());
-        if(mtShaderProgram)
+        MTShaderProgram* shaderProgram = ECHO_DOWN_CAST<MTShaderProgram*>(m_material->getShader());
+        if(shaderProgram)
         {
-            for(auto& it : m_shaderParams)
+            ShaderProgram::UniformArray* uniforms = shaderProgram->getUniforms();
+            for(auto& it : *uniforms)
             {
-                ShaderParam& uniform = it.second;
-                mtShaderProgram->setUniform( uniform.name.c_str(), uniform.data, uniform.type, uniform.length);
+                const ShaderProgram::Uniform& uniform = it.second;
+                if (uniform.m_type != SPT_TEXTURE)
+                {
+                    void* value = m_node ? m_node->getGlobalUniformValue(uniform.m_name) : nullptr;
+                    if (!value) value = m_material->getUniformValue(uniform.m_name);
+
+                    shaderProgram->setUniform(uniform.m_name.c_str(), value, uniform.m_type, uniform.m_count);
+                }
+                else
+                {
+                    i32* slotIdxPtr = (i32*)m_material->getUniformValue(uniform.m_name);
+                    Texture* texture = m_material->getTexture(*slotIdxPtr);
+                    if (texture)
+                    {
+                        Renderer::instance()->setTexture(*slotIdxPtr, texture);
+                    }
+
+                    shaderProgram->setUniform(uniform.m_name.c_str(), slotIdxPtr, uniform.m_type, uniform.m_count);
+                }
             }
 
-            mtShaderProgram->bindUniforms(this);
+            shaderProgram->bindUniforms(this);
         }
     }
 }

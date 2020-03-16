@@ -20,7 +20,7 @@ namespace Echo
         virtual Type getType() override { return Type::Metal; }
 
 		// initialize
-        virtual bool initialize(const Config& config) override;
+        virtual bool initialize(const Settings& config) override;
 
         // create buffer
         virtual GPUBuffer*	createVertexBuffer(Dword usage, const Buffer& buff) override;
@@ -45,7 +45,7 @@ namespace Echo
         virtual ShaderProgram* createShaderProgram() override;
 
 		// create renderable
-        virtual Renderable* createRenderable(const String& renderStage, ShaderProgram* material) override;
+        virtual Renderable* createRenderable() override;
         
         // convert matrix
         virtual void convertMatOrho(Matrix4& mat, const Matrix4& matOrth, Real zn, Real zf) override {}

@@ -7,6 +7,19 @@ namespace DataFlowProgramming
 	class ShaderCompiler
 	{
 	public:
+		struct Uniform
+		{
+			Echo::String  m_type;
+			Echo::String  m_name;
+
+			Uniform(const Echo::String& type, const Echo::String& name)
+				: m_type(type)
+				, m_name(name)
+			{}
+		};
+		typedef Echo::vector<Uniform>::type UniformArray;
+
+	public:
 		ShaderCompiler();
 		~ShaderCompiler();
 
@@ -26,7 +39,7 @@ namespace DataFlowProgramming
 	public:
 		// add
 		void addMacro(const Echo::String& macroName);
-		void addUniform(const Echo::String& codeChunk);
+		void addUniform(const Echo::String& type, const Echo::String& name);
 		void addTextureUniform(const Echo::String& uniformName);
 		void addCode(const Echo::String& codeChunk);
 
@@ -34,7 +47,8 @@ namespace DataFlowProgramming
 		Echo::i32		m_texturesCount = 0;
 
 		Echo::String	m_macros;
-		Echo::String	m_fsUniforms;
+		UniformArray	m_fsUniforms;
+		Echo::String	m_fsUniformsCode;
 		Echo::String	m_fsTextureUniforms;
 		Echo::String	m_fsCode;
 

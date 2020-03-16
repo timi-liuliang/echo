@@ -72,3 +72,4 @@ Echo is licensed under MIT license. You can just do what you want as your wish.
 |Spine|<img src="https://github.com/timi-liuliang/echo-examples/raw/master/ads/spine.gif?raw=true" alt="build house"  height="128px" />|Spine 2d animation|
 |Live2D|<img src="https://github.com/timi-liuliang/echo-examples/raw/master/ads/live2d.gif?raw=true" alt="build house"  height="128px" />|live2d animation|
 |Pbr|<img src="https://github.com/timi-liuliang/echo-examples/raw/master/ads/cubemap.png?raw=true" alt="build house"  height="128px" />|gltf and light prob test|
+|Force Field|<img src="https://github.com/timi-liuliang/echo-examples/blob/master/ads/forcefield.gif?raw=true" alt="force field"  height="128px" />|Force Field Effect; Shader Graph + Procedural Sphere|

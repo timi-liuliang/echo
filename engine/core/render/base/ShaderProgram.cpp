@@ -402,7 +402,7 @@ namespace Echo
         if (!m_rasterizerState)
         {
             RasterizerState::RasterizerDesc desc;
-            desc.cullMode = magic_enum::enum_cast<RasterizerState::CullMode>(m_cullMode.getValue().c_str()).value();
+            desc.cullMode = magic_enum::enum_cast<RasterizerState::CullMode>(m_cullMode.getValue().c_str()).value_or(RasterizerState::CullMode::CULL_NONE);
             m_rasterizerState = Renderer::instance()->createRasterizerState(desc);
         }
 

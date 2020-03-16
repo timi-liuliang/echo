@@ -31,8 +31,8 @@ namespace Echo
         virtual ~Terrain();
         
         // font res path
-        void setHeightmap(const ResourcePath& path);
-        const ResourcePath& getHeightmap() { return m_heightmap; }
+        void setDataPath(const ResourcePath& path);
+        const ResourcePath& getDataPath() { return m_dataPath; }
         
         // width height
         i32 getColumns() const { return m_columns; }
@@ -55,6 +55,9 @@ namespace Echo
         
         // get normal
         Vector3 getNormal(i32 x, i32 z);
+
+        // get weight
+        float getWeight(i32 x, i32 z, i32 index);
         
     protected:
         // build drawable
@@ -75,14 +78,13 @@ namespace Echo
         
     private:
         bool                    m_isRenderableDirty = true;
-        ResourcePath            m_heightmap = ResourcePath("", ".png");
+        ResourcePath            m_dataPath = ResourcePath("", "");
         Image*                  m_heightmapImage = nullptr;
+        vector<Image*>::type    m_layerImages;
 		float					m_heightRange = 256.f;
 		i32						m_gridSpacing = 1;
         Mesh*                   m_mesh = nullptr;
-        ShaderProgramPtr        m_shader;
         MaterialPtr             m_material;
-        MaterialPtr             m_materialDefault;
         Renderable*             m_renderable = nullptr;
         i32                     m_columns = 0;
         i32                     m_rows = 0;

@@ -43,6 +43,13 @@ namespace DataFlowProgramming
 
 		// max rules
 		m_maxRules = m_additionRules;
+
+		// pow rules
+		m_powRules.push_back(OperationRule(false, "float", "float", "float"));
+		m_powRules.push_back(OperationRule(false, "vec2", "vec2", "vec2"));
+		m_powRules.push_back(OperationRule(false, "vec3", "vec3", "vec3"));
+		m_powRules.push_back(OperationRule(false, "vec4", "vec4", "vec4"));
+		m_powRules.push_back(OperationRule(false, "color", "vec4", "vec4"));
 	}
 
 	OperationRules::~OperationRules()
@@ -108,6 +115,13 @@ namespace DataFlowProgramming
 	std::shared_ptr<ShaderData> OperationRules::NewMaxOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel)
 	{
 		Echo::String outputType = getOutput(inputA, inputB, m_maxRules);
+
+		return NewShaderData(outputType, dataModel);
+	}
+
+	std::shared_ptr<ShaderData> OperationRules::NewPowOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel)
+	{
+		Echo::String outputType = getOutput(inputA, inputB, m_powRules);
 
 		return NewShaderData(outputType, dataModel);
 	}

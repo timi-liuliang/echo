@@ -6,6 +6,8 @@
 #include <iostream>
 #include "ShaderDataModel.h"
 #include "DataFloat.h"
+#include "DataAny.h"
+#include "ShaderData.h"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -16,23 +18,22 @@ using QtNodes::NodeValidationState;
 
 namespace DataFlowProgramming
 {
-    /// The model dictates the number of inputs and outputs for the Node.
-    class ShaderTemplateDataModel : public ShaderDataModel
+    class CosDataModel : public ShaderDataModel
     {
         Q_OBJECT
 
     public:
-        ShaderTemplateDataModel();
-        virtual ~ShaderTemplateDataModel() {}
+        CosDataModel();
+        virtual ~CosDataModel() {}
 
         // caption
-        QString caption() const override { return QStringLiteral("Shader Template"); }
+        QString caption() const override { return QStringLiteral("Cos"); }
 
         // is caption visible
         bool captionVisible() const override { return true; }
 
         // name
-        QString name() const override { return QStringLiteral("ShaderTemplate"); }
+        QString name() const override { return QStringLiteral("Cos"); }
 
 		// generate code
 		virtual bool generateCode(ShaderCompiler& compiler) override;
@@ -48,7 +49,5 @@ namespace DataFlowProgramming
 
         // widget
         QWidget* embeddedWidget() override { return nullptr; }
-
-    private:
     };
 }
