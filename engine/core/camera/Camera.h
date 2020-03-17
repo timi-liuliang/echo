@@ -45,12 +45,12 @@ namespace Echo
 		void setFov(Real fov);
 
 		// width
-		Real getWidth() const;
-		void setWidth(Real width);
+		ui32 getWidth() const;
+		void setWidth(ui32 width);
 
 		// height
-		Real getHeight() const;
-		void setHeight(Real height);
+		ui32 getHeight() const;
+		void setHeight(ui32 height);
 
 		// scale
 		void setScale(Real scale);
@@ -85,8 +85,8 @@ namespace Echo
 		Matrix4			m_matView;
 		bool			m_isViewDirty;
 		Real			m_fov;
-		Real			m_width;
-		Real			m_height;
+		ui32			m_width;
+		ui32			m_height;
 		Real			m_scale;
 		Real			m_aspect;
 		Real			m_nearClip;

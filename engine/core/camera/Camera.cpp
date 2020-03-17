@@ -83,14 +83,14 @@ namespace Echo
 		m_isViewDirty = true;
 	}
 
-	void Camera::setWidth(Real width)
+	void Camera::setWidth(ui32 width)
 	{
 		m_width = width;
 		m_isProjDirty = true;
 		m_isViewDirty = true;
 	}
 
-	void Camera::setHeight(Real height)
+	void Camera::setHeight(ui32 height)
 	{
 		m_height = height;
 		m_isProjDirty = true;
@@ -123,12 +123,12 @@ namespace Echo
 		return m_fov;
 	}
 
-	Real Camera::getWidth() const
+	ui32 Camera::getWidth() const
 	{
 		return m_width;
 	}
 
-	Real Camera::getHeight() const
+	ui32 Camera::getHeight() const
 	{
 		return m_height;
 	}

@@ -98,12 +98,12 @@ namespace Echo
 		{
 			if (type == KeepAspectType::None)
 			{
-				camera->setWidth(Real(windowWidth));
-				camera->setHeight(Real(windowHeight));
+				camera->setWidth(windowWidth);
+				camera->setHeight(windowHeight);
 			}
 			else if (type == KeepAspectType::Stretch)
 			{
-				camera->setWidth(Real(getDesignWidth()));
+				camera->setWidth(getDesignWidth());
 				camera->setHeight(Real(getDesignHeight()));
 			}
 			if (type == KeepAspectType::Width)
@@ -127,8 +127,8 @@ namespace Echo
 	{
 		// 3d camera
 		Camera* pMainCamera = NodeTree::instance()->get3dCamera();
-		pMainCamera->setWidth(Real(windowWidth));
-		pMainCamera->setHeight(Real(windowHeight));
+		pMainCamera->setWidth(windowWidth);
+		pMainCamera->setHeight(windowHeight);
 		pMainCamera->update();
 
 		// 2d camera
