@@ -20,6 +20,9 @@ namespace Echo
                 // set platform
                 RadeonRays::IntersectionApi::SetPlatform( m_deviceInfo.platform);
                 m_intersectionApi = RadeonRays::IntersectionApi::Create( 0);
+
+				// global options
+				m_intersectionApi->SetOption("bvh.builder", "sah");
             }
         }
         catch(...)
@@ -44,6 +47,9 @@ namespace Echo
     
     void RaytracingWorld::step(float elapsedTime)
     {
-		m_camera.update();
+		if (!m_intersectionApi->IsWorldEmpty())
+		{
+			m_camera.update();
+		}
     }
 }
