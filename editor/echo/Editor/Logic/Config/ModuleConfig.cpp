@@ -20,7 +20,7 @@ namespace Echo
 		REGISTER_MODULE(PhysxModule);
         REGISTER_MODULE(ProceduralModule);
         REGISTER_MODULE(SceneModule);
-        REGISTER_MODULE(SRayModule);
+        REGISTER_MODULE(RaytracingModule);
 #ifdef ECHO_PLATFORM_WINDOWS
 		REGISTER_MODULE(VideoModule);
 #endif

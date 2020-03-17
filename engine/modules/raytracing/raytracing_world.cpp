@@ -1,10 +1,10 @@
-#include "sray_world.h"
+#include "raytracing_world.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/scene/node_tree.h"
 
 namespace Echo
 {
-    SRayWorld::SRayWorld()
+    RaytracingWorld::RaytracingWorld()
     {
         try
         {
@@ -28,21 +28,21 @@ namespace Echo
         }
     }
     
-    SRayWorld::~SRayWorld()
+    RaytracingWorld::~RaytracingWorld()
     {
     }
     
-    void SRayWorld::bindMethods()
+    void RaytracingWorld::bindMethods()
     {
     }
     
-    SRayWorld* SRayWorld::instance()
+    RaytracingWorld* RaytracingWorld::instance()
     {
-        static SRayWorld* inst = EchoNew(SRayWorld);
+        static RaytracingWorld* inst = EchoNew(RaytracingWorld);
         return inst;
     }
     
-    void SRayWorld::step(float elapsedTime)
+    void RaytracingWorld::step(float elapsedTime)
     {
 		m_camera.update();
     }

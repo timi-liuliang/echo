@@ -2,11 +2,11 @@
 
 namespace Echo
 {
-	class SRayCamera
+	class RaytracingCamera
 	{
 	public:
-		SRayCamera();
-		~SRayCamera();
+		RaytracingCamera();
+		~RaytracingCamera();
 
 		// update
 		void update();

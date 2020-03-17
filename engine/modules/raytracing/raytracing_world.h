@@ -2,28 +2,32 @@
 
 #include "engine/core/scene/node.h"
 #include <radeon_rays.h>
-#include "sray_camera.h"
+#include "raytracing_camera.h"
 
 namespace Echo
 {
-    class SRayWorld : public Object
+    class RaytracingWorld : public Object
     {
-        ECHO_SINGLETON_CLASS(SRayWorld, Object)
+        ECHO_SINGLETON_CLASS(RaytracingWorld, Object)
         
     public:
-        SRayWorld();
-        virtual ~SRayWorld();
+        RaytracingWorld();
+        virtual ~RaytracingWorld();
         
         // instance
-        static SRayWorld* instance();
+        static RaytracingWorld* instance();
         
         // step
         void step(float elapsedTime);
+
+	public:
+		// get intersection API
+		RadeonRays::IntersectionApi* getIntersectionApi() { return m_intersectionApi; }
         
     private:
         ui32                            m_deviceCount;
         RadeonRays::DeviceInfo          m_deviceInfo;
         RadeonRays::IntersectionApi*    m_intersectionApi = nullptr;
-		SRayCamera						m_camera;
+		RaytracingCamera				m_camera;
     };
 }
