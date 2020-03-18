@@ -7,10 +7,8 @@
 
 namespace Echo
 {
-	class RenderQueue : public Node
+	class RenderQueue
 	{
-		ECHO_CLASS(RenderQueue, Node);
-
 	public:
 		RenderQueue();
 		virtual ~RenderQueue();

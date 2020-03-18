@@ -15,24 +15,6 @@ namespace Echo
         EchoSafeDeleteContainer(m_items, RenderQueue);
 	}
 
-	void RenderStage::bindMethods()
-	{
-
-	}
-
-	RenderStage* RenderStage::instance()
-	{
-		static RenderStage* inst = EchoNew(RenderStage);
-
-		return inst;
-	}
-
-	void RenderStage::destroy()
-	{
-		RenderStage* inst = instance();
-		EchoSafeDelete(inst, RenderStage);
-	}
-
 	void RenderStage::addRenderable(const String& name, RenderableID id)
 	{
 		for (RenderQueue* item : m_items)
@@ -44,13 +26,13 @@ namespace Echo
 
 	void RenderStage::process()
 	{
-		RenderPipeline::instance()->beginFramebuffer(RenderPipeline::FB_Window);
+		//RenderPipeline::instance()->beginFramebuffer(RenderPipeline::FB_Window);
 
 		for (RenderQueue* item : m_items)
 		{
 			item->render();
 		}
 
-		RenderPipeline::instance()->endFramebuffer(RenderPipeline::FB_Window);
+		//RenderPipeline::instance()->endFramebuffer(RenderPipeline::FB_Window);
 	}
 }

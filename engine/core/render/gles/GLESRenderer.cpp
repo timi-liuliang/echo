@@ -492,7 +492,7 @@ namespace Echo
 		setViewport( &viewPort);
 
         // render target
-        RenderPipeline::instance()->onSize(width, height);
+        RenderPipeline::current()->onSize(width, height);
 	}
 
 	bool GLES2Renderer::present()

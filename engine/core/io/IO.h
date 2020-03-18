@@ -43,7 +43,7 @@ namespace Echo
 		IO();
 
 	protected:
-        EE_AUTO_MUTEX
+		EE_MUTEX					(m_mutex);
 		FileSystem*					m_resFileSystem;					// ("Res://")
 		FileSystem*					m_userFileSystem;					// ("User://")
 	};

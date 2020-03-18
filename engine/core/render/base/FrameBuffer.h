@@ -7,10 +7,8 @@
 
 namespace Echo
 {
-	class FrameBuffer : public Node
+	class FrameBuffer
 	{
-		ECHO_CLASS(FrameBuffer, Node)
-
 	public:
         // Type
         enum class Attachment : ui8

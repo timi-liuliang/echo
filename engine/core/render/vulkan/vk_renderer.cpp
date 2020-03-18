@@ -305,7 +305,7 @@ namespace Echo
     void VKRenderer::onSize(int width, int height)
     {
         // render target
-        RenderPipeline::instance()->onSize(width, height);
+        RenderPipeline::current()->onSize(width, height);
 
         for (auto& it : m_renderables)
         {

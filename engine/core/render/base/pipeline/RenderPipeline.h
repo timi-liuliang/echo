@@ -6,9 +6,9 @@
 
 namespace Echo
 {
-	class RenderPipeline : public Node
+	class RenderPipeline : public Res
 	{
-		ECHO_CLASS(RenderPipeline, Node)
+		ECHO_RES(RenderPipeline, Res, ".pipeline", Res::create<RenderPipeline>, RenderPipeline::load);
 
 	public:
 		enum FrameBufferType
@@ -19,10 +19,11 @@ namespace Echo
 
 	public:
 		RenderPipeline();
-		~RenderPipeline();
+		RenderPipeline(const ResourcePath& path);
+		virtual ~RenderPipeline();
 
-		// inst
-		static RenderPipeline* instance();
+		// add renderable
+		void addRenderable(const String& name, RenderableID id);
 
 		// render target operate
 		bool beginFramebuffer(ui32 id, bool clearColor = true, const Color& bgColor = Renderer::BGCOLOR, bool clearDepth = true, float depthValue = 1.0f, bool clearStencil = false, ui8 stencilValue = 0, ui32 rbo = 0xFFFFFFFF);
@@ -31,7 +32,21 @@ namespace Echo
 		// on Resize
 		void onSize(ui32 width, ui32 height);
 
+		// process
+		void process();
+
+	public:
+		// current
+		static ResRef<RenderPipeline> current();
+		static void setCurrent(const ResourcePath& path);
+
+	public:
+		// load and save
+		static Res* load(const ResourcePath& path);
+		virtual void save() override;
+
 	private:
 		FramebufferMap			m_framebuffers;
 	};
+	typedef ResRef<RenderPipeline> RenderPipelinePtr;
 }

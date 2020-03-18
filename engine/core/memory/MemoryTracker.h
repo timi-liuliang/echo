@@ -10,9 +10,7 @@
 namespace Echo
 {
 	class MemoryTracker
-	{
-        EE_AUTO_MUTEX
-        
+	{    
 	protected:
 		// Allocation record
 		struct Alloc
@@ -73,6 +71,7 @@ namespace Echo
         AllocationMap       m_allocations;
         size_t              m_totalAllocations;
         AllocationsByPool   m_allocationsByPool;
+		EE_MUTEX			(m_mutex);
 	};
 }
 

@@ -22,21 +22,20 @@ namespace Echo
 {
 	typedef void(*ThreadFunc)(void*);
 
-	// sleepº¯Êý
+	// sleep
 	void ThreadSleepByMilliSecond(float millSecond);
 
 #ifdef ECHO_PLATFORM_WINDOWS
-	//////////////////////////////////////////////////////////////////////////
 	class Mutex
 	{
 	public:
-		Mutex()			{ InitializeCriticalSection(&mCriticalSection);	}
-		~Mutex()		{ DeleteCriticalSection(&mCriticalSection);		}
-		void Lock()		{ EnterCriticalSection(&mCriticalSection);		}
-		void Unlock()	{ LeaveCriticalSection(&mCriticalSection);		}
+		Mutex()			{ }
+		~Mutex()		{ }
+		void lock()		{ m_mutex.lock(); }
+		void unlock()	{ m_mutex.unlock();		}
 
 	private:
-		CRITICAL_SECTION mCriticalSection;
+		std::mutex m_mutex;
 	};
 #elif defined(ECHO_PLATFORM_HTML5)
 	class Mutex
@@ -71,8 +70,8 @@ namespace Echo
 	class MutexLock
 	{
 	public:
-		MutexLock(Mutex& mutex) : mMutex(mutex) { mMutex.Lock();	}
-		~MutexLock()							{ mMutex.Unlock();	}
+		MutexLock(Mutex& mutex) : mMutex(mutex) { mMutex.lock();	}
+		~MutexLock()							{ mMutex.unlock();	}
 
 	private:
 		Mutex& mMutex;
@@ -108,14 +107,7 @@ namespace Echo
 		std::thread m_thread;
 #endif
 	};
-
-#define AUTO_MUTEX_NAME auto_mutex
-
-#define EE_AUTO_MUTEX mutable Mutex AUTO_MUTEX_NAME;
-#define EE_LOCK_AUTO_MUTEX MutexLock NameLock(AUTO_MUTEX_NAME);
-#define EE_LOCK_MUTEX_NAMED(mutexName, lockName) MutexLock lockName(mutexName);
 }
 
 #define EE_MUTEX(name)	mutable Echo::Mutex name;
-#define EE_STATIC_MUTEX(name)	static Echo::Mutex name;
 #define EE_LOCK_MUTEX(mutexName) Echo::MutexLock _lockName(mutexName);

@@ -3,7 +3,7 @@
 #include "base/ShaderProgram.h"
 #include "base/Renderer.h"
 #include "base/ShaderProgram.h"
-#include "base/pipeline/RenderStage.h"
+#include "base/pipeline/RenderPipeline.h"
 #include "base/Material.h"
 #include "base/mesh/Mesh.h"
 #include "engine/core/scene/render_node.h"
@@ -52,7 +52,7 @@ namespace Echo
 	{
 		if (m_mesh && m_mesh->isValid())
 		{
-			RenderStage::instance()->addRenderable(m_material->getRenderStage(), getIdentifier());
+			RenderPipeline::current()->addRenderable(m_material->getRenderStage(), getIdentifier());
 		}
 	}
 }

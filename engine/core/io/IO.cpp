@@ -53,7 +53,7 @@ namespace Echo
 
 	bool IO::isExist(const String& resourceName)
 	{
-		EE_LOCK_MUTEX(AUTO_MUTEX_NAME)
+		EE_LOCK_MUTEX(m_mutex)
 
 		if (StringUtil::StartWith(resourceName, "Res://"))
 		{
@@ -69,7 +69,7 @@ namespace Echo
 
 	String IO::convertResPathToFullPath(const String& filename)
 	{
-		EE_LOCK_AUTO_MUTEX
+		EE_LOCK_MUTEX(m_mutex)
 
 		if (StringUtil::StartWith(filename, "Res://"))
 		{

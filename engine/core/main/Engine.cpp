@@ -152,9 +152,6 @@ namespace Echo
 		Class::registerType<Log>();
 		Class::registerType<TextureAtlas>();
 		Class::registerType<RenderPipeline>();
-		Class::registerType<RenderStage>();
-		Class::registerType<RenderQueue>();
-		Class::registerType<FrameBuffer>();
         
 		REGISTER_OBJECT_EDITOR(ShaderProgram, ShaderEditor)
 		REGISTER_OBJECT_EDITOR(TextureAtlas, TextureAtlasEditor)
@@ -273,8 +270,6 @@ namespace Echo
 		EchoSafeDeleteInstance(GameSettings);
 		EchoSafeDeleteInstance(Input);
 		EchoSafeDeleteInstance(PluginSettings);
-		EchoSafeDeleteInstance(RenderStage);
-		EchoSafeDeleteInstance(RenderPipeline);
         
         Module::clear();
         Class::clear();
@@ -317,7 +312,7 @@ namespace Echo
 
 		// render
         Renderer::instance()->beginRender();
-		RenderStage::instance()->process();
+		RenderPipeline::current()->process();
 		Renderer::instance()->present();
 	}
     

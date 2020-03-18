@@ -5,6 +5,7 @@
 #include "engine/core/math/color.h"
 #include <thirdparty/pugixml/pugixml.hpp>
 #include "engine/core/resource/Res.h"
+#include "engine/core/render/base/pipeline/RenderPipeline.h"
 
 namespace Echo
 {
@@ -48,17 +49,17 @@ namespace Echo
 		const StringOption& getAspect() const { return m_aspect; }
 		void setAspect(const StringOption& option);
 
-		// set launch scene
+		// set scene
 		void setLaunchScene(const ResourcePath& path) { m_launchScene.setPath(path.getPath()); }
-
-		// get launch scene
 		const ResourcePath& getLaunchScene() const { return m_launchScene; }
 
-		// get bg color
+		// background color
 		const Color& getBackgroundColor() const;
-
-		// set bg color
 		void setBackgroundColor(const Color& color);
+
+		// render pipeline
+		void setRenderPipeline(const ResourcePath& path);
+		const ResourcePath& getRenderPipeline() const { return m_renderPipelinePath; }
 
 		// on size
 		void onSize(ui32 windowWidth, ui32 windowHeight);
@@ -69,11 +70,12 @@ namespace Echo
 		void keepAspect(ui32 windowWidth, ui32 windowHeight, KeepAspectType type, class Camera* camera);
 
 	private:
-		i32				m_designWidth;
-		i32				m_designHeight;
-		i32				m_windowWidth;
-		i32				m_windowHeight;
-		StringOption	m_aspect;
-		ResourcePath	m_launchScene;
+		i32					m_designWidth;
+		i32					m_designHeight;
+		i32					m_windowWidth;
+		i32					m_windowHeight;
+		StringOption		m_aspect;
+		ResourcePath		m_launchScene;
+		ResourcePath		m_renderPipelinePath;
 	};
 }

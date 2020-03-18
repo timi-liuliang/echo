@@ -1,12 +1,21 @@
 #include "RenderPipeline.h"
 #include "../Renderer.h"
 #include "../FrameBuffer.h"
+#include "engine/core/io/IO.h"
 
 namespace Echo
 {
+	static RenderPipelinePtr g_current;
+
 	RenderPipeline::RenderPipeline()
 	{
         m_framebuffers.insert(FramebufferMap::value_type(FB_Window, Renderer::instance()->getWindowFrameBuffer()));
+	}
+
+	RenderPipeline::RenderPipeline(const ResourcePath& path)
+		: Res(path)
+	{
+
 	}
 
 	RenderPipeline::~RenderPipeline()
@@ -14,14 +23,18 @@ namespace Echo
         m_framebuffers.clear();
 	}
 
-	void RenderPipeline::bindMethods()
+	RenderPipelinePtr RenderPipeline::current()
 	{
+		return g_current;
 	}
 
-	RenderPipeline* RenderPipeline::instance()
+	void RenderPipeline::setCurrent(const ResourcePath& path)
 	{
-		static RenderPipeline* inst = EchoNew(RenderPipeline);
-		return inst;
+
+	}
+
+	void RenderPipeline::bindMethods()
+	{
 	}
 
 	bool RenderPipeline::beginFramebuffer(ui32 id, bool clearColor, const Color& bgColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue, ui32 rbo)
@@ -50,6 +63,49 @@ namespace Echo
             FrameBuffer* fb = it.second;
             if(fb)
                 fb->onSize(width, height);
+		}
+	}
+
+	void RenderPipeline::addRenderable(const String& name, RenderableID id)
+	{
+		//for (RenderQueue* item : m_items)
+		//{
+		//	if (item->getName() == name)
+		//		item->addRenderable(id);
+		//}
+	}
+
+	void RenderPipeline::process()
+	{
+
+	}
+
+	Res* RenderPipeline::load(const ResourcePath& path)
+	{
+		MemoryReader reader(path.getPath());
+		if (reader.getSize())
+		{
+			RenderPipeline* inst = EchoNew(RenderPipeline(path));
+			//res->m_srcData = reader.getData<const char*>();
+
+			return inst;
+		}
+
+		return nullptr;
+	}
+
+	void RenderPipeline::save()
+	{
+		const char* content = "";// m_srcData.empty() ? luaScriptTemplate : m_srcData.data();
+		if (content)
+		{
+			String fullPath = IO::instance()->convertResPathToFullPath(m_path.getPath());
+			std::ofstream f(fullPath.c_str());
+
+			f << content;
+
+			f.flush();
+			f.close();
 		}
 	}
 }

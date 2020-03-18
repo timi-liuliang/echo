@@ -7,12 +7,8 @@
 
 namespace Echo
 {
-	/**
-	 * 资源包存档
-	 */
 	class ZipArchive : public Archive 
 	{
-		EE_AUTO_MUTEX
 	public:
 		ZipArchive(const String& strName, const String& strArchType);
 		virtual ~ZipArchive();
@@ -47,6 +43,7 @@ namespace Echo
 	protected:
 		ResourcePack		m_resourcePack;		// 资源包
 		bool				mLoaded;			// 加载状态，是否已加载成功
+		EE_MUTEX			(m_mutex)
 	};
 
 	/**

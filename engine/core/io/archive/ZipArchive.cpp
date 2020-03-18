@@ -6,38 +6,33 @@
 
 namespace Echo
 {
-	// 构造函数
 	ZipArchive::ZipArchive(const String& strName, const String& strArchType)
 		:	Archive(strName, strArchType)
 		,	mLoaded(false)
 	{
 	}
 
-	// 析构函数
 	ZipArchive::~ZipArchive()
 	{
 		unload();
 	}
 
-	// 是否大小写敏感
 	bool ZipArchive::isCaseSensitive(void) const 
 	{ 
 		return true; 
 	}
 
-	// 加载 
 	void ZipArchive::load()
 	{
-		EE_LOCK_MUTEX(AUTO_MUTEX_NAME)
+		EE_LOCK_MUTEX(m_mutex)
 		String fullName = Engine::instance()->getResPath() + mName;
 		m_resourcePack.openFile(fullName.c_str());
 		mLoaded = true;
 	}
 
-	// 卸载
 	void ZipArchive::unload()
 	{
-		EE_LOCK_MUTEX(AUTO_MUTEX_NAME)
+		EE_LOCK_MUTEX(m_mutex)
 		if (mLoaded)
 		{
 			m_resourcePack.closeFile();
@@ -45,10 +40,9 @@ namespace Echo
 		}
 	}
 
-	// 打开文件
 	DataStream* ZipArchive::open(const String& strFilename)
 	{
-		EE_LOCK_MUTEX(AUTO_MUTEX_NAME)
+		EE_LOCK_MUTEX(m_mutex)
 		DataStream* pResult = NULL;
 		const unsigned char* cpbFileData	= NULL;
 		unsigned char* pData		= NULL;
@@ -71,10 +65,9 @@ namespace Echo
 		return NULL;
 	}
 
-	// 列出所有文件
 	StringArray ZipArchive::list(bool bRecursive /*= true*/, bool bDirs /*= false*/)
 	{
-		EE_LOCK_MUTEX(AUTO_MUTEX_NAME)
+		EE_LOCK_MUTEX(m_mutex)
 		const ResourcePack::FileNode* cpFileNodes	= NULL;
 		int	nOutFileListCount			= 0;
 		StringArray ret;
@@ -101,10 +94,9 @@ namespace Echo
 		return ret;
 	}
 
-	// 列出文件信息
 	FileInfoList* ZipArchive::listFileInfo(bool bDirs /*= false*/)
 	{
-		EE_LOCK_MUTEX(AUTO_MUTEX_NAME)
+		EE_LOCK_MUTEX(m_mutex)
 		const ResourcePack::FileNode* cpFileNodes = NULL;
 		int	nOutFileListCount			= 0;
 		FileInfoList* pResult			= NULL;
@@ -138,10 +130,9 @@ namespace Echo
 		return pResult;
 	}
 
-	// 判断文件是否存在
 	bool ZipArchive::exists(const String& strFilename)
 	{
-		EE_LOCK_MUTEX(AUTO_MUTEX_NAME)
+		EE_LOCK_MUTEX(m_mutex)
 		return m_resourcePack.isFileExist(strFilename.c_str());
 	}
 }

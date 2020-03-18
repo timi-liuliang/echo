@@ -134,7 +134,6 @@ namespace Echo
 		String					m_sArchiveFileName;				// 文件存储路径
 		bool					m_bArchiveFileChange;
 		String					m_sArchiveFilePath;				// 当前存档文件路径
-
 		EE_MUTEX(m_UnpressLock);
 	};
 }

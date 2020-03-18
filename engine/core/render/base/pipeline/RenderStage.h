@@ -4,16 +4,11 @@
 
 namespace Echo
 {
-	class RenderStage : public Node
+	class RenderStage
 	{
-		ECHO_CLASS(RenderStage, Node)
-
 	public:
 		RenderStage();
 		~RenderStage();
-
-		// get instance
-		static RenderStage* instance();
 
 		// destroy
 		void destroy();

@@ -13,11 +13,6 @@ namespace Echo
 	{
 	}
 
-	void RenderQueue::bindMethods()
-	{
-
-	}
-
 	void RenderQueue::render()
 	{
 		Renderer* render = Renderer::instance();

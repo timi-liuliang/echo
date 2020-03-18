@@ -21,9 +21,4 @@ namespace Echo
 	FrameBuffer::~FrameBuffer()
 	{
 	}
-
-	void FrameBuffer::bindMethods()
-	{
-
-	}
 }

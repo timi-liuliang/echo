@@ -53,7 +53,7 @@ namespace Echo
 
 	void MemoryTracker::recordAlloc(void* ptr, size_t sz, unsigned int pool, const char* file, size_t ln, const char* func)
 	{
-		EE_LOCK_AUTO_MUTEX
+		EE_LOCK_MUTEX(m_mutex)
 		const char* msg = "Double allocation with same address - this probably means you have a mismatched allocation / deallocation style.";
 		EchoAssertX(m_allocations.find(ptr) == m_allocations.end(), msg);
 
@@ -86,7 +86,7 @@ namespace Echo
 	{
 		if (ptr)
         {
-            EE_LOCK_AUTO_MUTEX
+            EE_LOCK_MUTEX(m_mutex)
             AllocationMap::iterator it = m_allocations.find(ptr);
             if(it!=m_allocations.end())
             {

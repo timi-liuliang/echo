@@ -30,19 +30,16 @@ namespace Echo
 		return inst;
 	}
 
-	// get bg color
 	const Color& GameSettings::getBackgroundColor() const
 	{ 
 		return Renderer::BGCOLOR;
 	}
 
-	// set bg color
 	void GameSettings::setBackgroundColor(const Color& color)
 	{ 
 		Renderer::BGCOLOR = color;
 	}
 
-	// bind methods to script
 	void GameSettings::bindMethods() 
 	{
 		CLASS_BIND_METHOD(GameSettings, getDesignWidth, DEF_METHOD("getDesignWidth"));
@@ -69,7 +66,6 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(GameSettings, "LaunchScene", Variant::Type::ResourcePath, "getLaunchScene", "setLaunchScene");
 	}
 
-	// set design width
 	void GameSettings::setDesignWidth(i32 width) 
 	{ 
 		m_designWidth = width;
@@ -77,7 +73,6 @@ namespace Echo
 		onSize( Renderer::instance()->getWindowWidth(), Renderer::instance()->getWindowHeight());
 	}
 
-	// set design height
 	void GameSettings::setDesignHeight(i32 height) 
 	{ 
 		m_designHeight = height;
@@ -138,7 +133,6 @@ namespace Echo
 		keepAspect(windowWidth, windowHeight, type, NodeTree::instance()->getUiCamera());
 	}
 
-	// on size
 	void GameSettings::onSize(ui32 windowWidth, ui32 windowHeight)
 	{
 		if (Engine::instance()->getConfig().m_isGame)
@@ -161,5 +155,11 @@ namespace Echo
 		{
 			keepAspect(windowWidth, windowHeight, KeepAspectType::None);
 		}
+	}
+
+	void GameSettings::setRenderPipeline(const ResourcePath& path)
+	{ 
+		m_renderPipelinePath.setPath(path.getPath());
+		RenderPipeline::setCurrent(m_renderPipelinePath);
 	}
 }
