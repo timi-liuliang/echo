@@ -40,12 +40,17 @@ namespace Echo
 		static ResRef<RenderPipeline> current();
 		static void setCurrent(const ResourcePath& path);
 
+		// set src
+		void setSrc(const String& src);
+
 	public:
 		// load and save
 		static Res* load(const ResourcePath& path);
 		virtual void save() override;
 
 	private:
+		String					m_srcData;
+		bool					m_isParsed = false;
 		FramebufferMap			m_framebuffers;
 	};
 	typedef ResRef<RenderPipeline> RenderPipelinePtr;

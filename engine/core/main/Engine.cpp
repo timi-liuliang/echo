@@ -11,6 +11,7 @@
 #include "engine/core/render/base/Viewport.h"
 #include "engine/core/render/base/Material.h"
 #include "engine/core/render/base/pipeline/RenderPipeline.h"
+#include "engine/core/render/base/editor/render_pipeline_editor.h"
 #include "engine/core/render/base/pipeline/RenderStage.h"
 #include "engine/core/render/base/ShaderProgram.h"
 #include "engine/core/render/base/editor/shader_editor.h"
@@ -155,6 +156,7 @@ namespace Echo
         
 		REGISTER_OBJECT_EDITOR(ShaderProgram, ShaderEditor)
 		REGISTER_OBJECT_EDITOR(TextureAtlas, TextureAtlasEditor)
+		REGISTER_OBJECT_EDITOR(RenderPipeline, RenderPipelineEditor)
 
 		// load all plugin
 		Plugin::loadAllPlugins();

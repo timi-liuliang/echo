@@ -3,6 +3,11 @@
 #include "../FrameBuffer.h"
 #include "engine/core/io/IO.h"
 
+static const char* defaultPipelineTemplate = R"(<?xml version="1.0" encoding="utf-8"?>
+<pipeline>
+</pipeline>
+)";
+
 namespace Echo
 {
 	static RenderPipelinePtr g_current;
@@ -15,7 +20,6 @@ namespace Echo
 	RenderPipeline::RenderPipeline(const ResourcePath& path)
 		: Res(path)
 	{
-
 	}
 
 	RenderPipeline::~RenderPipeline()
@@ -23,18 +27,34 @@ namespace Echo
         m_framebuffers.clear();
 	}
 
+	void RenderPipeline::bindMethods()
+	{
+	}
+
 	RenderPipelinePtr RenderPipeline::current()
 	{
+		if (!g_current)
+		{
+			g_current = EchoNew( RenderPipeline);
+			g_current->setSrc(defaultPipelineTemplate);
+		}
+
 		return g_current;
 	}
 
 	void RenderPipeline::setCurrent(const ResourcePath& path)
 	{
+		if (g_current)
+		{
+			EchoSafeDelete(g_current, RenderPipeline);
+		}
 
+		g_current = ECHO_DOWN_CAST<RenderPipeline*>(Res::get(path));
 	}
 
-	void RenderPipeline::bindMethods()
+	void RenderPipeline::setSrc(const String& src)
 	{
+		m_srcData = src;
 	}
 
 	bool RenderPipeline::beginFramebuffer(ui32 id, bool clearColor, const Color& bgColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue, ui32 rbo)
@@ -77,7 +97,10 @@ namespace Echo
 
 	void RenderPipeline::process()
 	{
-
+		if (!m_isParsed)
+		{
+			m_isParsed = true;
+		}
 	}
 
 	Res* RenderPipeline::load(const ResourcePath& path)
@@ -85,10 +108,10 @@ namespace Echo
 		MemoryReader reader(path.getPath());
 		if (reader.getSize())
 		{
-			RenderPipeline* inst = EchoNew(RenderPipeline(path));
-			//res->m_srcData = reader.getData<const char*>();
+			RenderPipeline* res = EchoNew(RenderPipeline(path));
+			res->setSrc(reader.getData<const char*>());
 
-			return inst;
+			return res;
 		}
 
 		return nullptr;
@@ -96,7 +119,7 @@ namespace Echo
 
 	void RenderPipeline::save()
 	{
-		const char* content = "";// m_srcData.empty() ? luaScriptTemplate : m_srcData.data();
+		const char* content = m_srcData.empty() ? defaultPipelineTemplate : m_srcData.data();
 		if (content)
 		{
 			String fullPath = IO::instance()->convertResPathToFullPath(m_path.getPath());

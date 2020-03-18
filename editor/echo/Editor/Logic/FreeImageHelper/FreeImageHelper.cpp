@@ -334,7 +334,6 @@ namespace Echo
 
 	#define GCC_PACK(n)
 
-	/** 保存为bmp格式(仅支持RGB格式) 源自Unreal3 Lightmass */
 	int FreeImageHelper::SaveImageToBmp( BYTE* pixelData, int width, int height, const char* savePath)
 	{
 		PathUtil::DelPath( savePath);
@@ -397,7 +396,7 @@ namespace Echo
 		// Info header
 		fwrite( &IH, sizeof(IH), 1, fileHandle);
 
-		// 象素数据
+		// write pixel data
 		fwrite( pixelData, sizeof(BYTE)*width*height*3, 1, fileHandle);
 
 		fflush( fileHandle);
