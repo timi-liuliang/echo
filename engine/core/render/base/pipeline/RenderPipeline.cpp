@@ -5,6 +5,11 @@
 
 static const char* defaultPipelineTemplate = R"(<?xml version="1.0" encoding="utf-8"?>
 <pipeline>
+	<stage name="Final">
+		<queue name="Opaque" sort="false" />
+		<queue name="Transparent" sort="true" />
+		<framebuffer name="WindowFrameBuffer" />
+	</stage>
 </pipeline>
 )";
 
