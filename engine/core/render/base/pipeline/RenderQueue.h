@@ -7,48 +7,33 @@
 
 namespace Echo
 {
+	class RenderPipeline;
+	class RenderStage;
 	class RenderQueue
 	{
 	public:
-		RenderQueue();
+		RenderQueue(RenderPipeline* pipeline, RenderStage* stage);
 		virtual ~RenderQueue();
 
 		// render
 		virtual void render();
 
-		// add renderalbe
+		// add render able
 		void addRenderable(RenderableID id) { m_renderables.push_back(id); }
 
-		// set name
+		// name
 		void setName(const String& name) { m_name = name; }
-
-		// get name
 		const String& getName() const { return m_name; }
 
-	protected:
-		String							m_name;
-		vector<RenderableID>::type		m_renderables;
-	};
-
-
-	class DefaultRenderQueueOpaque : public RenderQueue
-	{
-	public:
-		DefaultRenderQueueOpaque();
-
-		// render
-		virtual void render();
-	};
-
-	class DefaultRenderQueueTransparent : public RenderQueue
-	{
-	public:
-		DefaultRenderQueueTransparent();
-
 		// sort
-		void sort();
+		void setSort(bool isSort) { m_isSort = isSort; }
+		bool isSort() const { return m_isSort; }
 
-		// render
-		virtual void render();
+	protected:
+		RenderPipeline*					m_pipeline;
+		RenderStage*					m_stage;
+		String							m_name;
+		bool							m_isSort;
+		vector<RenderableID>::type		m_renderables;
 	};
 }

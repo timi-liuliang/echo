@@ -219,7 +219,6 @@ namespace Echo
 		return true;
 	}
 
-	// instance res
 	Object* Object::instanceObject(void* pugiNode)
 	{
 		pugi::xml_node* xmlNode = (pugi::xml_node*)pugiNode;
@@ -262,7 +261,6 @@ namespace Echo
 		loadPropertyValue(pugiNode, classPtr, className, PropertyInfo::Dynamic);
 	}
 
-	// load propertys value
 	void Object::loadPropertyValue(void* pugiNode, Echo::Object* classPtr, const Echo::String& className, i32 flag)
 	{
 		pugi::xml_node* xmlNode = (pugi::xml_node*)pugiNode;

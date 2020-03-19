@@ -2,13 +2,15 @@
 #include "../Renderer.h"
 #include "../FrameBuffer.h"
 #include "engine/core/io/IO.h"
+#include "RenderStage.h"
+#include <thirdparty/pugixml/pugixml.hpp>
 
 static const char* defaultPipelineTemplate = R"(<?xml version="1.0" encoding="utf-8"?>
 <pipeline>
 	<stage name="Final">
 		<queue name="Opaque" sort="false" />
 		<queue name="Transparent" sort="true" />
-		<framebuffer name="WindowFrameBuffer" />
+		<framebuffer id="0" />
 	</stage>
 </pipeline>
 )";
@@ -19,7 +21,7 @@ namespace Echo
 
 	RenderPipeline::RenderPipeline()
 	{
-        m_framebuffers.insert(FramebufferMap::value_type(FB_Window, Renderer::instance()->getWindowFrameBuffer()));
+        m_framebuffers.insert(FramebufferMap::value_type(0, Renderer::instance()->getWindowFrameBuffer()));
 	}
 
 	RenderPipeline::RenderPipeline(const ResourcePath& path)
@@ -93,18 +95,45 @@ namespace Echo
 
 	void RenderPipeline::addRenderable(const String& name, RenderableID id)
 	{
-		//for (RenderQueue* item : m_items)
-		//{
-		//	if (item->getName() == name)
-		//		item->addRenderable(id);
-		//}
+		for (RenderStage* stage : m_renderStages)
+		{
+			stage->addRenderable(name, id);
+		}
 	}
 
-	void RenderPipeline::process()
+	void RenderPipeline::render()
 	{
 		if (!m_isParsed)
 		{
+			parseXml();
+
 			m_isParsed = true;
+		}
+
+		for (RenderStage* stage : m_renderStages)
+		{
+			stage->render();
+		}
+	}
+
+	void RenderPipeline::parseXml()
+	{
+		EchoSafeDeleteContainer(m_renderStages, RenderStage);
+
+		pugi::xml_document doc;
+		if (doc.load_buffer(m_srcData.data(), m_srcData.size()));
+		{
+			pugi::xml_node rootNode = doc.child("pipeline");
+			if (rootNode)
+			{
+				for (pugi::xml_node stageNode = rootNode.child("stage"); stageNode; stageNode = stageNode.next_sibling("stage"))
+				{
+					RenderStage* stage = EchoNew(RenderStage(this));
+					stage->setName(stageNode.attribute("name").as_string());
+					stage->parseXml(&stageNode);
+					m_renderStages.push_back(stage);
+				}
+			}
 		}
 	}
 

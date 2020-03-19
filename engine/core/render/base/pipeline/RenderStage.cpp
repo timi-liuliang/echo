@@ -1,38 +1,65 @@
 #include "RenderStage.h"
 #include "RenderPipeline.h"
+#include "RenderQueue.h"
 #include "engine/core/main/Engine.h"
+#include <thirdparty/pugixml/pugixml.hpp>
 
 namespace Echo
 {
-	RenderStage::RenderStage()
+	RenderStage::RenderStage(RenderPipeline* pipeline)
+		: m_pipeline(pipeline)
 	{
-		m_items.push_back(EchoNew(DefaultRenderQueueOpaque));
-		m_items.push_back(EchoNew(DefaultRenderQueueTransparent));
 	}
 
 	RenderStage::~RenderStage()
 	{
-        EchoSafeDeleteContainer(m_items, RenderQueue);
+        EchoSafeDeleteContainer(m_queues, RenderQueue);
+	}
+
+	void RenderStage::parseXml(void* pugiNode)
+	{
+		pugi::xml_node* stageNode = (pugi::xml_node*)pugiNode;
+		if (stageNode)
+		{
+			// queues
+			for (pugi::xml_node queueNode = stageNode->child("queue"); queueNode; queueNode = queueNode.next_sibling("queue"))
+			{
+				RenderQueue* queue = EchoNew(RenderQueue(m_pipeline, this));
+				queue->setName(queueNode.attribute("name").as_string("Opaque"));
+				queue->setSort(queueNode.attribute("sort").as_bool(false));
+				m_queues.push_back(queue);
+			}
+
+			// frame buffer
+			pugi::xml_node framebufferNode = stageNode->child("framebuffer");
+			if (framebufferNode)
+			{
+				m_frameBufferId = framebufferNode.attribute("id").as_uint();
+			}
+		}
 	}
 
 	void RenderStage::addRenderable(const String& name, RenderableID id)
 	{
-		for (RenderQueue* item : m_items)
+		for (RenderQueue* queue : m_queues)
 		{
-			if (item->getName() == name)
-				item->addRenderable(id);
+			if (queue->getName() == name)
+				queue->addRenderable(id);
 		}
 	}
 
-	void RenderStage::process()
+	void RenderStage::render()
 	{
-		//RenderPipeline::instance()->beginFramebuffer(RenderPipeline::FB_Window);
-
-		for (RenderQueue* item : m_items)
+		if (m_frameBufferId != -1)
 		{
-			item->render();
-		}
+			RenderPipeline::current()->beginFramebuffer(m_frameBufferId);
 
-		//RenderPipeline::instance()->endFramebuffer(RenderPipeline::FB_Window);
+			for (RenderQueue* queue : m_queues)
+			{
+				queue->render();
+			}
+
+			RenderPipeline::current()->endFramebuffer(m_frameBufferId);
+		}
 	}
 }

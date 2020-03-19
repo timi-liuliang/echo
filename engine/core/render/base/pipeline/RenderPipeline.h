@@ -6,23 +6,17 @@
 
 namespace Echo
 {
+	class RenderStage;
 	class RenderPipeline : public Res
 	{
 		ECHO_RES(RenderPipeline, Res, ".pipeline", Res::create<RenderPipeline>, RenderPipeline::load);
-
-	public:
-		enum FrameBufferType
-		{
-			FB_Window = 0,
-			FB_End
-		};
 
 	public:
 		RenderPipeline();
 		RenderPipeline(const ResourcePath& path);
 		virtual ~RenderPipeline();
 
-		// add renderable
+		// add render able
 		void addRenderable(const String& name, RenderableID id);
 
 		// render target operate
@@ -33,7 +27,7 @@ namespace Echo
 		void onSize(ui32 width, ui32 height);
 
 		// process
-		void process();
+		void render();
 
 	public:
 		// current
@@ -49,9 +43,14 @@ namespace Echo
 		virtual void save() override;
 
 	private:
-		String					m_srcData;
-		bool					m_isParsed = false;
-		FramebufferMap			m_framebuffers;
+		// parse
+		void parseXml();
+
+	private:
+		String						m_srcData;
+		bool						m_isParsed = false;
+		FramebufferMap				m_framebuffers;
+		vector<RenderStage*>::type	m_renderStages;
 	};
 	typedef ResRef<RenderPipeline> RenderPipelinePtr;
 }

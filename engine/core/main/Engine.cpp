@@ -314,7 +314,7 @@ namespace Echo
 
 		// render
         Renderer::instance()->beginRender();
-		RenderPipeline::current()->process();
+		RenderPipeline::current()->render();
 		Renderer::instance()->present();
 	}
     
