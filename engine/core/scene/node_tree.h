@@ -1,6 +1,7 @@
 #pragma once
 
 #include "node.h"
+#include "bvh.h"
 #include "engine/core/gizmos/Gizmos.h"
 #include "engine/core/camera/Camera.h"
 #include "engine/core/camera/CameraShadow.h"
@@ -51,6 +52,7 @@ namespace Echo
 		Camera*				m_2dCamera;
 		Camera*				m_uiCamera;
 		CameraShadow*		m_shadowCamera;
+		Bvh					m_accelerator;
         Node*				m_invisibleRoot = nullptr;	// invisible root node
 	};
 }

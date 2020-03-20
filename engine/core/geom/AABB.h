@@ -111,12 +111,23 @@ namespace Echo
 			vMin.z = Math::Min(point.z,vMin.z);
 		}
 
+		// union an AABB into this one.
 		inline void unionBox(const AABB &box)
 		{
 			if (box.isValid())
 			{
 				Vector3::Max( vMax, vMax, box.vMax);
 				Vector3::Min( vMin, vMin, box.vMin);
+			}
+		}
+
+		// union two AABBs into this one.
+		inline void unionBox(const AABB &box1, const AABB &box2)
+		{
+			if (box1.isValid() && box2.isValid())
+			{
+				Vector3::Max(vMax, box1.vMax, box2.vMax);
+				Vector3::Min(vMin, box1.vMin, box2.vMin);
 			}
 		}
 		
@@ -225,6 +236,8 @@ namespace Echo
 		{
 			return vMax.z - vMin.z;
 		}
+
+		Real getPerimeter() const { return (getDX() + getDY() + getDZ()) * 2.f; }
 
 		inline Vector3 getCenter() const
 		{
