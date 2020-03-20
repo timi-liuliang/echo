@@ -18,6 +18,7 @@ namespace Echo
 
 	public:
 		Render();
+		virtual ~Render();
 
 		static void setRenderTypes(i32 types = Type_2D | Type_3D | Type_Ui) { m_renderTypes = types; }
 		bool isNeedRender() const;
@@ -36,6 +37,7 @@ namespace Echo
 		virtual void* getGlobalUniformValue(const String& name);
 
 	protected:
+		i32				m_bvhNodeId = -1;
 		static i32		m_renderTypes;
 		StringOption	m_renderType = StringOption("2d", { "2d", "3d", "ui"});
 		bool			m_isVisible;

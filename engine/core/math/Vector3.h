@@ -544,10 +544,12 @@ namespace Echo
 			return vecLen;
 		}
 
-		static inline void Abs(Vector3& outVec, const Vector3& a)
+		static inline Vector3 Abs(const Vector3& a)
 		{
-			outVec = a;
+			Vector3 outVec = a;
 			outVec.abs();
+
+			return outVec;
 		}
 
 		static inline void Neg(Vector3& outVec, const Vector3& a)

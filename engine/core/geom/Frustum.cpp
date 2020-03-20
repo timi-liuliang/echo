@@ -48,7 +48,6 @@ namespace Echo
 		m_forward.normalize();
 		m_up.normalize();
 
-		// 计算up
 		m_right = m_up.cross(m_forward);		m_right.normalize();
 		m_up = m_forward.cross(m_right);		m_up.normalize();
 
@@ -61,7 +60,7 @@ namespace Echo
 		if (!m_flags.test(FrustumDirtyFlags::Vertex))
 			return m_vertexs;
 
-		// update vertexs
+		// update vertexes
 		Vector3  n = m_forward * m_nearZ;
 		Vector3  f = m_forward * m_farZ;
 
@@ -114,7 +113,6 @@ namespace Echo
 		return true;
 	}
 
-	// 获取AABB包围盒
 	const AABB& Frustum::getAABB()
 	{
 		if (!m_flags.test(FrustumDirtyFlags::Aabb))
@@ -196,7 +194,7 @@ namespace Echo
 			p.y = corners[(i >> 2) & 1].y;
 			p.z = corners[(i >> 1) & 1].z;
 
-			// 点积运算
+			// cross
 			float r = m_right.x * p.x + m_right.y * p.y + m_right.z * p.z;
 			float u = m_up.x * p.x + m_up.y * p.y + m_up.z * p.z;
 			float f = m_forward.x * p.x + m_forward.y * p.y + m_forward.z * p.z;

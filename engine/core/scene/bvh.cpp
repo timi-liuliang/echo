@@ -1,4 +1,5 @@
 #include "bvh.h"
+#include "engine/core/geom/Ray.h"
 
 #define NullNode -1
 
@@ -775,6 +776,155 @@ namespace Echo
 		{
 			m_nodes[i].aabb.vMin -= newOrigin;
 			m_nodes[i].aabb.vMax -= newOrigin;
+		}
+	}
+
+	void* Bvh::getUserData(i32 proxyId) const
+	{
+		EchoAssert(0 <= proxyId && proxyId < m_nodeCapacity);
+		return m_nodes[proxyId].userData;
+	}
+
+	const AABB& Bvh::getFatAABB(i32 proxyId) const
+	{
+		EchoAssert(0 <= proxyId && proxyId < m_nodeCapacity);
+		return m_nodes[proxyId].aabb;
+	}
+
+	void Bvh::query(BvhCb* callback, const AABB& aabb) const
+	{
+		GrowableStack<i32, 256> stack;
+		stack.push(m_root);
+
+		while (stack.getCount() > 0)
+		{
+			i32 nodeId = stack.pop();
+			if (nodeId == NullNode)
+			{
+				continue;
+			}
+
+			const BvhNode* node = m_nodes + nodeId;
+
+			if (node->aabb.isIntersected(aabb))
+			{
+				if (node->IsLeaf())
+				{
+					bool proceed = callback->queryCallback(nodeId);
+					if (proceed == false)
+					{
+						return;
+					}
+				}
+				else
+				{
+					stack.push(node->child1);
+					stack.push(node->child2);
+				}
+			}
+		}
+	}
+
+	void Bvh::query(BvhCb* callback, const Frustum& frustum) const
+	{
+		GrowableStack<i32, 256> stack;
+		stack.push(m_root);
+
+		while (stack.getCount() > 0)
+		{
+			i32 nodeId = stack.pop();
+			if (nodeId == NullNode)
+			{
+				continue;
+			}
+
+			const BvhNode* node = m_nodes + nodeId;
+			if (frustum.isAABBIn(node->aabb.vMin, node->aabb.vMax))
+			{
+				if (node->IsLeaf())
+				{
+					bool proceed = callback->queryCallback(nodeId);
+					if (proceed == false)
+					{
+						return;
+					}
+				}
+				else
+				{
+					stack.push(node->child1);
+					stack.push(node->child2);
+				}
+			}
+		}
+	}
+
+	void Bvh::rayCast(BvhCb* callback, const Vector3& start, const Vector3& end) const
+	{
+		Vector3 p1 = start;
+		Vector3 p2 = end;
+		Vector3 r = p2 - p1;
+		EchoAssert(r.len() > 0.0f);
+		r.normalize();
+
+		float maxFraction = 1.f;
+
+		// Build a bounding box for the segment.
+		AABB segmentAABB;
+		segmentAABB.addPoint(start);
+		segmentAABB.addPoint(end);
+
+		GrowableStack<i32, 256> stack;
+		stack.push(m_root);
+
+		while (stack.getCount() > 0)
+		{
+			i32 nodeId = stack.pop();
+			if (nodeId == NullNode)
+			{
+				continue;
+			}
+
+			const BvhNode* node = m_nodes + nodeId;
+
+			if (!node->aabb.isIntersected(segmentAABB))
+			{
+				continue;
+			}
+
+			Ray ray(p1, r);
+			if (!ray.hitBox(node->aabb))
+			{
+				continue;
+			}
+
+			if (node->IsLeaf())
+			{
+				//b2RayCastInput subInput;
+				//subInput.p1 = input.p1;
+				//subInput.p2 = input.p2;
+				//subInput.maxFraction = maxFraction;
+
+				float value = callback->rayCastCallback(nodeId);
+				if (value == 0.0f)
+				{
+					// The client has terminated the ray cast.
+					return;
+				}
+
+				if (value > 0.0f)
+				{
+					// Update segment bounding box.
+					maxFraction = value;
+					Vector3 t = p1 + maxFraction * (p2 - p1);
+					Vector3::Min(segmentAABB.vMin, p1, t);
+					Vector3::Max(segmentAABB.vMax, p1, t);
+				}
+			}
+			else
+			{
+				stack.push(node->child1);
+				stack.push(node->child2);
+			}
 		}
 	}
 }

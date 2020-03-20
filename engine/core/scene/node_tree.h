@@ -22,6 +22,10 @@ namespace Echo
 		// root node
         Node* getInvisibleRootNode();
 
+		// get bounding volume hierarchy accelerator
+		Bvh& get2dBvh() { return m_2dBvh; }
+		Bvh& get3dBvh() { return m_3dBvh; }
+
 	public:
 		// get main 3d camera
 		Camera* get3dCamera() const { return m_3dCamera; }
@@ -52,7 +56,8 @@ namespace Echo
 		Camera*				m_2dCamera;
 		Camera*				m_uiCamera;
 		CameraShadow*		m_shadowCamera;
-		Bvh					m_accelerator;
+		Bvh					m_2dBvh;
+		Bvh					m_3dBvh;
         Node*				m_invisibleRoot = nullptr;	// invisible root node
 	};
 }

@@ -11,6 +11,15 @@ namespace Echo
 	{
 	}
 
+	Render::~Render()
+	{
+		if (m_bvhNodeId != -1)
+		{
+			Bvh& bvh = m_renderType.getIdx() == 1 ? NodeTree::instance()->get3dBvh() : NodeTree::instance()->get2dBvh();
+			bvh.destroyProxy(m_bvhNodeId);
+		}
+	}
+
 	void Render::bindMethods()
 	{
 		CLASS_BIND_METHOD(Render, setRenderType,DEF_METHOD("setRenderType"));
@@ -51,6 +60,18 @@ namespace Echo
 			return;
 
 		Node::update(delta, bUpdateChildren);
+
+		if (m_bvhNodeId == -1)
+		{
+			AABB worldAABB = getLocalAABB();
+			if (worldAABB.isValid())
+			{
+				worldAABB = worldAABB.transform(getWorldMatrix());
+				Bvh& bvh = m_renderType.getIdx() == 1 ? NodeTree::instance()->get3dBvh() : NodeTree::instance()->get2dBvh();
+				
+				m_bvhNodeId = bvh.createProxy(worldAABB, this);
+			}
+		}
 	}
 
 	void* Render::getGlobalUniformValue(const String& name)

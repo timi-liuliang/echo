@@ -90,5 +90,11 @@ namespace Echo
         
         // update channels
         Channel::syncAll();
+
+		// render & test
+		//Frustum frustum;
+		//m_2dBvh.query(nullptr, frustum);
+		//m_2dBvh.query(nullptr, AABB());
+		//m_2dBvh.rayCast(nullptr, Vector3::ZERO, Vector3::ONE);
     }
 }
