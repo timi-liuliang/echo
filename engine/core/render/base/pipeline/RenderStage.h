@@ -31,7 +31,7 @@ namespace Echo
 	protected:
 		String						m_name;
 		RenderPipeline*				m_pipeline = nullptr;
-		vector<RenderQueue*>::type	m_queues;
+		vector<IRenderQueue*>::type	m_renderQueues;
 		ui32						m_frameBufferId = -1;
 	};
 }

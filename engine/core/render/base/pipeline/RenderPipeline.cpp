@@ -8,8 +8,8 @@
 static const char* defaultPipelineTemplate = R"(<?xml version="1.0" encoding="utf-8"?>
 <pipeline>
 	<stage name="Final">
-		<queue name="Opaque" sort="false" />
-		<queue name="Transparent" sort="true" />
+		<queue type="queue" name="Opaque" sort="false" />
+		<queue type="queue" name="Transparent" sort="true" />
 		<framebuffer id="0" />
 	</stage>
 </pipeline>

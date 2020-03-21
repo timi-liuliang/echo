@@ -6,8 +6,7 @@
 namespace Echo
 {
 	RenderQueue::RenderQueue(RenderPipeline* pipeline, RenderStage* stage)
-		: m_pipeline(pipeline)
-		, m_stage(stage)
+		: IRenderQueue(pipeline, stage)
 	{
 	}
 

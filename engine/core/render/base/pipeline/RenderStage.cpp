@@ -1,6 +1,7 @@
 #include "RenderStage.h"
 #include "RenderPipeline.h"
 #include "RenderQueue.h"
+#include "ImageFilter.h"
 #include "engine/core/main/Engine.h"
 #include <thirdparty/pugixml/pugixml.hpp>
 
@@ -13,7 +14,7 @@ namespace Echo
 
 	RenderStage::~RenderStage()
 	{
-        EchoSafeDeleteContainer(m_queues, RenderQueue);
+        EchoSafeDeleteContainer(m_renderQueues, IRenderQueue);
 	}
 
 	void RenderStage::parseXml(void* pugiNode)
@@ -24,10 +25,20 @@ namespace Echo
 			// queues
 			for (pugi::xml_node queueNode = stageNode->child("queue"); queueNode; queueNode = queueNode.next_sibling("queue"))
 			{
-				RenderQueue* queue = EchoNew(RenderQueue(m_pipeline, this));
-				queue->setName(queueNode.attribute("name").as_string("Opaque"));
-				queue->setSort(queueNode.attribute("sort").as_bool(false));
-				m_queues.push_back(queue);
+				String type = queueNode.attribute("type").as_string();
+				if (type == "queue")
+				{
+					RenderQueue* queue = EchoNew(RenderQueue(m_pipeline, this));
+					queue->setName(queueNode.attribute("name").as_string("Opaque"));
+					queue->setSort(queueNode.attribute("sort").as_bool(false));
+					m_renderQueues.push_back(queue);
+				}
+				else if (type == "filter")
+				{
+					ImageFilter* queue = EchoNew(ImageFilter(m_pipeline, this));
+					queue->setName(queueNode.attribute("name").as_string());
+					m_renderQueues.push_back(queue);
+				}
 			}
 
 			// frame buffer
@@ -41,10 +52,14 @@ namespace Echo
 
 	void RenderStage::addRenderable(const String& name, RenderableID id)
 	{
-		for (RenderQueue* queue : m_queues)
+		for (IRenderQueue* iqueue : m_renderQueues)
 		{
-			if (queue->getName() == name)
-				queue->addRenderable(id);
+			RenderQueue* queue = dynamic_cast<RenderQueue*>(iqueue);
+			if (queue)
+			{
+				if (queue->getName() == name)
+					queue->addRenderable(id);
+			}
 		}
 	}
 
@@ -54,9 +69,9 @@ namespace Echo
 		{
 			RenderPipeline::current()->beginFramebuffer(m_frameBufferId);
 
-			for (RenderQueue* queue : m_queues)
+			for (IRenderQueue* iqueue : m_renderQueues)
 			{
-				queue->render();
+				iqueue->render();
 			}
 
 			RenderPipeline::current()->endFramebuffer(m_frameBufferId);
