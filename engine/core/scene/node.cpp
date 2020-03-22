@@ -70,7 +70,6 @@ namespace Echo
 		}
 	}
 
-	// build matrix
 	void Node::Transform::buildMatrix(Matrix4& mat) const
 	{
 		mat.makeScaling( m_scale);
@@ -94,7 +93,6 @@ namespace Echo
 		invMat = invMat * matRot;
 	}
 
-	// operate "*"
 	Node::Transform Node::Transform::operator* (const Transform& b) const
 	{
 		Transform result;
@@ -128,7 +126,7 @@ namespace Echo
 
 	void Node::rotate(const Quaternion& rot)
 	{
-		// Normalise quaternion to avoid drift
+		// Normalize quaternion to avoid drift
 		Quaternion qnorm = rot;
 		qnorm.normalize();
 
@@ -476,6 +474,8 @@ namespace Echo
 		CLASS_BIND_METHOD(Node, queueFree,				DEF_METHOD("queueFree"));
 		CLASS_BIND_METHOD(Node, getNode,				DEF_METHOD("getNode"));
 		CLASS_BIND_METHOD(Node, addChild, 				DEF_METHOD("addChild"));
+		CLASS_BIND_METHOD(Node, setName,				DEF_METHOD("setName"));
+		CLASS_BIND_METHOD(Node, getName,				DEF_METHOD("getName"));
 		CLASS_BIND_METHOD(Node, setParent,				DEF_METHOD("setParent"));
         CLASS_BIND_METHOD(Node, getParent,              DEF_METHOD("getParent"));
 		CLASS_BIND_METHOD(Node, getChildNum,			DEF_METHOD("getChildNum"));
@@ -503,6 +503,7 @@ namespace Echo
 		CLASS_BIND_METHOD(Node, getPropertyValueR,		DEF_METHOD("getPropertyValue"));
 		CLASS_BIND_METHOD(Node, ch,						DEF_METHOD("ch"));
 
+		CLASS_REGISTER_PROPERTY(Node, "name", Variant::Type::String, "getName", "setName");
 		CLASS_REGISTER_PROPERTY(Node, "Enable", Variant::Type::Bool, "isEnable", "setEnable");
 		CLASS_REGISTER_PROPERTY(Node, "Position", Variant::Type::Vector3, "getLocalPosition", "setLocalPosition");
 		CLASS_REGISTER_PROPERTY(Node, "Rotation", Variant::Type::Vector3, "getLocalYawPitchRoll", "setLocalYawPitchRoll");

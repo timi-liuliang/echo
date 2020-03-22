@@ -299,7 +299,7 @@ private:
 
 #define ECHO_SINGLETON_CLASS(m_class, m_parent)												\
 public:																						\
-	virtual const String& getClassName() const override										        \
+	virtual const String& getClassName() const override										\
 	{																						\
 		static String className=#m_class;													\
 		return className;																	\

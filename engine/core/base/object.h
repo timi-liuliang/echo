@@ -25,9 +25,6 @@ namespace Echo
 		// get id
 		i32 getId() const { return m_id; }
 
-		void setName(const String& name) { m_name = name; }
-		const String& getName() const { return m_name; }
-
 		// path
 		const String& getPath() const { return m_path.getPath(); }
 		virtual void setPath(const String& path) { m_path.setPath(path); }
@@ -41,10 +38,10 @@ namespace Echo
 		virtual void queueFree() { ECHO_DELETE_T(this, Object); }
 
 	public:
-		// propertys (script property or dynamic property)
+		// properties (script property or dynamic property)
 		virtual const PropertyInfos& getPropertys();
 
-		// clear propertys
+		// clear properties
 		void clearPropertys();
 
 		// register property
@@ -87,7 +84,7 @@ namespace Echo
         static void loadPropertyRecursive(void* pugiNode, Echo::Object* classPtr, const Echo::String& className);
 		static void savePropertyRecursive(void* pugiNode, Echo::Object* classPtr, const Echo::String& className);
 
-		// load propertys value
+		// load properties value
 		static void loadPropertyValue(void* pugiNode, Echo::Object* classPtr, const Echo::String& className, i32 flag);
         
         // load/save signal slot connects
@@ -110,7 +107,6 @@ namespace Echo
 
 	protected:
 		i32				m_id;
-		String			m_name;
 		ResourcePath	m_path;
 		PropertyInfos	m_propertys;
         ChannelsPtr     m_chanels = nullptr;

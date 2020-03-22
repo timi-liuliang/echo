@@ -27,7 +27,7 @@ namespace Echo
 			// build matrix
 			void buildMatrix(Matrix4& mat) const;
 
-			// build inv matrix
+			// build inverse matrix
 			void buildInvMatrix(Matrix4& invMat) const;
 
 			// operate "*"
@@ -55,6 +55,9 @@ namespace Echo
 	public:
 		Node();
 		virtual ~Node();
+
+		void setName(const String& name) { m_name = name; }
+		const String& getName() const { return m_name; }
 
 		// parent(can only have one parent)
 		void setParent(Node* pParent);
@@ -186,6 +189,7 @@ namespace Echo
 		virtual void update_self() {}
 
 	protected:
+		String			m_name;
 		bool			m_isEnable = true;
 		bool			m_isLink = false;	        // belong to branch scene
 		Node*			m_parent = nullptr;

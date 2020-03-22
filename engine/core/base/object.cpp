@@ -49,7 +49,6 @@ namespace Echo
 		BIND_METHOD(Object::disconnect, DEF_METHOD("Object.disconnect"));
 
 		CLASS_BIND_METHOD(Object, getId, DEF_METHOD("getId"));
-        CLASS_BIND_METHOD(Object, getName, DEF_METHOD("getName"));
 		CLASS_BIND_METHOD(Object, isChannelExist,	DEF_METHOD("isChannelExist"));
 	}
 
@@ -223,13 +222,10 @@ namespace Echo
 	{
 		pugi::xml_node* xmlNode = (pugi::xml_node*)pugiNode;
 
-		Echo::String name = xmlNode->attribute("name").value();
 		Echo::String className = xmlNode->attribute("class").value();
 		Object* res = Echo::Class::create<Object*>(className);
 		if (res)
 		{
-			res->setName(name);
-
 			loadPropertyRecursive(pugiNode, res, className);
             loadSignalSlotConnects(xmlNode, res, className);
             loadChannels(xmlNode, res);
@@ -244,7 +240,6 @@ namespace Echo
 		return  nullptr;
 	}
 
-	// remember property recursive
 	void Object::loadPropertyRecursive(void* pugiNode, Echo::Object* classPtr, const Echo::String& className)
 	{
 		// load parent property first
@@ -320,7 +315,7 @@ namespace Echo
 			// don't display property of object
 			if (parentClassName == "Object")
             {
-                xmlNode->append_attribute("name").set_value(classPtr->getName().c_str());
+                //xmlNode->append_attribute("name").set_value(classPtr->getName().c_str());
                 xmlNode->append_attribute("class").set_value(classPtr->getClassName().c_str());
                 xmlNode->append_attribute("path").set_value(classPtr->getPath().c_str());
             }

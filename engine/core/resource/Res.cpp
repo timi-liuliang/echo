@@ -40,7 +40,6 @@ namespace Echo
 		: m_refCount(1)
 		, m_isLoaded(false)
 	{
-		//EchoAssert(false);
 	}
 
 	Res::Res(const ResourcePath& path)
@@ -211,7 +210,6 @@ namespace Echo
 		// root node
 		pugi::xml_node root = doc.append_child("res");
 
-		root.append_attribute("name").set_value(getName().c_str());
 		root.append_attribute("class").set_value(getClassName().c_str());
 		savePropertyRecursive(&root, this, this->getClassName());
 

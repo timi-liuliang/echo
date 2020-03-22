@@ -14,6 +14,9 @@ namespace Echo
 	public:
 		virtual ~Module() {}
 
+		void setName(const String& name) { m_name = name; }
+		const String& getName() const { return m_name; }
+
         // register all types of this module
 		virtual void registerTypes() {}
 
@@ -50,6 +53,7 @@ namespace Echo
         static void clear();
 
 	protected:
+		String			m_name;
 		bool			m_isEnable = true;
 	};
     

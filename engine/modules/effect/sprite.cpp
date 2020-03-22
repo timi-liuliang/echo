@@ -110,17 +110,14 @@ namespace Echo
         if(!m_mesh)
         {
             if(m_width && m_height)
-            {
                 m_mesh = Mesh::create(true, true);
-                
-                // indices
-                IndiceArray indices = { 0, 1, 2, 0, 2, 3};
-                m_mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(Word), indices.data());
-            }
         }
         
         if(m_mesh)
         {
+			// indices
+			IndiceArray indices = { 0, 1, 2, 0, 2, 3 };
+
             float hw = m_width * 0.5f;
             float hh = m_height * 0.5f;
 
@@ -131,16 +128,14 @@ namespace Echo
             vertices.push_back(VertexFormat(Vector3(hw,   hh, 0.f), Vector2(1.f, 0.f)));
             vertices.push_back(VertexFormat(Vector3(hw,  -hh, 0.f), Vector2(1.f, 1.f)));
 
-            // calc aabb
-            m_localAABB.reset();
-            for (VertexFormat& vert : vertices)
-                m_localAABB.addPoint(vert.m_position);
-
             // format
             MeshVertexFormat define;
             define.m_isUseUV = true;
 
+			m_mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(Word), indices.data());
             m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data());
+
+			m_localAABB = m_mesh->getLocalBox();
         }
 	}
 

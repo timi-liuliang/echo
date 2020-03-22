@@ -116,6 +116,7 @@ namespace Studio
 			Echo::Node* node = Echo::Class::create<Echo::Node*>(selectNodeType.c_str());
 			if (node)
 			{
+				node->setName(node->getClassName());
 				addNode(node);
 			}
 		}
@@ -645,7 +646,7 @@ namespace Studio
 		if (object)
 		{
 			showObjectPropertyRecursive(object, object->getClassName());
-			m_propertyHelper.applyTo(object->getName(), m_propertyTreeView, this, SLOT(refreshPropertyToObject(const QString&, QVariant)), false);
+			m_propertyHelper.applyTo(Echo::StringUtil::ToString(object->getId()).c_str(), m_propertyTreeView, this, SLOT(refreshPropertyToObject(const QString&, QVariant)), false);
 		}
 		else
 		{

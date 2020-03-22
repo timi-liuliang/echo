@@ -153,9 +153,6 @@ namespace Echo
 		if (it != g_classInfos->end())
 		{
 			Object* obj = it->second->create();
-			if (obj)
-				obj->setName(className);
-
 			return obj;
 		}
 

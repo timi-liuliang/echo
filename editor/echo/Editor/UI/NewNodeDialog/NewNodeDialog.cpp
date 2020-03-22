@@ -110,6 +110,7 @@ namespace Studio
 		{
 			// iconpath
 			Echo::Node* node = (Echo::Node*)Echo::Class::create(nodeName);
+			node->setName(nodeName);
 			Echo::String iconPath = node->getEditor() ? node->getEditor()->getEditorIcon() : "";
 			EchoSafeDelete(node, Node);
 

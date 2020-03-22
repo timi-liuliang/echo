@@ -4,15 +4,49 @@
 
 namespace Echo
 {
-	class ImageFilter : public IRenderQueue
+	class ImageFilter : public IRenderQueue, public Node
 	{
+		ECHO_CLASS(ImageFilter, Node)
+
 	public:
+		// Vertex Format
+		struct VertexFormat
+		{
+			Vector3        m_position;
+			Vector2        m_uv;
+
+			VertexFormat(const Vector3& pos, const Vector2& uv)
+				: m_position(pos), m_uv(uv)
+			{}
+		};
+		typedef vector<VertexFormat>::type  VertexArray;
+		typedef vector<ui32>::type          IndiceArray;
+
+	public:
+		ImageFilter() {}
 		ImageFilter(RenderPipeline* pipeline, RenderStage* stage);
 		virtual ~ImageFilter();
+
+		// material
+		Material* getMaterial() const { return m_material; }
+		void setMaterial(Object* material);
 
 		// render
 		virtual void render();
 
 	protected:
+		// build render able
+		void buildRenderable();
+
+		// update mesh buffer
+		void updateMeshBuffer();
+
+		// build mesh data by Draw ables data
+		void buildMeshData(VertexArray& oVertices, IndiceArray& oIndices);
+
+	protected:
+		Mesh*		m_mesh = nullptr;
+		MaterialPtr	m_material;
+		Renderable* m_renderable = nullptr;
 	};
 }
