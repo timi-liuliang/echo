@@ -68,7 +68,7 @@
          <string>Import</string>
         </property>
         <property name="statusTip">
-         <string>Apply Render Pipline</string>
+         <string>New</string>
         </property>
         <property name="text">
          <string>...</string>

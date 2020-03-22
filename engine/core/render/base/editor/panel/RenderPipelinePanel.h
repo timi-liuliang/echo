@@ -22,7 +22,8 @@ namespace Echo
 	public:
 		// import
 		void onNew();
-		void onImportFromImages();
+		void onNewCamera();
+		void onNewImageFilter();
 
 	protected:
 		RenderPipeline*				m_pipeline;
