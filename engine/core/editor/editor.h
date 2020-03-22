@@ -91,7 +91,7 @@ namespace Echo
         // set pos
         qGraphicsProxyWidgetSetPosFun qGraphicsProxyWidgetSetPos = nullptr;
         
-        // set zvalue
+        // set z value
         qGraphicsProxyWidgetSetZValueFun qGraphicsProxyWidgetSetZValue = nullptr;
         qGraphicsItemSetZValueFun qGraphicsItemSetZValue = nullptr;
         
@@ -107,7 +107,7 @@ namespace Echo
         // set tool tip
         qGraphicsItemSetToolTipFun qGraphicsItemSetToolTip = nullptr;
         
-        // set moveable
+        // set move able
         qGraphicsItemSetMoveableFun qGraphicsItemSetMoveable = nullptr;
         
     public:
@@ -257,6 +257,9 @@ namespace Echo
         
         // expand QTreeWidgetItem
         qTreeWidgetItemSetExpandedFun qTreeWidgetItemSetExpanded = nullptr;
+
+    public:
+        qGetOpenFileNamesFun qGetOpenFileNames = nullptr;
         
     public:
         // connect signal slot

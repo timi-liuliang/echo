@@ -17,3 +17,4 @@
 #include "QTreeWidget.h"
 #include "QTreeWidgetItem.h"
 #include "QUiLoader.h"
+#include "QFileDialog.h"

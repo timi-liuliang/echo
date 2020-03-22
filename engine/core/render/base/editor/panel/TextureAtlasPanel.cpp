@@ -52,7 +52,11 @@ namespace Echo
 
 	void TextureAtlasPanel::onImportFromImages()
 	{
-
+		StringArray files = Editor::instance()->qGetOpenFileNames(nullptr, "Select Images", "", "*.png");
+		if (!files.empty())
+		{
+			int a = 10;
+		}
 	}
 #endif
 }

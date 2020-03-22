@@ -15,6 +15,7 @@
 #include "QTreeWidgetItem.cx"
 #include "QUiLoader.cx"
 #include "QWidget.cx"
+#include "QFileDialog.cx"
 
 #define BIND_EDITOR_FUN(Fun) this->Fun = Echo::Fun
 
@@ -119,6 +120,9 @@ namespace Studio
 		BIND_EDITOR_FUN(qTreeWidgetItemUserData);
 		BIND_EDITOR_FUN(qTreeWidgetItemSetUserData);
 		BIND_EDITOR_FUN(qTreeWidgetItemSetExpanded);
+
+		// qt file dialog
+		BIND_EDITOR_FUN(qGetOpenFileNames);
 
 		// connect signal slot
 		BIND_EDITOR_FUN(qConnectObject);
