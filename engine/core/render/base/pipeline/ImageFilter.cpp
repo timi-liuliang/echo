@@ -36,11 +36,24 @@ namespace Echo
 		}
 	}
 
+	void ImageFilter::clearRenderable()
+	{
+		EchoSafeRelease(m_renderable);
+		EchoSafeDelete(m_mesh, Mesh);
+	}
+
 	void ImageFilter::buildRenderable()
 	{
-		if (m_material)
+		if (m_isRenderableDirty && m_material)
 		{
+			clearRenderable();
 
+			updateMeshBuffer();
+
+			// create renderable
+			m_renderable = Renderable::create(m_mesh, m_material, nullptr);
+
+			m_isRenderableDirty = false;
 		}
 	}
 

@@ -57,7 +57,7 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QToolButton" name="m_import">
+       <widget class="QToolButton" name="m_new">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -68,7 +68,7 @@
          <string>Import</string>
         </property>
         <property name="statusTip">
-         <string>Import</string>
+         <string>Apply Render Pipline</string>
         </property>
         <property name="text">
          <string>...</string>
@@ -187,12 +187,36 @@
     </widget>
    </item>
   </layout>
-  <action name="m_actionImportFromImages">
+  <action name="m_actionNewImageFilter">
    <property name="text">
-    <string>Import From Image Files</string>
+    <string>New Image Filter</string>
    </property>
    <property name="toolTip">
-    <string>Import form images</string>
+    <string>New Image Filter</string>
+   </property>
+  </action>
+  <action name="m_actionNewRenderStage">
+   <property name="text">
+    <string>New Render Stage</string>
+   </property>
+   <property name="toolTip">
+    <string>New Render Stage</string>
+   </property>
+  </action>
+  <action name="m_actionNewRenderQueue">
+   <property name="text">
+    <string>New Render Queue</string>
+   </property>
+   <property name="toolTip">
+    <string>New Render Queue</string>
+   </property>
+  </action>
+  <action name="m_actionNewCamera">
+   <property name="text">
+    <string>New Camera</string>
+   </property>
+   <property name="toolTip">
+    <string>New Camera</string>
    </property>
   </action>
  </widget>

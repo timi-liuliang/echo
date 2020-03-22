@@ -21,7 +21,7 @@ namespace Echo
 
 	public:
 		// import
-		void onImport();
+		void onNew();
 		void onImportFromImages();
 
 	protected:

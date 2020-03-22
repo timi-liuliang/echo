@@ -4,7 +4,7 @@
 
 namespace Echo
 {
-	class ImageFilter : public IRenderQueue, public Node
+	class ImageFilter : public IRenderQueue, public Object
 	{
 		ECHO_CLASS(ImageFilter, Node)
 
@@ -44,7 +44,11 @@ namespace Echo
 		// build mesh data by Draw ables data
 		void buildMeshData(VertexArray& oVertices, IndiceArray& oIndices);
 
+		// clear render able
+		void clearRenderable();
+
 	protected:
+		bool        m_isRenderableDirty = true;
 		Mesh*		m_mesh = nullptr;
 		MaterialPtr	m_material;
 		Renderable* m_renderable = nullptr;

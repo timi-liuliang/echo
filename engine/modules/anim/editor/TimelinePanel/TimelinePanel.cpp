@@ -31,7 +31,7 @@ namespace Echo
 			EditorApi.qSplitterSetStretchFactor(splitter, 1, 1);
 		}
 
-		// Top toolbuttons icons
+		// Top tool buttons icons
 		EditorApi.qToolButtonSetIcon(EditorApi.qFindChild(m_ui, "AddNode"), "engine/modules/anim/editor/icon/add.png");
 		EditorApi.qToolButtonSetIcon(EditorApi.qFindChild(m_ui, "Play"), "engine/modules/anim/editor/icon/play.png");
 		EditorApi.qToolButtonSetIcon(EditorApi.qFindChild(m_ui, "Stop"), "engine/modules/anim/editor/icon/stop.png");
@@ -312,7 +312,6 @@ namespace Echo
 		}
 	}
 
-	// property operate
 	void TimelinePanel::onSelectItem()
 	{
 		//QTreeWidgetItem* item = qTreeWidgetCurrentItem(qFindChild(m_ui, "m_nodeTreeWidget"));
@@ -398,7 +397,6 @@ namespace Echo
 		//}
 	}
 
-	// curve display
 	void TimelinePanel::refreshCurveDisplayToEditor(const String& objectPath, const String& propertyName)
 	{
 		// clear curves
@@ -462,7 +460,7 @@ namespace Echo
 
 	void TimelinePanel::refreshCurveKeyDisplayToEditor(const String& objectPath, const String& propertyName)
 	{
-		// cler all key items
+		// clear all key items
 		for (size_t i = 0; i < m_curveItems.size(); i++)
 		{
 			for (QGraphicsItem* item : m_curveKeyItems[i])
@@ -545,7 +543,7 @@ namespace Echo
 
 							QGraphicsItem* item = EditorApi.qGraphicsSceneAddEclipse(m_graphicsScene, center.x - m_keyRadius, center.y - m_keyRadius, m_keyRadius * 2.f, m_keyRadius*2.f, KeyColors[curveIdx]);
 
-							// set userdata
+							// set user data
 							String userData = StringUtil::Format("%s,%s,%s,%d,%d", m_currentEditAnim.c_str(), objectPath.c_str(), propertyName.c_str(), curveIdx, keyIdx);
 							EditorApi.qGraphicsItemSetUserData(item, userData.c_str());
 
@@ -553,7 +551,7 @@ namespace Echo
 							String toolTip = StringUtil::Format("Time : %d\nValue: %.3f", t, value);
 							EditorApi.qGraphicsItemSetToolTip(item, toolTip.c_str());
 
-							// set moveable
+							// set move able
 							EditorApi.qGraphicsItemSetMoveable(item, true);
 
 							// connect signal slots
@@ -721,7 +719,6 @@ namespace Echo
 		}
 	}
 
-	// current edit anim changed
 	void TimelinePanel::onCurrentEditAnimChanged()
 	{
 		String currentText = EditorApi.qComboBoxCurrentText(EditorApi.qFindChild(m_ui, "m_clips"));
@@ -740,7 +737,6 @@ namespace Echo
 				ui32 newLength = StringUtil::ParseUI32( EditorApi.qLineEditText(EditorApi.qFindChild(m_ui, "m_clipLengthLineEdit")), clip->m_length);
 				clip->setLength(newLength);
 			}
-			
 		}
 	}
 
@@ -763,7 +759,7 @@ namespace Echo
 			const float keyWidth = 20;	// pixels
 			const int   keyCount = 100;
 
-			// rulder bottom
+			// ruler bottom
 			Color bgColor; bgColor.setRGBA(83, 83, 83, 255);
 			m_rulerItems.push_back(EditorApi.qGraphicsSceneAddRect(m_graphicsScene, std::max<float>(float(-keyWidth) + m_rulerLeft, -keyWidth), -1 + m_rulerTop, float(keyCount * keyWidth) + keyWidth, m_rulerHeight, bgColor));
 			m_rulerItems.push_back(EditorApi.qGraphicsSceneAddLine(m_graphicsScene, std::max<float>(float(-keyWidth) + m_rulerLeft, -keyWidth), m_rulerHeight + m_rulerTop, float(keyCount * keyWidth) + keyWidth + m_rulerLeft, m_rulerHeight + m_rulerTop, m_rulerColor));
@@ -820,7 +816,7 @@ namespace Echo
 		const float keyWidth = 20;	// pixels
 		const int   keyCount = 50;
 
-		// rulder bottom
+		// ruler bottom
 		Color bgColor; bgColor.setRGBA(83, 83, 83, 255);
 		//m_rulerItems.push_back(qGraphicsSceneAddRect(m_graphicsScene, std::max<float>(float(-keyWidth) + m_rulerLeft, -keyWidth), -1 + m_rulerTop, float(keyCount * keyWidth) + keyWidth, m_rulerHeight, bgColor));
 		m_rulerItems.push_back(EditorApi.qGraphicsSceneAddLine(m_graphicsScene, std::max<float>(keyWidth + m_rulerLeft, -keyWidth), m_rulerHeight + m_rulerTop, std::max<float>(keyWidth + m_rulerLeft, -keyWidth), float(keyCount * keyWidth) + keyWidth + m_rulerLeft, m_rulerColor));
@@ -883,7 +879,6 @@ namespace Echo
 		}
 	}
 
-	// mouse right button on view
 	void TimelinePanel::onRightClickGraphicsView()
 	{
 		// clear menu
@@ -937,7 +932,6 @@ namespace Echo
 		refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
 	}
 
-	// get time and value by pos
 	bool TimelinePanel::calcKeyTimeAndValueByPos(const Vector2& pos, i32& time, float& value)
 	{
 		time = ui32(pos.x * m_millisecondPerPixel);
@@ -1003,7 +997,6 @@ namespace Echo
 		refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
 	}
 
-	// enable or disable curve editor
 	void TimelinePanel::switchCurveEditor()
 	{
 		if (!m_currentEditAnim.empty() && !m_currentEditObjectPath.empty() && !m_currentEditPropertyName.empty())

@@ -18,16 +18,11 @@ namespace Echo
 		// add render able
 		void addRenderable(RenderableID id) { m_renderables.push_back(id); }
 
-		// name
-		void setName(const String& name) { m_name = name; }
-		const String& getName() const { return m_name; }
-
 		// sort
 		void setSort(bool isSort) { m_isSort = isSort; }
 		bool isSort() const { return m_isSort; }
 
 	protected:
-		String							m_name;
 		bool							m_isSort;
 		vector<RenderableID>::type		m_renderables;
 	};
