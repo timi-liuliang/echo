@@ -14,7 +14,7 @@
 ## Download   
 |Description|Files|Previous|
 |---|---|---|   
-|Editor [Win64]|[echo-setup-2020.02.08.exe](https://media.githubusercontent.com/media/timi-liuliang/echo-download/master/download/echo-setup-2020.02.08.exe)|[old version](https://github.com/timi-liuliang/echo-download/tree/master/download)|
+|Editor [Win64]|[echo-setup-2020.03.22.exe](https://media.githubusercontent.com/media/timi-liuliang/echo-download/master/download/echo-setup-2020.03.22.exe)|[old version](https://github.com/timi-liuliang/echo-download/tree/master/download)|
 |Editor [Mac OS X 10.7 or later]|echo.dmg|
 |Examples|[echo-examples-master.zip](https://codeload.github.com/timi-liuliang/echo-examples/zip/master)|
 
