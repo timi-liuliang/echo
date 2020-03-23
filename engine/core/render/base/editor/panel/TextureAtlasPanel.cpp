@@ -4,6 +4,10 @@
 #include "engine/core/base/class_method_bind.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/util/StringUtil.h"
+#include "engine/core/io/MemoryReader.h"
+#include "engine/core/util/Buffer.h"
+#include "engine/core/render/base/image/Image.h"
+#include "TextureAtlasPackage.h"
 
 namespace Echo
 {
@@ -55,7 +59,30 @@ namespace Echo
 		StringArray files = Editor::instance()->qGetOpenFileNames(nullptr, "Select Images", "", "*.png");
 		if (!files.empty())
 		{
-			int a = 10;
+			array<i32, 7> sizes = { 64, 128, 256, 512, 1024, 2048, 4096 };
+			for (size_t i = 0; i < sizes.size(); i++)
+			{
+				map<String, int>::type atlaNames;
+				TextureAtlasPackage atlasPackage(sizes[i], sizes[i]);
+				for (String& file : files)
+				{
+					String atlaName = PathUtil::GetPureFilename(file, false);
+
+					MemoryReader memReader(file);
+					if (memReader.getSize())
+					{
+						Buffer commonTextureBuffer(memReader.getSize(), memReader.getData<ui8*>(), false);
+						Image* image = Image::createFromMemory(commonTextureBuffer, Image::GetImageFormat(file));
+						if (image)
+						{
+							int id = atlasPackage.insert((Color*)(image->getData()), image->getWidth(), image->getHeight());
+							atlaNames[atlaName] = id;
+
+							EchoSafeDelete(image, Image);
+						}
+					}
+				}
+			}
 		}
 	}
 #endif

@@ -46,5 +46,6 @@ namespace Echo
 		EE_MUTEX					(m_mutex);
 		FileSystem*					m_resFileSystem;					// ("Res://")
 		FileSystem*					m_userFileSystem;					// ("User://")
+		FileSystem*					m_externalFileSystem;
 	};
 }

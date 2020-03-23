@@ -11,12 +11,14 @@ namespace Echo
 	{
 		m_resFileSystem = EchoNew(FileSystem);
 		m_userFileSystem = EchoNew(FileSystem);
+		m_externalFileSystem = EchoNew(FileSystem);
 	}
 
 	IO::~IO()
 	{
 		EchoSafeDelete(m_resFileSystem, FileSystem);
 		EchoSafeDelete(m_userFileSystem, FileSystem);
+		EchoSafeDelete(m_externalFileSystem, FileSystem);
 	}
 
 	IO* IO::instance()
@@ -46,6 +48,7 @@ namespace Echo
 	{
 		if (StringUtil::StartWith(resourceName, "Res://"))          return m_resFileSystem->open(resourceName, accessMode);
 		else if (StringUtil::StartWith(resourceName, "User://"))    return m_userFileSystem->open(resourceName, accessMode);
+		else														return m_externalFileSystem->open(resourceName, accessMode);
 
 		EchoLogError("Cannot locate a resource [%s] ResourceGroupManager::openResource", resourceName.c_str());
 		return  nullptr;
