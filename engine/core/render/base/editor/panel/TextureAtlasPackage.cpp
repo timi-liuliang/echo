@@ -49,12 +49,16 @@ namespace Echo
 		return result;
 	}
 
-	int TextureAtlasPackage::insert(Color* data, int width, int height)
+	int TextureAtlasPackage::insert(Color* data, int width, int height, const any& userData)
 	{
 		if (!data)
 			return INVALID;
 
 		int nodeIdx = insert(0, data, width, height);
+		if (nodeIdx != INVALID)
+		{
+			m_nodes[nodeIdx].m_userData = userData;
+		}
 
 		return overWrite(nodeIdx, data, width, height);
 	}

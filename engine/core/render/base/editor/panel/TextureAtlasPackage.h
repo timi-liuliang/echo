@@ -1,5 +1,6 @@
 #pragma once
 
+#include "engine/core/util/Any.hpp"
 #include "engine/core/math/color.h"
 #include "engine/core/render/base/image/PixelFormat.h"
 #include "engine/core/render/base/Texture.h"
@@ -38,6 +39,7 @@ namespace Echo
 			int			m_id;
 			int			m_child[2];
 			IRect		m_rc;
+			any			m_userData;
 
 			Node();
 
@@ -50,7 +52,7 @@ namespace Echo
 		~TextureAtlasPackage();
 
 		// insert data, return node idx
-		int insert(Color* data, int width, int height);
+		int insert(Color* data, int width, int height, const any& userData);
 
 		// overwrite data
 		int overWrite(int nodeIdx, Color* data, int width, int height);
@@ -60,6 +62,9 @@ namespace Echo
 
 		// get node info
 		const Node& getNode(int nodeIdx) const { return m_nodes[nodeIdx]; }
+
+		// get all nodes
+		const vector<Node>::type& getAllNodes() const { return m_nodes; }
 
 		// width & height
 		int getWidth() const { return m_width; }

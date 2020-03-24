@@ -46,6 +46,10 @@ namespace Echo
 		Image(Byte* pData, ui32 width, ui32 height, ui32 depth, PixelFormat pixFmt, ui32 numFaces = 1, ui32 numMipMaps = 0);
 		virtual ~Image();
 
+		// file path
+		const String& getFilePath() const { return m_filePath; }
+		void setFilePath(const String& filePath) { m_filePath = filePath; }
+
 		static String getImageFormatName(ImageFormat imgFmt);
 		static Image* createFromMemory(const Buffer &inBuff, ImageFormat imgFmt);
 		static Image* loadFromDataStream(DataStream* stream, const String& name);
@@ -70,7 +74,8 @@ namespace Echo
 
 		// Get color value from a certain location in the image. The z coordinate is
         // only valid for cubemap and volume textures. This uses the first (largest) mipmap.
-		virtual Color getColor(int x, int y, int z) const;
+		Color getColor(int x, int y, int z) const;
+		vector<Color>::type getColors() const;
 
 		// Resize a 2D image, applying the appropriate filter.
 		virtual bool scale(ui32 width, ui32 height, ImageFilter filter = IMGFILTER_BILINEAR);
@@ -95,6 +100,7 @@ namespace Echo
 		static bool	Scale(const PixelBox &src, const PixelBox &dst, ImageFilter filter = IMGFILTER_BILINEAR);
 
 	protected:
+		String				m_filePath;
 		PixelFormat			m_format;			// The pixel format of the image
 		ui32				m_width;			// The width of the image in pixels
 		ui32				m_height;			// The height of the image in pixels

@@ -117,7 +117,11 @@ namespace Echo
         if (memReader.getSize())
         {
             Buffer commonTextureBuffer(memReader.getSize(), memReader.getData<ui8*>(), false);
-            return Image::createFromMemory(commonTextureBuffer, Image::GetImageFormat(fileName));
+            Image* image = Image::createFromMemory(commonTextureBuffer, Image::GetImageFormat(fileName));
+			if (image)
+				image->setFilePath(fileName);
+
+			return image;
         }
         
         return nullptr;
@@ -340,6 +344,20 @@ namespace Echo
 		//rval = PixelUtil::ConvertColor(rval, m_pixFmt);
 
 		return rval;
+	}
+
+	vector<Color>::type Image::getColors() const
+	{
+		vector<Color>::type results;
+		for (ui32 h = 0; h < m_height; h++)
+		{
+			for (ui32 w = 0; w < m_width; w++)
+			{
+				results.push_back(getColor(w, h, 0));
+			}
+		}
+
+		return results;
 	}
 
 	bool Image::scale(ui32 width, ui32 height, ImageFilter filter)

@@ -59,30 +59,58 @@ namespace Echo
 		StringArray files = Editor::instance()->qGetOpenFileNames(nullptr, "Select Images", "", "*.png");
 		if (!files.empty())
 		{
+			// load images
+			multimap<float, Image*>::type images;
+			for (String& file : files)
+			{
+				Image* image = Image::loadFromFile(file);
+				if (image)
+					images.insert(std::pair<float, Image*>(float(image->getWidth()*image->getHeight()), image));
+			}
+
+			// built atlas
 			array<i32, 7> sizes = { 64, 128, 256, 512, 1024, 2048, 4096 };
 			for (size_t i = 0; i < sizes.size(); i++)
 			{
-				map<String, int>::type atlaNames;
+				bool isSpaceEnough = true;
 				TextureAtlasPackage atlasPackage(sizes[i], sizes[i]);
-				for (String& file : files)
+				for (auto& it : images)
 				{
-					String atlaName = PathUtil::GetPureFilename(file, false);
-
-					MemoryReader memReader(file);
-					if (memReader.getSize())
+					Image* image = it.second;
+					String atlaName = PathUtil::GetPureFilename(image->getFilePath(), false);
+					if (image)
 					{
-						Buffer commonTextureBuffer(memReader.getSize(), memReader.getData<ui8*>(), false);
-						Image* image = Image::createFromMemory(commonTextureBuffer, Image::GetImageFormat(file));
-						if (image)
+						vector<Color>::type colors = image->getColors();
+						int id = atlasPackage.insert(colors.data(), image->getWidth(), image->getHeight(), atlaName);
+						if (id == -1)
 						{
-							int id = atlasPackage.insert((Color*)(image->getData()), image->getWidth(), image->getHeight());
-							atlaNames[atlaName] = id;
-
-							EchoSafeDelete(image, Image);
+							isSpaceEnough = false;
+							break;
 						}
 					}
 				}
+
+				if (isSpaceEnough)
+				{
+					m_textureAtlas->clear();
+					for (const TextureAtlasPackage::Node& node : atlasPackage.getAllNodes())
+					{
+						if (node.m_id != -1)
+						{
+							String name = any_cast<String>(node.m_userData);
+							Vector4 viewPort = atlasPackage.getViewport(node.m_id);
+
+							m_textureAtlas->addAtla(name, viewPort);
+						}
+					}
+
+					m_textureAtlas->save();
+
+					break;
+				}
 			}
+
+			EchoSafeDeleteMap(images, Image);
 		}
 	}
 #endif
