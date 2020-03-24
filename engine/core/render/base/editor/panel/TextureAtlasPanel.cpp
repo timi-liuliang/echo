@@ -28,9 +28,11 @@ namespace Echo
 
 		// Tool button icons
 		EditorApi.qToolButtonSetIcon(EditorApi.qFindChild(m_ui, "m_import"), "engine/core/render/base/editor/icon/import.png");
+		EditorApi.qToolButtonSetIcon(EditorApi.qFindChild(m_ui, "m_splitBygrid"), "engine/core/render/base/editor/icon/grid.png");
 
 		// connect signal slots
 		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_import"), QSIGNAL(clicked()), this, createMethodBind(&TextureAtlasPanel::onImport));
+		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_splitBygrid"), QSIGNAL(clicked()), this, createMethodBind(&TextureAtlasPanel::onSplit));
 	}
 
 	void TextureAtlasPanel::update()
@@ -112,6 +114,9 @@ namespace Echo
 						fullPath = Echo::PathUtil::GetRenameExtFile(fullPath, ".png");
 
 						atlasPackage.saveImage(fullPath);
+
+						if(IO::instance()->convertFullPathToResPath(fullPath, resPath))
+							m_textureAtlas->setTextureRes(resPath);
 					}
 
 					m_textureAtlas->save();
@@ -122,6 +127,11 @@ namespace Echo
 
 			EchoSafeDeleteMap(images, Image);
 		}
+	}
+
+	void TextureAtlasPanel::onSplit()
+	{
+
 	}
 #endif
 }

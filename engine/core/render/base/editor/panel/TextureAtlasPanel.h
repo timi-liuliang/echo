@@ -24,6 +24,9 @@ namespace Echo
 		void onImport();
 		void onImportFromImages();
 
+		// split
+		void onSplit();
+
 	protected:
 		TextureAtlas*				m_textureAtlas;
 		QWidget*					m_importMenu = nullptr;

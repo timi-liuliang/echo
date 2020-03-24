@@ -21,6 +21,10 @@ namespace Echo
         TextureAtlas(const ResourcePath& path);
         virtual ~TextureAtlas();
 
+		// texture res path
+		void setTextureRes(const ResourcePath& path);
+		const ResourcePath& getTextureRes() { return m_textureRes; }
+
 		// add
 		void addAtla(const String& name, const Vector4& viewPort);
 
@@ -35,6 +39,7 @@ namespace Echo
 
     protected:
 		vector<Atla>::type	m_atlas;
+		ResourcePath		m_textureRes = ResourcePath("", ".png");
     };
     typedef ResRef<TextureAtlas> TextureAtlasPtr;
 }

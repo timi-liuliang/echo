@@ -22,8 +22,18 @@ namespace Echo
 
     void TextureAtlas::bindMethods()
     {
+		CLASS_BIND_METHOD(TextureAtlas, getTextureRes, DEF_METHOD("getTextureRes"));
+		CLASS_BIND_METHOD(TextureAtlas, setTextureRes, DEF_METHOD("setTextureRes"));
 
+		CLASS_REGISTER_PROPERTY(TextureAtlas, "Texture", Variant::Type::ResourcePath, "getTextureRes", "setTextureRes");
     }
+
+	void TextureAtlas::setTextureRes(const ResourcePath& path)
+	{
+		if (m_textureRes.setPath(path.getPath()))
+		{
+		}
+	}
 
 	void TextureAtlas::addAtla(const String& name, const Vector4& viewPort)
 	{
@@ -50,6 +60,8 @@ namespace Echo
 			if (doc.load_buffer(reader.getData<char*>(), reader.getSize()))
 			{
 				pugi::xml_node root = doc.child("atlas");
+				res->setTextureRes(String(root.attribute("texture").as_string()));
+
 				for (pugi::xml_node child = root.child("atla"); child; child = child.next_sibling("atla"))
 				{
 					String name = child.attribute("name").as_string();
@@ -77,6 +89,7 @@ namespace Echo
 
 		// root node
 		pugi::xml_node root = doc.append_child("atlas");
+		root.append_attribute("texture").set_value(m_textureRes.getPath().c_str());
 		
 		// all atlas
 		for (const Atla& atla : m_atlas)
