@@ -70,11 +70,8 @@ namespace Echo
 		int getWidth() const { return m_width; }
 		int getHeight() const { return m_height; }
 
-		// get texture
-		Texture* getTexture() { return m_texture; }
- 
-		// refresh texture
-		void refreshTexture();
+		// save image
+		void saveImage(const String& path);
 
 	private:
 		// modify data
@@ -86,7 +83,6 @@ namespace Echo
 		vector<Node>::type	m_nodes;
 		void*				m_textureData = nullptr;
 		PixelFormat			m_format = PF_RGBA8_UNORM;
-		TexturePtr			m_texture;
     };
 }
 

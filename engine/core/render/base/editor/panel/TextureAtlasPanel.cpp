@@ -6,6 +6,7 @@
 #include "engine/core/util/StringUtil.h"
 #include "engine/core/io/MemoryReader.h"
 #include "engine/core/util/Buffer.h"
+#include "engine/core/io/IO.h"
 #include "engine/core/render/base/image/Image.h"
 #include "TextureAtlasPackage.h"
 
@@ -102,6 +103,15 @@ namespace Echo
 
 							m_textureAtlas->addAtla(name, viewPort);
 						}
+					}
+
+					// save png
+					{
+						String resPath = m_textureAtlas->getPath();
+						String fullPath = IO::instance()->convertResPathToFullPath(resPath);
+						fullPath = Echo::PathUtil::GetRenameExtFile(fullPath, ".png");
+
+						atlasPackage.saveImage(fullPath);
 					}
 
 					m_textureAtlas->save();

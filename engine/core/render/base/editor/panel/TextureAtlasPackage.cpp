@@ -1,6 +1,7 @@
 #include "TextureAtlasPackage.h"
 #include "engine/core/util/Buffer.h"
 #include "engine/core/resource/Res.h"
+#include "engine/core/render/base/image/Image.h"
 #include "engine/core/render/base/Texture.h"
 
 #ifdef ECHO_EDITOR_MODE
@@ -96,20 +97,6 @@ namespace Echo
 		return INVALID;
 	}
 
-	void TextureAtlasPackage::refreshTexture()
-	{
-		size_t pixelsize = PixelUtil::GetPixelSize(m_format);
-		Buffer buffer(ui32(m_width*m_height*pixelsize), m_textureData, false);
-		if (m_texture)
-		{
-            m_texture->updateTexture2D(m_format, Texture::TU_GPU_READ, m_width, m_height, buffer.getData(), buffer.getSize());
-		}
-		else
-		{
-            m_texture = Texture::createTexture2D(m_format, Texture::TU_GPU_READ, m_width, m_height, buffer.getData(), buffer.getSize());
-		}
-	}
-
 	int TextureAtlasPackage::insert(int nodeIdx, Color* data, int width, int height)
 	{
 		if (nodeIdx == INVALID)
@@ -187,6 +174,12 @@ namespace Echo
 
 			return nodeIdx;
 		}
+	}
+
+	void TextureAtlasPackage::saveImage(const String& path)
+	{
+		Image image((Byte*)m_textureData, m_width, m_height, 1, m_format, 1, 0);
+		image.saveToFile(path, IF_PNG);
 	}
 }
 
