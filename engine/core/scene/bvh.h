@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/core/util/GrowableStack.h"
+#include "engine/core/util/Any.hpp"
 #include "engine/core/geom/AABB.h"
 #include "engine/core/geom/Frustum.h"
 
@@ -28,7 +29,7 @@ namespace Echo
 		/// Enlarged AABB
 		AABB aabb;
 
-		void* userData;
+		any userData;
 
 		union
 		{
@@ -50,7 +51,7 @@ namespace Echo
 		~Bvh();
 
 		// proxy
-		i32 createProxy(const AABB& aabb, void* userData);
+		i32 createProxy(const AABB& aabb, const any& userData);
 		void destroyProxy(i32 proxyId);
 
 		// Move a proxy with a swepted AABB. If the proxy has moved outside of its fattened AABB,
@@ -61,7 +62,7 @@ namespace Echo
 
 		// Get proxy user data.
 		// @return the proxy user data or 0 if the id is invalid.
-		void* getUserData(i32 proxyId) const;
+		const any& getUserData(i32 proxyId) const;
 
 		// Get the fat AABB for a proxy.
 		const AABB& getFatAABB(i32 proxyId) const;

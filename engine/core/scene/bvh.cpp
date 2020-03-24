@@ -97,7 +97,7 @@ namespace Echo
 	// Create a proxy in the tree as a leaf node. We return the index
 	// of the node instead of a pointer so that we can grow
 	// the node pool.
-	i32 Bvh::createProxy(const AABB& aabb, void* userData)
+	i32 Bvh::createProxy(const AABB& aabb, const any& userData)
 	{
 		i32 proxyId = allocateNode();
 
@@ -779,7 +779,7 @@ namespace Echo
 		}
 	}
 
-	void* Bvh::getUserData(i32 proxyId) const
+	const any& Bvh::getUserData(i32 proxyId) const
 	{
 		EchoAssert(0 <= proxyId && proxyId < m_nodeCapacity);
 		return m_nodes[proxyId].userData;
