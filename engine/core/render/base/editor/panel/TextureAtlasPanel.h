@@ -27,6 +27,9 @@ namespace Echo
 		// split
 		void onSplit();
 
+		// refresh list
+		void refreshAtlaList();
+
 	protected:
 		TextureAtlas*				m_textureAtlas;
 		QWidget*					m_importMenu = nullptr;

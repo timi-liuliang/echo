@@ -28,13 +28,14 @@ namespace Echo
 		// add
 		void addAtla(const String& name, const Vector4& viewPort);
 
+		// get all atlas
+		const vector<Atla>::type& getAllAtlas() { return m_atlas; }
+
 		// clear
 		void clear();
 
-        // load
+        // load | save
         static Res* load(const ResourcePath& path);
-
-        // save
         virtual void save() override;
 
     protected:

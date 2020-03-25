@@ -33,6 +33,8 @@ namespace Echo
 		// connect signal slots
 		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_import"), QSIGNAL(clicked()), this, createMethodBind(&TextureAtlasPanel::onImport));
 		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_splitBygrid"), QSIGNAL(clicked()), this, createMethodBind(&TextureAtlasPanel::onSplit));
+
+		refreshAtlaList();
 	}
 
 	void TextureAtlasPanel::update()
@@ -127,11 +129,35 @@ namespace Echo
 
 			EchoSafeDeleteMap(images, Image);
 		}
+
+		refreshAtlaList();
 	}
 
 	void TextureAtlasPanel::onSplit()
 	{
 
+	}
+
+	void TextureAtlasPanel::refreshAtlaList()
+	{
+		QWidget* nodeTreeWidget = EditorApi.qFindChild(m_ui, "m_nodeTreeWidget");
+		if (nodeTreeWidget)
+		{
+			EditorApi.qTreeWidgetClear(nodeTreeWidget);
+
+			QTreeWidgetItem* rootItem = EditorApi.qTreeWidgetInvisibleRootItem(nodeTreeWidget);
+			if (rootItem)
+			{
+				for (const TextureAtlas::Atla atla : m_textureAtlas->getAllAtlas())
+				{
+					QTreeWidgetItem* objetcItem = EditorApi.qTreeWidgetItemNew();
+					EditorApi.qTreeWidgetItemSetText(objetcItem, 0, atla.m_name.c_str());
+					EditorApi.qTreeWidgetItemSetUserData(objetcItem, 0, "object");
+					//EditorApi.qTreeWidgetItemSetIcon(objetcItem, 0, Editor::instance()->getNodeIcon(node).c_str());
+					EditorApi.qTreeWidgetItemAddChild(rootItem, objetcItem);
+				}
+			}
+		}
 	}
 #endif
 }
