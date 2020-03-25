@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../ShaderProgram.h"
-#include "panel/RenderPipelinePanel.h"
+#include "engine/core/render/base/pipeline/RenderPipeline.h"
+#include "RenderPipelinePanel.h"
 
 namespace Echo
 {

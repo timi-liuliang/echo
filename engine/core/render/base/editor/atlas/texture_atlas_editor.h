@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../ShaderProgram.h"
-#include "panel/TextureAtlasPanel.h"
+#include "engine/core/render/base/ShaderProgram.h"
+#include "TextureAtlasPanel.h"
 
 namespace Echo
 {

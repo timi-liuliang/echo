@@ -12,7 +12,7 @@ namespace Echo
 	{
 		m_pipeline = ECHO_DOWN_CAST<RenderPipeline*>(obj);
 
-		m_ui = EditorApi.qLoadUi("engine/core/render/base/editor/panel/RenderPipelinePanel.ui");
+		m_ui = EditorApi.qLoadUi("engine/core/render/base/editor/pipeline/RenderPipelinePanel.ui");
 
 		QWidget* splitter = EditorApi.qFindChild(m_ui, "m_splitter");
 		if (splitter)

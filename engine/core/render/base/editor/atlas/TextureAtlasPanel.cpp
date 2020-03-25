@@ -17,7 +17,7 @@ namespace Echo
 	{
 		m_textureAtlas = ECHO_DOWN_CAST<TextureAtlas*>(obj);
 
-		m_ui = EditorApi.qLoadUi("engine/core/render/base/editor/panel/TextureAtlasPanel.ui");
+		m_ui = EditorApi.qLoadUi("engine/core/render/base/editor/atlas/TextureAtlasPanel.ui");
 
 		QWidget* splitter = EditorApi.qFindChild(m_ui, "m_splitter");
 		if (splitter)
