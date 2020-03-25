@@ -53,6 +53,13 @@ Programming visualization is a very import concept for non-programmers, with the
 
 ![](https://media.githubusercontent.com/media/timi-liuliang/echo-download/master/images/intro/shadereditor.png)   
 
+### Render Pipeline Visualization (Developing)
+Inspired by [CI|CD pipeline](https://semaphoreci.com/blog/cicd-pipeline), we decided make a render pipeline editor, then not only programmer but everyone can config engine render process.   
+1. Forward Rendering ?   
+2. Deferred Shading ?    
+3. Forward+ (Tiled Forward Rendering)?   
+Try config it by your needs.
+
 ### Configurable Module   
 Most of the engine's Functionality was implemented by configurable modules. that means when you release your app, you can just choose the module you really need. which makes your app have smaller size and more efficiency running speed.
 
