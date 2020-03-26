@@ -185,6 +185,7 @@ namespace Echo
 			String fullPath = IO::instance()->convertResPathToFullPath(resPath);
 
 			m_imageItem = EditorApi.qGraphicsSceneAddPixmap(m_graphicsScene, fullPath.c_str());
+			EditorApi.qGraphicsItemSetMoveable(m_imageItem, true);
 		}
 	}
 #endif
