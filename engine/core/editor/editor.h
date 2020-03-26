@@ -131,6 +131,9 @@ namespace Echo
         
         // add eclipse
         qGraphicsSceneAddEclipseFun qGraphicsSceneAddEclipse = nullptr;
+
+        // add pixmap
+        qGraphicsSceneAddPixmapFun qGraphicsSceneAddPixmap = nullptr;
         
         // remove item
         qGraphicsSceneDeleteWidgetFun qGraphicsSceneDeleteWidget = nullptr;

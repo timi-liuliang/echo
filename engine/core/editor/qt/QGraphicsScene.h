@@ -27,6 +27,9 @@ namespace Echo
 	// add eclipse
 	typedef QGraphicsItem* (*qGraphicsSceneAddEclipseFun)(QObject* scene, float left, float top, float width, float height, const Color& color);
 
+	// add pixmap
+	typedef QGraphicsItem* (*qGraphicsSceneAddPixmapFun)(QObject* scene, const char* fileName);
+
 	// remove item
 	typedef void (*qGraphicsSceneDeleteWidgetFun)(QObject* scene, QGraphicsProxyWidget* widget);
 

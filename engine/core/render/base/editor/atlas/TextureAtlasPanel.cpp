@@ -34,7 +34,11 @@ namespace Echo
 		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_import"), QSIGNAL(clicked()), this, createMethodBind(&TextureAtlasPanel::onImport));
 		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_splitBygrid"), QSIGNAL(clicked()), this, createMethodBind(&TextureAtlasPanel::onSplit));
 
-		refreshAtlaList();
+		// create QGraphicsScene
+		m_graphicsScene = EditorApi.qGraphicsSceneNew();
+		EditorApi.qGraphicsViewSetScene(EditorApi.qFindChild(m_ui, "m_graphicsView"), m_graphicsScene);
+
+		refreshUiDisplay();
 	}
 
 	void TextureAtlasPanel::update()
@@ -130,12 +134,18 @@ namespace Echo
 			EchoSafeDeleteMap(images, Image);
 		}
 
-		refreshAtlaList();
+		refreshUiDisplay();
 	}
 
 	void TextureAtlasPanel::onSplit()
 	{
 
+	}
+
+	void TextureAtlasPanel::refreshUiDisplay()
+	{
+		refreshAtlaList();
+		refreshImageDisplay();
 	}
 
 	void TextureAtlasPanel::refreshAtlaList()
@@ -157,6 +167,24 @@ namespace Echo
 					EditorApi.qTreeWidgetItemAddChild(rootItem, objetcItem);
 				}
 			}
+		}
+	}
+
+	void TextureAtlasPanel::refreshImageDisplay()
+	{
+		QWidget* graphicsView = EditorApi.qFindChild(m_ui, "m_graphicsView");
+		if (graphicsView)
+		{
+			if (m_imageItem)
+			{
+				EditorApi.qGraphicsSceneDeleteItem(m_graphicsScene, m_imageItem);
+				m_imageItem = nullptr;
+			}
+
+			String resPath = m_textureAtlas->getTextureRes().getPath();
+			String fullPath = IO::instance()->convertResPathToFullPath(resPath);
+
+			m_imageItem = EditorApi.qGraphicsSceneAddPixmap(m_graphicsScene, fullPath.c_str());
 		}
 	}
 #endif

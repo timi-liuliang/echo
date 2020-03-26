@@ -108,6 +108,20 @@ namespace Echo
 		return nullptr;
 	}
 
+	QGraphicsItem* qGraphicsSceneAddPixmap(QObject* scene, const char* fileName)
+	{
+		QGraphicsScene* graphicsScene = qobject_cast<QGraphicsScene*>(scene);
+		if (graphicsScene)
+		{
+			QImage image(fileName);
+			QGraphicsPixmapItem* pixmapItem = graphicsScene->addPixmap(QPixmap::fromImage(image));
+
+			return pixmapItem;
+		}
+
+		return nullptr;
+	}
+
 	void qGraphicsSceneDeleteWidget(QObject* scene, QGraphicsProxyWidget* widget)
 	{
 		QGraphicsScene* graphicsScene = qobject_cast<QGraphicsScene*>(scene);

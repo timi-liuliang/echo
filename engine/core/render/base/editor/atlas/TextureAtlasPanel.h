@@ -28,11 +28,15 @@ namespace Echo
 		void onSplit();
 
 		// refresh list
+		void refreshUiDisplay();
 		void refreshAtlaList();
+		void refreshImageDisplay();
 
 	protected:
 		TextureAtlas*				m_textureAtlas;
 		QWidget*					m_importMenu = nullptr;
+		QObject*					m_graphicsScene;
+		QGraphicsItem*				m_imageItem = nullptr;
 	};
 }
 
