@@ -44,6 +44,7 @@ namespace Studio
 
 		// get sender item
 		BIND_EDITOR_FUN(qSenderItem);
+		BIND_EDITOR_FUN(qGraphicsItemSetParentItem);
 		BIND_EDITOR_FUN(qGraphicsItemSceneRect);
 		BIND_EDITOR_FUN(qGraphicsItemWidth);
 		BIND_EDITOR_FUN(qGraphicsItemPos);

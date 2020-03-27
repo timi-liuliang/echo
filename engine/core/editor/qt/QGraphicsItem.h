@@ -10,6 +10,9 @@ namespace Echo
 	// get sender item
 	typedef QGraphicsItem* (*qSenderItemFun)();
 
+	// set parent
+	typedef void (*qGrphicsItemSetParentItemFun)(QGraphicsItem* current, QGraphicsItem* parent);
+
 	// get rect
 	typedef bool (*qGraphicsItemSceneRectFun)(QGraphicsItem* item, Rect& rect);
 

@@ -2,6 +2,7 @@
 #include "engine/core/io/IO.h"
 #include <thirdparty/pugixml/pugixml.hpp>
 #include <thirdparty/pugixml/pugiconfig.hpp>
+#include "engine/core/render/base/Texture.h"
 
 namespace Echo
 {
@@ -32,6 +33,7 @@ namespace Echo
 	{
 		if (m_textureRes.setPath(path.getPath()))
 		{
+			m_texture = ECHO_DOWN_CAST<Texture*>(Res::get(path.getPath()));
 		}
 	}
 
@@ -42,6 +44,20 @@ namespace Echo
 		atla.m_viewPort = viewPort;
 
 		m_atlas.push_back(atla);
+	}
+
+	bool TextureAtlas::getViewport(const String& name, Vector4& viewPort)
+	{
+		for (Atla& atla : m_atlas)
+		{
+			if (atla.m_name == name)
+			{
+				viewPort = atla.m_viewPort;
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	void TextureAtlas::clear()

@@ -15,6 +15,7 @@ namespace Echo
 
 	public:
 		TextureAtlasPanel(Object* obj);
+		virtual ~TextureAtlasPanel();
 
 		// update
 		void update();
@@ -26,17 +27,23 @@ namespace Echo
 
 		// split
 		void onSplit();
+		void onSelectItem();
 
 		// refresh list
 		void refreshUiDisplay();
 		void refreshAtlaList();
 		void refreshImageDisplay();
 
+		// clear
+		void clearImageItemAndBorder();
+
 	protected:
 		TextureAtlas*				m_textureAtlas;
 		QWidget*					m_importMenu = nullptr;
 		QObject*					m_graphicsScene;
 		QGraphicsItem*				m_imageItem = nullptr;
+		QGraphicsItem*				m_imageBorder = nullptr;
+		QGraphicsItem*				m_atlaBorder = nullptr;
 	};
 }
 

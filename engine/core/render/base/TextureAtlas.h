@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/core/resource/Res.h"
+#include "Texture.h"
 
 namespace Echo
 {
@@ -25,8 +26,14 @@ namespace Echo
 		void setTextureRes(const ResourcePath& path);
 		const ResourcePath& getTextureRes() { return m_textureRes; }
 
+		// texture
+		const TexturePtr& getTexture() { return m_texture; }
+
 		// add
 		void addAtla(const String& name, const Vector4& viewPort);
+
+		// get viewport
+		bool getViewport(const String& name, Vector4& viewPort);
 
 		// get all atlas
 		const vector<Atla>::type& getAllAtlas() { return m_atlas; }
@@ -41,6 +48,7 @@ namespace Echo
     protected:
 		vector<Atla>::type	m_atlas;
 		ResourcePath		m_textureRes = ResourcePath("", ".png");
+		TexturePtr			m_texture;
     };
     typedef ResRef<TextureAtlas> TextureAtlasPtr;
 }

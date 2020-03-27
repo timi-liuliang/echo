@@ -19,6 +19,14 @@ namespace Echo
 		return g_senderItem;
 	}
 
+	void qGraphicsItemSetParentItem(QGraphicsItem* current, QGraphicsItem* parent)
+	{
+		if(current && parent)
+		{
+			current->setParentItem(parent);
+		}
+	}
+
 	bool qGraphicsItemSceneRect(QGraphicsItem* item, Rect& rect)
 	{
 		if (item)

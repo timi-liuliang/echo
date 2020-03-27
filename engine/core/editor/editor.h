@@ -77,6 +77,9 @@ namespace Echo
     public:
         // get sender item
         qSenderItemFun qSenderItem = nullptr;
+
+        // set parent
+        qGrphicsItemSetParentItemFun qGraphicsItemSetParentItem = nullptr;
         
         // get rect
         qGraphicsItemSceneRectFun qGraphicsItemSceneRect = nullptr;
