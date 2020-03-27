@@ -46,4 +46,18 @@ namespace Echo
 			graphicsView->scale(scaleX, scaleY);
 		}
 	}
+
+	void qGraphicsViewFitInView(QWidget* view, Rect& rect)
+	{
+		QGraphicsView* graphicsView = qobject_cast<QGraphicsView*>(view);
+		if (graphicsView)
+		{
+			QRectF rectF;
+			rectF.setLeft(rect.left);
+			rectF.setTop(rect.top);
+			rectF.setRight(rect.right);
+			rectF.setBottom(rect.bottom);
+			graphicsView->fitInView(rectF);
+		}
+	}
 }

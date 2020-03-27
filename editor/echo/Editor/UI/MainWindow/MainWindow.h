@@ -16,6 +16,7 @@ namespace Studio
 	class ScratchEditor;
 	class TimelinePanel;
 	class DebuggerPanel;
+	class CenterPanel;
 	class BottomPanel;
 	class AboutWindow;
 	class MainWindow : public QMainWindow, public Ui_MainWindow
@@ -53,6 +54,7 @@ namespace Studio
 
 	public:
 		// panels
+		CenterPanel* getCenterPanel() { return m_centerPanel; }
 		BottomPanel* getBottomPanel() { return m_bottomPanel; }
 
 	protected:
@@ -141,6 +143,7 @@ namespace Studio
 		TextEditorArea*	    m_scriptEditorMdiArea = nullptr;
 		ShaderEditor*		m_shaderEditorPanel = nullptr;
 		ScratchEditor*		m_scratchEditorPanel = nullptr;
+		CenterPanel*		m_centerPanel;
 		BottomPanel*		m_bottomPanel;
 		QProcess			m_gameProcess;
 		QComboBox*			m_subEditComboBox;

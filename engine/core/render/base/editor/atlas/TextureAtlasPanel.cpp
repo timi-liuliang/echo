@@ -76,7 +76,7 @@ namespace Echo
 		if (!files.empty())
 		{
 			// load images
-			multimap<float, Image*>::type images;
+			multimap<float, Image*, std::greater<float>>::type images;
 			for (String& file : files)
 			{
 				Image* image = Image::loadFromFile(file);
@@ -183,12 +183,9 @@ namespace Echo
 		{
 			EditorApi.qGraphicsSceneDeleteItem(m_graphicsScene, m_imageItem);
 			m_imageItem = nullptr;
-		}
 
-		if (m_imageBorder)
-		{
-			EditorApi.qGraphicsSceneDeleteItem(m_graphicsScene, m_imageBorder);
-			m_imageBorder = nullptr;
+			// because m_imageBorder is a child of m_imageItem.
+			// so m_imageBorder will be delete too.
 		}
 	}
 
@@ -221,6 +218,9 @@ namespace Echo
 			m_imageBorder = EditorApi.qGraphicsSceneAddPath(m_graphicsScene, paths, 1.f, color);
 
 			EditorApi.qGraphicsItemSetParentItem(m_imageBorder, m_imageItem);
+
+			// fit in view
+			//EditorApi.qGraphicsViewFitInView(EditorApi.qFindChild(m_ui, "m_graphicsView"), rect);
 		}
 	}
 

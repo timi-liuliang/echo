@@ -18,6 +18,7 @@
 #include "TextEditorArea.h"
 #include "ShaderEditor.h"
 #include "ScratchEditor.h"
+#include "CenterPanel.h"
 #include "BottomPanel.h"
 #include "ProjectWnd.h"
 #include "PathChooseDialog.h"
@@ -118,6 +119,7 @@ namespace Studio
 		EchoSafeDelete(m_scriptEditorMdiArea, TextEditorArea);
 		EchoSafeDelete(m_shaderEditorPanel, ShaderEditor);
 		EchoSafeDelete(m_scratchEditorPanel, ScratchEditor);
+		EchoSafeDelete(m_centerPanel, CenterPanel);
         EchoSafeDelete(m_bottomPanel, BottomPanel);
         EchoSafeDelete(m_scenePanel, NodeTreePanel);
         EchoSafeDelete(m_resPanel, ResPanel);
@@ -137,6 +139,7 @@ namespace Studio
 		m_renderPanel = EchoNew(QDockWidget(this));
 		m_resPanel = EchoNew(ResPanel(this));
 		m_scenePanel = EchoNew(NodeTreePanel(this));
+		m_centerPanel = EchoNew(CenterPanel(this));
 		m_bottomPanel = EchoNew(BottomPanel(this));
 		m_scriptEditorMdiArea = EchoNew(TextEditorArea);
 		m_shaderEditorPanel = EchoNew(ShaderEditor(this));
@@ -158,6 +161,7 @@ namespace Studio
 		this->addDockWidget(Qt::TopDockWidgetArea, m_scriptEditorMdiArea);
 		this->addDockWidget(Qt::TopDockWidgetArea, m_shaderEditorPanel);
 		this->addDockWidget(Qt::TopDockWidgetArea, m_scratchEditorPanel);
+		this->addDockWidget(Qt::TopDockWidgetArea, m_centerPanel);
 		this->addDockWidget(Qt::TopDockWidgetArea, m_renderPanel);
 		this->addDockWidget(Qt::LeftDockWidgetArea, m_resPanel);
 		this->addDockWidget(Qt::RightDockWidgetArea, m_scenePanel);
@@ -165,6 +169,7 @@ namespace Studio
 
 		this->tabifyDockWidget(m_scriptEditorMdiArea, m_shaderEditorPanel);
 		this->tabifyDockWidget(m_shaderEditorPanel, m_scratchEditorPanel);
+		this->tabifyDockWidget(m_scratchEditorPanel, m_centerPanel);
 
 		m_resPanel->onOpenProject();
 

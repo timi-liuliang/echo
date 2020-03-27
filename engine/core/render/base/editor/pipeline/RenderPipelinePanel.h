@@ -8,7 +8,7 @@
 
 namespace Echo
 {
-	class RenderpipelinePanel : public BottomPanelTab
+	class RenderpipelinePanel : public PanelTab
 	{
 		typedef vector<QGraphicsItem*>::type QGraphicsItemArray;
 		typedef vector<QGraphicsProxyWidget*>::type QGraphicsWidgetArray;

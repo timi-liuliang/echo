@@ -1,5 +1,6 @@
 #include "Studio.h"
 #include "MainWindow.h"
+#include "CenterPanel.h"
 #include "BottomPanel.h"
 #include "ProjectWnd.h"
 #include "RenderWindow.h"
@@ -260,9 +261,14 @@ namespace Studio
 		//renderWindow->getInputController()->onInitCameraSettings(diroffset);
 	}
 
-	void AStudio::showBottomPanel(Echo::BottomPanelTab* bottomPanel)
+	void AStudio::showBottomPanel(Echo::PanelTab* bottomPanel)
 	{
-		MainWindow::instance()->getBottomPanel()->showBottomPanel( bottomPanel);
+		MainWindow::instance()->getBottomPanel()->showPanel( bottomPanel);
+	}
+
+	void AStudio::showCenterPanel(Echo::PanelTab* bottomPanel)
+	{
+		MainWindow::instance()->getCenterPanel()->showPanel(bottomPanel);
 	}
 
 	const Echo::String AStudio::selectANodeObject()

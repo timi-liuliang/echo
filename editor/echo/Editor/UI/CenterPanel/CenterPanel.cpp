@@ -1,4 +1,4 @@
-#include "BottomPanel.h"
+#include "CenterPanel.h"
 #include <QListWidgetItem>
 #include <QFile>
 #include <QUiLoader>
@@ -10,33 +10,24 @@
 
 namespace Studio
 {
-	BottomPanel::BottomPanel(QWidget* parent/* = 0*/)
+	CenterPanel::CenterPanel(QWidget* parent/* = 0*/)
 		: QDockWidget( parent)
 	{
 		setupUi(this);
 
-		m_documentPanel = EchoNew(DocumentPanel(this));
-		m_debuggerPanel = EchoNew(DebuggerPanel(this));
-
 		m_tabWidget->clear();
-		m_tabWidget->addTab(AStudio::instance()->getLogPanel(), "Log");
-		m_tabWidget->addTab(m_debuggerPanel, "Debugger");
-		m_tabWidget->addTab(m_documentPanel, "Document");
-
-		onTabIdxChanged(0);
 
 		QObject::connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(onTabIdxChanged(int)));
+
+		setVisible(false);
 	}
 
-	BottomPanel::~BottomPanel()
+	CenterPanel::~CenterPanel()
 	{
         m_tabWidget->disconnect();
-        
-        EchoSafeDelete( m_debuggerPanel, DebuggerPanel);
-        EchoSafeDelete( m_documentPanel, DocumentPanel);
 	}
 
-	QWidget* BottomPanel::getTab(const Echo::String& tabName)
+	QWidget* CenterPanel::getTab(const Echo::String& tabName)
 	{
 		for (int i = 0; i < m_tabWidget->count(); i++)
 		{
@@ -49,7 +40,7 @@ namespace Studio
 		return nullptr;
 	}
 
-	void BottomPanel::setTabVisible(const Echo::String& tabName, bool isVisible)
+	void CenterPanel::setTabVisible(const Echo::String& tabName, bool isVisible)
 	{
 		QWidget* page = getTab(tabName.c_str());
 		if (page)
@@ -59,19 +50,19 @@ namespace Studio
 		}
 	}
 
-	bool BottomPanel::isTabVisible(const Echo::String& tabName)
+	bool CenterPanel::isTabVisible(const Echo::String& tabName)
 	{
 		QWidget* page = getTab(tabName.c_str());
 		return page ? page->isVisible() : false;
 	}
 
-	void BottomPanel::onTabIdxChanged(int idx)
+	void CenterPanel::onTabIdxChanged(int idx)
 	{
 		QWidget* widget = m_tabWidget->currentWidget();
 		setWindowTitle(widget->windowTitle());
 	}
 
-	void BottomPanel::showPanel(Echo::PanelTab* bottomPanel)
+	void CenterPanel::showPanel(Echo::PanelTab* bottomPanel)
 	{
 		// display
 		if (bottomPanel->getUiPtr())
@@ -85,6 +76,7 @@ namespace Studio
 			}
 
 			setTabVisible(title, true);
+			setVisible(true);
 		}	
 	}
 }

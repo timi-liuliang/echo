@@ -20,8 +20,9 @@ namespace Echo
 		static void setInstance(Editor* inst);
 
 	public:
-		// show bottom panel
-		virtual void showBottomPanel(BottomPanelTab* bottomPanel)=0;
+		// show panel
+        virtual void showCenterPanel(PanelTab * bottomPanel) = 0;
+		virtual void showBottomPanel(PanelTab* bottomPanel)=0;
 
 	public:
 		// select a node object
@@ -156,6 +157,9 @@ namespace Echo
         
         // scale
         qGraphicsViewSetScaleFun qGraphicsViewSetScale = nullptr;
+
+        // fit in view
+        qGraphicsViewFitInViewFun qGraphicsViewFitInView = nullptr;
         
     public:
         // resize section

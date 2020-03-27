@@ -8,7 +8,7 @@
 
 namespace Echo
 {
-	class TextureAtlasPanel : public BottomPanelTab
+	class TextureAtlasPanel : public PanelTab
 	{
 		typedef vector<QGraphicsItem*>::type QGraphicsItemArray;
 		typedef vector<QGraphicsProxyWidget*>::type QGraphicsWidgetArray;

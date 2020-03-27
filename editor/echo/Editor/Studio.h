@@ -80,7 +80,10 @@ namespace Studio
 
 	public:
 		// show bottom panel
-		virtual void showBottomPanel(Echo::BottomPanelTab* bottomPanel) override;
+		virtual void showBottomPanel(Echo::PanelTab* centerPanel) override;
+
+		// show center panel
+		virtual void showCenterPanel(Echo::PanelTab* bottomPanel) override;
 
 	public:
 		// select a node object

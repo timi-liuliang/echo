@@ -8,7 +8,7 @@
 namespace Echo
 {
 	class Timeline;
-	class TimelinePanel : public BottomPanelTab
+	class TimelinePanel : public PanelTab
 	{
 		typedef vector<QGraphicsItem*>::type QGraphicsItemArray;
 		typedef vector<QGraphicsProxyWidget*>::type QGraphicsWidgetArray;

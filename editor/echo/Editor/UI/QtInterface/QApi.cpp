@@ -73,6 +73,7 @@ namespace Studio
 		BIND_EDITOR_FUN(qGraphicsViewSceneRect);
 		BIND_EDITOR_FUN(qGraphicsViewSetScene);
 		BIND_EDITOR_FUN(qGraphicsViewSetScale);
+		BIND_EDITOR_FUN(qGraphicsViewFitInView);
 
 		// resize section
 		BIND_EDITOR_FUN(qHeaderViewResizeSection);

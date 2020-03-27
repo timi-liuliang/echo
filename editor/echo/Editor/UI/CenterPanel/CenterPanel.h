@@ -10,13 +10,13 @@ namespace Studio
 {
 	class DebuggerPanel;
 	class DocumentPanel;
-	class BottomPanel : public QDockWidget, public Ui_BottomPanel
+	class CenterPanel : public QDockWidget, public Ui_BottomPanel
 	{
 		Q_OBJECT
 
 	public:
-		BottomPanel(QWidget* parent = 0);
-		~BottomPanel();
+		CenterPanel(QWidget* parent = 0);
+		~CenterPanel();
 
 		// show tab
 		void setTabVisible(const Echo::String& tabName, bool isVisible);
@@ -34,7 +34,5 @@ namespace Studio
 		QWidget* getTab(const Echo::String& tabName);
 
 	private:
-		DocumentPanel*	m_documentPanel;
-		DebuggerPanel*	m_debuggerPanel;
 	};
 }

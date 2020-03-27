@@ -4,13 +4,13 @@
 namespace Echo
 {
 #ifdef ECHO_EDITOR_MODE
-	BottomPanelTab::BottomPanelTab()
+	PanelTab::PanelTab()
 		: m_ui(nullptr)
 	{
 
 	}
 
-	BottomPanelTab::~BottomPanelTab()
+	PanelTab::~PanelTab()
 	{
 		EditorApi.qDeleteWidget(m_ui);
 	}

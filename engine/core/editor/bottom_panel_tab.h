@@ -5,11 +5,11 @@
 #ifdef ECHO_EDITOR_MODE
 namespace Echo
 {
-	class BottomPanelTab
+	class PanelTab
 	{
 	public:
-		BottomPanelTab();
-		virtual ~BottomPanelTab();
+		PanelTab();
+		virtual ~PanelTab();
 
 		// get ui ptr
 		QWidget* getUiPtr() { return m_ui; }

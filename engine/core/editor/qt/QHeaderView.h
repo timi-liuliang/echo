@@ -20,6 +20,9 @@ namespace Echo
 
 	// set section size mode
 	typedef void (*qHeaderViewSetSectionResizeModeFun)(QWidget* header, int logicalIndex, int mode);
+
+	// fit in view
+	typedef void (*qGraphicsViewFitInViewFun)(QWidget* view, Rect& rect);
 }
 
 #endif
