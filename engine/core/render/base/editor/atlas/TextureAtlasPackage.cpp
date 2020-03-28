@@ -42,10 +42,10 @@ namespace Echo
 	{
 		Vector4	result;
 		const IRect& tRc = m_nodes[nodeIdx].m_rc;
-		result.x = static_cast<float>(tRc.left) / static_cast<float>(m_width);
-		result.y = static_cast<float>(tRc.top) / static_cast<float>(m_height);
-		result.z = static_cast<float>(tRc.width) / static_cast<float>(m_width);
-		result.w = static_cast<float>(tRc.height) / static_cast<float>(m_height);
+		result.x = static_cast<float>(tRc.left);
+		result.y = static_cast<float>(tRc.top);
+		result.z = static_cast<float>(tRc.width);
+		result.w = static_cast<float>(tRc.height);
 
 		return result;
 	}

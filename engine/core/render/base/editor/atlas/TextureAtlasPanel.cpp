@@ -146,7 +146,33 @@ namespace Echo
 
 	void TextureAtlasPanel::onSplit()
 	{
+		ui32 rows = 4;
+		ui32 columns = 4;
+		String prefix = "sprite";
 
+		TexturePtr texture = m_textureAtlas->getTexture();
+		if (texture)
+		{
+			m_textureAtlas->clear();
+
+			float stepWidth = texture->getWidth() / columns;
+			float stepHeight = texture->getHeight() / rows;
+
+			for (ui32 row = 0; row < rows; row++)
+			{
+				for (ui32 column = 0; column < columns; column++)
+				{
+					float left = column * stepWidth;
+					float top = row * stepHeight;
+					String atlaName = StringUtil::Format("%s_%d_%d", prefix.c_str(), row, column);
+					m_textureAtlas->addAtla(atlaName, Vector4(left, top, stepWidth, stepHeight));
+				}
+			}
+
+			m_textureAtlas->save();
+
+			refreshUiDisplay();
+		}		
 	}
 
 	void TextureAtlasPanel::refreshUiDisplay()
@@ -242,13 +268,10 @@ namespace Echo
 				// calculate paths
 				vector<Vector2>::type paths;
 				{
-					TexturePtr texture = m_textureAtlas->getTexture();
-					ui32 textureWidth = texture->getWidth();
-					ui32 textureHeight = texture->getHeight();
-					ui32 atlaWidth = textureWidth * viewPort.z;
-					ui32 atlaHeight = textureHeight * viewPort.w;
-					ui32 atlaPosX = textureWidth * viewPort.x;
-					ui32 atlaPosY = textureHeight * viewPort.y;
+					ui32 atlaWidth = viewPort.z;
+					ui32 atlaHeight = viewPort.w;
+					ui32 atlaPosX = viewPort.x;
+					ui32 atlaPosY = viewPort.y;
 
 					paths.push_back(Vector2(atlaPosX, atlaPosY));
 					paths.push_back(Vector2(atlaPosX+atlaWidth, atlaPosY));
