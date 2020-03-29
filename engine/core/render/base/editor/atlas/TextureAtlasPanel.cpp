@@ -29,11 +29,9 @@ namespace Echo
 
 		// Tool button icons
 		EditorApi.qToolButtonSetIcon(EditorApi.qFindChild(m_ui, "m_import"), "engine/core/render/base/editor/icon/import.png");
-		EditorApi.qToolButtonSetIcon(EditorApi.qFindChild(m_ui, "m_splitBygrid"), "engine/core/render/base/editor/icon/grid.png");
 
 		// connect signal slots
 		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_import"), QSIGNAL(clicked()), this, createMethodBind(&TextureAtlasPanel::onImport));
-		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_splitBygrid"), QSIGNAL(clicked()), this, createMethodBind(&TextureAtlasPanel::onSplit));
 		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_nodeTreeWidget"), QSIGNAL(itemClicked(QTreeWidgetItem*, int)), this, createMethodBind(&TextureAtlasPanel::onSelectItem));
 		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_nodeTreeWidget"), QSIGNAL(itemChanged(QTreeWidgetItem*, int)), this, createMethodBind(&TextureAtlasPanel::onChangedAtlaName));
 
@@ -55,17 +53,18 @@ namespace Echo
 
 	void TextureAtlasPanel::onImport()
 	{
-		onImportFromImages();
+		if (!m_importMenu)
+		{
+			m_importMenu = EditorApi.qMenuNew(m_ui);
 
-		//if (!m_importMenu)
-		//{
-		//	m_importMenu = EditorApi.qMenuNew(m_ui);
+			EditorApi.qMenuAddAction(m_importMenu, EditorApi.qFindChildAction(m_ui, "m_actionBuildFromGrid"));
+			EditorApi.qMenuAddAction(m_importMenu, EditorApi.qFindChildAction(m_ui, "m_actionImportFromImages"));
 
-		//	EditorApi.qMenuAddAction(m_importMenu, EditorApi.qFindChildAction(m_ui, "m_actionImportFromImages"));
-		//	EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionImportFromImages"), QSIGNAL(triggered()), this, createMethodBind(&TextureAtlasPanel::onImportFromImages));
-		//}
+			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionImportFromImages"), QSIGNAL(triggered()), this, createMethodBind(&TextureAtlasPanel::onImportFromImages));
+			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionBuildFromGrid"), QSIGNAL(triggered()), this, createMethodBind(&TextureAtlasPanel::onSplit));
+		}
 
-		//EditorApi.qMenuExec(m_importMenu);
+		EditorApi.qMenuExec(m_importMenu);
 	}
 
 	void TextureAtlasPanel::onImportFromImages()
