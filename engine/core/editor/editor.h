@@ -264,6 +264,9 @@ namespace Echo
         
         // set user data
         qTreeWidgetItemSetUserDataFun qTreeWidgetItemSetUserData = nullptr;
+
+        // set editable
+        qTreeWidgetItemSetEditableFun qTreeWidgetItemSetEditable = nullptr;
         
         // expand QTreeWidgetItem
         qTreeWidgetItemSetExpandedFun qTreeWidgetItemSetExpanded = nullptr;

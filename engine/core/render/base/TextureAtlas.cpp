@@ -46,6 +46,18 @@ namespace Echo
 		m_atlas.push_back(atla);
 	}
 
+	void TextureAtlas::removeAtla(const String& name)
+	{
+		for (vector<Atla>::type::iterator it = m_atlas.begin(); it != m_atlas.end(); it++)
+		{
+			if (it->m_name == name)
+			{
+				m_atlas.erase(it);
+				break;
+			}
+		}
+	}
+
 	bool TextureAtlas::getViewport(const String& name, Vector4& viewPort)
 	{
 		for (Atla& atla : m_atlas)

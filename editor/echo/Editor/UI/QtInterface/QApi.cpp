@@ -121,6 +121,7 @@ namespace Studio
 		BIND_EDITOR_FUN(qTreeWidgetItemText);
 		BIND_EDITOR_FUN(qTreeWidgetItemSetIcon);
 		BIND_EDITOR_FUN(qTreeWidgetItemUserData);
+		BIND_EDITOR_FUN(qTreeWidgetItemSetEditable);
 		BIND_EDITOR_FUN(qTreeWidgetItemSetUserData);
 		BIND_EDITOR_FUN(qTreeWidgetItemSetExpanded);
 

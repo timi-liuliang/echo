@@ -46,6 +46,10 @@ namespace Echo
 		static const ResFun* getResFunByClassName(const String& className);
 
 	public:
+		// is a package
+		virtual bool isPackage() const { return false; }
+
+	public:
 		// add ref count
 		void addRefCount() { m_refCount++; }
 

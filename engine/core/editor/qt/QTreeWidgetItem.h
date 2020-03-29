@@ -30,6 +30,9 @@ namespace Echo
 	// set user data
 	typedef void (*qTreeWidgetItemSetUserDataFun)(QTreeWidgetItem* item, int column, const char* userData);
 
+	// set editable
+	typedef void (*qTreeWidgetItemSetEditableFun)(QTreeWidgetItem* item, bool editable);
+
 	// expand QTreeWidgetItem
 	typedef void (*qTreeWidgetItemSetExpandedFun)(QTreeWidgetItem* item, bool aexpand);
 }

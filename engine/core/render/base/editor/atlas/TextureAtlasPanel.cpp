@@ -35,6 +35,7 @@ namespace Echo
 		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_import"), QSIGNAL(clicked()), this, createMethodBind(&TextureAtlasPanel::onImport));
 		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_splitBygrid"), QSIGNAL(clicked()), this, createMethodBind(&TextureAtlasPanel::onSplit));
 		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_nodeTreeWidget"), QSIGNAL(itemClicked(QTreeWidgetItem*, int)), this, createMethodBind(&TextureAtlasPanel::onSelectItem));
+		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_nodeTreeWidget"), QSIGNAL(itemChanged(QTreeWidgetItem*, int)), this, createMethodBind(&TextureAtlasPanel::onChangedAtlaName));
 
 		// create QGraphicsScene
 		m_graphicsScene = EditorApi.qGraphicsSceneNew();
@@ -54,20 +55,17 @@ namespace Echo
 
 	void TextureAtlasPanel::onImport()
 	{
-		if (!m_importMenu)
-		{
-			m_importMenu = EditorApi.qMenuNew(m_ui);
+		onImportFromImages();
 
-			EditorApi.qMenuAddAction(m_importMenu, EditorApi.qFindChildAction(m_ui, "m_actionImportFromImages"));
-			//EditorApi.qMenuAddAction(m_importMenu, EditorApi.qFindChildAction(m_ui, "m_actionAddSetting"));
-			//EditorApi.qMenuAddAction(m_importMenu, EditorApi.qFindChildAction(m_ui, "m_actionAddResource"));
+		//if (!m_importMenu)
+		//{
+		//	m_importMenu = EditorApi.qMenuNew(m_ui);
 
-			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionImportFromImages"), QSIGNAL(triggered()), this, createMethodBind(&TextureAtlasPanel::onImportFromImages));
-			//EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionAddSetting"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddSetting));
-			//EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionAddResource"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddResource));
-		}
+		//	EditorApi.qMenuAddAction(m_importMenu, EditorApi.qFindChildAction(m_ui, "m_actionImportFromImages"));
+		//	EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionImportFromImages"), QSIGNAL(triggered()), this, createMethodBind(&TextureAtlasPanel::onImportFromImages));
+		//}
 
-		EditorApi.qMenuExec(m_importMenu);
+		//EditorApi.qMenuExec(m_importMenu);
 	}
 
 	void TextureAtlasPanel::onImportFromImages()
@@ -196,6 +194,7 @@ namespace Echo
 					QTreeWidgetItem* objetcItem = EditorApi.qTreeWidgetItemNew();
 					EditorApi.qTreeWidgetItemSetText(objetcItem, 0, atla.m_name.c_str());
 					EditorApi.qTreeWidgetItemSetUserData(objetcItem, 0, atla.m_name.c_str());
+					EditorApi.qTreeWidgetItemSetEditable(objetcItem, true);
 					//EditorApi.qTreeWidgetItemSetIcon(objetcItem, 0, Editor::instance()->getNodeIcon(node).c_str());
 					EditorApi.qTreeWidgetItemAddChild(rootItem, objetcItem);
 				}
@@ -284,6 +283,25 @@ namespace Echo
 				m_atlaBorder = EditorApi.qGraphicsSceneAddPath(m_graphicsScene, paths, 1.f, Color::RED);
 
 				EditorApi.qGraphicsItemSetParentItem(m_atlaBorder, m_imageItem);
+			}
+		}
+	}
+
+	void TextureAtlasPanel::onChangedAtlaName()
+	{
+		QTreeWidgetItem* item = EditorApi.qTreeWidgetCurrentItem(EditorApi.qFindChild(m_ui, "m_nodeTreeWidget"));
+		if (item)
+		{
+			Vector4 viewPort;
+
+			String newName = EditorApi.qTreeWidgetItemText(item, 0);
+			String oldName = EditorApi.qTreeWidgetItemUserData(item, 0);
+			if (m_textureAtlas->getViewport(oldName, viewPort))
+			{
+				m_textureAtlas->removeAtla(oldName);
+				m_textureAtlas->addAtla(newName, viewPort);
+
+				EditorApi.qTreeWidgetItemSetUserData(item, 0, newName.c_str());
 			}
 		}
 	}

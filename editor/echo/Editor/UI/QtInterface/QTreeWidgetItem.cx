@@ -68,6 +68,14 @@ namespace Echo
 		}
 	}
 
+	void qTreeWidgetItemSetEditable(QTreeWidgetItem* item, bool editable)
+	{
+		if (item && editable)
+		{
+			item->setFlags(item->flags() | Qt::ItemIsEditable);
+		}
+	}
+
 	// expand QTreeWidgetItem
 	void qTreeWidgetItemSetExpanded(QTreeWidgetItem* item, bool aexpand)
 	{

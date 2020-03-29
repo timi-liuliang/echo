@@ -31,6 +31,7 @@ namespace Echo
 
 		// add
 		void addAtla(const String& name, const Vector4& viewPort);
+		void removeAtla(const String& name);
 
 		// get viewport
 		bool getViewport(const String& name, Vector4& viewPort);

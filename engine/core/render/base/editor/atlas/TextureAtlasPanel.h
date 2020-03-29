@@ -29,6 +29,9 @@ namespace Echo
 		void onSplit();
 		void onSelectItem();
 
+		// change name
+		void onChangedAtlaName();
+
 		// refresh list
 		void refreshUiDisplay();
 		void refreshAtlaList();
