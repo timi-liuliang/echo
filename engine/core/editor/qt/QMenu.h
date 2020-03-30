@@ -12,6 +12,9 @@ namespace Echo
 	// void addAction(QAction *action)
 	typedef void (*qMenuAddActionFun)(QWidget* menu, QAction* action);
 
+	// add separator
+	typedef void(*qMenuAddSeparatorFun)(QWidget* menu);
+
 	// QAction *exec();
 	typedef void (*qMenuExecFun)(QWidget* menu);
 }

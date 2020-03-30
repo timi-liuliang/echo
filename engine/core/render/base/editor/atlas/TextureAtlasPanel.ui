@@ -145,6 +145,14 @@
     <string>Build From Grid Split</string>
    </property>
   </action>
+  <action name="m_actionAddNewOne">
+   <property name="text">
+    <string>Add a New Atla</string>
+   </property>
+   <property name="toolTip">
+    <string>Add a New Atla</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

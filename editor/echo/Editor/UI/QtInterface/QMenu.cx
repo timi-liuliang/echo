@@ -20,6 +20,18 @@ namespace Echo
 		}
 	}
 
+	void qMenuAddSeparator(QWidget* menu)
+	{
+		if (menu)
+		{
+			QMenu* qMenu = qobject_cast<QMenu*>(menu);
+			if (qMenu)
+			{
+				qMenu->addSeparator();
+			}
+		}
+	}
+
 	void qMenuExec(QWidget* menu)
 	{
 		if (menu)

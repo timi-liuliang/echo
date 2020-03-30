@@ -196,6 +196,9 @@ namespace Echo
         
         // void addAction(QAction *action)
         qMenuAddActionFun qMenuAddAction = nullptr;
+
+        // add section
+        qMenuAddSeparatorFun qMenuAddSeparator = nullptr;
         
         // QAction *exec();
         qMenuExecFun qMenuExec = nullptr;

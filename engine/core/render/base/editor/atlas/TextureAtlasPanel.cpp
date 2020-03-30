@@ -51,15 +51,29 @@ namespace Echo
 	{
 	}
 
+	void TextureAtlasPanel::onNewAtla()
+	{
+		if (m_textureAtlas && m_textureAtlas->getTexture())
+		{
+			String atlaName = StringUtil::Format("NewAtla");
+			m_textureAtlas->addAtla(atlaName, Vector4(0, 0, 128, 128));
+
+			refreshUiDisplay();
+		}
+	}
+
 	void TextureAtlasPanel::onImport()
 	{
 		if (!m_importMenu)
 		{
 			m_importMenu = EditorApi.qMenuNew(m_ui);
-
+			
+			EditorApi.qMenuAddAction(m_importMenu, EditorApi.qFindChildAction(m_ui, "m_actionAddNewOne"));
+			EditorApi.qMenuAddSeparator(m_importMenu);
 			EditorApi.qMenuAddAction(m_importMenu, EditorApi.qFindChildAction(m_ui, "m_actionBuildFromGrid"));
 			EditorApi.qMenuAddAction(m_importMenu, EditorApi.qFindChildAction(m_ui, "m_actionImportFromImages"));
 
+			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionAddNewOne"), QSIGNAL(triggered()), this, createMethodBind(&TextureAtlasPanel::onNewAtla));
 			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionImportFromImages"), QSIGNAL(triggered()), this, createMethodBind(&TextureAtlasPanel::onImportFromImages));
 			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionBuildFromGrid"), QSIGNAL(triggered()), this, createMethodBind(&TextureAtlasPanel::onSplit));
 		}

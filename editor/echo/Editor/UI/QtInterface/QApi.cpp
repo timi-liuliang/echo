@@ -91,6 +91,7 @@ namespace Studio
 		// create a new QMenu
 		BIND_EDITOR_FUN(qMenuNew);
 		BIND_EDITOR_FUN(qMenuAddAction);
+		BIND_EDITOR_FUN(qMenuAddSeparator);
 		BIND_EDITOR_FUN(qMenuExec);
 
 		// modify qsplitter stretch factor

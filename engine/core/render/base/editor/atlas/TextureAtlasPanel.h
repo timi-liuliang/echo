@@ -21,6 +21,9 @@ namespace Echo
 		void update();
 
 	public:
+		// new
+		void onNewAtla();
+
 		// import
 		void onImport();
 		void onImportFromImages();
