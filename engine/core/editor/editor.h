@@ -189,6 +189,16 @@ namespace Echo
         
         // height
         qLineEditHeightFun qLineEditHeight = nullptr;
+
+    public:
+		// new QLineEdit
+		qSpinBoxNewFun qSpinBoxNew = nullptr;
+
+		// set text
+		qSpinBoxSetValueFun qSpinBoxSetValue = nullptr;
+
+		// set maximum width
+		qSpinBoxValueFun qSpinBoxValue = nullptr;
         
     public:
         // create a new QMenu
@@ -275,6 +285,11 @@ namespace Echo
         qTreeWidgetItemSetExpandedFun qTreeWidgetItemSetExpanded = nullptr;
 
     public:
+        // dialog
+        qDialogExecFun qDialogExec = nullptr;
+
+    public:
+        // get open file names
         qGetOpenFileNamesFun qGetOpenFileNames = nullptr;
         
     public:

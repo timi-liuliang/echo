@@ -8,6 +8,7 @@
 #include "QGraphicsView.cx"
 #include "QHeaderView.cx"
 #include "QLineEdit.cx"
+#include "QSpinBox.cx"
 #include "QMenu.cx"
 #include "QSplitter.cx"
 #include "QToolButton.cx"
@@ -15,6 +16,7 @@
 #include "QTreeWidgetItem.cx"
 #include "QUiLoader.cx"
 #include "QWidget.cx"
+#include "QDialog.cx"
 #include "QFileDialog.cx"
 
 #define BIND_EDITOR_FUN(Fun) this->Fun = Echo::Fun
@@ -88,6 +90,11 @@ namespace Studio
 		BIND_EDITOR_FUN(qLineEditWidth);
 		BIND_EDITOR_FUN(qLineEditHeight);
 
+		// QSpinBox
+		BIND_EDITOR_FUN(qSpinBoxNew);
+		BIND_EDITOR_FUN(qSpinBoxValue);
+		BIND_EDITOR_FUN(qSpinBoxSetValue);
+
 		// create a new QMenu
 		BIND_EDITOR_FUN(qMenuNew);
 		BIND_EDITOR_FUN(qMenuAddAction);
@@ -125,6 +132,9 @@ namespace Studio
 		BIND_EDITOR_FUN(qTreeWidgetItemSetEditable);
 		BIND_EDITOR_FUN(qTreeWidgetItemSetUserData);
 		BIND_EDITOR_FUN(qTreeWidgetItemSetExpanded);
+
+		// dialog
+		BIND_EDITOR_FUN(qDialogExec);
 
 		// qt file dialog
 		BIND_EDITOR_FUN(qGetOpenFileNames);

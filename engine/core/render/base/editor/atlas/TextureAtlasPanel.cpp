@@ -19,6 +19,7 @@ namespace Echo
 		m_textureAtlas = ECHO_DOWN_CAST<TextureAtlas*>(obj);
 
 		m_ui = EditorApi.qLoadUi("engine/core/render/base/editor/atlas/TextureAtlasPanel.ui");
+		m_splitDialog = EditorApi.qLoadUi("engine/core/render/base/editor/atlas/TextureAtlasSplitDialog.ui");
 
 		QWidget* splitter = EditorApi.qFindChild(m_ui, "m_splitter");
 		if (splitter)
@@ -157,33 +158,36 @@ namespace Echo
 
 	void TextureAtlasPanel::onSplit()
 	{
-		ui32 rows = 4;
-		ui32 columns = 4;
-		String prefix = "sprite";
-
-		TexturePtr texture = m_textureAtlas->getTexture();
-		if (texture)
+		if (EditorApi.qDialogExec(m_splitDialog))
 		{
-			m_textureAtlas->clear();
+			ui32 rows = EditorApi.qSpinBoxValue(EditorApi.qFindChild(m_splitDialog, "m_spinBoxRows"));
+			ui32 columns = EditorApi.qSpinBoxValue(EditorApi.qFindChild(m_splitDialog, "m_spinBoxColumns"));
+			String prefix = EditorApi.qLineEditText(EditorApi.qFindChild(m_splitDialog, "m_prefix"));
 
-			float stepWidth = texture->getWidth() / columns;
-			float stepHeight = texture->getHeight() / rows;
-
-			for (ui32 row = 0; row < rows; row++)
+			TexturePtr texture = m_textureAtlas->getTexture();
+			if (texture)
 			{
-				for (ui32 column = 0; column < columns; column++)
+				m_textureAtlas->clear();
+
+				float stepWidth = texture->getWidth() / columns;
+				float stepHeight = texture->getHeight() / rows;
+
+				for (ui32 row = 0; row < rows; row++)
 				{
-					float left = column * stepWidth;
-					float top = row * stepHeight;
-					String atlaName = StringUtil::Format("%s_%d_%d", prefix.c_str(), row, column);
-					m_textureAtlas->addAtla(atlaName, Vector4(left, top, stepWidth, stepHeight));
+					for (ui32 column = 0; column < columns; column++)
+					{
+						float left = column * stepWidth;
+						float top = row * stepHeight;
+						String atlaName = StringUtil::Format("%s_%d_%d", prefix.c_str(), row, column);
+						m_textureAtlas->addAtla(atlaName, Vector4(left, top, stepWidth, stepHeight));
+					}
 				}
+
+				m_textureAtlas->save();
+
+				refreshUiDisplay();
 			}
-
-			m_textureAtlas->save();
-
-			refreshUiDisplay();
-		}		
+		}
 	}
 
 	void TextureAtlasPanel::refreshUiDisplay()

@@ -50,6 +50,7 @@ namespace Echo
 		QGraphicsItem*				m_imageItem = nullptr;
 		QGraphicsItem*				m_imageBorder = nullptr;
 		QGraphicsItem*				m_atlaBorder = nullptr;
+		class QWidget*				m_splitDialog = nullptr;
 	};
 }
 
