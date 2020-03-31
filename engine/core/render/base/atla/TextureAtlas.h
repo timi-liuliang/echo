@@ -22,6 +22,9 @@ namespace Echo
         TextureAtlas(const ResourcePath& path);
         virtual ~TextureAtlas();
 
+		// is a package
+		virtual bool isPackage() const { return true; }
+
 		// texture res path
 		void setTextureRes(const ResourcePath& path);
 		const ResourcePath& getTextureRes() { return m_textureRes; }

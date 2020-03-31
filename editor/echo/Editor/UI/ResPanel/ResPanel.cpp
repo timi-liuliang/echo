@@ -112,35 +112,44 @@ namespace Studio
 		}
 	}
 
-	void ResPanel::onDoubleClickedPreviewRes(const char* res)
+	void ResPanel::onDoubleClickedPreviewRes(const char* resFullPath)
 	{
-		if (Echo::PathUtil::IsDir(res))
+		if (Echo::PathUtil::IsDir(resFullPath))
 		{
-			m_dirModel->setCurrentSelect(res);
+			m_dirModel->setCurrentSelect(resFullPath);
 		}
 		else
 		{
-			Echo::String resPath;
-			if (Echo::IO::instance()->convertFullPathToResPath(res, resPath))
+			Echo::ResPtr res = Echo::Res::createByFileExtension(Echo::PathUtil::GetFileExt(resFullPath, true));
+			if (res && res->isPackage())
 			{
-				// edit res
-				NodeTreePanel::instance()->onSelectRes(resPath);
+				int a = 1;
+			}
+			else
+			{
+				Echo::String resPath;
+				if (Echo::IO::instance()->convertFullPathToResPath(resFullPath, resPath))
+				{
+					// edit res
+					NodeTreePanel::instance()->onSelectRes(resPath);
 
-				Echo::String ext = Echo::PathUtil::GetFileExt(resPath, true);
-				if (ext == ".scene")
-				{
-					MainWindow::instance()->openNodeTree(resPath);
+					Echo::String ext = Echo::PathUtil::GetFileExt(resPath, true);
+					if (ext == ".scene")
+					{
+						MainWindow::instance()->openNodeTree(resPath);
+					}
+					else if (ext == ".lua")
+					{
+						MainWindow::instance()->openLuaScript(resPath);
+					}
+					else if (ext == ".shader")
+					{
+						MainWindow::instance()->openShaderEditor(resPath);
+					}
 				}
-				else if (ext == ".lua")
-				{
-					MainWindow::instance()->openLuaScript(resPath);
-				}
-                else if (ext == ".shader")
-                {
-                    MainWindow::instance()->openShaderEditor(resPath);
-                }
 			}
 		}
+
 	}
 
 	void ResPanel::resizeEvent(QResizeEvent * e)

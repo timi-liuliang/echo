@@ -23,110 +23,59 @@ namespace Echo
 
     void TextureAtla::bindMethods()
     {
-		CLASS_BIND_METHOD(TextureAtla, getTextureRes, DEF_METHOD("getTextureRes"));
-		CLASS_BIND_METHOD(TextureAtla, setTextureRes, DEF_METHOD("setTextureRes"));
 
-		CLASS_REGISTER_PROPERTY(TextureAtla, "Texture", Variant::Type::ResourcePath, "getTextureRes", "setTextureRes");
     }
-
-	void TextureAtla::setTextureRes(const ResourcePath& path)
-	{
-		if (m_textureRes.setPath(path.getPath()))
-		{
-			m_texture = ECHO_DOWN_CAST<Texture*>(Res::get(path.getPath()));
-		}
-	}
-
-	void TextureAtla::addAtla(const String& name, const Vector4& viewPort)
-	{
-		Atla atla;
-		atla.m_name = name;
-		atla.m_viewPort = viewPort;
-
-		m_atlas.push_back(atla);
-	}
-
-	void TextureAtla::removeAtla(const String& name)
-	{
-		for (vector<Atla>::type::iterator it = m_atlas.begin(); it != m_atlas.end(); it++)
-		{
-			if (it->m_name == name)
-			{
-				m_atlas.erase(it);
-				break;
-			}
-		}
-	}
-
-	bool TextureAtla::getViewport(const String& name, Vector4& viewPort)
-	{
-		for (Atla& atla : m_atlas)
-		{
-			if (atla.m_name == name)
-			{
-				viewPort = atla.m_viewPort;
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	void TextureAtla::clear()
-	{
-		m_atlas.clear();
-	}
 
     Res* TextureAtla::load(const ResourcePath& path)
     {
-        MemoryReader reader(path.getPath());
-        if (reader.getSize())
-        {
-			TextureAtla* res = EchoNew(TextureAtla(path));
+   //     MemoryReader reader(path.getPath());
+   //     if (reader.getSize())
+   //     {
+			//TextureAtla* res = EchoNew(TextureAtla(path));
 
-			pugi::xml_document doc;
-			if (doc.load_buffer(reader.getData<char*>(), reader.getSize()))
-			{
-				pugi::xml_node root = doc.child("atlas");
-				res->setTextureRes(String(root.attribute("texture").as_string()));
+			//pugi::xml_document doc;
+			//if (doc.load_buffer(reader.getData<char*>(), reader.getSize()))
+			//{
+			//	pugi::xml_node root = doc.child("atlas");
+			//	res->setTextureRes(String(root.attribute("texture").as_string()));
 
-				for (pugi::xml_node child = root.child("atla"); child; child = child.next_sibling("atla"))
-				{
-					String name = child.attribute("name").as_string();
-					Vector4 viewPort = StringUtil::ParseVec4(child.attribute("viewport").as_string());
-					res->addAtla(name, viewPort);
-				}
-			}
+			//	for (pugi::xml_node child = root.child("atla"); child; child = child.next_sibling("atla"))
+			//	{
+			//		String name = child.attribute("name").as_string();
+			//		Vector4 viewPort = StringUtil::ParseVec4(child.attribute("viewport").as_string());
+			//		res->addAtla(name, viewPort);
+			//	}
+			//}
 
-            return res;
-        }
+   //         return res;
+   //     }
 
         return nullptr;
     }
 
     void TextureAtla::save()
     {
-		String fullPath = IO::instance()->convertResPathToFullPath(m_path.getPath());
+		//String fullPath = IO::instance()->convertResPathToFullPath(m_path.getPath());
 
-		pugi::xml_document doc;
+		//pugi::xml_document doc;
 
-		// declaration
-		pugi::xml_node dec = doc.prepend_child(pugi::node_declaration);
-		dec.append_attribute("version") = "1.0";
-		dec.append_attribute("encoding") = "utf-8";
+		//// declaration
+		//pugi::xml_node dec = doc.prepend_child(pugi::node_declaration);
+		//dec.append_attribute("version") = "1.0";
+		//dec.append_attribute("encoding") = "utf-8";
 
-		// root node
-		pugi::xml_node root = doc.append_child("atlas");
-		root.append_attribute("texture").set_value(m_textureRes.getPath().c_str());
-		
-		// all atlas
-		for (const Atla& atla : m_atlas)
-		{
-			pugi::xml_node atlaNode = root.append_child("atla");
-			atlaNode.append_attribute("name").set_value(atla.m_name.c_str());
-			atlaNode.append_attribute("viewport").set_value(StringUtil::ToString(atla.m_viewPort).c_str());
-		}
+		//// root node
+		//pugi::xml_node root = doc.append_child("atlas");
+		//root.append_attribute("texture").set_value(m_textureRes.getPath().c_str());
+		//
+		//// all atlas
+		//for (const Atla& atla : m_atlas)
+		//{
+		//	pugi::xml_node atlaNode = root.append_child("atla");
+		//	atlaNode.append_attribute("name").set_value(atla.m_name.c_str());
+		//	atlaNode.append_attribute("viewport").set_value(StringUtil::ToString(atla.m_viewPort).c_str());
+		//}
 
-		doc.save_file(fullPath.c_str(), "\t", 1U, pugi::encoding_utf8);
+		//doc.save_file(fullPath.c_str(), "\t", 1U, pugi::encoding_utf8);
     }
 }
