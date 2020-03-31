@@ -4,6 +4,7 @@
 #include <QStandardItemModel>
 #include <QSortFilterProxyModel>
 #include <engine/core/util/StringUtil.h>
+#include <engine/core/resource/Res.h>
 
 namespace QT_UI
 {
@@ -15,6 +16,7 @@ namespace QT_UI
 		QPreviewHelper(QListView* view);
 
 		// add item
+		void setRes(Echo::ResPtr& res, const char* exts, bool includePreDir);
 		void setPath(const Echo::String& filePath, const char* exts, bool includePreDir);
 
 		// set filter

@@ -123,7 +123,12 @@ namespace Studio
 			Echo::ResPtr res = Echo::Res::createByFileExtension(Echo::PathUtil::GetFileExt(resFullPath, true));
 			if (res && res->isPackage())
 			{
-				int a = 1;
+				Echo::String resPath;
+				if (Echo::IO::instance()->convertFullPathToResPath(resFullPath, resPath))
+				{
+					Echo::ResPtr selectRes = Echo::Res::get(resPath);
+					m_previewHelper->setRes(selectRes, nullptr, true);
+				}
 			}
 			else
 			{

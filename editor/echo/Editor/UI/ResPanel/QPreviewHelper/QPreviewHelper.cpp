@@ -28,6 +28,14 @@ namespace QT_UI
 		setUseIconMode();
 	}
 
+	void QPreviewHelper::setRes(Echo::ResPtr& res, const char* exts, bool includePreDir)
+	{
+		if (res->isPackage())
+		{
+			int a = 10;
+		}
+	}
+
 	void QPreviewHelper::setPath(const Echo::String& filePath, const char* exts, bool includePreDir)
 	{
 		// get all files
