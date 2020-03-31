@@ -6,7 +6,8 @@
 #include "engine/core/io/IO.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/render/base/image/ImageCodecMgr.h"
-#include "engine/core/render/base/TextureAtlas.h"
+#include "engine/core/render/base/atla/TextureAtla.h"
+#include "engine/core/render/base/atla/TextureAtlas.h"
 #include "engine/core/render/base/editor/atlas/texture_atlas_editor.h"
 #include "engine/core/render/base/Viewport.h"
 #include "engine/core/render/base/Material.h"
@@ -151,6 +152,7 @@ namespace Echo
         Class::registerType<IO>();
         Class::registerType<DataStream>();
 		Class::registerType<Log>();
+		Class::registerType<TextureAtla>();
 		Class::registerType<TextureAtlas>();
 		Class::registerType<RenderPipeline>();
         

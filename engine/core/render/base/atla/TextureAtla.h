@@ -1,13 +1,13 @@
 #pragma once
 
 #include "engine/core/resource/Res.h"
-#include "Texture.h"
+#include "engine/core/render/base/Texture.h"
 
 namespace Echo
 {
-    class TextureAtlas : public Res
+    class TextureAtla : public Res
     {
-        ECHO_RES(TextureAtlas, Res, ".atlas", Res::create<TextureAtlas>, TextureAtlas::load);
+        ECHO_RES(TextureAtla, Res, ".atla", Res::create<TextureAtla>, TextureAtla::load);
 
 	public:
 		// Atla
@@ -18,9 +18,9 @@ namespace Echo
 		};
 
     public:
-        TextureAtlas();
-        TextureAtlas(const ResourcePath& path);
-        virtual ~TextureAtlas();
+		TextureAtla();
+		TextureAtla(const ResourcePath& path);
+        virtual ~TextureAtla();
 
 		// texture res path
 		void setTextureRes(const ResourcePath& path);
@@ -51,5 +51,5 @@ namespace Echo
 		ResourcePath		m_textureRes = ResourcePath("", ".png");
 		TexturePtr			m_texture;
     };
-    typedef ResRef<TextureAtlas> TextureAtlasPtr;
+    typedef ResRef<TextureAtla> TextureAtlaPtr;
 }
