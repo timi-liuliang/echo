@@ -49,6 +49,10 @@ namespace Echo
         static Res* load(const ResourcePath& path);
         virtual void save() override;
 
+	protected:
+		// enum files
+		virtual void enumFilesInDir(StringArray& ret, const String& rootPath, bool bIncDir = false, bool bIncSubDirs = false, bool isAbsPath = false);
+
     protected:
 		vector<Atla>::type	m_atlas;
 		ResourcePath		m_textureRes = ResourcePath("", ".png");

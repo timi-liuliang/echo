@@ -4,6 +4,9 @@
 #include <functional>
 
 #ifdef ECHO_PLATFORM_WINDOWS
+	#undef WIN32_LEAN_AND_MEAN
+	#define WIN32_LEAN_AND_MEAN
+	#define _CRT_SECURE_NO_WARNINGS
 	#include <windows.h>
 	#include <time.h>
 #elif defined(ECHO_PLATFORM_IOS) || defined(ECHO_PLATFORM_MAC)

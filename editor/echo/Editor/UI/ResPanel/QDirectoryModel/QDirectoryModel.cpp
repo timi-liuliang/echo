@@ -2,6 +2,7 @@
 #include "QDirectoryModel.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/util/StringUtil.h>
+#include <engine/core/util/Timer.h>
 
 namespace QT_UI
 {
@@ -202,11 +203,11 @@ namespace QT_UI
 
 	void QDirectoryModel::OnSelectedFile(const QModelIndex& pIndex)
 	{
-        //Echo::Dword currenTime = GetTickCount();
-		//Echo::Dword elapsedTime = currenTime - m_selectTime;
-        m_selectTime = 0;//currenTime;
+        Echo::Dword currenTime = Echo::Time::instance()->getMilliseconds();
+		Echo::Dword elapsedTime = currenTime - m_selectTime;
+        m_selectTime = currenTime;
 
-		if (m_currentSelect == pIndex)
+		if (m_currentSelect == pIndex && elapsedTime < 200)
 			return;
 
 		m_currentSelect = pIndex;

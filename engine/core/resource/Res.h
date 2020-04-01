@@ -49,6 +49,9 @@ namespace Echo
 		// is a package
 		virtual bool isPackage() const { return false; }
 
+		// enum files
+		virtual void enumFilesInDir(StringArray& ret, const String& rootPath, bool bIncDir = false, bool bIncSubDirs = false, bool bAbsPath = false) {}
+
 	public:
 		// add ref count
 		void addRefCount() { m_refCount++; }

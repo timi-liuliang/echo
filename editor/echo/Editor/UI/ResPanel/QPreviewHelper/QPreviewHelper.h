@@ -52,10 +52,10 @@ namespace QT_UI
 
 	private:
 		// add item
-		void addItem(const char* filePath);
+		void addItem(const char* filePath, const char* displayText=nullptr);
 
 		// create items
-		void createItem(const char* filePath, std::vector<QStandardItem*>& results);
+		void createItem(const char* filePath, const char* displayText, std::vector<QStandardItem*>& results);
 
 		// get icon
 		QIcon getFileIcon(const char* fullPath);

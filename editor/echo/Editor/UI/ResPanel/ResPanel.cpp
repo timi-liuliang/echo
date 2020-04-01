@@ -127,6 +127,7 @@ namespace Studio
 				if (Echo::IO::instance()->convertFullPathToResPath(resFullPath, resPath))
 				{
 					Echo::ResPtr selectRes = Echo::Res::get(resPath);
+					m_previewHelper->clear();
 					m_previewHelper->setRes(selectRes, nullptr, true);
 				}
 			}

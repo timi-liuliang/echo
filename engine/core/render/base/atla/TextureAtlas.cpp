@@ -3,6 +3,7 @@
 #include <thirdparty/pugixml/pugixml.hpp>
 #include <thirdparty/pugixml/pugiconfig.hpp>
 #include "engine/core/render/base/Texture.h"
+#include "engine/core/util/PathUtil.h"
 
 namespace Echo
 {
@@ -129,4 +130,15 @@ namespace Echo
 
 		doc.save_file(fullPath.c_str(), "\t", 1U, pugi::encoding_utf8);
     }
+
+	void TextureAtlas::enumFilesInDir(StringArray& ret, const String& rootPath, bool bIncDir, bool bIncSubDirs, bool isAbsPath)
+	{
+		ret.clear();
+
+		for (Atla& atla : m_atlas)
+		{
+			String path = (isAbsPath ? PathUtil::GetRenameExtFile(getPath() + "/", "") : "") + atla.m_name + ".atla";
+			ret.push_back(path);
+		}
+	}
 }

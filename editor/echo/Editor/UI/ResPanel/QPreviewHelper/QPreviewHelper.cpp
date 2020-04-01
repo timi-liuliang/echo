@@ -4,6 +4,7 @@
 #include <engine/core/util/StringUtil.h>
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/resource/Res.h>
+#include "engine/core/io/IO.h"
 #include "Studio.h"
 
 namespace QT_UI
@@ -32,7 +33,32 @@ namespace QT_UI
 	{
 		if (res->isPackage())
 		{
-			int a = 10;
+			Echo::StringArray files;
+			res->enumFilesInDir(files, "", true, false, true);
+
+			if (exts)
+				m_supportExts = Echo::StringUtil::Split(exts, "|");
+			else
+				m_supportExts.clear();
+
+			// include pre directory
+			Echo::String resPath = Echo::PathUtil::GetFileDirPath(res->getPath());
+			Echo::String fullPath = Echo::IO::instance()->convertResPathToFullPath(resPath);
+			addItem(fullPath.c_str(), "..");
+
+			// add directory
+			for (const Echo::String& file : files)
+			{
+				if (Echo::PathUtil::IsDir(file))
+					addItem(file.c_str());
+			}
+
+			// add files
+			for (const Echo::String& file : files)
+			{
+				if (!Echo::PathUtil::IsDir(file) && isSupportExt(file))
+					addItem(file.c_str());
+			}
 		}
 	}
 
@@ -74,28 +100,27 @@ namespace QT_UI
 		m_listProxyModel->setFilterRegExp(regExp);
 	}
 
-	void QPreviewHelper::addItem(const char* filePath)
+	void QPreviewHelper::addItem(const char* filePath, const char* displayText)
 	{
 		std::vector<QStandardItem*> results;
-		createItem(filePath, results);
+		createItem(filePath, displayText, results);
 		for (QStandardItem* item : results)
 		{
 			m_listModel->appendRow(item);
 		}
 	}
 
-	// create items
-	void QPreviewHelper::createItem(const char* filePath, std::vector<QStandardItem*>& results)
+	void QPreviewHelper::createItem(const char* filePath, const char* displayText, std::vector<QStandardItem*>& results)
 	{
 		QStandardItem* item = nullptr;
 		if (Echo::PathUtil::IsDir( filePath))
 		{
-			Echo::String folderName = Echo::PathUtil::GetLastDirName(filePath);
+			Echo::String folderName = displayText ? displayText : Echo::PathUtil::GetLastDirName(filePath);
 			item = new QStandardItem(QIcon(":/icon/Icon/root.png"), folderName.c_str());
 		}
 		else
 		{
-			Echo::String fileName = Echo::PathUtil::GetPureFilename(filePath, true);
+			Echo::String fileName = displayText ? displayText : Echo::PathUtil::GetPureFilename(filePath, true);
 			item = new QStandardItem( getFileIcon(filePath), fileName.c_str());
 		}
 
