@@ -120,7 +120,7 @@ namespace Studio
 		}
 		else
 		{
-			Echo::ResPtr res = Echo::Res::createByFileExtension(Echo::PathUtil::GetFileExt(resFullPath, true));
+			Echo::ResPtr res = Echo::Res::createByFileExtension(Echo::PathUtil::GetFileExt(resFullPath, true), true);
 			if (res && res->isPackage())
 			{
 				Echo::String resPath;

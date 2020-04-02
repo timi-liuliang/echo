@@ -168,7 +168,7 @@ namespace QT_UI
 
     void QResEditor::onCreateRes()
     {
-        Echo::Res* res = Echo::Res::createByFileExtension(m_exts.c_str());
+        Echo::Res* res = Echo::Res::createByFileExtension(m_exts.c_str(), true);
         if (res)
         {
             m_lineEdit->setText(Echo::StringUtil::ToString(res->getId()).c_str());

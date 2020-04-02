@@ -22,8 +22,8 @@ namespace Studio
 		ProjectMgr();
 		~ProjectMgr();
 
-		// 新建项目文件
-		void NewProject( const char* projectName);
+		// new
+		void newProject( const char* projectName);
 
 		// 打开项目文件(全路径)
 		void OpenProject(const char* fullPathName);

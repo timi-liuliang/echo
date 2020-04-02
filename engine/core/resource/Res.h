@@ -37,7 +37,7 @@ namespace Echo
 		static Res* get(const ResourcePath& path);
 
 		// create by extension
-		static ResRef<Res> createByFileExtension(const String& extWithDot);
+		static ResRef<Res> createByFileExtension(const String& extWithDot, bool ignoreError);
 
 		// get res fun by extension
 		static const ResFun* getResFunByExtension(const String& extWithDot);

@@ -96,13 +96,27 @@ namespace Studio
 		}
 		else
 		{
-			Echo::String resPath;
-			if (Echo::IO::instance()->convertFullPathToResPath(res, resPath))
+			Echo::ResPtr resPtr = Echo::Res::createByFileExtension(Echo::PathUtil::GetFileExt(res, true), true);
+			if (resPtr && resPtr->isPackage())
 			{
-				m_selectedFile = resPath.c_str();
+				Echo::String resPath;
+				if (Echo::IO::instance()->convertFullPathToResPath(res, resPath))
+				{
+					Echo::ResPtr selectRes = Echo::Res::get(resPath);
+					m_previewHelper->clear();
+					m_previewHelper->setRes(selectRes, nullptr, true);
+				}
 			}
+			else
+			{
+				Echo::String resPath;
+				if (Echo::IO::instance()->convertFullPathToResPath(res, resPath))
+				{
+					m_selectedFile = resPath.c_str();
+				}
 
-			accept();
+				accept();
+			}
 		}
 	}
 }

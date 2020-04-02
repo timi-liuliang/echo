@@ -89,8 +89,12 @@ namespace QT_UI
 		// add files
 		for (const Echo::String& file : files)
 		{
-			if (!Echo::PathUtil::IsDir(file) && isSupportExt(file))
-				addItem(file.c_str());
+			if (!Echo::PathUtil::IsDir(file))
+			{
+				Echo::ResPtr res = Echo::Res::createByFileExtension(Echo::PathUtil::GetFileExt(file, true), true);
+				if(isSupportExt(file) || (res && res->isPackage()))
+					addItem(file.c_str());
+			}
 		}
 	}
 
@@ -160,7 +164,7 @@ namespace QT_UI
             const Echo::Res::ResFun* resFun = Echo::Res::getResFunByExtension(fileExt);
             if(resFun && resFun->m_cfun)
             {
-                Echo::ResPtr res = Echo::Res::createByFileExtension(fileExt);
+                Echo::ResPtr res = Echo::Res::createByFileExtension(fileExt, true);
                 iconPath = res && res->getEditor() ? res->getEditor()->getEditorIcon() : "";
                 if(!iconPath.empty())
                     iconPath = Studio::AStudio::instance()->getRootPath() + iconPath;

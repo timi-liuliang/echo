@@ -42,7 +42,7 @@ namespace Echo
 		static bool IsSameFile(const String& file1, const String& file2);
 		static bool CanWriteToFile(const String& file, bool bCreateNoExist);
 		static String GetCurrentDir();
-		static String GetFileDirPath(const String& filename);
+		static String GetFileDirPath(const String& filename, bool withLastSeperator=true);
 		static String GetPureFilename(const String& filename, bool bNeedExt = true);
 		static String GetPureDirname(const String& dirname);
 		static String GetFileExt(const String& filename, bool bNeedDot = false);

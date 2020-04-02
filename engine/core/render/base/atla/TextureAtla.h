@@ -2,6 +2,7 @@
 
 #include "engine/core/resource/Res.h"
 #include "engine/core/render/base/Texture.h"
+#include "TextureAtlas.h"
 
 namespace Echo
 {
@@ -19,6 +20,8 @@ namespace Echo
         virtual void save() override;
 
     protected:
+        String          m_atlaName;
+        TextureAtlasPtr m_owner;
     };
     typedef ResRef<TextureAtla> TextureAtlaPtr;
 }

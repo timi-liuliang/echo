@@ -17,7 +17,7 @@ namespace Studio
 
 	}
 
-	void ProjectMgr::NewProject(const char* projectName)
+	void ProjectMgr::newProject(const char* projectName)
 	{
 	}
 

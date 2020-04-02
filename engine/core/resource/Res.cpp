@@ -121,7 +121,7 @@ namespace Echo
 		return nullptr;
 	}
 
-	ResPtr Res::createByFileExtension(const String& extWithDot)
+	ResPtr Res::createByFileExtension(const String& extWithDot, bool ignoreError)
 	{
 		String ext = extWithDot;
 		std::unordered_map<String, Res::ResFun>::iterator itfun = g_resFuncs.find(ext);
@@ -132,7 +132,9 @@ namespace Echo
 				return res;	
 		}
 
-		EchoLogError("Res::create failed. Unknown extension [%s]", extWithDot.c_str());
+		if(!ignoreError)
+			EchoLogError("Res::create failed. Unknown extension [%s]", extWithDot.c_str());
+
 		return nullptr;
 	}
 

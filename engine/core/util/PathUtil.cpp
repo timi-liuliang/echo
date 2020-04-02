@@ -435,7 +435,7 @@ namespace Echo
 	}
 #endif
 
-	String PathUtil::GetFileDirPath(const String& filename)
+	String PathUtil::GetFileDirPath(const String& filename, bool withLastSeperator)
 	{
 		String path = filename;
 		size_t pos = path.find_last_of(SEPERATOR);
@@ -443,7 +443,7 @@ namespace Echo
 		{
 			return INVALID_PATH;
 		}
-		path = path.substr(0, pos + 1);
+		path = path.substr(0, withLastSeperator ? pos + 1 : pos);
 
 		return path;
 	}
