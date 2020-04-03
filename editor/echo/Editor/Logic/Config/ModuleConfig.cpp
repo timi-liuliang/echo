@@ -26,5 +26,6 @@ namespace Echo
 #endif
         REGISTER_MODULE(BuildModule);
 		REGISTER_MODULE(EditorSettingsModule);
+		REGISTER_MODULE(ShaderEditorModule)
 	}
 }
