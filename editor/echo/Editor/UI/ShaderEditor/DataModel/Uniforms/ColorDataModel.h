@@ -7,6 +7,7 @@
 #include "DataFloat.h"
 #include "QColorSelect.h"
 #include "ShaderDataModel.h"
+#include "shader_uniform_config.h"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -32,6 +33,9 @@ namespace DataFlowProgramming
         bool captionVisible() const override { return m_isParameter; }
 
         QString name() const override { return QStringLiteral("Color"); }
+
+		// variable name
+		virtual const Echo::String getVariableName();
 
 		// show menu
         virtual void showMenu(const QPointF& pos) override;
@@ -70,6 +74,9 @@ namespace DataFlowProgramming
         void onSetAsParameter();
         void onSetAsConstant();
 
+		// slot
+        virtual void onDoubleClicked();
+
     private:
         QMenu*                              m_menu = nullptr;
         QAction*                            m_setAsParameter = nullptr;
@@ -77,6 +84,7 @@ namespace DataFlowProgramming
         bool                                m_isParameter = false;
         QT_UI::QColorSelect*                m_colorSelect = nullptr;
         vector<std::shared_ptr<ShaderData>> m_outputs;
+        Echo::ShaderUniformConfig*          m_uniformConfig = nullptr;
     };
 }
 

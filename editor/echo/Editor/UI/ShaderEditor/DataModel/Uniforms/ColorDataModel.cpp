@@ -4,12 +4,15 @@
 #include "DataFloat.h"
 #include "DataVector3.h"
 #include "Engine/core/util/StringUtil.h"
+#include "NodeTreePanel.h"
 #include <QMenu>
 
 namespace DataFlowProgramming
 {
     ColorDataModel::ColorDataModel()
     {
+        m_uniformConfig = EchoNew(Echo::ShaderUniformConfig);
+
         m_colorSelect = new QT_UI::QColorSelect();
         m_colorSelect->setFixedSize(128, 128);
         m_colorSelect->setDrawText(false);
@@ -21,10 +24,16 @@ namespace DataFlowProgramming
         updateOutputDataVariableName();
     }
 
+	const Echo::String ColorDataModel::getVariableName()
+	{
+		return  m_uniformConfig->getVariableName().empty() ?  ShaderDataModel::getVariableName() : m_uniformConfig->getVariableName();
+	}
+
     QJsonObject ColorDataModel::save() const
     {
         QJsonObject modelJson = ShaderDataModel::save();
 
+        modelJson["variableName"] = m_uniformConfig->getVariableName().c_str();
         modelJson["color"] = Echo::StringUtil::ToString(m_colorSelect->GetColor()).c_str();
 
         return modelJson;
@@ -32,7 +41,14 @@ namespace DataFlowProgramming
 
     void ColorDataModel::restore(QJsonObject const &p)
     {
-         QJsonValue v = p["color"];
+		QJsonValue v = p["variableName"];
+		if (!v.isUndefined())
+		{
+			Echo::String variableName = v.toString().toStdString().c_str();
+            m_uniformConfig->setVariableName(variableName);
+		}
+
+        v = p["color"];
         if (!v.isUndefined())
         {
             Echo::String colorStr = v.toString().toStdString().c_str();
@@ -107,6 +123,11 @@ namespace DataFlowProgramming
 
         onColorEdited();
 	}
+
+    void ColorDataModel::onDoubleClicked()
+    {
+        Studio::NodeTreePanel::instance()->onEditObject(m_uniformConfig);
+    }
 
     void ColorDataModel::updateOutputDataVariableName()
     {

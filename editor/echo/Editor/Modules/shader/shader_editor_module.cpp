@@ -1,4 +1,5 @@
 #include "shader_editor_module.h"
+#include "shader_uniform_config.h"
 
 namespace Echo
 {
@@ -26,6 +27,6 @@ namespace Echo
 
     void ShaderEditorModule::registerTypes()
     {
-		//Class::registerType<EditorRenderSettings>();
+		Class::registerType<ShaderUniformConfig>();
     }
 }

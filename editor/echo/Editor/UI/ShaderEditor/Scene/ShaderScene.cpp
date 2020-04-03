@@ -8,6 +8,7 @@ namespace DataFlowProgramming
 	ShaderScene::ShaderScene(std::shared_ptr<QtNodes::DataModelRegistry> registry, QObject* parent)
 		: FlowScene(registry, parent)
 	{
+		QObject::connect(this, &FlowScene::nodeDoubleClicked, this, &ShaderScene::onDoubleClickedNode);
 		QObject::connect(this, &FlowScene::nodeContextMenu, this, &ShaderScene::onShowShaderNodeMenu);
 	}
 
@@ -61,6 +62,15 @@ namespace DataFlowProgramming
 		if (shaderDataModel)
 		{
 			shaderDataModel->showMenu(pos);
+		}
+	}
+
+	void ShaderScene::onDoubleClickedNode(QtNodes::Node& node)
+	{
+		ShaderDataModel* shaderDataModel = qobject_cast<ShaderDataModel*>(node.nodeDataModel());
+		if (shaderDataModel)
+		{
+			shaderDataModel->onDoubleClicked();
 		}
 	}
 }

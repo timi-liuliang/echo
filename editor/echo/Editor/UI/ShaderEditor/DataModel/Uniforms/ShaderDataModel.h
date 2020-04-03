@@ -32,7 +32,7 @@ namespace DataFlowProgramming
         virtual QString caption() const = 0;
 
         // variable name
-        const Echo::String getVariableName();
+        virtual const Echo::String getVariableName();
 
         // generate code
         virtual bool generateCode(ShaderCompiler& compiler)=0;
@@ -57,6 +57,10 @@ namespace DataFlowProgramming
 
         // check validation
         virtual bool checkValidation();
+
+    public:
+        // slot
+        virtual void onDoubleClicked() {}
 
 	protected:
         Echo::ui32                              m_id = 0;
