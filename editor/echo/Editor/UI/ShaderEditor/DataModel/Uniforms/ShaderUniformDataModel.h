@@ -41,7 +41,7 @@ namespace DataFlowProgramming
         virtual void showMenu(const QPointF& pos);
 
         // uniform config
-        void saveUniformConfig(QJsonObject const& p) const;
+        void saveUniformConfig(QJsonObject& p) const;
 		void restoreUniformConfig(QJsonObject const& p);
 
     public:

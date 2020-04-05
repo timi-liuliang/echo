@@ -26,13 +26,13 @@ namespace DataFlowProgramming
 			return getDefaultVariableName();
 	}
 
-	void ShaderUniformDataModel::saveUniformConfig(QJsonObject const& p) const
+	void ShaderUniformDataModel::saveUniformConfig(QJsonObject& p) const
 	{
 		p["isParameter"] = Echo::StringUtil::ToString(m_isParameter).c_str();
 		p["variableName"] = getVariableName().c_str();
 	}
 
-	void ShaderUniformDataModel::restoreUniformConfig(QJsonObject const& p)
+	void ShaderUniformDataModel::restoreUniformConfig(QJsonObject const &p)
 	{
 		QJsonValue v = p["isParameter"];
 		if (!v.isUndefined())
