@@ -6,7 +6,8 @@
 namespace DataFlowProgramming
 {
     FloatDataModel::FloatDataModel()
-      : m_lineEdit(new QLineEdit())
+      : ShaderUniformDataModel()
+      , m_lineEdit(new QLineEdit())
     {
         m_lineEdit->setValidator(new QDoubleValidator());
         m_lineEdit->setMaximumSize(QSize(m_lineEdit->sizeHint().width() * 0.4f, m_lineEdit->sizeHint().height()));

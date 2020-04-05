@@ -4,35 +4,32 @@
 #include "DataFloat.h"
 #include "DataVector3.h"
 #include "Engine/core/util/StringUtil.h"
-#include "NodeTreePanel.h"
 #include <QMenu>
 
 namespace DataFlowProgramming
 {
     ColorDataModel::ColorDataModel()
+        : ShaderUniformDataModel()
     {
+        m_outputs.resize(5);
+
         m_colorSelect = new QT_UI::QColorSelect();
         m_colorSelect->setFixedSize(128, 128);
         m_colorSelect->setDrawText(false);
 
         QObject::connect(m_colorSelect, SIGNAL(Signal_ColorChanged()), this, SLOT(onColorEdited()));
-
-        m_outputs.resize(5);
+		QObject::connect(m_setAsParameter, SIGNAL(triggered()), this, SLOT(onSetAsParameter()));
+		QObject::connect(m_setAsConstant, SIGNAL(triggered()), this, SLOT(onSetAsConstant()));
 
         updateOutputDataVariableName();
-    }
-
-    QString ColorDataModel::caption() const 
-    { 
-        return m_uniformConfig->getVariableName().c_str();
     }
 
     QJsonObject ColorDataModel::save() const
     {
         QJsonObject modelJson = ShaderDataModel::save();
 
-        modelJson["isParameter"] = Echo::StringUtil::ToString(m_isParameter).c_str();
-        modelJson["variableName"] = m_uniformConfig->getVariableName().c_str();
+        ShaderUniformDataModel::saveUniformConfig(modelJson);
+
         modelJson["color"] = Echo::StringUtil::ToString(m_colorSelect->GetColor()).c_str();
 
         return modelJson;
@@ -40,36 +37,14 @@ namespace DataFlowProgramming
 
     void ColorDataModel::restore(QJsonObject const &p)
     {
-		QJsonValue v = p["isParameter"];
-		if (!v.isUndefined())
-		{
-			Echo::String variableName = v.toString().toStdString().c_str();
-            m_isParameter = Echo::StringUtil::ParseBool(variableName);
-		}
+        ShaderUniformDataModel::restoreUniformConfig(p);
 
-		v = p["variableName"];
-		if (!v.isUndefined())
-		{
-			Echo::String variableName = v.toString().toStdString().c_str();
-            m_uniformConfig->setVariableName(variableName);
-		}
-
-        v = p["color"];
+        QJsonValue v = p["color"];
         if (!v.isUndefined())
         {
             Echo::String colorStr = v.toString().toStdString().c_str();
             m_colorSelect->SetColor(Echo::StringUtil::ParseColor(colorStr));
         }
-    }
-
-    unsigned int ColorDataModel::nPorts(PortType portType) const
-    {
-      switch (portType)
-      {
-      case PortType::In:    return 0;
-      case PortType::Out:   return m_outputs.size();
-      default:              return 0;
-      }
     }
 
     void ColorDataModel::onColorEdited()
@@ -79,39 +54,6 @@ namespace DataFlowProgramming
         Q_EMIT dataUpdated(2);
         Q_EMIT dataUpdated(3);
         Q_EMIT dataUpdated(4);
-    }
-
-    NodeDataType ColorDataModel::dataType(PortType portType, PortIndex portIndex) const
-    {
-        if(portType==PortType::Out)
-        {
-            return m_outputs[portIndex]->type();
-        }
-        
-        return NodeDataType {"unknown", "Unknown"};
-    }
-
-    std::shared_ptr<NodeData> ColorDataModel::outData(PortIndex portIndex)
-    {
-        return m_outputs[portIndex];
-    }
-
-    void ColorDataModel::showMenu(const QPointF& pos)
-    {
-        if (!m_menu)
-        {
-			m_menu = new QMenu();
-            m_setAsParameter = new QAction("Switch to Parameter");
-			m_setAsConstant = new QAction("Switch to Constant");
-
-            QObject::connect(m_setAsParameter, SIGNAL(triggered()), this, SLOT(onSetAsParameter()));
-            QObject::connect(m_setAsConstant, SIGNAL(triggered()), this, SLOT(onSetAsConstant()));
-        }
-
-        m_menu->clear();
-        m_menu->addAction(m_isParameter ? m_setAsConstant : m_setAsParameter);
-
-        m_menu->exec(QCursor::pos());
     }
 
 	void ColorDataModel::onSetAsParameter()
@@ -129,12 +71,6 @@ namespace DataFlowProgramming
 
         onColorEdited();
 	}
-
-    void ColorDataModel::onDoubleClicked()
-    {
-        if(m_isParameter)
-            Studio::NodeTreePanel::instance()->onEditObject(m_uniformConfig);
-    }
 
     void ColorDataModel::updateOutputDataVariableName()
     {

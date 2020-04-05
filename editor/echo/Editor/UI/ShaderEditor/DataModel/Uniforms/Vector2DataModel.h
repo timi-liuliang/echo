@@ -6,7 +6,7 @@
 #include "propertyeditor/QVector2Editor.h"
 #include <iostream>
 #include "DataFloat.h"
-#include "ShaderDataModel.h"
+#include "ShaderUniformDataModel.h"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -19,17 +19,13 @@ namespace DataFlowProgramming
 {
     /// The model dictates the number of inputs and outputs for the Node.
     /// In this example it has no logic.
-    class Vector2DataModel : public ShaderDataModel
+    class Vector2DataModel : public ShaderUniformDataModel
     {
       Q_OBJECT
 
     public:
         Vector2DataModel();
         virtual ~Vector2DataModel() {}
-
-        // caption
-        QString caption() const override { return QStringLiteral("Vector2"); }
-        bool captionVisible() const override { return false; }
 
         QString name() const override { return QStringLiteral("Vector2"); }
 

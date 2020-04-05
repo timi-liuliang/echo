@@ -7,7 +7,11 @@
 namespace DataFlowProgramming
 {
     TextureDataModel::TextureDataModel()
+        : ShaderUniformDataModel()
     {
+        m_isParameter = true;
+        m_uniformConfig->setVariableName(getDefaultVariableName());
+
         m_textureSelect = new QT_UI::QTextureSelect();
         m_textureSelect->setFixedSize(128, 128);
 
@@ -34,6 +38,8 @@ namespace DataFlowProgramming
     {
         QJsonObject modelJson = NodeDataModel::save();
 
+        ShaderUniformDataModel::saveUniformConfig(modelJson);
+
         modelJson["texture"] = m_textureSelect->getTexture().c_str();
 
         return modelJson;
@@ -41,6 +47,8 @@ namespace DataFlowProgramming
 
     void TextureDataModel::restore(QJsonObject const &p)
     {
+        ShaderUniformDataModel::restoreUniformConfig(p);
+
         QJsonValue v = p["texture"];
         if (!v.isUndefined())
         {
@@ -103,6 +111,8 @@ namespace DataFlowProgramming
 
 	bool TextureDataModel::generateCode(ShaderCompiler& compiler)
 	{                   
+        updateOutputDataVariableName();
+
 		compiler.addMacro("ENABLE_VERTEX_UV0");
 
 		compiler.addTextureUniform(getVariableName());

@@ -7,6 +7,7 @@
 namespace DataFlowProgramming
 {
     Vector2DataModel::Vector2DataModel()
+        : ShaderUniformDataModel()
     {
         m_vector2Editor = (new QT_UI::QVector2Editor(nullptr, "", nullptr));
         m_vector2Editor->setMaximumSize(QSize(m_vector2Editor->sizeHint().width() * 0.4f, m_vector2Editor->sizeHint().height()));

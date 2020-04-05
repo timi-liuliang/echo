@@ -30,11 +30,11 @@ namespace DataFlowProgramming
 		/// Caption is used in GUI
         virtual QString caption() const = 0;
 
-		/// Name makes this model unique
-        virtual QString name() const { return QStringLiteral("Invalid"); }
-
         // variable name
         virtual Echo::String getVariableName() const;
+
+        // get default variable name
+        Echo::String getDefaultVariableName() const;
 
         // generate code
         virtual bool generateCode(ShaderCompiler& compiler)=0;
@@ -64,15 +64,9 @@ namespace DataFlowProgramming
         // slot
         virtual void onDoubleClicked() {}
 
-    protected:
-        // get default variable name
-        Echo::String getDefaultVariableName() const;
-
 	protected:
         Echo::ui32                              m_id = 0;
         bool                                    m_isUsed = true;
-        bool                                    m_isParameter = false;
-        Echo::ShaderUniformConfig*              m_uniformConfig = nullptr;
 
 		std::vector<NodeDataType>               m_inputDataTypes;
 		std::vector<std::shared_ptr<ShaderData>>m_inputs;

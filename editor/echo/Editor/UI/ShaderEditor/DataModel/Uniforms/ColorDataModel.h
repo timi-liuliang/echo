@@ -6,7 +6,7 @@
 #include <iostream>
 #include "DataFloat.h"
 #include "QColorSelect.h"
-#include "ShaderDataModel.h"
+#include "ShaderUniformDataModel.h"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -17,7 +17,7 @@ using QtNodes::NodeValidationState;
 
 namespace DataFlowProgramming
 {
-    class ColorDataModel : public ShaderDataModel
+    class ColorDataModel : public ShaderUniformDataModel
     {
       Q_OBJECT
 
@@ -25,14 +25,7 @@ namespace DataFlowProgramming
         ColorDataModel();
         virtual ~ColorDataModel() {}
 
-        // caption
-        virtual QString caption() const override;
-        bool captionVisible() const override { return m_isParameter; }
-
         virtual QString name() const override { return QStringLiteral("Color"); }
-
-		// show menu
-        virtual void showMenu(const QPointF& pos) override;
 
         // generate code
         virtual bool generateCode(ShaderCompiler& compiler) override;
@@ -43,14 +36,6 @@ namespace DataFlowProgramming
         void restore(QJsonObject const &p) override;
 
     public:
-        // get port type
-        unsigned int nPorts(PortType portType) const override;
-
-        // get data type
-        NodeDataType dataType(PortType portType, PortIndex portIndex) const override;
-
-        std::shared_ptr<NodeData> outData(PortIndex port) override;
-
         void setInData(std::shared_ptr<NodeData>, int) override { }
 
         // get embedded widget
@@ -68,15 +53,8 @@ namespace DataFlowProgramming
         void onSetAsParameter();
         void onSetAsConstant();
 
-		// slot
-        virtual void onDoubleClicked();
-
     private:
-        QMenu*                              m_menu = nullptr;
-        QAction*                            m_setAsParameter = nullptr;
-		QAction*                            m_setAsConstant = nullptr;
         QT_UI::QColorSelect*                m_colorSelect = nullptr;
-        vector<std::shared_ptr<ShaderData>> m_outputs;
     };
 }
 

@@ -5,7 +5,7 @@
 #include <nodeeditor/NodeDataModel>
 #include <iostream>
 #include "DataFloat.h"
-#include "ShaderDataModel.h"
+#include "ShaderUniformDataModel.h"
 #include "QTextureSelect.h"
 
 using QtNodes::PortType;
@@ -17,9 +17,7 @@ using QtNodes::NodeValidationState;
 
 namespace DataFlowProgramming
 {
-    /// The model dictates the number of inputs and outputs for the Node.
-    /// In this example it has no logic.
-    class TextureDataModel : public ShaderDataModel
+    class TextureDataModel : public ShaderUniformDataModel
     {
       Q_OBJECT
 
@@ -28,7 +26,6 @@ namespace DataFlowProgramming
         virtual ~TextureDataModel() {}
 
         // caption
-        QString caption() const override { return QStringLiteral("Texture"); }
         bool captionVisible() const override { return true; }
 
         QString name() const override { return QStringLiteral("Texture"); }
@@ -54,6 +51,9 @@ namespace DataFlowProgramming
 
         // get embedded widget
         QWidget* embeddedWidget() override { return m_textureSelect; }
+
+		// show menu
+		virtual void showMenu(const QPointF& pos) {}
 
     private Q_SLOTS:
         // on value changed
