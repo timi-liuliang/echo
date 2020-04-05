@@ -28,10 +28,10 @@ namespace DataFlowProgramming
         virtual ~Vector4DataModel() {}
 
         // caption
-        QString caption() const override { return QStringLiteral("Vector4"); }
-        bool captionVisible() const override { return false; }
+        virtual QString caption() const override { return QStringLiteral("Vector4"); }
+        virtual bool captionVisible() const override { return false; }
 
-        QString name() const override { return QStringLiteral("Vector4"); }
+        virtual QString name() const override { return QStringLiteral("Vector4"); }
 
 		// generate code
         virtual bool generateCode(ShaderCompiler& compiler) override;

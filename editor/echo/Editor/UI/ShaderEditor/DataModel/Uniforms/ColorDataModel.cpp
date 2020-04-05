@@ -11,8 +11,6 @@ namespace DataFlowProgramming
 {
     ColorDataModel::ColorDataModel()
     {
-        m_uniformConfig = EchoNew(Echo::ShaderUniformConfig);
-
         m_colorSelect = new QT_UI::QColorSelect();
         m_colorSelect->setFixedSize(128, 128);
         m_colorSelect->setDrawText(false);
@@ -24,15 +22,16 @@ namespace DataFlowProgramming
         updateOutputDataVariableName();
     }
 
-	const Echo::String ColorDataModel::getVariableName()
-	{
-		return  m_uniformConfig->getVariableName().empty() ?  ShaderDataModel::getVariableName() : m_uniformConfig->getVariableName();
-	}
+    QString ColorDataModel::caption() const 
+    { 
+        return m_uniformConfig->getVariableName().c_str();
+    }
 
     QJsonObject ColorDataModel::save() const
     {
         QJsonObject modelJson = ShaderDataModel::save();
 
+        modelJson["isParameter"] = Echo::StringUtil::ToString(m_isParameter).c_str();
         modelJson["variableName"] = m_uniformConfig->getVariableName().c_str();
         modelJson["color"] = Echo::StringUtil::ToString(m_colorSelect->GetColor()).c_str();
 
@@ -41,7 +40,14 @@ namespace DataFlowProgramming
 
     void ColorDataModel::restore(QJsonObject const &p)
     {
-		QJsonValue v = p["variableName"];
+		QJsonValue v = p["isParameter"];
+		if (!v.isUndefined())
+		{
+			Echo::String variableName = v.toString().toStdString().c_str();
+            m_isParameter = Echo::StringUtil::ParseBool(variableName);
+		}
+
+		v = p["variableName"];
 		if (!v.isUndefined())
 		{
 			Echo::String variableName = v.toString().toStdString().c_str();
@@ -126,12 +132,13 @@ namespace DataFlowProgramming
 
     void ColorDataModel::onDoubleClicked()
     {
-        Studio::NodeTreePanel::instance()->onEditObject(m_uniformConfig);
+        if(m_isParameter)
+            Studio::NodeTreePanel::instance()->onEditObject(m_uniformConfig);
     }
 
     void ColorDataModel::updateOutputDataVariableName()
     {
-        Echo::String variableName = m_isParameter ? "fs_ubo." + getVariableName() : getVariableName();
+        Echo::String variableName = getVariableName();
 
 		m_outputs[0] = std::make_shared<DataVector3>(this, "rgb");
 		m_outputs[1] = std::make_shared<DataFloat>(this, "r");
@@ -152,7 +159,7 @@ namespace DataFlowProgramming
 		{
 			compiler.addUniform("vec4", getVariableName().c_str());
 
-            compiler.addCode(Echo::StringUtil::Format("\tfs_ubo.%s_Value.rgb = SRgbToLinear(fs_ubo.%s.rgb);\n", getVariableName().c_str(), getVariableName().c_str()));
+            compiler.addCode(Echo::StringUtil::Format("\tvec4 %s_Value = vec4(SRgbToLinear(fs_ubo.%s.rgb), fs_ubo.%s.a);\n", getVariableName().c_str(), getVariableName().c_str(), getVariableName().c_str()));
 		}
 		else
 		{

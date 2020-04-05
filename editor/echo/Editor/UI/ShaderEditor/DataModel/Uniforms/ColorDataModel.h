@@ -7,7 +7,6 @@
 #include "DataFloat.h"
 #include "QColorSelect.h"
 #include "ShaderDataModel.h"
-#include "shader_uniform_config.h"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -18,8 +17,6 @@ using QtNodes::NodeValidationState;
 
 namespace DataFlowProgramming
 {
-    /// The model dictates the number of inputs and outputs for the Node.
-    /// In this example it has no logic.
     class ColorDataModel : public ShaderDataModel
     {
       Q_OBJECT
@@ -29,13 +26,10 @@ namespace DataFlowProgramming
         virtual ~ColorDataModel() {}
 
         // caption
-        virtual QString caption() const override { return QStringLiteral("Color"); }
+        virtual QString caption() const override;
         bool captionVisible() const override { return m_isParameter; }
 
-        QString name() const override { return QStringLiteral("Color"); }
-
-		// variable name
-		virtual const Echo::String getVariableName();
+        virtual QString name() const override { return QStringLiteral("Color"); }
 
 		// show menu
         virtual void showMenu(const QPointF& pos) override;
@@ -81,10 +75,8 @@ namespace DataFlowProgramming
         QMenu*                              m_menu = nullptr;
         QAction*                            m_setAsParameter = nullptr;
 		QAction*                            m_setAsConstant = nullptr;
-        bool                                m_isParameter = false;
         QT_UI::QColorSelect*                m_colorSelect = nullptr;
         vector<std::shared_ptr<ShaderData>> m_outputs;
-        Echo::ShaderUniformConfig*          m_uniformConfig = nullptr;
     };
 }
 

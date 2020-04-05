@@ -8,14 +8,25 @@ namespace DataFlowProgramming
 	{
 		static Echo::ui32 id = 0;
 		m_id = id++;
+
+		m_uniformConfig = EchoNew(Echo::ShaderUniformConfig);
+		m_uniformConfig->setVariableName(getDefaultVariableName());
 	}
 
-	const Echo::String ShaderDataModel::getVariableName()
-	{ 
-		m_variableName = caption().toStdString().c_str() + Echo::StringUtil::Format("_%d", m_id);
-		m_variableName = Echo::StringUtil::Replace(m_variableName, " ", "");
+	Echo::String ShaderDataModel::getDefaultVariableName() const
+	{
+		Echo::String variableName = name().toStdString().c_str() + Echo::StringUtil::Format("_%d", m_id);
+		variableName = Echo::StringUtil::Replace(variableName, " ", "");
 
-		return m_variableName; 
+		return variableName;
+	}
+
+	Echo::String ShaderDataModel::getVariableName() const
+	{ 
+		if (m_isParameter)
+			return m_uniformConfig->getVariableName();
+		else
+			return getDefaultVariableName();
 	}
 
 	unsigned int ShaderDataModel::nPorts(PortType portType) const

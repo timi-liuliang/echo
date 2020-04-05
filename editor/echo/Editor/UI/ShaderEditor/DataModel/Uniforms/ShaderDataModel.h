@@ -7,6 +7,7 @@
 #include <string>
 #include "DataFloat.h"
 #include "QColorSelect.h"
+#include "shader_uniform_config.h"
 #include "Compiler/ShaderCompiler.h"
 
 using QtNodes::PortType;
@@ -18,8 +19,6 @@ using QtNodes::NodeValidationState;
 
 namespace DataFlowProgramming
 {
-    /// The model dictates the number of inputs and outputs for the Node.
-    /// In this example it has no logic.
     class ShaderDataModel : public NodeDataModel
     {
       Q_OBJECT
@@ -31,8 +30,11 @@ namespace DataFlowProgramming
 		/// Caption is used in GUI
         virtual QString caption() const = 0;
 
+		/// Name makes this model unique
+        virtual QString name() const { return QStringLiteral("Invalid"); }
+
         // variable name
-        virtual const Echo::String getVariableName();
+        virtual Echo::String getVariableName() const;
 
         // generate code
         virtual bool generateCode(ShaderCompiler& compiler)=0;
@@ -62,14 +64,19 @@ namespace DataFlowProgramming
         // slot
         virtual void onDoubleClicked() {}
 
+    protected:
+        // get default variable name
+        Echo::String getDefaultVariableName() const;
+
 	protected:
         Echo::ui32                              m_id = 0;
         bool                                    m_isUsed = true;
-        Echo::String                            m_variableName;
+        bool                                    m_isParameter = false;
+        Echo::ShaderUniformConfig*              m_uniformConfig = nullptr;
 
 		std::vector<NodeDataType>               m_inputDataTypes;
 		std::vector<std::shared_ptr<ShaderData>>m_inputs;
-		vector<std::shared_ptr<ShaderData>>     m_outputs;
+		std::vector<std::shared_ptr<ShaderData>>m_outputs;
 
 		NodeValidationState                     m_modelValidationState = NodeValidationState::Valid;
 		QString                                 m_modelValidationError = QStringLiteral("");
