@@ -265,6 +265,8 @@ mousePressEvent(QGraphicsSceneMouseEvent * event)
   {
     state.setResizing(true);
   }
+
+  _scene.nodePressed(node());
 }
 
 

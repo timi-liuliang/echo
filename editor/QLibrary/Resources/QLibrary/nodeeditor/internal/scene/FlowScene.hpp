@@ -88,6 +88,10 @@ namespace QtNodes
 
       void loadFromMemory(const QByteArray& data);
 
+    public:
+        // node pressed
+        virtual void nodePressed(Node& n) {}
+
     Q_SIGNALS:
 
       /**
