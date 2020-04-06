@@ -1,6 +1,7 @@
 #include "ShaderScene.h"
 #include "ShaderEditor.h"
 #include "ShaderTemplateDataModel.h"
+#include "ShaderUniformDataModel.h"
 #include "nodeeditor/internal/node/Node.hpp"
 
 namespace DataFlowProgramming
@@ -66,10 +67,14 @@ namespace DataFlowProgramming
 
 	void ShaderScene::nodePressed(QtNodes::Node& node)
 	{
-		ShaderDataModel* shaderDataModel = qobject_cast<ShaderDataModel*>(node.nodeDataModel());
+		ShaderUniformDataModel* shaderDataModel = qobject_cast<ShaderUniformDataModel*>(node.nodeDataModel());
 		if (shaderDataModel)
 		{
 			shaderDataModel->onDoubleClicked();
+		}
+		else
+		{
+			m_shaderEditor->showShaderProgramProperties();
 		}
 	}
 }

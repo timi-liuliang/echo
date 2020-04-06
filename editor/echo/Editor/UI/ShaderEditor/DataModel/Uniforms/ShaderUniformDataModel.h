@@ -49,7 +49,7 @@ namespace DataFlowProgramming
 
     public:
         // slot
-        virtual void onDoubleClicked() override;
+        virtual bool onDoubleClicked();
 
 	protected:
 		bool                        m_isParameter = false;

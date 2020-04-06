@@ -49,7 +49,7 @@ namespace DataFlowProgramming
 		}
 	}
 
-	void ShaderUniformDataModel::onDoubleClicked()
+	bool ShaderUniformDataModel::onDoubleClicked()
 	{
 		if (m_isParameter)
 		{
@@ -57,7 +57,11 @@ namespace DataFlowProgramming
 				m_uniformConfig->setVariableName(getDefaultVariableName());
 
 			Studio::NodeTreePanel::instance()->onEditObject(m_uniformConfig);
+
+			return true;
 		}
+
+		return false;
 	}
 
 	void ShaderUniformDataModel::showMenu(const QPointF& pos)

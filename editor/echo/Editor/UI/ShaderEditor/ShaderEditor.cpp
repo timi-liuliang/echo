@@ -37,6 +37,7 @@
 #include "ShaderView.h"
 #include "engine/core/io/IO.h"
 #include "engine/core/util/Timer.h"
+#include "NodeTreePanel.h"
 
 using namespace DataFlowProgramming;
 
@@ -109,6 +110,11 @@ namespace Studio
 	ShaderEditor::~ShaderEditor()
 	{
 	}
+
+    void ShaderEditor::showShaderProgramProperties()
+    {
+        Studio::NodeTreePanel::instance()->onEditObject(m_shaderProgram);
+    }
 
     void ShaderEditor::visitorAllNodes(QtNodes::NodeDataModel* dataModel)
     {

@@ -60,10 +60,6 @@ namespace DataFlowProgramming
         // check validation
         virtual bool checkValidation();
 
-    public:
-        // slot
-        virtual void onDoubleClicked() {}
-
 	protected:
         Echo::ui32                              m_id = 0;
         bool                                    m_isUsed = true;
