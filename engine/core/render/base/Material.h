@@ -93,9 +93,6 @@ namespace Echo
 		DECLARE_SIGNAL(Signal0, onShaderChanged)
 
 	protected:
-		// propertys (script property or dynamic property)
-		virtual const PropertyInfos& getPropertys() override;
-
 		// property value
 		virtual bool getPropertyValue(const String& propertyName, Variant& oVar) override;
 		virtual bool setPropertyValue(const String& propertyName, const Variant& propertyValue) override;
@@ -106,9 +103,6 @@ namespace Echo
 
 		// match uniforms
 		void matchUniforms();
-
-		// is global uniform
-		bool isGlobalUniform( const String& name);
 
 	private:
 		ResourcePath		m_shaderPath;				// shader res path

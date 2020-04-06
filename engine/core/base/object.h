@@ -45,7 +45,7 @@ namespace Echo
 		void clearPropertys();
 
 		// register property
-		bool registerProperty(const String& className, const String& propertyName, const Variant::Type type);
+		bool registerProperty(const String& className, const String& propertyName, const Variant::Type type, const PropertyHintArray& hints=PropertyHintArray());
 
 		// get property value
 		virtual bool getPropertyValue(const String& propertyName, Variant& oVar) { return false; }

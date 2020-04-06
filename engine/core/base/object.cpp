@@ -206,12 +206,13 @@ namespace Echo
 	}
 
 	// register property
-	bool Object::registerProperty(const String& className, const String& propertyName, const Variant::Type type)
+	bool Object::registerProperty(const String& className, const String& propertyName, const Variant::Type type, const PropertyHintArray& hints)
 	{
 		PropertyInfoDynamic* info = EchoNew(PropertyInfoDynamic);
 		info->m_name = propertyName;
 		info->m_type = type;
 		info->m_className = className;
+		info->m_hints = hints;
 
 		m_propertys.push_back(info);
 

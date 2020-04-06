@@ -25,6 +25,7 @@ namespace Echo
 
 	class Renderer;
 	class Renderable;
+    class Material;
 	class ShaderProgram : public Res
 	{
 		ECHO_RES(ShaderProgram, Res, ".shader", ShaderProgram::create, ShaderProgram::load);
@@ -80,6 +81,9 @@ namespace Echo
 		void clear();
 
     public:
+		// is global uniform
+		static bool isGlobalUniform(const String& name);
+
         // uniform
         void setUniform(const char* name, const void* value, ShaderParamType uniformType, ui32 count);
         UniformArray* getUniforms(){ return &m_uniforms; }
@@ -103,6 +107,11 @@ namespace Echo
         // data flow programming shader graph
         const String& getGraph() const { return m_graph; }
         void setGraph(const String& graph) { m_graph = graph; }
+
+    public:
+		// property value
+		virtual bool getPropertyValue(const String& propertyName, Variant& oVar) override;
+		virtual bool setPropertyValue(const String& propertyName, const Variant& propertyValue) override;
         
     public:
         // blend sate
@@ -113,7 +122,7 @@ namespace Echo
         DepthStencilState* getDepthState();
         void setDepthState(DepthStencilState* depthState) { m_depthState = depthState; }
         
-        // rasterizer state
+        // raster state
         RasterizerState* getRasterizerState();
         void setRasterizerState(RasterizerState* rasterState) { m_rasterizerState = rasterState; }
         

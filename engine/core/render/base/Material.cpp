@@ -150,11 +150,6 @@ namespace Echo
 		}
 	}
 
-	bool Material::isGlobalUniform(const String& name)
-	{
-		return StringUtil::StartWith(name, "u_") ? true : false;
-	}
-
 	void Material::addTexture(const String& name)
 	{
 		TextureInfo info;
@@ -279,7 +274,7 @@ namespace Echo
 
 				for (auto& it : m_uniforms)
 				{
-					if (!isGlobalUniform(it.first))
+					if (!ShaderProgram::isGlobalUniform(it.first))
 					{
 						switch (it.second->m_type)
 						{
@@ -297,11 +292,6 @@ namespace Echo
 			// emit signal
 			onShaderChanged();
 		}
-	}
-
-	const PropertyInfos& Material::getPropertys()
-	{
-		return m_propertys;
 	}
 
 	bool Material::getPropertyValue(const String& propertyName, Variant& oVar) 
