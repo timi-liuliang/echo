@@ -111,7 +111,7 @@ namespace Echo
 			desc.m_name = StringUtil::Substr( origUniformName, ".", false);
 			desc.m_type = GLES2Mapping::MapUniformType(uniformType);
 			desc.m_count = uniformSize;
-			desc.m_sizeInBytes = desc.m_count * MapUniformTypeSize(desc.m_type);
+			desc.m_sizeInBytes = desc.m_count * mapUniformTypeSize(desc.m_type);
 			desc.m_location = glGetUniformLocation(m_glesProgram, origUniformName.c_str());
 			m_uniforms[desc.m_name] = desc;
 		}

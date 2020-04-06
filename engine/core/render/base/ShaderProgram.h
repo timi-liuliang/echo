@@ -49,6 +49,7 @@ namespace Echo
             int                 m_sizeInBytes = 0;
             int                 m_location = -1;
             Byte*               m_value = nullptr;
+            Byte*               m_default = nullptr;
             bool                m_isDirty = true;
 
             Uniform() {}
@@ -61,18 +62,6 @@ namespace Echo
 			void setValue(const void* value);
         };
         typedef std::map<String, Uniform> UniformArray;
-
-        // UniformValue
-		struct UniformValue
-		{
-			i32 count;
-			ShaderParamType type;
-			ui32 sizeInByte;
-			void* value;
-
-			~UniformValue();
-		};
-		typedef map<String, UniformValue*>::type UniformValuesMap;
 
 	public:
 		ShaderProgram();
@@ -87,9 +76,6 @@ namespace Echo
 		static StringArray getEditableMacros();
         void setMacros(const StringArray& macros) { m_macros = macros; }
 
-		// get default value of uniform
-		const UniformValue* getDefaultUniformValue(const String& name);
-
 		// clear
 		void clear();
 
@@ -99,7 +85,7 @@ namespace Echo
         UniformArray* getUniforms(){ return &m_uniforms; }
 
 		// ByteSize
-		static int MapUniformTypeSize(ShaderParamType uniformType);
+		static int mapUniformTypeSize(ShaderParamType uniformType);
         
     public:
         // type
@@ -178,7 +164,6 @@ namespace Echo
 		RasterizerState*	m_rasterizerState = nullptr;
         MultisampleState*   m_multiSampleState = nullptr;
         UniformArray        m_uniforms;
-        UniformValuesMap	m_uniformDefaultValues;
 
     protected:
         StringOption        m_cullMode = StringOption("CULL_BACK", { "CULL_NONE", "CULL_FRONT", "CULL_BACK"});

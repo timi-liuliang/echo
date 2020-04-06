@@ -83,8 +83,7 @@ namespace Echo
 			return  it->second->m_value.data();
 		}
 
-		const ShaderProgram::UniformValue* dUniform = m_shaderProgram->getDefaultUniformValue(name);
-		return dUniform ? dUniform->value : nullptr;
+		return nullptr;
 	}
 
 	void Material::loadTexture()
@@ -396,15 +395,6 @@ namespace Echo
 							if (oldUniform && uniform->m_count == oldUniform->m_count && uniform->m_type == oldUniform->m_type)
 							{
 								uniform->setValue(oldUniform->m_value.data());
-							}
-						}
-						else
-						{
-							// default value
-							const ShaderProgram::UniformValue* defaultUniform = m_shaderProgram->getDefaultUniformValue(uniform->m_name);
-							if (defaultUniform && uniform->m_count == defaultUniform->count && uniform->m_type == defaultUniform->type)
-							{
-								uniform->setValue(defaultUniform->value);
 							}
 						}
 					}

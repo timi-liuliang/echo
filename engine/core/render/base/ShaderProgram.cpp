@@ -262,7 +262,6 @@ namespace Echo
 		EchoSafeDelete(m_blendState, BlendState);
 		EchoSafeDelete(m_depthState, DepthStencilState);
 		EchoSafeDelete(m_rasterizerState, RasterizerState);
-        EchoSafeDeleteMap(m_uniformDefaultValues, UniformValue);
 	}
     
     Res* ShaderProgram::create()
@@ -299,8 +298,6 @@ namespace Echo
 
 	bool ShaderProgram::build()
 	{
-        EchoSafeDeleteMap(m_uniformDefaultValues, UniformValue);
-        
         if(!m_vsCode.empty() && !m_psCode.empty())
         {
             String vsSrc = m_vsCode;
@@ -334,22 +331,6 @@ namespace Echo
 	{
 		StringArray macros;
 		return macros;
-	}
-
-	ShaderProgram::UniformValue::~UniformValue()
-	{
-		EchoSafeFree(value);
-	}
-
-	const ShaderProgram::UniformValue* ShaderProgram::getDefaultUniformValue(const String& name)
-	{
-		UniformValuesMap::iterator iter = m_uniformDefaultValues.find(name);
-		if (iter != m_uniformDefaultValues.end())
-		{
-			return iter->second;
-		}
-
-		return NULL;
 	}
 
     void ShaderProgram::setCullMode(const StringOption& option)
@@ -433,7 +414,7 @@ namespace Echo
 		}
     }
  
-	int ShaderProgram::MapUniformTypeSize(ShaderParamType uniformType)
+	int ShaderProgram::mapUniformTypeSize(ShaderParamType uniformType)
 	{
 		switch (uniformType)
 		{

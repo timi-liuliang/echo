@@ -223,7 +223,7 @@ namespace Echo
             desc.m_shader = shaderType;
             desc.m_sizeInBytes = compiler->get_declared_struct_member_size(type, i);
             desc.m_type = VKMapping::MapUniformType(compiler->get_type(type.member_types[i]));
-            desc.m_count = desc.m_sizeInBytes / MapUniformTypeSize(desc.m_type);
+            desc.m_count = desc.m_sizeInBytes / mapUniformTypeSize(desc.m_type);
             desc.m_location = compiler->type_struct_member_offset(type, i);
             m_uniforms[desc.m_name] = desc;
         }
