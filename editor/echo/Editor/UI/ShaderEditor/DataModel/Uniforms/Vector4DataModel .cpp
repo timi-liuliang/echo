@@ -71,4 +71,9 @@ namespace DataFlowProgramming
 
 		return true;
 	}
+
+	bool Vector4DataModel::getDefaultValue(Echo::String& uniformName, Echo::Variant& uniformValue)
+	{
+		return false;
+	}
 }

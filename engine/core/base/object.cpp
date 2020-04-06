@@ -193,19 +193,16 @@ namespace Echo
         return false;
     }
 
-	// propertys (script property or dynamic property)
 	const PropertyInfos& Object::getPropertys() 
 	{ 
 		return m_propertys;
 	}
 
-	// clear propertys
 	void Object::clearPropertys()
 	{
 		EchoSafeDeleteContainer(m_propertys, PropertyInfo);
 	}
 
-	// register property
 	bool Object::registerProperty(const String& className, const String& propertyName, const Variant::Type type, const PropertyHintArray& hints)
 	{
 		PropertyInfoDynamic* info = EchoNew(PropertyInfoDynamic);

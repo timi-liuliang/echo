@@ -18,5 +18,17 @@ namespace Echo
 		CLASS_BIND_METHOD(ShaderUniformConfig, setVariableName, DEF_METHOD("setVariableName"));
 
 		CLASS_REGISTER_PROPERTY(ShaderUniformConfig, "Name", Variant::Type::String, "getVariableName", "setVariableName");
+
+		CLASS_REGISTER_SIGNAL(ShaderUniformConfig, onVariableNameChanged);
+	}
+
+	void ShaderUniformConfig::setVariableName(const String& variableName)
+	{ 
+		m_variableName = variableName; 
+
+		if (onVariableNameChanged.isHaveConnects())
+		{
+			onVariableNameChanged();
+		}
 	}
 }

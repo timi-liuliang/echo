@@ -72,4 +72,9 @@ namespace DataFlowProgramming
 
 		return true;
 	}
+
+	bool Vector2DataModel::getDefaultValue(Echo::String& uniformName, Echo::Variant& uniformValue)
+	{
+		return false;
+	}
 }

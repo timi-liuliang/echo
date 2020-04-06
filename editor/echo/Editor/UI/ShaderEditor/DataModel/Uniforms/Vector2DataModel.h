@@ -32,6 +32,9 @@ namespace DataFlowProgramming
 		// generate code
         virtual bool generateCode(ShaderCompiler& compiler) override;
 
+		// get default value
+		virtual bool getDefaultValue(Echo::String& uniformName, Echo::Variant& uniformValue) override;
+
     public:
         // load|save
         QJsonObject save() const override;

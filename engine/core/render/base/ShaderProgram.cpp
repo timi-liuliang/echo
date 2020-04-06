@@ -198,23 +198,25 @@ namespace Echo
     
 	void ShaderProgram::Uniform::setValue(const void* value)
 	{
-		EchoAssert(value);
-
-		if (!m_value)
-		{
-			m_value = (Byte*)ECHO_MALLOC(m_sizeInBytes);
-		}
-
-		if (m_isDirty)
-		{
-			memcpy(m_value, value, m_sizeInBytes);
-		}
-		else if (memcmp(m_value, value, m_sizeInBytes) != 0)
-		{
-			m_isDirty = true;
-			memcpy(m_value, value, m_sizeInBytes);
-		}
+        if (value)
+        {
+			m_value.resize(m_sizeInBytes);
+			memcpy(m_value.data(), value, m_sizeInBytes);
+        }
+        else
+        {
+            m_value.clear();
+        }
 	}
+
+    void ShaderProgram::Uniform::setValueDefault(const void* value)
+    {
+        if (value)
+        {
+			m_valueDefault.resize(m_sizeInBytes);
+			memcpy(m_valueDefault.data(), value, m_sizeInBytes);
+        }
+    }
 
 	ShaderProgram::ShaderProgram()
 	{
@@ -314,32 +316,36 @@ namespace Echo
             // convert based on renderer type
             convert(m_type, vsSrc, psSrc);
 
-            if(!createShaderProgram( vsSrc, psSrc))
+            if (createShaderProgram(vsSrc, psSrc))
+            {
+				clearPropertys();
+
+				PropertyHintArray hints;
+				hints.push_back({ PropertyHintType::Category, "Uniforms" });
+
+				for (auto& it : m_uniforms)
+				{
+					if (!isGlobalUniform(it.first))
+					{
+						switch (it.second.m_type)
+						{
+						case ShaderParamType::SPT_INT: registerProperty(ECHO_CLASS_NAME(ShaderProgram), "Uniforms." + it.first, Variant::Type::Int, hints); break;
+						case ShaderParamType::SPT_FLOAT:registerProperty(ECHO_CLASS_NAME(ShaderProgram), "Uniforms." + it.first, Variant::Type::Real, hints); break;
+						case ShaderParamType::SPT_VEC3: registerProperty(ECHO_CLASS_NAME(ShaderProgram), "Uniforms." + it.first, Variant::Type::Vector3, hints); break;
+						case ShaderParamType::SPT_VEC4: registerProperty(ECHO_CLASS_NAME(ShaderProgram), "Uniforms." + it.first, Variant::Type::Color, hints); break;
+						case ShaderParamType::SPT_TEXTURE: registerProperty(ECHO_CLASS_NAME(ShaderProgram), "Uniforms." + it.first, Variant::Type::ResourcePath, hints); break;
+						default: break;
+						}
+					}
+				}
+
+				onShaderChanged();
+            }
+            else
             {
                 EchoLogError("create shader program failed");
                 return false;
             }
-
-            PropertyHintArray hints;
-            hints.push_back({PropertyHintType::Category, "Uniforms"});
-
-			for (auto& it : m_uniforms)
-			{
-				if (!isGlobalUniform(it.first))
-				{
-					switch (it.second.m_type)
-					{
-					case ShaderParamType::SPT_INT: registerProperty(ECHO_CLASS_NAME(ShaderProgram), "Uniforms." + it.first, Variant::Type::Int, hints); break;
-					case ShaderParamType::SPT_FLOAT:registerProperty(ECHO_CLASS_NAME(ShaderProgram), "Uniforms." + it.first, Variant::Type::Real, hints); break;
-					case ShaderParamType::SPT_VEC3: registerProperty(ECHO_CLASS_NAME(ShaderProgram), "Uniforms." + it.first, Variant::Type::Vector3, hints); break;
-					case ShaderParamType::SPT_VEC4: registerProperty(ECHO_CLASS_NAME(ShaderProgram), "Uniforms." + it.first, Variant::Type::Color, hints); break;
-					case ShaderParamType::SPT_TEXTURE: registerProperty(ECHO_CLASS_NAME(ShaderProgram), "Uniforms." + it.first, Variant::Type::ResourcePath, hints); break;
-					default: break;
-					}
-				}
-			}
-
-            onShaderChanged();
         }
         
         return true;
@@ -350,16 +356,19 @@ namespace Echo
 		StringArray ops = StringUtil::Split(propertyName, ".");
 		if (ops[0] == "Uniforms")
 		{
-			//Uniform* uniform = getUniform(ops[1]);
-			//switch (uniform->m_type)
-			//{
-			//case ShaderParamType::SPT_FLOAT:	oVar = *(float*)(uniform->m_value.data()); break;
-			//case ShaderParamType::SPT_VEC2:		oVar = *(Vector2*)(uniform->m_value.data()); break;
-			//case ShaderParamType::SPT_VEC3:		oVar = *(Vector3*)(uniform->m_value.data()); break;
-			//case ShaderParamType::SPT_VEC4:		oVar = *(Color*)(uniform->m_value.data()); break;
-			//case ShaderParamType::SPT_TEXTURE: oVar = ResourcePath(getTexturePath(*(int*)uniform->m_value.data()), ".png"); break;
-			//default:							oVar = *(float*)(uniform->m_value.data()); break;
-			//}
+			Uniform* uniform = getUniform(ops[1]);
+            if (uniform && !uniform->m_valueDefault.empty())
+            {
+				switch (uniform->m_type)
+				{
+				case ShaderParamType::SPT_FLOAT:	oVar = *(float*)(uniform->m_valueDefault.data()); break;
+				case ShaderParamType::SPT_VEC2:		oVar = *(Vector2*)(uniform->m_valueDefault.data()); break;
+				case ShaderParamType::SPT_VEC3:		oVar = *(Vector3*)(uniform->m_valueDefault.data()); break;
+				case ShaderParamType::SPT_VEC4:		oVar = *(Color*)(uniform->m_valueDefault.data()); break;
+					//case ShaderParamType::SPT_TEXTURE:  oVar = ResourcePath(getTexturePath(*(int*)uniform->m_value.data()), ".png"); break;
+				default:							oVar = *(float*)(uniform->m_valueDefault.data()); break;
+				}
+            }
 		}
 
 		return false;
@@ -370,16 +379,15 @@ namespace Echo
 		StringArray ops = StringUtil::Split(propertyName, ".");
 		if (ops[0] == "Uniforms")
 		{
-			//Uniform* uniform = getUniform(ops[1]);
-			//switch (uniform->m_type)
-			//{
-			//case ShaderParamType::SPT_FLOAT:	setUniformValue(ops[1], uniform->m_type, &(propertyValue.toReal())); break;
-			//case ShaderParamType::SPT_VEC2:		setUniformValue(ops[1], uniform->m_type, &(propertyValue.toVector2())); break;
-			//case ShaderParamType::SPT_VEC3:		setUniformValue(ops[1], uniform->m_type, &(propertyValue.toVector3())); break;
-			//case ShaderParamType::SPT_VEC4:		setUniformValue(ops[1], uniform->m_type, &(propertyValue.toColor())); break;
+			Uniform* uniform = getUniform(ops[1]);
+			switch (uniform->m_type)
+			{
+			case ShaderParamType::SPT_FLOAT:	uniform->setValueDefault(&(propertyValue.toReal())); break;
+			case ShaderParamType::SPT_VEC2:		uniform->setValueDefault(&(propertyValue.toVector3())); break;
+			case ShaderParamType::SPT_VEC4:		uniform->setValueDefault(&(propertyValue.toColor())); break;
 			//case ShaderParamType::SPT_TEXTURE:  setTexture(ops[1], propertyValue.toResPath().getPath()); break;
-			//default:							setUniformValue(ops[1], uniform->m_type, &(propertyValue.toReal())); break;
-			//}
+			default:							uniform->setValueDefault(&(propertyValue.toReal())); break;
+			}
 		}
 
 		return false;
@@ -477,6 +485,15 @@ namespace Echo
 			EchoLogError("ShaderProgram uniform [%d] not exist!", name);
 		}
     }
+
+    ShaderProgram::Uniform* ShaderProgram::getUniform(const String& name)
+	{
+        std::map<String, Uniform>::iterator it = m_uniforms.find(name);
+		if (it != m_uniforms.end())
+			return &(it->second);
+
+		return nullptr;
+	}
  
 	int ShaderProgram::mapUniformTypeSize(ShaderParamType uniformType)
 	{

@@ -136,24 +136,22 @@ namespace Echo
 		for (UniformArray::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++)
 		{
 			Uniform& uniform = it->second;
-			if (uniform.m_value)
+			void* value = uniform.m_value.empty() ? uniform.m_valueDefault.data() : uniform.m_value.data();
+			if (value)
 			{
-				if (uniform.m_isDirty && uniform.m_type != SPT_UNKNOWN)
+				if (uniform.m_type != SPT_UNKNOWN)
 				{
 					switch (uniform.m_type)
 					{
-						case SPT_VEC4:		OGLESDebug(glUniform4fv(uniform.m_location, uniform.m_count, (GLfloat*)uniform.m_value));					break;
-						case SPT_MAT4:		OGLESDebug(glUniformMatrix4fv(uniform.m_location, uniform.m_count, false, (GLfloat*)uniform.m_value));		break;
-						case SPT_INT:		OGLESDebug(glUniform1iv(uniform.m_location, uniform.m_count, (GLint*)uniform.m_value));					break;
-						case SPT_FLOAT:		OGLESDebug(glUniform1fv(uniform.m_location, uniform.m_count, (GLfloat*)uniform.m_value));					break;
-						case SPT_VEC2:		OGLESDebug(glUniform2fv(uniform.m_location, uniform.m_count, (GLfloat*)uniform.m_value));					break;
-						case SPT_VEC3:		OGLESDebug(glUniform3fv(uniform.m_location, uniform.m_count, (GLfloat*)uniform.m_value));					break;
-						case SPT_TEXTURE:	OGLESDebug(glUniform1i(uniform.m_location, *(ui32*)uniform.m_value));										break;
+						case SPT_VEC4:		OGLESDebug(glUniform4fv(uniform.m_location, uniform.m_count, (GLfloat*)value));					break;
+						case SPT_MAT4:		OGLESDebug(glUniformMatrix4fv(uniform.m_location, uniform.m_count, false, (GLfloat*)value));	break;
+						case SPT_INT:		OGLESDebug(glUniform1iv(uniform.m_location, uniform.m_count, (GLint*)value));					break;
+						case SPT_FLOAT:		OGLESDebug(glUniform1fv(uniform.m_location, uniform.m_count, (GLfloat*)value));					break;
+						case SPT_VEC2:		OGLESDebug(glUniform2fv(uniform.m_location, uniform.m_count, (GLfloat*)value));					break;
+						case SPT_VEC3:		OGLESDebug(glUniform3fv(uniform.m_location, uniform.m_count, (GLfloat*)value));					break;
+						case SPT_TEXTURE:	OGLESDebug(glUniform1i(uniform.m_location, *(ui32*)value));										break;
 						default:			EchoAssertX(0, "unknow shader param format!");													break;
 					}
-
-					// dirty flag
-					uniform.m_isDirty = false;
 				}
 			}
 			else
@@ -176,7 +174,6 @@ namespace Echo
 				for (UniformArray::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++)
 				{
 					Uniform& uniform = it->second;
-					uniform.m_isDirty = true;
 				}
 
 				m_preRenderable = NULL;

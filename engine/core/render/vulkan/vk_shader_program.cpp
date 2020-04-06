@@ -106,12 +106,13 @@ namespace Echo
         for (UniformArray::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++)
         {
             Uniform& uniform = it->second;
-            if (uniform.m_value && uniform.m_type != SPT_UNKNOWN)
+            void* value = uniform.m_value.empty() ? uniform.m_valueDefault.data() : uniform.m_value.data();
+            if (value && uniform.m_type != SPT_UNKNOWN)
             {
                 vector<Byte>::type& uniformBytes = uniform.m_shader == ShaderType::VS ? m_vertexShaderUniformBytes : m_fragmentShaderUniformBytes;
                 if (uniform.m_type != SPT_TEXTURE)
                 {
-                    std::memcpy(uniformBytes.data() + uniform.m_location, uniform.m_value, uniform.m_sizeInBytes * sizeof(Byte));
+                    std::memcpy(uniformBytes.data() + uniform.m_location, value, uniform.m_sizeInBytes * sizeof(Byte));
                 }
                 else
                 {

@@ -119,6 +119,20 @@ namespace Studio
         }
     }
 
+    void ShaderEditor::visitorUniformDefaultValues(QtNodes::NodeDataModel* dataModel)
+    {
+        ShaderUniformDataModel* shaderUniformDataModel = dynamic_cast<ShaderUniformDataModel*>(dataModel);
+		if (shaderUniformDataModel)
+		{
+            Echo::String uniformName;
+            Echo::Variant uniformValue;
+            if (shaderUniformDataModel->getDefaultValue(uniformName, uniformValue))
+            {
+                m_shaderProgram->setPropertyValue(uniformName, uniformValue);
+            }
+		}
+    }
+
     void ShaderEditor::compile()
     {
         if (m_isLoading)
@@ -141,6 +155,8 @@ namespace Studio
 
 					m_shaderProgram->setVsCode(m_shaderCompiler.getVsCode());
 					m_shaderProgram->setPsCode(m_shaderCompiler.getPsCode());
+
+                    flowScene->iterateOverNodeDataDependentOrder(std::bind(&ShaderEditor::visitorUniformDefaultValues, this, _1));
 				}
             }
         }

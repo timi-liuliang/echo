@@ -8,42 +8,27 @@
 
 namespace Echo
 {
-	Material::Uniform::Uniform(const String& name, ShaderParamType type, i32 count)
-		: m_name(name)
-		, m_type(type)
-		, m_count(count)
+	Material::UniformValue::UniformValue(const ShaderProgram::Uniform* uniform)
+		: m_uniform(uniform)
 	{
-		m_value.resize(getValueBytes(), 0);
+		m_value.resize(m_uniform->m_sizeInBytes, 0);
 	}
 
-	Material::Uniform::~Uniform()
-	{
-	}
-
-	ui32 Material::Uniform::getValueBytes()
-	{
-		ui32 bytes = 0;
-		switch (m_type)
-		{
-		case SPT_INT:		bytes = sizeof(int)*m_count;		break;
-		case SPT_FLOAT:		bytes = sizeof(real32)*m_count;		break;
-		case SPT_VEC2:		bytes = sizeof(Vector2)*m_count;	break;
-		case SPT_VEC3:		bytes = sizeof(Vector3)*m_count;	break;
-		case SPT_VEC4:		bytes = sizeof(Vector4)*m_count;	break;
-		case SPT_MAT4:		bytes = sizeof(Matrix4)*m_count;	break;
-		case SPT_TEXTURE:	bytes = sizeof(int)*m_count;		break;
-		default:			bytes = 0;							break;
-		}
-
-		return bytes;
-	}
-
-	void Material::Uniform::setValue(const void* value)
+	void Material::UniformValue::setValue(const void* value)
 	{
 		if (value)
 		{
-			i32 bytes = getValueBytes();
-			std::memcpy(m_value.data(), value, bytes);
+			std::memcpy(m_value.data(), value, m_uniform->m_sizeInBytes);
+
+			m_isUseDefaultValue = true;
+			for (Byte& byte : m_value)
+			{
+				if (byte)
+				{
+					m_isUseDefaultValue = false;
+					break;
+				}
+			}
 		}
 	}
 
@@ -61,7 +46,7 @@ namespace Echo
 
 	Material::~Material()
 	{
-		EchoSafeDeleteMap(m_uniforms, Uniform);
+		EchoSafeDeleteMap(m_uniforms, UniformValue);
 
 		unloadTexture();
 	}
@@ -78,7 +63,7 @@ namespace Echo
 	void* Material::getUniformValue(const String& name)
 	{
 		const auto& it = m_uniforms.find(name);
-		if (it != m_uniforms.end())
+		if (it != m_uniforms.end() && !it->second->m_isUseDefaultValue)
 		{
 			return  it->second->m_value.data();
 		}
@@ -143,7 +128,7 @@ namespace Echo
 		const auto& it = m_uniforms.find(name);
 		if (it != m_uniforms.end())
 		{
-			if (it->second->m_type == type)
+			if (it->second->m_uniform->m_type == type)
 				it->second->setValue(value);
 			else
 				EchoLogError("MaterialInstance::ModifyUnifromParam Type Error!");
@@ -181,7 +166,7 @@ namespace Echo
 		return nullptr;
 	}
 
-	Material::Uniform* Material::getUniform(const String& name)
+	Material::UniformValue* Material::getUniform(const String& name)
 	{
 		const auto& it = m_uniforms.find(name);
 		if (it != m_uniforms.end())
@@ -263,7 +248,7 @@ namespace Echo
                 matchUniforms();
 			}
 
-			// register uniform propertys
+			// register uniform properties
 			if (m_shaderProgram)
 			{
 				StringArray macros = ShaderProgram::getEditableMacros();
@@ -276,7 +261,7 @@ namespace Echo
 				{
 					if (!ShaderProgram::isGlobalUniform(it.first))
 					{
-						switch (it.second->m_type)
+						switch (it.second->m_uniform->m_type)
 						{
 						case ShaderParamType::SPT_INT: registerProperty(ECHO_CLASS_NAME(Material), "Uniforms." + it.first, Variant::Type::Int); break;
 						case ShaderParamType::SPT_FLOAT:registerProperty(ECHO_CLASS_NAME(Material), "Uniforms." + it.first, Variant::Type::Real); break;
@@ -299,8 +284,8 @@ namespace Echo
 		StringArray ops = StringUtil::Split(propertyName, ".");
 		if (ops[0] == "Uniforms")
 		{
-			Uniform* uniform = getUniform(ops[1]);
-			switch (uniform->m_type)
+			UniformValue* uniform = getUniform(ops[1]);
+			switch (uniform->m_uniform->m_type)
 			{
 			case ShaderParamType::SPT_FLOAT:	oVar = *(float*)(uniform->m_value.data()); break;
 			case ShaderParamType::SPT_VEC2:		oVar = *(Vector2*)(uniform->m_value.data()); break;
@@ -323,15 +308,19 @@ namespace Echo
 		StringArray ops = StringUtil::Split(propertyName, ".");
 		if (ops[0] == "Uniforms")
 		{
-			Uniform* uniform = getUniform(ops[1]);
-			switch (uniform->m_type)
+			UniformValue* uniform = getUniform(ops[1]);
+			if (uniform)
 			{
-			case ShaderParamType::SPT_FLOAT:	setUniformValue(ops[1], uniform->m_type, &(propertyValue.toReal())); break;
-			case ShaderParamType::SPT_VEC2:		setUniformValue(ops[1], uniform->m_type, &(propertyValue.toVector2())); break;
-			case ShaderParamType::SPT_VEC3:		setUniformValue(ops[1], uniform->m_type, &(propertyValue.toVector3())); break;
-			case ShaderParamType::SPT_VEC4:		setUniformValue(ops[1], uniform->m_type, &(propertyValue.toColor())); break;
-			case ShaderParamType::SPT_TEXTURE:  setTexture(ops[1], propertyValue.toResPath().getPath()); break;
-			default:							setUniformValue(ops[1], uniform->m_type, &(propertyValue.toReal())); break;
+				ShaderParamType uniformType = uniform->m_uniform->m_type;
+				switch (uniformType)
+				{
+				case ShaderParamType::SPT_FLOAT:	setUniformValue(ops[1], uniformType, &(propertyValue.toReal())); break;
+				case ShaderParamType::SPT_VEC2:		setUniformValue(ops[1], uniformType, &(propertyValue.toVector2())); break;
+				case ShaderParamType::SPT_VEC3:		setUniformValue(ops[1], uniformType, &(propertyValue.toVector3())); break;
+				case ShaderParamType::SPT_VEC4:		setUniformValue(ops[1], uniformType, &(propertyValue.toColor())); break;
+				case ShaderParamType::SPT_TEXTURE:  setTexture(ops[1], propertyValue.toResPath().getPath()); break;
+				default:							setUniformValue(ops[1], uniformType, &(propertyValue.toReal())); break;
+				}
 			}
 		}
 		else if (ops[0] == "Macros")
@@ -356,21 +345,21 @@ namespace Echo
 			{
 				const ShaderProgram::Uniform& suniform = it.second;
 				{
-					Uniform* uniform = EchoNew(Uniform(suniform.m_name, suniform.m_type, suniform.m_count));
+					UniformValue* uniform = EchoNew(UniformValue(&suniform));
 
 					// auto set texture value
-					if (uniform->m_type == SPT_TEXTURE)
+					if (suniform.m_type == SPT_TEXTURE)
 					{
 						i32 textureNum = getTextureNum();
 						uniform->setValue(&textureNum);
-						addTexture(uniform->m_name);
+						addTexture(suniform.m_name);
 
 						// use old values
 						for (TextureInfo& info : oldTextureInfos)
 						{
-							if (info.m_name == uniform->m_name)
+							if (info.m_name == suniform.m_name)
 							{
-								setTexture(uniform->m_name, info.m_texture);
+								setTexture(suniform.m_name, info.m_texture);
 								break;
 							}
 						}
@@ -378,18 +367,18 @@ namespace Echo
 					else
 					{
 						// old value
-						auto it = oldUniforms.find(uniform->m_name);
+						auto it = oldUniforms.find(suniform.m_name);
 						if (it != oldUniforms.end())
 						{
-							Uniform* oldUniform = it->second;
-							if (oldUniform && uniform->m_count == oldUniform->m_count && uniform->m_type == oldUniform->m_type)
+							UniformValue* oldUniform = it->second;
+							if (oldUniform && suniform.m_count == oldUniform->m_uniform->m_count && suniform.m_type == oldUniform->m_uniform->m_type)
 							{
 								uniform->setValue(oldUniform->m_value.data());
 							}
 						}
 					}
 
-					m_uniforms[uniform->m_name] = uniform;
+					m_uniforms[suniform.m_name] = uniform;
 				}
 			}
 		}

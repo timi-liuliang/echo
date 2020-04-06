@@ -7,13 +7,32 @@
 
 namespace Echo
 {
-	ConnectClassMethod::ConnectClassMethod(Signal* signal, Object* target, ClassMethodBind* method)
+	ConnectClassMethod::ConnectClassMethod(Signal* signal, void* target, ClassMethodBind* method)
+		: m_signal(signal)
+		, m_target(target)
+		, m_method(method)
+	{}
+
+	void ConnectClassMethod::emitSignal(const Variant** args, int argCount)
+	{
+		if (m_target)
+		{
+			Variant::CallError error;
+			m_method->call((Object*)m_target, args, argCount, error);
+		}
+		else
+		{
+			m_signal->disconnect(this);
+		}
+	}
+
+	ConnectObjectClassMethod::ConnectObjectClassMethod(Signal* signal, Object* target, ClassMethodBind* method)
 		: m_signal(signal)
 		, m_targetId(target->getId())
 		, m_method(method)
 	{}
 
-	void ConnectClassMethod::emitSignal(const Variant** args, int argCount)
+	void ConnectObjectClassMethod::emitSignal(const Variant** args, int argCount)
 	{
         Object* target = Object::getById(m_targetId);
         if(target)
@@ -91,7 +110,7 @@ namespace Echo
         if(!m_connects)
             m_connects = new vector<Connect*>::type;
             
-		m_connects->push_back(EchoNew(ConnectClassMethod(this, obj, method)));
+		m_connects->push_back(EchoNew(ConnectObjectClassMethod(this, obj, method)));
 
 		return true;
 	}

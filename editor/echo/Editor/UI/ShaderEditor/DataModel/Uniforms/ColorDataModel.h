@@ -29,6 +29,9 @@ namespace DataFlowProgramming
 
         // generate code
         virtual bool generateCode(ShaderCompiler& compiler) override;
+
+		// get default value
+		virtual bool getDefaultValue(Echo::String& uniformName, Echo::Variant& uniformValue) override;
         
     public:
         // load|save
@@ -44,6 +47,9 @@ namespace DataFlowProgramming
     private:
         // update outputs variable name
         void updateOutputDataVariableName();
+
+        // variable changed
+        void onVariableNameChanged();
 
     private Q_SLOTS:
         // on value changed

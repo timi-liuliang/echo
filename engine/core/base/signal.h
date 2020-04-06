@@ -20,14 +20,26 @@ namespace Echo
         // save
         virtual void save(void* pugiNode) {}
 	};
+
+	struct ConnectClassMethod : public Connect
+	{
+		Signal*          m_signal;
+		void*            m_target;
+		ClassMethodBind* m_method;
+
+        ConnectClassMethod(Signal* signal, void* target, ClassMethodBind* method);
+
+		// emit
+		virtual void emitSignal(const Variant** args, int argCount) override;
+	};
     
-    struct ConnectClassMethod : public Connect
+    struct ConnectObjectClassMethod : public Connect
     {
         Signal*             m_signal;
         i32                 m_targetId;
         ClassMethodBind*    m_method;
         
-		ConnectClassMethod(Signal* signal, Object* target, ClassMethodBind* method);
+		ConnectObjectClassMethod(Signal* signal, Object* target, ClassMethodBind* method);
         
         // emit
         virtual void emitSignal(const Variant** args, int argCount) override;
@@ -105,6 +117,16 @@ namespace Echo
                     connect->emitSignal(nullptr, 0);
             }
 		}
+
+        bool connectClassMethod(void* obj, ClassMethodBind* method)
+        {
+			if (!m_connects)
+				m_connects = new vector<Connect*>::type;
+
+			m_connects->push_back(EchoNew(ConnectClassMethod(this, obj, method)));
+
+			return true;
+        }
 	};
 
     template<typename T>

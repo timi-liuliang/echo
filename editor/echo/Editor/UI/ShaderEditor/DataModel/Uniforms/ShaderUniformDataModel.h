@@ -44,6 +44,9 @@ namespace DataFlowProgramming
         void saveUniformConfig(QJsonObject& p) const;
 		void restoreUniformConfig(QJsonObject const& p);
 
+        // get default value
+        virtual bool getDefaultValue(Echo::String& uniformName, Echo::Variant& value)=0;
+
     public:
         // slot
         virtual void onDoubleClicked() override;

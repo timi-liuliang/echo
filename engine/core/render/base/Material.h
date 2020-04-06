@@ -22,24 +22,19 @@ namespace Echo
 		typedef vector<TextureInfo>::type TextureInfoArray;
 
 	public:
-		struct Uniform
+		struct UniformValue
 		{
-			String				m_name;
-			ShaderParamType		m_type;
-			i32					m_count;
-			vector<Byte>::type	m_value;
+			const ShaderProgram::Uniform*	m_uniform;
+			bool							m_isUseDefaultValue = true;
+			vector<Byte>::type				m_value;
 
 			// destructor
-			Uniform(const String& name, ShaderParamType type, i32 count);
-			~Uniform();
-
-			// get value bytes
-			ui32 getValueBytes();
+			UniformValue(const ShaderProgram::Uniform* uniform);
 
 			// set value
 			void setValue(const void* value);
 		};
-		typedef map<String, Uniform*>::type ParamMap;
+		typedef map<String, UniformValue*>::type ParamMap;
 
 	public:
 		Material();
@@ -74,7 +69,7 @@ namespace Echo
 		void setUniformValue(const String& name, const ShaderParamType& type, const void* value);
         
         // get uniforms
-		Uniform* getUniform(const String& name);
+		UniformValue* getUniform(const String& name);
         void* getUniformValue(const String& name);
         ParamMap& GetUniformSet() { return m_uniforms; }
 

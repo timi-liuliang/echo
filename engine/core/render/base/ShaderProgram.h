@@ -49,20 +49,19 @@ namespace Echo
             int                 m_count = -1;
             int                 m_sizeInBytes = 0;
             int                 m_location = -1;
-            Byte*               m_value = nullptr;
-            Byte*               m_default = nullptr;
-            bool                m_isDirty = true;
+            vector<Byte>::type  m_value;
+            vector<Byte>::type  m_valueDefault;
 
             Uniform() {}
-            ~Uniform() { ECHO_FREE(m_value); }
-
-            // reset
-            void resetValue() { m_isDirty = true; }
+            ~Uniform() {}
 
             // set value
 			void setValue(const void* value);
+
+            // set default
+            void setValueDefault(const void* value);
         };
-        typedef std::map<String, Uniform> UniformArray;
+        typedef map<String, Uniform>::type UniformArray;
 
 	public:
 		ShaderProgram();
@@ -86,6 +85,9 @@ namespace Echo
 
         // uniform
         void setUniform(const char* name, const void* value, ShaderParamType uniformType, ui32 count);
+        Uniform* getUniform(const String& name);
+
+        // get all uniforms
         UniformArray* getUniforms(){ return &m_uniforms; }
 
 		// ByteSize

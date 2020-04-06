@@ -22,7 +22,9 @@ namespace Studio
 		ShaderEditor(QWidget* parent = 0);
 		~ShaderEditor();
         
+        // visitor nodes
         void visitorAllNodes(QtNodes::NodeDataModel* dataModel);
+        void visitorUniformDefaultValues(QtNodes::NodeDataModel* dataModel);
         
         // compile
         void compile();
