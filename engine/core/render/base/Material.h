@@ -25,13 +25,13 @@ namespace Echo
 		struct UniformValue
 		{
 			const ShaderProgram::Uniform*	m_uniform;
-			bool							m_isUseDefaultValue = true;
 			vector<Byte>::type				m_value;
 
 			// destructor
 			UniformValue(const ShaderProgram::Uniform* uniform);
 
-			// set value
+			// value
+			const void* getValue();
 			void setValue(const void* value);
 		};
 		typedef map<String, UniformValue*>::type ParamMap;
@@ -91,6 +91,9 @@ namespace Echo
 		// property value
 		virtual bool getPropertyValue(const String& propertyName, Variant& oVar) override;
 		virtual bool setPropertyValue(const String& propertyName, const Variant& propertyValue) override;
+
+		// property flags
+		virtual i32 getPropertyFlag(const String& propertyName) override;
 
 	private:
 		// add texture

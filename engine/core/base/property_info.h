@@ -4,6 +4,12 @@
 
 namespace Echo
 {
+	enum PropertyFlag
+	{
+		Save = 1 << 0,		// property will be saved to files
+		All = Save,
+	};
+
 	enum class PropertyHintType
 	{
 		None,
@@ -41,7 +47,10 @@ namespace Echo
 
 		// set property value
 		virtual void setPropertyValue(Object* classPtr, const String& propertyName, const Variant& propertyValue) = 0;
-        
+
+		// get flag
+		virtual i32 getPropertyFlag(Object* classPtr, const String& propertyName) { return PropertyFlag::All; }
+
         // get property hint
         const String& getHint(PropertyHintType hintType) const;
 	};
@@ -77,5 +86,8 @@ namespace Echo
 
 		// set property value
 		virtual void setPropertyValue(Object* classPtr, const String& propertyName, const Variant& propertyValue);
+
+		// get flag
+		virtual i32 getPropertyFlag(Object* classPtr, const String& propertyName) override;
 	};
 }

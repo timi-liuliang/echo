@@ -364,6 +364,23 @@ namespace Echo
 		return false;
 	}
 
+	// get property flag
+	i32 Class::getPropertyFlag(Object* classPtr, const String& propertyName)
+	{
+		String className = classPtr->getClassName();
+		do
+		{
+			PropertyInfo* pi = getProperty(className, classPtr, propertyName);
+			if (pi)
+			{
+				return pi->getPropertyFlag(classPtr, propertyName);
+			}
+
+		} while (getParentClass(className, className));
+
+		return PropertyFlag::All;
+	}
+
 	// get property type
 	Variant::Type Class::getPropertyType(Object* classPtr, const String& propertyName)
 	{

@@ -380,14 +380,20 @@ namespace Echo
 		if (ops[0] == "Uniforms")
 		{
 			Uniform* uniform = getUniform(ops[1]);
-			switch (uniform->m_type)
-			{
-			case ShaderParamType::SPT_FLOAT:	uniform->setValueDefault(&(propertyValue.toReal())); break;
-			case ShaderParamType::SPT_VEC2:		uniform->setValueDefault(&(propertyValue.toVector3())); break;
-			case ShaderParamType::SPT_VEC4:		uniform->setValueDefault(&(propertyValue.toColor())); break;
-			//case ShaderParamType::SPT_TEXTURE:  setTexture(ops[1], propertyValue.toResPath().getPath()); break;
-			default:							uniform->setValueDefault(&(propertyValue.toReal())); break;
-			}
+            if (uniform)
+            {
+				switch (uniform->m_type)
+				{
+				case ShaderParamType::SPT_FLOAT:	uniform->setValueDefault(&(propertyValue.toReal())); break;
+				case ShaderParamType::SPT_VEC2:		uniform->setValueDefault(&(propertyValue.toVector3())); break;
+				case ShaderParamType::SPT_VEC4:		uniform->setValueDefault(&(propertyValue.toColor())); break;
+					//case ShaderParamType::SPT_TEXTURE:  setTexture(ops[1], propertyValue.toResPath().getPath()); break;
+				default:							uniform->setValueDefault(&(propertyValue.toReal())); break;
+				}
+
+                return true;
+            }
+
 		}
 
 		return false;

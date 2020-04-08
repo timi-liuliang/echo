@@ -41,4 +41,9 @@ namespace Echo
 	{
 		classPtr->setPropertyValue(propertyName, propertyValue);
 	}
+
+	i32 PropertyInfoDynamic::getPropertyFlag(Object* classPtr, const String& propertyName)
+	{
+		return classPtr->getPropertyFlag(propertyName);
+	}
 }

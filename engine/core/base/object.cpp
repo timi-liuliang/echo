@@ -327,30 +327,33 @@ namespace Echo
 		Echo::Class::getPropertys(className, classPtr, propertys);
 		for (Echo::PropertyInfo* prop : propertys)
 		{
-			Echo::Variant var;
-			Echo::Class::getPropertyValue(classPtr, prop->m_name, var);
-			if (var.getType() == Variant::Type::Object)
+			if (Echo::Class::getPropertyFlag(classPtr, prop->m_name) & PropertyFlag::Save)
 			{
-				Object* obj = var.toObj();
-				if (obj)
+				Echo::Variant var;
+				Echo::Class::getPropertyValue(classPtr, prop->m_name, var);
+				if (var.getType() == Variant::Type::Object)
 				{
-					pugi::xml_node propertyNode = xmlNode->append_child("property");
-					propertyNode.append_attribute("name").set_value(prop->m_name.c_str());
-					if (!obj->getPath().empty())
+					Object* obj = var.toObj();
+					if (obj)
 					{
-						propertyNode.append_attribute("path").set_value(obj->getPath().c_str());
-					}
-					else
-					{
-						pugi::xml_node objNode = propertyNode.append_child("obj");
-						savePropertyRecursive(&objNode, obj, obj->getClassName());
+						pugi::xml_node propertyNode = xmlNode->append_child("property");
+						propertyNode.append_attribute("name").set_value(prop->m_name.c_str());
+						if (!obj->getPath().empty())
+						{
+							propertyNode.append_attribute("path").set_value(obj->getPath().c_str());
+						}
+						else
+						{
+							pugi::xml_node objNode = propertyNode.append_child("obj");
+							savePropertyRecursive(&objNode, obj, obj->getClassName());
+						}
 					}
 				}
-			}
-			else
-			{
-				Echo::String varStr = var.toString();
-				xmlNode->append_attribute(prop->m_name.c_str()).set_value(varStr.c_str());
+				else
+				{
+					Echo::String varStr = var.toString();
+					xmlNode->append_attribute(prop->m_name.c_str()).set_value(varStr.c_str());
+				}
 			}
 		}
 	}

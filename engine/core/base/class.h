@@ -173,6 +173,9 @@ namespace Echo
 		// get property value
 		static bool getPropertyValue(Object* classPtr, const String& propertyName, Variant& oVar);
 
+		// get property flag
+		static i32 getPropertyFlag(Object* classPtr, const String& propertyName);
+
 		// get property type
 		static Variant::Type getPropertyType(Object* classPtr, const String& propertyName);
 
