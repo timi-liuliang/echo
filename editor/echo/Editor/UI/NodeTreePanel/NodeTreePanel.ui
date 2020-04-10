@@ -314,6 +314,14 @@
     <string>Delete Reference</string>
    </property>
   </action>
+  <action name="m_actionPropertyResetToDefault">
+   <property name="text">
+    <string>Reset to Default</string>
+   </property>
+   <property name="toolTip">
+    <string>Reference</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>

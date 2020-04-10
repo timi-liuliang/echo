@@ -52,6 +52,7 @@ namespace Studio
         QObject::connect(m_propertyTreeView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showPropertyMenu(const QPoint&)));
 		QObject::connect(m_actionPropertyReference, SIGNAL(triggered()), this, SLOT(onReferenceProperty()));
 		QObject::connect(m_actionDeletePropertyReference, SIGNAL(triggered()), this, SLOT(onDeletePropertyReference()));
+		QObject::connect(m_actionPropertyResetToDefault, SIGNAL(triggered()), this, SLOT(onPropertyResetToDefault()));
         
         // signal widget
         QObject::connect(m_signalTreeWidget, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showSignalTreeWidgetMenu(const QPoint&)));
@@ -278,16 +279,19 @@ namespace Studio
         QModelIndex index = m_propertyTreeView->indexAt(point);
         if(index.isValid())
         {
-            m_channelPropertyTarget = m_propertyHelper.getPropertyName(index);
-            if(!m_channelPropertyTarget.empty())
+            m_propertyTarget = m_propertyHelper.getPropertyName(index);
+            if(!m_propertyTarget.empty())
             {
                 EchoSafeDelete(m_propertyMenu, QMenu);
                 m_propertyMenu = EchoNew(QMenu);
                 
                 m_propertyMenu->addAction(m_actionPropertyReference);
 
-				if(currentNode && currentNode->isChannelExist(m_channelPropertyTarget))
+				if(currentNode && currentNode->isChannelExist(m_propertyTarget))
 					m_propertyMenu->addAction(m_actionDeletePropertyReference);
+
+				m_propertyMenu->addSeparator();
+				m_propertyMenu->addAction(m_actionPropertyResetToDefault);
                 
                 m_propertyMenu->exec(QCursor::pos());
             }
@@ -307,7 +311,7 @@ namespace Studio
                 Echo::String relativePath = fromNode->getNodePathRelativeTo(currentNode);
     
                 Echo::String expression = Echo::StringUtil::Format("ch(\"%s\", \"%s\")", relativePath.c_str(), propertyName.c_str());
-                currentNode->registerChannel( m_channelPropertyTarget, expression);
+                currentNode->registerChannel( m_propertyTarget, expression);
 
 				// refresh property display
 				showSelectedObjectProperty();
@@ -320,10 +324,25 @@ namespace Studio
 		Echo::Node* currentNode = getCurrentSelectNode();
 		if (currentNode)
 		{
-			currentNode->unregisterChannel(m_channelPropertyTarget);
+			currentNode->unregisterChannel(m_propertyTarget);
 
 			// refresh property display
 			showSelectedObjectProperty();
+		}
+	}
+
+	void NodeTreePanel::onPropertyResetToDefault()
+	{
+		if (m_currentEditObject)
+		{
+			Echo::Variant value;
+			if (Echo::Class::getPropertyValueDefault(m_currentEditObject, m_propertyTarget, value))
+			{
+				Echo::Class::setPropertyValue(m_currentEditObject, m_propertyTarget, value);
+
+				// refresh property display
+				showSelectedObjectProperty();
+			}
 		}
 	}
     

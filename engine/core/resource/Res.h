@@ -106,6 +106,11 @@ namespace Echo
 
 			return obj;
 		}
+
+		virtual Object* getDefaultObject()
+		{
+			return nullptr;
+		}
 	};
 }
 

@@ -34,7 +34,7 @@ namespace Echo
 			const void* getValue();
 			void setValue(const void* value);
 		};
-		typedef map<String, UniformValue*>::type ParamMap;
+		typedef map<String, UniformValue*>::type UniformValueMap;
 
 	public:
 		Material();
@@ -71,7 +71,7 @@ namespace Echo
         // get uniforms
 		UniformValue* getUniform(const String& name);
         void* getUniformValue(const String& name);
-        ParamMap& GetUniformSet() { return m_uniforms; }
+        UniformValueMap& GetUniformSet() { return m_uniformValues; }
 
 		// get texture number
 		int getTextureNum() { return static_cast<int>(m_textures.size()); }
@@ -90,6 +90,7 @@ namespace Echo
 	protected:
 		// property value
 		virtual bool getPropertyValue(const String& propertyName, Variant& oVar) override;
+		virtual bool getPropertyValueDefault(const String& propertyName, Variant& oVar) override;
 		virtual bool setPropertyValue(const String& propertyName, const Variant& propertyValue) override;
 
 		// property flags
@@ -106,7 +107,7 @@ namespace Echo
 		ResourcePath		m_shaderPath;				// shader res path
 		StringArray			m_macros;
 		ShaderProgramPtr	m_shaderProgram;
-		ParamMap			m_uniforms;
+		UniformValueMap		m_uniformValues;
 		TextureInfoArray 	m_textures;
 	};
 	typedef ResRef<Material> MaterialPtr;

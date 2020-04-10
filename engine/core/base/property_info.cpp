@@ -22,6 +22,14 @@ namespace Echo
 		return true;
 	}
 
+	bool PropertyInfoStatic::getPropertyValueDefault(Object* classPtr, const String& propertyName, Variant& oVar)
+	{
+		Variant::CallError error;
+		oVar = m_getterMethod->call(classPtr, nullptr, 0, error);
+
+		return true;
+	}
+
 	void PropertyInfoStatic::setPropertyValue(Object* classPtr, const String& propertyName, const Variant& propertyValue)
 	{
 		Variant::CallError error;
@@ -32,6 +40,14 @@ namespace Echo
 	bool PropertyInfoDynamic::getPropertyValue(Object* classPtr, const String& propertyName, Variant& oVar)
 	{
 		if (classPtr->getPropertyValue(propertyName, oVar))
+			return true;
+
+		return false;
+	}
+
+	bool PropertyInfoDynamic::getPropertyValueDefault(Object* classPtr, const String& propertyName, Variant& oVar)
+	{
+		if (classPtr->getPropertyValueDefault(propertyName, oVar))
 			return true;
 
 		return false;

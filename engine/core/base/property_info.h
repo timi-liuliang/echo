@@ -44,6 +44,7 @@ namespace Echo
 
 		// get property value
 		virtual bool getPropertyValue(Object* classPtr, const String& propertyName, Variant& oVar) = 0;
+		virtual bool getPropertyValueDefault(Object* classPtr, const String& propertyName, Variant& oVar) = 0;
 
 		// set property value
 		virtual void setPropertyValue(Object* classPtr, const String& propertyName, const Variant& propertyValue) = 0;
@@ -59,17 +60,18 @@ namespace Echo
 	class ClassMethodBind;
 	struct PropertyInfoStatic : public PropertyInfo
 	{
-		String			m_getter;
-		String			m_setter;
-		ClassMethodBind*		m_getterMethod;
-		ClassMethodBind*		m_setterMethod;
+		String				m_getter;
+		String				m_setter;
+		ClassMethodBind*	m_getterMethod;
+		ClassMethodBind*	m_setterMethod;
 
 		PropertyInfoStatic()
 			: PropertyInfo(Type::Static)
 		{}
 
 		// get property value
-		virtual bool getPropertyValue(Object* classPtr, const String& propertyName, Variant& oVar);
+		virtual bool getPropertyValue(Object* classPtr, const String& propertyName, Variant& oVar) override;
+		virtual bool getPropertyValueDefault(Object* classPtr, const String& propertyName, Variant& oVar) override;
 
 		// set property value
 		virtual void setPropertyValue(Object* classPtr, const String& propertyName, const Variant& propertyValue);
@@ -82,7 +84,8 @@ namespace Echo
 		PropertyInfoDynamic() : PropertyInfo(Type::Dynamic) {}
 
 		// get property value
-		virtual bool getPropertyValue(Object* classPtr, const String& propertyName, Variant& oVar);
+		virtual bool getPropertyValue(Object* classPtr, const String& propertyName, Variant& oVar) override;
+		virtual bool getPropertyValueDefault(Object* classPtr, const String& propertyName, Variant& oVar) override;
 
 		// set property value
 		virtual void setPropertyValue(Object* classPtr, const String& propertyName, const Variant& propertyValue);

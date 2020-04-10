@@ -110,6 +110,9 @@ namespace Studio
 
 		// on delete reference
 		void onDeletePropertyReference();
+
+		// reset to default
+		void onPropertyResetToDefault();
         
     private slots:
         // signal tree widget show menu
@@ -177,6 +180,6 @@ namespace Studio
         QMenu*                          m_signalTreeMenu = nullptr;
         Echo::String                    m_signalName;
 		Echo::String					m_connectStr;
-        Echo::String                    m_channelPropertyTarget;
+        Echo::String                    m_propertyTarget;
 	};
 }

@@ -159,6 +159,18 @@ namespace Echo
 		return nullptr;
 	}
 
+	Object* Class::getDefaultObject(const String& className)
+	{
+		auto it = g_classInfos->find(className);
+		if (it != g_classInfos->end())
+		{
+			Object* obj = it->second->getDefaultObject();
+			return obj;
+		}
+
+		return nullptr;
+	}
+
 	// register method
 	bool Class::registerMethodBind(const String& className, const String& methodName, ClassMethodBind* method)
 	{
@@ -356,6 +368,23 @@ namespace Echo
 			if (pi)
 			{
 				if (pi->getPropertyValue(classPtr, propertyName, oVar))
+					return true;
+			}
+
+		} while (getParentClass(className, className));
+
+		return false;
+	}
+
+	bool Class::getPropertyValueDefault(Object* classPtr, const String& propertyName, Variant& oVar)
+	{
+		String className = classPtr->getClassName();
+		do
+		{
+			PropertyInfo* pi = getProperty(className, classPtr, propertyName);
+			if (pi)
+			{
+				if (pi->getPropertyValueDefault(classPtr, propertyName, oVar))
 					return true;
 			}
 

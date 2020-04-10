@@ -33,6 +33,9 @@ namespace Echo
         // create object
 		virtual Object* create() = 0;
 
+		// get default object
+		virtual Object* getDefaultObject() = 0;
+
 		// register property
 		void registerProperty(PropertyInfo* property);
 
@@ -123,6 +126,9 @@ namespace Echo
 		// create
 		static Object* create(const String& className);
 
+		// get default object
+		static Object* getDefaultObject(const String& className);
+
 		// add class
 		static void addClass(const String& className, ObjectFactory* objFactory);
 
@@ -172,6 +178,7 @@ namespace Echo
 
 		// get property value
 		static bool getPropertyValue(Object* classPtr, const String& propertyName, Variant& oVar);
+		static bool getPropertyValueDefault(Object* classPtr, const String& propertyName, Variant& oVar);
 
 		// get property flag
 		static i32 getPropertyFlag(Object* classPtr, const String& propertyName);
@@ -232,6 +239,12 @@ namespace Echo
 
 			return obj;
         }
+
+		virtual Object* getDefaultObject()
+		{
+			static T obj;
+			return &obj;
+		}
     };
     
     template<typename T>
@@ -257,6 +270,11 @@ namespace Echo
         {
             return T::instance();
         }
+
+		virtual Object* getDefaultObject()
+		{
+			return nullptr;
+		}
     };
 }
 

@@ -49,6 +49,7 @@ namespace Echo
 
 		// property value
 		virtual bool getPropertyValue(const String& propertyName, Variant& oVar) { return false; }
+		virtual bool getPropertyValueDefault(const String& propertyName, Variant& oVar) { return false; }
 		virtual bool setPropertyValue(const String& propertyName, const Variant& propertyValue) { return false; }
 
 		// property flags

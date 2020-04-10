@@ -24,6 +24,14 @@ namespace Echo
 		{
 			m_value.resize(m_uniform->m_sizeInBytes, 0);
 			std::memcpy(m_value.data(), value, m_uniform->m_sizeInBytes);
+
+			// clear
+			if (m_value == m_uniform->m_valueDefault)
+				m_value.clear();
+		}
+		else
+		{
+			m_value.clear();
 		}
 	}
 
@@ -41,7 +49,7 @@ namespace Echo
 
 	Material::~Material()
 	{
-		EchoSafeDeleteMap(m_uniforms, UniformValue);
+		EchoSafeDeleteMap(m_uniformValues, UniformValue);
 
 		unloadTexture();
 	}
@@ -57,8 +65,8 @@ namespace Echo
 
 	void* Material::getUniformValue(const String& name)
 	{
-		const auto& it = m_uniforms.find(name);
-		if (it != m_uniforms.end() && !it->second->m_value.empty())
+		const auto& it = m_uniformValues.find(name);
+		if (it != m_uniformValues.end() && !it->second->m_value.empty())
 		{
 			return  it->second->m_value.data();
 		}
@@ -115,13 +123,13 @@ namespace Echo
 
 	bool Material::isUniformExist(const String& name)
 	{
-		return m_uniforms.find(name)!=m_uniforms.end();
+		return m_uniformValues.find(name)!=m_uniformValues.end();
 	}
 
 	void Material::setUniformValue(const String& name, const ShaderParamType& type, const void* value)
 	{
-		const auto& it = m_uniforms.find(name);
-		if (it != m_uniforms.end())
+		const auto& it = m_uniformValues.find(name);
+		if (it != m_uniformValues.end())
 		{
 			if (it->second->m_uniform->m_type == type)
 				it->second->setValue(value);
@@ -163,8 +171,8 @@ namespace Echo
 
 	Material::UniformValue* Material::getUniform(const String& name)
 	{
-		const auto& it = m_uniforms.find(name);
-		if (it != m_uniforms.end())
+		const auto& it = m_uniformValues.find(name);
+		if (it != m_uniformValues.end())
 			return it->second;
 
 		return NULL;
@@ -252,7 +260,7 @@ namespace Echo
 					registerProperty(ECHO_CLASS_NAME(Material), "Macros." + macros[i * 2], Variant::Type::Bool);
 				}
 
-				for (auto& it : m_uniforms)
+				for (auto& it : m_uniformValues)
 				{
 					if (!ShaderProgram::isGlobalUniform(it.first))
 					{
@@ -297,6 +305,31 @@ namespace Echo
 		}
 
 		return false; 
+	}
+
+	bool Material::getPropertyValueDefault(const String& propertyName, Variant& oVar)
+	{
+		StringArray ops = StringUtil::Split(propertyName, ".");
+		if (ops[0] == "Uniforms")
+		{
+			UniformValue* uniform = getUniform(ops[1]);
+			const void* uniformValue = uniform->m_uniform->m_valueDefault.data();
+			switch (uniform->m_uniform->m_type)
+			{
+			case ShaderParamType::SPT_FLOAT:	oVar = *(float*)(uniformValue); break;
+			case ShaderParamType::SPT_VEC2:		oVar = *(Vector2*)(uniformValue); break;
+			case ShaderParamType::SPT_VEC3:		oVar = *(Vector3*)(uniformValue); break;
+			case ShaderParamType::SPT_VEC4:		oVar = *(Color*)(uniformValue); break;
+			case ShaderParamType::SPT_TEXTURE: oVar = ResourcePath(getTexturePath(*(int*)uniformValue), ".png"); break;
+			default:							oVar = *(float*)(uniformValue); break;
+			}
+		}
+		else if (ops[0] == "Macros")
+		{
+			oVar = isMacroUsed(ops[1]);
+		}
+
+		return true;
 	}
 
 	i32 Material::getPropertyFlag(const String& propertyName)
@@ -344,10 +377,10 @@ namespace Echo
 	{
 		if (m_shaderProgram)
 		{
-			ParamMap oldUniforms = m_uniforms;
+			UniformValueMap oldUniforms = m_uniformValues;
 			TextureInfoArray oldTextureInfos = std::move(m_textures);
 
-			m_uniforms.clear();
+			m_uniformValues.clear();
 			m_textures.clear();
 
 			for (auto& it : m_shaderProgram->getUniforms())
@@ -382,12 +415,12 @@ namespace Echo
 							UniformValue* oldUniform = it->second;
 							if (oldUniform && suniform->m_count == oldUniform->m_uniform->m_count && suniform->m_type == oldUniform->m_uniform->m_type)
 							{
-								uniform->setValue(oldUniform->m_value.data());
+								uniform->setValue(oldUniform->m_value.empty() ? nullptr : oldUniform->m_value.data());
 							}
 						}
 					}
 
-					m_uniforms[suniform->m_name] = uniform;
+					m_uniformValues[suniform->m_name] = uniform;
 				}
 			}
 		}
