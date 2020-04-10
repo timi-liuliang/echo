@@ -24,11 +24,11 @@ namespace Echo
 	public:
 		struct UniformValue
 		{
-			const ShaderProgram::Uniform*	m_uniform;
+			ShaderProgram::UniformPtr		m_uniform;
 			vector<Byte>::type				m_value;
 
 			// destructor
-			UniformValue(const ShaderProgram::Uniform* uniform);
+			UniformValue(const ShaderProgram::UniformPtr uniform);
 
 			// value
 			const void* getValue();

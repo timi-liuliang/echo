@@ -8,7 +8,7 @@
 
 namespace Echo
 {
-	Material::UniformValue::UniformValue(const ShaderProgram::Uniform* uniform)
+	Material::UniformValue::UniformValue(const ShaderProgram::UniformPtr uniform)
 		: m_uniform(uniform)
 	{
 	}
@@ -350,25 +350,25 @@ namespace Echo
 			m_uniforms.clear();
 			m_textures.clear();
 
-			for (auto& it : *(m_shaderProgram->getUniforms()))
+			for (auto& it : m_shaderProgram->getUniforms())
 			{
-				const ShaderProgram::Uniform& suniform = it.second;
+				ShaderProgram::UniformPtr& suniform = it.second;
 				{
-					UniformValue* uniform = EchoNew(UniformValue(&suniform));
+					UniformValue* uniform = EchoNew(UniformValue(suniform));
 
 					// auto set texture value
-					if (suniform.m_type == SPT_TEXTURE)
+					if (suniform->m_type == SPT_TEXTURE)
 					{
 						i32 textureNum = getTextureNum();
 						uniform->setValue(&textureNum);
-						addTexture(suniform.m_name);
+						addTexture(suniform->m_name);
 
 						// use old values
 						for (TextureInfo& info : oldTextureInfos)
 						{
-							if (info.m_name == suniform.m_name)
+							if (info.m_name == suniform->m_name)
 							{
-								setTexture(suniform.m_name, info.m_texture);
+								setTexture(suniform->m_name, info.m_texture);
 								break;
 							}
 						}
@@ -376,18 +376,18 @@ namespace Echo
 					else
 					{
 						// old value
-						auto it = oldUniforms.find(suniform.m_name);
+						auto it = oldUniforms.find(suniform->m_name);
 						if (it != oldUniforms.end())
 						{
 							UniformValue* oldUniform = it->second;
-							if (oldUniform && suniform.m_count == oldUniform->m_uniform->m_count && suniform.m_type == oldUniform->m_uniform->m_type)
+							if (oldUniform && suniform->m_count == oldUniform->m_uniform->m_count && suniform->m_type == oldUniform->m_uniform->m_type)
 							{
 								uniform->setValue(oldUniform->m_value.data());
 							}
 						}
 					}
 
-					m_uniforms[suniform.m_name] = uniform;
+					m_uniforms[suniform->m_name] = uniform;
 				}
 			}
 		}

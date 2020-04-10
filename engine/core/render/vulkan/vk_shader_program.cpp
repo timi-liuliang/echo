@@ -103,16 +103,16 @@ namespace Echo
         if (!m_isLinked) return;
 
         // organize uniform bytes
-        for (UniformArray::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++)
+        for (UniformMap::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++)
         {
-            Uniform& uniform = it->second;
-            void* value = uniform.m_value.empty() ? uniform.m_valueDefault.data() : uniform.m_value.data();
-            if (value && uniform.m_type != SPT_UNKNOWN)
+            UniformPtr uniform = it->second;
+            void* value = uniform->m_value.empty() ? uniform->m_valueDefault.data() : uniform->m_value.data();
+            if (value && uniform->m_type != SPT_UNKNOWN)
             {
-                vector<Byte>::type& uniformBytes = uniform.m_shader == ShaderType::VS ? m_vertexShaderUniformBytes : m_fragmentShaderUniformBytes;
-                if (uniform.m_type != SPT_TEXTURE)
+                vector<Byte>::type& uniformBytes = uniform->m_shader == ShaderType::VS ? m_vertexShaderUniformBytes : m_fragmentShaderUniformBytes;
+                if (uniform->m_type != SPT_TEXTURE)
                 {
-                    std::memcpy(uniformBytes.data() + uniform.m_location, value, uniform.m_sizeInBytes * sizeof(Byte));
+                    std::memcpy(uniformBytes.data() + uniform->m_location, value, uniform->m_sizeInBytes * sizeof(Byte));
                 }
                 else
                 {
@@ -219,14 +219,14 @@ namespace Echo
         size_t memberCount = type.member_types.size();
         for (size_t i = 0; i < memberCount; i++)
         {
-            Uniform desc;
-            desc.m_name = compiler->get_member_name(type.self, i);
-            desc.m_shader = shaderType;
-            desc.m_sizeInBytes = compiler->get_declared_struct_member_size(type, i);
-            desc.m_type = VKMapping::MapUniformType(compiler->get_type(type.member_types[i]));
-            desc.m_count = desc.m_sizeInBytes / mapUniformTypeSize(desc.m_type);
-            desc.m_location = compiler->type_struct_member_offset(type, i);
-            m_uniforms[desc.m_name] = desc;
+            Uniform* desc = EchoNew(Uniform);
+            desc->m_name = compiler->get_member_name(type.self, i);
+            desc->m_shader = shaderType;
+            desc->m_sizeInBytes = compiler->get_declared_struct_member_size(type, i);
+            desc->m_type = VKMapping::MapUniformType(compiler->get_type(type.member_types[i]));
+            desc->m_count = desc->m_sizeInBytes / mapUniformTypeSize(desc->m_type);
+            desc->m_location = compiler->type_struct_member_offset(type, i);
+            m_uniforms[desc->m_name] = desc;
         }
     }
 
@@ -237,9 +237,9 @@ namespace Echo
 
         for (auto& it : m_uniforms)
         {
-            const Uniform& uniform = it.second;
-            vector<Byte>::type& uniformBytes = uniform.m_shader == ShaderType::VS ? m_vertexShaderUniformBytes : m_fragmentShaderUniformBytes;
-            i32 bytes = uniform.m_location + uniform.m_sizeInBytes;
+            UniformPtr uniform = it.second;
+            vector<Byte>::type& uniformBytes = uniform->m_shader == ShaderType::VS ? m_vertexShaderUniformBytes : m_fragmentShaderUniformBytes;
+            i32 bytes = uniform->m_location + uniform->m_sizeInBytes;
             while (uniformBytes.size() < bytes)
             {
                 uniformBytes.push_back(0);

@@ -1,7 +1,29 @@
 #pragma once
 
+#include "engine/core/memory/MemAllocDef.h"
+
 namespace Echo
 {
+	class Refable
+	{
+	public:
+		// add ref count
+		void addRefCount() { m_refCount++; }
+
+		// release
+		void subRefCount()
+		{
+			m_refCount--;
+			if (m_refCount <= 0)
+			{
+				ECHO_DELETE_T(this, Refable);
+			}
+		}
+
+	protected:
+		int	m_refCount = 0;
+	};
+
 	template<typename T>
 	class ResRef
 	{

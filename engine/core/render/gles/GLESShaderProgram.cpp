@@ -107,13 +107,13 @@ namespace Echo
 
 			String origUniformName = StringUtil::Replace(unifromName, "[0]", "");
 
-			Uniform desc;
-			desc.m_name = StringUtil::Substr( origUniformName, ".", false);
-			desc.m_type = GLES2Mapping::MapUniformType(uniformType);
-			desc.m_count = uniformSize;
-			desc.m_sizeInBytes = desc.m_count * mapUniformTypeSize(desc.m_type);
-			desc.m_location = glGetUniformLocation(m_glesProgram, origUniformName.c_str());
-			m_uniforms[desc.m_name] = desc;
+			Uniform* desc = EchoNew(Uniform);
+			desc->m_name = StringUtil::Substr( origUniformName, ".", false);
+			desc->m_type = GLES2Mapping::MapUniformType(uniformType);
+			desc->m_count = uniformSize;
+			desc->m_sizeInBytes = desc->m_count * mapUniformTypeSize(desc->m_type);
+			desc->m_location = glGetUniformLocation(m_glesProgram, origUniformName.c_str());
+			m_uniforms[desc->m_name] = desc;
 		}
 
 		for (ui32 i = 0; i < VS_MAX; ++i)
@@ -133,23 +133,23 @@ namespace Echo
 
 	void GLES2ShaderProgram::bindUniforms()
 	{
-		for (UniformArray::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++)
+		for (UniformMap::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++)
 		{
-			Uniform& uniform = it->second;
-			void* value = uniform.m_value.empty() ? uniform.m_valueDefault.data() : uniform.m_value.data();
+			UniformPtr uniform = it->second;
+			void* value = uniform->m_value.empty() ? uniform->m_valueDefault.data() : uniform->m_value.data();
 			if (value)
 			{
-				if (uniform.m_type != SPT_UNKNOWN)
+				if (uniform->m_type != SPT_UNKNOWN)
 				{
-					switch (uniform.m_type)
+					switch (uniform->m_type)
 					{
-						case SPT_VEC4:		OGLESDebug(glUniform4fv(uniform.m_location, uniform.m_count, (GLfloat*)value));					break;
-						case SPT_MAT4:		OGLESDebug(glUniformMatrix4fv(uniform.m_location, uniform.m_count, false, (GLfloat*)value));	break;
-						case SPT_INT:		OGLESDebug(glUniform1iv(uniform.m_location, uniform.m_count, (GLint*)value));					break;
-						case SPT_FLOAT:		OGLESDebug(glUniform1fv(uniform.m_location, uniform.m_count, (GLfloat*)value));					break;
-						case SPT_VEC2:		OGLESDebug(glUniform2fv(uniform.m_location, uniform.m_count, (GLfloat*)value));					break;
-						case SPT_VEC3:		OGLESDebug(glUniform3fv(uniform.m_location, uniform.m_count, (GLfloat*)value));					break;
-						case SPT_TEXTURE:	OGLESDebug(glUniform1i(uniform.m_location, *(ui32*)value));										break;
+						case SPT_VEC4:		OGLESDebug(glUniform4fv(uniform->m_location, uniform->m_count, (GLfloat*)value));				break;
+						case SPT_MAT4:		OGLESDebug(glUniformMatrix4fv(uniform->m_location, uniform->m_count, false, (GLfloat*)value));	break;
+						case SPT_INT:		OGLESDebug(glUniform1iv(uniform->m_location, uniform->m_count, (GLint*)value));					break;
+						case SPT_FLOAT:		OGLESDebug(glUniform1fv(uniform->m_location, uniform->m_count, (GLfloat*)value));				break;
+						case SPT_VEC2:		OGLESDebug(glUniform2fv(uniform->m_location, uniform->m_count, (GLfloat*)value));				break;
+						case SPT_VEC3:		OGLESDebug(glUniform3fv(uniform->m_location, uniform->m_count, (GLfloat*)value));				break;
+						case SPT_TEXTURE:	OGLESDebug(glUniform1i(uniform->m_location, *(ui32*)value));									break;
 						default:			EchoAssertX(0, "unknow shader param format!");													break;
 					}
 				}
@@ -165,17 +165,9 @@ namespace Echo
 	{
 		if (m_isLinked)
 		{
-			// Install the shader program as part of the current rendering state.
 			if ((ECHO_DOWN_CAST<GLES2Renderer*>(Renderer::instance()))->bindShaderProgram(this))
 			{
 				OGLESDebug(glUseProgram(m_glesProgram));
-
-				// set dirty flag
-				for (UniformArray::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++)
-				{
-					Uniform& uniform = it->second;
-				}
-
 				m_preRenderable = NULL;
 			}
 		}

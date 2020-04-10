@@ -327,7 +327,7 @@ namespace Echo
 				{
 					if (!isGlobalUniform(it.first))
 					{
-						switch (it.second.m_type)
+						switch (it.second->m_type)
 						{
 						case ShaderParamType::SPT_INT: registerProperty(ECHO_CLASS_NAME(ShaderProgram), "Uniforms." + it.first, Variant::Type::Int, hints); break;
 						case ShaderParamType::SPT_FLOAT:registerProperty(ECHO_CLASS_NAME(ShaderProgram), "Uniforms." + it.first, Variant::Type::Real, hints); break;
@@ -480,11 +480,11 @@ namespace Echo
     
     void ShaderProgram::setUniform( const char* name, const void* value, ShaderParamType uniformType, ui32 count)
     {
-		UniformArray::iterator it = m_uniforms.find(name);
+		UniformMap::iterator it = m_uniforms.find(name);
 		if (it != m_uniforms.end())
 		{
-			Uniform& uniform = it->second;
-			uniform.setValue(value);
+			UniformPtr uniform = it->second;
+			uniform->setValue(value);
 		}
 		else
 		{
@@ -492,11 +492,11 @@ namespace Echo
 		}
     }
 
-    ShaderProgram::Uniform* ShaderProgram::getUniform(const String& name)
+    ShaderProgram::UniformPtr ShaderProgram::getUniform(const String& name)
 	{
-        std::map<String, Uniform>::iterator it = m_uniforms.find(name);
-		if (it != m_uniforms.end())
-			return &(it->second);
+        UniformMap::iterator it = m_uniforms.find(name);
+        if (it != m_uniforms.end())
+            return it->second;
 
 		return nullptr;
 	}

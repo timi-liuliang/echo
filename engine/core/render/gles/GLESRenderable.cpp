@@ -30,27 +30,26 @@ namespace Echo
 		ShaderProgram* shaderProgram = m_material->getShader();
 		if (shaderProgram)
 		{
-			ShaderProgram::UniformArray* uniforms = shaderProgram->getUniforms();
-			for (auto& it : *uniforms)
+			for (auto& it : shaderProgram->getUniforms())
 			{
-				const ShaderProgram::Uniform& uniform = it.second;
-				if (uniform.m_type != SPT_TEXTURE)
+				ShaderProgram::UniformPtr uniform = it.second;
+				if (uniform->m_type != SPT_TEXTURE)
 				{
-					void* value = m_node ? m_node->getGlobalUniformValue(uniform.m_name) : nullptr;
-					if (!value) value = m_material->getUniformValue(uniform.m_name);
+					void* value = m_node ? m_node->getGlobalUniformValue(uniform->m_name) : nullptr;
+					if (!value) value = m_material->getUniformValue(uniform->m_name);
 
-					shaderProgram->setUniform(uniform.m_name.c_str(), value, uniform.m_type, uniform.m_count);
+					shaderProgram->setUniform(uniform->m_name.c_str(), value, uniform->m_type, uniform->m_count);
 				}
 				else
 				{
-					i32* slotIdxPtr = (i32*)m_material->getUniformValue(uniform.m_name);
+					i32* slotIdxPtr = (i32*)m_material->getUniformValue(uniform->m_name);
 					Texture* texture = m_material->getTexture(*slotIdxPtr);
 					if (texture)
 					{
 						Renderer::instance()->setTexture(*slotIdxPtr, texture);
 					}
 
-					shaderProgram->setUniform(uniform.m_name.c_str(), slotIdxPtr, uniform.m_type, uniform.m_count);
+					shaderProgram->setUniform(uniform->m_name.c_str(), slotIdxPtr, uniform->m_type, uniform->m_count);
 				}
 			}
 		}

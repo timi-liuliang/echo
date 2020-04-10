@@ -132,27 +132,26 @@ namespace Echo
 		VKShaderProgram* vkShaderProgram = ECHO_DOWN_CAST<VKShaderProgram*>(m_material->getShader());
 		if (vkShaderProgram)
 		{
-			ShaderProgram::UniformArray* uniforms = vkShaderProgram->getUniforms();
-			for (auto& it : *uniforms)
+			for (auto& it : vkShaderProgram->getUniforms())
 			{
-				const ShaderProgram::Uniform& uniform = it.second;
-				if (uniform.m_type != SPT_TEXTURE)
+				ShaderProgram::UniformPtr uniform = it.second;
+				if (uniform->m_type != SPT_TEXTURE)
 				{
-					void* value = m_node ? m_node->getGlobalUniformValue(uniform.m_name) : nullptr;
-					if (!value) value = m_material->getUniformValue(uniform.m_name);
+					void* value = m_node ? m_node->getGlobalUniformValue(uniform->m_name) : nullptr;
+					if (!value) value = m_material->getUniformValue(uniform->m_name);
 
-                    vkShaderProgram->setUniform(uniform.m_name.c_str(), value, uniform.m_type, uniform.m_count);
+                    vkShaderProgram->setUniform(uniform->m_name.c_str(), value, uniform->m_type, uniform->m_count);
 				}
 				else
 				{
-					i32* slotIdxPtr = (i32*)m_material->getUniformValue(uniform.m_name);
+					i32* slotIdxPtr = (i32*)m_material->getUniformValue(uniform->m_name);
 					Texture* texture = m_material->getTexture(*slotIdxPtr);
 					if (texture)
 					{
 						Renderer::instance()->setTexture(*slotIdxPtr, texture);
 					}
 
-                    vkShaderProgram->setUniform(uniform.m_name.c_str(), slotIdxPtr, uniform.m_type, uniform.m_count);
+                    vkShaderProgram->setUniform(uniform->m_name.c_str(), slotIdxPtr, uniform->m_type, uniform->m_count);
 				}
 			}
 

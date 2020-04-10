@@ -41,7 +41,7 @@ namespace Echo
 		};
 
         // Uniform
-        struct Uniform
+        struct Uniform : public Refable
         {
             String              m_name = "UnKnown";
 			ShaderType			m_shader = ShaderType::Total;
@@ -61,7 +61,8 @@ namespace Echo
             // set default
             void setValueDefault(const void* value);
         };
-        typedef map<String, Uniform>::type UniformArray;
+        typedef ResRef<Uniform> UniformPtr;
+        typedef map<String, UniformPtr>::type UniformMap;
 
 	public:
 		ShaderProgram();
@@ -85,10 +86,10 @@ namespace Echo
 
         // uniform
         void setUniform(const char* name, const void* value, ShaderParamType uniformType, ui32 count);
-        Uniform* getUniform(const String& name);
+        UniformPtr getUniform(const String& name);
 
         // get all uniforms
-        UniformArray* getUniforms(){ return &m_uniforms; }
+        UniformMap& getUniforms(){ return m_uniforms; }
 
 		// ByteSize
 		static int mapUniformTypeSize(ShaderParamType uniformType);
@@ -174,7 +175,7 @@ namespace Echo
 		DepthStencilState*	m_depthState = nullptr;
 		RasterizerState*	m_rasterizerState = nullptr;
         MultisampleState*   m_multiSampleState = nullptr;
-        UniformArray        m_uniforms;
+        UniformMap          m_uniforms;
 
     protected:
         StringOption        m_cullMode = StringOption("CULL_BACK", { "CULL_NONE", "CULL_FRONT", "CULL_BACK"});
