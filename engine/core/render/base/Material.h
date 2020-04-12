@@ -12,28 +12,61 @@ namespace Echo
 		ECHO_RES(Material, Res, ".material", Res::create<Material>, Res::load)
 
 	public:
-		// texture info
-		struct TextureInfo
-		{
-			String		m_name;
-			String		m_uri;
-			TexturePtr	m_texture;
-		};
-		typedef vector<TextureInfo>::type TextureInfoArray;
-
-	public:
 		struct UniformValue
 		{
 			ShaderProgram::UniformPtr		m_uniform;
+
+			// is empty
+			virtual bool isEmpty() = 0;
+
+			// value
+			virtual const void* getValue() { return nullptr; }
+			virtual void setValue(const void* value) {}
+
+			// get texture path
+			virtual Texture* getTexture() { return nullptr; }
+			virtual const String& getTexturePath() { return StringUtil::BLANK; }
+
+			// texture
+			virtual Texture* setTexture(const String& uri) { return nullptr; }
+			virtual Texture* setTexture(TexturePtr texture) { return nullptr; }
+		};
+
+		struct UniformNormalValue : public UniformValue
+		{		
 			vector<Byte>::type				m_value;
 
 			// destructor
-			UniformValue(const ShaderProgram::UniformPtr uniform);
+			UniformNormalValue(const ShaderProgram::UniformPtr uniform);
+
+			// is empty
+			virtual bool isEmpty() override { return m_value.empty(); }
 
 			// value
-			const void* getValue();
-			void setValue(const void* value);
+			virtual const void* getValue() override;
+			virtual void setValue(const void* value) override;
 		};
+
+		struct UniformTextureValue : public UniformValue
+		{
+			String		m_uri;
+			TexturePtr	m_texture;
+
+			// destructor
+			UniformTextureValue(const ShaderProgram::UniformPtr uniform);
+
+			// is empty
+			virtual bool isEmpty() override { return m_uri.empty(); }
+
+			// get texture path
+			virtual Texture* getTexture() { return m_texture; }
+			virtual const String& getTexturePath();
+
+			// texture
+			virtual Texture* setTexture(const String& uri) override;
+			virtual Texture* setTexture(TexturePtr texture) override;
+		};
+
 		typedef map<String, UniformValue*>::type UniformValueMap;
 
 	public:
@@ -41,44 +74,27 @@ namespace Echo
 		Material(const ResourcePath& path);
 		~Material();
 
-		// load|unload texture
-		void loadTexture();
-		void unloadTexture();
-
-		// get texure
-		Texture* getTexture(const int& index);
-		const String& getTexturePath(const int& index);
-
-		// set shader
-		void setShaderPath(const ResourcePath& path);
-        const ResourcePath& getShaderPath() const { return m_shaderPath; }
+		// get shader
+		ShaderProgram* getShader();
 
 		// render stage
 		const String& getRenderStage();
+
+		// set shader
+		void setShaderPath(const ResourcePath& path);
+		const ResourcePath& getShaderPath() const { return m_shaderPath; }
 
 		// macro
         bool isMacroUsed(const String& macro);
 		void setMacros(const String& macros);
         void setMacro(const String& macro, bool enabled);
 
-		// get shader
-		ShaderProgram* getShader();
-
 		// operate uniform
 		bool isUniformExist(const String& name);
-		void setUniformValue(const String& name, const ShaderParamType& type, const void* value);
         
         // get uniforms
 		UniformValue* getUniform(const String& name);
-        void* getUniformValue(const String& name);
-        UniformValueMap& GetUniformSet() { return m_uniformValues; }
-
-		// get texture number
-		int getTextureNum() { return static_cast<int>(m_textures.size()); }
-
-		// texture
-		Texture* setTexture(const String& name, const String& uri);
-		Texture* setTexture(const String& name, TexturePtr texture);
+        UniformValueMap& GetAllUniforms() { return m_uniformValues; }
 
 		// build shader program
 		void buildShaderProgram();
@@ -97,9 +113,6 @@ namespace Echo
 		virtual i32 getPropertyFlag(const String& propertyName) override;
 
 	private:
-		// add texture
-		void addTexture(const String& name);
-
 		// match uniforms
 		void matchUniforms();
 
@@ -108,7 +121,6 @@ namespace Echo
 		StringArray			m_macros;
 		ShaderProgramPtr	m_shaderProgram;
 		UniformValueMap		m_uniformValues;
-		TextureInfoArray 	m_textures;
 	};
 	typedef ResRef<Material> MaterialPtr;
 }

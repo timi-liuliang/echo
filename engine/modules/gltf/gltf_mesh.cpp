@@ -118,9 +118,9 @@ namespace Echo
 				// image based lighting
 				if (material->isMacroUsed("USE_IBL"))
 				{
-					m_iblDiffuseSlot = material->getUniformValue("u_DiffuseEnvSampler") ? *(i32*)material->getUniformValue("u_DiffuseEnvSampler") : -1;
-					m_iblSpecularSlot = material->getUniformValue("u_SpecularEnvSampler") ? *(i32*)material->getUniformValue("u_SpecularEnvSampler") : -1;
-					m_iblBrdfSlot = material->getUniformValue("u_brdfLUT") ? *(i32*)material->getUniformValue("u_brdfLUT") : -1;
+					//m_iblDiffuseSlot = material->getUniformValue("u_DiffuseEnvSampler") ? *(i32*)material->getUniformValue("u_DiffuseEnvSampler") : -1;
+					//m_iblSpecularSlot = material->getUniformValue("u_SpecularEnvSampler") ? *(i32*)material->getUniformValue("u_SpecularEnvSampler") : -1;
+					//m_iblBrdfSlot = material->getUniformValue("u_brdfLUT") ? *(i32*)material->getUniformValue("u_brdfLUT") : -1;
 				}
 
 				m_renderableDirty = false;

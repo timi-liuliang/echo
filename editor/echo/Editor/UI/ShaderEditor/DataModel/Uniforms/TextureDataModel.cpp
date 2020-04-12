@@ -133,6 +133,14 @@ namespace DataFlowProgramming
 
 	bool TextureDataModel::getDefaultValue(Echo::String& uniformName, Echo::Variant& uniformValue)
 	{
+		if (m_isParameter)
+		{
+			uniformName = "Uniforms." + getVariableName();
+			uniformValue = m_textureSelect->getTexture();
+
+			return true;
+		}
+
 		return false;
 	}
 }

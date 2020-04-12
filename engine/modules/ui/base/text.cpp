@@ -163,7 +163,7 @@ namespace Echo
 					oIndices.push_back(vertBase + 2);
 					oIndices.push_back(vertBase + 3);
 
-                    m_material->setTexture("u_BaseColorSampler", fontGlyph->m_texture->getTexture());
+                    m_material->getUniform("u_BaseColorSampler")->setTexture(fontGlyph->m_texture->getTexture());
                 }
 
 				m_width += m_fontSize;

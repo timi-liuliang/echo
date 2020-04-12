@@ -51,6 +51,7 @@ namespace Echo
             int                 m_location = -1;
             vector<Byte>::type  m_value;
             vector<Byte>::type  m_valueDefault;
+            String		        m_texturePathDefault;
 
             Uniform() {}
             ~Uniform() {}
@@ -60,6 +61,7 @@ namespace Echo
 
             // set default
             void setValueDefault(const void* value);
+            void setTextureDefault(const String& path);
         };
         typedef ResRef<Uniform> UniformPtr;
         typedef map<String, UniformPtr>::type UniformMap;

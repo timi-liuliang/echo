@@ -218,6 +218,11 @@ namespace Echo
         }
     }
 
+    void ShaderProgram::Uniform::setTextureDefault(const String& path)
+    {
+        m_texturePathDefault = path;
+    }
+
 	ShaderProgram::ShaderProgram()
 	{
 	}
@@ -365,7 +370,7 @@ namespace Echo
 				case ShaderParamType::SPT_VEC2:		oVar = *(Vector2*)(uniform->m_valueDefault.data()); break;
 				case ShaderParamType::SPT_VEC3:		oVar = *(Vector3*)(uniform->m_valueDefault.data()); break;
 				case ShaderParamType::SPT_VEC4:		oVar = *(Color*)(uniform->m_valueDefault.data()); break;
-					//case ShaderParamType::SPT_TEXTURE:  oVar = ResourcePath(getTexturePath(*(int*)uniform->m_value.data()), ".png"); break;
+				case ShaderParamType::SPT_TEXTURE:  oVar = ResourcePath(uniform->m_texturePathDefault, ".png"); break;
 				default:							oVar = *(float*)(uniform->m_valueDefault.data()); break;
 				}
             }
@@ -387,7 +392,7 @@ namespace Echo
 				case ShaderParamType::SPT_FLOAT:	uniform->setValueDefault(&(propertyValue.toReal())); break;
 				case ShaderParamType::SPT_VEC2:		uniform->setValueDefault(&(propertyValue.toVector3())); break;
 				case ShaderParamType::SPT_VEC4:		uniform->setValueDefault(&(propertyValue.toColor())); break;
-					//case ShaderParamType::SPT_TEXTURE:  setTexture(ops[1], propertyValue.toResPath().getPath()); break;
+                case ShaderParamType::SPT_TEXTURE:  uniform->setTextureDefault(propertyValue.toResPath().getPath()); break;
 				default:							uniform->setValueDefault(&(propertyValue.toReal())); break;
 				}
 

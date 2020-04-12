@@ -85,7 +85,7 @@ namespace Echo
                 m_materialDefault->setShaderPath(m_shader->getPath());
             }
 
-            m_materialDefault->setTexture("u_BaseColorSampler", m_textureRes.getPath());
+            m_materialDefault->getUniform("u_BaseColorSampler")->setTexture(m_textureRes.getPath());
             
             // mesh
             Ui::VertexArray vertices;
@@ -116,12 +116,12 @@ namespace Echo
     
     void UiImage::buildMeshData(Ui::VertexArray& oVertices, Ui::IndiceArray& oIndices)
     {
-        Texture* texture = m_materialDefault->getTexture(0);
-        if (texture)
-        {
-            if(!m_width) m_width  = texture->getWidth();
-            if(!m_height) m_height = texture->getHeight();
-        }
+        //Texture* texture = m_materialDefault->getTexture(0);
+        //if (texture)
+        //{
+        //    if(!m_width) m_width  = texture->getWidth();
+        //    if(!m_height) m_height = texture->getHeight();
+        //}
         
         float hw = m_width * 0.5f;
         float hh = m_height * 0.5f;

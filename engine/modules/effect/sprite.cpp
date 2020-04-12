@@ -75,15 +75,15 @@ namespace Echo
                 m_material->setShaderPath(m_shader->getPath());
             }
 
-			m_material->setTexture("u_BaseColorSampler", m_textureRes.getPath());
-            
+			m_material->getUniform("u_BaseColorSampler")->setTexture(m_textureRes.getPath());
+
             // update width and height
-            Texture* texture = m_material->getTexture(0);
-            if (texture)
-            {
-                if(!m_width) setWidth( texture->getWidth());
-                if(!m_height) setHeight( texture->getHeight());
-            }
+            //Texture* texture = m_material->getTexture(0);
+            //if (texture)
+            //{
+            //    if(!m_width) setWidth( texture->getWidth());
+            //    if(!m_height) setHeight( texture->getHeight());
+            //}
 		}
 	}
 

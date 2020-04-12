@@ -227,7 +227,7 @@ namespace Echo
 			m_material = ECHO_CREATE_RES(Material);
 			m_material->setShaderPath(m_shader->getPath());
 
-			m_material->setTexture("u_BaseColorSampler", m_batch.m_texture);
+			m_material->getUniform("u_BaseColorSampler")->setTexture(m_batch.m_texture);
 
 			m_renderable = Renderable::create(m_mesh, m_material, this);
 		}
