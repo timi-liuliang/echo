@@ -59,8 +59,8 @@ namespace Echo
 			virtual bool isEmpty() override { return m_uri.empty(); }
 
 			// get texture path
-			virtual Texture* getTexture() { return m_texture; }
-			virtual const String& getTexturePath();
+			virtual Texture* getTexture() override;
+			virtual const String& getTexturePath() override;
 
 			// texture
 			virtual Texture* setTexture(const String& uri) override;

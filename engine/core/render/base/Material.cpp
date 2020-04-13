@@ -45,17 +45,29 @@ namespace Echo
 		return m_uri.empty() ? m_uniform->m_texturePathDefault : m_uri; 
 	}
 
+	Texture* Material::UniformTextureValue::getTexture()
+	{
+		if (!m_texture)
+		{
+			m_texture = m_uri.empty() ? (Texture*)Res::get(m_uniform->m_texturePathDefault) : (Texture*)Res::get(m_uri);
+		}
+
+		return m_texture; 
+	}
+
 	Texture* Material::UniformTextureValue::setTexture(const String& uri)
 	{
 		if (uri == m_uniform->m_texturePathDefault)
 		{
 			m_uri.clear();
-			return setTexture((Texture*)Res::get(m_uniform->m_texturePathDefault));
 		}
 		else
 		{
-			return setTexture((Texture*)Res::get(uri));
+			m_uri = uri;
 		}
+
+		m_texture = nullptr;
+		return getTexture();
 	}
 
 	Texture* Material::UniformTextureValue::setTexture(TexturePtr texture)
