@@ -319,7 +319,15 @@ namespace Echo
 
 			for (auto& it : m_shaderProgram->getUniforms())
 			{
+				// create
 				ShaderProgram::UniformPtr& suniform = it.second;
+				UniformValue* uniform = nullptr;
+				if (suniform->m_type == SPT_TEXTURE)
+					uniform = EchoNew(UniformTextureValue(suniform));
+				else
+					uniform = EchoNew(UniformNormalValue(suniform));
+
+				// copy data
 				UniformValueMap::iterator it = oldUniforms.find(suniform->m_name);
 				if (it != oldUniforms.end())
 				{
@@ -327,21 +335,13 @@ namespace Echo
 					if (oldUniform && suniform->m_count == oldUniform->m_uniform->m_count && suniform->m_type == oldUniform->m_uniform->m_type)
 					{
 						if (suniform->m_type == SPT_TEXTURE)
-						{
-							UniformValue* uniform = EchoNew(UniformTextureValue(suniform));
 							uniform->setTexture(oldUniform->getTexturePath());
-
-							m_uniformValues[suniform->m_name] = uniform;
-						}
 						else
-						{
-							UniformValue* uniform = EchoNew(UniformNormalValue(suniform));
 							uniform->setValue(oldUniform->isEmpty() ? nullptr : oldUniform->getValue());
-
-							m_uniformValues[suniform->m_name] = uniform;
-						}
 					}
 				}
+
+				m_uniformValues[suniform->m_name] = uniform;
 			}
 		}
 	}

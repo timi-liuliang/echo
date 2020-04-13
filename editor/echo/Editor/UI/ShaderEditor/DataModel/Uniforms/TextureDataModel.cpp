@@ -136,7 +136,7 @@ namespace DataFlowProgramming
 		if (m_isParameter)
 		{
 			uniformName = "Uniforms." + getVariableName();
-			uniformValue = m_textureSelect->getTexture();
+			uniformValue = Echo::ResourcePath(m_textureSelect->getTexture(), ".png");
 
 			return true;
 		}

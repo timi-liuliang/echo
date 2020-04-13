@@ -362,16 +362,22 @@ namespace Echo
 		if (ops[0] == "Uniforms")
 		{
 			Uniform* uniform = getUniform(ops[1]);
-            if (uniform && !uniform->m_valueDefault.empty())
+            if (uniform)
             {
-				switch (uniform->m_type)
+                bool isValueEmpty = uniform->m_type != ShaderParamType::SPT_TEXTURE && uniform->m_valueDefault.empty();
+				if (!isValueEmpty)
 				{
-				case ShaderParamType::SPT_FLOAT:	oVar = *(float*)(uniform->m_valueDefault.data()); break;
-				case ShaderParamType::SPT_VEC2:		oVar = *(Vector2*)(uniform->m_valueDefault.data()); break;
-				case ShaderParamType::SPT_VEC3:		oVar = *(Vector3*)(uniform->m_valueDefault.data()); break;
-				case ShaderParamType::SPT_VEC4:		oVar = *(Color*)(uniform->m_valueDefault.data()); break;
-				case ShaderParamType::SPT_TEXTURE:  oVar = ResourcePath(uniform->m_texturePathDefault, ".png"); break;
-				default:							oVar = *(float*)(uniform->m_valueDefault.data()); break;
+					switch (uniform->m_type)
+					{
+					case ShaderParamType::SPT_FLOAT:	oVar = *(float*)(uniform->m_valueDefault.data()); break;
+					case ShaderParamType::SPT_VEC2:		oVar = *(Vector2*)(uniform->m_valueDefault.data()); break;
+					case ShaderParamType::SPT_VEC3:		oVar = *(Vector3*)(uniform->m_valueDefault.data()); break;
+					case ShaderParamType::SPT_VEC4:		oVar = *(Color*)(uniform->m_valueDefault.data()); break;
+					case ShaderParamType::SPT_TEXTURE:  oVar = ResourcePath(uniform->m_texturePathDefault, ".png"); break;
+					default:							oVar = *(float*)(uniform->m_valueDefault.data()); break;
+					}
+
+					return true;
 				}
             }
 		}

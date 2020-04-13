@@ -51,11 +51,10 @@ namespace Echo
 						{
 							Renderer::instance()->setTexture(textureCount, texture);
 						}
-
-						shaderProgram->setUniform(uniform->m_name.c_str(), &textureCount, uniform->m_type, uniform->m_count);
-
-						textureCount++;
 					}
+
+					shaderProgram->setUniform(uniform->m_name.c_str(), &textureCount, uniform->m_type, uniform->m_count);
+					textureCount++;
 				}
 			}
 		}
