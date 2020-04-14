@@ -106,7 +106,7 @@ namespace Echo
         for (UniformMap::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++)
         {
             UniformPtr uniform = it->second;
-            void* value = uniform->m_value.empty() ? uniform->m_valueDefault.data() : uniform->m_value.data();
+            void* value = uniform->m_value.empty() ? uniform->getValueDefault().data() : uniform->m_value.data();
             if (value && uniform->m_type != SPT_UNKNOWN)
             {
                 vector<Byte>::type& uniformBytes = uniform->m_shader == ShaderType::VS ? m_vertexShaderUniformBytes : m_fragmentShaderUniformBytes;

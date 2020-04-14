@@ -15,7 +15,7 @@ namespace Echo
 
 	const void* Material::UniformNormalValue::getValue()
 	{
-		return m_value.empty() ? m_uniform->m_valueDefault.data() : m_value.data();
+		return m_value.empty() ? m_uniform->getValueDefault().data() : m_value.data();
 	}
 
 	void Material::UniformNormalValue::setValue(const void* value)
@@ -26,7 +26,7 @@ namespace Echo
 			std::memcpy(m_value.data(), value, m_uniform->m_sizeInBytes);
 
 			// clear
-			if (m_value == m_uniform->m_valueDefault)
+			if (m_value == m_uniform->getValueDefault())
 				m_value.clear();
 		}
 		else
@@ -40,16 +40,16 @@ namespace Echo
 		m_uniform = uniform;
 	}
 
-	const String& Material::UniformTextureValue::getTexturePath()
+	const ResourcePath& Material::UniformTextureValue::getTexturePath()
 	{ 
-		return m_uri.empty() ? m_uniform->m_texturePathDefault : m_uri; 
+		return m_uri.getPath().empty() ? m_uniform->getTextureDefault() : m_uri; 
 	}
 
 	Texture* Material::UniformTextureValue::getTexture()
 	{
 		if (!m_texture)
 		{
-			m_texture = m_uri.empty() ? (Texture*)Res::get(m_uniform->m_texturePathDefault) : (Texture*)Res::get(m_uri);
+			m_texture = m_uri.getPath().empty() ? (Texture*)Res::get(m_uniform->getTextureDefault()) : (Texture*)Res::get(m_uri);
 		}
 
 		return m_texture; 
@@ -57,7 +57,7 @@ namespace Echo
 
 	Texture* Material::UniformTextureValue::setTexture(const String& uri)
 	{
-		if (uri == m_uniform->m_texturePathDefault)
+		if (uri == m_uniform->getTextureDefault().getPath())
 		{
 			m_uri.clear();
 		}
@@ -245,7 +245,7 @@ namespace Echo
 			case ShaderParamType::SPT_VEC2:		oVar = *(Vector2*)(uniform->getValue()); break;
 			case ShaderParamType::SPT_VEC3:		oVar = *(Vector3*)(uniform->getValue()); break;
 			case ShaderParamType::SPT_VEC4:		oVar = *(Color*)(uniform->getValue()); break;
-			case ShaderParamType::SPT_TEXTURE : oVar = ResourcePath(uniform->getTexturePath(), ".png"); break;
+			case ShaderParamType::SPT_TEXTURE : oVar = uniform->getTexturePath(); break;
 			default:							oVar = *(float*)(uniform->getValue()); break;
 			}
 		}
@@ -265,12 +265,12 @@ namespace Echo
 			ShaderProgram::UniformPtr uniform = getUniform(ops[1])->m_uniform;
 			switch (uniform->m_type)
 			{
-			case ShaderParamType::SPT_FLOAT:	oVar = *(float*)(uniform->m_valueDefault.data()); break;
-			case ShaderParamType::SPT_VEC2:		oVar = *(Vector2*)(uniform->m_valueDefault.data()); break;
-			case ShaderParamType::SPT_VEC3:		oVar = *(Vector3*)(uniform->m_valueDefault.data()); break;
-			case ShaderParamType::SPT_VEC4:		oVar = *(Color*)(uniform->m_valueDefault.data()); break;
-			case ShaderParamType::SPT_TEXTURE: oVar = ResourcePath(uniform->m_texturePathDefault, ".png"); break;
-			default:							oVar = *(float*)(uniform->m_valueDefault.data()); break;
+			case ShaderParamType::SPT_FLOAT:	oVar = *(float*)(uniform->getValueDefault().data()); break;
+			case ShaderParamType::SPT_VEC2:		oVar = *(Vector2*)(uniform->getValueDefault().data()); break;
+			case ShaderParamType::SPT_VEC3:		oVar = *(Vector3*)(uniform->getValueDefault().data()); break;
+			case ShaderParamType::SPT_VEC4:		oVar = *(Color*)(uniform->getValueDefault().data()); break;
+			case ShaderParamType::SPT_TEXTURE:  oVar = uniform->getTextureDefault(); break;
+			default:							oVar = *(float*)(uniform->getValueDefault().data()); break;
 			}
 		}
 		else if (ops[0] == "Macros")
@@ -347,7 +347,7 @@ namespace Echo
 					if (oldUniform && suniform->m_count == oldUniform->m_uniform->m_count && suniform->m_type == oldUniform->m_uniform->m_type)
 					{
 						if (suniform->m_type == SPT_TEXTURE)
-							uniform->setTexture(oldUniform->getTexturePath());
+							uniform->setTexture(oldUniform->getTexturePath().getPath());
 						else
 							uniform->setValue(oldUniform->isEmpty() ? nullptr : oldUniform->getValue());
 					}

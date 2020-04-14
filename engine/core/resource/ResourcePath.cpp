@@ -5,6 +5,8 @@
 
 namespace Echo
 {
+	const ResourcePath ResourcePath::BLANK;
+
 	ResourcePath::ResourcePath()
 	{
 

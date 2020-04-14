@@ -20,8 +20,12 @@ namespace Echo
 		bool isSupportExt(const String& ext);
 
 		bool isEmpty() const { return m_path.empty(); }
+		void clear() { m_path.clear(); }
 
 		Res* getRes();
+
+	public:
+		static const ResourcePath BLANK;
 
 	private:
 		String			m_path;

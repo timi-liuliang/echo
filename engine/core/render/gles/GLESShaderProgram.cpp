@@ -106,10 +106,20 @@ namespace Echo
 			OGLESDebug(glGetActiveUniform(m_glesProgram, i, 512, &uniformLength, &uniformSize, &uniformType, unifromName));
 
 			String origUniformName = StringUtil::Replace(unifromName, "[0]", "");
+			ShaderParamType uniformTypeConvert = GLES2Mapping::MapUniformType(uniformType);
 
-			Uniform* desc = EchoNew(Uniform);
+			Uniform* desc = nullptr; 
+			if (uniformTypeConvert == SPT_TEXTURE)
+			{
+				desc = EchoNew(UniformTexture);
+			}
+			else
+			{
+				desc = EchoNew(UniformNormal);
+			}
+			
 			desc->m_name = StringUtil::Substr( origUniformName, ".", false);
-			desc->m_type = GLES2Mapping::MapUniformType(uniformType);
+			desc->m_type = uniformTypeConvert;
 			desc->m_count = uniformSize;
 			desc->m_sizeInBytes = desc->m_count * mapUniformTypeSize(desc->m_type);
 			desc->m_location = glGetUniformLocation(m_glesProgram, origUniformName.c_str());
@@ -136,7 +146,7 @@ namespace Echo
 		for (UniformMap::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++)
 		{
 			UniformPtr uniform = it->second;
-			void* value = uniform->m_value.empty() ? uniform->m_valueDefault.data() : uniform->m_value.data();
+			void* value = uniform->m_value.empty() ? uniform->getValueDefault().data() : uniform->m_value.data();
 			if (value)
 			{
 				if (uniform->m_type != SPT_UNKNOWN)

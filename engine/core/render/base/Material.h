@@ -25,7 +25,7 @@ namespace Echo
 
 			// get texture path
 			virtual Texture* getTexture() { return nullptr; }
-			virtual const String& getTexturePath() { return StringUtil::BLANK; }
+			virtual const ResourcePath& getTexturePath() { return StringUtil::BLANK; }
 
 			// texture
 			virtual Texture* setTexture(const String& uri) { return nullptr; }
@@ -49,18 +49,18 @@ namespace Echo
 
 		struct UniformTextureValue : public UniformValue
 		{
-			String		m_uri;
-			TexturePtr	m_texture;
+			ResourcePath	m_uri;
+			TexturePtr		m_texture;
 
 			// destructor
 			UniformTextureValue(const ShaderProgram::UniformPtr uniform);
 
 			// is empty
-			virtual bool isEmpty() override { return m_uri.empty(); }
+			virtual bool isEmpty() override { return m_uri.getPath().empty(); }
 
 			// get texture path
 			virtual Texture* getTexture() override;
-			virtual const String& getTexturePath() override;
+			virtual const ResourcePath& getTexturePath() override;
 
 			// texture
 			virtual Texture* setTexture(const String& uri) override;

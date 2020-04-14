@@ -40,6 +40,16 @@ namespace Echo
 			Total,
 		};
 
+        // enum texture type
+        enum TextureType
+        {
+            General,    // general 2d texture
+            Normal,     // normal map texture
+            Atla,       // atlas of 2d texture
+            Cube,       // cube map
+            Ibl,        // image based lighting, HDRI environment map
+        };
+
         // Uniform
         struct Uniform : public Refable
         {
@@ -50,19 +60,43 @@ namespace Echo
             int                 m_sizeInBytes = 0;
             int                 m_location = -1;
             vector<Byte>::type  m_value;
-            vector<Byte>::type  m_valueDefault;
-            String		        m_texturePathDefault;
 
             Uniform() {}
             ~Uniform() {}
 
             // set value
 			void setValue(const void* value);
+            const vector<Byte>::type& getValue() { return m_value; }
 
-            // set default
-            void setValueDefault(const void* value);
-            void setTextureDefault(const String& path);
+            // value default
+            virtual void setValueDefault(const void* value) {}
+            virtual vector<Byte>::type& getValueDefault() { static vector<Byte>::type empty; return empty; }
+
+            // texture default
+            virtual void setTextureDefault(const String& path) {}
+            virtual const ResourcePath& getTextureDefault() { return ResourcePath::BLANK; }
         };
+
+        // data
+        struct UniformNormal : public Uniform
+        {
+			vector<Byte>::type  m_valueDefault;
+
+            // set value default
+            virtual void setValueDefault(const void* value) override;
+            virtual vector<Byte>::type& getValueDefault() override { return m_valueDefault; }
+        };
+
+        // texture
+        struct UniformTexture : public Uniform
+        {
+			TextureType         m_type = TextureType::General;
+			ResourcePath		m_texturePathDefault = ResourcePath("", ".png|.atla");
+
+            virtual void setTextureDefault(const String& path) override;
+            virtual const ResourcePath& getTextureDefault() override;
+        };
+
         typedef ResRef<Uniform> UniformPtr;
         typedef map<String, UniformPtr>::type UniformMap;
 

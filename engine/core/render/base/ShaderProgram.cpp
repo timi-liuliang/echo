@@ -209,7 +209,7 @@ namespace Echo
         }
 	}
 
-    void ShaderProgram::Uniform::setValueDefault(const void* value)
+    void ShaderProgram::UniformNormal::setValueDefault(const void* value)
     {
         if (value)
         {
@@ -218,9 +218,14 @@ namespace Echo
         }
     }
 
-    void ShaderProgram::Uniform::setTextureDefault(const String& path)
+    void ShaderProgram::UniformTexture::setTextureDefault(const String& path)
     {
-        m_texturePathDefault = path;
+        m_texturePathDefault.setPath(path);
+    }
+
+    const ResourcePath& ShaderProgram::UniformTexture::getTextureDefault()
+    {
+        return m_texturePathDefault;
     }
 
 	ShaderProgram::ShaderProgram()
@@ -364,17 +369,17 @@ namespace Echo
 			Uniform* uniform = getUniform(ops[1]);
             if (uniform)
             {
-                bool isValueEmpty = uniform->m_type != ShaderParamType::SPT_TEXTURE && uniform->m_valueDefault.empty();
+                bool isValueEmpty = uniform->m_type != ShaderParamType::SPT_TEXTURE && uniform->getValueDefault().empty();
 				if (!isValueEmpty)
 				{
 					switch (uniform->m_type)
 					{
-					case ShaderParamType::SPT_FLOAT:	oVar = *(float*)(uniform->m_valueDefault.data()); break;
-					case ShaderParamType::SPT_VEC2:		oVar = *(Vector2*)(uniform->m_valueDefault.data()); break;
-					case ShaderParamType::SPT_VEC3:		oVar = *(Vector3*)(uniform->m_valueDefault.data()); break;
-					case ShaderParamType::SPT_VEC4:		oVar = *(Color*)(uniform->m_valueDefault.data()); break;
-					case ShaderParamType::SPT_TEXTURE:  oVar = ResourcePath(uniform->m_texturePathDefault, ".png"); break;
-					default:							oVar = *(float*)(uniform->m_valueDefault.data()); break;
+					case ShaderParamType::SPT_FLOAT:	oVar = *(float*)(uniform->getValueDefault().data()); break;
+					case ShaderParamType::SPT_VEC2:		oVar = *(Vector2*)(uniform->getValueDefault().data()); break;
+					case ShaderParamType::SPT_VEC3:		oVar = *(Vector3*)(uniform->getValueDefault().data()); break;
+					case ShaderParamType::SPT_VEC4:		oVar = *(Color*)(uniform->getValueDefault().data()); break;
+					case ShaderParamType::SPT_TEXTURE:  oVar = uniform->getTextureDefault(); break;
+					default:							oVar = *(float*)(uniform->getValueDefault().data()); break;
 					}
 
 					return true;
