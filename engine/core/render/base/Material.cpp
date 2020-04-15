@@ -1,6 +1,7 @@
 #include "engine/core/log/Log.h"
 #include "Material.h"
 #include "ShaderProgram.h"
+#include "engine/core/util/PathUtil.h"
 #include "engine/core/scene/node_tree.h"
 #include "engine/core/render/base/ShaderProgram.h"
 #include "engine/core/render/base/Renderer.h"
@@ -49,7 +50,16 @@ namespace Echo
 	{
 		if (!m_texture)
 		{
-			m_texture = m_uri.getPath().empty() ? (Texture*)Res::get(m_uniform->getTextureDefault()) : (Texture*)Res::get(m_uri);
+			const ResourcePath& path = m_uri.isEmpty() ? m_uniform->getTextureDefault() : m_uri;
+			if (Echo::PathUtil::GetFileExt(path.getPath(), false) == "atla")
+			{
+				m_atla = (TextureAtla*)Res::get(path);
+				m_texture = m_atla->getTexture();
+			}
+			else
+			{
+				m_texture = (Texture*)Res::get(path);
+			}
 		}
 
 		return m_texture; 

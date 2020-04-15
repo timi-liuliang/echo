@@ -4,6 +4,7 @@
 #include "engine/core/render/base/RenderState.h"
 #include "engine/core/resource/Res.h"
 #include "Texture.h"
+#include "atla/TextureAtla.h"
 
 namespace Echo
 {
@@ -51,12 +52,13 @@ namespace Echo
 		{
 			ResourcePath	m_uri;
 			TexturePtr		m_texture;
+			TextureAtlaPtr	m_atla;
 
 			// destructor
 			UniformTextureValue(const ShaderProgram::UniformPtr uniform);
 
 			// is empty
-			virtual bool isEmpty() override { return m_uri.getPath().empty(); }
+			virtual bool isEmpty() override { return m_uri.isEmpty(); }
 
 			// get texture path
 			virtual Texture* getTexture() override;
@@ -66,7 +68,6 @@ namespace Echo
 			virtual Texture* setTexture(const String& uri) override;
 			virtual Texture* setTexture(TexturePtr texture) override;
 		};
-
 		typedef map<String, UniformValue*>::type UniformValueMap;
 
 	public:
