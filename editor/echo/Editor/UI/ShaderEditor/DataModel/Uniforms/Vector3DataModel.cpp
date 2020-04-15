@@ -8,6 +8,8 @@ namespace DataFlowProgramming
     Vector3DataModel::Vector3DataModel()
         : ShaderUniformDataModel()
     {
+        m_uniformConfig = EchoNew(Echo::ShaderUniformConfig);
+
         m_vector3Editor = (new QT_UI::QVector3Editor(nullptr, "", nullptr));
         m_vector3Editor->setMaximumSize(QSize(m_vector3Editor->sizeHint().width() * 0.4f, m_vector3Editor->sizeHint().height()));
         m_vector3Editor->setValue(Echo::StringUtil::ToString(Echo::Vector3::ONE).c_str());
@@ -72,7 +74,7 @@ namespace DataFlowProgramming
 		return true;
 	}
 
-	bool Vector3DataModel::getDefaultValue(Echo::String& uniformName, Echo::Variant& uniformValue)
+	bool Vector3DataModel::getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues)
 	{
 		return false;
 	}

@@ -9,6 +9,8 @@ namespace DataFlowProgramming
       : ShaderUniformDataModel()
       , m_lineEdit(new QLineEdit())
     {
+        m_uniformConfig = EchoNew(Echo::ShaderUniformConfig);
+
         m_lineEdit->setValidator(new QDoubleValidator());
         m_lineEdit->setMaximumSize(QSize(m_lineEdit->sizeHint().width() * 0.4f, m_lineEdit->sizeHint().height()));
         m_lineEdit->setText("0.0");
@@ -74,7 +76,7 @@ namespace DataFlowProgramming
 		return true;
     }
 
-	bool FloatDataModel::getDefaultValue(Echo::String& uniformName, Echo::Variant& uniformValue)
+	bool FloatDataModel::getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues)
 	{
 		return false;
 	}

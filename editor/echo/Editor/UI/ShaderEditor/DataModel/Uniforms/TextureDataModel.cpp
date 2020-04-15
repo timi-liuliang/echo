@@ -3,6 +3,7 @@
 #include <QtGui/QDoubleValidator>
 #include "DataFloat.h"
 #include "DataVector3.h"
+#include "shader_uniform_texture_config.h"
 
 namespace DataFlowProgramming
 {
@@ -10,6 +11,7 @@ namespace DataFlowProgramming
         : ShaderUniformDataModel()
     {
         m_isParameter = true;
+        m_uniformConfig = EchoNew(Echo::ShaderUniformTextureConfig);
         m_uniformConfig->setVariableName(getDefaultVariableName());
 
         m_textureSelect = new QT_UI::QTextureSelect();
@@ -117,13 +119,20 @@ namespace DataFlowProgramming
 
 		compiler.addTextureUniform(getVariableName());
 
+        Echo::String uvConvertCode;
+        if (m_isAtla)
+        {
+            compiler.addUniform("vec4", Echo::StringUtil::Format("%sViewport", getVariableName().c_str()));
+            uvConvertCode = Echo::StringUtil::Format(" * fs_ubo.%sViewport.zw + fs_ubo.%sViewport.xy", getVariableName().c_str(), getVariableName().c_str());
+        }
+
         if (m_inputs[0])
         {
-            compiler.addCode(Echo::StringUtil::Format("\tvec4 %s_Color = texture( %s, %s);\n", getVariableName().c_str(), getVariableName().c_str(), dynamic_cast<ShaderData*>(m_inputs[0].get())->getVariableName().c_str()));
+            compiler.addCode(Echo::StringUtil::Format("\tvec4 %s_Color = texture( %s, %s %s);\n", getVariableName().c_str(), getVariableName().c_str(), dynamic_cast<ShaderData*>(m_inputs[0].get())->getVariableName().c_str(), uvConvertCode.c_str()));
         }
         else
         {
-            compiler.addCode(Echo::StringUtil::Format("\tvec4 %s_Color = texture( %s, v_UV);\n", getVariableName().c_str(), getVariableName().c_str()));
+            compiler.addCode(Echo::StringUtil::Format("\tvec4 %s_Color = texture( %s, v_UV %s);\n", getVariableName().c_str(), getVariableName().c_str(), uvConvertCode.c_str()));
         }
 
         compiler.addCode(Echo::StringUtil::Format("\t%s_Color.rgb = SRgbToLinear(%s_Color.rgb);\n", getVariableName().c_str(), getVariableName().c_str()));
@@ -131,12 +140,18 @@ namespace DataFlowProgramming
 		return true;
 	}
 
-	bool TextureDataModel::getDefaultValue(Echo::String& uniformName, Echo::Variant& uniformValue)
+	bool TextureDataModel::getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues)
 	{
 		if (m_isParameter)
 		{
-			uniformName = "Uniforms." + getVariableName();
-			uniformValue = Echo::ResourcePath(m_textureSelect->getTexture(), ".png");
+            uniformNames.push_back("Uniforms." + getVariableName());
+            uniformValues.push_back(Echo::ResourcePath(m_textureSelect->getTexture(), ".png"));
+
+            if (m_isAtla)
+            {
+				uniformNames.push_back("Uniforms." + getVariableName() + "Viewport");
+                uniformValues.push_back(Echo::Color(0.f, 0.f, 1.f, 1.f));
+            }
 
 			return true;
 		}

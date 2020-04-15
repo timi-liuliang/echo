@@ -38,6 +38,7 @@ namespace Echo
 
 		// get viewport
 		bool getViewport(const String& name, Vector4& viewPort);
+		bool getViewportNormalized(const String& name, Vector4& viewPort);
 
 		// get all atlas
 		const vector<Atla>::type& getAllAtlas() { return m_atlas; }

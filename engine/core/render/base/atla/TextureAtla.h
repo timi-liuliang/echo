@@ -18,6 +18,10 @@ namespace Echo
         // get texture
         const TexturePtr& getTexture() { return m_owner->getTexture(); }
 
+        // view port
+        Vector4 getViewport();
+        Vector4 getViewportNormalized();
+
         // load | save
         static Res* load(const ResourcePath& path);
         virtual void save() override;

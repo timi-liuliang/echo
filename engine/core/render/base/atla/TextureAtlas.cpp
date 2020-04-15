@@ -73,6 +73,18 @@ namespace Echo
 		return false;
 	}
 
+	bool TextureAtlas::getViewportNormalized(const String& name, Vector4& viewPort)
+	{
+		if (getViewport(name, viewPort))
+		{
+			viewPort /= Vector4(m_texture->getWidth(), m_texture->getHeight(), m_texture->getWidth(), m_texture->getHeight());
+
+			return true;
+		}
+
+		return false;
+	}
+
 	void TextureAtlas::clear()
 	{
 		m_atlas.clear();

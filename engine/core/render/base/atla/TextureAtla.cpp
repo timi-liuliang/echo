@@ -30,6 +30,22 @@ namespace Echo
 
 	}
 
+	Vector4 TextureAtla::getViewport()
+	{
+		Vector4 result;
+		m_owner->getViewport(m_atlaName, result);
+
+		return result;
+	}
+
+	Vector4 TextureAtla::getViewportNormalized()
+	{
+		Vector4 result;
+		m_owner->getViewportNormalized(m_atlaName, result);
+
+		return result;
+	}
+
 	Res* TextureAtla::load(const ResourcePath& path)
 	{
 		if (!path.isEmpty())

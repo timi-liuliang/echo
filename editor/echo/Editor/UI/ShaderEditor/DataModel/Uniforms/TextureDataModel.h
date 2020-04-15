@@ -34,7 +34,7 @@ namespace DataFlowProgramming
         virtual bool generateCode(ShaderCompiler& compiler);
 
 		// get default value
-		virtual bool getDefaultValue(Echo::String& uniformName, Echo::Variant& uniformValue) override;
+		virtual bool getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues) override;
 
     public:
         // load|save
@@ -67,7 +67,8 @@ namespace DataFlowProgramming
         void updateOutputDataVariableName();
 
     private:
-        QT_UI::QTextureSelect*                  m_textureSelect = nullptr;
+        bool                        m_isAtla = true;
+        QT_UI::QTextureSelect*      m_textureSelect = nullptr;
     };
 }
 

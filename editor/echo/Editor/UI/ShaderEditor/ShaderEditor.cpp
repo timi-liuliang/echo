@@ -130,11 +130,14 @@ namespace Studio
         ShaderUniformDataModel* shaderUniformDataModel = dynamic_cast<ShaderUniformDataModel*>(dataModel);
 		if (shaderUniformDataModel)
 		{
-            Echo::String uniformName;
-            Echo::Variant uniformValue;
-            if (shaderUniformDataModel->getDefaultValue(uniformName, uniformValue))
+            Echo::StringArray uniformNames;
+            Echo::VariantArray uniformValues;
+            if (shaderUniformDataModel->getDefaultValue(uniformNames, uniformValues))
             {
-                m_shaderProgram->setPropertyValue(uniformName, uniformValue);
+                for (size_t i = 0; i < uniformNames.size(); i++)
+                {
+                    m_shaderProgram->setPropertyValue(uniformNames[i], uniformValues[i]);
+                }
             }
 		}
     }

@@ -9,6 +9,8 @@ namespace DataFlowProgramming
     Vector2DataModel::Vector2DataModel()
         : ShaderUniformDataModel()
     {
+        m_uniformConfig = EchoNew(Echo::ShaderUniformConfig);
+
         m_vector2Editor = (new QT_UI::QVector2Editor(nullptr, "", nullptr));
         m_vector2Editor->setMaximumSize(QSize(m_vector2Editor->sizeHint().width() * 0.4f, m_vector2Editor->sizeHint().height()));
         m_vector2Editor->setValue(Echo::StringUtil::ToString(Echo::Vector3::ONE).c_str());
@@ -73,7 +75,7 @@ namespace DataFlowProgramming
 		return true;
 	}
 
-	bool Vector2DataModel::getDefaultValue(Echo::String& uniformName, Echo::Variant& uniformValue)
+	bool Vector2DataModel::getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues)
 	{
 		return false;
 	}

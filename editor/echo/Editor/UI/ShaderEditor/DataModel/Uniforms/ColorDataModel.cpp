@@ -21,6 +21,7 @@ namespace DataFlowProgramming
 		QObject::connect(m_setAsParameter, SIGNAL(triggered()), this, SLOT(onSetAsParameter()));
 		QObject::connect(m_setAsConstant, SIGNAL(triggered()), this, SLOT(onSetAsConstant()));
 
+        m_uniformConfig = EchoNew(Echo::ShaderUniformConfig);
         m_uniformConfig->onVariableNameChanged.connectClassMethod(this, Echo::createMethodBind(&ColorDataModel::onVariableNameChanged));
 
         updateOutputDataVariableName();
@@ -117,12 +118,12 @@ namespace DataFlowProgramming
 		return true;
 	}
 
-    bool ColorDataModel::getDefaultValue(Echo::String& uniformName, Echo::Variant& uniformValue)
+    bool ColorDataModel::getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues)
     {
         if (m_isParameter)
         {
-            uniformName = "Uniforms." + getVariableName();
-            uniformValue = m_colorSelect->GetColor();
+            uniformNames.push_back("Uniforms." + getVariableName());
+            uniformValues.push_back(m_colorSelect->GetColor());
 
             return true;
         }

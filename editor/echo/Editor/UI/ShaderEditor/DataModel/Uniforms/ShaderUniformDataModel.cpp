@@ -7,8 +7,6 @@ namespace DataFlowProgramming
 	ShaderUniformDataModel::ShaderUniformDataModel()
 		: ShaderDataModel()
 	{
-		m_uniformConfig = EchoNew(Echo::ShaderUniformConfig);
-
 		m_setAsParameter = new QAction("Switch to Parameter");
 		m_setAsConstant = new QAction("Switch to Constant");
 	}

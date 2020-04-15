@@ -50,12 +50,13 @@ namespace Echo
 
 		struct UniformTextureValue : public UniformValue
 		{
+			Material*		m_owner;
 			ResourcePath	m_uri;
 			TexturePtr		m_texture;
 			TextureAtlaPtr	m_atla;
 
 			// destructor
-			UniformTextureValue(const ShaderProgram::UniformPtr uniform);
+			UniformTextureValue(const ShaderProgram::UniformPtr uniform, Material* owner);
 
 			// is empty
 			virtual bool isEmpty() override { return m_uri.isEmpty(); }

@@ -36,7 +36,8 @@ namespace Echo
 		}
 	}
 
-	Material::UniformTextureValue::UniformTextureValue(const ShaderProgram::UniformPtr uniform)
+	Material::UniformTextureValue::UniformTextureValue(const ShaderProgram::UniformPtr uniform, Material* owner)
+		: m_owner(owner)
 	{
 		m_uniform = uniform;
 	}
@@ -55,6 +56,12 @@ namespace Echo
 			{
 				m_atla = (TextureAtla*)Res::get(path);
 				m_texture = m_atla->getTexture();
+
+				Material::UniformValue* viewportValue = m_owner->getUniform(m_uniform->m_name + "Viewport");
+				if (viewportValue)
+				{
+					viewportValue->setValue(&m_atla->getViewportNormalized());
+				}
 			}
 			else
 			{
@@ -345,7 +352,7 @@ namespace Echo
 				ShaderProgram::UniformPtr& suniform = it.second;
 				UniformValue* uniform = nullptr;
 				if (suniform->m_type == SPT_TEXTURE)
-					uniform = EchoNew(UniformTextureValue(suniform));
+					uniform = EchoNew(UniformTextureValue(suniform, this));
 				else
 					uniform = EchoNew(UniformNormalValue(suniform));
 

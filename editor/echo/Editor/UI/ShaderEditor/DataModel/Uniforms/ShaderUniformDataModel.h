@@ -45,7 +45,7 @@ namespace DataFlowProgramming
 		void restoreUniformConfig(QJsonObject const& p);
 
         // get default value
-        virtual bool getDefaultValue(Echo::String& uniformName, Echo::Variant& value)=0;
+        virtual bool getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues)=0;
 
     public:
         // slot

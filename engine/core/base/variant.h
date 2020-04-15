@@ -140,6 +140,7 @@ namespace Echo
             mutable Signal* m_signal;
 		};
 	};
+	typedef vector<Variant>::type VariantArray;
     
     template<typename T> INLINE T variant_cast(const Variant& variant)
     {
