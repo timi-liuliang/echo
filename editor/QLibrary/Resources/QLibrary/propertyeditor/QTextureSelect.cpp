@@ -15,7 +15,7 @@ namespace QT_UI
 
 	void QTextureSelect::OnSelectTexture()
 	{
-        Echo::String qFileName = Studio::ResChooseDialog::getSelectingFile(nullptr, ".png", "", "");
+        Echo::String qFileName = Studio::ResChooseDialog::getSelectingFile(nullptr, ".png|*.atla", "", "");
         if (!qFileName.empty())
         {
 			setTexture(qFileName);

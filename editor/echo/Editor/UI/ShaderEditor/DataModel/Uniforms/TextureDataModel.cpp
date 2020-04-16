@@ -145,7 +145,7 @@ namespace DataFlowProgramming
 		if (m_isParameter)
 		{
             uniformNames.push_back("Uniforms." + getVariableName());
-            uniformValues.push_back(Echo::ResourcePath(m_textureSelect->getTexture(), ".png"));
+            uniformValues.push_back(Echo::ResourcePath(m_textureSelect->getTexture(), m_isAtla ? ".png|.atla" : ".png"));
 
             if (m_isAtla)
             {
