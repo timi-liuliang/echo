@@ -1,5 +1,6 @@
 #include "shader_editor_module.h"
 #include "shader_uniform_config.h"
+#include "shader_uniform_texture_config.h"
 
 namespace Echo
 {
@@ -28,5 +29,6 @@ namespace Echo
     void ShaderEditorModule::registerTypes()
     {
 		Class::registerType<ShaderUniformConfig>();
+		Class::registerType<ShaderUniformTextureConfig>();
     }
 }

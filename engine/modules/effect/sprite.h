@@ -27,10 +27,6 @@ namespace Echo
 		Sprite();
 		virtual ~Sprite();
 
-		// texture res path
-		void setTextureRes(const ResourcePath& path);
-		const ResourcePath& getTextureRes() { return m_textureRes; }
-
 		// width
 		i32 getWidth() const { return m_width; }
 		void setWidth(i32 width);
@@ -39,9 +35,13 @@ namespace Echo
 		i32 getHeight() const { return m_height; }
 		void setHeight(i32 height);
 
+		// material
+		Material* getMaterial() const { return m_material; }
+		void setMaterial(Object* material);
+
 	protected:
 		// build drawable
-		void buildMaterial();
+		void buildRenderable();
 
 		// update
 		virtual void update_self() override;
@@ -49,17 +49,12 @@ namespace Echo
 		// update vertex buffer
 		void updateMeshBuffer();
 
-		// clear
-		void clear();
-
 	private:
-		ResourcePath			m_textureRes = ResourcePath("", ".png");
-		Mesh*					m_mesh = nullptr;			// Geometry Data for render
-        ShaderProgramPtr        m_shader;
-		MaterialPtr				m_material;		            // Material Instance
-		Renderable*				m_renderable = nullptr;
-		Matrix4					m_matWVP;
+		bool                    m_isRenderableDirty = true;
 		i32						m_width = 0;
 		i32						m_height = 0;
+		Mesh*					m_mesh = nullptr;			// Geometry Data for render
+		MaterialPtr				m_material;		            // Material Instance
+		Renderable*				m_renderable = nullptr;
 	};
 }

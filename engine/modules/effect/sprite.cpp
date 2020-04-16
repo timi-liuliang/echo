@@ -14,30 +14,23 @@ namespace Echo
 
 	Sprite::~Sprite()
 	{
-		clear();
+		EchoSafeRelease(m_renderable);
+		EchoSafeDelete(m_mesh, Mesh);
 	}
 
 	void Sprite::bindMethods()
 	{
-		CLASS_BIND_METHOD(Sprite, getTextureRes,	DEF_METHOD("getTextureRes"));
-		CLASS_BIND_METHOD(Sprite, setTextureRes,	DEF_METHOD("setTextureRes"));
 		CLASS_BIND_METHOD(Sprite, getWidth,		    DEF_METHOD("getWidth"));
 		CLASS_BIND_METHOD(Sprite, setWidth,		    DEF_METHOD("setWidth"));
 		CLASS_BIND_METHOD(Sprite, getHeight,		DEF_METHOD("getHeight"));
 		CLASS_BIND_METHOD(Sprite, setHeight,		DEF_METHOD("setHeight"));
+		CLASS_BIND_METHOD(Sprite, getMaterial,		DEF_METHOD("getMaterial"));
+		CLASS_BIND_METHOD(Sprite, setMaterial,		DEF_METHOD("setMaterial"));
 
 		CLASS_REGISTER_PROPERTY(Sprite, "Width", Variant::Type::Int, "getWidth", "setWidth");
 		CLASS_REGISTER_PROPERTY(Sprite, "Height", Variant::Type::Int, "getHeight", "setHeight");
-		CLASS_REGISTER_PROPERTY(Sprite, "Texture", Variant::Type::ResourcePath, "getTextureRes", "setTextureRes");
-	}
-
-	void Sprite::setTextureRes(const ResourcePath& path)
-	{
-        if(!path.isEmpty())
-        {
-            if (m_textureRes.setPath(path.getPath()))
-                buildMaterial();
-        }
+		CLASS_REGISTER_PROPERTY(Sprite, "Material", Variant::Type::Object, "getMaterial", "setMaterial");
+		CLASS_REGISTER_PROPERTY_HINT(Sprite, "Material", PropertyHintType::ResourceType, "Material");
 	}
 
 	void Sprite::setWidth(i32 width) 
@@ -45,8 +38,7 @@ namespace Echo
 		if (m_width != width)
 		{
 			m_width = width;
-
-			updateMeshBuffer();
+			m_isRenderableDirty = true;
 		}
 	}
 
@@ -55,35 +47,30 @@ namespace Echo
 		if (m_height != height)
 		{
 			m_height = height;
-
-			updateMeshBuffer();
+			m_isRenderableDirty = true;
 		}
 	}
 
-	void Sprite::buildMaterial()
+	void Sprite::setMaterial(Object* material)
 	{
-		if (!m_textureRes.getPath().empty())
+		m_material = (Material*)material;
+
+		m_isRenderableDirty = true;
+	}
+
+	void Sprite::buildRenderable()
+	{
+		if (m_isRenderableDirty && m_material)
 		{
-            if(!m_material)
-            {
-                // default shader
-                StringArray macros;
-                m_shader = ShaderProgram::getDefault2D(macros);
+			EchoSafeRelease(m_renderable);
 
-                // material
-                m_material = ECHO_CREATE_RES(Material);
-                m_material->setShaderPath(m_shader->getPath());
-            }
+			// mesh
+			updateMeshBuffer();
 
-			m_material->getUniform("u_BaseColorSampler")->setTexture(m_textureRes.getPath());
+			// create render able
+			m_renderable = Renderable::create(m_mesh, m_material, this);
 
-            // update width and height
-            //Texture* texture = m_material->getTexture(0);
-            //if (texture)
-            //{
-            //    if(!m_width) setWidth( texture->getWidth());
-            //    if(!m_height) setHeight( texture->getHeight());
-            //}
+			m_isRenderableDirty = false;
 		}
 	}
 
@@ -91,15 +78,9 @@ namespace Echo
 	{
 		if (isNeedRender())
 		{
-            if(!m_renderable)
-            {
-                if(m_mesh && m_material)
-                    m_renderable = Renderable::create(m_mesh, m_material, this);
-            }
-            
+			buildRenderable();
 			if (m_renderable)
 			{
-				m_matWVP = getWorldMatrix() * NodeTree::instance()->get2dCamera()->getViewProjMatrix();
 				m_renderable->submitToRenderQueue();
 			}
 		}
@@ -137,11 +118,5 @@ namespace Echo
 
 			m_localAABB = m_mesh->getLocalBox();
         }
-	}
-
-	void Sprite::clear()
-	{
-        EchoSafeRelease(m_renderable);
-        EchoSafeDelete(m_mesh, Mesh);
 	}
 }

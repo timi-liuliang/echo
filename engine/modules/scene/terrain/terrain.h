@@ -62,6 +62,7 @@ namespace Echo
     protected:
         // build drawable
         void buildRenderable();
+        void clearRenderable();
         
         // update
         virtual void update_self() override;
@@ -74,7 +75,6 @@ namespace Echo
         
         // clear
         void clear();
-        void clearRenderable();
         
     private:
         bool                    m_isRenderableDirty = true;
