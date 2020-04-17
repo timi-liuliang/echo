@@ -30,7 +30,7 @@ namespace Echo
 		const ResourcePath& getTextureRes() { return m_textureRes; }
 
 		// texture
-		const TexturePtr& getTexture() { return m_texture; }
+		TexturePtr& getTexture() { return m_texture; }
 
 		// add
 		void addAtla(const String& name, const Vector4& viewPort);

@@ -6,12 +6,12 @@
 namespace Echo
 {
 #ifdef ECHO_EDITOR_MODE
-    class TextureAtlasEditor : public ObjectEditor
+    class TextureAtlaEditor : public ObjectEditor
     {
     public:
-        TextureAtlasEditor(Object* object);
-        virtual ~TextureAtlasEditor();
-
+        TextureAtlaEditor(Object* object);
+        virtual ~TextureAtlaEditor();
+       
         // get thumbnail
         virtual ImagePtr getThumbnail() const;
 
@@ -22,7 +22,6 @@ namespace Echo
         void editor_update_self();
         
     private:
-        TextureAtlasPanel* m_panel = nullptr;
     };
     
 #endif

@@ -15,11 +15,6 @@ namespace Echo
     {
         EchoSafeDelete(m_panel, TextureAtlasPanel);
     }
-    
-    const char* TextureAtlasEditor::getEditorIcon() const
-    {
-        return "engine/core/render/base/editor/icon/texture_atlas.png";
-    }
 
     ImagePtr TextureAtlasEditor::getThumbnail() const
     {

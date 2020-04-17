@@ -16,7 +16,7 @@ namespace Echo
         virtual ~TextureAtla();
 
         // get texture
-        const TexturePtr& getTexture() { return m_owner->getTexture(); }
+        TexturePtr getTexture() { return m_owner ? m_owner->getTexture() : nullptr; }
 
         // view port
         Vector4 getViewport();

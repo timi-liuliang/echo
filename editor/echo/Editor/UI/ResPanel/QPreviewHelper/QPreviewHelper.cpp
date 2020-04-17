@@ -159,18 +159,18 @@ namespace QT_UI
         Echo::String fileExt = Echo::PathUtil::GetFileExt(fullPath, true);
         auto it = resIconMap.find(fileExt);
         if(it==resIconMap.end())
-        {
+		{
 			Echo::ImagePtr icon;
-			const Echo::Res::ResFun* resFun = Echo::Res::getResFunByExtension(fileExt);
-            if(resFun && resFun->m_cfun)
-            {
-                Echo::ResPtr res = Echo::Res::createByFileExtension(fileExt, true);
+			Echo::String resPath;
+			if (Echo::IO::instance()->convertFullPathToResPath(fullPath, resPath))
+			{
+				Echo::ResPtr res = Echo::Res::get(resPath);
 				if (res && res->getEditor())
 				{
 					icon = res->getEditor()->getThumbnail();
-				}       
-            }
-            
+				}
+			}
+     
             resIconMap[fileExt] = icon;
             return icon;
         }

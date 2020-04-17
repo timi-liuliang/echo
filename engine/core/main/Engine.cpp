@@ -8,6 +8,7 @@
 #include "engine/core/render/base/image/ImageCodecMgr.h"
 #include "engine/core/render/base/atla/TextureAtla.h"
 #include "engine/core/render/base/atla/TextureAtlas.h"
+#include "engine/core/render/base/editor/atlas/texture_atla_editor.h"
 #include "engine/core/render/base/editor/atlas/texture_atlas_editor.h"
 #include "engine/core/render/base/Viewport.h"
 #include "engine/core/render/base/Material.h"
@@ -157,6 +158,7 @@ namespace Echo
 		Class::registerType<RenderPipeline>();
         
 		REGISTER_OBJECT_EDITOR(ShaderProgram, ShaderEditor)
+		REGISTER_OBJECT_EDITOR(TextureAtla, TextureAtlaEditor)
 		REGISTER_OBJECT_EDITOR(TextureAtlas, TextureAtlasEditor)
 		REGISTER_OBJECT_EDITOR(RenderPipeline, RenderPipelineEditor)
 
