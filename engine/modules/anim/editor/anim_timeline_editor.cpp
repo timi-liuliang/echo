@@ -1,5 +1,6 @@
 #include "anim_timeline_editor.h"
 #include "engine/core/editor/editor.h"
+#include "engine/core/main/Engine.h"
 
 namespace Echo
 {
@@ -16,9 +17,9 @@ namespace Echo
 		EchoSafeDelete(m_timelinePanel, TimelinePanel);
 	}
 
-	const char* TimelineEditor::getEditorIcon() const
+	ImagePtr TimelineEditor::getThumbnail() const
 	{
-		return "engine/modules/anim/editor/icon/animtimeline.png";
+		return Image::loadFromFile(Engine::instance()->getRootPath() + "engine/modules/anim/editor/icon/animtimeline.png");
 	}
 
 	void TimelineEditor::onEditorSelectThisNode()

@@ -108,20 +108,24 @@ namespace Studio
 		nodeItem->setData( "node", Qt::UserRole);
 		if (!isNodeVirtual)
 		{
-			// iconpath
 			Echo::Node* node = (Echo::Node*)Echo::Class::create(nodeName);
 			node->setName(nodeName);
-			Echo::String iconPath = node->getEditor() ? node->getEditor()->getEditorIcon() : "";
+			Echo::ImagePtr thumbnail = node->getEditor() ? node->getEditor()->getThumbnail() : nullptr;
 			EchoSafeDelete(node, Node);
+			if (thumbnail)
+			{
+				QImage image(thumbnail->getData(), thumbnail->getWidth(), thumbnail->getHeight(), QImage::Format_RGBA8888);
+				nodeItem->setIcon(QIcon(QPixmap::fromImage(image)));
+			}
+			else
+			{
+				// get icon path by node name
+				Echo::String lowerCaseNodeName = nodeName;
+				Echo::StringUtil::LowerCase(lowerCaseNodeName);
+				Echo::String qIconPath = Echo::StringUtil::Format(":/icon/node/%s.png", lowerCaseNodeName.c_str());
 
-			Echo::String rootPath = AStudio::instance()->getRootPath();
-
-			// get icon path by node name
-			Echo::String lowerCaseNodeName = nodeName;
-			Echo::StringUtil::LowerCase(lowerCaseNodeName);
-			Echo::String qIconPath = Echo::StringUtil::Format(":/icon/node/%s.png", lowerCaseNodeName.c_str());
-
-			nodeItem->setIcon(QIcon(iconPath.empty() ? qIconPath.c_str() : (rootPath + iconPath).c_str()));
+				nodeItem->setIcon(QIcon(qIconPath.c_str()));
+			}
 		}
 
 		return nodeItem;

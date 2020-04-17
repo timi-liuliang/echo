@@ -294,9 +294,8 @@ namespace Studio
 		return PropertyChooseDialog::getSelectingProperty(nullptr, objectPtr);
 	}
 
-	// get node icon by class name
-	Echo::String AStudio::getNodeIcon( Echo::Node* node)
+	Echo::ImagePtr AStudio::getNodeIcon( Echo::Node* node)
 	{
-		return NodeTreePanel::getNodeIcon( node);
+		return nullptr;
 	}
 }

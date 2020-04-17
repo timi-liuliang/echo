@@ -20,10 +20,9 @@ namespace Echo
 		EchoSafeDelete(m_gizmo, Gizmos);
 	}
 
-	// get camera2d icon, used for editor
-	const char* Camera3DEditor::getEditorIcon() const
+	ImagePtr Camera3DEditor::getThumbnail() const
 	{
-		return "engine/modules/camera/editor/icon/camera3d.png";
+		return Image::loadFromFile(Engine::instance()->getRootPath() + "engine/modules/camera/editor/icon/camera3d.png");
 	}
 
 	void Camera3DEditor::editor_update_self()

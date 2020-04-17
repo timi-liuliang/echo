@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/core/base/echo_def.h"
+#include "engine/core/render/base/image/Image.h"
 #include "bottom_panel_tab.h"
 #include "qt/QWidgets.h"
 
@@ -39,7 +40,7 @@ namespace Echo
 
 	public:
 		// get node icon by class name
-		virtual Echo::String getNodeIcon(Node* node) = 0;
+		virtual Echo::ImagePtr getNodeIcon(Node* node) = 0;
         
     public:
         // new QCheckBox

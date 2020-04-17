@@ -13,7 +13,7 @@ namespace Echo
         virtual ~UiEventRegionRectEditor();
         
         // get camera2d icon, used for editor
-        const char* getEditorIcon() const override;
+        virtual ImagePtr getThumbnail() const override;
 
 		// on editor update this
 		virtual void editor_update_self() override;

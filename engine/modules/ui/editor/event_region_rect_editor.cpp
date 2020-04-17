@@ -19,10 +19,9 @@ namespace Echo
 		EchoSafeDelete(m_gizmo, Gizmos);
     }
     
-    // get camera2d icon, used for editor
-    const char* UiEventRegionRectEditor::getEditorIcon() const
+    ImagePtr UiEventRegionRectEditor::getThumbnail() const
     {
-        return "engine/modules/ui/editor/icon/event_region_rect.png";
+        return Image::loadFromFile(Engine::instance()->getRootPath() + "engine/modules/ui/editor/icon/event_region_rect.png");
     }
 
 	void UiEventRegionRectEditor::editor_update_self()

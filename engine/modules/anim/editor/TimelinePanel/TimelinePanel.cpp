@@ -270,7 +270,7 @@ namespace Echo
 						QTreeWidgetItem* objetcItem = EditorApi.qTreeWidgetItemNew();
 						EditorApi.qTreeWidgetItemSetText(objetcItem, 0, userData.m_path.c_str());
 						EditorApi.qTreeWidgetItemSetUserData(objetcItem, 0, "object");
-						EditorApi.qTreeWidgetItemSetIcon(objetcItem, 0, Editor::instance()->getNodeIcon(node).c_str());
+						//EditorApi.qTreeWidgetItemSetIcon(objetcItem, 0, Editor::instance()->getNodeIcon(node).c_str());
 						EditorApi.qTreeWidgetItemSetIcon(objetcItem, 1, "engine/modules/anim/editor/icon/add.png");
 						EditorApi.qTreeWidgetItemAddChild(rootItem, objetcItem);
 

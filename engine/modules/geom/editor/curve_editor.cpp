@@ -21,10 +21,9 @@ namespace Echo
 		EchoSafeDelete(m_gizmo, Gizmos);
 	}
 
-	// get camera2d icon, used for editor
-	const char* CurveEditor::getEditorIcon() const
+	ImagePtr CurveEditor::getThumbnail() const
 	{
-		return "engine/modules/geom/editor/icon/curve.png";
+		return Image::loadFromFile(Engine::instance()->getRootPath() + "engine/modules/geom/editor/icon/curve.png");
 	}
 
 	void CurveEditor::editor_update_self()

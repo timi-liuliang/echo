@@ -21,10 +21,9 @@ namespace Echo
 		EchoSafeDelete(m_gizmo, Gizmos);
 	}
 
-	// get camera2d icon, used for editor
-	const char* Camera2DEditor::getEditorIcon() const
+	ImagePtr Camera2DEditor::getThumbnail() const
 	{
-		return "engine/modules/camera/editor/icon/camera2d.png";
+		return Image::loadFromFile(Engine::instance()->getRootPath() + "engine/modules/camera/editor/icon/camera2d.png");
 	}
 
 	void Camera2DEditor::editor_update_self()

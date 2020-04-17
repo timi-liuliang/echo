@@ -11,7 +11,7 @@ namespace Echo
 		virtual ~TimelineEditor();
 
 		// get camera2d icon, used for editor
-		const char* getEditorIcon() const override;
+		virtual ImagePtr getThumbnail() const override;
 
 		// on editor select this node
 		virtual void onEditorSelectThisNode() override;

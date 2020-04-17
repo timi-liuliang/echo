@@ -152,7 +152,7 @@ namespace Studio
 
 		QTreeWidgetItem* nodeItem = new QTreeWidgetItem();
 		nodeItem->setText(0, nodeName.c_str());
-		nodeItem->setIcon(0, QIcon( getNodeIcon(node).c_str()));
+		nodeItem->setIcon(0, getNodeIcon(node));
 		nodeItem->setData(0, Qt::UserRole, QVariant(node->getId()));
 		nodeItem->setFlags( nodeItem->flags() | Qt::ItemIsEditable);
 		parent->insertChild(nodeIdx, nodeItem);
@@ -188,19 +188,25 @@ namespace Studio
 		}
 	}
 
-	Echo::String NodeTreePanel::getNodeIcon(Echo::Object* node)
+	QIcon NodeTreePanel::getNodeIcon(Echo::Object* node)
 	{
-		Echo::String iconPath = node->getEditor() ? node->getEditor()->getEditorIcon() : "";
+		Echo::ImagePtr thumbnail = node->getEditor() ? node->getEditor()->getThumbnail() : nullptr;
+		if (thumbnail)
+		{
+			QImage image(thumbnail->getData(), thumbnail->getWidth(), thumbnail->getHeight(), QImage::Format_RGBA8888);
+			return QIcon(QPixmap::fromImage(image));
+		}
+		else
+		{
+			Echo::String nodeClassName = node->getClassName();
 
-		Echo::String rootPath = AStudio::instance()->getRootPath();
-		Echo::String nodeClassName = node->getClassName();
+			// get icon path by node name
+			Echo::String lowerCaseNodeName = nodeClassName;
+			Echo::StringUtil::LowerCase(lowerCaseNodeName);
+			Echo::String qIconPath = Echo::StringUtil::Format(":/icon/node/%s.png", lowerCaseNodeName.c_str());
 
-		// get icon path by node name
-		Echo::String lowerCaseNodeName = nodeClassName;
-		Echo::StringUtil::LowerCase(lowerCaseNodeName);
-		Echo::String qIconPath = Echo::StringUtil::Format(":/icon/node/%s.png", lowerCaseNodeName.c_str());
-
-		return iconPath.empty() ? qIconPath.c_str() : (rootPath + iconPath).c_str();
+			return QIcon(qIconPath.c_str());
+		}
 	}
 
 	// get node in the item

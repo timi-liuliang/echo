@@ -12,12 +12,12 @@ namespace Echo
 		virtual ~CurveEditor();
 
 		// get camera2d icon, used for editor
-		const char* getEditorIcon() const override;
+		virtual ImagePtr getThumbnail() const override;
 
 		// on editor select this node
 		virtual void onEditorSelectThisNode() override { m_isSelect = true; }
 
-		// on editor unselect this node
+		// on editor unselected this node
 		virtual void onEditorUnSelectThisNode() override { m_isSelect = false; }
 
 		// on editor update this

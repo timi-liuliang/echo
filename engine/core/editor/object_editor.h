@@ -23,16 +23,13 @@ namespace Echo
 		/* editor update self*/
 		virtual void editor_update_self() {}
 
-		/* get node icon*/
-		virtual const char* getEditorIcon() const { return ""; }
-
 		// get thumbnail
 		virtual ImagePtr getThumbnail() const { return nullptr; }
 
-		/* on editor select this node*/
+		/* on editor selected this node*/
 		virtual void onEditorSelectThisNode() {}
 
-		// on editor unselect this node
+		// on editor unselected this node
 		virtual void onEditorUnSelectThisNode() {}
 
 		// object

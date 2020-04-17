@@ -100,15 +100,15 @@ namespace Studio
 
 	public:
 		// get node icon by class name
-		virtual Echo::String getNodeIcon(Echo::Node* node) override;
+		virtual Echo::ImagePtr getNodeIcon(Echo::Node* node) override;
 
 	private:
 		AStudio();
 
-		// 初始化日志系统
+		// init log system
 		bool initLogSystem();
 
-		// 缩略图是否存在
+		// is thumbnail exist
 		bool isThumbnailExists(const Echo::String& name);
 
 		bool replaceTraverseAllWidget(QWidget* parent, QWidget* from, QWidget* to);
