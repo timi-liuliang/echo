@@ -1,5 +1,6 @@
 #include "texture_atlas_editor.h"
 #include "engine/core/editor/editor.h"
+#include "engine/core/main/Engine.h"
 
 namespace Echo
 {
@@ -18,6 +19,11 @@ namespace Echo
     const char* TextureAtlasEditor::getEditorIcon() const
     {
         return "engine/core/render/base/editor/icon/texture_atlas.png";
+    }
+
+    ImagePtr TextureAtlasEditor::getThumbnail() const
+    {
+        return Image::loadFromFile(Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/texture_atlas.png");
     }
 
 	void TextureAtlasEditor::onEditorSelectThisNode()

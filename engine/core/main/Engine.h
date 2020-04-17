@@ -47,6 +47,10 @@ namespace Echo
 		// is inited
 		bool isInited() const { return m_isInited; }
 
+		// get root path
+		void setRootPath(const String& rootPath) { m_rootPath = rootPath; }
+		const String& getRootPath() { return m_rootPath; }
+
 		// res path
 		const String& getResPath() const;
 
@@ -79,6 +83,7 @@ namespace Echo
 
 	private:
 		Config				m_config;
+		String				m_rootPath;
 		String				m_resPath;
 		String				m_userPath;
 		bool				m_isInited;

@@ -15,6 +15,9 @@ namespace Echo
         // get icon, used for editor
         const char* getEditorIcon() const;
 
+        // get thumbnail
+        virtual ImagePtr getThumbnail() const;
+
 		// on editor select this node
 		virtual void onEditorSelectThisNode() override;
 

@@ -2,13 +2,14 @@
 
 #include "engine/core/util/Buffer.h"
 #include "engine/core/math/color.h"
+#include "engine/core/resource/ResRef.h"
 #include "PixelFormat.h"
 
 namespace Echo
 {
 	class DataStream;
 	class PixelBox;
-	class Image
+	class Image : public Refable
 	{
     public:
         static const ui32    MAX_MINMAPS = 16;
@@ -111,5 +112,6 @@ namespace Echo
 		ui32				m_size;
 		Byte*				m_data;
 	};
+	typedef ResRef<Image> ImagePtr;
 }
 

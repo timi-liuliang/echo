@@ -219,6 +219,8 @@ namespace Studio
 #else
         m_rootPath = m_appPath + "../../../../";
 #endif
+
+		Echo::Engine::instance()->setRootPath(m_rootPath);
 	}
 
 	bool AStudio::deleteResource(const char* res)

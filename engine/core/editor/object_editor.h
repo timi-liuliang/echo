@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/core/base/echo_def.h"
+#include "engine/core/render/base/image/Image.h"
 
 #ifdef ECHO_EDITOR_MODE
 namespace Echo
@@ -24,6 +25,9 @@ namespace Echo
 
 		/* get node icon*/
 		virtual const char* getEditorIcon() const { return ""; }
+
+		// get thumbnail
+		virtual ImagePtr getThumbnail() const { return nullptr; }
 
 		/* on editor select this node*/
 		virtual void onEditorSelectThisNode() {}

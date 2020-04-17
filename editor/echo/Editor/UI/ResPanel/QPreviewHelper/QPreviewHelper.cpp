@@ -152,40 +152,42 @@ namespace QT_UI
 		item->setToolTip(tips.c_str());	
 	}
 
-    static Echo::String getResIcon(const char* fullPath/*Echo::Object* node*/)
+    static Echo::ImagePtr getResIcon(const char* fullPath/*Echo::Object* node*/)
     {
-        static std::map<Echo::String, Echo::String> resIconMap;
+        static std::map<Echo::String, Echo::ImagePtr> resIconMap;
         
         Echo::String fileExt = Echo::PathUtil::GetFileExt(fullPath, true);
         auto it = resIconMap.find(fileExt);
         if(it==resIconMap.end())
         {
-            Echo::String iconPath;
-            const Echo::Res::ResFun* resFun = Echo::Res::getResFunByExtension(fileExt);
+			Echo::ImagePtr icon;
+			const Echo::Res::ResFun* resFun = Echo::Res::getResFunByExtension(fileExt);
             if(resFun && resFun->m_cfun)
             {
                 Echo::ResPtr res = Echo::Res::createByFileExtension(fileExt, true);
-                iconPath = res && res->getEditor() ? res->getEditor()->getEditorIcon() : "";
-                if(!iconPath.empty())
-                    iconPath = Studio::AStudio::instance()->getRootPath() + iconPath;
+				if (res && res->getEditor())
+				{
+					icon = res->getEditor()->getThumbnail();
+				}       
             }
             
-            resIconMap[fileExt] = iconPath;
-            return iconPath;
+            resIconMap[fileExt] = icon;
+            return icon;
         }
         else
         {
             return it->second;
         }
-
-        return "";
     }
 
 	QIcon QPreviewHelper::getFileIcon(const char* fullPath)
 	{
-        Echo::String resIcon = getResIcon(fullPath);
-        if(!resIcon.empty())
-            return QIcon(resIcon.c_str());
+        Echo::ImagePtr resIcon = getResIcon(fullPath);
+		if (resIcon)
+		{	
+			QImage image(resIcon->getData(), resIcon->getWidth(), resIcon->getHeight(), QImage::Format::Format_RGBA8888);
+			return QIcon(QPixmap::fromImage(image));
+		}
         
 		Echo::String fileExt = Echo::PathUtil::GetFileExt(fullPath, true);
 		if (Echo::StringUtil::Equal(fileExt, ".png", false))
