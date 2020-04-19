@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PixelUtil.h"
+
 namespace Echo
 {
 	// variable name hints:

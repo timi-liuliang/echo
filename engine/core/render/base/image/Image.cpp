@@ -329,10 +329,32 @@ namespace Echo
 		// Advance pointer by number of full faces, plus mip offset into
 		offset += face * fullFaceSize;
 		offset += finalFaceSize;
+
 		// Return subface as pixelbox
 		PixelBox src(finalWidth, finalHeight, finalDepth, m_format, offset);
 
 		return src;
+	}
+
+	Image* Image::getAtla(ui32 face, ui32 mipmap, ui32 left, ui32 top, ui32 width, ui32 height)
+	{
+		PixelBox faceMipMapBox = getPixelBox(face, mipmap);
+
+		vector<Byte>::type pixelDatas(width * height * m_pixelSize);
+		for (i32 w = 0; w < width; w++)
+		{
+			for (i32 h = 0; h < height; h++)
+			{
+				for (i32 i = 0; i < m_pixelSize; i++)
+				{
+					i32 dest = (h * width + w) * m_pixelSize + i;
+					i32 source = ((h + top) * m_width + w + left) * m_pixelSize + i;
+					pixelDatas[dest] = m_data[source];
+				}
+			}
+		}
+
+		return EchoNew(Image(pixelDatas.data(), width, height, 1, m_format));
 	}
 
 	Color Image::getColor(int x, int y, int z) const

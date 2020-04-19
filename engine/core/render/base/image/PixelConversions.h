@@ -1,6 +1,7 @@
 #pragma once
 
 #include <engine/core/base/echo_def.h>
+#include "PixelUtil.h"
 
 namespace Echo
 {

@@ -3,7 +3,7 @@
 #include "engine/core/util/Buffer.h"
 #include "engine/core/math/color.h"
 #include "engine/core/resource/ResRef.h"
-#include "PixelFormat.h"
+#include "PixelUtil.h"
 
 namespace Echo
 {
@@ -70,7 +70,12 @@ namespace Echo
 		virtual ui32 getNumFaces() const;
 		virtual bool hasAlpha() const;
 		virtual Byte getBPP() const;
-		virtual PixelBox getPixelBox(ui32 face = 0, ui32 mipmap = 0) const;
+
+	public:
+		// get pixel box
+		PixelBox getPixelBox(ui32 face = 0, ui32 mipmap = 0) const;
+
+		// all data
 		virtual Byte* getData() const;
 
 		// Get color value from a certain location in the image. The z coordinate is
@@ -99,6 +104,10 @@ namespace Echo
 		@note	dst and src can point to the same PixelBox object without any problem
 		*/
 		static bool	Scale(const PixelBox &src, const PixelBox &dst, ImageFilter filter = IMGFILTER_BILINEAR);
+
+	public:
+		// Get sub atla
+		Image* getAtla(ui32 face, ui32 mipmap, ui32 left, ui32 top, ui32 width, ui32 height);
 
 	protected:
 		String				m_filePath;

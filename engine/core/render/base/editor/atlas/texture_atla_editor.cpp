@@ -21,7 +21,13 @@ namespace Echo
         TextureAtla* atla = ECHO_DOWN_CAST<TextureAtla*>(m_object);
         if (atla && atla->getTexture())
         {
-            return Image::loadFromFile(atla->getTexture()->getPath());
+            ImagePtr image = Image::loadFromFile(atla->getTexture()->getPath());
+            i32 left = atla->getViewport().x;
+            i32 top = atla->getViewport().y;
+            i32 width = atla->getViewport().z;
+            i32 height = atla->getViewport().w;
+
+            return nullptr;// image->getAtla(0, 0, left, top, width, height);
         }
 
         return nullptr;
