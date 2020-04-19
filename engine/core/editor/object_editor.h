@@ -23,6 +23,9 @@ namespace Echo
 		/* editor update self*/
 		virtual void editor_update_self() {}
 
+		// is thumbnail static (every instance has same thumbnail)
+		virtual bool isThumbnailStatic() const { return true; }
+
 		// get thumbnail
 		virtual ImagePtr getThumbnail() const { return nullptr; }
 

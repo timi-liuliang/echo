@@ -7,6 +7,8 @@ namespace Echo
 	class Refable
 	{
 	public:
+		virtual ~Refable() {}
+
 		// add ref count
 		void addRefCount() { m_refCount++; }
 

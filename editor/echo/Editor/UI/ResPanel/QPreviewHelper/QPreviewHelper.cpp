@@ -168,10 +168,12 @@ namespace QT_UI
 				if (res && res->getEditor())
 				{
 					icon = res->getEditor()->getThumbnail();
+
+					if(res->getEditor()->isThumbnailStatic())
+						resIconMap[fileExt] = icon;
 				}
 			}
      
-            resIconMap[fileExt] = icon;
             return icon;
         }
         else

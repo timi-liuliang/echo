@@ -26,7 +26,7 @@ namespace Echo
 
 			// get texture path
 			virtual Texture* getTexture() { return nullptr; }
-			virtual const ResourcePath& getTexturePath() { return StringUtil::BLANK; }
+			virtual ResourcePath getTexturePath() { return StringUtil::BLANK; }
 
 			// texture
 			virtual Texture* setTexture(const String& uri) { return nullptr; }
@@ -63,7 +63,7 @@ namespace Echo
 
 			// get texture path
 			virtual Texture* getTexture() override;
-			virtual const ResourcePath& getTexturePath() override;
+			virtual ResourcePath getTexturePath() override;
 
 			// texture
 			virtual Texture* setTexture(const String& uri) override;

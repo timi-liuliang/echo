@@ -42,7 +42,7 @@ namespace Echo
 		m_uniform = uniform;
 	}
 
-	const ResourcePath& Material::UniformTextureValue::getTexturePath()
+	ResourcePath Material::UniformTextureValue::getTexturePath()
 	{ 
 		return m_uri.getPath().empty() ? m_uniform->getTextureDefault() : m_uri; 
 	}
@@ -51,7 +51,7 @@ namespace Echo
 	{
 		if (!m_texture)
 		{
-			const ResourcePath& path = m_uri.isEmpty() ? m_uniform->getTextureDefault() : m_uri;
+			ResourcePath path = m_uri.isEmpty() ? m_uniform->getTextureDefault() : m_uri;
 			if (Echo::PathUtil::GetFileExt(path.getPath(), false) == "atla")
 			{
 				m_atla = (TextureAtla*)Res::get(path);

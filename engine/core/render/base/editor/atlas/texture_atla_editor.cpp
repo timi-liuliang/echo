@@ -27,7 +27,7 @@ namespace Echo
             i32 width = atla->getViewport().z;
             i32 height = atla->getViewport().w;
 
-            return nullptr;// image->getAtla(0, 0, left, top, width, height);
+            return image->getAtla(0, 0, left, top, width, height);
         }
 
         return nullptr;

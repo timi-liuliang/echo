@@ -11,6 +11,9 @@ namespace Echo
     public:
         TextureAtlaEditor(Object* object);
         virtual ~TextureAtlaEditor();
+
+		// is thumbnail static (every instance has same thumbnail)
+		virtual bool isThumbnailStatic() const { return false; }
        
         // get thumbnail
         virtual ImagePtr getThumbnail() const;
