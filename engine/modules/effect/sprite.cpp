@@ -60,9 +60,18 @@ namespace Echo
 
 	void Sprite::buildRenderable()
 	{
-		if (m_isRenderableDirty && m_material)
+		if (m_isRenderableDirty)
 		{
 			EchoSafeRelease(m_renderable);
+
+			if (!m_material)
+			{
+				StringArray macros = { "ALPHA_ADJUST" };
+				ShaderProgramPtr shader = ShaderProgram::getDefault2D(macros);
+
+				m_material = ECHO_CREATE_RES(Material);
+				m_material->setShaderPath(shader->getPath());
+			}
 
 			// mesh
 			updateMeshBuffer();

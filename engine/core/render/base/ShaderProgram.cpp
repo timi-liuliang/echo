@@ -47,7 +47,7 @@ layout(binding = 0) uniform UBO
 } fs_ubo;
 
 // uniforms
-layout(binding = 3) uniform sampler2D u_BaseColorSampler;
+layout(binding = 3) uniform sampler2D BaseColor;
 
 // inputs
 layout(location = 0) in vec2  v_TexCoord;
@@ -57,7 +57,7 @@ layout(location = 0) out vec4 o_FragColor;
 
 void main(void)
 {
-    vec4 textureColor = texture(u_BaseColorSampler, v_TexCoord);
+    vec4 textureColor = texture(BaseColor, v_TexCoord);
     vec4 finalColor = textureColor;
 
 #ifdef ALPHA_ADJUST

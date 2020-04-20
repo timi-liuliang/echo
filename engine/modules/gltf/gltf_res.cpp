@@ -1083,7 +1083,7 @@ namespace Echo
 		if (baseColorTextureIdx != -1)
 		{
 			i32 imageIdx = m_textures[baseColorTextureIdx].m_source;
-			primitive.m_materialInst->getUniform("u_BaseColorSampler")->setTexture(m_images[imageIdx].m_uri);
+			primitive.m_materialInst->getUniform("BaseColor")->setTexture(m_images[imageIdx].m_uri);
 		}
 
 		// normal map

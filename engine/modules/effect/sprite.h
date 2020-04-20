@@ -51,8 +51,8 @@ namespace Echo
 
 	private:
 		bool                    m_isRenderableDirty = true;
-		i32						m_width = 0;
-		i32						m_height = 0;
+		i32						m_width = 64;
+		i32						m_height = 64;
 		Mesh*					m_mesh = nullptr;			// Geometry Data for render
 		MaterialPtr				m_material;		            // Material Instance
 		Renderable*				m_renderable = nullptr;

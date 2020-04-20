@@ -214,7 +214,7 @@ namespace Echo
 	{
 		if (m_textureRes.setPath(path.getPath()))
 		{
-			m_materialDefault->getUniform("u_BaseColorSampler")->setTexture(m_textureRes.getPath());
+			m_materialDefault->getUniform("BaseColor")->setTexture(m_textureRes.getPath());
 		}
 	}
 

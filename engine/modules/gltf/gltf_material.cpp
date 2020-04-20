@@ -113,7 +113,7 @@ uniform sampler2D   u_brdfLUT;
 #endif
 
 #ifdef HAS_BASECOLORMAP
-uniform sampler2D u_BaseColorSampler;
+uniform sampler2D BaseColor;
 #endif
 #ifdef HAS_NORMALMAP
 uniform sampler2D u_NormalSampler;
@@ -319,7 +319,7 @@ void main()
 
     // The albedo may be defined from a base texture or a flat color
 #ifdef HAS_BASECOLORMAP
-    vec4 baseColor = SRGBtoLINEAR(texture2D(u_BaseColorSampler, v_UV)) * u_BaseColorFactor;
+    vec4 baseColor = SRGBtoLINEAR(texture2D(BaseColor, v_UV)) * u_BaseColorFactor;
 #else
     vec4 baseColor = u_BaseColorFactor;
 #endif
