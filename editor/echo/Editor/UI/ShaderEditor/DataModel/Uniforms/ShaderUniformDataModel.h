@@ -53,7 +53,7 @@ namespace DataFlowProgramming
 
 	protected:
 		bool                        m_isParameter = false;
-		Echo::ShaderUniformConfig*  m_uniformConfig = nullptr;
+		Echo::ShaderUniform*        m_uniformConfig = nullptr;
 
 		QMenu*                      m_menu = nullptr;
 		QAction*                    m_setAsParameter = nullptr;

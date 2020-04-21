@@ -2,27 +2,27 @@
 
 namespace Echo
 {
-	ShaderUniformConfig::ShaderUniformConfig()
+	ShaderUniform::ShaderUniform()
 	{
 
 	}
 
-	ShaderUniformConfig::~ShaderUniformConfig()
+	ShaderUniform::~ShaderUniform()
 	{
 
 	}
 
-	void ShaderUniformConfig::bindMethods()
+	void ShaderUniform::bindMethods()
 	{
-		CLASS_BIND_METHOD(ShaderUniformConfig, getVariableName, DEF_METHOD("getVariableName"));
-		CLASS_BIND_METHOD(ShaderUniformConfig, setVariableName, DEF_METHOD("setVariableName"));
+		CLASS_BIND_METHOD(ShaderUniform, getVariableName, DEF_METHOD("getVariableName"));
+		CLASS_BIND_METHOD(ShaderUniform, setVariableName, DEF_METHOD("setVariableName"));
 
-		CLASS_REGISTER_PROPERTY(ShaderUniformConfig, "Name", Variant::Type::String, "getVariableName", "setVariableName");
+		CLASS_REGISTER_PROPERTY(ShaderUniform, "Name", Variant::Type::String, "getVariableName", "setVariableName");
 
-		CLASS_REGISTER_SIGNAL(ShaderUniformConfig, onVariableNameChanged);
+		CLASS_REGISTER_SIGNAL(ShaderUniform, onVariableNameChanged);
 	}
 
-	void ShaderUniformConfig::setVariableName(const String& variableName)
+	void ShaderUniform::setVariableName(const String& variableName)
 	{ 
 		m_variableName = variableName; 
 

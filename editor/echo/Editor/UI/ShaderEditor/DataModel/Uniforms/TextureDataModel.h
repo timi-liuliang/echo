@@ -6,6 +6,7 @@
 #include <iostream>
 #include "DataFloat.h"
 #include "ShaderUniformDataModel.h"
+#include "shader_uniform_texture_config.h"
 #include "QTextureSelect.h"
 
 using QtNodes::PortType;
@@ -67,7 +68,6 @@ namespace DataFlowProgramming
         void updateOutputDataVariableName();
 
     private:
-        bool                        m_isAtla = true;
         QT_UI::QTextureSelect*      m_textureSelect = nullptr;
     };
 }

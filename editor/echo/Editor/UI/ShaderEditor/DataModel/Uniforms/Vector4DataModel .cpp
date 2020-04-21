@@ -8,7 +8,7 @@ namespace DataFlowProgramming
     Vector4DataModel::Vector4DataModel()
         : ShaderUniformDataModel()
     {
-        m_uniformConfig = EchoNew(Echo::ShaderUniformConfig);
+        m_uniformConfig = EchoNew(Echo::ShaderUniform);
 
         m_vector4Editor = (new QT_UI::QVector4Editor(nullptr, "", nullptr));
         m_vector4Editor->setMaximumSize(QSize(m_vector4Editor->sizeHint().width() * 0.4f, m_vector4Editor->sizeHint().height()));

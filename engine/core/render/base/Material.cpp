@@ -44,7 +44,9 @@ namespace Echo
 
 	ResourcePath Material::UniformTextureValue::getTexturePath()
 	{ 
-		return m_uri.getPath().empty() ? m_uniform->getTextureDefault() : m_uri; 
+		String path = m_uri.getPath().empty() ? m_uniform->getTextureDefault().getPath() : m_uri.getPath();
+
+		return ResourcePath(path, m_uniform->getTextureDefault().getSupportExts().c_str());
 	}
 
 	Texture* Material::UniformTextureValue::getTexture()
@@ -258,17 +260,17 @@ namespace Echo
 			UniformValue* uniform = getUniform(ops[1]);
 			switch (uniform->m_uniform->m_type)
 			{
-			case ShaderParamType::SPT_FLOAT:	oVar = *(float*)(uniform->getValue()); break;
-			case ShaderParamType::SPT_VEC2:		oVar = *(Vector2*)(uniform->getValue()); break;
-			case ShaderParamType::SPT_VEC3:		oVar = *(Vector3*)(uniform->getValue()); break;
-			case ShaderParamType::SPT_VEC4:		oVar = *(Color*)(uniform->getValue()); break;
-			case ShaderParamType::SPT_TEXTURE : oVar = uniform->getTexturePath(); break;
-			default:							oVar = *(float*)(uniform->getValue()); break;
+			case ShaderParamType::SPT_FLOAT:	oVar = *(float*)(uniform->getValue()); return true;
+			case ShaderParamType::SPT_VEC2:		oVar = *(Vector2*)(uniform->getValue()); return true;
+			case ShaderParamType::SPT_VEC3:		oVar = *(Vector3*)(uniform->getValue()); return true;
+			case ShaderParamType::SPT_VEC4:		oVar = *(Color*)(uniform->getValue()); return true;
+			case ShaderParamType::SPT_TEXTURE : oVar = uniform->getTexturePath(); return true;
+			default:							oVar = *(float*)(uniform->getValue()); return true;
 			}
 		}
 		else if (ops[0] == "Macros")
 		{
-			oVar = isMacroUsed(ops[1]);
+			oVar = isMacroUsed(ops[1]);			return true;
 		}
 
 		return false; 
@@ -282,20 +284,20 @@ namespace Echo
 			ShaderProgram::UniformPtr uniform = getUniform(ops[1])->m_uniform;
 			switch (uniform->m_type)
 			{
-			case ShaderParamType::SPT_FLOAT:	oVar = *(float*)(uniform->getValueDefault().data()); break;
-			case ShaderParamType::SPT_VEC2:		oVar = *(Vector2*)(uniform->getValueDefault().data()); break;
-			case ShaderParamType::SPT_VEC3:		oVar = *(Vector3*)(uniform->getValueDefault().data()); break;
-			case ShaderParamType::SPT_VEC4:		oVar = *(Color*)(uniform->getValueDefault().data()); break;
-			case ShaderParamType::SPT_TEXTURE:  oVar = uniform->getTextureDefault(); break;
-			default:							oVar = *(float*)(uniform->getValueDefault().data()); break;
+			case ShaderParamType::SPT_FLOAT:	oVar = *(float*)(uniform->getValueDefault().data()); return true;
+			case ShaderParamType::SPT_VEC2:		oVar = *(Vector2*)(uniform->getValueDefault().data()); return true;
+			case ShaderParamType::SPT_VEC3:		oVar = *(Vector3*)(uniform->getValueDefault().data()); return true;
+			case ShaderParamType::SPT_VEC4:		oVar = *(Color*)(uniform->getValueDefault().data()); return true;
+			case ShaderParamType::SPT_TEXTURE:  oVar = uniform->getTextureDefault(); return true;
+			default:							oVar = *(float*)(uniform->getValueDefault().data()); return true;
 			}
 		}
 		else if (ops[0] == "Macros")
 		{
-			oVar = isMacroUsed(ops[1]);
+			oVar = isMacroUsed(ops[1]);			return true;
 		}
 
-		return true;
+		return false;
 	}
 
 	i32 Material::getPropertyFlag(const String& propertyName)

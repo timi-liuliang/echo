@@ -28,7 +28,7 @@ namespace Echo
 
     void ShaderEditorModule::registerTypes()
     {
-		Class::registerType<ShaderUniformConfig>();
-		Class::registerType<ShaderUniformTextureConfig>();
+		Class::registerType<ShaderUniform>();
+		Class::registerType<ShaderUniformTexture>();
     }
 }

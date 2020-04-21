@@ -11,27 +11,27 @@ namespace DataFlowProgramming
         : ShaderUniformDataModel()
     {
         m_isParameter = true;
-        m_uniformConfig = EchoNew(Echo::ShaderUniformTextureConfig);
+        m_uniformConfig = EchoNew(Echo::ShaderUniformTexture);
         m_uniformConfig->setVariableName(getDefaultVariableName());
 
         m_textureSelect = new QT_UI::QTextureSelect();
         m_textureSelect->setFixedSize(128, 128);
 
-       QObject::connect(m_textureSelect, SIGNAL(Signal_TextureChagned()), this, SLOT(onTextureEdited()));
+        QObject::connect(m_textureSelect, SIGNAL(Signal_TextureChagned()), this, SLOT(onTextureEdited()));
 
-	   m_inputDataTypes =
-	   {
-		   {"vec2", "UV"},
-	   };
+	    m_inputDataTypes =
+	    {
+		    {"vec2", "UV"},
+	    };
 
-	   m_inputs.resize(m_inputDataTypes.size());
+	    m_inputs.resize(m_inputDataTypes.size());
 
-		m_outputs.resize(5);
-		m_outputs[0] = std::make_shared<DataVector3>(this, "rgb");
-		m_outputs[1] = std::make_shared<DataFloat>(this, "r");
-		m_outputs[2] = std::make_shared<DataFloat>(this, "g");
-		m_outputs[3] = std::make_shared<DataFloat>(this, "b");
-		m_outputs[4] = std::make_shared<DataFloat>(this, "a");
+	    m_outputs.resize(5);
+	    m_outputs[0] = std::make_shared<DataVector3>(this, "rgb");
+	    m_outputs[1] = std::make_shared<DataFloat>(this, "r");
+	    m_outputs[2] = std::make_shared<DataFloat>(this, "g");
+	    m_outputs[3] = std::make_shared<DataFloat>(this, "b");
+	    m_outputs[4] = std::make_shared<DataFloat>(this, "a");
 
         updateOutputDataVariableName();
     }
@@ -43,6 +43,7 @@ namespace DataFlowProgramming
         ShaderUniformDataModel::saveUniformConfig(modelJson);
 
         modelJson["texture"] = m_textureSelect->getTexture().c_str();
+        modelJson["isAtla"] = Echo::StringUtil::ToString( ECHO_DOWN_CAST<Echo::ShaderUniformTexture*>(m_uniformConfig)->isAtla()).c_str();
 
         return modelJson;
     }
@@ -56,6 +57,13 @@ namespace DataFlowProgramming
         {
             Echo::String texturePath = v.toString().toStdString().c_str();
             m_textureSelect->setTexture(texturePath);
+        }
+
+        v = p["isAtla"];
+        if (!v.isUndefined())
+        {
+            Echo::String isAtlaStr = v.toString().toStdString().c_str();
+            ECHO_DOWN_CAST<Echo::ShaderUniformTexture*>(m_uniformConfig)->setAtla(Echo::StringUtil::ParseBool(isAtlaStr));
         }
     }
 
@@ -120,7 +128,7 @@ namespace DataFlowProgramming
 		compiler.addTextureUniform(getVariableName());
 
         Echo::String uvConvertCode;
-        if (m_isAtla)
+        if (ECHO_DOWN_CAST<Echo::ShaderUniformTexture*>(m_uniformConfig)->isAtla())
         {
             compiler.addUniform("vec4", Echo::StringUtil::Format("%sViewport", getVariableName().c_str()));
             uvConvertCode = Echo::StringUtil::Format(" * fs_ubo.%sViewport.zw + fs_ubo.%sViewport.xy", getVariableName().c_str(), getVariableName().c_str());
@@ -144,10 +152,12 @@ namespace DataFlowProgramming
 	{
 		if (m_isParameter)
 		{
-            uniformNames.push_back("Uniforms." + getVariableName());
-            uniformValues.push_back(Echo::ResourcePath(m_textureSelect->getTexture(), m_isAtla ? ".png|.atla" : ".png"));
+            bool isAtla = ECHO_DOWN_CAST<Echo::ShaderUniformTexture*>(m_uniformConfig)->isAtla();
 
-            if (m_isAtla)
+            uniformNames.push_back("Uniforms." + getVariableName());
+            uniformValues.push_back(Echo::ResourcePath(m_textureSelect->getTexture(), isAtla ? ".png|.atla" : ".png"));
+
+            if (ECHO_DOWN_CAST<Echo::ShaderUniformTexture*>(m_uniformConfig)->isAtla())
             {
 				uniformNames.push_back("Uniforms." + getVariableName() + "Viewport");
                 uniformValues.push_back(Echo::Color(0.f, 0.f, 1.f, 1.f));

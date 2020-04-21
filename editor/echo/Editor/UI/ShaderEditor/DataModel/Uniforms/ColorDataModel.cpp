@@ -21,7 +21,7 @@ namespace DataFlowProgramming
 		QObject::connect(m_setAsParameter, SIGNAL(triggered()), this, SLOT(onSetAsParameter()));
 		QObject::connect(m_setAsConstant, SIGNAL(triggered()), this, SLOT(onSetAsConstant()));
 
-        m_uniformConfig = EchoNew(Echo::ShaderUniformConfig);
+        m_uniformConfig = EchoNew(Echo::ShaderUniform);
         m_uniformConfig->onVariableNameChanged.connectClassMethod(this, Echo::createMethodBind(&ColorDataModel::onVariableNameChanged));
 
         updateOutputDataVariableName();

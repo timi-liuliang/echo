@@ -73,7 +73,7 @@ namespace Echo
             virtual vector<Byte>::type& getValueDefault() { static vector<Byte>::type empty; return empty; }
 
             // texture default
-            virtual void setTextureDefault(const String& path) {}
+            virtual void setTextureDefault(const ResourcePath& path) {}
             virtual const ResourcePath& getTextureDefault() { return ResourcePath::BLANK; }
         };
 
@@ -91,9 +91,9 @@ namespace Echo
         struct UniformTexture : public Uniform
         {
 			TextureType         m_type = TextureType::General;
-			ResourcePath		m_texturePathDefault = ResourcePath("", ".png|.atla");
+			ResourcePath		m_texturePathDefault = ResourcePath("", ".png");
 
-            virtual void setTextureDefault(const String& path) override;
+            virtual void setTextureDefault(const ResourcePath& path) override;
             virtual const ResourcePath& getTextureDefault() override;
         };
 

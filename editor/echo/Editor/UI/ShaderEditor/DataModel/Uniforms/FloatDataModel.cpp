@@ -9,7 +9,7 @@ namespace DataFlowProgramming
       : ShaderUniformDataModel()
       , m_lineEdit(new QLineEdit())
     {
-        m_uniformConfig = EchoNew(Echo::ShaderUniformConfig);
+        m_uniformConfig = EchoNew(Echo::ShaderUniform);
 
         m_lineEdit->setValidator(new QDoubleValidator());
         m_lineEdit->setMaximumSize(QSize(m_lineEdit->sizeHint().width() * 0.4f, m_lineEdit->sizeHint().height()));

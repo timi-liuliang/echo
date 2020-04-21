@@ -4,13 +4,13 @@
 
 namespace Echo
 {
-	class ShaderUniformConfig : public Echo::Object
+	class ShaderUniform : public Echo::Object
 	{
-		ECHO_CLASS(ShaderUniformConfig, Object)
+		ECHO_CLASS(ShaderUniform, Object)
 
 	public:
-		ShaderUniformConfig();
-		virtual ~ShaderUniformConfig();
+		ShaderUniform();
+		virtual ~ShaderUniform();
 
 		// variable name
 		const String& getVariableName() const { return m_variableName; }
