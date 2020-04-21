@@ -3,6 +3,7 @@
 #include <QHBoxLayout>
 #include <QLineEdit>
 #include <QToolButton>
+#include <QPushButton>
 #include <QWidget>
 #include <QPainter>
 #include <QMenu>
@@ -19,8 +20,8 @@ namespace QT_UI
 		QResEditor(class QPropertyModel* model, QString propertyName, const char* resType, QWidget* parent);
 
 		// Id
-		void SetId( QString text) { m_lineEdit->setText( text);  }
-		QString GetId() { return m_lineEdit->text(); }
+		void SetId( QString text) { m_id = Echo::StringUtil::ParseI32(text.toStdString().c_str());  }
+		QString GetId() { return Echo::StringUtil::ToString(m_id).c_str(); }
 
 		// MVC Paint
 		static bool ItemDelegatePaint(QPainter *painter, const QRect& rect, const Echo::String& val);
@@ -53,11 +54,11 @@ namespace QT_UI
         void onSaveRes();
 
 	private:
-		Echo::String	m_id;
+		Echo::i32		m_id;
 		Echo::String	m_resType;
 		Echo::String	m_exts;
 		QHBoxLayout*	m_horizonLayout;
-		QLineEdit*		m_lineEdit;
+		QPushButton*	m_displayButton;
 		QToolButton*	m_toolButton;
 		QPropertyModel* m_propertyModel;
 		QString			m_propertyName;

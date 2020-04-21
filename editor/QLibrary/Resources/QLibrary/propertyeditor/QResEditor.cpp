@@ -20,18 +20,19 @@ namespace QT_UI
 	{
 		m_exts = Echo::Res::getResFunByClassName(m_resType)->m_ext;
 
-		// ²¼¾Ö¿Ø¼þ
+		// root layout
 		m_horizonLayout = new QHBoxLayout( this);
 		m_horizonLayout->setSpacing( 0);
 		m_horizonLayout->setContentsMargins(0, 0, 0, 0);
 		m_horizonLayout->setObjectName( QString::fromUtf8("horizontalLayout"));
 
 		// LineEdit
-		m_lineEdit = new QLineEdit( this);
-		m_lineEdit->setReadOnly(true);
-		m_lineEdit->setObjectName( QString::fromUtf8("lineEdit"));
-		m_lineEdit->setContentsMargins(0, 0, 0, 0);
-		m_horizonLayout->addWidget( m_lineEdit);
+		m_displayButton = new QPushButton( this);
+		m_displayButton->setFlat(true);
+		m_displayButton->setText("");
+		m_displayButton->setObjectName( QString::fromUtf8("lineEdit"));
+		m_displayButton->setContentsMargins(0, 0, 0, 0);
+		m_horizonLayout->addWidget(m_displayButton);
 
 		// ToolButton
 		m_toolButton = new QToolButton( this);
@@ -43,8 +44,9 @@ namespace QT_UI
 		setFocusProxy( m_toolButton);
 
 		// connect signal and slot
-		QObject::connect( m_toolButton, SIGNAL(clicked()), this, SLOT(onShowMenu()));
-		QObject::connect(m_lineEdit, SIGNAL(returnPressed()), this, SLOT(onEditFinished()));
+		QObject::connect(m_displayButton, SIGNAL(clicked()), this, SLOT(onEdit()));
+		QObject::connect(m_displayButton, SIGNAL(returnPressed()), this, SLOT(onEditFinished()));
+		QObject::connect(m_toolButton, SIGNAL(clicked()), this, SLOT(onShowMenu()));
 
 		adjustHeightSize();
 	}
@@ -70,7 +72,7 @@ namespace QT_UI
 	{
 		if (isTextureRes())
 		{
-			m_lineEdit->setMinimumHeight(m_lineEdit->geometry().height()*1.6);
+			m_displayButton->setMinimumHeight(m_displayButton->geometry().height()*1.6);
 			m_toolButton->setMinimumHeight(m_toolButton->geometry().height() * 1.6);
 		}
 	}
@@ -89,7 +91,7 @@ namespace QT_UI
 
 	void QResEditor::onEditFinished()
 	{
-		m_propertyModel->setValue(m_propertyName, m_lineEdit->text().toStdString().c_str());
+		m_propertyModel->setValue(m_propertyName, Echo::StringUtil::ToString(m_id).c_str());
 	}
 
 	bool QResEditor::ItemDelegatePaint(QPainter *painter, const QRect& rect, const Echo::String& val)
@@ -171,7 +173,7 @@ namespace QT_UI
         Echo::Res* res = Echo::Res::createByFileExtension(m_exts.c_str(), true);
         if (res)
         {
-            m_lineEdit->setText(Echo::StringUtil::ToString(res->getId()).c_str());
+			m_id = res->getId();
             onEditFinished();
         }
     }
@@ -184,7 +186,7 @@ namespace QT_UI
 			Echo::Res* res = Echo::Res::get(qFileName);
 			if (res)
 			{
-				m_lineEdit->setText(Echo::StringUtil::ToString(res->getId()).c_str());
+				m_id = res->getId();
 				onEditFinished();
 			}
 		}
@@ -204,7 +206,7 @@ namespace QT_UI
 
 	void QResEditor::onClearRes()
 	{
-		m_lineEdit->setText(Echo::StringUtil::ToString(Echo::i32(-1)).c_str());
+		m_id = -1;
 		onEditFinished();
 	}
 
