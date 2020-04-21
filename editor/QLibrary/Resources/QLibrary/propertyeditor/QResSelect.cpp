@@ -113,15 +113,18 @@ namespace QT_UI
 		Echo::String path = val;
 		if (!path.empty())
 		{
-			Echo::String fullPath = Echo::IO::instance()->convertResPathToFullPath(path);
 			Echo::String ext = Echo::PathUtil::GetFileExt(path, true);
-			if (Echo::StringUtil::Equal(ext, ".png", false))
+			if (!ext.empty())
 			{
-				QPixmap pixmap(fullPath.c_str());
-				QRect tRect = QRect(rect.left() + 3, rect.top() + 2, rect.height() - 4, rect.height() - 4);
-				painter->drawPixmap(tRect, pixmap);
+				Echo::String fullPath = Echo::IO::instance()->convertResPathToFullPath(path);
+				if (Echo::StringUtil::Equal(ext, ".png", false))
+				{
+					QPixmap pixmap(fullPath.c_str());
+					QRect tRect = QRect(rect.left() + 3, rect.top() + 2, rect.height() - 4, rect.height() - 4);
+					painter->drawPixmap(tRect, pixmap);
 
-				return true;
+					return true;
+				}
 			}
 		}
 

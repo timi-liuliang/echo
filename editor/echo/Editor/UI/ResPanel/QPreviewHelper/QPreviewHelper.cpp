@@ -164,13 +164,17 @@ namespace QT_UI
 			Echo::String resPath;
 			if (Echo::IO::instance()->convertFullPathToResPath(fullPath, resPath))
 			{
-				Echo::ResPtr res = Echo::Res::get(resPath);
-				if (res && res->getEditor())
+				Echo::String extWithDot = Echo::PathUtil::GetFileExt(resPath, true);
+				if (Echo::Res::getResFunByExtension(extWithDot))
 				{
-					icon = res->getEditor()->getThumbnail();
+					Echo::ResPtr res = Echo::Res::get(resPath);
+					if (res && res->getEditor())
+					{
+						icon = res->getEditor()->getThumbnail();
 
-					if(res->getEditor()->isThumbnailStatic())
-						resIconMap[fileExt] = icon;
+						if (res->getEditor()->isThumbnailStatic())
+							resIconMap[fileExt] = icon;
+					}
 				}
 			}
      
