@@ -104,7 +104,7 @@ namespace Studio
 				{
 					Echo::ResPtr selectRes = Echo::Res::get(resPath);
 					m_previewHelper->clear();
-					m_previewHelper->setRes(selectRes, nullptr, true);
+					m_previewHelper->setRes(selectRes, m_supportExts.c_str(), true);
 				}
 			}
 			else
