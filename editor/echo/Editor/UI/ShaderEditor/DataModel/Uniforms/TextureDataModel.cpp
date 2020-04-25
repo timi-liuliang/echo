@@ -44,6 +44,7 @@ namespace DataFlowProgramming
 
         modelJson["texture"] = m_textureSelect->getTexture().c_str();
         modelJson["isAtla"] = Echo::StringUtil::ToString( ECHO_DOWN_CAST<Echo::ShaderUniformTexture*>(m_uniformConfig)->isAtla()).c_str();
+        modelJson["type"] = ECHO_DOWN_CAST<Echo::ShaderUniformTexture*>(m_uniformConfig)->getType().getValue().c_str();
 
         return modelJson;
     }
@@ -65,6 +66,13 @@ namespace DataFlowProgramming
             Echo::String isAtlaStr = v.toString().toStdString().c_str();
             ECHO_DOWN_CAST<Echo::ShaderUniformTexture*>(m_uniformConfig)->setAtla(Echo::StringUtil::ParseBool(isAtlaStr));
         }
+
+		v = p["type"];
+		if (!v.isUndefined())
+		{
+			Echo::String type = v.toString().toStdString().c_str();
+			ECHO_DOWN_CAST<Echo::ShaderUniformTexture*>(m_uniformConfig)->setType(type);
+		}
     }
 
     unsigned int TextureDataModel::nPorts(PortType portType) const
@@ -134,6 +142,12 @@ namespace DataFlowProgramming
             uvConvertCode = Echo::StringUtil::Format(" * fs_ubo.%sViewport.zw + fs_ubo.%sViewport.xy", getVariableName().c_str(), getVariableName().c_str());
         }
 
+		if (ECHO_DOWN_CAST<Echo::ShaderUniformTexture*>(m_uniformConfig)->isAtla())
+		{
+			compiler.addUniform("vec4", Echo::StringUtil::Format("%sViewport", getVariableName().c_str()));
+			uvConvertCode = Echo::StringUtil::Format(" * fs_ubo.%sViewport.zw + fs_ubo.%sViewport.xy", getVariableName().c_str(), getVariableName().c_str());
+		}
+
         if (m_inputs[0])
         {
             compiler.addCode(Echo::StringUtil::Format("\tvec4 %s_Color = texture( %s, %s %s);\n", getVariableName().c_str(), getVariableName().c_str(), dynamic_cast<ShaderData*>(m_inputs[0].get())->getVariableName().c_str(), uvConvertCode.c_str()));
@@ -143,7 +157,17 @@ namespace DataFlowProgramming
             compiler.addCode(Echo::StringUtil::Format("\tvec4 %s_Color = texture( %s, v_UV %s);\n", getVariableName().c_str(), getVariableName().c_str(), uvConvertCode.c_str()));
         }
 
-        compiler.addCode(Echo::StringUtil::Format("\t%s_Color.rgb = SRgbToLinear(%s_Color.rgb);\n", getVariableName().c_str(), getVariableName().c_str()));
+
+        if (ECHO_DOWN_CAST<Echo::ShaderUniformTexture*>(m_uniformConfig)->getType().getValue() == "General")
+        {
+            compiler.addCode(Echo::StringUtil::Format("\t%s_Color.rgb = SRgbToLinear(%s_Color.rgb);\n", getVariableName().c_str(), getVariableName().c_str()));
+        }
+        else
+        {
+            compiler.addMacro("ENABLE_VERTEX_NORMAL");
+
+            compiler.addCode(Echo::StringUtil::Format("\t%s_Color.rgb = _NormalMapFun(%s_Color.rgb);\n", getVariableName().c_str(), getVariableName().c_str()));
+        }
 
 		return true;
 	}

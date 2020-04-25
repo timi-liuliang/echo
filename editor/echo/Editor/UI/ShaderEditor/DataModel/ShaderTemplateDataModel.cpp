@@ -79,8 +79,9 @@ namespace DataFlowProgramming
                     compiler.addUniform("vec3", "u_CameraPosition");
 
                     compiler.addMacro("ENABLE_VERTEX_POSITION");
-					compiler.addMacro("ENABLE_VERTEX_NORMAL");
 					compiler.addMacro("ENABLE_LIGHTING_CALCULATION");
+
+                    compiler.addCode(Echo::StringUtil::Format("\tvec3 __Normal = %s;\n", dynamic_cast<ShaderData*>(m_inputs[i].get())->getVariableName().c_str()));
 				}
 
 				if (m_inputDataTypes[i].name == "Metallic")
