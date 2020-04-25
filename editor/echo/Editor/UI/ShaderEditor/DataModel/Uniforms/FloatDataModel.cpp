@@ -40,32 +40,12 @@ namespace DataFlowProgramming
         }
     }
 
-    unsigned int FloatDataModel::nPorts(PortType portType) const
-    {
-      switch (portType)
-      {
-        case PortType::In:      return 0;
-        case PortType::Out:     return m_outputs.size();
-        default:                return 0;
-      }
-    }
-
     void FloatDataModel::onTextEdited()
     {
         float number = Echo::StringUtil::ParseFloat(m_lineEdit->text().toStdString().c_str());
         m_lineEdit->setText(Echo::StringUtil::ToString(number).c_str());
 
         Q_EMIT dataUpdated(0);
-    }
-
-    NodeDataType FloatDataModel::dataType(PortType portType, PortIndex portIndex) const
-    {
-        return portType == PortType::Out ? m_outputs[portIndex]->type() : NodeDataType{ "unknown", "Unknown" };
-    }
-
-    std::shared_ptr<NodeData> FloatDataModel::outData(PortIndex portIndex)
-    {
-        return m_outputs[portIndex];
     }
 
     bool FloatDataModel::generateCode(ShaderCompiler& compiler)

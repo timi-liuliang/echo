@@ -41,29 +41,9 @@ namespace DataFlowProgramming
         }
     }
 
-    unsigned int Vector3DataModel::nPorts(PortType portType) const
-    {
-      switch (portType)
-      {
-      case PortType::In:  return m_inputs.size();
-      case PortType::Out: return m_outputs.size();
-      default:            return 0;
-      }
-    }
-
     void Vector3DataModel::onTextEdited()
     {
         Q_EMIT dataUpdated(0);
-    }
-
-    NodeDataType Vector3DataModel::dataType(PortType portType, PortIndex portIndex) const
-    {
-        return portType == PortType::Out ? m_outputs[portIndex]->type() : NodeDataType{ "invalid", "invalid" };
-    }
-
-    std::shared_ptr<NodeData> Vector3DataModel::outData(PortIndex portIndex)
-    {
-        return m_outputs[portIndex];
     }
 
 	bool Vector3DataModel::generateCode(ShaderCompiler& compiler)

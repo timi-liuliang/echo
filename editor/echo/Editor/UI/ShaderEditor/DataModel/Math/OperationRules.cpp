@@ -10,18 +10,15 @@ namespace DataFlowProgramming
 	OperationRules::OperationRules()
 	{
 		// addition
-		m_additionRules.push_back(OperationRule(true, "float", "float", "float"));
-		m_additionRules.push_back(OperationRule(true, "float", "vec2", "vec2"));
-		m_additionRules.push_back(OperationRule(true, "float", "vec3", "vec3"));
-		m_additionRules.push_back(OperationRule(true, "float", "vec4", "vec4"));
-		m_additionRules.push_back(OperationRule(true, "float", "color", "vec4"));
+		m_additionRules.push_back(OperationRule2_1(true, "float", "float", "float"));
+		m_additionRules.push_back(OperationRule2_1(true, "float", "vec2", "vec2"));
+		m_additionRules.push_back(OperationRule2_1(true, "float", "vec3", "vec3"));
+		m_additionRules.push_back(OperationRule2_1(true, "float", "vec4", "vec4"));
 
-		m_additionRules.push_back(OperationRule(true, "vec2", "vec2", "vec2"));
-		m_additionRules.push_back(OperationRule(true, "vec3", "vec3", "vec3"));
-		m_additionRules.push_back(OperationRule(true, "vec4", "vec4", "vec4"));
-		m_additionRules.push_back(OperationRule(true, "vec4", "color", "vec4"));
-
-		m_additionRules.push_back(OperationRule(true, "color", "color", "vec4"));
+		m_additionRules.push_back(OperationRule2_1(true, "vec2", "vec2", "vec2"));
+		m_additionRules.push_back(OperationRule2_1(true, "vec3", "vec3", "vec3"));
+		m_additionRules.push_back(OperationRule2_1(true, "vec4", "vec4", "vec4"));
+		m_additionRules.push_back(OperationRule2_1(true, "vec4", "color", "vec4"));
 
 		// subtraction
 		m_substractionRules = m_additionRules;
@@ -33,10 +30,10 @@ namespace DataFlowProgramming
 		m_divisionRules = m_additionRules;
 
 		// dot product
-		m_dotProductRules.push_back(OperationRule(true, "vec3", "vec3", "float"));
+		m_dotProductRules.push_back(OperationRule2_1(true, "vec3", "vec3", "float"));
 
 		// cross product
-		m_crossProductRules.push_back(OperationRule(true, "vec3", "vec3", "vec3"));
+		m_crossProductRules.push_back(OperationRule2_1(true, "vec3", "vec3", "vec3"));
 
 		// min rules
 		m_minRules = m_additionRules;
@@ -45,11 +42,17 @@ namespace DataFlowProgramming
 		m_maxRules = m_additionRules;
 
 		// pow rules
-		m_powRules.push_back(OperationRule(false, "float", "float", "float"));
-		m_powRules.push_back(OperationRule(false, "vec2", "vec2", "vec2"));
-		m_powRules.push_back(OperationRule(false, "vec3", "vec3", "vec3"));
-		m_powRules.push_back(OperationRule(false, "vec4", "vec4", "vec4"));
-		m_powRules.push_back(OperationRule(false, "color", "vec4", "vec4"));
+		m_powRules.push_back(OperationRule2_1(false, "float", "float", "float"));
+		m_powRules.push_back(OperationRule2_1(false, "vec2", "vec2", "vec2"));
+		m_powRules.push_back(OperationRule2_1(false, "vec3", "vec3", "vec3"));
+		m_powRules.push_back(OperationRule2_1(false, "vec4", "vec4", "vec4"));
+		m_powRules.push_back(OperationRule2_1(false, "color", "vec4", "vec4"));
+
+		// lerp rules
+		m_mixRules.push_back(OperationRule3_1("float", "float", "float", "float"));
+		m_mixRules.push_back(OperationRule3_1("vec2", "vec2", "float", "vec2"));
+		m_mixRules.push_back(OperationRule3_1("vec3", "vec3", "float", "vec3"));
+		m_mixRules.push_back(OperationRule3_1("vec4", "vec4", "float", "vec4"));
 	}
 
 	OperationRules::~OperationRules()
@@ -126,9 +129,16 @@ namespace DataFlowProgramming
 		return NewShaderData(outputType, dataModel);
 	}
 
-	Echo::String OperationRules::getOutput(const Echo::String& inputA, const Echo::String& inputB, const std::vector<OperationRule>& rules)
+	std::shared_ptr<ShaderData> OperationRules::NewMixOutput(const Echo::String& inputA, const Echo::String& inputB, const Echo::String& inputC, ShaderDataModel* dataModel)
 	{
-		for (const OperationRule& rule : rules)
+		Echo::String outputType = getOutput(inputA, inputB, inputC, m_mixRules);
+
+		return NewShaderData(outputType, dataModel);
+	}
+
+	Echo::String OperationRules::getOutput(const Echo::String& inputA, const Echo::String& inputB, const std::vector<OperationRule2_1>& rules)
+	{
+		for (const OperationRule2_1& rule : rules)
 		{
 			if (inputA == rule.m_inputA && inputB == rule.m_inputB)
 			{
@@ -141,6 +151,19 @@ namespace DataFlowProgramming
 				{
 					return rule.m_output;
 				}
+			}
+		}
+
+		return "invalid";
+	}
+
+	Echo::String OperationRules::getOutput(const Echo::String& inputA, const Echo::String& inputB, const Echo::String& inputC, const std::vector<OperationRule3_1>& rules)
+	{
+		for (const OperationRule3_1& rule : rules)
+		{
+			if (inputA == rule.m_inputA && inputB == rule.m_inputB && inputC == rule.m_inputC)
+			{
+				return rule.m_output;
 			}
 		}
 

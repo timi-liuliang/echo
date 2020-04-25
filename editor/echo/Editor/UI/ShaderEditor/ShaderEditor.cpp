@@ -28,6 +28,7 @@
 #include "DataModel/Math/Functions/CosDataModel.h"
 #include "DataModel/Math/Functions/DotProductDataModel.h"
 #include "DataModel/Math/Functions/CrossProductDataModel.h"
+#include "DataModel/Math/Functions/MixDataModel.h"
 #include "Data/DataFloat.h"
 #include "Data/DataVector2.h"
 #include "Data/DataVector3.h"
@@ -68,6 +69,9 @@ namespace Studio
         ret->registerModel<SubstractionDataModel>("Math");
         ret->registerModel<MultiplicationDataModel>("Math");
         ret->registerModel<DivisionDataModel>("Math");
+
+		// lerp
+		ret->registerModel<MixDataModel>("Math");
 
         // Math.Utils
         ret->registerModel<SplitDataModel>("Math.Utils");
