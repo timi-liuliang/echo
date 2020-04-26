@@ -78,7 +78,7 @@ namespace Echo
 		m_nodes[nodeId].child1 = NullNode;
 		m_nodes[nodeId].child2 = NullNode;
 		m_nodes[nodeId].height = 0;
-		m_nodes[nodeId].userData = NULL;
+		m_nodes[nodeId].userData = 0;
 		++m_nodeCount;
 		return nodeId;
 	}
@@ -97,7 +97,7 @@ namespace Echo
 	// Create a proxy in the tree as a leaf node. We return the index
 	// of the node instead of a pointer so that we can grow
 	// the node pool.
-	i32 Bvh::createProxy(const AABB& aabb, const any& userData)
+	i32 Bvh::createProxy(const AABB& aabb, const i32 userData)
 	{
 		i32 proxyId = allocateNode();
 
@@ -265,7 +265,7 @@ namespace Echo
 		i32 oldParent = m_nodes[sibling].parent;
 		i32 newParent = allocateNode();
 		m_nodes[newParent].parent = oldParent;
-		m_nodes[newParent].userData = NULL;
+		m_nodes[newParent].userData = 0;
 		m_nodes[newParent].aabb.unionBox(leafAABB, m_nodes[sibling].aabb);
 		m_nodes[newParent].height = m_nodes[sibling].height + 1;
 
@@ -779,7 +779,7 @@ namespace Echo
 		}
 	}
 
-	const any& Bvh::getUserData(i32 proxyId) const
+	const i32 Bvh::getUserData(i32 proxyId) const
 	{
 		EchoAssert(0 <= proxyId && proxyId < m_nodeCapacity);
 		return m_nodes[proxyId].userData;

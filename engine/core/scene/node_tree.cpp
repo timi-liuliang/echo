@@ -4,10 +4,6 @@
 namespace Echo
 {
 	NodeTree::NodeTree()
-		: m_3dCamera(nullptr)
-		, m_2dCamera(nullptr)
-		, m_uiCamera(nullptr)
-		, m_shadowCamera(nullptr)
 	{
         m_invisibleRoot = EchoNew(Node);
 	}
@@ -28,7 +24,6 @@ namespace Echo
 		return inst;
 	}
 
-    // root node
     Node* NodeTree::getInvisibleRootNode()
     {
         return m_invisibleRoot;

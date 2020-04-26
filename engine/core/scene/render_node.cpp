@@ -63,14 +63,14 @@ namespace Echo
 
 		if (m_bvhNodeId == -1)
 		{
-			//AABB worldAABB = getLocalAABB();
-			//if (worldAABB.isValid())
-			//{
-			//	worldAABB = worldAABB.transform(getWorldMatrix());
-			//	Bvh& bvh = m_renderType.getIdx() == 1 ? NodeTree::instance()->get3dBvh() : NodeTree::instance()->get2dBvh();
-			//	
-			//	m_bvhNodeId = bvh.createProxy(worldAABB, this);
-			//}
+			AABB worldAABB = getLocalAABB();
+			if (worldAABB.isValid())
+			{
+				worldAABB = worldAABB.transform(getWorldMatrix());
+				Bvh& bvh = m_renderType.getIdx() == 1 ? NodeTree::instance()->get3dBvh() : NodeTree::instance()->get2dBvh();
+				
+				m_bvhNodeId = bvh.createProxy(worldAABB, getId());
+			}
 		}
 	}
 

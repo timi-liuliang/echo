@@ -52,10 +52,10 @@ namespace Echo
 		NodeTree();
 
 	protected:
-		Camera*			    m_3dCamera;
-		Camera*				m_2dCamera;
-		Camera*				m_uiCamera;
-		CameraShadow*		m_shadowCamera;
+		Camera*			    m_3dCamera = nullptr;
+		Camera*				m_2dCamera = nullptr;
+		Camera*				m_uiCamera = nullptr;
+		CameraShadow*		m_shadowCamera = nullptr;
 		Bvh					m_2dBvh;
 		Bvh					m_3dBvh;
         Node*				m_invisibleRoot = nullptr;	// invisible root node

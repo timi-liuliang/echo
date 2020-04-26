@@ -51,6 +51,12 @@ namespace Echo
             return !content;
         }
 
+        // clear
+        void clear()
+        {
+            EchoSafeDelete(content, placeholder);
+        }
+
 		// get type
         const std::type_info & type() const
         {
@@ -97,7 +103,7 @@ namespace Echo
         };
 
 	private:
-        placeholder* content;
+        placeholder* content = nullptr;
     };
 
 	// bad cast

@@ -29,7 +29,7 @@ namespace Echo
 		/// Enlarged AABB
 		AABB aabb;
 
-		any userData;
+		i32 userData;
 
 		union
 		{
@@ -51,7 +51,7 @@ namespace Echo
 		~Bvh();
 
 		// proxy
-		i32 createProxy(const AABB& aabb, const any& userData);
+		i32 createProxy(const AABB& aabb, const i32 userData);
 		void destroyProxy(i32 proxyId);
 
 		// Move a proxy with a swepted AABB. If the proxy has moved outside of its fattened AABB,
@@ -62,7 +62,7 @@ namespace Echo
 
 		// Get proxy user data.
 		// @return the proxy user data or 0 if the id is invalid.
-		const any& getUserData(i32 proxyId) const;
+		const i32 getUserData(i32 proxyId) const;
 
 		// Get the fat AABB for a proxy.
 		const AABB& getFatAABB(i32 proxyId) const;
