@@ -43,8 +43,8 @@ namespace Echo
 	public:
 		Mutex()			{}
 		~Mutex()		{}
-		void Lock()		{}
-		void Unlock()	{}
+		void lock()		{}
+		void unlock()	{}
 	};
 #else
 	//////////////////////////////////////////////////////////////////////////
@@ -59,8 +59,8 @@ namespace Echo
 			pthread_mutex_init(&mutex, &MutexAttributes);
 		}
 		~Mutex(void) { pthread_mutex_destroy(&mutex);}
-		void Lock() { pthread_mutex_lock(&mutex);}
-		void Unlock() { pthread_mutex_unlock(&mutex);}
+		void lock() { pthread_mutex_lock(&mutex);}
+		void unlock() { pthread_mutex_unlock(&mutex);}
 	private:
 		pthread_mutex_t mutex;
 	};
@@ -70,8 +70,8 @@ namespace Echo
 	class MutexLock
 	{
 	public:
-		MutexLock(Mutex& mutex) : mMutex(mutex) { mMutex.Lock();	}
-		~MutexLock()							{ mMutex.Unlock();	}
+		MutexLock(Mutex& mutex) : mMutex(mutex) { mMutex.lock();	}
+		~MutexLock()							{ mMutex.unlock();	}
 
 	private:
 		Mutex& mMutex;

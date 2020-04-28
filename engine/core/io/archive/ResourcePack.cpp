@@ -497,13 +497,13 @@ namespace Echo
 			return NULL;
 		}
 
-		m_UnpressLock.Lock();
+		m_UnpressLock.lock();
 		if(UnCompressData (m_pFileNode[nFileNodePos], nOutLength))
 		{
-			m_UnpressLock.Unlock();
+			m_UnpressLock.unlock();
 			return m_OutBuffer;
 		}
-		m_UnpressLock.Unlock();
+		m_UnpressLock.unlock();
 		nOutLength = 0;
 		return NULL;
 	}
