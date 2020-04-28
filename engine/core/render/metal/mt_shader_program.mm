@@ -178,28 +178,28 @@ namespace Echo
                     MTLStructMember* member = structType.members[i];
                     MTLArrayType*    arrayInfo = member.arrayType;
 
-                    Uniform desc;
-                    desc.m_name = [member.name UTF8String];
-                    desc.m_shader = shaderType;
-                    desc.m_type = MTMapping::MapUniformType( arrayInfo ? arrayInfo.dataType : member.dataType);
-                    desc.m_count = arrayInfo ? arrayInfo.arrayLength : 1;
-                    desc.m_sizeInBytes = desc.m_count * MapUniformTypeSize(desc.m_type);
-                    desc.m_location = member.offset;
-                    m_uniforms[desc.m_name] = desc;
+                    Uniform* desc = EchoNew(UniformNormal);
+                    desc->m_name = [member.name UTF8String];
+                    desc->m_shader = shaderType;
+                    desc->m_type = MTMapping::MapUniformType( arrayInfo ? arrayInfo.dataType : member.dataType);
+                    desc->m_count = arrayInfo ? arrayInfo.arrayLength : 1;
+                    desc->m_sizeInBytes = desc->m_count * mapUniformTypeSize(desc->m_type);
+                    desc->m_location = member.offset;
+                    m_uniforms[desc->m_name] = desc;
                 }
             }
         }
         else if(arg.type == MTLArgumentTypeTexture)
         {
-            Uniform desc;
-            desc.m_name = [arg.name UTF8String];
-            desc.m_shader = shaderType;
-            desc.m_type = MTMapping::MapUniformType(MTLDataTypeTexture);
-            desc.m_count = 1;
-            desc.m_sizeInBytes = 4;
-            desc.m_location = arg.index;
+            Uniform* desc = EchoNew(UniformTexture);
+            desc->m_name = [arg.name UTF8String];
+            desc->m_shader = shaderType;
+            desc->m_type = MTMapping::MapUniformType(MTLDataTypeTexture);
+            desc->m_count = 1;
+            desc->m_sizeInBytes = 4;
+            desc->m_location = arg.index;
             
-            m_uniforms[desc.m_name] = desc;
+            m_uniforms[desc->m_name] = desc;
         }
         else if(arg.type == MTLArgumentTypeSampler)
         {
@@ -226,11 +226,11 @@ namespace Echo
 
         for(auto& it : m_uniforms)
         {
-            const Uniform& uniform = it.second;
-            if(uniform.m_type!=SPT_TEXTURE)
+            UniformPtr uniform = it.second;
+            if(uniform->m_type!=SPT_TEXTURE)
             {
-                vector<Byte>::type& uniformBytes = uniform.m_shader == ShaderType::VS ? m_vertexShaderUniformBytes : m_fragmentShaderUniformBytes;
-                i32 bytes = uniform.m_location + uniform.m_sizeInBytes;
+                vector<Byte>::type& uniformBytes = uniform->m_shader == ShaderType::VS ? m_vertexShaderUniformBytes : m_fragmentShaderUniformBytes;
+                i32 bytes = uniform->m_location + uniform->m_sizeInBytes;
                 while(uniformBytes.size()<bytes)
                 {
                     uniformBytes.push_back(0);
@@ -242,15 +242,16 @@ namespace Echo
     void MTShaderProgram::bindUniforms(MTRenderable* renderable)
     {
         // organize uniform bytes
-        for (UniformArray::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++)
+        for (UniformMap::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++)
         {
-            Uniform& uniform = it->second;
-            if (uniform.m_value && uniform.m_type != SPT_UNKNOWN && uniform.m_type!=SPT_TEXTURE)
+            UniformPtr uniform = it->second;
+            void* value = uniform->m_value.empty() ? uniform->getValueDefault().data() : uniform->m_value.data();
+            if (value && uniform->m_type != SPT_UNKNOWN && uniform->m_type!=SPT_TEXTURE)
             {
-                vector<Byte>::type& uniformBytes = uniform.m_shader == ShaderType::VS ? m_vertexShaderUniformBytes : m_fragmentShaderUniformBytes;
-                if(uniform.m_type != SPT_TEXTURE)
+                vector<Byte>::type& uniformBytes = uniform->m_shader == ShaderType::VS ? m_vertexShaderUniformBytes : m_fragmentShaderUniformBytes;
+                if(uniform->m_type != SPT_TEXTURE)
                 {
-                    std::memcpy(uniformBytes.data()+uniform.m_location, uniform.m_value, uniform.m_sizeInBytes*sizeof(Byte));
+                    std::memcpy(uniformBytes.data()+uniform->m_location, value, uniform->m_sizeInBytes*sizeof(Byte));
                 }
             }
         }
@@ -267,17 +268,20 @@ namespace Echo
                 [commandEncoder setFragmentBytes:m_fragmentShaderUniformBytes.data() length:m_fragmentShaderUniformBytes.size() atIndex:0];
             
             // textues
-            for (UniformArray::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++)
+            for (UniformMap::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++)
             {
-                Uniform& uniform = it->second;
-                if (uniform.m_shader == ShaderType::FS && uniform.m_type == SPT_TEXTURE)
+                UniformPtr uniform = it->second;
+                if (uniform->m_shader == ShaderType::FS && uniform->m_type == SPT_TEXTURE)
                 {
-                    i32 texSlot = *(i32*)(uniform.m_value);
-                    MTTexture2D* texture = ECHO_DOWN_CAST<MTTexture2D*>(renderable->getMaterial()->getTexture(texSlot));
-                    if(texture)
+                    Material::UniformValue* uniformValue = renderable->getMaterial()->getUniform(uniform->m_name);
+                    if(uniformValue && uniformValue->getTexture())
                     {
-                        [commandEncoder setFragmentSamplerState:texture->getMTSamplerState() atIndex:uniform.m_location];
-                        [commandEncoder setFragmentTexture:texture->getMTTexture() atIndex:uniform.m_location];
+                        MTTexture2D* texture = ECHO_DOWN_CAST<MTTexture2D*>(uniformValue->getTexture());
+                        if(texture)
+                        {
+                            [commandEncoder setFragmentSamplerState:texture->getMTSamplerState() atIndex:uniform->m_location];
+                            [commandEncoder setFragmentTexture:texture->getMTTexture() atIndex:uniform->m_location];
+                        }
                     }
                 }
             }

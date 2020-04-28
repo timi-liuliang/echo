@@ -62,7 +62,8 @@ namespace Echo
 				Material::UniformValue* viewportValue = m_owner->getUniform(m_uniform->m_name + "Viewport");
 				if (viewportValue)
 				{
-					viewportValue->setValue(&m_atla->getViewportNormalized());
+                    Vector4 viewport = m_atla->getViewportNormalized();
+					viewportValue->setValue(&viewport);
 				}
 			}
 			else
@@ -359,10 +360,10 @@ namespace Echo
 					uniform = EchoNew(UniformNormalValue(suniform));
 
 				// copy data
-				UniformValueMap::iterator it = oldUniforms.find(suniform->m_name);
-				if (it != oldUniforms.end())
+				UniformValueMap::iterator itv = oldUniforms.find(suniform->m_name);
+				if (itv != oldUniforms.end())
 				{
-					UniformValue* oldUniform = it->second;
+					UniformValue* oldUniform = itv->second;
 					if (oldUniform && suniform->m_count == oldUniform->m_uniform->m_count && suniform->m_type == oldUniform->m_uniform->m_type)
 					{
 						if (suniform->m_type == SPT_TEXTURE)

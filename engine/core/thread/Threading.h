@@ -70,8 +70,8 @@ namespace Echo
 	class MutexLock
 	{
 	public:
-		MutexLock(Mutex& mutex) : mMutex(mutex) { mMutex.lock();	}
-		~MutexLock()							{ mMutex.unlock();	}
+		MutexLock(Mutex& mutex) : mMutex(mutex) { mMutex.Lock();	}
+		~MutexLock()							{ mMutex.Unlock();	}
 
 	private:
 		Mutex& mMutex;
