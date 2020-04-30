@@ -18,7 +18,7 @@ namespace DataFlowProgramming
 
 	Echo::String ShaderUniformDataModel::getVariableName() const
 	{ 
-		if (m_isParameter && !m_uniformConfig->getVariableName().empty())
+		if (m_uniformConfig->isExport() && !m_uniformConfig->getVariableName().empty())
 			return m_uniformConfig->getVariableName();
 		else
 			return getDefaultVariableName();
@@ -26,17 +26,17 @@ namespace DataFlowProgramming
 
 	void ShaderUniformDataModel::saveUniformConfig(QJsonObject& p) const
 	{
-		p["isParameter"] = Echo::StringUtil::ToString(m_isParameter).c_str();
+		p["Export"] = Echo::StringUtil::ToString(m_uniformConfig->isExport()).c_str();
 		p["variableName"] = getVariableName().c_str();
 	}
 
 	void ShaderUniformDataModel::restoreUniformConfig(QJsonObject const &p)
 	{
-		QJsonValue v = p["isParameter"];
+		QJsonValue v = p["Export"];
 		if (!v.isUndefined())
 		{
 			Echo::String variableName = v.toString().toStdString().c_str();
-			m_isParameter = Echo::StringUtil::ParseBool(variableName);
+			m_uniformConfig->setExport(Echo::StringUtil::ParseBool(variableName));
 		}
 
 		v = p["variableName"];
@@ -49,17 +49,12 @@ namespace DataFlowProgramming
 
 	bool ShaderUniformDataModel::onDoubleClicked()
 	{
-		if (m_isParameter)
-		{
-			if (m_uniformConfig->getVariableName().empty())
-				m_uniformConfig->setVariableName(getDefaultVariableName());
+		if (m_uniformConfig->getVariableName().empty())
+			m_uniformConfig->setVariableName(getDefaultVariableName());
 
-			Studio::NodeTreePanel::instance()->onEditObject(m_uniformConfig);
+		Studio::NodeTreePanel::instance()->onEditObject(m_uniformConfig);
 
-			return true;
-		}
-
-		return false;
+		return true;
 	}
 
 	void ShaderUniformDataModel::showMenu(const QPointF& pos)
@@ -70,7 +65,7 @@ namespace DataFlowProgramming
 		}
 
 		m_menu->clear();
-		m_menu->addAction(m_isParameter ? m_setAsConstant : m_setAsParameter);
+		m_menu->addAction(m_uniformConfig->isExport() ? m_setAsConstant : m_setAsParameter);
 
 		m_menu->exec(QCursor::pos());
 	}

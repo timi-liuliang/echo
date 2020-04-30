@@ -61,7 +61,8 @@ namespace DataFlowProgramming
 
 	void ColorDataModel::onSetAsParameter()
     {
-		m_isParameter = true;
+        m_uniformConfig->setExport(true);
+
 		updateOutputDataVariableName();
 
         onColorEdited();
@@ -69,7 +70,7 @@ namespace DataFlowProgramming
 
 	void ColorDataModel::onSetAsConstant()
     {
-		m_isParameter = false;
+        m_uniformConfig->setExport(false);
 		updateOutputDataVariableName();
 
         onColorEdited();
@@ -101,7 +102,7 @@ namespace DataFlowProgramming
 
 	bool ColorDataModel::generateCode(ShaderCompiler& compiler)
 	{
-		if (m_isParameter)
+		if (m_uniformConfig->isExport())
 		{
 			compiler.addUniform("vec4", getVariableName().c_str());
 
@@ -120,7 +121,7 @@ namespace DataFlowProgramming
 
     bool ColorDataModel::getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues)
     {
-        if (m_isParameter)
+        if (m_uniformConfig->isExport())
         {
             uniformNames.push_back("Uniforms." + getVariableName());
             uniformValues.push_back(m_colorSelect->GetColor());

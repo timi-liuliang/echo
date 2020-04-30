@@ -12,9 +12,14 @@ namespace Echo
 		ShaderUniformTexture();
 		virtual ~ShaderUniformTexture();
 
+		// constant
+		virtual bool isExport() const override { return true; }
+
+		// type
 		const StringOption& getType() { return m_type; }
 		void setType(const StringOption& type) { m_type.setValue(type.getValue()); }
 
+		// atla
 		void setAtla(bool isAtla) { m_isAtla = isAtla; }
 		bool isAtla() const { return m_isAtla; }
 

@@ -10,8 +10,8 @@ namespace DataFlowProgramming
     TextureDataModel::TextureDataModel()
         : ShaderUniformDataModel()
     {
-        m_isParameter = true;
         m_uniformConfig = EchoNew(Echo::ShaderUniformTexture);
+        m_uniformConfig->setExport(true);
         m_uniformConfig->setVariableName(getDefaultVariableName());
 
         m_textureSelect = new QT_UI::QTextureSelect();
@@ -174,7 +174,7 @@ namespace DataFlowProgramming
 
 	bool TextureDataModel::getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues)
 	{
-		if (m_isParameter)
+		if (m_uniformConfig->isExport())
 		{
             bool isAtla = ECHO_DOWN_CAST<Echo::ShaderUniformTexture*>(m_uniformConfig)->isAtla();
 

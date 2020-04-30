@@ -32,7 +32,7 @@ namespace DataFlowProgramming
 		virtual QString caption() const override;
 
         // caption visible
-        virtual bool captionVisible() const override { return m_isParameter; }
+        virtual bool captionVisible() const override { return m_uniformConfig->isExport(); }
 
         // variable name
         virtual Echo::String getVariableName() const;
@@ -52,7 +52,6 @@ namespace DataFlowProgramming
         virtual bool onDoubleClicked();
 
 	protected:
-		bool                        m_isParameter = false;
 		Echo::ShaderUniform*        m_uniformConfig = nullptr;
 
 		QMenu*                      m_menu = nullptr;
