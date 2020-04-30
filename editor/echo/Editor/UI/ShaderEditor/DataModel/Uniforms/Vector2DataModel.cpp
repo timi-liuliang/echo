@@ -9,8 +9,6 @@ namespace DataFlowProgramming
     Vector2DataModel::Vector2DataModel()
         : ShaderUniformDataModel()
     {
-        m_uniformConfig = EchoNew(Echo::ShaderUniform);
-
         m_vector2Editor = (new QT_UI::QVector2Editor(nullptr, "", nullptr));
         m_vector2Editor->setMaximumSize(QSize(m_vector2Editor->sizeHint().width() * 0.4f, m_vector2Editor->sizeHint().height()));
         m_vector2Editor->setValue(Echo::StringUtil::ToString(Echo::Vector3::ONE).c_str());
@@ -18,8 +16,11 @@ namespace DataFlowProgramming
         QObject::connect(m_vector2Editor, SIGNAL(Signal_ValueChanged()), this, SLOT(onTextEdited()));
 
 		m_outputs.resize(1);
-		m_outputs[0] = std::make_shared<DataVector2>(this, "vec2");
-		m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s", getVariableName().c_str()));
+
+		m_uniformConfig = EchoNew(Echo::ShaderUniform);
+		m_uniformConfig->onVariableNameChanged.connectClassMethod(this, Echo::createMethodBind(&Vector2DataModel::onVariableNameChanged));
+
+        updateOutputDataVariableName();
     }
 
 
@@ -42,41 +43,51 @@ namespace DataFlowProgramming
         }
     }
 
-    unsigned int Vector2DataModel::nPorts(PortType portType) const
-    {
-      switch (portType)
-      {
-      case PortType::In:  return m_inputs.size();
-      case PortType::Out: return m_outputs.size();
-      default:            return 0;
-      }
-    }
+	void Vector2DataModel::updateOutputDataVariableName()
+	{
+		m_outputs[0] = std::make_shared<DataVector2>(this, "vec2");
+		m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s_Value", getVariableName().c_str()));
+	}
+
+	void Vector2DataModel::onVariableNameChanged()
+	{
+		updateOutputDataVariableName();
+
+		onTextEdited();
+	}
 
     void Vector2DataModel::onTextEdited()
     {
         Q_EMIT dataUpdated(0);
     }
 
-    NodeDataType Vector2DataModel::dataType(PortType portType, PortIndex portIndex) const
-    {
-        return portType == PortType::Out ? m_outputs[portIndex]->type() : NodeDataType{ "invalid", "invalid" };
-    }
-
-    std::shared_ptr<NodeData> Vector2DataModel::outData(PortIndex portIndex)
-    {
-        return m_outputs[portIndex];
-    }
-
 	bool Vector2DataModel::generateCode(ShaderCompiler& compiler)
 	{
-		Echo::Vector2 number = m_vector2Editor->getValue();
-		compiler.addCode(Echo::StringUtil::Format("\tvec2 %s = vec2(%f, %f);\n", getVariableName().c_str(), number.x, number.y));
+        if (m_uniformConfig->isExport())
+        {
+			compiler.addUniform("vec2", getVariableName().c_str());
+
+			compiler.addCode(Echo::StringUtil::Format("\tfloat %s_Value = fs_ubo.%s;\n", getVariableName().c_str(), getVariableName().c_str()));
+        }
+        else
+        {
+			Echo::Vector2 number = m_vector2Editor->getValue();
+			compiler.addCode(Echo::StringUtil::Format("\tvec2 %s_Value = vec2(%f, %f);\n", getVariableName().c_str(), number.x, number.y));
+        }
 
 		return true;
 	}
 
 	bool Vector2DataModel::getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues)
 	{
+        if (m_uniformConfig->isExport())
+        {
+            Echo::Vector2 number = m_vector2Editor->getValue();
+
+			uniformNames.push_back("Uniforms." + getVariableName());
+			uniformValues.push_back(number);
+        }
+
 		return false;
 	}
 }

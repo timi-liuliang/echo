@@ -11,8 +11,8 @@ namespace Echo
 		UiImageEditor(Object* object);
 		virtual ~UiImageEditor();
 
-		// get camera2d icon, used for editor
-		const char* getEditorIcon() const;
+		// get thumbnail, used for editor
+		virtual ImagePtr getThumbnail() const override;
 
 	private:
 	};

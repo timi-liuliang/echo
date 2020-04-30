@@ -12,7 +12,7 @@ namespace Echo
 		virtual ~UiTextEditor();
 
 		// get camera2d icon, used for editor
-		const char* getEditorIcon() const;
+		virtual ImagePtr getThumbnail() const override;
 
 	private:
 	};

@@ -12,7 +12,7 @@ namespace Echo
         virtual ~ShaderEditor();
         
         // get icon, used for editor
-        const char* getEditorIcon() const;
+        ImagePtr getThumbnail() const;
         
     private:
     };

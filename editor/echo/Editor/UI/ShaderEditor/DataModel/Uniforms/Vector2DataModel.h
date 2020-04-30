@@ -17,8 +17,6 @@ using QtNodes::NodeValidationState;
 
 namespace DataFlowProgramming
 {
-    /// The model dictates the number of inputs and outputs for the Node.
-    /// In this example it has no logic.
     class Vector2DataModel : public ShaderUniformDataModel
     {
       Q_OBJECT
@@ -41,18 +39,17 @@ namespace DataFlowProgramming
         void restore(QJsonObject const &p) override;
 
     public:
-        // get port type
-        unsigned int nPorts(PortType portType) const override;
-
-        // get data type
-        NodeDataType dataType(PortType portType, PortIndex portIndex) const override;
-
-        std::shared_ptr<NodeData> outData(PortIndex port) override;
-
         void setInData(std::shared_ptr<NodeData>, int) override { }
 
         // get embedded widget
         QWidget* embeddedWidget() override { return m_vector2Editor; }
+
+    private:
+		// update outputs variable name
+		void updateOutputDataVariableName();
+
+		// variable changed
+		void onVariableNameChanged();
 
     private Q_SLOTS:
         // on value changed

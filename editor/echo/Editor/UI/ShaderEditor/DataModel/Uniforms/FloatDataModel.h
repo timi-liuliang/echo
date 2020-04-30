@@ -44,6 +44,13 @@ namespace DataFlowProgramming
         // get embedded widget
         QWidget* embeddedWidget() override { return m_lineEdit; }
 
+	private:
+		// update outputs variable name
+		void updateOutputDataVariableName();
+
+		// variable changed
+		void onVariableNameChanged();
+
     private Q_SLOTS:
         // on value changed
         void onTextEdited();

@@ -17,8 +17,6 @@ using QtNodes::NodeValidationState;
 
 namespace DataFlowProgramming
 {
-    /// The model dictates the number of inputs and outputs for the Node.
-    /// In this example it has no logic.
     class Vector3DataModel : public ShaderUniformDataModel
     {
       Q_OBJECT
@@ -45,6 +43,13 @@ namespace DataFlowProgramming
 
         // get embedded widget
         QWidget* embeddedWidget() override { return m_vector3Editor; }
+
+	private:
+		// update outputs variable name
+		void updateOutputDataVariableName();
+
+		// variable changed
+		void onVariableNameChanged();
 
     private Q_SLOTS:
         // on value changed

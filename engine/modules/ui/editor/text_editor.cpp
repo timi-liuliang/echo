@@ -1,5 +1,6 @@
 #include "text_editor.h"
 #include "engine/core/editor/editor.h"
+#include "engine/core/main/Engine.h"
 
 namespace Echo
 {
@@ -13,10 +14,9 @@ namespace Echo
 	{
 	}
 
-	// get camera2d icon, used for editor
-	const char* UiTextEditor::getEditorIcon() const
+	ImagePtr UiTextEditor::getThumbnail() const
 	{
-		return "engine/modules/ui/editor/icon/text.png";
+		return Image::loadFromFile(Engine::instance()->getRootPath() + "engine/modules/ui/editor/icon/text.png");
 	}
 #endif
 }

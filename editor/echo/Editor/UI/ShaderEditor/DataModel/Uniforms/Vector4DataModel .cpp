@@ -8,8 +8,6 @@ namespace DataFlowProgramming
     Vector4DataModel::Vector4DataModel()
         : ShaderUniformDataModel()
     {
-        m_uniformConfig = EchoNew(Echo::ShaderUniform);
-
         m_vector4Editor = (new QT_UI::QVector4Editor(nullptr, "", nullptr));
         m_vector4Editor->setMaximumSize(QSize(m_vector4Editor->sizeHint().width() * 0.4f, m_vector4Editor->sizeHint().height()));
         m_vector4Editor->setValue(Echo::StringUtil::ToString(Echo::Vector3::ONE).c_str());
@@ -17,8 +15,11 @@ namespace DataFlowProgramming
         QObject::connect(m_vector4Editor, SIGNAL(Signal_ValueChanged()), this, SLOT(onTextEdited()));
 
 		m_outputs.resize(1);
-		m_outputs[0] = std::make_shared<DataVector4>(this, "vec4");
-		m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s", getVariableName().c_str()));
+
+		m_uniformConfig = EchoNew(Echo::ShaderUniform);
+		m_uniformConfig->onVariableNameChanged.connectClassMethod(this, Echo::createMethodBind(&Vector4DataModel::onVariableNameChanged));
+
+		updateOutputDataVariableName();
     }
 
 
@@ -41,41 +42,51 @@ namespace DataFlowProgramming
         }
     }
 
-    unsigned int Vector4DataModel::nPorts(PortType portType) const
-    {
-      switch (portType)
-      {
-      case PortType::In:  return m_inputs.size();
-      case PortType::Out: return m_outputs.size();
-      default:            return 0;
-      }
-    }
+	void Vector4DataModel::updateOutputDataVariableName()
+	{
+		m_outputs[0] = std::make_shared<DataVector4>(this, "vec4");
+		m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s_Value", getVariableName().c_str()));
+	}
+
+	void Vector4DataModel::onVariableNameChanged()
+	{
+		updateOutputDataVariableName();
+
+		onTextEdited();
+	}
 
     void Vector4DataModel::onTextEdited()
     {
         Q_EMIT dataUpdated(0);
     }
 
-    NodeDataType Vector4DataModel::dataType(PortType portType, PortIndex portIndex) const
-    {
-        return portType == PortType::Out ? m_outputs[portIndex]->type() : NodeDataType{ "invalid", "invalid" };
-    }
-
-    std::shared_ptr<NodeData> Vector4DataModel::outData(PortIndex portIndex)
-    {
-        return m_outputs[portIndex];
-    }
-
 	bool Vector4DataModel::generateCode(ShaderCompiler& compiler)
 	{
-		Echo::Vector4 number = m_vector4Editor->getValue();
-		compiler.addCode(Echo::StringUtil::Format("\tvec4 %s = vec4(%f, %f, %f, %f);\n", getVariableName().c_str(), number.x, number.y, number.z, number.w));
+        if (m_uniformConfig->isExport())
+        {
+			compiler.addUniform("vec4", getVariableName().c_str());
+
+			compiler.addCode(Echo::StringUtil::Format("\tvec4 %s_Value = fs_ubo.%s;\n", getVariableName().c_str(), getVariableName().c_str()));
+        }
+        else
+        {
+			Echo::Vector4 number = m_vector4Editor->getValue();
+			compiler.addCode(Echo::StringUtil::Format("\tvec4 %s_Value = vec4(%f, %f, %f, %f);\n", getVariableName().c_str(), number.x, number.y, number.z, number.w));
+        }
 
 		return true;
 	}
 
 	bool Vector4DataModel::getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues)
 	{
+        if (m_uniformConfig->isExport())
+        {
+			Echo::Vector2 number = m_vector4Editor->getValue();
+
+			uniformNames.push_back("Uniforms." + getVariableName());
+			uniformValues.push_back(number);
+        }
+
 		return false;
 	}
 }
