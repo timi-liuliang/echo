@@ -195,16 +195,21 @@ namespace QT_UI
 			return QIcon(QPixmap::fromImage(image));
 		}
         
-		Echo::String fileExt = Echo::PathUtil::GetFileExt(fullPath, true);
-		if (Echo::StringUtil::Equal(fileExt, ".png", false))
+		Echo::String fileExtWithDot = Echo::PathUtil::GetFileExt(fullPath, true);
+		if (Echo::StringUtil::Equal(fileExtWithDot, ".png", false))
 		{
 			QPixmap pixmap(fullPath);
 			return QIcon(pixmap.scaled(QSize(64, 64)));
 		}
-		else if (Echo::StringUtil::Equal(fileExt, ".lua", false))
-		{
-			return QIcon(":/icon/Icon/file/lua.png");
-		}
+        else
+        {
+            Echo::String fileExt = Echo::PathUtil::GetFileExt(fullPath, false);
+            Echo::String iconPath = Echo::StringUtil::Format(":/icon/Icon/file/%s.png", fileExt.c_str());
+            if(QFile::exists(iconPath.c_str()))
+            {
+                return QIcon(iconPath.c_str());
+            }
+        }
 
 		return QIcon(":/icon/Icon/file/file.png");
 	}
