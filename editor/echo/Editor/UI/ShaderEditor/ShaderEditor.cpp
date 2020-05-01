@@ -88,9 +88,6 @@ namespace Studio
 
         // Converts
         ret->registerTypeConverter(std::make_pair(DataFloat(nullptr, "").type(), DataAny(nullptr).type()), QtNodes::TypeConverter{ FloatToAny() });
-        //ret->registerTypeConverter(std::make_pair(DataFloat(nullptr, "").type(), DataVector2(nullptr, "").type()), QtNodes::TypeConverter{ FloatToVector2() });
-        //ret->registerTypeConverter(std::make_pair(DataFloat(nullptr, "").type(), DataVector3(nullptr, "").type()), QtNodes::TypeConverter{ FloatToVector3() });
-        //ret->registerTypeConverter(std::make_pair(DataFloat(nullptr, "").type(), DataVector4(nullptr, "").type()), QtNodes::TypeConverter{ FloatToVector4() });
         ret->registerTypeConverter(std::make_pair(DataVector2(nullptr, "").type(), DataAny(nullptr).type()), QtNodes::TypeConverter{ Vector2ToAny() });
         ret->registerTypeConverter(std::make_pair(DataVector3(nullptr, "").type(), DataAny(nullptr).type()), QtNodes::TypeConverter{ Vector3ToAny() });
         ret->registerTypeConverter(std::make_pair(DataVector4(nullptr, "").type(), DataAny(nullptr).type()), QtNodes::TypeConverter{ Vector4ToAny() });

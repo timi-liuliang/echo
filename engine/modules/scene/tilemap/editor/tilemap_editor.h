@@ -14,7 +14,7 @@ namespace Echo
         virtual ~TileMapEditor();
         
         // get camera2d icon, used for editor
-        const char* getEditorIcon() const;
+        virtual ImagePtr getThumbnail() const override;
 
 		// on editor selected this node
 		virtual void onEditorSelectThisNode() override { m_isSelect = true; }

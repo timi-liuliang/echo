@@ -1,5 +1,6 @@
 #include "audio_player_editor.h"
 #include "engine/core/editor/editor.h"
+#include "engine/core/main/Engine.h"
 
 namespace Echo
 {
@@ -13,10 +14,9 @@ namespace Echo
 	{
 	}
 
-	// get camera2d icon, used for editor
-	const char* AudioPlayerEditor::getEditorIcon() const
+	ImagePtr AudioPlayerEditor::getThumbnail() const
 	{
-		return "engine/modules/audio/editor/icon/audioplayer.png";
+		return Image::loadFromFile(Engine::instance()->getRootPath() + "engine/modules/audio/editor/icon/audioplayer.png");
 	}
 #endif
 }

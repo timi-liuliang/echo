@@ -11,8 +11,8 @@ namespace Echo
 		AudioListenerEditor(Object* object);
 		virtual ~AudioListenerEditor();
 
-		// get camera2d icon, used for editor
-		const char* getEditorIcon() const;
+		// get icon, used for editor
+        virtual ImagePtr getThumbnail() const override;
 
 	private:
 	};

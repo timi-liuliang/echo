@@ -1,5 +1,6 @@
 #include "video_player_editor.h"
 #include "engine/core/editor/editor.h"
+#include "engine/core/main/Engine.h"
 
 namespace Echo
 {
@@ -13,10 +14,9 @@ namespace Echo
 	{
 	}
 
-	// get camera2d icon, used for editor
-	const char* VideoPlayerEditor::getEditorIcon() const
+	ImagePtr VideoPlayerEditor::getThumbnail() const
 	{
-		return "engine/modules/video/editor/icon/videoplayer.png";
+		return Image::loadFromFile(Engine::instance()->getRootPath() + "engine/modules/video/editor/icon/videoplayer.png");
 	}
 #endif
 }

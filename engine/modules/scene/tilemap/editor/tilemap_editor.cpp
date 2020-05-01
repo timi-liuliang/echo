@@ -19,10 +19,9 @@ namespace Echo
         EchoSafeDelete(m_gizmo, Gizmos);
     }
     
-    // get camera2d icon, used for editor
-    const char* TileMapEditor::getEditorIcon() const
+    ImagePtr TileMapEditor::getThumbnail() const
     {
-        return "engine/modules/scene/tilemap/editor/icon/tilemap.png";
+        return Image::loadFromFile(Engine::instance()->getRootPath() + "engine/modules/scene/tilemap/editor/icon/tilemap.png");
     }
 
 	void TileMapEditor::editor_update_self()

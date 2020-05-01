@@ -1,5 +1,6 @@
 #include "terrain_editor.h"
 #include "engine/core/editor/editor.h"
+#include "engine/core/main/Engine.h"
 
 namespace Echo
 {
@@ -13,10 +14,9 @@ namespace Echo
     {
     }
     
-    // get camera2d icon, used for editor
-    const char* TerrainEditor::getEditorIcon() const
+    ImagePtr TerrainEditor::getThumbnail() const
     {
-        return "engine/modules/scene/terrain/editor/icon/terrain.png";
+        return Image::loadFromFile(Engine::instance()->getRootPath() +  "engine/modules/scene/terrain/editor/icon/terrain.png");
     }
 #endif
 }
