@@ -19,7 +19,8 @@ namespace Echo
 			Vector4,
 			Quaternion,
 			String,
-		}							 m_type;														// propert type
+			Object,
+		}							 m_type;														// property type
 		AnimCurve::InterpolationType m_interpolationType = AnimCurve::InterpolationType::Linear;	// interpolation type
 
 		// constuctor
@@ -173,6 +174,23 @@ namespace Echo
 
 		// add key
 		void addKey(ui32 time, const Quaternion& value);
+
+		// correct data
+		virtual void correct() {}
+
+		// optimize
+		virtual void optimize() override {}
+
+		// update to time
+		virtual void updateToTime(ui32 time, ui32 deltaTime) override;
+
+		// get length
+		virtual ui32 getLength() override;
+	};
+
+	struct AnimPropertyObject : public AnimProperty
+	{
+		AnimPropertyObject() : AnimProperty(Type::Object) {}
 
 		// correct data
 		virtual void correct() {}

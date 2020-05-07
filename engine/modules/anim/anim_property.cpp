@@ -4,7 +4,6 @@
 
 namespace Echo
 {
-	// create
 	AnimProperty* AnimProperty::create(AnimProperty::Type type)
 	{
 		switch (type)
@@ -14,13 +13,13 @@ namespace Echo
 		case AnimProperty::Type::Vector3:	return EchoNew(AnimPropertyVec3);
 		case AnimProperty::Type::Vector4:	return EchoNew(AnimPropertyVec4);
 		case AnimProperty::Type::Quaternion:return EchoNew(AnimPropertyQuat);
+		case AnimProperty::Type::Object:	return EchoNew(AnimPropertyObject);
 		default:							return nullptr;
 		}
 
 		return nullptr;
 	}
 
-	// set interpolation type
 	void AnimProperty::setInterpolationType(AnimCurve::InterpolationType type)
 	{ 
 		m_interpolationType = type;
@@ -41,7 +40,6 @@ namespace Echo
         EchoSafeDeleteContainer(m_curves, AnimCurve);
     }
 
-	// set interpolation type
 	void AnimPropertyCurve::setInterpolationType(AnimCurve::InterpolationType type)
 	{
 		AnimProperty::setInterpolationType(type);
@@ -51,7 +49,6 @@ namespace Echo
 		}
 	}
 
-	// optimize
 	void AnimPropertyCurve::optimize()
 	{
 		for (AnimCurve* curve : m_curves)
@@ -60,7 +57,6 @@ namespace Echo
 		}
 	}
 
-	// get length
 	ui32 AnimPropertyCurve::getLength()
 	{
 		ui32 length = 0;
@@ -73,13 +69,11 @@ namespace Echo
 		return length;
 	}
 
-	// set key value
 	void AnimPropertyCurve::setKeyValue(int curveIdx, int keyIdx, float value)
 	{
 		m_curves[curveIdx]->setValueByKeyIdx(keyIdx, value);
 	}
 
-	// add key
 	void AnimPropertyCurve::addKeyToCurve(int curveIdx, ui32 time, float value)
 	{
 		m_curves[curveIdx]->addKey(time, value);
@@ -89,14 +83,12 @@ namespace Echo
 		: AnimPropertyCurve(Type::Float, 1)
 	{}
 
-	// add key
 	void AnimPropertyFloat::addKey(ui32 time, float value)
 	{
 		for (size_t i = 0; i < m_curves.size(); i++)
 			m_curves[i]->addKey(time, value);
 	}
 
-	// update to time
 	void AnimPropertyFloat::updateToTime(ui32 time, ui32 deltaTime)
 	{
 		for (size_t i = 0; i < m_curves.size(); i++)
@@ -107,14 +99,12 @@ namespace Echo
 		: AnimPropertyCurve(Type::Vector3, 3)
 	{}
 
-	// add key
 	void AnimPropertyVec3::addKey(ui32 time, const Vector3& value)
 	{
 		for (int i = 0; i < int(m_curves.size()); i++)
 			m_curves[i]->addKey(time, value[i]);
 	}
 
-	// update to time
 	void AnimPropertyVec3::updateToTime(ui32 time, ui32 deltaTime)
 	{
 		for (int i = 0; i < int(m_curves.size()); i++)
@@ -184,7 +174,6 @@ namespace Echo
 		m_keys.push_back(key);
 	}
 
-	// get length
 	ui32 AnimPropertyQuat::getLength()
 	{
 		return m_keys.size() ? m_keys.back().m_time : 0;
@@ -211,11 +200,21 @@ namespace Echo
 					curKey = i;
 			}
 
-			// calc value
+			// calculate value
 			const Key& pre = m_keys[curKey];
 			const Key& next = m_keys[curKey + 1];
 			float ratio = Math::Clamp(float(time - pre.m_time) / float(next.m_time - pre.m_time), 0.f, 1.f);
 			Quaternion::Slerp(m_vlaue, pre.m_value, next.m_value, ratio, true);
 		}
+	}
+
+	ui32 AnimPropertyObject::getLength()
+	{
+		return 0;
+	}
+
+	void AnimPropertyObject::updateToTime(ui32 time, ui32 deltaTime)
+	{
+
 	}
 }

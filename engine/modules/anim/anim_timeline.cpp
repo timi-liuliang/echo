@@ -460,7 +460,6 @@ namespace Echo
 		}
 	}
 
-	// get anim property type by node path and property name
 	AnimProperty::Type Timeline::getAnimPropertyType(const String& objectPath, const String& propertyName)
 	{
 		Echo::Node* node = getNode(objectPath.c_str());
@@ -471,6 +470,7 @@ namespace Echo
 			{
 			case Variant::Type::Bool:		return AnimProperty::Type::Bool;
 			case Variant::Type::Vector3:	return AnimProperty::Type::Vector3;
+			case Variant::Type::Object:		return AnimProperty::Type::Object;
 			default:						return AnimProperty::Type::Unknown;
 			}
 		}

@@ -155,6 +155,7 @@ namespace Echo
 			m_timeline->renameClip(currentIndex, currentAnimName.c_str());
 
 			EditorApi.qComboBoxSetItemText(EditorApi.qFindChild(m_ui, "m_clips"), currentIndex, currentAnimName.c_str());
+			setCurrentEditAnim(currentAnimName.c_str());
 		}
 	}
 
@@ -340,14 +341,17 @@ namespace Echo
 				if (!propertyName.empty())
 				{
 					AnimProperty::Type propertyType = m_timeline->getAnimPropertyType(node->getNodePathRelativeTo(m_timeline), propertyName);
-					m_timeline->addProperty(m_currentEditAnim, node->getNodePathRelativeTo(m_timeline), propertyName, propertyType);
+					if (propertyType != AnimProperty::Type::Unknown)
+					{
+						m_timeline->addProperty(m_currentEditAnim, node->getNodePathRelativeTo(m_timeline), propertyName, propertyType);
 
-					// addNodePropertyToEditor;
-					QTreeWidgetItem* propertyItem = EditorApi.qTreeWidgetItemNew();
-					EditorApi.qTreeWidgetItemSetText(propertyItem, 0, propertyName.c_str());
-					EditorApi.qTreeWidgetItemSetUserData(propertyItem, 0, "property");
-					EditorApi.qTreeWidgetItemSetExpanded(item, true);
-					EditorApi.qTreeWidgetItemAddChild(item, propertyItem);
+						// addNodePropertyToEditor;
+						QTreeWidgetItem* propertyItem = EditorApi.qTreeWidgetItemNew();
+						EditorApi.qTreeWidgetItemSetText(propertyItem, 0, propertyName.c_str());
+						EditorApi.qTreeWidgetItemSetUserData(propertyItem, 0, "property");
+						EditorApi.qTreeWidgetItemSetExpanded(item, true);
+						EditorApi.qTreeWidgetItemAddChild(item, propertyItem);
+					}
 				}
 			}
 		}
