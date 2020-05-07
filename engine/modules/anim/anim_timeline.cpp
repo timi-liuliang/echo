@@ -4,6 +4,7 @@
 #include <thirdparty/pugixml/pugixml.hpp>
 #include <thirdparty/pugixml/pugiconfig.hpp>
 #include <thirdparty/pugixml/pugixml_ext.hpp>
+#include "engine/core/util/magic_enum.hpp"
 
 namespace Echo
 {
@@ -131,15 +132,6 @@ namespace Echo
 	static const char* AnimPropertyTypeStr[] = { "Unknown", "Bool", "Float", "Vector3", "Vector4", "Quaternion", "String" };
 	static const char* ObjectTypeStr[] = { "Node", "Setting", "Resource" };
 
-	static AnimProperty::Type getAnimPropertyTypeByTypeStr(const String& typeStr)
-	{
-		if (typeStr == "Bool")	return AnimProperty::Type::Bool;
-		else if (typeStr == "Vector3") return AnimProperty::Type::Vector3;
-
-		return AnimProperty::Type::Unknown;
-	}
-
-	// get anim data
 	const Base64String& Timeline::getAnimData()
 	{ 
 		if (m_isAnimDataDirty)
@@ -250,7 +242,7 @@ namespace Echo
 						Echo::String propertyName = propertyNode.attribute("name").as_string();
 						Echo::String typeStr = propertyNode.attribute("type").as_string();
 						Echo::String interpolationType = propertyNode.attribute("interpolation_type").as_string();
-						AnimProperty::Type propertyType = getAnimPropertyTypeByTypeStr(typeStr);
+						AnimProperty::Type propertyType = magic_enum::enum_cast<AnimProperty::Type>(typeStr.c_str()).value_or(AnimProperty::Type::Unknown);
 
 						addProperty(animClip->m_name, path, propertyName, propertyType);
 						if (propertyType == AnimProperty::Type::Bool)
