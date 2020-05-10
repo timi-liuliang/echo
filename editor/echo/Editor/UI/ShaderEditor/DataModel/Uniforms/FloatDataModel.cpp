@@ -27,6 +27,8 @@ namespace DataFlowProgramming
     {
         QJsonObject modelJson = ShaderDataModel::save();
 
+        ShaderUniformDataModel::saveUniformConfig(modelJson);
+
         modelJson["number"] = m_lineEdit->text().toStdString().c_str();
 
         return modelJson;
@@ -34,6 +36,8 @@ namespace DataFlowProgramming
 
     void FloatDataModel::restore(QJsonObject const &p)
     {
+        ShaderUniformDataModel::restoreUniformConfig(p);
+
         QJsonValue v = p["number"];
         if (!v.isUndefined())
         {
@@ -73,7 +77,7 @@ namespace DataFlowProgramming
         else
         {
 			float number = Echo::StringUtil::ParseFloat(m_lineEdit->text().toStdString().c_str());
-			compiler.addCode(Echo::StringUtil::Format("\tfloat %s = %f;\n", getVariableName().c_str(), number));
+			compiler.addCode(Echo::StringUtil::Format("\tfloat %s_Value = %f;\n", getVariableName().c_str(), number));
         }
 
 		return true;
