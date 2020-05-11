@@ -129,7 +129,6 @@ namespace Echo
 	}
 
 	static const char* AnimCurveInterpolationTypeStr[] = { "Linear", "Discrete" };
-	static const char* AnimPropertyTypeStr[] = { "Unknown", "Bool", "Float", "Vector3", "Vector4", "Quaternion", "String" };
 	static const char* ObjectTypeStr[] = { "Node", "Setting", "Resource" };
 
 	const Base64String& Timeline::getAnimData()
@@ -167,7 +166,7 @@ namespace Echo
 						const String& propertyName = any_cast<String>(animProperty->m_userData);
 						pugi::xml_node propertyXmlNode = objectXmlNode.append_child("property");
 						propertyXmlNode.append_attribute("name").set_value(propertyName.c_str());
-						propertyXmlNode.append_attribute("type").set_value(AnimPropertyTypeStr[int(animProperty->m_type)]);
+						propertyXmlNode.append_attribute("type").set_value(std::string(magic_enum::enum_name(animProperty->m_type)).c_str());
 						propertyXmlNode.append_attribute("interpolation_type").set_value(AnimCurveInterpolationTypeStr[int(animProperty->m_interpolationType)]);
 
 						AnimPropertyBool*  boolProperty = dynamic_cast<AnimPropertyBool*>(animProperty);
@@ -208,7 +207,6 @@ namespace Echo
 		return m_animData; 
 	}
 
-	// set anim data
 	void Timeline::setAnimData(const Base64String& data)
 	{ 
 		// clear
@@ -244,28 +242,32 @@ namespace Echo
 						Echo::String interpolationType = propertyNode.attribute("interpolation_type").as_string();
 						AnimProperty::Type propertyType = magic_enum::enum_cast<AnimProperty::Type>(typeStr.c_str()).value_or(AnimProperty::Type::Unknown);
 
-						addProperty(animClip->m_name, path, propertyName, propertyType);
-						if (propertyType == AnimProperty::Type::Bool)
+						if (propertyType != AnimProperty::Type::Unknown)
 						{
-							for (pugi::xml_node keyNode = propertyNode.child("key"); keyNode; keyNode = keyNode.next_sibling("key"))
-							{
-								ui32 time = keyNode.attribute("time").as_uint();
-								bool value = keyNode.attribute("value").as_bool();
+							addProperty(animClip->m_name, path, propertyName, propertyType);
 
-								addKey(animClip->m_name, path, propertyName, time, value);
-							}
-						}
-						else if (propertyType == AnimProperty::Type::Vector3)
-						{
-							for (pugi::xml_node curveNode = propertyNode.child("curve"); curveNode; curveNode = curveNode.next_sibling("curve"))
+							if (propertyType == AnimProperty::Type::Bool)
 							{
-								i32 curveIdx = curveNode.attribute("index").as_int();
-								for (pugi::xml_node keyNode = curveNode.child("key"); keyNode; keyNode = keyNode.next_sibling("key"))
+								for (pugi::xml_node keyNode = propertyNode.child("key"); keyNode; keyNode = keyNode.next_sibling("key"))
 								{
 									ui32 time = keyNode.attribute("time").as_uint();
-									float value = keyNode.attribute("value").as_float();
+									bool value = keyNode.attribute("value").as_bool();
 
-									addKey(animClip->m_name, path, propertyName, curveIdx, time, value);
+									addKey(animClip->m_name, path, propertyName, time, value);
+								}
+							}
+							else if (propertyType == AnimProperty::Type::Vector3)
+							{
+								for (pugi::xml_node curveNode = propertyNode.child("curve"); curveNode; curveNode = curveNode.next_sibling("curve"))
+								{
+									i32 curveIdx = curveNode.attribute("index").as_int();
+									for (pugi::xml_node keyNode = curveNode.child("key"); keyNode; keyNode = keyNode.next_sibling("key"))
+									{
+										ui32 time = keyNode.attribute("time").as_uint();
+										float value = keyNode.attribute("value").as_float();
+
+										addKey(animClip->m_name, path, propertyName, curveIdx, time, value);
+									}
 								}
 							}
 						}
