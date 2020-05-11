@@ -31,9 +31,10 @@ paint(QPainter* painter,
 
   NodeState const& state = node.nodeState();
 
-  NodeGraphicsObject const & graphicsObject = node.nodeGraphicsObject();
+  NodeGraphicsObject& graphicsObject = node.nodeGraphicsObject();
 
   geom.recalculateSize(painter->font());
+  graphicsObject.updateProxyWidgetPos();
 
   //--------------------------------------------
   NodeDataModel const * model = node.nodeDataModel();

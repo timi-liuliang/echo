@@ -132,6 +132,14 @@ setGeometryChanged()
   prepareGeometryChange();
 }
 
+void NodeGraphicsObject::updateProxyWidgetPos()
+{
+    QWidget* w = _node.nodeDataModel()->embeddedWidget();
+    if (w && _proxyWidget)
+    {
+        _proxyWidget->setPos(_node.nodeGeometry().widgetPosition());
+    }
+}
 
 void
 NodeGraphicsObject::

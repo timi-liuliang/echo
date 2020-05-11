@@ -41,6 +41,9 @@ public:
   void
   setGeometryChanged();
 
+  // update proxy widget position
+  void updateProxyWidgetPos();
+
   /// Visits all attached connections and corrects
   /// their corresponding end points.
   void
