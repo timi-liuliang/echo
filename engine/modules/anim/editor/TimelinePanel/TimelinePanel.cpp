@@ -283,6 +283,11 @@ namespace Echo
 							EditorApi.qTreeWidgetItemSetUserData(propertyItem, 0, "property");
 							EditorApi.qTreeWidgetItemSetExpanded(objetcItem, true);
 							EditorApi.qTreeWidgetItemAddChild(objetcItem, propertyItem);
+
+							if (property->getType() == AnimProperty::Type::Object)
+							{
+								EditorApi.qTreeWidgetItemSetIcon(propertyItem, 1, "engine/modules/anim/editor/icon/add.png");
+							}
 						}
 					}
 				}
@@ -351,6 +356,11 @@ namespace Echo
 						EditorApi.qTreeWidgetItemSetUserData(propertyItem, 0, "property");
 						EditorApi.qTreeWidgetItemSetExpanded(item, true);
 						EditorApi.qTreeWidgetItemAddChild(item, propertyItem);
+
+						if (propertyType == AnimProperty::Type::Object)
+						{
+							EditorApi.qTreeWidgetItemSetIcon(propertyItem, 1, "engine/modules/anim/editor/icon/add.png");
+						}
 					}
 				}
 			}
