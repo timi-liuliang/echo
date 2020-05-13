@@ -237,6 +237,7 @@ namespace Echo
 
 					for (pugi::xml_node propertyNode = objectNode.child("property"); propertyNode; propertyNode = propertyNode.next_sibling("property"))
 					{
+						Echo::StringArray propertyChain;
 						Echo::String propertyName = propertyNode.attribute("name").as_string();
 						Echo::String typeStr = propertyNode.attribute("type").as_string();
 						Echo::String interpolationType = propertyNode.attribute("interpolation_type").as_string();
@@ -244,7 +245,8 @@ namespace Echo
 
 						if (propertyType != AnimProperty::Type::Unknown)
 						{
-							addProperty(animClip->m_name, path, propertyName, propertyType);
+							propertyChain.push_back(propertyName);
+							addProperty(animClip->m_name, path, propertyChain, propertyType);
 
 							if (propertyType == AnimProperty::Type::Bool)
 							{
@@ -344,7 +346,7 @@ namespace Echo
 		return nullptr;
 	}
 
-	void Timeline::addProperty(const String& animName, const String& objectPath, const String& propertyName, AnimProperty::Type propertyType)
+	void Timeline::addProperty(const String& animName, const String& objectPath, const StringArray& propertyChain, AnimProperty::Type propertyType)
 	{
 		AnimClip* clip = getClip(animName.c_str());
 		if (clip)
@@ -354,7 +356,7 @@ namespace Echo
 				const ObjectUserData& userData = any_cast<ObjectUserData>(animNode->m_userData);
 				if (userData.m_path == objectPath)
 				{
-					animNode->addProperty( propertyName, propertyType);
+					animNode->addProperty( propertyChain[0], propertyType);
 					break;
 				}
 			}
@@ -454,21 +456,38 @@ namespace Echo
 		}
 	}
 
-	AnimProperty::Type Timeline::getAnimPropertyType(const String& objectPath, const String& propertyName)
+	AnimProperty::Type Timeline::getAnimPropertyType(const String& objectPath, const StringArray& propertyChain)
 	{
-		Echo::Node* node = getNode(objectPath.c_str());
-		if (node)
+		Echo::Object* object = getLastObject(objectPath, propertyChain);
+		if (object)
 		{
-			Variant::Type type = Class::getPropertyType(node, propertyName);
+			Variant::Type type = Class::getPropertyType(object, propertyChain.back());
 			switch (type)
 			{
-			case Variant::Type::Bool:		return AnimProperty::Type::Bool;
-			case Variant::Type::Vector3:	return AnimProperty::Type::Vector3;
-			case Variant::Type::Object:		return AnimProperty::Type::Object;
-			default:						return AnimProperty::Type::Unknown;
+			case Variant::Type::Bool:			return AnimProperty::Type::Bool;
+			case Variant::Type::Vector3:		return AnimProperty::Type::Vector3;
+			case Variant::Type::ResourcePath:	return AnimProperty::Type::ResourcePath;
+			case Variant::Type::Object:			return AnimProperty::Type::Object;
+			default:							return AnimProperty::Type::Unknown;
 			}
 		}
 
 		return AnimProperty::Type::Unknown;
+	}
+
+	Object* Timeline::getLastObject(const String& objectPath, const StringArray& propertyChain)
+	{
+		Echo::Node* node = getNode(objectPath.c_str());
+		Echo::Object* result = node;
+
+		for (i32 i = 0; i < i32(propertyChain.size()) - 1; i++)
+		{
+			Echo::Variant propertyValue;
+			Class::getPropertyValue(result, propertyChain[i], propertyValue);
+
+			result = propertyValue.toObj();
+		}
+
+		return result;
 	}
 }

@@ -9,6 +9,26 @@
 namespace Echo
 {
 #ifdef ECHO_EDITOR_MODE
+	class TimelinePanelUtil
+	{
+	public:
+		// is a object item
+		static bool isObject(QTreeWidgetItem* item)
+		{
+			String text = EditorApi.qTreeWidgetItemText(item, 0);
+			String userData = EditorApi.qTreeWidgetItemUserData(item, 0);
+			return userData == "object" ? true : false;
+		}
+
+		// is a property item
+		static bool isProperty(QTreeWidgetItem* item)
+		{
+			String text = EditorApi.qTreeWidgetItemText(item, 0);
+			String userData = EditorApi.qTreeWidgetItemUserData(item, 0);
+			return userData == "property" ? true : false;
+		}
+	};
+
 	TimelinePanel::TimelinePanel(Object* obj)
 		: m_addObjectMenu(nullptr)
 		, m_nodeTreeWidgetWidth(0)
@@ -286,6 +306,7 @@ namespace Echo
 
 							if (property->getType() == AnimProperty::Type::Object)
 							{
+								EditorApi.qTreeWidgetItemSetUserData(propertyItem, 1, "property");
 								EditorApi.qTreeWidgetItemSetIcon(propertyItem, 1, "engine/modules/anim/editor/icon/add.png");
 							}
 						}
@@ -338,17 +359,69 @@ namespace Echo
 		int column = EditorApi.qTreeWidgetCurrentColumn(EditorApi.qFindChild(m_ui, "m_nodeTreeWidget"));
 		if (column == 1)
 		{
-			String text = EditorApi.qTreeWidgetItemText(item, 0);
-			Node* node = m_timeline->getNode(text.c_str());
-			if (node)
+			String userData = EditorApi.qTreeWidgetItemUserData(item, column);
+			Echo::StringArray propertyNames;
+			if (userData == "object")
 			{
-				String propertyName = Editor::instance()->selectAProperty( node);
+				String text = EditorApi.qTreeWidgetItemText(item, 0);
+				Node* node = m_timeline->getNode(text.c_str());
+				if (node)
+				{
+					String propertyName = Editor::instance()->selectAProperty(node);
+					if (!propertyName.empty())
+					{
+						propertyNames.insert(propertyNames.begin(), propertyName);
+						AnimProperty::Type propertyType = m_timeline->getAnimPropertyType(node->getNodePathRelativeTo(m_timeline), propertyNames);
+						if (propertyType != AnimProperty::Type::Unknown)
+						{
+							m_timeline->addProperty(m_currentEditAnim, node->getNodePathRelativeTo(m_timeline), propertyNames, propertyType);
+
+							// addNodePropertyToEditor;
+							QTreeWidgetItem* propertyItem = EditorApi.qTreeWidgetItemNew();
+							EditorApi.qTreeWidgetItemSetText(propertyItem, 0, propertyName.c_str());
+							EditorApi.qTreeWidgetItemSetUserData(propertyItem, 0, "property");
+							EditorApi.qTreeWidgetItemSetExpanded(item, true);
+							EditorApi.qTreeWidgetItemAddChild(item, propertyItem);
+
+							if (propertyType == AnimProperty::Type::Object)
+							{
+								EditorApi.qTreeWidgetItemSetUserData(propertyItem, 1, "property");
+								EditorApi.qTreeWidgetItemSetIcon(propertyItem, 1, "engine/modules/anim/editor/icon/add.png");
+							}
+						}
+					}
+				}
+			}
+			else if (userData == "property")
+			{
+				QTreeWidgetItem* nodeItem = EditorApi.qTreeWidgetItemParent(item);
+				propertyNames.insert(propertyNames.begin(), EditorApi.qTreeWidgetItemText(item, 0));
+				while (TimelinePanelUtil::isProperty(nodeItem))
+				{
+					nodeItem = EditorApi.qTreeWidgetItemParent(nodeItem);
+					propertyNames.insert(propertyNames.begin(), EditorApi.qTreeWidgetItemText(nodeItem, 0));
+				}
+
+				String text = EditorApi.qTreeWidgetItemText(nodeItem, 0);
+				Node* node = m_timeline->getNode(text.c_str());
+				Object* propertyObject = node;
+				for (Echo::String propertyName : propertyNames)
+				{
+					Echo::Variant propertyValue;
+					Class::getPropertyValue(propertyObject, propertyName, propertyValue);
+
+					propertyObject = propertyValue.toObj();
+				}
+
+				String propertyName = Editor::instance()->selectAProperty(propertyObject);
 				if (!propertyName.empty())
 				{
-					AnimProperty::Type propertyType = m_timeline->getAnimPropertyType(node->getNodePathRelativeTo(m_timeline), propertyName);
+					propertyNames.push_back(propertyName);
+
+					AnimProperty::Type propertyType = m_timeline->getAnimPropertyType(node->getNodePathRelativeTo(m_timeline), propertyNames);
 					if (propertyType != AnimProperty::Type::Unknown)
 					{
-						m_timeline->addProperty(m_currentEditAnim, node->getNodePathRelativeTo(m_timeline), propertyName, propertyType);
+						//m_timeline->addProperty(m_currentEditAnim, node->getNodePathRelativeTo(m_timeline), propertyNames, propertyType);
 
 						// addNodePropertyToEditor;
 						QTreeWidgetItem* propertyItem = EditorApi.qTreeWidgetItemNew();
@@ -359,6 +432,7 @@ namespace Echo
 
 						if (propertyType == AnimProperty::Type::Object)
 						{
+							EditorApi.qTreeWidgetItemSetUserData(propertyItem, 1, "property");
 							EditorApi.qTreeWidgetItemSetIcon(propertyItem, 1, "engine/modules/anim/editor/icon/add.png");
 						}
 					}

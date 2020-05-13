@@ -19,11 +19,12 @@ namespace Echo
 			Vector4,
 			Quaternion,
 			String,
+			ResourcePath,
 			Object,
 		}							 m_type;														// property type
 		AnimCurve::InterpolationType m_interpolationType = AnimCurve::InterpolationType::Linear;	// interpolation type
 
-		// constuctor
+		// constructor
 		AnimProperty(Type type) : m_type(type) {}
         virtual ~AnimProperty() {}
 
