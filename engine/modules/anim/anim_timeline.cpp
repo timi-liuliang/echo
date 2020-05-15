@@ -355,8 +355,8 @@ namespace Echo
 			{
 				const ObjectUserData& userData = any_cast<ObjectUserData>(animNode->m_userData);
 				if (userData.m_path == objectPath)
-				{
-					animNode->addProperty( propertyChain[0], propertyType);
+				{		
+					animNode->addProperty(StringUtil::ToString(propertyChain), propertyType);
 					break;
 				}
 			}
@@ -426,30 +426,28 @@ namespace Echo
 			for (AnimObject* animNode : clip->m_objects)
 			{
 				const ObjectUserData& objUserData = any_cast<ObjectUserData>(animNode->m_userData);
-				Echo::Node* node = this->getNode(objUserData.m_path.c_str());
-				if (node)
+				for (AnimProperty* property : animNode->m_properties)
 				{
-					for (AnimProperty* property : animNode->m_properties)
+					const Echo::StringArray propertyChain = StringUtil::Split(any_cast<String>(property->m_userData));
+					Echo::Object* node = getLastObject(objUserData.m_path.c_str(), propertyChain);
+					if (node)
 					{
-						const Echo::String& propertyName = any_cast<String>(property->m_userData);
-
-						// swith case
 						switch (property->getType())
 						{
-						case AnimProperty::Type::Bool: 
-							{ 
-								AnimPropertyBool* boolProperty = ECHO_DOWN_CAST<AnimPropertyBool*>(property);
-								if(boolProperty->isActive())
-									Class::setPropertyValue(node, propertyName, boolProperty->getValue());
-							} 
-							break;
-						case AnimProperty::Type::Vector3:	
-							{
-								Class::setPropertyValue(node, propertyName, ((AnimPropertyVec3*)property)->getValue());
-							}
-							break;
+						case AnimProperty::Type::Bool:
+						{
+							AnimPropertyBool* boolProperty = ECHO_DOWN_CAST<AnimPropertyBool*>(property);
+							if (boolProperty->isActive())
+								Class::setPropertyValue(node, propertyChain.back(), boolProperty->getValue());
+						}
+						break;
+						case AnimProperty::Type::Vector3:
+						{
+							Class::setPropertyValue(node, propertyChain.back(), ((AnimPropertyVec3*)property)->getValue());
+						}
+						break;
 						default: break;
-						}				
+						}
 					}
 				}
 			}

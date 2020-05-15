@@ -103,7 +103,6 @@ namespace Echo
 		switchCurveEditor();
 	}
 
-	// sync data to editor
 	void TimelinePanel::syncDataToEditor()
 	{
 		// update display
