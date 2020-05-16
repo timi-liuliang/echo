@@ -6,6 +6,7 @@
 #include "engine/core/log/Log.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/util/base64.h"
+#include "engine/core/util/magic_enum.hpp"
 #include "engine/modules/light/light_module.h"
 
 namespace Echo
@@ -710,15 +711,15 @@ namespace Echo
 					// node path
 					animNode->m_userData = channel.m_node;
 
-					// propertys
+					// properties
 					GltfAccessorInfo& timeAccess = m_accessors[sampler.m_input];
 					GltfAccessorInfo& keyAccess = m_accessors[sampler.m_output];
 
 					// add property
-					AnimProperty* animProperty = animNode->addProperty(channel.m_path, MapAnimPropertyType(keyAccess.m_type));
+					AnimProperty* animProperty = animNode->addProperty(std::string(magic_enum::enum_name(channel.m_path)).c_str(), MapAnimPropertyType(keyAccess.m_type));
 					if (timeAccess.m_count == keyAccess.m_count)
 					{
-						// interploate type
+						// interpolate type
 						animProperty->setInterpolationType(MappingInterpolationType(sampler.m_interpolation));
 
 						// key values

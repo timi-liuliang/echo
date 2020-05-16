@@ -1,6 +1,7 @@
 #include "gltf_skeleton.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/main/Engine.h"
+#include "engine/core/util/magic_enum.hpp"
 
 namespace Echo
 {
@@ -118,11 +119,11 @@ namespace Echo
 
 			for (AnimObject* animNode : clip->m_objects)
 			{
-				// copy all propertys results of this node
+				// copy all properties results of this node
 				i32 nodeIdx = any_cast<i32>(animNode->m_userData);
 				for (AnimProperty* property : animNode->m_properties)
 				{
-					GltfAnimChannel::Path channelPath = any_cast<GltfAnimChannel::Path>(property->m_userData);
+					GltfAnimChannel::Path channelPath = magic_enum::enum_cast<GltfAnimChannel::Path>(property->m_name.c_str()).value_or(GltfAnimChannel::Path::Translation);
 					switch (channelPath)
 					{
 					case GltfAnimChannel::Path::Translation:	m_nodeTransforms[nodeIdx].m_pos = ((AnimPropertyVec3*)property)->getValue(); break;

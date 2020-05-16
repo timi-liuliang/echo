@@ -14,10 +14,10 @@ namespace Echo
         ~AnimObject();
         
 		// add property
-		AnimProperty* addProperty( const any& userData, AnimProperty::Type type)
+		AnimProperty* addProperty( const String& name, AnimProperty::Type type)
 		{
 			AnimProperty* property = AnimProperty::create(type);
-			property->m_userData = userData;
+			property->m_name = name;
 			m_properties.push_back(property);
 
 			return property;

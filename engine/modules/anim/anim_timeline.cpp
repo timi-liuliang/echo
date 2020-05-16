@@ -163,9 +163,8 @@ namespace Echo
 
 					for (AnimProperty* animProperty : animObject->m_properties)
 					{
-						const String& propertyName = any_cast<String>(animProperty->m_userData);
 						pugi::xml_node propertyXmlNode = objectXmlNode.append_child("property");
-						propertyXmlNode.append_attribute("name").set_value(propertyName.c_str());
+						propertyXmlNode.append_attribute("name").set_value(animProperty->m_name.c_str());
 						propertyXmlNode.append_attribute("type").set_value(std::string(magic_enum::enum_name(animProperty->m_type)).c_str());
 						propertyXmlNode.append_attribute("interpolation_type").set_value(AnimCurveInterpolationTypeStr[int(animProperty->m_interpolationType)]);
 
@@ -177,6 +176,17 @@ namespace Echo
 								pugi::xml_node keyXmlNode = propertyXmlNode.append_child("key");
 								keyXmlNode.append_attribute("time").set_value(curveKey.first);
 								keyXmlNode.append_attribute("value").set_value(curveKey.second);
+							}
+						}
+
+						AnimPropertyString* stringProperty = dynamic_cast<AnimPropertyString*>(animProperty);
+						if (stringProperty)
+						{
+							for (auto curveKey : stringProperty->m_keys)
+							{
+								pugi::xml_node keyXmlNode = propertyXmlNode.append_child("key");
+								keyXmlNode.append_attribute("time").set_value(curveKey.first);
+								keyXmlNode.append_attribute("value").set_value(curveKey.second.c_str());
 							}
 						}
 
@@ -258,6 +268,16 @@ namespace Echo
 									addKey(animClip->m_name, path, propertyName, time, value);
 								}
 							}
+							else if (propertyType == AnimProperty::Type::String)
+							{
+								for (pugi::xml_node keyNode = propertyNode.child("key"); keyNode; keyNode = keyNode.next_sibling("key"))
+								{
+									ui32 time = keyNode.attribute("time").as_uint();
+									String value = keyNode.attribute("value").as_string();
+
+									addKey(animClip->m_name, path, propertyName, time, value);
+								}
+							}
 							else if (propertyType == AnimProperty::Type::Vector3)
 							{
 								for (pugi::xml_node curveNode = propertyNode.child("curve"); curveNode; curveNode = curveNode.next_sibling("curve"))
@@ -334,7 +354,7 @@ namespace Echo
 				{
 					for (AnimProperty* property : animNode->m_properties)
 					{
-						if (any_cast<String>(property->m_userData) == propertyName)
+						if (property->m_name == propertyName)
 						{
 							return property;
 						}
@@ -356,7 +376,8 @@ namespace Echo
 				const ObjectUserData& userData = any_cast<ObjectUserData>(animNode->m_userData);
 				if (userData.m_path == objectPath)
 				{		
-					animNode->addProperty(StringUtil::ToString(propertyChain), propertyType);
+					String propertyName = StringUtil::ToString(propertyChain);
+					animNode->addProperty( propertyName, propertyType);
 					break;
 				}
 			}
@@ -372,6 +393,16 @@ namespace Echo
 		if (animProperty && animProperty->getType() == AnimProperty::Type::Bool)
 		{
 			AnimPropertyBool* boolProp = ECHO_DOWN_CAST<AnimPropertyBool*>(animProperty);
+			boolProp->addKey(time, value);
+		}
+	}
+
+	void Timeline::addKey(const String& animName, const String& objectPath, const String& propertyName, ui32 time, const String& value)
+	{
+		AnimProperty* animProperty = getProperty(animName, objectPath, propertyName);
+		if (animProperty && animProperty->getType() == AnimProperty::Type::String)
+		{
+			AnimPropertyString* boolProp = ECHO_DOWN_CAST<AnimPropertyString*>(animProperty);
 			boolProp->addKey(time, value);
 		}
 	}
@@ -428,7 +459,7 @@ namespace Echo
 				const ObjectUserData& objUserData = any_cast<ObjectUserData>(animNode->m_userData);
 				for (AnimProperty* property : animNode->m_properties)
 				{
-					const Echo::StringArray propertyChain = StringUtil::Split(any_cast<String>(property->m_userData));
+					const Echo::StringArray propertyChain = StringUtil::Split(property->m_name);
 					Echo::Object* node = getLastObject(objUserData.m_path.c_str(), propertyChain);
 					if (node)
 					{
@@ -464,7 +495,7 @@ namespace Echo
 			{
 			case Variant::Type::Bool:			return AnimProperty::Type::Bool;
 			case Variant::Type::Vector3:		return AnimProperty::Type::Vector3;
-			case Variant::Type::ResourcePath:	return AnimProperty::Type::ResourcePath;
+			case Variant::Type::ResourcePath:	return AnimProperty::Type::String;
 			case Variant::Type::Object:			return AnimProperty::Type::Object;
 			default:							return AnimProperty::Type::Unknown;
 			}

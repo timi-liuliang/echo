@@ -436,15 +436,20 @@ namespace Echo
 		return Format("%s %s %s %s", MorphNumericString(ToString(val.x)).c_str(), MorphNumericString(ToString(val.y)).c_str(), MorphNumericString(ToString(val.z)).c_str(), MorphNumericString(ToString(val.w)).c_str());;
 	}
 
-	String StringUtil::ToString(const StringArray& array, const char* delims)
+	String StringUtil::ToString(const StringArray& strs, const char* delims)
 	{
-		// trad convert, only fast than iostream.
-		String result; result.reserve(array.size() * 16);
-
-		for (const String& element : array)
+		String result; 
+		if (strs.size() > 0)
 		{
-			result += element;
-			result += delims;
+			result.reserve(strs.size() * 16);
+			i32 count = i32(strs.size()) - 1;
+			for (i32 i=0; i<count; i++)
+			{
+				result += strs[i];
+				result += delims;
+			}
+
+			result += strs.back();
 		}
 
 		return result;

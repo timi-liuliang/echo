@@ -8,13 +8,14 @@ namespace Echo
 	{
 		switch (type)
 		{
-		case AnimProperty::Type::Bool:		return EchoNew(AnimPropertyBool);
-		case AnimProperty::Type::Float:		return EchoNew(AnimPropertyFloat);
-		case AnimProperty::Type::Vector3:	return EchoNew(AnimPropertyVec3);
-		case AnimProperty::Type::Vector4:	return EchoNew(AnimPropertyVec4);
-		case AnimProperty::Type::Quaternion:return EchoNew(AnimPropertyQuat);
-		case AnimProperty::Type::Object:	return EchoNew(AnimPropertyObject);
-		default:							return nullptr;
+		case AnimProperty::Type::Bool:			return EchoNew(AnimPropertyBool);
+		case AnimProperty::Type::Float:			return EchoNew(AnimPropertyFloat);
+		case AnimProperty::Type::Vector3:		return EchoNew(AnimPropertyVec3);
+		case AnimProperty::Type::Vector4:		return EchoNew(AnimPropertyVec4);
+		case AnimProperty::Type::Quaternion:	return EchoNew(AnimPropertyQuat);
+		case AnimProperty::Type::String:		return EchoNew(AnimPropertyString);
+		case AnimProperty::Type::Object:		return EchoNew(AnimPropertyObject);
+		default:								return nullptr;
 		}
 
 		return nullptr;
@@ -216,5 +217,44 @@ namespace Echo
 	void AnimPropertyObject::updateToTime(ui32 time, ui32 deltaTime)
 	{
 
+	}
+
+	void AnimPropertyString::addKey(ui32 time, const String& value)
+	{
+		m_keys[time] = value;
+	}
+
+	void AnimPropertyString::updateToTime(ui32 time, ui32 deltaTime)
+	{
+		if (deltaTime)
+		{
+			m_isActive = false;
+
+			for (auto it : m_keys)
+			{
+				ui32 preTime = time - deltaTime;
+				if (it.first >= preTime && it.first <= time)
+				{
+					m_value = it.second;
+					m_isActive = true;
+					break;
+				}
+			}
+		}
+	}
+
+	ui32 AnimPropertyString::getLength()
+	{
+		return getEndTime() - getStartTime();
+	}
+
+	ui32 AnimPropertyString::getStartTime()
+	{
+		return m_keys.size() ? m_keys.begin()->first : 0;
+	}
+
+	ui32 AnimPropertyString::getEndTime()
+	{
+		return m_keys.size() ? m_keys.rbegin()->first : 0;
 	}
 }

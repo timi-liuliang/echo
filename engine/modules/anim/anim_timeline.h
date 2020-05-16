@@ -100,6 +100,7 @@ namespace Echo
 
 		// add key frame
 		void addKey(const String& animName, const String& objectPath, const String& propertyName, ui32 time, bool value);
+		void addKey(const String& animName, const String& objectPath, const String& propertyName, ui32 time, const String& value);
 		void addKey(const String& animName, const String& objectPath, const String& propertyName, int curveIdx, ui32 time, float value);
 		void addKey(const String& animName, const String& objectPath, const String& propertyName, int curveIdx, ui32 time, const String& value) {}
 		void setKey(const String& animName, const String& objectPath, const String& propertyName, int curveIdx, int keyIdx, float value);

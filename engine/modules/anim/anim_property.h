@@ -9,7 +9,7 @@ namespace Echo
 	class Node;
 	struct AnimProperty
 	{
-		any							m_userData;														// name
+		Echo::String				 m_name;														// name
 		enum class Type
 		{
 			Unknown,
@@ -19,7 +19,6 @@ namespace Echo
 			Vector4,
 			Quaternion,
 			String,
-			ResourcePath,
 			Object,
 		}							 m_type;														// property type
 		AnimCurve::InterpolationType m_interpolationType = AnimCurve::InterpolationType::Linear;	// interpolation type
@@ -154,6 +153,8 @@ namespace Echo
 
 		// get length
 		virtual ui32 getLength() override;
+
+		// start|end time
 		ui32 getStartTime();
 		ui32 getEndTime();
 	};
@@ -204,5 +205,41 @@ namespace Echo
 
 		// get length
 		virtual ui32 getLength() override;
+	};
+
+	struct AnimPropertyString : public AnimProperty
+	{
+		typedef map<ui32, Echo::String>::type KeyMap;
+
+		KeyMap			m_keys;
+		Echo::String	m_value;
+		bool			m_isActive = false;
+
+		AnimPropertyString() : AnimProperty(Type::String) {}
+
+		// is active
+		bool isActive() const { return m_isActive; }
+
+		// get value
+		const String& getValue() { return m_value; }
+
+		// add key
+		void addKey(ui32 time, const String& value);
+
+		// correct data
+		virtual void correct() {}
+
+		// optimize
+		virtual void optimize() override {}
+
+		// update to time
+		virtual void updateToTime(ui32 time, ui32 deltaTime) override;
+
+		// get length
+		virtual ui32 getLength() override;
+
+		// start|end time
+		ui32 getStartTime();
+		ui32 getEndTime();
 	};
 }

@@ -296,9 +296,8 @@ namespace Echo
 
 						for (AnimProperty* property : animNode->m_properties)
 						{
-							const String& propertyName = any_cast<String>(property->m_userData);
 							QTreeWidgetItem* propertyItem = EditorApi.qTreeWidgetItemNew();
-							EditorApi.qTreeWidgetItemSetText(propertyItem, 0, propertyName.c_str());
+							EditorApi.qTreeWidgetItemSetText(propertyItem, 0, property->m_name.c_str());
 							EditorApi.qTreeWidgetItemSetUserData(propertyItem, 0, "property");
 							EditorApi.qTreeWidgetItemSetExpanded(objetcItem, true);
 							EditorApi.qTreeWidgetItemAddChild(objetcItem, propertyItem);
@@ -359,7 +358,7 @@ namespace Echo
 		if (column == 1)
 		{
 			String userData = EditorApi.qTreeWidgetItemUserData(item, column);
-			Echo::StringArray propertyNames;
+			Echo::StringArray propertyChain;
 			if (userData == "object")
 			{
 				String text = EditorApi.qTreeWidgetItemText(item, 0);
@@ -369,11 +368,11 @@ namespace Echo
 					String propertyName = Editor::instance()->selectAProperty(node);
 					if (!propertyName.empty())
 					{
-						propertyNames.insert(propertyNames.begin(), propertyName);
-						AnimProperty::Type propertyType = m_timeline->getAnimPropertyType(node->getNodePathRelativeTo(m_timeline), propertyNames);
+						propertyChain.insert(propertyChain.begin(), propertyName);
+						AnimProperty::Type propertyType = m_timeline->getAnimPropertyType(node->getNodePathRelativeTo(m_timeline), propertyChain);
 						if (propertyType != AnimProperty::Type::Unknown)
 						{
-							m_timeline->addProperty(m_currentEditAnim, node->getNodePathRelativeTo(m_timeline), propertyNames, propertyType);
+							m_timeline->addProperty(m_currentEditAnim, node->getNodePathRelativeTo(m_timeline), propertyChain, propertyType);
 
 							// addNodePropertyToEditor;
 							QTreeWidgetItem* propertyItem = EditorApi.qTreeWidgetItemNew();
@@ -394,17 +393,17 @@ namespace Echo
 			else if (userData == "property")
 			{
 				QTreeWidgetItem* nodeItem = EditorApi.qTreeWidgetItemParent(item);
-				propertyNames.insert(propertyNames.begin(), EditorApi.qTreeWidgetItemText(item, 0));
+				propertyChain.insert(propertyChain.begin(), EditorApi.qTreeWidgetItemText(item, 0));
 				while (TimelinePanelUtil::isProperty(nodeItem))
 				{
 					nodeItem = EditorApi.qTreeWidgetItemParent(nodeItem);
-					propertyNames.insert(propertyNames.begin(), EditorApi.qTreeWidgetItemText(nodeItem, 0));
+					propertyChain.insert(propertyChain.begin(), EditorApi.qTreeWidgetItemText(nodeItem, 0));
 				}
 
 				String text = EditorApi.qTreeWidgetItemText(nodeItem, 0);
 				Node* node = m_timeline->getNode(text.c_str());
 				Object* propertyObject = node;
-				for (Echo::String propertyName : propertyNames)
+				for (Echo::String propertyName : propertyChain)
 				{
 					Echo::Variant propertyValue;
 					Class::getPropertyValue(propertyObject, propertyName, propertyValue);
@@ -415,12 +414,12 @@ namespace Echo
 				String propertyName = Editor::instance()->selectAProperty(propertyObject);
 				if (!propertyName.empty())
 				{
-					propertyNames.push_back(propertyName);
+					propertyChain.push_back(propertyName);
 
-					AnimProperty::Type propertyType = m_timeline->getAnimPropertyType(node->getNodePathRelativeTo(m_timeline), propertyNames);
+					AnimProperty::Type propertyType = m_timeline->getAnimPropertyType(node->getNodePathRelativeTo(m_timeline), propertyChain);
 					if (propertyType != AnimProperty::Type::Unknown)
 					{
-						//m_timeline->addProperty(m_currentEditAnim, node->getNodePathRelativeTo(m_timeline), propertyNames, propertyType);
+						m_timeline->addProperty(m_currentEditAnim, node->getNodePathRelativeTo(m_timeline), propertyChain, propertyType);
 
 						// addNodePropertyToEditor;
 						QTreeWidgetItem* propertyItem = EditorApi.qTreeWidgetItemNew();
