@@ -366,25 +366,29 @@ namespace Echo
 		return nullptr;
 	}
 
-	void Timeline::addProperty(const String& animName, const String& objectPath, const StringArray& propertyChain, AnimProperty::Type propertyType)
+	bool Timeline::addProperty(const String& animName, const String& objectPath, const StringArray& propertyChain, AnimProperty::Type propertyType)
 	{
 		AnimClip* clip = getClip(animName.c_str());
 		if (clip)
 		{
-			for (AnimObject* animNode : clip->m_objects)
+			for (AnimObject* animObject : clip->m_objects)
 			{
-				const ObjectUserData& userData = any_cast<ObjectUserData>(animNode->m_userData);
+				const ObjectUserData& userData = any_cast<ObjectUserData>(animObject->m_userData);
 				if (userData.m_path == objectPath)
 				{		
 					String propertyName = StringUtil::ToString(propertyChain);
-					animNode->addProperty( propertyName, propertyType);
-					break;
+					if (!animObject->isExist(propertyName))
+					{
+						animObject->addProperty(propertyName, propertyType);
+						m_isAnimDataDirty = true;
+
+						return true;
+					}
 				}
 			}
 		}
 
-		// dirty flag
-		m_isAnimDataDirty = true;
+		return false;
 	}
 
 	void Timeline::addKey(const String& animName, const String& objectPath, const String& propertyName, ui32 time, bool value)

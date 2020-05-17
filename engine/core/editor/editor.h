@@ -285,6 +285,12 @@ namespace Echo
         // expand QTreeWidgetItem
         qTreeWidgetItemSetExpandedFun qTreeWidgetItemSetExpanded = nullptr;
 
+        // child count
+        qTreeWidgetItemChildCountFun qTreeWidgetItemChildCount = nullptr;
+
+        // child
+        qTreeWidgetItemChildFun qTreeWidgetItemChild = nullptr;
+
     public:
         // dialog
         qDialogExecFun qDialogExec = nullptr;

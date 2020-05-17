@@ -35,6 +35,12 @@ namespace Echo
 
 	// expand QTreeWidgetItem
 	typedef void (*qTreeWidgetItemSetExpandedFun)(QTreeWidgetItem* item, bool aexpand);
+
+	// child count
+	typedef i32(*qTreeWidgetItemChildCountFun)(QTreeWidgetItem* item);
+
+	// child at index
+	typedef QTreeWidgetItem* (*qTreeWidgetItemChildFun)(QTreeWidgetItem* item, i32 index);
 }
 
 #endif

@@ -296,20 +296,53 @@ namespace Echo
 
 						for (AnimProperty* property : animNode->m_properties)
 						{
-							QTreeWidgetItem* propertyItem = EditorApi.qTreeWidgetItemNew();
-							EditorApi.qTreeWidgetItemSetText(propertyItem, 0, property->m_name.c_str());
-							EditorApi.qTreeWidgetItemSetUserData(propertyItem, 0, "property");
-							EditorApi.qTreeWidgetItemSetExpanded(objetcItem, true);
-							EditorApi.qTreeWidgetItemAddChild(objetcItem, propertyItem);
-
-							if (property->getType() == AnimProperty::Type::Object)
-							{
-								EditorApi.qTreeWidgetItemSetUserData(propertyItem, 1, "property");
-								EditorApi.qTreeWidgetItemSetIcon(propertyItem, 1, "engine/modules/anim/editor/icon/add.png");
-							}
+							syncPropertyDataToEditor(objetcItem, property, StringUtil::Split(property->m_name));
 						}
 					}
 				}
+			}
+		}
+	}
+
+	void TimelinePanel::syncPropertyDataToEditor(QTreeWidgetItem* parentItem, AnimProperty* property, const StringArray& propertyChain)
+	{
+		if (propertyChain.size() > 0)
+		{
+			String propertyName = propertyChain.front();
+			QTreeWidgetItem* propertyItem = nullptr;
+
+			// is exist
+			for (i32 i = 0; i < EditorApi.qTreeWidgetItemChildCount(parentItem); i++)
+			{
+				QTreeWidgetItem* child = EditorApi.qTreeWidgetItemChild(parentItem, i);
+				if (child && EditorApi.qTreeWidgetItemText(child, 0)==propertyName)
+				{
+					propertyItem = child;
+				}
+			}
+
+			// create new
+			if (!propertyItem)
+			{
+				propertyItem = EditorApi.qTreeWidgetItemNew();
+				EditorApi.qTreeWidgetItemSetText(propertyItem, 0, propertyName.c_str());
+				EditorApi.qTreeWidgetItemSetUserData(propertyItem, 0, "property");
+				EditorApi.qTreeWidgetItemSetExpanded(parentItem, true);
+				EditorApi.qTreeWidgetItemAddChild(parentItem, propertyItem);
+
+				if (property->getType() == AnimProperty::Type::Object)
+				{
+					EditorApi.qTreeWidgetItemSetUserData(propertyItem, 1, "property");
+					EditorApi.qTreeWidgetItemSetIcon(propertyItem, 1, "engine/modules/anim/editor/icon/add.png");
+				}
+			}
+
+			// add last property
+			if (propertyChain.size() > 1)
+			{
+				StringArray lastPropertyChain = propertyChain;
+				lastPropertyChain.erase(lastPropertyChain.begin());
+				syncPropertyDataToEditor(propertyItem, property, lastPropertyChain);
 			}
 		}
 	}
@@ -419,19 +452,20 @@ namespace Echo
 					AnimProperty::Type propertyType = m_timeline->getAnimPropertyType(node->getNodePathRelativeTo(m_timeline), propertyChain);
 					if (propertyType != AnimProperty::Type::Unknown)
 					{
-						m_timeline->addProperty(m_currentEditAnim, node->getNodePathRelativeTo(m_timeline), propertyChain, propertyType);
+						if(m_timeline->addProperty(m_currentEditAnim, node->getNodePathRelativeTo(m_timeline), propertyChain, propertyType))
+						{ 
+							// addNodePropertyToEditor;
+							QTreeWidgetItem* propertyItem = EditorApi.qTreeWidgetItemNew();
+							EditorApi.qTreeWidgetItemSetText(propertyItem, 0, propertyName.c_str());
+							EditorApi.qTreeWidgetItemSetUserData(propertyItem, 0, "property");
+							EditorApi.qTreeWidgetItemSetExpanded(item, true);
+							EditorApi.qTreeWidgetItemAddChild(item, propertyItem);
 
-						// addNodePropertyToEditor;
-						QTreeWidgetItem* propertyItem = EditorApi.qTreeWidgetItemNew();
-						EditorApi.qTreeWidgetItemSetText(propertyItem, 0, propertyName.c_str());
-						EditorApi.qTreeWidgetItemSetUserData(propertyItem, 0, "property");
-						EditorApi.qTreeWidgetItemSetExpanded(item, true);
-						EditorApi.qTreeWidgetItemAddChild(item, propertyItem);
-
-						if (propertyType == AnimProperty::Type::Object)
-						{
-							EditorApi.qTreeWidgetItemSetUserData(propertyItem, 1, "property");
-							EditorApi.qTreeWidgetItemSetIcon(propertyItem, 1, "engine/modules/anim/editor/icon/add.png");
+							if (propertyType == AnimProperty::Type::Object)
+							{
+								EditorApi.qTreeWidgetItemSetUserData(propertyItem, 1, "property");
+								EditorApi.qTreeWidgetItemSetIcon(propertyItem, 1, "engine/modules/anim/editor/icon/add.png");
+							}
 						}
 					}
 				}

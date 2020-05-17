@@ -84,4 +84,26 @@ namespace Echo
 			item->setExpanded( aexpand);
 		}
 	}
+
+	// child count
+	i32 qTreeWidgetItemChildCount(QTreeWidgetItem* item)
+	{
+		if(item)
+		{
+			return item->childCount();
+		}
+
+		return 0;
+	}
+
+	// child at index
+	QTreeWidgetItem* qTreeWidgetItemChild(QTreeWidgetItem* item, i32 index)
+	{
+		if(item)
+		{
+			return item->child(index);
+		}
+
+		return nullptr;
+	}
 }

@@ -103,6 +103,7 @@ namespace Echo
 		void syncClipTimeLength();
 		void syncClipListDataToEditor();
 		void syncClipNodeDataToEditor();
+		void syncPropertyDataToEditor(QTreeWidgetItem* parentItem, class AnimProperty* property, const StringArray& propertyChain);
 		void addNodePropertyToEditor();
 
 		// curve display

@@ -12,6 +12,18 @@ namespace Echo
 		vector<AnimProperty*>::type	m_properties;		// property need to update for this node
 
         ~AnimObject();
+
+		// is exist
+		bool isExist(const String& name)
+		{
+			for (AnimProperty* property : m_properties)
+			{
+				if (property->m_name == name)
+					return true;
+			}
+
+			return false;
+		}
         
 		// add property
 		AnimProperty* addProperty( const String& name, AnimProperty::Type type)

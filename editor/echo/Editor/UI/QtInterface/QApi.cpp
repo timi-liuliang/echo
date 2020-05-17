@@ -132,6 +132,8 @@ namespace Studio
 		BIND_EDITOR_FUN(qTreeWidgetItemSetEditable);
 		BIND_EDITOR_FUN(qTreeWidgetItemSetUserData);
 		BIND_EDITOR_FUN(qTreeWidgetItemSetExpanded);
+		BIND_EDITOR_FUN(qTreeWidgetItemChildCount);
+		BIND_EDITOR_FUN(qTreeWidgetItemChild);
 
 		// dialog
 		BIND_EDITOR_FUN(qDialogExec);
