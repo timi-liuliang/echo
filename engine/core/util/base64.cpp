@@ -5,7 +5,6 @@
 
 namespace Echo
 {
-	// encoding table
 	static char encoding_table[] = 
 	{ 
 		'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
@@ -19,7 +18,6 @@ namespace Echo
 	};
 
 	static int   mod_table[] = { 0, 2, 1 };
-
 
 	Base64Encode::Base64Encode(const String& data)
 	{
@@ -84,15 +82,12 @@ namespace Echo
 		}
 	}
 
-	// encode
 	void Base64String::encode(const char* originStr)
 	{
 		Base64Encode encoder(originStr);
 		m_data = encoder.getData();
 	}
 
-	// decode
-			// decode
 	String Base64String::decode() const
 	{
 		Base64Decode decoder(m_data);
