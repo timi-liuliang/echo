@@ -95,7 +95,7 @@ namespace Echo
 
 	public:
 		//property
-		AnimProperty* getProperty(const String& animName, const String& objectPath, const String& propertyName);
+		AnimProperty* getProperty(const String& animName, const String& objectPath, const StringArray& propertyChain);
 		bool addProperty(const String& animName, const String& objectPath, const StringArray& propertyChain, AnimProperty::Type propertyType);
 
 		// add key frame

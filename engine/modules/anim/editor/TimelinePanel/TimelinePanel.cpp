@@ -27,6 +27,29 @@ namespace Echo
 			String userData = EditorApi.qTreeWidgetItemUserData(item, 0);
 			return userData == "property" ? true : false;
 		}
+
+		// get property chain and object path
+		static void queryNodePathAndPropertyChain(QTreeWidgetItem* item, String& nodePath, StringArray& propertyChain)
+		{
+			String userData = EditorApi.qTreeWidgetItemUserData(item, 0);
+			if (userData == "property")
+			{
+				QTreeWidgetItem* nodeItem = EditorApi.qTreeWidgetItemParent(item);
+				propertyChain.insert(propertyChain.begin(), EditorApi.qTreeWidgetItemText(item, 0));
+				while (isProperty(nodeItem))
+				{
+					propertyChain.insert(propertyChain.begin(), EditorApi.qTreeWidgetItemText(nodeItem, 0));
+					nodeItem = EditorApi.qTreeWidgetItemParent(nodeItem);
+				}
+
+				nodePath = EditorApi.qTreeWidgetItemText(nodeItem, 0);
+			}
+			else
+			{
+				propertyChain.clear();
+				nodePath = EditorApi.qTreeWidgetItemText(item, 0);
+			}
+		}
 	};
 
 	TimelinePanel::TimelinePanel(Object* obj)
@@ -482,20 +505,18 @@ namespace Echo
 			String userData = EditorApi.qTreeWidgetItemUserData( item, column);
 			if (userData == "property")
 			{
-				QTreeWidgetItem* parent = EditorApi.qTreeWidgetItemParent( item);
-				m_currentEditObjectPath = EditorApi.qTreeWidgetItemText( parent, 0);
-				m_currentEditPropertyName = EditorApi.qTreeWidgetItemText(item, 0);
+				TimelinePanelUtil::queryNodePathAndPropertyChain(item, m_currentEditObjectPath, m_currentEditPropertyChain);
 			}
 			else
 			{
-				m_currentEditPropertyName = StringUtil::BLANK;
+				m_currentEditPropertyChain.clear();
 			}
 
 			// refresh curve display
-			refreshCurveDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
+			refreshCurveDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyChain);
 
 			// refresh curve key display
-			refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
+			refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyChain);
 
 			// enable disable curve edit
 			switchCurveEditor();
@@ -517,7 +538,7 @@ namespace Echo
 		//}
 	}
 
-	void TimelinePanel::refreshCurveDisplayToEditor(const String& objectPath, const String& propertyName)
+	void TimelinePanel::refreshCurveDisplayToEditor(const String& objectPath, const StringArray& propertyChain)
 	{
 		// clear curves
 		for (size_t i = 0; i < m_curveItems.size(); i++)
@@ -530,7 +551,7 @@ namespace Echo
 		}
 
 		// recreate curves
-		AnimProperty* animProperty = m_timeline->getProperty(m_currentEditAnim, objectPath, propertyName);
+		AnimProperty* animProperty = m_timeline->getProperty(m_currentEditAnim, objectPath, propertyChain);
 		if (animProperty)
 		{
 			switch (animProperty->m_type)
@@ -578,7 +599,7 @@ namespace Echo
 		}
 	}
 
-	void TimelinePanel::refreshCurveKeyDisplayToEditor(const String& objectPath, const String& propertyName)
+	void TimelinePanel::refreshCurveKeyDisplayToEditor(const String& objectPath, const StringArray& propertyChain)
 	{
 		// clear all key items
 		for (size_t i = 0; i < m_curveItems.size(); i++)
@@ -598,7 +619,7 @@ namespace Echo
 		m_curveKeyWidgets.clear();
 
 		// create key
-		AnimProperty* animProperty = m_timeline->getProperty(m_currentEditAnim, objectPath, propertyName);
+		AnimProperty* animProperty = m_timeline->getProperty(m_currentEditAnim, objectPath, propertyChain);
 		if (animProperty)
 		{
 			array<Color, 4> KeyColors = { Color::RED, Color::GREEN, Color::BLUE, Color::WHITE};
@@ -664,7 +685,7 @@ namespace Echo
 							QGraphicsItem* item = EditorApi.qGraphicsSceneAddEclipse(m_graphicsScene, center.x - m_keyRadius, center.y - m_keyRadius, m_keyRadius * 2.f, m_keyRadius*2.f, KeyColors[curveIdx]);
 
 							// set user data
-							String userData = StringUtil::Format("%s,%s,%s,%d,%d", m_currentEditAnim.c_str(), objectPath.c_str(), propertyName.c_str(), curveIdx, keyIdx);
+							String userData = StringUtil::Format("%s,%s,%s,%d,%d", m_currentEditAnim.c_str(), objectPath.c_str(), StringUtil::ToString(propertyChain).c_str(), curveIdx, keyIdx);
 							EditorApi.qGraphicsItemSetUserData(item, userData.c_str());
 
 							// set tooltip
@@ -692,7 +713,7 @@ namespace Echo
 
 	bool TimelinePanel::getKeyInfo(TimelinePanel::KeyInfo& keyInfo, const String& animName, const String& objectPath, const String& propertyName, int curveIdx, int keyIdx)
 	{
-		AnimProperty* animProperty = m_timeline->getProperty(m_currentEditAnim, objectPath, propertyName);
+		AnimProperty* animProperty = m_timeline->getProperty(m_currentEditAnim, objectPath, StringUtil::Split(propertyName));
 		if (animProperty)
 		{
 			switch (animProperty->m_type)
@@ -771,8 +792,8 @@ namespace Echo
 		EditorApi.qWidgetSetVisible( m_curveKeyLineEdit, false);
 
 		// refresh curve and key display
-		refreshCurveDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
-		refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
+		refreshCurveDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyChain);
+		refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyChain);
 	}
 
 	void TimelinePanel::onKeyPositionChanged()
@@ -1007,7 +1028,7 @@ namespace Echo
 			EditorApi.qDeleteWidget(m_keyEditMenu);
 		}
 
-		AnimProperty* animProperty = m_timeline->getProperty(m_currentEditAnim, m_currentEditObjectPath, m_currentEditPropertyName);
+		AnimProperty* animProperty = m_timeline->getProperty(m_currentEditAnim, m_currentEditObjectPath, m_currentEditPropertyChain);
 		if (animProperty)
 		{
 			if (animProperty->getType() == AnimProperty::Type::Bool)
@@ -1027,6 +1048,13 @@ namespace Echo
 				EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionAddKeyToCurveRed"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddKeyToCurveRed));
 				EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionAddKeyToCurveGreen"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddKeyToCurveGreen));
 				EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionAddKeyToCurveBlue"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddKeyToCurveBlue));
+			}
+			else if (animProperty->getType() == AnimProperty::Type::String)
+			{
+				m_keyEditMenu = EditorApi.qMenuNew(m_ui);
+
+				EditorApi.qMenuAddAction(m_keyEditMenu, EditorApi.qFindChildAction(m_ui, "m_actionAddStringKeyToCurve"));
+				EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionAddStringKeyToCurve"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddStringKeyToCurve));
 			}
 		}
 
@@ -1048,8 +1076,8 @@ namespace Echo
 		m_unitsPerPixel = Math::Clamp(m_unitsPerPixel, 1.f, 50.f);
 
 		// refresh curve and key display
-		refreshCurveDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
-		refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
+		refreshCurveDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyChain);
+		refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyChain);
 	}
 
 	bool TimelinePanel::calcKeyTimeAndValueByPos(const Vector2& pos, i32& time, float& value)
@@ -1074,12 +1102,27 @@ namespace Echo
 		if (calcKeyTimeAndValueByPos(m_keyEditCursorScenePos, time, value))
 		{
 			time = Math::Clamp(time, 0, 1000 * 60 * 60 * 24);
-			m_timeline->addKey(m_currentEditAnim, m_currentEditObjectPath, m_currentEditPropertyName, time, true);
+			m_timeline->addKey(m_currentEditAnim, m_currentEditObjectPath, StringUtil::ToString(m_currentEditPropertyChain), time, true);
 		}
 
 		// refresh curve and key display
-		refreshCurveDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
-		refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
+		refreshCurveDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyChain);
+		refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyChain);
+	}
+
+	void TimelinePanel::onAddStringKeyToCurve()
+	{
+		i32 time;
+		float value;
+		if (calcKeyTimeAndValueByPos(m_keyEditCursorScenePos, time, value))
+		{
+			time = Math::Clamp(time, 0, 1000 * 60 * 60 * 24);
+			m_timeline->addKey(m_currentEditAnim, m_currentEditObjectPath, StringUtil::ToString(m_currentEditPropertyChain), time, String("apple"));
+		}
+
+		// refresh curve and key display
+		refreshCurveDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyChain);
+		refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyChain);
 	}
 
 	void TimelinePanel::onAddKeyToCurveRed()
@@ -1109,17 +1152,17 @@ namespace Echo
 		if (calcKeyTimeAndValueByPos(m_keyEditCursorScenePos, time, value))
 		{
 			time = Math::Clamp(time, 0, 1000 * 60 * 60 * 24);
-			m_timeline->addKey(m_currentEditAnim, m_currentEditObjectPath, m_currentEditPropertyName, curveIdx, time, value);
+			m_timeline->addKey(m_currentEditAnim, m_currentEditObjectPath, StringUtil::ToString(m_currentEditPropertyChain), curveIdx, time, value);
 		}
 
 		// refresh curve and key display
-		refreshCurveDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
-		refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
+		refreshCurveDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyChain);
+		refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyChain);
 	}
 
 	void TimelinePanel::switchCurveEditor()
 	{
-		if (!m_currentEditAnim.empty() && !m_currentEditObjectPath.empty() && !m_currentEditPropertyName.empty())
+		if (!m_currentEditAnim.empty() && !m_currentEditObjectPath.empty() && !m_currentEditPropertyChain.empty())
 		{
 			EditorApi.qWidgetSetEnable(EditorApi.qFindChild(m_ui, "m_graphicsView"), true);
 		}
@@ -1146,10 +1189,10 @@ namespace Echo
 		m_unitsPerPixel = (totalRect.getHeight() + 20.f) / viewRect.getHeight();
 
 		// refresh curve display
-		refreshCurveDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
+		refreshCurveDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyChain);
 
 		// refresh curve key display
-		refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyName);
+		refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyChain);
 
 		// draw ruler
 		drawRuler();

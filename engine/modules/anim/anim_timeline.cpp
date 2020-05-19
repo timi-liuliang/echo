@@ -342,11 +342,12 @@ namespace Echo
 		}
 	}
 
-	AnimProperty* Timeline::getProperty(const String& animName, const String& objectPath, const String& propertyName)
+	AnimProperty* Timeline::getProperty(const String& animName, const String& objectPath, const StringArray& propertyChain)
 	{
 		AnimClip* clip = getClip(animName.c_str());
 		if (clip)
 		{
+			String propertyName = StringUtil::ToString(propertyChain);
 			for (AnimObject* animNode : clip->m_objects)
 			{
 				const ObjectUserData& userData = any_cast<ObjectUserData>(animNode->m_userData);
@@ -393,17 +394,17 @@ namespace Echo
 
 	void Timeline::addKey(const String& animName, const String& objectPath, const String& propertyName, ui32 time, bool value)
 	{
-		AnimProperty* animProperty = getProperty(animName, objectPath, propertyName);
+		AnimProperty* animProperty = getProperty(animName, objectPath, StringUtil::Split(propertyName));
 		if (animProperty && animProperty->getType() == AnimProperty::Type::Bool)
 		{
-			AnimPropertyBool* boolProp = ECHO_DOWN_CAST<AnimPropertyBool*>(animProperty);
-			boolProp->addKey(time, value);
+			AnimPropertyBool* strProp = ECHO_DOWN_CAST<AnimPropertyBool*>(animProperty);
+			strProp->addKey(time, value);
 		}
 	}
 
 	void Timeline::addKey(const String& animName, const String& objectPath, const String& propertyName, ui32 time, const String& value)
 	{
-		AnimProperty* animProperty = getProperty(animName, objectPath, propertyName);
+		AnimProperty* animProperty = getProperty(animName, objectPath, StringUtil::Split(propertyName));
 		if (animProperty && animProperty->getType() == AnimProperty::Type::String)
 		{
 			AnimPropertyString* boolProp = ECHO_DOWN_CAST<AnimPropertyString*>(animProperty);
@@ -413,7 +414,7 @@ namespace Echo
 
 	void Timeline::addKey(const String& animName, const String& objectPath, const String& propertyName, int curveIdx, ui32 time, float value)
 	{
-		AnimProperty* animProperty = getProperty(animName, objectPath, propertyName);
+		AnimProperty* animProperty = getProperty(animName, objectPath, StringUtil::Split(propertyName));
 		if (animProperty)
 		{
 			if (animProperty->getType() == AnimProperty::Type::Vector3)
@@ -429,7 +430,7 @@ namespace Echo
 
 	void Timeline::setKey(const String& animName, const String& objectPath, const String& propertyName, int curveIdx, int keyIdx, float value)
 	{
-		AnimProperty* animProperty = getProperty(animName, objectPath, propertyName);
+		AnimProperty* animProperty = getProperty(animName, objectPath, StringUtil::Split(propertyName));
 		if (animProperty)
 		{
 			if (animProperty->getType() == AnimProperty::Type::Vector3)
@@ -479,6 +480,11 @@ namespace Echo
 						case AnimProperty::Type::Vector3:
 						{
 							Class::setPropertyValue(node, propertyChain.back(), ((AnimPropertyVec3*)property)->getValue());
+						}
+						break;
+						case AnimProperty::Type::String:
+						{
+							Class::setPropertyValue(node, propertyChain.back(), ((AnimPropertyString*)property)->getValue());
 						}
 						break;
 						default: break;

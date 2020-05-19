@@ -78,6 +78,7 @@ namespace Echo
 
 		// on add key
 		void onAddBoolKeyToCurve();
+		void onAddStringKeyToCurve();
 		void onAddKeyToCurveRed();
 		void onAddKeyToCurveGreen();
 		void onAddKeyToCurveBlue();
@@ -108,8 +109,8 @@ namespace Echo
 
 		// curve display
 		void clearCurveItemsTo(int number);
-		void refreshCurveDisplayToEditor(const String& objectPath, const String& propertyName);
-		void refreshCurveKeyDisplayToEditor(const String& objectPath, const String& propertyName);
+		void refreshCurveDisplayToEditor(const String& objectPath, const StringArray& propertyChain);
+		void refreshCurveKeyDisplayToEditor(const String& objectPath, const StringArray& propertyChain);
 
 		// set current edit anim
 		void setCurrentEditAnim(const char* animName);
@@ -131,7 +132,7 @@ namespace Echo
 		float						m_graphicsViewScale = 1.f;
 		QObject*					m_graphicsScene;
 		String						m_currentEditObjectPath;
-		String						m_currentEditPropertyName;
+		StringArray					m_currentEditPropertyChain;
 		float						m_rulerLeft = 0.f;
 		float						m_rulerTop = 0.f;
 		float						m_rulerHeight;

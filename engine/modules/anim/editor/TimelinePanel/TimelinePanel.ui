@@ -418,6 +418,14 @@
     <string>Add Bool Key To Curve</string>
    </property>
   </action>
+  <action name="m_actionAddStringKeyToCurve">
+   <property name="text">
+    <string>Add String Key To Curve</string>
+   </property>
+   <property name="toolTip">
+    <string>Add Bool Key To Curve</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
