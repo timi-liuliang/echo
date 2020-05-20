@@ -50,6 +50,19 @@ namespace Echo
 				nodePath = EditorApi.qTreeWidgetItemText(item, 0);
 			}
 		}
+
+		// get value
+		static bool getProertyValue(Timeline* timeline, String& objectPath, const StringArray& propertyChain, Variant& oVar)
+		{
+			Object* lastObject = timeline->getLastObject(objectPath, propertyChain);
+			if (lastObject)
+			{
+				Class::getPropertyValue(lastObject, propertyChain.back(), oVar);
+				return true;
+			}
+
+			return false;
+		}
 	};
 
 	TimelinePanel::TimelinePanel(Object* obj)
@@ -248,7 +261,7 @@ namespace Echo
 
 	void TimelinePanel::onAddResource()
 	{
-		Echo::String path = Editor::instance()->selectAResObject();
+		Echo::String path = Editor::instance()->selectAResObject("");
 		if (!path.empty())
 		{
 			m_timeline->addObject(m_currentEditAnim, Timeline::Resource, path);
@@ -1117,7 +1130,18 @@ namespace Echo
 		if (calcKeyTimeAndValueByPos(m_keyEditCursorScenePos, time, value))
 		{
 			time = Math::Clamp(time, 0, 1000 * 60 * 60 * 24);
-			m_timeline->addKey(m_currentEditAnim, m_currentEditObjectPath, StringUtil::ToString(m_currentEditPropertyChain), time, String("apple"));
+
+			Variant::Type variantType = m_timeline->getAnimPropertyVariableType(m_currentEditObjectPath, m_currentEditPropertyChain);
+			if (variantType == Variant::Type::ResourcePath)
+			{
+				Variant currentValue;
+				if (TimelinePanelUtil::getProertyValue(m_timeline, m_currentEditObjectPath, m_currentEditPropertyChain, currentValue))
+				{
+					String exts = currentValue.toResPath().getSupportExts().c_str();
+					String path = Editor::instance()->selectAResObject(exts.c_str());
+					m_timeline->addKey(m_currentEditAnim, m_currentEditObjectPath, StringUtil::ToString(m_currentEditPropertyChain), time, path);
+				}
+			}
 		}
 
 		// refresh curve and key display

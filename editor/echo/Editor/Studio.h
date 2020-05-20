@@ -93,7 +93,7 @@ namespace Studio
 		virtual const Echo::String selectASettingObject() override;
 
 		// select a resource object
-		virtual const Echo::String selectAResObject() override;
+		virtual const Echo::String selectAResObject(const char* exts) override;
 
 		// select a object's property
 		virtual const Echo::String selectAProperty(Echo::Object* objectPtr) override;

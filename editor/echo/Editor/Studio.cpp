@@ -283,9 +283,9 @@ namespace Studio
 		return SettingChooseDialog::getSelectingSetting(nullptr);
 	}
 
-	const Echo::String AStudio::selectAResObject()
+	const Echo::String AStudio::selectAResObject(const char* exts)
 	{
-		Echo::String resPath = ResChooseDialog::getSelectingFile( nullptr, "");
+		Echo::String resPath = ResChooseDialog::getSelectingFile( nullptr, exts);
 		return resPath;
 	}
 

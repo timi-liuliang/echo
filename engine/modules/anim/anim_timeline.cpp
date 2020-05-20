@@ -497,21 +497,27 @@ namespace Echo
 
 	AnimProperty::Type Timeline::getAnimPropertyType(const String& objectPath, const StringArray& propertyChain)
 	{
+		Variant::Type type = getAnimPropertyVariableType(objectPath, propertyChain);
+		switch (type)
+		{
+		case Variant::Type::Bool:			return AnimProperty::Type::Bool;
+		case Variant::Type::Vector3:		return AnimProperty::Type::Vector3;
+		case Variant::Type::ResourcePath:	return AnimProperty::Type::String;
+		case Variant::Type::Object:			return AnimProperty::Type::Object;
+		default:							return AnimProperty::Type::Unknown;
+		}
+	}
+
+	Variant::Type Timeline::getAnimPropertyVariableType(const String& objectPath, const StringArray& propertyChain)
+	{
 		Echo::Object* object = getLastObject(objectPath, propertyChain);
 		if (object)
 		{
 			Variant::Type type = Class::getPropertyType(object, propertyChain.back());
-			switch (type)
-			{
-			case Variant::Type::Bool:			return AnimProperty::Type::Bool;
-			case Variant::Type::Vector3:		return AnimProperty::Type::Vector3;
-			case Variant::Type::ResourcePath:	return AnimProperty::Type::String;
-			case Variant::Type::Object:			return AnimProperty::Type::Object;
-			default:							return AnimProperty::Type::Unknown;
-			}
+			return type;
 		}
 
-		return AnimProperty::Type::Unknown;
+		return Variant::Type::Unknown;
 	}
 
 	Object* Timeline::getLastObject(const String& objectPath, const StringArray& propertyChain)

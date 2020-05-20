@@ -33,7 +33,7 @@ namespace Echo
 		virtual const String selectASettingObject()=0;
 
 		// select a resource object
-		virtual const String selectAResObject()=0;
+		virtual const String selectAResObject(const char* exts)=0;
 
 		// select a object's property
 		virtual const Echo::String selectAProperty(Object* objectPtr)=0;

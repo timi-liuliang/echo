@@ -118,6 +118,7 @@ namespace Echo
 
 		// get anim property type by node path and property name
 		AnimProperty::Type getAnimPropertyType(const String& objectPath, const StringArray& propertyChain);
+		Variant::Type getAnimPropertyVariableType(const String& objectPath, const StringArray& propertyChain);
 
 		// get last object
 		Object* getLastObject(const String& objectPath, const StringArray& propertyChain);
