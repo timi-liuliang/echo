@@ -484,7 +484,16 @@ namespace Echo
 						break;
 						case AnimProperty::Type::String:
 						{
-							Class::setPropertyValue(node, propertyChain.back(), ((AnimPropertyString*)property)->getValue());
+							Variant::Type vType = getAnimPropertyVariableType(objUserData.m_path.c_str(), propertyChain);
+							if (vType == Variant::Type::String)
+							{
+								Class::setPropertyValue(node, propertyChain.back(), ((AnimPropertyString*)property)->getValue());
+							}
+							else if (vType == Variant::Type::ResourcePath)
+							{
+								ResourcePath resPath = ((AnimPropertyString*)property)->getValue();
+								Class::setPropertyValue(node, propertyChain.back(), resPath);
+							}
 						}
 						break;
 						default: break;
