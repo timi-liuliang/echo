@@ -326,6 +326,7 @@ namespace Echo
 						QTreeWidgetItem* objetcItem = EditorApi.qTreeWidgetItemNew();
 						EditorApi.qTreeWidgetItemSetText(objetcItem, 0, userData.m_path.c_str());
 						EditorApi.qTreeWidgetItemSetUserData(objetcItem, 0, "object");
+						EditorApi.qTreeWidgetItemSetUserData(objetcItem, 1, "object");
 						//EditorApi.qTreeWidgetItemSetIcon(objetcItem, 0, Editor::instance()->getNodeIcon(node).c_str());
 						EditorApi.qTreeWidgetItemSetIcon(objetcItem, 1, "engine/modules/anim/editor/icon/add.png");
 						EditorApi.qTreeWidgetItemAddChild(rootItem, objetcItem);
@@ -718,6 +719,31 @@ namespace Echo
 				}
 			}
 			break;
+			case AnimProperty::Type::String:
+			{
+				AnimPropertyString* strProperty = ECHO_DOWN_CAST<AnimPropertyString*>(animProperty);
+				if (strProperty)
+				{
+					//i32 keyIdx = 0;
+					for (auto& it : strProperty->m_keys)
+					{
+						ui32 t = it.first;
+						String value = it.second;
+
+						Vector2 center;
+						calcKeyPosByTimeAndValue(t, 0.f, center);
+
+						QWidget* checkBox = EditorApi.qCheckBoxNew();
+						QGraphicsProxyWidget* widget = EditorApi.qGraphicsSceneAddWidget(m_graphicsScene, checkBox);
+
+						EditorApi.qGraphicsProxyWidgetSetPos(widget, center.x, 50.f);
+						EditorApi.qGraphicsProxyWidgetSetZValue(widget, 250.f);
+
+						m_curveKeyWidgets.push_back(widget);
+					}
+				}
+			}
+			break;
                     
             default: break;
 			}
@@ -901,7 +927,7 @@ namespace Echo
 		EditorApi.qGraphicsViewSceneRect(EditorApi.qFindChild(m_ui, "m_graphicsView"), viewRect);
 		if (viewRect.left != m_rulerLeft || viewRect.top != m_rulerTop)
 		{
-			m_rulerLeft = viewRect.left;
+			m_rulerLeft = int(viewRect.left / 20) * 20;
 			m_rulerTop = viewRect.top;
 
 			for (QGraphicsItem* item : m_rulerItems)
@@ -916,7 +942,7 @@ namespace Echo
 			// ruler bottom
 			Color bgColor; bgColor.setRGBA(83, 83, 83, 255);
 			m_rulerItems.push_back(EditorApi.qGraphicsSceneAddRect(m_graphicsScene, std::max<float>(float(-keyWidth) + m_rulerLeft, -keyWidth), -1 + m_rulerTop, float(keyCount * keyWidth) + keyWidth, m_rulerHeight, bgColor));
-			m_rulerItems.push_back(EditorApi.qGraphicsSceneAddLine(m_graphicsScene, std::max<float>(float(-keyWidth) + m_rulerLeft, -keyWidth), m_rulerHeight + m_rulerTop, float(keyCount * keyWidth) + keyWidth + m_rulerLeft, m_rulerHeight + m_rulerTop, m_rulerColor));
+			m_rulerItems.push_back(EditorApi.qGraphicsSceneAddLine(m_graphicsScene, std::max<float>(float(-keyWidth) + m_rulerLeft, 0), m_rulerHeight + m_rulerTop, float(keyCount * keyWidth) + keyWidth + m_rulerLeft, m_rulerHeight + m_rulerTop, m_rulerColor));
 
 			// key line
 			for (int i = 0; i <= keyCount; i++)
@@ -973,7 +999,7 @@ namespace Echo
 		// ruler bottom
 		Color bgColor; bgColor.setRGBA(83, 83, 83, 255);
 		//m_rulerItems.push_back(qGraphicsSceneAddRect(m_graphicsScene, std::max<float>(float(-keyWidth) + m_rulerLeft, -keyWidth), -1 + m_rulerTop, float(keyCount * keyWidth) + keyWidth, m_rulerHeight, bgColor));
-		m_rulerItems.push_back(EditorApi.qGraphicsSceneAddLine(m_graphicsScene, std::max<float>(keyWidth + m_rulerLeft, -keyWidth), m_rulerHeight + m_rulerTop, std::max<float>(keyWidth + m_rulerLeft, -keyWidth), float(keyCount * keyWidth) + keyWidth + m_rulerLeft, m_rulerColor));
+		m_rulerItems.push_back(EditorApi.qGraphicsSceneAddLine(m_graphicsScene, std::max<float>(keyWidth + m_rulerLeft, 0), m_rulerHeight + m_rulerTop, std::max<float>(keyWidth + m_rulerLeft, 0), float(keyCount * keyWidth) + keyWidth + m_rulerLeft, m_rulerColor));
 
 		//// key line
 		//for (int i = 0; i <= keyCount; i++)
