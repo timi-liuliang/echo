@@ -27,6 +27,10 @@ namespace Echo
         
         // set linear velocity
         void setLinearVelocity(const Vector3& velocity);
+
+		// apply force
+		void applyForce(const Vector3& force);
+		void applyForceToCenter(const Vector3& force, bool wake);
         
         // set b2Body transform
         void syncTransformTob2Body();

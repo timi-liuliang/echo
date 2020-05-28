@@ -27,6 +27,8 @@ namespace Echo
 		CLASS_BIND_METHOD(Box2DBody, getGravityScale, DEF_METHOD("getGravityScale"));
 		CLASS_BIND_METHOD(Box2DBody, setGravityScale, DEF_METHOD("setGravityScale"));
         CLASS_BIND_METHOD(Box2DBody, setLinearVelocity, DEF_METHOD("setLinearVelocity"));
+		CLASS_BIND_METHOD(Box2DBody, applyForce, DEF_METHOD("applyForce"));
+		CLASS_BIND_METHOD(Box2DBody, applyForceToCenter, DEF_METHOD("applyForceToCenter"));
         CLASS_BIND_METHOD(Box2DBody, syncTransformTob2Body, DEF_METHOD("syncTransformTob2Body"));
 
 		CLASS_REGISTER_PROPERTY(Box2DBody, "Type", Variant::Type::StringOption, "getType", "setType");
@@ -61,6 +63,26 @@ namespace Echo
             m_body->SetLinearVelocity(b2Vec2(velocity.x / pixelsPerUnit, velocity.y / pixelsPerUnit));
         }
     }
+
+	void Box2DBody::applyForce(const Vector3& force)
+	{
+		if (m_body && force.lenSqr()>0)
+		{
+			Vector3 point = getWorldPosition();
+			bool wake = true;
+			float pixelsPerUnit = Box2DModule::instance()->getPixelsPerMeter();
+			m_body->ApplyForce(b2Vec2(force.x, force.y), b2Vec2(point.x / pixelsPerUnit, point.y / pixelsPerUnit), wake);
+		}
+	}
+
+	void Box2DBody::applyForceToCenter(const Vector3& force, bool wake)
+	{
+		if (m_body && force.lenSqr()>0)
+		{
+			float pixelsPerUnit = Box2DModule::instance()->getPixelsPerMeter();
+			m_body->ApplyForceToCenter(b2Vec2(force.x, force.y), wake);
+		}
+	}
 
     void Box2DBody::syncTransformTob2Body()
     {
