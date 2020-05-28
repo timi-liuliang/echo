@@ -160,8 +160,10 @@ namespace Echo
     void AudioPlayer::setAudio(const ResourcePath& res)
     {
         m_audioRes=res;
-
-		loadBuff();
+		if (!m_audioRes.isEmpty())
+		{
+			loadBuff();
+		}
     }
     
     bool AudioPlayer::loadBuff()
