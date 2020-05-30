@@ -27,6 +27,10 @@ namespace Echo
 		CLASS_BIND_METHOD(Box2DBody, getGravityScale, DEF_METHOD("getGravityScale"));
 		CLASS_BIND_METHOD(Box2DBody, setGravityScale, DEF_METHOD("setGravityScale"));
         CLASS_BIND_METHOD(Box2DBody, setLinearVelocity, DEF_METHOD("setLinearVelocity"));
+		CLASS_BIND_METHOD(Box2DBody, getLinearVelocity, DEF_METHOD("getLinearVelocity"));
+		CLASS_BIND_METHOD(Box2DBody, getAngle, DEF_METHOD("getAngle"));
+		CLASS_BIND_METHOD(Box2DBody, setAngularVelocity, DEF_METHOD("setAngularVelocity"));
+		CLASS_BIND_METHOD(Box2DBody, getAngularVelocity, DEF_METHOD("getAngularVelocity"));
 		CLASS_BIND_METHOD(Box2DBody, applyForce, DEF_METHOD("applyForce"));
 		CLASS_BIND_METHOD(Box2DBody, applyForceToCenter, DEF_METHOD("applyForceToCenter"));
         CLASS_BIND_METHOD(Box2DBody, syncTransformTob2Body, DEF_METHOD("syncTransformTob2Body"));
@@ -63,6 +67,52 @@ namespace Echo
             m_body->SetLinearVelocity(b2Vec2(velocity.x / pixelsPerUnit, velocity.y / pixelsPerUnit));
         }
     }
+
+	Vector3 Box2DBody::getLinearVelocity() const
+	{
+		Vector3 result = Vector3::ZERO;
+		if (m_body)
+		{
+			float pixelsPerUnit = Box2DModule::instance()->getPixelsPerMeter();
+			const b2Vec2& b2Velocity = m_body->GetLinearVelocity();
+			result = Vector3(b2Velocity.x * pixelsPerUnit, b2Velocity.y * pixelsPerUnit, 0.f);
+		}
+
+		return result;
+	}
+
+	float Box2DBody::getAngle() const
+	{
+		if(m_body)	
+		{
+			return m_body->GetAngle();
+		}
+		
+		return 0.f;
+	}
+
+	void Box2DBody::setAngularVelocity(float omega)
+	{
+		if (m_body)
+		{
+			if (!(omega >=0.09 && omega<0.11))
+			{
+				int a = 19;
+			}
+
+			m_body->SetAngularVelocity(omega);
+		}
+	}
+
+	float Box2DBody::getAngularVelocity()
+	{
+		if (m_body)
+		{
+			return m_body->GetAngularVelocity();
+		}
+
+		return 0.f;
+	}
 
 	void Box2DBody::applyForce(const Vector3& force)
 	{

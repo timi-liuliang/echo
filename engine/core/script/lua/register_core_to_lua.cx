@@ -92,6 +92,10 @@ function vec3:normalize()
 	end
 end
 
+function vec3:dot(rhs)
+	return self.x*rhs.x + self.y*rhs.y + self.z*rhs.z
+end
+
 function vec3:cross(rhs)
     vec = vec3(0.0, 0.0, 0.0)
 
@@ -163,6 +167,14 @@ function quaternion:rotateVec3(vec)
     uuv = uuv * 2.0
 
     return vec + uv + uuv
+end
+
+function quaternion:getRadian()
+	return math.acos(self.w) * 2.0
+end
+
+function quaternion:getDegree()
+	return math.deg(math.acos(self.w) * 2.0)
 end
 
 setmetatable(quaternion, quaternion)

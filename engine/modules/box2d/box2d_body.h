@@ -27,6 +27,14 @@ namespace Echo
         
         // set linear velocity
         void setLinearVelocity(const Vector3& velocity);
+		Vector3 getLinearVelocity() const;
+
+		// angle
+		float getAngle() const;
+
+		// angular velocity (radian/second)
+		void setAngularVelocity(float omega);
+		float getAngularVelocity();
 
 		// apply force
 		void applyForce(const Vector3& force);

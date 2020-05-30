@@ -65,7 +65,6 @@ namespace Echo
 		return q;
 	}
 
-	// 方向转角度
 	void Vector3::toHVAngle(float& oHorizonAngle, float& oVerticalAngle) const
 	{
 		oVerticalAngle = acos(y);
