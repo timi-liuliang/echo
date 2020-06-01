@@ -1,4 +1,5 @@
-#include "Axis3D.h"
+#include "TransformWidget.h"
+#include "EchoEngine.h"
 
 namespace Studio
 {
@@ -122,7 +123,7 @@ namespace Studio
 	//	return tpAngle;
 	//}
 
-	Axis3D::Axis3D()
+	TransformWidget::TransformWidget()
 	{
 		m_fScale = 1.f;
 
@@ -137,21 +138,25 @@ namespace Studio
 		m_vAxisDir[1] = Echo::Vector3(0.0f, 1.0f, 0.0f);
 		m_vAxisDir[2] = Echo::Vector3(0.0f, 0.0f, 1.0f);
 
-		//for (int i = 0; i < 3; i++)
-		//{
-		//	m_pAxes[i] = visualShapeMgr.CreateSegment(5);
-		//	m_pPlaneLine[i] = visualShapeMgr.CreateSegment(5);
-		//	m_pPlaneLine[3 + i] = visualShapeMgr.CreateSegment(5);
-		//	m_pAxes[i]->SetVisible(false);
-		//	m_pPlaneLine[i]->SetVisible(false);
-		//	m_pPlaneLine[3 + i]->SetVisible(false);
-		//}
+		m_axis = ECHO_DOWN_CAST<Echo::Gizmos*>(Echo::Class::create("Gizmos"));
+		m_axis->setParent(EchoEngine::instance()->getInvisibleEditorNode());
+		m_axis->setVisible(true);
+
+		for (int i = 0; i < 3; i++)
+		{
+			//m_pPlaneLine[i] = visualShapeMgr.CreateSegment(5);
+			//m_pPlaneLine[3 + i] = visualShapeMgr.CreateSegment(5);
+			//m_pPlaneLine[i]->SetVisible(false);
+			//m_pPlaneLine[3 + i]->SetVisible(false);
+		}
 
 
-		//// 设置参数
-		//m_pAxes[0]->Set(0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
-		//m_pAxes[1]->Set(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-		//m_pAxes[2]->Set(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+		// 设置参数
+		m_axis->clear();
+		m_axis->setRenderType("3d");
+		m_axis->drawLine(Echo::Vector3(0.0f, 0.0f, 0.0f), Echo::Vector3(1.0f, 0.0f, 0.0f), Echo::Color::RED);
+		m_axis->drawLine(Echo::Vector3(0.0f, 0.0f, 0.0f), Echo::Vector3(0.0f, 1.0f, 0.0f), Echo::Color::GREEN);
+		m_axis->drawLine(Echo::Vector3(0.0f, 0.0f, 0.0f), Echo::Vector3(0.0f, 0.0f, 1.0f), Echo::Color::BLUE);
 		//m_pPlaneLine[0]->Set(0.4f, 0.0f, 0.0f, 0.4f, 0.4f, 0.0f);
 		//m_pPlaneLine[1]->Set(0.4f, 0.4f, 0.0f, 0.0f, 0.4f, 0.0f);
 		//m_pPlaneLine[2]->Set(0.0f, 0.4f, 0.0f, 0.0f, 0.4f, 0.4f);
@@ -159,10 +164,7 @@ namespace Studio
 		//m_pPlaneLine[4]->Set(0.4f, 0.0f, 0.4f, 0.0f, 0.0f, 0.4f);
 		//m_pPlaneLine[5]->Set(0.4f, 0.0f, 0.0f, 0.4f, 0.0f, 0.4f);
 
-		//// 设置颜色
-		//m_pAxes[0]->SetColor(0xFFFF0000);
-		//m_pAxes[1]->SetColor(0xFF00FF00);
-		//m_pAxes[2]->SetColor(0xFF0000FF);
+		// 设置颜色
 		//m_pPlaneLine[0]->SetColor(0xFFFF0000);
 		//m_pPlaneLine[1]->SetColor(0xFF00FF00);
 		//m_pPlaneLine[2]->SetColor(0xFF00FF00);
@@ -218,7 +220,7 @@ namespace Studio
 		InitRenderState();
 	}
 
-	void Axis3D::InitRenderState()
+	void TransformWidget::InitRenderState()
 	{
 		//// 设置光栅化状态
 		//DepthStencilStateDesc desc;
@@ -234,7 +236,7 @@ namespace Studio
 		//}
 	}
 
-	void Axis3D::CatchEntity(Echo::Node* enity)
+	void TransformWidget::CatchEntity(Echo::Node* enity)
 	{
 		if (enity)
 			m_entityList.push_back(enity);
@@ -374,7 +376,7 @@ namespace Studio
 	//	}
 	//}
 
-	void Axis3D::UpdateTranslateCollBox()
+	void TransformWidget::UpdateTranslateCollBox()
 	{
 		//m_moveBoxs[EM_MOVE_X].Set(m_vPosition + Vector3(1.f, 0.f, 0.f), Vector3::XAxis, Vector3::YAxis, Vector3::ZAxis, 0.60f, 0.15f, 0.15f);
 		//m_moveBoxs[EM_MOVE_Y].Set(m_vPosition + Vector3(0.f, 1.f, 0.f), Vector3::XAxis, Vector3::YAxis, Vector3::ZAxis, 0.15f, 0.60f, 0.15f);
@@ -384,7 +386,7 @@ namespace Studio
 		//m_moveBoxs[EM_MOVE_XZPLANE].Set(m_vPosition + Vector3(0.2f, 0.0f, 0.2f), Vector3::XAxis, Vector3::YAxis, Vector3::ZAxis, 0.2f, 0.05f, 0.2f);
 	}
 
-	bool Axis3D::OnMouseDown(const Echo::Vector3& rayOrig, const Echo::Vector3& rayDir)
+	bool TransformWidget::OnMouseDown(const Echo::Vector3& rayOrig, const Echo::Vector3& rayDir)
 	{
 		/*
 		if (m_bVisible)
@@ -512,7 +514,7 @@ namespace Studio
 		return false;
 	}
 
-	void Axis3D::OnMouseUp()
+	void TransformWidget::OnMouseUp()
 	{/*
 		if (m_bVisible)
 		{
@@ -581,7 +583,7 @@ namespace Studio
 		m_rotateType = EM_ROTATE_NULL;*/
 	}
 
-	void Axis3D::SetPosition(float _posX, float _posY, float _posZ)
+	void TransformWidget::SetPosition(float _posX, float _posY, float _posZ)
 	{/*
 		m_vPosition.x = _posX;
 		m_vPosition.y = _posY;
@@ -606,12 +608,12 @@ namespace Studio
 		UpdateTranslateCollBox();*/
 	}
 
-	void Axis3D::SetPosition(const Echo::Vector3& pos)
+	void TransformWidget::SetPosition(const Echo::Vector3& pos)
 	{
 		this->SetPosition(pos.x, pos.y, pos.z);
 	}
 
-	void Axis3D::SetVisible(bool visible)
+	void TransformWidget::SetVisible(bool visible)
 	{
 		/*
 		// 本地记录
@@ -651,7 +653,7 @@ namespace Studio
 		}*/
 	}
 
-	void  Axis3D::Translate(const Echo::Vector3& trans)
+	void  TransformWidget::Translate(const Echo::Vector3& trans)
 	{
 		/*
 		if (trans != Echo::Vector3::ZERO)
@@ -681,14 +683,14 @@ namespace Studio
 		}*/
 	}
 
-	void Axis3D::SetEditType(EditType type)
+	void TransformWidget::SetEditType(EditType type)
 	{
 		this->SetVisible(false);
 		m_editType = type;
 		this->SetVisible(true);
 	}
 
-	void  Axis3D::SetScale(float fScale)
+	void  TransformWidget::SetScale(float fScale)
 	{
 		/*
 		m_fScale = fScale;
@@ -708,7 +710,7 @@ namespace Studio
 		*/
 	}
 
-	bool Axis3D::IsWorking()
+	bool TransformWidget::IsWorking()
 	{
 		return m_moveType != EM_MOVE_NULL || m_rotateType != EM_ROTATE_NULL;
 	}

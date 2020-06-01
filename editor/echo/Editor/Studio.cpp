@@ -194,10 +194,10 @@ namespace Studio
 		// remember it
 		m_projectCfg->addRecentProject(fileName);
 
-		// 初始化渲染窗口
+		// set project
 		TIME_PROFILE(EchoEngine::SetProject(fileName);)
 
-		// 通知主窗口
+		// notify main window
 		TIME_PROFILE
 		(
 			m_mainWindow->onOpenProject();

@@ -20,18 +20,21 @@ namespace Studio
 		// initialize
 		bool Initialize( size_t hwnd);
 
-		// 每帧渲染
+		// render
 		void Render( float elapsedTime, bool isRenderWindowVisible);
 
-		// 修改窗口大小
+		// resize
 		void Resize(int cx, int cy);
 
-		// 设置project
+		// set project
 		static bool SetProject( const char* projectFile);
 
 	public:
 		// on open node tree
 		bool onOpenNodeTree(const Echo::String& resPath);
+
+		// get invisible editor root node
+		Echo::Node* getInvisibleEditorNode() { return m_invisibleNodeForEditor; }
 
 		// current edit node
 		void setCurrentEditNode(Echo::Node* node);
@@ -42,23 +45,11 @@ namespace Studio
 		const Echo::String& getCurrentEditNodeSavePath() { return m_currentEditNodeSavePath; }
 
 	public:
-		// 预览声音
-		virtual void previewAudioEvent( const char* audioEvent);
-
-		// 停止正在预览的声源
-		virtual void stopCurPreviewAudioEvent();
-
-		//设置显示或隐藏背景网格
-		virtual void setBackGridVisibleOrNot(bool showFlag);
-
 		// resize grid
 		void resizeBackGrid3d();
 		void resizeBackGrid2d();
 
-		// 获取模型半径
-		float GetMeshRadius();
-
-		// 保存缩略图
+		// save thumbnail
 		void SaveSceneThumbnail(bool setCam = true);
 
 	public:

@@ -4,6 +4,7 @@
 #include "ui_NodeTreePanel.h"
 #include "QProperty.hpp"
 #include "NewNodeDialog.h"
+#include "TransformWidget.h"
 #include <engine/core/resource/Res.h>
 #include <engine/core/scene/node.h>
 

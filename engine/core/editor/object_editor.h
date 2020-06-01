@@ -30,16 +30,27 @@ namespace Echo
 		virtual ImagePtr getThumbnail() const { return nullptr; }
 
 		/* on editor selected this node*/
-		virtual void onEditorSelectThisNode() {}
+		virtual void onEditorSelectThisNode() { m_isSelected = true; }
 
 		// on editor unselected this node
-		virtual void onEditorUnSelectThisNode() {}
+		virtual void onEditorUnSelectThisNode() { m_isSelected = false; }
 
 		// object
 		Object* getObject() { return m_object; }
 
+	public:
+		// transform widget
+		virtual bool isUseTransformWidget() { return m_isSelected; }
+
+		// get transform widget position
+		virtual const Vector3& getTransformWidgetPosition() { return Vector3::ZERO; }
+
+		// on operate transform widget
+		virtual bool onOperateTransformWidget(const Vector3& translate, float yaw, float pitch, float roll, const Vector3& scale) { return false; }
+
 	protected:
 		Object*			m_object;
+		bool			m_isSelected = false;
 	};
 
 	struct ObjectEditorFactory

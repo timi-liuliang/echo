@@ -23,6 +23,7 @@ namespace Studio
 
 		delete m_inputController2d;
 		delete m_inputController3d;
+		EchoSafeDelete(m_transformWidget, TransformWidget);
 	}
 
 	// size hint
@@ -44,6 +45,9 @@ namespace Studio
 			m_inputController3d = new InputController3d;
 
 		m_inputController = m_inputController2d;
+
+		if (!m_transformWidget)
+			m_transformWidget = EchoNew(TransformWidget);
 
 		m_timer = new QTimer(this);
 		QObject::connect(m_timer, SIGNAL(timeout()), this, SLOT(Render()));

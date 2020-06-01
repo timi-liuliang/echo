@@ -48,10 +48,8 @@ namespace Studio
 		// 获取渲染窗口
 		virtual RenderWindow* getRenderWindow();
 
-		// 保存缩略图
+		// thumbnail
 		virtual bool saveThumbnail( const Echo::String& fileName, int type = 0 );
-
-		// 根据文件名获取缩略图全路径
 		Echo::String getThumbnailPath( const Echo::String& filePath,bool needOldExt = true);
 		
 		// 重置摄像机参数
@@ -70,12 +68,12 @@ namespace Studio
 		virtual bool deleteResource(const char* res);
 
 	public:
-		// 获取主窗口
+		// get main window
 		QWidget* getMainWindow();
 		ProjectWnd* getProjectWindow();
 		QDockWidget* getPropertyPanel();
 
-		// 打开项目文件
+		// open project
 		void OpenProject( const char* fileName);
 
 	public:
@@ -117,7 +115,7 @@ namespace Studio
         void initFunctions();
 
 	private:
-		Echo::String					m_rootPath;			// root direcory
+		Echo::String					m_rootPath;			// root directory
 		Echo::String					m_appPath;
 		MainWindow*						m_mainWindow = nullptr;
 		ProjectWnd*						m_projectWindow = nullptr;

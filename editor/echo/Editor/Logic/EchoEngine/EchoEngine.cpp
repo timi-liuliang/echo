@@ -264,47 +264,6 @@ namespace Studio
 		}
 	}
 
-	void EchoEngine::setBackGridVisibleOrNot(bool showFlag)
-	{
-		/*
-		if (m_backGrid && m_backGridNode)
-		{
-			if (!showFlag)
-			{
-				m_backGrid->attachTo(NULL);
-			}
-			else
-			{
-				m_backGrid->attachTo(m_backGridNode);
-			}
-		}
-		*/
-	}
-
-	void EchoEngine::previewAudioEvent(const char* audioEvent)
-	{
-		//Echo::FSAudioManager::instance()->destroyAudioSources(&m_curPlayAudio, 1);
-
-		//bool isAudioEvnet = Echo::StringUtil::StartWith(audioEvent, "event:", true);
-		//if (isAudioEvnet)
-		//{
-		//	Echo::AudioSource::Cinfo cinfo;
-		//	cinfo.m_name = audioEvent;
-		//	cinfo.m_is3DMode = false;
-		//	m_curPlayAudio = Echo::FSAudioManager::instance()->createAudioSource(cinfo);
-		//}
-	}
-
-	void EchoEngine::stopCurPreviewAudioEvent()
-	{
-		//Echo::FSAudioManager::instance()->destroyAudioSources(&m_curPlayAudio, 1);
-	}
-
-	float EchoEngine::GetMeshRadius()
-	{
-		return 10.f;
-	}
-
 	void EchoEngine::SaveSceneThumbnail(bool setCam)
 	{
 		//Echo::RenderTarget* defaultBackBuffer = Echo::RenderTargetManager::Instance()->getRenderTargetByID(Echo::RTI_DefaultBackBuffer);

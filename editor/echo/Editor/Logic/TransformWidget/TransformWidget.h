@@ -3,10 +3,12 @@
 #include <vector>
 #include <engine/core/math/Math.h>
 #include <engine/core/scene/node.h>
+#include <engine/core/gizmos/Gizmos.h>
+#include <engine/core/main/Engine.h>
 
 namespace Studio
 {
-	class Axis3D
+	class TransformWidget
 	{
 	public:
 		enum EditType
@@ -38,7 +40,7 @@ namespace Studio
 		};
 
 	public:
-		Axis3D();
+		TransformWidget();
 
 		// 关连接点
 		void CatchEntity(Echo::Node* enity);
@@ -87,7 +89,7 @@ namespace Studio
 		void UpdateTranslateCollBox();
 
 	private:
-		//VisualSegment3*	m_pAxes[3];			// x, y, z 轴线
+		Echo::Gizmos*			m_axis;			// x, y, z 轴线
 		//VisualSegment3* m_pPlaneLine[6];	// 显示面的6根线
 		//VisualCone3*	m_pCone[3];			// 圆锥体
 		Echo::Vector3			m_vPosition;		// 3D轴位置

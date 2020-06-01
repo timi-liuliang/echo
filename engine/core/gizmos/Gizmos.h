@@ -73,7 +73,7 @@ namespace Echo
         void initDefaultShader();
 
 	private:
-		bool			    m_isAutoClear;
+		bool			    m_isAutoClear = false;
         ShaderProgramPtr    m_shader;
 		MaterialPtr		    m_material;
 		Batch*			    m_lineBatch = nullptr;

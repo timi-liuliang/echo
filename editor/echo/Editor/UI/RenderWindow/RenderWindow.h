@@ -3,6 +3,7 @@
 #include <QWidget>
 #include <QMenu>
 #include "IInputController.h"
+#include "TransformWidget.h"
 
 namespace Studio
 {
@@ -75,6 +76,7 @@ namespace Studio
 		IRWInputController*		m_inputController = nullptr;
 		IRWInputController*		m_inputController2d = nullptr;
 		IRWInputController*		m_inputController3d = nullptr;
+		TransformWidget*		m_transformWidget = nullptr;
 		bool					m_isLeftButtonDown = false;
 		QSize					m_ratio;
 	};

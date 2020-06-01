@@ -134,7 +134,6 @@ namespace Echo
 	}
 
 	Gizmos::Gizmos()
-		: m_isAutoClear(false)
 	{
         initDefaultShader();
         
