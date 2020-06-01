@@ -150,27 +150,21 @@ namespace Studio
 			//m_pPlaneLine[3 + i]->SetVisible(false);
 		}
 
-
-		// 设置参数
 		m_axis->clear();
 		m_axis->setRenderType("3d");
+
+		// axis line
 		m_axis->drawLine(Echo::Vector3(0.0f, 0.0f, 0.0f), Echo::Vector3(1.0f, 0.0f, 0.0f), Echo::Color::RED);
 		m_axis->drawLine(Echo::Vector3(0.0f, 0.0f, 0.0f), Echo::Vector3(0.0f, 1.0f, 0.0f), Echo::Color::GREEN);
 		m_axis->drawLine(Echo::Vector3(0.0f, 0.0f, 0.0f), Echo::Vector3(0.0f, 0.0f, 1.0f), Echo::Color::BLUE);
-		//m_pPlaneLine[0]->Set(0.4f, 0.0f, 0.0f, 0.4f, 0.4f, 0.0f);
-		//m_pPlaneLine[1]->Set(0.4f, 0.4f, 0.0f, 0.0f, 0.4f, 0.0f);
-		//m_pPlaneLine[2]->Set(0.0f, 0.4f, 0.0f, 0.0f, 0.4f, 0.4f);
-		//m_pPlaneLine[3]->Set(0.0f, 0.4f, 0.4f, 0.0f, 0.0f, 0.4f);
-		//m_pPlaneLine[4]->Set(0.4f, 0.0f, 0.4f, 0.0f, 0.0f, 0.4f);
-		//m_pPlaneLine[5]->Set(0.4f, 0.0f, 0.0f, 0.4f, 0.0f, 0.4f);
 
-		// 设置颜色
-		//m_pPlaneLine[0]->SetColor(0xFFFF0000);
-		//m_pPlaneLine[1]->SetColor(0xFF00FF00);
-		//m_pPlaneLine[2]->SetColor(0xFF00FF00);
-		//m_pPlaneLine[3]->SetColor(0xFF0000FF);
-		//m_pPlaneLine[4]->SetColor(0xFF0000FF);
-		//m_pPlaneLine[5]->SetColor(0xFFFF0000);
+		// plane
+		m_axis->drawLine(Echo::Vector3(0.4f, 0.0f, 0.0f), Echo::Vector3(0.4f, 0.4f, 0.0f), Echo::Color::RED);
+		m_axis->drawLine(Echo::Vector3(0.4f, 0.4f, 0.0f), Echo::Vector3(0.0f, 0.4f, 0.0f), Echo::Color::GREEN);
+		m_axis->drawLine(Echo::Vector3(0.0f, 0.4f, 0.0f), Echo::Vector3(0.0f, 0.4f, 0.4f), Echo::Color::GREEN);
+		m_axis->drawLine(Echo::Vector3(0.0f, 0.4f, 0.4f), Echo::Vector3(0.0f, 0.0f, 0.4f), Echo::Color::BLUE);
+		m_axis->drawLine(Echo::Vector3(0.4f, 0.0f, 0.4f), Echo::Vector3(0.0f, 0.0f, 0.4f), Echo::Color::BLUE);
+		m_axis->drawLine(Echo::Vector3(0.4f, 0.0f, 0.0f), Echo::Vector3(0.4f, 0.0f, 0.4f), Echo::Color::RED);
 
 		//// 三个圆锥
 		//for (int i = 0; i < 3; i++)
