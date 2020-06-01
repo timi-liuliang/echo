@@ -18,7 +18,6 @@ namespace Studio
 			EM_EDIT_SCALE,			// 缩放
 		};
 
-		// 移动类型
 		enum EMoveType
 		{
 			EM_MOVE_NULL = -1,  // 默认类型,不移动
@@ -30,7 +29,6 @@ namespace Studio
 			EM_MOVE_XZPLANE,	// 在XZ平面内移动
 		};
 
-		// 旋转类型
 		enum ERotateType
 		{
 			EM_ROTATE_NULL,
@@ -45,9 +43,6 @@ namespace Studio
 		// 关连接点
 		void CatchEntity(Echo::Node* enity);
 
-		// 关连VisualShape
-		//void CatchTransform(Echo::Transform* vs);
-
 		// 清除附着的场景结点
 		void Clear() { /*m_entityList.clear(); m_transforms.clear();*/ }
 
@@ -60,10 +55,8 @@ namespace Studio
 		// 取消选择
 		void OnMouseUp();
 
-		// 设置位置
+		// position
 		void SetPosition(float _posX, float _posY, float _posZ);
-
-		// 设置位置
 		void SetPosition(const Echo::Vector3& pos);
 
 		// 设置是否可见
@@ -82,9 +75,6 @@ namespace Studio
 		bool IsWorking();
 
 	private:
-		// 初始化渲染状态
-		void InitRenderState();
-
 		// 更新碰撞检测盒子位置
 		void UpdateTranslateCollBox();
 
@@ -103,6 +93,5 @@ namespace Studio
 		float					m_fScale;
 		//boost::array<Box3, 6>	m_moveBoxs;			// 移动时盒子
 		std::vector<Echo::Node*>m_entityList;		// attached node list
-		//std::vector<Transform*>	m_transforms;		// VisualShape列表
 	};
 }

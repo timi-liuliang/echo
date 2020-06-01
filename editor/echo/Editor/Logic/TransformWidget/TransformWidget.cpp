@@ -209,25 +209,6 @@ namespace Studio
 		//m_pScale->Set(RenderLayout::TT_TriangleList, positions, sizeof(positions), indices, sizeof(indices), EF_R16UI);
 		//m_pScale->SetColor(0xFF33AAFF);
 		//m_pScale->SetVisible(false);
-
-		// 初始化渲染状态
-		InitRenderState();
-	}
-
-	void TransformWidget::InitRenderState()
-	{
-		//// 设置光栅化状态
-		//DepthStencilStateDesc desc;
-		//desc.m_depthFun = CF_Always;
-		//DepthStencilStatePtr depthStencilState = ARenderDevice->CreateDepthStencilState(desc);
-		//for (int i = 0; i < 3; i++)
-		//{
-		//	m_pAxes[i]->GetMaterial()->SetDepthStencilState(depthStencilState);
-		//	m_pPlaneLine[i]->GetMaterial()->SetDepthStencilState(depthStencilState);
-		//	m_pPlaneLine[3 + i]->GetMaterial()->SetDepthStencilState(depthStencilState);
-		//	m_pCone[i]->GetMaterial()->SetDepthStencilState(depthStencilState);
-		//	m_pCycle[i]->GetMaterial()->SetDepthStencilState(depthStencilState);
-		//}
 	}
 
 	void TransformWidget::CatchEntity(Echo::Node* enity)
@@ -235,12 +216,6 @@ namespace Studio
 		if (enity)
 			m_entityList.push_back(enity);
 	}
-
-	//void Axis3D::CatchTransform(Transform* vs)
-	//{
-	//	if (vs)
-	//		m_transforms.push_back(vs);
-	//}
 
 	//void Axis3D::OnMouseMove(const Vector3& rayOrig0, const Vector3& rayDir0, const Vector3& rayOrig1, const Vector3& rayDir1, POINT* ptPre/*=NULL*/, POINT* ptCurr/*=NULL*/)
 	//{
