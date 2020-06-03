@@ -78,12 +78,14 @@ namespace Studio
 		// 更新碰撞检测盒子位置
 		void UpdateTranslateCollBox();
 
+		// draw cone
+		void drawCone(float radius, float height, const Echo::Transform& transform, const Echo::Color& color);
+
 	private:
 		Echo::Gizmos*			m_axis;			// x, y, z 轴线
 		//VisualSegment3* m_pPlaneLine[6];	// 显示面的6根线
 		//VisualCone3*	m_pCone[3];			// 圆锥体
 		Echo::Vector3			m_vPosition;		// 3D轴位置
-		Echo::Vector3			m_vAxisDir[3];		// 三个轴的朝向	
 		//VisualCycle3*			m_pCycle[3];
 		//VisualShape*			m_pScale;			// 缩放
 		EditType				m_editType;			// 编辑类型

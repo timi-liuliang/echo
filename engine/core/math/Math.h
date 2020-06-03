@@ -8,3 +8,4 @@
 #include "Matrix4.h"
 #include "Quaternion.h"
 #include "Curve.h"
+#include "Transform.h"

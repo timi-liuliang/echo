@@ -125,61 +125,40 @@ namespace Studio
 
 	TransformWidget::TransformWidget()
 	{
+		using namespace Echo;
+
 		m_fScale = 1.f;
 
 		m_editType = EM_EDIT_TRANSLATE;
 		m_rotateType = EM_ROTATE_NULL;
 		m_moveType = EM_MOVE_NULL;
-		m_vPosition = Echo::Vector3::ZERO;
+		m_vPosition = Vector3::ZERO;
 		m_bVisible = false;
-
-		// 指定三个轴的朝向
-		m_vAxisDir[0] = Echo::Vector3(1.0f, 0.0f, 0.0f);
-		m_vAxisDir[1] = Echo::Vector3(0.0f, 1.0f, 0.0f);
-		m_vAxisDir[2] = Echo::Vector3(0.0f, 0.0f, 1.0f);
 
 		m_axis = ECHO_DOWN_CAST<Echo::Gizmos*>(Echo::Class::create("Gizmos"));
 		m_axis->setParent(EchoEngine::instance()->getInvisibleEditorNode());
 		m_axis->setVisible(true);
 
-		for (int i = 0; i < 3; i++)
-		{
-			//m_pPlaneLine[i] = visualShapeMgr.CreateSegment(5);
-			//m_pPlaneLine[3 + i] = visualShapeMgr.CreateSegment(5);
-			//m_pPlaneLine[i]->SetVisible(false);
-			//m_pPlaneLine[3 + i]->SetVisible(false);
-		}
-
 		m_axis->clear();
 		m_axis->setRenderType("3d");
 
 		// axis line
-		m_axis->drawLine(Echo::Vector3(0.0f, 0.0f, 0.0f), Echo::Vector3(1.0f, 0.0f, 0.0f), Echo::Color::RED);
-		m_axis->drawLine(Echo::Vector3(0.0f, 0.0f, 0.0f), Echo::Vector3(0.0f, 1.0f, 0.0f), Echo::Color::GREEN);
-		m_axis->drawLine(Echo::Vector3(0.0f, 0.0f, 0.0f), Echo::Vector3(0.0f, 0.0f, 1.0f), Echo::Color::BLUE);
+		m_axis->drawLine(Vector3(0.0f, 0.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f), Echo::Color::RED);
+		m_axis->drawLine(Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f), Echo::Color::GREEN);
+		m_axis->drawLine(Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f), Echo::Color::BLUE);
 
 		// plane
-		m_axis->drawLine(Echo::Vector3(0.4f, 0.0f, 0.0f), Echo::Vector3(0.4f, 0.4f, 0.0f), Echo::Color::RED);
-		m_axis->drawLine(Echo::Vector3(0.4f, 0.4f, 0.0f), Echo::Vector3(0.0f, 0.4f, 0.0f), Echo::Color::GREEN);
-		m_axis->drawLine(Echo::Vector3(0.0f, 0.4f, 0.0f), Echo::Vector3(0.0f, 0.4f, 0.4f), Echo::Color::GREEN);
-		m_axis->drawLine(Echo::Vector3(0.0f, 0.4f, 0.4f), Echo::Vector3(0.0f, 0.0f, 0.4f), Echo::Color::BLUE);
-		m_axis->drawLine(Echo::Vector3(0.4f, 0.0f, 0.4f), Echo::Vector3(0.0f, 0.0f, 0.4f), Echo::Color::BLUE);
-		m_axis->drawLine(Echo::Vector3(0.4f, 0.0f, 0.0f), Echo::Vector3(0.4f, 0.0f, 0.4f), Echo::Color::RED);
+		m_axis->drawLine(Vector3(0.4f, 0.0f, 0.0f), Vector3(0.4f, 0.4f, 0.0f), Color::RED);
+		m_axis->drawLine(Vector3(0.4f, 0.4f, 0.0f), Vector3(0.0f, 0.4f, 0.0f), Color::GREEN);
+		m_axis->drawLine(Vector3(0.0f, 0.4f, 0.0f), Vector3(0.0f, 0.4f, 0.4f), Color::GREEN);
+		m_axis->drawLine(Vector3(0.0f, 0.4f, 0.4f), Vector3(0.0f, 0.0f, 0.4f), Color::BLUE);
+		m_axis->drawLine(Vector3(0.4f, 0.0f, 0.4f), Vector3(0.0f, 0.0f, 0.4f), Color::BLUE);
+		m_axis->drawLine(Vector3(0.4f, 0.0f, 0.0f), Vector3(0.4f, 0.0f, 0.4f), Color::RED);
 
-		//// 三个圆锥
-		//for (int i = 0; i < 3; i++)
-		//{
-		//	m_pCone[i] = visualShapeMgr.CreateCone(5);
-		//	m_pCone[i]->SetRadiusAndHeight(0.1f, 0.6f);
-		//	m_pCone[i]->SetFace(m_vAxisDir[i]);
-		//	m_pCone[i]->SetVisible(false);
-		//	//m_pCone[i]->SetSizeFixed( true);
-		//}
-
-		//// 设置颜色
-		//m_pCone[0]->SetColor(0xFFFF0000);
-		//m_pCone[1]->SetColor(0xFF00FF00);
-		//m_pCone[2]->SetColor(0xFF0000FF);
+		// cones
+		drawCone(0.1f, 0.6f, Transform(Vector3::UNIT_X, Vector3::ONE, Quaternion::IDENTITY), Echo::Color::RED);
+		drawCone(0.1f, 0.6f, Transform(Vector3::UNIT_Y, Vector3::ONE, Quaternion::fromVec3ToVec3(Echo::Vector3::UNIT_X, Echo::Vector3::UNIT_Y)), Echo::Color::GREEN);
+		drawCone(0.1f, 0.6f, Transform(Vector3::UNIT_Z, Vector3::ONE, Quaternion::fromVec3ToVec3(Echo::Vector3::UNIT_X, Echo::Vector3::UNIT_Z)), Echo::Color::BLUE);
 
 		//// 三个圆
 		//for (int i = 0; i < 3; i++)
@@ -209,6 +188,37 @@ namespace Studio
 		//m_pScale->Set(RenderLayout::TT_TriangleList, positions, sizeof(positions), indices, sizeof(indices), EF_R16UI);
 		//m_pScale->SetColor(0xFF33AAFF);
 		//m_pScale->SetVisible(false);
+	}
+
+	void TransformWidget::drawCone(float radius, float height, const Echo::Transform& transform, const Echo::Color& color)
+	{
+		// init positions
+		Echo::Vector3 positions[27];
+		for (int i = 0; i < 25; i++)
+		{
+			float theta = (2 * Echo::Math::PI * i) / 24.0f;
+
+			positions[i].x = 0.0f;
+			positions[i].y = sinf(theta) * radius;
+			positions[i].z = cosf(theta) * radius;
+		}
+		positions[25] = Echo::Vector3(0.0f, 0.0f, 0.0f);
+		positions[26] = Echo::Vector3(height, 0.0f, 0.0f);
+
+		// transform
+		for (int i = 0; i < 27; i++)
+		{
+			positions[i] = transform.transformVec3(positions[i]);
+		}
+
+		// draw triangles
+		for (int i = 0; i < 25; i++)
+		{
+			float theta = (2 * Echo::Math::PI * i) / 24.0f;
+
+			m_axis->drawTriangle(positions[i], positions[i + 1], positions[25], color);
+			m_axis->drawTriangle(positions[i], positions[26], positions[i+1], color);
+		}
 	}
 
 	void TransformWidget::CatchEntity(Echo::Node* enity)

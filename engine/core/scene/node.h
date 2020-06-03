@@ -15,28 +15,6 @@ namespace Echo
 	public:
 		typedef vector<Node*>::type NodeArray;
 
-		// transform
-		struct Transform
-		{
-			Vector3		m_pos;
-			Quaternion	m_quat;
-			Vector3		m_scale;
-
-			Transform() { reset(); }
-
-			// build matrix
-			void buildMatrix(Matrix4& mat) const;
-
-			// build inverse matrix
-			void buildInvMatrix(Matrix4& invMat) const;
-
-			// operate "*"
-			Transform operator* (const Transform& b) const;
-
-			// reset
-			void reset();
-		};
-
 		// lua script
 		struct LuaScript
 		{

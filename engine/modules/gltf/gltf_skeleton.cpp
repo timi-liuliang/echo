@@ -112,7 +112,7 @@ namespace Echo
 		if (clip)
 		{
 			// reset
-			for (Node::Transform& transform : m_nodeTransforms)
+			for (Transform& transform : m_nodeTransforms)
 			{
 				transform.reset();
 			}

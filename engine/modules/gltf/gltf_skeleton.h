@@ -53,6 +53,6 @@ namespace Echo
 		GltfResPtr						m_asset;			// gltf asset ptr
 		StringOption					m_animations;
 		vector<AnimClip*>::type			m_clips;
-		vector<Node::Transform>::type	m_nodeTransforms;
+		vector<Transform>::type			m_nodeTransforms;
 	};
 }

@@ -70,48 +70,6 @@ namespace Echo
 		}
 	}
 
-	void Node::Transform::buildMatrix(Matrix4& mat) const
-	{
-		mat.makeScaling( m_scale);
-
-		Matrix4 matRot;
-		matRot.fromQuan(m_quat);
-		mat = mat * matRot;
-
-		mat.translate(m_pos);
-	}
-
-	void Node::Transform::buildInvMatrix(Matrix4& invMat) const
-	{
-		invMat.makeTranslation(-m_pos);
-		Matrix4 matRot;
-		Quaternion rot = m_quat;
-		rot.conjugate();
-		matRot.fromQuan(rot);
-		invMat = invMat * matRot;
-		matRot.makeScaling(1.0f / m_scale.x, 1.0f / m_scale.y, 1.0f / m_scale.z);
-		invMat = invMat * matRot;
-	}
-
-	Node::Transform Node::Transform::operator* (const Transform& b) const
-	{
-		Transform result;
-
-		result.m_quat = m_quat * b.m_quat;
-		result.m_scale = m_scale * b.m_scale;
-		result.m_pos = m_quat * (m_scale * b.m_pos);
-		result.m_pos += m_pos;
-
-		return result;
-	}
-
-	void Node::Transform::reset()
-	{
-		m_pos = Vector3::ZERO;
-		m_quat = Quaternion::IDENTITY;
-		m_scale = Vector3::ONE;
-	}
-
 	Node::Node()
 	{
 		m_matWorld = Matrix4::IDENTITY;
