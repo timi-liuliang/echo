@@ -125,19 +125,24 @@ namespace Studio
 
 	TransformWidget::TransformWidget()
 	{
-		using namespace Echo;
-
 		m_fScale = 1.f;
 
 		m_editType = EM_EDIT_TRANSLATE;
 		m_rotateType = EM_ROTATE_NULL;
 		m_moveType = EM_MOVE_NULL;
-		m_vPosition = Vector3::ZERO;
+		m_vPosition = Echo::Vector3::ZERO;
 		m_bVisible = false;
 
 		m_axis = ECHO_DOWN_CAST<Echo::Gizmos*>(Echo::Class::create("Gizmos"));
 		m_axis->setParent(EchoEngine::instance()->getInvisibleEditorNode());
 		m_axis->setVisible(true);
+
+		draw();
+	}
+
+	void TransformWidget::draw()
+	{
+		using namespace Echo;
 
 		m_axis->clear();
 		m_axis->setRenderType("3d");

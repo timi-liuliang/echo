@@ -78,7 +78,8 @@ namespace Studio
 		// 更新碰撞检测盒子位置
 		void UpdateTranslateCollBox();
 
-		// draw cone
+		// draw
+		void draw();
 		void drawCone(float radius, float height, const Echo::Transform& transform, const Echo::Color& color);
 
 	private:
