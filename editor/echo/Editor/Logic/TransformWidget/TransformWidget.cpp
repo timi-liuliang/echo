@@ -127,9 +127,9 @@ namespace Studio
 	{
 		m_fScale = 1.f;
 
-		m_editType = EM_EDIT_TRANSLATE;
-		m_rotateType = EM_ROTATE_NULL;
-		m_moveType = EM_MOVE_NULL;
+		m_editType = EditType::Translate;
+		m_rotateType = RotateType::None;
+		m_moveType = MoveType::None;
 		m_vPosition = Echo::Vector3::ZERO;
 		m_bVisible = false;
 
@@ -224,12 +224,6 @@ namespace Studio
 			m_axis->drawTriangle(positions[i], positions[i + 1], positions[25], color);
 			m_axis->drawTriangle(positions[i], positions[26], positions[i+1], color);
 		}
-	}
-
-	void TransformWidget::CatchEntity(Echo::Node* enity)
-	{
-		if (enity)
-			m_entityList.push_back(enity);
 	}
 
 	//void Axis3D::OnMouseMove(const Vector3& rayOrig0, const Vector3& rayDir0, const Vector3& rayOrig1, const Vector3& rayDir1, POINT* ptPre/*=NULL*/, POINT* ptCurr/*=NULL*/)
@@ -692,10 +686,5 @@ namespace Studio
 		m_pCone[1]->GetTransform()->SetTrans(m_vPosition.x, m_fScale + m_vPosition.y, m_vPosition.z);
 		m_pCone[2]->GetTransform()->SetTrans(m_vPosition.x, m_vPosition.y, m_fScale + m_vPosition.z);
 		*/
-	}
-
-	bool TransformWidget::IsWorking()
-	{
-		return m_moveType != EM_MOVE_NULL || m_rotateType != EM_ROTATE_NULL;
 	}
 }
