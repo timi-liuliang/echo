@@ -128,6 +128,7 @@ namespace Studio
 			m_isLeftButtonDown = true;
 		}
 
+		m_transformWidget->onMouseDown(Echo::Vector2(e->localPos().x(), e->localPos().y()));
 		m_inputController->mousePressEvent(e);
 	}
 
@@ -143,6 +144,7 @@ namespace Studio
 			m_isLeftButtonDown = false;
 		}
 
+		m_transformWidget->onMouseUp();
 		m_inputController->mouseReleaseEvent(e);
 	}
 

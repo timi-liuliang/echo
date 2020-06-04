@@ -1,5 +1,6 @@
 #include "TransformWidget.h"
 #include "EchoEngine.h"
+#include <engine/core/geom/Ray.h>
 
 namespace Studio
 {
@@ -131,7 +132,6 @@ namespace Studio
 		m_rotateType = RotateType::None;
 		m_moveType = MoveType::None;
 		m_vPosition = Echo::Vector3::ZERO;
-		m_bVisible = false;
 
 		m_axis = ECHO_DOWN_CAST<Echo::Gizmos*>(Echo::Class::create("Gizmos"));
 		m_axis->setParent(EchoEngine::instance()->getInvisibleEditorNode());
@@ -161,7 +161,7 @@ namespace Studio
 		m_axis->drawLine(Vector3(0.4f, 0.0f, 0.0f), Vector3(0.4f, 0.0f, 0.4f), Color::RED);
 
 		// cones
-		drawCone(0.1f, 0.6f, Transform(Vector3::UNIT_X, Vector3::ONE, Quaternion::IDENTITY), Echo::Color::RED);
+		drawCone(0.1f, 0.6f, Transform(Vector3::UNIT_X, Vector3::ONE, Quaternion::IDENTITY), m_moveType==MoveType::XAxis ? Color::YELLOW : Color::RED);
 		drawCone(0.1f, 0.6f, Transform(Vector3::UNIT_Y, Vector3::ONE, Quaternion::fromVec3ToVec3(Echo::Vector3::UNIT_X, Echo::Vector3::UNIT_Y)), Echo::Color::GREEN);
 		drawCone(0.1f, 0.6f, Transform(Vector3::UNIT_Z, Vector3::ONE, Quaternion::fromVec3ToVec3(Echo::Vector3::UNIT_X, Echo::Vector3::UNIT_Z)), Echo::Color::BLUE);
 
@@ -354,211 +354,119 @@ namespace Studio
 	//	}
 	//}
 
-	void TransformWidget::UpdateTranslateCollBox()
+	void TransformWidget::updateTranslateCollisionBox()
 	{
-		//m_moveBoxs[EM_MOVE_X].Set(m_vPosition + Vector3(1.f, 0.f, 0.f), Vector3::XAxis, Vector3::YAxis, Vector3::ZAxis, 0.60f, 0.15f, 0.15f);
-		//m_moveBoxs[EM_MOVE_Y].Set(m_vPosition + Vector3(0.f, 1.f, 0.f), Vector3::XAxis, Vector3::YAxis, Vector3::ZAxis, 0.15f, 0.60f, 0.15f);
-		//m_moveBoxs[EM_MOVE_Z].Set(m_vPosition + Vector3(0.f, 0.f, 1.f), Vector3::XAxis, Vector3::YAxis, Vector3::ZAxis, 0.15f, 0.15f, 0.60f);
-		//m_moveBoxs[EM_MOVE_XYPLANE].Set(m_vPosition + Vector3(0.2f, 0.2f, 0.0f), Vector3::XAxis, Vector3::YAxis, Vector3::ZAxis, 0.2f, 0.2f, 0.05f);
-		//m_moveBoxs[EM_MOVE_YZPLANE].Set(m_vPosition + Vector3(0.0f, 0.2f, 0.2f), Vector3::XAxis, Vector3::YAxis, Vector3::ZAxis, 0.05f, 0.2f, 0.2f);
-		//m_moveBoxs[EM_MOVE_XZPLANE].Set(m_vPosition + Vector3(0.2f, 0.0f, 0.2f), Vector3::XAxis, Vector3::YAxis, Vector3::ZAxis, 0.2f, 0.05f, 0.2f);
+		using namespace Echo;
+
+		m_moveBoxs[int(MoveType::XAxis)].Set(m_vPosition + Vector3(1.f, 0.f, 0.f), Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.60f, 0.15f, 0.15f);
+		m_moveBoxs[int(MoveType::YAxis)].Set(m_vPosition + Vector3(0.f, 1.f, 0.f), Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.15f, 0.60f, 0.15f);
+		m_moveBoxs[int(MoveType::ZAxis)].Set(m_vPosition + Vector3(0.f, 0.f, 1.f), Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.15f, 0.15f, 0.60f);
+		m_moveBoxs[int(MoveType::XYPlane)].Set(m_vPosition + Vector3(0.2f, 0.2f, 0.0f), Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.2f, 0.2f, 0.05f);
+		m_moveBoxs[int(MoveType::YZPlane)].Set(m_vPosition + Vector3(0.0f, 0.2f, 0.2f), Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.05f, 0.2f, 0.2f);
+		m_moveBoxs[int(MoveType::XZPlane)].Set(m_vPosition + Vector3(0.2f, 0.0f, 0.2f), Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.2f, 0.05f, 0.2f);
 	}
 
-	bool TransformWidget::OnMouseDown(const Echo::Vector3& rayOrig, const Echo::Vector3& rayDir)
+	bool TransformWidget::onMouseDown(const Echo::Vector2& localPos)
 	{
-		/*
-		if (m_bVisible)
+		Echo::Camera* camera = Echo::NodeTree::instance()->get3dCamera();
+		if (camera)
 		{
-			switch (m_editType)
-			{
-			case EM_EDIT_TRANSLATE:
-			{
-				m_moveType = EM_MOVE_NULL;
-				Line3 line(rayOrig, rayDir);
-				for (int i = EM_MOVE_X; i <= EM_MOVE_XZPLANE; i++)
-				{
-					IntrLine3Box3 intrLB(line, m_moveBoxs[i]);
-					if (intrLB.Test())
-					{
-						m_moveType = EMoveType(i);
-						break;
-					}
-				}
+			Echo::Ray ray;
+			camera->getCameraRay(ray, localPos);
 
-				// 更改显示
-				switch (m_moveType)
-				{
-				case EM_MOVE_X:
-				{
-					m_pAxes[0]->SetColor(0xFFFFFFFF);
-					m_pCone[0]->SetColor(0xFFFFFFFF);
-				}
-				break;
-				case EM_MOVE_Y:
-				{
-					m_pAxes[1]->SetColor(0xFFFFFFFF);
-					m_pCone[1]->SetColor(0xFFFFFFFF);
-				}
-				break;
-				case EM_MOVE_Z:
-				{
-					m_pAxes[2]->SetColor(0xFFFFFFFF);
-					m_pCone[2]->SetColor(0xFFFFFFFF);
-				}
-				break;
-				case EM_MOVE_XYPLANE:
-				{
-					m_pPlaneLine[0]->SetColor(0xFFFFFFFF);
-					m_pPlaneLine[1]->SetColor(0xFFFFFFFF);
-				}
-				break;
-				case EM_MOVE_YZPLANE:
-				{
-					m_pPlaneLine[2]->SetColor(0xFFFFFFFF);
-					m_pPlaneLine[3]->SetColor(0xFFFFFFFF);
-				}
-				break;
-				case EM_MOVE_XZPLANE:
-				{
-					m_pPlaneLine[4]->SetColor(0xFFFFFFFF);
-					m_pPlaneLine[5]->SetColor(0xFFFFFFFF);
-				}
-				break;
-				}
-			}
-			break;
-			case EM_EDIT_ROTATE:
+			if (m_isVisible)
 			{
-				float fLastDist = 1e30f;
-				float fDist;
-				Vector3 intersectPos;
-				Plane3 plane;
-				m_rotateType = EM_ROTATE_NULL;
-
-				// 选择
-				for (int i = 0; i < 3; i++)
+				switch (m_editType)
 				{
-					Line3 ray(rayOrig, rayDir);
-					Plane3 plane(m_vPosition, m_vAxisDir[i]);
-					IntrLine3Plane3 intrLP(ray, plane);
-					if (intrLP.Test())
+				case EditType::Translate:
+				{
+					m_moveType = MoveType::None;
+					for (int i = int(MoveType::XAxis); i <= int(MoveType::YZPlane); i++)
 					{
-						fDist = intrLP.m_distance;
-						intersectPos = intrLP.m_intrPoint;
-						if ((intersectPos - m_vPosition).Length() > 0.8f*m_fScale && (intersectPos - m_vPosition).Length() < 1.2f*m_fScale)
+						//IntrLine3Box3 intrLB(line, m_moveBoxs[i]);
+						//if (intrLB.Test())
 						{
-							if (i == 0) m_rotateType = EM_ROTATE_X;
-							if (i == 1) m_rotateType = EM_ROTATE_Y;
-							if (i == 2) m_rotateType = EM_ROTATE_Z;
-
-							fLastDist = fDist;
-
+							m_moveType = MoveType::XAxis;// MoveType(i);
 							break;
 						}
 					}
-				}
 
-				// 显示
-				switch (m_rotateType)
-				{
-				case EM_ROTATE_X:
-					m_pCycle[0]->SetColor(0xFFFFFFFF);
-					break;
-				case EM_ROTATE_Y:
-					m_pCycle[1]->SetColor(0xFFFFFFFF);
-					break;
-				case EM_ROTATE_Z:
-					m_pCycle[2]->SetColor(0xFFFFFFFF);
-					break;
+					// update display
+					draw();
 				}
-			}
-			break;
-			case EM_EDIT_SCALE:
-			{
-				Triangle3 triangle(m_vPosition, m_vPosition, m_vPosition);
-				triangle.m_v[0].x += 0.5f*m_fScale; triangle.m_v[1].y += 0.5f*m_fScale; triangle.m_v[2].z += 0.5f*m_fScale;
-				Line3 line3(rayOrig, rayDir);
-				float fdist;
+				break;
+				//case EM_EDIT_ROTATE:
+				//{
+				//	float fLastDist = 1e30f;
+				//	float fDist;
+				//	Vector3 intersectPos;
+				//	Plane3 plane;
+				//	m_rotateType = EM_ROTATE_NULL;
 
-				if (Intersect(line3, triangle, fdist))
-				{
-					m_pScale->SetColor(0xFFFFFFFF);
+				//	// 选择
+				//	for (int i = 0; i < 3; i++)
+				//	{
+				//		Line3 ray(rayOrig, rayDir);
+				//		Plane3 plane(m_vPosition, m_vAxisDir[i]);
+				//		IntrLine3Plane3 intrLP(ray, plane);
+				//		if (intrLP.Test())
+				//		{
+				//			fDist = intrLP.m_distance;
+				//			intersectPos = intrLP.m_intrPoint;
+				//			if ((intersectPos - m_vPosition).Length() > 0.8f*m_fScale && (intersectPos - m_vPosition).Length() < 1.2f*m_fScale)
+				//			{
+				//				if (i == 0) m_rotateType = EM_ROTATE_X;
+				//				if (i == 1) m_rotateType = EM_ROTATE_Y;
+				//				if (i == 2) m_rotateType = EM_ROTATE_Z;
+
+				//				fLastDist = fDist;
+
+				//				break;
+				//			}
+				//		}
+				//	}
+
+				//	// 显示
+				//	switch (m_rotateType)
+				//	{
+				//	case EM_ROTATE_X:
+				//		m_pCycle[0]->SetColor(0xFFFFFFFF);
+				//		break;
+				//	case EM_ROTATE_Y:
+				//		m_pCycle[1]->SetColor(0xFFFFFFFF);
+				//		break;
+				//	case EM_ROTATE_Z:
+				//		m_pCycle[2]->SetColor(0xFFFFFFFF);
+				//		break;
+				//	}
+				//}
+				//break;
+				//case EM_EDIT_SCALE:
+				//{
+				//	Triangle3 triangle(m_vPosition, m_vPosition, m_vPosition);
+				//	triangle.m_v[0].x += 0.5f*m_fScale; triangle.m_v[1].y += 0.5f*m_fScale; triangle.m_v[2].z += 0.5f*m_fScale;
+				//	Line3 line3(rayOrig, rayDir);
+				//	float fdist;
+
+				//	if (Intersect(line3, triangle, fdist))
+				//	{
+				//		m_pScale->SetColor(0xFFFFFFFF);
+				//	}
+				//}
+				//break;
 				}
-			}
-			break;
 			}
 		}
-		*/
+
 		return false;
 	}
 
-	void TransformWidget::OnMouseUp()
-	{/*
-		if (m_bVisible)
-		{
-			switch (m_editType)
-			{
-			case EM_EDIT_TRANSLATE:
-			{
-				// 更改显示
-				switch (m_moveType)
-				{
-				case EM_MOVE_X:
-				{
-					m_pAxes[0]->SetColor(0xFFFF0000);
-					m_pCone[0]->SetColor(0xFFFF0000);
-				}
-				break;
-				case EM_MOVE_Y:
-				{
-					m_pAxes[1]->SetColor(0xFF00FF00);
-					m_pCone[1]->SetColor(0xFF00FF00);
-				}
-				break;
-				case EM_MOVE_Z:
-				{
-					m_pAxes[2]->SetColor(0xFF0000FF);
-					m_pCone[2]->SetColor(0xFF0000FF);
-				}
-				break;
-				case EM_MOVE_XYPLANE:
-				{
-					m_pPlaneLine[0]->SetColor(0xFFFF0000);
-					m_pPlaneLine[1]->SetColor(0xFF00FF00);
-				}
-				break;
-				case EM_MOVE_YZPLANE:
-				{
-					m_pPlaneLine[2]->SetColor(0xFF00FF00);
-					m_pPlaneLine[3]->SetColor(0xFF0000FF);
-				}
-				break;
-				case EM_MOVE_XZPLANE:
-				{
-					m_pPlaneLine[4]->SetColor(0xFF0000FF);
-					m_pPlaneLine[5]->SetColor(0xFFFF0000);
-				}
-				break;
-				}
-			}
-			break;
-			case EM_EDIT_ROTATE:
-			{
-				m_pCycle[0]->SetColor(0xFFFF0000);
-				m_pCycle[1]->SetColor(0xFF00FF00);
-				m_pCycle[2]->SetColor(0xFF0000FF);
-			}
-			break;
-			case EM_EDIT_SCALE:
-			{
-				m_pScale->SetColor(0xFF33AAFF);
-			}
-			break;
-			}
-		}
+	void TransformWidget::onMouseUp()
+	{
+		m_moveType = MoveType::None;
+		m_rotateType = RotateType::None;
 
-		m_moveType = EM_MOVE_NULL;
-		m_rotateType = EM_ROTATE_NULL;*/
+		draw();
 	}
 
 	void TransformWidget::SetPosition(float _posX, float _posY, float _posZ)
@@ -591,7 +499,7 @@ namespace Studio
 		this->SetPosition(pos.x, pos.y, pos.z);
 	}
 
-	void TransformWidget::SetVisible(bool visible)
+	void TransformWidget::setVisible(bool visible)
 	{
 		/*
 		// 本地记录
@@ -663,9 +571,9 @@ namespace Studio
 
 	void TransformWidget::SetEditType(EditType type)
 	{
-		this->SetVisible(false);
+		this->setVisible(false);
 		m_editType = type;
-		this->SetVisible(true);
+		this->setVisible(true);
 	}
 
 	void  TransformWidget::SetScale(float fScale)

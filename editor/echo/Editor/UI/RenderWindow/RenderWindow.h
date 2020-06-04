@@ -25,25 +25,15 @@ namespace Studio
 
 		QSize GetAspectRatio() const { return m_ratio; }
 
-		// 鼠标滚轮事件
+		// mouse event
 		virtual void wheelEvent( QWheelEvent * e) override;
-
-		// 鼠标移动事件
 		virtual void mouseMoveEvent( QMouseEvent* e) override;
-
-		// 鼠标按下事件
 		virtual void mousePressEvent( QMouseEvent* e) override;
-
-		// 鼠标双击事件
 		virtual void mouseDoubleClickEvent(QMouseEvent* e) override;
-
-		// 鼠标释放事件
 		virtual void mouseReleaseEvent( QMouseEvent* e) override;
 
-		// 鼠标按下事件
+		// key event
 		virtual void keyPressEvent( QKeyEvent* e) override;
-
-		// 鼠标抬起事件
 		virtual void keyReleaseEvent( QKeyEvent* e) override;
 
 		// 输入控制器

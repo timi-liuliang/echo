@@ -18,7 +18,7 @@ namespace QT_UI
 	{
 		Q_OBJECT
 
-		typedef map<string, QIcon>  IconMap;
+		typedef std::map<string, QIcon>  IconMap;
 
 	public:
 		// ¹¹Ôìº¯Êý
