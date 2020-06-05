@@ -161,8 +161,6 @@ namespace Studio
 		m_axis->drawLine(Vector3(0.4f, 0.0f, 0.4f), Vector3(0.0f, 0.0f, 0.4f), isMoveType(MoveType::XZPlane) ? White : Color::BLUE);
 		m_axis->drawLine(Vector3(0.4f, 0.0f, 0.0f), Vector3(0.4f, 0.0f, 0.4f), isMoveType(MoveType::XZPlane) ? White : Color::RED);
 
-
-
 		// cones
 		drawCone(0.1f, 0.6f, Transform(Vector3::UNIT_X, Vector3::ONE, Quaternion::IDENTITY), isMoveType(MoveType::XAxis) ? White : Color::RED);
 		drawCone(0.1f, 0.6f, Transform(Vector3::UNIT_Y, Vector3::ONE, Quaternion::fromVec3ToVec3(Echo::Vector3::UNIT_X, Echo::Vector3::UNIT_Y)), isMoveType(MoveType::YAxis) ? White : Echo::Color::GREEN);
