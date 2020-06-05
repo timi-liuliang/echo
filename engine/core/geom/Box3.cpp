@@ -4,10 +4,10 @@ namespace Echo
 {
 	Box3::Box3( const Vector3& center, const Vector3& axis0, const Vector3& axis1, const Vector3& axis2, float extent0, float extent1, float extent2)
 	{
-		Set( center, axis0, axis1, axis2, extent0, extent1, extent2);
+		set( center, axis0, axis1, axis2, extent0, extent1, extent2);
 	}
 
-	void Box3::Set( const Vector3& center, const Vector3& axis0, const Vector3& axis1, const Vector3& axis2, float extent0, float extent1, float extent2)
+	void Box3::set( const Vector3& center, const Vector3& axis0, const Vector3& axis1, const Vector3& axis2, float extent0, float extent1, float extent2)
 	{
 		m_center = center;
 

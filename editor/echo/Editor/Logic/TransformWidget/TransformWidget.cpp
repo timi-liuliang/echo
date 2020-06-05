@@ -4,7 +4,6 @@
 
 namespace Studio
 {
-	// calc angle between to lines
 	static float AresTwoLineAngle(const Echo::Vector3& lineFirst, const Echo::Vector3& lineSecond)
 	{
 		float length = lineFirst.len() * lineSecond.len();
@@ -20,7 +19,6 @@ namespace Studio
 		return acos(length);
 	}
 
-	// move on axis
 	static float TranslateOnAxis(const Echo::Vector3& rayPos0, const Echo::Vector3& rayDir0, const Echo::Vector3& rayPos1, const Echo::Vector3& rayDir1, const Echo::Vector3& entityPos, const Echo::Vector3& translateAxis)
 	{
 		// 结果
@@ -131,7 +129,7 @@ namespace Studio
 		m_editType = EditType::Translate;
 		m_rotateType = RotateType::None;
 		m_moveType = MoveType::None;
-		m_vPosition = Echo::Vector3::ZERO;
+		m_position = Echo::Vector3::ZERO;
 
 		m_axis = ECHO_DOWN_CAST<Echo::Gizmos*>(Echo::Class::create("Gizmos"));
 		m_axis->setParent(EchoEngine::instance()->getInvisibleEditorNode());
@@ -144,26 +142,31 @@ namespace Studio
 	{
 		using namespace Echo;
 
+		// color
+		const Echo::Color White(1.f, 1.f, 1.f, 1.f);
+
 		m_axis->clear();
 		m_axis->setRenderType("3d");
 
 		// axis line
-		m_axis->drawLine(Vector3(0.0f, 0.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f), Echo::Color::RED);
-		m_axis->drawLine(Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f), Echo::Color::GREEN);
-		m_axis->drawLine(Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f), Echo::Color::BLUE);
+		m_axis->drawLine(Vector3(0.0f, 0.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f), isMoveType(MoveType::XAxis) ? White : Echo::Color::RED);
+		m_axis->drawLine(Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f), isMoveType(MoveType::YAxis) ? White : Echo::Color::GREEN);
+		m_axis->drawLine(Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f), isMoveType(MoveType::ZAxis) ? White : Echo::Color::BLUE);
 
 		// plane
-		m_axis->drawLine(Vector3(0.4f, 0.0f, 0.0f), Vector3(0.4f, 0.4f, 0.0f), Color::RED);
-		m_axis->drawLine(Vector3(0.4f, 0.4f, 0.0f), Vector3(0.0f, 0.4f, 0.0f), Color::GREEN);
-		m_axis->drawLine(Vector3(0.0f, 0.4f, 0.0f), Vector3(0.0f, 0.4f, 0.4f), Color::GREEN);
-		m_axis->drawLine(Vector3(0.0f, 0.4f, 0.4f), Vector3(0.0f, 0.0f, 0.4f), Color::BLUE);
-		m_axis->drawLine(Vector3(0.4f, 0.0f, 0.4f), Vector3(0.0f, 0.0f, 0.4f), Color::BLUE);
-		m_axis->drawLine(Vector3(0.4f, 0.0f, 0.0f), Vector3(0.4f, 0.0f, 0.4f), Color::RED);
+		m_axis->drawLine(Vector3(0.4f, 0.0f, 0.0f), Vector3(0.4f, 0.4f, 0.0f), isMoveType(MoveType::XYPlane) ? White : Color::RED);
+		m_axis->drawLine(Vector3(0.4f, 0.4f, 0.0f), Vector3(0.0f, 0.4f, 0.0f), isMoveType(MoveType::XYPlane) ? White : Color::GREEN);
+		m_axis->drawLine(Vector3(0.0f, 0.4f, 0.0f), Vector3(0.0f, 0.4f, 0.4f), isMoveType(MoveType::YZPlane) ? White : Color::GREEN);
+		m_axis->drawLine(Vector3(0.0f, 0.4f, 0.4f), Vector3(0.0f, 0.0f, 0.4f), isMoveType(MoveType::YZPlane) ? White : Color::BLUE);
+		m_axis->drawLine(Vector3(0.4f, 0.0f, 0.4f), Vector3(0.0f, 0.0f, 0.4f), isMoveType(MoveType::XZPlane) ? White : Color::BLUE);
+		m_axis->drawLine(Vector3(0.4f, 0.0f, 0.0f), Vector3(0.4f, 0.0f, 0.4f), isMoveType(MoveType::XZPlane) ? White : Color::RED);
+
+
 
 		// cones
-		drawCone(0.1f, 0.6f, Transform(Vector3::UNIT_X, Vector3::ONE, Quaternion::IDENTITY), m_moveType==MoveType::XAxis ? Color::YELLOW : Color::RED);
-		drawCone(0.1f, 0.6f, Transform(Vector3::UNIT_Y, Vector3::ONE, Quaternion::fromVec3ToVec3(Echo::Vector3::UNIT_X, Echo::Vector3::UNIT_Y)), Echo::Color::GREEN);
-		drawCone(0.1f, 0.6f, Transform(Vector3::UNIT_Z, Vector3::ONE, Quaternion::fromVec3ToVec3(Echo::Vector3::UNIT_X, Echo::Vector3::UNIT_Z)), Echo::Color::BLUE);
+		drawCone(0.1f, 0.6f, Transform(Vector3::UNIT_X, Vector3::ONE, Quaternion::IDENTITY), isMoveType(MoveType::XAxis) ? White : Color::RED);
+		drawCone(0.1f, 0.6f, Transform(Vector3::UNIT_Y, Vector3::ONE, Quaternion::fromVec3ToVec3(Echo::Vector3::UNIT_X, Echo::Vector3::UNIT_Y)), isMoveType(MoveType::YAxis) ? White : Echo::Color::GREEN);
+		drawCone(0.1f, 0.6f, Transform(Vector3::UNIT_Z, Vector3::ONE, Quaternion::fromVec3ToVec3(Echo::Vector3::UNIT_X, Echo::Vector3::UNIT_Z)), isMoveType(MoveType::ZAxis) ? White : Echo::Color::BLUE);
 
 		//// 三个圆
 		//for (int i = 0; i < 3; i++)
@@ -358,12 +361,12 @@ namespace Studio
 	{
 		using namespace Echo;
 
-		m_moveBoxs[int(MoveType::XAxis)].Set(m_vPosition + Vector3(1.f, 0.f, 0.f), Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.60f, 0.15f, 0.15f);
-		m_moveBoxs[int(MoveType::YAxis)].Set(m_vPosition + Vector3(0.f, 1.f, 0.f), Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.15f, 0.60f, 0.15f);
-		m_moveBoxs[int(MoveType::ZAxis)].Set(m_vPosition + Vector3(0.f, 0.f, 1.f), Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.15f, 0.15f, 0.60f);
-		m_moveBoxs[int(MoveType::XYPlane)].Set(m_vPosition + Vector3(0.2f, 0.2f, 0.0f), Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.2f, 0.2f, 0.05f);
-		m_moveBoxs[int(MoveType::YZPlane)].Set(m_vPosition + Vector3(0.0f, 0.2f, 0.2f), Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.05f, 0.2f, 0.2f);
-		m_moveBoxs[int(MoveType::XZPlane)].Set(m_vPosition + Vector3(0.2f, 0.0f, 0.2f), Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.2f, 0.05f, 0.2f);
+		m_moveBoxs[int(MoveType::XAxis)].set(m_position + Vector3(1.f, 0.f, 0.f), Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.60f, 0.15f, 0.15f);
+		m_moveBoxs[int(MoveType::YAxis)].set(m_position + Vector3(0.f, 1.f, 0.f), Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.15f, 0.60f, 0.15f);
+		m_moveBoxs[int(MoveType::ZAxis)].set(m_position + Vector3(0.f, 0.f, 1.f), Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.15f, 0.15f, 0.60f);
+		m_moveBoxs[int(MoveType::XYPlane)].set(m_position + Vector3(0.2f, 0.2f, 0.0f), Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.2f, 0.2f, 0.05f);
+		m_moveBoxs[int(MoveType::YZPlane)].set(m_position + Vector3(0.0f, 0.2f, 0.2f), Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.05f, 0.2f, 0.2f);
+		m_moveBoxs[int(MoveType::XZPlane)].set(m_position + Vector3(0.2f, 0.0f, 0.2f), Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.2f, 0.05f, 0.2f);
 	}
 
 	bool TransformWidget::onMouseDown(const Echo::Vector2& localPos)
@@ -371,9 +374,14 @@ namespace Studio
 		Echo::Camera* camera = Echo::NodeTree::instance()->get3dCamera();
 		if (camera)
 		{
+			// get camera ray
 			Echo::Ray ray;
 			camera->getCameraRay(ray, localPos);
 
+			// update collision box
+			updateTranslateCollisionBox();
+
+			// hit operate
 			if (m_isVisible)
 			{
 				switch (m_editType)
@@ -381,12 +389,11 @@ namespace Studio
 				case EditType::Translate:
 				{
 					m_moveType = MoveType::None;
-					for (int i = int(MoveType::XAxis); i <= int(MoveType::YZPlane); i++)
+					for (int i = int(MoveType::XAxis); i <= int(MoveType::XZPlane); i++)
 					{
-						//IntrLine3Box3 intrLB(line, m_moveBoxs[i]);
-						//if (intrLB.Test())
+						if (ray.hitBox3(m_moveBoxs[i]))
 						{
-							m_moveType = MoveType::XAxis;// MoveType(i);
+							m_moveType = MoveType(i);
 							break;
 						}
 					}

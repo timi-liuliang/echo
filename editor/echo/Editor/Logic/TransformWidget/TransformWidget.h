@@ -71,6 +71,9 @@ namespace Studio
 		// 设置缩放
 		void  SetScale(float fScale);
 
+		// check move type
+		bool isMoveType(MoveType type) const { return m_moveType == type; }
+
 	private:
 		// draw
 		void draw();
@@ -82,7 +85,7 @@ namespace Studio
 	private:
 		Echo::Gizmos*				m_axis;
 		Echo::array<Echo::Box3, 6>	m_moveBoxs;
-		Echo::Vector3				m_vPosition;		// 3D轴位置
+		Echo::Vector3				m_position;		// 3D轴位置
 		//VisualCycle3*				m_pCycle[3];
 		//VisualShape*				m_pScale;			// 缩放
 		EditType					m_editType;			// 编辑类型

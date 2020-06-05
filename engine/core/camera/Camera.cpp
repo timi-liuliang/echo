@@ -150,12 +150,12 @@ namespace Echo
 		Vector3 v0(screenPos, vDepth.x);
 		Vector3 v1(screenPos, vDepth.y);
 
-		Renderer::instance()->unproject(ray.o, v0, m_matVP);
+		Renderer::instance()->unproject(ray.m_origin, v0, m_matVP);
 
 		Vector3 vTarget;
 		Renderer::instance()->unproject(vTarget, v1, m_matVP);
-		ray.dir = vTarget - ray.o;
-		ray.dir.normalize();
+		ray.m_dir = vTarget - ray.m_origin;
+		ray.m_dir.normalize();
 	}
 
 	void Camera::unProjectionMousePos( Vector3& from, Vector3& to, const Vector2& screenPos )

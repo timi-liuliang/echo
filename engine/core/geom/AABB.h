@@ -317,5 +317,20 @@ namespace Echo
 			vMin -= Vector3(w, w, w);
 			vMax += Vector3(w, w, w);
 		}
+
+		// get normal by face index
+		Vector3 getNormalByFaceIndex(const int faceIdx) const
+		{
+			switch (faceIdx)
+			{
+			case 0: return Vector3::NEG_UNIT_X;
+			case 1: return Vector3::NEG_UNIT_Y;
+			case 2: return Vector3::NEG_UNIT_Z;
+			case 3: return Vector3::UNIT_X;
+			case 4: return Vector3::UNIT_Y;
+			case 5: return Vector3::UNIT_Z;
+			default: return Vector3::INVALID;
+			}
+		}
 	};
 }

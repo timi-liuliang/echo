@@ -6,6 +6,7 @@
 #include "engine/core/math/Rect.h"
 #include "AABB.h"
 #include "Sphere.h"
+#include "Box3.h"
 
 namespace Echo
 {
@@ -38,19 +39,33 @@ namespace Echo
 		Ray(const Vector3& o, const Vector3& dir);
 		Ray(const Ray& src);
 
-		bool hitTri(const Triangle& tri, Real& tmin) const;
-		bool hitTri(const Triangle& tri, Real& tmin, HitInfo& si) const;
+		// transform
+		void transform(const Matrix4& mat);
+
+		// get point by distance
+		Vector3 getPoint(Real distance) const;
+
+		// triangle
+		bool hitTriangle(const Triangle& tri, Real& tmin) const;
+		bool hitTriangle(const Triangle& tri, Real& tmin, HitInfo& si) const;
+
+		// plane
 		bool hitPlane(const Plane& plane, Real& tmin) const;
 		bool hitPlane(const Plane& plane, Real& tmin, HitInfo& si) const;
-		bool hitBox(const AABB& box) const;
-		bool hitBox(const AABB& box, Real& tmin, HitInfo& si) const;
+
+		// aabb
+		bool hitAABB(const AABB& box) const;
+		bool hitAABB(const AABB& box, Real& tmin, HitInfo& si) const;
+
+		// box
+		bool hitBox3(const Box3& box) const;
+
+		// sphere
 		bool hitSphere(const Sphere& sphere, Real& tmin, HitInfo& si) const;
 		bool hitSphere(const Sphere& sphere, Real& tmin) const;
-		void transform(const Matrix4& mat);
-		Vector3 getPoint(Real dis) const;
 
 	public:
-		Vector3	o;			//!< origin
-		Vector3	dir;		//!< direction
+		Vector3	m_origin;	// origin
+		Vector3	m_dir;		// direction
 	};
 }

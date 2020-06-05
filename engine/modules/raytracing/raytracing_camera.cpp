@@ -125,7 +125,7 @@ namespace Echo
 						i32 offset = h * m_width + w;
 
 						camera->getCameraRay(ray, Vector2(w, h));
-						m_rays[offset] = RadeonRays::ray(RadeonRays::float3(ray.o.x, ray.o.y, ray.o.z), RadeonRays::float3(ray.dir.x, ray.dir.y, ray.dir.z));
+						m_rays[offset] = RadeonRays::ray(RadeonRays::float3(ray.m_origin.x, ray.m_origin.y, ray.m_origin.z), RadeonRays::float3(ray.m_dir.x, ray.m_dir.y, ray.m_dir.z));
 						//m_rays[offset] = RadeonRays::ray(RadeonRays::float3(0, 0, 2), RadeonRays::float3(0, 0, -1.0));
 					}
 				}

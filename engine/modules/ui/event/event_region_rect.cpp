@@ -46,7 +46,7 @@ namespace Echo
 		AABB worldBox;
 		buildWorldAABB(worldBox);
 
-		return worldBox.isValid() ? ray.hitBox(worldBox) : false;
+		return worldBox.isValid() ? ray.hitAABB(worldBox) : false;
 	}
 
 	bool UiEventRegionRect::getHitPosition(const Ray& ray, Vector3& worldPos)
@@ -57,7 +57,7 @@ namespace Echo
 		{
 			float min;
 			Ray::HitInfo hitInfo;
-			if (ray.hitBox(worldBox, min, hitInfo))
+			if (ray.hitAABB(worldBox, min, hitInfo))
 			{
 				worldPos = hitInfo.hitPos;
 				return true;

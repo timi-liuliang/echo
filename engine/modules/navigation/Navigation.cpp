@@ -449,7 +449,7 @@ namespace Echo
 			Echo::Ray      ray(startPos, dir);
 			Echo::Triangle triangle;
 			triangle.set(v[0], v[1], v[2]);
-			if (ray.hitTri(triangle, minDis))
+			if (ray.hitTriangle(triangle, minDis))
 			{
 				if (resultLen > minDis)
 					resultLen = minDis;

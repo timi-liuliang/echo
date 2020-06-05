@@ -892,7 +892,7 @@ namespace Echo
 			}
 
 			Ray ray(p1, r);
-			if (!ray.hitBox(node->aabb))
+			if (!ray.hitAABB(node->aabb))
 			{
 				continue;
 			}
