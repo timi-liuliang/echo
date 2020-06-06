@@ -19,77 +19,69 @@ namespace Studio
 		return acos(length);
 	}
 
-	static float TranslateOnAxis(const Echo::Vector3& rayPos0, const Echo::Vector3& rayDir0, const Echo::Vector3& rayPos1, const Echo::Vector3& rayDir1, const Echo::Vector3& entityPos, const Echo::Vector3& translateAxis)
+	float TransformWidget::translateOnAxis(const Echo::Ray& ray0, const Echo::Ray& ray1, const Echo::Vector3& entityPos, const Echo::Vector3& translateAxis)
 	{
-		// 结果
 		float result = 0.0f;
 
-		// 求面法线
-		Echo::Vector3 rayAssistant;
-		rayAssistant = rayDir0.cross(rayDir1);
-		rayAssistant.normalize();
-		float test = rayAssistant.dot(translateAxis) / (rayAssistant.len() * translateAxis.len());
+		// calculate face normal
+		Echo::Vector3 planeNormal;
+		planeNormal = ray0.m_dir.cross(ray1.m_dir);
+		planeNormal.normalize();
+		float test = planeNormal.dot(translateAxis) / (planeNormal.len() * translateAxis.len());
 
-		// 严重的精度问题
+		// check
 		if (test > 0.3f || test < -0.3f)
-		{
 			return result;
-		}
 
-		rayAssistant = rayAssistant.cross(translateAxis);
-		rayAssistant.normalize();
+		planeNormal = planeNormal.cross(translateAxis);
+		planeNormal.normalize();
 
-		// 如果平行
-		if (!rayAssistant.len())
-		{
+		// check
+		if (!planeNormal.len())
 			return result;
-		}
 
-		//// 根据点与法线确定面
-		//Plane3   axisPlane(entityPos, rayAssistant);
-		//axisPlane.Normalize();
+		// define plane
+		Echo::Plane axisPlane(entityPos, planeNormal);
+		axisPlane.normalize();
 
-		//// 求出面与射线相交点
-		//Line3 line0(rayPos0, rayDir0);
-		//Line3 line1(rayPos1, rayDir1);
-		//IntrLine3Plane3 intrLP0(line0, axisPlane);
-		//IntrLine3Plane3 intrLP1(line1, axisPlane);
-		//if (!intrLP0.Test() || !intrLP1.Test())
-		//	return result;
+		// intersection
+		float hitDistance0;
+		float hitDistance1;
+		Echo::Ray::HitInfo hitResult0;
+		Echo::Ray::HitInfo hitResult1;
 
-		//Vector3 pointBegin = intrLP0.m_intrPoint;
-		//Vector3 pointEnd = intrLP1.m_intrPoint;
+		if(!ray0.hitPlane(axisPlane, hitDistance0, hitResult0) || !ray1.hitPlane(axisPlane, hitDistance1, hitResult1))
+			return result;
 
-		//// 求在移动轴上投影长度
-		//Vector3 rayMove = pointEnd - pointBegin;
-		//result = Vector3Dot(rayMove, translateAxis) / translateAxis.Length();
+		Echo::Vector3 pointBegin = hitResult0.hitPos;
+		Echo::Vector3 pointEnd = hitResult1.hitPos;
+
+		// calculate distance on the axis
+		Echo::Vector3 rayMove = pointEnd - pointBegin;
+		result = rayMove.dot(translateAxis) / translateAxis.len();
 
 		return result;
 	}
 
-	// 在平面上移动, 若射与平面不相交 return NULL
-	//static Echo::Vector3* TranslateOnPlane(Vector3* pOut, const Plane3& plane, const Vector3& rayPos0, const Vector3& rayDir0, const Vector3& rayPos1, const Vector3& rayDir1)
-	//{
-	//	// 求出面与射线相交点
-	//	Line3 line0(rayPos0, rayDir0);
-	//	Line3 line1(rayPos1, rayDir1);
-	//	IntrLine3Plane3 intrLP0(line0, plane);
-	//	IntrLine3Plane3 intrLP1(line1, plane);
-	//	if (!intrLP0.Test() || !intrLP1.Test())
-	//	{
-	//		*pOut = Vector3::Zero;
+	Echo::Vector3* TransformWidget::translateOnPlane(Echo::Vector3* pOut, const Echo::Plane& plane, const Echo::Ray& ray0, const Echo::Ray& ray1)
+	{
+		// intersection
+		float hitDistance0;
+		float hitDistance1;
+		Echo::Ray::HitInfo hitResult0;
+		Echo::Ray::HitInfo hitResult1;
+		if (!ray0.hitPlane(plane, hitDistance0, hitResult0) || !ray1.hitPlane(plane, hitDistance1, hitResult1))
+		{
+			*pOut = Echo::Vector3::ZERO;
+			return nullptr;
+		}
 
-	//		return NULL;
-	//	}
+		Echo::Vector3 pointBegin = hitResult0.hitPos;
+		Echo::Vector3 pointEnd = hitResult1.hitPos;
 
-	//	Vector3 pointBegin = intrLP0.m_intrPoint;
-	//	Vector3 pointEnd = intrLP1.m_intrPoint;
-
-	//	// 求在移动轴上投影长度
-	//	*pOut = pointEnd - pointBegin;
-
-	//	return pOut;
-	//}
+		*pOut = pointEnd - pointBegin;
+		return pOut;
+	}
 
 	//// 在平面上旋转,返回相对旋转矩阵(第一个参数返回角度,)
 	//static float RotateOnPlane(const Vector3& planePoint, const Vector3& planeNormal, const Vector3& rayPos0, const Vector3& rayDir0, const Vector3& rayPos1, const Vector3& rayDir1)
@@ -147,6 +139,9 @@ namespace Studio
 
 		m_axis->clear();
 		m_axis->setRenderType("3d");
+
+		m_axis->setWorldPosition(Echo::Vector3(0.5f, 0.f, 0.5f));
+		m_axis->getWorldMatrix();
 
 		// axis line
 		m_axis->drawLine(Vector3(0.0f, 0.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f), isMoveType(MoveType::XAxis) ? White : Echo::Color::RED);
@@ -227,64 +222,71 @@ namespace Studio
 		}
 	}
 
-	//void Axis3D::OnMouseMove(const Vector3& rayOrig0, const Vector3& rayDir0, const Vector3& rayOrig1, const Vector3& rayDir1, POINT* ptPre/*=NULL*/, POINT* ptCurr/*=NULL*/)
-	//{
-	//	if (m_bVisible)
-	//	{
-	//		switch (m_editType)
-	//		{
-	//		case EM_EDIT_TRANSLATE:
-	//		{
-	//			// 移动
-	//			float       fDist = 0.0f;
-	//			Echo::Vector3 relaTrans;
-	//			switch (m_moveType)
-	//			{
-	//			case EM_MOVE_X:
-	//			{
-	//				fDist = TranslateOnAxis(rayOrig0, rayDir0, rayOrig1, rayDir1, m_vPosition, m_vAxisDir[EM_MOVE_X]);
-	//				relaTrans = fDist * m_vAxisDir[EM_MOVE_X];
-	//			}
-	//			break;
-	//			case EM_MOVE_Y:
-	//			{
-	//				fDist = TranslateOnAxis(rayOrig0, rayDir0, rayOrig1, rayDir1, m_vPosition, m_vAxisDir[EM_MOVE_Y]);
-	//				relaTrans = fDist * m_vAxisDir[EM_MOVE_Y];
-	//			}
-	//			break;
-	//			case EM_MOVE_Z:
-	//			{
-	//				fDist = TranslateOnAxis(rayOrig0, rayDir0, rayOrig1, rayDir1, m_vPosition, m_vAxisDir[EM_MOVE_Z]);
-	//				relaTrans = fDist * m_vAxisDir[EM_MOVE_Z];
-	//			}
-	//			break;
-	//			case EM_MOVE_XYPLANE:
-	//			{
-	//				Plane3 plane(m_vPosition, m_vAxisDir[EM_MOVE_Z]);
-	//				TranslateOnPlane(&relaTrans, plane, rayOrig0, rayDir0, rayOrig1, rayDir1);
-	//			}
-	//			break;
-	//			case EM_MOVE_YZPLANE:
-	//			{
-	//				Plane3 plane(m_vPosition, m_vAxisDir[EM_MOVE_X]);
-	//				TranslateOnPlane(&relaTrans, plane, rayOrig0, rayDir0, rayOrig1, rayDir1);
-	//			}
-	//			break;
-	//			case EM_MOVE_XZPLANE:
-	//			{
-	//				Plane3 plane(m_vPosition, m_vAxisDir[EM_MOVE_Y]);
-	//				TranslateOnPlane(&relaTrans, plane, rayOrig0, rayDir0, rayOrig1, rayDir1);
-	//			}
-	//			break;
-	//			default:
-	//			{
-	//				return;
-	//			}
-	//			}
+	void TransformWidget::onMouseMove(const Echo::Vector2& localPos)
+	{
+		Echo::Camera* camera = Echo::NodeTree::instance()->get3dCamera();
+		if (camera && m_isVisible)
+		{
+			// get camera ray
+			Echo::Ray ray0;
+			Echo::Ray ray1;
+			camera->getCameraRay(ray0, m_mousePos);
+			camera->getCameraRay(ray1, localPos);
 
-	//			Translate(relaTrans);
-	//		}
-	//		break;
+
+			switch (m_editType)
+			{
+			case EditType::Translate:
+			{
+				float       fDist = 0.0f;
+				Echo::Vector3 relaTrans;
+				switch (m_moveType)
+				{
+				case MoveType::XAxis:
+				{
+					fDist = translateOnAxis(ray0, ray1, m_position, Echo::Vector3::UNIT_X);
+					relaTrans = fDist * Echo::Vector3::UNIT_X;
+				}
+				break;
+				case MoveType::YAxis:
+				{
+					fDist = translateOnAxis(ray0, ray1, m_position, Echo::Vector3::UNIT_Y);
+					relaTrans = fDist * Echo::Vector3::UNIT_Y;
+				}
+				break;
+				case MoveType::ZAxis:
+				{
+					fDist = translateOnAxis(ray0, ray1, m_position, Echo::Vector3::UNIT_Z);
+					relaTrans = fDist * Echo::Vector3::UNIT_Z;
+				}
+				break;
+				case MoveType::XYPlane:
+				{
+					Echo::Plane plane(m_position, Echo::Vector3::UNIT_Z);
+					translateOnPlane(&relaTrans, plane, ray0, ray1);
+				}
+				break;
+				case MoveType::YZPlane:
+				{
+					Echo::Plane plane(m_position, Echo::Vector3::UNIT_X);
+					translateOnPlane(&relaTrans, plane, ray0, ray1);
+				}
+				break;
+				case MoveType::XZPlane:
+				{
+					Echo::Plane plane(m_position, Echo::Vector3::UNIT_Y);
+					translateOnPlane(&relaTrans, plane, ray0, ray1);
+				}
+				break;
+				default:
+				{
+					return;
+				}
+				}
+
+				onTranslate(relaTrans);
+			}
+			break;
 	//		case EM_EDIT_ROTATE:
 	//		{
 	//			float fAngle0 = 0.0f;
@@ -351,9 +353,11 @@ namespace Studio
 	//			}
 	//		}
 	//		break;
-	//		}
-	//	}
-	//}
+			}
+		}
+
+		m_mousePos = localPos;
+	}
 
 	void TransformWidget::updateTranslateCollisionBox()
 	{
@@ -369,6 +373,8 @@ namespace Studio
 
 	bool TransformWidget::onMouseDown(const Echo::Vector2& localPos)
 	{
+		m_mousePos = localPos;
+
 		Echo::Camera* camera = Echo::NodeTree::instance()->get3dCamera();
 		if (camera)
 		{
@@ -474,34 +480,12 @@ namespace Studio
 		draw();
 	}
 
-	void TransformWidget::SetPosition(float _posX, float _posY, float _posZ)
-	{/*
-		m_vPosition.x = _posX;
-		m_vPosition.y = _posY;
-		m_vPosition.z = _posZ;
-
-		for (int i = 0; i < 3; i++)
-		{
-			m_pAxes[i]->GetTransform()->SetTrans(_posX, _posY, _posZ);
-			m_pPlaneLine[i]->GetTransform()->SetTrans(_posX, _posY, _posZ);
-			m_pPlaneLine[i + 3]->GetTransform()->SetTrans(_posX, _posY, _posZ);
-			m_pCycle[i]->GetTransform()->SetTrans(_posX, _posY, _posZ);
-		}
-
-		// 设置位置
-		m_pCone[0]->GetTransform()->SetTrans(m_fScale + m_vPosition.x, m_vPosition.y, m_vPosition.z);
-		m_pCone[1]->GetTransform()->SetTrans(m_vPosition.x, m_fScale + m_vPosition.y, m_vPosition.z);
-		m_pCone[2]->GetTransform()->SetTrans(m_vPosition.x, m_vPosition.y, m_fScale + m_vPosition.z);
-
-		m_pScale->GetTransform()->SetTrans(_posX, _posY, _posZ);
-
-		// 更新碰撞检测盒子位置
-		UpdateTranslateCollBox();*/
-	}
-
-	void TransformWidget::SetPosition(const Echo::Vector3& pos)
+	void TransformWidget::setPosition(const Echo::Vector3& pos)
 	{
-		this->SetPosition(pos.x, pos.y, pos.z);
+		m_position = pos;
+
+		updateTranslateCollisionBox();
+		draw();
 	}
 
 	void TransformWidget::setVisible(bool visible)
@@ -544,34 +528,12 @@ namespace Studio
 		}*/
 	}
 
-	void  TransformWidget::Translate(const Echo::Vector3& trans)
+	void  TransformWidget::onTranslate(const Echo::Vector3& trans)
 	{
-		/*
 		if (trans != Echo::Vector3::ZERO)
 		{
-			Echo::Vector3 pos = m_vPosition + trans;
-
-			// 更改自身位置
-			this->SetPosition(pos);
-
-			// 更改所有模型位置
-			for (size_t i = 0; i < m_entityList.size(); i++)
-			{
-				Transform transform = m_entityList[i]->GetTransform();
-				Vector3 newPosition = transform.GetTrans() + trans;
-				//newPosition.x = (int)(newPosition.x * 50) * 0.02f;
-				//newPosition.y = (int)(newPosition.y * 50) * 0.02f;
-				//newPosition.z = (int)(newPosition.z * 50) * 0.02f;
-				transform.SetTrans(newPosition);
-				m_entityList[i]->SetTransform(transform);
-			}
-
-			for (size_t i = 0; i < m_transforms.size(); i++)
-			{
-				Echo::Vector3 newPosition = m_transforms[i]->GetTrans() + trans;
-				m_transforms[i]->SetTrans(newPosition);
-			}
-		}*/
+			setPosition(m_position + trans);
+		}
 	}
 
 	void TransformWidget::SetEditType(EditType type)
@@ -581,7 +543,7 @@ namespace Studio
 		this->setVisible(true);
 	}
 
-	void  TransformWidget::SetScale(float fScale)
+	void  TransformWidget::setScale(float fScale)
 	{
 		/*
 		m_fScale = fScale;

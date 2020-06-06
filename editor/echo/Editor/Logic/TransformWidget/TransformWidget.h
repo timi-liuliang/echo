@@ -4,6 +4,7 @@
 #include <engine/core/math/Math.h>
 #include <engine/core/scene/node.h>
 #include <engine/core/geom/Box3.h>
+#include <engine/core/geom/Ray.h>
 #include <engine/core/gizmos/Gizmos.h>
 #include <engine/core/main/Engine.h>
 
@@ -52,24 +53,20 @@ namespace Studio
 
 		// mouse event
 		bool onMouseDown(const Echo::Vector2& localPos);
+		void onMouseMove(const Echo::Vector2& localPos);
 		void onMouseUp();
-		//void OnMouseMove(const Echo::Vector3& rayOrig0, const Echo::Vector3& rayDir0, const Echo::Vector3& rayOrig1, const Echo::Vector3& rayDir1, POINT* ptPre = NULL, POINT* ptCurr = NULL);
 
 		// position
-		void SetPosition(float _posX, float _posY, float _posZ);
-		void SetPosition(const Echo::Vector3& pos);
+		void setPosition(const Echo::Vector3& pos);
 
 		// visible
 		void setVisible(bool visible);
 
-		// 渲染
+		// set edit type
 		void SetEditType(EditType type);
 
-		// 移动
-		void  Translate(const Echo::Vector3& trans);
-
-		// 设置缩放
-		void  SetScale(float fScale);
+		// set scale
+		void  setScale(float fScale);
 
 		// check move type
 		bool isMoveType(MoveType type) const { return m_moveType == type; }
@@ -82,17 +79,25 @@ namespace Studio
 		// update collision box
 		void updateTranslateCollisionBox();
 
+		// translate
+		void onTranslate(const Echo::Vector3& trans);
+
 	private:
+		// translate help function
+		float translateOnAxis(const Echo::Ray& ray0, const Echo::Ray& ray1, const Echo::Vector3& entityPos, const Echo::Vector3& translateAxis);
+		Echo::Vector3* translateOnPlane(Echo::Vector3* pOut, const Echo::Plane& plane, const Echo::Ray& ray0, const Echo::Ray& ray1);
+
+	private:
+		Echo::Vector2				m_mousePos;
+		Echo::Vector3				m_position;
 		Echo::Gizmos*				m_axis;
 		Echo::array<Echo::Box3, 6>	m_moveBoxs;
-		Echo::Vector3				m_position;		// 3D轴位置
 		//VisualCycle3*				m_pCycle[3];
-		//VisualShape*				m_pScale;			// 缩放
-		EditType					m_editType;			// 编辑类型
-		MoveType					m_moveType;			// 移动类型
-		RotateType					m_rotateType;		// 旋转类型
+		//VisualShape*				m_pScale;
+		EditType					m_editType;
+		MoveType					m_moveType;
+		RotateType					m_rotateType;
 		bool						m_isVisible = true;
 		float						m_fScale;
-
 	};
 }

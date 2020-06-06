@@ -106,13 +106,7 @@ namespace Studio
 
 	void RenderWindow::mouseMoveEvent(QMouseEvent* e)
 	{
-		if ( m_isLeftButtonDown)
-		{
-			static QPointF lastPos = e->localPos();
-
-			lastPos = e->localPos();
-		}
-
+		m_transformWidget->onMouseMove(Echo::Vector2(e->localPos().x(), e->localPos().y()));
 		m_inputController->mouseMoveEvent(e);
 	}
 
