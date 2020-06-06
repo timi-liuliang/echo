@@ -19,70 +19,6 @@ namespace Studio
 		return acos(length);
 	}
 
-	float TransformWidget::translateOnAxis(const Echo::Ray& ray0, const Echo::Ray& ray1, const Echo::Vector3& entityPos, const Echo::Vector3& translateAxis)
-	{
-		float result = 0.0f;
-
-		// calculate face normal
-		Echo::Vector3 planeNormal;
-		planeNormal = ray0.m_dir.cross(ray1.m_dir);
-		planeNormal.normalize();
-		float test = planeNormal.dot(translateAxis) / (planeNormal.len() * translateAxis.len());
-
-		// check
-		if (test > 0.3f || test < -0.3f)
-			return result;
-
-		planeNormal = planeNormal.cross(translateAxis);
-		planeNormal.normalize();
-
-		// check
-		if (!planeNormal.len())
-			return result;
-
-		// define plane
-		Echo::Plane axisPlane(entityPos, planeNormal);
-		axisPlane.normalize();
-
-		// intersection
-		float hitDistance0;
-		float hitDistance1;
-		Echo::Ray::HitInfo hitResult0;
-		Echo::Ray::HitInfo hitResult1;
-
-		if(!ray0.hitPlane(axisPlane, hitDistance0, hitResult0) || !ray1.hitPlane(axisPlane, hitDistance1, hitResult1))
-			return result;
-
-		Echo::Vector3 pointBegin = hitResult0.hitPos;
-		Echo::Vector3 pointEnd = hitResult1.hitPos;
-
-		// calculate distance on the axis
-		Echo::Vector3 rayMove = pointEnd - pointBegin;
-		result = rayMove.dot(translateAxis) / translateAxis.len();
-
-		return result;
-	}
-
-	Echo::Vector3* TransformWidget::translateOnPlane(Echo::Vector3* pOut, const Echo::Plane& plane, const Echo::Ray& ray0, const Echo::Ray& ray1)
-	{
-		// intersection
-		float hitDistance0;
-		float hitDistance1;
-		Echo::Ray::HitInfo hitResult0;
-		Echo::Ray::HitInfo hitResult1;
-		if (!ray0.hitPlane(plane, hitDistance0, hitResult0) || !ray1.hitPlane(plane, hitDistance1, hitResult1))
-		{
-			*pOut = Echo::Vector3::ZERO;
-			return nullptr;
-		}
-
-		Echo::Vector3 pointBegin = hitResult0.hitPos;
-		Echo::Vector3 pointEnd = hitResult1.hitPos;
-
-		*pOut = pointEnd - pointBegin;
-		return pOut;
-	}
-
 	//// 在平面上旋转,返回相对旋转矩阵(第一个参数返回角度,)
 	//static float RotateOnPlane(const Vector3& planePoint, const Vector3& planeNormal, const Vector3& rayPos0, const Vector3& rayDir0, const Vector3& rayPos1, const Vector3& rayDir1)
 	//{
@@ -140,8 +76,7 @@ namespace Studio
 		m_axis->clear();
 		m_axis->setRenderType("3d");
 
-		m_axis->setWorldPosition(Echo::Vector3(0.5f, 0.f, 0.5f));
-		m_axis->getWorldMatrix();
+		m_axis->setWorldPosition(m_position);
 
 		// axis line
 		m_axis->drawLine(Vector3(0.0f, 0.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f), isMoveType(MoveType::XAxis) ? White : Echo::Color::RED);
@@ -561,5 +496,69 @@ namespace Studio
 		m_pCone[1]->GetTransform()->SetTrans(m_vPosition.x, m_fScale + m_vPosition.y, m_vPosition.z);
 		m_pCone[2]->GetTransform()->SetTrans(m_vPosition.x, m_vPosition.y, m_fScale + m_vPosition.z);
 		*/
+	}
+
+	float TransformWidget::translateOnAxis(const Echo::Ray& ray0, const Echo::Ray& ray1, const Echo::Vector3& entityPos, const Echo::Vector3& translateAxis)
+	{
+		float result = 0.0f;
+
+		// calculate face normal
+		Echo::Vector3 planeNormal;
+		planeNormal = ray0.m_dir.cross(ray1.m_dir);
+		planeNormal.normalize();
+		float test = planeNormal.dot(translateAxis) / (planeNormal.len() * translateAxis.len());
+
+		// check
+		if (test > 0.3f || test < -0.3f)
+			return result;
+
+		planeNormal = planeNormal.cross(translateAxis);
+		planeNormal.normalize();
+
+		// check
+		if (!planeNormal.len())
+			return result;
+
+		// define plane
+		Echo::Plane axisPlane(entityPos, planeNormal);
+		axisPlane.normalize();
+
+		// intersection
+		float hitDistance0;
+		float hitDistance1;
+		Echo::Ray::HitInfo hitResult0;
+		Echo::Ray::HitInfo hitResult1;
+
+		if (!ray0.hitPlane(axisPlane, hitDistance0, hitResult0) || !ray1.hitPlane(axisPlane, hitDistance1, hitResult1))
+			return result;
+
+		Echo::Vector3 pointBegin = hitResult0.hitPos;
+		Echo::Vector3 pointEnd = hitResult1.hitPos;
+
+		// calculate distance on the axis
+		Echo::Vector3 rayMove = pointEnd - pointBegin;
+		result = rayMove.dot(translateAxis) / translateAxis.len();
+
+		return result;
+	}
+
+	Echo::Vector3* TransformWidget::translateOnPlane(Echo::Vector3* pOut, const Echo::Plane& plane, const Echo::Ray& ray0, const Echo::Ray& ray1)
+	{
+		// intersection
+		float hitDistance0;
+		float hitDistance1;
+		Echo::Ray::HitInfo hitResult0;
+		Echo::Ray::HitInfo hitResult1;
+		if (!ray0.hitPlane(plane, hitDistance0, hitResult0) || !ray1.hitPlane(plane, hitDistance1, hitResult1))
+		{
+			*pOut = Echo::Vector3::ZERO;
+			return nullptr;
+		}
+
+		Echo::Vector3 pointBegin = hitResult0.hitPos;
+		Echo::Vector3 pointEnd = hitResult1.hitPos;
+
+		*pOut = pointEnd - pointBegin;
+		return pOut;
 	}
 }

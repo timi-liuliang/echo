@@ -23,9 +23,9 @@ layout(location = 1) out vec4 v_Color;
 
 void main(void)
 {
-    vec4 position = /*u_WorldMatrix */ vec4(a_Position, 1.0);
+    vec4 position = vs_ubo.u_WorldMatrix * vec4(a_Position, 1.0);
     
-    v_Position  = (vs_ubo.u_WorldMatrix * position).xyz;
+    v_Position  = position.xyz;
     gl_Position = vs_ubo.u_ViewProjMatrix * position;
     
     v_Color = a_Color;
@@ -186,6 +186,9 @@ namespace Echo
 
 		m_lineBatch->addVertex(VertexFormat(from, color));
 		m_lineBatch->addVertex(VertexFormat(to, color));
+
+		m_localAABB.addPoint(from);
+		m_localAABB.addPoint(to);
 	}
 
 	void Gizmos::drawTriangle(const Vector3& v0, const Vector3& v1, const Vector3& v2, const Color& color)
@@ -197,10 +200,15 @@ namespace Echo
 		m_triangleBatch->addVertex(VertexFormat(v0, color));
 		m_triangleBatch->addVertex(VertexFormat(v1, color));
 		m_triangleBatch->addVertex(VertexFormat(v2, color));
+
+		m_localAABB.addPoint(v0);
+		m_localAABB.addPoint(v1);
+		m_localAABB.addPoint(v2);
 	}
 
 	void Gizmos::clear()
 	{
+		m_localAABB.reset();
 		m_lineBatch->clear();
 		m_triangleBatch->clear();
 	}
