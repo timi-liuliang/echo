@@ -5,6 +5,7 @@
 #include "engine/core/util/Exception.h"
 #include "engine/core/io/IO.h"
 #include "engine/core/log/Log.h"
+#include "engine/core/localization/Localization.h"
 #include "engine/core/render/base/image/ImageCodecMgr.h"
 #include "engine/core/render/base/atla/TextureAtla.h"
 #include "engine/core/render/base/atla/TextureAtlas.h"
@@ -156,6 +157,8 @@ namespace Echo
 		Class::registerType<TextureAtla>();
 		Class::registerType<TextureAtlas>();
 		Class::registerType<RenderPipeline>();
+		Class::registerType<Translator>();
+		Class::registerType<Localization>();
         
 		REGISTER_OBJECT_EDITOR(ShaderProgram, ShaderEditor)
 		REGISTER_OBJECT_EDITOR(TextureAtla, TextureAtlaEditor)

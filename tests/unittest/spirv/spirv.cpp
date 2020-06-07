@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <engine/core/render/interface/glslcc/GLSLCrossCompiler.h>
+#include <engine/core/render/base/glslcc/GLSLCrossCompiler.h>
 
 // glsl vs for test
 static const char* glslVS =R"(#version 450
