@@ -21,9 +21,6 @@ namespace Studio
 		// 添加监视路径(递归)
 		void addPath( const char* path);
 		void addIgnoreFileName(const char* ignoreName);
-	
-	private:
-		void updateThumbnail(Echo::String fileExt);
 
 	public: signals:
 		// 数据变动

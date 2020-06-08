@@ -6,7 +6,6 @@
 #include "ProjectMgr.h"
 #include "ConfigMgr.h"
 #include "IInputController.h"
-#include "Logic/ThumbnailMgr/ThumbnailMgr.h"
 #include <QWidget>
 #include <QDockWidget>
 
@@ -49,7 +48,6 @@ namespace Studio
 		virtual RenderWindow* getRenderWindow();
 
 		// thumbnail
-		virtual bool saveThumbnail( const Echo::String& fileName, int type = 0 );
 		Echo::String getThumbnailPath( const Echo::String& filePath,bool needOldExt = true);
 		
 		// 重置摄像机参数

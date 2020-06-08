@@ -146,7 +146,6 @@ namespace Studio
 			TIME_PROFILE
 			(
 				EchoEngine::instance();
-				ThumbnailMgr::instance();
 			)
 
 			TIME_PROFILE
@@ -234,20 +233,8 @@ namespace Studio
 		return true;
 	}
 
-	bool AStudio::saveThumbnail(const Echo::String& fileName, int type /* = 0 */)
-	{
-		bool success = ThumbnailMgr::instance()->saveThumbnail(fileName, ThumbnailMgr::THUMBNAIL_TYPE(type));
-		if ( success )
-		{
-			QString itemName;
-			itemName = fileName.c_str();
-		}
-		return success;
-	}
-
 	Echo::String AStudio::getThumbnailPath(const Echo::String& filePath, bool needOldExt)
 	{
-		// 过滤掉后缀名，加上bmp
 		Echo::String fileName = Echo::PathUtil::GetPureFilename(filePath, needOldExt);
 		Echo::String appPath = Echo::PathUtil::GetCurrentDir();
 

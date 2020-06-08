@@ -53,18 +53,6 @@ namespace Studio
 		m_ignoreFileNames.push_back(ignoreName);
 	}
 
-	void FileSystemWatcher::updateThumbnail(Echo::String fileExt)
-	{
-		// 更新缩略图
-		Echo::StringArray exts = Echo::StringUtil::Split(".effect|.model|.mesh|.skin|.material|.scene|.png|.tga|.bmp|.jpg", "|");
-		for (Echo::String& ext : exts)
-		{
-			if (ext == fileExt)
-				ThumbnailMgr::update();
-		}
-	}
-
-	// 文件修改
 	void FileSystemWatcher::onFileChanged(const QString& file)
 	{
 		Echo::String filePathName = file.toStdString().c_str();
@@ -98,8 +86,6 @@ namespace Studio
 
 		// c++热加载
 		emit Signal_fileChanged(file);
-
-		updateThumbnail(fileExt);
 	}
 
 	// 文件目录修改
@@ -160,7 +146,6 @@ namespace Studio
 		onFileChanged(file.c_str());
 	}
 
-	// 文件删除
 	void FileSystemWatcher::onFileDelete(const Echo::String& file)
 	{
 		if (!Echo::PathUtil::IsDir(file))
@@ -170,7 +155,5 @@ namespace Studio
 		}
 
 		m_fileSystemWatcher->removePath(file.c_str());
-		Echo::String fileExt = Echo::PathUtil::GetFileExt(file.c_str(), true);
-		updateThumbnail(fileExt);
 	}
 }
