@@ -4,6 +4,7 @@
 #include "MainWindow.h"
 #include "InputController2d.h"
 #include "InputController3d.h"
+#include "OperationManager.h"
 #include <QDateTime>
 
 namespace Studio
@@ -70,6 +71,9 @@ namespace Studio
 		InputContext ctx(pos, button, elapsed);
 
 		m_inputController->tick(ctx);
+
+		// operations
+		OperationManager::instance()->tick();
 
 		// Call the main render function
 		EchoEngine::instance()->Render(elapsed, this->isVisible());

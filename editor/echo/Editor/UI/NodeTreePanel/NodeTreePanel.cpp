@@ -11,6 +11,7 @@
 #include "ResPanel.h"
 #include "MainWindow.h"
 #include "RenderWindow.h"
+#include "OperationManager.h"
 #include "SlotChooseDialog.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/io/IO.h>
@@ -1088,7 +1089,7 @@ namespace Studio
 
     void NodeTreePanel::onUnselectCurrentEditObject()
     {
-        // editor extension : unselect object
+        // editor extension : unselected object
         if (m_currentEditObject && m_currentEditObject->getEditor())
         {
             m_currentEditObject->getEditor()->onEditorUnSelectThisNode();
@@ -1104,6 +1105,8 @@ namespace Studio
 		m_currentEditObject = getCurrentSelectNode();
 		showSelectedObjectProperty();
         showSelectedObjectSignal();
+
+		OperationManager::instance()->onSelectedObject(m_currentEditObject ? m_currentEditObject->getId() : 0, false);
 
 		// editor extension : select object
 		if (m_currentEditObject && m_currentEditObject->getEditor())
@@ -1126,6 +1129,8 @@ namespace Studio
 
 		showSelectedObjectProperty();
 
+		OperationManager::instance()->onSelectedObject(m_currentEditObject ? m_currentEditObject->getId() : 0, false);
+
 		// editor extension : select object
 		if (m_currentEditObject && m_currentEditObject->getEditor())
 		{
@@ -1138,6 +1143,8 @@ namespace Studio
 		m_currentEditObject = res;
 
 		showSelectedObjectProperty();
+
+		OperationManager::instance()->onSelectedObject(m_currentEditObject ? m_currentEditObject->getId() : 0, false);
 	}
 
 	void NodeTreePanel::saveCurrentEditRes()
