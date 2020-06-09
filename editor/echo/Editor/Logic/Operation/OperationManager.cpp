@@ -1,8 +1,14 @@
 #include "OperationManager.h"
+#include "Operations/OperationTranslate.h"
 #include "engine/core/memory/MemAllocDef.h"
 
 namespace Studio
 {
+	OperationManager::OperationManager()
+	{
+		m_currentOperation = EchoNew(OperationTranslate);
+	}
+
 	OperationManager* OperationManager::instance()
 	{
 		static OperationManager* inst = EchoNew(OperationManager);
@@ -11,7 +17,10 @@ namespace Studio
 
 	void OperationManager::tick()
 	{
-		int a = 10;
+		if (m_currentOperation)
+		{
+			m_currentOperation->tick(m_selectedObjects);
+		}
 	}
 
 	void OperationManager::onSelectedObject(Echo::ui32 objectId, bool isMultiSelect)

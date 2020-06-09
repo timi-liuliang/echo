@@ -8,7 +8,7 @@ namespace Studio
 	class OperationManager
 	{
 	public:
-		OperationManager() {}
+		OperationManager();
 		~OperationManager() {}
 
 		// instance
@@ -23,5 +23,6 @@ namespace Studio
 
 	private:
 		Echo::set<Echo::ui32>::type	m_selectedObjects;
+		Echo::ObjectOperation*		m_currentOperation = nullptr;
 	};
 }

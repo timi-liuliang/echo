@@ -15,10 +15,10 @@ namespace Studio
 		RenderWindow( QWidget* parent = NULL);
 		virtual ~RenderWindow();
 
-		// 开始渲染
+		// begin render
 		void BeginRender();
 
-		// 窗口大小改变
+		// resize window
 		void ResizeWindow();
 
 		void SetAspectRatio(const QSize& size);
@@ -36,7 +36,7 @@ namespace Studio
 		virtual void keyPressEvent( QKeyEvent* e) override;
 		virtual void keyReleaseEvent( QKeyEvent* e) override;
 
-		// 输入控制器
+		// set controller
 		void setInputController( IRWInputController* controller) { m_inputController = controller; }
 
 		// input controller
@@ -48,15 +48,18 @@ namespace Studio
 		void switchToController2d() { m_inputController = m_inputController2d; }
 		void switchToController3d() { m_inputController = m_inputController3d; }
 
+		// transform widget
+		TransformWidget* getTransformWidget() { return m_transformWidget; }
+
 	protected:
 		// size hint
 		virtual QSize sizeHint() const override;
 
 	private slots:
-		// 渲染
+		// render
 		void  Render();
 
-		// 重置设备
+		// reset device
 		void  ResetDevice();
 
 	private:
