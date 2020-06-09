@@ -468,6 +468,11 @@ namespace Studio
 		if (trans != Echo::Vector3::ZERO)
 		{
 			setPosition(m_position + trans);
+
+			if (m_listener)
+			{
+				m_listener->onTranslate(trans);
+			}
 		}
 	}
 

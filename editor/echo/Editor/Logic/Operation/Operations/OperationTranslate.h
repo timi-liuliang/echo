@@ -6,7 +6,7 @@
 
 namespace Studio
 {
-	class OperationTranslate : public Echo::ObjectOperation
+	class OperationTranslate : public Echo::ObjectOperation, TransformWidget::Listener
 	{
 	public:
 		OperationTranslate();
@@ -14,6 +14,9 @@ namespace Studio
 
 		// tick
 		virtual void tick(const Echo::set<Echo::ui32>::type& objects);
+
+		// on translate
+		virtual void onTranslate(const Echo::Vector3& trans);
 
 	private:
 		// get transform widget

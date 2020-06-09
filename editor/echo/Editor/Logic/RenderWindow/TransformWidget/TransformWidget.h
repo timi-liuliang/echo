@@ -48,6 +48,13 @@ namespace Studio
 			All,
 		};
 
+		class Listener
+		{
+		public:
+			// on translate
+			virtual void onTranslate(const Echo::Vector3& trans)=0;
+		};
+
 	public:
 		TransformWidget();
 
@@ -55,6 +62,9 @@ namespace Studio
 		bool onMouseDown(const Echo::Vector2& localPos);
 		void onMouseMove(const Echo::Vector2& localPos);
 		void onMouseUp();
+
+		// set listener
+		void setListener(Listener* listener) { m_listener = listener; }
 
 		// position
 		void setPosition(const Echo::Vector3& pos);
@@ -99,5 +109,6 @@ namespace Studio
 		RotateType					m_rotateType;
 		bool						m_isVisible = true;
 		float						m_fScale;
+		Listener*					m_listener = nullptr;
 	};
 }

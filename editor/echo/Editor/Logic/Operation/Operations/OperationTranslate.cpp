@@ -25,6 +25,19 @@ namespace Studio
 			if (transformWidget)
 			{
 				transformWidget->setPosition(getObjectsCenter());
+				transformWidget->setListener(this);
+			}
+		}
+	}
+
+	void OperationTranslate::onTranslate(const Echo::Vector3& trans)
+	{
+		for (Echo::i32 id : m_selectedObjects)
+		{
+			Echo::Node* node = dynamic_cast<Echo::Node*>(Echo::Object::getById(id));
+			if (node)
+			{
+				node->setWorldPosition(node->getWorldPosition() + trans);
 			}
 		}
 	}
