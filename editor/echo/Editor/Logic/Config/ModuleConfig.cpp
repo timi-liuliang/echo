@@ -11,6 +11,7 @@ namespace Echo
 		REGISTER_MODULE(AudioModule)
 		REGISTER_MODULE(Live2DModule)
 		REGISTER_MODULE(SpineModule)
+		REGISTER_MODULE(SplineModule)
 		REGISTER_MODULE(GltfModule)
 		REGISTER_MODULE(AnimModule)
 		REGISTER_MODULE(EffectModule)
