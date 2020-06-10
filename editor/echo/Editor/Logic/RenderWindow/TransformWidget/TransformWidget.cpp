@@ -2,6 +2,8 @@
 #include "EchoEngine.h"
 #include <engine/core/geom/Ray.h>
 
+#define TWODIMENSION_SCALE 120
+
 namespace Studio
 {
 	static float AresTwoLineAngle(const Echo::Vector3& lineFirst, const Echo::Vector3& lineSecond)
@@ -72,29 +74,50 @@ namespace Studio
 
 		// color
 		const Echo::Color White(1.f, 1.f, 1.f, 1.f);
+		const Echo::String renderType = m_is2d ? "2d" : "3d";
+		const Echo::real32 scale = m_is2d ? TWODIMENSION_SCALE : 1.f;
 
 		m_axis->clear();
-		m_axis->setRenderType("3d");
+		m_axis->setRenderType(renderType);
 
 		m_axis->setWorldPosition(m_position);
 
-		// axis line
-		m_axis->drawLine(Vector3(0.0f, 0.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f), isMoveType(MoveType::XAxis) ? White : Echo::Color::RED);
-		m_axis->drawLine(Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f), isMoveType(MoveType::YAxis) ? White : Echo::Color::GREEN);
-		m_axis->drawLine(Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f), isMoveType(MoveType::ZAxis) ? White : Echo::Color::BLUE);
+		if (m_is2d)
+		{
+			// axis line
+			m_axis->drawLine(Vector3(0.0f, 0.0f, 0.0f) * scale, Vector3(1.0f, 0.0f, 0.0f) * scale, isMoveType(MoveType::XAxis) ? White : Echo::Color::RED);
+			m_axis->drawLine(Vector3(0.0f, 0.0f, 0.0f) * scale, Vector3(0.0f, 1.0f, 0.0f) * scale, isMoveType(MoveType::YAxis) ? White : Echo::Color::GREEN);
 
-		// plane
-		m_axis->drawLine(Vector3(0.4f, 0.0f, 0.0f), Vector3(0.4f, 0.4f, 0.0f), isMoveType(MoveType::XYPlane) ? White : Color::RED);
-		m_axis->drawLine(Vector3(0.4f, 0.4f, 0.0f), Vector3(0.0f, 0.4f, 0.0f), isMoveType(MoveType::XYPlane) ? White : Color::GREEN);
-		m_axis->drawLine(Vector3(0.0f, 0.4f, 0.0f), Vector3(0.0f, 0.4f, 0.4f), isMoveType(MoveType::YZPlane) ? White : Color::GREEN);
-		m_axis->drawLine(Vector3(0.0f, 0.4f, 0.4f), Vector3(0.0f, 0.0f, 0.4f), isMoveType(MoveType::YZPlane) ? White : Color::BLUE);
-		m_axis->drawLine(Vector3(0.4f, 0.0f, 0.4f), Vector3(0.0f, 0.0f, 0.4f), isMoveType(MoveType::XZPlane) ? White : Color::BLUE);
-		m_axis->drawLine(Vector3(0.4f, 0.0f, 0.0f), Vector3(0.4f, 0.0f, 0.4f), isMoveType(MoveType::XZPlane) ? White : Color::RED);
+			// plane
+			m_axis->drawLine(Vector3(0.4f, 0.0f, 0.0f) * scale, Vector3(0.4f, 0.4f, 0.0f) * scale, isMoveType(MoveType::XYPlane) ? White : Color::RED);
+			m_axis->drawLine(Vector3(0.4f, 0.4f, 0.0f) * scale, Vector3(0.0f, 0.4f, 0.0f) * scale, isMoveType(MoveType::XYPlane) ? White : Color::GREEN);
 
-		// cones
-		drawCone(0.1f, 0.6f, Transform(Vector3::UNIT_X, Vector3::ONE, Quaternion::IDENTITY), isMoveType(MoveType::XAxis) ? White : Color::RED);
-		drawCone(0.1f, 0.6f, Transform(Vector3::UNIT_Y, Vector3::ONE, Quaternion::fromVec3ToVec3(Echo::Vector3::UNIT_X, Echo::Vector3::UNIT_Y)), isMoveType(MoveType::YAxis) ? White : Echo::Color::GREEN);
-		drawCone(0.1f, 0.6f, Transform(Vector3::UNIT_Z, Vector3::ONE, Quaternion::fromVec3ToVec3(Echo::Vector3::UNIT_X, Echo::Vector3::UNIT_Z)), isMoveType(MoveType::ZAxis) ? White : Echo::Color::BLUE);
+			// cones
+			drawCone(0.1f * scale, 0.6f * scale, Transform(Vector3::UNIT_X * scale, Vector3::ONE, Quaternion::IDENTITY), isMoveType(MoveType::XAxis) ? White : Color::RED);
+			drawCone(0.1f * scale, 0.6f * scale, Transform(Vector3::UNIT_Y * scale, Vector3::ONE, Quaternion::fromVec3ToVec3(Echo::Vector3::UNIT_X, Echo::Vector3::UNIT_Y)), isMoveType(MoveType::YAxis) ? White : Echo::Color::GREEN);
+		}
+		else
+		{
+			// axis line
+			m_axis->drawLine(Vector3(0.0f, 0.0f, 0.0f) * scale, Vector3(1.0f, 0.0f, 0.0f) * scale, isMoveType(MoveType::XAxis) ? White : Echo::Color::RED);
+			m_axis->drawLine(Vector3(0.0f, 0.0f, 0.0f) * scale, Vector3(0.0f, 1.0f, 0.0f) * scale, isMoveType(MoveType::YAxis) ? White : Echo::Color::GREEN);
+			m_axis->drawLine(Vector3(0.0f, 0.0f, 0.0f) * scale, Vector3(0.0f, 0.0f, 1.0f) * scale, isMoveType(MoveType::ZAxis) ? White : Echo::Color::BLUE);
+
+			// plane
+			m_axis->drawLine(Vector3(0.4f, 0.0f, 0.0f) * scale, Vector3(0.4f, 0.4f, 0.0f) * scale, isMoveType(MoveType::XYPlane) ? White : Color::RED);
+			m_axis->drawLine(Vector3(0.4f, 0.4f, 0.0f) * scale, Vector3(0.0f, 0.4f, 0.0f) * scale, isMoveType(MoveType::XYPlane) ? White : Color::GREEN);
+			m_axis->drawLine(Vector3(0.0f, 0.4f, 0.0f) * scale, Vector3(0.0f, 0.4f, 0.4f) * scale, isMoveType(MoveType::YZPlane) ? White : Color::GREEN);
+			m_axis->drawLine(Vector3(0.0f, 0.4f, 0.4f) * scale, Vector3(0.0f, 0.0f, 0.4f) * scale, isMoveType(MoveType::YZPlane) ? White : Color::BLUE);
+			m_axis->drawLine(Vector3(0.4f, 0.0f, 0.4f) * scale, Vector3(0.0f, 0.0f, 0.4f) * scale, isMoveType(MoveType::XZPlane) ? White : Color::BLUE);
+			m_axis->drawLine(Vector3(0.4f, 0.0f, 0.0f) * scale, Vector3(0.4f, 0.0f, 0.4f) * scale, isMoveType(MoveType::XZPlane) ? White : Color::RED);
+
+			// cones
+			drawCone(0.1f * scale, 0.6f * scale, Transform(Vector3::UNIT_X * scale, Vector3::ONE, Quaternion::IDENTITY), isMoveType(MoveType::XAxis) ? White : Color::RED);
+			drawCone(0.1f * scale, 0.6f * scale, Transform(Vector3::UNIT_Y * scale, Vector3::ONE, Quaternion::fromVec3ToVec3(Echo::Vector3::UNIT_X, Echo::Vector3::UNIT_Y)), isMoveType(MoveType::YAxis) ? White : Echo::Color::GREEN);
+			drawCone(0.1f * scale, 0.6f * scale, Transform(Vector3::UNIT_Z * scale, Vector3::ONE, Quaternion::fromVec3ToVec3(Echo::Vector3::UNIT_X, Echo::Vector3::UNIT_Z)), isMoveType(MoveType::ZAxis) ? White : Echo::Color::BLUE);
+		}
+
+
 
 		//// 三个圆
 		//for (int i = 0; i < 3; i++)
@@ -159,7 +182,7 @@ namespace Studio
 
 	void TransformWidget::onMouseMove(const Echo::Vector2& localPos)
 	{
-		Echo::Camera* camera = Echo::NodeTree::instance()->get3dCamera();
+		Echo::Camera* camera = (Echo::Render::getRenderTypes() & Echo::Render::Type::Type_3D) ? Echo::NodeTree::instance()->get3dCamera() : Echo::NodeTree::instance()->get2dCamera();
 		if (camera && m_isVisible)
 		{
 			// get camera ray
@@ -175,48 +198,81 @@ namespace Studio
 			{
 				float       fDist = 0.0f;
 				Echo::Vector3 relaTrans;
-				switch (m_moveType)
+				if (m_is2d)
 				{
-				case MoveType::XAxis:
-				{
-					fDist = translateOnAxis(ray0, ray1, m_position, Echo::Vector3::UNIT_X);
-					relaTrans = fDist * Echo::Vector3::UNIT_X;
+					switch (m_moveType)
+					{
+					case MoveType::XAxis:
+					{
+						Echo::Plane plane(m_position, Echo::Vector3::UNIT_Z);
+						translateOnPlane(&relaTrans, plane, ray0, ray1);
+						relaTrans.y = 0.f;
+					}
+					break;
+					case MoveType::YAxis:
+					{
+						Echo::Plane plane(m_position, Echo::Vector3::UNIT_Z);
+						translateOnPlane(&relaTrans, plane, ray0, ray1);
+						relaTrans.x = 0.f;
+					}
+					break;
+					case MoveType::XYPlane:
+					{
+						Echo::Plane plane(m_position, Echo::Vector3::UNIT_Z);
+						translateOnPlane(&relaTrans, plane, ray0, ray1);
+					}
+					break;
+					default:
+					{
+						return;
+					}
+					}
 				}
-				break;
-				case MoveType::YAxis:
+				else
 				{
-					fDist = translateOnAxis(ray0, ray1, m_position, Echo::Vector3::UNIT_Y);
-					relaTrans = fDist * Echo::Vector3::UNIT_Y;
-				}
-				break;
-				case MoveType::ZAxis:
-				{
-					fDist = translateOnAxis(ray0, ray1, m_position, Echo::Vector3::UNIT_Z);
-					relaTrans = fDist * Echo::Vector3::UNIT_Z;
-				}
-				break;
-				case MoveType::XYPlane:
-				{
-					Echo::Plane plane(m_position, Echo::Vector3::UNIT_Z);
-					translateOnPlane(&relaTrans, plane, ray0, ray1);
-				}
-				break;
-				case MoveType::YZPlane:
-				{
-					Echo::Plane plane(m_position, Echo::Vector3::UNIT_X);
-					translateOnPlane(&relaTrans, plane, ray0, ray1);
-				}
-				break;
-				case MoveType::XZPlane:
-				{
-					Echo::Plane plane(m_position, Echo::Vector3::UNIT_Y);
-					translateOnPlane(&relaTrans, plane, ray0, ray1);
-				}
-				break;
-				default:
-				{
-					return;
-				}
+					switch (m_moveType)
+					{
+					case MoveType::XAxis:
+					{
+						fDist = translateOnAxis(ray0, ray1, m_position, Echo::Vector3::UNIT_X);
+						relaTrans = fDist * Echo::Vector3::UNIT_X;
+					}
+					break;
+					case MoveType::YAxis:
+					{
+						fDist = translateOnAxis(ray0, ray1, m_position, Echo::Vector3::UNIT_Y);
+						relaTrans = fDist * Echo::Vector3::UNIT_Y;
+					}
+					break;
+					case MoveType::ZAxis:
+					{
+						fDist = translateOnAxis(ray0, ray1, m_position, Echo::Vector3::UNIT_Z);
+						relaTrans = fDist * Echo::Vector3::UNIT_Z;
+					}
+					break;
+					case MoveType::XYPlane:
+					{
+						Echo::Plane plane(m_position, Echo::Vector3::UNIT_Z);
+						translateOnPlane(&relaTrans, plane, ray0, ray1);
+					}
+					break;
+					case MoveType::YZPlane:
+					{
+						Echo::Plane plane(m_position, Echo::Vector3::UNIT_X);
+						translateOnPlane(&relaTrans, plane, ray0, ray1);
+					}
+					break;
+					case MoveType::XZPlane:
+					{
+						Echo::Plane plane(m_position, Echo::Vector3::UNIT_Y);
+						translateOnPlane(&relaTrans, plane, ray0, ray1);
+					}
+					break;
+					default:
+					{
+						return;
+					}
+					}
 				}
 
 				onTranslate(relaTrans);
@@ -298,19 +354,32 @@ namespace Studio
 	{
 		using namespace Echo;
 
-		m_moveBoxs[int(MoveType::XAxis)].set(m_position + Vector3(1.f, 0.f, 0.f), Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.60f, 0.15f, 0.15f);
-		m_moveBoxs[int(MoveType::YAxis)].set(m_position + Vector3(0.f, 1.f, 0.f), Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.15f, 0.60f, 0.15f);
-		m_moveBoxs[int(MoveType::ZAxis)].set(m_position + Vector3(0.f, 0.f, 1.f), Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.15f, 0.15f, 0.60f);
-		m_moveBoxs[int(MoveType::XYPlane)].set(m_position + Vector3(0.2f, 0.2f, 0.0f), Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.2f, 0.2f, 0.05f);
-		m_moveBoxs[int(MoveType::YZPlane)].set(m_position + Vector3(0.0f, 0.2f, 0.2f), Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.05f, 0.2f, 0.2f);
-		m_moveBoxs[int(MoveType::XZPlane)].set(m_position + Vector3(0.2f, 0.0f, 0.2f), Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.2f, 0.05f, 0.2f);
+		if (m_is2d)
+		{
+			const Echo::real32 scale = TWODIMENSION_SCALE;
+
+			m_moveBoxs[int(MoveType::XAxis)].set(m_position + Vector3(1.f, 0.f, 0.f) * scale, Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.60f * scale, 0.15f * scale, 0.15f * scale);
+			m_moveBoxs[int(MoveType::YAxis)].set(m_position + Vector3(0.f, 1.f, 0.f) * scale, Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.15f * scale, 0.60f * scale, 0.15f * scale);
+			m_moveBoxs[int(MoveType::XYPlane)].set(m_position + Vector3(0.2f, 0.2f, 0.0f) * scale, Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.2f * scale, 0.2f * scale, 0.05f * scale);
+		}
+		else
+		{
+			const Echo::real32 scale = 1.f;
+
+			m_moveBoxs[int(MoveType::XAxis)].set(m_position + Vector3(1.f, 0.f, 0.f) * scale, Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.60f * scale, 0.15f * scale, 0.15f * scale);
+			m_moveBoxs[int(MoveType::YAxis)].set(m_position + Vector3(0.f, 1.f, 0.f) * scale, Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.15f * scale, 0.60f * scale, 0.15f * scale);
+			m_moveBoxs[int(MoveType::ZAxis)].set(m_position + Vector3(0.f, 0.f, 1.f) * scale, Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.15f * scale, 0.15f * scale, 0.60f * scale);
+			m_moveBoxs[int(MoveType::XYPlane)].set(m_position + Vector3(0.2f, 0.2f, 0.0f) * scale, Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.2f * scale, 0.2f * scale, 0.05f * scale);
+			m_moveBoxs[int(MoveType::YZPlane)].set(m_position + Vector3(0.0f, 0.2f, 0.2f) * scale, Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.05f * scale, 0.2f * scale, 0.2f * scale);
+			m_moveBoxs[int(MoveType::XZPlane)].set(m_position + Vector3(0.2f, 0.0f, 0.2f) * scale, Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, 0.2f * scale, 0.05f * scale, 0.2f * scale);
+		}
 	}
 
 	bool TransformWidget::onMouseDown(const Echo::Vector2& localPos)
 	{
 		m_mousePos = localPos;
 
-		Echo::Camera* camera = Echo::NodeTree::instance()->get3dCamera();
+		Echo::Camera* camera = (Echo::Render::getRenderTypes() & Echo::Render::Type::Type_3D) ? Echo::NodeTree::instance()->get3dCamera() : Echo::NodeTree::instance()->get2dCamera();
 		if (camera)
 		{
 			// get camera ray
@@ -425,42 +494,15 @@ namespace Studio
 
 	void TransformWidget::setVisible(bool visible)
 	{
-		/*
-		// 本地记录
-		m_bVisible = visible;
+		m_axis->setVisible(visible);
+	}
 
-		switch (m_editType)
-		{
-		case EM_EDIT_TRANSLATE:
-		{
-			for (int i = 0; i < 3; i++)
-			{
-				m_pAxes[i]->SetVisible(visible);
-				m_pPlaneLine[i]->SetVisible(visible);
-				m_pPlaneLine[3 + i]->SetVisible(visible);
-				m_pCone[i]->SetVisible(visible);
-			}
-		}
-		break;
-		case EM_EDIT_ROTATE:
-		{
-			for (int i = 0; i < 3; i++)
-			{
-				m_pCycle[i]->SetVisible(visible);
-			}
-		}
-		break;
-		case EM_EDIT_SCALE:
-		{
-			for (int i = 0; i < 3; i++)
-			{
-				m_pAxes[i]->SetVisible(visible);
-				m_pCone[i]->SetVisible(visible);
-				m_pScale->SetVisible(visible);
-			}
-		}
-		break;
-		}*/
+	void TransformWidget::setRenderType2d(bool is2d)
+	{ 
+		m_is2d = is2d;
+
+		updateTranslateCollisionBox();
+		draw();
 	}
 
 	void  TransformWidget::onTranslate(const Echo::Vector3& trans)

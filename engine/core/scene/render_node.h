@@ -20,7 +20,11 @@ namespace Echo
 		Render();
 		virtual ~Render();
 
+		// render types
 		static void setRenderTypes(i32 types = Type_2D | Type_3D | Type_Ui) { m_renderTypes = types; }
+		static i32 getRenderTypes() { return m_renderTypes; }
+
+		// is need render by types
 		bool isNeedRender() const;
 
 		// render type

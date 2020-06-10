@@ -72,6 +72,9 @@ namespace Studio
 		// visible
 		void setVisible(bool visible);
 
+		// set render type
+		void setRenderType2d(bool is2d);
+
 		// set edit type
 		void SetEditType(EditType type);
 
@@ -98,6 +101,7 @@ namespace Studio
 		Echo::Vector3* translateOnPlane(Echo::Vector3* pOut, const Echo::Plane& plane, const Echo::Ray& ray0, const Echo::Ray& ray1);
 
 	private:
+		bool						m_is2d = false;
 		Echo::Vector2				m_mousePos;
 		Echo::Vector3				m_position;
 		Echo::Gizmos*				m_axis;

@@ -25,6 +25,7 @@ namespace Studio
 			if (transformWidget)
 			{
 				transformWidget->setPosition(getObjectsCenter());
+				transformWidget->setRenderType2d(is2d());
 				transformWidget->setListener(this);
 			}
 		}
@@ -62,5 +63,19 @@ namespace Studio
 		}
 
 		return count ? position / count : position;
+	}
+
+	bool OperationTranslate::is2d()
+	{
+		for (Echo::i32 id : m_selectedObjects)
+		{
+			Echo::Render* node = dynamic_cast<Echo::Render*>(Echo::Object::getById(id));
+			if (node)
+			{
+				return node->getRenderType().getValue() == "3d" ? false : true;
+			}
+		}
+
+		return (Echo::Render::getRenderTypes() & Echo::Render::Type::Type_3D) ? false : true;
 	}
 }

@@ -37,7 +37,7 @@ namespace Studio
 
 	void InputController2d::tick(const InputContext& ctx)
 	{
-		// 移动摄像机
+		// move camera
 		Echo::Vector3 cameraMoveDir = Echo::Vector3::ZERO;
 		if ( m_keyADown ) 
 			cameraMoveDir.x += -1.f;
@@ -51,7 +51,7 @@ namespace Studio
 		m_cameraMoveDir = cameraMoveDir;
 		m_cameraMoveDir.normalize();
 
-		// 更新摄像机
+		// update camera
 		UpdateCamera(ctx.elapsedTime);
 	}
 
@@ -190,7 +190,6 @@ namespace Studio
 		}
 	}
 
-	// on focuse node
 	void InputController2d::onFocusNode(Echo::Node* node)
 	{
 		if (node)

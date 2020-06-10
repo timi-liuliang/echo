@@ -18,7 +18,7 @@ namespace Echo
 		float		m_extent[3];
 
 		// initialized
-		Box3() {}
+		Box3() { memset(this, 0, sizeof(Box3)); }
 		Box3( const Vector3& center, const Vector3& axis0, const Vector3& axis1, const Vector3& axis2, float extent0, float extent1, float extent2);
 
 		// Set

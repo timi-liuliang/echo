@@ -25,7 +25,11 @@ namespace Studio
 		// get objects center
 		Echo::Vector3 getObjectsCenter();
 
+		// get render type
+		bool is2d();
+
 	private:
+		Echo::i32					m_renderTypes;
 		Echo::set<Echo::ui32>::type	m_selectedObjects;
 	};
 }
