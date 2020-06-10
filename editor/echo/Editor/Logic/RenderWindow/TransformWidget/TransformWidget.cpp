@@ -73,17 +73,18 @@ namespace Studio
 		using namespace Echo;
 
 		// color
-		const Echo::Color White(1.f, 1.f, 1.f, 1.f);
-		const Echo::String renderType = m_is2d ? "2d" : "3d";
-		const Echo::real32 scale = m_is2d ? TWODIMENSION_SCALE : 1.f;
+		const Color White(1.f, 1.f, 1.f, 1.f);
+		const String renderType = m_is2d ? "2d" : "3d";
+		const real32 scale = m_is2d ? TWODIMENSION_SCALE : 1.f;
 
 		m_axis->clear();
 		m_axis->setRenderType(renderType);
 
-		m_axis->setWorldPosition(m_position);
-
 		if (m_is2d)
 		{
+			Vector3 position(m_position.x, m_position.y, -255.f);
+			m_axis->setWorldPosition(position);
+
 			// axis line
 			m_axis->drawLine(Vector3(0.0f, 0.0f, 0.0f) * scale, Vector3(1.0f, 0.0f, 0.0f) * scale, isMoveType(MoveType::XAxis) ? White : Echo::Color::RED);
 			m_axis->drawLine(Vector3(0.0f, 0.0f, 0.0f) * scale, Vector3(0.0f, 1.0f, 0.0f) * scale, isMoveType(MoveType::YAxis) ? White : Echo::Color::GREEN);
@@ -98,6 +99,8 @@ namespace Studio
 		}
 		else
 		{
+			m_axis->setWorldPosition(m_position);
+
 			// axis line
 			m_axis->drawLine(Vector3(0.0f, 0.0f, 0.0f) * scale, Vector3(1.0f, 0.0f, 0.0f) * scale, isMoveType(MoveType::XAxis) ? White : Echo::Color::RED);
 			m_axis->drawLine(Vector3(0.0f, 0.0f, 0.0f) * scale, Vector3(0.0f, 1.0f, 0.0f) * scale, isMoveType(MoveType::YAxis) ? White : Echo::Color::GREEN);
