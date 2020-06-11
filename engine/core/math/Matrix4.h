@@ -43,6 +43,14 @@ namespace Echo
 			m30 = f30; m31 = f31; m32 = f32; m33 = f33;
 		}
 
+		Matrix4(const Vector3& x, const Vector3& y, const Vector3& z, const Vector3& w)
+		{
+			m00 = x.x; m01 = x.y; m02 = x.z; m03 = 0.f;
+			m10 = y.x; m11 = y.y; m12 = y.z; m13 = 0.f;
+			m20 = z.x; m21 = z.y; m22 = z.z; m23 = 0.f;
+			m30 = w.x; m31 = w.y; m32 = w.z; m33 = 1.f;
+		}
+
 		Matrix4(Real* arr)
 		{
 			memcpy(m, arr, sizeof(Real)*16);

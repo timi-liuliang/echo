@@ -322,7 +322,7 @@ namespace Echo
 			return (x * x + y * y + z * z);
 		}
 
-		void normalize()
+		const Vector3& normalize()
 		{
 			Real length = len();
 			if ( length > 1e-08 )
@@ -331,6 +331,8 @@ namespace Echo
 				y /= length;
 				z /= length;
 			}
+
+			return *this;
 		}
 
 		Real normalizeLen()

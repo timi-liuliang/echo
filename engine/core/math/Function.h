@@ -509,9 +509,7 @@ namespace Math
 	}
     
     static inline unsigned int FloorLog2(unsigned int Value)
-    {
-        
-        
+    { 
         // see http://codinggorilla.domemtech.com/?p=81 or http://en.wikipedia.org/wiki/Binary_logarithm but modified to return 0 for a input value of 0
         // 686ms on test data
         unsigned int pos = 0;
@@ -520,8 +518,7 @@ namespace Math
         if (Value >= 1<< 4) { Value >>=  4; pos +=  4; }
         if (Value >= 1<< 2) { Value >>=  2; pos +=  2; }
         if (Value >= 1<< 1) {				pos +=  1; }
-        return (Value == 0) ? 0 : pos;
-        
+        return (Value == 0) ? 0 : pos;      
     }
     
     
@@ -537,4 +534,10 @@ namespace Math
         int Bitmask = ((int)(CountLeadingZeros(Arg) << 26)) >> 31;
         return (32 - CountLeadingZeros(Arg - 1)) & (~Bitmask);
     }
+
+	template< class T, class U >
+	inline T Lerp(const T& A, const T& B, const U& Alpha)
+	{
+		return (T)(A + Alpha * (B - A));
+	}
 }}

@@ -494,9 +494,11 @@ namespace Echo
 			mat.m30 = 0.0f;				mat.m31 = 0.0f;				mat.m32 = 0.0f;				mat.m33 = 1.0f;
 		}
 
-
-		inline void fromMat4(const Matrix4& mat)
+		// build from matrix
+		static inline Quaternion fromMat4(const Matrix4& mat)
 		{
+			Quaternion quat;
+
 			Real fTrace = mat.m00 + mat.m11 + mat.m22;
 			Real fRoot;
 
@@ -504,11 +506,11 @@ namespace Echo
 			{
 				// |w| > 1/2, may as well choose w > 1/2
 				fRoot = Math::Sqrt(fTrace + 1.0f);  // 2w
-				w = 0.5f * fRoot;
+				quat.w = 0.5f * fRoot;
 				fRoot = 0.5f / fRoot;  // 1/(4w)
-				x = (mat.m12 - mat.m21) * fRoot;
-				y = (mat.m20 - mat.m02) * fRoot;
-				z = (mat.m01 - mat.m10) * fRoot;
+				quat.x = (mat.m12 - mat.m21) * fRoot;
+				quat.y = (mat.m20 - mat.m02) * fRoot;
+				quat.z = (mat.m01 - mat.m10) * fRoot;
 			}
 			else
 			{
@@ -523,18 +525,22 @@ namespace Echo
 				int k = nNext[j];
 
 				fRoot = Math::Sqrt(mat(i, i) - mat(j, j) - mat(k, k) + 1.0f);
-				Real* nQuan[3] = { &x, &y, &z };
+				Real* nQuan[3] = { &quat.x, &quat.y, &quat.z };
 				*nQuan[i] = 0.5f * fRoot;
 				fRoot = 0.5f / fRoot;
-				w = (mat[j][k] - mat[k][j]) * fRoot;
+				quat.w = (mat[j][k] - mat[k][j]) * fRoot;
 				*nQuan[j] = (mat(i, j) + mat(j, i)) * fRoot;
 				*nQuan[k] = (mat(i, k) + mat(k, i)) * fRoot;
 			}
+
+			return quat;
 		}
 
+		// from dir to dir
 		static Quaternion fromVec3ToVec3(const Vector3& from, const Vector3& to);
 
-		inline void fromAxes(const Vector3& xAxis, const Vector3& yAxis, const Vector3& zAxis)
+		// from axes
+		static inline Quaternion fromAxes(const Vector3& xAxis, const Vector3& yAxis, const Vector3& zAxis)
 		{
 			Matrix4 kRot = Matrix4::IDENTITY;
 			kRot.m00 = xAxis.x;
@@ -549,39 +555,7 @@ namespace Echo
 			kRot.m21 = zAxis.y;
 			kRot.m22 = zAxis.z;
 
-			Real fTrace = kRot.m00+kRot.m11+kRot.m22;
-			Real fRoot;
-
-			if ( fTrace > 0.0 )
-			{
-				// |w| > 1/2, may as well choose w > 1/2
-				fRoot = Math::Sqrt(fTrace + 1.0f);  // 2w
-				w = 0.5f*fRoot;
-				fRoot = 0.5f/fRoot;  // 1/(4w)
-				x = (kRot.m12-kRot.m21)*fRoot;
-				y = (kRot.m20-kRot.m02)*fRoot;
-				z = (kRot.m01-kRot.m10)*fRoot;
-			}
-			else
-			{
-				// |w| <= 1/2
-				static ui32 s_iNext[3] = { 1, 2, 0 };
-				ui32 i = 0;
-				if ( kRot.m11 > kRot.m00 )
-					i = 1;
-				if ( kRot.m22 > kRot[i][i] )
-					i = 2;
-				ui32 j = s_iNext[i];
-				ui32 k = s_iNext[j];
-
-				fRoot = Math::Sqrt(kRot[i][i]-kRot[j][j]-kRot[k][k] + 1.0f);
-				Real* apkQuat[3] = { &x, &y, &z };
-				*apkQuat[i] = 0.5f*fRoot;
-				fRoot = 0.5f/fRoot;
-				w = (kRot[j][k]-kRot[k][j])*fRoot;
-				*apkQuat[j] = (kRot[j][i]+kRot[i][j])*fRoot;
-				*apkQuat[k] = (kRot[k][i]+kRot[i][k])*fRoot;
-			}
+			return fromMat4(kRot);
 		}
         
         // rotate direction
