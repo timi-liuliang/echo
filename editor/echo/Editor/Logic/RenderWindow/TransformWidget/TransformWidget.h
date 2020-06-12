@@ -42,9 +42,9 @@ namespace Studio
 		enum class ScaleType
 		{
 			None,
-			X,
-			Y,
-			Z,
+			XAxis,
+			YAxis,
+			ZAxis,
 			All,
 		};
 
@@ -83,11 +83,13 @@ namespace Studio
 
 		// check move type
 		bool isMoveType(MoveType type) const { return m_moveType == type; }
+		bool isScaleType(ScaleType type) const { return m_scaleType==type; }
 
 	private:
 		// draw
 		void draw();
 		void drawCone(float radius, float height, const Echo::Transform& transform, const Echo::Color& color);
+		void drawBox(const Echo::Vector3& extent, const Echo::Transform& transform, const Echo::Color& color);
 
 		// update collision box
 		void updateTranslateCollisionBox();
@@ -111,6 +113,7 @@ namespace Studio
 		EditType					m_editType;
 		MoveType					m_moveType;
 		RotateType					m_rotateType;
+		ScaleType					m_scaleType;
 		bool						m_isVisible = true;
 		float						m_fScale;
 		Listener*					m_listener = nullptr;

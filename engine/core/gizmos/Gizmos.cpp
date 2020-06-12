@@ -206,6 +206,11 @@ namespace Echo
 		m_localAABB.addPoint(v2);
 	}
 
+	void Gizmos::mergeVertices()
+	{
+
+	}
+
 	void Gizmos::clear()
 	{
 		m_localAABB.reset();

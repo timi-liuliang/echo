@@ -27,7 +27,16 @@ namespace Echo
 		// build AABB
 		void buildAABB( AABB& aabb);
 
-		// get eight points
+		/* get eight points
+		 *    3--------2
+		 *   /|       /|
+		 *  / |      / |
+		 * 0--------1  |
+		 * |  7-----|--6
+		 * | /      | /
+		 * |/       |/
+		 * 4--------5
+		 */
 		void buildEightPoints( Vector3* points);
 	};
 }

@@ -53,13 +53,14 @@ namespace Echo
 		// draw line
 		void drawLine(const Vector3& from, const Vector3& to, const Color& color);
 
-		// draw trangle
+		// draw triangle
 		void drawTriangle(const Vector3& v0, const Vector3& v1, const Vector3& v2, const Color& color);
 
-		// is auto clear
-		bool isAutoClear() const { return m_isAutoClear; }
+		// optimize triangles, merge vertices
+		void mergeVertices();
 
-		// set auto clear
+		// auto clear
+		bool isAutoClear() const { return m_isAutoClear; }
 		void setAutoClear(bool autClear) { m_isAutoClear = autClear; }
 
 		// clear mesh data
