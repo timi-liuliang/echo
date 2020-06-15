@@ -17,3 +17,4 @@ bin/editor/Mac/Release/build
 /engine/core/base/echo_config.h
 bin/editor/Debug/echo
 /soulution
+/app/android/app/.cxx
