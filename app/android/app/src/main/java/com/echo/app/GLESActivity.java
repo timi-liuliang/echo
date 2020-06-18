@@ -11,7 +11,7 @@ public class GLESActivity extends Activity {
     @Override protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
-        m_view = new GLESView(getApplication());
+        m_view = new GLESView(getApplication(), false, 0, 0);
         setContentView(m_view);
     }
 
