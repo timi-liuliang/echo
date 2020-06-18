@@ -40,10 +40,10 @@ public class GLESView extends GLSurfaceView {
          * surface exactly. This is going to be done in our custom config
          * chooser. See ConfigChooser class definition below
          */
-        setEGLConfigChooser(translucent ? new ConfigChooser( 8, 8, 8, 8, depth, stencil) : new ConfigChooser(5, 6, 5, 0), depth, stencil);
+        setEGLConfigChooser(translucent ? new ConfigChooser( 8, 8, 8, 8, depth, stencil) : new ConfigChooser(5, 6, 5, 0, depth, stencil));
 
         /* Set the renderer responsible for frame rendering */
-        setRenderer( new Renderer())
+        setRenderer( new Renderer());
     }
 
     /**
