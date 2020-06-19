@@ -1,6 +1,8 @@
+# include directories
+INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH})
 
 # Add a shared library
-ADD_LIBRARY(echo-native SHARED native-lib.cpp)
+ADD_LIBRARY(echojni SHARED EchoJni.cpp)
 
 # Link engine libraries
-TARGET_LINK_LIBRARIES(echo-native box2d freeimage freetype lua physx pugixml spine zlib)
+TARGET_LINK_LIBRARIES(echojni box2d freeimage freetype lua physx pugixml spine zlib)
