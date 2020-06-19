@@ -169,7 +169,7 @@ public class GLESView extends GLSurfaceView {
 
         // On surface changed
         public void onSurfaceChanged(GL10 gl, int width, int height) {
-
+            GLESJniLib.init( width, height);
         }
 
         // On surface created
@@ -179,7 +179,7 @@ public class GLESView extends GLSurfaceView {
 
         // On draw frame
         public void onDrawFrame(GL10 gl) {
-
+            GLESJniLib.tick();
         }
     }
 }

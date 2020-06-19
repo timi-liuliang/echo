@@ -5,12 +5,14 @@
 // init
 extern "C" JNIEXPORT void JNICALL Java_com_echo_app_GLESJniLib_init(JNIEnv *env, jclass clazz, jint width, jint height)
 {
-    Echo::initRender(0);
-    Echo::initEngine( "", true);
+    int a = 10;
+    //Echo::initRender(0);
+    //Echo::initEngine( "", true);
 }
 
 // tick
 extern "C" JNIEXPORT void JNICALL Java_com_echo_app_GLESJniLib_tick(JNIEnv *env, jclass clazz)
 {
-    Echo::Engine::instance()->tick(0.1f);
+    int a = 1;
+    //Echo::Engine::instance()->tick(0.1f);
 }

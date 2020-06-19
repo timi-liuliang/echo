@@ -2,6 +2,7 @@ package com.echo.app;
 
 public class GLESJniLib {
 
+    // load library
     static {
         System.loadLibrary("echojni");
     }
