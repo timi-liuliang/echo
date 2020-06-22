@@ -14,12 +14,32 @@ namespace Echo
         
         // instance
         static AndroidBuildSettings* instance();
+
+        // set output directory
+        virtual void setOutputDir(const String& outputDir) override;
+
+        // build
+        virtual void build() override;
+
+		// get final result path
+		virtual String getFinalResultPath() override;
         
         // icon res path
         void setIconRes(const ResourcePath& path);
         const ResourcePath& getIconRes() { return m_iconRes; }
+
+    private:
+        // output directory
+        bool prepare();
+
+        // copy
+        void copySrc();
+        void copyRes();
         
     private:
+        String                  m_rootDir;
+        String                  m_projectDir;
+        String                  m_outputDir;
         ResourcePath            m_iconRes;
     };
 }

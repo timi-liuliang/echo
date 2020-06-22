@@ -90,7 +90,8 @@ namespace Studio
 
     Echo::BuildSettings* BuildWindow::getBuildSettings()
     {
-        if(m_targetPlatform=="iOS")				return ECHO_DOWN_CAST<Echo::BuildSettings*>(Echo::Class::create(ECHO_CLASS_NAME(iOSBuildSettings)));
+        if (m_targetPlatform == "iOS")			return ECHO_DOWN_CAST<Echo::BuildSettings*>(Echo::Class::create(ECHO_CLASS_NAME(iOSBuildSettings)));
+        else if(m_targetPlatform == "Android")  return ECHO_DOWN_CAST<Echo::BuildSettings*>(Echo::Class::create(ECHO_CLASS_NAME(AndroidBuildSettings)));
 		else if(m_targetPlatform == "Windows")	return ECHO_DOWN_CAST<Echo::BuildSettings*>(Echo::Class::create(ECHO_CLASS_NAME(WindowsBuildSettings)));
         else									return nullptr;
     }
