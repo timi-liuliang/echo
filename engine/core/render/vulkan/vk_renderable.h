@@ -48,6 +48,6 @@ namespace Echo
         const VkPipelineMultisampleStateCreateInfo* getVkMultiSampleStateCreateInfo();
 
 	private:
-		VkPipeline          m_vkPipeline = nullptr;
+		VkPipeline          m_vkPipeline = VK_NULL_HANDLE;
 	};
 }

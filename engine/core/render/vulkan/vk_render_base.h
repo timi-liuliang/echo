@@ -8,9 +8,16 @@
 #define VK_USE_PLATFORM_ANDROID_KHR
 #endif
 
-#include <vulkan/vulkan.h>
-#include <vulkan/vk_sdk_platform.h>
-#include <thirdparty/spirv-cross/spirv_cross.hpp>
+#ifdef ECHO_PLATFORM_ANDROID
+    #include <vulkan/vulkan.h>
+    #include <vulkan/vk_platform.h>
+    #include <vulkan/vulkan_android.h>
+    #include <thirdparty/spirv-cross/spirv_cross.hpp>
+#else
+    #include <vulkan/vulkan.h>
+    #include <vulkan/vk_sdk_platform.h>
+    #include <thirdparty/spirv-cross/spirv_cross.hpp>
+#endif
 
 namespace Echo
 {

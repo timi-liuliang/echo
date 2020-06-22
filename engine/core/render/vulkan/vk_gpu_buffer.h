@@ -25,7 +25,7 @@ namespace Echo
         void clear();
 
     private:
-        VkBuffer        m_vkBuffer = nullptr;
-        VkDeviceMemory  m_vkBufferMemory = nullptr;
+        VkBuffer        m_vkBuffer = VK_NULL_HANDLE;
+        VkDeviceMemory  m_vkBufferMemory = VK_NULL_HANDLE;
     };
 }

@@ -9,8 +9,8 @@
     #include <OpenAL/al.h>
     #include <OpenAL/alc.h>
 #elif defined(ECHO_PLATFORM_ANDROID)
-    #include <OpenAL/al.h>
-    #include <OpenAL/alc.h>
+    #include <AL/al.h>
+    #include <AL/alc.h>
 #else
     #include <AL/al.h>
     #include <AL/alc.h>

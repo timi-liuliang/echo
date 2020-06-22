@@ -342,8 +342,8 @@ namespace Echo
         createInfo.sType = VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR;
         createInfo.pNext = nullptr;
         createInfo.flags = 0;
-        createInfo.window = AndroidGetApplicationWindow();
-        if (VK_SUCCESS != vkCreateAndroidSurfaceKHR(m_vkInstance, &createInfo, nullptr, &m_vkWindowSurface))
+        //createInfo.window = AndroidGetApplicationWindow();
+        //if (VK_SUCCESS != vkCreateAndroidSurfaceKHR(m_vkInstance, &createInfo, nullptr, &m_vkWindowSurface))
         {
             EchoLogError("Vulkan Renderer failed to create window surface!");
         }

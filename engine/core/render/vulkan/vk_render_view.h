@@ -30,8 +30,8 @@ namespace Echo
 
     private:
         VkFormat        m_vkFormat;
-        VkImage         m_vkImage = nullptr;
+        VkImage         m_vkImage = VK_NULL_HANDLE;
         VkDeviceMemory  m_vkMemory;
-        VkImageView     m_vkImageView = nullptr;
+        VkImageView     m_vkImageView = VK_NULL_HANDLE;
 	};
 }

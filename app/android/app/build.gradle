@@ -13,7 +13,7 @@ android {
         externalNativeBuild {
             cmake {
                 arguments "-DECHO_BUILD_PLATFORM_ANDROID=TRUE","-DECHO_EDITOR_MODE=FALSE","-DCMAKE_BUILD_TYPE=Release"
-                cppFlags "-std=c++11"
+                cppFlags "-std=c++14"
             }
         }
 

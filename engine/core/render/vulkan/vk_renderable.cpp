@@ -77,7 +77,7 @@ namespace Echo
         if (m_vkPipeline)
         {
             vkDestroyPipeline(VKRenderer::instance()->getVkDevice(), m_vkPipeline, nullptr);
-            m_vkPipeline = nullptr;
+            m_vkPipeline = VK_NULL_HANDLE;
         }
     }
 

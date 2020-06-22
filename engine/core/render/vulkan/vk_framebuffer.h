@@ -38,14 +38,14 @@ namespace Echo
         virtual VkCommandBuffer getVkCommandbuffer() { return nullptr; }
 
         // get vk frame buffer
-        virtual VkFramebuffer getVkFramebuffer() { return nullptr; }
+        virtual VkFramebuffer getVkFramebuffer() { return VK_NULL_HANDLE; }
 
         // get vk descriptor pool
         VkDescriptorPool getVkDescriptorPool() { return m_vkDescriptorPool; }
 
     protected:
         // clear color image
-        virtual VkImage getVkColorImage() { return nullptr; }
+        virtual VkImage getVkColorImage() { return VK_NULL_HANDLE; }
 
     protected:
         // create render pass
@@ -55,12 +55,12 @@ namespace Echo
         void createVkDescriptorPool();
 
     protected:
-        VkRenderPass                        m_vkRenderPass = nullptr;
+        VkRenderPass                        m_vkRenderPass = VK_NULL_HANDLE;
         VkRenderPassBeginInfo               m_vkRenderPassBeginInfo;
         vector<VkFramebuffer>::type         m_vkFramebuffers;
         VkViewport                          m_vkViewport;
         VkPipelineViewportStateCreateInfo   m_vkViewportStateCreateInfo;
-        VkDescriptorPool                    m_vkDescriptorPool = nullptr;
+        VkDescriptorPool                    m_vkDescriptorPool = VK_NULL_HANDLE;
     };
 
     class VKFramebufferOffscreen : public VKFramebuffer

@@ -272,6 +272,8 @@ ADD_SUBDIRECTORY(thirdparty/tinyexpr)
 IF(ECHO_PLATFORM_WIN32)
 	ADD_SUBDIRECTORY(thirdparty/jplayer)
 	ADD_SUBDIRECTORY(thirdparty/openal-soft)
+ELSEIF(ECHO_PLATFORM_ANDROID)
+	ADD_SUBDIRECTORY(thirdparty/openal-soft)
 ENDIF()
 #ADD_SUBDIRECTORY(thirdparty/protobuf/src/google/protobuf)
 
