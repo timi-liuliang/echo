@@ -114,11 +114,11 @@ namespace Echo
 		log("Convert Project File ...");
 
 		// copy res
-		//PathUtil::CopyDir(m_projectDir, m_outputDir + "app/ios/resources/data/");
+		PathUtil::CopyDir(m_projectDir, m_outputDir + "app/android/app/src/main/assets/");
 
 		// rename
-		//String projectFile = PathUtil::GetPureFilename(Engine::instance()->getConfig().m_projectFile);
-		//PathUtil::RenameFile(m_outputDir + "app/ios/resources/data/" + projectFile, m_outputDir + "app/ios/resources/data/app.echo");
+		String projectFile = PathUtil::GetPureFilename(Engine::instance()->getConfig().m_projectFile);
+		PathUtil::RenameFile(m_outputDir + "app/android/app/src/main/assets/" + projectFile, m_outputDir + "app/android/app/src/main/assets/app.echo");
     }
 
 	String AndroidBuildSettings::getFinalResultPath()
