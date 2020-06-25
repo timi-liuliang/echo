@@ -18,7 +18,7 @@ namespace Echo
 		static RaytracingModule* instance();
 
 		// register all types of the module
-		virtual void registerTypes();
+		virtual void registerTypes() override;
 
 		// update box2d world
 		virtual void update(float elapsedTime) override;

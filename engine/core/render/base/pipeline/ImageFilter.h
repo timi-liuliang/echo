@@ -32,7 +32,7 @@ namespace Echo
 		void setMaterial(Object* material);
 
 		// render
-		virtual void render();
+		virtual void render() override ;
 
 	protected:
 		// build render able

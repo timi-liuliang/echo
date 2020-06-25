@@ -22,7 +22,7 @@ namespace Echo
         virtual bool end() override;
 
         // on resize
-        virtual void onSize(ui32 width, ui32 height);
+        virtual void onSize(ui32 width, ui32 height) override;
 
     public:
         // get vk viewPort
@@ -74,7 +74,7 @@ namespace Echo
         virtual bool end() override;
 
         // on resize
-        virtual void onSize(ui32 width, ui32 height);
+        virtual void onSize(ui32 width, ui32 height) override;
 
     protected:
         // create vk frame buffer
@@ -92,14 +92,14 @@ namespace Echo
         virtual bool end() override;
 
         // on resize
-        virtual void onSize(ui32 width, ui32 height);
+        virtual void onSize(ui32 width, ui32 height) override;
 
     public:
         // get vk command buffer
-        virtual VkCommandBuffer getVkCommandbuffer() { return m_vkCommandBuffers[m_imageIndex]; }
+        virtual VkCommandBuffer getVkCommandbuffer() override { return m_vkCommandBuffers[m_imageIndex]; }
 
         // get vk frame buffer
-        virtual VkFramebuffer getVkFramebuffer() { return m_vkFramebuffers[m_imageIndex]; }
+        virtual VkFramebuffer getVkFramebuffer() override { return m_vkFramebuffers[m_imageIndex]; }
 
     private:
         // recreate swap chain
@@ -135,7 +135,7 @@ namespace Echo
         void createVkSurface(void* handle);
 
         // clear color image
-        virtual VkImage getVkColorImage() { return m_vkSwapChainImages[m_imageIndex]; }
+        virtual VkImage getVkColorImage() override { return m_vkSwapChainImages[m_imageIndex]; }
 
         // submit command buffer
         void submitCommandBuffer();

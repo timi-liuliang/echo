@@ -25,7 +25,7 @@ namespace Echo
         virtual bool initialize(const Settings& config) override;
 
         // get type
-        virtual Type getType() { return Renderer::Type::Vulkan; }
+        virtual Type getType() override { return Renderer::Type::Vulkan; }
 
         // create buffer
         virtual GPUBuffer*	createVertexBuffer(Dword usage, const Buffer& buff) override;

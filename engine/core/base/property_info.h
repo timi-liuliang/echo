@@ -74,7 +74,7 @@ namespace Echo
 		virtual bool getPropertyValueDefault(Object* classPtr, const String& propertyName, Variant& oVar) override;
 
 		// set property value
-		virtual void setPropertyValue(Object* classPtr, const String& propertyName, const Variant& propertyValue);
+		virtual void setPropertyValue(Object* classPtr, const String& propertyName, const Variant& propertyValue) override;
 	};
 
 	struct PropertyInfoDynamic : public PropertyInfo
@@ -88,7 +88,7 @@ namespace Echo
 		virtual bool getPropertyValueDefault(Object* classPtr, const String& propertyName, Variant& oVar) override;
 
 		// set property value
-		virtual void setPropertyValue(Object* classPtr, const String& propertyName, const Variant& propertyValue);
+		virtual void setPropertyValue(Object* classPtr, const String& propertyName, const Variant& propertyValue) override;
 
 		// get flag
 		virtual i32 getPropertyFlag(Object* classPtr, const String& propertyName) override;

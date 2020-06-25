@@ -8,14 +8,14 @@
 extern "C" JNIEXPORT void JNICALL Java_com_echo_app_GLESJniLib_init(JNIEnv *env, jclass clazz, jint width, jint height)
 {
     // Log
-    Echo::Log::instance()->addOutput(EchoNew(Echo::GameLog("Game")));
+    //Echo::Log::instance()->addOutput(EchoNew(Echo::GameLog("Game")));
 
-    Echo::initRender(0);
-    Echo::initEngine( "", true);
+    //Echo::initRender(0);
+    //Echo::initEngine( "", true);
 }
 
 // tick
 extern "C" JNIEXPORT void JNICALL Java_com_echo_app_GLESJniLib_tick(JNIEnv *env, jclass clazz)
 {
-    Echo::Engine::instance()->tick(0.1f);
+    //Echo::Engine::instance()->tick(0.1f);
 }

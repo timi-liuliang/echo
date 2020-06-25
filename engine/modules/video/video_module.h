@@ -16,9 +16,9 @@ namespace Echo
 		static VideoModule* instance();
 
 		// register all types of the module
-		virtual void registerTypes();
+		virtual void registerTypes() override;
 
 		// update audio module
-		virtual void update(float elapsedTime);
+		virtual void update(float elapsedTime) override;
 	};
 }

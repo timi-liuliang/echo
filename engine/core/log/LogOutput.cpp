@@ -8,10 +8,7 @@
 #	include <Windows.h>
 #elif defined(ECHO_PLATFORM_ANDROID)
 #	include <android/log.h>
-#   include "platform/android/JniHelper.h"
 #endif
-
-//////////////////////////////////////////////////////////////////////////
 
 namespace Echo
 {
@@ -185,41 +182,6 @@ namespace Echo
 	bool LogDefault::writelogtosdcard(const char* formats)
 	{
 #ifdef ECHO_PLATFORM_ANDROID
-		FILE* fp = NULL;
-		String strDocPath;
-        if (!strDocPath.empty()) {
-            String strFile = strDocPath + "../" + m_logFilename;
-            fp = fopen(strFile.c_str(),"a+");
-		if(!fp)
-		{
-				__android_log_print(ANDROID_LOG_ERROR, m_logName.c_str(), strFile.c_str());
-			Echo::LogDefault("Can't find SdCard");
-			return false;
-		}
-		//Echo::Log("find SdCard");
-		Echo::String str_ = formats;
-		str_.append("\n");
-		fwrite(str_.c_str(),str_.length(),1,fp);
-		fclose(fp);
-        }
-
-		ICEFIRE::JniMethodInfo t;
-		if (ICEFIRE::JniHelper::getStaticMethodInfo(t,
-			LOG_FOR_LEDOCRASHSDK_CLASS_NAME,
-			LOG_FOR_LEDOCRASHSDK_FUNCTION_NAME,
-			LOG_FOR_LEDOCRASHSDK_SIGNATURE))
-		{
-			Echo::String strlog = formats;
-			strlog.append("\n");
-			char arrChLog[4096];
-			strncpy(arrChLog, strlog.c_str(), sizeof(arrChLog));
-			jstring stringArg1 = t.env->NewStringUTF(arrChLog);
-
-			t.env->CallStaticVoidMethod(t.classID, t.methodID, stringArg1);
-			t.env->DeleteLocalRef(t.classID);
-			t.env->DeleteLocalRef(stringArg1);
-		}
-
 #endif
 
 		return true;
@@ -247,19 +209,19 @@ namespace Echo
 		if(m_bConsoleOutput)
 		{
 #ifdef ECHO_PLATFORM_ANDROID
-			android_LogPriority priority;
-			switch(level)
-			{
-			case LL_DEBUG:		priority = ANDROID_LOG_DEBUG;	break;
-			case LL_INFO:		priority = ANDROID_LOG_INFO;	break;
-			case LL_WARNING:	priority = ANDROID_LOG_WARN;	break;
-			case LL_ERROR:		priority = ANDROID_LOG_ERROR;	break;
-			case LL_FATAL:		priority = ANDROID_LOG_FATAL;	break;
-			default :			priority = ANDROID_LOG_INFO;	break;
-			}
-
-			__android_log_print(priority, m_logName.c_str(), msgStr.c_str());
-			writelogtosdcard(msgStr.c_str());
+//			android_LogPriority priority;
+//			switch(level)
+//			{
+//			case LL_DEBUG:		priority = ANDROID_LOG_DEBUG;	break;
+//			case LL_INFO:		priority = ANDROID_LOG_INFO;	break;
+//			case LL_WARNING:	priority = ANDROID_LOG_WARN;	break;
+//			case LL_ERROR:		priority = ANDROID_LOG_ERROR;	break;
+//			case LL_FATAL:		priority = ANDROID_LOG_FATAL;	break;
+//			default :			priority = ANDROID_LOG_INFO;	break;
+//			}
+//
+//			__android_log_print(priority, m_logFilename.c_str(), msgStr.c_str());
+//			writelogtosdcard(msgStr.c_str());
 #else
 			printf("%s", msgStr.c_str());
 #endif
@@ -273,7 +235,7 @@ namespace Echo
 		}
 
 
-		// ´íÎóÏûÏ¢Ç¿ÖÆµ¯´°(Release && Windows only)
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢Ç¿ï¿½Æµï¿½ï¿½ï¿½(Release && Windows only)
 #ifndef ECHO_EDITOR_MODE
 		if (level >= LL_ERROR)
 		{

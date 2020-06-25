@@ -14,7 +14,7 @@ namespace Echo
 		const GLES2SamplerState*	m_samplerState;
 		
 		TextureSlotInfo()
-			: m_target(-1), m_texture(NULL), m_samplerState( NULL)
+			: m_target(-1), m_texture(0), m_samplerState( NULL)
 		{}
 
 		void reset()

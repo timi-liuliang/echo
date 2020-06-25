@@ -22,7 +22,7 @@ namespace Echo
 
 	protected:
 		// get global uniforms
-		virtual void* getGlobalUniformValue(const String& name);
+		virtual void* getGlobalUniformValue(const String& name) override;
 
 	protected:
 		float					m_alpha = 1.f;

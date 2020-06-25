@@ -13,7 +13,7 @@ android {
         externalNativeBuild {
             cmake {
                 arguments "-DECHO_BUILD_PLATFORM_ANDROID=TRUE","-DECHO_EDITOR_MODE=FALSE","-DCMAKE_BUILD_TYPE=Release"
-                cppFlags "-std=c++14"
+                cppFlags "-std=c++1z", "-fexceptions"
             }
         }
 
@@ -28,6 +28,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            applicationIdSuffix ".debug"
+            debuggable  true
         }
     }
     externalNativeBuild {

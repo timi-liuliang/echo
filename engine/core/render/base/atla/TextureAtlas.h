@@ -23,7 +23,7 @@ namespace Echo
         virtual ~TextureAtlas();
 
 		// is a package
-		virtual bool isPackage() const { return true; }
+		virtual bool isPackage() const override { return true; }
 
 		// texture res path
 		void setTextureRes(const ResourcePath& path);
@@ -52,7 +52,7 @@ namespace Echo
 
 	protected:
 		// enum files
-		virtual void enumFilesInDir(StringArray& ret, const String& rootPath, bool bIncDir = false, bool bIncSubDirs = false, bool isAbsPath = false);
+		virtual void enumFilesInDir(StringArray& ret, const String& rootPath, bool bIncDir = false, bool bIncSubDirs = false, bool isAbsPath = false) override ;
 
     protected:
 		vector<Atla>::type	m_atlas;

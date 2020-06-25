@@ -61,7 +61,7 @@ namespace magic_enum {
 // If need another range for specific enum type, add specialization enum_range for necessary enum type.
 template <typename E>
 struct enum_range final {
-  static_assert(std::is_enum_v<E>, "magic_enum::enum_range requires enum type.");
+  static_assert(std::is_enum<E>::value, "magic_enum::enum_range requires enum type.");
   static constexpr int min = MAGIC_ENUM_RANGE_MIN;
   static constexpr int max = MAGIC_ENUM_RANGE_MAX;
   static_assert(max > min, "magic_enum::enum_range requires max > min.");
@@ -84,7 +84,7 @@ namespace detail {
 
 template <typename E>
 [[nodiscard]] constexpr int min_impl() {
-  static_assert(std::is_enum_v<E>, "magic_enum::detail::min_impl requires enum type.");
+  static_assert(std::is_enum<E>::value, "magic_enum::detail::min_impl requires enum type.");
   using U = std::underlying_type_t<E>;
   constexpr int min = enum_range<E>::min > (std::numeric_limits<U>::min)() ? enum_range<E>::min : (std::numeric_limits<U>::min)();
 
@@ -93,7 +93,7 @@ template <typename E>
 
 template <typename E>
 [[nodiscard]] constexpr auto range_impl() {
-  static_assert(std::is_enum_v<E>, "magic_enum::detail::range_impl requires enum type.");
+  static_assert(std::is_enum<E>::value, "magic_enum::detail::range_impl requires enum type.");
   static_assert(enum_range<E>::min > (std::numeric_limits<int>::min)(), "magic_enum::enum_range requires min must be greater than INT_MIN.");
   static_assert(enum_range<E>::max < (std::numeric_limits<int>::max)(), "magic_enum::enum_range requires max must be less than INT_MAX.");
   static_assert(enum_range<E>::max > enum_range<E>::min, "magic_enum::enum_range requires max > min.");
@@ -126,7 +126,7 @@ template <typename E>
 
 template <typename E, E V>
 [[nodiscard]] constexpr std::string_view name_impl() noexcept {
-  static_assert(std::is_enum_v<E>, "magic_enum::detail::name_impl requires enum type.");
+  static_assert(std::is_enum<E>::value, "magic_enum::detail::name_impl requires enum type.");
 #if defined(__clang__)
   constexpr auto name = pretty_name({__PRETTY_FUNCTION__, sizeof(__PRETTY_FUNCTION__) - 2});
 #elif defined(__GNUC__) && __GNUC__ >= 9
@@ -142,7 +142,7 @@ template <typename E, E V>
 
 template <typename E, int... I>
 [[nodiscard]] constexpr auto strings_impl(std::integer_sequence<int, I...>) noexcept {
-  static_assert(std::is_enum_v<E>, "magic_enum::detail::strings_impl requires enum type.");
+  static_assert(std::is_enum<E>::value, "magic_enum::detail::strings_impl requires enum type.");
   constexpr std::array<std::string_view, sizeof...(I)> names{{name_impl<E, static_cast<E>(I + min_impl<E>())>()...}};
 
   return names;
@@ -150,7 +150,7 @@ template <typename E, int... I>
 
 template <typename E>
 [[nodiscard]] constexpr std::string_view name_impl(int value) noexcept {
-  static_assert(std::is_enum_v<E>, "magic_enum::detail::name_impl requires enum type.");
+  static_assert(std::is_enum<E>::value, "magic_enum::detail::name_impl requires enum type.");
   constexpr auto names = strings_impl<E>(range_impl<E>());
 
   if (auto i = static_cast<std::size_t>(value - min_impl<E>()); i < names.size()) {
@@ -162,7 +162,7 @@ template <typename E>
 
 template <typename E, int... I>
 [[nodiscard]] constexpr auto values_impl(std::integer_sequence<int, I...>) noexcept {
-  static_assert(std::is_enum_v<E>, "magic_enum::detail::values_impl requires enum type.");
+  static_assert(std::is_enum<E>::value, "magic_enum::detail::values_impl requires enum type.");
   constexpr std::array<bool, sizeof...(I)> valid{{!name_impl<E, static_cast<E>(I + min_impl<E>())>().empty()...}};
   constexpr auto num_valid = ((valid[I] ? 1 : 0) + ...);
 
@@ -178,7 +178,7 @@ template <typename E, int... I>
 
 template <typename E, std::size_t... I>
 [[nodiscard]] constexpr auto names_impl(std::integer_sequence<std::size_t, I...>) noexcept {
-  static_assert(std::is_enum_v<E>, "magic_enum::detail::names_impl requires enum type.");
+  static_assert(std::is_enum<E>::value, "magic_enum::detail::names_impl requires enum type.");
   constexpr auto values = values_impl<E>(range_impl<E>());
   constexpr std::array<std::string_view, sizeof...(I)> names{{name_impl<E, values[I]>()...}};
 
@@ -187,7 +187,7 @@ template <typename E, std::size_t... I>
 
 template <typename E, std::size_t... I>
 [[nodiscard]] constexpr auto entries_impl(std::integer_sequence<std::size_t, I...>) noexcept {
-  static_assert(std::is_enum_v<E>, "magic_enum::detail::entries_impl requires enum type.");
+  static_assert(std::is_enum<E>::value, "magic_enum::detail::entries_impl requires enum type.");
   constexpr auto values = values_impl<E>(range_impl<E>());
   constexpr std::array<std::pair<E, std::string_view>, sizeof...(I)> entries{{{values[I], name_impl<E, values[I]>()}...}};
 
@@ -195,19 +195,19 @@ template <typename E, std::size_t... I>
 }
 
 template <typename T>
-using enable_if_enum_t = std::enable_if_t<std::is_enum_v<std::decay_t<T>>>;
+using enable_if_enum_t = std::enable_if_t<std::is_enum<std::decay_t<T>>::value>;
 
-template <typename T, bool = std::is_enum_v<T>>
+template <typename T, bool = std::is_enum<T>::value>
 struct is_scoped_enum_impl : std::false_type {};
 
 template <typename T>
-struct is_scoped_enum_impl<T, true> : std::bool_constant<!std::is_convertible_v<T, std::underlying_type_t<T>>> {};
+struct is_scoped_enum_impl<T, true> : std::integral_constant<bool, !std::is_convertible<T, std::underlying_type_t<T>>::value> {};
 
-template <typename T, bool = std::is_enum_v<T>>
+template <typename T, bool = std::is_enum<T>::value>
 struct is_unscoped_enum_impl : std::false_type {};
 
 template <typename T>
-struct is_unscoped_enum_impl<T, true> : std::bool_constant<std::is_convertible_v<T, std::underlying_type_t<T>>> {};
+struct is_unscoped_enum_impl<T, true> : std::integral_constant<bool, std::is_convertible<T, std::underlying_type_t<T>>::value> {};
 
 template <typename T, typename = T>
 struct is_fixed_enum_impl : std::false_type {};
@@ -215,7 +215,7 @@ struct is_fixed_enum_impl : std::false_type {};
 template <typename T>
 struct is_fixed_enum_impl<T, decltype(T{0})> : std::is_enum<T> {};
 
-template <typename T, bool = std::is_enum_v<T>>
+template <typename T, bool = std::is_enum<T>::value>
 struct underlying_type_impl {};
 
 template <typename T>
@@ -260,7 +260,7 @@ using underlying_type_t = typename underlying_type<T>::type;
 template <typename E, typename = detail::enable_if_enum_t<E>>
 [[nodiscard]] constexpr std::optional<std::decay_t<E>> enum_cast(std::string_view value) noexcept {
   using D = std::decay_t<E>;
-  static_assert(std::is_enum_v<D>, "magic_enum::enum_cast requires enum type.");
+  static_assert(std::is_enum<D>::value, "magic_enum::enum_cast requires enum type.");
   constexpr auto values = detail::values_impl<D>(detail::range_impl<D>());
   constexpr auto count = values.size();
   constexpr auto names = detail::names_impl<D>(std::make_index_sequence<count>{});
@@ -279,7 +279,7 @@ template <typename E, typename = detail::enable_if_enum_t<E>>
 template <typename E, typename = detail::enable_if_enum_t<E>>
 [[nodiscard]] constexpr std::optional<std::decay_t<E>> enum_cast(std::underlying_type_t<std::decay_t<E>> value) noexcept {
   using D = std::decay_t<E>;
-  static_assert(std::is_enum_v<D>, "magic_enum::enum_cast requires enum type.");
+  static_assert(std::is_enum<D>::value, "magic_enum::enum_cast requires enum type.");
 
   if (detail::name_impl<D>(static_cast<int>(value)).empty()) {
     return std::nullopt; // Invalid value or out of range.
@@ -292,7 +292,7 @@ template <typename E, typename = detail::enable_if_enum_t<E>>
 template <typename E, typename = detail::enable_if_enum_t<E>>
 [[nodiscard]] constexpr auto enum_integer(E value) noexcept {
   using D = std::decay_t<E>;
-  static_assert(std::is_enum_v<D>, "magic_enum::enum_integer requires enum type.");
+  static_assert(std::is_enum<D>::value, "magic_enum::enum_integer requires enum type.");
 
   return static_cast<std::underlying_type_t<D>>(value);
 }
@@ -302,7 +302,7 @@ template <typename E, typename = detail::enable_if_enum_t<E>>
 template<typename E, typename = detail::enable_if_enum_t<E>>
 [[nodiscard]] constexpr auto enum_value(std::size_t index) {
   using D = std::decay_t<E>;
-  static_assert(std::is_enum_v<D>, "magic_enum::enum_value requires enum type.");
+  static_assert(std::is_enum<D>::value, "magic_enum::enum_value requires enum type.");
   constexpr auto values = detail::values_impl<D>(detail::range_impl<D>());
 
   return assert(index < values.size()), values[index];
@@ -313,7 +313,7 @@ template<typename E, typename = detail::enable_if_enum_t<E>>
 template <typename E, typename = detail::enable_if_enum_t<E>>
 [[nodiscard]] constexpr auto enum_values() noexcept {
   using D = std::decay_t<E>;
-  static_assert(std::is_enum_v<D>, "magic_enum::enum_values requires enum type.");
+  static_assert(std::is_enum<D>::value, "magic_enum::enum_values requires enum type.");
   constexpr auto values = detail::values_impl<D>(detail::range_impl<D>());
 
   return values;
@@ -323,7 +323,7 @@ template <typename E, typename = detail::enable_if_enum_t<E>>
 template <typename E, typename = detail::enable_if_enum_t<E>>
 [[nodiscard]] constexpr auto enum_count() noexcept {
   using D = std::decay_t<E>;
-  static_assert(std::is_enum_v<D>, "magic_enum::enum_count requires enum type.");
+  static_assert(std::is_enum<D>::value, "magic_enum::enum_count requires enum type.");
   constexpr auto count = detail::values_impl<D>(detail::range_impl<D>()).size();
 
   return count;
@@ -334,7 +334,7 @@ template <typename E, typename = detail::enable_if_enum_t<E>>
 template <auto V, typename = detail::enable_if_enum_t<decltype(V)>>
 [[nodiscard]] constexpr std::string_view enum_name() noexcept {
   using D = std::decay_t<decltype(V)>;
-  static_assert(std::is_enum_v<D>, "magic_enum::enum_name requires enum type.");
+  static_assert(std::is_enum<D>::value, "magic_enum::enum_name requires enum type.");
 
   return detail::name_impl<D, V>();
 }
@@ -343,7 +343,7 @@ template <auto V, typename = detail::enable_if_enum_t<decltype(V)>>
 template <typename E, typename = detail::enable_if_enum_t<E>>
 [[nodiscard]] constexpr std::string_view enum_name(E value) noexcept {
   using D = std::decay_t<E>;
-  static_assert(std::is_enum_v<D>, "magic_enum::enum_name requires enum type.");
+  static_assert(std::is_enum<D>::value, "magic_enum::enum_name requires enum type.");
 
   return detail::name_impl<D>(static_cast<int>(value));
 }
@@ -353,7 +353,7 @@ template <typename E, typename = detail::enable_if_enum_t<E>>
 template <typename E, typename = detail::enable_if_enum_t<E>>
 [[nodiscard]] constexpr auto enum_names() noexcept {
   using D = std::decay_t<E>;
-  static_assert(std::is_enum_v<D>, "magic_enum::enum_names requires enum type.");
+  static_assert(std::is_enum<D>::value, "magic_enum::enum_names requires enum type.");
   constexpr auto count = detail::values_impl<D>(detail::range_impl<D>()).size();
   constexpr auto names = detail::names_impl<D>(std::make_index_sequence<count>{});
 
@@ -365,7 +365,7 @@ template <typename E, typename = detail::enable_if_enum_t<E>>
 template <typename E, typename = detail::enable_if_enum_t<E>>
 [[nodiscard]] constexpr auto enum_entries() noexcept {
   using D = std::decay_t<E>;
-  static_assert(std::is_enum_v<D>, "magic_enum::enum_entries requires enum type.");
+  static_assert(std::is_enum<D>::value, "magic_enum::enum_entries requires enum type.");
   constexpr auto count = detail::values_impl<D>(detail::range_impl<D>()).size();
   constexpr auto entries = detail::entries_impl<D>(std::make_index_sequence<count>{});
 
@@ -377,7 +377,7 @@ namespace ops {
 template <class Char, class Traits, typename E, typename = detail::enable_if_enum_t<E>>
 std::basic_ostream<Char, Traits>& operator<<(std::basic_ostream<Char, Traits>& os, E value) {
   using D = std::decay_t<E>;
-  static_assert(std::is_enum_v<D>, "magic_enum::ops::operator<< requires enum type.");
+  static_assert(std::is_enum<D>::value, "magic_enum::ops::operator<< requires enum type.");
 
   if (auto name = detail::name_impl<D>(static_cast<int>(value)); !name.empty()) {
     for (auto c : name) {
@@ -391,7 +391,7 @@ std::basic_ostream<Char, Traits>& operator<<(std::basic_ostream<Char, Traits>& o
 template <class Char, class Traits, typename E, typename = detail::enable_if_enum_t<E>>
 std::basic_ostream<Char, Traits>& operator<<(std::basic_ostream<Char, Traits>& os, std::optional<E> value) {
   using D = std::decay_t<E>;
-  static_assert(std::is_enum_v<D>, "magic_enum::ops::operator<< requires enum type.");
+  static_assert(std::is_enum<D>::value, "magic_enum::ops::operator<< requires enum type.");
 
   if (value.has_value()) {
     if (auto name = detail::name_impl<D>(static_cast<int>(value.value())); !name.empty()) {
