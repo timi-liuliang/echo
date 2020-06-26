@@ -9,7 +9,7 @@ namespace Echo
     public:
         GameLog(const Echo::String& name);
 
-        /** 日志输出 */
+        /** output message */
         virtual void logMessage(Level level, const Echo::String &msg);
     };
 }
