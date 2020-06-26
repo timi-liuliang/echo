@@ -21,4 +21,4 @@ GROUP_FILES(ALL_FILES ${CMAKE_CURRENT_SOURCE_DIR})
 ADD_LIBRARY(${MODULE_NAME} SHARED ${ALL_FILES} CMakeLists.txt)
 
 # Link engine libraries
-TARGET_LINK_LIBRARIES(echojni box2d freeimage freetype lua physx pugixml spine zlib engine)
+TARGET_LINK_LIBRARIES(${MODULE_NAME} box2d freeimage freetype lua physx pugixml spine zlib engine)
