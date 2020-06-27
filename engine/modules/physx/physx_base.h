@@ -2,7 +2,7 @@
 
 #include <engine/core/base/echo_def.h>
 
-#if defined(ECHO_PLATFORM_IOS) || defined(ECHO_PLATFORM_MAC)
+#if defined(ECHO_PLATFORM_IOS) || defined(ECHO_PLATFORM_MAC) || defined(ECHO_PLATFORM_ANDROID)
 	#define NDEBUG
 #endif
 
