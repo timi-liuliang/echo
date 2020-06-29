@@ -19,6 +19,6 @@ namespace Echo
 		virtual void registerTypes() override;
 
 		// update audio module
-		virtual void update(float elapsedTime);
+		virtual void update(float elapsedTime) override;
 	};
 }

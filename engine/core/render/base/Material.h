@@ -17,6 +17,8 @@ namespace Echo
 		{
 			ShaderProgram::UniformPtr		m_uniform;
 
+			virtual ~UniformValue() {}
+
 			// is empty
 			virtual bool isEmpty() = 0;
 

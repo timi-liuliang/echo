@@ -15,6 +15,6 @@ namespace Echo
 		static AIModule* instance();
 
 		// register all types of the module
-		virtual void registerTypes();
+		virtual void registerTypes() override;
 	};
 }
