@@ -10,7 +10,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_echo_app_GLESJniLib_init(JNIEnv *env,
     // Log
     Echo::Log::instance()->addOutput(EchoNew(Echo::GameLog("Game")));
 
-    Echo::initRender(0);
+    Echo::initRender(0, width, height);
     Echo::initEngine( "", true);
 }
 

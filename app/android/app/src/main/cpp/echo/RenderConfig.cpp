@@ -17,6 +17,8 @@ namespace Echo
 
         Echo::Renderer::Settings renderCfg;
         renderCfg.m_windowHandle = hwnd;
+        renderCfg.m_windowWidth = width;
+        renderCfg.m_windowHeight = height;
 
         EchoLogDebug("Canvas Size : %d x %d", renderCfg.m_windowWidth, renderCfg.m_windowHeight);
         if (renderer && renderer->initialize(renderCfg))

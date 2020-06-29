@@ -18,13 +18,13 @@ namespace Echo
 			LL_FATAL, 
 		};
 
-		/** 日志输出 */
+		// log message
 		virtual void logMessage(Level level, const String &msg) = 0;
 
 	public:
 		LogOutput(const String& name) : m_name(name) {}
 
-		/** 获取目标名称 */
+		// get log name
 		virtual const String& getName() const { return m_name; }
 
 	private:
