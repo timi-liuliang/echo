@@ -3,7 +3,10 @@ package com.echo.app;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
+import android.os.Environment;
 import android.util.Log;
+
+import java.io.File;
 
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
@@ -169,7 +172,12 @@ public class GLESView extends GLSurfaceView {
 
         // On surface changed
         public void onSurfaceChanged(GL10 gl, int width, int height) {
-            GLESJniLib.init( width, height);
+            // Internal storage
+            String resDir = Environment.getDataDirectory().getAbsolutePath() + "/res/";
+            String userDir = Environment.getDataDirectory().getAbsolutePath() + "/user/";
+
+            GLESJniLib.install(resDir);
+            GLESJniLib.init( width, height, resDir, userDir);
         }
 
         // On surface created

@@ -8,8 +8,13 @@ public class GLESJniLib {
     }
 
     // init
-    public static native void init(int width, int height);
+    public static native void init(int width, int height, String resDirectory, String userDirectory);
 
     // tick
     public static native void tick();
+
+    // install
+    public static void install(String resDir) {
+
+    }
 }
