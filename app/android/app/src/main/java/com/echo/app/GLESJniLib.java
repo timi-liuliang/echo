@@ -1,20 +1,19 @@
 package com.echo.app;
 
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 public class GLESJniLib {
 
-    // load library
+    // Load library
     static {
         System.loadLibrary("echojni");
     }
 
-    // init
+    // Init
     public static native void init(int width, int height, String resDirectory, String userDirectory);
 
-    // tick
+    // Tick
     public static native void tick();
-
-    // install
-    public static void install(String resDir) {
-
-    }
 }

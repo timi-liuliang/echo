@@ -176,7 +176,6 @@ public class GLESView extends GLSurfaceView {
             String resDir = Environment.getDataDirectory().getAbsolutePath() + "/res/";
             String userDir = Environment.getDataDirectory().getAbsolutePath() + "/user/";
 
-            GLESJniLib.install(resDir);
             GLESJniLib.init( width, height, resDir, userDir);
         }
 
