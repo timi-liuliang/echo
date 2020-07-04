@@ -172,11 +172,7 @@ public class GLESView extends GLSurfaceView {
 
         // On surface changed
         public void onSurfaceChanged(GL10 gl, int width, int height) {
-            // Internal storage
-            String resDir = Environment.getDataDirectory().getAbsolutePath() + "/res/";
-            String userDir = Environment.getDataDirectory().getAbsolutePath() + "/user/";
-
-            GLESJniLib.init( width, height, resDir, userDir);
+            GLESJniLib.init( width, height);
         }
 
         // On surface created

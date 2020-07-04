@@ -11,8 +11,11 @@ public class GLESJniLib {
         System.loadLibrary("echojni");
     }
 
+    //  set dirs
+    public static native void setDirs(String resDirectory, String userDirectory);
+
     // Init
-    public static native void init(int width, int height, String resDirectory, String userDirectory);
+    public static native void init(int width, int height);
 
     // Tick
     public static native void tick();

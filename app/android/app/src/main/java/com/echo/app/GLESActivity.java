@@ -1,6 +1,7 @@
 package com.echo.app;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -39,10 +40,13 @@ public class GLESActivity extends Activity {
 
     // install
     public void install() {
+        // https://imnotyourson.com/which-storage-directory-should-i-use-for-storing-on-android-6/
         String fromResDir = "res/";
-        String toResDir = Environment.getDataDirectory().getAbsolutePath() + "/res/";
+        String toResDir = getApplicationContext().getFilesDir().getAbsolutePath() + "/res/";
+        String toUserDir = getApplicationContext().getFilesDir().getAbsolutePath() + "/user/";
 
         copyFolder(fromResDir, toResDir);
+        GLESJniLib.setDirs( toResDir, toUserDir);
     }
 
     // copy folder

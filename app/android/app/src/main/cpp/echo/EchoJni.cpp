@@ -14,17 +14,24 @@ Echo::String jstring2string(JNIEnv *env, jstring jStr)
 }
 
 // init
-extern "C" JNIEXPORT void JNICALL Java_com_echo_app_GLESJniLib_init(JNIEnv *env, jclass clazz, jint width, jint height, jstring inResDir, jstring inUserDir)
+extern "C" JNIEXPORT void JNICALL Java_com_echo_app_GLESJniLib_setDirs(JNIEnv *env, jclass clazz, jstring inResDir, jstring inUserDir)
 {
     Echo::String resDir = jstring2string(env, inResDir);
     Echo::String userDir = jstring2string(env, inUserDir);
 
+    int  a = 10;
+}
+
+
+// init
+extern "C" JNIEXPORT void JNICALL Java_com_echo_app_GLESJniLib_init(JNIEnv *env, jclass clazz, jint width, jint height)
+{
     // Log
     Echo::Log::instance()->addOutput(EchoNew(Echo::GameLog("Game")));
 
     // Initialize
     Echo::initRender(0, width, height);
-    Echo::initEngine( resDir + "app.echo", true);
+    Echo::initEngine( "app.echo", true);
 }
 
 // tick
