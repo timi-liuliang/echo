@@ -3,6 +3,7 @@ package com.echo.app;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -38,36 +39,51 @@ public class GLESActivity extends Activity {
 
     // install
     public void install() {
-        // Internal storage
-        String resDir = Environment.getDataDirectory().getAbsolutePath() + "/res/";
+        String fromResDir = "res/";
+        String toResDir = Environment.getDataDirectory().getAbsolutePath() + "/res/";
 
+        copyFolder(fromResDir, toResDir);
+    }
+
+    // copy folder
+    private void copyFolder(String fromDir, String toDir) {
         try{
-            String[] files = getAssets().list("");
+            String[] files = getAssets().list(fromDir);
             for(String fileName : files){
-                InputStream in = getAssets().open(fileName);
-                OutputStream out = new FileOutputStream(new File(resDir, fileName));
-
-                copyFile(in, out);
-
-                in.close();
-                out.flush();
-                out.close();
+                if (fileName.contains(".")){
+                    copyFile(fromDir + fileName, toDir + fileName);
+                } else {
+                    copyFolder(fromDir + fileName + "/", toDir + fileName + "/");
+                }
             }
         } catch (IOException e) {
-            //Log.e("tag", "Failed to get asset file list.", e);
+            Log.e("Echo", "Failed to get asset file list.", e);
         }
     }
 
-    // Copy file
-    private void copyFile(InputStream in, OutputStream out) {
-        try{
+    // copy file
+    private void copyFile(String fromPath, String toPath) {
+        try {
+            // input stream
+            InputStream in = getAssets().open(fromPath);
+
+            // output stream
+            File toFile = new File(toPath);
+            toFile.getParentFile().mkdirs();
+            toFile.createNewFile();
+            OutputStream out = new FileOutputStream(toFile, false);
+
             byte[] buffer = new byte[1024];
             int bytes;
             while ((bytes = in.read(buffer)) != -1) {
                 out.write(buffer, 0, bytes);
             }
+
+            in.close();
+            out.flush();
+            out.close();
         } catch (IOException e){
-            //Log.e("tag", "Failed to get asset file list.", e);
+            Log.e("Echo", "Failed to copy file when install.", e);
         }
     }
 }

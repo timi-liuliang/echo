@@ -114,11 +114,12 @@ namespace Echo
 		log("Convert Project File ...");
 
 		// copy res
-		PathUtil::CopyDir(m_projectDir, m_outputDir + "app/android/app/src/main/assets/");
+		PathUtil::DelPath(m_outputDir + "app/android/app/src/main/assets/res/");
+		PathUtil::CopyDir(m_projectDir, m_outputDir + "app/android/app/src/main/assets/res/");
 
 		// rename
 		String projectFile = PathUtil::GetPureFilename(Engine::instance()->getConfig().m_projectFile);
-		PathUtil::RenameFile(m_outputDir + "app/android/app/src/main/assets/" + projectFile, m_outputDir + "app/android/app/src/main/assets/app.echo");
+		PathUtil::RenameFile(m_outputDir + "app/android/app/src/main/assets/res/" + projectFile, m_outputDir + "app/android/app/src/main/assets/res/app.echo");
     }
 
 	String AndroidBuildSettings::getFinalResultPath()
