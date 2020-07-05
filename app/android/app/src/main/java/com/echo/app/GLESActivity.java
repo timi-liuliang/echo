@@ -40,54 +40,6 @@ public class GLESActivity extends Activity {
 
     // install
     public void install() {
-        // https://imnotyourson.com/which-storage-directory-should-i-use-for-storing-on-android-6/
-        String fromResDir = "res/";
-        String toResDir = getApplicationContext().getFilesDir().getAbsolutePath() + "/res/";
-        String toUserDir = getApplicationContext().getFilesDir().getAbsolutePath() + "/user/";
-
-        copyFolder(fromResDir, toResDir);
-        GLESJniLib.setDirs( toResDir, toUserDir);
-    }
-
-    // copy folder
-    private void copyFolder(String fromDir, String toDir) {
-        try{
-            String[] files = getAssets().list(fromDir);
-            for(String fileName : files){
-                if (fileName.contains(".")){
-                    copyFile(fromDir + fileName, toDir + fileName);
-                } else {
-                    copyFolder(fromDir + fileName + "/", toDir + fileName + "/");
-                }
-            }
-        } catch (IOException e) {
-            Log.e("Echo", "Failed to get asset file list.", e);
-        }
-    }
-
-    // copy file
-    private void copyFile(String fromPath, String toPath) {
-        try {
-            // input stream
-            InputStream in = getAssets().open(fromPath);
-
-            // output stream
-            File toFile = new File(toPath);
-            toFile.getParentFile().mkdirs();
-            toFile.createNewFile();
-            OutputStream out = new FileOutputStream(toFile, false);
-
-            byte[] buffer = new byte[1024];
-            int bytes;
-            while ((bytes = in.read(buffer)) != -1) {
-                out.write(buffer, 0, bytes);
-            }
-
-            in.close();
-            out.flush();
-            out.close();
-        } catch (IOException e){
-            Log.e("Echo", "Failed to copy file when install.", e);
-        }
+        GLESJniLib.install(getApplicationContext(), getAssets());
     }
 }
