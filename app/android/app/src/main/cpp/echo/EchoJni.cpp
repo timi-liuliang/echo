@@ -2,13 +2,13 @@
 #include <string>
 #include "App.h"
 
-// init res directory
+// init res directory https://stackoverflow.com/questions/54433385/art-sigsegv-fault-when-entering-jni-function-in-c-code-within-android-studio
 extern "C" JNIEXPORT void JNICALL Java_com_echo_app_GLESJniLib_initRes(JNIEnv *env, jclass clazz, jstring inResDir, jstring inUserDir)
 {
-    //Echo::String resDir = env->GetStringUTFChars(inResDir, NULL);
-    //Echo::String userDir = env->GetStringUTFChars(inUserDir, NULL);
+    Echo::String resDir = env->GetStringUTFChars(inResDir, NULL);
+    Echo::String userDir = env->GetStringUTFChars(inUserDir, NULL);
 
-   // Echo::App::instance()->initRes(resDir, userDir);
+    Echo::App::instance()->initRes(resDir, userDir);
 }
 
 // init engine
