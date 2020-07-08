@@ -19,7 +19,7 @@ namespace Echo
 		virtual void onEditorSelectThisNode() override;
 
         // update self
-        void editor_update_self();
+        virtual void editor_update_self() override;
         
     private:
         RenderpipelinePanel* m_panel = nullptr;

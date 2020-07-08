@@ -13,13 +13,13 @@ namespace Echo
         virtual ~TextureAtlasEditor();
 
         // get thumbnail
-        virtual ImagePtr getThumbnail() const;
+        virtual ImagePtr getThumbnail() const override;
 
 		// on editor select this node
 		virtual void onEditorSelectThisNode() override;
 
         // update self
-        void editor_update_self();
+        virtual void editor_update_self() override;
         
     private:
         TextureAtlasPanel* m_panel = nullptr;
