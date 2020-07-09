@@ -33,6 +33,7 @@ namespace Echo
         Engine::Config rootcfg;
         rootcfg.m_projectFile = rootPath + "/data/app.echo";
         rootcfg.m_userPath = userPath;
+		rootcfg.m_isGame = true;
         Engine::instance()->initialize(rootcfg);
     }
 

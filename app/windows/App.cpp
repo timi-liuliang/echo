@@ -1,6 +1,7 @@
 #include "App.h"
 #include "Log.h"
 #include <engine/core/util/PathUtil.h>
+#include <engine/core/util/HashGenerator.h>
 #include <engine/core/main/GameSettings.h>
 #include <engine/core/render/base/Renderer.h>
 #include <engine/core/input/input.h>
@@ -95,7 +96,13 @@ namespace Echo
 		Echo::Log::instance()->addOutput(m_log);
 
         Echo::initRender((size_t)hwnd);
-        Echo::initEngine(echoProject, true);
+		
+		Echo::Engine::Config rootcfg;
+		rootcfg.m_projectFile = m_projectFile;
+		rootcfg.m_isGame = true;
+		rootcfg.m_userPath = Echo::PathUtil::GetCurrentDir() + "/user/" + Echo::StringUtil::Format("u%d/", Echo::BKDRHash(m_projectFile.c_str()));
+		Echo::PathUtil::FormatPath(rootcfg.m_userPath);
+		Echo::Engine::instance()->initialize(rootcfg);
 
 		// default window size
 		resizeWindow( m_hWnd, Echo::GameSettings::instance()->getWindowWidth(), Echo::GameSettings::instance()->getWindowHeight());

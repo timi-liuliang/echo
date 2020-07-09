@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<node class="UiImage" path="" name="UiImage" Enable="true" Position="0 0 0" Rotation="0 0 0" Scale="1 1 1" Script="" RenderType="ui" Visible="true" Alpha="1.0" Width="168" Height="168" Texture="Res://icon.png" />

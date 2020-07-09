@@ -14,6 +14,7 @@
 #include "base/RenderState.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/util/TimeProfiler.h>
+#include <engine/core/util/HashGenerator.h>
 #include <engine/core/io/IO.h>
 
 namespace Studio
@@ -46,7 +47,13 @@ namespace Studio
 	{
         // init
         Echo::initRender( hwnd);
-        Echo::initEngine(!m_projectFile.empty() ? m_projectFile.c_str() : "", false);
+
+		Echo::Engine::Config rootcfg;
+		rootcfg.m_projectFile = m_projectFile;
+		rootcfg.m_isGame = false;
+		rootcfg.m_userPath = Echo::PathUtil::GetCurrentDir() + "/user/" + Echo::StringUtil::Format("u%d/", Echo::BKDRHash(m_projectFile.c_str()));
+		Echo::PathUtil::FormatPath(rootcfg.m_userPath);
+		Echo::Engine::instance()->initialize(rootcfg);
 
 		TIME_PROFILE
 		(

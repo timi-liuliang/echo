@@ -324,22 +324,4 @@ namespace Echo
 		RenderPipeline::current()->render();
 		Renderer::instance()->present();
 	}
-    
-    Engine* initEngine(const String& project, bool isGame)
-    {
-        Echo::Engine::Config rootcfg;
-        rootcfg.m_projectFile = project;
-        rootcfg.m_isGame = isGame;
-
-#ifdef ECHO_PLATFORM_WINDOWS
-        rootcfg.m_userPath = PathUtil::GetCurrentDir() + "/user/" + StringUtil::Format("u%d/", BKDRHash(project.c_str()));
-        PathUtil::FormatPath(rootcfg.m_userPath);
-#else
-
-#endif
-
-        Engine::instance()->initialize(rootcfg);
-
-		return Engine::instance();
-    }
 }

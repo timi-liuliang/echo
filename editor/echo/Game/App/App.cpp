@@ -1,6 +1,8 @@
 #include "App.h"
 #include "Log.h"
 #include <engine/core/render/gles/GLES.h>
+#include <engine/core/util/PathUtil.h>
+#include <engine/core/util/HashGenerator.h>
 
 namespace Game
 {
@@ -21,7 +23,13 @@ namespace Game
 		Echo::Log::instance()->addOutput(m_log);
 
         Echo::initRender(hwnd);
-        Echo::initEngine( echoProject, true);
+
+		Echo::Engine::Config rootcfg;
+        rootcfg.m_projectFile = echoProject;
+        rootcfg.m_isGame = true;
+        rootcfg.m_userPath = Echo::PathUtil::GetCurrentDir() + "/user/" + Echo::StringUtil::Format("u%d/", Echo::BKDRHash(echoProject.c_str()));
+		Echo::PathUtil::FormatPath(rootcfg.m_userPath);
+		Echo::Engine::instance()->initialize(rootcfg);
 	}
 
 	void App::tick(float elapsedTime)

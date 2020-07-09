@@ -89,9 +89,6 @@ namespace Echo
 		bool				m_isInited;
 		float				m_frameTime;
 	};
-    
-    // init engine
-    Engine* initEngine(const String& project, bool isGame);
 }
 
 #ifdef ECHO_EDITOR_MODE

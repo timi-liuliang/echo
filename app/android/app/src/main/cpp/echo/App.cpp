@@ -2,6 +2,7 @@
 #include "Log.h"
 #include <engine/core/main/Engine.h>
 #include <engine/core/render/gles/GLES.h>
+#include <engine/core/util/Timer.h>
 
 namespace Echo
 {
@@ -24,11 +25,23 @@ namespace Echo
 
         // Initialize
         Echo::initRender(0, width, height);
-        Echo::initEngine( m_resDir + "app.echo", true);
+
+        Engine::Config rootcfg;
+        rootcfg.m_projectFile = m_resDir + "app.echo";
+        rootcfg.m_userPath = m_userDir;
+        rootcfg.m_isGame = true;
+        Engine::instance()->initialize(rootcfg);
     }
 
     void App::tick()
     {
-        Echo::Engine::instance()->tick(0.01f);
+        static Echo::ulong lastTime = Echo::Time::instance()->getMilliseconds();
+
+        // calc delta Time
+        ulong curTime = Echo::Time::instance()->getMilliseconds();
+        ulong elapsedTime = curTime - lastTime;
+        lastTime = curTime;
+
+        Echo::Engine::instance()->tick(elapsedTime * 0.01f);
     }
 }
