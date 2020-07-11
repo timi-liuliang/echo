@@ -1,6 +1,8 @@
 #include "android_build_settings.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/main/Engine.h"
+#include <engine/core/io/IO.h>
+#include <engine/core/main/module.h>
 
 namespace Echo
 {
@@ -57,7 +59,7 @@ namespace Echo
 			//writeInfoPlist();
 			//writeCMakeList();
 
-			//writeModuleConfig();
+			writeModuleConfig();
 
 			//cmake();
 
@@ -126,5 +128,39 @@ namespace Echo
 	{
 		String FinalResultPath = m_outputDir + "bin/app/";
 		return PathUtil::IsDirExist(FinalResultPath) ? FinalResultPath : m_outputDir;
+	}
+
+	void AndroidBuildSettings::writeModuleConfig()
+	{
+		String  moduleSrc;
+
+		// include
+		writeLine(moduleSrc, "#include <engine/core/main/module.h>\n");
+
+		// namespace
+		writeLine(moduleSrc, "namespace Echo\n{");
+		writeLine(moduleSrc, "\tvoid registerModules()");
+		writeLine(moduleSrc, "\t{");
+		vector<Module*>::type* allModules = Module::getAllModules();
+		if (allModules)
+		{
+			for (Module* module : *allModules)
+			{
+				if (module->isEnable() && !module->isEditorOnly())
+					writeLine(moduleSrc, StringUtil::Format("\t\tREGISTER_MODULE(%s)", module->getClassName().c_str()));
+			}
+		}
+
+		// end namespace
+		writeLine(moduleSrc, "\t}\n}\n");
+
+		// Write to file
+		String savePath = m_outputDir + "app/android/app/src/main/cpp/echo/ModuleConfig.cpp";
+		FileHandleDataStream stream(savePath, DataStream::WRITE);
+		if (!stream.fail())
+		{
+			stream.write(moduleSrc.data(), moduleSrc.size());
+			stream.close();
+		}
 	}
 }

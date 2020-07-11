@@ -35,6 +35,10 @@ namespace Echo
         // copy
         void copySrc();
         void copyRes();
+
+    private:
+        // write config
+        void writeModuleConfig();
         
     private:
         String                  m_rootDir;
