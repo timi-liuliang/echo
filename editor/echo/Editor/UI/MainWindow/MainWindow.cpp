@@ -29,6 +29,7 @@
 #include <QTimer>
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/io/IO.h>
+#include <engine/core/main/module.h>
 #include <engine/core/scene/render_node.h>
 #include "editor_render_settings.h"
 
@@ -712,6 +713,14 @@ namespace Studio
                 {
                     QAction* action = new QAction(this);
                     action->setText(className.c_str());
+					
+					// check state
+					Echo::Module* module = dynamic_cast<Echo::Module*>(obj);
+					if (module && !module->isEditorOnly())
+					{
+						action->setCheckable(true);
+						action->setChecked(module->isEnable());
+					}
                     
                     QMenu* menu = getParentMenu(allMenus, className);
                     menu->addAction(action);
