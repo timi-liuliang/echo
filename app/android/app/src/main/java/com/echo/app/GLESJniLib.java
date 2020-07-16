@@ -38,7 +38,7 @@ public class GLESJniLib {
     // copy folder
     private static void copyFolder(AssetManager assets, String fromDir, String toDir) {
         try{
-            String[] files = assets.list(fromDir);
+            String[] files = assets.list(formatPath(fromDir));
             for(String fileName : files){
                 if (fileName.contains(".")){
                     copyFile( assets,fromDir + fileName, toDir + fileName);
@@ -75,5 +75,14 @@ public class GLESJniLib {
         } catch (IOException e){
             Log.e("Echo", "Failed to copy file when install.", e);
         }
+    }
+
+    // format path, remove last '/' (HUAWEI NEM-AL10)
+    private static String formatPath(String fromDir){
+        if(fromDir.length()>0 && fromDir.charAt(fromDir.length()-1) == '/') {
+            return fromDir.substring(0, fromDir.length()-1);
+        }
+
+        return fromDir;
     }
 }
