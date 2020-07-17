@@ -42,6 +42,6 @@ namespace Echo
         ulong elapsedTime = curTime - lastTime;
         lastTime = curTime;
 
-        Echo::Engine::instance()->tick(elapsedTime * 0.01f);
+        Echo::Engine::instance()->tick(elapsedTime * 0.001f);
     }
 }

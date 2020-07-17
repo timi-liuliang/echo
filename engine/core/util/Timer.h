@@ -56,23 +56,19 @@ namespace Echo
 		Time();
 
 	protected:
-		clock_t mZeroClock;
+		clock_t m_zeroClock;
 
 #ifdef ECHO_PLATFORM_WINDOWS
 		Echo::ui32 mStartTick;
 		LONGLONG mLastTime;
 		LARGE_INTEGER mStartTime;
 		LARGE_INTEGER mFrequency;
-
 		DWORD_PTR mTimerMask;
-
 #elif defined(ECHO_PLATFORM_IOS) || defined(ECHO_PLATFORM_MAC)
-        
         uint64_t m_IosStartTime;
         mach_timebase_info_data_t m_TimeBaseInfo;
-        
 #elif defined(ECHO_PLATFORM_ANDROID) || defined(ECHO_PLATFORM_HTML5)
-		struct timespec m_AndroidStartTime;
+		struct timespec m_startTime;
 #else 
 		struct timeval	m_startTime;
 #endif

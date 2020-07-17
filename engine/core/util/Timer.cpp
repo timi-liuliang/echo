@@ -94,26 +94,19 @@ namespace Echo
 
 		mLastTime = 0;
 		mZeroClock = clock();
- 
 #elif defined(ECHO_PLATFORM_IOS) || defined(ECHO_PLATFORM_MAC)
-        
         mZeroClock = clock();
         m_IosStartTime = mach_absolute_time();
         if(KERN_SUCCESS != mach_timebase_info(&m_TimeBaseInfo))
         {
             return;
         }
-
 #elif defined(ECHO_PLATFORM_ANDROID) || defined(ECHO_PLATFORM_HTML5)
-
-		mZeroClock = clock();
-		clock_gettime(CLOCK_MONOTONIC, &m_AndroidStartTime);
-
+        m_zeroClock = clock();
+		clock_gettime(CLOCK_MONOTONIC, &m_startTime);
 #else
-
 		mZeroClock = clock();
 		gettimeofday(&m_startTime, NULL);
-
 #endif
 	}
 
@@ -158,17 +151,12 @@ namespace Echo
 
 		return newTicks;
 #elif defined(ECHO_PLATFORM_IOS) || defined(ECHO_PLATFORM_MAC)
-        
         return  (mach_absolute_time() - m_IosStartTime) * m_TimeBaseInfo.numer / m_TimeBaseInfo.denom / 1000000;
-        
 #elif defined(ECHO_PLATFORM_ANDROID) || defined(ECHO_PLATFORM_HTML5)
-
 		struct timespec now;
 		clock_gettime(CLOCK_MONOTONIC, &now);
-		return (now.tv_sec - m_AndroidStartTime.tv_sec) * 1000 + (now.tv_nsec - m_AndroidStartTime.tv_nsec) / 1000000;
-
+		return (now.tv_sec - m_startTime.tv_sec) * 1000 + (now.tv_nsec - m_startTime.tv_nsec) / 1000000;
 #else
-
 		struct timeval now;
 		gettimeofday(&now, NULL);
 		return (now.tv_sec-m_startTime.tv_sec)*1000+(now.tv_usec-m_startTime.tv_usec)/1000;
@@ -221,11 +209,9 @@ namespace Echo
         return  (mach_absolute_time() - m_IosStartTime) * m_TimeBaseInfo.numer / m_TimeBaseInfo.denom / 1000;
         
 #elif defined(ECHO_PLATFORM_ANDROID) || defined(ECHO_PLATFORM_HTML5)
-
 		struct timespec now;
 		clock_gettime(CLOCK_MONOTONIC, &now);
-		return (now.tv_sec - m_AndroidStartTime.tv_sec) * 1000000 + (now.tv_nsec - m_AndroidStartTime.tv_nsec) / 1000;
-
+		return (now.tv_sec - m_startTime.tv_sec) * 1000000 + (now.tv_nsec - m_startTime.tv_nsec) / 1000;
 #else
 
 		struct timeval now;
@@ -237,12 +223,12 @@ namespace Echo
 	unsigned long Time::getMillisecondsCPU()
 	{
 		clock_t newClock = clock();
-		return (unsigned long)((float)(newClock-mZeroClock) / ((float)CLOCKS_PER_SEC/1000.0)) ;
+		return (unsigned long)((float)(newClock-m_zeroClock) / ((float)CLOCKS_PER_SEC/1000.0)) ;
 	}
 
 	unsigned long Time::getMicrosecondsCPU()
 	{
 		clock_t newClock = clock();
-		return (unsigned long)((float)(newClock-mZeroClock) / ((float)CLOCKS_PER_SEC/1000000.0)) ;
+		return (unsigned long)((float)(newClock-m_zeroClock) / ((float)CLOCKS_PER_SEC/1000000.0)) ;
 	}
 }
