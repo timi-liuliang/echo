@@ -5,6 +5,8 @@ import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.os.Environment;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 
 import java.io.File;
 
@@ -20,6 +22,7 @@ public class GLESView extends GLSurfaceView {
     public GLESView(Context context, boolean translucent, int depth, int stencil) {
         super(context);
         init(translucent, depth, stencil);
+        registTouchEvent(this);
     }
 
     // init
@@ -47,6 +50,20 @@ public class GLESView extends GLSurfaceView {
 
         /* Set the renderer responsible for frame rendering */
         setRenderer( new Renderer());
+    }
+
+    // register touch event
+    private void registTouchEvent(View view) {
+
+        view.setOnTouchListener( new View.OnTouchListener() {
+
+            // on touch
+            public boolean onTouch(View v, MotionEvent event){
+
+                GLESJniLib.onTouch(event.getAction(), event.getActionIndex(), event.getX(), event.getY());
+                return false;
+            }
+        });
     }
 
     /**

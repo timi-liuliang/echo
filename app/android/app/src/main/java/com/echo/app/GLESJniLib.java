@@ -21,6 +21,9 @@ public class GLESJniLib {
     public static native void initRes(String resDirectory, String userDirectory);
     public static native void initEngine(int width, int height);
 
+    // event
+    public static native void onTouch(int type, int buttonId, float x, float y);
+
     // tick
     public static native void tick();
 
