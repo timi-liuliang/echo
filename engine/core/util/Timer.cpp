@@ -16,7 +16,7 @@ namespace Echo
 
 	Time::Time()
 #ifdef ECHO_PLATFORM_WINDOWS
-		: mTimerMask( 0 )
+		: m_timerMask( 0 )
 #endif
 	{
 		reset();
@@ -68,32 +68,32 @@ namespace Echo
 			procMask = 1;
 
 		// Find the lowest core that this process uses
-		if( mTimerMask == 0 )
+		if( m_timerMask == 0 )
 		{
-			mTimerMask = 1;
-			while( ( mTimerMask & procMask ) == 0 )
+			m_timerMask = 1;
+			while( ( m_timerMask & procMask ) == 0 )
 			{
-				mTimerMask <<= 1;
+				m_timerMask <<= 1;
 			}
 		}
 
 		HANDLE thread = GetCurrentThread();
 
 		// Set affinity to the first core
-		DWORD_PTR oldMask = SetThreadAffinityMask(thread, mTimerMask);
+		DWORD_PTR oldMask = SetThreadAffinityMask(thread, m_timerMask);
 
 		// Get the constant frequency
-		QueryPerformanceFrequency(&mFrequency);
+		QueryPerformanceFrequency(&m_frequency);
 
 		// Query the timer
-		QueryPerformanceCounter(&mStartTime);
-		mStartTick = GetTickCount();
+		QueryPerformanceCounter(&m_startTime);
+		m_startTick = GetTickCount();
 
 		// Reset affinity
 		SetThreadAffinityMask(thread, oldMask);
 
-		mLastTime = 0;
-		mZeroClock = clock();
+		m_lastTime = 0;
+		m_zeroClock = clock();
 #elif defined(ECHO_PLATFORM_IOS) || defined(ECHO_PLATFORM_MAC)
         mZeroClock = clock();
         m_IosStartTime = mach_absolute_time();
@@ -118,7 +118,7 @@ namespace Echo
 		HANDLE thread = GetCurrentThread();
 
 		// Set affinity to the first core
-		DWORD_PTR oldMask = SetThreadAffinityMask(thread, mTimerMask);
+		DWORD_PTR oldMask = SetThreadAffinityMask(thread, m_timerMask);
 
 		// Query the timer
 		QueryPerformanceCounter(&curTime);
@@ -126,28 +126,28 @@ namespace Echo
 		// Reset affinity
 		SetThreadAffinityMask(thread, oldMask);
 
-		LONGLONG newTime = curTime.QuadPart - mStartTime.QuadPart;
+		LONGLONG newTime = curTime.QuadPart - m_startTime.QuadPart;
 
 		// scale by 1000 for milliseconds
-		unsigned long newTicks = (unsigned long) (1000 * newTime / mFrequency.QuadPart);
+		unsigned long newTicks = (unsigned long) (1000 * newTime / m_frequency.QuadPart);
 
 		// detect and compensate for performance counter leaps
 		// (surprisingly common, see Microsoft KB: Q274323)
-		unsigned long check = GetTickCount() - mStartTick;
+		unsigned long check = GetTickCount() - m_startTick;
 		signed long msecOff = (signed long)(newTicks - check);
 		if (msecOff < -100 || msecOff > 100)
 		{
 			// We must keep the timer running forward :)
-			LONGLONG adjust = std::min<LONGLONG>(msecOff * mFrequency.QuadPart / 1000, newTime - mLastTime);
-			mStartTime.QuadPart += adjust;
+			LONGLONG adjust = std::min<LONGLONG>(msecOff * m_frequency.QuadPart / 1000, newTime - m_lastTime);
+			m_startTime.QuadPart += adjust;
 			newTime -= adjust;
 
 			// Re-calculate milliseconds
-			newTicks = (unsigned long) (1000 * newTime / mFrequency.QuadPart);
+			newTicks = (unsigned long) (1000 * newTime / m_frequency.QuadPart);
 		}
 
 		// Record last time for adjust
-		mLastTime = newTime;
+		m_lastTime = newTime;
 
 		return newTicks;
 #elif defined(ECHO_PLATFORM_IOS) || defined(ECHO_PLATFORM_MAC)
@@ -171,7 +171,7 @@ namespace Echo
 		HANDLE thread = GetCurrentThread();
 
 		// Set affinity to the first core
-		DWORD_PTR oldMask = SetThreadAffinityMask(thread, mTimerMask);
+		DWORD_PTR oldMask = SetThreadAffinityMask(thread, m_timerMask);
 
 		// Query the timer
 		QueryPerformanceCounter(&curTime);
@@ -179,28 +179,28 @@ namespace Echo
 		// Reset affinity
 		SetThreadAffinityMask(thread, oldMask);
 
-		LONGLONG newTime = curTime.QuadPart - mStartTime.QuadPart;
+		LONGLONG newTime = curTime.QuadPart - m_startTime.QuadPart;
 
 		// get milliseconds to check against GetTickCount
-		unsigned long newTicks = (unsigned long) (1000 * newTime / mFrequency.QuadPart);
+		unsigned long newTicks = (unsigned long) (1000 * newTime / m_frequency.QuadPart);
 
 		// detect and compensate for performance counter leaps
 		// (surprisingly common, see Microsoft KB: Q274323)
-		unsigned long check = GetTickCount() - mStartTick;
+		unsigned long check = GetTickCount() - m_startTick;
 		signed long msecOff = (signed long)(newTicks - check);
 		if (msecOff < -100 || msecOff > 100)
 		{
 			// We must keep the timer running forward :)
-			LONGLONG adjust = (std::min)(msecOff * mFrequency.QuadPart / 1000, newTime - mLastTime);
-			mStartTime.QuadPart += adjust;
+			LONGLONG adjust = (std::min)(msecOff * m_frequency.QuadPart / 1000, newTime - m_lastTime);
+			m_startTime.QuadPart += adjust;
 			newTime -= adjust;
 		}
 
 		// Record last time for adjust
-		mLastTime = newTime;
+		m_lastTime = newTime;
 
 		// scale by 1000000 for microseconds
-		unsigned long newMicro = (unsigned long) (1000000 * newTime / mFrequency.QuadPart);
+		unsigned long newMicro = (unsigned long) (1000000 * newTime / m_frequency.QuadPart);
 
 		return newMicro;
         

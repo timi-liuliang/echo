@@ -2,6 +2,7 @@
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/main/Engine.h"
 #include <engine/core/io/IO.h>
+#include <thirdparty/pugixml/pugixml.hpp>
 #include <engine/core/main/module.h>
 
 namespace Echo
@@ -24,9 +25,12 @@ namespace Echo
 
     void AndroidBuildSettings::bindMethods()
     {
+		CLASS_BIND_METHOD(AndroidBuildSettings, getAppName, DEF_METHOD("getAppName"));
+		CLASS_BIND_METHOD(AndroidBuildSettings, setAppName, DEF_METHOD("setAppName"));
         CLASS_BIND_METHOD(AndroidBuildSettings, getIconRes,   DEF_METHOD("getIconRes"));
         CLASS_BIND_METHOD(AndroidBuildSettings, setIconRes,   DEF_METHOD("setIconRes"));
 
+		CLASS_REGISTER_PROPERTY(AndroidBuildSettings, "AppName", Variant::Type::String, "getAppName", "setAppName");
         CLASS_REGISTER_PROPERTY(AndroidBuildSettings, "Icon", Variant::Type::ResourcePath, "getIconRes", "setIconRes");
     }
 
@@ -56,7 +60,7 @@ namespace Echo
 			//replaceLaunchImage();
 
 			// overwrite config
-			//writeInfoPlist();
+			writeStringsXml();
 			//writeCMakeList();
 
 			writeModuleConfig();
@@ -68,6 +72,12 @@ namespace Echo
 
 		m_listener->onEnd();
     }
+
+	String AndroidBuildSettings::getAppName() const
+	{
+		if (m_appName.empty())  return PathUtil::GetPureFilename(Engine::instance()->getConfig().m_projectFile, false);
+		else                    return m_appName;
+	}
 
     bool AndroidBuildSettings::prepare()
     {
@@ -128,6 +138,25 @@ namespace Echo
 	{
 		String FinalResultPath = m_outputDir + "bin/app/";
 		return PathUtil::IsDirExist(FinalResultPath) ? FinalResultPath : m_outputDir;
+	}
+
+	void AndroidBuildSettings::writeStringsXml()
+	{
+		pugi::xml_document doc;
+		pugi::xml_node dec = doc.prepend_child(pugi::node_declaration);
+		dec.append_attribute("version") = "1.0";
+		dec.append_attribute("encoding") = "utf-8";
+
+		pugi::xml_node root_node = doc.append_child("resources");
+
+		// app name
+		pugi::xml_node app_name_node = root_node.append_child("string");
+		app_name_node.append_attribute("name").set_value("app_name");
+		app_name_node.append_child(pugi::node_pcdata).set_value(getAppName().c_str());
+
+		// write file
+		Echo::String savePath = m_outputDir + "app/android/app/src/main/res/values/strings.xml";
+		doc.save_file(savePath.c_str(), "\t", 1U, pugi::encoding_utf8);
 	}
 
 	void AndroidBuildSettings::writeModuleConfig()
