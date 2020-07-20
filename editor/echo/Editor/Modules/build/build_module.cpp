@@ -4,6 +4,8 @@
 #include "android_build_settings.h"
 #include "windows_build_settings.h"
 #include "wechat_build_settings.h"
+#include "was_build_settings.h"
+#include "html5_build_settings.h"
 
 namespace Echo
 {
@@ -37,5 +39,7 @@ namespace Echo
         Class::registerType<AndroidBuildSettings>();
         Class::registerType<WindowsBuildSettings>();
         Class::registerType<WeChatBuildSettings>();
+        Class::registerType<WebAssemblyBuildSettings>();
+        Class::registerType<Html5BuildSettings>();
     }
 }
