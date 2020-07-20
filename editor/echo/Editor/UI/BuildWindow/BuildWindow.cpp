@@ -42,13 +42,27 @@ namespace Studio
 
     void BuildWindow::initPlatformList()
     {
-        m_platformList->setIconSize(QSize(28, 28));
+        m_platformList->setIconSize(QSize(32, 32));
 
-        m_platformList->addItem(new QListWidgetItem(QIcon(":/icon/Icon/build/android.png"), "Android"));
-        m_platformList->addItem(new QListWidgetItem(QIcon(":/icon/Icon/build/ios.png"),     "iOS"));
-        m_platformList->addItem(new QListWidgetItem(QIcon(":/icon/Icon/build/mac.png"),     "Mac"));
-        m_platformList->addItem(new QListWidgetItem(QIcon(":/icon/Icon/build/windows.png"), "Windows"));
-        m_platformList->addItem(new QListWidgetItem(QIcon(":/icon/Icon/build/wechat.png"),  "WeChat"));
+        Echo::StringArray platforms;
+        Echo::Class::getChildClasses(platforms, "BuildSettings", true);
+        for (const Echo::String& platform : platforms)
+        {
+            Echo::BuildSettings* buildSetting = Echo::Class::create<Echo::BuildSettings*>(platform);
+            if (buildSetting)
+            {
+				Echo::ImagePtr thumbnail = buildSetting->getPlatformThumbnail();
+				if (thumbnail)
+				{
+					QImage image(thumbnail->getData(), thumbnail->getWidth(), thumbnail->getHeight(), QImage::Format_RGBA8888);
+                    m_platformList->addItem(new QListWidgetItem(QIcon(QPixmap::fromImage(image)), buildSetting->getPlatformName()));
+				}
+                else
+                {
+                    m_platformList->addItem(new QListWidgetItem(QIcon(), buildSetting->getPlatformName()));
+                }
+            }
+        }
     }
 
     void BuildWindow::onPlatformChanged()

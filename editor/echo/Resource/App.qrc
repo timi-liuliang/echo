@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/icon">
-        <file>Icon/build/wechat.png</file>
         <file>Icon/node_lua_script.png</file>
         <file>Icon/eye_open.png</file>
         <file>Icon/eye_close.png</file>
@@ -54,10 +53,6 @@
         <file>Icon/close.png</file>
         <file>Icon/handle.png</file>
         <file>Icon/signal/signal.png</file>
-        <file>Icon/build/android.png</file>
-        <file>Icon/build/ios.png</file>
-        <file>Icon/build/mac.png</file>
-        <file>Icon/build/windows.png</file>
         <file>Icon/file/echo.png</file>
         <file>Icon/file/scene.png</file>
     </qresource>

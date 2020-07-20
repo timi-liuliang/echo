@@ -15,6 +15,12 @@ namespace Echo
 		// instance
 		static WebAssemblyBuildSettings* instance();
 
+		// get name
+		virtual char* getPlatformName() const { return "WebAssembly"; }
+
+		// platform thumbnail
+		virtual ImagePtr getPlatformThumbnail() const override;
+
 		// build
 		virtual void build() override;
 

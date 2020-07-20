@@ -30,6 +30,11 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(WindowsBuildSettings, "Icon", Variant::Type::ResourcePath, "getIconRes", "setIconRes");
 	}
 
+	ImagePtr WindowsBuildSettings::getPlatformThumbnail() const
+	{
+		return Image::loadFromFile(Engine::instance()->getRootPath() + "editor/echo/Editor/Modules/build/editor/icon/windows.png");
+	}
+
 	void WindowsBuildSettings::setOutputDir(const String& outputDir)
 	{
 		m_outputDir = outputDir;

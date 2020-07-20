@@ -15,6 +15,12 @@ namespace Echo
 		// instance
 		static WeChatBuildSettings* instance();
 
+		// get name
+		virtual char* getPlatformName() const { return "WeChat"; }
+
+		// platform thumbnail
+		virtual ImagePtr getPlatformThumbnail() const override;
+
 		// build
 		virtual void build() override;
 

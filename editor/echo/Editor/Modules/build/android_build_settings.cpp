@@ -34,6 +34,11 @@ namespace Echo
         CLASS_REGISTER_PROPERTY(AndroidBuildSettings, "Icon", Variant::Type::ResourcePath, "getIconRes", "setIconRes");
     }
 
+	ImagePtr AndroidBuildSettings::getPlatformThumbnail() const
+	{
+		return Image::loadFromFile(Engine::instance()->getRootPath() + "editor/echo/Editor/Modules/build/editor/icon/android.png");
+	}
+
     void AndroidBuildSettings::setIconRes(const ResourcePath& path)
     {
         

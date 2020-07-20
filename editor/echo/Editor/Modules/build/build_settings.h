@@ -13,6 +13,12 @@ namespace Echo
     public:
         BuildSettings() {}
         virtual ~BuildSettings() {}
+
+        // platform name
+        virtual char* getPlatformName() const { return "Unknown"; }
+
+        // platform thumbnail
+        virtual ImagePtr getPlatformThumbnail() const { return nullptr; }
         
         // set
         virtual void setOutputDir(const String& outputDir) {}

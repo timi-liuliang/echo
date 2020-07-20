@@ -15,6 +15,12 @@ namespace Echo
 		// instance
 		static Html5BuildSettings* instance();
 
+		// get name
+		virtual char* getPlatformName() const { return "Html5"; }
+
+		// platform thumbnail
+		virtual ImagePtr getPlatformThumbnail() const override;
+
 		// build
 		virtual void build() override;
 

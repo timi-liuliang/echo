@@ -103,6 +103,11 @@ namespace Echo
         CLASS_REGISTER_PROPERTY_HINT(iOSBuildSettings, "LandscapeRight",     PropertyHintType::Category, "Device Orientation");
     }
 
+	ImagePtr iOSBuildSettings::getPlatformThumbnail() const
+	{
+		return Image::loadFromFile(Engine::instance()->getRootPath() + "editor/echo/Editor/Modules/build/editor/icon/ios.png");
+	}
+
     void iOSBuildSettings::configAppIcons()
     {
         m_appIcons.push_back(AppIconItem(20));

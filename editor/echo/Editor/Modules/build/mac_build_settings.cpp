@@ -1,4 +1,5 @@
 #include "mac_build_settings.h"
+#include <engine/core/main/Engine.h>
 
 namespace Echo
 {
@@ -25,6 +26,11 @@ namespace Echo
 
         CLASS_REGISTER_PROPERTY(MacBuildSettings, "Icon", Variant::Type::ResourcePath, "getIconRes", "setIconRes");
     }
+
+	ImagePtr MacBuildSettings::getPlatformThumbnail() const
+	{
+		return Image::loadFromFile(Engine::instance()->getRootPath() + "editor/echo/Editor/Modules/build/editor/icon/mac.png");
+	}
 
     void MacBuildSettings::setIconRes(const ResourcePath& path)
     {

@@ -15,6 +15,12 @@ namespace Echo
         // instance
         static AndroidBuildSettings* instance();
 
+		// get name
+		virtual char* getPlatformName() const { return "Android"; }
+
+		// platform thumbnail
+        virtual ImagePtr getPlatformThumbnail() const override;
+
         // set output directory
         virtual void setOutputDir(const String& outputDir) override;
 

@@ -30,6 +30,11 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(Html5BuildSettings, "Icon", Variant::Type::ResourcePath, "getIconRes", "setIconRes");
 	}
 
+	ImagePtr Html5BuildSettings::getPlatformThumbnail() const
+	{
+		return Image::loadFromFile(Engine::instance()->getRootPath() + "editor/echo/Editor/Modules/build/editor/icon/html5.png");
+	}
+
 	void Html5BuildSettings::setOutputDir(const String& outputDir)
 	{
 		m_outputDir = outputDir;
