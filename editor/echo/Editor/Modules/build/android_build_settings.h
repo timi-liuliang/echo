@@ -43,10 +43,10 @@ namespace Echo
         
         // icon res path
         void setIconRes(const ResourcePath& path);
-        const ResourcePath& getIconRes() { return m_iconRes; }
+        const ResourcePath& getIconRes() { return m_iconBackground; }
 
 		void setIconRoundRes(const ResourcePath& path);
-		const ResourcePath& getIconRoundRes() { return m_iconRoundRes; }
+		const ResourcePath& getIconRoundRes() { return m_iconForeground; }
 
     private:
         // output directory
@@ -75,7 +75,7 @@ namespace Echo
         String                  m_projectDir;
         String                  m_outputDir;
         String                  m_appName;
-        ResourcePath            m_iconRes = ResourcePath("Res://icon.png", ".png");
-        ResourcePath            m_iconRoundRes = ResourcePath("Res://icon.png", ".png");
+        ResourcePath            m_iconBackground = ResourcePath("Res://icon.png", ".png");
+        ResourcePath            m_iconForeground = ResourcePath("Res://icon.png", ".png");
     };
 }

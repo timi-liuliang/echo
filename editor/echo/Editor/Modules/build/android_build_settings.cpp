@@ -159,43 +159,55 @@ namespace Echo
 		// icon
 		AppIconItem iconConfigs[] =
 		{
-			{72, "mipmap-hdpi"},
-			{48, "mipmap-mdpi"},
-			{96, "mipmap-xhdpi"},
-			{144, "mipmap-xxhdpi"},
-			{192, "mipmap-xxxhdpi"}
+			{162, "mipmap-hdpi"},
+			{108, "mipmap-mdpi"},
+			{216, "mipmap-xhdpi"},
+			{324, "mipmap-xxhdpi"},
+			{432, "mipmap-xxxhdpi"}
 		};
 
-		String iconFullPath = IO::instance()->convertResPathToFullPath(m_iconRes.getPath());
-		if (PathUtil::IsFileExist(iconFullPath))
+		String iconBackgroundFullPath = IO::instance()->convertResPathToFullPath(m_iconBackground.getPath());
+		if (PathUtil::IsFileExist(iconBackgroundFullPath))
 		{
 			for (const AppIconItem& item : iconConfigs)
 			{
-				String outputPath = m_outputDir + StringUtil::Format("app/android/app/src/main/res/%s/ic_launcher.png", item.m_folder.c_str());
+				String outputPath = m_outputDir + StringUtil::Format("app/android/app/src/main/res/%s/ic_launcher_background.png", item.m_folder.c_str());
 				PathUtil::DelPath(outputPath);
 
-				rescaleIcon(iconFullPath.c_str(), outputPath.c_str(), item.m_size, item.m_size);
-			}
-
-			// play store
-			{
-				String outputPath = m_outputDir + StringUtil::Format("app/android/app/src/main/ic_launcher-playstore.png");
-				PathUtil::DelPath(outputPath);
-
-				rescaleIcon(iconFullPath.c_str(), outputPath.c_str(), 512, 512);
+				rescaleIcon(iconBackgroundFullPath.c_str(), outputPath.c_str(), item.m_size, item.m_size);
 			}
 		}
 
-		String iconRoundFullPath = IO::instance()->convertResPathToFullPath(m_iconRoundRes.getPath());
-		if (PathUtil::IsFileExist(iconRoundFullPath))
+		String iconForegroundFullPath = IO::instance()->convertResPathToFullPath(m_iconForeground.getPath());
+		if (PathUtil::IsFileExist(iconForegroundFullPath))
 		{
 			for (const AppIconItem& item : iconConfigs)
 			{
-				String outputPath = m_outputDir + StringUtil::Format("app/android/app/src/main/res/%s/ic_launcher_round.png", item.m_folder.c_str());
+				String outputPath = m_outputDir + StringUtil::Format("app/android/app/src/main/res/%s/ic_launcher_foreground.png", item.m_folder.c_str());
 				PathUtil::DelPath(outputPath);
 
-				rescaleIcon(iconRoundFullPath.c_str(), outputPath.c_str(), item.m_size, item.m_size);
+				rescaleIcon(iconForegroundFullPath.c_str(), outputPath.c_str(), item.m_size, item.m_size);
 			}
+		}
+
+		// play store
+		{
+			String outputPath = m_outputDir + StringUtil::Format("app/android/app/src/main/ic_launcher-playstore.png");
+			PathUtil::DelPath(outputPath);
+
+			rescaleIcon(iconBackgroundFullPath.c_str(), outputPath.c_str(), 512, 512);
+		}
+
+		// legacy
+		{
+			//AppIconItem iconConfigs[] =
+			//{
+			//	{72, "mipmap-hdpi"},
+			//	{48, "mipmap-mdpi"},
+			//	{96, "mipmap-xhdpi"},
+			//	{144, "mipmap-xxhdpi"},
+			//	{192, "mipmap-xxxhdpi"}
+			//};
 		}
 	}
 
