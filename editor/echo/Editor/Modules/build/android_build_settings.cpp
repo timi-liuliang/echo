@@ -176,6 +176,14 @@ namespace Echo
 
 				rescaleIcon(iconFullPath.c_str(), outputPath.c_str(), item.m_size, item.m_size);
 			}
+
+			// play store
+			{
+				String outputPath = m_outputDir + StringUtil::Format("app/android/app/src/main/ic_launcher-playstore.png");
+				PathUtil::DelPath(outputPath);
+
+				rescaleIcon(iconFullPath.c_str(), outputPath.c_str(), 512, 512);
+			}
 		}
 
 		String iconRoundFullPath = IO::instance()->convertResPathToFullPath(m_iconRoundRes.getPath());
