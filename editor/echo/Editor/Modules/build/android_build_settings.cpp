@@ -28,14 +28,14 @@ namespace Echo
     {
 		CLASS_BIND_METHOD(AndroidBuildSettings, getAppName, DEF_METHOD("getAppName"));
 		CLASS_BIND_METHOD(AndroidBuildSettings, setAppName, DEF_METHOD("setAppName"));
-        CLASS_BIND_METHOD(AndroidBuildSettings, getIconRes,   DEF_METHOD("getIconRes"));
-        CLASS_BIND_METHOD(AndroidBuildSettings, setIconRes,   DEF_METHOD("setIconRes"));
-		CLASS_BIND_METHOD(AndroidBuildSettings, getIconRoundRes, DEF_METHOD("getIconRoundRes"));
-		CLASS_BIND_METHOD(AndroidBuildSettings, setIconRoundRes, DEF_METHOD("setIconRoundRes"));
+        CLASS_BIND_METHOD(AndroidBuildSettings, getIconBackgroundRes,   DEF_METHOD("getIconBackgroundRes"));
+        CLASS_BIND_METHOD(AndroidBuildSettings, setIconBackgroundRes,   DEF_METHOD("setIconBackgroundRes"));
+		CLASS_BIND_METHOD(AndroidBuildSettings, getIconForegroundRes, DEF_METHOD("getIconForegroundRes"));
+		CLASS_BIND_METHOD(AndroidBuildSettings, setIconForegroundRes, DEF_METHOD("setIconForegroundRes"));
 
 		CLASS_REGISTER_PROPERTY(AndroidBuildSettings, "AppName", Variant::Type::String, "getAppName", "setAppName");
-        CLASS_REGISTER_PROPERTY(AndroidBuildSettings, "Icon", Variant::Type::ResourcePath, "getIconRes", "setIconRes");
-		CLASS_REGISTER_PROPERTY(AndroidBuildSettings, "IconRound", Variant::Type::ResourcePath, "getIconRoundRes", "setIconRoundRes");
+        CLASS_REGISTER_PROPERTY(AndroidBuildSettings, "IconBackground", Variant::Type::ResourcePath, "getIconBackgroundRes", "setIconBackgroundRes");
+		CLASS_REGISTER_PROPERTY(AndroidBuildSettings, "IconForeground", Variant::Type::ResourcePath, "getIconForegroundRes", "setIconForegroundRes");
     }
 
 	ImagePtr AndroidBuildSettings::getPlatformThumbnail() const
@@ -43,14 +43,14 @@ namespace Echo
 		return Image::loadFromFile(Engine::instance()->getRootPath() + "editor/echo/Editor/Modules/build/editor/icon/android.png");
 	}
 
-    void AndroidBuildSettings::setIconRes(const ResourcePath& path)
+    void AndroidBuildSettings::setIconBackgroundRes(const ResourcePath& path)
     {
-        
+		m_iconBackground.setPath(path.getPath());
     }
 
-	void AndroidBuildSettings::setIconRoundRes(const ResourcePath& path)
+	void AndroidBuildSettings::setIconForegroundRes(const ResourcePath& path)
 	{
-
+		m_iconForeground.setPath(path.getPath());
 	}
 
     void AndroidBuildSettings::setOutputDir(const String& outputDir)

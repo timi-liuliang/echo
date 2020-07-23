@@ -42,11 +42,11 @@ namespace Echo
 		virtual String getFinalResultPath() override;
         
         // icon res path
-        void setIconRes(const ResourcePath& path);
-        const ResourcePath& getIconRes() { return m_iconBackground; }
+        void setIconBackgroundRes(const ResourcePath& path);
+        const ResourcePath& getIconBackgroundRes() { return m_iconBackground; }
 
-		void setIconRoundRes(const ResourcePath& path);
-		const ResourcePath& getIconRoundRes() { return m_iconForeground; }
+		void setIconForegroundRes(const ResourcePath& path);
+		const ResourcePath& getIconForegroundRes() { return m_iconForeground; }
 
     private:
         // output directory
