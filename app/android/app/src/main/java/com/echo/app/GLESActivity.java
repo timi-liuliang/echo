@@ -5,12 +5,15 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Window;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.File;
+
+import static android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN;
 
 public class GLESActivity extends Activity {
 
@@ -19,6 +22,11 @@ public class GLESActivity extends Activity {
     // on Create
     @Override protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+
+        // hide title bar https://www.javatpoint.com/android-hide-title-bar-example
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //getActionBar().hide();
+        //getWindow().setFlags(FLAG_FULLSCREEN, FLAG_FULLSCREEN);
 
         install();
 
