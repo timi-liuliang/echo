@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <settings>
 	<AIModule class="AIModule" path="" Enable="true" />
-	<AndroidBuildSettings class="AndroidBuildSettings" path="" Icon="" />
+	<AndroidBuildSettings class="AndroidBuildSettings" path="" AppName="app" IconBackground="Res://icon.png" IconForeground="Res://icon.png" />
 	<AnimModule class="AnimModule" path="" Enable="true" />
 	<AudioDevice class="AudioDevice" path="" />
 	<AudioModule class="AudioModule" path="" Enable="true" />
@@ -14,9 +14,10 @@
 	<EffectModule class="EffectModule" path="" Enable="true" />
 	<Engine class="Engine" path="" />
 	<FrameState class="FrameState" path="" />
-	<GameSettings class="GameSettings" path="" Background="0.298 0.298 0.322 1 " DesignWidth="480" DesignHeight="960" WindowWidth="480" WindowHeight="960" Aspect="stretch" LaunchScene="Res://scene/main.scene" />
+	<GameSettings class="GameSettings" path="" Background="0.298 0.298 0.322 1 " DesignWidth="480" DesignHeight="960" WindowWidth="480" WindowHeight="960" Aspect="keep in" LaunchScene="Res://scene/main.scene" />
 	<GeomModule class="GeomModule" path="" Enable="true" />
 	<GltfModule class="GltfModule" path="" Enable="true" />
+	<Html5BuildSettings class="Html5BuildSettings" path="" Icon="" />
 	<IO class="IO" path="" />
 	<Input class="Input" path="" />
 	<LightModule class="LightModule" path="" Enable="true" ImageBasedLighting="true" Brdf="" />
@@ -38,6 +39,7 @@
 	<UiModule class="UiModule" path="" Enable="true" />
 	<VideoModule class="VideoModule" path="" Enable="true" />
 	<WeChatBuildSettings class="WeChatBuildSettings" path="" Icon="" />
+	<WebAssemblyBuildSettings class="WebAssemblyBuildSettings" path="" Icon="" />
 	<WindowsBuildSettings class="WindowsBuildSettings" path="" Icon="" />
 	<iOSBuildSettings class="iOSBuildSettings" path="" AppName="sprite" Identifier="com.echo.sprite" Version="1.0.0" Icon="Res://icon.png" HiddenStatusBar="true" Portrait="true" PortraitUpsideDown="true" LandscapeLeft="true" LandscapeRight="true" />
 </settings>
