@@ -8,7 +8,7 @@ namespace pugi
 
 		virtual void write(const void* data, size_t size)
 		{
-			m_result += std::string(static_cast<const char*>(data), size);
+			m_result.append(static_cast<const char*>(data), size);
 		}
 	};
 
