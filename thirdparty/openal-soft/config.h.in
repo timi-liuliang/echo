@@ -17,6 +17,9 @@
 /* Define if we have the _aligned_malloc function */
 #cmakedefine HAVE__ALIGNED_MALLOC
 
+/* Define if we use dirent.h */
+#cmakedefine HAVE_DIRENT_H
+
 /* Define if we have the proc_pidpath function */
 #cmakedefine HAVE_PROC_PIDPATH
 

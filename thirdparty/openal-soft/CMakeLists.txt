@@ -38,6 +38,9 @@ IF(ECHO_PLATFORM_WIN32)
     SET(HAVE_STAT TRUE)
 ELSEIF(ECHO_PLATFORM_ANDROID)
     SET(HAVE_OPENSL TRUE)
+    SET(HAVE_MALLOC_H TRUE)
+    SET(SIZEOF_LONG 4)
+    SET(HAVE_DIRENT_H TRUE)
 ENDIF()
 
 # Configure FILE
@@ -173,25 +176,22 @@ SET(BACKEND
     ${MODULE_PATH}/alc/backends/null.h
 )
 
-SET(WASAPI_BACKEND
-    ${MODULE_PATH}/alc/backends/wasapi.cpp
-    ${MODULE_PATH}/alc/backends/wasapi.h
-)
-
-SET(WINMM_BACKEND
-    ${MODULE_PATH}/alc/backends/winmm.cpp
-    ${MODULE_PATH}/alc/backends/winmm.h
-)
-
 SET(WAVE_BACKEND
     ${MODULE_PATH}/alc/backends/wave.cpp
     ${MODULE_PATH}/alc/backends/wave.h
 )
 
+IF(ECHO_PLATFORM_ANDROID)
+    SET(OPENSL_BACKEND ${MODULE_PATH}/alc/backends/opensl.h ${MODULE_PATH}/alc/backends/opensl.cpp)
+ELSE()
+    SET(WINMM_BACKEND ${MODULE_PATH}/alc/backends/winmm.cpp ${MODULE_PATH}/alc/backends/winmm.h)
+    SET(WASAPI_BACKEND ${MODULE_PATH}/alc/backends/wasapi.cpp ${MODULE_PATH}/alc/backends/wasapi.h)
+ENDIF()
+
 # Recursive get all files
 SET(ALL_FILES 
     ${COMMON_FILES} ${OPENAL_FILES} ${ALC_FILES} 
-    ${BACKEND} ${WASAPI_BACKEND} ${WINMM_BACKEND} ${WAVE_BACKEND}
+    ${BACKEND} ${WASAPI_BACKEND} ${WINMM_BACKEND} ${WAVE_BACKEND} ${OPENSL_BACKEND}
 )
 
 # Group

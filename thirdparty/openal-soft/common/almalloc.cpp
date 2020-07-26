@@ -12,7 +12,7 @@
 #endif
 
 
-#define ALIGNED_ALLOC_AVAILABLE (__STDC_VERSION__ >= 201112L || __cplusplus >= 201703L)
+#define ALIGNED_ALLOC_AVAILABLE 0//(__STDC_VERSION__ >= 201112L || __cplusplus >= 201703L)
 
 void *al_malloc(size_t alignment, size_t size)
 {
