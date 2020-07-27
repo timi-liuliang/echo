@@ -65,7 +65,7 @@
         <option name="WORKING_DIR" value="" />
         <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
         <option name="SHOW_OPTIMIZED_WARNING" value="true" />
-        <symbol_dirs symbol_path="D:\Github\echo-dev\lib\Android" />
+        <symbol_dirs symbol_path="$PROJECT_DIR$/../../lib/Android" />
       </Auto>
       <Hybrid>
         <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
