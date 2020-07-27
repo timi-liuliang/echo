@@ -867,7 +867,7 @@ namespace Echo
 			return false;
 	}
 
-	bool PathUtil::CopyDir(const String& srcDir, const String& destDir, bool bOverWrite)
+	bool PathUtil::CopyDir(const String& srcDir, const String& destDir, bool bOverWrite, bool bIgnoreDotFolder)
 	{
 		DIR* pDir;
 		struct dirent* pDirInfo;
@@ -891,7 +891,7 @@ namespace Echo
 			memset(fullname, 0, sizeof(fullname));
 
 			/* ignore hidden files */
-			if(pDirInfo->d_name[0] == '.')
+			if(pDirInfo->d_name[0] == '.' && bIgnoreDotFolder)
 				continue;
 
 			strncpy(fullname, dirname, 255);

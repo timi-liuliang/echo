@@ -120,7 +120,7 @@ namespace Echo
 		log("Copy Engine Source Code ...");
 
 		// copy app
-		PathUtil::CopyDir(m_rootDir + "app/android/", m_outputDir + "app/android/");
+		PathUtil::CopyDir(m_rootDir + "app/android/", m_outputDir + "app/android/", true, false);
 
 		// copy engine
 		PathUtil::CopyDir(m_rootDir + "engine/", m_outputDir + "engine/");

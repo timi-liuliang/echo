@@ -61,7 +61,7 @@ namespace Echo
 		static void EnumFilesInDir(StringArray& ret, const String& rootPath, bool bIncDir = false, bool bIncSubDirs = false, bool bAbsPath = false);
 		static void EnumSubDirs(StringArray& ret, const String& rootPath, bool bIncSubFolders = false);
 		static bool CopyFilePath(const String& src, const String& dest, bool bOverWrite = true);
-		static bool CopyDir(const String& srcDir, const String& destDir, bool bOverWrite = true);
+		static bool CopyDir(const String& srcDir, const String& destDir, bool bOverWrite = true, bool bIgnoreDotFolder=true);
 		static bool DelFilesInDir(const String& folder);
 		static bool DelPath(const String& path);
 		static bool WriteData(const String& path, const void* data, int len, const char* mode="wb");
