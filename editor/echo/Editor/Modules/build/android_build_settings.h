@@ -48,6 +48,10 @@ namespace Echo
 		void setIconForegroundRes(const ResourcePath& path);
 		const ResourcePath& getIconForegroundRes() { return m_iconForeground; }
 
+        // Fullscreen
+        bool isFullscreen() const { return m_isFullScreen; }
+        void setFullscreen(bool isFullscreen) { m_isFullScreen = isFullscreen; }
+
     private:
         // output directory
         bool prepare();
@@ -62,6 +66,7 @@ namespace Echo
     private:
         // write settings
         void writeStringsXml();
+        void writeStylesXml();
 
         // write config
         void writeModuleConfig();
@@ -77,5 +82,6 @@ namespace Echo
         String                  m_appName;
         ResourcePath            m_iconBackground = ResourcePath("Res://icon.png", ".png");
         ResourcePath            m_iconForeground = ResourcePath("Res://icon.png", ".png");
+        bool                    m_isFullScreen = true;
     };
 }

@@ -23,9 +23,6 @@ public class GLESActivity extends Activity {
     @Override protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
-        // https://stackoverflow.com/questions/26543268/android-making-a-fullscreen-application
-        getWindow().setFlags(FLAG_FULLSCREEN, FLAG_FULLSCREEN);
-
         install();
 
         m_view = new GLESView(getApplication(), false, 0, 0);

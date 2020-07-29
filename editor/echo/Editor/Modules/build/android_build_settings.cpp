@@ -32,10 +32,13 @@ namespace Echo
         CLASS_BIND_METHOD(AndroidBuildSettings, setIconBackgroundRes,   DEF_METHOD("setIconBackgroundRes"));
 		CLASS_BIND_METHOD(AndroidBuildSettings, getIconForegroundRes, DEF_METHOD("getIconForegroundRes"));
 		CLASS_BIND_METHOD(AndroidBuildSettings, setIconForegroundRes, DEF_METHOD("setIconForegroundRes"));
+		CLASS_BIND_METHOD(AndroidBuildSettings, isFullscreen, DEF_METHOD("isFullscreen"));
+		CLASS_BIND_METHOD(AndroidBuildSettings, setFullscreen, DEF_METHOD("setFullscreen"));
 
 		CLASS_REGISTER_PROPERTY(AndroidBuildSettings, "AppName", Variant::Type::String, "getAppName", "setAppName");
         CLASS_REGISTER_PROPERTY(AndroidBuildSettings, "IconBackground", Variant::Type::ResourcePath, "getIconBackgroundRes", "setIconBackgroundRes");
 		CLASS_REGISTER_PROPERTY(AndroidBuildSettings, "IconForeground", Variant::Type::ResourcePath, "getIconForegroundRes", "setIconForegroundRes");
+		CLASS_REGISTER_PROPERTY(AndroidBuildSettings, "Fullscreen", Variant::Type::Bool, "isFullscreen", "setFullscreen");
     }
 
 	ImagePtr AndroidBuildSettings::getPlatformThumbnail() const
@@ -75,6 +78,7 @@ namespace Echo
 
 			// overwrite config
 			writeStringsXml();
+			writeStylesXml();
 			//writeCMakeList();
 
 			writeModuleConfig();
@@ -230,6 +234,30 @@ namespace Echo
 
 		// write file
 		Echo::String savePath = m_outputDir + "app/android/app/src/main/res/values/strings.xml";
+		doc.save_file(savePath.c_str(), "\t", 1U, pugi::encoding_utf8);
+	}
+
+	void AndroidBuildSettings::writeStylesXml()
+	{
+		pugi::xml_document doc;
+		pugi::xml_node dec = doc.prepend_child(pugi::node_declaration);
+		dec.append_attribute("version") = "1.0";
+		dec.append_attribute("encoding") = "utf-8";
+
+		pugi::xml_node root_node = doc.append_child("resources");
+
+		// style
+		pugi::xml_node style_node = root_node.append_child("style");
+		style_node.append_attribute("name").set_value("AppTheme");
+		style_node.append_attribute("parent").set_value("Theme.AppCompat.Light.DarkActionBar");
+
+		// full screen
+		pugi::xml_node fullscreen_node = style_node.append_child("item");
+		fullscreen_node.append_attribute("name").set_value("android:windowFullscreen");
+		fullscreen_node.append_child(pugi::node_pcdata).set_value(isFullscreen() ? "true" : "false");
+
+		// write file
+		Echo::String savePath = m_outputDir + "app/android/app/src/main/res/values/styles.xml";
 		doc.save_file(savePath.c_str(), "\t", 1U, pugi::encoding_utf8);
 	}
 
