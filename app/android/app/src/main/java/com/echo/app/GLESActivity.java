@@ -23,10 +23,8 @@ public class GLESActivity extends Activity {
     @Override protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
-        // hide title bar https://www.javatpoint.com/android-hide-title-bar-example
-        //requestWindowFeature(Window.FEATURE_NO_TITLE);
-        //getActionBar().hide();
-        //getWindow().setFlags(FLAG_FULLSCREEN, FLAG_FULLSCREEN);
+        // https://stackoverflow.com/questions/26543268/android-making-a-fullscreen-application
+        getWindow().setFlags(FLAG_FULLSCREEN, FLAG_FULLSCREEN);
 
         install();
 
