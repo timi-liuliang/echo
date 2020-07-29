@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QProcess>
+#include <QTimer>
 #include "ui_MainWindow.h"
 #include <engine/core/util/StringUtil.h>
 #include <QComboBox>
@@ -117,6 +118,9 @@ namespace Studio
 
 		// open camera settings panel
 		void onClickEditorCameraSettings();
+
+		// show message
+		void onShowStatusMessage();
         
     public slots:
         // undo
@@ -137,6 +141,7 @@ namespace Studio
 		void recoverEditSettings();
 
 	protected:
+		QTimer				m_timer;
 		QDockWidget*		m_renderPanel;
 		ResPanel*			m_resPanel;
 		NodeTreePanel*		m_scenePanel;

@@ -108,6 +108,10 @@ namespace Studio
 		//m_toolBar->addAction(m_actionEditorCameraSettings);
 		//QObject::connect(m_actionEditorCameraSettings, SIGNAL(triggered(bool)), this, SLOT(onClickEditorCameraSettings()));
 
+		// show status message
+		QObject::connect(&m_timer, SIGNAL(timeout()), this, SLOT(onShowStatusMessage()));
+		m_timer.start(500);
+
 		EchoAssert(!g_inst);
 		g_inst = this;
 	}
@@ -740,4 +744,9 @@ namespace Studio
     {
         UndoHistory::instance()->redo();
     }
+
+	void MainWindow::onShowStatusMessage()
+	{
+		statusBar()->showMessage(Echo::StringUtil::Format("Fps:%d", Echo::FrameState::instance()->getFps()).c_str());
+	}
 }

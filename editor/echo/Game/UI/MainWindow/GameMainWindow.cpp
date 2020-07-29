@@ -1,5 +1,6 @@
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QStatusBar>
 #include "GameMainWindow.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/main/GameSettings.h"
@@ -53,6 +54,10 @@ namespace Game
 
 		// windows size
 		configWindowSizes();
+
+		// show status message
+		QObject::connect(&m_timer, SIGNAL(timeout()), this, SLOT(onShowStatusMessage()));
+		m_timer.start(500);
 	}
 
 	void GameMainWindow::moveToCenter()
@@ -130,5 +135,10 @@ namespace Game
 			Echo::i32 index = action->data().toInt();
 			setRenderWindowSize(m_windowSizes[index].m_width, m_windowSizes[index].m_height);
 		}
+	}
+
+	void GameMainWindow::onShowStatusMessage()
+	{
+		statusBar()->showMessage(Echo::StringUtil::Format("Fps:%d", Echo::FrameState::instance()->getFps()).c_str());
 	}
 }

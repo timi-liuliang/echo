@@ -2,6 +2,7 @@
 
 #include "Window.h"
 #include <QProcess>
+#include <QTimer>
 #include "ui_GameMainWindow.h"
 #include <engine/core/util/StringUtil.h>
 
@@ -49,7 +50,11 @@ namespace Game
 		void onSwitchResolutionHorizontal();
 		void onSwitchResolutionVertical();
 
+		// show message
+		void onShowStatusMessage();
+
 	private:
+		QTimer							m_timer;
 		Window*							m_renderWindow;
 		Echo::vector<WindowSize>::type	m_windowSizes;
 	};
