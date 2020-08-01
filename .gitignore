@@ -19,3 +19,5 @@ bin/editor/Debug/echo
 /soulution
 /app/android/app/.cxx
 /thirdparty/openal-soft/config.h
+
+.vscode/
