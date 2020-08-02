@@ -18,10 +18,6 @@ namespace Echo
 		return inst;
 	}
 
-	void Input::update()
-	{
-	}
-
 	void Input::bindMethods()
 	{
 		CLASS_BIND_METHOD(Input, isMouseButtonDown, "isMouseButtonDown");
@@ -50,40 +46,78 @@ namespace Echo
 		return m_keyStates[id].m_isDown;
 	}
 
+	void Input::update()
+	{
+		EE_LOCK_MUTEX(m_eventQueueMutex);
+		while (m_eventQueue.size())
+		{
+			const Event& event = m_eventQueue.front();
+			if (event.m_type == Event::Type::MouseButtonDown)
+			{
+				m_mouseState.m_mouseButtonStates[event.m_id].m_isDown = true;
+				m_mouseState.m_mouseButtonStates[event.m_id].m_position = event.m_pos;
+
+				onMouseButtonDown();
+			}
+			else if (event.m_type == Event::Type::MouseButtonUp)
+			{
+				m_mouseState.m_mouseButtonStates[event.m_id].m_isDown = false;
+				m_mouseState.m_mouseButtonStates[event.m_id].m_position = event.m_pos;
+
+				onMouseButtonUp();
+			}
+			else if (event.m_type == Event::Type::MouseMove)
+			{
+				m_mouseState.m_mouseButtonStates[event.m_id].m_position = event.m_pos;
+
+				onMouseMove();
+			}
+			else if (event.m_type == Event::Type::KeyDown)
+			{
+				m_keyStates[event.m_id].m_isDown = true;
+
+				onKeyDown();
+			}
+			else if (event.m_type == Event::Type::KeyUp)
+			{
+				m_keyStates[event.m_id].m_isDown = false;
+
+				onKeyUp();
+			}
+
+			m_eventQueue.pop();
+		}
+	}
+
 	void Input::notifyMouseButtonDown(Echo::ui32 id, const Vector2& pos)
 	{
-		m_mouseState.m_mouseButtonStates[id].m_isDown = true;
-		m_mouseState.m_mouseButtonStates[id].m_position = pos;
-        
-        onMouseButtonDown();
+		addEvent(Event(Event::Type::MouseButtonDown, id, pos));
 	}
 
 	void Input::notifyMouseButtonUp(Echo::ui32 id, const Vector2& pos)
 	{
-		m_mouseState.m_mouseButtonStates[id].m_isDown = false;
-		m_mouseState.m_mouseButtonStates[id].m_position = pos;
-
-		onMouseButtonUp();
+		addEvent(Event(Event::Type::MouseButtonUp, id, pos));
 	}
 
 	void Input::notifyMouseMove(Echo::ui32 id, const Vector2& pos)
 	{
-		m_mouseState.m_mouseButtonStates[id].m_position = pos;
-
-		onMouseMove();
+		addEvent(Event(Event::Type::MouseMove, id, pos));
 	}
 
 	void Input::notifyKeyDown(Echo::ui32 id)
 	{
-		m_keyStates[id].m_isDown = true;
-
-		onKeyDown();
+		addEvent(Event(Event::Type::KeyDown, id, Vector2::ZERO));
 	}
 
 	void Input::notifyKeyUp(Echo::ui32 id)
 	{
-		m_keyStates[id].m_isDown = false;
+		addEvent(Event(Event::Type::KeyUp, id, Vector2::ZERO));
+	}
 
-		onKeyUp();
+	void Input::addEvent(const Input::Event& event)
+	{
+		EE_LOCK_MUTEX(m_eventQueueMutex);
+		
+		m_eventQueue.push(event);
 	}
 }

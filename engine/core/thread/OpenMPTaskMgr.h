@@ -12,11 +12,11 @@ namespace Echo
 	class OpenMPTaskMgr
 	{
 	public:
-		// 任务类型
+		// Task type
 		enum TaskType
 		{
-			TT_AnimationUpdate = 0,		// 动画更新
-			TT_EffectSystem,			// 更新特效
+			TT_AnimationUpdate = 0,
+			TT_EffectSystem,
 		};
 
 	public:
@@ -25,16 +25,16 @@ namespace Echo
 		// instance
 		static OpenMPTaskMgr* instance();
 
-		// 添加任务
+		// add
 		void addTask(TaskType type, CpuThreadPool::Job* task);
 
-		// 执行任务(相关逻辑会有一帧延迟,并无大碍)
+		// execs
 		void execTasks(TaskType type);
 
-		// 等待动画更新完成
+		// wait for finished
 		void waitForAnimationUpdateComplete();
 
-		// 等待特效更新完成
+		// wait finished
 		void waitForEffectSystemUpdateComplete();
 
 	private:
