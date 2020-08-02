@@ -73,9 +73,9 @@ You can compute the value of one property based on the value of another property
 Echo is licensed under MIT license. You can just do what you want as your wish.
 
 ## Examples
-|Example|Screenshot|Description|
-|---|---|---|
-|Build-House|<img src="https://github.com/timi-liuliang/echo-examples/blob/master/ads/build_house.gif?raw=true" alt="build house"  height="128px" />|A little build house game, used for test sprite node|
+|Example|Screenshot|Description|Download|
+|---|---|---|---|
+|Build-House|<img src="https://github.com/timi-liuliang/echo-examples/blob/master/ads/build_house.gif?raw=true" alt="build house"  height="128px" />|A little build house game, used for test sprite node|[build-house-android.apk](https://github.com/timi-liuliang/echo-examples/releases/tag/build-house-1.0)|
 |Spine|<img src="https://github.com/timi-liuliang/echo-examples/raw/master/ads/spine.gif?raw=true" alt="build house"  height="128px" />|Spine 2d animation|
 |Live2D|<img src="https://github.com/timi-liuliang/echo-examples/raw/master/ads/live2d.gif?raw=true" alt="build house"  height="128px" />|live2d animation|
 |Pbr|<img src="https://github.com/timi-liuliang/echo-examples/raw/master/ads/cubemap.png?raw=true" alt="build house"  height="128px" />|gltf and light prob test|
