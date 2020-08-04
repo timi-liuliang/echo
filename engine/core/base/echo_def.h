@@ -238,17 +238,16 @@ __GNUC_PATCHLEVEL__)
 #endif
 
 // STD including
-#ifndef __MFC_FRAME_WORK__
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <wchar.h>
 #include <typeinfo>
 #include <cmath>
+#include <cstring>
 #include <float.h>
 #include <assert.h>
 #include <time.h>
-#endif
 
 // STL including
 #include <limits>

@@ -6,7 +6,7 @@ namespace Echo
 {
 	class ModelModule : public Module
 	{
-		ECHO_SINGLETON_CLASS(Live2DModule, Module)
+		ECHO_SINGLETON_CLASS(ModelModule, Module)
 
 	public:
 		ModelModule();
