@@ -79,7 +79,7 @@ namespace Echo
 		PathUtil::CopyFilePath(m_rootDir + "CMakeLists.txt", m_outputDir + "CMakeLists.txt");
 
 		// copy build script
-		PathUtil::CopyFilePath(m_rootDir + "build/windows/cmake.bat", m_outputDir + "cmake.bat");
+		PathUtil::CopyFilePath(m_rootDir + "tool/build/windows/cmake.bat", m_outputDir + "cmake.bat");
 	}
 
 	void WindowsBuildSettings::copyRes()

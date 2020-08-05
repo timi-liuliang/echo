@@ -215,7 +215,7 @@ namespace Echo
         PathUtil::CopyFilePath( m_rootDir + "CMakeLists.txt", m_outputDir + "CMakeLists.txt");
         
         // copy build script
-        PathUtil::CopyFilePath( m_rootDir + "build/ios/cmake.sh", m_outputDir + "cmake.sh");
+        PathUtil::CopyFilePath( m_rootDir + "tool/build/ios/cmake.sh", m_outputDir + "cmake.sh");
     }
 
     void iOSBuildSettings::copyRes()
