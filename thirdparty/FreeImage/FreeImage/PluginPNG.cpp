@@ -39,12 +39,12 @@
 
 // ----------------------------------------------------------
 
-#include "../ZLib/zlib.h"
+#include "../zlib/zlib.h"
 #include "../LibPNG/png.h"
 
 // ----------------------------------------------------------
 
-static int S_throw;  // ÐÞ¸´iOSÏÂcatch ²»ÉÏ
+static int S_throw;  // ï¿½Þ¸ï¿½iOSï¿½ï¿½catch ï¿½ï¿½ï¿½ï¿½
 
 typedef struct {
     FreeImageIO *s_io;
@@ -60,7 +60,7 @@ _ReadProc(png_structp png_ptr, unsigned char *data, png_size_t size) {
     pfi_ioStructure pfio = (pfi_ioStructure)png_get_io_ptr(png_ptr);
 	unsigned n = pfio->s_io->read_proc(data, (unsigned int)size, 1, pfio->s_handle);
 	if(size && (n == 0)) {
-		S_throw = 1;  // ÐÞ¸´iOSÏÂcatch ²»ÉÏ
+		S_throw = 1;  // ï¿½Þ¸ï¿½iOSï¿½ï¿½catch ï¿½ï¿½ï¿½ï¿½
 		//throw "Read error: invalid or corrupted PNG file";
 	}
 }
@@ -604,14 +604,14 @@ Load(FreeImageIO *io, fi_handle handle, int page, int flags, void *data) {
 				row_pointers[height - 1 - k] = FreeImage_GetScanLine(dib, k);			
 			}
 
-			S_throw = 0;  // ÐÞ¸´iOSÏÂcatch ²»ÉÏ
+			S_throw = 0;  // ï¿½Þ¸ï¿½iOSï¿½ï¿½catch ï¿½ï¿½ï¿½ï¿½
 			
 			png_set_benign_errors(png_ptr, 1);
 			png_read_image(png_ptr, row_pointers);
 
 			if (S_throw == 1)
 			{
-				 // ÐÞ¸´iOSÏÂcatch ²»ÉÏ
+				 // ï¿½Þ¸ï¿½iOSï¿½ï¿½catch ï¿½ï¿½ï¿½ï¿½
 				throw "Read error: invalid or corrupted PNG file";
 			}
 
