@@ -1,5 +1,6 @@
 #include "function.h"
 #include <iostream>
+#include <cstdarg>
 
 #ifdef _WIN32
 #include <stdarg.h>
