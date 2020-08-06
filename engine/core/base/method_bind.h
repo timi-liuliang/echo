@@ -174,5 +174,4 @@ namespace Echo
 	}
 }
 
-#define BIND_METHOD(method, methodName) \
-	bindMethod(&method, methodName)
+#define BIND_METHOD(method, methodName) bindMethod(&method, methodName)

@@ -77,4 +77,5 @@ void LoadModule_##T() \
 
 #define REGISTER_MODULE(T) \
 extern void LoadModule_##T(); \
-LoadModule_##T();	\
+LoadModule_##T(); \
+    
