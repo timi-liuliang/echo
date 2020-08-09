@@ -125,7 +125,7 @@ namespace Echo
 	#elif defined(__ANDROID__)
 		extensions.push_back(VK_KHR_ANDROID_SURFACE_EXTENSION_NAME);
 	#elif defined(__linux__)
-		extensions.push_back(VK_KHR_XCB_SURFACE_EXTENSION_NAME);
+		extensions.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
 	#endif
 
 	#if defined(ECHO_EDITOR_MODE)

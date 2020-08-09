@@ -1,5 +1,6 @@
 #include "StringUtil.h"
 #include "AssertX.h"
+#include <stdarg.h>
 
 // Platform head file including
 #ifdef ECHO_PLATFORM_WINDOWS

@@ -105,7 +105,7 @@ namespace Echo
         m_zeroClock = clock();
 		clock_gettime(CLOCK_MONOTONIC, &m_startTime);
 #else
-		mZeroClock = clock();
+		m_zeroClock = clock();
 		gettimeofday(&m_startTime, NULL);
 #endif
 	}

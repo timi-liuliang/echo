@@ -235,7 +235,7 @@ namespace Echo
 		}
 
 
-		// ������Ϣǿ�Ƶ���(Release && Windows only)
+		// (Release && Windows only)
 #ifndef ECHO_EDITOR_MODE
 		if (level >= LL_ERROR)
 		{

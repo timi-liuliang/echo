@@ -30,10 +30,11 @@ IF(${ECHO_PLATFORM_WINDOWS})
     INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/engine/core/render/gles)
 	INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/openal-soft/include)
     INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/vulkan/windows/x64/include)
+ELSEIF(ECHO_PLATFORM_LINUX)
+    INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/openal-soft/include)
+    INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/vulkan/linux/x86_64/include)
 ELSEIF(ECHO_PLATFORM_ANDROID)
     INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/openal-soft/include)
-ELSEIF(ECHO_PLATFORM_LINUX)
-
 ENDIF()
 
 # Configure FILE
