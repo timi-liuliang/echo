@@ -3,17 +3,17 @@
 # Set Module Name
 SET(MODULE_NAME freeimage)
 
-# 包含目录
+# Include directories
 INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR})
 INCLUDE_DIRECTORIES( ${ECHO_ROOT_PATH}/thirdparty/zlib/)
 
-# 链接库目录
+# link directories
 LINK_DIRECTORIES(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 
-# 预定义宏
+# predefine macros
 ADD_DEFINITIONS( -DLIBRAW_NODLL -DDISABLE_PERF_MEASUREMENT -DOPJ_STATIC -DNOMINMAX)
 
-# 源文件路径
+# Set source file paths
 SET(FREEIMAG_MODULE_PATH        ${ECHO_ROOT_PATH}/thirdparty/FreeImage)
 SET(FREEIMAG_MODULE_HEADER_PATH ${ECHO_ROOT_PATH}/thirdparty/FreeImage)
 SET(FREEIMAG_MODULE_SOURCE_PATH ${ECHO_ROOT_PATH}/thirdparty/FreeImage)
@@ -186,14 +186,14 @@ INCLUDE_DIRECTORIES(
 
 SET(ALL_FILES ${FREEIMAGE_HEADER_FILES} ${FREEIMAGE_SOURCE_FILES})
 
-# 分组
+# Group
 GROUP_FILES(ALL_FILES ${FREEIMAG_MODULE_PATH})
 
-# 生成库
+# Generate library
 ADD_LIBRARY(${MODULE_NAME} ${ALL_FILES} CMakeLists.txt)
 
-# 设置目录
+# Set directories
 SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES FOLDER "thirdparty")
 
-# ??????
+# Message
 MESSAGE(STATUS "Configure success!")
