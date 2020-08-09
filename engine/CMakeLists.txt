@@ -24,7 +24,7 @@ INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/physx/physx/include)
 INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/physx/pxshared/include)
 INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/Core/include)
 INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/freetype-2.10.0/include)
-INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/radeonrays/RadeonRays/include)
+INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/RadeonRays/RadeonRays/include)
 
 IF(${ECHO_PLATFORM_WINDOWS})
     INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/engine/core/render/gles)
