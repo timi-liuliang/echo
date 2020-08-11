@@ -7,7 +7,7 @@ namespace Echo
 {
 	class MeshRes : public Res
 	{
-		ECHO_RES(MeshRes, Res, ".mesh", Res::create<MeshRes>, MeshRes::load);
+		ECHO_RES(MeshRes, Res, ".mesh", nullptr, MeshRes::load);
 
 	public:
 		MeshRes() {}
