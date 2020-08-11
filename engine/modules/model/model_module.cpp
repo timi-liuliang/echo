@@ -1,5 +1,6 @@
 #include "engine/core/log/Log.h"
 #include "model_module.h"
+#include "mesh_res.h"
 
 namespace Echo
 {
@@ -23,5 +24,6 @@ namespace Echo
 
 	void ModelModule::registerTypes()
 	{
+		Class::registerType<MeshRes>();
 	}
 }

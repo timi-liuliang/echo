@@ -18,10 +18,11 @@ namespace Echo
 		REGISTER_MODULE(UiModule)
 		REGISTER_MODULE(AIModule)
 		REGISTER_MODULE(LightModule);
+		REGISTER_MODULE(ModelModule);
 		REGISTER_MODULE(PhysxModule);
         REGISTER_MODULE(ProceduralModule);
+		REGISTER_MODULE(RaytracingModule);
         REGISTER_MODULE(SceneModule);
-        REGISTER_MODULE(RaytracingModule);
 #ifdef ECHO_PLATFORM_WINDOWS
 		REGISTER_MODULE(VideoModule);
 #endif
