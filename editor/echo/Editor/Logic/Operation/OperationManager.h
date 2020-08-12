@@ -1,7 +1,7 @@
 #pragma once
 
 #include <engine/core/base/object.h>
-#include "engine/core/editor/ObjectOperation.h"
+#include "engine/core/editor/object_operation.h"
 
 namespace Studio
 {

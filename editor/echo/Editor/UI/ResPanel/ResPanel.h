@@ -47,8 +47,9 @@ namespace Studio
 		// new folder
 		void newFolder();
 
-		// create res
+		// res
 		void onCreateRes();
+		void onImportRes();
 
 		// rename res
 		void onRenameRes();

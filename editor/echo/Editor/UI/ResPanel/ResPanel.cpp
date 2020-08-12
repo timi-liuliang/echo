@@ -12,6 +12,7 @@
 #include <engine/core/io/IO.h>
 #include <engine/core/resource/Res.h>
 #include <engine/core/render/base/Material.h>
+#include <engine/core/editor/importer.h>
 
 namespace Studio
 {
@@ -198,11 +199,38 @@ namespace Studio
 			m_resMenu->addAction(m_actionDeleteRes);
 			m_resMenu->addAction(m_actionRenameRes);
 
+			m_resMenu->addSeparator();
+			m_resMenu->addAction(m_actionCopyPath);
+
 			m_menuEditItem = item;
 		}
+		else
+		{
+			m_resMenu->addSeparator();
 
-		m_resMenu->addSeparator();
-		m_resMenu->addAction(m_actionCopyPath);
+			// import res
+			QMenu* importResMenu = new QMenu("Import");
+
+			Echo::StringArray allImporter;
+			Echo::Class::getChildClasses(allImporter, "Importer", true);
+			for (const Echo::String& importer : allImporter)
+			{
+				Echo::Importer* importerObj = (Echo::Importer*)Echo::Class::create(importer.c_str());
+				if (importerObj)
+				{
+					QAction* importResAction = new QAction(this);
+					importResAction->setText(importerObj->getName());
+					importResAction->setToolTip(importer.c_str());
+					importResMenu->addAction(importResAction);
+
+					QObject::connect(importResAction, SIGNAL(triggered()), this, SLOT(onImportRes()));
+
+					EchoSafeDelete(importerObj, Importer);
+				}
+			}
+
+			m_resMenu->addMenu(importResMenu);
+		}
 
 		m_resMenu->addSeparator();
 		m_resMenu->addAction(m_actionShowInExplorer);
@@ -275,6 +303,19 @@ namespace Studio
 
 					reslectCurrentDir();
 				}
+			}
+		}
+	}
+
+	void ResPanel::onImportRes()
+	{
+		QAction* action = qobject_cast<QAction*>(sender());
+		if (action)
+		{
+			Echo::String className = action->toolTip().toStdString().c_str();
+			Echo::Importer* importer = (Echo::Importer*)Echo::Class::create(className);
+			if (importer)
+			{
 			}
 		}
 	}

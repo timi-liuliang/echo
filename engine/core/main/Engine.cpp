@@ -1,4 +1,5 @@
 #include "engine/core/base/class.h"
+#include "engine/core/editor/importer.h"
 #include "engine/core/main/Engine.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/util/HashGenerator.h"
@@ -159,6 +160,10 @@ namespace Echo
 		Class::registerType<RenderPipeline>();
 		Class::registerType<Translator>();
 		Class::registerType<Localization>();
+
+	#ifdef ECHO_EDITOR_MODE
+		Class::registerType<Importer>();
+	#endif
         
 		REGISTER_OBJECT_EDITOR(ShaderProgram, ShaderEditor)
 		REGISTER_OBJECT_EDITOR(TextureAtla, TextureAtlaEditor)
