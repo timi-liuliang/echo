@@ -1,7 +1,7 @@
 #pragma once
 
 #include "base/Renderable.h"
-#include "base/mesh/MeshRes.h"
+#include "base/mesh/mesh.h"
 
 namespace Echo
 {

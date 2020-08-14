@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/mesh/MeshRes.h"
+#include "base/mesh/mesh.h"
 #include "base/ShaderProgram.h"
 #include "base/GPUBuffer.h"
 #include "vk_render_base.h"

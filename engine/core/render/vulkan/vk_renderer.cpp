@@ -1,4 +1,4 @@
-#include "base/mesh/MeshRes.h"
+#include "base/mesh/mesh.h"
 #include "base/pipeline/RenderPipeline.h"
 #include "vk_renderer.h"
 #include "vk_renderable.h"

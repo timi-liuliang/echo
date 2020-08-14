@@ -5,7 +5,7 @@
 #include "base/ShaderProgram.h"
 #include "base/pipeline/RenderPipeline.h"
 #include "base/Material.h"
-#include "base/mesh/MeshRes.h"
+#include "base/mesh/mesh.h"
 #include "engine/core/scene/render_node.h"
 
 namespace Echo

@@ -1,5 +1,5 @@
 #include "pcg_sphere.h"
-#include "engine/core/render/base/mesh/MeshRes.h"
+#include "engine/core/render/base/mesh/mesh.h"
 
 namespace Echo
 {

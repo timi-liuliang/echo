@@ -2,7 +2,7 @@
 
 #include "engine/core/io/IO.h"
 #include "engine/core/scene/render_node.h"
-#include "engine/core/render/base/mesh/MeshRes.h"
+#include "engine/core/render/base/mesh/mesh.h"
 #include "engine/core/render/base/Material.h"
 #include "engine/core/render/base/Renderable.h"
 #include "live2d_cubism_motion.h"

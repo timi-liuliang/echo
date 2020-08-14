@@ -2,7 +2,7 @@
 #include <spine/extension.h>
 #include "engine/core/log/Log.h"
 #include "engine/core/render/base/Texture.h"
-#include "engine/core/render/base/mesh/MeshRes.h"
+#include "engine/core/render/base/mesh/mesh.h"
 #include "engine/core/render/base/Material.h"
 
 using namespace Echo;

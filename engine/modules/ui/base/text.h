@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/core/render/base/mesh/MeshRes.h"
+#include "engine/core/render/base/mesh/mesh.h"
 #include "engine/core/render/base/Material.h"
 #include "engine/core/render/base/Renderable.h"
 #include "../render/vertex_format.h"

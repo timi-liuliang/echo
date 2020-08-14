@@ -5,7 +5,7 @@
 #include "Texture.h"
 #include "RenderState.h"
 #include "Material.h"
-#include "mesh/MeshRes.h"
+#include "mesh/mesh.h"
 
 namespace Echo
 {

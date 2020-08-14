@@ -3,7 +3,7 @@
 #include <base/Texture.h>
 #include <base/ShaderProgram.h>
 #include "engine/core/render/base/GPUBuffer.h"
-#include "engine/core/render/base/mesh/MeshRes.h"
+#include "engine/core/render/base/mesh/mesh.h"
 #include "GLESRenderState.h"
 
 namespace Echo

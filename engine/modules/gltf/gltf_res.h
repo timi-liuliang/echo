@@ -4,7 +4,7 @@
 #include "engine/core/math/Math.h"
 #include "engine/core/io/IO.h"
 #include "engine/core/scene/node.h"
-#include "engine/core/render/base/mesh/MeshRes.h"
+#include "engine/core/render/base/mesh/mesh.h"
 #include "engine/core/resource/Res.h"
 #include "engine/core/render/base/Material.h"
 #include "engine/modules/anim/anim_property.h"

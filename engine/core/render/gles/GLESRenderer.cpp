@@ -9,7 +9,7 @@
 #include "GLESRenderable.h"
 #include <engine/core/log/Log.h>
 #include <engine/core/util/Exception.h>
-#include "engine/core/render/base/mesh/MeshRes.h"
+#include "engine/core/render/base/mesh/mesh.h"
 #include "base/pipeline/RenderPipeline.h"
 #include "GLESGPUBuffer.h"
 #include "base/Viewport.h"

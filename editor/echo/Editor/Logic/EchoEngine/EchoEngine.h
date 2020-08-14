@@ -4,7 +4,7 @@
 #include <engine/core/log/Log.h>
 #include <engine/core/main/Engine.h>
 #include <engine/core/scene/node_tree.h>
-#include <engine/core/render/base/mesh/MeshRes.h>
+#include <engine/core/render/base/mesh/mesh.h>
 
 namespace Studio
 {

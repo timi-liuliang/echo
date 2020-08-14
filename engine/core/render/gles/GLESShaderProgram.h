@@ -3,7 +3,7 @@
 #include <engine/core/util/Array.hpp>
 #include "base/ShaderProgram.h"
 #include "base/Renderable.h"
-#include "base/mesh/MeshRes.h"
+#include "base/mesh/mesh.h"
 #include "GLESShader.h"
 #include "GLESRenderable.h"
 
