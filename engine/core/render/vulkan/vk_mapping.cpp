@@ -2,16 +2,16 @@
 
 namespace Echo
 {
-    VkPrimitiveTopology VKMapping::MapPrimitiveTopology(Mesh::TopologyType type)
+    VkPrimitiveTopology VKMapping::MapPrimitiveTopology(MeshRes::TopologyType type)
     {
         switch (type)
         {
-        case Mesh::TT_POINTLIST:        return VK_PRIMITIVE_TOPOLOGY_POINT_LIST;
-        case Mesh::TT_LINELIST:         return VK_PRIMITIVE_TOPOLOGY_LINE_LIST;
-        case Mesh::TT_LINESTRIP:        return VK_PRIMITIVE_TOPOLOGY_LINE_STRIP;
-        case Mesh::TT_TRIANGLELIST:     return VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-        case Mesh::TT_TRIANGLESTRIP:    return VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP;
-        default:                        return VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+        case MeshRes::TT_POINTLIST:        return VK_PRIMITIVE_TOPOLOGY_POINT_LIST;
+        case MeshRes::TT_LINELIST:         return VK_PRIMITIVE_TOPOLOGY_LINE_LIST;
+        case MeshRes::TT_LINESTRIP:        return VK_PRIMITIVE_TOPOLOGY_LINE_STRIP;
+        case MeshRes::TT_TRIANGLELIST:     return VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+        case MeshRes::TT_TRIANGLESTRIP:    return VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP;
+        default:                           return VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
         }
     }
 

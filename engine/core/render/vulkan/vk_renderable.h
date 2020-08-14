@@ -26,7 +26,7 @@ namespace Echo
 
     private:
         // link shader and program
-        virtual void setMesh(Mesh* mesh) override;
+        virtual void setMesh(MeshResPtr mesh) override;
 
 	private:
         // build vertex input attribute

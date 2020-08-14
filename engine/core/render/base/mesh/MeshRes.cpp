@@ -1,38 +1,43 @@
 #include "engine/core/log/Log.h"
-#include "Mesh.h"
+#include "MeshRes.h"
 #include "engine/core/render/base/Renderer.h"
 #include <algorithm>
 
 namespace Echo
 {
-	Mesh* Mesh::create(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer)
+	MeshRes* MeshRes::create(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer)
 	{
-		return EchoNew(Mesh(isDynamicVertexBuffer, isDynamicIndicesBuffer));
+		return EchoNew(MeshRes(isDynamicVertexBuffer, isDynamicIndicesBuffer));
 	}
 
-	Mesh::Mesh(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer)
+	MeshRes::MeshRes(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer)
 		: m_topologyType(TT_TRIANGLELIST)
 		, m_isDynamicVertexBuffer(isDynamicVertexBuffer)
 		, m_isDynamicIndicesBuffer(isDynamicIndicesBuffer)
 	{
 	}
 
-	Mesh::~Mesh()
+	MeshRes::~MeshRes()
 	{
 		clear();
 	}
 
-	GPUBuffer* Mesh::getVertexBuffer() const
+	void MeshRes::bindMethods()
+	{
+
+	}
+
+	GPUBuffer* MeshRes::getVertexBuffer() const
 	{
 		return m_vertexBuffer;
 	}
 
-	GPUBuffer* Mesh::getIndexBuffer() const
+	GPUBuffer* MeshRes::getIndexBuffer() const
 	{
 		return m_indexBuffer;
 	}
 
-	void Mesh::buildTangentData()
+	void MeshRes::buildTangentData()
 	{
 		ui32 faceCount = getFaceCount();
 
@@ -84,7 +89,7 @@ namespace Echo
 		}
 	}
 
-	void Mesh::clear()
+	void MeshRes::clear()
 	{
 		m_indices.clear();
 		m_indices.shrink_to_fit();
@@ -95,12 +100,12 @@ namespace Echo
 		m_vertData.reset();
 	}
 
-	ui32 Mesh::getIndexCount() const
+	ui32 MeshRes::getIndexCount() const
 	{
 		return m_idxCount;
 	}
 
-	ui32 Mesh::getFaceCount() const
+	ui32 MeshRes::getFaceCount() const
 	{
 		ui32 count = m_indexBuffer ? m_idxCount : getVertexCount();
 		switch (m_topologyType)
@@ -114,22 +119,22 @@ namespace Echo
 		}
 	}
 
-	ui32 Mesh::getIndexStride() const
+	ui32 MeshRes::getIndexStride() const
 	{
 		return m_idxStride;
 	}
 
-	Word* Mesh::getIndices() const
+	Word* MeshRes::getIndices() const
 	{
 		return (Word*)m_indices.data();
 	}
 
-	ui32 Mesh::getMemeoryUsage() const
+	ui32 MeshRes::getMemeoryUsage() const
 	{
 		return m_vertData.getVertexStride()*m_vertData.getVertexCount() + m_idxCount*m_idxStride;
 	}
 
-	void Mesh::generateTangentData(bool useNormalMap)
+	void MeshRes::generateTangentData(bool useNormalMap)
 	{
 		if (useNormalMap)
 		{
@@ -143,12 +148,12 @@ namespace Echo
 		}
 	}
 
-	const VertexElementList& Mesh::getVertexElements() const
+	const VertexElementList& MeshRes::getVertexElements() const
 	{
 		return m_vertData.getFormat().m_vertexElements;
 	}
 
-	bool Mesh::buildBuffer()
+	bool MeshRes::buildBuffer()
 	{
 		buildIndexBuffer();
 		buildVertexBuffer();
@@ -156,7 +161,7 @@ namespace Echo
 		return true;
 	}
 
-	void Mesh::buildIndexBuffer()
+	void MeshRes::buildIndexBuffer()
 	{
 		Buffer indexBuff(m_idxCount*m_idxStride, m_indices.data());
 		if (m_isDynamicIndicesBuffer)
@@ -175,7 +180,7 @@ namespace Echo
 		}	
 	}
 
-	void Mesh::buildVertexBuffer()
+	void MeshRes::buildVertexBuffer()
 	{
 		Buffer vertBuff(m_vertData.getByteSize(), m_vertData.getVertices());
 		if (m_isDynamicVertexBuffer)
@@ -194,7 +199,7 @@ namespace Echo
 		}	
 	}
 
-	void Mesh::updateIndices(ui32 indicesCount, ui32 indicesStride, const void* indices)
+	void MeshRes::updateIndices(ui32 indicesCount, ui32 indicesStride, const void* indices)
 	{
 		// load indices
 		m_idxCount = indicesCount;
@@ -209,7 +214,7 @@ namespace Echo
 		}
 	}
 
-	void Mesh::updateVertexs(const MeshVertexFormat& format, ui32 vertCount, const Byte* vertices)
+	void MeshRes::updateVertexs(const MeshVertexFormat& format, ui32 vertCount, const Byte* vertices)
 	{
 		m_vertData.set(format, vertCount);
 		if (vertCount)
@@ -229,7 +234,7 @@ namespace Echo
 		}
 	}
 
-	void Mesh::updateVertexs(const MeshVertexData& vertexData)
+	void MeshRes::updateVertexs(const MeshVertexData& vertexData)
 	{
 		m_vertData = vertexData;
 
@@ -241,5 +246,21 @@ namespace Echo
 		}
 
 		buildVertexBuffer();
+	}
+
+	Res* MeshRes::load(const ResourcePath& path)
+	{
+		if (!path.isEmpty())
+		{
+			MeshRes* res = EchoNew(MeshRes);
+			return res;
+		}
+
+		return nullptr;
+	}
+
+	void MeshRes::save()
+	{
+
 	}
 }

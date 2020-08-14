@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/mesh/Mesh.h"
+#include "base/mesh/MeshRes.h"
 #include "base/ShaderProgram.h"
 #include "base/GPUBuffer.h"
 #include "vk_render_base.h"
@@ -11,7 +11,7 @@ namespace Echo
     {
     public:
         // mapping primitive topology type
-        static VkPrimitiveTopology MapPrimitiveTopology(Mesh::TopologyType type);
+        static VkPrimitiveTopology MapPrimitiveTopology(MeshRes::TopologyType type);
 
         // mapping vertex semantic
         static String MapVertexSemanticString(VertexSemantic semantic);

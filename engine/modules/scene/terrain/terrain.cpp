@@ -178,7 +178,7 @@ namespace Echo
     void Terrain::updateMeshBuffer()
     {
 		// create mesh
-		if (!m_mesh) m_mesh = Mesh::create(true, true);
+		if (!m_mesh) m_mesh = MeshRes::create(true, true);
 
 		// update data
         VertexArray    vertices;
@@ -204,7 +204,7 @@ namespace Echo
     void Terrain::clearRenderable()
     {
         EchoSafeRelease(m_renderable);
-        EchoSafeDelete(m_mesh, Mesh);
+        m_mesh.reset();
     }
     
     float Terrain::getHeight(i32 x, i32 z)

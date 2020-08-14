@@ -2,7 +2,7 @@
 
 #include "engine/core/util/StringOption.h"
 #include "engine/core/scene/render_node.h"
-#include "engine/core/render/base/mesh/Mesh.h"
+#include "engine/core/render/base/mesh/MeshRes.h"
 #include "engine/core/render/base/Material.h"
 #include "engine/core/render/base/Renderable.h"
 #include "AttachmentLoader.h"
@@ -65,7 +65,7 @@ namespace Echo
 		spAttachmentLoader*	m_attachmentLoader;
 
 		AttachmentVertices	m_batch;
-		Mesh*				m_mesh;
+		MeshResPtr			m_mesh;
         ShaderProgramPtr    m_shader;
 		Material*			m_material;
 		Renderable*			m_renderable;

@@ -107,7 +107,7 @@ namespace Echo
             MeshVertexFormat define;
             define.m_isUseUV = true;
             
-            m_mesh = Mesh::create(true, true);
+            m_mesh = MeshRes::create(true, true);
             m_mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(Word), indices.data());
             m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data());
             
@@ -205,6 +205,6 @@ namespace Echo
     void UiText::clearRenderable()
     {
         EchoSafeRelease(m_renderable);
-        EchoSafeDelete(m_mesh, Mesh);
+        m_mesh.reset();
     }
 }

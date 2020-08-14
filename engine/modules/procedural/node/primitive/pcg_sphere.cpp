@@ -1,5 +1,5 @@
 #include "pcg_sphere.h"
-#include "engine/core/render/base/mesh/Mesh.h"
+#include "engine/core/render/base/mesh/MeshRes.h"
 
 namespace Echo
 {
@@ -13,7 +13,7 @@ namespace Echo
 
 	}
 
-	Mesh* PCGSphere::buildUvSphere(float radius, i32 stackCount, i32 sectorCount)
+	MeshResPtr PCGSphere::buildUvSphere(float radius, i32 stackCount, i32 sectorCount)
 	{
 		// Vertex Format
 		struct VertexFormat
@@ -28,7 +28,7 @@ namespace Echo
 		VertexArray    vertices;
 		IndiceArray    indices;
 	
-		Mesh* mesh = Mesh::create(true, true);
+		MeshResPtr mesh = MeshRes::create(true, true);
 
 		float x, y, z, xz;                              // vertex position
 		float nx, ny, nz, lengthInv = 1.0f / radius;    // vertex normal

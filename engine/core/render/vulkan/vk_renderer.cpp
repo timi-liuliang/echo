@@ -1,4 +1,4 @@
-#include "base/mesh/Mesh.h"
+#include "base/mesh/MeshRes.h"
 #include "base/pipeline/RenderPipeline.h"
 #include "vk_renderer.h"
 #include "vk_renderable.h"
@@ -331,7 +331,7 @@ namespace Echo
             vkRenderable->bindShaderParams();
             vkRenderable->bindGeometry();
 
-            Mesh* mesh = renderable->getMesh();
+			MeshResPtr mesh = renderable->getMesh();
             if (mesh->getIndexBuffer())
             {
                 ui32 idxCount = mesh->getIndexCount();

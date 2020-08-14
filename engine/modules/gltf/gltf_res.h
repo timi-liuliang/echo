@@ -4,6 +4,7 @@
 #include "engine/core/math/Math.h"
 #include "engine/core/io/IO.h"
 #include "engine/core/scene/node.h"
+#include "engine/core/render/base/mesh/MeshRes.h"
 #include "engine/core/resource/Res.h"
 #include "engine/core/render/base/Material.h"
 #include "engine/modules/anim/anim_property.h"
@@ -27,7 +28,6 @@ namespace Echo
 		vector<ui32>::type	m_nodes;
 	};
 
-	class Mesh;
 	struct GltfPrimitive
 	{
 		ui32				m_indices = -1;		// index to accessor containing the indices
@@ -43,7 +43,7 @@ namespace Echo
 			TriangleFan
 		}					m_mode = Triangles; // each attribute is mapped with his name and accessor index to the data
 		GltfAttributes		m_attributes;
-		Mesh*				m_mesh = nullptr;	// geometry Data for render
+		MeshResPtr			m_mesh;				// geometry Data for render
         ShaderProgramPtr    m_shader;
 		MaterialPtr			m_materialInst;
 	};

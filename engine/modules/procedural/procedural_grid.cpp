@@ -37,7 +37,7 @@ namespace Echo
 			IndiceArray    indices;
 
 			if (!m_mesh)
-				m_mesh = Mesh::create(true, true);
+				m_mesh = MeshRes::create(true, true);
 
 			i32 columns = 11;
 			i32 rows = 11;

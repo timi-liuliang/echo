@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/core/render/base/mesh/Mesh.h"
+#include "engine/core/render/base/mesh/MeshRes.h"
 #include "engine/core/render/base/Material.h"
 #include "engine/core/render/base/Renderable.h"
 #include "../render/vertex_format.h"
@@ -57,7 +57,7 @@ namespace Echo
         WString                 m_text;
         ResourcePath            m_fontRes = ResourcePath("", ".ttf");
 		i32						m_fontSize = 24;
-        Mesh*                   m_mesh;            // Geometry Data for render
+        MeshResPtr              m_mesh;            // Geometry Data for render
         ShaderProgramPtr        m_shader;
         MaterialPtr             m_material;        // Material Instance
         Renderable*             m_renderable;

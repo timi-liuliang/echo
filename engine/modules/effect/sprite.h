@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/core/scene/render_node.h"
-#include "engine/core/render/base/mesh/Mesh.h"
+#include "engine/core/render/base/mesh/MeshRes.h"
 #include "engine/core/render/base/Material.h"
 #include "engine/core/render/base/Renderable.h"
 
@@ -53,7 +53,7 @@ namespace Echo
 		bool                    m_isRenderableDirty = true;
 		i32						m_width = 64;
 		i32						m_height = 64;
-		Mesh*					m_mesh = nullptr;			// Geometry Data for render
+		MeshResPtr				m_mesh;						// Geometry Data for render
 		MaterialPtr				m_material;		            // Material Instance
 		Renderable*				m_renderable = nullptr;
 	};

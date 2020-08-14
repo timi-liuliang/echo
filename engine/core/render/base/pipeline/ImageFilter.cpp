@@ -1,4 +1,4 @@
-#include "engine/core/render/base/mesh/Mesh.h"
+#include "engine/core/render/base/mesh/MeshRes.h"
 #include "engine/core/render/base/Renderer.h"
 #include "ImageFilter.h"
 
@@ -39,7 +39,7 @@ namespace Echo
 	void ImageFilter::clearRenderable()
 	{
 		EchoSafeRelease(m_renderable);
-		EchoSafeDelete(m_mesh, Mesh);
+		m_mesh.reset();
 	}
 
 	void ImageFilter::buildRenderable()
@@ -75,7 +75,7 @@ namespace Echo
 	void ImageFilter::updateMeshBuffer()
 	{
 		// create mesh
-		if (!m_mesh) m_mesh = Mesh::create(true, true);
+		if (!m_mesh) m_mesh = MeshRes::create(true, true);
 
 		// update data
 		VertexArray    vertices;

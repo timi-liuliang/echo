@@ -1,6 +1,6 @@
 #include "engine/core/log/Log.h"
 #include "model_module.h"
-#include "mesh_res.h"
+#include "mesh.h"
 #include "importer/gltf/gltf_importer.h"
 
 namespace Echo
@@ -24,7 +24,7 @@ namespace Echo
 
 	void ModelModule::registerTypes()
 	{
-		Class::registerType<MeshRes>();
+		Class::registerType<Mesh>();
 
 	#ifdef ECHO_EDITOR_MODE
 		Class::registerType<GltfImporter>();

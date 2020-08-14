@@ -5,11 +5,11 @@
 #include "Texture.h"
 #include "RenderState.h"
 #include "Material.h"
+#include "mesh/MeshRes.h"
 
 namespace Echo
 {
 	class Render;
-	class Mesh;
 	class Material;
 	class Renderable : public Object
 	{
@@ -20,14 +20,14 @@ namespace Echo
 		ui32 getIdentifier() const { return m_identifier; }
 
 		// create method
-		static Renderable* create(Mesh* mesh, Material* matInst, Render* node);
+		static Renderable* create(MeshResPtr mesh, Material* matInst, Render* node);
 
 		// release
 		void release();
 
 		// set mesh
-		Mesh* getMesh() { return m_mesh; }
-		virtual void setMesh(Mesh* mesh) = 0;
+		MeshResPtr getMesh() { return m_mesh; }
+		virtual void setMesh(MeshResPtr mesh) = 0;
 
 		// set material
 		virtual void setMaterial(Material* material) { m_material = material; }
@@ -51,7 +51,7 @@ namespace Echo
 	public:
 		ui32									m_identifier;
 		Render*									m_node = nullptr;
-		Mesh*									m_mesh = nullptr;
+		MeshResPtr								m_mesh;
 		MaterialPtr								m_material;
 	};
 	typedef ui32 RenderableID;

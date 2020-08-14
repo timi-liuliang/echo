@@ -24,7 +24,7 @@ namespace Echo
 
 	public:
 		// build
-		static class Mesh* buildUvSphere(float radius, i32 stackCount, i32 sectorCount);
+		static MeshResPtr buildUvSphere(float radius, i32 stackCount, i32 sectorCount);
 
 	protected:
 		Type	m_type;

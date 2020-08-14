@@ -2,7 +2,7 @@
 
 #include "engine/core/io/IO.h"
 #include "engine/core/scene/render_node.h"
-#include "engine/core/render/base/mesh/Mesh.h"
+#include "engine/core/render/base/mesh/MeshRes.h"
 #include "engine/core/render/base/Material.h"
 #include "engine/core/render/base/Renderable.h"
 #include "live2d_cubism_motion.h"
@@ -138,7 +138,7 @@ namespace Echo
 		vector<Drawable>::type	m_drawables;
 		MotionMap				m_motions;
 
-		Mesh*					m_mesh;				// Geometry Data for render
+		MeshResPtr				m_mesh;				// Geometry Data for render
 		MaterialPtr				m_material;			// Custom Material
         ShaderProgramPtr        m_shaderDefault;
 		MaterialPtr				m_materialDefault;

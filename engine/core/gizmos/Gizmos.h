@@ -2,7 +2,7 @@
 
 #include "engine/core/math/Math.h"
 #include "engine/core/render/base/Material.h"
-#include "engine/core/render/base/mesh/Mesh.h"
+#include "engine/core/render/base/mesh/MeshRes.h"
 #include "engine/core/render/base/Renderable.h"
 #include "engine/core/scene/render_node.h"
 
@@ -34,7 +34,7 @@ namespace Echo
 			VertexArray		m_vertexs;
 			IndiceArray		m_indices;
 			MaterialPtr		m_material;
-			Mesh*			m_mesh;
+			MeshResPtr		m_mesh;
 			Renderable*		m_renderable;
 			bool			m_meshDirty;
 

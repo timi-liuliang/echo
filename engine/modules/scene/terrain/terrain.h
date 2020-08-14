@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/core/scene/render_node.h"
-#include "engine/core/render/base/mesh/Mesh.h"
+#include "engine/core/render/base/mesh/MeshRes.h"
 #include "engine/core/render/base/Material.h"
 #include "engine/core/render/base/Renderable.h"
 #include "engine/core/render/base/image/Image.h"
@@ -83,7 +83,7 @@ namespace Echo
         vector<Image*>::type    m_layerImages;
 		float					m_heightRange = 256.f;
 		i32						m_gridSpacing = 1;
-        Mesh*                   m_mesh = nullptr;
+        MeshResPtr              m_mesh;
         MaterialPtr             m_material;
         Renderable*             m_renderable = nullptr;
         i32                     m_columns = 0;

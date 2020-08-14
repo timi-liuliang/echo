@@ -5,7 +5,7 @@
 #include "base/ShaderProgram.h"
 #include "base/pipeline/RenderPipeline.h"
 #include "base/Material.h"
-#include "base/mesh/Mesh.h"
+#include "base/mesh/MeshRes.h"
 #include "engine/core/scene/render_node.h"
 
 namespace Echo
@@ -25,7 +25,7 @@ namespace Echo
 		Renderer::instance()->destroyRenderables(&ptr, 1);
 	}
 
-	Renderable* Renderable::create(Mesh* mesh, Material* material, Render* node)
+	Renderable* Renderable::create(MeshResPtr mesh, Material* material, Render* node)
 	{
 		// bind shader param
 		Renderable* renderable = Renderer::instance()->createRenderable();

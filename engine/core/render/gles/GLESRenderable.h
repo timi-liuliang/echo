@@ -1,7 +1,7 @@
 #pragma once
 
 #include "base/Renderable.h"
-#include "base/mesh/Mesh.h"
+#include "base/mesh/MeshRes.h"
 
 namespace Echo
 {
@@ -47,7 +47,7 @@ namespace Echo
 
 	private:
 		// set mesh
-		virtual void setMesh(Mesh* mesh) override;
+		virtual void setMesh(MeshResPtr mesh) override;
 
 		// set material
 		virtual void setMaterial(Material* material) override;

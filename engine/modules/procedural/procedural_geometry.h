@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/core/scene/render_node.h"
-#include "engine/core/render/base/mesh/Mesh.h"
+#include "engine/core/render/base/mesh/MeshRes.h"
 #include "engine/core/render/base/Material.h"
 #include "engine/core/render/base/Renderable.h"
 
@@ -16,7 +16,7 @@ namespace Echo
 		virtual ~ProceduralGeometry();
 
 		// set mesh
-		void setMesh(Mesh* mesh);
+		void setMesh(MeshResPtr mesh);
 
 		// material
 		Material* getMaterial() const { return m_material; }
@@ -37,7 +37,7 @@ namespace Echo
 
 	protected:
 		bool					m_isRenderableDirty = true;
-		Mesh*					m_mesh = nullptr;
+		MeshResPtr				m_mesh;
 		MaterialPtr             m_material;
 		Renderable*				m_renderable = nullptr;
 	};

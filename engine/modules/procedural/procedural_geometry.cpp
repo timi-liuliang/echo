@@ -23,7 +23,7 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY_HINT(ProceduralGeometry, "Material", PropertyHintType::ResourceType, "Material");
 	}
 
-	void ProceduralGeometry::setMesh(Mesh* mesh)
+	void ProceduralGeometry::setMesh(MeshResPtr mesh)
 	{ 
 		m_mesh = mesh; 
 
@@ -84,6 +84,6 @@ namespace Echo
 	void ProceduralGeometry::clearRenderable()
 	{
 		EchoSafeRelease(m_renderable);
-		EchoSafeDelete(m_mesh, Mesh);
+		m_mesh.reset();
 	}
 }

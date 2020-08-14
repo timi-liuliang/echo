@@ -2,6 +2,7 @@
 
 #include "engine/core/geom/AABB.h"
 #include "MeshVertexData.h"
+#include "engine/core/resource/Res.h"
 
 namespace Echo
 {
@@ -9,8 +10,10 @@ namespace Echo
 	* Mesh 2013-11-6
 	*/
 	class GPUBuffer;
-	class Mesh
+	class MeshRes : public Res
 	{
+		ECHO_RES(MeshRes, Res, ".mesh", nullptr, MeshRes::load);
+
 	public:
 		enum TopologyType
 		{
@@ -27,10 +30,11 @@ namespace Echo
 		};
 
 	public:
-		~Mesh();
+		MeshRes() {}
+		~MeshRes();
 
 		// create
-		static Mesh* create(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer);
+		static MeshRes* create(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer);
 
 		// name
 		const String& getName() const { return m_name; }
@@ -78,7 +82,7 @@ namespace Echo
 		// is have bone data
 		bool isSkin() const { return isVertexUsage(VS_BLENDINDICES); }
 
-		// is vertex useage
+		// is vertex usage
 		bool isVertexUsage(VertexSemantic semantic) const { return m_vertData.isVertexUsage(semantic); }
 
 		// get vertex elements
@@ -110,12 +114,16 @@ namespace Echo
 		void clear();
 
 	protected:
-		Mesh(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer);
+		MeshRes(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer);
+
+		// load|save
+		static Res* load(const ResourcePath& path);
+		virtual void save() override;
 
 		// get memory usage
 		ui32 getMemeoryUsage() const;
 
-		// calc tangent data
+		// calculate tangent data
 		void buildTangentData();
 
 		// build buffer
@@ -135,11 +143,12 @@ namespace Echo
 		ui32						m_idxStride = 0;
 		vector<Byte>::type			m_indices;
 		MeshVertexData				m_vertData;
-		bool						m_isDynamicVertexBuffer;
+		bool						m_isDynamicVertexBuffer = false;
 		GPUBuffer*					m_vertexBuffer = nullptr;
-		bool						m_isDynamicIndicesBuffer;
+		bool						m_isDynamicIndicesBuffer = false;
 		GPUBuffer*					m_indexBuffer = nullptr;
 		vector<ui32>::type			m_boneIdxs;
 	};
+	typedef Echo::ResRef<Echo::MeshRes> MeshResPtr;
 }
 

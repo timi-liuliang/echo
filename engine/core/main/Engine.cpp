@@ -146,6 +146,7 @@ namespace Echo
 		Class::registerType<Texture>();
 		Class::registerType<ShaderProgram>();
 		Class::registerType<Material>();
+		Class::registerType<MeshRes>();
 		Class::registerType<LuaScript>();
 		Class::registerType<TextureCube>();
 		Class::registerType<GameSettings>();

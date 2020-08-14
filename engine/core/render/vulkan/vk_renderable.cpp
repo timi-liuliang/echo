@@ -12,7 +12,7 @@ namespace Echo
     {
     }
 
-    void VKRenderable::setMesh(Mesh* mesh)
+    void VKRenderable::setMesh(MeshResPtr mesh)
     {
         m_mesh = mesh;
 
