@@ -15,6 +15,12 @@ namespace Echo
 
 		// name
 		virtual const char* getName() override { return "GLTF"; }
+
+		// import
+		virtual void run(const char* targetFolder);
+
+	private:
+		String		m_gltfFile;
 	};
 }
 #endif

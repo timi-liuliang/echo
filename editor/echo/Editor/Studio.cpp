@@ -22,6 +22,7 @@
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/io/IO.h>
 #include "EchoEngine.h"
+#include <QFileDialog>
 
 namespace Studio
 {
@@ -222,34 +223,6 @@ namespace Studio
 		Echo::Engine::instance()->setRootPath(m_rootPath);
 	}
 
-	bool AStudio::deleteResource(const char* res)
-	{
-
-		return false;
-	}
-
-	bool AStudio::isResCanbeDeleted(const char* res)
-	{
-		return true;
-	}
-
-	Echo::String AStudio::getThumbnailPath(const Echo::String& filePath, bool needOldExt)
-	{
-		Echo::String fileName = Echo::PathUtil::GetPureFilename(filePath, needOldExt);
-		Echo::String appPath = Echo::PathUtil::GetCurrentDir();
-
-		unsigned int projectHash = Echo::BKDRHash(Echo::Engine::instance()->getConfig().m_projectFile.c_str());
-		Echo::String thumbnailPath = Echo::StringUtil::Format("%s/Cache/project_%d/thumbnail/%s.bmp", appPath.c_str(), projectHash, fileName.c_str());
-
-		return thumbnailPath;
-	}
-
-	void AStudio::resetCamera(float diroffset)
-	{
-		//auto* renderWindow = static_cast<RenderWindow*>(getRenderWindow());
-		//renderWindow->getInputController()->onInitCameraSettings(diroffset);
-	}
-
 	void AStudio::showBottomPanel(Echo::PanelTab* bottomPanel)
 	{
 		MainWindow::instance()->getBottomPanel()->showPanel( bottomPanel);
@@ -279,6 +252,17 @@ namespace Studio
 	const Echo::String AStudio::selectAProperty(Echo::Object* objectPtr)
 	{
 		return PropertyChooseDialog::getSelectingProperty(nullptr, objectPtr);
+	}
+
+	const Echo::String AStudio::selectAFile(const char* title, const char* exts)
+	{
+		QString resFile = QFileDialog::getOpenFileName(nullptr, title, "", exts);
+		if (!resFile.isEmpty())
+		{
+			return resFile.toStdString().c_str();
+		}
+
+		return Echo::StringUtil::BLANK;
 	}
 
 	Echo::ImagePtr AStudio::getNodeIcon( Echo::Node* node)

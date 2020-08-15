@@ -316,6 +316,7 @@ namespace Studio
 			Echo::Importer* importer = (Echo::Importer*)Echo::Class::create(className);
 			if (importer)
 			{
+				importer->run(m_currentDir.c_str());
 			}
 		}
 	}

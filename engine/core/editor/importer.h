@@ -15,6 +15,9 @@ namespace Echo
 
 		// name
 		virtual const char* getName() { return ""; }
+
+		// import
+		virtual void run(const char* targetFolder) {}
 	};
 }
 #endif

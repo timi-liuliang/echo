@@ -142,58 +142,30 @@ namespace QT_UI
 		Echo::String fileExt = Echo::PathUtil::GetFileExt(fileName);
 		Echo::String filePreTex;
 
-		// 是否需要预览
 		if (!IsNeedPreview(fileExt.c_str()))
 			return;
-		if (fileExt == "bank")
-		{
-			// 获取所有声音事件
-			//if (EchoAudioManager)
-			{
-				//Echo::StringArray bankEvents;
-				//Echo::FSAudioManager::instance()->getAudioEvents(bankEvents, fileName.c_str());
-				//for (size_t i = 0; i < bankEvents.size(); i++)
-				{
-					//if (!m_searchName.isEmpty())
-					//{
-					//	if (QString::fromStdString(bankEvents[i]).contains(m_searchName))
-					//	{
-					//		addItem(m_isNeedFullPath ? filePath : bankEvents[i].c_str(), ":/icon/Icon/AudioSource.png");
-					//	}
-					//}
-					//else
-					{
-						//newItem = createItem(m_isNeedFullPath ? filePath : bankEvents[i].c_str(), ":/icon/Icon/AudioSource.png");
-						//results.push_back(newItem);
-					}
-				}
-			}
-		}
+
+		Echo::String thumbNailFile;// = Studio::AStudio::instance()->getThumbnailPath(fileName);
+
+		IconMap::iterator it = m_iconMaps.find(fileExt);
+		if (QFile::exists(QString(thumbNailFile.c_str())))
+			filePreTex = thumbNailFile.c_str();
+		else if (it != m_iconMaps.end())
+			filePreTex = it->second;
 		else
+			filePreTex = ":///icon/Icon/xml.png";
+
+		//if (!m_searchName.isEmpty())
+		//{
+		//	if (QString::fromStdString(fileName).contains(m_searchName))
+		//	{
+		//		addItem(filePath, filePreTex.c_str());
+		//	}
+		//}
+		//else
 		{
-			Echo::String thumbNailFile = Studio::AStudio::instance()->getThumbnailPath(fileName);
-			Echo::String fileExt = Echo::PathUtil::GetFileExt(fileName, false);
-
-			IconMap::iterator it = m_iconMaps.find(fileExt);
-			if (QFile::exists(QString(thumbNailFile.c_str())))
-				filePreTex = thumbNailFile.c_str();
-			else if (it != m_iconMaps.end())
-				filePreTex = it->second;
-			else
-				filePreTex = ":///icon/Icon/xml.png";
-
-			//if (!m_searchName.isEmpty())
-			//{
-			//	if (QString::fromStdString(fileName).contains(m_searchName))
-			//	{
-			//		addItem(filePath, filePreTex.c_str());
-			//	}
-			//}
-			//else
-			{
-				newItem = createItem(filePath, filePreTex.c_str());
-				results.push_back(newItem);
-			}
+			newItem = createItem(filePath, filePreTex.c_str());
+			results.push_back(newItem);
 		}
 		//return newItem;
 	}
@@ -219,7 +191,7 @@ namespace QT_UI
 		//QListWidgetItem* widgetItem = NULL;
 		QStandardItem* widgetItem = NULL;
 
-		// 生成缩略图
+		// generate thumbnail
 		Echo::String thumbnailPath;
 		if( !icon.isEmpty() && icon[0] == ':')
 		{
@@ -250,7 +222,6 @@ namespace QT_UI
 		}
 		addToolTips(widgetItem, text);
 
-		// 设置属性
 		if (widgetItem)
 		{
 			widgetItem->setSizeHint(QSize( m_iconWidth, m_iconHeight));
@@ -269,10 +240,6 @@ namespace QT_UI
 
 	QString QPreviewWidget::getCurrentSelect()
 	{
-		//QListWidgetItem* item = m_listWidget->currentItem();
-
-		//return item ? item->data(Qt::UserRole).toString() : "";
-
 		const QModelIndex proxyIndex = m_listView->currentIndex();
 		const QModelIndex currentIndex = m_listProxyModel->mapToSource(proxyIndex);
 		return m_listModel->data(currentIndex, Qt::UserRole).toString();

@@ -23,53 +23,36 @@ namespace Studio
 		// instance
 		static AStudio* instance();
 
-		// 启动
+		// start|close
 		void Start();
-
-		// 关闭
 		void Close();
 
-		// 设置程序工作路径
+		// app path
 		void setAppPath( const char* appPath);
-
-		// 获取程序工作路径
 		const char* getAppPath() const { return m_appPath.c_str(); }
 
 		// get editor root path
 		const Echo::String& getRootPath();
 
-		// 获取配置管理器
+		// config manager
 		ConfigMgr* getConfigMgr() { return m_projectCfg; }
-
-		// 获取日志窗口
-		LogPanel* getLogPanel() { return m_logPanel; }
-
-		// 获取渲染窗口
-		virtual RenderWindow* getRenderWindow();
-
-		// thumbnail
-		Echo::String getThumbnailPath( const Echo::String& filePath,bool needOldExt = true);
-		
-		// 重置摄像机参数
-		virtual void resetCamera(float diroffset = 0);
-
-		// 设置渲染窗口控制器
+	
+		// input controller
 		virtual void setRenderWindowController( IRWInputController* controller);
-
 		virtual IRWInputController* getRenderWindowController();
-
-	public:
-		// 资源是否可被删除
-		virtual bool isResCanbeDeleted( const char* res);
-
-		// 删除资源
-		virtual bool deleteResource(const char* res);
 
 	public:
 		// get main window
 		QWidget* getMainWindow();
 		ProjectWnd* getProjectWindow();
 		QDockWidget* getPropertyPanel();
+
+		// render window
+		virtual RenderWindow* getRenderWindow();
+
+		// log panel
+		LogPanel* getLogPanel() { return m_logPanel; }
+
 
 		// open project
 		void OpenProject( const char* fileName);
@@ -93,6 +76,9 @@ namespace Studio
 
 		// select a object's property
 		virtual const Echo::String selectAProperty(Echo::Object* objectPtr) override;
+
+		// select a file in os
+		virtual const Echo::String selectAFile(const char* title, const char* exts) override;
 
 	public:
 		// get node icon by class name

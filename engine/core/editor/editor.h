@@ -36,7 +36,10 @@ namespace Echo
 		virtual const String selectAResObject(const char* exts)=0;
 
 		// select a object's property
-		virtual const Echo::String selectAProperty(Object* objectPtr)=0;
+		virtual const String selectAProperty(Object* objectPtr)=0;
+
+        // select a file in os
+        virtual const String selectAFile(const char* title, const char* exts)=0;
 
 	public:
 		// get node icon by class name
