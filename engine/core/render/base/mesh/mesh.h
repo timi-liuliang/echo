@@ -113,12 +113,12 @@ namespace Echo
 		// clear
 		void clear();
 
-	protected:
-		MeshRes(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer);
-
 		// load|save
 		static Res* load(const ResourcePath& path);
 		virtual void save() override;
+
+	protected:
+		MeshRes(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer);
 
 		// get memory usage
 		ui32 getMemeoryUsage() const;

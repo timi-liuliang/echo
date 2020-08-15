@@ -1,4 +1,5 @@
 #include "gltf_importer.h"
+#include "gltf_loader.h"
 #include "engine/core/editor/editor.h"
 
 #ifdef ECHO_EDITOR_MODE
@@ -25,7 +26,27 @@ namespace Echo
 			m_gltfFile = EditorApi.selectAFile("Import GLTF", "*.gltf");
 			if (!m_gltfFile.empty())
 			{
-				int a = 10;
+				Gltf::Loader loader;
+				if (loader.load(m_gltfFile))
+				{
+					// save meshes
+					saveMeshs(loader);
+				}
+			}
+		}
+	}
+
+	void GltfImporter::saveMeshs(Gltf::Loader& loader)
+	{
+		for (Gltf::MeshInfo& meshInfo : loader.m_meshes)
+		{
+			for (Gltf::Primitive& primitiveInfo : meshInfo.m_primitives)
+			{
+				MeshResPtr mesh = primitiveInfo.m_mesh;
+				if (mesh)
+				{
+					mesh->save();
+				}
 			}
 		}
 	}

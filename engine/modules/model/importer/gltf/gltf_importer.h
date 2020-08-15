@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/core/editor/importer.h"
+#include "gltf_loader.h"
 
 #ifdef ECHO_EDITOR_MODE
 namespace Echo
@@ -19,8 +20,12 @@ namespace Echo
 		// import
 		virtual void run(const char* targetFolder);
 
+		// save
+		void saveMeshs(Gltf::Loader& loader);
+
 	private:
 		String		m_gltfFile;
+		String		m_targetFoler;
 	};
 }
 #endif
