@@ -151,8 +151,6 @@ namespace Echo
 	void MeshVertexData::setPosition(int idx, const Vector3& pos)
 	{
 		*(Vector3*)(getVertice(idx) + m_format.m_posOffset) = pos;
-
-		//m_aabb.addPoint(pos);
 	}
 
 	void MeshVertexData::setColor(i32 idx, Dword color)
@@ -222,6 +220,33 @@ namespace Echo
 	{
 		m_count = 0;
 		m_vertices.clear();
-		//m_aabb.reset();
+	}
+
+	MeshVertexData::ByteArray MeshVertexData::getPositions()
+	{
+		ByteArray result;
+		result.resize(sizeof(Vector3) * getVertexCount());
+
+		Vector3* dataPtr = (Vector3*)(&result[0]);
+		for (size_t i = 0; i < m_count; ++i)
+		{
+			dataPtr[i] = getPosition(i);
+		}
+
+		return result;
+	}
+
+	MeshVertexData::ByteArray MeshVertexData::getUV0s()
+	{
+		ByteArray result;
+		result.resize(sizeof(Vector2) * getVertexCount());
+
+		Vector2* dataPtr = (Vector2*)(&result[0]);
+		for (size_t i = 0; i < m_count; ++i)
+		{
+			dataPtr[i] = getUV0(i);
+		}
+
+		return result;
 	}
 }

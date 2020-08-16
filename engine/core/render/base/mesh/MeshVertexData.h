@@ -121,6 +121,11 @@ namespace Echo
 		// reset
 		void reset();
 
+	public:
+		// get data
+		ByteArray getPositions();
+		ByteArray getUV0s();
+
 	private:
 		ui32				m_count;
 		MeshVertexFormat	m_format;
