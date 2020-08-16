@@ -2,6 +2,9 @@
 #include "mesh.h"
 #include "engine/core/render/base/Renderer.h"
 #include <algorithm>
+#include <thirdparty/pugixml/pugixml.hpp>
+#include "engine/core/util/magic_enum.hpp"
+#include "engine/core/io/IO.h"
 
 namespace Echo
 {
@@ -261,6 +264,56 @@ namespace Echo
 
 	void MeshRes::save()
 	{
+		pugi::xml_document doc;
 
+		// root node
+		pugi::xml_node root = doc.append_child("mesh");
+		root.append_attribute("topology").set_value(std::string(magic_enum::enum_name(m_topologyType)).c_str());
+
+		// indices
+		pugi::xml_node indices = root.append_child("indices");
+		indices.append_attribute("count").set_value(getIndexCount());
+		indices.append_attribute("stride").set_value(getIndexStride());
+
+		// vertex
+		const MeshVertexFormat& format = m_vertData.getFormat();
+		pugi::xml_node vertex = root.append_child("vertex");
+		vertex.append_attribute("count").set_value(m_vertData.getVertexCount());
+		vertex.append_attribute("stride").set_value(m_vertData.getVertexStride());
+		vertex.append_attribute("isUseNormal").set_value(format.m_isUseNormal);
+		vertex.append_attribute("isUseVertexColor").set_value(format.m_isUseVertexColor);
+		vertex.append_attribute("isUseUV").set_value(format.m_isUseUV);
+		vertex.append_attribute("isUseLightmapUV").set_value(format.m_isUseLightmapUV);
+		vertex.append_attribute("isUseBlendingData").set_value(format.m_isUseBlendingData);
+		vertex.append_attribute("isUseTangentBinormal").set_value(format.m_isUseTangentBinormal);
+
+		// to string
+		std::ostringstream xmlstream;
+		doc.save(xmlstream);
+
+		// save
+		DataStream* stream = IO::instance()->open(m_path.getPath(), DataStream::WRITE);
+		if (stream && stream->isWriteable())
+		{
+			// header
+			i32 headerSize = xmlstream.str().size();
+			stream->write(&headerSize, sizeof(headerSize));
+			stream->write(xmlstream.str().data(), headerSize);
+
+			// data
+			if (getIndexCount())
+			{
+				stream->write(getIndices(), getIndexStride() * getIndexCount());
+			}
+
+			if (getVertexCount())
+			{
+				stream->write(m_vertData.getVertices(), m_vertData.getByteSize());
+			}
+
+			// close
+			stream->close();
+			EchoSafeDelete(stream, DataStream);
+		}
 	}
 }

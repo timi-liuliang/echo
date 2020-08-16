@@ -23,14 +23,17 @@ namespace Echo
 	{
 		if (m_gltfFile.empty())
 		{
-			m_gltfFile = EditorApi.selectAFile("Import GLTF", "*.gltf");
-			if (!m_gltfFile.empty())
+			if (IO::instance()->convertFullPathToResPath(targetFolder, m_targetFoler))
 			{
-				Gltf::Loader loader;
-				if (loader.load(m_gltfFile))
+				m_gltfFile = EditorApi.selectAFile("Import GLTF", "*.gltf");
+				if (!m_gltfFile.empty())
 				{
-					// save meshes
-					saveMeshs(loader);
+					Gltf::Loader loader;
+					if (loader.load(m_gltfFile))
+					{
+						// save meshes
+						saveMeshs(loader);
+					}
 				}
 			}
 		}
@@ -45,6 +48,7 @@ namespace Echo
 				MeshResPtr mesh = primitiveInfo.m_mesh;
 				if (mesh)
 				{
+					mesh->setPath(m_targetFoler + "/" + meshInfo.m_name + ".mesh");
 					mesh->save();
 				}
 			}
