@@ -1027,7 +1027,7 @@ namespace Gltf
 
 	bool Loader::buildMaterial(int meshIdx, int primitiveIdx)
 	{
-		return false;
+		return true;
 
 		Primitive& primitive = m_meshes[meshIdx].m_primitives[primitiveIdx];
 		MaterialInfo& matInfo = primitive.m_material != -1 ? m_materials[primitive.m_material] : MaterialInfo::DEFAULT;

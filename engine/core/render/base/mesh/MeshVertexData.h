@@ -124,6 +124,7 @@ namespace Echo
 	public:
 		// get data
 		ByteArray getPositions();
+		ByteArray getNormals();
 		ByteArray getUV0s();
 
 	private:

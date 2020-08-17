@@ -236,6 +236,23 @@ namespace Echo
 		return result;
 	}
 
+	MeshVertexData::ByteArray MeshVertexData::getNormals()
+	{
+		ByteArray result;
+		result.resize(sizeof(Byte) * 3 * getVertexCount());
+
+		Byte* dataPtr = (Byte*)(&result[0]);
+		for (size_t i = 0; i < m_count; ++i)
+		{
+			const Vector3& normal = getNormal(i);
+			dataPtr[i * 3 + 0] = (normal.x + 1.f) * 0.5f * 255;
+			dataPtr[i * 3 + 1] = (normal.y + 1.f) * 0.5f * 255;
+			dataPtr[i * 3 + 2] = (normal.z + 1.f) * 0.5f * 255;
+		}
+
+		return result;
+	}
+
 	MeshVertexData::ByteArray MeshVertexData::getUV0s()
 	{
 		ByteArray result;

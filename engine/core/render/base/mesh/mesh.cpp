@@ -290,7 +290,8 @@ namespace Echo
 		// normal
 		if (m_vertData.getFormat().m_isUseNormal)
 		{
-
+			MeshVertexData::ByteArray normals = m_vertData.getNormals();
+			writer.addData("Normal", "Byte3", normals.data(), normals.size());
 		}
 
 		// color
