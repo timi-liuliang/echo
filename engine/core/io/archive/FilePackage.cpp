@@ -1,4 +1,4 @@
-#include "engine/core/io/archive/ResourcePack.h"
+#include "FilePackage.h"
 #include "engine/core/util/PathUtil.h"
 #include "zlib/zlib.h"
 #include "engine/core/util/AssertX.h"

@@ -5,7 +5,6 @@
 #include "engine/core/thread/Threading.h"
 #include "stream/DataStream.h"
 #include "MemoryReader.h"
-#include "archive/Archive.h"
 #include "archive/FileSystem.h"
 
 namespace Echo

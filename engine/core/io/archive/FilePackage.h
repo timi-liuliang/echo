@@ -10,9 +10,6 @@
 
 namespace Echo
 {
-	/**
-	 * ×ÊÔ´°ü
-	 */
 	class ResourcePack
 	{
 	public:
