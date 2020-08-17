@@ -3,7 +3,7 @@
 #include "engine/core/resource/Res.h"
 #include <engine/core/util/Buffer.h>
 #include <engine/core/math/Rect.h>
-#include <engine/core/io/DataStream.h>
+#include <engine/core/io/stream/DataStream.h>
 #include "RenderState.h"
 #include "image/PixelFormat.h"
 

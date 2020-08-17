@@ -1,5 +1,5 @@
 #include <engine/core/io/IO.h>
-#include <engine/core/io/DataStream.h>
+#include <engine/core/io/stream/DataStream.h>
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/base/echo_def.h>
 #include "base/Texture.h"

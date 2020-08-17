@@ -1,7 +1,6 @@
-#ifndef __ECHO_ZIP_ARCHIVE_H__
-#define __ECHO_ZIP_ARCHIVE_H__
+#pragma once
 
-#include <engine/core/io/DataStream.h>
+#include <engine/core/io/stream/MemoryDataStream.h>
 #include "Archive.h"
 #include "ResourcePack.h"
 
@@ -56,5 +55,3 @@ namespace Echo
 			:	MemoryDataStream(strName, pvMem, uSize, bFreeOnClose, bReadOnly) {}
 	};
 }
-
-#endif

@@ -3,6 +3,7 @@
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/main/Engine.h>
 #include <engine/core/main/module.h>
+#include <engine/core/io/stream/FileHandleDataStream.h>
 
 namespace Echo
 {

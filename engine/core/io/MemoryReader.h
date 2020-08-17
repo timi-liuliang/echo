@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DataStream.h"
+#include "stream/DataStream.h"
 
 namespace Echo
 {

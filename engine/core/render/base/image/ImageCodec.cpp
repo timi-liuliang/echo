@@ -1,5 +1,5 @@
 #include "engine/core/log/Log.h"
-#include "engine/core/io/DataStream.h"
+#include "engine/core/io/stream/MemoryDataStream.h"
 #include "ImageCodec.h"
 #include <thirdparty/FreeImage/FreeImage.h>
 

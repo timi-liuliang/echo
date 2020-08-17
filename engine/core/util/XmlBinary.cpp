@@ -10,7 +10,48 @@ namespace Echo
 
 	XmlBinaryReader::~XmlBinaryReader()
 	{
+		EchoSafeDelete(m_stream, DataStream);
+	}
 
+	pugi::xml_node XmlBinaryReader::getRoot()
+	{
+		return m_doc.child("header");
+	}
+
+	bool XmlBinaryReader::load(const char* path)
+	{
+		m_stream = IO::instance()->open(path, DataStream::READ);
+		if (m_stream)
+		{
+			i32 headerSize = 0;
+			m_stream->seek(-sizeof(i32), SEEK_END);
+			m_stream->read(&headerSize, sizeof(i32));
+			if (m_stream->size() > (headerSize + sizeof(i32)))
+			{
+				String header64Str;
+				header64Str.resize(headerSize + 1);
+				m_stream->seek(-sizeof(i32) - headerSize, SEEK_END);
+				m_stream->read(&header64Str[0], headerSize);
+				header64Str[headerSize] = '\0';
+				Base64String header64(header64Str.c_str());
+				String xmlContent = header64.decode();
+				
+				if (m_doc.load_buffer(xmlContent.data(), xmlContent.size()))
+				{
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	bool XmlBinaryReader::getData(const char* name, XmlBinaryReader::Data& binaryData)
+	{
+		binaryData.m_name = name;
+		//binaryData.m_type = 
+
+		return true;
 	}
 
 	XmlBinaryWriter::XmlBinaryWriter()

@@ -257,7 +257,22 @@ namespace Echo
 		if (!path.isEmpty())
 		{
 			MeshRes* res = EchoNew(MeshRes);
-			return res;
+			if (res)
+			{
+				XmlBinaryReader reader;
+				if (reader.load(path.getPath().c_str()))
+				{
+					// root node
+					pugi::xml_node root = reader.getRoot();
+					String topology = root.attribute("topology").as_string();
+
+					// indices
+					pugi::xml_node indices = root.child("indices");
+					i32 indexCount = indices.attribute("count").as_int();
+
+					return res;
+				}
+			}
 		}
 
 		return nullptr;
@@ -274,7 +289,6 @@ namespace Echo
 		// indices
 		pugi::xml_node indices = root.append_child("indices");
 		indices.append_attribute("count").set_value(getIndexCount());
-		indices.append_attribute("stride").set_value(getIndexStride());
 		writer.addData("Indices", "Word", getIndices(), getIndexCount() * getIndexStride());
 
 		// vertex

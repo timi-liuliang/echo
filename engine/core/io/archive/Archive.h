@@ -2,7 +2,7 @@
 
 #include <functional>
 #include "engine/core/util/StringUtil.h"
-#include "engine/core/io/DataStream.h"
+#include "engine/core/io/stream/DataStream.h"
 
 namespace Echo
 {

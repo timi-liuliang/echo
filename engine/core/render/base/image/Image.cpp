@@ -2,6 +2,7 @@
 #include <engine/core/util/Exception.h>
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/io/IO.h>
+#include <engine/core/io/stream/MemoryDataStream.h>
 #include "Image.h"
 #include "ImageResampler.h"
 #include "ImageCodec.h"

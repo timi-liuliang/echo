@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/core/io/DataStream.h"
+#include "engine/core/io/stream/DataStream.h"
 #include "engine/core/resource/ResourcePath.h"
 #include "live2d_cubism_motion_res.h"
 

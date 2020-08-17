@@ -1,5 +1,5 @@
 #include "gltf_loader.h"
-#include "engine/core/io/DataStream.h"
+#include "engine/core/io/stream/DataStream.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/util/base64.h"

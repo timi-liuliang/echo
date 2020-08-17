@@ -2,14 +2,37 @@
 
 #include "engine/core/memory/MemAllocDef.h"
 #include <thirdparty/pugixml/pugixml.hpp>
+#include "engine/core/io/stream/DataStream.h"
 
 namespace Echo
 {
 	class XmlBinaryReader
 	{
 	public:
+		// data
+		struct Data
+		{
+			String	m_name;
+			String	m_type;
+			
+		};
+
+	public:
 		XmlBinaryReader();
 		~XmlBinaryReader();
+
+		// root node
+		pugi::xml_node getRoot();
+
+		// get data
+		bool getData(const char* name, Data& binaryData);
+
+		// load
+		bool load(const char* path);
+
+	private:
+		pugi::xml_document  m_doc;
+		DataStream*			m_stream = nullptr;
 	};
 
 	class XmlBinaryWriter

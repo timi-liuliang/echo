@@ -3,7 +3,7 @@
 #include <functional>
 #include "engine/core/base/object.h"
 #include "engine/core/thread/Threading.h"
-#include "DataStream.h"
+#include "stream/DataStream.h"
 #include "MemoryReader.h"
 #include "archive/Archive.h"
 #include "archive/FileSystem.h"

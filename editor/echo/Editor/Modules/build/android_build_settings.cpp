@@ -5,6 +5,7 @@
 #include <thirdparty/pugixml/pugixml.hpp>
 #include "FreeImageHelper.h"
 #include <engine/core/main/module.h>
+#include <engine/core/io/stream/FileHandleDataStream.h>
 
 namespace Echo
 {
