@@ -226,7 +226,7 @@ namespace Echo
 		if (m_settings.m_polygonMode != RasterizerState::PM_FILL)
 		{
 			MeshResPtr mesh = renderable->getMesh();
-			if (mesh->getTopologyType() == MeshRes::TT_TRIANGLELIST && mesh->getIndexBuffer())
+			if (mesh->getTopologyType() == Mesh::TT_TRIANGLELIST && mesh->getIndexBuffer())
 			{
 				vector<i32>::type newIndices;
 				for (i32 i = 0; i < mesh->getFaceCount(); i++)
@@ -272,7 +272,7 @@ namespace Echo
 				shaderProgram->bindRenderable(renderable);
 
 				// set the type of primitive that should be rendered from this vertex buffer
-				GLenum glTopologyType = GLES2Mapping::MapPrimitiveTopology(MeshRes::TT_LINELIST);
+				GLenum glTopologyType = GLES2Mapping::MapPrimitiveTopology(Mesh::TT_LINELIST);
 
 				//set the index buffer to active in the input assembler
 				if (m_wireFrameIndexBuffer)

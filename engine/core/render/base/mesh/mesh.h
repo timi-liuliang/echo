@@ -10,9 +10,9 @@ namespace Echo
 	* Mesh 2013-11-6
 	*/
 	class GPUBuffer;
-	class MeshRes : public Res
+	class Mesh : public Res
 	{
-		ECHO_RES(MeshRes, Res, ".mesh", nullptr, MeshRes::load);
+		ECHO_RES(Mesh, Res, ".mesh", nullptr, Mesh::load);
 
 	public:
 		enum TopologyType
@@ -30,11 +30,11 @@ namespace Echo
 		};
 
 	public:
-		MeshRes() {}
-		~MeshRes();
+		Mesh() {}
+		~Mesh();
 
 		// create
-		static MeshRes* create(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer);
+		static Mesh* create(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer);
 
 		// name
 		const String& getName() const { return m_name; }
@@ -118,7 +118,7 @@ namespace Echo
 		virtual void save() override;
 
 	protected:
-		MeshRes(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer);
+		Mesh(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer);
 
 		// get memory usage
 		ui32 getMemeoryUsage() const;
@@ -149,6 +149,6 @@ namespace Echo
 		GPUBuffer*					m_indexBuffer = nullptr;
 		vector<ui32>::type			m_boneIdxs;
 	};
-	typedef Echo::ResRef<Echo::MeshRes> MeshResPtr;
+	typedef Echo::ResRef<Echo::Mesh> MeshResPtr;
 }
 

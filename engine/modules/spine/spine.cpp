@@ -217,7 +217,7 @@ namespace Echo
 			define.m_isUseVertexColor = true;
 			define.m_isUseUV = true;
 
-			m_mesh = MeshRes::create(true, true);
+			m_mesh = Mesh::create(true, true);
 			m_mesh->updateIndices(ui32(m_batch.m_indicesData.size()), sizeof(Word), m_batch.m_indicesData.data());
 			m_mesh->updateVertexs(define, ui32(m_batch.m_verticesData.size()), (const Byte*)m_batch.m_verticesData.data());
             

@@ -178,7 +178,7 @@ namespace Echo
     void Terrain::updateMeshBuffer()
     {
 		// create mesh
-		if (!m_mesh) m_mesh = MeshRes::create(true, true);
+		if (!m_mesh) m_mesh = Mesh::create(true, true);
 
 		// update data
         VertexArray    vertices;

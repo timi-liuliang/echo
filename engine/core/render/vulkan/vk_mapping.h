@@ -11,7 +11,7 @@ namespace Echo
     {
     public:
         // mapping primitive topology type
-        static VkPrimitiveTopology MapPrimitiveTopology(MeshRes::TopologyType type);
+        static VkPrimitiveTopology MapPrimitiveTopology(Mesh::TopologyType type);
 
         // mapping vertex semantic
         static String MapVertexSemanticString(VertexSemantic semantic);

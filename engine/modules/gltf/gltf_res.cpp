@@ -961,7 +961,7 @@ namespace Echo
 		// create mesh
 		if (!primitive.m_mesh)
 		{
-			primitive.m_mesh = MeshRes::create(true, true);
+			primitive.m_mesh = Mesh::create(true, true);
 
 			// update indices
 			if(indicesDataVoid)

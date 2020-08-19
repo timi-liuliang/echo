@@ -9,39 +9,39 @@
 
 namespace Echo
 {
-	MeshRes* MeshRes::create(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer)
+	Mesh* Mesh::create(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer)
 	{
-		return EchoNew(MeshRes(isDynamicVertexBuffer, isDynamicIndicesBuffer));
+		return EchoNew(Mesh(isDynamicVertexBuffer, isDynamicIndicesBuffer));
 	}
 
-	MeshRes::MeshRes(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer)
+	Mesh::Mesh(bool isDynamicVertexBuffer, bool isDynamicIndicesBuffer)
 		: m_topologyType(TT_TRIANGLELIST)
 		, m_isDynamicVertexBuffer(isDynamicVertexBuffer)
 		, m_isDynamicIndicesBuffer(isDynamicIndicesBuffer)
 	{
 	}
 
-	MeshRes::~MeshRes()
+	Mesh::~Mesh()
 	{
 		clear();
 	}
 
-	void MeshRes::bindMethods()
+	void Mesh::bindMethods()
 	{
 
 	}
 
-	GPUBuffer* MeshRes::getVertexBuffer() const
+	GPUBuffer* Mesh::getVertexBuffer() const
 	{
 		return m_vertexBuffer;
 	}
 
-	GPUBuffer* MeshRes::getIndexBuffer() const
+	GPUBuffer* Mesh::getIndexBuffer() const
 	{
 		return m_indexBuffer;
 	}
 
-	void MeshRes::buildTangentData()
+	void Mesh::buildTangentData()
 	{
 		ui32 faceCount = getFaceCount();
 
@@ -93,7 +93,7 @@ namespace Echo
 		}
 	}
 
-	void MeshRes::clear()
+	void Mesh::clear()
 	{
 		m_indices.clear();
 		m_indices.shrink_to_fit();
@@ -104,12 +104,12 @@ namespace Echo
 		m_vertData.reset();
 	}
 
-	ui32 MeshRes::getIndexCount() const
+	ui32 Mesh::getIndexCount() const
 	{
 		return m_idxCount;
 	}
 
-	ui32 MeshRes::getFaceCount() const
+	ui32 Mesh::getFaceCount() const
 	{
 		ui32 count = m_indexBuffer ? m_idxCount : getVertexCount();
 		switch (m_topologyType)
@@ -123,22 +123,22 @@ namespace Echo
 		}
 	}
 
-	ui32 MeshRes::getIndexStride() const
+	ui32 Mesh::getIndexStride() const
 	{
 		return m_idxStride;
 	}
 
-	Word* MeshRes::getIndices() const
+	Word* Mesh::getIndices() const
 	{
 		return (Word*)m_indices.data();
 	}
 
-	ui32 MeshRes::getMemeoryUsage() const
+	ui32 Mesh::getMemeoryUsage() const
 	{
 		return m_vertData.getVertexStride()*m_vertData.getVertexCount() + m_idxCount*m_idxStride;
 	}
 
-	void MeshRes::generateTangentData(bool useNormalMap)
+	void Mesh::generateTangentData(bool useNormalMap)
 	{
 		if (useNormalMap)
 		{
@@ -152,12 +152,12 @@ namespace Echo
 		}
 	}
 
-	const VertexElementList& MeshRes::getVertexElements() const
+	const VertexElementList& Mesh::getVertexElements() const
 	{
 		return m_vertData.getFormat().m_vertexElements;
 	}
 
-	bool MeshRes::buildBuffer()
+	bool Mesh::buildBuffer()
 	{
 		buildIndexBuffer();
 		buildVertexBuffer();
@@ -165,7 +165,7 @@ namespace Echo
 		return true;
 	}
 
-	void MeshRes::buildIndexBuffer()
+	void Mesh::buildIndexBuffer()
 	{
 		Buffer indexBuff(m_idxCount*m_idxStride, m_indices.data());
 		if (m_isDynamicIndicesBuffer)
@@ -184,7 +184,7 @@ namespace Echo
 		}	
 	}
 
-	void MeshRes::buildVertexBuffer()
+	void Mesh::buildVertexBuffer()
 	{
 		Buffer vertBuff(m_vertData.getByteSize(), m_vertData.getVertices());
 		if (m_isDynamicVertexBuffer)
@@ -203,7 +203,7 @@ namespace Echo
 		}	
 	}
 
-	void MeshRes::updateIndices(ui32 indicesCount, ui32 indicesStride, const void* indices)
+	void Mesh::updateIndices(ui32 indicesCount, ui32 indicesStride, const void* indices)
 	{
 		// load indices
 		m_idxCount = indicesCount;
@@ -218,7 +218,7 @@ namespace Echo
 		}
 	}
 
-	void MeshRes::updateVertexs(const MeshVertexFormat& format, ui32 vertCount, const Byte* vertices)
+	void Mesh::updateVertexs(const MeshVertexFormat& format, ui32 vertCount, const Byte* vertices)
 	{
 		m_vertData.set(format, vertCount);
 		if (vertCount)
@@ -238,7 +238,7 @@ namespace Echo
 		}
 	}
 
-	void MeshRes::updateVertexs(const MeshVertexData& vertexData)
+	void Mesh::updateVertexs(const MeshVertexData& vertexData)
 	{
 		m_vertData = vertexData;
 
@@ -252,11 +252,11 @@ namespace Echo
 		buildVertexBuffer();
 	}
 
-	Res* MeshRes::load(const ResourcePath& path)
+	Res* Mesh::load(const ResourcePath& path)
 	{
 		if (!path.isEmpty())
 		{
-			MeshRes* res = EchoNew(MeshRes);
+			Mesh* res = EchoNew(Mesh);
 			if (res)
 			{
 				XmlBinaryReader reader;
@@ -265,6 +265,7 @@ namespace Echo
 					// root node
 					pugi::xml_node root = reader.getRoot();
 					String topology = root.attribute("topology").as_string();
+					res->setTopologyType(magic_enum::enum_cast<Mesh::TopologyType>(topology.c_str()).value_or(Mesh::TT_TRIANGLELIST));
 
 					// indices
 					pugi::xml_node indices = root.child("indices");
@@ -343,7 +344,7 @@ namespace Echo
 		return nullptr;
 	}
 
-	void MeshRes::save()
+	void Mesh::save()
 	{
 		XmlBinaryWriter writer;
 

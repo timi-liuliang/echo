@@ -100,7 +100,7 @@ namespace Echo
         if(!m_mesh)
         {
             if(m_width && m_height)
-                m_mesh = MeshRes::create(true, true);
+                m_mesh = Mesh::create(true, true);
         }
         
         if(m_mesh)

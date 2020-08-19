@@ -356,15 +356,15 @@ namespace Echo
 			}
 		}
 
-		static inline GLenum MapPrimitiveTopology(MeshRes::TopologyType type)
+		static inline GLenum MapPrimitiveTopology(Mesh::TopologyType type)
 		{
 			switch(type)
 			{
-			case MeshRes::TT_POINTLIST:		return GL_POINTS;
-			case MeshRes::TT_LINELIST:			return GL_LINES;
-			case MeshRes::TT_LINESTRIP:		return GL_LINE_STRIP;
-			case MeshRes::TT_TRIANGLELIST:		return GL_TRIANGLES;
-			case MeshRes::TT_TRIANGLESTRIP:	return GL_TRIANGLE_STRIP;
+			case Mesh::TT_POINTLIST:		return GL_POINTS;
+			case Mesh::TT_LINELIST:			return GL_LINES;
+			case Mesh::TT_LINESTRIP:		return GL_LINE_STRIP;
+			case Mesh::TT_TRIANGLELIST:		return GL_TRIANGLES;
+			case Mesh::TT_TRIANGLESTRIP:	return GL_TRIANGLE_STRIP;
 			default:						return GL_TRIANGLES;
 			}
 		}

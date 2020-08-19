@@ -28,7 +28,7 @@ namespace Echo
 		VertexArray    vertices;
 		IndiceArray    indices;
 	
-		MeshResPtr mesh = MeshRes::create(true, true);
+		MeshResPtr mesh = Mesh::create(true, true);
 
 		float x, y, z, xz;                              // vertex position
 		float nx, ny, nz, lengthInv = 1.0f / radius;    // vertex normal

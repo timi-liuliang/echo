@@ -64,7 +64,7 @@ namespace Echo
 	{
 		m_gizmos = gizmos;
 		m_material = material;
-		m_mesh = MeshRes::create(true, true);
+		m_mesh = Mesh::create(true, true);
 		m_renderable = nullptr;
 		m_meshDirty = true;
 	}
@@ -141,10 +141,10 @@ namespace Echo
 		m_material->setShaderPath( m_shader->getPath());
 
 		m_lineBatch = EchoNew(Batch(m_material, this));
-		m_lineBatch->m_mesh->setTopologyType(MeshRes::TT_LINELIST);
+		m_lineBatch->m_mesh->setTopologyType(Mesh::TT_LINELIST);
 
 		m_triangleBatch = EchoNew(Batch(m_material, this));
-		m_triangleBatch->m_mesh->setTopologyType(MeshRes::TT_TRIANGLELIST);
+		m_triangleBatch->m_mesh->setTopologyType(Mesh::TT_TRIANGLELIST);
 	}
 
 	Gizmos::~Gizmos()
