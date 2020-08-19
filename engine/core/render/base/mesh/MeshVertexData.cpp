@@ -222,7 +222,7 @@ namespace Echo
 		m_vertices.clear();
 	}
 
-	MeshVertexData::ByteArray MeshVertexData::getPositions()
+	ByteArray MeshVertexData::getPositions()
 	{
 		ByteArray result;
 		result.resize(sizeof(Vector3) * getVertexCount());
@@ -236,7 +236,7 @@ namespace Echo
 		return result;
 	}
 
-	MeshVertexData::ByteArray MeshVertexData::getNormals()
+	ByteArray MeshVertexData::getNormals()
 	{
 		ByteArray result;
 		result.resize(sizeof(Byte) * 3 * getVertexCount());
@@ -253,7 +253,7 @@ namespace Echo
 		return result;
 	}
 
-	MeshVertexData::ByteArray MeshVertexData::getUV0s()
+	ByteArray MeshVertexData::getUV0s()
 	{
 		ByteArray result;
 		result.resize(sizeof(Vector2) * getVertexCount());

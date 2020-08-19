@@ -12,9 +12,13 @@ namespace Echo
 		// data
 		struct Data
 		{
-			String	m_name;
-			String	m_type;
-			
+			String		m_name;
+			String		m_type;
+			i32			m_offset = 0;
+			i32			m_size = 0;
+			ByteArray	m_data;
+
+			bool isEmpty() { return m_data.empty(); }
 		};
 
 	public:

@@ -268,7 +268,72 @@ namespace Echo
 
 					// indices
 					pugi::xml_node indices = root.child("indices");
-					i32 indexCount = indices.attribute("count").as_int();
+					i32 indicesCount = indices.attribute("count").as_int();
+
+					// indices data
+					XmlBinaryReader::Data indicesData;
+					reader.getData("Indices", indicesData);
+
+					// parse vertex
+					XmlBinaryReader::Data positionData, normalData, colorData, uv0Data, blendingData;
+					reader.getData("Position", positionData);
+					reader.getData("Normal", normalData);
+					reader.getData("UV0", uv0Data);
+
+					MeshVertexFormat vertFormat;
+					vertFormat.m_isUseNormal = !normalData.isEmpty();
+					vertFormat.m_isUseUV = !uv0Data.isEmpty();
+					vertFormat.m_isUseVertexColor = !colorData.isEmpty();
+					vertFormat.m_isUseBlendingData = !blendingData.isEmpty();
+
+					// vertex
+					pugi::xml_node vertex = root.child("vertex");
+					i32 vertCount = vertex.attribute("count").as_int();
+
+					// init vertex data
+					MeshVertexData vertexData;
+					vertexData.set(vertFormat, vertCount);
+
+					if (!positionData.isEmpty() && positionData.m_type == "Vector3")
+					{
+						Vector3* positions = (Vector3*)(positionData.m_data.data());
+						for (int i = 0; i < vertCount; i++)
+						{
+							vertexData.setPosition(i, positions[i]);
+						}
+					}
+
+					if (!normalData.isEmpty() && normalData.m_type == "Byte3")
+					{
+						Byte* normals = (Byte*)(normalData.m_data.data());
+						for (int i = 0; i < vertCount; i++)
+						{
+							Vector3 normal;
+							normal.x = normals[i * 3 + 0] / 255.f * 2.f - 1.f;
+							normal.x = normals[i * 3 + 1] / 255.f * 2.f - 1.f;
+							normal.x = normals[i * 3 + 2] / 255.f * 2.f - 1.f;
+							vertexData.setNormal(i, normal);
+						}
+					}
+
+					if (!uv0Data.isEmpty() && uv0Data.m_type == "Vector2")
+					{
+						Vector2* uvs = (Vector2*)(uv0Data.m_data.data());
+						for (int i = 0; i < vertCount; i++)
+						{
+							vertexData.setUV0(i, uvs[i]);
+						}
+					}
+
+					// set indices data
+					if (!indicesData.isEmpty())
+					{
+						i32 indicesStride = indicesData.m_type == "Word" ? 2 : 4;
+						res->updateIndices(indicesCount, indicesStride, indicesData.m_data.data());
+					}
+
+					// set vertex data
+					res->updateVertexs(vertexData);
 
 					return res;
 				}
@@ -297,14 +362,14 @@ namespace Echo
 
 		// positions
 		{
-			MeshVertexData::ByteArray positions = m_vertData.getPositions();
+			ByteArray positions = m_vertData.getPositions();
 			writer.addData("Position", "Vector3", positions.data(), positions.size());
 		}
 
 		// normal
 		if (m_vertData.getFormat().m_isUseNormal)
 		{
-			MeshVertexData::ByteArray normals = m_vertData.getNormals();
+			ByteArray normals = m_vertData.getNormals();
 			writer.addData("Normal", "Byte3", normals.data(), normals.size());
 		}
 
@@ -317,7 +382,7 @@ namespace Echo
 		// uv
 		if (m_vertData.getFormat().m_isUseUV)
 		{
-			MeshVertexData::ByteArray uvs = m_vertData.getUV0s();
+			ByteArray uvs = m_vertData.getUV0s();
 			writer.addData("UV0", "Vector2", uvs.data(), uvs.size());
 		}
 

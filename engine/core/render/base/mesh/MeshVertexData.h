@@ -65,10 +65,7 @@ namespace Echo
 
 	// vertex data for mesh
 	class MeshVertexData
-	{
-    public:
-        typedef vector<Byte>::type ByteArray;
-        
+	{   
 	public:
 		MeshVertexData();
 

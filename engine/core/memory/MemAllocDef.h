@@ -443,6 +443,7 @@ namespace Echo
 
 	typedef vector<String>::type		StringArray;
 	typedef set<String>::type			StringSet;
+	typedef vector<Byte>::type			ByteArray;
 }
 
 // Global Interface Definitions

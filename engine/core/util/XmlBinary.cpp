@@ -48,10 +48,29 @@ namespace Echo
 
 	bool XmlBinaryReader::getData(const char* name, XmlBinaryReader::Data& binaryData)
 	{
-		binaryData.m_name = name;
-		//binaryData.m_type = 
+		pugi::xml_node binarys = getRoot().child("_binarys_");
+		for (pugi::xml_node binary = binarys.child("_binary_"); binary; binary = binary.next_sibling("_binary_"))
+		{
+			if (strcmp(name, binary.attribute("name").as_string()) == 0)
+			{
+				binaryData.m_name = name;
+				binaryData.m_type = binary.attribute("type").as_string();
+				binaryData.m_offset = binary.attribute("offset").as_int();
+				binaryData.m_size = binary.attribute("size").as_int();
 
-		return true;
+				if (binaryData.m_size)
+				{
+					binaryData.m_data.resize(binaryData.m_size);
+
+					m_stream->seek(binaryData.m_offset, SEEK_SET);
+					m_stream->read(&binaryData.m_data[0], binaryData.m_size);
+				}
+
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	XmlBinaryWriter::XmlBinaryWriter()
@@ -62,7 +81,6 @@ namespace Echo
 
 	XmlBinaryWriter::~XmlBinaryWriter()
 	{
-
 	}
 
 	pugi::xml_node XmlBinaryWriter::getRoot()
