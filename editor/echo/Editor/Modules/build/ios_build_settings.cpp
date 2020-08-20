@@ -225,6 +225,7 @@ namespace Echo
 
         // copy res
         PathUtil::CopyDir( m_projectDir, m_outputDir + "app/ios/resources/data/");
+        packageRes(m_outputDir + "app/ios/resources/data/");
 
         // rename
         String projectFile = PathUtil::GetPureFilename( Engine::instance()->getConfig().m_projectFile);

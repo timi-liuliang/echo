@@ -28,6 +28,9 @@ namespace Echo
         
         // get final result path
         virtual String getFinalResultPath() { return StringUtil::BLANK; }
+
+        // package root folders
+        virtual void packageRes(const String& rootFolder);
         
     public:
         // log

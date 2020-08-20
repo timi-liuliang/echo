@@ -1,10 +1,22 @@
 #include "build_settings.h"
+#include <engine/core/util/PathUtil.h>
+#include <engine/core/io/archive/FilePackage.h>
 
 namespace Echo
 {
     void BuildSettings::bindMethods()
     {
         
+    }
+
+    void BuildSettings::packageRes(const String& rootFolder)
+    {
+        StringArray subFolers;
+        PathUtil::EnumFilesInDir(subFolers, rootFolder, true, false, true);
+        for (const String& folder : subFolers)
+        {
+            FilePackage::compressFolder(folder.c_str());
+        }
     }
 
     void BuildSettings::log(const char* formats, ...)

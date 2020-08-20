@@ -93,6 +93,7 @@ namespace Echo
 
 		// copy res
 		PathUtil::CopyDir(m_projectDir, m_outputDir + "bin/app/win64/Release/data/");
+		packageRes(m_outputDir + "bin/app/win64/Release/data/");
 
 		// rename
 		String projectFile = PathUtil::GetPureFilename(Engine::instance()->getConfig().m_projectFile);

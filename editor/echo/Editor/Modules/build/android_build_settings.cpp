@@ -147,6 +147,7 @@ namespace Echo
 		// copy res
 		PathUtil::DelPath(m_outputDir + "app/android/app/src/main/assets/res/");
 		PathUtil::CopyDir(m_projectDir, m_outputDir + "app/android/app/src/main/assets/res/");
+		packageRes(m_outputDir + "app/android/app/src/main/assets/res/");
 
 		// rename
 		String projectFile = PathUtil::GetPureFilename(Engine::instance()->getConfig().m_projectFile);
