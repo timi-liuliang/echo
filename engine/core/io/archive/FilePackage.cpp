@@ -29,19 +29,28 @@ namespace Echo
 		return nullptr;
 	}
 
-	void FilePackage::compressFolder(const char* folderPath)
+	void FilePackage::compressFolder(const char* inFolderPath)
 	{
+		String folderPath = inFolderPath;
+		PathUtil::FormatPath(folderPath, false);
+
 		XmlBinaryWriter	writer;
 
 		StringArray allFiles;
 		PathUtil::EnumFilesInDir(allFiles, folderPath, false, true, true);
-		for (const String& file : allFiles)
+		for (String file : allFiles)
 		{
 			MemoryReader fileReader(file);
 			if (fileReader.getSize())
 			{
+				file = StringUtil::Replace(file, folderPath, "");
+				writer.addData(file.c_str(), "Uncompress", fileReader.getData<void*>(), fileReader.getSize());
 			}
 		}
+
+		folderPath.pop_back();
+		String packagPathName = folderPath + ".pkg";
+		writer.save(packagPathName.c_str());
 	}
 
 	int FilePackage::uncompress(unsigned char* dest, unsigned int* destLen, const unsigned char* source, unsigned int sourceLen)

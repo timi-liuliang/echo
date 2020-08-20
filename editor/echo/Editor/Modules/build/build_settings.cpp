@@ -15,7 +15,11 @@ namespace Echo
         PathUtil::EnumFilesInDir(subFolers, rootFolder, true, false, true);
         for (const String& folder : subFolers)
         {
-            FilePackage::compressFolder(folder.c_str());
+            if (!PathUtil::IsFile(folder))
+            {
+                FilePackage::compressFolder(folder.c_str());
+                PathUtil::DelPath(folder);
+            }
         }
     }
 
