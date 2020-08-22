@@ -20,14 +20,14 @@ namespace Echo
 		ui32 getIdentifier() const { return m_identifier; }
 
 		// create method
-		static Renderable* create(MeshResPtr mesh, Material* matInst, Render* node);
+		static Renderable* create(MeshPtr mesh, Material* matInst, Render* node);
 
 		// release
 		void release();
 
 		// set mesh
-		MeshResPtr getMesh() { return m_mesh; }
-		virtual void setMesh(MeshResPtr mesh) = 0;
+		MeshPtr getMesh() { return m_mesh; }
+		virtual void setMesh(MeshPtr mesh) = 0;
 
 		// set material
 		virtual void setMaterial(Material* material) { m_material = material; }
@@ -51,7 +51,7 @@ namespace Echo
 	public:
 		ui32									m_identifier;
 		Render*									m_node = nullptr;
-		MeshResPtr								m_mesh;
+		MeshPtr								m_mesh;
 		MaterialPtr								m_material;
 	};
 	typedef ui32 RenderableID;

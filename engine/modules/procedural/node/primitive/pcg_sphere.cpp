@@ -13,7 +13,7 @@ namespace Echo
 
 	}
 
-	MeshResPtr PCGSphere::buildUvSphere(float radius, i32 stackCount, i32 sectorCount)
+	MeshPtr PCGSphere::buildUvSphere(float radius, i32 stackCount, i32 sectorCount)
 	{
 		// Vertex Format
 		struct VertexFormat
@@ -28,7 +28,7 @@ namespace Echo
 		VertexArray    vertices;
 		IndiceArray    indices;
 	
-		MeshResPtr mesh = Mesh::create(true, true);
+		MeshPtr mesh = Mesh::create(true, true);
 
 		float x, y, z, xz;                              // vertex position
 		float nx, ny, nz, lengthInv = 1.0f / radius;    // vertex normal

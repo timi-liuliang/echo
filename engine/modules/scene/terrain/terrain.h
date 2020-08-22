@@ -83,7 +83,7 @@ namespace Echo
         vector<Image*>::type    m_layerImages;
 		float					m_heightRange = 256.f;
 		i32						m_gridSpacing = 1;
-        MeshResPtr              m_mesh;
+        MeshPtr              m_mesh;
         MaterialPtr             m_material;
         Renderable*             m_renderable = nullptr;
         i32                     m_columns = 0;

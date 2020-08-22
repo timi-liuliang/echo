@@ -16,7 +16,7 @@ namespace Echo
 		virtual ~ProceduralGeometry();
 
 		// set mesh
-		void setMesh(MeshResPtr mesh);
+		void setMesh(MeshPtr mesh);
 
 		// material
 		Material* getMaterial() const { return m_material; }
@@ -37,7 +37,7 @@ namespace Echo
 
 	protected:
 		bool					m_isRenderableDirty = true;
-		MeshResPtr				m_mesh;
+		MeshPtr				m_mesh;
 		MaterialPtr             m_material;
 		Renderable*				m_renderable = nullptr;
 	};

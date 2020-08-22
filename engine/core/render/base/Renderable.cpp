@@ -25,7 +25,7 @@ namespace Echo
 		Renderer::instance()->destroyRenderables(&ptr, 1);
 	}
 
-	Renderable* Renderable::create(MeshResPtr mesh, Material* material, Render* node)
+	Renderable* Renderable::create(MeshPtr mesh, Material* material, Render* node)
 	{
 		// bind shader param
 		Renderable* renderable = Renderer::instance()->createRenderable();

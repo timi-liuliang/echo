@@ -138,7 +138,7 @@ namespace Echo
 		vector<Drawable>::type	m_drawables;
 		MotionMap				m_motions;
 
-		MeshResPtr				m_mesh;				// Geometry Data for render
+		MeshPtr				m_mesh;				// Geometry Data for render
 		MaterialPtr				m_material;			// Custom Material
         ShaderProgramPtr        m_shaderDefault;
 		MaterialPtr				m_materialDefault;

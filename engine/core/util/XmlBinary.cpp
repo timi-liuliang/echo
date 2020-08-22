@@ -95,7 +95,7 @@ namespace Echo
 		pugi::xml_node binary = binarys.append_child("_binary_");
 		binary.append_attribute("name").set_value(name);
 		binary.append_attribute("type").set_value(type);
-		binary.append_attribute("offset").set_value(m_binary.size());
+		binary.append_attribute("offset").set_value(i32(m_binary.size()));
 		binary.append_attribute("size").set_value(bytes);
 
 		m_binary.resize(m_binary.size() + bytes);

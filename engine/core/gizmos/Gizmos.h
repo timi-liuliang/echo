@@ -34,7 +34,7 @@ namespace Echo
 			VertexArray		m_vertexs;
 			IndiceArray		m_indices;
 			MaterialPtr		m_material;
-			MeshResPtr		m_mesh;
+			MeshPtr		m_mesh;
 			Renderable*		m_renderable;
 			bool			m_meshDirty;
 

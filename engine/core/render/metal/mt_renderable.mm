@@ -55,7 +55,7 @@ namespace Echo
         return mtBuffer->getMetalBuffer();
     }
 
-    void MTRenderable::setMesh(Mesh* mesh)
+    void MTRenderable::setMesh(MeshPtr mesh)
     {
         m_mesh = mesh;
 

@@ -65,7 +65,7 @@ namespace Echo
 		spAttachmentLoader*	m_attachmentLoader;
 
 		AttachmentVertices	m_batch;
-		MeshResPtr			m_mesh;
+		MeshPtr			m_mesh;
         ShaderProgramPtr    m_shader;
 		Material*			m_material;
 		Renderable*			m_renderable;

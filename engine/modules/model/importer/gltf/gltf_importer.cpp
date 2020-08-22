@@ -45,7 +45,7 @@ namespace Echo
 		{
 			for (Gltf::Primitive& primitiveInfo : meshInfo.m_primitives)
 			{
-				MeshResPtr mesh = primitiveInfo.m_mesh;
+				MeshPtr mesh = primitiveInfo.m_mesh;
 				if (mesh)
 				{
 					mesh->setPath(m_targetFoler + "/" + meshInfo.m_name + ".mesh");

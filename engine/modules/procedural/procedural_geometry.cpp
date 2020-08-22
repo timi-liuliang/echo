@@ -23,7 +23,7 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY_HINT(ProceduralGeometry, "Material", PropertyHintType::ResourceType, "Material");
 	}
 
-	void ProceduralGeometry::setMesh(MeshResPtr mesh)
+	void ProceduralGeometry::setMesh(MeshPtr mesh)
 	{ 
 		m_mesh = mesh; 
 

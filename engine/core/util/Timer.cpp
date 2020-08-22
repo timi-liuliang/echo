@@ -95,7 +95,7 @@ namespace Echo
 		m_lastTime = 0;
 		m_zeroClock = clock();
 #elif defined(ECHO_PLATFORM_IOS) || defined(ECHO_PLATFORM_MAC)
-        mZeroClock = clock();
+        m_zeroClock = clock();
         m_IosStartTime = mach_absolute_time();
         if(KERN_SUCCESS != mach_timebase_info(&m_TimeBaseInfo))
         {

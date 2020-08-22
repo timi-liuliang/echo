@@ -110,7 +110,7 @@ namespace Echo
 			{
 				clearRenderable();
 
-				MeshResPtr mesh = m_asset->m_meshes[m_meshIdx].m_primitives[m_primitiveIdx].m_mesh;
+				MeshPtr mesh = m_asset->m_meshes[m_meshIdx].m_primitives[m_primitiveIdx].m_mesh;
 				m_renderable = Renderable::create(mesh, material, this);
 
 				m_localAABB = mesh->getLocalBox();

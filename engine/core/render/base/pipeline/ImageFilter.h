@@ -49,7 +49,7 @@ namespace Echo
 
 	protected:
 		bool        m_isRenderableDirty = true;
-		MeshResPtr	m_mesh;
+		MeshPtr	m_mesh;
 		MaterialPtr	m_material;
 		Renderable* m_renderable = nullptr;
 	};

@@ -149,6 +149,6 @@ namespace Echo
 		GPUBuffer*					m_indexBuffer = nullptr;
 		vector<ui32>::type			m_boneIdxs;
 	};
-	typedef Echo::ResRef<Echo::Mesh> MeshResPtr;
+	typedef Echo::ResRef<Echo::Mesh> MeshPtr;
 }
 

@@ -23,7 +23,7 @@ namespace Echo
         
     private:
         // link
-        virtual void setMesh(Mesh* mesh) override;
+        virtual void setMesh(MeshPtr mesh);
         
         // build vertex descriptor
         void buildVertexDescriptor();

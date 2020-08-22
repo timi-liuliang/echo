@@ -51,7 +51,7 @@ namespace Echo
         
     private:
         ResourcePath            m_textureRes;
-        MeshResPtr              m_mesh;            // Geometry Data for render
+        MeshPtr              m_mesh;            // Geometry Data for render
         ShaderProgramPtr        m_shader;
         MaterialPtr             m_material;
         MaterialPtr             m_materialDefault;
