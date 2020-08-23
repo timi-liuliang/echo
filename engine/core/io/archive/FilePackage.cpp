@@ -1,6 +1,7 @@
 #include "FilePackage.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/io/MemoryReader.h"
+#include "engine/core/io/stream/MemoryDataStream.h"
 #include "zlib/zlib.h"
 
 namespace Echo
@@ -35,6 +36,19 @@ namespace Echo
 
 	DataStream* FilePackage::open(const char* fileName)
 	{
+        auto it = m_files.find(fileName);
+        if(it!=m_files.end())
+        {
+            XmlBinaryReader::Data data;
+            if(m_reader.getData(it->second.c_str(), data))
+            {
+                MemoryDataStream* stream = EchoNew(MemoryDataStream(data.m_size, true));
+                std::memcpy(stream->getPtr(), data.m_data.data(), data.m_size);
+                
+                return stream;
+            }
+        }
+        
 		return nullptr;
 	}
 

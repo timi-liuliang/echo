@@ -28,10 +28,6 @@ namespace Echo
 			m_size = ftell(m_fileHandle);
 			fseek(m_fileHandle, 0, SEEK_SET);
 		}
-		else
-		{
-			EchoLogError( "FileHandleDataStream fopen [%s] failed", name.c_str());
-		}
 	}
 
 	FileHandleDataStream::~FileHandleDataStream()

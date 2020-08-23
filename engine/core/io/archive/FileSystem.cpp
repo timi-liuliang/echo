@@ -51,8 +51,6 @@ namespace Echo
         if (stream->fail())
         {
             EchoSafeDelete(stream, FileHandleDataStream);
-
-            EchoLogError("Error: Cannot open file: %s in FileSystem::open[%s]", filename.c_str(), strerror(errno));
             return nullptr;
         }
 

@@ -13,7 +13,7 @@ namespace Echo
 		MemoryDataStream(const String& name, size_t size, bool freeOnClose = true, bool readOnly = false);
 		~MemoryDataStream();
 
-		// 获取数据流
+		// get buffer
 		virtual const void* getBuffer() { return mData; }
 
 		ui8* getPtr(void) { return mData; }
