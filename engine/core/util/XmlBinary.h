@@ -30,6 +30,9 @@ namespace Echo
 
 		// get data
 		bool getData(const char* name, Data& binaryData);
+        
+        // get binary names
+        StringArray getBinaryNames();
 
 		// load
 		bool load(const char* path);

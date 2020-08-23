@@ -37,7 +37,23 @@ namespace Echo
 	void IO::setResPath(const String& resPath)
 	{
 		m_resFileSystem->setPath(resPath, "Res://");
+        
+        loadPackages();
 	}
+
+    void IO::loadPackages()
+    {
+        StringArray packages;
+        PathUtil::EnumFilesInDir(packages, m_resFileSystem->getPath(), false, false, true);
+        for(const String& package : packages)
+        {
+            if(PathUtil::GetFileExt(package, true)==".pkg")
+            {
+                FilePackage* filePackage = EchoNew(FilePackage(package.c_str()));
+                m_resFilePackages.push_back(filePackage);
+            }
+        }
+    }
 
 	void IO::setUserPath(const String& userPath)
 	{
@@ -46,9 +62,25 @@ namespace Echo
 
 	DataStream* IO::open(const String& resourceName, ui32 accessMode)
 	{
-		if (StringUtil::StartWith(resourceName, "Res://"))          return m_resFileSystem->open(resourceName, accessMode);
-		else if (StringUtil::StartWith(resourceName, "User://"))    return m_userFileSystem->open(resourceName, accessMode);
-		else														return m_externalFileSystem->open(resourceName, accessMode);
+		if (StringUtil::StartWith(resourceName, "Res://"))
+        {
+            DataStream* stream = m_resFileSystem->open(resourceName, accessMode);
+            if(stream)  return stream;
+            
+            for(FilePackage* package : m_resFilePackages)
+            {
+                stream = package->open(resourceName.c_str());
+                if(stream)  return stream;
+            }
+        }
+		else if (StringUtil::StartWith(resourceName, "User://"))
+        {
+            return m_userFileSystem->open(resourceName, accessMode);
+        }
+		else
+        {
+            return m_externalFileSystem->open(resourceName, accessMode);
+        }
 
 		EchoLogError("Cannot locate a resource [%s] ResourceGroupManager::openResource", resourceName.c_str());
 		return  nullptr;
@@ -60,7 +92,16 @@ namespace Echo
 
 		if (StringUtil::StartWith(resourceName, "Res://"))
 		{
-			return m_resFileSystem->isExist(resourceName);
+            if(m_resFileSystem->isExist(resourceName))
+                return true;
+                
+			for(FilePackage* package : m_resFilePackages)
+            {
+                if(package->isExist(resourceName))
+                    return true;
+            }
+            
+            return false;
 		}
 		else if (StringUtil::StartWith(resourceName, "User://"))
 		{

@@ -73,6 +73,19 @@ namespace Echo
 		return false;
 	}
 
+    StringArray XmlBinaryReader::getBinaryNames()
+    {
+        StringArray result;
+        
+        pugi::xml_node binarys = getRoot().child("_binarys_");
+        for (pugi::xml_node binary = binarys.child("_binary_"); binary; binary = binary.next_sibling("_binary_"))
+        {
+            result.push_back(binary.attribute("name").as_string());
+        }
+
+        return result;
+    }
+
 	XmlBinaryWriter::XmlBinaryWriter()
 	{
 		pugi::xml_node root = m_doc.append_child("header");

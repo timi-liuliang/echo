@@ -17,6 +17,15 @@ namespace Echo
 
 	FilePackage::FilePackage(const char* packageFile)
 	{
+        m_packageFile = packageFile;
+        String packageName = PathUtil::GetPureFilename(m_packageFile, false);
+        if(m_reader.load(m_packageFile.c_str()))
+        {
+            for(const String& name : m_reader.getBinaryNames())
+            {
+                m_files["Res://" + packageName + "/" + name] = name;
+            }
+        }
 	}
 
 	FilePackage::~FilePackage()
@@ -28,6 +37,11 @@ namespace Echo
 	{
 		return nullptr;
 	}
+
+    bool FilePackage::isExist(const String& filename)
+    {
+        return m_files.find(filename) != m_files.end();
+    }
 
 	void FilePackage::compressFolder(const char* inFolderPath)
 	{

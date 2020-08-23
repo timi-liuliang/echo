@@ -14,7 +14,10 @@ namespace Echo
 
 		// open
 		DataStream* open(const char* fileName);
-
+        
+        // is exist
+        bool isExist(const String& filename);
+        
 		// add data
 		static void compressFolder(const char* folderPath);
 
@@ -24,7 +27,8 @@ namespace Echo
 		int	compress(unsigned char* dest, unsigned int* destLen, const unsigned char* source, unsigned int sourceLen);
 
 	private:
-		String			m_fileName;
-		XmlBinaryReader	m_reader;
+        String                      m_packageFile;
+        map<String,String>::type    m_files;
+		XmlBinaryReader             m_reader;
 	};
 }
