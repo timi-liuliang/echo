@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../particle_system.h"
+#include "particle_system_panel.h"
 
 namespace Echo
 {
@@ -11,9 +11,6 @@ namespace Echo
         ParticleSystemEditor(Object* object);
         virtual ~ParticleSystemEditor();
 
-        // is thumbnail static (every instance has same thumbnail)
-        virtual bool isThumbnailStatic() const override { return false; }
-       
         // get thumbnail
         virtual ImagePtr getThumbnail() const override;
 
@@ -24,6 +21,7 @@ namespace Echo
         virtual void editor_update_self() override;
         
     private:
+        ParticleSystemPanel* m_panel = nullptr;
     };
     
 #endif

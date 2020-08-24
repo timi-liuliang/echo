@@ -1,6 +1,4 @@
 #include "particle_system_editor.h"
-#include "engine/core/render/base/atla/TextureAtla.h"
-#include "engine/core/render/base/Texture.h"
 #include "engine/core/editor/editor.h"
 #include "engine/core/main/Engine.h"
 
@@ -10,24 +8,30 @@ namespace Echo
     ParticleSystemEditor::ParticleSystemEditor(Object* object)
     : ObjectEditor(object)
     {
+        m_panel = EchoNew(ParticleSystemPanel(object));
     }
     
     ParticleSystemEditor::~ParticleSystemEditor()
     {
+        EchoSafeDelete(m_panel, ParticleSystemPanel);
     }
 
     ImagePtr ParticleSystemEditor::getThumbnail() const
     {
-        return nullptr;
+        return Image::loadFromFile(Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/texture_atlas.png");
     }
 
     void ParticleSystemEditor::onEditorSelectThisNode()
     {
+        Editor::instance()->showBottomPanel(m_panel);
     }
 
     void ParticleSystemEditor::editor_update_self()
     {
-
+        if (m_panel)
+        {
+            m_panel->update();
+        }
     }
 #endif
 }
