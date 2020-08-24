@@ -1,3 +1,5 @@
+#pragma once
+
 #include "../anim_timeline.h"
 #include "TimelinePanel/TimelinePanel.h"
 
