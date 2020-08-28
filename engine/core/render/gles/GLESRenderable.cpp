@@ -60,7 +60,7 @@ namespace Echo
 		}
 	}
 
-	void GLES2Renderable::setMesh(MeshResPtr mesh)
+	void GLES2Renderable::setMesh(MeshPtr mesh)
 	{
 		m_mesh = mesh;
 

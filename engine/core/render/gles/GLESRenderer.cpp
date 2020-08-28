@@ -225,7 +225,7 @@ namespace Echo
 #ifdef ECHO_EDITOR_MODE
 		if (m_settings.m_polygonMode != RasterizerState::PM_FILL)
 		{
-			MeshResPtr mesh = renderable->getMesh();
+			MeshPtr mesh = renderable->getMesh();
 			if (mesh->getTopologyType() == Mesh::TT_TRIANGLELIST && mesh->getIndexBuffer())
 			{
 				vector<i32>::type newIndices;
@@ -316,7 +316,7 @@ namespace Echo
 		shaderProgram->bindUniforms();
 		shaderProgram->bindRenderable(renderable);
 
-		MeshResPtr mesh = renderable->getMesh();
+		MeshPtr mesh = renderable->getMesh();
 
 		// set the type of primitive that should be rendered from this vertex buffer
 		GLenum glTopologyType = GLES2Mapping::MapPrimitiveTopology(mesh->getTopologyType());

@@ -331,7 +331,7 @@ namespace Echo
             vkRenderable->bindShaderParams();
             vkRenderable->bindGeometry();
 
-			MeshResPtr mesh = renderable->getMesh();
+			MeshPtr mesh = renderable->getMesh();
             if (mesh->getIndexBuffer())
             {
                 ui32 idxCount = mesh->getIndexCount();

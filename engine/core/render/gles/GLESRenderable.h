@@ -47,7 +47,7 @@ namespace Echo
 
 	private:
 		// set mesh
-		virtual void setMesh(MeshResPtr mesh) override;
+		virtual void setMesh(MeshPtr mesh) override;
 
 		// set material
 		virtual void setMaterial(Material* material) override;
