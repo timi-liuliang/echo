@@ -270,6 +270,7 @@ namespace Echo
 					// indices
 					pugi::xml_node indices = root.child("indices");
 					i32 indicesCount = indices.attribute("count").as_int();
+					i32 indicesStride = indices.attribute("stride").as_int();
 
 					// indices data
 					XmlBinaryReader::Data indicesData;
@@ -329,7 +330,6 @@ namespace Echo
 					// set indices data
 					if (!indicesData.isEmpty())
 					{
-						i32 indicesStride = indicesData.m_type == "Word" ? 2 : 4;
 						res->updateIndices(indicesCount, indicesStride, indicesData.m_data.data());
 					}
 
@@ -355,7 +355,8 @@ namespace Echo
 		// indices
 		pugi::xml_node indices = root.append_child("indices");
 		indices.append_attribute("count").set_value(getIndexCount());
-		writer.addData("Indices", "Word", getIndices(), getIndexCount() * getIndexStride());
+		indices.append_attribute("stride").set_value(getIndexStride());
+		writer.addData("Indices", StringUtil::Format("Byte%d", getIndexStride()).c_str(), getIndices(), getIndexCount() * getIndexStride());
 
 		// vertex
 		pugi::xml_node vertex = root.append_child("vertex");

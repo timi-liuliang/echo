@@ -68,10 +68,7 @@ void main(void)
 }
 )";
 
-static const char* g_3dVsCode = R"(
-#version 450
-
-#define ENABLE_VERTEX_NORMAL
+static const char* g_3dVsCode = R"(#version 450
 
 // uniforms
 layout(binding = 0) uniform UBO
@@ -86,7 +83,7 @@ layout(location = 0) in vec3 a_Position;
 // outputs
 layout(location = 0) out vec3 v_Position;
 
-#ifdef ENABLE_VERTEX_NORMAL
+#ifdef HAS_NORMALS
 layout(location = 1) in vec3 a_Normal;
 layout(location = 1) out vec3 v_Normal;
 #endif
@@ -96,26 +93,24 @@ void main(void)
     vec4 position = vec4(a_Position, 1.0);
     position = vs_ubo.u_WorldMatrix * position;
 
-    v_Position  = position.xyz;
     gl_Position = vs_ubo.u_ViewProjMatrix * position;
 
-#ifdef ENABLE_VERTEX_NORMAL
+    v_Position  = position.xyz / position.w;
+
+#ifdef HAS_NORMALS
 	v_Normal = normalize(vec3(vs_ubo.u_WorldMatrix * vec4(a_Normal.xyz, 0.0)));
 #endif
 }
 )";
 
-static const char* g_3dPsCode = R"(
-#version 450
-
-#define ENABLE_VERTEX_NORMAL
+static const char* g_3dPsCode = R"(#version 450
 
 precision mediump float;
 
 // inputs
 layout(location = 0) in vec3  v_Position;
 
-#ifdef ENABLE_VERTEX_NORMAL
+#ifdef HAS_NORMALS
 layout(location = 1) in vec3 v_Normal;
 #endif
 
@@ -143,6 +138,21 @@ vec3 LinearToSRgb(vec3 linearIn)
 #endif
 }
 
+// Find the normal for this fragment, pulling either from a predefined normal map
+// or from the interpolated mesh normal and tangent attributes.
+vec3 getNormal()
+{
+#ifdef HAS_NORMALS
+    vec3 ng = normalize(v_Normal);
+#else
+    vec3 pos_dx = dFdx(v_Position);
+    vec3 pos_dy = dFdy(v_Position);
+    vec3 ng = cross(pos_dx, pos_dy);
+#endif
+
+    return ng;
+}
+
 void main(void)
 {
 	vec3 __BaseColor = SRgbToLinear(vec3(0.75));
@@ -150,7 +160,7 @@ void main(void)
     vec3 _lightDir = normalize(vec3(1.0, 1.0, 1.0));
     vec3 _lightColor = SRgbToLinear(vec3(1.2, 1.2, 1.2));
     vec3 _AmbientColor = SRgbToLinear(vec3(0.4, 0.4, 0.4));
-    __BaseColor = max(dot(v_Normal, _lightDir), 0.0) * _lightColor * __BaseColor + _AmbientColor;
+    __BaseColor = max(dot(getNormal(), _lightDir), 0.0) * _lightColor * __BaseColor + _AmbientColor;
 
     o_FragColor = vec4(LinearToSRgb(__BaseColor.rgb), 1.0);
 }
@@ -541,7 +551,7 @@ namespace Echo
 		}
 		else if (StringUtil::StartWith(shaderPath, "_echo_default_3d_shader_"))
 		{
-			return ShaderProgram::getDefault3D(StringArray());
+            return ShaderProgram::getDefault3D({"HAS_NORMALS"});
 		}
 
 		return nullptr;

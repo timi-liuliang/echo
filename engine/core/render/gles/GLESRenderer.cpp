@@ -327,7 +327,7 @@ namespace Echo
 		{
 			// map index type
 			GLenum idxType;
-			if (mesh->getIndexStride() == sizeof(Dword))	idxType = GL_UNSIGNED_INT;
+			if (mesh->getIndexStride() == sizeof(ui32))		idxType = GL_UNSIGNED_INT;
 			else if(mesh->getIndexStride() == sizeof(Word))	idxType = GL_UNSIGNED_SHORT;
 			else											idxType = GL_UNSIGNED_BYTE;
 

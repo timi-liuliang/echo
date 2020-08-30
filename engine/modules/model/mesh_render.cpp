@@ -57,9 +57,13 @@ namespace Echo
 			clearRenderable();
 
 			// make sure one material is valid
-			if (!m_material)
+			if (!m_material && m_mesh)
 			{
-				ShaderProgramPtr shader = ShaderProgram::getDefault3D(StringArray());
+				StringArray macros;
+				if(m_mesh->getVertexData().getFormat().m_isUseNormal)
+					macros.push_back("HAS_NORMALS");
+
+				ShaderProgramPtr shader = ShaderProgram::getDefault3D(macros);
 
 				// material
 				m_material = ECHO_CREATE_RES(Material);

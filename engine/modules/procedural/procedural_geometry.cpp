@@ -61,7 +61,7 @@ namespace Echo
 			// make sure one material is valid
 			if (!m_material)
 			{
-				ShaderProgramPtr shader = ShaderProgram::getDefault3D(StringArray());
+				ShaderProgramPtr shader = ShaderProgram::getDefault3D({ "HAS_NORMALS" });
 
 				// material
 				m_material = ECHO_CREATE_RES(Material);

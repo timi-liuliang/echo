@@ -285,7 +285,7 @@ namespace Gltf
 
 	struct Loader
 	{
-		ResourcePath						m_path;
+		ResourcePath					m_path;
 		MetaInfo						m_metaInfo;
 		vector<SceneInfo>::type			m_scenes;
 		vector<MeshInfo>::type			m_meshes;

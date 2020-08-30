@@ -1,6 +1,7 @@
 #include "gltf_importer.h"
 #include "gltf_loader.h"
 #include "engine/core/editor/editor.h"
+#include "engine/core/util/PathUtil.h"
 
 #ifdef ECHO_EDITOR_MODE
 namespace Echo
@@ -41,15 +42,28 @@ namespace Echo
 
 	void GltfImporter::saveMeshs(Gltf::Loader& loader)
 	{
-		for (Gltf::MeshInfo& meshInfo : loader.m_meshes)
+		for(size_t i =0; i < loader.m_meshes.size(); i++)
 		{
-			for (Gltf::Primitive& primitiveInfo : meshInfo.m_primitives)
+			Gltf::MeshInfo& meshInfo = loader.m_meshes[i];
+			for (size_t j=0; j < meshInfo.m_primitives.size(); j++)
 			{
-				MeshPtr mesh = primitiveInfo.m_mesh;
+				MeshPtr mesh = meshInfo.m_primitives[j].m_mesh;
 				if (mesh)
 				{
-					mesh->setPath(m_targetFoler + "/" + meshInfo.m_name + ".mesh");
-					mesh->save();
+					if (!meshInfo.m_name.empty())
+					{
+						mesh->setPath(m_targetFoler + "/" + meshInfo.m_name  +".mesh");
+						mesh->save();
+					}
+					else
+					{
+						String meshName = PathUtil::GetPureFilename(loader.m_path.getPath(), false);
+						if (i != 0 || j != 0)
+							meshName += StringUtil::Format("%d_%d", i, j);
+
+						mesh->setPath(m_targetFoler + "/" + meshName + ".mesh");
+						mesh->save();
+					}
 				}
 			}
 		}
