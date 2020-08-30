@@ -312,8 +312,8 @@ namespace Echo
 						{
 							Vector3 normal;
 							normal.x = normals[i * 3 + 0] / 255.f * 2.f - 1.f;
-							normal.x = normals[i * 3 + 1] / 255.f * 2.f - 1.f;
-							normal.x = normals[i * 3 + 2] / 255.f * 2.f - 1.f;
+							normal.y = normals[i * 3 + 1] / 255.f * 2.f - 1.f;
+							normal.z = normals[i * 3 + 2] / 255.f * 2.f - 1.f;
 							vertexData.setNormal(i, normal);
 						}
 					}
