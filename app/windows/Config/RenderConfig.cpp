@@ -19,7 +19,7 @@ namespace Echo
 		//LoadVKRenderer(renderer);
 #endif
 
-		Echo::Renderer::Config renderCfg;
+		Echo::Renderer::Settings renderCfg;
 		renderCfg.m_windowHandle = hwnd;
 
 		EchoLogDebug("Canvas Size : %d x %d", renderCfg.m_windowWidth, renderCfg.m_windowHeight);
