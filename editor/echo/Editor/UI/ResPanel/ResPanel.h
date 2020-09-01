@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QDockWidget>
+#include <QFileSystemWatcher>
 #include "ui_ResPanel.h"
 #include "QProperty.hpp"
 #include <QDirectoryModel.h>
@@ -72,6 +73,10 @@ namespace Studio
 		// on search text changed
 		void onSearchTextChanged();
 
+		// file system changed (QFileSystemWatcher)
+		void onWatchFileChanged(const QString& file);
+		void onWatchFileDirChanged(const QString& dir);
+
 	private:
 		// get unique file name
 		bool getUniqueNewResSavePath( Echo::String& outNewPath, const Echo::String& className, const Echo::String& currentDir);
@@ -87,5 +92,6 @@ namespace Studio
 		QMenu*						m_resMenu;			// Mouse right button click
 		QStandardItem*				m_menuEditItem;
 		bool						m_viewTypeGrid;
+		QFileSystemWatcher*			m_filesystemWatcher = nullptr;
 	};
 }

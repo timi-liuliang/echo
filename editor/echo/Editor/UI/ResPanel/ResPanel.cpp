@@ -89,6 +89,13 @@ namespace Studio
 
 		bool isIncludePreDir = dir == Echo::Engine::instance()->getResPath() ? false : true;
 		m_previewHelper->setPath(dir, nullptr, isIncludePreDir);
+
+		// watch current dir
+		EchoSafeDelete(m_filesystemWatcher, QFileSystemWatcher);
+		m_filesystemWatcher = EchoNew(QFileSystemWatcher);
+		m_filesystemWatcher->addPath(m_currentDir.c_str());
+		QObject::connect(m_filesystemWatcher, SIGNAL(fileChanged(const QString&)), this, SLOT(onWatchFileChanged(const QString&)));
+		QObject::connect(m_filesystemWatcher, SIGNAL(directoryChanged(const QString&)), this, SLOT(onWatchFileDirChanged(const QString&)));
 	}
 
 	void ResPanel::reslectCurrentDir()
@@ -99,6 +106,19 @@ namespace Studio
 
 		if (!m_currentDir.empty())
 			onSelectDir(m_currentDir.c_str());
+	}
+
+	void ResPanel::onWatchFileChanged(const QString& file)
+	{
+
+	}
+
+	void ResPanel::onWatchFileDirChanged(const QString& dir)
+	{
+		if (m_currentDir == dir.toStdString().c_str())
+		{
+			reslectCurrentDir();
+		}
 	}
 
 	void ResPanel::onClickedPreviewRes(const char* res)
