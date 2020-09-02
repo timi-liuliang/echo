@@ -29,6 +29,19 @@ function update_all_channels()
 end
 )";
 
+// 2.math extension
+const char* mathex = R"(
+function math.clamp(v, minValue, maxValue)  
+    if v < minValue then
+        return minValue
+    end
+    if( v > maxValue) then
+        return maxValue
+    end
+    return v 
+end
+)";
+
 // 2.math vec2
 const char* vec2 = R"(
 vec2 = {}
@@ -187,6 +200,7 @@ namespace Echo
 		// core library
 		{
 			LuaBinder::instance()->execString(utils, true);
+            LuaBinder::instance()->execString(mathex, true);
             LuaBinder::instance()->execString(vec2, true);
 			LuaBinder::instance()->execString(vec3, true);
 
