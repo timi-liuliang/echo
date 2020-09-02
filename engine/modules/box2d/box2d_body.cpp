@@ -143,7 +143,7 @@ namespace Echo
             float pixelsPerUnit = Box2DModule::instance()->getPixelsPerMeter();
 
             Echo::Vector3 pitchYawRoll;
-            getWorldOrientation().toEulerAngle(pitchYawRoll.x, pitchYawRoll.y, pitchYawRoll.z);
+            getWorldOrientation().toPitchYawRoll(pitchYawRoll.x, pitchYawRoll.y, pitchYawRoll.z);
             m_body->SetTransform( b2Vec2(getWorldPosition().x / pixelsPerUnit, getWorldPosition().y / pixelsPerUnit) , pitchYawRoll.z * Math::DEG2RAD);
         }
     }
@@ -156,7 +156,7 @@ namespace Echo
 
 			// rotation
 			Echo::Vector3 pitchYawRoll;
-			getWorldOrientation().toEulerAngle(pitchYawRoll.x, pitchYawRoll.y, pitchYawRoll.z);
+			getWorldOrientation().toPitchYawRoll(pitchYawRoll.x, pitchYawRoll.y, pitchYawRoll.z);
 
 			// create body
 			b2BodyDef bodyDef;
@@ -178,12 +178,9 @@ namespace Echo
 				{
 					float pixelsPerUnit = Box2DModule::instance()->getPixelsPerMeter();
 
-					Quaternion quat;
-					quat.fromEulerAngle(0.f, 0.f, m_body->GetAngle()*Math::RAD2DEG);
-
 					const b2Vec2& pos = m_body->GetPosition();
 					this->setWorldPosition(Vector3(pos.x * pixelsPerUnit, pos.y * pixelsPerUnit, getWorldPosition().z));
-					this->setWorldOrientation(quat);
+					this->setWorldOrientation(Quaternion::fromPitchYawRoll(0.f, 0.f, m_body->GetAngle() * Math::RAD2DEG));
 				}
 			}
 			else

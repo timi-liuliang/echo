@@ -123,4 +123,34 @@ namespace Echo
 
 		return result;
 	}
+
+	Quaternion Quaternion::fromPitchYawRoll(Real pitch, Real yaw, Real roll)
+	{
+		Quaternion quat;
+
+		float fCosHRoll = Math::Cos(roll * Math::DEG2RAD * 0.5f);
+		float fSinHRoll = Math::Sin(roll * Math::DEG2RAD * 0.5f);
+		float fCosHPitch = Math::Cos(pitch * Math::DEG2RAD * 0.5f);
+		float fSinHPitch = Math::Sin(pitch * Math::DEG2RAD * 0.5f);
+		float fCosHYaw = Math::Cos(yaw * Math::DEG2RAD * 0.5f);
+		float fSinHYaw = Math::Sin(yaw * Math::DEG2RAD * 0.5f);
+
+		quat.w = fCosHRoll * fCosHPitch * fCosHYaw + fSinHRoll * fSinHPitch * fSinHYaw;
+		quat.x = fCosHRoll * fSinHPitch * fCosHYaw + fSinHRoll * fCosHPitch * fSinHYaw;
+		quat.y = fCosHRoll * fCosHPitch * fSinHYaw - fSinHRoll * fSinHPitch * fCosHYaw;
+		quat.z = fSinHRoll * fCosHPitch * fCosHYaw - fCosHRoll * fSinHPitch * fSinHYaw;
+
+		return quat;
+	}
+
+	void Quaternion::toPitchYawRoll(Real& pitch, Real& yaw, Real& roll) const
+	{
+		roll = Math::ATan2(2.0f * (w * z + x * y), 1.0f - 2.0f * (z * z + x * x));
+		pitch = Math::ASin(2.0f * (w * x - y * z));
+		yaw = Math::ATan2(2.0f * (w * y + z * x), 1.0f - 2.0f * (x * x + y * y));
+
+		pitch = pitch * Math::RAD2DEG;
+		yaw = yaw * Math::RAD2DEG;
+		roll = roll * Math::RAD2DEG;
+	}
 }

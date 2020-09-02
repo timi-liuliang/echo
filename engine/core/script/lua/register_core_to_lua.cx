@@ -192,6 +192,7 @@ namespace Echo
 
 			LuaBinder::instance()->execString(math_quaternion, true);
 			BIND_METHOD(Quaternion::fromVec3ToVec3, DEF_METHOD("quaternion.fromVec3ToVec3"));
+			BIND_METHOD(Quaternion::fromPitchYawRoll, DEF_METHOD("quaternion.fromPitchYawRoll"));
 		}
 	}
 }

@@ -57,12 +57,6 @@ namespace Echo
 		{
 		}
 
-		inline Quaternion(Real yaw, Real pitch, Real roll)
-		{
-			// NOTE: arguments order
-			fromEulerAngle(pitch, yaw, roll);
-		}
-
 		inline Quaternion(const Vector3& vAixs, Real radian)
 		{
 			fromAxisAngle(vAixs, radian);
@@ -665,31 +659,9 @@ namespace Echo
 			return result;
 		}
 
-		inline void fromEulerAngle(Real pitch, Real yaw, Real roll)
-		{
-			float fCosHRoll = Math::Cos(roll * Math::DEG2RAD * 0.5f);
-			float fSinHRoll = Math::Sin(roll * Math::DEG2RAD * 0.5f);
-			float fCosHPitch = Math::Cos(pitch * Math::DEG2RAD * 0.5f);
-			float fSinHPitch = Math::Sin(pitch * Math::DEG2RAD * 0.5f);
-			float fCosHYaw = Math::Cos(yaw * Math::DEG2RAD * 0.5f);
-			float fSinHYaw = Math::Sin(yaw * Math::DEG2RAD * 0.5f);
-
-			w = fCosHRoll * fCosHPitch * fCosHYaw + fSinHRoll * fSinHPitch * fSinHYaw;
-			x = fCosHRoll * fSinHPitch * fCosHYaw + fSinHRoll * fCosHPitch * fSinHYaw;
-			y = fCosHRoll * fCosHPitch * fSinHYaw - fSinHRoll * fSinHPitch * fCosHYaw;
-			z = fSinHRoll * fCosHPitch * fCosHYaw - fCosHRoll * fSinHPitch * fSinHYaw;
-		}
-
-		inline void toEulerAngle(Real& pitch, Real& yaw, Real& roll) const
-		{
-			roll = Math::ATan2(2.0f * (w * z + x * y), 1.0f - 2.0f * (z * z + x * x));
-			pitch = Math::ASin(2.0f * (w * x - y * z));
-			yaw = Math::ATan2(2.0f * (w * y + z * x), 1.0f - 2.0f * (x * x + y * y));
-
-			pitch = pitch * Math::RAD2DEG;
-			yaw = yaw * Math::RAD2DEG;
-			roll = roll * Math::RAD2DEG;
-		}
+		// convert between quaternion and PitchRawRoll
+		static Quaternion fromPitchYawRoll(Real pitch, Real yaw, Real roll);
+		void toPitchYawRoll(Real& pitch, Real& yaw, Real& roll) const;
 
 	public:
 		static inline Quaternion Log(const Quaternion& quan)

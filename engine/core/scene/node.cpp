@@ -283,17 +283,14 @@ namespace Echo
 	const Vector3 Node::getLocalYawPitchRoll()
 	{
 		Vector3 yawpitchroll;
-		m_localTransform.m_quat.toEulerAngle(yawpitchroll.x, yawpitchroll.y, yawpitchroll.z);
+		m_localTransform.m_quat.toPitchYawRoll(yawpitchroll.x, yawpitchroll.y, yawpitchroll.z);
 
 		return yawpitchroll;
 	}
 
 	void Node::setLocalYawPitchRoll(const Vector3& yawPitchRoll)
 	{
-		Quaternion quat;
-		quat.fromEulerAngle(yawPitchRoll.x, yawPitchRoll.y, yawPitchRoll.z);
-
-		setLocalOrientation(quat);
+		setLocalOrientation(Quaternion::fromPitchYawRoll(yawPitchRoll.x, yawPitchRoll.y, yawPitchRoll.z));
 	}
 
 	const Vector3& Node::getLocalPosition() const
@@ -454,6 +451,7 @@ namespace Echo
 		CLASS_BIND_METHOD(Node, setLocalPosition,		DEF_METHOD("setLocalPosition"));
 		CLASS_BIND_METHOD(Node, setLocalYawPitchRoll,	DEF_METHOD("setLocalYawPitchRoll"));
 		CLASS_BIND_METHOD(Node, setLocalOrientation,	DEF_METHOD("setLocalOrientation"));
+		CLASS_BIND_METHOD(Node, setWorldOrientation,	DEF_METHOD("setWorldOrientation"));
 		CLASS_BIND_METHOD(Node, setEnable,				DEF_METHOD("setEnable"));
 		CLASS_BIND_METHOD(Node, isEnable,				DEF_METHOD("isEnable"));
 		CLASS_BIND_METHOD(Node, setScript,				DEF_METHOD("setScript"));
