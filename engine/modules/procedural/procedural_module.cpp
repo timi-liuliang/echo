@@ -1,8 +1,8 @@
 #include "procedural_module.h"
 #include "procedural_texture.h"
 #include "procedural_geometry.h"
-#include "procedural_grid.h"
-#include "procedural_sphere.h"
+#include "node/primitive/procedural_grid.h"
+#include "node/primitive/procedural_sphere.h"
 #include "procedural_depend_graph.h"
 
 namespace Echo

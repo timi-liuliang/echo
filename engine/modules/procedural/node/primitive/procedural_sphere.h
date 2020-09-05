@@ -1,6 +1,6 @@
 #pragma once
 
-#include "procedural_geometry.h"
+#include "../../procedural_geometry.h"
 
 namespace Echo
 {

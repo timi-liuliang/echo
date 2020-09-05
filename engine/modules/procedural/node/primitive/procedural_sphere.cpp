@@ -1,5 +1,5 @@
 #include "procedural_sphere.h"
-#include "node/primitive/pcg_sphere.h"
+#include "pcg_sphere.h"
 
 namespace Echo
 {
