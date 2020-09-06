@@ -18,7 +18,7 @@ namespace Echo
 
     ImagePtr ParticleSystemEditor::getThumbnail() const
     {
-        return Image::loadFromFile(Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/texture_atlas.png");
+        return Image::loadFromFile(Engine::instance()->getRootPath() + "engine/modules/effect/editor/icon/particle_system.png");
     }
 
     void ParticleSystemEditor::onEditorSelectThisNode()

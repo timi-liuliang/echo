@@ -1,23 +1,51 @@
 #pragma once
 
-#include "engine/core/resource/Res.h"
+#include "engine/core/scene/render_node.h"
+#include "engine/core/render/base/mesh/mesh.h"
+#include "engine/core/render/base/Material.h"
+#include "engine/core/render/base/Renderable.h"
 
 namespace Echo
 {
-    class ParticleSystem : public Res
+    class ParticleSystem : public Render
     {
-        ECHO_RES(ParticleSystem, Res, ".particlesystem", Res::create<ParticleSystem>, ParticleSystem::load);
+        ECHO_CLASS(ParticleSystem, Render)
+
+    public:
+        struct VertexFormat
+        {
+            Vector3        m_position;
+            Vector2        m_uv;
+
+            VertexFormat(const Vector3& pos, const Vector2& uv)
+                : m_position(pos), m_uv(uv)
+            {}
+        };
+        typedef vector<VertexFormat>::type    VertexArray;
+        typedef vector<Word>::type    IndiceArray;
 
     public:
         ParticleSystem();
-        ~ParticleSystem();
+        virtual ~ParticleSystem();
 
-        // load|save
-        static Res* load(const ResourcePath& path);
-        virtual void save() override;
+        // material
+        Material* getMaterial() const { return m_material; }
+        void setMaterial(Object* material);
 
     protected:
-    };
-    typedef Echo::ResRef<Echo::ParticleSystem> ParticleSystemPtr;
-}
+        // build drawable
+        void buildRenderable();
 
+        // update
+        virtual void update_self() override;
+
+        // update vertex buffer
+        void updateMeshBuffer();
+
+    private:
+        bool                       m_isRenderableDirty = true;
+        MeshPtr                    m_mesh;                        // Geometry Data for render
+        MaterialPtr                m_material;                    // Material Instance
+        Renderable*                m_renderable = nullptr;
+    };
+}

@@ -1,7 +1,6 @@
 #include "effect_module.h"
 #include "sprite.h"
 #include "particle_system.h"
-#include "particle_system_render.h"
 #include "editor/particle_system_editor.h"
 
 namespace Echo
@@ -27,7 +26,6 @@ namespace Echo
 	{
 		Class::registerType<Sprite>();
         Class::registerType<ParticleSystem>();
-        Class::registerType<ParticleSystemRender>();
         
         REGISTER_OBJECT_EDITOR(ParticleSystem, ParticleSystemEditor)
 	}
