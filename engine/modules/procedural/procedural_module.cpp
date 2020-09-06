@@ -3,6 +3,7 @@
 #include "procedural_geometry.h"
 #include "node/primitive/procedural_grid.h"
 #include "node/primitive/procedural_sphere.h"
+#include "editor/procedural_geometry_editor.h"
 #include "procedural_depend_graph.h"
 
 namespace Echo
@@ -32,6 +33,6 @@ namespace Echo
 		Class::registerType<ProceduralGird>();
 		Class::registerType<ProceduralSphere>();
 
-//		REGISTER_OBJECT_EDITOR(Curve, CurveEditor)
+		REGISTER_OBJECT_EDITOR(ProceduralGeometry, ProceduralGeometryEditor)
 	}
 }
