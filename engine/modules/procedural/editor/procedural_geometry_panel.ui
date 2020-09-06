@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>TimelinePanel</class>
- <widget class="QWidget" name="TimelinePanel">
+ <class>ProceduralGeometryPanel</class>
+ <widget class="QWidget" name="ProceduralGeometryPanel">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Texture Atlas</string>
+   <string>Procedural Geometry</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -99,22 +99,6 @@
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QTreeWidget" name="m_nodeTreeWidget">
-      <property name="animated">
-       <bool>false</bool>
-      </property>
-      <property name="headerHidden">
-       <bool>true</bool>
-      </property>
-      <property name="columnCount">
-       <number>1</number>
-      </property>
-      <column>
-       <property name="text">
-        <string notr="true">1</string>
-       </property>
-      </column>
-     </widget>
      <widget class="QGraphicsView" name="m_graphicsView">
       <property name="contextMenuPolicy">
        <enum>Qt::CustomContextMenu</enum>
