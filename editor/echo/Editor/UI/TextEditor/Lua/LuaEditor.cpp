@@ -24,7 +24,6 @@ namespace Studio
 	{
 	}
 
-	// size hint
 	QSize LuaEditor::sizeHint() const
 	{
 		float width = MainWindow::instance()->width() * 0.7f;

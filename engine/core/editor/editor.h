@@ -22,7 +22,7 @@ namespace Echo
 
 	public:
 		// show panel
-        virtual void showCenterPanel(PanelTab * bottomPanel) = 0;
+        virtual void showCenterPanel(PanelTab * bottomPanel, float widthRatio=0.75f, float heightRation=0.65f) = 0;
 		virtual void showBottomPanel(PanelTab* bottomPanel)=0;
 
 	public:

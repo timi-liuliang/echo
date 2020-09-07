@@ -4,13 +4,13 @@
 #include <engine/core/editor/bottom_panel_tab.h>
 #include <QDockWidget>
 #include <QString>
-#include "ui_BottomPanel.h"
+#include "ui_CenterPanel.h"
 
 namespace Studio
 {
 	class DebuggerPanel;
 	class DocumentPanel;
-	class CenterPanel : public QDockWidget, public Ui_BottomPanel
+	class CenterPanel : public QDockWidget, public Ui_CenterPanel
 	{
 		Q_OBJECT
 
@@ -23,7 +23,7 @@ namespace Studio
 		bool isTabVisible(const Echo::String& tabName);
 
 		// show bottom panel
-		void showPanel(Echo::PanelTab* bottomPanel);
+		void showPanel(Echo::PanelTab* panel, float widthRatio=0.75f, float heightRation=0.65f);
 
 	public slots:
 		// on tab index changed

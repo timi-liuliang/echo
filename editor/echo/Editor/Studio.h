@@ -62,7 +62,7 @@ namespace Studio
 		virtual void showBottomPanel(Echo::PanelTab* centerPanel) override;
 
 		// show center panel
-		virtual void showCenterPanel(Echo::PanelTab* bottomPanel) override;
+		virtual void showCenterPanel(Echo::PanelTab* bottomPanel, float widthRatio, float heightRation) override;
 
 	public:
 		// select a node object

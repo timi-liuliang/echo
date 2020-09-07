@@ -228,7 +228,7 @@ namespace Studio
 		MainWindow::instance()->getBottomPanel()->showPanel( bottomPanel);
 	}
 
-	void AStudio::showCenterPanel(Echo::PanelTab* bottomPanel)
+	void AStudio::showCenterPanel(Echo::PanelTab* bottomPanel, float widthRatio, float heightRation)
 	{
 		MainWindow::instance()->getCenterPanel()->showPanel(bottomPanel);
 	}
