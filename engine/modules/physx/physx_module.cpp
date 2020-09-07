@@ -4,6 +4,7 @@
 #include "shape/physx_shape_sphere.h"
 #include "shape/physx_shape_capsule.h"
 #include "shape/physx_shape_plane.h"
+#include "shape/physx_shape_heightfield.h"
 #include "physx_body.h"
 #include "engine/core/main/Engine.h"
 
@@ -43,6 +44,7 @@ namespace Echo
 		Class::registerType<PhysxShapeSphere>();
 		Class::registerType<PhysxShapeCapsule>();
 		Class::registerType<PhysxShapePlane>();
+		Class::registerType<PhysxShapeHeightfield>();
 	}
 
 	void PhysxModule::update(float elapsedTime)
