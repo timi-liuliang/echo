@@ -162,6 +162,9 @@ namespace Echo
         // scale
         qGraphicsViewSetScaleFun qGraphicsViewSetScale = nullptr;
 
+        // set background brush
+        qGraphicsViewSetBackgroundBrushFun qGraphicsViewSetBackgroundBrush = nullptr;
+
         // fit in view
         qGraphicsViewFitInViewFun qGraphicsViewFitInView = nullptr;
         

@@ -47,6 +47,15 @@ namespace Echo
 		}
 	}
 
+	void qGraphicsViewSetBackgroundBrush(QWidget* view, const Color& color)
+	{
+		QGraphicsView* graphicsView = qobject_cast<QGraphicsView*>(view);
+		if (graphicsView)
+		{
+			graphicsView->setBackgroundBrush(QColor::fromRgbF(color.r, color.g, color.b, color.a));
+		}
+	}
+
 	void qGraphicsViewFitInView(QWidget* view, Rect& rect)
 	{
 		QGraphicsView* graphicsView = qobject_cast<QGraphicsView*>(view);

@@ -18,6 +18,9 @@ namespace Echo
 
 	// scale
 	typedef void (*qGraphicsViewSetScaleFun)(QWidget* view, float scaleX, float scaleY);
+
+	// set background brush
+	typedef void (*qGraphicsViewSetBackgroundBrushFun)(QWidget* view, const Color& color);
 }
 
 #endif

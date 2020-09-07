@@ -14,6 +14,15 @@ namespace Echo
 		typedef vector<QGraphicsProxyWidget*>::type QGraphicsWidgetArray;
 
 	public:
+		// Background style
+		struct BackgroundStyle
+		{
+			Color m_backgroundColor;
+			Color m_fineGridColor;
+			Color m_coarseGridColor;
+		};
+
+	public:
 		ProceduralGeometryPanel(Object* obj);
 		virtual ~ProceduralGeometryPanel();
 
@@ -50,6 +59,7 @@ namespace Echo
 		QGraphicsItem*				m_imageItem = nullptr;
 		QGraphicsItem*				m_imageBorder = nullptr;
 		QGraphicsItem*				m_atlaBorder = nullptr;
+		BackgroundStyle				m_backgroundStyle;
 	};
 }
 

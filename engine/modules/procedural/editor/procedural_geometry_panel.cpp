@@ -84,6 +84,11 @@ namespace Echo
 
 	void ProceduralGeometryPanel::refreshUiDisplay()
 	{
+		m_backgroundStyle.m_backgroundColor.setRGBA(77, 77, 77, 255);
+		m_backgroundStyle.m_fineGridColor.setRGBA(84, 84, 84, 255);
+		m_backgroundStyle.m_coarseGridColor.setRGBA(64, 64, 64, 255);
+
+		EditorApi.qGraphicsViewSetBackgroundBrush(EditorApi.qFindChild(m_ui, "m_graphicsView"), m_backgroundStyle.m_backgroundColor);
 	}
 
 	void ProceduralGeometryPanel::refreshAtlaList()
