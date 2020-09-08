@@ -37,8 +37,6 @@ namespace Echo
 		// create QGraphicsScene
 		m_graphicsScene = EditorApi.qGraphicsSceneNew();
 		EditorApi.qGraphicsViewSetScene(EditorApi.qFindChild(m_ui, "m_graphicsView"), m_graphicsScene);
-
-		refreshUiDisplay();
 	}
 
 	ProceduralGeometryPanel::~ProceduralGeometryPanel()
@@ -48,6 +46,8 @@ namespace Echo
 
 	void ProceduralGeometryPanel::update()
 	{
+		refreshUiDisplay();
+
 	}
 
 	void ProceduralGeometryPanel::onNewAtla()
@@ -59,7 +59,7 @@ namespace Echo
 		if (!m_importMenu)
 		{
 			m_importMenu = EditorApi.qMenuNew(m_ui);
-			
+
 			EditorApi.qMenuAddAction(m_importMenu, EditorApi.qFindChildAction(m_ui, "m_actionAddNewOne"));
 			EditorApi.qMenuAddSeparator(m_importMenu);
 			EditorApi.qMenuAddAction(m_importMenu, EditorApi.qFindChildAction(m_ui, "m_actionBuildFromGrid"));
@@ -84,11 +84,44 @@ namespace Echo
 
 	void ProceduralGeometryPanel::refreshUiDisplay()
 	{
+		drawBackground();
+	}
+
+	void ProceduralGeometryPanel::drawBackground()
+	{
 		m_backgroundStyle.m_backgroundColor.setRGBA(77, 77, 77, 255);
 		m_backgroundStyle.m_fineGridColor.setRGBA(84, 84, 84, 255);
 		m_backgroundStyle.m_coarseGridColor.setRGBA(64, 64, 64, 255);
 
 		EditorApi.qGraphicsViewSetBackgroundBrush(EditorApi.qFindChild(m_ui, "m_graphicsView"), m_backgroundStyle.m_backgroundColor);
+
+		auto drawGrid = [&](double gridStep, const Color& color)
+		{
+			Rect viewRect;
+			EditorApi.qGraphicsViewSceneRect(EditorApi.qFindChild(m_ui, "m_graphicsView"), viewRect);
+
+			double left = std::floor(viewRect.left / gridStep - 0.5);
+			double right = std::floor(viewRect.right / gridStep + 1.0);
+			double bottom = std::floor(viewRect.bottom / gridStep - 0.5);
+			double top = std::floor(viewRect.top / gridStep + 1.0);
+
+			// vertical lines
+			for (int xi = int(left); xi <= int(right); ++xi)
+			{
+				m_backgroundGrids.push_back(EditorApi.qGraphicsSceneAddLine(m_graphicsScene, xi * gridStep, bottom * gridStep, xi * gridStep, top * gridStep, color));
+			}
+
+			// horizontal lines
+			for (int yi = int(top); yi <= int(bottom); ++yi)
+			{
+				m_backgroundGrids.push_back(EditorApi.qGraphicsSceneAddLine(m_graphicsScene, left * gridStep, yi * gridStep, right * gridStep, yi * gridStep, color));
+			}
+		};
+
+		m_backgroundGrids.clear();
+
+		drawGrid(15, m_backgroundStyle.m_fineGridColor);
+		drawGrid(150, m_backgroundStyle.m_coarseGridColor);
 	}
 
 	void ProceduralGeometryPanel::refreshAtlaList()
@@ -97,14 +130,6 @@ namespace Echo
 
 	void ProceduralGeometryPanel::clearImageItemAndBorder()
 	{
-		if (m_imageItem)
-		{
-			EditorApi.qGraphicsSceneDeleteItem(m_graphicsScene, m_imageItem);
-			m_imageItem = nullptr;
-
-			// because m_imageBorder is a child of m_imageItem.
-			// so m_imageBorder will be delete too.
-		}
 	}
 
 	void ProceduralGeometryPanel::refreshImageDisplay()

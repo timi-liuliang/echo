@@ -52,14 +52,16 @@ namespace Echo
 		// clear
 		void clearImageItemAndBorder();
 
+	private:
+		// draw
+		void drawBackground();
+
 	protected:
-		ProceduralGeometry*			m_proceduralGeometry = nullptr;
-		QWidget*					m_importMenu = nullptr;
-		QObject*					m_graphicsScene;
-		QGraphicsItem*				m_imageItem = nullptr;
-		QGraphicsItem*				m_imageBorder = nullptr;
-		QGraphicsItem*				m_atlaBorder = nullptr;
-		BackgroundStyle				m_backgroundStyle;
+		ProceduralGeometry*				m_proceduralGeometry = nullptr;
+		QWidget*						m_importMenu = nullptr;
+		QObject*						m_graphicsScene;
+		BackgroundStyle					m_backgroundStyle;
+		vector<QGraphicsItem*>::type	m_backgroundGrids;
 	};
 }
 
