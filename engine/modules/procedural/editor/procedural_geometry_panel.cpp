@@ -100,15 +100,15 @@ namespace Echo
 			Rect viewRect;
 			EditorApi.qGraphicsViewSceneRect(EditorApi.qFindChild(m_ui, "m_graphicsView"), viewRect);
 
-			double left = std::floor(viewRect.left / gridStep - 0.5);
+			double left = std::floor(viewRect.left / gridStep - 1.0);
 			double right = std::floor(viewRect.right / gridStep + 1.0);
-			double bottom = std::floor(viewRect.bottom / gridStep - 0.5);
-			double top = std::floor(viewRect.top / gridStep + 1.0);
+			double top = std::floor(viewRect.top / gridStep - 1.0);
+			double bottom = std::floor(viewRect.bottom / gridStep + 1.0);
 
 			// vertical lines
 			for (int xi = int(left); xi <= int(right); ++xi)
 			{
-				m_backgroundGrids.push_back(EditorApi.qGraphicsSceneAddLine(m_graphicsScene, xi * gridStep, bottom * gridStep, xi * gridStep, top * gridStep, color));
+				m_backgroundGrids.push_back(EditorApi.qGraphicsSceneAddLine(m_graphicsScene, xi * gridStep, top * gridStep, xi * gridStep, bottom * gridStep, color));
 			}
 
 			// horizontal lines
