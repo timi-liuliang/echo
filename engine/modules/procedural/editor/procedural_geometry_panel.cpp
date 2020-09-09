@@ -37,6 +37,10 @@ namespace Echo
 		// create QGraphicsScene
 		m_graphicsScene = EditorApi.qGraphicsSceneNew();
 		EditorApi.qGraphicsViewSetScene(EditorApi.qFindChild(m_ui, "m_graphicsView"), m_graphicsScene);
+
+		// background
+		m_backgroundGridSmall.set(EditorApi.qFindChild(m_ui, "m_graphicsView"), m_graphicsScene);
+		m_backgroundGridBig.set(EditorApi.qFindChild(m_ui, "m_graphicsView"), m_graphicsScene);
 	}
 
 	ProceduralGeometryPanel::~ProceduralGeometryPanel()
@@ -47,7 +51,6 @@ namespace Echo
 	void ProceduralGeometryPanel::update()
 	{
 		refreshUiDisplay();
-
 	}
 
 	void ProceduralGeometryPanel::onNewAtla()
@@ -95,33 +98,8 @@ namespace Echo
 
 		EditorApi.qGraphicsViewSetBackgroundBrush(EditorApi.qFindChild(m_ui, "m_graphicsView"), m_backgroundStyle.m_backgroundColor);
 
-		auto drawGrid = [&](double gridStep, const Color& color)
-		{
-			Rect viewRect;
-			EditorApi.qGraphicsViewSceneRect(EditorApi.qFindChild(m_ui, "m_graphicsView"), viewRect);
-
-			double left = std::floor(viewRect.left / gridStep - 1.0);
-			double right = std::floor(viewRect.right / gridStep + 1.0);
-			double top = std::floor(viewRect.top / gridStep - 1.0);
-			double bottom = std::floor(viewRect.bottom / gridStep + 1.0);
-
-			// vertical lines
-			for (int xi = int(left); xi <= int(right); ++xi)
-			{
-				m_backgroundGrids.push_back(EditorApi.qGraphicsSceneAddLine(m_graphicsScene, xi * gridStep, top * gridStep, xi * gridStep, bottom * gridStep, color));
-			}
-
-			// horizontal lines
-			for (int yi = int(top); yi <= int(bottom); ++yi)
-			{
-				m_backgroundGrids.push_back(EditorApi.qGraphicsSceneAddLine(m_graphicsScene, left * gridStep, yi * gridStep, right * gridStep, yi * gridStep, color));
-			}
-		};
-
-		m_backgroundGrids.clear();
-
-		drawGrid(15, m_backgroundStyle.m_fineGridColor);
-		drawGrid(150, m_backgroundStyle.m_coarseGridColor);
+		m_backgroundGridSmall.update(15, m_backgroundStyle.m_fineGridColor);
+		m_backgroundGridBig.update(150, m_backgroundStyle.m_coarseGridColor);
 	}
 
 	void ProceduralGeometryPanel::refreshAtlaList()

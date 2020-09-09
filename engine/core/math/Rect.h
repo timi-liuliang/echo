@@ -14,7 +14,7 @@ namespace Echo
 		Real	bottom;
 
 	public:
-		inline Rect()
+		Rect()
 			:left(0)
 			,top(0)
 			,right(0)
@@ -22,7 +22,7 @@ namespace Echo
 		{
 		}
 
-		inline Rect(Real l, Real t, Real r, Real b)
+		Rect(Real l, Real t, Real r, Real b)
 			:left(l)
 			,top(t)
 			,right(r)
@@ -30,7 +30,7 @@ namespace Echo
 		{
 		}
 
-		inline Rect(const Rect& rect)
+		Rect(const Rect& rect)
 			:left(rect.left)
 			,top(rect.top)
 			,right(rect.right)
@@ -38,7 +38,7 @@ namespace Echo
 		{
 		}
 
-		inline Rect& operator = (const Rect& rect)
+		Rect& operator = (const Rect& rect)
 		{
 			left = rect.left;
 			top = rect.top;
@@ -47,32 +47,42 @@ namespace Echo
 			return *this;
 		}
 
-		inline Real getWidth() const
+		bool operator == (const Rect& rhs) const
+		{
+			return (left == rhs.left && top == rhs.top && right == rhs.right && bottom == rhs.bottom);
+		}
+
+		bool operator != (const Rect& rhs) const
+		{
+			return (left != rhs.left || top != rhs.top || right != rhs.right || bottom != rhs.bottom);
+		}
+
+		Real getWidth() const
 		{
 			return (right - left);
 		}
 
-		inline Real getHeight() const
+		Real getHeight() const
 		{
 			return (bottom - top);
 		}
 
-		inline Vector2 getSize() const
+		Vector2 getSize() const
 		{
 			return Vector2(getWidth(), getHeight());
 		}
 
-		inline bool isNull() const
+		bool isNull() const
 		{
 			return (getWidth() == 0 || getHeight() == 0);
 		}
 
-		inline void setNull()
+		void setNull()
 		{
 			left = right = top = bottom = 0;
 		}
 
-		inline Rect& offset(const Vector2& pt )
+		Rect& offset(const Vector2& pt )
 		{
 			left		+= pt.x;
 			right		+= pt.x;
@@ -81,12 +91,12 @@ namespace Echo
 			return *this;
 		}
 
-		Rect&	merge(const Rect& rhs);
-		Rect	intersect(const Rect& rhs) const;
-		bool	isPointInRect(const Vector2& position) const;
+		Rect& merge(const Rect& rhs);
+		Rect intersect(const Rect& rhs) const;
+		bool isPointInRect(const Vector2& position) const;
 		
-		// 获取面积
-		Real    getArea() const { return getWidth() * getHeight(); }
+		// area
+		Real getArea() const { return getWidth() * getHeight(); }
 	};
 
 	// Rectangle
@@ -95,17 +105,15 @@ namespace Echo
 	{
 		T left,	top, width, height;
 
-		// 构造函数
 		TRect() 
 			: left(0), top(0), width(0), height(0)
 		{}
 
-		// 构造函数
 		TRect( T const& _left, T const& _top, T const& _width, T const& _height)
 			: left(_left), top(_top), width(_width), height(_height) 
 		{}
 
-		// 获取面积
+		// area
 		T getArea() const { return width * height; }
 	};
 }

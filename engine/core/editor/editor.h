@@ -329,6 +329,6 @@ namespace Echo
 	};
 }
 
-#define EditorApi (*Editor::instance())
+#define EditorApi (*Echo::Editor::instance())
 
 #endif

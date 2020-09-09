@@ -3,6 +3,7 @@
 #include "engine/core/util/Array.hpp"
 #include "engine/core/editor/bottom_panel_tab.h"
 #include "../procedural_geometry.h"
+#include "painter/background_grid_painter.h"
 
 #ifdef ECHO_EDITOR_MODE
 
@@ -57,11 +58,12 @@ namespace Echo
 		void drawBackground();
 
 	protected:
-		ProceduralGeometry*				m_proceduralGeometry = nullptr;
-		QWidget*						m_importMenu = nullptr;
-		QObject*						m_graphicsScene;
-		BackgroundStyle					m_backgroundStyle;
-		vector<QGraphicsItem*>::type	m_backgroundGrids;
+		ProceduralGeometry*					m_proceduralGeometry = nullptr;
+		QWidget*							m_importMenu = nullptr;
+		QObject*							m_graphicsScene;
+		BackgroundStyle						m_backgroundStyle;
+		Procedural::QBackgroundGridPainter	m_backgroundGridSmall;
+		Procedural::QBackgroundGridPainter	m_backgroundGridBig;
 	};
 }
 
