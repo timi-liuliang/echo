@@ -40,6 +40,8 @@ namespace Procedural
 			if (!m_rect)
 			{
 				m_rect = EditorApi.qGraphicsSceneAddRect(m_graphicsScene, 0.f, 0.f, 200.f, 100.f, Echo::Color::RED);
+
+				EditorApi.qGraphicsItemSetMoveable(m_rect, true);
 			}
 
 			for (Echo::PGNode* pgNode : pg->getPGNodes())
