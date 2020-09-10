@@ -4,6 +4,7 @@
 #include "engine/core/editor/bottom_panel_tab.h"
 #include "../procedural_geometry.h"
 #include "painter/background_grid_painter.h"
+#include "painter/node_painter.h"
 
 #ifdef ECHO_EDITOR_MODE
 
@@ -64,6 +65,7 @@ namespace Echo
 		BackgroundStyle						m_backgroundStyle;
 		Procedural::QBackgroundGridPainter	m_backgroundGridSmall;
 		Procedural::QBackgroundGridPainter	m_backgroundGridBig;
+		Procedural::PGNodesPainter			m_pgNodesPainter;
 	};
 }
 

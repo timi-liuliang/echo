@@ -1,19 +1,19 @@
-#include "pcg_sphere.h"
+#include "pg_sphere.h"
 #include "engine/core/render/base/mesh/mesh.h"
 
 namespace Echo
 {
-	PCGSphere::PCGSphere()
+	PGSphere::PGSphere()
 	{
 
 	}
 
-	PCGSphere::~PCGSphere()
+	PGSphere::~PGSphere()
 	{
 
 	}
 
-	MeshPtr PCGSphere::buildUvSphere(float radius, i32 stackCount, i32 sectorCount)
+	MeshPtr PGSphere::buildUvSphere(float radius, i32 stackCount, i32 sectorCount)
 	{
 		// Vertex Format
 		struct VertexFormat

@@ -5,7 +5,7 @@
 
 namespace Echo
 {
-	class PCGNode : public Object
+	class PTNode : public Object
 	{
 
 	};

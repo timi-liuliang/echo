@@ -41,6 +41,9 @@ namespace Echo
 		// background
 		m_backgroundGridSmall.set(EditorApi.qFindChild(m_ui, "m_graphicsView"), m_graphicsScene);
 		m_backgroundGridBig.set(EditorApi.qFindChild(m_ui, "m_graphicsView"), m_graphicsScene);
+
+		// pg nodes painter
+		m_pgNodesPainter.set(EditorApi.qFindChild(m_ui, "m_graphicsView"), m_graphicsScene);
 	}
 
 	ProceduralGeometryPanel::~ProceduralGeometryPanel()
@@ -88,6 +91,9 @@ namespace Echo
 	void ProceduralGeometryPanel::refreshUiDisplay()
 	{
 		drawBackground();
+
+		// pg nodes painter
+		m_pgNodesPainter.update(m_proceduralGeometry);
 	}
 
 	void ProceduralGeometryPanel::drawBackground()

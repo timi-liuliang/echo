@@ -1,5 +1,5 @@
 #include "procedural_sphere.h"
-#include "pcg_sphere.h"
+#include "pg_sphere.h"
 
 namespace Echo
 {
@@ -24,7 +24,7 @@ namespace Echo
 
 		if (!m_mesh)
 		{
-			m_mesh = PCGSphere::buildUvSphere(1.f, 50, 50);
+			m_mesh = PGSphere::buildUvSphere(1.f, 50, 50);
 
 			m_localAABB = m_mesh->getLocalBox();
 		}

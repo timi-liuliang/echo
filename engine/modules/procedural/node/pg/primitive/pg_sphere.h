@@ -1,12 +1,12 @@
 #pragma once
 
-#include "../pcg_node.h"
+#include "../pg_node.h"
 
 namespace Echo
 {
 	// http://www.songho.ca/opengl/gl_sphere.html
 	// https://medium.com/game-dev-daily/four-ways-to-create-a-mesh-for-a-sphere-d7956b825db4
-	class PCGSphere : PCGNode
+	class PGSphere : PGNode
 	{
 	public:
 		// Type
@@ -19,8 +19,8 @@ namespace Echo
 		};
 
 	public:
-		PCGSphere();
-		virtual ~PCGSphere();
+		PGSphere();
+		virtual ~PGSphere();
 
 	public:
 		// build

@@ -4,6 +4,7 @@
 #include "engine/core/render/base/mesh/mesh.h"
 #include "engine/core/render/base/Material.h"
 #include "engine/core/render/base/Renderable.h"
+#include "node/pg/pg_node.h"
 
 namespace Echo
 {
@@ -14,6 +15,9 @@ namespace Echo
 	public:
 		ProceduralGeometry();
 		virtual ~ProceduralGeometry();
+
+		// PGNodes
+		vector<PGNode*>::type& getPGNodes() { return m_pgNodes; }
 
 		// set mesh
 		void setMesh(MeshPtr mesh);
@@ -36,6 +40,7 @@ namespace Echo
 		void clearRenderable();
 
 	protected:
+		vector<PGNode*>::type	m_pgNodes;
 		bool					m_isRenderableDirty = true;
 		MeshPtr					m_mesh;
 		MaterialPtr             m_material;
