@@ -25,7 +25,7 @@ namespace Echo
 		size_t getIdx() const { return m_index; }
 
 		// add opiton
-		void addOption(const String& option) { m_options.push_back(option); }
+		void addOption(const String& option) { m_options.emplace_back(option); }
 
 		// remove option
 		void removeOption(const String& option);

@@ -89,8 +89,8 @@ namespace DataFlowProgramming
 		{
             float number = Echo::StringUtil::ParseFloat(m_lineEdit->text().toStdString().c_str());
 
-			uniformNames.push_back("Uniforms." + getVariableName());
-			uniformValues.push_back(number);
+			uniformNames.emplace_back("Uniforms." + getVariableName());
+			uniformValues.emplace_back(number);
 
 			return true;
 		}

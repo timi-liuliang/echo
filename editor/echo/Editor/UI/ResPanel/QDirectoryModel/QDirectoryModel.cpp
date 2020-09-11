@@ -17,7 +17,7 @@ namespace QT_UI
 
 		Echo::StringArray exts = Echo::StringUtil::Split(extFilter, "|");
 		for (size_t i = 0; i<exts.size(); i++)
-			m_exts.push_back(exts[i].c_str());
+			m_exts.emplace_back(exts[i].c_str());
 
 		m_treeView = treeView;
 		m_proxy = proxy;
@@ -104,7 +104,7 @@ namespace QT_UI
 
 			invisibleRootItem()->setChild(invisibleRootItem()->rowCount(), 0, rootItem);
 
-			m_dirItems.push_back(rootItem);
+			m_dirItems.emplace_back(rootItem);
 			RecursiveDir(m_rootPath, rootItem, interrupt);
 
 			// expand root index
@@ -144,9 +144,9 @@ namespace QT_UI
 				childItem->setIcon(m_iconMaps["filter"]);
 				childItem->setData(fileDirs[i].c_str(), Qt::UserRole);
 
-				dirItems.push_back(childItem);
+				dirItems.emplace_back(childItem);
 
-				m_dirItems.push_back(childItem);
+				m_dirItems.emplace_back(childItem);
 				RecursiveDir(fileDirs[i].c_str(), childItem, interrupt);
 			}
 			else
@@ -161,7 +161,7 @@ namespace QT_UI
 					childItem->setIcon(getFileIcon(fileDirs[i].c_str()));
 					childItem->setData(fileDirs[i].c_str(), Qt::UserRole);
 
-					fileItems.push_back(childItem);
+					fileItems.emplace_back(childItem);
 				}
 			}
 		}

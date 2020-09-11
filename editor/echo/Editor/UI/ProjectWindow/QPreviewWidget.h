@@ -39,12 +39,13 @@ namespace QT_UI
 		// ItemInfo
 		struct ItemInfo
 		{
-			ItemInfo()
-			{
-
-			}
 			QString		m_text;
 			QString		m_icon;
+
+			ItemInfo(const QString& text, const QString& icon)
+				: m_text(text), m_icon(icon)
+			{
+			}
 		};
 
 	public:

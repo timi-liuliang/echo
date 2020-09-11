@@ -22,14 +22,14 @@ namespace Echo
 
 	void InputGeometryData::addTriangle(int a, int b, int c, int area, float maxSlope)
 	{
-		m_tris.push_back(a);
-		m_tris.push_back(b);
-		m_tris.push_back(c);
+		m_tris.emplace_back(a);
+		m_tris.emplace_back(b);
+		m_tris.emplace_back(c);
 
 		rcChunkyTriInfo info;
 		info.area = area;
 		info.walkableSlopeAngle = maxSlope;
-		m_triInfos.push_back(info);
+		m_triInfos.emplace_back(info);
 	}
 
 	int InputGeometryData::getTriCount() const 

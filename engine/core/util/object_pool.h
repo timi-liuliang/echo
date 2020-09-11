@@ -35,7 +35,7 @@ namespace Echo
 		void deleteObj(T* obj)
 		{
 			i32 idx = static_cast<i32>(obj - m_objs);
-			m_frees.push_back(idx);
+			m_frees.emplace_back(idx);
 		}
 
 		void clear()

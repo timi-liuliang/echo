@@ -732,7 +732,7 @@ namespace Echo
 						}
 					}
 
-					animClip->m_objects.push_back(animNode);
+					animClip->m_objects.emplace_back(animNode);
 				}
 			}
 
@@ -1474,7 +1474,7 @@ namespace Echo
 		{
 			Node* node = createSkeleton();
 			if (node)
-				nodes.push_back(node);
+				nodes.emplace_back(node);
 		}
 
 		// only have one root node
@@ -1528,7 +1528,7 @@ namespace Echo
 					mesh->setGltfRes(m_path);
 					mesh->setMeshIdx(info.m_mesh);
 					mesh->setPrimitiveIdx(static_cast<int>(i));
-					curNodes.push_back(mesh);
+					curNodes.emplace_back(mesh);
 				}
 			}
 		}

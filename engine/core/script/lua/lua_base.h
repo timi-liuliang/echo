@@ -168,7 +168,7 @@ namespace Echo
 		lua_pushnil(state);
 		while (lua_next(state, idx) != 0)
 		{
-			result->push_back((float)lua_tonumber(state, -1));
+			result->emplace_back((float)lua_tonumber(state, -1));
 			lua_pop(state, 1);
 		}
 
@@ -196,7 +196,7 @@ namespace Echo
 			lua_pushnil(state);
 			while (lua_next(state, row) != 0)
 			{
-				rowElement.push_back(lua_tonumber(state, -1));
+				rowElement.emplace_back(lua_tonumber(state, -1));
 				lua_pop(state, 1);
 			}
 

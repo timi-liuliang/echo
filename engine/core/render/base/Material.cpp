@@ -184,7 +184,7 @@ namespace Echo
 		{
 			if (!isMacroUsed(macro))
 			{
-				m_macros.push_back(macro);
+				m_macros.emplace_back(macro);
 			}
 		}
 		else

@@ -68,7 +68,7 @@ namespace Echo
 				t = (float)i / stackCount;
 				vertex.m_uv = Vector2(s, t);
 
-				vertices.push_back(vertex);
+				vertices.emplace_back(vertex);
 			}
 		}
 
@@ -88,16 +88,16 @@ namespace Echo
 				// 2 triangles per sector excluding 1st and last stacks
 				if (i != 0)
 				{
-					indices.push_back(k1);
-					indices.push_back(k2);
-					indices.push_back(k1 + 1);
+					indices.emplace_back(k1);
+					indices.emplace_back(k2);
+					indices.emplace_back(k1 + 1);
 				}
 
 				if (i != (stackCount - 1))
 				{
-					indices.push_back(k1+1);
-					indices.push_back(k2);
-					indices.push_back(k2 + 1);
+					indices.emplace_back(k1+1);
+					indices.emplace_back(k2);
+					indices.emplace_back(k2 + 1);
 				}
 			}
 		}

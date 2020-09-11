@@ -61,7 +61,7 @@ namespace Echo
 			{
 				StringArray macros;
 				if(m_mesh->getVertexData().getFormat().m_isUseNormal)
-					macros.push_back("HAS_NORMALS");
+					macros.emplace_back("HAS_NORMALS");
 
 				ShaderProgramPtr shader = ShaderProgram::getDefault3D(macros);
 

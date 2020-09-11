@@ -64,11 +64,11 @@ namespace Echo
                 if (IO::instance()->isExist(layerImagePath))
                 {
 					Image* layerImage = Image::loadFromFile(layerImagePath);
-					m_layerImages.push_back(layerImage);
+					m_layerImages.emplace_back(layerImage);
                 }
                 else
                 {
-                    m_layerImages.push_back(nullptr);
+                    m_layerImages.emplace_back(nullptr);
                 }
             }
         }
@@ -148,7 +148,7 @@ namespace Echo
 
                     float weight = Math::IntervalRandom(0.f, 1.f);
                     vert.m_layerWeights = Vector4(getWeight(row, column, 0), getWeight(row, column, 1), getWeight(row, column, 2), getWeight(row, column, 3));
-                    oVertices.push_back(vert);
+                    oVertices.emplace_back(vert);
                 }
             }
             
@@ -164,12 +164,12 @@ namespace Echo
                     i32 indexLeftBottom = indexLeftTop + m_columns;
                     i32 indexRightBottom = indexRightTop + m_columns;
                     
-                    oIndices.push_back(indexLeftTop);
-                    oIndices.push_back(indexRightBottom);
-                    oIndices.push_back(indexRightTop);
-                    oIndices.push_back(indexLeftTop);
-                    oIndices.push_back(indexLeftBottom);
-                    oIndices.push_back(indexRightBottom);
+                    oIndices.emplace_back(indexLeftTop);
+                    oIndices.emplace_back(indexRightBottom);
+                    oIndices.emplace_back(indexRightTop);
+                    oIndices.emplace_back(indexLeftTop);
+                    oIndices.emplace_back(indexLeftBottom);
+                    oIndices.emplace_back(indexRightBottom);
                 }
             }
         }

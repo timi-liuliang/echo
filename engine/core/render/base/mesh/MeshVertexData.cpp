@@ -35,37 +35,30 @@ namespace Echo
 
 		m_vertexElements.clear();
 
-		// 增加位置的空间
-		m_vertexElements.push_back(VertexElement(VS_POSITION, PF_RGB32_FLOAT));
+		m_vertexElements.emplace_back(VS_POSITION, PF_RGB32_FLOAT);
 
-		// 使用法线
 		if (m_isUseNormal)
-			m_vertexElements.push_back(VertexElement(VS_NORMAL, PF_RGB32_FLOAT));
+			m_vertexElements.emplace_back(VS_NORMAL, PF_RGB32_FLOAT);
 
-		// 增加顶点色
 		if (m_isUseVertexColor)
-			m_vertexElements.push_back(VertexElement(VS_COLOR, PF_RGBA8_UNORM));
+			m_vertexElements.emplace_back(VS_COLOR, PF_RGBA8_UNORM);
 
-		// 纹理坐标
 		if (m_isUseUV)
-			m_vertexElements.push_back(VertexElement(VS_TEXCOORD0, PF_RG32_FLOAT));
+			m_vertexElements.emplace_back(VS_TEXCOORD0, PF_RG32_FLOAT);
 
-		// 灯光图
 		if (m_isUseLightmapUV)
-			m_vertexElements.push_back(VertexElement(VS_TEXCOORD1, PF_RG32_FLOAT));
+			m_vertexElements.emplace_back(VS_TEXCOORD1, PF_RG32_FLOAT);
 
-		// 动画数据(骨骼权重与索引)
 		if (m_isUseBlendingData)
 		{
-			m_vertexElements.push_back(VertexElement(VS_BLENDINDICES, PF_RGBA8_UINT));
-			m_vertexElements.push_back(VertexElement(VS_BLENDWEIGHTS, PF_RGBA32_FLOAT));
+			m_vertexElements.emplace_back(VS_BLENDINDICES, PF_RGBA8_UINT);
+			m_vertexElements.emplace_back(VS_BLENDWEIGHTS, PF_RGBA32_FLOAT);
 		}
 
-		// 切空间数据
 		if (m_isUseTangentBinormal)
 		{
-			m_vertexElements.push_back(VertexElement(VS_TANGENT, PF_RGB32_FLOAT));
-			m_vertexElements.push_back(VertexElement(VS_BINORMAL, PF_RGB32_FLOAT));
+			m_vertexElements.emplace_back(VS_TANGENT, PF_RGB32_FLOAT);
+			m_vertexElements.emplace_back(VS_BINORMAL, PF_RGB32_FLOAT);
 		}
 	}
 

@@ -150,18 +150,18 @@ namespace Echo
 
 					// vertices
 					Word vertBase = oVertices.size();
-					oVertices.push_back(Ui::VertexFormat(Vector3(left, top, 0.f), Vector2(uvLeft, uvTop)));
-					oVertices.push_back(Ui::VertexFormat(Vector3(left, bottom, 0.f), Vector2(uvLeft, uvBottom)));
-					oVertices.push_back(Ui::VertexFormat(Vector3(right, bottom, 0.f), Vector2(uvRight, uvBottom)));
-					oVertices.push_back(Ui::VertexFormat(Vector3(right, top, 0.f), Vector2(uvRight, uvTop)));
+					oVertices.emplace_back(Vector3(left, top, 0.f), Vector2(uvLeft, uvTop));
+					oVertices.emplace_back(Vector3(left, bottom, 0.f), Vector2(uvLeft, uvBottom));
+					oVertices.emplace_back(Vector3(right, bottom, 0.f), Vector2(uvRight, uvBottom));
+					oVertices.emplace_back(Vector3(right, top, 0.f), Vector2(uvRight, uvTop));
 
 					// indices
-					oIndices.push_back(vertBase + 0);
-					oIndices.push_back(vertBase + 1);
-					oIndices.push_back(vertBase + 2);
-					oIndices.push_back(vertBase + 0);
-					oIndices.push_back(vertBase + 2);
-					oIndices.push_back(vertBase + 3);
+					oIndices.emplace_back(vertBase + 0);
+					oIndices.emplace_back(vertBase + 1);
+					oIndices.emplace_back(vertBase + 2);
+					oIndices.emplace_back(vertBase + 0);
+					oIndices.emplace_back(vertBase + 2);
+					oIndices.emplace_back(vertBase + 3);
 
                     m_material->getUniform("BaseColor")->setTexture(fontGlyph->m_texture->getTexture());
                 }

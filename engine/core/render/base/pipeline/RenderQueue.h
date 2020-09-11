@@ -16,7 +16,7 @@ namespace Echo
 		virtual void render();
 
 		// add render able
-		void addRenderable(RenderableID id) { m_renderables.push_back(id); }
+		void addRenderable(RenderableID id) { m_renderables.emplace_back(id); }
 
 		// sort
 		void setSort(bool isSort) { m_isSort = isSort; }

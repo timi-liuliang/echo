@@ -165,7 +165,7 @@ namespace QT_UI
 		//else
 		{
 			newItem = createItem(filePath, filePreTex.c_str());
-			results.push_back(newItem);
+			results.emplace_back(newItem);
 		}
 		//return newItem;
 	}
@@ -178,10 +178,7 @@ namespace QT_UI
 
 	QStandardItem* QPreviewWidget::createItem( const QString& text, const QString& icon)
 	{
-		ItemInfo iteminfo;
-		iteminfo.m_text = text;
-		iteminfo.m_icon = icon;
-		m_itemInfos.push_back( iteminfo);
+		m_itemInfos.emplace_back( text, icon);
 
 		Echo::String fileNameWithoutExt = Echo::PathUtil::GetPureFilename(text.toStdString().c_str(), false);
 		Echo::String fileName = Echo::PathUtil::GetPureFilename(text.toStdString().c_str());

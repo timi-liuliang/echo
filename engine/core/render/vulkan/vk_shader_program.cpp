@@ -242,7 +242,7 @@ namespace Echo
             i32 bytes = uniform->m_location + uniform->m_sizeInBytes;
             while (uniformBytes.size() < bytes)
             {
-                uniformBytes.push_back(0);
+                uniformBytes.emplace_back(0);
             }
         }
     }

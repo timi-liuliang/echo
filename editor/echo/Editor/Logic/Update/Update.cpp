@@ -31,7 +31,7 @@ namespace Studio
 			Echo::String astudio = httpText.substr(beginPos+1, endPos-beginPos+8);
 			httpText = Echo::StringUtil::Replace(httpText, astudio, "");
 
-			oResult->push_back(astudio);
+			oResult->emplace_back(astudio);
 
 			beginPos = httpText.find(">astudio", 0);
 			endPos = httpText.find("setup.exe<", 0);

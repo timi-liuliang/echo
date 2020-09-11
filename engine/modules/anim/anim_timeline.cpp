@@ -46,7 +46,7 @@ namespace Echo
 			if (clip->m_name.empty())
 				generateUniqueAnimName("Anim ", clip->m_name);
 
-			m_clips.push_back(clip);
+			m_clips.emplace_back(clip);
 			m_animations.addOption(clip->m_name);
 
 			m_isAnimDataDirty = true;
@@ -255,7 +255,7 @@ namespace Echo
 
 						if (propertyType != AnimProperty::Type::Unknown)
 						{
-							propertyChain.push_back(propertyName);
+							propertyChain.emplace_back(propertyName);
 							addProperty(animClip->m_name, path, propertyChain, propertyType);
 
 							if (propertyType == AnimProperty::Type::Bool)
@@ -336,7 +336,7 @@ namespace Echo
 			AnimObject* animNode = EchoNew(AnimObject);
 			animNode->m_userData = ObjectUserData( type, path);
 
-			clip->m_objects.push_back(animNode);
+			clip->m_objects.emplace_back(animNode);
 
 			m_isAnimDataDirty = true;
 		}

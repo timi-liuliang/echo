@@ -22,6 +22,10 @@ namespace Echo
     {
         PropertyHintType    m_type;
         String              m_value;
+
+		PropertyHint(PropertyHintType type, const String& value)
+			: m_type(type), m_value(value)
+		{}
     };
     typedef vector<PropertyHint>::type PropertyHintArray;
 

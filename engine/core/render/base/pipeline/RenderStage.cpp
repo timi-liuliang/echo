@@ -31,13 +31,13 @@ namespace Echo
 					RenderQueue* queue = EchoNew(RenderQueue(m_pipeline, this));
 					queue->setName(queueNode.attribute("name").as_string("Opaque"));
 					queue->setSort(queueNode.attribute("sort").as_bool(false));
-					m_renderQueues.push_back(queue);
+					m_renderQueues.emplace_back(queue);
 				}
 				else if (type == "filter")
 				{
 					ImageFilter* queue = EchoNew(ImageFilter(m_pipeline, this));
 					queue->setName(queueNode.attribute("name").as_string());
-					m_renderQueues.push_back(queue);
+					m_renderQueues.emplace_back(queue);
 				}
 			}
 

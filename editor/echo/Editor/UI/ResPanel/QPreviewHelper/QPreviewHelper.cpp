@@ -133,7 +133,7 @@ namespace QT_UI
 			item->setData(filePath, Qt::UserRole);
 			item->setSizeHint(QSize( m_itemWidth, m_itemHeight));
 			addToolTips(item, filePath);
-			results.push_back(item);
+			results.emplace_back(item);
 		}
 	}
 

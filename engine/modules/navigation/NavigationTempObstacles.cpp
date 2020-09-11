@@ -669,7 +669,7 @@ namespace Echo
 					tileData.data = (unsigned char*)dtAlloc(tileData.dataSize, DT_ALLOC_PERM);
 					pStream->read(tileData.data, tileData.dataSize);
 
-					tileCacheData.tileDatas.push_back(tileData);
+					tileCacheData.tileDatas.emplace_back(tileData);
 				}
 
 				cleanup();

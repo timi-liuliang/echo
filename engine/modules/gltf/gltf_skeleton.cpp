@@ -41,7 +41,7 @@ namespace Echo
 						if (clip->m_name.empty())
 							generateUniqueName(clip->m_name);
 
-						m_clips.push_back(clip);
+						m_clips.emplace_back(clip);
 						m_animations.addOption(clip->m_name);
 					}
 				}

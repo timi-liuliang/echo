@@ -113,10 +113,10 @@ namespace Echo
 
             // vertices
             VertexArray vertices;
-            vertices.push_back(VertexFormat(Vector3(-hw, -hh, 0.f), Vector2(0.f, 1.f)));
-            vertices.push_back(VertexFormat(Vector3(-hw,  hh, 0.f), Vector2(0.f, 0.f)));
-            vertices.push_back(VertexFormat(Vector3(hw,   hh, 0.f), Vector2(1.f, 0.f)));
-            vertices.push_back(VertexFormat(Vector3(hw,  -hh, 0.f), Vector2(1.f, 1.f)));
+            vertices.emplace_back(Vector3(-hw, -hh, 0.f), Vector2(0.f, 1.f));
+            vertices.emplace_back(Vector3(-hw,  hh, 0.f), Vector2(0.f, 0.f));
+            vertices.emplace_back(Vector3(hw,   hh, 0.f), Vector2(1.f, 0.f));
+            vertices.emplace_back(Vector3(hw,  -hh, 0.f), Vector2(1.f, 1.f));
 
             // format
             MeshVertexFormat define;

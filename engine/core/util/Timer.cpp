@@ -52,7 +52,7 @@ namespace Echo
 		Task task;
 		task.m_startTime = getMilliseconds() + delayMilliseconds;
 		task.m_cb = cb;
-		m_tasks.push_back(task);
+		m_tasks.emplace_back(task);
 	}
 
 	void Time::reset()

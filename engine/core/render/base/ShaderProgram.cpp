@@ -341,7 +341,7 @@ namespace Echo
 				clearPropertys();
 
 				PropertyHintArray hints;
-				hints.push_back({ PropertyHintType::Category, "Uniforms" });
+				hints.emplace_back( PropertyHintType::Category, "Uniforms");
 
 				for (auto& it : m_uniforms)
 				{

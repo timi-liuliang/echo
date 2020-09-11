@@ -123,8 +123,8 @@ namespace DataFlowProgramming
     {
         if (m_uniformConfig->isExport())
         {
-            uniformNames.push_back("Uniforms." + getVariableName());
-            uniformValues.push_back(m_colorSelect->GetColor());
+            uniformNames.emplace_back("Uniforms." + getVariableName());
+            uniformValues.emplace_back(m_colorSelect->GetColor());
 
             return true;
         }

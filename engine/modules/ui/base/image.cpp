@@ -127,10 +127,10 @@ namespace Echo
         float hh = m_height * 0.5f;
         
         // vertices
-        oVertices.push_back(Ui::VertexFormat(Vector3(-hw, -hh, 0.f), Vector2(0.f, 1.f)));
-        oVertices.push_back(Ui::VertexFormat(Vector3(-hw,  hh, 0.f), Vector2(0.f, 0.f)));
-        oVertices.push_back(Ui::VertexFormat(Vector3(hw,   hh, 0.f), Vector2(1.f, 0.f)));
-        oVertices.push_back(Ui::VertexFormat(Vector3(hw,  -hh, 0.f), Vector2(1.f, 1.f)));
+        oVertices.emplace_back(Vector3(-hw, -hh, 0.f), Vector2(0.f, 1.f));
+        oVertices.emplace_back(Vector3(-hw,  hh, 0.f), Vector2(0.f, 0.f));
+        oVertices.emplace_back(Vector3(hw,   hh, 0.f), Vector2(1.f, 0.f));
+        oVertices.emplace_back(Vector3(hw,  -hh, 0.f), Vector2(1.f, 1.f));
         
         // calc aabb
         m_localAABB.reset();
@@ -138,12 +138,12 @@ namespace Echo
             m_localAABB.addPoint(vert.m_position);
         
         // indices
-        oIndices.push_back(0);
-        oIndices.push_back(1);
-        oIndices.push_back(2);
-        oIndices.push_back(0);
-        oIndices.push_back(2);
-        oIndices.push_back(3);
+        oIndices.emplace_back(0);
+        oIndices.emplace_back(1);
+        oIndices.emplace_back(2);
+        oIndices.emplace_back(0);
+        oIndices.emplace_back(2);
+        oIndices.emplace_back(3);
     }
     
     void UiImage::updateMeshBuffer()

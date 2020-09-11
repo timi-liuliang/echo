@@ -215,7 +215,7 @@ namespace Echo
 			newPlayer->setVolume(volumeScale);
 			newPlayer->play();
 
-			m_oneShotPlayers.push_back(newPlayer);
+			m_oneShotPlayers.emplace_back(newPlayer);
 		}
 	}
 }

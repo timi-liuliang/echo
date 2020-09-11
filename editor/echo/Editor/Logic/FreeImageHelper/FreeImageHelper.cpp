@@ -307,7 +307,6 @@ namespace Echo
 				{		
 					for (size_t w = 0; w < imageInfo.m_width; w++)
 					{
-						// 注，FreeImage中读出颜色值上下倒置
 						size_t pix = (imageInfo.m_height - h - 1) * imageInfo.m_width + w;
 						BYTE r = pixels[pix * 4 + 0];
 						Byte g = pixels[pix * 4 + 1];
@@ -317,7 +316,7 @@ namespace Echo
 						Echo::Color color;
 						color.setRGBA(r, g, b, a);
 
-						colors.push_back(color);
+						colors.emplace_back(color);
 					}
 				}
 

@@ -252,11 +252,11 @@ namespace Echo
 			color.setRGBA(56, 56, 56, 255);
 
 			vector<Vector2>::type paths;
-			paths.push_back(Vector2(0.f, 0.f));
-			paths.push_back(Vector2(rect.getWidth(), 0.f));
-			paths.push_back(Vector2(rect.getWidth(), rect.getHeight()));
-			paths.push_back(Vector2(0.f, rect.getHeight()));
-			paths.push_back(Vector2(0.f, 0.f));
+			paths.emplace_back(0.f, 0.f);
+			paths.emplace_back(rect.getWidth(), 0.f);
+			paths.emplace_back(rect.getWidth(), rect.getHeight());
+			paths.emplace_back(0.f, rect.getHeight());
+			paths.emplace_back(0.f, 0.f);
 			m_imageBorder = EditorApi.qGraphicsSceneAddPath(m_graphicsScene, paths, 1.f, color);
 
 			EditorApi.qGraphicsItemSetParentItem(m_imageBorder, m_imageItem);
@@ -289,11 +289,11 @@ namespace Echo
 					ui32 atlaPosX = viewPort.x;
 					ui32 atlaPosY = viewPort.y;
 
-					paths.push_back(Vector2(atlaPosX, atlaPosY));
-					paths.push_back(Vector2(atlaPosX+atlaWidth, atlaPosY));
-					paths.push_back(Vector2(atlaPosX + atlaWidth, atlaPosY + atlaHeight));
-					paths.push_back(Vector2(atlaPosX, atlaPosY + atlaHeight));
-					paths.push_back(Vector2(atlaPosX, atlaPosY));
+					paths.emplace_back(atlaPosX, atlaPosY);
+					paths.emplace_back(atlaPosX+atlaWidth, atlaPosY);
+					paths.emplace_back(atlaPosX + atlaWidth, atlaPosY + atlaHeight);
+					paths.emplace_back(atlaPosX, atlaPosY + atlaHeight);
+					paths.emplace_back(atlaPosX, atlaPosY);
 				}
 
 				// create qGraphicsItem

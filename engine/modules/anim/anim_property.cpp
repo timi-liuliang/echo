@@ -32,7 +32,7 @@ namespace Echo
 		m_curves.reserve(curveCount);
 		for (i32 i = 0; i < curveCount; i++)
 		{
-			m_curves.push_back(EchoNew(AnimCurve));
+			m_curves.emplace_back(EchoNew(AnimCurve));
 		}
 	}
     
@@ -169,10 +169,7 @@ namespace Echo
 
 	void AnimPropertyQuat::addKey(ui32 time, const Quaternion& value)
 	{
-		Key key;
-		key.m_time = time;
-		key.m_value = value;
-		m_keys.push_back(key);
+		m_keys.emplace_back(time, value);
 	}
 
 	ui32 AnimPropertyQuat::getLength()

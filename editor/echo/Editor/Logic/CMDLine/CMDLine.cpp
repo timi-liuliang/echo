@@ -25,7 +25,7 @@ namespace Echo
 		{	
 			StringArray sargv;
 			for( int i=1; i<argc; i++)
-				sargv.push_back( argv[i]);
+				sargv.emplace_back( argv[i]);
 
 			if (sargv[0] == "play")
 			{

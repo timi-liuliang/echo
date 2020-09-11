@@ -102,7 +102,7 @@ namespace Echo
 //				break;
 //			}
 //
-//			luaStack.push_back(elem);
+//			luaStack.emplace_back(elem);
 //		}
 //#endif
 //	}
@@ -281,7 +281,7 @@ namespace Echo
 				const char* key = lua_tostring(m_luaState, -2);
 				const char* type = lua_typename(m_luaState, lua_type(m_luaState, -1));
 				if(strcmp(type, "function")==0)
-					methods.push_back(key);
+					methods.emplace_back(key);
 
 				lua_pop(m_luaState, 1);
 			}

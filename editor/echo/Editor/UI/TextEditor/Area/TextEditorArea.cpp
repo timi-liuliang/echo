@@ -67,7 +67,7 @@ namespace Studio
 
                 QObject::connect(newEditor, SIGNAL(titleChanged(LuaEditor*)), this, SLOT(onLuaEditorTitleChanged(LuaEditor*)));
                 
-                m_luaEditors.push_back(newEditor);
+                m_luaEditors.emplace_back(newEditor);
             }
         }
         
@@ -84,7 +84,7 @@ namespace Studio
         {
             LuaEditor* luaEditor = qobject_cast<LuaEditor*>(m_tabWidgetScript->widget(i));
             if(luaEditor)
-                openedFiles.push_back(luaEditor->getCurrentLuaFilePath());
+                openedFiles.emplace_back(luaEditor->getCurrentLuaFilePath());
         }
         
         ConfigMgr* configMgr = AStudio::instance()->getConfigMgr();

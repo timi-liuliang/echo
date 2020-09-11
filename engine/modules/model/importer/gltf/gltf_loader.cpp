@@ -716,7 +716,7 @@ namespace Gltf
 						}
 					}
 
-					//animClip->m_objects.push_back(animNode);
+					//animClip->m_objects.emplace_back(animNode);
 				}
 			}
 

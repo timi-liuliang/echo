@@ -58,10 +58,10 @@ namespace Procedural
 				{
 					reset();
 
-					double left = std::floor(viewRect.left / gridStep - 1.0);
-					double right = std::floor(viewRect.right / gridStep + 1.0);
-					double top = std::floor(viewRect.top / gridStep - 1.0);
-					double bottom = std::floor(viewRect.bottom / gridStep + 1.0);
+					Echo::Real left = std::floor(viewRect.left / gridStep - 1.0);
+					Echo::Real right = std::floor(viewRect.right / gridStep + 1.0);
+					Echo::Real top = std::floor(viewRect.top / gridStep - 1.0);
+					Echo::Real bottom = std::floor(viewRect.bottom / gridStep + 1.0);
 
 					// vertical lines
 					Echo::vector<Echo::Vector2>::type vpaths;
@@ -70,14 +70,14 @@ namespace Procedural
 						if (xi % 2 == 0)
 						{
 							// top -> bottom
-							vpaths.push_back(Echo::Vector2(xi * gridStep, top * gridStep));
-							vpaths.push_back(Echo::Vector2(xi * gridStep, bottom * gridStep));
+							vpaths.emplace_back(xi * gridStep, top * gridStep);
+							vpaths.emplace_back(xi * gridStep, bottom * gridStep);
 						}
 						else
 						{
 							// bottom -> top
-							vpaths.push_back(Echo::Vector2(xi * gridStep, bottom * gridStep));
-							vpaths.push_back(Echo::Vector2(xi * gridStep, top * gridStep));
+							vpaths.emplace_back(Echo::Vector2(xi * gridStep, bottom * gridStep));
+							vpaths.emplace_back(Echo::Vector2(xi * gridStep, top * gridStep));
 						}
 					}
 
@@ -88,14 +88,14 @@ namespace Procedural
 						if (yi % 2 == 0)
 						{
 							// left -> right
-							hpaths.push_back(Echo::Vector2(left * gridStep, yi * gridStep));
-							hpaths.push_back(Echo::Vector2(right * gridStep, yi * gridStep));
+							hpaths.emplace_back(left * gridStep, yi * gridStep);
+							hpaths.emplace_back(right * gridStep, yi * gridStep);
 						}
 						else
 						{
 							// right -> left
-							hpaths.push_back(Echo::Vector2(right * gridStep, yi * gridStep));
-							hpaths.push_back(Echo::Vector2(left * gridStep, yi * gridStep));
+							hpaths.emplace_back(right * gridStep, yi * gridStep);
+							hpaths.emplace_back(left * gridStep, yi * gridStep);
 						}
 					}
 

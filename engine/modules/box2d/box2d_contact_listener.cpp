@@ -13,7 +13,7 @@ namespace Echo
 		Box2DBody* bodyA = (Box2DBody*)contact->GetFixtureA()->GetBody()->GetUserData();
         Box2DBody* bodyB = (Box2DBody*)contact->GetFixtureB()->GetBody()->GetUserData();
         
-        m_signals.push_back(SignalCache(bodyA->getId(), bodyB->getId(), true));
+        m_signals.emplace_back(bodyA->getId(), bodyB->getId(), true);
     }
 
     void Box2DContactListener::EndContact(b2Contact* contact)
@@ -21,7 +21,7 @@ namespace Echo
 		Box2DBody* bodyA = (Box2DBody*)contact->GetFixtureA()->GetBody()->GetUserData();
         Box2DBody* bodyB = (Box2DBody*)contact->GetFixtureB()->GetBody()->GetUserData();
 
-        m_signals.push_back(SignalCache(bodyA->getId(), bodyB->getId(), false));
+        m_signals.emplace_back(bodyA->getId(), bodyB->getId(), false);
     }
 
     void Box2DContactListener::EmitSignals()

@@ -40,11 +40,7 @@ namespace Echo
 
 	void TextureAtlas::addAtla(const String& name, const Vector4& viewPort)
 	{
-		Atla atla;
-		atla.m_name = name;
-		atla.m_viewPort = viewPort;
-
-		m_atlas.push_back(atla);
+		m_atlas.emplace_back(name, viewPort);
 	}
 
 	void TextureAtlas::removeAtla(const String& name)
@@ -149,8 +145,7 @@ namespace Echo
 
 		for (Atla& atla : m_atlas)
 		{
-			String path = (isAbsPath ? PathUtil::GetRenameExtFile(getPath() + "/", "") : "") + atla.m_name + ".atla";
-			ret.push_back(path);
+			ret.emplace_back((isAbsPath ? PathUtil::GetRenameExtFile(getPath() + "/", "") : "") + atla.m_name + ".atla");
 		}
 	}
 }

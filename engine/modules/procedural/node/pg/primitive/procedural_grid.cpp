@@ -55,7 +55,7 @@ namespace Echo
 						vert.m_uv = Vector2(row / (rows - 1), column / (columns - 1));
 						vert.m_normal = Vector3::UNIT_Y;
 
-						vertices.push_back(vert);
+						vertices.emplace_back(vert);
 					}
 				}
 
@@ -71,12 +71,12 @@ namespace Echo
 						i32 indexLeftBottom = indexLeftTop + columns;
 						i32 indexRightBottom = indexRightTop + columns;
 
-						indices.push_back(indexLeftTop);
-						indices.push_back(indexRightBottom);
-						indices.push_back(indexRightTop);
-						indices.push_back(indexLeftTop);
-						indices.push_back(indexLeftBottom);
-						indices.push_back(indexRightBottom);
+						indices.emplace_back(indexLeftTop);
+						indices.emplace_back(indexRightBottom);
+						indices.emplace_back(indexRightTop);
+						indices.emplace_back(indexLeftTop);
+						indices.emplace_back(indexLeftBottom);
+						indices.emplace_back(indexRightBottom);
 					}
 				}
 			}

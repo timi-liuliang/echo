@@ -178,13 +178,13 @@ namespace DataFlowProgramming
 		{
             bool isAtla = ECHO_DOWN_CAST<Echo::ShaderUniformTexture*>(m_uniformConfig)->isAtla();
 
-            uniformNames.push_back("Uniforms." + getVariableName());
-            uniformValues.push_back(Echo::ResourcePath(m_textureSelect->getTexture(), isAtla ? ".png|.atla" : ".png"));
+            uniformNames.emplace_back("Uniforms." + getVariableName());
+            uniformValues.emplace_back(Echo::ResourcePath(m_textureSelect->getTexture(), isAtla ? ".png|.atla" : ".png"));
 
             if (ECHO_DOWN_CAST<Echo::ShaderUniformTexture*>(m_uniformConfig)->isAtla())
             {
-				uniformNames.push_back("Uniforms." + getVariableName() + "Viewport");
-                uniformValues.push_back(Echo::Color(0.f, 0.f, 1.f, 1.f));
+				uniformNames.emplace_back("Uniforms." + getVariableName() + "Viewport");
+                uniformValues.emplace_back(Echo::Color(0.f, 0.f, 1.f, 1.f));
             }
 
 			return true;

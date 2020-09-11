@@ -89,7 +89,7 @@ namespace Echo
         
         // create new one
         FontTexture* newTexture = EchoNew(FontTexture(DEFAULT_FONT_TEXTURE_SIZE, DEFAULT_FONT_TEXTURE_SIZE));
-        m_fontTextures.push_back(newTexture);
+        m_fontTextures.emplace_back(newTexture);
 		i32 nodeIndex = newTexture->insert(glyphBitmap.data(), glyphWidth, glyphHeight);
 		if (nodeIndex != -1)
 		{

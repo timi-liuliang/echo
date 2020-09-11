@@ -27,7 +27,7 @@ namespace Echo
 		Node rootNode;
 		rootNode.m_rc = IRect(0, 0, m_width, m_height);
 		m_nodes.reserve(256);
-		m_nodes.push_back(rootNode);
+		m_nodes.emplace_back(rootNode);
 	}
 
 	FontTexture::~FontTexture()
@@ -168,12 +168,12 @@ namespace Echo
 			if (node0.m_rc.getArea() > 0)
 			{
 				m_nodes[nodeIdx].m_child[0] = int(m_nodes.size());
-				m_nodes.push_back(node0);
+				m_nodes.emplace_back(node0);
 			}
 			if (node1.m_rc.getArea() > 0)
 			{
 				m_nodes[nodeIdx].m_child[1] = int(m_nodes.size());
-				m_nodes.push_back(node1);
+				m_nodes.emplace_back(node1);
 			}
 
 			m_nodes[nodeIdx].m_rc.width = texWidth;

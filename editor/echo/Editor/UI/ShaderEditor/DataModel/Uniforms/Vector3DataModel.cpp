@@ -82,8 +82,8 @@ namespace DataFlowProgramming
 		{
 			Echo::Vector3 number = m_vector3Editor->getValue();
 
-			uniformNames.push_back("Uniforms." + getVariableName());
-			uniformValues.push_back(number);
+			uniformNames.emplace_back("Uniforms." + getVariableName());
+			uniformValues.emplace_back(number);
 		}
 
 		return false;

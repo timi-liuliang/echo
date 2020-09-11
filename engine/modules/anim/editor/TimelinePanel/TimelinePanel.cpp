@@ -484,7 +484,7 @@ namespace Echo
 				String propertyName = Editor::instance()->selectAProperty(propertyObject);
 				if (!propertyName.empty())
 				{
-					propertyChain.push_back(propertyName);
+					propertyChain.emplace_back(propertyName);
 
 					AnimProperty::Type propertyType = m_timeline->getAnimPropertyType(node->getNodePathRelativeTo(m_timeline), propertyChain);
 					if (propertyType != AnimProperty::Type::Unknown)
@@ -597,7 +597,7 @@ namespace Echo
 
 								Vector2 keyPos;
 								calcKeyPosByTimeAndValue(t, value, keyPos);
-								curvePaths[curveIdx].push_back(keyPos);
+								curvePaths[curveIdx].emplace_back(keyPos);
 							}
 						}
 					}
@@ -675,7 +675,7 @@ namespace Echo
 							//qConnect(item, QSIGNAL(mouseDoubleClickEvent(QGraphicsSceneMouseEvent*)), this, createMethodBind(&TimelinePanel::onKeyDoubleClickedCurveKey));
 							//qConnect(item, QSIGNAL(mouseMoveEvent(QGraphicsSceneMouseEvent*)), this, createMethodBind(&TimelinePanel::onKeyPositionChanged));
 
-							m_curveKeyWidgets.push_back( widget);
+							m_curveKeyWidgets.emplace_back( widget);
 						}
 					}
 				}
@@ -713,7 +713,7 @@ namespace Echo
 							EditorApi.qConnectGraphicsItem(item, QSIGNAL(mouseDoubleClickEvent(QGraphicsSceneMouseEvent*)), this, createMethodBind(&TimelinePanel::onKeyDoubleClickedCurveKey));
 							EditorApi.qConnectGraphicsItem(item, QSIGNAL(mouseMoveEvent(QGraphicsSceneMouseEvent*)), this, createMethodBind(&TimelinePanel::onKeyPositionChanged));
 
-							m_curveKeyItems[curveIdx].push_back(item);
+							m_curveKeyItems[curveIdx].emplace_back(item);
 						}
 					}
 				}
@@ -739,7 +739,7 @@ namespace Echo
 						EditorApi.qGraphicsProxyWidgetSetPos(widget, center.x, 50.f);
 						EditorApi.qGraphicsProxyWidgetSetZValue(widget, 250.f);
 
-						m_curveKeyWidgets.push_back(widget);
+						m_curveKeyWidgets.emplace_back(widget);
 					}
 				}
 			}
@@ -941,15 +941,15 @@ namespace Echo
 
 			// ruler bottom
 			Color bgColor; bgColor.setRGBA(83, 83, 83, 255);
-			m_rulerItems.push_back(EditorApi.qGraphicsSceneAddRect(m_graphicsScene, std::max<float>(float(-keyWidth) + m_rulerLeft, -keyWidth), -1 + m_rulerTop, float(keyCount * keyWidth) + keyWidth, m_rulerHeight, bgColor));
-			m_rulerItems.push_back(EditorApi.qGraphicsSceneAddLine(m_graphicsScene, std::max<float>(float(-keyWidth) + m_rulerLeft, 0), m_rulerHeight + m_rulerTop, float(keyCount * keyWidth) + keyWidth + m_rulerLeft, m_rulerHeight + m_rulerTop, m_rulerColor));
+			m_rulerItems.emplace_back(EditorApi.qGraphicsSceneAddRect(m_graphicsScene, std::max<float>(float(-keyWidth) + m_rulerLeft, -keyWidth), -1 + m_rulerTop, float(keyCount * keyWidth) + keyWidth, m_rulerHeight, bgColor));
+			m_rulerItems.emplace_back(EditorApi.qGraphicsSceneAddLine(m_graphicsScene, std::max<float>(float(-keyWidth) + m_rulerLeft, 0), m_rulerHeight + m_rulerTop, float(keyCount * keyWidth) + keyWidth + m_rulerLeft, m_rulerHeight + m_rulerTop, m_rulerColor));
 
 			// key line
 			for (int i = 0; i <= keyCount; i++)
 			{
 				float xPos = i * keyWidth;
 				if(xPos+m_rulerLeft>=0)
-					m_rulerItems.push_back(EditorApi.qGraphicsSceneAddLine(m_graphicsScene, xPos + m_rulerLeft, 18.f + m_rulerTop, xPos + m_rulerLeft, m_rulerHeight + m_rulerTop, m_rulerColor));
+					m_rulerItems.emplace_back(EditorApi.qGraphicsSceneAddLine(m_graphicsScene, xPos + m_rulerLeft, 18.f + m_rulerTop, xPos + m_rulerLeft, m_rulerHeight + m_rulerTop, m_rulerColor));
 			}
 
 			// draw Text
@@ -998,15 +998,15 @@ namespace Echo
 
 		// ruler bottom
 		Color bgColor; bgColor.setRGBA(83, 83, 83, 255);
-		//m_rulerItems.push_back(qGraphicsSceneAddRect(m_graphicsScene, std::max<float>(float(-keyWidth) + m_rulerLeft, -keyWidth), -1 + m_rulerTop, float(keyCount * keyWidth) + keyWidth, m_rulerHeight, bgColor));
-		m_rulerItems.push_back(EditorApi.qGraphicsSceneAddLine(m_graphicsScene, std::max<float>(keyWidth + m_rulerLeft, 0), m_rulerHeight + m_rulerTop, std::max<float>(keyWidth + m_rulerLeft, 0), float(keyCount * keyWidth) + keyWidth + m_rulerLeft, m_rulerColor));
+		//m_rulerItems.emplace_back(qGraphicsSceneAddRect(m_graphicsScene, std::max<float>(float(-keyWidth) + m_rulerLeft, -keyWidth), -1 + m_rulerTop, float(keyCount * keyWidth) + keyWidth, m_rulerHeight, bgColor));
+		m_rulerItems.emplace_back(EditorApi.qGraphicsSceneAddLine(m_graphicsScene, std::max<float>(keyWidth + m_rulerLeft, 0), m_rulerHeight + m_rulerTop, std::max<float>(keyWidth + m_rulerLeft, 0), float(keyCount * keyWidth) + keyWidth + m_rulerLeft, m_rulerColor));
 
 		//// key line
 		//for (int i = 0; i <= keyCount; i++)
 		//{
 		//	float xPos = i * keyWidth;
 		//	if (xPos + m_rulerLeft >= 0)
-		//		m_rulerItems.push_back(qGraphicsSceneAddLine(m_graphicsScene, xPos + m_rulerLeft, 18.f + m_rulerTop, xPos + m_rulerLeft, m_rulerHeight + m_rulerTop, m_rulerColor));
+		//		m_rulerItems.emplace_back(qGraphicsSceneAddLine(m_graphicsScene, xPos + m_rulerLeft, 18.f + m_rulerTop, xPos + m_rulerLeft, m_rulerHeight + m_rulerTop, m_rulerColor));
 		//}
 
 		//// draw Text
@@ -1025,7 +1025,7 @@ namespace Echo
 		//			{
 		//				float halfWidth = qGraphicsItemWidth(textItem) * 0.4f /*0.5f*/;
 		//				qGraphicsItemSetPos(textItem, textPos.x, textPos.y);
-		//				m_rulerItems.push_back(textItem);
+		//				m_rulerItems.emplace_back(textItem);
 		//			}
 		//		}
 		//	}

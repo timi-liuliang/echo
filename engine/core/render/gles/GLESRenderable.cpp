@@ -87,7 +87,7 @@ namespace Echo
 			unit.m_buffer = m_mesh->getVertexBuffer();
 			buildVertStreamDeclaration(&unit);
 
-			m_vertexStreams.push_back(unit);
+			m_vertexStreams.emplace_back(unit);
 		}
 	}
 

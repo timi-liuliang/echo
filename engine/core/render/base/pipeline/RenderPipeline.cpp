@@ -131,7 +131,7 @@ namespace Echo
 					RenderStage* stage = EchoNew(RenderStage(this));
 					stage->setName(stageNode.attribute("name").as_string());
 					stage->parseXml(&stageNode);
-					m_renderStages.push_back(stage);
+					m_renderStages.emplace_back(stage);
 				}
 			}
 		}

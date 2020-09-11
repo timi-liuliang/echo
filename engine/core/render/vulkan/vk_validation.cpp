@@ -61,15 +61,15 @@ namespace Echo
 		validationLayers.clear();
 		if (checkLayer("VK_LAYER_LUNARG_standard_validation"))
 		{
-			validationLayers.push_back("VK_LAYER_LUNARG_standard_validation");
+			validationLayers.emplace_back("VK_LAYER_LUNARG_standard_validation");
 		}
 		else
 		{
-			validationLayers.push_back("VK_LAYER_GOOGLE_threading");
-			validationLayers.push_back("VK_LAYER_LUNARG_parameter_validation");
-			validationLayers.push_back("VK_LAYER_LUNARG_object_tracker");
-			validationLayers.push_back("VK_LAYER_LUNARG_core_validation");
-			validationLayers.push_back("VK_LAYER_GOOGLE_unique_objects");
+			validationLayers.emplace_back("VK_LAYER_GOOGLE_threading");
+			validationLayers.emplace_back("VK_LAYER_LUNARG_parameter_validation");
+			validationLayers.emplace_back("VK_LAYER_LUNARG_object_tracker");
+			validationLayers.emplace_back("VK_LAYER_LUNARG_core_validation");
+			validationLayers.emplace_back("VK_LAYER_GOOGLE_unique_objects");
 		}
 	}
 

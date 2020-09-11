@@ -10,15 +10,15 @@ namespace DataFlowProgramming
 	OperationRules::OperationRules()
 	{
 		// addition
-		m_additionRules.push_back(OperationRule2_1(true, "float", "float", "float"));
-		m_additionRules.push_back(OperationRule2_1(true, "float", "vec2", "vec2"));
-		m_additionRules.push_back(OperationRule2_1(true, "float", "vec3", "vec3"));
-		m_additionRules.push_back(OperationRule2_1(true, "float", "vec4", "vec4"));
+		m_additionRules.emplace_back(true, "float", "float", "float");
+		m_additionRules.emplace_back(true, "float", "vec2", "vec2");
+		m_additionRules.emplace_back(true, "float", "vec3", "vec3");
+		m_additionRules.emplace_back(true, "float", "vec4", "vec4");
 
-		m_additionRules.push_back(OperationRule2_1(true, "vec2", "vec2", "vec2"));
-		m_additionRules.push_back(OperationRule2_1(true, "vec3", "vec3", "vec3"));
-		m_additionRules.push_back(OperationRule2_1(true, "vec4", "vec4", "vec4"));
-		m_additionRules.push_back(OperationRule2_1(true, "vec4", "color", "vec4"));
+		m_additionRules.emplace_back(true, "vec2", "vec2", "vec2");
+		m_additionRules.emplace_back(true, "vec3", "vec3", "vec3");
+		m_additionRules.emplace_back(true, "vec4", "vec4", "vec4");
+		m_additionRules.emplace_back(true, "vec4", "color", "vec4");
 
 		// subtraction
 		m_substractionRules = m_additionRules;
@@ -30,10 +30,10 @@ namespace DataFlowProgramming
 		m_divisionRules = m_additionRules;
 
 		// dot product
-		m_dotProductRules.push_back(OperationRule2_1(true, "vec3", "vec3", "float"));
+		m_dotProductRules.emplace_back(true, "vec3", "vec3", "float");
 
 		// cross product
-		m_crossProductRules.push_back(OperationRule2_1(true, "vec3", "vec3", "vec3"));
+		m_crossProductRules.emplace_back(true, "vec3", "vec3", "vec3");
 
 		// min rules
 		m_minRules = m_additionRules;
@@ -42,17 +42,17 @@ namespace DataFlowProgramming
 		m_maxRules = m_additionRules;
 
 		// pow rules
-		m_powRules.push_back(OperationRule2_1(false, "float", "float", "float"));
-		m_powRules.push_back(OperationRule2_1(false, "vec2", "vec2", "vec2"));
-		m_powRules.push_back(OperationRule2_1(false, "vec3", "vec3", "vec3"));
-		m_powRules.push_back(OperationRule2_1(false, "vec4", "vec4", "vec4"));
-		m_powRules.push_back(OperationRule2_1(false, "color", "vec4", "vec4"));
+		m_powRules.emplace_back(false, "float", "float", "float");
+		m_powRules.emplace_back(false, "vec2", "vec2", "vec2");
+		m_powRules.emplace_back(false, "vec3", "vec3", "vec3");
+		m_powRules.emplace_back(false, "vec4", "vec4", "vec4");
+		m_powRules.emplace_back(false, "color", "vec4", "vec4");
 
 		// lerp rules
-		m_mixRules.push_back(OperationRule3_1("float", "float", "float", "float"));
-		m_mixRules.push_back(OperationRule3_1("vec2", "vec2", "float", "vec2"));
-		m_mixRules.push_back(OperationRule3_1("vec3", "vec3", "float", "vec3"));
-		m_mixRules.push_back(OperationRule3_1("vec4", "vec4", "float", "vec4"));
+		m_mixRules.emplace_back("float", "float", "float", "float");
+		m_mixRules.emplace_back("vec2", "vec2", "float", "vec2");
+		m_mixRules.emplace_back("vec3", "vec3", "float", "vec3");
+		m_mixRules.emplace_back("vec4", "vec4", "float", "vec4");
 	}
 
 	OperationRules::~OperationRules()

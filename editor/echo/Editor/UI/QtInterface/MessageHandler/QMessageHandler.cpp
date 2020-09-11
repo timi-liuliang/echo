@@ -30,12 +30,12 @@ namespace Echo
 		auto it = m_connects.find( sender);
 		if (it != m_connects.end())
 		{
-			it->second.push_back(Connect( signal, (Object*)receiver, slot));
+			it->second.emplace_back(signal, (Object*)receiver, slot);
 		}
 		else
 		{
 			ConnectArray connects;
-			connects.push_back(Connect(signal, (Object*)receiver, slot));
+			connects.emplace_back(signal, (Object*)receiver, slot);
 			m_connects[sender] = connects;
 
 			QObject::connect(sender, SIGNAL(destroyed()), this, SLOT(onDestroyWidget()));
@@ -72,12 +72,12 @@ namespace Echo
 		auto it = m_connects.find(sender);
 		if (it != m_connects.end())
 		{
-			it->second.push_back(Connect(signal, (Object*)receiver, slot));
+			it->second.emplace_back(signal, (Object*)receiver, slot);
 		}
 		else
 		{
 			ConnectArray connects;
-			connects.push_back(Connect(signal, (Object*)receiver, slot));
+			connects.emplace_back(signal, (Object*)receiver, slot);
 			m_connects[sender] = connects;
 
 			//QObject::connect(sender, SIGNAL(destroyed()), this, SLOT(onDestroyWidget()));

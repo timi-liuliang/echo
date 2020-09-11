@@ -165,6 +165,10 @@ namespace Echo
 		{
 			ui32		m_time;
 			Quaternion	m_value;
+
+			Key(ui32 time, const Quaternion& value)
+				: m_time(time), m_value(value)
+			{}
 		};
 		Quaternion				m_vlaue;
 		vector<Key>::type		m_keys;

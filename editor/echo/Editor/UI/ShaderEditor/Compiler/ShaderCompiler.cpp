@@ -411,7 +411,7 @@ namespace DataFlowProgramming
 				return;
 		}
 
-		m_fsUniforms.push_back(Uniform(type, name));
+		m_fsUniforms.emplace_back(type, name);
 
 		// refresh code
 		m_fsUniformsCode.clear();

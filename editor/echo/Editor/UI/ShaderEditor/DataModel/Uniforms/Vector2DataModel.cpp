@@ -84,8 +84,8 @@ namespace DataFlowProgramming
         {
             Echo::Vector2 number = m_vector2Editor->getValue();
 
-			uniformNames.push_back("Uniforms." + getVariableName());
-			uniformValues.push_back(number);
+			uniformNames.emplace_back("Uniforms." + getVariableName());
+			uniformValues.emplace_back(number);
         }
 
 		return false;

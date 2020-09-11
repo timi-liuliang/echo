@@ -154,13 +154,13 @@ namespace Echo
 			else if (pos == String::npos || (maxSplits && numSplits == maxSplits))
 			{
 				// Copy the rest of the string
-				ret.push_back( str.substr(start) );
+				ret.emplace_back( str.substr(start) );
 				break;
 			}
 			else
 			{
 				// Copy up to delimiter
-				ret.push_back( str.substr(start, pos - start) );
+				ret.emplace_back( str.substr(start, pos - start) );
 				start = pos + 1;
 			}
 			// parse up to next real data
@@ -482,7 +482,7 @@ namespace Echo
 		StringArray strArray = Split(val, " ");
 		for (const String& element : strArray)
 		{
-			result.push_back(ParseReal(element));
+			result.emplace_back(ParseReal(element));
 		}
 
 		return result;
@@ -618,7 +618,7 @@ namespace Echo
 		StringArray attackAngles = StringUtil::Split( val, ";");
 		for( size_t angleIdx=0; angleIdx<attackAngles.size(); angleIdx++)
 		{
-			vec2Array.push_back( StringUtil::ParseVec2( attackAngles[angleIdx]));
+			vec2Array.emplace_back( StringUtil::ParseVec2( attackAngles[angleIdx]));
 		}
 
 		return vec2Array;
@@ -651,7 +651,7 @@ namespace Echo
 			std::vector<Vector3> result; 
 			for (size_t i = 0; i < vec.size(); i+= 3)
 			{
-				result.push_back(Vector3(ParseReal(vec[i]), ParseReal(vec[i + 1]), ParseReal(vec[i + 2])));
+				result.emplace_back(ParseReal(vec[i]), ParseReal(vec[i + 1]), ParseReal(vec[i + 2]));
 			}
 
 			return result; 

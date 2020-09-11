@@ -36,8 +36,8 @@ namespace Echo
 	{
 		switch (type)
 		{
-			case TT_AnimationUpdate: m_animationUpdateTasks.push_back(task);			break;
-			case TT_EffectSystem:	 m_effectSystemUpdateTasks.push_back(task);			break;
+			case TT_AnimationUpdate: m_animationUpdateTasks.emplace_back(task);			break;
+			case TT_EffectSystem:	 m_effectSystemUpdateTasks.emplace_back(task);		break;
 			default:				 EchoLogError("OpenMPTaskMgr::Unknown task type");	break;
 		}
 	}

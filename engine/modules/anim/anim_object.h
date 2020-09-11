@@ -30,7 +30,7 @@ namespace Echo
 		{
 			AnimProperty* property = AnimProperty::create(type);
 			property->m_name = name;
-			m_properties.push_back(property);
+			m_properties.emplace_back(property);
 
 			return property;
 		}

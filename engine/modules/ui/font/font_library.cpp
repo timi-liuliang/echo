@@ -45,7 +45,7 @@ namespace Echo
         
         // create new
 		FontFace* face = EchoNew(FontFace(m_library, filePath));
-		m_fontFaces.push_back(face);
+		m_fontFaces.emplace_back(face);
 
         return face;
     }

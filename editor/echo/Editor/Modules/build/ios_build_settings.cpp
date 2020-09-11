@@ -111,23 +111,23 @@ namespace Echo
 
     void iOSBuildSettings::configAppIcons()
     {
-        m_appIcons.push_back(AppIconItem(20));
-        m_appIcons.push_back(AppIconItem(29));
+        m_appIcons.emplace_back(20);
+        m_appIcons.emplace_back(29);
         
-        m_appIcons.push_back(AppIconItem(40));
-        m_appIcons.push_back(AppIconItem(58));
-        m_appIcons.push_back(AppIconItem(60));
-        m_appIcons.push_back(AppIconItem(76));
+        m_appIcons.emplace_back(40);
+        m_appIcons.emplace_back(58);
+        m_appIcons.emplace_back(60);
+        m_appIcons.emplace_back(76);
         
-        m_appIcons.push_back(AppIconItem(80));
-        m_appIcons.push_back(AppIconItem(87));
+        m_appIcons.emplace_back(80);
+        m_appIcons.emplace_back(87);
         
-        m_appIcons.push_back(AppIconItem(120));
-        m_appIcons.push_back(AppIconItem(152));
-        m_appIcons.push_back(AppIconItem(167));
-        m_appIcons.push_back(AppIconItem(180));
+        m_appIcons.emplace_back(120);
+        m_appIcons.emplace_back(152);
+        m_appIcons.emplace_back(167);
+        m_appIcons.emplace_back(180);
         
-        m_appIcons.push_back(AppIconItem(1024));
+        m_appIcons.emplace_back(1024);
     }
 
     void iOSBuildSettings::configLaunchImages()
@@ -135,34 +135,34 @@ namespace Echo
         // https://developer.apple.com/design/human-interface-guidelines/ios/icons-and-images/launch-screen/
         
         // iphone se
-        m_launchImages.push_back(LaunchImageItem(320, 568, 2, DeviceType::iPhone));
+        m_launchImages.emplace_back(320, 568, 2, DeviceType::iPhone);
         
         // iphone6s,iphone7,iphone8
-        m_launchImages.push_back(LaunchImageItem(375, 667, 2, DeviceType::iPhone));
+        m_launchImages.emplace_back(375, 667, 2, DeviceType::iPhone);
         
         // iphone6s plus, iphone7 plus, iphone8 plus
-        m_launchImages.push_back(LaunchImageItem(414, 736, 3, DeviceType::iPhone));
+        m_launchImages.emplace_back(414, 736, 3, DeviceType::iPhone);
         
         // iphoneX, iphoneXs 1125px × 2436px
-        m_launchImages.push_back(LaunchImageItem(375, 812, 3, DeviceType::iPhone));
+        m_launchImages.emplace_back(375, 812, 3, DeviceType::iPhone);
         
         // iphone XR
-        m_launchImages.push_back(LaunchImageItem(414, 896, 2, DeviceType::iPhone));
+        m_launchImages.emplace_back(414, 896, 2, DeviceType::iPhone);
         
         // iphone Xs Max
-        m_launchImages.push_back(LaunchImageItem(414, 896, 3, DeviceType::iPhone));
+        m_launchImages.emplace_back(414, 896, 3, DeviceType::iPhone);
         
         // ipad mini, ipad
-        m_launchImages.push_back(LaunchImageItem(1024, 768, 2, DeviceType::iPad));
+        m_launchImages.emplace_back(1024, 768, 2, DeviceType::iPad);
         
         // 10.5 iPad pro
-        m_launchImages.push_back(LaunchImageItem(1112, 834, 2, DeviceType::iPad));
+        m_launchImages.emplace_back(1112, 834, 2, DeviceType::iPad);
         
         // 11 iPad pro
-        m_launchImages.push_back(LaunchImageItem(1194, 834, 2, DeviceType::iPad));
+        m_launchImages.emplace_back(1194, 834, 2, DeviceType::iPad);
     
         // 12.9 iPad pro
-        m_launchImages.push_back(LaunchImageItem(1366, 1024, 2, DeviceType::iPad));
+        m_launchImages.emplace_back(1366, 1024, 2, DeviceType::iPad);
     }
     
     void iOSBuildSettings::setOutputDir(const String& outputDir)

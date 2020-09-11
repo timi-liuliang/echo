@@ -130,7 +130,7 @@ namespace Echo
 				ui32 maskCount = maskCounts[i];
 				for (ui32 j = 0; j < maskCount; j++)
 				{
-					drawable.m_masks.push_back(masks[i][j]);
+					drawable.m_masks.emplace_back(masks[i][j]);
 				}
 				
 				// vertexs
@@ -145,7 +145,7 @@ namespace Echo
 					vert.m_position = Vector3(pos.X * m_canvas.m_pixelsPerUnit, pos.Y * m_canvas.m_pixelsPerUnit, 0.f);
 					vert.m_uv = Vector2(uv.X, 1.f-uv.Y);
 
-					drawable.m_vertices.push_back( vert);
+					drawable.m_vertices.emplace_back( vert);
 					drawable.m_box.addPoint(vert.m_position);
 				}
 
@@ -156,7 +156,7 @@ namespace Echo
 				ui32 indeceCount = indexCounts[i];
 				for (ui32 j = 0; j < indeceCount; j++)
 				{
-					drawable.m_indices.push_back( indices[i][j]);
+					drawable.m_indices.emplace_back( indices[i][j]);
 				}
 			}
 
@@ -307,11 +307,11 @@ namespace Echo
 
 			// vertices
 			for (VertexFormat& vert : drawable.m_vertices)
-				oVertices.push_back(vert);
+				oVertices.emplace_back(vert);
 
 			// indices
 			for (int idx : drawable.m_indices)
-				oIndices.push_back(idx + vertOffset);
+				oIndices.emplace_back(idx + vertOffset);
 		}
 	}
 

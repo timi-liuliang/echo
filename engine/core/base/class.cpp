@@ -274,10 +274,7 @@ namespace Echo
         PropertyInfo* pi = getProperty(className, nullptr, propertyName);
         if (pi)
         {
-            PropertyHint hint;
-            hint.m_type = hintType;
-            hint.m_value = hintStr;
-            pi->m_hints.push_back(hint);
+            pi->m_hints.emplace_back(hintType, hintStr);
             
             return true;
         }

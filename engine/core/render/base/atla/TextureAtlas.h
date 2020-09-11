@@ -15,6 +15,10 @@ namespace Echo
 		{
 			String	 m_name;
 			Vector4  m_viewPort;
+
+			Atla(const String& name, const Vector4& viewPort)
+				: m_name(name), m_viewPort(viewPort)
+			{}
 		};
 
     public:

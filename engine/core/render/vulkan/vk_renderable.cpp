@@ -119,7 +119,7 @@ namespace Echo
                     attributeDescription.location = compiler->get_decoration(spirvResource.id, spv::DecorationLocation);
                     attributeDescription.format = VKMapping::MapVertexFormat(vertElements[i].m_pixFmt);
                     attributeDescription.offset = elementOffset;
-                    viAttributeDescriptions.push_back(attributeDescription);
+                    viAttributeDescriptions.emplace_back(attributeDescription);
                 }
 
                 elementOffset += PixelUtil::GetPixelSize(vertElements[i].m_pixFmt);

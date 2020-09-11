@@ -121,15 +121,15 @@ namespace Echo
 	{
 		extensions = { VK_KHR_SURFACE_EXTENSION_NAME };
 	#if defined(_WIN32)
-		extensions.push_back(VK_KHR_WIN32_SURFACE_EXTENSION_NAME);
+		extensions.emplace_back(VK_KHR_WIN32_SURFACE_EXTENSION_NAME);
 	#elif defined(__ANDROID__)
-		extensions.push_back(VK_KHR_ANDROID_SURFACE_EXTENSION_NAME);
+		extensions.emplace_back(VK_KHR_ANDROID_SURFACE_EXTENSION_NAME);
 	#elif defined(__linux__)
-		extensions.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
+		extensions.emplace_back(VK_KHR_SURFACE_EXTENSION_NAME);
 	#endif
 
 	#if defined(ECHO_EDITOR_MODE)
-		extensions.push_back(VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
+		extensions.emplace_back(VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
 	#endif
 	}
 

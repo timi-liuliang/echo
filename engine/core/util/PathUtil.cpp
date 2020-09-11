@@ -648,10 +648,10 @@ namespace Echo
 #ifdef ECHO_PLATFORM_WINDOWS
             if(!IsDriveOrRoot(tempDir))
 			{
-				paths.push_back(tempDir);
+				paths.emplace_back(tempDir);
 			}
 #else
-            paths.push_back(tempDir);
+            paths.emplace_back(tempDir);
 #endif
             
 			token = strtok(NULL, seps);
@@ -755,7 +755,7 @@ namespace Echo
 				{
 					String dirEntry = fullname;
 					dirEntry += PathUtil::SEPERATOR;
-					ret.push_back(dirEntry);
+					ret.emplace_back(dirEntry);
 				}
 
 				if(bIncSubDirs)
@@ -773,7 +773,7 @@ namespace Echo
 				else
 					fileEntry = curRelPath + pDirInfo->d_name;
 
-				ret.push_back(fileEntry);
+				ret.emplace_back(fileEntry);
 			}
 		}
         
@@ -834,7 +834,7 @@ namespace Echo
 				if(bIncSubDirs)
 				{
 					String subFolder = fullname;
-					ret.push_back(subFolder);
+					ret.emplace_back(subFolder);
 
 					EnumSubDirs(ret, subFolder, bIncSubDirs);
 				}

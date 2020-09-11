@@ -245,12 +245,12 @@ namespace Echo
 						v2 = ((Word*)mesh->getIndices())[i * 3 + 2];
 					}
 
-					newIndices.push_back(v0);
-					newIndices.push_back(v1);
-					newIndices.push_back(v1);
-					newIndices.push_back(v2);
-					newIndices.push_back(v2);
-					newIndices.push_back(v0);
+					newIndices.emplace_back(v0);
+					newIndices.emplace_back(v1);
+					newIndices.emplace_back(v1);
+					newIndices.emplace_back(v2);
+					newIndices.emplace_back(v2);
+					newIndices.emplace_back(v0);
 				}
 
 				i32 idxCount = newIndices.size();

@@ -200,7 +200,7 @@ namespace Studio
 				Echo::String recentValue= recentNode.attribute( "project_value" ).as_string();
 				if ( !isPathExist( recentValue ) )
 				{
-					m_recentProjects.push_back(recentValue);
+					m_recentProjects.emplace_back(recentValue);
 				}
 			}
 		}

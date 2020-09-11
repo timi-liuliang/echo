@@ -83,18 +83,18 @@ namespace Game
 
 	void GameMainWindow::configWindowSizes()
 	{
-		m_windowSizes.push_back(WindowSize(Echo::GameSettings::instance()->getWindowWidth(), Echo::GameSettings::instance()->getWindowHeight(), "Design"));
-		m_windowSizes.push_back(WindowSize(320, 568, "iPhoneSE @2x"));
-		m_windowSizes.push_back(WindowSize(375, 667, "iPhone6s iPhone7 iPhone8 @2x"));
-		m_windowSizes.push_back(WindowSize(414, 736, "iPhone6s Plus iPhone7 Plus iPhone8 Plus @3x"));
-		m_windowSizes.push_back(WindowSize(375, 812, "iPhoneX iPhoneXs @3x"));
-		m_windowSizes.push_back(WindowSize(414, 896, "iPhoneXR @2x"));
-		m_windowSizes.push_back(WindowSize(414, 896, "iPhoneXs Max @3x"));
+		m_windowSizes.emplace_back(Echo::GameSettings::instance()->getWindowWidth(), Echo::GameSettings::instance()->getWindowHeight(), "Design");
+		m_windowSizes.emplace_back(320, 568, "iPhoneSE @2x");
+		m_windowSizes.emplace_back(375, 667, "iPhone6s iPhone7 iPhone8 @2x");
+		m_windowSizes.emplace_back(414, 736, "iPhone6s Plus iPhone7 Plus iPhone8 Plus @3x");
+		m_windowSizes.emplace_back(375, 812, "iPhoneX iPhoneXs @3x");
+		m_windowSizes.emplace_back(414, 896, "iPhoneXR @2x");
+		m_windowSizes.emplace_back(414, 896, "iPhoneXs Max @3x");
 
-		m_windowSizes.push_back(WindowSize(768, 1024, "iPad Mini, iPad @2x"));
-		m_windowSizes.push_back(WindowSize(834, 1112, "10.5 iPad pro @2x"));
-		m_windowSizes.push_back(WindowSize(834, 1194, "11 iPad pro @2x"));
-		m_windowSizes.push_back(WindowSize(1024, 1366,"12.9 iPad pro @2x"));
+		m_windowSizes.emplace_back(768, 1024, "iPad Mini, iPad @2x");
+		m_windowSizes.emplace_back(834, 1112, "10.5 iPad pro @2x");
+		m_windowSizes.emplace_back(834, 1194, "11 iPad pro @2x");
+		m_windowSizes.emplace_back(1024, 1366,"12.9 iPad pro @2x");
 
 		// Horizontal
 		for (size_t i = 0; i < m_windowSizes.size(); i++)
