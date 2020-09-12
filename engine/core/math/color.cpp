@@ -12,6 +12,7 @@ namespace Echo
 	const Color Color::WHITE(1, 1, 1, 1);
 	const Color Color::YELLOW(1, 1, 0, 1);
 	const Color Color::CYAN(0, 1, 1, 1);
+	const Color Color::DARKCYAN(0, 0.55, 0.55, 1);
 	const Color Color::PURPLE(1, 0, 1, 1);
 	const Color Color::GRAY(0.62745F, 0.62745F, 0.62745F, 1);
 

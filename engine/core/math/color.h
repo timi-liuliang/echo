@@ -17,6 +17,7 @@ namespace Echo
 		static const Color WHITE;
 		static const Color YELLOW;
 		static const Color CYAN;
+		static const Color DARKCYAN;
 		static const Color PURPLE;
 		static const Color GRAY;
 

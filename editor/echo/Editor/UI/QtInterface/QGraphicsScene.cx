@@ -30,14 +30,14 @@ namespace Echo
 		return nullptr;
 	}
 
-	QGraphicsItem* qGraphicsSceneAddRect(QObject* scene, float left, float top, float width, float height, const Color& color)
+	QGraphicsItem* qGraphicsSceneAddRect(QObject* scene, float left, float top, float width, float height, const Color& penColor, const Color& brushColor)
 	{
 		QGraphicsScene* graphicsScene = qobject_cast<QGraphicsScene*>(scene);
 		if (graphicsScene)
 		{
 			QRectF rect(left, top, width, height);
-			QPen pen(QColor::fromRgbF(color.r, color.g, color.b, color.a));
-			QBrush brush(QColor::fromRgbF(color.r, color.g, color.b, color.a));
+			QPen pen(QColor::fromRgbF(penColor.r, penColor.g, penColor.b, penColor.a));
+			QBrush brush(QColor::fromRgbF(brushColor.r, brushColor.g, brushColor.b, brushColor.a));
 			return graphicsScene->addRect(rect, pen, brush);
 		}
 
