@@ -1,16 +1,18 @@
 #pragma once
 
+#ifdef ECHO_EDITOR_MODE
+
 #include "engine/core/editor/editor.h"
 #include "engine/modules/procedural/procedural_geometry.h"
-
-#ifdef ECHO_EDITOR_MODE
+#include <QPen>
+#include <QGRaphicsScene>
 
 namespace Procedural
 {
 	struct PGNodesPainter
 	{
 		QWidget*							m_graphicsView = nullptr;
-		QObject*							m_graphicsScene = nullptr;
+		QGraphicsScene*						m_graphicsScene = nullptr;
 		QGraphicsItem*						m_rect = nullptr;
 		Echo::vector<QGraphicsItem*>::type	m_inputConnectionPoints;
 		Echo::vector<QGraphicsItem*>::type	m_outputConnectionPoints;
@@ -31,7 +33,7 @@ namespace Procedural
 		void set(QWidget* view, QObject* scene)
 		{
 			m_graphicsView = view;
-			m_graphicsScene = scene;
+			m_graphicsScene = (QGraphicsScene*)scene;
 
 			m_selectedBoundaryColor.setRGBA(255, 165, 0, 255);
 			m_regionColor.setRGBA(80, 80, 80,255);
@@ -92,6 +94,9 @@ namespace Procedural
 				{
 					EditorApi.qGraphicsItemSetParentItem(item, m_rect);
 				}
+
+				QPen pen;
+				pen.setColor(QColor::fromRgbF(1.f, 1.f, 1.f, 1.f));
 			}
 
 			for (Echo::PGNode* pgNode : pg->getPGNodes())

@@ -1,32 +1,3 @@
-# Macro
-MACRO(GROUP_QT_UI_FILES src_files root_path)
-		SET(cur_dir ${root_path})
-		FOREACH(group_files ${${src_files}})
-			STRING(REGEX REPLACE ${cur_dir}/\(.*\) \\1 sgbd_fpath ${group_files})
-			STRING(REGEX REPLACE "\(.*\)/.*" \\1 sgbd_group_name ${sgbd_fpath})
-			STRING(COMPARE EQUAL ${sgbd_fpath} ${sgbd_group_name} sgbd_nogroup)
-			STRING(REPLACE "/" "\\" sgbd_group_name ${sgbd_group_name})
-			IF(sgbd_nogroup)
-				SOURCE_GROUP("" FILES ${group_files})
-			ELSE()
-				INCLUDE_DIRECTORIES(${sgbd_group_name})
-				SOURCE_GROUP(${sgbd_group_name} FILES ${group_files})
-				SET(QTUI_HEADER_UI)
-				QT5_WRAP_UI(QTUI_HEADER_UI	${group_files})
-				SOURCE_GROUP(${sgbd_group_name} FILES ${QTUI_HEADER_UI})
-				SET(ASTUDIO_QT_FILES ${ASTUDIO_QT_FILES} ${QTUI_HEADER_UI})
-			ENDIF(sgbd_nogroup)
-		ENDFOREACH(group_files)
-ENDMACRO(GROUP_QT_UI_FILES)
-
-# define macro GROUP_QT_MOC_FILES
-MACRO(GROUP_QT_MOC_FILES src_files)
-	SET(QTUI_MOC_UI)
-	QT5_WRAP_CPP(QTUI_MOC_UI	${${src_files}})
-	SOURCE_GROUP("Resources\\Generated Files\\Moc" FILES ${QTUI_MOC_UI})
-	SET(ASTUDIO_QT_FILES ${ASTUDIO_QT_FILES} ${QTUI_MOC_UI})
-ENDMACRO(GROUP_QT_MOC_FILES)
-
 # configure
 SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 ADD_DEFINITIONS(-DQT_STATICPLUGIN)
@@ -45,21 +16,6 @@ ENDIF(MSVC)
 
 #
 CMAKE_POLICY(SET CMP0020 NEW)
-
-#
-IF(${ECHO_PLATFORM_MAC})
-	SET(CMAKE_PREFIX_PATH ${ECHO_ROOT_PATH}/editor/Qt/5.12.3/clang_64)
-ELSEIF(${ECHO_PLATFORM_WINDOWS})
-	IF(CMAKE_SIZEOF_VOID_P EQUAL 4)
-		SET(CMAKE_PREFIX_PATH ${ECHO_ROOT_PATH}/editor/Qt/5.10.0/msvc2015)
-	ELSEIF(CMAKE_SIZEOF_VOID_P EQUAL 8)
-		SET(CMAKE_PREFIX_PATH ${ECHO_ROOT_PATH}/editor/Qt/5.10.0/msvc2017_64)
-	ENDIF()
-ENDIF()
-
-FIND_PACKAGE(Qt5Core)
-FIND_PACKAGE(Qt5Widgets)
-FIND_PACKAGE(Qt5UiTools)
 
 INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH})
 INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty)
@@ -143,11 +99,13 @@ ADD_EXECUTABLE(${MODULE_NAME}
 
 # link libraries
 TARGET_LINK_LIBRARIES(${MODULE_NAME} zlib engine lua recast freeimage physx)
-TARGET_LINK_LIBRARIES(${MODULE_NAME} Qt5::Core Qt5::Widgets Qt5::UiTools)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} Live2DCubismCore pugixml spine box2d)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} freetype)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} radeonrays)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} glslang spirv-cross)
+
+# line qt
+TARGET_LINK_QTLIBRARIES(${MODULE_NAME})
 
 IF(${ECHO_PLATFORM_WINDOWS})
 	TARGET_LINK_LIBRARIES(${MODULE_NAME} winmm.lib imm32.lib dxgi.lib Shlwapi.lib)

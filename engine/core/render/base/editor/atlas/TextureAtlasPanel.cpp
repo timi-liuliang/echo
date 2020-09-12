@@ -284,10 +284,10 @@ namespace Echo
 				// calculate paths
 				vector<Vector2>::type paths;
 				{
-					ui32 atlaWidth = viewPort.z;
-					ui32 atlaHeight = viewPort.w;
-					ui32 atlaPosX = viewPort.x;
-					ui32 atlaPosY = viewPort.y;
+					Real atlaWidth = viewPort.z;
+					Real atlaHeight = viewPort.w;
+					Real atlaPosX = viewPort.x;
+					Real atlaPosY = viewPort.y;
 
 					paths.emplace_back(atlaPosX, atlaPosY);
 					paths.emplace_back(atlaPosX+atlaWidth, atlaPosY);
