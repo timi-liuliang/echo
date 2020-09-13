@@ -21,9 +21,6 @@ namespace Echo
 	// add path
 	typedef QGraphicsItem* (*qGraphicsSceneAddPathFun)(QObject* scene, const vector<Vector2>::type paths, float widthf, const Color& color);
 
-	// add simple text
-	typedef QGraphicsItem* (*qGraphicsSceneAddSimpleTextFun)(QObject* scene, const char* txt, const Color& color);
-
 	// add eclipse
 	typedef QGraphicsItem* (*qGraphicsSceneAddEclipseFun)(QObject* scene, float left, float top, float width, float height, const Color& color);
 

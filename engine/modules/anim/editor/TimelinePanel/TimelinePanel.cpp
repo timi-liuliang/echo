@@ -129,7 +129,7 @@ namespace Echo
 		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_graphicsView"), QSIGNAL(customContextMenuRequested(const QPoint&)), this, createMethodBind(&TimelinePanel::onRightClickGraphicsView));
 
 		// create QGraphicsScene
-		m_graphicsScene = EditorApi.qGraphicsSceneNew();
+		m_graphicsScene = (QGraphicsScene*)EditorApi.qGraphicsSceneNew();
 		EditorApi.qGraphicsViewSetScene(EditorApi.qFindChild(m_ui, "m_graphicsView"), m_graphicsScene);
 
 		// wheel event
@@ -963,7 +963,7 @@ namespace Echo
 					calcKeyTimeAndValueByPos(textPos, time, value);
 					if (time >= 0)
 					{
-						QGraphicsItem* textItem = EditorApi.qGraphicsSceneAddSimpleText(m_graphicsScene, StringUtil::Format("%d", time).c_str(), m_rulerColor);
+						QGraphicsItem* textItem = m_graphicsScene->addSimpleText(StringUtil::Format("%d", time).c_str());
 						if (textItem)
 						{
 							//float halfWidth = EditorApi.qGraphicsItemWidth(textItem) * 0.4f /*0.5f*/;

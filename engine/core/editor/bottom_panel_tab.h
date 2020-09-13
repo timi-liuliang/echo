@@ -3,6 +3,7 @@
 #include "engine/core/editor/qt/QWidget.h"
 
 #ifdef ECHO_EDITOR_MODE
+
 namespace Echo
 {
 	class PanelTab

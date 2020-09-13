@@ -5,6 +5,9 @@
 
 #ifdef ECHO_EDITOR_MODE
 
+#include <QGraphicsScene>
+#include <QtWidgets/QGraphicsItem>
+
 namespace Echo
 {
 	class Timeline;
@@ -130,7 +133,7 @@ namespace Echo
 		String						m_currentEditAnim;
 		int							m_nodeTreeWidgetWidth;
 		float						m_graphicsViewScale = 1.f;
-		QObject*					m_graphicsScene;
+		QGraphicsScene*				m_graphicsScene;
 		String						m_currentEditObjectPath;
 		StringArray					m_currentEditPropertyChain;
 		float						m_rulerLeft = 0.f;

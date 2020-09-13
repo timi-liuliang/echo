@@ -6,6 +6,7 @@
 #include "engine/modules/procedural/procedural_geometry.h"
 #include <QPen>
 #include <QGRaphicsScene>
+#include <QtWidgets/QGraphicsItem>
 
 namespace Procedural
 {
@@ -23,7 +24,8 @@ namespace Procedural
 		float								m_height = 40;
 		float								m_connectPointRadius = 8.f;
 		Echo::Color							m_connectPointColor = Echo::Color::DARKCYAN;
-		QGraphicsItem*						m_text = nullptr;
+		QGraphicsSimpleTextItem*			m_text = nullptr;
+		Echo::Color							m_textColor;
 
 		~PGNodesPainter()
 		{
@@ -37,6 +39,7 @@ namespace Procedural
 
 			m_selectedBoundaryColor.setRGBA(255, 165, 0, 255);
 			m_regionColor.setRGBA(80, 80, 80,255);
+			m_textColor.setRGBA(178, 178, 178, 255);
 		}
 
 		// reset
@@ -76,8 +79,9 @@ namespace Procedural
 				m_rect = EditorApi.qGraphicsSceneAddRect(m_graphicsScene, 0.f, 0.f, m_width, m_height, m_normalBoundaryColor, m_regionColor);
 				EditorApi.qGraphicsItemSetMoveable(m_rect, true);
 
-				m_text = EditorApi.qGraphicsSceneAddSimpleText(m_graphicsScene, "Sphere", m_connectPointColor);
-				EditorApi.qGraphicsItemSetParentItem(m_text, m_rect);
+				m_text = m_graphicsScene->addSimpleText("Sphere");
+				m_text->setBrush(QBrush(QColor::fromRgbF(m_textColor.r, m_textColor.g, m_textColor.b, m_textColor.a)));
+				m_text->setParentItem(m_rect);
 
 				Echo::Rect textRect;
 				EditorApi.qGraphicsItemSceneRect(m_text, textRect);
@@ -86,13 +90,13 @@ namespace Procedural
 				m_inputConnectionPoints.push_back(EditorApi.qGraphicsSceneAddEclipse(m_graphicsScene, (m_width - m_connectPointRadius) * 0.5f, - m_connectPointRadius * 0.5f, m_connectPointRadius, m_connectPointRadius, m_connectPointColor));
 				for (QGraphicsItem* item : m_inputConnectionPoints)
 				{
-					EditorApi.qGraphicsItemSetParentItem(item, m_rect);
+					item->setParentItem(m_rect);
 				}
 
 				m_outputConnectionPoints.push_back(EditorApi.qGraphicsSceneAddEclipse(m_graphicsScene, (m_width - m_connectPointRadius) * 0.5f, m_height-m_connectPointRadius * 0.5f, m_connectPointRadius, m_connectPointRadius, m_connectPointColor));
 				for (QGraphicsItem* item : m_outputConnectionPoints)
 				{
-					EditorApi.qGraphicsItemSetParentItem(item, m_rect);
+					item->setParentItem(m_rect);
 				}
 
 				QPen pen;

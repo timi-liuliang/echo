@@ -46,7 +46,6 @@ namespace Studio
 
 		// get sender item
 		BIND_EDITOR_FUN(qSenderItem);
-		BIND_EDITOR_FUN(qGraphicsItemSetParentItem);
 		BIND_EDITOR_FUN(qGraphicsItemSceneRect);
 		BIND_EDITOR_FUN(qGraphicsItemWidth);
 		BIND_EDITOR_FUN(qGraphicsItemPos);
@@ -64,7 +63,6 @@ namespace Studio
 		BIND_EDITOR_FUN(qGraphicsSceneAddLine);
 		BIND_EDITOR_FUN(qGraphicsSceneAddRect);
 		BIND_EDITOR_FUN(qGraphicsSceneAddPath);
-		BIND_EDITOR_FUN(qGraphicsSceneAddSimpleText);
 		BIND_EDITOR_FUN(qGraphicsSceneAddEclipse);
 		BIND_EDITOR_FUN(qGraphicsSceneAddPixmap);
 		BIND_EDITOR_FUN(qGraphicsSceneDeleteWidget);

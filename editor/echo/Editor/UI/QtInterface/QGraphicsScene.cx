@@ -91,23 +91,6 @@ namespace Echo
 		return nullptr;
 	}
 
-	QGraphicsItem* qGraphicsSceneAddSimpleText(QObject* scene, const char* txt, const Color& color)
-	{
-		QGraphicsScene* graphicsScene = qobject_cast<QGraphicsScene*>(scene);
-		if (graphicsScene)
-		{
-			QGraphicsSimpleTextItem* txtItem = graphicsScene->addSimpleText( txt);
-			QColor qColor = QColor::fromRgbF(color.r, color.g, color.b, color.a);
-			QPen pen = txtItem->pen();
-			pen.setColor(qColor);
-			txtItem->setPen( pen);
-
-			return txtItem;
-		}
-
-		return nullptr;
-	}
-
 	QGraphicsItem* qGraphicsSceneAddPixmap(QObject* scene, const char* fileName)
 	{
 		QGraphicsScene* graphicsScene = qobject_cast<QGraphicsScene*>(scene);

@@ -6,6 +6,8 @@
 
 #ifdef ECHO_EDITOR_MODE
 
+#include <QtWidgets/QGraphicsItem>
+
 namespace Echo
 {
 	class TextureAtlasPanel : public PanelTab

@@ -258,8 +258,7 @@ namespace Echo
 			paths.emplace_back(0.f, rect.getHeight());
 			paths.emplace_back(0.f, 0.f);
 			m_imageBorder = EditorApi.qGraphicsSceneAddPath(m_graphicsScene, paths, 1.f, color);
-
-			EditorApi.qGraphicsItemSetParentItem(m_imageBorder, m_imageItem);
+			m_imageBorder->setParentItem(m_imageItem);
 
 			// fit in view
 			//EditorApi.qGraphicsViewFitInView(EditorApi.qFindChild(m_ui, "m_graphicsView"), rect);
@@ -298,8 +297,7 @@ namespace Echo
 
 				// create qGraphicsItem
 				m_atlaBorder = EditorApi.qGraphicsSceneAddPath(m_graphicsScene, paths, 1.f, Color::RED);
-
-				EditorApi.qGraphicsItemSetParentItem(m_atlaBorder, m_imageItem);
+				m_atlaBorder->setParentItem(m_imageItem);
 			}
 		}
 	}

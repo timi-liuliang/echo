@@ -82,9 +82,6 @@ namespace Echo
     public:
         // get sender item
         qSenderItemFun qSenderItem = nullptr;
-
-        // set parent
-        qGrphicsItemSetParentItemFun qGraphicsItemSetParentItem = nullptr;
         
         // get rect
         qGraphicsItemSceneRectFun qGraphicsItemSceneRect = nullptr;
@@ -133,10 +130,7 @@ namespace Echo
         
         // add path
         qGraphicsSceneAddPathFun qGraphicsSceneAddPath = nullptr;
-        
-        // add simple text
-        qGraphicsSceneAddSimpleTextFun qGraphicsSceneAddSimpleText = nullptr;
-        
+       
         // add eclipse
         qGraphicsSceneAddEclipseFun qGraphicsSceneAddEclipse = nullptr;
 
