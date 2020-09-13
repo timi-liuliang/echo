@@ -3,6 +3,9 @@ MESSAGE( STATUS "Configuring module: Engine...")
 # Set Module Name
 SET(MODULE_NAME engine)
 
+# Policy
+CMAKE_POLICY(SET CMP0020 NEW)
+
 # Set Module Path
 SET(MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 

@@ -3,6 +3,9 @@ MESSAGE( STATUS "Configuring module: unittest")
 # set module name
 SET(MODULE_NAME unittest)
 
+# Policy
+CMAKE_POLICY(SET CMP0020 NEW)
+
 # include directories
 INCLUDE_DIRECTORIES( ${ECHO_ROOT_PATH})
 INCLUDE_DIRECTORIES( ${ECHO_ROOT_PATH}/thirdparty)
