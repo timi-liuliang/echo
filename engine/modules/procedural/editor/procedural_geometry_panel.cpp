@@ -19,11 +19,11 @@ namespace Echo
 
 		m_ui = EditorApi.qLoadUi("engine/modules/procedural/editor/procedural_geometry_panel.ui");
 
-		QWidget* splitter = EditorApi.qFindChild(m_ui, "m_splitter");
+		QSplitter* splitter = (QSplitter*)EditorApi.qFindChild(m_ui, "m_splitter");
 		if (splitter)
 		{
-			EditorApi.qSplitterSetStretchFactor(splitter, 0, 0);
-			EditorApi.qSplitterSetStretchFactor(splitter, 1, 1);
+			splitter->setStretchFactor(0, 0);
+			splitter->setStretchFactor(1, 1);
 		}
 
 		// Tool button icons

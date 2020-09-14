@@ -80,11 +80,11 @@ namespace Echo
 
 		m_ui = EditorApi.qLoadUi("engine/modules/anim/editor/TimelinePanel/TimelinePanel.ui");
 
-		QWidget* splitter = EditorApi.qFindChild(m_ui, "m_splitter");
+		QSplitter* splitter = (QSplitter*)EditorApi.qFindChild(m_ui, "m_splitter");
 		if (splitter)
 		{
-			EditorApi.qSplitterSetStretchFactor(splitter, 0, 0);
-			EditorApi.qSplitterSetStretchFactor(splitter, 1, 1);
+			splitter->setStretchFactor(0, 0);
+			splitter->setStretchFactor(1, 1);
 		}
 
 		// Top tool buttons icons

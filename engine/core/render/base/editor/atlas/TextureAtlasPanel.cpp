@@ -21,11 +21,11 @@ namespace Echo
 		m_ui = EditorApi.qLoadUi("engine/core/render/base/editor/atlas/TextureAtlasPanel.ui");
 		m_splitDialog = EditorApi.qLoadUi("engine/core/render/base/editor/atlas/TextureAtlasSplitDialog.ui");
 
-		QWidget* splitter = EditorApi.qFindChild(m_ui, "m_splitter");
+		QSplitter* splitter = (QSplitter*)EditorApi.qFindChild(m_ui, "m_splitter");
 		if (splitter)
 		{
-			EditorApi.qSplitterSetStretchFactor(splitter, 0, 0);
-			EditorApi.qSplitterSetStretchFactor(splitter, 1, 1);
+			splitter->setStretchFactor(0, 0);
+			splitter->setStretchFactor(1, 1);
 		}
 
 		// Tool button icons

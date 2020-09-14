@@ -8,7 +8,6 @@
 #include "QHeaderView.cx"
 #include "QLineEdit.cx"
 #include "QSpinBox.cx"
-#include "QSplitter.cx"
 #include "QToolButton.cx"
 #include "QTreeWidget.cx"
 #include "QTreeWidgetItem.cx"
@@ -87,9 +86,6 @@ namespace Studio
 		BIND_EDITOR_FUN(qSpinBoxNew);
 		BIND_EDITOR_FUN(qSpinBoxValue);
 		BIND_EDITOR_FUN(qSpinBoxSetValue);
-
-		// modify qsplitter stretch factor
-		BIND_EDITOR_FUN(qSplitterSetStretchFactor);
 
 		// set tool button fixed width
 		BIND_EDITOR_FUN(qToolButtonSetFixedWidth);

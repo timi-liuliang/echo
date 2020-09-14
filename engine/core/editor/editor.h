@@ -192,10 +192,6 @@ namespace Echo
 		qSpinBoxValueFun qSpinBoxValue = nullptr;
         
     public:
-        // modify qsplitter stretch factor
-        qSplitterSetStretchFactorFun qSplitterSetStretchFactor = nullptr;
-        
-    public:
         // set tool button fixed width
         qToolButtonSetFixedWidthFun qToolButtonSetFixedWidth = nullptr;
         
