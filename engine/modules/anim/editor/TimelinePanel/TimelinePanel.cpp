@@ -218,18 +218,18 @@ namespace Echo
 	{
 		if (!m_addObjectMenu)
 		{
-			m_addObjectMenu = EditorApi.qMenuNew(m_ui);
+			m_addObjectMenu = EchoNew(QMenu(m_ui));
 
-			EditorApi.qMenuAddAction(m_addObjectMenu, EditorApi.qFindChildAction(m_ui, "m_actionAddNode"));
-			EditorApi.qMenuAddAction(m_addObjectMenu, EditorApi.qFindChildAction(m_ui, "m_actionAddSetting"));
-			EditorApi.qMenuAddAction(m_addObjectMenu, EditorApi.qFindChildAction(m_ui, "m_actionAddResource"));
+			m_addObjectMenu->addAction( EditorApi.qFindChildAction(m_ui, "m_actionAddNode"));
+			m_addObjectMenu->addAction(EditorApi.qFindChildAction(m_ui, "m_actionAddSetting"));
+			m_addObjectMenu->addAction(EditorApi.qFindChildAction(m_ui, "m_actionAddResource"));
 
 			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionAddNode"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddNode));
 			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionAddSetting"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddSetting));
 			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionAddResource"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddResource));
 		}
 
-		EditorApi.qMenuExec(m_addObjectMenu);
+		m_addObjectMenu->exec(QCursor::pos());
 	}
 
 	void TimelinePanel::onAddNode()
@@ -654,7 +654,7 @@ namespace Echo
 							Vector2 center;
 							calcKeyPosByTimeAndValue(t, value, center);
 
-							QWidget* checkBox = EditorApi.qCheckBoxNew();
+							QWidget* checkBox = new QCheckBox;
 							QGraphicsProxyWidget* widget = EditorApi.qGraphicsSceneAddWidget(m_graphicsScene, checkBox);
 
 							EditorApi.qGraphicsProxyWidgetSetPos(widget, center.x, 0.f);
@@ -707,7 +707,7 @@ namespace Echo
 							EditorApi.qGraphicsItemSetToolTip(item, toolTip.c_str());
 
 							// set move able
-							EditorApi.qGraphicsItemSetMoveable(item, true);
+							item->setFlag(QGraphicsItem::ItemIsMovable, true);
 
 							// connect signal slots
 							EditorApi.qConnectGraphicsItem(item, QSIGNAL(mouseDoubleClickEvent(QGraphicsSceneMouseEvent*)), this, createMethodBind(&TimelinePanel::onKeyDoubleClickedCurveKey));
@@ -733,7 +733,7 @@ namespace Echo
 						Vector2 center;
 						calcKeyPosByTimeAndValue(t, 0.f, center);
 
-						QWidget* checkBox = EditorApi.qCheckBoxNew();
+						QWidget* checkBox = new QCheckBox;
 						QGraphicsProxyWidget* widget = EditorApi.qGraphicsSceneAddWidget(m_graphicsScene, checkBox);
 
 						EditorApi.qGraphicsProxyWidgetSetPos(widget, center.x, 50.f);
@@ -1049,12 +1049,12 @@ namespace Echo
 		{
 			if (m_curveItems[i])
 			{
-				EditorApi.qGraphicsItemSetVisible(m_curveItems[i], m_curveVisibles[i]);
+				m_curveItems[i]->setVisible(m_curveVisibles[i]);
 			}
 
 			for (QGraphicsItem* keyItem : m_curveKeyItems[i])
 			{
-				EditorApi.qGraphicsItemSetVisible( keyItem, m_curveVisibles[i]);
+				keyItem->setVisible(m_curveVisibles[i]);
 			}
 		}
 	}
@@ -1064,7 +1064,7 @@ namespace Echo
 		// clear menu
 		if (m_keyEditMenu)
 		{
-			EditorApi.qDeleteWidget(m_keyEditMenu);
+			EchoSafeDelete(m_keyEditMenu, QMenu);
 		}
 
 		AnimProperty* animProperty = m_timeline->getProperty(m_currentEditAnim, m_currentEditObjectPath, m_currentEditPropertyChain);
@@ -1072,27 +1072,27 @@ namespace Echo
 		{
 			if (animProperty->getType() == AnimProperty::Type::Bool)
 			{
-				m_keyEditMenu = EditorApi.qMenuNew(m_ui);
+				m_keyEditMenu = EchoNew(QMenu(m_ui));
 
-				EditorApi.qMenuAddAction(m_keyEditMenu, EditorApi.qFindChildAction(m_ui, "m_actionAddBoolKeyToCurve"));
+				m_keyEditMenu->addAction( EditorApi.qFindChildAction(m_ui, "m_actionAddBoolKeyToCurve"));
 				EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionAddBoolKeyToCurve"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddBoolKeyToCurve));
 			}
 			else if (animProperty->getType() == AnimProperty::Type::Vector3)
 			{
-				m_keyEditMenu = EditorApi.qMenuNew(m_ui);
+				m_keyEditMenu = EchoNew(QMenu(m_ui));
 
-				EditorApi.qMenuAddAction(m_keyEditMenu, EditorApi.qFindChildAction(m_ui, "m_actionAddKeyToCurveRed"));
-				EditorApi.qMenuAddAction(m_keyEditMenu, EditorApi.qFindChildAction(m_ui, "m_actionAddKeyToCurveGreen"));
-				EditorApi.qMenuAddAction(m_keyEditMenu, EditorApi.qFindChildAction(m_ui, "m_actionAddKeyToCurveBlue"));
+				m_keyEditMenu->addAction(EditorApi.qFindChildAction(m_ui, "m_actionAddKeyToCurveRed"));
+				m_keyEditMenu->addAction(EditorApi.qFindChildAction(m_ui, "m_actionAddKeyToCurveGreen"));
+				m_keyEditMenu->addAction(EditorApi.qFindChildAction(m_ui, "m_actionAddKeyToCurveBlue"));
 				EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionAddKeyToCurveRed"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddKeyToCurveRed));
 				EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionAddKeyToCurveGreen"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddKeyToCurveGreen));
 				EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionAddKeyToCurveBlue"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddKeyToCurveBlue));
 			}
 			else if (animProperty->getType() == AnimProperty::Type::String)
 			{
-				m_keyEditMenu = EditorApi.qMenuNew(m_ui);
+				m_keyEditMenu = EchoNew(QMenu(m_ui));
 
-				EditorApi.qMenuAddAction(m_keyEditMenu, EditorApi.qFindChildAction(m_ui, "m_actionAddStringKeyToCurve"));
+				m_keyEditMenu->addAction(EditorApi.qFindChildAction(m_ui, "m_actionAddStringKeyToCurve"));
 				EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionAddStringKeyToCurve"), QSIGNAL(triggered()), this, createMethodBind(&TimelinePanel::onAddStringKeyToCurve));
 			}
 		}
@@ -1101,7 +1101,7 @@ namespace Echo
 		m_keyEditCursorScenePos = EditorApi.qObjectGetEventAll(m_graphicsScene).graphicsSceneMouseEvent.scenePos;
 
 		// show menu
-		EditorApi.qMenuExec(m_keyEditMenu);
+		m_keyEditMenu->exec(QCursor::pos());
 	}
 
 	void TimelinePanel::onGraphicsSceneWheelEvent()

@@ -60,7 +60,7 @@ namespace Echo
 
 	protected:
 		ProceduralGeometry*					m_proceduralGeometry = nullptr;
-		QWidget*							m_importMenu = nullptr;
+		QMenu*								m_importMenu = nullptr;
 		QObject*							m_graphicsScene;
 		BackgroundStyle						m_backgroundStyle;
 		Procedural::QBackgroundGridPainter	m_backgroundGridSmall;

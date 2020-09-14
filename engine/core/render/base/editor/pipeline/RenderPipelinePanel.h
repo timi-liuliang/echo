@@ -27,7 +27,7 @@ namespace Echo
 
 	protected:
 		RenderPipeline*				m_pipeline;
-		QWidget*					m_importMenu = nullptr;
+		QMenu*						m_importMenu = nullptr;
 	};
 }
 

@@ -45,7 +45,7 @@ namespace Echo
 
 	protected:
 		ParticleSystem*				m_particleSystem;
-		QWidget*					m_importMenu = nullptr;
+		QMenu*						m_importMenu = nullptr;
 		QObject*					m_graphicsScene;
 		QGraphicsItem*				m_imageItem = nullptr;
 		QGraphicsItem*				m_imageBorder = nullptr;

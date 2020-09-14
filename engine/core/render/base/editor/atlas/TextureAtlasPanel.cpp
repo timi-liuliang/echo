@@ -67,19 +67,19 @@ namespace Echo
 	{
 		if (!m_importMenu)
 		{
-			m_importMenu = EditorApi.qMenuNew(m_ui);
+			m_importMenu = EchoNew(QMenu(m_ui));
 			
-			EditorApi.qMenuAddAction(m_importMenu, EditorApi.qFindChildAction(m_ui, "m_actionAddNewOne"));
-			EditorApi.qMenuAddSeparator(m_importMenu);
-			EditorApi.qMenuAddAction(m_importMenu, EditorApi.qFindChildAction(m_ui, "m_actionBuildFromGrid"));
-			EditorApi.qMenuAddAction(m_importMenu, EditorApi.qFindChildAction(m_ui, "m_actionImportFromImages"));
+			m_importMenu->addAction(EditorApi.qFindChildAction(m_ui, "m_actionAddNewOne"));
+			m_importMenu->addSeparator();
+			m_importMenu->addAction(EditorApi.qFindChildAction(m_ui, "m_actionBuildFromGrid"));
+			m_importMenu->addAction(EditorApi.qFindChildAction(m_ui, "m_actionImportFromImages"));
 
 			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionAddNewOne"), QSIGNAL(triggered()), this, createMethodBind(&TextureAtlasPanel::onNewAtla));
 			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionImportFromImages"), QSIGNAL(triggered()), this, createMethodBind(&TextureAtlasPanel::onImportFromImages));
 			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionBuildFromGrid"), QSIGNAL(triggered()), this, createMethodBind(&TextureAtlasPanel::onSplit));
 		}
 
-		EditorApi.qMenuExec(m_importMenu);
+		m_importMenu->exec(QCursor::pos());
 	}
 
 	void TextureAtlasPanel::onImportFromImages()
@@ -242,7 +242,7 @@ namespace Echo
 			String fullPath = IO::instance()->convertResPathToFullPath(resPath);
 
 			m_imageItem = EditorApi.qGraphicsSceneAddPixmap(m_graphicsScene, fullPath.c_str());
-			EditorApi.qGraphicsItemSetMoveable(m_imageItem, true);
+			m_imageItem->setFlag(QGraphicsItem::ItemIsMovable, true);
 
 			// image border
 			Rect rect;

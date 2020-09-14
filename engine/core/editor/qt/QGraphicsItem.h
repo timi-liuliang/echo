@@ -30,9 +30,6 @@ namespace Echo
 	typedef void (*qGraphicsProxyWidgetSetZValueFun)(QGraphicsProxyWidget* item, float zValue);
 	typedef void (*qGraphicsItemSetZValueFun)(QGraphicsItem* item, float zValue);
 
-	// set visible
-	typedef void (*qGraphicsItemSetVisibleFun)(QGraphicsItem* item, bool visible);
-
 	// user data
 	typedef String (*qGraphicsItemUserDataFun)(QGraphicsItem* item);
 
@@ -41,9 +38,6 @@ namespace Echo
 
 	// set tool tip
 	typedef void (*qGraphicsItemSetToolTipFun)(QGraphicsItem* item, const char* toolTip);
-
-	// set moveable
-	typedef void (*qGraphicsItemSetMoveableFun)(QGraphicsItem* item, bool isMoveable);
 }
 
 #endif

@@ -77,14 +77,6 @@ namespace Echo
 		}
 	}
 
-	void qGraphicsItemSetVisible(QGraphicsItem* item, bool visible)
-	{
-		if (item)
-		{
-			item->setVisible(visible);
-		}
-	}
-
 	String qGraphicsItemUserData(QGraphicsItem* item)
 	{
 		return item ? item->data(Qt::UserRole).toString().toStdString().c_str() : StringUtil::BLANK;
@@ -103,14 +95,6 @@ namespace Echo
 		if (item)
 		{
 			item->setToolTip(toolTip);
-		}
-	}
-
-	void qGraphicsItemSetMoveable(QGraphicsItem* item, bool isMoveable)
-	{
-		if (item)
-		{
-			item->setFlag(QGraphicsItem::ItemIsMovable, isMoveable);
 		}
 	}
 }

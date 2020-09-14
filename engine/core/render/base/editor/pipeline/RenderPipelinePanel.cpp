@@ -36,16 +36,16 @@ namespace Echo
 	{
 		if (!m_importMenu)
 		{
-			m_importMenu = EditorApi.qMenuNew(m_ui);
+			m_importMenu = EchoNew(QMenu(m_ui));
 
-			EditorApi.qMenuAddAction(m_importMenu, EditorApi.qFindChildAction(m_ui, "m_actionNewCamera"));
-			EditorApi.qMenuAddAction(m_importMenu, EditorApi.qFindChildAction(m_ui, "m_actionNewImageFilter"));
+			m_importMenu->addAction( EditorApi.qFindChildAction(m_ui, "m_actionNewCamera"));
+			m_importMenu->addAction( EditorApi.qFindChildAction(m_ui, "m_actionNewImageFilter"));
 
 			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionNewCamera"), QSIGNAL(triggered()), this, createMethodBind(&RenderpipelinePanel::onNewCamera));
 			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionNewImageFilter"), QSIGNAL(triggered()), this, createMethodBind(&RenderpipelinePanel::onNewImageFilter));
 		}
 
-		EditorApi.qMenuExec(m_importMenu);
+		m_importMenu->exec(QCursor::pos());
 	}
 
 	void RenderpipelinePanel::onNewCamera()

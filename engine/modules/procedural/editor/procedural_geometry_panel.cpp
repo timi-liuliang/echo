@@ -64,19 +64,19 @@ namespace Echo
 	{
 		if (!m_importMenu)
 		{
-			m_importMenu = EditorApi.qMenuNew(m_ui);
+			m_importMenu = EchoNew(QMenu(m_ui));
 
-			EditorApi.qMenuAddAction(m_importMenu, EditorApi.qFindChildAction(m_ui, "m_actionAddNewOne"));
-			EditorApi.qMenuAddSeparator(m_importMenu);
-			EditorApi.qMenuAddAction(m_importMenu, EditorApi.qFindChildAction(m_ui, "m_actionBuildFromGrid"));
-			EditorApi.qMenuAddAction(m_importMenu, EditorApi.qFindChildAction(m_ui, "m_actionImportFromImages"));
+			m_importMenu->addAction( EditorApi.qFindChildAction(m_ui, "m_actionAddNewOne"));
+			m_importMenu->addSeparator();
+			m_importMenu->addAction( EditorApi.qFindChildAction(m_ui, "m_actionBuildFromGrid"));
+			m_importMenu->addAction( EditorApi.qFindChildAction(m_ui, "m_actionImportFromImages"));
 
 			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionAddNewOne"), QSIGNAL(triggered()), this, createMethodBind(&ProceduralGeometryPanel::onNewAtla));
 			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionImportFromImages"), QSIGNAL(triggered()), this, createMethodBind(&ProceduralGeometryPanel::onImportFromImages));
 			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionBuildFromGrid"), QSIGNAL(triggered()), this, createMethodBind(&ProceduralGeometryPanel::onSplit));
 		}
 
-		EditorApi.qMenuExec(m_importMenu);
+		m_importMenu->exec(QCursor::pos());
 	}
 
 	void ProceduralGeometryPanel::onImportFromImages()

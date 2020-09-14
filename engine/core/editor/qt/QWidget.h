@@ -4,18 +4,14 @@
 
 #ifdef ECHO_EDITOR_MODE
 
+#include <QtWidgets/QGraphicsItem>
+
 class QObject;
 class QWidget;
 class QAction;
 class QTreeWidgetItem;
-class QGraphicsItem;
-class QGraphicsItemGroup;
-class QGraphicsLineItem;
-class QGraphicsPathItem;
-class QGraphicsPixmapItem;
 class QGraphicsPolygonItem;
 class QGraphicsProxyWidget;
-class QGraphicsRectItem;
 class QGraphicsSceneContextMenuEvent;
 class QGraphicsSceneDragDropEvent;
 class QGraphicsSceneEvent;
@@ -23,8 +19,6 @@ class QGraphicsSceneHelpEvent;
 class QGraphicsSceneHoverEvent;
 class QGraphicsSceneMouseEvent;
 class QGraphicsSceneWheelEvent;
-class QGraphicsSimpleTextItem;
-class QGraphicsTextItem;
 
 # define QSIGNAL(a)  "2"#a
 

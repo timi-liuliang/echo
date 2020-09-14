@@ -1,5 +1,4 @@
 #include "Studio.h"
-#include "QCheckBox.cx"
 #include "QComboBox.cx"
 #include "QCursor.cx"
 #include "QEvent.cx"
@@ -9,7 +8,6 @@
 #include "QHeaderView.cx"
 #include "QLineEdit.cx"
 #include "QSpinBox.cx"
-#include "QMenu.cx"
 #include "QSplitter.cx"
 #include "QToolButton.cx"
 #include "QTreeWidget.cx"
@@ -26,8 +24,6 @@ namespace Studio
     // init functions
     void AStudio::initFunctions()
     {
-        BIND_EDITOR_FUN(qCheckBoxNew);
-        
         // QComboBox->addItem(const QIcon &icon, const QString &text)
         BIND_EDITOR_FUN(qComboBoxAddItem);
         BIND_EDITOR_FUN(qComboBoxCurrentIndex);
@@ -53,11 +49,9 @@ namespace Studio
 		BIND_EDITOR_FUN(qGraphicsProxyWidgetSetPos);
 		BIND_EDITOR_FUN(qGraphicsProxyWidgetSetZValue);
 		BIND_EDITOR_FUN(qGraphicsItemSetZValue);
-		BIND_EDITOR_FUN(qGraphicsItemSetVisible);
 		BIND_EDITOR_FUN(qGraphicsItemUserData);
 		BIND_EDITOR_FUN(qGraphicsItemSetUserData);
 		BIND_EDITOR_FUN(qGraphicsItemSetToolTip);
-		BIND_EDITOR_FUN(qGraphicsItemSetMoveable);
 		BIND_EDITOR_FUN(qGraphicsSceneNew);
 		BIND_EDITOR_FUN(qGraphicsSceneAddWidget);
 		BIND_EDITOR_FUN(qGraphicsSceneAddLine);
@@ -93,12 +87,6 @@ namespace Studio
 		BIND_EDITOR_FUN(qSpinBoxNew);
 		BIND_EDITOR_FUN(qSpinBoxValue);
 		BIND_EDITOR_FUN(qSpinBoxSetValue);
-
-		// create a new QMenu
-		BIND_EDITOR_FUN(qMenuNew);
-		BIND_EDITOR_FUN(qMenuAddAction);
-		BIND_EDITOR_FUN(qMenuAddSeparator);
-		BIND_EDITOR_FUN(qMenuExec);
 
 		// modify qsplitter stretch factor
 		BIND_EDITOR_FUN(qSplitterSetStretchFactor);

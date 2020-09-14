@@ -128,7 +128,7 @@ namespace Echo
 
 	protected:
 		Timeline*					m_timeline;
-		QWidget*					m_addObjectMenu;
+		QMenu*						m_addObjectMenu;
 		QAction*					m_addNodeAction;
 		String						m_currentEditAnim;
 		int							m_nodeTreeWidgetWidth;
@@ -151,7 +151,7 @@ namespace Echo
 		QWidget*					m_curveKeyLineEdit = nullptr;
 		QGraphicsProxyWidget*		m_curveKeyLineEditProxyWidget = nullptr;
 		QGraphicsItem*				m_curveKeyItem;
-		QWidget*					m_keyEditMenu = nullptr;
+		QMenu*						m_keyEditMenu = nullptr;
 		Vector2						m_keyEditCursorScenePos;
 		float						m_millisecondPerPixel = 1.f;
 		float						m_unitsPerPixel = 1.f;

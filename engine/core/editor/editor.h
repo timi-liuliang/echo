@@ -46,10 +46,6 @@ namespace Echo
 		virtual Echo::ImagePtr getNodeIcon(Node* node) = 0;
         
     public:
-        // new QCheckBox
-        qCheckBoxNewFun qCheckBoxNew = nullptr;
-        
-    public:
         // QComboBox->addItem(const QIcon &icon, const QString &text)
         qComboBoxAddItemFun qComboBoxAddItem = nullptr;
         
@@ -98,10 +94,7 @@ namespace Echo
         
         // set z value
         qGraphicsProxyWidgetSetZValueFun qGraphicsProxyWidgetSetZValue = nullptr;
-        qGraphicsItemSetZValueFun qGraphicsItemSetZValue = nullptr;
-        
-        // set visible
-        qGraphicsItemSetVisibleFun qGraphicsItemSetVisible = nullptr;
+        qGraphicsItemSetZValueFun qGraphicsItemSetZValue = nullptr;       
         
         // user data
         qGraphicsItemUserDataFun qGraphicsItemUserData = nullptr;
@@ -111,9 +104,6 @@ namespace Echo
         
         // set tool tip
         qGraphicsItemSetToolTipFun qGraphicsItemSetToolTip = nullptr;
-        
-        // set move able
-        qGraphicsItemSetMoveableFun qGraphicsItemSetMoveable = nullptr;
         
     public:
         // create a QGraphicsScene
@@ -200,19 +190,6 @@ namespace Echo
 
 		// set maximum width
 		qSpinBoxValueFun qSpinBoxValue = nullptr;
-        
-    public:
-        // create a new QMenu
-        qMenuNewFun qMenuNew = nullptr;
-        
-        // void addAction(QAction *action)
-        qMenuAddActionFun qMenuAddAction = nullptr;
-
-        // add section
-        qMenuAddSeparatorFun qMenuAddSeparator = nullptr;
-        
-        // QAction *exec();
-        qMenuExecFun qMenuExec = nullptr;
         
     public:
         // modify qsplitter stretch factor

@@ -1,12 +1,14 @@
 #pragma once
 
+#include "engine/core/editor/editor.h"
+
 #ifdef ECHO_EDITOR_MODE
 
-#include "engine/core/editor/editor.h"
 #include "engine/modules/procedural/procedural_geometry.h"
 #include <QPen>
 #include <QGRaphicsScene>
 #include <QtWidgets/QGraphicsItem>
+#include "qgraphics_round_item.h"
 
 namespace Procedural
 {
@@ -14,7 +16,7 @@ namespace Procedural
 	{
 		QWidget*							m_graphicsView = nullptr;
 		QGraphicsScene*						m_graphicsScene = nullptr;
-		QGraphicsItem*						m_rect = nullptr;
+		QGraphicsRoundRectItem*				m_rect = nullptr;
 		Echo::vector<QGraphicsItem*>::type	m_inputConnectionPoints;
 		Echo::vector<QGraphicsItem*>::type	m_outputConnectionPoints;
 		Echo::Color							m_normalBoundaryColor;
@@ -76,8 +78,13 @@ namespace Procedural
 		{
 			if (!m_rect)
 			{
-				m_rect = EditorApi.qGraphicsSceneAddRect(m_graphicsScene, 0.f, 0.f, m_width, m_height, m_normalBoundaryColor, m_regionColor);
-				EditorApi.qGraphicsItemSetMoveable(m_rect, true);
+				m_rect = new QGraphicsRoundRectItem();
+				m_rect->setRect(QRect(0.f, 0.f, m_width, m_height));
+				m_rect->setRadius(4.f);
+				m_rect->setPen(QPen(QColor::fromRgbF(m_normalBoundaryColor.r, m_normalBoundaryColor.g, m_normalBoundaryColor.b, m_normalBoundaryColor.a)));
+				m_rect->setBrush(QBrush(QColor::fromRgbF(m_regionColor.r, m_regionColor.g, m_regionColor.b, m_regionColor.a)));
+				m_rect->setFlag(QGraphicsItem::ItemIsMovable, true);
+				m_graphicsScene->addItem(m_rect);
 
 				m_text = m_graphicsScene->addSimpleText("Sphere");
 				m_text->setBrush(QBrush(QColor::fromRgbF(m_textColor.r, m_textColor.g, m_textColor.b, m_textColor.a)));
