@@ -252,6 +252,9 @@ namespace Echo
         qGetOpenFileNamesFun qGetOpenFileNames = nullptr;
         
     public:
+        // sender
+        qSenderFun qSender = nullptr;
+
         // connect signal slot
         qConnectObjectFun qConnectObject = nullptr;
         qConnectWidgetFun qConnectWidget = nullptr;

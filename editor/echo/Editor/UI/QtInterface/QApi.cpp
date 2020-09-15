@@ -110,6 +110,7 @@ namespace Studio
 		BIND_EDITOR_FUN(qGetOpenFileNames);
 
 		// connect signal slot
+		BIND_EDITOR_FUN(qSender);
 		BIND_EDITOR_FUN(qConnectObject);
 		BIND_EDITOR_FUN(qConnectWidget);
 		BIND_EDITOR_FUN(qConnectAction);

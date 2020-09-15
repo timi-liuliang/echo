@@ -6,6 +6,7 @@
 namespace Echo
 {
 	// extern set sender item function
+	extern void qSetSender(QObject* item);
 	extern void qSetSenderItem(QGraphicsItem* item);
 
 	QMessageHandler::QMessageHandler(QWidget* parent)
@@ -57,6 +58,8 @@ namespace Echo
 				{
 					if (Echo::StringUtil::Substr(signal, "(") == Echo::StringUtil::Substr(conn.m_signal, "("))
 					{
+						qSetSender(sd);
+
 						Echo::Variant::CallError error;
 						Echo::Object* receiver = (Object*)conn.m_receiver;
 						Echo::ClassMethodBind* method = conn.m_method;
@@ -79,12 +82,9 @@ namespace Echo
 			ConnectArray connects;
 			connects.emplace_back(signal, (Object*)receiver, slot);
 			m_connects[sender] = connects;
-
-			//QObject::connect(sender, SIGNAL(destroyed()), this, SLOT(onDestroyWidget()));
 		}
 	}
 
-	// get event
 	qEventAll& QMessageHandler::getEvent(void* sender)
 	{
 		auto it = m_events.find(sender);
@@ -108,6 +108,8 @@ namespace Echo
 			{
 				if (Echo::StringUtil::Substr(signal, "(") == Echo::StringUtil::Substr(conn.m_signal, "("))
 				{
+					qSetSender(sender);
+
 					Echo::Variant::CallError error;
 					Echo::Object* receiver = (Object*)conn.m_receiver;
 					Echo::ClassMethodBind* method = conn.m_method;
@@ -139,7 +141,6 @@ namespace Echo
 		}
 	}
 
-	// on widget destroy
 	void QMessageHandler::onDestroyWidget()
 	{
 		auto it = m_connects.find((QWidget*)sender());

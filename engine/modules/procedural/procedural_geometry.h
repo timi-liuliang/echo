@@ -17,6 +17,7 @@ namespace Echo
 		virtual ~ProceduralGeometry();
 
 		// PGNodes
+		void addPGNode(PGNode* pgNode);
 		vector<PGNode*>::type& getPGNodes() { return m_pgNodes; }
 
 		// set mesh

@@ -6,6 +6,18 @@
 
 namespace Echo
 {
+	static QObject* g_senderObject = nullptr;
+
+	void qSetSender(QObject* item)
+	{
+		g_senderObject = item;
+	}
+
+	QObject* qSender()
+	{
+		return g_senderObject;
+	}
+
 	void qConnectObject(QObject* sender, const char* signal, void* receiver, ClassMethodBind* slot)
 	{
 		if (sender)

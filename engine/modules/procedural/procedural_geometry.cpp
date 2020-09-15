@@ -23,6 +23,14 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY_HINT(ProceduralGeometry, "Material", PropertyHintType::ResourceType, "Material");
 	}
 
+	void ProceduralGeometry::addPGNode(PGNode* pgNode)
+	{
+		if (pgNode)
+		{
+			m_pgNodes.push_back(pgNode);
+		}
+	}
+
 	void ProceduralGeometry::setMesh(MeshPtr mesh)
 	{ 
 		m_mesh = mesh; 

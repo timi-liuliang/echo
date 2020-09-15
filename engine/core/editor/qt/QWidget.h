@@ -24,6 +24,9 @@ class QGraphicsSceneWheelEvent;
 
 namespace Echo
 {
+	// sender
+	typedef QObject* (*qSenderFun)();
+
 	// connect signal slot
 	typedef void (*qConnectObjectFun)(QObject* sender, const char* signal, void* receiver, ClassMethodBind* slot);
 	typedef void (*qConnectWidgetFun)(QWidget* sender, const char* signal, void* receiver, ClassMethodBind* slot);

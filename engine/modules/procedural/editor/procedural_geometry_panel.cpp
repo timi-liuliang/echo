@@ -79,12 +79,24 @@ namespace Echo
 			}
 		}
 
+		m_newPGNodePosition = Echo::Vector2(QCursor::pos().x(), QCursor::pos().y());
 		m_menuNew->exec(QCursor::pos());
 	}
 
 	void ProceduralGeometryPanel::onNewPGNode()
 	{
-		//QAction* pAction = qobject_cast<QAction*>(QObject::sender());
+		QAction* action = qobject_cast<QAction*>(EditorApi.qSender());
+		if(action)
+		{ 
+			Echo::String className = action->data().toString().toStdString().c_str();
+			if (m_proceduralGeometry)
+			{
+				Echo::PGNode* pgNode = Echo::Class::create<PGNode*>(className);
+				pgNode->setPosition(m_newPGNodePosition);
+
+				m_proceduralGeometry->addPGNode(pgNode);
+			}
+		}
 	}
 
 	void ProceduralGeometryPanel::onSplit()

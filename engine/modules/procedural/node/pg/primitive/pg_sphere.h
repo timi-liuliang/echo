@@ -29,6 +29,6 @@ namespace Echo
 		static MeshPtr buildUvSphere(float radius, i32 stackCount, i32 sectorCount);
 
 	protected:
-		Type	m_type;
+		Type	m_type = Type::Uv;
 	};
 }
