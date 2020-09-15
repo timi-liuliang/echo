@@ -811,7 +811,7 @@ namespace Echo
 			}
 		}
 
-		EditorApi.qWidgetSetVisible(m_curveKeyLineEdit, true);
+		m_curveKeyLineEdit->setVisible(true);
 		EditorApi.qLineEditSetCursorPosition(m_curveKeyLineEdit, 0);
 	}
 
@@ -828,7 +828,7 @@ namespace Echo
 			m_timeline->setKey(userDataSplits[0], userDataSplits[1], userDataSplits[2], StringUtil::ParseI32(userDataSplits[3]), StringUtil::ParseI32(userDataSplits[4]), value);
 		}
 
-		EditorApi.qWidgetSetVisible( m_curveKeyLineEdit, false);
+		m_curveKeyLineEdit->setVisible(false);
 
 		// refresh curve and key display
 		refreshCurveDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyChain);
@@ -1214,11 +1214,11 @@ namespace Echo
 	{
 		if (!m_currentEditAnim.empty() && !m_currentEditObjectPath.empty() && !m_currentEditPropertyChain.empty())
 		{
-			EditorApi.qWidgetSetEnable(EditorApi.qFindChild(m_ui, "m_graphicsView"), true);
+			EditorApi.qFindChild(m_ui, "m_graphicsView")->setEnabled(true);
 		}
 		else
 		{
-			EditorApi.qWidgetSetEnable(EditorApi.qFindChild(m_ui, "m_graphicsView"), false);
+			EditorApi.qFindChild(m_ui, "m_graphicsView")->setEnabled(false);
 		}
 	}
 

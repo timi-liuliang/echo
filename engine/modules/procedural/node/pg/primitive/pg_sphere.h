@@ -6,8 +6,10 @@ namespace Echo
 {
 	// http://www.songho.ca/opengl/gl_sphere.html
 	// https://medium.com/game-dev-daily/four-ways-to-create-a-mesh-for-a-sphere-d7956b825db4
-	class PGSphere : PGNode
+	class PGSphere : public PGNode
 	{
+		ECHO_CLASS(PGSphere, PGNode)
+
 	public:
 		// Type
 		enum Type

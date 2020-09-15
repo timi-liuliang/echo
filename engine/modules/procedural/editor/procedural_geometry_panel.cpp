@@ -30,7 +30,7 @@ namespace Echo
 		EditorApi.qToolButtonSetIcon(EditorApi.qFindChild(m_ui, "m_import"), "engine/core/render/base/editor/icon/import.png");
 
 		// connect signal slots
-		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_import"), QSIGNAL(clicked()), this, createMethodBind(&ProceduralGeometryPanel::onImport));
+		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_graphicsView"), QSIGNAL(customContextMenuRequested(const QPoint&)), this, createMethodBind(&ProceduralGeometryPanel::onRightClickGraphicsView));
 		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_nodeTreeWidget"), QSIGNAL(itemClicked(QTreeWidgetItem*, int)), this, createMethodBind(&ProceduralGeometryPanel::onSelectItem));
 		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_nodeTreeWidget"), QSIGNAL(itemChanged(QTreeWidgetItem*, int)), this, createMethodBind(&ProceduralGeometryPanel::onChangedAtlaName));
 
@@ -60,28 +60,31 @@ namespace Echo
 	{
 	}
 
-	void ProceduralGeometryPanel::onImport()
+	void ProceduralGeometryPanel::onRightClickGraphicsView()
 	{
-		if (!m_importMenu)
+		if (!m_menuNew)
 		{
-			m_importMenu = EchoNew(QMenu(m_ui));
+			m_menuNew = EchoNew(QMenu(m_ui));
 
-			m_importMenu->addAction( EditorApi.qFindChildAction(m_ui, "m_actionAddNewOne"));
-			m_importMenu->addSeparator();
-			m_importMenu->addAction( EditorApi.qFindChildAction(m_ui, "m_actionBuildFromGrid"));
-			m_importMenu->addAction( EditorApi.qFindChildAction(m_ui, "m_actionImportFromImages"));
+			Echo::StringArray pgNodeClasses;
+			Echo::Class::getChildClasses(pgNodeClasses, "PGNode", true);
+			for (String& className : pgNodeClasses)
+			{
+				QAction* newAction = new QAction;
+				newAction->setText(Echo::StringUtil::Replace(className, "PG", "").c_str());
+				newAction->setData(className.c_str());
+				m_menuNew->addAction(newAction);
 
-			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionAddNewOne"), QSIGNAL(triggered()), this, createMethodBind(&ProceduralGeometryPanel::onNewAtla));
-			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionImportFromImages"), QSIGNAL(triggered()), this, createMethodBind(&ProceduralGeometryPanel::onImportFromImages));
-			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionBuildFromGrid"), QSIGNAL(triggered()), this, createMethodBind(&ProceduralGeometryPanel::onSplit));
+				EditorApi.qConnectAction(newAction, QSIGNAL(triggered()), this, createMethodBind(&ProceduralGeometryPanel::onNewPGNode));
+			}
 		}
 
-		m_importMenu->exec(QCursor::pos());
+		m_menuNew->exec(QCursor::pos());
 	}
 
-	void ProceduralGeometryPanel::onImportFromImages()
+	void ProceduralGeometryPanel::onNewPGNode()
 	{
-
+		//QAction* pAction = qobject_cast<QAction*>(QObject::sender());
 	}
 
 	void ProceduralGeometryPanel::onSplit()

@@ -7,6 +7,6 @@ namespace Echo
 {
 	class PGNode : public Object
 	{
-
+		ECHO_CLASS(PGNode, Object);
 	};
 }

@@ -13,6 +13,11 @@ namespace Echo
 
 	}
 
+	void PGSphere::bindMethods()
+	{
+
+	}
+
 	MeshPtr PGSphere::buildUvSphere(float radius, i32 stackCount, i32 sectorCount)
 	{
 		// Vertex Format

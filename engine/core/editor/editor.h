@@ -263,15 +263,6 @@ namespace Echo
         
         // find child action by name
         qFindChildActionFun qFindChildAction = nullptr;
-        
-        // set visible
-        qWidgetSetVisibleFun qWidgetSetVisible = nullptr;
-        
-        // set enabled
-        qWidgetSetEnableFun qWidgetSetEnable = nullptr;
-        
-        // delete QWidget
-        qDeleteWidgetFun qDeleteWidget = nullptr;
 	};
 }
 

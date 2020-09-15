@@ -12,7 +12,7 @@ namespace Echo
 
 	PanelTab::~PanelTab()
 	{
-		EditorApi.qDeleteWidget(m_ui);
+		delete m_ui; m_ui = nullptr;
 	}
 #endif
 }

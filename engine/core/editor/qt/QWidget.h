@@ -35,15 +35,6 @@ namespace Echo
 
 	// find child action by name
 	typedef QAction* (*qFindChildActionFun)(QWidget* root, const char* name);
-
-	// set visible
-	typedef void (*qWidgetSetVisibleFun)(QWidget* widget, bool visible);
-
-	// set enabled
-	typedef void (*qWidgetSetEnableFun)(QWidget* widget, bool enabled);
-
-	// delete QWidget
-	typedef void (*qDeleteWidgetFun)(QWidget*& widget);
 }
 
 #endif

@@ -36,8 +36,8 @@ namespace Echo
 		void onNewAtla();
 
 		// import
-		void onImport();
-		void onImportFromImages();
+		void onRightClickGraphicsView();
+		void onNewPGNode();
 
 		// split
 		void onSplit();
@@ -60,7 +60,7 @@ namespace Echo
 
 	protected:
 		ProceduralGeometry*					m_proceduralGeometry = nullptr;
-		QMenu*								m_importMenu = nullptr;
+		QMenu*								m_menuNew = nullptr;			
 		QObject*							m_graphicsScene;
 		BackgroundStyle						m_backgroundStyle;
 		Procedural::QBackgroundGridPainter	m_backgroundGridSmall;

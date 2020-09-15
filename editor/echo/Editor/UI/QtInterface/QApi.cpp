@@ -116,8 +116,5 @@ namespace Studio
 		BIND_EDITOR_FUN(qConnectGraphicsItem);
 		BIND_EDITOR_FUN(qFindChild);
 		BIND_EDITOR_FUN(qFindChildAction);
-		BIND_EDITOR_FUN(qWidgetSetVisible);
-		BIND_EDITOR_FUN(qWidgetSetEnable);
-		BIND_EDITOR_FUN(qDeleteWidget);
     }
 }
