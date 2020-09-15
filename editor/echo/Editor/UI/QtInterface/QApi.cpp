@@ -1,6 +1,5 @@
 #include "Studio.h"
 #include "QComboBox.cx"
-#include "QCursor.cx"
 #include "QEvent.cx"
 #include "QGraphicsItem.cx"
 #include "QGraphicsScene.cx"
@@ -30,9 +29,6 @@ namespace Studio
         BIND_EDITOR_FUN(qComboBoxSetCurrentText);
         BIND_EDITOR_FUN(qComboBoxSetItemText);
         BIND_EDITOR_FUN(qComboBoxClear);
-        
-        // QCursor
-        BIND_EDITOR_FUN(qCursorPos);
         
         // QEvent
         BIND_EDITOR_FUN(qObjectGetEventAll);
