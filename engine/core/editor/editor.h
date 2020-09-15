@@ -149,13 +149,6 @@ namespace Echo
         qGraphicsViewFitInViewFun qGraphicsViewFitInView = nullptr;
         
     public:
-        // resize section
-        qHeaderViewResizeSectionFun qHeaderViewResizeSection = nullptr;
-        
-        // set section size mode
-        qHeaderViewSetSectionResizeModeFun qHeaderViewSetSectionResizeMode = nullptr;
-        
-    public:
         // new QLineEdit
         qLineEditNewFun qLineEditNew = nullptr;
         

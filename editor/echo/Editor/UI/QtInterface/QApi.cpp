@@ -4,7 +4,6 @@
 #include "QGraphicsItem.cx"
 #include "QGraphicsScene.cx"
 #include "QGraphicsView.cx"
-#include "QHeaderView.cx"
 #include "QLineEdit.cx"
 #include "QToolButton.cx"
 #include "QTreeWidget.cx"
@@ -63,10 +62,6 @@ namespace Studio
 		BIND_EDITOR_FUN(qGraphicsViewSetScale);
 		BIND_EDITOR_FUN(qGraphicsViewSetBackgroundBrush);
 		BIND_EDITOR_FUN(qGraphicsViewFitInView);
-
-		// resize section
-		BIND_EDITOR_FUN(qHeaderViewResizeSection);
-		BIND_EDITOR_FUN(qHeaderViewSetSectionResizeMode);
 
 		// new QLineEdit
 		BIND_EDITOR_FUN(qLineEditNew);

@@ -889,11 +889,11 @@ namespace Echo
 			int curWidth = EditorApi.qTreeWidgetWidth(nodeTreeWidget);
 			if (m_nodeTreeWidgetWidth != curWidth)
 			{
-				QWidget* header = EditorApi.qTreeWidgetHeader(nodeTreeWidget);
+				QHeaderView* header = (QHeaderView*)EditorApi.qTreeWidgetHeader(nodeTreeWidget);
 
-				EditorApi.qHeaderViewResizeSection(header, 1, 30);
-				EditorApi.qHeaderViewSetSectionResizeMode(header, 1, QHeaderViewResizeMode::Fixed);
-				EditorApi.qHeaderViewResizeSection(header, 0, curWidth - 30);
+				header->resizeSection(1, 30);
+				header->setSectionResizeMode(QHeaderView::ResizeMode::Fixed);
+				header->resizeSection(0, curWidth - 30);
 				m_nodeTreeWidgetWidth = EditorApi.qTreeWidgetWidth(nodeTreeWidget);
 			}
 		}

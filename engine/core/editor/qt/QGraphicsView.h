@@ -21,6 +21,9 @@ namespace Echo
 
 	// set background brush
 	typedef void (*qGraphicsViewSetBackgroundBrushFun)(QWidget* view, const Color& color);
+
+	// fit in view
+	typedef void (*qGraphicsViewFitInViewFun)(QWidget* view, Rect& rect);
 }
 
 #endif
