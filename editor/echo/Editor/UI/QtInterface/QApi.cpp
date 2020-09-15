@@ -7,7 +7,6 @@
 #include "QGraphicsView.cx"
 #include "QHeaderView.cx"
 #include "QLineEdit.cx"
-#include "QSpinBox.cx"
 #include "QToolButton.cx"
 #include "QTreeWidget.cx"
 #include "QTreeWidgetItem.cx"
@@ -81,11 +80,6 @@ namespace Studio
 		BIND_EDITOR_FUN(qLineEditText);
 		BIND_EDITOR_FUN(qLineEditWidth);
 		BIND_EDITOR_FUN(qLineEditHeight);
-
-		// QSpinBox
-		BIND_EDITOR_FUN(qSpinBoxNew);
-		BIND_EDITOR_FUN(qSpinBoxValue);
-		BIND_EDITOR_FUN(qSpinBoxSetValue);
 
 		// set tool button fixed width
 		BIND_EDITOR_FUN(qToolButtonSetFixedWidth);

@@ -160,8 +160,8 @@ namespace Echo
 	{
 		if (EditorApi.qDialogExec(m_splitDialog))
 		{
-			ui32 rows = EditorApi.qSpinBoxValue(EditorApi.qFindChild(m_splitDialog, "m_spinBoxRows"));
-			ui32 columns = EditorApi.qSpinBoxValue(EditorApi.qFindChild(m_splitDialog, "m_spinBoxColumns"));
+			ui32 rows = ((QSpinBox*)EditorApi.qFindChild(m_splitDialog, "m_spinBoxRows"))->value();
+			ui32 columns = ((QSpinBox*)EditorApi.qFindChild(m_splitDialog, "m_spinBoxColumns"))->value();
 			String prefix = EditorApi.qLineEditText(EditorApi.qFindChild(m_splitDialog, "m_prefix"));
 
 			TexturePtr texture = m_textureAtlas->getTexture();

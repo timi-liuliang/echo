@@ -180,16 +180,6 @@ namespace Echo
         
         // height
         qLineEditHeightFun qLineEditHeight = nullptr;
-
-    public:
-		// new QLineEdit
-		qSpinBoxNewFun qSpinBoxNew = nullptr;
-
-		// set text
-		qSpinBoxSetValueFun qSpinBoxSetValue = nullptr;
-
-		// set maximum width
-		qSpinBoxValueFun qSpinBoxValue = nullptr;
         
     public:
         // set tool button fixed width
