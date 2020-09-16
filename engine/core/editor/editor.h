@@ -135,12 +135,6 @@ namespace Echo
         
         // get view port
         qGraphicsViewSceneRectFun qGraphicsViewSceneRect = nullptr;
-        
-        // create a QGraphicsScene
-        qGraphicsViewSetSceneFun qGraphicsViewSetScene = nullptr;
-        
-        // scale
-        qGraphicsViewSetScaleFun qGraphicsViewSetScale = nullptr;
 
         // set background brush
         qGraphicsViewSetBackgroundBrushFun qGraphicsViewSetBackgroundBrush = nullptr;

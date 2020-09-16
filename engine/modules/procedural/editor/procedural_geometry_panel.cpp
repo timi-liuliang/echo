@@ -35,15 +35,16 @@ namespace Echo
 		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_nodeTreeWidget"), QSIGNAL(itemChanged(QTreeWidgetItem*, int)), this, createMethodBind(&ProceduralGeometryPanel::onChangedAtlaName));
 
 		// create QGraphicsScene
+		m_graphicsView = m_ui->findChild<QGraphicsView*>("m_graphicsView");
 		m_graphicsScene = EditorApi.qGraphicsSceneNew();
-		EditorApi.qGraphicsViewSetScene(EditorApi.qFindChild(m_ui, "m_graphicsView"), m_graphicsScene);
+		m_graphicsView->setScene(m_graphicsScene);
 
 		// background
-		m_backgroundGridSmall.set(EditorApi.qFindChild(m_ui, "m_graphicsView"), m_graphicsScene);
-		m_backgroundGridBig.set(EditorApi.qFindChild(m_ui, "m_graphicsView"), m_graphicsScene);
+		m_backgroundGridSmall.set(m_graphicsView, m_graphicsScene);
+		m_backgroundGridBig.set(m_graphicsView, m_graphicsScene);
 
 		// pg nodes painter
-		m_pgNodesPainter.set(EditorApi.qFindChild(m_ui, "m_graphicsView"), m_graphicsScene);
+		m_pgNodesPainter.set(m_graphicsView, m_graphicsScene);
 	}
 
 	ProceduralGeometryPanel::~ProceduralGeometryPanel()
@@ -79,8 +80,10 @@ namespace Echo
 			}
 		}
 
-		m_newPGNodePosition = Echo::Vector2(QCursor::pos().x(), QCursor::pos().y());
 		m_menuNew->exec(QCursor::pos());
+
+		QPointF scenePos = m_graphicsView->mapToScene(QCursor::pos());
+		m_newPGNodePosition = Echo::Vector2(scenePos.x(), scenePos.y());
 	}
 
 	void ProceduralGeometryPanel::onNewPGNode()

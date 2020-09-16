@@ -58,8 +58,6 @@ namespace Studio
 		// disable viewport update
 		BIND_EDITOR_FUN(qGraphicsViewDisableViewportAutoUpdate);
 		BIND_EDITOR_FUN(qGraphicsViewSceneRect);
-		BIND_EDITOR_FUN(qGraphicsViewSetScene);
-		BIND_EDITOR_FUN(qGraphicsViewSetScale);
 		BIND_EDITOR_FUN(qGraphicsViewSetBackgroundBrush);
 		BIND_EDITOR_FUN(qGraphicsViewFitInView);
 

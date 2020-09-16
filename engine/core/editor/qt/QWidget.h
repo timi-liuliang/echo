@@ -4,6 +4,8 @@
 
 #ifdef ECHO_EDITOR_MODE
 
+#include <QGraphicsScene>
+#include <QGraphicsView>
 #include <QtWidgets/QGraphicsItem>
 
 class QObject;

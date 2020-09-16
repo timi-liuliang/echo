@@ -7,7 +7,7 @@
 
 namespace Echo
 {
-	QObject* qGraphicsSceneNew()
+	QGraphicsScene* qGraphicsSceneNew()
 	{
 		return new QGraphicsSceneEx();
 	}

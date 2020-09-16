@@ -6,6 +6,7 @@
 #ifdef ECHO_EDITOR_MODE
 
 #include <QGraphicsScene>
+#include <QGraphicsView>
 #include <QtWidgets/QGraphicsItem>
 
 namespace Echo
@@ -133,7 +134,8 @@ namespace Echo
 		String						m_currentEditAnim;
 		int							m_nodeTreeWidgetWidth;
 		float						m_graphicsViewScale = 1.f;
-		QGraphicsScene*				m_graphicsScene;
+		QGraphicsView*				m_graphicsView = nullptr;
+		QGraphicsScene*				m_graphicsScene = nullptr;
 		String						m_currentEditObjectPath;
 		StringArray					m_currentEditPropertyChain;
 		float						m_rulerLeft = 0.f;

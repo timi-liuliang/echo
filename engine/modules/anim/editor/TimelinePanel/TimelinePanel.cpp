@@ -129,8 +129,9 @@ namespace Echo
 		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_graphicsView"), QSIGNAL(customContextMenuRequested(const QPoint&)), this, createMethodBind(&TimelinePanel::onRightClickGraphicsView));
 
 		// create QGraphicsScene
+		m_graphicsView = m_ui->findChild<QGraphicsView*>("m_graphicsView");
 		m_graphicsScene = (QGraphicsScene*)EditorApi.qGraphicsSceneNew();
-		EditorApi.qGraphicsViewSetScene(EditorApi.qFindChild(m_ui, "m_graphicsView"), m_graphicsScene);
+		m_graphicsView->setScene(m_graphicsScene);
 
 		// wheel event
 		EditorApi.qConnectObject( m_graphicsScene, QSIGNAL(wheelEvent(QGraphicsSceneWheelEvent*)), this, createMethodBind(&TimelinePanel::onGraphicsSceneWheelEvent));

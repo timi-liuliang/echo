@@ -27,26 +27,6 @@ namespace Echo
 		}
 	}
 
-	void qGraphicsViewSetScene(QWidget* view, QObject* scene)
-	{
-		QGraphicsView* graphicsView = qobject_cast<QGraphicsView*>(view);
-		QGraphicsScene* graphicsScene = qobject_cast<QGraphicsScene*>(scene);
-		if (graphicsView && graphicsScene)
-		{
-			graphicsView->setScene(graphicsScene);
-			graphicsView->setRenderHint( QPainter::Antialiasing, true);
-		}
-	}
-
-	void qGraphicsViewSetScale(QWidget* view, float scaleX, float scaleY)
-	{
-		QGraphicsView* graphicsView = qobject_cast<QGraphicsView*>(view);
-		if (graphicsView)
-		{
-			graphicsView->scale(scaleX, scaleY);
-		}
-	}
-
 	void qGraphicsViewSetBackgroundBrush(QWidget* view, const Color& color)
 	{
 		QGraphicsView* graphicsView = qobject_cast<QGraphicsView*>(view);

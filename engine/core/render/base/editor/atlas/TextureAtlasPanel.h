@@ -48,7 +48,8 @@ namespace Echo
 	protected:
 		TextureAtlas*				m_textureAtlas;
 		QMenu*						m_importMenu = nullptr;
-		QObject*					m_graphicsScene;
+		QGraphicsView*				m_graphicsView = nullptr;
+		QGraphicsScene*				m_graphicsScene = nullptr;
 		QGraphicsItem*				m_imageItem = nullptr;
 		QGraphicsItem*				m_imageBorder = nullptr;
 		QGraphicsItem*				m_atlaBorder = nullptr;

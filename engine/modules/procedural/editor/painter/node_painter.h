@@ -14,7 +14,7 @@ namespace Procedural
 {
 	struct PGNodesPainter
 	{
-		QWidget*							m_graphicsView = nullptr;
+		QGraphicsView*						m_graphicsView = nullptr;
 		QGraphicsScene*						m_graphicsScene = nullptr;
 		QGraphicsRoundRectItem*				m_rect = nullptr;
 		Echo::vector<QGraphicsItem*>::type	m_inputConnectionPoints;
@@ -34,10 +34,10 @@ namespace Procedural
 		}
 
 		// set
-		void set(QWidget* view, QObject* scene)
+		void set(QGraphicsView* view, QGraphicsScene* scene)
 		{
 			m_graphicsView = view;
-			m_graphicsScene = (QGraphicsScene*)scene;
+			m_graphicsScene = scene;
 
 			m_selectedBoundaryColor.setRGBA(255, 165, 0, 255);
 			m_regionColor.setRGBA(80, 80, 80,255);

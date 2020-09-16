@@ -7,7 +7,7 @@
 namespace Echo
 {
 	// create a QGraphicsScene
-	typedef QObject* (*qGraphicsSceneNewFun)();
+	typedef QGraphicsScene* (*qGraphicsSceneNewFun)();
 
 	// add widget to QGraphicsScene
 	typedef QGraphicsProxyWidget* (*qGraphicsSceneAddWidgetFun)(QObject* scene, QWidget* widget);
