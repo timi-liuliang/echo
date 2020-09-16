@@ -66,7 +66,7 @@ namespace Echo
 		BackgroundStyle						m_backgroundStyle;
 		Procedural::QBackgroundGridPainter	m_backgroundGridSmall;
 		Procedural::QBackgroundGridPainter	m_backgroundGridBig;
-		Procedural::PGNodesPainter			m_pgNodesPainter;
+		Procedural::PGNodePainters			m_pgNodePainters;
 		Echo::Vector2						m_newPGNodePosition;
 	};
 }

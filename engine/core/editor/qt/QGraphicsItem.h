@@ -19,10 +19,6 @@ namespace Echo
 	// get item width
 	typedef float (*qGraphicsItemWidthFun)(QGraphicsItem* item);
 
-	// pos
-	typedef Vector2 (*qGraphicsItemPosFun)(QGraphicsItem* item);
-	typedef void (*qGraphicsItemSetPosFun)(QGraphicsItem* item, float posX, float posY);
-
 	// set pos
 	typedef void (*qGraphicsProxyWidgetSetPosFun)(QGraphicsProxyWidget* item, float posX, float posY);
 

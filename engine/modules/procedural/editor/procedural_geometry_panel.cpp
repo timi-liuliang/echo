@@ -42,9 +42,6 @@ namespace Echo
 		// background
 		m_backgroundGridSmall.set(m_graphicsView, m_graphicsScene);
 		m_backgroundGridBig.set(m_graphicsView, m_graphicsScene);
-
-		// pg nodes painter
-		m_pgNodesPainter.set(m_graphicsView, m_graphicsScene);
 	}
 
 	ProceduralGeometryPanel::~ProceduralGeometryPanel()
@@ -82,7 +79,8 @@ namespace Echo
 
 		m_menuNew->exec(QCursor::pos());
 
-		QPointF scenePos = m_graphicsView->mapToScene(QCursor::pos());
+		QPoint  localPos = m_graphicsView->mapFromGlobal(QCursor::pos());
+		QPointF scenePos = m_graphicsView->mapToScene(localPos);
 		m_newPGNodePosition = Echo::Vector2(scenePos.x(), scenePos.y());
 	}
 
@@ -111,7 +109,11 @@ namespace Echo
 		drawBackground();
 
 		// pg nodes painter
-		m_pgNodesPainter.update(m_proceduralGeometry);
+		m_pgNodePainters.resize(m_proceduralGeometry->getPGNodes().size());
+		for (size_t i=0; i<m_proceduralGeometry->getPGNodes().size(); i++)
+		{
+			m_pgNodePainters[i].update( m_graphicsView, m_graphicsScene, m_proceduralGeometry->getPGNodes()[i]);
+		}
 	}
 
 	void ProceduralGeometryPanel::drawBackground()

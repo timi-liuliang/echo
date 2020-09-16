@@ -122,7 +122,7 @@ namespace Echo
 		{
 			graphicsScene->removeItem(item);
 
-			delete item;
+			//delete item;
 		}
 	}
 }

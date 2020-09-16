@@ -38,20 +38,6 @@ namespace Echo
 	{
 		return item ? item->sceneBoundingRect().width() : 0.f;
 	}
-
-	// set pos
-	void qGraphicsItemSetPos(QGraphicsItem* item, float posX, float posY)
-	{
-		if (item)
-		{
-			item->setPos(QPointF(posX, posY));
-		}
-	}
-
-	Vector2 qGraphicsItemPos(QGraphicsItem* item)
-	{
-		return item ? Vector2(item->pos().x(), item->pos().y()) : Vector2::INVALID;
-	}
 	
 	void qGraphicsProxyWidgetSetPos(QGraphicsProxyWidget* item, float posX, float posY)
 	{

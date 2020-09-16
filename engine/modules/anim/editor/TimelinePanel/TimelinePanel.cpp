@@ -841,7 +841,7 @@ namespace Echo
 		QGraphicsItem* sender = EditorApi.qSenderItem();
 		if (sender)
 		{
-			Vector2 scenePos = EditorApi.qGraphicsItemPos(sender);
+			Vector2 scenePos(sender->pos().x(), sender->pos().y());
 			i32 time;
 			float value;
 			calcKeyTimeAndValueByPos(scenePos, time, value);
@@ -968,7 +968,7 @@ namespace Echo
 						if (textItem)
 						{
 							//float halfWidth = EditorApi.qGraphicsItemWidth(textItem) * 0.4f /*0.5f*/;
-							EditorApi.qGraphicsItemSetPos(textItem, textPos.x, textPos.y);
+							textItem->setPos(textPos.x, textPos.y);
 							m_rulerItems.push_back(textItem);
 						}
 					}

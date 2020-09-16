@@ -81,10 +81,6 @@ namespace Echo
         // get item width
         qGraphicsItemWidthFun qGraphicsItemWidth = nullptr;
         
-        // pos
-        qGraphicsItemPosFun qGraphicsItemPos = nullptr;
-        qGraphicsItemSetPosFun qGraphicsItemSetPos = nullptr;
-        
         // set pos
         qGraphicsProxyWidgetSetPosFun qGraphicsProxyWidgetSetPos = nullptr;
         

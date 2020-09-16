@@ -12,8 +12,9 @@
 
 namespace Procedural
 {
-	struct PGNodesPainter
+	struct PGNodePainter
 	{
+		Echo::PGNode*						m_pgNode = nullptr;
 		QGraphicsView*						m_graphicsView = nullptr;
 		QGraphicsScene*						m_graphicsScene = nullptr;
 		QGraphicsRoundRectItem*				m_rect = nullptr;
@@ -29,30 +30,19 @@ namespace Procedural
 		QGraphicsSimpleTextItem*			m_text = nullptr;
 		Echo::Color							m_textColor;
 
-		~PGNodesPainter()
+		PGNodePainter()
 		{
+
 		}
 
-		// set
-		void set(QGraphicsView* view, QGraphicsScene* scene)
+		~PGNodePainter()
 		{
-			m_graphicsView = view;
-			m_graphicsScene = scene;
-
-			m_selectedBoundaryColor.setRGBA(255, 165, 0, 255);
-			m_regionColor.setRGBA(80, 80, 80,255);
-			m_textColor.setRGBA(178, 178, 178, 255);
+			reset();
 		}
 
 		// reset
 		void reset()
 		{
-			if (m_rect)
-			{
-				EditorApi.qGraphicsSceneDeleteItem(m_graphicsScene, m_rect);
-				m_rect = nullptr;
-			}
-
 			if (m_text)
 			{
 				EditorApi.qGraphicsSceneDeleteItem(m_graphicsScene, m_text);
@@ -71,19 +61,41 @@ namespace Procedural
 
 			m_inputConnectionPoints.clear();
 			m_outputConnectionPoints.clear();
+
+			if (m_rect)
+			{
+				EditorApi.qGraphicsSceneDeleteItem(m_graphicsScene, m_rect);
+				m_rect = nullptr;
+			}
 		}
 
 		// update
-		void update(Echo::ProceduralGeometry* pg)
+		void update(QGraphicsView* view, QGraphicsScene* scene, Echo::PGNode* pgNode)
 		{
+			if (m_pgNode != pgNode)
+			{
+				reset();
+			}
+
 			if (!m_rect)
 			{
+				m_graphicsView = view;
+				m_graphicsScene = scene;
+
+				m_selectedBoundaryColor.setRGBA(255, 165, 0, 255);
+				m_regionColor.setRGBA(80, 80, 80, 255);
+				m_textColor.setRGBA(178, 178, 178, 255);
+
+				float halfWidth = m_width * 0.5f;
+				float halfHeight = m_height * 0.5f;
+
 				m_rect = new QGraphicsRoundRectItem();
-				m_rect->setRect(QRect(0.f, 0.f, m_width, m_height));
+				m_rect->setRect(QRect(-halfWidth, -halfHeight, m_width, m_height));
 				m_rect->setRadius(4.f);
 				m_rect->setPen(QPen(QColor::fromRgbF(m_normalBoundaryColor.r, m_normalBoundaryColor.g, m_normalBoundaryColor.b, m_normalBoundaryColor.a)));
 				m_rect->setBrush(QBrush(QColor::fromRgbF(m_regionColor.r, m_regionColor.g, m_regionColor.b, m_regionColor.a)));
 				m_rect->setFlag(QGraphicsItem::ItemIsMovable, true);
+				m_rect->setPos(QPointF(pgNode->getPosition().x, pgNode->getPosition().y));
 				m_graphicsScene->addItem(m_rect);
 
 				m_text = m_graphicsScene->addSimpleText("Sphere");
@@ -92,30 +104,29 @@ namespace Procedural
 
 				Echo::Rect textRect;
 				EditorApi.qGraphicsItemSceneRect(m_text, textRect);
-				EditorApi.qGraphicsItemSetPos(m_text, (m_width - textRect.getWidth()) * 0.5f, (m_height - textRect.getHeight()) * 0.5f);
+				m_text->setPos((m_width - textRect.getWidth()) * 0.5f - halfWidth, (m_height - textRect.getHeight()) * 0.5f - halfHeight);
 
-				m_inputConnectionPoints.push_back(EditorApi.qGraphicsSceneAddEclipse(m_graphicsScene, (m_width - m_connectPointRadius) * 0.5f, - m_connectPointRadius * 0.5f, m_connectPointRadius, m_connectPointRadius, m_connectPointColor));
+				float halfConnectPointRadius = m_connectPointRadius * 0.5f;
+				m_inputConnectionPoints.push_back(EditorApi.qGraphicsSceneAddEclipse(m_graphicsScene, 0.f, 0.f, m_connectPointRadius, m_connectPointRadius, m_connectPointColor));
 				for (QGraphicsItem* item : m_inputConnectionPoints)
 				{
 					item->setParentItem(m_rect);
+					item->setPos(0.f - halfConnectPointRadius, -halfHeight - halfConnectPointRadius * 3.f);
 				}
 
-				m_outputConnectionPoints.push_back(EditorApi.qGraphicsSceneAddEclipse(m_graphicsScene, (m_width - m_connectPointRadius) * 0.5f, m_height-m_connectPointRadius * 0.5f, m_connectPointRadius, m_connectPointRadius, m_connectPointColor));
+				m_outputConnectionPoints.push_back(EditorApi.qGraphicsSceneAddEclipse(m_graphicsScene, 0.f, 0.f, m_connectPointRadius, m_connectPointRadius, m_connectPointColor));
 				for (QGraphicsItem* item : m_outputConnectionPoints)
 				{
 					item->setParentItem(m_rect);
+					item->setPos(0.f - halfConnectPointRadius, halfHeight + halfConnectPointRadius);
 				}
 
 				QPen pen;
 				pen.setColor(QColor::fromRgbF(1.f, 1.f, 1.f, 1.f));
 			}
-
-			for (Echo::PGNode* pgNode : pg->getPGNodes())
-			{
-
-			}
 		}
 	};
+	typedef Echo::vector<PGNodePainter>::type PGNodePainters;
 }
 
 #endif
