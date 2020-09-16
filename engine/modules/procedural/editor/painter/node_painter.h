@@ -75,6 +75,7 @@ namespace Procedural
 			if (m_pgNode != pgNode)
 			{
 				reset();
+				m_pgNode = pgNode;
 			}
 
 			if (!m_rect)

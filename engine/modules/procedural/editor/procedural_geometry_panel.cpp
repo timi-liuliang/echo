@@ -109,10 +109,11 @@ namespace Echo
 		drawBackground();
 
 		// pg nodes painter
-		m_pgNodePainters.resize(m_proceduralGeometry->getPGNodes().size());
-		for (size_t i=0; i<m_proceduralGeometry->getPGNodes().size(); i++)
+		vector<PGNode*>::type& pgNodes = m_proceduralGeometry->getPGNodes();
+		m_pgNodePainters.resize(pgNodes.size());
+		for (size_t i=0; i< pgNodes.size(); i++)
 		{
-			m_pgNodePainters[i].update( m_graphicsView, m_graphicsScene, m_proceduralGeometry->getPGNodes()[i]);
+			m_pgNodePainters[i].update( m_graphicsView, m_graphicsScene, pgNodes[i]);
 		}
 	}
 
