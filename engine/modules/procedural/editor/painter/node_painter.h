@@ -30,59 +30,14 @@ namespace Procedural
 		QGraphicsSimpleTextItem*			m_text = nullptr;
 		Echo::Color							m_textColor;
 
-		PGNodePainter()
+		PGNodePainter(QGraphicsView* view, QGraphicsScene* scene, Echo::PGNode* pgNode)
 		{
-
-		}
-
-		~PGNodePainter()
-		{
-			reset();
-		}
-
-		// reset
-		void reset()
-		{
-			if (m_text)
-			{
-				EditorApi.qGraphicsSceneDeleteItem(m_graphicsScene, m_text);
-				m_text = nullptr;
-			}
-
-			for (QGraphicsItem* connectionPoint : m_inputConnectionPoints)
-			{
-				EditorApi.qGraphicsSceneDeleteItem(m_graphicsScene, connectionPoint);
-			}
-
-			for (QGraphicsItem* connectionPoint : m_outputConnectionPoints)
-			{
-				EditorApi.qGraphicsSceneDeleteItem(m_graphicsScene, connectionPoint);
-			}
-
-			m_inputConnectionPoints.clear();
-			m_outputConnectionPoints.clear();
-
-			if (m_rect)
-			{
-				EditorApi.qGraphicsSceneDeleteItem(m_graphicsScene, m_rect);
-				m_rect = nullptr;
-			}
-		}
-
-		// update
-		void update(QGraphicsView* view, QGraphicsScene* scene, Echo::PGNode* pgNode)
-		{
-			if (m_pgNode != pgNode)
-			{
-				reset();
-				m_pgNode = pgNode;
-			}
+			m_pgNode = pgNode;
+			m_graphicsView = view;
+			m_graphicsScene = scene;
 
 			if (!m_rect)
 			{
-				m_graphicsView = view;
-				m_graphicsScene = scene;
-
 				m_selectedBoundaryColor.setRGBA(255, 165, 0, 255);
 				m_regionColor.setRGBA(80, 80, 80, 255);
 				m_textColor.setRGBA(178, 178, 178, 255);
@@ -126,8 +81,43 @@ namespace Procedural
 				pen.setColor(QColor::fromRgbF(1.f, 1.f, 1.f, 1.f));
 			}
 		}
+
+		~PGNodePainter()
+		{
+			reset();
+		}
+
+		// reset
+		void reset()
+		{
+			if (m_rect)
+			{
+				m_graphicsScene->removeItem(m_rect);
+			}
+
+			m_inputConnectionPoints.clear();
+			m_outputConnectionPoints.clear();
+
+			m_pgNode = nullptr;
+			m_graphicsView = nullptr;
+			m_graphicsScene = nullptr;
+			m_rect = nullptr;
+			m_text = nullptr;
+		}
+
+		// set
+		void set()
+		{
+
+		}
+
+		// update
+		void update()
+		{
+
+		}
 	};
-	typedef Echo::vector<PGNodePainter>::type PGNodePainters;
+	typedef Echo::vector<PGNodePainter*>::type PGNodePainters;
 }
 
 #endif

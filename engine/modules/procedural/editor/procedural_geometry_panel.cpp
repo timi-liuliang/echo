@@ -108,13 +108,7 @@ namespace Echo
 	{
 		drawBackground();
 
-		// pg nodes painter
-		vector<PGNode*>::type& pgNodes = m_proceduralGeometry->getPGNodes();
-		m_pgNodePainters.resize(pgNodes.size());
-		for (size_t i=0; i< pgNodes.size(); i++)
-		{
-			m_pgNodePainters[i].update( m_graphicsView, m_graphicsScene, pgNodes[i]);
-		}
+		drawNodes();
 	}
 
 	void ProceduralGeometryPanel::drawBackground()
@@ -129,8 +123,34 @@ namespace Echo
 		m_backgroundGridBig.update(150, m_backgroundStyle.m_coarseGridColor);
 	}
 
-	void ProceduralGeometryPanel::refreshAtlaList()
+	void ProceduralGeometryPanel::drawNodes()
 	{
+		vector<PGNode*>::type& pgNodes = m_proceduralGeometry->getPGNodes();
+		while (m_pgNodePainters.size() > pgNodes.size())
+		{
+			EchoSafeDelete(m_pgNodePainters.back(), PGNodePainter);
+			m_pgNodePainters.pop_back();
+		}
+
+		if (m_pgNodePainters.size() < pgNodes.size())
+		{
+			for (size_t i = m_pgNodePainters.size(); i < pgNodes.size(); ++i)
+				m_pgNodePainters.emplace_back(EchoNew(Procedural::PGNodePainter(m_graphicsView, m_graphicsScene, pgNodes[i])));
+		}
+
+		for (size_t i = 0; i < pgNodes.size(); i++)
+		{
+			if (!m_pgNodePainters[i] || m_pgNodePainters[i]->m_pgNode != pgNodes[i])
+			{
+				EchoSafeDelete(m_pgNodePainters[i], PGNodePainter);
+				m_pgNodePainters[i] = EchoNew(Procedural::PGNodePainter(m_graphicsView, m_graphicsScene, pgNodes[i]));
+			}
+		}
+
+		for (size_t i = 0; i < pgNodes.size(); i++)
+		{
+			m_pgNodePainters[i]->update();
+		}
 	}
 
 	void ProceduralGeometryPanel::clearImageItemAndBorder()

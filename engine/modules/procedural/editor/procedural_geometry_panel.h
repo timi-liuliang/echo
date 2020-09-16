@@ -48,7 +48,7 @@ namespace Echo
 
 		// refresh list
 		void refreshUiDisplay();
-		void refreshAtlaList();
+		void drawNodes();
 		void refreshImageDisplay();
 
 		// clear
