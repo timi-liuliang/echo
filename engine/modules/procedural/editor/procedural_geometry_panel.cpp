@@ -9,6 +9,7 @@
 #include "engine/core/io/IO.h"
 #include "engine/core/render/base/image/Image.h"
 #include "engine/core/render/base/atla/TextureAtlas.h"
+#include "engine/core/log/Log.h"
 
 namespace Echo
 {
@@ -77,11 +78,11 @@ namespace Echo
 			}
 		}
 
-		m_menuNew->exec(QCursor::pos());
-
 		QPoint  localPos = m_graphicsView->mapFromGlobal(QCursor::pos());
 		QPointF scenePos = m_graphicsView->mapToScene(localPos);
 		m_newPGNodePosition = Echo::Vector2(scenePos.x(), scenePos.y());
+
+		m_menuNew->exec(QCursor::pos());
 	}
 
 	void ProceduralGeometryPanel::onNewPGNode()
