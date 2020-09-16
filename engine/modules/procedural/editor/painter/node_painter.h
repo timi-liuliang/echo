@@ -5,7 +5,7 @@
 #include "engine/core/editor/editor.h"
 #include "engine/modules/procedural/procedural_geometry.h"
 #include <QPen>
-#include <QGRaphicsScene>
+#include <QGraphicsScene>
 #include <QtWidgets/QGraphicsItem>
 
 namespace Procedural
