@@ -10,6 +10,7 @@
 #include <QSpinBox>
 #include <QHeaderView>
 #include <QCheckBox>
+#include <QDockWidget>
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QtWidgets/QGraphicsItem>

@@ -6,6 +6,9 @@
 #include "qt/QWidgets.h"
 
 #ifdef ECHO_EDITOR_MODE
+
+
+
 namespace Echo
 {
 	class Editor
@@ -22,7 +25,7 @@ namespace Echo
 
 	public:
 		// show panel
-        virtual void showCenterPanel(PanelTab * bottomPanel, float widthRatio=0.75f, float heightRation=0.65f) = 0;
+        virtual void showCenterPanel(QDockWidget * panel, float widthRatio=0.75f, float heightRation=0.65f) = 0;
 		virtual void showBottomPanel(PanelTab* bottomPanel)=0;
 
 	public:

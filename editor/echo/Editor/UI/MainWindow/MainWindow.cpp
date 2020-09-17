@@ -18,7 +18,6 @@
 #include "TextEditorArea.h"
 #include "ShaderEditor.h"
 #include "ScratchEditor.h"
-#include "CenterPanel.h"
 #include "BottomPanel.h"
 #include "ProjectWnd.h"
 #include "PathChooseDialog.h"
@@ -124,7 +123,6 @@ namespace Studio
 		EchoSafeDelete(m_scriptEditorMdiArea, TextEditorArea);
 		EchoSafeDelete(m_shaderEditorPanel, ShaderEditor);
 		EchoSafeDelete(m_scratchEditorPanel, ScratchEditor);
-		EchoSafeDelete(m_centerPanel, CenterPanel);
         EchoSafeDelete(m_bottomPanel, BottomPanel);
         EchoSafeDelete(m_scenePanel, NodeTreePanel);
         EchoSafeDelete(m_resPanel, ResPanel);
@@ -144,7 +142,6 @@ namespace Studio
 		m_renderPanel = EchoNew(QDockWidget(this));
 		m_resPanel = EchoNew(ResPanel(this));
 		m_scenePanel = EchoNew(NodeTreePanel(this));
-		m_centerPanel = EchoNew(CenterPanel(this));
 		m_bottomPanel = EchoNew(BottomPanel(this));
 		m_scriptEditorMdiArea = EchoNew(TextEditorArea);
 		m_shaderEditorPanel = EchoNew(ShaderEditor(this));
@@ -166,7 +163,6 @@ namespace Studio
 		this->addDockWidget(Qt::TopDockWidgetArea, m_scriptEditorMdiArea);
 		this->addDockWidget(Qt::TopDockWidgetArea, m_shaderEditorPanel);
 		this->addDockWidget(Qt::TopDockWidgetArea, m_scratchEditorPanel);
-		this->addDockWidget(Qt::TopDockWidgetArea, m_centerPanel);
 		this->addDockWidget(Qt::TopDockWidgetArea, m_renderPanel);
 		this->addDockWidget(Qt::LeftDockWidgetArea, m_resPanel);
 		this->addDockWidget(Qt::RightDockWidgetArea, m_scenePanel);
@@ -174,7 +170,6 @@ namespace Studio
 
 		this->tabifyDockWidget(m_scriptEditorMdiArea, m_shaderEditorPanel);
 		this->tabifyDockWidget(m_shaderEditorPanel, m_scratchEditorPanel);
-		this->tabifyDockWidget(m_scratchEditorPanel, m_centerPanel);
 
 		m_resPanel->onOpenProject();
 
@@ -189,9 +184,31 @@ namespace Studio
 		QObject::connect(m_actionSaveProject, SIGNAL(triggered(bool)), m_scriptEditorMdiArea, SLOT(save()));
         QObject::connect(m_actionSaveProject, SIGNAL(triggered(bool)), m_shaderEditorPanel, SLOT(save()));
 		QObject::connect(m_scriptEditorMdiArea, SIGNAL(visibilityChanged(bool)), this, SLOT(onScriptEditVisibilityChanged()));
-		QObject::connect(m_shaderEditorPanel, SIGNAL(visibilityChanged(bool)), this, SLOT(onShaderEditVisibilityChanged()));
-		QObject::connect(m_scratchEditorPanel, SIGNAL(visibilityChanged(bool)), this, SLOT(onScratchEditVisibilityChanged()));
+		QObject::connect(m_shaderEditorPanel, SIGNAL(visibilityChanged(bool)), this, SLOT(onCenterDockWidgetVisibilityChanged()));
+		QObject::connect(m_scratchEditorPanel, SIGNAL(visibilityChanged(bool)), this, SLOT(onCenterDockWidgetVisibilityChanged()));
 		QObject::connect(m_renderPanel, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(onDockWidgetLocationChanged()));
+	}
+
+	void MainWindow::addCenterPanel(QDockWidget* panel)
+	{
+		if (std::find(m_centerPanels.begin(), m_centerPanels.end(), panel) == m_centerPanels.end())
+		{
+			QDockWidget* tabifyPanel = m_centerPanels.size() > 0 ? m_centerPanels.back() : m_scriptEditorMdiArea;
+
+			this->addDockWidget(Qt::TopDockWidgetArea, panel);
+			this->tabifyDockWidget(panel, tabifyPanel);
+
+			QObject::connect(panel, SIGNAL(visibilityChanged(bool)), this, SLOT(onCenterDockWidgetVisibilityChanged()));
+
+			panel->setVisible(false);
+			panel->setVisible(true);
+
+			m_centerPanels.push_back(panel);
+		}
+		else
+		{
+			panel->setVisible(true);
+		}
 	}
     
     void MainWindow::onPrepareQuit()
@@ -548,24 +565,22 @@ namespace Studio
         }
     }
 
+	void MainWindow::onCenterDockWidgetVisibilityChanged()
+	{
+		QDockWidget* panel = qobject_cast<QDockWidget*>(sender());
+		if (panel)
+		{
+			if (panel->isVisible())
+				resizeDocks({ panel, m_renderPanel }, { 70 , 30 }, Qt::Horizontal);
+		}
+	}
+
 	void MainWindow::onScriptEditVisibilityChanged()
 	{
 		if (m_scriptEditorMdiArea->isVisible())
 			resizeDocks({ m_scriptEditorMdiArea, m_renderPanel }, { 70 , 30 }, Qt::Horizontal);
 
 		AStudio::instance()->getConfigMgr()->setValue("luascripteditor_visible", m_scriptEditorMdiArea->isVisible() ? "true" : "false");
-	}
-
-	void MainWindow::onShaderEditVisibilityChanged()
-	{
-		if (m_shaderEditorPanel->isVisible())
-			resizeDocks({ m_shaderEditorPanel, m_renderPanel }, { 70 , 30 }, Qt::Horizontal);
-	}
-
-	void MainWindow::onScratchEditVisibilityChanged()
-	{
-		if (m_scratchEditorPanel->isVisible())
-			resizeDocks({ m_scratchEditorPanel, m_renderPanel }, { 70 , 30 }, Qt::Horizontal);
 	}
 
 	void MainWindow::onDockWidgetLocationChanged()

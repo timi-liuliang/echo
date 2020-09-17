@@ -1,6 +1,5 @@
 #include "Studio.h"
 #include "MainWindow.h"
-#include "CenterPanel.h"
 #include "BottomPanel.h"
 #include "ProjectWnd.h"
 #include "RenderWindow.h"
@@ -228,9 +227,9 @@ namespace Studio
 		MainWindow::instance()->getBottomPanel()->showPanel( bottomPanel);
 	}
 
-	void AStudio::showCenterPanel(Echo::PanelTab* bottomPanel, float widthRatio, float heightRation)
+	void AStudio::showCenterPanel(QDockWidget* panel, float widthRatio, float heightRation)
 	{
-		MainWindow::instance()->getCenterPanel()->showPanel(bottomPanel);
+		MainWindow::instance()->addCenterPanel(panel);
 	}
 
 	const Echo::String AStudio::selectANodeObject()

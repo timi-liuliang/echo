@@ -24,13 +24,6 @@ namespace Studio
 	{
 	}
 
-	QSize LuaEditor::sizeHint() const
-	{
-		float width = MainWindow::instance()->width() * 0.7f;
-		float height = MainWindow::instance()->height() * 0.65f;
-		return QSize(width, height);
-	}
-
 	void LuaEditor::open(const Echo::String& fullPath)
 	{
 		m_luaRes = ECHO_DOWN_CAST<Echo::LuaScript*>(Echo::Res::get(fullPath));

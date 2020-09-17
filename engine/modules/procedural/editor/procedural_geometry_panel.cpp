@@ -18,7 +18,7 @@ namespace Echo
 	{
 		m_proceduralGeometry = ECHO_DOWN_CAST<ProceduralGeometry*>(obj);
 
-		m_ui = EditorApi.qLoadUi("engine/modules/procedural/editor/procedural_geometry_panel.ui");
+		m_ui = qobject_cast<QDockWidget*>(EditorApi.qLoadUi("engine/modules/procedural/editor/procedural_geometry_panel.ui"));
 
 		QSplitter* splitter = (QSplitter*)EditorApi.qFindChild(m_ui, "m_splitter");
 		if (splitter)

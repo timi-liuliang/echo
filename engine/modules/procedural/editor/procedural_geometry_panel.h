@@ -10,7 +10,7 @@
 
 namespace Echo
 {
-	class ProceduralGeometryPanel : public PanelTab
+	class ProceduralGeometryPanel
 	{
 		typedef vector<QGraphicsItem*>::type QGraphicsItemArray;
 		typedef vector<QGraphicsProxyWidget*>::type QGraphicsWidgetArray;
@@ -27,6 +27,9 @@ namespace Echo
 	public:
 		ProceduralGeometryPanel(Object* obj);
 		virtual ~ProceduralGeometryPanel();
+
+		// ui
+		QDockWidget* getUi() { return m_ui; }
 
 		// update
 		void update();
@@ -60,6 +63,7 @@ namespace Echo
 
 	protected:
 		ProceduralGeometry*					m_proceduralGeometry = nullptr;
+		QDockWidget*						m_ui;
 		QMenu*								m_menuNew = nullptr;
 		QGraphicsView*						m_graphicsView = nullptr;
 		QGraphicsScene*						m_graphicsScene = nullptr;

@@ -62,7 +62,7 @@ namespace Studio
 		virtual void showBottomPanel(Echo::PanelTab* centerPanel) override;
 
 		// show center panel
-		virtual void showCenterPanel(Echo::PanelTab* bottomPanel, float widthRatio, float heightRation) override;
+		virtual void showCenterPanel(QDockWidget* panel, float widthRatio, float heightRation) override;
 
 	public:
 		// select a node object

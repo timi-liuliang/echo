@@ -37,10 +37,6 @@ namespace Studio
         // title changed
         void titleChanged(LuaEditor* editor);
 
-	protected:
-		// size hint
-		virtual QSize sizeHint() const override;
-
 	private:
 		Echo::LuaResPtr				m_luaRes;
 		LuaSyntaxHighLighter*		m_luaSyntaxHighLighter;

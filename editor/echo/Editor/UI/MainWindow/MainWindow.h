@@ -17,12 +17,13 @@ namespace Studio
 	class ScratchEditor;
 	class TimelinePanel;
 	class DebuggerPanel;
-	class CenterPanel;
 	class BottomPanel;
 	class AboutWindow;
 	class MainWindow : public QMainWindow, public Ui_MainWindow
 	{
 		Q_OBJECT
+
+		typedef Echo::vector<QDockWidget*>::type QDockWidgets;
 
 	public:
 		MainWindow(QMainWindow* parent=0);
@@ -54,8 +55,10 @@ namespace Studio
 		static void setTheme(const char* theme);
 
 	public:
+		// add center panel
+		void addCenterPanel(QDockWidget* panel);
+
 		// panels
-		CenterPanel* getCenterPanel() { return m_centerPanel; }
 		BottomPanel* getBottomPanel() { return m_bottomPanel; }
 
 	protected:
@@ -109,9 +112,8 @@ namespace Studio
 		void onAbout();
 
 		// on display script edit panel
+		void onCenterDockWidgetVisibilityChanged();
 		void onScriptEditVisibilityChanged();
-		void onShaderEditVisibilityChanged();
-		void onScratchEditVisibilityChanged();
 
 		// on Dockwidget location changed
 		void onDockWidgetLocationChanged();
@@ -148,7 +150,7 @@ namespace Studio
 		TextEditorArea*	    m_scriptEditorMdiArea = nullptr;
 		ShaderEditor*		m_shaderEditorPanel = nullptr;
 		ScratchEditor*		m_scratchEditorPanel = nullptr;
-		CenterPanel*		m_centerPanel;
+		QDockWidgets		m_centerPanels;
 		BottomPanel*		m_bottomPanel;
 		QProcess			m_gameProcess;
 		QComboBox*			m_subEditComboBox;
