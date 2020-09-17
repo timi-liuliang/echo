@@ -6,7 +6,7 @@
 
 ## Introduction  
 
-**Echo** is a new game engine, which used more industry-standard of nowadays for game development. The new design concept makes the engine simplicity to use. but more powerful.
+**Echo** is a new game engine, which uses many industry-standards of nowadays for game development. This new design concept makes the engine simpler to use and more powerful.
 
 [Examples](https://github.com/timi-liuliang/echo-examples)  
 [Documentation](https://github.com/timi-liuliang/echo/wiki)  
@@ -35,42 +35,42 @@ Scene manager is easy, No Entiy, No GameObject, No Component, No Prefab. Only No
 ### Multi-Platform Support  
 iOS Android Html5 Windows Mac Linux Steam  
 
-### New Industry Standard Support
-gLtf2.0, Vulkan, Metal, Pbr, Real time ray tracing.
+### New Industry Standards Supported
+Gltf 2.0, Vulkan, Metal, Pbr, real time ray tracing.
 
 ### 2D And 3D Seamless Transition  
 Every node can be 2d or 3d. The core difference is the camera and the unit the node use. So you can just switch a node to 2d or 3d easily.
 
 ### Easy To Program  
-Mostly, you'll use Lua as your main programming language. and also you can use c++ directly. the design of node tree makes the Lua logic code more easy to write. and the embedded Lua editor and embedded document help you write code just in the echo editor.   
-Except for Lua, You can also choose use embedded Scratch as the main development language. Which is a type of visual script inspired by [MIT](https://scratch.mit.edu/).  In the echo, Scratch is based on Lua, when running the app, It'll convert to Lua, Make sure it's good both at code merge and running efficiency.   
-If you really like other types of script language, you can tell us, or you can support it by modifying the c++ code directly.
+Mostly, you'll use Lua as your main programming language. and also can also use C++ directly. The design of our node tree makes the Lua logic code more easy to write. And the embedded Lua editor and the embedded documents help you to write code in the echo editor directly.   
+Besides Lua, can you also choose to use the embedded Scratch language as the main development tool. This is a type of visual script inspired by [MIT](https://scratch.mit.edu/). In the Echo engine is Scratch based on Lua, when running the app, It'll convert to Lua and make sure it's good both to merge and will run efficent..   
+If you really like other types of scripting languages, you can tell us or you can support it by modifying the C++ code directly.
 
 ![](https://media.githubusercontent.com/media/timi-liuliang/echo-download/master/images/intro/echo1.png)   
 
 ### Data Flow Programming Based ShaderEditor
-Programming visualization is a very import concept for non-programmers, with the help of DataFlowProgramming framework [nodeeditor](https://github.com/paceholder/nodeeditor), shader programming becomes easier to understand and not so evil anymore.
+Programming visualization is a very important concept for non-programmers and with the help of the DataFlowProgramming framework [nodeeditor](https://github.com/paceholder/nodeeditor), shader programming becomes easier to understand.
 
 ![](https://media.githubusercontent.com/media/timi-liuliang/echo-download/master/images/intro/shadereditor.png)   
 
 ### Render Pipeline Visualization (Developing)
-Inspired by [CI|CD pipeline](https://semaphoreci.com/blog/cicd-pipeline), we decided make a render pipeline editor, then not only programmer but everyone can config engine render process.   
-1. Forward Rendering ?   
-2. Deferred Shading ?    
-3. Forward+ (Tiled Forward Rendering)?   
-Try config it by your needs.
+Inspired by [CI|CD pipeline](https://semaphoreci.com/blog/cicd-pipeline), we decided to make a render pipeline editor, so that not only programmers, but everyone can configure the engine render process.   
+1. Forward Rendering?   
+2. Deferred Shading?    
+3. Forward+ (Tiled Forward Rendering)?
+Try configuring it by your needs.
 
 ### Configurable Module   
-Most of the engine's Functionality was implemented by configurable modules. that means when you release your app, you can just choose the module you really need. which makes your app have smaller size and more efficiency running speed.
+Most of the engine's Functionality was implemented by configurable modules. that means when you release your app, you can just choose the module you really need. Which makes your app smaller in size and more efficiently running.
 
 ### Animate Everything   
-With Timeline, You can animate everything. You can not only animate any Object's(Node, Setting, Res) any property. But also you can call any Object's any function.
+With Timeline, you can animate everything. You can not only animate any Object's (Node, Setting, Res) property. But also you can call any Object's function.
 
 ### Channel References
-You can compute the value of one property based on the value of another property, possibly on a different node. This lets you duplicate values, or make values relative to other values, and have Echo automatically update them whenever they change.
+You can compute the value of one property based on the value of another property, possibly on a different node. This lets you duplicate values, or makes values relative to other values, and have the Echo automatically update them whenever they change.
 
 ### Open Source  
-Echo is licensed under MIT license. You can just do what you want as your wish.
+Echo is licensed under the MIT license. You can just do what you want as you wish.
 
 ## Examples
 |Example|Screenshot|Description|Download|
