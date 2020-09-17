@@ -227,9 +227,14 @@ namespace Studio
 		MainWindow::instance()->getBottomPanel()->showPanel( bottomPanel);
 	}
 
-	void AStudio::showCenterPanel(QDockWidget* panel, float widthRatio, float heightRation)
+	void AStudio::showCenterPanel(QDockWidget* panel, float widthRatio)
 	{
-		MainWindow::instance()->addCenterPanel(panel);
+		MainWindow::instance()->addCenterPanel(panel, widthRatio);
+	}
+
+	void AStudio::removeCenterPanel(QDockWidget* panel)
+	{
+		MainWindow::instance()->removeCenterPanel(panel);
 	}
 
 	const Echo::String AStudio::selectANodeObject()

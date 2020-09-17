@@ -23,7 +23,7 @@ namespace Echo
 
     void ProceduralGeometryEditor::onEditorSelectThisNode()
     {
-        Editor::instance()->showCenterPanel(m_panel->getUi(), 0.75f, 0.76f);
+        Editor::instance()->showCenterPanel(m_panel->getUi(), 0.3f);
     }
 
     void ProceduralGeometryEditor::editor_update_self()

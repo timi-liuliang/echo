@@ -6,7 +6,6 @@ namespace Echo
 {
 	static Editor* g_editorInst = nullptr;
 
-	// get instance
 	Editor* Editor::instance()
 	{
 		EchoAssert(g_editorInst);

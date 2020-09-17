@@ -48,6 +48,9 @@ namespace Echo
 	ProceduralGeometryPanel::~ProceduralGeometryPanel()
 	{
 		clearImageItemAndBorder();
+
+		EditorApi.removeCenterPanel(m_ui);
+		delete m_ui; m_ui = nullptr;
 	}
 
 	void ProceduralGeometryPanel::update()

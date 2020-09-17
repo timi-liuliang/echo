@@ -189,7 +189,7 @@ namespace Studio
 		QObject::connect(m_renderPanel, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(onDockWidgetLocationChanged()));
 	}
 
-	void MainWindow::addCenterPanel(QDockWidget* panel)
+	void MainWindow::addCenterPanel(QDockWidget* panel, float widthRatio)
 	{
 		if (std::find(m_centerPanels.begin(), m_centerPanels.end(), panel) == m_centerPanels.end())
 		{
@@ -197,17 +197,35 @@ namespace Studio
 
 			this->addDockWidget(Qt::TopDockWidgetArea, panel);
 			this->tabifyDockWidget(panel, tabifyPanel);
+			//this->removeDockWidget(m_renderPanel);
+			//this->addDockWidget(Qt::TopDockWidgetArea, m_renderPanel);
 
-			QObject::connect(panel, SIGNAL(visibilityChanged(bool)), this, SLOT(onCenterDockWidgetVisibilityChanged()));
+			QObject::connect(panel, SIGNAL(close(bool)), this, SLOT(onExternalCenterDockWidgetVisibilityChanged()));
 
-			panel->setVisible(false);
 			panel->setVisible(true);
+			resizeDocks({ panel, m_renderPanel }, { int(widthRatio * 100.f) , int((1.f-widthRatio) * 100.f) }, Qt::Horizontal);
 
 			m_centerPanels.push_back(panel);
 		}
 		else
 		{
 			panel->setVisible(true);
+		}
+	}
+
+	void MainWindow::removeCenterPanel(QDockWidget* panel)
+	{
+		if (panel)
+		{
+			for (auto it = m_centerPanels.begin(); it != m_centerPanels.end();)
+			{
+				if (*it == panel)
+				{
+					this->removeDockWidget(panel);
+					m_centerPanels.erase(it);
+					break;
+				}
+			}
 		}
 	}
     
@@ -218,7 +236,6 @@ namespace Studio
 		EchoSafeDelete(m_scratchEditorPanel, ScratchEditor);
     }
 
-	// recover edit settings
 	void MainWindow::recoverEditSettings()
 	{
 		// open last edit node tree
@@ -267,7 +284,6 @@ namespace Studio
 		onSaveProject();
 	}
 
-	// on save as scene
 	void MainWindow::onSaveAsScene()
 	{
 		Echo::String savePath = PathChooseDialog::getExistingPathName(this, ".scene", "Save").toStdString().c_str();
@@ -573,6 +589,12 @@ namespace Studio
 			if (panel->isVisible())
 				resizeDocks({ panel, m_renderPanel }, { 70 , 30 }, Qt::Horizontal);
 		}
+	}
+
+	void MainWindow::onExternalCenterDockWidgetVisibilityChanged()
+	{
+		QDockWidget* panel = qobject_cast<QDockWidget*>(sender());
+		removeCenterPanel(panel);
 	}
 
 	void MainWindow::onScriptEditVisibilityChanged()

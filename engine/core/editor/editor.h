@@ -24,8 +24,11 @@ namespace Echo
 		static void setInstance(Editor* inst);
 
 	public:
-		// show panel
-        virtual void showCenterPanel(QDockWidget * panel, float widthRatio=0.75f, float heightRation=0.65f) = 0;
+		// center panel
+        virtual void showCenterPanel(QDockWidget * panel, float widthRatio=0.75) = 0;
+        virtual void removeCenterPanel(QDockWidget* panel)=0;
+
+        // bottom panel
 		virtual void showBottomPanel(PanelTab* bottomPanel)=0;
 
 	public:

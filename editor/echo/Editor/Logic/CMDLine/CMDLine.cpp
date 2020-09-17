@@ -56,7 +56,6 @@ namespace Echo
 
 		app.setAttribute(Qt::AA_NativeWindows);
 
-		// 设置编码方式
 		QTextCodec *codec = QTextCodec::codecForName("GB18030");
 		QTextCodec::setCodecForLocale(codec);
 
@@ -112,7 +111,6 @@ namespace Echo
 		return true;
 	}
 
-	// exec command
 	bool GameMode::exec(int argc, char* argv[])
 	{
 		Echo::String type = argv[1];
@@ -144,17 +142,16 @@ namespace Echo
 		return true;
 	}
 
-	// exec command
 	bool EditOpenMode::exec(int argc, char* argv[])
 	{
 		QApplication app(argc, argv);
 		app.setAttribute(Qt::AA_NativeWindows);
 
-		// 设置编码方式
+		// codec
 		QTextCodec *codec = QTextCodec::codecForName("GB18030");
 		QTextCodec::setCodecForLocale(codec);
 
-		// 设置界面风格
+		// ui style
 		QFile qssFile(":/Qss/Qss/Ps.qss");
 		qssFile.open(QFile::ReadOnly);
 		if (qssFile.isOpen())
@@ -165,14 +162,12 @@ namespace Echo
 			qssFile.close();
 		}
 
-		// 基础编辑器
 		TIME_PROFILE
 		(
 			g_astudio = Studio::AStudio::instance();
 			g_astudio->setAppPath(QDir::currentPath().toStdString().c_str());
 		)
 
-		// 加载配置
 		TIME_PROFILE
 		(
 			g_astudio->getConfigMgr()->loadCfgFile();
@@ -183,7 +178,6 @@ namespace Echo
 			g_astudio->Start();
 		)
 
-		// 显示主窗口
 		TIME_PROFILE
 		(
 			Echo::String projectFile = argv[1];
@@ -191,7 +185,6 @@ namespace Echo
 			g_astudio->getProjectWindow()->openProject( projectFile);
 		)
 
-		// 执行
 		app.exec();
 
 		delete g_astudio;

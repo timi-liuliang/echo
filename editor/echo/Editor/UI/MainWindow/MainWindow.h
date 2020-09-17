@@ -56,7 +56,8 @@ namespace Studio
 
 	public:
 		// add center panel
-		void addCenterPanel(QDockWidget* panel);
+		void addCenterPanel(QDockWidget* panel, float widthRatio);
+		void removeCenterPanel(QDockWidget* panel);
 
 		// panels
 		BottomPanel* getBottomPanel() { return m_bottomPanel; }
@@ -112,8 +113,9 @@ namespace Studio
 		void onAbout();
 
 		// on display script edit panel
-		void onCenterDockWidgetVisibilityChanged();
 		void onScriptEditVisibilityChanged();
+		void onCenterDockWidgetVisibilityChanged();
+		void onExternalCenterDockWidgetVisibilityChanged();
 
 		// on Dockwidget location changed
 		void onDockWidgetLocationChanged();
