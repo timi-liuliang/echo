@@ -1,22 +1,21 @@
 #pragma once
 
+#include "engine/core/base/echo_config.h"
+
+#ifdef ECHO_EDITOR_MODE
+
 #include "QWidget.h"
 #include "QEvent.h"
-#include "QAction.h"
-#include "QCheckBox.h"
 #include "QComboBox.h"
-#include "QCursor.h"
 #include "QGraphicsItem.h"
 #include "QGraphicsScene.h"
 #include "QGraphicsView.h"
-#include "QHeaderView.h"
 #include "QLineEdit.h"
-#include "QSpinBox.h"
-#include "QMenu.h"
-#include "QSplitter.h"
 #include "QToolButton.h"
 #include "QTreeWidget.h"
 #include "QTreeWidgetItem.h"
 #include "QUiLoader.h"
 #include "QDialog.h"
 #include "QFileDialog.h"
+
+#endif

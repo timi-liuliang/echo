@@ -4,13 +4,18 @@
 
 #ifdef ECHO_EDITOR_MODE
 
+#include <QAction>
+#include <QSplitter>
+#include <QMenu>
+#include <QSpinBox>
+#include <QHeaderView>
+#include <QCheckBox>
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QtWidgets/QGraphicsItem>
 
 class QObject;
 class QWidget;
-class QAction;
 class QTreeWidgetItem;
 class QGraphicsPolygonItem;
 class QGraphicsProxyWidget;
