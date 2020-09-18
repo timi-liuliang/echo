@@ -19,6 +19,8 @@ namespace Echo
 		m_textureAtlas = ECHO_DOWN_CAST<TextureAtlas*>(obj);
 
 		m_ui = EditorApi.qLoadUi("engine/core/render/base/editor/atlas/TextureAtlasPanel.ui");
+		m_nodeTreeWidget = m_ui->findChild<QTreeWidget*>("m_nodeTreeWidget");
+
 		m_splitDialog = EditorApi.qLoadUi("engine/core/render/base/editor/atlas/TextureAtlasSplitDialog.ui");
 
 		QSplitter* splitter = (QSplitter*)EditorApi.qFindChild(m_ui, "m_splitter");
@@ -199,22 +201,22 @@ namespace Echo
 
 	void TextureAtlasPanel::refreshAtlaList()
 	{
-		QWidget* nodeTreeWidget = EditorApi.qFindChild(m_ui, "m_nodeTreeWidget");
+		QTreeWidget* nodeTreeWidget = m_ui->findChild<QTreeWidget*>("m_nodeTreeWidget");
 		if (nodeTreeWidget)
 		{
-			EditorApi.qTreeWidgetClear(nodeTreeWidget);
+			nodeTreeWidget->clear();
 
-			QTreeWidgetItem* rootItem = EditorApi.qTreeWidgetInvisibleRootItem(nodeTreeWidget);
+			QTreeWidgetItem* rootItem = nodeTreeWidget->invisibleRootItem();
 			if (rootItem)
 			{
 				for (const TextureAtlas::Atla atla : m_textureAtlas->getAllAtlas())
 				{
-					QTreeWidgetItem* objetcItem = EditorApi.qTreeWidgetItemNew();
-					EditorApi.qTreeWidgetItemSetText(objetcItem, 0, atla.m_name.c_str());
-					EditorApi.qTreeWidgetItemSetUserData(objetcItem, 0, atla.m_name.c_str());
-					EditorApi.qTreeWidgetItemSetEditable(objetcItem, true);
+					QTreeWidgetItem* objetcItem = new QTreeWidgetItem;
+					objetcItem->setText( 0, atla.m_name.c_str());
+					objetcItem->setData( 0, Qt::UserRole, atla.m_name.c_str());
+					objetcItem->setFlags(objetcItem->flags() | Qt::ItemIsEditable);
 					//EditorApi.qTreeWidgetItemSetIcon(objetcItem, 0, Editor::instance()->getNodeIcon(node).c_str());
-					EditorApi.qTreeWidgetItemAddChild(rootItem, objetcItem);
+					rootItem->addChild(objetcItem);
 				}
 			}
 		}
@@ -268,11 +270,11 @@ namespace Echo
 
 	void TextureAtlasPanel::onSelectItem()
 	{
-		QTreeWidgetItem* item = EditorApi.qTreeWidgetCurrentItem(EditorApi.qFindChild(m_ui, "m_nodeTreeWidget"));
+		QTreeWidgetItem* item = m_nodeTreeWidget->currentItem();
 		if (item && m_textureAtlas->getTexture())
 		{
 			Vector4 viewPort;
-			String userData = EditorApi.qTreeWidgetItemUserData(item, 0);
+			String userData = item->data(0, Qt::UserRole).toString().toStdString().c_str();
 			if (m_textureAtlas->getViewport(userData, viewPort))
 			{
 				if (m_atlaBorder)
@@ -305,19 +307,19 @@ namespace Echo
 
 	void TextureAtlasPanel::onChangedAtlaName()
 	{
-		QTreeWidgetItem* item = EditorApi.qTreeWidgetCurrentItem(EditorApi.qFindChild(m_ui, "m_nodeTreeWidget"));
+		QTreeWidgetItem* item = m_nodeTreeWidget->currentItem();
 		if (item)
 		{
 			Vector4 viewPort;
 
-			String newName = EditorApi.qTreeWidgetItemText(item, 0);
-			String oldName = EditorApi.qTreeWidgetItemUserData(item, 0);
+			String newName = item->text(0).toStdString().c_str();
+			String oldName = item->data(0, Qt::UserRole).toString().toStdString().c_str();
 			if (m_textureAtlas->getViewport(oldName, viewPort))
 			{
 				m_textureAtlas->removeAtla(oldName);
 				m_textureAtlas->addAtla(newName, viewPort);
 
-				EditorApi.qTreeWidgetItemSetUserData(item, 0, newName.c_str());
+				item->setData( 0, Qt::UserRole, newName.c_str());
 			}
 		}
 	}

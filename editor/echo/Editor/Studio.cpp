@@ -62,11 +62,6 @@ namespace Studio
 		return inst;
 	}
 
-	const Echo::String& AStudio::getRootPath()
-	{
-		return m_rootPath;
-	}
-
 	bool AStudio::initLogSystem()
 	{
 		Echo::Engine::instance();
@@ -214,12 +209,12 @@ namespace Studio
 
 		// calculate root path
 #ifdef ECHO_PLATFORM_WINDOWS
-		m_rootPath = m_appPath + "../../../../";
+		Echo::String rootPath = m_appPath + "../../../../";
 #else
-        m_rootPath = m_appPath + "../../../../";
+		Echo::String rootPath = m_appPath + "../../../../";
 #endif
 
-		Echo::Engine::instance()->setRootPath(m_rootPath);
+		Echo::Engine::instance()->setRootPath(rootPath);
 	}
 
 	void AStudio::showBottomPanel(Echo::PanelTab* bottomPanel)

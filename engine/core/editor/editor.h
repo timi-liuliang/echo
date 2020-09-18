@@ -181,63 +181,7 @@ namespace Echo
         
     public:
         // load ui file by path. then return the widget
-        qLoadUiFun qLoadUi = nullptr;
-        
-    public:
-        // invisible root item
-        qTreeWidgetInvisibleRootItemFun qTreeWidgetInvisibleRootItem = nullptr;
-        
-        // current select item
-        qTreeWidgetCurrentItemFun qTreeWidgetCurrentItem = nullptr;
-        
-        // header
-        qTreeWidgetHeaderFun qTreeWidgetHeader = nullptr;
-        
-        // current column
-        qTreeWidgetCurrentColumnFun qTreeWidgetCurrentColumn = nullptr;
-        
-        // get width
-        qTreeWidgetWidthFun qTreeWidgetWidth = nullptr;
-        
-        // clear
-        qTreeWidgetClearFun qTreeWidgetClear = nullptr;
-        
-    public:
-        // create a new QTreeWidgetItem
-        qTreeWidgetItemNewFun qTreeWidgetItemNew = nullptr;
-        
-        // get parent
-        qTreeWidgetItemParentFun qTreeWidgetItemParent = nullptr;
-        
-        // add child item
-        qTreeWidgetItemAddChildFun qTreeWidgetItemAddChild = nullptr;
-        
-        // set text
-        qTreeWidgetItemSetTextFun qTreeWidgetItemSetText = nullptr;
-        
-        // get text
-        qTreeWidgetItemTextFun qTreeWidgetItemText = nullptr;
-        
-        // set icon
-        qTreeWidgetItemSetIconFun qTreeWidgetItemSetIcon = nullptr;
-        
-        // get user data
-        qTreeWidgetItemUserDataFun qTreeWidgetItemUserData = nullptr;
-        
-        // set user data
-        qTreeWidgetItemSetUserDataFun qTreeWidgetItemSetUserData = nullptr;
-
-        // set editable
-        qTreeWidgetItemSetEditableFun qTreeWidgetItemSetEditable = nullptr;
-        
-        // expand QTreeWidgetItem
-        qTreeWidgetItemSetExpandedFun qTreeWidgetItemSetExpanded = nullptr;
-
-        // child count
-        qTreeWidgetItemChildCountFun qTreeWidgetItemChildCount = nullptr;
-
-        // child
-        qTreeWidgetItemChildFun qTreeWidgetItemChild = nullptr;
+        qLoadUiFun qLoadUi = nullptr;      
 
     public:
         // dialog

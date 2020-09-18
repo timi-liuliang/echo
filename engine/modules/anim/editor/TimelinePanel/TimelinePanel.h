@@ -5,10 +5,6 @@
 
 #ifdef ECHO_EDITOR_MODE
 
-#include <QGraphicsScene>
-#include <QGraphicsView>
-#include <QtWidgets/QGraphicsItem>
-
 namespace Echo
 {
 	class Timeline;
@@ -128,6 +124,7 @@ namespace Echo
 		void drawRulerVertical();
 
 	protected:
+		QTreeWidget*				m_nodeTreeWidget = nullptr;
 		Timeline*					m_timeline;
 		QMenu*						m_addObjectMenu;
 		QAction*					m_addNodeAction;

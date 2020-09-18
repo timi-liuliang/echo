@@ -46,6 +46,7 @@ namespace Echo
 		void clearImageItemAndBorder();
 
 	protected:
+		QTreeWidget*				m_nodeTreeWidget = nullptr;
 		TextureAtlas*				m_textureAtlas;
 		QMenu*						m_importMenu = nullptr;
 		QGraphicsView*				m_graphicsView = nullptr;

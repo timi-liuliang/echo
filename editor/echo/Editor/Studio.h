@@ -31,9 +31,6 @@ namespace Studio
 		void setAppPath( const char* appPath);
 		const char* getAppPath() const { return m_appPath.c_str(); }
 
-		// get editor root path
-		const Echo::String& getRootPath();
-
 		// config manager
 		ConfigMgr* getConfigMgr() { return m_projectCfg; }
 	
@@ -100,7 +97,6 @@ namespace Studio
         void initFunctions();
 
 	private:
-		Echo::String					m_rootPath;			// root directory
 		Echo::String					m_appPath;
 		MainWindow*						m_mainWindow = nullptr;
 		ProjectWnd*						m_projectWindow = nullptr;

@@ -49,7 +49,7 @@ namespace Echo
 
 		// get root path
 		void setRootPath(const String& rootPath) { m_rootPath = rootPath; }
-		const String& getRootPath() { return m_rootPath; }
+		virtual const String& getRootPath() { return m_rootPath; }
 
 		// res path
 		const String& getResPath() const;

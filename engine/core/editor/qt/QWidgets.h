@@ -12,8 +12,6 @@
 #include "QGraphicsView.h"
 #include "QLineEdit.h"
 #include "QToolButton.h"
-#include "QTreeWidget.h"
-#include "QTreeWidgetItem.h"
 #include "QUiLoader.h"
 #include "QDialog.h"
 #include "QFileDialog.h"

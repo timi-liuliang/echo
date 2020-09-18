@@ -1,5 +1,6 @@
 #include <QToolButton>
 #include <engine/core/util/StringUtil.h>
+#include <engine/core/main/Engine.h>
 #include "Studio.h"
 
 namespace Echo
@@ -23,7 +24,7 @@ namespace Echo
 			QToolButton* toolButton = qobject_cast<QToolButton*>(button);
 			if (toolButton)
 			{
-				Echo::String fullPath = Studio::AStudio::instance()->getRootPath() + iconPath;
+				Echo::String fullPath = Echo::Engine::instance()->getRootPath() + iconPath;
 				toolButton->setIcon(QIcon(fullPath.c_str()));
 			}
 		}

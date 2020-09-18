@@ -6,8 +6,6 @@
 #include "QGraphicsView.cx"
 #include "QLineEdit.cx"
 #include "QToolButton.cx"
-#include "QTreeWidget.cx"
-#include "QTreeWidgetItem.cx"
 #include "QUiLoader.cx"
 #include "QWidget.cx"
 #include "QDialog.cx"
@@ -76,28 +74,6 @@ namespace Studio
 
 		// load ui file by path. then return the widget
 		BIND_EDITOR_FUN(qLoadUi);
-
-		// invisible root item
-		BIND_EDITOR_FUN(qTreeWidgetInvisibleRootItem);
-		BIND_EDITOR_FUN(qTreeWidgetCurrentItem);
-		BIND_EDITOR_FUN(qTreeWidgetHeader);
-		BIND_EDITOR_FUN(qTreeWidgetCurrentColumn);
-		BIND_EDITOR_FUN(qTreeWidgetWidth);
-		BIND_EDITOR_FUN(qTreeWidgetClear);
-
-		// create a new QTreeWidgetItem
-		BIND_EDITOR_FUN(qTreeWidgetItemNew);
-		BIND_EDITOR_FUN(qTreeWidgetItemParent);
-		BIND_EDITOR_FUN(qTreeWidgetItemAddChild);
-		BIND_EDITOR_FUN(qTreeWidgetItemSetText);
-		BIND_EDITOR_FUN(qTreeWidgetItemText);
-		BIND_EDITOR_FUN(qTreeWidgetItemSetIcon);
-		BIND_EDITOR_FUN(qTreeWidgetItemUserData);
-		BIND_EDITOR_FUN(qTreeWidgetItemSetEditable);
-		BIND_EDITOR_FUN(qTreeWidgetItemSetUserData);
-		BIND_EDITOR_FUN(qTreeWidgetItemSetExpanded);
-		BIND_EDITOR_FUN(qTreeWidgetItemChildCount);
-		BIND_EDITOR_FUN(qTreeWidgetItemChild);
 
 		// dialog
 		BIND_EDITOR_FUN(qDialogExec);

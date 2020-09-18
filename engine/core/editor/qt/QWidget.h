@@ -14,6 +14,9 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QtWidgets/QGraphicsItem>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+#include <QIcon>
 
 class QObject;
 class QWidget;
