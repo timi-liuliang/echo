@@ -14,7 +14,12 @@ namespace Echo
 		void setPosition(const Vector2& position) { m_position = position; }
 		const Vector2& getPosition() { return m_position; }
 
+		// final
+		bool isFinal() const { return m_isFinal; }
+		void setFinal(bool isFinal) { m_isFinal = isFinal; }
+
 	private:
 		Vector2		m_position;
+		bool		m_isFinal = false;
 	};
 }

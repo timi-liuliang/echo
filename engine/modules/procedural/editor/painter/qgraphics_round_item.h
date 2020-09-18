@@ -20,10 +20,12 @@ namespace Procedural
 		// custom paint
 		virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 		{
+			painter->setPen(pen());
+			painter->setBrush(brush());
 			painter->drawRoundedRect(rect(), m_radius, m_radius);
 		}
 
-		// set radisu
+		// set radius
 		void setRadius(float radius) { m_radius = radius; }
 
 	protected:

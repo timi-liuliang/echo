@@ -9,7 +9,6 @@ namespace Echo
 		return new QTreeWidgetItem();
 	}
 
-	// get parent
 	QTreeWidgetItem* qTreeWidgetItemParent(QTreeWidgetItem* item)
 	{
 		return item ? item->parent() : nullptr;
