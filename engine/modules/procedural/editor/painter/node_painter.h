@@ -79,7 +79,7 @@ namespace Procedural
 				m_rectFinal->setZValue(-5.f);
 				m_rectFinal->setParentItem(m_rect);
 
-				m_text = m_graphicsScene->addSimpleText("Sphere");
+				m_text = m_graphicsScene->addSimpleText(Echo::StringUtil::Replace(pgNode->getClassName(), "PG", "").c_str());
 				m_text->setBrush(QBrush(m_style.m_fontColor));
 				m_text->setParentItem(m_rect);
 

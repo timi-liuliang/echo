@@ -58,7 +58,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QToolButton" name="m_import">
+        <widget class="QToolButton" name="m_play">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -66,10 +66,10 @@
           </sizepolicy>
          </property>
          <property name="toolTip">
-          <string>Import</string>
+          <string>Play</string>
          </property>
          <property name="statusTip">
-          <string>Import</string>
+          <string>Play</string>
          </property>
          <property name="text">
           <string>...</string>

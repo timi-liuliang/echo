@@ -24,6 +24,9 @@ namespace Echo
 		PGSphere();
 		virtual ~PGSphere();
 
+		// calculate
+		virtual void play(PCGData& data);
+
 	public:
 		// build
 		static MeshPtr buildUvSphere(float radius, i32 stackCount, i32 sectorCount);

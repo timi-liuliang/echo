@@ -8,4 +8,9 @@ namespace Echo
 		m_vertices.clear();
 		m_primitives.clear();
 	}
+
+	MeshPtr PCGData::buildMesh()
+	{
+		return nullptr;
+	}
 }

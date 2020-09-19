@@ -31,7 +31,7 @@ namespace Echo
 		void setParent(PGNode* parent);
 
 		// calculate
-		virtual void run(PCGData& data);
+		virtual void play(PCGData& data);
 
 	private:
 		PGNode*					m_parent = nullptr;

@@ -27,7 +27,8 @@ namespace Echo
 
 	void ProceduralGeometry::setMesh(MeshPtr mesh)
 	{ 
-		m_mesh = mesh; 
+		m_mesh = mesh;
+		m_localAABB = m_mesh ? m_mesh->getLocalBox() : AABB();
 
 		m_isRenderableDirty = true;
 	}
@@ -71,8 +72,6 @@ namespace Echo
 			}
 
 			buildMesh();
-
-			// mesh
 			if (m_mesh)
 			{
 				m_renderable = Renderable::create(m_mesh, m_material, this);
@@ -88,11 +87,13 @@ namespace Echo
 		m_mesh.reset();
 	}
 
-	void ProceduralGeometry::run()
+	void ProceduralGeometry::play()
 	{
 		m_data.clear();
 
 		if (m_pgNode)
-			m_pgNode->run(m_data);
+			m_pgNode->play(m_data);
+
+		setMesh(m_data.buildMesh());
 	}
 }

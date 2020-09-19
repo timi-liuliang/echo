@@ -4,6 +4,7 @@
 #include "pcg_vertex.h"
 #include "pcg_primitive.h"
 #include "pcg_detail.h"
+#include "engine/core/render/base/mesh/mesh.h"
 
 namespace Echo
 {
@@ -12,6 +13,9 @@ namespace Echo
 	public:
 		PCGData() {}
 		~PCGData() {}
+
+		// mesh
+		MeshPtr buildMesh();
 
 		// clear
 		void clear();

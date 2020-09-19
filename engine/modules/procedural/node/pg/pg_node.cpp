@@ -43,8 +43,11 @@ namespace Echo
 			parent->addChild(this);
 	}
 
-	void PGNode::run(PCGData& data)
+	void PGNode::play(PCGData& data)
 	{
-
+		for (PGNode* child : m_children)
+		{
+			child->play(data);
+		}
 	}
 }

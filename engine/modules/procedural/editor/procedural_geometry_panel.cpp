@@ -28,12 +28,13 @@ namespace Echo
 		}
 
 		// Tool button icons
-		EditorApi.qToolButtonSetIcon(EditorApi.qFindChild(m_ui, "m_import"), "engine/core/render/base/editor/icon/import.png");
+		EditorApi.qToolButtonSetIcon(EditorApi.qFindChild(m_ui, "m_play"), "engine/modules/procedural/editor/icon/play.png");
 
 		// connect signal slots
 		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_graphicsView"), QSIGNAL(customContextMenuRequested(const QPoint&)), this, createMethodBind(&ProceduralGeometryPanel::onRightClickGraphicsView));
 		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_nodeTreeWidget"), QSIGNAL(itemClicked(QTreeWidgetItem*, int)), this, createMethodBind(&ProceduralGeometryPanel::onSelectItem));
 		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_nodeTreeWidget"), QSIGNAL(itemChanged(QTreeWidgetItem*, int)), this, createMethodBind(&ProceduralGeometryPanel::onChangedAtlaName));
+		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_play"), QSIGNAL(clicked()), this, createMethodBind(&ProceduralGeometryPanel::onPlay));
 
 		// create QGraphicsScene
 		m_graphicsView = m_ui->findChild<QGraphicsView*>("m_graphicsView");
@@ -56,10 +57,6 @@ namespace Echo
 	void ProceduralGeometryPanel::update()
 	{
 		refreshUiDisplay();
-	}
-
-	void ProceduralGeometryPanel::onNewAtla()
-	{
 	}
 
 	void ProceduralGeometryPanel::onRightClickGraphicsView()
@@ -108,8 +105,12 @@ namespace Echo
 		}
 	}
 
-	void ProceduralGeometryPanel::onSplit()
+	void ProceduralGeometryPanel::onPlay()
 	{
+		if (m_proceduralGeometry)
+		{
+			m_proceduralGeometry->play();
+		}
 	}
 
 	void ProceduralGeometryPanel::refreshUiDisplay()

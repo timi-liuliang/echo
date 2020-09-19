@@ -18,6 +18,11 @@ namespace Echo
 
 	}
 
+	void PGSphere::play(PCGData& data)
+	{
+
+	}
+
 	MeshPtr PGSphere::buildUvSphere(float radius, i32 stackCount, i32 sectorCount)
 	{
 		// Vertex Format

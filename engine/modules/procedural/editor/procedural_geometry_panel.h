@@ -36,14 +36,13 @@ namespace Echo
 
 	public:
 		// new
-		void onNewAtla();
+		void onPlay();
 
 		// import
 		void onRightClickGraphicsView();
 		void onNewPGNode();
 
 		// split
-		void onSplit();
 		void onSelectItem();
 
 		// change name

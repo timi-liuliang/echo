@@ -28,7 +28,7 @@ namespace Echo
 		void setMaterial(Object* material);
 
 		// run
-		void run();
+		void play();
 
 	protected:
 		// update self
