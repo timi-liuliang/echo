@@ -2,6 +2,7 @@
 
 #include "engine/core/base/object.h"
 #include "engine/core/render/base/mesh/mesh.h"
+#include "engine/modules/procedural/data/pcg_data.h"
 
 namespace Echo
 {
@@ -16,13 +17,26 @@ namespace Echo
 
 		// final
 		bool isFinal() const { return m_isFinal; }
-		void setFinal(bool isFinal) { m_isFinal = isFinal; }
+		void setFinal(bool isFinal);
 
-	public:
-		DECLARE_SIGNAL(Signal0, onFinalChanged)
+		// child
+		void addChild(PGNode* node);
+		void removeChild(PGNode* node);
+
+		// children
+		const vector<PGNode*>::type& children() { return m_children; }
+
+		// set parent
+		PGNode* getParent() { return m_parent; }
+		void setParent(PGNode* parent);
+
+		// calculate
+		virtual void run(PCGData& data);
 
 	private:
-		Vector2		m_position;
-		bool		m_isFinal = false;
+		PGNode*					m_parent = nullptr;
+		vector<PGNode*>::type	m_children;
+		Vector2					m_position;
+		bool					m_isFinal = false;
 	};
 }

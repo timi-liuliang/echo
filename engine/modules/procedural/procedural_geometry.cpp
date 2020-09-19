@@ -7,6 +7,8 @@ namespace Echo
 	ProceduralGeometry::ProceduralGeometry()
 	{
 		setRenderType("3d");
+
+		m_pgNode = new PGNode;
 	}
 
 	ProceduralGeometry::~ProceduralGeometry()
@@ -21,14 +23,6 @@ namespace Echo
 
 		CLASS_REGISTER_PROPERTY(ProceduralGeometry, "Material", Variant::Type::Object, "getMaterial", "setMaterial");
 		CLASS_REGISTER_PROPERTY_HINT(ProceduralGeometry, "Material", PropertyHintType::ResourceType, "Material");
-	}
-
-	void ProceduralGeometry::addPGNode(PGNode* pgNode)
-	{
-		if (pgNode)
-		{
-			m_pgNodes.push_back(pgNode);
-		}
 	}
 
 	void ProceduralGeometry::setMesh(MeshPtr mesh)
@@ -81,7 +75,6 @@ namespace Echo
 			// mesh
 			if (m_mesh)
 			{
-				// create renderable
 				m_renderable = Renderable::create(m_mesh, m_material, this);
 			}
 
@@ -93,5 +86,13 @@ namespace Echo
 	{
 		EchoSafeRelease(m_renderable);
 		m_mesh.reset();
+	}
+
+	void ProceduralGeometry::run()
+	{
+		m_data.clear();
+
+		if (m_pgNode)
+			m_pgNode->run(m_data);
 	}
 }

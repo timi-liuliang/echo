@@ -5,6 +5,7 @@
 #include "engine/core/render/base/Material.h"
 #include "engine/core/render/base/Renderable.h"
 #include "node/pg/pg_node.h"
+#include "data/pcg_data.h"
 
 namespace Echo
 {
@@ -16,9 +17,8 @@ namespace Echo
 		ProceduralGeometry();
 		virtual ~ProceduralGeometry();
 
-		// PGNodes
-		void addPGNode(PGNode* pgNode);
-		vector<PGNode*>::type& getPGNodes() { return m_pgNodes; }
+		// PGNode
+		PGNode* getPGNode() { return m_pgNode; }
 
 		// set mesh
 		void setMesh(MeshPtr mesh);
@@ -26,6 +26,9 @@ namespace Echo
 		// material
 		Material* getMaterial() const { return m_material; }
 		void setMaterial(Object* material);
+
+		// run
+		void run();
 
 	protected:
 		// update self
@@ -41,7 +44,8 @@ namespace Echo
 		void clearRenderable();
 
 	protected:
-		vector<PGNode*>::type	m_pgNodes;
+		PGNode*					m_pgNode = nullptr;
+		PCGData					m_data;
 		bool					m_isRenderableDirty = true;
 		MeshPtr					m_mesh;
 		MaterialPtr             m_material;

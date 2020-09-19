@@ -10,7 +10,11 @@ namespace Echo
 	class PCGData : public Object
 	{
 	public:
+		PCGData() {}
+		~PCGData() {}
 
+		// clear
+		void clear();
 
 	private:
 		vector<PCGPoint>::type		m_points;

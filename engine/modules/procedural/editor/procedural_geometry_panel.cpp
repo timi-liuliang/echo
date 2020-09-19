@@ -96,10 +96,14 @@ namespace Echo
 			Echo::String className = action->data().toString().toStdString().c_str();
 			if (m_proceduralGeometry)
 			{
-				Echo::PGNode* pgNode = Echo::Class::create<PGNode*>(className);
-				pgNode->setPosition(m_newPGNodePosition);
+				Echo::PGNode* root = m_proceduralGeometry->getPGNode();
+				if (root)
+				{
+					Echo::PGNode* pgNode = Echo::Class::create<PGNode*>(className);
+					pgNode->setPosition(m_newPGNodePosition);
 
-				m_proceduralGeometry->addPGNode(pgNode);
+					root->addChild(pgNode);
+				}
 			}
 		}
 	}
@@ -129,7 +133,7 @@ namespace Echo
 
 	void ProceduralGeometryPanel::drawNodes()
 	{
-		vector<PGNode*>::type& pgNodes = m_proceduralGeometry->getPGNodes();
+		const vector<PGNode*>::type& pgNodes = m_proceduralGeometry->getPGNode()->children();
 		while (m_pgNodePainters.size() > pgNodes.size())
 		{
 			EchoSafeDelete(m_pgNodePainters.back(), PGNodePainter);
