@@ -18,6 +18,9 @@ namespace Echo
 		bool isFinal() const { return m_isFinal; }
 		void setFinal(bool isFinal) { m_isFinal = isFinal; }
 
+	public:
+		DECLARE_SIGNAL(Signal0, onFinalChanged)
+
 	private:
 		Vector2		m_position;
 		bool		m_isFinal = false;

@@ -57,7 +57,7 @@ namespace Procedural
 				float halfWidth = m_width * 0.5f;
 				float halfHeight = m_height * 0.5f;
 
-				m_rect = new QGraphicsRoundRectItem();
+				m_rect = new QGraphicsRoundRectItem(nullptr);
 				m_rect->setRect(QRect(-halfWidth, -halfHeight, m_width, m_height));
 				m_rect->setRadius(3.f);
 				m_rect->setPen(QPen(m_style.m_normalBoundaryColor, m_style.m_penWidth));
@@ -71,7 +71,7 @@ namespace Procedural
 				m_rect->setPos(QPointF(pgNode->getPosition().x, pgNode->getPosition().y));
 				m_graphicsScene->addItem(m_rect);
 
-				m_rectFinal = new QGraphicsRoundRectItem();
+				m_rectFinal = new QGraphicsRoundRectItem(nullptr, m_pgNode);
 				m_rectFinal->setRect(QRect(halfWidth - m_rectFinalWidth, -halfHeight, m_rectFinalWidth, m_height));
 				m_rectFinal->setRadius(3.f);
 				m_rectFinal->setPen(QPen(m_style.m_normalBoundaryColor, 1.f));
@@ -101,8 +101,6 @@ namespace Procedural
 					item->setParentItem(m_rect);
 					item->setPos(0.f - halfConnectPointRadius, halfHeight + halfConnectPointRadius);
 				}
-
-
 			}
 		}
 

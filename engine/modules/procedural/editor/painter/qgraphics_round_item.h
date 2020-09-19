@@ -11,8 +11,9 @@ namespace Procedural
 	class QGraphicsRoundRectItem : public QGraphicsRectItem
 	{
 	public:
-		QGraphicsRoundRectItem(QGraphicsItem* parent = nullptr)
+		QGraphicsRoundRectItem(QGraphicsItem* parent = nullptr, Echo::PGNode* pgNode = nullptr)
 			: QGraphicsRectItem(parent)
+			, m_pgNode(pgNode)
 		{
 
 		}
@@ -28,8 +29,20 @@ namespace Procedural
 		// set radius
 		void setRadius(float radius) { m_radius = radius; }
 
+		// mouse event
+		virtual void mousePressEvent(QGraphicsSceneMouseEvent* event) override
+		{
+			QGraphicsRectItem::mousePressEvent(event);
+
+			if (m_pgNode)
+			{
+				m_pgNode->setFinal(!m_pgNode->isFinal());
+			}
+		}
+
 	protected:
-		float	m_radius = 3.f;
+		float			m_radius = 3.f;
+		Echo::PGNode*	m_pgNode = nullptr;
 	};
 }
 
