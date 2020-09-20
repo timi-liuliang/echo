@@ -9,7 +9,8 @@ namespace Echo
 
 	void PGNode::setFinal(bool isFinal)
 	{ 
-		m_isFinal = isFinal; 
+		m_isFinal = isFinal;
+		m_dirtyFlag = true;
 
 		if(m_isFinal && m_parent)
 		{
@@ -52,5 +53,7 @@ namespace Echo
 				child->play(data);
 			}
 		}
+
+		m_dirtyFlag = false;
 	}
 }

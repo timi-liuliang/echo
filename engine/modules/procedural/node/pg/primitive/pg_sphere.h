@@ -27,11 +27,10 @@ namespace Echo
 		// calculate
 		virtual void play(PCGData& data);
 
-	public:
-		// build
-		static MeshPtr buildUvSphere(float radius, i32 stackCount, i32 sectorCount);
-
 	protected:
 		Type	m_type = Type::Uv;
+		float	m_radius = 1.f;
+		i32		m_stackCount = 50;
+		i32		m_sectorCount = 50;
 	};
 }

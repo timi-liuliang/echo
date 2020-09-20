@@ -20,65 +20,46 @@ namespace Echo
 
 	void PGSphere::play(PCGData& data)
 	{
-
-	}
-
-	MeshPtr PGSphere::buildUvSphere(float radius, i32 stackCount, i32 sectorCount)
-	{
-		// Vertex Format
-		struct VertexFormat
-		{
-			Vector3        m_position;
-			Vector3        m_normal;
-			Vector2        m_uv;
-		};
-		typedef vector<VertexFormat>::type  VertexArray;
-		typedef vector<ui32>::type          IndiceArray;
-
-		VertexArray    vertices;
-		IndiceArray    indices;
-	
-		MeshPtr mesh = Mesh::create(true, true);
-
 		float x, y, z, xz;                              // vertex position
-		float nx, ny, nz, lengthInv = 1.0f / radius;    // vertex normal
+		float nx, ny, nz, lengthInv = 1.0f / m_radius;    // vertex normal
 		float s, t;                                     // vertex texCoord
 
-		float sectorStep = 2 * Math::PI / sectorCount;
-		float stackStep = Math::PI / stackCount;
+		float sectorStep = 2 * Math::PI / m_sectorCount;
+		float stackStep = Math::PI / m_stackCount;
 		float sectorAngle, stackAngle;
 
-		for (int i = 0; i <= stackCount; ++i)
+		vector<PCGPoint*>::type points;
+		for (int i = 0; i <= m_stackCount; ++i)
 		{
 			stackAngle = Math::PI / 2 - i * stackStep;        // starting from pi/2 to -pi/2
-			xz = radius * cosf(stackAngle);             // r * cos(u)
-			y = radius * sinf(stackAngle);              // r * sin(u)
+			xz = m_radius * cosf(stackAngle);             // r * cos(u)
+			y = m_radius * sinf(stackAngle);              // r * sin(u)
 
 			// add (sectorCount+1) vertices per stack
 			// the first and last vertices have same position and normal, but different tex coords
-			for (int j = 0; j <= sectorCount; ++j)
+			for (int j = 0; j <= m_sectorCount; ++j)
 			{
 				sectorAngle = j * sectorStep;           // starting from 0 to 2pi
 
-				VertexFormat vertex;
+				PCGPoint* point = data.addPoint();
 
 				// vertex position (x, y, z)
 				x = xz * cosf(sectorAngle);             // r * cos(u) * cos(v)
 				z = xz * sinf(sectorAngle);             // r * cos(u) * sin(v)
-				vertex.m_position = Vector3(x, y, z);
+				point->m_position = Vector3(x, y, z);
 
 				// normalized vertex normal (nx, ny, nz)
 				nx = x * lengthInv;
 				ny = y * lengthInv;
 				nz = z * lengthInv;
-				vertex.m_normal = Vector3(nx, ny, nz);
+				point->m_normal = Vector3(nx, ny, nz);
 
 				// vertex texture coordinate (s, t) range between [0, 1]
-				s = (float)j / sectorCount;
-				t = (float)i / stackCount;
-				vertex.m_uv = Vector2(s, t);
+				s = (float)j / m_sectorCount;
+				t = (float)i / m_stackCount;
+				point->m_uv = Vector2(s, t);
 
-				vertices.emplace_back(vertex);
+				points.push_back(point);
 			}
 		}
 
@@ -88,37 +69,32 @@ namespace Echo
 		//  | /  |
 		//  k2--k2+1
 		unsigned int k1, k2;
-		for (int i = 0; i < stackCount; ++i)
+		for (int i = 0; i < m_stackCount; ++i)
 		{
-			k1 = i * (sectorCount + 1);     // beginning of current stack
-			k2 = k1 + sectorCount + 1;      // beginning of next stack
+			k1 = i * (m_sectorCount + 1);     // beginning of current stack
+			k2 = k1 + m_sectorCount + 1;      // beginning of next stack
 
-			for (int j = 0; j < sectorCount; ++j, ++k1, ++k2)
+			for (int j = 0; j < m_sectorCount; ++j, ++k1, ++k2)
 			{
 				// 2 triangles per sector excluding 1st and last stacks
 				if (i != 0)
 				{
-					indices.emplace_back(k1);
-					indices.emplace_back(k2);
-					indices.emplace_back(k1 + 1);
+					PCGPrimitive* prim= data.addPrimitive();
+					prim->addPoint(points[k1]);
+					prim->addPoint(points[k2]);
+					prim->addPoint(points[k1+1]);
 				}
 
-				if (i != (stackCount - 1))
+				if (i != (m_stackCount - 1))
 				{
-					indices.emplace_back(k1+1);
-					indices.emplace_back(k2);
-					indices.emplace_back(k2 + 1);
+					PCGPrimitive* prim = data.addPrimitive();
+					prim->addPoint(points[k1+1]);
+					prim->addPoint(points[k2]);
+					prim->addPoint(points[k2 + 1]);
 				}
 			}
 		}
 
-		MeshVertexFormat define;
-		define.m_isUseNormal = true;
-		define.m_isUseUV = true;
-
-		mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(ui32), indices.data());
-		mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data());
-
-		return mesh;
+		m_dirtyFlag = false;
 	}
 }

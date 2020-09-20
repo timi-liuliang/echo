@@ -17,22 +17,9 @@ namespace Echo
 
 	}
 
-	MeshPtr PGGrid::buildMesh()
+	void PGGrid::play(PCGData& data)
 	{
-		// Vertex Format
-		struct VertexFormat
-		{
-			Vector3        m_position;
-			Vector3        m_normal;
-			Vector2        m_uv;
-		};
-		typedef vector<VertexFormat>::type  VertexArray;
-		typedef vector<ui32>::type          IndiceArray;
-
-		VertexArray    vertices;
-		IndiceArray    indices;
-
-		MeshPtr mesh = Mesh::create(true, true);
+		vector<PCGPoint*>::type points;
 
 		i32 columns = 11;
 		i32 rows = 11;
@@ -45,12 +32,13 @@ namespace Echo
 			{
 				for (i32 column = 0; column < columns; column++)
 				{
-					VertexFormat vert;
-					vert.m_position = Vector3(row, 0.f, column) + basePosition;
-					vert.m_uv = Vector2(row / (rows - 1), column / (columns - 1));
-					vert.m_normal = Vector3::UNIT_Y;
+					PCGPoint* point = data.addPoint();
 
-					vertices.emplace_back(vert);
+					point->m_position = Vector3(row, 0.f, column) + basePosition;
+					point->m_uv = Vector2(row / (rows - 1), column / (columns - 1));
+					point->m_normal = Vector3::UNIT_Y;
+
+					points.emplace_back(point);
 				}
 			}
 
@@ -66,23 +54,19 @@ namespace Echo
 					i32 indexLeftBottom = indexLeftTop + columns;
 					i32 indexRightBottom = indexRightTop + columns;
 
-					indices.emplace_back(indexLeftTop);
-					indices.emplace_back(indexRightBottom);
-					indices.emplace_back(indexRightTop);
-					indices.emplace_back(indexLeftTop);
-					indices.emplace_back(indexLeftBottom);
-					indices.emplace_back(indexRightBottom);
+					PCGPrimitive* prim0 = data.addPrimitive();
+					prim0->addPoint(points[indexLeftTop]);
+					prim0->addPoint(points[indexRightBottom]);
+					prim0->addPoint(points[indexRightTop]);
+
+					PCGPrimitive* prim1 = data.addPrimitive();
+					prim1->addPoint(points[indexLeftTop]);
+					prim1->addPoint(points[indexLeftBottom]);
+					prim1->addPoint(points[indexRightBottom]);
 				}
 			}
 		}
 
-		MeshVertexFormat define;
-		define.m_isUseNormal = true;
-		define.m_isUseUV = true;
-
-		mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(ui32), indices.data());
-		mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data());
-
-		return mesh;
+		m_dirtyFlag = false;
 	}
 }

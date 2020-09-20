@@ -27,15 +27,15 @@ namespace Echo
 		Material* getMaterial() const { return m_material; }
 		void setMaterial(Object* material);
 
+		// is dirty
+		bool isDirty();
+
 		// run
 		void play();
 
 	protected:
 		// update self
 		virtual void update_self() override;
-
-		// build mesh
-		virtual void buildMesh();
 
 		// build drawable
 		void buildRenderable();

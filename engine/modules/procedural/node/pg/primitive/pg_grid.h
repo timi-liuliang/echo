@@ -12,8 +12,7 @@ namespace Echo
 		PGGrid();
 		virtual ~PGGrid();
 
-	protected:
-		// build mesh
-		static MeshPtr buildMesh();
+		// calculate
+		virtual void play(PCGData& data);
 	};
 }

@@ -1,6 +1,7 @@
 #include "procedural_geometry.h"
 #include "engine/core/main/Engine.h"
 #include "engine/core/scene/node_tree.h"
+#include <queue>
 
 namespace Echo
 {
@@ -9,6 +10,7 @@ namespace Echo
 		setRenderType("3d");
 
 		m_pgNode = new PGNode;
+		m_pgNode->setFinal(true);
 	}
 
 	ProceduralGeometry::~ProceduralGeometry()
@@ -42,17 +44,17 @@ namespace Echo
 
 	void ProceduralGeometry::update_self()
 	{
+	#ifdef ECHO_EDITOR_MODE
+		if (isDirty())
+			play();
+	#endif
+
 		if (isNeedRender())
 		{
 			buildRenderable();
 			if (m_renderable)
 				m_renderable->submitToRenderQueue();
 		}
-	}
-
-	void ProceduralGeometry::buildMesh()
-	{
-
 	}
 
 	void ProceduralGeometry::buildRenderable()
@@ -71,7 +73,6 @@ namespace Echo
 				m_material->setShaderPath(shader->getPath());
 			}
 
-			buildMesh();
 			if (m_mesh)
 			{
 				m_renderable = Renderable::create(m_mesh, m_material, this);
@@ -84,7 +85,28 @@ namespace Echo
 	void ProceduralGeometry::clearRenderable()
 	{
 		EchoSafeRelease(m_renderable);
-		m_mesh.reset();
+	}
+
+	bool ProceduralGeometry::isDirty()
+	{
+		std::queue<PGNode*> nodes;
+		nodes.push(m_pgNode);
+		while (nodes.size())
+		{
+			PGNode* node = nodes.front();
+			if (node->isFinal())
+			{
+				if (node->isDirty())
+					return true;
+
+				for (PGNode* child : node->children())
+					nodes.push(child);
+			}
+
+			nodes.pop();
+		}
+
+		return false;
 	}
 
 	void ProceduralGeometry::play()

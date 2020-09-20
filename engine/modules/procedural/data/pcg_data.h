@@ -14,6 +14,12 @@ namespace Echo
 		PCGData() {}
 		~PCGData() {}
 
+		// add point
+		PCGPoint* addPoint();
+
+		// add primitives
+		PCGPrimitive* addPrimitive();
+
 		// mesh
 		MeshPtr buildMesh();
 
@@ -21,9 +27,11 @@ namespace Echo
 		void clear();
 
 	private:
-		vector<PCGPoint>::type		m_points;
+		i32							m_pointIdx = 0;
+		vector<PCGPoint*>::type		m_points;
 		vector<PCGVertex>::type		m_vertices;
-		vector<PCGPrimitive>::type	m_primitives;
+		i32							m_primitiveIdx = 0;
+		vector<PCGPrimitive*>::type	m_primitives;
 		PCGDetail					m_detail;
 	};
 }

@@ -30,12 +30,16 @@ namespace Echo
 		PGNode* getParent() { return m_parent; }
 		void setParent(PGNode* parent);
 
+		// is dirty
+		bool isDirty() { return m_dirtyFlag; }
+
 		// calculate
 		virtual void play(PCGData& data);
 
-	private:
+	protected:
 		PGNode*					m_parent = nullptr;
 		vector<PGNode*>::type	m_children;
+		bool					m_dirtyFlag = true;
 		Vector2					m_position;
 		bool					m_isFinal = false;
 	};
