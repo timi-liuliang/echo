@@ -1,4 +1,5 @@
 #include "procedural_geometry.h"
+#include "engine/core/log/Log.h"
 #include "engine/core/main/Engine.h"
 #include "engine/core/scene/node_tree.h"
 #include <queue>

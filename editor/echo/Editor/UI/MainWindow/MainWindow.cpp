@@ -200,7 +200,7 @@ namespace Studio
 			//this->removeDockWidget(m_renderPanel);
 			//this->addDockWidget(Qt::TopDockWidgetArea, m_renderPanel);
 
-			QObject::connect(panel, SIGNAL(close(bool)), this, SLOT(onExternalCenterDockWidgetVisibilityChanged()));
+			QObject::connect(panel, SIGNAL(visibilityChanged(bool)), this, SLOT(onExternalCenterDockWidgetVisibilityChanged()));
 
 			panel->setVisible(true);
 			resizeDocks({ panel, m_renderPanel }, { int(widthRatio * 100.f) , int((1.f-widthRatio) * 100.f) }, Qt::Horizontal);

@@ -18,7 +18,7 @@ namespace Echo
 	{
 		m_pointIdx++;
 
-		PGPoint* point = new PGPoint;
+		PGPoint* point = EchoNew(PGPoint);
 		point->m_id = m_pointIdx++;
 		m_points.push_back(point);
 
@@ -29,7 +29,7 @@ namespace Echo
 	{
 		m_primitiveIdx++;
 
-		PGPrimitive* prim = new PGPrimitive(m_primitiveIdx++);
+		PGPrimitive* prim = EchoNew(PGPrimitive(m_primitiveIdx++));
 		m_primitives.push_back(prim);
 
 		return prim;
@@ -51,8 +51,6 @@ namespace Echo
 		VertexArray    vertices;
 		IndiceArray    indices;
 
-		MeshPtr mesh = Mesh::create(true, true);
-
 		MeshVertexFormat define;
 		define.m_isUseNormal = true;
 		define.m_isUseUV = true;
@@ -72,9 +70,15 @@ namespace Echo
 			}
 		}
 
-		mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(ui32), indices.data());
-		mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data());
+		if (!indices.empty() && !vertices.empty())
+		{
+			MeshPtr mesh = Mesh::create(true, true);
+			mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(ui32), indices.data());
+			mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data());
 
-		return mesh;
+			return mesh;
+		}
+
+		return nullptr;
 	}
 }

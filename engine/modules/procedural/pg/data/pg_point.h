@@ -5,6 +5,7 @@
 
 namespace Echo
 {
+	// https://www.tokeru.com/cgwiki/index.php?title=Points_and_Verts_and_Prims
 	struct PGPoint
 	{
 		i32		m_id;
