@@ -222,8 +222,11 @@ namespace Studio
 				if (*it == panel)
 				{
 					this->removeDockWidget(panel);
-					m_centerPanels.erase(it);
-					break;
+					it = m_centerPanels.erase(it);
+				}
+				else
+				{
+					it++;
 				}
 			}
 		}

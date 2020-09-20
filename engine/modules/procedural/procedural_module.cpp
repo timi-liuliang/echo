@@ -4,6 +4,7 @@
 #include "pg/node/primitive/pg_sphere.h"
 #include "pg/node/primitive/pg_grid.h"
 #include "editor/procedural_geometry_editor.h"
+#include "editor/procedural_texture_editor.h"
 #include "procedural_depend_graph.h"
 
 namespace Echo
@@ -35,6 +36,7 @@ namespace Echo
 		Class::registerType<PGSphere>();
 		Class::registerType<PGGrid>();
 
+		REGISTER_OBJECT_EDITOR(ProceduralTexture, ProceduralTextureEditor)
 		REGISTER_OBJECT_EDITOR(ProceduralGeometry, ProceduralGeometryEditor)
 	}
 }
