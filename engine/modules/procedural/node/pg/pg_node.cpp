@@ -47,7 +47,10 @@ namespace Echo
 	{
 		for (PGNode* child : m_children)
 		{
-			child->play(data);
+			if (child->isFinal())
+			{
+				child->play(data);
+			}
 		}
 	}
 }
