@@ -28,7 +28,7 @@ namespace Echo
 		float stackStep = Math::PI / m_stackCount;
 		float sectorAngle, stackAngle;
 
-		vector<PCGPoint*>::type points;
+		vector<PGPoint*>::type points;
 		for (int i = 0; i <= m_stackCount; ++i)
 		{
 			stackAngle = Math::PI / 2 - i * stackStep;        // starting from pi/2 to -pi/2
@@ -41,7 +41,7 @@ namespace Echo
 			{
 				sectorAngle = j * sectorStep;           // starting from 0 to 2pi
 
-				PCGPoint* point = data.addPoint();
+				PGPoint* point = data.addPoint();
 
 				// vertex position (x, y, z)
 				x = xz * cosf(sectorAngle);             // r * cos(u) * cos(v)
@@ -79,7 +79,7 @@ namespace Echo
 				// 2 triangles per sector excluding 1st and last stacks
 				if (i != 0)
 				{
-					PCGPrimitive* prim= data.addPrimitive();
+					PGPrimitive* prim= data.addPrimitive();
 					prim->addPoint(points[k1]);
 					prim->addPoint(points[k2]);
 					prim->addPoint(points[k1+1]);
@@ -87,7 +87,7 @@ namespace Echo
 
 				if (i != (m_stackCount - 1))
 				{
-					PCGPrimitive* prim = data.addPrimitive();
+					PGPrimitive* prim = data.addPrimitive();
 					prim->addPoint(points[k1+1]);
 					prim->addPoint(points[k2]);
 					prim->addPoint(points[k2 + 1]);

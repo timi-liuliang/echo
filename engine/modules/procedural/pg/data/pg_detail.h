@@ -2,7 +2,7 @@
 
 namespace Echo
 {
-	class PCGDetail
+	class PGDetail
 	{
 
 	};

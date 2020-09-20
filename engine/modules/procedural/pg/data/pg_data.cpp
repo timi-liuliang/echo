@@ -1,35 +1,35 @@
-#include "pcg_data.h"
+#include "pg_data.h"
 
 namespace Echo
 {
 	void PCGData::clear()
 	{
 		m_pointIdx = 0;
-		EchoSafeDeleteContainer(m_points, PCGPoint);
+		EchoSafeDeleteContainer(m_points, PGPoint);
 
 		m_points.clear();
 		m_vertices.clear();
 
 		m_primitiveIdx = 0;
-		EchoSafeDeleteContainer(m_primitives, PCGPrimitive);
+		EchoSafeDeleteContainer(m_primitives, PGPrimitive);
 	}
 
-	PCGPoint* PCGData::addPoint()
+	PGPoint* PCGData::addPoint()
 	{
 		m_pointIdx++;
 
-		PCGPoint* point = new PCGPoint;
+		PGPoint* point = new PGPoint;
 		point->m_id = m_pointIdx++;
 		m_points.push_back(point);
 
 		return point;
 	}
 
-	PCGPrimitive* PCGData::addPrimitive()
+	PGPrimitive* PCGData::addPrimitive()
 	{
 		m_primitiveIdx++;
 
-		PCGPrimitive* prim = new PCGPrimitive(m_primitiveIdx++);
+		PGPrimitive* prim = new PGPrimitive(m_primitiveIdx++);
 		m_primitives.push_back(prim);
 
 		return prim;
@@ -57,9 +57,9 @@ namespace Echo
 		define.m_isUseNormal = true;
 		define.m_isUseUV = true;
 
-		for (PCGPrimitive* primitive : m_primitives)
+		for (PGPrimitive* primitive : m_primitives)
 		{
-			for (PCGPoint* point : primitive->getPoints())
+			for (PGPoint* point : primitive->getPoints())
 			{
 				indices.push_back(vertices.size());
 

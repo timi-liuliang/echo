@@ -1,9 +1,9 @@
 #pragma once
 
-#include "pcg_point.h"
-#include "pcg_vertex.h"
-#include "pcg_primitive.h"
-#include "pcg_detail.h"
+#include "pg_point.h"
+#include "pg_vertex.h"
+#include "pg_primitive.h"
+#include "pg_detail.h"
 #include "engine/core/render/base/mesh/mesh.h"
 
 namespace Echo
@@ -15,10 +15,10 @@ namespace Echo
 		~PCGData() {}
 
 		// add point
-		PCGPoint* addPoint();
+		PGPoint* addPoint();
 
 		// add primitives
-		PCGPrimitive* addPrimitive();
+		PGPrimitive* addPrimitive();
 
 		// mesh
 		MeshPtr buildMesh();
@@ -28,10 +28,10 @@ namespace Echo
 
 	private:
 		i32							m_pointIdx = 0;
-		vector<PCGPoint*>::type		m_points;
-		vector<PCGVertex>::type		m_vertices;
+		vector<PGPoint*>::type		m_points;
+		vector<PGVertex>::type		m_vertices;
 		i32							m_primitiveIdx = 0;
-		vector<PCGPrimitive*>::type	m_primitives;
-		PCGDetail					m_detail;
+		vector<PGPrimitive*>::type	m_primitives;
+		PGDetail					m_detail;
 	};
 }

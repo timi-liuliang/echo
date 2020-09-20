@@ -19,7 +19,7 @@ namespace Echo
 
 	void PGGrid::play(PCGData& data)
 	{
-		vector<PCGPoint*>::type points;
+		vector<PGPoint*>::type points;
 
 		i32 columns = 11;
 		i32 rows = 11;
@@ -32,7 +32,7 @@ namespace Echo
 			{
 				for (i32 column = 0; column < columns; column++)
 				{
-					PCGPoint* point = data.addPoint();
+					PGPoint* point = data.addPoint();
 
 					point->m_position = Vector3(row, 0.f, column) + basePosition;
 					point->m_uv = Vector2(row / (rows - 1), column / (columns - 1));
@@ -54,12 +54,12 @@ namespace Echo
 					i32 indexLeftBottom = indexLeftTop + columns;
 					i32 indexRightBottom = indexRightTop + columns;
 
-					PCGPrimitive* prim0 = data.addPrimitive();
+					PGPrimitive* prim0 = data.addPrimitive();
 					prim0->addPoint(points[indexLeftTop]);
 					prim0->addPoint(points[indexRightBottom]);
 					prim0->addPoint(points[indexRightTop]);
 
-					PCGPrimitive* prim1 = data.addPrimitive();
+					PGPrimitive* prim1 = data.addPrimitive();
 					prim1->addPoint(points[indexLeftTop]);
 					prim1->addPoint(points[indexLeftBottom]);
 					prim1->addPoint(points[indexRightBottom]);

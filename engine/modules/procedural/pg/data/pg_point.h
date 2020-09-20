@@ -5,7 +5,7 @@
 
 namespace Echo
 {
-	struct PCGPoint
+	struct PGPoint
 	{
 		i32		m_id;
 		Vector3	m_position;
