@@ -22,13 +22,13 @@ namespace Echo
 		// stream unit
 		struct StreamUnit
 		{
-			VertexElementList		m_vertElements;		// 顶点格式声明
-			VertexDeclarationList	m_vertDeclaration;	// 顶点声明
-			ui32					m_vertStride;		// 每顶点大小
-			GPUBuffer*				m_buffer;			// 顶点数据
+			VertexElementList		m_vertElements;
+			VertexDeclarationList	m_vertDeclaration;
+			ui32					m_vertStride;
+			GPUBuffer*				m_buffer;
 
 			StreamUnit()
-				: m_buffer(NULL)
+				: m_buffer(nullptr)
 			{}
 		};
 

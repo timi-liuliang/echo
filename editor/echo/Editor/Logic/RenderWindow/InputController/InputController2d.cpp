@@ -248,7 +248,6 @@ namespace Studio
 			m_keyEDown;
 	}
 
-	// on open node tree
 	void InputController2d::onOpenNodeTree(const Echo::String& resPath)
 	{
 		// camera 2d
@@ -270,7 +269,6 @@ namespace Studio
 		}
 	}
 
-	// on save node tree
 	void InputController2d::onSaveConfig()
 	{
 		const Echo::String& resPath = EchoEngine::instance()->getCurrentEditNodeSavePath();

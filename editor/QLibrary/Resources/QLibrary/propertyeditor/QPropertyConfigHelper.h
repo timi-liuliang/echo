@@ -81,12 +81,12 @@ namespace QT_UI
 
 	private:
 		Echo::String						m_id;
-		Echo::i32							m_curDepth;		// 当前深度
-		Echo::array<Echo::ui32, 25>			m_idxs;			// 对应深度行号
-		Echo::String						m_result;		// 结果
-		Echo::String						m_lastResult;	// 上次属性
-		Echo::map<QString, QVariant>::type	m_values;		// 所有初始值
-		QT_UI::QProperty*					m_property;		// 属性
-		QMetaObject::Connection				m_signalConn;	// 消息链接
+		Echo::i32							m_curDepth;
+		Echo::array<Echo::ui32, 25>			m_idxs;
+		Echo::String						m_result;
+		Echo::String						m_lastResult;
+		Echo::map<QString, QVariant>::type	m_values;
+		QT_UI::QProperty*					m_property;
+		QMetaObject::Connection				m_signalConn;
 	};
 }

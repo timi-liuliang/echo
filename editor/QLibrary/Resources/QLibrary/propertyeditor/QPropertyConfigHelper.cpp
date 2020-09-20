@@ -85,11 +85,11 @@ namespace QT_UI
 	{
 		Echo::ui32& curIdx = m_idxs[m_curDepth];
 
-		// 根据"_" 取最长的字符串
+		// get longest string by "_"
 		Echo::StringArray displayArr = Echo::StringUtil::Split(propertyName, ".");
 		Echo::String displayText = displayArr.back();
 
-		// 组织控件字符串
+		// organize widget string
 		Echo::String widgetStr = FormatUI(widget, widgetParams ? widgetParams : "");
 		Echo::String format = Echo::StringUtil::Format("<item text=\"%s\" row=\"%d\" col=\"0\" /><item text=\"\" row=\"%d\" col=\"1\" property=\"%s\" widget=\"%s\" toolTip=\"%s\" />", displayText.c_str(), curIdx, curIdx, propertyName, widgetStr.c_str(), toolTip);
 		m_result += format;
@@ -102,8 +102,6 @@ namespace QT_UI
 	void QPropertyConfigHelper::addItem_c2(const char* propertyName, const Echo::String& value, WidgetType widget, const char* widgetParams, const char* toolTip)
 	{
 		Echo::ui32& curIdx = m_idxs[m_curDepth];
-
-		// 组织控件字符串
 		Echo::String widgetStr = FormatUI( widget, widgetParams);
 
 		Echo::String propertyNameEx = Echo::StringUtil::Format("%s_co_%d", propertyName, 2);
@@ -116,8 +114,6 @@ namespace QT_UI
 	void QPropertyConfigHelper::addItem_c3(const char* propertyName, const Echo::String& value, WidgetType widget, const char* widgetParams, const char* toolTip)
 	{
 		Echo::ui32& curIdx = m_idxs[m_curDepth];
-
-		// 组织控件字符串
 		Echo::String widgetStr = FormatUI(widget, widgetParams);
 
 		Echo::String propertyNameEx = Echo::StringUtil::Format("%s_co_%d", propertyName, 3);

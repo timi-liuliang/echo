@@ -15,60 +15,49 @@ namespace Studio
 		// instance
 		static ConfigMgr* instance();
 
-	public:
-		// 读取配置文件
+		// load
 		bool loadCfgFile( );
 
-		// Rencent Projects operate
+		// Recent Projects operate
 		bool addRecentProject( const char* fileName);
         void removeRencentProject(const Echo::String& fileName);
 		void switchProjectToTop(const char* fileName);
 
-		// 保存配置文件
+		// save
 		bool saveCfgFile( );
 
-		// 文件是否存在（如果不存在则创建）
+		// is exist
 		bool isFileExit( );
-
-		// 当前工程是否已经存在
 		bool isPathExist( Echo::String path );
 
-		// 设置输出路径
+		// output dir
 		void setOutPutDir( const char* path ) { m_outPutDir = path; }
-
-		// 获取输出路径
 		const char* getOutPutDir( ) { return m_outPutDir.c_str(); }
 
-		// 获取最近打开的项目文件
+		// get last open project
 		Echo::String getLastOpenProjectFile();
 
-		// 根据名称获取属性值
+		// value
 		Echo::String getValue( const char* property);
-
-		// 设置属性
 		void setValue( const char* property, const char* value);
 
-		// 获取所有最近打开的工程
+		// all recent projects
 		void getAllRecentProject(Echo::list<Echo::String>::type& projects);
 
 	private:
-		// 保存到文件
+		// save
 		void saveData( pugi::xml_document& doc, pugi::xml_node* projectNode );
 
-		// 读取最近打开的工程
+		// load recent
 		void loadRecentProject( pugi::xml_node* node);
-
-		// 读取资源输出路径
 		void loadOutPutDir( pugi::xml_node* node);
-
-		// 加载属性值
 		void loadPropertys( pugi::xml_node* node);
 
 	private:
-		Echo::String						m_cfgFile;			// 配置文件
-		Echo::list<Echo::String>::type		m_recentProjects;	// 最近打开的工程
-		Echo::String						m_outPutDir;		// 资源转换输出路径
-		size_t								m_maxRecentProjects;// 记录最近打
-		std::map<Echo::String, Echo::String>m_propertys;		// 配置
+		Echo::String						m_cfgFile;
+		Echo::list<Echo::String>::type		m_recentProjects;
+		Echo::String						m_outPutDir;
+		size_t								m_maxRecentProjects;
+		std::map<Echo::String, Echo::String>m_propertys;
 	};
 }

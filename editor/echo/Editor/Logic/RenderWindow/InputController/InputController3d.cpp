@@ -52,10 +52,10 @@ namespace Studio
 
 	void InputController3d::tick(const InputContext& ctx)
 	{
-		// 摄像机旋转更新
+		// rotation camera
 		SmoothRotation(ctx.elapsedTime);
 
-		// 移动摄像机
+		// move camera
 		Echo::Vector3 cameraMoveDir = Echo::Vector3::ZERO;
 		if ( m_keyADown ) 
 			cameraMoveDir.x += 1.f;
@@ -68,7 +68,7 @@ namespace Studio
 
 		SetCameraMoveDir(cameraMoveDir);
 
-		// 更新摄像机
+		// update
 		UpdateCamera(ctx.elapsedTime);
 	}
 
@@ -204,7 +204,6 @@ namespace Studio
 		}
 	}
 
-	// on focuse node
 	void InputController3d::onFocusNode(Echo::Node* node)
 	{
 		if (node)
@@ -356,7 +355,6 @@ namespace Studio
 		m_horizonAngleGoal = m_horizonAngle;
 	}
 
-	// on open node tree
 	void InputController3d::onOpenNodeTree(const Echo::String& resPath)
 	{
 		// camera 3d
@@ -383,7 +381,6 @@ namespace Studio
 		}
 	}
 
-	// on save node tree
 	void InputController3d::onSaveConfig()
 	{
 		const Echo::String& resPath = EchoEngine::instance()->getCurrentEditNodeSavePath();

@@ -17,7 +17,7 @@ namespace Studio
 		InputController3d();
 		virtual ~InputController3d();
 
-		// 每帧更新
+		// tick
 		virtual void tick(const InputContext& ctx) override;
 
 		// events
@@ -31,55 +31,51 @@ namespace Studio
 		virtual void keyPressEvent(QKeyEvent* e) override;
 		virtual void keyReleaseEvent(QKeyEvent* e) override;
 
-		// 鼠标按键
+		// press button
 		virtual Qt::MouseButton pressedMouseButton() override;
 
-		// 鼠标位置
+		// mouse position
 		virtual QPointF mousePosition() override;
 
-		// 相机更新size
+		// on size
 		virtual void onSizeCamera(unsigned int width, unsigned int height) override;
-
-		// 修正摄像机
 		virtual void onAdaptCamera() override;
 
-		// 适应模型
+		// zoom
 		virtual void CameraZoom(const Echo::AABB& box, float scale);
 
-		// 获取摄像机半径（即摄像机与主角距离）
+		// camera radius
 		float GetCameraRadius() { return m_cameraRadius; }
-
-		// 设置摄像机半径
 		void SetCameraRadius(float radius) { m_cameraRadius = Echo::Math::Clamp(radius, 0.1f, 1000.f); }
 
 		bool isCameraMoving() const;
 
-		// 控制是否更新摄像机
+		// need update camera
 		void setNeedUpdateCamera(bool need) { m_bNeedUpdateCamera = need; UpdateCamera(0.01f); }
 
-		// on focuse node
+		// on focus node
 		virtual void onFocusNode(Echo::Node* node) override;
 
 	protected:
-		// 摄像机更新
+		// update camera
 		void UpdateCamera(float elapsedTime);
 
-		// 平移摄像机
+		// set move dir
 		void SetCameraMoveDir(const Echo::Vector3& dir);
 
-		// 操作摄像机
+		// zoom
 		void CameraZoom(float zValue);
 
-		// 旋转摄像机
+		// rotation
 		void RotationCamera(float xValue, float yValue);
 
-		// 摄像机自适应
+		// adapt camera
 		void AdaptCamera();
 
-		// 获取摄像机
+		// get camera
 		Echo::Camera* GetCamera() { return m_camera; }
 
-		// 旋转摄像机(平滑处理)
+		// rotation
 		void SmoothRotation(float elapsedTime);
 
 	protected:
@@ -111,16 +107,16 @@ namespace Studio
 		QPointF m_pos;
 
 	protected:
-		Echo::Camera*		m_camera;			// 主摄像机
-		float				m_cameraRadius;		// 摄像机观察半径
-		Echo::Vector3		m_cameraLookAt;		// 摄像机观察点
-		Echo::Vector3		m_cameraMoveDir;	// 摄像机移动
-		Echo::Vector3		m_cameraForward;	// 朝向
-		Echo::Vector3		m_cameraPositon;	// 摄像机位置
-		float				m_horizonAngle;		// 水平旋转角度(顺时针)
-		float				m_verticleAngle;	// 垂直旋转角度(顺时针)
-		float				m_horizonAngleGoal;	// 目标水平旋转角度
-		float				m_verticleAngleGoal;// 目标垂直旋转角度
-		bool				m_bNeedUpdateCamera;// 是否需要更新相机位置
+		Echo::Camera*		m_camera;
+		float				m_cameraRadius;
+		Echo::Vector3		m_cameraLookAt;
+		Echo::Vector3		m_cameraMoveDir;
+		Echo::Vector3		m_cameraForward;
+		Echo::Vector3		m_cameraPositon;
+		float				m_horizonAngle;
+		float				m_verticleAngle;
+		float				m_horizonAngleGoal;
+		float				m_verticleAngleGoal;
+		bool				m_bNeedUpdateCamera;
 	};
 }

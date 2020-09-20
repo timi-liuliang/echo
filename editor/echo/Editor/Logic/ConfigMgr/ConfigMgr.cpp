@@ -19,7 +19,6 @@ namespace Studio
 		saveCfgFile();
 	}
 
-	// instance
 	ConfigMgr* ConfigMgr::instance()
 	{
 		return g_instance;
@@ -177,7 +176,6 @@ namespace Studio
 
 			outputDir.append_attribute("dir_value") = m_outPutDir.c_str();
 
-			// 保存所有属性
 			for( std::map<Echo::String, Echo::String>::iterator it=m_propertys.begin(); it!=m_propertys.end(); it++)
 			{
 				pugi::xml_node propertyNode = propertys.append_child("property");

@@ -17,7 +17,7 @@ namespace Studio
 		InputController2d();
 		virtual ~InputController2d();
 
-		// 每帧更新
+		// tick
 		virtual void tick(const InputContext& ctx) override;
 
 		// event
@@ -29,45 +29,41 @@ namespace Studio
 		virtual void keyPressEvent(QKeyEvent* e) override;
 		virtual void keyReleaseEvent(QKeyEvent* e) override;
 
-		// 鼠标按键
+		// press mouse button
 		virtual Qt::MouseButton pressedMouseButton() override;
 
-		// 鼠标位置
+		// mouse position
 		virtual QPointF mousePosition() override;
 
-		// 相机更新size
+		// camera
 		virtual void onSizeCamera(unsigned int width, unsigned int height) override;
-
-		// 修正摄像机
 		virtual void onAdaptCamera() override;
-
-		// 适应模型
 		virtual void CameraZoom(const Echo::AABB& box, float scale);
 
 		void UpdateCameraInfo();
 
 		bool isCameraMoving() const;
 
-		// 控制是否更新摄像机
+		// set camera update
 		void setNeedUpdateCamera(bool need) { m_bNeedUpdateCamera = need; UpdateCamera(0.01f); }
 
-		// on focuse node
+		// on focus node
 		virtual void onFocusNode(Echo::Node* node) override;
 
 	protected:
-		// 初始化摄像机参数
+		// init camera settings
 		void InitializeCameraSettings(float offsetdir = 5);
 
-		// 摄像机更新
+		// update camera
 		void UpdateCamera(float elapsedTime);
 
-		// 操作摄像机
+		// zoom
 		void CameraZoom(float zValue);
 
-		// 位移摄像机
+		// move
 		void MoveCamera(float xValue, float yValue);
 
-		// 摄像机自适应
+		// adapte
 		void AdaptCamera();
 
 	protected:
