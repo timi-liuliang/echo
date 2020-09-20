@@ -6,7 +6,7 @@
 
 #include "engine/modules/procedural/procedural_geometry.h"
 #include <QPen>
-#include <QGRaphicsScene>
+#include <QGraphicsScene>
 #include <QtWidgets/QGraphicsItem>
 #include "qgraphics_round_item.h"
 
