@@ -1,8 +1,8 @@
 #include "procedural_module.h"
 #include "procedural_texture.h"
 #include "procedural_geometry.h"
-#include "node/pg/primitive/pg_sphere.h"
-#include "node/pg/primitive/pg_grid.h"
+#include "pg/node/primitive/pg_sphere.h"
+#include "pg/node/primitive/pg_grid.h"
 #include "editor/procedural_geometry_editor.h"
 #include "procedural_depend_graph.h"
 

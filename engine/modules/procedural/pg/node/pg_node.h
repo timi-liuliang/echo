@@ -2,7 +2,7 @@
 
 #include "engine/core/base/object.h"
 #include "engine/core/render/base/mesh/mesh.h"
-#include "engine/modules/procedural/data/pcg_data.h"
+#include "engine/modules/procedural/pg/data/pcg_data.h"
 
 namespace Echo
 {
