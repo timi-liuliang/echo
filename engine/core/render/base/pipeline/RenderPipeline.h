@@ -37,6 +37,9 @@ namespace Echo
 		// set src
 		void setSrc(const String& src);
 
+		// stages
+		const vector<RenderStage*>::type& getRenderStages() { return m_renderStages; }
+
 	public:
 		// load and save
 		static Res* load(const ResourcePath& path);

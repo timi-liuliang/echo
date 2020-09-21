@@ -26,10 +26,16 @@ namespace Echo
 
 		// connect signal slots
 		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_new"), QSIGNAL(clicked()), this, createMethodBind(&RenderpipelinePanel::onNew));
+
+		// create QGraphicsScene
+		m_graphicsView = m_ui->findChild<QGraphicsView*>("m_graphicsView");
+		m_graphicsScene = EditorApi.qGraphicsSceneNew();
+		m_graphicsView->setScene(m_graphicsScene);
 	}
 
 	void RenderpipelinePanel::update()
 	{
+		drawStages();
 	}
 
 	void RenderpipelinePanel::onNew()
@@ -56,6 +62,36 @@ namespace Echo
 	void RenderpipelinePanel::onNewImageFilter()
 	{
 
+	}
+
+	void RenderpipelinePanel::drawStages()
+	{
+		const vector<RenderStage*>::type& stages = m_pipeline->getRenderStages();
+		while (m_stageNodePainters.size() > stages.size())
+		{
+			EchoSafeDelete(m_stageNodePainters.back(), StatgeNodePainter);
+			m_stageNodePainters.pop_back();
+		}
+
+		if (m_stageNodePainters.size() < stages.size())
+		{
+			for (size_t i = m_stageNodePainters.size(); i < stages.size(); ++i)
+				m_stageNodePainters.emplace_back(EchoNew(Pipeline::StatgeNodePainter(m_graphicsView, m_graphicsScene, stages[i])));
+		}
+
+		for (size_t i = 0; i < stages.size(); i++)
+		{
+			if (!m_stageNodePainters[i] || m_stageNodePainters[i]->m_stage != stages[i])
+			{
+				EchoSafeDelete(m_stageNodePainters[i], StatgeNodePainter);
+				m_stageNodePainters[i] = EchoNew(Pipeline::StatgeNodePainter(m_graphicsView, m_graphicsScene, stages[i]));
+			}
+		}
+
+		for (size_t i = 0; i < stages.size(); i++)
+		{
+			m_stageNodePainters[i]->update();
+		}
 	}
 #endif
 }

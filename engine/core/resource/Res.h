@@ -45,6 +45,9 @@ namespace Echo
 		// get res fun by class
 		static const ResFun* getResFunByClassName(const String& className);
 
+		// update
+		static void updateAll(float delta);
+
 	public:
 		// is a package
 		virtual bool isPackage() const { return false; }

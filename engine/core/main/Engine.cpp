@@ -318,6 +318,9 @@ namespace Echo
 		elapsedTime = Math::Clamp( elapsedTime, 0.f, 1.f);
 		m_frameTime = elapsedTime;
 
+		// res
+		Res::updateAll(m_frameTime);
+
 		// update logic
 		Module::updateAll(m_frameTime);
 		NodeTree::instance()->update(m_frameTime);

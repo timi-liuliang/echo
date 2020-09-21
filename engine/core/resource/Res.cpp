@@ -58,6 +58,17 @@ namespace Echo
 	{
 	}
 
+	void Res::updateAll(float delta)
+	{
+#ifdef ECHO_EDITOR_MODE
+		for (auto& [key, res] : g_ress)
+		{
+			if (res && res->m_objectEditor)
+				res->m_objectEditor->editor_update_self();
+		}
+#endif
+	}
+
 	void Res::setPath(const String& path)
 	{
 		// remove res cache

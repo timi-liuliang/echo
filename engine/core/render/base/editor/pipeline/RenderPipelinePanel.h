@@ -6,6 +6,8 @@
 
 #ifdef ECHO_EDITOR_MODE
 
+#include "node_painter.h"
+
 namespace Echo
 {
 	class RenderpipelinePanel : public PanelTab
@@ -26,8 +28,15 @@ namespace Echo
 		void onNewImageFilter();
 
 	protected:
+		// draw
+		void drawStages();
+
+	protected:
 		RenderPipeline*				m_pipeline;
+		QGraphicsView*				m_graphicsView = nullptr;
+		QGraphicsScene*				m_graphicsScene = nullptr;
 		QMenu*						m_importMenu = nullptr;
+		Pipeline::StageNodePainters	m_stageNodePainters;
 	};
 }
 

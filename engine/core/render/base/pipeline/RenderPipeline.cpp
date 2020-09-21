@@ -62,6 +62,14 @@ namespace Echo
 	void RenderPipeline::setSrc(const String& src)
 	{
 		m_srcData = src;
+
+		if (!m_isParsed)
+		{
+			parseXml();
+
+			m_isParsed = true;
+		}
+
 	}
 
 	bool RenderPipeline::beginFramebuffer(ui32 id, bool clearColor, const Color& bgColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue, ui32 rbo)
@@ -103,13 +111,6 @@ namespace Echo
 
 	void RenderPipeline::render()
 	{
-		if (!m_isParsed)
-		{
-			parseXml();
-
-			m_isParsed = true;
-		}
-
 		for (RenderStage* stage : m_renderStages)
 		{
 			stage->render();
