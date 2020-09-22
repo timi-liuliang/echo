@@ -59,7 +59,7 @@ namespace Procedural
 
 				m_rect = new QGraphicsRoundRectItem(nullptr);
 				m_rect->setRect(QRect(-halfWidth, -halfHeight, m_width, m_height));
-				m_rect->setRadius(3.f);
+				m_rect->setRadius(0.f);
 				m_rect->setPen(QPen(m_style.m_normalBoundaryColor, m_style.m_penWidth));
 				QLinearGradient gradient(QPointF(0.0, -halfHeight), QPointF(0.0, halfHeight));
 				gradient.setColorAt(0.0,  m_style.m_gradientColor0);
