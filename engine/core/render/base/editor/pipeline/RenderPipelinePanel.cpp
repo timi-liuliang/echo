@@ -36,6 +36,7 @@ namespace Echo
 	void RenderpipelinePanel::update()
 	{
 		drawStages();
+		drawRenderQueues();
 	}
 
 	void RenderpipelinePanel::onNew()
@@ -90,7 +91,48 @@ namespace Echo
 
 		for (size_t i = 0; i < stages.size(); i++)
 		{
-			m_stageNodePainters[i]->update();
+			m_stageNodePainters[i]->update(i);
+		}
+	}
+
+	void RenderpipelinePanel::drawRenderQueues()
+	{
+		vector<Vector2>::type		poses;
+		vector<IRenderQueue*>::type renderqueues;
+		for (size_t x=0; x<m_pipeline->getRenderStages().size(); x++)
+		{
+			RenderStage* stage = m_pipeline->getRenderStages()[x];
+			for (size_t y = 0; y < stage->getRenderQueues().size(); y++)
+			{
+				renderqueues.push_back(stage->getRenderQueues()[y]);
+				poses.push_back(Vector2(x, y));
+			}
+		}
+
+		while (m_renderQueueNodePainters.size() > renderqueues.size())
+		{
+			EchoSafeDelete(m_renderQueueNodePainters.back(), RenderQueueNodePainter);
+			m_renderQueueNodePainters.pop_back();
+		}
+
+		if (m_renderQueueNodePainters.size() < renderqueues.size())
+		{
+			for (size_t i = m_renderQueueNodePainters.size(); i < renderqueues.size(); ++i)
+				m_renderQueueNodePainters.emplace_back(EchoNew(Pipeline::RenderQueueNodePainter(m_graphicsView, m_graphicsScene, renderqueues[i])));
+		}
+
+		for (size_t i = 0; i < renderqueues.size(); i++)
+		{
+			if (!m_renderQueueNodePainters[i] || m_renderQueueNodePainters[i]->m_renderQueue != renderqueues[i])
+			{
+				EchoSafeDelete(m_renderQueueNodePainters[i], RenderQueueNodePainter);
+				m_renderQueueNodePainters[i] = EchoNew(Pipeline::RenderQueueNodePainter(m_graphicsView, m_graphicsScene, renderqueues[i]));
+			}
+		}
+
+		for (size_t i = 0; i < renderqueues.size(); i++)
+		{
+			m_renderQueueNodePainters[i]->update(poses[i].x, poses[i].y + 1.f);
 		}
 	}
 #endif

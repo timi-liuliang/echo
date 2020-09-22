@@ -28,15 +28,15 @@ namespace Pipeline
 			QColor m_errorColor	  = Qt::red;
 			QColor finalColor	  = QColor(54, 108, 179, 255);
 			float  m_penWidth = 1.5f;
+			float  m_cornerRadius = 0.f;
 		}									m_style;
 		Echo::RenderStage*					m_stage = nullptr;
 		QGraphicsView*						m_graphicsView = nullptr;
 		QGraphicsScene*						m_graphicsScene = nullptr;
 		QGraphicsPathItem*					m_rect = nullptr;
 		float								m_rectFinalWidth = 15;
-		Echo::vector<QGraphicsItem*>::type	m_inputConnectionPoints;
 		Echo::vector<QGraphicsItem*>::type	m_outputConnectionPoints;
-		float								m_width = 120;
+		float								m_width = 160;
 		float								m_height = 40;
 		float								m_connectPointRadius = 8.f;
 		Echo::Color							m_connectPointColor = Echo::Color::DARKCYAN;
@@ -54,7 +54,7 @@ namespace Pipeline
 				float halfHeight = m_height * 0.5f;
 
 				QPainterPath path;
-				path.addRoundedRect(QRectF(-halfWidth, -halfHeight, m_width, m_height), 10, 10);
+				path.addRoundedRect(QRectF(-halfWidth, -halfHeight, m_width, m_height), m_style.m_cornerRadius, m_style.m_cornerRadius);
 
 				m_rect = new QGraphicsPathItem(nullptr);
 				m_rect->setPath(path);
@@ -78,13 +78,6 @@ namespace Pipeline
 				m_text->setPos((m_width - textRect.getWidth()) * 0.5f - halfWidth, (m_height - textRect.getHeight()) * 0.5f - halfHeight);
 
 				float halfConnectPointRadius = m_connectPointRadius * 0.5f;
-				m_inputConnectionPoints.push_back(EditorApi.qGraphicsSceneAddEclipse(m_graphicsScene, 0.f, 0.f, m_connectPointRadius, m_connectPointRadius, m_connectPointColor));
-				for (QGraphicsItem* item : m_inputConnectionPoints)
-				{
-					item->setParentItem(m_rect);
-					item->setPos(0.f - halfConnectPointRadius, -halfHeight - halfConnectPointRadius * 3.f);
-				}
-
 				m_outputConnectionPoints.push_back(EditorApi.qGraphicsSceneAddEclipse(m_graphicsScene, 0.f, 0.f, m_connectPointRadius, m_connectPointRadius, m_connectPointColor));
 				for (QGraphicsItem* item : m_outputConnectionPoints)
 				{
@@ -105,7 +98,6 @@ namespace Pipeline
 			if (m_rect)
 				m_graphicsScene->removeItem(m_rect);
 
-			m_inputConnectionPoints.clear();
 			m_outputConnectionPoints.clear();
 
 			m_stage = nullptr;
@@ -122,8 +114,12 @@ namespace Pipeline
 		}
 
 		// update
-		void update()
+		void update(Echo::i32 xPos)
 		{
+			if (m_rect)
+			{
+				m_rect->setPos(xPos * 240.f, 0.f);
+			}
 		}
 	};
 	typedef Echo::vector<StatgeNodePainter*>::type StageNodePainters;

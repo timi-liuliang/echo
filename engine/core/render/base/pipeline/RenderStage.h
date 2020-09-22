@@ -16,13 +16,17 @@ namespace Echo
 		const String& getName() const { return m_name; }
 
 		// destroy
-		void destroy();
+		void destroy() {}
 
 		// add render able
 		void addRenderable(const String& name, RenderableID id);
 
 		// process
 		void render();
+
+	public:
+		// get render queues
+		const vector<IRenderQueue*>::type& getRenderQueues() { return m_renderQueues; }
 
 	public:
 		// load|save

@@ -6,7 +6,8 @@
 
 #ifdef ECHO_EDITOR_MODE
 
-#include "node_painter.h"
+#include "stage_node_painter.h"
+#include "renderqueue_node_painter.h"
 
 namespace Echo
 {
@@ -30,13 +31,15 @@ namespace Echo
 	protected:
 		// draw
 		void drawStages();
+		void drawRenderQueues();
 
 	protected:
-		RenderPipeline*				m_pipeline;
-		QGraphicsView*				m_graphicsView = nullptr;
-		QGraphicsScene*				m_graphicsScene = nullptr;
-		QMenu*						m_importMenu = nullptr;
-		Pipeline::StageNodePainters	m_stageNodePainters;
+		RenderPipeline*						m_pipeline;
+		QGraphicsView*						m_graphicsView = nullptr;
+		QGraphicsScene*						m_graphicsScene = nullptr;
+		QMenu*								m_importMenu = nullptr;
+		Pipeline::StageNodePainters			m_stageNodePainters;
+		Pipeline::RenderQueueNodePainters	m_renderQueueNodePainters;
 	};
 }
 
