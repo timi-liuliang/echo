@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QMenuBar>
-#include <QTOOLButton>
+#include <QToolButton>
 #include <QMainWindow>
 
 namespace QT_UI
