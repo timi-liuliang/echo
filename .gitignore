@@ -12,13 +12,12 @@ bin/app/Win32/Debug/data
 bin/app/Win32/Release/data
 bin/editor/Win64/Debug/build
 bin/editor/Win64/Release/build
-bin/editor/Mac/Debug/build
-bin/editor/Mac/Release/build
+bin/editor/Mac/Debug
+bin/editor/Mac/Release
 /engine/core/base/echo_config.h
 bin/editor/Debug/echo
 /soulution
 /app/android/app/.cxx
 /thirdparty/openal-soft/config.h
-
 .vscode/
 /build
