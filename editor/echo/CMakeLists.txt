@@ -57,15 +57,27 @@ SET(QLIBRARY_PATH        ${ECHO_ROOT_PATH}/editor/QLibrary)
 IF(${ECHO_PLATFORM_MAC})
 	FILE(GLOB_RECURSE MAC_SOURCE_FILES	${MODULE_SOURCE_PATH}/*.mm)
  
+    # set con to info.plist
+    SET(MACOSX_BUNDLE_ICON_FILE App.icns)
+ 
     # resource files
     SET(MAC_RESOURCE_FILES
-        ${CMAKE_CURRENT_SOURCE_DIR}/Resource/mac/App.icns
         ${ECHO_BIN_PATH}/qt.conf
         ${ECHO_BIN_PATH}/qt
-    )
     
+    SET(MAC_RESOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/Resource/mac/App.icns ${ECHO_BIN_PATH}/qt.conf ${ECHO_BIN_PATH}/qt)
     SET_SOURCE_FILES_PROPERTIES(${MAC_RESOURCE_FILES} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
     SOURCE_GROUP("Resources\\MacOSX" FILES ${MAC_RESOURCE_FILES})
+    
+    # source files
+    SET(MAC_ECHO_SOURCE_FILES
+        ${ECHO_ROOT_PATH}/app
+        ${ECHO_ROOT_PATH}/engine
+        ${ECHO_ROOT_PATH}/thirdparty
+        ${ECHO_ROOT_PATH}/CMakeLists.txt
+    )
+    SET_SOURCE_FILES_PROPERTIES(${MAC_ECHO_SOURCE_FILES} PROPERTIES MACOSX_PACKAGE_LOCATION "echo")
+    SOURCE_GROUP("Resources\\MacOSX\\echo" FILES ${MAC_ECHO_SOURCE_FILES})
 ELSE()
 	SET(MAC_SOURCE_FILES)
 ENDIF()
@@ -109,6 +121,7 @@ ADD_EXECUTABLE(${MODULE_NAME} MACOSX_BUNDLE
 	${MODULE_QT_RCC_SRCS}
 	${ASTUDIO_QT_FILES}
     ${MAC_RESOURCE_FILES}
+    ${MAC_ECHO_SOURCE_FILES}
 	CMakeLists.txt)
 
 # link libraries

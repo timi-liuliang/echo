@@ -69,11 +69,8 @@ namespace Echo
 		//splash.showMessage(QString::fromLocal8Bit("Echo (32 bit OpenGLES) Copyright @ 2018-2019 B-Lab"), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
 
 		// new astudio
-		TIME_PROFILE
-		(
-			g_astudio = Studio::AStudio::instance();
-			g_astudio->setAppPath(QDir::currentPath().toStdString().c_str());
-		)
+        g_astudio = Studio::AStudio::instance();
+        g_astudio->setAppPath(QDir::currentPath().toStdString().c_str());
 
 		// load editor config
 		TIME_PROFILE

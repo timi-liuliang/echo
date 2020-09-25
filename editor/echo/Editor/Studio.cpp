@@ -210,6 +210,8 @@ namespace Studio
 		// calculate root path
 #ifdef ECHO_PLATFORM_WINDOWS
 		Echo::String rootPath = m_appPath + "../../../../";
+#elif defined ECHO_PLATFORM_MAC
+        Echo::String rootPath = m_appPath + "../echo/";
 #else
 		Echo::String rootPath = m_appPath + "../../../../";
 #endif
