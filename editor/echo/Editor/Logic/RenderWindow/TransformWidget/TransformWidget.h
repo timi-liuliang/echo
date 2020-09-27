@@ -104,6 +104,7 @@ namespace Studio
 
 	private:
 		bool						m_is2d = false;
+		float						m_2dDepth = 250.f;
 		Echo::Vector2				m_mousePos;
 		Echo::Vector3				m_position;
 		Echo::Gizmos*				m_axis;

@@ -84,7 +84,7 @@ namespace Studio
 		{
 			if (m_is2d)
 			{
-				Vector3 position(m_position.x, m_position.y, -255.f);
+				Vector3 position(m_position.x, m_position.y, m_2dDepth);
 				m_axis->setWorldPosition(position);
 
 				// axis line

@@ -62,7 +62,7 @@ namespace Studio
 			}
 		}
 
-		return count ? position / count : position;
+		return count ? position / count : Echo::Vector3::INVALID;
 	}
 
 	bool OperationTranslate::is2d()
