@@ -67,12 +67,39 @@ namespace Echo
 
 	void PhysxWorld::bindMethods()
 	{
+		CLASS_BIND_METHOD(PhysxWorld, getGravity, DEF_METHOD("getGravity"));
+		CLASS_BIND_METHOD(PhysxWorld, setGravity, DEF_METHOD("setGravity"));
+		CLASS_BIND_METHOD(PhysxWorld, getShift, DEF_METHOD("getShift"));
+		CLASS_BIND_METHOD(PhysxWorld, setShift, DEF_METHOD("setShift"));
+
+		CLASS_REGISTER_PROPERTY(PhysxWorld, "Gravity", Variant::Type::Vector3, "getGravity", "setGravity");
+		CLASS_REGISTER_PROPERTY(PhysxWorld, "Shift", Variant::Type::Vector3,   "getShift", "setShift");
 	}
 
 	PhysxWorld* PhysxWorld::instance()
 	{
 		static PhysxWorld* inst = EchoNew(PhysxWorld);
 		return inst;
+	}
+
+	void PhysxWorld::setGravity(const Vector3& gravity)
+	{
+		m_gravity = gravity;
+		if (m_pxScene)
+		{
+			m_pxScene->setGravity(physx::PxVec3(m_gravity.x, m_gravity.y, m_gravity.z));
+		}
+	}
+
+	void PhysxWorld::setShift(const Vector3& shift)
+	{
+		if (m_pxScene)
+		{
+			Vector3 offset = shift - m_shift;
+			m_pxScene->shiftOrigin(physx::PxVec3(offset.x, offset.y, offset.z));
+
+			m_shift = shift;
+		}
 	}
 
 	void PhysxWorld::step(float elapsedTime)

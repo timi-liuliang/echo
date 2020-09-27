@@ -49,18 +49,20 @@ namespace Echo
 
 	void PhysxDebugDraw::drawLines(const physx::PxRenderBuffer& rb)
 	{
+		Vector3 shift = PhysxWorld::instance()->getShift();
 		for (physx::PxU32 i = 0; i < rb.getNbLines(); i++)
 		{
 			const physx::PxDebugLine& line = rb.getLines()[i];
 			Vector3 pos0(line.pos0.x, line.pos0.y, line.pos0.z);
 			Vector3 pos1(line.pos1.x, line.pos1.y, line.pos1.z);
 			Color   color(line.color0);
-			m_gizmosNode->drawLine(pos0, pos1, color);
+			m_gizmosNode->drawLine(pos0 - shift, pos1 - shift, color);
 		}
 	}
 
 	void PhysxDebugDraw::drawTriangles(const physx::PxRenderBuffer& rb)
 	{
+		Vector3 shift = PhysxWorld::instance()->getShift();
 		for (physx::PxU32 i = 0; i < rb.getNbTriangles(); i++)
 		{
 			const physx::PxDebugTriangle& tri = rb.getTriangles()[i];
@@ -68,7 +70,7 @@ namespace Echo
 			Vector3 pos1(tri.pos1.x, tri.pos1.y, tri.pos1.z);
 			Vector3 pos2(tri.pos2.x, tri.pos2.y, tri.pos2.z);
 			Color   color(tri.color0);
-			m_gizmosNode->drawTriangle( pos0, pos1, pos2, color);
+			m_gizmosNode->drawTriangle( pos0 - shift, pos1 - shift, pos2 - shift, color);
 		}
 	}
 }

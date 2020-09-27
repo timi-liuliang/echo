@@ -25,12 +25,13 @@ namespace Echo
 
 	void PhysxBody::update_self()
 	{
+		const Vector3& shift = PhysxWorld::instance()->getShift();
 		if (m_isEnable && !m_pxBody)
 		{
 			physx::PxPhysics* physics =	PhysxWorld::instance()->getPxPhysics();
 			if (physics)
 			{
-				physx::PxTransform pxTransform((physx::PxVec3&)getWorldPosition(), (physx::PxQuat&)getWorldOrientation());
+				physx::PxTransform pxTransform((physx::PxVec3&)(getWorldPosition() + shift), (physx::PxQuat&)getWorldOrientation());
 				if (m_type.getIdx() == 0)
 				{
 					m_pxBody = physics->createRigidStatic(pxTransform);
@@ -53,12 +54,12 @@ namespace Echo
 			if (Engine::instance()->getConfig().m_isGame)
 			{
 				physx::PxTransform pxTransform = m_pxBody->getGlobalPose();
-				this->setWorldPosition( (Vector3&)pxTransform.p);
+				this->setWorldPosition( (Vector3&)pxTransform.p - shift);
 				this->setWorldOrientation((Quaternion&)pxTransform.q);
 			}
 			else
 			{
-				physx::PxTransform pxTransform((physx::PxVec3&)getWorldPosition(), (physx::PxQuat&)getWorldOrientation());
+				physx::PxTransform pxTransform((physx::PxVec3&)(getWorldPosition() + shift), (physx::PxQuat&)getWorldOrientation());
 				m_pxBody->setGlobalPose( pxTransform);
 			}
 		}
