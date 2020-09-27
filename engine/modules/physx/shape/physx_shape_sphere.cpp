@@ -1,5 +1,5 @@
 #include "physx_shape_sphere.h"
-#include "../physx_world.h"
+#include "../physx_module.h"
 
 namespace Echo
 {
@@ -22,7 +22,7 @@ namespace Echo
 	{
 		using namespace physx;
 
-		PxPhysics* physics = PhysxWorld::instance()->getPxPhysics();
+		PxPhysics* physics = PhysxModule::instance()->getPxPhysics();
 		if (physics)
 		{
 			physx::PxTransform pxTransform((physx::PxVec3&)getLocalPosition(), (physx::PxQuat&)getLocalOrientation());

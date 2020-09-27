@@ -1,5 +1,5 @@
 #include "physx_body.h"
-#include "physx_world.h"
+#include "physx_Module.h"
 #include <engine/core/main/Engine.h>
 
 namespace Echo
@@ -25,10 +25,10 @@ namespace Echo
 
 	void PhysxBody::update_self()
 	{
-		const Vector3& shift = PhysxWorld::instance()->getShift();
+		const Vector3& shift = PhysxModule::instance()->getShift();
 		if (m_isEnable && !m_pxBody)
 		{
-			physx::PxPhysics* physics =	PhysxWorld::instance()->getPxPhysics();
+			physx::PxPhysics* physics = PhysxModule::instance()->getPxPhysics();
 			if (physics)
 			{
 				physx::PxTransform pxTransform((physx::PxVec3&)(getWorldPosition() + shift), (physx::PxQuat&)getWorldOrientation());
@@ -45,7 +45,7 @@ namespace Echo
 					m_pxBody = dyb;
 				}
 
-				PhysxWorld::instance()->getPxScene()->addActor(*m_pxBody);
+				PhysxModule::instance()->getPxScene()->addActor(*m_pxBody);
 			}
 		}
 

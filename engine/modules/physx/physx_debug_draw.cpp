@@ -3,7 +3,7 @@
 #include "engine/core/log/Log.h"
 #include "engine/core/gizmos/Gizmos.h"
 #include "engine/core/math/Math.h"
-#include "physx_world.h"
+#include "physx_module.h"
 
 namespace Echo
 {
@@ -49,7 +49,7 @@ namespace Echo
 
 	void PhysxDebugDraw::drawLines(const physx::PxRenderBuffer& rb)
 	{
-		Vector3 shift = PhysxWorld::instance()->getShift();
+		Vector3 shift = PhysxModule::instance()->getShift();
 		for (physx::PxU32 i = 0; i < rb.getNbLines(); i++)
 		{
 			const physx::PxDebugLine& line = rb.getLines()[i];
@@ -62,7 +62,7 @@ namespace Echo
 
 	void PhysxDebugDraw::drawTriangles(const physx::PxRenderBuffer& rb)
 	{
-		Vector3 shift = PhysxWorld::instance()->getShift();
+		Vector3 shift = PhysxModule::instance()->getShift();
 		for (physx::PxU32 i = 0; i < rb.getNbTriangles(); i++)
 		{
 			const physx::PxDebugTriangle& tri = rb.getTriangles()[i];

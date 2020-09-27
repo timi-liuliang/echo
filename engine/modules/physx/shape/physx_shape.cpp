@@ -1,5 +1,5 @@
 #include "physx_shape.h"
-#include "../physx_world.h"
+#include "../physx_module.h"
 #include "../physx_body.h"
 #include <engine/core/main/Engine.h>
 
@@ -7,7 +7,7 @@ namespace Echo
 {
 	PhysxShape::PhysxShape()
 	{
-		m_pxMaterial = PhysxWorld::instance()->getPxPhysics()->createMaterial(0.5f, 0.5f, 0.5f);
+		m_pxMaterial = PhysxModule::instance()->getPxPhysics()->createMaterial(0.5f, 0.5f, 0.5f);
 	}
 
 	PhysxShape::~PhysxShape()
