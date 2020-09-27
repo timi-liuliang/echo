@@ -39,10 +39,8 @@ namespace Echo
         // report leaks
 		void reportLeaks();
 
-		/** Set the name of the report file that will be produced on exit. */
+		// the name of the report file that will be produced on exit.
 		void setReportFileName(const std::string& name) { m_leakFileName = name; }
-        
-		// Return the name of the file which will contain the report at exit
 		const std::string& getReportFileName() const { return m_leakFileName; }
         
 		// whether the memory report should be sent to stdout
@@ -69,7 +67,7 @@ namespace Echo
         std::string         m_leakFileName;
         bool                m_isDumpToStdOut = true;
         AllocationMap       m_allocations;
-        size_t              m_totalAllocations;
+        size_t              m_totalAllocations = 0;
         AllocationsByPool   m_allocationsByPool;
 		EE_MUTEX			(m_mutex);
 	};
