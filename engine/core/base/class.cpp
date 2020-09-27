@@ -26,7 +26,7 @@ namespace Echo
 		}
 		else
 		{
-			EchoLogError("property [%s] already exist", property->m_name.c_str());
+			EchoLogError("property [%s] already exist in class [%s]", property->m_name.c_str(), m_name.c_str());
 		}
 	}
     
