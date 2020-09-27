@@ -1,5 +1,6 @@
 #include "bvh.h"
 #include "engine/core/geom/Ray.h"
+#include "engine/core/log/Log.h"
 
 #define NullNode -1
 
@@ -86,12 +87,18 @@ namespace Echo
 	// Return a node to the pool.
 	void Bvh::freeNode(i32 nodeId)
 	{
-		EchoAssert(0 <= nodeId && nodeId < m_nodeCapacity);
-		EchoAssert(0 < m_nodeCount);
-		m_nodes[nodeId].next = m_freeList;
-		m_nodes[nodeId].height = -1;
-		m_freeList = nodeId;
-		--m_nodeCount;
+        if(m_nodeCount>0)
+        {
+            EchoAssert(0 <= nodeId && nodeId < m_nodeCapacity);
+            m_nodes[nodeId].next = m_freeList;
+            m_nodes[nodeId].height = -1;
+            m_freeList = nodeId;
+            --m_nodeCount;
+        }
+        else
+        {
+            EchoLogError("Bvh free node failed.");
+        }
 	}
 
 	// Create a proxy in the tree as a leaf node. We return the index

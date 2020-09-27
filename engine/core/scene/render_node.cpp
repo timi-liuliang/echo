@@ -16,7 +16,7 @@ namespace Echo
 		if (m_bvhNodeId != -1)
 		{
 			Bvh& bvh = m_renderType.getIdx() == 1 ? NodeTree::instance()->get3dBvh() : NodeTree::instance()->get2dBvh();
-			bvh.destroyProxy(m_bvhNodeId);
+			//bvh.destroyProxy(m_bvhNodeId);
 		}
 	}
 
