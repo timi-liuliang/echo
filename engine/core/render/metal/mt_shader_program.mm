@@ -111,7 +111,7 @@ namespace Echo
         {
             colorAttachmentDescriptor.pixelFormat = MTLPixelFormatBGRA8Unorm;
             
-            MTBlendState* mtBlendState = ECHO_DOWN_CAST<MTBlendState*>(m_blendState);
+            MTBlendState* mtBlendState = ECHO_DOWN_CAST<MTBlendState*>(getBlendState());
             if(mtBlendState)
                 mtBlendState->activeMtColorAttachmentDescriptor(colorAttachmentDescriptor);
         }
