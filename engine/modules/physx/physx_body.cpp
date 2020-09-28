@@ -1,5 +1,5 @@
 #include "physx_body.h"
-#include "physx_Module.h"
+#include "physx_module.h"
 #include <engine/core/main/Engine.h>
 
 namespace Echo
@@ -31,7 +31,8 @@ namespace Echo
 			physx::PxPhysics* physics = PhysxModule::instance()->getPxPhysics();
 			if (physics)
 			{
-				physx::PxTransform pxTransform((physx::PxVec3&)(getWorldPosition() + shift), (physx::PxQuat&)getWorldOrientation());
+                Vector3 finalPosition = getWorldPosition() + shift;
+				physx::PxTransform pxTransform((physx::PxVec3&)finalPosition, (physx::PxQuat&)getWorldOrientation());
 				if (m_type.getIdx() == 0)
 				{
 					m_pxBody = physics->createRigidStatic(pxTransform);
@@ -59,7 +60,8 @@ namespace Echo
 			}
 			else
 			{
-				physx::PxTransform pxTransform((physx::PxVec3&)(getWorldPosition() + shift), (physx::PxQuat&)getWorldOrientation());
+                Vector3 finalPosition = getWorldPosition() + shift;
+				physx::PxTransform pxTransform((physx::PxVec3&)finalPosition, (physx::PxQuat&)getWorldOrientation());
 				m_pxBody->setGlobalPose( pxTransform);
 			}
 		}

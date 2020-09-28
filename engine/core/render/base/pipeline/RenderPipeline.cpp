@@ -111,10 +111,14 @@ namespace Echo
 
 	void RenderPipeline::render()
 	{
-		for (RenderStage* stage : m_renderStages)
-		{
-			stage->render();
-		}
+        Renderer::instance()->beginRender();
+        
+        for (RenderStage* stage : m_renderStages)
+        {
+            stage->render();
+        }
+        
+        Renderer::instance()->present();
 	}
 
 	void RenderPipeline::parseXml()

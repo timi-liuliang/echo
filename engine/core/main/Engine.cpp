@@ -329,8 +329,6 @@ namespace Echo
 		Input::instance()->update();
 
 		// render
-        Renderer::instance()->beginRender();
 		RenderPipeline::current()->render();
-		Renderer::instance()->present();
 	}
 }
