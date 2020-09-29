@@ -1,8 +1,8 @@
 #include "tilemap.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/scene/node_tree.h"
-#include "base/Renderer.h"
-#include "base/ShaderProgram.h"
+#include "base/renderer.h"
+#include "base/shader_program.h"
 #include "engine/core/main/Engine.h"
 #include "engine/modules/ui/font/font_library.h"
 

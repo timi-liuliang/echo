@@ -7,7 +7,7 @@
 #include <engine/core/util/AssertX.h>
 #include <engine/core/util/Exception.h>
 #include "engine/core/scene/render_node.h"
-#include "base/image/PixelFormat.h"
+#include "base/image/pixel_format.h"
 #include "base/Renderer.h"
 
 
@@ -226,7 +226,7 @@ namespace Echo
 		if (shaderProgram)
 		{
 			GLESRenderer* glesRenderer = (ECHO_DOWN_CAST<GLESRenderer*>(Renderer::instance()));
-			glesRenderer->setDepthStencilState(shaderProgram->getDepthState());
+			glesRenderer->setDepthStencilState(shaderProgram->getDepthStencilState());
 			glesRenderer->setRasterizerState(shaderProgram->getRasterizerState());
 			glesRenderer->setBlendState(shaderProgram->getBlendState());
 		}

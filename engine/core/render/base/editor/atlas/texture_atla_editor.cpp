@@ -1,6 +1,6 @@
 #include "texture_atla_editor.h"
-#include "engine/core/render/base/atla/TextureAtla.h"
-#include "engine/core/render/base/Texture.h"
+#include "engine/core/render/base/atla/texture_atla.h"
+#include "engine/core/render/base/texture.h"
 #include "engine/core/editor/editor.h"
 #include "engine/core/main/Engine.h"
 

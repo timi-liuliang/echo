@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/core/geom/AABB.h"
-#include "MeshVertexData.h"
+#include "mesh_vertex_data.h"
 #include "engine/core/resource/Res.h"
 
 namespace Echo

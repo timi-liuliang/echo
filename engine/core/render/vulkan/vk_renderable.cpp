@@ -198,7 +198,7 @@ namespace Echo
 
     const VkPipelineDepthStencilStateCreateInfo* VKRenderable::getVkDepthStencilStateCrateInfo()
     {
-        VKDepthStencilState* vkState = ECHO_DOWN_CAST<VKDepthStencilState*>(m_material->getShader()->getDepthState());
+        VKDepthStencilState* vkState = ECHO_DOWN_CAST<VKDepthStencilState*>(m_material->getShader()->getDepthStencilState());
         return vkState->getVkCreateInfo();
     }
 

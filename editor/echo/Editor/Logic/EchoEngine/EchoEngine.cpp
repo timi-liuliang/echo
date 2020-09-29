@@ -4,14 +4,14 @@
 #include <array>
 #include <engine/core/main/Engine.h>
 #include <engine/modules/navigation/Navigation.h>
-#include <base/FrameBuffer.h>
+#include <base/frame_buffer.h>
 #include "engine/core/thread/Threading.h"
 #include "Studio.h"
 #include "RenderWindow.h"
 #include <base/Renderer.h>
 #include <string>
 #include "Studio.h"
-#include "base/RenderState.h"
+#include "base/render_state.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/util/TimeProfiler.h>
 #include <engine/core/util/HashGenerator.h>

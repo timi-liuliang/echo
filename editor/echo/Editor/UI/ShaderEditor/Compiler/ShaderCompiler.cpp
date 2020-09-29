@@ -1,5 +1,5 @@
 #include "ShaderCompiler.h"
-#include <engine/core/render/base/glslcc/GLSLCrossCompiler.h>
+#include <engine/core/render/base/glslcc/glsl_cross_compiler.h>
 
 static const char* g_VsTemplate = R"(#version 450
 

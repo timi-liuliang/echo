@@ -5,7 +5,7 @@
 #include "engine/core/math/color.h"
 #include <thirdparty/pugixml/pugixml.hpp>
 #include "engine/core/resource/Res.h"
-#include "engine/core/render/base/pipeline/RenderPipeline.h"
+#include "engine/core/render/base/pipeline/render_pipeline.h"
 
 namespace Echo
 {

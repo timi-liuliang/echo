@@ -4,7 +4,7 @@
 
 #ifdef ECHO_EDITOR_MODE
 
-#include "engine/core/render/base/pipeline/RenderStage.h"
+#include "engine/core/render/base/pipeline/render_stage.h"
 #include "engine/modules/procedural/procedural_geometry.h"
 
 namespace Pipeline

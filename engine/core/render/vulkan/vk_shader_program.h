@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/ShaderProgram.h"
+#include "base/shader_program.h"
 #include "vk_render_base.h"
 #include "vk_gpu_buffer.h"
 #include <thirdparty/spirv-cross/spirv_cross.hpp>

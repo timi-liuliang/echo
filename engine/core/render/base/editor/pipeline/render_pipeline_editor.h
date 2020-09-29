@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/core/render/base/pipeline/RenderPipeline.h"
+#include "engine/core/render/base/pipeline/render_pipeline.h"
 #include "RenderPipelinePanel.h"
 
 namespace Echo

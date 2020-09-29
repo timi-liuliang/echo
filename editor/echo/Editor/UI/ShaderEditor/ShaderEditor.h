@@ -6,7 +6,7 @@
 #include <QGraphicsView>
 #include <nodeeditor/NodeDataModel>
 #include <engine/core/util/StringUtil.h>
-#include <engine/core/render/base/ShaderProgram.h>
+#include <engine/core/render/base/shader_program.h>
 #include "Scene/ShaderScene.h"
 #include "Scene/ShaderView.h"
 #include "Compiler/ShaderCompiler.h"

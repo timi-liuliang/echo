@@ -1,7 +1,7 @@
 #include "gles_render_base.h"
 #include "gles_mapping.h"
-#include "base/GPUBuffer.h"
-#include "base/image/PixelFormat.h"
+#include "base/gpu_buffer.h"
+#include "base/image/pixel_format.h"
 
 namespace Echo
 {

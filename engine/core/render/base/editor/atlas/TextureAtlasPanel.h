@@ -2,7 +2,7 @@
 
 #include "engine/core/util/Array.hpp"
 #include "engine/core/editor/bottom_panel_tab.h"
-#include "../../atla/TextureAtlas.h"
+#include "../../atla/texture_atlas.h"
 
 #ifdef ECHO_EDITOR_MODE
 

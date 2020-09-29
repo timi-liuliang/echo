@@ -7,8 +7,8 @@
 #include "engine/core/io/MemoryReader.h"
 #include "engine/core/util/Buffer.h"
 #include "engine/core/io/IO.h"
-#include "engine/core/render/base/image/Image.h"
-#include "engine/core/render/base/atla/TextureAtlas.h"
+#include "engine/core/render/base/image/image.h"
+#include "engine/core/render/base/atla/texture_atlas.h"
 
 namespace Echo
 {

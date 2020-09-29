@@ -1,8 +1,8 @@
 #pragma once
 
 #include <engine/core/util/Array.hpp>
-#include "base/ShaderProgram.h"
-#include "base/Renderable.h"
+#include "base/shader_program.h"
+#include "base/renderable.h"
 #include "base/mesh/mesh.h"
 #include "gles_shader.h"
 #include "gles_renderable.h"

@@ -2,7 +2,7 @@
 
 #include "engine/core/util/Array.hpp"
 #include "engine/core/editor/bottom_panel_tab.h"
-#include "../../pipeline/RenderPipeline.h"
+#include "../../pipeline/render_pipeline.h"
 
 #ifdef ECHO_EDITOR_MODE
 
