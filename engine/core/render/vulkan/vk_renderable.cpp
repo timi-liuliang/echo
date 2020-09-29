@@ -127,6 +127,11 @@ namespace Echo
         }
     }
 
+    void VKRenderable::bindRenderState()
+    {
+
+    }
+
     void VKRenderable::bindShaderParams()
     {
 		VKShaderProgram* vkShaderProgram = ECHO_DOWN_CAST<VKShaderProgram*>(m_material->getShader());

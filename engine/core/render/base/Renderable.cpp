@@ -36,18 +36,6 @@ namespace Echo
 		return renderable;
 	}
 
-	void Renderable::bindRenderState()
-	{
-		ShaderProgram* shaderProgram = m_material->getShader();
-		if (shaderProgram)
-		{
-			Renderer* pRenderer = Renderer::instance();
-			pRenderer->setDepthStencilState(shaderProgram->getDepthState());
-			pRenderer->setRasterizerState(shaderProgram->getRasterizerState());
-			pRenderer->setBlendState(shaderProgram->getBlendState());
-		}
-	}
-
 	void Renderable::submitToRenderQueue()
 	{
 		if (m_mesh && m_mesh->isValid())

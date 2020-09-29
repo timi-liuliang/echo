@@ -45,10 +45,6 @@ namespace Echo
 		virtual ~Renderable();
 
 	public:
-		// bind render state
-		void bindRenderState();
-
-	public:
 		ui32									m_identifier;
 		Render*									m_node = nullptr;
 		MeshPtr								m_mesh;

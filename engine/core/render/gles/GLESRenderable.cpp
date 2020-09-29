@@ -220,4 +220,16 @@ namespace Echo
 
 		return true;
 	}
+
+	void GLES2Renderable::bindRenderState()
+	{
+		ShaderProgram* shaderProgram = m_material->getShader();
+		if (shaderProgram)
+		{
+			GLES2Renderer* glesRenderer = (ECHO_DOWN_CAST<GLES2Renderer*>(Renderer::instance()));
+			glesRenderer->setDepthStencilState(shaderProgram->getDepthState());
+			glesRenderer->setRasterizerState(shaderProgram->getRasterizerState());
+			glesRenderer->setBlendState(shaderProgram->getBlendState());
+		}
+	}
 }

@@ -52,11 +52,6 @@ namespace Echo
 		// initialize
 		virtual bool initialize(const Settings& config)=0;
 
-		// states
-		virtual void setRasterizerState(RasterizerState* pState);
-		virtual void setDepthStencilState(DepthStencilState* pState);
-		virtual void setBlendState(BlendState* pState);
-
 		// set texture
 		virtual void setTexture(ui32 index, Texture* texture, bool needUpdate = false) = 0;
 
@@ -69,11 +64,6 @@ namespace Echo
 
 		// max stage number
 		virtual ui32 getMaxStageNum() const = 0;
-        
-        // current states
-		virtual RasterizerState* getRasterizerState() const;
-		virtual DepthStencilState* getDepthStencilState() const;
-		virtual BlendState*	getBlendState() const;
 
 		// scissor command
 		virtual void scissor(ui32 left, ui32 top, ui32 width, ui32 height)=0;
@@ -148,10 +138,7 @@ namespace Echo
 		ui32 getStartMipmap() const { return m_startMipmap; }
 
 	protected:
-		Settings				m_settings;
-		RasterizerState*	m_rasterizerState = nullptr;
-		DepthStencilState*	m_depthStencilState = nullptr;
-		BlendState*			m_blendState = nullptr;
+		Settings			m_settings;
 		std::map<ui32, Renderable*>	m_renderables;
 		ui32				m_startMipmap = 0;
 		DeviceFeature		m_deviceFeature;

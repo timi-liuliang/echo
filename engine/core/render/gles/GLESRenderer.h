@@ -108,6 +108,17 @@ namespace Echo
 		// on size
 		virtual void onSize(int width, int height) override;
 
+	public:
+		// current states
+		virtual RasterizerState* getRasterizerState() const;
+		virtual DepthStencilState* getDepthStencilState() const;
+		virtual BlendState* getBlendState() const;
+
+		// states
+		virtual void setRasterizerState(RasterizerState* pState);
+		virtual void setDepthStencilState(DepthStencilState* pState);
+		virtual void setBlendState(BlendState* pState);
+
 	protected:
 		//  interal implement
 		virtual Renderable* createRenderable() override;
@@ -130,17 +141,18 @@ namespace Echo
 	protected:
 		GLES2ShaderProgram*			m_pre_shader_program = nullptr;
 		array<TextureSlotInfo, 8>	m_preTextures;
-
-	private:
-		String				m_gpuDesc;
-		ui32				m_screenWidth = 0;
-		ui32				m_screenHeight = 0;
+		RasterizerState*			m_rasterizerState = nullptr;
+		DepthStencilState*			m_depthStencilState = nullptr;
+		BlendState*					m_blendState = nullptr;
+		String						m_gpuDesc;
+		ui32						m_screenWidth = 0;
+		ui32						m_screenHeight = 0;
 		std::set<GLES2SamplerState*> m_vecSamlerStates;
-		NineBoolArray		m_isVertexAttribArrayEnable;
-        FrameBuffer*        m_windowFramebuffer = nullptr;
+		NineBoolArray				m_isVertexAttribArrayEnable;
+        FrameBuffer*				m_windowFramebuffer = nullptr;
 
 #ifdef ECHO_EDITOR_MODE
-		GPUBuffer*			m_wireFrameIndexBuffer = nullptr;
+		GPUBuffer*					m_wireFrameIndexBuffer = nullptr;
 #endif
 
 #ifdef ECHO_PLATFORM_WINDOWS

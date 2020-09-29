@@ -45,6 +45,9 @@ namespace Echo
 		// bind shader params
 		void bindShaderParams();
 
+		// bind render state
+		void bindRenderState();
+
 	private:
 		// set mesh
 		virtual void setMesh(MeshPtr mesh) override;

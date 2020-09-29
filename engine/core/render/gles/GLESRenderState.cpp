@@ -2,6 +2,7 @@
 #include "GLESRenderState.h"
 #include "GLESMapping.h"
 #include "GLESTexture2D.h"
+#include "GLESRenderer.h"
 #include "base/Renderer.h"
 #include "engine/core/util/Exception.h"
 
@@ -35,7 +36,7 @@ namespace Echo
 		blendParams.alpha_mask = m_glAlphaMask;
 		blendParams.blendFactor = m_desc.blendFactor;
 
-		BlendState* pCurState = Renderer::instance()->getBlendState();
+		BlendState* pCurState = (ECHO_DOWN_CAST<GLES2Renderer*>(Renderer::instance()))->getBlendState();
 		if(pCurState)
 		{
 			const BlendDesc& currDesc = pCurState->getDesc();
@@ -180,7 +181,7 @@ namespace Echo
 		depthStencilParams.backStencilDepthFailOP = m_glBackStencilDepthFailOP;
 		depthStencilParams.backStencilPassOP = m_glBackStencilPassOP;
 		
-		DepthStencilState* pCurState = Renderer::instance()->getDepthStencilState();
+		DepthStencilState* pCurState = (ECHO_DOWN_CAST<GLES2Renderer*>(Renderer::instance()))->getDepthStencilState();
 		if(pCurState)
 		{
 			const  DepthStencilDesc& currDesc = pCurState->getDesc();
@@ -349,7 +350,7 @@ namespace Echo
 
 	void GLES2RasterizerState::active()
 	{
-		RasterizerState* pCurState = Renderer::instance()->getRasterizerState();
+		RasterizerState* pCurState = (ECHO_DOWN_CAST<GLES2Renderer*>(Renderer::instance()))->getRasterizerState();
 		const RasterizerDesc* currDesc = nullptr;
 		if (pCurState)
 		{

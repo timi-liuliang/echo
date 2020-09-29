@@ -326,7 +326,6 @@ namespace Echo
             VKFramebuffer* vkFramebuffer = VKFramebuffer::current();
             VkCommandBuffer vkCommandbuffer = vkFramebuffer->getVkCommandbuffer();
 
-            vkRenderable->bindRenderState();
             vkCmdBindPipeline(vkCommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkRenderable->getVkPipeline());
             vkRenderable->bindShaderParams();
             vkRenderable->bindGeometry();

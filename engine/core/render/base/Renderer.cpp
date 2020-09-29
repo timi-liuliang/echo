@@ -27,9 +27,6 @@ namespace Echo
 	}
 
 	Renderer::Renderer()
-		: m_rasterizerState(NULL)
-		, m_depthStencilState(NULL)
-		, m_blendState(NULL)
 	{
 		EchoAssert(!g_render);
 		g_render = this;
@@ -44,52 +41,9 @@ namespace Echo
 		m_renderables.clear();
 	}
 
-	void Renderer::setRasterizerState(RasterizerState* state)
-	{
-		EchoAssert(state);
-		if (state != m_rasterizerState)
-		{
-			state->active();
-			m_rasterizerState = state;
-		}
-	}
-
-	void Renderer::setDepthStencilState(DepthStencilState* state)
-	{
-		if (state && state != m_depthStencilState)
-		{
-			state->active();
-			m_depthStencilState = state;
-		}
-	}
-
-	void Renderer::setBlendState(BlendState* state)
-	{
-		if (state != m_blendState)
-		{
-			state->active();
-			m_blendState = state;
-		}
-	}
-
 	bool Renderer::isFullscreen() const
 	{
 		return m_settings.m_isFullscreen;
-	}
-
-	RasterizerState* Renderer::getRasterizerState() const
-	{
-		return m_rasterizerState;
-	}
-
-	DepthStencilState* Renderer::getDepthStencilState() const
-	{
-		return m_depthStencilState;
-	}
-
-	BlendState* Renderer::getBlendState() const
-	{
-		return m_blendState;
 	}
 
 	void Renderer::project(Vector3& screenPos, const Vector3& worldPos, const Matrix4& matVP, Viewport* pViewport)

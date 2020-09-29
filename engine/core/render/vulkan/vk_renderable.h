@@ -13,6 +13,7 @@ namespace Echo
         virtual ~VKRenderable() {}
 
         // bind shader uniforms
+		void bindRenderState();
         void bindShaderParams();
         void bindGeometry();
 

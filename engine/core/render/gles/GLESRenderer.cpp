@@ -689,4 +689,48 @@ namespace Echo
 
         return m_windowFramebuffer;
     }
+
+
+	RasterizerState* GLES2Renderer::getRasterizerState() const
+	{
+		return m_rasterizerState;
+	}
+
+	DepthStencilState* GLES2Renderer::getDepthStencilState() const
+	{
+		return m_depthStencilState;
+	}
+
+	BlendState* GLES2Renderer::getBlendState() const
+	{
+		return m_blendState;
+	}
+
+	void GLES2Renderer::setRasterizerState(RasterizerState* state)
+	{
+		EchoAssert(state);
+		if (state != m_rasterizerState)
+		{
+			state->active();
+			m_rasterizerState = state;
+		}
+	}
+
+	void GLES2Renderer::setDepthStencilState(DepthStencilState* state)
+	{
+		if (state && state != m_depthStencilState)
+		{
+			state->active();
+			m_depthStencilState = state;
+		}
+	}
+
+	void GLES2Renderer::setBlendState(BlendState* state)
+	{
+		if (state != m_blendState)
+		{
+			state->active();
+			m_blendState = state;
+		}
+	}
 }
