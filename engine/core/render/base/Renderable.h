@@ -45,10 +45,10 @@ namespace Echo
 		virtual ~Renderable();
 
 	public:
-		ui32									m_identifier;
-		Render*									m_node = nullptr;
-		MeshPtr								m_mesh;
-		MaterialPtr								m_material;
+		ui32			m_identifier;
+		Render*			m_node = nullptr;
+		MeshPtr			m_mesh;
+		MaterialPtr		m_material;
 	};
 	typedef ui32 RenderableID;
 }

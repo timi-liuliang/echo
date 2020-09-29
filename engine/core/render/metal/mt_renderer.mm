@@ -165,8 +165,9 @@ namespace Echo
         MTRenderable* mtRenderable = ECHO_DOWN_CAST<MTRenderable*>(renderable);
         MTShaderProgram* shaderProgram = ECHO_DOWN_CAST<MTShaderProgram*>(mtRenderable->getMaterial()->getShader());
         shaderProgram->bind();
-        mtRenderable->bindRenderState();
         mtRenderable->bindShaderParams();
+        
+        [m_metalRenderCommandEncoder setDepthStencilState:shaderProgram->getMTDepthStencilState()]; 
 
         if(m_metalRenderPassDescriptor && mtRenderable && mtRenderable->getMetalRenderPipelineState())
         {

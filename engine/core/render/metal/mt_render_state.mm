@@ -1,5 +1,6 @@
 #include "mt_render_state.h"
 #include "mt_renderer.h"
+#include "mt_mapping.h"
 
 namespace Echo
 {
@@ -22,7 +23,20 @@ namespace Echo
     MTDepthStencilState::MTDepthStencilState(const DepthStencilDesc& desc)
         : DepthStencilState(desc)
     {
-        
+        if(!m_mtDepthStencilDescriptor)
+        {
+            m_mtDepthStencilDescriptor = [MTLDepthStencilDescriptor new];
+            m_mtDepthStencilDescriptor.depthWriteEnabled = desc.bDepthEnable;
+            m_mtDepthStencilDescriptor.depthCompareFunction = MTMapping::MapComparisonFunc(desc.depthFunc);
+            //m_mtDepthStencilDescriptor.backFaceStencil = ;
+            //m_mtDepthStencilDescriptor.frontFaceStencil = ;
+            
+            id<MTLDevice> device = MTRenderer::instance()->getMetalDevice();
+            if(device)
+            {
+                m_mtDepthStencilState = [device newDepthStencilStateWithDescriptor:m_mtDepthStencilDescriptor];
+            }
+        }
     }
     
     MTRasterizerState::MTRasterizerState(const RasterizerDesc& desc)

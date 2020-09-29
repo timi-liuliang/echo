@@ -471,7 +471,7 @@ namespace Echo
         return m_blendState; 
     }
 
-    DepthStencilState* ShaderProgram::getDepthState()
+    DepthStencilState* ShaderProgram::getDepthStencilState()
     { 
         if (!m_depthState)
         {
@@ -574,7 +574,7 @@ namespace Echo
             depthDesc.bDepthEnable = false;
             depthDesc.bWriteDepth = false;
             DepthStencilState* depthState = Renderer::instance()->createDepthStencilState(depthDesc);
-            shader->setDepthState(depthState);
+            shader->setDepthStencilState(depthState);
 
             // reaster state
             shader->setCullMode("CULL_NONE");
@@ -605,7 +605,7 @@ namespace Echo
 			depthDesc.bDepthEnable = true;
 			depthDesc.bWriteDepth = true;
 			DepthStencilState* depthState = Renderer::instance()->createDepthStencilState(depthDesc);
-			shader->setDepthState(depthState);
+			shader->setDepthStencilState(depthState);
 
 			// reaster state
 			shader->setCullMode("CULL_NONE");

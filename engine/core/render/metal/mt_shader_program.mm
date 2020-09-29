@@ -287,4 +287,9 @@ namespace Echo
             }
         }
     }
+
+    id<MTLDepthStencilState> MTShaderProgram::getMTDepthStencilState()
+    {
+        return ((MTDepthStencilState*)getDepthStencilState())->getMTDepthStencilState();
+    }
 }

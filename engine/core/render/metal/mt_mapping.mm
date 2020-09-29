@@ -135,4 +135,20 @@ namespace Echo
             default:                        return SPT_UNKNOWN;
         }
     }
+
+    MTLCompareFunction MTMapping::MapComparisonFunc(RenderState::ComparisonFunc func)
+    {
+        switch(func)
+        {
+        case RenderState::CF_NEVER:         return MTLCompareFunctionNever;
+        case RenderState::CF_ALWAYS:        return MTLCompareFunctionAlways;
+        case RenderState::CF_LESS:          return MTLCompareFunctionLess;
+        case RenderState::CF_LESS_EQUAL:    return MTLCompareFunctionLessEqual;
+        case RenderState::CF_EQUAL:         return MTLCompareFunctionEqual;
+        case RenderState::CF_NOT_EQUAL:     return MTLCompareFunctionNotEqual;
+        case RenderState::CF_GREATER_EQUAL: return MTLCompareFunctionGreaterEqual;
+        case RenderState::CF_GREATER:       return MTLCompareFunctionGreater;
+        default:                            return MTLCompareFunctionLess;
+        }
+    }
 }

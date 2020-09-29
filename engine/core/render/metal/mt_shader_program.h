@@ -28,6 +28,9 @@ namespace Echo
         
         // build vertex descriptor
         MTLVertexDescriptor* buildVertexDescriptor(const VertexElementList& vertElments);
+        
+        // get state
+        id<MTLDepthStencilState> getMTDepthStencilState();
 
     private:
         // create shader library

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/mesh/Mesh.h"
+#include "base/mesh/mesh.h"
 #include "base/ShaderProgram.h"
 #include "mt_render_base.h"
 
@@ -23,5 +23,8 @@ namespace Echo
         
         // Mapping Uniform type
         static ShaderParamType MapUniformType( MTLDataType uniformType);
+        
+        // Mapping DepthComparisonFunc
+        static MTLCompareFunction MapComparisonFunc(RenderState::ComparisonFunc func);
     };
 }

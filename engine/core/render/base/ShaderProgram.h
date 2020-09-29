@@ -158,8 +158,8 @@ namespace Echo
         void setBlendState(BlendState* blendState) { m_blendState = blendState; }
         
         // depth state
-        DepthStencilState* getDepthState();
-        void setDepthState(DepthStencilState* depthState) { m_depthState = depthState; }
+        DepthStencilState* getDepthStencilState();
+        void setDepthStencilState(DepthStencilState* depthState) { m_depthState = depthState; }
         
         // raster state
         RasterizerState* getRasterizerState();

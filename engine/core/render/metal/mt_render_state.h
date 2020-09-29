@@ -20,7 +20,12 @@ namespace Echo
         MTDepthStencilState(const DepthStencilDesc& desc);
         virtual ~MTDepthStencilState() {}
 
-        virtual void active() override {}
+        // get metal depth state
+        id<MTLDepthStencilState> getMTDepthStencilState() const { return m_mtDepthStencilState; }
+        
+    private:
+        MTLDepthStencilDescriptor*  m_mtDepthStencilDescriptor = nullptr;
+        id<MTLDepthStencilState>    m_mtDepthStencilState;
 	};
 
 	class MTRasterizerState : public RasterizerState
