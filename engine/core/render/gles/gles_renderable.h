@@ -5,7 +5,7 @@
 
 namespace Echo
 {
-	class GLES2Renderable : public Renderable
+	class GLESRenderable : public Renderable
 	{
 	public:
 		// vertex declaration
@@ -33,8 +33,8 @@ namespace Echo
 		};
 
 	public:
-		GLES2Renderable(int identifier);
-		~GLES2Renderable();
+		GLESRenderable(int identifier);
+		~GLESRenderable();
 
 		// bind geometry data
 		void bind( Renderable* pre);

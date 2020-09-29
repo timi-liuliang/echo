@@ -1,33 +1,56 @@
-#include "GLESRenderBase.h"
-#include "GLESShader.h"
+#include "gles_render_base.h"
+#include "gles_shader.h"
 #include <engine/core/util/Exception.h>
 #include "engine/core/io/IO.h"
 
 namespace Echo
 {
-	GLES2Shader::GLES2Shader(ShaderType type, const String& filename)
-		: Shader(type, filename)
+	GLESShader::GLESShader(ShaderType type, const String& filename)
+		: m_filename(filename)
 	{
+		DataStream* pShaderStream = IO::instance()->open(filename);
+		if (!pShaderStream)
+		{
+			EchoLogError("Shader file isn't exist. [%s]", filename.c_str());
+		}
+
+		m_validata = true;
+		m_shaderType = type;
+		m_shaderSize = static_cast<ui32>(pShaderStream->size() + 1);
+		m_srcData.resize(m_shaderSize);
+		m_srcData[m_shaderSize - 1] = '\0';
+
+		pShaderStream->read(&m_srcData[0], m_shaderSize);
+
+		EchoSafeDelete(pShaderStream, DataStream);
+
 		replaceInclude();
 		create(filename);
 	}
 
-	GLES2Shader::GLES2Shader(ShaderType type, const char* srcBuffer, ui32 size)
-		: Shader(type, srcBuffer, size)
+	GLESShader::GLESShader(ShaderType type, const char* srcBuffer, ui32 size)
+		: m_program(NULL)
 	{
+		m_validata = true;
+		m_shaderType = type;
+		m_shaderSize = size;
+
+		m_srcData.resize(m_shaderSize);
+		memcpy(&m_srcData[0], srcBuffer, size);
+
 		create("");
 	}
 
-	GLES2Shader::~GLES2Shader()
+	GLESShader::~GLESShader()
 	{
-		if (m_hShader)
+		if (m_glesShader)
 		{
-			OGLESDebug(glDeleteShader(m_hShader));
-			m_hShader = 0;
+			OGLESDebug(glDeleteShader(m_glesShader));
+			m_glesShader = 0;
 		}
 	}
 
-	void GLES2Shader::replaceInclude()
+	void GLESShader::replaceInclude()
 	{
 		String::size_type pos = m_srcData.find("#include");
 		if (pos != String::npos)
@@ -62,7 +85,7 @@ namespace Echo
 		}
 	}
 
-	void GLES2Shader::create(const String& filename)
+	void GLESShader::create(const String& filename)
 	{
 		// Windows platform，Debug mode，enable Nsight Shader debug
 #if defined(ECHO_PLATFORM_WINDOWS) && defined(ECHO_DEBUG)
@@ -77,8 +100,8 @@ namespace Echo
 		{
 			case ST_VERTEXSHADER:
 			{
-				m_hShader = OGLESDebug(glCreateShader(GL_VERTEX_SHADER));
-				if (!m_hShader)
+				m_glesShader = OGLESDebug(glCreateShader(GL_VERTEX_SHADER));
+				if (!m_glesShader)
 				{
 					EchoLogError("Create vertex Shader [%s] failed.", filename.c_str());
 				}
@@ -86,8 +109,8 @@ namespace Echo
 			break;
 			case ST_PIXELSHADER:
 			{
-				m_hShader = OGLESDebug(glCreateShader(GL_FRAGMENT_SHADER));
-				if (!m_hShader)
+				m_glesShader = OGLESDebug(glCreateShader(GL_FRAGMENT_SHADER));
+				if (!m_glesShader)
 				{
 					EchoLogError("Create pixel Shader [%s] failed.", filename.c_str());
 				}
@@ -100,20 +123,20 @@ namespace Echo
 
 		// bind shader source code to the shader object
 		const GLchar* srcData = &m_srcData[0];
-		OGLESDebug(glShaderSource(m_hShader, 1, &srcData, NULL));
+		OGLESDebug(glShaderSource(m_glesShader, 1, &srcData, NULL));
 
 		// compile shader.
-		OGLESDebug(glCompileShader(m_hShader));
+		OGLESDebug(glCompileShader(m_glesShader));
 
 		// check to see if the vertex shader compiled successfully.
 		GLint status;
-		OGLESDebug(glGetShaderiv(m_hShader, GL_COMPILE_STATUS, &status));
+		OGLESDebug(glGetShaderiv(m_glesShader, GL_COMPILE_STATUS, &status));
 		if (status != 1)
 		{
 			m_validata = false;
 			// get the size of the string containing the information log for the failed shader compilation message.
 			GLint logSize = 0;
-			OGLESDebug(glGetShaderiv(m_hShader, GL_INFO_LOG_LENGTH, &logSize));
+			OGLESDebug(glGetShaderiv(m_glesShader, GL_INFO_LOG_LENGTH, &logSize));
 
 			// increment the size by one to handle also the null terminator.
 			++logSize;
@@ -123,7 +146,7 @@ namespace Echo
 
 			// retrieve the info log.
 			GLint realsize;
-			OGLESDebug(glGetShaderInfoLog(m_hShader, logSize, &realsize, szLogInfo));
+			OGLESDebug(glGetShaderInfoLog(m_glesShader, logSize, &realsize, szLogInfo));
 
 			String errMsg = szLogInfo;
 			EchoSafeFree(szLogInfo);
@@ -135,8 +158,38 @@ namespace Echo
 		m_srcData.shrink_to_fit();
 	}
 
-	GLuint GLES2Shader::getShaderHandle() const
+	GLuint GLESShader::getShaderHandle() const
 	{
-		return m_hShader;
+		return m_glesShader;
+	}
+
+	void GLESShader::setShaderProgram(GLESShaderProgram* pProgram)
+	{
+		m_program = pProgram;
+	}
+
+	GLESShaderProgram* GLESShader::getShaderProgram() const
+	{
+		return m_program;
+	}
+
+	GLESShader::ShaderType GLESShader::getShaderType() const
+	{
+		return m_shaderType;
+	}
+
+	String GLESShader::GetShaderTypeDesc(ShaderType type)
+	{
+		switch (type)
+		{
+		case ST_VERTEXSHADER:	return "ST_VERTEXSHADER";
+		case ST_PIXELSHADER:	return "ST_PIXELSHADER";
+		default:				return "UNKNOWN";
+		}
+	}
+
+	bool GLESShader::validate() const
+	{
+		return m_validata;
 	}
 }

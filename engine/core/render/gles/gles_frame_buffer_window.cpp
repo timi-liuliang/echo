@@ -1,5 +1,5 @@
-#include "GLESFrameBufferWindow.h"
-#include "GLESFrameBuffer.h"
+#include "gles_frame_buffer_window.h"
+#include "gles_frame_buffer.h"
 
 namespace Echo
 {

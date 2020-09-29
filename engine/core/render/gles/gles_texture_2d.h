@@ -6,7 +6,7 @@ namespace Echo
 {
 	class GLESTexture2D: public Texture
 	{
-		friend class GLES2Renderer;
+		friend class GLESRenderer;
 
 	public:
 		// updateSubTex2D

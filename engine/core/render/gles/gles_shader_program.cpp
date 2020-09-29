@@ -1,14 +1,14 @@
-#include "GLESRenderBase.h"
-#include "GLESRenderer.h"
-#include "GLESShaderProgram.h"
-#include "GLESMapping.h"
+#include "gles_render_base.h"
+#include "gles_renderer.h"
+#include "gles_shader_program.h"
+#include "gles_mapping.h"
 #include <engine/core/util/Exception.h>
 #include <engine/core/log/Log.h>
 #include "engine/core/memory/MemAllocDef.h"
 
 namespace Echo
 {
-	GLES2ShaderProgram::GLES2ShaderProgram()
+	GLESShaderProgram::GLESShaderProgram()
 		: ShaderProgram()
 	{
 		m_shaders.assign(nullptr);
@@ -17,23 +17,23 @@ namespace Echo
 		m_preRenderable = NULL;
 	}
 
-	GLES2ShaderProgram::~GLES2ShaderProgram()
+	GLESShaderProgram::~GLESShaderProgram()
 	{
 		clearShaderProgram();
 	}
 	
-	bool GLES2ShaderProgram::attachShader(Shader* shader)
+	bool GLESShaderProgram::attachShader(GLESShader* shader)
 	{
 		if (shader)
 		{
-			Shader::ShaderType type = shader->getShaderType();
+			GLESShader::ShaderType type = shader->getShaderType();
 			if (!m_shaders[(ui32)type])
 			{
 				m_shaders[(ui32)type] = shader;
 				shader->setShaderProgram(this);
 				m_isLinked = false;
 
-				GLES2Shader* glesShader = ECHO_DOWN_CAST<GLES2Shader*>(shader);
+				GLESShader* glesShader = ECHO_DOWN_CAST<GLESShader*>(shader);
 				ui32 shaderHandle = glesShader->getShaderHandle();
 				OGLESDebug(glAttachShader(m_glesProgram, shaderHandle));
 
@@ -41,18 +41,18 @@ namespace Echo
 			}
 		}
 
-		EchoLogError("The shader [%s] has been already attached.", shader ? Shader::GetShaderTypeDesc(shader->getShaderType()).c_str() : "");
+		EchoLogError("The shader [%s] has been already attached.", shader ? GLESShader::GetShaderTypeDesc(shader->getShaderType()).c_str() : "");
 		return false;
 	}
 	
-	Shader* GLES2ShaderProgram::detachShader(Shader::ShaderType type)
+	GLESShader* GLESShaderProgram::detachShader(GLESShader::ShaderType type)
 	{
-		Shader* shader = m_shaders[(ui32)type];
+		GLESShader* shader = m_shaders[(ui32)type];
 		m_shaders[(ui32)type] = nullptr;
 		m_isLinked = false;
 		if(shader)
 		{
-			GLES2Shader* pGLES2Shader = (GLES2Shader*)shader;
+			GLESShader* pGLES2Shader = (GLESShader*)shader;
 			ui32 hShader = pGLES2Shader->getShaderHandle();
 			OGLESDebug(glDetachShader(m_glesProgram, hShader));
 		}
@@ -60,7 +60,7 @@ namespace Echo
 		return shader;
 	}
 
-	bool GLES2ShaderProgram::linkShaders()
+	bool GLESShaderProgram::linkShaders()
 	{
 		m_uniforms.clear();
 
@@ -141,7 +141,7 @@ namespace Echo
 		return true;
 	}
 
-	void GLES2ShaderProgram::bindUniforms()
+	void GLESShaderProgram::bindUniforms()
 	{
 		for (UniformMap::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++)
 		{
@@ -171,11 +171,11 @@ namespace Echo
 		}
 	}
 	
-	void GLES2ShaderProgram::bind()
+	void GLESShaderProgram::bind()
 	{
 		if (m_isLinked)
 		{
-			if ((ECHO_DOWN_CAST<GLES2Renderer*>(Renderer::instance()))->bindShaderProgram(this))
+			if ((ECHO_DOWN_CAST<GLESRenderer*>(Renderer::instance()))->bindShaderProgram(this))
 			{
 				OGLESDebug(glUseProgram(m_glesProgram));
 				m_preRenderable = NULL;
@@ -187,24 +187,24 @@ namespace Echo
 		}
 	}
 
-	void GLES2ShaderProgram::bindRenderable(Renderable* renderInput)
+	void GLESShaderProgram::bindRenderable(Renderable* renderInput)
 	{
-		GLES2Renderable* ra = ECHO_DOWN_CAST<GLES2Renderable*>(renderInput);
+		GLESRenderable* ra = ECHO_DOWN_CAST<GLESRenderable*>(renderInput);
 		ra->bind(m_preRenderable);
 
 		m_preRenderable = ra;
 	}
 	
-	i32 GLES2ShaderProgram::getAtrribLocation(VertexSemantic vertexSemantic)
+	i32 GLESShaderProgram::getAtrribLocation(VertexSemantic vertexSemantic)
 	{
 		return m_attribLocationMapping[vertexSemantic];
 	}
 
-	void GLES2ShaderProgram::unbind()
+	void GLESShaderProgram::unbind()
 	{
 	}
 
-	bool GLES2ShaderProgram::createShaderProgram(const String& vsContent, const String& psContent)
+	bool GLESShaderProgram::createShaderProgram(const String& vsContent, const String& psContent)
 	{
 		clearShaderProgram();
 
@@ -215,15 +215,15 @@ namespace Echo
 			return false;
 		}
 
-		GLES2Renderer* pRenderer = ECHO_DOWN_CAST<GLES2Renderer*>(Renderer::instance());
-		Shader *pVertexShader = pRenderer->createShader(Shader::ST_VERTEXSHADER, vsContent.data(), (ui32)vsContent.size());
+		GLESRenderer* pRenderer = ECHO_DOWN_CAST<GLESRenderer*>(Renderer::instance());
+		GLESShader*pVertexShader = pRenderer->createShader(GLESShader::ST_VERTEXSHADER, vsContent.data(), (ui32)vsContent.size());
 		if (!pVertexShader)
 		{
 			EchoLogError("Error in create vs file: ");
 			return false;
 		}
 
-		Shader *pPixelShader = pRenderer->createShader(Shader::ST_PIXELSHADER, psContent.data(), (ui32)psContent.size());
+		GLESShader*pPixelShader = pRenderer->createShader(GLESShader::ST_PIXELSHADER, psContent.data(), (ui32)psContent.size());
 		if (!pPixelShader)
 		{
 			EchoLogError("Error in create ps file: ");
@@ -238,15 +238,15 @@ namespace Echo
 		return true;
 	}
 
-	void GLES2ShaderProgram::clearShaderProgram()
+	void GLESShaderProgram::clearShaderProgram()
 	{
-		(ECHO_DOWN_CAST<GLES2Renderer*>(Renderer::instance()))->bindShaderProgram(nullptr);
+		(ECHO_DOWN_CAST<GLESRenderer*>(Renderer::instance()))->bindShaderProgram(nullptr);
 
-		Shader* pVertexShader = detachShader(Shader::ST_VERTEXSHADER);
-		EchoSafeDelete(pVertexShader, Shader);
+		GLESShader* pVertexShader = detachShader(GLESShader::ST_VERTEXSHADER);
+		EchoSafeDelete(pVertexShader, GLESShader);
 
-		Shader* pPixelShader = detachShader(Shader::ST_PIXELSHADER);
-		EchoSafeDelete(pPixelShader, Shader);
+		GLESShader* pPixelShader = detachShader(GLESShader::ST_PIXELSHADER);
+		EchoSafeDelete(pPixelShader, GLESShader);
 
 		if (m_glesProgram)
 		{

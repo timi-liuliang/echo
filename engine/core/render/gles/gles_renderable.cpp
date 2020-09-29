@@ -1,31 +1,30 @@
-#include "GLESRenderBase.h"
-#include "GLESRenderer.h"
-#include "GLESRenderable.h"
-#include "GLESShaderProgram.h"
-#include "GLESMapping.h"
-#include "GLESGPUBuffer.h"
+#include "gles_render_base.h"
+#include "gles_renderer.h"
+#include "gles_renderable.h"
+#include "gles_shader_program.h"
+#include "gles_mapping.h"
+#include "gles_gpu_buffer.h"
 #include <engine/core/util/AssertX.h>
 #include <engine/core/util/Exception.h>
 #include "engine/core/scene/render_node.h"
 #include "base/image/PixelFormat.h"
 #include "base/Renderer.h"
-#include "GLESMapping.h"
 
 
 namespace Echo
 {
-	extern GLES2Renderer* g_renderer;
+	extern GLESRenderer* g_renderer;
 
-	GLES2Renderable::GLES2Renderable(int identifier)
+	GLESRenderable::GLESRenderable(int identifier)
 		: Renderable(identifier)
 	{
 	}
 
-	GLES2Renderable::~GLES2Renderable()
+	GLESRenderable::~GLESRenderable()
 	{
 	}
 
-	void GLES2Renderable::bindShaderParams()
+	void GLESRenderable::bindShaderParams()
 	{
 		ShaderProgram* shaderProgram = m_material->getShader();
 		if (shaderProgram)
@@ -60,23 +59,23 @@ namespace Echo
 		}
 	}
 
-	void GLES2Renderable::setMesh(MeshPtr mesh)
+	void GLESRenderable::setMesh(MeshPtr mesh)
 	{
 		m_mesh = mesh;
 
 		bindVertexStream();
 	}
 
-	void GLES2Renderable::setMaterial(Material* material)
+	void GLESRenderable::setMaterial(Material* material)
 	{
 		m_material = material;
 
 		bindVertexStream();
 
-		material->onShaderChanged.connectClassMethod(this, createMethodBind(&GLES2Renderable::bindVertexStream));
+		material->onShaderChanged.connectClassMethod(this, createMethodBind(&GLESRenderable::bindVertexStream));
 	}
 
-	void GLES2Renderable::bindVertexStream()
+	void GLESRenderable::bindVertexStream()
 	{
 		if (m_mesh && m_material && m_material->getShader())
 		{
@@ -91,7 +90,7 @@ namespace Echo
 		}
 	}
 
-	void GLES2Renderable::bind(Renderable* pre)
+	void GLESRenderable::bind(Renderable* pre)
 	{
 		GPUBuffer* idxBuffer = m_mesh->getIndexBuffer();
 		GPUBuffer* preIdxBuffer = pre ? pre->getMesh()->getIndexBuffer() : nullptr;
@@ -121,7 +120,7 @@ namespace Echo
 			{
 				const StreamUnit& streamUnit = m_vertexStreams[i];
 
-				((GLES2GPUBuffer*)streamUnit.m_buffer)->bindBuffer();
+				((GLESGPUBuffer*)streamUnit.m_buffer)->bindBuffer();
 
 				size_t declarationSize = streamUnit.m_vertDeclaration.size();
 				for (size_t i = 0; i < declarationSize; ++i)
@@ -141,12 +140,12 @@ namespace Echo
 		if ( isNeedSetIdxBuffer)
 		{
 			// Bind the index buffer and load the index data into it.
-			((GLES2GPUBuffer*)idxBuffer)->bindBuffer();
+			((GLESGPUBuffer*)idxBuffer)->bindBuffer();
 		}
 	}
 
 	// unbind
-	void GLES2Renderable::unbind()
+	void GLESRenderable::unbind()
 	{
 #ifndef ECHO_PLATFORM_IOS
 		// bind vertex stream
@@ -167,7 +166,7 @@ namespace Echo
 #endif
 	}
 
-	bool GLES2Renderable::buildVertStreamDeclaration(StreamUnit* stream)
+	bool GLESRenderable::buildVertStreamDeclaration(StreamUnit* stream)
 	{
 		ui32 numVertElms = static_cast<ui32>(stream->m_vertElements.size());
 		if (numVertElms == 0)
@@ -179,7 +178,7 @@ namespace Echo
 		stream->m_vertDeclaration.reserve(numVertElms);
 		stream->m_vertDeclaration.resize(numVertElms);
 
-		GLES2ShaderProgram* gles2Program = ECHO_DOWN_CAST<GLES2ShaderProgram*>(m_material->getShader());
+		GLESShaderProgram* gles2Program = ECHO_DOWN_CAST<GLESShaderProgram*>(m_material->getShader());
 		ui32 elmOffset = 0;
 		for (size_t i = 0; i < numVertElms; ++i)
 		{
@@ -221,12 +220,12 @@ namespace Echo
 		return true;
 	}
 
-	void GLES2Renderable::bindRenderState()
+	void GLESRenderable::bindRenderState()
 	{
 		ShaderProgram* shaderProgram = m_material->getShader();
 		if (shaderProgram)
 		{
-			GLES2Renderer* glesRenderer = (ECHO_DOWN_CAST<GLES2Renderer*>(Renderer::instance()));
+			GLESRenderer* glesRenderer = (ECHO_DOWN_CAST<GLESRenderer*>(Renderer::instance()));
 			glesRenderer->setDepthStencilState(shaderProgram->getDepthState());
 			glesRenderer->setRasterizerState(shaderProgram->getRasterizerState());
 			glesRenderer->setBlendState(shaderProgram->getBlendState());

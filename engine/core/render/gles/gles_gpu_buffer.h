@@ -4,11 +4,11 @@
 
 namespace Echo
 {
-	class GLES2GPUBuffer: public GPUBuffer
+	class GLESGPUBuffer: public GPUBuffer
 	{
 	public:
-		GLES2GPUBuffer(GPUBufferType type, Dword usage, const Buffer& buff);
-		~GLES2GPUBuffer();
+		GLESGPUBuffer(GPUBufferType type, Dword usage, const Buffer& buff);
+		~GLESGPUBuffer();
 
 		bool updateData(const Buffer& buff);
 		void bindBuffer();

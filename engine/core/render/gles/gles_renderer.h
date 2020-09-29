@@ -1,17 +1,17 @@
 #pragma once
 
 #include "engine/core/render/base/Renderer.h"
-#include "Shader.h"
-#include "GLESRenderState.h"
-#include "GLESRenderView.h"
+#include "gles_shader.h"
+#include "gles_render_state.h"
+#include "gles_render_view.h"
 
 namespace Echo
 {
 	struct TextureSlotInfo
 	{
-		GLenum				m_target;
-		GLuint				m_texture;
-		const GLES2SamplerState*	m_samplerState;
+		GLenum					m_target;
+		GLuint					m_texture;
+		const GLESSamplerState*	m_samplerState;
 		
 		TextureSlotInfo()
 			: m_target(-1), m_texture(0), m_samplerState( NULL)
@@ -27,16 +27,16 @@ namespace Echo
 
 	class GLESTexture2D;
 	class GLESTextureCube;
-	class GLES2ShaderProgram;
-	class GLES2Renderer: public Renderer
+	class GLESShaderProgram;
+	class GLESRenderer: public Renderer
 	{
 		typedef vector<GLuint>::type			TexUintList;
 		typedef vector<SamplerState*>::type		SamplerList;
 		typedef array<bool, 9>					NineBoolArray;
 
 	public:
-		GLES2Renderer();
-		~GLES2Renderer();
+		GLESRenderer();
+		~GLESRenderer();
 
 		// initialize
 		virtual bool initialize(const Settings& config) override;
@@ -79,7 +79,7 @@ namespace Echo
 		TextureCube* createTextureCube(const String& name) override;
 
 		ShaderProgram*	createShaderProgram() override;
-		Shader*	createShader(Shader::ShaderType type, const char* srcBuffer, ui32 size);
+		GLESShader*	createShader(GLESShader::ShaderType type, const char* srcBuffer, ui32 size);
 
 		// states
 		virtual RasterizerState* createRasterizerState(const RasterizerState::RasterizerDesc& desc) override;
@@ -100,7 +100,7 @@ namespace Echo
         virtual FrameBuffer* getWindowFrameBuffer() override;
 
         // bind shader program
-		bool bindShaderProgram(GLES2ShaderProgram* program);
+		bool bindShaderProgram(GLESShaderProgram* program);
 
 		// get viewport
 		virtual void getViewportReal( Viewport& pViewport) override;
@@ -139,7 +139,7 @@ namespace Echo
 		GLuint getGlesTexture(Texture* texture);
 
 	protected:
-		GLES2ShaderProgram*			m_pre_shader_program = nullptr;
+		GLESShaderProgram*			m_pre_shader_program = nullptr;
 		array<TextureSlotInfo, 8>	m_preTextures;
 		RasterizerState*			m_rasterizerState = nullptr;
 		DepthStencilState*			m_depthStencilState = nullptr;
@@ -147,7 +147,7 @@ namespace Echo
 		String						m_gpuDesc;
 		ui32						m_screenWidth = 0;
 		ui32						m_screenHeight = 0;
-		std::set<GLES2SamplerState*> m_vecSamlerStates;
+		std::set<GLESSamplerState*> m_vecSamlerStates;
 		NineBoolArray				m_isVertexAttribArrayEnable;
         FrameBuffer*				m_windowFramebuffer = nullptr;
 

@@ -1,13 +1,13 @@
-#include "GLESRenderBase.h"
-#include "GLESGPUBuffer.h"
-#include "GLESMapping.h"
-#include "GLESRenderer.h"
+#include "gles_render_base.h"
+#include "gles_gpu_buffer.h"
+#include "gles_mapping.h"
+#include "gles_renderer.h"
 #include <engine/core/util/Exception.h>
 #include <engine/core/log/Log.h>
 
 namespace Echo
 {
-	GLES2GPUBuffer::GLES2GPUBuffer(GPUBufferType type, Dword usage, const Buffer& buff)
+	GLESGPUBuffer::GLESGPUBuffer(GPUBufferType type, Dword usage, const Buffer& buff)
 		: GPUBuffer(type, usage, buff)
 	{
 		switch (type)
@@ -25,12 +25,12 @@ namespace Echo
 		updateData(buff);
 	}
 
-	GLES2GPUBuffer::~GLES2GPUBuffer()
+	GLESGPUBuffer::~GLESGPUBuffer()
 	{
 		OGLESDebug(glDeleteBuffers(1, &m_hVBO));
 	}
 
-	bool GLES2GPUBuffer::updateData(const Buffer& buff)
+	bool GLESGPUBuffer::updateData(const Buffer& buff)
 	{
 		if (buff.getSize() > 0 || m_glUsage != GL_STATIC_DRAW)
 		{
@@ -47,7 +47,7 @@ namespace Echo
 		return false;
 	}
 
-	void GLES2GPUBuffer::bindBuffer()
+	void GLESGPUBuffer::bindBuffer()
 	{
 		OGLESDebug(glBindBuffer(m_target, m_hVBO));
 	}

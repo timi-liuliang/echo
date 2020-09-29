@@ -1,4 +1,4 @@
-#include "GLESRenderBase.h"
+#include "gles_render_base.h"
 
 ECHO_COMPILER_ASSERT(ECHO_STL_MEMORY_ALLOCATOR == ECHO_STL_MEMORY_ALLOCATOR_STANDARD);
 

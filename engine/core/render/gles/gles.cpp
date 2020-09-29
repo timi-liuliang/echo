@@ -1,11 +1,11 @@
 #include "GLES.h"
-#include "GLESRenderer.h"
+#include "gles_renderer.h"
 
 namespace Echo
 {
 	void LoadGLESRenderer(Renderer*& render)
 	{
-		render = EchoNew(GLES2Renderer);
+		render = EchoNew(GLESRenderer);
 	}
 
 	void UnLoadGLESRenderer(Renderer* render)

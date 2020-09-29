@@ -6,7 +6,7 @@ namespace Echo
 {
 	class GLESTextureCube: public TextureCube
 	{
-		friend class GLES2Renderer;
+		friend class GLESRenderer;
 
 	protected:
 		GLESTextureCube();

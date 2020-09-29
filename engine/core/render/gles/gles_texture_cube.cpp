@@ -4,10 +4,10 @@
 #include "base/image/PixelFormat.h"
 #include "base/image/Image.h"
 #include "base/image/TextureLoader.h"
-#include "GLESRenderBase.h"
-#include "GLESRenderer.h"
-#include "GLESTextureCube.h"
-#include "GLESMapping.h"
+#include "gles_render_base.h"
+#include "gles_renderer.h"
+#include "gles_texture_cube.h"
+#include "gles_mapping.h"
 #include <iostream>
 
 namespace Echo

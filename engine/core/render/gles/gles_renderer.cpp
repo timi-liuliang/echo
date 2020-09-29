@@ -1,22 +1,22 @@
-#include "GLESRenderBase.h"
-#include "GLESRenderer.h"
-#include "GLESMapping.h"
-#include "GLESFrameBuffer.h"
-#include "GLESFrameBufferWindow.h"
-#include "GLESTexture2D.h"
-#include "GLESTextureCube.h"
-#include "GLESShaderProgram.h"
-#include "GLESRenderable.h"
+#include "gles_render_base.h"
+#include "gles_renderer.h"
+#include "gles_mapping.h"
+#include "gles_frame_buffer.h"
+#include "gles_frame_buffer_window.h"
+#include "gles_texture_2d.h"
+#include "gles_texture_cube.h"
+#include "gles_shader_program.h"
+#include "gles_renderable.h"
 #include <engine/core/log/Log.h>
 #include <engine/core/util/Exception.h>
 #include "engine/core/render/base/mesh/mesh.h"
 #include "base/pipeline/RenderPipeline.h"
-#include "GLESGPUBuffer.h"
+#include "gles_gpu_buffer.h"
 #include "base/Viewport.h"
 
 namespace Echo
 {
-	GLES2Renderer* g_renderer = nullptr;
+	GLESRenderer* g_renderer = nullptr;
 }
 
 #if defined(ECHO_PLATFORM_IOS)
@@ -35,7 +35,7 @@ extern void PresentRenderBuffer();
 
 namespace Echo
 {
-	GLES2Renderer::GLES2Renderer()
+	GLESRenderer::GLESRenderer()
 		: m_pre_shader_program(NULL)
 #ifdef ECHO_PLATFORM_WINDOWS
 		, m_eglConfig(0)
@@ -51,7 +51,7 @@ namespace Echo
 		std::fill(m_isVertexAttribArrayEnable.begin(), m_isVertexAttribArrayEnable.end(), false);
 	}
 
-	GLES2Renderer::~GLES2Renderer()
+	GLESRenderer::~GLESRenderer()
 	{
 		cleanSystemResource();
 		destroyImpl();
@@ -61,7 +61,7 @@ namespace Echo
 		g_renderer = nullptr;
 	}
 
-	bool GLES2Renderer::initialize(const Settings& config)
+	bool GLESRenderer::initialize(const Settings& config)
 	{
 		m_settings = config;
 
@@ -73,7 +73,7 @@ namespace Echo
 		return true;
 	}
 
-	bool GLES2Renderer::initializeImpl(const Renderer::Settings& config)
+	bool GLESRenderer::initializeImpl(const Renderer::Settings& config)
 	{
 #ifdef ECHO_PLATFORM_WINDOWS
 		// create render context
@@ -102,7 +102,7 @@ namespace Echo
 		return true;
 	}
 
-	void GLES2Renderer::checkOpenGLExtensions()
+	void GLESRenderer::checkOpenGLExtensions()
 	{
 		String GLExtensions = " ";
 		GLExtensions += String((const char*)glGetString(GL_EXTENSIONS));
@@ -141,14 +141,14 @@ namespace Echo
 
 	}
 
-	void GLES2Renderer::destroyImpl()
+	void GLESRenderer::destroyImpl()
 	{
 #ifdef ECHO_PLATFORM_WINDOWS
 		destroyRenderContext();
 #endif
 	}
 
-	void GLES2Renderer::createSystemResource()
+	void GLESRenderer::createSystemResource()
 	{
 		m_settings.m_isFullscreen = true;
 
@@ -157,34 +157,34 @@ namespace Echo
 		setViewport(&viewport);
 	}
 
-	void GLES2Renderer::cleanSystemResource()
+	void GLESRenderer::cleanSystemResource()
 	{
-		EchoSafeDeleteContainer(m_vecSamlerStates, GLES2SamplerState);
+		EchoSafeDeleteContainer(m_vecSamlerStates, GLESSamplerState);
 	}
 
-	void GLES2Renderer::setViewport(Viewport* pViewport)
+	void GLESRenderer::setViewport(Viewport* pViewport)
 	{
 		EchoAssert(pViewport);
 		OGLESDebug(glViewport(pViewport->getLeft(), pViewport->getTop(), pViewport->getWidth(), pViewport->getHeight()));
 	}
 
-	ui32 GLES2Renderer::getMaxStageNum() const
+	ui32 GLESRenderer::getMaxStageNum() const
 	{
 		return 32;
 	}
 
-	void GLES2Renderer::scissor(ui32 left, ui32 top, ui32 width, ui32 height)
+	void GLESRenderer::scissor(ui32 left, ui32 top, ui32 width, ui32 height)
 	{
 		OGLESDebug(glEnable(GL_SCISSOR_TEST));
 		OGLESDebug(glScissor(left, getWindowHeight() - top - height, width, height));
 	}
 
-	void GLES2Renderer::endScissor()
+	void GLESRenderer::endScissor()
 	{
 		OGLESDebug(glDisable(GL_SCISSOR_TEST));
 	}
 
-	GLuint GLES2Renderer::getGlesTexture(Texture* texture)
+	GLuint GLESRenderer::getGlesTexture(Texture* texture)
 	{
 		switch (texture->getType())
 		{
@@ -194,7 +194,7 @@ namespace Echo
 		}
 	}
 
-	void GLES2Renderer::setTexture(ui32 index, Texture* texture, bool needUpdate)
+	void GLESRenderer::setTexture(ui32 index, Texture* texture, bool needUpdate)
 	{
 		if (texture)
 		{
@@ -207,7 +207,7 @@ namespace Echo
 		}
 	}
 
-	void GLES2Renderer::bindTexture(GLenum slot, GLenum target, GLuint texture, bool needReset)
+	void GLESRenderer::bindTexture(GLenum slot, GLenum target, GLuint texture, bool needReset)
 	{
 		TextureSlotInfo& slotInfo = m_preTextures[slot];
 //		if (m_dirtyTexSlot || slotInfo.m_target != target || slotInfo.m_texture != texture || needReset)
@@ -220,7 +220,7 @@ namespace Echo
 		}
 	}
 
-	bool GLES2Renderer::drawWireframe(Renderable* renderable)
+	bool GLESRenderer::drawWireframe(Renderable* renderable)
 	{
 #ifdef ECHO_EDITOR_MODE
 		if (m_settings.m_polygonMode != RasterizerState::PM_FILL)
@@ -262,9 +262,9 @@ namespace Echo
 					m_wireFrameIndexBuffer->updateData(indexBuff);
 
 				// draw
-				GLES2Renderable* glesRenderable = (GLES2Renderable*)renderable;
+				GLESRenderable* glesRenderable = (GLESRenderable*)renderable;
 
-				GLES2ShaderProgram* shaderProgram = ECHO_DOWN_CAST<GLES2ShaderProgram*>(renderable->getMaterial()->getShader());
+				GLESShaderProgram* shaderProgram = ECHO_DOWN_CAST<GLESShaderProgram*>(renderable->getMaterial()->getShader());
 				shaderProgram->bind();
 				glesRenderable->bindRenderState();
 				glesRenderable->bindShaderParams();
@@ -284,7 +284,7 @@ namespace Echo
 					Byte* idxOffset = 0;
 
 					// bind buffer
-					((GLES2GPUBuffer*)m_wireFrameIndexBuffer)->bindBuffer();
+					((GLESGPUBuffer*)m_wireFrameIndexBuffer)->bindBuffer();
 
 					// draw
 					OGLESDebug(glDrawElements(glTopologyType, idxCount, idxType, idxOffset));
@@ -300,16 +300,16 @@ namespace Echo
 		return false;
 	}
 
-	void GLES2Renderer::draw(Renderable* renderable)
+	void GLESRenderer::draw(Renderable* renderable)
 	{
 #ifdef ECHO_EDITOR_MODE
 		if (drawWireframe(renderable))
 			return;
 #endif
 
-		GLES2Renderable* glesRenderable = (GLES2Renderable*)renderable;
+		GLESRenderable* glesRenderable = (GLESRenderable*)renderable;
 
-        GLES2ShaderProgram* shaderProgram = ECHO_DOWN_CAST<GLES2ShaderProgram*>(renderable->getMaterial()->getShader());
+        GLESShaderProgram* shaderProgram = ECHO_DOWN_CAST<GLESShaderProgram*>(renderable->getMaterial()->getShader());
 		shaderProgram->bind();
 		glesRenderable->bindRenderState();
 		glesRenderable->bindShaderParams();
@@ -357,13 +357,13 @@ namespace Echo
 		shaderProgram->unbind();
 	}
 
-	void GLES2Renderer::getDepthRange(Vector2& vec)
+	void GLESRenderer::getDepthRange(Vector2& vec)
 	{
 		vec.x = -1.0f;
 		vec.y = 1.0f;
 	}
 
-	void GLES2Renderer::convertMatOrho(Matrix4& mat, const Matrix4& matOrth, Real zn, Real zf)
+	void GLESRenderer::convertMatOrho(Matrix4& mat, const Matrix4& matOrth, Real zn, Real zf)
 	{
 		mat.m00 = matOrth.m00;	mat.m01 = matOrth.m01;	mat.m02 = matOrth.m02;		mat.m03 = matOrth.m03;
 		mat.m10 = matOrth.m10;	mat.m11 = matOrth.m11;	mat.m12 = matOrth.m12;		mat.m13 = matOrth.m13;
@@ -371,7 +371,7 @@ namespace Echo
 		mat.m30 = matOrth.m30;	mat.m31 = matOrth.m31;	mat.m32 = (zn + zf) / (zn - zf);	mat.m33 = matOrth.m33;
 	}
 
-	void GLES2Renderer::convertMatProj(Matrix4& mat, const Matrix4& matProj)
+	void GLESRenderer::convertMatProj(Matrix4& mat, const Matrix4& matProj)
 	{
 		mat.m00 = matProj.m00;	mat.m01 = matProj.m01;	mat.m02 = matProj.m02;		mat.m03 = matProj.m03;
 		mat.m10 = matProj.m10;	mat.m11 = matProj.m11;	mat.m12 = matProj.m12;		mat.m13 = matProj.m13;
@@ -379,7 +379,7 @@ namespace Echo
 		mat.m30 = matProj.m30;	mat.m31 = matProj.m31;	mat.m32 = 2 * matProj.m32;	mat.m33 = matProj.m33;
 	}
 
-	void GLES2Renderer::enableAttribLocation(ui32 attribLocation)
+	void GLESRenderer::enableAttribLocation(ui32 attribLocation)
 	{
 		if (!m_isVertexAttribArrayEnable[attribLocation])
 		{
@@ -388,7 +388,7 @@ namespace Echo
 		}
 	}
 
-	void GLES2Renderer::disableAttribLocation(ui32 attribLocation)
+	void GLESRenderer::disableAttribLocation(ui32 attribLocation)
 	{
 		if (m_isVertexAttribArrayEnable[attribLocation])
 		{
@@ -397,74 +397,74 @@ namespace Echo
 		}
 	}
 
-	GPUBuffer* GLES2Renderer::createVertexBuffer(Dword usage, const Buffer& buff)
+	GPUBuffer* GLESRenderer::createVertexBuffer(Dword usage, const Buffer& buff)
 	{
-		return EchoNew(GLES2GPUBuffer(GPUBuffer::GBT_VERTEX, usage, buff));
+		return EchoNew(GLESGPUBuffer(GPUBuffer::GBT_VERTEX, usage, buff));
 	}
 
-	GPUBuffer* GLES2Renderer::createIndexBuffer(Dword usage, const Buffer& buff)
+	GPUBuffer* GLESRenderer::createIndexBuffer(Dword usage, const Buffer& buff)
 	{
-		return EchoNew(GLES2GPUBuffer(GPUBuffer::GBT_INDEX, usage, buff));
+		return EchoNew(GLESGPUBuffer(GPUBuffer::GBT_INDEX, usage, buff));
 	}
 
-	Texture* GLES2Renderer::createTexture2D()
+	Texture* GLESRenderer::createTexture2D()
 	{
 		static i32 TextureIndex = 0;
 		return EchoNew(GLESTexture2D(StringUtil::Format("Texture_%d", TextureIndex++)));
 	}
 
-	Texture* GLES2Renderer::createTexture2D(const String& name)
+	Texture* GLESRenderer::createTexture2D(const String& name)
 	{
 		return EchoNew(GLESTexture2D(name));
 	}
 
-	TextureCube* GLES2Renderer::createTextureCube(const String& name)
+	TextureCube* GLESRenderer::createTextureCube(const String& name)
 	{
 		return name.empty() ? EchoNew(GLESTextureCube) : EchoNew(GLESTextureCube(name));
 	}
 
-	ShaderProgram* GLES2Renderer::createShaderProgram()
+	ShaderProgram* GLESRenderer::createShaderProgram()
 	{
-		return EchoNew(GLES2ShaderProgram);
+		return EchoNew(GLESShaderProgram);
 	}
 
-	Shader* GLES2Renderer::createShader(Shader::ShaderType type, const char* srcBuffer, ui32 size)
+	GLESShader* GLESRenderer::createShader(GLESShader::ShaderType type, const char* srcBuffer, ui32 size)
 	{
-		return EchoNew(GLES2Shader(type, srcBuffer, size));
+		return EchoNew(GLESShader(type, srcBuffer, size));
 	}
 
-	RasterizerState* GLES2Renderer::createRasterizerState(const RasterizerState::RasterizerDesc& desc)
+	RasterizerState* GLESRenderer::createRasterizerState(const RasterizerState::RasterizerDesc& desc)
 	{
-		return EchoNew(GLES2RasterizerState(desc));
+		return EchoNew(GLESRasterizerState(desc));
 	}
 
-	DepthStencilState* GLES2Renderer::createDepthStencilState(const DepthStencilState::DepthStencilDesc& desc)
+	DepthStencilState* GLESRenderer::createDepthStencilState(const DepthStencilState::DepthStencilDesc& desc)
 	{
-		return EchoNew(GLES2DepthStencilState(desc));
+		return EchoNew(GLESDepthStencilState(desc));
 	}
 
-	BlendState* GLES2Renderer::createBlendState(const BlendState::BlendDesc& desc)
+	BlendState* GLESRenderer::createBlendState(const BlendState::BlendDesc& desc)
 	{
-		return EchoNew(GLES2BlendState(desc));
+		return EchoNew(GLESBlendState(desc));
 	}
 
-	const SamplerState* GLES2Renderer::getSamplerState(const SamplerState::SamplerDesc& desc)
+	const SamplerState* GLESRenderer::getSamplerState(const SamplerState::SamplerDesc& desc)
 	{
 		// is exist
-		for (std::set<GLES2SamplerState*>::iterator it = m_vecSamlerStates.begin(); it != m_vecSamlerStates.end(); it++)
+		for (std::set<GLESSamplerState*>::iterator it = m_vecSamlerStates.begin(); it != m_vecSamlerStates.end(); it++)
 		{
 			if ((*it)->getDesc() == desc)
 				return *it;
 		}
 
 		// new one
-		GLES2SamplerState* pState = EchoNew(GLES2SamplerState(desc));
+		GLESSamplerState* pState = EchoNew(GLESSamplerState(desc));
 		m_vecSamlerStates.insert(pState);
 
 		return pState;
 	}
 
-	bool GLES2Renderer::bindShaderProgram(GLES2ShaderProgram* program)
+	bool GLESRenderer::bindShaderProgram(GLESShaderProgram* program)
 	{
 		if (m_pre_shader_program != program)
 		{
@@ -475,7 +475,7 @@ namespace Echo
 		return false;
 	}
 
-	void GLES2Renderer::getViewportReal(Viewport& pViewport)
+	void GLESRenderer::getViewportReal(Viewport& pViewport)
 	{
 		GLint viewPort[4];
 		OGLESDebug(glGetIntegerv(GL_VIEWPORT, viewPort));
@@ -483,7 +483,7 @@ namespace Echo
 		pViewport = Viewport(viewPort[0], viewPort[1], viewPort[2], viewPort[3]);
 	}
 
-	void GLES2Renderer::onSize(int width, int height)
+	void GLESRenderer::onSize(int width, int height)
 	{
 		m_screenWidth = width;
 		m_screenHeight = height;
@@ -495,7 +495,7 @@ namespace Echo
         RenderPipeline::current()->onSize(width, height);
 	}
 
-	bool GLES2Renderer::present()
+	bool GLESRenderer::present()
 	{
 		m_pre_shader_program = nullptr;
 
@@ -523,7 +523,7 @@ namespace Echo
 
 #ifdef ECHO_PLATFORM_WINDOWS
 
-	bool GLES2Renderer::createRenderContext(const Renderer::Settings& config)
+	bool GLESRenderer::createRenderContext(const Renderer::Settings& config)
 	{
 		m_hWnd = (HWND)config.m_windowHandle;
 		m_hDC = GetDC(m_hWnd);
@@ -642,7 +642,7 @@ namespace Echo
 		return true;
 	}
 
-	void GLES2Renderer::destroyRenderContext()
+	void GLESRenderer::destroyRenderContext()
 	{
 		eglDestroyContext(m_eglDisplay, m_eglContext);
 		eglDestroySurface(m_eglDisplay, m_eglSurface);
@@ -655,32 +655,32 @@ namespace Echo
 		ReleaseDC(m_hWnd, m_hDC);
 	}
 
-	bool GLES2Renderer::contextCurrent()
+	bool GLESRenderer::contextCurrent()
 	{
 		return !!eglMakeCurrent(m_eglDisplay, m_eglSurface, m_eglSurface, m_eglContext);
 	}
 #endif
 
-    RenderView* GLES2Renderer::createRenderView(ui32 width, ui32 height, PixelFormat pixelFormat)
+    RenderView* GLESRenderer::createRenderView(ui32 width, ui32 height, PixelFormat pixelFormat)
     {
         return EchoNew(GLESRenderView(width, height, pixelFormat));
     }
 
-	FrameBuffer* GLES2Renderer::createFramebuffer(ui32 id, ui32 width, ui32 height)
+	FrameBuffer* GLESRenderer::createFramebuffer(ui32 id, ui32 width, ui32 height)
 	{
 		return EchoNew(GLESFramebuffer(id, width, height));
 	}
 
-	Renderable* GLES2Renderer::createRenderable()
+	Renderable* GLESRenderer::createRenderable()
 	{
         static ui32 id = 0; id++;
-		Renderable* renderable = EchoNew(GLES2Renderable(id));
+		Renderable* renderable = EchoNew(GLESRenderable(id));
 		m_renderables[id] = renderable;
 
 		return renderable;
 	}
 
-    FrameBuffer* GLES2Renderer::getWindowFrameBuffer()
+    FrameBuffer* GLESRenderer::getWindowFrameBuffer()
     {
         if (!m_windowFramebuffer)
         {
@@ -691,22 +691,22 @@ namespace Echo
     }
 
 
-	RasterizerState* GLES2Renderer::getRasterizerState() const
+	RasterizerState* GLESRenderer::getRasterizerState() const
 	{
 		return m_rasterizerState;
 	}
 
-	DepthStencilState* GLES2Renderer::getDepthStencilState() const
+	DepthStencilState* GLESRenderer::getDepthStencilState() const
 	{
 		return m_depthStencilState;
 	}
 
-	BlendState* GLES2Renderer::getBlendState() const
+	BlendState* GLESRenderer::getBlendState() const
 	{
 		return m_blendState;
 	}
 
-	void GLES2Renderer::setRasterizerState(RasterizerState* state)
+	void GLESRenderer::setRasterizerState(RasterizerState* state)
 	{
 		EchoAssert(state);
 		if (state != m_rasterizerState)
@@ -716,7 +716,7 @@ namespace Echo
 		}
 	}
 
-	void GLES2Renderer::setDepthStencilState(DepthStencilState* state)
+	void GLESRenderer::setDepthStencilState(DepthStencilState* state)
 	{
 		if (state && state != m_depthStencilState)
 		{
@@ -725,7 +725,7 @@ namespace Echo
 		}
 	}
 
-	void GLES2Renderer::setBlendState(BlendState* state)
+	void GLESRenderer::setBlendState(BlendState* state)
 	{
 		if (state != m_blendState)
 		{

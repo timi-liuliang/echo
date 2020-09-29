@@ -1,7 +1,7 @@
 #pragma once
 
 #include "base/RenderState.h"
-#include "GLESRenderBase.h"
+#include "gles_render_base.h"
 
 namespace Echo
 {
@@ -62,11 +62,11 @@ namespace Echo
 		GLenum backStencilPassOP;
 	};
 
-	class GLES2BlendState: public BlendState
+	class GLESBlendState: public BlendState
 	{
 	public:
-		GLES2BlendState(const BlendDesc &desc);
-		~GLES2BlendState();
+		GLESBlendState(const BlendDesc &desc);
+		~GLESBlendState();
 
 	public:
 		void						active();
@@ -87,11 +87,11 @@ namespace Echo
 		GLboolean					m_glAlphaMask;
 	};
 	
-	class GLES2DepthStencilState: public DepthStencilState
+	class GLESDepthStencilState: public DepthStencilState
 	{
 	public:
-		GLES2DepthStencilState(const DepthStencilDesc& desc);
-		~GLES2DepthStencilState();
+		GLESDepthStencilState(const DepthStencilDesc& desc);
+		~GLESDepthStencilState();
 
 	public:
 		void						active();
@@ -112,11 +112,11 @@ namespace Echo
 		GLenum						m_glBackStencilPassOP;
 	};
 
-	class GLES2RasterizerState: public RasterizerState
+	class GLESRasterizerState: public RasterizerState
 	{
 	public:
-		GLES2RasterizerState(const RasterizerDesc& desc);
-		~GLES2RasterizerState();
+		GLESRasterizerState(const RasterizerDesc& desc);
+		~GLESRasterizerState();
 
 	public:
 		void						active();
@@ -125,17 +125,15 @@ namespace Echo
 		void						create();
 
 	private:
-		//GLenum					m_glPolygonMode;
-		//GLenum					m_glShadeModel;
 		GLenum						m_glFrontFace;
 	};
 
-	class GLES2SamplerState: public SamplerState
+	class GLESSamplerState: public SamplerState
 	{
-		friend class GLES2Renderer;
+		friend class GLESRenderer;
 	private:
-		GLES2SamplerState(const SamplerDesc& desc);
-		~GLES2SamplerState();
+		GLESSamplerState(const SamplerDesc& desc);
+		~GLESSamplerState();
 
 	public:
 		void			active(const SamplerState* pre) const;

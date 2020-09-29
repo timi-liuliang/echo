@@ -1,24 +1,24 @@
-#include "GLESRenderBase.h"
-#include "GLESRenderState.h"
-#include "GLESMapping.h"
-#include "GLESTexture2D.h"
-#include "GLESRenderer.h"
+#include "gles_render_base.h"
+#include "gles_render_state.h"
+#include "gles_mapping.h"
+#include "gles_texture_2d.h"
+#include "gles_renderer.h"
 #include "base/Renderer.h"
 #include "engine/core/util/Exception.h"
 
 namespace Echo
 {
-	GLES2BlendState::GLES2BlendState(const BlendDesc& desc)
+	GLESBlendState::GLESBlendState(const BlendDesc& desc)
 		: BlendState(desc)
 	{
 		create();
 	}
 
-	GLES2BlendState::~GLES2BlendState()
+	GLESBlendState::~GLESBlendState()
 	{
 	}
 
-	void GLES2BlendState::active()
+	void GLESBlendState::active()
 	{
 		BlendStateParams blendParams;
 		memset(&blendParams, 0, sizeof(blendParams));
@@ -36,7 +36,7 @@ namespace Echo
 		blendParams.alpha_mask = m_glAlphaMask;
 		blendParams.blendFactor = m_desc.blendFactor;
 
-		BlendState* pCurState = (ECHO_DOWN_CAST<GLES2Renderer*>(Renderer::instance()))->getBlendState();
+		BlendState* pCurState = (ECHO_DOWN_CAST<GLESRenderer*>(Renderer::instance()))->getBlendState();
 		if(pCurState)
 		{
 			const BlendDesc& currDesc = pCurState->getDesc();
@@ -134,7 +134,7 @@ namespace Echo
 		}
 	}
 
-	void GLES2BlendState::create()
+	void GLESBlendState::create()
 	{
 		m_glBlendOP = GLES2Mapping::MapBlendOperation(m_desc.blendOP);
 		m_glAlphaBlendOP = GLES2Mapping::MapBlendOperation(m_desc.alphaBlendOP);
@@ -148,17 +148,17 @@ namespace Echo
 		m_glAlphaMask = (m_desc.colorWriteMask & CMASK_ALPHA) != 0;
 	}
 
-	GLES2DepthStencilState::GLES2DepthStencilState(const DepthStencilDesc &desc)
+	GLESDepthStencilState::GLESDepthStencilState(const DepthStencilDesc &desc)
 		: DepthStencilState(desc)
 	{
 		create();
 	}
 
-	GLES2DepthStencilState::~GLES2DepthStencilState()
+	GLESDepthStencilState::~GLESDepthStencilState()
 	{
 	}
 
-	void GLES2DepthStencilState::active()
+	void GLESDepthStencilState::active()
 	{
 		DepthStencilStateParams depthStencilParams;
 		memset(&depthStencilParams, 0, sizeof(depthStencilParams));
@@ -181,7 +181,7 @@ namespace Echo
 		depthStencilParams.backStencilDepthFailOP = m_glBackStencilDepthFailOP;
 		depthStencilParams.backStencilPassOP = m_glBackStencilPassOP;
 		
-		DepthStencilState* pCurState = (ECHO_DOWN_CAST<GLES2Renderer*>(Renderer::instance()))->getDepthStencilState();
+		DepthStencilState* pCurState = (ECHO_DOWN_CAST<GLESRenderer*>(Renderer::instance()))->getDepthStencilState();
 		if(pCurState)
 		{
 			const  DepthStencilDesc& currDesc = pCurState->getDesc();
@@ -324,7 +324,7 @@ namespace Echo
 		}
 	}
 
-	void GLES2DepthStencilState::create()
+	void GLESDepthStencilState::create()
 	{
 		m_glDepthMask = m_desc.bWriteDepth? GL_TRUE : GL_FALSE;
 		m_glDepthFunc = GLES2Mapping::MapComparisonFunc(m_desc.depthFunc);
@@ -338,19 +338,19 @@ namespace Echo
 		m_glBackStencilPassOP = GLES2Mapping::MapStencilOperation(m_desc.backStencilPassOP);
 	}
 
-	GLES2RasterizerState::GLES2RasterizerState(const RasterizerDesc& desc)
+	GLESRasterizerState::GLESRasterizerState(const RasterizerDesc& desc)
 		: RasterizerState(desc)
 	{
 		create();
 	}
 
-	GLES2RasterizerState::~GLES2RasterizerState()
+	GLESRasterizerState::~GLESRasterizerState()
 	{
 	}
 
-	void GLES2RasterizerState::active()
+	void GLESRasterizerState::active()
 	{
-		RasterizerState* pCurState = (ECHO_DOWN_CAST<GLES2Renderer*>(Renderer::instance()))->getRasterizerState();
+		RasterizerState* pCurState = (ECHO_DOWN_CAST<GLESRenderer*>(Renderer::instance()))->getRasterizerState();
 		const RasterizerDesc* currDesc = nullptr;
 		if (pCurState)
 		{
@@ -473,7 +473,7 @@ namespace Echo
 		}
 	}
 
-	void GLES2RasterizerState::create()
+	void GLESRasterizerState::create()
 	{
 		if(m_desc.polygonMode != PM_FILL)
 			EchoLogError("GLES2Renderer only support polygon fill mode [PM_FILL]. Check polygonMode property.");
@@ -484,17 +484,17 @@ namespace Echo
 		m_glFrontFace = m_desc.bFrontFaceCCW ? GL_CCW : GL_CW;
 	}
 
-	GLES2SamplerState::GLES2SamplerState(const SamplerDesc& desc)
+	GLESSamplerState::GLESSamplerState(const SamplerDesc& desc)
 		: SamplerState(desc)
 	{
 		create();
 	}
 
-	GLES2SamplerState::~GLES2SamplerState()
+	GLESSamplerState::~GLESSamplerState()
 	{
 	}
 
-	void GLES2SamplerState::active(const SamplerState* pre) const
+	void GLESSamplerState::active(const SamplerState* pre) const
 	{
 		const SamplerDesc* prev_desc = nullptr;
 		const SamplerDesc* curr_desc = nullptr;
@@ -536,7 +536,7 @@ namespace Echo
 		}
 	}
 
-	void GLES2SamplerState::create()
+	void GLESSamplerState::create()
 	{
 		if (m_desc.minFilter == FO_NONE)
 		{
@@ -573,27 +573,27 @@ namespace Echo
 		m_glAddrModeW = GLES2Mapping::MapAddressMode(m_desc.addrWMode);
 	}
 
-	GLint GLES2SamplerState::getGLMinFilter() const
+	GLint GLESSamplerState::getGLMinFilter() const
 	{
 		return m_glMinFilter;
 	}
 
-	GLint GLES2SamplerState::getGLMagFilter() const
+	GLint GLESSamplerState::getGLMagFilter() const
 	{
 		return m_glMagFilter;
 	}
 
-	GLint GLES2SamplerState::getGLAddrModeU() const
+	GLint GLESSamplerState::getGLAddrModeU() const
 	{
 		return m_glAddrModeU;
 	}
 
-	GLint GLES2SamplerState::getGLAddrModeV() const
+	GLint GLESSamplerState::getGLAddrModeV() const
 	{
 		return m_glAddrModeV;
 	}
 
-	GLint GLES2SamplerState::getGLAddrModeW() const
+	GLint GLESSamplerState::getGLAddrModeW() const
 	{
 		return m_glAddrModeW;
 	}
