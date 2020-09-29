@@ -1,7 +1,7 @@
 #pragma once
 
 #include "irender_queue.h"
-#include <engine/core/render/base/Renderable.h>
+#include <engine/core/render/base/renderable.h>
 #include <engine/core/scene/node.h>
 
 namespace Echo

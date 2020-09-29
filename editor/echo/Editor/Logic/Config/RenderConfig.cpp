@@ -1,7 +1,7 @@
 #include <engine/core/log/Log.h>
 #include <engine/core/render/vulkan/vk.h>
 #include <engine/core/render/metal/mt.h>
-#include <engine/core/render/gles/GLES.h>
+#include <engine/core/render/gles/gles.h>
 #include <engine/core/util/magic_enum.hpp>
 
 namespace Echo

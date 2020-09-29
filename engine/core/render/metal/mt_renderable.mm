@@ -1,4 +1,4 @@
-#include "engine/core/render/base/mesh/Mesh.h"
+#include "engine/core/render/base/mesh/mesh.h"
 #include "engine/core/scene/render_node.h"
 #include "mt_mapping.h"
 #include "mt_gpu_buffer.h"

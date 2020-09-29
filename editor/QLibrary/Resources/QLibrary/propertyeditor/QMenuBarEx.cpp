@@ -1,4 +1,4 @@
-#include "QMenubarEx.h"
+#include "QMenuBarEx.h"
 #include <QToolButton>
 #include <QHBoxLayout>
 #include <QMouseEvent>

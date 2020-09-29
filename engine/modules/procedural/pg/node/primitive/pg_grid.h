@@ -13,6 +13,6 @@ namespace Echo
 		virtual ~PGGrid();
 
 		// calculate
-		virtual void play(PCGData& data);
+		virtual void play(PCGData& data) override;
 	};
 }

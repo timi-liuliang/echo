@@ -1,7 +1,7 @@
 #pragma once
 
 #include <nodeeditor/NodeData>
-#include "Engine/core/util/StringUtil.h"
+#include "engine/core/util/StringUtil.h"
 
 using QtNodes::NodeDataType;
 using QtNodes::NodeData;

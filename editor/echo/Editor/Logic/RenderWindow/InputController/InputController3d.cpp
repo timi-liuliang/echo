@@ -2,7 +2,7 @@
 #include "EchoEngine.h"
 #include <QWheelEvent>
 #include <QMouseEvent>
-#include <engine/core/render/base/Renderer.h>
+#include <engine/core/render/base/renderer.h>
 #include <engine/core/math/Function.h>
 #include "Modules/settings/editor_camera_settings.h"
 #include "Studio.h"

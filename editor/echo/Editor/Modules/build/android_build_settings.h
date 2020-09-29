@@ -23,7 +23,7 @@ namespace Echo
         static AndroidBuildSettings* instance();
 
 		// get name
-		virtual char* getPlatformName() const { return "Android"; }
+		virtual const char* getPlatformName() const override { return "Android"; }
 
 		// platform thumbnail
         virtual ImagePtr getPlatformThumbnail() const override;

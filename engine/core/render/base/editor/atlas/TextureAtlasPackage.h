@@ -3,7 +3,7 @@
 #include "engine/core/util/Any.hpp"
 #include "engine/core/math/color.h"
 #include "engine/core/render/base/image/pixel_format.h"
-#include "engine/core/render/base/Texture.h"
+#include "engine/core/render/base/texture.h"
 
 #ifdef ECHO_EDITOR_MODE
 

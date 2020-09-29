@@ -8,7 +8,7 @@
 #include "engine/core/thread/Threading.h"
 #include "Studio.h"
 #include "RenderWindow.h"
-#include <base/Renderer.h>
+#include <base/renderer.h>
 #include <string>
 #include "Studio.h"
 #include "base/render_state.h"

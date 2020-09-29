@@ -16,7 +16,7 @@ namespace Echo
 		static WindowsBuildSettings* instance();
 
 		// get name
-		virtual char* getPlatformName() const { return "Windows"; }
+		virtual const char* getPlatformName() const override { return "Windows"; }
 
 		// platform thumbnail
 		virtual ImagePtr getPlatformThumbnail() const override;

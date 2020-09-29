@@ -1,7 +1,7 @@
 #pragma once
 
 #include "base/mesh/mesh.h"
-#include "base/ShaderProgram.h"
+#include "base/shader_program.h"
 #include "mt_render_base.h"
 
 namespace Echo

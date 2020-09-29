@@ -5,7 +5,7 @@
 #include "DataVector3.h"
 #include "ShaderScene.h"
 #include "nodeeditor/internal/node/Node.hpp"
-#include <Engine/core/log/Log.h>
+#include <engine/core/log/Log.h>
 
 namespace DataFlowProgramming
 {

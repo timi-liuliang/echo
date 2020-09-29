@@ -6,7 +6,7 @@
 #include <QProcess>
 #include "FreeImageHelper.h"
 #include <engine/core/main/module.h>
-#include <engine/core/render/base/Renderer.h>
+#include <engine/core/render/base/renderer.h>
 
 namespace Echo
 {

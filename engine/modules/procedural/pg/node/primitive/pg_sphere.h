@@ -25,7 +25,7 @@ namespace Echo
 		virtual ~PGSphere();
 
 		// calculate
-		virtual void play(PCGData& data);
+		virtual void play(PCGData& data) override;
 
 	protected:
 		Type	m_type = Type::Uv;

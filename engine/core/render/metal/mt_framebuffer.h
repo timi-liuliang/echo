@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/core/render/base/FrameBuffer.h"
+#include "engine/core/render/base/frame_buffer.h"
 #include "mt_render_base.h"
 
 namespace Echo

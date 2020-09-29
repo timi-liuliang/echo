@@ -3,7 +3,7 @@
 #include "shader_program.h"
 #include "engine/core/render/base/render_state.h"
 #include "engine/core/resource/Res.h"
-#include "Texture.h"
+#include "texture.h"
 #include "atla/texture_atla.h"
 
 namespace Echo

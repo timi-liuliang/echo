@@ -1,4 +1,4 @@
-#include "base/mesh/Mesh.h"
+#include "base/mesh/mesh.h"
 #include "mt_renderer.h"
 #include "mt_renderable.h"
 #include "mt_shader_program.h"
@@ -167,7 +167,7 @@ namespace Echo
         shaderProgram->bind();
         mtRenderable->bindShaderParams();
         
-        [m_metalRenderCommandEncoder setDepthStencilState:shaderProgram->getMTDepthStencilState()]; 
+        [m_metalRenderCommandEncoder setDepthStencilState:shaderProgram->getMTDepthStencilState()];
 
         if(m_metalRenderPassDescriptor && mtRenderable && mtRenderable->getMetalRenderPipelineState())
         {

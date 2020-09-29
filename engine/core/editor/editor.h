@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/core/base/echo_def.h"
-#include "engine/core/render/base/image/Image.h"
+#include "engine/core/render/base/image/image.h"
 #include "bottom_panel_tab.h"
 #include "qt/QWidgets.h"
 

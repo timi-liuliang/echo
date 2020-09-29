@@ -1,7 +1,7 @@
 #pragma once
 
-#include "base/image/Image.h"
-#include "engine/core/render/base/Texture.h"
+#include "base/image/image.h"
+#include "engine/core/render/base/texture.h"
 #include "mt_render_base.h"
 
 namespace Echo

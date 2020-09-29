@@ -3,7 +3,7 @@
 #include <QtGui/QDoubleValidator>
 #include "DataFloat.h"
 #include "DataVector3.h"
-#include "Engine/core/util/StringUtil.h"
+#include "engine/core/util/StringUtil.h"
 #include <QMenu>
 
 namespace DataFlowProgramming

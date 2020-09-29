@@ -2,7 +2,7 @@
 #include "engine/core/io/IO.h"
 #include <thirdparty/pugixml/pugixml.hpp>
 #include <thirdparty/pugixml/pugiconfig.hpp>
-#include "engine/core/render/base/Texture.h"
+#include "engine/core/render/base/texture.h"
 #include "engine/core/util/PathUtil.h"
 
 namespace Echo

@@ -6,7 +6,7 @@
 #include "engine/core/scene/node.h"
 #include "engine/core/render/base/mesh/mesh.h"
 #include "engine/core/resource/Res.h"
-#include "engine/core/render/base/Material.h"
+#include "engine/core/render/base/material.h"
 #include "engine/modules/anim/anim_property.h"
 #include <nlohmann/json.hpp>
 

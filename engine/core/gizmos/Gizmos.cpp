@@ -1,7 +1,7 @@
 #include "Gizmos.h"
 #include "engine/core/memory/MemAllocDef.h"
 #include "engine/core/scene/node_tree.h"
-#include "engine/core/render/base/Renderer.h"
+#include "engine/core/render/base/renderer.h"
 
 // material for vulkan or metal or opengles
 static const char* g_gizmoVsCode = R"(

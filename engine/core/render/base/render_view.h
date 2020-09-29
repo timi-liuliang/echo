@@ -1,7 +1,7 @@
 #pragma once
 
 #include "image/pixel_format.h"
-#include "Texture.h"
+#include "texture.h"
 
 namespace Echo
 {

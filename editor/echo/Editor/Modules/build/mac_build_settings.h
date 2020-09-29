@@ -16,7 +16,7 @@ namespace Echo
         static MacBuildSettings* instance();
 
 		// get name
-		virtual char* getPlatformName() const { return "Mac"; }
+		virtual const char* getPlatformName() const override { return "Mac"; }
 
 		// platform thumbnail
 		virtual ImagePtr getPlatformThumbnail() const override;

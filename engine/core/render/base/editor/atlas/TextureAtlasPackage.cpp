@@ -1,8 +1,8 @@
 #include "TextureAtlasPackage.h"
 #include "engine/core/util/Buffer.h"
 #include "engine/core/resource/Res.h"
-#include "engine/core/render/base/image/Image.h"
-#include "engine/core/render/base/Texture.h"
+#include "engine/core/render/base/image/image.h"
+#include "engine/core/render/base/texture.h"
 
 #ifdef ECHO_EDITOR_MODE
 

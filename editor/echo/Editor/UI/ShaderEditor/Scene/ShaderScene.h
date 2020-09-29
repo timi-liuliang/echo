@@ -33,7 +33,7 @@ namespace DataFlowProgramming
         void onShowShaderNodeMenu(QtNodes::Node& node, const QPointF& pos);
 
         // double clicked
-        virtual void nodePressed(QtNodes::Node& node);
+        virtual void nodePressed(QtNodes::Node& node) override;
 
     protected:
         class Studio::ShaderEditor* m_shaderEditor = nullptr;

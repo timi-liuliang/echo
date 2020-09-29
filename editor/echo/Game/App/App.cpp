@@ -1,6 +1,6 @@
 #include "App.h"
 #include "Log.h"
-#include <engine/core/render/gles/GLES.h>
+#include <engine/core/render/gles/gles.h>
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/util/HashGenerator.h>
 

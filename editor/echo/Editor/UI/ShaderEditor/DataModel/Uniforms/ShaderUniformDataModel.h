@@ -35,10 +35,10 @@ namespace DataFlowProgramming
         virtual bool captionVisible() const override { return m_uniformConfig->isExport(); }
 
         // variable name
-        virtual Echo::String getVariableName() const;
+        virtual Echo::String getVariableName() const override;
 
         // show menu
-        virtual void showMenu(const QPointF& pos);
+        virtual void showMenu(const QPointF& pos) override;
 
         // uniform config
         void saveUniformConfig(QJsonObject& p) const;

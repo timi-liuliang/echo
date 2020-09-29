@@ -18,7 +18,7 @@ namespace Echo
 		virtual const char* getName() override { return "GLTF"; }
 
 		// import
-		virtual void run(const char* targetFolder);
+		virtual void run(const char* targetFolder) override;
 
 		// save
 		void saveMeshs(Gltf::Loader& loader);

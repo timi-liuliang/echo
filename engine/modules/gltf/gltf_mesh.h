@@ -3,8 +3,8 @@
 #include "engine/core/scene/render_node.h"
 #include "engine/core/scene/node_path.h"
 #include "engine/core/render/base/mesh/mesh.h"
-#include "engine/core/render/base/Material.h"
-#include "engine/core/render/base/Renderable.h"
+#include "engine/core/render/base/material.h"
+#include "engine/core/render/base/renderable.h"
 #include "gltf_res.h"
 #include "gltf_skeleton.h"
 

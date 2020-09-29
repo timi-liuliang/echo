@@ -19,7 +19,7 @@ namespace Procedural
 		}
 
 		// custom paint
-		virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
+		virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override
 		{
 			painter->setPen(pen());
 			painter->setBrush(brush());

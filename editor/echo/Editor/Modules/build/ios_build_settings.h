@@ -53,7 +53,7 @@ namespace Echo
         static iOSBuildSettings* instance();
 
 		// get name
-		virtual char* getPlatformName() const { return "iOS"; }
+		virtual const char* getPlatformName() const override { return "iOS"; }
 
 		// platform thumbnail
 		virtual ImagePtr getPlatformThumbnail() const override;

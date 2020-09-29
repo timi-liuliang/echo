@@ -1,7 +1,7 @@
 #pragma once
 
 #include <engine/core/base/type_def.h>
-#include <freeimage/FreeImage.h>
+#include <FreeImage/FreeImage.h>
 #include <engine/core/util/StringUtil.h>
 #include <engine/core/math/color.h>
 

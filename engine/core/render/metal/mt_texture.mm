@@ -3,7 +3,7 @@
 #include "mt_renderer.h"
 #include "mt_render_state.h"
 #include "engine/core/io/IO.h"
-#include "base/image/Image.h"
+#include "base/image/image.h"
 
 namespace Echo
 {

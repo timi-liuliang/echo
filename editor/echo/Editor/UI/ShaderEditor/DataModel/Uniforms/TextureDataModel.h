@@ -32,7 +32,7 @@ namespace DataFlowProgramming
         QString name() const override { return QStringLiteral("Texture"); }
 
 		// generate code
-        virtual bool generateCode(ShaderCompiler& compiler);
+        virtual bool generateCode(ShaderCompiler& compiler) override;
 
 		// get default value
 		virtual bool getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues) override;
@@ -57,7 +57,7 @@ namespace DataFlowProgramming
         QWidget* embeddedWidget() override { return m_textureSelect; }
 
 		// show menu
-		virtual void showMenu(const QPointF& pos) {}
+		virtual void showMenu(const QPointF& pos) override {}
 
     private Q_SLOTS:
         // on value changed

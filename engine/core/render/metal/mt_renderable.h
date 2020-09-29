@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/Renderable.h"
+#include "base/renderable.h"
 #include "mt_render_base.h"
 
 namespace Echo

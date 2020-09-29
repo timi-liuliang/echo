@@ -1,5 +1,5 @@
 #include "engine/core/log/Log.h"
-#include "Material.h"
+#include "material.h"
 #include "shader_program.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/scene/node_tree.h"

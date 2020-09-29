@@ -707,13 +707,13 @@ namespace Gltf
 						//animProperty->setInterpolationType(MappingInterpolationType(sampler.m_interpolation));
 
 						// key values
-						switch (keyAccess.m_type)
-						{
+						//switch (keyAccess.m_type)
+						//{
 						//case GltfAccessorInfo::Type::Scalar:	addKeyToAnimProperty<float, AnimPropertyFloat>(timeAccess, keyAccess, animProperty);	break;
 						//case GltfAccessorInfo::Type::Vec3:		addKeyToAnimProperty<Vector3, AnimPropertyVec3>(timeAccess, keyAccess, animProperty);	break;
 						//case GltfAccessorInfo::Type::Vec4:		addKeyToAnimProperty<Quaternion, AnimPropertyQuat>(timeAccess, keyAccess, animProperty); break;
 						//default: break;
-						}
+						//}
 					}
 
 					//animClip->m_objects.emplace_back(animNode);

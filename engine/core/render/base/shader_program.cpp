@@ -4,7 +4,7 @@
 #include "engine/core/util/magic_enum.hpp"
 #include "engine/core/log/Log.h"
 #include "engine/core/util/Exception.h"
-#include "Renderer.h"
+#include "renderer.h"
 #include "image/pixel_format.h"
 #include "engine/core/io/IO.h"
 #include <thirdparty/pugixml/pugixml.hpp>

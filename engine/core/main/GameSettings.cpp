@@ -2,7 +2,7 @@
 #include "engine/core/log/Log.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/io/IO.h"
-#include "engine/core/render/base/Renderer.h"
+#include "engine/core/render/base/renderer.h"
 #include "engine/core/main/Engine.h"
 #include "engine/core/scene/node_tree.h"
 #include <ostream>

@@ -1,6 +1,6 @@
 #include "engine/core/log/Log.h"
 #include "mesh.h"
-#include "engine/core/render/base/Renderer.h"
+#include "engine/core/render/base/renderer.h"
 #include <algorithm>
 #include <thirdparty/pugixml/pugixml.hpp>
 #include "engine/core/util/magic_enum.hpp"

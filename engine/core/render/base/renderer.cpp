@@ -1,11 +1,11 @@
-#include "Renderer.h"
+#include "renderer.h"
 #include "frame_buffer.h"
 #include "engine/core/log/Log.h"
 #include "view_port.h"
 #include "image/pixel_format.h"
 #include "renderable.h"
 #include "../metal/mt.h"
-#include "../gles/GLES.h"
+#include "../gles/gles.h"
 
 namespace Echo
 {

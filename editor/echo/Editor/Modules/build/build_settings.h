@@ -15,7 +15,7 @@ namespace Echo
         virtual ~BuildSettings() {}
 
         // platform name
-        virtual char* getPlatformName() const { return "Unknown"; }
+        virtual const char* getPlatformName() const { return "Unknown"; }
 
         // platform thumbnail
         virtual ImagePtr getPlatformThumbnail() const { return nullptr; }

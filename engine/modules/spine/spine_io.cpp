@@ -1,5 +1,5 @@
 #include "engine/core/io/IO.h"
-#include "base/Texture.h"
+#include "base/texture.h"
 #include <spine/extension.h>
 
 // create texture res

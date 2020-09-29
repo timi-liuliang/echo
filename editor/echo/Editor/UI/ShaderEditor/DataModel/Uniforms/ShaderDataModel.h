@@ -27,9 +27,6 @@ namespace DataFlowProgramming
         ShaderDataModel();
         virtual ~ShaderDataModel() {}
 
-		/// Caption is used in GUI
-        virtual QString caption() const = 0;
-
         // variable name
         virtual Echo::String getVariableName() const;
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/core/util/StringUtil.h"
+#include "engine/core/util/StringUtil.h"
 
 namespace DataFlowProgramming
 {

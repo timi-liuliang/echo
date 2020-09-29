@@ -2,7 +2,7 @@
 
 #include <QtCore/QString>
 #include "../base/Export.hpp"
-#include "Engine/core/util/StringUtil.h"
+#include "engine/core/util/StringUtil.h"
 
 namespace QtNodes
 {
