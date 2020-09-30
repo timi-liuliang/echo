@@ -10,13 +10,6 @@ namespace Echo
 	class AABB
 	{
 	public:
-		enum Extent
-		{
-			EXTENT_NULL,
-			EXTENT_FINITE,
-			EXTENT_INFINITE
-		};
-
 		/*
 		   4--------7
 		  /|       /|
@@ -47,7 +40,6 @@ namespace Echo
 	public:
 		Vector3		vMin;		//!< Min Point
 		Vector3		vMax;		//!< Max Point
-		Extent		mExtent;
 
 		static const AABB ZERO;
 
@@ -97,7 +89,7 @@ namespace Echo
 		inline void reset()
 		{
 			vMin.x = vMin.y = vMin.z =  1e30f;
-			vMax.x = vMax.y = vMax.z = -1e30f;// Math::MAX_REAL容易出现计算溢出，放弃使用
+			vMax.x = vMax.y = vMax.z = -1e30f;
 		}
 
 		inline void addPoint(const Vector3 &point)

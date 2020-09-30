@@ -3,7 +3,6 @@
 #include <QString>
 #include <array>
 #include <engine/core/main/Engine.h>
-#include <engine/modules/navigation/Navigation.h>
 #include <base/frame_buffer.h>
 #include "engine/core/thread/Threading.h"
 #include "Studio.h"

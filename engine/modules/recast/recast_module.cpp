@@ -1,4 +1,5 @@
 #include "recast_module.h"
+#include "recast_nav_mesh.h"
 
 namespace Echo
 {
@@ -21,5 +22,6 @@ namespace Echo
 
 	void RecastModule::registerTypes()
 	{
+		Class::registerType<RecastNavMesh>();
 	}
 }
