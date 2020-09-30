@@ -1,8 +1,9 @@
 #ifndef DETOURTILECACHE_H
 #define DETOURTILECACHE_H
 
-#include <vector>
 #include "DetourStatus.h"
+
+
 
 typedef unsigned int dtObstacleRef;
 
@@ -37,8 +38,8 @@ enum ObstacleState
 enum ObstacleType
 {
 	DT_OBSTACLE_CYLINDER,
-	DT_OBSTACLE_BOX,
-	DT_OBSTACLE_OBB,
+	DT_OBSTACLE_BOX, // AABB
+	DT_OBSTACLE_ORIENTED_BOX, // OBB
 };
 
 struct dtObstacleCylinder
@@ -54,12 +55,11 @@ struct dtObstacleBox
 	float bmax[ 3 ];
 };
 
-struct dtObstacleObb
+struct dtObstacleOrientedBox
 {
-	float pos0[3];
-	float pos1[3];
-	float width;
-	float height;
+	float center[ 3 ];
+	float halfExtents[ 3 ];
+	float rotAux[ 2 ]; //{ cos(0.5f*angle)*sin(-0.5f*angle); cos(0.5f*angle)*cos(0.5f*angle) - 0.5 }
 };
 
 static const int DT_MAX_TOUCHED_TILES = 8;
@@ -69,7 +69,7 @@ struct dtTileCacheObstacle
 	{
 		dtObstacleCylinder cylinder;
 		dtObstacleBox box;
-		dtObstacleObb obb;
+		dtObstacleOrientedBox orientedBox;
 	};
 
 	dtCompressedTileRef touched[DT_MAX_TOUCHED_TILES];
@@ -103,21 +103,6 @@ struct dtTileCacheMeshProcess
 						 unsigned char* polyAreas, unsigned short* polyFlags) = 0;
 };
 
-struct dtTileCacheTileData
-{
-	unsigned char*	data;
-	int				dataSize;
-};
-
-struct dtTileCacheData
-{
-	dtTileCacheParams				 params;
-	std::vector<dtTileCacheTileData> tileDatas;
-};
-
-// free dtNavMeshData
-dtTileCacheData* dtAllocTileCacheData();
-void dtFreeTileCacheData(dtTileCacheData*& tileCacheData);
 
 class dtTileCache
 {
@@ -142,8 +127,7 @@ public:
 	dtStatus init(const dtTileCacheParams* params,
 				  struct dtTileCacheAlloc* talloc,
 				  struct dtTileCacheCompressor* tcomp,
-				  struct dtTileCacheMeshProcess* tmproc,
-				  struct dtTileCacheData* oData);
+				  struct dtTileCacheMeshProcess* tmproc);
 	
 	int getTilesAt(const int tx, const int ty, dtCompressedTileRef* tiles, const int maxTiles) const ;
 	
@@ -155,9 +139,14 @@ public:
 	
 	dtStatus removeTile(dtCompressedTileRef ref, unsigned char** data, int* dataSize);
 	
+	// Cylinder obstacle.
 	dtStatus addObstacle(const float* pos, const float radius, const float height, dtObstacleRef* result);
+
+	// Aabb obstacle.
 	dtStatus addBoxObstacle(const float* bmin, const float* bmax, dtObstacleRef* result);
-	dtStatus addObbObstacle(const float* pos0, const float* pos1, float width, float height, dtObstacleRef* result);
+
+	// Box obstacle: can be rotated in Y.
+	dtStatus addBoxObstacle(const float* center, const float* halfExtents, const float yRadians, dtObstacleRef* result);
 	
 	dtStatus removeObstacle(const dtObstacleRef ref);
 	
@@ -265,8 +254,6 @@ private:
 	static const int MAX_UPDATE = 64;
 	dtCompressedTileRef m_update[MAX_UPDATE];
 	int m_nupdate;
-
-	dtTileCacheData* m_data;				///< Used for save
 };
 
 dtTileCache* dtAllocTileCache();

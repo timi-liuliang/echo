@@ -340,8 +340,7 @@ dtCrowd::dtCrowd() :
 	m_maxPathResult(0),
 	m_maxAgentRadius(0),
 	m_velocitySampleCount(0),
-	m_navquery(0),
-	m_doCollide(true)
+	m_navquery(0)
 {
 }
 
@@ -387,7 +386,8 @@ bool dtCrowd::init(const int maxAgents, const float maxAgentRadius, dtNavMesh* n
 	m_maxAgents = maxAgents;
 	m_maxAgentRadius = maxAgentRadius;
 
-	dtVset(m_ext, m_maxAgentRadius*2.0f,m_maxAgentRadius*1.5f,m_maxAgentRadius*2.0f);
+	// Larger than agent radius because it is also used for agent recovery.
+	dtVset(m_agentPlacementHalfExtents, m_maxAgentRadius*2.0f, m_maxAgentRadius*1.5f, m_maxAgentRadius*2.0f);
 	
 	m_grid = dtAllocProximityGrid();
 	if (!m_grid)
@@ -532,12 +532,11 @@ int dtCrowd::addAgent(const float* pos, const dtCrowdAgentParams* params)
 	float nearest[3];
 	dtPolyRef ref = 0;
 	dtVcopy(nearest, pos);
-	dtStatus status = m_navquery->findNearestPoly(pos, m_ext, &m_filters[ag->params.queryFilterType], &ref, nearest);
+	dtStatus status = m_navquery->findNearestPoly(pos, m_agentPlacementHalfExtents, &m_filters[ag->params.queryFilterType], &ref, nearest);
 	if (dtStatusFailed(status))
 	{
 		dtVcopy(nearest, pos);
 		ref = 0;
-		return -1;
 	}
 	
 	ag->corridor.reset(ref, nearest);
@@ -967,7 +966,7 @@ void dtCrowd::checkPathValidity(dtCrowdAgent** agents, const int nagents, const 
 			float nearest[3];
 			dtVcopy(nearest, agentPos);
 			agentRef = 0;
-			m_navquery->findNearestPoly(ag->npos, m_ext, &m_filters[ag->params.queryFilterType], &agentRef, nearest);
+			m_navquery->findNearestPoly(ag->npos, m_agentPlacementHalfExtents, &m_filters[ag->params.queryFilterType], &agentRef, nearest);
 			dtVcopy(agentPos, nearest);
 
 			if (!agentRef)
@@ -1003,7 +1002,7 @@ void dtCrowd::checkPathValidity(dtCrowdAgent** agents, const int nagents, const 
 				float nearest[3];
 				dtVcopy(nearest, ag->targetPos);
 				ag->targetRef = 0;
-				m_navquery->findNearestPoly(ag->targetPos, m_ext, &m_filters[ag->params.queryFilterType], &ag->targetRef, nearest);
+				m_navquery->findNearestPoly(ag->targetPos, m_agentPlacementHalfExtents, &m_filters[ag->params.queryFilterType], &ag->targetRef, nearest);
 				dtVcopy(ag->targetPos, nearest);
 				replan = true;
 			}
@@ -1053,11 +1052,6 @@ void dtCrowd::update(const float dt, dtCrowdAgentDebugInfo* debug)
 	
 	dtCrowdAgent** agents = m_activeAgents;
 	int nagents = getActiveAgents(agents, m_maxAgents);
-	if (debugIdx != -1)
-	{
-		agents = &agents[debugIdx];
-		nagents = 1;
-	}
 
 	// Check that all agents still have valid paths.
 	checkPathValidity(agents, nagents, dt);
@@ -1329,70 +1323,68 @@ void dtCrowd::update(const float dt, dtCrowdAgentDebugInfo* debug)
 	
 	// Handle collisions.
 	static const float COLLISION_RESOLVE_FACTOR = 0.7f;
-	if (m_doCollide)
+	
+	for (int iter = 0; iter < 4; ++iter)
 	{
-		for (int iter = 0; iter < 4; ++iter)
+		for (int i = 0; i < nagents; ++i)
 		{
-			for (int i = 0; i < nagents; ++i)
+			dtCrowdAgent* ag = agents[i];
+			const int idx0 = getAgentIndex(ag);
+			
+			if (ag->state != DT_CROWDAGENT_STATE_WALKING)
+				continue;
+
+			dtVset(ag->disp, 0,0,0);
+			
+			float w = 0;
+
+			for (int j = 0; j < ag->nneis; ++j)
 			{
-				dtCrowdAgent* ag = agents[i];
-				const int idx0 = getAgentIndex(ag);
+				const dtCrowdAgent* nei = &m_agents[ag->neis[j].idx];
+				const int idx1 = getAgentIndex(nei);
 
-				if (ag->state != DT_CROWDAGENT_STATE_WALKING)
+				float diff[3];
+				dtVsub(diff, ag->npos, nei->npos);
+				diff[1] = 0;
+				
+				float dist = dtVlenSqr(diff);
+				if (dist > dtSqr(ag->params.radius + nei->params.radius))
 					continue;
-
-				dtVset(ag->disp, 0, 0, 0);
-
-				float w = 0;
-
-				for (int j = 0; j < ag->nneis; ++j)
+				dist = dtMathSqrtf(dist);
+				float pen = (ag->params.radius + nei->params.radius) - dist;
+				if (dist < 0.0001f)
 				{
-					const dtCrowdAgent* nei = &m_agents[ag->neis[j].idx];
-					const int idx1 = getAgentIndex(nei);
-
-					float diff[3];
-					dtVsub(diff, ag->npos, nei->npos);
-					diff[1] = 0;
-
-					float dist = dtVlenSqr(diff);
-					if (dist > dtSqr(ag->params.radius + nei->params.radius))
-						continue;
-					dist = dtMathSqrtf(dist);
-					float pen = (ag->params.radius + nei->params.radius) - dist;
-					if (dist < 0.0001f)
-					{
-						// Agents on top of each other, try to choose diverging separation directions.
-						if (idx0 > idx1)
-							dtVset(diff, -ag->dvel[2], 0, ag->dvel[0]);
-						else
-							dtVset(diff, ag->dvel[2], 0, -ag->dvel[0]);
-						pen = 0.01f;
-					}
+					// Agents on top of each other, try to choose diverging separation directions.
+					if (idx0 > idx1)
+						dtVset(diff, -ag->dvel[2],0,ag->dvel[0]);
 					else
-					{
-						pen = (1.0f / dist) * (pen*0.5f) * COLLISION_RESOLVE_FACTOR;
-					}
-
-					dtVmad(ag->disp, ag->disp, diff, pen);
-
-					w += 1.0f;
+						dtVset(diff, ag->dvel[2],0,-ag->dvel[0]);
+					pen = 0.01f;
 				}
-
-				if (w > 0.0001f)
+				else
 				{
-					const float iw = 1.0f / w;
-					dtVscale(ag->disp, ag->disp, iw);
+					pen = (1.0f/dist) * (pen*0.5f) * COLLISION_RESOLVE_FACTOR;
 				}
+				
+				dtVmad(ag->disp, ag->disp, diff, pen);			
+				
+				w += 1.0f;
 			}
-
-			for (int i = 0; i < nagents; ++i)
+			
+			if (w > 0.0001f)
 			{
-				dtCrowdAgent* ag = agents[i];
-				if (ag->state != DT_CROWDAGENT_STATE_WALKING)
-					continue;
-
-				dtVadd(ag->npos, ag->npos, ag->disp);
+				const float iw = 1.0f / w;
+				dtVscale(ag->disp, ag->disp, iw);
 			}
+		}
+		
+		for (int i = 0; i < nagents; ++i)
+		{
+			dtCrowdAgent* ag = agents[i];
+			if (ag->state != DT_CROWDAGENT_STATE_WALKING)
+				continue;
+			
+			dtVadd(ag->npos, ag->npos, ag->disp);
 		}
 	}
 	

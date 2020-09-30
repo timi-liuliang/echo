@@ -2041,49 +2041,24 @@ dtStatus dtMarkBoxArea(dtTileCacheLayer& layer, const float* orig, const float c
 	return DT_SUCCESS;
 }
 
-dtStatus dtMarkObbArea(dtTileCacheLayer& layer, const float* orig, const float cs, const float ch,
-	const float* pos0, const float* pos1, const float width, const float height, const unsigned char areaId)
+dtStatus dtMarkBoxArea(dtTileCacheLayer& layer, const float* orig, const float cs, const float ch,
+					   const float* center, const float* halfExtents, const float* rotAux, const unsigned char areaId)
 {
-	float hw = width * 0.5f;
-	float hl = dtVdist(pos0, pos1) * 0.5f;
-	float raidus = dtMathSqrtf(hw*hw + hl*hl);
-
-	float centre[3];
-	dtVadd(centre, pos0, pos1);
-	dtVscale(centre, centre, 0.5f);
-
-	float bmin[3], bmax[3];
-	bmin[0] = centre[0] - raidus;
-	bmin[1] = centre[1] - raidus;
-	bmin[2] = centre[2] - raidus;
-	bmax[0] = centre[0] + raidus + height;
-	bmax[1] = centre[1] + raidus + height;
-	bmax[2] = centre[2] + raidus + height;
-
-	// 度度轴
-	float haxis[3] = { 0.f, 1.f, 0.f };
-
-	// 长度轴
-	float laxis[3];
-	dtVsub(laxis, pos0, centre);
-	dtVnormalize(laxis);
-
-	// 宽度轴向
-	float waxis[3];
-	dtVcross(waxis, laxis, haxis);
-	dtVnormalize(waxis);
-
 	const int w = (int)layer.header->width;
 	const int h = (int)layer.header->height;
-	const float ics = 1.0f / cs;
-	const float ich = 1.0f / ch;
+	const float ics = 1.0f/cs;
+	const float ich = 1.0f/ch;
 
-	int minx = (int)dtMathFloorf((bmin[0] - orig[0])*ics);
-	int miny = (int)dtMathFloorf((bmin[1] - orig[1])*ich);
-	int minz = (int)dtMathFloorf((bmin[2] - orig[2])*ics);
-	int maxx = (int)dtMathFloorf((bmax[0] - orig[0])*ics);
-	int maxy = (int)dtMathFloorf((bmax[1] - orig[1])*ich);
-	int maxz = (int)dtMathFloorf((bmax[2] - orig[2])*ics);
+	float cx = (center[0] - orig[0])*ics;
+	float cz = (center[2] - orig[2])*ics;
+	
+	float maxr = 1.41f*dtMax(halfExtents[0], halfExtents[2]);
+	int minx = (int)floorf(cx - maxr*ics);
+	int maxx = (int)floorf(cx + maxr*ics);
+	int minz = (int)floorf(cz - maxr*ics);
+	int maxz = (int)floorf(cz + maxr*ics);
+	int miny = (int)floorf((center[1]-halfExtents[1]-orig[1])*ich);
+	int maxy = (int)floorf((center[1]+halfExtents[1]-orig[1])*ich);
 
 	if (maxx < 0) return DT_SUCCESS;
 	if (minx >= w) return DT_SUCCESS;
@@ -2091,35 +2066,29 @@ dtStatus dtMarkObbArea(dtTileCacheLayer& layer, const float* orig, const float c
 	if (minz >= h) return DT_SUCCESS;
 
 	if (minx < 0) minx = 0;
-	if (maxx >= w) maxx = w - 1;
+	if (maxx >= w) maxx = w-1;
 	if (minz < 0) minz = 0;
-	if (maxz >= h) maxz = h - 1;
+	if (maxz >= h) maxz = h-1;
+	
+	float xhalf = halfExtents[0]*ics + 0.5f;
+	float zhalf = halfExtents[2]*ics + 0.5f;
 
 	for (int z = minz; z <= maxz; ++z)
 	{
 		for (int x = minx; x <= maxx; ++x)
-		{
-			float cellpos[3];
-			cellpos[0] = x * cs + orig[0];
-			cellpos[1] = centre[1];
-			cellpos[2] = z * cs + orig[2];
-
-			float diffcp[3];
-			dtVsub(diffcp, cellpos, centre);
-
-			float ld = dtAbs(dtVdot(diffcp, laxis));
-			float wd = dtAbs(dtVdot(diffcp, waxis));
-
-			if (ld > hl)
+		{			
+			float x2 = 2.0f*(float(x) - cx);
+			float z2 = 2.0f*(float(z) - cz);
+			float xrot = rotAux[1]*x2 + rotAux[0]*z2;
+			if (xrot > xhalf || xrot < -xhalf)
 				continue;
-
-			if (wd > hw)
+			float zrot = rotAux[1]*z2 - rotAux[0]*x2;
+			if (zrot > zhalf || zrot < -zhalf)
 				continue;
-
-			const int y = layer.heights[x + z*w];
+			const int y = layer.heights[x+z*w];
 			if (y < miny || y > maxy)
 				continue;
-			layer.areas[x + z*w] = areaId;
+			layer.areas[x+z*w] = areaId;
 		}
 	}
 
@@ -2227,7 +2196,7 @@ dtStatus dtDecompressTileCacheLayer(dtTileCacheAlloc* alloc, dtTileCacheCompress
 									   grids, gridsSize, &size);
 	if (dtStatusFailed(status))
 	{
-		dtFree(buffer);
+		alloc->free(buffer);
 		return status;
 	}
 	

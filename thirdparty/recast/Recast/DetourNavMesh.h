@@ -21,7 +21,6 @@
 
 #include "DetourAlloc.h"
 #include "DetourStatus.h"
-#include <vector>
 
 // Undefine (or define in a build cofnig) the following line to use 64bit polyref.
 // Generally not needed, useful for very large worlds.
@@ -129,6 +128,11 @@ enum dtFindPathOptions
 enum dtRaycastOptions
 {
 	DT_RAYCAST_USE_COSTS = 0x01,		///< Raycast should calculate movement cost along the ray and fill RaycastHit::cost
+};
+
+enum dtDetailTriEdgeFlags
+{
+	DT_DETAIL_EDGE_BOUNDARY = 0x01,		///< Detail triangle edge is part of the poly boundary
 };
 
 
@@ -288,7 +292,8 @@ struct dtMeshTile
 	/// The detail mesh's unique vertices. [(x, y, z) * dtMeshHeader::detailVertCount]
 	float* detailVerts;	
 
-	/// The detail mesh's triangles. [(vertA, vertB, vertC) * dtMeshHeader::detailTriCount]
+	/// The detail mesh's triangles. [(vertA, vertB, vertC, triFlags) * dtMeshHeader::detailTriCount].
+	/// See dtDetailTriEdgeFlags and dtGetDetailTriEdgeFlags.
 	unsigned char* detailTris;	
 
 	/// The tile bounding volume nodes. [Size: dtMeshHeader::bvNodeCount]
@@ -306,6 +311,15 @@ private:
 	dtMeshTile& operator=(const dtMeshTile&);
 };
 
+/// Get flags for edge in detail triangle.
+/// @param	triFlags[in]		The flags for the triangle (last component of detail vertices above).
+/// @param	edgeIndex[in]		The index of the first vertex of the edge. For instance, if 0,
+///								returns flags for edge AB.
+inline int dtGetDetailTriEdgeFlags(unsigned char triFlags, int edgeIndex)
+{
+	return (triFlags >> (edgeIndex * 2)) & 0x3;
+}
+
 /// Configuration parameters used to define multi-tile navigation meshes.
 /// The values are used to allocate space during the initialization of a navigation mesh.
 /// @see dtNavMesh::init()
@@ -318,24 +332,6 @@ struct dtNavMeshParams
 	int maxTiles;					///< The maximum number of tiles the navigation mesh can contain.
 	int maxPolys;					///< The maximum number of polygons each tile can contain.
 };
-
-// NavMesh Tile Data
-struct dtNavMeshTileData
-{
-	unsigned char*	data;
-	int				dataSize;
-};
-
-// NavMesh Data
-struct dtNavMeshData
-{
-	dtNavMeshParams					params;
-	std::vector<dtNavMeshTileData>	tileDatas;
-};
-
-// free dtNavMeshData
-dtNavMeshData* dtAllocNavMeshData();
-void dtFreeNavMeshData( dtNavMeshData*& navMeshData);
 
 /// A navigation mesh based on tiles of convex polygons.
 /// @ingroup detour
@@ -351,7 +347,7 @@ public:
 	/// Initializes the navigation mesh for tiled use.
 	///  @param[in]	params		Initialization parameters.
 	/// @return The status flags for the operation.
-	dtStatus init(const dtNavMeshParams* params, dtNavMeshData* oData=nullptr);
+	dtStatus init(const dtNavMeshParams* params);
 
 	/// Initializes the navigation mesh for single tile use.
 	///  @param[in]	data		Data of the new tile. (See: #dtCreateNavMeshData)
@@ -654,7 +650,9 @@ private:
 							dtPolyRef* polys, const int maxPolys) const;
 	/// Find nearest polygon within a tile.
 	dtPolyRef findNearestPolyInTile(const dtMeshTile* tile, const float* center,
-									const float* extents, float* nearestPt) const;
+									const float* halfExtents, float* nearestPt) const;
+	/// Returns whether position is over the poly and the height at the position if so.
+	bool getPolyHeight(const dtMeshTile* tile, const dtPoly* poly, const float* pos, float* height) const;
 	/// Returns closest point on polygon.
 	void closestPointOnPoly(dtPolyRef ref, const float* pos, float* closest, bool* posOverPoly) const;
 	
@@ -675,7 +673,7 @@ private:
 	unsigned int m_polyBits;			///< Number of poly bits in the tile ID.
 #endif
 
-	dtNavMeshData* m_data;				///< Used for save NavMesh
+	friend class dtNavMeshQuery;
 };
 
 /// Allocates a navigation mesh object using the Detour allocator.

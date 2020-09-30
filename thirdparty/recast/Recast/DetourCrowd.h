@@ -206,8 +206,6 @@ class dtCrowd
 	dtCrowdAgent* m_agents;
 	dtCrowdAgent** m_activeAgents;
 	dtCrowdAgentAnimation* m_agentAnims;
-
-	bool m_doCollide;
 	
 	dtPathQueue m_pathq;
 
@@ -219,7 +217,7 @@ class dtCrowd
 	dtPolyRef* m_pathResult;
 	int m_maxPathResult;
 	
-	float m_ext[3];
+	float m_agentPlacementHalfExtents[3];
 
 	dtQueryFilter m_filters[DT_CROWD_MAX_QUERY_FILTER_TYPE];
 
@@ -281,8 +279,6 @@ public:
 	/// @return The index of the agent in the agent pool. Or -1 if the agent could not be added.
 	int addAgent(const float* pos, const dtCrowdAgentParams* params);
 
-	void setDoCollide(bool docollide){ m_doCollide = docollide; }
-
 	/// Updates the specified agent's configuration.
 	///  @param[in]		idx		The agent index. [Limits: 0 <= value < #getAgentCount()]
 	///  @param[in]		params	The new agent configuration.
@@ -329,9 +325,13 @@ public:
 	/// @return The filter used by the crowd.
 	inline dtQueryFilter* getEditableFilter(const int i) { return (i >= 0 && i < DT_CROWD_MAX_QUERY_FILTER_TYPE) ? &m_filters[i] : 0; }
 
-	/// Gets the search extents [(x, y, z)] used by the crowd for query operations. 
-	/// @return The search extents used by the crowd. [(x, y, z)]
-	const float* getQueryExtents() const { return m_ext; }
+	/// Gets the search halfExtents [(x, y, z)] used by the crowd for query operations. 
+	/// @return The search halfExtents used by the crowd. [(x, y, z)]
+	const float* getQueryHalfExtents() const { return m_agentPlacementHalfExtents; }
+
+	/// Same as getQueryHalfExtents. Left to maintain backwards compatibility.
+	/// @return The search halfExtents used by the crowd. [(x, y, z)]
+	const float* getQueryExtents() const { return m_agentPlacementHalfExtents; }
 	
 	/// Gets the velocity sample count.
 	/// @return The velocity sample count.
