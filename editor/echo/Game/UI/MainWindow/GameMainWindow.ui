@@ -77,7 +77,7 @@
   <customwidget>
    <class>QT_UI::QMenuBarEx</class>
    <extends>QMenuBar</extends>
-   <header>qmenubarex.h</header>
+   <header>QMenuBarEx.h</header>
   </customwidget>
  </customwidgets>
  <resources>

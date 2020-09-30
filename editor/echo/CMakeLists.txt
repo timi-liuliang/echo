@@ -31,18 +31,14 @@ LINK_DIRECTORIES(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 IF(${ECHO_PLATFORM_WINDOWS})
 	IF(CMAKE_SIZEOF_VOID_P EQUAL 4)
 		LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/opengles/mali/lib/win32)
-		#LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/openal-1.1/windows/libs/Win32)
 		LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/Core/lib/windows/x86)
 		LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/vulkan/windows/x64/lib)
 	ELSEIF(CMAKE_SIZEOF_VOID_P EQUAL 8)
 		LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/opengles/mali/lib/win64)
-		#LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/openal-1.1/windows/libs/Win64)
 		LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/Core/lib/windows/x86_64)
 		LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/opencl/windows/lib/x64)
 		LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/vulkan/windows/x64/lib)
 	ENDIF()
-ELSE()
-	LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/Core/lib/macos)
 ENDIF()
 
 # set module name
@@ -134,7 +130,7 @@ ADD_EXECUTABLE(${MODULE_NAME} MACOSX_BUNDLE
 
 # link libraries
 TARGET_LINK_LIBRARIES(${MODULE_NAME} zlib engine lua recast freeimage physx)
-TARGET_LINK_LIBRARIES(${MODULE_NAME} Live2DCubismCore pugixml spine box2d)
+TARGET_LINK_LIBRARIES(${MODULE_NAME} pugixml spine box2d)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} freetype)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} radeonrays)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} glslang spirv-cross)
@@ -150,6 +146,7 @@ IF(${ECHO_PLATFORM_WINDOWS})
     TARGET_LINK_LIBRARIES(${MODULE_NAME} OpenCL)
 	TARGET_LINK_LIBRARIES(${MODULE_NAME} vulkan-1.lib)
     TARGET_LINK_LIBRARIES(${MODULE_NAME} jplayer)
+    TARGET_LINK_LIBRARIES(${MODULE_NAME} Live2DCubismCore)
 ELSE()
 	# AddFrameWork Macro
 	MACRO(ADD_FRAMEWORK fwname)
@@ -164,6 +161,8 @@ ELSE()
 
 	SET(FRAMEWORKS "${FRAMEWORKS} -ObjC")
 	SET(CMAKE_EXE_LINKER_FLAGS ${FRAMEWORKS})
+    
+    TARGET_LINK_LIBRARIES(${MODULE_NAME} ${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/Core/lib/macos/libLive2DCubismCore.a)
 ENDIF()
 
 # set folder

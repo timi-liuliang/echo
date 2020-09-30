@@ -417,6 +417,7 @@ namespace Studio
 	//			}
 	//		}
 	//		break;
+            default: break;
 			}
 		}
 
@@ -483,6 +484,8 @@ namespace Studio
 					draw();
 				}
 				break;
+                        
+                case EditType::Rotate: {} break;
 				//case EM_EDIT_ROTATE:
 				//{
 				//	float fLastDist = 1e30f;
