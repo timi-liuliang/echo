@@ -127,7 +127,7 @@ namespace Echo
             MTLRenderPassDescriptor* metalRenderPassDescriptor = [MTLRenderPassDescriptor renderPassDescriptor];
             metalRenderPassDescriptor.colorAttachments[0].texture = m_metalNextDrawable.texture;
             metalRenderPassDescriptor.colorAttachments[0].loadAction = MTLLoadActionClear;
-            metalRenderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(0.298f, 0.298f, 0.322f, 1.f);
+            metalRenderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(BGCOLOR.r, BGCOLOR.g, BGCOLOR.b, BGCOLOR.a);
             metalRenderPassDescriptor.colorAttachments[0].storeAction = MTLStoreActionStore;
 
             if(!m_depthTexture)
