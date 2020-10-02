@@ -14,6 +14,9 @@ namespace Studio
 	public:
 		RenderWindow( QWidget* parent = NULL);
 		virtual ~RenderWindow();
+        
+        // create
+        static RenderWindow* create();
 
 		// begin render
 		void BeginRender();
@@ -57,7 +60,7 @@ namespace Studio
 
 	private slots:
 		// render
-		void  Render();
+        void  Render();
 
 		// reset device
 		void  ResetDevice();

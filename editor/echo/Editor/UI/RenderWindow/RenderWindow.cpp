@@ -27,7 +27,13 @@ namespace Studio
 		EchoSafeDelete(m_transformWidget, TransformWidget);
 	}
 
-	// size hint
+//#ifndef ECHO_PLATFORM_MAC
+    RenderWindow* RenderWindow::create()
+    {
+        return new RenderWindow;
+    }
+//#endif
+
 	QSize RenderWindow::sizeHint() const
 	{
 		float width = MainWindow::instance()->width() * 0.3f;

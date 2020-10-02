@@ -138,16 +138,10 @@ namespace Studio
 	{
 		if ( !m_renderWindow )
 		{
-			TIME_PROFILE
-			(
-				EchoEngine::instance();
-			)
-
-			TIME_PROFILE
-			(
-				m_renderWindow = EchoNew(RenderWindow);
-				m_renderWindow->BeginRender();
-			)
+            EchoEngine::instance();
+            
+            m_renderWindow = RenderWindow::create();
+            m_renderWindow->BeginRender();
 		}
 
 		return m_renderWindow;
