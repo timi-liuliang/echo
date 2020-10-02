@@ -14,12 +14,9 @@ namespace Studio
 	public:
 		RenderWindow( QWidget* parent = NULL);
 		virtual ~RenderWindow();
-        
-        // create
-        static RenderWindow* create();
 
 		// begin render
-		void BeginRender();
+		virtual void BeginRender();
 
 		// resize window
 		void ResizeWindow();
@@ -58,14 +55,14 @@ namespace Studio
 		// size hint
 		virtual QSize sizeHint() const override;
 
-	private slots:
+	public slots:
 		// render
         void  Render();
 
 		// reset device
 		void  ResetDevice();
 
-	private:
+	protected:
 		QSize					m_dx9Size;
 		QTimer*					m_timer = nullptr;
 		QMenu*					m_mouseMenu = nullptr;

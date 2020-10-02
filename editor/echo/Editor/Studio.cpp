@@ -3,6 +3,7 @@
 #include "BottomPanel.h"
 #include "ProjectWnd.h"
 #include "RenderWindow.h"
+#include "RenderWindowMetal.h"
 #include "ResChooseDialog.h"
 #include "SettingChooseDialog.h"
 #include "NodePathChooseDialog.h"
@@ -140,7 +141,11 @@ namespace Studio
 		{
             EchoEngine::instance();
             
-            m_renderWindow = RenderWindow::create();
+        #ifdef ECHO_PLATFORM_MAC
+            m_renderWindow = new RenderWindowMetal;
+        #else
+            m_renderWindow = new RenderWindow;
+        #endif
             m_renderWindow->BeginRender();
 		}
 

@@ -116,52 +116,21 @@ namespace Echo
         return EchoNew(MTTexture2D(name));
     }
 
-    void MTRenderer::makeNextRenderPassDescriptor()
-    {
-        if(!m_metalRenderPassDescriptor)
-        {
-            CAMetalLayer* metalLayer = m_framebufferWindow->getMetalLayer();
-            m_metalNextDrawable = [metalLayer nextDrawable];
-
-            // render pass descriptor
-            MTLRenderPassDescriptor* metalRenderPassDescriptor = [MTLRenderPassDescriptor renderPassDescriptor];
-            metalRenderPassDescriptor.colorAttachments[0].texture = m_metalNextDrawable.texture;
-            metalRenderPassDescriptor.colorAttachments[0].loadAction = MTLLoadActionClear;
-            metalRenderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(BGCOLOR.r, BGCOLOR.g, BGCOLOR.b, BGCOLOR.a);
-            metalRenderPassDescriptor.colorAttachments[0].storeAction = MTLStoreActionStore;
-
-            if(!m_depthTexture)
-            {
-                ui32 width = m_metalNextDrawable.texture.width;
-                ui32 height = m_metalNextDrawable.texture.height;
-                
-                m_depthTexture = EchoNew(MTTexture2D("_RenderTargetDetpth_0_"));
-                m_depthTexture->setSurfaceData(0, PF_D24_UNORM_S8_UINT, 0, width, height, Buffer());
-            }
-            
-            metalRenderPassDescriptor.depthAttachment.texture = m_depthTexture->getMTTexture();
-            metalRenderPassDescriptor.depthAttachment.loadAction = MTLLoadActionClear;
-            metalRenderPassDescriptor.depthAttachment.clearDepth = 1.0f;
-            metalRenderPassDescriptor.depthAttachment.storeAction = MTLStoreActionDontCare;
-            
-            m_metalRenderPassDescriptor = metalRenderPassDescriptor;
-        }
-    }
-
     void MTRenderer::beginRender()
     {
-        // create render pass descriptor
-        makeNextRenderPassDescriptor();
-
+        MTKView* view = m_framebufferWindow->getMetalView();
+        view.clearColor = { BGCOLOR.r, BGCOLOR.g, BGCOLOR.b, BGCOLOR.a};
+        
         // create command buffer
         m_metalCommandBuffer = [m_metalCommandQueue commandBuffer];
 
         // creat a command encoder
-        m_metalRenderCommandEncoder = [m_metalCommandBuffer renderCommandEncoderWithDescriptor:m_metalRenderPassDescriptor];
+        m_metalRenderCommandEncoder = [m_metalCommandBuffer renderCommandEncoderWithDescriptor:view.currentRenderPassDescriptor];
     }
 
     void MTRenderer::draw(Renderable* renderable)
     {
+        return;
         MTRenderable* mtRenderable = ECHO_DOWN_CAST<MTRenderable*>(renderable);
         MTShaderProgram* shaderProgram = ECHO_DOWN_CAST<MTShaderProgram*>(mtRenderable->getMaterial()->getShader());
         shaderProgram->bind();
@@ -169,7 +138,7 @@ namespace Echo
         
         [m_metalRenderCommandEncoder setDepthStencilState:shaderProgram->getMTDepthStencilState()];
 
-        if(m_metalRenderPassDescriptor && mtRenderable && mtRenderable->getMetalRenderPipelineState())
+        if(mtRenderable && mtRenderable->getMetalRenderPipelineState())
         {
             Mesh* mesh = renderable->getMesh();
             GPUBuffer* indexBuffer = mesh->getIndexBuffer();
@@ -210,13 +179,8 @@ namespace Echo
     bool MTRenderer::present()
     {
         [m_metalRenderCommandEncoder endEncoding];
-        [m_metalCommandBuffer presentDrawable:m_metalNextDrawable];
+        [m_metalCommandBuffer presentDrawable:m_framebufferWindow->getMetalView().currentDrawable];
         [m_metalCommandBuffer commit];
-
-        m_metalNextDrawable = nullptr;
-
-        //[m_metalRenderPassDescriptor release];
-        m_metalRenderPassDescriptor = nullptr;
 
         return true;
     }

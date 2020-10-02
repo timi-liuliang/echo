@@ -4,3 +4,4 @@
 #include <Metal/Metal.h>
 #include <Metal/MTLRenderPipeline.h>
 #include <QuartzCore/CAMetalLayer.h>
+#include <MetalKit/MTKView.h>

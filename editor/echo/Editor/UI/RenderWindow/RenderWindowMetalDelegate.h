@@ -5,6 +5,6 @@
 // Our platform independent render class
 @interface RendererWindowMetalDelegate : NSObject<MTKViewDelegate>
 
-- (nonnull instancetype)initWithMetalKitView:(nonnull MTKView *)mtkView;
+- (nonnull instancetype)initWithMetalKitView:(nonnull void*)window;
 
 @end

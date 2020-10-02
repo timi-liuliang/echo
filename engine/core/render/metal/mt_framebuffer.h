@@ -49,14 +49,13 @@ namespace Echo
         
     public:
         // get metal layer
-        CAMetalLayer* getMetalLayer() { return m_metalLayer; }
+        MTKView* getMetalView() { return m_metalView; }
         
     private:
         // make metal layer
         NSView* makeViewMetalCompatible(void* handle);
         
     private:
-        NSView*                         m_metalView = nullptr;
-        CAMetalLayer*                   m_metalLayer = nullptr;
+        MTKView*                        m_metalView = nullptr;
     };
 }
