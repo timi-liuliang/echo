@@ -14,6 +14,9 @@ namespace Echo
         
         // instance
         static MacBuildSettings* instance();
+        
+        // build
+        virtual void build() override;
 
 		// get name
 		virtual const char* getPlatformName() const override { return "Mac"; }
@@ -26,6 +29,14 @@ namespace Echo
         const ResourcePath& getIconRes() { return m_iconRes; }
         
     private:
+        // output directory
+        bool prepare();
+        
+    private:
         ResourcePath            m_iconRes;
+        String                  m_rootDir;
+        String                  m_projectDir;
+        String                  m_outputDir;
+        String                  m_solutionDir;
     };
 }
