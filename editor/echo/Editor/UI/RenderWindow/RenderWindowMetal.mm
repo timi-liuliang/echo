@@ -5,7 +5,6 @@
 #include <Metal/Metal.h>
 #include <Metal/MTLRenderPipeline.h>
 #include <MetalKit/MTKView.h>
-#include "RenderWindowMetalDelegate.h"
 #include "EchoEngine.h"
 #include "MainWindow.h"
 #include "InputController2d.h"
