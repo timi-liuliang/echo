@@ -2,6 +2,8 @@
 
 #include "RenderWindow.h"
 
+#ifdef ECHO_PLATFORM_MAC
+
 namespace Studio
 {
     class RenderWindowMetal : public RenderWindow
@@ -27,3 +29,5 @@ namespace Studio
         void*   m_mtkView = nullptr;
     };
 }
+
+#endif
