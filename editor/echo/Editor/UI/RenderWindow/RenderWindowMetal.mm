@@ -44,11 +44,11 @@ namespace Studio
             m_transformWidget = EchoNew(TransformWidget);
         
         m_timer = new QTimer(this);
-        QObject::connect(m_timer, SIGNAL(timeout()), this, SLOT(RenderlMetal()));
+        QObject::connect(m_timer, SIGNAL(timeout()), this, SLOT(RenderMetal()));
         m_timer->start(10);
     }
 
-    void RenderWindowMetal::RenderlMetal()
+    void RenderWindowMetal::RenderMetal()
     {
         @autoreleasepool
         {

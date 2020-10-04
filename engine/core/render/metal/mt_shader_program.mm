@@ -136,7 +136,8 @@ namespace Echo
         if(device && m_metalRenderPipelineDescriptor)
         {
             NSError* buildError = nullptr;
-            id<MTLRenderPipelineState> mtRenderPipelineState = [device newRenderPipelineStateWithDescriptor:m_metalRenderPipelineDescriptor options:MTLPipelineOptionArgumentInfo reflection:&m_metalRenderPipelineReflection error:&buildError];
+            i32 options = MTLPipelineOptionArgumentInfo | MTLPipelineOptionBufferTypeInfo;
+            id<MTLRenderPipelineState> mtRenderPipelineState = [device newRenderPipelineStateWithDescriptor:m_metalRenderPipelineDescriptor options:options reflection:&m_metalRenderPipelineReflection error:&buildError];
             if(!buildError)
             {
                 parseUniforms(m_metalRenderPipelineReflection);

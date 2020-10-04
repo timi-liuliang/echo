@@ -1,8 +1,7 @@
 #pragma once
 
 #include "RenderWindow.h"
-
-#ifdef ECHO_PLATFORM_MAC
+#include "engine/core/base/echo_def.h"
 
 namespace Studio
 {
@@ -18,8 +17,12 @@ namespace Studio
         virtual void BeginRender() override;
         
     public slots:
+#ifdef ECHO_PLATFORM_MAC
         // render
-        void RenderlMetal();
+        void RenderMetal();
+#else
+        void RenderMetal() {}
+#endif
         
     private:
         // new metal window
@@ -30,4 +33,3 @@ namespace Studio
     };
 }
 
-#endif

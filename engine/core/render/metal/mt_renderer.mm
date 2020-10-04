@@ -130,7 +130,6 @@ namespace Echo
 
     void MTRenderer::draw(Renderable* renderable)
     {
-        return;
         MTRenderable* mtRenderable = ECHO_DOWN_CAST<MTRenderable*>(renderable);
         MTShaderProgram* shaderProgram = ECHO_DOWN_CAST<MTShaderProgram*>(mtRenderable->getMaterial()->getShader());
         shaderProgram->bind();
