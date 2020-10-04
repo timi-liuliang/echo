@@ -14,11 +14,12 @@ namespace Game
 		setMouseTracking(true);
 		setFocusPolicy(Qt::StrongFocus);
 
-		m_app = new App;
+		m_app = EchoNew(App);
 	}
 
 	Window::~Window()
 	{
+		EchoSafeDelete(m_app, App);
 	}
 
 	void Window::start(const Echo::String& echoProject)

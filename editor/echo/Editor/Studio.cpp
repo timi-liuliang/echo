@@ -17,6 +17,7 @@
 #include <QMetaMethod>
 #include <QSplitter>
 #include "QPropertyModel.h"
+#include "OperationManager.h"
 #include <engine/core/util/HashGenerator.h>
 #include <engine/core/util/TimeProfiler.h>
 #include <engine/core/util/PathUtil.h>
@@ -47,6 +48,7 @@ namespace Studio
         // do something before quit
         m_mainWindow->onPrepareQuit();
         
+		EchoSafeDeleteInstance(OperationManager);
         EchoSafeDeleteInstance(EchoEngine);
         EchoSafeDeleteInstance(Engine);
 		EchoSafeDelete(m_logPanel, LogPanel);

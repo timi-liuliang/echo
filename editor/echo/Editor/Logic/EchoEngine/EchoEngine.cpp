@@ -116,7 +116,6 @@ namespace Studio
 		}
 	}
 
-	// new
 	void EchoEngine::newEditNodeTree()
 	{
 		setCurrentEditNodeSavePath("");
@@ -127,7 +126,6 @@ namespace Studio
 		}
 	}
 
-	// on open node tree
 	bool EchoEngine::onOpenNodeTree(const Echo::String& resPath)
 	{
 		Echo::Node* node = Echo::Node::loadLink(resPath, false);

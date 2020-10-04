@@ -17,7 +17,13 @@ namespace Echo
 
     BuildModule::~BuildModule()
     {
-
+        EchoSafeDeleteInstance(iOSBuildSettings);
+        EchoSafeDeleteInstance(AndroidBuildSettings);
+        EchoSafeDeleteInstance(MacBuildSettings);
+        EchoSafeDeleteInstance(WindowsBuildSettings);
+        EchoSafeDeleteInstance(WeChatBuildSettings);
+        EchoSafeDeleteInstance(WebAssemblyBuildSettings);
+        EchoSafeDeleteInstance(Html5BuildSettings);
     }
 
 	BuildModule* BuildModule::instance()

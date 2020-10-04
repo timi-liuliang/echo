@@ -285,6 +285,8 @@ namespace Echo
 		EchoSafeDeleteInstance(GameSettings);
 		EchoSafeDeleteInstance(Input);
 		EchoSafeDeleteInstance(PluginSettings);
+		EchoSafeDeleteInstance(FrameState);
+		EchoSafeDeleteInstance(Localization);
         
         Module::clear();
         Class::clear();
