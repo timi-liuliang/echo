@@ -85,11 +85,11 @@ namespace Studio
 		int width = static_cast<int>(this->width());
 		int height = static_cast<int>(this->height());
 
-		if (m_dx9Size.width() != width || m_dx9Size.height() != height)
+		if (m_size.width() != width || m_size.height() != height)
 		{
 			EchoEngine::instance()->Resize(width, height);
-			m_dx9Size.setWidth(width);
-			m_dx9Size.setHeight(height);
+			m_size.setWidth(width);
+			m_size.setHeight(height);
 		}
 	}
 

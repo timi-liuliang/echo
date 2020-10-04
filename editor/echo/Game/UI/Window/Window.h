@@ -15,7 +15,7 @@ namespace Game
 		virtual ~Window();
 
 		// start
-		void start(const Echo::String& echoProject);
+		virtual void start(const Echo::String& echoProject);
 
 		// aspect ratio
 		void setAspectRatio(const QSize& size);
@@ -39,12 +39,12 @@ namespace Game
 		// on reset device
 		void  resetDevice();
 
-	private:
+	protected:
 		// check window size
 		void checkWindowSize();
 
-	private:
-		QSize					m_dx9Size;
+	protected:
+		QSize					m_size;
 		QTimer*					m_timer = nullptr;
 		QSize					m_ratio;
 		App*					m_app = nullptr;

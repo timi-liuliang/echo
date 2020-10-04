@@ -2,6 +2,7 @@
 #include <QDesktopWidget>
 #include <QStatusBar>
 #include "GameMainWindow.h"
+#include "WindowMetal.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/main/GameSettings.h"
 #include "MacHelper.h"
@@ -16,7 +17,12 @@ namespace Game
 	{
 		setupUi( this);
 
-		m_renderWindow = new Window(this);
+#ifdef ECHO_PLATFORM_MAC
+        m_renderWindow = new WindowMetal(this);
+#else
+        m_renderWindow = new Window(this);
+#endif
+
 		setCentralWidget(m_renderWindow);;
 
 #ifdef ECHO_PLATFORM_WINDOWS

@@ -63,7 +63,7 @@ namespace Studio
 		void  ResetDevice();
 
 	protected:
-		QSize					m_dx9Size;
+		QSize					m_size;
 		QTimer*					m_timer = nullptr;
 		QMenu*					m_mouseMenu = nullptr;
 		IRWInputController*		m_inputController = nullptr;
