@@ -9,6 +9,11 @@ namespace Studio
 		m_currentOperation = EchoNew(OperationTranslate);
 	}
 
+    OperationManager::~OperationManager()
+    {
+        EchoSafeDelete(m_currentOperation, ObjectOperation);
+    }
+
 	OperationManager* OperationManager::instance()
 	{
 		static OperationManager* inst = EchoNew(OperationManager);

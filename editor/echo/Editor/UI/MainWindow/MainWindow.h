@@ -146,18 +146,18 @@ namespace Studio
 
 	protected:
 		QTimer				m_timer;
-		QDockWidget*		m_renderPanel;
-		ResPanel*			m_resPanel;
-		NodeTreePanel*		m_scenePanel;
+		QDockWidget*		m_renderPanel = nullptr;
+		ResPanel*			m_resPanel = nullptr;
+		NodeTreePanel*		m_scenePanel = nullptr;
 		TextEditorArea*	    m_scriptEditorMdiArea = nullptr;
 		ShaderEditor*		m_shaderEditorPanel = nullptr;
 		ScratchEditor*		m_scratchEditorPanel = nullptr;
 		QDockWidgets		m_centerPanels;
-		BottomPanel*		m_bottomPanel;
+		BottomPanel*		m_bottomPanel = nullptr;
 		QProcess			m_gameProcess;
-		QComboBox*			m_subEditComboBox;
-		QComboBox*			m_viewMode;
-		AboutWindow*		m_aboutWindow;
+		QComboBox*			m_subEditComboBox = nullptr;
+		QComboBox*			m_viewMode = nullptr;
+		AboutWindow*		m_aboutWindow = nullptr;
 		QMenu*				m_cameraSettingsMenu = nullptr;
 	};
 }

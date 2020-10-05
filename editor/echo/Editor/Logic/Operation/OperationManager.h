@@ -9,7 +9,7 @@ namespace Studio
 	{
 	public:
 		OperationManager();
-		~OperationManager() {}
+        ~OperationManager();
 
 		// instance
 		static OperationManager* instance();

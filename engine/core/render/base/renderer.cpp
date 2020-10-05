@@ -14,7 +14,6 @@ namespace Echo
 
 	Renderer* Renderer::instance()
 	{
-		EchoAssert(g_render);
 		return g_render;
 	}
 

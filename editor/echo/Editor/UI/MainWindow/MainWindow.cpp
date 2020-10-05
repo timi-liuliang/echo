@@ -38,9 +38,6 @@ namespace Studio
 
 	MainWindow::MainWindow(QMainWindow* parent/*=0*/)
 		: QMainWindow(parent)
-		, m_renderPanel(nullptr)
-		, m_resPanel(nullptr)
-		, m_aboutWindow(nullptr)
 	{
 		setupUi(this);
 
