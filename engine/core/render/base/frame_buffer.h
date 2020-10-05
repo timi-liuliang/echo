@@ -30,7 +30,7 @@ namespace Echo
 		virtual ~FrameBuffer();
 
 		// get id
-		ui32 id() const { return m_id; }
+		ui32 getId() const { return m_id; }
         
         // width && height
         ui32 getWidth() const { return m_width; }

@@ -12,6 +12,34 @@
 #include "OperationManager.h"
 #include <QDateTime>
 
+@interface RenderWindowMetalDelegate : NSObject <MTKViewDelegate>
+
+-(nonnull instancetype)initWithMetalKitView:(nonnull MTKView *)view;
+
+@end
+
+@implementation RenderWindowMetalDelegate
+{
+}
+
+-(nonnull instancetype)initWithMetalKitView:(nonnull MTKView *)view;
+{
+    self = [super init];
+    return self;
+}
+
+- (void)drawInMTKView:(nonnull MTKView *)view
+{
+    int a = 10;
+}
+
+- (void)mtkView:(nonnull MTKView *)view drawableSizeWillChange:(CGSize)size
+{
+}
+
+@end
+
+
 namespace Studio
 {
     RenderWindowMetal::RenderWindowMetal(QWidget* parent)
@@ -45,7 +73,7 @@ namespace Studio
         
         m_timer = new QTimer(this);
         QObject::connect(m_timer, SIGNAL(timeout()), this, SLOT(RenderMetal()));
-        m_timer->start(10);
+        m_timer->start(20);
     }
 
     void RenderWindowMetal::RenderMetal()
@@ -85,9 +113,9 @@ namespace Studio
         view.depthStencilPixelFormat = MTLPixelFormatDepth32Float;
         
         // Create Renderer
-        //RendererWindowMetalDelegate* renderer = [[RendererWindowMetalDelegate alloc] initWithMetalKitView:view];
-        //[renderer mtkView:view drawableSizeWillChange:view.drawableSize];
-        //view.delegate = renderer;
+        RenderWindowMetalDelegate* renderer = [[RenderWindowMetalDelegate alloc] initWithMetalKitView:view];
+        [renderer mtkView:view drawableSizeWillChange:view.drawableSize];
+        view.delegate = renderer;
 
         // Create and show a Qt Window which controls the metal view
         QWindow* window = QWindow::fromWinId((WId)view);

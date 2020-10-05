@@ -9,6 +9,33 @@
 #include "GameMainWindow.h"
 #include <engine/core/main/GameSettings.h>
 
+@interface GameRenderWindowMetalDelegate : NSObject <MTKViewDelegate>
+
+-(nonnull instancetype)initWithMetalKitView:(nonnull MTKView *)view;
+
+@end
+
+@implementation GameRenderWindowMetalDelegate
+{
+}
+
+-(nonnull instancetype)initWithMetalKitView:(nonnull MTKView *)view;
+{
+    self = [super init];
+    return self;
+}
+
+- (void)drawInMTKView:(nonnull MTKView *)view
+{
+    int a = 10;
+}
+
+- (void)mtkView:(nonnull MTKView *)view drawableSizeWillChange:(CGSize)size
+{
+}
+
+@end
+
 namespace Game
 {
     WindowMetal::WindowMetal(QWidget* parent)
@@ -34,7 +61,7 @@ namespace Game
 
         m_timer = new QTimer(this);
         connect(m_timer, SIGNAL(timeout()), this, SLOT(renderMetal()));
-        m_timer->start(10);
+        m_timer->start(20);
     }
 
     void  WindowMetal::renderMetal()
@@ -62,6 +89,11 @@ namespace Game
         view.device = MTLCreateSystemDefaultDevice();
         view.colorPixelFormat = MTLPixelFormatBGRA8Unorm;
         view.depthStencilPixelFormat = MTLPixelFormatDepth32Float;
+        
+        // Create Renderer
+        GameRenderWindowMetalDelegate* renderer = [[GameRenderWindowMetalDelegate alloc] initWithMetalKitView:view];
+        [renderer mtkView:view drawableSizeWillChange:view.drawableSize];
+        view.delegate = renderer;
 
         // Create and show a Qt Window which controls the metal view
         QWindow* window = QWindow::fromWinId((WId)view);
