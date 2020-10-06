@@ -56,7 +56,6 @@ IF(${ECHO_PLATFORM_MAC})
     # resource files
     SET(MAC_RESOURCE_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/Resource/mac/App.icns
-        ${CMAKE_CURRENT_SOURCE_DIR}/Resource/mac/Info.plist
         ${ECHO_BIN_PATH}/qt.conf
 		${ECHO_BIN_PATH}/qt
     )

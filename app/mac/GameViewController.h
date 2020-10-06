@@ -1,11 +1,3 @@
-//
-//  GameViewController.h
-//  TestMetal
-//
-//  Created by CaptainLiu on 2020/10/2.
-//  Copyright © 2020 CaptainLiu. All rights reserved.
-//
-
 #import <Cocoa/Cocoa.h>
 #import <Metal/Metal.h>
 #import <MetalKit/MetalKit.h>
