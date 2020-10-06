@@ -68,6 +68,7 @@ IF(${ECHO_PLATFORM_MAC})
         ${ECHO_ROOT_PATH}/app
         ${ECHO_ROOT_PATH}/engine
         ${ECHO_ROOT_PATH}/thirdparty
+        ${ECHO_ROOT_PATH}/tool
         ${ECHO_ROOT_PATH}/CMakeLists.txt
     )
     SET_SOURCE_FILES_PROPERTIES(${MAC_ECHO_SOURCE_FILES} PROPERTIES MACOSX_PACKAGE_LOCATION "echo")

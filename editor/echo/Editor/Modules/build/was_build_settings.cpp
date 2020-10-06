@@ -44,7 +44,7 @@ namespace Echo
 
 	bool WebAssemblyBuildSettings::prepare()
 	{
-		m_rootDir = PathUtil::GetCurrentDir() + "/../../../../";
+		m_rootDir = Engine::instance()->getRootPath();
 		m_projectDir = Engine::instance()->getResPath();
 		m_outputDir = m_outputDir.empty() ? PathUtil::GetCurrentDir() + "/build/wechat/" : m_outputDir;
 

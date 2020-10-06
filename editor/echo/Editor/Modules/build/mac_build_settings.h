@@ -31,6 +31,9 @@ namespace Echo
         // set output directory
         virtual void setOutputDir(const String& outputDir) override;
         
+        // get final result path
+        virtual String getFinalResultPath() override;
+        
     private:
         // output directory
         bool prepare();

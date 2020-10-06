@@ -100,7 +100,7 @@ namespace Echo
 
     bool AndroidBuildSettings::prepare()
     {
-		m_rootDir = PathUtil::GetCurrentDir() + "/../../../../";
+		m_rootDir = Engine::instance()->getRootPath();
 		m_projectDir = Engine::instance()->getResPath();
         m_outputDir = m_outputDir.empty() ? PathUtil::GetCurrentDir() + "/build/android/" : m_outputDir;
 

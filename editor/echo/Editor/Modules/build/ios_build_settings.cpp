@@ -173,7 +173,7 @@ namespace Echo
 
     bool iOSBuildSettings::prepare()
     {
-        m_rootDir   = PathUtil::GetCurrentDir() + "/../../../../";
+        m_rootDir   = Engine::instance()->getRootPath();
         m_projectDir = Engine::instance()->getResPath();
         m_outputDir = m_outputDir.empty() ? PathUtil::GetCurrentDir() + "/build/ios/" : m_outputDir;
         m_solutionDir = m_outputDir + "xcode/";

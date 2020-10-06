@@ -74,9 +74,15 @@ namespace Echo
         
     }
 
+    String MacBuildSettings::getFinalResultPath()
+    {
+        String finalResultPath = m_outputDir + "bin/app/";
+        return PathUtil::IsDirExist(finalResultPath) ? finalResultPath : m_outputDir;
+    }
+
     bool MacBuildSettings::prepare()
     {
-        m_rootDir   = PathUtil::GetCurrentDir() + "/../../../../";
+        m_rootDir   = Engine::instance()->getRootPath();
         m_projectDir = Engine::instance()->getResPath();
         m_outputDir = m_outputDir.empty() ? PathUtil::GetCurrentDir() + "/build/mac/" : m_outputDir;
         m_solutionDir = m_outputDir + "xcode/";
