@@ -114,7 +114,7 @@ namespace Studio
         if (m_targetPlatform == "iOS")			return ECHO_DOWN_CAST<Echo::BuildSettings*>(Echo::Class::create(ECHO_CLASS_NAME(iOSBuildSettings)));
         else if(m_targetPlatform == "Android")  return ECHO_DOWN_CAST<Echo::BuildSettings*>(Echo::Class::create(ECHO_CLASS_NAME(AndroidBuildSettings)));
 		else if(m_targetPlatform == "Windows")	return ECHO_DOWN_CAST<Echo::BuildSettings*>(Echo::Class::create(ECHO_CLASS_NAME(WindowsBuildSettings)));
-        else if(m_targetPlatform == "Mac")      return ECHO_DOWN_CAST<Echo::BuildSettings*>(Echo::Class::create(ECHO_CLASS_NAME(MacBuildSettins)));
+        else if(m_targetPlatform == "Mac")      return ECHO_DOWN_CAST<Echo::BuildSettings*>(Echo::Class::create(ECHO_CLASS_NAME(MacBuildSettings)));
         else									return nullptr;
     }
 

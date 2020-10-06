@@ -28,9 +28,19 @@ namespace Echo
         void setIconRes(const ResourcePath& path);
         const ResourcePath& getIconRes() { return m_iconRes; }
         
+        // set output directory
+        virtual void setOutputDir(const String& outputDir) override;
+        
     private:
         // output directory
         bool prepare();
+        
+        // copy
+        void copySrc();
+        void copyRes();
+        
+        // write config
+        void writeModuleConfig();
         
     private:
         ResourcePath            m_iconRes;

@@ -1,6 +1,8 @@
 #include "mac_build_settings.h"
 #include "engine/core/util/PathUtil.h"
 #include <engine/core/main/Engine.h>
+#include <engine/core/main/module.h>
+#include <engine/core/io/stream/FileHandleDataStream.h>
 
 namespace Echo
 {
@@ -28,6 +30,12 @@ namespace Echo
         CLASS_REGISTER_PROPERTY(MacBuildSettings, "Icon", Variant::Type::ResourcePath, "getIconRes", "setIconRes");
     }
 
+    void MacBuildSettings::setOutputDir(const String& outputDir)
+    {
+        m_outputDir = outputDir;
+        PathUtil::FormatPath(m_outputDir, false);
+    }
+
     void MacBuildSettings::build()
     {
         log("Build App for Mac platform.");
@@ -36,8 +44,8 @@ namespace Echo
 
         if(prepare())
         {
-//            copySrc();
-//            copyRes();
+            copySrc();
+            copyRes();
 //
 //            replaceIcon();
 //            replaceLaunchImage();
@@ -46,7 +54,7 @@ namespace Echo
 //            writeInfoPlist();
 //            writeCMakeList();
 //
-//            writeModuleConfig();
+            writeModuleConfig();
 
             //cmake();
 
@@ -70,7 +78,7 @@ namespace Echo
     {
         m_rootDir   = PathUtil::GetCurrentDir() + "/../../../../";
         m_projectDir = Engine::instance()->getResPath();
-        m_outputDir = m_outputDir.empty() ? PathUtil::GetCurrentDir() + "/build/ios/" : m_outputDir;
+        m_outputDir = m_outputDir.empty() ? PathUtil::GetCurrentDir() + "/build/mac/" : m_outputDir;
         m_solutionDir = m_outputDir + "xcode/";
         
         // delete output dir
@@ -87,5 +95,72 @@ namespace Echo
         }
         
         return true;
+    }
+
+    void MacBuildSettings::copySrc()
+    {
+        log("Copy Engine Source Code ...");
+
+        // copy app
+        PathUtil::CopyDir( m_rootDir + "app/mac/", m_outputDir + "app/mac/");
+
+        // copy engine
+        PathUtil::CopyDir( m_rootDir + "engine/", m_outputDir + "engine/");
+
+        // copy thirdparty
+        PathUtil::CopyDir( m_rootDir + "thirdparty/", m_outputDir + "thirdparty/");
+
+        // copy CMakeLists.txt
+        PathUtil::CopyFilePath( m_rootDir + "CMakeLists.txt", m_outputDir + "CMakeLists.txt");
+        
+        // copy build script
+        PathUtil::CopyFilePath( m_rootDir + "tool/build/mac/cmake.sh", m_outputDir + "cmake.sh");
+    }
+
+    void MacBuildSettings::copyRes()
+    {
+        log("Convert Project File ...");
+
+        // copy res
+        PathUtil::CopyDir( m_projectDir, m_outputDir + "app/mac/resources/data/");
+        packageRes(m_outputDir + "app/mac/resources/data/");
+
+        // rename
+        String projectFile = PathUtil::GetPureFilename( Engine::instance()->getConfig().m_projectFile);
+        PathUtil::RenameFile(m_outputDir + "app/mac/resources/data/" + projectFile, m_outputDir + "app/mac/resources/data/app.echo");
+    }
+
+    void MacBuildSettings::writeModuleConfig()
+    {
+        String  moduleSrc;
+
+        // include
+        writeLine(moduleSrc, "#include <engine/core/main/module.h>\n");
+
+        // namespace
+        writeLine(moduleSrc, "namespace Echo\n{");
+        writeLine(moduleSrc, "\tvoid registerModules()");
+        writeLine(moduleSrc, "\t{");
+        vector<Module*>::type* allModules = Module::getAllModules();
+        if (allModules)
+        {
+            for (Module* module : *allModules)
+            {
+                if (module->isEnable() && !module->isEditorOnly())
+                    writeLine(moduleSrc, StringUtil::Format("\t\tREGISTER_MODULE(%s)", module->getClassName().c_str()));
+            }
+        }
+
+        // end namespace
+        writeLine(moduleSrc, "\t}\n}\n");
+
+        // Write to file
+        String savePath = m_outputDir + "app/mac/config/ModuleConfig.cpp";
+        FileHandleDataStream stream(savePath, DataStream::WRITE);
+        if (!stream.fail())
+        {
+            stream.write(moduleSrc.data(), moduleSrc.size());
+            stream.close();
+        }
     }
 }
