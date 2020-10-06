@@ -10,6 +10,7 @@ build/editor/windows/nsis/echo
 /thirdparty/vulkan
 bin/app/Win32/Debug/data
 bin/app/Win32/Release/data
+bin/app/Mac
 bin/editor/Win64/Debug/build
 bin/editor/Win64/Release/build
 bin/editor/Mac/Debug
