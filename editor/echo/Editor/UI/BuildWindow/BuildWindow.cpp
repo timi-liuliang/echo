@@ -17,8 +17,15 @@ namespace Studio
 	{
 		setupUi( this);
 
+#ifdef ECHO_PLATFORM_WINDOWS
         // hide window hwnd
         setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+#elif defined(ECHO_PLATFORM_MAC)
+        // set title bar color
+        //macChangeTitleBarColor(winId(), 0.f, 0.f, 0.f);
+        setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+        m_menuBar->setNativeMenuBar(false);
+#endif
 
 		// set icon
         m_menuBar->setTopLeftCornerIcon(":/icon/Icon/icon.png");
@@ -107,6 +114,7 @@ namespace Studio
         if (m_targetPlatform == "iOS")			return ECHO_DOWN_CAST<Echo::BuildSettings*>(Echo::Class::create(ECHO_CLASS_NAME(iOSBuildSettings)));
         else if(m_targetPlatform == "Android")  return ECHO_DOWN_CAST<Echo::BuildSettings*>(Echo::Class::create(ECHO_CLASS_NAME(AndroidBuildSettings)));
 		else if(m_targetPlatform == "Windows")	return ECHO_DOWN_CAST<Echo::BuildSettings*>(Echo::Class::create(ECHO_CLASS_NAME(WindowsBuildSettings)));
+        else if(m_targetPlatform == "Mac")      return ECHO_DOWN_CAST<Echo::BuildSettings*>(Echo::Class::create(ECHO_CLASS_NAME(MacBuildSettins)));
         else									return nullptr;
     }
 
