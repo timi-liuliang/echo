@@ -34,6 +34,18 @@ namespace Echo
         // get final result path
         virtual String getFinalResultPath() override;
         
+        // identifier
+        void setIdentifier(const String& identifier) { m_identifier = identifier; }
+        String getIdentifier() const;
+        
+        // version
+        void setVersion(const String& version) { m_version = version; }
+        const String& getVersion() const { return m_version; }
+        
+        // app name
+        void setAppName(const String& appName) { m_appName = appName; }
+        String getAppName() const;
+        
     private:
         // output directory
         bool prepare();
@@ -42,8 +54,10 @@ namespace Echo
         void copySrc();
         void copyRes();
         
-        // write config
+        // write
         void writeModuleConfig();
+        void writeInfoPlist();
+        void writeCMakeList();
         
     private:
         ResourcePath            m_iconRes;
@@ -51,5 +65,8 @@ namespace Echo
         String                  m_projectDir;
         String                  m_outputDir;
         String                  m_solutionDir;
+        String                  m_appName;
+        String                  m_identifier;
+        String                  m_version = "1.0.0";
     };
 }
