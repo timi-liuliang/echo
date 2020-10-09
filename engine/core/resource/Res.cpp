@@ -69,6 +69,16 @@ namespace Echo
 #endif
 	}
 
+	void Res::clear()
+	{
+		for (auto& [key, res] : g_ress)
+		{
+			//EchoSafeDelete(res, Res);
+		}
+
+		g_ress.clear();
+	}
+
 	void Res::setPath(const String& path)
 	{
 		// remove res cache

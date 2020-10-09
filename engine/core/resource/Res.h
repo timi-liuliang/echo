@@ -48,6 +48,9 @@ namespace Echo
 		// update
 		static void updateAll(float delta);
 
+		// clear
+		static void clear();
+
 	public:
 		// is a package
 		virtual bool isPackage() const { return false; }

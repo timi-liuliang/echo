@@ -273,6 +273,8 @@ namespace Echo
 
 	void Engine::destroy()
 	{
+		Res::clear();
+
 		EchoSafeDeleteInstance(NodeTree);
 		EchoSafeDeleteInstance(ImageCodecMgr);
 		EchoSafeDeleteInstance(IO);
