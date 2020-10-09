@@ -1,8 +1,8 @@
-#include "recast_nav_mesh.h"
+#include "recast_off_mesh_link.h"
 
 namespace Echo
 {
-	void RecastNavMesh::bindMethods()
+	void RecastOffMeshLink::bindMethods()
 	{
 
 	}

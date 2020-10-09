@@ -4,9 +4,9 @@
 
 namespace Echo
 {
-	class RecastNavMesh : public Node
+	class RecastOffMeshLink : public Node
 	{
-		ECHO_CLASS(RecastNavMesh, Node)
+		ECHO_CLASS(RecastOffMeshLink, Node)
 
 	public:
 	};
