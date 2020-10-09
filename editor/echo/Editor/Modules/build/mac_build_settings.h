@@ -53,6 +53,9 @@ namespace Echo
         // copy
         void copySrc();
         void copyRes();
+
+		// replace
+		void replaceIcon();
         
         // write
         void writeModuleConfig();
@@ -60,12 +63,12 @@ namespace Echo
         void writeCMakeList();
         
     private:
-        ResourcePath            m_iconRes;
         String                  m_rootDir;
         String                  m_projectDir;
         String                  m_outputDir;
         String                  m_solutionDir;
         String                  m_appName;
+        ResourcePath            m_iconRes = ResourcePath("Res://icon.png", ".png");
         String                  m_identifier;
         String                  m_version = "1.0.0";
     };

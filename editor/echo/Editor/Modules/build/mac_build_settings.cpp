@@ -3,7 +3,11 @@
 #include <engine/core/main/Engine.h>
 #include <engine/core/main/module.h>
 #include <engine/core/io/stream/FileHandleDataStream.h>
+#include <engine/core/io/IO.h>
 #include <thirdparty/pugixml/pugixml.hpp>
+#include <thirdparty/libicns/icns.h>
+
+extern "C" { int icns_png_to_image(icns_size_t dataSize, icns_byte_t* dataPtr, icns_image_t* imageOut); }
 
 namespace Echo
 {
@@ -37,7 +41,7 @@ namespace Echo
         CLASS_REGISTER_PROPERTY(MacBuildSettings, "AppName",    Variant::Type::String,          "getAppName",       "setAppName");
         CLASS_REGISTER_PROPERTY(MacBuildSettings, "Identifier", Variant::Type::String,          "getIdentifier",    "setIdentifier");
         CLASS_REGISTER_PROPERTY(MacBuildSettings, "Version",    Variant::Type::String,          "getVersion",       "setVersion");
-        CLASS_REGISTER_PROPERTY(MacBuildSettings, "Icon",       Variant::Type::ResourcePath,    "getIconRes", "setIconRes");
+        CLASS_REGISTER_PROPERTY(MacBuildSettings, "Icon",       Variant::Type::ResourcePath,    "getIconRes",       "setIconRes");
     }
 
     void MacBuildSettings::setOutputDir(const String& outputDir)
@@ -167,6 +171,31 @@ namespace Echo
         String projectFile = PathUtil::GetPureFilename( Engine::instance()->getConfig().m_projectFile);
         PathUtil::RenameFile(m_outputDir + "app/mac/resources/data/" + projectFile, m_outputDir + "app/mac/resources/data/app.echo");
     }
+
+	void MacBuildSettings::replaceIcon()
+	{
+		String iconFullPath = IO::instance()->convertResPathToFullPath(m_iconRes.getPath());
+		if (PathUtil::IsFileExist(iconFullPath))
+		{
+            MemoryReader memReader(m_iconRes.getPath());
+            if (memReader.getSize())
+            {
+                icns_image_t* icnsImage = EchoNew(icns_image_t);
+                if (ICNS_STATUS_OK == icns_png_to_image(memReader.getSize(), memReader.getData<icns_byte_t*>(), icnsImage))
+                {
+
+                }
+            }
+
+			//for (const AppIconItem& item : m_appIcons)
+			//{
+			//	String outputPath = m_outputDir + StringUtil::Format("app/ios/Assets.xcassets/AppIcon.appiconset/Icon%dx%d.png", item.m_size, item.m_size);
+			//	PathUtil::DelPath(outputPath);
+
+			//	//rescaleIcon(iconFullPath.c_str(), outputPath.c_str(), item.m_size, item.m_size);
+			//}
+		}
+	}
 
     void MacBuildSettings::writeModuleConfig()
     {

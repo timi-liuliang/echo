@@ -199,7 +199,7 @@ void icns_place_jp2_cdef(icns_byte_t *dataPtr, icns_size_t dataSize);
 
 // icns_utils.c
 icns_uint32_t icns_get_element_order(icns_type_t iconType);
-void icns_print_err(const char *template, ...);
+void icns_print_err(const char* formats, ...);
 
 // Stop hiding symbols
 //#pragma GCC visibility pop
