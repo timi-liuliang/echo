@@ -322,7 +322,7 @@ ENDIF()
 
 # Editor mode
 IF(ECHO_EDITOR_MODE)
-	# unit test
+	ADD_SUBDIRECTORY(thirdparty/libicns)
 	ADD_SUBDIRECTORY(thirdparty/googletest)
 	ADD_SUBDIRECTORY(tests/unittest)
 
