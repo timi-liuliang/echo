@@ -256,16 +256,21 @@ namespace Echo
 								icns_add_element_in_family(&iconFamily, iconElement);
                         }
 
-                        // write icon file
-						String outputPath = m_outputDir + StringUtil::Format("app/mac/resources/mac/App.icns");
-						FILE* fileHandle = fopen(outputPath.c_str(), "wb");
-						if (fileHandle)
-						{
-							icns_write_family_to_file(fileHandle, iconFamily);
+                        icns_sint32_t count;
+                        icns_count_elements_in_family(iconFamily, &count);
+                        if (count)
+                        {
+							// write icon file
+							String outputPath = m_outputDir + StringUtil::Format("app/mac/resources/mac/App.icns");
+							FILE* fileHandle = fopen(outputPath.c_str(), "wb");
+							if (fileHandle)
+							{
+								icns_write_family_to_file(fileHandle, iconFamily);
 
-                            fflush(fileHandle);
-                            fclose(fileHandle);
-						}
+								fflush(fileHandle);
+								fclose(fileHandle);
+							}
+                        }
                     }
                 }
             }
