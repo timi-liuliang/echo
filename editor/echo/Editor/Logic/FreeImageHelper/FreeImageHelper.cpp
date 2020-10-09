@@ -21,7 +21,7 @@ namespace Echo
         return inst;
     }
 
-	int FreeImageHelper::MappingFlagsByFormat( FREE_IMAGE_FORMAT fmt)
+	int FreeImageHelper::mappingFlagsByFormat( FREE_IMAGE_FORMAT fmt)
 	{
 		int fiFlags = 0;
 		if( fmt==FIF_PNG)
@@ -40,7 +40,7 @@ namespace Echo
 	{
 		FREE_IMAGE_FORMAT fileFMT = FreeImage_GetFIFFromFilename( filePath);
 		
-		int fiFlags = MappingFlagsByFormat( fileFMT);
+		int fiFlags = mappingFlagsByFormat( fileFMT);
 
 		// 加载获取纹理信息
 		if( fileFMT!= FIF_UNKNOWN && FreeImage_FIFSupportsReading( fileFMT))
@@ -72,7 +72,7 @@ namespace Echo
 	{
 		std::string ext = PathUtil::GetFileExt( iFilePath).c_str();
 		FREE_IMAGE_FORMAT fileFMT = FreeImage_GetFIFFromFilename( iFilePath);
-		int fiFlags = MappingFlagsByFormat( fileFMT);
+		int fiFlags = mappingFlagsByFormat( fileFMT);
 
 		// Load
 		if( fileFMT!= FIF_UNKNOWN && FreeImage_FIFSupportsReading( fileFMT))
@@ -105,7 +105,7 @@ namespace Echo
     {
         std::string ext = PathUtil::GetFileExt( iFilePath).c_str();
         FREE_IMAGE_FORMAT fileFMT = FreeImage_GetFIFFromFilename( iFilePath);
-        int fiFlags = MappingFlagsByFormat( fileFMT);
+        int fiFlags = mappingFlagsByFormat( fileFMT);
 
         // Load
         if( fileFMT!= FIF_UNKNOWN && FreeImage_FIFSupportsReading( fileFMT))
@@ -131,9 +131,7 @@ namespace Echo
 	{
 		FREE_IMAGE_FORMAT fileFMT = FreeImage_GetFIFFromFilename( iFilePath);
 
-		int fiFlags = MappingFlagsByFormat( fileFMT);
-
-		// 加载获取纹理信息
+		int fiFlags = mappingFlagsByFormat( fileFMT);
 		if( fileFMT!= FIF_UNKNOWN && FreeImage_FIFSupportsReading( fileFMT))
 		{
 			FIBITMAP* dip = FreeImage_Load( fileFMT, iFilePath, fiFlags);
@@ -146,7 +144,6 @@ namespace Echo
 					width  = (ui32)(width * scaleValue);
 					height = (ui32)(height* scaleValue);
 
-					// 缩放纹理
 					FIBITMAP* dipScaled = FreeImage_Rescale( dip, width, height, FILTER_BOX);
 
 					FreeImage_Save( FIF_TARGA, dipScaled, oFilePath, TARGA_DEFAULT);
@@ -172,7 +169,7 @@ namespace Echo
 	{
 		FREE_IMAGE_FORMAT fileFMT = FreeImage_GetFIFFromFilename( iFilePath);
 
-		int fiFlags = MappingFlagsByFormat( fileFMT);
+		int fiFlags = mappingFlagsByFormat( fileFMT);
 
 		// 加载获取纹理信息
 		if( fileFMT!= FIF_UNKNOWN && FreeImage_FIFSupportsReading( fileFMT))
@@ -221,7 +218,7 @@ namespace Echo
 		ImageInfo imageInfo;
 		FREE_IMAGE_FORMAT fileFMT = FreeImage_GetFIFFromFilename( srcPath);
 
-		int fiFlags = MappingFlagsByFormat( fileFMT);
+		int fiFlags = mappingFlagsByFormat( fileFMT);
 		 
 		// 加载获取纹理信息
 		if( fileFMT!= FIF_UNKNOWN && FreeImage_FIFSupportsReading( fileFMT))
@@ -264,8 +261,8 @@ namespace Echo
 			return false;
 		}
 
-		SaveImageToBmp( rgbBits, imageInfo.m_width, imageInfo.m_height, oRgbFile);
-		SaveImageToBmp( alphaBits, imageInfo.m_width, imageInfo.m_height, oAlphaFile);
+		saveImageToBmp( rgbBits, imageInfo.m_width, imageInfo.m_height, oRgbFile);
+		saveImageToBmp( alphaBits, imageInfo.m_width, imageInfo.m_height, oAlphaFile);
 
 		return true;
 	}
@@ -277,7 +274,7 @@ namespace Echo
 		ImageInfo imageInfo;
 		FREE_IMAGE_FORMAT fileFMT = FreeImage_GetFIFFromFilename(srcPath);
 
-		int fiFlags = MappingFlagsByFormat(fileFMT);
+		int fiFlags = mappingFlagsByFormat(fileFMT);
 
 		// 加载获取纹理信息
 		if (fileFMT != FIF_UNKNOWN && FreeImage_FIFSupportsReading(fileFMT))
@@ -333,7 +330,7 @@ namespace Echo
 
 	#define GCC_PACK(n)
 
-	int FreeImageHelper::SaveImageToBmp( BYTE* pixelData, int width, int height, const char* savePath)
+	int FreeImageHelper::saveImageToBmp( BYTE* pixelData, int width, int height, const char* savePath)
 	{
 		PathUtil::DelPath( savePath);
 
@@ -409,7 +406,7 @@ namespace Echo
 		ImageInfo imageInfo;
 		FREE_IMAGE_FORMAT fileFMT = FreeImage_GetFIFFromFilename( filePath);
 
-		int fiFlags = MappingFlagsByFormat( fileFMT);
+		int fiFlags = mappingFlagsByFormat( fileFMT);
 
 		// 加载获取纹理信息
 		if( fileFMT!= FIF_UNKNOWN && FreeImage_FIFSupportsReading( fileFMT))
@@ -471,8 +468,8 @@ namespace Echo
 		FREE_IMAGE_FORMAT dstFileFMT = FreeImage_GetFIFFromFilename( dstFile );
 		FREE_IMAGE_FORMAT srcFileFMT = FreeImage_GetFIFFromFilename( srcFile );
 
-		int dstFiFlags = MappingFlagsByFormat( dstFileFMT );
-		int srcFiFlags = MappingFlagsByFormat( srcFileFMT );
+		int dstFiFlags = mappingFlagsByFormat( dstFileFMT );
+		int srcFiFlags = mappingFlagsByFormat( srcFileFMT );
 
 		// 加载获取纹理信息
 		if( dstFileFMT!= FIF_UNKNOWN && FreeImage_FIFSupportsReading( dstFileFMT)
@@ -503,11 +500,11 @@ namespace Echo
 		return false;
 	}
 
-	bool FreeImageHelper::SaveRGBAtoRGBjpeg(const char* srcFile, const char* dstFile, ImageInfo& imageInfo, float scale)
+	bool FreeImageHelper::saveRGBAtoRGBjpeg(const char* srcFile, const char* dstFile, ImageInfo& imageInfo, float scale)
 	{
 		FREE_IMAGE_FORMAT fileFMT = FreeImage_GetFIFFromFilename(srcFile);
 
-		int fiFlags = MappingFlagsByFormat(fileFMT);
+		int fiFlags = mappingFlagsByFormat(fileFMT);
 
 		// 加载获取纹理信息
 		if (fileFMT != FIF_UNKNOWN && FreeImage_FIFSupportsReading(fileFMT))
@@ -570,7 +567,7 @@ namespace Echo
 
 		FREE_IMAGE_FORMAT fileFMT = FreeImage_GetFIFFromFilename((*srcFile)[0].c_str());
 
-		int fiFlags = MappingFlagsByFormat(fileFMT);
+		int fiFlags = mappingFlagsByFormat(fileFMT);
 
 		// 加载获取纹理信息
 		if (fileFMT != FIF_UNKNOWN && FreeImage_FIFSupportsReading(fileFMT))

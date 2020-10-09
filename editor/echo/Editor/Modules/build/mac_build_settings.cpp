@@ -113,9 +113,14 @@ namespace Echo
         }
     }
 
+    String MacBuildSettings::getProjectName() const
+    {
+        return PathUtil::GetPureFilename( Engine::instance()->getConfig().m_projectFile, false);
+    }
+
     String MacBuildSettings::getAppName() const
     {
-        if(m_appName.empty())   return PathUtil::GetPureFilename( Engine::instance()->getConfig().m_projectFile, false);
+        if(m_appName.empty())   return getProjectName();
         else                    return m_appName;
     }
 
@@ -371,7 +376,7 @@ namespace Echo
         String  cmakeStr;
         
         // module
-        String moduleName = StringUtil::Replace(getAppName(), " ", "");
+        String moduleName = StringUtil::Replace(getProjectName(), " ", "");
         writeLine( cmakeStr, StringUtil::Format("SET(MODULE_NAME %s)", moduleName.c_str()));
         
         // set module path
