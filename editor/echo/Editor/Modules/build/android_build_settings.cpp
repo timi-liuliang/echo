@@ -298,7 +298,7 @@ namespace Echo
 	{
 		std::string ext = PathUtil::GetFileExt(iFilePath).c_str();
 		FREE_IMAGE_FORMAT fileFMT = FreeImage_GetFIFFromFilename(iFilePath);
-		int fiFlags = FreeImageHelper::instance()->MappingFlagsByFormat(fileFMT);
+		int fiFlags = FreeImageHelper::instance()->mappingFlagsByFormat(fileFMT);
 
 		// Load
 		if (fileFMT != FIF_UNKNOWN && FreeImage_FIFSupportsReading(fileFMT))

@@ -42,6 +42,9 @@ namespace Echo
         void setVersion(const String& version) { m_version = version; }
         const String& getVersion() const { return m_version; }
         
+        // project name
+        String getProjectName() const;
+        
         // app name
         void setAppName(const String& appName) { m_appName = appName; }
         String getAppName() const;

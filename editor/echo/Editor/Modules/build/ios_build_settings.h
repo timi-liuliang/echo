@@ -71,6 +71,9 @@ namespace Echo
         void setIconRes(const ResourcePath& path);
         const ResourcePath& getIconRes() { return m_iconRes; }
         
+        // project name
+        String getProjectName() const;
+        
         // app name
         void setAppName(const String& appName) { m_appName = appName; }
         String getAppName() const;
