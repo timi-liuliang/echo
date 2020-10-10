@@ -13,8 +13,9 @@
     [super viewDidLoad];
 
     _view = (MTKView *)self.view;
-
     _view.device = MTLCreateSystemDefaultDevice();
+    _view.colorPixelFormat = MTLPixelFormatBGRA8Unorm;
+    _view.depthStencilPixelFormat = MTLPixelFormatDepth32Float;
 
     if(!_view.device)
     {
@@ -24,7 +25,6 @@
     }
 
     _renderer = [[Renderer alloc] initWithMetalKitView:_view];
-
     [_renderer mtkView:_view drawableSizeWillChange:_view.bounds.size];
 
     _view.delegate = _renderer;
