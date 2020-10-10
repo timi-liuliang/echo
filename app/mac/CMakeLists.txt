@@ -6,12 +6,12 @@ SET(MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Include Direoctories
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
-INCLUDE_DIRECtORIES(${ECHO_ROOT_PATH})
+INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH})
 
 # Link Directories
 LINK_DIRECTORIES(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 LINK_DIRECTORIES(${ECHO_LIB_PATH})
-LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/Core/lib/ios/)
+LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/Core/lib/macos/)
 
 # AddFrameWork Macro
 MACRO(ADD_FRAMEWORK fwname)
@@ -53,6 +53,7 @@ ADD_EXECUTABLE(${MODULE_NAME} MACOSX_BUNDLE ${ALL_FILES} ${MAC_RESOURCE_FILES} C
 # Link Library
 TARGET_LINK_LIBRARIES(${MODULE_NAME} engine)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} pugixml physx spine recast lua freeimage freetype zlib box2d)
+TARGET_LINK_LIBRARIES(${MODULE_NAME} glslang spirv-cross)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} Live2DCubismCore)
 
 # https://help.apple.com/xcode/mac/current/#/itcaec37c2a6
