@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<settings>
+	<AIModule class="AIModule" path="" Enable="true" />
+	<AndroidBuildSettings class="AndroidBuildSettings" path="" AppName="app" IconBackground="Res://icon.png" IconForeground="Res://icon.png" />
+	<AnimModule class="AnimModule" path="" Enable="true" />
+	<AudioDevice class="AudioDevice" path="" />
+	<AudioModule class="AudioModule" path="" Enable="true" />
+	<Box2DModule class="Box2DModule" path="" Enable="true" FramesPerSecond="60" DebugDraw="Editor" PixelsPerMeter="32.0" Gravity="0 -9.8" />
+	<BuildModule class="BuildModule" path="" Enable="true" />
+	<CameraModule class="CameraModule" path="" Enable="true" />
+	<EditorCameraSettings class="EditorCameraSettings" path="" MoveSpeed="1.0" NearClip="0.2" FarClip="2500.0" />
+	<EditorRenderSettings class="EditorRenderSettings" path="" PolygonMode="Fill" />
+	<EditorSettingsModule class="EditorSettingsModule" path="" Enable="true" />
+	<EffectModule class="EffectModule" path="" Enable="true" />
+	<Engine class="Engine" path="" />
+	<FrameState class="FrameState" path="" />
+	<GameSettings class="GameSettings" path="" Background="0.298 0.298 0.322 1 " DesignWidth="480" DesignHeight="960" WindowWidth="480" WindowHeight="960" Aspect="keep in" LaunchScene="Res://scene/main.scene" />
+	<GeomModule class="GeomModule" path="" Enable="true" />
+	<GltfModule class="GltfModule" path="" Enable="true" />
+	<Html5BuildSettings class="Html5BuildSettings" path="" Icon="" />
+	<IO class="IO" path="" />
+	<Input class="Input" path="" />
+	<LightModule class="LightModule" path="" Enable="true" ImageBasedLighting="true" Brdf="" />
+	<Live2DModule class="Live2DModule" path="" Enable="true" />
+	<Localization class="Localization" path="" />
+	<Log class="Log" path="" />
+	<MacBuildSettings class="MacBuildSettings" path="" Icon="" />
+	<PhysxModule class="PhysxModule" path="" Enable="true" DebugDraw="Editor" />
+	<PhysxWorld class="PhysxWorld" path="" />
+	<PluginSettings class="PluginSettings" path="" SearchPath="${EchoDir}/plugins/;${ProjectDir}/plugins/;" />
+	<ProceduralModule class="ProceduralModule" path="" Enable="true" />
+	<RaytracingModule class="RaytracingModule" path="" Enable="true" />
+	<RaytracingWorld class="RaytracingWorld" path="" />
+	<SceneModule class="SceneModule" path="" Enable="true" />
+	<ShaderEditorModule class="ShaderEditorModule" path="" Enable="true" />
+	<SpineModule class="SpineModule" path="" Enable="true" />
+	<SplineModule class="SplineModule" path="" Enable="true" />
+	<UiEventProcessor class="UiEventProcessor" path="" />
+	<UiModule class="UiModule" path="" Enable="true" />
+	<VideoModule class="VideoModule" path="" Enable="true" />
+	<WeChatBuildSettings class="WeChatBuildSettings" path="" Icon="" />
+	<WebAssemblyBuildSettings class="WebAssemblyBuildSettings" path="" Icon="" />
+	<WindowsBuildSettings class="WindowsBuildSettings" path="" Icon="" />
+	<iOSBuildSettings class="iOSBuildSettings" path="" AppName="sprite" Identifier="com.echo.sprite" Version="1.0.0" Icon="Res://icon.png" HiddenStatusBar="true" Portrait="true" PortraitUpsideDown="true" LandscapeLeft="true" LandscapeRight="true" />
+</settings>
