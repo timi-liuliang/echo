@@ -42,6 +42,10 @@ namespace Echo
 
 	void GameSettings::bindMethods() 
 	{
+        CLASS_BIND_METHOD(GameSettings, getBackgroundColor, DEF_METHOD("getBackgroundColor"));
+        CLASS_BIND_METHOD(GameSettings, setBackgroundColor, DEF_METHOD("setBackgroundColor"));
+        CLASS_BIND_METHOD(GameSettings, isFullScreen,   DEF_METHOD("isFullScreen"));
+        CLASS_BIND_METHOD(GameSettings, setFullScreen,  DEF_METHOD("setFullScreen"));
 		CLASS_BIND_METHOD(GameSettings, getDesignWidth, DEF_METHOD("getDesignWidth"));
 		CLASS_BIND_METHOD(GameSettings, setDesignWidth, DEF_METHOD("setDesignWidth"));
 		CLASS_BIND_METHOD(GameSettings, getDesignHeight, DEF_METHOD("getDesignHeight"));
@@ -54,10 +58,9 @@ namespace Echo
 		CLASS_BIND_METHOD(GameSettings, setAspect, DEF_METHOD("setAspect"));
 		CLASS_BIND_METHOD(GameSettings, getLaunchScene, DEF_METHOD("getLaunchScene"));
 		CLASS_BIND_METHOD(GameSettings, setLaunchScene, DEF_METHOD("setLaunchScene"));
-		CLASS_BIND_METHOD(GameSettings, getBackgroundColor, DEF_METHOD("getBackgroundColor"));
-		CLASS_BIND_METHOD(GameSettings, setBackgroundColor, DEF_METHOD("setBackgroundColor"));
 
 		CLASS_REGISTER_PROPERTY(GameSettings, "Background", Variant::Type::Color, "getBackgroundColor", "setBackgroundColor");
+        CLASS_REGISTER_PROPERTY(GameSettings, "FullScreen", Variant::Type::Int, "isFullScreen", "setFullScreen");
 		CLASS_REGISTER_PROPERTY(GameSettings, "DesignWidth", Variant::Type::Int, "getDesignWidth", "setDesignWidth");
 		CLASS_REGISTER_PROPERTY(GameSettings, "DesignHeight", Variant::Type::Int, "getDesignHeight", "setDesignHeight");
 		CLASS_REGISTER_PROPERTY(GameSettings, "WindowWidth", Variant::Type::Int, "getWindowWidth", "setWindowWidth");
@@ -65,6 +68,11 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(GameSettings, "Aspect", Variant::Type::StringOption, "getAspect", "setAspect");
 		CLASS_REGISTER_PROPERTY(GameSettings, "LaunchScene", Variant::Type::ResourcePath, "getLaunchScene", "setLaunchScene");
 	}
+
+    void GameSettings::setFullScreen(bool fullScreen)
+    {
+        m_fullScreen = fullScreen;
+    }
 
 	void GameSettings::setDesignWidth(i32 width) 
 	{ 

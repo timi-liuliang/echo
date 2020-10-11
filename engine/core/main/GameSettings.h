@@ -28,6 +28,10 @@ namespace Echo
 
 		// instance
 		static GameSettings* instance();
+        
+        // full screen
+        void setFullScreen(bool fullScreen);
+        bool isFullScreen() const { return m_fullScreen; }
 
 		// design window width
 		void setDesignWidth(i32 width);
@@ -70,6 +74,7 @@ namespace Echo
 		void keepAspect(ui32 windowWidth, ui32 windowHeight, KeepAspectType type, class Camera* camera);
 
 	private:
+        bool                m_fullScreen = false;
 		i32					m_designWidth;
 		i32					m_designHeight;
 		i32					m_windowWidth;

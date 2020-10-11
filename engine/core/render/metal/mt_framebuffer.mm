@@ -69,15 +69,6 @@ namespace Echo
     {
         m_width = width;
         m_height = height;
-        
-        CALayer* metalLayer = m_metalView.layer;
-        if(metalLayer)
-        {
-            float  contentsScale = metalLayer.contentsScale;
-            CGSize newSize = { m_width * contentsScale, m_height * contentsScale};
-            
-            [metalLayer setDrawableSize: newSize];
-        }
     }
     
     NSView* MTFrameBufferWindow::makeViewMetalCompatible(void* handle)
