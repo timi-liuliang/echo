@@ -36,10 +36,12 @@ static MTKView * g_view = nullptr;
     Echo::PathUtil::FormatPath(rootcfg.m_userPath);
     Echo::Engine::instance()->initialize(rootcfg);
     
+    [self initWindowSize];
+    
     return self;
 }
 
-+(nonnull instancetype)initWindowSize
+-(nonnull instancetype)initWindowSize
 {
     // default window size
     Echo::GameSettings* settings = Echo::GameSettings::instance();

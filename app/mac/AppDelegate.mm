@@ -9,7 +9,6 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-    [Renderer initWindowSize];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification

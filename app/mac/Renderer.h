@@ -8,7 +8,7 @@
 -(nonnull instancetype)initWithMetalKitView:(nonnull MTKView *)view;
 
 // init window size
-+(nonnull instancetype)initWindowSize;
+-(nonnull instancetype)initWindowSize;
 
 @end
 
