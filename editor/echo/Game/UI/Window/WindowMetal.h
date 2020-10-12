@@ -16,17 +16,9 @@ namespace Game
         // begin render
         virtual void start(const Echo::String& echoProject) override;
         
-    public slots:
-#ifdef ECHO_PLATFORM_MAC
-        // render
-        void renderMetal();
-#else
-        void renderMetal() {}
-#endif
-        
     private:
         // new metal window
-        QWindow* newMetalWindow();
+        QWidget* newMetalWindow();
         
     private:
         void*   m_mtkView = nullptr;

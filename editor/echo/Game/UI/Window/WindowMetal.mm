@@ -6,6 +6,7 @@
 #include <Metal/MTLRenderPipeline.h>
 #include <MetalKit/MTKView.h>
 #include <QDateTime>
+#include <QMacCocoaViewContainer>
 #include "GameMainWindow.h"
 #include <engine/core/main/GameSettings.h>
 
@@ -19,7 +20,7 @@
 {
 }
 
--(nonnull instancetype)initWithMetalKitView:(nonnull MTKView *)view;
+-(nonnull instancetype)initWithMetalKitView:(nonnull MTKView *)view
 {
     self = [super init];
     return self;
@@ -27,7 +28,19 @@
 
 - (void)drawInMTKView:(nonnull MTKView *)view
 {
-    int a = 10;
+    @autoreleasepool
+    {
+        static Echo::Dword lastTime = QDateTime::currentMSecsSinceEpoch();
+
+        // calc delta Time
+        Echo::Dword curTime = QDateTime::currentMSecsSinceEpoch();
+        Echo::Dword elapsedTime = curTime - lastTime;
+
+        // Call the main render function
+        Echo::Engine::instance()->tick(elapsedTime * 0.001f);
+
+        lastTime = curTime;
+    }
 }
 
 - (void)mtkView:(nonnull MTKView *)view drawableSizeWillChange:(CGSize)size
@@ -44,7 +57,7 @@ namespace Game
         QHBoxLayout *layout = new QHBoxLayout(this);
         layout->setMargin(0);
         this->setLayout(layout);
-        layout->addWidget(QWidget::createWindowContainer(newMetalWindow()));
+        layout->addWidget(newMetalWindow());
     }
 
     WindowMetal::~WindowMetal()
@@ -60,30 +73,11 @@ namespace Game
         GameMainWindow::instance()->setRenderWindowSize(Echo::GameSettings::instance()->getWindowWidth(), Echo::GameSettings::instance()->getWindowHeight());
 
         m_timer = new QTimer(this);
-        connect(m_timer, SIGNAL(timeout()), this, SLOT(renderMetal()));
-        m_timer->start(20);
+        connect(m_timer, SIGNAL(timeout()), this, SLOT(checkWindowSize()));
+        m_timer->start(50);
     }
 
-    void  WindowMetal::renderMetal()
-    {
-        @autoreleasepool
-        {
-            checkWindowSize();
-
-            static Echo::Dword lastTime = QDateTime::currentMSecsSinceEpoch();
-
-            // calc delta Time
-            Echo::Dword curTime = QDateTime::currentMSecsSinceEpoch();
-            Echo::Dword elapsedTime = curTime - lastTime;
-
-            // Call the main render function
-            m_app->tick(elapsedTime * 0.001f);
-
-            lastTime = curTime;
-        }
-    }
-
-    QWindow* WindowMetal::newMetalWindow()
+    QWidget* WindowMetal::newMetalWindow()
     {
         MTKView *view = [[[MTKView alloc] init] autorelease];
         view.device = MTLCreateSystemDefaultDevice();
@@ -96,10 +90,9 @@ namespace Game
         view.delegate = renderer;
 
         // Create and show a Qt Window which controls the metal view
-        QWindow* window = QWindow::fromWinId((WId)view);
-        window->setSurfaceType(QSurface::MetalSurface);
+        QMacCocoaViewContainer* container = new QMacCocoaViewContainer(view, this);
         m_mtkView = view;
         
-        return window;
+        return container;
     }
 }

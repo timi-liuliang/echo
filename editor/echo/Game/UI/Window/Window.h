@@ -32,14 +32,13 @@ namespace Game
 		virtual void keyPressEvent(QKeyEvent* e) override;
 		virtual void keyReleaseEvent( QKeyEvent* e) override;
 
-	private slots:
+    protected slots:
 		// render every frame
 		void  render();
 
 		// on reset device
 		void  resetDevice();
 
-	protected:
 		// check window size
 		void checkWindowSize();
 
