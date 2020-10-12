@@ -31,34 +31,34 @@
     _view.delegate = _renderer;
 }
 
+- (Echo::Vector2)mouseLocationInWindow:(NSEvent*)event
+{
+    return Echo::Vector2([event locationInWindow].x, _view.bounds.size.height - [event locationInWindow].y) * _view.layer.contentsScale;
+}
+
 - (void)mouseDown:(NSEvent *)event
 {
-    CGPoint windowPos = [event locationInWindow];
-    Echo::Input::instance()->notifyMouseButtonDown(0, Echo::Vector2(windowPos.x, windowPos.y));
+    Echo::Input::instance()->notifyMouseButtonDown(0, [self mouseLocationInWindow:event]);
 }
 
 - (void)mouseUp:(NSEvent *)event
 {
-    CGPoint windowPos = [event locationInWindow];
-    Echo::Input::instance()->notifyMouseButtonUp(0, Echo::Vector2(windowPos.x, windowPos.y));
+    Echo::Input::instance()->notifyMouseButtonUp(0, [self mouseLocationInWindow:event]);
 }
 
 - (void)rightMouseDown:(NSEvent *)event
 {
-    CGPoint windowPos = [event locationInWindow];
-    Echo::Input::instance()->notifyMouseButtonDown(1, Echo::Vector2(windowPos.x, windowPos.y));
+    Echo::Input::instance()->notifyMouseButtonDown(1, [self mouseLocationInWindow:event]);
 }
 
 - (void)rightMouseUp:(NSEvent *)event
 {
-    CGPoint windowPos = [event locationInWindow];
-    Echo::Input::instance()->notifyMouseButtonUp(1, Echo::Vector2(windowPos.x, windowPos.y));
+    Echo::Input::instance()->notifyMouseButtonUp(1, [self mouseLocationInWindow:event]);
 }
 
 - (void)mouseMoved:(NSEvent *)event
 {
-    CGPoint windowPos = [event locationInWindow];
-    Echo::Input::instance()->notifyMouseMove(0, Echo::Vector2(windowPos.x, windowPos.y));
+    Echo::Input::instance()->notifyMouseMove(0, [self mouseLocationInWindow:event]);
 }
 
 - (void)scrollWheel:(NSEvent *)event

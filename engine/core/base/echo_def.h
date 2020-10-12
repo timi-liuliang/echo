@@ -8,7 +8,7 @@
 #include <unordered_set>
 
 // Echo Engine version
-#define ECHO_VERSION 0.2
+#define ECHO_VERSION 0.0.603
 
 // Mode
 #if defined(_DEBUG) || defined(DEBUG) || !defined(NDEBUG)
