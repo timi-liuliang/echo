@@ -68,6 +68,8 @@ namespace Echo
 
     void MTTexture2D::setSurfaceData(int level, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, const Buffer& buff)
     {
+        reset();
+        
         if(!m_mtTextureDescriptor)
         {
             m_mtTextureDescriptor = [[MTLTextureDescriptor alloc] init];
@@ -99,6 +101,29 @@ namespace Echo
                 
                 [m_mtTexture replaceRegion:region mipmapLevel:0 withBytes:buff.getData() bytesPerRow:bytesPerRow];
             }
+        }
+    }
+
+    bool MTTexture2D::updateTexture2D(PixelFormat format, TexUsage usage, i32 width, i32 height, void* data, ui32 size)
+    {
+        Buffer buff(size, data, false);
+        setSurfaceData(0, format, usage, width, height, buff);
+        
+        return true;
+    }
+
+    void MTTexture2D::reset()
+    {
+        if(m_mtTexture)
+        {
+            [m_mtTexture release];
+            m_mtTexture = nullptr;
+        }
+
+        if(m_mtTextureDescriptor)
+        {
+            [m_mtTextureDescriptor release];
+            m_mtTextureDescriptor = nullptr;
         }
     }
 }

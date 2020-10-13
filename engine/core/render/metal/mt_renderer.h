@@ -27,6 +27,7 @@ namespace Echo
         virtual GPUBuffer*	createIndexBuffer(Dword usage, const Buffer& buff) override;
         
         // create texture
+        virtual Texture* createTexture2D() override;
         virtual Texture*     createTexture2D(const String& name) override;
         virtual TextureCube* createTextureCube(const String& name) override {return nullptr; }
         

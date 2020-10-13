@@ -111,6 +111,12 @@ namespace Echo
         return m_framebufferWindow;
     }
 
+    Texture* MTRenderer::createTexture2D()
+    {
+        static i32 TextureIndex = 0;
+        return EchoNew(MTTexture2D(StringUtil::Format("Texture_%d", TextureIndex++)));
+    }
+
     Texture* MTRenderer::createTexture2D(const String& name)
     {
         return EchoNew(MTTexture2D(name));

@@ -24,7 +24,13 @@ namespace Echo
         // load
         virtual bool load() override;
         
+        // reset
+        void reset();
+        
     public:
+        // update
+        virtual bool updateTexture2D(PixelFormat format, TexUsage usage, i32 width, i32 height, void* data, ui32 size) override;
+        
         // set surface data
         void setSurfaceData(int level, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, const Buffer& buff);
         
@@ -34,6 +40,6 @@ namespace Echo
         
     private:
         MTLTextureDescriptor*   m_mtTextureDescriptor = nullptr;
-        id<MTLTexture>          m_mtTexture;
+        id<MTLTexture>          m_mtTexture = nullptr;
     };
 }
