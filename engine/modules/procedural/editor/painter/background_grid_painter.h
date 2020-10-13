@@ -11,7 +11,7 @@ namespace Procedural
 	struct QBackgroundGridPainter
 	{
 		QWidget*		m_graphicsView = nullptr;
-		QObject*		m_graphicsScene = nullptr;
+		QGraphicsScene*	m_graphicsScene = nullptr;
 		QGraphicsItem*	m_horizonalLines = nullptr;
 		QGraphicsItem*	m_verticalLines = nullptr;
 		Echo::Color		m_color;
@@ -24,7 +24,7 @@ namespace Procedural
 		}
 
 		// set
-		void set(QWidget* view, QObject* scene)
+		void set(QWidget* view, QGraphicsScene* scene)
 		{
 			m_graphicsView = view;
 			m_graphicsScene = scene;
@@ -35,13 +35,13 @@ namespace Procedural
 		{
 			if (m_horizonalLines)
 			{
-				EditorApi.qGraphicsSceneDeleteItem(m_graphicsScene, m_horizonalLines);
+				m_graphicsScene->removeItem(m_horizonalLines);
 				m_horizonalLines = nullptr;
 			}
 
 			if (m_verticalLines)
 			{
-				EditorApi.qGraphicsSceneDeleteItem(m_graphicsScene, m_verticalLines);
+				m_graphicsScene->removeItem(m_verticalLines);
 				m_verticalLines = nullptr;
 			}
 		}

@@ -16,6 +16,7 @@
 #include <QtWidgets/QGraphicsItem>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
+#include <QGraphicsProxyWidget>
 #include <QIcon>
 
 class QObject;

@@ -26,12 +26,6 @@ namespace Echo
 
 	// add pixmap
 	typedef QGraphicsItem* (*qGraphicsSceneAddPixmapFun)(QObject* scene, const char* fileName);
-
-	// remove item
-	typedef void (*qGraphicsSceneDeleteWidgetFun)(QObject* scene, QGraphicsProxyWidget* widget);
-
-	// delete item
-	typedef void (*qGraphicsSceneDeleteItemFun)(QObject* scene, QGraphicsItem* item);
 }
 
 #endif

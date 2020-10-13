@@ -104,25 +104,4 @@ namespace Echo
 
 		return nullptr;
 	}
-
-	void qGraphicsSceneDeleteWidget(QObject* scene, QGraphicsProxyWidget* widget)
-	{
-		QGraphicsScene* graphicsScene = qobject_cast<QGraphicsScene*>(scene);
-		if (graphicsScene)
-		{
-			graphicsScene->removeItem( widget);
-		}
-	}
-
-	// delete item
-	void qGraphicsSceneDeleteItem(QObject* scene, QGraphicsItem* item)
-	{
-		QGraphicsScene* graphicsScene = qobject_cast<QGraphicsScene*>(scene);
-		if (graphicsScene)
-		{
-			graphicsScene->removeItem(item);
-
-			//delete item;
-		}
-	}
 }

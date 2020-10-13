@@ -562,7 +562,7 @@ namespace Echo
 		{
 			if (m_curveItems[i])
 			{
-				EditorApi.qGraphicsSceneDeleteItem(m_graphicsScene, m_curveItems[i]);
+				m_graphicsScene->removeItem(m_curveItems[i]);
 				m_curveItems[i] = nullptr;
 			}
 		}
@@ -623,15 +623,15 @@ namespace Echo
 		{
 			for (QGraphicsItem* item : m_curveKeyItems[i])
 			{
-				EditorApi.qGraphicsSceneDeleteItem(m_graphicsScene, item);
+				m_graphicsScene->removeItem(item);
 			}
 
 			m_curveKeyItems[i].clear();
 		}
 
 		for (QGraphicsProxyWidget* widget : m_curveKeyWidgets)
-		{
-			EditorApi.qGraphicsSceneDeleteWidget(m_graphicsScene, widget);
+		{ 
+			m_graphicsScene->removeItem(widget);
 		}
 		m_curveKeyWidgets.clear();
 
@@ -934,7 +934,7 @@ namespace Echo
 
 			for (QGraphicsItem* item : m_rulerItems)
 			{
-				EditorApi.qGraphicsSceneDeleteItem(m_graphicsScene, item);
+				m_graphicsScene->removeItem(item);
 			}
 			m_rulerItems.clear();
 
@@ -991,7 +991,8 @@ namespace Echo
 	{
 		for (QGraphicsItem* item : m_rulerHItems)
 		{
-			EditorApi.qGraphicsSceneDeleteItem(m_graphicsScene, item);
+			m_graphicsScene->removeItem(item);
+			delete item;
 		}
 		m_rulerHItems.clear();
 

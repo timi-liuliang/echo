@@ -125,12 +125,6 @@ namespace Echo
         // add pixmap
         qGraphicsSceneAddPixmapFun qGraphicsSceneAddPixmap = nullptr;
         
-        // remove item
-        qGraphicsSceneDeleteWidgetFun qGraphicsSceneDeleteWidget = nullptr;
-        
-        // delete item
-        qGraphicsSceneDeleteItemFun qGraphicsSceneDeleteItem = nullptr;
-        
     public:
         // disable viewport update
         qGraphicsViewDisableViewportAutoUpdateFun qGraphicsViewDisableViewportAutoUpdate = nullptr;

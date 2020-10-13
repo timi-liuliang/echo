@@ -48,8 +48,6 @@ namespace Studio
 		BIND_EDITOR_FUN(qGraphicsSceneAddPath);
 		BIND_EDITOR_FUN(qGraphicsSceneAddEclipse);
 		BIND_EDITOR_FUN(qGraphicsSceneAddPixmap);
-		BIND_EDITOR_FUN(qGraphicsSceneDeleteWidget);
-		BIND_EDITOR_FUN(qGraphicsSceneDeleteItem);
 
 		// disable viewport update
 		BIND_EDITOR_FUN(qGraphicsViewDisableViewportAutoUpdate);

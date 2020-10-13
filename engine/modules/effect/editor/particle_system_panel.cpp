@@ -95,7 +95,7 @@ namespace Echo
 	{
 		if (m_imageItem)
 		{
-			EditorApi.qGraphicsSceneDeleteItem(m_graphicsScene, m_imageItem);
+			m_graphicsScene->removeItem(m_imageItem);
 			m_imageItem = nullptr;
 
 			// because m_imageBorder is a child of m_imageItem.
