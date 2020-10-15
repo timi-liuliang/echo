@@ -8,15 +8,9 @@
 
 **Echo** is a new game engine, which uses many industry-standards of nowadays for game development. This new design concept makes the engine simpler to use and more powerful.
 
+[Download](https://github.com/timi-liuliang/echo/releases)   
 [Examples](https://github.com/timi-liuliang/echo-examples)  
 [Documentation](https://github.com/timi-liuliang/echo/wiki)  
-
-## Download   
-|Description|Files|Previous|
-|---|---|---|   
-|Editor [Win64]|[echo-0.0.606-win64.exe](https://github.com/timi-liuliang/echo/releases/download/0.0.6-preview/echo-0.0.606-win64.exe)|[old version](https://github.com/timi-liuliang/echo/releases)|
-|Editor [Mac OS X 10.7 or later]|[echo-0.0.606-mac.zip](https://github.com/timi-liuliang/echo/releases/download/0.0.6-preview/echo-0.0.606-mac.zip)|
-|Examples|[echo-examples-master.zip](https://codeload.github.com/timi-liuliang/echo-examples/zip/master)|
 
 ## Build
 ### [Editor]   
