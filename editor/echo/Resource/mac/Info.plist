@@ -23,9 +23,9 @@
 	<key>CFBundleShortVersionString</key>
 	<string></string>
 	<key>CFBundleSignature</key>
-	<string>????</string>
+	<string>ECHO</string>
 	<key>CFBundleVersion</key>
-	<string></string>
+	<string>0.0.606</string>
 	<key>CSResourcesFileMapped</key>
 	<true/>
 	<key>NSHumanReadableCopyright</key>
