@@ -13,43 +13,51 @@ namespace DataFlowProgramming
     {
         m_comboBox->setMinimumWidth(m_comboBox->sizeHint().width() * 1.7);
 
-        m_outputs.resize(8);
+        m_outputs.resize(10);
 
         // position
-        m_comboBox->addItem("position");
+        m_comboBox->addItem("position(local)");
 		m_outputs[0] = std::make_shared<DataVector3>(this, "vec3");
-		m_outputs[0]->setVariableName("v_Position");
+		m_outputs[0]->setVariableName("v_Position.local");
+
+		m_comboBox->addItem("position(world)");
+		m_outputs[1] = std::make_shared<DataVector3>(this, "vec3");
+		m_outputs[1]->setVariableName("v_Position.world");
+
+		m_comboBox->addItem("position(screen)");
+		m_outputs[2] = std::make_shared<DataVector3>(this, "vec3");
+		m_outputs[2]->setVariableName("v_Position.screen");
 
         // normal
         m_comboBox->addItem("normal");
-		m_outputs[1] = std::make_shared<DataVector3>(this, "vec3");
-		m_outputs[1]->setVariableName("v_Normal");
+		m_outputs[3] = std::make_shared<DataVector3>(this, "vec3");
+		m_outputs[3]->setVariableName("v_Normal");
         
         // color
         m_comboBox->addItem("color");
-		m_outputs[2] = std::make_shared<DataVector4>(this, "vec4");
-		m_outputs[2]->setVariableName("v_Color");
+		m_outputs[4] = std::make_shared<DataVector4>(this, "vec4");
+		m_outputs[4]->setVariableName("v_Color");
 
         // uv0
         m_comboBox->addItem("uv0");
-		m_outputs[3] = std::make_shared<DataVector2>(this, "vec2");
-		m_outputs[3]->setVariableName("v_UV");
+		m_outputs[5] = std::make_shared<DataVector2>(this, "vec2");
+		m_outputs[5]->setVariableName("v_UV");
 
         m_comboBox->addItem("uv1");
-		m_outputs[4] = std::make_shared<DataVector2>(this, "vec2");
-		m_outputs[4]->setVariableName("v_UV1");
+		m_outputs[6] = std::make_shared<DataVector2>(this, "vec2");
+		m_outputs[6]->setVariableName("v_UV1");
 
         m_comboBox->addItem("tangent");
-		m_outputs[5] = std::make_shared<DataVector4>(this, "vec3");
-		m_outputs[5]->setVariableName("v_Tangent");
+		m_outputs[7] = std::make_shared<DataVector4>(this, "vec3");
+		m_outputs[7]->setVariableName("v_Tangent");
 
         m_comboBox->addItem("weights");
-		m_outputs[6] = std::make_shared<DataVector4>(this, "vec4");
-		m_outputs[6]->setVariableName("v_Weight");
+		m_outputs[8] = std::make_shared<DataVector4>(this, "vec4");
+		m_outputs[8]->setVariableName("v_Weight");
 
         m_comboBox->addItem("joints");
-		m_outputs[7] = std::make_shared<DataVector4>(this, "vec4");
-		m_outputs[7]->setVariableName("v_Joint");
+		m_outputs[9] = std::make_shared<DataVector4>(this, "vec4");
+		m_outputs[9]->setVariableName("v_Joint");
 
         m_comboBox->setCurrentIndex(0);
 

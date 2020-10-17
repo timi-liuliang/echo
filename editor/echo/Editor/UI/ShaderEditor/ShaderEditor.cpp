@@ -29,6 +29,8 @@
 #include "DataModel/Math/Functions/DotProductDataModel.h"
 #include "DataModel/Math/Functions/CrossProductDataModel.h"
 #include "DataModel/Math/Functions/MixDataModel.h"
+#include "DataModel/Math/Functions/FloorDataModel.h"
+#include "DataModel/Math/Functions/ModDataModel.h"
 #include "Data/DataFloat.h"
 #include "Data/DataVector2.h"
 #include "Data/DataVector3.h"
@@ -69,22 +71,20 @@ namespace Studio
         ret->registerModel<SubstractionDataModel>("Math");
         ret->registerModel<MultiplicationDataModel>("Math");
         ret->registerModel<DivisionDataModel>("Math");
-
-		// lerp
+		ret->registerModel<DotProductDataModel>("Math");
+		ret->registerModel<CrossProductDataModel>("Math");
+		ret->registerModel<MinDataModel>("Math");
+		ret->registerModel<MaxDataModel>("Math");
+		ret->registerModel<PowDataModel>("Math");
+		ret->registerModel<SinDataModel>("Math");
+		ret->registerModel<CosDataModel>("Math");
+		ret->registerModel<ModDataModel>("Math");
+		ret->registerModel<FloorDataModel>("Math");
 		ret->registerModel<MixDataModel>("Math");
 
         // Math.Utils
         ret->registerModel<SplitDataModel>("Math.Utils");
         ret->registerModel<CombineDataModel>("Math.Utils");
-
-        // Math.Functions
-		ret->registerModel<DotProductDataModel>("Math.Functions");
-		ret->registerModel<CrossProductDataModel>("Math.Functions");
-		ret->registerModel<MinDataModel>("Math.Functions");
-		ret->registerModel<MaxDataModel>("Math.Functions");
-        ret->registerModel<PowDataModel>("Math.Functions");
-        ret->registerModel<SinDataModel>("Math.Functions");
-        ret->registerModel<CosDataModel>("Math.Functions");
 
         // Converts
         ret->registerTypeConverter(std::make_pair(DataFloat(nullptr, "").type(), DataAny(nullptr).type()), QtNodes::TypeConverter{ FloatToAny() });

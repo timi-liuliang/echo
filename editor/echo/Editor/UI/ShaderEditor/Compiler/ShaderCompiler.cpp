@@ -16,7 +16,13 @@ layout(binding = 0) uniform UBO
 layout(location = 0) in vec3 a_Position;
 
 #ifdef ENABLE_VERTEX_POSITION
-layout(location = 0) out vec3 v_Position;
+struct Position
+{
+	vec3 local;
+	vec3 world;
+	vec3 screen;
+};
+layout(location = 0) out Position v_Position;
 #endif
 
 #ifdef ENABLE_VERTEX_NORMAL
@@ -50,12 +56,13 @@ layout(location = 6) out vec4 v_Joint;
 
 void main(void)
 {
-	vec4 position = vs_ubo.u_WorldMatrix * vec4(a_Position, 1.0);
-    position = vs_ubo.u_ViewProjMatrix * position;
-    gl_Position = position;
+	vec4 worldPosition = vs_ubo.u_WorldMatrix * vec4(a_Position, 1.0);
+    gl_Position = vs_ubo.u_ViewProjMatrix * worldPosition;
 
 #ifdef ENABLE_VERTEX_POSITION
-	v_Position = position.xyz;
+	v_Position.local = a_Position;
+	v_Position.world = worldPosition.xyz;
+	v_Position.screen = gl_Position.xyz / gl_Position.w;
 #endif
 
 #ifdef ENABLE_VERTEX_NORMAL
@@ -100,7 +107,13 @@ ${FS_TEXTURE_UNIFORMS}
 
 // inputs
 #ifdef ENABLE_VERTEX_POSITION
-layout(location = 0) in vec3  v_Position;
+struct Position
+{
+	vec3 local;
+	vec3 world;
+	vec3 screen;
+};
+layout(location = 0) in Position  v_Position;
 #endif
 
 #ifdef ENABLE_VERTEX_NORMAL
@@ -312,7 +325,7 @@ ${FS_SHADER_CODE}
 #endif
 
 #ifdef ENABLE_LIGHTING_CALCULATION
-	__BaseColor = PbrLighting(v_Position, __BaseColor, __Normal, __Metalic, __PerceptualRoughness, fs_ubo.u_CameraPosition);
+	__BaseColor = PbrLighting(v_Position.world, __BaseColor, __Normal, __Metalic, __PerceptualRoughness, fs_ubo.u_CameraPosition);
 #endif
 
 #ifdef ENABLE_OCCLUSION
