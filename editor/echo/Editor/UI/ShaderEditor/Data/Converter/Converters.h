@@ -8,6 +8,33 @@
 
 namespace DataFlowProgramming
 {
+	class FloatToVector2
+	{
+	public:
+		std::shared_ptr<NodeData> operator()(std::shared_ptr<NodeData> data);
+
+	private:
+		std::shared_ptr<ShaderData> m_result;
+	};
+
+	class FloatToVector3
+	{
+	public:
+		std::shared_ptr<NodeData> operator()(std::shared_ptr<NodeData> data);
+
+	private:
+		std::shared_ptr<ShaderData> m_result;
+	};
+
+	class FloatToVector4
+	{
+	public:
+		std::shared_ptr<NodeData> operator()(std::shared_ptr<NodeData> data);
+
+	private:
+		std::shared_ptr<ShaderData> m_result;
+	};
+
 	class FloatToAny
 	{
 	public:
