@@ -172,7 +172,7 @@ namespace DataFlowProgramming
 
 	std::shared_ptr<ShaderData> OperationRules::NewShaderData(const Echo::String& type, ShaderDataModel* dataModel)
 	{
-		if (type == "float")	return std::make_shared<DataFloat>(dataModel, "float");
+		if (type == "float")		return std::make_shared<DataFloat>(dataModel, "float");
 		else if (type == "vec2")	return std::make_shared<DataVector2>(dataModel, "vec2");
 		else if (type == "vec3")	return std::make_shared<DataVector3>(dataModel, "vec3");
 		else if (type == "vec4")	return std::make_shared<DataVector4>(dataModel, "vec4");

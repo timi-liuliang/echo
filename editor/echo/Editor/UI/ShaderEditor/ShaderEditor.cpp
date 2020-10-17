@@ -15,10 +15,10 @@
 #include "SharedUniformDataModel.h"
 #include "DataModel/Uniforms/Vector2DataModel.h"
 #include "DataModel/Uniforms/Vector4DataModel .h"
-#include "DataModel/Math/AdditionDataModel.h"
-#include "DataModel/Math/SubstractionDataModel.h"
-#include "DataModel/Math/MultiplicationDataModel.h"
-#include "DataModel/Math/DivisionDataModel.h"
+#include "DataModel/Math/Functions/AdditionDataModel.h"
+#include "DataModel/Math/Functions/SubstractionDataModel.h"
+#include "DataModel/Math/Functions/MultiplicationDataModel.h"
+#include "DataModel/Math/Functions/DivisionDataModel.h"
 #include "DataModel/Math/Utils/SplitDataModel.h"
 #include "DataModel/Math/Utils/CombineDataModel.h"
 #include "DataModel/Math/Functions/MaxDataModel.h"
@@ -28,9 +28,13 @@
 #include "DataModel/Math/Functions/CosDataModel.h"
 #include "DataModel/Math/Functions/DotProductDataModel.h"
 #include "DataModel/Math/Functions/CrossProductDataModel.h"
+#include "DataModel/Math/Functions/LengthDataModel.h"
 #include "DataModel/Math/Functions/MixDataModel.h"
+#include "DataModel/Math/Functions/SmoothStepDataModel.h"
 #include "DataModel/Math/Functions/FloorDataModel.h"
 #include "DataModel/Math/Functions/ModDataModel.h"
+#include "DataModel/Math/Functions/FractDataModel.h"
+#include "DataModel/Math/Functions/FwidthDataModel.h"
 #include "Data/DataFloat.h"
 #include "Data/DataVector2.h"
 #include "Data/DataVector3.h"
@@ -80,7 +84,11 @@ namespace Studio
 		ret->registerModel<CosDataModel>("Math");
 		ret->registerModel<ModDataModel>("Math");
 		ret->registerModel<FloorDataModel>("Math");
+        ret->registerModel<FractDataModel>("Math");
+        ret->registerModel<FwidthDataModel>("Math");
+        ret->registerModel<LengthDataModel>("Math");
 		ret->registerModel<MixDataModel>("Math");
+        ret->registerModel<SmoothStepDataModel>("Math");
 
         // Math.Utils
         ret->registerModel<SplitDataModel>("Math.Utils");

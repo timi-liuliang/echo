@@ -73,6 +73,6 @@ namespace DataFlowProgramming
 		std::vector<OperationRule2_1>	m_minRules;
 		std::vector<OperationRule2_1>	m_maxRules;
 		std::vector<OperationRule2_1>	m_powRules;
-		std::vector<OperationRule3_1>   m_mixRules;
+		std::vector<OperationRule3_1>   m_mixRules;				// mix, smoothstep
 	};
 }

@@ -20,7 +20,7 @@ struct Position
 {
 	vec3 local;
 	vec3 world;
-	vec3 screen;
+	vec3 view;
 };
 layout(location = 0) out Position v_Position;
 #endif
@@ -56,14 +56,28 @@ layout(location = 6) out vec4 v_Joint;
 
 void main(void)
 {
+	 // local space   [-inf, -inf] to [+inf, +inf]
+	 //     \/                                     -- localToWorld (Model)
+	 // world space   [-inf, -inf] to [+inf, +inf]
+	 //     \/                                     -- worldToCamera (View)
+	 // camera space  [-inf, -inf] to [+inf, +inf]
+	 //     \/                                     -- projectionMatrix (Projection)
+	 // clip space    [  -1,   -1] to [   1,    1]
+	 //     \/                                     
+	 // view space    [   0,    0] to [   1,    1] \
+	 //     \/                                      -- handled by GPU / driver
+	 // screen space  [   0,    0] to [   W,    H] /
+
 	vec4 worldPosition = vs_ubo.u_WorldMatrix * vec4(a_Position, 1.0);
-    gl_Position = vs_ubo.u_ViewProjMatrix * worldPosition;
+    vec4 clipPosition = vs_ubo.u_ViewProjMatrix * worldPosition;
 
 #ifdef ENABLE_VERTEX_POSITION
 	v_Position.local = a_Position;
 	v_Position.world = worldPosition.xyz;
-	v_Position.screen = gl_Position.xyz / gl_Position.w;
+	v_Position.view = (clipPosition.xyz / clipPosition.w + vec3(1.0)) * 0.5;
 #endif
+
+	gl_Position = clipPosition;
 
 #ifdef ENABLE_VERTEX_NORMAL
 	#ifdef HAS_TANGENTS
@@ -111,7 +125,7 @@ struct Position
 {
 	vec3 local;
 	vec3 world;
-	vec3 screen;
+	vec3 view;
 };
 layout(location = 0) in Position  v_Position;
 #endif
