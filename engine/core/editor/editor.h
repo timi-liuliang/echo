@@ -50,6 +50,10 @@ namespace Echo
 	public:
 		// get node icon by class name
 		virtual Echo::ImagePtr getNodeIcon(Node* node) = 0;
+
+    public:
+        // show object's property in property panel
+        virtual void showObjectProperty(Object* object)=0;
         
     public:
         // QComboBox->addItem(const QIcon &icon, const QString &text)
@@ -176,10 +180,6 @@ namespace Echo
     public:
         // load ui file by path. then return the widget
         qLoadUiFun qLoadUi = nullptr;      
-
-    public:
-        // dialog
-        qDialogExecFun qDialogExec = nullptr;
 
     public:
         // get open file names

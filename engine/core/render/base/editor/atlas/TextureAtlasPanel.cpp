@@ -21,7 +21,7 @@ namespace Echo
 		m_ui = EditorApi.qLoadUi("engine/core/render/base/editor/atlas/TextureAtlasPanel.ui");
 		m_nodeTreeWidget = m_ui->findChild<QTreeWidget*>("m_nodeTreeWidget");
 
-		m_splitDialog = EditorApi.qLoadUi("engine/core/render/base/editor/atlas/TextureAtlasSplitDialog.ui");
+		m_splitDialog = (QDialog*)EditorApi.qLoadUi("engine/core/render/base/editor/atlas/TextureAtlasSplitDialog.ui");
 
 		QSplitter* splitter = (QSplitter*)EditorApi.qFindChild(m_ui, "m_splitter");
 		if (splitter)
@@ -161,7 +161,7 @@ namespace Echo
 
 	void TextureAtlasPanel::onSplit()
 	{
-		if (EditorApi.qDialogExec(m_splitDialog))
+		if (m_splitDialog->exec())
 		{
 			ui32 rows = ((QSpinBox*)EditorApi.qFindChild(m_splitDialog, "m_spinBoxRows"))->value();
 			ui32 columns = ((QSpinBox*)EditorApi.qFindChild(m_splitDialog, "m_spinBoxColumns"))->value();

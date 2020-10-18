@@ -32,8 +32,6 @@ namespace Echo
 
 		// connect signal slots
 		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_graphicsView"), QSIGNAL(customContextMenuRequested(const QPoint&)), this, createMethodBind(&ProceduralGeometryPanel::onRightClickGraphicsView));
-		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_nodeTreeWidget"), QSIGNAL(itemClicked(QTreeWidgetItem*, int)), this, createMethodBind(&ProceduralGeometryPanel::onSelectItem));
-		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_nodeTreeWidget"), QSIGNAL(itemChanged(QTreeWidgetItem*, int)), this, createMethodBind(&ProceduralGeometryPanel::onChangedAtlaName));
 		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_play"), QSIGNAL(clicked()), this, createMethodBind(&ProceduralGeometryPanel::onPlay));
 
 		// create QGraphicsScene
@@ -167,16 +165,6 @@ namespace Echo
 	}
 
 	void ProceduralGeometryPanel::refreshImageDisplay()
-	{
-
-	}
-
-	void ProceduralGeometryPanel::onSelectItem()
-	{
-
-	}
-
-	void ProceduralGeometryPanel::onChangedAtlaName()
 	{
 
 	}

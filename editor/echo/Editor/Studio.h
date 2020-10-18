@@ -82,6 +82,9 @@ namespace Studio
 		// get node icon by class name
 		virtual Echo::ImagePtr getNodeIcon(Echo::Node* node) override;
 
+		// show object's property in property panel
+		virtual void showObjectProperty(Echo::Object* object);
+
 	private:
 		AStudio();
 

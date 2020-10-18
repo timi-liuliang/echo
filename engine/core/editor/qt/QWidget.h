@@ -18,6 +18,7 @@
 #include <QTreeWidgetItem>
 #include <QGraphicsProxyWidget>
 #include <QIcon>
+#include <QDialog>
 
 class QObject;
 class QWidget;

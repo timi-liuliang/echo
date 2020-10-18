@@ -271,4 +271,9 @@ namespace Studio
 	{
 		return nullptr;
 	}
+
+	void AStudio::showObjectProperty(Echo::Object* object)
+	{
+		NodeTreePanel::instance()->onEditObject(object);
+	}
 }

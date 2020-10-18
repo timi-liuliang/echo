@@ -42,12 +42,6 @@ namespace Echo
 		void onRightClickGraphicsView();
 		void onNewPGNode();
 
-		// split
-		void onSelectItem();
-
-		// change name
-		void onChangedAtlaName();
-
 		// refresh list
 		void refreshUiDisplay();
 		void drawNodes();

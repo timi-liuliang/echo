@@ -37,6 +37,8 @@ namespace Procedural
 			if (m_pgNode)
 			{
 				m_pgNode->setFinal(!m_pgNode->isFinal());
+
+				EditorApi.showObjectProperty(m_pgNode);
 			}
 		}
 
