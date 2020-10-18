@@ -136,11 +136,11 @@ namespace Echo
         void setType(const String& type) { m_type = type; }
         
         // vs code
-        const String& getVsCode() const { return m_vsCode; }
+        const String& getVsCode() const;
         void setVsCode(const String& vsCode);
         
         // ps code
-        const String& getPsCode() const { return m_psCode; }
+        const String& getPsCode() const;
         void setPsCode(const String& psCode);
         
         // data flow programming shader graph

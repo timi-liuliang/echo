@@ -68,7 +68,7 @@ void main(void)
 }
 )";
 
-static const char* g_3dVsCode = R"(#version 450
+static Echo::String g_3dVsCode = R"(#version 450
 
 // uniforms
 layout(binding = 0) uniform UBO
@@ -103,7 +103,7 @@ void main(void)
 }
 )";
 
-static const char* g_3dPsCode = R"(#version 450
+static Echo::String g_3dPsCode = R"(#version 450
 
 precision mediump float;
 
@@ -138,29 +138,16 @@ vec3 LinearToSRgb(vec3 linearIn)
 #endif
 }
 
-// Find the normal for this fragment, pulling either from a predefined normal map
-// or from the interpolated mesh normal and tangent attributes.
-vec3 getNormal()
-{
-#ifdef HAS_NORMALS
-    vec3 ng = normalize(v_Normal);
-#else
-    vec3 pos_dx = dFdx(v_Position);
-    vec3 pos_dy = dFdy(v_Position);
-    vec3 ng = cross(pos_dx, pos_dy);
-#endif
-
-    return ng;
-}
-
 void main(void)
 {
 	vec3 __BaseColor = SRgbToLinear(vec3(0.75));
 
+#ifdef HAS_NORMALS
     vec3 _lightDir = normalize(vec3(1.0, 1.0, 1.0));
     vec3 _lightColor = SRgbToLinear(vec3(1.2, 1.2, 1.2));
     vec3 _AmbientColor = SRgbToLinear(vec3(0.4, 0.4, 0.4));
-    __BaseColor = max(dot(getNormal(), _lightDir), 0.0) * _lightColor * __BaseColor + _AmbientColor;
+    __BaseColor = max(dot(normalize(v_Normal), _lightDir), 0.0) * _lightColor * __BaseColor + _AmbientColor;
+#endif
 
     o_FragColor = vec4(LinearToSRgb(__BaseColor.rgb), 1.0);
 }
@@ -291,6 +278,11 @@ namespace Echo
         return Renderer::instance()->createShaderProgram();
     }
 
+	const String& ShaderProgram::getVsCode() const
+    { 
+        return m_vsCode.empty() ? g_3dVsCode : m_vsCode;
+    }
+
     void ShaderProgram::setVsCode(const String& vsCode)
     {
         m_vsCode=vsCode;
@@ -300,6 +292,11 @@ namespace Echo
     {
         m_psCode=psCode;
         build();
+    }
+
+	const String& ShaderProgram::getPsCode() const
+    { 
+        return m_psCode.empty() ? g_3dPsCode : m_psCode; 
     }
 
 	bool ShaderProgram::isGlobalUniform(const String& name)
@@ -325,11 +322,10 @@ namespace Echo
 
 	bool ShaderProgram::build()
 	{
-        if(!m_vsCode.empty() && !m_psCode.empty())
+		String vsSrc = getVsCode();
+		String psSrc = getPsCode();
+        if(!vsSrc.empty() && !psSrc.empty())
         {
-            String vsSrc = m_vsCode;
-            String psSrc = m_psCode;
-            
             insertMacros(vsSrc);
             insertMacros(psSrc);
             
