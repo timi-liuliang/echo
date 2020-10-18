@@ -165,19 +165,6 @@ namespace Echo
         qLineEditHeightFun qLineEditHeight = nullptr;
         
     public:
-        // set tool button fixed width
-        qToolButtonSetFixedWidthFun qToolButtonSetFixedWidth = nullptr;
-        
-        // set tool button icon
-        qToolButtonSetIconFun qToolButtonSetIcon = nullptr;
-        
-        // set icon size
-        qToolButtonSetIconSizeFun qToolButtonSetIconSize = nullptr;
-        
-        // is toolbutton checked
-        qToolButtonIsCheckedFun qToolButtonIsChecked = nullptr;
-        
-    public:
         // load ui file by path. then return the widget
         qLoadUiFun qLoadUi = nullptr;      
 

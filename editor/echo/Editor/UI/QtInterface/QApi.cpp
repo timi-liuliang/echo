@@ -5,7 +5,6 @@
 #include "QGraphicsScene.cx"
 #include "QGraphicsView.cx"
 #include "QLineEdit.cx"
-#include "QToolButton.cx"
 #include "QUiLoader.cx"
 #include "QWidget.cx"
 #include "QFileDialog.cx"
@@ -62,12 +61,6 @@ namespace Studio
 		BIND_EDITOR_FUN(qLineEditText);
 		BIND_EDITOR_FUN(qLineEditWidth);
 		BIND_EDITOR_FUN(qLineEditHeight);
-
-		// set tool button fixed width
-		BIND_EDITOR_FUN(qToolButtonSetFixedWidth);
-		BIND_EDITOR_FUN(qToolButtonSetIcon);
-		BIND_EDITOR_FUN(qToolButtonSetIconSize);
-		BIND_EDITOR_FUN(qToolButtonIsChecked);
 
 		// load ui file by path. then return the widget
 		BIND_EDITOR_FUN(qLoadUi);

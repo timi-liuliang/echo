@@ -10,6 +10,7 @@
 #include "engine/core/render/base/image/image.h"
 #include "engine/core/render/base/atla/texture_atlas.h"
 #include "TextureAtlasPackage.h"
+#include "engine/core/main/Engine.h"
 
 namespace Echo
 {
@@ -31,7 +32,11 @@ namespace Echo
 		}
 
 		// Tool button icons
-		EditorApi.qToolButtonSetIcon(EditorApi.qFindChild(m_ui, "m_import"), "engine/core/render/base/editor/icon/import.png");
+		QToolButton* importButton = (QToolButton*)EditorApi.qFindChild(m_ui, "m_import");
+		if (importButton)
+		{
+			importButton->setIcon(QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/import.png").c_str()));
+		}
 
 		// connect signal slots
 		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_import"), QSIGNAL(clicked()), this, createMethodBind(&TextureAtlasPanel::onImport));

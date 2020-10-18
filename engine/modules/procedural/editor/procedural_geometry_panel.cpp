@@ -8,6 +8,7 @@
 #include "engine/core/util/Buffer.h"
 #include "engine/core/io/IO.h"
 #include "engine/core/render/base/image/image.h"
+#include "engine/core/main/Engine.h"
 #include "engine/core/render/base/atla/texture_atlas.h"
 #include "engine/core/log/Log.h"
 
@@ -28,7 +29,7 @@ namespace Echo
 		}
 
 		// Tool button icons
-		EditorApi.qToolButtonSetIcon(EditorApi.qFindChild(m_ui, "m_play"), "engine/modules/procedural/editor/icon/play.png");
+		((QToolButton*)EditorApi.qFindChild(m_ui, "m_play"))->setIcon(QIcon((Engine::instance()->getRootPath() + "engine/modules/procedural/editor/icon/play.png").c_str()));
 
 		// connect signal slots
 		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_graphicsView"), QSIGNAL(customContextMenuRequested(const QPoint&)), this, createMethodBind(&ProceduralGeometryPanel::onRightClickGraphicsView));

@@ -7,6 +7,7 @@
 #include "engine/core/io/MemoryReader.h"
 #include "engine/core/util/Buffer.h"
 #include "engine/core/io/IO.h"
+#include "engine/core/main/Engine.h"
 #include "engine/core/render/base/image/image.h"
 #include "engine/core/render/base/atla/texture_atlas.h"
 
@@ -27,7 +28,7 @@ namespace Echo
 		}
 
 		// Tool button icons
-		EditorApi.qToolButtonSetIcon(EditorApi.qFindChild(m_ui, "m_import"), "engine/core/render/base/editor/icon/import.png");
+		((QToolButton*)EditorApi.qFindChild(m_ui, "m_import"))->setIcon(QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/import.png").c_str()));
 
 		// connect signal slots
 		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_import"), QSIGNAL(clicked()), this, createMethodBind(&ParticleSystemPanel::onImport));

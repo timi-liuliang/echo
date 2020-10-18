@@ -123,6 +123,9 @@ namespace Echo
 		void drawRuler();
 		void drawRulerVertical();
 
+		// set tool button icon
+		void setToolbuttonIcon(const String& buttonName, const String& iconPath);
+
 	protected:
 		QTreeWidget*				m_nodeTreeWidget = nullptr;
 		Timeline*					m_timeline;

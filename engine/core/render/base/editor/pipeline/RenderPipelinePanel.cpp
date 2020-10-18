@@ -4,6 +4,7 @@
 #include "engine/core/base/class_method_bind.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/util/StringUtil.h"
+#include "engine/core/main/Engine.h"
 
 namespace Echo
 {
@@ -22,7 +23,7 @@ namespace Echo
 		}
 
 		// Tool button icons
-		EditorApi.qToolButtonSetIcon(EditorApi.qFindChild(m_ui, "m_new"), "engine/core/render/base/editor/icon/import.png");
+		((QToolButton*)EditorApi.qFindChild(m_ui, "m_new"))->setIcon(QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/import.png").c_str()));
 
 		// connect signal slots
 		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_new"), QSIGNAL(clicked()), this, createMethodBind(&RenderpipelinePanel::onNew));

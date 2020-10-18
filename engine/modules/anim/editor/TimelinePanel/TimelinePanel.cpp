@@ -90,24 +90,24 @@ namespace Echo
 		}
 
 		// Top tool buttons icons
-		EditorApi.qToolButtonSetIcon(EditorApi.qFindChild(m_ui, "AddNode"), "engine/modules/anim/editor/icon/add.png");
-		EditorApi.qToolButtonSetIcon(EditorApi.qFindChild(m_ui, "Play"), "engine/modules/anim/editor/icon/play.png");
-		EditorApi.qToolButtonSetIcon(EditorApi.qFindChild(m_ui, "Stop"), "engine/modules/anim/editor/icon/stop.png");
-		EditorApi.qToolButtonSetIcon(EditorApi.qFindChild(m_ui, "Restart"), "engine/modules/anim/editor/icon/replay.png");
+		setToolbuttonIcon( "AddNode", "engine/modules/anim/editor/icon/add.png");
+		setToolbuttonIcon( "Play", "engine/modules/anim/editor/icon/play.png");
+		setToolbuttonIcon( "Stop", "engine/modules/anim/editor/icon/stop.png");
+		setToolbuttonIcon( "Restart", "engine/modules/anim/editor/icon/replay.png");
 
 		// set fixed width of add toolbutton
-		EditorApi.qToolButtonSetIconSize(EditorApi.qFindChild(m_ui, "AddNode"), 24, 24);
+		((QToolButton*)EditorApi.qFindChild(m_ui, "AddNode"))->setIconSize(QSize(24, 24));
 
-		// set toolbuttons icons
-		EditorApi.qToolButtonSetIcon( EditorApi.qFindChild(m_ui, "NewClip"), "engine/modules/anim/editor/icon/new.png");
-		EditorApi.qToolButtonSetIcon( EditorApi.qFindChild(m_ui, "DuplicateClip"), "engine/modules/anim/editor/icon/duplicate.png");
-		EditorApi.qToolButtonSetIcon( EditorApi.qFindChild(m_ui, "DeleteClip"), "engine/modules/anim/editor/icon/delete.png");
+		// set icons
+		setToolbuttonIcon( "NewClip", "engine/modules/anim/editor/icon/new.png");
+		setToolbuttonIcon( "DuplicateClip", "engine/modules/anim/editor/icon/duplicate.png");
+		setToolbuttonIcon( "DeleteClip", "engine/modules/anim/editor/icon/delete.png");
 
-		// set curve toolbutton icons
-		EditorApi.qToolButtonSetIcon(EditorApi.qFindChild(m_ui, "m_curveXVisible"), "engine/modules/anim/editor/icon/curve_red.png");
-		EditorApi.qToolButtonSetIcon(EditorApi.qFindChild(m_ui, "m_curveYVisible"), "engine/modules/anim/editor/icon/curve_green.png");
-		EditorApi.qToolButtonSetIcon(EditorApi.qFindChild(m_ui, "m_curveZVisible"), "engine/modules/anim/editor/icon/curve_blue.png");
-		EditorApi.qToolButtonSetIcon(EditorApi.qFindChild(m_ui, "m_curveWVisible"), "engine/modules/anim/editor/icon/curve_white.png");
+		// set curve icons
+		setToolbuttonIcon("m_curveXVisible", "engine/modules/anim/editor/icon/curve_red.png");
+		setToolbuttonIcon("m_curveYVisible", "engine/modules/anim/editor/icon/curve_green.png");
+		setToolbuttonIcon("m_curveZVisible", "engine/modules/anim/editor/icon/curve_blue.png");
+		setToolbuttonIcon("m_curveWVisible", "engine/modules/anim/editor/icon/curve_white.png");
 
 		// connect signal slots
 		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "NewClip"), QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onNewClip));
@@ -140,6 +140,16 @@ namespace Echo
 
 		// draw ruler
 		switchCurveEditor();
+	}
+
+	void TimelinePanel::setToolbuttonIcon(const String& buttonName, const String& iconPath)
+	{
+		QToolButton* button = (QToolButton*)EditorApi.qFindChild(m_ui, buttonName.c_str());
+		if (button)
+		{
+			String fullPath = Engine::instance()->getRootPath() + iconPath;
+			button->setIcon(QIcon(fullPath.c_str()));
+		}
 	}
 
 	void TimelinePanel::syncDataToEditor()
@@ -863,13 +873,13 @@ namespace Echo
 		{
 			m_timeline->play(m_currentEditAnim.c_str());
 
-			EditorApi.qToolButtonSetIcon(EditorApi.qFindChild(m_ui, "Play"), "engine/modules/anim/editor/icon/pause.png");
+			setToolbuttonIcon("Play", "engine/modules/anim/editor/icon/pause.png");
 		}
 		else
 		{
 			m_timeline->pause();
 
-			EditorApi.qToolButtonSetIcon(EditorApi.qFindChild(m_ui, "Play"), "engine/modules/anim/editor/icon/play.png");
+			setToolbuttonIcon("Play", "engine/modules/anim/editor/icon/play.png");
 		}
 	}
 
@@ -878,7 +888,7 @@ namespace Echo
 		m_timeline->stop();
 
 		// recover play button icon to "play.png"
-		EditorApi.qToolButtonSetIcon(EditorApi.qFindChild(m_ui, "Play"), "engine/modules/anim/editor/icon/play.png");
+		setToolbuttonIcon("Play", "engine/modules/anim/editor/icon/play.png");
 	}
 
 	void TimelinePanel::onRestartAnim()
@@ -1047,10 +1057,10 @@ namespace Echo
 
 	void TimelinePanel::onSwitchCurveVisibility()
 	{
-		m_curveVisibles[0] = EditorApi.qToolButtonIsChecked(EditorApi.qFindChild(m_ui, "m_curveXVisible"));
-		m_curveVisibles[1] = EditorApi.qToolButtonIsChecked(EditorApi.qFindChild(m_ui, "m_curveYVisible"));
-		m_curveVisibles[2] = EditorApi.qToolButtonIsChecked(EditorApi.qFindChild(m_ui, "m_curveZVisible"));
-		m_curveVisibles[3] = EditorApi.qToolButtonIsChecked(EditorApi.qFindChild(m_ui, "m_curveWVisible"));
+		m_curveVisibles[0] = ((QToolButton*)EditorApi.qFindChild(m_ui, "m_curveXVisible"))->isChecked();
+		m_curveVisibles[1] = ((QToolButton*)EditorApi.qFindChild(m_ui, "m_curveYVisible"))->isChecked();
+		m_curveVisibles[2] = ((QToolButton*)EditorApi.qFindChild(m_ui, "m_curveZVisible"))->isChecked();
+		m_curveVisibles[3] = ((QToolButton*)EditorApi.qFindChild(m_ui, "m_curveWVisible"))->isChecked();
 
 		for (size_t i = 0; i < m_curveItems.size(); i++)
 		{

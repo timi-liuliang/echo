@@ -19,6 +19,7 @@
 #include <QGraphicsProxyWidget>
 #include <QIcon>
 #include <QDialog>
+#include <QToolButton>
 
 class QObject;
 class QWidget;
