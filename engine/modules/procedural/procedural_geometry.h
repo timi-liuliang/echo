@@ -27,6 +27,10 @@ namespace Echo
 		Material* getMaterial() const { return m_material; }
 		void setMaterial(Object* material);
 
+		// content
+		const Base64String& getPGContent();
+		void setPGContent(const Base64String& content);
+
 		// is dirty
 		bool isDirty();
 
@@ -45,7 +49,8 @@ namespace Echo
 
 	protected:
 		PGNode*					m_pgNode = nullptr;
-		PCGData					m_data;
+		PCGData					m_pgData;
+		Base64String			m_pgContent;
 		bool					m_isRenderableDirty = true;
 		MeshPtr					m_mesh;
 		MaterialPtr             m_material;

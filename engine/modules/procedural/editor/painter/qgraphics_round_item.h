@@ -42,6 +42,16 @@ namespace Procedural
 			}
 		}
 
+		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
+		{
+			QGraphicsRectItem::mouseReleaseEvent(event);
+
+			if (m_pgNode)
+			{
+				m_pgNode->setPosition(Echo::Vector2(pos().x(), pos().y()));
+			}
+		}
+
 	protected:
 		float			m_radius = 3.f;
 		Echo::PGNode*	m_pgNode = nullptr;

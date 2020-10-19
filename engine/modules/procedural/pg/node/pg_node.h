@@ -23,6 +23,14 @@ namespace Echo
 		void addChild(PGNode* node);
 		void removeChild(PGNode* node);
 
+		// get child
+		ui32 getChildNum() const { return static_cast<ui32>(m_children.size()); }
+		PGNode* getChildByIndex(ui32 idx);
+
+		// link
+		bool isLink() const { return m_isLink; }
+		void setLink(bool isLink) { m_isLink = isLink; }
+
 		// children
 		const vector<PGNode*>::type& children() { return m_children; }
 
@@ -36,11 +44,19 @@ namespace Echo
 		// calculate
 		virtual void play(PCGData& data);
 
+	public:
+		// save
+		void saveXml(void* pugiNode, bool recursive);
+
+		// instance
+		static PGNode* instanceNodeTree(void* pugiNode, PGNode* parent);
+
 	protected:
 		PGNode*					m_parent = nullptr;
 		vector<PGNode*>::type	m_children;
 		bool					m_dirtyFlag = true;
 		Vector2					m_position;
 		bool					m_isFinal = false;
+		bool					m_isLink = false;
 	};
 }

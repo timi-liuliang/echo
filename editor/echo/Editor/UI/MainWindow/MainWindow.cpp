@@ -214,18 +214,18 @@ namespace Studio
 	{
 		if (panel)
 		{
-			for (auto it = m_centerPanels.begin(); it != m_centerPanels.end();)
-			{
-				if (*it == panel)
-				{
-					this->removeDockWidget(panel);
-					it = m_centerPanels.erase(it);
-				}
-				else
-				{
-					it++;
-				}
-			}
+			//for (auto it = m_centerPanels.begin(); it != m_centerPanels.end();)
+			//{
+			//	if (*it == panel)
+			//	{
+			//		this->removeDockWidget(panel);
+			//		//it = m_centerPanels.erase(it);
+			//	}
+			//	else
+			//	{
+			//		it++;
+			//	}
+			//}
 		}
 	}
     
