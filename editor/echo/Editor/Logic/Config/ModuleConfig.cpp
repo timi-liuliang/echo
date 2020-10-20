@@ -5,7 +5,6 @@ namespace Echo
 	// implement by application or dll
 	void registerModules()
 	{
-        REGISTER_MODULE(GeomModule)
 		REGISTER_MODULE(CameraModule)
 		REGISTER_MODULE(Box2DModule)
 		REGISTER_MODULE(AudioModule)

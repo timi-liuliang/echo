@@ -1,6 +1,7 @@
 #include "procedural_module.h"
 #include "procedural_texture.h"
 #include "procedural_geometry.h"
+#include "pg/node/connect/pg_connect.h"
 #include "pg/node/primitive/pg_sphere.h"
 #include "pg/node/primitive/pg_grid.h"
 #include "editor/procedural_geometry_editor.h"
@@ -33,6 +34,7 @@ namespace Echo
         Class::registerType<ProceduralGeometry>();
 
 		Class::registerType<PGNode>();
+		Class::registerType<PGConnnect>();
 		Class::registerType<PGSphere>();
 		Class::registerType<PGGrid>();
 
