@@ -11,6 +11,7 @@
 #include "engine/core/render/base/atla/texture_atlas.h"
 #include "TextureAtlasPackage.h"
 #include "engine/core/main/Engine.h"
+#include "engine/core/editor/editor.h"
 
 namespace Echo
 {
@@ -92,14 +93,14 @@ namespace Echo
 
 	void TextureAtlasPanel::onImportFromImages()
 	{
-		StringArray files = Editor::instance()->qGetOpenFileNames(nullptr, "Select Images", "", "*.png");
+		QStringList files = QFileDialog::getOpenFileNames(nullptr, "Select Images", "", "*.png");
 		if (!files.empty())
 		{
 			// load images
 			multimap<float, Image*, std::greater<float>>::type images;
-			for (String& file : files)
+			for (QString& file : files)
 			{
-				Image* image = Image::loadFromFile(file);
+				Image* image = Image::loadFromFile(file.toStdString().c_str());
 				if (image)
 					images.insert(std::pair<float, Image*>(float(image->getWidth()*image->getHeight()), image));
 			}

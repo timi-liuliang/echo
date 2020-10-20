@@ -167,10 +167,6 @@ namespace Echo
     public:
         // load ui file by path. then return the widget
         qLoadUiFun qLoadUi = nullptr;      
-
-    public:
-        // get open file names
-        qGetOpenFileNamesFun qGetOpenFileNames = nullptr;
         
     public:
         // sender

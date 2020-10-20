@@ -7,7 +7,6 @@
 #include "QLineEdit.cx"
 #include "QUiLoader.cx"
 #include "QWidget.cx"
-#include "QFileDialog.cx"
 
 #define BIND_EDITOR_FUN(Fun) this->Fun = Echo::Fun
 
@@ -64,9 +63,6 @@ namespace Studio
 
 		// load ui file by path. then return the widget
 		BIND_EDITOR_FUN(qLoadUi);
-
-		// qt file dialog
-		BIND_EDITOR_FUN(qGetOpenFileNames);
 
 		// connect signal slot
 		BIND_EDITOR_FUN(qSender);

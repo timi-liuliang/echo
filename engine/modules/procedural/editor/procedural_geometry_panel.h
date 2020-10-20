@@ -10,7 +10,7 @@
 
 namespace Echo
 {
-	class ProceduralGeometryPanel
+	class ProceduralGeometryPanel : public QObject
 	{
 		typedef vector<QGraphicsItem*>::type QGraphicsItemArray;
 		typedef vector<QGraphicsProxyWidget*>::type QGraphicsWidgetArray;
@@ -41,6 +41,9 @@ namespace Echo
 		// import
 		void onRightClickGraphicsView();
 		void onNewPGNode();
+
+		// delete 
+		void onDeletePGNodes();
 
 		// refresh list
 		void refreshUiDisplay();

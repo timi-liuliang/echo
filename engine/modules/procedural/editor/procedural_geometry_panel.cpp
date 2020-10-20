@@ -11,6 +11,7 @@
 #include "engine/core/main/Engine.h"
 #include "engine/core/render/base/atla/texture_atlas.h"
 #include "engine/core/log/Log.h"
+#include "painter/qgraphics_scene_ex.h"
 
 namespace Echo
 {
@@ -34,10 +35,11 @@ namespace Echo
 		// connect signal slots
 		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_graphicsView"), QSIGNAL(customContextMenuRequested(const QPoint&)), this, createMethodBind(&ProceduralGeometryPanel::onRightClickGraphicsView));
 		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_play"), QSIGNAL(clicked()), this, createMethodBind(&ProceduralGeometryPanel::onPlay));
+		EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionDeleteNodes"), QSIGNAL(triggered()), this, createMethodBind(&ProceduralGeometryPanel::onDeletePGNodes));
 
 		// create QGraphicsScene
 		m_graphicsView = m_ui->findChild<QGraphicsView*>("m_graphicsView");
-		m_graphicsScene = EditorApi.qGraphicsSceneNew();
+		m_graphicsScene = new QGraphicsSceneEx;
 		m_graphicsView->setScene(m_graphicsScene);
 
 		// background
@@ -102,6 +104,11 @@ namespace Echo
 				}
 			}
 		}
+	}
+
+	void ProceduralGeometryPanel::onDeletePGNodes()
+	{
+		int a = 10;
 	}
 
 	void ProceduralGeometryPanel::onPlay()

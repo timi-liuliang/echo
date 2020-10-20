@@ -20,6 +20,7 @@
 #include <QIcon>
 #include <QDialog>
 #include <QToolButton>
+#include <QFileDialog>
 
 class QObject;
 class QWidget;

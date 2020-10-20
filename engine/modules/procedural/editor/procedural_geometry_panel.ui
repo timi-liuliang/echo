@@ -115,6 +115,14 @@
     </item>
    </layout>
   </widget>
+  <action name="m_actionDeleteNodes">
+   <property name="text">
+    <string>DeleteNodes</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
