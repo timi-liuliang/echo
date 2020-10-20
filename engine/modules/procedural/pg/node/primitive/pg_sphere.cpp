@@ -15,7 +15,16 @@ namespace Echo
 
 	void PGSphere::bindMethods()
 	{
+		CLASS_BIND_METHOD(PGSphere, getRadius, DEF_METHOD("getRadius"));
+		CLASS_BIND_METHOD(PGSphere, setRadius, DEF_METHOD("setRadius"));
 
+		CLASS_REGISTER_PROPERTY(PGSphere, "Radius", Variant::Type::Real, "getRadius", "setRadius");
+	}
+
+	void PGSphere::setRadius(float radius)
+	{
+		m_radius = radius;
+		m_dirtyFlag = true;
 	}
 
 	void PGSphere::play(PCGData& data)

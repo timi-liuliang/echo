@@ -24,6 +24,10 @@ namespace Echo
 		PGSphere();
 		virtual ~PGSphere();
 
+		// readius
+		void setRadius(float radius);
+		float getRadius() const { return m_radius; }
+
 		// calculate
 		virtual void play(PCGData& data) override;
 
