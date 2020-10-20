@@ -8,20 +8,6 @@ namespace Echo
 	class QGraphicsSceneEx : public QGraphicsScene
 	{
 	protected:
-		virtual void keyReleaseEvent(QKeyEvent* event) override
-		{
-			if (event->key() == Qt::Key_Delete)
-			{
-				int a = 10;
-
-				//QList<QGraphicsItem*> selectedItems = selectedItems();
-				//foreach(QGraphicsItem * item, selectedItems)
-				//{
-				//	removeItem(item);
-				//	delete item;
-				//}
-			}
-		}
 	};
 #endif
 }

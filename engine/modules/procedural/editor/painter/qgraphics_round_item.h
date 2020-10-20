@@ -45,6 +45,18 @@ namespace Procedural
 			}
 		}
 
+		// key press
+		virtual void keyPressEvent(QKeyEvent* event)
+		{
+			if (event->key() == Qt::Key_Delete)
+			{
+				if (m_pgNode)
+				{
+
+				}
+			}
+		}
+
 	protected:
 		// position changed etc...
 		virtual QVariant itemChange(GraphicsItemChange change, const QVariant& value);

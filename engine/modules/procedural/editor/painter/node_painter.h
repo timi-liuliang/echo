@@ -69,6 +69,7 @@ namespace Procedural
 				m_rect->setBrush(gradient);
 				m_rect->setFlag(QGraphicsItem::ItemIsMovable, true);
 				m_rect->setFlag(QGraphicsItem::ItemSendsScenePositionChanges, true);
+				m_rect->setFlag(QGraphicsItem::ItemIsFocusable, true);
 				m_rect->setPos(QPointF(pgNode->getPosition().x, pgNode->getPosition().y));
 				m_graphicsScene->addItem(m_rect);
 
