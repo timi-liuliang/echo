@@ -18,7 +18,7 @@ namespace Procedural
 		{
 			QColor m_normalBoundaryColor = QColor(137, 137, 137);
 			QColor m_selectedBoundaryColor = QColor(255, 165, 0);
-			QColor m_gradientColor0 = Qt::gray;
+			QColor m_gradientColor0 = QColor(80, 80, 80);
 			QColor m_gradientColor1 = QColor(80, 80, 80);
 			QColor m_gradientColor2 = QColor(64, 64, 64);
 			QColor m_gradientColor3 = QColor(58, 58, 58);
@@ -57,7 +57,7 @@ namespace Procedural
 				float halfWidth = m_width * 0.5f;
 				float halfHeight = m_height * 0.5f;
 
-				m_rect = new QGraphicsRoundRectItem(nullptr);
+				m_rect = new QGraphicsRoundRectItem(nullptr, m_pgNode, false);
 				m_rect->setRect(QRect(-halfWidth, -halfHeight, m_width, m_height));
 				m_rect->setRadius(0.f);
 				m_rect->setPen(QPen(m_style.m_normalBoundaryColor, m_style.m_penWidth));
@@ -68,10 +68,11 @@ namespace Procedural
 				gradient.setColorAt(1.0,  m_style.m_gradientColor3);
 				m_rect->setBrush(gradient);
 				m_rect->setFlag(QGraphicsItem::ItemIsMovable, true);
+				m_rect->setFlag(QGraphicsItem::ItemSendsScenePositionChanges, true);
 				m_rect->setPos(QPointF(pgNode->getPosition().x, pgNode->getPosition().y));
 				m_graphicsScene->addItem(m_rect);
 
-				m_rectFinal = new QGraphicsRoundRectItem(nullptr, m_pgNode);
+				m_rectFinal = new QGraphicsRoundRectItem(nullptr, m_pgNode, true);
 				m_rectFinal->setRect(QRect(halfWidth - m_rectFinalWidth, -halfHeight, m_rectFinalWidth, m_height));
 				m_rectFinal->setRadius(3.f);
 				m_rectFinal->setPen(QPen(m_style.m_normalBoundaryColor, 1.f));

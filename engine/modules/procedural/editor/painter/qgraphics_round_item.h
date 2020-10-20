@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/core/editor/editor.h"
+#include "engine/modules/procedural/pg/node/pg_node.h"
 
 #ifdef ECHO_EDITOR_MODE
 
@@ -11,9 +12,10 @@ namespace Procedural
 	class QGraphicsRoundRectItem : public QGraphicsRectItem
 	{
 	public:
-		QGraphicsRoundRectItem(QGraphicsItem* parent = nullptr, Echo::PGNode* pgNode = nullptr)
+		QGraphicsRoundRectItem(QGraphicsItem* parent = nullptr, Echo::PGNode* pgNode = nullptr, bool isFinalRect=false)
 			: QGraphicsRectItem(parent)
 			, m_pgNode(pgNode)
+			, m_isFinalRect(isFinalRect)
 		{
 
 		}
@@ -36,23 +38,19 @@ namespace Procedural
 
 			if (m_pgNode)
 			{
-				m_pgNode->setFinal(!m_pgNode->isFinal());
+				if(m_isFinalRect)
+					m_pgNode->setFinal(!m_pgNode->isFinal());
 
 				EditorApi.showObjectProperty(m_pgNode);
 			}
 		}
 
-		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
-		{
-			QGraphicsRectItem::mouseReleaseEvent(event);
-
-			if (m_pgNode)
-			{
-				m_pgNode->setPosition(Echo::Vector2(pos().x(), pos().y()));
-			}
-		}
+	protected:
+		// position changed etc...
+		virtual QVariant itemChange(GraphicsItemChange change, const QVariant& value);
 
 	protected:
+		bool			m_isFinalRect = false;
 		float			m_radius = 3.f;
 		Echo::PGNode*	m_pgNode = nullptr;
 	};
