@@ -52,7 +52,7 @@ namespace Procedural
 			{
 				if (m_pgNode)
 				{
-
+					m_pgNode->queueFree();
 				}
 			}
 		}

@@ -72,6 +72,22 @@ namespace Echo
 		m_dirtyFlag = false;
 	}
 
+	void PGNode::queueFree()
+	{
+		if (m_parent)
+		{
+			m_parent->removeChild(this);
+		}
+
+		vector<PGNode*>::type children = m_children;
+		for (PGNode* n : children)
+		{
+			n->queueFree();
+		}
+
+		ECHO_DELETE_T(this, PGNode);
+	}
+
 	void PGNode::saveXml(void* pugiNode, bool recursive)
 	{
 		pugi::xml_node* xmlNode = (pugi::xml_node*)pugiNode;

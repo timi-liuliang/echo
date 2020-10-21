@@ -45,6 +45,10 @@ namespace Echo
 		virtual void play(PCGData& data);
 
 	public:
+		// queue free
+		virtual void queueFree() override;
+
+	public:
 		// save
 		void saveXml(void* pugiNode, bool recursive);
 
