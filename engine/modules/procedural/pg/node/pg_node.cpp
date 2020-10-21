@@ -30,6 +30,20 @@ namespace Echo
 		}
 	}
 
+	void PGNode::setSelected(bool isSelected)
+	{
+		m_isSelected = isSelected;
+
+		if (m_isSelected && m_parent)
+		{
+			for (PGNode* neighbour : m_parent->children())
+			{
+				if (neighbour != this)
+					neighbour->m_isSelected = false;
+			}
+		}
+	}
+
 	void PGNode::addChild(PGNode* node)
 	{ 
 		if (node->getParent())

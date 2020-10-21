@@ -19,6 +19,10 @@ namespace Echo
 		bool isFinal() const { return m_isFinal; }
 		void setFinal(bool isFinal);
 
+		// is selected
+		bool isSelected() const { return m_isSelected; }
+		void setSelected(bool isSelected);
+
 		// child
 		void addChild(PGNode* node);
 		void removeChild(PGNode* node);
@@ -61,6 +65,7 @@ namespace Echo
 		bool					m_dirtyFlag = true;
 		Vector2					m_position;
 		bool					m_isFinal = false;
+		bool					m_isSelected = false;
 		bool					m_isLink = false;
 	};
 }

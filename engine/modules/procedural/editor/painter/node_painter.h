@@ -9,6 +9,7 @@
 #include <QGraphicsScene>
 #include <QtWidgets/QGraphicsItem>
 #include "qgraphics_round_item.h"
+#include "qgraphics_round_item_final.h"
 
 namespace Procedural
 {
@@ -16,7 +17,8 @@ namespace Procedural
 	{
 		struct 
 		{
-			QColor m_normalBoundaryColor = QColor(137, 137, 137);
+			QColor m_normalBoundaryColor = QColor(132, 132, 132);
+			QColor m_finalBoundaryColor = QColor(132, 132, 132, 0);
 			QColor m_selectedBoundaryColor = QColor(255, 165, 0);
 			QColor m_gradientColor0 = QColor(80, 80, 80);
 			QColor m_gradientColor1 = QColor(80, 80, 80);
@@ -36,7 +38,7 @@ namespace Procedural
 		QGraphicsView*						m_graphicsView = nullptr;
 		QGraphicsScene*						m_graphicsScene = nullptr;
 		QGraphicsRoundRectItem*				m_rect = nullptr;
-		QGraphicsRoundRectItem*				m_rectFinal = nullptr;
+		QGraphicsRoundRectItemFinal*		m_rectFinal = nullptr;
 		float								m_rectFinalWidth = 15;
 		Echo::vector<QGraphicsItem*>::type	m_inputConnectionPoints;
 		Echo::vector<QGraphicsItem*>::type	m_outputConnectionPoints;
@@ -57,7 +59,7 @@ namespace Procedural
 				float halfWidth = m_width * 0.5f;
 				float halfHeight = m_height * 0.5f;
 
-				m_rect = new QGraphicsRoundRectItem(nullptr, m_pgNode, false);
+				m_rect = new QGraphicsRoundRectItem(nullptr, m_pgNode);
 				m_rect->setRect(QRect(-halfWidth, -halfHeight, m_width, m_height));
 				m_rect->setRadius(0.f);
 				m_rect->setPen(QPen(m_style.m_normalBoundaryColor, m_style.m_penWidth));
@@ -73,10 +75,10 @@ namespace Procedural
 				m_rect->setPos(QPointF(pgNode->getPosition().x, pgNode->getPosition().y));
 				m_graphicsScene->addItem(m_rect);
 
-				m_rectFinal = new QGraphicsRoundRectItem(nullptr, m_pgNode, true);
-				m_rectFinal->setRect(QRect(halfWidth - m_rectFinalWidth, -halfHeight, m_rectFinalWidth, m_height));
-				m_rectFinal->setRadius(3.f);
-				m_rectFinal->setPen(QPen(m_style.m_normalBoundaryColor, 1.f));
+				m_rectFinal = new QGraphicsRoundRectItemFinal(nullptr, m_pgNode);
+				m_rectFinal->setRect(QRect(halfWidth - m_rectFinalWidth - 1, -halfHeight + 1, m_rectFinalWidth, m_height - 2));
+				m_rectFinal->setRadius(0.f);
+				m_rectFinal->setPen(QPen(m_style.m_finalBoundaryColor, 0.f));
 				m_rectFinal->setBrush(QBrush(m_style.finalColor));
 				m_rectFinal->setZValue(-5.f);
 				m_rectFinal->setParentItem(m_rect);
@@ -143,6 +145,11 @@ namespace Procedural
 			if (m_pgNode && m_rectFinal)
 			{
 				m_rectFinal->setBrush(QBrush( m_pgNode->isFinal() ? m_style.finalColor : Qt::transparent));
+			}
+
+			if (m_pgNode && m_rect)
+			{
+				m_rect->setPen(QPen(m_pgNode->isSelected() ? m_style.m_selectedBoundaryColor : m_style.m_normalBoundaryColor, m_style.m_penWidth));
 			}
 		}
 	};

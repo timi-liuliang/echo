@@ -9,10 +9,10 @@
 
 namespace Procedural
 {
-	class QGraphicsRoundRectItem : public QGraphicsRectItem
+	class QGraphicsRoundRectItemFinal : public QGraphicsRectItem
 	{
 	public:
-		QGraphicsRoundRectItem(QGraphicsItem* parent = nullptr, Echo::PGNode* pgNode = nullptr)
+		QGraphicsRoundRectItemFinal(QGraphicsItem* parent = nullptr, Echo::PGNode* pgNode = nullptr)
 			: QGraphicsRectItem(parent)
 			, m_pgNode(pgNode)
 		{
@@ -37,8 +37,9 @@ namespace Procedural
 
 			if (m_pgNode)
 			{
+				m_pgNode->setFinal(!m_pgNode->isFinal());
+
 				EditorApi.showObjectProperty(m_pgNode);
-				m_pgNode->setSelected(true);
 			}
 		}
 
@@ -55,19 +56,6 @@ namespace Procedural
 		}
 
 	protected:
-		// position changed etc...
-		virtual QVariant itemChange(GraphicsItemChange change, const QVariant& value)
-		{
-			if (change == ItemPositionChange && m_pgNode)
-			{
-				m_pgNode->setPosition(Echo::Vector2(pos().x(), pos().y()));
-			}
-
-			return QGraphicsRectItem::itemChange(change, value);
-		}
-
-	protected:
-		bool			m_isFinalRect = false;
 		float			m_radius = 3.f;
 		Echo::PGNode*	m_pgNode = nullptr;
 	};
