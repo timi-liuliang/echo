@@ -2,6 +2,7 @@
 #include "model_module.h"
 #include "mesh_render.h"
 #include "importer/gltf/gltf_importer.h"
+#include "importer/fbx/fbx_importer.h"
 
 namespace Echo
 {
@@ -28,6 +29,7 @@ namespace Echo
 
 	#ifdef ECHO_EDITOR_MODE
 		Class::registerType<GltfImporter>();
+		Class::registerType<FbxImporter>();
 	#endif
 	}
 }
