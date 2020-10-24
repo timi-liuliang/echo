@@ -46,7 +46,7 @@ namespace Gltf
 			TriangleFan
 		}					m_mode = Triangles; // each attribute is mapped with his name and accessor index to the data
 		GltfAttributes		m_attributes;
-		MeshPtr			m_mesh;				// geometry Data for render
+		MeshPtr				m_mesh;				// geometry Data for render
 		ShaderProgramPtr    m_shader;
 		MaterialPtr			m_materialInst;
 	};

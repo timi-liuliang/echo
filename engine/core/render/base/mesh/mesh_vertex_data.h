@@ -34,21 +34,21 @@ namespace Echo
 
 	struct MeshVertexFormat
 	{
-		bool		        m_isUseNormal;
-		bool		        m_isUseVertexColor;
-		bool		        m_isUseUV;
-		bool		        m_isUseLightmapUV;
-		bool		        m_isUseBlendingData;
-		bool		        m_isUseTangentBinormal;
-		ui32		        m_stride;
-		Byte		        m_posOffset;
-		Byte		        m_normalOffset;
-		Byte		        m_colorOffset;
-		Byte		        m_uv0Offset;
-		Byte		        m_uv1Offset;
-		Byte		        m_boneIndicesOffset;
-		Byte		        m_boneWeightsOffset;
-		Byte		        m_tangentOffset;
+		bool		        m_isUseNormal = false;
+		bool		        m_isUseVertexColor = false;
+		bool		        m_isUseUV = false;
+		bool		        m_isUseLightmapUV = false;
+		bool		        m_isUseBlendingData = false;
+		bool		        m_isUseTangentBinormal = false;
+		ui32		        m_stride = 0;
+		Byte		        m_posOffset = 0;
+		Byte		        m_normalOffset = 0;
+		Byte		        m_colorOffset = 0;
+		Byte		        m_uv0Offset = 0;
+		Byte		        m_uv1Offset = 0;
+		Byte		        m_boneIndicesOffset = 0;
+		Byte		        m_boneWeightsOffset = 0;
+		Byte		        m_tangentOffset = 0;
 		VertexElementList	m_vertexElements;
 
 		MeshVertexFormat();

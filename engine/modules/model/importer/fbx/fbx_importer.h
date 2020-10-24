@@ -1,9 +1,10 @@
 #pragma once
 
 #include "engine/core/editor/importer.h"
-#include "fbx_loader.h"
 
 #ifdef ECHO_EDITOR_MODE
+#include "thirdparty/openfbx/ofbx.h"
+
 namespace Echo
 {
 	class FbxImporter : public Importer
@@ -21,7 +22,7 @@ namespace Echo
 		virtual void run(const char* targetFolder) override;
 
 		// save
-		void saveMeshs(Fbx::Loader& loader);
+		void saveMeshs(ofbx::IScene* fbxScene);
 
 	private:
 		String		m_fbxFile;

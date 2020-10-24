@@ -3,20 +3,6 @@
 namespace Echo
 {
 	MeshVertexFormat::MeshVertexFormat()
-		: m_isUseNormal(false)
-		, m_isUseVertexColor(false)
-		, m_isUseUV(false)
-		, m_isUseLightmapUV(false)
-		, m_isUseBlendingData(false)
-		, m_isUseTangentBinormal(false)
-		, m_stride(0)
-		, m_posOffset(0)
-		, m_normalOffset(0)
-		, m_colorOffset(0)
-		, m_uv0Offset(0)
-		, m_uv1Offset(0)
-		, m_boneIndicesOffset(0)
-		, m_boneWeightsOffset(0)
 	{
 
 	}
