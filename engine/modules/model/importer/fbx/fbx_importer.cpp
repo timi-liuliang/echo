@@ -64,7 +64,7 @@ namespace Echo
 					MeshVertexData vertexData;
 					vertexData.set(vertFormat, geometry->getVertexCount());
 
-					// position
+					// position cm->m
 					for (int j = 0; j < geometry->getVertexCount(); j++)
 					{
 						const ofbx::Vec3 fbxPosition = geometry->getVertices()[j];
@@ -78,9 +78,34 @@ namespace Echo
 						vertexData.setNormal(j, Vector3(fbxNormal.x, fbxNormal.y, fbxNormal.z));
 					}
 
+					// update vertices data
 					MeshPtr mesh = Mesh::create(true, true);
-					mesh->updateIndices(static_cast<ui32>(geometry->getIndexCount()), sizeof(i32), geometry->getFaceIndices());
 					mesh->updateVertexs(vertexData);
+
+					// indices
+					const i32* fbxFaceIndices = geometry->getFaceIndices();
+					if (geometry->getVertexCount() < 65535)
+					{
+						vector<i16>::type shortIndices;
+						for (int j = 0; j < geometry->getIndexCount(); ++j)
+						{
+							int idx = (fbxFaceIndices[j] < 0) ? (-fbxFaceIndices[j] - 1)  : (fbxFaceIndices[j]);
+							shortIndices.push_back(idx);
+						}
+
+						mesh->updateIndices(static_cast<ui32>(geometry->getIndexCount()), sizeof(i16), shortIndices.data());
+					}
+					else
+					{
+						vector<i32>::type intIndices;
+						for (int j = 0; j < geometry->getIndexCount(); ++j)
+						{
+							int idx = (fbxFaceIndices[j] < 0) ? (-fbxFaceIndices[j] - 1) : (fbxFaceIndices[j]);
+							intIndices.push_back(idx);
+						}
+
+						mesh->updateIndices(static_cast<ui32>(geometry->getIndexCount()), sizeof(i32), intIndices.data());
+					}
 
 					if (mesh)
 					{
