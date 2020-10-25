@@ -5,7 +5,6 @@
 namespace Echo
 {
 	class Quaternion;
-	class Vector2;
 	class Vector3
 	{
 	public:

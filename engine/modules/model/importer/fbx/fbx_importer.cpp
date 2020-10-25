@@ -48,6 +48,8 @@ namespace Echo
 		}
 	}
 
+	#define CM_TO_M 0.01
+
 	void FbxImporter::saveMeshs(ofbx::IScene* fbxScene)
 	{
 		for (int i = 0; i < fbxScene->getMeshCount(); i++)
@@ -58,8 +60,11 @@ namespace Echo
 				const ofbx::Geometry* geometry = fbxMesh->getGeometry();
 				if (geometry)
 				{
+					ofbx::Matrix meshMatrix = fbxMesh->getGeometricMatrix();
+
 					MeshVertexFormat vertFormat;
 					vertFormat.m_isUseNormal = geometry->getNormals() ? true : false;
+					vertFormat.m_isUseUV = geometry->getUVs(0) ? true : false;
 
 					MeshVertexData vertexData;
 					vertexData.set(vertFormat, geometry->getVertexCount());
@@ -68,14 +73,27 @@ namespace Echo
 					for (int j = 0; j < geometry->getVertexCount(); j++)
 					{
 						const ofbx::Vec3 fbxPosition = geometry->getVertices()[j];
-						vertexData.setPosition(j, Vector3(fbxPosition.x, fbxPosition.y, fbxPosition.z));
+						vertexData.setPosition(j, Vector3(fbxPosition.x, fbxPosition.y, fbxPosition.z) * fbxScene->getGlobalSettings()->UnitScaleFactor * CM_TO_M);
 					}
 
 					// normals
-					for (int j = 0; j < geometry->getVertexCount(); j++)
+					if (geometry->getNormals())
 					{
-						const ofbx::Vec3 fbxNormal = geometry->getNormals()[j];
-						vertexData.setNormal(j, Vector3(fbxNormal.x, fbxNormal.y, fbxNormal.z));
+						for (int j = 0; j < geometry->getVertexCount(); j++)
+						{
+							const ofbx::Vec3 fbxNormal = geometry->getNormals()[j];
+							vertexData.setNormal(j, Vector3(fbxNormal.x, fbxNormal.y, fbxNormal.z));
+						}
+					}
+
+					// uvs
+					if (geometry->getUVs(0))
+					{
+						for (int j = 0; j < geometry->getVertexCount(); j++)
+						{
+							const ofbx::Vec2 fbxUv = geometry->getUVs(0)[j];
+							vertexData.setUV0(j, Vector2(fbxUv.x, fbxUv.y));
+						}
 					}
 
 					// update vertices data
