@@ -122,7 +122,7 @@ namespace Echo
 		ui32				m_width = 0;
 		ui32				m_height = 0;
 		ui32				m_depth = 1;
-		bool				m_isMipMapEnable;
+		bool				m_isMipMapEnable = true;
 		ui32				m_numMipmaps = 1;
 		ui32				m_faceNum = 1;
 		ui32				m_blockSize = 0;

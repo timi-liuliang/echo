@@ -105,8 +105,7 @@ namespace Echo
 		MemoryReader memReader(getPath());
 		if (memReader.getSize())
 		{
-			Buffer commonTextureBuffer(memReader.getSize(), memReader.getData<ui8*>(), false);
-			Image* image = Image::createFromMemory(commonTextureBuffer, Image::GetImageFormat(getPath()));
+			Image* image = Image::createFromMemory(Buffer(memReader.getSize(), memReader.getData<ui8*>(), false), Image::GetImageFormat(getPath()));
 			if (image)
 			{
 				m_isCompressed = false;
@@ -117,18 +116,26 @@ namespace Echo
 				m_pixFmt = image->getPixelFormat();
 				m_numMipmaps = image->getNumMipmaps() ? image->getNumMipmaps() : 1;
 				ui32 pixelsSize = PixelUtil::CalcSurfaceSize(m_width, m_height, m_depth, m_numMipmaps, m_pixFmt);
-				Buffer buff(pixelsSize, image->getData(), false);
+				i32 level = 0;
 
-				set2DSurfaceData( 0, m_pixFmt, m_usage, m_width, m_height, buff);
-				EchoSafeDelete(image, Image);
+				set2DSurfaceData(level, m_pixFmt, m_usage, m_width, m_height, Buffer(pixelsSize, image->getData(), false));
 
 				// Generate mipmaps
 				if (m_isMipMapEnable && !m_compressType)
 				{
-					OGLESDebug(glBindTexture(GL_TEXTURE_2D, m_glesTexture));
-					OGLESDebug(glGenerateMipmap(GL_TEXTURE_2D));
-					OGLESDebug(glBindTexture(GL_TEXTURE_2D, 0));
+					while (true)
+					{
+						i32 halfWidth = image->getWidth() / 2;
+						i32 halfHeight = image->getHeight() / 2;
+						if (!image->scale(halfWidth, halfHeight))
+							break;
+
+						pixelsSize = PixelUtil::CalcSurfaceSize(halfWidth, halfHeight, 1, 1, m_pixFmt);
+						set2DSurfaceData(++level, m_pixFmt, m_usage, halfWidth, halfHeight, Buffer(pixelsSize, image->getData(), false));
+					}
 				}
+
+				EchoSafeDelete(image, Image);
 
 				return true;
 			}

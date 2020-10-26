@@ -17,7 +17,6 @@ namespace Echo
 
 	Texture::Texture()
 		: m_pixFmt(PF_UNKNOWN)
-		, m_isMipMapEnable(false)
 	{
 
 	}
@@ -25,7 +24,6 @@ namespace Echo
 	Texture::Texture(const String& name)
 		: Res(name)
 		, m_pixFmt(PF_UNKNOWN)
-		, m_isMipMapEnable(false)
 	{
 	}
 

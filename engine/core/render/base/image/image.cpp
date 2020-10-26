@@ -385,6 +385,9 @@ namespace Echo
 
 	bool Image::scale(ui32 width, ui32 height, ImageFilter filter)
 	{
+		if (width < 1 || height < 1) 
+			return false;
+
 		// scale dynamic images is not supported
 		EchoAssert(m_depth == 1);
 
