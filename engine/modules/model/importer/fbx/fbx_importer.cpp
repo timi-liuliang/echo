@@ -24,21 +24,22 @@ namespace Echo
 
 	void FbxImporter::run(const char* targetFolder)
 	{
-		if (m_fbxFile.empty())
+		if (IO::instance()->convertFullPathToResPath(targetFolder, m_targetFoler))
 		{
-			if (IO::instance()->convertFullPathToResPath(targetFolder, m_targetFoler))
+			QStringList resFiles = QFileDialog::getOpenFileNames(nullptr, "Import Fbx", "", "*.fbx");
+			for (const QString& qfbxFile : resFiles)
 			{
-				m_fbxFile = EditorApi.selectAFile("Import Fbx", "*.fbx");
-				if (!m_fbxFile.empty())
+				String fbxFile = qfbxFile.toStdString().c_str();
+				if (!fbxFile.empty())
 				{
-					MemoryReader memReader(m_fbxFile);
+					MemoryReader memReader(fbxFile);
 					if (memReader.getSize())
 					{
 						ofbx::IScene* fbxScene = ofbx::load(memReader.getData<ofbx::u8*>(), memReader.getSize(), (ofbx::u64)ofbx::LoadFlags::TRIANGULATE);
 						if (fbxScene)
 						{
 							// meshes
-							saveMeshs(fbxScene);
+							saveMeshs(fbxScene, fbxFile);
 
 							fbxScene->destroy();
 						}
@@ -50,7 +51,7 @@ namespace Echo
 
 	#define CM_TO_M 0.01
 
-	void FbxImporter::saveMeshs(ofbx::IScene* fbxScene)
+	void FbxImporter::saveMeshs(ofbx::IScene* fbxScene, const String& fbxFile)
 	{
 		for (int i = 0; i < fbxScene->getMeshCount(); i++)
 		{
@@ -127,7 +128,7 @@ namespace Echo
 
 					if (mesh)
 					{
-						String meshName = PathUtil::GetPureFilename(m_fbxFile, false);
+						String meshName = PathUtil::GetPureFilename(fbxFile, false);
 						mesh->setPath(m_targetFoler + "/" + meshName + ".mesh");
 						mesh->save();
 					}

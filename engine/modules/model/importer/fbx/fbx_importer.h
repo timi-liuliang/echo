@@ -22,10 +22,9 @@ namespace Echo
 		virtual void run(const char* targetFolder) override;
 
 		// save
-		void saveMeshs(ofbx::IScene* fbxScene);
+		void saveMeshs(ofbx::IScene* fbxScene, const String& fbxFile);
 
 	private:
-		String		m_fbxFile;
 		String		m_targetFoler;
 	};
 }
