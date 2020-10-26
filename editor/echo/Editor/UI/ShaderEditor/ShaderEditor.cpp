@@ -35,6 +35,7 @@
 #include "DataModel/Math/Functions/ModDataModel.h"
 #include "DataModel/Math/Functions/FractDataModel.h"
 #include "DataModel/Math/Functions/FwidthDataModel.h"
+#include "DataModel/Math/Functions/AbsDataModel.h"
 #include "Data/DataFloat.h"
 #include "Data/DataVector2.h"
 #include "Data/DataVector3.h"
@@ -71,6 +72,7 @@ namespace Studio
         ret->registerModel<LayerBlendDataModel>("Inputs");
 
         // Maths
+        ret->registerModel<AbsDataModel>("Math");
         ret->registerModel<AdditionDataModel>("Math");
         ret->registerModel<SubstractionDataModel>("Math");
         ret->registerModel<MultiplicationDataModel>("Math");
