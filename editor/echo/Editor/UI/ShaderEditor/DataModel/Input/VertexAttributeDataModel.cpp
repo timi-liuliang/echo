@@ -29,10 +29,14 @@ namespace DataFlowProgramming
         m_outputs.back()->setVariableName("v_Position.view");
 
         // normal
+		m_comboBox->addItem("normal(local)");
+		m_outputs.emplace_back(std::make_shared<DataVector3>(this, "vec3"));
+		m_outputs.back()->setVariableName("v_NormalLocal");
+
         m_comboBox->addItem("normal(world)");
         m_outputs.emplace_back(std::make_shared<DataVector3>(this, "vec3"));
         m_outputs.back()->setVariableName("v_Normal");
-        
+
         // color
         m_comboBox->addItem("color");
         m_outputs.emplace_back(std::make_shared<DataVector4>(this, "vec4"));
