@@ -27,31 +27,31 @@ layout(location = 0) out Position v_Position;
 
 #ifdef ENABLE_VERTEX_NORMAL
 layout(location = 1) in vec3 a_Normal;
-layout(location = 1) out vec3 v_Normal;
+layout(location = 3) out vec3 v_Normal;
 
 #ifdef HAS_TANGENTS
 	layout(location = 2) in vec4 a_Tangent;
-	layout(location = 2) out mat3 v_TBN;
+	layout(location = 4) out mat3 v_TBN;
 #endif
 
 #endif
 
 #ifdef ENABLE_VERTEX_COLOR
 layout(location = 3) in vec4 a_Color;
-layout(location = 3) out vec4 v_Color;
+layout(location = 5) out vec4 v_Color;
 #endif
 
 #ifdef ENABLE_VERTEX_UV0
 layout(location = 4) in vec2 a_UV;
-layout(location = 4) out vec2 v_UV;
+layout(location = 6) out vec2 v_UV;
 #endif
 
 #ifdef ENABLE_VERTEX_BLENDING
 layout(location = 5) in vec4 a_Weight;
-layout(location = 5) out vec4 v_Weight;
+layout(location = 7) out vec4 v_Weight;
 
 layout(location = 6) in vec4 a_Joint;
-layout(location = 6) out vec4 v_Joint;
+layout(location = 8) out vec4 v_Joint;
 #endif
 
 void main(void)
@@ -131,23 +131,23 @@ layout(location = 0) in Position  v_Position;
 #endif
 
 #ifdef ENABLE_VERTEX_NORMAL
-layout(location = 1) in vec3 v_Normal;
+layout(location = 3) in vec3 v_Normal;
 #ifdef HAS_TANGENTS
-	layout(location = 2) in mat3 v_TBN;
+	layout(location = 4) in mat3 v_TBN;
 #endif
 #endif
 
 #ifdef ENABLE_VERTEX_COLOR
-layout(location = 3) in vec4  v_Color;
+layout(location = 5) in vec4  v_Color;
 #endif
 
 #ifdef ENABLE_VERTEX_UV0
-layout(location = 4) in vec2  v_UV;
+layout(location = 6) in vec2  v_UV;
 #endif
 
 #ifdef ENABLE_VERTEX_BLENDING
-layout(location = 5) in vec4 v_Weight;
-layout(location = 6) in vec4 v_Joint;
+layout(location = 7) in vec4 v_Weight;
+layout(location = 8) in vec4 v_Joint;
 #endif
 
 // outputs

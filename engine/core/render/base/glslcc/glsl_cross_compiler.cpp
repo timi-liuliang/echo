@@ -6,6 +6,7 @@
 #include <thirdparty/spirv-cross/spirv_glsl.hpp>
 #include <thirdparty/spirv-cross/spirv_hlsl.hpp>
 #include <thirdparty/spirv-cross/spirv_msl.hpp>
+#include "engine/core/util/magic_enum.hpp"
 #include "engine/core/log/Log.h"
 
 const TBuiltInResource k_defaultConf = {
@@ -264,10 +265,11 @@ namespace Echo
 					}
 					else
 					{
+                        std::string shaderType = std::string(magic_enum::enum_name(ShaderType(i)));
 						StringArray lines = StringUtil::Split(shader->getInfoLog(), "\n");
 						for (String& line : lines)
 						{
-							EchoLogError(("[GLSLCrossCompiler] " + line).c_str());
+							EchoLogError(("[GLSLCrossCompiler - %s] " + line).c_str(), shaderType.c_str());
 						}
 					}
 				}

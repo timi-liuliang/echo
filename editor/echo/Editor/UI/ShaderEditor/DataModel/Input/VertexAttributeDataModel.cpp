@@ -29,7 +29,7 @@ namespace DataFlowProgramming
         m_outputs.back()->setVariableName("v_Position.view");
 
         // normal
-        m_comboBox->addItem("normal");
+        m_comboBox->addItem("normal(world)");
         m_outputs.emplace_back(std::make_shared<DataVector3>(this, "vec3"));
         m_outputs.back()->setVariableName("v_Normal");
         
@@ -116,7 +116,7 @@ namespace DataFlowProgramming
         {
             compiler.addMacro("ENABLE_VERTEX_POSITION");
         }
-		if (text == "normal")
+		if (Echo::StringUtil::StartWith(text, "normal("))
 		{
 			compiler.addMacro("ENABLE_VERTEX_NORMAL");
 		}
