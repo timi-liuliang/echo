@@ -20,9 +20,6 @@ namespace Studio
 
 	ResPanel::ResPanel( QWidget* parent/*=0*/)
 		: QDockWidget( parent)
-		, m_resMenu(nullptr)
-		, m_menuEditItem(nullptr)
-		, m_viewTypeGrid(true)
 	{
 		setupUi( this);
 

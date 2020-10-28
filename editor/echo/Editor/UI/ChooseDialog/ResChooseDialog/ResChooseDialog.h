@@ -31,10 +31,17 @@ namespace Studio
 		// double click res
 		void onDoubleClickPreviewRes(const char* res);
 
+		// on switch view type
+		void onSwitchResVeiwType();
+
+		// on search text changed
+		void onSearchTextChanged();
+
 	private:
 		QT_UI::QDirectoryModel*		m_dirModel;
 		QT_UI::QPreviewHelper*		m_previewHelper;
 		Echo::String				m_selectedFile;
 		Echo::String				m_supportExts;
+		bool						m_viewTypeGrid = true;
 	};
 }

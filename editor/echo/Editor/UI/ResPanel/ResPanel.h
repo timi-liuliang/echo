@@ -89,9 +89,9 @@ namespace Studio
 		Echo::String				m_currentDir;
 		QT_UI::QDirectoryModel*		m_dirModel;
 		QT_UI::QPreviewHelper*		m_previewHelper;
-		QMenu*						m_resMenu;			// Mouse right button click
-		QStandardItem*				m_menuEditItem;
-		bool						m_viewTypeGrid;
+		QMenu*						m_resMenu = nullptr;			// Mouse right button click
+		QStandardItem*				m_menuEditItem = nullptr;
+		bool						m_viewTypeGrid = true;
 		QFileSystemWatcher*			m_filesystemWatcher = nullptr;
 	};
 }

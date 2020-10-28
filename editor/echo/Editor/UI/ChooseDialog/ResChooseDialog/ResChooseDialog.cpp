@@ -40,6 +40,8 @@ namespace Studio
 		m_previewHelper = new QT_UI::QPreviewHelper(m_listView);
 		QObject::connect(m_previewHelper, SIGNAL(clickedRes(const char*)), this, SLOT(onClickPreviewRes(const char*)));
 		QObject::connect(m_previewHelper, SIGNAL(doubleClickedRes(const char*)), this, SLOT(onDoubleClickPreviewRes(const char*)));
+		QObject::connect(m_viewTypeButton, SIGNAL(clicked()), this, SLOT(onSwitchResVeiwType()));
+		QObject::connect(m_searchLineEdit, SIGNAL(textChanged(const QString&)), this, SLOT(onSearchTextChanged()));
 
 		// initialize path
 		m_dirModel->clear();
@@ -128,5 +130,30 @@ namespace Studio
 				accept();
 			}
 		}
+	}
+
+	void ResChooseDialog::onSwitchResVeiwType()
+	{
+		m_viewTypeGrid = !m_viewTypeGrid;
+		if (m_viewTypeGrid)
+		{
+			m_previewHelper->setUseIconMode();
+
+			m_viewTypeButton->setIcon(QIcon(":/icon/Icon/res/view_type_list.png"));
+			m_viewTypeButton->setToolTip("List");
+		}
+		else
+		{
+			m_previewHelper->setUseListMode();
+
+			m_viewTypeButton->setIcon(QIcon(":/icon/Icon/res/view_type_grid.png"));
+			m_viewTypeButton->setToolTip("Thumbnail");
+		}
+	}
+
+	void ResChooseDialog::onSearchTextChanged()
+	{
+		Echo::String pattern = m_searchLineEdit->text().toStdString().c_str();
+		m_previewHelper->setFilterPattern(pattern.c_str());
 	}
 }
