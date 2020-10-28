@@ -13,10 +13,20 @@ namespace Studio
 	{
 		setupUi(this);
 
-		// hide default window title
-		setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+#ifdef ECHO_PLATFORM_WINDOWS
+		// hide window hwnd
+		setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+#elif defined(ECHO_PLATFORM_MAC)
+		// set title bar color
+		//macChangeTitleBarColor(winId(), 0.f, 0.f, 0.f);
+		setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+		m_menuBar->setNativeMenuBar(false);
+#endif
 
-		// 目录树型结构
+		// set icon
+		m_menuBar->setTopLeftCornerIcon(":/icon/Icon/icon.png");
+
+		// directory model
 		m_dirModel = new QT_UI::QDirectoryModel();
 		m_dirModel->SetIcon("root", QIcon(":/icon/Icon/root.png"));
 		m_dirModel->SetIcon("filter", QIcon(":/icon/Icon/folder_close.png"));
