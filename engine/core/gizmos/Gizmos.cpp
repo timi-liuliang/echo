@@ -206,6 +206,11 @@ namespace Echo
 		m_localAABB.addPoint(v2);
 	}
 
+	void Gizmos::drawSprite(const Vector3& position, TexturePtr texture)
+	{
+
+	}
+
 	void Gizmos::mergeVertices()
 	{
 

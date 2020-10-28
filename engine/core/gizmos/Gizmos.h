@@ -56,6 +56,9 @@ namespace Echo
 		// draw triangle
 		void drawTriangle(const Vector3& v0, const Vector3& v1, const Vector3& v2, const Color& color);
 
+		// draw sprite
+		void drawSprite(const Vector3& position, TexturePtr texture);
+
 		// optimize triangles, merge vertices
 		void mergeVertices();
 
