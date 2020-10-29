@@ -50,6 +50,9 @@ namespace Echo
 		Gizmos();
 		~Gizmos();
 
+		// draw point
+		void drawPoint(const Vector3& from, const Color& color, float radius);
+
 		// draw line
 		void drawLine(const Vector3& from, const Vector3& to, const Color& color);
 

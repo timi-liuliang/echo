@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../spline.h"
+#include "engine/core/gizmos/Gizmos.h"
 
 namespace Echo
 {
@@ -21,6 +22,7 @@ namespace Echo
 		virtual void editor_update_self() override;
 
 	private:
+		Gizmos* m_gizmo = nullptr;
 	};
 #endif
 }

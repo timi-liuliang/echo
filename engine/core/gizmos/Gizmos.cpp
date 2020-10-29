@@ -179,6 +179,15 @@ namespace Echo
         }
     }
 
+	void Gizmos::drawPoint(const Vector3& from, const Color& color, float radius)
+	{
+		Vector3 v0 = from + Vector3(0.f,   0.f, radius);
+		Vector3 v1 = from + Vector3(radius,  0.f, -radius);
+		Vector3 v2 = from + Vector3(-radius, 0.f, -radius);
+
+		drawTriangle(v0, v1, v2, color);
+	}
+
 	void Gizmos::drawLine(const Vector3& from, const Vector3& to, const Color& color)
 	{
 		m_lineBatch->addIndex((Word)m_lineBatch->m_vertexs.size());

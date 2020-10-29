@@ -8,10 +8,14 @@ namespace Echo
 	SplineEditor::SplineEditor(Object* object)
 		: ObjectEditor(object)
 	{
+		m_gizmo = ECHO_DOWN_CAST<Echo::Gizmos*>(Echo::Class::create("Gizmos"));
+		m_gizmo->setName(StringUtil::Format("gizmo_obj_%d", m_object->getId()));
+		m_gizmo->setRenderType("3d");
 	}
 
 	SplineEditor::~SplineEditor()
 	{
+		EchoSafeDelete(m_gizmo, Gizmos);
 	}
 
 	ImagePtr SplineEditor::getThumbnail() const
@@ -25,7 +29,30 @@ namespace Echo
 
 	void SplineEditor::editor_update_self()
 	{
+		m_gizmo->clear();
 
+		Spline* spline = ECHO_DOWN_CAST<Spline*>(m_object);
+		if (spline)
+		{
+			// points
+			for (SplinePoint* point : spline->getPoints())
+			{
+				m_gizmo->drawPoint(point->getWorldPosition(), Color::BLUE, 0.1f);
+			}
+
+			// segments
+			for (SplineSegment* segment : spline->getSegments())
+			{
+				SplinePoint* pointA = spline->getPoint(segment->getEndPointA());
+				SplinePoint* pointB = spline->getPoint(segment->getEndPointB());
+				if (pointA && pointB)
+				{
+					m_gizmo->drawLine(pointA->getWorldPosition(), pointB->getWorldPosition(), Color::WHITE);
+				}
+			}
+		}
+
+		m_gizmo->update(Engine::instance()->getFrameTime(), true);
 	}
 #endif
 }

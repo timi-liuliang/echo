@@ -18,7 +18,7 @@ namespace Echo
 		CLASS_BIND_METHOD(SplinePoint, getPointId, DEF_METHOD("getPointId"));
 		CLASS_BIND_METHOD(SplinePoint, setPointId, DEF_METHOD("setPointId"));
 
-		CLASS_REGISTER_PROPERTY(SplinePoint, "PointId", Variant::Type::Real, "getPointId", "setPointId");
+		CLASS_REGISTER_PROPERTY(SplinePoint, "PointId", Variant::Type::Int, "getPointId", "setPointId");
 	}
 
 	i32 SplinePoint::getPointId()
