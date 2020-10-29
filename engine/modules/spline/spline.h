@@ -11,5 +11,9 @@ namespace Echo
 	public:
 		Spline();
 		virtual ~Spline();
+
+	public:
+		// get unique point id
+		i32 getUniquePointId();
 	};
 }
