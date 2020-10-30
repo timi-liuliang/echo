@@ -37,7 +37,7 @@ namespace Echo
 			// points
 			for (SplinePoint* point : spline->getPoints())
 			{
-				m_gizmo->drawPoint(point->getWorldPosition(), Color::BLUE, 0.1f);
+				m_gizmo->drawPoint(point->getWorldPosition(), Color(0.f, 0.f, 1.f, 0.9f), 38.f, 4);
 			}
 
 			// segments
@@ -47,7 +47,7 @@ namespace Echo
 				SplinePoint* pointB = spline->getPoint(segment->getEndPointB());
 				if (pointA && pointB)
 				{
-					m_gizmo->drawLine(pointA->getWorldPosition(), pointB->getWorldPosition(), Color::WHITE);
+					m_gizmo->drawLine(pointA->getWorldPosition(), pointB->getWorldPosition(), Color(1.f, 1.f, 1.f, 0.5f));
 				}
 			}
 		}

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "engine/core/camera/Camera.h"
 #include "node.h"
 
 namespace Echo
@@ -31,9 +32,14 @@ namespace Echo
 		const StringOption& getRenderType() { return m_renderType; }
 		void setRenderType(const StringOption& type);
 
+		// visible
 		void setVisible(bool isVisible) { m_isVisible = isVisible; }
 		bool isVisible() const { return m_isVisible; }
 
+		// get camera
+		Camera* getCamera();
+
+		// update
 		virtual void update(float delta, bool bUpdateChildren) override;
 
 	public:

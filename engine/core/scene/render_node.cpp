@@ -54,6 +54,12 @@ namespace Echo
 		m_renderType.setValue(type.getValue());
 	}
 
+	Camera* Render::getCamera()
+	{
+		Camera* camera = m_renderType.getIdx() == 0 ? NodeTree::instance()->get2dCamera() : (m_renderType.getIdx() == 1 ? NodeTree::instance()->get3dCamera() : NodeTree::instance()->getUiCamera());
+		return camera;
+	}
+
 	void Render::update(float delta, bool bUpdateChildren)
 	{
 		if (!m_isEnable)
@@ -82,7 +88,7 @@ namespace Echo
 		if (name == "u_Time")
 			return (void*)FrameState::instance()->getCurrentTimeSecondsPtr();
 
-		Camera* camera = m_renderType.getIdx() == 0 ? NodeTree::instance()->get2dCamera() : (m_renderType.getIdx() == 1 ? NodeTree::instance()->get3dCamera() : NodeTree::instance()->getUiCamera());
+		Camera* camera = getCamera();
 		if (camera)
 		{
 			if (name == "u_ViewProjMatrix")

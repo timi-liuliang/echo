@@ -179,13 +179,31 @@ namespace Echo
         }
     }
 
-	void Gizmos::drawPoint(const Vector3& from, const Color& color, float radius)
+	void Gizmos::drawPoint(const Vector3& from, const Color& color, float pixels, int segments)
 	{
-		Vector3 v0 = from + Vector3(0.f,   0.f, radius);
-		Vector3 v1 = from + Vector3(radius,  0.f, -radius);
-		Vector3 v2 = from + Vector3(-radius, 0.f, -radius);
+		Camera* camera = getCamera();
+		if (camera)
+		{
+			float radius = pixels / 2.f;
+			if (camera->getProjectionMode() == Camera::PM_PERSPECTIVE)
+			{
+				float ratio = radius / camera->getWidth();
+				float nearPlaneWidth = camera->getNear() * tan(camera->getFov());
+				float pointDistance = (camera->getPosition() - from).len();
 
-		drawTriangle(v0, v1, v2, color);
+				radius = (ratio * nearPlaneWidth) * (pointDistance / camera->getNear());
+			}
+
+			float deltaDegree = 2.f * Math::PI / segments;
+			for (int i = 0; i < segments; i++)
+			{
+				Vector3 v0 = from - camera->getDirection() * radius;
+				Vector3 v1 = v0 + Quaternion::fromAxisAngle(camera->getDirection(), i * deltaDegree + Math::PI_DIV4).rotateVec3(camera->getRight()) * radius;
+				Vector3 v2 = v0 + Quaternion::fromAxisAngle(camera->getDirection(), (i + 1) * deltaDegree + Math::PI_DIV4).rotateVec3(camera->getRight()) * radius;
+
+				drawTriangle(v0, v1, v2, color);
+			}
+		}
 	}
 
 	void Gizmos::drawLine(const Vector3& from, const Vector3& to, const Color& color)

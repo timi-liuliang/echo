@@ -61,6 +61,14 @@ namespace Echo
 
 		}
 
+		static Color fromRGBA(Byte ir, Byte ig, Byte ib, Byte ia=255)
+		{
+			Color result; 
+			result.setRGBA(ir, ig, ib, ia);
+
+			return result;
+		}
+
 	public:
 		// casting
 		inline operator Dword () const

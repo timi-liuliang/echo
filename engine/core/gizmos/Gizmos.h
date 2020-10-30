@@ -51,7 +51,7 @@ namespace Echo
 		~Gizmos();
 
 		// draw point
-		void drawPoint(const Vector3& from, const Color& color, float radius);
+		void drawPoint(const Vector3& from, const Color& color, float pixels, int segments=4);
 
 		// draw line
 		void drawLine(const Vector3& from, const Vector3& to, const Color& color);
