@@ -2,6 +2,7 @@
 
 #include "engine/core/scene/node.h"
 #include "spline_point.h"
+#include "spline_control_point.h"
 
 namespace Echo
 {
@@ -21,10 +22,12 @@ namespace Echo
 		void setEndPointB(i32 pointId) { m_endPointB = pointId; }
 		i32 getEndPointB() { return m_endPointB; }
 
+		// control point
+		SplineControlPoint* getControlPointA();
+		SplineControlPoint* getControlPointB();
+
 	protected:
 		i32			m_endPointA = 0;
 		i32			m_endPointB = 0;
-		Vector3		m_controlPointA = Vector3::ZERO;
-		Vector3		m_controlPointB = Vector3::ZERO;
 	};
 }

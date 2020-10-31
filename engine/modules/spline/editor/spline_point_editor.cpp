@@ -19,10 +19,6 @@ namespace Echo
 		return Image::loadFromFile(Engine::instance()->getRootPath() + "engine/modules/spline/editor/icon/spline_point.png");
 	}
 
-	void SplinePointEditor::onEditorSelectThisNode()
-	{
-	}
-
 	void SplinePointEditor::editor_update_self()
 	{
 

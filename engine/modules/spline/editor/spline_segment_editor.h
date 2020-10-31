@@ -14,7 +14,7 @@ namespace Echo
 		// get thumbnail
 		virtual ImagePtr getThumbnail() const override;
 
-		// on editor select this node
+		/* on editor selected this node*/
 		virtual void onEditorSelectThisNode() override;
 
 		// update self

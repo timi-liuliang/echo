@@ -5,14 +5,17 @@
 namespace Echo
 {
 #ifdef ECHO_EDITOR_MODE
-	class SplinePointEditor : public ObjectEditor
+	class SplineControlPointEditor : public ObjectEditor
 	{
 	public:
-		SplinePointEditor(Object* object);
-		virtual ~SplinePointEditor();
+		SplineControlPointEditor(Object* object);
+		virtual ~SplineControlPointEditor();
 
 		// get thumbnail
 		virtual ImagePtr getThumbnail() const override;
+
+		// on editor select this node
+		virtual void onEditorSelectThisNode() override;
 
 		// update self
 		virtual void editor_update_self() override;

@@ -29,6 +29,9 @@ namespace Echo
 		// get thumbnail
 		virtual ImagePtr getThumbnail() const { return nullptr; }
 
+		// is selected
+		bool isSelected() const { return m_isSelected; }
+
 		/* on editor selected this node*/
 		virtual void onEditorSelectThisNode() { m_isSelected = true; }
 

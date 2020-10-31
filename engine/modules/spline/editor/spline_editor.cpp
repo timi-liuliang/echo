@@ -1,5 +1,6 @@
 #include "spline_editor.h"
 #include "engine/core/editor/editor.h"
+#include "engine/core/math/Curve.h"
 #include "engine/core/main/Engine.h"
 
 namespace Echo
@@ -37,7 +38,7 @@ namespace Echo
 			// points
 			for (SplinePoint* point : spline->getPoints())
 			{
-				m_gizmo->drawPoint(point->getWorldPosition(), Color(0.f, 0.f, 1.f, 0.9f), 38.f, 4);
+				m_gizmo->drawPoint(point->getWorldPosition(), point->getEditor()->isSelected() ? Color::BLUE : Color(0.5f, 0.5f, 0.5f, 1.f), 30.f, 4);
 			}
 
 			// segments
@@ -45,9 +46,37 @@ namespace Echo
 			{
 				SplinePoint* pointA = spline->getPoint(segment->getEndPointA());
 				SplinePoint* pointB = spline->getPoint(segment->getEndPointB());
+				SplineControlPoint* controlPointA = segment->getControlPointA();
+				SplineControlPoint* controlPointB = segment->getControlPointB();
 				if (pointA && pointB)
 				{
-					m_gizmo->drawLine(pointA->getWorldPosition(), pointB->getWorldPosition(), Color(1.f, 1.f, 1.f, 0.5f));
+					Color segmentColor = segment->getEditor()->isSelected() ? Color::BLUE : Color(1.f, 1.f, 1.f, 0.5f);
+
+					if (controlPointA && controlPointB)
+					{
+						i32 segments = (pointB->getWorldPosition() - pointA->getWorldPosition()).len() / 0.1f;
+						for (i32 i = 0; i < segments; i++)
+						{
+							Vector3 startPos, endPos;
+							Bezier3(startPos, pointA->getWorldPosition(), controlPointA->getWorldPosition(), controlPointB->getWorldPosition(), pointB->getWorldPosition(), float(i) / segments);
+							Bezier3(endPos,   pointA->getWorldPosition(), controlPointA->getWorldPosition(), controlPointB->getWorldPosition(), pointB->getWorldPosition(), float(i + 1) / segments);
+							
+							m_gizmo->drawLine(startPos, endPos, segmentColor);
+						}
+
+						if (m_showControlPoint)
+						{
+							m_gizmo->drawPoint(controlPointA->getWorldPosition(), Color::fromRGBA(231, 0, 18), 30.f, 4);
+							m_gizmo->drawPoint(controlPointB->getWorldPosition(), Color::fromRGBA(231, 0, 18), 30.f, 4);
+
+							m_gizmo->drawLine(pointA->getWorldPosition(), controlPointA->getWorldPosition(), Color::fromRGBA(231, 0, 18));
+							m_gizmo->drawLine(pointB->getWorldPosition(), controlPointB->getWorldPosition(), Color::fromRGBA(231, 0, 18));
+						}
+					}
+					else
+					{
+						m_gizmo->drawLine(pointA->getWorldPosition(), pointB->getWorldPosition(), segmentColor);
+					}
 				}
 			}
 		}

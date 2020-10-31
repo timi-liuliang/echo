@@ -23,6 +23,7 @@ namespace Echo
 
 	private:
 		Gizmos* m_gizmo = nullptr;
+		bool	m_showControlPoint = true;
 	};
 #endif
 }
