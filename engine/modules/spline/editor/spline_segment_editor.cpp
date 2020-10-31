@@ -31,17 +31,20 @@ namespace Echo
 			{
 				SplinePoint* pointA = spline->getPoint(segment->getEndPointA());
 				SplinePoint* pointB = spline->getPoint(segment->getEndPointB());
-				Vector3 offset = 0.5f * (pointA->getWorldPosition() + pointB->getWorldPosition()) - segment->getWorldPosition();
-				if (offset.lenSqr())
+				if (pointA && pointB)
 				{
-					segment->setWorldPosition(segment->getWorldPosition()+offset);
-					segment->update(0.f, true);
+					Vector3 offset = 0.5f * (pointA->getWorldPosition() + pointB->getWorldPosition()) - segment->getWorldPosition();
+					if (offset.lenSqr())
+					{
+						segment->setWorldPosition(segment->getWorldPosition() + offset);
+						segment->update(0.f, true);
 
-					SplineControlPoint* controlPointA = segment->getControlPointA();
-					SplineControlPoint* controlPointB = segment->getControlPointB();
+						SplineControlPoint* controlPointA = segment->getControlPointA();
+						SplineControlPoint* controlPointB = segment->getControlPointB();
 
-					if (controlPointA) controlPointA->setWorldPosition(controlPointA->getWorldPosition() - offset);
-					if (controlPointB) controlPointB->setWorldPosition(controlPointB->getWorldPosition() - offset);
+						if (controlPointA) controlPointA->setWorldPosition(controlPointA->getWorldPosition() - offset);
+						if (controlPointB) controlPointB->setWorldPosition(controlPointB->getWorldPosition() - offset);
+					}
 				}
 			}
 		}
