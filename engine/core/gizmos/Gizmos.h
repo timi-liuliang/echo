@@ -40,8 +40,9 @@ namespace Echo
 			Gizmos*			m_gizmos;
 			VertexArray		m_vertexs;
 			IndiceArray		m_indices;
+			TexturePtr		m_albedo;
 			MaterialPtr		m_material;
-			MeshPtr		m_mesh;
+			MeshPtr			m_mesh;
 			Renderable*		m_renderable;
 			bool			m_meshDirty;
 
@@ -69,12 +70,9 @@ namespace Echo
 		// draw sprite
 		void drawSprite(const Vector3& position, const Color& color, float pixels, TexturePtr texture, int flags = RenderFlags::FixedSize);
 
-		// optimize triangles, merge vertices
-		void mergeVertices();
-
 		// auto clear
-		bool isAutoClear() const { return m_isAutoClear; }
-		void setAutoClear(bool autClear) { m_isAutoClear = autClear; }
+		bool isAutoClear() const { return m_autoClear; }
+		void setAutoClear(bool autClear) { m_autoClear = autClear; }
 
 		// clear mesh data
 		void clear();
@@ -85,12 +83,18 @@ namespace Echo
         
         // get default shader
         void initDefaultShader();
+		void initDefaultShaderSprite();
+
+		// get sprite batch
+		Batch* getSpriteBatch(TexturePtr texture);
 
 	private:
-		bool			    m_isAutoClear = false;
+		bool			    m_autoClear = false;
         ShaderProgramPtr    m_shader;
 		MaterialPtr		    m_material;
 		Batch*			    m_lineBatch = nullptr;
 		Batch*			    m_triangleBatch = nullptr;
+		ShaderProgramPtr	m_shaderSprite;
+		set<Batch*>::type	m_spriteBatchs;
 	};
 }
