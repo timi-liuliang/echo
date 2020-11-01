@@ -11,13 +11,8 @@ namespace Echo
 	{
 		m_gizmo = ECHO_DOWN_CAST<Echo::Gizmos*>(Echo::Class::create("Gizmos"));
 		m_gizmo->setName(StringUtil::Format("gizmo_obj_%d", m_object->getId()));
-		m_gizmo->setRenderType("3d");
 
-		//Echo::String resPath;
-		//if (IO::instance()->convertFullPathToResPath(Engine::instance()->getRootPath() + "engine/modules/audio/editor/icon/audioplayer.png", resPath))
-		{
-			m_albedo = (Texture*)Echo::Res::get(Engine::instance()->getRootPath() + "engine/modules/audio/editor/icon/audioplayer.png");
-		}
+		m_albedo = (Texture*)Echo::Res::get(Engine::instance()->getRootPath() + "engine/modules/audio/editor/icon/audioplayer.png");
 	}
 
 	AudioPlayerEditor::~AudioPlayerEditor()
@@ -37,6 +32,7 @@ namespace Echo
 		AudioPlayer* audioPlayer = ECHO_DOWN_CAST<AudioPlayer*>(m_object);
 		if (audioPlayer && m_albedo)
 		{
+			m_gizmo->setRenderType(audioPlayer->is2d() ? "2d" : "3d");
 			m_gizmo->drawSprite(audioPlayer->getWorldPosition(), Color::WHITE, 120.f, m_albedo, Gizmos::RenderFlags::FixedPixel);
 		}
 
