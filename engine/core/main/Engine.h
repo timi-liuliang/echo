@@ -44,7 +44,7 @@ namespace Echo
 		float* getFrameTimePtr() { return &m_frameTime; }
 		ui32 getFrameTimeMS() { return ui32(m_frameTime*1000.f); }
 
-		// is inited
+		// is initialized
 		bool isInited() const { return m_isInited; }
 
 		// get root path

@@ -210,7 +210,7 @@ namespace Echo
 		if (camera)
 		{
 			float radius = pixels / 2.f;
-			if (camera->getProjectionMode() == Camera::PM_PERSPECTIVE && (flags & RenderFlags::FixedSize))
+			if (camera->getProjectionMode() == Camera::PM_PERSPECTIVE && (flags & RenderFlags::FixedPixel))
 			{
 				float ratio = radius / camera->getWidth();
 				float nearPlaneWidth = camera->getNear() * tan(camera->getFov());
@@ -264,7 +264,7 @@ namespace Echo
 		if (camera)
 		{
 			float radius = pixels / 2.f;
-			if (camera->getProjectionMode() == Camera::PM_PERSPECTIVE && (flags & RenderFlags::FixedSize))
+			if (camera->getProjectionMode() == Camera::PM_PERSPECTIVE && (flags & RenderFlags::FixedPixel))
 			{
 				float ratio = radius / camera->getWidth();
 				float nearPlaneWidth = camera->getNear() * tan(camera->getFov());
@@ -286,16 +286,14 @@ namespace Echo
 					spriteBatch->addIndex((Word)spriteBatch->m_vertexs.size() + 0);
 					spriteBatch->addIndex((Word)spriteBatch->m_vertexs.size() + 1);
 					spriteBatch->addIndex((Word)spriteBatch->m_vertexs.size() + 2);
+					spriteBatch->addIndex((Word)spriteBatch->m_vertexs.size() + 0);
+					spriteBatch->addIndex((Word)spriteBatch->m_vertexs.size() + 2);
 					spriteBatch->addIndex((Word)spriteBatch->m_vertexs.size() + 3);
-					spriteBatch->addIndex((Word)spriteBatch->m_vertexs.size() + 4);
-					spriteBatch->addIndex((Word)spriteBatch->m_vertexs.size() + 5);
 
-					spriteBatch->addVertex(VertexFormat(v0, color, Vector2(1.f, 0.f)));
-					spriteBatch->addVertex(VertexFormat(v1, color, Vector2(0.f, 0.f)));
-					spriteBatch->addVertex(VertexFormat(v2, color, Vector2(0.f, 1.f)));
-					spriteBatch->addVertex(VertexFormat(v0, color, Vector2(1.f, 0.f)));
-					spriteBatch->addVertex(VertexFormat(v2, color, Vector2(0.f, 1.f)));
-					spriteBatch->addVertex(VertexFormat(v3, color, Vector2(1.f, 1.f)));
+					spriteBatch->addVertex(VertexFormat(v0, color, Vector2(1.f, 1.f)));
+					spriteBatch->addVertex(VertexFormat(v1, color, Vector2(0.f, 1.f)));
+					spriteBatch->addVertex(VertexFormat(v2, color, Vector2(0.f, 0.f)));
+					spriteBatch->addVertex(VertexFormat(v3, color, Vector2(1.f, 0.f)));
 				}
 
 				m_localAABB.addPoint(v0);
@@ -316,6 +314,7 @@ namespace Echo
 			}
 
 			Material* material = ECHO_CREATE_RES(Material);
+			material->setMacro("ENABLE_ALBEDO_TEXTURE", true);
 			material->setShaderPath(m_shaderSprite->getPath());
 
 			Batch* batch = EchoNew(Batch(material, this));

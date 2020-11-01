@@ -16,7 +16,7 @@ namespace Echo
 		// render flags
 		enum RenderFlags
 		{
-			FixedSize = 1 << 0,
+			FixedPixel = 1 << 0,
 		};
 
 		// vertex format
@@ -59,7 +59,7 @@ namespace Echo
 		~Gizmos();
 
 		// draw point
-		void drawPoint(const Vector3& position, const Color& color, float pixels, int segments=4, int flags=RenderFlags::FixedSize);
+		void drawPoint(const Vector3& position, const Color& color, float pixels, int segments=4, int flags=RenderFlags::FixedPixel);
 
 		// draw line
 		void drawLine(const Vector3& from, const Vector3& to, const Color& color);
@@ -68,7 +68,7 @@ namespace Echo
 		void drawTriangle(const Vector3& v0, const Vector3& v1, const Vector3& v2, const Color& color);
 
 		// draw sprite
-		void drawSprite(const Vector3& position, const Color& color, float pixels, TexturePtr texture, int flags = RenderFlags::FixedSize);
+		void drawSprite(const Vector3& position, const Color& color, float pixels, TexturePtr texture, int flags = RenderFlags::FixedPixel);
 
 		// auto clear
 		bool isAutoClear() const { return m_autoClear; }

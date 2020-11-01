@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../audio_player.h"
+#include "engine/core/gizmos/Gizmos.h"
 
 namespace Echo
 {
@@ -14,7 +15,12 @@ namespace Echo
 		// get icon, used for editor
 		virtual ImagePtr getThumbnail() const override;
 
+		// update self
+		virtual void editor_update_self() override;
+
 	private:
+		Gizmos*		m_gizmo = nullptr;
+		TexturePtr	m_albedo;
 	};
 
 #endif

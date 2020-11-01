@@ -131,6 +131,8 @@ namespace Echo
 
 	bool PathUtil::IsFileExist(const String& file)
 	{
+		if (file.empty()) return false;
+
 #ifdef ECHO_PLATFORM_HTML5
 		struct ::stat path_stat;
 		if (::lstat(file.c_str(), &path_stat) != 0) 

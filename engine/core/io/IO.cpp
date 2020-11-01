@@ -88,7 +88,7 @@ namespace Echo
 
 	bool IO::isExist(const String& resourceName)
 	{
-		EE_LOCK_MUTEX(m_mutex)
+        EE_LOCK_MUTEX(m_mutex)
 
 		if (StringUtil::StartWith(resourceName, "Res://"))
 		{
@@ -108,7 +108,7 @@ namespace Echo
             return m_userFileSystem->isExist(resourceName);
 		}
 
-		return false;
+		return PathUtil::IsFileExist(resourceName);
 	}
 
 	String IO::convertResPathToFullPath(const String& filename)
