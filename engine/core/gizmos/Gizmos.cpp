@@ -108,6 +108,7 @@ namespace Echo
 		{
 			MeshVertexFormat define;
 			define.m_isUseVertexColor = true;
+			define.m_isUseUV = true;
 
 			m_mesh->updateIndices((ui32)m_indices.size(), sizeof(Word), m_indices.data());
 			m_mesh->updateVertexs(define, (ui32)m_vertexs.size(), (const Byte*)m_vertexs.data());
@@ -179,17 +180,17 @@ namespace Echo
         }
     }
 
-	void Gizmos::drawPoint(const Vector3& from, const Color& color, float pixels, int segments)
+	void Gizmos::drawPoint(const Vector3& position, const Color& color, float pixels, int segments, int flags)
 	{
 		Camera* camera = getCamera();
 		if (camera)
 		{
 			float radius = pixels / 2.f;
-			if (camera->getProjectionMode() == Camera::PM_PERSPECTIVE)
+			if (camera->getProjectionMode() == Camera::PM_PERSPECTIVE && (flags & RenderFlags::FixedSize))
 			{
 				float ratio = radius / camera->getWidth();
 				float nearPlaneWidth = camera->getNear() * tan(camera->getFov());
-				float pointDistance = (camera->getPosition() - from).len();
+				float pointDistance = (camera->getPosition() - position).len();
 
 				radius = (ratio * nearPlaneWidth) * (pointDistance / camera->getNear());
 			}
@@ -197,7 +198,7 @@ namespace Echo
 			float deltaDegree = 2.f * Math::PI / segments;
 			for (int i = 0; i < segments; i++)
 			{
-				Vector3 v0 = from - camera->getDirection() * radius;
+				Vector3 v0 = position - camera->getDirection() * radius;
 				Vector3 v1 = v0 + Quaternion::fromAxisAngle(camera->getDirection(), i * deltaDegree + Math::PI_DIV4).rotateVec3(camera->getRight()) * radius;
 				Vector3 v2 = v0 + Quaternion::fromAxisAngle(camera->getDirection(), (i + 1) * deltaDegree + Math::PI_DIV4).rotateVec3(camera->getRight()) * radius;
 
@@ -233,9 +234,32 @@ namespace Echo
 		m_localAABB.addPoint(v2);
 	}
 
-	void Gizmos::drawSprite(const Vector3& position, TexturePtr texture)
+	void Gizmos::drawSprite(const Vector3& position, const Color& color, float pixels, TexturePtr texture, int flags)
 	{
+		Camera* camera = getCamera();
+		if (camera)
+		{
+			float radius = pixels / 2.f;
+			if (camera->getProjectionMode() == Camera::PM_PERSPECTIVE && (flags & RenderFlags::FixedSize))
+			{
+				float ratio = radius / camera->getWidth();
+				float nearPlaneWidth = camera->getNear() * tan(camera->getFov());
+				float pointDistance = (camera->getPosition() - position).len();
 
+				radius = (ratio * nearPlaneWidth) * (pointDistance / camera->getNear());
+			}
+
+			int segments = 4;
+			float deltaDegree = 2.f * Math::PI / segments;
+			for (int i = 0; i < segments; i++)
+			{
+				Vector3 v0 = position - camera->getDirection() * radius;
+				Vector3 v1 = v0 + Quaternion::fromAxisAngle(camera->getDirection(), i * deltaDegree + Math::PI_DIV4).rotateVec3(camera->getRight()) * radius;
+				Vector3 v2 = v0 + Quaternion::fromAxisAngle(camera->getDirection(), (i + 1) * deltaDegree + Math::PI_DIV4).rotateVec3(camera->getRight()) * radius;
+
+				drawTriangle(v0, v1, v2, color);
+			}
+		}
 	}
 
 	void Gizmos::mergeVertices()

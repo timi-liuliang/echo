@@ -13,14 +13,21 @@ namespace Echo
 		ECHO_CLASS(Gizmos, Render)
 
 	public:
+		// render flags
+		enum RenderFlags
+		{
+			FixedSize = 1 << 0,
+		};
+
 		// vertex format
 		struct VertexFormat
 		{
 			Vector3		m_position;
 			Dword		m_color;
+			Vector2		m_uv;
 
-			VertexFormat(const Vector3& pos, const Color& color)
-				: m_position(pos), m_color(color.getABGR())
+			VertexFormat(const Vector3& pos, const Color& color, const Vector2& uv=Vector2::ZERO)
+				: m_position(pos), m_color(color.getABGR()), m_uv(uv)
 			{		
 			}
 		};
@@ -51,7 +58,7 @@ namespace Echo
 		~Gizmos();
 
 		// draw point
-		void drawPoint(const Vector3& from, const Color& color, float pixels, int segments=4);
+		void drawPoint(const Vector3& position, const Color& color, float pixels, int segments=4, int flags=RenderFlags::FixedSize);
 
 		// draw line
 		void drawLine(const Vector3& from, const Vector3& to, const Color& color);
@@ -60,7 +67,7 @@ namespace Echo
 		void drawTriangle(const Vector3& v0, const Vector3& v1, const Vector3& v2, const Color& color);
 
 		// draw sprite
-		void drawSprite(const Vector3& position, TexturePtr texture);
+		void drawSprite(const Vector3& position, const Color& color, float pixels, TexturePtr texture, int flags = RenderFlags::FixedSize);
 
 		// optimize triangles, merge vertices
 		void mergeVertices();
