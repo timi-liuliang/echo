@@ -82,8 +82,7 @@ namespace Echo
 		virtual void update_self() override;
         
         // get default shader
-        void initDefaultShader();
-		void initDefaultShaderSprite();
+		ShaderProgramPtr initDefaultShader(bool enableAlbedoTexture);
 
 		// get sprite batch
 		Batch* getSpriteBatch(TexturePtr texture);

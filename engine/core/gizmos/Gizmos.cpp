@@ -152,8 +152,8 @@ namespace Echo
 
 	Gizmos::Gizmos()
 	{
-        initDefaultShader();
-		initDefaultShaderSprite();
+        m_shader = initDefaultShader(false);
+		m_shaderSprite = initDefaultShader(true);
         
 		m_material = ECHO_CREATE_RES(Material);
 		m_material->setShaderPath( m_shader->getPath());
@@ -178,46 +178,31 @@ namespace Echo
 	{
 	}
 
-    void Gizmos::initDefaultShader()
+    ShaderProgramPtr Gizmos::initDefaultShader(bool enableAlbedoTexture)
     {
-        ResourcePath shaderVirtualPath = ResourcePath("echo_gizmo_default_shader");
-        m_shader = ECHO_DOWN_CAST<ShaderProgram*>(ShaderProgram::get(shaderVirtualPath));
-        if(!m_shader)
+        ResourcePath shaderVirtualPath = ResourcePath(enableAlbedoTexture ? "echo_gizmo_default_shader_sprite" : "echo_gizmo_default_shader");
+        ShaderProgramPtr shader = ECHO_DOWN_CAST<ShaderProgram*>(ShaderProgram::get(shaderVirtualPath));
+        if(!shader)
         {
-            m_shader = ECHO_CREATE_RES(ShaderProgram);
+			shader = ECHO_CREATE_RES(ShaderProgram);
+
+			// macros
+			if (enableAlbedoTexture)
+				shader->setMacros({ "ENABLE_ALBEDO_TEXTURE" });
 
 			// render state
-			m_shader->setBlendMode("Transparent");
-			m_shader->setCullMode("CULL_NONE");
+			shader->setBlendMode("Transparent");
+			shader->setCullMode("CULL_NONE");
 
 			// set code
-            m_shader->setPath(shaderVirtualPath.getPath());
-            m_shader->setType("glsl");
-            m_shader->setVsCode(g_gizmoVsCode);
-            m_shader->setPsCode(g_gizmoPsCode);
+			shader->setPath(shaderVirtualPath.getPath());
+			shader->setType("glsl");
+			shader->setVsCode(g_gizmoVsCode);
+			shader->setPsCode(g_gizmoPsCode);
         }
+
+		return shader;
     }
-
-	void Gizmos::initDefaultShaderSprite()
-	{
-		ResourcePath shaderVirtualPath = ResourcePath("echo_gizmo_default_shader_sprite");
-		m_shaderSprite = ECHO_DOWN_CAST<ShaderProgram*>(ShaderProgram::get(shaderVirtualPath));
-		if (!m_shaderSprite)
-		{
-			m_shaderSprite = ECHO_CREATE_RES(ShaderProgram);
-			m_shaderSprite->setMacros({ "ENABLE_ALBEDO_TEXTURE" });
-
-			// render state
-			m_shaderSprite->setBlendMode("Transparent");
-			m_shaderSprite->setCullMode("CULL_NONE");
-
-			// set code
-			m_shaderSprite->setPath(shaderVirtualPath.getPath());
-			m_shaderSprite->setType("glsl");
-			m_shaderSprite->setVsCode(g_gizmoVsCode);
-			m_shaderSprite->setPsCode(g_gizmoPsCode);
-		}
-	}
 
 	void Gizmos::drawPoint(const Vector3& position, const Color& color, float pixels, int segments, int flags)
 	{
