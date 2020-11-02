@@ -211,11 +211,12 @@ namespace Echo
 		{
 			if (camera->getProjectionMode() == Camera::ProjMode::PM_PERSPECTIVE && (flags & RenderFlags::FixedPixel))
 			{
-				float ratio = radius / camera->getHeight();
-				float nearPlaneWidth = camera->getNear() * tan(camera->getFov() * 0.5f) * 2.f;
+				float halfHeight = camera->getHeight() * 0.5f;
+				float ratio = radius / halfHeight;
+				float halfNearPlaneWidth = camera->getNear() * tan(camera->getFov() * 0.5f);
 				float pointDistance = (camera->getPosition() - position).len();
 
-				radius = (ratio * nearPlaneWidth) * (pointDistance / camera->getNear());
+				radius = (ratio * halfNearPlaneWidth) * (pointDistance / camera->getNear());
 			}
 		}
 	}
