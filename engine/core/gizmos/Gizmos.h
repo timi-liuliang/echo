@@ -87,6 +87,9 @@ namespace Echo
 		// get sprite batch
 		Batch* getSpriteBatch(TexturePtr texture);
 
+		// adjust point size
+		void adjustPointSize(float& radius, const Vector3& position, int flags);
+
 	private:
 		bool			    m_autoClear = false;
         ShaderProgramPtr    m_shader;

@@ -406,9 +406,9 @@ namespace Echo
  		mat.m30 = 0.0;	mat.m31 = 0.0;	mat.m32 = zn*q;	mat.m33 = 0.0;
  	}
 
-	// …Ó∂»∑∂Œß(0,1)
 	void Matrix4::PerspectiveFovRH_D3D(Matrix4 &outMat, Real fovy, Real aspect, Real zn, Real zf)
 	{
+		// depth range (0,1)
 		EchoAssert(false);
 	}
 

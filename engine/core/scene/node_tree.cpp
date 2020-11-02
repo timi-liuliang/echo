@@ -32,7 +32,7 @@ namespace Echo
 	bool NodeTree::init()
 	{
 		// create main camera
-		m_3dCamera = EchoNew(Camera(Camera::PM_PERSPECTIVE));
+		m_3dCamera = EchoNew(Camera(Camera::ProjMode::PM_PERSPECTIVE));
 		m_shadowCamera = EchoNew(CameraShadow);
 
 		Vector3 vCamPos(0.f, 3.f, 3.f);
@@ -48,7 +48,7 @@ namespace Echo
 		// create 2D camera
 		Vector3 vCam2DPos(0, 0, 0);
 		Vector3 vCam2DDir = -Vector3::UNIT_Z;
-		m_2dCamera = EchoNew(Camera(Camera::PM_ORTHO));
+		m_2dCamera = EchoNew(Camera(Camera::ProjMode::PM_ORTHO));
 
 		m_2dCamera->setPosition(vCam2DPos);
 		m_2dCamera->setDirection(vCam2DDir);
@@ -57,7 +57,7 @@ namespace Echo
 		m_2dCamera->update();
 
 		// create gui camera
-		m_uiCamera = EchoNew(Camera(Camera::PM_ORTHO));
+		m_uiCamera = EchoNew(Camera(Camera::ProjMode::PM_ORTHO));
 
 		m_uiCamera->setPosition(vCam2DPos);
 		m_uiCamera->setDirection(vCam2DDir);

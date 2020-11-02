@@ -204,20 +204,29 @@ namespace Echo
 		return shader;
     }
 
+	void Gizmos::adjustPointSize(float& radius, const Vector3& position, int flags)
+	{
+		Camera* camera = getCamera();
+		if (camera)
+		{
+			if (camera->getProjectionMode() == Camera::ProjMode::PM_PERSPECTIVE && (flags & RenderFlags::FixedPixel))
+			{
+				float ratio = radius / camera->getHeight();
+				float nearPlaneWidth = camera->getNear() * tan(camera->getFov() * 0.5f) * 2.f;
+				float pointDistance = (camera->getPosition() - position).len();
+
+				radius = (ratio * nearPlaneWidth) * (pointDistance / camera->getNear());
+			}
+		}
+	}
+
 	void Gizmos::drawPoint(const Vector3& position, const Color& color, float pixels, int segments, int flags)
 	{
 		Camera* camera = getCamera();
 		if (camera)
 		{
 			float radius = pixels / 2.f;
-			if (camera->getProjectionMode() == Camera::PM_PERSPECTIVE && (flags & RenderFlags::FixedPixel))
-			{
-				float ratio = radius / camera->getWidth();
-				float nearPlaneWidth = camera->getNear() * tan(camera->getFov());
-				float pointDistance = (camera->getPosition() - position).len();
-
-				radius = (ratio * nearPlaneWidth) * (pointDistance / camera->getNear());
-			}
+			adjustPointSize(radius, position, flags);
 
 			float deltaDegree = 2.f * Math::PI / segments;
 			for (int i = 0; i < segments; i++)
@@ -264,42 +273,33 @@ namespace Echo
 		if (camera)
 		{
 			float radius = pixels / 2.f;
-			if (camera->getProjectionMode() == Camera::PM_PERSPECTIVE && (flags & RenderFlags::FixedPixel))
-			{
-				float ratio = radius / camera->getWidth();
-				float nearPlaneWidth = camera->getNear() * tan(camera->getFov());
-				float pointDistance = (camera->getPosition() - position).len();
+			adjustPointSize(radius, position, flags);
 
-				radius = (ratio * nearPlaneWidth) * (pointDistance / camera->getNear());
+			Vector3 center = position;
+			Vector3 v0 = center + Quaternion::fromAxisAngle(camera->getDirection(), Math::PI_DIV2 * 0.f + Math::PI_DIV4).rotateVec3(camera->getRight()) * radius;
+			Vector3 v1 = center + Quaternion::fromAxisAngle(camera->getDirection(), Math::PI_DIV2 * 1.f + Math::PI_DIV4).rotateVec3(camera->getRight()) * radius;
+			Vector3 v2 = center + Quaternion::fromAxisAngle(camera->getDirection(), Math::PI_DIV2 * 2.f + Math::PI_DIV4).rotateVec3(camera->getRight()) * radius;
+			Vector3 v3 = center + Quaternion::fromAxisAngle(camera->getDirection(), Math::PI_DIV2 * 3.f + Math::PI_DIV4).rotateVec3(camera->getRight()) * radius;
+
+			Batch* spriteBatch = getSpriteBatch(texture);
+			if (spriteBatch)
+			{
+				spriteBatch->addIndex((Word)spriteBatch->m_vertexs.size() + 0);
+				spriteBatch->addIndex((Word)spriteBatch->m_vertexs.size() + 1);
+				spriteBatch->addIndex((Word)spriteBatch->m_vertexs.size() + 2);
+				spriteBatch->addIndex((Word)spriteBatch->m_vertexs.size() + 0);
+				spriteBatch->addIndex((Word)spriteBatch->m_vertexs.size() + 2);
+				spriteBatch->addIndex((Word)spriteBatch->m_vertexs.size() + 3);
+
+				spriteBatch->addVertex(VertexFormat(v0, color, Vector2(1.f, 1.f)));
+				spriteBatch->addVertex(VertexFormat(v1, color, Vector2(0.f, 1.f)));
+				spriteBatch->addVertex(VertexFormat(v2, color, Vector2(0.f, 0.f)));
+				spriteBatch->addVertex(VertexFormat(v3, color, Vector2(1.f, 0.f)));
 			}
 
-			{
-				Vector3 center = position;
-				Vector3 v0 = center + Quaternion::fromAxisAngle(camera->getDirection(), Math::PI_DIV2 * 0.f + Math::PI_DIV4).rotateVec3(camera->getRight()) * radius;
-				Vector3 v1 = center + Quaternion::fromAxisAngle(camera->getDirection(), Math::PI_DIV2 * 1.f + Math::PI_DIV4).rotateVec3(camera->getRight()) * radius;
-				Vector3 v2 = center + Quaternion::fromAxisAngle(camera->getDirection(), Math::PI_DIV2 * 2.f + Math::PI_DIV4).rotateVec3(camera->getRight()) * radius;
-				Vector3 v3 = center + Quaternion::fromAxisAngle(camera->getDirection(), Math::PI_DIV2 * 3.f + Math::PI_DIV4).rotateVec3(camera->getRight()) * radius;
-
-				Batch* spriteBatch = getSpriteBatch(texture);
-				if(spriteBatch)
-				{
-					spriteBatch->addIndex((Word)spriteBatch->m_vertexs.size() + 0);
-					spriteBatch->addIndex((Word)spriteBatch->m_vertexs.size() + 1);
-					spriteBatch->addIndex((Word)spriteBatch->m_vertexs.size() + 2);
-					spriteBatch->addIndex((Word)spriteBatch->m_vertexs.size() + 0);
-					spriteBatch->addIndex((Word)spriteBatch->m_vertexs.size() + 2);
-					spriteBatch->addIndex((Word)spriteBatch->m_vertexs.size() + 3);
-
-					spriteBatch->addVertex(VertexFormat(v0, color, Vector2(1.f, 1.f)));
-					spriteBatch->addVertex(VertexFormat(v1, color, Vector2(0.f, 1.f)));
-					spriteBatch->addVertex(VertexFormat(v2, color, Vector2(0.f, 0.f)));
-					spriteBatch->addVertex(VertexFormat(v3, color, Vector2(1.f, 0.f)));
-				}
-
-				m_localAABB.addPoint(v0);
-				m_localAABB.addPoint(v1);
-				m_localAABB.addPoint(v2);
-			}
+			m_localAABB.addPoint(v0);
+			m_localAABB.addPoint(v1);
+			m_localAABB.addPoint(v2);
 		}
 	}
 

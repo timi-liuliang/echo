@@ -10,7 +10,7 @@ namespace Echo
 	class Camera
 	{
 	public:
-		enum ProjMode
+		enum class ProjMode
 		{
 			PM_PERSPECTIVE,
 			PM_ORTHO,
@@ -18,7 +18,7 @@ namespace Echo
 		};
 
 	public:
-		Camera(ProjMode mode = PM_PERSPECTIVE);
+		Camera(ProjMode mode = ProjMode::PM_PERSPECTIVE);
 		virtual ~Camera();
 
 		// proj mode
@@ -80,19 +80,19 @@ namespace Echo
 		ProjMode		m_projMode;
 		Vector3			m_position;
 		Vector3			m_dir;
-		Vector3			m_up;
+		Vector3			m_up = Vector3::UNIT_Y;
 		Vector3			m_right;
 		Matrix4			m_matView;
-		bool			m_isViewDirty;
-		Real			m_fov;
+		bool			m_isViewDirty = true;
+		Real			m_fov = Math::PI_DIV4;
 		ui32			m_width;
 		ui32			m_height;
-		Real			m_scale;
+		Real			m_scale = 1.f;
 		Real			m_aspect;
-		Real			m_nearClip;
-		Real			m_farClip;
+		Real			m_nearClip = 0.1f;
+		Real			m_farClip = 100.f;
 		Matrix4			m_matProj;
-		bool			m_isProjDirty;
+		bool			m_isProjDirty = true;
 		Matrix4			m_matVP;
 	};
 }

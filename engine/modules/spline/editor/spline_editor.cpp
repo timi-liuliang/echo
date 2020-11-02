@@ -35,10 +35,12 @@ namespace Echo
 		Spline* spline = ECHO_DOWN_CAST<Spline*>(m_object);
 		if (spline)
 		{
+			const float pointPixels = 18.f;
+
 			// points
 			for (SplinePoint* point : spline->getPoints())
 			{
-				m_gizmo->drawPoint(point->getWorldPosition(), point->getEditor()->isSelected() ? Color::BLUE : Color(0.5f, 0.5f, 0.5f, 1.f), 30.f, 4);
+				m_gizmo->drawPoint(point->getWorldPosition(), point->getEditor()->isSelected() ? Color::BLUE : Color(0.5f, 0.5f, 0.5f, 1.f), pointPixels, 4);
 			}
 
 			// segments
@@ -66,8 +68,8 @@ namespace Echo
 
 						if (m_showControlPoint)
 						{
-							m_gizmo->drawPoint(controlPointA->getWorldPosition(), Color::fromRGBA(231, 0, 18), 30.f, 4);
-							m_gizmo->drawPoint(controlPointB->getWorldPosition(), Color::fromRGBA(231, 0, 18), 30.f, 4);
+							m_gizmo->drawPoint(controlPointA->getWorldPosition(), Color::fromRGBA(231, 0, 18), pointPixels, 4);
+							m_gizmo->drawPoint(controlPointB->getWorldPosition(), Color::fromRGBA(231, 0, 18), pointPixels, 4);
 
 							m_gizmo->drawLine(pointA->getWorldPosition(), controlPointA->getWorldPosition(), Color::fromRGBA(231, 0, 18));
 							m_gizmo->drawLine(pointB->getWorldPosition(), controlPointB->getWorldPosition(), Color::fromRGBA(231, 0, 18));

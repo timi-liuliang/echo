@@ -8,36 +8,17 @@ namespace Echo
 {
 	Camera::Camera(ProjMode mode)
 		: m_projMode(mode)
-		, m_scale( 1.f)
 	{
-		m_up = Vector3::UNIT_Y;
 		m_position = Vector3(-150.0f, 150.0f, -150.0f);
 		m_dir = Vector3::ZERO - m_position;
 		m_dir.normalize();
 
 		m_matView.identity();
-		m_isViewDirty = true;
-
-		//Viewport* pViewport = Renderer::instance()->getViewport();
-		//if(pViewport)
-		{
-			m_width = (Real)Renderer::instance()->getWindowWidth();
-			m_height = (Real)Renderer::instance()->getWindowHeight();
-			m_aspect = (Real)m_width / (Real)m_height;
-		}
-		//else
-		//{
-		//	m_width = 0.f;
-		//	m_height = 0.f;
-		//	m_aspect = 1.0f;
-		//}
-
-		m_fov = Math::PI_DIV4;
-
-		m_nearClip = 0.1f;
-		m_farClip = 100.0f;
 		m_matProj.identity();
-		m_isProjDirty = true;
+
+		m_width = (Real)Renderer::instance()->getWindowWidth();
+		m_height = (Real)Renderer::instance()->getWindowHeight();
+		m_aspect = (Real)m_width / (Real)m_height;
 	}
 
 	Camera::~Camera()
@@ -196,14 +177,14 @@ namespace Echo
 		{
 			switch (m_projMode)
 			{
-			case PM_PERSPECTIVE:
+			case ProjMode::PM_PERSPECTIVE:
 				{
 					m_aspect = (Real)m_width / (Real)m_height;
 					Matrix4::PerspectiveFovRH(m_matProj, m_fov, m_aspect, m_nearClip, m_farClip);
 					Renderer::instance()->convertMatProj(m_matProj, m_matProj);
 				}
 				break;
-			case PM_ORTHO:
+			case ProjMode::PM_ORTHO:
 				{
 					Matrix4::OrthoRH(m_matProj, (Real)m_width * m_scale, (Real)m_height * m_scale, m_nearClip, m_farClip);
 					Renderer::instance()->convertMatOrho(m_matProj, m_matProj, m_nearClip, m_farClip);
