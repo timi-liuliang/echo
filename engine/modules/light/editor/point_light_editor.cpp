@@ -29,6 +29,15 @@ namespace Echo
 	{
 	}
 
+	void PointLightEditor::postEditorCreateObject()
+	{
+		Light* light = ECHO_DOWN_CAST<Light*>(m_object);
+		if (light)
+		{
+			light->set2d(!(Render::getRenderTypes() & Render::Type_3D));
+		}
+	}
+
 	void PointLightEditor::editor_update_self()
 	{
 		m_gizmo->clear();

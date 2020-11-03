@@ -51,6 +51,10 @@ namespace Echo
 		// on operate transform widget
 		virtual bool onOperateTransformWidget(const Vector3& translate, float yaw, float pitch, float roll, const Vector3& scale) { return false; }
 
+	public:
+		// post process
+		virtual void postEditorCreateObject() {}
+
 	protected:
 		Object*			m_object;
 		bool			m_isSelected = false;

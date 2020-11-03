@@ -18,6 +18,9 @@ namespace Echo
 		// on editor select this node
 		virtual void onEditorSelectThisNode() override;
 
+		// post process
+		virtual void postEditorCreateObject() override;
+
 		// update self
 		virtual void editor_update_self() override;
 

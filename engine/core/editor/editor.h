@@ -7,8 +7,6 @@
 
 #ifdef ECHO_EDITOR_MODE
 
-
-
 namespace Echo
 {
 	class Editor

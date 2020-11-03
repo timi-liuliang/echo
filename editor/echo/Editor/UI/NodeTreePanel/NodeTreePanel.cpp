@@ -120,6 +120,9 @@ namespace Studio
 			{
 				node->setName(node->getClassName());
 				addNode(node);
+
+				if (node->getEditor())
+					node->getEditor()->postEditorCreateObject();
 			}
 		}
 	}
