@@ -15,6 +15,9 @@ namespace Echo
 		// get icon, used for editor
 		virtual ImagePtr getThumbnail() const override;
 
+		// post create this object
+		virtual void postEditorCreateObject() override;
+
 		// update self
 		virtual void editor_update_self() override;
 

@@ -25,6 +25,15 @@ namespace Echo
 		return Image::loadFromFile(Engine::instance()->getRootPath() + "engine/modules/audio/editor/icon/audioplayer.png");
 	}
 
+	void AudioPlayerEditor::postEditorCreateObject()
+	{
+		AudioPlayer* audioPlayer = ECHO_DOWN_CAST<AudioPlayer*>(m_object);
+		if (audioPlayer)
+		{
+			audioPlayer->set2d(!(Render::getRenderTypes() & Render::Type_3D));
+		}
+	}
+
 	void AudioPlayerEditor::editor_update_self()
 	{
 		m_gizmo->clear();
