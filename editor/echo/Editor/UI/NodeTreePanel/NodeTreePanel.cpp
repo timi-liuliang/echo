@@ -119,10 +119,10 @@ namespace Studio
 			if (node)
 			{
 				node->setName(node->getClassName());
-				addNode(node);
-
 				if (node->getEditor())
 					node->getEditor()->postEditorCreateObject();
+
+				addNode(node);
 			}
 		}
 	}
