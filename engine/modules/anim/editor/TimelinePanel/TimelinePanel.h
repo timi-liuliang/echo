@@ -128,6 +128,7 @@ namespace Echo
 
 	protected:
 		QTreeWidget*				m_nodeTreeWidget = nullptr;
+		QComboBox*					m_clipsComboBox = nullptr;
 		Timeline*					m_timeline;
 		QMenu*						m_addObjectMenu;
 		QAction*					m_addNodeAction;

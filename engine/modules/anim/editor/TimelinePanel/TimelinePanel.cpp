@@ -81,6 +81,7 @@ namespace Echo
 
 		m_ui = EditorApi.qLoadUi("engine/modules/anim/editor/TimelinePanel/TimelinePanel.ui");
 		m_nodeTreeWidget = m_ui->findChild<QTreeWidget*>("m_nodeTreeWidget");
+		m_clipsComboBox = m_ui->findChild<QComboBox*>("m_clips");
 
 		QSplitter* splitter = (QSplitter*)EditorApi.qFindChild(m_ui, "m_splitter");
 		if (splitter)
@@ -183,7 +184,7 @@ namespace Echo
 
 	void TimelinePanel::onDuplicateClip()
 	{
-		String currentAnim = EditorApi.qComboBoxCurrentText(EditorApi.qFindChild(m_ui, "m_clips"));
+		String currentAnim = m_clipsComboBox->currentText().toStdString().c_str();
 		if (!currentAnim.empty() && m_timeline)
 		{
 			AnimClip* animClip = m_timeline->getClip(currentAnim.c_str());
@@ -200,7 +201,7 @@ namespace Echo
 
 	void TimelinePanel::onDeleteClip()
 	{
-		String currentAnim = EditorApi.qComboBoxCurrentText(EditorApi.qFindChild(m_ui, "m_clips"));
+		String currentAnim = m_clipsComboBox->currentText().toStdString().c_str();
 		if (!currentAnim.empty() && m_timeline)
 		{
 			m_timeline->deleteClip(currentAnim.c_str());
@@ -216,13 +217,13 @@ namespace Echo
 
 	void TimelinePanel::onRenameClip()
 	{
-		String currentAnimName = EditorApi.qComboBoxCurrentText(EditorApi.qFindChild(m_ui, "m_clips"));
+		String currentAnimName = m_clipsComboBox->currentText().toStdString().c_str();
 		if (!currentAnimName.empty() && m_timeline)
 		{
-			int currentIndex = EditorApi.qComboBoxCurrentIndex(EditorApi.qFindChild(m_ui, "m_clips"));
+			int currentIndex = m_clipsComboBox->currentIndex();
 			m_timeline->renameClip(currentIndex, currentAnimName.c_str());
 
-			EditorApi.qComboBoxSetItemText(EditorApi.qFindChild(m_ui, "m_clips"), currentIndex, currentAnimName.c_str());
+			m_clipsComboBox->setItemText(currentIndex, currentAnimName.c_str());
 			setCurrentEditAnim(currentAnimName.c_str());
 		}
 	}
@@ -305,15 +306,14 @@ namespace Echo
 	{
 		if (m_timeline)
 		{
-			QWidget* comboBox = EditorApi.qFindChild(m_ui, "m_clips");
-			if (comboBox)
+			if (m_clipsComboBox)
 			{
-				EditorApi.qComboBoxClear(comboBox);
+				m_clipsComboBox->clear();
 
 				const StringOption& anims = m_timeline->getAnim();
 				for (const String& animName : anims.getOptions())
 				{
-					EditorApi.qComboBoxAddItem(comboBox, nullptr, animName.c_str());
+					m_clipsComboBox->addItem(animName.c_str());
 				}
 			}
 		}
@@ -404,11 +404,10 @@ namespace Echo
 
 	void TimelinePanel::setCurrentEditAnim(const char* animName)
 	{
-		QWidget* comboBox = EditorApi.qFindChild(m_ui, "m_clips");
-		if (comboBox)
+		if (m_clipsComboBox)
 		{
 			int index = m_timeline->getClipIndex(animName);
-			EditorApi.qComboBoxSetCurrentIndex( comboBox, index);
+			m_clipsComboBox->setCurrentIndex(index);
 
 			m_currentEditAnim = animName;
 
@@ -916,7 +915,7 @@ namespace Echo
 
 	void TimelinePanel::onCurrentEditAnimChanged()
 	{
-		String currentText = EditorApi.qComboBoxCurrentText(EditorApi.qFindChild(m_ui, "m_clips"));
+		String currentText = m_clipsComboBox->currentText().toStdString().c_str();
 		setCurrentEditAnim( currentText.c_str());
 
 		onStopAnim();

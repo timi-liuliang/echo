@@ -1,5 +1,4 @@
 #include "Studio.h"
-#include "QComboBox.cx"
 #include "QEvent.cx"
 #include "QGraphicsItem.cx"
 #include "QGraphicsScene.cx"
@@ -15,15 +14,6 @@ namespace Studio
     // init functions
     void AStudio::initFunctions()
     {
-        // QComboBox->addItem(const QIcon &icon, const QString &text)
-        BIND_EDITOR_FUN(qComboBoxAddItem);
-        BIND_EDITOR_FUN(qComboBoxCurrentIndex);
-        BIND_EDITOR_FUN(qComboBoxCurrentText);
-        BIND_EDITOR_FUN(qComboBoxSetCurrentIndex);
-        BIND_EDITOR_FUN(qComboBoxSetCurrentText);
-        BIND_EDITOR_FUN(qComboBoxSetItemText);
-        BIND_EDITOR_FUN(qComboBoxClear);
-        
         // QEvent
         BIND_EDITOR_FUN(qObjectGetEventAll);
         BIND_EDITOR_FUN(qGraphicsItemGetEventAll);
