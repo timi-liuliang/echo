@@ -92,7 +92,7 @@ namespace Echo
 
 		for (size_t i = 0; i < stages.size(); i++)
 		{
-			m_stageNodePainters[i]->update(i, stages.size());
+			m_stageNodePainters[i]->update(i, i + 1 == stages.size());
 		}
 	}
 

@@ -6,6 +6,7 @@
 
 #include "engine/core/render/base/pipeline/render_stage.h"
 #include "engine/modules/procedural/procedural_geometry.h"
+#include "engine/core/main/Engine.h"
 
 namespace Pipeline
 {
@@ -22,8 +23,6 @@ namespace Pipeline
 			QColor m_shadowColor	= QColor(20, 20, 20);
 			QColor m_fontColor		= Qt::gray;
 			QColor m_fontColorFaded = Qt::gray;
-			QColor m_connectionPointColor = QColor(169, 169, 169);
-			QColor m_filledConnectionPointColor = Qt::cyan;
 			QColor m_warningColor = QColor(128, 128, 0);
 			QColor m_errorColor	  = Qt::red;
 			QColor finalColor	  = QColor(54, 108, 179, 255);
@@ -34,6 +33,8 @@ namespace Pipeline
 		QGraphicsView*						m_graphicsView = nullptr;
 		QGraphicsScene*						m_graphicsScene = nullptr;
 		QGraphicsPathItem*					m_rect = nullptr;
+		QGraphicsPixmapItem*				m_nextArrow = nullptr;
+		size_t								m_renderQueueSize = 0;
 		float								m_rectFinalWidth = 15;
 		float								m_width = 190;
 		float								m_height = 240;
@@ -48,21 +49,10 @@ namespace Pipeline
 			if (!m_rect)
 			{
 				float halfWidth = m_width * 0.5f;
-				float halfHeight = m_height * 0.5f;
-
-				QPainterPath path;
-				path.addRoundedRect(QRectF(-halfWidth, 0.f, m_width, m_height), m_style.m_cornerRadius, m_style.m_cornerRadius);
 
 				m_rect = new QGraphicsPathItem(nullptr);
 				m_rect->setZValue(-1.f);
-				m_rect->setPath(path);
 				m_rect->setPen(QPen(m_style.m_normalBoundaryColor, m_style.m_penWidth));
-				QLinearGradient gradient(QPointF(0.0, -halfHeight), QPointF(0.0, halfHeight));
-				gradient.setColorAt(0.0,  m_style.m_gradientColor0);
-				gradient.setColorAt(0.03, m_style.m_gradientColor1);
-				gradient.setColorAt(0.97, m_style.m_gradientColor2);
-				gradient.setColorAt(1.0,  m_style.m_gradientColor3);
-				m_rect->setBrush(gradient);
 				m_rect->setFlag(QGraphicsItem::ItemIsMovable, true);
 				m_rect->setPos(QPointF(0.f, 0.f));
 				m_graphicsScene->addItem(m_rect);
@@ -70,10 +60,12 @@ namespace Pipeline
 				m_text = m_graphicsScene->addSimpleText(m_stage->getName().c_str());
 				m_text->setBrush(QBrush(m_style.m_fontColor));
 				m_text->setParentItem(m_rect);
-
-				Echo::Rect textRect;
-				EditorApi.qGraphicsItemSceneRect(m_text, textRect);
 				m_text->setPos(15 - halfWidth, 15);
+
+				QPixmap rightArrow((Echo::Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/right-arrow.png").c_str());
+				m_nextArrow = m_graphicsScene->addPixmap(rightArrow.scaled(QSize(16, 16)));
+				m_nextArrow->setParentItem(m_rect);
+				m_nextArrow->setPos(QPointF(halfWidth + 5.f, 0.f));
 			}
 		}
 
@@ -102,11 +94,32 @@ namespace Pipeline
 		}
 
 		// update
-		void update(Echo::i32 xPos, Echo::i32 stageCount)
+		void update(Echo::i32 xPos, bool isFinal)
 		{
 			if (m_rect)
-			{
+			{		
+				if (m_renderQueueSize != m_stage->getRenderQueues().size())
+				{
+					m_renderQueueSize = m_stage->getRenderQueues().size();
+					m_height = 40.f + m_renderQueueSize * 56.f;
+
+					float halfWidth = m_width * 0.5f;
+					float halfHeight = m_height * 0.5f;
+
+					QPainterPath path;
+					path.addRoundedRect(QRectF(-halfWidth, 0.f, m_width, m_height), m_style.m_cornerRadius, m_style.m_cornerRadius);
+					m_rect->setPath(path);
+
+					QLinearGradient gradient(QPointF(0.0, -halfHeight), QPointF(0.0, halfHeight));
+					gradient.setColorAt(0.0, m_style.m_gradientColor0);
+					gradient.setColorAt(0.03, m_style.m_gradientColor1);
+					gradient.setColorAt(0.97, m_style.m_gradientColor2);
+					gradient.setColorAt(1.0, m_style.m_gradientColor3);
+					m_rect->setBrush(gradient);
+				}
+
 				m_rect->setPos(xPos * 240.f, 0.f);
+				m_nextArrow->setVisible(!isFinal);
 			}
 		}
 	};
