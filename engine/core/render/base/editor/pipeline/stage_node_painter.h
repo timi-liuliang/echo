@@ -35,11 +35,8 @@ namespace Pipeline
 		QGraphicsScene*						m_graphicsScene = nullptr;
 		QGraphicsPathItem*					m_rect = nullptr;
 		float								m_rectFinalWidth = 15;
-		Echo::vector<QGraphicsItem*>::type	m_outputConnectionPoints;
-		float								m_width = 160;
-		float								m_height = 40;
-		float								m_connectPointRadius = 8.f;
-		Echo::Color							m_connectPointColor = Echo::Color::DARKCYAN;
+		float								m_width = 190;
+		float								m_height = 240;
 		QGraphicsSimpleTextItem*			m_text = nullptr;
 
 		StatgeNodePainter(QGraphicsView* view, QGraphicsScene* scene, Echo::RenderStage* stage)
@@ -54,9 +51,10 @@ namespace Pipeline
 				float halfHeight = m_height * 0.5f;
 
 				QPainterPath path;
-				path.addRoundedRect(QRectF(-halfWidth, -halfHeight, m_width, m_height), m_style.m_cornerRadius, m_style.m_cornerRadius);
+				path.addRoundedRect(QRectF(-halfWidth, 0.f, m_width, m_height), m_style.m_cornerRadius, m_style.m_cornerRadius);
 
 				m_rect = new QGraphicsPathItem(nullptr);
+				m_rect->setZValue(-1.f);
 				m_rect->setPath(path);
 				m_rect->setPen(QPen(m_style.m_normalBoundaryColor, m_style.m_penWidth));
 				QLinearGradient gradient(QPointF(0.0, -halfHeight), QPointF(0.0, halfHeight));
@@ -75,15 +73,7 @@ namespace Pipeline
 
 				Echo::Rect textRect;
 				EditorApi.qGraphicsItemSceneRect(m_text, textRect);
-				m_text->setPos((m_width - textRect.getWidth()) * 0.5f - halfWidth, (m_height - textRect.getHeight()) * 0.5f - halfHeight);
-
-				float halfConnectPointRadius = m_connectPointRadius * 0.5f;
-				m_outputConnectionPoints.push_back(EditorApi.qGraphicsSceneAddEclipse(m_graphicsScene, 0.f, 0.f, m_connectPointRadius, m_connectPointRadius, m_connectPointColor));
-				for (QGraphicsItem* item : m_outputConnectionPoints)
-				{
-					item->setParentItem(m_rect);
-					item->setPos(0.f - halfConnectPointRadius, halfHeight + halfConnectPointRadius);
-				}
+				m_text->setPos(15 - halfWidth, 15);
 			}
 		}
 
@@ -97,8 +87,6 @@ namespace Pipeline
 		{
 			if (m_rect)
 				m_graphicsScene->removeItem(m_rect);
-
-			m_outputConnectionPoints.clear();
 
 			m_stage = nullptr;
 			m_graphicsView = nullptr;
@@ -114,7 +102,7 @@ namespace Pipeline
 		}
 
 		// update
-		void update(Echo::i32 xPos)
+		void update(Echo::i32 xPos, Echo::i32 stageCount)
 		{
 			if (m_rect)
 			{

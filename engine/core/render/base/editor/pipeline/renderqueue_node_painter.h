@@ -35,12 +35,8 @@ namespace Pipeline
 		QGraphicsScene*						m_graphicsScene = nullptr;
 		QGraphicsPathItem*					m_rect = nullptr;
 		float								m_rectFinalWidth = 15;
-		Echo::vector<QGraphicsItem*>::type	m_inputConnectionPoints;
-		Echo::vector<QGraphicsItem*>::type	m_outputConnectionPoints;
 		float								m_width = 160;
 		float								m_height = 40;
-		float								m_connectPointRadius = 8.f;
-		Echo::Color							m_connectPointColor = Echo::Color::DARKCYAN;
 		QGraphicsSimpleTextItem*			m_text = nullptr;
 
 		RenderQueueNodePainter(QGraphicsView* view, QGraphicsScene* scene, Echo::IRenderQueue* queue)
@@ -77,21 +73,6 @@ namespace Pipeline
 				Echo::Rect textRect;
 				EditorApi.qGraphicsItemSceneRect(m_text, textRect);
 				m_text->setPos((m_width - textRect.getWidth()) * 0.5f - halfWidth, (m_height - textRect.getHeight()) * 0.5f - halfHeight);
-
-				float halfConnectPointRadius = m_connectPointRadius * 0.5f;
-				m_inputConnectionPoints.push_back(EditorApi.qGraphicsSceneAddEclipse(m_graphicsScene, 0.f, 0.f, m_connectPointRadius, m_connectPointRadius, m_connectPointColor));
-				for (QGraphicsItem* item : m_inputConnectionPoints)
-				{
-					item->setParentItem(m_rect);
-					item->setPos(0.f - halfConnectPointRadius, -halfHeight - halfConnectPointRadius * 3.f);
-				}
-
-				m_outputConnectionPoints.push_back(EditorApi.qGraphicsSceneAddEclipse(m_graphicsScene, 0.f, 0.f, m_connectPointRadius, m_connectPointRadius, m_connectPointColor));
-				for (QGraphicsItem* item : m_outputConnectionPoints)
-				{
-					item->setParentItem(m_rect);
-					item->setPos(0.f - halfConnectPointRadius, halfHeight + halfConnectPointRadius);
-				}
 			}
 		}
 
@@ -105,9 +86,6 @@ namespace Pipeline
 		{
 			if (m_rect)
 				m_graphicsScene->removeItem(m_rect);
-
-			m_inputConnectionPoints.clear();
-			m_outputConnectionPoints.clear();
 
 			m_renderQueue = nullptr;
 			m_graphicsView = nullptr;
@@ -125,7 +103,8 @@ namespace Pipeline
 		// update
 		void update(Echo::i32 xPos, Echo::i32 yPos)
 		{
-			m_rect->setPos(xPos * 200.f, yPos * 70.f);
+			float startYPos = 60.f;
+			m_rect->setPos(xPos * 200.f, startYPos + yPos * 56.f);
 		}
 	};
 	typedef Echo::vector<RenderQueueNodePainter*>::type RenderQueueNodePainters;

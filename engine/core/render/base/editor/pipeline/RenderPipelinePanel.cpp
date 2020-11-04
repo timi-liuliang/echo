@@ -92,7 +92,7 @@ namespace Echo
 
 		for (size_t i = 0; i < stages.size(); i++)
 		{
-			m_stageNodePainters[i]->update(i);
+			m_stageNodePainters[i]->update(i, stages.size());
 		}
 	}
 
@@ -133,7 +133,7 @@ namespace Echo
 
 		for (size_t i = 0; i < renderqueues.size(); i++)
 		{
-			m_renderQueueNodePainters[i]->update(poses[i].x, poses[i].y + 1.f);
+			m_renderQueueNodePainters[i]->update(poses[i].x, poses[i].y);
 		}
 	}
 #endif
