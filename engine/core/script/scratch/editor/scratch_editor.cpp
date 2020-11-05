@@ -23,7 +23,7 @@ namespace Echo
 
 	void ScratchEditor::onEditorSelectThisNode()
 	{
-		Editor::instance()->showCenterPanel((QDockWidget*)m_panel->getUiPtr());
+		Editor::instance()->showCenterPanel(m_panel->getUi());
 	}
 
 	void ScratchEditor::editor_update_self()

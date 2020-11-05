@@ -11,7 +11,7 @@ namespace Echo
 #ifdef ECHO_EDITOR_MODE
 	ScratchEditorPanel::ScratchEditorPanel(Object* obj)
 	{
-		m_ui = EditorApi.qLoadUi("engine/core/script/scratch/editor/panel/scratch_panel.ui");
+		m_ui = qobject_cast<QDockWidget*>(EditorApi.qLoadUi("engine/core/script/scratch/editor/panel/scratch_panel.ui"));
 
 		QSplitter* splitter = (QSplitter*)EditorApi.qFindChild(m_ui, "m_splitter");
 		if (splitter)
