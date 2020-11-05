@@ -208,6 +208,13 @@ namespace Studio
 		{
 			panel->setVisible(true);
 		}
+
+		// https://stackoverflow.com/questions/42746408/how-to-get-rid-of-strange-white-line-under-qtabbar-while-customzing-tabified-qdo
+		QList<QTabBar*> tabBars = findChildren<QTabBar*>("", Qt::FindDirectChildrenOnly);
+		for (QTabBar* tabBar : tabBars)
+		{
+			tabBar->setDrawBase(false);
+		}
 	}
 
 	void MainWindow::removeCenterPanel(QDockWidget* panel)
