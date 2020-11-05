@@ -1,5 +1,6 @@
 #include "render_pipeline_editor.h"
 #include "engine/core/editor/editor.h"
+#include "engine/core/main/Engine.h"
 
 namespace Echo
 {
@@ -14,11 +15,11 @@ namespace Echo
     {
         EchoSafeDelete(m_panel, RenderpipelinePanel);
     }
-    
-    const char* RenderPipelineEditor::getEditorIcon() const
-    {
-        return "engine/core/render/base/editor/icon/render_pipeline.png";
-    }
+
+	ImagePtr RenderPipelineEditor::getThumbnail() const
+	{
+		return Image::loadFromFile(Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/render_pipeline.png");
+	}
 
 	void RenderPipelineEditor::onEditorSelectThisNode()
 	{

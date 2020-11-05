@@ -1,17 +1,17 @@
 #pragma once
 
-#include "engine/core/render/base/pipeline/render_pipeline.h"
-#include "RenderPipelinePanel.h"
+#include "engine/core/script/scratch/scratch.h"
+#include "panel/scratch_panel.h"
 
 namespace Echo
 {
 #ifdef ECHO_EDITOR_MODE
-    class RenderPipelineEditor : public ObjectEditor
+    class ScratchEditor : public ObjectEditor
     {
     public:
-        RenderPipelineEditor(Object* object);
-        virtual ~RenderPipelineEditor();
-        
+        ScratchEditor(Object* object);
+        virtual ~ScratchEditor();
+       
 		// get thumbnail
 		virtual ImagePtr getThumbnail() const override;
 
@@ -22,7 +22,7 @@ namespace Echo
         virtual void editor_update_self() override;
         
     private:
-        RenderpipelinePanel* m_panel = nullptr;
+        ScratchEditorPanel* m_panel = nullptr;
     };
     
 #endif

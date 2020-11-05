@@ -25,11 +25,10 @@ namespace Echo
 	bool tryScratchFile(lua_State* L, const String& fileName, int& errCode)
 	{
 		String scratchFile = "Res://" + fileName + ".scratch";
-		Scratch scratch;
-		scratch.load(scratchFile.c_str());
-		if(scratch.compile() && scratch.getLua().size()>0)
+		ScratchPtr scratch = ECHO_DOWN_CAST<Scratch*>(Res::get(scratchFile));
+		if(scratch->compile() && scratch->getLua().size()>0)
 		{
-			errCode = luaL_loadbuffer(L, scratch.getLua().c_str(), scratch.getLua().size(), scratchFile.c_str());
+			errCode = luaL_loadbuffer(L, scratch->getLua().c_str(), scratch->getLua().size(), scratchFile.c_str());
 			return errCode ? false : true;
 		}
 

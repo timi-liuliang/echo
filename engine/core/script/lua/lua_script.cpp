@@ -19,7 +19,6 @@ namespace Echo
 {
 	LuaScript::LuaScript()
 	{
-		//EchoAssert(false);
 	}
 
 	LuaScript::LuaScript(const ResourcePath& path)

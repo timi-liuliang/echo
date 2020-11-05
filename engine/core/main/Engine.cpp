@@ -28,6 +28,8 @@
 #include "engine/core/script/lua/register_core_to_lua.cx"
 #include "engine/core/script/lua/lua_binder.h"
 #include "engine/core/script/lua/lua_script.h"
+#include "engine/core/script/scratch/scratch.h"
+#include "engine/core/script/scratch/editor/scratch_editor.h"
 #include "Plugin.h"
 #include "module.h"
 #include "engine/core/render/gles/gles.h"
@@ -148,6 +150,7 @@ namespace Echo
 		Class::registerType<Material>();
 		Class::registerType<Mesh>();
 		Class::registerType<LuaScript>();
+		Class::registerType<Scratch>();
 		Class::registerType<TextureCube>();
 		Class::registerType<GameSettings>();
 		Class::registerType<Gizmos>();
@@ -170,6 +173,7 @@ namespace Echo
 		REGISTER_OBJECT_EDITOR(TextureAtla, TextureAtlaEditor)
 		REGISTER_OBJECT_EDITOR(TextureAtlas, TextureAtlasEditor)
 		REGISTER_OBJECT_EDITOR(RenderPipeline, RenderPipelineEditor)
+		REGISTER_OBJECT_EDITOR(Scratch, ScratchEditor)
 
 		// load all plugin
 		Plugin::loadAllPlugins();
