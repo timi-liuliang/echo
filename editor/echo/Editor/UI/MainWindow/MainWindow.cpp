@@ -10,6 +10,7 @@
 #include <QShortcut>
 #include <QMdiArea>
 #include <QComboBox>
+#include <QStatusBar>
 #include "DebuggerPanel.h"
 #include "EchoEngine.h"
 #include "QResSelect.h"
@@ -106,7 +107,7 @@ namespace Studio
 
 		// show status message
 		QObject::connect(&m_timer, SIGNAL(timeout()), this, SLOT(onShowStatusMessage()));
-		m_timer.start(500);
+		m_timer.start(100);
 
 		EchoAssert(!g_inst);
 		g_inst = this;
@@ -207,13 +208,6 @@ namespace Studio
 		else
 		{
 			panel->setVisible(true);
-		}
-
-		// https://stackoverflow.com/questions/42746408/how-to-get-rid-of-strange-white-line-under-qtabbar-while-customzing-tabified-qdo
-		QList<QTabBar*> tabBars = findChildren<QTabBar*>("", Qt::FindDirectChildrenOnly);
-		for (QTabBar* tabBar : tabBars)
-		{
-			tabBar->setDrawBase(false);
 		}
 	}
 
@@ -792,5 +786,17 @@ namespace Studio
 	void MainWindow::onShowStatusMessage()
 	{
 		statusBar()->showMessage(Echo::StringUtil::Format("Fps:%d", Echo::FrameState::instance()->getFps()).c_str());
+
+		hideWhiteLineOfQTabBar();
+	}
+
+	void MainWindow::hideWhiteLineOfQTabBar()
+	{
+		// https://stackoverflow.com/questions/42746408/how-to-get-rid-of-strange-white-line-under-qtabbar-while-customzing-tabified-qdo
+		QList<QTabBar*> tabBars = findChildren<QTabBar*>("", Qt::FindDirectChildrenOnly);
+		for (QTabBar* tabBar : tabBars)
+		{
+			tabBar->setDrawBase(false);
+		}
 	}
 }

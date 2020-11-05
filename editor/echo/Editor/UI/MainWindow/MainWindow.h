@@ -144,6 +144,10 @@ namespace Studio
 		// recover edit settings
 		void recoverEditSettings();
 
+	private:
+		// hide QTabbar white line
+		void hideWhiteLineOfQTabBar();
+
 	protected:
 		QTimer				m_timer;
 		QDockWidget*		m_renderPanel = nullptr;
