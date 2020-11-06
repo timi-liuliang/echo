@@ -31,6 +31,7 @@
 #include <engine/core/io/IO.h>
 #include <engine/core/main/module.h>
 #include <engine/core/scene/render_node.h>
+#include <engine/core/util/Timer.h>
 #include "editor_render_settings.h"
 
 namespace Studio
@@ -194,13 +195,15 @@ namespace Studio
 			QDockWidget* tabifyPanel = m_centerPanels.size() > 0 ? m_centerPanels.back() : m_scriptEditorMdiArea;
 
 			this->addDockWidget(Qt::TopDockWidgetArea, panel);
-			this->tabifyDockWidget(panel, tabifyPanel);
-			//this->removeDockWidget(m_renderPanel);
-			//this->addDockWidget(Qt::TopDockWidgetArea, m_renderPanel);
+			this->tabifyDockWidget(tabifyPanel, panel);
+
+			// https://www.qtcentre.org/threads/47927-How-to-set-focus-(select)-a-tabbed-QDockWidget
+			Echo::Time::instance()->addDelayTask(100, [panel]()
+			{
+				panel->raise();
+			});
 
 			QObject::connect(panel, SIGNAL(visibilityChanged(bool)), this, SLOT(onExternalCenterDockWidgetVisibilityChanged()));
-
-			panel->setVisible(true);
 			resizeDocks({ panel, m_renderPanel }, { int(widthRatio * 100.f) , int((1.f-widthRatio) * 100.f) }, Qt::Horizontal);
 
 			m_centerPanels.push_back(panel);
