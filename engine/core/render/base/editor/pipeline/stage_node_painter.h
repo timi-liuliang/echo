@@ -7,6 +7,7 @@
 #include "engine/core/render/base/pipeline/render_stage.h"
 #include "engine/modules/procedural/procedural_geometry.h"
 #include "engine/core/main/Engine.h"
+#include "custom/qgraphics_pixmap_item_custom.h"
 
 namespace Pipeline
 {
@@ -34,6 +35,7 @@ namespace Pipeline
 		QGraphicsScene*						m_graphicsScene = nullptr;
 		QGraphicsPathItem*					m_rect = nullptr;
 		QGraphicsPixmapItem*				m_nextArrow = nullptr;
+		QGraphicsPixmapItemCustom*			m_addAction = nullptr;
 		size_t								m_renderQueueSize = 0;
 		float								m_rectFinalWidth = 15;
 		float								m_width = 190;
@@ -57,15 +59,35 @@ namespace Pipeline
 				m_rect->setPos(QPointF(0.f, 0.f));
 				m_graphicsScene->addItem(m_rect);
 
+				Echo::Vector2 textPos(15.f, 15.f);
 				m_text = m_graphicsScene->addSimpleText(m_stage->getName().c_str());
 				m_text->setBrush(QBrush(m_style.m_fontColor));
 				m_text->setParentItem(m_rect);
-				m_text->setPos(15 - halfWidth, 15);
+				m_text->setPos(textPos.x - halfWidth, textPos.y);
 
 				QPixmap rightArrow((Echo::Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/right-arrow.png").c_str());
 				m_nextArrow = m_graphicsScene->addPixmap(rightArrow.scaled(QSize(16, 16)));
 				m_nextArrow->setParentItem(m_rect);
 				m_nextArrow->setPos(QPointF(halfWidth + 5.f, 0.f));
+
+				QPixmap addNew((Echo::Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/import_dark.png").c_str());
+				m_addAction = new QGraphicsPixmapItemCustom();
+				m_addAction->setPixmap(addNew.scaled(QSize(16, 16)));
+				m_addAction->setParentItem(m_rect);
+				m_addAction->setAcceptHoverEvents(true);
+				m_graphicsScene->addItem(m_addAction);
+			
+				m_addAction->setHoverEnterEventCb([](QGraphicsPixmapItem* item)
+				{
+					QPixmap addNew((Echo::Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/import.png").c_str());
+					item->setPixmap(addNew.scaled(QSize(16, 16)));
+				});
+
+				m_addAction->setHoverEnterLeaveCb([](QGraphicsPixmapItem* item)
+				{
+					QPixmap addNew((Echo::Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/import_dark.png").c_str());
+					item->setPixmap(addNew.scaled(QSize(16, 16)));
+				});
 			}
 		}
 
@@ -101,7 +123,7 @@ namespace Pipeline
 				if (m_renderQueueSize != m_stage->getRenderQueues().size())
 				{
 					m_renderQueueSize = m_stage->getRenderQueues().size();
-					m_height = 40.f + m_renderQueueSize * 56.f;
+					m_height = 40.f + m_renderQueueSize * 56.f + 16.f;
 
 					float halfWidth = m_width * 0.5f;
 					float halfHeight = m_height * 0.5f;
@@ -116,6 +138,8 @@ namespace Pipeline
 					gradient.setColorAt(0.97, m_style.m_gradientColor2);
 					gradient.setColorAt(1.0, m_style.m_gradientColor3);
 					m_rect->setBrush(gradient);
+
+					m_addAction->setPos(QPointF(-8.f, m_height - 24.f));
 				}
 
 				m_rect->setPos(xPos * 240.f, 0.f);
