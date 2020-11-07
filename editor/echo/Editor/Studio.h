@@ -63,6 +63,9 @@ namespace Studio
 		virtual void removeCenterPanel(QDockWidget* panel) override;
 
 	public:
+		// select a class
+		virtual const Echo::String selectAClass() override;
+
 		// select a node object
 		virtual const Echo::String selectANodeObject()override;
 

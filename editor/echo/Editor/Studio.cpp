@@ -235,6 +235,11 @@ namespace Studio
 		MainWindow::instance()->removeCenterPanel(panel);
 	}
 
+	const Echo::String AStudio::selectAClass()
+	{
+		return NewNodeDialog::getSelectedNodeType();
+	}
+
 	const Echo::String AStudio::selectANodeObject()
 	{
 		return NodePathChooseDialog::getSelectingNode( nullptr);

@@ -14,6 +14,10 @@ namespace Echo
 		Scratch(const ResourcePath& path);
 		~Scratch();
 
+		// parent
+		const String& getParentClass() const { return m_parentClass; }
+		void setParentClass(const String& parent) { m_parentClass = parent; }
+
 		// compile to lua
 		bool compile() { return false; }
 
@@ -22,10 +26,10 @@ namespace Echo
 
 		// load|save
 		static Res* load(const ResourcePath& path);
-		void save(const char* pathName);
 
 	private:
 		String m_lua;
+		String m_parentClass;
 	};
 	typedef ResRef<Scratch> ScratchPtr;
 }

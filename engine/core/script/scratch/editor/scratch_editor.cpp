@@ -26,6 +26,22 @@ namespace Echo
 		Editor::instance()->showCenterPanel(m_panel->getUi());
 	}
 
+	void ScratchEditor::postEditorCreateObject()
+	{
+		Scratch* scratch = ECHO_DOWN_CAST<Scratch*>(m_object);
+		if (scratch)
+		{
+			if (scratch->getParentClass().empty())
+			{
+				String parentClass = Editor::instance()->selectAClass();
+				if (!parentClass.empty())
+				{
+					scratch->setParentClass(parentClass);
+				}
+			}
+		}
+	}
+
 	void ScratchEditor::editor_update_self()
 	{
 		if (m_panel)

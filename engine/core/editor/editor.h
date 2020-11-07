@@ -30,6 +30,9 @@ namespace Echo
 		virtual void showBottomPanel(PanelTab* bottomPanel)=0;
 
 	public:
+        // select a class
+        virtual const String selectAClass()=0;
+
 		// select a node object
 		virtual const String selectANodeObject()=0;
 

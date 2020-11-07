@@ -312,6 +312,9 @@ namespace Studio
 			Echo::ResPtr res = (Echo::Res*)Echo::Class::create(className);
 			if (res)
 			{			
+				if (res->getEditor())
+					res->getEditor()->postEditorCreateObject();
+
 				Echo::String newSavePath;
 				if (getUniqueNewResSavePath(newSavePath, className, m_currentDir))
 				{

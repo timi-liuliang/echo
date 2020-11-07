@@ -21,7 +21,10 @@ namespace Echo
 
 	void Scratch::bindMethods()
 	{
+		CLASS_BIND_METHOD(Scratch, getParentClass, DEF_METHOD("getParentClass"));
+		CLASS_BIND_METHOD(Scratch, setParentClass, DEF_METHOD("setParentClass"));
 
+		CLASS_REGISTER_PROPERTY(Scratch, "Parent", Variant::Type::String, "getParentClass", "setParentClass");
 	}
 
 	Res* Scratch::load(const ResourcePath& path)
@@ -34,20 +37,5 @@ namespace Echo
 		}
 
 		return nullptr;
-	}
-
-	void Scratch::save(const char* pathName)
-	{
-		const char* content = "";
-		if (content)
-		{
-			String fullPath = IO::instance()->convertResPathToFullPath(m_path.getPath());
-			std::ofstream f(fullPath.c_str());
-
-			f << content;
-
-			f.flush();
-			f.close();
-		}
 	}
 }
