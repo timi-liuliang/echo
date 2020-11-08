@@ -35,7 +35,6 @@ namespace Echo
         return Module::getCurrentRegisterModuleName();
     }
     
-    // clear all classinfos
     void Class::clear()
     {
         if(g_classInfos)
@@ -50,7 +49,6 @@ namespace Echo
         }
     }
 
-	// add class
 	void Class::addClass(const String& className, ObjectFactory* objFactory)
 	{
 		if (!g_classInfos)
@@ -61,7 +59,6 @@ namespace Echo
 		(*g_classInfos)[className] = objFactory;
 	}
 
-	// get class info
 	ClassInfo* Class::getClassInfo(const String& className)
 	{
 		auto it = g_classInfos->find(className);
@@ -73,7 +70,6 @@ namespace Echo
 		return nullptr;
 	}
 
-	// is derived from
 	bool Class::isDerivedFrom(const String& className, const String& parentClassName)
 	{
 		String parent;
@@ -88,21 +84,18 @@ namespace Echo
 		return false;
 	}
 
-	// is virtual
 	bool Class::isVirtual(const String& className)
 	{
 		ClassInfo* cinfo = getClassInfo(className);	
 		return cinfo ? cinfo->m_virtual : true;
 	}
 
-	// is singleton
 	bool Class::isSingleton(const String& className)
 	{
 		ClassInfo* cinfo = getClassInfo(className);
 		return cinfo ? cinfo->m_singleton : true;
 	}
 
-	// get parent class name
 	bool Class::getParentClass(String& parentClassName, const String& className)
 	{
 		ClassInfo* cinfo = getClassInfo(className);
@@ -115,7 +108,6 @@ namespace Echo
 		return false;
 	}
 
-	// get all child class
 	bool Class::getChildClasses(StringArray& childClasses, const String& className, bool recursive)
 	{
 		if (!g_classInfos)
@@ -136,7 +128,6 @@ namespace Echo
 		return !childClasses.empty();
 	}
 
-	// get all class names
 	size_t Class::getAllClasses(StringArray& classes)
 	{
 		for (auto& it : *g_classInfos)
@@ -171,7 +162,6 @@ namespace Echo
 		return nullptr;
 	}
 
-	// register method
 	bool Class::registerMethodBind(const String& className, const String& methodName, ClassMethodBind* method)
 	{
 		auto it = g_classInfos->find(className);
@@ -189,7 +179,6 @@ namespace Echo
 		return false;
 	}
     
-    // register signal
     bool Class::registerSignal(const String& className, const String& signalName, ClassMethodBind* getSignalMethod)
     {
         auto it = g_classInfos->find(className);
@@ -204,7 +193,6 @@ namespace Echo
         return false;
     }
 
-	// get method
 	ClassMethodBind* Class::getMethodBind(const String& className, const String& methodName)
 	{
 		auto it = g_classInfos->find(className);
@@ -216,7 +204,6 @@ namespace Echo
 		return nullptr;
 	}
     
-    // get signal by class name
     Signal* Class::getSignal(const String& className, Object* classPtr, const String& signalName)
     {
         auto it = g_classInfos->find(className);
@@ -233,7 +220,6 @@ namespace Echo
         return nullptr;
     }
 
-    // get signal
     Signal* Class::getSignal(Object* classPtr, const String& signalName)
     {
         String className = classPtr->getClassName();
@@ -339,7 +325,6 @@ namespace Echo
         return nullptr;
     }
 
-	// get property
 	PropertyInfo* Class::getProperty(const String& className, Object* classPtr, const String& propertyName)
 	{
 		PropertyInfos propertys;
@@ -355,7 +340,6 @@ namespace Echo
 		return nullptr;
 	}
 
-	// get property value
 	bool Class::getPropertyValue(Object* classPtr, const String& propertyName, Variant& oVar)
 	{
 		String className = classPtr->getClassName();
@@ -390,7 +374,6 @@ namespace Echo
 		return false;
 	}
 
-	// get property flag
 	i32 Class::getPropertyFlag(Object* classPtr, const String& propertyName)
 	{
 		String className = classPtr->getClassName();
@@ -407,7 +390,6 @@ namespace Echo
 		return PropertyFlag::All;
 	}
 
-	// get property type
 	Variant::Type Class::getPropertyType(Object* classPtr, const String& propertyName)
 	{
 		String className = classPtr->getClassName();
@@ -422,7 +404,6 @@ namespace Echo
 		return Variant::Type::Unknown;
 	}
 
-	// set property value
 	bool Class::setPropertyValue(Object* classPtr, const String& propertyName, const Variant& propertyValue)
 	{
 		String className = classPtr->getClassName();
