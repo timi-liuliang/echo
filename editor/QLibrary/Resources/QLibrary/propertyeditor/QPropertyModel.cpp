@@ -77,7 +77,12 @@ namespace QT_UI
 			int row = elementNode.attribute("row").as_int(0);
 			int col = elementNode.attribute("col").as_int(0);
 
-			QStandardItem* item = addChildItem(pParentItem, text.toStdString().c_str(), bold, row, col, elementNode.attribute("widget").as_string(""), elementNode.attribute("property").as_string(""), toolTip.toStdString().c_str());
+			// upper text
+			std::string upperText = text.toStdString();
+			if (!upperText.empty())
+				upperText[0] = toupper(upperText[0]);
+
+			QStandardItem* item = addChildItem(pParentItem, upperText.c_str(), bold, row, col, elementNode.attribute("widget").as_string(""), elementNode.attribute("property").as_string(""), toolTip.toStdString().c_str());
 			item->setData(constraintCondition(firstChildElement), kConstraint);
 
 			pugi::xml_node childNode = elementNode.child("item");
@@ -220,10 +225,5 @@ namespace QT_UI
 			}
 		}
 		return constraint;
-	}
-
-	void QPropertyModel::ThrowSelfDefineSig(QString sigName, QString propertyName, QVariant value)
-	{
-		emit Signal_ThrowSelfDefineSig(sigName,propertyName,value);
 	}
 }

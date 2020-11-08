@@ -19,67 +19,54 @@ namespace QT_UI
 
 		typedef map<QString, QVariant> AttribList;
 	public:
-		// 构造函数
 		QPropertyModel(const char* fileName, bool isEnableGB2312 = false, QObject* parent = 0);
 		~QPropertyModel();
 
-		// 设置ID
+		// id
 		void setID(const QString& id) { m_id = id; }
-
-		// 获取ID
 		const QString& getID() { return m_id; }
 
-		// 设置数据
+		// set data
 		void  setupModelData(pugi::xml_document* cfg);
 
-		// 根据属性查找数据
+		// find value
 		bool findValue(QVariant& value, const QString& propertyName);
 
-		// 设置数据
+		// set value
 		void setValue(const QString& propertyName, QVariant value);
-
-		// 设置数据
 		static bool setValue(const QString& modelName, const QString& propertyName, QVariant value);
 
-		// 根据text查找item
+		// find by text
 		QStandardItem* findItemByText(const char* text);
 
-		// 添加子结点
+		// child operates
 		QStandardItem* addChildItem(QStandardItem* parent, const char* text, bool bold, int row, int col, const char* widget, const char* property, const char* toolTip);
-
-		// 除除子结点
 		void removeChildItem(QStandardItem* parent);
 
-		// 抛出自定义Signal
-		void ThrowSelfDefineSig(QString sigName, QString propertyName, QVariant value);
-
 	private:
-		// 解析配置文件
+		// parse config
 		void ParseCfg();
 
-		// 递归添加
+		// add child item
 		void addChildItem(pugi::xml_node* pFirstChildElement, QStandardItem* pParentItem);
 
-		// 更新约束
+		// update constraint
 		void updateConstraint(const QString& propertyName, QVariant value);
 
-		// 读取约束
+		// read constraint
 		QMap<QString, QVariant> constraintCondition(pugi::xml_node* itemNode);
 
 	signals:
-		// 数据变动
+		// value changed
 		void Signal_ValueChanged(const QString& propertyName, QVariant value);
 		void Signal_ValueChanged(const QString& propertyName, QVariant value, int row, int column);
 
-		//抛出自定义的信号,主要是为了解决一些属性修改弹窗涉及到过多的引擎逻辑,所以为了解耦,抛给引擎逻辑处理
-		void Signal_ThrowSelfDefineSig(const QString& singalStr, const QString& propertyNamej,QVariant value);
-
 	private:
-		QString						m_id;					// 标识
+		QString						m_id;
 		pugi::xml_document*			m_cfg;
 		AttribList					m_valueList;
-		vector<QStandardItem*>		m_standItems;			// 表项
-		map<QString, QStandardItem*>m_propertyStandItmes;	// 属性对应的StandItem
+		vector<QStandardItem*>		m_standItems;
+		map<QString, QStandardItem*>m_propertyStandItmes;
 		bool						m_isEnableGB2312;
 	};
 }
