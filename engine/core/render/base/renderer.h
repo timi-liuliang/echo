@@ -43,6 +43,9 @@ namespace Echo
 		// instance
 		static Renderer* instance();
 
+		// register class types
+		static void registerClassTypes();
+
 		// replace instance
 		static bool replaceInstance(Renderer* inst);
         

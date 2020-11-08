@@ -4,8 +4,8 @@
 
 namespace Echo
 {
-	ImageFilter::ImageFilter(RenderPipeline* pipeline, RenderStage* stage)
-		: IRenderQueue(pipeline, stage)
+	ImageFilter::ImageFilter(RenderStage* stage)
+		: IRenderQueue( stage)
 	{
 	}
 

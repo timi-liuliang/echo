@@ -363,7 +363,7 @@ namespace Echo
 
 	void Node::registerToScript()
 	{
-        if (!m_isRegisteredToScript)
+        if (!m_registeredToScript)
         {
             Object::registerToScript();
 

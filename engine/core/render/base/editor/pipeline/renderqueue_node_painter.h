@@ -69,10 +69,6 @@ namespace Pipeline
 				m_text = m_graphicsScene->addSimpleText(m_renderQueue->getName().c_str());
 				m_text->setBrush(QBrush(m_style.m_fontColor));
 				m_text->setParentItem(m_rect);
-
-				Echo::Rect textRect;
-				EditorApi.qGraphicsItemSceneRect(m_text, textRect);
-				m_text->setPos((m_width - textRect.getWidth()) * 0.5f - halfWidth, (m_height - textRect.getHeight()) * 0.5f - halfHeight);
 			}
 		}
 
@@ -103,8 +99,17 @@ namespace Pipeline
 		// update
 		void update(Echo::i32 xPos, Echo::i32 yPos)
 		{
+			float halfWidth = m_width * 0.5f;
+			float halfHeight = m_height * 0.5f;
+
 			float startYPos = 60.f;
 			m_rect->setPos(xPos * 200.f, startYPos + yPos * 56.f);
+
+			m_text->setText(m_renderQueue->getName().c_str());
+
+			Echo::Rect textRect;
+			EditorApi.qGraphicsItemSceneRect(m_text, textRect);
+			m_text->setPos((m_width - textRect.getWidth()) * 0.5f - halfWidth, (m_height - textRect.getHeight()) * 0.5f - halfHeight);
 		}
 	};
 	typedef Echo::vector<RenderQueueNodePainter*>::type RenderQueueNodePainters;

@@ -13,34 +13,38 @@ namespace Pipeline
 	public:
 		QGraphicsPixmapItemCustom(QGraphicsItem* parent = nullptr)
 			: QGraphicsPixmapItem(parent)
-		{
+		{}
 
-		}
+		// hover event callback
+		void setHoverEnterEventCb(std::function<void(QGraphicsPixmapItem*)> cb) { m_hoverEnterEventCb = cb;}
+		void setHoverEnterLeaveCb(std::function<void(QGraphicsPixmapItem*)> cb) { m_hoverLeaveEventCb = cb; }
 
-		void setHoverEnterEventCb(std::function<void(QGraphicsPixmapItem*)> cb)
-		{
-			m_hoverEnterEvent = cb;
-		}
+		// mouse event cb
+		void setMousePressEventCb(std::function<void(QGraphicsPixmapItem*)> cb) { m_mousePressEventCb = cb; }
 
-		void setHoverEnterLeaveCb(std::function<void(QGraphicsPixmapItem*)> cb)
-		{
-			m_hoverLeaveEvent = cb;
-		}
-
+	protected:
 		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent* event) override
 		{
 			QGraphicsPixmapItem::hoverEnterEvent(event);
 
-			if (m_hoverEnterEvent)
-				m_hoverEnterEvent(this);
+			if (m_hoverEnterEventCb)
+				m_hoverEnterEventCb(this);
 		}
 
 		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent* event) override
 		{
 			QGraphicsPixmapItem::hoverLeaveEvent(event);
 
-			if (m_hoverLeaveEvent)
-				m_hoverLeaveEvent(this);
+			if (m_hoverLeaveEventCb)
+				m_hoverLeaveEventCb(this);
+		}
+
+		virtual void mousePressEvent(QGraphicsSceneMouseEvent* event)
+		{
+			QGraphicsPixmapItem::mousePressEvent(event);
+
+			if (m_mousePressEventCb)
+				m_mousePressEventCb(this);
 		}
 
 	protected:
@@ -51,8 +55,9 @@ namespace Pipeline
 		}
 
 	protected:
-		std::function<void(QGraphicsPixmapItem*)> m_hoverEnterEvent;
-		std::function<void(QGraphicsPixmapItem*)> m_hoverLeaveEvent;
+		std::function<void(QGraphicsPixmapItem*)> m_hoverEnterEventCb;
+		std::function<void(QGraphicsPixmapItem*)> m_hoverLeaveEventCb;
+		std::function<void(QGraphicsPixmapItem*)> m_mousePressEventCb;
 	};
 }
 

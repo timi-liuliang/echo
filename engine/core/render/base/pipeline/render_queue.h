@@ -8,8 +8,11 @@ namespace Echo
 {
 	class RenderQueue : public IRenderQueue
 	{
+		ECHO_CLASS(RenderQueue, IRenderQueue)
+
 	public:
-		RenderQueue(RenderPipeline* pipeline, RenderStage* stage);
+		RenderQueue() {}
+		RenderQueue(RenderStage* stage);
 		virtual ~RenderQueue();
 
 		// render

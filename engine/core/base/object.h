@@ -30,7 +30,7 @@ namespace Echo
 		virtual void setPath(const String& path) { m_path.setPath(path); }
         
         // register to script
-        bool isRegisteredToScript() { return m_isRegisteredToScript; }
+        bool isRegisteredToScript() { return m_registeredToScript; }
         virtual void registerToScript();
         virtual void unregisterFromScript();
 
@@ -112,6 +112,6 @@ namespace Echo
 		ResourcePath	m_path;
 		PropertyInfos	m_propertys;
         ChannelsPtr     m_chanels = nullptr;
-        bool			m_isRegisteredToScript = false;
+        bool			m_registeredToScript = false;
 	};
 }

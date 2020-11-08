@@ -5,13 +5,18 @@
 
 namespace Echo
 {
-	RenderQueue::RenderQueue(RenderPipeline* pipeline, RenderStage* stage)
-		: IRenderQueue(pipeline, stage)
+	RenderQueue::RenderQueue(RenderStage* stage)
+		: IRenderQueue(stage)
 	{
 	}
 
 	RenderQueue::~RenderQueue()
 	{
+	}
+
+	void RenderQueue::bindMethods()
+	{
+
 	}
 
 	void RenderQueue::render()

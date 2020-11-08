@@ -6,6 +6,15 @@
 #include "renderable.h"
 #include "../metal/mt.h"
 #include "../gles/gles.h"
+#include "pipeline/image_filter.h"
+#include "pipeline/render_queue.h"
+#include "pipeline/render_pipeline.h"
+#include "base/editor/pipeline/render_pipeline_editor.h"
+#include "base/editor/shader/shader_editor.h"
+#include "base/atla/texture_atla.h"
+#include "base/atla/texture_atlas.h"
+#include "base/editor/atlas/texture_atla_editor.h"
+#include "base/editor/atlas/texture_atlas_editor.h"
 
 namespace Echo
 {
@@ -15,6 +24,27 @@ namespace Echo
 	Renderer* Renderer::instance()
 	{
 		return g_render;
+	}
+
+	void Renderer::registerClassTypes()
+	{
+		Class::registerType<Render>();
+		Class::registerType<IRenderQueue>();
+		Class::registerType<ImageFilter>();
+		Class::registerType<RenderQueue>();
+		Class::registerType<RenderPipeline>();
+		Class::registerType<Texture>();
+		Class::registerType<TextureCube>();
+		Class::registerType<ShaderProgram>();
+		Class::registerType<Mesh>();
+		Class::registerType<Material>();
+		Class::registerType<TextureAtla>();
+		Class::registerType<TextureAtlas>();
+
+		REGISTER_OBJECT_EDITOR(RenderPipeline, RenderPipelineEditor)
+		REGISTER_OBJECT_EDITOR(ShaderProgram, ShaderEditor)
+		REGISTER_OBJECT_EDITOR(TextureAtla, TextureAtlaEditor)
+		REGISTER_OBJECT_EDITOR(TextureAtlas, TextureAtlasEditor)
 	}
 
 	bool Renderer::replaceInstance(Renderer* inst)

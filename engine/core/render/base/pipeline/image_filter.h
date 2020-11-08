@@ -4,9 +4,9 @@
 
 namespace Echo
 {
-	class ImageFilter : public IRenderQueue, public Object
+	class ImageFilter : public IRenderQueue
 	{
-		ECHO_CLASS(ImageFilter, Node)
+		ECHO_CLASS(ImageFilter, IRenderQueue)
 
 	public:
 		// Vertex Format
@@ -24,7 +24,7 @@ namespace Echo
 
 	public:
 		ImageFilter() {}
-		ImageFilter(RenderPipeline* pipeline, RenderStage* stage);
+		ImageFilter(RenderStage* stage);
 		virtual ~ImageFilter();
 
 		// material
@@ -49,7 +49,7 @@ namespace Echo
 
 	protected:
 		bool        m_isRenderableDirty = true;
-		MeshPtr	m_mesh;
+		MeshPtr		m_mesh;
 		MaterialPtr	m_material;
 		Renderable* m_renderable = nullptr;
 	};

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "render_queue.h"
+#include "image_filter.h"
 
 namespace Echo
 {
@@ -27,6 +28,9 @@ namespace Echo
 	public:
 		// get render queues
 		const vector<IRenderQueue*>::type& getRenderQueues() { return m_renderQueues; }
+
+		// add image filter
+		ImageFilter* addImageFilter(const String& name);
 
 	public:
 		// load|save

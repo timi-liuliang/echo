@@ -17,6 +17,15 @@ namespace Echo
         EchoSafeDeleteContainer(m_renderQueues, IRenderQueue);
 	}
 
+	ImageFilter* RenderStage::addImageFilter(const String& name)
+	{
+		ImageFilter* queue = EchoNew(ImageFilter(this));
+		queue->setName(name);
+		m_renderQueues.emplace_back(queue);
+
+		return queue;
+	}
+
 	void RenderStage::parseXml(void* pugiNode)
 	{
 		pugi::xml_node* stageNode = (pugi::xml_node*)pugiNode;
@@ -28,16 +37,14 @@ namespace Echo
 				String type = queueNode.attribute("type").as_string();
 				if (type == "queue")
 				{
-					RenderQueue* queue = EchoNew(RenderQueue(m_pipeline, this));
+					RenderQueue* queue = EchoNew(RenderQueue( this));
 					queue->setName(queueNode.attribute("name").as_string("Opaque"));
 					queue->setSort(queueNode.attribute("sort").as_bool(false));
 					m_renderQueues.emplace_back(queue);
 				}
 				else if (type == "filter")
 				{
-					ImageFilter* queue = EchoNew(ImageFilter(m_pipeline, this));
-					queue->setName(queueNode.attribute("name").as_string());
-					m_renderQueues.emplace_back(queue);
+					addImageFilter(queueNode.attribute("name").as_string());
 				}
 			}
 

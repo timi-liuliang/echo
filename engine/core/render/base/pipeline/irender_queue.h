@@ -1,16 +1,18 @@
 #pragma once
 
-#include "engine/core/memory/MemAllocDef.h"
+#include "engine/core/base/object.h"
 
 namespace Echo
 {
 	class RenderPipeline;
 	class RenderStage;
-	class IRenderQueue
+	class IRenderQueue : public Object
 	{
+		ECHO_VIRTUAL_CLASS(IRenderQueue, Object);
+
 	public:
 		IRenderQueue() {}
-		IRenderQueue(RenderPipeline* pipeline, RenderStage* stage) : m_pipeline(pipeline), m_stage(stage) {}
+		IRenderQueue(RenderStage* stage) : m_stage(stage) {}
 		virtual ~IRenderQueue() {}
 
 		// name
@@ -18,11 +20,10 @@ namespace Echo
 		const String& getName() const { return m_name; }
 
 		// render
-		virtual void render()=0;
+		virtual void render() {}
 
 	protected:
 		String			m_name;
-		RenderPipeline* m_pipeline = nullptr;
 		RenderStage*	m_stage = nullptr;
 	};
 }

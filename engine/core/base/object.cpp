@@ -77,18 +77,18 @@ namespace Echo
 
     void Object::registerToScript() 
     {
-        if (!m_isRegisteredToScript)
+        if (!m_registeredToScript)
         {
             String globalTableName = StringUtil::Format("objs._%d", this->getId());
             LuaBinder::instance()->registerObject(getClassName(), globalTableName.c_str(), this);
 
-            m_isRegisteredToScript = true;
+            m_registeredToScript = true;
         }
     }
 
     void Object::unregisterFromScript()
     {
-        if (m_isRegisteredToScript)
+        if (m_registeredToScript)
         {
             String luaStr = StringUtil::Format("objs._%d = nil", getId());
             LuaBinder::instance()->execString(luaStr);

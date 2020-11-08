@@ -8,17 +8,10 @@
 #include "engine/core/log/Log.h"
 #include "engine/core/localization/Localization.h"
 #include "engine/core/render/base/image/image_codec_mgr.h"
-#include "engine/core/render/base/atla/texture_atla.h"
-#include "engine/core/render/base/atla/texture_atlas.h"
-#include "engine/core/render/base/editor/atlas/texture_atla_editor.h"
-#include "engine/core/render/base/editor/atlas/texture_atlas_editor.h"
 #include "engine/core/render/base/view_port.h"
 #include "engine/core/render/base/material.h"
-#include "engine/core/render/base/pipeline/render_pipeline.h"
-#include "engine/core/render/base/editor/pipeline/render_pipeline_editor.h"
 #include "engine/core/render/base/pipeline/render_stage.h"
 #include "engine/core/render/base/shader_program.h"
-#include "engine/core/render/base/editor/shader/shader_editor.h"
 #include "engine/core/render/base/texture_cube.h"
 #include "engine/core/scene/render_node.h"
 #include "engine/core/scene/node_tree.h"
@@ -143,15 +136,9 @@ namespace Echo
 		Class::registerType<Engine>();
 		Class::registerType<Node>();
 		Class::registerType<Module>();
-		Class::registerType<Render>();
 		Class::registerType<Res>();
-		Class::registerType<Texture>();
-		Class::registerType<ShaderProgram>();
-		Class::registerType<Material>();
-		Class::registerType<Mesh>();
 		Class::registerType<LuaScript>();
 		Class::registerType<Scratch>();
-		Class::registerType<TextureCube>();
 		Class::registerType<GameSettings>();
 		Class::registerType<Gizmos>();
 		Class::registerType<Input>();
@@ -159,21 +146,18 @@ namespace Echo
         Class::registerType<IO>();
         Class::registerType<DataStream>();
 		Class::registerType<Log>();
-		Class::registerType<TextureAtla>();
-		Class::registerType<TextureAtlas>();
-		Class::registerType<RenderPipeline>();
+
 		Class::registerType<Translator>();
 		Class::registerType<Localization>();
 
 	#ifdef ECHO_EDITOR_MODE
 		Class::registerType<Importer>();
 	#endif
-        
-		REGISTER_OBJECT_EDITOR(ShaderProgram, ShaderEditor)
-		REGISTER_OBJECT_EDITOR(TextureAtla, TextureAtlaEditor)
-		REGISTER_OBJECT_EDITOR(TextureAtlas, TextureAtlasEditor)
-		REGISTER_OBJECT_EDITOR(RenderPipeline, RenderPipelineEditor)
+       
 		REGISTER_OBJECT_EDITOR(Scratch, ScratchEditor)
+
+		// resiter render classes
+		Renderer::registerClassTypes();
 
 		// load all plugin
 		Plugin::loadAllPlugins();
