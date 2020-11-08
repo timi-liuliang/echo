@@ -26,8 +26,8 @@ namespace Echo
 		i32 getId() const { return m_id; }
 
 		// path
-		const String& getPath() const { return m_path.getPath(); }
-		virtual void setPath(const String& path) { m_path.setPath(path); }
+		virtual const String& getPath() const { return StringUtil::BLANK; }
+		virtual void setPath(const String& path) {}
         
         // register to script
         bool isRegisteredToScript() { return m_registeredToScript; }
@@ -109,7 +109,6 @@ namespace Echo
 
 	protected:
 		i32				m_id;
-		ResourcePath	m_path;
 		PropertyInfos	m_propertys;
         ChannelsPtr     m_chanels = nullptr;
         bool			m_registeredToScript = false;

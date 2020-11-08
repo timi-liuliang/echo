@@ -29,6 +29,7 @@ namespace Echo
 
 		// set path
 		virtual void setPath(const String& path) override;
+		virtual const String& getPath() const override { return m_path.getPath(); }
 
 		// resister res
 		static void registerRes(const String& className, const String& exts, RES_CREATE_FUNC cfun, RES_LOAD_FUNC lfun);
@@ -81,6 +82,7 @@ namespace Echo
 	protected:
 		int								m_refCount;
 		bool							m_isLoaded;
+		ResourcePath					m_path;
 	};
 	typedef ResRef<Res> ResPtr;
 

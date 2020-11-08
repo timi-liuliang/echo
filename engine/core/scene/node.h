@@ -34,8 +34,13 @@ namespace Echo
 		Node();
 		virtual ~Node();
 
+		// name
 		void setName(const String& name) { m_name = name; }
 		const String& getName() const { return m_name; }
+
+		// path
+		virtual void setPath(const String& path) override { m_path.setPath(path); }
+		virtual const String& getPath() const override { return m_path.getPath(); }
 
 		// parent(can only have one parent)
 		void setParent(Node* pParent);
@@ -168,6 +173,7 @@ namespace Echo
 
 	protected:
 		String			m_name;
+		ResourcePath	m_path;
 		bool			m_isEnable = true;
 		bool			m_isLink = false;	        // belong to branch scene
 		Node*			m_parent = nullptr;
