@@ -6,6 +6,7 @@
 
 #include "engine/core/render/base/pipeline/render_stage.h"
 #include "engine/modules/procedural/procedural_geometry.h"
+#include "custom/qgraphics_renderqueue_item.h"
 
 namespace Pipeline
 {
@@ -33,7 +34,7 @@ namespace Pipeline
 		Echo::IRenderQueue*					m_renderQueue = nullptr;
 		QGraphicsView*						m_graphicsView = nullptr;
 		QGraphicsScene*						m_graphicsScene = nullptr;
-		QGraphicsPathItem*					m_rect = nullptr;
+		QGraphicsRenderQueueItem*			m_rect = nullptr;
 		float								m_rectFinalWidth = 15;
 		float								m_width = 160;
 		float								m_height = 40;
@@ -53,9 +54,10 @@ namespace Pipeline
 				QPainterPath path;
 				path.addRoundedRect(QRectF(-halfWidth, -halfHeight, m_width, m_height), m_style.m_cornerRadius, m_style.m_cornerRadius);
 
-				m_rect = new QGraphicsPathItem(nullptr);
+				m_rect = new QGraphicsRenderQueueItem(nullptr);
 				m_rect->setPath(path);
 				m_rect->setPen(QPen(m_style.m_normalBoundaryColor, m_style.m_penWidth));
+				m_rect->setFlag(QGraphicsItem::ItemIsFocusable);
 				QLinearGradient gradient(QPointF(0.0, -halfHeight), QPointF(0.0, halfHeight));
 				gradient.setColorAt(0.0,  m_style.m_gradientColor0);
 				gradient.setColorAt(0.03, m_style.m_gradientColor1);
@@ -65,6 +67,12 @@ namespace Pipeline
 				m_rect->setFlag(QGraphicsItem::ItemIsMovable, true);
 				m_rect->setPos(QPointF(0.f, 0.f));
 				m_graphicsScene->addItem(m_rect);
+
+				// mouse press event
+				m_rect->setMousePressEventCb([this](QGraphicsItem* item)
+				{
+					EditorApi.showObjectProperty(m_renderQueue);
+				});
 
 				m_text = m_graphicsScene->addSimpleText(m_renderQueue->getName().c_str());
 				m_text->setBrush(QBrush(m_style.m_fontColor));
@@ -103,6 +111,7 @@ namespace Pipeline
 			float halfHeight = m_height * 0.5f;
 
 			float startYPos = 60.f;
+			m_rect->setPen(QPen(m_rect->isFocused() ? m_style.m_selectedBoundaryColor : m_style.m_normalBoundaryColor, m_style.m_penWidth));
 			m_rect->setPos(xPos * 200.f, startYPos + yPos * 56.f);
 
 			m_text->setText(m_renderQueue->getName().c_str());
