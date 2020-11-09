@@ -38,6 +38,7 @@ namespace Echo
 		QGraphicsView*						m_graphicsView = nullptr;
 		QGraphicsScene*						m_graphicsScene = nullptr;
 		QMenu*								m_importMenu = nullptr;
+		QGraphicsLineItem*					m_borderTopLine = nullptr;
 		Pipeline::StageNodePainters			m_stageNodePainters;
 		Pipeline::RenderQueueNodePainters	m_renderQueueNodePainters;
 	};
