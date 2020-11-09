@@ -8,6 +8,7 @@
 #include "engine/modules/procedural/procedural_geometry.h"
 #include "engine/core/main/Engine.h"
 #include "custom/qgraphics_pixmap_item_custom.h"
+#include "custom/qgraphics_renderstage_item.h"
 
 namespace Pipeline
 {
@@ -56,7 +57,7 @@ namespace Pipeline
 		Echo::RenderStage*			m_stage = nullptr;
 		QGraphicsView*				m_graphicsView = nullptr;
 		QGraphicsScene*				m_graphicsScene = nullptr;
-		QGraphicsPathItem*			m_rect = nullptr;
+		QGraphicsRenderStageItem*	m_rect = nullptr;
 		QGraphicsPixmapItem*		m_nextArrow = nullptr;
 		QGraphicsPixmapItemCustom*  m_addAction = nullptr;
 		size_t						m_renderQueueSize = 0;

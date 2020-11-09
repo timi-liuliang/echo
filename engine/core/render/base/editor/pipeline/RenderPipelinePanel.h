@@ -8,6 +8,7 @@
 
 #include "stage_node_painter.h"
 #include "renderqueue_node_painter.h"
+#include "custom/qgraphics_scene_ex.h"
 
 namespace Echo
 {
@@ -36,7 +37,7 @@ namespace Echo
 	protected:
 		RenderPipeline*						m_pipeline;
 		QGraphicsView*						m_graphicsView = nullptr;
-		QGraphicsScene*						m_graphicsScene = nullptr;
+		Pipeline::QGraphicsSceneEx*			m_graphicsScene = nullptr;
 		QMenu*								m_importMenu = nullptr;
 		QGraphicsLineItem*					m_borderTopLine = nullptr;
 		Pipeline::StageNodePainters			m_stageNodePainters;

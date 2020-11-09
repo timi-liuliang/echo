@@ -64,7 +64,6 @@ namespace Pipeline
 				gradient.setColorAt(0.97, m_style.m_gradientColor2);
 				gradient.setColorAt(1.0,  m_style.m_gradientColor3);
 				m_rect->setBrush(gradient);
-				m_rect->setFlag(QGraphicsItem::ItemIsMovable, true);
 				m_rect->setPos(QPointF(0.f, 0.f));
 				m_graphicsScene->addItem(m_rect);
 

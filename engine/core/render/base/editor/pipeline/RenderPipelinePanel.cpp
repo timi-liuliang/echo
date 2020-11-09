@@ -30,8 +30,14 @@ namespace Echo
 
 		// create QGraphicsScene
 		m_graphicsView = m_ui->findChild<QGraphicsView*>("m_graphicsView");
-		m_graphicsScene = EditorApi.qGraphicsSceneNew();
+		m_graphicsScene = new Pipeline::QGraphicsSceneEx();
 		m_graphicsView->setScene(m_graphicsScene);
+
+		// event
+		m_graphicsScene->setMousePressEventCb([this]()
+		{
+			EditorApi.showObjectProperty(m_pipeline);
+		});
 
 		// top line
 		float topSpace = 15.f;
