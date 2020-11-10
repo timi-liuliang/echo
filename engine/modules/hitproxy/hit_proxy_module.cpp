@@ -1,4 +1,6 @@
 #include "hit_proxy_module.h"
+#include "hit_proxy.h"
+#include "hit_proxy_obb.h"
 
 namespace Echo
 {
@@ -25,6 +27,7 @@ namespace Echo
 
 	void HitProxyModule::registerTypes()
 	{
-
+		Class::registerType<HitProxy>();
+		Class::registerType<HitProxyOBB>();
 	}
 }
