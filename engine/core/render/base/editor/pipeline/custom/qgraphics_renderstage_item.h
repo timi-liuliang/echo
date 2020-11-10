@@ -8,10 +8,10 @@
 
 namespace Pipeline
 {
-	class QGraphicsRenderQueueItem : public QGraphicsPathItem
+	class QGraphicsRenderStageItem : public QGraphicsPathItem
 	{
 	public:
-		QGraphicsRenderQueueItem(QGraphicsItem* parent = nullptr)
+		QGraphicsRenderStageItem(QGraphicsItem* parent = nullptr)
 			: QGraphicsPathItem(parent)
 		{}
 

@@ -17,6 +17,14 @@ namespace Echo
         EchoSafeDeleteContainer(m_renderQueues, IRenderQueue);
 	}
 
+	void RenderStage::bindMethods()
+	{
+		CLASS_BIND_METHOD(RenderStage, getName, DEF_METHOD("getName"));
+		CLASS_BIND_METHOD(RenderStage, setName, DEF_METHOD("setName"));
+
+		CLASS_REGISTER_PROPERTY(RenderStage, "Name", Variant::Type::String, "getName", "setName");
+	}
+
 	ImageFilter* RenderStage::addImageFilter(const String& name)
 	{
 		ImageFilter* queue = EchoNew(ImageFilter(this));

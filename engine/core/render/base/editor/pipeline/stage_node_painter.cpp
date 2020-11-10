@@ -15,12 +15,18 @@ namespace Pipeline
 		{
 			float halfWidth = m_width * 0.5f;
 
-			m_rect = new QGraphicsPathItem(nullptr);
+			m_rect = new QGraphicsRenderStageItem(nullptr);
 			m_rect->setZValue(-1.f);
 			m_rect->setPen(QPen(m_style.m_normalBoundaryColor, m_style.m_penWidth));
-			m_rect->setFlag(QGraphicsItem::ItemIsMovable, true);
+			m_rect->setFlag(QGraphicsItem::ItemIsFocusable, true);
 			m_rect->setPos(QPointF(0.f, 0.f));
 			m_graphicsScene->addItem(m_rect);
+
+			// mouse press event
+			m_rect->setMousePressEventCb([this](QGraphicsItem* item)
+			{
+				EditorApi.showObjectProperty(m_stage);
+			});
 
 			Echo::Vector2 textPos(15.f, 15.f);
 			m_text = m_graphicsScene->addSimpleText(m_stage->getName().c_str());
@@ -139,7 +145,11 @@ namespace Pipeline
 				m_addAction->setPos(QPointF(-8.f, m_height - 24.f));
 			}
 
+			m_text->setText(m_stage->getName().c_str());
+
 			m_rect->setPos(xPos * 240.f, 0.f);
+			m_rect->setPen(QPen(m_rect->isFocused() ? m_style.m_selectedBoundaryColor : m_style.m_normalBoundaryColor, m_style.m_penWidth));
+
 			m_nextArrow->setVisible(!isFinal);
 		}
 	}

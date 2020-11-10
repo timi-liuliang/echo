@@ -6,9 +6,12 @@
 namespace Echo
 {
 	class RenderPipeline;
-	class RenderStage
+	class RenderStage : public Object
 	{
+		ECHO_CLASS(RenderStage, Object)
+
 	public:
+		RenderStage() {}
 		RenderStage(RenderPipeline* pipeline);
 		~RenderStage();
 

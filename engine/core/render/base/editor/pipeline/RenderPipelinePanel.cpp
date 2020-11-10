@@ -30,8 +30,23 @@ namespace Echo
 
 		// create QGraphicsScene
 		m_graphicsView = m_ui->findChild<QGraphicsView*>("m_graphicsView");
-		m_graphicsScene = EditorApi.qGraphicsSceneNew();
+		m_graphicsScene = new Pipeline::QGraphicsSceneEx();
 		m_graphicsView->setScene(m_graphicsScene);
+
+		// event
+		m_graphicsScene->setMousePressEventCb([this]()
+		{
+			EditorApi.showObjectProperty(m_pipeline);
+		});
+
+		// top line
+		float topSpace = 15.f;
+		float leftSpace = 15.f;
+		float defaultStageNodeWidth = 190.f;
+		m_borderTopLine = m_graphicsScene->addLine(QLineF(-leftSpace - defaultStageNodeWidth * 0.5f, -topSpace, 100, -topSpace), QPen(QColor(0, 0, 0, 0)));
+
+		// Fixed viewport top-left corner
+		m_graphicsView->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 	}
 
 	void RenderpipelinePanel::update()
