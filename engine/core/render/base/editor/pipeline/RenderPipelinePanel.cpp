@@ -151,5 +151,14 @@ namespace Echo
 			m_renderQueueNodePainters[i]->update(poses[i].x, poses[i].y);
 		}
 	}
+
+	void RenderpipelinePanel::save()
+	{
+		if (m_pipeline)
+		{
+			m_pipeline->save();
+		}
+	}
+
 #endif
 }

@@ -15,6 +15,9 @@ namespace Echo
 		// get ui ptr
 		QWidget* getUiPtr() { return m_ui; }
 
+		// save
+		virtual void save() {}
+
 	public:
 		QWidget*		m_ui;
 	};

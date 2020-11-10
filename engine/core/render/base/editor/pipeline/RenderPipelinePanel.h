@@ -35,6 +35,10 @@ namespace Echo
 		void drawRenderQueues();
 
 	protected:
+		// save
+		virtual void save() override;
+
+	protected:
 		RenderPipeline*						m_pipeline;
 		QGraphicsView*						m_graphicsView = nullptr;
 		Pipeline::QGraphicsSceneEx*			m_graphicsScene = nullptr;

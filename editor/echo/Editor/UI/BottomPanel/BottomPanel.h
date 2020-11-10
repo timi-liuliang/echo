@@ -29,12 +29,16 @@ namespace Studio
 		// on tab index changed
 		void onTabIdxChanged(int idx);
 
+		// save
+		void save();
+
 	private:
 		// get tab
 		QWidget* getTab(const Echo::String& tabName);
 
 	private:
-		DocumentPanel*	m_documentPanel;
-		DebuggerPanel*	m_debuggerPanel;
+		DocumentPanel*				m_documentPanel;
+		DebuggerPanel*				m_debuggerPanel;
+		std::vector<Echo::PanelTab*>m_otherPanels;
 	};
 }

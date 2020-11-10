@@ -82,9 +82,18 @@ namespace Studio
 			{
 				QWidget* widget = bottomPanel->getUiPtr();
 				m_tabWidget->addTab( widget, title.c_str());
+				m_otherPanels.push_back(bottomPanel);
 			}
 
 			setTabVisible(title, true);
 		}	
+	}
+
+	void BottomPanel::save()
+	{
+		for (Echo::PanelTab* otherPanel : m_otherPanels)
+		{
+			otherPanel->save();
+		}
 	}
 }
