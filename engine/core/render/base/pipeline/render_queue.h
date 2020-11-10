@@ -22,11 +22,11 @@ namespace Echo
 		void addRenderable(RenderableID id) { m_renderables.emplace_back(id); }
 
 		// sort
-		void setSort(bool isSort) { m_isSort = isSort; }
-		bool isSort() const { return m_isSort; }
+		void setSort(bool isSort) { m_sort = isSort; }
+		bool isSort() const { return m_sort; }
 
 	protected:
-		bool							m_isSort;
+		bool							m_sort;
 		vector<RenderableID>::type		m_renderables;
 	};
 }

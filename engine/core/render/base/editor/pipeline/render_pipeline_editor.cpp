@@ -26,6 +26,15 @@ namespace Echo
 		Editor::instance()->showBottomPanel(m_panel);
 	}
 
+	void RenderPipelineEditor::postEditorCreateObject()
+	{
+		RenderPipeline* pipeline = ECHO_DOWN_CAST<RenderPipeline*>(m_object);
+		if (pipeline)
+		{
+			pipeline->setSrc(RenderPipeline::Default);
+		}
+	}
+
 	void RenderPipelineEditor::editor_update_self()
 	{
 		if (m_panel)

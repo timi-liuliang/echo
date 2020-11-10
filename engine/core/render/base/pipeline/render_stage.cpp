@@ -65,6 +65,39 @@ namespace Echo
 		}
 	}
 
+	void RenderStage::saveXml(void* pugiNode)
+	{
+		pugi::xml_node* parentNode = (pugi::xml_node*)pugiNode;
+		if (parentNode)
+		{
+			pugi::xml_node stageNode = parentNode->append_child("stage");
+			stageNode.append_attribute("name").set_value(getName().c_str());
+
+			for (IRenderQueue* renderQueue : m_renderQueues)
+			{
+				pugi::xml_node queueNode = stageNode.append_child("queue");
+
+				RenderQueue* queue = dynamic_cast<RenderQueue*>(renderQueue);
+				if (queue)
+				{
+					queueNode.append_attribute("type").set_value("queue");
+					queueNode.append_attribute("name").set_value(queue->getName().c_str());
+					queueNode.append_attribute("sort").set_value(queue->isSort());
+				}
+
+				ImageFilter* filter = dynamic_cast<ImageFilter*>(renderQueue);
+				if (filter)
+				{
+					queueNode.append_attribute("type").set_value("filter");
+					queueNode.append_attribute("name").set_value(filter->getName().c_str());
+				}
+			}
+
+			pugi::xml_node frameNode = stageNode.append_child("framebuffer");
+			frameNode.append_attribute("id").set_value(m_frameBufferId);
+		}
+	}
+
 	void RenderStage::addRenderable(const String& name, RenderableID id)
 	{
 		for (IRenderQueue* iqueue : m_renderQueues)

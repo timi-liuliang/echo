@@ -38,6 +38,7 @@ namespace Echo
 	public:
 		// load|save
 		void parseXml(void* pugiNode);
+		void saveXml(void* pugiNode);
 
 	protected:
 		String						m_name;

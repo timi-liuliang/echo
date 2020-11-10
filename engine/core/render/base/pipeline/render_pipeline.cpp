@@ -38,6 +38,18 @@ namespace Echo
 	{
 	}
 
+	void RenderPipeline::setSrc(Template type)
+	{
+		if (type == Empty)
+		{
+			setSrc(StringUtil::BLANK);
+		}
+		else if (type == Template::Default)
+		{
+			setSrc(defaultPipelineTemplate);
+		}
+	}
+
 	RenderPipelinePtr RenderPipeline::current()
 	{
 		if (!g_current)
@@ -69,7 +81,6 @@ namespace Echo
 
 			m_isParsed = true;
 		}
-
 	}
 
 	bool RenderPipeline::beginFramebuffer(ui32 id, bool clearColor, const Color& bgColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue, ui32 rbo)
@@ -158,16 +169,15 @@ namespace Echo
 
 	void RenderPipeline::save()
 	{
-		const char* content = m_srcData.empty() ? defaultPipelineTemplate : m_srcData.data();
-		if (content)
+		pugi::xml_document doc;
+
+		pugi::xml_node rootNode = doc.append_child("pipeline");
+		for (RenderStage* stage : m_renderStages)
 		{
-			String fullPath = IO::instance()->convertResPathToFullPath(m_path.getPath());
-			std::ofstream f(fullPath.c_str());
-
-			f << content;
-
-			f.flush();
-			f.close();
+			stage->saveXml(&rootNode);
 		}
+
+		String fullPath = IO::instance()->convertResPathToFullPath(m_path.getPath());
+		doc.save_file(fullPath.c_str(), "\t", 1U, pugi::encoding_utf8);
 	}
 }

@@ -16,7 +16,10 @@ namespace Echo
 
 	void RenderQueue::bindMethods()
 	{
+		CLASS_BIND_METHOD(RenderQueue, isSort, DEF_METHOD("isSort"));
+		CLASS_BIND_METHOD(RenderQueue, setSort, DEF_METHOD("setSort"));
 
+		CLASS_REGISTER_PROPERTY(RenderQueue, "Sort", Variant::Type::Bool, "isSort", "setSort");
 	}
 
 	void RenderQueue::render()
@@ -25,7 +28,7 @@ namespace Echo
 		if (render)
 		{
 			// sort
-			if (m_isSort)
+			if (m_sort)
 			{
 				std::sort(m_renderables.begin(), m_renderables.end(), [](RenderableID a, RenderableID b) -> bool
 				{

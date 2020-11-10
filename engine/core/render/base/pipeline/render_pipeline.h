@@ -12,6 +12,14 @@ namespace Echo
 		ECHO_RES(RenderPipeline, Res, ".pipeline", Res::create<RenderPipeline>, RenderPipeline::load);
 
 	public:
+		// template
+		enum Template
+		{
+			Empty,
+			Default,
+		};
+
+	public:
 		RenderPipeline();
 		RenderPipeline(const ResourcePath& path);
 		virtual ~RenderPipeline();
@@ -35,6 +43,7 @@ namespace Echo
 		static void setCurrent(const ResourcePath& path);
 
 		// set src
+		void setSrc(Template type);
 		void setSrc(const String& src);
 
 		// stages

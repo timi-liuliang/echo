@@ -53,7 +53,6 @@ namespace Studio
 			pugi::xml_document doc;
 			doc.load_file(m_cfgFile.c_str());
 
-			// root节点
 			pugi::xml_node projectNode = doc.child( "project" );
 			if( projectNode)
 			{
