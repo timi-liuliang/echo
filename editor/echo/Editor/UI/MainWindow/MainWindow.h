@@ -15,6 +15,7 @@ namespace Studio
 	class TextEditorArea;
 	class ShaderEditor;
 	class TimelinePanel;
+	class DocumentPanel;
 	class DebuggerPanel;
 	class BottomPanel;
 	class AboutWindow;
@@ -156,6 +157,7 @@ namespace Studio
 		ShaderEditor*		m_shaderEditorPanel = nullptr;
 		QDockWidgets		m_centerPanels;
 		BottomPanel*		m_bottomPanel = nullptr;
+		DocumentPanel*		m_documentPanel = nullptr;
 		DebuggerPanel*		m_debuggerPanel = nullptr;
 		QProcess			m_gameProcess;
 		QComboBox*			m_subEditComboBox = nullptr;

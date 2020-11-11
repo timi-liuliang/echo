@@ -5,7 +5,7 @@
 namespace Studio
 {
 	DocumentPanel::DocumentPanel(QWidget* parent)
-		: QWidget(parent)
+		: QDockWidget(parent)
 	{
 		setupUi(this);
         

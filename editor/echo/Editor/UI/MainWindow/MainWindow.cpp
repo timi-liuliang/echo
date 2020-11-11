@@ -24,6 +24,7 @@
 #include "RenderWindow.h"
 #include "MacHelper.h"
 #include "BuildWindow.h"
+#include "Document.h"
 #include "About.h"
 #include <QTimer>
 #include <engine/core/util/PathUtil.h>
@@ -121,6 +122,7 @@ namespace Studio
 		EchoSafeDelete(m_scriptEditorMdiArea, TextEditorArea);
 		EchoSafeDelete(m_shaderEditorPanel, ShaderEditor);
         EchoSafeDelete(m_bottomPanel, BottomPanel);
+		EchoSafeDelete(m_documentPanel, DocumentPanel);
 		EchoSafeDelete(m_debuggerPanel, DebuggerPanel);
         EchoSafeDelete(m_scenePanel, NodeTreePanel);
         EchoSafeDelete(m_resPanel, ResPanel);
@@ -140,9 +142,10 @@ namespace Studio
 		m_renderPanel = EchoNew(QDockWidget(this));
 		m_resPanel = EchoNew(ResPanel(this));
 		m_scenePanel = EchoNew(NodeTreePanel(this));
-		m_bottomPanel = EchoNew(BottomPanel(this));
 		m_scriptEditorMdiArea = EchoNew(TextEditorArea);
 		m_shaderEditorPanel = EchoNew(ShaderEditor(this));
+		m_bottomPanel = EchoNew(BottomPanel(this));
+		m_documentPanel = EchoNew(DocumentPanel(this));
 		m_debuggerPanel = EchoNew(DebuggerPanel(this));
 		m_scriptEditorMdiArea->setVisible(false);
 		m_shaderEditorPanel->setVisible(false);
@@ -163,10 +166,12 @@ namespace Studio
 		this->addDockWidget(Qt::LeftDockWidgetArea, m_resPanel);
 		this->addDockWidget(Qt::RightDockWidgetArea, m_scenePanel);
 		this->addDockWidget(Qt::BottomDockWidgetArea, m_bottomPanel);
+		this->addDockWidget(Qt::BottomDockWidgetArea, m_documentPanel);
 		this->addDockWidget(Qt::BottomDockWidgetArea, m_debuggerPanel);
 
 		this->tabifyDockWidget(m_scriptEditorMdiArea, m_shaderEditorPanel);
-		this->tabifyDockWidget(m_bottomPanel, m_debuggerPanel);
+		this->tabifyDockWidget(m_bottomPanel, m_documentPanel);
+		this->tabifyDockWidget(m_documentPanel, m_debuggerPanel);
 
 		m_resPanel->onOpenProject();
 

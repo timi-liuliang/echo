@@ -37,7 +37,6 @@ namespace Studio
 		QWidget* getTab(const Echo::String& tabName);
 
 	private:
-		DocumentPanel*				m_documentPanel;
 		std::vector<Echo::PanelTab*>m_otherPanels;
 	};
 }

@@ -15,11 +15,8 @@ namespace Studio
 	{
 		setupUi(this);
 
-		m_documentPanel = EchoNew(DocumentPanel(this));
-
 		m_tabWidget->clear();
 		m_tabWidget->addTab(AStudio::instance()->getLogPanel(), "Log");
-		m_tabWidget->addTab(m_documentPanel, "Document");
 
 		onTabIdxChanged(0);
 
@@ -29,8 +26,6 @@ namespace Studio
 	BottomPanel::~BottomPanel()
 	{
         m_tabWidget->disconnect();
-        
-        EchoSafeDelete( m_documentPanel, DocumentPanel);
 	}
 
 	QWidget* BottomPanel::getTab(const Echo::String& tabName)
