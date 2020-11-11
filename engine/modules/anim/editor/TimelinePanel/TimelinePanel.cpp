@@ -79,7 +79,7 @@ namespace Echo
 
 		m_timeline = ECHO_DOWN_CAST<Timeline*>(obj);
 
-		m_ui = EditorApi.qLoadUi("engine/modules/anim/editor/TimelinePanel/TimelinePanel.ui");
+		m_ui = (QDockWidget*)EditorApi.qLoadUi("engine/modules/anim/editor/TimelinePanel/TimelinePanel.ui");
 		m_nodeTreeWidget = m_ui->findChild<QTreeWidget*>("m_nodeTreeWidget");
 		m_clipsComboBox = m_ui->findChild<QComboBox*>("m_clips");
 

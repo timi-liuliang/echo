@@ -13,13 +13,13 @@ namespace Echo
 		virtual ~PanelTab();
 
 		// get ui ptr
-		QWidget* getUiPtr() { return m_ui; }
+		QDockWidget* getUiPtr() { return m_ui; }
 
 		// save
 		virtual void save() {}
 
 	public:
-		QWidget*		m_ui;
+		QDockWidget*		m_ui;
 	};
 }
 #endif

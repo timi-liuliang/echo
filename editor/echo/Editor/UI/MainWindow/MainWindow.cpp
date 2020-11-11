@@ -18,7 +18,6 @@
 #include "LuaEditor.h"
 #include "TextEditorArea.h"
 #include "ShaderEditor.h"
-#include "BottomPanel.h"
 #include "ProjectWnd.h"
 #include "PathChooseDialog.h"
 #include "RenderWindow.h"
@@ -232,6 +231,34 @@ namespace Studio
 			//	}
 			//}
 		}
+	}
+
+	void MainWindow::addBottomPanel(QDockWidget* panel)
+	{
+		if (std::find(m_bottomPanels.begin(), m_bottomPanels.end(), panel) == m_bottomPanels.end())
+		{
+			QDockWidget* tabifyPanel = m_bottomPanels.size() > 0 ? m_bottomPanels.back() : m_logPanel;
+
+			this->addDockWidget(Qt::BottomDockWidgetArea, panel);
+			this->tabifyDockWidget(tabifyPanel, panel);
+
+			// https://www.qtcentre.org/threads/47927-How-to-set-focus-(select)-a-tabbed-QDockWidget
+			Echo::Time::instance()->addDelayTask(100, [panel]()
+			{
+				panel->raise();
+			});
+
+			m_bottomPanels.push_back(panel);
+		}
+		else
+		{
+			panel->setVisible(true);
+		}
+	}
+
+	void MainWindow::removeBottomPanel(QDockWidget* panel)
+	{
+
 	}
     
     void MainWindow::onPrepareQuit()

@@ -20,7 +20,7 @@ namespace Echo
 	{
 		m_textureAtlas = ECHO_DOWN_CAST<TextureAtlas*>(obj);
 
-		m_ui = EditorApi.qLoadUi("engine/core/render/base/editor/atlas/TextureAtlasPanel.ui");
+		m_ui = (QDockWidget*)EditorApi.qLoadUi("engine/core/render/base/editor/atlas/TextureAtlasPanel.ui");
 		m_nodeTreeWidget = m_ui->findChild<QTreeWidget*>("m_nodeTreeWidget");
 
 		m_splitDialog = (QDialog*)EditorApi.qLoadUi("engine/core/render/base/editor/atlas/TextureAtlasSplitDialog.ui");

@@ -1,6 +1,5 @@
 #include "Studio.h"
 #include "MainWindow.h"
-#include "BottomPanel.h"
 #include "ProjectWnd.h"
 #include "RenderWindow.h"
 #include "RenderWindowMetal.h"
@@ -223,6 +222,7 @@ namespace Studio
 	void AStudio::showBottomPanel(Echo::PanelTab* bottomPanel)
 	{
 		//MainWindow::instance()->getBottomPanel()->showPanel( bottomPanel);
+		MainWindow::instance()->addBottomPanel(bottomPanel->getUiPtr());
 	}
 
 	void AStudio::showCenterPanel(QDockWidget* panel, float widthRatio)

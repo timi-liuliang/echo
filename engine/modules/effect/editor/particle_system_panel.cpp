@@ -18,7 +18,7 @@ namespace Echo
 	{
 		m_particleSystem = ECHO_DOWN_CAST<ParticleSystem*>(obj);
 
-		m_ui = EditorApi.qLoadUi("engine/modules/effect/editor/particle_system_panel.ui");
+		m_ui = (QDockWidget*)EditorApi.qLoadUi("engine/modules/effect/editor/particle_system_panel.ui");
 
 		QSplitter* splitter = (QSplitter*)EditorApi.qFindChild(m_ui, "m_splitter");
 		if (splitter)

@@ -60,6 +60,10 @@ namespace Studio
 		void addCenterPanel(QDockWidget* panel, float widthRatio);
 		void removeCenterPanel(QDockWidget* panel);
 
+		// add bottom panel
+		void addBottomPanel(QDockWidget* panel);
+		void removeBottomPanel(QDockWidget* panel);
+
 	protected:
 		void closeEvent(QCloseEvent *event);
 
@@ -154,6 +158,7 @@ namespace Studio
 		TextEditorArea*	    m_scriptEditorMdiArea = nullptr;
 		ShaderEditor*		m_shaderEditorPanel = nullptr;
 		QDockWidgets		m_centerPanels;
+		QDockWidgets		m_bottomPanels;
 		LogPanel*			m_logPanel = nullptr;
 		DocumentPanel*		m_documentPanel = nullptr;
 		DebuggerPanel*		m_debuggerPanel = nullptr;
