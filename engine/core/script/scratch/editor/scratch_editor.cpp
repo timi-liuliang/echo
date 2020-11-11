@@ -23,7 +23,7 @@ namespace Echo
 
 	void ScratchEditor::onEditorSelectThisNode()
 	{
-		Editor::instance()->showCenterPanel(m_panel->getUi());
+		Editor::instance()->showCenterPanel(m_panel->getUiPtr());
 	}
 
 	void ScratchEditor::postEditorCreateObject()

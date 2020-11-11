@@ -7,19 +7,13 @@
 
 namespace Echo
 {
-	class ScratchEditorPanel
+	class ScratchEditorPanel : public EditorDockPanel
 	{
 	public:
 		ScratchEditorPanel(Object* obj);
 
-		// get ui
-		QDockWidget* getUi() { return m_ui; }
-
 		// update
 		void update();
-
-	private:
-		QDockWidget* m_ui = nullptr;
 	};
 }
 
