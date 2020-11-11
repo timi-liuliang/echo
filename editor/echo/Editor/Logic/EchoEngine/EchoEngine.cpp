@@ -22,11 +22,6 @@ namespace Studio
 	RenderWindow* EchoEngine::m_renderWindow = NULL;
 
 	EchoEngine::EchoEngine()
-		: m_log(NULL)
-		, m_currentEditNode(nullptr)
-		, m_invisibleNodeForEditor(nullptr)
-		, m_gizmosNodeGrid3d(nullptr)
-		, m_gizmosNodeGrid2d(nullptr)
 	{
 	}
 

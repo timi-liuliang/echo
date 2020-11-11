@@ -70,12 +70,11 @@ namespace Studio
 		void InitializeBackGrid();
 
 	protected:
-		Echo::LogOutput*		m_log;
-		Echo::Node*				m_currentEditNode;
+		Echo::Node*				m_currentEditNode = nullptr;
 		Echo::String			m_currentEditNodeSavePath;
-		Echo::Node*				m_invisibleNodeForEditor;
-		Echo::Gizmos*			m_gizmosNodeGrid3d;
-		Echo::Gizmos*			m_gizmosNodeGrid2d;
+		Echo::Node*				m_invisibleNodeForEditor = nullptr;
+		Echo::Gizmos*			m_gizmosNodeGrid3d = nullptr;
+		Echo::Gizmos*			m_gizmosNodeGrid2d = nullptr;
 		static std::string		m_projectFile;
 		static RenderWindow*	m_renderWindow;
 	};

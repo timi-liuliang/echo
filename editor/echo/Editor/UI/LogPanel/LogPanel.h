@@ -8,27 +8,24 @@
 namespace Studio
 {
 	//----------------------------------------
-	// 输出 主窗口 2010-12-30
+	// LogPanel 2010-12-30
 	//----------------------------------------
-	class LogPanel : public QWidget, public Echo::LogOutput, public Ui_LogPanel
+	class LogPanel : public QDockWidget, public Echo::LogOutput, public Ui_LogPanel
 	{
 		Q_OBJECT
 
 	public:
-		// 构造函数
 		LogPanel(QWidget* parent = 0);
-
-		// 析构函数
 		~LogPanel();
 
-		// 输出消息
+		// Out
 		void OutMsg( int level,const char* msg, const char* icon);
 
 	public:
-		// 日志输出
+		// log message
 		virtual void logMessage(Level level, const Echo::String &msg) override;
 		 
-
+		// set path
 		virtual void setPath(const Echo::String&){}
 
 	signals:

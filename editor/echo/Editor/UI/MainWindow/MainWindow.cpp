@@ -121,7 +121,6 @@ namespace Studio
 
 		EchoSafeDelete(m_scriptEditorMdiArea, TextEditorArea);
 		EchoSafeDelete(m_shaderEditorPanel, ShaderEditor);
-        EchoSafeDelete(m_bottomPanel, BottomPanel);
 		EchoSafeDelete(m_documentPanel, DocumentPanel);
 		EchoSafeDelete(m_debuggerPanel, DebuggerPanel);
         EchoSafeDelete(m_scenePanel, NodeTreePanel);
@@ -144,7 +143,7 @@ namespace Studio
 		m_scenePanel = EchoNew(NodeTreePanel(this));
 		m_scriptEditorMdiArea = EchoNew(TextEditorArea);
 		m_shaderEditorPanel = EchoNew(ShaderEditor(this));
-		m_bottomPanel = EchoNew(BottomPanel(this));
+		m_logPanel = AStudio::instance()->getLogPanel();
 		m_documentPanel = EchoNew(DocumentPanel(this));
 		m_debuggerPanel = EchoNew(DebuggerPanel(this));
 		m_scriptEditorMdiArea->setVisible(false);
@@ -165,12 +164,12 @@ namespace Studio
 		this->addDockWidget(Qt::TopDockWidgetArea, m_renderPanel);
 		this->addDockWidget(Qt::LeftDockWidgetArea, m_resPanel);
 		this->addDockWidget(Qt::RightDockWidgetArea, m_scenePanel);
-		this->addDockWidget(Qt::BottomDockWidgetArea, m_bottomPanel);
+		this->addDockWidget(Qt::BottomDockWidgetArea, m_logPanel);
 		this->addDockWidget(Qt::BottomDockWidgetArea, m_documentPanel);
 		this->addDockWidget(Qt::BottomDockWidgetArea, m_debuggerPanel);
 
 		this->tabifyDockWidget(m_scriptEditorMdiArea, m_shaderEditorPanel);
-		this->tabifyDockWidget(m_bottomPanel, m_documentPanel);
+		this->tabifyDockWidget(m_logPanel, m_documentPanel);
 		this->tabifyDockWidget(m_documentPanel, m_debuggerPanel);
 
 		m_resPanel->onOpenProject();
@@ -185,7 +184,6 @@ namespace Studio
 		// signals & slots
 		QObject::connect(m_actionSaveProject, SIGNAL(triggered(bool)), m_scriptEditorMdiArea, SLOT(save()));
         QObject::connect(m_actionSaveProject, SIGNAL(triggered(bool)), m_shaderEditorPanel, SLOT(save()));
-		QObject::connect(m_actionSaveProject, SIGNAL(triggered(bool)), m_bottomPanel, SLOT(save()));
 		QObject::connect(m_scriptEditorMdiArea, SIGNAL(visibilityChanged(bool)), this, SLOT(onScriptEditVisibilityChanged()));
 		QObject::connect(m_shaderEditorPanel, SIGNAL(visibilityChanged(bool)), this, SLOT(onCenterDockWidgetVisibilityChanged()));
 		QObject::connect(m_renderPanel, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(onDockWidgetLocationChanged()));
@@ -642,7 +640,7 @@ namespace Studio
 
 	void MainWindow::onOpenHelpDialog()
 	{
-		m_bottomPanel->setTabVisible( "DocumentPanel", !m_bottomPanel->isTabVisible("DocumentPanel"));
+		m_logPanel->raise();
 	}
 
 	void MainWindow::onOpenWiki()

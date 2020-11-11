@@ -8,7 +8,7 @@
 namespace Studio
 {
 	LogPanel::LogPanel(QWidget* parent/* = 0*/)
-		: QWidget( parent)
+		: QDockWidget( parent)
 		, LogOutput("LogPanel")
 		, m_sameMessageNum(0)
 		, m_lastLevel(LL_INVALID)

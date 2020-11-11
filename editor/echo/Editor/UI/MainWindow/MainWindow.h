@@ -15,6 +15,7 @@ namespace Studio
 	class TextEditorArea;
 	class ShaderEditor;
 	class TimelinePanel;
+	class LogPanel;
 	class DocumentPanel;
 	class DebuggerPanel;
 	class BottomPanel;
@@ -58,9 +59,6 @@ namespace Studio
 		// add center panel
 		void addCenterPanel(QDockWidget* panel, float widthRatio);
 		void removeCenterPanel(QDockWidget* panel);
-
-		// panels
-		BottomPanel* getBottomPanel() { return m_bottomPanel; }
 
 	protected:
 		void closeEvent(QCloseEvent *event);
@@ -156,7 +154,7 @@ namespace Studio
 		TextEditorArea*	    m_scriptEditorMdiArea = nullptr;
 		ShaderEditor*		m_shaderEditorPanel = nullptr;
 		QDockWidgets		m_centerPanels;
-		BottomPanel*		m_bottomPanel = nullptr;
+		LogPanel*			m_logPanel = nullptr;
 		DocumentPanel*		m_documentPanel = nullptr;
 		DebuggerPanel*		m_debuggerPanel = nullptr;
 		QProcess			m_gameProcess;

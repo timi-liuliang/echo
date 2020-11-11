@@ -222,7 +222,7 @@ namespace Studio
 
 	void AStudio::showBottomPanel(Echo::PanelTab* bottomPanel)
 	{
-		MainWindow::instance()->getBottomPanel()->showPanel( bottomPanel);
+		//MainWindow::instance()->getBottomPanel()->showPanel( bottomPanel);
 	}
 
 	void AStudio::showCenterPanel(QDockWidget* panel, float widthRatio)
