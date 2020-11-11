@@ -18,7 +18,6 @@
 #include "LuaEditor.h"
 #include "TextEditorArea.h"
 #include "ShaderEditor.h"
-#include "ScratchEditor.h"
 #include "BottomPanel.h"
 #include "ProjectWnd.h"
 #include "PathChooseDialog.h"
@@ -121,8 +120,8 @@ namespace Studio
 
 		EchoSafeDelete(m_scriptEditorMdiArea, TextEditorArea);
 		EchoSafeDelete(m_shaderEditorPanel, ShaderEditor);
-		EchoSafeDelete(m_scratchEditorPanel, ScratchEditor);
         EchoSafeDelete(m_bottomPanel, BottomPanel);
+		EchoSafeDelete(m_debuggerPanel, DebuggerPanel);
         EchoSafeDelete(m_scenePanel, NodeTreePanel);
         EchoSafeDelete(m_resPanel, ResPanel);
         EchoSafeDelete(m_renderPanel, QDockWidget);
@@ -144,10 +143,9 @@ namespace Studio
 		m_bottomPanel = EchoNew(BottomPanel(this));
 		m_scriptEditorMdiArea = EchoNew(TextEditorArea);
 		m_shaderEditorPanel = EchoNew(ShaderEditor(this));
-		m_scratchEditorPanel = EchoNew(ScratchEditor(this));
+		m_debuggerPanel = EchoNew(DebuggerPanel(this));
 		m_scriptEditorMdiArea->setVisible(false);
 		m_shaderEditorPanel->setVisible(false);
-		m_scratchEditorPanel->setVisible(false);
 
 		// add renderWindow to RenderDockWidget
 		QWidget* renderWindow = AStudio::instance()->getRenderWindow();
@@ -161,14 +159,14 @@ namespace Studio
 
 		this->addDockWidget(Qt::TopDockWidgetArea, m_scriptEditorMdiArea);
 		this->addDockWidget(Qt::TopDockWidgetArea, m_shaderEditorPanel);
-		this->addDockWidget(Qt::TopDockWidgetArea, m_scratchEditorPanel);
 		this->addDockWidget(Qt::TopDockWidgetArea, m_renderPanel);
 		this->addDockWidget(Qt::LeftDockWidgetArea, m_resPanel);
 		this->addDockWidget(Qt::RightDockWidgetArea, m_scenePanel);
 		this->addDockWidget(Qt::BottomDockWidgetArea, m_bottomPanel);
+		this->addDockWidget(Qt::BottomDockWidgetArea, m_debuggerPanel);
 
 		this->tabifyDockWidget(m_scriptEditorMdiArea, m_shaderEditorPanel);
-		this->tabifyDockWidget(m_shaderEditorPanel, m_scratchEditorPanel);
+		this->tabifyDockWidget(m_bottomPanel, m_debuggerPanel);
 
 		m_resPanel->onOpenProject();
 
@@ -185,7 +183,6 @@ namespace Studio
 		QObject::connect(m_actionSaveProject, SIGNAL(triggered(bool)), m_bottomPanel, SLOT(save()));
 		QObject::connect(m_scriptEditorMdiArea, SIGNAL(visibilityChanged(bool)), this, SLOT(onScriptEditVisibilityChanged()));
 		QObject::connect(m_shaderEditorPanel, SIGNAL(visibilityChanged(bool)), this, SLOT(onCenterDockWidgetVisibilityChanged()));
-		QObject::connect(m_scratchEditorPanel, SIGNAL(visibilityChanged(bool)), this, SLOT(onCenterDockWidgetVisibilityChanged()));
 		QObject::connect(m_renderPanel, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(onDockWidgetLocationChanged()));
 	}
 
@@ -238,7 +235,6 @@ namespace Studio
     {
         EchoSafeDelete(m_scriptEditorMdiArea, TextEditorArea);
 		EchoSafeDelete(m_shaderEditorPanel, ShaderEditor);
-		EchoSafeDelete(m_scratchEditorPanel, ScratchEditor);
     }
 
 	void MainWindow::recoverEditSettings()

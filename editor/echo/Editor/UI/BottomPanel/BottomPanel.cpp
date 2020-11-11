@@ -16,11 +16,9 @@ namespace Studio
 		setupUi(this);
 
 		m_documentPanel = EchoNew(DocumentPanel(this));
-		m_debuggerPanel = EchoNew(DebuggerPanel(this));
 
 		m_tabWidget->clear();
 		m_tabWidget->addTab(AStudio::instance()->getLogPanel(), "Log");
-		m_tabWidget->addTab(m_debuggerPanel, "Debugger");
 		m_tabWidget->addTab(m_documentPanel, "Document");
 
 		onTabIdxChanged(0);
@@ -32,7 +30,6 @@ namespace Studio
 	{
         m_tabWidget->disconnect();
         
-        EchoSafeDelete( m_debuggerPanel, DebuggerPanel);
         EchoSafeDelete( m_documentPanel, DocumentPanel);
 	}
 

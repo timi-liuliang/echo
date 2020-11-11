@@ -14,7 +14,6 @@ namespace Studio
 	class LuaEditor;
 	class TextEditorArea;
 	class ShaderEditor;
-	class ScratchEditor;
 	class TimelinePanel;
 	class DebuggerPanel;
 	class BottomPanel;
@@ -155,9 +154,9 @@ namespace Studio
 		NodeTreePanel*		m_scenePanel = nullptr;
 		TextEditorArea*	    m_scriptEditorMdiArea = nullptr;
 		ShaderEditor*		m_shaderEditorPanel = nullptr;
-		ScratchEditor*		m_scratchEditorPanel = nullptr;
 		QDockWidgets		m_centerPanels;
 		BottomPanel*		m_bottomPanel = nullptr;
+		DebuggerPanel*		m_debuggerPanel = nullptr;
 		QProcess			m_gameProcess;
 		QComboBox*			m_subEditComboBox = nullptr;
 		QComboBox*			m_viewMode = nullptr;

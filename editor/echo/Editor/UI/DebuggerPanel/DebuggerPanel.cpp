@@ -3,14 +3,12 @@
 
 namespace Studio
 {
-	// 构造函数
 	DebuggerPanel::DebuggerPanel(QWidget* parent/* = 0*/)
-		: QWidget( parent)
+		: QDockWidget( parent)
 	{
 		setupUi(this);
 	}
 
-	// 析构函数
 	DebuggerPanel::~DebuggerPanel()
 	{
 	}

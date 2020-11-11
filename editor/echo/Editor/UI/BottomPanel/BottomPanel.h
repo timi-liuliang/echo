@@ -38,7 +38,6 @@ namespace Studio
 
 	private:
 		DocumentPanel*				m_documentPanel;
-		DebuggerPanel*				m_debuggerPanel;
 		std::vector<Echo::PanelTab*>m_otherPanels;
 	};
 }
