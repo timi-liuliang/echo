@@ -2,7 +2,7 @@
 
 #include "engine/core/base/echo_def.h"
 #include "engine/core/render/base/image/image.h"
-#include "bottom_panel_tab.h"
+#include "editor_dock_panel.h"
 #include "qt/QWidgets.h"
 
 #ifdef ECHO_EDITOR_MODE
@@ -27,7 +27,7 @@ namespace Echo
         virtual void removeCenterPanel(QDockWidget* panel)=0;
 
         // bottom panel
-		virtual void showBottomPanel(PanelTab* bottomPanel)=0;
+		virtual void showBottomPanel(EditorDockPanel* bottomPanel)=0;
 
 	public:
         // select a class

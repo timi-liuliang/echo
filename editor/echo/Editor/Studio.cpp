@@ -219,10 +219,9 @@ namespace Studio
 		Echo::Engine::instance()->setRootPath(rootPath);
 	}
 
-	void AStudio::showBottomPanel(Echo::PanelTab* bottomPanel)
+	void AStudio::showBottomPanel(Echo::EditorDockPanel* bottomPanel)
 	{
-		//MainWindow::instance()->getBottomPanel()->showPanel( bottomPanel);
-		MainWindow::instance()->addBottomPanel(bottomPanel->getUiPtr());
+		MainWindow::instance()->addBottomPanel(bottomPanel);
 	}
 
 	void AStudio::showCenterPanel(QDockWidget* panel, float widthRatio)

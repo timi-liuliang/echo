@@ -1,14 +1,14 @@
 #pragma once
 
 #include "engine/core/util/Array.hpp"
-#include "engine/core/editor/bottom_panel_tab.h"
+#include "engine/core/editor/editor_dock_panel.h"
 
 #ifdef ECHO_EDITOR_MODE
 
 namespace Echo
 {
 	class Timeline;
-	class TimelinePanel : public PanelTab
+	class TimelinePanel : public EditorDockPanel
 	{
 		typedef vector<QGraphicsItem*>::type QGraphicsItemArray;
 		typedef vector<QGraphicsProxyWidget*>::type QGraphicsWidgetArray;

@@ -181,8 +181,7 @@ namespace Studio
 		QTimer::singleShot(100, this, SLOT(recoverEditSettings()));
 
 		// signals & slots
-		QObject::connect(m_actionSaveProject, SIGNAL(triggered(bool)), m_scriptEditorMdiArea, SLOT(save()));
-        QObject::connect(m_actionSaveProject, SIGNAL(triggered(bool)), m_shaderEditorPanel, SLOT(save()));
+		QObject::connect(m_actionSaveProject, SIGNAL(triggered(bool)), this, SLOT(onSave()));
 		QObject::connect(m_scriptEditorMdiArea, SIGNAL(visibilityChanged(bool)), this, SLOT(onScriptEditVisibilityChanged()));
 		QObject::connect(m_shaderEditorPanel, SIGNAL(visibilityChanged(bool)), this, SLOT(onCenterDockWidgetVisibilityChanged()));
 		QObject::connect(m_renderPanel, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(onDockWidgetLocationChanged()));
@@ -233,30 +232,30 @@ namespace Studio
 		}
 	}
 
-	void MainWindow::addBottomPanel(QDockWidget* panel)
+	void MainWindow::addBottomPanel(Echo::EditorDockPanel* panel)
 	{
 		if (std::find(m_bottomPanels.begin(), m_bottomPanels.end(), panel) == m_bottomPanels.end())
 		{
-			QDockWidget* tabifyPanel = m_bottomPanels.size() > 0 ? m_bottomPanels.back() : m_logPanel;
+			QDockWidget* tabifyPanel = m_bottomPanels.size() > 0 ? m_bottomPanels.back()->getUiPtr() : m_logPanel;
 
-			this->addDockWidget(Qt::BottomDockWidgetArea, panel);
-			this->tabifyDockWidget(tabifyPanel, panel);
+			this->addDockWidget(Qt::BottomDockWidgetArea, panel->getUiPtr());
+			this->tabifyDockWidget(tabifyPanel, panel->getUiPtr());
 
 			// https://www.qtcentre.org/threads/47927-How-to-set-focus-(select)-a-tabbed-QDockWidget
 			Echo::Time::instance()->addDelayTask(100, [panel]()
 			{
-				panel->raise();
+				panel->getUiPtr()->raise();
 			});
 
 			m_bottomPanels.push_back(panel);
 		}
 		else
 		{
-			panel->setVisible(true);
+			panel->getUiPtr()->setVisible(true);
 		}
 	}
 
-	void MainWindow::removeBottomPanel(QDockWidget* panel)
+	void MainWindow::removeBottomPanel(Echo::EditorDockPanel* panel)
 	{
 
 	}
@@ -812,6 +811,15 @@ namespace Studio
     {
         UndoHistory::instance()->redo();
     }
+
+	void MainWindow::onSave()
+	{
+		m_scriptEditorMdiArea->save();
+		m_shaderEditorPanel->save();
+
+		for (Echo::EditorDockPanel* panel : m_bottomPanels)
+			panel->save();
+	}
 
 	void MainWindow::onShowStatusMessage()
 	{

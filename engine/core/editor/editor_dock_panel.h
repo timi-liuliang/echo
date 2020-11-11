@@ -6,11 +6,11 @@
 
 namespace Echo
 {
-	class PanelTab
+	class EditorDockPanel
 	{
 	public:
-		PanelTab();
-		virtual ~PanelTab();
+		EditorDockPanel();
+		virtual ~EditorDockPanel();
 
 		// get ui ptr
 		QDockWidget* getUiPtr() { return m_ui; }

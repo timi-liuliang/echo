@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/core/util/Array.hpp"
-#include "engine/core/editor/bottom_panel_tab.h"
+#include "engine/core/editor/editor_dock_panel.h"
 #include "../../pipeline/render_pipeline.h"
 
 #ifdef ECHO_EDITOR_MODE
@@ -12,7 +12,7 @@
 
 namespace Echo
 {
-	class RenderpipelinePanel : public PanelTab
+	class RenderpipelinePanel : public EditorDockPanel
 	{
 		typedef vector<QGraphicsItem*>::type QGraphicsItemArray;
 		typedef vector<QGraphicsProxyWidget*>::type QGraphicsWidgetArray;

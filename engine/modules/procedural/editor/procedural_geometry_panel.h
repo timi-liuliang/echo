@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/core/util/Array.hpp"
-#include "engine/core/editor/bottom_panel_tab.h"
+#include "engine/core/editor/editor_dock_panel.h"
 #include "../procedural_geometry.h"
 #include "painter/background_grid_painter.h"
 #include "painter/node_painter.h"

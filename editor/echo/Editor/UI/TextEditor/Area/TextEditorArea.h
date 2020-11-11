@@ -24,7 +24,7 @@ namespace Studio
         void rememberScriptOpenStates();
         void recoverScriptOpenStates();
 
-	protected slots:
+	public slots:
 		// save
 		void save();
         

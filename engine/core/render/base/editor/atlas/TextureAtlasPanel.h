@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/core/util/Array.hpp"
-#include "engine/core/editor/bottom_panel_tab.h"
+#include "engine/core/editor/editor_dock_panel.h"
 #include "../../atla/texture_atlas.h"
 
 #ifdef ECHO_EDITOR_MODE
@@ -10,7 +10,7 @@
 
 namespace Echo
 {
-	class TextureAtlasPanel : public PanelTab
+	class TextureAtlasPanel : public EditorDockPanel
 	{
 		typedef vector<QGraphicsItem*>::type QGraphicsItemArray;
 		typedef vector<QGraphicsProxyWidget*>::type QGraphicsWidgetArray;

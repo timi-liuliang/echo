@@ -4,6 +4,7 @@
 #include <QTimer>
 #include "ui_MainWindow.h"
 #include <engine/core/util/StringUtil.h>
+#include <engine/core/editor/editor_dock_panel.h>
 #include <QComboBox>
 #include <QMdiArea>
 
@@ -25,6 +26,7 @@ namespace Studio
 		Q_OBJECT
 
 		typedef Echo::vector<QDockWidget*>::type QDockWidgets;
+		typedef Echo::vector<Echo::EditorDockPanel*>::type EditorDockPanels;
 
 	public:
 		MainWindow(QMainWindow* parent=0);
@@ -61,8 +63,8 @@ namespace Studio
 		void removeCenterPanel(QDockWidget* panel);
 
 		// add bottom panel
-		void addBottomPanel(QDockWidget* panel);
-		void removeBottomPanel(QDockWidget* panel);
+		void addBottomPanel(Echo::EditorDockPanel* panel);
+		void removeBottomPanel(Echo::EditorDockPanel* panel);
 
 	protected:
 		void closeEvent(QCloseEvent *event);
@@ -133,6 +135,9 @@ namespace Studio
         void onUndo();
         void onRedo();
 
+		// save
+		void onSave();
+
 	protected slots:
 		// open another project
 		void openAnotherProject(const Echo::String& fullPathName);
@@ -158,7 +163,7 @@ namespace Studio
 		TextEditorArea*	    m_scriptEditorMdiArea = nullptr;
 		ShaderEditor*		m_shaderEditorPanel = nullptr;
 		QDockWidgets		m_centerPanels;
-		QDockWidgets		m_bottomPanels;
+		EditorDockPanels	m_bottomPanels;
 		LogPanel*			m_logPanel = nullptr;
 		DocumentPanel*		m_documentPanel = nullptr;
 		DebuggerPanel*		m_debuggerPanel = nullptr;
