@@ -25,14 +25,16 @@ namespace Echo
 	void ImageFilter::setMaterial(Object* material)
 	{
 		m_material = (Material*)material;
+		m_isRenderableDirty = true;
 	}
 
 	void ImageFilter::render()
 	{
 		Renderer* render = Renderer::instance();
-		if (render && m_material)
+		if (render)
 		{
-
+			if(buildRenderable())
+				render->draw(m_renderable);
 		}
 	}
 
@@ -42,7 +44,7 @@ namespace Echo
 		m_mesh.reset();
 	}
 
-	void ImageFilter::buildRenderable()
+	bool ImageFilter::buildRenderable()
 	{
 		if (m_isRenderableDirty && m_material)
 		{
@@ -55,6 +57,8 @@ namespace Echo
 
 			m_isRenderableDirty = false;
 		}
+
+		return m_renderable ? true : false;
 	}
 
 	void ImageFilter::buildMeshData(VertexArray& oVertices, IndiceArray& oIndices)

@@ -63,12 +63,10 @@ namespace Echo
 
 	void RenderPipeline::setCurrent(const ResourcePath& path)
 	{
-		if (g_current)
-		{
-			EchoSafeDelete(g_current, RenderPipeline);
-		}
+		g_current->subRefCount();
 
-		g_current = ECHO_DOWN_CAST<RenderPipeline*>(Res::get(path));
+		if(!path.isEmpty())
+			g_current = ECHO_DOWN_CAST<RenderPipeline*>(Res::get(path));
 	}
 
 	void RenderPipeline::setSrc(const String& src)

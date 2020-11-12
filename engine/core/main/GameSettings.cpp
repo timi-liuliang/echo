@@ -16,6 +16,7 @@ namespace Echo
 		, m_windowHeight(-1)
 		, m_aspect("stretch", {"none", "stretch", "keep width", "keep height", "keep in", "keep out"})
         , m_launchScene("", ".scene")
+		, m_renderPipelinePath("", ".pipeline")
 	{
 	}
 
@@ -56,6 +57,8 @@ namespace Echo
 		CLASS_BIND_METHOD(GameSettings, setWindowHeight, DEF_METHOD("setWindowHeight"));
 		CLASS_BIND_METHOD(GameSettings, getAspect, DEF_METHOD("getAspect"));
 		CLASS_BIND_METHOD(GameSettings, setAspect, DEF_METHOD("setAspect"));
+		CLASS_BIND_METHOD(GameSettings, getRenderPipeline, DEF_METHOD("getRenderPipeline"));
+		CLASS_BIND_METHOD(GameSettings, setRenderPipeline, DEF_METHOD("setRenderPipeline"));
 		CLASS_BIND_METHOD(GameSettings, getLaunchScene, DEF_METHOD("getLaunchScene"));
 		CLASS_BIND_METHOD(GameSettings, setLaunchScene, DEF_METHOD("setLaunchScene"));
 
@@ -66,6 +69,7 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(GameSettings, "WindowWidth", Variant::Type::Int, "getWindowWidth", "setWindowWidth");
 		CLASS_REGISTER_PROPERTY(GameSettings, "WindowHeight", Variant::Type::Int, "getWindowHeight", "setWindowHeight");
 		CLASS_REGISTER_PROPERTY(GameSettings, "Aspect", Variant::Type::StringOption, "getAspect", "setAspect");
+		CLASS_REGISTER_PROPERTY(GameSettings, "RenderPipeline", Variant::Type::ResourcePath, "getRenderPipeline", "setRenderPipeline");
 		CLASS_REGISTER_PROPERTY(GameSettings, "LaunchScene", Variant::Type::ResourcePath, "getLaunchScene", "setLaunchScene");
 	}
 

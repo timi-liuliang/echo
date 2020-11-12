@@ -36,7 +36,7 @@ namespace Echo
 
 	protected:
 		// build render able
-		void buildRenderable();
+		bool buildRenderable();
 
 		// update mesh buffer
 		void updateMeshBuffer();
