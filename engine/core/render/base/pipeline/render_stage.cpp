@@ -42,18 +42,8 @@ namespace Echo
 			// queues
 			for (pugi::xml_node queueNode = stageNode->child("queue"); queueNode; queueNode = queueNode.next_sibling("queue"))
 			{
-				String type = queueNode.attribute("type").as_string();
-				if (type == "queue")
-				{
-					RenderQueue* queue = EchoNew(RenderQueue( this));
-					queue->setName(queueNode.attribute("name").as_string("Opaque"));
-					queue->setSort(queueNode.attribute("sort").as_bool(false));
-					m_renderQueues.emplace_back(queue);
-				}
-				else if (type == "filter")
-				{
-					addImageFilter(queueNode.attribute("name").as_string());
-				}
+				IRenderQueue* queue = ECHO_DOWN_CAST<IRenderQueue*>(instanceObject(&queueNode));
+				m_renderQueues.push_back(queue);
 			}
 
 			// frame buffer
@@ -76,21 +66,7 @@ namespace Echo
 			for (IRenderQueue* renderQueue : m_renderQueues)
 			{
 				pugi::xml_node queueNode = stageNode.append_child("queue");
-
-				RenderQueue* queue = dynamic_cast<RenderQueue*>(renderQueue);
-				if (queue)
-				{
-					queueNode.append_attribute("type").set_value("queue");
-					queueNode.append_attribute("name").set_value(queue->getName().c_str());
-					queueNode.append_attribute("sort").set_value(queue->isSort());
-				}
-
-				ImageFilter* filter = dynamic_cast<ImageFilter*>(renderQueue);
-				if (filter)
-				{
-					queueNode.append_attribute("type").set_value("filter");
-					queueNode.append_attribute("name").set_value(filter->getName().c_str());
-				}
+				savePropertyRecursive(&queueNode, renderQueue, renderQueue->getClassName());
 			}
 
 			pugi::xml_node frameNode = stageNode.append_child("framebuffer");
