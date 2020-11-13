@@ -3,6 +3,8 @@
 
 #ifdef ECHO_EDITOR_MODE
 
+#include <QMessageBox>
+
 namespace Pipeline
 {
 	RenderQueueNodePainter::RenderQueueNodePainter(QGraphicsView* view, QGraphicsScene* scene, Echo::IRenderQueue* queue)
@@ -41,16 +43,17 @@ namespace Pipeline
 
 			m_rect->setKeyPressEventCb([this](QKeyEvent* event) 
 			{
-				if (m_renderQueue)
-				{
-					EditorApi.showObjectProperty(m_renderQueue->getStage());
-					m_renderQueue->getStage()->deleteRenderQueue(m_renderQueue);
-				}
+				if(event->key()==Qt::Key_Delete)
+					deleteThisRenderQueue();
 			});
 
 			m_text = m_graphicsScene->addSimpleText(m_renderQueue->getName().c_str());
 			m_text->setBrush(QBrush(m_style.m_fontColor));
 			m_text->setParentItem(m_rect);
+
+			m_textDiableLine = m_graphicsScene->addLine(QLineF(), QPen(m_style.m_fontColorFaded));
+			m_textDiableLine->setVisible(false);
+			m_textDiableLine->setParentItem(m_rect);
 
 			// close
 			initDeleteButton();
@@ -68,24 +71,22 @@ namespace Pipeline
 		m_deleteButtton->setVisible(false);
 		m_graphicsScene->addItem(m_deleteButtton);
 
-		m_rect->setHoverEnterEventCb([this](QGraphicsItem* item)
-		{
-			m_deleteButtton->setVisible(true);
-		});
-
-		m_rect->setHoverEnterLeaveCb([this](QGraphicsItem* item)
-		{
-			m_deleteButtton->setVisible(false);
-		});
-
 		m_deleteButtton->setMousePressEventCb([this](QGraphicsPixmapItem* item)
 		{
-			if (m_renderQueue)
+			deleteThisRenderQueue();
+		});
+	}
+
+	void RenderQueueNodePainter::deleteThisRenderQueue()
+	{
+		if (m_renderQueue)
+		{
+			if (QMessageBox::Yes == QMessageBox(QMessageBox::Warning, "Warning", "Do you really want to delete the selected render queue ?", QMessageBox::Yes | QMessageBox::No).exec())
 			{
 				EditorApi.showObjectProperty(m_renderQueue->getStage());
 				m_renderQueue->getStage()->deleteRenderQueue(m_renderQueue);
 			}
-		});
+		}
 	}
 
 	void RenderQueueNodePainter::reset()
@@ -106,14 +107,36 @@ namespace Pipeline
 		float halfHeight = m_height * 0.5f;
 
 		float startYPos = 60.f;
-		m_rect->setPen(QPen(m_rect->isFocused() ? m_style.m_selectedBoundaryColor : m_style.m_normalBoundaryColor, m_style.m_penWidth));
+		float penWidth = m_renderQueue->isEnable() ? m_style.m_penWidth : m_style.m_penWidth - 1;
+		m_rect->setPen(QPen(m_rect->isFocused() ? m_style.m_selectedBoundaryColor : (m_renderQueue->isEnable() ? m_style.m_normalBoundaryColor : m_style.m_disableBoundaryColor), penWidth));
 		m_rect->setPos(xPos * 200.f, startYPos + yPos * 56.f);
 
+		m_deleteButtton->setVisible(m_rect->isFocused());
+
+		if (m_renderQueue->isEnable())
+		{
+			QLinearGradient gradient(QPointF(0.0, -halfHeight), QPointF(0.0, halfHeight));
+			gradient.setColorAt(0.0, m_style.m_gradientColor0);
+			gradient.setColorAt(0.03, m_style.m_gradientColor1);
+			gradient.setColorAt(0.97, m_style.m_gradientColor2);
+			gradient.setColorAt(1.0, m_style.m_gradientColor3);
+			m_rect->setBrush(gradient);
+		}
+		else
+		{
+			m_rect->setBrush(QBrush(m_style.m_gradientColor1));
+		}
+
 		m_text->setText(m_renderQueue->getName().c_str());
+		m_text->setBrush(m_renderQueue->isEnable() ? QBrush(m_style.m_fontColor) : QBrush(m_style.m_fontColorFaded));
 
 		Echo::Rect textRect;
 		EditorApi.qGraphicsItemSceneRect(m_text, textRect);
 		m_text->setPos((m_width - textRect.getWidth()) * 0.5f - halfWidth, (m_height - textRect.getHeight()) * 0.5f - halfHeight);
+
+		m_textDiableLine->setVisible(!m_renderQueue->isEnable());
+		m_textDiableLine->setLine(-textRect.getWidth() * 0.5f - 2.f, 0.f, textRect.getWidth() * 0.5f + 2.f, 0.f);
+		m_textDiableLine->setPos(0.f, 0.f);
 	}
 }
 

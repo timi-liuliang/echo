@@ -19,6 +19,10 @@ namespace Echo
 		void setName(const String& name) { m_name = name; }
 		const String& getName() const { return m_name; }
 
+		// enable
+		bool isEnable() const { return m_enable; }
+		void setEnable(bool enable) { m_enable = enable; }
+
 		// stage
 		void setStage(RenderStage* stage) { m_stage = stage; }
 		RenderStage* getStage() { return m_stage; }
@@ -28,6 +32,7 @@ namespace Echo
 
 	protected:
 		String			m_name;
+		bool			m_enable = true;
 		RenderStage*	m_stage = nullptr;
 	};
 }

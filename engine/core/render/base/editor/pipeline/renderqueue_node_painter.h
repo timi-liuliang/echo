@@ -30,10 +30,14 @@ namespace Pipeline
 		// init delete action
 		void initDeleteButton();
 
+		// delete
+		void deleteThisRenderQueue();
+
 	protected:
 		struct
 		{
 			QColor m_normalBoundaryColor = QColor(137, 137, 137);
+			QColor m_disableBoundaryColor = QColor(77, 77, 77);
 			QColor m_selectedBoundaryColor = QColor(255, 165, 0);
 			QColor m_gradientColor0 = Qt::gray;
 			QColor m_gradientColor1 = QColor(80, 80, 80);
@@ -41,7 +45,7 @@ namespace Pipeline
 			QColor m_gradientColor3 = QColor(58, 58, 58);
 			QColor m_shadowColor = QColor(20, 20, 20);
 			QColor m_fontColor = Qt::gray;
-			QColor m_fontColorFaded = Qt::gray;
+			QColor m_fontColorFaded = Qt::darkGray;
 			QColor m_connectionPointColor = QColor(169, 169, 169);
 			QColor m_filledConnectionPointColor = Qt::cyan;
 			QColor m_warningColor = QColor(128, 128, 0);
@@ -58,6 +62,7 @@ namespace Pipeline
 		float								m_width = 160;
 		float								m_height = 40;
 		QGraphicsSimpleTextItem*			m_text = nullptr;
+		QGraphicsLineItem*					m_textDiableLine = nullptr;
 		QGraphicsPixmapItemCustom*			m_deleteButtton = nullptr;
 	};
 	typedef Echo::vector<RenderQueueNodePainter*>::type RenderQueueNodePainters;
