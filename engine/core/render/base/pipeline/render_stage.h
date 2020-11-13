@@ -35,6 +35,9 @@ namespace Echo
 		// add image filter
 		ImageFilter* addImageFilter(const String& name);
 
+		// delete
+		void deleteRenderQueue(IRenderQueue* renderQueue);
+
 	public:
 		// load|save
 		void parseXml(void* pugiNode);

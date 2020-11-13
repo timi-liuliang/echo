@@ -41,8 +41,6 @@ namespace Pipeline
 
 		virtual void mousePressEvent(QGraphicsSceneMouseEvent* event)
 		{
-			QGraphicsPixmapItem::mousePressEvent(event);
-
 			if (m_mousePressEventCb)
 				m_mousePressEventCb(this);
 		}

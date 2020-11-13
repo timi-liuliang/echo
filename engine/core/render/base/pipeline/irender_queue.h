@@ -19,6 +19,10 @@ namespace Echo
 		void setName(const String& name) { m_name = name; }
 		const String& getName() const { return m_name; }
 
+		// stage
+		void setStage(RenderStage* stage) { m_stage = stage; }
+		RenderStage* getStage() { return m_stage; }
+
 		// render
 		virtual void render() {}
 

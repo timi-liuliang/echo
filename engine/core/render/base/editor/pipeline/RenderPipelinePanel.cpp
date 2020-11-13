@@ -139,7 +139,7 @@ namespace Echo
 
 		for (size_t i = 0; i < renderqueues.size(); i++)
 		{
-			if (!m_renderQueueNodePainters[i] || m_renderQueueNodePainters[i]->m_renderQueue != renderqueues[i])
+			if (!m_renderQueueNodePainters[i] || m_renderQueueNodePainters[i]->getRenderQueue() != renderqueues[i])
 			{
 				EchoSafeDelete(m_renderQueueNodePainters[i], RenderQueueNodePainter);
 				m_renderQueueNodePainters[i] = EchoNew(Pipeline::RenderQueueNodePainter(m_graphicsView, m_graphicsScene, renderqueues[i]));

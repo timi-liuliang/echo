@@ -34,6 +34,12 @@ namespace Echo
 		return queue;
 	}
 
+	void RenderStage::deleteRenderQueue(IRenderQueue* renderQueue)
+	{
+		m_renderQueues.erase(std::find(m_renderQueues.begin(), m_renderQueues.end(), renderQueue));
+		EchoSafeDelete(renderQueue, IRenderQueue);
+	}
+
 	void RenderStage::parseXml(void* pugiNode)
 	{
 		pugi::xml_node* stageNode = (pugi::xml_node*)pugiNode;
@@ -43,7 +49,11 @@ namespace Echo
 			for (pugi::xml_node queueNode = stageNode->child("queue"); queueNode; queueNode = queueNode.next_sibling("queue"))
 			{
 				IRenderQueue* queue = ECHO_DOWN_CAST<IRenderQueue*>(instanceObject(&queueNode));
-				m_renderQueues.push_back(queue);
+				if (queue)
+				{
+					queue->setStage(this);
+					m_renderQueues.push_back(queue);
+				}
 			}
 
 			// frame buffer
