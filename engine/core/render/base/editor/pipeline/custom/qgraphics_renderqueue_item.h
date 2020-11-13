@@ -25,6 +25,9 @@ namespace Pipeline
 		// mouse event cb
 		void setMousePressEventCb(std::function<void(QGraphicsItem*)> cb) { m_mousePressEventCb = cb; }
 
+		// key event cb
+		void setKeyPressEventCb(std::function<void(QKeyEvent*)> cb) { m_keyEventCb = cb; }
+
 	protected:
 		virtual void focusInEvent(QFocusEvent* event)
 		{
@@ -52,10 +55,16 @@ namespace Pipeline
 				m_hoverLeaveEventCb(this);
 		}
 
-		virtual void mousePressEvent(QGraphicsSceneMouseEvent* event)
+		virtual void mousePressEvent(QGraphicsSceneMouseEvent* event) override
 		{
 			if (m_mousePressEventCb)
 				m_mousePressEventCb(this);
+		}
+
+		virtual void keyPressEvent(QKeyEvent* event) override
+		{
+			if (m_keyEventCb)
+				m_keyEventCb(event);
 		}
 
 	protected:
@@ -70,6 +79,7 @@ namespace Pipeline
 		std::function<void(QGraphicsItem*)> m_hoverEnterEventCb;
 		std::function<void(QGraphicsItem*)> m_hoverLeaveEventCb;
 		std::function<void(QGraphicsItem*)> m_mousePressEventCb;
+		std::function<void(QKeyEvent*)>		m_keyEventCb;
 	};
 }
 

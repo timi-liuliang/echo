@@ -39,6 +39,15 @@ namespace Pipeline
 				EditorApi.showObjectProperty(m_renderQueue);
 			});
 
+			m_rect->setKeyPressEventCb([this](QKeyEvent* event) 
+			{
+				if (m_renderQueue)
+				{
+					EditorApi.showObjectProperty(m_renderQueue->getStage());
+					m_renderQueue->getStage()->deleteRenderQueue(m_renderQueue);
+				}
+			});
+
 			m_text = m_graphicsScene->addSimpleText(m_renderQueue->getName().c_str());
 			m_text->setBrush(QBrush(m_style.m_fontColor));
 			m_text->setParentItem(m_rect);
