@@ -5,6 +5,7 @@
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/util/StringUtil.h"
 #include "engine/core/main/Engine.h"
+#include "engine/core/main/GameSettings.h"
 
 namespace Echo
 {
@@ -23,10 +24,13 @@ namespace Echo
 		}
 
 		// Tool button icons
-		((QToolButton*)EditorApi.qFindChild(m_ui, "m_new"))->setIcon(QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/import.png").c_str()));
+		m_applyButton = m_ui->findChild<QToolButton*>("m_apply");
+		m_playIcon = QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/play.png").c_str());
+		m_stopIcon = QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/stop.png").c_str());
+		m_applyButton->setIcon(m_playIcon);
 
 		// connect signal slots
-		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_new"), QSIGNAL(clicked()), this, createMethodBind(&RenderpipelinePanel::onNew));
+		EditorApi.qConnectWidget(m_applyButton, QSIGNAL(clicked()), this, createMethodBind(&RenderpipelinePanel::onApply));
 
 		// create QGraphicsScene
 		m_graphicsView = m_ui->findChild<QGraphicsView*>("m_graphicsView");
@@ -53,32 +57,22 @@ namespace Echo
 	{
 		drawStages();
 		drawRenderQueues();
+
+		updateApplyButtonIcon();
 	}
 
-	void RenderpipelinePanel::onNew()
+	void RenderpipelinePanel::onApply()
 	{
-		if (!m_importMenu)
+		Echo::String resPath = m_pipeline->getPath();
+		Echo::String currentPath = Echo::GameSettings::instance()->getRenderPipeline().getPath();
+		if (resPath != currentPath)
 		{
-			m_importMenu = EchoNew(QMenu(m_ui));
-
-			m_importMenu->addAction( EditorApi.qFindChildAction(m_ui, "m_actionNewCamera"));
-			m_importMenu->addAction( EditorApi.qFindChildAction(m_ui, "m_actionNewImageFilter"));
-
-			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionNewCamera"), QSIGNAL(triggered()), this, createMethodBind(&RenderpipelinePanel::onNewCamera));
-			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionNewImageFilter"), QSIGNAL(triggered()), this, createMethodBind(&RenderpipelinePanel::onNewImageFilter));
+			Echo::GameSettings::instance()->setRenderPipeline(resPath);
 		}
-
-		m_importMenu->exec(QCursor::pos());
-	}
-
-	void RenderpipelinePanel::onNewCamera()
-	{
-
-	}
-
-	void RenderpipelinePanel::onNewImageFilter()
-	{
-
+		else
+		{
+			Echo::GameSettings::instance()->setRenderPipeline(Echo::StringUtil::BLANK);
+		}
 	}
 
 	void RenderpipelinePanel::drawStages()
@@ -149,6 +143,24 @@ namespace Echo
 		for (size_t i = 0; i < renderqueues.size(); i++)
 		{
 			m_renderQueueNodePainters[i]->update(poses[i].x, poses[i].y);
+		}
+	}
+
+	void RenderpipelinePanel::updateApplyButtonIcon()
+	{
+		Echo::String resPath = m_pipeline->getPath();
+		Echo::String currentPath = Echo::GameSettings::instance()->getRenderPipeline().getPath();
+		if (resPath != currentPath)
+		{
+			m_applyButton->setIcon(m_playIcon);
+			m_applyButton->setStatusTip("Start this render pipeline");
+			m_applyButton->setToolTip("Start this render pipeline");
+		}
+		else
+		{
+			m_applyButton->setIcon(m_stopIcon);
+			m_applyButton->setStatusTip("Stop this render pipeline");
+			m_applyButton->setToolTip("Stop this render pipeline");
 		}
 	}
 

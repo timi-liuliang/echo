@@ -25,14 +25,15 @@ namespace Echo
 
 	public:
 		// import
-		void onNew();
-		void onNewCamera();
-		void onNewImageFilter();
+		void onApply();
 
 	protected:
 		// draw
 		void drawStages();
 		void drawRenderQueues();
+
+		// update icon
+		void updateApplyButtonIcon();
 
 	protected:
 		// save
@@ -40,9 +41,11 @@ namespace Echo
 
 	protected:
 		RenderPipeline*						m_pipeline;
+		QIcon								m_playIcon;
+		QIcon								m_stopIcon;
+		QToolButton*						m_applyButton;
 		QGraphicsView*						m_graphicsView = nullptr;
 		Pipeline::QGraphicsSceneEx*			m_graphicsScene = nullptr;
-		QMenu*								m_importMenu = nullptr;
 		QGraphicsLineItem*					m_borderTopLine = nullptr;
 		Pipeline::StageNodePainters			m_stageNodePainters;
 		Pipeline::RenderQueueNodePainters	m_renderQueueNodePainters;
