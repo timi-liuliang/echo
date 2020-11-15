@@ -1,5 +1,6 @@
 #include "stage_node_painter.h"
 #include "engine/core/base/class_method_bind.h"
+#include "engine/core/log/Log.h"
 
 #ifdef ECHO_EDITOR_MODE
 
@@ -74,7 +75,7 @@ namespace Pipeline
 	{
 		if (!m_addMenu)
 		{
-			m_addMenu = EchoNew(QMenu(nullptr));
+			m_addMenu = EchoNew(QMenu(m_graphicsView));
 
 			QAction* newImageFilter = new QAction("Image Filter");
 			QAction* newRenderQueue = new QAction("Render Queue");

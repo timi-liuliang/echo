@@ -5,6 +5,7 @@
 #ifdef ECHO_EDITOR_MODE
 
 #include <QPainter>
+#include <QGraphicsSceneEvent>
 
 namespace Pipeline
 {
@@ -54,8 +55,12 @@ namespace Pipeline
 
 		virtual void mousePressEvent(QGraphicsSceneMouseEvent* event)
 		{
-			if (m_mousePressEventCb)
-				m_mousePressEventCb(this);
+			QGraphicsItem* item = scene()->itemAt(event->scenePos(), QTransform());
+			if (item == this)
+			{
+				if (m_mousePressEventCb)
+					m_mousePressEventCb(this);
+			}
 		}
 
 	protected:

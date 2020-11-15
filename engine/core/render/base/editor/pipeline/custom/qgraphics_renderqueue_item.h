@@ -5,6 +5,7 @@
 #ifdef ECHO_EDITOR_MODE
 
 #include <QPainter>
+#include <QGraphicsSceneEvent>
 
 namespace Pipeline
 {
@@ -57,8 +58,12 @@ namespace Pipeline
 
 		virtual void mousePressEvent(QGraphicsSceneMouseEvent* event) override
 		{
-			if (m_mousePressEventCb)
-				m_mousePressEventCb(this);
+			QGraphicsItem* item = scene()->itemAt(event->scenePos(), QTransform());
+			if (item == this)
+			{
+				if (m_mousePressEventCb)
+					m_mousePressEventCb(this);
+			}
 		}
 
 		virtual void keyPressEvent(QKeyEvent* event) override
