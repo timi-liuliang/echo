@@ -25,7 +25,25 @@ namespace Echo
 	void ImageFilter::setMaterial(Object* material)
 	{
 		m_material = (Material*)material;
+		if (m_material)
+		{
+			setGlobalUniforms();
+			m_material->onShaderChanged.connectClassMethod(this, createMethodBind(&ImageFilter::setGlobalUniforms));
+		}
+
 		m_isRenderableDirty = true;
+	}
+
+	void ImageFilter::setGlobalUniforms()
+	{
+		if (m_material)
+		{
+			Material::UniformValue* worldMatrix = m_material->getUniform("u_WorldMatrix");
+			if (worldMatrix) worldMatrix->setValue(&Matrix4::IDENTITY);
+
+			Material::UniformValue* viewProjMatrix = m_material->getUniform("u_ViewProjMatrix");
+			if (viewProjMatrix) viewProjMatrix->setValue(&Matrix4::IDENTITY);
+		}
 	}
 
 	void ImageFilter::render()
@@ -63,6 +81,8 @@ namespace Echo
 
 	void ImageFilter::buildMeshData(VertexArray& oVertices, IndiceArray& oIndices)
 	{
+		// https://www.khronos.org/opengl/wiki/Face_Culling
+		// On a freshly created OpenGL Context, the default front face is Counter-Clockwise(CL_CCW)
 		oIndices = { 0, 1, 2, 0, 2, 3 };
 
 		float hw = -1.f;
@@ -70,9 +90,9 @@ namespace Echo
 
 		// vertices
 		oVertices.emplace_back(Vector3(-hw, -hh, 0.f), Vector2(0.f, 1.f));
-		oVertices.emplace_back(Vector3(-hw, hh, 0.f), Vector2(0.f, 0.f));
-		oVertices.emplace_back(Vector3(hw, hh, 0.f), Vector2(1.f, 0.f));
 		oVertices.emplace_back(Vector3(hw, -hh, 0.f), Vector2(1.f, 1.f));
+		oVertices.emplace_back(Vector3(hw, hh, 0.f), Vector2(1.f, 0.f));
+		oVertices.emplace_back(Vector3(-hw, hh, 0.f), Vector2(0.f, 0.f));
 	}
 
 	void ImageFilter::updateMeshBuffer()

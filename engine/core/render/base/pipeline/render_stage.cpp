@@ -89,7 +89,7 @@ namespace Echo
 		for (IRenderQueue* iqueue : m_renderQueues)
 		{
 			RenderQueue* queue = dynamic_cast<RenderQueue*>(iqueue);
-			if (queue)
+			if (queue && queue->isEnable())
 			{
 				if (queue->getName() == name)
 					queue->addRenderable(id);
@@ -105,7 +105,8 @@ namespace Echo
 
 			for (IRenderQueue* iqueue : m_renderQueues)
 			{
-				iqueue->render();
+				if(iqueue->isEnable())
+					iqueue->render();
 			}
 
 			RenderPipeline::current()->endFramebuffer(m_frameBufferId);

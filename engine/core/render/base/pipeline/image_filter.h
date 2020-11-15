@@ -47,6 +47,10 @@ namespace Echo
 		// clear render able
 		void clearRenderable();
 
+	private:
+		// set material global uniforms
+		void setGlobalUniforms();
+
 	protected:
 		bool        m_isRenderableDirty = true;
 		MeshPtr		m_mesh;
