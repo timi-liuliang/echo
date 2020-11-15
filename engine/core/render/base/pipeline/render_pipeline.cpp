@@ -7,7 +7,7 @@
 
 static const char* defaultPipelineTemplate = R"(<?xml version="1.0" encoding="utf-8"?>
 <pipeline>
-	<stage name="Final">
+	<stage name="Screen Window">
 		<queue class="RenderQueue" Name="Opaque" Sort="false" />
 		<queue class="RenderQueue" Name="Transparent" Sort="true" />
 		<framebuffer id="0" />
