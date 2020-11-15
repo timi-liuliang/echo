@@ -413,6 +413,18 @@ namespace Studio
 
 	void ResPanel::onRenamedRes(const QString src, const QString dest)
 	{
+		Echo::String srcPath;
+		Echo::String destPath;
+		if (Echo::IO::instance()->convertFullPathToResPath(src.toStdString().c_str(), srcPath) &&
+			Echo::IO::instance()->convertFullPathToResPath(dest.toStdString().c_str(), destPath))
+		{
+			Echo::ResPtr res = Echo::Res::get(srcPath);
+			if (res)
+			{
+				res->setPath(destPath);
+			}
+		}
+
 		// refresh current dir
 		m_dirModel->Clean();
 		m_dirModel->Refresh();
