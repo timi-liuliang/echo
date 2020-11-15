@@ -20,7 +20,7 @@ namespace Echo
 			{}
 		};
 		typedef vector<VertexFormat>::type  VertexArray;
-		typedef vector<ui32>::type          IndiceArray;
+		typedef vector<ui16>::type          IndiceArray;
 
 	public:
 		ImageFilter() {}

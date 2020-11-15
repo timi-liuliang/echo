@@ -310,51 +310,54 @@ namespace Echo
 		GLESRenderable* glesRenderable = (GLESRenderable*)renderable;
 
         GLESShaderProgram* shaderProgram = ECHO_DOWN_CAST<GLESShaderProgram*>(renderable->getMaterial()->getShader());
-		shaderProgram->bind();
-		glesRenderable->bindRenderState();
-		glesRenderable->bindShaderParams();
-		shaderProgram->bindUniforms();
-		shaderProgram->bindRenderable(renderable);
-
-		MeshPtr mesh = renderable->getMesh();
-
-		// set the type of primitive that should be rendered from this vertex buffer
-		GLenum glTopologyType = GLES2Mapping::MapPrimitiveTopology(mesh->getTopologyType());
-
-		//set the index buffer to active in the input assembler
-		GPUBuffer* pIdxBuff = mesh->getIndexBuffer();
-		if (pIdxBuff)
+		if (shaderProgram)
 		{
-			// map index type
-			GLenum idxType;
-			if (mesh->getIndexStride() == sizeof(ui32))		idxType = GL_UNSIGNED_INT;
-			else if(mesh->getIndexStride() == sizeof(Word))	idxType = GL_UNSIGNED_SHORT;
-			else											idxType = GL_UNSIGNED_BYTE;
+			shaderProgram->bind();
+			glesRenderable->bindRenderState();
+			glesRenderable->bindShaderParams();
+			shaderProgram->bindUniforms();
+			shaderProgram->bindRenderable(renderable);
 
-			// index count
-			ui32 idxCount = mesh->getIndexCount();
+			MeshPtr mesh = renderable->getMesh();
 
-			// index offset
-			Byte* idxOffset = 0; idxOffset += mesh->getStartIndex() * mesh->getIndexStride();
+			// set the type of primitive that should be rendered from this vertex buffer
+			GLenum glTopologyType = GLES2Mapping::MapPrimitiveTopology(mesh->getTopologyType());
 
-			// draw
-			OGLESDebug(glDrawElements(glTopologyType, idxCount, idxType, idxOffset));
-		}
-		else	// no using index buffer
-		{
-			ui32 vertCount = mesh->getVertexCount();
-			if (vertCount > 0)
+			//set the index buffer to active in the input assembler
+			GPUBuffer* pIdxBuff = mesh->getIndexBuffer();
+			if (pIdxBuff)
 			{
-				ui32 startVert = mesh->getStartVertex();
-				OGLESDebug(glDrawArrays(glTopologyType, startVert, vertCount));
-			}
-			else
-			{
-				EchoLogError("GLES2Renderer::render failed!");
-			}
-		}
+				// map index type
+				GLenum idxType;
+				if (mesh->getIndexStride() == sizeof(ui32))		idxType = GL_UNSIGNED_INT;
+				else if (mesh->getIndexStride() == sizeof(Word))	idxType = GL_UNSIGNED_SHORT;
+				else											idxType = GL_UNSIGNED_BYTE;
 
-		shaderProgram->unbind();
+				// index count
+				ui32 idxCount = mesh->getIndexCount();
+
+				// index offset
+				Byte* idxOffset = 0; idxOffset += mesh->getStartIndex() * mesh->getIndexStride();
+
+				// draw
+				OGLESDebug(glDrawElements(glTopologyType, idxCount, idxType, idxOffset));
+			}
+			else	// no using index buffer
+			{
+				ui32 vertCount = mesh->getVertexCount();
+				if (vertCount > 0)
+				{
+					ui32 startVert = mesh->getStartVertex();
+					OGLESDebug(glDrawArrays(glTopologyType, startVert, vertCount));
+				}
+				else
+				{
+					EchoLogError("GLES2Renderer::render failed!");
+				}
+			}
+
+			shaderProgram->unbind();
+		}
 	}
 
 	void GLESRenderer::getDepthRange(Vector2& vec)

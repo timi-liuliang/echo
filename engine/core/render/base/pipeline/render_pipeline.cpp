@@ -27,6 +27,7 @@ namespace Echo
 	RenderPipeline::RenderPipeline(const ResourcePath& path)
 		: Res(path)
 	{
+		m_framebuffers.insert(FramebufferMap::value_type(0, Renderer::instance()->getWindowFrameBuffer()));
 	}
 
 	RenderPipeline::~RenderPipeline()
@@ -63,7 +64,7 @@ namespace Echo
 
 	void RenderPipeline::setCurrent(const ResourcePath& path)
 	{
-		g_current->subRefCount();
+		g_current = nullptr;
 
 		if(!path.isEmpty())
 			g_current = ECHO_DOWN_CAST<RenderPipeline*>(Res::get(path));

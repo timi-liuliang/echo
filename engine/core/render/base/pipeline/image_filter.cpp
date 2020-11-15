@@ -52,7 +52,7 @@ namespace Echo
 
 			updateMeshBuffer();
 
-			// create renderable
+			// create render able
 			m_renderable = Renderable::create(m_mesh, m_material, nullptr);
 
 			m_isRenderableDirty = false;
@@ -69,11 +69,10 @@ namespace Echo
 		float hh =  1.f;
 
 		// vertices
-		VertexArray vertices;
-		vertices.emplace_back(Vector3(-hw, -hh, 0.f), Vector2(0.f, 1.f));
-		vertices.emplace_back(Vector3(-hw, hh, 0.f), Vector2(0.f, 0.f));
-		vertices.emplace_back(Vector3(hw, hh, 0.f), Vector2(1.f, 0.f));
-		vertices.emplace_back(Vector3(hw, -hh, 0.f), Vector2(1.f, 1.f));
+		oVertices.emplace_back(Vector3(-hw, -hh, 0.f), Vector2(0.f, 1.f));
+		oVertices.emplace_back(Vector3(-hw, hh, 0.f), Vector2(0.f, 0.f));
+		oVertices.emplace_back(Vector3(hw, hh, 0.f), Vector2(1.f, 0.f));
+		oVertices.emplace_back(Vector3(hw, -hh, 0.f), Vector2(1.f, 1.f));
 	}
 
 	void ImageFilter::updateMeshBuffer()
@@ -89,7 +88,7 @@ namespace Echo
 		MeshVertexFormat define;
 		define.m_isUseUV = true;
 
-		m_mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(ui32), indices.data());
+		m_mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(ui16), indices.data());
 		m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data());
 	}
 }
