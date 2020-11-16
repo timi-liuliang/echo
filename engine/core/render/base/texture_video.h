@@ -13,6 +13,6 @@ namespace Echo
 		virtual ~TextureVideo();
 
 	private:
-		ResourcePath	m_cubeDiffuseTextureNames[6];
+		ResourcePath	m_videoPath;
 	};
 }
