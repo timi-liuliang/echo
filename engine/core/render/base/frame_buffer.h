@@ -3,7 +3,7 @@
 #include "engine/core/util/Array.hpp"
 #include "engine/core/scene/node.h"
 #include "texture.h"
-#include "render_view.h"
+#include "texture_render.h"
 
 namespace Echo
 {
@@ -37,7 +37,7 @@ namespace Echo
         ui32 getHeight() const { return m_height; }
 
         // attach render view
-        virtual void attach(Attachment attachment, RenderView* renderView) {}
+        virtual void attach(Attachment attachment, TextureRender* renderView) {}
         virtual void detach(Attachment attachment) {}
 
 		// begin|end render
@@ -51,7 +51,7 @@ namespace Echo
         ui32					    m_id = 0;
         ui32                        m_width = 0;
         ui32                        m_height = 0;
-        array<RenderView*, 9>       m_views;
+        array<TextureRender*, 9>    m_views;
 	};
 	typedef map<ui32, FrameBuffer*>::type	FramebufferMap;
 }

@@ -5,10 +5,17 @@
 
 namespace Echo
 {
-	class RenderView
+	class TextureRender : public Texture
 	{
+		ECHO_RES(TextureRender, Texture, ".rt", TextureRender::create, Res::load)
+
 	public:
-		virtual ~RenderView();
+		TextureRender();
+		TextureRender(const String& name);
+		virtual ~TextureRender();
+
+		// create fun
+		static Res* create();
 
         // width & height
         ui32 getWidth() const { return m_width; }
@@ -17,19 +24,12 @@ namespace Echo
 		// pixel format
 		PixelFormat	getPixelFormat() const { return m_format; }
 
-        // texture
-        Texture* getTexture() { return m_bindTexture; }
-
         // on resize
-        virtual void onSize(ui32 width, ui32 height)=0;
-
-    protected:
-        RenderView(ui32 width, ui32 height, PixelFormat pixelFormat);
+		virtual void onSize(ui32 width, ui32 height) {}
 
 	protected:
         ui32				m_width;
         ui32				m_height;
 		PixelFormat			m_format;
-        Texture*			m_bindTexture = nullptr;
 	};
 }

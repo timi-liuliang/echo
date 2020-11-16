@@ -1,6 +1,5 @@
 #include "engine/core/util/PathUtil.h"
 #include "base/Renderer.h"
-#include "vk_render_view.h"
 #include "vk_framebuffer.h"
 #include "vk_renderer.h"
 
@@ -24,7 +23,7 @@ namespace Echo
         return g_current;
     }
 
-    void VKFramebuffer::attach(Attachment attachment, RenderView* renderView)
+    void VKFramebuffer::attach(Attachment attachment, TextureRender* renderView)
     {
         m_views[(ui8)attachment] = renderView;
     }
@@ -73,7 +72,7 @@ namespace Echo
         m_width = width;
         m_height = height;
 
-        for (RenderView* colorView : m_views)
+        for (TextureRender* colorView : m_views)
         {
             if (colorView)
                 colorView->onSize(width, height);

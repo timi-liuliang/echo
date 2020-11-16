@@ -86,14 +86,12 @@ namespace Echo
         virtual Texture* createTexture2D() {return nullptr;}
 		virtual Texture* createTexture2D(const String& name)=0;
 		virtual TextureCube* createTextureCube(const String& name) = 0;
-
-		void dirtyTexSlot(){ m_dirtyTexSlot = true; }
+		virtual TextureRender* createTextureRender(const String& name) = 0;
 
 		// create shader
 		virtual ShaderProgram* createShaderProgram()=0;
 		
 		// create views
-        virtual RenderView*  createRenderView(ui32 width, ui32 height, PixelFormat pixelFormat)=0;
 		virtual FrameBuffer* createFramebuffer(ui32 id, ui32 width, ui32 height)=0;
 
 		// create states
@@ -145,7 +143,6 @@ namespace Echo
 		std::map<ui32, Renderable*>	m_renderables;
 		ui32				m_startMipmap = 0;
 		DeviceFeature		m_deviceFeature;
-		bool				m_dirtyTexSlot = false;
 	};
     
     // initialize Renderer

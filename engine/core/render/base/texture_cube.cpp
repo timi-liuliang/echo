@@ -20,7 +20,6 @@ namespace Echo
 
 	}
 
-	// create fun
 	Res* TextureCube::create()
 	{
 		return Renderer::instance()->createTextureCube("");

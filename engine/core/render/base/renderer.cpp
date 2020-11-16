@@ -36,6 +36,7 @@ namespace Echo
 		Class::registerType<RenderPipeline>();
 		Class::registerType<Texture>();
 		Class::registerType<TextureCube>();
+		Class::registerType<TextureRender>();
 		Class::registerType<ShaderProgram>();
 		Class::registerType<Mesh>();
 		Class::registerType<Material>();

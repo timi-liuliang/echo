@@ -3,7 +3,7 @@
 #include "engine/core/render/base/Renderer.h"
 #include "gles_shader.h"
 #include "gles_render_state.h"
-#include "gles_render_view.h"
+#include "gles_texture_render.h"
 
 namespace Echo
 {
@@ -75,8 +75,9 @@ namespace Echo
 
 		// textures
 		virtual Texture* createTexture2D() override;
-		Texture*  createTexture2D(const String& name) override;
-		TextureCube* createTextureCube(const String& name) override;
+		virtual Texture*  createTexture2D(const String& name) override;
+		virtual TextureCube* createTextureCube(const String& name) override;
+		virtual TextureRender* createTextureRender(const String& name) override;
 
 		ShaderProgram*	createShaderProgram() override;
 		GLESShader*	createShader(GLESShader::ShaderType type, const char* srcBuffer, ui32 size);
@@ -89,7 +90,6 @@ namespace Echo
 		const SamplerState*	getSamplerState(const SamplerState::SamplerDesc& desc) override;
 	
 		// frame buffer
-        virtual RenderView*  createRenderView(ui32 width, ui32 height, PixelFormat pixelFormat) override;
 		virtual FrameBuffer* createFramebuffer(ui32 id, ui32 width, ui32 height) override;
 
         // screen size

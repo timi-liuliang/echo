@@ -32,11 +32,11 @@ namespace Echo
         virtual GPUBuffer*	createIndexBuffer(Dword usage, const Buffer& buff) override;
 
         // create texture
-        virtual Texture*     createTexture2D(const String& name) override;
-        virtual TextureCube* createTextureCube(const String& name) override {return nullptr; }
+        virtual Texture*       createTexture2D(const String& name) override;
+        virtual TextureCube*   createTextureCube(const String& name) override {return nullptr; }
+        virtual TextureRender* createTextureRender(const String& name) override;
 
         // create views
-        virtual RenderView*  createRenderView(ui32 width, ui32 height, PixelFormat pixelFormat) override { return nullptr; }
         virtual FrameBuffer* createFramebuffer(ui32 id, ui32 width, ui32 height) override { return EchoNew(VKFramebufferOffscreen(id, width, height));}
 
         // create states

@@ -6,4 +6,9 @@ namespace Echo
     {
 
     }
+
+    VKTextureRender::~VKTextureRender()
+    {
+
+    }
 }

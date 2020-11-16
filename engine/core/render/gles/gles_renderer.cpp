@@ -212,7 +212,6 @@ namespace Echo
 		TextureSlotInfo& slotInfo = m_preTextures[slot];
 //		if (m_dirtyTexSlot || slotInfo.m_target != target || slotInfo.m_texture != texture || needReset)
 		{
-			m_dirtyTexSlot = false;
 			OGLESDebug(glActiveTexture(GL_TEXTURE0 + slot));
 			OGLESDebug(glBindTexture(target, texture));
 			slotInfo.m_target = target;
@@ -424,6 +423,11 @@ namespace Echo
 	TextureCube* GLESRenderer::createTextureCube(const String& name)
 	{
 		return name.empty() ? EchoNew(GLESTextureCube) : EchoNew(GLESTextureCube(name));
+	}
+
+	TextureRender* GLESRenderer::createTextureRender(const String& name)
+	{
+		return EchoNew(GLESTextureRender(name));
 	}
 
 	ShaderProgram* GLESRenderer::createShaderProgram()
@@ -663,11 +667,6 @@ namespace Echo
 		return !!eglMakeCurrent(m_eglDisplay, m_eglSurface, m_eglSurface, m_eglContext);
 	}
 #endif
-
-    RenderView* GLESRenderer::createRenderView(ui32 width, ui32 height, PixelFormat pixelFormat)
-    {
-        return EchoNew(GLESRenderView(width, height, pixelFormat));
-    }
 
 	FrameBuffer* GLESRenderer::createFramebuffer(ui32 id, ui32 width, ui32 height)
 	{

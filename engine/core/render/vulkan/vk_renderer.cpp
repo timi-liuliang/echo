@@ -5,7 +5,6 @@
 #include "vk_shader_program.h"
 #include "vk_render_state.h"
 #include "vk_gpu_buffer.h"
-#include "vk_render_view.h"
 #include "vk_framebuffer.h"
 #include "vk_texture.h"
 
@@ -62,6 +61,11 @@ namespace Echo
     {
         return EchoNew(VKTexture2D);
     }
+
+	TextureRender* VKRenderer::createTextureRender(const String& name)
+	{ 
+		return EchoNew(VKTextureRender); 
+	}
 
 	void VKRenderer::setTexture(ui32 index, Texture* texture, bool needUpdate)
 	{

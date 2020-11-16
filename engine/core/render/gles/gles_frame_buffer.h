@@ -12,7 +12,7 @@ namespace Echo
 		virtual ~GLESFramebuffer();
 
         // attach render view
-        virtual void attach(Attachment attachment, RenderView* renderView) override;
+        virtual void attach(Attachment attachment, TextureRender* renderView) override;
 
         // begin render
         virtual bool begin(bool isClearColor, const Color& bgColor, bool isClearDepth, float depthValue, bool isClearStencil, ui8 stencilValue) override;

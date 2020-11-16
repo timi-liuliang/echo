@@ -1,6 +1,7 @@
 #pragma once
 
-#include "base/Texture.h"
+#include "base/texture.h"
+#include "base/texture_render.h"
 
 namespace Echo
 {
@@ -8,5 +9,11 @@ namespace Echo
     {
     public:
         virtual ~VKTexture2D();
+    };
+
+    class VKTextureRender : public TextureRender
+    {
+    public:
+        virtual ~VKTextureRender();
     };
 }

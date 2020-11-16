@@ -4,6 +4,7 @@
 #include "gles_mapping.h"
 #include "gles_frame_buffer.h"
 #include "gles_texture_2d.h"
+#include "gles_texture_render.h"
 
 namespace Echo
 {
@@ -20,9 +21,9 @@ namespace Echo
 	}
 
     // attach render view
-    void GLESFramebuffer::attach(Attachment attachment, RenderView* renderView)
+    void GLESFramebuffer::attach(Attachment attachment, TextureRender* renderView)
     {
-        GLESTexture2D* texture = dynamic_cast<GLESTexture2D*>(renderView->getTexture());
+        GLESTextureRender* texture = dynamic_cast<GLESTextureRender*>(renderView);
         GLenum esAttachment = attachment == Attachment::DepthStencil ? GL_DEPTH_ATTACHMENT : GL_COLOR_ATTACHMENT0;
 
         OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
@@ -85,7 +86,7 @@ namespace Echo
         m_width = width;
         m_height = height;
 
-        for (RenderView* colorView : m_views)
+        for (TextureRender* colorView : m_views)
         {
             if (colorView)
                 colorView->onSize(width, height);
