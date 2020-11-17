@@ -30,9 +30,9 @@ namespace Echo
         virtual Texture* createTexture2D() override;
         virtual Texture*     createTexture2D(const String& name) override;
         virtual TextureCube* createTextureCube(const String& name) override {return nullptr; }
+        virtual TextureRender* createTextureRender(const String& name) override;
         
         // create views
-        virtual RenderView*  createRenderView(ui32 width, ui32 height, PixelFormat pixelFormat) override;
         virtual FrameBuffer* createFramebuffer(ui32 id, ui32 width, ui32 height) override;
         
         // create states

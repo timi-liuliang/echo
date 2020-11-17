@@ -5,6 +5,7 @@
 #ifdef ECHO_EDITOR_MODE
 
 #include <QAction>
+#include <QComboBox>
 #include <QSplitter>
 #include <QMenu>
 #include <QSpinBox>

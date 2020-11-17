@@ -95,8 +95,8 @@ namespace Echo
     {
         return EchoNew(MTSamplerState(desc));
     }
-
-    RenderView* MTRenderer::createRenderView(ui32 width, ui32 height, PixelFormat pixelFormat)
+    
+    TextureRender* MTRenderer::createTextureRender(const String& name)
     {
         return nullptr;
     }
