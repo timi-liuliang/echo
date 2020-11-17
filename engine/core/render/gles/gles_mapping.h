@@ -395,6 +395,7 @@ namespace Echo
 			{
 			case Texture::TT_2D:			return GL_TEXTURE_2D;
 			case Texture::TT_Cube:			return GL_TEXTURE_CUBE_MAP;
+			case Texture::TT_Render:		return GL_TEXTURE_2D;
 			default:
 				{
 					EchoAssert(false);

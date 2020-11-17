@@ -232,8 +232,6 @@ namespace Echo
 
 		// root node
 		pugi::xml_node root = doc.append_child("res");
-
-		root.append_attribute("class").set_value(getClassName().c_str());
 		savePropertyRecursive(&root, this, this->getClassName());
 
 		doc.save_file(fullPath.c_str(), "\t", 1U, pugi::encoding_utf8);

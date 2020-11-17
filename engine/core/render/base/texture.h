@@ -19,11 +19,12 @@ namespace Echo
 	public:
 		enum TexType
 		{
+			TT_Unknown,
 			TT_1D,
 			TT_2D,
 			TT_3D,
 			TT_Cube,
-			TT_Unknown,
+			TT_Render,
 		};
 
 		enum CubeFace
@@ -76,10 +77,12 @@ namespace Echo
 		PixelFormat getPixelFormat() const{ return m_pixFmt; }
 
 		// width
-		ui32 getWidth() const { return m_width; }
+		virtual ui32 getWidth() const { return m_width; }
+		virtual void setWidth(ui32 width) { m_width = width; }
 
 		// height
-		ui32 getHeight() const{ return m_height; }
+		virtual ui32 getHeight() const{ return m_height; }
+		virtual void setHeight(ui32 height) { m_height = height; }
 
 		// depth
 		ui32 getDepth() const { return m_depth; }
@@ -114,11 +117,11 @@ namespace Echo
 		// static load
 		static Res* load(const ResourcePath& path);
 
-	public:
-		PixelFormat			m_pixFmt;
+	protected:
+		PixelFormat			m_pixFmt = PF_UNKNOWN;
 		bool				m_isCompressed = false;
 		ui32				m_compressType = CompressType_Unknown;
-		Dword				m_usage = TU_DYNAMIC;
+		TexUsage			m_usage = TU_DYNAMIC;
 		ui32				m_width = 0;
 		ui32				m_height = 0;
 		ui32				m_depth = 1;

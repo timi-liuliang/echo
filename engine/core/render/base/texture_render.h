@@ -17,19 +17,25 @@ namespace Echo
 		// create fun
 		static Res* create();
 
-        // width & height
-        ui32 getWidth() const { return m_width; }
-        ui32 getHeight() const { return m_height; }
+		// type
+		virtual TexType getType() const override { return TT_Render; }
 
-		// pixel format
-		PixelFormat	getPixelFormat() const { return m_format; }
+		// override width|height
+		virtual void setWidth(ui32 width) override;
+		virtual void setHeight(ui32 height) override;
+
+		// color
+		const Color& getClearColor() const { return m_clearColor; }
+		void setClearColor(const Color& color);
 
         // on resize
-		virtual void onSize(ui32 width, ui32 height) {}
+		virtual void onSize(ui32 width, ui32 height);
 
 	protected:
-        ui32				m_width;
-        ui32				m_height;
-		PixelFormat			m_format;
+		// unload
+		virtual bool unload() { return false; }
+
+	protected:
+		Color		m_clearColor = Color::BLACK;
 	};
 }

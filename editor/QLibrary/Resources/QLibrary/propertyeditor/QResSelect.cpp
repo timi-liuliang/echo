@@ -15,7 +15,7 @@ namespace QT_UI
 		, m_propertyModel(model)
 		, m_propertyName(propertyName)
 	{
-		// 布局控件
+		// layout
 		m_horizonLayout = new QHBoxLayout( this);
 		m_horizonLayout->setSpacing( 0);
 		m_horizonLayout->setContentsMargins(0, 0, 0, 0);
@@ -36,7 +36,7 @@ namespace QT_UI
 
 		setFocusProxy( m_toolButton);
 
-		// 消息
+		// signal|slots
 		QObject::connect( m_toolButton, SIGNAL(clicked()), this, SLOT(OnSelectPath()));
 		QObject::connect(m_lineEdit, SIGNAL(returnPressed()), this, SLOT(onEditFinished()));
 

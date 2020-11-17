@@ -190,6 +190,7 @@ namespace Echo
 		{
 		case Texture::TT_2D:	return ECHO_DOWN_CAST<GLESTexture2D*>(texture)->m_glesTexture;
 		case Texture::TT_Cube:  return ECHO_DOWN_CAST<GLESTextureCube*>(texture)->m_glesTexture;
+		case Texture::TT_Render:return ECHO_DOWN_CAST<GLESTextureRender*>(texture)->getGlesTexture();
 		default:				return 0;
 		}
 	}

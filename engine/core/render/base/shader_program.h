@@ -91,7 +91,7 @@ namespace Echo
         struct UniformTexture : public Uniform
         {
 			TextureType         m_type = TextureType::General;
-			ResourcePath		m_texturePathDefault = ResourcePath("", ".png");
+			ResourcePath		m_texturePathDefault = ResourcePath("", ".png|.rt");
 
             virtual void setTextureDefault(const ResourcePath& path) override;
             virtual const ResourcePath& getTextureDefault() override;

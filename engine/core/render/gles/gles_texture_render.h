@@ -11,20 +11,16 @@ namespace Echo
 	public:
 		// updateSubTex2D
 		virtual bool updateTexture2D(PixelFormat format, TexUsage usage, i32 width, i32 height, void* data, ui32 size) override;
-		virtual	bool updateSubTex2D(ui32 level, const Rect& rect, void* pData, ui32 size) override;
 
-		// type
-		virtual TexType getType() const override { return TT_2D; }
+		// getGlesTexture
+		GLuint getGlesTexture();
 
 	protected:
 		GLESTextureRender(const String& name);
 		virtual ~GLESTextureRender();
 
-		// load
-		virtual bool load() override;
-
 		// unload
-		bool unload();
+		virtual bool unload() override;
 
 	protected:
 		// create
@@ -34,6 +30,6 @@ namespace Echo
 		void set2DSurfaceData(int level, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, const Buffer& buff);
 
 	public:
-		GLuint		m_glesTexture;
+		GLuint		m_glesTexture = 0;
 	};
 }
