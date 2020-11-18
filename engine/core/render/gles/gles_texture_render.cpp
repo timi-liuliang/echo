@@ -27,6 +27,9 @@ namespace Echo
 	{
 		create2DTexture();
 
+		m_width = width;
+		m_height = height;
+		m_usage = usage;
 		m_isCompressed = false;
 		m_compressType = Texture::CompressType_Unknown;
 		m_depth = 1;

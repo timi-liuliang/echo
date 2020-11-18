@@ -31,6 +31,11 @@ namespace Echo
         // on resize
 		virtual void onSize(ui32 width, ui32 height);
 
+	public:
+		// update texture by rect
+		virtual bool updateTexture2D(PixelFormat format, TexUsage usage, i32 width, i32 height, void* data, ui32 size) { return false; }
+		virtual bool updateSubTex2D(ui32 level, const Rect& rect, void* pData, ui32 size) { return false; }
+
 	protected:
 		// unload
 		virtual bool unload() { return false; }
@@ -38,4 +43,5 @@ namespace Echo
 	protected:
 		Color		m_clearColor = Color::BLACK;
 	};
+	typedef ResRef<TextureRender> TextureRenderPtr;
 }

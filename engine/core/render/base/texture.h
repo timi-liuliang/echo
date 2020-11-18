@@ -61,14 +61,9 @@ namespace Echo
 	public:
 		Texture();
 
-		// get global texture
+		// get|set global texture
 		static Texture* getGlobal(ui32 globalTextureIdx);
-
-		// set global texture
 		static void setGlobal(ui32 globalTextureIdx, Texture* texture);
-        
-        // create by data
-        static Texture* createTexture2D(PixelFormat format, TexUsage usage, i32 width, i32 height, void* data, ui32 size);
 
 		// type
 		virtual TexType getType() const { return TT_Unknown; }
@@ -78,11 +73,11 @@ namespace Echo
 
 		// width
 		virtual ui32 getWidth() const { return m_width; }
-		virtual void setWidth(ui32 width) { m_width = width; }
+		virtual void setWidth(ui32 width) {}
 
 		// height
 		virtual ui32 getHeight() const{ return m_height; }
-		virtual void setHeight(ui32 height) { m_height = height; }
+		virtual void setHeight(ui32 height) {}
 
 		// depth
 		ui32 getDepth() const { return m_depth; }
@@ -91,10 +86,6 @@ namespace Echo
 		bool isMipmapEnable() const { return m_isMipMapEnable; }
 		void setMipmapEnable(bool isEanble) { m_isMipMapEnable = isEanble; }
 		ui32 getNumMipmaps() const { return m_numMipmaps; }
-
-		// update texture by rect
-        virtual bool updateTexture2D(PixelFormat format, TexUsage usage, i32 width, i32 height, void* data, ui32 size) { return false; }
-		virtual bool updateSubTex2D(ui32 level, const Rect& rect, void* pData, ui32 size) { return false; }
 		
 		// sampler state
 		void setSamplerState( const SamplerState::SamplerDesc& desc);

@@ -2,6 +2,7 @@
 #include "engine/core/util/Buffer.h"
 #include "engine/core/resource/Res.h"
 #include "engine/core/render/base/texture.h"
+#include "engine/core/render/base/renderer.h"
 
 #define INVALID -1
 
@@ -94,14 +95,10 @@ namespace Echo
 	{
 		size_t pixelsize = PixelUtil::GetPixelSize(m_format);
 		Buffer buffer(ui32(m_width*m_height*pixelsize), m_textureData, false);
-		if (m_texture)
-		{
-            m_texture->updateTexture2D(m_format, Texture::TU_GPU_READ, m_width, m_height, buffer.getData(), buffer.getSize());
-		}
-		else
-		{
-            m_texture = Texture::createTexture2D(m_format, Texture::TU_GPU_READ, m_width, m_height, buffer.getData(), buffer.getSize());
-		}
+		if (!m_texture)
+			m_texture = Renderer::instance()->createTextureRender("");
+
+		m_texture->updateTexture2D(m_format, Texture::TU_GPU_READ, m_width, m_height, buffer.getData(), buffer.getSize());
 	}
 
 	int FontTexture::insert(int nodeIdx, Color* data, int width, int height)

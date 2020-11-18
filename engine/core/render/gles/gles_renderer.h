@@ -74,7 +74,6 @@ namespace Echo
 		GPUBuffer*	createIndexBuffer(Dword usage, const Buffer& buff) override;
 
 		// textures
-		virtual Texture* createTexture2D() override;
 		virtual Texture*  createTexture2D(const String& name) override;
 		virtual TextureCube* createTextureCube(const String& name) override;
 		virtual TextureRender* createTextureRender(const String& name) override;

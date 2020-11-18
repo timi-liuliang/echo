@@ -2,7 +2,7 @@
 
 #include "engine/core/math/color.h"
 #include "engine/core/render/base/image/pixel_format.h"
-#include "engine/core/render/base/texture.h"
+#include "engine/core/render/base/texture_render.h"
 
 namespace Echo
 {
@@ -79,6 +79,6 @@ namespace Echo
 		vector<Node>::type	m_nodes;
 		void*				m_textureData = nullptr;
 		PixelFormat			m_format = PF_RGBA8_UNORM;
-		TexturePtr			m_texture;
+		TextureRenderPtr	m_texture;
     };
 }

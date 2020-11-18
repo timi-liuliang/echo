@@ -410,12 +410,6 @@ namespace Echo
 		return EchoNew(GLESGPUBuffer(GPUBuffer::GBT_INDEX, usage, buff));
 	}
 
-	Texture* GLESRenderer::createTexture2D()
-	{
-		static i32 TextureIndex = 0;
-		return EchoNew(GLESTexture2D(StringUtil::Format("Texture_%d", TextureIndex++)));
-	}
-
 	Texture* GLESRenderer::createTexture2D(const String& name)
 	{
 		return EchoNew(GLESTexture2D(name));
