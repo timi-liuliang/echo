@@ -82,6 +82,14 @@ namespace Echo
 		}
 	}
 
+	void RenderPipeline::addStage(const String& name, i32 position)
+	{
+		RenderStage* stage = EchoNew(RenderStage(this));
+		stage->setName("New Stage");
+
+		m_renderStages.emplace_back(stage);
+	}
+
 	bool RenderPipeline::beginFramebuffer(ui32 id, bool clearColor, const Color& bgColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue, ui32 rbo)
 	{
 		FramebufferMap::iterator it = m_framebuffers.find(id);

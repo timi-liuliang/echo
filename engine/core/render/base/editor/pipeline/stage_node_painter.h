@@ -45,12 +45,21 @@ namespace Pipeline
 		void update(Echo::i32 xPos, bool isFinal);
 
 		// on add
-		void showAddMenu();
+		void showAddQueueMenu();
+		void showAddStageMenu();
+
+		// add new stage
+		void addNewStage();
 
 	public:
 		// new
 		void onNewImageFilter();
 		void onNewRenderQueue();
+
+	private:
+		// next arrow
+		void initNextArrow();
+		void updateNextArrow(bool isFinal);
 
 	public:
 		Style						m_style;
@@ -58,7 +67,8 @@ namespace Pipeline
 		QGraphicsView*				m_graphicsView = nullptr;
 		QGraphicsScene*				m_graphicsScene = nullptr;
 		QGraphicsRenderStageItem*	m_rect = nullptr;
-		QGraphicsPixmapItem*		m_nextArrow = nullptr;
+		QGraphicsPixmapItemCustom*	m_nextArrow = nullptr;
+		bool						m_nextArrowHighlight = false;
 		QGraphicsPixmapItemCustom*  m_addAction = nullptr;
 		size_t						m_renderQueueSize = 0;
 		float						m_rectFinalWidth = 15;

@@ -29,6 +29,9 @@ namespace Echo
 		void render();
 
 	public:
+		// get pipeline
+		RenderPipeline* getPipeline() { return m_pipeline; }
+
 		// get render queues
 		const vector<IRenderQueue*>::type& getRenderQueues() { return m_renderQueues; }
 
@@ -47,6 +50,6 @@ namespace Echo
 		String						m_name;
 		RenderPipeline*				m_pipeline = nullptr;
 		vector<IRenderQueue*>::type	m_renderQueues;
-		ui32						m_frameBufferId = -1;
+		ui32						m_frameBufferId = 0;
 	};
 }

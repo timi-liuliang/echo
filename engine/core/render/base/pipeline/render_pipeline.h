@@ -46,8 +46,12 @@ namespace Echo
 		void setSrc(Template type);
 		void setSrc(const String& src);
 
+	public:
 		// stages
-		const vector<RenderStage*>::type& getRenderStages() { return m_renderStages; }
+		vector<RenderStage*>::type& getRenderStages() { return m_renderStages; }
+
+		// stage operate
+		void addStage(const String& name, i32 position=0);
 
 	public:
 		// load and save
