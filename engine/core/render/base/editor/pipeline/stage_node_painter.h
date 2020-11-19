@@ -56,7 +56,13 @@ namespace Pipeline
 		void onNewImageFilter();
 		void onNewRenderQueue();
 
+		// delete
+		void onDeleteThisRenderStage();
+
 	private:
+		// boundary
+		void initBoundary();
+
 		// next arrow
 		void initNextArrow();
 		void updateNextArrow(bool isFinal);

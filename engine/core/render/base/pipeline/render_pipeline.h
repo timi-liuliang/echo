@@ -48,10 +48,11 @@ namespace Echo
 
 	public:
 		// stages
-		vector<RenderStage*>::type& getRenderStages() { return m_renderStages; }
+		vector<RenderStage*>::type& getRenderStages() { return m_stages; }
 
 		// stage operate
-		void addStage(const String& name, i32 position=0);
+		void addStage(RenderStage* stage);
+		void deleteStage(RenderStage* stage);
 
 	public:
 		// load and save
@@ -66,7 +67,7 @@ namespace Echo
 		String						m_srcData;
 		bool						m_isParsed = false;
 		FramebufferMap				m_framebuffers;
-		vector<RenderStage*>::type	m_renderStages;
+		vector<RenderStage*>::type	m_stages;
 	};
 	typedef ResRef<RenderPipeline> RenderPipelinePtr;
 }

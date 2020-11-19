@@ -82,12 +82,23 @@ namespace Echo
 		}
 	}
 
-	void RenderPipeline::addStage(const String& name, i32 position)
+	void RenderPipeline::addStage(RenderStage* stage)
 	{
-		RenderStage* stage = EchoNew(RenderStage(this));
-		stage->setName("New Stage");
+		m_stages.emplace_back(stage);
+	}
 
-		m_renderStages.emplace_back(stage);
+	void RenderPipeline::deleteStage(RenderStage* stage)
+	{
+		for (auto it = m_stages.begin(); it != m_stages.end(); it++)
+		{
+			if (*it == stage)
+			{
+				EchoSafeDelete(stage, RenderStage);
+				it = m_stages.erase(it);
+
+				break;
+			}
+		}
 	}
 
 	bool RenderPipeline::beginFramebuffer(ui32 id, bool clearColor, const Color& bgColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue, ui32 rbo)
@@ -121,7 +132,7 @@ namespace Echo
 
 	void RenderPipeline::addRenderable(const String& name, RenderableID id)
 	{
-		for (RenderStage* stage : m_renderStages)
+		for (RenderStage* stage : m_stages)
 		{
 			stage->addRenderable(name, id);
 		}
@@ -131,7 +142,7 @@ namespace Echo
 	{
         Renderer::instance()->beginRender();
         
-        for (RenderStage* stage : m_renderStages)
+        for (RenderStage* stage : m_stages)
         {
             stage->render();
         }
@@ -141,7 +152,7 @@ namespace Echo
 
 	void RenderPipeline::parseXml()
 	{
-		EchoSafeDeleteContainer(m_renderStages, RenderStage);
+		EchoSafeDeleteContainer(m_stages, RenderStage);
 
 		pugi::xml_document doc;
 		if (doc.load_buffer(m_srcData.data(), m_srcData.size()));
@@ -154,7 +165,7 @@ namespace Echo
 					RenderStage* stage = EchoNew(RenderStage(this));
 					stage->setName(stageNode.attribute("name").as_string());
 					stage->parseXml(&stageNode);
-					m_renderStages.emplace_back(stage);
+					m_stages.emplace_back(stage);
 				}
 			}
 		}
@@ -179,7 +190,7 @@ namespace Echo
 		pugi::xml_document doc;
 
 		pugi::xml_node rootNode = doc.append_child("pipeline");
-		for (RenderStage* stage : m_renderStages)
+		for (RenderStage* stage : m_stages)
 		{
 			stage->saveXml(&rootNode);
 		}

@@ -15,26 +15,13 @@ namespace Pipeline
 
 		if (!m_rect)
 		{
-			float halfWidth = m_width * 0.5f;
-
-			m_rect = new QGraphicsRenderStageItem(nullptr);
-			m_rect->setZValue(-1.f);
-			m_rect->setPen(QPen(m_style.m_normalBoundaryColor, m_style.m_penWidth));
-			m_rect->setFlag(QGraphicsItem::ItemIsFocusable, true);
-			m_rect->setPos(QPointF(0.f, 0.f));
-			m_graphicsScene->addItem(m_rect);
-
-			// mouse press event
-			m_rect->setMousePressEventCb([this](QGraphicsItem* item)
-			{
-				EditorApi.showObjectProperty(m_stage);
-			});
+			initBoundary();
 
 			Echo::Vector2 textPos(15.f, 15.f);
 			m_text = m_graphicsScene->addSimpleText(m_stage->getName().c_str());
 			m_text->setBrush(QBrush(m_style.m_fontColor));
 			m_text->setParentItem(m_rect);
-			m_text->setPos(textPos.x - halfWidth, textPos.y);
+			m_text->setPos(textPos.x - m_width * 0.5f, textPos.y);
 
 			initNextArrow();
 
@@ -67,6 +54,30 @@ namespace Pipeline
 	StatgeNodePainter::~StatgeNodePainter()
 	{
 		reset();
+	}
+
+	void StatgeNodePainter::initBoundary()
+	{
+		float halfWidth = m_width * 0.5f;
+
+		m_rect = new QGraphicsRenderStageItem(nullptr);
+		m_rect->setZValue(-1.f);
+		m_rect->setPen(QPen(m_style.m_normalBoundaryColor, m_style.m_penWidth));
+		m_rect->setFlag(QGraphicsItem::ItemIsFocusable, true);
+		m_rect->setPos(QPointF(0.f, 0.f));
+		m_graphicsScene->addItem(m_rect);
+
+		// mouse press event
+		m_rect->setMousePressEventCb([this](QGraphicsItem* item)
+		{
+			EditorApi.showObjectProperty(m_stage);
+		});
+
+		m_rect->setKeyPressEventCb([this](QKeyEvent* event)
+		{
+			if (event->key() == Qt::Key_Delete)
+				onDeleteThisRenderStage();
+		});
 	}
 
 	void StatgeNodePainter::initNextArrow()
@@ -142,7 +153,10 @@ namespace Pipeline
 		Echo::RenderPipeline* pipeline = m_stage ? m_stage->getPipeline() : nullptr;
 		if (pipeline)
 		{
-			pipeline->addStage("New Stage", 0);
+			Echo::RenderStage* stage = EchoNew(Echo::RenderStage(pipeline));
+			stage->setName("New Stage");
+
+			pipeline->addStage(stage);
 		}
 	}
 
@@ -156,7 +170,15 @@ namespace Pipeline
 				EditorApi.showObjectProperty(imageFilter);
 			}
 		}
+	}
 
+	void StatgeNodePainter::onDeleteThisRenderStage()
+	{
+		Echo::RenderPipeline* pipeline = m_stage ? m_stage->getPipeline() : nullptr;
+		if (pipeline)
+		{
+			pipeline->deleteStage(m_stage);
+		}
 	}
 
 	void StatgeNodePainter::onNewRenderQueue()
