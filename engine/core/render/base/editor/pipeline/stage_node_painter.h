@@ -76,7 +76,7 @@ namespace Pipeline
 		QGraphicsPixmapItemCustom*	m_nextArrow = nullptr;
 		bool						m_nextArrowHighlight = false;
 		QGraphicsPixmapItemCustom*  m_addAction = nullptr;
-		size_t						m_renderQueueSize = 0;
+		size_t						m_renderQueueSize = -1;
 		float						m_rectFinalWidth = 15;
 		float						m_width = 190;
 		float						m_height = 240;
