@@ -88,7 +88,7 @@ namespace Pipeline
 		m_nextArrow = new QGraphicsPixmapItemCustom();
 		m_nextArrow->setPixmap(rightArrow.scaled(QSize(16, 16)));
 		m_nextArrow->setParentItem(m_rect);
-		m_nextArrow->setPos(QPointF(halfWidth + 1.f, 0.f));
+		m_nextArrow->setPos(QPointF(-halfWidth - 37.f, 0.f));
 		m_nextArrow->setAcceptHoverEvents(true);
 		m_graphicsScene->addItem(m_nextArrow);
 
@@ -177,7 +177,11 @@ namespace Pipeline
 		Echo::RenderPipeline* pipeline = m_stage ? m_stage->getPipeline() : nullptr;
 		if (pipeline)
 		{
-			pipeline->deleteStage(m_stage);
+			if (QMessageBox::Yes == QMessageBox(QMessageBox::Warning, "Warning", "Do you really want to delete the selected render stage ?", QMessageBox::Yes | QMessageBox::No).exec())
+			{
+				EditorApi.showObjectProperty(pipeline);
+				pipeline->deleteStage(m_stage);
+			}
 		}
 	}
 

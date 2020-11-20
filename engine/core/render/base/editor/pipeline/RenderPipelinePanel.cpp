@@ -77,7 +77,7 @@ namespace Echo
 
 	void RenderpipelinePanel::drawStages()
 	{
-		const vector<RenderStage*>::type& stages = m_pipeline->getRenderStages();
+		vector<RenderStage*>::type stages = m_pipeline->getRenderStages();
 		while (m_stageNodePainters.size() > stages.size())
 		{
 			EchoSafeDelete(m_stageNodePainters.back(), StatgeNodePainter);
