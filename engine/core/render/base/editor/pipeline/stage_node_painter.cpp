@@ -88,7 +88,7 @@ namespace Pipeline
 		m_nextArrow = new QGraphicsPixmapItemCustom();
 		m_nextArrow->setPixmap(rightArrow.scaled(QSize(16, 16)));
 		m_nextArrow->setParentItem(m_rect);
-		m_nextArrow->setPos(QPointF(halfWidth + 5.f, 0.f));
+		m_nextArrow->setPos(QPointF(halfWidth + 1.f, 0.f));
 		m_nextArrow->setAcceptHoverEvents(true);
 		m_graphicsScene->addItem(m_nextArrow);
 
@@ -113,15 +113,15 @@ namespace Pipeline
 		Echo::String imagePath;
 		if (isFinal)
 		{
-			imagePath = m_nextArrowHighlight ? "engine/core/render/base/editor/icon/right-arrow.png":"engine/core/render/base/editor/icon/right-arrow.png";
+			imagePath = m_nextArrowHighlight ? "engine/core/render/base/editor/icon/next-arrow-final.png":"engine/core/render/base/editor/icon/next-arrow-dark-final.png";
 		}
 		else
 		{
-			imagePath = m_nextArrowHighlight ? "engine/core/render/base/editor/icon/right-arrow.png":"engine/core/render/base/editor/icon/right-arrow.png";
+			imagePath = m_nextArrowHighlight ? "engine/core/render/base/editor/icon/next-arrow.png":"engine/core/render/base/editor/icon/next-arrow-dark.png";
 		}
 
 		QPixmap rightArrow((Echo::Engine::instance()->getRootPath() + imagePath).c_str());
-		m_nextArrow->setPixmap(rightArrow.scaled(QSize(16, 16)));
+		m_nextArrow->setPixmap(rightArrow.scaled(QSize(36, 18), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 	}
 
 	void StatgeNodePainter::showAddQueueMenu()
@@ -225,7 +225,7 @@ namespace Pipeline
 
 			m_text->setText(m_stage->getName().c_str());
 
-			m_rect->setPos(xPos * 240.f, 0.f);
+			m_rect->setPos(xPos * 228.f, 0.f);
 			m_rect->setPen(QPen(m_rect->isFocused() ? m_style.m_selectedBoundaryColor : m_style.m_normalBoundaryColor, m_style.m_penWidth));
 
 			updateNextArrow(isFinal);
