@@ -15,7 +15,7 @@ namespace Pipeline
 	struct StatgeAddButton
 	{
 	public:
-		StatgeAddButton(QGraphicsView* view, QGraphicsScene* scene, Echo::RenderStage* stage);
+		StatgeAddButton(QGraphicsScene* scene, Echo::RenderPipeline* pipeline);
 		~StatgeAddButton();
 
 		// reset
@@ -30,31 +30,18 @@ namespace Pipeline
 		// add new stage
 		void addNewStage();
 
-	public:
-		// new
-		void onNewImageFilter();
-		void onNewRenderQueue();
-
-		// delete
-		void onDeleteThisRenderStage();
-
 	private:
-		// boundary
-		void initBoundary();
-
 		// next arrow
 		void initNextArrow();
 		void updateNextArrow(bool isFinal);
 
 	public:
-		Echo::RenderStage*			m_stage = nullptr;
-		QGraphicsView*				m_graphicsView = nullptr;
+		Echo::RenderPipeline*		m_pipeline = nullptr;
 		QGraphicsScene*				m_graphicsScene = nullptr;
-		QGraphicsRenderStageItem*	m_rect = nullptr;
+		Echo::Vector2				m_stagePosition;
 		QGraphicsPixmapItemCustom*	m_nextArrow = nullptr;
 		bool						m_nextArrowHighlight = false;
-		float						m_width = 190;
-		float						m_height = 240;
+		float						m_stageWidth = 190;
 	};
 	typedef Echo::vector<StatgeAddButton*>::type StatgeAddButtons;
 }

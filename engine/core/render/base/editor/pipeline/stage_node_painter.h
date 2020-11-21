@@ -46,10 +46,6 @@ namespace Pipeline
 
 		// on add
 		void showAddQueueMenu();
-		void showAddStageMenu();
-
-		// add new stage
-		void addNewStage();
 
 	public:
 		// new
@@ -63,18 +59,12 @@ namespace Pipeline
 		// boundary
 		void initBoundary();
 
-		// next arrow
-		void initNextArrow();
-		void updateNextArrow(bool isFinal);
-
 	public:
 		Style						m_style;
 		Echo::RenderStage*			m_stage = nullptr;
 		QGraphicsView*				m_graphicsView = nullptr;
 		QGraphicsScene*				m_graphicsScene = nullptr;
 		QGraphicsRenderStageItem*	m_rect = nullptr;
-		QGraphicsPixmapItemCustom*	m_nextArrow = nullptr;
-		bool						m_nextArrowHighlight = false;
 		QGraphicsPixmapItemCustom*  m_addAction = nullptr;
 		size_t						m_renderQueueSize = -1;
 		float						m_rectFinalWidth = 15;

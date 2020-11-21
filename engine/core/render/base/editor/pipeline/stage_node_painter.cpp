@@ -23,8 +23,6 @@ namespace Pipeline
 			m_text->setParentItem(m_rect);
 			m_text->setPos(textPos.x - m_width * 0.5f, textPos.y);
 
-			initNextArrow();
-
 			QPixmap addNew((Echo::Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/import_dark.png").c_str());
 			m_addAction = new QGraphicsPixmapItemCustom();
 			m_addAction->setPixmap(addNew.scaled(QSize(16, 16)));
@@ -80,50 +78,6 @@ namespace Pipeline
 		});
 	}
 
-	void StatgeNodePainter::initNextArrow()
-	{
-		float halfWidth = m_width * 0.5f;
-
-		QPixmap rightArrow((Echo::Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/right-arrow.png").c_str());
-		m_nextArrow = new QGraphicsPixmapItemCustom();
-		m_nextArrow->setPixmap(rightArrow.scaled(QSize(16, 16)));
-		m_nextArrow->setParentItem(m_rect);
-		m_nextArrow->setPos(QPointF(-halfWidth - 37.f, 0.f));
-		m_nextArrow->setAcceptHoverEvents(true);
-		m_graphicsScene->addItem(m_nextArrow);
-
-		m_nextArrow->setHoverEnterEventCb([this](QGraphicsPixmapItem* item)
-		{
-			m_nextArrowHighlight = true;
-		});
-
-		m_nextArrow->setHoverEnterLeaveCb([this](QGraphicsPixmapItem* item)
-		{
-			m_nextArrowHighlight = false;
-		});
-
-		m_nextArrow->setMousePressEventCb([this](QGraphicsPixmapItem* item)
-		{
-			showAddStageMenu();
-		});
-	}
-
-	void StatgeNodePainter::updateNextArrow(bool isFinal)
-	{
-		Echo::String imagePath;
-		if (isFinal)
-		{
-			imagePath = m_nextArrowHighlight ? "engine/core/render/base/editor/icon/next-arrow-final.png":"engine/core/render/base/editor/icon/next-arrow-dark-final.png";
-		}
-		else
-		{
-			imagePath = m_nextArrowHighlight ? "engine/core/render/base/editor/icon/next-arrow.png":"engine/core/render/base/editor/icon/next-arrow-dark.png";
-		}
-
-		QPixmap rightArrow((Echo::Engine::instance()->getRootPath() + imagePath).c_str());
-		m_nextArrow->setPixmap(rightArrow.scaled(QSize(36, 18), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-	}
-
 	void StatgeNodePainter::showAddQueueMenu()
 	{
 		if (!m_addMenu)
@@ -141,23 +95,6 @@ namespace Pipeline
 		}
 
 		m_addMenu->exec(QCursor::pos());
-	}
-
-	void StatgeNodePainter::showAddStageMenu()
-	{
-		addNewStage();
-	}
-
-	void StatgeNodePainter::addNewStage()
-	{
-		Echo::RenderPipeline* pipeline = m_stage ? m_stage->getPipeline() : nullptr;
-		if (pipeline)
-		{
-			Echo::RenderStage* stage = EchoNew(Echo::RenderStage(pipeline));
-			stage->setName("New Stage");
-
-			pipeline->addStage(stage);
-		}
 	}
 
 	void StatgeNodePainter::onNewImageFilter()
@@ -231,8 +168,6 @@ namespace Pipeline
 
 			m_rect->setPos(xPos * 228.f, 0.f);
 			m_rect->setPen(QPen(m_rect->isFocused() ? m_style.m_selectedBoundaryColor : m_style.m_normalBoundaryColor, m_style.m_penWidth));
-
-			updateNextArrow(isFinal);
 		}
 	}
 }

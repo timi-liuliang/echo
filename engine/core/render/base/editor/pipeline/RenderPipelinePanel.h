@@ -7,6 +7,7 @@
 #ifdef ECHO_EDITOR_MODE
 
 #include "stage_node_painter.h"
+#include "stage_add_button.h"
 #include "renderqueue_node_painter.h"
 #include "custom/qgraphics_scene_ex.h"
 
@@ -31,6 +32,7 @@ namespace Echo
 		// draw
 		void drawStages();
 		void drawRenderQueues();
+		void drawStageAddButtons();
 
 		// update icon
 		void updateApplyButtonIcon();
@@ -48,6 +50,7 @@ namespace Echo
 		Pipeline::QGraphicsSceneEx*			m_graphicsScene = nullptr;
 		QGraphicsLineItem*					m_borderTopLine = nullptr;
 		Pipeline::StageNodePainters			m_stageNodePainters;
+		Pipeline::StatgeAddButtons			m_stageAddButtons;
 		Pipeline::RenderQueueNodePainters	m_renderQueueNodePainters;
 	};
 }

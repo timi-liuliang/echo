@@ -36,6 +36,7 @@ namespace Echo
 		m_graphicsView = m_ui->findChild<QGraphicsView*>("m_graphicsView");
 		m_graphicsScene = new Pipeline::QGraphicsSceneEx();
 		m_graphicsView->setScene(m_graphicsScene);
+		m_graphicsView->setAttribute(Qt::WA_AlwaysShowToolTips);
 
 		// event
 		m_graphicsScene->setMousePressEventCb([this]()
@@ -56,6 +57,7 @@ namespace Echo
 	void RenderpipelinePanel::update()
 	{
 		drawStages();
+		drawStageAddButtons();
 		drawRenderQueues();
 
 		updateApplyButtonIcon();
@@ -102,6 +104,27 @@ namespace Echo
 		for (size_t i = 0; i < stages.size(); i++)
 		{
 			m_stageNodePainters[i]->update(i, i + 1 == stages.size());
+		}
+	}
+
+	void RenderpipelinePanel::drawStageAddButtons()
+	{
+		Echo::i32 count = m_pipeline->getRenderStages().size()+1;
+		while (m_stageAddButtons.size() > count)
+		{
+			EchoSafeDelete(m_stageAddButtons.back(), StatgeAddButton);
+			m_stageAddButtons.pop_back();
+		}
+
+		if (m_stageAddButtons.size() <count)
+		{
+			for (size_t i = m_stageAddButtons.size(); i < count; ++i)
+				m_stageAddButtons.emplace_back(EchoNew(Pipeline::StatgeAddButton(m_graphicsScene, m_pipeline)));
+		}
+
+		for (size_t i = 0; i < count; i++)
+		{
+			m_stageAddButtons[i]->update(i, i + 1 == count);
 		}
 	}
 
