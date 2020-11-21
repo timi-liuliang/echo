@@ -25,16 +25,17 @@ namespace Pipeline
 
 	void StatgeAddButton::initStageDropRegion()
 	{
-		m_stageDropRegion = new QGraphicsPathItem(nullptr);
+		m_stageDropRegion = new QGraphicsDragDropRegionItem(nullptr);
 		m_stageDropRegion->setZValue(-10.f);
 		m_stageDropRegion->setAcceptDrops(true);
+		m_stageDropRegion->setAcceptHoverEvents(true);
 		m_stageDropRegion->setPos(QPointF(0.f, 0.f));
 		m_stageDropRegion->setPen(QPen(m_stageDropRegionDefaultColor));
 		m_stageDropRegion->setBrush(QBrush(m_stageDropRegionDefaultColor));
 		m_graphicsScene->addItem(m_stageDropRegion);
 
 		QPainterPath path;
-		path.addRoundedRect(QRectF(0.f, 0.f, StageNodePainter::getSpace(), 1000.f), 0.f, 0.f);
+		path.addRoundedRect(QRectF(StageNodePainter::getSpace() * 0.1f, 19.f, StageNodePainter::getSpace() * 0.8f - 2.f, 1000.f), 0.f, 0.f);
 		m_stageDropRegion->setPath(path);
 	}
 
@@ -43,6 +44,17 @@ namespace Pipeline
 		float halfWidth = StageNodePainter::getHalfWidth();
 		Echo::Vector2 stagePostion = Echo::Vector2(m_stagePosition * (StageNodePainter::getWidth() + StageNodePainter::getSpace()), 0.f);
 		m_stageDropRegion->setPos(QPointF(stagePostion.x - halfWidth - 37.f, 0.f));
+
+		if (m_stageDropRegion->isDropEnter())
+		{
+			m_stageDropRegion->setPen(QPen(m_stageDropRegionHighlightColor, 1.5f, Qt::DashLine));
+			m_stageDropRegion->setBrush(QBrush(m_stageDropRegionDefaultColor));
+		}
+		else
+		{
+			m_stageDropRegion->setPen(QPen(m_stageDropRegionDefaultColor, 1.5f));
+			m_stageDropRegion->setBrush(QBrush(m_stageDropRegionDefaultColor));
+		}
 	}
 
 	void StatgeAddButton::initNextArrow()

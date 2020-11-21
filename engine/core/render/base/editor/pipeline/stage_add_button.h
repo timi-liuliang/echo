@@ -9,6 +9,7 @@
 #include "engine/core/main/Engine.h"
 #include "custom/qgraphics_pixmap_item_custom.h"
 #include "custom/qgraphics_renderstage_item.h"
+#include "custom/qgraphics__drag_drop_region_item.h"
 
 namespace Pipeline
 {
@@ -46,7 +47,8 @@ namespace Pipeline
 		QGraphicsPixmapItemCustom*	m_nextArrow = nullptr;
 		bool						m_nextArrowHighlight = false;
 		QColor						m_stageDropRegionDefaultColor = QColor(83, 83, 83);
-		QGraphicsPathItem*			m_stageDropRegion = nullptr;
+		QColor						m_stageDropRegionHighlightColor = QColor(255, 214, 98, 125); //Qt::green;
+		QGraphicsDragDropRegionItem*m_stageDropRegion = nullptr;
 	};
 	typedef Echo::vector<StatgeAddButton*>::type StatgeAddButtons;
 }

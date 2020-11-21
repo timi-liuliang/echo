@@ -163,7 +163,9 @@ namespace Pipeline
 
 			m_text->setText(m_stage->getName().c_str());
 
-			m_rect->setPos(xPos * (getWidth()+getSpace()), 0.f);
+			// update position
+			m_rect->setFlag(QGraphicsItem::ItemIsMovable, false);
+			m_rect->setPos(xPos * (getWidth() + getSpace()), 0.f);
 			m_rect->setPen(QPen(m_rect->isFocused() ? m_style.m_selectedBoundaryColor : m_style.m_normalBoundaryColor, m_style.m_penWidth));
 		}
 	}

@@ -12,15 +12,15 @@
 
 namespace Pipeline
 {
-	class QGraphicsRenderStageItem : public QGraphicsPathItem
+	class QGraphicsDragDropRegionItem : public QGraphicsPathItem
 	{
 	public:
-		QGraphicsRenderStageItem(QGraphicsItem* parent = nullptr)
+		QGraphicsDragDropRegionItem(QGraphicsItem* parent = nullptr)
 			: QGraphicsPathItem(parent)
 		{}
 
-		// is focused
-		bool isFocused() const { return m_focused; }
+		// is drop enter
+		bool isDropEnter() const { return m_dropEnter; }
 
 		// hover event callback
 		void setHoverEnterEventCb(std::function<void(QGraphicsItem*)> cb) { m_hoverEnterEventCb = cb;}
@@ -72,12 +72,34 @@ namespace Pipeline
 		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override
 		{
 			QGraphicsPathItem::mouseReleaseEvent(event);
+
 		}
 
 		virtual void keyPressEvent(QKeyEvent* event) override
 		{
 			if (m_keyEventCb)
 				m_keyEventCb(event);
+		}
+
+		virtual void dragEnterEvent(QGraphicsSceneDragDropEvent* event) override
+		{
+			if (event->mimeData()->hasFormat("drag/render-stage"))
+			{
+				m_dropEnter = true;
+			}
+		}
+
+		virtual void dragLeaveEvent(QGraphicsSceneDragDropEvent* event) override
+		{
+			m_dropEnter = false;
+		}
+
+		virtual void dropEvent(QGraphicsSceneDragDropEvent* event) override
+		{
+			if (event->mimeData()->hasFormat("drag/render-stage"))
+			{
+				int a = 10;
+			}
 		}
 
 		virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override
@@ -89,24 +111,10 @@ namespace Pipeline
 				QMimeData* mimeData = new  QMimeData;
 				mimeData->setData("drag/render-stage", QByteArray());
 				QDrag* drag = new QDrag(mimeData);
-				drag->setMimeData(mimeData);
-				drag->setPixmap(QPixmapFromItem(this));
 				if (drag->exec(Qt::MoveAction) == Qt::MoveAction)
 				{
 				}
 			}
-		}
-
-	public:
-		static QPixmap QPixmapFromItem(QGraphicsItem* item) 
-		{
-			QPixmap pixmap(item->boundingRect().size().toSize());
-			pixmap.fill(Qt::transparent);
-			QPainter painter(&pixmap);
-			painter.setRenderHint(QPainter::Antialiasing);
-			QStyleOptionGraphicsItem opt;
-			item->paint(&painter, &opt);
-			return pixmap;
 		}
 
 	protected:
@@ -117,6 +125,7 @@ namespace Pipeline
 		}
 
 	protected:
+		bool								m_dropEnter = false;
 		bool								m_focused = false;
 		std::function<void(QGraphicsItem*)> m_hoverEnterEventCb;
 		std::function<void(QGraphicsItem*)> m_hoverLeaveEventCb;
