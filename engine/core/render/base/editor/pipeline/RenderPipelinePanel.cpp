@@ -82,22 +82,22 @@ namespace Echo
 		vector<RenderStage*>::type stages = m_pipeline->getRenderStages();
 		while (m_stageNodePainters.size() > stages.size())
 		{
-			EchoSafeDelete(m_stageNodePainters.back(), StatgeNodePainter);
+			EchoSafeDelete(m_stageNodePainters.back(), StageNodePainter);
 			m_stageNodePainters.pop_back();
 		}
 
 		if (m_stageNodePainters.size() < stages.size())
 		{
 			for (size_t i = m_stageNodePainters.size(); i < stages.size(); ++i)
-				m_stageNodePainters.emplace_back(EchoNew(Pipeline::StatgeNodePainter(m_graphicsView, m_graphicsScene, stages[i])));
+				m_stageNodePainters.emplace_back(EchoNew(Pipeline::StageNodePainter(m_graphicsView, m_graphicsScene, stages[i])));
 		}
 
 		for (size_t i = 0; i < stages.size(); i++)
 		{
 			if (!m_stageNodePainters[i] || m_stageNodePainters[i]->m_stage != stages[i])
 			{
-				EchoSafeDelete(m_stageNodePainters[i], StatgeNodePainter);
-				m_stageNodePainters[i] = EchoNew(Pipeline::StatgeNodePainter(m_graphicsView, m_graphicsScene, stages[i]));
+				EchoSafeDelete(m_stageNodePainters[i], StageNodePainter);
+				m_stageNodePainters[i] = EchoNew(Pipeline::StageNodePainter(m_graphicsView, m_graphicsScene, stages[i]));
 			}
 		}
 

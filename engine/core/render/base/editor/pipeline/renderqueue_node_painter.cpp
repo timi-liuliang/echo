@@ -1,9 +1,9 @@
 #include "renderqueue_node_painter.h"
-#include "engine/core/main/Engine.h"
 
 #ifdef ECHO_EDITOR_MODE
 
-#include <QMessageBox>
+#include "engine/core/main/Engine.h"
+#include "stage_node_painter.h"
 
 namespace Pipeline
 {
@@ -109,7 +109,7 @@ namespace Pipeline
 		float startYPos = 60.f;
 		float penWidth = m_renderQueue->isEnable() ? m_style.m_penWidth : m_style.m_penWidth - 1;
 		m_rect->setPen(QPen(m_rect->isFocused() ? m_style.m_selectedBoundaryColor : (m_renderQueue->isEnable() ? m_style.m_normalBoundaryColor : m_style.m_disableBoundaryColor), penWidth));
-		m_rect->setPos(xPos * 200.f, startYPos + yPos * 56.f);
+		m_rect->setPos(xPos * (StageNodePainter::getWidth() + StageNodePainter::getSpace()), startYPos + yPos * 56.f);
 
 		m_deleteButtton->setVisible(m_rect->isFocused());
 

@@ -1,9 +1,11 @@
 #include "stage_add_button.h"
+
+#ifdef ECHO_EDITOR_MODE
+
 #include "engine/core/base/class_method_bind.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/render/base/pipeline/render_pipeline.h"
-
-#ifdef ECHO_EDITOR_MODE
+#include "stage_node_painter.h"
 
 namespace Pipeline
 {
@@ -60,8 +62,9 @@ namespace Pipeline
 		QPixmap rightArrow((Echo::Engine::instance()->getRootPath() + imagePath).c_str());
 		m_nextArrow->setPixmap(rightArrow.scaled(QSize(36, 18), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 
-		float halfWidth = m_stageWidth * 0.5f;
-		m_nextArrow->setPos(QPointF(m_stagePosition.x - halfWidth - 37.f, 0.f));
+		float halfWidth = StageNodePainter::getHalfWidth();
+		Echo::Vector2 stagePostion = Echo::Vector2(m_stagePosition * (StageNodePainter::getWidth() + StageNodePainter::getSpace()), 0.f);
+		m_nextArrow->setPos(QPointF(stagePostion.x - halfWidth - 37.f, 0.f));
 	}
 
 	void StatgeAddButton::showAddStageMenu()
@@ -76,7 +79,7 @@ namespace Pipeline
 			Echo::RenderStage* stage = EchoNew(Echo::RenderStage(m_pipeline));
 			stage->setName("New Stage");
 
-			m_pipeline->addStage(stage);
+			m_pipeline->addStage(stage, m_stagePosition);
 		}
 	}
 
@@ -92,7 +95,7 @@ namespace Pipeline
 
 	void StatgeAddButton::update(Echo::i32 xPos, bool isFinal)
 	{
-		m_stagePosition = Echo::Vector2(xPos * 228.f, 0.f);
+		m_stagePosition = xPos;
 		updateNextArrow(isFinal);
 	}
 }

@@ -38,10 +38,9 @@ namespace Pipeline
 	public:
 		Echo::RenderPipeline*		m_pipeline = nullptr;
 		QGraphicsScene*				m_graphicsScene = nullptr;
-		Echo::Vector2				m_stagePosition;
+		Echo::ui32					m_stagePosition;
 		QGraphicsPixmapItemCustom*	m_nextArrow = nullptr;
 		bool						m_nextArrowHighlight = false;
-		float						m_stageWidth = 190;
 	};
 	typedef Echo::vector<StatgeAddButton*>::type StatgeAddButtons;
 }

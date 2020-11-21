@@ -51,7 +51,7 @@ namespace Echo
 		vector<RenderStage*>::type& getRenderStages() { return m_stages; }
 
 		// stage operate
-		void addStage(RenderStage* stage);
+		void addStage(RenderStage* stage, ui32 position=-1);
 		void deleteStage(RenderStage* stage);
 
 	public:

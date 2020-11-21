@@ -7,7 +7,7 @@
 
 namespace Pipeline
 {
-	StatgeNodePainter::StatgeNodePainter(QGraphicsView* view, QGraphicsScene* scene, Echo::RenderStage* stage)
+	StageNodePainter::StageNodePainter(QGraphicsView* view, QGraphicsScene* scene, Echo::RenderStage* stage)
 	{
 		m_stage = stage;
 		m_graphicsView = view;
@@ -21,7 +21,7 @@ namespace Pipeline
 			m_text = m_graphicsScene->addSimpleText(m_stage->getName().c_str());
 			m_text->setBrush(QBrush(m_style.m_fontColor));
 			m_text->setParentItem(m_rect);
-			m_text->setPos(textPos.x - m_width * 0.5f, textPos.y);
+			m_text->setPos(textPos.x - getHalfWidth(), textPos.y);
 
 			QPixmap addNew((Echo::Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/import_dark.png").c_str());
 			m_addAction = new QGraphicsPixmapItemCustom();
@@ -49,15 +49,13 @@ namespace Pipeline
 		}
 	}
 
-	StatgeNodePainter::~StatgeNodePainter()
+	StageNodePainter::~StageNodePainter()
 	{
 		reset();
 	}
 
-	void StatgeNodePainter::initBoundary()
+	void StageNodePainter::initBoundary()
 	{
-		float halfWidth = m_width * 0.5f;
-
 		m_rect = new QGraphicsRenderStageItem(nullptr);
 		m_rect->setZValue(-1.f);
 		m_rect->setPen(QPen(m_style.m_normalBoundaryColor, m_style.m_penWidth));
@@ -78,7 +76,7 @@ namespace Pipeline
 		});
 	}
 
-	void StatgeNodePainter::showAddQueueMenu()
+	void StageNodePainter::showAddQueueMenu()
 	{
 		if (!m_addMenu)
 		{
@@ -90,14 +88,14 @@ namespace Pipeline
 			m_addMenu->addAction(newImageFilter);
 			m_addMenu->addAction(newRenderQueue);
 
-			EditorApi.qConnectAction(newImageFilter, QSIGNAL(triggered()), this, Echo::createMethodBind(&StatgeNodePainter::onNewImageFilter));
-			EditorApi.qConnectAction(newRenderQueue, QSIGNAL(triggered()), this, Echo::createMethodBind(&StatgeNodePainter::onNewRenderQueue));
+			EditorApi.qConnectAction(newImageFilter, QSIGNAL(triggered()), this, Echo::createMethodBind(&StageNodePainter::onNewImageFilter));
+			EditorApi.qConnectAction(newRenderQueue, QSIGNAL(triggered()), this, Echo::createMethodBind(&StageNodePainter::onNewRenderQueue));
 		}
 
 		m_addMenu->exec(QCursor::pos());
 	}
 
-	void StatgeNodePainter::onNewImageFilter()
+	void StageNodePainter::onNewImageFilter()
 	{
 		if (m_stage)
 		{
@@ -109,7 +107,7 @@ namespace Pipeline
 		}
 	}
 
-	void StatgeNodePainter::onDeleteThisRenderStage()
+	void StageNodePainter::onDeleteThisRenderStage()
 	{
 		Echo::RenderPipeline* pipeline = m_stage ? m_stage->getPipeline() : nullptr;
 		if (pipeline)
@@ -122,11 +120,11 @@ namespace Pipeline
 		}
 	}
 
-	void StatgeNodePainter::onNewRenderQueue()
+	void StageNodePainter::onNewRenderQueue()
 	{
 	}
 
-	void StatgeNodePainter::reset()
+	void StageNodePainter::reset()
 	{
 		if (m_rect)
 			m_graphicsScene->removeItem(m_rect);
@@ -138,7 +136,7 @@ namespace Pipeline
 		m_text = nullptr;
 	}
 
-	void StatgeNodePainter::update(Echo::i32 xPos, bool isFinal)
+	void StageNodePainter::update(Echo::i32 xPos, bool isFinal)
 	{
 		if (m_rect)
 		{
@@ -147,11 +145,10 @@ namespace Pipeline
 				m_renderQueueSize = m_stage->getRenderQueues().size();
 				m_height = 40.f + m_renderQueueSize * 56.f + 16.f;
 
-				float halfWidth = m_width * 0.5f;
 				float halfHeight = m_height * 0.5f;
 
 				QPainterPath path;
-				path.addRoundedRect(QRectF(-halfWidth, 0.f, m_width, m_height), m_style.m_cornerRadius, m_style.m_cornerRadius);
+				path.addRoundedRect(QRectF(-getHalfWidth(), 0.f, getWidth(), m_height), m_style.m_cornerRadius, m_style.m_cornerRadius);
 				m_rect->setPath(path);
 
 				QLinearGradient gradient(QPointF(0.0, -halfHeight), QPointF(0.0, halfHeight));
@@ -166,7 +163,7 @@ namespace Pipeline
 
 			m_text->setText(m_stage->getName().c_str());
 
-			m_rect->setPos(xPos * 228.f, 0.f);
+			m_rect->setPos(xPos * (getWidth()+getSpace()), 0.f);
 			m_rect->setPen(QPen(m_rect->isFocused() ? m_style.m_selectedBoundaryColor : m_style.m_normalBoundaryColor, m_style.m_penWidth));
 		}
 	}

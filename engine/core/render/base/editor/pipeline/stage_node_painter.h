@@ -12,7 +12,7 @@
 
 namespace Pipeline
 {
-	struct StatgeNodePainter
+	struct StageNodePainter
 	{
 	public:
 		// Style for painting
@@ -35,8 +35,8 @@ namespace Pipeline
 		};
 
 	public:
-		StatgeNodePainter(QGraphicsView* view, QGraphicsScene* scene, Echo::RenderStage* stage);
-		~StatgeNodePainter();
+		StageNodePainter(QGraphicsView* view, QGraphicsScene* scene, Echo::RenderStage* stage);
+		~StageNodePainter();
 
 		// reset
 		void reset();
@@ -44,13 +44,19 @@ namespace Pipeline
 		// update
 		void update(Echo::i32 xPos, bool isFinal);
 
-		// on add
-		void showAddQueueMenu();
+	public:
+		// get width
+		static float getWidth() { return 190.f; }
+		static float getHalfWidth() { return getWidth() * 0.5f; }
+		static float getSpace() { return 38.f; }
 
 	public:
 		// new
 		void onNewImageFilter();
 		void onNewRenderQueue();
+
+		// on add
+		void showAddQueueMenu();
 
 		// delete
 		void onDeleteThisRenderStage();
@@ -68,12 +74,11 @@ namespace Pipeline
 		QGraphicsPixmapItemCustom*  m_addAction = nullptr;
 		size_t						m_renderQueueSize = -1;
 		float						m_rectFinalWidth = 15;
-		float						m_width = 190;
 		float						m_height = 240;
 		QGraphicsSimpleTextItem*	m_text = nullptr;
 		QMenu*						m_addMenu = nullptr;
 	};
-	typedef Echo::vector<StatgeNodePainter*>::type StageNodePainters;
+	typedef Echo::vector<StageNodePainter*>::type StageNodePainters;
 }
 
 #endif

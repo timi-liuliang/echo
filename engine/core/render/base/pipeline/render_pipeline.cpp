@@ -82,9 +82,16 @@ namespace Echo
 		}
 	}
 
-	void RenderPipeline::addStage(RenderStage* stage)
+	void RenderPipeline::addStage(RenderStage* stage, ui32 position)
 	{
-		m_stages.emplace_back(stage);
+		if (position < m_stages.size())
+		{
+			m_stages.insert(m_stages.begin() + position, stage);
+		}
+		else
+		{
+			m_stages.emplace_back(stage);
+		}
 	}
 
 	void RenderPipeline::deleteStage(RenderStage* stage)
