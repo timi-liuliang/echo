@@ -35,12 +35,18 @@ namespace Pipeline
 		void initNextArrow();
 		void updateNextArrow(bool isFinal);
 
+		// drop region
+		void initStageDropRegion();
+		void updateStageDropRegion();
+
 	public:
 		Echo::RenderPipeline*		m_pipeline = nullptr;
 		QGraphicsScene*				m_graphicsScene = nullptr;
 		Echo::ui32					m_stagePosition;
 		QGraphicsPixmapItemCustom*	m_nextArrow = nullptr;
 		bool						m_nextArrowHighlight = false;
+		QColor						m_stageDropRegionDefaultColor = QColor(83, 83, 83);
+		QGraphicsPathItem*			m_stageDropRegion = nullptr;
 	};
 	typedef Echo::vector<StatgeAddButton*>::type StatgeAddButtons;
 }

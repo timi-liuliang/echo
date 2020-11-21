@@ -15,11 +15,34 @@ namespace Pipeline
 		m_graphicsScene = scene;
 
 		initNextArrow();
+		initStageDropRegion();
 	}
 
 	StatgeAddButton::~StatgeAddButton()
 	{
 		reset();
+	}
+
+	void StatgeAddButton::initStageDropRegion()
+	{
+		m_stageDropRegion = new QGraphicsPathItem(nullptr);
+		m_stageDropRegion->setZValue(-10.f);
+		m_stageDropRegion->setAcceptDrops(true);
+		m_stageDropRegion->setPos(QPointF(0.f, 0.f));
+		m_stageDropRegion->setPen(QPen(m_stageDropRegionDefaultColor));
+		m_stageDropRegion->setBrush(QBrush(m_stageDropRegionDefaultColor));
+		m_graphicsScene->addItem(m_stageDropRegion);
+
+		QPainterPath path;
+		path.addRoundedRect(QRectF(0.f, 0.f, StageNodePainter::getSpace(), 1000.f), 0.f, 0.f);
+		m_stageDropRegion->setPath(path);
+	}
+
+	void StatgeAddButton::updateStageDropRegion()
+	{
+		float halfWidth = StageNodePainter::getHalfWidth();
+		Echo::Vector2 stagePostion = Echo::Vector2(m_stagePosition * (StageNodePainter::getWidth() + StageNodePainter::getSpace()), 0.f);
+		m_stageDropRegion->setPos(QPointF(stagePostion.x - halfWidth - 37.f, 0.f));
 	}
 
 	void StatgeAddButton::initNextArrow()
@@ -97,6 +120,7 @@ namespace Pipeline
 	{
 		m_stagePosition = xPos;
 		updateNextArrow(isFinal);
+		updateStageDropRegion();
 	}
 }
 
