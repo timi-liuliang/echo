@@ -9,6 +9,7 @@
 #include "engine/core/main/Engine.h"
 #include "custom/qgraphics_pixmap_item_custom.h"
 #include "custom/qgraphics_renderstage_item.h"
+#include "renderqueue_node_painter.h"
 
 namespace Pipeline
 {
@@ -65,6 +66,9 @@ namespace Pipeline
 		// boundary
 		void initBoundary();
 
+		// render queues
+		void updateRenderQueues(Echo::i32 xPos);
+
 	public:
 		Style						m_style;
 		Echo::RenderStage*			m_stage = nullptr;
@@ -73,10 +77,10 @@ namespace Pipeline
 		QGraphicsRenderStageItem*	m_rect = nullptr;
 		QGraphicsPixmapItemCustom*  m_addAction = nullptr;
 		size_t						m_renderQueueSize = -1;
-		float						m_rectFinalWidth = 15;
 		float						m_height = 240;
 		QGraphicsSimpleTextItem*	m_text = nullptr;
 		QMenu*						m_addMenu = nullptr;
+		RenderQueueNodePainters		m_renderQueueNodePainters;
 	};
 	typedef Echo::vector<StageNodePainter*>::type StageNodePainters;
 }

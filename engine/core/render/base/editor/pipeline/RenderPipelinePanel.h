@@ -31,7 +31,6 @@ namespace Echo
 	protected:
 		// draw
 		void drawStages();
-		void drawRenderQueues();
 		void drawStageAddButtons();
 
 		// update icon
@@ -51,7 +50,6 @@ namespace Echo
 		QGraphicsLineItem*					m_borderTopLine = nullptr;
 		Pipeline::StageNodePainters			m_stageNodePainters;
 		Pipeline::StatgeAddButtons			m_stageAddButtons;
-		Pipeline::RenderQueueNodePainters	m_renderQueueNodePainters;
 	};
 }
 

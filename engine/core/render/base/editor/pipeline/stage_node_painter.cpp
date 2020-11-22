@@ -136,6 +136,43 @@ namespace Pipeline
 		m_text = nullptr;
 	}
 
+	void StageNodePainter::updateRenderQueues(Echo::i32 x)
+	{
+		Echo::vector<Echo::Vector2>::type		poses;
+		Echo::vector<Echo::IRenderQueue*>::type renderqueues;
+		for (size_t y = 0; y < m_stage->getRenderQueues().size(); y++)
+		{
+			renderqueues.push_back(m_stage->getRenderQueues()[y]);
+			poses.push_back(Echo::Vector2(x, y));
+		}
+
+		while (m_renderQueueNodePainters.size() > renderqueues.size())
+		{
+			EchoSafeDelete(m_renderQueueNodePainters.back(), RenderQueueNodePainter);
+			m_renderQueueNodePainters.pop_back();
+		}
+
+		if (m_renderQueueNodePainters.size() < renderqueues.size())
+		{
+			for (size_t i = m_renderQueueNodePainters.size(); i < renderqueues.size(); ++i)
+				m_renderQueueNodePainters.emplace_back(EchoNew(Pipeline::RenderQueueNodePainter(m_graphicsView, m_graphicsScene, renderqueues[i])));
+		}
+
+		for (size_t i = 0; i < renderqueues.size(); i++)
+		{
+			if (!m_renderQueueNodePainters[i] || m_renderQueueNodePainters[i]->getRenderQueue() != renderqueues[i])
+			{
+				EchoSafeDelete(m_renderQueueNodePainters[i], RenderQueueNodePainter);
+				m_renderQueueNodePainters[i] = EchoNew(Pipeline::RenderQueueNodePainter(m_graphicsView, m_graphicsScene, renderqueues[i]));
+			}
+		}
+
+		for (size_t i = 0; i < renderqueues.size(); i++)
+		{
+			m_renderQueueNodePainters[i]->update(poses[i].x, poses[i].y);
+		}
+	}
+
 	void StageNodePainter::update(Echo::i32 xPos, bool isFinal)
 	{
 		if (m_rect)
@@ -168,6 +205,8 @@ namespace Pipeline
 			m_rect->setPos(xPos * (getWidth() + getSpace()), 0.f);
 			m_rect->setPen(QPen(m_rect->isFocused() ? m_style.m_selectedBoundaryColor : m_style.m_normalBoundaryColor, m_style.m_penWidth));
 		}
+
+		updateRenderQueues(xPos);
 	}
 }
 
