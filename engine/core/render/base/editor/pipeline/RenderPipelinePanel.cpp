@@ -118,7 +118,7 @@ namespace Echo
 		if (m_stageAddButtons.size() <count)
 		{
 			for (size_t i = m_stageAddButtons.size(); i < count; ++i)
-				m_stageAddButtons.emplace_back(EchoNew(Pipeline::StatgeAddButton(m_graphicsScene, m_pipeline)));
+				m_stageAddButtons.emplace_back(EchoNew(Pipeline::StatgeAddButton(m_graphicsView, m_graphicsScene, m_pipeline)));
 		}
 
 		for (size_t i = 0; i < count; i++)

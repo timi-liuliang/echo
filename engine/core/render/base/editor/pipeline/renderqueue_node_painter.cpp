@@ -15,11 +15,11 @@ namespace Pipeline
 
 		if (!m_rect)
 		{
-			float halfWidth = m_width * 0.5f;
-			float halfHeight = m_height * 0.5f;
+			float halfWidth = getWidth() * 0.5f;
+			float halfHeight = getHeight() * 0.5f;
 
 			QPainterPath path;
-			path.addRoundedRect(QRectF(-halfWidth, -halfHeight, m_width, m_height), m_style.m_cornerRadius, m_style.m_cornerRadius);
+			path.addRoundedRect(QRectF(-halfWidth, -halfHeight, getWidth(), getHeight()), m_style.m_cornerRadius, m_style.m_cornerRadius);
 
 			m_rect = new QGraphicsRenderQueueItem(nullptr);
 			m_rect->setPath(path);
@@ -66,7 +66,7 @@ namespace Pipeline
 		m_deleteButtton = new QGraphicsPixmapItemCustom();
 		m_deleteButtton->setPixmap(icon.scaled(QSize(16, 16)));
 		m_deleteButtton->setParentItem(m_rect);
-		m_deleteButtton->setPos(QPointF(m_width * 0.5f - 24.f, -8.f));
+		m_deleteButtton->setPos(QPointF(getWidth() * 0.5f - 24.f, -8.f));
 		m_deleteButtton->setAcceptHoverEvents(true);
 		m_deleteButtton->setVisible(false);
 		m_graphicsScene->addItem(m_deleteButtton);
@@ -103,13 +103,13 @@ namespace Pipeline
 
 	void RenderQueueNodePainter::update(Echo::i32 xPos, Echo::i32 yPos)
 	{
-		float halfWidth = m_width * 0.5f;
-		float halfHeight = m_height * 0.5f;
+		float halfWidth = getWidth() * 0.5f;
+		float halfHeight = getHeight() * 0.5f;
 
-		float startYPos = 60.f;
+		float startYPos = getStartPos();
 		float penWidth = m_renderQueue->isEnable() ? m_style.m_penWidth : m_style.m_penWidth - 1;
 		m_rect->setPen(QPen(m_rect->isFocused() ? m_style.m_selectedBoundaryColor : (m_renderQueue->isEnable() ? m_style.m_normalBoundaryColor : m_style.m_disableBoundaryColor), penWidth));
-		m_rect->setPos(xPos * (StageNodePainter::getWidth() + StageNodePainter::getSpace()), startYPos + yPos * 56.f);
+		m_rect->setPos(xPos * (StageNodePainter::getWidth() + StageNodePainter::getSpace()), startYPos + yPos * (getHeight()+getSpace()));
 
 		m_deleteButtton->setVisible(m_rect->isFocused());
 
@@ -132,7 +132,7 @@ namespace Pipeline
 
 		Echo::Rect textRect;
 		EditorApi.qGraphicsItemSceneRect(m_text, textRect);
-		m_text->setPos((m_width - textRect.getWidth()) * 0.5f - halfWidth, (m_height - textRect.getHeight()) * 0.5f - halfHeight);
+		m_text->setPos((getWidth() - textRect.getWidth()) * 0.5f - halfWidth, (getHeight() - textRect.getHeight()) * 0.5f - halfHeight);
 
 		m_textDiableLine->setVisible(!m_renderQueue->isEnable());
 		m_textDiableLine->setLine(-textRect.getWidth() * 0.5f - 2.f, 0.f, textRect.getWidth() * 0.5f + 2.f, 0.f);

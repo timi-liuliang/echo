@@ -16,7 +16,7 @@ namespace Pipeline
 	struct StatgeAddButton
 	{
 	public:
-		StatgeAddButton(QGraphicsScene* scene, Echo::RenderPipeline* pipeline);
+		StatgeAddButton(QGraphicsView* view, QGraphicsScene* scene, Echo::RenderPipeline* pipeline);
 		~StatgeAddButton();
 
 		// reset
@@ -42,6 +42,7 @@ namespace Pipeline
 
 	public:
 		Echo::RenderPipeline*		m_pipeline = nullptr;
+		QGraphicsView*				m_graphicsView = nullptr;
 		QGraphicsScene*				m_graphicsScene = nullptr;
 		Echo::ui32					m_stagePosition;
 		QGraphicsPixmapItemCustom*	m_nextArrow = nullptr;

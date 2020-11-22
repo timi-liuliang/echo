@@ -98,7 +98,7 @@ namespace Pipeline
 		{
 			if (event->mimeData()->hasFormat("drag/render-stage"))
 			{
-				int a = 10;
+
 			}
 		}
 

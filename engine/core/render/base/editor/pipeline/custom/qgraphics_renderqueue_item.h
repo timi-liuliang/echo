@@ -6,6 +6,9 @@
 
 #include <QPainter>
 #include <QGraphicsSceneEvent>
+#include <QApplication>
+#include <QMimeData>
+#include <QDrag>
 
 namespace Pipeline
 {
@@ -72,11 +75,33 @@ namespace Pipeline
 				m_keyEventCb(event);
 		}
 
-	protected:
-		// position changed etc...
-		virtual QVariant itemChange(GraphicsItemChange change, const QVariant& value)
+		virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override
 		{
-			return QGraphicsPathItem::itemChange(change, value);
+			QGraphicsPathItem::mouseMoveEvent(event);
+
+			if (QLineF(event->screenPos(), event->buttonDownScreenPos(Qt::LeftButton)).length() > QApplication::startDragDistance())
+			{
+				QMimeData* mimeData = new  QMimeData;
+				mimeData->setData("drag/render-stage", QByteArray());
+				QDrag* drag = new QDrag(mimeData);
+				drag->setMimeData(mimeData);
+				drag->setPixmap(QPixmapFromItem(this));
+				if (drag->exec(Qt::MoveAction) == Qt::MoveAction)
+				{
+				}
+			}
+		}
+
+	public:
+		static QPixmap QPixmapFromItem(QGraphicsItem* item)
+		{
+			QPixmap pixmap(item->boundingRect().size().toSize());
+			pixmap.fill(Qt::transparent);
+			QPainter painter(&pixmap);
+			painter.setRenderHint(QPainter::Antialiasing);
+			QStyleOptionGraphicsItem opt;
+			item->paint(&painter, &opt);
+			return pixmap;
 		}
 
 	protected:

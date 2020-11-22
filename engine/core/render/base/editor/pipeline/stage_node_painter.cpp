@@ -173,6 +173,27 @@ namespace Pipeline
 		}
 	}
 
+	void StageNodePainter::updateRenderQueueAddButtons(Echo::i32 xPos)
+	{
+		Echo::i32 count = m_stage->getRenderQueues().size() + 1;
+		while (m_renderQueueAddButtons.size() > count)
+		{
+			EchoSafeDelete(m_renderQueueAddButtons.back(), RenderQueueAddButton);
+			m_renderQueueAddButtons.pop_back();
+		}
+
+		if (m_renderQueueAddButtons.size() < count)
+		{
+			for (size_t i = m_renderQueueAddButtons.size(); i < count; ++i)
+				m_renderQueueAddButtons.emplace_back(EchoNew(Pipeline::RenderQueueAddButton(m_graphicsScene, m_stage->getPipeline())));
+		}
+
+		for (size_t i = 0; i < count; i++)
+		{
+			m_renderQueueAddButtons[i]->update(xPos, i);
+		}
+	}
+
 	void StageNodePainter::update(Echo::i32 xPos, bool isFinal)
 	{
 		if (m_rect)
@@ -207,6 +228,7 @@ namespace Pipeline
 		}
 
 		updateRenderQueues(xPos);
+		updateRenderQueueAddButtons(xPos);
 	}
 }
 

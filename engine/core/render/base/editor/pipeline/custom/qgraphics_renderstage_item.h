@@ -110,13 +110,6 @@ namespace Pipeline
 		}
 
 	protected:
-		// position changed etc...
-		virtual QVariant itemChange(GraphicsItemChange change, const QVariant& value)
-		{
-			return QGraphicsPathItem::itemChange(change, value);
-		}
-
-	protected:
 		bool								m_focused = false;
 		std::function<void(QGraphicsItem*)> m_hoverEnterEventCb;
 		std::function<void(QGraphicsItem*)> m_hoverLeaveEventCb;

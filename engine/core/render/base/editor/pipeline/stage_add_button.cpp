@@ -9,9 +9,10 @@
 
 namespace Pipeline
 {
-	StatgeAddButton::StatgeAddButton(QGraphicsScene* scene, Echo::RenderPipeline* pipeline)
+	StatgeAddButton::StatgeAddButton(QGraphicsView* view, QGraphicsScene* scene, Echo::RenderPipeline* pipeline)
 	{
 		m_pipeline = pipeline;
+		m_graphicsView = view;
 		m_graphicsScene = scene;
 
 		initNextArrow();
@@ -35,7 +36,7 @@ namespace Pipeline
 		m_graphicsScene->addItem(m_stageDropRegion);
 
 		QPainterPath path;
-		path.addRoundedRect(QRectF(StageNodePainter::getSpace() * 0.1f, 19.f, StageNodePainter::getSpace() * 0.8f - 2.f, 1000.f), 0.f, 0.f);
+		path.addRoundedRect(QRectF(StageNodePainter::getSpace() * 0.1f, 19.f, StageNodePainter::getSpace() * 0.8f - 2.f, m_graphicsScene->height() - 25.f), 0.f, 0.f);
 		m_stageDropRegion->setPath(path);
 	}
 
@@ -44,6 +45,10 @@ namespace Pipeline
 		float halfWidth = StageNodePainter::getHalfWidth();
 		Echo::Vector2 stagePostion = Echo::Vector2(m_stagePosition * (StageNodePainter::getWidth() + StageNodePainter::getSpace()), 0.f);
 		m_stageDropRegion->setPos(QPointF(stagePostion.x - halfWidth - 37.f, 0.f));
+
+		QPainterPath path;
+		path.addRoundedRect(QRectF(StageNodePainter::getSpace() * 0.1f, 19.f, StageNodePainter::getSpace() * 0.8f - 2.f, m_graphicsView->height() - 19.f - 21.f), 0.f, 0.f);
+		m_stageDropRegion->setPath(path);
 
 		if (m_stageDropRegion->isDropEnter())
 		{

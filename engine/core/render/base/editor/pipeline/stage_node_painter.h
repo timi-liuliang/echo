@@ -10,6 +10,7 @@
 #include "custom/qgraphics_pixmap_item_custom.h"
 #include "custom/qgraphics_renderstage_item.h"
 #include "renderqueue_node_painter.h"
+#include "renderqueue_add_button.h"
 
 namespace Pipeline
 {
@@ -68,6 +69,7 @@ namespace Pipeline
 
 		// render queues
 		void updateRenderQueues(Echo::i32 xPos);
+		void updateRenderQueueAddButtons(Echo::i32 xPos);
 
 	public:
 		Style						m_style;
@@ -81,6 +83,7 @@ namespace Pipeline
 		QGraphicsSimpleTextItem*	m_text = nullptr;
 		QMenu*						m_addMenu = nullptr;
 		RenderQueueNodePainters		m_renderQueueNodePainters;
+		RenderQueueAddButtons		m_renderQueueAddButtons;
 	};
 	typedef Echo::vector<StageNodePainter*>::type StageNodePainters;
 }

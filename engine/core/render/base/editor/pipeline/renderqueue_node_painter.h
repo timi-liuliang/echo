@@ -26,6 +26,15 @@ namespace Pipeline
 		// update
 		void update(Echo::i32 xPos, Echo::i32 yPos);
 
+	public:
+		// start pos
+		static float getStartPos() { return 60.f; }
+
+		// get height|width
+		static float getWidth() { return 160.f; }
+		static float getHeight(){ return 40.f; }
+		static float getSpace() { return 16.f; }
+
 	protected:
 		// init delete action
 		void initDeleteButton();
@@ -59,8 +68,6 @@ namespace Pipeline
 		QGraphicsScene*						m_graphicsScene = nullptr;
 		QGraphicsRenderQueueItem*			m_rect = nullptr;
 		float								m_rectFinalWidth = 15;
-		float								m_width = 160;
-		float								m_height = 40;
 		QGraphicsSimpleTextItem*			m_text = nullptr;
 		QGraphicsLineItem*					m_textDiableLine = nullptr;
 		QGraphicsPixmapItemCustom*			m_deleteButtton = nullptr;
