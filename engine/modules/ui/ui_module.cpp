@@ -1,7 +1,9 @@
 #include "ui_module.h"
+#include "event/event/drag_event.h"
+#include "event/event/mouse_event.h"
 #include "event/event_processor.h"
-#include "event/event_region.h"
-#include "event/event_region_rect.h"
+#include "event/region/event_region.h"
+#include "event/region/event_region_rect.h"
 #include "event/gesture/gesture_recognizer.h"
 #include "event/gesture/long_press_gesture_recognizer.h"
 #include "event/gesture/pan_gesture_recognizer.h"
@@ -43,7 +45,9 @@ namespace Echo
 
 	void UiModule::registerTypes()
 	{
-        Class::registerType<UiEventProcessor>();
+		Class::registerType<UiEventProcessor>();
+		Class::registerType<MouseEvent>();
+		Class::registerType<DragEvent>();
         Class::registerType<UiEventRegion>();
         Class::registerType<UiEventRegionRect>();
 		Class::registerType<UiGestureRecognizer>();

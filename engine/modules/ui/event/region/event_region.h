@@ -3,7 +3,7 @@
 #include "engine/core/base/signal.h"
 #include "engine/core/scene/node.h"
 #include "engine/core/geom/Ray.h"
-#include "engine/core/input/mouse_event.h"
+#include "../event/mouse_event.h"
 
 namespace Echo
 {
@@ -40,6 +40,11 @@ namespace Echo
 		DECLARE_SIGNAL(Signal0, onMouseButtonMove)
         DECLARE_SIGNAL(Signal0, onMouseButtonEnter)
         DECLARE_SIGNAL(Signal0, onMouseButtonLeave)
+
+		// drag drop
+		DECLARE_SIGNAL(Signal0, onDragEnter)
+		DECLARE_SIGNAL(Signal0, onDragLeave)
+		DECLARE_SIGNAL(Signal0, onDragDrop)
 
 	protected:
 		StringOption	m_type = StringOption("ui", { "2d", "3d", "ui" });

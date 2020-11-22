@@ -30,7 +30,6 @@
 #include "engine/core/render/metal/mt.h"
 #include "engine/core/gizmos/Gizmos.h"
 #include "engine/core/input/input.h"
-#include "engine/core/input/mouse_event.h"
 
 namespace Echo
 {
@@ -142,7 +141,6 @@ namespace Echo
 		Class::registerType<GameSettings>();
 		Class::registerType<Gizmos>();
 		Class::registerType<Input>();
-		Class::registerType<MouseEvent>();
         Class::registerType<IO>();
         Class::registerType<DataStream>();
 		Class::registerType<Log>();

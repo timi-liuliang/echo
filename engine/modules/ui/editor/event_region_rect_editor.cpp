@@ -1,7 +1,7 @@
 #include "event_region_rect_editor.h"
 #include "engine/core/editor/editor.h"
 #include "engine/core/main/Engine.h"
-#include "../event/event_region_rect.h"
+#include "../event/region/event_region_rect.h"
 
 namespace Echo
 {
