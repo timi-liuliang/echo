@@ -86,7 +86,7 @@ namespace Pipeline
 				QDrag* drag = new QDrag(event->widget());
 				drag->setMimeData(mimeData);
 				drag->setPixmap(Echo::QGraphicsItemToPixmap(this, 0.4f));
-				QPoint hotSpot = (scenePos() - event->buttonDownScenePos(Qt::LeftButton)).toPoint();
+				QPoint hotSpot = (event->buttonDownScenePos(Qt::LeftButton).toPoint() - sceneBoundingRect().topLeft().toPoint());
 				drag->setHotSpot(hotSpot);
 				drag->exec();
 			}
