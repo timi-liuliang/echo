@@ -34,6 +34,24 @@ namespace Echo
 
 	// set tool tip
 	typedef void (*qGraphicsItemSetToolTipFun)(QGraphicsItem* item, const char* toolTip);
+
+	// to pixmap
+	static inline QPixmap QGraphicsItemToPixmap(QGraphicsItem* item, float alpha=1.f)
+	{
+		QRectF boundingRect = item->sceneBoundingRect();
+		QPixmap pixmap(boundingRect.size().toSize());
+		pixmap.fill(Qt::transparent);
+		if (item->scene())
+		{
+			QPainter painter(&pixmap);
+			painter.setOpacity(alpha);
+			painter.setRenderHint(QPainter::Antialiasing);
+			item->scene()->render(&painter, QRectF(), boundingRect);
+			painter.end();
+		}
+
+		return pixmap;
+	}
 }
 
 #endif

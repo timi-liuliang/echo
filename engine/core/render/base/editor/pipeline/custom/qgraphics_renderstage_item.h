@@ -88,25 +88,11 @@ namespace Pipeline
 			{
 				QMimeData* mimeData = new  QMimeData;
 				mimeData->setData("drag/render-stage", QByteArray());
-				QDrag* drag = new QDrag(mimeData);
+				QDrag* drag = new QDrag(event->widget());
 				drag->setMimeData(mimeData);
-				drag->setPixmap(QPixmapFromItem(this));
-				if (drag->exec(Qt::MoveAction) == Qt::MoveAction)
-				{
-				}
+				drag->setPixmap(Echo::QGraphicsItemToPixmap(this));
+				drag->exec();
 			}
-		}
-
-	public:
-		static QPixmap QPixmapFromItem(QGraphicsItem* item) 
-		{
-			QPixmap pixmap(item->boundingRect().size().toSize());
-			pixmap.fill(Qt::transparent);
-			QPainter painter(&pixmap);
-			painter.setRenderHint(QPainter::Antialiasing);
-			QStyleOptionGraphicsItem opt;
-			item->paint(&painter, &opt);
-			return pixmap;
 		}
 
 	protected:
