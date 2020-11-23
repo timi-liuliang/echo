@@ -151,7 +151,7 @@ namespace Echo
 		QGraphicsWidgetArray		m_curveKeyWidgets;
 		array<QGraphicsItemArray, 4>m_curveKeyItems;
 		array<bool, 4>				m_curveVisibles;
-		QWidget*					m_curveKeyLineEdit = nullptr;
+		QLineEdit*					m_curveKeyLineEdit = nullptr;
 		QGraphicsProxyWidget*		m_curveKeyLineEditProxyWidget = nullptr;
 		QGraphicsItem*				m_curveKeyItem;
 		QMenu*						m_keyEditMenu = nullptr;

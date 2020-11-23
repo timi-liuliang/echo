@@ -171,7 +171,7 @@ namespace Echo
 		{
 			ui32 rows = ((QSpinBox*)EditorApi.qFindChild(m_splitDialog, "m_spinBoxRows"))->value();
 			ui32 columns = ((QSpinBox*)EditorApi.qFindChild(m_splitDialog, "m_spinBoxColumns"))->value();
-			String prefix = EditorApi.qLineEditText(EditorApi.qFindChild(m_splitDialog, "m_prefix"));
+			String prefix = m_splitDialog->findChild<QLineEdit*>("m_prefix")->text().toStdString().c_str();
 
 			TexturePtr texture = m_textureAtlas->getTexture();
 			if (texture)

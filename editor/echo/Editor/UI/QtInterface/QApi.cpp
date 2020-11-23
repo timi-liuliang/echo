@@ -3,7 +3,6 @@
 #include "QGraphicsItem.cx"
 #include "QGraphicsScene.cx"
 #include "QGraphicsView.cx"
-#include "QLineEdit.cx"
 #include "QUiLoader.cx"
 #include "QWidget.cx"
 
@@ -41,15 +40,6 @@ namespace Studio
 		BIND_EDITOR_FUN(qGraphicsViewSceneRect);
 		BIND_EDITOR_FUN(qGraphicsViewSetBackgroundBrush);
 		BIND_EDITOR_FUN(qGraphicsViewFitInView);
-
-		// new QLineEdit
-		BIND_EDITOR_FUN(qLineEditNew);
-		BIND_EDITOR_FUN(qLineEditSetText);
-		BIND_EDITOR_FUN(qLineEditSetMaximumWidth);
-		BIND_EDITOR_FUN(qLineEditSetCursorPosition);
-		BIND_EDITOR_FUN(qLineEditText);
-		BIND_EDITOR_FUN(qLineEditWidth);
-		BIND_EDITOR_FUN(qLineEditHeight);
 
 		// load ui file by path. then return the widget
 		BIND_EDITOR_FUN(qLoadUi);
