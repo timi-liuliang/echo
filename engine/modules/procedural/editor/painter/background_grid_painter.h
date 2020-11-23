@@ -102,8 +102,8 @@ namespace Procedural
 					m_verticalLines = EditorApi.qGraphicsSceneAddPath(m_graphicsScene, vpaths, 1.f, m_color);
 					m_horizonalLines = EditorApi.qGraphicsSceneAddPath(m_graphicsScene, hpaths, 1.f, m_color);
 
-					EditorApi.qGraphicsItemSetZValue(m_verticalLines, -255.f);
-					EditorApi.qGraphicsItemSetZValue(m_horizonalLines, -255.f);
+					m_verticalLines->setZValue(-255.f);
+					m_horizonalLines->setZValue(-255.f);
 
 					m_viewRect = viewRect;
 					m_gridStep = gridStep;

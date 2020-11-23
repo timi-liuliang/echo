@@ -13,7 +13,7 @@ namespace Echo
 	{
 		m_ui = qobject_cast<QDockWidget*>(EditorApi.qLoadUi("engine/core/script/scratch/editor/panel/scratch_panel.ui"));
 
-		QSplitter* splitter = (QSplitter*)EditorApi.qFindChild(m_ui, "m_splitter");
+		QSplitter* splitter = m_ui->findChild<QSplitter*>("m_splitter");
 		if (splitter)
 		{
 			splitter->setStretchFactor(0, 0);

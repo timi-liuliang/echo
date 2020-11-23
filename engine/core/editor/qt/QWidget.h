@@ -49,12 +49,6 @@ namespace Echo
 	typedef void (*qConnectWidgetFun)(QWidget* sender, const char* signal, void* receiver, ClassMethodBind* slot);
 	typedef void (*qConnectActionFun)(QAction* sender, const char* signal, void* receiver, ClassMethodBind* slot);
 	typedef void (*qConnectGraphicsItemFun)(QGraphicsItem* sender, const char* signal, void* receiver, ClassMethodBind* slot);
-
-	// find child widget by name
-	typedef QWidget* (*qFindChildFun)( QWidget* root, const char* name);
-
-	// find child action by name
-	typedef QAction* (*qFindChildActionFun)(QWidget* root, const char* name);
 }
 
 #endif

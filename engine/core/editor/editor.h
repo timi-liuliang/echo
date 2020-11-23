@@ -64,28 +64,6 @@ namespace Echo
         // get sender item
         qSenderItemFun qSenderItem = nullptr;
         
-        // get rect
-        qGraphicsItemSceneRectFun qGraphicsItemSceneRect = nullptr;
-        
-        // get item width
-        qGraphicsItemWidthFun qGraphicsItemWidth = nullptr;
-        
-        // set pos
-        qGraphicsProxyWidgetSetPosFun qGraphicsProxyWidgetSetPos = nullptr;
-        
-        // set z value
-        qGraphicsProxyWidgetSetZValueFun qGraphicsProxyWidgetSetZValue = nullptr;
-        qGraphicsItemSetZValueFun qGraphicsItemSetZValue = nullptr;       
-        
-        // user data
-        qGraphicsItemUserDataFun qGraphicsItemUserData = nullptr;
-        
-        // set user data
-        qGraphicsItemSetUserDataFun qGraphicsItemSetUserData = nullptr;
-        
-        // set tool tip
-        qGraphicsItemSetToolTipFun qGraphicsItemSetToolTip = nullptr;
-        
     public:
         // create a QGraphicsScene
         qGraphicsSceneNewFun qGraphicsSceneNew = nullptr;
@@ -134,12 +112,6 @@ namespace Echo
         qConnectWidgetFun qConnectWidget = nullptr;
         qConnectActionFun qConnectAction = nullptr;
         qConnectGraphicsItemFun qConnectGraphicsItem = nullptr;
-        
-        // find child widget by name
-        qFindChildFun qFindChild = nullptr;
-        
-        // find child action by name
-        qFindChildActionFun qFindChildAction = nullptr;
 	};
 }
 

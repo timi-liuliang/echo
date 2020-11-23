@@ -20,7 +20,7 @@ namespace Echo
 
 		m_ui = (QDockWidget*)EditorApi.qLoadUi("engine/modules/effect/editor/particle_system_panel.ui");
 
-		QSplitter* splitter = (QSplitter*)EditorApi.qFindChild(m_ui, "m_splitter");
+		QSplitter* splitter = m_ui->findChild<QSplitter*>("m_splitter");
 		if (splitter)
 		{
 			splitter->setStretchFactor(0, 0);
@@ -28,12 +28,12 @@ namespace Echo
 		}
 
 		// Tool button icons
-		((QToolButton*)EditorApi.qFindChild(m_ui, "m_import"))->setIcon(QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/import.png").c_str()));
+		m_ui->findChild<QToolButton*>("m_import")->setIcon(QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/import.png").c_str()));
 
 		// connect signal slots
-		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_import"), QSIGNAL(clicked()), this, createMethodBind(&ParticleSystemPanel::onImport));
-		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_nodeTreeWidget"), QSIGNAL(itemClicked(QTreeWidgetItem*, int)), this, createMethodBind(&ParticleSystemPanel::onSelectItem));
-		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_nodeTreeWidget"), QSIGNAL(itemChanged(QTreeWidgetItem*, int)), this, createMethodBind(&ParticleSystemPanel::onChangedAtlaName));
+		EditorApi.qConnectWidget(m_ui->findChild<QWidget*>("m_import"), QSIGNAL(clicked()), this, createMethodBind(&ParticleSystemPanel::onImport));
+		EditorApi.qConnectWidget(m_ui->findChild<QWidget*>("m_nodeTreeWidget"), QSIGNAL(itemClicked(QTreeWidgetItem*, int)), this, createMethodBind(&ParticleSystemPanel::onSelectItem));
+		EditorApi.qConnectWidget(m_ui->findChild<QWidget*>("m_nodeTreeWidget"), QSIGNAL(itemChanged(QTreeWidgetItem*, int)), this, createMethodBind(&ParticleSystemPanel::onChangedAtlaName));
 
 		// create QGraphicsScene
 		m_graphicsView = m_ui->findChild<QGraphicsView*>("m_graphicsView");
@@ -62,14 +62,14 @@ namespace Echo
 		{
 			m_importMenu = EchoNew(QMenu(m_ui));
 			
-			m_importMenu->addAction( EditorApi.qFindChildAction(m_ui, "m_actionAddNewOne"));
+			m_importMenu->addAction( m_ui->findChild<QAction*>("m_actionAddNewOne"));
 			m_importMenu->addSeparator();
-			m_importMenu->addAction(EditorApi.qFindChildAction(m_ui, "m_actionBuildFromGrid"));
-			m_importMenu->addAction(EditorApi.qFindChildAction(m_ui, "m_actionImportFromImages"));
+			m_importMenu->addAction(m_ui->findChild<QAction*>("m_actionBuildFromGrid"));
+			m_importMenu->addAction(m_ui->findChild<QAction*>("m_actionImportFromImages"));
 
-			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionAddNewOne"), QSIGNAL(triggered()), this, createMethodBind(&ParticleSystemPanel::onNewAtla));
-			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionImportFromImages"), QSIGNAL(triggered()), this, createMethodBind(&ParticleSystemPanel::onImportFromImages));
-			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionBuildFromGrid"), QSIGNAL(triggered()), this, createMethodBind(&ParticleSystemPanel::onSplit));
+			EditorApi.qConnectAction(m_ui->findChild<QAction*>("m_actionAddNewOne"), QSIGNAL(triggered()), this, createMethodBind(&ParticleSystemPanel::onNewAtla));
+			EditorApi.qConnectAction(m_ui->findChild<QAction*>("m_actionImportFromImages"), QSIGNAL(triggered()), this, createMethodBind(&ParticleSystemPanel::onImportFromImages));
+			EditorApi.qConnectAction(m_ui->findChild<QAction*>("m_actionBuildFromGrid"), QSIGNAL(triggered()), this, createMethodBind(&ParticleSystemPanel::onSplit));
 		}
 
 		m_importMenu->exec(QCursor::pos());

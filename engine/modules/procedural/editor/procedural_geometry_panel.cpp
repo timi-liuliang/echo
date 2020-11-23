@@ -22,7 +22,7 @@ namespace Echo
 
 		m_ui = qobject_cast<QDockWidget*>(EditorApi.qLoadUi("engine/modules/procedural/editor/procedural_geometry_panel.ui"));
 
-		QSplitter* splitter = (QSplitter*)EditorApi.qFindChild(m_ui, "m_splitter");
+		QSplitter* splitter = m_ui->findChild<QSplitter*>("m_splitter");
 		if (splitter)
 		{
 			splitter->setStretchFactor(0, 0);
@@ -30,12 +30,12 @@ namespace Echo
 		}
 
 		// Tool button icons
-		((QToolButton*)EditorApi.qFindChild(m_ui, "m_play"))->setIcon(QIcon((Engine::instance()->getRootPath() + "engine/modules/procedural/editor/icon/play.png").c_str()));
+		m_ui->findChild<QToolButton*>("m_play")->setIcon(QIcon((Engine::instance()->getRootPath() + "engine/modules/procedural/editor/icon/play.png").c_str()));
 
 		// connect signal slots
-		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_graphicsView"), QSIGNAL(customContextMenuRequested(const QPoint&)), this, createMethodBind(&ProceduralGeometryPanel::onRightClickGraphicsView));
-		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_play"), QSIGNAL(clicked()), this, createMethodBind(&ProceduralGeometryPanel::onPlay));
-		EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionDeleteNodes"), QSIGNAL(triggered()), this, createMethodBind(&ProceduralGeometryPanel::onDeletePGNodes));
+		EditorApi.qConnectWidget(m_ui->findChild<QWidget*>("m_graphicsView"), QSIGNAL(customContextMenuRequested(const QPoint&)), this, createMethodBind(&ProceduralGeometryPanel::onRightClickGraphicsView));
+		EditorApi.qConnectWidget(m_ui->findChild<QWidget*>("m_play"), QSIGNAL(clicked()), this, createMethodBind(&ProceduralGeometryPanel::onPlay));
+		EditorApi.qConnectAction(m_ui->findChild<QAction*>("m_actionDeleteNodes"), QSIGNAL(triggered()), this, createMethodBind(&ProceduralGeometryPanel::onDeletePGNodes));
 
 		// create QGraphicsScene
 		m_graphicsView = m_ui->findChild<QGraphicsView*>("m_graphicsView");
@@ -132,7 +132,7 @@ namespace Echo
 		m_backgroundStyle.m_fineGridColor.setRGBA(84, 84, 84, 255);
 		m_backgroundStyle.m_coarseGridColor.setRGBA(64, 64, 64, 255);
 
-		EditorApi.qGraphicsViewSetBackgroundBrush(EditorApi.qFindChild(m_ui, "m_graphicsView"), m_backgroundStyle.m_backgroundColor);
+		EditorApi.qGraphicsViewSetBackgroundBrush(m_ui->findChild<QGraphicsView*>("m_graphicsView"), m_backgroundStyle.m_backgroundColor);
 
 		m_backgroundGridSmall.update(15, m_backgroundStyle.m_fineGridColor);
 		m_backgroundGridBig.update(150, m_backgroundStyle.m_coarseGridColor);

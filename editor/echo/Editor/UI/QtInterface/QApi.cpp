@@ -19,14 +19,6 @@ namespace Studio
 
 		// get sender item
 		BIND_EDITOR_FUN(qSenderItem);
-		BIND_EDITOR_FUN(qGraphicsItemSceneRect);
-		BIND_EDITOR_FUN(qGraphicsItemWidth);
-		BIND_EDITOR_FUN(qGraphicsProxyWidgetSetPos);
-		BIND_EDITOR_FUN(qGraphicsProxyWidgetSetZValue);
-		BIND_EDITOR_FUN(qGraphicsItemSetZValue);
-		BIND_EDITOR_FUN(qGraphicsItemUserData);
-		BIND_EDITOR_FUN(qGraphicsItemSetUserData);
-		BIND_EDITOR_FUN(qGraphicsItemSetToolTip);
 		BIND_EDITOR_FUN(qGraphicsSceneNew);
 		BIND_EDITOR_FUN(qGraphicsSceneAddWidget);
 		BIND_EDITOR_FUN(qGraphicsSceneAddLine);
@@ -50,7 +42,5 @@ namespace Studio
 		BIND_EDITOR_FUN(qConnectWidget);
 		BIND_EDITOR_FUN(qConnectAction);
 		BIND_EDITOR_FUN(qConnectGraphicsItem);
-		BIND_EDITOR_FUN(qFindChild);
-		BIND_EDITOR_FUN(qFindChildAction);
     }
 }

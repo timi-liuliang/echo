@@ -25,7 +25,7 @@ namespace Echo
 
 		m_splitDialog = (QDialog*)EditorApi.qLoadUi("engine/core/render/base/editor/atlas/TextureAtlasSplitDialog.ui");
 
-		QSplitter* splitter = (QSplitter*)EditorApi.qFindChild(m_ui, "m_splitter");
+		QSplitter* splitter = m_ui->findChild<QSplitter*>("m_splitter");
 		if (splitter)
 		{
 			splitter->setStretchFactor(0, 0);
@@ -33,16 +33,16 @@ namespace Echo
 		}
 
 		// Tool button icons
-		QToolButton* importButton = (QToolButton*)EditorApi.qFindChild(m_ui, "m_import");
+		QToolButton* importButton = m_ui->findChild<QToolButton*>("m_import");
 		if (importButton)
 		{
 			importButton->setIcon(QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/import.png").c_str()));
 		}
 
 		// connect signal slots
-		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_import"), QSIGNAL(clicked()), this, createMethodBind(&TextureAtlasPanel::onImport));
-		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_nodeTreeWidget"), QSIGNAL(itemClicked(QTreeWidgetItem*, int)), this, createMethodBind(&TextureAtlasPanel::onSelectItem));
-		EditorApi.qConnectWidget(EditorApi.qFindChild(m_ui, "m_nodeTreeWidget"), QSIGNAL(itemChanged(QTreeWidgetItem*, int)), this, createMethodBind(&TextureAtlasPanel::onChangedAtlaName));
+		EditorApi.qConnectWidget(m_ui->findChild<QWidget*>("m_import"), QSIGNAL(clicked()), this, createMethodBind(&TextureAtlasPanel::onImport));
+		EditorApi.qConnectWidget(m_ui->findChild<QWidget*>("m_nodeTreeWidget"), QSIGNAL(itemClicked(QTreeWidgetItem*, int)), this, createMethodBind(&TextureAtlasPanel::onSelectItem));
+		EditorApi.qConnectWidget(m_ui->findChild<QWidget*>("m_nodeTreeWidget"), QSIGNAL(itemChanged(QTreeWidgetItem*, int)), this, createMethodBind(&TextureAtlasPanel::onChangedAtlaName));
 
 		// create QGraphicsScene
 		m_graphicsView = m_ui->findChild<QGraphicsView*>("m_graphicsView");
@@ -78,14 +78,14 @@ namespace Echo
 		{
 			m_importMenu = EchoNew(QMenu(m_ui));
 			
-			m_importMenu->addAction(EditorApi.qFindChildAction(m_ui, "m_actionAddNewOne"));
+			m_importMenu->addAction(m_ui->findChild<QAction*>("m_actionAddNewOne"));
 			m_importMenu->addSeparator();
-			m_importMenu->addAction(EditorApi.qFindChildAction(m_ui, "m_actionBuildFromGrid"));
-			m_importMenu->addAction(EditorApi.qFindChildAction(m_ui, "m_actionImportFromImages"));
+			m_importMenu->addAction(m_ui->findChild<QAction*>("m_actionBuildFromGrid"));
+			m_importMenu->addAction(m_ui->findChild<QAction*>("m_actionImportFromImages"));
 
-			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionAddNewOne"), QSIGNAL(triggered()), this, createMethodBind(&TextureAtlasPanel::onNewAtla));
-			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionImportFromImages"), QSIGNAL(triggered()), this, createMethodBind(&TextureAtlasPanel::onImportFromImages));
-			EditorApi.qConnectAction(EditorApi.qFindChildAction(m_ui, "m_actionBuildFromGrid"), QSIGNAL(triggered()), this, createMethodBind(&TextureAtlasPanel::onSplit));
+			EditorApi.qConnectAction(m_ui->findChild<QAction*>("m_actionAddNewOne"), QSIGNAL(triggered()), this, createMethodBind(&TextureAtlasPanel::onNewAtla));
+			EditorApi.qConnectAction(m_ui->findChild<QAction*>("m_actionImportFromImages"), QSIGNAL(triggered()), this, createMethodBind(&TextureAtlasPanel::onImportFromImages));
+			EditorApi.qConnectAction(m_ui->findChild<QAction*>("m_actionBuildFromGrid"), QSIGNAL(triggered()), this, createMethodBind(&TextureAtlasPanel::onSplit));
 		}
 
 		m_importMenu->exec(QCursor::pos());
@@ -169,8 +169,8 @@ namespace Echo
 	{
 		if (m_splitDialog->exec())
 		{
-			ui32 rows = ((QSpinBox*)EditorApi.qFindChild(m_splitDialog, "m_spinBoxRows"))->value();
-			ui32 columns = ((QSpinBox*)EditorApi.qFindChild(m_splitDialog, "m_spinBoxColumns"))->value();
+			ui32 rows = m_splitDialog->findChild<QSpinBox*>("m_spinBoxRows")->value();
+			ui32 columns = m_splitDialog->findChild<QSpinBox*>("m_spinBoxColumns")->value();
 			String prefix = m_splitDialog->findChild<QLineEdit*>("m_prefix")->text().toStdString().c_str();
 
 			TexturePtr texture = m_textureAtlas->getTexture();
@@ -242,7 +242,7 @@ namespace Echo
 
 	void TextureAtlasPanel::refreshImageDisplay()
 	{
-		QWidget* graphicsView = EditorApi.qFindChild(m_ui, "m_graphicsView");
+		QGraphicsView* graphicsView = m_ui->findChild<QGraphicsView*>("m_graphicsView");
 		if (graphicsView)
 		{
 			clearImageItemAndBorder();
@@ -254,17 +254,16 @@ namespace Echo
 			m_imageItem->setFlag(QGraphicsItem::ItemIsMovable, true);
 
 			// image border
-			Rect rect;
-			EditorApi.qGraphicsItemSceneRect(m_imageItem, rect);
+			QRectF rect = m_imageItem->sceneBoundingRect();
 
 			Color color;
 			color.setRGBA(56, 56, 56, 255);
 
 			vector<Vector2>::type paths;
 			paths.emplace_back(0.f, 0.f);
-			paths.emplace_back(rect.getWidth(), 0.f);
-			paths.emplace_back(rect.getWidth(), rect.getHeight());
-			paths.emplace_back(0.f, rect.getHeight());
+			paths.emplace_back(rect.width(), 0.f);
+			paths.emplace_back(rect.width(), rect.height());
+			paths.emplace_back(0.f, rect.height());
 			paths.emplace_back(0.f, 0.f);
 			m_imageBorder = EditorApi.qGraphicsSceneAddPath(m_graphicsScene, paths, 1.f, color);
 			m_imageBorder->setParentItem(m_imageItem);

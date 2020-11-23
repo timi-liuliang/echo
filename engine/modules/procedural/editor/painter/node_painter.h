@@ -87,9 +87,8 @@ namespace Procedural
 				m_text->setBrush(QBrush(m_style.m_fontColor));
 				m_text->setParentItem(m_rect);
 
-				Echo::Rect textRect;
-				EditorApi.qGraphicsItemSceneRect(m_text, textRect);
-				m_text->setPos((m_width - textRect.getWidth()) * 0.5f - halfWidth, (m_height - textRect.getHeight()) * 0.5f - halfHeight);
+				QRectF textRect = m_text->sceneBoundingRect();
+				m_text->setPos((m_width - textRect.width()) * 0.5f - halfWidth, (m_height - textRect.height()) * 0.5f - halfHeight);
 
 				float halfConnectPointRadius = m_connectPointRadius * 0.5f;
 				m_inputConnectionPoints.push_back(EditorApi.qGraphicsSceneAddEclipse(m_graphicsScene, 0.f, 0.f, m_connectPointRadius, m_connectPointRadius, m_connectPointColor));

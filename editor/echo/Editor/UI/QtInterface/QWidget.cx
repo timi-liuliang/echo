@@ -52,16 +52,4 @@ namespace Echo
 			QMessageHandler::instance()->bind( sender, signal, receiver, slot);
 		}
 	}
-
-	QWidget* qFindChild(QWidget* root, const char* name)
-	{
-		QWidget* widget = root->findChild<QWidget*>(name);
-		return widget;
-	}
-
-	QAction* qFindChildAction(QWidget* root, const char* name)
-	{
-		QAction* action = root->findChild<QAction*>(name);
-		return action;
-	}
 }

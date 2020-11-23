@@ -130,12 +130,11 @@ namespace Pipeline
 		m_text->setText(m_renderQueue->getName().c_str());
 		m_text->setBrush(m_renderQueue->isEnable() ? QBrush(m_style.m_fontColor) : QBrush(m_style.m_fontColorFaded));
 
-		Echo::Rect textRect;
-		EditorApi.qGraphicsItemSceneRect(m_text, textRect);
-		m_text->setPos((getWidth() - textRect.getWidth()) * 0.5f - halfWidth, (getHeight() - textRect.getHeight()) * 0.5f - halfHeight);
+		QRectF textRect = m_text->sceneBoundingRect();
+		m_text->setPos((getWidth() - textRect.width()) * 0.5f - halfWidth, (getHeight() - textRect.height()) * 0.5f - halfHeight);
 
 		m_textDiableLine->setVisible(!m_renderQueue->isEnable());
-		m_textDiableLine->setLine(-textRect.getWidth() * 0.5f - 2.f, 0.f, textRect.getWidth() * 0.5f + 2.f, 0.f);
+		m_textDiableLine->setLine(-textRect.width() * 0.5f - 2.f, 0.f, textRect.width() * 0.5f + 2.f, 0.f);
 		m_textDiableLine->setPos(0.f, 0.f);
 	}
 }
