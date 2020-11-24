@@ -82,7 +82,7 @@ namespace Pipeline
 			if (QLineF(event->screenPos(), event->buttonDownScreenPos(Qt::LeftButton)).length() > QApplication::startDragDistance())
 			{
 				QMimeData* mimeData = new  QMimeData;
-				mimeData->setData("drag/render-stage", QByteArray());
+				mimeData->setData("drag/render-queue", QByteArray());
 				QDrag* drag = new QDrag(event->widget());
 				drag->setMimeData(mimeData);
 				drag->setPixmap(Echo::QGraphicsItemToPixmap(this, 0.7f));

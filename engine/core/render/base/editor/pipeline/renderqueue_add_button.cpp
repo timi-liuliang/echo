@@ -36,6 +36,19 @@ namespace Pipeline
 		QPainterPath path;
 		path.addRoundedRect(QRectF(-RenderQueueNodePainter::getWidth() * 0.5f, -RenderQueueNodePainter::getSpace() * 0.3f, RenderQueueNodePainter::getWidth(), RenderQueueNodePainter::getSpace() * 0.6f), 0.f, 0.f);
 		m_dropRegion->setPath(path);
+
+		m_dropRegion->setDragEnterCb([this](QGraphicsSceneDragDropEvent* event)
+		{
+			return event->mimeData()->hasFormat("drag/render-queue") ? true : false;
+		});
+
+		m_dropRegion->setDragDropCb([this](QGraphicsSceneDragDropEvent* event)
+		{
+			if (event->mimeData()->hasFormat("drag/render-queue"))
+			{
+
+			}
+		});
 	}
 
 	void RenderQueueAddButton::updateDropRegion()

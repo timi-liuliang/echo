@@ -49,7 +49,7 @@ namespace Pipeline
 		bool						m_nextArrowHighlight = false;
 		QColor						m_stageDropRegionDefaultColor = QColor(83, 83, 83);
 		QColor						m_stageDropRegionHighlightColor = QColor(255, 214, 98, 125); //Qt::green;
-		QGraphicsDragDropRegionItem*m_stageDropRegion = nullptr;
+		QGraphicsDragDropRegionItem*m_dropRegion = nullptr;
 	};
 	typedef Echo::vector<StatgeAddButton*>::type StatgeAddButtons;
 }
