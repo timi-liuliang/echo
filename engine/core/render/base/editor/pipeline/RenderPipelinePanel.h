@@ -29,6 +29,9 @@ namespace Echo
 		void onApply();
 
 	protected:
+		// need update
+		bool isNeedUpdateStageNodePainters();
+
 		// draw
 		void drawStages();
 		void drawStageAddButtons();

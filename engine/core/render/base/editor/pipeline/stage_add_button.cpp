@@ -48,7 +48,26 @@ namespace Pipeline
 		{
 			if (event->mimeData()->hasFormat("drag/render-stage"))
 			{
+				using namespace Echo;
 
+				Echo::i32 objectId = event->mimeData()->data("drag/render-stage").toInt();
+				Echo::RenderStage* from = ECHO_DOWN_CAST<Echo::RenderStage*>(Echo::Object::getById(objectId));
+				if (from)
+				{
+					vector<RenderStage*>::type stages = m_pipeline->getRenderStages();
+					for (size_t i = 0; i < stages.size(); i++)
+					{
+						if (stages[i] == from)
+						{
+							stages[i] = nullptr;
+							stages.insert(stages.begin() + m_stagePosition, from);
+							stages.erase(std::remove(stages.begin(), stages.end(), nullptr), stages.end());
+							break;
+						}
+					}
+
+					m_pipeline->getRenderStages() = stages;
+				}
 			}
 		});
 	}

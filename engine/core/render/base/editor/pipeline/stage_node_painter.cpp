@@ -56,7 +56,7 @@ namespace Pipeline
 
 	void StageNodePainter::initBoundary()
 	{
-		m_rect = new QGraphicsRenderStageItem(nullptr);
+		m_rect = new QGraphicsRenderStageItem(nullptr, m_stage->getId());
 		m_rect->setZValue(-1.f);
 		m_rect->setPen(QPen(m_style.m_normalBoundaryColor, m_style.m_penWidth));
 		m_rect->setFlag(QGraphicsItem::ItemIsFocusable, true);
@@ -126,6 +126,8 @@ namespace Pipeline
 
 	void StageNodePainter::reset()
 	{
+		EchoSafeDeleteContainer(m_renderQueueNodePainters, RenderQueueNodePainter);
+
 		if (m_rect)
 			m_graphicsScene->removeItem(m_rect);
 

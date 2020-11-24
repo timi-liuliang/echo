@@ -46,7 +46,12 @@ namespace Pipeline
 		{
 			if (event->mimeData()->hasFormat("drag/render-queue"))
 			{
+				Echo::i32 objectId = event->mimeData()->data("drag/render-queue").toInt();
+				Echo::IRenderQueue* from = ECHO_DOWN_CAST<Echo::IRenderQueue*>(Echo::Object::getById(objectId));
+				if (from)
+				{
 
+				}
 			}
 		});
 	}

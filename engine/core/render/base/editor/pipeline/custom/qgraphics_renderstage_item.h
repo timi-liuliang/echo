@@ -15,8 +15,8 @@ namespace Pipeline
 	class QGraphicsRenderStageItem : public QGraphicsPathItem
 	{
 	public:
-		QGraphicsRenderStageItem(QGraphicsItem* parent = nullptr)
-			: QGraphicsPathItem(parent)
+		QGraphicsRenderStageItem(QGraphicsItem* parent, Echo::ui32 objectId)
+			: QGraphicsPathItem(parent), m_objectId(objectId)
 		{}
 
 		// is focused
@@ -87,7 +87,7 @@ namespace Pipeline
 			if (QLineF(event->screenPos(), event->buttonDownScreenPos(Qt::LeftButton)).length() > QApplication::startDragDistance())
 			{
 				QMimeData* mimeData = new  QMimeData;
-				mimeData->setData("drag/render-stage", QByteArray());
+				mimeData->setData("drag/render-stage", QByteArray::number(m_objectId));
 				QDrag* drag = new QDrag(event->widget());
 				drag->setMimeData(mimeData);
 				drag->setPixmap(Echo::QGraphicsItemToPixmap(this, 0.7f));
@@ -98,6 +98,7 @@ namespace Pipeline
 		}
 
 	protected:
+		Echo::ui32							m_objectId = 0;
 		bool								m_focused = false;
 		std::function<void(QGraphicsItem*)> m_hoverEnterEventCb;
 		std::function<void(QGraphicsItem*)> m_hoverLeaveEventCb;

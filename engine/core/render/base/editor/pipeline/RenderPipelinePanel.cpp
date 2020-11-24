@@ -76,28 +76,52 @@ namespace Echo
 		}
 	}
 
-	void RenderpipelinePanel::drawStages()
+	bool RenderpipelinePanel::isNeedUpdateStageNodePainters()
 	{
 		vector<RenderStage*>::type stages = m_pipeline->getRenderStages();
-		while (m_stageNodePainters.size() > stages.size())
-		{
-			EchoSafeDelete(m_stageNodePainters.back(), StageNodePainter);
-			m_stageNodePainters.pop_back();
-		}
-
-		if (m_stageNodePainters.size() < stages.size())
-		{
-			for (size_t i = m_stageNodePainters.size(); i < stages.size(); ++i)
-				m_stageNodePainters.emplace_back(EchoNew(Pipeline::StageNodePainter(m_graphicsView, m_graphicsScene, stages[i])));
-		}
+		if (m_stageNodePainters.size() != stages.size())
+			return true;
 
 		for (size_t i = 0; i < stages.size(); i++)
 		{
-			if (!m_stageNodePainters[i] || m_stageNodePainters[i]->m_stage != stages[i])
+			if (m_stageNodePainters[i]->m_stage != stages[i])
+				return true;
+		}
+
+		return false;
+	}
+
+	void RenderpipelinePanel::drawStages()
+	{
+		vector<RenderStage*>::type stages = m_pipeline->getRenderStages();
+		if (isNeedUpdateStageNodePainters())
+		{
+			Pipeline::StageNodePainters newStageNodePainters;
+			for (RenderStage* stage : stages)
 			{
-				EchoSafeDelete(m_stageNodePainters[i], StageNodePainter);
-				m_stageNodePainters[i] = EchoNew(Pipeline::StageNodePainter(m_graphicsView, m_graphicsScene, stages[i]));
+				bool createNew = true;
+				for (size_t i = 0; i < m_stageNodePainters.size(); i++)
+				{
+					if (m_stageNodePainters[i]->m_stage == stage)
+					{
+						newStageNodePainters.push_back(m_stageNodePainters[i]);
+						m_stageNodePainters.erase(m_stageNodePainters.begin()+i);
+						createNew = false;
+						break;
+					}
+				}
+
+				if (createNew)
+					newStageNodePainters.emplace_back(EchoNew(Pipeline::StageNodePainter(m_graphicsView, m_graphicsScene, stage)));
 			}
+
+			for (Pipeline::StageNodePainter* stagePainter : m_stageNodePainters)
+			{
+				if (stagePainter)
+					EchoSafeDelete(stagePainter, StageNodePainter);
+			}
+
+			m_stageNodePainters = newStageNodePainters;
 		}
 
 		for (size_t i = 0; i < stages.size(); i++)

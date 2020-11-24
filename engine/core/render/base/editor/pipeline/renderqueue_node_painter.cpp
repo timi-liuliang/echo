@@ -21,7 +21,7 @@ namespace Pipeline
 			QPainterPath path;
 			path.addRoundedRect(QRectF(-halfWidth, -halfHeight, getWidth(), getHeight()), m_style.m_cornerRadius, m_style.m_cornerRadius);
 
-			m_rect = new QGraphicsRenderQueueItem(nullptr);
+			m_rect = new QGraphicsRenderQueueItem(nullptr, queue->getId());
 			m_rect->setPath(path);
 			m_rect->setPen(QPen(m_style.m_normalBoundaryColor, m_style.m_penWidth));
 			m_rect->setFlag(QGraphicsItem::ItemIsFocusable);

@@ -15,7 +15,7 @@ namespace Pipeline
 	class QGraphicsDragDropRegionItem : public QGraphicsPathItem
 	{
 	public:
-		QGraphicsDragDropRegionItem(QGraphicsItem* parent = nullptr)
+		QGraphicsDragDropRegionItem(QGraphicsItem* parent)
 			: QGraphicsPathItem(parent)
 		{}
 
