@@ -54,7 +54,7 @@ namespace Pipeline
 				Echo::RenderStage* from = ECHO_DOWN_CAST<Echo::RenderStage*>(Echo::Object::getById(objectId));
 				if (from)
 				{
-					vector<RenderStage*>::type stages = m_pipeline->getRenderStages();
+					vector<RenderStage*>::type& stages = m_pipeline->getRenderStages();
 					for (size_t i = 0; i < stages.size(); i++)
 					{
 						if (stages[i] == from)
@@ -65,8 +65,6 @@ namespace Pipeline
 							break;
 						}
 					}
-
-					m_pipeline->getRenderStages() = stages;
 				}
 			}
 		});

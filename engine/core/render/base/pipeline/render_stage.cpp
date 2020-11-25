@@ -34,9 +34,29 @@ namespace Echo
 		return queue;
 	}
 
+	void RenderStage::addRenderQueue(IRenderQueue* queue, ui32 position)
+	{
+		if (position < m_renderQueues.size())
+		{
+			queue->setStage(this);
+			m_renderQueues.insert(m_renderQueues.begin() + position, queue);
+		}
+		else
+		{
+			queue->setStage(this);
+			m_renderQueues.emplace_back(queue);
+		}
+	}
+
+	void RenderStage::removeRenderQueue(IRenderQueue* renderQueue)
+	{
+		renderQueue->setStage(nullptr);
+		m_renderQueues.erase(std::find(m_renderQueues.begin(), m_renderQueues.end(), renderQueue));
+	}
+
 	void RenderStage::deleteRenderQueue(IRenderQueue* renderQueue)
 	{
-		m_renderQueues.erase(std::find(m_renderQueues.begin(), m_renderQueues.end(), renderQueue));
+		removeRenderQueue(renderQueue);
 		EchoSafeDelete(renderQueue, IRenderQueue);
 	}
 

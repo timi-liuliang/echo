@@ -28,7 +28,8 @@ namespace Echo
 
 	Res* TextureRender::create()
 	{
-		return Renderer::instance()->createTextureRender("");
+		static i32 idx = 0; idx++;
+		return Renderer::instance()->createTextureRender(StringUtil::Format("TXTURE_RENDER_%d", idx));
 	}
 
 	void TextureRender::setWidth(ui32 width)

@@ -46,11 +46,36 @@ namespace Pipeline
 		{
 			if (event->mimeData()->hasFormat("drag/render-queue"))
 			{
-				Echo::i32 objectId = event->mimeData()->data("drag/render-queue").toInt();
-				Echo::IRenderQueue* from = ECHO_DOWN_CAST<Echo::IRenderQueue*>(Echo::Object::getById(objectId));
-				if (from)
-				{
+				using namespace Echo;
 
+				Echo::i32 objectId = event->mimeData()->data("drag/render-queue").toInt();
+				Echo::IRenderQueue* fromQueue = ECHO_DOWN_CAST<Echo::IRenderQueue*>(Echo::Object::getById(objectId));
+				if (fromQueue)
+				{
+					Echo::RenderStage* fromStage = fromQueue->getStage();
+					Echo::RenderStage* targetStage = m_pipeline->getRenderStages()[m_xPos];
+					if (fromStage && targetStage)
+					{
+						if (fromStage == targetStage)
+						{
+							vector<IRenderQueue*>::type& queues = fromStage->getRenderQueues();
+							for (size_t i = 0; i < queues.size(); i++)
+							{
+								if (queues[i] == fromQueue)
+								{
+									queues[i] = nullptr;
+									queues.insert(queues.begin() + m_yPos, fromQueue);
+									queues.erase(std::remove(queues.begin(), queues.end(), nullptr), queues.end());
+									break;
+								}
+							}
+						}
+						else
+						{
+							fromStage->removeRenderQueue(fromQueue);
+							targetStage->addRenderQueue(fromQueue);
+						}
+					}
 				}
 			}
 		});
