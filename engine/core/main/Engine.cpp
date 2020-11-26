@@ -1,5 +1,6 @@
 #include "engine/core/base/class.h"
 #include "engine/core/editor/importer.h"
+#include "engine/core/editor/importer/file_importer.h"
 #include "engine/core/main/Engine.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/util/HashGenerator.h"
@@ -150,6 +151,7 @@ namespace Echo
 
 	#ifdef ECHO_EDITOR_MODE
 		Class::registerType<Importer>();
+		Class::registerType<FileImporter>();
 	#endif
        
 		REGISTER_OBJECT_EDITOR(Scratch, ScratchEditor)
