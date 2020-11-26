@@ -88,15 +88,21 @@
          </layout>
         </item>
         <item>
-         <widget class="QListView" name="m_listView">
+         <widget class="QT_UI::QResListView" name="m_listView">
           <property name="contextMenuPolicy">
            <enum>Qt::CustomContextMenu</enum>
+          </property>
+          <property name="acceptDrops">
+           <bool>true</bool>
           </property>
           <property name="horizontalScrollBarPolicy">
            <enum>Qt::ScrollBarAlwaysOff</enum>
           </property>
           <property name="editTriggers">
            <set>QAbstractItemView::EditKeyPressed</set>
+          </property>
+          <property name="dragEnabled">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -152,6 +158,13 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QT_UI::QResListView</class>
+   <extends>QListView</extends>
+   <header>QResListView.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../../../Resource/App.qrc"/>
  </resources>
