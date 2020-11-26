@@ -3,6 +3,7 @@
 #include <QListView>
 #include <QStandardItemModel>
 #include <QSortFilterProxyModel>
+#include "QResListModel.h"
 #include <engine/core/util/StringUtil.h>
 #include <engine/core/resource/Res.h>
 
@@ -39,6 +40,10 @@ namespace QT_UI
 
 		// set use list Mode
 		void setUseListMode();
+
+	public:
+		// list model
+		QStandardItemModel* getModel() { return m_listModel; }
 
 	public: signals :
 		// clicked
@@ -84,7 +89,7 @@ namespace QT_UI
 		int						m_itemWidth;
 		int						m_itemHeight;
 		QListView*				m_listView;
-		QStandardItemModel*		m_listModel;
+		QResListModel*			m_listModel;
 		QSortFilterProxyModel*	m_listProxyModel;
 		Echo::StringArray		m_supportExts;
 	};

@@ -12,7 +12,7 @@ namespace QT_UI
 	QPreviewHelper::QPreviewHelper(QListView* view)	
 		: m_listView(view)
 	{
-		m_listModel = new QStandardItemModel(m_listView);
+		m_listModel = new QResListModel(m_listView);
 
 		m_listProxyModel = new QSortFilterProxyModel(m_listView);
 		m_listProxyModel->setSourceModel(m_listModel);
