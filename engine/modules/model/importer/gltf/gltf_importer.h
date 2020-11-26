@@ -15,7 +15,7 @@ namespace Echo
 		virtual ~GltfImporter();
 
 		// name
-		virtual const char* getName() override { return "GLTF"; }
+		virtual const char* getName() override { return "GLTF (*.gltf)"; }
 
 		// import
 		virtual void run(const char* targetFolder) override;

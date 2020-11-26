@@ -16,7 +16,7 @@ namespace Echo
 		virtual ~FileImporter();
 
 		// name
-		virtual const char* getName() override { return "File(*.*)"; }
+		virtual const char* getName() override { return "File (*.*)"; }
 
 		// import
 		virtual void run(const char* targetFolder) override;

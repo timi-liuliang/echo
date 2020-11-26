@@ -16,7 +16,7 @@ namespace Echo
 		virtual ~FbxImporter();
 
 		// name
-		virtual const char* getName() override { return "FBX"; }
+		virtual const char* getName() override { return "FBX (*.fbx)"; }
 
 		// import
 		virtual void run(const char* targetFolder) override;
