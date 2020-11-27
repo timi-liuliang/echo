@@ -76,7 +76,9 @@ namespace Echo
 		OGLESDebug(glStencilMask(clear_stencil));
 
 		if (mask != 0)
+		{
 			OGLESDebug(glClear(mask));
+		}
 	}
 
 	void GLESFramebuffer::onSize( ui32 width, ui32 height )

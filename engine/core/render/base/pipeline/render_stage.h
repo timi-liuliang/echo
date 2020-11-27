@@ -23,6 +23,14 @@ namespace Echo
 		const StringOption& getFrameBufferType() const { return m_frameBufferType; }
 		void setFrameBufferType(const StringOption& type);
 
+		// clear color
+		bool isClearColor() const { return m_isClearColor; }
+		void setClearColor(bool isClearColor) { m_isClearColor = isClearColor; }
+
+		// clear depth
+		bool isClearDepth() const { return m_isClearDepth; }
+		void setClearDepth(bool isClearDepth) { m_isClearDepth = isClearDepth; }
+
 		// add render able
 		void addRenderable(const String& name, RenderableID id);
 
@@ -60,6 +68,8 @@ namespace Echo
 		RenderPipeline*				m_pipeline = nullptr;
 		vector<IRenderQueue*>::type	m_renderQueues;
 		StringOption				m_frameBufferType = StringOption("WindowSurface", { "OffScreen", "WindowSurface" });
+		bool						m_isClearColor = true;
+		bool						m_isClearDepth = true;
 		FrameBuffer*				m_frameBuffer = nullptr;
 	};
 }
