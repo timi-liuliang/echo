@@ -21,18 +21,15 @@ namespace Echo
 
 	RenderPipeline::RenderPipeline()
 	{
-        m_framebuffers.insert(FramebufferMap::value_type(0, Renderer::instance()->getWindowFrameBuffer()));
 	}
 
 	RenderPipeline::RenderPipeline(const ResourcePath& path)
 		: Res(path)
 	{
-		m_framebuffers.insert(FramebufferMap::value_type(0, Renderer::instance()->getWindowFrameBuffer()));
 	}
 
 	RenderPipeline::~RenderPipeline()
 	{
-        m_framebuffers.clear();
 	}
 
 	void RenderPipeline::bindMethods()
@@ -108,32 +105,11 @@ namespace Echo
 		}
 	}
 
-	bool RenderPipeline::beginFramebuffer(ui32 id, bool clearColor, const Color& bgColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue, ui32 rbo)
-	{
-		FramebufferMap::iterator it = m_framebuffers.find(id);
-        if (it != m_framebuffers.end())
-        {
-            FrameBuffer* frameBuffer = it->second;
-            if (frameBuffer)
-                return frameBuffer->begin(clearColor, bgColor, clearDepth, depthValue, clearStencil, stencilValue);
-        }
-
-		return false;
-	}
-
-	bool RenderPipeline::endFramebuffer(ui32 id)
-	{
-		FramebufferMap::iterator it = m_framebuffers.find(id);
-		return it != m_framebuffers.end() ? it->second->end() : false;
-	}
-
 	void RenderPipeline::onSize(ui32 width, ui32 height)
 	{
-		for (auto& it : m_framebuffers)
+		for (RenderStage* stage : m_stages)
 		{
-            FrameBuffer* fb = it.second;
-            if(fb)
-                fb->onSize(width, height);
+			stage->onSize(width, height);
 		}
 	}
 
@@ -169,8 +145,8 @@ namespace Echo
 			{
 				for (pugi::xml_node stageNode = rootNode.child("stage"); stageNode; stageNode = stageNode.next_sibling("stage"))
 				{
-					RenderStage* stage = EchoNew(RenderStage(this));
-					stage->setName(stageNode.attribute("name").as_string());
+					RenderStage* stage = ECHO_DOWN_CAST<RenderStage*>(instanceObject(&stageNode));
+					stage->setPipeline(this);
 					stage->parseXml(&stageNode);
 					m_stages.emplace_back(stage);
 				}

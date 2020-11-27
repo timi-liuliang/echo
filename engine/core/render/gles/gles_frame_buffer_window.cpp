@@ -4,7 +4,7 @@
 namespace Echo
 {
     GLESFramebufferWindow::GLESFramebufferWindow(ui32 width, ui32 height)
-        : FrameBuffer(0, width, height)
+        : FrameBuffer(width, height)
     {
     }
 

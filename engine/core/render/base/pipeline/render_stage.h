@@ -19,17 +19,22 @@ namespace Echo
 		void setName(const String& name) { m_name = name; }
 		const String& getName() const { return m_name; }
 
-		// destroy
-		void destroy() {}
+		// frame buffer type
+		const StringOption& getFrameBufferType() const { return m_frameBufferType; }
+		void setFrameBufferType(const StringOption& type);
 
 		// add render able
 		void addRenderable(const String& name, RenderableID id);
+
+		// on size
+		void onSize(ui32 width, ui32 height);
 
 		// process
 		void render();
 
 	public:
 		// get pipeline
+		void setPipeline(RenderPipeline* pipeline) { m_pipeline = pipeline; }
 		RenderPipeline* getPipeline() { return m_pipeline; }
 
 		// get render queues
@@ -54,6 +59,7 @@ namespace Echo
 		String						m_name;
 		RenderPipeline*				m_pipeline = nullptr;
 		vector<IRenderQueue*>::type	m_renderQueues;
-		ui32						m_frameBufferId = 0;
+		StringOption				m_frameBufferType = StringOption("WindowSurface", { "OffScreen", "WindowSurface" });
+		FrameBuffer*				m_frameBuffer = nullptr;
 	};
 }

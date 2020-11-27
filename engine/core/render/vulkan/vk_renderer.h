@@ -37,7 +37,7 @@ namespace Echo
         virtual TextureRender* createTextureRender(const String& name) override;
 
         // create views
-        virtual FrameBuffer* createFramebuffer(ui32 id, ui32 width, ui32 height) override { return EchoNew(VKFramebufferOffscreen(id, width, height));}
+        virtual FrameBuffer* createFramebuffer(ui32 width, ui32 height) override { return EchoNew(VKFramebufferOffscreen(width, height));}
 
         // create states
         virtual RasterizerState* createRasterizerState(const RasterizerState::RasterizerDesc& desc) override;

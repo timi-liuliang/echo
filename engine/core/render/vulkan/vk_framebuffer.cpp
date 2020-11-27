@@ -7,8 +7,8 @@ namespace Echo
 {
     static VKFramebuffer* g_current = nullptr;
 
-    VKFramebuffer::VKFramebuffer(ui32 id, ui32 width, ui32 height)
-        : FrameBuffer(id, width, height)
+    VKFramebuffer::VKFramebuffer(ui32 width, ui32 height)
+        : FrameBuffer(width, height)
     {
         createVkDescriptorPool();
     }
@@ -148,8 +148,8 @@ namespace Echo
         VKDebug(vkCreateDescriptorPool(VKRenderer::instance()->getVkDevice(), &descriptorPoolInfo, nullptr, &m_vkDescriptorPool));
     }
 
-    VKFramebufferOffscreen::VKFramebufferOffscreen(ui32 id, ui32 width, ui32 height)
-        : VKFramebuffer(id, width, height)
+    VKFramebufferOffscreen::VKFramebufferOffscreen(ui32 width, ui32 height)
+        : VKFramebuffer(width, height)
     {
     }
 
@@ -197,7 +197,7 @@ namespace Echo
     }
 
     VKFramebufferWindow::VKFramebufferWindow(ui32 width, ui32 height, void* handle)
-        : VKFramebuffer(0, width, height)
+        : VKFramebuffer(width, height)
     {
         createVkSemaphores();
 

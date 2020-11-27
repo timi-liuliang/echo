@@ -26,11 +26,8 @@ namespace Echo
 
 	public:
         FrameBuffer();
-		FrameBuffer(ui32 id, ui32 width, ui32 height);
+		FrameBuffer(ui32 width, ui32 height);
 		virtual ~FrameBuffer();
-
-		// get id
-		ui32 getId() const { return m_id; }
         
         // width && height
         ui32 getWidth() const { return m_width; }
@@ -48,7 +45,6 @@ namespace Echo
         virtual void onSize(ui32 width, ui32 height) {}
 
 	protected:
-        ui32					    m_id = 0;
         ui32                        m_width = 0;
         ui32                        m_height = 0;
         array<TextureRender*, 9>    m_views;

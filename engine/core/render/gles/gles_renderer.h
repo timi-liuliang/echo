@@ -89,7 +89,7 @@ namespace Echo
 		const SamplerState*	getSamplerState(const SamplerState::SamplerDesc& desc) override;
 	
 		// frame buffer
-		virtual FrameBuffer* createFramebuffer(ui32 id, ui32 width, ui32 height) override;
+		virtual FrameBuffer* createFramebuffer(ui32 width, ui32 height) override;
 
         // screen size
 		virtual ui32 getWindowWidth() override { return m_screenWidth; }

@@ -19,10 +19,22 @@ namespace Echo
 
 	void RenderStage::bindMethods()
 	{
-		CLASS_BIND_METHOD(RenderStage, getName, DEF_METHOD("getName"));
-		CLASS_BIND_METHOD(RenderStage, setName, DEF_METHOD("setName"));
+		CLASS_BIND_METHOD(RenderStage, getName,				DEF_METHOD("getName"));
+		CLASS_BIND_METHOD(RenderStage, setName,				DEF_METHOD("setName"));
+		CLASS_BIND_METHOD(RenderStage, getFrameBufferType,  DEF_METHOD("getFrameBufferType"));
+		CLASS_BIND_METHOD(RenderStage, setFrameBufferType,  DEF_METHOD("setFrameBufferType"));
 
 		CLASS_REGISTER_PROPERTY(RenderStage, "Name", Variant::Type::String, "getName", "setName");
+		CLASS_REGISTER_PROPERTY(RenderStage, "FrameBufferType", Variant::Type::StringOption, "getFrameBufferType", "setFrameBufferType");
+	}
+
+	void RenderStage::setFrameBufferType(const StringOption& type)
+	{
+		if (m_frameBufferType.setValue(type.getValue()))
+		{
+			if(m_frameBufferType.getIdx()==1)
+				m_frameBuffer = Renderer::instance()->getWindowFrameBuffer();
+		}
 	}
 
 	ImageFilter* RenderStage::addImageFilter(const String& name)
@@ -75,13 +87,6 @@ namespace Echo
 					m_renderQueues.push_back(queue);
 				}
 			}
-
-			// frame buffer
-			pugi::xml_node framebufferNode = stageNode->child("framebuffer");
-			if (framebufferNode)
-			{
-				m_frameBufferId = framebufferNode.attribute("id").as_uint();
-			}
 		}
 	}
 
@@ -91,16 +96,13 @@ namespace Echo
 		if (parentNode)
 		{
 			pugi::xml_node stageNode = parentNode->append_child("stage");
-			stageNode.append_attribute("name").set_value(getName().c_str());
+			savePropertyRecursive(&stageNode, this, this->getClassName());
 
 			for (IRenderQueue* renderQueue : m_renderQueues)
 			{
 				pugi::xml_node queueNode = stageNode.append_child("queue");
 				savePropertyRecursive(&queueNode, renderQueue, renderQueue->getClassName());
 			}
-
-			pugi::xml_node frameNode = stageNode.append_child("framebuffer");
-			frameNode.append_attribute("id").set_value(m_frameBufferId);
 		}
 	}
 
@@ -117,19 +119,25 @@ namespace Echo
 		}
 	}
 
+	void RenderStage::onSize(ui32 width, ui32 height)
+	{
+		if (m_frameBuffer)
+			m_frameBuffer->onSize(width, height);
+	}
+
 	void RenderStage::render()
 	{
-		if (m_frameBufferId != -1)
+		if (m_frameBuffer)
 		{
-			RenderPipeline::current()->beginFramebuffer(m_frameBufferId);
+			m_frameBuffer->begin(true, Renderer::BGCOLOR, true, 1.f, false, 0);
 
 			for (IRenderQueue* iqueue : m_renderQueues)
 			{
-				if(iqueue->isEnable())
+				if (iqueue->isEnable())
 					iqueue->render();
 			}
 
-			RenderPipeline::current()->endFramebuffer(m_frameBufferId);
+			m_frameBuffer->end();
 		}
 	}
 }

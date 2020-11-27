@@ -663,9 +663,9 @@ namespace Echo
 	}
 #endif
 
-	FrameBuffer* GLESRenderer::createFramebuffer(ui32 id, ui32 width, ui32 height)
+	FrameBuffer* GLESRenderer::createFramebuffer(ui32 width, ui32 height)
 	{
-		return EchoNew(GLESFramebuffer(id, width, height));
+		return EchoNew(GLESFramebuffer(width, height));
 	}
 
 	Renderable* GLESRenderer::createRenderable()

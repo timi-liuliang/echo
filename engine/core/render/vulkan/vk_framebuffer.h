@@ -8,7 +8,7 @@ namespace Echo
     class VKFramebuffer : public FrameBuffer
     {
     public:
-        VKFramebuffer(ui32 id, ui32 width, ui32 height);
+        VKFramebuffer(ui32 width, ui32 height);
         virtual ~VKFramebuffer();
 
         // current frame buffer
@@ -66,7 +66,7 @@ namespace Echo
     class VKFramebufferOffscreen : public VKFramebuffer
     {
     public:
-        VKFramebufferOffscreen(ui32 id, ui32 width, ui32 height);
+        VKFramebufferOffscreen(ui32 width, ui32 height);
         virtual ~VKFramebufferOffscreen();
 
         // begin render

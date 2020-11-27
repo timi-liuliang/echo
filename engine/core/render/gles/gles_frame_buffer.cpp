@@ -8,8 +8,8 @@
 
 namespace Echo
 {
-    GLESFramebuffer::GLESFramebuffer( ui32 id, ui32 width, ui32 height)
-		: FrameBuffer(id, width, height)
+    GLESFramebuffer::GLESFramebuffer(ui32 width, ui32 height)
+		: FrameBuffer(width, height)
         , m_fbo(0)
 	{
         OGLESDebug(glGenFramebuffers(1, &m_fbo));
@@ -77,8 +77,6 @@ namespace Echo
 
 		if (mask != 0)
 			OGLESDebug(glClear(mask));
-
-		//Renderer::instance()->setDepthStencilState( Renderer::instance()->getDefaultDepthStencilState());
 	}
 
 	void GLESFramebuffer::onSize( ui32 width, ui32 height )

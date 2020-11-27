@@ -91,7 +91,7 @@ namespace Echo
 		virtual ShaderProgram* createShaderProgram()=0;
 		
 		// create views
-		virtual FrameBuffer* createFramebuffer(ui32 id, ui32 width, ui32 height)=0;
+		virtual FrameBuffer* createFramebuffer(ui32 width, ui32 height)=0;
 
 		// create states
 		virtual RasterizerState* createRasterizerState(const RasterizerState::RasterizerDesc& desc) = 0;

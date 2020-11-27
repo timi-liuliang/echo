@@ -8,7 +8,7 @@ namespace Echo
 	class GLESFramebuffer : public FrameBuffer
 	{
 	public:
-        GLESFramebuffer(ui32 id, ui32 width, ui32 height);
+        GLESFramebuffer(ui32 width, ui32 height);
 		virtual ~GLESFramebuffer();
 
         // attach render view

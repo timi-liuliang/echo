@@ -27,10 +27,6 @@ namespace Echo
 		// add render able
 		void addRenderable(const String& name, RenderableID id);
 
-		// render target operate
-		bool beginFramebuffer(ui32 id, bool clearColor = true, const Color& bgColor = Renderer::BGCOLOR, bool clearDepth = true, float depthValue = 1.0f, bool clearStencil = false, ui8 stencilValue = 0, ui32 rbo = 0xFFFFFFFF);
-		bool endFramebuffer(ui32 id);
-
 		// on Resize
 		void onSize(ui32 width, ui32 height);
 
@@ -66,7 +62,6 @@ namespace Echo
 	private:
 		String						m_srcData;
 		bool						m_isParsed = false;
-		FramebufferMap				m_framebuffers;
 		vector<RenderStage*>::type	m_stages;
 	};
 	typedef ResRef<RenderPipeline> RenderPipelinePtr;
