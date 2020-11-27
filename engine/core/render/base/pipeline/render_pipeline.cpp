@@ -5,12 +5,11 @@
 #include "render_stage.h"
 #include <thirdparty/pugixml/pugixml.hpp>
 
-static const char* defaultPipelineTemplate = R"(<?xml version="1.0" encoding="utf-8"?>
+static const char* defaultPipelineTemplate = R"(<?xml version="1.0"?>
 <pipeline>
-	<stage name="Screen Window">
-		<queue class="RenderQueue" Name="Opaque" Sort="false" />
-		<queue class="RenderQueue" Name="Transparent" Sort="true" />
-		<framebuffer id="0" />
+	<stage class="RenderStage" Name="GBuffer" FrameBuffer.Type="WindowSurface" FrameBuffer.IsClearColor="true" FrameBuffer.IsClearDepth="true">
+		<queue class="RenderQueue" Name="Opaque" Enable="true" Sort="false" />
+		<queue class="RenderQueue" Name="Transparent" Enable="true" Sort="true" />
 	</stage>
 </pipeline>
 )";
