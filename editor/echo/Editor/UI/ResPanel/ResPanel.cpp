@@ -181,6 +181,22 @@ namespace Studio
 		m_previewHelper->onListViewResize();
 	}
 
+	void ResPanel::addImporterActionToMenu(QMenu* menu, const Echo::String& className)
+	{
+		Echo::Importer* importerObj = (Echo::Importer*)Echo::Class::create(className.c_str());
+		if (importerObj)
+		{
+			QAction* importResAction = new QAction(this);
+			importResAction->setText(importerObj->getName());
+			importResAction->setToolTip(className.c_str());
+			menu->addAction(importResAction);
+
+			QObject::connect(importResAction, SIGNAL(triggered()), this, SLOT(onImportRes()));
+
+			EchoSafeDelete(importerObj, Importer);
+		}
+	}
+
 	void ResPanel::showMenu(const QPoint& point)
 	{
 		QStandardItem* item = m_previewHelper->itemAt( point);
@@ -228,22 +244,15 @@ namespace Studio
 			// import res
 			QMenu* importResMenu = new QMenu("Import");
 
+			addImporterActionToMenu(importResMenu, ECHO_CLASS_NAME(FileImporter));
+			importResMenu->addSeparator();
+
 			Echo::StringArray allImporter;
 			Echo::Class::getChildClasses(allImporter, "Importer", true);
 			for (const Echo::String& importer : allImporter)
 			{
-				Echo::Importer* importerObj = (Echo::Importer*)Echo::Class::create(importer.c_str());
-				if (importerObj)
-				{
-					QAction* importResAction = new QAction(this);
-					importResAction->setText(importerObj->getName());
-					importResAction->setToolTip(importer.c_str());
-					importResMenu->addAction(importResAction);
-
-					QObject::connect(importResAction, SIGNAL(triggered()), this, SLOT(onImportRes()));
-
-					EchoSafeDelete(importerObj, Importer);
-				}
+				if(importer!= ECHO_CLASS_NAME(FileImporter))
+					addImporterActionToMenu(importResMenu, importer);
 			}
 
 			m_resMenu->addMenu(importResMenu);

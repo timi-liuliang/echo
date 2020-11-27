@@ -81,6 +81,9 @@ namespace Studio
 		// get unique file name
 		bool getUniqueNewResSavePath( Echo::String& outNewPath, const Echo::String& className, const Echo::String& currentDir);
 
+		// add import action to menu
+		void addImporterActionToMenu(QMenu* menu, const Echo::String& className);
+
 	protected:
 		// reimplement reiszeEvent function
 		virtual void resizeEvent(QResizeEvent * e);
