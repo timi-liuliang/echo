@@ -5,11 +5,11 @@
 
 namespace Echo
 {
-	class GLESFramebuffer : public FrameBuffer
+	class GLESFrameBufferOffScreen : public FrameBufferOffScreen
 	{
 	public:
-        GLESFramebuffer(ui32 width, ui32 height);
-		virtual ~GLESFramebuffer();
+        GLESFrameBufferOffScreen(ui32 width, ui32 height);
+		virtual ~GLESFrameBufferOffScreen();
 
         // attach render view
         virtual void attach(Attachment attachment, TextureRender* renderView) override;
@@ -27,5 +27,19 @@ namespace Echo
 
 	private:
 		GLuint m_fbo;
+	};
+
+	class GLESFramebufferWindow : public FrameBufferWindow
+	{
+	public:
+		GLESFramebufferWindow();
+		virtual ~GLESFramebufferWindow();
+
+		// begin render
+		virtual bool begin(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue) override;
+		virtual bool end() override;
+
+		// on resize
+		virtual void onSize(ui32 width, ui32 height) override;
 	};
 }

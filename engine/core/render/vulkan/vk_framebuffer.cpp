@@ -8,7 +8,7 @@ namespace Echo
     static VKFramebuffer* g_current = nullptr;
 
     VKFramebuffer::VKFramebuffer(ui32 width, ui32 height)
-        : FrameBuffer(width, height)
+        : FrameBufferOffScreen(width, height)
     {
         createVkDescriptorPool();
     }

@@ -41,9 +41,6 @@ namespace Echo
 
 		createVkCommandPool();
 
-        // window frame buffer
-        m_framebufferWindow = EchoNew(VKFramebufferWindow(config.m_windowWidth, config.m_windowHeight, (void*)config.m_windowHandle));
-
         return true;
     }
 
@@ -355,10 +352,5 @@ namespace Echo
     bool VKRenderer::present()
     {
         return false;
-    }
-
-    FrameBuffer* VKRenderer::getWindowFrameBuffer()
-    {
-        return m_framebufferWindow;
     }
 }

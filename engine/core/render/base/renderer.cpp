@@ -38,6 +38,9 @@ namespace Echo
 		Class::registerType<TextureCube>();
 		Class::registerType<TextureRender>();
 		Class::registerType<ShaderProgram>();
+		Class::registerType<FrameBuffer>();
+		Class::registerType<FrameBufferOffScreen>();
+		Class::registerType<FrameBufferWindow>();
 		Class::registerType<Mesh>();
 		Class::registerType<Material>();
 		Class::registerType<TextureAtla>();

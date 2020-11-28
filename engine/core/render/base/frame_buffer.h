@@ -2,13 +2,30 @@
 
 #include "engine/core/util/Array.hpp"
 #include "engine/core/scene/node.h"
+#include "engine/core/resource/Res.h"
 #include "texture.h"
 #include "texture_render.h"
 
 namespace Echo
 {
-	class FrameBuffer
+    class FrameBuffer : public Res
+    {
+        ECHO_CLASS(FrameBuffer, Res)
+
+    public:
+		// begin|end render
+		virtual bool begin(bool isClearColor, const Color& bgColor, bool isClearDepth, float depthValue, bool isClearStencil, ui8 stencilValue) { return false; }
+		virtual bool end() { return false; }
+
+		// on resize
+		virtual void onSize(ui32 width, ui32 height) {}
+    };
+    typedef ResRef<FrameBuffer> FrameBufferPtr;
+
+	class FrameBufferOffScreen : public FrameBuffer
 	{
+        ECHO_RES(FrameBufferOffScreen, FrameBuffer, ".fbos", FrameBufferOffScreen::create, Res::load)
+
 	public:
         // Type
         enum class Attachment : ui8
@@ -25,9 +42,12 @@ namespace Echo
         };
 
 	public:
-        FrameBuffer();
-		FrameBuffer(ui32 width, ui32 height);
-		virtual ~FrameBuffer();
+        FrameBufferOffScreen();
+        FrameBufferOffScreen(ui32 width, ui32 height);
+		virtual ~FrameBufferOffScreen();
+
+		// create fun
+		static Res* create();
         
         // width && height
         ui32 getWidth() const { return m_width; }
@@ -37,17 +57,22 @@ namespace Echo
         virtual void attach(Attachment attachment, TextureRender* renderView) {}
         virtual void detach(Attachment attachment) {}
 
-		// begin|end render
-		virtual bool begin(bool isClearColor, const Color& bgColor, bool isClearDepth, float depthValue, bool isClearStencil, ui8 stencilValue) { return false; }
-        virtual bool end() { return false; }
-
-		// on resize
-        virtual void onSize(ui32 width, ui32 height) {}
-
 	protected:
         ui32                        m_width = 0;
         ui32                        m_height = 0;
         array<TextureRender*, 9>    m_views;
 	};
-	typedef map<ui32, FrameBuffer*>::type	FramebufferMap;
+
+
+    class FrameBufferWindow : public FrameBuffer
+    {
+        ECHO_RES(FrameBufferWindow, FrameBuffer, ".fbws", FrameBufferWindow::create, Res::load)
+
+    public:
+        FrameBufferWindow() {}
+        virtual ~FrameBufferWindow() {}
+
+		// create fun
+		static Res* create();
+    };
 }

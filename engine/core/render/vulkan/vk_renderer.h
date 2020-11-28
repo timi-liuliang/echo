@@ -37,7 +37,8 @@ namespace Echo
         virtual TextureRender* createTextureRender(const String& name) override;
 
         // create views
-        virtual FrameBuffer* createFramebuffer(ui32 width, ui32 height) override { return EchoNew(VKFramebufferOffscreen(width, height));}
+        virtual FrameBufferOffScreen* createFrameBufferOffScreen(ui32 width, ui32 height) override { return EchoNew(VKFramebufferOffscreen(width, height));}
+        virtual FrameBufferWindow* createFrameBufferWindow() override { return nullptr; }
 
         // create states
         virtual RasterizerState* createRasterizerState(const RasterizerState::RasterizerDesc& desc) override;
@@ -81,11 +82,8 @@ namespace Echo
         virtual void getDepthRange(Vector2& vec) override {}
 
         // get screen width and height
-        virtual ui32 getWindowWidth() override { return m_framebufferWindow->getWidth();}
-        virtual ui32 getWindowHeight() override { return m_framebufferWindow->getHeight();}
-
-        // get screen frame buffer
-        virtual FrameBuffer* getWindowFrameBuffer() override;
+        virtual ui32 getWindowWidth() override { return 256.f; }
+        virtual ui32 getWindowHeight() override { return 256.f; }
 
 		// get view port
 		virtual void getViewportReal(Viewport& pViewport) override {}
@@ -134,7 +132,6 @@ namespace Echo
 		void createVkCommandPool();
 
     private:
-        FrameBuffer*        m_framebufferWindow = nullptr;
 		Extensions			m_enabledExtensions;
 		VkInstance			m_vkInstance;
 		ExtensionProperties	m_vkExtensions;

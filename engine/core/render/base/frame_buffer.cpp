@@ -5,19 +5,46 @@
 
 namespace Echo
 {
-    FrameBuffer::FrameBuffer()
+	void FrameBuffer::bindMethods()
+	{
+
+	}
+
+	FrameBufferOffScreen::FrameBufferOffScreen()
     {
         m_views.assign(nullptr);
     }
 
-	FrameBuffer::FrameBuffer(ui32 width, ui32 height)
+	FrameBufferOffScreen::FrameBufferOffScreen(ui32 width, ui32 height)
 		: m_width(width)
         , m_height(height)
 	{
         m_views.assign(nullptr);
 	}
 
-	FrameBuffer::~FrameBuffer()
+	FrameBufferOffScreen::~FrameBufferOffScreen()
 	{
+	}
+
+	void FrameBufferOffScreen::bindMethods()
+	{
+
+	}
+
+	Res* FrameBufferOffScreen::create()
+	{
+		static i32 idx = 0; idx++;
+		return Renderer::instance()->createFrameBufferOffScreen(Renderer::instance()->getWindowWidth(), Renderer::instance()->getWindowHeight());
+	}
+
+	Res* FrameBufferWindow::create()
+	{
+		static i32 idx = 0; idx++;
+		return Renderer::instance()->createFrameBufferWindow();
+	}
+
+	void FrameBufferWindow::bindMethods()
+	{
+
 	}
 }

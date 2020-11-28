@@ -2,6 +2,7 @@
 
 #include "render_queue.h"
 #include "image_filter.h"
+#include "../frame_buffer.h"
 
 namespace Echo
 {
@@ -70,6 +71,6 @@ namespace Echo
 		StringOption				m_frameBufferType = StringOption("WindowSurface", { "OffScreen", "WindowSurface" });
 		bool						m_isClearColor = true;
 		bool						m_isClearDepth = true;
-		FrameBuffer*				m_frameBuffer = nullptr;
+		FrameBufferPtr				m_frameBuffer;
 	};
 }

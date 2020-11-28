@@ -91,7 +91,8 @@ namespace Echo
 		virtual ShaderProgram* createShaderProgram()=0;
 		
 		// create views
-		virtual FrameBuffer* createFramebuffer(ui32 width, ui32 height)=0;
+		virtual FrameBufferOffScreen* createFrameBufferOffScreen(ui32 width, ui32 height) = 0;
+		virtual FrameBufferWindow* createFrameBufferWindow() = 0;
 
 		// create states
 		virtual RasterizerState* createRasterizerState(const RasterizerState::RasterizerDesc& desc) = 0;
@@ -116,9 +117,6 @@ namespace Echo
         // screen width and height
         virtual ui32 getWindowWidth() = 0;
         virtual ui32 getWindowHeight() = 0;
-
-        // get screen frame buffer
-        virtual FrameBuffer* getWindowFrameBuffer() = 0;
 
 	public:
 		// device features

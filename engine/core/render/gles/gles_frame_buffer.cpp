@@ -8,20 +8,20 @@
 
 namespace Echo
 {
-    GLESFramebuffer::GLESFramebuffer(ui32 width, ui32 height)
-		: FrameBuffer(width, height)
+    GLESFrameBufferOffScreen::GLESFrameBufferOffScreen(ui32 width, ui32 height)
+		: FrameBufferOffScreen(width, height)
         , m_fbo(0)
 	{
         OGLESDebug(glGenFramebuffers(1, &m_fbo));
 	}
 
-    GLESFramebuffer::~GLESFramebuffer()
+    GLESFrameBufferOffScreen::~GLESFrameBufferOffScreen()
 	{
 		OGLESDebug(glDeleteFramebuffers(1, &m_fbo));
 	}
 
     // attach render view
-    void GLESFramebuffer::attach(Attachment attachment, TextureRender* renderView)
+    void GLESFrameBufferOffScreen::attach(Attachment attachment, TextureRender* renderView)
     {
         GLESTextureRender* texture = dynamic_cast<GLESTextureRender*>(renderView);
         GLenum esAttachment = attachment == Attachment::DepthStencil ? GL_DEPTH_ATTACHMENT : GL_COLOR_ATTACHMENT0;
@@ -33,7 +33,7 @@ namespace Echo
         m_views[(ui8)attachment] = renderView;
     }
 
-	bool GLESFramebuffer::begin(bool isClearColor, const Color& bgColor, bool isClearDepth, float depthValue, bool isClearStencil, ui8 stencilValue)
+	bool GLESFrameBufferOffScreen::begin(bool isClearColor, const Color& bgColor, bool isClearDepth, float depthValue, bool isClearStencil, ui8 stencilValue)
 	{
 		// bind frame buffer
 		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
@@ -45,12 +45,12 @@ namespace Echo
 		return true;
 	}
 
-	bool GLESFramebuffer::end()
+	bool GLESFrameBufferOffScreen::end()
 	{
 		return true;
 	}
 
-	void GLESFramebuffer::clear(bool clear_color, const Color& color, bool clear_depth, float depth_value, bool clear_stencil, ui8 stencil_value)
+	void GLESFrameBufferOffScreen::clear(bool clear_color, const Color& color, bool clear_depth, float depth_value, bool clear_stencil, ui8 stencil_value)
 	{
 		GLbitfield mask = 0;
 		if (clear_color)
@@ -81,7 +81,7 @@ namespace Echo
 		}
 	}
 
-	void GLESFramebuffer::onSize( ui32 width, ui32 height )
+	void GLESFrameBufferOffScreen::onSize( ui32 width, ui32 height )
 	{
         m_width = width;
         m_height = height;
@@ -91,5 +91,40 @@ namespace Echo
             if (colorView)
                 colorView->onSize(width, height);
         }
+	}
+
+	GLESFramebufferWindow::GLESFramebufferWindow()
+		: FrameBufferWindow()
+	{
+	}
+
+	GLESFramebufferWindow::~GLESFramebufferWindow()
+	{
+	}
+
+	bool GLESFramebufferWindow::begin(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue)
+	{
+		// bind frame buffer
+#if defined(ECHO_PLATFORM_WINDOWS) || defined(ECHO_PLATFORM_ANDROID)
+		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+#endif
+
+		ui32 width = Renderer::instance()->getWindowWidth();
+		ui32 height = Renderer::instance()->getWindowHeight();
+		OGLESDebug(glViewport(0, 0, width, height));
+
+		// clear
+		GLESFrameBufferOffScreen::clear(clearColor, backgroundColor, clearDepth, depthValue, clearStencil, stencilValue);
+
+		return true;
+	}
+
+	bool GLESFramebufferWindow::end()
+	{
+		return true;
+	}
+
+	void GLESFramebufferWindow::onSize(ui32 width, ui32 height)
+	{
 	}
 }

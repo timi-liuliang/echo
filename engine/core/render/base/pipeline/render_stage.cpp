@@ -42,8 +42,7 @@ namespace Echo
 	{
 		if (m_frameBufferType.setValue(type.getValue()))
 		{
-			if(m_frameBufferType.getIdx()==1)
-				m_frameBuffer = Renderer::instance()->getWindowFrameBuffer();
+
 		}
 	}
 

@@ -5,7 +5,7 @@
 
 namespace Echo
 {
-    class VKFramebuffer : public FrameBuffer
+    class VKFramebuffer : public FrameBufferOffScreen
     {
     public:
         VKFramebuffer(ui32 width, ui32 height);

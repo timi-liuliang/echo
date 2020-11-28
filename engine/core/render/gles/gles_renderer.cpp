@@ -2,7 +2,6 @@
 #include "gles_renderer.h"
 #include "gles_mapping.h"
 #include "gles_frame_buffer.h"
-#include "gles_frame_buffer_window.h"
 #include "gles_texture_2d.h"
 #include "gles_texture_cube.h"
 #include "gles_shader_program.h"
@@ -55,8 +54,6 @@ namespace Echo
 	{
 		cleanSystemResource();
 		destroyImpl();
-
-		EchoSafeDelete(m_windowFramebuffer, FrameBuffer);
 
 		g_renderer = nullptr;
 	}
@@ -663,9 +660,14 @@ namespace Echo
 	}
 #endif
 
-	FrameBuffer* GLESRenderer::createFramebuffer(ui32 width, ui32 height)
+	FrameBufferOffScreen* GLESRenderer::createFrameBufferOffScreen(ui32 width, ui32 height)
 	{
-		return EchoNew(GLESFramebuffer(width, height));
+		return EchoNew(GLESFrameBufferOffScreen(width, height));
+	}
+
+	FrameBufferWindow* GLESRenderer::createFrameBufferWindow()
+	{
+		return EchoNew(GLESFramebufferWindow);
 	}
 
 	Renderable* GLESRenderer::createRenderable()
@@ -676,17 +678,6 @@ namespace Echo
 
 		return renderable;
 	}
-
-    FrameBuffer* GLESRenderer::getWindowFrameBuffer()
-    {
-        if (!m_windowFramebuffer)
-        {
-            m_windowFramebuffer = EchoNew(GLESFramebufferWindow( m_screenWidth, m_screenHeight));
-        }
-
-        return m_windowFramebuffer;
-    }
-
 
 	RasterizerState* GLESRenderer::getRasterizerState() const
 	{

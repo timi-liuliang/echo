@@ -89,14 +89,12 @@ namespace Echo
 		const SamplerState*	getSamplerState(const SamplerState::SamplerDesc& desc) override;
 	
 		// frame buffer
-		virtual FrameBuffer* createFramebuffer(ui32 width, ui32 height) override;
+		virtual FrameBufferOffScreen* createFrameBufferOffScreen(ui32 width, ui32 height);
+		virtual FrameBufferWindow* createFrameBufferWindow();
 
         // screen size
 		virtual ui32 getWindowWidth() override { return m_screenWidth; }
 		virtual ui32 getWindowHeight() override { return m_screenHeight; }
-
-        // get screen frame buffer
-        virtual FrameBuffer* getWindowFrameBuffer() override;
 
         // bind shader program
 		bool bindShaderProgram(GLESShaderProgram* program);
@@ -148,7 +146,6 @@ namespace Echo
 		ui32						m_screenHeight = 0;
 		std::set<GLESSamplerState*> m_vecSamlerStates;
 		NineBoolArray				m_isVertexAttribArrayEnable;
-        FrameBuffer*				m_windowFramebuffer = nullptr;
 
 #ifdef ECHO_EDITOR_MODE
 		GPUBuffer*					m_wireFrameIndexBuffer = nullptr;
