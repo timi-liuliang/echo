@@ -216,7 +216,7 @@ namespace Studio
 			// res may don't have create method, which means this type of resource
 			// can't be create by echo
 			const Echo::Res::ResFun* resFun = Echo::Res::getResFunByClassName(res);
-			if (resFun->m_cfun)
+			if (resFun && resFun->m_cfun)
 			{
 				QAction* createResAction = new QAction(this);
 				createResAction->setText(res.c_str());
