@@ -28,7 +28,7 @@ namespace Echo
         m_views[(ui8)attachment] = renderView;
     }
 
-    bool VKFramebuffer::begin(bool isClearColor, const Color& bgColor, bool isClearDepth, float depthValue, bool isClearStencil, ui8 stencilValue)
+    bool VKFramebuffer::begin(const Color& bgColor, float depthValue, bool isClearStencil, ui8 stencilValue)
     {
         g_current = this;
 
@@ -157,9 +157,9 @@ namespace Echo
     {
     }
 
-    bool VKFramebufferOffscreen::begin(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue)
+    bool VKFramebufferOffscreen::begin(const Color& backgroundColor, float depthValue, bool clearStencil, ui8 stencilValue)
     {
-        VKFramebuffer::begin(clearColor, backgroundColor, clearDepth, depthValue, clearStencil, stencilValue);
+        VKFramebuffer::begin(backgroundColor, depthValue, clearStencil, stencilValue);
 
         return true;
     }
@@ -221,11 +221,11 @@ namespace Echo
         vkDestroySemaphore(VKRenderer::instance()->getVkDevice(), m_vkImageAvailableSemaphore, nullptr);
     }
 
-    bool VKFramebufferWindow::begin(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue)
+    bool VKFramebufferWindow::begin(const Color& backgroundColor, float depthValue, bool clearStencil, ui8 stencilValue)
     {
         VKDebug(vkAcquireNextImageKHR(VKRenderer::instance()->getVkDevice(), m_vkSwapChain, Math::MAX_UI64, m_vkImageAvailableSemaphore, VK_NULL_HANDLE, &m_imageIndex));
 
-        return VKFramebuffer::begin(clearColor, backgroundColor, clearDepth, depthValue, clearStencil, stencilValue);
+        return VKFramebuffer::begin(backgroundColor, depthValue, clearStencil, stencilValue);
     }
 
     bool VKFramebufferWindow::end()

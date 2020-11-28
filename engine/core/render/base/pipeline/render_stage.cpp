@@ -21,29 +21,13 @@ namespace Echo
 	{
 		CLASS_BIND_METHOD(RenderStage, getName,				DEF_METHOD("getName"));
 		CLASS_BIND_METHOD(RenderStage, setName,				DEF_METHOD("setName"));
-		CLASS_BIND_METHOD(RenderStage, getFrameBufferType,  DEF_METHOD("getFrameBufferType"));
-		CLASS_BIND_METHOD(RenderStage, setFrameBufferType,  DEF_METHOD("setFrameBufferType"));
-		CLASS_BIND_METHOD(RenderStage, isClearColor,		DEF_METHOD("isClearColor"));
-		CLASS_BIND_METHOD(RenderStage, setClearColor,		DEF_METHOD("setClearColor"));
-		CLASS_BIND_METHOD(RenderStage, isClearDepth,		DEF_METHOD("isClearDepth"));
-		CLASS_BIND_METHOD(RenderStage, setClearDepth,		DEF_METHOD("setClearDepth"));
+		CLASS_BIND_METHOD(RenderStage, getFrameBuffer, DEF_METHOD("getFrameBuffer"));
+		CLASS_BIND_METHOD(RenderStage, setFrameBuffer, DEF_METHOD("setFrameBuffer"));
 
 		CLASS_REGISTER_PROPERTY(RenderStage, "Name", Variant::Type::String, "getName", "setName");
-		CLASS_REGISTER_PROPERTY(RenderStage, "FrameBuffer.Type", Variant::Type::StringOption, "getFrameBufferType", "setFrameBufferType");
-		CLASS_REGISTER_PROPERTY(RenderStage, "FrameBuffer.IsClearColor", Variant::Type::Bool, "isClearColor", "setClearColor");
-		CLASS_REGISTER_PROPERTY(RenderStage, "FrameBuffer.IsClearDepth", Variant::Type::Bool, "isClearDepth", "setClearDepth");
+		CLASS_REGISTER_PROPERTY(RenderStage, "FrameBuffer", Variant::Type::Object, "getFrameBuffer", "setFrameBuffer");
 
-		CLASS_REGISTER_PROPERTY_HINT(RenderStage, "FrameBuffer.Type",		  PropertyHintType::Category, "FrameBuffer");
-		CLASS_REGISTER_PROPERTY_HINT(RenderStage, "FrameBuffer.IsClearColor", PropertyHintType::Category, "FrameBuffer");
-		CLASS_REGISTER_PROPERTY_HINT(RenderStage, "FrameBuffer.IsClearDepth", PropertyHintType::Category, "FrameBuffer");
-	}
-
-	void RenderStage::setFrameBufferType(const StringOption& type)
-	{
-		if (m_frameBufferType.setValue(type.getValue()))
-		{
-
-		}
+		CLASS_REGISTER_PROPERTY_HINT(RenderStage, "FrameBuffer", PropertyHintType::ResourceType, "FrameBufferOffScreen|FrameBufferWindow");
 	}
 
 	ImageFilter* RenderStage::addImageFilter(const String& name)
@@ -138,7 +122,7 @@ namespace Echo
 	{
 		if (m_frameBuffer)
 		{
-			m_frameBuffer->begin(m_isClearColor, Renderer::BGCOLOR, m_isClearDepth, 1.f, false, 0);
+			m_frameBuffer->begin(Renderer::BGCOLOR, 1.f, false, 0);
 
 			for (IRenderQueue* iqueue : m_renderQueues)
 			{

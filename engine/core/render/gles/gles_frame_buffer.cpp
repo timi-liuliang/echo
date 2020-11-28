@@ -33,14 +33,14 @@ namespace Echo
         m_views[(ui8)attachment] = renderView;
     }
 
-	bool GLESFrameBufferOffScreen::begin(bool isClearColor, const Color& bgColor, bool isClearDepth, float depthValue, bool isClearStencil, ui8 stencilValue)
+	bool GLESFrameBufferOffScreen::begin(const Color& bgColor, float depthValue, bool isClearStencil, ui8 stencilValue)
 	{
 		// bind frame buffer
 		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
 		OGLESDebug(glViewport(0, 0, m_width, m_height));
 
 		// clear
-		clear( isClearColor, bgColor, isClearDepth, depthValue, isClearStencil, stencilValue );
+		clear( m_isClearColor, bgColor, m_isClearDepth, depthValue, isClearStencil, stencilValue );
 
 		return true;
 	}
@@ -102,7 +102,7 @@ namespace Echo
 	{
 	}
 
-	bool GLESFramebufferWindow::begin(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue)
+	bool GLESFramebufferWindow::begin(const Color& backgroundColor, float depthValue, bool clearStencil, ui8 stencilValue)
 	{
 		// bind frame buffer
 #if defined(ECHO_PLATFORM_WINDOWS) || defined(ECHO_PLATFORM_ANDROID)
@@ -114,7 +114,7 @@ namespace Echo
 		OGLESDebug(glViewport(0, 0, width, height));
 
 		// clear
-		GLESFrameBufferOffScreen::clear(clearColor, backgroundColor, clearDepth, depthValue, clearStencil, stencilValue);
+		GLESFrameBufferOffScreen::clear(m_isClearColor, backgroundColor, m_isClearDepth, depthValue, clearStencil, stencilValue);
 
 		return true;
 	}

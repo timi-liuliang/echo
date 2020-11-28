@@ -14,11 +14,24 @@ namespace Echo
 
     public:
 		// begin|end render
-		virtual bool begin(bool isClearColor, const Color& bgColor, bool isClearDepth, float depthValue, bool isClearStencil, ui8 stencilValue) { return false; }
+		virtual bool begin(const Color& bgColor, float depthValue, bool isClearStencil, ui8 stencilValue) { return false; }
 		virtual bool end() { return false; }
 
 		// on resize
 		virtual void onSize(ui32 width, ui32 height) {}
+
+	public:
+		// clear color
+		bool isClearColor() const { return m_isClearColor; }
+		void setClearColor(bool isClearColor) { m_isClearColor = isClearColor; }
+
+		// clear depth
+		bool isClearDepth() const { return m_isClearDepth; }
+		void setClearDepth(bool isClearDepth) { m_isClearDepth = isClearDepth; }
+
+    protected:
+		bool	m_isClearColor = true;
+		bool	m_isClearDepth = true;
     };
     typedef ResRef<FrameBuffer> FrameBufferPtr;
 

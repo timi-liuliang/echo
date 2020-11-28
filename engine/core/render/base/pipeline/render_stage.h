@@ -20,17 +20,9 @@ namespace Echo
 		void setName(const String& name) { m_name = name; }
 		const String& getName() const { return m_name; }
 
-		// frame buffer type
-		const StringOption& getFrameBufferType() const { return m_frameBufferType; }
-		void setFrameBufferType(const StringOption& type);
-
-		// clear color
-		bool isClearColor() const { return m_isClearColor; }
-		void setClearColor(bool isClearColor) { m_isClearColor = isClearColor; }
-
-		// clear depth
-		bool isClearDepth() const { return m_isClearDepth; }
-		void setClearDepth(bool isClearDepth) { m_isClearDepth = isClearDepth; }
+		// frame buffer
+		FrameBuffer* getFrameBuffer() const { return m_frameBuffer; }
+		void setFrameBuffer(Object* fb) { m_frameBuffer = (FrameBuffer*)fb; }
 
 		// add render able
 		void addRenderable(const String& name, RenderableID id);
@@ -68,9 +60,6 @@ namespace Echo
 		String						m_name;
 		RenderPipeline*				m_pipeline = nullptr;
 		vector<IRenderQueue*>::type	m_renderQueues;
-		StringOption				m_frameBufferType = StringOption("WindowSurface", { "OffScreen", "WindowSurface" });
-		bool						m_isClearColor = true;
-		bool						m_isClearDepth = true;
 		FrameBufferPtr				m_frameBuffer;
 	};
 }

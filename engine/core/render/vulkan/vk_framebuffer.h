@@ -18,7 +18,7 @@ namespace Echo
         virtual void attach(Attachment attachment, TextureRender* renderView) override;
 
         // begin render
-        virtual bool begin(bool isClearColor, const Color& bgColor, bool isClearDepth, float depthValue, bool isClearStencil, ui8 stencilValue) override;
+        virtual bool begin(const Color& bgColor, float depthValue, bool isClearStencil, ui8 stencilValue) override;
         virtual bool end() override;
 
         // on resize
@@ -70,7 +70,7 @@ namespace Echo
         virtual ~VKFramebufferOffscreen();
 
         // begin render
-        virtual bool begin(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue) override;
+        virtual bool begin(const Color& backgroundColor, float depthValue, bool clearStencil, ui8 stencilValue) override;
         virtual bool end() override;
 
         // on resize
@@ -88,7 +88,7 @@ namespace Echo
         virtual ~VKFramebufferWindow();
 
         // begin render
-        virtual bool begin(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue) override;
+        virtual bool begin(const Color& backgroundColor, float depthValue, bool clearStencil, ui8 stencilValue) override;
         virtual bool end() override;
 
         // on resize
