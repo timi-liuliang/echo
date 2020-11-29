@@ -11,14 +11,18 @@
 
 namespace QT_UI
 {
-	QResEditor::QResEditor(class QPropertyModel* model, QString propertyName, const char* resType, QWidget* parent)
+	QResEditor::QResEditor(class QPropertyModel* model, QString propertyName, const char* resTypes, QWidget* parent)
 		: QWidget( parent)
-        , m_resType(resType)
 		, m_propertyModel(model)
 		, m_propertyName(propertyName)
 		, m_menu(nullptr)
 	{
-		m_exts = Echo::Res::getResFunByClassName(m_resType)->m_ext;
+		m_resTypes = Echo::StringUtil::Split(resTypes, "|");
+		for (const Echo::String& resType : m_resTypes)
+		{
+			m_exts += m_exts.empty() ? "" : "|";
+			m_exts += Echo::Res::getResFunByClassName(resType)->m_ext;
+		}
 
 		// root layout
 		m_horizonLayout = new QHBoxLayout( this);
@@ -127,10 +131,14 @@ namespace QT_UI
 		m_menu = EchoNew(QMenu(this));
 
 		// new
-		QAction* createAction = new QAction(m_menu);
-		createAction->setText(("New " + m_resType).c_str());
-		m_menu->addAction(createAction);
-        QObject::connect(createAction, SIGNAL(triggered()), this, SLOT(onCreateRes()));
+		for (const Echo::String& resType : m_resTypes)
+		{
+			QAction* createAction = new QAction(m_menu);
+			createAction->setText(("New " + resType).c_str());
+			createAction->setData(resType.c_str());
+			m_menu->addAction(createAction);
+			QObject::connect(createAction, SIGNAL(triggered()), this, SLOT(onCreateRes()));
+		}
 
 		m_menu->addSeparator();
 
@@ -170,12 +178,18 @@ namespace QT_UI
 
     void QResEditor::onCreateRes()
     {
-        Echo::Res* res = Echo::Res::createByFileExtension(m_exts.c_str(), true);
-        if (res)
-        {
-			m_id = res->getId();
-            onEditFinished();
-        }
+		QAction* action = qobject_cast<QAction*>(sender());
+		if (action)
+		{
+			Echo::String classType = action->data().toString().toStdString().c_str();
+			Echo::String resExt = Echo::Res::getResFunByClassName(classType)->m_ext;
+			Echo::Res* res = Echo::Res::createByFileExtension(resExt.c_str(), true);
+			if (res)
+			{
+				m_id = res->getId();
+				onEditFinished();
+			}
+		}
     }
 
 	void QResEditor::onLoad()

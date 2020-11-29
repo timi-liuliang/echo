@@ -7,7 +7,10 @@
 
 static const char* defaultPipelineTemplate = R"(<?xml version="1.0"?>
 <pipeline>
-	<stage class="RenderStage" Name="GBuffer" FrameBuffer.Type="WindowSurface" FrameBuffer.IsClearColor="true" FrameBuffer.IsClearDepth="true">
+	<stage class="RenderStage" Name="GBuffer">
+		<property name="FrameBuffer">
+			<obj class="FrameBufferWindow" IsClearColor="true" IsClearDepth="true" />
+		</property>
 		<queue class="RenderQueue" Name="Opaque" Enable="true" Sort="false" />
 		<queue class="RenderQueue" Name="Transparent" Enable="true" Sort="true" />
 	</stage>

@@ -17,7 +17,7 @@ namespace QT_UI
 		Q_OBJECT
 
 	public:
-		QResEditor(class QPropertyModel* model, QString propertyName, const char* resType, QWidget* parent);
+		QResEditor(class QPropertyModel* model, QString propertyName, const char* resTypes, QWidget* parent);
 
 		// Id
 		void SetId( QString text) { m_id = Echo::StringUtil::ParseI32(text.toStdString().c_str());  }
@@ -54,14 +54,14 @@ namespace QT_UI
         void onSaveRes();
 
 	private:
-		Echo::i32		m_id;
-		Echo::String	m_resType;
-		Echo::String	m_exts;
-		QHBoxLayout*	m_horizonLayout;
-		QPushButton*	m_displayButton;
-		QToolButton*	m_toolButton;
-		QPropertyModel* m_propertyModel;
-		QString			m_propertyName;
-		QMenu*			m_menu;			// Mouse right button click
+		Echo::i32			m_id;
+		Echo::StringArray	m_resTypes;
+		Echo::String		m_exts;
+		QHBoxLayout*		m_horizonLayout;
+		QPushButton*		m_displayButton;
+		QToolButton*		m_toolButton;
+		QPropertyModel*		m_propertyModel;
+		QString				m_propertyName;
+		QMenu*				m_menu;			// Mouse right button click
 	};
 }
