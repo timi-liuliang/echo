@@ -51,10 +51,10 @@ namespace Pipeline
 				using namespace Echo;
 
 				Echo::i32 objectId = event->mimeData()->data("drag/render-stage").toInt();
-				Echo::RenderPass* from = ECHO_DOWN_CAST<Echo::RenderPass*>(Echo::Object::getById(objectId));
+				Echo::RenderStage* from = ECHO_DOWN_CAST<Echo::RenderStage*>(Echo::Object::getById(objectId));
 				if (from)
 				{
-					vector<RenderPass*>::type& stages = m_pipeline->getRenderStages();
+					vector<RenderStage*>::type& stages = m_pipeline->getRenderStages();
 					for (size_t i = 0; i < stages.size(); i++)
 					{
 						if (stages[i] == from)
@@ -146,7 +146,7 @@ namespace Pipeline
 	{
 		if (m_pipeline)
 		{
-			Echo::RenderPass* stage = EchoNew(Echo::RenderPass(m_pipeline));
+			Echo::RenderStage* stage = EchoNew(Echo::RenderStage(m_pipeline));
 			stage->setName("New Stage");
 
 			m_pipeline->addStage(stage, m_stagePosition);

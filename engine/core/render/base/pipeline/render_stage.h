@@ -7,14 +7,14 @@
 namespace Echo
 {
 	class RenderPipeline;
-	class RenderPass : public Object
+	class RenderStage : public Object
 	{
-		ECHO_CLASS(RenderPass, Object)
+		ECHO_CLASS(RenderStage, Object)
 
 	public:
-		RenderPass() {}
-		RenderPass(RenderPipeline* pipeline);
-		~RenderPass();
+		RenderStage() {}
+		RenderStage(RenderPipeline* pipeline);
+		~RenderStage();
 
 		// name
 		void setName(const String& name) { m_name = name; }

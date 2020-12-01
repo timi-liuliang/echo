@@ -5,14 +5,14 @@
 namespace Echo
 {
 	class RenderPipeline;
-	class RenderPass;
+	class RenderStage;
 	class IRenderQueue : public Object
 	{
 		ECHO_VIRTUAL_CLASS(IRenderQueue, Object);
 
 	public:
 		IRenderQueue() {}
-		IRenderQueue(RenderPass* stage) : m_stage(stage) {}
+		IRenderQueue(RenderStage* stage) : m_stage(stage) {}
 		virtual ~IRenderQueue() {}
 
 		// name
@@ -24,8 +24,8 @@ namespace Echo
 		void setEnable(bool enable) { m_enable = enable; }
 
 		// stage
-		void setStage(RenderPass* stage) { m_stage = stage; }
-		RenderPass* getStage() { return m_stage; }
+		void setStage(RenderStage* stage) { m_stage = stage; }
+		RenderStage* getStage() { return m_stage; }
 
 		// render
 		virtual void render() {}
@@ -33,6 +33,6 @@ namespace Echo
 	protected:
 		String			m_name;
 		bool			m_enable = true;
-		RenderPass*	m_stage = nullptr;
+		RenderStage*	m_stage = nullptr;
 	};
 }

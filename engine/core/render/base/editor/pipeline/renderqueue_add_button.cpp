@@ -52,8 +52,8 @@ namespace Pipeline
 				Echo::IRenderQueue* fromQueue = ECHO_DOWN_CAST<Echo::IRenderQueue*>(Echo::Object::getById(objectId));
 				if (fromQueue)
 				{
-					Echo::RenderPass* fromStage = fromQueue->getStage();
-					Echo::RenderPass* targetStage = m_pipeline->getRenderStages()[m_xPos];
+					Echo::RenderStage* fromStage = fromQueue->getStage();
+					Echo::RenderStage* targetStage = m_pipeline->getRenderStages()[m_xPos];
 					if (fromStage && targetStage)
 					{
 						if (fromStage == targetStage)

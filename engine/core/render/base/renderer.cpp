@@ -32,7 +32,7 @@ namespace Echo
 		Class::registerType<IRenderQueue>();
 		Class::registerType<ImageFilter>();
 		Class::registerType<RenderQueue>();
-		Class::registerType<RenderPass>();
+		Class::registerType<RenderStage>();
 		Class::registerType<RenderPipeline>();
 		Class::registerType<Texture>();
 		Class::registerType<TextureCube>();

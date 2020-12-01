@@ -4,7 +4,7 @@
 
 #ifdef ECHO_EDITOR_MODE
 
-#include "engine/core/render/base/pipeline/render_pass.h"
+#include "engine/core/render/base/pipeline/render_stage.h"
 #include "engine/modules/procedural/procedural_geometry.h"
 #include "custom/qgraphics_renderqueue_item.h"
 #include "custom/qgraphics_pixmap_item_custom.h"

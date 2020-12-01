@@ -7,7 +7,7 @@
 
 namespace Pipeline
 {
-	StageNodePainter::StageNodePainter(QGraphicsView* view, QGraphicsScene* scene, Echo::RenderPass* stage)
+	StageNodePainter::StageNodePainter(QGraphicsView* view, QGraphicsScene* scene, Echo::RenderStage* stage)
 	{
 		m_stage = stage;
 		m_graphicsView = view;
