@@ -47,8 +47,8 @@ namespace Echo
             renderPassBeginInfo.renderPass = m_vkRenderPass;
             renderPassBeginInfo.renderArea.offset.x = 0;
             renderPassBeginInfo.renderArea.offset.y = 0;
-            renderPassBeginInfo.renderArea.extent.width = m_width;
-            renderPassBeginInfo.renderArea.extent.height = m_height;
+            renderPassBeginInfo.renderArea.extent.width = Renderer::instance()->getWindowWidth();
+            renderPassBeginInfo.renderArea.extent.height = Renderer::instance()->getWindowHeight();
             renderPassBeginInfo.clearValueCount = 1;
             renderPassBeginInfo.pClearValues = clearValues;
             renderPassBeginInfo.framebuffer = getVkFramebuffer();
@@ -69,9 +69,6 @@ namespace Echo
 
     void VKFramebuffer::onSize(ui32 width, ui32 height)
     {
-        m_width = width;
-        m_height = height;
-
         for (TextureRender* colorView : m_views)
         {
             if (colorView)
@@ -81,8 +78,8 @@ namespace Echo
         // view port
         m_vkViewport.x = 0.f;
         m_vkViewport.y = 0.0f;
-        m_vkViewport.width = m_width;
-        m_vkViewport.height = m_height;
+        m_vkViewport.width = width;
+        m_vkViewport.height = height;
         m_vkViewport.minDepth = 0.f;
         m_vkViewport.maxDepth = 1.f;
 
@@ -171,8 +168,6 @@ namespace Echo
 
     void VKFramebufferOffscreen::onSize(ui32 width, ui32 height)
     {
-        m_width = width;
-        m_height = height;
     }
 
     void VKFramebufferOffscreen::createVkFramebuffers()
@@ -524,8 +519,8 @@ namespace Echo
             fbCreateInfo.renderPass = m_vkRenderPass;
             fbCreateInfo.attachmentCount = 1;
             fbCreateInfo.pAttachments = &vkImageView;
-            fbCreateInfo.width = m_width;
-            fbCreateInfo.height = m_height;
+            fbCreateInfo.width = Renderer::instance()->getWindowWidth();
+            fbCreateInfo.height = Renderer::instance()->getWindowHeight();
             fbCreateInfo.layers = 1;
 
             VKDebug(vkCreateFramebuffer(VKRenderer::instance()->getVkDevice(), &fbCreateInfo, NULL, &m_vkFramebuffers[i]));

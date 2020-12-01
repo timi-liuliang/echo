@@ -20,7 +20,6 @@ namespace Echo
 		OGLESDebug(glDeleteFramebuffers(1, &m_fbo));
 	}
 
-    // attach render view
     void GLESFrameBufferOffScreen::attach(Attachment attachment, TextureRender* renderView)
     {
         GLESTextureRender* texture = dynamic_cast<GLESTextureRender*>(renderView);
@@ -35,14 +34,17 @@ namespace Echo
 
 	bool GLESFrameBufferOffScreen::begin(const Color& bgColor, float depthValue, bool isClearStencil, ui8 stencilValue)
 	{
-		// bind frame buffer
-		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
-		OGLESDebug(glViewport(0, 0, m_width, m_height));
+		if (hasColorAttachment() || hasDepthAttachment())
+		{
+			OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
+			//OGLESDebug(glViewport(0, 0, m_width, m_height));
 
-		// clear
-		clear( m_isClearColor, bgColor, m_isClearDepth, depthValue, isClearStencil, stencilValue );
+			clear(m_isClearColor && hasColorAttachment(), bgColor, m_isClearDepth && hasDepthAttachment(), depthValue, isClearStencil, stencilValue);
 
-		return true;
+			return true;
+		}
+
+		return false;
 	}
 
 	bool GLESFrameBufferOffScreen::end()
@@ -50,22 +52,22 @@ namespace Echo
 		return true;
 	}
 
-	void GLESFrameBufferOffScreen::clear(bool clear_color, const Color& color, bool clear_depth, float depth_value, bool clear_stencil, ui8 stencil_value)
+	void GLESFrameBufferOffScreen::clear(bool clearColor, const Color& color, bool clearDepth, float depth_value, bool clear_stencil, ui8 stencil_value)
 	{
 		GLbitfield mask = 0;
-		if (clear_color)
+		if (clearColor)
 		{
 			OGLESDebug(glClearColor(color.r, color.g, color.b, color.a));
 			mask |= GL_COLOR_BUFFER_BIT;
 		}
 
-		if (clear_depth)
+		if (clearDepth)
 		{
 			OGLESDebug(glClearDepthf(depth_value));
 			mask |= GL_DEPTH_BUFFER_BIT;
 		}
 
-		OGLESDebug(glDepthMask(clear_depth));
+		OGLESDebug(glDepthMask(clearColor));
 
 		if (clear_stencil)
 		{
@@ -83,9 +85,6 @@ namespace Echo
 
 	void GLESFrameBufferOffScreen::onSize( ui32 width, ui32 height )
 	{
-        m_width = width;
-        m_height = height;
-
         for (TextureRender* colorView : m_views)
         {
             if (colorView)

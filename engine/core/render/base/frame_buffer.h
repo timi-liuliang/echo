@@ -61,19 +61,22 @@ namespace Echo
 
 		// create fun
 		static Res* create();
-        
-        // width && height
-        ui32 getWidth() const { return m_width; }
-        ui32 getHeight() const { return m_height; }
 
         // attach render view
         virtual void attach(Attachment attachment, TextureRender* renderView) {}
         virtual void detach(Attachment attachment) {}
 
+    public:
+        // attachment color0
+        ResourcePath getColor0();
+        void setColor0(const ResourcePath& path);
+
+        // has depth attachment | color
+        bool hasColorAttachment() { return m_views[int(Attachment::Color0)]; }
+        bool hasDepthAttachment() { return m_views[int(Attachment::DepthStencil)]; }
+
 	protected:
-        ui32                        m_width = 0;
-        ui32                        m_height = 0;
-        array<TextureRender*, 9>    m_views;
+        array<TextureRenderPtr, 9>  m_views;
 	};
 
 

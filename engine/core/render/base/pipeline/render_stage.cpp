@@ -122,15 +122,16 @@ namespace Echo
 	{
 		if (m_frameBuffer)
 		{
-			m_frameBuffer->begin(Renderer::BGCOLOR, 1.f, false, 0);
-
-			for (IRenderQueue* iqueue : m_renderQueues)
+			if (m_frameBuffer->begin(Renderer::BGCOLOR, 1.f, false, 0))
 			{
-				if (iqueue->isEnable())
-					iqueue->render();
-			}
+				for (IRenderQueue* iqueue : m_renderQueues)
+				{
+					if (iqueue->isEnable())
+						iqueue->render();
+				}
 
-			m_frameBuffer->end();
+				m_frameBuffer->end();
+			}
 		}
 	}
 }

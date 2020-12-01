@@ -22,8 +22,6 @@ namespace Echo
     }
 
 	FrameBufferOffScreen::FrameBufferOffScreen(ui32 width, ui32 height)
-		: m_width(width)
-        , m_height(height)
 	{
         m_views.assign(nullptr);
 	}
@@ -34,13 +32,27 @@ namespace Echo
 
 	void FrameBufferOffScreen::bindMethods()
 	{
+		CLASS_BIND_METHOD(FrameBufferOffScreen, getColor0, DEF_METHOD("getColor0"));
+		CLASS_BIND_METHOD(FrameBufferOffScreen, setColor0, DEF_METHOD("setColor0"));
 
+		CLASS_REGISTER_PROPERTY(FrameBufferOffScreen, "Color0", Variant::Type::ResourcePath, "getColor0", "setColor0");
 	}
 
 	Res* FrameBufferOffScreen::create()
 	{
 		static i32 idx = 0; idx++;
 		return Renderer::instance()->createFrameBufferOffScreen(Renderer::instance()->getWindowWidth(), Renderer::instance()->getWindowHeight());
+	}
+
+	ResourcePath FrameBufferOffScreen::getColor0()
+	{
+		return m_views[0] ? ResourcePath(m_views[0]->getPath(), ".rt") : ResourcePath("", ".rt");
+	}
+
+	void FrameBufferOffScreen::setColor0(const ResourcePath& path)
+	{
+		m_views[0] = ECHO_DOWN_CAST<TextureRender*>(Res::get(path));
+		attach(Attachment::Color0, m_views[0]);
 	}
 
 	Res* FrameBufferWindow::create()
