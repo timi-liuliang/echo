@@ -4,7 +4,7 @@
 
 namespace Echo
 {
-	ImageFilter::ImageFilter(RenderStage* stage)
+	ImageFilter::ImageFilter(RenderPass* stage)
 		: IRenderQueue( stage)
 	{
 	}

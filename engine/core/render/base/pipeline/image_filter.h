@@ -24,7 +24,7 @@ namespace Echo
 
 	public:
 		ImageFilter() {}
-		ImageFilter(RenderStage* stage);
+		ImageFilter(RenderPass* stage);
 		virtual ~ImageFilter();
 
 		// material

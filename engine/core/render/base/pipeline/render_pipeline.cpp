@@ -2,12 +2,12 @@
 #include "../renderer.h"
 #include "../frame_buffer.h"
 #include "engine/core/io/IO.h"
-#include "render_stage.h"
+#include "render_pass.h"
 #include <thirdparty/pugixml/pugixml.hpp>
 
 static const char* defaultPipelineTemplate = R"(<?xml version="1.0"?>
 <pipeline>
-	<stage class="RenderStage" Name="GBuffer">
+	<stage class="RenderPass" Name="GBuffer">
 		<property name="FrameBuffer">
 			<obj class="FrameBufferWindow" IsClearColor="true" IsClearDepth="true" />
 		</property>
@@ -81,7 +81,7 @@ namespace Echo
 		}
 	}
 
-	void RenderPipeline::addStage(RenderStage* stage, ui32 position)
+	void RenderPipeline::addStage(RenderPass* stage, ui32 position)
 	{
 		if (position < m_stages.size())
 		{
@@ -93,13 +93,13 @@ namespace Echo
 		}
 	}
 
-	void RenderPipeline::deleteStage(RenderStage* stage)
+	void RenderPipeline::deleteStage(RenderPass* stage)
 	{
 		for (auto it = m_stages.begin(); it != m_stages.end(); it++)
 		{
 			if (*it == stage)
 			{
-				EchoSafeDelete(stage, RenderStage);
+				EchoSafeDelete(stage, RenderPass);
 				it = m_stages.erase(it);
 
 				break;
@@ -109,7 +109,7 @@ namespace Echo
 
 	void RenderPipeline::onSize(ui32 width, ui32 height)
 	{
-		for (RenderStage* stage : m_stages)
+		for (RenderPass* stage : m_stages)
 		{
 			stage->onSize(width, height);
 		}
@@ -117,7 +117,7 @@ namespace Echo
 
 	void RenderPipeline::addRenderable(const String& name, RenderableID id)
 	{
-		for (RenderStage* stage : m_stages)
+		for (RenderPass* stage : m_stages)
 		{
 			stage->addRenderable(name, id);
 		}
@@ -127,7 +127,7 @@ namespace Echo
 	{
         Renderer::instance()->beginRender();
         
-        for (RenderStage* stage : m_stages)
+        for (RenderPass* stage : m_stages)
         {
             stage->render();
         }
@@ -137,7 +137,7 @@ namespace Echo
 
 	void RenderPipeline::parseXml()
 	{
-		EchoSafeDeleteContainer(m_stages, RenderStage);
+		EchoSafeDeleteContainer(m_stages, RenderPass);
 
 		pugi::xml_document doc;
 		if (doc.load_buffer(m_srcData.data(), m_srcData.size()));
@@ -147,7 +147,7 @@ namespace Echo
 			{
 				for (pugi::xml_node stageNode = rootNode.child("stage"); stageNode; stageNode = stageNode.next_sibling("stage"))
 				{
-					RenderStage* stage = ECHO_DOWN_CAST<RenderStage*>(instanceObject(&stageNode));
+					RenderPass* stage = ECHO_DOWN_CAST<RenderPass*>(instanceObject(&stageNode));
 					stage->setPipeline(this);
 					stage->parseXml(&stageNode);
 					m_stages.emplace_back(stage);
@@ -175,7 +175,7 @@ namespace Echo
 		pugi::xml_document doc;
 
 		pugi::xml_node rootNode = doc.append_child("pipeline");
-		for (RenderStage* stage : m_stages)
+		for (RenderPass* stage : m_stages)
 		{
 			stage->saveXml(&rootNode);
 		}

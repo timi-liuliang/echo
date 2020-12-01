@@ -5,7 +5,7 @@
 
 namespace Echo
 {
-	RenderQueue::RenderQueue(RenderStage* stage)
+	RenderQueue::RenderQueue(RenderPass* stage)
 		: IRenderQueue(stage)
 	{
 	}

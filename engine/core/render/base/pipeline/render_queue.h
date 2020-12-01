@@ -12,7 +12,7 @@ namespace Echo
 
 	public:
 		RenderQueue() {}
-		RenderQueue(RenderStage* stage);
+		RenderQueue(RenderPass* stage);
 		virtual ~RenderQueue();
 
 		// render

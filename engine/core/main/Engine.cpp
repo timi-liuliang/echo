@@ -11,7 +11,7 @@
 #include "engine/core/render/base/image/image_codec_mgr.h"
 #include "engine/core/render/base/view_port.h"
 #include "engine/core/render/base/material.h"
-#include "engine/core/render/base/pipeline/render_stage.h"
+#include "engine/core/render/base/pipeline/render_pass.h"
 #include "engine/core/render/base/shader_program.h"
 #include "engine/core/render/base/texture_cube.h"
 #include "engine/core/scene/render_node.h"

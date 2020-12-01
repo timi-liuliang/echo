@@ -78,7 +78,7 @@ namespace Echo
 
 	bool RenderpipelinePanel::isNeedUpdateStageNodePainters()
 	{
-		vector<RenderStage*>::type stages = m_pipeline->getRenderStages();
+		vector<RenderPass*>::type stages = m_pipeline->getRenderStages();
 		if (m_stageNodePainters.size() != stages.size())
 			return true;
 
@@ -93,11 +93,11 @@ namespace Echo
 
 	void RenderpipelinePanel::drawStages()
 	{
-		vector<RenderStage*>::type stages = m_pipeline->getRenderStages();
+		vector<RenderPass*>::type stages = m_pipeline->getRenderStages();
 		if (isNeedUpdateStageNodePainters())
 		{
 			Pipeline::StageNodePainters newStageNodePainters;
-			for (RenderStage* stage : stages)
+			for (RenderPass* stage : stages)
 			{
 				bool createNew = true;
 				for (size_t i = 0; i < m_stageNodePainters.size(); i++)

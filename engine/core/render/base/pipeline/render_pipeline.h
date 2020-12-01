@@ -6,7 +6,7 @@
 
 namespace Echo
 {
-	class RenderStage;
+	class RenderPass;
 	class RenderPipeline : public Res
 	{
 		ECHO_RES(RenderPipeline, Res, ".pipeline", Res::create<RenderPipeline>, RenderPipeline::load);
@@ -44,11 +44,11 @@ namespace Echo
 
 	public:
 		// stages
-		vector<RenderStage*>::type& getRenderStages() { return m_stages; }
+		vector<RenderPass*>::type& getRenderStages() { return m_stages; }
 
 		// stage operate
-		void addStage(RenderStage* stage, ui32 position=-1);
-		void deleteStage(RenderStage* stage);
+		void addStage(RenderPass* stage, ui32 position=-1);
+		void deleteStage(RenderPass* stage);
 
 	public:
 		// load and save
@@ -62,7 +62,7 @@ namespace Echo
 	private:
 		String						m_srcData;
 		bool						m_isParsed = false;
-		vector<RenderStage*>::type	m_stages;
+		vector<RenderPass*>::type	m_stages;
 	};
 	typedef ResRef<RenderPipeline> RenderPipelinePtr;
 }
