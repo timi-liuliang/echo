@@ -14,6 +14,7 @@ namespace QT_UI
 	class QChannelEditor : public QPushButton
 	{
 		Q_OBJECT
+
 	public:
 		QChannelEditor( QWidget* parent = 0);
 
@@ -34,9 +35,10 @@ namespace QT_UI
 
 	public slots:
 		// edit event
-		void onEditExpression();
+		void onDisplayExpression();
 
 	private:
 		Echo::String		m_info;
+		bool				m_displayExpression = true;
 	};
 }

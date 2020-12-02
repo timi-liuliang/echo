@@ -13,6 +13,7 @@
 #include "RenderWindow.h"
 #include "OperationManager.h"
 #include "SlotChooseDialog.h"
+#include "ChannelExpressionDialog.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/io/IO.h>
 #include <engine/modules/gltf/gltf_res.h>
@@ -310,22 +311,19 @@ namespace Studio
 
 	void NodeTreePanel::onReferenceProperty()
 	{
-		Echo::String nodePath;
-		Echo::String propertyName;
-		if (ReferenceChooseDialog::getReference(this, nodePath, propertyName))
+		Echo::Object* object = getCurrentEditObject();
+		if (object)
 		{
-            Echo::Node* currentNode = getCurrentSelectNode();
-            if(currentNode)
-            {
-                Echo::Node* fromNode = currentNode->getNode(nodePath.c_str());
-                Echo::String relativePath = fromNode->getNodePathRelativeTo(currentNode);
-    
-                Echo::String expression = Echo::StringUtil::Format("ch(\"%s\", \"%s\")", relativePath.c_str(), propertyName.c_str());
-                currentNode->registerChannel( m_propertyTarget, expression);
+			Echo::Channel* channel = object->getChannel(m_propertyTarget);
+			Echo::String   expression = channel ? channel->getExpression() : "";
+			if (Studio::ChannelExpressionDialog::getExpression(this, expression, object->getId()))
+			{
+				object->unregisterChannel(m_propertyTarget);
+				if(!expression.empty())
+					object->registerChannel(m_propertyTarget, expression);
 
-				// refresh property display
 				showSelectedObjectProperty();
-            }
+			}
 		}
 	}
 

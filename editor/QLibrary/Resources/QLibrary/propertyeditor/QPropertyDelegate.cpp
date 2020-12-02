@@ -254,7 +254,6 @@ namespace QT_UI
 			{
 				QChannelEditor* widget = qobject_cast<QChannelEditor*>(editor);
 				widget->setInfo(value.toString().toStdString());
-				widget->onEditExpression();
 				m_model->setValue(propertyName, widget->getInfo().c_str());
 			}
 			else if( widgetType == "CheckBox")

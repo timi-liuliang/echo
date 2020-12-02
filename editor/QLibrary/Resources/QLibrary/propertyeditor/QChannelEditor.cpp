@@ -9,19 +9,12 @@ namespace QT_UI
 	QChannelEditor::QChannelEditor( QWidget* parent)
 		: QPushButton( parent)
 	{ 
-		connect( this, SIGNAL(clicked()), this, SLOT(onEditExpression()));
+		connect( this, SIGNAL(clicked()), this, SLOT(onDisplayExpression()));
 	}
 
-	void QChannelEditor::onEditExpression()
+	void QChannelEditor::onDisplayExpression()
 	{
-		Echo::StringArray	dataArray = Echo::StringUtil::Split(m_info.c_str(), "#");
-		Echo::String		expression = dataArray[0];
-		if (Studio::ChannelExpressionDialog::getExpression(this, expression))
-		{
-			dataArray[0] = expression;
-
-			setInfo(Echo::StringUtil::Format("%s#%s#%s", dataArray[0].c_str(), dataArray[1].c_str() ,dataArray[2].c_str()).c_str());
-		}
+		m_displayExpression = !m_displayExpression;
 	}
 
 	void QChannelEditor::setInfo( const string& info)
@@ -53,9 +46,21 @@ namespace QT_UI
 		painter->setPen(QColor(0, 0, 0));
 		painter->drawRect(QRect(rect.left(), rect.top(), rect.width() - 1, rect.height() - 1));
 
-		if (type == Echo::Variant::Type::Bool && !isRenderExpressionOnly)
+		if (!isRenderExpressionOnly)
 		{
-			QCheckBoxEditor::ItemDelegatePaint(painter, rect, value);
+			if (type == Echo::Variant::Type::Bool)
+			{
+				QCheckBoxEditor::ItemDelegatePaint(painter, rect, value);
+			}
+			else
+			{
+				Echo::String text = value;
+				QRect textRect(rect.left() + 6, rect.top() + 3, rect.width() - 6, rect.height() - 6);
+				QFont font = painter->font(); font.setBold(false);
+				painter->setFont(font);
+				painter->setPen(QColor(232, 232, 232));
+				painter->drawText(textRect, Qt::AlignLeft, text.c_str());
+			}
 		}
 		else
 		{
@@ -80,6 +85,6 @@ namespace QT_UI
 	{
 		QPainter painter( this);
 
-		ItemDelegatePaintExpression( &painter, rect(), m_info.c_str(), true);
+		ItemDelegatePaintExpression( &painter, rect(), m_info.c_str(), m_displayExpression);
 	}
 }
