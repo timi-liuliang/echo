@@ -26,7 +26,7 @@ namespace Echo
         GLenum esAttachment = attachment == Attachment::DepthStencil ? GL_DEPTH_ATTACHMENT : GL_COLOR_ATTACHMENT0;
 
         OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
-        OGLESDebug(glFramebufferTexture2D(GL_FRAMEBUFFER, esAttachment, GL_TEXTURE_2D, texture->m_glesTexture, 0));
+        OGLESDebug(glFramebufferTexture2D(GL_FRAMEBUFFER, esAttachment, GL_TEXTURE_2D, texture->getGlesTexture(), 0));
         OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 
         m_views[(ui8)attachment] = renderView;

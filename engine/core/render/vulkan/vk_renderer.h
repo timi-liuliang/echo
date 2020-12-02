@@ -75,9 +75,6 @@ namespace Echo
         virtual void setTexture(ui32 index, Texture* texture, bool needUpdate = false) override;
 
     public:
-        // get max stage number
-        virtual ui32 getMaxStageNum() const override { return 32;}
-
         // get depth range
         virtual void getDepthRange(Vector2& vec) override {}
 

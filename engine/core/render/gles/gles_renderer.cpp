@@ -165,11 +165,6 @@ namespace Echo
 		OGLESDebug(glViewport(pViewport->getLeft(), pViewport->getTop(), pViewport->getWidth(), pViewport->getHeight()));
 	}
 
-	ui32 GLESRenderer::getMaxStageNum() const
-	{
-		return 32;
-	}
-
 	void GLESRenderer::scissor(ui32 left, ui32 top, ui32 width, ui32 height)
 	{
 		OGLESDebug(glEnable(GL_SCISSOR_TEST));

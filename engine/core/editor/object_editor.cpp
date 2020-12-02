@@ -14,7 +14,6 @@ namespace Echo
 
 	}
 
-	// register editor
 	void ObjectEditor::registerEditor(const char* objName, ObjectEditorFactory* factory)
 	{
 		if (g_objEditorFactorys.find(objName) == g_objEditorFactorys.end())
@@ -27,7 +26,6 @@ namespace Echo
 		}
 	}
 
-	// create editor
 	ObjectEditor* ObjectEditor::createEditor(Object* object)
 	{
 		if (!Engine::instance()->getConfig().m_isGame)

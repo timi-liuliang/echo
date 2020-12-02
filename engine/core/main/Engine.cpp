@@ -134,6 +134,7 @@ namespace Echo
 		Class::registerType<Object>();
         Class::registerType<FrameState>();
 		Class::registerType<Engine>();
+		Class::registerType<Renderer>();
 		Class::registerType<Node>();
 		Class::registerType<Module>();
 		Class::registerType<Res>();
@@ -156,7 +157,7 @@ namespace Echo
        
 		REGISTER_OBJECT_EDITOR(Scratch, ScratchEditor)
 
-		// resiter render classes
+		// register render classes
 		Renderer::registerClassTypes();
 
 		// load all plugin

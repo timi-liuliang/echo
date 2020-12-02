@@ -41,7 +41,7 @@ namespace Echo
 		virtual bool unload() { return false; }
 
 	protected:
-		Color		m_clearColor = Color::BLACK;
+		Color			m_clearColor = Color::BLACK;
 	};
 	typedef ResRef<TextureRender> TextureRenderPtr;
 }

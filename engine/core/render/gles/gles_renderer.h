@@ -48,8 +48,6 @@ namespace Echo
 
 		void setViewport(Viewport* pViewport);
 
-		ui32 getMaxStageNum() const override;
-
 		void scissor(ui32 left, ui32 top, ui32 width, ui32 height) override;
 		void endScissor() override;
 

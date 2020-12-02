@@ -57,7 +57,6 @@ namespace Studio
 		}
 	}
 
-	// refresh propertys display
 	void PropertyChooseDialog::refreshPropertysDisplayRecursive(QTreeWidget* treeWidget, Echo::Object* objectPtr, const Echo::String& className)
 	{
 		// show parent property first

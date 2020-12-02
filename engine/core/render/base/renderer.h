@@ -11,9 +11,9 @@
 
 namespace Echo
 {
-	class Renderer
+	class Renderer : public Object
 	{
-		typedef RasterizerState::PolygonMode PolygonFillMode;
+		ECHO_SINGLETON_CLASS(Renderer, Object);
 
 	public:
         // type
@@ -64,9 +64,6 @@ namespace Echo
 		// render config
 		const Settings& getSettings() const { return m_settings; }
 		void setSettings(const Settings& settings) { m_settings = settings; }
-
-		// max stage number
-		virtual ui32 getMaxStageNum() const = 0;
 
 		// scissor command
 		virtual void scissor(ui32 left, ui32 top, ui32 width, ui32 height)=0;
