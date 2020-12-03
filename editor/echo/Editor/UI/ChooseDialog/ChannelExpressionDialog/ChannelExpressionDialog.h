@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QDialog>
+#include "LuaSyntaxHighLighter.h"
 #include "ui_ChannelExpressionDialog.h"
 #include <engine/core/util/StringUtil.h>
 #include <engine/core/base/object.h>
@@ -33,6 +34,7 @@ namespace Studio
         void referenceNodeProperty();
 
     private:
-        Echo::Object* m_currentObject = nullptr;
+        Echo::Object*           m_currentObject = nullptr;
+        LuaSyntaxHighLighter*   m_luaSyntaxHighLighter = nullptr;
 	};
 }

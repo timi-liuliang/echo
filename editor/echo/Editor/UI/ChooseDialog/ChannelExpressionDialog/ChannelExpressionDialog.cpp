@@ -19,6 +19,10 @@ namespace Studio
 		m_menuBar->setCornderButtonVisible(QT_UI::QMenuBarEx::Minus, false);
 		m_menuBar->setCornderButtonVisible(QT_UI::QMenuBarEx::Minimize, false);
 		m_menuBar->setCornderButtonVisible(QT_UI::QMenuBarEx::FullScreen, false);
+
+		// syntax high lighter
+		m_luaSyntaxHighLighter = new LuaSyntaxHighLighter(m_textEditExression->document());
+		m_textEditExression->setSyntaxHighter(m_luaSyntaxHighLighter);
         
         // connect signal slot
         QObject::connect(m_textEditExression, SIGNAL(textChanged()), this, SLOT(onExpressionChanged()));
@@ -55,7 +59,7 @@ namespace Studio
     
     void ChannelExpressionDialog::setExpressionText(const Echo::String& functionName)
     {
-		m_textEditExression->setText(functionName.c_str());
+		m_textEditExression->setPlainText(functionName.c_str());
     }
 
 	void ChannelExpressionDialog::setObject(Echo::Object* object)
