@@ -703,7 +703,6 @@ namespace Studio
     {
         // hide tab when there are no signals
         int signalCount = m_signalTreeWidget->invisibleRootItem()->childCount();
-        m_tabSignal->setVisible(signalCount>0);
         if(signalCount == 0)
         {
             // hide tab
