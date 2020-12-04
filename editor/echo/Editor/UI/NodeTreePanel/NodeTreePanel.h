@@ -87,10 +87,10 @@ namespace Studio
 		// on discard instancing
 		void onDiscardInstancing();
 
-		// when modifyd item name
+		// when modify item name
 		void onChangedNodeName(QTreeWidgetItem* item);
 
-		// import gltf scene
+		// import Gltf scene
 		void importGltfScene();
 
 		// on instance child scene
@@ -136,7 +136,8 @@ namespace Studio
 
 	public slots:
 		// update
-		void  update();
+		void update();
+		void updateObjectPropetyValueToModel(Echo::Object* classPtr, const Echo::String& className);
 
 		// on select node
         void onUnselectCurrentEditObject();
@@ -169,6 +170,9 @@ namespace Studio
         
         // update signal tab visible
         void updateSignaltabVisible();
+
+		// to model value
+		Echo::String toModelValue(Echo::Object* object, const Echo::String& name, const Echo::Variant& var);
 
 	private:
 		int								m_width;

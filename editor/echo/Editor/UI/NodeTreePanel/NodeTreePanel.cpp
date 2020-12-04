@@ -109,7 +109,48 @@ namespace Studio
 			m_nodeTreeWidget->header()->resizeSection(0, max<int>( 16, m_nodeTreeWidget->width() - (NodeIconWidth + 1) * 3));
 			m_width = m_nodeTreeWidget->width();
 		}
+
+		// update property value to property model
+		static Echo::i32 frameCount = 0; frameCount++;
+		if (frameCount > 2 && m_currentEditObject)
+		{		
+			updateObjectPropetyValueToModel(m_currentEditObject, m_currentEditObject->getClassName());
+
+			frameCount = 0;
+		}
 	}
+
+	void NodeTreePanel::updateObjectPropetyValueToModel(Echo::Object* classPtr, const Echo::String& className)
+	{
+		// show parent property first
+		Echo::String parentClassName;
+		if (Echo::Class::getParentClass(parentClassName, className))
+		{
+			// don't display property of object
+			if (parentClassName != "Object")
+				updateObjectPropetyValueToModel(classPtr, parentClassName);
+		}
+
+		// show self property
+		Echo::PropertyInfos propertys;
+		Echo::Class::getPropertys(className, classPtr, propertys);
+		if (propertys.size())
+		{
+			for (const Echo::PropertyInfo* prop : propertys)
+			{
+				Echo::Variant var;
+				Echo::Class::getPropertyValue(classPtr, prop->m_name, var);
+
+				QT_UI::QProperty* qproperty = m_propertyHelper.getQProperty();
+				if (qproperty && qproperty->m_model)
+				{
+					qproperty->m_model->setValue(prop->m_name.c_str(), toModelValue(classPtr, prop->m_name, var).c_str());
+				}
+			}
+		}
+	}
+
+
 
 	void NodeTreePanel::showNewNodeDialog()
 	{
@@ -134,7 +175,6 @@ namespace Studio
 		onEditObject(nullptr);
 	}
 
-	// refresh node tree display
 	void NodeTreePanel::refreshNodeTreeDisplay()
 	{
 		refreshNodeTreeDisplay(m_nodeTreeWidget);
@@ -957,33 +997,45 @@ namespace Studio
 		}
 	}
 
+	Echo::String NodeTreePanel::toModelValue(Echo::Object* object, const Echo::String& name, const Echo::Variant& var)
+	{
+		if (!object->isChannelExist(name))
+		{
+			return var.toString();
+		}
+		else
+		{
+			Echo::String expression = object->getChannel(name)->getExpression();
+			return Echo::StringUtil::Format("%s#%s#%d", expression.c_str(), var.toString().c_str(), int(var.getType()));
+		}
+	}
+
 	void NodeTreePanel::showPropertyByVariant(Echo::Object* object, const Echo::String& name, const Echo::Variant& var, const Echo::PropertyInfo* propInfo)
 	{
+		Echo::String modelValue = toModelValue(object, name, var);
 		if (!object->isChannelExist(name))
 		{
             Echo::String resourceHint = propInfo->getHint(Echo::PropertyHintType::ResourceType);
             
 			switch (var.getType())
 			{
-			case Echo::Variant::Type::Bool:			m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_CheckBox); break;
-			case Echo::Variant::Type::Int:			m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_Int); break;
-			case Echo::Variant::Type::Real:			m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_Real); break;
-			case Echo::Variant::Type::String:		m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_String); break;
-			case Echo::Variant::Type::Vector2:		m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_Vector2); break;
-			case Echo::Variant::Type::Vector3:		m_propertyHelper.addItem(name.c_str(), var.toVector3(), QT_UI::WT_Vector3); break;
-			case Echo::Variant::Type::Color:		m_propertyHelper.addItem(name.c_str(), var.toColor(), QT_UI::WT_ColorSelect); break;
-			case Echo::Variant::Type::ResourcePath:	m_propertyHelper.addItem(name.c_str(), var.toResPath().getPath(), QT_UI::WT_AssetsSelect, var.toResPath().getSupportExts().c_str()); break;
-			case Echo::Variant::Type::StringOption: m_propertyHelper.addItem(name.c_str(), var.toStringOption().getValue(), QT_UI::WT_ComboBox, var.toStringOption().getOptionsStr().c_str()); break;
-			case Echo::Variant::Type::NodePath:		m_propertyHelper.addItem(name.c_str(), var.toNodePath().getPath(), QT_UI::WT_NodeSelect, Echo::StringUtil::ToString(object->getId()).c_str()); break;
-			case Echo::Variant::Type::Object:		m_propertyHelper.addItem(name.c_str(), var.toObj() ? var.toObj()->getId() : -1, QT_UI::WT_Res, resourceHint.c_str()); break;
-			default:								m_propertyHelper.addItem(name.c_str(), var.toString(), QT_UI::WT_None); break;
+			case Echo::Variant::Type::Bool:			m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_CheckBox); break;
+			case Echo::Variant::Type::Int:			m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_Int); break;
+			case Echo::Variant::Type::Real:			m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_Real); break;
+			case Echo::Variant::Type::String:		m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_String); break;
+			case Echo::Variant::Type::Vector2:		m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_Vector2); break;
+			case Echo::Variant::Type::Vector3:		m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_Vector3); break;
+			case Echo::Variant::Type::Color:		m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_ColorSelect); break;
+			case Echo::Variant::Type::ResourcePath:	m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_AssetsSelect, var.toResPath().getSupportExts().c_str()); break;
+			case Echo::Variant::Type::StringOption: m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_ComboBox, var.toStringOption().getOptionsStr().c_str()); break;
+			case Echo::Variant::Type::NodePath:		m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_NodeSelect, Echo::StringUtil::ToString(object->getId()).c_str()); break;
+			case Echo::Variant::Type::Object:		m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_Res, resourceHint.c_str()); break;
+			default:								m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_None); break;
 			}
 		}
 		else
 		{
-			Echo::String expression = object->getChannel(name)->getExpression();
-			Echo::String info = Echo::StringUtil::Format("%s#%s#%d", expression.c_str(), var.toString().c_str(), int(var.getType()));
-			m_propertyHelper.addItem(name.c_str(), info, QT_UI::WT_ChannelEditor, nullptr);
+			m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_ChannelEditor, nullptr);
 		}
 	}
 

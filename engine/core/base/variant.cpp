@@ -154,6 +154,7 @@ namespace Echo
 		case Type::StringOption: return (any_cast<StringOption>(m_any)).getValue();
 		case Type::VectorN:   return StringUtil::ToString(any_cast<RealVector>(m_any));
 		case Type::Base64String: return (any_cast<Base64String>(m_any)).getData();
+		case Type::Object:		 return StringUtil::ToString(toObj() ? toObj()->getId():-1);
         default:                 return StringUtil::BLANK;
 		}
 	}
