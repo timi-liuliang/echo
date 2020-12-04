@@ -78,7 +78,6 @@ namespace QT_UI
 		return result;
 	}
 
-	// redefine paintEvent
 	void QVector3Editor::paintEvent(QPaintEvent* event)
 	{
 		// get label background color
@@ -94,7 +93,6 @@ namespace QT_UI
 		QWidget::paintEvent(event);
 	}
 
-	// edit finished
 	void QVector3Editor::onEditFinished()
 	{
 		using namespace Echo;

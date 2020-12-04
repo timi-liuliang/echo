@@ -16,7 +16,7 @@ namespace QT_UI
 		Q_OBJECT
 
 	public:
-		QChannelEditor( QWidget* parent = 0);
+		QChannelEditor(class QPropertyModel* model, QString propertyName, QWidget* parent = 0);
 
 		// set|get expression
 		void setInfo( const string& info);
@@ -33,11 +33,17 @@ namespace QT_UI
 		// size
 		QSize sizeHint() const;
 
+	protected:
+		// double click event
+		virtual void mouseDoubleClickEvent(QMouseEvent* event);
+
 	public slots:
 		// edit event
 		void onDisplayExpression();
 
 	private:
+		QPropertyModel*		m_propertyModel = nullptr;
+		QString				m_propertyName;
 		Echo::String		m_info;
 		bool				m_displayExpression = true;
 	};

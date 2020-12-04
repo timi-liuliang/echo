@@ -233,6 +233,7 @@ namespace Echo
 		// root node
 		pugi::xml_node root = doc.append_child("res");
 		savePropertyRecursive(&root, this, this->getClassName());
+		saveChannels(&root, this);
 
 		doc.save_file(fullPath.c_str(), "\t", 1U, pugi::encoding_utf8);
 	}

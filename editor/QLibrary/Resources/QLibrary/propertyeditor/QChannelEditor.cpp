@@ -6,8 +6,10 @@
 
 namespace QT_UI
 {
-	QChannelEditor::QChannelEditor( QWidget* parent)
+	QChannelEditor::QChannelEditor(class QPropertyModel* model, QString propertyName, QWidget* parent)
 		: QPushButton( parent)
+		, m_propertyModel(model)
+		, m_propertyName(propertyName)
 	{ 
 		connect( this, SIGNAL(clicked()), this, SLOT(onDisplayExpression()));
 	}
@@ -15,6 +17,11 @@ namespace QT_UI
 	void QChannelEditor::onDisplayExpression()
 	{
 		m_displayExpression = !m_displayExpression;
+	}
+
+	void QChannelEditor::mouseDoubleClickEvent(QMouseEvent* event)
+	{
+
 	}
 
 	void QChannelEditor::setInfo( const string& info)

@@ -164,7 +164,7 @@ namespace QT_UI
 		}
 		else if (widgetType == "ChannelEditor")
 		{
-			QChannelEditor* widget = new QChannelEditor(parent);
+			QChannelEditor* widget = new QChannelEditor(m_model, propertyName, parent);
 			QObject::connect(widget, SIGNAL(clicked()), this, SLOT(commitEditor()));
 			return widget;
 		}
