@@ -16,6 +16,7 @@ namespace Echo
 		Range,				// variable range
         Category,           // property category
 		ResourceType,		// resource object type
+		ReadOnly,
 	};
 
     struct PropertyHint
@@ -58,6 +59,17 @@ namespace Echo
 
         // get property hint
         const String& getHint(PropertyHintType hintType) const;
+
+		// add hint
+		void addHint( PropertyHint hint) { m_hints.emplace_back(hint); }
+
+		// add hint
+		template<typename ... T>
+		void addHint( PropertyHint hint, T... args)
+		{
+			addHint(hint);
+			addHint(args...);
+		}
 	};
 	typedef vector<PropertyInfo*>::type PropertyInfos;
 

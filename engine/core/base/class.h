@@ -167,7 +167,6 @@ namespace Echo
 
 		// add property
 		static bool registerProperty(const String& className, const String& propertyName, const Variant::Type type, const String& getter, const String& setter);
-        static bool registerPropertyHint(const String& className, const String& propertyName, PropertyHintType hintType, const String& hintStr);
 
 		// get propertys
 		static ui32 getPropertys(const String& className, Object* classPtr, PropertyInfos& propertys, i32 flag=PropertyInfo::Static | PropertyInfo::Dynamic, bool withParent=false);
@@ -210,6 +209,19 @@ namespace Echo
             
             return bind;
         }
+
+		template<typename ... T>
+		static bool registerPropertyHint(const String& className, const String& propertyName, T... args)
+		{
+			PropertyInfo* pi = getProperty(className, nullptr, propertyName);
+			if (pi)
+			{
+				pi->addHint(args...);
+				return true;
+			}
+
+			return false;
+		}
         
         // clear all classinfos
         static void clear();
@@ -343,7 +355,7 @@ private:
 	Echo::Class::registerProperty(#m_class, name, type, getter, setter)
 
 #define CLASS_REGISTER_PROPERTY_HINT(m_class, name, hintType, hintStr) \
-	Echo::Class::registerPropertyHint(#m_class, name, hintType, hintStr)
+	Echo::Class::registerPropertyHint(#m_class, name, PropertyHint(hintType, hintStr))
 
 #define CLASS_REGISTER_SIGNAL(class, signal) \
     Echo::Class::registerSignal(#class, #signal, &class::getSignal##signal)

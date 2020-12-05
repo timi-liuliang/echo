@@ -255,19 +255,6 @@ namespace Echo
 		return true;
 	}
 
-    bool Class::registerPropertyHint(const String& className, const String& propertyName, PropertyHintType hintType, const String& hintStr)
-    {
-        PropertyInfo* pi = getProperty(className, nullptr, propertyName);
-        if (pi)
-        {
-            pi->m_hints.emplace_back(hintType, hintStr);
-            
-            return true;
-        }
-        
-        return false;
-    }
-
 	ui32 Class::getPropertys(const String& className, Object* classPtr, PropertyInfos& propertys, i32 flag, bool withParent)
 	{
 		// parent properties
