@@ -15,7 +15,7 @@ namespace Echo
         static VKFramebuffer* current();
 
         // attach render view
-        virtual void attach(Attachment attachment, TextureRender* renderView) override;
+        virtual void attach(Attachment attachment, TextureRender* renderView);
 
         // begin render
         virtual bool begin(const Color& bgColor, float depthValue, bool isClearStencil, ui8 stencilValue) override;

@@ -13,6 +13,7 @@ namespace Echo
         , m_fbo(0)
 	{
         OGLESDebug(glGenFramebuffers(1, &m_fbo));
+		m_esTextures.assign(0);
 	}
 
     GLESFrameBufferOffScreen::~GLESFrameBufferOffScreen()
@@ -20,26 +21,63 @@ namespace Echo
 		OGLESDebug(glDeleteFramebuffers(1, &m_fbo));
 	}
 
-    void GLESFrameBufferOffScreen::attach(Attachment attachment, TextureRender* renderView)
+	bool GLESFrameBufferOffScreen::build(i32& width, i32& height)
+	{
+		if (!hasColorAttachment()) return false;
+		if (!hasDepthAttachment()) return false;
+
+		width = m_views[i32(Attachment::DepthStencil)]->getWidth();
+		height = m_views[i32(Attachment::DepthStencil)]->getHeight();
+		if (!width || !height) return false;
+
+		for (i32 i = i32(Attachment::Color0); i <= i32(Attachment::DepthStencil); i++)
+		{
+			if (m_views[i])
+			{
+				if (width != m_views[i]->getWidth()) return false;
+				if (height != m_views[i]->getHeight()) return false;
+			}
+		}
+
+		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
+		attach();
+		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+
+		return true;
+	}
+
+    void GLESFrameBufferOffScreen::attach()
     {
-        GLESTextureRender* texture = dynamic_cast<GLESTextureRender*>(renderView);
-        GLenum esAttachment = attachment == Attachment::DepthStencil ? GL_DEPTH_ATTACHMENT : GL_COLOR_ATTACHMENT0;
+		for (i32 i = i32(Attachment::Color0); i <= i32(Attachment::DepthStencil); i++)
+		{
+			GLESTextureRender* texture = dynamic_cast<GLESTextureRender*>(m_views[i].ptr());
+			GLuint esTexture = texture ? texture->getGlesTexture() : 0;
+			if (esTexture != m_esTextures[i])
+			{
+				if (i != Attachment::DepthStencil)
+				{
+					OGLESDebug(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, esTexture, 0));
+				}
+				else
+				{
+					OGLESDebug(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, texture->getGlesTexture()));
+				}
 
-        OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
-        OGLESDebug(glFramebufferTexture2D(GL_FRAMEBUFFER, esAttachment, GL_TEXTURE_2D, texture->getGlesTexture(), 0));
-        OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, 0));
-
-        m_views[(ui8)attachment] = renderView;
+				m_esTextures[i] = esTexture;
+			}
+		}
     }
 
 	bool GLESFrameBufferOffScreen::begin(const Color& bgColor, float depthValue, bool isClearStencil, ui8 stencilValue)
 	{
-		if (hasColorAttachment() || hasDepthAttachment())
+		i32 width = 0;
+		i32 height = 0;
+		if (build(width, height))
 		{
 			OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
-			//OGLESDebug(glViewport(0, 0, m_width, m_height));
+			OGLESDebug(glViewport(0, 0, width, height));
 
-			clear(m_isClearColor && hasColorAttachment(), bgColor, m_isClearDepth && hasDepthAttachment(), depthValue, isClearStencil, stencilValue);
+			clear(m_isClearColor, bgColor, m_isClearDepth, depthValue, isClearStencil, stencilValue);
 
 			return true;
 		}

@@ -84,15 +84,23 @@ namespace Echo
 
 	GLuint GLESTextureRender::getGlesTexture() 
 	{ 
-		if (!m_glesTexture)
+		if (!m_glesTexture && m_pixFmt!=PF_UNKNOWN)
 		{
-			m_pixFmt = PF_RGBA8_UNORM;
-			m_usage = Texture::TU_GPU_READ;
-			size_t pixelsize = m_width * m_height * PixelUtil::GetPixelSize(m_pixFmt);
-			if (pixelsize)
+			if (!PixelUtil::IsDepth(m_pixFmt))
 			{
-				vector<DWORD>::type textureData(m_width * m_height, m_clearColor.getABGR());
-				updateTexture2D(m_pixFmt, m_usage, m_width, m_height, textureData.data(), pixelsize);
+				m_usage = Texture::TU_GPU_READ;
+				size_t pixelsize = m_width * m_height * PixelUtil::GetPixelSize(m_pixFmt);
+				if (pixelsize)
+				{
+					vector<DWORD>::type textureData(m_width * m_height, m_clearColor.getABGR());
+					updateTexture2D(m_pixFmt, m_usage, m_width, m_height, textureData.data(), pixelsize);
+				}
+			}
+			else
+			{
+				glGenRenderbuffers(1, &m_glesTexture);
+				glBindRenderbuffer(GL_RENDERBUFFER, m_glesTexture);
+				glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, m_width, m_height);
 			}
 		}
 

@@ -11,9 +11,6 @@ namespace Echo
         GLESFrameBufferOffScreen(ui32 width, ui32 height);
 		virtual ~GLESFrameBufferOffScreen();
 
-        // attach render view
-        virtual void attach(Attachment attachment, TextureRender* renderView) override;
-
         // begin render
         virtual bool begin(const Color& bgColor, float depthValue, bool isClearStencil, ui8 stencilValue) override;
         virtual bool end() override;
@@ -25,8 +22,16 @@ namespace Echo
 		// clear render target
 		static void clear(bool clear_color, const Color& color, bool clear_depth, float depth_value, bool clear_stencil, ui8 stencil_value);
 
+	protected:
+		// prepare
+		bool build(i32& width, i32& height);
+
+		// attach render view
+		void attach();
+
 	private:
-		GLuint m_fbo;
+		GLuint			  m_fbo;
+		array<GLuint, 9>  m_esTextures;
 	};
 
 	class GLESFramebufferWindow : public FrameBufferWindow

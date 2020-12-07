@@ -41,7 +41,7 @@ namespace Echo
 
 	public:
         // Type
-        enum class Attachment : ui8
+        enum Attachment : ui8
         {
             Color0 = 0,
             Color1,
@@ -62,14 +62,14 @@ namespace Echo
 		// create fun
 		static Res* create();
 
-        // attach render view
-        virtual void attach(Attachment attachment, TextureRender* renderView) {}
-        virtual void detach(Attachment attachment) {}
-
     public:
         // attachment color0
         ResourcePath getColor0();
         void setColor0(const ResourcePath& path);
+
+        // attachment depth
+        ResourcePath getDepth();
+        void setDepth(const ResourcePath& path);
 
         // has depth attachment | color
         bool hasColorAttachment() { return m_views[int(Attachment::Color0)]; }

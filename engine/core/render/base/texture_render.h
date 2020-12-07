@@ -2,6 +2,7 @@
 
 #include "image/pixel_format.h"
 #include "texture.h"
+#include "engine/core/util/magic_enum.hpp"
 
 namespace Echo
 {
@@ -24,6 +25,10 @@ namespace Echo
 		virtual void setWidth(ui32 width) override;
 		virtual void setHeight(ui32 height) override;
 
+		// set format
+		const StringOption& getPixelFormatName() { return m_pixelFormatName; }
+		void setPixelFormatName(const StringOption& option);
+
 		// color
 		const Color& getClearColor() const { return m_clearColor; }
 		void setClearColor(const Color& color);
@@ -41,7 +46,8 @@ namespace Echo
 		virtual bool unload() { return false; }
 
 	protected:
-		Color			m_clearColor = Color::BLACK;
+		Color			m_clearColor	  = Color::BLACK;
+		StringOption    m_pixelFormatName = StringOption("PF_RGBA8_UNORM", {"PF_RGBA8_UNORM", "PF_D24_UNORM_S8_UINT"});
 	};
 	typedef ResRef<TextureRender> TextureRenderPtr;
 }
