@@ -16,14 +16,12 @@ namespace Echo
 	static map<ui32, Texture*>::type	g_globalTextures;
 
 	Texture::Texture()
-		: m_pixFmt(PF_UNKNOWN)
 	{
 
 	}
 
 	Texture::Texture(const String& name)
 		: Res(name)
-		, m_pixFmt(PF_UNKNOWN)
 	{
 	}
 
