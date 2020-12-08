@@ -19,7 +19,8 @@ namespace QT_UI
 
 		Qt::ItemFlags flags(const QModelIndex& index) const 
 		{
-			return  Qt::ItemIsSelectable  | Qt::ItemIsDragEnabled |
+			return  Qt::ItemIsEditable |
+					Qt::ItemIsSelectable  | Qt::ItemIsDragEnabled |
 					Qt::ItemIsDropEnabled | Qt::ItemIsEnabled;
 		}
 
