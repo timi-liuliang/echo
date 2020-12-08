@@ -121,9 +121,6 @@ namespace Echo
 
 		// get viewport size
 		virtual void getViewportReal(Viewport& pViewport)=0;
-        
-        // begin render
-        virtual void beginRender() {}
 
 		// present
 		virtual bool present()=0;

@@ -125,8 +125,6 @@ namespace Echo
 
 	void RenderPipeline::render()
 	{
-        Renderer::instance()->beginRender();
-        
         for (RenderStage* stage : m_stages)
         {
             stage->render();
