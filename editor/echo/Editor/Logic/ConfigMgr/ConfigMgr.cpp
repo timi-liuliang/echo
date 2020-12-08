@@ -24,53 +24,34 @@ namespace Studio
 		return g_instance;
 	}
 
-	bool ConfigMgr::isFileExit( )
-	{
-		FILE* pFile = fopen( m_cfgFile.c_str(), "rb" );
-		if ( NULL == pFile )
-		{
-			// create dir
-			Echo::String dir = Echo::PathUtil::GetFileDirPath( m_cfgFile);
-			if( !Echo::PathUtil::IsDirExist( dir))
-				Echo::PathUtil::CreateDir( dir);
-
-			// open file
-			pFile = fopen( m_cfgFile.c_str(), "wb" );
-		}
-
-		fclose( pFile );
-
-		return true;
-	}
-
 	bool ConfigMgr::loadCfgFile( )
 	{
 		m_recentProjects.clear();
 		  
-		isFileExit();
-		try
-		{	
-			pugi::xml_document doc;
-			doc.load_file(m_cfgFile.c_str());
-
-			pugi::xml_node projectNode = doc.child( "project" );
-			if( projectNode)
-			{
-				loadRecentProject( &projectNode );
-				loadOutPutDir( &projectNode );
-				loadPropertys( &projectNode);
-			}
-			else
-			{
-				
-			}
-		}
-		catch ( ... )
+		if (Echo::PathUtil::IsFileExist(m_cfgFile))
 		{
-			return false;
+			try
+			{
+				pugi::xml_document doc;
+				doc.load_file(m_cfgFile.c_str());
+
+				pugi::xml_node projectNode = doc.child("project");
+				if (projectNode)
+				{
+					loadRecentProject(&projectNode);
+					loadOutPutDir(&projectNode);
+					loadPropertys(&projectNode);
+				}
+
+				return true;
+			}
+			catch (...)
+			{
+				return false;
+			}
 		}
 
-		return true;
+		return false;
 	}
 
 	bool ConfigMgr::saveCfgFile( )

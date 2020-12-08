@@ -27,8 +27,7 @@ namespace Studio
 		bool saveCfgFile( );
 
 		// is exist
-		bool isFileExit( );
-		bool isPathExist( Echo::String path );
+		bool isPathExist( Echo::String path);
 
 		// output dir
 		void setOutPutDir( const char* path ) { m_outPutDir = path; }
