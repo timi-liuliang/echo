@@ -136,6 +136,7 @@ namespace Echo
 		Class::registerType<Engine>();
 		Class::registerType<Renderer>();
 		Class::registerType<Node>();
+		Class::registerType<Render>();
 		Class::registerType<Module>();
 		Class::registerType<Res>();
 		Class::registerType<LuaScript>();

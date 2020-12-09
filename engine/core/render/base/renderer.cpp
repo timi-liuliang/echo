@@ -6,6 +6,7 @@
 #include "renderable.h"
 #include "../metal/mt.h"
 #include "../gles/gles.h"
+#include "pipeline/render_stage.h"
 #include "pipeline/image_filter.h"
 #include "pipeline/render_queue.h"
 #include "pipeline/render_pipeline.h"
@@ -34,7 +35,6 @@ namespace Echo
 
 	void Renderer::registerClassTypes()
 	{
-		Class::registerType<Render>();
 		Class::registerType<IRenderQueue>();
 		Class::registerType<ImageFilter>();
 		Class::registerType<RenderQueue>();

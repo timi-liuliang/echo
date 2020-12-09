@@ -4,6 +4,7 @@
 
 namespace Echo
 {
+	class GLESShaderProgram;
 	class GLESShader
 	{
 		friend class GLESShaderProgram;
