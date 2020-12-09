@@ -16,6 +16,9 @@ namespace Echo
         // instance
         static MTRenderer* instance();
         
+        // begin render
+        void beginRender();
+        
         // get name
         virtual Type getType() override { return Type::Metal; }
 
@@ -27,13 +30,13 @@ namespace Echo
         virtual GPUBuffer*	createIndexBuffer(Dword usage, const Buffer& buff) override;
         
         // create texture
-        virtual Texture* createTexture2D() override;
         virtual Texture*     createTexture2D(const String& name) override;
         virtual TextureCube* createTextureCube(const String& name) override {return nullptr; }
         virtual TextureRender* createTextureRender(const String& name) override;
         
         // create views
-        virtual FrameBuffer* createFramebuffer(ui32 id, ui32 width, ui32 height) override;
+        virtual FrameBufferOffScreen* createFrameBufferOffScreen(ui32 width, ui32 height) override;
+        virtual FrameBufferWindow* createFrameBufferWindow() override;
         
         // create states
         virtual RasterizerState* createRasterizerState(const RasterizerState::RasterizerDesc& desc) override;
@@ -58,9 +61,6 @@ namespace Echo
        
 		// on size
         virtual void onSize(int width, int height) override;
-
-        // begin render
-        virtual void beginRender() override;
         
 		// draw
         virtual void draw(Renderable* renderable) override;
@@ -74,16 +74,10 @@ namespace Echo
         
     public:
         // screen width and height
-        virtual ui32 getWindowWidth() override { return m_framebufferWindow->getWidth();}
-        virtual ui32 getWindowHeight() override { return m_framebufferWindow->getHeight();}
-        
-        // get screen frame buffer
-        virtual FrameBuffer* getWindowFrameBuffer() override;
+        virtual ui32 getWindowWidth() override { return m_windowWidth;}
+        virtual ui32 getWindowHeight() override { return m_windowHeight;}
       
     public:
-        // get max stage number
-        virtual ui32 getMaxStageNum() const override { return 32;}
-        
         // get depth range
         virtual void getDepthRange(Vector2& vec) override { vec = Vector2(-1.f, 1.f); }
 
@@ -98,6 +92,8 @@ namespace Echo
         id<MTLRenderCommandEncoder> getMetalRenderCommandEncoder() { return m_metalRenderCommandEncoder; }
         
     private:
+        ui32                            m_windowWidth = 0;
+        ui32                            m_windowHeight = 0;
         id<MTLDevice>                   m_metalDevice;
         id<MTLCommandQueue>             m_metalCommandQueue;
         id<MTLCommandBuffer>            m_metalCommandBuffer;

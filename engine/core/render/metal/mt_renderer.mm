@@ -34,7 +34,7 @@ namespace Echo
     bool MTRenderer::initialize(const Settings& config)
     {
         // new frame buffer window
-        m_framebufferWindow = EchoNew(MTFrameBufferWindow(config.m_windowWidth, config.m_windowHeight, (void*)config.m_windowHandle));
+        m_framebufferWindow = EchoNew(MTFrameBufferWindow((void*)config.m_windowHandle));
 
         // set view port
         onSize( config.m_windowWidth, config.m_windowHeight);
@@ -101,20 +101,14 @@ namespace Echo
         return nullptr;
     }
 
-    FrameBuffer* MTRenderer::createFramebuffer(ui32 id, ui32 width, ui32 height)
+    FrameBufferOffScreen* MTRenderer::createFrameBufferOffScreen(ui32 width, ui32 height)
     {
-        return EchoNew(MTFrameBufferOffscreen(id, width, height));
+        return EchoNew(MTFrameBufferOffscreen(width, height));
     }
 
-    FrameBuffer* MTRenderer::getWindowFrameBuffer()
+    FrameBufferWindow* MTRenderer::createFrameBufferWindow()
     {
-        return m_framebufferWindow;
-    }
-
-    Texture* MTRenderer::createTexture2D()
-    {
-        static i32 TextureIndex = 0;
-        return EchoNew(MTTexture2D(StringUtil::Format("Texture_%d", TextureIndex++)));
+        return EchoNew(MTFrameBufferWindow((void*)m_settings.m_windowHandle));
     }
 
     Texture* MTRenderer::createTexture2D(const String& name)

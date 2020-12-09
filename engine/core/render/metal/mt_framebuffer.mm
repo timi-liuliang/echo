@@ -3,27 +3,10 @@
 
 namespace Echo
 {
-    static MTFrameBuffer* g_current = nullptr;
+    static FrameBuffer* g_current = nullptr;
     
-    void MTFrameBuffer::onSize(ui32 width, ui32 height)
-    {
-        
-    }
-    
-    MTFrameBuffer* MTFrameBuffer::current()
-    {
-        return g_current;
-    }
-    
-    bool MTFrameBuffer::begin(bool isClearColor, const Color& bgColor, bool isClearDepth, float depthValue, bool isClearStencil, ui8 stencilValue)
-    {
-        g_current = this;
-        
-        return false;
-    }
-    
-    MTFrameBufferOffscreen::MTFrameBufferOffscreen(ui32 id, ui32 width, ui32 height)
-        : MTFrameBuffer(id, width, height)
+    MTFrameBufferOffscreen::MTFrameBufferOffscreen(ui32 width, ui32 height)
+        : FrameBufferOffScreen(width, height)
     {
     }
     
@@ -31,10 +14,9 @@ namespace Echo
     {
     }
     
-    bool MTFrameBufferOffscreen::begin(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue)
+    bool MTFrameBufferOffscreen::begin(const Color& backgroundColor, float depthValue, bool clearStencil, ui8 stencilValue)
     {
-        MTFrameBuffer::begin(clearColor, backgroundColor, clearDepth, depthValue, clearStencil, stencilValue);
-        
+        g_current = this;
         return true;
     }
     
@@ -43,8 +25,8 @@ namespace Echo
         return true;
     }
     
-    MTFrameBufferWindow::MTFrameBufferWindow(ui32 width, ui32 height, void* handle)
-        : MTFrameBuffer(0, width, height)
+    MTFrameBufferWindow::MTFrameBufferWindow(void* handle)
+        : FrameBufferWindow()
     {
         makeViewMetalCompatible(handle);
     }
@@ -53,10 +35,9 @@ namespace Echo
     {
     }
     
-    bool MTFrameBufferWindow::begin(bool clearColor, const Color& backgroundColor, bool clearDepth, float depthValue, bool clearStencil, ui8 stencilValue)
+    bool MTFrameBufferWindow::begin(const Color& backgroundColor, float depthValue, bool clearStencil, ui8 stencilValue)
     {
-        MTFrameBuffer::begin(clearColor, backgroundColor, clearDepth, depthValue, clearStencil, stencilValue);
-        
+        g_current = this;
         return true;
     }
     
@@ -67,8 +48,6 @@ namespace Echo
     
     void MTFrameBufferWindow::onSize(ui32 width, ui32 height)
     {
-        m_width = width;
-        m_height = height;
     }
     
     NSView* MTFrameBufferWindow::makeViewMetalCompatible(void* handle)
