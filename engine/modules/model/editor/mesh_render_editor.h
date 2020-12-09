@@ -1,10 +1,11 @@
 #pragma once
 
-#include "particle_system_panel.h"
+#include "engine/core/editor/object_editor.h"
+
+#ifdef ECHO_EDITOR_MODE
 
 namespace Echo
 {
-#ifdef ECHO_EDITOR_MODE
     class MeshRenderEditor : public ObjectEditor
     {
     public:
@@ -22,6 +23,7 @@ namespace Echo
         
     private:
     };
-    
-#endif
 }
+
+
+#endif
