@@ -41,9 +41,13 @@ namespace Echo
 
 		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
 		attach();
-		GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 
+#ifdef ECHO_EDITOR_MODE
+		GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 		return status == GL_FRAMEBUFFER_COMPLETE ? true : false;
+#else
+		return true;
+#endif
 	}
 
     void GLESFrameBufferOffScreen::attach()

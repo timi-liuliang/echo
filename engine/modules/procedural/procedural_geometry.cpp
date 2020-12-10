@@ -13,7 +13,7 @@ namespace Echo
 	{
 		setRenderType("3d");
 
-		m_pgNode = new PGNode;
+		m_pgNode = EchoNew(PGNode);
 	}
 
 	ProceduralGeometry::~ProceduralGeometry()
