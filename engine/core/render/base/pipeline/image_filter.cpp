@@ -89,10 +89,10 @@ namespace Echo
 		float hh =  1.f;
 
 		// vertices
-		oVertices.emplace_back(Vector3(-hw, -hh, 0.f), Vector2(0.f, 1.f));
-		oVertices.emplace_back(Vector3(hw, -hh, 0.f), Vector2(1.f, 1.f));
-		oVertices.emplace_back(Vector3(hw, hh, 0.f), Vector2(1.f, 0.f));
-		oVertices.emplace_back(Vector3(-hw, hh, 0.f), Vector2(0.f, 0.f));
+		oVertices.emplace_back(Vector3(-hw, -hh, 0.f), Vector2(1.f, 0.f));
+		oVertices.emplace_back(Vector3(hw, -hh, 0.f), Vector2(0.f, 0.f));
+		oVertices.emplace_back(Vector3(hw, hh, 0.f), Vector2(0.f, 1.f));
+		oVertices.emplace_back(Vector3(-hw, hh, 0.f), Vector2(1.f, 1.f));
 	}
 
 	void ImageFilter::updateMeshBuffer()

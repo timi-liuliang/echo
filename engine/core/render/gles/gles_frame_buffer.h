@@ -24,7 +24,7 @@ namespace Echo
 
 	protected:
 		// prepare
-		bool build(i32& width, i32& height);
+		bool bind(i32& width, i32& height);
 
 		// attach render view
 		void attach();

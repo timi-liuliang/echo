@@ -21,7 +21,7 @@ namespace Echo
 		OGLESDebug(glDeleteFramebuffers(1, &m_fbo));
 	}
 
-	bool GLESFrameBufferOffScreen::build(i32& width, i32& height)
+	bool GLESFrameBufferOffScreen::bind(i32& width, i32& height)
 	{
 		if (!hasColorAttachment()) return false;
 		if (!hasDepthAttachment()) return false;
@@ -42,7 +42,6 @@ namespace Echo
 		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
 		attach();
 		GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 
 		return status == GL_FRAMEBUFFER_COMPLETE ? true : false;
 	}
@@ -73,9 +72,8 @@ namespace Echo
 	{
 		i32 width = 0;
 		i32 height = 0;
-		if (build(width, height))
+		if (bind(width, height))
 		{
-			OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
 			OGLESDebug(glViewport(0, 0, width, height));
 
 			clear(m_isClearColor, bgColor, m_isClearDepth, depthValue, isClearStencil, stencilValue);
@@ -143,9 +141,7 @@ namespace Echo
 	bool GLESFramebufferWindow::begin(const Color& backgroundColor, float depthValue, bool clearStencil, ui8 stencilValue)
 	{
 		// bind frame buffer
-#if defined(ECHO_PLATFORM_WINDOWS) || defined(ECHO_PLATFORM_ANDROID)
 		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, 0));
-#endif
 
 		ui32 width = Renderer::instance()->getWindowWidth();
 		ui32 height = Renderer::instance()->getWindowHeight();
