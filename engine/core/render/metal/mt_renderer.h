@@ -16,9 +16,6 @@ namespace Echo
         // instance
         static MTRenderer* instance();
         
-        // begin render
-        void beginRender();
-        
         // get name
         virtual Type getType() override { return Type::Metal; }
 
@@ -88,16 +85,18 @@ namespace Echo
         // get metal native device
         id<MTLDevice> getMetalDevice() { return m_metalDevice; }
         
+        // get metal layer
+        MTKView* getMetalView() { return m_metalView; }
+        
         // get metal render command encoder
+        void setMetalRenderCommandEncoder(id<MTLRenderCommandEncoder> encoder) { m_metalRenderCommandEncoder = encoder; }
         id<MTLRenderCommandEncoder> getMetalRenderCommandEncoder() { return m_metalRenderCommandEncoder; }
         
     private:
         ui32                            m_windowWidth = 0;
         ui32                            m_windowHeight = 0;
         id<MTLDevice>                   m_metalDevice;
-        id<MTLCommandQueue>             m_metalCommandQueue;
-        id<MTLCommandBuffer>            m_metalCommandBuffer;
+        MTKView*                        m_metalView = nullptr;
         id<MTLRenderCommandEncoder>     m_metalRenderCommandEncoder;
-        MTFrameBufferWindow*            m_framebufferWindow = nullptr;
 	};
 }

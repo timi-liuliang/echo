@@ -16,7 +16,6 @@ namespace Echo
     MTRenderer::MTRenderer()
     {
         m_metalDevice = MTLCreateSystemDefaultDevice();
-        m_metalCommandQueue = [m_metalDevice newCommandQueue];
 
         g_inst = this;
     }
@@ -34,7 +33,7 @@ namespace Echo
     bool MTRenderer::initialize(const Settings& config)
     {
         // new frame buffer window
-        m_framebufferWindow = EchoNew(MTFrameBufferWindow((void*)config.m_windowHandle));
+        m_metalView = (MTKView*)config.m_windowHandle;
 
         // set view port
         onSize( config.m_windowWidth, config.m_windowHeight);
@@ -44,7 +43,6 @@ namespace Echo
 
     void MTRenderer::onSize(int width, int height)
     {
-        m_framebufferWindow->onSize( width, height);
     }
 
 	void MTRenderer::setTexture(ui32 index, Texture* texture, bool needUpdate)
@@ -108,24 +106,12 @@ namespace Echo
 
     FrameBufferWindow* MTRenderer::createFrameBufferWindow()
     {
-        return EchoNew(MTFrameBufferWindow((void*)m_settings.m_windowHandle));
+        return EchoNew(MTFrameBufferWindow);
     }
 
     Texture* MTRenderer::createTexture2D(const String& name)
     {
         return EchoNew(MTTexture2D(name));
-    }
-
-    void MTRenderer::beginRender()
-    {
-        MTKView* view = m_framebufferWindow->getMetalView();
-        view.clearColor = { BGCOLOR.r, BGCOLOR.g, BGCOLOR.b, BGCOLOR.a};
-        
-        // create command buffer
-        m_metalCommandBuffer = [m_metalCommandQueue commandBuffer];
-
-        // creat a command encoder
-        m_metalRenderCommandEncoder = [m_metalCommandBuffer renderCommandEncoderWithDescriptor:view.currentRenderPassDescriptor];
     }
 
     void MTRenderer::draw(Renderable* renderable)
@@ -177,10 +163,6 @@ namespace Echo
 
     bool MTRenderer::present()
     {
-        [m_metalRenderCommandEncoder endEncoding];
-        [m_metalCommandBuffer presentDrawable:m_framebufferWindow->getMetalView().currentDrawable];
-        [m_metalCommandBuffer commit];
-
         return true;
     }
 }

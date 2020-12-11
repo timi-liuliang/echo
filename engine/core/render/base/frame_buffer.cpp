@@ -71,7 +71,6 @@ namespace Echo
 
 	Res* FrameBufferWindow::create()
 	{
-		static i32 idx = 0; idx++;
 		return Renderer::instance()->createFrameBufferWindow();
 	}
 

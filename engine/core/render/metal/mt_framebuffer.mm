@@ -25,10 +25,12 @@ namespace Echo
         return true;
     }
     
-    MTFrameBufferWindow::MTFrameBufferWindow(void* handle)
+    MTFrameBufferWindow::MTFrameBufferWindow()
         : FrameBufferWindow()
     {
-        makeViewMetalCompatible(handle);
+        id<MTLDevice> device = MTRenderer::instance()->getMetalDevice();
+        if(device)
+            m_metalCommandQueue = [device newCommandQueue];
     }
     
     MTFrameBufferWindow::~MTFrameBufferWindow()
@@ -37,25 +39,43 @@ namespace Echo
     
     bool MTFrameBufferWindow::begin(const Color& backgroundColor, float depthValue, bool clearStencil, ui8 stencilValue)
     {
-        g_current = this;
-        return true;
+        MTKView* view = MTRenderer::instance()->getMetalView();
+        if(view)
+        {
+            // clear color
+            view.clearColor = { backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a};
+            
+            // create command buffer
+            m_metalCommandBuffer = [m_metalCommandQueue commandBuffer];
+
+            // creat a command encoder
+            m_metalRenderCommandEncoder = [m_metalCommandBuffer renderCommandEncoderWithDescriptor:view.currentRenderPassDescriptor];
+            
+            // set current
+            MTRenderer::instance()->setMetalRenderCommandEncoder(m_metalRenderCommandEncoder);
+            
+            return true;
+        }
+        
+        return false;
     }
     
     bool MTFrameBufferWindow::end()
     {
-        return true;
+        MTKView* view = MTRenderer::instance()->getMetalView();
+        if(view)
+        {
+            [m_metalRenderCommandEncoder endEncoding];
+            [m_metalCommandBuffer presentDrawable:view.currentDrawable];
+            [m_metalCommandBuffer commit];
+            
+            return true;
+        }
+        
+        return false;
     }
     
     void MTFrameBufferWindow::onSize(ui32 width, ui32 height)
     {
-    }
-    
-    NSView* MTFrameBufferWindow::makeViewMetalCompatible(void* handle)
-    {
-        MTRenderer* mtRenderer = ECHO_DOWN_CAST<MTRenderer*>(Renderer::instance());
-        
-        m_metalView = (MTKView*)handle;
-        
-        return m_metalView;
     }
 }

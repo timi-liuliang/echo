@@ -21,7 +21,7 @@ namespace Echo
     class MTFrameBufferWindow : public FrameBufferWindow
     {
     public:
-        MTFrameBufferWindow(void* handle);
+        MTFrameBufferWindow();
         virtual ~MTFrameBufferWindow();
         
         // begin render
@@ -31,15 +31,13 @@ namespace Echo
         // on resize
         virtual void onSize(ui32 width, ui32 height) override;
         
-    public:
-        // get metal layer
-        MTKView* getMetalView() { return m_metalView; }
+    public:        
+        // get metal render command encoder
+        id<MTLRenderCommandEncoder> getMetalRenderCommandEncoder() { return m_metalRenderCommandEncoder; }
         
     private:
-        // make metal layer
-        NSView* makeViewMetalCompatible(void* handle);
-        
-    private:
-        MTKView*                        m_metalView = nullptr;
+        id<MTLCommandQueue>             m_metalCommandQueue;
+        id<MTLCommandBuffer>            m_metalCommandBuffer;
+        id<MTLRenderCommandEncoder>     m_metalRenderCommandEncoder;
     };
 }
