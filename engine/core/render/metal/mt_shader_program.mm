@@ -4,6 +4,7 @@
 #include "mt_renderer.h"
 #include "mt_mapping.h"
 #include "mt_texture.h"
+#include "mt_texture_render.h"
 #include "engine/core/log/Log.h"
 
 namespace Echo
@@ -242,6 +243,28 @@ namespace Echo
 
     void MTShaderProgram::bindUniforms(MTRenderable* renderable)
     {
+        auto getMetalTexture = [](Texture* texture)
+        {
+            switch (texture->getType())
+            {
+            case Texture::TT_2D:    return ECHO_DOWN_CAST<MTTexture2D*>(texture)->getMTTexture();
+            //case Texture::TT_Cube:  return ECHO_DOWN_CAST<MTTextureCube*>(texture)->getMTTexture();
+            case Texture::TT_Render:return ECHO_DOWN_CAST<MTTextureRender*>(texture)->getMTTexture();
+            default:                return id<MTLTexture>();
+            }
+        };
+        
+        auto getMetalSampleState = [](Texture* texture)
+        {
+            switch (texture->getType())
+            {
+            case Texture::TT_2D:    return ECHO_DOWN_CAST<MTTexture2D*>(texture)->getMTSamplerState();
+            //case Texture::TT_Cube:  return ECHO_DOWN_CAST<MTTextureCube*>(texture)->getMTSamplerState();
+            case Texture::TT_Render:return ECHO_DOWN_CAST<MTTextureRender*>(texture)->getMTSamplerState();
+            default:                return id<MTLSamplerState>();
+            }
+        };
+        
         // organize uniform bytes
         for (UniformMap::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++)
         {
@@ -277,11 +300,13 @@ namespace Echo
                     Material::UniformValue* uniformValue = renderable->getMaterial()->getUniform(uniform->m_name);
                     if(uniformValue && uniformValue->getTexture())
                     {
-                        MTTexture2D* texture = ECHO_DOWN_CAST<MTTexture2D*>(uniformValue->getTexture());
-                        if(texture)
+                        id<MTLTexture> mtTexture = getMetalTexture(uniformValue->getTexture());
+                        if(mtTexture)
                         {
-                            [commandEncoder setFragmentSamplerState:texture->getMTSamplerState() atIndex:uniform->m_location];
-                            [commandEncoder setFragmentTexture:texture->getMTTexture() atIndex:uniform->m_location];
+                            id<MTLSamplerState> mtSamplerState = getMetalSampleState(uniformValue->getTexture());
+                            
+                            [commandEncoder setFragmentSamplerState:mtSamplerState atIndex:uniform->m_location];
+                            [commandEncoder setFragmentTexture:mtTexture atIndex:uniform->m_location];
                         }
                     }
                 }

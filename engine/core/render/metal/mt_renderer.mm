@@ -5,6 +5,7 @@
 #include "mt_render_state.h"
 #include "mt_framebuffer.h"
 #include "mt_texture.h"
+#include "mt_texture_render.h"
 #include "mt_gpu_buffer.h"
 #include "mt_renderable.h"
 #include "mt_mapping.h"
@@ -96,7 +97,7 @@ namespace Echo
     
     TextureRender* MTRenderer::createTextureRender(const String& name)
     {
-        return nullptr;
+        return EchoNew(MTTextureRender(name));
     }
 
     FrameBufferOffScreen* MTRenderer::createFrameBufferOffScreen(ui32 width, ui32 height)
