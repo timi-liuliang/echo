@@ -16,6 +16,8 @@
 #include "base/atla/texture_atlas.h"
 #include "base/editor/atlas/texture_atla_editor.h"
 #include "base/editor/atlas/texture_atlas_editor.h"
+#include "base/editor/shader/node/shader_node.h"
+#include "base/editor/shader/node/shader_node_glsl.h"
 
 namespace Echo
 {
@@ -51,6 +53,11 @@ namespace Echo
 		Class::registerType<Material>();
 		Class::registerType<TextureAtla>();
 		Class::registerType<TextureAtlas>();
+
+	#ifdef ECHO_EDITOR_MODE
+		Class::registerType<ShaderNode>();
+		Class::registerType<ShaderNodeGLSL>();
+	#endif
 
 		REGISTER_OBJECT_EDITOR(RenderPipeline, RenderPipelineEditor)
 		REGISTER_OBJECT_EDITOR(ShaderProgram, ShaderEditor)
