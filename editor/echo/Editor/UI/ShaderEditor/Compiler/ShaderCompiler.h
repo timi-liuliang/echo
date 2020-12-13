@@ -41,6 +41,7 @@ namespace DataFlowProgramming
 		void addMacro(const Echo::String& macroName);
 		void addUniform(const Echo::String& type, const Echo::String& name);
 		void addTextureUniform(const Echo::String& uniformName);
+		void addFunction(const Echo::String& function);
 		void addCode(const Echo::String& codeChunk);
 
 	private:

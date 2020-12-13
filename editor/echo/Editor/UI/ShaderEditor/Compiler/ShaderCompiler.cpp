@@ -458,6 +458,11 @@ namespace DataFlowProgramming
 		m_fsTextureUniforms += Echo::StringUtil::Format("layout(binding = %d) uniform sampler2D %s;\n", m_texturesCount, uniformName.c_str());
 	}
 
+	void ShaderCompiler::addFunction(const Echo::String& function)
+	{
+
+	}
+
 	void ShaderCompiler::addCode(const Echo::String& codeChunk)
 	{
 		m_fsCode += codeChunk;
