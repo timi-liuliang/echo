@@ -17,6 +17,7 @@ namespace Echo
         Category,           // property category
 		ResourceType,		// resource object type
 		ReadOnly,
+		Language,
 	};
 
     struct PropertyHint
@@ -24,7 +25,7 @@ namespace Echo
         PropertyHintType    m_type;
         String              m_value;
 
-		PropertyHint(PropertyHintType type, const String& value)
+		PropertyHint(PropertyHintType type, const String& value = String())
 			: m_type(type), m_value(value)
 		{}
     };

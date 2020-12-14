@@ -12,6 +12,11 @@ namespace Echo
 	{
 	}
 
+	void ShaderNode::bindMethods()
+	{
+
+	}
+
 #endif
 }
 
