@@ -56,6 +56,10 @@ namespace Studio
 
 	bool ConfigMgr::saveCfgFile( )
 	{
+		Echo::String path = Echo::PathUtil::GetFileDirPath(m_cfgFile, true);
+		if (!Echo::PathUtil::IsDirExist(path))
+			Echo::PathUtil::CreateDir(path);
+
 		pugi::xml_document doc;
 		pugi::xml_node dec = doc.prepend_child(pugi::node_declaration);
 		dec.append_attribute("version") = "1.0";

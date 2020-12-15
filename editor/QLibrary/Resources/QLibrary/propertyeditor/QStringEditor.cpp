@@ -1,6 +1,7 @@
 #include <QPainter>
 #include "QStringEditor.h"
 #include "QPropertyModel.h"
+#include "TextEditorDialog.h"
 #include <engine/core/math/Vector3.h>
 #include <engine/core/util/StringUtil.h>
 #include <engine/core/script/lua/lua_binder.h>
@@ -94,10 +95,10 @@ namespace QT_UI
 
 	void QStringEditor::onEditText()
 	{
-		//QString qFileName = QFileDialog::getOpenFileName(this, tr("Open Picture"), "", tr("*.tga;; *.png;; *.*"));
-		//if (!qFileName.isEmpty())
-		//{
-		//	m_lineEdit->setText(QFileInfo(qFileName).fileName().toStdString().c_str());
-		//}
+		Echo::String text = m_lineEdit->text().toStdString().c_str();
+		if (Studio::TextEditorDialog::getText(this, text, m_readOnly))
+		{
+			m_lineEdit->setText(text.c_str());
+		}
 	}
 }

@@ -128,13 +128,13 @@ namespace QT_UI
 		Echo::String widgetStr;
 		switch (widget)
 		{
-		case WT_Int:			widgetStr = "Int";			 break;
-		case WT_Real:			widgetStr = "Real";			 break;
-        case WT_String:         widgetStr = "String";        break;
-		case WT_Vector2:		widgetStr = "Vector2";		 break;
-		case WT_Vector3:		widgetStr = "Vector3";		 break;
-		case WT_CheckBox:		widgetStr = "CheckBox";		 break;
-		case WT_ColorSelect:	widgetStr = "ColorSelect";	 break;
+		case WT_Int:			widgetStr = "Int";											break;
+		case WT_Real:			widgetStr = "Real";											break;
+        case WT_String:         widgetStr = Echo::String("String,") + widgetParams;			break;
+		case WT_Vector2:		widgetStr = "Vector2";										break;
+		case WT_Vector3:		widgetStr = "Vector3";										break;
+		case WT_CheckBox:		widgetStr = "CheckBox";										break;
+		case WT_ColorSelect:	widgetStr = "ColorSelect";									break;
 		case WT_ComboBox:		widgetStr = Echo::String("ComboBox,") + widgetParams;		break;
 		case WT_AssetsSelect:	widgetStr = Echo::String("AssetsSelect,") + widgetParams;	break;
 		case WT_NodeSelect:		widgetStr = Echo::String("NodeSelect,") + widgetParams;		break;

@@ -134,7 +134,7 @@ namespace QT_UI
 		if( !userDatas.size())
 			return NULL;
 
-		QString  widgetType = userDatas[0].c_str();
+		Echo::String  widgetType = userDatas[0].c_str();
 		if (widgetType == "FileSelect")
 		{
 			return new QFileSelect(parent);
