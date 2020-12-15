@@ -43,6 +43,7 @@ namespace QT_UI
 		QPropertyModel* m_propertyModel;
 		QString			m_propertyName;
 		Echo::String	m_extraData;
+		bool			m_isBase64String = false;
 		bool			m_readOnly = false;
 		Echo::String	m_language;
 	};

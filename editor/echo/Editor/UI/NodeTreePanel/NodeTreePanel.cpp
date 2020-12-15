@@ -1021,10 +1021,11 @@ namespace Studio
 			case Echo::Variant::Type::Bool:			m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_CheckBox); break;
 			case Echo::Variant::Type::Int:			m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_Int); break;
 			case Echo::Variant::Type::Real:			m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_Real); break;
-			case Echo::Variant::Type::String:		m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_String, extraData.c_str()); break;
 			case Echo::Variant::Type::Vector2:		m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_Vector2); break;
 			case Echo::Variant::Type::Vector3:		m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_Vector3); break;
 			case Echo::Variant::Type::Color:		m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_ColorSelect); break;
+			case Echo::Variant::Type::String:		
+			case Echo::Variant::Type::Base64String:	m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_String, extraData.c_str()); break;
 			case Echo::Variant::Type::ResourcePath:	m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_AssetsSelect, var.toResPath().getSupportExts().c_str()); break;
 			case Echo::Variant::Type::StringOption: m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_ComboBox, var.toStringOption().getOptionsStr().c_str()); break;
 			case Echo::Variant::Type::NodePath:		m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_NodeSelect, Echo::StringUtil::ToString(object->getId()).c_str()); break;

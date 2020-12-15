@@ -52,6 +52,7 @@ namespace QT_UI
 				Echo::String readOnly = info->getHint(Echo::PropertyHintType::ReadOnly);
 				Echo::String language = info->getHint(Echo::PropertyHintType::Language);
 
+				m_isBase64String = info->m_type == Echo::Variant::Type::Base64String;
 				m_readOnly = Echo::StringUtil::Equal(readOnly, "true", false);
 				m_language = language;
 
@@ -95,10 +96,27 @@ namespace QT_UI
 
 	void QStringEditor::onEditText()
 	{
-		Echo::String text = m_lineEdit->text().toStdString().c_str();
-		if (Studio::TextEditorDialog::getText(this, text, m_readOnly))
+		if (m_isBase64String)
 		{
-			m_lineEdit->setText(text.c_str());
+			Echo::Base64String text64 = m_lineEdit->text().toStdString().c_str();
+			Echo::String text = text64.decode();
+			if (Studio::TextEditorDialog::getText(this, text, m_readOnly))
+			{
+				text64.encode(text.c_str());
+				m_lineEdit->setText(text64.getData().c_str());
+
+				onEditFinished();
+			}
+		}
+		else
+		{
+			Echo::String text = m_lineEdit->text().toStdString().c_str();
+			if (Studio::TextEditorDialog::getText(this, text, m_readOnly))
+			{
+				m_lineEdit->setText(text.c_str());
+
+				onEditFinished();
+			}
 		}
 	}
 }
