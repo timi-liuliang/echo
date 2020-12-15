@@ -194,7 +194,7 @@ namespace QT_UI
 		}
         else if (widgetType=="String")
         {
-            return new QStringEditor(m_model, propertyName, parent);
+            return new QStringEditor(m_model, propertyName, userDatas.size() > 1 ? userDatas[1].c_str() : "", parent);
         }
 		else if (widgetType == "Vector2")
 		{

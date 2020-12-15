@@ -150,8 +150,6 @@ namespace Studio
 		}
 	}
 
-
-
 	void NodeTreePanel::showNewNodeDialog()
 	{
 		Echo::String selectNodeType = NewNodeDialog::getSelectedNodeType();
@@ -1015,6 +1013,7 @@ namespace Studio
 		Echo::String modelValue = toModelValue(object, name, var);
 		if (!object->isChannelExist(name))
 		{
+			Echo::String extraData = Echo::StringUtil::Format("%d:%s", object->getId(), name.c_str());
             Echo::String resourceHint = propInfo->getHint(Echo::PropertyHintType::ResourceType);
             
 			switch (var.getType())
@@ -1022,7 +1021,7 @@ namespace Studio
 			case Echo::Variant::Type::Bool:			m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_CheckBox); break;
 			case Echo::Variant::Type::Int:			m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_Int); break;
 			case Echo::Variant::Type::Real:			m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_Real); break;
-			case Echo::Variant::Type::String:		m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_String); break;
+			case Echo::Variant::Type::String:		m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_String, extraData.c_str()); break;
 			case Echo::Variant::Type::Vector2:		m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_Vector2); break;
 			case Echo::Variant::Type::Vector3:		m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_Vector3); break;
 			case Echo::Variant::Type::Color:		m_propertyHelper.addItem(name.c_str(), modelValue, QT_UI::WT_ColorSelect); break;
