@@ -1,6 +1,7 @@
 #include "TextEditorDialog.h"
 #include "NodeTreePanel.h"
 #include "ReferenceChooseDialog.h"
+#include <QStatusBar>
 
 namespace Studio
 {
@@ -8,6 +9,9 @@ namespace Studio
 		: QDialog( parent)
 	{
 		setupUi(this);
+
+		QStatusBar* statusBar = new QStatusBar(this);
+		verticalLayoutRoot->addWidget(statusBar);
 
 #ifdef ECHO_PLATFORM_WINDOWS
 		setWindowFlags(windowFlags() | Qt::FramelessWindowHint);

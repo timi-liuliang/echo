@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Text Editor</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout" name="verticalLayoutRoot">
    <property name="spacing">
     <number>0</number>
    </property>
