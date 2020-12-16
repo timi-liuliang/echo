@@ -1,4 +1,4 @@
-#include "LuaTextEdit.h"
+#include "TextEdit.h"
 #include <QTextCursor>
 #include <QTextBlock>
 #include <QKeyEvent>
@@ -11,12 +11,12 @@
 #include <engine/core/util/StringUtil.h>
 #include <engine/core/log/Log.h>
 #include "Studio.h"
-#include "LuaTextEditLineNumberArea.h"
-#include "LuaSyntaxHighLighter.h"
+#include "TextEditLineNumberArea.h"
+#include "SyntaxHighLighter.h"
 
 namespace Studio
 {
-	LuaTextEdit::LuaTextEdit(QWidget* parent)
+	TextEdit::TextEdit(QWidget* parent)
 		: QPlainTextEdit(parent)
 		, m_completer(nullptr)
 	{
@@ -26,12 +26,8 @@ namespace Studio
 		m_completer->setCaseSensitivity(Qt::CaseInsensitive);
 		m_completer->setWrapAround(false);
 
-		// set words
-		m_keyWords << "self" << "function" << "if" << "then" << "for" << "return" << "end" << "do" << "pairs" << "ipairs";
-		setModel( m_keyWords);
-
 		// line number area
-		m_lineNumberArea = new LuaTextEditLineNumberArea(this);
+		m_lineNumberArea = new TextEditLineNumberArea(this);
 		
 		QObject::connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
 		QObject::connect(this, SIGNAL(updateRequest(QRect, int)), this, SLOT(updateLineNumberArea(QRect, int)));
@@ -58,24 +54,24 @@ namespace Studio
         setLineWrapMode(LineWrapMode::NoWrap);
 	}
 
-	LuaTextEdit::~LuaTextEdit()
+	TextEdit::~TextEdit()
 	{
 
 	}
 
-	void LuaTextEdit::setModel(const QStringList& words)
+	void TextEdit::setModel(const QStringList& words)
 	{
 		QStringListModel* model = new QStringListModel(words, m_completer);
 		m_completer->setModel(model);
 		m_completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
 	}
 
-	QCompleter* LuaTextEdit::getCompleter() const
+	QCompleter* TextEdit::getCompleter() const
 	{
 		return m_completer;
 	}
 
-	void LuaTextEdit::wheelEvent(QWheelEvent* e)
+	void TextEdit::wheelEvent(QWheelEvent* e)
 	{
 		// not all font point size is valid. why?
 		if (e->modifiers() & Qt::ControlModifier)
@@ -91,7 +87,7 @@ namespace Studio
 			font.setPixelSize(fontPixelSize);
 			setFont(font);
 
-			AStudio::instance()->getConfigMgr()->setValue("lua_edit_font_size", Echo::StringUtil::ToString(fontPixelSize).c_str());
+			AStudio::instance()->getConfigMgr()->setValue("text_edit_font_size", Echo::StringUtil::ToString(fontPixelSize).c_str());
 		}
 		else
 		{
@@ -99,33 +95,33 @@ namespace Studio
 		}
 	}
 
-	void LuaTextEdit::mouseMoveEvent(QMouseEvent* e)
+	void TextEdit::mouseMoveEvent(QMouseEvent* e)
 	{
 		QPlainTextEdit::mouseMoveEvent(e);
 	}
     
-    void LuaTextEdit::mousePressEvent(QMouseEvent* e)
+    void TextEdit::mousePressEvent(QMouseEvent* e)
     {
         QPlainTextEdit::mousePressEvent(e);
         
-        if(m_luaSyntaxHighLighter->removeRule( LuaSyntaxHighLighter::RG_SelectTextBlock)>0)
-            m_luaSyntaxHighLighter->rehighlight();
+        if(m_syntaxHighLighter->removeRule( SyntaxHighLighter::RG_SelectTextBlock)>0)
+			m_syntaxHighLighter->rehighlight();
     }
 
-	void LuaTextEdit::mouseDoubleClickEvent(QMouseEvent *e)
+	void TextEdit::mouseDoubleClickEvent(QMouseEvent *e)
 	{
 		QPlainTextEdit::mouseDoubleClickEvent(e);
 
 		Echo::String selectText = textUnderCursor().toStdString().c_str();
-        if(!selectText.empty() && m_luaSyntaxHighLighter)
+        if(!selectText.empty() && m_syntaxHighLighter)
         {
-            m_luaSyntaxHighLighter->removeRule( LuaSyntaxHighLighter::RG_SelectTextBlock);
-            m_luaSyntaxHighLighter->appendBackgroundRule(120, 160, 200, Echo::StringUtil::Format("\\b%s\\b", selectText.c_str()), LuaSyntaxHighLighter::RG_SelectTextBlock);
-            m_luaSyntaxHighLighter->rehighlight();
+			m_syntaxHighLighter->removeRule( SyntaxHighLighter::RG_SelectTextBlock);
+			m_syntaxHighLighter->appendBackgroundRule(120, 160, 200, Echo::StringUtil::Format("\\b%s\\b", selectText.c_str()), SyntaxHighLighter::RG_SelectTextBlock);
+			m_syntaxHighLighter->rehighlight();
         }
 	}
 
-	void LuaTextEdit::keyPressEvent(QKeyEvent* e) 
+	void TextEdit::keyPressEvent(QKeyEvent* e)
 	{
 		if (m_completer->popup()->isVisible() && e->key() == Qt::Key_Return)
 		{
@@ -174,7 +170,7 @@ namespace Studio
 		}
 	}
 
-	void LuaTextEdit::focusInEvent(QFocusEvent* e)
+	void TextEdit::focusInEvent(QFocusEvent* e)
 	{
 		if (m_completer)
 			m_completer->setWidget(this);
@@ -182,7 +178,7 @@ namespace Studio
 		QPlainTextEdit::focusInEvent(e);
 	}
 
-	void LuaTextEdit::insertCompletion(const QString& completion)
+	void TextEdit::insertCompletion(const QString& completion)
 	{
 		if (m_completer->widget() != this)
 			return;
@@ -195,7 +191,7 @@ namespace Studio
 		setTextCursor(tc);
 	}
 
-	QString LuaTextEdit::textUnderCursor() const
+	QString TextEdit::textUnderCursor() const
 	{
 		QTextCursor tc = textCursor();
 		tc.select(QTextCursor::WordUnderCursor);
@@ -203,97 +199,13 @@ namespace Studio
 		return tc.selectedText();
 	}
 
-	// current line
-	Echo::String LuaTextEdit::textCurrentLine() const
+	Echo::String TextEdit::textCurrentLine() const
 	{
 		QString text = textCursor().block().text();
 		return text.toStdString().c_str();
 	}
 
-	// auto add end 
-	void LuaTextEdit::autoCompleteEnd(QKeyEvent* e)
-	{
-		if (e->key() != Qt::Key_Space)
-			return;
-
-		int tabCount = 0;
-		Echo::String currentLineText = textCurrentLine();
-		for (size_t i = 0; i < currentLineText.size(); i++)
-		{
-			if (currentLineText[i] == '\t')
-			{
-				tabCount++;
-			}
-			else
-			{
-				currentLineText = currentLineText.substr(tabCount, currentLineText.size() - tabCount);
-				break;
-			}
-		}
-
-		if (/*Echo::StringUtil::StartWith(currentLineText, "for") ||
-			Echo::StringUtil::StartWith(currentLineText, "if") ||*/
-			Echo::StringUtil::StartWith(currentLineText, "function"))
-		{
-			QPlainTextEdit::insertPlainText(" \n");
-			for (int i = 0; i < tabCount; i++)
-				QPlainTextEdit::insertPlainText("\t");
-
-			QPlainTextEdit::insertPlainText("end\n");
-
-			QTextCursor curCursor = textCursor();
-			textCursor().movePosition(QTextCursor::PreviousBlock, QTextCursor::MoveAnchor,  2);
-			setTextCursor(curCursor);
-		}
-	}
-
-	// auto indent
-	void LuaTextEdit::autoIndent(QKeyEvent* e)
-	{
-		if (e->key() != Qt::Key_Return)
-			return;
-
-		int tabCount = 0;
-		Echo::String currentLineText = textCurrentLine();
-		for (size_t i = 0; i < currentLineText.size(); i++)
-		{
-			if (currentLineText[i] == '\t')
-			{
-				tabCount++;
-			}
-			else
-			{
-				currentLineText = currentLineText.substr(tabCount, currentLineText.size() - tabCount);
-				break;
-			}		
-		}
-
-		if (Echo::StringUtil::StartWith(currentLineText, "for") || 
-			Echo::StringUtil::StartWith(currentLineText, "if") || 
-			Echo::StringUtil::StartWith(currentLineText, "function"))
-		{
-			QPlainTextEdit::insertPlainText("\n");
-			for (int i = 0; i < tabCount+1; i++)
-			{
-				QPlainTextEdit::insertPlainText("\t");
-			}
-		}
-		else if (Echo::StringUtil::StartWith(currentLineText, "end"))
-		{
-			QPlainTextEdit::insertPlainText("\n");
-		}
-		else
-		{
-			QPlainTextEdit::insertPlainText("\n");
-			for (int i = 0; i < tabCount; i++)
-			{
-				QPlainTextEdit::insertPlainText("\t");
-			}
-		}
-	}
-
-	// draw line number paint event
-	void LuaTextEdit::lineNumberAreaPaintEvent(QPaintEvent* event)
+	void TextEdit::lineNumberAreaPaintEvent(QPaintEvent* event)
 	{
 		QPainter painter(m_lineNumberArea);
 		painter.fillRect(event->rect(), QColor(77, 77, 77));
@@ -321,8 +233,7 @@ namespace Studio
 		}
 	}
 
-	// get line number area width
-	int LuaTextEdit::lineNumberAreaWidth()
+	int TextEdit::lineNumberAreaWidth()
 	{
 		int digits = 1;
 		int max = std::max<int>(1, blockCount());
@@ -337,14 +248,13 @@ namespace Studio
 		return space;
 	}
 
-	// update line number area width
-	void LuaTextEdit::updateLineNumberAreaWidth(int newBlockCount)
+	void TextEdit::updateLineNumberAreaWidth(int newBlockCount)
 	{
 		setViewportMargins(lineNumberAreaWidth(), 0, 0, 0);
 	}
 
 	// update line number area
-	void LuaTextEdit::updateLineNumberArea(const QRect& rect, int dy)
+	void TextEdit::updateLineNumberArea(const QRect& rect, int dy)
 	{
 		if (dy)
 			m_lineNumberArea->scroll(0, dy);
@@ -355,7 +265,7 @@ namespace Studio
 			updateLineNumberAreaWidth(0);
 	}
 
-	void LuaTextEdit::resizeEvent(QResizeEvent* e)
+	void TextEdit::resizeEvent(QResizeEvent* e)
 	{
 		QPlainTextEdit::resizeEvent(e);
 
@@ -363,8 +273,7 @@ namespace Studio
 		m_lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
 	}
 
-	// high light current line
-	void LuaTextEdit::highlightCurrentLine()
+	void TextEdit::highlightCurrentLine()
 	{
 		QList<QTextEdit::ExtraSelection> extraSelections;
 		if (!isReadOnly())

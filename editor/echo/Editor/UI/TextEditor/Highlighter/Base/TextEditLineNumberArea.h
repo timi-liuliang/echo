@@ -4,11 +4,11 @@
 
 namespace Studio
 {
-	class LuaTextEdit;
-	class LuaTextEditLineNumberArea : public QWidget
+	class TextEdit;
+	class TextEditLineNumberArea : public QWidget
 	{
 	public:
-		LuaTextEditLineNumberArea(LuaTextEdit* editor);
+		TextEditLineNumberArea(TextEdit* editor);
 
 		// sizeHint
 		virtual QSize sizeHint() const override;
@@ -24,6 +24,6 @@ namespace Studio
 		virtual void paintEvent(QPaintEvent* event) override;
 
 	private:
-		LuaTextEdit*		m_luaTextEditor;
+		TextEdit*		m_textEditor;
 	};
 }
