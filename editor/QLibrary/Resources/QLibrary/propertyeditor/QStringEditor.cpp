@@ -100,7 +100,7 @@ namespace QT_UI
 		{
 			Echo::Base64String text64 = m_lineEdit->text().toStdString().c_str();
 			Echo::String text = text64.decode();
-			if (Studio::TextEditorDialog::getText(this, text, m_readOnly))
+			if (Studio::TextEditorDialog::getText(this, text, m_readOnly, m_language))
 			{
 				text64.encode(text.c_str());
 				m_lineEdit->setText(text64.getData().c_str());
@@ -111,7 +111,7 @@ namespace QT_UI
 		else
 		{
 			Echo::String text = m_lineEdit->text().toStdString().c_str();
-			if (Studio::TextEditorDialog::getText(this, text, m_readOnly))
+			if (Studio::TextEditorDialog::getText(this, text, m_readOnly, m_language))
 			{
 				m_lineEdit->setText(text.c_str());
 

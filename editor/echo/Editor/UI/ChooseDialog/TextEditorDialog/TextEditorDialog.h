@@ -13,11 +13,11 @@ namespace Studio
 		Q_OBJECT
 
 	public:
-        TextEditorDialog(QWidget* parent);
+        TextEditorDialog(QWidget* parent, const Echo::String& language);
 		virtual ~TextEditorDialog();
 
 		// get selecting node
-        static bool getText(QWidget* parent, Echo::String& expression, bool readOnly);
+        static bool getText(QWidget* parent, Echo::String& expression, bool readOnly, const Echo::String& language);
         
         // function name
         const Echo::String getPlainText() const;
@@ -32,6 +32,6 @@ namespace Studio
         void onTextChanged();
 
     private:
-        LuaSyntaxHighLighter*   m_luaSyntaxHighLighter = nullptr;
+        SyntaxHighLighter*   m_syntaxHighLighter = nullptr;
 	};
 }

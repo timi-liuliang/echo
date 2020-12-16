@@ -2,10 +2,13 @@
 #include "NodeTreePanel.h"
 #include "ReferenceChooseDialog.h"
 #include <QStatusBar>
+#include "GlslSyntaxHighLighter.h"
+#include "XmlSyntaxHighLighter.h"
+#include "TextSyntaxHighLighter.h"
 
 namespace Studio
 {
-	TextEditorDialog::TextEditorDialog(QWidget* parent)
+	TextEditorDialog::TextEditorDialog(QWidget* parent, const Echo::String& language)
 		: QDialog( parent)
 	{
 		setupUi(this);
@@ -23,8 +26,17 @@ namespace Studio
 		m_menuBar->setCornderButtonVisible(QT_UI::QMenuBarEx::FullScreen, false);
 
 		// syntax high lighter
-		m_luaSyntaxHighLighter = new LuaSyntaxHighLighter(m_textEdit->document());
-		m_textEdit->setSyntaxHighter(m_luaSyntaxHighLighter);
+		m_syntaxHighLighter = nullptr;
+		if(Echo::StringUtil::Equal(language, "lua", false))		
+			m_syntaxHighLighter = new LuaSyntaxHighLighter(m_textEdit->document());
+		else if (Echo::StringUtil::Equal(language, "glsl", false))
+			m_syntaxHighLighter = new GLSLSyntaxHighLighter(m_textEdit->document());
+		else if (Echo::StringUtil::Equal(language, "xml", false))
+			m_syntaxHighLighter = new XmlSyntaxHighLighter(m_textEdit->document());
+		else
+			m_syntaxHighLighter = new TextSyntaxHighLighter(m_textEdit->document());
+
+		m_textEdit->setSyntaxHighter(m_syntaxHighLighter);
         
         // connect signal slot
         QObject::connect(m_textEdit, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
@@ -35,9 +47,9 @@ namespace Studio
 
 	}
 
-	bool TextEditorDialog::getText(QWidget* parent, Echo::String& text, bool readOnly)
+	bool TextEditorDialog::getText(QWidget* parent, Echo::String& text, bool readOnly, const Echo::String& language)
 	{
-		TextEditorDialog dialog(parent);
+		TextEditorDialog dialog(parent, language);
         dialog.setPlainText(text);
 		dialog.setReadOnly(readOnly);
 		dialog.show();

@@ -21,7 +21,7 @@ namespace Studio
         
     public:
         // set syntax hightlighter
-        void setSyntaxHighter(SyntaxHighLighter* highLighter) { m_syntaxHighLighter = highLighter; }
+		void setSyntaxHighter(SyntaxHighLighter* highLighter);
 
 	public:
 		// draw line number paint event
@@ -49,9 +49,8 @@ namespace Studio
 		virtual void focusInEvent(QFocusEvent* e) override;
 		virtual void resizeEvent(QResizeEvent* e) override;
 
-		virtual void autoIndent(QKeyEvent* e) {}
-		virtual void autoCompleteEnd(QKeyEvent* e) {}
-
+		virtual void autoIndent(QKeyEvent* e);
+		virtual void autoCompleteEnd(QKeyEvent* e);
 
 	protected:
 		// insert completion

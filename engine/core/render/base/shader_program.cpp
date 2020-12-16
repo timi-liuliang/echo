@@ -265,7 +265,9 @@ namespace Echo
         CLASS_REGISTER_PROPERTY_HINT(ShaderProgram, "CullMode", PropertyHintType::Category, "RasterizerState");
         CLASS_REGISTER_PROPERTY_HINT(ShaderProgram, "BlendMode", PropertyHintType::Category, "BlendState");
         CLASS_REGISTER_PROPERTY_HINT(ShaderProgram, "VertexShader", PropertyHintType::ReadOnly, "true");
+        CLASS_REGISTER_PROPERTY_HINT(ShaderProgram, "VertexShader", PropertyHintType::Language, "glsl");
         CLASS_REGISTER_PROPERTY_HINT(ShaderProgram, "FragmentShader", PropertyHintType::ReadOnly, "true");
+        CLASS_REGISTER_PROPERTY_HINT(ShaderProgram, "FragmentShader", PropertyHintType::Language, "glsl");
         CLASS_REGISTER_PROPERTY_HINT(ShaderProgram, "Graph", PropertyHintType::ReadOnly, "true");
 	}
 

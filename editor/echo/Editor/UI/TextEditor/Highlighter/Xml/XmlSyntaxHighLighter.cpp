@@ -1,9 +1,9 @@
 #include <QtGui>
-#include "LuaSyntaxHighLighter.h"
+#include "XmlSyntaxHighLighter.h"
 
 namespace Studio
 {
-	LuaSyntaxHighLighter::LuaSyntaxHighLighter(QTextDocument* parent)
+	XmlSyntaxHighLighter::XmlSyntaxHighLighter(QTextDocument* parent)
 		: SyntaxHighLighter( parent)
 	{
 		// set words

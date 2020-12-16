@@ -109,7 +109,7 @@
       <number>3</number>
      </property>
      <item>
-      <widget class="Studio::LuaTextEdit" name="m_textEdit">
+      <widget class="Studio::TextEdit" name="m_textEdit">
        <property name="frameShape">
         <enum>QFrame::NoFrame</enum>
        </property>
@@ -179,9 +179,9 @@
    <header>QMenuBarEx.h</header>
   </customwidget>
   <customwidget>
-   <class>Studio::LuaTextEdit</class>
+   <class>Studio::TextEdit</class>
    <extends>QTextEdit</extends>
-   <header>LuaTextEdit.h</header>
+   <header>TextEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources>

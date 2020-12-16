@@ -30,7 +30,7 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="Studio::LuaTextEdit" name="m_plainTextEdit">
+    <widget class="Studio::TextEdit" name="m_plainTextEdit">
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
@@ -40,9 +40,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Studio::LuaTextEdit</class>
+   <class>Studio::TextEdit</class>
    <extends>QPlainTextEdit</extends>
-   <header>LuaTextEdit.h</header>
+   <header>TextEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

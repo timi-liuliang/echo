@@ -21,6 +21,9 @@ namespace Studio
 
 	public:
 		SyntaxHighLighter(QTextDocument* parent = 0);
+
+		// key words
+		const QStringList& getKeyWords() const { return m_keyWords; }
         
         // append rule
         void appendForegroundRule( int r, int g, int b, const Echo::String& regExp, RuleGroup group=RG_Default);
@@ -42,6 +45,7 @@ namespace Studio
 			QTextCharFormat format;
 		};
 
+		QStringList					m_keyWords;
 		QRegExp						commentStartExpression;
 		QRegExp						commentEndExpression;
 		QTextCharFormat				multiLineCommentFormat;
