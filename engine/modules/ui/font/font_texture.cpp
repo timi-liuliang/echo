@@ -96,7 +96,10 @@ namespace Echo
 		size_t pixelsize = PixelUtil::GetPixelSize(m_format);
 		Buffer buffer(ui32(m_width*m_height*pixelsize), m_textureData, false);
 		if (!m_texture)
-			m_texture = Renderer::instance()->createTextureRender("");
+		{
+			static i32 idx = 0; idx++;
+			m_texture = Renderer::instance()->createTextureRender(StringUtil::Format("FONT_TXTURE_RENDER_%d", idx));
+		}
 
 		m_texture->updateTexture2D(m_format, Texture::TU_GPU_READ, m_width, m_height, buffer.getData(), buffer.getSize());
 	}
