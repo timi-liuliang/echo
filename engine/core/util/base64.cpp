@@ -19,13 +19,13 @@ namespace Echo
 
 	static int   mod_table[] = { 0, 2, 1 };
 
-	Base64Encode::Base64Encode(const String& data)
+	Base64Encode::Base64Encode(const String& orig)
 	{
-		int input_length = static_cast<int>(data.length());
-		int output_length = 4 * (int(data.length() + 2) / 3);
+		int input_length = static_cast<int>(orig.length()+1);
+		int output_length = 4 * (int(input_length + 2) / 3);
 		m_encoded.resize(output_length);
 
-
+		const char* data = orig.c_str();
 		for (int i = 0, j = 0; i < input_length;)
 		{
 			uint32_t octet_a = i < input_length ? (unsigned char)data[i++] : 0;
