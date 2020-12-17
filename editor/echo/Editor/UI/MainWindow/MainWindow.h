@@ -12,7 +12,7 @@ namespace Studio
 {
 	class ResPanel;
 	class NodeTreePanel;
-	class LuaEditor;
+	class TextEditor;
 	class TextEditorArea;
 	class ShaderEditor;
 	class TimelinePanel;

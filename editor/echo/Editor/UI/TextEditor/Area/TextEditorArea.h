@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QMainWindow>
-#include "LuaEditor.h"
+#include "TextEditor.h"
 #include "ui_TextEditorArea.h"
 
 namespace Studio
@@ -32,9 +32,9 @@ namespace Studio
         void onTabIdxChanged(int idx);
         
         // on lua editor title changed
-        void onLuaEditorTitleChanged(LuaEditor* editor);
+        void onLuaEditorTitleChanged(TextEditor* editor);
 
 	private:
-		Echo::vector<LuaEditor*>::type	m_luaEditors;
+		Echo::vector<TextEditor*>::type	m_luaEditors;
 	};
 }

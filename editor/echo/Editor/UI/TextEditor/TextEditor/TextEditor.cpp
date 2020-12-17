@@ -1,7 +1,7 @@
 #include "ProjectMgr.h"
 #include <QFileDialog>
 #include "MainWindow.h"
-#include "LuaEditor.h"
+#include "TextEditor.h"
 #include "Studio.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/io/IO.h>
@@ -10,7 +10,7 @@
 
 namespace Studio
 {
-	LuaEditor::LuaEditor(QWidget* parent)
+	TextEditor::TextEditor(QWidget* parent)
 		: QWidget(parent)
 	{
 		setupUi( this);
@@ -19,12 +19,12 @@ namespace Studio
 		QObject::connect(m_plainTextEdit, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
 	}
 
-	LuaEditor::~LuaEditor()
+	TextEditor::~TextEditor()
 	{
 		EchoSafeDelete(m_syntaxHighLighter, SyntaxHighLighter);
 	}
 
-	void LuaEditor::open(const Echo::String& fullPath)
+	void TextEditor::open(const Echo::String& fullPath)
 	{
 		m_pathName = fullPath;
 		Echo::String content = Echo::IO::instance()->loadFileToString(fullPath);
@@ -48,17 +48,17 @@ namespace Studio
 		m_plainTextEdit->setSyntaxHighter(m_syntaxHighLighter);
 	}
 
-	const Echo::String& LuaEditor::getFilePath()
+	const Echo::String& TextEditor::getFilePath()
 	{
 		return m_pathName;
 	}
 
-	void LuaEditor::onTextChanged()
+	void TextEditor::onTextChanged()
 	{
 		updateTitle();
 	}
 
-	void LuaEditor::save()
+	void TextEditor::save()
 	{
 		m_content = m_plainTextEdit->toPlainText().toStdString().c_str();
 		Echo::IO::instance()->saveStringToFile(m_pathName, m_content);
@@ -66,7 +66,7 @@ namespace Studio
 		updateTitle();
 	}
 
-	void LuaEditor::updateTitle()
+	void TextEditor::updateTitle()
 	{
 		Echo::String currentContent = m_plainTextEdit->toPlainText().toStdString().c_str();
 		if (m_content == currentContent)

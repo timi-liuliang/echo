@@ -1,20 +1,20 @@
 #pragma once
 
 #include <QMainWindow>
-#include "ui_LuaEditor.h"
+#include "ui_TextEditor.h"
 #include "QProperty.hpp"
 #include "LuaSyntaxHighLighter.h"
 #include <engine/core/script/lua/lua_script.h>
 
 namespace Studio
 {
-	class LuaEditor : public QWidget, public Ui_ScriptEditorPanel
+	class TextEditor : public QWidget, public Ui_TextEditorPanel
 	{
 		Q_OBJECT
 
 	public:
-		LuaEditor(QWidget* parent = 0);
-		~LuaEditor();
+		TextEditor(QWidget* parent = 0);
+		~TextEditor();
 
 		// open lua file
 		void open( const Echo::String& fullPath);
@@ -35,7 +35,7 @@ namespace Studio
         
     public: signals:
         // title changed
-        void titleChanged(LuaEditor* editor);
+        void titleChanged(TextEditor* editor);
 
 	private:
 		Echo::String			m_pathName;

@@ -43,7 +43,7 @@ namespace Studio
 
 	TextEditorArea::~TextEditorArea()
 	{
-		EchoSafeDeleteContainer(m_luaEditors, LuaEditor);
+		EchoSafeDeleteContainer(m_luaEditors, TextEditor);
 	}
 
 	void TextEditorArea::open(const Echo::String& fullPath, bool isRememberOpenStates)
@@ -55,7 +55,7 @@ namespace Studio
         }
         else
         {
-            LuaEditor* newEditor = EchoNew(LuaEditor(this));
+            TextEditor* newEditor = EchoNew(TextEditor(this));
             if (newEditor)
             {
                 Echo::String fileName = Echo::PathUtil::GetPureFilename(fullPath);
@@ -65,7 +65,7 @@ namespace Studio
                 newEditor->open(fullPath);
                 newEditor->show();
 
-                QObject::connect(newEditor, SIGNAL(titleChanged(LuaEditor*)), this, SLOT(onLuaEditorTitleChanged(LuaEditor*)));
+                QObject::connect(newEditor, SIGNAL(titleChanged(TextEditor*)), this, SLOT(onLuaEditorTitleChanged(TextEditor*)));
                 
                 m_luaEditors.emplace_back(newEditor);
             }
@@ -82,7 +82,7 @@ namespace Studio
         Echo::StringArray openedFiles;
         for(int i=0; i<m_tabWidgetScript->count(); i++)
         {
-            LuaEditor* luaEditor = qobject_cast<LuaEditor*>(m_tabWidgetScript->widget(i));
+            TextEditor* luaEditor = qobject_cast<TextEditor*>(m_tabWidgetScript->widget(i));
             if(luaEditor)
                 openedFiles.emplace_back(luaEditor->getFilePath());
         }
@@ -111,7 +111,7 @@ namespace Studio
     {
         for(int i=0; i<m_tabWidgetScript->count(); i++)
         {
-            LuaEditor* luaEditor = qobject_cast<LuaEditor*>(m_tabWidgetScript->widget(i));
+            TextEditor* luaEditor = qobject_cast<TextEditor*>(m_tabWidgetScript->widget(i));
             if(luaEditor && luaEditor->getFilePath() == fullPath)
             {
                 index = i;
@@ -127,7 +127,7 @@ namespace Studio
         rememberScriptOpenStates();
     }
 
-    void TextEditorArea::onLuaEditorTitleChanged(LuaEditor* editor)
+    void TextEditorArea::onLuaEditorTitleChanged(TextEditor* editor)
     {
         if(editor)
         {
@@ -141,7 +141,7 @@ namespace Studio
 
 	void TextEditorArea::save()
 	{
-		for (LuaEditor* luaEditor : m_luaEditors)
+		for (TextEditor* luaEditor : m_luaEditors)
 		{
 			luaEditor->save();
 		}

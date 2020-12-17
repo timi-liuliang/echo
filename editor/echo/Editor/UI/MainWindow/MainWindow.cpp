@@ -15,7 +15,7 @@
 #include "EchoEngine.h"
 #include "QResSelect.h"
 #include "ResChooseDialog.h"
-#include "LuaEditor.h"
+#include "TextEditor.h"
 #include "TextEditorArea.h"
 #include "ShaderEditor.h"
 #include "ProjectWnd.h"
