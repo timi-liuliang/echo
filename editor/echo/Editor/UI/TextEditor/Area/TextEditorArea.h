@@ -32,9 +32,12 @@ namespace Studio
         void onTabIdxChanged(int idx);
         
         // on lua editor title changed
-        void onLuaEditorTitleChanged(TextEditor* editor);
+        void onTextEditorTitleChanged(TextEditor* editor);
+
+		// on request close tab
+		void onRequestCloseTab(int idx);
 
 	private:
-		Echo::vector<TextEditor*>::type	m_luaEditors;
+		Echo::vector<TextEditor*>::type	m_textEditors;
 	};
 }

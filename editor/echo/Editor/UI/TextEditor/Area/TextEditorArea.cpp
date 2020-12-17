@@ -5,28 +5,6 @@
 #include "Studio.h"
 #include <engine/core/util/PathUtil.h>
 
-static const char* customStyleSheet = R"(
-QTabBar::tab
-{
-    background:rgb(66,66,66);
-    color : rgb(180,180,180);
-    font : bold;
-    padding: 3 7px;
-    min-width: 80px;
-
-    /*order-left:1px solid rgb(66,66,66);*/
-    border: 1px solid rgb(56,56,56);
-}
-
-QTabBar::tab:selected,QTabBar::tab:hover
-{
-    background:rgb(77,77,77);
-    color:rgb(243,243,243);
-
-    border-bottom: none;
-}
-)";
-
 namespace Studio
 {
 	TextEditorArea::TextEditorArea(QWidget* parent)
@@ -34,16 +12,15 @@ namespace Studio
 	{
 		setupUi( this);
         
-        this->setStyleSheet(customStyleSheet);
-        
         m_tabWidgetScript->clear();
         
         QObject::connect(m_tabWidgetScript, SIGNAL(currentChanged(int)), this, SLOT(onTabIdxChanged(int)));
+        QObject::connect(m_tabWidgetScript->tabBar(), SIGNAL(tabCloseRequested(int)), this, SLOT(onRequestCloseTab(int)));
 	}
 
 	TextEditorArea::~TextEditorArea()
 	{
-		EchoSafeDeleteContainer(m_luaEditors, TextEditor);
+		EchoSafeDeleteContainer(m_textEditors, TextEditor);
 	}
 
 	void TextEditorArea::open(const Echo::String& fullPath, bool isRememberOpenStates)
@@ -65,9 +42,9 @@ namespace Studio
                 newEditor->open(fullPath);
                 newEditor->show();
 
-                QObject::connect(newEditor, SIGNAL(titleChanged(TextEditor*)), this, SLOT(onLuaEditorTitleChanged(TextEditor*)));
+                QObject::connect(newEditor, SIGNAL(titleChanged(TextEditor*)), this, SLOT(onTextEditorTitleChanged(TextEditor*)));
                 
-                m_luaEditors.emplace_back(newEditor);
+                m_textEditors.emplace_back(newEditor);
             }
         }
         
@@ -127,7 +104,7 @@ namespace Studio
         rememberScriptOpenStates();
     }
 
-    void TextEditorArea::onLuaEditorTitleChanged(TextEditor* editor)
+    void TextEditorArea::onTextEditorTitleChanged(TextEditor* editor)
     {
         if(editor)
         {
@@ -139,9 +116,20 @@ namespace Studio
         }
     }
 
+    void TextEditorArea::onRequestCloseTab(int idx)
+    {
+        if(idx<m_tabWidgetScript->count())
+            m_tabWidgetScript->removeTab(idx);
+
+        rememberScriptOpenStates();
+
+        if (!m_tabWidgetScript->count())
+            close();
+    }
+
 	void TextEditorArea::save()
 	{
-		for (TextEditor* luaEditor : m_luaEditors)
+		for (TextEditor* luaEditor : m_textEditors)
 		{
 			luaEditor->save();
 		}
