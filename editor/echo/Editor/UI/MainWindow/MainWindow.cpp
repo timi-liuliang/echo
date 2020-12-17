@@ -598,7 +598,7 @@ namespace Studio
         updateRenderWindowTitle();
 	}
 
-	void MainWindow::openLuaScript(const Echo::String& fileName)
+	void MainWindow::openTextEditor(const Echo::String& fileName)
 	{
 		m_scriptEditorMdiArea->open(fileName);
 	}

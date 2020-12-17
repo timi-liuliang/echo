@@ -20,7 +20,7 @@ namespace Studio
 		void open( const Echo::String& fullPath);
 
 		// get current edit lua file path
-		const Echo::String& getCurrentLuaFilePath();
+		const Echo::String& getFilePath();
 
 	public slots :
 		// save
@@ -38,7 +38,8 @@ namespace Studio
         void titleChanged(LuaEditor* editor);
 
 	private:
-		Echo::LuaResPtr				m_luaRes;
-		LuaSyntaxHighLighter*		m_luaSyntaxHighLighter;
+		Echo::String			m_pathName;
+		Echo::String			m_content;
+		SyntaxHighLighter*		m_syntaxHighLighter = nullptr;
 	};
 }

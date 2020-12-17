@@ -84,7 +84,7 @@ namespace Studio
         {
             LuaEditor* luaEditor = qobject_cast<LuaEditor*>(m_tabWidgetScript->widget(i));
             if(luaEditor)
-                openedFiles.emplace_back(luaEditor->getCurrentLuaFilePath());
+                openedFiles.emplace_back(luaEditor->getFilePath());
         }
         
         ConfigMgr* configMgr = AStudio::instance()->getConfigMgr();
@@ -112,7 +112,7 @@ namespace Studio
         for(int i=0; i<m_tabWidgetScript->count(); i++)
         {
             LuaEditor* luaEditor = qobject_cast<LuaEditor*>(m_tabWidgetScript->widget(i));
-            if(luaEditor && luaEditor->getCurrentLuaFilePath() == fullPath)
+            if(luaEditor && luaEditor->getFilePath() == fullPath)
             {
                 index = i;
                 return true;
@@ -132,7 +132,7 @@ namespace Studio
         if(editor)
         {
             int tabIndex = 0;
-            if(getTabIndex(editor->getCurrentLuaFilePath(), tabIndex))
+            if(getTabIndex(editor->getFilePath(), tabIndex))
             {
                 m_tabWidgetScript->setTabText(tabIndex, editor->windowTitle());
             }

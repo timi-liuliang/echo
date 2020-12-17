@@ -48,7 +48,7 @@ namespace Studio
 		void openNodeTree(const Echo::String& resPath);
 
 		// open lua file for edit
-		void openLuaScript(const Echo::String& resPath);
+		void openTextEditor(const Echo::String& resPath);
         
         // open shader editor
         void openShaderEditor(const Echo::String& resPath);

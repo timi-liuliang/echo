@@ -162,9 +162,9 @@ namespace Studio
 					{
 						MainWindow::instance()->openNodeTree(resPath);
 					}
-					else if (ext == ".lua")
+					else if (ext == ".lua" || ext== ".xml")
 					{
-						MainWindow::instance()->openLuaScript(resPath);
+						MainWindow::instance()->openTextEditor(resPath);
 					}
 					else if (ext == ".shader")
 					{

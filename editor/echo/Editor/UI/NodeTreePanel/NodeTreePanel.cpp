@@ -936,7 +936,7 @@ namespace Studio
 									const Echo::ResourcePath& script = target->getScript();
 									if (!script.isEmpty())
 									{
-										MainWindow::instance()->openLuaScript(script.getPath());
+										MainWindow::instance()->openTextEditor(script.getPath());
 									}
 								}
 							}
@@ -1104,7 +1104,7 @@ namespace Studio
 				const Echo::ResourcePath& script = node->getScript();
 				if (!script.isEmpty())
 				{
-					MainWindow::instance()->openLuaScript(script.getPath());
+					MainWindow::instance()->openTextEditor(script.getPath());
 				}
 			}
 		}
