@@ -8,6 +8,7 @@
 #include "DataFloat.h"
 #include "DataAny.h"
 #include "ShaderData.h"
+#include "engine/core/render/base/editor/shader/node/shader_node_glsl.h"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -38,6 +39,10 @@ namespace DataFlowProgramming
 		// generate code
 		virtual bool generateCode(ShaderCompiler& compiler) override;
 
+	public:
+		// slot
+		virtual bool onDoubleClicked();
+
     public:
         // load|save
         virtual QJsonObject save() const override;
@@ -49,5 +54,8 @@ namespace DataFlowProgramming
 
         // widget
         QWidget* embeddedWidget() override { return nullptr; }
+
+    protected:
+        Echo::ShaderNodeGLSL* m_glslNode = nullptr;
     };
 }

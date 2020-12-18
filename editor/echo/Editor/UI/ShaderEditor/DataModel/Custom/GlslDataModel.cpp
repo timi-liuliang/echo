@@ -8,6 +8,7 @@
 #include "DataInvalid.h"
 #include "ShaderScene.h"
 #include "OperationRules.h"
+#include "NodeTreePanel.h"
 
 namespace DataFlowProgramming
 {
@@ -23,6 +24,8 @@ namespace DataFlowProgramming
         m_outputs.resize(1);
         m_outputs[0] = std::make_shared<DataInvalid>(this);
         m_outputs[0]->setVariableName(getVariableName());
+
+        m_glslNode = EchoNew(Echo::ShaderNodeGLSL);
     }
 
     QJsonObject GlslDataModel::save() const
@@ -53,6 +56,13 @@ namespace DataFlowProgramming
 
 		Q_EMIT dataUpdated(0);
     }
+
+	bool GlslDataModel::onDoubleClicked()
+	{
+		Studio::NodeTreePanel::instance()->onEditObject(m_glslNode);
+
+		return true;
+	}
 
     bool GlslDataModel::generateCode(ShaderCompiler& compiler)
     {

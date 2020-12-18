@@ -4,6 +4,7 @@
 #include <thirdparty/pugixml/pugiconfig.hpp>
 #include "engine/core/render/base/texture.h"
 #include "engine/core/util/PathUtil.h"
+#include "base/editor/atlas/texture_atlas_editor.h"
 
 namespace Echo
 {
@@ -28,6 +29,8 @@ namespace Echo
 		CLASS_BIND_METHOD(TextureAtlas, setTextureRes, DEF_METHOD("setTextureRes"));
 
 		CLASS_REGISTER_PROPERTY(TextureAtlas, "Texture", Variant::Type::ResourcePath, "getTextureRes", "setTextureRes");
+
+		CLASS_REGISTER_EDITOR(TextureAtlas, TextureAtlasEditor)
     }
 
 	void TextureAtlas::setTextureRes(const ResourcePath& path)

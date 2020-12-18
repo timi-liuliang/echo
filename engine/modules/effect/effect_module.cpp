@@ -27,6 +27,6 @@ namespace Echo
 		Class::registerType<Sprite>();
         Class::registerType<ParticleSystem>();
         
-        REGISTER_OBJECT_EDITOR(ParticleSystem, ParticleSystemEditor)
+        CLASS_REGISTER_EDITOR(ParticleSystem, ParticleSystemEditor)
 	}
 }

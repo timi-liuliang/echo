@@ -25,6 +25,6 @@ namespace Echo
 	{
 		Class::registerType<Timeline>();
 
-		REGISTER_OBJECT_EDITOR(Timeline, TimelineEditor)
+		CLASS_REGISTER_EDITOR(Timeline, TimelineEditor)
 	}
 }

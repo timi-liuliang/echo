@@ -15,7 +15,6 @@
 #include "base/atla/texture_atla.h"
 #include "base/atla/texture_atlas.h"
 #include "base/editor/atlas/texture_atla_editor.h"
-#include "base/editor/atlas/texture_atlas_editor.h"
 #include "base/editor/shader/node/shader_node.h"
 #include "base/editor/shader/node/shader_node_glsl.h"
 
@@ -59,10 +58,9 @@ namespace Echo
 		Class::registerType<ShaderNodeGLSL>();
 	#endif
 
-		REGISTER_OBJECT_EDITOR(RenderPipeline, RenderPipelineEditor)
-		REGISTER_OBJECT_EDITOR(ShaderProgram, ShaderEditor)
-		REGISTER_OBJECT_EDITOR(TextureAtla, TextureAtlaEditor)
-		REGISTER_OBJECT_EDITOR(TextureAtlas, TextureAtlasEditor)
+		CLASS_REGISTER_EDITOR(RenderPipeline, RenderPipelineEditor)
+		CLASS_REGISTER_EDITOR(ShaderProgram, ShaderEditor)
+		CLASS_REGISTER_EDITOR(TextureAtla, TextureAtlaEditor)
 	}
 
 	bool Renderer::replaceInstance(Renderer* inst)

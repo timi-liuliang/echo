@@ -33,7 +33,7 @@ namespace Echo
         Class::registerType<Terrain>();
         Class::registerType<TileMap>();
         
-        REGISTER_OBJECT_EDITOR(Terrain, TerrainEditor)
-        REGISTER_OBJECT_EDITOR(TileMap, TileMapEditor)
+        CLASS_REGISTER_EDITOR(Terrain, TerrainEditor)
+        CLASS_REGISTER_EDITOR(TileMap, TileMapEditor)
     }
 }

@@ -156,7 +156,7 @@ namespace Echo
 		Class::registerType<FileImporter>();
 	#endif
        
-		REGISTER_OBJECT_EDITOR(Scratch, ScratchEditor)
+		CLASS_REGISTER_EDITOR(Scratch, ScratchEditor)
 
 		// register render classes
 		Renderer::registerClassTypes();

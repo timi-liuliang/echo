@@ -61,8 +61,8 @@ namespace Echo
         Class::registerType<UiText>();
         Class::registerType<UiImage>();
 
-		REGISTER_OBJECT_EDITOR(UiText, UiTextEditor)
-		REGISTER_OBJECT_EDITOR(UiImage, UiImageEditor)
-        REGISTER_OBJECT_EDITOR(UiEventRegionRect, UiEventRegionRectEditor)
+		CLASS_REGISTER_EDITOR(UiText, UiTextEditor)
+		CLASS_REGISTER_EDITOR(UiImage, UiImageEditor)
+        CLASS_REGISTER_EDITOR(UiEventRegionRect, UiEventRegionRectEditor)
 	}
 }

@@ -38,7 +38,7 @@ namespace Echo
 		Class::registerType<PGSphere>();
 		Class::registerType<PGGrid>();
 
-		REGISTER_OBJECT_EDITOR(ProceduralTexture, ProceduralTextureEditor)
-		REGISTER_OBJECT_EDITOR(ProceduralGeometry, ProceduralGeometryEditor)
+		CLASS_REGISTER_EDITOR(ProceduralTexture, ProceduralTextureEditor)
+		CLASS_REGISTER_EDITOR(ProceduralGeometry, ProceduralGeometryEditor)
 	}
 }

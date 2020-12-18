@@ -50,11 +50,11 @@ namespace Echo
 		Class::registerType<CubeLightCustom>();
 		Class::registerType<CubeLightCapture>();
 
-        REGISTER_OBJECT_EDITOR(PointLight, PointLightEditor)
-        REGISTER_OBJECT_EDITOR(SpotLight, SpotLightEditor)
-        REGISTER_OBJECT_EDITOR(DirectionLight, DirectionLightEditor)
-        REGISTER_OBJECT_EDITOR(CubeLightCustom, CubeLightCustomEditor)
-        REGISTER_OBJECT_EDITOR(CubeLightCapture, CubeLightCaptureEditor)
+        CLASS_REGISTER_EDITOR(PointLight, PointLightEditor)
+        CLASS_REGISTER_EDITOR(SpotLight, SpotLightEditor)
+        CLASS_REGISTER_EDITOR(DirectionLight, DirectionLightEditor)
+        CLASS_REGISTER_EDITOR(CubeLightCustom, CubeLightCustomEditor)
+        CLASS_REGISTER_EDITOR(CubeLightCapture, CubeLightCaptureEditor)
 	}
 
     void LightModule::setIBLBrdfPath(const ResourcePath& brdf)

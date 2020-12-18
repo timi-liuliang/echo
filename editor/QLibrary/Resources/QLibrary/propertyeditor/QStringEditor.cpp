@@ -28,7 +28,7 @@ namespace QT_UI
 
 		m_toolButton = new QToolButton(this);
 		m_toolButton->setObjectName(QString::fromUtf8("toolButton"));
-		m_toolButton->setText("...");
+		m_toolButton->setText("T");
 		m_toolButton->setContentsMargins(0, 0, 0, 0);
 		m_horizonLayout->addWidget(m_toolButton);
 

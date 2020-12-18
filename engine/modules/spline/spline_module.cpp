@@ -34,9 +34,9 @@ namespace Echo
 		Class::registerType<SplineSegment>();
 		Class::registerType<SplineControlPoint>();
 
-		REGISTER_OBJECT_EDITOR(Spline, SplineEditor)
-		REGISTER_OBJECT_EDITOR(SplinePoint, SplinePointEditor)
-		REGISTER_OBJECT_EDITOR(SplineSegment, SplineSegmentEditor)
-		REGISTER_OBJECT_EDITOR(SplineControlPoint, SplineControlPointEditor)
+		CLASS_REGISTER_EDITOR(Spline, SplineEditor)
+		CLASS_REGISTER_EDITOR(SplinePoint, SplinePointEditor)
+		CLASS_REGISTER_EDITOR(SplineSegment, SplineSegmentEditor)
+		CLASS_REGISTER_EDITOR(SplineControlPoint, SplineControlPointEditor)
 	}
 }

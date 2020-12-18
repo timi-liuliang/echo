@@ -33,6 +33,6 @@ namespace Echo
 		Class::registerType<FbxImporter>();
 	#endif
 
-		REGISTER_OBJECT_EDITOR(MeshRender, MeshRenderEditor)
+		CLASS_REGISTER_EDITOR(MeshRender, MeshRenderEditor)
 	}
 }

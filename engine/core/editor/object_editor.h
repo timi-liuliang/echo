@@ -70,7 +70,7 @@ namespace Echo
 	};
 }
 
-#define REGISTER_OBJECT_EDITOR(OBJECT, EDITOR) static Echo::ObjectEditorFactoryT<EDITOR> G_OBJECT_EDIT_##EDITOR##_REGISTER(#OBJECT);
+#define CLASS_REGISTER_EDITOR(OBJECT, EDITOR) static Echo::ObjectEditorFactoryT<EDITOR> G_OBJECT_EDIT_##EDITOR##_REGISTER(#OBJECT);
 
 // define node edit interface for echo editor
 #define ECHO_EDITOR_INTERFACE									\
@@ -96,5 +96,5 @@ protected:														\
 
 #else
 #define ECHO_EDITOR_INTERFACE
-#define REGISTER_OBJECT_EDITOR(OBJECT, EDITOR)
+#define CLASS_REGISTER_EDITOR(OBJECT, EDITOR)
 #endif

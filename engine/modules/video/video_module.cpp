@@ -30,7 +30,7 @@ namespace Echo
 	{
 		Class::registerType<VideoPlayer>();
 
-		REGISTER_OBJECT_EDITOR(VideoPlayer, VideoPlayerEditor)
+		CLASS_REGISTER_EDITOR(VideoPlayer, VideoPlayerEditor)
 	}
 
 	void VideoModule::update(float elapsedTime)

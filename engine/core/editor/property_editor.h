@@ -12,10 +12,10 @@ namespace Echo
 		PropertyEditor();
 		virtual ~PropertyEditor();
 
+	public:
 		// register|create editor
 		static void registerEditor(const char* className, const char* propertyName, PropertyEditorFactory* factory);
 		static PropertyEditor* createEditor(const char* className, const char* propertyName);
-
 
 	protected:
 	};
@@ -40,7 +40,7 @@ namespace Echo
 	};
 }
 
-#define REGISTER_PROPERTY_EDITOR(OBJECT, PROPERTY, EDITOR) static Echo::PropertyEditorFactoryT<EDITOR> G_PROPERTY_EDIT_##EDITOR##_REGISTER(#OBJECT, #PROPERTY);
+#define REGISTER_PROPERTY_EDITOR(OBJECT, PROPERTY, EDITOR) static Echo::PropertyEditorFactoryT<EDITOR> G_PROPERTY_EDIT_##EDITOR##_REGISTER(#OBJECT, PROPERTY);
 #else
 #define REGISTER_PROPERTY_EDITOR(OBJECT, PROPERTY, EDITOR)
 #endif

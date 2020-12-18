@@ -36,8 +36,8 @@ namespace Echo
 		Class::registerType<AudioListener>();
 		Class::registerType<AudioDevice>();
 
-		REGISTER_OBJECT_EDITOR(AudioPlayer, AudioPlayerEditor)
-		REGISTER_OBJECT_EDITOR(AudioListener, AudioListenerEditor)
+		CLASS_REGISTER_EDITOR(AudioPlayer, AudioPlayerEditor)
+		CLASS_REGISTER_EDITOR(AudioListener, AudioListenerEditor)
 	}
 
 	void AudioModule::update(float elapsedTime)

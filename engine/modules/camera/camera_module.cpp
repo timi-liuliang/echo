@@ -29,7 +29,7 @@ namespace Echo
 		Class::registerType<Camera2D>();
 		Class::registerType<Camera3D>();
 
-		REGISTER_OBJECT_EDITOR(Camera2D, Camera2DEditor)
-		REGISTER_OBJECT_EDITOR(Camera3D, Camera3DEditor)
+		CLASS_REGISTER_EDITOR(Camera2D, Camera2DEditor)
+		CLASS_REGISTER_EDITOR(Camera3D, Camera3DEditor)
 	}
 }
