@@ -41,7 +41,7 @@ namespace DataFlowProgramming
 
 	public:
 		// slot
-		virtual bool onDoubleClicked();
+		virtual bool onNodePressed();
 
     public:
         // load|save

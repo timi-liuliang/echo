@@ -67,10 +67,10 @@ namespace DataFlowProgramming
 
 	void ShaderScene::nodePressed(QtNodes::Node& node)
 	{
-		ShaderUniformDataModel* shaderDataModel = qobject_cast<ShaderUniformDataModel*>(node.nodeDataModel());
+		ShaderDataModel* shaderDataModel = qobject_cast<ShaderDataModel*>(node.nodeDataModel());
 		if (shaderDataModel)
 		{
-			shaderDataModel->onDoubleClicked();
+			shaderDataModel->onNodePressed();
 		}
 		else
 		{

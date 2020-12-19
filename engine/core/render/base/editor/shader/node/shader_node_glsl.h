@@ -13,6 +13,10 @@ namespace Echo
 		ShaderNodeGLSL();
 		virtual ~ShaderNodeGLSL();
 
+		// name
+		const String& getName() const { return m_name; }
+		void setName(const String& name) { m_name = name; }
+
 		// inputs
 		const String& getInputs() const { return m_inputs; }
 		void setInputs(const String& inputs) { m_inputs = inputs; }
@@ -26,6 +30,7 @@ namespace Echo
 		void setReturnType(const StringOption& type) { m_returnType.setValue(type.getValue()); }
 
 	private:
+		String			m_name;
 		String			m_inputs;
 		String			m_code;
 		StringOption	m_returnType = StringOption("float", { "float", "vec2", "vec3", "vec4" });

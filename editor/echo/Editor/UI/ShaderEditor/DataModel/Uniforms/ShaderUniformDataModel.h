@@ -49,7 +49,7 @@ namespace DataFlowProgramming
 
     public:
         // slot
-        virtual bool onDoubleClicked();
+        virtual bool onNodePressed();
 
 	protected:
 		Echo::ShaderUniform*        m_uniformConfig = nullptr;

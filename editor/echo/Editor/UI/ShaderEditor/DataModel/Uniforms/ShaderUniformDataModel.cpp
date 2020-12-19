@@ -47,7 +47,7 @@ namespace DataFlowProgramming
 		}
 	}
 
-	bool ShaderUniformDataModel::onDoubleClicked()
+	bool ShaderUniformDataModel::onNodePressed()
 	{
 		if (m_uniformConfig->getVariableName().empty())
 			m_uniformConfig->setVariableName(getDefaultVariableName());

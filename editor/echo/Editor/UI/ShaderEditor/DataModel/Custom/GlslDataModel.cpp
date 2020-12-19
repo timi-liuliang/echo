@@ -57,7 +57,7 @@ namespace DataFlowProgramming
 		Q_EMIT dataUpdated(0);
     }
 
-	bool GlslDataModel::onDoubleClicked()
+	bool GlslDataModel::onNodePressed()
 	{
 		Studio::NodeTreePanel::instance()->onEditObject(m_glslNode);
 
