@@ -6,7 +6,7 @@
 #include <iostream>
 #include "DataFloat.h"
 #include "ShaderUniformDataModel.h"
-#include "shader_uniform_texture_config.h"
+#include <engine/core/render/base/editor/shader/node/shader_node_uniform_texture.h>
 #include "QTextureSelect.h"
 
 using QtNodes::PortType;

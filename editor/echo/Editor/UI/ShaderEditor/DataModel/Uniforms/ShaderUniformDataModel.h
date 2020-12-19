@@ -7,7 +7,6 @@
 #include <string>
 #include "DataFloat.h"
 #include "QColorSelect.h"
-#include "shader_uniform_config.h"
 #include "ShaderDataModel.h"
 #include "Compiler/ShaderCompiler.h"
 
@@ -52,8 +51,7 @@ namespace DataFlowProgramming
         virtual bool onNodePressed();
 
 	protected:
-		Echo::ShaderUniform*        m_uniformConfig = nullptr;
-
+		Echo::ShaderNodeUniform*    m_uniformConfig = nullptr;
 		QMenu*                      m_menu = nullptr;
 		QAction*                    m_setAsParameter = nullptr;
 		QAction*                    m_setAsConstant = nullptr;

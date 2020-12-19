@@ -16,6 +16,8 @@
 #include "base/atla/texture_atlas.h"
 #include "base/editor/atlas/texture_atla_editor.h"
 #include "base/editor/shader/node/shader_node.h"
+#include "base/editor/shader/node/shader_node_uniform.h"
+#include "base/editor/shader/node/shader_node_uniform_texture.h"
 #include "base/editor/shader/node/shader_node_glsl.h"
 
 namespace Echo
@@ -55,6 +57,8 @@ namespace Echo
 
 	#ifdef ECHO_EDITOR_MODE
 		Class::registerType<ShaderNode>();
+		Class::registerType<ShaderNodeUniform>();
+		Class::registerType<ShaderNodeUniformTexture>();
 		Class::registerType<ShaderNodeGLSL>();
 	#endif
 

@@ -3,14 +3,13 @@
 #include <QtGui/QDoubleValidator>
 #include "DataFloat.h"
 #include "DataVector3.h"
-#include "shader_uniform_texture_config.h"
 
 namespace DataFlowProgramming
 {
     TextureDataModel::TextureDataModel()
         : ShaderUniformDataModel()
     {
-        m_uniformConfig = EchoNew(Echo::ShaderUniformTexture);
+        m_uniformConfig = EchoNew(Echo::ShaderNodeUniformTexture);
         m_uniformConfig->setExport(true);
         m_uniformConfig->setVariableName(getDefaultVariableName());
 
@@ -43,8 +42,8 @@ namespace DataFlowProgramming
         ShaderUniformDataModel::saveUniformConfig(modelJson);
 
         modelJson["texture"] = m_textureSelect->getTexture().c_str();
-        modelJson["isAtla"] = Echo::StringUtil::ToString( ECHO_DOWN_CAST<Echo::ShaderUniformTexture*>(m_uniformConfig)->isAtla()).c_str();
-        modelJson["type"] = ECHO_DOWN_CAST<Echo::ShaderUniformTexture*>(m_uniformConfig)->getType().getValue().c_str();
+        modelJson["isAtla"] = Echo::StringUtil::ToString( ECHO_DOWN_CAST<Echo::ShaderNodeUniformTexture*>(m_uniformConfig)->isAtla()).c_str();
+        modelJson["type"] = ECHO_DOWN_CAST<Echo::ShaderNodeUniformTexture*>(m_uniformConfig)->getType().getValue().c_str();
 
         return modelJson;
     }
@@ -64,14 +63,14 @@ namespace DataFlowProgramming
         if (!v.isUndefined())
         {
             Echo::String isAtlaStr = v.toString().toStdString().c_str();
-            ECHO_DOWN_CAST<Echo::ShaderUniformTexture*>(m_uniformConfig)->setAtla(Echo::StringUtil::ParseBool(isAtlaStr));
+            ECHO_DOWN_CAST<Echo::ShaderNodeUniformTexture*>(m_uniformConfig)->setAtla(Echo::StringUtil::ParseBool(isAtlaStr));
         }
 
 		v = p["type"];
 		if (!v.isUndefined())
 		{
 			Echo::String type = v.toString().toStdString().c_str();
-			ECHO_DOWN_CAST<Echo::ShaderUniformTexture*>(m_uniformConfig)->setType(type);
+			ECHO_DOWN_CAST<Echo::ShaderNodeUniformTexture*>(m_uniformConfig)->setType(type);
 		}
     }
 
@@ -136,13 +135,13 @@ namespace DataFlowProgramming
 		compiler.addTextureUniform(getVariableName());
 
         Echo::String uvConvertCode;
-        if (ECHO_DOWN_CAST<Echo::ShaderUniformTexture*>(m_uniformConfig)->isAtla())
+        if (ECHO_DOWN_CAST<Echo::ShaderNodeUniformTexture*>(m_uniformConfig)->isAtla())
         {
             compiler.addUniform("vec4", Echo::StringUtil::Format("%sViewport", getVariableName().c_str()));
             uvConvertCode = Echo::StringUtil::Format(" * fs_ubo.%sViewport.zw + fs_ubo.%sViewport.xy", getVariableName().c_str(), getVariableName().c_str());
         }
 
-		if (ECHO_DOWN_CAST<Echo::ShaderUniformTexture*>(m_uniformConfig)->isAtla())
+		if (ECHO_DOWN_CAST<Echo::ShaderNodeUniformTexture*>(m_uniformConfig)->isAtla())
 		{
 			compiler.addUniform("vec4", Echo::StringUtil::Format("%sViewport", getVariableName().c_str()));
 			uvConvertCode = Echo::StringUtil::Format(" * fs_ubo.%sViewport.zw + fs_ubo.%sViewport.xy", getVariableName().c_str(), getVariableName().c_str());
@@ -158,7 +157,7 @@ namespace DataFlowProgramming
         }
 
 
-        if (ECHO_DOWN_CAST<Echo::ShaderUniformTexture*>(m_uniformConfig)->getType().getValue() == "General")
+        if (ECHO_DOWN_CAST<Echo::ShaderNodeUniformTexture*>(m_uniformConfig)->getType().getValue() == "General")
         {
             compiler.addCode(Echo::StringUtil::Format("\t%s_Color.rgb = SRgbToLinear(%s_Color.rgb);\n", getVariableName().c_str(), getVariableName().c_str()));
         }
@@ -176,12 +175,12 @@ namespace DataFlowProgramming
 	{
 		if (m_uniformConfig->isExport())
 		{
-            bool isAtla = ECHO_DOWN_CAST<Echo::ShaderUniformTexture*>(m_uniformConfig)->isAtla();
+            bool isAtla = ECHO_DOWN_CAST<Echo::ShaderNodeUniformTexture*>(m_uniformConfig)->isAtla();
 
             uniformNames.emplace_back("Uniforms." + getVariableName());
             uniformValues.emplace_back(Echo::ResourcePath(m_textureSelect->getTexture(), isAtla ? ".png|.atla" : ".png"));
 
-            if (ECHO_DOWN_CAST<Echo::ShaderUniformTexture*>(m_uniformConfig)->isAtla())
+            if (ECHO_DOWN_CAST<Echo::ShaderNodeUniformTexture*>(m_uniformConfig)->isAtla())
             {
 				uniformNames.emplace_back("Uniforms." + getVariableName() + "Viewport");
                 uniformValues.emplace_back(Echo::Color(0.f, 0.f, 1.f, 1.f));

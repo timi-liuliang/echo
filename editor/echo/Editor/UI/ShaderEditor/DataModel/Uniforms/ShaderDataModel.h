@@ -7,7 +7,7 @@
 #include <string>
 #include "DataFloat.h"
 #include "QColorSelect.h"
-#include "shader_uniform_config.h"
+#include <engine/core/render/base/editor/shader/node/shader_node_uniform.h>
 #include "Compiler/ShaderCompiler.h"
 
 using QtNodes::PortType;
