@@ -18,9 +18,9 @@ namespace Echo
 
 	}
 
-	void PropertyEditor::registerEditor(const char* className, const char* propertyName, PropertyEditorFactory* factory)
+	void PropertyEditor::registerEditor(const String& className, const String& propertyName, PropertyEditorFactory* factory)
 	{
-		String finalName = StringUtil::Format("%s.%s", className, propertyName);
+		String finalName = StringUtil::Format("%s.%s", className.c_str(), propertyName.c_str());
 		if (g_propertyEditorFactorys.find(finalName) == g_propertyEditorFactorys.end())
 		{
 			g_propertyEditorFactorys[finalName] = factory;
@@ -31,19 +31,26 @@ namespace Echo
 		}
 	}
 
-	PropertyEditor* PropertyEditor::createEditor(const char* className, const char* propertyName)
+	PropertyEditor* PropertyEditor::createEditor(const String& className, const String& propertyName)
+	{
+		PropertyEditorFactory* factory = getFactory(className, propertyName);
+		return factory ? factory->create() : nullptr;
+	}
+
+	PropertyEditorFactory* PropertyEditor::getFactory(const String& className, const String& propertyName)
 	{
 		if (!Engine::instance()->getConfig().m_isGame)
 		{
-			String finalName = StringUtil::Format("%s.%s", className, propertyName);
+			String finalName = StringUtil::Format("%s.%s", className.c_str(), propertyName.c_str());
 			auto it = g_propertyEditorFactorys.find(finalName);
 			if (it != g_propertyEditorFactorys.end())
 			{
-				return it->second->create();
+				return it->second;
 			}
 		}
 
 		return nullptr;
 	}
+
 #endif
 }

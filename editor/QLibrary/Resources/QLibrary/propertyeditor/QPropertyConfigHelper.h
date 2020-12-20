@@ -22,6 +22,7 @@ namespace QT_UI
 		WT_AssetsSelect,
 		WT_NodeSelect,
 		WT_Res,
+		WT_Custom,
 		WT_ChannelEditor,
 	};
 

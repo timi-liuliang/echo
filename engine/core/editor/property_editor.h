@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/core/base/echo_def.h"
+#include "engine/core/memory/MemAllocDef.h"
 
 #ifdef ECHO_EDITOR_MODE
 namespace Echo
@@ -14,8 +15,11 @@ namespace Echo
 
 	public:
 		// register|create editor
-		static void registerEditor(const char* className, const char* propertyName, PropertyEditorFactory* factory);
-		static PropertyEditor* createEditor(const char* className, const char* propertyName);
+		static void registerEditor(const String& className, const String& propertyName, PropertyEditorFactory* factory);
+		static PropertyEditor* createEditor(const String& className, const String& propertyName);
+
+		// get factory
+		static PropertyEditorFactory* getFactory(const String& className, const String& propertyName);
 
 	protected:
 	};
@@ -28,7 +32,7 @@ namespace Echo
 	template<typename T>
 	struct PropertyEditorFactoryT : public PropertyEditorFactory
 	{
-		PropertyEditorFactoryT(const char* className, const char* propertyName)
+		PropertyEditorFactoryT(const String& className, const String& propertyName)
 		{
 			PropertyEditor::registerEditor(className, propertyName, this);
 		}
