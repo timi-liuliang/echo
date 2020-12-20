@@ -2,6 +2,7 @@
 
 #include "engine/core/base/echo_def.h"
 #include "engine/core/editor/property_editor.h"
+#include "engine/core/editor/qt/QWidgets.h"
 
 #ifdef ECHO_EDITOR_MODE
 namespace Echo
@@ -12,7 +13,17 @@ namespace Echo
 		ParamterListEditorGLSL();
 		virtual ~ParamterListEditorGLSL();
 
+		// set
+		virtual void setObject(Object* object) override;
+
+	private:
+		// on text changed
+		void onTextChanged();
+
 	protected:
+		QHBoxLayout*	m_horizonLayout = nullptr;
+		QLineEdit*		m_lineEdit = nullptr;
+		QToolButton*	m_toolButton = nullptr;
 	};
 }
 #endif

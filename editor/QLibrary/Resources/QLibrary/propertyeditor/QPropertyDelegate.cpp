@@ -17,6 +17,8 @@
 #include <QCheckBox>
 #include <QApplication>
 #include <engine/core/util/PathUtil.h>
+#include <engine/core/base/object.h>
+#include <engine/core/editor/property_editor.h>
 
 namespace QT_UI
 {
@@ -123,7 +125,6 @@ namespace QT_UI
 		}
 	}
 
-	// createEditor, returns an editor widget
 	QWidget* QPropertyDelegate::createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const
 	{
 		QVariant     userData		= index.model()->data( index, Qt::UserRole);
@@ -132,7 +133,7 @@ namespace QT_UI
 		
 		QString propertyName = index.model()->data(index, Qt::DisplayPropertyRole).toString();
 		if( !userDatas.size())
-			return NULL;
+			return nullptr;
 
 		Echo::String  widgetType = userDatas[0].c_str();
 		if (widgetType == "FileSelect")
@@ -203,6 +204,18 @@ namespace QT_UI
 		else if(widgetType == "Vector3")
 		{
 			return new QVector3Editor(m_model, propertyName, parent);
+		}
+		else if (widgetType == "UserCustom")
+		{
+			Echo::StringArray config = Echo::StringUtil::Split(userDatas[1], ":");
+			Echo::PropertyEditor* editor = Echo::PropertyEditor::createEditor(config[1], config[2]);
+			if(editor)
+			{ 
+				editor->setParent(parent);
+				editor->setObject(Echo::Object::getById(Echo::StringUtil::ParseI32(config[0])));
+			}
+
+			return editor;
 		}
 		else if (widgetType == "default")
 		{

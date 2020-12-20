@@ -2,16 +2,20 @@
 
 #include "engine/core/base/echo_def.h"
 #include "engine/core/memory/MemAllocDef.h"
+#include "qt/QWidget.h"
 
 #ifdef ECHO_EDITOR_MODE
 namespace Echo
 {
 	struct PropertyEditorFactory;
-	class PropertyEditor
+	class PropertyEditor : public QWidget
 	{
 	public:
 		PropertyEditor();
 		virtual ~PropertyEditor();
+
+		// set
+		virtual void setObject(Object* object) { m_object = object; }
 
 	public:
 		// register|create editor
@@ -22,6 +26,9 @@ namespace Echo
 		static PropertyEditorFactory* getFactory(const String& className, const String& propertyName);
 
 	protected:
+		Object*		m_object = nullptr;
+		String		m_className;
+		String		m_propertyName;
 	};
 
 	struct PropertyEditorFactory

@@ -34,7 +34,16 @@ namespace Echo
 	PropertyEditor* PropertyEditor::createEditor(const String& className, const String& propertyName)
 	{
 		PropertyEditorFactory* factory = getFactory(className, propertyName);
-		return factory ? factory->create() : nullptr;
+		if (factory)
+		{
+			PropertyEditor* property = factory->create();
+			property->m_className = className;
+			property->m_propertyName = propertyName;
+
+			return property;
+		}
+
+		return nullptr;
 	}
 
 	PropertyEditorFactory* PropertyEditor::getFactory(const String& className, const String& propertyName)

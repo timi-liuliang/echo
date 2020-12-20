@@ -1039,7 +1039,7 @@ namespace Studio
 			}
 			else
 			{
-				Echo::String extraData = Echo::StringUtil::Format("%s:%s", className.c_str(), propertyName.c_str());
+				Echo::String extraData = Echo::StringUtil::Format("%d:%s:%s", object->getId(), className.c_str(), propertyName.c_str());
 				m_propertyHelper.addItem(propertyName.c_str(), modelValue, QT_UI::WT_Custom, extraData.c_str());
 			}
 		}

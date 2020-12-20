@@ -23,6 +23,8 @@
 #include <QToolButton>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 class QObject;
 class QWidget;
