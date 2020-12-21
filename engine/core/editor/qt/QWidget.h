@@ -9,12 +9,15 @@
 #include <QSplitter>
 #include <QMenu>
 #include <QSpinBox>
+#include <QPushButton>
 #include <QHeaderView>
 #include <QCheckBox>
 #include <QDockWidget>
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QtWidgets/QGraphicsItem>
+#include <QListWidget>
+#include <QTableWidget>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QGraphicsProxyWidget>
@@ -25,6 +28,8 @@
 #include <QMessageBox>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QApplication>
+#include <QIcon>
 
 class QObject;
 class QWidget;

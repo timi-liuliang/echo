@@ -20,6 +20,9 @@ namespace Echo
 		// on text changed
 		void onTextChanged();
 
+		// on edit parameters
+		void onEditParameters();
+
 	protected:
 		QHBoxLayout*	m_horizonLayout = nullptr;
 		QLineEdit*		m_lineEdit = nullptr;

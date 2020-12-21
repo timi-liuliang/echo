@@ -2,6 +2,7 @@
 #include "engine/core/memory/MemAllocDef.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/editor/editor.h"
+#include "parameter_list_editor_dialog.h"
 
 namespace Echo
 {
@@ -24,6 +25,7 @@ namespace Echo
 		m_horizonLayout->addWidget(m_toolButton);
 
 		EditorApi.qConnectWidget(m_lineEdit, QSIGNAL(textChanged(const QString&)), this, createMethodBind(&ParamterListEditorGLSL::onTextChanged));
+		EditorApi.qConnectWidget(m_toolButton, QSIGNAL(clicked()), this, createMethodBind(&ParamterListEditorGLSL::onEditParameters));
 	}
 
 	ParamterListEditorGLSL::~ParamterListEditorGLSL()
@@ -49,6 +51,15 @@ namespace Echo
 		{
 			Echo::String value = m_lineEdit->text().toStdString().c_str();
 			Class::setPropertyValue(m_object, m_propertyName, value);
+		}
+	}
+
+	void ParamterListEditorGLSL::onEditParameters()
+	{
+		ParamterListEditorDialog dialog(this);
+		if (dialog.exec() == QDialog::Accepted)
+		{
+			int a = 10;
 		}
 	}
 #endif
