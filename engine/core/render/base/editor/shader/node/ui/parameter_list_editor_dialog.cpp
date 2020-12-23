@@ -12,6 +12,8 @@ namespace Echo
 	{
 		setupUi(this);
 
+		layout()->addWidget(new QStatusBar(this));
+
 		// stretch header
 		m_tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 		m_tableWidget->setHorizontalHeaderItem(0, new QTableWidgetItem("Name"));

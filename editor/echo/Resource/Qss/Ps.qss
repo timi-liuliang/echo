@@ -211,13 +211,13 @@ QTableWidget
     outline: none;
     outline-style: none;
 	
+	gridline-color: rgb(56, 56, 56);
 	background-color: rgb(77,77,77);
 	alternate-background-color: rgb(107,107,107);
 }
 
 QTableWidget::item
 {
-	font : bold;
 	/*color: rgb(243,243,243);*/
 	height:24px;
 	background-color:rgba(0,0,0,0);

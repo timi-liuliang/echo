@@ -28,6 +28,7 @@
 #include <QMessageBox>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QStatusBar>
 #include <QApplication>
 #include <QIcon>
 
