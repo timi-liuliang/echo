@@ -18,9 +18,15 @@ namespace Echo
 
 	protected:
 		// slots
+		void onAdd();
+		void onDelete();
+		void onMoveUp();
+		void onMoveDown();
+		void onOk();
 		void onCancel();
 
 	protected:
+		StringArray		m_types;
 	};
 }
 #endif

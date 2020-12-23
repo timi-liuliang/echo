@@ -204,6 +204,34 @@ QListWidget
     outline-style: none;
 }
 
+QTableWidget
+{
+	border : 1px solid rgb(56,56,56);
+    outline: 0px;
+    outline: none;
+    outline-style: none;
+	
+	background-color: rgb(77,77,77);
+	alternate-background-color: rgb(107,107,107);
+}
+
+QTableWidget::item
+{
+	font : bold;
+	/*color: rgb(243,243,243);*/
+	height:24px;
+	background-color:rgba(0,0,0,0);
+	border-right:1px solid rgb(66,66,66);
+}
+
+QTableWidget::item:selected
+{
+	color : rgb(243,243,243);
+	font : bold;
+	padding: -1;
+	background-color: rgb(14,99,156);
+}
+
 QDialog
 {
 	border-top : 1px solid rgb(56,56,56);

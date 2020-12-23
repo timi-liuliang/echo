@@ -75,7 +75,7 @@
     </layout>
    </item>
    <item>
-    <widget class="QTableWidget" name="tableWidget">
+    <widget class="QTableWidget" name="m_tableWidget">
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
@@ -85,6 +85,9 @@
      <property name="columnCount">
       <number>2</number>
      </property>
+     <attribute name="verticalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
      <column/>
      <column/>
     </widget>
