@@ -154,7 +154,7 @@
   <customwidget>
    <class>QT_UI::QMenuBarEx</class>
    <extends>QMenuBar</extends>
-   <header>QMenuBarEx.h</header>
+   <header>engine/core/editor/qt/extension/QMenuBarEx.h</header>
   </customwidget>
  </customwidgets>
  <resources>

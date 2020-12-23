@@ -15,6 +15,8 @@ namespace Game
 		: QMainWindow( parent)
 		, m_renderWindow(nullptr)
 	{
+		m_studio = Studio::AStudio::instance();
+
 		setupUi( this);
 
 #ifdef ECHO_PLATFORM_MAC
@@ -31,7 +33,6 @@ namespace Game
 		setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
 		menubar->setNativeMenuBar(false);
 #endif
-
 		// set icon
 		menubar->setTopLeftCornerIcon(":/icon/Icon/icon.png");
 
@@ -42,6 +43,7 @@ namespace Game
 
 	GameMainWindow::~GameMainWindow()
 	{
+		EchoSafeDelete(m_studio, AStudio);
 	}
 
 	GameMainWindow* GameMainWindow::instance()

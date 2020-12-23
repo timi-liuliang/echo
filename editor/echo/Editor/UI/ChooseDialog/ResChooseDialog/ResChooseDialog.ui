@@ -190,8 +190,8 @@
  <customwidgets>
   <customwidget>
    <class>QT_UI::QMenuBarEx</class>
-   <extends>QLabel</extends>
-   <header>QMenuBarEx.h</header>
+   <extends>QMenuBar</extends>
+   <header>engine/core/editor/qt/extension/QMenuBarEx.h</header>
   </customwidget>
  </customwidgets>
  <resources>

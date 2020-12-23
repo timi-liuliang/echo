@@ -96,8 +96,6 @@ namespace Studio
 
 		// is thumbnail exist
 		bool isThumbnailExists(const Echo::String& name);
-
-		bool replaceTraverseAllWidget(QWidget* parent, QWidget* from, QWidget* to);
         
         // init functions
         void initFunctions();

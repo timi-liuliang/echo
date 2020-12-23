@@ -45,7 +45,8 @@ namespace Studio
         using namespace Echo;
         
         // do something before quit
-        m_mainWindow->onPrepareQuit();
+		if(m_mainWindow)
+			m_mainWindow->onPrepareQuit();
         
 		EchoSafeDeleteInstance(OperationManager);
         EchoSafeDeleteInstance(EchoEngine);
@@ -108,32 +109,6 @@ namespace Studio
 		Echo::String fileFullName = Echo::StringUtil::Format("%sCache/thumbnail/%s.bmp", appPath.c_str(), name.c_str());
 
 		return Echo::PathUtil::IsFileExist(fileFullName);
-	}
-
-	bool AStudio::replaceTraverseAllWidget(QWidget* parent, QWidget* from, QWidget* to)
-	{
-		if ( parent && parent->layout() )
-		{
-			auto replaced = parent->layout()->replaceWidget(from, to);
-			if ( replaced )
-			{
-				delete replaced;
-				return true;
-			}
-			auto widgets = parent->findChildren<QWidget*>();
-			if ( !widgets.size() )
-			{
-				return false;
-			}
-			for ( int i = 0; i < widgets.size(); ++i )
-			{
-				if ( replaceTraverseAllWidget(widgets[i], from, to) )
-				{
-					return true;
-				}
-			}
-		}
-		return false;
 	}
 
 	RenderWindow* AStudio::getRenderWindow()

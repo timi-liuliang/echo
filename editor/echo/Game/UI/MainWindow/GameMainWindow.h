@@ -3,6 +3,7 @@
 #include "Window.h"
 #include <QProcess>
 #include <QTimer>
+#include "Studio.h"
 #include "ui_GameMainWindow.h"
 #include <engine/core/util/StringUtil.h>
 
@@ -54,6 +55,7 @@ namespace Game
 		void onShowStatusMessage();
 
 	private:
+		Studio::AStudio*				m_studio = nullptr;
 		QTimer							m_timer;
 		Window*							m_renderWindow;
 		Echo::vector<WindowSize>::type	m_windowSizes;

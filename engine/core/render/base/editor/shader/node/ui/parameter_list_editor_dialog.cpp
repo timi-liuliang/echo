@@ -27,6 +27,10 @@ namespace Echo
 		//menubar->setNativeMenuBar(false);
 #endif
 
+		m_menuBar->setCornderButtonVisible(QT_UI::QMenuBarEx::Minus, false);
+		m_menuBar->setCornderButtonVisible(QT_UI::QMenuBarEx::Minimize, false);
+		m_menuBar->setCornderButtonVisible(QT_UI::QMenuBarEx::FullScreen, false);
+
 		m_add->setIcon(QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/editor/shader/icon/add.png").c_str()));
 		m_delete->setIcon(QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/editor/shader/icon/delete.png").c_str()));
 		m_moveUp->setIcon(QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/editor/shader/icon/move_up.png").c_str()));
