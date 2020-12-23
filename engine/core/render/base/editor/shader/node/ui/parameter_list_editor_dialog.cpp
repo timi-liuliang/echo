@@ -27,14 +27,11 @@ namespace Echo
 		//menubar->setNativeMenuBar(false);
 #endif
 
-		m_menuBar->setCornderButtonVisible(QT_UI::QMenuBarEx::Minus, false);
-		m_menuBar->setCornderButtonVisible(QT_UI::QMenuBarEx::Minimize, false);
-		m_menuBar->setCornderButtonVisible(QT_UI::QMenuBarEx::FullScreen, false);
-
 		m_add->setIcon(QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/editor/shader/icon/add.png").c_str()));
 		m_delete->setIcon(QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/editor/shader/icon/delete.png").c_str()));
 		m_moveUp->setIcon(QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/editor/shader/icon/move_up.png").c_str()));
 		m_moveDown->setIcon(QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/editor/shader/icon/move_down.png").c_str()));
+		m_close->setIcon(QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/editor/shader/icon/close.png").c_str()));
 
 		EditorApi.qConnectWidget(m_add, QSIGNAL(clicked()), this, createMethodBind(&ParamterListEditorDialog::onAdd));
 		EditorApi.qConnectWidget(m_delete, QSIGNAL(clicked()), this, createMethodBind(&ParamterListEditorDialog::onDelete));
@@ -42,6 +39,7 @@ namespace Echo
 		EditorApi.qConnectWidget(m_moveDown, QSIGNAL(clicked()), this, createMethodBind(&ParamterListEditorDialog::onMoveDown));
 		EditorApi.qConnectWidget(m_ok, QSIGNAL(clicked()), this, createMethodBind(&ParamterListEditorDialog::onOk));
 		EditorApi.qConnectWidget(m_cancel, QSIGNAL(clicked()), this, createMethodBind(&ParamterListEditorDialog::onCancel));
+		EditorApi.qConnectWidget(m_close, QSIGNAL(clicked()), this, createMethodBind(&ParamterListEditorDialog::onCancel));
 	}
 
 	ParamterListEditorDialog::~ParamterListEditorDialog()

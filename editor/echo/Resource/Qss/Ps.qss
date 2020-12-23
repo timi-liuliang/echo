@@ -249,10 +249,12 @@ QHeaderView
 
 QHeaderView::section
 {
+	border: 1px solid rgb(66,66,66);
+	height:22px;
 	font-family: "Arial";
 	font : bold;
 	background-color: rgb(66,66,66);
-	margin: 5px;
+	margin: 1px;
 	text-align: center;
 }
 
