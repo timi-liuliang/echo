@@ -40,6 +40,7 @@ namespace Studio
 		m_nodeTreeWidget->setMouseTracking(true);
         m_nodeTreeWidget->setAttribute(Qt::WA_MacShowFocusRect,0);
         m_propertyTreeView->setAttribute(Qt::WA_MacShowFocusRect,0);
+		m_propertyTreeView->header()->setDefaultAlignment(Qt::AlignCenter);
 
 		QObject::connect(m_newNodeButton,  SIGNAL(clicked()), this, SLOT(showNewNodeDialog()));
 		QObject::connect(m_actionAddNode,  SIGNAL(triggered()), this, SLOT(showNewNodeDialog()));
