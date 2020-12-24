@@ -56,10 +56,10 @@ namespace Echo
 
 	void ParamterListEditorGLSL::onEditParameters()
 	{
-		ParamterListEditorDialog dialog(this);
+		ParamterListEditorDialog dialog(this, m_lineEdit->text().toStdString().c_str());
 		if (dialog.exec() == QDialog::Accepted)
 		{
-			int a = 10;
+			m_lineEdit->setText(dialog.getParms().c_str());
 		}
 	}
 #endif

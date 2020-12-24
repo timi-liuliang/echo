@@ -180,5 +180,22 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>m_ok</sender>
+   <signal>clicked()</signal>
+   <receiver>ParameterListEditorDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>82</x>
+     <y>443</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>12</x>
+     <y>449</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
