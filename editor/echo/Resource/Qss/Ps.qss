@@ -207,7 +207,7 @@ QListWidget
 QTableWidget
 {
 	border : 1px solid rgb(56,56,56);
-    outline: 0px;
+    outline: 1px;
     outline: none;
     outline-style: none;
 	
