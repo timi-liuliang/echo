@@ -16,7 +16,7 @@ namespace Echo
 		ParamterListEditorDialog(QWidget* parent, const String& params);
 		virtual ~ParamterListEditorDialog();
 
-		// get parmeters
+		// get parameters
 		String getParms();
 
 		// parse
@@ -32,8 +32,11 @@ namespace Echo
 		void onChanged();
 		void onMoveUp();
 		void onMoveDown();
-		void onOk();
 		void onCancel();
+
+	private:
+		// switch cell widget
+		void switchCellWidget(i32 fromRow, i32 fromColumn, i32 toRow, i32 toColumn);
 
 	protected:
 		QStatusBar*		m_statusBar = nullptr;

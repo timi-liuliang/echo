@@ -25,7 +25,6 @@ namespace Echo
 		setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
 #elif defined(ECHO_PLATFORM_MAC)
 		setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
-		//menubar->setNativeMenuBar(false);
 #endif
 
 		m_add->setIcon(QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/editor/shader/icon/add.png").c_str()));
@@ -38,9 +37,11 @@ namespace Echo
 		EditorApi.qConnectWidget(m_delete, QSIGNAL(clicked()), this, createMethodBind(&ParamterListEditorDialog::onDelete));
 		EditorApi.qConnectWidget(m_moveUp, QSIGNAL(clicked()), this, createMethodBind(&ParamterListEditorDialog::onMoveUp));
 		EditorApi.qConnectWidget(m_moveDown, QSIGNAL(clicked()), this, createMethodBind(&ParamterListEditorDialog::onMoveDown));
-		EditorApi.qConnectWidget(m_ok, QSIGNAL(clicked()), this, createMethodBind(&ParamterListEditorDialog::onOk));
 		EditorApi.qConnectWidget(m_cancel, QSIGNAL(clicked()), this, createMethodBind(&ParamterListEditorDialog::onCancel));
 		EditorApi.qConnectWidget(m_close, QSIGNAL(clicked()), this, createMethodBind(&ParamterListEditorDialog::onCancel));
+
+		m_moveUp->setVisible(false);
+		m_moveDown->setVisible(false);
 
 		parse(params);
 	}
@@ -123,17 +124,44 @@ namespace Echo
 
 	void ParamterListEditorDialog::onMoveUp()
 	{
+		i32 fromRow = m_tableWidget->currentRow();
+		if (fromRow >= 1 && fromRow < m_tableWidget->rowCount())
+		{
+			i32 targetRow = fromRow - 1;
+			for (i32 column = 0; column < m_tableWidget->columnCount(); column++)
+			{
+				switchCellWidget(fromRow, column, targetRow, column);
+			}
+		}
 
+		onChanged();
 	}
 
 	void ParamterListEditorDialog::onMoveDown()
 	{
+		i32 fromRow = m_tableWidget->currentRow();
+		if (fromRow >= 0 && fromRow < m_tableWidget->rowCount() - 1)
+		{
+			i32 targetRow = fromRow + 1;
+			for (i32 column = 0; column < m_tableWidget->columnCount(); column++)
+			{
+				switchCellWidget(fromRow, column, targetRow, column);
+			}
+		}
 
+		onChanged();
 	}
 
-	void ParamterListEditorDialog::onOk()
+	void ParamterListEditorDialog::switchCellWidget(i32 fromRow, i32 fromColumn, i32 toRow, i32 toColumn)
 	{
+		QWidget* from = m_tableWidget->cellWidget(fromRow, fromColumn);
+		QWidget* to = m_tableWidget->cellWidget(toRow, toColumn);
 
+		m_tableWidget->removeCellWidget(fromRow, fromColumn);
+		m_tableWidget->removeCellWidget(toRow, toColumn);
+
+		m_tableWidget->setCellWidget(fromRow, fromColumn, to);
+		m_tableWidget->setCellWidget(toRow, toColumn, from);
 	}
 
 	void ParamterListEditorDialog::onCancel()
