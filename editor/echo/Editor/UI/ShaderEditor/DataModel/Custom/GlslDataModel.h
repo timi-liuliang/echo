@@ -39,10 +39,6 @@ namespace DataFlowProgramming
 		// generate code
 		virtual bool generateCode(ShaderCompiler& compiler) override;
 
-	public:
-		// slot
-		virtual bool onNodePressed();
-
     public:
         // load|save
         virtual QJsonObject save() const override;
@@ -54,8 +50,5 @@ namespace DataFlowProgramming
 
         // widget
         QWidget* embeddedWidget() override { return nullptr; }
-
-    protected:
-        Echo::ShaderNodeGLSL* m_glslNode = nullptr;
     };
 }

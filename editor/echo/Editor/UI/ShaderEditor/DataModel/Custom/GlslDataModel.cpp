@@ -8,7 +8,6 @@
 #include "DataInvalid.h"
 #include "ShaderScene.h"
 #include "OperationRules.h"
-#include "NodeTreePanel.h"
 
 namespace DataFlowProgramming
 {
@@ -25,18 +24,21 @@ namespace DataFlowProgramming
         m_outputs[0] = std::make_shared<DataInvalid>(this);
         m_outputs[0]->setVariableName(getVariableName());
 
-        m_glslNode = EchoNew(Echo::ShaderNodeGLSL);
+        SHADER_NODE_CONNECT(Echo::ShaderNodeGLSL);
     }
 
-    QJsonObject GlslDataModel::save() const
-    {
-        QJsonObject modelJson = NodeDataModel::save();
-        return modelJson;
-    }
+	QJsonObject GlslDataModel::save() const
+	{
+		QJsonObject nodeJson = NodeDataModel::save();
+        saveShaderNode(nodeJson);
 
-    void GlslDataModel::restore(QJsonObject const &p)
-    {
-    }
+		return nodeJson;
+	}
+
+	void GlslDataModel::restore(QJsonObject const& p)
+	{
+        restoreShaderNode(p);
+	}
 
     void GlslDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
     {
@@ -56,13 +58,6 @@ namespace DataFlowProgramming
 
 		Q_EMIT dataUpdated(0);
     }
-
-	bool GlslDataModel::onNodePressed()
-	{
-		Studio::NodeTreePanel::instance()->onEditObject(m_glslNode);
-
-		return true;
-	}
 
     bool GlslDataModel::generateCode(ShaderCompiler& compiler)
     {

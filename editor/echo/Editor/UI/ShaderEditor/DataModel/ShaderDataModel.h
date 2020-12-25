@@ -17,6 +17,9 @@ using QtNodes::NodeDataType;
 using QtNodes::NodeDataModel;
 using QtNodes::NodeValidationState;
 
+#define SHADER_NODE_CONNECT(ShaderNodeClass) \
+    m_shaderNode = EchoNew(ShaderNodeClass);
+
 namespace DataFlowProgramming
 {
     class ShaderDataModel : public NodeDataModel
@@ -57,12 +60,18 @@ namespace DataFlowProgramming
         // check validation
         virtual bool checkValidation();
 
+    protected:
+		// load|save
+		void saveShaderNode(QJsonObject& p) const;
+		void restoreShaderNode(QJsonObject const& p);
+
     public:
 		// slot
-        virtual bool onNodePressed() { return false; }
+        virtual bool onNodePressed();
 
 	protected:
         Echo::ui32                              m_id = 0;
+        Echo::ShaderNode*                       m_shaderNode = nullptr;
         bool                                    m_isUsed = true;
 
 		std::vector<NodeDataType>               m_inputDataTypes;
