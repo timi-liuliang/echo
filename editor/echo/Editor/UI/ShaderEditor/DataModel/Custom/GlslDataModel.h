@@ -27,9 +27,6 @@ namespace DataFlowProgramming
         GlslDataModel();
         virtual ~GlslDataModel() {}
 
-        // caption
-        QString caption() const override { return QStringLiteral("Glsl"); }
-
         // is caption visible
         bool captionVisible() const override { return true; }
 

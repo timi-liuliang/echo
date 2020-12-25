@@ -13,7 +13,15 @@ namespace Echo
 		ShaderNode();
 		virtual ~ShaderNode();
 
-	private:
+		// name
+		virtual const char* getName() const { return "Unknown"; }
+
+		// caption
+		const String& getCaption() const { return m_caption; }
+		void setCaption(const String& caption) { m_caption = caption; }
+
+	protected:
+		String			m_caption;
 	};
 
 #endif

@@ -30,6 +30,9 @@ namespace DataFlowProgramming
         ShaderDataModel();
         virtual ~ShaderDataModel() {}
 
+		// caption
+		QString caption() const override { return m_shaderNode ? m_shaderNode->getCaption().c_str() : "UnKnown"; }
+
         // variable name
         virtual Echo::String getVariableName() const;
 

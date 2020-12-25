@@ -7,6 +7,7 @@ namespace Echo
 	ShaderNodeGLSL::ShaderNodeGLSL()
 		: ShaderNode()
 	{
+		m_caption = "GLSL";
 	}
 
 	ShaderNodeGLSL::~ShaderNodeGLSL()
@@ -15,8 +16,6 @@ namespace Echo
 
 	void ShaderNodeGLSL::bindMethods()
 	{
-		CLASS_BIND_METHOD(ShaderNodeGLSL, getName, DEF_METHOD("getName"));
-		CLASS_BIND_METHOD(ShaderNodeGLSL, setName, DEF_METHOD("setName"));
 		CLASS_BIND_METHOD(ShaderNodeGLSL, getInputs, DEF_METHOD("getInputs"));
 		CLASS_BIND_METHOD(ShaderNodeGLSL, setInputs, DEF_METHOD("setInputs"));
 		CLASS_BIND_METHOD(ShaderNodeGLSL, getCode, DEF_METHOD("getCode"));
@@ -24,7 +23,6 @@ namespace Echo
 		CLASS_BIND_METHOD(ShaderNodeGLSL, getReturnType, DEF_METHOD("getReturnType"));
 		CLASS_BIND_METHOD(ShaderNodeGLSL, setReturnType, DEF_METHOD("setReturnType"));
 
-		CLASS_REGISTER_PROPERTY(ShaderNodeGLSL, "Name", Variant::Type::String, "getName", "setName");
 		CLASS_REGISTER_PROPERTY(ShaderNodeGLSL, "Inputs", Variant::Type::String, "getInputs", "setInputs");
 		CLASS_REGISTER_PROPERTY(ShaderNodeGLSL, "ReturnType", Variant::Type::StringOption, "getReturnType", "setReturnType");
 		CLASS_REGISTER_PROPERTY(ShaderNodeGLSL, "Code", Variant::Type::String, "getCode", "setCode");

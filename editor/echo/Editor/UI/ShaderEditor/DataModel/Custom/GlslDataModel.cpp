@@ -30,7 +30,7 @@ namespace DataFlowProgramming
 	QJsonObject GlslDataModel::save() const
 	{
 		QJsonObject nodeJson = NodeDataModel::save();
-        saveShaderNode(nodeJson);
+		saveShaderNode(nodeJson);
 
 		return nodeJson;
 	}
