@@ -25,6 +25,10 @@ namespace Echo
 		const StringOption& getReturnType() const { return m_returnType; }
 		void setReturnType(const StringOption& type) { m_returnType.setValue(type.getValue()); }
 
+	public:
+		// get input data types
+		virtual DataTypes getInputDataTypes() override;
+
 	private:
 		String			m_inputs;
 		String			m_code;

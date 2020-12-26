@@ -165,6 +165,16 @@ namespace DataFlowProgramming
 					Echo::Class::setPropertyValue(m_shaderNode, prop->m_name, variant);
 				}
 			}
+
+			// sync data types
+			m_inputDataTypes.clear();
+			Echo::ShaderNode::DataTypes inputTypes = m_shaderNode->getInputDataTypes();
+			for (const Echo::ShaderNode::DataType& type : inputTypes)
+			{
+				m_inputDataTypes.push_back({type.m_type, type.m_name});
+			}
+
+			m_inputs.resize(m_inputDataTypes.size());
 		}
 	}
 }

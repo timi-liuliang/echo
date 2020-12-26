@@ -31,6 +31,22 @@ namespace Echo
 		REGISTER_PROPERTY_EDITOR(ShaderNodeGLSL, "Inputs", ParamterListEditorGLSL);
 	}
 
+	ShaderNode::DataTypes ShaderNodeGLSL::getInputDataTypes()
+	{
+		DataTypes result;
+		StringArray inputs = StringUtil::Split(m_inputs, ",");
+		for (const String& input : inputs)
+		{
+			StringArray inputInfo = StringUtil::Split(input, " ");
+			if (inputInfo.size() == 2)
+			{
+				result.push_back({inputInfo[0], inputInfo[1]});
+			}
+		}
+
+		return result;
+	}
+
 #endif
 }
 

@@ -13,13 +13,6 @@ namespace DataFlowProgramming
 {
     GlslDataModel::GlslDataModel()
     {
-        m_inputDataTypes = 
-        {
-            {"any", "A"},
-        };
-
-        m_inputs.resize(m_inputDataTypes.size());
-
         m_outputs.resize(1);
         m_outputs[0] = std::make_shared<DataInvalid>(this);
         m_outputs[0]->setVariableName(getVariableName());
@@ -38,8 +31,6 @@ namespace DataFlowProgramming
 	void GlslDataModel::restore(QJsonObject const& p)
 	{
         restoreShaderNode(p);
-
-
 	}
 
     void GlslDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
