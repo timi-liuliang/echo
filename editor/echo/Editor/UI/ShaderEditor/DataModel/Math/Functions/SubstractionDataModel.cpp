@@ -36,39 +36,6 @@ namespace DataFlowProgramming
     {
     }
 
-    unsigned int SubstractionDataModel::nPorts(PortType portType) const
-    {
-        unsigned int result = 1;
-
-        switch (portType)
-        {
-            case PortType::In: result = m_inputs.size(); break;
-            case PortType::Out:result = m_outputs.size(); break;
-            default:                       break;
-        }
-
-        return result;
-    }
-
-    NodeDataType SubstractionDataModel::dataType(PortType portType, PortIndex portIndex) const
-    {
-        if(portType==PortType::In)
-        {
-            return m_inputDataTypes[portIndex];
-        }
-        else if (portType == PortType::Out)
-        {
-            return m_outputs[portIndex]->type();
-        }
-        
-        return NodeDataType {"unknown", "Unknown"};
-    }
-
-    std::shared_ptr<NodeData> SubstractionDataModel::outData(PortIndex portIndex)
-    {
-        return m_outputs[portIndex];
-    }
-
     void SubstractionDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
     {
 		m_inputs[portIndex] = std::dynamic_pointer_cast<ShaderData>(nodeData);

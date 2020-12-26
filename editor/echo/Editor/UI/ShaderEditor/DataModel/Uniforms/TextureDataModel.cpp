@@ -74,16 +74,6 @@ namespace DataFlowProgramming
 		}
     }
 
-    unsigned int TextureDataModel::nPorts(PortType portType) const
-    {
-		switch (portType)
-		{
-		case PortType::In:    return m_inputs.size();
-		case PortType::Out:   return m_outputs.size();
-		default:              return 0;
-		}
-    }
-
     void TextureDataModel::onTextureEdited()
     {
 		Q_EMIT dataUpdated(0);
@@ -91,19 +81,6 @@ namespace DataFlowProgramming
 		Q_EMIT dataUpdated(2);
 		Q_EMIT dataUpdated(3);
 		Q_EMIT dataUpdated(4);
-    }
-
-    NodeDataType TextureDataModel::dataType(PortType portType, PortIndex portIndex) const
-    {
-        if (portType == PortType::In)       return m_inputDataTypes[portIndex];
-        else if (portType == PortType::Out) return m_outputs[portIndex]->type();
-        
-        return NodeDataType {"unknown", "Unknown"};
-    }
-
-    std::shared_ptr<NodeData> TextureDataModel::outData(PortIndex portIndex)
-    {
-        return m_outputs[portIndex];
     }
 
 	void TextureDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex port)

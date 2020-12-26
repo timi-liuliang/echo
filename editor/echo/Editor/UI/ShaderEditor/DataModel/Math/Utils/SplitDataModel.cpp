@@ -43,35 +43,6 @@ namespace DataFlowProgramming
     {
     }
 
-    unsigned int SplitDataModel::nPorts(PortType portType) const
-    {
-        switch (portType)
-        {
-            case PortType::In: return m_inputs.size();
-            case PortType::Out:return m_outputs.size();
-            default:           return 0;
-        }
-    }
-
-    NodeDataType SplitDataModel::dataType(PortType portType, PortIndex portIndex) const
-    {
-        if(portType==PortType::In)
-        {
-            return m_inputDataTypes[portIndex];
-        }
-        else if (portType == PortType::Out)
-        {
-            return m_outputs[portIndex]->type();
-        }
-        
-        return NodeDataType {"invalid", "invalid"};
-    }
-
-    std::shared_ptr<NodeData> SplitDataModel::outData(PortIndex portIndex)
-    {
-        return m_outputs[portIndex];
-    }
-
     void SplitDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
     {
         invalidAllOutputs();

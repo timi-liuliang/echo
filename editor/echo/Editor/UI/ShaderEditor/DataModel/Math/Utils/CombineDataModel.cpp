@@ -39,35 +39,6 @@ namespace DataFlowProgramming
 	{
 	}
 
-	unsigned int CombineDataModel::nPorts(PortType portType) const
-	{
-		switch (portType)
-		{
-		case PortType::In: return m_inputs.size();
-		case PortType::Out:return m_outputs.size();
-		default:           return 0;
-		}
-	}
-
-	NodeDataType CombineDataModel::dataType(PortType portType, PortIndex portIndex) const
-	{
-		if (portType == PortType::In)
-		{
-			return m_inputDataTypes[portIndex];
-		}
-		else if (portType == PortType::Out)
-		{
-			return m_outputs[portIndex]->type();
-		}
-
-		return NodeDataType{ "invalid", "invalid" };
-	}
-
-	std::shared_ptr<NodeData> CombineDataModel::outData(PortIndex portIndex)
-	{
-		return m_outputs[portIndex];
-	}
-
 	void CombineDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
 	{
 		m_inputs[portIndex] = std::dynamic_pointer_cast<ShaderData>(nodeData);

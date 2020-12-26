@@ -35,8 +35,6 @@ namespace DataFlowProgramming
 
         // variable name
         virtual Echo::String getVariableName() const;
-
-        // get default variable name
         Echo::String getDefaultVariableName() const;
 
         // generate code
