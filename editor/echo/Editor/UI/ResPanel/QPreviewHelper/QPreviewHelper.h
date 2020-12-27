@@ -20,6 +20,9 @@ namespace QT_UI
 		void setRes(Echo::ResPtr& res, const char* exts, bool includePreDir);
 		void setPath(const Echo::String& filePath, const char* exts, bool includePreDir);
 
+		// select file
+		void selectFile(const Echo::String& fileName);
+
 		// set filter
 		void setFilterPattern(const char* pattern);
 

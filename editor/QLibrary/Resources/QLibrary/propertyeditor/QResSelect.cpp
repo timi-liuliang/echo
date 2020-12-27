@@ -2,6 +2,7 @@
 #include <QFileDialog>
 #include "QPropertyModel.h"
 #include "ResChooseDialog.h"
+#include "ResPanel.h"
 #include "PathChooseDialog.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/io/IO.h>
@@ -28,22 +29,30 @@ namespace QT_UI
 		m_horizonLayout->addWidget( m_lineEdit);
 
 		// ToolButton
-		m_toolButton = new QToolButton( this);
-		m_toolButton->setObjectName( QString::fromUtf8("toolButton"));
-		m_toolButton->setText( "...");
-		m_toolButton->setContentsMargins(0, 0, 0, 0);
-		m_horizonLayout->addWidget( m_toolButton);
+		m_resSelectButton = new QToolButton( this);
+		//m_resSelectButton->setText( "...");
+		m_resSelectButton->setIcon(QIcon(":/icon/Icon/res/file.png"));
+		m_resSelectButton->setContentsMargins(0, 0, 0, 0);
+		m_horizonLayout->addWidget( m_resSelectButton);
 
-		setFocusProxy( m_toolButton);
+		// find button
+		m_resFindButton = new QToolButton(this);
+		m_resFindButton->setIcon(QIcon(":/icon/Icon/res/loupe.png"));
+		m_resFindButton->setToolTip("Show In Res Panel");
+		m_resFindButton->setContentsMargins(1, 0, 0, 0);
+		m_horizonLayout->addWidget(m_resFindButton);
+
+		setFocusProxy( m_resSelectButton);
 
 		// signal|slots
-		QObject::connect( m_toolButton, SIGNAL(clicked()), this, SLOT(OnSelectPath()));
+		QObject::connect(m_resSelectButton, SIGNAL(clicked()), this, SLOT(onSelectPath()));
+		QObject::connect(m_resFindButton, SIGNAL(clicked()), this, SLOT(onShowRes()));
 		QObject::connect(m_lineEdit, SIGNAL(returnPressed()), this, SLOT(onEditFinished()));
 
 		adjustHeightSize();
 	}
 
-	void QResSelect::OnSelectPath()
+	void QResSelect::onSelectPath()
 	{
 		if (m_exts.empty())
 		{
@@ -69,6 +78,17 @@ namespace QT_UI
 		}
 	}
 
+	void QResSelect::onShowRes()
+	{
+		Echo::String resPathName = m_lineEdit->text().toStdString().c_str();
+		if (!resPathName.empty())
+		{
+			Echo::String fullPathName = Echo::IO::instance()->convertResPathToFullPath(resPathName);
+			if(!fullPathName.empty())
+				Studio::ResPanel::instance()->onSelectFile(fullPathName.c_str());
+		}
+	}
+
 	bool QResSelect::isTextureRes()
 	{
 		Echo::StringArray exts = Echo::StringUtil::Split(m_exts, "|");
@@ -86,7 +106,7 @@ namespace QT_UI
 		if (isTextureRes())
 		{
 			m_lineEdit->setMinimumHeight(m_lineEdit->geometry().height()*1.6);
-			m_toolButton->setMinimumHeight(m_toolButton->geometry().height() * 1.6);
+			m_resSelectButton->setMinimumHeight(m_resSelectButton->geometry().height() * 1.6);
 		}
 	}
 
@@ -106,6 +126,9 @@ namespace QT_UI
 	{
 		Echo::String value = m_lineEdit->text().toStdString().c_str();
 		m_propertyModel->setValue(m_propertyName, value.c_str());
+
+		Echo::String resPathName = m_lineEdit->text().toStdString().c_str();
+		m_resFindButton->setVisible(resPathName.empty() ? false : true);
 	}
 
 	bool QResSelect::ItemDelegatePaint(QPainter *painter, const QRect& rect, const Echo::String& val)

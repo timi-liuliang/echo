@@ -29,14 +29,13 @@ namespace Studio
 	public slots:
 		// when select dir
 		void onSelectDir(const char* dir);
+		void onSelectFile(const char* pathName);
 
 		// reselect current dir
 		void reslectCurrentDir();
 
 		// click res
 		void onClickedPreviewRes(const char* res);
-
-		// double click res
 		void onDoubleClickedPreviewRes(const char* res);
 
 		// node tree widget show menu
@@ -85,7 +84,7 @@ namespace Studio
 		void addImporterActionToMenu(QMenu* menu, const Echo::String& className);
 
 	protected:
-		// reimplement reiszeEvent function
+		// re implement reiszeEvent function
 		virtual void resizeEvent(QResizeEvent * e);
 
 	private:

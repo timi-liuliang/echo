@@ -11,7 +11,7 @@
 namespace QT_UI
 {
 	//-------------------------------------------
-	// AssetsSelect 文件选择控件 2013-1-22 帝林
+	// AssetsSelect 2013-1-22 Captain
 	//-------------------------------------------
 	class QResSelect : public QWidget
 	{
@@ -20,13 +20,11 @@ namespace QT_UI
 	public:
 		QResSelect(class QPropertyModel* model, QString propertyName, const char* exts, const char* files, QWidget* parent = 0);
 
-		// 设置路径
+		// path
 		void SetPath( const Echo::String text) { m_lineEdit->setText( text.c_str());  }
-
-		// 获取路径
 		QString GetPath() { return m_lineEdit->text(); }
 
-		// MVC渲染
+		// MVC paint
 		static bool ItemDelegatePaint(QPainter *painter, const QRect& rect, const Echo::String& val);
 
 	protected:
@@ -40,10 +38,9 @@ namespace QT_UI
 		void adjustHeightSize();
 
 	private slots:
-		// 选择路径
-		void OnSelectPath();
-
-		// edit finished
+		// slots
+		void onSelectPath();
+		void onShowRes();
 		void onEditFinished();
 
 	private:
@@ -51,7 +48,8 @@ namespace QT_UI
 		QString			m_files;
 		QHBoxLayout*	m_horizonLayout;
 		QLineEdit*		m_lineEdit;
-		QToolButton*	m_toolButton;
+		QToolButton*	m_resSelectButton = nullptr;
+		QToolButton*	m_resFindButton = nullptr;
 		QPropertyModel* m_propertyModel;
 		QString			m_propertyName;
 	};

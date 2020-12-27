@@ -95,6 +95,18 @@ namespace Studio
 		QObject::connect(m_filesystemWatcher, SIGNAL(directoryChanged(const QString&)), this, SLOT(onWatchFileDirChanged(const QString&)));
 	}
 
+	void ResPanel::onSelectFile(const char* pathName)
+	{
+		Echo::String dir = Echo::PathUtil::GetFileDirPath(pathName);
+		if (!dir.empty())
+		{
+			onSelectDir(dir.c_str());
+
+			Echo::String fileName = Echo::PathUtil::GetPureFilename(pathName, true);
+			m_previewHelper->selectFile(fileName);
+		}
+	}
+
 	void ResPanel::reslectCurrentDir()
 	{
 		// refresh current dir

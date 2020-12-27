@@ -98,6 +98,15 @@ namespace QT_UI
 		}
 	}
 
+	void QPreviewHelper::selectFile(const Echo::String& fileName)
+	{
+		QList<QStandardItem*> items = m_listModel->findItems(fileName.c_str());
+		for (QStandardItem* item : items)
+		{
+			m_listView->setCurrentIndex(m_listProxyModel->mapFromSource(item->index()));
+		}
+	}
+
 	void QPreviewHelper::setFilterPattern(const char* pattern)
 	{
 		QRegExp regExp( pattern, Qt::CaseInsensitive);
