@@ -30,7 +30,7 @@ namespace DataFlowProgramming
         QString name() const override { return QStringLiteral("Shared"); }
 
 		// generate code
-		virtual bool generateCode(ShaderCompiler& compiler) override;
+		virtual bool generateCode(Echo::ShaderCompiler& compiler) override;
 
     public:
         // load|save

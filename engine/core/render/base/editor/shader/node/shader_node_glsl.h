@@ -29,6 +29,9 @@ namespace Echo
 		// get input data types
 		virtual DataTypes getInputDataTypes() override;
 
+		// generate code
+		virtual bool generateCode(ShaderCompiler& compiler) override;
+
 	private:
 		String			m_inputs;
 		String			m_code;

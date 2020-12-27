@@ -1,9 +1,10 @@
 #pragma once
 
-#include "engine/core/util/StringUtil.h"
+#include "engine/core/base/object.h"
 
-namespace DataFlowProgramming
+namespace Echo
 {
+#ifdef ECHO_EDITOR_MODE
 	class ShaderCompiler
 	{
 	public:
@@ -46,14 +47,14 @@ namespace DataFlowProgramming
 
 	private:
 		Echo::i32		m_texturesCount = 0;
-
 		Echo::String	m_macros;
 		UniformArray	m_fsUniforms;
 		Echo::String	m_fsUniformsCode;
 		Echo::String	m_fsTextureUniforms;
+		Echo::String	m_fsFunctionCode;
 		Echo::String	m_fsCode;
-
 		Echo::String	m_finalVsCode;
 		Echo::String	m_finalPsCode;
 	};
+#endif
 }

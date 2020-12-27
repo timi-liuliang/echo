@@ -177,4 +177,16 @@ namespace DataFlowProgramming
 			m_inputs.resize(m_inputDataTypes.size());
 		}
 	}
+
+	bool ShaderDataModel::generateCode(Echo::ShaderCompiler& compiler)
+	{
+		if (m_shaderNode)
+		{
+			m_shaderNode->generateCode(compiler);
+
+			return true;
+		}
+
+		return false;
+	}
 }

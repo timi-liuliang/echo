@@ -67,7 +67,7 @@ namespace DataFlowProgramming
 		return m_outputs[portIndex];
 	}
 
-	bool LayerBlendDataModel::generateCode(ShaderCompiler& compiler)
+	bool LayerBlendDataModel::generateCode(Echo::ShaderCompiler& compiler)
 	{
 		compiler.addMacro("ENABLE_VERTEX_BLENDING");
 

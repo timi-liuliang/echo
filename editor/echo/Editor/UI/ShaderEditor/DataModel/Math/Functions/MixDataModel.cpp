@@ -56,7 +56,7 @@ namespace DataFlowProgramming
 		Q_EMIT dataUpdated(0);
     }
 
-    bool MixDataModel::generateCode(ShaderCompiler& compiler)
+    bool MixDataModel::generateCode(Echo::ShaderCompiler& compiler)
     {
         if (m_inputs[0] && m_inputs[1] && m_inputs[2])
         {

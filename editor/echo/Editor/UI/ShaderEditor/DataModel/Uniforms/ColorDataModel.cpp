@@ -100,7 +100,7 @@ namespace DataFlowProgramming
         onColorEdited();
     }
 
-	bool ColorDataModel::generateCode(ShaderCompiler& compiler)
+	bool ColorDataModel::generateCode(Echo::ShaderCompiler& compiler)
 	{
 		if (m_uniformConfig->isExport())
 		{

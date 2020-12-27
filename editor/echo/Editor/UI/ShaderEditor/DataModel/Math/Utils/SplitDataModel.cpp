@@ -93,7 +93,7 @@ namespace DataFlowProgramming
         checkValidation();
     }
 
-    bool SplitDataModel::generateCode(ShaderCompiler& compiler)
+    bool SplitDataModel::generateCode(Echo::ShaderCompiler& compiler)
     {
         return true;
     }

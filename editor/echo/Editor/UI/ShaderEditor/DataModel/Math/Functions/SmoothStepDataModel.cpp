@@ -56,7 +56,7 @@ namespace DataFlowProgramming
 		Q_EMIT dataUpdated(0);
     }
 
-    bool SmoothStepDataModel::generateCode(ShaderCompiler& compiler)
+    bool SmoothStepDataModel::generateCode(Echo::ShaderCompiler& compiler)
     {
         if (m_inputs[0] && m_inputs[1] && m_inputs[2])
         {

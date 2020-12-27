@@ -90,7 +90,7 @@ namespace DataFlowProgramming
         return m_outputs[index];
     }
 
-    bool SharedUniformDataModel::generateCode(ShaderCompiler& compiler)
+    bool SharedUniformDataModel::generateCode(Echo::ShaderCompiler& compiler)
     {
         Echo::String text = m_comboBox->currentText().toStdString().c_str();
         if (text == "u_Time")

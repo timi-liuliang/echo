@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/core/base/object.h"
+#include "../compiler/shader_compiler.h"
 
 namespace Echo
 {
@@ -32,6 +33,9 @@ namespace Echo
 	public:
 		// get input data types
 		virtual DataTypes getInputDataTypes() { return DataTypes(); }
+
+		// generate code
+		virtual bool generateCode(ShaderCompiler& compiler) { return false; }
 
 	protected:
 		String			m_caption;

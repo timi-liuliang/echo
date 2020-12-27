@@ -54,7 +54,7 @@ namespace DataFlowProgramming
 		Q_EMIT dataUpdated(0);
     }
 
-    bool FloorDataModel::generateCode(ShaderCompiler& compiler)
+    bool FloorDataModel::generateCode(Echo::ShaderCompiler& compiler)
     {
         if (m_inputs[0])
         {

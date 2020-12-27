@@ -54,7 +54,7 @@ namespace DataFlowProgramming
 		Q_EMIT dataUpdated(0);
     }
 
-    bool AbsDataModel::generateCode(ShaderCompiler& compiler)
+    bool AbsDataModel::generateCode(Echo::ShaderCompiler& compiler)
     {
         if (m_inputs[0])
         {

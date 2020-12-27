@@ -55,7 +55,7 @@ namespace DataFlowProgramming
 		Q_EMIT dataUpdated(0);
     }
 
-    bool CrossProductDataModel::generateCode(ShaderCompiler& compiler)
+    bool CrossProductDataModel::generateCode(Echo::ShaderCompiler& compiler)
     {
         if (m_inputs[0] && m_inputs[1])
         {

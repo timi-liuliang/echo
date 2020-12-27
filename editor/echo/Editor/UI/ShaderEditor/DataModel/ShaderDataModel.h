@@ -8,7 +8,7 @@
 #include "DataFloat.h"
 #include "QColorSelect.h"
 #include <engine/core/render/base/editor/shader/node/shader_node_uniform.h>
-#include "Compiler/ShaderCompiler.h"
+#include <engine/core/render/base/editor/shader/compiler/shader_compiler.h>
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -33,12 +33,15 @@ namespace DataFlowProgramming
 		// caption
 		QString caption() const override { return m_shaderNode ? m_shaderNode->getCaption().c_str() : "UnKnown"; }
 
+		// name
+		virtual QString name() const override { return m_shaderNode ? m_shaderNode->getName() : "UnKnown"; }
+
         // variable name
         virtual Echo::String getVariableName() const;
         Echo::String getDefaultVariableName() const;
 
         // generate code
-        virtual bool generateCode(ShaderCompiler& compiler)=0;
+        virtual bool generateCode(Echo::ShaderCompiler& compiler);
 
         // show menu
         virtual void showMenu(const QPointF& pos) {}

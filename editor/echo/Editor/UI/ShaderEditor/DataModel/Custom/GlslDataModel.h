@@ -33,9 +33,6 @@ namespace DataFlowProgramming
         // name
         QString name() const override { return QStringLiteral("Glsl"); }
 
-		// generate code
-		virtual bool generateCode(ShaderCompiler& compiler) override;
-
     public:
         // load|save
         virtual QJsonObject save() const override;

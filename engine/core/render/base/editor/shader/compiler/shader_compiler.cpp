@@ -1,5 +1,7 @@
-#include "ShaderCompiler.h"
-#include <engine/core/render/base/glslcc/glsl_cross_compiler.h>
+#include "shader_compiler.h"
+#include "engine/core/render/base/glslcc/glsl_cross_compiler.h"
+
+#ifdef ECHO_EDITOR_MODE
 
 static const char* g_VsTemplate = R"(#version 450
 
@@ -156,6 +158,9 @@ layout(location = 9) in vec4 v_Joint;
 
 // outputs
 layout(location = 0) out vec4 o_FragColor;
+
+// custom functions
+${FS_FUNCTIONS}
 
 // functions
 #define SRGB_FAST_APPROXIMATION
@@ -358,7 +363,7 @@ ${FS_SHADER_CODE}
 }
 )";
 
-namespace DataFlowProgramming
+namespace Echo
 {
 	ShaderCompiler::ShaderCompiler()
 	{
@@ -396,6 +401,7 @@ namespace DataFlowProgramming
 		psCode = Echo::StringUtil::Replace(psCode, "${FS_MACROS}", m_macros.c_str());
 		psCode = Echo::StringUtil::Replace(psCode, "${FS_UNIFORMS}", m_fsUniformsCode.c_str());
 		psCode = Echo::StringUtil::Replace(psCode, "${FS_TEXTURE_UNIFORMS}", m_fsTextureUniforms.c_str());
+		psCode = Echo::StringUtil::Replace(psCode, "${FS_FUNCTIONS}", m_fsFunctionCode.c_str());
 		psCode = Echo::StringUtil::Replace(psCode, "${FS_SHADER_CODE}", m_fsCode.c_str());
 		psCode = Echo::StringUtil::Replace(psCode, "\t", "    ");
 
@@ -460,7 +466,7 @@ namespace DataFlowProgramming
 
 	void ShaderCompiler::addFunction(const Echo::String& function)
 	{
-
+		m_fsFunctionCode += function;
 	}
 
 	void ShaderCompiler::addCode(const Echo::String& codeChunk)
@@ -468,3 +474,4 @@ namespace DataFlowProgramming
 		m_fsCode += codeChunk;
 	}
 }
+#endif

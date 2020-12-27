@@ -54,7 +54,7 @@ namespace DataFlowProgramming
 		Q_EMIT dataUpdated(0);
     }
 
-    bool CosDataModel::generateCode(ShaderCompiler& compiler)
+    bool CosDataModel::generateCode(Echo::ShaderCompiler& compiler)
     {
         if (m_inputs[0])
         {

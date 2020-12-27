@@ -66,7 +66,7 @@ namespace DataFlowProgramming
         Q_EMIT dataUpdated(0);
     }
 
-    bool FloatDataModel::generateCode(ShaderCompiler& compiler)
+    bool FloatDataModel::generateCode(Echo::ShaderCompiler& compiler)
     {
         if (m_uniformConfig->isExport())
         {

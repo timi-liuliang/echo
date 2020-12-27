@@ -55,7 +55,7 @@ namespace DataFlowProgramming
 		checkValidation();
 	}
 
-	bool CombineDataModel::generateCode(ShaderCompiler& compiler)
+	bool CombineDataModel::generateCode(Echo::ShaderCompiler& compiler)
 	{
 		Echo::String x = m_inputs[0] ? m_inputs[0]->getVariableName() : "0.0";
 		Echo::String y = m_inputs[1] ? m_inputs[1]->getVariableName() : "0.0";

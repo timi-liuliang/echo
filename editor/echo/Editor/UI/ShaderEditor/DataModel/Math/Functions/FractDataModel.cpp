@@ -54,7 +54,7 @@ namespace DataFlowProgramming
 		Q_EMIT dataUpdated(0);
     }
 
-    bool FractDataModel::generateCode(ShaderCompiler& compiler)
+    bool FractDataModel::generateCode(Echo::ShaderCompiler& compiler)
     {
         if (m_inputs[0])
         {

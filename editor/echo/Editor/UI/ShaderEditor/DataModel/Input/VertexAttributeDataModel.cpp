@@ -113,7 +113,7 @@ namespace DataFlowProgramming
         return m_outputs[index];
     }
 
-    bool VertexAttributeDataModel::generateCode(ShaderCompiler& compiler)
+    bool VertexAttributeDataModel::generateCode(Echo::ShaderCompiler& compiler)
     {
         Echo::String text = m_comboBox->currentText().toStdString().c_str();
         if (Echo::StringUtil::StartWith(text, "position("))

@@ -47,6 +47,13 @@ namespace Echo
 		return result;
 	}
 
+	bool ShaderNodeGLSL::generateCode(ShaderCompiler& compiler)
+	{
+		compiler.addFunction("");
+
+		return true;
+	}
+
 #endif
 }
 

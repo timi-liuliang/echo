@@ -103,7 +103,7 @@ namespace DataFlowProgramming
 		m_outputs[4]->setVariableName(Echo::StringUtil::Format("%s_Color.a", variableName.c_str()));
 	}
 
-	bool TextureDataModel::generateCode(ShaderCompiler& compiler)
+	bool TextureDataModel::generateCode(Echo::ShaderCompiler& compiler)
 	{                   
         updateOutputDataVariableName();
 

@@ -20,33 +20,21 @@ using QtNodes::NodeValidationState;
 namespace DataFlowProgramming
 {
     template<typename T>
-    class TemplateDataModel : public ShaderDataModel
+    class TDataModel : public ShaderDataModel
     {
     public:
-        TemplateDataModel()
+        TDataModel()
         {
             m_shaderNode = EchoNew(T);
         }
 
-        virtual ~TemplateDataModel() 
+        virtual ~TDataModel() 
         {}
 
         // is caption visible
         bool captionVisible() const override 
         { 
             return true; 
-        }
-
-        // name
-        QString name() const override 
-        { 
-            return m_shaderNode->getName().c_str();
-        }
-
-		// generate code
-        virtual bool generateCode(ShaderCompiler& compiler) override
-        {
-
         }
 
     public:

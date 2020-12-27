@@ -54,7 +54,7 @@ namespace DataFlowProgramming
 		Q_EMIT dataUpdated(0);
     }
 
-    bool SinDataModel::generateCode(ShaderCompiler& compiler)
+    bool SinDataModel::generateCode(Echo::ShaderCompiler& compiler)
     {
         if (m_inputs[0])
         {

@@ -55,7 +55,7 @@ namespace DataFlowProgramming
         Q_EMIT dataUpdated(0);
     }
 
-    bool DivisionDataModel::generateCode(ShaderCompiler& compiler)
+    bool DivisionDataModel::generateCode(Echo::ShaderCompiler& compiler)
     {
         if (m_inputs[0] && m_inputs[1])
         {

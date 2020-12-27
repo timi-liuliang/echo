@@ -61,7 +61,7 @@ namespace DataFlowProgramming
         Q_EMIT dataUpdated(0);
     }
 
-	bool Vector2DataModel::generateCode(ShaderCompiler& compiler)
+	bool Vector2DataModel::generateCode(Echo::ShaderCompiler& compiler)
 	{
         if (m_uniformConfig->isExport())
         {

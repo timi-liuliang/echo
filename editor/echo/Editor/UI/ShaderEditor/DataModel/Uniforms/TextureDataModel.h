@@ -32,7 +32,7 @@ namespace DataFlowProgramming
         QString name() const override { return QStringLiteral("Texture"); }
 
 		// generate code
-        virtual bool generateCode(ShaderCompiler& compiler) override;
+        virtual bool generateCode(Echo::ShaderCompiler& compiler) override;
 
 		// get default value
 		virtual bool getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues) override;

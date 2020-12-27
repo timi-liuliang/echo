@@ -8,7 +8,7 @@
 #include "DataFloat.h"
 #include "QColorSelect.h"
 #include "ShaderDataModel.h"
-#include "Compiler/ShaderCompiler.h"
+#include <engine/core/render/base/editor/shader/compiler/shader_compiler.h>
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
