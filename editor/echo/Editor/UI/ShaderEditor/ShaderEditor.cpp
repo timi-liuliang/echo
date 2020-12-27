@@ -36,7 +36,7 @@
 #include "DataModel/Math/Functions/FractDataModel.h"
 #include "DataModel/Math/Functions/FwidthDataModel.h"
 #include "DataModel/Math/Functions/AbsDataModel.h"
-#include "DataModel/Custom/GlslDataModel.h"
+#include "DataModel/Custom/TDataModel.h"
 #include "Data/DataFloat.h"
 #include "Data/DataVector2.h"
 #include "Data/DataVector3.h"
@@ -98,7 +98,7 @@ namespace Studio
         ret->registerModel<CombineDataModel>("Math.Utils");
 
         // Custom
-        ret->registerModel<GlslDataModel>("Custom");
+        ret->registerModel<TDataModel<Echo::ShaderNodeGLSL>>("Custom");
 
         // Converts
         ret->registerTypeConverter(std::make_pair(DataFloat(nullptr, "").type(),   DataVector2(nullptr, "").type()), QtNodes::TypeConverter{ FloatToVector2() });

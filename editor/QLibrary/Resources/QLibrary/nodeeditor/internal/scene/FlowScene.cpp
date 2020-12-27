@@ -278,8 +278,7 @@ void FlowScene::iterateOverNodeDataDependentOrder(std::function<void(NodeDataMod
   std::set<QUuid> visitedNodesSet;
 
   //A leaf node is a node with no input ports, or all possible input ports empty
-  auto isNodeLeaf =
-    [](Node const &node, NodeDataModel const &model)
+  auto isNodeLeaf = [](Node const &node, NodeDataModel const &model)
     {
       for (unsigned int i = 0; i < model.nPorts(PortType::In); ++i)
       {

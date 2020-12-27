@@ -55,11 +55,11 @@ namespace QtNodes
         bool resizing() const;
 
     private:
-        std::vector<ConnectionPtrSet> _inConnections;
-        std::vector<ConnectionPtrSet> _outConnections;
-        ReactToConnectionState _reaction;
-        PortType     _reactingPortType;
-        NodeDataType _reactingDataType;
-        bool _resizing;
+        std::vector<ConnectionPtrSet>   _inConnections;
+        std::vector<ConnectionPtrSet>   _outConnections;
+        ReactToConnectionState          _reaction;
+        PortType                        _reactingPortType;
+        NodeDataType                    _reactingDataType;
+        bool                            _resizing;
     };
 }
