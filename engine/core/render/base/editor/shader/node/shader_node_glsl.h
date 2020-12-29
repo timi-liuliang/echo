@@ -18,7 +18,7 @@ namespace Echo
 
 		// inputs
 		const String& getInputs() const { return m_inputs; }
-		void setInputs(const String& inputs) { m_inputs = inputs; }
+		void setInputs(const String& inputs);
 
 		// code
 		const String& getCode() const { return m_code; }

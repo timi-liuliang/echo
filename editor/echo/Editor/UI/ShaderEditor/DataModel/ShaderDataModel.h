@@ -75,8 +75,7 @@ namespace DataFlowProgramming
 
 	protected:
         Echo::ui32                              m_id = 0;
-        Echo::ShaderNode*                       m_shaderNode = nullptr;
-        bool                                    m_isUsed = true;
+		Echo::ShaderNode*                       m_shaderNode = nullptr;
 
 		std::vector<NodeDataType>               m_inputDataTypes;
 		std::vector<std::shared_ptr<ShaderData>>m_inputs;

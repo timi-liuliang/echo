@@ -31,6 +31,11 @@ namespace Echo
 		REGISTER_PROPERTY_EDITOR(ShaderNodeGLSL, "Inputs", ParamterListEditorGLSL);
 	}
 
+	void ShaderNodeGLSL::setInputs(const String& inputs)
+	{ 
+		m_inputs = inputs;
+	}
+
 	ShaderNode::DataTypes ShaderNodeGLSL::getInputDataTypes()
 	{
 		DataTypes result;
@@ -49,7 +54,7 @@ namespace Echo
 
 	bool ShaderNodeGLSL::generateCode(ShaderCompiler& compiler)
 	{
-		String functionCode = StringUtil::Format("%s custom_fun_%d( %s)\n{%s\n}", m_returnType.getValue().c_str(), m_id, m_inputs.c_str(), m_code.c_str());
+		String functionCode = StringUtil::Format("%s custom_fun_%d( %s)\n{\n%s\n}", m_returnType.getValue().c_str(), m_id, m_inputs.c_str(), m_code.c_str());
 		compiler.addFunction(functionCode);
 
 		return true;

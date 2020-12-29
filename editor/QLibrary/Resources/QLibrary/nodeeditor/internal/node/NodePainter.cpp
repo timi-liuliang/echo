@@ -21,43 +21,32 @@ using QtNodes::NodeState;
 using QtNodes::NodeDataModel;
 using QtNodes::FlowScene;
 
-void
-NodePainter::
-paint(QPainter* painter,
-      Node & node,
-      FlowScene const& scene)
+void NodePainter::paint(QPainter* painter, Node & node, FlowScene const& scene)
 {
-  NodeGeometry const& geom = node.nodeGeometry();
+    NodeGeometry const& geom = node.nodeGeometry();
+    NodeState const& state = node.nodeState();
 
-  NodeState const& state = node.nodeState();
+    NodeGraphicsObject& graphicsObject = node.nodeGraphicsObject();
 
-  NodeGraphicsObject& graphicsObject = node.nodeGraphicsObject();
+    geom.recalculateSize(painter->font());
+    graphicsObject.updateProxyWidgetPos();
 
-  geom.recalculateSize(painter->font());
-  graphicsObject.updateProxyWidgetPos();
+    //--------------------------------------------
+    NodeDataModel const * model = node.nodeDataModel();
 
-  //--------------------------------------------
-  NodeDataModel const * model = node.nodeDataModel();
+    drawNodeRect(painter, geom, model, graphicsObject);
+    drawConnectionPoints(painter, geom, state, model, scene);
+    drawFilledConnectionPoints(painter, geom, state, model);
+    drawModelName(painter, geom, state, model);
+    drawEntryLabels(painter, geom, state, model);
+    drawResizeRect(painter, geom, model);
+    drawValidationRect(painter, geom, model, graphicsObject);
 
-  drawNodeRect(painter, geom, model, graphicsObject);
-
-  drawConnectionPoints(painter, geom, state, model, scene);
-
-  drawFilledConnectionPoints(painter, geom, state, model);
-
-  drawModelName(painter, geom, state, model);
-
-  drawEntryLabels(painter, geom, state, model);
-
-  drawResizeRect(painter, geom, model);
-
-  drawValidationRect(painter, geom, model, graphicsObject);
-
-  /// call custom painter
-  if (auto painterDelegate = model->painterDelegate())
-  {
-    painterDelegate->paint(painter, geom, model);
-  }
+    /// call custom painter
+    if (auto painterDelegate = model->painterDelegate())
+    {
+        painterDelegate->paint(painter, geom, model);
+    }
 }
 
 
