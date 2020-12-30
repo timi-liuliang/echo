@@ -34,6 +34,8 @@ namespace Echo
 	void ShaderNodeGLSL::setInputs(const String& inputs)
 	{ 
 		m_inputs = inputs;
+
+		m_inputDataTypesChangedCb();
 	}
 
 	ShaderNode::DataTypes ShaderNodeGLSL::getInputDataTypes()

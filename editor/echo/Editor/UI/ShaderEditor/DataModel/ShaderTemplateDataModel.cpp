@@ -39,7 +39,7 @@ namespace DataFlowProgramming
     {
 		m_inputs[port] = std::dynamic_pointer_cast<ShaderData>(nodeData);
 
-		ShaderScene* shaderScene = qobject_cast<ShaderScene*>(_scene);
+		ShaderScene* shaderScene = qobject_cast<ShaderScene*>(m_scene);
 		if (shaderScene)
 		{
             // check validation

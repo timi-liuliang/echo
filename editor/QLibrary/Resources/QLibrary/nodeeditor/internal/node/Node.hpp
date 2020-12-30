@@ -72,22 +72,14 @@ namespace QtNodes
         /// and propagates it to the connection
         void onDataUpdated(PortIndex index);
 
-        /// update the graphic part if the size of the embeddedwidget changes
+        /// update the graphic part if the size of the embedded widget changes
         void onNodeSizeUpdated();
 
     private:
-        // addressing
-        QUuid _uid;
-
-        // data
-        std::unique_ptr<NodeDataModel> _nodeDataModel;
-
-        // node state
-        NodeState _nodeState;
-
-        // painting
-        NodeGeometry _nodeGeometry;
-
-        std::unique_ptr<NodeGraphicsObject> _nodeGraphicsObject;
+        QUuid                               m_uid;                  // addressing
+        std::unique_ptr<NodeDataModel>      m_nodeDataModel;        // data
+        NodeState                           m_nodeState;            // node state
+        NodeGeometry                        m_nodeGeometry;         // painting
+        std::unique_ptr<NodeGraphicsObject> m_nodeGraphicsObject;
     };
 }

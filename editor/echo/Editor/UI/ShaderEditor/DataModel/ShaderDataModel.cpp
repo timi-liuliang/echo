@@ -11,18 +11,6 @@ namespace DataFlowProgramming
 		m_id = id++;
 	}
 
-	bool ShaderDataModel::onNodePressed() 
-	{ 
-		if (m_shaderNode)
-		{
-			Studio::NodeTreePanel::instance()->onEditObject(m_shaderNode);
-
-			return true;
-		}
-
-		return false; 
-	}
-
 	Echo::String ShaderDataModel::getVariableName() const
 	{ 
 		return getDefaultVariableName();
@@ -129,64 +117,8 @@ namespace DataFlowProgramming
 		return true;
 	}
 
-	void ShaderDataModel::saveShaderNode(QJsonObject& p) const
-	{
-		if (m_shaderNode)
-		{
-			Echo::PropertyInfos properties;
-			Echo::Class::getPropertys(m_shaderNode->getClassName(), m_shaderNode, properties, 3, true);
-
-			for (Echo::PropertyInfo* prop : properties)
-			{
-				Echo::Variant variant;
-				Echo::Class::getPropertyValue(m_shaderNode, prop->m_name, variant);
-
-				p[prop->m_name.c_str()] = variant.toString().c_str();
-			}
-		}
-	}
-
-	void ShaderDataModel::restoreShaderNode(QJsonObject const& p)
-	{
-		if (m_shaderNode)
-		{
-			Echo::PropertyInfos properties;
-			Echo::Class::getPropertys(m_shaderNode->getClassName(), m_shaderNode, properties, 3, true);
-
-			for (Echo::PropertyInfo* prop : properties)
-			{
-				QJsonValue v = p[prop->m_name.c_str()];
-				if (!v.isUndefined())
-				{
-					Echo::String value = v.toString().toStdString().c_str();
-
-					Echo::Variant variant;
-					variant.fromString(prop->m_type, value);
-					Echo::Class::setPropertyValue(m_shaderNode, prop->m_name, variant);
-				}
-			}
-
-			// sync data types
-			m_inputDataTypes.clear();
-			Echo::ShaderNode::DataTypes inputTypes = m_shaderNode->getInputDataTypes();
-			for (const Echo::ShaderNode::DataType& type : inputTypes)
-			{
-				m_inputDataTypes.push_back({type.m_type, type.m_name});
-			}
-
-			m_inputs.resize(m_inputDataTypes.size());
-		}
-	}
-
 	bool ShaderDataModel::generateCode(Echo::ShaderCompiler& compiler)
 	{
-		if (m_shaderNode)
-		{
-			m_shaderNode->generateCode(compiler);
-
-			return true;
-		}
-
 		return false;
 	}
 }

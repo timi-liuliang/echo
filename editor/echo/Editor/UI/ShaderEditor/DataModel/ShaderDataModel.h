@@ -31,10 +31,10 @@ namespace DataFlowProgramming
         virtual ~ShaderDataModel() {}
 
 		// caption
-		QString caption() const override { return m_shaderNode ? m_shaderNode->getCaption().c_str() : "UnKnown"; }
+		QString caption() const override { return "UnKnown"; }
 
 		// name
-		virtual QString name() const override { return m_shaderNode ? m_shaderNode->getName() : "UnKnown"; }
+		virtual QString name() const override { return "UnKnown"; }
 
         // variable name
         virtual Echo::String getVariableName() const;
@@ -64,18 +64,12 @@ namespace DataFlowProgramming
         // check validation
         virtual bool checkValidation();
 
-    protected:
-		// load|save
-		void saveShaderNode(QJsonObject& p) const;
-		void restoreShaderNode(QJsonObject const& p);
-
     public:
 		// slot
-        virtual bool onNodePressed();
+        virtual bool onNodePressed() { return false; }
 
 	protected:
         Echo::ui32                              m_id = 0;
-		Echo::ShaderNode*                       m_shaderNode = nullptr;
 
 		std::vector<NodeDataType>               m_inputDataTypes;
 		std::vector<std::shared_ptr<ShaderData>>m_inputs;

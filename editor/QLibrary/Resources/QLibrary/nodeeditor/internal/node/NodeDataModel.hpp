@@ -29,23 +29,30 @@ namespace QtNodes
       Q_OBJECT
 
     public:
-      NodeDataModel();
-      virtual ~NodeDataModel() = default;
+		enum class ConnectionPolicy
+		{
+			One,
+			Many,
+		};
 
-      /// Caption is used in GUI
-      virtual QString caption() const = 0;
+    public:
+        NodeDataModel();
+        virtual ~NodeDataModel() = default;
 
-      /// It is possible to hide caption in GUI
-      virtual bool captionVisible() const { return true; }
+        /// Caption is used in GUI
+        virtual QString caption() const = 0;
 
-      /// Port caption is used in GUI to label individual ports
-      virtual QString portCaption(PortType, PortIndex) const { return QString(); }
+        /// It is possible to hide caption in GUI
+        virtual bool captionVisible() const { return true; }
 
-      /// It is possible to hide port caption in GUI
-      virtual bool portCaptionVisible(PortType, PortIndex) const { return false; }
+        /// Port caption is used in GUI to label individual ports
+        virtual QString portCaption(PortType, PortIndex) const { return QString(); }
 
-      /// Name makes this model unique
-      virtual QString name() const = 0;
+        /// It is possible to hide port caption in GUI
+        virtual bool portCaptionVisible(PortType, PortIndex) const { return false; }
+
+        /// Name makes this model unique
+        virtual QString name() const = 0;
 
     public:
         QJsonObject save() const override;
@@ -56,12 +63,6 @@ namespace QtNodes
         virtual NodeDataType dataType(PortType portType, PortIndex portIndex) const = 0;
 
     public:
-        enum class ConnectionPolicy
-        {
-            One,
-            Many,
-        };
-
         // connection policy
         virtual ConnectionPolicy portOutConnectionPolicy(PortIndex) const {   return ConnectionPolicy::Many; }
 
@@ -70,8 +71,8 @@ namespace QtNodes
         void setNodeStyle(NodeStyle const& style);
 
         // scene
-        FlowScene* scene() { return _scene; }
-        void setScene(FlowScene* scene) { _scene = scene; }
+        FlowScene* scene() { return m_scene; }
+        void setScene(FlowScene* scene) { m_scene = scene; }
 
     public:
         /// Triggers the algorithm
@@ -112,8 +113,7 @@ namespace QtNodes
         void embeddedWidgetSizeUpdated();
 
      protected:
-        NodeStyle _nodeStyle;
-
-        FlowScene* _scene = nullptr;
+        NodeStyle   m_nodeStyle;
+        FlowScene*  m_scene = nullptr;
     };
 }

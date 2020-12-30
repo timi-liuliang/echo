@@ -26,6 +26,7 @@ namespace DataFlowProgramming
         TDataModel()
         {
             m_shaderNode = EchoNew(T);
+			m_shaderNode->setInputDataTypesChangedCb([this](){ syncInputDataTypes(); });
         }
 
         virtual ~TDataModel() 
@@ -36,6 +37,31 @@ namespace DataFlowProgramming
         { 
             return true; 
         }
+
+		// caption
+		QString caption() const override 
+		{ 
+			return m_shaderNode->getCaption().c_str();
+		}
+
+		// name
+		virtual QString name() const override 
+		{ 
+			return m_shaderNode->getName(); 
+		}
+
+		// generate code
+		virtual bool generateCode(Echo::ShaderCompiler& compiler) override
+		{
+			return m_shaderNode->generateCode(compiler);
+		}
+
+		// pressed event
+		virtual bool onNodePressed() override
+		{
+			Studio::NodeTreePanel::instance()->onEditObject(m_shaderNode);
+			return true;
+		}
 
     public:
         // load|save
@@ -64,5 +90,67 @@ namespace DataFlowProgramming
         { 
             return nullptr; 
         }
+
+	protected:
+		// load|save
+		void saveShaderNode(QJsonObject& p) const;
+		void restoreShaderNode(QJsonObject const& p);
+
+		// sync
+		void syncInputDataTypes();
+
+    protected:
+        Echo::ShaderNode* m_shaderNode = nullptr;
     };
+
+    template<typename T> void TDataModel<T>::saveShaderNode(QJsonObject& p) const
+    {
+		if (m_shaderNode)
+		{
+			Echo::PropertyInfos properties;
+			Echo::Class::getPropertys(m_shaderNode->getClassName(), m_shaderNode, properties, 3, true);
+
+			for (Echo::PropertyInfo* prop : properties)
+			{
+				Echo::Variant variant;
+				Echo::Class::getPropertyValue(m_shaderNode, prop->m_name, variant);
+
+				p[prop->m_name.c_str()] = variant.toString().c_str();
+			}
+		}
+    }
+
+    template<typename T> void TDataModel<T>::restoreShaderNode(QJsonObject const& p)
+    {
+		if (m_shaderNode)
+		{
+			Echo::PropertyInfos properties;
+			Echo::Class::getPropertys(m_shaderNode->getClassName(), m_shaderNode, properties, 3, true);
+
+			for (Echo::PropertyInfo* prop : properties)
+			{
+				QJsonValue v = p[prop->m_name.c_str()];
+				if (!v.isUndefined())
+				{
+					Echo::String value = v.toString().toStdString().c_str();
+
+					Echo::Variant variant;
+					variant.fromString(prop->m_type, value);
+					Echo::Class::setPropertyValue(m_shaderNode, prop->m_name, variant);
+				}
+			}
+		}
+    }
+
+	template<typename T> void TDataModel<T>::syncInputDataTypes()
+	{
+		m_inputDataTypes.clear();
+		Echo::ShaderNode::DataTypes inputTypes = m_shaderNode->getInputDataTypes();
+		for (const Echo::ShaderNode::DataType& type : inputTypes)
+		{
+			m_inputDataTypes.push_back({ type.m_type, type.m_name });
+		}
+
+		m_inputs.resize(m_inputDataTypes.size());
+	}
 }

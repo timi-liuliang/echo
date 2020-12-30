@@ -2,6 +2,7 @@
 
 #include "engine/core/base/object.h"
 #include "../compiler/shader_compiler.h"
+#include <functional>
 
 namespace Echo
 {
@@ -37,8 +38,13 @@ namespace Echo
 		// generate code
 		virtual bool generateCode(ShaderCompiler& compiler) { return false; }
 
+	public:
+		// signals
+		void setInputDataTypesChangedCb(std::function<void()> cb) { m_inputDataTypesChangedCb = cb; }		
+
 	protected:
-		String			m_caption;
+		String					m_caption;
+		std::function<void()>	m_inputDataTypesChangedCb;
 	};
 
 #endif

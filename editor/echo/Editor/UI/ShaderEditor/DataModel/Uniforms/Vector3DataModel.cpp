@@ -16,7 +16,7 @@ namespace DataFlowProgramming
 
 		m_outputs.resize(1);
 
-		m_shaderNode = m_uniformConfig = EchoNew(Echo::ShaderNodeUniform);
+		m_uniformConfig = EchoNew(Echo::ShaderNodeUniform);
 		m_uniformConfig->onVariableNameChanged.connectClassMethod(this, Echo::createMethodBind(&Vector3DataModel::onVariableNameChanged));
 
 		updateOutputDataVariableName();

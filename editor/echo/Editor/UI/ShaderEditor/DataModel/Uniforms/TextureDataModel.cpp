@@ -9,7 +9,7 @@ namespace DataFlowProgramming
     TextureDataModel::TextureDataModel()
         : ShaderUniformDataModel()
     {
-        m_shaderNode = m_uniformConfig = EchoNew(Echo::ShaderNodeUniformTexture);
+        m_uniformConfig = EchoNew(Echo::ShaderNodeUniformTexture);
         m_uniformConfig->setExport(true);
         m_uniformConfig->setVariableName(getDefaultVariableName());
 
