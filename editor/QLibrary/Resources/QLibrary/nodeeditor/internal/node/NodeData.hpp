@@ -10,6 +10,11 @@ namespace QtNodes
     {
         Echo::String id;
         Echo::String name;
+
+        bool operator == (const NodeDataType& rhs) const
+        {
+            return id == rhs.id && name == rhs.name;
+        }
     };
 
     /// Class represents data transferred between nodes.

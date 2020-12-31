@@ -29,8 +29,11 @@ namespace QtNodes
     public:
         NodeState(std::unique_ptr<NodeDataModel> const &model);
 
-        /// Returns vector of connections ID.
-        /// Some of them can be empty (null)
+        // reset
+        void reset(std::unique_ptr<NodeDataModel> const& model);
+
+        // Returns vector of connections ID.
+        // Some of them can be empty (null)
         std::vector<ConnectionPtrSet>const& getEntries(PortType) const;
         std::vector<ConnectionPtrSet>& getEntries(PortType);
 
@@ -53,10 +56,6 @@ namespace QtNodes
         // resizing
         void setResizing(bool resizing);
         bool resizing() const;
-
-    protected:
-        // sync
-        void syncConnections();
 
     private:
         std::vector<ConnectionPtrSet>   m_inConnections;

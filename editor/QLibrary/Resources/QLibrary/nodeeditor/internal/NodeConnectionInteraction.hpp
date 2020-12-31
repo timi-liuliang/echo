@@ -50,8 +50,8 @@ namespace QtNodes
         bool nodePortIsEmpty(PortType portType, PortIndex portIndex) const;
 
     private:
-        Node*         _node;
-        Connection*   _connection;
-        FlowScene*    _scene;
+        Node*         m_node;
+        Connection*   m_connection;
+        FlowScene*    m_scene;
     };
 }

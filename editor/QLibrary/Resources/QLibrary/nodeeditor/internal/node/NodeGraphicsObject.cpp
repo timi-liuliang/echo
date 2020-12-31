@@ -54,9 +54,11 @@ namespace QtNodes
 		embedQWidget();
 
 		// connect to the move signals to emit the move signals in FlowScene
-		auto onMoveSlot = [this] {
+		auto onMoveSlot = [this]()
+		{
 			m_scene.nodeMoved(m_node, pos());
 		};
+
 		connect(this, &QGraphicsObject::xChanged, this, onMoveSlot);
 		connect(this, &QGraphicsObject::yChanged, this, onMoveSlot);
 	}
@@ -130,9 +132,7 @@ namespace QtNodes
 
 		for (PortType portType : {PortType::In, PortType::Out})
 		{
-			auto const& connectionEntries =
-				nodeState.getEntries(portType);
-
+			auto const& connectionEntries = nodeState.getEntries(portType);
 			for (auto const& connections : connectionEntries)
 			{
 				for (auto& con : connections)
@@ -150,9 +150,7 @@ namespace QtNodes
 		setFlag(QGraphicsItem::ItemIsSelectable, !locked);
 	}
 
-	void NodeGraphicsObject::paint(QPainter* painter,
-		QStyleOptionGraphicsItem const* option,
-		QWidget*)
+	void NodeGraphicsObject::paint(QPainter* painter, QStyleOptionGraphicsItem const* option, QWidget*)
 	{
 		painter->setClipRect(option->exposedRect);
 
@@ -236,9 +234,7 @@ namespace QtNodes
 		auto& geom = m_node.nodeGeometry();
 		auto& state = m_node.nodeState();
 
-		if (m_node.nodeDataModel()->resizable() &&
-			geom.resizeRect().contains(QPoint(pos.x(),
-				pos.y())))
+		if (m_node.nodeDataModel()->resizable() && geom.resizeRect().contains(QPoint(pos.x(), pos.y())))
 		{
 			state.setResizing(true);
 		}

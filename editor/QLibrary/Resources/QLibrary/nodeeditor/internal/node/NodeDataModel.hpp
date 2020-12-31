@@ -112,6 +112,9 @@ namespace QtNodes
         // widget size changed
         void embeddedWidgetSizeUpdated();
 
+        // port count changed
+        void portUpdated();
+
      protected:
         NodeStyle   m_nodeStyle;
         FlowScene*  m_scene = nullptr;

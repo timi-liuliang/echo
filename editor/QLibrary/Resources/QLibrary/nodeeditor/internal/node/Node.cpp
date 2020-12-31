@@ -32,6 +32,7 @@ namespace QtNodes
 		// propagate data: model => node
 		QObject::connect(m_nodeDataModel.get(), &NodeDataModel::dataUpdated, this, &Node::onDataUpdated);
 		QObject::connect(m_nodeDataModel.get(), &NodeDataModel::embeddedWidgetSizeUpdated, this, &Node::onNodeSizeUpdated);
+		QObject::connect(m_nodeDataModel.get(), &NodeDataModel::portUpdated, this, &Node::onPortUpdated);
 	}
 
 	Node::~Node() = default;
@@ -169,4 +170,8 @@ namespace QtNodes
 		}
 	}
 
+	void Node::onPortUpdated()
+	{
+		nodeState().reset(m_nodeDataModel);
+	}
 }

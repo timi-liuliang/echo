@@ -22,16 +22,13 @@ namespace QtNodes
 {
 	void NodePainter::paint(QPainter* painter, Node& node, FlowScene const& scene)
 	{
-		NodeGeometry const& geom = node.nodeGeometry();
-		NodeState const& state = node.nodeState();
-
-		NodeGraphicsObject& graphicsObject = node.nodeGraphicsObject();
+		NodeGeometry const&  geom = node.nodeGeometry();
+		NodeState const&     state = node.nodeState();
+		NodeGraphicsObject&  graphicsObject = node.nodeGraphicsObject();
+		NodeDataModel const* model = node.nodeDataModel();
 
 		geom.recalculateSize(painter->font());
 		graphicsObject.updateProxyWidgetPos();
-
-		//--------------------------------------------
-		NodeDataModel const* model = node.nodeDataModel();
 
 		drawNodeRect(painter, geom, model, graphicsObject);
 		drawConnectionPoints(painter, geom, state, model, scene);

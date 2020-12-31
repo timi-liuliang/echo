@@ -12,12 +12,18 @@ using QtNodes::Connection;
 namespace QtNodes
 {
 	NodeState::NodeState(std::unique_ptr<NodeDataModel> const& model)
-		: m_inConnections(model->nPorts(PortType::In))
-		, m_outConnections(model->nPorts(PortType::Out))
-		, m_reaction(NOT_REACTING)
+		: m_reaction(NOT_REACTING)
 		, m_reactingPortType(PortType::None)
 		, m_resizing(false)
-	{}
+	{
+		reset(model);
+	}
+
+	void NodeState::reset(std::unique_ptr<NodeDataModel> const& model)
+	{
+		m_inConnections.resize(model->nPorts(PortType::In));
+		m_outConnections.resize(model->nPorts(PortType::Out));
+	}
 
 	std::vector<NodeState::ConnectionPtrSet> const& NodeState::getEntries(PortType portType) const
 	{
@@ -29,8 +35,6 @@ namespace QtNodes
 
 	std::vector<NodeState::ConnectionPtrSet>& NodeState::getEntries(PortType portType)
 	{
-		syncConnections();
-
 		if (portType == PortType::In)
 			return m_inConnections;
 		else
@@ -89,10 +93,5 @@ namespace QtNodes
 	bool NodeState::resizing() const
 	{
 		return m_resizing;
-	}
-
-	void NodeState::syncConnections()
-	{
-
 	}
 }

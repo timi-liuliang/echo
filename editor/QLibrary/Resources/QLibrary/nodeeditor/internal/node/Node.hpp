@@ -75,6 +75,9 @@ namespace QtNodes
         /// update the graphic part if the size of the embedded widget changes
         void onNodeSizeUpdated();
 
+        // update when port types or count changed
+        void onPortUpdated();
+
     private:
         QUuid                               m_uid;                  // addressing
         std::unique_ptr<NodeDataModel>      m_nodeDataModel;        // data
