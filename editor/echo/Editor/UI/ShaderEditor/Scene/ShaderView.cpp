@@ -61,7 +61,7 @@ namespace DataFlowProgramming
 		modelMenu.addAction(treeViewAction);
 
 		QMap<QString, QTreeWidgetItem*> topLevelItems;
-		for (auto const& cat : _scene->registry().categories())
+		for (auto const& cat : m_scene->registry().categories())
 		{
 			if (cat != skipText)
 			{
@@ -72,7 +72,7 @@ namespace DataFlowProgramming
 			}
 		}
 
-		for (auto const& assoc : _scene->registry().registeredModelsCategoryAssociation())
+		for (auto const& assoc : m_scene->registry().registeredModelsCategoryAssociation())
 		{
 			auto parent = topLevelItems[assoc.second];
 			if (parent)
@@ -93,15 +93,15 @@ namespace DataFlowProgramming
 				return;
 			}
 
-			auto type = _scene->registry().create(modelName);
+			auto type = m_scene->registry().create(modelName);
 			if (type)
 			{
-				auto& node = _scene->createNode(std::move(type));
+				auto& node = m_scene->createNode(std::move(type));
 				QPoint pos = event->pos();
 				QPointF posView = this->mapToScene(pos);
 				node.nodeGraphicsObject().setPos(posView);
 
-				_scene->nodePlaced(node);
+				m_scene->nodePlaced(node);
 			}
 			else
 			{

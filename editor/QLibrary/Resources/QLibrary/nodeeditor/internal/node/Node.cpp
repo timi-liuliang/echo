@@ -173,5 +173,9 @@ namespace QtNodes
 	void Node::onPortUpdated()
 	{
 		nodeState().reset(m_nodeDataModel);
+		onNodeSizeUpdated();
+
+		nodeGraphicsObject().setSelected(false);
+		nodeGraphicsObject().setSelected(true);
 	}
 }

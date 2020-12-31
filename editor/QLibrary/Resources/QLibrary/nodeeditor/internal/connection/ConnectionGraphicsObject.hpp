@@ -15,8 +15,7 @@ class ConnectionGeometry;
 class Node;
 
 /// Graphic Object for connection. Adds itself to scene
-class ConnectionGraphicsObject
-  : public QGraphicsObject
+class ConnectionGraphicsObject : public QGraphicsObject
 {
   Q_OBJECT
 

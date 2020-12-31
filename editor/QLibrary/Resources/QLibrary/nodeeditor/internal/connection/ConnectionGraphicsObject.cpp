@@ -86,17 +86,13 @@ shape() const
 }
 
 
-void
-ConnectionGraphicsObject::
-setGeometryChanged()
+void ConnectionGraphicsObject::setGeometryChanged()
 {
   prepareGeometryChange();
 }
 
 
-void
-ConnectionGraphicsObject::
-move()
+void ConnectionGraphicsObject::move()
 {
   for(PortType portType: { PortType::In, PortType::Out } )
   {
