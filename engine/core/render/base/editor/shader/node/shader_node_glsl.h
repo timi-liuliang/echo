@@ -17,8 +17,8 @@ namespace Echo
 		virtual QString name() const override { return "GLSL"; }
 
 		// inputs
-		const String& getInputs() const { return m_inputs; }
-		void setInputs(const String& inputs);
+		const String& getParms() const { return m_parameters; }
+		void setParms(const String& inputs);
 
 		// code
 		const String& getCode() const { return m_code; }
@@ -36,7 +36,7 @@ namespace Echo
 		virtual bool generateCode(ShaderCompiler& compiler) override;
 
 	private:
-		String			m_inputs;
+		String			m_parameters;
 		String			m_code;
 		StringOption	m_returnType = StringOption("float", { "float", "vec2", "vec3", "vec4" });
 	};

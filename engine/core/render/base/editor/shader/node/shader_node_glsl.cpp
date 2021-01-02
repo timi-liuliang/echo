@@ -20,27 +20,27 @@ namespace Echo
 
 	void ShaderNodeGLSL::bindMethods()
 	{
-		CLASS_BIND_METHOD(ShaderNodeGLSL, getInputs, DEF_METHOD("getInputs"));
-		CLASS_BIND_METHOD(ShaderNodeGLSL, setInputs, DEF_METHOD("setInputs"));
+		CLASS_BIND_METHOD(ShaderNodeGLSL, getParms, DEF_METHOD("getParms"));
+		CLASS_BIND_METHOD(ShaderNodeGLSL, setParms, DEF_METHOD("setParms"));
 		CLASS_BIND_METHOD(ShaderNodeGLSL, getCode, DEF_METHOD("getCode"));
 		CLASS_BIND_METHOD(ShaderNodeGLSL, setCode, DEF_METHOD("setCode"));
 		CLASS_BIND_METHOD(ShaderNodeGLSL, getReturnType, DEF_METHOD("getReturnType"));
 		CLASS_BIND_METHOD(ShaderNodeGLSL, setReturnType, DEF_METHOD("setReturnType"));
 
-		CLASS_REGISTER_PROPERTY(ShaderNodeGLSL, "Inputs", Variant::Type::String, "getInputs", "setInputs");
+		CLASS_REGISTER_PROPERTY(ShaderNodeGLSL, "Parameters", Variant::Type::String, "getParms", "setParms");
 		CLASS_REGISTER_PROPERTY(ShaderNodeGLSL, "ReturnType", Variant::Type::StringOption, "getReturnType", "setReturnType");
 		CLASS_REGISTER_PROPERTY(ShaderNodeGLSL, "Code", Variant::Type::String, "getCode", "setCode");
 		CLASS_REGISTER_PROPERTY_HINT(ShaderNodeGLSL, "Code", PropertyHintType::Language, "glsl");
 
-		REGISTER_PROPERTY_EDITOR(ShaderNodeGLSL, "Inputs", ParamterListEditorGLSL);
+		REGISTER_PROPERTY_EDITOR(ShaderNodeGLSL, "Parameters", ParamterListEditorGLSL);
 	}
 
-	void ShaderNodeGLSL::setInputs(const String& inputs)
+	void ShaderNodeGLSL::setParms(const String& inputs)
 	{ 
-		m_inputs = inputs;
-
-		if (m_inputDataTypes != getInputDataTypes(inputs))
+		if (m_parameters != inputs)
 		{
+			m_parameters = inputs;
+
 			m_inputDataTypes = getInputDataTypes(inputs);
 			m_inputs.resize(m_inputDataTypes.size());
 
@@ -85,7 +85,7 @@ namespace Echo
 
 	bool ShaderNodeGLSL::generateCode(ShaderCompiler& compiler)
 	{
-		String functionCode = StringUtil::Format("%s custom_fun_%d( %s)\n{\n%s\n}", m_returnType.getValue().c_str(), m_id, m_inputs.c_str(), m_code.c_str());
+		String functionCode = StringUtil::Format("%s custom_fun_%d( %s)\n{\n%s\n}", m_returnType.getValue().c_str(), m_id, m_parameters.c_str(), m_code.c_str());
 		compiler.addFunction(functionCode);
 
 		return true;
