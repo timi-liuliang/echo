@@ -195,6 +195,9 @@ MESSAGE(STATUS "\${ECHO_ROOT_PATH}: ${ECHO_ROOT_PATH}")
 MESSAGE(STATUS "\${ECHO_LIB_PATH}: ${ECHO_LIB_PATH}")
 MESSAGE(STATUS "\${ECHO_BIN_PATH}: ${ECHO_BIN_PATH}")
 
+# Tutorial - CMake Functions and Macros
+# https://asitdhal.medium.com/cmake-functions-and-macros-22293041519f
+
 # MACRO for GROUP_FILES
 MACRO(GROUP_FILES src_files root_path)
         SET(cur_dir ${root_path})
@@ -246,7 +249,7 @@ MACRO(APPEND_FILES src_files rescure append_dir)
 ENDMACRO(APPEND_FILES)
 
 # Macro
-MACRO(GROUP_QT_UI_FILES src_files root_path)
+MACRO(GROUP_QT_UI_FILES qt_generate_files src_files root_path)
 		SET(cur_dir ${root_path})
 		FOREACH(group_files ${${src_files}})
 			STRING(REGEX REPLACE ${cur_dir}/\(.*\) \\1 sgbd_fpath ${group_files})
@@ -261,47 +264,18 @@ MACRO(GROUP_QT_UI_FILES src_files root_path)
 				SET(QTUI_HEADER_UI)
 				QT5_WRAP_UI(QTUI_HEADER_UI	${group_files})
 				SOURCE_GROUP(${sgbd_group_name} FILES ${QTUI_HEADER_UI})
-				SET(ASTUDIO_QT_FILES ${ASTUDIO_QT_FILES} ${QTUI_HEADER_UI})
+				SET(${${qt_generate_files}} ${qt_generate_files} ${QTUI_HEADER_UI})
 			ENDIF(sgbd_nogroup)
 		ENDFOREACH(group_files)
 ENDMACRO(GROUP_QT_UI_FILES)
 
 # define macro GROUP_QT_MOC_FILES
-MACRO(GROUP_QT_MOC_FILES src_files)
+MACRO(GROUP_QT_MOC_FILES qt_generate_files src_files)
 	SET(QTUI_MOC_UI)
-	QT5_WRAP_CPP(QTUI_MOC_UI	${${src_files}})
+	QT5_WRAP_CPP(QTUI_MOC_UI ${${src_files}})
 	SOURCE_GROUP("Resources\\Generated Files\\Moc" FILES ${QTUI_MOC_UI})
-	SET(ASTUDIO_QT_FILES ${ASTUDIO_QT_FILES} ${QTUI_MOC_UI})
+	SET(${${qt_generate_files}} ${${qt_generate_files}} ${QTUI_MOC_UI})
 ENDMACRO(GROUP_QT_MOC_FILES)
-
-# Macro
-MACRO(GROUP_ENGINE_QT_UI_FILES src_files root_path)
-		SET(cur_dir ${root_path})
-		FOREACH(group_files ${${src_files}})
-			STRING(REGEX REPLACE ${cur_dir}/\(.*\) \\1 sgbd_fpath ${group_files})
-			STRING(REGEX REPLACE "\(.*\)/.*" \\1 sgbd_group_name ${sgbd_fpath})
-			STRING(COMPARE EQUAL ${sgbd_fpath} ${sgbd_group_name} sgbd_nogroup)
-			STRING(REPLACE "/" "\\" sgbd_group_name ${sgbd_group_name})
-			IF(sgbd_nogroup)
-				SOURCE_GROUP("" FILES ${group_files})
-			ELSE()
-				#INCLUDE_DIRECTORIES(${sgbd_group_name})
-				SOURCE_GROUP(${sgbd_group_name} FILES ${group_files})
-				SET(QTUI_HEADER_UI)
-				QT5_WRAP_UI(QTUI_HEADER_UI	${group_files})
-				SOURCE_GROUP(${sgbd_group_name} FILES ${QTUI_HEADER_UI})
-				SET(ENGINE_QT_FILES ${ENGINE_QT_FILES} ${QTUI_HEADER_UI})
-			ENDIF(sgbd_nogroup)
-		ENDFOREACH(group_files)
-ENDMACRO(GROUP_ENGINE_QT_UI_FILES)
-
-# define macro GROUP_QT_MOC_FILES
-MACRO(GROUP_ENGINE_QT_MOC_FILES src_files)
-	SET(QTUI_MOC_UI)
-	QT5_WRAP_CPP(QTUI_MOC_UI	${${src_files}})
-	SOURCE_GROUP("core\\editor\\moc" FILES ${QTUI_MOC_UI})
-	SET(ENGINE_QT_FILES ${ENGINE_QT_FILES} ${QTUI_MOC_UI})
-ENDMACRO(GROUP_ENGINE_QT_MOC_FILES)
 
 MACRO(TARGET_FIND_QTPACKAGES MODULE_NAME)
 	IF(ECHO_EDITOR_MODE)
@@ -353,6 +327,7 @@ IF(ECHO_EDITOR_MODE)
 	ADD_SUBDIRECTORY(thirdparty/libicns)
 	ADD_SUBDIRECTORY(thirdparty/openfbx)
 	ADD_SUBDIRECTORY(thirdparty/googletest)
+	ADD_SUBDIRECTORY(thirdparty/nodeeditor)
 	ADD_SUBDIRECTORY(tests/unittest)
 
 	IF(ECHO_PLATFORM_WINDOWS)
