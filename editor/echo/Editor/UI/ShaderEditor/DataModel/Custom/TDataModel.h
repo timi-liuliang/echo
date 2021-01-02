@@ -144,18 +144,9 @@ namespace DataFlowProgramming
 
 	template<typename T> void TDataModel<T>::syncInputDataTypes()
 	{
-		// calculate new data types
-		std::vector<NodeDataType> newDataTypes;
-		Echo::ShaderNode::DataTypes inputTypes = m_shaderNode->getInputDataTypes();
-		for (const Echo::ShaderNode::DataType& type : inputTypes)
+		if (m_inputDataTypes != m_shaderNode->getInputDataTypes())
 		{
-			newDataTypes.push_back({ type.m_type, type.m_name });
-		}
-
-		// update if different
-		if (m_inputDataTypes != newDataTypes)
-		{
-			m_inputDataTypes = newDataTypes;
+			m_inputDataTypes = m_shaderNode->getInputDataTypes();
 			m_inputs.resize(m_inputDataTypes.size());
 
 			Q_EMIT portUpdated();

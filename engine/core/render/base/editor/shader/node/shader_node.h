@@ -4,21 +4,15 @@
 #include "../compiler/shader_compiler.h"
 #include <functional>
 
+#ifdef ECHO_EDITOR_MODE
+
+#include <nodeeditor/NodeData>
+
 namespace Echo
 {
-#ifdef ECHO_EDITOR_MODE
 	class ShaderNode : public Object
 	{
 		ECHO_CLASS(ShaderNode, Object)
-
-	public:
-		// Data Type
-		struct DataType
-		{
-			String m_type;
-			String m_name;
-		};
-		typedef vector<DataType>::type DataTypes;
 
 	public:
 		ShaderNode();
@@ -33,7 +27,7 @@ namespace Echo
 
 	public:
 		// get input data types
-		virtual DataTypes getInputDataTypes() { return DataTypes(); }
+		virtual QtNodes::NodeDataTypes getInputDataTypes() { return QtNodes::NodeDataTypes(); }
 
 		// generate code
 		virtual bool generateCode(ShaderCompiler& compiler) { return false; }
@@ -46,6 +40,6 @@ namespace Echo
 		String					m_caption;
 		std::function<void()>	m_inputDataTypesChangedCb;
 	};
+}
 
 #endif
-}

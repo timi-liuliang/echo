@@ -38,9 +38,9 @@ namespace Echo
 		m_inputDataTypesChangedCb();
 	}
 
-	ShaderNode::DataTypes ShaderNodeGLSL::getInputDataTypes()
+	QtNodes::NodeDataTypes ShaderNodeGLSL::getInputDataTypes()
 	{
-		DataTypes result;
+		QtNodes::NodeDataTypes result;
 		StringArray inputs = StringUtil::Split(m_inputs, ",");
 		for (const String& input : inputs)
 		{

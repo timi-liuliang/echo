@@ -264,18 +264,18 @@ MACRO(GROUP_QT_UI_FILES qt_generate_files src_files root_path)
 				SET(QTUI_HEADER_UI)
 				QT5_WRAP_UI(QTUI_HEADER_UI	${group_files})
 				SOURCE_GROUP(${sgbd_group_name} FILES ${QTUI_HEADER_UI})
-				SET(${${qt_generate_files}} ${qt_generate_files} ${QTUI_HEADER_UI})
+				SET(${qt_generate_files} ${${qt_generate_files}} ${QTUI_HEADER_UI})
 			ENDIF(sgbd_nogroup)
 		ENDFOREACH(group_files)
 ENDMACRO(GROUP_QT_UI_FILES)
 
-# define macro GROUP_QT_MOC_FILES
-MACRO(GROUP_QT_MOC_FILES qt_generate_files src_files)
+# define function GROUP_QT_MOC_FILES
+FUNCTION(GROUP_QT_MOC_FILES qt_generate_files src_files)
 	SET(QTUI_MOC_UI)
 	QT5_WRAP_CPP(QTUI_MOC_UI ${${src_files}})
 	SOURCE_GROUP("Resources\\Generated Files\\Moc" FILES ${QTUI_MOC_UI})
-	SET(${${qt_generate_files}} ${${qt_generate_files}} ${QTUI_MOC_UI})
-ENDMACRO(GROUP_QT_MOC_FILES)
+	SET(${qt_generate_files} ${${qt_generate_files}} ${QTUI_MOC_UI} PARENT_SCOPE)
+ENDFUNCTION(GROUP_QT_MOC_FILES)
 
 MACRO(TARGET_FIND_QTPACKAGES MODULE_NAME)
 	IF(ECHO_EDITOR_MODE)

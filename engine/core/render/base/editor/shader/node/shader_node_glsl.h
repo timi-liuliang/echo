@@ -30,7 +30,7 @@ namespace Echo
 
 	public:
 		// get input data types
-		virtual DataTypes getInputDataTypes() override;
+		virtual QtNodes::NodeDataTypes getInputDataTypes() override;
 
 		// generate code
 		virtual bool generateCode(ShaderCompiler& compiler) override;

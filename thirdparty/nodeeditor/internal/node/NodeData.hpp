@@ -16,6 +16,7 @@ namespace QtNodes
             return id == rhs.id && name == rhs.name;
         }
     };
+    typedef std::vector<QtNodes::NodeDataType> NodeDataTypes;
 
     /// Class represents data transferred between nodes.
     /// @param type is used for comparing the types

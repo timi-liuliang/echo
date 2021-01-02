@@ -71,7 +71,7 @@ namespace DataFlowProgramming
 	protected:
         Echo::ui32                              m_id = 0;
 
-		std::vector<NodeDataType>               m_inputDataTypes;
+        QtNodes::NodeDataTypes                  m_inputDataTypes;
 		std::vector<std::shared_ptr<ShaderData>>m_inputs;
 		std::vector<std::shared_ptr<ShaderData>>m_outputs;
 
