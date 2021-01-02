@@ -1,6 +1,7 @@
 #include "ShaderDataModel.h"
-#include "Data/DataAny.h"
 #include "NodeTreePanel.h"
+
+using namespace Echo;
 
 namespace DataFlowProgramming
 {

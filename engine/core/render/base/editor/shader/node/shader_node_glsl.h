@@ -14,7 +14,7 @@ namespace Echo
 		virtual ~ShaderNodeGLSL();
 
 		// name
-		virtual const char* getName() const { return "GLSL"; }
+		virtual QString name() const override { return "GLSL"; }
 
 		// inputs
 		const String& getInputs() const { return m_inputs; }
@@ -26,11 +26,11 @@ namespace Echo
 
 		// return type
 		const StringOption& getReturnType() const { return m_returnType; }
-		void setReturnType(const StringOption& type) { m_returnType.setValue(type.getValue()); }
+		void setReturnType(const StringOption& type);
 
 	public:
 		// get input data types
-		virtual QtNodes::NodeDataTypes getInputDataTypes() override;
+		QtNodes::NodeDataTypes getInputDataTypes(const String& inputs);
 
 		// generate code
 		virtual bool generateCode(ShaderCompiler& compiler) override;

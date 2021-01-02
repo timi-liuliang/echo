@@ -1,10 +1,10 @@
 #include "ColorDataModel.h"
 #include <QtCore/QJsonValue>
 #include <QtGui/QDoubleValidator>
-#include "DataFloat.h"
-#include "DataVector3.h"
 #include "engine/core/util/StringUtil.h"
 #include <QMenu>
+
+using namespace Echo;
 
 namespace DataFlowProgramming
 {

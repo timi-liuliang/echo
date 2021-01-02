@@ -1,11 +1,11 @@
 #include "ShaderTemplateDataModel.h"
 #include <QtCore/QJsonValue>
 #include <QtGui/QDoubleValidator>
-#include "DataFloat.h"
-#include "DataVector3.h"
 #include "ShaderScene.h"
 #include "nodeeditor/internal/node/Node.hpp"
 #include <engine/core/log/Log.h>
+
+using namespace Echo;
 
 namespace DataFlowProgramming
 {

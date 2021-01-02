@@ -1,8 +1,8 @@
 #include "TextureDataModel.h"
 #include <QtCore/QJsonValue>
 #include <QtGui/QDoubleValidator>
-#include "DataFloat.h"
-#include "DataVector3.h"
+
+using namespace Echo;
 
 namespace DataFlowProgramming
 {

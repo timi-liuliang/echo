@@ -5,8 +5,14 @@
 #include <nodeeditor/NodeDataModel>
 #include <iostream>
 #include <string>
-#include "DataFloat.h"
 #include "QColorSelect.h"
+#include <engine/core/render/base/editor/shader/data/shader_data_float.h>
+#include <engine/core/render/base/editor/shader/data/shader_data_vector2.h>
+#include <engine/core/render/base/editor/shader/data/shader_data_vector3.h>
+#include <engine/core/render/base/editor/shader/data/shader_data_vector4.h>
+#include <engine/core/render/base/editor/shader/data/shader_data_invalid.h>
+#include <engine/core/render/base/editor/shader/data/shader_data_texture.h>
+#include <engine/core/render/base/editor/shader/data/shader_data_any.h>
 #include <engine/core/render/base/editor/shader/node/shader_node_uniform.h>
 #include <engine/core/render/base/editor/shader/compiler/shader_compiler.h>
 
@@ -69,14 +75,14 @@ namespace DataFlowProgramming
         virtual bool onNodePressed() { return false; }
 
 	protected:
-        Echo::ui32                              m_id = 0;
+        Echo::ui32                                      m_id = 0;
 
-        QtNodes::NodeDataTypes                  m_inputDataTypes;
-		std::vector<std::shared_ptr<ShaderData>>m_inputs;
-		std::vector<std::shared_ptr<ShaderData>>m_outputs;
+        QtNodes::NodeDataTypes                          m_inputDataTypes;
+		std::vector<std::shared_ptr<Echo::ShaderData>>  m_inputs;
+		std::vector<std::shared_ptr<Echo::ShaderData>>  m_outputs;
 
-		NodeValidationState                     m_modelValidationState = NodeValidationState::Valid;
-		QString                                 m_modelValidationError = QStringLiteral("");
+		NodeValidationState                             m_modelValidationState = NodeValidationState::Valid;
+		QString                                         m_modelValidationError = QStringLiteral("");
     };
 }
 

@@ -1,11 +1,6 @@
 #include "CrossProductDataModel.h"
 #include <QtCore/QJsonValue>
 #include <QtGui/QDoubleValidator>
-#include "DataFloat.h"
-#include "DataVector2.h"
-#include "DataVector3.h"
-#include "DataVector4.h"
-#include "DataInvalid.h"
 #include "ShaderScene.h"
 #include "OperationRules.h"
 

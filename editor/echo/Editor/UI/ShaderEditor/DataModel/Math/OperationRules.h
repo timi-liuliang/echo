@@ -1,7 +1,10 @@
 #pragma once
 
 #include <engine/core/util/StringUtil.h>
-#include "Data/ShaderData.h"
+#include <engine/core/render/base/editor/shader/data/shader_data.h>
+#include "ShaderDataModel.h"
+
+using namespace Echo;
 
 namespace DataFlowProgramming
 {

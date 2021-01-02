@@ -3,6 +3,8 @@
 #include <QtGui/QDoubleValidator>
 #include "LayerBlendDataModel.h"
 
+using namespace Echo;
+
 namespace DataFlowProgramming
 {
 	LayerBlendDataModel::LayerBlendDataModel()

@@ -36,12 +36,8 @@
 #include "DataModel/Math/Functions/FractDataModel.h"
 #include "DataModel/Math/Functions/FwidthDataModel.h"
 #include "DataModel/Math/Functions/AbsDataModel.h"
-#include "DataModel/Custom/TDataModel.h"
-#include "Data/DataFloat.h"
-#include "Data/DataVector2.h"
-#include "Data/DataVector3.h"
-#include "Data/DataVector4.h"
-#include "Data/Converter/Converters.h"
+#include <engine/core/render/base/editor/shader/data/converter/shader_data_converters.h>
+#include <engine/core/render/base/editor/shader/node/shader_node_glsl.h>
 #include "ShaderScene.h"
 #include "ShaderView.h"
 #include "engine/core/io/IO.h"
@@ -49,6 +45,7 @@
 #include "NodeTreePanel.h"
 
 using namespace DataFlowProgramming;
+using namespace Echo;
 
 namespace Studio
 {
@@ -98,7 +95,7 @@ namespace Studio
         ret->registerModel<CombineDataModel>("Math.Utils");
 
         // Custom
-        ret->registerModel<TDataModel<Echo::ShaderNodeGLSL>>("Custom");
+        ret->registerModel<Echo::ShaderNodeGLSL>("Custom");
 
         // Converts
         ret->registerTypeConverter(std::make_pair(DataFloat(nullptr, "").type(),   DataVector2(nullptr, "").type()), QtNodes::TypeConverter{ FloatToVector2() });

@@ -1,7 +1,8 @@
 #include "FloatDataModel.h"
 #include <QtCore/QJsonValue>
 #include <QtGui/QDoubleValidator>
-#include "DataFloat.h"
+
+using namespace Echo;
 
 namespace DataFlowProgramming
 {

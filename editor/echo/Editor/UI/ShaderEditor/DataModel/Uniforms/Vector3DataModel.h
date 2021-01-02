@@ -5,7 +5,6 @@
 #include <nodeeditor/NodeDataModel>
 #include "propertyeditor/QVector3Editor.h"
 #include <iostream>
-#include "DataFloat.h"
 #include "ShaderUniformDataModel.h"
 
 using QtNodes::PortType;

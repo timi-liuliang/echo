@@ -1,9 +1,5 @@
 #include "OperationRules.h"
-#include "Data/DataFloat.h"
-#include "Data/DataVector2.h"
-#include "Data/DataVector3.h"
-#include "Data/DataVector4.h"
-#include "Data/DataInvalid.h"
+#include "ShaderDataModel.h"
 
 namespace DataFlowProgramming
 {

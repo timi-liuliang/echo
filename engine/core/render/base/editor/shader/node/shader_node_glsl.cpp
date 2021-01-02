@@ -8,6 +8,10 @@ namespace Echo
 		: ShaderNode()
 	{
 		m_caption = "GLSL";
+
+		m_outputs.resize(1);
+		m_outputs[0] = std::make_shared<DataFloat>(this, "float");
+		m_outputs[0]->setVariableName(getDefaultVariableName());
 	}
 
 	ShaderNodeGLSL::~ShaderNodeGLSL()
@@ -35,14 +39,20 @@ namespace Echo
 	{ 
 		m_inputs = inputs;
 
-		m_inputDataTypesChangedCb();
+		if (m_inputDataTypes != getInputDataTypes(inputs))
+		{
+			m_inputDataTypes = getInputDataTypes(inputs);
+			m_inputs.resize(m_inputDataTypes.size());
+
+			Q_EMIT portUpdated();
+		}
 	}
 
-	QtNodes::NodeDataTypes ShaderNodeGLSL::getInputDataTypes()
+	QtNodes::NodeDataTypes ShaderNodeGLSL::getInputDataTypes(const String& inputs)
 	{
 		QtNodes::NodeDataTypes result;
-		StringArray inputs = StringUtil::Split(m_inputs, ",");
-		for (const String& input : inputs)
+		StringArray inputArray = StringUtil::Split(inputs, ",");
+		for (const String& input : inputArray)
 		{
 			StringArray inputInfo = StringUtil::Split(input, " ");
 			if (inputInfo.size() == 2)
@@ -52,6 +62,25 @@ namespace Echo
 		}
 
 		return result;
+	}
+
+	void ShaderNodeGLSL::setReturnType(const StringOption& type)
+	{ 
+		if (m_returnType.setValue(type.getValue()))
+		{
+			QtNodes::NodeDataModel* model = this;
+
+			m_outputs.resize(1);
+			m_outputs[0]->setVariableName(getDefaultVariableName());
+
+			if(m_returnType.getValue()=="")				m_outputs[0] = std::make_shared<DataFloat>(model, "float");
+			else if (m_returnType.getValue() == "vec2")	m_outputs[0] = std::make_shared<DataVector2>(model, "vec2");
+			else if (m_returnType.getValue() == "vec3") m_outputs[0] = std::make_shared<DataVector3>(model, "vec3");
+			else if (m_returnType.getValue() == "vec4") m_outputs[0] = std::make_shared<DataVector4>(model, "vec4");
+			else										m_outputs[0] = std::make_shared<DataInvalid>(model);
+
+			Q_EMIT portUpdated();
+		}
 	}
 
 	bool ShaderNodeGLSL::generateCode(ShaderCompiler& compiler)

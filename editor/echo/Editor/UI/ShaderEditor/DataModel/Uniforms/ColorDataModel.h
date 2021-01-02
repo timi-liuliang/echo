@@ -4,7 +4,6 @@
 #include <QtWidgets/QLineEdit>
 #include <nodeeditor/NodeDataModel>
 #include <iostream>
-#include "DataFloat.h"
 #include "QColorSelect.h"
 #include "ShaderUniformDataModel.h"
 

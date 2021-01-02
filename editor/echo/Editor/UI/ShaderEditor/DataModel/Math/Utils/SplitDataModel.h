@@ -5,9 +5,6 @@
 #include <nodeeditor/NodeDataModel>
 #include <iostream>
 #include "ShaderDataModel.h"
-#include "DataFloat.h"
-#include "DataAny.h"
-#include "ShaderData.h"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;

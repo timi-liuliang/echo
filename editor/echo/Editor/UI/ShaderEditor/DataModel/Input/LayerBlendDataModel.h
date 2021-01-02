@@ -4,7 +4,6 @@
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QLineEdit>
 #include <iostream>
-#include "DataFloat.h"
 #include "ShaderDataModel.h"
 
 using QtNodes::PortType;
@@ -59,7 +58,6 @@ namespace DataFlowProgramming
 	private:
 		Echo::i32							m_maxOutputNumber = 4;
 		QComboBox*							m_comboBox;
-		vector<std::shared_ptr<ShaderData>> m_outputs;
 	};
 }
 

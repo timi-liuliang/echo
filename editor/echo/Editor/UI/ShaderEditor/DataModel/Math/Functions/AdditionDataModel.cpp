@@ -1,11 +1,6 @@
 #include "AdditionDataModel.h"
 #include <QtCore/QJsonValue>
 #include <QtGui/QDoubleValidator>
-#include "DataFloat.h"
-#include "DataVector2.h"
-#include "DataVector3.h"
-#include "DataVector4.h"
-#include "DataInvalid.h"
 #include "ShaderScene.h"
 #include "OperationRules.h"
 
@@ -22,7 +17,7 @@ namespace DataFlowProgramming
         m_inputs.resize(m_inputDataTypes.size());
 
         m_outputs.resize(1);
-        m_outputs[0] = std::make_shared<DataInvalid>(this);
+        m_outputs[0] = std::make_shared<Echo::DataInvalid>(this);
         m_outputs[0]->setVariableName(getVariableName());
     }
 

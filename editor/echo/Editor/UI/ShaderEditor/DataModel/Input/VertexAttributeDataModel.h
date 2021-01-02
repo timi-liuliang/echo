@@ -3,7 +3,6 @@
 #include <QtCore/QObject>
 #include <QtWidgets/QComboBox>
 #include <iostream>
-#include "DataFloat.h"
 #include "ShaderDataModel.h"
 
 using QtNodes::PortType;
@@ -57,7 +56,6 @@ namespace DataFlowProgramming
 
     private:
       QComboBox*                            m_comboBox;
-      vector<std::shared_ptr<ShaderData>>   m_outputs;
     };
 }
 

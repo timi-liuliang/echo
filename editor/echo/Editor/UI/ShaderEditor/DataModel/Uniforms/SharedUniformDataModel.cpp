@@ -1,10 +1,8 @@
 #include "SharedUniformDataModel.h"
 #include <QtCore/QJsonValue>
 #include <QtGui/QDoubleValidator>
-#include "DataFloat.h"
-#include "DataVector2.h"
-#include "DataVector3.h"
-#include "DataVector4.h"
+
+using namespace Echo;
 
 namespace DataFlowProgramming
 {

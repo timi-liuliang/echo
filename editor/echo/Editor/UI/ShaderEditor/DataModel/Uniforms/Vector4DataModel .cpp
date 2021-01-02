@@ -1,7 +1,8 @@
 #include "Vector4DataModel .h"
 #include <QtCore/QJsonValue>
 #include <QtGui/QDoubleValidator>
-#include "DataVector4.h"
+
+using namespace Echo;
 
 namespace DataFlowProgramming
 {

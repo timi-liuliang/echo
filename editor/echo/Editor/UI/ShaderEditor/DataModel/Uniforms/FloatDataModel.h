@@ -3,7 +3,6 @@
 #include <QtCore/QObject>
 #include <QtWidgets/QLineEdit>
 #include <iostream>
-#include "DataFloat.h"
 #include "ShaderUniformDataModel.h"
 
 using QtNodes::PortType;

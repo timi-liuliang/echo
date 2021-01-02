@@ -68,13 +68,17 @@ namespace DataFlowProgramming
 	void ShaderScene::nodePressed(QtNodes::Node& node)
 	{
 		ShaderDataModel* shaderDataModel = qobject_cast<ShaderDataModel*>(node.nodeDataModel());
-		if (shaderDataModel && shaderDataModel->onNodePressed())
+		if (shaderDataModel)
 		{
-			// do nothing
+			if(!shaderDataModel->onNodePressed())
+				m_shaderEditor->showShaderProgramProperties();
 		}
-		else
+
+		Echo::ShaderNode* shaderNode = dynamic_cast<Echo::ShaderNode*>(node.nodeDataModel());
+		if (shaderNode)
 		{
-			m_shaderEditor->showShaderProgramProperties();
+			if (!shaderNode->onNodePressed())
+				m_shaderEditor->showShaderProgramProperties();
 		}
 	}
 }

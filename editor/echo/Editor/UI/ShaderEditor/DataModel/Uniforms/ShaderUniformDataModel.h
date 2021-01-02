@@ -5,7 +5,6 @@
 #include <nodeeditor/NodeDataModel>
 #include <iostream>
 #include <string>
-#include "DataFloat.h"
 #include "QColorSelect.h"
 #include "ShaderDataModel.h"
 #include <engine/core/render/base/editor/shader/compiler/shader_compiler.h>
