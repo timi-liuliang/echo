@@ -2,6 +2,8 @@
 
 #include "shader_data.h"
 
+#ifdef ECHO_EDITOR_MODE
+
 using QtNodes::NodeDataType;
 using QtNodes::NodeData;
 
@@ -31,3 +33,5 @@ namespace Echo
         std::shared_ptr<ShaderData> m_internalData;
     };
 }
+
+#endif

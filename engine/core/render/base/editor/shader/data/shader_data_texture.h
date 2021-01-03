@@ -1,7 +1,8 @@
 #pragma once
 
 #include "shader_data.h"
-#include <nodeeditor/NodeDataModel>
+
+#ifdef ECHO_EDITOR_MODE
 
 using QtNodes::NodeDataType;
 using QtNodes::NodeData;
@@ -21,3 +22,5 @@ namespace Echo
         }
     };
 }
+
+#endif

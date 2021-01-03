@@ -46,8 +46,11 @@ namespace DataFlowProgramming
             for (QtNodes::Node* node : shaderScene->allNodes())
             {
                 auto shaderDataModel = dynamic_cast<ShaderDataModel*>(node->nodeDataModel());
-                if (!shaderDataModel->checkValidation())
-                    return;
+                if (shaderDataModel)
+                {
+					if (!shaderDataModel->checkValidation())
+						return;
+                }
             }
 
             // compile

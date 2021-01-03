@@ -6,6 +6,8 @@
 #include "../shader_data_vector4.h"
 #include "../shader_data_any.h"
 
+#ifdef ECHO_EDITOR_MODE
+
 namespace Echo
 {
 	class FloatToVector2
@@ -81,4 +83,4 @@ namespace Echo
 	};
 }
 
-
+#endif

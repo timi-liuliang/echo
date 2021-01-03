@@ -1,5 +1,7 @@
 #include "shader_data_converters.h"
 
+#ifdef ECHO_EDITOR_MODE
+
 namespace Echo
 {
 	std::shared_ptr<NodeData> FloatToVector2::operator()(std::shared_ptr<NodeData> data)
@@ -125,3 +127,5 @@ namespace Echo
 		return m_result;
 	}
 }
+
+#endif

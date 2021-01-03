@@ -1,8 +1,9 @@
 #include "shader_node.h"
 
+#ifdef ECHO_EDITOR_MODE
+
 namespace Echo
 {
-#ifdef ECHO_EDITOR_MODE
 	ShaderNode::ShaderNode()
 		: Object()
 	{
@@ -172,7 +173,6 @@ namespace Echo
 
 		return variableName;
 	}
-
-#endif
 }
 
+#endif
