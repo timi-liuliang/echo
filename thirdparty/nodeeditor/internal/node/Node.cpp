@@ -33,6 +33,7 @@ namespace QtNodes
 		QObject::connect(m_nodeDataModel.get(), &NodeDataModel::dataUpdated, this, &Node::onDataUpdated);
 		QObject::connect(m_nodeDataModel.get(), &NodeDataModel::embeddedWidgetSizeUpdated, this, &Node::onNodeSizeUpdated);
 		QObject::connect(m_nodeDataModel.get(), &NodeDataModel::portUpdated, this, &Node::onPortUpdated);
+		QObject::connect(m_nodeDataModel.get(), &NodeDataModel::captionUpdated, this, &Node::onCaptionUpdated);
 	}
 
 	Node::~Node() = default;
@@ -175,6 +176,12 @@ namespace QtNodes
 		nodeState().reset(m_nodeDataModel);
 		onNodeSizeUpdated();
 
+		nodeGraphicsObject().setSelected(false);
+		nodeGraphicsObject().setSelected(true);
+	}
+
+	void  Node::onCaptionUpdated()
+	{
 		nodeGraphicsObject().setSelected(false);
 		nodeGraphicsObject().setSelected(true);
 	}

@@ -29,7 +29,7 @@ namespace Echo
 		virtual QString name() const override { return "Unknown"; }
 
 		// caption
-		virtual QString caption() const override { return m_caption.c_str(); }
+		virtual QString caption() const override { return "Unknown"; }
 
 		// widget
 		virtual QWidget* embeddedWidget() override { return nullptr;}
@@ -77,13 +77,7 @@ namespace Echo
 		void saveShaderNode(QJsonObject& p) const;
 		void restoreShaderNode(QJsonObject const& p);
 
-	public:
-		// caption
-		const String& getCaption() const { return m_caption; }
-		void setCaption(const String& caption) { m_caption = caption; }
-
 	protected:
-		String										m_caption;
 		QtNodes::NodeDataTypes						m_inputDataTypes;
 		std::vector<std::shared_ptr<ShaderData>>	m_inputs;
 		std::vector<std::shared_ptr<ShaderData>>	m_outputs;

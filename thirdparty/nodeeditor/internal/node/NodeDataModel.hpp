@@ -112,8 +112,9 @@ namespace QtNodes
         // widget size changed
         void embeddedWidgetSizeUpdated();
 
-        // port count changed
+        // need update display
         void portUpdated();
+        void captionUpdated();
 
      protected:
         NodeStyle   m_nodeStyle;

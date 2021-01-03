@@ -7,8 +7,6 @@ namespace Echo
 	ShaderNodeGLSL::ShaderNodeGLSL()
 		: ShaderNode()
 	{
-		m_caption = "GLSL";
-
 		m_outputs.resize(1);
 		m_outputs[0] = std::make_shared<DataFloat>(this, "float");
 		m_outputs[0]->setVariableName(getDefaultVariableName());
@@ -20,6 +18,8 @@ namespace Echo
 
 	void ShaderNodeGLSL::bindMethods()
 	{
+		CLASS_BIND_METHOD(ShaderNodeGLSL, getFunctionName, DEF_METHOD("getFunctionName"));
+		CLASS_BIND_METHOD(ShaderNodeGLSL, setFunctionName, DEF_METHOD("setFunctionName"));
 		CLASS_BIND_METHOD(ShaderNodeGLSL, getParms, DEF_METHOD("getParms"));
 		CLASS_BIND_METHOD(ShaderNodeGLSL, setParms, DEF_METHOD("setParms"));
 		CLASS_BIND_METHOD(ShaderNodeGLSL, getCode, DEF_METHOD("getCode"));
@@ -27,12 +27,21 @@ namespace Echo
 		CLASS_BIND_METHOD(ShaderNodeGLSL, getReturnType, DEF_METHOD("getReturnType"));
 		CLASS_BIND_METHOD(ShaderNodeGLSL, setReturnType, DEF_METHOD("setReturnType"));
 
+		CLASS_REGISTER_PROPERTY(ShaderNodeGLSL, "FunctionName", Variant::Type::String, "getFunctionName", "setFunctionName");
 		CLASS_REGISTER_PROPERTY(ShaderNodeGLSL, "Parameters", Variant::Type::String, "getParms", "setParms");
 		CLASS_REGISTER_PROPERTY(ShaderNodeGLSL, "ReturnType", Variant::Type::StringOption, "getReturnType", "setReturnType");
 		CLASS_REGISTER_PROPERTY(ShaderNodeGLSL, "Code", Variant::Type::String, "getCode", "setCode");
 		CLASS_REGISTER_PROPERTY_HINT(ShaderNodeGLSL, "Code", PropertyHintType::Language, "glsl");
 
 		REGISTER_PROPERTY_EDITOR(ShaderNodeGLSL, "Parameters", ParamterListEditorGLSL);
+	}
+
+
+	void  ShaderNodeGLSL::setFunctionName(const String& funName)
+	{
+		m_funName = funName;
+
+		Q_EMIT captionUpdated();
 	}
 
 	void ShaderNodeGLSL::setParms(const String& inputs)

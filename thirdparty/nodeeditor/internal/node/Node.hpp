@@ -78,6 +78,9 @@ namespace QtNodes
         // update when port types or count changed
         void onPortUpdated();
 
+        // caption updated
+        void onCaptionUpdated();
+
     private:
         QUuid                               m_uid;                  // addressing
         std::unique_ptr<NodeDataModel>      m_nodeDataModel;        // data

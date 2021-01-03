@@ -14,10 +14,6 @@ namespace Echo
 
 	void ShaderNode::bindMethods()
 	{
-		CLASS_BIND_METHOD(ShaderNode, getCaption, DEF_METHOD("getCaption"));
-		CLASS_BIND_METHOD(ShaderNode, setCaption, DEF_METHOD("setCaption"));
-
-		CLASS_REGISTER_PROPERTY(ShaderNode, "Caption", Variant::Type::String, "getCaption", "setCaption");
 	}
 
 	unsigned int ShaderNode::nPorts(QtNodes::PortType portType) const
