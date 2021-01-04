@@ -557,9 +557,17 @@ namespace Studio
 				newNode->setName(curNode->getName());
 
 				// remember parent item before delete this item
-				QTreeWidgetItem* parentItem = item->parent() ? item->parent() : m_nodeTreeWidget->invisibleRootItem();
-				removeItem(item);
-				addNode(m_nodeTreeWidget, newNode, parentItem, true);
+				if (item->parent())
+				{
+					QTreeWidgetItem* parentItem = item->parent();
+					removeItem(item);
+					addNode(m_nodeTreeWidget, newNode, parentItem, true);
+				}
+				else
+				{
+					removeItem(item);
+					addNode(newNode);
+				}
 			}
 		}
 	}

@@ -104,7 +104,7 @@ namespace Echo
 		String functionCode = StringUtil::Format("%s custom_fun_%d( %s)\n{\n%s\n}", m_returnType.getValue().c_str(), m_id, m_parameters.c_str(), m_code.c_str());
 		compiler.addFunction(functionCode);
 
-		String code = StringUtil::Format("\t%s %s custom_fun_%d();\n", m_returnType.getValue().c_str(), getDefaultVariableName().c_str(), m_id);
+		String code = StringUtil::Format("\t%s %s = custom_fun_%d();\n", m_returnType.getValue().c_str(), getDefaultVariableName().c_str(), m_id);
 		compiler.addCode(code);
 
 		return true;

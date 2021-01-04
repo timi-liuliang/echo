@@ -204,6 +204,7 @@ namespace Echo
 	{
 		if (parent)
 		{
+			this->remove();
 			parent->insertChild(parent->getChildNum(), this);
 		}
 		else
@@ -216,8 +217,6 @@ namespace Echo
 
 	void Node::insertChild(ui32 idx, Node* node)
 	{
-		node->remove();
-
 		// make sure the name is unique in current layer
 		int    id = 1;
 		String name = node->getName();
@@ -697,16 +696,19 @@ namespace Echo
 			{
 				pugi::xml_node root = doc.child("node");
 				Node* rootNode = instanceNodeTree(&root, nullptr);
-				if (isLink)
+				if (rootNode)
 				{
-					rootNode->setPath(path);
-					for (Echo::ui32 idx = 0; idx < rootNode->getChildNum(); idx++)
+					if (isLink)
 					{
-						rootNode->getChildByIndex(idx)->setLink(true);
+						rootNode->setPath(path);
+						for (Echo::ui32 idx = 0; idx < rootNode->getChildNum(); idx++)
+						{
+							rootNode->getChildByIndex(idx)->setLink(true);
+						}
 					}
+					rootNode->registerToScript();
+					return rootNode;
 				}
-				rootNode->registerToScript();
-				return rootNode;
 			}
 		}
 
@@ -722,26 +724,29 @@ namespace Echo
 			pugi::xml_node* xmlNode = (pugi::xml_node*)pugiNode;
 			Echo::String path = xmlNode->attribute("path").value();
 			Node* node = path.empty() ? ECHO_DOWN_CAST<Node*>(instanceObject(pugiNode)) : loadLink(path, true);
-			if (node)
+			if (!node)
 			{
-				if (!path.empty())
-				{
-					// overwrite property
-					loadPropertyRecursive(xmlNode, node, node->getClassName());
-                    loadSignalSlotConnects(xmlNode, node, node->getClassName());
-                    loadChannels(xmlNode, node);
-				}
-
-				if (parent)
-					parent->addChild(node);
-
-				for (pugi::xml_node child = xmlNode->child("node"); child; child = child.next_sibling("node"))
-				{
-					instanceNodeTree(&child, node);
-				}
-
-				return node;
+				//  if class not exist, create a empty node as placeholder
+				node = Echo::Class::create<Node*>("Node");
 			}
+
+			if (!path.empty())
+			{
+				// overwrite property
+				loadPropertyRecursive(xmlNode, node, node->getClassName());
+                loadSignalSlotConnects(xmlNode, node, node->getClassName());
+                loadChannels(xmlNode, node);
+			}
+
+			if (parent)
+				parent->addChild(node);
+
+			for (pugi::xml_node child = xmlNode->child("node"); child; child = child.next_sibling("node"))
+			{
+				instanceNodeTree(&child, node);
+			}
+
+			return node;
 		}
 
 		return nullptr;

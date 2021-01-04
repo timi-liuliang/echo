@@ -383,6 +383,7 @@ namespace Echo
 		m_fsUniforms.clear();
 		m_fsUniformsCode.clear();
 		m_fsTextureUniforms.clear();
+		m_fsFunctionCode.clear();
 		m_fsCode.clear();
 	}
 
