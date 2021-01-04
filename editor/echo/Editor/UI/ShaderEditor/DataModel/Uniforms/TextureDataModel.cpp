@@ -87,8 +87,6 @@ namespace DataFlowProgramming
 	{
 		m_inputs[port] = std::dynamic_pointer_cast<ShaderData>(nodeData);
         
-        checkValidation();
-
         onTextureEdited();
 	}
 

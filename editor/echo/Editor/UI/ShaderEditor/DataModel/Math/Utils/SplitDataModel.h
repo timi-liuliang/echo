@@ -48,9 +48,6 @@ namespace DataFlowProgramming
         // widget
         QWidget* embeddedWidget() override { return nullptr; }
 
-		// check validation
-		virtual bool checkValidation() override;
-
     private:
         // invalid all outputs
         void invalidAllOutputs();

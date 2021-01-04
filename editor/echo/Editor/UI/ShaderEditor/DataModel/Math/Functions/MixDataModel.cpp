@@ -46,8 +46,6 @@ namespace DataFlowProgramming
 			m_outputs[0]->setVariableName(getVariableName());
         }
 
-        checkValidation();
-
 		Q_EMIT dataUpdated(0);
     }
 

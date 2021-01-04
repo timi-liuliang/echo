@@ -58,7 +58,6 @@ namespace DataFlowProgramming
 		}
     }
 
-	// generate code
     bool ShaderTemplateDataModel::generateCode(Echo::ShaderCompiler& compiler)
     {
         for (size_t i = 0; i < m_inputs.size(); i++)

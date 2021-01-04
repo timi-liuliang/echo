@@ -136,12 +136,14 @@ namespace Studio
         ShaderDataModel* shaderDataModel = dynamic_cast<ShaderDataModel*>(dataModel);
         if(shaderDataModel)
         {
+            shaderDataModel->checkValidation();
             shaderDataModel->generateCode(m_shaderCompiler);
         }
 
 		ShaderNode* shaderNode = dynamic_cast<ShaderNode*>(dataModel);
 		if (shaderNode)
 		{
+            shaderNode->checkValidation();
             shaderNode->generateCode(m_shaderCompiler);
 		}
     }

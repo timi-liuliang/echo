@@ -40,6 +40,9 @@ namespace Echo
 		// get input data types
 		QtNodes::NodeDataTypes getInputDataTypes(const String& inputs);
 
+		// check validation
+		virtual bool checkValidation() override;
+
 		// generate code
 		virtual bool generateCode(ShaderCompiler& compiler) override;
 

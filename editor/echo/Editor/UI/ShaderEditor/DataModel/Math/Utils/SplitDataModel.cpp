@@ -84,64 +84,10 @@ namespace DataFlowProgramming
                 Q_EMIT dataUpdated(i);
             }
         }
-
-        checkValidation();
     }
 
     bool SplitDataModel::generateCode(Echo::ShaderCompiler& compiler)
     {
         return true;
-    }
-
-    bool SplitDataModel::checkValidation()
-    {
-		m_modelValidationState = NodeValidationState::Valid;
-		m_modelValidationError = QStringLiteral("");
-
-		// check 
-		if (m_inputDataTypes.size() != m_inputs.size())
-		{
-			m_modelValidationState = NodeValidationState::Error;
-			m_modelValidationError = QStringLiteral("Inputs count error");
-
-			return false;
-		}
-
-		// input type check
-		for (size_t i = 0; i < m_inputDataTypes.size(); i++)
-		{
-			if (m_inputs[i] && m_inputs[i]->type().id != m_inputDataTypes[i].id)
-			{
-				m_modelValidationState = NodeValidationState::Error;
-				m_modelValidationError = Echo::StringUtil::Format("Input [%d] type error", i).c_str();
-
-				return false;
-			}
-		}
-
-		// check invalid input
-		for (size_t i = 0; i < m_inputs.size(); i++)
-		{
-			if (m_inputs[i] && m_inputs[i]->type().id == "invalid")
-			{
-				m_modelValidationState = NodeValidationState::Error;
-				m_modelValidationError = Echo::StringUtil::Format("Input [%d] is invalid", i).c_str();
-
-				return false;
-			}
-            else if (m_inputs[i] && m_inputs[i]->type().id == "any")
-            {
-                 std::shared_ptr<ShaderData> internalData = DataAny::getInternalData(m_inputs[i]);
-                 if (internalData && internalData->type().id == "invalid")
-                 {
-					 m_modelValidationState = NodeValidationState::Error;
-					 m_modelValidationError = Echo::StringUtil::Format("Input [%d] is invalid", i).c_str();
-
-					 return false;
-                 }
-            }
-		}
-
-		return true;
     }
 }

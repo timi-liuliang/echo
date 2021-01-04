@@ -46,8 +46,6 @@ namespace DataFlowProgramming
 		{
 			Q_EMIT dataUpdated(i);
 		}
-
-		checkValidation();
 	}
 
 	bool CombineDataModel::generateCode(Echo::ShaderCompiler& compiler)

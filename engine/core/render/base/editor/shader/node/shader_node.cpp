@@ -46,6 +46,11 @@ namespace Echo
 		return m_outputs[portIndex];
 	}
 
+	void ShaderNode::setInData(std::shared_ptr<NodeData> nodeData, int portIndex)
+	{
+		m_inputs[portIndex] = std::dynamic_pointer_cast<ShaderData>(nodeData);
+	}
+
 	bool ShaderNode::checkValidation()
 	{
 		m_modelValidationState = QtNodes::NodeValidationState::Valid;

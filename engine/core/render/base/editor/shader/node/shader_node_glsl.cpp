@@ -99,12 +99,42 @@ namespace Echo
 		}
 	}
 
+	bool ShaderNodeGLSL::checkValidation()
+	{
+		if (!ShaderNode::checkValidation())
+			return false;
+
+		for (size_t i = 0; i < m_inputs.size(); i++)
+		{
+			if (!m_inputs[i])
+			{
+				m_modelValidationState = QtNodes::NodeValidationState::Error;
+				m_modelValidationError = Echo::StringUtil::Format("Input [%d] can't be null", i).c_str();
+
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 	bool ShaderNodeGLSL::generateCode(ShaderCompiler& compiler)
 	{
-		String functionCode = StringUtil::Format("%s custom_fun_%d( %s)\n{\n%s\n}", m_returnType.getValue().c_str(), m_id, m_parameters.c_str(), m_code.c_str());
+		String funName = m_funName.empty() ? StringUtil::Format("custom_fun_%d", m_id) : m_funName;
+		String functionCode = StringUtil::Format("%s %s( %s)\n{\n%s\n}", m_returnType.getValue().c_str(), funName.c_str(), m_parameters.c_str(), m_code.c_str());
 		compiler.addFunction(functionCode);
 
-		String code = StringUtil::Format("\t%s %s = custom_fun_%d();\n", m_returnType.getValue().c_str(), getDefaultVariableName().c_str(), m_id);
+		String params;
+		i32 finalIdx = m_inputs.size() - 1;
+		for (size_t i = 0; i <= finalIdx; i++)
+		{
+			if (m_inputs[i])
+			{
+				params += " " + m_inputs[i]->getVariableName() + (i == finalIdx ? "" : ",");
+			}
+		}
+
+		String code = StringUtil::Format("\t%s %s = %s(%s);\n", m_returnType.getValue().c_str(), getDefaultVariableName().c_str(), funName.c_str(), params.c_str());
 		compiler.addCode(code);
 
 		return true;

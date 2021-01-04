@@ -45,7 +45,7 @@ namespace Echo
 		std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port) override;
 
 		// set in data
-		virtual void setInData(std::shared_ptr<NodeData>, int) override { }
+		virtual void setInData(std::shared_ptr<NodeData> nodeData, int portIndex) override;
 
 	public:
 		// validation
