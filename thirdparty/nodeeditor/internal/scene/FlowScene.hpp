@@ -2,11 +2,9 @@
 
 #include <QtCore/QUuid>
 #include <QtWidgets/QGraphicsScene>
-
 #include <unordered_map>
 #include <tuple>
 #include <functional>
-
 #include "../base/QUuidStdHash.hpp"
 #include "../base/Export.hpp"
 #include "../DataModelRegistry.hpp"
@@ -26,67 +24,68 @@ namespace QtNodes
     /// Scene holds connections and nodes.
     class NODE_EDITOR_PUBLIC FlowScene : public QGraphicsScene
     {
-      Q_OBJECT
+        Q_OBJECT
+
     public:
-        FlowScene(std::shared_ptr<DataModelRegistry> registry, QObject * parent = Q_NULLPTR);
-        FlowScene(QObject * parent = Q_NULLPTR);
+        FlowScene(std::shared_ptr<DataModelRegistry> registry, QObject* parent = Q_NULLPTR);
+        FlowScene(QObject* parent = Q_NULLPTR);
         ~FlowScene();
 
     public:
         // create connection
-        std::shared_ptr<Connection> createConnection(PortType connectedPort, Node& node,PortIndex portIndex);
-        std::shared_ptr<Connection> createConnection(Node& nodeIn, PortIndex portIndexIn, Node& nodeOut, PortIndex portIndexOut, TypeConverter const & converter = TypeConverter{});
+        std::shared_ptr<Connection> createConnection(PortType connectedPort, Node& node, PortIndex portIndex);
+        std::shared_ptr<Connection> createConnection(Node& nodeIn, PortIndex portIndexIn, Node& nodeOut, PortIndex portIndexOut, TypeConverter const& converter = TypeConverter{});
 
         // restore connection
-        std::shared_ptr<Connection> restoreConnection(QJsonObject const &connectionJson);
+        std::shared_ptr<Connection> restoreConnection(QJsonObject const& connectionJson);
 
         // delete connection
         void deleteConnection(Connection& connection);
 
     public:
-      Node& createNode(std::unique_ptr<NodeDataModel> && dataModel);
+        Node& createNode(std::unique_ptr<NodeDataModel>&& dataModel);
 
-      Node* restoreNode(QJsonObject const& nodeJson);
+        Node* restoreNode(QJsonObject const& nodeJson);
 
-      virtual void removeNode(Node& node);
+        virtual void removeNode(Node& node);
 
-      DataModelRegistry&registry() const;
+        DataModelRegistry& registry() const;
 
-      void setRegistry(std::shared_ptr<DataModelRegistry> registry);
+        void setRegistry(std::shared_ptr<DataModelRegistry> registry);
 
-      void iterateOverNodes(std::function<void(Node*)> const & visitor);
+        void iterateOverNodes(std::function<void(Node*)> const& visitor);
 
-      void iterateOverNodeData(std::function<void(NodeDataModel*)> const & visitor);
+        void iterateOverNodeData(std::function<void(NodeDataModel*)> const& visitor);
 
-      void iterateOverNodeDataDependentOrder(std::function<void(NodeDataModel*)> const & visitor);
+        void iterateOverNodeDataDependentOrder(std::function<void(NodeDataModel*)> const& visitor);
 
-      QPointF getNodePosition(Node const& node) const;
+        QPointF getNodePosition(Node const& node) const;
 
-      void setNodePosition(Node& node, QPointF const& pos) const;
+        void setNodePosition(Node& node, QPointF const& pos) const;
 
-      QSizeF getNodeSize(Node const& node) const;
-
-    public:
-
-      std::unordered_map<QUuid, std::unique_ptr<Node> > const & nodes() const;
-
-      std::unordered_map<QUuid, std::shared_ptr<Connection> > const & connections() const;
-
-      std::vector<Node*> allNodes() const;
-
-      std::vector<Node*> selectedNodes() const;
+        QSizeF getNodeSize(Node const& node) const;
 
     public:
 
-      void clearScene();
+        std::unordered_map<QUuid, std::unique_ptr<Node> > const& nodes() const;
 
-      void save() const;
+        std::unordered_map<QUuid, std::shared_ptr<Connection> > const& connections() const;
 
-      void load();
+        std::vector<Node*> allNodes() const;
 
-      QByteArray saveToMemory() const;
+        std::vector<Node*> selectedNodes() const;
 
-      void loadFromMemory(const QByteArray& data);
+    public:
+
+        void clearScene();
+
+        void save() const;
+
+        void load();
+
+        QByteArray saveToMemory() const;
+
+        void loadFromMemory(const QByteArray& data);
 
     public:
         // node pressed
@@ -94,55 +93,54 @@ namespace QtNodes
 
     Q_SIGNALS:
 
-      /**
-       * @brief Node has been created but not on the scene yet.
-       * @see nodePlaced()
-       */
-      void nodeCreated(Node &n);
+        /**
+         * @brief Node has been created but not on the scene yet.
+         * @see nodePlaced()
+         */
+        void nodeCreated(Node& n);
 
-      /**
-       * @brief Node has been added to the scene.
-       * @details Connect to this signal if need a correct position of node.
-       * @see nodeCreated()
-       */
-      void nodePlaced(Node &n);
+        /**
+         * @brief Node has been added to the scene.
+         * @details Connect to this signal if need a correct position of node.
+         * @see nodeCreated()
+         */
+        void nodePlaced(Node& n);
 
-      void nodeDeleted(Node &n);
+        void nodeDeleted(Node& n);
 
-      void connectionCreated(Connection const &c);
-      void connectionDeleted(Connection const &c);
+        void connectionCreated(Connection const& c);
+        void connectionDeleted(Connection const& c);
 
-      void nodeMoved(Node& n, const QPointF& newLocation);
+        void nodeMoved(Node& n, const QPointF& newLocation);
 
-      void nodeDoubleClicked(Node& n);
+        void nodeDoubleClicked(Node& n);
 
-      void connectionHovered(Connection& c, QPoint screenPos);
+        void connectionHovered(Connection& c, QPoint screenPos);
 
-      void nodeHovered(Node& n, QPoint screenPos);
+        void nodeHovered(Node& n, QPoint screenPos);
 
-      void connectionHoverLeft(Connection& c);
+        void connectionHoverLeft(Connection& c);
 
-      void nodeHoverLeft(Node& n);
+        void nodeHoverLeft(Node& n);
 
-      void nodeContextMenu(Node& n, const QPointF& pos);
+        void nodeContextMenu(Node& n, const QPointF& pos);
 
     private:
+        using SharedConnection = std::shared_ptr<Connection>;
+        using UniqueNode = std::unique_ptr<Node>;
 
-      using SharedConnection = std::shared_ptr<Connection>;
-      using UniqueNode       = std::unique_ptr<Node>;
-
-      std::unordered_map<QUuid, SharedConnection> _connections;
-      std::unordered_map<QUuid, UniqueNode>       _nodes;
-      std::shared_ptr<DataModelRegistry>          _registry;
+        std::unordered_map<QUuid, SharedConnection> m_connections;
+        std::unordered_map<QUuid, UniqueNode>       m_nodes;
+        std::shared_ptr<DataModelRegistry>          m_registry;
 
     private Q_SLOTS:
 
-      void setupConnectionSignals(Connection const& c);
+        void setupConnectionSignals(Connection const& c);
 
-      void sendConnectionCreatedToNodes(Connection const& c);
-      void sendConnectionDeletedToNodes(Connection const& c);
+        void sendConnectionCreatedToNodes(Connection const& c);
+        void sendConnectionDeletedToNodes(Connection const& c);
 
     };
     // get node by position
-    Node* locateNodeAt(QPointF scenePoint, FlowScene &scene,QTransform const & viewTransform);
+    Node* locateNodeAt(QPointF scenePoint, FlowScene& scene, QTransform const& viewTransform);
 }
