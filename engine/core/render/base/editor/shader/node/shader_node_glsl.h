@@ -30,7 +30,7 @@ namespace Echo
 
 		// code
 		const String& getCode() const { return m_code; }
-		void setCode(const String& code) { m_code = code; }
+		void setCode(const String& code);
 
 		// return type
 		const StringOption& getReturnType() const { return m_returnType; }
