@@ -81,7 +81,7 @@ namespace Echo
 	String ShaderNodeGLSL::getCode() const
 	{
 		String funName = m_funName.empty() ? StringUtil::Format("custom_fun_%d", m_id) : m_funName;
-		String functionCode = StringUtil::Format("%s %s( %s)\n{%s}", m_returnType.getValue().c_str(), funName.c_str(), m_parameters.c_str(), m_code.c_str());
+		String functionCode = StringUtil::Format("%s %s(%s)\n{%s}", m_returnType.getValue().c_str(), funName.c_str(), m_parameters.c_str(), m_code.c_str());
 
 		return functionCode;
 	}
