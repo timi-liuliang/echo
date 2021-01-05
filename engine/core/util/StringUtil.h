@@ -25,7 +25,6 @@ namespace Echo
 		bool			IsHaveUpper(const String& str);
 		bool			IsHaveLower(const String& str);
 		String			Format(const char* formats, ...);
-		//WString         Format( const wchar_t* formats, ... );
 		bool			StartWith(const String& str, const String& pattern, bool lowCase = false);
 		bool			EndWith(const String& str, const String& pattern);
 		bool			Equal(const String& str1, const String& str2, bool bCaseSensitive = true);

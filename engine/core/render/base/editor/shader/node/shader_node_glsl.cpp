@@ -44,22 +44,63 @@ namespace Echo
 		Q_EMIT captionUpdated();
 	}
 
-	void ShaderNodeGLSL::setParms(const String& inputs)
-	{ 
-		if (m_parameters != inputs)
+	bool ShaderNodeGLSL::isParamsValid(const String& params)
+	{
+		StringArray paramTypes = { "float", "vec2", "vec3", "vec4" };
+
+		StringArray inputArray = StringUtil::Split(params, ",");
+		for (const String& input : inputArray)
 		{
-			m_parameters = inputs;
+			StringArray inputInfo = StringUtil::Split(input, " ");
+			if (inputInfo.size() != 2)
+				return false;
 
-			m_inputDataTypes = getInputDataTypes(inputs);
-			m_inputs.resize(m_inputDataTypes.size());
+			if (std::find(paramTypes.begin(), paramTypes.end(), inputInfo[0]) == paramTypes.end())
+				return false;
+		}
 
-			Q_EMIT portUpdated();
+		return true;
+	}
+
+	void ShaderNodeGLSL::setParms(const String& params)
+	{ 
+		if (isParamsValid(params))
+		{
+			if (m_parameters != params)
+			{
+				m_parameters = params;
+
+				m_inputDataTypes = getInputDataTypes(params);
+				m_inputs.resize(m_inputDataTypes.size());
+
+				Q_EMIT portUpdated();
+			}
 		}
 	}
 
+	String ShaderNodeGLSL::getCode() const
+	{
+		String funName = m_funName.empty() ? StringUtil::Format("custom_fun_%d", m_id) : m_funName;
+		String functionCode = StringUtil::Format("%s %s( %s)\n{%s}", m_returnType.getValue().c_str(), funName.c_str(), m_parameters.c_str(), m_code.c_str());
+
+		return functionCode;
+	}
+
 	void ShaderNodeGLSL::setCode(const String& code)
-	{ 
-		m_code = code; 
+	{
+		StringArray words = StringUtil::Split(code, " ");
+		String returnType = words[0];
+		setReturnType(returnType);
+
+		String params = StringUtil::Substr(code, "{", true);
+		params = StringUtil::Substr(params, "(", false);
+		params = StringUtil::Substr(params, ")", true);
+		setParms(params);
+
+		String body = StringUtil::Substr(code, "{", false);
+		body = StringUtil::Substr(body, "}", true);
+
+		m_code = body;
 	}
 
 	QtNodes::NodeDataTypes ShaderNodeGLSL::getInputDataTypes(const String& inputs)

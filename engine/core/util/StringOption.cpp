@@ -67,4 +67,15 @@ namespace Echo
 			}
 		}
 	}
+
+	bool StringOption::isOptionExist(const String& option)
+	{
+		for (String& cur : m_options)
+		{
+			if (cur == option)
+				return true;
+		}
+
+		return false;
+	}
 }

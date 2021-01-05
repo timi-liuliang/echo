@@ -26,10 +26,10 @@ namespace Echo
 
 		// inputs
 		const String& getParms() const { return m_parameters; }
-		void setParms(const String& inputs);
+		void setParms(const String& params);
 
 		// code
-		const String& getCode() const { return m_code; }
+		String getCode() const;
 		void setCode(const String& code);
 
 		// return type
@@ -45,6 +45,10 @@ namespace Echo
 
 		// generate code
 		virtual bool generateCode(ShaderCompiler& compiler) override;
+
+	private:
+		// is params valid
+		bool isParamsValid(const String& params);
 
 	private:
 		String			m_funName;
