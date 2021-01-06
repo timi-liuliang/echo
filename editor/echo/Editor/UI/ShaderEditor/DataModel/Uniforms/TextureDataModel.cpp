@@ -14,23 +14,21 @@ namespace DataFlowProgramming
         m_uniformConfig->setVariableName(getDefaultVariableName());
 
         m_textureSelect = new QT_UI::QTextureSelect();
-        m_textureSelect->setFixedSize(128, 128);
+        m_textureSelect->setFixedSize(75, 75);
 
         QObject::connect(m_textureSelect, SIGNAL(Signal_TextureChagned()), this, SLOT(onTextureEdited()));
 
 	    m_inputDataTypes =
 	    {
-		    {"vec2", "UV"},
+		    {"vec2", "uv"},
 	    };
 
 	    m_inputs.resize(m_inputDataTypes.size());
 
-	    m_outputs.resize(5);
-	    m_outputs[0] = std::make_shared<DataVector3>(this, "rgb");
-	    m_outputs[1] = std::make_shared<DataFloat>(this, "r");
-	    m_outputs[2] = std::make_shared<DataFloat>(this, "g");
-	    m_outputs[3] = std::make_shared<DataFloat>(this, "b");
-	    m_outputs[4] = std::make_shared<DataFloat>(this, "a");
+	    m_outputs.resize(3);
+        m_outputs[0] = std::make_shared<DataSampler2D>(this, "tex");
+	    m_outputs[1] = std::make_shared<DataVector3>(this, "rgb");
+	    m_outputs[2] = std::make_shared<DataFloat>(this, "a");
 
         updateOutputDataVariableName();
     }
@@ -79,8 +77,6 @@ namespace DataFlowProgramming
 		Q_EMIT dataUpdated(0);
 		Q_EMIT dataUpdated(1);
 		Q_EMIT dataUpdated(2);
-		Q_EMIT dataUpdated(3);
-		Q_EMIT dataUpdated(4);
     }
 
 	void TextureDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex port)
@@ -94,11 +90,9 @@ namespace DataFlowProgramming
 	{
 		Echo::String variableName = getVariableName();
 
-		m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s_Color.rgb", variableName.c_str()));
-		m_outputs[1]->setVariableName(Echo::StringUtil::Format("%s_Color.r", variableName.c_str()));
-		m_outputs[2]->setVariableName(Echo::StringUtil::Format("%s_Color.g", variableName.c_str()));
-		m_outputs[3]->setVariableName(Echo::StringUtil::Format("%s_Color.b", variableName.c_str()));
-		m_outputs[4]->setVariableName(Echo::StringUtil::Format("%s_Color.a", variableName.c_str()));
+        m_outputs[0]->setVariableName(variableName.c_str());
+		m_outputs[1]->setVariableName(Echo::StringUtil::Format("%s_Color.rgb", variableName.c_str()));
+		m_outputs[2]->setVariableName(Echo::StringUtil::Format("%s_Color.a", variableName.c_str()));
 	}
 
 	bool TextureDataModel::generateCode(Echo::ShaderCompiler& compiler)

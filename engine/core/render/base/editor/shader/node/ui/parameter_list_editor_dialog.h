@@ -40,7 +40,7 @@ namespace Echo
 
 	protected:
 		QStatusBar*		m_statusBar = nullptr;
-		StringArray		m_types = {"float", "vec2", "vec3", "vec4"};
+		StringArray		m_types = {"float", "vec2", "vec3", "vec4", "sampler2D"};
 	};
 }
 #endif

@@ -46,7 +46,7 @@ namespace Echo
 
 	bool ShaderNodeGLSL::isParamsValid(const String& params)
 	{
-		StringArray paramTypes = { "float", "vec2", "vec3", "vec4" };
+		StringArray paramTypes = { "float", "vec2", "vec3", "vec4", "sampler2D" };
 
 		StringArray inputArray = StringUtil::Split(params, ",");
 		for (const String& input : inputArray)
@@ -91,6 +91,11 @@ namespace Echo
 		StringArray words = StringUtil::Split(code, " ");
 		String returnType = words[0];
 		setReturnType(returnType);
+
+		String funName = StringUtil::Substr(code, "(", true);
+		words = StringUtil::Split(funName, " ");
+		if(words.size()==2)
+			setFunctionName(words[1]);
 
 		String params = StringUtil::Substr(code, "{", true);
 		params = StringUtil::Substr(params, "(", false);
@@ -167,7 +172,7 @@ namespace Echo
 
 		String params;
 		i32 finalIdx = m_inputs.size() - 1;
-		for (size_t i = 0; i <= finalIdx; i++)
+		for (i32 i = 0; i <= finalIdx; i++)
 		{
 			if (m_inputs[i])
 			{

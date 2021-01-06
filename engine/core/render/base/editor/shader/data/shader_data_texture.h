@@ -9,17 +9,21 @@ using QtNodes::NodeData;
 
 namespace Echo
 {
-    class DataTexture : public ShaderData
+    class DataSampler2D : public ShaderData
     {
     public:
-        DataTexture(QtNodes::NodeDataModel* dataModel)
-        : ShaderData(dataModel)
+        DataSampler2D(QtNodes::NodeDataModel* dataModel, const Echo::String& displayText)
+            : ShaderData(dataModel)
+            , m_displayText(displayText)
         {}
 
         NodeDataType type() const override
         {
-            return NodeDataType {"texture", "Texture"};
+            return NodeDataType {"sampler2D", m_displayText.c_str() };
         }
+
+    private:
+        Echo::String    m_displayText;
     };
 }
 
