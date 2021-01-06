@@ -11,10 +11,10 @@ namespace DataFlowProgramming
     ColorDataModel::ColorDataModel()
         : ShaderUniformDataModel()
     {
-        m_outputs.resize(5);
+        m_outputs.resize(2);
 
         m_colorSelect = new QT_UI::QColorSelect();
-        m_colorSelect->setFixedSize(128, 128);
+        m_colorSelect->setFixedSize(75, 75);
         m_colorSelect->setDrawText(false);
 
         QObject::connect(m_colorSelect, SIGNAL(Signal_ColorChanged()), this, SLOT(onColorEdited()));
@@ -54,9 +54,6 @@ namespace DataFlowProgramming
     {
         Q_EMIT dataUpdated(0);
         Q_EMIT dataUpdated(1);
-        Q_EMIT dataUpdated(2);
-        Q_EMIT dataUpdated(3);
-        Q_EMIT dataUpdated(4);
     }
 
 	void ColorDataModel::onSetAsParameter()
@@ -81,16 +78,10 @@ namespace DataFlowProgramming
         Echo::String variableName = getVariableName();
 
 		m_outputs[0] = std::make_shared<DataVector3>(this, "rgb");
-		m_outputs[1] = std::make_shared<DataFloat>(this, "r");
-		m_outputs[2] = std::make_shared<DataFloat>(this, "g");
-		m_outputs[3] = std::make_shared<DataFloat>(this, "b");
-		m_outputs[4] = std::make_shared<DataFloat>(this, "a");
+		m_outputs[1] = std::make_shared<DataFloat>(this, "a");
 
 		m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s_Value.rgb", variableName.c_str()));
-		m_outputs[1]->setVariableName(Echo::StringUtil::Format("%s_Value.r", variableName.c_str()));
-		m_outputs[2]->setVariableName(Echo::StringUtil::Format("%s_Value.g", variableName.c_str()));
-		m_outputs[3]->setVariableName(Echo::StringUtil::Format("%s_Value.b", variableName.c_str()));
-		m_outputs[4]->setVariableName(Echo::StringUtil::Format("%s_Value.a", variableName.c_str()));
+		m_outputs[1]->setVariableName(Echo::StringUtil::Format("%s_Value.a", variableName.c_str()));
     }
 
     void ColorDataModel::onVariableNameChanged()

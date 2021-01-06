@@ -69,6 +69,13 @@ namespace Echo
 			{
 				m_texture = (Texture*)Res::get(path);
 			}
+
+			Material::UniformValue* uniformSize = m_owner->getUniform(m_uniform->m_name + "Size");
+			if (uniformSize)
+			{
+				Vector2 size(m_texture->getWidth(), m_texture->getHeight());
+				uniformSize->setValue(&size);
+			}
 		}
 
 		return m_texture; 
@@ -238,6 +245,7 @@ namespace Echo
 						{
 						case ShaderParamType::SPT_INT: registerProperty(ECHO_CLASS_NAME(Material), "Uniforms." + it.first, Variant::Type::Int); break;
 						case ShaderParamType::SPT_FLOAT:registerProperty(ECHO_CLASS_NAME(Material), "Uniforms." + it.first, Variant::Type::Real); break;
+						case ShaderParamType::SPT_VEC2: registerProperty(ECHO_CLASS_NAME(Material), "Uniforms." + it.first, Variant::Type::Vector2); break;
 						case ShaderParamType::SPT_VEC3: registerProperty(ECHO_CLASS_NAME(Material), "Uniforms." + it.first, Variant::Type::Vector3); break;
 						case ShaderParamType::SPT_VEC4: registerProperty(ECHO_CLASS_NAME(Material), "Uniforms." + it.first, Variant::Type::Color); break;
 						case ShaderParamType::SPT_TEXTURE: registerProperty(ECHO_CLASS_NAME(Material), "Uniforms." + it.first, Variant::Type::ResourcePath); break;
