@@ -69,13 +69,6 @@ namespace Echo
 			{
 				m_texture = (Texture*)Res::get(path);
 			}
-
-			Material::UniformValue* uniformSize = m_owner->getUniform(m_uniform->m_name + "Size");
-			if (uniformSize)
-			{
-				Vector2 size(m_texture->getWidth(), m_texture->getHeight());
-				uniformSize->setValue(&size);
-			}
 		}
 
 		return m_texture; 

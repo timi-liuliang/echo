@@ -38,6 +38,7 @@
 #include "DataModel/Math/Functions/AbsDataModel.h"
 #include <engine/core/render/base/editor/shader/data/converter/shader_data_converters.h>
 #include <engine/core/render/base/editor/shader/node/shader_node_glsl.h>
+#include <engine/core/render/base/editor/shader/node/shader_node_texture_size.h>
 #include "ShaderScene.h"
 #include "ShaderView.h"
 #include "engine/core/io/IO.h"
@@ -89,10 +90,11 @@ namespace Studio
         ret->registerModel<LengthDataModel>("Math");
 		ret->registerModel<MixDataModel>("Math");
         ret->registerModel<SmoothStepDataModel>("Math");
+		ret->registerModel<SplitDataModel>("Math");
+		ret->registerModel<CombineDataModel>("Math");
 
-        // Math.Utils
-        ret->registerModel<SplitDataModel>("Math.Utils");
-        ret->registerModel<CombineDataModel>("Math.Utils");
+        // Utils
+        ret->registerModel<Echo::ShaderNodeTextureSize>("Utils");
 
         // Custom
         ret->registerModel<Echo::ShaderNodeGLSL>("Custom");

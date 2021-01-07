@@ -11,6 +11,7 @@ namespace Echo
 
 	ShaderNode::~ShaderNode()
 	{
+		EditorApi.showObjectProperty(nullptr);
 	}
 
 	void ShaderNode::bindMethods()

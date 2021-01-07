@@ -133,7 +133,7 @@ namespace Echo
 			m_outputs.resize(1);
 			m_outputs[0]->setVariableName(getDefaultVariableName());
 
-			if(m_returnType.getValue()=="")				m_outputs[0] = std::make_shared<DataFloat>(model, "float");
+			if(m_returnType.getValue()=="float")		m_outputs[0] = std::make_shared<DataFloat>(model, "float");
 			else if (m_returnType.getValue() == "vec2")	m_outputs[0] = std::make_shared<DataVector2>(model, "vec2");
 			else if (m_returnType.getValue() == "vec3") m_outputs[0] = std::make_shared<DataVector3>(model, "vec3");
 			else if (m_returnType.getValue() == "vec4") m_outputs[0] = std::make_shared<DataVector4>(model, "vec4");

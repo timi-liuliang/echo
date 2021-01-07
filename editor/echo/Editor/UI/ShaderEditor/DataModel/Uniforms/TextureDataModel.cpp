@@ -25,11 +25,10 @@ namespace DataFlowProgramming
 
 	    m_inputs.resize(m_inputDataTypes.size());
 
-	    m_outputs.resize(4);
+	    m_outputs.resize(3);
         m_outputs[0] = std::make_shared<DataSampler2D>(this, "tex");
-        m_outputs[1] = std::make_shared<DataVector2>(this, "size");
-	    m_outputs[2] = std::make_shared<DataVector3>(this, "rgb");
-	    m_outputs[3] = std::make_shared<DataFloat>(this, "a");
+	    m_outputs[1] = std::make_shared<DataVector3>(this, "rgb");
+	    m_outputs[2] = std::make_shared<DataFloat>(this, "a");
 
         updateOutputDataVariableName();
     }
@@ -78,7 +77,6 @@ namespace DataFlowProgramming
 		Q_EMIT dataUpdated(0);
 		Q_EMIT dataUpdated(1);
 		Q_EMIT dataUpdated(2);
-        Q_EMIT dataUpdated(3);
     }
 
 	void TextureDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex port)
@@ -93,9 +91,8 @@ namespace DataFlowProgramming
 		Echo::String variableName = getVariableName();
 
         m_outputs[0]->setVariableName(variableName.c_str());
-        m_outputs[1]->setVariableName(Echo::StringUtil::Format("fs_ubo.%sSize", variableName.c_str()));
-		m_outputs[2]->setVariableName(Echo::StringUtil::Format("%s_Color.rgb", variableName.c_str()));
-		m_outputs[3]->setVariableName(Echo::StringUtil::Format("%s_Color.a", variableName.c_str()));
+		m_outputs[1]->setVariableName(Echo::StringUtil::Format("%s_Color.rgb", variableName.c_str()));
+		m_outputs[2]->setVariableName(Echo::StringUtil::Format("%s_Color.a", variableName.c_str()));
 	}
 
 	bool TextureDataModel::generateCode(Echo::ShaderCompiler& compiler)
@@ -105,7 +102,6 @@ namespace DataFlowProgramming
 		compiler.addMacro("ENABLE_VERTEX_UV0");
 
 		compiler.addTextureUniform(getVariableName());
-        compiler.addUniform("vec2", Echo::StringUtil::Format("%sSize", getVariableName().c_str()));
 
         Echo::String uvConvertCode;
         if (ECHO_DOWN_CAST<Echo::ShaderNodeUniformTexture*>(m_uniformConfig)->isAtla())
