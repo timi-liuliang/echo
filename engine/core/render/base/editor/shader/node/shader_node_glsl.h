@@ -21,7 +21,7 @@ namespace Echo
 
 	public:
 		// caption
-		const String& getFunctionName() const;
+		String getFunctionName() const;
 		void setFunctionName(const String& funName);
 
 		// inputs

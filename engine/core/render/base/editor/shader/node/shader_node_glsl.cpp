@@ -36,7 +36,7 @@ namespace Echo
 		REGISTER_PROPERTY_EDITOR(ShaderNodeGLSL, "Parameters", ParamterListEditorGLSL);
 	}
 
-	const String& ShaderNodeGLSL::getFunctionName() const
+	String ShaderNodeGLSL::getFunctionName() const
 	{
 		return m_funName.empty() ? StringUtil::Format("custom_fun_%d", m_id) : m_funName;;
 	}

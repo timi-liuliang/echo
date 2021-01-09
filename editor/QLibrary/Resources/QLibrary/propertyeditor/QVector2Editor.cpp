@@ -42,7 +42,6 @@ namespace QT_UI
 		QObject::connect(m_lineEditY, SIGNAL(textEdited(const QString&)), this, SLOT(onEditing()));
 	}
 
-	// set value
 	void QVector2Editor::setValue(const QString& val)
 	{
 		Echo::String vec3Str = val.toStdString().c_str();
@@ -64,7 +63,6 @@ namespace QT_UI
 		return result;
 	}
 
-	// redefine paintEvent
 	void QVector2Editor::paintEvent(QPaintEvent* event)
 	{
 		// get label background color
@@ -80,30 +78,31 @@ namespace QT_UI
 		QWidget::paintEvent(event);
 	}
 
-	// edit finished
 	void QVector2Editor::onEditFinished()
 	{
 		using namespace Echo;
 
-		LuaBinder* inst = LuaBinder::instance();
-
-		String xText = m_lineEditX->text().toStdString().c_str();
-		String yText = m_lineEditY->text().toStdString().c_str();
-		
-		if (inst->execString("__editor_calc_result_x = " + xText) &&
-			inst->execString("__editor_calc_result_y = " + yText))
+		if (m_propertyModel)
 		{
-			float x = inst->getGlobalVariableFloat("__editor_calc_result_x");
-			float y = inst->getGlobalVariableFloat("__editor_calc_result_y");
-			inst->execString("__editor_calc_result_x = nil");
-			inst->execString("__editor_calc_result_y = nil");
+			LuaBinder* inst = LuaBinder::instance();
 
-			Vector2 vec2(x, y);
-			m_propertyModel->setValue(m_propertyName, StringUtil::ToString(vec2).c_str());
+			String xText = m_lineEditX->text().toStdString().c_str();
+			String yText = m_lineEditY->text().toStdString().c_str();
+
+			if (inst->execString("__editor_calc_result_x = " + xText) &&
+				inst->execString("__editor_calc_result_y = " + yText))
+			{
+				float x = inst->getGlobalVariableFloat("__editor_calc_result_x");
+				float y = inst->getGlobalVariableFloat("__editor_calc_result_y");
+				inst->execString("__editor_calc_result_x = nil");
+				inst->execString("__editor_calc_result_y = nil");
+
+				Vector2 vec2(x, y);
+				m_propertyModel->setValue(m_propertyName, StringUtil::ToString(vec2).c_str());
+			}
 		}
 	}
 
-	// editing
 	void QVector2Editor::onEditing()
 	{
 		if (m_lineEditX == sender())
