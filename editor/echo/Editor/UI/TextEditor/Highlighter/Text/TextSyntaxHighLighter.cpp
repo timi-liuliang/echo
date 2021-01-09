@@ -25,7 +25,7 @@ namespace Studio
 		appendForegroundRule(209, 154, 102, "\\b[0-9]+.?[0-9]+\\b");
 		appendForegroundRule(209, 154, 102, "\\b[0-9]+\\b");
 
-		commentStartExpression = QRegExp("--[[");
-		commentEndExpression = QRegExp("]]--");
+		m_commentStartExpression = QRegExp("--[[");
+		m_commentEndExpression = QRegExp("]]--");
 	}
 }

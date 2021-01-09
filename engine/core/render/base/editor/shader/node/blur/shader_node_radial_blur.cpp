@@ -2,13 +2,15 @@
 
 #ifdef ECHO_EDITOR_MODE
 
-static const char* radialBlur = R"(vec3 RadialBlur(sampler2D tex, vec2 uv,vec2 center, float quality)
+static const char* radialBlur = R"(vec3 RadialBlur(sampler2D tex, vec2 uv,vec2 center, float quality, float strength)
 {
+	// https://gaming.stackexchange.com/questions/306721/what-is-radial-blur
 	vec2 dir = (center - uv) / quality;
-	vec4 color = vec4( 0.0);
-
-	float count = 0.0;
-	for (float i = 0.0; i <= quality; i += 1.0)
+	vec4 origin = texture(tex, uv);
+	vec4 color = origin;
+	float count = 1.0;
+	
+	for (float i = 1.0; i <= quality; i += 1.0)
 	{
 		color += texture(tex, uv + dir * i);
 		count += 1.0;
@@ -16,7 +18,7 @@ static const char* radialBlur = R"(vec3 RadialBlur(sampler2D tex, vec2 uv,vec2 c
 
 	color /= count;
 
-	return color.xyz;
+	return mix(origin.xyz, color.xyz, strength);
 })";
 
 namespace Echo

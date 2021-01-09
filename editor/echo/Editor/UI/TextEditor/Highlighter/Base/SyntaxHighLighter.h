@@ -46,10 +46,9 @@ namespace Studio
 		};
 
 		QStringList					m_keyWords;
-		QRegExp						commentStartExpression;
-		QRegExp						commentEndExpression;
-		QTextCharFormat				multiLineCommentFormat;
-		QTextCharFormat				singleLineCommentFormat;
+		QRegExp						m_commentStartExpression;
+		QRegExp						m_commentEndExpression;
+		QTextCharFormat				m_multiLineCommentFormat;
 		QVector<HighlightingRule>	m_highLightRules;
 	};
 }

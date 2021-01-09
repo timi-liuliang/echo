@@ -92,10 +92,10 @@ namespace Studio
         ret->registerModel<LengthDataModel>("Math");
 		ret->registerModel<MixDataModel>("Math");
         ret->registerModel<SmoothStepDataModel>("Math");
-		ret->registerModel<SplitDataModel>("Math");
-		ret->registerModel<CombineDataModel>("Math");
 
         // Utils
+		ret->registerModel<SplitDataModel>("Utils");
+		ret->registerModel<CombineDataModel>("Utils");
         ret->registerModel<Echo::ShaderNodeTextureSize>("Utils");
 
         // Custom

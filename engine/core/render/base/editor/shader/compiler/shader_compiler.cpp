@@ -163,7 +163,7 @@ layout(location = 0) out vec4 o_FragColor;
 ${FS_FUNCTIONS}
 
 // functions
-#define SRGB_FAST_APPROXIMATION
+// #define SRGB_FAST_APPROXIMATION
 
 vec3 SRgbToLinear(vec3 srgbIn)
 {
@@ -179,7 +179,7 @@ vec3 LinearToSRgb(vec3 linearIn)
 #ifdef SRGB_FAST_APPROXIMATION
     return pow(linearIn,vec3(1.0/2.2));
 #else
-    return srgbIn;
+    return linearIn;
 #endif
 }
 

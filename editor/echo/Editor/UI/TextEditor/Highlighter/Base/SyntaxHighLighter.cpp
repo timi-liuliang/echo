@@ -76,11 +76,11 @@ namespace Studio
 
 		int startIndex = 0;
 		if (previousBlockState() != 1)
-			startIndex = commentStartExpression.indexIn(text);
+			startIndex = m_commentStartExpression.indexIn(text);
 
 		while (startIndex >= 0) 
 		{
-			int endIndex = commentEndExpression.indexIn(text, startIndex);
+			int endIndex = m_commentEndExpression.indexIn(text, startIndex);
 			int commentLength;
 			if (endIndex == -1) 
 			{
@@ -88,13 +88,13 @@ namespace Studio
 				commentLength = text.length() - startIndex;
 			} else 
 			{
-				commentLength = endIndex - startIndex + commentEndExpression.matchedLength();
+				commentLength = endIndex - startIndex + m_commentEndExpression.matchedLength();
 			}
 
 			QColor color; color.setRgb( 92, 99, 112);
-			multiLineCommentFormat.setForeground(color);
-			setFormat(startIndex, commentLength, multiLineCommentFormat);
-			startIndex = commentStartExpression.indexIn(text, startIndex + commentLength);
+			m_multiLineCommentFormat.setForeground(color);
+			setFormat(startIndex, commentLength, m_multiLineCommentFormat);
+			startIndex = m_commentStartExpression.indexIn(text, startIndex + commentLength);
 		}
 	}
 }

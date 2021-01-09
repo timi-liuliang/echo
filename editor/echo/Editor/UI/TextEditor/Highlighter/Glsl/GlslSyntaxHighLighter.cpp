@@ -18,6 +18,7 @@ namespace Studio
 		appendForegroundRule(192, 120, 221, "\\bvec2\\b");
 		appendForegroundRule(192, 120, 221, "\\bvec3\\b");
 		appendForegroundRule(192, 120, 221, "\\bvec4\\b");
+		appendForegroundRule(192, 120, 221, "\\bsampler2D\\b");
 		appendForegroundRule(192, 120, 221, "\\bfunction\\b");
 		appendForegroundRule(192, 120, 221, "\\bif\\b");
 		appendForegroundRule(192, 120, 221, "\\belse\\b");
@@ -34,9 +35,6 @@ namespace Studio
 		appendForegroundRule(209, 154, 102, "\\bfalse\\b");
 		appendForegroundRule( 97, 175, 239, "\\bQ[A-Za-z]+\\b");
 
-		// command
-		appendForegroundRule(128, 138, 156, "--[^\n]*");
-
 		// strings
 		appendForegroundRule( 152, 195, 121, "\".*\"");
 
@@ -44,7 +42,10 @@ namespace Studio
 		appendForegroundRule(209, 154, 102, "\\b[0-9]+.?[0-9]+\\b");
 		appendForegroundRule(209, 154, 102, "\\b[0-9]+\\b");
 
-		commentStartExpression = QRegExp("--[[");
-		commentEndExpression = QRegExp("]]--");
+		// single command
+		appendForegroundRule(0, 138, 0, "//[^\n]*");
+
+		m_commentStartExpression = QRegExp("/\\*");
+		m_commentEndExpression = QRegExp("\\*/");
 	}
 }
