@@ -21,7 +21,7 @@ namespace Echo
 
 	public:
 		// caption
-		const String& getFunctionName() const { return m_funName; }
+		const String& getFunctionName() const;
 		void setFunctionName(const String& funName);
 
 		// inputs
@@ -53,7 +53,7 @@ namespace Echo
 	private:
 		String			m_funName;
 		String			m_parameters;
-		String			m_code;
+		String			m_body;
 		StringOption	m_returnType = StringOption("float", { "float", "vec2", "vec3", "vec4" });
 	};
 

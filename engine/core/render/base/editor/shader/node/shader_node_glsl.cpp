@@ -36,6 +36,10 @@ namespace Echo
 		REGISTER_PROPERTY_EDITOR(ShaderNodeGLSL, "Parameters", ParamterListEditorGLSL);
 	}
 
+	const String& ShaderNodeGLSL::getFunctionName() const
+	{
+		return m_funName.empty() ? StringUtil::Format("custom_fun_%d", m_id) : m_funName;;
+	}
 
 	void  ShaderNodeGLSL::setFunctionName(const String& funName)
 	{
@@ -80,8 +84,8 @@ namespace Echo
 
 	String ShaderNodeGLSL::getCode() const
 	{
-		String funName = m_funName.empty() ? StringUtil::Format("custom_fun_%d", m_id) : m_funName;
-		String functionCode = StringUtil::Format("%s %s(%s)\n{%s}", m_returnType.getValue().c_str(), funName.c_str(), m_parameters.c_str(), m_code.c_str());
+		String funName = getFunctionName();
+		String functionCode = StringUtil::Format("%s %s(%s)\n%s", m_returnType.getValue().c_str(), funName.c_str(), m_parameters.c_str(), m_body.c_str());
 
 		return functionCode;
 	}
@@ -102,10 +106,11 @@ namespace Echo
 		params = StringUtil::Substr(params, ")", true);
 		setParms(params);
 
-		String body = StringUtil::Substr(code, "{", false);
-		body = StringUtil::Substr(body, "}", true);
+		size_t bodyFirstPos = code.find_first_of("{");
+		size_t bodyLastPos = code.find_last_of("}");
+		String body = code.substr(bodyFirstPos, bodyLastPos);
 
-		m_code = body;
+		m_body = body;
 	}
 
 	QtNodes::NodeDataTypes ShaderNodeGLSL::getInputDataTypes(const String& inputs)
@@ -166,8 +171,8 @@ namespace Echo
 
 	bool ShaderNodeGLSL::generateCode(ShaderCompiler& compiler)
 	{
-		String funName = m_funName.empty() ? StringUtil::Format("custom_fun_%d", m_id) : m_funName;
-		String functionCode = StringUtil::Format("%s %s( %s)\n{\n%s\n}", m_returnType.getValue().c_str(), funName.c_str(), m_parameters.c_str(), m_code.c_str());
+		String funName = getFunctionName();
+		String functionCode = getCode();
 		compiler.addFunction(functionCode);
 
 		String params;
