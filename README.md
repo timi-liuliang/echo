@@ -74,5 +74,5 @@ Echo is licensed under the MIT license. You can just do what you want as you wis
 |Live2D|<img src="https://github.com/timi-liuliang/echo-examples/raw/master/ads/live2d.gif?raw=true" alt="build house"  height="128px" />|live2d animation|
 |Pbr|<img src="https://github.com/timi-liuliang/echo-examples/raw/master/ads/cubemap.png?raw=true" alt="build house"  height="128px" />|gltf and light prob test|
 |Force Field|<img src="https://github.com/timi-liuliang/echo-examples/blob/master/ads/forcefield.gif?raw=true" alt="force field"  height="128px" />|Force Field Effect; Shader Graph + Procedural Sphere|
-|Gaussian Blur|<img src="https://github.com/timi-liuliang/echo-examples/blob/master/ads/gaussian_blur.png?raw=true" alt="force field"  height="128px" />|Gaussian blur; Shader Graph + Procedural plane|
-|Radial Blur|<img src="https://github.com/timi-liuliang/echo-examples/blob/master/ads/gaussian_blur.png?raw=true" alt="force field"  height="128px" />|Radial blur; Shader Graph + Procedural plane|
+|Gaussian Blur|<img src="https://github.com/timi-liuliang/echo-examples/blob/master/ads/gaussianblur.png?raw=true" alt="force field"  height="128px" />|Gaussian blur; Shader Graph + Procedural plane|
+|Radial Blur|<img src="https://github.com/timi-liuliang/echo-examples/blob/master/ads/radialblur.png?raw=true" alt="force field"  height="128px" />|Radial blur; Shader Graph + Procedural plane|
