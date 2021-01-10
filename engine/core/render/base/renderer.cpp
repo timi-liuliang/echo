@@ -20,6 +20,7 @@
 #include "base/editor/shader/node/shader_node_uniform_texture.h"
 #include "base/editor/shader/node/shader_node_glsl.h"
 #include "base/editor/shader/node/blur/shader_node_gaussian_blur.h"
+#include "base/editor/shader/node/blur/shader_node_zoom_blur.h"
 #include "base/editor/shader/node/blur/shader_node_radial_blur.h"
 
 namespace Echo
@@ -63,6 +64,7 @@ namespace Echo
 		Class::registerType<ShaderNodeUniformTexture>();
 		Class::registerType<ShaderNodeGLSL>();
 		Class::registerType<ShaderNodeGaussianBlur>();
+		Class::registerType<ShaderNodeZoomBlur>();
 		Class::registerType<ShaderNodeRadialBlur>();
 	#endif
 

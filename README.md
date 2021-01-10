@@ -47,12 +47,14 @@ Programming visualization is a very important concept for non-programmers and wi
 
 ![](https://media.githubusercontent.com/media/timi-liuliang/echo-download/master/images/intro/shadereditor.png)   
 
-### Render Pipeline Visualization (Developing)
-Inspired by [CI|CD pipeline](https://semaphoreci.com/blog/cicd-pipeline), we decided to make a render pipeline editor, so that not only programmers, but everyone can configure the engine render process.   
+### Frame Pipeline Visualization (Developing)
+Inspired by [CI|CD pipeline](https://semaphoreci.com/blog/cicd-pipeline), we decided to make a frame pipeline editor, so that not only programmers, but everyone can configure the engine frame render process.   
 1. Forward Rendering?   
 2. Deferred Shading?    
 3. Forward+ (Tiled Forward Rendering)?
 Try configuring it by your needs.
+
+![](https://media.githubusercontent.com/media/timi-liuliang/echo-download/master/images/intro/framepipeline.png)   
 
 ### Configurable Module   
 Most of the engine's Functionality was implemented by configurable modules. that means when you release your app, you can just choose the module you really need. Which makes your app smaller in size and more efficiently running.
@@ -74,5 +76,5 @@ Echo is licensed under the MIT license. You can just do what you want as you wis
 |Live2D|<img src="https://github.com/timi-liuliang/echo-examples/raw/master/ads/live2d.gif?raw=true" alt="build house"  height="128px" />|live2d animation|
 |Pbr|<img src="https://github.com/timi-liuliang/echo-examples/raw/master/ads/cubemap.png?raw=true" alt="build house"  height="128px" />|gltf and light prob test|
 |Force Field|<img src="https://github.com/timi-liuliang/echo-examples/blob/master/ads/forcefield.gif?raw=true" alt="force field"  height="128px" />|Force Field Effect; Shader Graph + Procedural Sphere|
-|Gaussian Blur|<img src="https://github.com/timi-liuliang/echo-examples/blob/master/ads/gaussianblur.png?raw=true" alt="force field"  height="128px" />|Gaussian blur; Shader Graph + Procedural plane|
-|Radial Blur|<img src="https://github.com/timi-liuliang/echo-examples/blob/master/ads/radialblur.png?raw=true" alt="force field"  height="128px" />|Radial blur; Shader Graph + Procedural plane|
+|Gaussian Blur|<img src="https://github.com/timi-liuliang/echo-examples/blob/master/ads/gaussianblur.png?raw=true" alt="gaussian blur"  height="128px" />|Gaussian blur; Shader Graph + Procedural plane|
+|Zoom Blur|<img src="https://github.com/timi-liuliang/echo-examples/blob/master/ads/zoomblur.png?raw=true" alt="zoom blur"  height="128px" />|Zoom blur; Shader Graph + Procedural plane|

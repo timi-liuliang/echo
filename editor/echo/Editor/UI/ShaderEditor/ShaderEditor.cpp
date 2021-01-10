@@ -39,6 +39,7 @@
 #include <engine/core/render/base/editor/shader/data/converter/shader_data_converters.h>
 #include <engine/core/render/base/editor/shader/node/shader_node_glsl.h>
 #include <engine/core/render/base/editor/shader/node/blur/shader_node_gaussian_blur.h>
+#include <engine/core/render/base/editor/shader/node/blur/shader_node_zoom_blur.h>
 #include <engine/core/render/base/editor/shader/node/blur/shader_node_radial_blur.h>
 #include <engine/core/render/base/editor/shader/node/shader_node_texture_size.h>
 #include "ShaderScene.h"
@@ -101,6 +102,7 @@ namespace Studio
         // Custom
         ret->registerModel<Echo::ShaderNodeGLSL>("Custom");
         ret->registerModel<Echo::ShaderNodeGaussianBlur>("Blur");
+        ret->registerModel<Echo::ShaderNodeZoomBlur>("Blur");
         ret->registerModel<Echo::ShaderNodeRadialBlur>("Blur");
 
         // Converts
