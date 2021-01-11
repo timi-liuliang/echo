@@ -8,10 +8,11 @@ namespace Echo
 	class ShaderCompiler
 	{
 	public:
+		// uniform description
 		struct Uniform
 		{
-			Echo::String  m_type;
-			Echo::String  m_name;
+			String  m_type;
+			String  m_name;
 
 			Uniform(const Echo::String& type, const Echo::String& name)
 				: m_type(type)
@@ -19,6 +20,21 @@ namespace Echo
 			{}
 		};
 		typedef Echo::vector<Uniform>::type UniformArray;
+
+		// function description
+		struct Function
+		{
+			ui32	m_id;
+			String	m_name;
+			String  m_code;
+
+			Function(ui32 id, const String& name, const String& code)
+				: m_id(id)
+				, m_name(name)
+				, m_code(code)
+			{}
+		};
+		typedef Echo::vector<Function>::type FunctionArray;
 
 	public:
 		ShaderCompiler();
@@ -40,21 +56,22 @@ namespace Echo
 	public:
 		// add
 		void addMacro(const Echo::String& macroName);
-		void addUniform(const Echo::String& type, const Echo::String& name);
+		void addUniform(const Echo::String& type, const String& name);
 		void addTextureUniform(const Echo::String& uniformName);
-		void addFunction(const Echo::String& function);
+		void addFunction(ui32 id, String& name, const String& code);
 		void addCode(const Echo::String& codeChunk);
 
 	private:
-		Echo::i32		m_texturesCount = 0;
-		Echo::String	m_macros;
+		i32				m_texturesCount = 0;
+		String			m_macros;
 		UniformArray	m_fsUniforms;
-		Echo::String	m_fsUniformsCode;
-		Echo::String	m_fsTextureUniforms;
-		Echo::String	m_fsFunctionCode;
-		Echo::String	m_fsCode;
-		Echo::String	m_finalVsCode;
-		Echo::String	m_finalPsCode;
+		String			m_fsUniformsCode;
+		String			m_fsTextureUniforms;
+		FunctionArray	m_fsFunctions;
+		String			m_fsFunctionCode;
+		String			m_fsCode;
+		String			m_finalVsCode;
+		String			m_finalPsCode;
 	};
 #endif
 }

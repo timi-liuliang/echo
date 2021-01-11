@@ -2,7 +2,7 @@
 #include "Log.h"
 #include <engine/core/render/gles/gles.h>
 #include <engine/core/util/PathUtil.h>
-#include <engine/core/util/HashGenerator.h>
+#include <engine/core/util/hash_generator.h>
 
 namespace Game
 {

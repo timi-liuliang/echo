@@ -3,7 +3,7 @@
 #include "engine/core/editor/importer/file_importer.h"
 #include "engine/core/main/Engine.h"
 #include "engine/core/util/PathUtil.h"
-#include "engine/core/util/HashGenerator.h"
+#include "engine/core/util/hash_generator.h"
 #include "engine/core/util/Exception.h"
 #include "engine/core/io/IO.h"
 #include "engine/core/log/Log.h"

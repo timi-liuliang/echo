@@ -50,6 +50,9 @@ namespace Echo
 		// is params valid
 		bool isParamsValid(const String& params);
 
+		// calculate hash
+		ui32 getHash();
+
 	private:
 		String			m_funName;
 		String			m_parameters;

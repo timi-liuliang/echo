@@ -1,5 +1,6 @@
 #include "shader_node_glsl.h"
 #include "ui/parameter_list_editor_glsl.h"
+#include "engine/core/util/hash_generator.h"
 
 namespace Echo
 {
@@ -64,6 +65,12 @@ namespace Echo
 		}
 
 		return true;
+	}
+
+	ui32 ShaderNodeGLSL::getHash()
+	{
+		String uniqueStr = m_returnType.getValue() + m_parameters + m_body;
+		return BKDRHash(uniqueStr.c_str());
 	}
 
 	void ShaderNodeGLSL::setParms(const String& params)
@@ -173,7 +180,7 @@ namespace Echo
 	{
 		String funName = getFunctionName();
 		String functionCode = getCode();
-		compiler.addFunction(functionCode);
+		compiler.addFunction(getHash(), funName, functionCode);
 
 		String params;
 		i32 finalIdx = m_inputs.size() - 1;

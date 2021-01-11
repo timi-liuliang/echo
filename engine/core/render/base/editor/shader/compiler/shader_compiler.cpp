@@ -383,6 +383,7 @@ namespace Echo
 		m_fsUniforms.clear();
 		m_fsUniformsCode.clear();
 		m_fsTextureUniforms.clear();
+		m_fsFunctions.clear();
 		m_fsFunctionCode.clear();
 		m_fsCode.clear();
 	}
@@ -465,9 +466,25 @@ namespace Echo
 		m_fsTextureUniforms += Echo::StringUtil::Format("layout(binding = %d) uniform sampler2D %s;\n", m_texturesCount, uniformName.c_str());
 	}
 
-	void ShaderCompiler::addFunction(const Echo::String& function)
+	void ShaderCompiler::addFunction(ui32 id, String& name, const String& code)
 	{
-		m_fsFunctionCode += function;
+		for (const Function& function : m_fsFunctions)
+		{
+			if (function.m_id == id)
+			{
+				name = function.m_name;
+				return;
+			}
+		}
+
+		m_fsFunctions.emplace_back(id, name, code);
+
+		// refresh function code
+		m_fsFunctionCode.clear();
+		for (const Function& function : m_fsFunctions)
+		{
+			m_fsFunctionCode += function.m_code;
+		}
 	}
 
 	void ShaderCompiler::addCode(const Echo::String& codeChunk)
