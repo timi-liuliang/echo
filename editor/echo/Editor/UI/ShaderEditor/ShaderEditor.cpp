@@ -40,7 +40,7 @@
 #include <engine/core/render/base/editor/shader/node/shader_node_glsl.h>
 #include <engine/core/render/base/editor/shader/node/blur/shader_node_gaussian_blur.h>
 #include <engine/core/render/base/editor/shader/node/blur/shader_node_zoom_blur.h>
-#include <engine/core/render/base/editor/shader/node/blur/shader_node_radial_blur.h>
+#include <engine/core/render/base/editor/shader/node/blur/shader_node_spin_blur.h>
 #include <engine/core/render/base/editor/shader/node/shader_node_texture_size.h>
 #include "ShaderScene.h"
 #include "ShaderView.h"
@@ -103,7 +103,7 @@ namespace Studio
         ret->registerModel<Echo::ShaderNodeGLSL>("Custom");
         ret->registerModel<Echo::ShaderNodeGaussianBlur>("Blur");
         ret->registerModel<Echo::ShaderNodeZoomBlur>("Blur");
-        ret->registerModel<Echo::ShaderNodeRadialBlur>("Blur");
+        ret->registerModel<Echo::ShaderNodeSpinBlur>("Blur");
 
         // Converts
         ret->registerTypeConverter(std::make_pair(DataFloat(nullptr, "").type(),   DataVector2(nullptr, "").type()), QtNodes::TypeConverter{ FloatToVector2() });

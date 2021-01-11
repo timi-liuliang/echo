@@ -65,7 +65,7 @@ namespace Echo
 		Class::registerType<ShaderNodeGLSL>();
 		Class::registerType<ShaderNodeGaussianBlur>();
 		Class::registerType<ShaderNodeZoomBlur>();
-		Class::registerType<ShaderNodeRadialBlur>();
+		Class::registerType<ShaderNodeSpinBlur>();
 	#endif
 
 		CLASS_REGISTER_EDITOR(RenderPipeline, RenderPipelineEditor)
