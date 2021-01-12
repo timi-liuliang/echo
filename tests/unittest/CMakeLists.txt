@@ -32,6 +32,9 @@ ENDIF()
 ADD_EXECUTABLE(${MODULE_NAME} ${ALL_FILES} CMakeLists.txt)
 
 # link libararies
+TARGET_LINK_LIBRARIES(${MODULE_NAME} nodeeditor)
+
+# link libararies depend on platform
 IF(ECHO_PLATFORM_WINDOWS)
 	TARGET_LINK_LIBRARIES(${MODULE_NAME} googletest engine pugixml)
 	TARGET_LINK_LIBRARIES(${MODULE_NAME} zlib engine winmm.lib imm32.lib dxgi.lib Shlwapi.lib lua recast freeimage)
