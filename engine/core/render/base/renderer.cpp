@@ -22,6 +22,7 @@
 #include "base/editor/shader/node/blur/shader_node_gaussian_blur.h"
 #include "base/editor/shader/node/blur/shader_node_zoom_blur.h"
 #include "base/editor/shader/node/blur/shader_node_spin_blur.h"
+#include "base/editor/shader/node/color/shader_node_gray_scale.h"
 
 namespace Echo
 {
@@ -66,6 +67,7 @@ namespace Echo
 		Class::registerType<ShaderNodeGaussianBlur>();
 		Class::registerType<ShaderNodeZoomBlur>();
 		Class::registerType<ShaderNodeSpinBlur>();
+		Class::registerType<ShaderNodeGrayScale>();
 	#endif
 
 		CLASS_REGISTER_EDITOR(RenderPipeline, RenderPipelineEditor)

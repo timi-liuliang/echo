@@ -41,6 +41,7 @@
 #include <engine/core/render/base/editor/shader/node/blur/shader_node_gaussian_blur.h>
 #include <engine/core/render/base/editor/shader/node/blur/shader_node_zoom_blur.h>
 #include <engine/core/render/base/editor/shader/node/blur/shader_node_spin_blur.h>
+#include <engine/core/render/base/editor/shader/node/color/shader_node_gray_scale.h>
 #include <engine/core/render/base/editor/shader/node/shader_node_texture_size.h>
 #include "ShaderScene.h"
 #include "ShaderView.h"
@@ -104,6 +105,9 @@ namespace Studio
         ret->registerModel<Echo::ShaderNodeGaussianBlur>("Blur");
         ret->registerModel<Echo::ShaderNodeZoomBlur>("Blur");
         ret->registerModel<Echo::ShaderNodeSpinBlur>("Blur");
+
+        // Color
+        ret->registerModel<Echo::ShaderNodeGrayScale>("Color");
 
         // Converts
         ret->registerTypeConverter(std::make_pair(DataFloat(nullptr, "").type(),   DataVector2(nullptr, "").type()), QtNodes::TypeConverter{ FloatToVector2() });

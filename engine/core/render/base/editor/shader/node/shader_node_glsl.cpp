@@ -115,9 +115,11 @@ namespace Echo
 
 		size_t bodyFirstPos = code.find_first_of("{");
 		size_t bodyLastPos = code.find_last_of("}");
-		String body = code.substr(bodyFirstPos, bodyLastPos);
-
-		m_body = body;
+		if (bodyFirstPos != String::npos && bodyLastPos != String::npos)
+		{
+			String body = code.substr(bodyFirstPos, bodyLastPos);
+			m_body = body;
+		}
 	}
 
 	QtNodes::NodeDataTypes ShaderNodeGLSL::getInputDataTypes(const String& inputs)

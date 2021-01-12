@@ -17,7 +17,7 @@
 #include <QSplitter>
 #include "QPropertyModel.h"
 #include "OperationManager.h"
-#include <engine/core/util/HashGenerator.h>
+#include <engine/core/util/hash_generator.h>
 #include <engine/core/util/TimeProfiler.h>
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/io/IO.h>
