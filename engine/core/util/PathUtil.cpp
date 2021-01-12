@@ -1030,20 +1030,4 @@ namespace Echo
 
 		return flag;
 	}
-
-	bool PathUtil::WriteData(const String& path, const void* data, int len, const char* mode)
-	{
-		FILE* fileHandle = fopen(path.c_str(), mode);
-		if (fileHandle)
-		{
-			fwrite(data, len, 1, fileHandle);
-
-			fflush(fileHandle);
-			fclose(fileHandle);
-
-			return true;
-		}
-
-		return false;
-	}
 }

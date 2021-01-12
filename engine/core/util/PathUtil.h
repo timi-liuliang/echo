@@ -64,6 +64,5 @@ namespace Echo
 		static bool CopyDir(const String& srcDir, const String& destDir, bool bOverWrite = true, bool bIgnoreDotFolder=true);
 		static bool DelFilesInDir(const String& folder);
 		static bool DelPath(const String& path);
-		static bool WriteData(const String& path, const void* data, int len, const char* mode="wb");
 	};
 }
