@@ -6,7 +6,7 @@ static const char* radialBlur = R"(vec3 SpinBlur(sampler2D tex, vec2 uv, vec2 ce
 {
 	float len = length(uv - center);	
 	vec2 dir = normalize(uv - center);
-	float angle = atan(dir.x, dir.y);
+	float angle = asin(dir.x) > 0 ? acos(dir.y) : -acos(dir.y);
 	float step = radians(speed) / samples;
 	vec4 origin = texture(tex, uv);
 	vec4 color = origin;
@@ -15,7 +15,7 @@ static const char* radialBlur = R"(vec3 SpinBlur(sampler2D tex, vec2 uv, vec2 ce
 	for (float i = 1.0; i <= samples; i += 1.0)
 	{
 		float d = angle + step * i;
-		color += texture(tex, center + len * vec2(cos(d), sin(d)));
+		color += texture(tex, center + len * vec2(sin(d), cos(d)));
 		count += 1.0;
 	}
 
