@@ -24,6 +24,7 @@
 #include "base/editor/shader/node/blur/shader_node_spin_blur.h"
 #include "base/editor/shader/node/color/shader_node_gray_scale.h"
 #include "base/editor/shader/node/math/shader_node_atan2.h"
+#include "base/editor/shader/node/math/shader_node_sign.h"
 
 namespace Echo
 {
@@ -71,6 +72,7 @@ namespace Echo
 		Class::registerType<ShaderNodeGrayScale>();
 
 		Class::registerType<ShaderNodeATan2>();
+		Class::registerType<ShaderNodeSign>();
 	#endif
 
 		CLASS_REGISTER_EDITOR(RenderPipeline, RenderPipelineEditor)

@@ -44,6 +44,7 @@
 #include <engine/core/render/base/editor/shader/node/color/shader_node_gray_scale.h>
 #include <engine/core/render/base/editor/shader/node/shader_node_texture_size.h>
 #include <engine/core/render/base/editor/shader/node/math/shader_node_atan2.h>
+#include <engine/core/render/base/editor/shader/node/math/shader_node_sign.h>
 #include "ShaderScene.h"
 #include "ShaderView.h"
 #include "engine/core/io/IO.h"
@@ -96,6 +97,7 @@ namespace Studio
 		ret->registerModel<MixDataModel>("Math");
         ret->registerModel<SmoothStepDataModel>("Math");
         ret->registerModel<Echo::ShaderNodeATan2>("Math");
+        ret->registerModel<Echo::ShaderNodeSign>("Math");
 
         // Utils
 		ret->registerModel<SplitDataModel>("Utils");
