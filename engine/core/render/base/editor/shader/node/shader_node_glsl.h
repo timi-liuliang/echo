@@ -56,7 +56,7 @@ namespace Echo
 	private:
 		String			m_funName;
 		String			m_parameters;
-		String			m_body;
+		String			m_body = "{\n\treturn 1.0;\n}";
 		StringOption	m_returnType = StringOption("float", { "float", "vec2", "vec3", "vec4" });
 	};
 
