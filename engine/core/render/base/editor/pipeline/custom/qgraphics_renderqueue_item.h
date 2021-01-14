@@ -92,6 +92,23 @@ namespace Pipeline
 			}
 		}
 
+		virtual bool sceneEventFilter(QGraphicsItem* watched, QEvent* event)
+		{
+			if (watched->type() == QGraphicsLineItem::Type)
+			{
+				if (event->type() == QEvent::MouseButtonPress)
+				{
+					mousePressEvent(dynamic_cast<QGraphicsSceneMouseEvent*>(event));
+				}
+				else if (event->type() == QEvent::KeyPress)
+				{
+					keyPressEvent(dynamic_cast<QKeyEvent*>(event));
+				}
+			}
+
+			return false;
+		}
+
 	protected:
 		Echo::ui32							m_objectId = 0;
 		bool								m_focused = false;

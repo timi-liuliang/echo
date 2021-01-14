@@ -8,6 +8,7 @@
 #include "engine/modules/procedural/procedural_geometry.h"
 #include "custom/qgraphics_renderqueue_item.h"
 #include "custom/qgraphics_pixmap_item_custom.h"
+#include "custom/qgraphics_text_item_custom.h"
 
 namespace Pipeline
 {
@@ -68,7 +69,7 @@ namespace Pipeline
 		QGraphicsScene*						m_graphicsScene = nullptr;
 		QGraphicsRenderQueueItem*			m_rect = nullptr;
 		float								m_rectFinalWidth = 15;
-		QGraphicsSimpleTextItem*			m_text = nullptr;
+		QGraphicsSimpleTextItemCustom*		m_text = nullptr;
 		QGraphicsLineItem*					m_textDiableLine = nullptr;
 		QGraphicsPixmapItemCustom*			m_deleteButtton = nullptr;
 	};

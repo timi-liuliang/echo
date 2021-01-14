@@ -26,6 +26,7 @@ namespace Pipeline
 			m_rect->setPen(QPen(m_style.m_normalBoundaryColor, m_style.m_penWidth));
 			m_rect->setFlag(QGraphicsItem::ItemIsFocusable);
 			m_rect->setAcceptHoverEvents(true);
+			m_rect->setFiltersChildEvents(true);
 			QLinearGradient gradient(QPointF(0.0, -halfHeight), QPointF(0.0, halfHeight));
 			gradient.setColorAt(0.0, m_style.m_gradientColor0);
 			gradient.setColorAt(0.03, m_style.m_gradientColor1);
@@ -47,9 +48,22 @@ namespace Pipeline
 					deleteThisRenderQueue();
 			});
 
-			m_text = m_graphicsScene->addSimpleText(m_renderQueue->getName().c_str());
+			m_text = new QGraphicsSimpleTextItemCustom();
 			m_text->setBrush(QBrush(m_style.m_fontColor));
 			m_text->setParentItem(m_rect);
+			m_graphicsScene->addItem(m_text);
+
+			// mouse press event
+			m_text->setMousePressEventCb([this](QGraphicsSimpleTextItem* item)
+			{
+				EditorApi.showObjectProperty(m_renderQueue);
+			});
+
+			m_text->setKeyPressEventCb([this](QKeyEvent* event)
+			{
+				if (event->key() == Qt::Key_Delete)
+					deleteThisRenderQueue();
+			});
 
 			m_textDiableLine = m_graphicsScene->addLine(QLineF(), QPen(m_style.m_fontColorFaded));
 			m_textDiableLine->setVisible(false);
