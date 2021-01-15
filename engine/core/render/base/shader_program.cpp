@@ -217,7 +217,7 @@ namespace Echo
 
     void ShaderProgram::UniformTexture::setTextureDefault(const ResourcePath& path)
     {
-        m_texturePathDefault = path;
+        m_texturePathDefault.setPath(path.getPath());
     }
 
     const ResourcePath& ShaderProgram::UniformTexture::getTextureDefault()
