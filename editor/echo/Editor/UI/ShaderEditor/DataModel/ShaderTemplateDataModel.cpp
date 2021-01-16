@@ -52,9 +52,6 @@ namespace DataFlowProgramming
 						return;
                 }
             }
-
-            // compile
-			shaderScene->compile();
 		}
     }
 
