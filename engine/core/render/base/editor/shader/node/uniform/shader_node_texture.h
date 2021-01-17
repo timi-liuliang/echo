@@ -17,7 +17,7 @@ namespace Echo
 		virtual QString name() const override { return "Texture"; }
 
 		// caption
-		virtual QString caption() const override { return "Texture"; }
+		virtual QString caption() const override { return getVariableName().c_str(); }
 
 	private:
 		// get default value
@@ -35,7 +35,7 @@ namespace Echo
 
 	public:
 		String getVariableName() const { return m_variableName.empty() ? StringUtil::Format("Texture%d", getId()) : m_variableName; }
-		void setVariableName(const String& variableName) { m_variableName = variableName; }
+		void setVariableName(const String& variableName);
 
 		// type
 		const StringOption& getType() { return m_type; }

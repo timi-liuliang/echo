@@ -56,6 +56,12 @@ namespace Echo
 		m_outputs[2]->setVariableName(Echo::StringUtil::Format("%s_Color.a", variableName.c_str()));
 	}
 
+	void ShaderNodeTexture::setVariableName(const String& variableName)
+	{
+		m_variableName = variableName; 
+		captionUpdated();
+	}
+
 	void ShaderNodeTexture::setInData(std::shared_ptr<NodeData> nodeData, int portIndex)
 	{
 		m_inputs[portIndex] = std::dynamic_pointer_cast<ShaderData>(nodeData);
