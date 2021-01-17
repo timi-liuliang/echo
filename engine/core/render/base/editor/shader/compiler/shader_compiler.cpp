@@ -165,24 +165,6 @@ ${FS_FUNCTIONS}
 // functions
 // #define SRGB_FAST_APPROXIMATION
 
-vec3 SRgbToLinear(vec3 srgbIn)
-{
-#ifdef SRGB_FAST_APPROXIMATION
-    return pow(srgbIn,vec3(2.2));
-#else
-    return srgbIn;
-#endif
-}
-
-vec3 LinearToSRgb(vec3 linearIn)
-{
-#ifdef SRGB_FAST_APPROXIMATION
-    return pow(linearIn,vec3(1.0/2.2));
-#else
-    return linearIn;
-#endif
-}
-
 // normal map
 vec3 _NormalMapFun(vec3 n)
 {
@@ -321,7 +303,7 @@ vec3 PbrLighting(vec3 pixelPosition, vec3 baseColor, vec3 normal, float metallic
     vec3 color = NdotL * _lightColor * (diffuseContrib + specContrib);
 
 	// environment color
-    vec3 _environmentLightColor = SRgbToLinear(vec3(0.3, 0.3, 0.3));
+    vec3 _environmentLightColor = vec3(0.09, 0.09, 0.09);
 	color += baseColor * _environmentLightColor;
 
 	return color;
@@ -332,7 +314,7 @@ void main(void)
 ${FS_SHADER_CODE}
 
 #ifndef ENABLE_BASE_COLOR 
-    vec3 __BaseColor = SRgbToLinear(vec3(0.75));
+    vec3 __BaseColor = vec3(0.6);
 #endif
 
 #ifndef ENABLE_OPACITY
@@ -359,7 +341,7 @@ ${FS_SHADER_CODE}
 	__BaseColor.rgb += __Emissive;
 #endif  
 
-    o_FragColor = vec4(LinearToSRgb(__BaseColor.rgb), __Opacity);
+    o_FragColor = vec4(__BaseColor.rgb, __Opacity);
 }
 )";
 
