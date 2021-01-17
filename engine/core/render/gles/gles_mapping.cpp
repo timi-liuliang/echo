@@ -5,9 +5,6 @@
 
 namespace Echo
 {
-	GLenum GLES2Mapping::g_halfFloatDataType = GL_INVALID_ENUM;
-	GLenum GLES2Mapping::g_halfFloatInternalFormat = GL_INVALID_ENUM;
-
 	GLenum GLES2Mapping::MapStencilOperation(DepthStencilState::StencilOperation op)
 	{
 		switch(op)

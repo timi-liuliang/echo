@@ -86,16 +86,6 @@ namespace Echo
 
 		checkOpenGLExtensions();
 
-		if (m_deviceFeature.supportGLES30())
-		{
-			GLES2Mapping::g_halfFloatDataType = GL_HALF_FLOAT;
-			GLES2Mapping::g_halfFloatInternalFormat = GL_RGBA16F;
-		}
-		else
-		{
-			GLES2Mapping::g_halfFloatInternalFormat = GL_RGBA;
-		}
-
 		return true;
 	}
 

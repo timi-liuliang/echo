@@ -92,7 +92,7 @@ namespace Echo
 				size_t pixelsize = m_width * m_height * PixelUtil::GetPixelSize(m_pixFmt);
 				if (pixelsize)
 				{
-					vector<Dword>::type textureData(m_width * m_height, m_clearColor.getABGR());
+					vector<Byte>::type textureData(pixelsize, 0);
 					updateTexture2D(m_pixFmt, m_usage, m_width, m_height, textureData.data(), pixelsize);
 				}
 			}

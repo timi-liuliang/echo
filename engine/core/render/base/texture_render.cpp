@@ -59,10 +59,7 @@ namespace Echo
 	{
 		if (m_pixelFormatName.getValue() != option.getValue() && m_pixelFormatName.setValue(option.getValue()))
 		{
-			if (option.getValue() == "PF_RGBA8_UNORM")
-				m_pixFmt = PixelFormat::PF_RGBA8_UNORM;
-			else
-				m_pixFmt = PixelFormat::PF_D24_UNORM_S8_UINT;
+			m_pixFmt = magic_enum::enum_cast<PixelFormat>(option.getValue()).value_or(PixelFormat::PF_UNKNOWN);
 
 			unload();
 		}

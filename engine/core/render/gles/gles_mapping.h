@@ -60,9 +60,6 @@ namespace Echo
 		static GLenum			MapBlendFactor(BlendState::BlendFactor factor);
 		static GLint			MapAddressMode(SamplerState::AddressMode mode);
 
-		static GLenum g_halfFloatDataType;
-		static GLenum g_halfFloatInternalFormat;
-
 		static inline GLES2Error MapErrorCode(GLenum err)
 		{
 			switch (err)
@@ -138,6 +135,7 @@ namespace Echo
 			case PF_RGBA16_SNORM:		return GL_SHORT;
 			case PF_RGBA16_UINT:		return GL_UNSIGNED_SHORT;
 			case PF_RGBA16_SINT:		return GL_SHORT;
+			case PF_RGBA16_FLOAT:		return GL_HALF_FLOAT;
 			case PF_R32_UNORM:			return GL_UNSIGNED_INT;
 			case PF_R32_SNORM:			return GL_INT;
 			case PF_R32_UINT:			return GL_UNSIGNED_INT;
@@ -223,7 +221,7 @@ namespace Echo
 				//case PF_RGBA16_UINT:
 				//case PF_RGBA16_SINT:
 
-			case PF_RGBA16_FLOAT:			return g_halfFloatInternalFormat;
+			case PF_RGBA16_FLOAT:			return GL_RGBA16F;
 
 			case PF_PVRTC_RGBA_4444:
 			case PF_RGBA32_FLOAT:

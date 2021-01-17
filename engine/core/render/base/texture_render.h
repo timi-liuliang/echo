@@ -47,7 +47,7 @@ namespace Echo
 
 	protected:
 		Color			m_clearColor	  = Color::BLACK;
-		StringOption    m_pixelFormatName = StringOption("PF_UNKNOWN", {"PF_UNKNOWN", "PF_RGBA8_UNORM", "PF_D24_UNORM_S8_UINT"});
+		StringOption    m_pixelFormatName = StringOption("PF_UNKNOWN", {"PF_UNKNOWN", "PF_RGBA8_UNORM", "PF_RGBA16_FLOAT" , "PF_D24_UNORM_S8_UINT"});
 	};
 	typedef ResRef<TextureRender> TextureRenderPtr;
 }
