@@ -10,7 +10,6 @@
 #include "FloatDataModel.h"
 #include "Vector3DataModel.h"
 #include "ColorDataModel.h"
-#include "TextureDataModel.h"
 #include "LayerBlendDataModel.h"
 #include "SharedUniformDataModel.h"
 #include "DataModel/Uniforms/Vector2DataModel.h"
@@ -38,6 +37,7 @@
 #include "DataModel/Math/Functions/AbsDataModel.h"
 #include <engine/core/render/base/editor/shader/data/converter/shader_data_converters.h>
 #include <engine/core/render/base/editor/shader/node/shader_node_glsl.h>
+#include <engine/core/render/base/editor/shader/node/uniform/shader_node_texture.h>
 #include <engine/core/render/base/editor/shader/node/blur/shader_node_gaussian_blur.h>
 #include <engine/core/render/base/editor/shader/node/blur/shader_node_zoom_blur.h>
 #include <engine/core/render/base/editor/shader/node/blur/shader_node_spin_blur.h>
@@ -72,7 +72,7 @@ namespace Studio
         ret->registerModel<Vector3DataModel>("Uniforms");
         ret->registerModel<Vector4DataModel>("Uniforms");
         ret->registerModel<ColorDataModel>("Uniforms");
-        ret->registerModel<TextureDataModel>("Uniforms");
+        ret->registerModel<ShaderNodeTexture>("Uniforms");
 
         // Inputs
         ret->registerModel<VertexAttributeDataModel>("Inputs");
@@ -183,6 +183,20 @@ namespace Studio
                 }
             }
 		}
+
+        Echo::ShaderNode* shaderNode = dynamic_cast<Echo::ShaderNode*>(dataModel);
+        if (shaderNode)
+        {
+			Echo::StringArray uniformNames;
+			Echo::VariantArray uniformValues;
+			if (shaderNode->getDefaultValue(uniformNames, uniformValues))
+			{
+				for (size_t i = 0; i < uniformNames.size(); i++)
+				{
+					m_shaderProgram->setPropertyValue(uniformNames[i], uniformValues[i]);
+				}
+			}
+        }
     }
 
     void ShaderEditor::compile()

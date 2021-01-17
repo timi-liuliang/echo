@@ -17,7 +17,7 @@
 #include "base/editor/atlas/texture_atla_editor.h"
 #include "base/editor/shader/node/shader_node.h"
 #include "base/editor/shader/node/shader_node_uniform.h"
-#include "base/editor/shader/node/shader_node_uniform_texture.h"
+#include "base/editor/shader/node/uniform/shader_node_texture.h"
 #include "base/editor/shader/node/shader_node_glsl.h"
 #include "base/editor/shader/node/blur/shader_node_gaussian_blur.h"
 #include "base/editor/shader/node/blur/shader_node_zoom_blur.h"
@@ -66,7 +66,7 @@ namespace Echo
 	#ifdef ECHO_EDITOR_MODE
 		Class::registerType<ShaderNode>();
 		Class::registerType<ShaderNodeUniform>();
-		Class::registerType<ShaderNodeUniformTexture>();
+		Class::registerType<ShaderNodeTexture>();
 		Class::registerType<ShaderNodeGLSL>();
 		Class::registerType<ShaderNodeGaussianBlur>();
 		Class::registerType<ShaderNodeZoomBlur>();

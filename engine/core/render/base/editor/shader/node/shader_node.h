@@ -59,6 +59,9 @@ namespace Echo
 		// generate variable name
 		Echo::String getDefaultVariableName() const;
 
+		// get default value
+		virtual bool getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues) { return false; }
+
 		// generate code
 		virtual bool generateCode(ShaderCompiler& compiler) { return false; }
 
