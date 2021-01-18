@@ -4,7 +4,7 @@
 #include <QtWidgets/QLineEdit>
 #include <nodeeditor/NodeDataModel>
 #include <iostream>
-#include "ShaderDataModel.h"
+#include "engine/core/render/base/editor/shader/node/shader_node.h"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;

@@ -3,7 +3,7 @@
 #include <QtCore/QObject>
 #include <QtWidgets/QLineEdit>
 #include <iostream>
-#include "ShaderUniformDataModel.h"
+#include "shader_node_uniform.h"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;

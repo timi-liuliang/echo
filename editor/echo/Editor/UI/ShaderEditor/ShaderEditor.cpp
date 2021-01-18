@@ -5,48 +5,7 @@
 #include <nodeeditor/FlowView>
 #include <nodeeditor/DataModelRegistry>
 #include <nodeeditor/TypeConverter>
-#include "ShaderTemplateDataModel.h"
-#include "VertexAttributeDataModel.h"
-#include "FloatDataModel.h"
-#include "Vector3DataModel.h"
-#include "ColorDataModel.h"
-#include "LayerBlendDataModel.h"
-#include "SharedUniformDataModel.h"
-#include "DataModel/Uniforms/Vector2DataModel.h"
-#include "DataModel/Uniforms/Vector4DataModel .h"
-#include "DataModel/Math/Functions/AdditionDataModel.h"
-#include "DataModel/Math/Functions/SubstractionDataModel.h"
-#include "DataModel/Math/Functions/MultiplicationDataModel.h"
-#include "DataModel/Math/Functions/DivisionDataModel.h"
-#include "DataModel/Math/Utils/SplitDataModel.h"
-#include "DataModel/Math/Utils/CombineDataModel.h"
-#include "DataModel/Math/Functions/MaxDataModel.h"
-#include "DataModel/Math/Functions/MinDataModel.h"
-#include "DataModel/Math/Functions/PowDataModel.h"
-#include "DataModel/Math/Functions/SinDataModel.h"
-#include "DataModel/Math/Functions/CosDataModel.h"
-#include "DataModel/Math/Functions/DotProductDataModel.h"
-#include "DataModel/Math/Functions/CrossProductDataModel.h"
-#include "DataModel/Math/Functions/LengthDataModel.h"
-#include "DataModel/Math/Functions/MixDataModel.h"
-#include "DataModel/Math/Functions/SmoothStepDataModel.h"
-#include "DataModel/Math/Functions/FloorDataModel.h"
-#include "DataModel/Math/Functions/ModDataModel.h"
-#include "DataModel/Math/Functions/FractDataModel.h"
-#include "DataModel/Math/Functions/FwidthDataModel.h"
-#include "DataModel/Math/Functions/AbsDataModel.h"
-#include <engine/core/render/base/editor/shader/data/converter/shader_data_converters.h>
-#include <engine/core/render/base/editor/shader/node/shader_node_glsl.h>
-#include <engine/core/render/base/editor/shader/node/uniform/shader_node_texture.h>
-#include <engine/core/render/base/editor/shader/node/blur/shader_node_gaussian_blur.h>
-#include <engine/core/render/base/editor/shader/node/blur/shader_node_zoom_blur.h>
-#include <engine/core/render/base/editor/shader/node/blur/shader_node_spin_blur.h>
-#include <engine/core/render/base/editor/shader/node/color/shader_node_gray_scale.h>
-#include <engine/core/render/base/editor/shader/node/color/shader_node_srgb_to_linear.h>
-#include <engine/core/render/base/editor/shader/node/color/shader_node_linear_to_srgb.h>
-#include <engine/core/render/base/editor/shader/node/shader_node_texture_size.h>
-#include <engine/core/render/base/editor/shader/node/math/shader_node_atan2.h>
-#include <engine/core/render/base/editor/shader/node/math/shader_node_sign.h>
+#include <engine/core/render/base/editor/shader/node/shader_node.h>
 #include "ShaderScene.h"
 #include "ShaderView.h"
 #include "engine/core/io/IO.h"
@@ -62,60 +21,60 @@ namespace Studio
 	{
 		auto ret = std::make_shared<QtNodes::DataModelRegistry>();
 
-        // shader template
-        ret->registerModel<ShaderTemplateDataModel>("skip me");
-        
-        // variables
-        ret->registerModel<SharedUniformDataModel>("Uniforms");
-        ret->registerModel<FloatDataModel>("Uniforms");
-        ret->registerModel<Vector2DataModel>("Uniforms");
-        ret->registerModel<Vector3DataModel>("Uniforms");
-        ret->registerModel<Vector4DataModel>("Uniforms");
-        ret->registerModel<ColorDataModel>("Uniforms");
-        ret->registerModel<ShaderNodeTexture>("Uniforms");
+  //      // shader template
+  //      ret->registerModel<ShaderTemplateDataModel>("skip me");
+  //      
+  //      // variables
+  //      ret->registerModel<SharedUniformDataModel>("Uniforms");
+  //      ret->registerModel<FloatDataModel>("Uniforms");
+  //      ret->registerModel<Vector2DataModel>("Uniforms");
+  //      ret->registerModel<Vector3DataModel>("Uniforms");
+  //      ret->registerModel<Vector4DataModel>("Uniforms");
+  //      ret->registerModel<ColorDataModel>("Uniforms");
+  //      ret->registerModel<ShaderNodeTexture>("Uniforms");
 
-        // Inputs
-        ret->registerModel<VertexAttributeDataModel>("Inputs");
-        ret->registerModel<LayerBlendDataModel>("Inputs");
+  //      // Inputs
+  //      ret->registerModel<VertexAttributeDataModel>("Inputs");
+  //      ret->registerModel<LayerBlendDataModel>("Inputs");
 
-        // Maths
-        ret->registerModel<AbsDataModel>("Math");
-        ret->registerModel<AdditionDataModel>("Math");
-        ret->registerModel<SubstractionDataModel>("Math");
-        ret->registerModel<MultiplicationDataModel>("Math");
-        ret->registerModel<DivisionDataModel>("Math");
-		ret->registerModel<DotProductDataModel>("Math");
-		ret->registerModel<CrossProductDataModel>("Math");
-		ret->registerModel<MinDataModel>("Math");
-		ret->registerModel<MaxDataModel>("Math");
-		ret->registerModel<PowDataModel>("Math");
-		ret->registerModel<SinDataModel>("Math");
-		ret->registerModel<CosDataModel>("Math");
-		ret->registerModel<ModDataModel>("Math");
-		ret->registerModel<FloorDataModel>("Math");
-        ret->registerModel<FractDataModel>("Math");
-        ret->registerModel<FwidthDataModel>("Math");
-        ret->registerModel<LengthDataModel>("Math");
-		ret->registerModel<MixDataModel>("Math");
-        ret->registerModel<SmoothStepDataModel>("Math");
-        ret->registerModel<Echo::ShaderNodeATan2>("Math");
-        ret->registerModel<Echo::ShaderNodeSign>("Math");
+  //      // Maths
+  //      ret->registerModel<AbsDataModel>("Math");
+  //      ret->registerModel<AdditionDataModel>("Math");
+  //      ret->registerModel<SubstractionDataModel>("Math");
+  //      ret->registerModel<MultiplicationDataModel>("Math");
+  //      ret->registerModel<DivisionDataModel>("Math");
+		//ret->registerModel<DotProductDataModel>("Math");
+		//ret->registerModel<CrossProductDataModel>("Math");
+		//ret->registerModel<MinDataModel>("Math");
+		//ret->registerModel<MaxDataModel>("Math");
+		//ret->registerModel<PowDataModel>("Math");
+		//ret->registerModel<SinDataModel>("Math");
+		//ret->registerModel<CosDataModel>("Math");
+		//ret->registerModel<ModDataModel>("Math");
+		//ret->registerModel<FloorDataModel>("Math");
+  //      ret->registerModel<FractDataModel>("Math");
+  //      ret->registerModel<FwidthDataModel>("Math");
+  //      ret->registerModel<LengthDataModel>("Math");
+		//ret->registerModel<MixDataModel>("Math");
+  //      ret->registerModel<SmoothStepDataModel>("Math");
+  //      ret->registerModel<Echo::ShaderNodeATan2>("Math");
+  //      ret->registerModel<Echo::ShaderNodeSign>("Math");
 
-        // Utils
-		ret->registerModel<SplitDataModel>("Utils");
-		ret->registerModel<CombineDataModel>("Utils");
-        ret->registerModel<Echo::ShaderNodeTextureSize>("Utils");
+  //      // Utils
+		//ret->registerModel<SplitDataModel>("Utils");
+		//ret->registerModel<CombineDataModel>("Utils");
+  //      ret->registerModel<Echo::ShaderNodeTextureSize>("Utils");
 
-        // Custom
-        ret->registerModel<Echo::ShaderNodeGLSL>("Custom");
-        ret->registerModel<Echo::ShaderNodeGaussianBlur>("Blur");
-        ret->registerModel<Echo::ShaderNodeZoomBlur>("Blur");
-        ret->registerModel<Echo::ShaderNodeSpinBlur>("Blur");
+  //      // Custom
+  //      ret->registerModel<Echo::ShaderNodeGLSL>("Custom");
+  //      ret->registerModel<Echo::ShaderNodeGaussianBlur>("Blur");
+  //      ret->registerModel<Echo::ShaderNodeZoomBlur>("Blur");
+  //      ret->registerModel<Echo::ShaderNodeSpinBlur>("Blur");
 
-        // Color
-        ret->registerModel<Echo::ShaderNodeGrayScale>("Color");
-        ret->registerModel<Echo::ShaderNodeSRgbToLinear>("Color");
-        ret->registerModel<Echo::ShaderNodeLinearToSRgb>("Color");
+  //      // Color
+  //      ret->registerModel<Echo::ShaderNodeGrayScale>("Color");
+  //      ret->registerModel<Echo::ShaderNodeSRgbToLinear>("Color");
+  //      ret->registerModel<Echo::ShaderNodeLinearToSRgb>("Color");
 
         // Converts
         ret->registerTypeConverter(std::make_pair(DataFloat(nullptr, "").type(),   DataVector2(nullptr, "").type()), QtNodes::TypeConverter{ FloatToVector2() });

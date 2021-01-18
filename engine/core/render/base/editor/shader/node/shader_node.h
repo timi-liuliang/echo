@@ -1,14 +1,14 @@
 #pragma once
 
 #include "engine/core/base/object.h"
-#include "../compiler/shader_compiler.h"
-#include <functional>
 #include "engine/core/editor/editor.h"
 
 #ifdef ECHO_EDITOR_MODE
 
+#include <functional>
 #include <nodeeditor/NodeData>
 #include <nodeeditor/NodeDataModel>
+#include "../compiler/shader_compiler.h"
 #include "../data/shader_data.h"
 #include "../data/shader_data_float.h"
 #include "../data/shader_data_invalid.h"

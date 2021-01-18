@@ -1,4 +1,4 @@
-#include "VertexAttributeDataModel.h"
+#include "shader_node_vertex_attribute.h"
 #include <QtCore/QJsonValue>
 #include <QtGui/QDoubleValidator>
 

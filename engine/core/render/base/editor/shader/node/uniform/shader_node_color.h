@@ -4,8 +4,7 @@
 #include <QtWidgets/QLineEdit>
 #include <nodeeditor/NodeDataModel>
 #include <iostream>
-#include "QColorSelect.h"
-#include "ShaderUniformDataModel.h"
+#include "shader_node_uniform.h"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;

@@ -1,4 +1,4 @@
-#include "Vector2DataModel.h"
+#include "shader_node_vector2.h"
 #include <QtCore/QJsonValue>
 #include <QtGui/QDoubleValidator>
 

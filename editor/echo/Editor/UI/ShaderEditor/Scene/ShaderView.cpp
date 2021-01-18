@@ -1,6 +1,5 @@
 #include "ShaderView.h"
 #include "ShaderEditor.h"
-#include "ShaderTemplateDataModel.h"
 #include "nodeeditor/internal/node/Node.hpp"
 #include <QMenu>
 #include <QWidgetAction>
@@ -40,7 +39,7 @@ namespace DataFlowProgramming
 
 		auto skipText = QStringLiteral("skip me");
 
-		//Add filterbox to the context menu
+		//Add filter box to the context menu
 		auto* txtBox = new QLineEdit(&modelMenu);
 
 		txtBox->setPlaceholderText(QStringLiteral("Filter"));
@@ -51,7 +50,7 @@ namespace DataFlowProgramming
 
 		modelMenu.addAction(txtBoxAction);
 
-		//Add result treeview to the context menu
+		//Add result tree view to the context menu
 		auto* treeView = new QTreeWidget(&modelMenu);
 		treeView->header()->close();
 

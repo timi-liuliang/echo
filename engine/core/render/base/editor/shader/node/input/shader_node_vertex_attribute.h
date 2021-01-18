@@ -3,7 +3,7 @@
 #include <QtCore/QObject>
 #include <QtWidgets/QComboBox>
 #include <iostream>
-#include "ShaderDataModel.h"
+#include "engine/core/render/base/editor/shader/node/shader_node.h"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;

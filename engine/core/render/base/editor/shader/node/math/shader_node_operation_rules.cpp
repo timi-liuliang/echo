@@ -1,5 +1,5 @@
-#include "OperationRules.h"
-#include "ShaderDataModel.h"
+#include "shader_node_operation_rules.h"
+#include "../../shader_node.h"
 
 namespace DataFlowProgramming
 {

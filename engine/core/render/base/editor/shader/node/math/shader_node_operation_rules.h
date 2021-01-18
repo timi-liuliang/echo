@@ -2,7 +2,7 @@
 
 #include <engine/core/util/StringUtil.h>
 #include <engine/core/render/base/editor/shader/data/shader_data.h>
-#include "ShaderDataModel.h"
+#include "engine/core/render/base/editor/shader/node/shader_node.h"
 
 using namespace Echo;
 

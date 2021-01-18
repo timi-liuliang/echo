@@ -1,4 +1,4 @@
-#include "FloatDataModel.h"
+#include "shader_node_float.h"
 #include <QtCore/QJsonValue>
 #include <QtGui/QDoubleValidator>
 

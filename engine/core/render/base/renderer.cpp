@@ -16,7 +16,7 @@
 #include "base/atla/texture_atlas.h"
 #include "base/editor/atlas/texture_atla_editor.h"
 #include "base/editor/shader/node/shader_node.h"
-#include "base/editor/shader/node/shader_node_uniform.h"
+#include "base/editor/shader/node/uniform/shader_node_uniform.h"
 #include "base/editor/shader/node/uniform/shader_node_texture.h"
 #include "base/editor/shader/node/shader_node_glsl.h"
 #include "base/editor/shader/node/blur/shader_node_gaussian_blur.h"

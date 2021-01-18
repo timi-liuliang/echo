@@ -1,7 +1,6 @@
-#include "ShaderTemplateDataModel.h"
+#include "shader_node_template.h"
 #include <QtCore/QJsonValue>
 #include <QtGui/QDoubleValidator>
-#include "ShaderScene.h"
 #include "nodeeditor/internal/node/Node.hpp"
 #include <engine/core/log/Log.h>
 
@@ -37,22 +36,6 @@ namespace DataFlowProgramming
 
     void ShaderTemplateDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex port)
     {
-		m_inputs[port] = std::dynamic_pointer_cast<ShaderData>(nodeData);
-
-		ShaderScene* shaderScene = qobject_cast<ShaderScene*>(m_scene);
-		if (shaderScene)
-		{
-            // check validation
-            for (QtNodes::Node* node : shaderScene->allNodes())
-            {
-                auto shaderDataModel = dynamic_cast<ShaderDataModel*>(node->nodeDataModel());
-                if (shaderDataModel)
-                {
-					if (!shaderDataModel->checkValidation())
-						return;
-                }
-            }
-		}
     }
 
     bool ShaderTemplateDataModel::generateCode(Echo::ShaderCompiler& compiler)

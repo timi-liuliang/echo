@@ -3,9 +3,8 @@
 #include <QtCore/QObject>
 #include <QtWidgets/QLineEdit>
 #include <nodeeditor/NodeDataModel>
-#include "propertyeditor/QVector2Editor.h"
 #include <iostream>
-#include "ShaderUniformDataModel.h"
+#include "shader_node_uniform.h"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;

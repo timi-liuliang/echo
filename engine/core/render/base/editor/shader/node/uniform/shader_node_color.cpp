@@ -1,4 +1,4 @@
-#include "ColorDataModel.h"
+#include "shader_node_color.h"
 #include <QtCore/QJsonValue>
 #include <QtGui/QDoubleValidator>
 #include "engine/core/util/StringUtil.h"

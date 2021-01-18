@@ -1,7 +1,6 @@
-#include "LayerBlendDataModel.h"
+#include "shader_node_layer_blend.h"
 #include <QtCore/QJsonValue>
 #include <QtGui/QDoubleValidator>
-#include "LayerBlendDataModel.h"
 
 using namespace Echo;
 
