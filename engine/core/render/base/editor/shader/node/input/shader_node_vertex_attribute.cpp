@@ -1,12 +1,10 @@
 #include "shader_node_vertex_attribute.h"
-#include <QtCore/QJsonValue>
-#include <QtGui/QDoubleValidator>
 
-using namespace Echo;
+#ifdef ECHO_EDITOR_MODE
 
-namespace DataFlowProgramming
+namespace Echo
 {
-    VertexAttributeDataModel::VertexAttributeDataModel()
+    ShaderNodeVertexAttribute::ShaderNodeVertexAttribute()
       : m_comboBox(new QComboBox())
     {
         m_comboBox->setMinimumWidth(m_comboBox->sizeHint().width() * 1.7);
@@ -62,56 +60,43 @@ namespace DataFlowProgramming
         m_outputs.back()->setVariableName("v_Joint");
 
         m_comboBox->setCurrentIndex(0);
-
-        QObject::connect(m_comboBox, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(onIndexChanged()));
     }
 
-    QJsonObject VertexAttributeDataModel::save() const
+    void ShaderNodeVertexAttribute::bindMethods()
     {
-        QJsonObject modelJson = ShaderDataModel::save();
+		CLASS_BIND_METHOD(ShaderNodeVertexAttribute, getOption, DEF_METHOD("getOption"));
+		CLASS_BIND_METHOD(ShaderNodeVertexAttribute, setOption, DEF_METHOD("setOption"));
 
-        modelJson["option"] = m_comboBox->currentText().toStdString().c_str();
-
-        return modelJson;
+		CLASS_REGISTER_PROPERTY(ShaderNodeVertexAttribute, "Attribute", Variant::Type::String, "getOption", "setOption");
     }
 
-    void VertexAttributeDataModel::restore(QJsonObject const &p)
+    String ShaderNodeVertexAttribute::getOption() const
     {
-        QJsonValue v = p["option"];
-        if (!v.isUndefined())
-        {
-            m_comboBox->setCurrentText(v.toString());
-        }
+        return m_comboBox->currentText().toStdString().c_str();
     }
 
-    unsigned int VertexAttributeDataModel::nPorts(PortType portType) const
+    void ShaderNodeVertexAttribute::setOption(const String& option)
+    {
+        m_comboBox->setCurrentText(option.c_str());
+    }
+
+    unsigned int ShaderNodeVertexAttribute::nPorts(QtNodes::PortType portType) const
     {
       switch (portType)
       {
-        case PortType::In:      return 0;
-        case PortType::Out:     return 1;
-        default:                return 0;
+        case QtNodes::PortType::In:      return 0;
+        case QtNodes::PortType::Out:     return 1;
+        default:                        return 0;
       }
     }
 
-    void VertexAttributeDataModel::onIndexChanged()
-    {
-        Q_EMIT dataUpdated(0);
-    }
-
-    NodeDataType VertexAttributeDataModel::dataType(PortType portType, PortIndex portIndex) const
+    NodeDataType ShaderNodeVertexAttribute::dataType(QtNodes::PortType portType, QtNodes::PortIndex portIndex) const
     {
         int index = m_comboBox->currentIndex();
-        return portType == PortType::Out ? m_outputs[index]->type() : NodeDataType{ "unknown", "Unknown" };
+        return portType == QtNodes::PortType::Out ? m_outputs[index]->type() : NodeDataType{ "invalid", "invalid" };
     }
 
-    std::shared_ptr<NodeData> VertexAttributeDataModel::outData(PortIndex portIndex)
-    {
-        int index = m_comboBox->currentIndex();
-        return m_outputs[index];
-    }
-
-    bool VertexAttributeDataModel::generateCode(Echo::ShaderCompiler& compiler)
+    bool ShaderNodeVertexAttribute::generateCode(Echo::ShaderCompiler& compiler)
     {
         Echo::String text = m_comboBox->currentText().toStdString().c_str();
         if (Echo::StringUtil::StartWith(text, "position("))
@@ -146,3 +131,5 @@ namespace DataFlowProgramming
 		return true;
     }
 }
+
+#endif

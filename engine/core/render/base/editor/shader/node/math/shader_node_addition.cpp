@@ -1,11 +1,11 @@
 #include "shader_node_addition.h"
-#include <QtCore/QJsonValue>
-#include <QtGui/QDoubleValidator>
 #include "shader_node_operation_rules.h"
 
-namespace DataFlowProgramming
+#ifdef ECHO_EDITOR_MODE
+
+namespace Echo
 {
-    AdditionDataModel::AdditionDataModel()
+    ShaderNodeAddition::ShaderNodeAddition()
     {
         m_inputDataTypes = 
         {
@@ -20,17 +20,7 @@ namespace DataFlowProgramming
         m_outputs[0]->setVariableName(getVariableName());
     }
 
-    QJsonObject AdditionDataModel::save() const
-    {
-        QJsonObject modelJson = NodeDataModel::save();
-        return modelJson;
-    }
-
-    void AdditionDataModel::restore(QJsonObject const &p)
-    {
-    }
-
-    void AdditionDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
+    void ShaderNodeAddition::setInData(std::shared_ptr<NodeData> nodeData, QtNodes::PortIndex portIndex)
     {
         m_inputs[portIndex] = std::dynamic_pointer_cast<ShaderData>(nodeData);
         if (m_inputs[0] && m_inputs[1])
@@ -47,7 +37,7 @@ namespace DataFlowProgramming
 		Q_EMIT dataUpdated(0);
     }
 
-    bool AdditionDataModel::generateCode(Echo::ShaderCompiler& compiler)
+    bool ShaderNodeAddition::generateCode(Echo::ShaderCompiler& compiler)
     {
         if (m_inputs[0] && m_inputs[1])
         {
@@ -61,3 +51,5 @@ namespace DataFlowProgramming
         return true;
     }
 }
+
+#endif

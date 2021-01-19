@@ -14,19 +14,11 @@ namespace Echo
 		virtual ~ShaderNodeUniform();
 
 		// constant
-		virtual bool isExport() const { return m_isExport; }
-		void setExport(bool isExport) { m_isExport = isExport; }
-
-		// variable name
-		const String& getVariableName() const { return m_variableName; }
-		void setVariableName(const String& variableName);
-
-	public:
-		DECLARE_SIGNAL(Signal0, onVariableNameChanged)
+		virtual bool isUniform() const { return m_isUniform; }
+		void setUniform(bool isUniform) { m_isUniform = isUniform; }
 
 	protected:
-		bool        m_isExport = false;
-		String		m_variableName;
+		bool        m_isUniform = false;
 	};
 #endif
 }

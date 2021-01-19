@@ -16,6 +16,10 @@ namespace Echo
 
 	void ShaderNode::bindMethods()
 	{
+		CLASS_BIND_METHOD(ShaderNode, getVariableName, DEF_METHOD("getVariableName"));
+		CLASS_BIND_METHOD(ShaderNode, setVariableName, DEF_METHOD("setVariableName"));
+
+		CLASS_REGISTER_PROPERTY(ShaderNode, "VariableName", Variant::Type::String, "getVariableName", "setVariableName");
 	}
 
 	unsigned int ShaderNode::nPorts(QtNodes::PortType portType) const
@@ -172,12 +176,17 @@ namespace Echo
 		return true;
 	}
 
-	Echo::String ShaderNode::getDefaultVariableName() const
+	String ShaderNode::getVariableName() const
 	{
-		Echo::String variableName = name().toStdString().c_str() + Echo::StringUtil::Format("_%d", m_id);
-		variableName = Echo::StringUtil::Replace(variableName, " ", "");
+		if (m_variableName.empty())
+		{
+			Echo::String variableName = name().toStdString().c_str() + Echo::StringUtil::Format("_%d", m_id);
+			variableName = Echo::StringUtil::Replace(variableName, " ", "");
 
-		return variableName;
+			return variableName;
+		}
+
+		return m_variableName;
 	}
 }
 

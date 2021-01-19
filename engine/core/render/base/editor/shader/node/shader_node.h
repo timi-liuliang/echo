@@ -56,9 +56,6 @@ namespace Echo
 		virtual bool checkValidation();
 
 	public:
-		// generate variable name
-		Echo::String getDefaultVariableName() const;
-
 		// get default value
 		virtual bool getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues) { return false; }
 
@@ -70,6 +67,11 @@ namespace Echo
 
 		// show menu
 		virtual void showMenu(const QPointF& pos) {}
+
+	public:
+		// variable name
+		String getVariableName() const;
+		void setVariableName(const String& variableName) { m_variableName = variableName; }
 
 	public:
 		// load|save
@@ -86,6 +88,7 @@ namespace Echo
 		std::vector<std::shared_ptr<ShaderData>>	m_outputs;
 		QtNodes::NodeValidationState				m_modelValidationState = QtNodes::NodeValidationState::Valid;
 		QString										m_modelValidationError = QStringLiteral("");
+		String										m_variableName;
 	};
 }
 

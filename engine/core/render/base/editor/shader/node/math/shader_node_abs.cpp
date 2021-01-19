@@ -1,11 +1,12 @@
 #include "shader_node_abs.h"
-#include <QtCore/QJsonValue>
-#include <QtGui/QDoubleValidator>
 #include "shader_node_operation_rules.h"
 
-namespace DataFlowProgramming
+#ifdef ECHO_EDITOR_MODE
+
+namespace Echo
 {
-    AbsDataModel::AbsDataModel()
+    ShaderNodeAbs::ShaderNodeAbs()
+        : ShaderNode()
     {
         m_inputDataTypes = 
         {
@@ -19,17 +20,7 @@ namespace DataFlowProgramming
         m_outputs[0]->setVariableName(getVariableName());
     }
 
-    QJsonObject AbsDataModel::save() const
-    {
-        QJsonObject modelJson = NodeDataModel::save();
-        return modelJson;
-    }
-
-    void AbsDataModel::restore(QJsonObject const &p)
-    {
-    }
-
-    void AbsDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
+    void ShaderNodeAbs::setInData(std::shared_ptr<NodeData> nodeData, QtNodes::PortIndex portIndex)
     {
         m_inputs[portIndex] = std::dynamic_pointer_cast<ShaderData>(nodeData);
         if (m_inputs[0])
@@ -46,7 +37,7 @@ namespace DataFlowProgramming
 		Q_EMIT dataUpdated(0);
     }
 
-    bool AbsDataModel::generateCode(Echo::ShaderCompiler& compiler)
+    bool ShaderNodeAbs::generateCode(Echo::ShaderCompiler& compiler)
     {
         if (m_inputs[0])
         {
@@ -59,3 +50,5 @@ namespace DataFlowProgramming
         return true;
     }
 }
+
+#endif

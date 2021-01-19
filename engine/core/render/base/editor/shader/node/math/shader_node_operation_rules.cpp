@@ -1,7 +1,8 @@
 #include "shader_node_operation_rules.h"
-#include "../../shader_node.h"
 
-namespace DataFlowProgramming
+#ifdef ECHO_EDITOR_MODE
+
+namespace Echo
 {
 	OperationRules::OperationRules()
 	{
@@ -175,3 +176,5 @@ namespace DataFlowProgramming
 		else						return std::make_shared<DataInvalid>(dataModel);
 	}
 }
+
+#endif

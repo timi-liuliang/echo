@@ -1,61 +1,49 @@
 #pragma once
 
-#include <QtCore/QObject>
-#include <QtWidgets/QComboBox>
-#include <iostream>
 #include "engine/core/render/base/editor/shader/node/shader_node.h"
 
-using QtNodes::PortType;
-using QtNodes::PortIndex;
-using QtNodes::NodeData;
-using QtNodes::NodeDataType;
-using QtNodes::NodeDataModel;
-using QtNodes::NodeValidationState;
+#ifdef ECHO_EDITOR_MODE
 
-namespace DataFlowProgramming
+namespace Echo
 {
-    class VertexAttributeDataModel : public ShaderDataModel
+    class ShaderNodeVertexAttribute : public ShaderNode
     {
-      Q_OBJECT
+        ECHO_CLASS(ShaderNodeVertexAttribute, ShaderNode)
 
     public:
-        VertexAttributeDataModel();
-        virtual ~VertexAttributeDataModel() {}
+        ShaderNodeVertexAttribute();
+        virtual ~ShaderNodeVertexAttribute() {}
+
+        // name
+		virtual QString name() const override { return QStringLiteral("VertexAttribute"); }
 
         // caption
-        QString caption() const override { return QStringLiteral("Vertex Attribute"); }
+        virtual QString caption() const override { return QStringLiteral("Vertex Attribute"); }
+
+        // is caption visible
         bool captionVisible() const override { return true; }
 
-        QString name() const override { return QStringLiteral("VertexAttribute"); }
-
 		// generate code
-		virtual bool generateCode(Echo::ShaderCompiler& compiler) override;
-
-    public:
-        // load|save
-        QJsonObject save() const override;
-        void restore(QJsonObject const &p) override;
+		virtual bool generateCode(ShaderCompiler& compiler) override;
 
     public:
         // get port type
-        unsigned int nPorts(PortType portType) const override;
+        virtual unsigned int nPorts(QtNodes::PortType portType) const override;
 
         // get data type
-        NodeDataType dataType(PortType portType, PortIndex portIndex) const override;
-
-        std::shared_ptr<NodeData> outData(PortIndex port) override;
-
-        void setInData(std::shared_ptr<NodeData>, int) override { }
+        virtual NodeDataType dataType(QtNodes::PortType portType, QtNodes::PortIndex portIndex) const override;
 
         // get embedded widget
         QWidget* embeddedWidget() override { return m_comboBox; }
 
-    private Q_SLOTS:
-        // on value changed
-        void onIndexChanged();
+    public:
+		// attribute
+		String getOption() const;
+        void setOption(const String& option);
 
     private:
-      QComboBox*                            m_comboBox;
+        QComboBox*      m_comboBox;
     };
 }
 
+#endif

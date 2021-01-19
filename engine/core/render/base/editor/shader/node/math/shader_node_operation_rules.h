@@ -4,9 +4,9 @@
 #include <engine/core/render/base/editor/shader/data/shader_data.h>
 #include "engine/core/render/base/editor/shader/node/shader_node.h"
 
-using namespace Echo;
+#ifdef ECHO_EDITOR_MODE
 
-namespace DataFlowProgramming
+namespace Echo
 {
 	class OperationRules
 	{
@@ -79,3 +79,5 @@ namespace DataFlowProgramming
 		std::vector<OperationRule3_1>   m_mixRules;				// mix, smoothstep
 	};
 }
+
+#endif
