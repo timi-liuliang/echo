@@ -22,16 +22,6 @@ namespace DataFlowProgramming
 		m_outputs[2] = std::make_shared<DataVector2>(this, "rg");
 	}
 
-	QJsonObject CombineDataModel::save() const
-	{
-		QJsonObject modelJson = NodeDataModel::save();
-		return modelJson;
-	}
-
-	void CombineDataModel::restore(QJsonObject const& p)
-	{
-	}
-
 	void CombineDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
 	{
 		m_inputs[portIndex] = std::dynamic_pointer_cast<ShaderData>(nodeData);

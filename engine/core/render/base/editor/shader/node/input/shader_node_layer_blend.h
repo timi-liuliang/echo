@@ -1,63 +1,34 @@
 #pragma once
 
-#include <QtCore/QObject>
-#include <QtWidgets/QComboBox>
-#include <QtWidgets/QLineEdit>
-#include <iostream>
 #include "engine/core/render/base/editor/shader/node/shader_node.h"
 
-using QtNodes::PortType;
-using QtNodes::PortIndex;
-using QtNodes::NodeData;
-using QtNodes::NodeDataType;
-using QtNodes::NodeDataModel;
-using QtNodes::NodeValidationState;
+#ifdef ECHO_EDITOR_MODE
 
-namespace DataFlowProgramming
+namespace Echo
 {
-	class LayerBlendDataModel : public ShaderDataModel
+	class ShaderNodeLayerBlend : public ShaderNode
 	{
-		Q_OBJECT
+		ECHO_CLASS(ShaderNodeLayerBlend, ShaderNode)
 
 	public:
-		LayerBlendDataModel();
-		virtual ~LayerBlendDataModel() {}
+		ShaderNodeLayerBlend();
+		virtual ~ShaderNodeLayerBlend() {}
+
+		// name
+		virtual QString name() const override { return QStringLiteral("LayerBlend"); }
 
 		// caption
 		QString caption() const override { return QStringLiteral("LayerBlend"); }
+
+		// is caption visible
 		bool captionVisible() const override { return true; }
 
-		QString name() const override { return QStringLiteral("LayerBlend"); }
-
 		// generate code
-		virtual bool generateCode(Echo::ShaderCompiler& compiler) override;
-
-	public:
-		// load|save
-		QJsonObject save() const override;
-		void restore(QJsonObject const& p) override;
-
-	public:
-		// get port type
-		unsigned int nPorts(PortType portType) const override;
-
-		// get data type
-		NodeDataType dataType(PortType portType, PortIndex portIndex) const override;
-
-		std::shared_ptr<NodeData> outData(PortIndex port) override;
-
-		void setInData(std::shared_ptr<NodeData>, int) override { }
-
-		// get embedded widget
-		QWidget* embeddedWidget() override { return nullptr; }
-
-	private Q_SLOTS:
-		// on value changed
-		void onIndexChanged();
+		virtual bool generateCode(ShaderCompiler& compiler) override;
 
 	private:
-		Echo::i32							m_maxOutputNumber = 4;
-		QComboBox*							m_comboBox;
+		Echo::i32	m_maxOutputNumber = 4;
 	};
 }
 
+#endif

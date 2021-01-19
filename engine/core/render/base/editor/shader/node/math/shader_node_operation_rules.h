@@ -45,21 +45,21 @@ namespace Echo
 
 	public:
 		// new shaderData
-		std::shared_ptr<ShaderData> NewShaderData(const Echo::String& type, ShaderDataModel* dataModel);
+		std::shared_ptr<ShaderData> NewShaderData(const Echo::String& type, ShaderNode* dataModel);
 
 		// addition
-		std::shared_ptr<ShaderData> NewAdditionOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel);
-		std::shared_ptr<ShaderData> NewSubstractionOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel);
-		std::shared_ptr<ShaderData> NewMultiplicationOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel);
-		std::shared_ptr<ShaderData> NewDivisionOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel);
-		std::shared_ptr<ShaderData> NewDotProductOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel);
-		std::shared_ptr<ShaderData> NewCrossProductOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel);
-		std::shared_ptr<ShaderData> NewMinOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel);
-		std::shared_ptr<ShaderData> NewMaxOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel);
-		std::shared_ptr<ShaderData> NewPowOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel);
+		std::shared_ptr<ShaderData> NewAdditionOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderNode* dataModel);
+		std::shared_ptr<ShaderData> NewSubstractionOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderNode* dataModel);
+		std::shared_ptr<ShaderData> NewMultiplicationOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderNode* dataModel);
+		std::shared_ptr<ShaderData> NewDivisionOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderNode* dataModel);
+		std::shared_ptr<ShaderData> NewDotProductOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderNode* dataModel);
+		std::shared_ptr<ShaderData> NewCrossProductOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderNode* dataModel);
+		std::shared_ptr<ShaderData> NewMinOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderNode* dataModel);
+		std::shared_ptr<ShaderData> NewMaxOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderNode* dataModel);
+		std::shared_ptr<ShaderData> NewPowOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderNode* dataModel);
 
 		// lerp
-		std::shared_ptr<ShaderData> NewMixOutput(const Echo::String& inputA, const Echo::String& inputB, const Echo::String& inputC, ShaderDataModel* dataModel);
+		std::shared_ptr<ShaderData> NewMixOutput(const Echo::String& inputA, const Echo::String& inputB, const Echo::String& inputC, ShaderNode* dataModel);
 
 	private:
 		// get output

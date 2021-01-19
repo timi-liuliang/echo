@@ -63,70 +63,70 @@ namespace Echo
 		return opertaionRules;
 	}
 
-	std::shared_ptr<ShaderData> OperationRules::NewAdditionOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel)
+	std::shared_ptr<ShaderData> OperationRules::NewAdditionOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderNode* dataModel)
 	{
 		Echo::String outputType = getOutput(inputA, inputB, m_additionRules);
 
 		return NewShaderData(outputType, dataModel);
 	}
 
-	std::shared_ptr<ShaderData> OperationRules::NewSubstractionOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel)
+	std::shared_ptr<ShaderData> OperationRules::NewSubstractionOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderNode* dataModel)
 	{
 		Echo::String outputType = getOutput(inputA, inputB, m_substractionRules);
 
 		return NewShaderData(outputType, dataModel);
 	}
 
-	std::shared_ptr<ShaderData> OperationRules::NewMultiplicationOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel)
+	std::shared_ptr<ShaderData> OperationRules::NewMultiplicationOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderNode* dataModel)
 	{
 		Echo::String outputType = getOutput(inputA, inputB, m_multiplicationRules);
 
 		return NewShaderData(outputType, dataModel);
 	}
 
-	std::shared_ptr<ShaderData> OperationRules::NewDivisionOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel)
+	std::shared_ptr<ShaderData> OperationRules::NewDivisionOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderNode* dataModel)
 	{
 		Echo::String outputType = getOutput(inputA, inputB, m_divisionRules);
 
 		return NewShaderData(outputType, dataModel);
 	}
 
-	std::shared_ptr<ShaderData> OperationRules::NewDotProductOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel)
+	std::shared_ptr<ShaderData> OperationRules::NewDotProductOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderNode* dataModel)
 	{
 		Echo::String outputType = getOutput(inputA, inputB, m_dotProductRules);
 
 		return NewShaderData(outputType, dataModel);
 	}
 
-	std::shared_ptr<ShaderData> OperationRules::NewCrossProductOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel)
+	std::shared_ptr<ShaderData> OperationRules::NewCrossProductOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderNode* dataModel)
 	{
 		Echo::String outputType = getOutput(inputA, inputB, m_crossProductRules);
 
 		return NewShaderData(outputType, dataModel);
 	}
 
-	std::shared_ptr<ShaderData> OperationRules::NewMinOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel)
+	std::shared_ptr<ShaderData> OperationRules::NewMinOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderNode* dataModel)
 	{
 		Echo::String outputType = getOutput(inputA, inputB, m_minRules);
 
 		return NewShaderData(outputType, dataModel);
 	}
 
-	std::shared_ptr<ShaderData> OperationRules::NewMaxOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel)
+	std::shared_ptr<ShaderData> OperationRules::NewMaxOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderNode* dataModel)
 	{
 		Echo::String outputType = getOutput(inputA, inputB, m_maxRules);
 
 		return NewShaderData(outputType, dataModel);
 	}
 
-	std::shared_ptr<ShaderData> OperationRules::NewPowOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderDataModel* dataModel)
+	std::shared_ptr<ShaderData> OperationRules::NewPowOutput(const Echo::String& inputA, const Echo::String& inputB, ShaderNode* dataModel)
 	{
 		Echo::String outputType = getOutput(inputA, inputB, m_powRules);
 
 		return NewShaderData(outputType, dataModel);
 	}
 
-	std::shared_ptr<ShaderData> OperationRules::NewMixOutput(const Echo::String& inputA, const Echo::String& inputB, const Echo::String& inputC, ShaderDataModel* dataModel)
+	std::shared_ptr<ShaderData> OperationRules::NewMixOutput(const Echo::String& inputA, const Echo::String& inputB, const Echo::String& inputC, ShaderNode* dataModel)
 	{
 		Echo::String outputType = getOutput(inputA, inputB, inputC, m_mixRules);
 
@@ -167,7 +167,7 @@ namespace Echo
 		return "invalid";
 	}
 
-	std::shared_ptr<ShaderData> OperationRules::NewShaderData(const Echo::String& type, ShaderDataModel* dataModel)
+	std::shared_ptr<ShaderData> OperationRules::NewShaderData(const Echo::String& type, ShaderNode* dataModel)
 	{
 		if (type == "float")		return std::make_shared<DataFloat>(dataModel, "float");
 		else if (type == "vec2")	return std::make_shared<DataVector2>(dataModel, "vec2");
