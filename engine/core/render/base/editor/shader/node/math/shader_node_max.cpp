@@ -1,11 +1,11 @@
 #include "shader_node_max.h"
-#include <QtCore/QJsonValue>
-#include <QtGui/QDoubleValidator>
 #include "shader_node_operation_rules.h"
 
-namespace DataFlowProgramming
+#ifdef ECHO_EDITOR_MODE
+
+namespace Echo
 {
-	MaxDataModel::MaxDataModel()
+    ShaderNodeMax::ShaderNodeMax()
     {
         m_inputDataTypes = 
         {
@@ -20,17 +20,7 @@ namespace DataFlowProgramming
         m_outputs[0]->setVariableName(getVariableName());
     }
 
-    QJsonObject MaxDataModel::save() const
-    {
-        QJsonObject modelJson = NodeDataModel::save();
-        return modelJson;
-    }
-
-    void MaxDataModel::restore(QJsonObject const &p)
-    {
-    }
-
-    void MaxDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
+    void ShaderNodeMax::setInData(std::shared_ptr<NodeData> nodeData, QtNodes::PortIndex portIndex)
     {
         m_inputs[portIndex] = std::dynamic_pointer_cast<ShaderData>(nodeData);
         if (m_inputs[0] && m_inputs[1])
@@ -47,7 +37,7 @@ namespace DataFlowProgramming
 		Q_EMIT dataUpdated(0);
     }
 
-    bool MaxDataModel::generateCode(Echo::ShaderCompiler& compiler)
+    bool ShaderNodeMax::generateCode(Echo::ShaderCompiler& compiler)
     {
         if (m_inputs[0] && m_inputs[1])
         {
@@ -61,3 +51,5 @@ namespace DataFlowProgramming
         return true;
     }
 }
+
+#endif

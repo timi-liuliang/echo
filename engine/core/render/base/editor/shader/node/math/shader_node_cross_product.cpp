@@ -1,12 +1,11 @@
 #include "shader_node_cross_product.h"
 #include "shader_node_operation_rules.h"
-#include <QtCore/QJsonValue>
-#include <QtGui/QDoubleValidator>
-#include "shader_node_operation_rules.h"
 
-namespace DataFlowProgramming
+#ifdef ECHO_EDITOR_MODE
+
+namespace Echo
 {
-    CrossProductDataModel::CrossProductDataModel()
+    ShaderNodeCrossProduct::ShaderNodeCrossProduct()
     {
         m_inputDataTypes = 
         {
@@ -21,17 +20,7 @@ namespace DataFlowProgramming
         m_outputs[0]->setVariableName(getVariableName());
     }
 
-    QJsonObject CrossProductDataModel::save() const
-    {
-        QJsonObject modelJson = NodeDataModel::save();
-        return modelJson;
-    }
-
-    void CrossProductDataModel::restore(QJsonObject const &p)
-    {
-    }
-
-    void CrossProductDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
+    void ShaderNodeCrossProduct::setInData(std::shared_ptr<NodeData> nodeData, QtNodes::PortIndex portIndex)
     {
         m_inputs[portIndex] = std::dynamic_pointer_cast<ShaderData>(nodeData);
         if (m_inputs[0] && m_inputs[1])
@@ -48,7 +37,7 @@ namespace DataFlowProgramming
 		Q_EMIT dataUpdated(0);
     }
 
-    bool CrossProductDataModel::generateCode(Echo::ShaderCompiler& compiler)
+    bool ShaderNodeCrossProduct::generateCode(Echo::ShaderCompiler& compiler)
     {
         if (m_inputs[0] && m_inputs[1])
         {
@@ -62,3 +51,5 @@ namespace DataFlowProgramming
         return true;
     }
 }
+
+#endif

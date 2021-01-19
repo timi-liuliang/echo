@@ -1,11 +1,11 @@
 #include "shader_node_division.h"
-#include <QtCore/QJsonValue>
-#include <QtGui/QDoubleValidator>
 #include "shader_node_operation_rules.h"
 
-namespace DataFlowProgramming
+#ifdef ECHO_EDITOR_MODE
+
+namespace Echo
 {
-    DivisionDataModel::DivisionDataModel()
+    ShaderNodeDivision::ShaderNodeDivision()
     {
         m_inputDataTypes = 
         {
@@ -20,17 +20,7 @@ namespace DataFlowProgramming
         m_outputs[0]->setVariableName(getVariableName());
     }
 
-    QJsonObject DivisionDataModel::save() const
-    {
-        QJsonObject modelJson = NodeDataModel::save();
-        return modelJson;
-    }
-
-    void DivisionDataModel::restore(QJsonObject const &p)
-    {
-    }
-
-    void DivisionDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
+    void ShaderNodeDivision::setInData(std::shared_ptr<NodeData> nodeData, QtNodes::PortIndex portIndex)
     {
 		m_inputs[portIndex] = std::dynamic_pointer_cast<ShaderData>(nodeData);
 		if (m_inputs[0] && m_inputs[1])
@@ -47,7 +37,7 @@ namespace DataFlowProgramming
         Q_EMIT dataUpdated(0);
     }
 
-    bool DivisionDataModel::generateCode(Echo::ShaderCompiler& compiler)
+    bool ShaderNodeDivision::generateCode(Echo::ShaderCompiler& compiler)
     {
         if (m_inputs[0] && m_inputs[1])
         {
@@ -61,3 +51,5 @@ namespace DataFlowProgramming
         return true;
     }
 }
+
+#endif

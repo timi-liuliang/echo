@@ -1,10 +1,11 @@
 #include "shader_node_combine.h"
-#include <QtCore/QJsonValue>
-#include <QtGui/QDoubleValidator>
+#include "shader_node_operation_rules.h"
 
-namespace DataFlowProgramming
+#ifdef ECHO_EDITOR_MODE
+
+namespace Echo
 {
-	CombineDataModel::CombineDataModel()
+	ShaderNodeCombine::ShaderNodeCombine()
 	{
 		m_inputDataTypes =
 		{
@@ -22,7 +23,7 @@ namespace DataFlowProgramming
 		m_outputs[2] = std::make_shared<DataVector2>(this, "rg");
 	}
 
-	void CombineDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
+	void ShaderNodeCombine::setInData(std::shared_ptr<NodeData> nodeData, QtNodes::PortIndex portIndex)
 	{
 		m_inputs[portIndex] = std::dynamic_pointer_cast<ShaderData>(nodeData);
 
@@ -36,7 +37,7 @@ namespace DataFlowProgramming
 		}
 	}
 
-	bool CombineDataModel::generateCode(Echo::ShaderCompiler& compiler)
+	bool ShaderNodeCombine::generateCode(Echo::ShaderCompiler& compiler)
 	{
 		Echo::String x = m_inputs[0] ? m_inputs[0]->getVariableName() : "0.0";
 		Echo::String y = m_inputs[1] ? m_inputs[1]->getVariableName() : "0.0";
@@ -48,3 +49,5 @@ namespace DataFlowProgramming
 		return true;
 	}
 }
+
+#endif
