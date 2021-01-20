@@ -36,15 +36,7 @@ namespace DataFlowProgramming
 		virtual bool generateCode(Echo::ShaderCompiler& compiler) override;
 
     public:
-        // load|save
-        virtual QJsonObject save() const override;
-        virtual void restore(QJsonObject const &p) override;
-
-    public:
         // when input changed
         void setInData(std::shared_ptr<NodeData> nodeData, PortIndex port) override;
-
-        // widget
-        QWidget* embeddedWidget() override { return nullptr; }
     };
 }

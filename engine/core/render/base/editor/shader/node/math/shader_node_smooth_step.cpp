@@ -1,11 +1,11 @@
 #include "shader_node_smooth_step.h"
-#include <QtCore/QJsonValue>
-#include <QtGui/QDoubleValidator>
 #include "shader_node_operation_rules.h"
 
-namespace DataFlowProgramming
+#ifdef ECHO_EDITOR_MODE
+
+namespace Echo
 {
-    SmoothStepDataModel::SmoothStepDataModel()
+    ShaderNodeSmoothStep::ShaderNodeSmoothStep()
     {
         m_inputDataTypes = 
         {
@@ -21,17 +21,7 @@ namespace DataFlowProgramming
         m_outputs[0]->setVariableName(getVariableName());
     }
 
-    QJsonObject SmoothStepDataModel::save() const
-    {
-        QJsonObject modelJson = NodeDataModel::save();
-        return modelJson;
-    }
-
-    void SmoothStepDataModel::restore(QJsonObject const &p)
-    {
-    }
-
-    void SmoothStepDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
+    void ShaderNodeSmoothStep::setInData(std::shared_ptr<NodeData> nodeData, QtNodes::PortIndex portIndex)
     {
         m_inputs[portIndex] = std::dynamic_pointer_cast<ShaderData>(nodeData);
         if (m_inputs[0] && m_inputs[1] && m_inputs[2])
@@ -48,7 +38,7 @@ namespace DataFlowProgramming
 		Q_EMIT dataUpdated(0);
     }
 
-    bool SmoothStepDataModel::generateCode(Echo::ShaderCompiler& compiler)
+    bool ShaderNodeSmoothStep::generateCode(Echo::ShaderCompiler& compiler)
     {
         if (m_inputs[0] && m_inputs[1] && m_inputs[2])
         {
@@ -63,3 +53,5 @@ namespace DataFlowProgramming
         return true;
     }
 }
+
+#endif

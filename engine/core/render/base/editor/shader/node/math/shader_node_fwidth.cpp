@@ -1,11 +1,11 @@
 #include "shader_node_fwidth.h"
-#include <QtCore/QJsonValue>
-#include <QtGui/QDoubleValidator>
 #include "shader_node_operation_rules.h"
 
-namespace DataFlowProgramming
+#ifdef ECHO_EDITOR_MODE
+
+namespace Echo
 {
-    FwidthDataModel::FwidthDataModel()
+    ShaderNodeFwidth::ShaderNodeFwidth()
     {
         m_inputDataTypes = 
         {
@@ -19,17 +19,7 @@ namespace DataFlowProgramming
         m_outputs[0]->setVariableName(getVariableName());
     }
 
-    QJsonObject FwidthDataModel::save() const
-    {
-        QJsonObject modelJson = NodeDataModel::save();
-        return modelJson;
-    }
-
-    void FwidthDataModel::restore(QJsonObject const &p)
-    {
-    }
-
-    void FwidthDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
+    void ShaderNodeFwidth::setInData(std::shared_ptr<NodeData> nodeData, QtNodes::PortIndex portIndex)
     {
         m_inputs[portIndex] = std::dynamic_pointer_cast<ShaderData>(nodeData);
         if (m_inputs[0])
@@ -46,7 +36,7 @@ namespace DataFlowProgramming
 		Q_EMIT dataUpdated(0);
     }
 
-    bool FwidthDataModel::generateCode(Echo::ShaderCompiler& compiler)
+    bool ShaderNodeFwidth::generateCode(Echo::ShaderCompiler& compiler)
     {
         if (m_inputs[0])
         {
@@ -59,3 +49,5 @@ namespace DataFlowProgramming
         return true;
     }
 }
+
+#endif

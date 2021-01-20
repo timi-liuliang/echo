@@ -1,8 +1,9 @@
 #include "shader_node_split.h"
-#include <QtCore/QJsonValue>
-#include <QtGui/QDoubleValidator>
+#include "shader_node_operation_rules.h"
 
-namespace DataFlowProgramming
+#ifdef ECHO_EDITOR_MODE
+
+namespace Echo
 {
     SplitDataModel::SplitDataModel()
     {
@@ -24,16 +25,6 @@ namespace DataFlowProgramming
 			m_outputs[i] = std::make_shared<DataInvalid>(this);
 			m_outputs[i]->setVariableName(getVariableName());
 		}
-    }
-
-    QJsonObject SplitDataModel::save() const
-    {
-        QJsonObject modelJson = NodeDataModel::save();
-        return modelJson;
-    }
-
-    void SplitDataModel::restore(QJsonObject const &p)
-    {
     }
 
     void SplitDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
@@ -89,3 +80,5 @@ namespace DataFlowProgramming
         return true;
     }
 }
+
+#endif

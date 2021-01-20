@@ -1,63 +1,34 @@
-#include <QtCore/QJsonValue>
-#include <QtGui/QDoubleValidator>
-#include "shader_node_operation_rules.h"
-#include "shader_node_dot_product.h"
+#pragma once
 
-namespace DataFlowProgramming
+#include "engine/core/render/base/editor/shader/node/shader_node.h"
+
+#ifdef ECHO_EDITOR_MODE
+
+namespace Echo
 {
-    DotProductDataModel::DotProductDataModel()
+    class ShaderNodeDotProduct : public ShaderNode
     {
-        m_inputDataTypes = 
-        {
-            {"any", "A"},
-            {"any", "B"},
-        };
+        ECHO_CLASS(ShaderNodeDotProduct, ShaderNode)
 
-        m_inputs.resize(m_inputDataTypes.size());
+    public:
+        ShaderNodeDotProduct();
+        virtual ~ShaderNodeDotProduct() {}
 
-        m_outputs.resize(1);
-        m_outputs[0] = std::make_shared<DataInvalid>(this);
-        m_outputs[0]->setVariableName(getVariableName());
-    }
+		// name
+        virtual QString name() const override { return QStringLiteral("DotProduct"); }
 
-    QJsonObject DotProductDataModel::save() const
-    {
-        QJsonObject modelJson = NodeDataModel::save();
-        return modelJson;
-    }
+        // caption
+        virtual QString caption() const override { return QStringLiteral("Dot Product"); }
 
-    void DotProductDataModel::restore(QJsonObject const &p)
-    {
-    }
+        // is caption visible
+        virtual bool captionVisible() const override { return true; }
 
-    void DotProductDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
-    {
-        m_inputs[portIndex] = std::dynamic_pointer_cast<ShaderData>(nodeData);
-        if (m_inputs[0] && m_inputs[1])
-        {
-            m_outputs[0] = OperationRules::instance().NewDotProductOutput( DataAny::getInternalData(m_inputs[0])->type().id, DataAny::getInternalData(m_inputs[1])->type().id, this);
-            m_outputs[0]->setVariableName(getVariableName());
-        }
-        else
-        {
-			m_outputs[0] = std::make_shared<DataInvalid>(this);
-			m_outputs[0]->setVariableName(getVariableName());
-        }
+		// when input changed
+        virtual void setInData(std::shared_ptr<NodeData> nodeData, QtNodes::PortIndex port) override;
 
-		Q_EMIT dataUpdated(0);
-    }
-
-    bool DotProductDataModel::generateCode(Echo::ShaderCompiler& compiler)
-    {
-        if (m_inputs[0] && m_inputs[1])
-        {
-            compiler.addCode(Echo::StringUtil::Format("\t%s %s = dot(%s, %s);\n",
-                m_outputs[0]->type().id.c_str(),
-                m_outputs[0]->getVariableName().c_str(),
-                DataAny::getInternalData(m_inputs[0])->getVariableName().c_str(),
-                DataAny::getInternalData(m_inputs[1])->getVariableName().c_str()));
-        }
-
-        return true;
-    }
+		// generate code
+		virtual bool generateCode(Echo::ShaderCompiler& compiler) override;
+    };
 }
+
+#endif

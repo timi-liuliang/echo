@@ -1,9 +1,9 @@
 #include "shader_node_multiplication.h"
-#include <QtCore/QJsonValue>
-#include <QtGui/QDoubleValidator>
 #include "shader_node_operation_rules.h"
 
-namespace DataFlowProgramming
+#ifdef ECHO_EDITOR_MODE
+
+namespace Echo
 {
     MultiplicationDataModel::MultiplicationDataModel()
     {
@@ -61,3 +61,5 @@ namespace DataFlowProgramming
         return true;
     }
 }
+
+#endif

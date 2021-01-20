@@ -24,7 +24,7 @@ namespace Echo
         virtual bool captionVisible() const override { return true; }
 
 		// when input changed
-		void setInData(std::shared_ptr<NodeData> nodeData, QtNodes::PortIndex port) override;
+		virtual void setInData(std::shared_ptr<NodeData> nodeData, QtNodes::PortIndex port) override;
 
 		// generate code
 		virtual bool generateCode(Echo::ShaderCompiler& compiler) override;

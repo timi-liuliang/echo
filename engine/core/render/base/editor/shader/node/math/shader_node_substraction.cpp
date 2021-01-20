@@ -1,9 +1,9 @@
 #include "shader_node_substraction.h"
-#include <QtCore/QJsonValue>
-#include <QtGui/QDoubleValidator>
 #include "shader_node_operation_rules.h"
 
-namespace DataFlowProgramming
+#ifdef ECHO_EDITOR_MODE
+
+namespace Echo
 {
     SubstractionDataModel::SubstractionDataModel()
     {
@@ -18,16 +18,6 @@ namespace DataFlowProgramming
         m_outputs.resize(1);
         m_outputs[0] = std::make_shared<DataInvalid>(this);
         m_outputs[0]->setVariableName(getVariableName());
-    }
-
-    QJsonObject SubstractionDataModel::save() const
-    {
-        QJsonObject modelJson = NodeDataModel::save();
-        return modelJson;
-    }
-
-    void SubstractionDataModel::restore(QJsonObject const &p)
-    {
     }
 
     void SubstractionDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
@@ -61,3 +51,5 @@ namespace DataFlowProgramming
         return true;
     }
 }
+
+#endif
