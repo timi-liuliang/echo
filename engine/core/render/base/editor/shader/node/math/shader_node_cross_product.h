@@ -30,3 +30,5 @@ namespace Echo
 		virtual bool generateCode(Echo::ShaderCompiler& compiler) override;
     };
 }
+
+#endif

@@ -15,7 +15,7 @@ using QtNodes::NodeValidationState;
 
 namespace DataFlowProgramming
 {
-    class SinDataModel : public ShaderDataModel
+    class SinDataModel : public ShaderNode
     {
         Q_OBJECT
 
@@ -24,13 +24,13 @@ namespace DataFlowProgramming
         virtual ~SinDataModel() {}
 
         // caption
-        QString caption() const override { return QStringLiteral("Sin"); }
+        virtual QString caption() const override { return QStringLiteral("Sin"); }
 
         // is caption visible
-        bool captionVisible() const override { return true; }
+        virtual bool captionVisible() const override { return true; }
 
         // name
-        QString name() const override { return QStringLiteral("Sin"); }
+        virtual QString name() const override { return QStringLiteral("Sin"); }
 
 		// generate code
 		virtual bool generateCode(Echo::ShaderCompiler& compiler) override;

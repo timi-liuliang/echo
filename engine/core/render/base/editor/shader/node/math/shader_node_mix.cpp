@@ -1,11 +1,11 @@
 #include "shader_node_mix.h"
-#include <QtCore/QJsonValue>
-#include <QtGui/QDoubleValidator>
 #include "shader_node_operation_rules.h"
 
-namespace DataFlowProgramming
+#ifdef ECHO_EDITOR_MODE
+
+namespace Echo
 {
-    MixDataModel::MixDataModel()
+    ShaderNodeMix::ShaderNodeMix()
     {
         m_inputDataTypes = 
         {
@@ -21,17 +21,7 @@ namespace DataFlowProgramming
         m_outputs[0]->setVariableName(getVariableName());
     }
 
-    QJsonObject MixDataModel::save() const
-    {
-        QJsonObject modelJson = NodeDataModel::save();
-        return modelJson;
-    }
-
-    void MixDataModel::restore(QJsonObject const &p)
-    {
-    }
-
-    void MixDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
+    void ShaderNodeMix::setInData(std::shared_ptr<NodeData> nodeData, QtNodes::PortIndex portIndex)
     {
         m_inputs[portIndex] = std::dynamic_pointer_cast<ShaderData>(nodeData);
         if (m_inputs[0] && m_inputs[1] && m_inputs[2])
@@ -48,7 +38,7 @@ namespace DataFlowProgramming
 		Q_EMIT dataUpdated(0);
     }
 
-    bool MixDataModel::generateCode(Echo::ShaderCompiler& compiler)
+    bool ShaderNodeMix::generateCode(Echo::ShaderCompiler& compiler)
     {
         if (m_inputs[0] && m_inputs[1] && m_inputs[2])
         {
@@ -63,3 +53,5 @@ namespace DataFlowProgramming
         return true;
     }
 }
+
+#endif
