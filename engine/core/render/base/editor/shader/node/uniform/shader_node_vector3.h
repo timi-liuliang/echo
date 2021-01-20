@@ -1,27 +1,18 @@
 #pragma once
 
-#include <QtCore/QObject>
-#include <QtWidgets/QLineEdit>
-#include <nodeeditor/NodeDataModel>
-#include <iostream>
 #include "shader_node_uniform.h"
 
-using QtNodes::PortType;
-using QtNodes::PortIndex;
-using QtNodes::NodeData;
-using QtNodes::NodeDataType;
-using QtNodes::NodeDataModel;
-using QtNodes::NodeValidationState;
+#ifdef ECHO_EDITOR_MODE
 
-namespace DataFlowProgramming
+namespace Echo
 {
-    class Vector3DataModel : public ShaderUniformDataModel
+    class ShaderNodeVector3 : public ShaderNodeUniform
     {
-      Q_OBJECT
+        ECHO_CLASS(ShaderNodeVector3, ShaderNodeUniform)
 
     public:
-        Vector3DataModel();
-        virtual ~Vector3DataModel() {}
+        ShaderNodeVector3();
+        virtual ~ShaderNodeVector3() {}
 
         QString name() const override { return QStringLiteral("Vector3"); }
 
@@ -57,4 +48,6 @@ namespace DataFlowProgramming
         QT_UI::QVector3Editor*   m_vector3Editor;
     };
 }
+
+#endif
 

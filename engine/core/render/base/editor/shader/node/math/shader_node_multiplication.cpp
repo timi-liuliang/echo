@@ -5,7 +5,7 @@
 
 namespace Echo
 {
-    MultiplicationDataModel::MultiplicationDataModel()
+    ShaderNodeMultiplication::ShaderNodeMultiplication()
     {
         m_inputDataTypes = 
         {
@@ -20,17 +20,7 @@ namespace Echo
         m_outputs[0]->setVariableName(getVariableName());
     }
 
-    QJsonObject MultiplicationDataModel::save() const
-    {
-        QJsonObject modelJson = NodeDataModel::save();
-        return modelJson;
-    }
-
-    void MultiplicationDataModel::restore(QJsonObject const &p)
-    {
-    }
-
-    void MultiplicationDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
+    void ShaderNodeMultiplication::setInData(std::shared_ptr<NodeData> nodeData, QtNodes::PortIndex portIndex)
     {
 		m_inputs[portIndex] = std::dynamic_pointer_cast<ShaderData>(nodeData);
 		if (m_inputs[0] && m_inputs[1])
@@ -47,7 +37,7 @@ namespace Echo
         Q_EMIT dataUpdated(0);
     }
 
-    bool MultiplicationDataModel::generateCode(Echo::ShaderCompiler& compiler)
+    bool ShaderNodeMultiplication::generateCode(Echo::ShaderCompiler& compiler)
     {
         if (m_inputs[0] && m_inputs[1])
         {

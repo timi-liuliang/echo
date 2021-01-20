@@ -1,14 +1,10 @@
 #include "shader_node_template.h"
-#include <QtCore/QJsonValue>
-#include <QtGui/QDoubleValidator>
-#include "nodeeditor/internal/node/Node.hpp"
-#include <engine/core/log/Log.h>
 
-using namespace Echo;
+#ifdef ECHO_EDITOR_MODE
 
-namespace DataFlowProgramming
+namespace Echo
 {
-    ShaderTemplateDataModel::ShaderTemplateDataModel()
+    ShaderNodeTemplate::ShaderNodeTemplate()
     {
         m_inputDataTypes = 
         {
@@ -24,21 +20,7 @@ namespace DataFlowProgramming
         m_inputs.resize(m_inputDataTypes.size());
     }
 
-    QJsonObject ShaderTemplateDataModel::save() const
-    {
-        QJsonObject modelJson = NodeDataModel::save();
-        return modelJson;
-    }
-
-    void ShaderTemplateDataModel::restore(QJsonObject const &p)
-    {
-    }
-
-    void ShaderTemplateDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex port)
-    {
-    }
-
-    bool ShaderTemplateDataModel::generateCode(Echo::ShaderCompiler& compiler)
+    bool ShaderNodeTemplate::generateCode(Echo::ShaderCompiler& compiler)
     {
         for (size_t i = 0; i < m_inputs.size(); i++)
         {
@@ -95,3 +77,5 @@ namespace DataFlowProgramming
         return true;
     }
 }
+
+#endif

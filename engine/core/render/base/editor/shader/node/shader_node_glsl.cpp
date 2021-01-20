@@ -10,7 +10,7 @@ namespace Echo
 	{
 		m_outputs.resize(1);
 		m_outputs[0] = std::make_shared<DataFloat>(this, "float");
-		m_outputs[0]->setVariableName(getDefaultVariableName());
+		m_outputs[0]->setVariableName(getVariableName());
 	}
 
 	ShaderNodeGLSL::~ShaderNodeGLSL()
@@ -145,7 +145,7 @@ namespace Echo
 			QtNodes::NodeDataModel* model = this;
 
 			m_outputs.resize(1);
-			m_outputs[0]->setVariableName(getDefaultVariableName());
+			m_outputs[0]->setVariableName(getVariableName());
 
 			if(m_returnType.getValue()=="float")		m_outputs[0] = std::make_shared<DataFloat>(model, "float");
 			else if (m_returnType.getValue() == "vec2")	m_outputs[0] = std::make_shared<DataVector2>(model, "vec2");
@@ -153,7 +153,7 @@ namespace Echo
 			else if (m_returnType.getValue() == "vec4") m_outputs[0] = std::make_shared<DataVector4>(model, "vec4");
 			else										m_outputs[0] = std::make_shared<DataInvalid>(model);
 
-			m_outputs[0]->setVariableName(getDefaultVariableName());
+			m_outputs[0]->setVariableName(getVariableName());
 
 			Q_EMIT portUpdated();
 		}

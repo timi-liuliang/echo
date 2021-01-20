@@ -1,27 +1,18 @@
 #pragma once
 
-#include <QtCore/QObject>
-#include <QtWidgets/QLineEdit>
-#include <nodeeditor/NodeDataModel>
-#include <iostream>
 #include "shader_node_uniform.h"
 
-using QtNodes::PortType;
-using QtNodes::PortIndex;
-using QtNodes::NodeData;
-using QtNodes::NodeDataType;
-using QtNodes::NodeDataModel;
-using QtNodes::NodeValidationState;
+#ifdef ECHO_EDITOR_MODE
 
-namespace DataFlowProgramming
+namespace Echo
 {
-    class ColorDataModel : public ShaderUniformDataModel
+    class ShaderNodeColor : public ShaderNodeUniform
     {
-      Q_OBJECT
+        ECHO_CLASS(ShaderNodeColor, ShaderNode)
 
     public:
-        ColorDataModel();
-        virtual ~ColorDataModel() {}
+        ShaderNodeColor();
+        virtual ~ShaderNodeColor() {}
 
         virtual QString name() const override { return QStringLiteral("Color"); }
 
@@ -30,35 +21,19 @@ namespace DataFlowProgramming
 
 		// get default value
 		virtual bool getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues) override;
-        
-    public:
-        // load|save
-        QJsonObject save() const override;
-        void restore(QJsonObject const &p) override;
 
     public:
-        void setInData(std::shared_ptr<NodeData>, int) override { }
+        // color
+        void setColor(const Color& color);
+        const Color& getColor();
 
-        // get embedded widget
-        QWidget* embeddedWidget() override { return m_colorSelect; }
-
-    private:
-        // update outputs variable name
-        void updateOutputDataVariableName();
-
-        // variable changed
-        void onVariableNameChanged();
-
-    private Q_SLOTS:
-        // on value changed
-        void onColorEdited();
-
-        // switch between parameter with constant
-        void onSetAsParameter();
-        void onSetAsConstant();
+		// variable name
+		virtual void setVariableName(const String& variableName) override;
 
     private:
-        QT_UI::QColorSelect*                m_colorSelect = nullptr;
+        Color           m_color;
     };
 }
+
+#endif
 

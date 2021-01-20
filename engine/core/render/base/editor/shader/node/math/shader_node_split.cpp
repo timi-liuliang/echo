@@ -5,7 +5,7 @@
 
 namespace Echo
 {
-    SplitDataModel::SplitDataModel()
+    ShaderNodeSplit::ShaderNodeSplit()
     {
         m_inputDataTypes = 
         {
@@ -18,7 +18,7 @@ namespace Echo
         invalidAllOutputs();
     }
 
-    void SplitDataModel::invalidAllOutputs()
+    void ShaderNodeSplit::invalidAllOutputs()
     {
 		for (size_t i = 0; i < m_outputs.size(); i++)
 		{
@@ -27,7 +27,7 @@ namespace Echo
 		}
     }
 
-    void SplitDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
+    void ShaderNodeSplit::setInData(std::shared_ptr<NodeData> nodeData, QtNodes::PortIndex portIndex)
     {
         invalidAllOutputs();
 
@@ -75,7 +75,7 @@ namespace Echo
         }
     }
 
-    bool SplitDataModel::generateCode(Echo::ShaderCompiler& compiler)
+    bool ShaderNodeSplit::generateCode(Echo::ShaderCompiler& compiler)
     {
         return true;
     }

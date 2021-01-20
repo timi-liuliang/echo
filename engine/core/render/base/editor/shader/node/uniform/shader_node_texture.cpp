@@ -49,7 +49,7 @@ namespace Echo
 
 	void ShaderNodeTexture::updateOutputDataVariableName()
 	{
-		Echo::String variableName = getDefaultVariableName();
+		Echo::String variableName = getVariableName();
 
 		m_outputs[0]->setVariableName(variableName.c_str());
 		m_outputs[1]->setVariableName(Echo::StringUtil::Format("%s_Color.rgb", variableName.c_str()));

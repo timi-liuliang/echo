@@ -1,13 +1,11 @@
 #include "shader_node_float.h"
-#include <QtCore/QJsonValue>
-#include <QtGui/QDoubleValidator>
 
-using namespace Echo;
+#ifdef ECHO_EDITOR_MODE
 
-namespace DataFlowProgramming
+namespace Echo
 {
-    FloatDataModel::FloatDataModel()
-      : ShaderUniformDataModel()
+    ShaderNodeFloat::ShaderNodeFloat()
+      : ShaderNodeUniform()
       , m_lineEdit(new QLineEdit())
     {
         m_lineEdit->setValidator(new QDoubleValidator());
@@ -18,27 +16,20 @@ namespace DataFlowProgramming
 
         m_outputs.resize(1);
 
-        m_uniformConfig = EchoNew(Echo::ShaderNodeUniform);
-		m_uniformConfig->onVariableNameChanged.connectClassMethod(this, Echo::createMethodBind(&FloatDataModel::onVariableNameChanged));
-
         updateOutputDataVariableName();
     }
 
-    QJsonObject FloatDataModel::save() const
+    QJsonObject ShaderNodeFloat::save() const
     {
         QJsonObject modelJson = ShaderDataModel::save();
-
-        ShaderUniformDataModel::saveUniformConfig(modelJson);
 
         modelJson["number"] = m_lineEdit->text().toStdString().c_str();
 
         return modelJson;
     }
 
-    void FloatDataModel::restore(QJsonObject const &p)
+    void ShaderNodeFloat::restore(QJsonObject const &p)
     {
-        ShaderUniformDataModel::restoreUniformConfig(p);
-
         QJsonValue v = p["number"];
         if (!v.isUndefined())
         {
@@ -46,20 +37,20 @@ namespace DataFlowProgramming
         }
     }
 
-    void FloatDataModel::updateOutputDataVariableName()
+    void ShaderNodeFloat::updateOutputDataVariableName()
     {
 		m_outputs[0] = std::make_shared<DataFloat>(this, "float");
 		m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s_Value", getVariableName().c_str()));
     }
 
-    void FloatDataModel::onVariableNameChanged()
+    void ShaderNodeFloat::onVariableNameChanged()
     {
         updateOutputDataVariableName();
 
         onTextEdited();
     }
 
-    void FloatDataModel::onTextEdited()
+    void ShaderNodeFloat::onTextEdited()
     {
         float number = Echo::StringUtil::ParseFloat(m_lineEdit->text().toStdString().c_str());
         m_lineEdit->setText(Echo::StringUtil::ToString(number).c_str());
@@ -67,9 +58,9 @@ namespace DataFlowProgramming
         Q_EMIT dataUpdated(0);
     }
 
-    bool FloatDataModel::generateCode(Echo::ShaderCompiler& compiler)
+    bool ShaderNodeFloat::generateCode(Echo::ShaderCompiler& compiler)
     {
-        if (m_uniformConfig->isExport())
+        if (m_isUniform)
         {
             compiler.addUniform("float", getVariableName().c_str());
 
@@ -84,9 +75,9 @@ namespace DataFlowProgramming
 		return true;
     }
 
-	bool FloatDataModel::getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues)
+	bool ShaderNodeFloat::getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues)
 	{
-		if (m_uniformConfig->isExport())
+		if (m_isUniform)
 		{
             float number = Echo::StringUtil::ParseFloat(m_lineEdit->text().toStdString().c_str());
 
@@ -99,3 +90,5 @@ namespace DataFlowProgramming
 		return false;
 	}
 }
+
+#endif

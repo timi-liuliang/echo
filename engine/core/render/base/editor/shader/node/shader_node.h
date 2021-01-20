@@ -70,8 +70,8 @@ namespace Echo
 
 	public:
 		// variable name
-		String getVariableName() const;
-		void setVariableName(const String& variableName) { m_variableName = variableName; }
+		virtual String getVariableName() const;
+		virtual void setVariableName(const String& variableName) { m_variableName = variableName; }
 
 	public:
 		// load|save

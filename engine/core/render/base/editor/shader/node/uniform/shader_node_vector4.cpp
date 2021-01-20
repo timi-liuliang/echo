@@ -1,13 +1,11 @@
 #include "shader_node_vector4.h"
-#include <QtCore/QJsonValue>
-#include <QtGui/QDoubleValidator>
 
-using namespace Echo;
+#ifdef ECHO_EDITOR_MODE
 
-namespace DataFlowProgramming
+namespace Echo
 {
-    Vector4DataModel::Vector4DataModel()
-        : ShaderUniformDataModel()
+    ShaderNodeVector4::ShaderNodeVector4()
+        : ShaderNodeUniform()
     {
         m_vector4Editor = (new QT_UI::QVector4Editor(nullptr, "", nullptr));
         m_vector4Editor->setMaximumSize(QSize(m_vector4Editor->sizeHint().width() * 0.4f, m_vector4Editor->sizeHint().height()));
@@ -17,14 +15,11 @@ namespace DataFlowProgramming
 
 		m_outputs.resize(1);
 
-		m_uniformConfig = EchoNew(Echo::ShaderNodeUniform);
-		m_uniformConfig->onVariableNameChanged.connectClassMethod(this, Echo::createMethodBind(&Vector4DataModel::onVariableNameChanged));
-
 		updateOutputDataVariableName();
     }
 
 
-    QJsonObject Vector4DataModel::save() const
+    QJsonObject ShaderNodeVector4::save() const
     {
         QJsonObject modelJson = NodeDataModel::save();
 
@@ -33,7 +28,7 @@ namespace DataFlowProgramming
         return modelJson;
     }
 
-    void Vector4DataModel::restore(QJsonObject const &p)
+    void ShaderNodeVector4::restore(QJsonObject const &p)
     {
         QJsonValue v = p["number"];
         if (!v.isUndefined())
@@ -43,27 +38,27 @@ namespace DataFlowProgramming
         }
     }
 
-	void Vector4DataModel::updateOutputDataVariableName()
+	void ShaderNodeVector4::updateOutputDataVariableName()
 	{
 		m_outputs[0] = std::make_shared<DataVector4>(this, "vec4");
 		m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s_Value", getVariableName().c_str()));
 	}
 
-	void Vector4DataModel::onVariableNameChanged()
+	void ShaderNodeVector4::onVariableNameChanged()
 	{
 		updateOutputDataVariableName();
 
 		onTextEdited();
 	}
 
-    void Vector4DataModel::onTextEdited()
+    void ShaderNodeVector4::onTextEdited()
     {
         Q_EMIT dataUpdated(0);
     }
 
-	bool Vector4DataModel::generateCode(Echo::ShaderCompiler& compiler)
+	bool ShaderNodeVector4::generateCode(Echo::ShaderCompiler& compiler)
 	{
-        if (m_uniformConfig->isExport())
+        if (m_isUniform)
         {
 			compiler.addUniform("vec4", getVariableName().c_str());
 
@@ -78,9 +73,9 @@ namespace DataFlowProgramming
 		return true;
 	}
 
-	bool Vector4DataModel::getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues)
+	bool ShaderNodeVector4::getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues)
 	{
-        if (m_uniformConfig->isExport())
+        if (m_isUniform)
         {
 			Echo::Vector2 number = m_vector4Editor->getValue();
 
@@ -91,3 +86,5 @@ namespace DataFlowProgramming
 		return false;
 	}
 }
+
+#endif

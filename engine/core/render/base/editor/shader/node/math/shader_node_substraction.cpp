@@ -5,7 +5,7 @@
 
 namespace Echo
 {
-    SubstractionDataModel::SubstractionDataModel()
+    ShaderNodeSubstraction::ShaderNodeSubstraction()
     {
         m_inputDataTypes = 
         {
@@ -20,7 +20,7 @@ namespace Echo
         m_outputs[0]->setVariableName(getVariableName());
     }
 
-    void SubstractionDataModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
+    void ShaderNodeSubstraction::setInData(std::shared_ptr<NodeData> nodeData, QtNodes::PortIndex portIndex)
     {
 		m_inputs[portIndex] = std::dynamic_pointer_cast<ShaderData>(nodeData);
 		if (m_inputs[0] && m_inputs[1])
@@ -37,7 +37,7 @@ namespace Echo
         Q_EMIT dataUpdated(0);
     }
 
-    bool SubstractionDataModel::generateCode(Echo::ShaderCompiler& compiler)
+    bool ShaderNodeSubstraction::generateCode(Echo::ShaderCompiler& compiler)
     {
         if (m_inputs[0] && m_inputs[1])
         {

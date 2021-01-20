@@ -1,29 +1,18 @@
 #pragma once
 
-#include <QtCore/QObject>
-#include <QtWidgets/QLineEdit>
-#include <nodeeditor/NodeDataModel>
-#include <iostream>
 #include "shader_node_uniform.h"
 
-using QtNodes::PortType;
-using QtNodes::PortIndex;
-using QtNodes::NodeData;
-using QtNodes::NodeDataType;
-using QtNodes::NodeDataModel;
-using QtNodes::NodeValidationState;
+#ifdef ECHO_EDITOR_MODE
 
-namespace DataFlowProgramming
+namespace Echo
 {
-    /// The model dictates the number of inputs and outputs for the Node.
-    /// In this example it has no logic.
-    class Vector4DataModel : public ShaderUniformDataModel
+    class ShaderNodeVector4 : public ShaderNodeUniform
     {
-      Q_OBJECT
+        ECHO_CLASS(ShaderNodeVector4, ShaderNodeUniform)
 
     public:
-        Vector4DataModel();
-        virtual ~Vector4DataModel() {}
+        ShaderNodeVector4();
+        virtual ~ShaderNodeVector4() {}
 
         virtual QString name() const override { return QStringLiteral("Vector4"); }
 
@@ -61,3 +50,4 @@ namespace DataFlowProgramming
     };
 }
 
+#endif

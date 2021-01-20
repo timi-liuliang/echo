@@ -1,81 +1,39 @@
 #include "shader_node_color.h"
-#include <QtCore/QJsonValue>
-#include <QtGui/QDoubleValidator>
-#include "engine/core/util/StringUtil.h"
-#include <QMenu>
 
-using namespace Echo;
+#ifdef ECHO_EDITOR_MODE
 
-namespace DataFlowProgramming
+namespace Echo
 {
-    ColorDataModel::ColorDataModel()
-        : ShaderUniformDataModel()
+    ShaderNodeColor::ShaderNodeColor()
+        : ShaderNodeUniform()
     {
         m_outputs.resize(2);
-
-        m_colorSelect = new QT_UI::QColorSelect();
-        m_colorSelect->setFixedSize(75, 75);
-        m_colorSelect->setDrawText(false);
-
-        QObject::connect(m_colorSelect, SIGNAL(Signal_ColorChanged()), this, SLOT(onColorEdited()));
-		QObject::connect(m_setAsParameter, SIGNAL(triggered()), this, SLOT(onSetAsParameter()));
-		QObject::connect(m_setAsConstant, SIGNAL(triggered()), this, SLOT(onSetAsConstant()));
-
-        m_uniformConfig = EchoNew(Echo::ShaderNodeUniform);
-        m_uniformConfig->onVariableNameChanged.connectClassMethod(this, Echo::createMethodBind(&ColorDataModel::onVariableNameChanged));
-
-        updateOutputDataVariableName();
     }
 
-    QJsonObject ColorDataModel::save() const
+    void ShaderNodeColor::bindMethods()
     {
-        QJsonObject modelJson = ShaderDataModel::save();
+		CLASS_BIND_METHOD(ShaderNodeColor, getColor, DEF_METHOD("getColor"));
+		CLASS_BIND_METHOD(ShaderNodeColor, setColor, DEF_METHOD("setColor"));
 
-        ShaderUniformDataModel::saveUniformConfig(modelJson);
-
-        modelJson["color"] = Echo::StringUtil::ToString(m_colorSelect->GetColor()).c_str();
-
-        return modelJson;
+		CLASS_REGISTER_PROPERTY(ShaderNodeColor, "Color", Variant::Type::String, "getColor", "setColor");
     }
 
-    void ColorDataModel::restore(QJsonObject const &p)
+    void ShaderNodeColor::setColor(const Color& color)
     {
-        ShaderUniformDataModel::restoreUniformConfig(p);
+        m_color = color;
 
-        QJsonValue v = p["color"];
-        if (!v.isUndefined())
-        {
-            Echo::String colorStr = v.toString().toStdString().c_str();
-            m_colorSelect->SetColor(Echo::StringUtil::ParseColor(colorStr));
-        }
+		Q_EMIT dataUpdated(0);
+		Q_EMIT dataUpdated(1);
     }
 
-    void ColorDataModel::onColorEdited()
+    const Color& ShaderNodeColor::getColor()
     {
-        Q_EMIT dataUpdated(0);
-        Q_EMIT dataUpdated(1);
+        return m_color;
     }
 
-	void ColorDataModel::onSetAsParameter()
-    {
-        m_uniformConfig->setExport(true);
-
-		updateOutputDataVariableName();
-
-        onColorEdited();
-	}
-
-	void ColorDataModel::onSetAsConstant()
-    {
-        m_uniformConfig->setExport(false);
-		updateOutputDataVariableName();
-
-        onColorEdited();
-	}
-
-    void ColorDataModel::updateOutputDataVariableName()
-    {
-        Echo::String variableName = getVariableName();
+	void ShaderNodeColor::setVariableName(const String& variableName)
+    { 
+        m_variableName = variableName; 
 
 		m_outputs[0] = std::make_shared<DataVector3>(this, "rgb");
 		m_outputs[1] = std::make_shared<DataFloat>(this, "a");
@@ -84,16 +42,9 @@ namespace DataFlowProgramming
 		m_outputs[1]->setVariableName(Echo::StringUtil::Format("%s_Value.a", variableName.c_str()));
     }
 
-    void ColorDataModel::onVariableNameChanged()
-    {
-        updateOutputDataVariableName();
-
-        onColorEdited();
-    }
-
-	bool ColorDataModel::generateCode(Echo::ShaderCompiler& compiler)
+	bool ShaderNodeColor::generateCode(Echo::ShaderCompiler& compiler)
 	{
-		if (m_uniformConfig->isExport())
+		if (m_isUniform)
 		{
 			compiler.addUniform("vec4", getVariableName().c_str());
 
@@ -101,7 +52,7 @@ namespace DataFlowProgramming
 		}
 		else
 		{
-			Echo::Color color = m_colorSelect->GetColor();
+			Echo::Color color = m_color;
             color.toLinear();
 
 			compiler.addCode(Echo::StringUtil::Format("\tvec4 %s_Value = vec4(%f, %f, %f, %f);\n", getVariableName().c_str(), color.r, color.g, color.b, color.a));
@@ -110,12 +61,12 @@ namespace DataFlowProgramming
 		return true;
 	}
 
-    bool ColorDataModel::getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues)
+    bool ShaderNodeColor::getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues)
     {
-        if (m_uniformConfig->isExport())
+        if (m_isUniform)
         {
             uniformNames.emplace_back("Uniforms." + getVariableName());
-            uniformValues.emplace_back(m_colorSelect->GetColor());
+            uniformValues.emplace_back(m_color);
 
             return true;
         }
@@ -123,3 +74,5 @@ namespace DataFlowProgramming
         return false;
     }
 }
+
+#endif

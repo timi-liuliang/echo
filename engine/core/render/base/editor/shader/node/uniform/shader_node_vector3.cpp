@@ -1,13 +1,11 @@
 #include "shader_node_vector3.h"
-#include <QtCore/QJsonValue>
-#include <QtGui/QDoubleValidator>
 
-using namespace Echo;
+#ifdef ECHO_EDITOR_MODE
 
-namespace DataFlowProgramming
+namespace Echo
 {
-    Vector3DataModel::Vector3DataModel()
-        : ShaderUniformDataModel()
+	ShaderNodeVector3::ShaderNodeVector3()
+        : ShaderNodeUniform()
     {
         m_vector3Editor = (new QT_UI::QVector3Editor(nullptr, "", nullptr));
         m_vector3Editor->setMaximumSize(QSize(m_vector3Editor->sizeHint().width() * 0.4f, m_vector3Editor->sizeHint().height()));
@@ -17,13 +15,10 @@ namespace DataFlowProgramming
 
 		m_outputs.resize(1);
 
-		m_uniformConfig = EchoNew(Echo::ShaderNodeUniform);
-		m_uniformConfig->onVariableNameChanged.connectClassMethod(this, Echo::createMethodBind(&Vector3DataModel::onVariableNameChanged));
-
 		updateOutputDataVariableName();
     }
 
-    QJsonObject Vector3DataModel::save() const
+    QJsonObject ShaderNodeVector3::save() const
     {
         QJsonObject modelJson = NodeDataModel::save();
 
@@ -32,7 +27,7 @@ namespace DataFlowProgramming
         return modelJson;
     }
 
-    void Vector3DataModel::restore(QJsonObject const &p)
+    void ShaderNodeVector3::restore(QJsonObject const &p)
     {
         QJsonValue v = p["number"];
         if (!v.isUndefined())
@@ -42,27 +37,27 @@ namespace DataFlowProgramming
         }
     }
 
-	void Vector3DataModel::updateOutputDataVariableName()
+	void ShaderNodeVector3::updateOutputDataVariableName()
 	{
 		m_outputs[0] = std::make_shared<DataVector3>(this, "vec3");
 		m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s_Value", getVariableName().c_str()));
 	}
 
-	void Vector3DataModel::onVariableNameChanged()
+	void ShaderNodeVector3::onVariableNameChanged()
 	{
 		updateOutputDataVariableName();
 
 		onTextEdited();
 	}
 
-    void Vector3DataModel::onTextEdited()
+    void ShaderNodeVector3::onTextEdited()
     {
         Q_EMIT dataUpdated(0);
     }
 
-	bool Vector3DataModel::generateCode(Echo::ShaderCompiler& compiler)
+	bool ShaderNodeVector3::generateCode(Echo::ShaderCompiler& compiler)
 	{
-		if (m_uniformConfig->isExport())
+		if (m_isUniform)
 		{
 			compiler.addUniform("vec3", getVariableName().c_str());
 
@@ -77,9 +72,9 @@ namespace DataFlowProgramming
 		return true;
 	}
 
-	bool Vector3DataModel::getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues)
+	bool ShaderNodeVector3::getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues)
 	{
-		if (m_uniformConfig->isExport())
+		if (m_isUniform)
 		{
 			Echo::Vector3 number = m_vector3Editor->getValue();
 
@@ -90,3 +85,5 @@ namespace DataFlowProgramming
 		return false;
 	}
 }
+
+#endif

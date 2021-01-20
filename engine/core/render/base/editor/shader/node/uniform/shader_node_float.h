@@ -1,28 +1,18 @@
 #pragma once
 
-#include <QtCore/QObject>
-#include <QtWidgets/QLineEdit>
-#include <iostream>
 #include "shader_node_uniform.h"
 
-using QtNodes::PortType;
-using QtNodes::PortIndex;
-using QtNodes::NodeData;
-using QtNodes::NodeDataType;
-using QtNodes::NodeDataModel;
-using QtNodes::NodeValidationState;
+#ifdef ECHO_EDITOR_MODE
 
-namespace DataFlowProgramming
+namespace Echo
 {
-    /// The model dictates the number of inputs and outputs for the Node.
-    /// In this example it has no logic.
-    class FloatDataModel : public ShaderUniformDataModel
+    class ShaderNodeFloat : public ShaderNodeUniform
     {
-      Q_OBJECT
+        ECHO_CLASS(ShaderNodeFloat, ShaderNode)
 
     public:
-        FloatDataModel();
-        virtual ~FloatDataModel() {}
+        ShaderNodeFloat();
+        virtual ~ShaderNodeFloat() {}
 
         virtual QString name() const override { return QStringLiteral("Float"); }
 
@@ -38,8 +28,6 @@ namespace DataFlowProgramming
         void restore(QJsonObject const &p) override;
 
     public:
-        void setInData(std::shared_ptr<NodeData>, int) override { }
-
         // get embedded widget
         QWidget* embeddedWidget() override { return m_lineEdit; }
 
@@ -58,4 +46,6 @@ namespace DataFlowProgramming
       QLineEdit*                            m_lineEdit;
     };
 }
+
+#endif
 

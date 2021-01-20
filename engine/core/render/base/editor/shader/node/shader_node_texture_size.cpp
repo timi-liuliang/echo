@@ -16,7 +16,7 @@ namespace Echo
 
 		m_outputs.resize(1);
 		m_outputs[0] = std::make_shared<DataInvalid>(this);
-		m_outputs[0]->setVariableName(getDefaultVariableName());
+		m_outputs[0]->setVariableName(getVariableName());
 	}
 
 	ShaderNodeTextureSize::~ShaderNodeTextureSize()
@@ -34,12 +34,12 @@ namespace Echo
 		if (m_inputs[0])
 		{
 			m_outputs[0] = std::make_shared<DataVector2>(this, "vec2");
-			m_outputs[0]->setVariableName(getDefaultVariableName());
+			m_outputs[0]->setVariableName(getVariableName());
 		}
 		else
 		{
 			m_outputs[0] = std::make_shared<DataInvalid>(this);
-			m_outputs[0]->setVariableName(getDefaultVariableName());
+			m_outputs[0]->setVariableName(getVariableName());
 		}
 
 		Q_EMIT dataUpdated(0);

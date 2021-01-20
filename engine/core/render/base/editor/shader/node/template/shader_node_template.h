@@ -1,53 +1,31 @@
 #pragma once
 
-#include <QtCore/QObject>
-#include <QtWidgets/QLineEdit>
-#include <nodeeditor/NodeDataModel>
-#include <iostream>
 #include "engine/core/render/base/editor/shader/node/shader_node.h"
 
-using QtNodes::PortType;
-using QtNodes::PortIndex;
-using QtNodes::NodeData;
-using QtNodes::NodeDataType;
-using QtNodes::NodeDataModel;
-using QtNodes::NodeValidationState;
+#ifdef ECHO_EDITOR_MODE
 
-namespace DataFlowProgramming
+namespace Echo
 {
-    /// The model dictates the number of inputs and outputs for the Node.
-    class ShaderTemplateDataModel : public ShaderDataModel
+    class ShaderNodeTemplate : public ShaderNode
     {
-        Q_OBJECT
+        ECHO_CLASS(ShaderNodeTemplate, ShaderNode)
 
     public:
-        ShaderTemplateDataModel();
-        virtual ~ShaderTemplateDataModel() {}
+        ShaderNodeTemplate();
+        virtual ~ShaderNodeTemplate() {}
+
+		// name
+		virtual QString name() const override { return QStringLiteral("ShaderTemplate"); }
 
         // caption
-        QString caption() const override { return QStringLiteral("Shader Template"); }
+        virtual QString caption() const override { return QStringLiteral("Shader Template"); }
 
         // is caption visible
-        bool captionVisible() const override { return true; }
-
-        // name
-        QString name() const override { return QStringLiteral("ShaderTemplate"); }
+        virtual bool captionVisible() const override { return true; }
 
 		// generate code
 		virtual bool generateCode(Echo::ShaderCompiler& compiler) override;
-
-    public:
-        // load|save
-        virtual QJsonObject save() const override;
-        virtual void restore(QJsonObject const &p) override;
-
-    public:
-        // when input changed
-        void setInData(std::shared_ptr<NodeData> nodeData, PortIndex port) override;
-
-        // widget
-        QWidget* embeddedWidget() override { return nullptr; }
-
-    private:
     };
 }
+
+#endif
