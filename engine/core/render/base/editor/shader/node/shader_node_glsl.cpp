@@ -194,7 +194,7 @@ namespace Echo
 			}
 		}
 
-		String code = StringUtil::Format("\t%s %s = %s(%s);\n", m_returnType.getValue().c_str(), getDefaultVariableName().c_str(), funName.c_str(), params.c_str());
+		String code = StringUtil::Format("\t%s %s = %s(%s);\n", m_returnType.getValue().c_str(), getVariableName().c_str(), funName.c_str(), params.c_str());
 		compiler.addCode(code);
 
 		return true;

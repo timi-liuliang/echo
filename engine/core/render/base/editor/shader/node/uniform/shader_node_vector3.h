@@ -14,38 +14,24 @@ namespace Echo
         ShaderNodeVector3();
         virtual ~ShaderNodeVector3() {}
 
-        QString name() const override { return QStringLiteral("Vector3"); }
+        // name
+        virtual QString name() const override { return QStringLiteral("Vector3"); }
 
-		// generate code
-        virtual bool generateCode(Echo::ShaderCompiler& compiler) override;
+        // set variable name
+        virtual void setVariableName(const String& variableName) override;
+
+        // value
+        const Vector3& getValue() { return m_value; }
+        void setValue(const Vector3& value);
 
 		// get default value
 		virtual bool getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues) override;
 
-    public:
-        // load|save
-        QJsonObject save() const override;
-        void restore(QJsonObject const &p) override;
-
-    public:
-        void setInData(std::shared_ptr<NodeData>, int) override { }
-
-        // get embedded widget
-        QWidget* embeddedWidget() override { return m_vector3Editor; }
-
-	private:
-		// update outputs variable name
-		void updateOutputDataVariableName();
-
-		// variable changed
-		void onVariableNameChanged();
-
-    private Q_SLOTS:
-        // on value changed
-        void onTextEdited();
+		// generate code
+		virtual bool generateCode(Echo::ShaderCompiler& compiler) override;
 
     private:
-        QT_UI::QVector3Editor*   m_vector3Editor;
+        Vector3     m_value;
     };
 }
 

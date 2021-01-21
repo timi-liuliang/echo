@@ -5,6 +5,7 @@
 #include <QWidgetAction>
 #include <QTreeWidget>
 #include <QContextMenuEvent>
+#include <QLineEdit>
 #include <nodeeditor/FlowScene>
 #include "engine/core/log/Log.h"
 

@@ -14,36 +14,24 @@ namespace Echo
         ShaderNodeFloat();
         virtual ~ShaderNodeFloat() {}
 
+        // name
         virtual QString name() const override { return QStringLiteral("Float"); }
 
-		// generate code
-		virtual bool generateCode(Echo::ShaderCompiler& compiler) override;
+		// set variable name
+		virtual void setVariableName(const String& variableName) override;
+
+		// value
+		const float& getValue() { return m_value; }
+		void setValue(float value);
 
 		// get default value
 		virtual bool getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues) override;
 
-    public:
-        // load|save
-        QJsonObject save() const override;
-        void restore(QJsonObject const &p) override;
-
-    public:
-        // get embedded widget
-        QWidget* embeddedWidget() override { return m_lineEdit; }
-
-	private:
-		// update outputs variable name
-		void updateOutputDataVariableName();
-
-		// variable changed
-		void onVariableNameChanged();
-
-    private Q_SLOTS:
-        // on value changed
-        void onTextEdited();
+		// generate code
+		virtual bool generateCode(Echo::ShaderCompiler& compiler) override;
 
     private:
-      QLineEdit*                            m_lineEdit;
+        float           m_value;
     };
 }
 

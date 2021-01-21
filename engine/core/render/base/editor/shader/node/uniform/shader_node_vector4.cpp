@@ -7,54 +7,42 @@ namespace Echo
     ShaderNodeVector4::ShaderNodeVector4()
         : ShaderNodeUniform()
     {
-        m_vector4Editor = (new QT_UI::QVector4Editor(nullptr, "", nullptr));
-        m_vector4Editor->setMaximumSize(QSize(m_vector4Editor->sizeHint().width() * 0.4f, m_vector4Editor->sizeHint().height()));
-        m_vector4Editor->setValue(Echo::StringUtil::ToString(Echo::Vector3::ONE).c_str());
+    }
 
-        QObject::connect(m_vector4Editor, SIGNAL(Signal_ValueChanged()), this, SLOT(onTextEdited()));
+	void ShaderNodeVector4::bindMethods()
+	{
+		CLASS_BIND_METHOD(ShaderNodeVector4, getValue, DEF_METHOD("getValue"));
+		CLASS_BIND_METHOD(ShaderNodeVector4, setValue, DEF_METHOD("setValue"));
+
+		CLASS_REGISTER_PROPERTY(ShaderNodeVector4, "Value", Variant::Type::Vector4, "getValue", "setValue");
+	}
+
+	void ShaderNodeVector4::setVariableName(const String& variableName)
+	{
+		m_variableName = variableName;
 
 		m_outputs.resize(1);
-
-		updateOutputDataVariableName();
-    }
-
-
-    QJsonObject ShaderNodeVector4::save() const
-    {
-        QJsonObject modelJson = NodeDataModel::save();
-
-		modelJson["number"] = Echo::StringUtil::ToString(m_vector4Editor->getValue()).c_str();
-
-        return modelJson;
-    }
-
-    void ShaderNodeVector4::restore(QJsonObject const &p)
-    {
-        QJsonValue v = p["number"];
-        if (!v.isUndefined())
-        {
-            QString strNum = v.toString();
-            m_vector4Editor->setValue(v.toString());
-        }
-    }
-
-	void ShaderNodeVector4::updateOutputDataVariableName()
-	{
 		m_outputs[0] = std::make_shared<DataVector4>(this, "vec4");
 		m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s_Value", getVariableName().c_str()));
+
+		Q_EMIT dataUpdated(0);
 	}
 
-	void ShaderNodeVector4::onVariableNameChanged()
+	void ShaderNodeVector4::setValue(const Vector4& value)
 	{
-		updateOutputDataVariableName();
-
-		onTextEdited();
+		m_value = value;
 	}
 
-    void ShaderNodeVector4::onTextEdited()
-    {
-        Q_EMIT dataUpdated(0);
-    }
+	bool ShaderNodeVector4::getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues)
+	{
+		if (m_isUniform)
+		{
+			uniformNames.emplace_back("Uniforms." + getVariableName());
+			uniformValues.emplace_back(m_value);
+		}
+
+		return false;
+	}
 
 	bool ShaderNodeVector4::generateCode(Echo::ShaderCompiler& compiler)
 	{
@@ -66,24 +54,10 @@ namespace Echo
         }
         else
         {
-			Echo::Vector4 number = m_vector4Editor->getValue();
-			compiler.addCode(Echo::StringUtil::Format("\tvec4 %s_Value = vec4(%f, %f, %f, %f);\n", getVariableName().c_str(), number.x, number.y, number.z, number.w));
+			compiler.addCode(Echo::StringUtil::Format("\tvec4 %s_Value = vec4(%f, %f, %f, %f);\n", getVariableName().c_str(), m_value.x, m_value.y, m_value.z, m_value.w));
         }
 
 		return true;
-	}
-
-	bool ShaderNodeVector4::getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues)
-	{
-        if (m_isUniform)
-        {
-			Echo::Vector2 number = m_vector4Editor->getValue();
-
-			uniformNames.emplace_back("Uniforms." + getVariableName());
-			uniformValues.emplace_back(number);
-        }
-
-		return false;
 	}
 }
 

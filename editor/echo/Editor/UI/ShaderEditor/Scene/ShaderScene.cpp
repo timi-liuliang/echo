@@ -33,7 +33,7 @@ namespace DataFlowProgramming
 	void ShaderScene::removeNode(QtNodes::Node& node)
 	{
 		// Can't delete ShaderTemplate
-		ShaderTemplateDataModel* shaderTempateNode = qobject_cast<ShaderTemplateDataModel*>(node.nodeDataModel());
+		Echo::ShaderNodeTemplate* shaderTempateNode = dynamic_cast<Echo::ShaderNodeTemplate*>(node.nodeDataModel());
 		if (!shaderTempateNode)
 		{
 			FlowScene::removeNode(node);
@@ -45,7 +45,7 @@ namespace DataFlowProgramming
 		for (QtNodes::Node* node : allNodes())
 		{
 			// Can't delete ShaderTemplate
-			ShaderTemplateDataModel* shaderTempateNode = qobject_cast<ShaderTemplateDataModel*>(node->nodeDataModel());
+			Echo::ShaderNodeTemplate* shaderTempateNode = dynamic_cast<Echo::ShaderNodeTemplate*>(node->nodeDataModel());
 			if (shaderTempateNode)
 			{
 				return node;

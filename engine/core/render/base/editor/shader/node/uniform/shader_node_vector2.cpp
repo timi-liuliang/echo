@@ -7,54 +7,42 @@ namespace Echo
     ShaderNodeVector2::ShaderNodeVector2()
         : ShaderNodeUniform()
     {
-        m_vector2Editor = (new QT_UI::QVector2Editor(nullptr, "", nullptr));
-        m_vector2Editor->setMaximumSize(QSize(m_vector2Editor->sizeHint().width() * 0.4f, m_vector2Editor->sizeHint().height()));
-        m_vector2Editor->setValue(Echo::StringUtil::ToString(Echo::Vector3::ONE).c_str());
+    }
 
-        QObject::connect(m_vector2Editor, SIGNAL(Signal_ValueChanged()), this, SLOT(onTextEdited()));
+	void ShaderNodeVector2::bindMethods()
+	{
+		CLASS_BIND_METHOD(ShaderNodeVector2, getValue, DEF_METHOD("getValue"));
+		CLASS_BIND_METHOD(ShaderNodeVector2, setValue, DEF_METHOD("setValue"));
+
+		CLASS_REGISTER_PROPERTY(ShaderNodeVector2, "Value", Variant::Type::Vector2, "getValue", "setValue");
+	}
+
+	void ShaderNodeVector2::setVariableName(const String& variableName)
+	{
+		m_variableName = variableName;
 
 		m_outputs.resize(1);
-
-        updateOutputDataVariableName();
-    }
-
-
-    QJsonObject ShaderNodeVector2::save() const
-    {
-        QJsonObject modelJson = NodeDataModel::save();
-
-		modelJson["number"] = Echo::StringUtil::ToString(m_vector2Editor->getValue()).c_str();
-
-        return modelJson;
-    }
-
-    void ShaderNodeVector2::restore(QJsonObject const &p)
-    {
-        QJsonValue v = p["number"];
-        if (!v.isUndefined())
-        {
-            QString strNum = v.toString();
-            m_vector2Editor->setValue(v.toString());
-        }
-    }
-
-	void ShaderNodeVector2::updateOutputDataVariableName()
-	{
 		m_outputs[0] = std::make_shared<DataVector2>(this, "vec2");
 		m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s_Value", getVariableName().c_str()));
+
+		Q_EMIT dataUpdated(0);
 	}
 
-	void ShaderNodeVector2::onVariableNameChanged()
+	void ShaderNodeVector2::setValue(const Vector2& value)
 	{
-		updateOutputDataVariableName();
-
-		onTextEdited();
+		m_value = value;
 	}
 
-    void ShaderNodeVector2::onTextEdited()
-    {
-        Q_EMIT dataUpdated(0);
-    }
+	bool ShaderNodeVector2::getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues)
+	{
+		if (m_isUniform)
+		{
+			uniformNames.emplace_back("Uniforms." + getVariableName());
+			uniformValues.emplace_back(m_value);
+		}
+
+		return false;
+	}
 
 	bool ShaderNodeVector2::generateCode(Echo::ShaderCompiler& compiler)
 	{
@@ -66,24 +54,10 @@ namespace Echo
         }
         else
         {
-			Echo::Vector2 number = m_vector2Editor->getValue();
-			compiler.addCode(Echo::StringUtil::Format("\tvec2 %s_Value = vec2(%f, %f);\n", getVariableName().c_str(), number.x, number.y));
+			compiler.addCode(Echo::StringUtil::Format("\tvec2 %s_Value = vec2(%f, %f);\n", getVariableName().c_str(), m_value.x, m_value.y));
         }
 
 		return true;
-	}
-
-	bool ShaderNodeVector2::getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues)
-	{
-        if (m_isUniform)
-        {
-            Echo::Vector2 number = m_vector2Editor->getValue();
-
-			uniformNames.emplace_back("Uniforms." + getVariableName());
-			uniformValues.emplace_back(number);
-        }
-
-		return false;
 	}
 }
 

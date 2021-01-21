@@ -112,13 +112,6 @@ namespace Studio
 
     void ShaderEditor::visitorAllNodes(QtNodes::NodeDataModel* dataModel)
     {
-        ShaderDataModel* shaderDataModel = dynamic_cast<ShaderDataModel*>(dataModel);
-        if(shaderDataModel)
-        {
-            shaderDataModel->checkValidation();
-            shaderDataModel->generateCode(m_shaderCompiler);
-        }
-
 		ShaderNode* shaderNode = dynamic_cast<ShaderNode*>(dataModel);
 		if (shaderNode)
 		{
@@ -129,20 +122,6 @@ namespace Studio
 
     void ShaderEditor::visitorUniformDefaultValues(QtNodes::NodeDataModel* dataModel)
     {
-        ShaderUniformDataModel* shaderUniformDataModel = dynamic_cast<ShaderUniformDataModel*>(dataModel);
-		if (shaderUniformDataModel)
-		{
-            Echo::StringArray uniformNames;
-            Echo::VariantArray uniformValues;
-            if (shaderUniformDataModel->getDefaultValue(uniformNames, uniformValues))
-            {
-                for (size_t i = 0; i < uniformNames.size(); i++)
-                {
-                    m_shaderProgram->setPropertyValue(uniformNames[i], uniformValues[i]);
-                }
-            }
-		}
-
         Echo::ShaderNode* shaderNode = dynamic_cast<Echo::ShaderNode*>(dataModel);
         if (shaderNode)
         {
@@ -212,8 +191,9 @@ namespace Studio
 
                     // Create one ShaderTemplate node
 					QtNodes::FlowView* flowView = m_graphicsView;
-					Echo::Time::instance()->addDelayTask(200, [flowScene, flowView]() {
-						std::unique_ptr<NodeDataModel> type = flowScene->registry().create("ShaderTemplate");
+					Echo::Time::instance()->addDelayTask(200, [flowScene, flowView]() 
+                    {
+						std::unique_ptr<QtNodes::NodeDataModel> type = flowScene->registry().create("ShaderTemplate");
 						if (type)
 						{
                             QRectF sceneRect = flowView->sceneRect();

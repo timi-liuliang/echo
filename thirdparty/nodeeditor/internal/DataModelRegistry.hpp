@@ -5,9 +5,7 @@
 #include <functional>
 #include <unordered_map>
 #include <vector>
-
 #include <QtCore/QString>
-
 #include "node/NodeDataModel.hpp"
 #include "base/TypeConverter.hpp"
 #include "base/Export.hpp"
@@ -64,7 +62,7 @@ namespace QtNodes
 
         void registerTypeConverter(TypeConverterId const & id, TypeConverter typeConverter)
         {
-            _registeredTypeConverters[id] = std::move(typeConverter);
+            m_registeredTypeConverters[id] = std::move(typeConverter);
         }
 
         std::unique_ptr<NodeDataModel>create(QString const &modelName);
@@ -78,11 +76,10 @@ namespace QtNodes
         TypeConverter getTypeConverter(NodeDataType const & d1, NodeDataType const & d2) const;
 
     private:
-        RegisteredModelsCategoryMap _registeredModelsCategory;
-        CategoriesSet _categories;
-        RegisteredModelCreatorsMap _registeredItemCreators;
-
-        RegisteredTypeConvertersMap _registeredTypeConverters;
+        RegisteredModelsCategoryMap m_registeredModelsCategory;
+        CategoriesSet               m_categories;
+        RegisteredModelCreatorsMap  m_registeredItemCreators;
+        RegisteredTypeConvertersMap m_registeredTypeConverters;
 
     private:
         // If the registered ModelType class has the static member method
@@ -107,11 +104,11 @@ namespace QtNodes
         registerModelImpl(RegistryItemCreator creator, QString const &category )
         {
             const QString name = ModelType::Name();
-            if (_registeredItemCreators.count(name) == 0)
+            if (m_registeredItemCreators.count(name) == 0)
             {
-                _registeredItemCreators[name] = std::move(creator);
-                _categories.insert(category);
-                _registeredModelsCategory[name] = category;
+                m_registeredItemCreators[name] = std::move(creator);
+                m_categories.insert(category);
+                m_registeredModelsCategory[name] = category;
             }
         }
 
@@ -120,11 +117,11 @@ namespace QtNodes
         registerModelImpl(RegistryItemCreator creator, QString const &category)
         {
             const QString name = creator()->name();
-            if (_registeredItemCreators.count(name) == 0)
+            if (m_registeredItemCreators.count(name) == 0)
             {
-                _registeredItemCreators[name] = std::move(creator);
-                _categories.insert(category);
-                _registeredModelsCategory[name] = category;
+                m_registeredItemCreators[name] = std::move(creator);
+                m_categories.insert(category);
+                m_registeredModelsCategory[name] = category;
             }
         }
     };

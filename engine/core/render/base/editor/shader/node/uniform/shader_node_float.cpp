@@ -6,57 +6,46 @@ namespace Echo
 {
     ShaderNodeFloat::ShaderNodeFloat()
       : ShaderNodeUniform()
-      , m_lineEdit(new QLineEdit())
     {
-        m_lineEdit->setValidator(new QDoubleValidator());
-        m_lineEdit->setMaximumSize(QSize(m_lineEdit->sizeHint().width() * 0.4f, m_lineEdit->sizeHint().height()));
-        m_lineEdit->setText("0.0");
 
-        QObject::connect(m_lineEdit, SIGNAL(editingFinished()), this, SLOT(onTextEdited()));
-
-        m_outputs.resize(1);
-
-        updateOutputDataVariableName();
     }
 
-    QJsonObject ShaderNodeFloat::save() const
-    {
-        QJsonObject modelJson = ShaderDataModel::save();
+	void ShaderNodeFloat::bindMethods()
+	{
+		CLASS_BIND_METHOD(ShaderNodeFloat, getValue, DEF_METHOD("getValue"));
+		CLASS_BIND_METHOD(ShaderNodeFloat, setValue, DEF_METHOD("setValue"));
 
-        modelJson["number"] = m_lineEdit->text().toStdString().c_str();
+		CLASS_REGISTER_PROPERTY(ShaderNodeFloat, "Value", Variant::Type::Real, "getValue", "setValue");
+	}
 
-        return modelJson;
-    }
+	void ShaderNodeFloat::setVariableName(const String& variableName)
+	{
+		m_variableName = variableName;
 
-    void ShaderNodeFloat::restore(QJsonObject const &p)
-    {
-        QJsonValue v = p["number"];
-        if (!v.isUndefined())
-        {
-            m_lineEdit->setText(v.toString());
-        }
-    }
-
-    void ShaderNodeFloat::updateOutputDataVariableName()
-    {
+		m_outputs.resize(1);
 		m_outputs[0] = std::make_shared<DataFloat>(this, "float");
 		m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s_Value", getVariableName().c_str()));
-    }
 
-    void ShaderNodeFloat::onVariableNameChanged()
-    {
-        updateOutputDataVariableName();
+		Q_EMIT dataUpdated(0);
+	}
 
-        onTextEdited();
-    }
+	void ShaderNodeFloat::setValue(float value)
+	{
+		m_value = value;
+	}
 
-    void ShaderNodeFloat::onTextEdited()
-    {
-        float number = Echo::StringUtil::ParseFloat(m_lineEdit->text().toStdString().c_str());
-        m_lineEdit->setText(Echo::StringUtil::ToString(number).c_str());
+	bool ShaderNodeFloat::getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues)
+	{
+		if (m_isUniform)
+		{
+			uniformNames.emplace_back("Uniforms." + getVariableName());
+			uniformValues.emplace_back(m_value);
 
-        Q_EMIT dataUpdated(0);
-    }
+			return true;
+		}
+
+		return false;
+	}
 
     bool ShaderNodeFloat::generateCode(Echo::ShaderCompiler& compiler)
     {
@@ -68,27 +57,11 @@ namespace Echo
         }
         else
         {
-			float number = Echo::StringUtil::ParseFloat(m_lineEdit->text().toStdString().c_str());
-			compiler.addCode(Echo::StringUtil::Format("\tfloat %s_Value = %f;\n", getVariableName().c_str(), number));
+			compiler.addCode(Echo::StringUtil::Format("\tfloat %s_Value = %f;\n", getVariableName().c_str(), m_value));
         }
 
 		return true;
     }
-
-	bool ShaderNodeFloat::getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues)
-	{
-		if (m_isUniform)
-		{
-            float number = Echo::StringUtil::ParseFloat(m_lineEdit->text().toStdString().c_str());
-
-			uniformNames.emplace_back("Uniforms." + getVariableName());
-			uniformValues.emplace_back(number);
-
-			return true;
-		}
-
-		return false;
-	}
 }
 
 #endif
