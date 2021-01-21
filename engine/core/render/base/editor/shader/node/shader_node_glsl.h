@@ -19,6 +19,9 @@ namespace Echo
 		// caption
 		virtual QString caption() const override { return m_funName.empty() ? "GLSL" : m_funName.c_str(); }
 
+		// category
+		virtual QString category() const override { return "Custom"; }
+
 	public:
 		// caption
 		String getFunctionName() const;

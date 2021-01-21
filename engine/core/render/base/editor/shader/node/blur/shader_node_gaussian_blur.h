@@ -15,6 +15,9 @@ namespace Echo
 
 		// name
 		virtual QString name() const override { return "GaussianBlur"; }
+
+		// category
+		virtual QString category() const override { return "Blur"; }
 	};
 
 #endif

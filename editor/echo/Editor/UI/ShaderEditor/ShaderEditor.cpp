@@ -21,60 +21,22 @@ namespace Studio
 	{
 		auto ret = std::make_shared<QtNodes::DataModelRegistry>();
 
-  //      // shader template
-  //      ret->registerModel<ShaderTemplateDataModel>("skip me");
-  //      
-  //      // variables
-  //      ret->registerModel<SharedUniformDataModel>("Uniforms");
-  //      ret->registerModel<FloatDataModel>("Uniforms");
-  //      ret->registerModel<Vector2DataModel>("Uniforms");
-  //      ret->registerModel<Vector3DataModel>("Uniforms");
-  //      ret->registerModel<Vector4DataModel>("Uniforms");
-  //      ret->registerModel<ColorDataModel>("Uniforms");
-  //      ret->registerModel<ShaderNodeTexture>("Uniforms");
+        Echo::StringArray classNames;
+        Echo::Class::getChildClasses(classNames, "ShaderNode", true);
+        for (const String& className : classNames)
+        {
+            ShaderNode* shaderNode = dynamic_cast<ShaderNode*>(Class::create(className));
+            if (shaderNode)
+            {
+				ret->registerModel(shaderNode->name(), shaderNode->category(), [className]()
+				{
+					ShaderNode* newNode = dynamic_cast<ShaderNode*>(Class::create(className));
+					return std::unique_ptr<QtNodes::NodeDataModel>(newNode);
+				});
 
-  //      // Inputs
-  //      ret->registerModel<VertexAttributeDataModel>("Inputs");
-  //      ret->registerModel<LayerBlendDataModel>("Inputs");
-
-  //      // Maths
-  //      ret->registerModel<AbsDataModel>("Math");
-  //      ret->registerModel<AdditionDataModel>("Math");
-  //      ret->registerModel<SubstractionDataModel>("Math");
-  //      ret->registerModel<MultiplicationDataModel>("Math");
-  //      ret->registerModel<DivisionDataModel>("Math");
-		//ret->registerModel<DotProductDataModel>("Math");
-		//ret->registerModel<CrossProductDataModel>("Math");
-		//ret->registerModel<MinDataModel>("Math");
-		//ret->registerModel<MaxDataModel>("Math");
-		//ret->registerModel<PowDataModel>("Math");
-		//ret->registerModel<SinDataModel>("Math");
-		//ret->registerModel<CosDataModel>("Math");
-		//ret->registerModel<ModDataModel>("Math");
-		//ret->registerModel<FloorDataModel>("Math");
-  //      ret->registerModel<FractDataModel>("Math");
-  //      ret->registerModel<FwidthDataModel>("Math");
-  //      ret->registerModel<LengthDataModel>("Math");
-		//ret->registerModel<MixDataModel>("Math");
-  //      ret->registerModel<SmoothStepDataModel>("Math");
-  //      ret->registerModel<Echo::ShaderNodeATan2>("Math");
-  //      ret->registerModel<Echo::ShaderNodeSign>("Math");
-
-  //      // Utils
-		//ret->registerModel<SplitDataModel>("Utils");
-		//ret->registerModel<CombineDataModel>("Utils");
-  //      ret->registerModel<Echo::ShaderNodeTextureSize>("Utils");
-
-  //      // Custom
-  //      ret->registerModel<Echo::ShaderNodeGLSL>("Custom");
-  //      ret->registerModel<Echo::ShaderNodeGaussianBlur>("Blur");
-  //      ret->registerModel<Echo::ShaderNodeZoomBlur>("Blur");
-  //      ret->registerModel<Echo::ShaderNodeSpinBlur>("Blur");
-
-  //      // Color
-  //      ret->registerModel<Echo::ShaderNodeGrayScale>("Color");
-  //      ret->registerModel<Echo::ShaderNodeSRgbToLinear>("Color");
-  //      ret->registerModel<Echo::ShaderNodeLinearToSRgb>("Color");
+                EchoSafeDelete(shaderNode, ShaderNode);
+            }
+        }
 
         // Converts
         ret->registerTypeConverter(std::make_pair(DataFloat(nullptr, "").type(),   DataVector2(nullptr, "").type()), QtNodes::TypeConverter{ FloatToVector2() });
@@ -210,18 +172,6 @@ namespace Studio
         }
 
         m_isLoading = false;
-    }
-
-    void ShaderEditor::adjustViewRect()
-    {
-   //     QtNodes::Node* shaderTemplateNode = m_graphicsScene->getShaderTemplateNode();
-   //     if (shaderTemplateNode)
-   //     {
-   //         QRectF stRect = shaderTemplateNode->nodeGraphicsObject().sceneBoundingRect();
-
-			//QRectF viewRect = m_graphicsView->sceneRect();
-			//m_graphicsView->centerOn(&shaderTemplateNode->nodeGraphicsObject());
-   //     }
     }
 
     void ShaderEditor::save()

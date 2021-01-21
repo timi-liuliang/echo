@@ -19,6 +19,9 @@ namespace Echo
 		// caption
 		virtual QString caption() const override { return getVariableName().c_str(); }
 
+		// category
+		virtual QString category() const override { return "Texture"; }
+
 	private:
 		// get default value
 		virtual bool getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues) override;

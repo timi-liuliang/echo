@@ -39,10 +39,6 @@ namespace Studio
         // save
         void save();
 
-    protected:
-        // adjust view
-        void adjustViewRect();
-
 	private:
         bool                                m_isLoading = false;
         Echo::ShaderProgramPtr              m_shaderProgram;

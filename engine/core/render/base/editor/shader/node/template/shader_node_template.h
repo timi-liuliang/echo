@@ -20,6 +20,9 @@ namespace Echo
         // caption
         virtual QString caption() const override { return QStringLiteral("Shader Template"); }
 
+		// category
+		virtual QString category() const override { return "skip me"; }
+
         // is caption visible
         virtual bool captionVisible() const override { return true; }
 

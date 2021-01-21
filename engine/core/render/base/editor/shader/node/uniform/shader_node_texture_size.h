@@ -1,6 +1,6 @@
 #pragma once
 
-#include "shader_node.h"
+#include "engine/core/render/base/editor/shader/node/shader_node.h"
 
 namespace Echo
 {
@@ -19,7 +19,9 @@ namespace Echo
 		// caption
 		virtual QString caption() const override { return "TextureSize"; }
 
-	private:
+		// category
+		virtual QString category() const override { return "Texture"; }
+
 		// set in
 		virtual void setInData(std::shared_ptr<NodeData> nodeData, int portIndex) override;
 

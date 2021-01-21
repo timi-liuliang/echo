@@ -23,6 +23,9 @@ namespace Echo
 		// is caption visible
 		bool captionVisible() const override { return true; }
 
+		// category
+		virtual QString category() const override { return "Inputs"; }
+
 		// generate code
 		virtual bool generateCode(ShaderCompiler& compiler) override;
 

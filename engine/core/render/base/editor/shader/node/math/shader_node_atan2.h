@@ -15,6 +15,9 @@ namespace Echo
 
 		// name
 		virtual QString name() const override { return "ATan2"; }
+
+		// category
+		virtual QString category() const override { return "Math"; }
 	};
 
 #endif

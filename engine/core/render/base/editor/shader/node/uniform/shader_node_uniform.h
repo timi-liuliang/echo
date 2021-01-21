@@ -13,6 +13,9 @@ namespace Echo
 		ShaderNodeUniform();
 		virtual ~ShaderNodeUniform();
 
+		// category
+		virtual QString category() const override { return "Uniforms"; }
+
 		// constant
 		virtual bool isUniform() const { return m_isUniform; }
 		void setUniform(bool isUniform) { m_isUniform = isUniform; }

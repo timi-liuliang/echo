@@ -14,14 +14,17 @@ namespace Echo
         ShaderNodeMod();
         virtual ~ShaderNodeMod() {}
 
+		// name
+		virtual QString name() const override { return QStringLiteral("Mod"); }
+
         // caption
         virtual QString caption() const override { return QStringLiteral("Mod"); }
 
         // is caption visible
         virtual bool captionVisible() const override { return true; }
 
-        // name
-        virtual QString name() const override { return QStringLiteral("Mod"); }
+		// category
+		virtual QString category() const override { return "Math"; }
 
 		// when input changed
 		virtual void setInData(std::shared_ptr<NodeData> nodeData, QtNodes::PortIndex port) override;

@@ -31,6 +31,9 @@ namespace Echo
 		// caption
 		virtual QString caption() const override { return "Unknown"; }
 
+		// category
+		virtual QString category() const { return "Unknown"; }
+
 		// widget
 		virtual QWidget* embeddedWidget() override { return nullptr;}
 

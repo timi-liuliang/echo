@@ -41,23 +41,14 @@ namespace QtNodes
         DataModelRegistry&operator=(DataModelRegistry &&)      = default;
 
     public:
-        template<typename ModelType>
-        void registerModel(RegistryItemCreator creator,QString const &category = "Nodes")
+        void registerModel(const QString& name, const QString& category, std::function<std::unique_ptr<NodeDataModel>()> creator)
         {
-            registerModelImpl<ModelType>(std::move(creator), category);
-        }
-
-        template<typename ModelType>
-        void registerModel(QString const &category = "Nodes")
-        {
-            RegistryItemCreator creator = [](){ return std::make_unique<ModelType>(); };
-            registerModelImpl<ModelType>(std::move(creator), category);
-        }
-
-        template<typename ModelType>
-        void registerModel(QString const &category, RegistryItemCreator creator)
-        {
-            registerModelImpl<ModelType>(std::move(creator), category);
+			if (m_registeredItemCreators.count(name) == 0)
+			{
+				m_registeredItemCreators[name] = std::move(creator);
+				m_categories.insert(category);
+				m_registeredModelsCategory[name] = category;
+			}
         }
 
         void registerTypeConverter(TypeConverterId const & id, TypeConverter typeConverter)
@@ -98,31 +89,5 @@ namespace QtNodes
         struct HasStaticMethodName<T,typename std::enable_if<std::is_same<decltype(T::Name()), QString>::value>::type>
           : std::true_type
         {};
-
-        template<typename ModelType>
-        typename std::enable_if< HasStaticMethodName<ModelType>::value>::type
-        registerModelImpl(RegistryItemCreator creator, QString const &category )
-        {
-            const QString name = ModelType::Name();
-            if (m_registeredItemCreators.count(name) == 0)
-            {
-                m_registeredItemCreators[name] = std::move(creator);
-                m_categories.insert(category);
-                m_registeredModelsCategory[name] = category;
-            }
-        }
-
-        template<typename ModelType>
-        typename std::enable_if< !HasStaticMethodName<ModelType>::value>::type
-        registerModelImpl(RegistryItemCreator creator, QString const &category)
-        {
-            const QString name = creator()->name();
-            if (m_registeredItemCreators.count(name) == 0)
-            {
-                m_registeredItemCreators[name] = std::move(creator);
-                m_categories.insert(category);
-                m_registeredModelsCategory[name] = category;
-            }
-        }
     };
 }

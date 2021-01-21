@@ -23,19 +23,14 @@ namespace Echo
         // is caption visible
         virtual bool captionVisible() const override { return true; }
 
+		// category
+		virtual QString category() const override { return "Math"; }
+
 		// when input changed
 		virtual void setInData(std::shared_ptr<NodeData> nodeData, QtNodes::PortIndex port) override;
 
 		// generate code
 		virtual bool generateCode(Echo::ShaderCompiler& compiler) override;
-
-    public:
-        // load|save
-        virtual QJsonObject save() const override;
-        virtual void restore(QJsonObject const &p) override;
-
-    public:
-
     };
 }
 
