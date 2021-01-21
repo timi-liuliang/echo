@@ -23,6 +23,11 @@ namespace Echo
 		m_outputs[2] = std::make_shared<DataVector2>(this, "rg");
 	}
 
+	void ShaderNodeCombine::bindMethods()
+	{
+
+	}
+
 	void ShaderNodeCombine::setInData(std::shared_ptr<NodeData> nodeData, QtNodes::PortIndex portIndex)
 	{
 		m_inputs[portIndex] = std::dynamic_pointer_cast<ShaderData>(nodeData);

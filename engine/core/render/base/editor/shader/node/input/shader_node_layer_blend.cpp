@@ -14,6 +14,11 @@ namespace Echo
 		}
 	}
 
+	void ShaderNodeLayerBlend::bindMethods()
+	{
+
+	}
+
 	bool ShaderNodeLayerBlend::generateCode(Echo::ShaderCompiler& compiler)
 	{
 		compiler.addMacro("ENABLE_VERTEX_BLENDING");

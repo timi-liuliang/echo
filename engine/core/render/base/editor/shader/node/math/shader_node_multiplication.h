@@ -8,7 +8,7 @@ namespace Echo
 {
     class ShaderNodeMultiplication : public ShaderNode
     {
-        Q_OBJECT
+        ECHO_CLASS(ShaderNodeMultiplication, ShaderNode)
 
     public:
         ShaderNodeMultiplication();

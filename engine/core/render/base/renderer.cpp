@@ -16,6 +16,9 @@
 #include "base/atla/texture_atlas.h"
 #include "base/editor/atlas/texture_atla_editor.h"
 #include "base/editor/shader/node/shader_node.h"
+#include "base/editor/shader/node/template/shader_node_template.h"
+#include "base/editor/shader/node/input/shader_node_layer_blend.h"
+#include "base/editor/shader/node/input/shader_node_vertex_attribute.h"
 #include "base/editor/shader/node/uniform/shader_node_uniform.h"
 #include "base/editor/shader/node/uniform/shader_node_texture.h"
 #include "base/editor/shader/node/shader_node_glsl.h"
@@ -25,8 +28,29 @@
 #include "base/editor/shader/node/color/shader_node_gray_scale.h"
 #include "base/editor/shader/node/color/shader_node_srgb_to_linear.h"
 #include "base/editor/shader/node/color/shader_node_linear_to_srgb.h"
+#include "base/editor/shader/node/math/shader_node_abs.h"
+#include "base/editor/shader/node/math/shader_node_addition.h"
 #include "base/editor/shader/node/math/shader_node_atan2.h"
+#include "base/editor/shader/node/math/shader_node_combine.h"
+#include "base/editor/shader/node/math/shader_node_cos.h"
+#include "base/editor/shader/node/math/shader_node_cross_product.h"
+#include "base/editor/shader/node/math/shader_node_division.h"
+#include "base/editor/shader/node/math/shader_node_dot_product.h"
+#include "base/editor/shader/node/math/shader_node_floor.h"
+#include "base/editor/shader/node/math/shader_node_fract.h"
+#include "base/editor/shader/node/math/shader_node_fwidth.h"
+#include "base/editor/shader/node/math/shader_node_length.h"
+#include "base/editor/shader/node/math/shader_node_max.h"
+#include "base/editor/shader/node/math/shader_node_min.h"
+#include "base/editor/shader/node/math/shader_node_mix.h"
+#include "base/editor/shader/node/math/shader_node_mod.h"
+#include "base/editor/shader/node/math/shader_node_multiplication.h"
+#include "base/editor/shader/node/math/shader_node_pow.h"
 #include "base/editor/shader/node/math/shader_node_sign.h"
+#include "base/editor/shader/node/math/shader_node_sin.h"
+#include "base/editor/shader/node/math/shader_node_smooth_step.h"
+#include "base/editor/shader/node/math/shader_node_split.h"
+#include "base/editor/shader/node/math/shader_node_substraction.h"
 
 namespace Echo
 {
@@ -65,19 +89,51 @@ namespace Echo
 
 	#ifdef ECHO_EDITOR_MODE
 		Class::registerType<ShaderNode>();
-		Class::registerType<ShaderNodeUniform>();
-		Class::registerType<ShaderNodeTexture>();
 		Class::registerType<ShaderNodeGLSL>();
+		Class::registerType<ShaderNodeTemplate>();
+
+		// blur
 		Class::registerType<ShaderNodeGaussianBlur>();
 		Class::registerType<ShaderNodeZoomBlur>();
 		Class::registerType<ShaderNodeSpinBlur>();
 
+		// color
 		Class::registerType<ShaderNodeGrayScale>();
 		Class::registerType<ShaderNodeSRgbToLinear>();
 		Class::registerType<ShaderNodeLinearToSRgb>();
 
+		// input
+		Class::registerType<ShaderNodeLayerBlend>();
+		Class::registerType<ShaderNodeVertexAttribute>();
+
+		// math
+		Class::registerType<ShaderNodeAbs>();
+		Class::registerType<ShaderNodeAddition>();
 		Class::registerType<ShaderNodeATan2>();
+		Class::registerType<ShaderNodeCombine>();
+		Class::registerType<ShaderNodeCos>();
+		Class::registerType<ShaderNodeCrossProduct>();
+		Class::registerType<ShaderNodeDivision>();
+		Class::registerType<ShaderNodeDotProduct>();
+		Class::registerType<ShaderNodeFloor>();
+		Class::registerType<ShaderNodeFract>();
+		Class::registerType<ShaderNodeFwidth>();
+		Class::registerType<ShaderNodeLength>();
+		Class::registerType<ShaderNodeMax>();
+		Class::registerType<ShaderNodeMin>();
+		Class::registerType<ShaderNodeMix>();
+		Class::registerType<ShaderNodeMod>();
+		Class::registerType<ShaderNodeMultiplication>();
+		Class::registerType<ShaderNodePow>();
 		Class::registerType<ShaderNodeSign>();
+		Class::registerType<ShaderNodeSin>();
+		Class::registerType<ShaderNodeSmoothStep>();
+		Class::registerType<ShaderNodeSplit>();
+		Class::registerType<ShaderNodeSubstraction>();
+
+		// uniform
+		Class::registerType<ShaderNodeUniform>();
+		Class::registerType<ShaderNodeTexture>();
 	#endif
 
 		CLASS_REGISTER_EDITOR(RenderPipeline, RenderPipelineEditor)

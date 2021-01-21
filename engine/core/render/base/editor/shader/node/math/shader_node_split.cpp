@@ -18,6 +18,11 @@ namespace Echo
         invalidAllOutputs();
     }
 
+	void ShaderNodeSplit::bindMethods()
+	{
+
+	}
+
     void ShaderNodeSplit::invalidAllOutputs()
     {
 		for (size_t i = 0; i < m_outputs.size(); i++)

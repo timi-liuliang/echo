@@ -21,6 +21,11 @@ namespace Echo
         m_outputs[0]->setVariableName(getVariableName());
     }
 
+	void ShaderNodeMix::bindMethods()
+	{
+
+	}
+
     void ShaderNodeMix::setInData(std::shared_ptr<NodeData> nodeData, QtNodes::PortIndex portIndex)
     {
         m_inputs[portIndex] = std::dynamic_pointer_cast<ShaderData>(nodeData);

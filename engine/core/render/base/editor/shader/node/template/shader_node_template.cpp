@@ -20,6 +20,11 @@ namespace Echo
         m_inputs.resize(m_inputDataTypes.size());
     }
 
+	void ShaderNodeTemplate::bindMethods()
+	{
+
+	}
+
     bool ShaderNodeTemplate::generateCode(Echo::ShaderCompiler& compiler)
     {
         for (size_t i = 0; i < m_inputs.size(); i++)
