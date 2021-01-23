@@ -20,6 +20,11 @@
 #include "base/editor/shader/node/input/shader_node_layer_blend.h"
 #include "base/editor/shader/node/input/shader_node_vertex_attribute.h"
 #include "base/editor/shader/node/uniform/shader_node_uniform.h"
+#include "base/editor/shader/node/uniform/shader_node_float.h"
+#include "base/editor/shader/node/uniform/shader_node_vector2.h"
+#include "base/editor/shader/node/uniform/shader_node_vector3.h"
+#include "base/editor/shader/node/uniform/shader_node_vector4.h"
+#include "base/editor/shader/node/uniform/shader_node_color.h"
 #include "base/editor/shader/node/uniform/shader_node_texture.h"
 #include "base/editor/shader/node/shader_node_glsl.h"
 #include "base/editor/shader/node/blur/shader_node_gaussian_blur.h"
@@ -133,6 +138,11 @@ namespace Echo
 
 		// uniform
 		Class::registerType<ShaderNodeUniform>();
+		Class::registerType<ShaderNodeFloat>();
+		Class::registerType<ShaderNodeVector2>();
+		Class::registerType<ShaderNodeVector3>();
+		Class::registerType<ShaderNodeVector4>();
+		Class::registerType<ShaderNodeColor>();
 		Class::registerType<ShaderNodeTexture>();
 	#endif
 

@@ -48,7 +48,10 @@ namespace Echo
 
 	std::shared_ptr<NodeData> ShaderNode::outData(QtNodes::PortIndex portIndex)
 	{
-		return m_outputs[portIndex];
+		if(m_outputs.size()>portIndex)
+			return m_outputs[portIndex];
+		else
+			return std::make_shared<DataInvalid>(this);
 	}
 
 	void ShaderNode::setInData(std::shared_ptr<NodeData> nodeData, int portIndex)

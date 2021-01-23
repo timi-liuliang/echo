@@ -7,7 +7,7 @@ namespace Echo
 #ifdef ECHO_EDITOR_MODE
 	class ShaderNodeUniform : public ShaderNode
 	{
-		ECHO_CLASS(ShaderNodeUniform, ShaderNode)
+		ECHO_VIRTUAL_CLASS(ShaderNodeUniform, ShaderNode)
 
 	public:
 		ShaderNodeUniform();

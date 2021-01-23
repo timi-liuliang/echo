@@ -49,8 +49,9 @@ namespace QtNodes
 
 	void NodeState::setConnection(PortType portType, PortIndex portIndex, Connection& connection)
 	{
-		auto& connections = getEntries(portType);
-		connections.at(portIndex).insert(std::make_pair(connection.id(), &connection));
+		std::vector<ConnectionPtrSet>& connections = getEntries(portType);
+		if(connections.size()>portIndex)
+			connections.at(portIndex).insert(std::make_pair(connection.id(), &connection));
 	}
 
 	void NodeState::eraseConnection(PortType portType, PortIndex portIndex, QUuid id)

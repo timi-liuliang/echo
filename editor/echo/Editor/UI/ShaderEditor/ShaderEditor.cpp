@@ -25,16 +25,19 @@ namespace Studio
         Echo::Class::getChildClasses(classNames, "ShaderNode", true);
         for (const String& className : classNames)
         {
-            ShaderNode* shaderNode = dynamic_cast<ShaderNode*>(Class::create(className));
-            if (shaderNode)
+            if (!Echo::Class::isVirtual(className))
             {
-				ret->registerModel(shaderNode->name(), shaderNode->category(), [className]()
+				ShaderNode* shaderNode = dynamic_cast<ShaderNode*>(Class::create(className));
+				if (shaderNode)
 				{
-					ShaderNode* newNode = dynamic_cast<ShaderNode*>(Class::create(className));
-					return std::unique_ptr<QtNodes::NodeDataModel>(newNode);
-				});
+					ret->registerModel(shaderNode->name(), shaderNode->category(), [className]()
+					{
+						ShaderNode* newNode = dynamic_cast<ShaderNode*>(Class::create(className));
+						return std::unique_ptr<QtNodes::NodeDataModel>(newNode);
+					});
 
-                EchoSafeDelete(shaderNode, ShaderNode);
+					EchoSafeDelete(shaderNode, ShaderNode);
+				}
             }
         }
 
