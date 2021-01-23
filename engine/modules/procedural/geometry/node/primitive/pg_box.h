@@ -19,6 +19,10 @@ namespace Echo
 		// calculate
 		virtual void play(PCGData& data) override;
 
+	private:
+		// add plane
+		void addPlane(PCGData& data, i32 axis, bool negative);
+
 	protected:
 		Vector3		m_size = Vector3::ONE;
 	};
