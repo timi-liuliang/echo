@@ -32,8 +32,6 @@ namespace Echo
 
 	void ShaderNodeTexture::bindMethods()
 	{
-		CLASS_BIND_METHOD(ShaderNodeTexture, setVariableName, DEF_METHOD("setVariableName"));
-		CLASS_BIND_METHOD(ShaderNodeTexture, getVariableName, DEF_METHOD("getVariableName"));
 		CLASS_BIND_METHOD(ShaderNodeTexture, setType, DEF_METHOD("setType"));
 		CLASS_BIND_METHOD(ShaderNodeTexture, getType, DEF_METHOD("getType"));
 		CLASS_BIND_METHOD(ShaderNodeTexture, setAtla, DEF_METHOD("setAtla"));
@@ -41,7 +39,6 @@ namespace Echo
 		CLASS_BIND_METHOD(ShaderNodeTexture, setTexture, DEF_METHOD("setTexture"));
 		CLASS_BIND_METHOD(ShaderNodeTexture, getTexture, DEF_METHOD("getTexture"));
 
-		CLASS_REGISTER_PROPERTY(ShaderNodeTexture, "Name", Variant::Type::String, "getVariableName", "setVariableName");
 		CLASS_REGISTER_PROPERTY(ShaderNodeTexture, "Type", Variant::Type::StringOption, "getType", "setType");
 		CLASS_REGISTER_PROPERTY(ShaderNodeTexture, "Atla", Variant::Type::Bool, "isAtla", "setAtla");
 		CLASS_REGISTER_PROPERTY(ShaderNodeTexture, "Texture", Variant::Type::Bool, "getTexture", "setTexture");
@@ -54,12 +51,6 @@ namespace Echo
 		m_outputs[0]->setVariableName(variableName.c_str());
 		m_outputs[1]->setVariableName(Echo::StringUtil::Format("%s_Color.rgb", variableName.c_str()));
 		m_outputs[2]->setVariableName(Echo::StringUtil::Format("%s_Color.a", variableName.c_str()));
-	}
-
-	void ShaderNodeTexture::setVariableName(const String& variableName)
-	{
-		m_variableName = variableName; 
-		captionUpdated();
 	}
 
 	void ShaderNodeTexture::setInData(std::shared_ptr<NodeData> nodeData, int portIndex)

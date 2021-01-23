@@ -19,7 +19,7 @@ namespace Echo
 		CLASS_BIND_METHOD(ShaderNode, getVariableName, DEF_METHOD("getVariableName"));
 		CLASS_BIND_METHOD(ShaderNode, setVariableName, DEF_METHOD("setVariableName"));
 
-		CLASS_REGISTER_PROPERTY(ShaderNode, "VariableName", Variant::Type::String, "getVariableName", "setVariableName");
+		CLASS_REGISTER_PROPERTY(ShaderNode, "Variable", Variant::Type::String, "getVariableName", "setVariableName");
 	}
 
 	unsigned int ShaderNode::nPorts(QtNodes::PortType portType) const

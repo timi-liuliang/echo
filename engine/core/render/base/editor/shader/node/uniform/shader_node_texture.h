@@ -37,9 +37,6 @@ namespace Echo
 		virtual QWidget* embeddedWidget() override { return m_toolButton; }
 
 	public:
-		String getVariableName() const { return m_variableName.empty() ? StringUtil::Format("Texture%d", getId()) : m_variableName; }
-		void setVariableName(const String& variableName);
-
 		// type
 		const StringOption& getType() { return m_type; }
 		void setType(const StringOption& type) { m_type.setValue(type.getValue()); }
@@ -57,7 +54,6 @@ namespace Echo
 		void updateOutputDataVariableName();
 
 	protected:
-		String			m_variableName = "";
 		bool			m_isAtla = false;
 		StringOption	m_type = StringOption("General", { "General", "NormalMap" });
 		ResourcePath	m_texture;
