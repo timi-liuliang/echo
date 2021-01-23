@@ -51,6 +51,7 @@
 #include "base/editor/shader/node/math/shader_node_mod.h"
 #include "base/editor/shader/node/math/shader_node_multiplication.h"
 #include "base/editor/shader/node/math/shader_node_negative.h"
+#include "base/editor/shader/node/math/shader_node_one_minus.h"
 #include "base/editor/shader/node/math/shader_node_pow.h"
 #include "base/editor/shader/node/math/shader_node_sign.h"
 #include "base/editor/shader/node/math/shader_node_sin.h"
@@ -130,6 +131,8 @@ namespace Echo
 		Class::registerType<ShaderNodeMix>();
 		Class::registerType<ShaderNodeMod>();
 		Class::registerType<ShaderNodeMultiplication>();
+		Class::registerType<ShaderNodeNegative>();
+		Class::registerType<ShaderNodeOneMinus>();
 		Class::registerType<ShaderNodePow>();
 		Class::registerType<ShaderNodeSign>();
 		Class::registerType<ShaderNodeSin>();
