@@ -4,8 +4,8 @@
 #include "engine/core/render/base/mesh/mesh.h"
 #include "engine/core/render/base/material.h"
 #include "engine/core/render/base/renderable.h"
-#include "pg/node/pg_node.h"
-#include "pg/data/pg_data.h"
+#include "geometry/node/pg_node.h"
+#include "geometry/data/pg_data.h"
 
 namespace Echo
 {

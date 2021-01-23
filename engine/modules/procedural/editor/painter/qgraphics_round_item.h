@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/core/editor/editor.h"
-#include "engine/modules/procedural/pg/node/pg_node.h"
+#include "engine/modules/procedural/geometry/node/pg_node.h"
 
 #ifdef ECHO_EDITOR_MODE
 
