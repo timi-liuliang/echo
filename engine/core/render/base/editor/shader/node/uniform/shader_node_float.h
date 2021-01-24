@@ -12,7 +12,7 @@ namespace Echo
 
     public:
         ShaderNodeFloat();
-        virtual ~ShaderNodeFloat() {}
+        virtual ~ShaderNodeFloat();
 
         // name
         virtual QString name() const override { return QStringLiteral("Float"); }
@@ -30,8 +30,19 @@ namespace Echo
 		// generate code
 		virtual bool generateCode(Echo::ShaderCompiler& compiler) override;
 
+    public:
+        // make widgets
+        void setupWidgets();
+
+        // slots
+        void onTextEdited();
+
+		// get embedded widget
+		virtual QWidget* embeddedWidget() override { return m_lineEdit; }
+
     private:
         float           m_value;
+        QLineEdit*      m_lineEdit = nullptr;
     };
 }
 

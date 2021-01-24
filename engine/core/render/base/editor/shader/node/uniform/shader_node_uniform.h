@@ -13,6 +13,12 @@ namespace Echo
 		ShaderNodeUniform();
 		virtual ~ShaderNodeUniform();
 
+		// caption
+		virtual QString caption() const override { return getVariableName().c_str(); }
+
+		// is caption visible
+		virtual bool captionVisible() const override { return m_isUniform; }
+
 		// category
 		virtual QString category() const override { return "Uniforms"; }
 

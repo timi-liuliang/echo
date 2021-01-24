@@ -41,7 +41,13 @@ namespace Echo
 
 		CLASS_REGISTER_PROPERTY(ShaderNodeTexture, "Type", Variant::Type::StringOption, "getType", "setType");
 		CLASS_REGISTER_PROPERTY(ShaderNodeTexture, "Atla", Variant::Type::Bool, "isAtla", "setAtla");
-		CLASS_REGISTER_PROPERTY(ShaderNodeTexture, "Texture", Variant::Type::Bool, "getTexture", "setTexture");
+		CLASS_REGISTER_PROPERTY(ShaderNodeTexture, "Texture", Variant::Type::ResourcePath, "getTexture", "setTexture");
+	}
+
+	void ShaderNodeTexture::setAtla(bool isAtla)
+	{
+		m_isAtla = isAtla;
+		m_texture = ResourcePath(m_texture.getPath(), m_isAtla ? ".atla|.png|.rt" : ".png|.rt");
 	}
 
 	void ShaderNodeTexture::updateOutputDataVariableName()
@@ -65,7 +71,7 @@ namespace Echo
 	bool ShaderNodeTexture::getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues)
 	{
 		uniformNames.emplace_back("Uniforms." + getVariableName());
-		uniformValues.emplace_back(Echo::ResourcePath(m_texture.getPath(), m_isAtla ? ".png|.atla" : ".png"));
+		uniformValues.emplace_back(m_texture);
 
 		if (m_isAtla)
 		{
@@ -106,11 +112,7 @@ namespace Echo
 			compiler.addCode(Echo::StringUtil::Format("\tvec4 %s_Color = texture( %s, v_UV %s);\n", getVariableName().c_str(), getVariableName().c_str(), uvConvertCode.c_str()));
 		}
 
-		if (m_type.getValue() == "General")
-		{
-			compiler.addCode(Echo::StringUtil::Format("\t%s_Color.rgb = SRgbToLinear(%s_Color.rgb);\n", getVariableName().c_str(), getVariableName().c_str()));
-		}
-		else
+		if (m_type.getValue() == "NormalMap")
 		{
 			compiler.addMacro("ENABLE_VERTEX_NORMAL");
 

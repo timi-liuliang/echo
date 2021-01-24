@@ -264,7 +264,7 @@ vec3 PbrLighting(vec3 pixelPosition, vec3 baseColor, vec3 normal, float metallic
 
 	// Multiple lights
     vec3 _lightDir = normalize(vec3(1.0, 1.0, 1.0));
-    vec3 _lightColor = SRgbToLinear(vec3(1.2, 1.2, 1.2));
+    vec3 _lightColor = vec3(0.8, 0.8, 0.8);
 
 	// depend on light direction
     vec3 l = normalize(_lightDir);             // Vector from surface point to light

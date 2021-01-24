@@ -8,6 +8,11 @@ namespace Echo
         : ShaderNodeUniform()
     {
         m_outputs.resize(2);
+		m_outputs[0] = std::make_shared<DataVector3>(this, "rgb");
+		m_outputs[1] = std::make_shared<DataFloat>(this, "a");
+
+		m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s_Value.rgb", getVariableName().c_str()));
+		m_outputs[1]->setVariableName(Echo::StringUtil::Format("%s_Value.a", getVariableName().c_str()));
     }
 
     void ShaderNodeColor::bindMethods()
@@ -35,11 +40,8 @@ namespace Echo
     { 
         m_variableName = variableName; 
 
-		m_outputs[0] = std::make_shared<DataVector3>(this, "rgb");
-		m_outputs[1] = std::make_shared<DataFloat>(this, "a");
-
-		m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s_Value.rgb", variableName.c_str()));
-		m_outputs[1]->setVariableName(Echo::StringUtil::Format("%s_Value.a", variableName.c_str()));
+		m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s_Value.rgb", getVariableName().c_str()));
+		m_outputs[1]->setVariableName(Echo::StringUtil::Format("%s_Value.a", getVariableName().c_str()));
     }
 
 	bool ShaderNodeColor::generateCode(Echo::ShaderCompiler& compiler)

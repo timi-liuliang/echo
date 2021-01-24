@@ -7,6 +7,9 @@ namespace Echo
     ShaderNodeVector4::ShaderNodeVector4()
         : ShaderNodeUniform()
     {
+		m_outputs.resize(1);
+		m_outputs[0] = std::make_shared<DataVector4>(this, "vec4");
+		m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s_Value", getVariableName().c_str()));
     }
 
 	void ShaderNodeVector4::bindMethods()
@@ -20,9 +23,6 @@ namespace Echo
 	void ShaderNodeVector4::setVariableName(const String& variableName)
 	{
 		m_variableName = variableName;
-
-		m_outputs.resize(1);
-		m_outputs[0] = std::make_shared<DataVector4>(this, "vec4");
 		m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s_Value", getVariableName().c_str()));
 
 		Q_EMIT dataUpdated(0);
@@ -31,6 +31,8 @@ namespace Echo
 	void ShaderNodeVector4::setValue(const Vector4& value)
 	{
 		m_value = value;
+
+		Q_EMIT dataUpdated(0);
 	}
 
 	bool ShaderNodeVector4::getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues)

@@ -78,6 +78,9 @@ namespace Echo
     void ShaderNodeVertexAttribute::setOption(const String& option)
     {
         m_comboBox->setCurrentText(option.c_str());
+
+        Q_EMIT captionUpdated();
+        Q_EMIT dataUpdated(0);
     }
 
     unsigned int ShaderNodeVertexAttribute::nPorts(QtNodes::PortType portType) const
@@ -95,6 +98,12 @@ namespace Echo
         int index = m_comboBox->currentIndex();
         return portType == QtNodes::PortType::Out ? m_outputs[index]->type() : NodeDataType{ "invalid", "invalid" };
     }
+
+	std::shared_ptr<NodeData> ShaderNodeVertexAttribute::outData(QtNodes::PortIndex portIndex)
+	{
+		int index = m_comboBox->currentIndex();
+		return m_outputs[index];
+	}
 
     bool ShaderNodeVertexAttribute::generateCode(Echo::ShaderCompiler& compiler)
     {

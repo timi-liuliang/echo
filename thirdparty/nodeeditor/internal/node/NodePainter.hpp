@@ -17,7 +17,6 @@ namespace QtNodes
 	public:
 		NodePainter();
 
-	public:
 		// paint
 		static void paint(QPainter* painter, Node& node, FlowScene const& scene);
 		static void drawNodeRect(QPainter* painter, NodeGeometry const& geom, NodeDataModel const* model, NodeGraphicsObject const& graphicsObject);

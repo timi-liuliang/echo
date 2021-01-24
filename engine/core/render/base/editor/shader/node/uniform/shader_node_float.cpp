@@ -7,8 +7,16 @@ namespace Echo
     ShaderNodeFloat::ShaderNodeFloat()
       : ShaderNodeUniform()
     {
+		setupWidgets();
 
+		m_outputs.resize(1);
+		m_outputs[0] = std::make_shared<DataFloat>(this, "float");
+		m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s_Value", getVariableName().c_str()));
     }
+
+	ShaderNodeFloat::~ShaderNodeFloat()
+	{
+	}
 
 	void ShaderNodeFloat::bindMethods()
 	{
@@ -21,9 +29,6 @@ namespace Echo
 	void ShaderNodeFloat::setVariableName(const String& variableName)
 	{
 		m_variableName = variableName;
-
-		m_outputs.resize(1);
-		m_outputs[0] = std::make_shared<DataFloat>(this, "float");
 		m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s_Value", getVariableName().c_str()));
 
 		Q_EMIT dataUpdated(0);
@@ -32,6 +37,7 @@ namespace Echo
 	void ShaderNodeFloat::setValue(float value)
 	{
 		m_value = value;
+		m_lineEdit->setText(StringUtil::ToString(m_value).c_str());
 	}
 
 	bool ShaderNodeFloat::getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues)
@@ -62,6 +68,21 @@ namespace Echo
 
 		return true;
     }
+
+	void ShaderNodeFloat::setupWidgets()
+	{
+		m_lineEdit = new QLineEdit();
+		m_lineEdit->setValidator(new QDoubleValidator());
+		m_lineEdit->setMaximumSize(QSize(m_lineEdit->sizeHint().width() * 0.4f, m_lineEdit->sizeHint().height()));
+		m_lineEdit->setText("0.0");
+
+		EditorApi.qConnectWidget(m_lineEdit, QSIGNAL(editingFinished()), this, createMethodBind(&ShaderNodeFloat::onTextEdited));
+	}
+
+	void ShaderNodeFloat::onTextEdited()
+	{
+		m_value = StringUtil::ParseFloat(m_lineEdit->text().toStdString().c_str());
+	}
 }
 
 #endif

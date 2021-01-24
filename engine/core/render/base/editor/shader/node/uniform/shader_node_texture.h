@@ -42,7 +42,7 @@ namespace Echo
 		void setType(const StringOption& type) { m_type.setValue(type.getValue()); }
 
 		// atlas
-		void setAtla(bool isAtla) { m_isAtla = isAtla; }
+		void setAtla(bool isAtla);
 		bool isAtla() const { return m_isAtla; }
 
 		// default texture
@@ -56,7 +56,7 @@ namespace Echo
 	protected:
 		bool			m_isAtla = false;
 		StringOption	m_type = StringOption("General", { "General", "NormalMap" });
-		ResourcePath	m_texture;
+		ResourcePath	m_texture = ResourcePath("", ".atla|.png|.rt");
 		QToolButton*	m_toolButton = nullptr;
 	};
 

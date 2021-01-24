@@ -36,6 +36,9 @@ namespace Echo
         // get data type
         virtual NodeDataType dataType(QtNodes::PortType portType, QtNodes::PortIndex portIndex) const override;
 
+        // out data
+        virtual std::shared_ptr<NodeData> outData(QtNodes::PortIndex port) override;
+
         // get embedded widget
         QWidget* embeddedWidget() override { return m_comboBox; }
 

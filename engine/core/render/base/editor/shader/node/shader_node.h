@@ -74,7 +74,7 @@ namespace Echo
 	public:
 		// variable name
 		virtual String getVariableName() const;
-		virtual void setVariableName(const String& variableName) { m_variableName = variableName; }
+		virtual void setVariableName(const String& variableName);
 
 	public:
 		// load|save

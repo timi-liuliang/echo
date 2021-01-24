@@ -191,6 +191,13 @@ namespace Echo
 
 		return m_variableName;
 	}
+
+	void ShaderNode::setVariableName(const String& variableName)
+	{ 
+		m_variableName = variableName; 
+
+		Q_EMIT captionUpdated();
+	}
 }
 
 #endif
