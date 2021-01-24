@@ -2,7 +2,7 @@
 
 #ifdef ECHO_EDITOR_MODE
 
-static const char* gaussianBlur =R"(vec3 GaussianBlur(sampler2D tex,vec2 uv, float radius, float dirs, float samples, float strength)
+static const char* gaussianBlur =R"(vec3 GaussianBlur(sampler2D tex,vec2 uv, float radius, float dirs, float samples, float weight, float strength)
 {
 	// https://www.shadertoy.com/view/Xltfzj
 	float pi = 6.28318530718;
@@ -16,8 +16,9 @@ static const char* gaussianBlur =R"(vec3 GaussianBlur(sampler2D tex,vec2 uv, flo
 	{
 		for (float i = 1.0; i <= samples; i += 1.0)
 		{
-			color += texture(tex, uv + vec2(cos(d), sin(d)) * step * i);
-			count += 1.0;
+			float weight = pow(1.0 - i / samples, weight);
+			color += texture(tex, uv + vec2(cos(d), sin(d)) * step * i) * weight;
+			count += weight;
 		}
 	}
 
