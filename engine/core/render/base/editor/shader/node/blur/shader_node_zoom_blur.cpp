@@ -2,7 +2,7 @@
 
 #ifdef ECHO_EDITOR_MODE
 
-static const char* zoomBlur = R"(vec3 ZoomBlur(sampler2D tex, vec2 uv, vec2 center, float radius, float samples, float strength)
+static const char* zoomBlur = R"(vec3 ZoomBlur(sampler2D tex, vec2 uv, vec2 center, float radius, float samples, float weight, float strength)
 {
 	// https://gaming.stackexchange.com/questions/306721/what-is-radial-blur
 	vec2 dir = center - uv;
@@ -15,8 +15,9 @@ static const char* zoomBlur = R"(vec3 ZoomBlur(sampler2D tex, vec2 uv, vec2 cent
 	
 	for (float i = 1.0; i <= samples; i += 1.0)
 	{
-		color += texture(tex, uv + step * i);
-		count += 1.0;
+		float weightPow = pow(1.0 - i / samples, weight);
+		color += texture(tex, uv + step * i) * weightPow;
+		count += weightPow;
 	}
 
 	color /= count;

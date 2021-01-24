@@ -49,7 +49,7 @@ namespace Echo
             compiler.addCode(Echo::StringUtil::Format("\t%s %s = %s(1.0) - %s;\n",
                 m_outputs[0]->type().id.c_str(),
                 m_outputs[0]->getVariableName().c_str(),
-                m_inputs[0]->type().id.c_str(),
+                DataAny::getInternalData(m_inputs[0])->type().id.c_str(),
                 DataAny::getInternalData(m_inputs[0])->getVariableName().c_str()));
         }
 
