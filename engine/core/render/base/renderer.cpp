@@ -30,6 +30,7 @@
 #include "base/editor/shader/node/blur/shader_node_gaussian_blur.h"
 #include "base/editor/shader/node/blur/shader_node_zoom_blur.h"
 #include "base/editor/shader/node/blur/shader_node_spin_blur.h"
+#include "base/editor/shader/node/blur/shader_node_flow_blur.h"
 #include "base/editor/shader/node/color/shader_node_gray_scale.h"
 #include "base/editor/shader/node/color/shader_node_srgb_to_linear.h"
 #include "base/editor/shader/node/color/shader_node_linear_to_srgb.h"
@@ -103,6 +104,7 @@ namespace Echo
 		Class::registerType<ShaderNodeGaussianBlur>();
 		Class::registerType<ShaderNodeZoomBlur>();
 		Class::registerType<ShaderNodeSpinBlur>();
+		Class::registerType<ShaderNodeFlowBlur>();
 
 		// color
 		Class::registerType<ShaderNodeGrayScale>();

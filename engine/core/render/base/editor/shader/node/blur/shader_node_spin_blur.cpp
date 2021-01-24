@@ -2,7 +2,7 @@
 
 #ifdef ECHO_EDITOR_MODE
 
-static const char* radialBlur = R"(vec3 SpinBlur(sampler2D tex, vec2 uv, vec2 center, float speed, float samples, float strength)
+static const char* radialBlur = R"(vec3 SpinBlur(sampler2D tex, vec2 uv, vec2 center, float speed, float samples, float weight, float strength)
 {
 	float len = length(uv - center);	
 	vec2 dir = normalize(uv - center);
@@ -14,9 +14,10 @@ static const char* radialBlur = R"(vec3 SpinBlur(sampler2D tex, vec2 uv, vec2 ce
 	
 	for (float i = 1.0; i <= samples; i += 1.0)
 	{
+		float weightPow = pow(1.0 - i / samples, weight);
 		float d = angle + step * i;
-		color += texture(tex, center + len * vec2(sin(d), cos(d)));
-		count += 1.0;
+		color += texture(tex, center + len * vec2(sin(d), cos(d))) * weightPow;
+		count += weightPow;
 	}
 
 	color /= count;
