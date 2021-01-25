@@ -5,9 +5,8 @@
 namespace Echo
 {
     ShaderNodeVertexAttribute::ShaderNodeVertexAttribute()
-      : m_comboBox(new QComboBox())
     {
-        m_comboBox->setMinimumWidth(m_comboBox->sizeHint().width() * 1.7);
+        setupWidgets();
 
         m_outputs.clear();
 
@@ -139,6 +138,19 @@ namespace Echo
 
 		return true;
     }
+
+	void ShaderNodeVertexAttribute::setupWidgets()
+	{
+		m_comboBox = new QComboBox();
+		m_comboBox->setMinimumWidth(m_comboBox->sizeHint().width() * 1.7);
+
+		EditorApi.qConnectWidget(m_comboBox, QSIGNAL(currentIndexChanged(const QString&)), this, createMethodBind(&ShaderNodeVertexAttribute::onComboBoxEdited));
+	}
+
+	void ShaderNodeVertexAttribute::onComboBoxEdited()
+	{
+		setOption(m_comboBox->currentText().toStdString().c_str());
+	}
 }
 
 #endif

@@ -6,19 +6,19 @@
 
 namespace Echo
 {
-    class ShaderNodeVertexAttribute : public ShaderNode
+    class ShaderNodeShared : public ShaderNode
     {
-        ECHO_CLASS(ShaderNodeVertexAttribute, ShaderNode)
+        ECHO_CLASS(ShaderNodeShared, ShaderNode)
 
     public:
-        ShaderNodeVertexAttribute();
-        virtual ~ShaderNodeVertexAttribute() {}
+        ShaderNodeShared();
+        virtual ~ShaderNodeShared() {}
 
         // name
-		virtual QString name() const override { return QStringLiteral("VertexAttribute"); }
+		virtual QString name() const override { return QStringLiteral("Shared"); }
 
         // caption
-        virtual QString caption() const override { return QStringLiteral("Vertex Attribute"); }
+        virtual QString caption() const override { return QStringLiteral("Shared Uniform"); }
 
         // is caption visible
         bool captionVisible() const override { return true; }
@@ -46,8 +46,8 @@ namespace Echo
 		// slots
 		void onComboBoxEdited();
 
-		// get embedded widget
-		QWidget* embeddedWidget() override { return m_comboBox; }
+        // get embedded widget
+        QWidget* embeddedWidget() override { return m_comboBox; }
 
     public:
 		// attribute

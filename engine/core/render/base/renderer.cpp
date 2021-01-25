@@ -18,6 +18,7 @@
 #include "base/editor/shader/node/shader_node.h"
 #include "base/editor/shader/node/template/shader_node_template.h"
 #include "base/editor/shader/node/input/shader_node_layer_blend.h"
+#include "base/editor/shader/node/input/shader_node_shared.h"
 #include "base/editor/shader/node/input/shader_node_vertex_attribute.h"
 #include "base/editor/shader/node/uniform/shader_node_uniform.h"
 #include "base/editor/shader/node/uniform/shader_node_float.h"
@@ -113,6 +114,7 @@ namespace Echo
 
 		// input
 		Class::registerType<ShaderNodeLayerBlend>();
+		Class::registerType<ShaderNodeShared>();
 		Class::registerType<ShaderNodeVertexAttribute>();
 
 		// math
