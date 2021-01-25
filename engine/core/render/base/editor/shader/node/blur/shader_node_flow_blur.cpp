@@ -14,7 +14,7 @@ static const char* code = R"(vec3 FlowBlur(sampler2D tex, sampler2D flow, vec2 u
 		vec2 dir = texture(flow, uv).xy * 2.0 - 1.0;
 		uv += dir * step;
 		
-		float weightPow = pow(1.0 - i / samples, weight);
+		float weightPow = pow(clamp(1.0 - i / samples, 0.0, 1.0), weight);
 		color += texture(tex, uv) * weightPow;
 		count += weightPow;
 	}

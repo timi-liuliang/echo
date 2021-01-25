@@ -14,7 +14,7 @@ static const char* radialBlur = R"(vec3 SpinBlur(sampler2D tex, vec2 uv, vec2 ce
 	
 	for (float i = 1.0; i <= samples; i += 1.0)
 	{
-		float weightPow = pow(1.0 - i / samples, weight);
+		float weightPow = pow(clamp(1.0 - i / samples, 0.0, 1.0), weight);
 		float d = angle + step * i;
 		color += texture(tex, center + len * vec2(sin(d), cos(d))) * weightPow;
 		count += weightPow;

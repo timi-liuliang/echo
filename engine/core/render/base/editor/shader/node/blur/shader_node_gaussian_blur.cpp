@@ -16,7 +16,7 @@ static const char* gaussianBlur =R"(vec3 GaussianBlur(sampler2D tex,vec2 uv, flo
 	{
 		for (float i = 1.0; i <= samples; i += 1.0)
 		{
-			float weightPow = pow(1.0 - i / samples, weight);
+			float weightPow = pow(clamp(1.0 - i / samples, 0.0, 1.0), weight);
 			color += texture(tex, uv + vec2(cos(d), sin(d)) * step * i) * weightPow;
 			count += weightPow;
 		}
