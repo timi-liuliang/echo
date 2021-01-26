@@ -41,6 +41,7 @@
 #include "base/editor/shader/node/math/shader_node_combine.h"
 #include "base/editor/shader/node/math/shader_node_cos.h"
 #include "base/editor/shader/node/math/shader_node_cross_product.h"
+#include "base/editor/shader/node/math/shader_node_degree_to_radian.h"
 #include "base/editor/shader/node/math/shader_node_division.h"
 #include "base/editor/shader/node/math/shader_node_dot_product.h"
 #include "base/editor/shader/node/math/shader_node_floor.h"
@@ -55,6 +56,7 @@
 #include "base/editor/shader/node/math/shader_node_negative.h"
 #include "base/editor/shader/node/math/shader_node_one_minus.h"
 #include "base/editor/shader/node/math/shader_node_pow.h"
+#include "base/editor/shader/node/math/shader_node_radian_to_degree.h"
 #include "base/editor/shader/node/math/shader_node_sign.h"
 #include "base/editor/shader/node/math/shader_node_sin.h"
 #include "base/editor/shader/node/math/shader_node_smooth_step.h"
@@ -124,6 +126,7 @@ namespace Echo
 		Class::registerType<ShaderNodeCombine>();
 		Class::registerType<ShaderNodeCos>();
 		Class::registerType<ShaderNodeCrossProduct>();
+		Class::registerType<ShaderNodeDegreeToRadian>();
 		Class::registerType<ShaderNodeDivision>();
 		Class::registerType<ShaderNodeDotProduct>();
 		Class::registerType<ShaderNodeFloor>();
@@ -138,6 +141,7 @@ namespace Echo
 		Class::registerType<ShaderNodeNegative>();
 		Class::registerType<ShaderNodeOneMinus>();
 		Class::registerType<ShaderNodePow>();
+		Class::registerType<ShaderNodeRadianToDegree>();
 		Class::registerType<ShaderNodeSign>();
 		Class::registerType<ShaderNodeSin>();
 		Class::registerType<ShaderNodeSmoothStep>();
