@@ -180,24 +180,29 @@ namespace Echo
 
 	bool ShaderNodeGLSL::generateCode(ShaderCompiler& compiler)
 	{
-		String funName = getFunctionName();
-		String functionCode = getCode();
-		compiler.addFunction(getHash(), funName, functionCode);
-
-		String params;
-		i32 finalIdx = m_inputs.size() - 1;
-		for (i32 i = 0; i <= finalIdx; i++)
+		if (getOutputConnectionCount(0))
 		{
-			if (m_inputs[i])
+			String funName = getFunctionName();
+			String functionCode = getCode();
+			compiler.addFunction(getHash(), funName, functionCode);
+
+			String params;
+			i32 finalIdx = m_inputs.size() - 1;
+			for (i32 i = 0; i <= finalIdx; i++)
 			{
-				params += " " + m_inputs[i]->getVariableName() + (i == finalIdx ? "" : ",");
+				if (m_inputs[i])
+				{
+					params += " " + m_inputs[i]->getVariableName() + (i == finalIdx ? "" : ",");
+				}
 			}
+
+			String code = StringUtil::Format("\t%s %s = %s(%s);\n", m_returnType.getValue().c_str(), getVariableName().c_str(), funName.c_str(), params.c_str());
+			compiler.addCode(code);
+
+			return true;
 		}
 
-		String code = StringUtil::Format("\t%s %s = %s(%s);\n", m_returnType.getValue().c_str(), getVariableName().c_str(), funName.c_str(), params.c_str());
-		compiler.addCode(code);
-
-		return true;
+		return false;
 	}
 
 #endif

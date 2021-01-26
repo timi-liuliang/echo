@@ -2,6 +2,8 @@
 
 #ifdef ECHO_EDITOR_MODE
 
+#include <nodeeditor/Connection>
+
 namespace Echo
 {
 	ShaderNode::ShaderNode()
@@ -197,6 +199,29 @@ namespace Echo
 		m_variableName = variableName; 
 
 		Q_EMIT captionUpdated();
+	}
+
+	i32 ShaderNode::getOutputConnectionCount(QtNodes::PortIndex index)
+	{
+		i32 count = 0;
+		for (const QtNodes::Connection* conn : m_outputConnections)
+		{
+			if (conn && conn->getPortIndex(QtNodes::PortType::Out) == index)
+				count++;
+		}
+
+
+		return count;
+	}
+
+	void ShaderNode::outputConnectionCreated(QtNodes::Connection const& conn)
+	{
+		m_outputConnections.push_back(&conn);
+	}
+
+	void ShaderNode::outputConnectionDeleted(QtNodes::Connection const& conn)
+	{
+		m_outputConnections.erase(std::remove(m_outputConnections.begin(), m_outputConnections.end(), &conn), m_outputConnections.end());
 	}
 }
 

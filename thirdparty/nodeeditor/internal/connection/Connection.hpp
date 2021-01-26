@@ -29,15 +29,15 @@ namespace QtNodes
       Q_OBJECT
 
     public:
-      /// New Connection is attached to the port of the given Node.
-      /// The port has parameters (portType, portIndex).
-      /// The opposite connection end will require another port.
-      Connection(PortType portType, Node& node,PortIndex portIndex);
-      Connection(Node& nodeIn,PortIndex portIndexIn, Node& nodeOut,PortIndex portIndexOut, TypeConverter converter =TypeConverter{});
-      Connection(const Connection&) = delete;
-      Connection operator=(const Connection&) = delete;
+		/// New Connection is attached to the port of the given Node.
+		/// The port has parameters (portType, portIndex).
+		/// The opposite connection end will require another port.
+		Connection(PortType portType, Node& node, PortIndex portIndex);
+		Connection(Node& nodeIn, PortIndex portIndexIn, Node& nodeOut, PortIndex portIndexOut, TypeConverter converter = TypeConverter{});
+		Connection(const Connection&) = delete;
+		Connection operator=(const Connection&) = delete;
 
-      ~Connection();
+		~Connection();
 
     public:
         QJsonObject save() const override;
@@ -46,9 +46,9 @@ namespace QtNodes
         // id
         QUuid id() const;
 
-      /// Remembers the end being dragged.
-      /// Invalidates Node address.
-      /// Grabs mouse.
+		/// Remembers the end being dragged.
+		/// Invalidates Node address.
+		/// Grabs mouse.
         void setRequiredPort(PortType portType);
         PortType requiredPort() const;
 
@@ -61,78 +61,54 @@ namespace QtNodes
         void removeFromNodes() const;
 
     public:
-      ConnectionGraphicsObject& getConnectionGraphicsObject() const;
+		ConnectionGraphicsObject& getConnectionGraphicsObject() const;
 
-      ConnectionState const & connectionState() const;
-      ConnectionState& connectionState();
+		ConnectionState const& connectionState() const;
+		ConnectionState& connectionState();
 
-      ConnectionGeometry&
-      connectionGeometry();
+		ConnectionGeometry& connectionGeometry();
+		ConnectionGeometry const& connectionGeometry() const;
 
-      ConnectionGeometry const&
-      connectionGeometry() const;
+		Node* getNode(PortType portType) const;
+		Node*& getNode(PortType portType);
 
-      Node*
-      getNode(PortType portType) const;
+		PortIndex getPortIndex(PortType portType) const;
 
-      Node*&
-      getNode(PortType portType);
+		void  clearNode(PortType portType);
 
-      PortIndex
-      getPortIndex(PortType portType) const;
+		NodeDataType dataType(PortType portType) const;
 
-      void
-      clearNode(PortType portType);
+		void setTypeConverter(TypeConverter converter);
 
-      NodeDataType
-      dataType(PortType portType) const;
-
-      void
-      setTypeConverter(TypeConverter converter);
-
-      bool
-      complete() const;
+		bool complete() const;
 
     public: // data propagation
-
-      void
-      propagateData(std::shared_ptr<NodeData> nodeData) const;
-
-      void
-      propagateEmptyData() const;
+		void propagateData(std::shared_ptr<NodeData> nodeData) const;
+		void propagateEmptyData() const;
 
     Q_SIGNALS:
-
-      void
-      connectionCompleted(Connection const&) const;
-
-      void
-      connectionMadeIncomplete(Connection const&) const;
+		void connectionCompleted(Connection const&) const;
+		void connectionMadeIncomplete(Connection const&) const;
 
     private:
-
-      QUuid _uid;
-
-    private:
-
-      Node* _outNode = nullptr;
-      Node* _inNode  = nullptr;
-
-      PortIndex _outPortIndex;
-      PortIndex _inPortIndex;
+		QUuid _uid;
 
     private:
+		Node* m_outNode = nullptr;
+		Node* m_inNode = nullptr;
 
-      ConnectionState    _connectionState;
-      ConnectionGeometry _connectionGeometry;
+		PortIndex m_outPortIndex;
+		PortIndex m_inPortIndex;
 
-      std::unique_ptr<ConnectionGraphicsObject>_connectionGraphicsObject;
+    private:
+		ConnectionState    _connectionState;
+		ConnectionGeometry _connectionGeometry;
 
-      TypeConverter _converter;
+		std::unique_ptr<ConnectionGraphicsObject>_connectionGraphicsObject;
+
+		TypeConverter _converter;
 
     Q_SIGNALS:
-
-      void
-      updated(Connection& conn) const;
+        void updated(Connection& conn) const;
     };
 }

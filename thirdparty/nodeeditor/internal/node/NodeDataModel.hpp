@@ -16,9 +16,9 @@ namespace QtNodes
 {
     enum class NodeValidationState
     {
-      Valid,
-      Warning,
-      Error
+		Valid,
+		Warning,
+		Error
     };
 
     class FlowScene;

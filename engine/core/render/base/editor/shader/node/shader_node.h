@@ -85,10 +85,19 @@ namespace Echo
 		void saveShaderNode(QJsonObject& p) const;
 		void restoreShaderNode(QJsonObject const& p);
 
+	public:
+		// get output connection count by index
+		i32 getOutputConnectionCount(QtNodes::PortIndex index);
+
+		// output connection
+		virtual void outputConnectionCreated(QtNodes::Connection const&) override;
+		virtual void outputConnectionDeleted(QtNodes::Connection const&) override;
+
 	protected:
 		QtNodes::NodeDataTypes						m_inputDataTypes;
 		std::vector<std::shared_ptr<ShaderData>>	m_inputs;
 		std::vector<std::shared_ptr<ShaderData>>	m_outputs;
+		std::vector<const QtNodes::Connection*>		m_outputConnections;
 		QtNodes::NodeValidationState				m_modelValidationState = QtNodes::NodeValidationState::Valid;
 		QString										m_modelValidationError = QStringLiteral("");
 		String										m_variableName;

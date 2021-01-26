@@ -103,20 +103,23 @@ namespace Echo
 			uvConvertCode = Echo::StringUtil::Format(" * fs_ubo.%sViewport.zw + fs_ubo.%sViewport.xy", getVariableName().c_str(), getVariableName().c_str());
 		}
 
-		if (m_inputs[0])
+		if (getOutputConnectionCount(1) || getOutputConnectionCount(2))
 		{
-			compiler.addCode(Echo::StringUtil::Format("\tvec4 %s_Color = texture( %s, %s %s);\n", getVariableName().c_str(), getVariableName().c_str(), dynamic_cast<ShaderData*>(m_inputs[0].get())->getVariableName().c_str(), uvConvertCode.c_str()));
-		}
-		else
-		{
-			compiler.addCode(Echo::StringUtil::Format("\tvec4 %s_Color = texture( %s, v_UV %s);\n", getVariableName().c_str(), getVariableName().c_str(), uvConvertCode.c_str()));
-		}
+			if (m_inputs[0])
+			{
+				compiler.addCode(Echo::StringUtil::Format("\tvec4 %s_Color = texture( %s, %s %s);\n", getVariableName().c_str(), getVariableName().c_str(), dynamic_cast<ShaderData*>(m_inputs[0].get())->getVariableName().c_str(), uvConvertCode.c_str()));
+			}
+			else
+			{
+				compiler.addCode(Echo::StringUtil::Format("\tvec4 %s_Color = texture( %s, v_UV %s);\n", getVariableName().c_str(), getVariableName().c_str(), uvConvertCode.c_str()));
+			}
 
-		if (m_type.getValue() == "NormalMap")
-		{
-			compiler.addMacro("ENABLE_VERTEX_NORMAL");
+			if (m_type.getValue() == "NormalMap")
+			{
+				compiler.addMacro("ENABLE_VERTEX_NORMAL");
 
-			compiler.addCode(Echo::StringUtil::Format("\t%s_Color.rgb = _NormalMapFun(%s_Color.rgb);\n", getVariableName().c_str(), getVariableName().c_str()));
+				compiler.addCode(Echo::StringUtil::Format("\t%s_Color.rgb = _NormalMapFun(%s_Color.rgb);\n", getVariableName().c_str(), getVariableName().c_str()));
+			}
 		}
 
 		return true;

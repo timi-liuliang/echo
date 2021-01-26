@@ -34,8 +34,8 @@ Connection(PortType portType,
            Node& node,
            PortIndex portIndex)
   : _uid(QUuid::createUuid())
-  , _outPortIndex(INVALID)
-  , _inPortIndex(INVALID)
+  , m_outPortIndex(INVALID)
+  , m_inPortIndex(INVALID)
   , _connectionState()
 {
   setNodeToPort(node, portType, portIndex);
@@ -46,10 +46,10 @@ Connection(PortType portType,
 
 Connection::Connection(Node& nodeIn,PortIndex portIndexIn, Node& nodeOut, PortIndex portIndexOut, TypeConverter typeConverter)
   : _uid(QUuid::createUuid())
-  , _outNode(&nodeOut)
-  , _inNode(&nodeIn)
-  , _outPortIndex(portIndexOut)
-  , _inPortIndex(portIndexIn)
+  , m_outNode(&nodeOut)
+  , m_inNode(&nodeIn)
+  , m_outPortIndex(portIndexOut)
+  , m_inPortIndex(portIndexIn)
   , _connectionState()
   , _converter(std::move(typeConverter))
 {
@@ -64,14 +64,14 @@ Connection::
   if (complete()) connectionMadeIncomplete(*this);
   propagateEmptyData();
 
-  if (_inNode)
+  if (m_inNode)
   {
-    _inNode->nodeGraphicsObject().update();
+    m_inNode->nodeGraphicsObject().update();
   }
 
-  if (_outNode)
+  if (m_outNode)
   {
-    _outNode->nodeGraphicsObject().update();
+    m_outNode->nodeGraphicsObject().update();
   }
 }
 
@@ -82,13 +82,13 @@ save() const
 {
   QJsonObject connectionJson;
 
-  if (_inNode && _outNode)
+  if (m_inNode && m_outNode)
   {
-    connectionJson["in_id"] = _inNode->id().toString();
-    connectionJson["in_index"] = _inPortIndex;
+    connectionJson["in_id"] = m_inNode->id().toString();
+    connectionJson["in_index"] = m_inPortIndex;
 
-    connectionJson["out_id"] = _outNode->id().toString();
-    connectionJson["out_index"] = _outPortIndex;
+    connectionJson["out_id"] = m_outNode->id().toString();
+    connectionJson["out_index"] = m_outPortIndex;
 
     if (_converter)
     {
@@ -122,7 +122,7 @@ QUuid Connection::id() const
 
 bool Connection::complete() const
 {
-  return _inNode != nullptr && _outNode != nullptr;
+  return m_inNode != nullptr && m_outNode != nullptr;
 }
 
 void Connection::setRequiredPort(PortType dragging)
@@ -132,13 +132,13 @@ void Connection::setRequiredPort(PortType dragging)
   switch (dragging)
   {
     case PortType::Out:
-      _outNode      = nullptr;
-      _outPortIndex = INVALID;
+      m_outNode      = nullptr;
+      m_outPortIndex = INVALID;
       break;
 
     case PortType::In:
-      _inNode      = nullptr;
-      _inPortIndex = INVALID;
+      m_inNode      = nullptr;
+      m_inPortIndex = INVALID;
       break;
 
     default:
@@ -201,11 +201,11 @@ getPortIndex(PortType portType) const
   switch (portType)
   {
     case PortType::In:
-      result = _inPortIndex;
+      result = m_inPortIndex;
       break;
 
     case PortType::Out:
-      result = _outPortIndex;
+      result = m_outPortIndex;
 
       break;
 
@@ -226,9 +226,9 @@ void Connection::setNodeToPort(Node& node, PortType portType, PortIndex portInde
 	nodeWeak = &node;
 
 	if (portType == PortType::Out)
-		_outPortIndex = portIndex;
+		m_outPortIndex = portIndex;
 	else
-		_inPortIndex = portIndex;
+		m_inPortIndex = portIndex;
 
 	_connectionState.setNoRequiredPort();
 
@@ -244,11 +244,11 @@ void
 Connection::
 removeFromNodes() const
 {
-  if (_inNode)
-    _inNode->nodeState().eraseConnection(PortType::In, _inPortIndex, id());
+  if (m_inNode)
+    m_inNode->nodeState().eraseConnection(PortType::In, m_inPortIndex, id());
 
-  if (_outNode)
-    _outNode->nodeState().eraseConnection(PortType::Out, _outPortIndex, id());
+  if (m_outNode)
+    m_outNode->nodeState().eraseConnection(PortType::Out, m_outPortIndex, id());
 }
 
 
@@ -299,11 +299,11 @@ getNode(PortType portType) const
   switch (portType)
   {
     case PortType::In:
-      return _inNode;
+      return m_inNode;
       break;
 
     case PortType::Out:
-      return _outNode;
+      return m_outNode;
       break;
 
     default:
@@ -321,11 +321,11 @@ getNode(PortType portType)
   switch (portType)
   {
     case PortType::In:
-      return _inNode;
+      return m_inNode;
       break;
 
     case PortType::Out:
-      return _outNode;
+      return m_outNode;
       break;
 
     default:
@@ -347,9 +347,9 @@ clearNode(PortType portType)
   getNode(portType) = nullptr;
 
   if (portType == PortType::In)
-    _inPortIndex = INVALID;
+    m_inPortIndex = INVALID;
   else
-    _outPortIndex = INVALID;
+    m_outPortIndex = INVALID;
 }
 
 
@@ -357,14 +357,14 @@ NodeDataType
 Connection::
 dataType(PortType portType) const
 {
-  if (_inNode && _outNode)
+  if (m_inNode && m_outNode)
   {
     auto const & model = (portType == PortType::In) ?
-                        _inNode->nodeDataModel() :
-                        _outNode->nodeDataModel();
+                        m_inNode->nodeDataModel() :
+                        m_outNode->nodeDataModel();
     PortIndex index = (portType == PortType::In) ? 
-                      _inPortIndex :
-                      _outPortIndex;
+                      m_inPortIndex :
+                      m_outPortIndex;
 
     return model->dataType(portType, index);
   }
@@ -373,14 +373,14 @@ dataType(PortType portType) const
     Node* validNode;
     PortIndex index = INVALID;
 
-    if ((validNode = _inNode))
+    if ((validNode = m_inNode))
     {
-      index    = _inPortIndex;
+      index    = m_inPortIndex;
       portType = PortType::In;
     }
-    else if ((validNode = _outNode))
+    else if ((validNode = m_outNode))
     {
-      index    = _outPortIndex;
+      index    = m_outPortIndex;
       portType = PortType::Out;
     }
 
@@ -408,14 +408,14 @@ void
 Connection::
 propagateData(std::shared_ptr<NodeData> nodeData) const
 {
-  if (_inNode)
+  if (m_inNode)
   {
     if (_converter)
     {
       nodeData = _converter(nodeData);
     }
 
-    _inNode->propagateData(nodeData, _inPortIndex);
+    m_inNode->propagateData(nodeData, m_inPortIndex);
   }
 }
 
