@@ -200,7 +200,9 @@ namespace Pipeline
 	{
 		if (m_rect)
 		{
-			if (m_renderQueueSize != m_stage->getRenderQueues().size())
+			bool enable = m_stage->isEnable();
+
+			if (m_renderQueueSize != m_stage->getRenderQueues().size() || m_enable!=enable)
 			{
 				m_renderQueueSize = m_stage->getRenderQueues().size();
 				m_height = 40.f + m_renderQueueSize * 56.f + 16.f;
@@ -211,14 +213,22 @@ namespace Pipeline
 				path.addRoundedRect(QRectF(-getHalfWidth(), 0.f, getWidth(), m_height), m_style.m_cornerRadius, m_style.m_cornerRadius);
 				m_rect->setPath(path);
 
-				QLinearGradient gradient(QPointF(0.0, -halfHeight), QPointF(0.0, halfHeight));
-				gradient.setColorAt(0.0, m_style.m_gradientColor0);
-				gradient.setColorAt(0.03, m_style.m_gradientColor1);
-				gradient.setColorAt(0.97, m_style.m_gradientColor2);
-				gradient.setColorAt(1.0, m_style.m_gradientColor3);
-				m_rect->setBrush(gradient);
+				if (enable)
+				{
+					QLinearGradient gradient(QPointF(0.0, -halfHeight), QPointF(0.0, halfHeight));
+					gradient.setColorAt(0.0, m_style.m_gradientColor0);
+					gradient.setColorAt(0.03, m_style.m_gradientColor1);
+					gradient.setColorAt(0.97, m_style.m_gradientColor2);
+					gradient.setColorAt(1.0, m_style.m_gradientColor3);
+					m_rect->setBrush(gradient);
+				}
+				else
+				{
+					m_rect->setBrush(QBrush(m_style.m_gradientColor1));
+				}
 
 				m_addAction->setPos(QPointF(-8.f, m_height - 24.f));
+				m_enable = enable;
 			}
 
 			m_text->setText(m_stage->getName().c_str());
@@ -226,7 +236,10 @@ namespace Pipeline
 			// update position
 			m_rect->setFlag(QGraphicsItem::ItemIsMovable, false);
 			m_rect->setPos(xPos * (getWidth() + getSpace()), 0.f);
-			m_rect->setPen(QPen(m_rect->isFocused() ? m_style.m_selectedBoundaryColor : m_style.m_normalBoundaryColor, m_style.m_penWidth));
+
+			// pen width
+			float penWidth = enable ? m_style.m_penWidth : m_style.m_penWidth - 1;
+			m_rect->setPen(QPen(m_rect->isFocused() ? m_style.m_selectedBoundaryColor : m_style.m_normalBoundaryColor, penWidth));
 		}
 
 		updateRenderQueues(xPos);

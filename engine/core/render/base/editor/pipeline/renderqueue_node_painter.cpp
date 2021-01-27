@@ -117,17 +117,19 @@ namespace Pipeline
 
 	void RenderQueueNodePainter::update(Echo::i32 xPos, Echo::i32 yPos)
 	{
+		bool enable = m_renderQueue->isEnable() && m_renderQueue->getStage()->isEnable();
+
 		float halfWidth = getWidth() * 0.5f;
 		float halfHeight = getHeight() * 0.5f;
 
 		float startYPos = getStartPos();
-		float penWidth = m_renderQueue->isEnable() ? m_style.m_penWidth : m_style.m_penWidth - 1;
+		float penWidth = enable ? m_style.m_penWidth : m_style.m_penWidth - 1;
 		m_rect->setPen(QPen(m_rect->isFocused() ? m_style.m_selectedBoundaryColor : (m_renderQueue->isEnable() ? m_style.m_normalBoundaryColor : m_style.m_disableBoundaryColor), penWidth));
 		m_rect->setPos(xPos * (StageNodePainter::getWidth() + StageNodePainter::getSpace()), startYPos + yPos * (getHeight()+getSpace()));
 
 		m_deleteButtton->setVisible(m_rect->isFocused());
 
-		if (m_renderQueue->isEnable())
+		if (enable)
 		{
 			QLinearGradient gradient(QPointF(0.0, -halfHeight), QPointF(0.0, halfHeight));
 			gradient.setColorAt(0.0, m_style.m_gradientColor0);
@@ -147,7 +149,7 @@ namespace Pipeline
 		QRectF textRect = m_text->sceneBoundingRect();
 		m_text->setPos((getWidth() - textRect.width()) * 0.5f - halfWidth, (getHeight() - textRect.height()) * 0.5f - halfHeight);
 
-		m_textDiableLine->setVisible(!m_renderQueue->isEnable());
+		m_textDiableLine->setVisible(!enable);
 		m_textDiableLine->setLine(-textRect.width() * 0.5f - 2.f, 0.f, textRect.width() * 0.5f + 2.f, 0.f);
 		m_textDiableLine->setPos(0.f, 0.f);
 	}

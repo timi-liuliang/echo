@@ -79,6 +79,7 @@ namespace Pipeline
 		QGraphicsRenderStageItem*	m_rect = nullptr;
 		QGraphicsPixmapItemCustom*  m_addAction = nullptr;
 		size_t						m_renderQueueSize = -1;
+		bool						m_enable = true;
 		float						m_height = 240;
 		QGraphicsSimpleTextItem*	m_text = nullptr;
 		QMenu*						m_addMenu = nullptr;
