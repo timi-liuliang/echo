@@ -21,10 +21,13 @@ namespace Echo
 	{
 		CLASS_BIND_METHOD(RenderStage, getName,		  DEF_METHOD("getName"));
 		CLASS_BIND_METHOD(RenderStage, setName,		  DEF_METHOD("setName"));
+		CLASS_BIND_METHOD(RenderStage, isEnable,	  DEF_METHOD("isEnable"));
+		CLASS_BIND_METHOD(RenderStage, setEnable,	  DEF_METHOD("setEnable"));
 		CLASS_BIND_METHOD(RenderStage, getFrameBuffer, DEF_METHOD("getFrameBuffer"));
 		CLASS_BIND_METHOD(RenderStage, setFrameBuffer, DEF_METHOD("setFrameBuffer"));
 
 		CLASS_REGISTER_PROPERTY(RenderStage, "Name", Variant::Type::String, "getName", "setName");
+		CLASS_REGISTER_PROPERTY(RenderStage, "Enable", Variant::Type::Bool, "isEnable", "setEnable");
 		CLASS_REGISTER_PROPERTY(RenderStage, "FrameBuffer", Variant::Type::Object, "getFrameBuffer", "setFrameBuffer");
 
 		CLASS_REGISTER_PROPERTY_HINT(RenderStage, "FrameBuffer", PropertyHintType::ResourceType, "FrameBufferOffScreen|FrameBufferWindow");
@@ -120,7 +123,7 @@ namespace Echo
 
 	void RenderStage::render()
 	{
-		if (m_frameBuffer)
+		if (m_enable && m_frameBuffer)
 		{
 			if (m_frameBuffer->begin(Renderer::BGCOLOR, 1.f, false, 0))
 			{

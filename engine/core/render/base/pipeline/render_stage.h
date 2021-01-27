@@ -19,6 +19,10 @@ namespace Echo
 		// name
 		void setName(const String& name) { m_name = name; }
 		const String& getName() const { return m_name; }
+		
+		// enable
+		void setEnable(bool enable) { m_enable = enable; }
+		bool isEnable() const { return m_enable; }
 
 		// frame buffer
 		FrameBuffer* getFrameBuffer() const { return m_frameBuffer; }
@@ -58,6 +62,7 @@ namespace Echo
 
 	protected:
 		String						m_name;
+		bool						m_enable = true;
 		RenderPipeline*				m_pipeline = nullptr;
 		vector<IRenderQueue*>::type	m_renderQueues;
 		FrameBufferPtr				m_frameBuffer;
