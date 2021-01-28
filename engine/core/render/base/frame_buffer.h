@@ -79,7 +79,6 @@ namespace Echo
         array<TextureRenderPtr, 9>  m_views;
 	};
 
-
     class FrameBufferWindow : public FrameBuffer
     {
         ECHO_RES(FrameBufferWindow, FrameBuffer, ".fbws", FrameBufferWindow::create, Res::load)

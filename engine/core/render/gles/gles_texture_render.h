@@ -15,6 +15,9 @@ namespace Echo
 		// getGlesTexture
 		GLuint getGlesTexture();
 
+		// capture
+		virtual void saveToPng(const String& savePathName) override;
+
 	protected:
 		GLESTextureRender(const String& name);
 		virtual ~GLESTextureRender();

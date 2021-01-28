@@ -36,6 +36,9 @@ namespace Echo
         // on resize
 		virtual void onSize(ui32 width, ui32 height);
 
+		// capture
+		virtual void saveToPng(const String& savePathName) {}
+
 	public:
 		// update texture by rect
 		virtual bool updateTexture2D(PixelFormat format, TexUsage usage, i32 width, i32 height, void* data, ui32 size) { return false; }
