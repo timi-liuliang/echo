@@ -70,8 +70,22 @@ namespace Pipeline
 			m_textDiableLine->setParentItem(m_rect);
 
 			// close
+			initTypeButton();
 			initDeleteButton();
 		}
+	}
+
+	void RenderQueueNodePainter::initTypeButton()
+	{
+		bool isImageFilter = dynamic_cast<Echo::ImageFilter*>(m_renderQueue) ? true : false;
+		Echo::String iconPath = isImageFilter ? "image_filter.png" : "render_queue.png";
+
+		QPixmap icon((Echo::Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/" + iconPath).c_str());
+		m_typeButton = new QGraphicsPixmapItemCustom();
+		m_typeButton->setPixmap(icon.scaled(QSize(16, 16)));
+		m_typeButton->setParentItem(m_rect);
+		m_typeButton->setPos(QPointF(- getWidth() * 0.5f + 12.f, -8.f));
+		m_graphicsScene->addItem(m_typeButton);
 	}
 
 	void RenderQueueNodePainter::initDeleteButton()
@@ -152,6 +166,8 @@ namespace Pipeline
 		m_textDiableLine->setVisible(!enable);
 		m_textDiableLine->setLine(-textRect.width() * 0.5f - 2.f, 0.f, textRect.width() * 0.5f + 2.f, 0.f);
 		m_textDiableLine->setPos(0.f, 0.f);
+
+		m_typeButton->setVisible(false);
 	}
 }
 

@@ -37,7 +37,8 @@ namespace Pipeline
 		static float getSpace() { return 16.f; }
 
 	protected:
-		// init delete action
+		// init icons
+		void initTypeButton();
 		void initDeleteButton();
 
 		// delete
@@ -69,6 +70,7 @@ namespace Pipeline
 		QGraphicsScene*						m_graphicsScene = nullptr;
 		QGraphicsRenderQueueItem*			m_rect = nullptr;
 		float								m_rectFinalWidth = 15;
+		QGraphicsPixmapItemCustom*			m_typeButton = nullptr;
 		QGraphicsSimpleTextItemCustom*		m_text = nullptr;
 		QGraphicsLineItem*					m_textDiableLine = nullptr;
 		QGraphicsPixmapItemCustom*			m_deleteButtton = nullptr;
