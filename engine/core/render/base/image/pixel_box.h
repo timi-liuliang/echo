@@ -4,36 +4,15 @@
 
 namespace Echo
 {
-	//////////////////////////////////////////////////////////////////////////
-
-	class PixelBox
+	struct PixelBox
 	{
-	public:
-		PixelBox();
-
-		/** Constructor providing width, height and depth. This constructor
-		assumes the pixel data is laid out consecutively in memory. (this
-		means row after row, slice after slice, with no space in between)
-		@param width	    Width of the region
-		@param height	    Height of the region
-		@param depth	    Depth of the region
-		@param pixelFormat	Format of this buffer
-		@param pixelData    Pointer to the actual data
-		*/
-		PixelBox(ui32 width, ui32 height, ui32 depth, PixelFormat pixFormat, void* pPixData = NULL);
-
-		~PixelBox();
-
-	public:
 		ui32			left;
 		ui32			top;
 		ui32			right;
 		ui32			bottom;
 		ui32			front;
 		ui32			back;
-
-		// The data pointer 
-		void* pData;
+		void*			data; 		// The data pointer 
 
 		// The pixel format 
 		PixelFormat		pixFmt;
@@ -50,6 +29,12 @@ namespace Echo
 		for compressed formats.
 		*/
 		ui32			slicePitch;
+
+	public:
+		PixelBox();
+		PixelBox(ui32 width, ui32 height, ui32 depth, PixelFormat pixFormat, void* pPixData = NULL);
+
+		~PixelBox();
 
 	public:
 		// Get the width of this box

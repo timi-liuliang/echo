@@ -21,7 +21,7 @@ namespace Echo
 		, bottom(height)
 		, front(0)
 		, back(depth)
-		, pData(pPixData)
+		, data(pPixData)
 		, pixFmt(pixFormat)
 	{
 		setConsecutive();
@@ -85,7 +85,7 @@ namespace Echo
 		// Notice how we do not propagate left/top/front from the incoming box, since
 		// the returned pointer is already offset
 		PixelBox rval(def.getWidth(), def.getHeight(), def.getDepth(), pixFmt,
-			((ui8*)pData) + ((def.left - left) * pixSize) + ((def.top - top) * rowPitch * pixSize) + ((def.front - front) * slicePitch * pixSize));
+			((ui8*)data) + ((def.left - left) * pixSize) + ((def.top - top) * rowPitch * pixSize) + ((def.front - front) * slicePitch * pixSize));
 
 		rval.rowPitch = rowPitch;
 		rval.slicePitch = slicePitch;
@@ -102,7 +102,7 @@ namespace Echo
 
 		Byte pixelSize = PixelUtil::GetPixelSize(pixFmt);
 		size_t pixelOffset = pixelSize * (z * slicePitch + y * rowPitch + x);
-		PixelUtil::UnpackColor(color, pixFmt, (Byte*)pData + pixelOffset);
+		PixelUtil::UnpackColor(color, pixFmt, (Byte*)data + pixelOffset);
 
 		return color;
 	}
@@ -111,6 +111,6 @@ namespace Echo
 	{
 		Byte pixelSize = PixelUtil::GetPixelSize(pixFmt);
 		size_t pixelOffset = pixelSize * (z * slicePitch + y * rowPitch + x);
-		PixelUtil::PackColor(color, pixFmt, (Byte*)pData + pixelOffset);
+		PixelUtil::PackColor(color, pixFmt, (Byte*)data + pixelOffset);
 	}
 }

@@ -18,6 +18,9 @@ namespace Echo
         // on resize
         virtual void onSize(ui32 width, ui32 height) override;
 
+		// read pixels
+		virtual bool readPixels(Attachment attach, PixelBox& pixels) override;
+
     public:
 		// clear render target
 		static void clear(bool clear_color, const Color& color, bool clear_depth, float depth_value, bool clear_stencil, ui8 stencil_value);
@@ -46,5 +49,8 @@ namespace Echo
 
 		// on resize
 		virtual void onSize(ui32 width, ui32 height) override;
+
+		// read pixels
+		virtual bool readPixels(Attachment attach, PixelBox& pixels) override;
 	};
 }

@@ -415,7 +415,7 @@ namespace Echo
 		PixelBox destBox( m_width, m_height, 1, targetFormat);
 		if (targetFormat != m_format)
 		{
-			destBox.pData = ECHO_ALLOC_T(Byte, destBox.getConsecutiveSize());
+			destBox.data = ECHO_ALLOC_T(Byte, destBox.getConsecutiveSize());
 
 			PixelBox srcBox(m_width, m_height, 1, m_format, m_data);
 			PixelUtil::BulkPixelConversion(srcBox, destBox);
@@ -425,7 +425,7 @@ namespace Echo
 			m_format = targetFormat;
 			m_pixelSize = PixelUtil::GetPixelSize(m_format);
 			m_size = PixelUtil::GetMemorySize(m_width, m_height, 1, m_format);
-			m_data = static_cast<Byte*>(destBox.pData);
+			m_data = static_cast<Byte*>(destBox.data);
 		}
 
 		return true;
@@ -513,7 +513,7 @@ namespace Echo
 					// Allocate temporary buffer of destination size in source format 
 					temp = PixelBox(dst.getWidth(), dst.getHeight(), dst.getDepth(), src.pixFmt);
 					buf.allocate(temp.getConsecutiveSize());
-					temp.pData = buf.getData();
+					temp.data = buf.getData();
 				}
 				// super-optimized: no conversion
 				switch (PixelUtil::GetPixelSize(src.pixFmt)) 
@@ -534,7 +534,7 @@ namespace Echo
 					}
 				}
 
-				if(temp.pData != dst.pData)
+				if(temp.data != dst.data)
 				{
 					// Blit temp buffer
 					PixelUtil::BulkPixelConversion(temp, dst);
@@ -570,7 +570,7 @@ namespace Echo
 							// Allocate temp buffer of destination size in source format 
 							temp = PixelBox(dst.getWidth(), dst.getHeight(), dst.getDepth(), src.pixFmt);
 							buf.allocate(temp.getConsecutiveSize());
-							temp.pData = buf.getData();
+							temp.data = buf.getData();
 						}
 						// super-optimized: byte-oriented math, no conversion
 						switch (PixelUtil::GetPixelSize(src.pixFmt)) 
@@ -586,7 +586,7 @@ namespace Echo
 								return false;
 							}
 						}
-						if(temp.pData != dst.pData)
+						if(temp.data != dst.data)
 						{
 							// Blit temp buffer
 							PixelUtil::BulkPixelConversion(temp, dst);

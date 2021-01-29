@@ -395,20 +395,20 @@ namespace Echo
 		{
 			conversionRequired = true;
 			// Allocate memory
-			convBox.pData = ECHO_ALLOC_T(Byte, convBox.getConsecutiveSize());
+			convBox.data = ECHO_ALLOC_T(Byte, convBox.getConsecutiveSize());
 			// perform conversion and reassign source
 
 			Buffer memBuff(inBuff);
 			PixelBox newSrc(imgInfo.width, imgInfo.height, 1, imgInfo.pixFmt, memBuff.getData());
 			PixelUtil::BulkPixelConversion(newSrc, convBox);
-			pSrcData = static_cast<Byte*>(convBox.pData);
+			pSrcData = static_cast<Byte*>(convBox.data);
 		}
 
 		FIBITMAP *pBitmap = FreeImage_AllocateT(fiImgType, static_cast<int>(imgInfo.width), static_cast<int>(imgInfo.height), bpp);
 		if(!pBitmap)
 		{
 			if (conversionRequired)
-				ECHO_FREE(convBox.pData);
+				ECHO_FREE(convBox.data);
 
 			EchoLogError("FreeImage_AllocateT failed - possibly out of memory.");
 			EchoAssertX(false, "FreeImage_AllocateT failed - possibly out of memory.");
@@ -445,7 +445,7 @@ namespace Echo
 		if (conversionRequired)
 		{
 			// delete temporary conversion area
-			ECHO_FREE(convBox.pData);
+			ECHO_FREE(convBox.data);
 		}
 
 		//ui32 buffSize = srcPitch * imgInfo.height;

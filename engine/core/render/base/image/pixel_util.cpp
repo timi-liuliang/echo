@@ -649,7 +649,7 @@ namespace Echo
 		{
 			if (src.pixFmt == dst.pixFmt)
 			{
-				memcpy(dst.pData, src.pData, src.getConsecutiveSize());
+				memcpy(dst.data, src.data, src.getConsecutiveSize());
 				return;
 			}
 			else
@@ -665,14 +665,14 @@ namespace Echo
 			// Everything consecutive?
 			if (src.isConsecutive() && dst.isConsecutive())
 			{
-				memcpy(dst.pData, src.pData, src.getConsecutiveSize());
+				memcpy(dst.data, src.data, src.getConsecutiveSize());
 				return;
 			}
 
 			const ui32 srcPixelSize = PixelUtil::GetPixelSize(src.pixFmt);
 			const ui32 dstPixelSize = PixelUtil::GetPixelSize(dst.pixFmt);
-			ui8* srcptr = static_cast<ui8*>(src.pData) + (src.left + src.top * src.rowPitch + src.front * src.slicePitch) * srcPixelSize;
-			ui8* dstptr = static_cast<ui8*>(dst.pData) + (dst.left + dst.top * dst.rowPitch + dst.front * dst.slicePitch) * dstPixelSize;
+			ui8* srcptr = static_cast<ui8*>(src.data) + (src.left + src.top * src.rowPitch + src.front * src.slicePitch) * srcPixelSize;
+			ui8* dstptr = static_cast<ui8*>(dst.data) + (dst.left + dst.top * dst.rowPitch + dst.front * dst.slicePitch) * dstPixelSize;
 
 			// Calculate pitches+skips in bytes
 			const ui32 srcRowPitchBytes = src.rowPitch * srcPixelSize;
@@ -710,8 +710,8 @@ namespace Echo
 
 		const ui32 srcPixelSize = PixelUtil::GetPixelSize(src.pixFmt);
 		const ui32 dstPixelSize = PixelUtil::GetPixelSize(dst.pixFmt);
-		ui8* srcptr = static_cast<ui8*>(src.pData) + (src.left + src.top * src.rowPitch + src.front * src.slicePitch) * srcPixelSize;
-		ui8* dstptr = static_cast<ui8*>(dst.pData) + (dst.left + dst.top * dst.rowPitch + dst.front * dst.slicePitch) * dstPixelSize;
+		ui8* srcptr = static_cast<ui8*>(src.data) + (src.left + src.top * src.rowPitch + src.front * src.slicePitch) * srcPixelSize;
+		ui8* dstptr = static_cast<ui8*>(dst.data) + (dst.left + dst.top * dst.rowPitch + dst.front * dst.slicePitch) * dstPixelSize;
 
 		// Calculate pitches+skips in bytes
 		const ui32 srcRowSkipBytes = src.getRowSkip() * srcPixelSize;

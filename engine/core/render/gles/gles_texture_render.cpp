@@ -113,9 +113,4 @@ namespace Echo
 
 		return m_glesTexture; 
 	}
-
-	void GLESTextureRender::saveToPng(const String& savePathName)
-	{
-
-	}
 }

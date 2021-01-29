@@ -22,8 +22,8 @@ namespace Echo
 			// assert(src.format == dst.format);
 
 			// srcdata stays at beginning, pdst is a moving pointer
-			Byte* srcdata = (Byte*)src.pData;
-			Byte* pdst = (Byte*)dst.pData;
+			Byte* srcdata = (Byte*)src.data;
+			Byte* pdst = (Byte*)dst.data;
 
 			// sx_48,sy_48,sz_48 represent current position in source
 			// using 16/48-bit fixed precision, incremented by steps
@@ -66,8 +66,8 @@ namespace Echo
 			ui32 dstelemsize = PixelUtil::GetPixelSize(dst.pixFmt);
 
 			// srcdata stays at beginning, pdst is a moving pointer
-			Byte* srcdata = (Byte*)src.pData;
-			Byte* pdst = (Byte*)dst.pData;
+			Byte* srcdata = (Byte*)src.data;
+			Byte* pdst = (Byte*)dst.data;
 
 			// sx_48,sy_48,sz_48 represent current position in source
 			// using 16/48-bit fixed precision, incremented by steps
@@ -156,8 +156,8 @@ namespace Echo
 			// assert(dstchannels == 3 || dstchannels == 4);
 
 			// srcdata stays at beginning, pdst is a moving pointer
-			float* srcdata = (float*)src.pData;
-			float* pdst = (float*)dst.pData;
+			float* srcdata = (float*)src.data;
+			float* pdst = (float*)dst.data;
 
 			// sx_48,sy_48,sz_48 represent current position in source
 			// using 16/48-bit fixed precision, incremented by steps
@@ -267,8 +267,8 @@ namespace Echo
 			}
 
 			// srcdata stays at beginning of slice, pdst is a moving pointer
-			Byte* srcdata = (Byte*)src.pData;
-			Byte* pdst = (Byte*)dst.pData;
+			Byte* srcdata = (Byte*)src.data;
+			Byte* pdst = (Byte*)dst.data;
 
 			// sx_48,sy_48 represent current position in source
 			// using 16/48-bit fixed precision, incremented by steps

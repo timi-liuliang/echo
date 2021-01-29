@@ -133,6 +133,11 @@ namespace Echo
         }
 	}
 
+	bool GLESFrameBufferOffScreen::readPixels(Attachment attach, PixelBox& pixels)
+	{
+		return false;
+	}
+
 	GLESFramebufferWindow::GLESFramebufferWindow()
 		: FrameBufferWindow()
 	{
@@ -164,5 +169,10 @@ namespace Echo
 
 	void GLESFramebufferWindow::onSize(ui32 width, ui32 height)
 	{
+	}
+
+	bool GLESFramebufferWindow::readPixels(Attachment attach, PixelBox& pixels)
+	{
+		return false;
 	}
 }

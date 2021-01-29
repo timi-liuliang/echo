@@ -98,8 +98,8 @@ namespace Echo
 		static const int ID = U::ID;
 		static void Conversion(const PixelBox &src, const PixelBox &dst)
 		{
-			typename U::SrcType *srcptr = static_cast<typename U::SrcType*>(src.pData) + (src.left + src.top * src.rowPitch + src.front * src.slicePitch);
-			typename U::DstType *dstptr = static_cast<typename U::DstType*>(dst.pData) + (dst.left + dst.top * dst.rowPitch + dst.front * dst.slicePitch);
+			typename U::SrcType *srcptr = static_cast<typename U::SrcType*>(src.data) + (src.left + src.top * src.rowPitch + src.front * src.slicePitch);
+			typename U::DstType *dstptr = static_cast<typename U::DstType*>(dst.data) + (dst.left + dst.top * dst.rowPitch + dst.front * dst.slicePitch);
 
 			const ui32 srcSliceSkip = src.getSliceSkip();
 			const ui32 dstSliceSkip = dst.getSliceSkip();

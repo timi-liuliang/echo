@@ -12,6 +12,21 @@ namespace Echo
     {
         ECHO_CLASS(FrameBuffer, Res)
 
+	public:
+		// Type
+		enum Attachment : ui8
+		{
+			Color0 = 0,
+			Color1,
+			Color2,
+			Color3,
+			Color4,
+			Color5,
+			Color6,
+			Color7,
+			DepthStencil
+		};
+
     public:
 		// begin|end render
 		virtual bool begin(const Color& bgColor, float depthValue, bool isClearStencil, ui8 stencilValue) { return false; }
@@ -29,6 +44,9 @@ namespace Echo
 		bool isClearDepth() const { return m_isClearDepth; }
 		void setClearDepth(bool isClearDepth) { m_isClearDepth = isClearDepth; }
 
+		// read pixels
+		virtual bool readPixels(Attachment attach, PixelBox& pixels) { return false; }
+
     protected:
 		bool	m_isClearColor = true;
 		bool	m_isClearDepth = true;
@@ -38,21 +56,6 @@ namespace Echo
 	class FrameBufferOffScreen : public FrameBuffer
 	{
         ECHO_RES(FrameBufferOffScreen, FrameBuffer, ".fbos", FrameBufferOffScreen::create, Res::load)
-
-	public:
-        // Type
-        enum Attachment : ui8
-        {
-            Color0 = 0,
-            Color1,
-            Color2,
-            Color3,
-            Color4,
-            Color5,
-            Color6,
-            Color7,
-            DepthStencil
-        };
 
 	public:
         FrameBufferOffScreen();
