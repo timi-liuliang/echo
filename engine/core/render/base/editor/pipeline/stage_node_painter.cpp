@@ -13,6 +13,8 @@ namespace Pipeline
 		m_graphicsView = view;
 		m_graphicsScene = scene;
 
+		m_stage->onRenderBegin.connectClassMethod(this, Echo::createMethodBind(&StageNodePainter::onCaptureFrame));
+
 		if (!m_rect)
 		{
 			initBoundary();
@@ -67,6 +69,7 @@ namespace Pipeline
 		m_rect->setMousePressEventCb([this](QGraphicsItem* item)
 		{
 			EditorApi.showObjectProperty(m_stage);
+			m_needCaptureFrame = true;
 		});
 
 		m_rect->setKeyPressEventCb([this](QKeyEvent* event)
@@ -244,6 +247,28 @@ namespace Pipeline
 
 		updateRenderQueues(xPos);
 		updateRenderQueueAddButtons(xPos);
+	}
+
+	void StageNodePainter::onCaptureFrame()
+	{
+		if (m_needCaptureFrame)
+		{
+			if (m_stage)
+			{
+				Echo::FrameBuffer* fb = m_stage->getFrameBuffer();
+				if (fb)
+				{
+					Echo::FrameBuffer::Pixels pixels;
+					if (fb->readPixels(Echo::FrameBuffer::Attachment::Color0, pixels))
+					{
+						Echo::Image image(pixels.m_data.data(), pixels.m_width, pixels.m_height, 1, pixels.m_format);
+						image.saveToFile("D:/test1.png");
+					}
+				}
+			}
+
+			m_needCaptureFrame = false;
+		}
 	}
 }
 

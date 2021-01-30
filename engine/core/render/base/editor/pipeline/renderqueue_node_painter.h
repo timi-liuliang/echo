@@ -36,6 +36,10 @@ namespace Pipeline
 		static float getHeight(){ return 40.f; }
 		static float getSpace() { return 16.f; }
 
+	public:
+		// on capture
+		void onCaptureFrame();
+
 	protected:
 		// init icons
 		void initTypeButton();
@@ -74,6 +78,7 @@ namespace Pipeline
 		QGraphicsSimpleTextItemCustom*		m_text = nullptr;
 		QGraphicsLineItem*					m_textDiableLine = nullptr;
 		QGraphicsPixmapItemCustom*			m_deleteButtton = nullptr;
+		bool								m_needCaptureFrame = false;
 	};
 	typedef Echo::vector<RenderQueueNodePainter*>::type RenderQueueNodePainters;
 }

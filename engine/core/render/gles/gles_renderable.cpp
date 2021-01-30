@@ -184,7 +184,7 @@ namespace Echo
 		{
 			stream->m_vertDeclaration[i].m_attribute = gles2Program->getAtrribLocation(stream->m_vertElements[i].m_semantic);
 			stream->m_vertDeclaration[i].count = PixelUtil::GetChannelCount(stream->m_vertElements[i].m_pixFmt);
-			stream->m_vertDeclaration[i].type = GLES2Mapping::MapDataType(stream->m_vertElements[i].m_pixFmt);
+			stream->m_vertDeclaration[i].type = GLESMapping::MapDataType(stream->m_vertElements[i].m_pixFmt);
 			stream->m_vertDeclaration[i].bNormalize = PixelUtil::IsNormalized(stream->m_vertElements[i].m_pixFmt);
 			stream->m_vertDeclaration[i].elementOffset = elmOffset;
 			elmOffset += PixelUtil::GetPixelSize(stream->m_vertElements[i].m_pixFmt);
@@ -208,7 +208,7 @@ namespace Echo
 
 				if (!found)
 				{
-					String errorInfo = StringUtil::Format("Vertex Attribute [%s] name is NOT in Vertex Stream", GLES2Mapping::MapVertexSemanticString((VertexSemantic)i).c_str());
+					String errorInfo = StringUtil::Format("Vertex Attribute [%s] name is NOT in Vertex Stream", GLESMapping::MapVertexSemanticString((VertexSemantic)i).c_str());
 					EchoLogFatal(errorInfo.c_str());
 					EchoAssertX(false, errorInfo.c_str());
 				}

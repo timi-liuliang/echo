@@ -63,6 +63,10 @@ namespace Pipeline
 		// delete
 		void onDeleteThisRenderStage();
 
+	public:
+		// on capture
+		void onCaptureFrame();
+
 	private:
 		// boundary
 		void initBoundary();
@@ -85,6 +89,7 @@ namespace Pipeline
 		QMenu*						m_addMenu = nullptr;
 		RenderQueueNodePainters		m_renderQueueNodePainters;
 		RenderQueueAddButtons		m_renderQueueAddButtons;
+		bool						m_needCaptureFrame = false;
 	};
 	typedef Echo::vector<StageNodePainter*>::type StageNodePainters;
 }

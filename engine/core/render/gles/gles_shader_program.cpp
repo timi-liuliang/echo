@@ -106,7 +106,7 @@ namespace Echo
 			OGLESDebug(glGetActiveUniform(m_glesProgram, i, 512, &uniformLength, &uniformSize, &uniformType, unifromName));
 
 			String origUniformName = StringUtil::Replace(unifromName, "[0]", "");
-			ShaderParamType uniformTypeConvert = GLES2Mapping::MapUniformType(uniformType);
+			ShaderParamType uniformTypeConvert = GLESMapping::MapUniformType(uniformType);
 
 			Uniform* desc = nullptr; 
 			if (uniformTypeConvert == SPT_TEXTURE)
@@ -128,7 +128,7 @@ namespace Echo
 
 		for (ui32 i = 0; i < VS_MAX; ++i)
 		{
-			String strName = GLES2Mapping::MapVertexSemanticString((VertexSemantic)i);
+			String strName = GLESMapping::MapVertexSemanticString((VertexSemantic)i);
 			GLint loc = OGLESDebug(glGetAttribLocation(m_glesProgram, strName.c_str()));
 			if (loc != -1)
 			{

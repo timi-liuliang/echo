@@ -5,7 +5,7 @@
 
 namespace Echo
 {
-	GLenum GLES2Mapping::MapStencilOperation(DepthStencilState::StencilOperation op)
+	GLenum GLESMapping::MapStencilOperation(DepthStencilState::StencilOperation op)
 	{
 		switch(op)
 		{
@@ -25,7 +25,7 @@ namespace Echo
 		}
 	}
 
-	GLenum GLES2Mapping::MapBlendOperation(BlendState::BlendOperation op)
+	GLenum GLESMapping::MapBlendOperation(BlendState::BlendOperation op)
 	{
 		switch(op)
 		{
@@ -42,7 +42,7 @@ namespace Echo
 		}
 	}
 
-	GLenum GLES2Mapping::MapBlendFactor(BlendState::BlendFactor factor)
+	GLenum GLESMapping::MapBlendFactor(BlendState::BlendFactor factor)
 	{
 		switch(factor)
 		{
@@ -65,7 +65,7 @@ namespace Echo
 		}
 	}
 
-	GLint GLES2Mapping::MapAddressMode(SamplerState::AddressMode mode)
+	GLint GLESMapping::MapAddressMode(SamplerState::AddressMode mode)
 	{
 		switch(mode)
 		{

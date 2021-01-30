@@ -181,7 +181,7 @@ namespace Echo
 	{
 		if (texture)
 		{
-			GLenum glTarget = GLES2Mapping::MapTextureType(texture->getType());
+			GLenum glTarget = GLESMapping::MapTextureType(texture->getType());
 			bindTexture(index, glTarget, getGlesTexture(texture), needUpdate);
 		}
 		else
@@ -254,7 +254,7 @@ namespace Echo
 				shaderProgram->bindRenderable(renderable);
 
 				// set the type of primitive that should be rendered from this vertex buffer
-				GLenum glTopologyType = GLES2Mapping::MapPrimitiveTopology(Mesh::TT_LINELIST);
+				GLenum glTopologyType = GLESMapping::MapPrimitiveTopology(Mesh::TT_LINELIST);
 
 				//set the index buffer to active in the input assembler
 				if (m_wireFrameIndexBuffer)
@@ -303,7 +303,7 @@ namespace Echo
 			MeshPtr mesh = renderable->getMesh();
 
 			// set the type of primitive that should be rendered from this vertex buffer
-			GLenum glTopologyType = GLES2Mapping::MapPrimitiveTopology(mesh->getTopologyType());
+			GLenum glTopologyType = GLESMapping::MapPrimitiveTopology(mesh->getTopologyType());
 
 			//set the index buffer to active in the input assembler
 			GPUBuffer* pIdxBuff = mesh->getIndexBuffer();

@@ -19,7 +19,7 @@ namespace Echo
         virtual void onSize(ui32 width, ui32 height) override;
 
 		// read pixels
-		virtual bool readPixels(Attachment attach, PixelBox& pixels) override;
+		virtual bool readPixels(Attachment attach, Pixels& pixels) override;
 
     public:
 		// clear render target
@@ -51,6 +51,6 @@ namespace Echo
 		virtual void onSize(ui32 width, ui32 height) override;
 
 		// read pixels
-		virtual bool readPixels(Attachment attach, PixelBox& pixels) override;
+		virtual bool readPixels(Attachment attach, Pixels& pixels) override;
 	};
 }

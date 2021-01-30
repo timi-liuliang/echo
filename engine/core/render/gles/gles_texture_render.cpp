@@ -60,11 +60,11 @@ namespace Echo
 		OGLESDebug(glBindTexture(GL_TEXTURE_2D, m_glesTexture));
 		OGLESDebug(glPixelStorei(GL_UNPACK_ALIGNMENT, 1));
 
-		GLenum internalFmt = GLES2Mapping::MapInternalFormat(pixFmt);
+		GLenum internalFmt = GLESMapping::MapInternalFormat(pixFmt);
 		if (!PixelUtil::IsCompressed(pixFmt))
 		{
-			GLenum glFmt = GLES2Mapping::MapFormat(pixFmt);
-			GLenum glType = GLES2Mapping::MapDataType(pixFmt);
+			GLenum glFmt = GLESMapping::MapFormat(pixFmt);
+			GLenum glType = GLESMapping::MapDataType(pixFmt);
 			OGLESDebug(glTexImage2D(GL_TEXTURE_2D, level, internalFmt, width, height, 0, glFmt, glType, buff.getData()));
 		}
 

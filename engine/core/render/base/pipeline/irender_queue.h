@@ -30,6 +30,11 @@ namespace Echo
 		// render
 		virtual void render() {}
 
+	public:
+		// Modified signal
+		DECLARE_SIGNAL(Signal0, onRenderBegin)
+		DECLARE_SIGNAL(Signal0, onRenderEnd)
+
 	protected:
 		String			m_name;
 		bool			m_enable = true;

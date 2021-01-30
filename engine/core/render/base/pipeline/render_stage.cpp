@@ -127,11 +127,15 @@ namespace Echo
 		{
 			if (m_frameBuffer->begin(Renderer::BGCOLOR, 1.f, false, 0))
 			{
-				for (IRenderQueue* iqueue : m_renderQueues)
+				onRenderBegin();
 				{
-					if (iqueue->isEnable())
-						iqueue->render();
+					for (IRenderQueue* iqueue : m_renderQueues)
+					{
+						if (iqueue->isEnable())
+							iqueue->render();
+					}
 				}
+				onRenderEnd();
 
 				m_frameBuffer->end();
 			}

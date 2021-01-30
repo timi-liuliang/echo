@@ -17,7 +17,7 @@ namespace Echo
 			default:			EchoLogError("Unknown GPUBufferType."); break;
 		}
 
-		m_glUsage = GLES2Mapping::MapGPUBufferUsage(m_usage);
+		m_glUsage = GLESMapping::MapGPUBufferUsage(m_usage);
 
 		// Generate an ID for the buffer.
 		OGLESDebug(glGenBuffers(1, &m_hVBO));

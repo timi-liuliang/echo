@@ -55,10 +55,14 @@ namespace Echo
 		void removeRenderQueue(IRenderQueue* renderQueue);
 		void deleteRenderQueue(IRenderQueue* renderQueue);
 
-	public:
 		// load|save
 		void parseXml(void* pugiNode);
 		void saveXml(void* pugiNode);
+
+	public:
+		// Modified signal
+		DECLARE_SIGNAL(Signal0, onRenderBegin)
+		DECLARE_SIGNAL(Signal0, onRenderEnd)
 
 	protected:
 		String						m_name;

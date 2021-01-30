@@ -136,12 +136,12 @@ namespace Echo
 
 	void GLESBlendState::create()
 	{
-		m_glBlendOP = GLES2Mapping::MapBlendOperation(m_desc.blendOP);
-		m_glAlphaBlendOP = GLES2Mapping::MapBlendOperation(m_desc.alphaBlendOP);
-		m_glSrcBlend = GLES2Mapping::MapBlendFactor(m_desc.srcBlend);
-		m_glDstBlend = GLES2Mapping::MapBlendFactor(m_desc.dstBlend);
-		m_glSrcAlphaBlend = GLES2Mapping::MapBlendFactor(m_desc.srcAlphaBlend);
-		m_glDstAlphaBlend = GLES2Mapping::MapBlendFactor(m_desc.dstAlphaBlend);
+		m_glBlendOP = GLESMapping::MapBlendOperation(m_desc.blendOP);
+		m_glAlphaBlendOP = GLESMapping::MapBlendOperation(m_desc.alphaBlendOP);
+		m_glSrcBlend = GLESMapping::MapBlendFactor(m_desc.srcBlend);
+		m_glDstBlend = GLESMapping::MapBlendFactor(m_desc.dstBlend);
+		m_glSrcAlphaBlend = GLESMapping::MapBlendFactor(m_desc.srcAlphaBlend);
+		m_glDstAlphaBlend = GLESMapping::MapBlendFactor(m_desc.dstAlphaBlend);
 		m_glRedMask = (m_desc.colorWriteMask & CMASK_RED) != 0;
 		m_glGreenMask = (m_desc.colorWriteMask & CMASK_GREEN) != 0;
 		m_glBlueMask = (m_desc.colorWriteMask & CMASK_BLUE) != 0;
@@ -327,15 +327,15 @@ namespace Echo
 	void GLESDepthStencilState::create()
 	{
 		m_glDepthMask = m_desc.bWriteDepth? GL_TRUE : GL_FALSE;
-		m_glDepthFunc = GLES2Mapping::MapComparisonFunc(m_desc.depthFunc);
-		m_glFrontStencilFunc = GLES2Mapping::MapComparisonFunc(m_desc.frontStencilFunc);
-		m_glFrontStencilFailOP = GLES2Mapping::MapStencilOperation(m_desc.frontStencilFailOP);
-		m_glFrontStencilDepthFailOP = GLES2Mapping::MapStencilOperation(m_desc.frontStencilDepthFailOP);
-		m_glFrontStencilPassOP = GLES2Mapping::MapStencilOperation(m_desc.frontStencilPassOP);
-		m_glBackStencilFunc = GLES2Mapping::MapComparisonFunc(m_desc.backStencilFunc);
-		m_glBackStencilFailOP = GLES2Mapping::MapStencilOperation(m_desc.backStencilFailOP);
-		m_glBackStencilDepthFailOP = GLES2Mapping::MapStencilOperation(m_desc.backStencilDepthFailOP);
-		m_glBackStencilPassOP = GLES2Mapping::MapStencilOperation(m_desc.backStencilPassOP);
+		m_glDepthFunc = GLESMapping::MapComparisonFunc(m_desc.depthFunc);
+		m_glFrontStencilFunc = GLESMapping::MapComparisonFunc(m_desc.frontStencilFunc);
+		m_glFrontStencilFailOP = GLESMapping::MapStencilOperation(m_desc.frontStencilFailOP);
+		m_glFrontStencilDepthFailOP = GLESMapping::MapStencilOperation(m_desc.frontStencilDepthFailOP);
+		m_glFrontStencilPassOP = GLESMapping::MapStencilOperation(m_desc.frontStencilPassOP);
+		m_glBackStencilFunc = GLESMapping::MapComparisonFunc(m_desc.backStencilFunc);
+		m_glBackStencilFailOP = GLESMapping::MapStencilOperation(m_desc.backStencilFailOP);
+		m_glBackStencilDepthFailOP = GLESMapping::MapStencilOperation(m_desc.backStencilDepthFailOP);
+		m_glBackStencilPassOP = GLESMapping::MapStencilOperation(m_desc.backStencilPassOP);
 	}
 
 	GLESRasterizerState::GLESRasterizerState(const RasterizerDesc& desc)
@@ -568,9 +568,9 @@ namespace Echo
 		else
 			m_glMagFilter = GL_NEAREST;
 
-		m_glAddrModeU = GLES2Mapping::MapAddressMode(m_desc.addrUMode);
-		m_glAddrModeV = GLES2Mapping::MapAddressMode(m_desc.addrVMode);
-		m_glAddrModeW = GLES2Mapping::MapAddressMode(m_desc.addrWMode);
+		m_glAddrModeU = GLESMapping::MapAddressMode(m_desc.addrUMode);
+		m_glAddrModeV = GLESMapping::MapAddressMode(m_desc.addrVMode);
+		m_glAddrModeW = GLESMapping::MapAddressMode(m_desc.addrWMode);
 	}
 
 	GLint GLESSamplerState::getGLMinFilter() const

@@ -133,7 +133,7 @@ namespace Echo
         }
 	}
 
-	bool GLESFrameBufferOffScreen::readPixels(Attachment attach, PixelBox& pixels)
+	bool GLESFrameBufferOffScreen::readPixels(Attachment attach, Pixels& pixels)
 	{
 		return false;
 	}
@@ -171,8 +171,23 @@ namespace Echo
 	{
 	}
 
-	bool GLESFramebufferWindow::readPixels(Attachment attach, PixelBox& pixels)
+	bool GLESFramebufferWindow::readPixels(Attachment attach, Pixels& pixels)
 	{
+		if (attach == Attachment::Color0)
+		{
+			pixels.set(Renderer::instance()->getWindowWidth(), Renderer::instance()->getWindowHeight(), PixelFormat::PF_RGBA8_UNORM);
+			OGLESDebug(glReadPixels(0, 0, pixels.m_width, pixels.m_height, GL_RGBA, GL_UNSIGNED_BYTE, pixels.m_data.data()));
+
+			return true;
+		}
+		else if (attach == Attachment::DepthStencil)
+		{
+			pixels.set(Renderer::instance()->getWindowWidth(), Renderer::instance()->getWindowHeight(), PixelFormat::PF_RGBA8_UNORM);
+			OGLESDebug(glReadPixels(0, 0, pixels.m_width, pixels.m_height, GL_UNSIGNED_INT_24_8, GL_UNSIGNED_BYTE, pixels.m_data.data()));
+
+			return true;
+		}
+
 		return false;
 	}
 }

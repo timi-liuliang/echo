@@ -13,6 +13,8 @@ namespace Pipeline
 		m_graphicsView = view;
 		m_graphicsScene = scene;
 
+		m_renderQueue->onRenderEnd.connectClassMethod(this, Echo::createMethodBind(&RenderQueueNodePainter::onCaptureFrame));
+
 		if (!m_rect)
 		{
 			float halfWidth = getWidth() * 0.5f;
@@ -40,6 +42,7 @@ namespace Pipeline
 			m_rect->setMousePressEventCb([this](QGraphicsItem* item)
 			{
 				EditorApi.showObjectProperty(m_renderQueue);
+				m_needCaptureFrame = true;
 			});
 
 			m_rect->setKeyPressEventCb([this](QKeyEvent* event) 
@@ -57,6 +60,7 @@ namespace Pipeline
 			m_text->setMousePressEventCb([this](QGraphicsSimpleTextItem* item)
 			{
 				EditorApi.showObjectProperty(m_renderQueue);
+				m_needCaptureFrame = true;
 			});
 
 			m_text->setKeyPressEventCb([this](QKeyEvent* event)
@@ -119,6 +123,8 @@ namespace Pipeline
 
 	void RenderQueueNodePainter::reset()
 	{
+		m_renderQueue->onRenderEnd.disconnectAll();
+
 		if (m_rect)
 			m_graphicsScene->removeItem(m_rect);
 
@@ -168,6 +174,29 @@ namespace Pipeline
 		m_textDiableLine->setPos(0.f, 0.f);
 
 		m_typeButton->setVisible(false);
+	}
+
+	void RenderQueueNodePainter::onCaptureFrame()
+	{
+		if (m_needCaptureFrame)
+		{
+			Echo::RenderStage* stage = m_renderQueue->getStage();
+			if (stage)
+			{
+				Echo::FrameBuffer* fb = stage->getFrameBuffer();
+				if (fb)
+				{
+					Echo::FrameBuffer::Pixels pixels;
+					if (fb->readPixels(Echo::FrameBuffer::Attachment::Color0, pixels))
+					{
+						Echo::Image image(pixels.m_data.data(), pixels.m_width, pixels.m_height, 1, pixels.m_format);
+						image.saveToFile("D:/test.png");
+					}
+				}
+			}
+
+			m_needCaptureFrame = false;
+		}
 	}
 }
 

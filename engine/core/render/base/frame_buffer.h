@@ -27,6 +27,23 @@ namespace Echo
 			DepthStencil
 		};
 
+		// Pixels
+		struct Pixels
+		{
+			i32					m_width = 0;
+			i32					m_height = 0;
+			PixelFormat			m_format = PixelFormat::PF_UNKNOWN;
+			vector<Byte>::type	m_data;
+
+			void set(i32 width, i32 height, PixelFormat format)
+			{
+				m_width = width;
+				m_height = height;
+				m_format = format;
+				m_data.resize(PixelUtil::GetPixelSize(m_format) * m_width * m_height);
+			}
+		};
+
     public:
 		// begin|end render
 		virtual bool begin(const Color& bgColor, float depthValue, bool isClearStencil, ui8 stencilValue) { return false; }
@@ -45,7 +62,7 @@ namespace Echo
 		void setClearDepth(bool isClearDepth) { m_isClearDepth = isClearDepth; }
 
 		// read pixels
-		virtual bool readPixels(Attachment attach, PixelBox& pixels) { return false; }
+		virtual bool readPixels(Attachment attach, Pixels& pixels) { return false; }
 
     protected:
 		bool	m_isClearColor = true;

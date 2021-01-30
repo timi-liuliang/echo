@@ -30,13 +30,10 @@ namespace Echo
 		*/
 		ui32			slicePitch;
 
-	public:
 		PixelBox();
 		PixelBox(ui32 width, ui32 height, ui32 depth, PixelFormat pixFormat, void* pPixData = NULL);
-
 		~PixelBox();
 
-	public:
 		// Get the width of this box
 		inline ui32			getWidth() const { return right - left; }
 		// Get the height of this box

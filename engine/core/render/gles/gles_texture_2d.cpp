@@ -56,8 +56,8 @@ namespace Echo
 
 		OGLESDebug(glBindTexture(GL_TEXTURE_2D, m_glesTexture));
 
-		GLenum glFmt = GLES2Mapping::MapFormat(m_pixFmt);
-		GLenum glType = GLES2Mapping::MapDataType(m_pixFmt);
+		GLenum glFmt = GLESMapping::MapFormat(m_pixFmt);
+		GLenum glType = GLESMapping::MapDataType(m_pixFmt);
 		OGLESDebug(glTexSubImage2D(GL_TEXTURE_2D, level, (GLint)rect.left, (GLint)rect.top, (GLsizei)rect.getWidth(), (GLsizei)rect.getHeight(), glFmt, glType, pData));
 
 		OGLESDebug(glBindTexture(GL_TEXTURE_2D, 0));
@@ -83,15 +83,15 @@ namespace Echo
 		OGLESDebug(glBindTexture(GL_TEXTURE_2D, m_glesTexture));
 		OGLESDebug(glPixelStorei(GL_UNPACK_ALIGNMENT, 1));
 
-		GLenum internalFmt = GLES2Mapping::MapInternalFormat(pixFmt);
+		GLenum internalFmt = GLESMapping::MapInternalFormat(pixFmt);
 		if (PixelUtil::IsCompressed(pixFmt))
 		{
 			OGLESDebug(glCompressedTexImage2D(GL_TEXTURE_2D, level, internalFmt, width, height, 0, buff.getSize(), buff.getData()));
 		}
 		else
 		{
-			GLenum glFmt = GLES2Mapping::MapFormat(pixFmt);
-			GLenum glType = GLES2Mapping::MapDataType(pixFmt);
+			GLenum glFmt = GLESMapping::MapFormat(pixFmt);
+			GLenum glType = GLESMapping::MapDataType(pixFmt);
 			OGLESDebug(glTexImage2D(GL_TEXTURE_2D, level, internalFmt, width, height, 0, glFmt, glType, buff.getData()));
 		}
 

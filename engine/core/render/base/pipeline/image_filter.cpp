@@ -48,12 +48,16 @@ namespace Echo
 
 	void ImageFilter::render()
 	{
+		onRenderBegin();
+
 		Renderer* render = Renderer::instance();
 		if (render)
 		{
 			if(buildRenderable())
 				render->draw(m_renderable);
 		}
+
+		onRenderEnd();
 	}
 
 	void ImageFilter::clearRenderable()

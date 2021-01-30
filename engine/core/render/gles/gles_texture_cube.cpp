@@ -58,15 +58,15 @@ namespace Echo
 		OGLESDebug(glBindTexture(GL_TEXTURE_CUBE_MAP, m_glesTexture));
 		OGLESDebug(glPixelStorei(GL_UNPACK_ALIGNMENT, 1));
 
-		GLenum internalFmt = GLES2Mapping::MapInternalFormat( pixFmt);
+		GLenum internalFmt = GLESMapping::MapInternalFormat( pixFmt);
 		if (PixelUtil::IsCompressed(pixFmt))
 		{
 			OGLESDebug(glCompressedTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, level, internalFmt, width, height, 0, buff.getSize(), buff.getData()));
 		}
 		else
 		{
-			GLenum glFmt = GLES2Mapping::MapFormat(pixFmt);
-			GLenum glType = GLES2Mapping::MapDataType(pixFmt);
+			GLenum glFmt = GLESMapping::MapFormat(pixFmt);
+			GLenum glType = GLESMapping::MapDataType(pixFmt);
 			OGLESDebug(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, level, internalFmt, width, height, 0, glFmt, glType, buff.getData()));
 		}
 
