@@ -60,11 +60,11 @@ namespace Echo
 			{
 				if (i != Attachment::DepthStencil)
 				{
-					OGLESDebug(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, esTexture, 0));
+					OGLESDebug(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, esTexture, 0));
 				}
 				else
 				{
-					OGLESDebug(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, texture->getGlesTexture()));
+					OGLESDebug(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, esTexture));
 				}
 
 				m_esTextures[i] = esTexture;
@@ -135,6 +135,19 @@ namespace Echo
 
 	bool GLESFrameBufferOffScreen::readPixels(Attachment attach, Pixels& pixels)
 	{
+		if (m_views[attach])
+		{
+			PixelFormat pixFmt = m_views[attach]->getPixelFormat();
+			GLenum glFmt = GLESMapping::MapInternalFormat(pixFmt);
+			GLenum glType = GLESMapping::MapDataType(pixFmt);
+			pixels.set(m_views[attach]->getWidth(), m_views[attach]->getHeight(), pixFmt);
+
+			OGLESDebug(glReadBuffer(GL_COLOR_ATTACHMENT0 + attach));
+			OGLESDebug(glReadPixels(0, 0, pixels.m_width, pixels.m_height, glFmt, glType, pixels.m_data.data()));
+
+			return true;
+		}
+
 		return false;
 	}
 
@@ -176,6 +189,8 @@ namespace Echo
 		if (attach == Attachment::Color0)
 		{
 			pixels.set(Renderer::instance()->getWindowWidth(), Renderer::instance()->getWindowHeight(), PixelFormat::PF_RGBA8_UNORM);
+
+			OGLESDebug(glReadBuffer(GL_COLOR_ATTACHMENT0));
 			OGLESDebug(glReadPixels(0, 0, pixels.m_width, pixels.m_height, GL_RGBA, GL_UNSIGNED_BYTE, pixels.m_data.data()));
 
 			return true;
@@ -183,6 +198,8 @@ namespace Echo
 		else if (attach == Attachment::DepthStencil)
 		{
 			pixels.set(Renderer::instance()->getWindowWidth(), Renderer::instance()->getWindowHeight(), PixelFormat::PF_RGBA8_UNORM);
+
+			OGLESDebug(glReadBuffer(GL_DEPTH_ATTACHMENT));
 			OGLESDebug(glReadPixels(0, 0, pixels.m_width, pixels.m_height, GL_UNSIGNED_INT_24_8, GL_UNSIGNED_BYTE, pixels.m_data.data()));
 
 			return true;

@@ -24,30 +24,33 @@ namespace Echo
 
 	void RenderQueue::render()
 	{
-		Renderer* render = Renderer::instance();
-		if (render)
+		onRenderBegin();
 		{
-			// sort
-			if (m_sort)
+			Renderer* render = Renderer::instance();
+			if (render)
 			{
-				std::sort(m_renderables.begin(), m_renderables.end(), [](RenderableID a, RenderableID b) -> bool
+				// sort
+				if (m_sort)
 				{
-					Renderable* renderableA = Renderer::instance()->getRenderable(a);
-					Renderable* renderableB = Renderer::instance()->getRenderable(b);
-					return renderableA && renderableB ? renderableA->getNode()->getWorldPosition().z < renderableB->getNode()->getWorldPosition().z : false;
-				});
+					std::sort(m_renderables.begin(), m_renderables.end(), [](RenderableID a, RenderableID b) -> bool
+					{
+						Renderable* renderableA = Renderer::instance()->getRenderable(a);
+						Renderable* renderableB = Renderer::instance()->getRenderable(b);
+						return renderableA && renderableB ? renderableA->getNode()->getWorldPosition().z < renderableB->getNode()->getWorldPosition().z : false;
+					});
+				}
+
+				// render
+				for (RenderableID id : m_renderables)
+				{
+					Renderable* renderable = Renderer::instance()->getRenderable(id);
+					if (renderable)
+						render->draw(renderable);
+				}
 			}
 
-			// render
-			for (RenderableID id : m_renderables)
-			{
-				Renderable* renderable = Renderer::instance()->getRenderable(id);
-				if (renderable)
-					render->draw(renderable);
-			}
+			m_renderables.clear();
 		}
-
-
-		m_renderables.clear();
+		onRenderEnd();
 	}
 }

@@ -59,10 +59,10 @@ namespace Echo
 	{
 		if (m_pixelFormatName.getValue() != option.getValue() && m_pixelFormatName.setValue(option.getValue()))
 		{
-			m_pixFmt = magic_enum::enum_cast<PixelFormat>(option.getValue()).value_or(PixelFormat::PF_UNKNOWN);
-
 			unload();
 		}
+
+		m_pixFmt = magic_enum::enum_cast<PixelFormat>(m_pixelFormatName.getValue()).value_or(PixelFormat::PF_UNKNOWN);
 	}
 
 	void TextureRender::setClearColor(const Color& color)
