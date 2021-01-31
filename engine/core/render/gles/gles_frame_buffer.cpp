@@ -137,7 +137,7 @@ namespace Echo
 	{
 		if (m_views[attach])
 		{
-			PixelFormat pixFmt = m_views[attach]->getPixelFormat();
+			PixelFormat pixFmt = PixelFormat::PF_RGBA8_UNORM;// m_views[attach]->getPixelFormat();
 			GLenum glFmt = GLESMapping::MapInternalFormat(pixFmt);
 			GLenum glType = GLESMapping::MapDataType(pixFmt);
 			pixels.set(m_views[attach]->getWidth(), m_views[attach]->getHeight(), pixFmt);
