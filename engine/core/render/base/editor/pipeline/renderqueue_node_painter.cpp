@@ -190,7 +190,7 @@ namespace Pipeline
 					if (fb->readPixels(Echo::FrameBuffer::Attachment::Color0, pixels))
 					{
 						Echo::Image image(pixels.m_data.data(), pixels.m_width, pixels.m_height, 1, pixels.m_format);
-						image.saveToFile("D:/test.png");
+						image.saveToFile("D:/test.bmp");
 					}
 				}
 			}
