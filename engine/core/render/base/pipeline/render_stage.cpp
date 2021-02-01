@@ -19,15 +19,18 @@ namespace Echo
 
 	void RenderStage::bindMethods()
 	{
-		CLASS_BIND_METHOD(RenderStage, getName,		  DEF_METHOD("getName"));
-		CLASS_BIND_METHOD(RenderStage, setName,		  DEF_METHOD("setName"));
-		CLASS_BIND_METHOD(RenderStage, isEnable,	  DEF_METHOD("isEnable"));
-		CLASS_BIND_METHOD(RenderStage, setEnable,	  DEF_METHOD("setEnable"));
+		CLASS_BIND_METHOD(RenderStage, getName,		   DEF_METHOD("getName"));
+		CLASS_BIND_METHOD(RenderStage, setName,		   DEF_METHOD("setName"));
+		CLASS_BIND_METHOD(RenderStage, isEnable,	   DEF_METHOD("isEnable"));
+		CLASS_BIND_METHOD(RenderStage, setEnable,	   DEF_METHOD("setEnable"));
+		CLASS_BIND_METHOD(RenderStage, isEditorOnly,   DEF_METHOD("isEditorOnly"));
+		CLASS_BIND_METHOD(RenderStage, setEditorOnly,  DEF_METHOD("setEditorOnly"));
 		CLASS_BIND_METHOD(RenderStage, getFrameBuffer, DEF_METHOD("getFrameBuffer"));
 		CLASS_BIND_METHOD(RenderStage, setFrameBuffer, DEF_METHOD("setFrameBuffer"));
 
 		CLASS_REGISTER_PROPERTY(RenderStage, "Name", Variant::Type::String, "getName", "setName");
 		CLASS_REGISTER_PROPERTY(RenderStage, "Enable", Variant::Type::Bool, "isEnable", "setEnable");
+		CLASS_REGISTER_PROPERTY(RenderStage, "EditorOnly", Variant::Type::Bool, "isEditorOnly", "setEditorOnly");
 		CLASS_REGISTER_PROPERTY(RenderStage, "FrameBuffer", Variant::Type::Object, "getFrameBuffer", "setFrameBuffer");
 
 		CLASS_REGISTER_PROPERTY_HINT(RenderStage, "FrameBuffer", PropertyHintType::ResourceType, "FrameBufferOffScreen|FrameBufferWindow");
@@ -123,22 +126,23 @@ namespace Echo
 
 	void RenderStage::render()
 	{
-		if (m_enable && m_frameBuffer)
-		{
-			if (m_frameBuffer->begin(Renderer::BGCOLOR, 1.f, false, 0))
-			{
-				onRenderBegin();
-				{
-					for (IRenderQueue* iqueue : m_renderQueues)
-					{
-						if (iqueue->isEnable())
-							iqueue->render();
-					}
-				}
-				onRenderEnd();
+		if (!m_enable)				return;
+		if (!m_frameBuffer)			return;
+		if (IsGame && m_editorOnly) return;
 
-				m_frameBuffer->end();
+		if (m_frameBuffer->begin(Renderer::BGCOLOR, 1.f, false, 0))
+		{
+			onRenderBegin();
+			{
+				for (IRenderQueue* iqueue : m_renderQueues)
+				{
+					if (iqueue->isEnable())
+						iqueue->render();
+				}
 			}
+			onRenderEnd();
+
+			m_frameBuffer->end();
 		}
 	}
 }

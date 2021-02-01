@@ -24,6 +24,10 @@ namespace Echo
 		void setEnable(bool enable) { m_enable = enable; }
 		bool isEnable() const { return m_enable; }
 
+		// editor only
+		void setEditorOnly(bool editorOnly) { m_editorOnly = editorOnly; }
+		bool isEditorOnly() const { return m_editorOnly; }
+
 		// frame buffer
 		FrameBuffer* getFrameBuffer() const { return m_frameBuffer; }
 		void setFrameBuffer(Object* fb) { m_frameBuffer = (FrameBuffer*)fb; }
@@ -67,6 +71,7 @@ namespace Echo
 	protected:
 		String						m_name;
 		bool						m_enable = true;
+		bool						m_editorOnly = false;
 		RenderPipeline*				m_pipeline = nullptr;
 		vector<IRenderQueue*>::type	m_renderQueues;
 		FrameBufferPtr				m_frameBuffer;
