@@ -81,7 +81,7 @@ namespace Echo
 
 		// states
 		virtual RasterizerState* createRasterizerState(const RasterizerState::RasterizerDesc& desc) override;
-		virtual DepthStencilState* createDepthStencilState(const DepthStencilState::DepthStencilDesc& desc) override;
+		virtual DepthStencilState* createDepthStencilState() override;
 		virtual BlendState*	createBlendState(const BlendState::BlendDesc& desc) override;
         virtual MultisampleState* createMultisampleState() override { return nullptr; }
 		const SamplerState*	getSamplerState(const SamplerState::SamplerDesc& desc) override;

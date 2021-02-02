@@ -422,9 +422,9 @@ namespace Echo
 		return EchoNew(GLESRasterizerState(desc));
 	}
 
-	DepthStencilState* GLESRenderer::createDepthStencilState(const DepthStencilState::DepthStencilDesc& desc)
+	DepthStencilState* GLESRenderer::createDepthStencilState()
 	{
-		return EchoNew(GLESDepthStencilState(desc));
+		return EchoNew(GLESDepthStencilState);
 	}
 
 	BlendState* GLESRenderer::createBlendState(const BlendState::BlendDesc& desc)

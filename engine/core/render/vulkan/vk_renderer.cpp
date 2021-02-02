@@ -88,9 +88,9 @@ namespace Echo
         return EchoNew(VKRasterizerState(desc));
     }
 
-    DepthStencilState* VKRenderer::createDepthStencilState(const DepthStencilState::DepthStencilDesc& desc)
+    DepthStencilState* VKRenderer::createDepthStencilState()
     {
-        return EchoNew(VKDepthStencilState(desc));
+        return EchoNew(VKDepthStencilState);
     }
 
     BlendState* VKRenderer::createBlendState(const BlendState::BlendDesc& desc)

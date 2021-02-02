@@ -97,6 +97,8 @@ namespace Echo
 		Class::registerType<Material>();
 		Class::registerType<TextureAtla>();
 		Class::registerType<TextureAtlas>();
+		Class::registerType<RenderState>();
+		Class::registerType<DepthStencilState>();
 
 	#ifdef ECHO_EDITOR_MODE
 		Class::registerType<ShaderNode>();

@@ -254,6 +254,8 @@ namespace Echo
 		CLASS_BIND_METHOD(ShaderProgram, setCullMode, DEF_METHOD("setCullMode"));
 		CLASS_BIND_METHOD(ShaderProgram, getBlendMode, DEF_METHOD("getBlendMode"));
 		CLASS_BIND_METHOD(ShaderProgram, setBlendMode, DEF_METHOD("setBlendMode"));
+		CLASS_BIND_METHOD(ShaderProgram, getDepthStencilState, DEF_METHOD("getDepthStencilState"));
+		CLASS_BIND_METHOD(ShaderProgram, setDepthStencilState, DEF_METHOD("setDepthStencilState"));
 
         CLASS_REGISTER_PROPERTY(ShaderProgram, "Type", Variant::Type::String, "getType", "setType");
         CLASS_REGISTER_PROPERTY(ShaderProgram, "VertexShader", Variant::Type::String, "getVsCode", "setVsCode");
@@ -261,6 +263,8 @@ namespace Echo
         CLASS_REGISTER_PROPERTY(ShaderProgram, "Graph", Variant::Type::String, "getGraph", "setGraph");
         CLASS_REGISTER_PROPERTY(ShaderProgram, "CullMode", Variant::Type::StringOption, "getCullMode", "setCullMode");
         CLASS_REGISTER_PROPERTY(ShaderProgram, "BlendMode", Variant::Type::StringOption, "getBlendMode", "setBlendMode");
+		CLASS_REGISTER_PROPERTY(ShaderProgram, "DepthStencilState", Variant::Type::Object, "getDepthStencilState", "setDepthStencilState");
+		CLASS_REGISTER_PROPERTY_HINT(ShaderProgram, "DepthStencilState", PropertyHintType::ResourceType, "DepthStencilState");
 
         CLASS_REGISTER_PROPERTY_HINT(ShaderProgram, "CullMode", PropertyHintType::Category, "RasterizerState");
         CLASS_REGISTER_PROPERTY_HINT(ShaderProgram, "BlendMode", PropertyHintType::Category, "BlendState");
@@ -477,8 +481,7 @@ namespace Echo
     { 
         if (!m_depthState)
         {
-            DepthStencilState::DepthStencilDesc desc;
-            m_depthState = Renderer::instance()->createDepthStencilState(desc);
+            m_depthState = Renderer::instance()->createDepthStencilState();
         }
 
         return m_depthState; 
@@ -572,10 +575,10 @@ namespace Echo
             shader->setBlendMode("Transparent");
             
             // depth state
-            DepthStencilState::DepthStencilDesc depthDesc;
-            depthDesc.bDepthEnable = false;
-            depthDesc.bWriteDepth = false;
-            DepthStencilState* depthState = Renderer::instance()->createDepthStencilState(depthDesc);
+            DepthStencilState* depthState = Renderer::instance()->createDepthStencilState();
+            depthState->setDepthEnable(false);
+            depthState->setWriteDepth(false);
+
             shader->setDepthStencilState(depthState);
 
             // reaster state
@@ -603,10 +606,9 @@ namespace Echo
 			shader->setBlendMode("Opaque");
 
 			// depth state
-			DepthStencilState::DepthStencilDesc depthDesc;
-			depthDesc.bDepthEnable = true;
-			depthDesc.bWriteDepth = true;
-			DepthStencilState* depthState = Renderer::instance()->createDepthStencilState(depthDesc);
+			DepthStencilState* depthState = Renderer::instance()->createDepthStencilState();
+            depthState->setDepthEnable(true);
+            depthState->setWriteDepth(true);
 			shader->setDepthStencilState(depthState);
 
 			// reaster state

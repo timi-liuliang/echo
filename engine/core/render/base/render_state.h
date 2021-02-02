@@ -1,24 +1,24 @@
 #pragma once
 
 #include "engine/core/math/color.h"
+#include "engine/core/resource/Res.h"
 
 namespace Echo
 {
-	class RenderState
+	class RenderState : public Res
 	{
-	public:
-		RenderState();
-		virtual ~RenderState();
+		ECHO_VIRTUAL_CLASS(RenderState, Res)
 
+	public:
 		enum ColorMask
 		{
-			CMASK_NONE		= 0x00000000,
-			CMASK_RED		= 0x00000001,
-			CMASK_GREEN		= 0x00000002,
-			CMASK_BLUE		= 0x00000004,
-			CMASK_ALPHA		= 0x00000008,
-			CMASK_COLOR     = CMASK_RED | CMASK_GREEN | CMASK_BLUE,
-			CMASK_ALL		= CMASK_RED | CMASK_GREEN | CMASK_BLUE | CMASK_ALPHA
+			CMASK_NONE = 0x00000000,
+			CMASK_RED = 0x00000001,
+			CMASK_GREEN = 0x00000002,
+			CMASK_BLUE = 0x00000004,
+			CMASK_ALPHA = 0x00000008,
+			CMASK_COLOR = CMASK_RED | CMASK_GREEN | CMASK_BLUE,
+			CMASK_ALL = CMASK_RED | CMASK_GREEN | CMASK_BLUE | CMASK_ALPHA
 		};
 
 		enum ComparisonFunc
@@ -33,6 +33,17 @@ namespace Echo
 			CF_NOT_EQUAL,
 			CF_MAXNUM
 		};
+
+	public:
+		RenderState();
+		virtual ~RenderState();
+
+		// dirty
+		bool isDirty() { return m_dirty; }
+		void setDirty(bool dirty) { m_dirty = dirty; }
+
+	protected:
+		bool	m_dirty = true;
 	};
 
 	class BlendState: public RenderState
@@ -122,8 +133,9 @@ namespace Echo
 
 	class DepthStencilState: public RenderState
 	{
-	public:
+		ECHO_RES(DepthStencilState, RenderState, ".edss", DepthStencilState::create, Res::load)
 
+	public:
 		enum StencilOperation
 		{
 			// Keep the existing stencil data.
@@ -145,71 +157,49 @@ namespace Echo
 			SOP_MAX
 		};
 
-		struct DepthStencilDesc
-		{
-			bool				bDepthEnable;
-			bool				bWriteDepth;
-			ComparisonFunc		depthFunc;
-
-			bool				bFrontStencilEnable;
-			ComparisonFunc		frontStencilFunc;
-			ui16				frontStencilReadMask;
-			ui16				frontStencilWriteMask;
-			StencilOperation	frontStencilFailOP;
-			StencilOperation	frontStencilDepthFailOP;
-			StencilOperation	frontStencilPassOP;
-			ui32				frontStencilRef;
-
-			bool				bBackStencilEnable;
-			ComparisonFunc		backStencilFunc;
-			ui16				backStencilReadMask;
-			ui16				backStencilWriteMask;
-			StencilOperation	backStencilFailOP;
-			StencilOperation	backStencilDepthFailOP;
-			StencilOperation	backStencilPassOP;
-			ui32				backStencilRef;
-
-			void reset()
-			{
-				bDepthEnable			= true;
-				bWriteDepth				= true;
-				depthFunc				= CF_LESS;
-
-				bFrontStencilEnable		= false;
-				frontStencilFunc		= CF_ALWAYS;
-				frontStencilReadMask	= 0xffff;
-				frontStencilWriteMask	= 0xffff;
-				frontStencilFailOP		= SOP_KEEP;
-				frontStencilDepthFailOP	= SOP_INCR;
-				frontStencilPassOP		= SOP_KEEP;
-				frontStencilRef			= 1;
-
-				bBackStencilEnable		= false;
-				backStencilFunc			= CF_ALWAYS;
-				backStencilReadMask		= 0xffff;
-				backStencilWriteMask	= 0xffff;
-				backStencilFailOP		= SOP_KEEP;
-				backStencilDepthFailOP	= SOP_DECR;
-				backStencilPassOP		= SOP_KEEP;
-				backStencilRef			= 1;
-			}
-
-			DepthStencilDesc()
-			{
-				reset();
-			}
-		};
-
-		DepthStencilState(const DepthStencilDesc& desc);
+	public:
+		DepthStencilState() {}
 		virtual ~DepthStencilState();
 
-	public:
-        virtual void						active() {}
-		const DepthStencilDesc&				getDesc() const;
+		// create fun
+		static Res* create();
 
-	protected:
-		DepthStencilDesc		m_desc;
+		// active
+        virtual void active() {}
+
+	public:
+		// depth enable
+		bool isDepthEnable() const { return bDepthEnable; }
+		void setDepthEnable(bool enable);
+
+		// write depth
+		bool isWriteDepth() const { return bWriteDepth; }
+		void setWriteDepth(bool writeDepth);
+
+	public:
+		bool				bDepthEnable = true;
+		bool				bWriteDepth = true;
+		ComparisonFunc		depthFunc = CF_LESS;
+
+		bool				bFrontStencilEnable = false;
+		ComparisonFunc		frontStencilFunc = CF_ALWAYS;
+		ui16				frontStencilReadMask = 0xffff;
+		ui16				frontStencilWriteMask = 0xffff;
+		StencilOperation	frontStencilFailOP = SOP_KEEP;
+		StencilOperation	frontStencilDepthFailOP = SOP_INCR;
+		StencilOperation	frontStencilPassOP = SOP_KEEP;
+		ui32				frontStencilRef = 1;
+
+		bool				bBackStencilEnable = false;
+		ComparisonFunc		backStencilFunc = CF_ALWAYS;
+		ui16				backStencilReadMask = 0xffff;
+		ui16				backStencilWriteMask = 0xffff;
+		StencilOperation	backStencilFailOP = SOP_KEEP;
+		StencilOperation	backStencilDepthFailOP = SOP_DECR;
+		StencilOperation	backStencilPassOP = SOP_KEEP;
+		ui32				backStencilRef = 1;
 	};
+	typedef ResRef<DepthStencilState> DepthStencilStatePtr;
 
 	class RasterizerState : public RenderState
 	{

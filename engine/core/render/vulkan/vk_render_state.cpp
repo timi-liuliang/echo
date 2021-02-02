@@ -16,8 +16,8 @@ namespace Echo
         m_vkCreateInfo.pAttachments = &blendAttachState;
     }
 
-    VKDepthStencilState::VKDepthStencilState(const DepthStencilDesc& desc)
-        : DepthStencilState(desc)
+    VKDepthStencilState::VKDepthStencilState()
+        : DepthStencilState()
     {
         m_vkCreateInfo = {};
         m_vkCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;

@@ -148,10 +148,9 @@ namespace Echo
 		m_glAlphaMask = (m_desc.colorWriteMask & CMASK_ALPHA) != 0;
 	}
 
-	GLESDepthStencilState::GLESDepthStencilState(const DepthStencilDesc &desc)
-		: DepthStencilState(desc)
+	GLESDepthStencilState::GLESDepthStencilState()
+		: DepthStencilState()
 	{
-		create();
 	}
 
 	GLESDepthStencilState::~GLESDepthStencilState()
@@ -160,17 +159,33 @@ namespace Echo
 
 	void GLESDepthStencilState::active()
 	{
+		if (m_dirty)
+		{
+			m_glDepthMask = bWriteDepth ? GL_TRUE : GL_FALSE;
+			m_glDepthFunc = GLESMapping::MapComparisonFunc(depthFunc);
+			m_glFrontStencilFunc = GLESMapping::MapComparisonFunc(frontStencilFunc);
+			m_glFrontStencilFailOP = GLESMapping::MapStencilOperation(frontStencilFailOP);
+			m_glFrontStencilDepthFailOP = GLESMapping::MapStencilOperation(frontStencilDepthFailOP);
+			m_glFrontStencilPassOP = GLESMapping::MapStencilOperation(frontStencilPassOP);
+			m_glBackStencilFunc = GLESMapping::MapComparisonFunc(backStencilFunc);
+			m_glBackStencilFailOP = GLESMapping::MapStencilOperation(backStencilFailOP);
+			m_glBackStencilDepthFailOP = GLESMapping::MapStencilOperation(backStencilDepthFailOP);
+			m_glBackStencilPassOP = GLESMapping::MapStencilOperation(backStencilPassOP);
+
+			m_dirty = false;
+		}
+
 		DepthStencilStateParams depthStencilParams;
 		memset(&depthStencilParams, 0, sizeof(depthStencilParams));
-		depthStencilParams.isEnableDepthTest = m_desc.bDepthEnable;
-		depthStencilParams.isEnableStencilTest = m_desc.bFrontStencilEnable || m_desc.bBackStencilEnable;
-		depthStencilParams.isWriteDepth = m_desc.bWriteDepth;
-		depthStencilParams.frontStencilRef = m_desc.frontStencilRef;
-		depthStencilParams.frontStencilReadMask = m_desc.frontStencilReadMask;
-		depthStencilParams.frontStencilWriteMask = m_desc.frontStencilWriteMask;
-		depthStencilParams.backStencilRef = m_desc.backStencilRef;
-		depthStencilParams.backStencilReadMask = m_desc.backStencilReadMask;
-		depthStencilParams.backStencilWriteMask = m_desc.backStencilWriteMask;
+		depthStencilParams.isEnableDepthTest = bDepthEnable;
+		depthStencilParams.isEnableStencilTest = bFrontStencilEnable || bBackStencilEnable;
+		depthStencilParams.isWriteDepth = bWriteDepth;
+		depthStencilParams.frontStencilRef = frontStencilRef;
+		depthStencilParams.frontStencilReadMask = frontStencilReadMask;
+		depthStencilParams.frontStencilWriteMask = frontStencilWriteMask;
+		depthStencilParams.backStencilRef = backStencilRef;
+		depthStencilParams.backStencilReadMask = backStencilReadMask;
+		depthStencilParams.backStencilWriteMask = backStencilWriteMask;
 		depthStencilParams.depthFunc = m_glDepthFunc;
 		depthStencilParams.frontStencilFunc = m_glFrontStencilFunc;
 		depthStencilParams.frontStencilFailOP = m_glFrontStencilFailOP;
@@ -184,63 +199,61 @@ namespace Echo
 		DepthStencilState* pCurState = (ECHO_DOWN_CAST<GLESRenderer*>(Renderer::instance()))->getDepthStencilState();
 		if(pCurState)
 		{
-			const  DepthStencilDesc& currDesc = pCurState->getDesc();
-
-			if (m_desc.bDepthEnable != currDesc.bDepthEnable)
+			if (bDepthEnable != pCurState->bDepthEnable)
 			{
 				depthStencilParams.isChangeDepthTest = true;
 			}
 
-			if (m_desc.bWriteDepth != currDesc.bWriteDepth)
+			if (bWriteDepth != pCurState->bWriteDepth)
 			{
 				depthStencilParams.isChangeDepthWrite = true;
 			}
 
-			if (m_desc.depthFunc != currDesc.depthFunc)
+			if (depthFunc != pCurState->depthFunc)
 			{
 				depthStencilParams.isSetDepthFunc = true;
 			}
 
-			if ((m_desc.frontStencilFunc != currDesc.frontStencilFunc) ||
-				(m_desc.frontStencilRef != currDesc.frontStencilRef) ||
-				(m_desc.frontStencilReadMask != currDesc.frontStencilReadMask))
+			if ((frontStencilFunc != pCurState->frontStencilFunc) ||
+				(frontStencilRef != pCurState->frontStencilRef) ||
+				(frontStencilReadMask != pCurState->frontStencilReadMask))
 			{
 				depthStencilParams.isSetStencilFuncFront = true;
 			}
 
-			if ((m_desc.frontStencilFailOP != currDesc.frontStencilFailOP) ||
-				(m_desc.frontStencilDepthFailOP != currDesc.frontStencilDepthFailOP) ||
-				(m_desc.frontStencilPassOP != currDesc.frontStencilPassOP))
+			if ((frontStencilFailOP != pCurState->frontStencilFailOP) ||
+				(frontStencilDepthFailOP != pCurState->frontStencilDepthFailOP) ||
+				(frontStencilPassOP != pCurState->frontStencilPassOP))
 			{
 				depthStencilParams.isSetStencilOpFront = true;
 			}
 
-			if (m_desc.frontStencilWriteMask != currDesc.frontStencilWriteMask)
+			if (frontStencilWriteMask != pCurState->frontStencilWriteMask)
 			{
 				depthStencilParams.isSetStencilMaskFront = true;
 			}
 
-			if ((m_desc.backStencilFunc != currDesc.backStencilFunc) ||
-				(m_desc.backStencilRef != currDesc.backStencilRef) ||
-				(m_desc.backStencilReadMask != currDesc.backStencilReadMask))
+			if ((backStencilFunc != pCurState->backStencilFunc) ||
+				(backStencilRef != pCurState->backStencilRef) ||
+				(backStencilReadMask != pCurState->backStencilReadMask))
 			{
 				depthStencilParams.isSetStencilFuncBack = true;
 			}
 
-			if ((m_desc.backStencilFailOP != currDesc.backStencilFailOP) ||
-				(m_desc.backStencilDepthFailOP != currDesc.backStencilDepthFailOP) ||
-				(m_desc.backStencilPassOP != currDesc.backStencilPassOP))
+			if ((backStencilFailOP != pCurState->backStencilFailOP) ||
+				(backStencilDepthFailOP != pCurState->backStencilDepthFailOP) ||
+				(backStencilPassOP != pCurState->backStencilPassOP))
 			{
 				depthStencilParams.isSetStencilOpBack = true;
 			}
 
-			if (m_desc.backStencilWriteMask != currDesc.backStencilWriteMask)
+			if (backStencilWriteMask != pCurState->backStencilWriteMask)
 			{
 				depthStencilParams.isSetStencilMaskBack = true;
 			}
 
-			if ((m_desc.bFrontStencilEnable != currDesc.bFrontStencilEnable) ||
-				(m_desc.bBackStencilEnable != currDesc.bBackStencilEnable))
+			if ((bFrontStencilEnable != pCurState->bFrontStencilEnable) ||
+				(bBackStencilEnable != pCurState->bBackStencilEnable))
 			{
 				depthStencilParams.isChangeStencilTest = true;
 			}
@@ -322,20 +335,6 @@ namespace Echo
 				OGLESDebug(glDisable(GL_STENCIL_TEST));
 			}
 		}
-	}
-
-	void GLESDepthStencilState::create()
-	{
-		m_glDepthMask = m_desc.bWriteDepth? GL_TRUE : GL_FALSE;
-		m_glDepthFunc = GLESMapping::MapComparisonFunc(m_desc.depthFunc);
-		m_glFrontStencilFunc = GLESMapping::MapComparisonFunc(m_desc.frontStencilFunc);
-		m_glFrontStencilFailOP = GLESMapping::MapStencilOperation(m_desc.frontStencilFailOP);
-		m_glFrontStencilDepthFailOP = GLESMapping::MapStencilOperation(m_desc.frontStencilDepthFailOP);
-		m_glFrontStencilPassOP = GLESMapping::MapStencilOperation(m_desc.frontStencilPassOP);
-		m_glBackStencilFunc = GLESMapping::MapComparisonFunc(m_desc.backStencilFunc);
-		m_glBackStencilFailOP = GLESMapping::MapStencilOperation(m_desc.backStencilFailOP);
-		m_glBackStencilDepthFailOP = GLESMapping::MapStencilOperation(m_desc.backStencilDepthFailOP);
-		m_glBackStencilPassOP = GLESMapping::MapStencilOperation(m_desc.backStencilPassOP);
 	}
 
 	GLESRasterizerState::GLESRasterizerState(const RasterizerDesc& desc)

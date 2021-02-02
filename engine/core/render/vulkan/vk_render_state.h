@@ -21,7 +21,7 @@ namespace Echo
 	class VKDepthStencilState : public DepthStencilState
 	{
 	public:
-        VKDepthStencilState(const DepthStencilDesc& desc);
+        VKDepthStencilState();
         virtual ~VKDepthStencilState() {}
 
         // get vk create info

@@ -159,7 +159,7 @@ namespace Echo
         
         // depth state
         DepthStencilState* getDepthStencilState();
-        void setDepthStencilState(DepthStencilState* depthState) { m_depthState = depthState; }
+        void setDepthStencilState(Object* depthState) { m_depthState = (DepthStencilState*)depthState; }
         
         // raster state
         RasterizerState* getRasterizerState();
@@ -202,16 +202,16 @@ namespace Echo
         void insertMacros(String& code);
 
 	protected:
-		StringArray			m_macros;
-        String              m_type = "glsl";
-        String              m_vsCode;
-        String              m_psCode;
-        String              m_graph;
-		BlendState*			m_blendState = nullptr;
-		DepthStencilState*	m_depthState = nullptr;
-		RasterizerState*	m_rasterizerState = nullptr;
-        MultisampleState*   m_multiSampleState = nullptr;
-        UniformMap          m_uniforms;
+		StringArray			    m_macros;
+        String                  m_type = "glsl";
+        String                  m_vsCode;
+        String                  m_psCode;
+        String                  m_graph;
+		BlendState*             m_blendState = nullptr;
+		DepthStencilStatePtr    m_depthState = nullptr;
+		RasterizerState*	    m_rasterizerState = nullptr;
+        MultisampleState*       m_multiSampleState = nullptr;
+        UniformMap              m_uniforms;
 
     protected:
         StringOption        m_cullMode = StringOption("CULL_BACK", { "CULL_NONE", "CULL_FRONT", "CULL_BACK"});

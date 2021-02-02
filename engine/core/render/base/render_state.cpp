@@ -1,5 +1,6 @@
 #include "render_state.h"
 #include "engine/core/math/Math.h"
+#include "renderer.h"
 
 namespace Echo
 {
@@ -9,6 +10,11 @@ namespace Echo
 
 	RenderState::~RenderState()
 	{
+	}
+
+	void RenderState::bindMethods()
+	{
+
 	}
 
 	BlendState::BlendState(const BlendDesc& desc)
@@ -25,18 +31,42 @@ namespace Echo
 		return m_desc;
 	}
 
-	DepthStencilState::DepthStencilState(const DepthStencilDesc& desc)
-		: m_desc(desc)
-	{
-	}
-
 	DepthStencilState::~DepthStencilState()
 	{
 	}
 
-	const DepthStencilState::DepthStencilDesc& DepthStencilState::getDesc() const
+	void DepthStencilState::bindMethods()
 	{
-		return m_desc;
+		CLASS_BIND_METHOD(DepthStencilState, isDepthEnable, DEF_METHOD("isDepthEnable"));
+		CLASS_BIND_METHOD(DepthStencilState, setDepthEnable, DEF_METHOD("setDepthEnable"));
+		CLASS_BIND_METHOD(DepthStencilState, isWriteDepth, DEF_METHOD("isWriteDepth"));
+		CLASS_BIND_METHOD(DepthStencilState, setWriteDepth, DEF_METHOD("setWriteDepth"));
+
+		CLASS_REGISTER_PROPERTY(DepthStencilState, "DepthEnable", Variant::Type::Bool, "isDepthEnable", "setDepthEnable");
+		CLASS_REGISTER_PROPERTY(DepthStencilState, "WriteDepth", Variant::Type::Bool, "isWriteDepth", "setWriteDepth");
+	}
+
+	Res* DepthStencilState::create()
+	{
+		return Renderer::instance()->createDepthStencilState();
+	}
+
+	void DepthStencilState::setDepthEnable(bool enable)
+	{ 
+		if (bDepthEnable != enable)
+		{
+			bDepthEnable = enable;
+			setDirty(true);
+		}
+	}
+
+	void DepthStencilState::setWriteDepth(bool writeDepth)
+	{ 
+		if (bWriteDepth != writeDepth)
+		{
+			bWriteDepth = writeDepth; 
+			setDirty(true);
+		}
 	}
 
 	RasterizerState::RasterizerState(const RasterizerDesc& desc)

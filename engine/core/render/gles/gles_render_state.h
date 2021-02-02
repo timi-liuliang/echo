@@ -90,14 +90,11 @@ namespace Echo
 	class GLESDepthStencilState: public DepthStencilState
 	{
 	public:
-		GLESDepthStencilState(const DepthStencilDesc& desc);
+		GLESDepthStencilState();
 		~GLESDepthStencilState();
 
-	public:
+		// active
 		void						active();
-
-	private:
-		void						create();
 
 	private:
 		GLboolean					m_glDepthMask;

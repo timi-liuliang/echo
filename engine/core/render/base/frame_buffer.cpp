@@ -43,7 +43,6 @@ namespace Echo
 
 	Res* FrameBufferOffScreen::create()
 	{
-		static i32 idx = 0; idx++;
 		return Renderer::instance()->createFrameBufferOffScreen(Renderer::instance()->getWindowWidth(), Renderer::instance()->getWindowHeight());
 	}
 
