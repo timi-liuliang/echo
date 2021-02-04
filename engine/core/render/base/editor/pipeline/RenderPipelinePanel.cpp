@@ -29,8 +29,14 @@ namespace Echo
 		m_stopIcon = QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/stop.png").c_str());
 		m_applyButton->setIcon(m_playIcon);
 
+		m_captureModeButton = m_ui->findChild<QToolButton*>("m_captureMode");
+		m_captureEnableIcon = QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/capture-enable.png").c_str());
+		m_captureDisableIcon = QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/capture-disable.png").c_str());
+		m_captureModeButton->setIcon(m_captureDisableIcon);
+
 		// connect signal slots
 		EditorApi.qConnectWidget(m_applyButton, QSIGNAL(clicked()), this, createMethodBind(&RenderpipelinePanel::onApply));
+		EditorApi.qConnectWidget(m_captureModeButton, QSIGNAL(clicked()), this, createMethodBind(&RenderpipelinePanel::onCaputeModeChanged));
 
 		// create QGraphicsScene
 		m_graphicsView = m_ui->findChild<QGraphicsView*>("m_graphicsView");
@@ -74,6 +80,13 @@ namespace Echo
 		{
 			Echo::GameSettings::instance()->setRenderPipeline(Echo::StringUtil::BLANK);
 		}
+	}
+
+	void RenderpipelinePanel::onCaputeModeChanged()
+	{
+		m_captureEnable = !m_captureEnable;
+
+		updateCaptureModeButtonIcon();
 	}
 
 	bool RenderpipelinePanel::isNeedUpdateStageNodePainters()
@@ -166,6 +179,22 @@ namespace Echo
 			m_applyButton->setIcon(m_stopIcon);
 			m_applyButton->setStatusTip("Stop this render pipeline");
 			m_applyButton->setToolTip("Stop this render pipeline");
+		}
+	}
+
+	void RenderpipelinePanel::updateCaptureModeButtonIcon()
+	{
+		if (m_captureEnable)
+		{
+			m_captureModeButton->setIcon(m_captureEnableIcon);
+			m_captureModeButton->setStatusTip("Capture Running");
+			m_captureModeButton->setToolTip("Capture Running");
+		}
+		else
+		{
+			m_captureModeButton->setIcon(m_captureDisableIcon);
+			m_captureModeButton->setStatusTip("Capture Stopped");
+			m_captureModeButton->setToolTip("Capture Stopped");
 		}
 	}
 

@@ -80,6 +80,19 @@
         </widget>
        </item>
        <item>
+        <widget class="QToolButton" name="m_captureMode">
+         <property name="toolTip">
+          <string>Capture Mode</string>
+         </property>
+         <property name="statusTip">
+          <string>Capture Mode</string>
+         </property>
+         <property name="text">
+          <string>...</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="horizontalSpacer">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>

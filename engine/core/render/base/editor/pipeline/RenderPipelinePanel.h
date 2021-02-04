@@ -27,6 +27,7 @@ namespace Echo
 	public:
 		// import
 		void onApply();
+		void onCaputeModeChanged();
 
 	protected:
 		// need update
@@ -38,6 +39,7 @@ namespace Echo
 
 		// update icon
 		void updateApplyButtonIcon();
+		void updateCaptureModeButtonIcon();
 
 	protected:
 		// save
@@ -47,7 +49,11 @@ namespace Echo
 		RenderPipeline*						m_pipeline;
 		QIcon								m_playIcon;
 		QIcon								m_stopIcon;
-		QToolButton*						m_applyButton;
+		QToolButton*						m_applyButton = nullptr;
+		QIcon								m_captureEnableIcon;
+		QIcon								m_captureDisableIcon;
+		bool								m_captureEnable = false;
+		QToolButton*						m_captureModeButton = nullptr;
 		QGraphicsView*						m_graphicsView = nullptr;
 		Pipeline::QGraphicsSceneEx*			m_graphicsScene = nullptr;
 		QGraphicsLineItem*					m_borderTopLine = nullptr;
