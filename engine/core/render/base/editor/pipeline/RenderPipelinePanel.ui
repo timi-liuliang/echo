@@ -82,10 +82,10 @@
        <item>
         <widget class="QToolButton" name="m_captureMode">
          <property name="toolTip">
-          <string>Capture Mode</string>
+          <string>Capture stopped</string>
          </property>
          <property name="statusTip">
-          <string>Capture Mode</string>
+          <string>Capture stopped</string>
          </property>
          <property name="text">
           <string>...</string>

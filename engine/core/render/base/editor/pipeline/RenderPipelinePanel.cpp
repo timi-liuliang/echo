@@ -168,17 +168,17 @@ namespace Echo
 	{
 		Echo::String resPath = m_pipeline->getPath();
 		Echo::String currentPath = Echo::GameSettings::instance()->getRenderPipeline().getPath();
-		if (resPath != currentPath)
+		if (resPath == currentPath)
 		{
 			m_applyButton->setIcon(m_playIcon);
-			m_applyButton->setStatusTip("Start this render pipeline");
-			m_applyButton->setToolTip("Start this render pipeline");
+			m_applyButton->setStatusTip("Render pipeline running");
+			m_applyButton->setToolTip("Render pipeline running");
 		}
 		else
 		{
 			m_applyButton->setIcon(m_stopIcon);
-			m_applyButton->setStatusTip("Stop this render pipeline");
-			m_applyButton->setToolTip("Stop this render pipeline");
+			m_applyButton->setStatusTip("Render pipeline stopped");
+			m_applyButton->setToolTip("Render pipeline stopped");
 		}
 	}
 
@@ -187,14 +187,14 @@ namespace Echo
 		if (m_captureEnable)
 		{
 			m_captureModeButton->setIcon(m_captureEnableIcon);
-			m_captureModeButton->setStatusTip("Capture Running");
-			m_captureModeButton->setToolTip("Capture Running");
+			m_captureModeButton->setStatusTip("Capture running");
+			m_captureModeButton->setToolTip("Capture running");
 		}
 		else
 		{
 			m_captureModeButton->setIcon(m_captureDisableIcon);
-			m_captureModeButton->setStatusTip("Capture Stopped");
-			m_captureModeButton->setToolTip("Capture Stopped");
+			m_captureModeButton->setStatusTip("Capture stopped");
+			m_captureModeButton->setToolTip("Capture stopped");
 		}
 	}
 
