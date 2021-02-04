@@ -6,6 +6,7 @@
 
 #ifdef ECHO_EDITOR_MODE
 
+#include <QSplitter>
 #include "stage_node_painter.h"
 #include "stage_add_button.h"
 #include "renderqueue_node_painter.h"
@@ -29,6 +30,9 @@ namespace Echo
 		void onApply();
 		void onCaputeModeChanged();
 
+		// capture frame
+		void onCaptureFrame(FrameBuffer* fb);
+
 	protected:
 		// need update
 		bool isNeedUpdateStageNodePainters();
@@ -46,6 +50,7 @@ namespace Echo
 		virtual void save() override;
 
 	protected:
+		QSplitter*							m_splitter = nullptr;
 		RenderPipeline*						m_pipeline;
 		QIcon								m_playIcon;
 		QIcon								m_stopIcon;
@@ -55,6 +60,7 @@ namespace Echo
 		bool								m_captureEnable = false;
 		QToolButton*						m_captureModeButton = nullptr;
 		QGraphicsView*						m_graphicsView = nullptr;
+		QGraphicsView*						m_graphicsViewFrameBuffer = nullptr;
 		Pipeline::QGraphicsSceneEx*			m_graphicsScene = nullptr;
 		QGraphicsLineItem*					m_borderTopLine = nullptr;
 		Pipeline::StageNodePainters			m_stageNodePainters;

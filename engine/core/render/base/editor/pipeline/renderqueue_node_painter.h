@@ -27,6 +27,9 @@ namespace Pipeline
 		// update
 		void update(Echo::i32 xPos, Echo::i32 yPos);
 
+		// set capture frame callback
+		void setCaptureFrameCb(std::function<void(Echo::FrameBuffer*)> cb) { m_captureFrameCb = cb; }
+
 	public:
 		// start pos
 		static float getStartPos() { return 60.f; }
@@ -36,7 +39,7 @@ namespace Pipeline
 		static float getHeight(){ return 40.f; }
 		static float getSpace() { return 16.f; }
 
-	public:
+	private:
 		// on capture
 		void onCaptureFrame();
 
@@ -68,17 +71,18 @@ namespace Pipeline
 			QColor finalColor = QColor(54, 108, 179, 255);
 			float  m_penWidth = 1.5f;
 			float  m_cornerRadius = 0.f;
-		}									m_style;
-		Echo::IRenderQueue*					m_renderQueue = nullptr;
-		QGraphicsView*						m_graphicsView = nullptr;
-		QGraphicsScene*						m_graphicsScene = nullptr;
-		QGraphicsRenderQueueItem*			m_rect = nullptr;
-		float								m_rectFinalWidth = 15;
-		QGraphicsPixmapItemCustom*			m_typeButton = nullptr;
-		QGraphicsSimpleTextItemCustom*		m_text = nullptr;
-		QGraphicsLineItem*					m_textDiableLine = nullptr;
-		QGraphicsPixmapItemCustom*			m_deleteButtton = nullptr;
-		bool								m_needCaptureFrame = false;
+		}										m_style;
+		Echo::IRenderQueue*						m_renderQueue = nullptr;
+		QGraphicsView*							m_graphicsView = nullptr;
+		QGraphicsScene*							m_graphicsScene = nullptr;
+		QGraphicsRenderQueueItem*				m_rect = nullptr;
+		float									m_rectFinalWidth = 15;
+		QGraphicsPixmapItemCustom*				m_typeButton = nullptr;
+		QGraphicsSimpleTextItemCustom*			m_text = nullptr;
+		QGraphicsLineItem*						m_textDiableLine = nullptr;
+		QGraphicsPixmapItemCustom*				m_deleteButtton = nullptr;
+		bool									m_needCaptureFrame = false;
+		std::function<void(Echo::FrameBuffer*)> m_captureFrameCb;
 	};
 	typedef Echo::vector<RenderQueueNodePainter*>::type RenderQueueNodePainters;
 }

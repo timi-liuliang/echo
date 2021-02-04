@@ -124,6 +124,7 @@
         <enum>Qt::ScrollBarAsNeeded</enum>
        </property>
       </widget>
+      <widget class="QGraphicsView" name="m_graphicsViewFrameBuffer"/>
      </widget>
     </item>
     <item>

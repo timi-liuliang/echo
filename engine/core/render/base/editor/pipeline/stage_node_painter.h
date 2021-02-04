@@ -16,6 +16,8 @@ namespace Pipeline
 {
 	struct StageNodePainter
 	{
+		typedef std::function<void(Echo::FrameBuffer*)> CaptureFrameCbFun;
+
 	public:
 		// Style for painting
 		struct Style
@@ -46,6 +48,10 @@ namespace Pipeline
 		// update
 		void update(Echo::i32 xPos, bool isFinal);
 
+
+		// set capture frame callback
+		void setCaptureFrameCb(std::function<void(Echo::FrameBuffer*)> cb) { m_captureFrameCb = cb; }
+
 	public:
 		// get width
 		static float getWidth() { return 190.f; }
@@ -75,6 +81,9 @@ namespace Pipeline
 		void updateRenderQueues(Echo::i32 xPos);
 		void updateRenderQueueAddButtons(Echo::i32 xPos);
 
+		// new render queue
+		RenderQueueNodePainter* newRenderQueueNodePainter(Echo::IRenderQueue* renderQueue);
+
 	public:
 		Style						m_style;
 		Echo::RenderStage*			m_stage = nullptr;
@@ -90,6 +99,7 @@ namespace Pipeline
 		RenderQueueNodePainters		m_renderQueueNodePainters;
 		RenderQueueAddButtons		m_renderQueueAddButtons;
 		bool						m_needCaptureFrame = false;
+		CaptureFrameCbFun			m_captureFrameCb;
 	};
 	typedef Echo::vector<StageNodePainter*>::type StageNodePainters;
 }

@@ -16,11 +16,11 @@ namespace Echo
 
 		m_ui = (QDockWidget*)EditorApi.qLoadUi("engine/core/render/base/editor/pipeline/RenderPipelinePanel.ui");
 
-		QSplitter* splitter = m_ui->findChild<QSplitter*>("m_splitter");
-		if (splitter)
+		m_splitter = m_ui->findChild<QSplitter*>("m_splitter");
+		if (m_splitter)
 		{
-			splitter->setStretchFactor(0, 0);
-			splitter->setStretchFactor(1, 1);
+			m_splitter->setStretchFactor(0, 1.5);
+			m_splitter->setStretchFactor(1, 1);
 		}
 
 		// Tool button icons
@@ -43,6 +43,9 @@ namespace Echo
 		m_graphicsScene = new Pipeline::QGraphicsSceneEx();
 		m_graphicsView->setScene(m_graphicsScene);
 		m_graphicsView->setAttribute(Qt::WA_AlwaysShowToolTips);
+
+		m_graphicsViewFrameBuffer = m_ui->findChild<QGraphicsView*>("m_graphicsViewFrameBuffer");
+		m_graphicsViewFrameBuffer->setVisible(false);
 
 		// event
 		m_graphicsScene->setMousePressEventCb([this]()
@@ -89,6 +92,19 @@ namespace Echo
 		updateCaptureModeButtonIcon();
 	}
 
+	void RenderpipelinePanel::onCaptureFrame(FrameBuffer* fb)
+	{
+		if (m_captureEnable)
+		{
+			Echo::FrameBuffer::Pixels pixels;
+			if (fb->readPixels(Echo::FrameBuffer::Attachment::Color0, pixels))
+			{
+				Echo::Image image(pixels.m_data.data(), pixels.m_width, pixels.m_height, 1, pixels.m_format);
+				image.saveToFile("D:/test.bmp");
+			}
+		}
+	}
+
 	bool RenderpipelinePanel::isNeedUpdateStageNodePainters()
 	{
 		vector<RenderStage*>::type stages = m_pipeline->getRenderStages();
@@ -125,7 +141,15 @@ namespace Echo
 				}
 
 				if (createNew)
-					newStageNodePainters.emplace_back(EchoNew(Pipeline::StageNodePainter(m_graphicsView, m_graphicsScene, stage)));
+				{
+					Pipeline::StageNodePainter* painter = EchoNew(Pipeline::StageNodePainter(m_graphicsView, m_graphicsScene, stage));
+					painter->setCaptureFrameCb([this](Echo::FrameBuffer* fb) 
+					{
+						onCaptureFrame(fb);
+					});
+
+					newStageNodePainters.emplace_back(painter);
+				}
 			}
 
 			for (Pipeline::StageNodePainter* stagePainter : m_stageNodePainters)
@@ -196,6 +220,8 @@ namespace Echo
 			m_captureModeButton->setStatusTip("Capture stopped");
 			m_captureModeButton->setToolTip("Capture stopped");
 		}
+
+		m_graphicsViewFrameBuffer->setVisible(m_captureEnable);
 	}
 
 	void RenderpipelinePanel::save()

@@ -141,6 +141,21 @@ namespace Pipeline
 		m_text = nullptr;
 	}
 
+	RenderQueueNodePainter* StageNodePainter::newRenderQueueNodePainter(Echo::IRenderQueue* renderQueue)
+	{
+		RenderQueueNodePainter* painter = EchoNew(RenderQueueNodePainter(m_graphicsView, m_graphicsScene, renderQueue));
+		if (painter)
+		{
+			painter->setCaptureFrameCb([this](Echo::FrameBuffer* fb)
+			{
+				if (m_captureFrameCb)
+					m_captureFrameCb(fb);
+			});
+		}
+
+		return painter;
+	}
+
 	void StageNodePainter::updateRenderQueues(Echo::i32 x)
 	{
 		Echo::vector<Echo::Vector2>::type		poses;
@@ -160,7 +175,7 @@ namespace Pipeline
 		if (m_renderQueueNodePainters.size() < renderqueues.size())
 		{
 			for (size_t i = m_renderQueueNodePainters.size(); i < renderqueues.size(); ++i)
-				m_renderQueueNodePainters.emplace_back(EchoNew(Pipeline::RenderQueueNodePainter(m_graphicsView, m_graphicsScene, renderqueues[i])));
+				m_renderQueueNodePainters.emplace_back(newRenderQueueNodePainter( renderqueues[i]));
 		}
 
 		for (size_t i = 0; i < renderqueues.size(); i++)
@@ -168,7 +183,7 @@ namespace Pipeline
 			if (!m_renderQueueNodePainters[i] || m_renderQueueNodePainters[i]->getRenderQueue() != renderqueues[i])
 			{
 				EchoSafeDelete(m_renderQueueNodePainters[i], RenderQueueNodePainter);
-				m_renderQueueNodePainters[i] = EchoNew(Pipeline::RenderQueueNodePainter(m_graphicsView, m_graphicsScene, renderqueues[i]));
+				m_renderQueueNodePainters[i] = newRenderQueueNodePainter( renderqueues[i]);
 			}
 		}
 
@@ -256,14 +271,16 @@ namespace Pipeline
 			if (m_stage)
 			{
 				Echo::FrameBuffer* fb = m_stage->getFrameBuffer();
-				if (fb)
+				if (fb && m_captureFrameCb)
 				{
-					Echo::FrameBuffer::Pixels pixels;
-					if (fb->readPixels(Echo::FrameBuffer::Attachment::Color0, pixels))
-					{
-						Echo::Image image(pixels.m_data.data(), pixels.m_width, pixels.m_height, 1, pixels.m_format);
-						image.saveToFile("D:/test1.png");
-					}
+					m_captureFrameCb(fb);
+
+					//Echo::FrameBuffer::Pixels pixels;
+					//if (fb->readPixels(Echo::FrameBuffer::Attachment::Color0, pixels))
+					//{
+					//	Echo::Image image(pixels.m_data.data(), pixels.m_width, pixels.m_height, 1, pixels.m_format);
+					//	image.saveToFile("D:/test1.png");
+					//}
 				}
 			}
 

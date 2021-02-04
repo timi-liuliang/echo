@@ -184,14 +184,9 @@ namespace Pipeline
 			if (stage)
 			{
 				Echo::FrameBuffer* fb = stage->getFrameBuffer();
-				if (fb)
+				if (fb && m_captureFrameCb)
 				{
-					Echo::FrameBuffer::Pixels pixels;
-					if (fb->readPixels(Echo::FrameBuffer::Attachment::Color0, pixels))
-					{
-						Echo::Image image(pixels.m_data.data(), pixels.m_width, pixels.m_height, 1, pixels.m_format);
-						image.saveToFile("D:/test.bmp");
-					}
+					m_captureFrameCb(fb);
 				}
 			}
 
