@@ -10,6 +10,7 @@
 #include "stage_node_painter.h"
 #include "stage_add_button.h"
 #include "renderqueue_node_painter.h"
+#include "frame_buffer_painter.h"
 #include "custom/qgraphics_scene_ex.h"
 
 namespace Echo
@@ -62,9 +63,11 @@ namespace Echo
 		QGraphicsView*						m_graphicsView = nullptr;
 		QGraphicsView*						m_graphicsViewFrameBuffer = nullptr;
 		Pipeline::QGraphicsSceneEx*			m_graphicsScene = nullptr;
+		Pipeline::QGraphicsSceneEx*			m_graphicsSceneFrameBuffer = nullptr;
 		QGraphicsLineItem*					m_borderTopLine = nullptr;
 		Pipeline::StageNodePainters			m_stageNodePainters;
 		Pipeline::StatgeAddButtons			m_stageAddButtons;
+		Pipeline::FrameBufferPainter*		m_frameBufferPainter = nullptr;
 	};
 }
 

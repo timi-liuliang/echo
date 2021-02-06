@@ -16,13 +16,6 @@ namespace Echo
 
 		m_ui = (QDockWidget*)EditorApi.qLoadUi("engine/core/render/base/editor/pipeline/RenderPipelinePanel.ui");
 
-		m_splitter = m_ui->findChild<QSplitter*>("m_splitter");
-		if (m_splitter)
-		{
-			m_splitter->setStretchFactor(0, 1.5);
-			m_splitter->setStretchFactor(1, 1);
-		}
-
 		// Tool button icons
 		m_applyButton = m_ui->findChild<QToolButton*>("m_apply");
 		m_playIcon = QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/play.png").c_str());
@@ -46,6 +39,12 @@ namespace Echo
 
 		m_graphicsViewFrameBuffer = m_ui->findChild<QGraphicsView*>("m_graphicsViewFrameBuffer");
 		m_graphicsViewFrameBuffer->setVisible(false);
+
+		m_graphicsSceneFrameBuffer = new Pipeline::QGraphicsSceneEx();
+		m_graphicsViewFrameBuffer->setScene(m_graphicsSceneFrameBuffer);
+		m_graphicsViewFrameBuffer->setAttribute(Qt::WA_AlwaysShowToolTips);
+
+		m_frameBufferPainter = new Pipeline::FrameBufferPainter(m_graphicsViewFrameBuffer, m_graphicsSceneFrameBuffer);
 
 		// event
 		m_graphicsScene->setMousePressEventCb([this]()
@@ -94,14 +93,9 @@ namespace Echo
 
 	void RenderpipelinePanel::onCaptureFrame(FrameBuffer* fb)
 	{
-		if (m_captureEnable)
+		if (m_captureEnable && m_frameBufferPainter)
 		{
-			Echo::FrameBuffer::Pixels pixels;
-			if (fb->readPixels(Echo::FrameBuffer::Attachment::Color0, pixels))
-			{
-				Echo::Image image(pixels.m_data.data(), pixels.m_width, pixels.m_height, 1, pixels.m_format);
-				image.saveToFile("D:/test.bmp");
-			}
+			m_frameBufferPainter->capture(fb);
 		}
 	}
 
@@ -213,15 +207,21 @@ namespace Echo
 			m_captureModeButton->setIcon(m_captureEnableIcon);
 			m_captureModeButton->setStatusTip("Capture running");
 			m_captureModeButton->setToolTip("Capture running");
+			m_graphicsViewFrameBuffer->setVisible(true);
+
+			m_splitter = m_ui->findChild<QSplitter*>("m_splitter");
+			if (m_splitter)
+			{
+				m_splitter->setSizes({1, 1});
+			}
 		}
 		else
 		{
 			m_captureModeButton->setIcon(m_captureDisableIcon);
 			m_captureModeButton->setStatusTip("Capture stopped");
 			m_captureModeButton->setToolTip("Capture stopped");
+			m_graphicsViewFrameBuffer->setVisible(false);
 		}
-
-		m_graphicsViewFrameBuffer->setVisible(m_captureEnable);
 	}
 
 	void RenderpipelinePanel::save()
