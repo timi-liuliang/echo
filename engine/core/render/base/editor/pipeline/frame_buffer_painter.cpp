@@ -49,11 +49,11 @@ namespace Pipeline
 			float width = height / pixels.m_height * pixels.m_width;
 
 			Echo::Image image(pixels.m_data.data(), pixels.m_width, pixels.m_height, 1, pixels.m_format);
-			image.convertFormat(Echo::PF_RGBA8_UNORM);
+			image.scale(width, height, Echo::Image::ImageFilter::IMGFILTER_NEAREST);
 
-			QImage qimage(image.getData(), image.getWidth(), image.getHeight(), QImage::Format_RGBA8888);
-			qimage = qimage.scaled(QSize(width, height), Qt::AspectRatioMode::IgnoreAspectRatio);
+			QImage qimage(image.getData(), width, height, QImage::Format_RGBA8888);
 			qimage = qimage.mirrored(false, true);
+			qimage = qimage.convertToFormat(QImage::Format_RGB888);
 
 			m_image->setPixmap(QPixmap::fromImage(qimage));
 
