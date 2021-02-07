@@ -54,7 +54,7 @@ Inspired by [CI|CD pipeline](https://semaphoreci.com/blog/cicd-pipeline), we dec
 3. Forward+ (Tiled Forward Rendering)?
 Try configuring it by your needs.
 
-![](https://raw.githubusercontent.com/timi-liuliang/echo-download/master/images/intro/framepipeline.png) 
+![](https://media.githubusercontent.com/media/timi-liuliang/echo-download/master/images/intro/framepipeline.png) 
 
 ### Configurable Module   
 Most of the engine's Functionality was implemented by configurable modules. that means when you release your app, you can just choose the module you really need. Which makes your app smaller in size and more efficiently running.
