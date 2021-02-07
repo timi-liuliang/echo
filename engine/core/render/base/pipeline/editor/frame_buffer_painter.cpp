@@ -64,7 +64,8 @@ namespace Pipeline
 
 				// pixmap item
 				Echo::Image image(pixels.m_data.data(), pixels.m_width, pixels.m_height, 1, pixels.m_format);
-				image.scale(width, height, Echo::Image::ImageFilter::IMGFILTER_NEAREST);
+				image.scale(width, height, Echo::Image::ImageFilter::IMGFILTER_LINEAR);
+				image.convertFormat(Echo::PF_RGBA8_UNORM);
 
 				QImage qimage(image.getData(), width, height, QImage::Format_RGBA8888);
 				qimage = qimage.mirrored(false, true);

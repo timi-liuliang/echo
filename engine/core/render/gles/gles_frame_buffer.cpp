@@ -133,24 +133,27 @@ namespace Echo
         }
 	}
 
+	// https://docs.gl/es3/glReadPixels
 	bool GLESFrameBufferOffScreen::readPixels(Attachment attach, Pixels& pixels)
 	{
 		if (m_views[attach])
 		{
-			PixelFormat pixFmt = PixelFormat::PF_RGBA8_UNORM;// m_views[attach]->getPixelFormat();
-			GLenum glFmt = GLESMapping::MapInternalFormat(pixFmt);
-			GLenum glType = GLESMapping::MapDataType(pixFmt);
-			pixels.set(m_views[attach]->getWidth(), m_views[attach]->getHeight(), pixFmt);
-
 			if (attach != Attachment::DepthStencil)
 			{
+				PixelFormat pixFmt = PixelFormat::PF_RGBA8_UNORM;// m_views[attach]->getPixelFormat();
+				GLenum glFmt = GLESMapping::MapInternalFormat(pixFmt);
+				GLenum glType = GLESMapping::MapDataType(pixFmt);
+				pixels.set(m_views[attach]->getWidth(), m_views[attach]->getHeight(), pixFmt);
+
 				OGLESDebug(glReadBuffer(GL_COLOR_ATTACHMENT0 + attach));
 				OGLESDebug(glReadPixels(0, 0, pixels.m_width, pixels.m_height, glFmt, glType, pixels.m_data.data()));
 			}
 			else
 			{
-				OGLESDebug(glReadBuffer(GL_DEPTH_ATTACHMENT));
-				OGLESDebug(glReadPixels(0, 0, pixels.m_width, pixels.m_height, GL_UNSIGNED_INT_24_8, GL_UNSIGNED_BYTE, pixels.m_data.data()));
+				pixels.set(Renderer::instance()->getWindowWidth(), Renderer::instance()->getWindowHeight(), PixelFormat::PF_RGBA8_UNORM);
+
+				//OGLESDebug(glReadBuffer(GL_DEPTH_ATTACHMENT));
+				//OGLESDebug(glReadPixels(0, 0, pixels.m_width, pixels.m_height, GL_RED, GL_FLOAT, pixels.m_data.data()));
 			}
 
 			return true;
@@ -198,6 +201,7 @@ namespace Echo
 		{
 			pixels.set(Renderer::instance()->getWindowWidth(), Renderer::instance()->getWindowHeight(), PixelFormat::PF_RGBA8_UNORM);
 
+			// https://docs.gl/es3/glReadBuffer
 			OGLESDebug(glReadBuffer(GL_COLOR_ATTACHMENT0));
 			OGLESDebug(glReadPixels(0, 0, pixels.m_width, pixels.m_height, GL_RGBA, GL_UNSIGNED_BYTE, pixels.m_data.data()));
 
@@ -207,8 +211,8 @@ namespace Echo
 		{
 			pixels.set(Renderer::instance()->getWindowWidth(), Renderer::instance()->getWindowHeight(), PixelFormat::PF_RGBA8_UNORM);
 
-			OGLESDebug(glReadBuffer(GL_DEPTH_ATTACHMENT));
-			OGLESDebug(glReadPixels(0, 0, pixels.m_width, pixels.m_height, GL_UNSIGNED_INT_24_8, GL_UNSIGNED_BYTE, pixels.m_data.data()));
+			//OGLESDebug(glReadBuffer(GL_DEPTH_ATTACHMENT));
+			//OGLESDebug(glReadPixels(0, 0, pixels.m_width, pixels.m_height, GL_RED, GL_FLOAT, pixels.m_data.data()));
 
 			return true;
 		}
