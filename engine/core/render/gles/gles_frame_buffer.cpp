@@ -150,7 +150,7 @@ namespace Echo
 			else
 			{
 				OGLESDebug(glReadBuffer(GL_DEPTH_ATTACHMENT));
-				OGLESDebug(glReadPixels(0, 0, pixels.m_width, pixels.m_height, glFmt, glType, pixels.m_data.data()));
+				OGLESDebug(glReadPixels(0, 0, pixels.m_width, pixels.m_height, GL_UNSIGNED_INT_24_8, GL_UNSIGNED_BYTE, pixels.m_data.data()));
 			}
 
 			return true;
