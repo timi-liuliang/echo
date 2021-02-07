@@ -142,8 +142,16 @@ namespace Echo
 			GLenum glType = GLESMapping::MapDataType(pixFmt);
 			pixels.set(m_views[attach]->getWidth(), m_views[attach]->getHeight(), pixFmt);
 
-			OGLESDebug(glReadBuffer(GL_COLOR_ATTACHMENT0 + attach));
-			OGLESDebug(glReadPixels(0, 0, pixels.m_width, pixels.m_height, glFmt, glType, pixels.m_data.data()));
+			if (attach != Attachment::DepthStencil)
+			{
+				OGLESDebug(glReadBuffer(GL_COLOR_ATTACHMENT0 + attach));
+				OGLESDebug(glReadPixels(0, 0, pixels.m_width, pixels.m_height, glFmt, glType, pixels.m_data.data()));
+			}
+			else
+			{
+				OGLESDebug(glReadBuffer(GL_DEPTH_ATTACHMENT));
+				OGLESDebug(glReadPixels(0, 0, pixels.m_width, pixels.m_height, glFmt, glType, pixels.m_data.data()));
+			}
 
 			return true;
 		}

@@ -21,23 +21,27 @@ namespace Pipeline
 		// reset
 		void capture(Echo::FrameBuffer* fb);
 
+		// reset
+		void reset();
+
 	public:
 		// start pos
-		static float getStartPos() { return 60.f; }
+		static float getHeight() { return 100.f; }
 
 		// get height|width
 		static float getSpace() { return 16.f; }
 
 	protected:
-		// init icons
-		void initImage();
+		// create
+		QGraphicsPathItem* createBoundRect(const Echo::Vector2& pos);
+		QGraphicsPixmapItemCustom* createImage(QGraphicsPathItem* rect);
 
 	protected:
 		QGraphicsView*							m_graphicsView = nullptr;
 		QGraphicsScene*							m_graphicsScene = nullptr;
-		QGraphicsRenderQueueItem*				m_rect = nullptr;
 		float									m_rectFinalWidth = 15;
-		QGraphicsPixmapItemCustom*				m_image = nullptr;
+		std::vector<QGraphicsPathItem*>			m_rects;
+		std::vector<QGraphicsPixmapItemCustom*>	m_images;
 	};
 }
 
