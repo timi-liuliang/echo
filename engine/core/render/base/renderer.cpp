@@ -10,7 +10,7 @@
 #include "pipeline/image_filter.h"
 #include "pipeline/render_queue.h"
 #include "pipeline/render_pipeline.h"
-#include "base/editor/pipeline/render_pipeline_editor.h"
+#include "base/pipeline/editor/render_pipeline_editor.h"
 #include "base/editor/shader/shader_editor.h"
 #include "base/atla/texture_atla.h"
 #include "base/atla/texture_atlas.h"

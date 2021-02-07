@@ -25,7 +25,7 @@ namespace Pipeline
 			m_text->setParentItem(m_rect);
 			m_text->setPos(textPos.x - getHalfWidth(), textPos.y);
 
-			QPixmap addNew((Echo::Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/import_dark.png").c_str());
+			QPixmap addNew((Echo::Engine::instance()->getRootPath() + "engine/core/render/base/pipeline/editor/icon/import_dark.png").c_str());
 			m_addAction = new QGraphicsPixmapItemCustom();
 			m_addAction->setPixmap(addNew.scaled(QSize(16, 16)));
 			m_addAction->setParentItem(m_rect);
@@ -34,13 +34,13 @@ namespace Pipeline
 
 			m_addAction->setHoverEnterEventCb([](QGraphicsPixmapItem* item)
 			{
-				QPixmap addNew((Echo::Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/import.png").c_str());
+				QPixmap addNew((Echo::Engine::instance()->getRootPath() + "engine/core/render/base/pipeline/editor/icon/import.png").c_str());
 				item->setPixmap(addNew.scaled(QSize(16, 16)));
 			});
 
 			m_addAction->setHoverEnterLeaveCb([](QGraphicsPixmapItem* item)
 			{
-				QPixmap addNew((Echo::Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/import_dark.png").c_str());
+				QPixmap addNew((Echo::Engine::instance()->getRootPath() + "engine/core/render/base/pipeline/editor/icon/import_dark.png").c_str());
 				item->setPixmap(addNew.scaled(QSize(16, 16)));
 			});
 
@@ -274,13 +274,6 @@ namespace Pipeline
 				if (fb && m_captureFrameCb)
 				{
 					m_captureFrameCb(fb);
-
-					//Echo::FrameBuffer::Pixels pixels;
-					//if (fb->readPixels(Echo::FrameBuffer::Attachment::Color0, pixels))
-					//{
-					//	Echo::Image image(pixels.m_data.data(), pixels.m_width, pixels.m_height, 1, pixels.m_format);
-					//	image.saveToFile("D:/test1.png");
-					//}
 				}
 			}
 

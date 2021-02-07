@@ -14,17 +14,17 @@ namespace Echo
 	{
 		m_pipeline = ECHO_DOWN_CAST<RenderPipeline*>(obj);
 
-		m_ui = (QDockWidget*)EditorApi.qLoadUi("engine/core/render/base/editor/pipeline/RenderPipelinePanel.ui");
+		m_ui = (QDockWidget*)EditorApi.qLoadUi("engine/core/render/base/pipeline/editor/RenderPipelinePanel.ui");
 
 		// Tool button icons
 		m_applyButton = m_ui->findChild<QToolButton*>("m_apply");
-		m_playIcon = QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/play.png").c_str());
-		m_stopIcon = QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/stop.png").c_str());
+		m_playIcon = QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/pipeline/editor/icon/play.png").c_str());
+		m_stopIcon = QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/pipeline/editor/icon/stop.png").c_str());
 		m_applyButton->setIcon(m_playIcon);
 
 		m_captureModeButton = m_ui->findChild<QToolButton*>("m_captureMode");
-		m_captureEnableIcon = QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/capture-enable.png").c_str());
-		m_captureDisableIcon = QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/capture-disable.png").c_str());
+		m_captureEnableIcon = QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/pipeline/editor/icon/capture-enable.png").c_str());
+		m_captureDisableIcon = QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/pipeline/editor/icon/capture-disable.png").c_str());
 		m_captureModeButton->setIcon(m_captureDisableIcon);
 
 		// connect signal slots

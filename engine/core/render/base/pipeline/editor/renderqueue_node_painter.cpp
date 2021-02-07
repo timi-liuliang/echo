@@ -84,7 +84,7 @@ namespace Pipeline
 		bool isImageFilter = dynamic_cast<Echo::ImageFilter*>(m_renderQueue) ? true : false;
 		Echo::String iconPath = isImageFilter ? "image_filter.png" : "render_queue.png";
 
-		QPixmap icon((Echo::Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/" + iconPath).c_str());
+		QPixmap icon((Echo::Engine::instance()->getRootPath() + "engine/core/render/base/pipeline/editor/icon/" + iconPath).c_str());
 		m_typeButton = new QGraphicsPixmapItemCustom();
 		m_typeButton->setPixmap(icon.scaled(QSize(16, 16)));
 		m_typeButton->setParentItem(m_rect);
@@ -94,7 +94,7 @@ namespace Pipeline
 
 	void RenderQueueNodePainter::initDeleteButton()
 	{
-		QPixmap icon((Echo::Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/delete.png").c_str());
+		QPixmap icon((Echo::Engine::instance()->getRootPath() + "engine/core/render/base/pipeline/editor/icon/delete.png").c_str());
 		m_deleteButtton = new QGraphicsPixmapItemCustom();
 		m_deleteButtton->setPixmap(icon.scaled(QSize(16, 16)));
 		m_deleteButtton->setParentItem(m_rect);
