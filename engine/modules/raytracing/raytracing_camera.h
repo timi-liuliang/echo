@@ -1,6 +1,7 @@
 #pragma once
 
 #include <radeon_rays.h>
+#include "engine/core/render/base/texture_render.h"
 
 namespace Echo
 {
@@ -22,6 +23,9 @@ namespace Echo
 		void clearBuffer();
 		void prepareRays();
 
+		// render to framebuffer
+		void renderToFrameBuffer();
+
 	protected:
 		ui32				m_width = 0;
 		ui32				m_height = 0;
@@ -29,6 +33,8 @@ namespace Echo
 		RadeonRays::Buffer*	m_rayBuffer = nullptr;
 		RadeonHitInfoArray	m_intersections;
 		RadeonRays::Buffer*	m_intersectionBuffer = nullptr;
-		vector<Color>::type	m_imageColors;
+		vector<Dword>::type	m_imageColors;
+		TextureRenderPtr	m_texture;
+		class ImageFilter*	m_imageFilter = nullptr;
 	};
 }

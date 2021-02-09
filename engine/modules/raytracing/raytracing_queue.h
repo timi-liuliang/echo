@@ -18,6 +18,5 @@ namespace Echo
 		virtual void render();
 
 	protected:
-		vector<RenderableID>::type		m_renderables;
 	};
 }

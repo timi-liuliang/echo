@@ -2,6 +2,8 @@
 #include "raytracing_camera.h"
 #include "engine/core/scene/node_tree.h"
 #include "engine/core/geom/Ray.h"
+#include "engine/core/render/base/renderer.h"
+#include "engine/core/render/base/pipeline/image_filter.h"
 
 namespace Echo
 {
@@ -44,6 +46,8 @@ namespace Echo
 					}
 				}
 				api->UnmapBuffer(m_intersectionBuffer, intersections, nullptr);
+
+				renderToFrameBuffer();
 			}
 			else
 			{
@@ -113,5 +117,26 @@ namespace Echo
 				}
 			}
 		}
+	}
+
+	void RaytracingCamera::renderToFrameBuffer()
+	{
+		size_t pixelsize = PixelUtil::GetPixelSize(PF_RGBA8_UNORM);
+		Buffer buffer(ui32(m_width * m_height * pixelsize), m_imageColors.data(), false);
+		if (!m_texture)
+		{
+			static i32 idx = 0; idx++;
+			m_texture = Renderer::instance()->createTextureRender(StringUtil::Format("RAYTRACING_TXTURE_RENDER_%d", idx));
+		}
+
+		m_texture->updateTexture2D(PF_RGBA8_UNORM, Texture::TU_GPU_READ, m_width, m_height, buffer.getData(), buffer.getSize());
+
+		if (!m_imageFilter)
+		{
+			m_imageFilter = EchoNew(ImageFilter);
+		}
+
+		if (m_imageFilter)
+			m_imageFilter->render();
 	}
 }
