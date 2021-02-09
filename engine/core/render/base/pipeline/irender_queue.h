@@ -12,7 +12,7 @@ namespace Echo
 
 	public:
 		IRenderQueue() {}
-		IRenderQueue(RenderStage* stage) : m_stage(stage) {}
+		//IRenderQueue(RenderStage* stage) : m_stage(stage) {}
 		virtual ~IRenderQueue() {}
 
 		// name

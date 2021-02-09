@@ -60,7 +60,6 @@ namespace Pipeline
 
 	public:
 		// new
-		void onNewImageFilter();
 		void onNewRenderQueue();
 
 		// on add

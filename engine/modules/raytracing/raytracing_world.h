@@ -20,6 +20,9 @@ namespace Echo
         // step
         void step(float elapsedTime);
 
+        // render
+        void render();
+
 	public:
 		// get intersection API
 		RadeonRays::IntersectionApi* getIntersectionApi() { return m_intersectionApi; }

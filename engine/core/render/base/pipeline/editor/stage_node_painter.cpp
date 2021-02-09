@@ -5,6 +5,8 @@
 
 #ifdef ECHO_EDITOR_MODE
 
+#include <QtCore/QObject>
+
 namespace Pipeline
 {
 	StageNodePainter::StageNodePainter(QGraphicsView* view, QGraphicsScene* scene, Echo::RenderStage* stage)
@@ -85,27 +87,37 @@ namespace Pipeline
 		{
 			m_addMenu = EchoNew(QMenu(m_graphicsView));
 
-			QAction* newImageFilter = new QAction("Image Filter");
-			QAction* newRenderQueue = new QAction("Render Queue");
+			Echo::StringArray childClasses;
+			Echo::Class::getChildClasses(childClasses, "IRenderQueue", true);
+			for (const Echo::String& className : childClasses)
+			{
+				QAction* renderQueueAction = new QAction(className.c_str());
+				m_addMenu->addAction(renderQueueAction);
 
-			m_addMenu->addAction(newImageFilter);
-			m_addMenu->addAction(newRenderQueue);
-
-			EditorApi.qConnectAction(newImageFilter, QSIGNAL(triggered()), this, Echo::createMethodBind(&StageNodePainter::onNewImageFilter));
-			EditorApi.qConnectAction(newRenderQueue, QSIGNAL(triggered()), this, Echo::createMethodBind(&StageNodePainter::onNewRenderQueue));
+				EditorApi.qConnectAction(renderQueueAction, QSIGNAL(triggered()), this, Echo::createMethodBind(&StageNodePainter::onNewRenderQueue));
+			}
 		}
 
 		m_addMenu->exec(QCursor::pos());
 	}
 
-	void StageNodePainter::onNewImageFilter()
+	void StageNodePainter::onNewRenderQueue()
 	{
 		if (m_stage)
 		{
-			Echo::ImageFilter* imageFilter = m_stage->addImageFilter("New Image Filter");
-			if (imageFilter)
+			QAction* action = qobject_cast<QAction*>(EditorApi.qSender());
+			if (action)
 			{
-				EditorApi.showObjectProperty(imageFilter);
+				Echo::String text = action->text().toStdString().c_str();
+
+				Echo::IRenderQueue* renderQueue = dynamic_cast<Echo::IRenderQueue*>(Echo::Class::create(text));
+				if (renderQueue)
+				{
+					renderQueue->setName("New " + text);
+					m_stage->addRenderQueue(renderQueue);
+
+					EditorApi.showObjectProperty(renderQueue);
+				}
 			}
 		}
 	}
@@ -121,10 +133,6 @@ namespace Pipeline
 				pipeline->deleteStage(m_stage);
 			}
 		}
-	}
-
-	void StageNodePainter::onNewRenderQueue()
-	{
 	}
 
 	void StageNodePainter::reset()

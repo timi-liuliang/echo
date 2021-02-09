@@ -47,6 +47,11 @@ namespace Echo
     
     void RaytracingWorld::step(float elapsedTime)
     {
+
+    }
+
+    void RaytracingWorld::render()
+    {
 		if (!m_intersectionApi->IsWorldEmpty())
 		{
 			m_camera.update();

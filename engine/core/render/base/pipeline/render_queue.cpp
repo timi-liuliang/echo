@@ -5,11 +5,6 @@
 
 namespace Echo
 {
-	RenderQueue::RenderQueue(RenderStage* stage)
-		: IRenderQueue(stage)
-	{
-	}
-
 	RenderQueue::~RenderQueue()
 	{
 	}

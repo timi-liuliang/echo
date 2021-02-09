@@ -49,9 +49,6 @@ namespace Echo
 		// get render queues
 		vector<IRenderQueue*>::type& getRenderQueues() { return m_renderQueues; }
 
-		// add image filter
-		ImageFilter* addImageFilter(const String& name);
-
 		// add
 		void addRenderQueue(IRenderQueue* queue, ui32 position=-1);
 

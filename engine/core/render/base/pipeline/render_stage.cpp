@@ -36,15 +36,6 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY_HINT(RenderStage, "FrameBuffer", PropertyHintType::ResourceType, "FrameBufferOffScreen|FrameBufferWindow");
 	}
 
-	ImageFilter* RenderStage::addImageFilter(const String& name)
-	{
-		ImageFilter* queue = EchoNew(ImageFilter(this));
-		queue->setName(name);
-		m_renderQueues.emplace_back(queue);
-
-		return queue;
-	}
-
 	void RenderStage::addRenderQueue(IRenderQueue* queue, ui32 position)
 	{
 		if (position < m_renderQueues.size())

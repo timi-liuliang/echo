@@ -12,7 +12,6 @@ namespace Echo
 
 	public:
 		RenderQueue() {}
-		RenderQueue(RenderStage* stage);
 		virtual ~RenderQueue();
 
 		// render
