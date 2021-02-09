@@ -133,7 +133,16 @@ namespace Echo
 
 		if (!m_imageFilter)
 		{
+			StringArray macros = { /* "ALPHA_ADJUST"*/ };
+			m_shader = ShaderProgram::getDefault2D(macros);
+
+			// material
+			m_material = EchoNew(Material(StringUtil::Format("RayTracingMaterial")));
+			m_material->setShaderPath(m_shader->getPath());
+			m_material->getUniform("BaseColor")->setTexture(m_texture.ptr());
+
 			m_imageFilter = EchoNew(ImageFilter);
+			m_imageFilter->setMaterial(m_material);
 		}
 
 		if (m_imageFilter)

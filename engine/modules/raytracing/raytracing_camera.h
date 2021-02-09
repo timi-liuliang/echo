@@ -2,6 +2,7 @@
 
 #include <radeon_rays.h>
 #include "engine/core/render/base/texture_render.h"
+#include "engine/core/render/base/material.h"
 
 namespace Echo
 {
@@ -35,6 +36,8 @@ namespace Echo
 		RadeonRays::Buffer*	m_intersectionBuffer = nullptr;
 		vector<Dword>::type	m_imageColors;
 		TextureRenderPtr	m_texture;
+		ShaderProgramPtr    m_shader;
+		MaterialPtr         m_material;
 		class ImageFilter*	m_imageFilter = nullptr;
 	};
 }
