@@ -22,7 +22,7 @@ namespace Echo
         static VKRenderer* instance();
 
 		// initialize
-        virtual bool initialize(const Settings& config) override;
+        virtual bool initialize(const Settings& settings) override;
 
         // get type
         virtual Type getType() override { return Renderer::Type::Vulkan; }
@@ -38,7 +38,7 @@ namespace Echo
 
         // create views
         virtual FrameBufferOffScreen* createFrameBufferOffScreen(ui32 width, ui32 height) override { return EchoNew(VKFramebufferOffscreen(width, height));}
-        virtual FrameBufferWindow* createFrameBufferWindow() override { return nullptr; }
+        virtual FrameBufferWindow* createFrameBufferWindow() override { return EchoNew(VKFramebufferWindow); }
 
         // create states
         virtual RasterizerState* createRasterizerState(const RasterizerState::RasterizerDesc& desc) override;

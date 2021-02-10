@@ -139,7 +139,9 @@ namespace Echo
 			// material
 			m_material = EchoNew(Material(StringUtil::Format("RayTracingMaterial")));
 			m_material->setShaderPath(m_shader->getPath());
-			m_material->getUniform("BaseColor")->setTexture(m_texture.ptr());
+			
+			if(m_material->getUniform("BaseColor"))
+				m_material->getUniform("BaseColor")->setTexture(m_texture.ptr());
 
 			m_imageFilter = EchoNew(ImageFilter);
 			m_imageFilter->setMaterial(m_material);

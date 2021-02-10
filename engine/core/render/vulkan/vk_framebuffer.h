@@ -5,24 +5,14 @@
 
 namespace Echo
 {
-    class VKFramebuffer : public FrameBufferOffScreen
+    class VKFramebuffer
     {
     public:
-        VKFramebuffer(ui32 width, ui32 height);
+        VKFramebuffer();
         virtual ~VKFramebuffer();
 
         // current frame buffer
         static VKFramebuffer* current();
-
-        // attach render view
-        virtual void attach(Attachment attachment, TextureRender* renderView);
-
-        // begin render
-        virtual bool begin(const Color& bgColor, float depthValue, bool isClearStencil, ui8 stencilValue) override;
-        virtual bool end() override;
-
-        // on resize
-        virtual void onSize(ui32 width, ui32 height) override;
 
     public:
         // get vk viewPort
@@ -50,13 +40,13 @@ namespace Echo
 
     protected:
         VkRenderPass                        m_vkRenderPass = VK_NULL_HANDLE;
-        VkRenderPassBeginInfo               m_vkRenderPassBeginInfo;
-        vector<VkFramebuffer>::type         m_vkFramebuffers;
+		VkRenderPassBeginInfo               m_vkRenderPassBeginInfo;
         VkViewport                          m_vkViewport;
         VkPipelineViewportStateCreateInfo   m_vkViewportStateCreateInfo;
+        vector<VkFramebuffer>::type         m_vkFramebuffers;
     };
 
-    class VKFramebufferOffscreen : public VKFramebuffer
+    class VKFramebufferOffscreen : public FrameBufferOffScreen, public VKFramebuffer
     {
     public:
         VKFramebufferOffscreen(ui32 width, ui32 height);
@@ -74,10 +64,10 @@ namespace Echo
         void createVkFramebuffers();
     };
 
-    class VKFramebufferWindow : public VKFramebuffer
+    class VKFramebufferWindow : public FrameBufferWindow, public VKFramebuffer
     {
     public:
-        VKFramebufferWindow(ui32 width, ui32 height, void* handle);
+        VKFramebufferWindow();
         virtual ~VKFramebufferWindow();
 
         // begin render

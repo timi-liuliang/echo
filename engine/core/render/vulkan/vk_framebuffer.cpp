@@ -7,8 +7,7 @@ namespace Echo
 {
     static VKFramebuffer* g_current = nullptr;
 
-    VKFramebuffer::VKFramebuffer(ui32 width, ui32 height)
-        : FrameBufferOffScreen(width, height)
+    VKFramebuffer::VKFramebuffer()
     {
     }
 
@@ -19,72 +18,6 @@ namespace Echo
     VKFramebuffer* VKFramebuffer::current()
     {
         return g_current;
-    }
-
-    void VKFramebuffer::attach(Attachment attachment, TextureRender* renderView)
-    {
-        m_views[(ui8)attachment] = renderView;
-    }
-
-    bool VKFramebuffer::begin(const Color& bgColor, float depthValue, bool isClearStencil, ui8 stencilValue)
-    {
-        g_current = this;
-
-        VkCommandBufferBeginInfo commandBufferBeginInfo = {};
-        commandBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-
-        if (VK_SUCCESS == vkBeginCommandBuffer(getVkCommandbuffer(), &commandBufferBeginInfo))
-        {
-            VkClearValue clearValues[2];
-            clearValues[0].color = { Renderer::BGCOLOR.r, Renderer::BGCOLOR.g, Renderer::BGCOLOR.b, Renderer::BGCOLOR.a };
-            clearValues[1].depthStencil = { 1.0f, 0 };
-
-            VkRenderPassBeginInfo renderPassBeginInfo = {};
-            renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-            renderPassBeginInfo.pNext = nullptr;
-            renderPassBeginInfo.renderPass = m_vkRenderPass;
-            renderPassBeginInfo.renderArea.offset.x = 0;
-            renderPassBeginInfo.renderArea.offset.y = 0;
-            renderPassBeginInfo.renderArea.extent.width = Renderer::instance()->getWindowWidth();
-            renderPassBeginInfo.renderArea.extent.height = Renderer::instance()->getWindowHeight();
-            renderPassBeginInfo.clearValueCount = 1;
-            renderPassBeginInfo.pClearValues = clearValues;
-            renderPassBeginInfo.framebuffer = getVkFramebuffer();
-
-            vkCmdBeginRenderPass(getVkCommandbuffer(), &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
-
-            return true;
-        }
-
-        EchoLogError("vulkan begin command buffer failed.");
-        return false;
-    }
-
-    bool VKFramebuffer::end()
-    {
-        return true;
-    }
-
-    void VKFramebuffer::onSize(ui32 width, ui32 height)
-    {
-        for (TextureRender* colorView : m_views)
-        {
-            if (colorView)
-                colorView->onSize(width, height);
-        }
-
-        // view port
-        m_vkViewport.x = 0.f;
-        m_vkViewport.y = 0.0f;
-        m_vkViewport.width = width;
-        m_vkViewport.height = height;
-        m_vkViewport.minDepth = 0.f;
-        m_vkViewport.maxDepth = 1.f;
-
-        m_vkViewportStateCreateInfo = {};
-        m_vkViewportStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-        m_vkViewportStateCreateInfo.viewportCount = 1;
-        m_vkViewportStateCreateInfo.pViewports = &m_vkViewport;
     }
 
     void VKFramebuffer::createVkRenderPass()
@@ -123,7 +56,7 @@ namespace Echo
     }
 
     VKFramebufferOffscreen::VKFramebufferOffscreen(ui32 width, ui32 height)
-        : VKFramebuffer(width, height)
+        : FrameBufferOffScreen(width, height)
     {
     }
 
@@ -133,8 +66,6 @@ namespace Echo
 
     bool VKFramebufferOffscreen::begin(const Color& backgroundColor, float depthValue, bool clearStencil, ui8 stencilValue)
     {
-        VKFramebuffer::begin(backgroundColor, depthValue, clearStencil, stencilValue);
-
         return true;
     }
 
@@ -168,18 +99,18 @@ namespace Echo
         //}
     }
 
-    VKFramebufferWindow::VKFramebufferWindow(ui32 width, ui32 height, void* handle)
-        : VKFramebuffer(width, height)
+    VKFramebufferWindow::VKFramebufferWindow()
+        : FrameBufferWindow()
     {
+        const Renderer::Settings& settings = Renderer::instance()->getSettings();
+
         createVkSemaphores();
 
-        createVkSurface(handle);
+        createVkSurface((void*)settings.m_windowHandle);
 
         vkGetDeviceQueue(VKRenderer::instance()->getVkDevice(), VKRenderer::instance()->getPresentQueueFamilyIndex(m_vkWindowSurface), 0, &m_vkPresentQueue);
 
-        onSize(width, height);
-
-        g_current = this;
+        onSize(settings.m_windowWidth, settings.m_windowHeight);
     }
 
     VKFramebufferWindow::~VKFramebufferWindow()
@@ -195,9 +126,38 @@ namespace Echo
 
     bool VKFramebufferWindow::begin(const Color& backgroundColor, float depthValue, bool clearStencil, ui8 stencilValue)
     {
+        g_current = this;
+
         VKDebug(vkAcquireNextImageKHR(VKRenderer::instance()->getVkDevice(), m_vkSwapChain, Math::MAX_UI64, m_vkImageAvailableSemaphore, VK_NULL_HANDLE, &m_imageIndex));
 
-        return VKFramebuffer::begin(backgroundColor, depthValue, clearStencil, stencilValue);
+		VkCommandBufferBeginInfo commandBufferBeginInfo = {};
+		commandBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+
+		if (VK_SUCCESS == vkBeginCommandBuffer(getVkCommandbuffer(), &commandBufferBeginInfo))
+		{
+			VkClearValue clearValues[2];
+			clearValues[0].color = { Renderer::BGCOLOR.r, Renderer::BGCOLOR.g, Renderer::BGCOLOR.b, Renderer::BGCOLOR.a };
+			clearValues[1].depthStencil = { 1.0f, 0 };
+
+			VkRenderPassBeginInfo renderPassBeginInfo = {};
+			renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+			renderPassBeginInfo.pNext = nullptr;
+			renderPassBeginInfo.renderPass = m_vkRenderPass;
+			renderPassBeginInfo.renderArea.offset.x = 0;
+			renderPassBeginInfo.renderArea.offset.y = 0;
+			renderPassBeginInfo.renderArea.extent.width = Renderer::instance()->getWindowWidth();
+			renderPassBeginInfo.renderArea.extent.height = Renderer::instance()->getWindowHeight();
+			renderPassBeginInfo.clearValueCount = 1;
+			renderPassBeginInfo.pClearValues = clearValues;
+			renderPassBeginInfo.framebuffer = getVkFramebuffer();
+
+			vkCmdBeginRenderPass(getVkCommandbuffer(), &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
+
+			return true;
+		}
+
+		EchoLogError("vulkan begin command buffer failed.");
+		return false;
     }
 
     bool VKFramebufferWindow::end()
@@ -211,7 +171,17 @@ namespace Echo
 
     void VKFramebufferWindow::onSize(ui32 width, ui32 height)
     {
-        VKFramebuffer::onSize(width, height);
+		m_vkViewport.x = 0.f;
+		m_vkViewport.y = 0.0f;
+		m_vkViewport.width = width;
+		m_vkViewport.height = height;
+		m_vkViewport.minDepth = 0.f;
+		m_vkViewport.maxDepth = 1.f;
+
+		m_vkViewportStateCreateInfo = {};
+		m_vkViewportStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+		m_vkViewportStateCreateInfo.viewportCount = 1;
+		m_vkViewportStateCreateInfo.pViewports = &m_vkViewport;
 
         recreateVkSwapChain();
     }
