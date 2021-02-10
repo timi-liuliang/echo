@@ -132,7 +132,7 @@ namespace Echo
     {
         VkDescriptorSetAllocateInfo allocInfo = {};
         allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-        allocInfo.descriptorPool = VKFramebuffer::current()->getVkDescriptorPool();
+        allocInfo.descriptorPool =VKRenderer::instance()->getVkDescriptorPool();
         allocInfo.descriptorSetCount = m_vkDescriptorSetLayouts.size();
         allocInfo.pSetLayouts = m_vkDescriptorSetLayouts.data();
 

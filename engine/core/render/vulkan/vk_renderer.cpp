@@ -19,6 +19,8 @@ namespace Echo
 
     VKRenderer::~VKRenderer()
     {
+		vkDestroyDescriptorPool(VKRenderer::instance()->getVkDevice(), m_vkDescriptorPool, nullptr);
+
 		m_validation.cleanup();
 		vkDestroyDevice(m_vkDevice, nullptr);
 		vkDestroyInstance(m_vkInstance, nullptr);
@@ -40,6 +42,8 @@ namespace Echo
 		createVkLogicalDevice();
 
 		createVkCommandPool();
+
+		createVkDescriptorPool();
 
         return true;
     }
@@ -301,6 +305,27 @@ namespace Echo
 		createInfo.flags = 0;
 
         VKDebug(vkCreateCommandPool(m_vkDevice, &createInfo, nullptr, &m_vkCommandPool));
+	}
+
+	void VKRenderer::createVkDescriptorPool()
+	{
+		array<VkDescriptorPoolSize, 1> typeCounts;
+		typeCounts[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+		typeCounts[0].descriptorCount = 512;
+
+		// For additional type you need to add new entries in the type count list
+		//typeCounts[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+		//typeCounts[1].descriptorCount = 2;
+
+		// Create the global descriptor pool
+		VkDescriptorPoolCreateInfo descriptorPoolInfo = {};
+		descriptorPoolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+		descriptorPoolInfo.pNext = nullptr;
+		descriptorPoolInfo.poolSizeCount = typeCounts.size();
+		descriptorPoolInfo.pPoolSizes = typeCounts.data();
+		descriptorPoolInfo.maxSets = 512;
+
+		VKDebug(vkCreateDescriptorPool( m_vkDevice, &descriptorPoolInfo, nullptr, &m_vkDescriptorPool));
 	}
 
     void VKRenderer::onSize(int width, int height)

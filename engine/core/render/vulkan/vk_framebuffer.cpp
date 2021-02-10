@@ -10,12 +10,10 @@ namespace Echo
     VKFramebuffer::VKFramebuffer(ui32 width, ui32 height)
         : FrameBufferOffScreen(width, height)
     {
-        createVkDescriptorPool();
     }
 
     VKFramebuffer::~VKFramebuffer()
     {
-        vkDestroyDescriptorPool(VKRenderer::instance()->getVkDevice(), m_vkDescriptorPool, nullptr);
     }
 
     VKFramebuffer* VKFramebuffer::current()
@@ -122,27 +120,6 @@ namespace Echo
 
             VKDebug(vkCreateRenderPass(vkRenderer->getVkDevice(), &renderPassCreateInfo, nullptr, &m_vkRenderPass));
         }
-    }
-
-    void VKFramebuffer::createVkDescriptorPool()
-    {
-        array<VkDescriptorPoolSize, 1> typeCounts;
-        typeCounts[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        typeCounts[0].descriptorCount = 512;
-
-        // For additional type you need to add new entries in the type count list
-        //typeCounts[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        //typeCounts[1].descriptorCount = 2;
-
-        // Create the global descriptor pool
-        VkDescriptorPoolCreateInfo descriptorPoolInfo = {};
-        descriptorPoolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-        descriptorPoolInfo.pNext = nullptr;
-        descriptorPoolInfo.poolSizeCount = typeCounts.size();
-        descriptorPoolInfo.pPoolSizes = typeCounts.data();
-        descriptorPoolInfo.maxSets = 512;
-
-        VKDebug(vkCreateDescriptorPool(VKRenderer::instance()->getVkDevice(), &descriptorPoolInfo, nullptr, &m_vkDescriptorPool));
     }
 
     VKFramebufferOffscreen::VKFramebufferOffscreen(ui32 width, ui32 height)

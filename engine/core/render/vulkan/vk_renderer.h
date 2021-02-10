@@ -104,6 +104,9 @@ namespace Echo
         // get clear command buffer
         VkCommandPool getVkCommandPool() { return m_vkCommandPool; }
 
+		// get vk descriptor pool
+		VkDescriptorPool getVkDescriptorPool() { return m_vkDescriptorPool; }
+
 	private:
 		// create vk instance
 		void createVkInstance();
@@ -128,6 +131,9 @@ namespace Echo
 		// create command pool
 		void createVkCommandPool();
 
+		// create vk descriptor pool
+		void createVkDescriptorPool();
+
     private:
 		Extensions			m_enabledExtensions;
 		VkInstance			m_vkInstance;
@@ -138,5 +144,6 @@ namespace Echo
 		VKValidation		m_validation;
         VkQueue             m_vkGraphicsQueue = nullptr;
 		VkCommandPool		m_vkCommandPool;
+        VkDescriptorPool    m_vkDescriptorPool = VK_NULL_HANDLE;
 	};
 }
