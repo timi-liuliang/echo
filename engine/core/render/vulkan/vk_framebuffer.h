@@ -37,6 +37,7 @@ namespace Echo
     protected:
         // create render pass
         void createVkRenderPass();
+        void destroyVkRenderPass();
 
     protected:
         VkRenderPass                        m_vkRenderPass = VK_NULL_HANDLE;

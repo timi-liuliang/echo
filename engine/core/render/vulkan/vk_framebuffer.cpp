@@ -22,6 +22,8 @@ namespace Echo
 
     void VKFramebuffer::createVkRenderPass()
     {
+        destroyVkRenderPass();
+
         if (!m_vkRenderPass)
         {
             VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
@@ -52,6 +54,15 @@ namespace Echo
             renderPassCreateInfo.pSubpasses = &subpassDesc;
 
             VKDebug(vkCreateRenderPass(vkRenderer->getVkDevice(), &renderPassCreateInfo, nullptr, &m_vkRenderPass));
+        }
+    }
+
+    void VKFramebuffer::destroyVkRenderPass()
+    {
+        if (m_vkRenderPass)
+        {
+            vkDestroyRenderPass(VKRenderer::instance()->getVkDevice(), m_vkRenderPass, nullptr);
+            m_vkRenderPass = VK_NULL_HANDLE;
         }
     }
 
@@ -136,7 +147,7 @@ namespace Echo
 		if (VK_SUCCESS == vkBeginCommandBuffer(getVkCommandbuffer(), &commandBufferBeginInfo))
 		{
 			VkClearValue clearValues[2];
-			clearValues[0].color = { Renderer::BGCOLOR.r, Renderer::BGCOLOR.g, Renderer::BGCOLOR.b, Renderer::BGCOLOR.a };
+			clearValues[0].color = { backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a };
 			clearValues[1].depthStencil = { 1.0f, 0 };
 
 			VkRenderPassBeginInfo renderPassBeginInfo = {};
