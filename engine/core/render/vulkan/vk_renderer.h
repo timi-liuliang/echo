@@ -79,8 +79,8 @@ namespace Echo
         virtual void getDepthRange(Vector2& vec) override {}
 
         // get screen width and height
-        virtual ui32 getWindowWidth() override { return 256.f; }
-        virtual ui32 getWindowHeight() override { return 256.f; }
+        virtual ui32 getWindowWidth() override { return m_screenWidth; }
+        virtual ui32 getWindowHeight() override { return m_screenHeight; }
 
 		// get view port
 		virtual void getViewportReal(Viewport& pViewport) override {}
@@ -135,6 +135,8 @@ namespace Echo
 		void createVkDescriptorPool();
 
     private:
+		ui32				m_screenWidth = 0;
+		ui32				m_screenHeight = 0;
 		Extensions			m_enabledExtensions;
 		VkInstance			m_vkInstance;
 		ExtensionProperties	m_vkExtensions;

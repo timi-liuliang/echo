@@ -332,6 +332,9 @@ namespace Echo
 
     void VKRenderer::onSize(int width, int height)
     {
+		m_screenWidth = width;
+		m_screenHeight = height;
+
         // render target
         RenderPipeline::current()->onSize(width, height);
 
