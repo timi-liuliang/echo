@@ -31,20 +31,8 @@ namespace Echo
 		return inst;
 	}
 
-	const Color& GameSettings::getBackgroundColor() const
-	{ 
-		return Renderer::BGCOLOR;
-	}
-
-	void GameSettings::setBackgroundColor(const Color& color)
-	{ 
-		Renderer::BGCOLOR = color;
-	}
-
 	void GameSettings::bindMethods() 
 	{
-        CLASS_BIND_METHOD(GameSettings, getBackgroundColor, DEF_METHOD("getBackgroundColor"));
-        CLASS_BIND_METHOD(GameSettings, setBackgroundColor, DEF_METHOD("setBackgroundColor"));
         CLASS_BIND_METHOD(GameSettings, isFullScreen,   DEF_METHOD("isFullScreen"));
         CLASS_BIND_METHOD(GameSettings, setFullScreen,  DEF_METHOD("setFullScreen"));
 		CLASS_BIND_METHOD(GameSettings, getDesignWidth, DEF_METHOD("getDesignWidth"));
@@ -62,7 +50,6 @@ namespace Echo
 		CLASS_BIND_METHOD(GameSettings, getLaunchScene, DEF_METHOD("getLaunchScene"));
 		CLASS_BIND_METHOD(GameSettings, setLaunchScene, DEF_METHOD("setLaunchScene"));
 
-		CLASS_REGISTER_PROPERTY(GameSettings, "Background", Variant::Type::Color, "getBackgroundColor", "setBackgroundColor");
         CLASS_REGISTER_PROPERTY(GameSettings, "FullScreen", Variant::Type::Int, "isFullScreen", "setFullScreen");
 		CLASS_REGISTER_PROPERTY(GameSettings, "DesignWidth", Variant::Type::Int, "getDesignWidth", "setDesignWidth");
 		CLASS_REGISTER_PROPERTY(GameSettings, "DesignHeight", Variant::Type::Int, "getDesignHeight", "setDesignHeight");

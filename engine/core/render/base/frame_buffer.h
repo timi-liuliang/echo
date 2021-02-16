@@ -46,7 +46,7 @@ namespace Echo
 
     public:
 		// begin|end render
-		virtual bool begin(const Color& bgColor, float depthValue, bool isClearStencil, ui8 stencilValue) { return false; }
+		virtual bool begin() { return false; }
 		virtual bool end() { return false; }
 
 		// on resize
@@ -57,6 +57,10 @@ namespace Echo
 		bool isClearColor() const { return m_isClearColor; }
 		void setClearColor(bool isClearColor) { m_isClearColor = isClearColor; }
 
+		// background color
+		const Color& getClearColorValue() const { return m_clearColor; }
+		void setClearColorValue(const Color& color) { m_clearColor = color; }
+
 		// clear depth
 		bool isClearDepth() const { return m_isClearDepth; }
 		void setClearDepth(bool isClearDepth) { m_isClearDepth = isClearDepth; }
@@ -66,7 +70,11 @@ namespace Echo
 
     protected:
 		bool	m_isClearColor = true;
+		Color	m_clearColor = Color(0.298f, 0.298f, 0.322f);
 		bool	m_isClearDepth = true;
+		float	m_clearDepth = 1.f;
+		bool	m_isClearStencil = true; 
+		ui8		m_clearStencil = 0;
     };
     typedef ResRef<FrameBuffer> FrameBufferPtr;
 
@@ -109,5 +117,7 @@ namespace Echo
 
 		// create fun
 		static Res* create();
+
+	protected:
     };
 }

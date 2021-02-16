@@ -54,7 +54,7 @@ namespace Echo
         virtual ~VKFramebufferOffscreen();
 
         // begin render
-        virtual bool begin(const Color& backgroundColor, float depthValue, bool clearStencil, ui8 stencilValue) override;
+        virtual bool begin() override;
         virtual bool end() override;
 
         // on resize
@@ -72,7 +72,7 @@ namespace Echo
         virtual ~VKFramebufferWindow();
 
         // begin render
-        virtual bool begin(const Color& backgroundColor, float depthValue, bool clearStencil, ui8 stencilValue) override;
+        virtual bool begin() override;
         virtual bool end() override;
 
         // on resize

@@ -57,10 +57,6 @@ namespace Echo
 		void setLaunchScene(const ResourcePath& path) { m_launchScene.setPath(path.getPath()); }
 		const ResourcePath& getLaunchScene() const { return m_launchScene; }
 
-		// background color
-		const Color& getBackgroundColor() const;
-		void setBackgroundColor(const Color& color);
-
 		// render pipeline
 		void setRenderPipeline(const ResourcePath& path);
 		const ResourcePath& getRenderPipeline() const { return m_renderPipelinePath; }

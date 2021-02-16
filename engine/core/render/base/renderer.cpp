@@ -65,7 +65,6 @@
 
 namespace Echo
 {
-	Color Renderer::BGCOLOR = Echo::Color(0.298f, 0.298f, 0.322f);	// render target clear color
 	static Renderer* g_render = nullptr;							// global renderer
 
 	Renderer* Renderer::instance()

@@ -72,7 +72,7 @@ namespace Echo
 		}
     }
 
-	bool GLESFrameBufferOffScreen::begin(const Color& bgColor, float depthValue, bool isClearStencil, ui8 stencilValue)
+	bool GLESFrameBufferOffScreen::begin()
 	{
 		i32 width = 0;
 		i32 height = 0;
@@ -80,7 +80,7 @@ namespace Echo
 		{
 			OGLESDebug(glViewport(0, 0, width, height));
 
-			clear(m_isClearColor, bgColor, m_isClearDepth, depthValue, isClearStencil, stencilValue);
+			clear(m_isClearColor, m_clearColor, m_isClearDepth, m_clearDepth, m_isClearStencil, m_clearStencil);
 
 			return true;
 		}
@@ -171,7 +171,7 @@ namespace Echo
 	{
 	}
 
-	bool GLESFramebufferWindow::begin(const Color& backgroundColor, float depthValue, bool clearStencil, ui8 stencilValue)
+	bool GLESFramebufferWindow::begin()
 	{
 		// bind frame buffer
 		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, 0));
@@ -181,7 +181,7 @@ namespace Echo
 		OGLESDebug(glViewport(0, 0, width, height));
 
 		// clear
-		GLESFrameBufferOffScreen::clear(m_isClearColor, backgroundColor, m_isClearDepth, depthValue, clearStencil, stencilValue);
+		GLESFrameBufferOffScreen::clear(m_isClearColor, m_clearColor, m_isClearDepth, m_clearDepth, m_isClearStencil, m_clearStencil);
 
 		return true;
 	}

@@ -121,7 +121,7 @@ namespace Echo
 		if (!m_frameBuffer)			return;
 		if (IsGame && m_editorOnly) return;
 
-		if (m_frameBuffer->begin(Renderer::BGCOLOR, 1.f, false, 0))
+		if (m_frameBuffer->begin())
 		{
 			onRenderBegin();
 			{

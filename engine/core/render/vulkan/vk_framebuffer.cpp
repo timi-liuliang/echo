@@ -75,7 +75,7 @@ namespace Echo
     {
     }
 
-    bool VKFramebufferOffscreen::begin(const Color& backgroundColor, float depthValue, bool clearStencil, ui8 stencilValue)
+    bool VKFramebufferOffscreen::begin()
     {
         return true;
     }
@@ -135,7 +135,7 @@ namespace Echo
         vkDestroySemaphore(VKRenderer::instance()->getVkDevice(), m_vkImageAvailableSemaphore, nullptr);
     }
 
-    bool VKFramebufferWindow::begin(const Color& backgroundColor, float depthValue, bool clearStencil, ui8 stencilValue)
+    bool VKFramebufferWindow::begin()
     {
         g_current = this;
 
@@ -147,8 +147,8 @@ namespace Echo
 		if (VK_SUCCESS == vkBeginCommandBuffer(getVkCommandbuffer(), &commandBufferBeginInfo))
 		{
 			VkClearValue clearValues[2];
-			clearValues[0].color = { backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a };
-			clearValues[1].depthStencil = { 1.0f, 0 };
+			clearValues[0].color = { m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a };
+			clearValues[1].depthStencil = { m_clearDepth, m_clearStencil };
 
 			VkRenderPassBeginInfo renderPassBeginInfo = {};
 			renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;

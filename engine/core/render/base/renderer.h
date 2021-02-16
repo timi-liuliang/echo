@@ -34,8 +34,6 @@ namespace Echo
 			RasterizerState::PolygonMode	m_polygonMode = RasterizerState::PM_FILL;		// Global Settings
 		};
 
-		static Color BGCOLOR;
-
 	public:
 		Renderer();
 		virtual ~Renderer();

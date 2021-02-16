@@ -12,7 +12,7 @@ namespace Echo
 		virtual ~GLESFrameBufferOffScreen();
 
         // begin render
-        virtual bool begin(const Color& bgColor, float depthValue, bool isClearStencil, ui8 stencilValue) override;
+        virtual bool begin() override;
         virtual bool end() override;
 
         // on resize
@@ -44,7 +44,7 @@ namespace Echo
 		virtual ~GLESFramebufferWindow();
 
 		// begin render
-		virtual bool begin(const Color& backgroundColor,float depthValue, bool clearStencil, ui8 stencilValue) override;
+		virtual bool begin() override;
 		virtual bool end() override;
 
 		// on resize
