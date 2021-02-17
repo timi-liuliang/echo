@@ -18,7 +18,7 @@ namespace Echo
         bool isLinked() const { return m_isLinked; }
 
         // bind
-        void bindUniforms();
+        void bindUniforms(VkCommandBuffer& vkCommandbuffer);
 
     public:
         // get shader stage create info

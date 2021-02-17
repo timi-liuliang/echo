@@ -337,46 +337,40 @@ namespace Echo
 
         // render target
         RenderPipeline::current()->onSize(width, height);
-
-        for (auto& it : m_renderables)
-        {
-            VKRenderable* vkRenderable = ECHO_DOWN_CAST<VKRenderable*>(it.second);
-            if (vkRenderable)
-            {
-                vkRenderable->createVkPipeline();
-            }
-        }
     }
 
     void VKRenderer::draw(Renderable* renderable)
     {
-        VKRenderable* vkRenderable = ECHO_DOWN_CAST<VKRenderable*>(renderable);
-        if (vkRenderable->getVkPipeline())
-        {
-            ShaderProgram* shaderProgram = renderable->getMaterial()->getShader();
-            VKFramebuffer* vkFramebuffer = VKFramebuffer::current();
-            VkCommandBuffer vkCommandbuffer = vkFramebuffer->getVkCommandbuffer();
+		VKFramebuffer* currentFrameBuffer = VKFramebuffer::current();
+		if (currentFrameBuffer)
+		{
+			VKRenderable* vkRenderable = ECHO_DOWN_CAST<VKRenderable*>(renderable);
+			if (vkRenderable->createVkPipeline(currentFrameBuffer))
+			{
+				ShaderProgram* shaderProgram = renderable->getMaterial()->getShader();
+				VkCommandBuffer vkCommandbuffer = currentFrameBuffer->getVkCommandbuffer();
 
-            vkCmdBindPipeline(vkCommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkRenderable->getVkPipeline());
-            vkRenderable->bindShaderParams();
-            vkRenderable->bindGeometry();
+				vkCmdBindPipeline(vkCommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkRenderable->getVkPipeline());
+				vkRenderable->bindShaderParams(vkCommandbuffer);
+				vkRenderable->bindGeometry(vkCommandbuffer);
 
-			MeshPtr mesh = renderable->getMesh();
-            if (mesh->getIndexBuffer())
-            {
-                ui32 idxCount = mesh->getIndexCount();
-                ui32 idxOffset = mesh->getStartIndex();
+				MeshPtr mesh = renderable->getMesh();
+				if (mesh->getIndexBuffer())
+				{
+					ui32 idxCount = mesh->getIndexCount();
+					ui32 idxOffset = mesh->getStartIndex();
 
-                vkCmdDrawIndexed(vkCommandbuffer, idxCount, 1, idxOffset, 0, 0);
-            }
-            else
-            {
-                ui32 vertCount = mesh->getVertexCount();
-                ui32 startVert = mesh->getStartVertex();
+					vkCmdDrawIndexed(vkCommandbuffer, idxCount, 1, idxOffset, 0, 0);
+				}
+				else
+				{
+					ui32 vertCount = mesh->getVertexCount();
+					ui32 startVert = mesh->getStartVertex();
 
-                vkCmdDraw(vkCommandbuffer, vertCount, 1, startVert, 0);
-            }
-        }
+					vkCmdDraw(vkCommandbuffer, vertCount, 1, startVert, 0);
+				}
+			}
+		}
     }
 
     bool VKRenderer::present()

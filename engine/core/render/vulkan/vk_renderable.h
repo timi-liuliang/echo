@@ -14,11 +14,11 @@ namespace Echo
 
         // bind shader uniforms
 		void bindRenderState();
-        void bindShaderParams();
-        void bindGeometry();
+        void bindShaderParams(VkCommandBuffer& vkCommandbuffer);
+        void bindGeometry(VkCommandBuffer& vkCommandbuffer);
 
         // create|destroy vk pipeline
-        void createVkPipeline();
+        bool createVkPipeline(class VKFramebuffer* vkFrameBuffer);
         void destroyVkPipeline();
 
     public:
@@ -49,6 +49,7 @@ namespace Echo
         const VkPipelineMultisampleStateCreateInfo* getVkMultiSampleStateCreateInfo();
 
 	private:
-		VkPipeline          m_vkPipeline = VK_NULL_HANDLE;
+        VkGraphicsPipelineCreateInfo    m_vkPipelineInfo = {};
+		VkPipeline                      m_vkPipeline = VK_NULL_HANDLE;
 	};
 }

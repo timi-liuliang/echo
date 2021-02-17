@@ -414,41 +414,47 @@ namespace Echo
         VKDebug(vkCreateSwapchainKHR(vkDevice, &createInfo, nullptr, &m_vkSwapChain));
 
         // destroy old vk swapchain and clearsup all the presentable images
+        destroyVkImageViews();
         destroyVkSwapChain(oldVkSwapChain);
     }
 
     void VKFramebufferWindow::createVkImageViews(VkDevice vkDevice)
     {
-        destroyVkImageViews();
+        // destroyVkImageViews has been called by createSwapChain()
+        // do nothing
 
         // image count
         ui32 swapChainImageCount = 0;
         VKDebug(vkGetSwapchainImagesKHR(vkDevice, m_vkSwapChain, &swapChainImageCount, nullptr));
 
-        // Vk image
-        m_vkSwapChainImages.resize(swapChainImageCount);
-        VKDebug(vkGetSwapchainImagesKHR(vkDevice, m_vkSwapChain, &swapChainImageCount, &m_vkSwapChainImages[0]));
-
-        // create ImageViews
-        m_vkSwapChainImageViews.resize(swapChainImageCount);
-        for (size_t i = 0; i < m_vkSwapChainImageViews.size(); i++)
+        // create image views
+        if (swapChainImageCount)
         {
-            VkImageViewCreateInfo createInfo = {};
-            createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-            createInfo.image = m_vkSwapChainImages[i];
-            createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-            createInfo.format = VK_FORMAT_B8G8R8A8_UNORM;
-            createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
-            createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
-            createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
-            createInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
-            createInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-            createInfo.subresourceRange.baseMipLevel = 0;
-            createInfo.subresourceRange.levelCount = 1;
-            createInfo.subresourceRange.baseArrayLayer = 0;
-            createInfo.subresourceRange.layerCount = 1;
+			// Vk image
+			m_vkSwapChainImages.resize(swapChainImageCount);
+			VKDebug(vkGetSwapchainImagesKHR(vkDevice, m_vkSwapChain, &swapChainImageCount, &m_vkSwapChainImages[0]));
 
-            VKDebug(vkCreateImageView(vkDevice, &createInfo, nullptr, &m_vkSwapChainImageViews[i]));
+			// create ImageViews
+			m_vkSwapChainImageViews.resize(swapChainImageCount);
+			for (size_t i = 0; i < m_vkSwapChainImageViews.size(); i++)
+			{
+				VkImageViewCreateInfo createInfo = {};
+				createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+				createInfo.image = m_vkSwapChainImages[i];
+				createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+				createInfo.format = VK_FORMAT_B8G8R8A8_UNORM;
+				createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+				createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+				createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+				createInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+				createInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+				createInfo.subresourceRange.baseMipLevel = 0;
+				createInfo.subresourceRange.levelCount = 1;
+				createInfo.subresourceRange.baseArrayLayer = 0;
+				createInfo.subresourceRange.layerCount = 1;
+
+				VKDebug(vkCreateImageView(vkDevice, &createInfo, nullptr, &m_vkSwapChainImageViews[i]));
+			}
         }
     }
 

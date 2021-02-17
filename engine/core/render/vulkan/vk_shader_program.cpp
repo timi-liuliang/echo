@@ -247,13 +247,13 @@ namespace Echo
         }
     }
 
-    void VKShaderProgram::bindUniforms()
+    void VKShaderProgram::bindUniforms(VkCommandBuffer& vkCommandbuffer)
     {
         // update uniform VkBuffer by memory
         updateVkUniformBuffer();
 
         // Bind descriptor sets describing shader binding points
-        vkCmdBindDescriptorSets(VKFramebuffer::current()->getVkCommandbuffer(), VK_PIPELINE_BIND_POINT_GRAPHICS, m_vkPipelineLayout, 0, m_vkDescriptorSets.size(), m_vkDescriptorSets.data(), 0, nullptr);
+        vkCmdBindDescriptorSets(vkCommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_vkPipelineLayout, 0, m_vkDescriptorSets.size(), m_vkDescriptorSets.data(), 0, nullptr);
     }
 
     const spirv_cross::ShaderResources VKShaderProgram::getSpirvShaderResources(ShaderType type)

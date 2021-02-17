@@ -3,6 +3,7 @@
 #include "vk_mapping.h"
 #include "vk_shader_program.h"
 #include "vk_render_state.h"
+#include "vk_framebuffer.h"
 #include "engine/core/scene/render_node.h"
 
 namespace Echo
@@ -15,61 +16,61 @@ namespace Echo
     void VKRenderable::setMesh(MeshPtr mesh)
     {
         m_mesh = mesh;
-
-        createVkPipeline();
     }
 
-    void VKRenderable::createVkPipeline()
+    bool VKRenderable::createVkPipeline(VKFramebuffer* vkFrameBuffer)
     {
-        destroyVkPipeline();
-
-        VKShaderProgram* vkShaderProgram = ECHO_DOWN_CAST<VKShaderProgram*>(m_material->getShader());
-        if (m_mesh && vkShaderProgram && vkShaderProgram->isLinked() && VKFramebuffer::current())
+        if (m_vkPipelineInfo.renderPass != vkFrameBuffer->getVkRenderPass())
         {
-            VKFramebuffer* vkFrameBuffer = VKFramebuffer::current();
+			destroyVkPipeline();
 
-            VkVertexInputBindingDescription vertexInputBinding = {};
-            vertexInputBinding.binding = 0;
-            vertexInputBinding.stride = m_mesh->getVertexStride();
-            vertexInputBinding.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+			VKShaderProgram* vkShaderProgram = ECHO_DOWN_CAST<VKShaderProgram*>(m_material->getShader());
+			if (m_mesh && vkShaderProgram && vkShaderProgram->isLinked())
+			{
+				VkVertexInputBindingDescription vertexInputBinding = {};
+				vertexInputBinding.binding = 0;
+				vertexInputBinding.stride = m_mesh->getVertexStride();
+				vertexInputBinding.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 
-            vector<VkVertexInputAttributeDescription>::type viAttributeDescriptions;
-            buildVkVertexInputAttributeDescriptions(vkShaderProgram, m_mesh->getVertexElements(), viAttributeDescriptions);
+				vector<VkVertexInputAttributeDescription>::type viAttributeDescriptions;
+				buildVkVertexInputAttributeDescriptions(vkShaderProgram, m_mesh->getVertexElements(), viAttributeDescriptions);
 
-            VkPipelineVertexInputStateCreateInfo vertexInputStateCreateInfo = {};
-            vertexInputStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-            vertexInputStateCreateInfo.vertexBindingDescriptionCount = 1;
-            vertexInputStateCreateInfo.pVertexBindingDescriptions = &vertexInputBinding;
-            vertexInputStateCreateInfo.vertexAttributeDescriptionCount = viAttributeDescriptions.size();
-            vertexInputStateCreateInfo.pVertexAttributeDescriptions = viAttributeDescriptions.data();
+				VkPipelineVertexInputStateCreateInfo vertexInputStateCreateInfo = {};
+				vertexInputStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+				vertexInputStateCreateInfo.vertexBindingDescriptionCount = 1;
+				vertexInputStateCreateInfo.pVertexBindingDescriptions = &vertexInputBinding;
+				vertexInputStateCreateInfo.vertexAttributeDescriptionCount = viAttributeDescriptions.size();
+				vertexInputStateCreateInfo.pVertexAttributeDescriptions = viAttributeDescriptions.data();
 
-            VkPipelineInputAssemblyStateCreateInfo pipelineInputAssemblyStateCreateInfo = {};
-            pipelineInputAssemblyStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-            pipelineInputAssemblyStateCreateInfo.topology = VKMapping::MapPrimitiveTopology(m_mesh->getTopologyType());
+				VkPipelineInputAssemblyStateCreateInfo pipelineInputAssemblyStateCreateInfo = {};
+				pipelineInputAssemblyStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
+				pipelineInputAssemblyStateCreateInfo.topology = VKMapping::MapPrimitiveTopology(m_mesh->getTopologyType());
 
-            vector<VkDynamicState>::type dynamicStateEnables = { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR };
-            VkPipelineDynamicStateCreateInfo dynamicState = {};
-            dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
-            dynamicState.dynamicStateCount = dynamicStateEnables.size();
-            dynamicState.pDynamicStates = dynamicStateEnables.data();
+				vector<VkDynamicState>::type dynamicStateEnables = { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR };
+				VkPipelineDynamicStateCreateInfo dynamicState = {};
+				dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+				dynamicState.dynamicStateCount = dynamicStateEnables.size();
+				dynamicState.pDynamicStates = dynamicStateEnables.data();
 
-            VkGraphicsPipelineCreateInfo pipelineInfo = {};
-            pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-            pipelineInfo.layout = vkShaderProgram->getVkPipelineLayout();
-            pipelineInfo.renderPass = vkFrameBuffer->getVkRenderPass();
-            pipelineInfo.stageCount = vkShaderProgram->getVkShaderStageCreateInfo().size();
-            pipelineInfo.pStages = vkShaderProgram->getVkShaderStageCreateInfo().data();
-            pipelineInfo.pVertexInputState = &vertexInputStateCreateInfo;
-            pipelineInfo.pInputAssemblyState = &pipelineInputAssemblyStateCreateInfo;
-            pipelineInfo.pViewportState = vkFrameBuffer->getVkViewportStateCreateInfo();
-            pipelineInfo.pDepthStencilState = getVkDepthStencilStateCrateInfo();
-            pipelineInfo.pRasterizationState = getVkRasterizationStateCreateInfo();
-            pipelineInfo.pMultisampleState = getVkMultiSampleStateCreateInfo();
-            pipelineInfo.pColorBlendState = getVkColorBlendStateCreateInfo();
-            pipelineInfo.pDynamicState = &dynamicState;
+				m_vkPipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+				m_vkPipelineInfo.layout = vkShaderProgram->getVkPipelineLayout();
+				m_vkPipelineInfo.renderPass = vkFrameBuffer->getVkRenderPass();
+				m_vkPipelineInfo.stageCount = vkShaderProgram->getVkShaderStageCreateInfo().size();
+				m_vkPipelineInfo.pStages = vkShaderProgram->getVkShaderStageCreateInfo().data();
+				m_vkPipelineInfo.pVertexInputState = &vertexInputStateCreateInfo;
+				m_vkPipelineInfo.pInputAssemblyState = &pipelineInputAssemblyStateCreateInfo;
+				m_vkPipelineInfo.pViewportState = vkFrameBuffer->getVkViewportStateCreateInfo();
+				m_vkPipelineInfo.pDepthStencilState = getVkDepthStencilStateCrateInfo();
+				m_vkPipelineInfo.pRasterizationState = getVkRasterizationStateCreateInfo();
+				m_vkPipelineInfo.pMultisampleState = getVkMultiSampleStateCreateInfo();
+				m_vkPipelineInfo.pColorBlendState = getVkColorBlendStateCreateInfo();
+				m_vkPipelineInfo.pDynamicState = &dynamicState;
 
-            VKDebug(vkCreateGraphicsPipelines(VKRenderer::instance()->getVkDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_vkPipeline));
+				VKDebug(vkCreateGraphicsPipelines(VKRenderer::instance()->getVkDevice(), VK_NULL_HANDLE, 1, &m_vkPipelineInfo, nullptr, &m_vkPipeline));
+			}
         }
+
+        return m_vkPipeline ? true : false;
     }
 
     void VKRenderable::destroyVkPipeline()
@@ -132,7 +133,7 @@ namespace Echo
 
     }
 
-    void VKRenderable::bindShaderParams()
+    void VKRenderable::bindShaderParams(VkCommandBuffer& vkCommandbuffer)
     {
 		VKShaderProgram* vkShaderProgram = ECHO_DOWN_CAST<VKShaderProgram*>(m_material->getShader());
 		if (vkShaderProgram)
@@ -163,24 +164,24 @@ namespace Echo
 				}
 			}
 
-			vkShaderProgram->bindUniforms();
+			vkShaderProgram->bindUniforms(vkCommandbuffer);
 		}
     }
 
-    void VKRenderable::bindGeometry()
+    void VKRenderable::bindGeometry(VkCommandBuffer& vkCommandbuffer)
     {
         VKBuffer* vertexBuffer = ECHO_DOWN_CAST<VKBuffer*>(m_mesh->getVertexBuffer());
         if (vertexBuffer)
         {
             VkDeviceSize offsets[1] = { 0 };
             VkBuffer vkBuffer = vertexBuffer->getVkBuffer();
-            vkCmdBindVertexBuffers(VKFramebuffer::current()->getVkCommandbuffer(), 0, 1, &vkBuffer, offsets);
+            vkCmdBindVertexBuffers(vkCommandbuffer, 0, 1, &vkBuffer, offsets);
         }
 
         VKBuffer* indexBuffer = ECHO_DOWN_CAST<VKBuffer*>(m_mesh->getIndexBuffer());
         if (indexBuffer)
         {
-            vkCmdBindIndexBuffer(VKFramebuffer::current()->getVkCommandbuffer(), indexBuffer->getVkBuffer(), 0, VK_INDEX_TYPE_UINT32);
+            vkCmdBindIndexBuffer(vkCommandbuffer, indexBuffer->getVkBuffer(), 0, VK_INDEX_TYPE_UINT32);
         }
     }
 
