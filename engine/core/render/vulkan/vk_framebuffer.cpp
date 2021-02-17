@@ -200,7 +200,7 @@ namespace Echo
         VkDevice vkDevice = VKRenderer::instance()->getVkDevice();
         if (vkDevice)
         {
-            vkDeviceWaitIdle(vkDevice);
+            VKDebug(vkDeviceWaitIdle(vkDevice));
 
             createSwapChain(vkDevice);
             createVkImageViews(vkDevice);
@@ -209,7 +209,7 @@ namespace Echo
             createVkCommandBuffers();
             createVkFences();
 
-            vkDeviceWaitIdle(vkDevice);
+            VKDebug(vkDeviceWaitIdle(vkDevice));
         }
     }
 

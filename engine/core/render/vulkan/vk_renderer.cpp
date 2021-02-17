@@ -341,6 +341,8 @@ namespace Echo
 
     void VKRenderer::draw(Renderable* renderable)
     {
+		return;
+
 		VKFramebuffer* currentFrameBuffer = VKFramebuffer::current();
 		if (currentFrameBuffer)
 		{
