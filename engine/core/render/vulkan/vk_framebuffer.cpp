@@ -26,8 +26,6 @@ namespace Echo
 
         if (!m_vkRenderPass)
         {
-            VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
-
             VkAttachmentReference attachRef = {};
             attachRef.attachment = 0;
             attachRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
@@ -53,7 +51,7 @@ namespace Echo
             renderPassCreateInfo.subpassCount = 1;
             renderPassCreateInfo.pSubpasses = &subpassDesc;
 
-            VKDebug(vkCreateRenderPass(vkRenderer->getVkDevice(), &renderPassCreateInfo, nullptr, &m_vkRenderPass));
+            VKDebug(vkCreateRenderPass(VKRenderer::instance()->getVkDevice(), &renderPassCreateInfo, nullptr, &m_vkRenderPass));
         }
     }
 
@@ -416,13 +414,12 @@ namespace Echo
         VKDebug(vkCreateSwapchainKHR(vkDevice, &createInfo, nullptr, &m_vkSwapChain));
 
         // destroy old vk swapchain and clearsup all the presentable images
-        destroyVkImageViews();
         destroyVkSwapChain(oldVkSwapChain);
     }
 
     void VKFramebufferWindow::createVkImageViews(VkDevice vkDevice)
     {
-        VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
+        destroyVkImageViews();
 
         // image count
         ui32 swapChainImageCount = 0;
