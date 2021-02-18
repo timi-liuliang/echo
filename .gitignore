@@ -7,7 +7,6 @@ app/ios/.DS_Store
 app/ios/frame/.DS_Store
 app/ios/frame/Platform/.DS_Store
 build/editor/windows/nsis/echo
-/thirdparty/vulkan
 bin/app/Win32/Debug/data
 bin/app/Win32/Release/data
 bin/app/Mac
