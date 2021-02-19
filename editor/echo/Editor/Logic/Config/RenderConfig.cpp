@@ -15,7 +15,8 @@ namespace Echo
 #elif defined ECHO_PLATFORM_HTML5
 		LoadGLESRenderer(renderer);
 #else
-		LoadVKRenderer(renderer);
+		LoadGLESRenderer(renderer);
+		//LoadVKRenderer(renderer);
 #endif
 
 		Echo::Renderer::Settings renderCfg;
