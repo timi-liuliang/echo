@@ -7875,22 +7875,22 @@ out:
 }
 
 #if defined(_WIN32)
-BOOL WINAPI DllMain(HINSTANCE hinst, DWORD reason, LPVOID reserved) {
-    switch (reason) {
-        case DLL_PROCESS_ATTACH:
-            loader_initialize();
-            break;
-        case DLL_PROCESS_DETACH:
-            if (NULL == reserved) {
-                loader_release();
-            }
-            break;
-        default:
-            // Do nothing
-            break;
-    }
-    return TRUE;
-}
+//BOOL WINAPI DllMain(HINSTANCE hinst, DWORD reason, LPVOID reserved) {
+//    switch (reason) {
+//        case DLL_PROCESS_ATTACH:
+//            loader_initialize();
+//            break;
+//        case DLL_PROCESS_DETACH:
+//            if (NULL == reserved) {
+//                loader_release();
+//            }
+//            break;
+//        default:
+//            // Do nothing
+//            break;
+//    }
+//    return TRUE;
+//}
 #elif !defined(_WIN32)
 __attribute__((constructor)) void loader_init_library() { loader_initialize(); }
 

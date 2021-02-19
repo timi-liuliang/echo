@@ -8,6 +8,11 @@
 #include "vk_framebuffer.h"
 #include "vk_texture.h"
 
+extern "C"
+{
+#include <thirdparty/vulkan/vulkan-loader/loader/loader.h>
+}
+
 namespace Echo
 {
     VKRenderer* g_inst = nullptr;
@@ -34,6 +39,9 @@ namespace Echo
     bool VKRenderer::initialize(const Settings& settings)
     {
 		m_settings = settings;
+
+		// initialize vulkan loader
+		loader_initialize();
 
 		createVkInstance();
 
