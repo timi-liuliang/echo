@@ -183,8 +183,8 @@ class ImageSubresourceLayoutMap {
         return encoder_.MakeVkSubresource(subres);
     }
 
-    inline uint32_t LevelLimit(uint32_t level) const { return std::min(encoder_.Limits().mipLevel, level); }
-    inline uint32_t LayerLimit(uint32_t layer) const { return std::min(encoder_.Limits().arrayLayer, layer); }
+    inline uint32_t LevelLimit(uint32_t level) const { return std::min<uint32_t>(encoder_.Limits().mipLevel, level); }
+    inline uint32_t LayerLimit(uint32_t layer) const { return std::min<uint32_t>(encoder_.Limits().arrayLayer, layer); }
 
     bool InRange(const VkImageSubresource& subres) const { return encoder_.InRange(subres); }
     bool InRange(const VkImageSubresourceRange& range) const { return encoder_.InRange(range); }
