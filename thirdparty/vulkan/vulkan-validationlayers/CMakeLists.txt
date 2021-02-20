@@ -8,6 +8,8 @@ MESSAGE( STATUS "Configuring module: ${MODULE_NAME} ...")
 INCLUDE_DIRECTORIES( ${ECHO_ROOT_PATH})
 INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR})
 INCLUDE_DIRECTORIES( ${ECHO_ROOT_PATH}/thirdparty/vulkan/vulkan-headers/include)
+INCLUDE_DIRECTORIES( ${ECHO_ROOT_PATH}/thirdparty/vulkan/spirv-headers/include)
+INCLUDE_DIRECTORIES( ${ECHO_ROOT_PATH}/thirdparty/vulkan/spirv-tools/include)
 
 # Link Directories
 LINK_DIRECTORIES(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
@@ -17,6 +19,11 @@ FILE( GLOB_RECURSE ALL_FILES *.h *.inl *.c *.cpp *.mm)
 
 # Group
 GROUP_FILES(ALL_FILES ${CMAKE_CURRENT_SOURCE_DIR})
+
+# Add Macro
+IF(ECHO_PLATFORM_WINDOWS)
+    ADD_DEFINITIONS(-DNOMINMAX)
+ENDIF()
 
 # Add library
 ADD_LIBRARY(${MODULE_NAME} ${ALL_FILES} CMakeLists.txt)
