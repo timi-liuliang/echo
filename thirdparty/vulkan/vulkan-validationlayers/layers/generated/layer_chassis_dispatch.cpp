@@ -725,7 +725,7 @@ void *BuildUnwrappedUpdateTemplateBuffer(ValidationObject *layer_data, uint64_t 
                 case VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC:
                 case VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC: {
                     auto buffer_entry = reinterpret_cast<VkDescriptorBufferInfo *>(update_entry);
-                    allocation_size = std::max<size_t>(allocation_size, offset + sizeof(VkDescriptorBufferInfo));
+                    allocation_size = std::max(allocation_size, offset + sizeof(VkDescriptorBufferInfo));
 
                     VkDescriptorBufferInfo *wrapped_entry = new VkDescriptorBufferInfo(*buffer_entry);
                     wrapped_entry->buffer = layer_data->Unwrap(buffer_entry->buffer);
@@ -735,14 +735,14 @@ void *BuildUnwrappedUpdateTemplateBuffer(ValidationObject *layer_data, uint64_t 
                 case VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER:
                 case VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER: {
                     auto buffer_view_handle = reinterpret_cast<VkBufferView *>(update_entry);
-                    allocation_size = std::max<size_t>(allocation_size, offset + sizeof(VkBufferView));
+                    allocation_size = std::max(allocation_size, offset + sizeof(VkBufferView));
 
                     VkBufferView wrapped_entry = layer_data->Unwrap(*buffer_view_handle);
                     template_entries.emplace_back(offset, kVulkanObjectTypeBufferView, CastToUint64(wrapped_entry), 0);
                 } break;
                 case VK_DESCRIPTOR_TYPE_INLINE_UNIFORM_BLOCK_EXT: {
                     size_t numBytes = create_info.pDescriptorUpdateEntries[i].descriptorCount;
-                    allocation_size = std::max<size_t>(allocation_size, offset + numBytes);
+                    allocation_size = std::max(allocation_size, offset + numBytes);
                     // nothing to unwrap, just plain data
                     template_entries.emplace_back(offset, kVulkanObjectTypeUnknown, CastToUint64(update_entry),
                                                   numBytes);
@@ -751,14 +751,14 @@ void *BuildUnwrappedUpdateTemplateBuffer(ValidationObject *layer_data, uint64_t 
                 } break;
                 case VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_NV:{
                     auto accstruct_nv_handle = reinterpret_cast<VkAccelerationStructureNV *>(update_entry);
-                    allocation_size = std::max<size_t>(allocation_size, offset + sizeof(VkAccelerationStructureNV ));
+                    allocation_size = std::max(allocation_size, offset + sizeof(VkAccelerationStructureNV ));
 
                     VkAccelerationStructureNV  wrapped_entry = layer_data->Unwrap(*accstruct_nv_handle);
                     template_entries.emplace_back(offset, kVulkanObjectTypeAccelerationStructureNV, CastToUint64(wrapped_entry), 0);
                 } break;
                 case VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR: {
                     auto accstruct_khr_handle = reinterpret_cast<VkAccelerationStructureKHR *>(update_entry);
-                    allocation_size = std::max<size_t>(allocation_size, offset + sizeof(VkAccelerationStructureKHR ));
+                    allocation_size = std::max(allocation_size, offset + sizeof(VkAccelerationStructureKHR ));
 
                     VkAccelerationStructureKHR  wrapped_entry = layer_data->Unwrap(*accstruct_khr_handle);
                     template_entries.emplace_back(offset, kVulkanObjectTypeAccelerationStructureKHR, CastToUint64(wrapped_entry), 0);
