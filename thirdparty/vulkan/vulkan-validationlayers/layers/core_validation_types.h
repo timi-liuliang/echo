@@ -32,6 +32,7 @@
 #include "sparse_containers.h"
 #include "vk_safe_struct.h"
 #include "vulkan/vulkan.h"
+#include "vulkan/vulkan_beta.h"
 #include "vk_layer_logging.h"
 #include "vk_object_types.h"
 #include "vk_extension_helper.h"

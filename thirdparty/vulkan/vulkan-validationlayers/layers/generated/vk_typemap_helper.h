@@ -37,7 +37,9 @@
 // types and sTypes
 
 template <VkStructureType id> struct LvlSTypeMap {};
-template <typename T> struct LvlTypeMap {};
+template <typename T> struct LvlTypeMap {
+    static const VkStructureType kSType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+};
 
 // Map type VkBufferMemoryBarrier to id VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER
 template <> struct LvlTypeMap<VkBufferMemoryBarrier> {
