@@ -79,6 +79,11 @@ namespace Echo
 		addLayer(validationLayers, "VK_LAYER_LUNARG_object_tracker");
 		addLayer(validationLayers, "VK_LAYER_LUNARG_core_validation");
 		addLayer(validationLayers, "VK_LAYER_GOOGLE_unique_objects");
+
+		for (const char* layer : validationLayers)
+		{
+			EchoLogInfo("Enable validation layer - [%s]", layer);
+		}
 	#endif
 	}
 
