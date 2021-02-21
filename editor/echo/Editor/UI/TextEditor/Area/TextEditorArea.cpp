@@ -64,7 +64,7 @@ namespace Studio
                 openedFiles.emplace_back(luaEditor->getFilePath());
         }
         
-        ConfigMgr* configMgr = AStudio::instance()->getConfigMgr();
+        EditorConfig* configMgr = AStudio::instance()->getConfigMgr();
         if(configMgr)
         {
             configMgr->setValue("luascripteditor_current_file", Echo::StringUtil::ToString(openedFiles,";").c_str());

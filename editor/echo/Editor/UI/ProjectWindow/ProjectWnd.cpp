@@ -62,7 +62,7 @@ namespace Studio
     void ProjectWnd::loadAllRecentProjects()
     {
         Echo::list<Echo::String>::type recentProjects;
-        ConfigMgr::instance()->getAllRecentProject(recentProjects);
+        EditorConfig::instance()->getAllRecentProject(recentProjects);
 
         m_previewerWidget->clearAllItems();
         for ( Echo::String& project : recentProjects)
@@ -206,7 +206,7 @@ namespace Studio
     {
         if(!m_selectedProject.empty())
         {
-            ConfigMgr::instance()->removeRencentProject(m_selectedProject.c_str());
+            EditorConfig::instance()->removeRencentProject(m_selectedProject.c_str());
             
             loadAllRecentProjects();
         }

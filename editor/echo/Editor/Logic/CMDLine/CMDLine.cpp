@@ -10,7 +10,7 @@
 #include "MainWindow.h"
 #include "Window.h"
 #include "ProjectWnd.h"
-#include "ConfigMgr.h"
+#include "EditorConfig.h"
 #include "GameMainWindow.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/util/TimeProfiler.h>
@@ -75,12 +75,12 @@ namespace Echo
 		// load editor config
 		TIME_PROFILE
 		(
-			Studio::ConfigMgr::instance()->loadCfgFile();
+			Studio::EditorConfig::instance()->loadCfgFile();
 		)
 
 		// Qss
 		{
-			Echo::String theme = Studio::ConfigMgr::instance()->getValue("CurrentTheme");
+			Echo::String theme = Studio::EditorConfig::instance()->getValue("CurrentTheme");
 			theme = theme.empty() ? ":/Qss/Qss/Ps.qss" : theme;
 			if (!theme.empty())
 			{

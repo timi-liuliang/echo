@@ -1,12 +1,12 @@
-#include "ConfigMgr.h"
+#include "EditorConfig.h"
 #include <engine/core/util/PathUtil.h>
 #include <ostream>
 
 namespace Studio
 {
-	static ConfigMgr* g_instance = nullptr;
+	static EditorConfig* g_instance = nullptr;
 
-	ConfigMgr::ConfigMgr()
+	EditorConfig::EditorConfig()
 		: m_outPutDir( "" )
 		, m_maxRecentProjects( 10)
 	{
@@ -14,17 +14,17 @@ namespace Studio
 		g_instance = this;
 	}
 
-	ConfigMgr::~ConfigMgr()
+	EditorConfig::~EditorConfig()
 	{
 		saveCfgFile();
 	}
 
-	ConfigMgr* ConfigMgr::instance()
+	EditorConfig* EditorConfig::instance()
 	{
 		return g_instance;
 	}
 
-	bool ConfigMgr::loadCfgFile( )
+	bool EditorConfig::loadCfgFile( )
 	{
 		m_recentProjects.clear();
 		  
@@ -54,7 +54,7 @@ namespace Studio
 		return false;
 	}
 
-	bool ConfigMgr::saveCfgFile( )
+	bool EditorConfig::saveCfgFile( )
 	{
 		Echo::String path = Echo::PathUtil::GetFileDirPath(m_cfgFile, true);
 		if (!Echo::PathUtil::IsDirExist(path))
@@ -74,7 +74,7 @@ namespace Studio
 		return true;
 	}
 
-	void ConfigMgr::switchProjectToTop(const char* fileName)
+	void EditorConfig::switchProjectToTop(const char* fileName)
 	{		
 		for (Echo::list<Echo::String>::iterator iter = m_recentProjects.begin(); iter != m_recentProjects.end(); ++iter)
 		{
@@ -88,7 +88,7 @@ namespace Studio
 		}
 	}
 
-	bool ConfigMgr::addRecentProject( const char* fileName )
+	bool EditorConfig::addRecentProject( const char* fileName )
 	{
 		if ( isPathExist(fileName) )
 		{
@@ -110,14 +110,14 @@ namespace Studio
 		return true;
 	}
 
-    void ConfigMgr::removeRencentProject(const Echo::String& fileName)
+    void EditorConfig::removeRencentProject(const Echo::String& fileName)
     {
         m_recentProjects.remove(fileName);
         
         saveCfgFile();
     }
 
-	Echo::String ConfigMgr::getLastOpenProjectFile()
+	Echo::String EditorConfig::getLastOpenProjectFile()
 	{
 		if( m_recentProjects.size())
 		{
@@ -129,7 +129,7 @@ namespace Studio
 		return Echo::String();
 	}
 
-	bool ConfigMgr::isPathExist( Echo::String path )
+	bool EditorConfig::isPathExist( Echo::String path )
 	{
 		Echo::list<Echo::String>::iterator iter = m_recentProjects.begin();
 		for ( ; iter != m_recentProjects.end(); ++iter )
@@ -143,7 +143,7 @@ namespace Studio
 		return false;
 	}
 
-	void ConfigMgr::saveData( pugi::xml_document& doc, pugi::xml_node* projectNode)
+	void EditorConfig::saveData( pugi::xml_document& doc, pugi::xml_node* projectNode)
 	{
 		if( projectNode)
 		{
@@ -169,7 +169,7 @@ namespace Studio
 		}
 	}
 
-	void ConfigMgr::loadRecentProject( pugi::xml_node* node)
+	void EditorConfig::loadRecentProject( pugi::xml_node* node)
 	{
 		if ( node )
 		{
@@ -188,7 +188,7 @@ namespace Studio
 		}
 	}
 
-	void ConfigMgr::loadOutPutDir( pugi::xml_node* node )
+	void EditorConfig::loadOutPutDir( pugi::xml_node* node )
 	{
 		if ( node )
 		{
@@ -198,7 +198,7 @@ namespace Studio
 		}
 	}
 
-	void ConfigMgr::loadPropertys( pugi::xml_node* node)
+	void EditorConfig::loadPropertys( pugi::xml_node* node)
 	{
 		if ( node )
 		{
@@ -216,7 +216,7 @@ namespace Studio
 		}
 	}
 
-	Echo::String ConfigMgr::getValue( const char* property)
+	Echo::String EditorConfig::getValue( const char* property)
 	{
 		if (!m_recentProjects.empty())
 		{
@@ -231,7 +231,7 @@ namespace Studio
 		return "";
 	}
 
-	void ConfigMgr::setValue( const char* property, const char* value)
+	void EditorConfig::setValue( const char* property, const char* value)
 	{
 		if (!m_recentProjects.empty())
 		{
@@ -242,7 +242,7 @@ namespace Studio
 		}
 	}
 
-	void ConfigMgr::getAllRecentProject(Echo::list<Echo::String>::type& projects)
+	void EditorConfig::getAllRecentProject(Echo::list<Echo::String>::type& projects)
 	{
 		projects.insert(projects.begin(), m_recentProjects.begin(), m_recentProjects.end());
 	}

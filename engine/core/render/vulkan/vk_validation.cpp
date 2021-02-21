@@ -56,21 +56,30 @@ namespace Echo
 		return false;
 	}
 
+	bool VKValidation::addLayer(vector<const char*>::type& validationLayers, const char* layerName)
+	{
+		if (checkLayer(layerName))
+		{
+			validationLayers.emplace_back(layerName);
+			return true;
+		}
+
+		return false;
+	}
+
 	void VKValidation::prepareVkValidationLayers(vector<const char*>::type& validationLayers)
 	{
 		validationLayers.clear();
-		if (checkLayer("VK_LAYER_LUNARG_standard_validation"))
-		{
-			validationLayers.emplace_back("VK_LAYER_LUNARG_standard_validation");
-		}
-		else
-		{
-			validationLayers.emplace_back("VK_LAYER_GOOGLE_threading");
-			validationLayers.emplace_back("VK_LAYER_LUNARG_parameter_validation");
-			validationLayers.emplace_back("VK_LAYER_LUNARG_object_tracker");
-			validationLayers.emplace_back("VK_LAYER_LUNARG_core_validation");
-			validationLayers.emplace_back("VK_LAYER_GOOGLE_unique_objects");
-		}
+
+	#ifdef ECHO_EDITOR_MODE
+		addLayer(validationLayers, "VK_LAYER_KHRONOS_validation");
+		addLayer(validationLayers, "VK_LAYER_LUNARG_standard_validation");
+		addLayer(validationLayers, "VK_LAYER_GOOGLE_threading");
+		addLayer(validationLayers, "VK_LAYER_LUNARG_parameter_validation");
+		addLayer(validationLayers, "VK_LAYER_LUNARG_object_tracker");
+		addLayer(validationLayers, "VK_LAYER_LUNARG_core_validation");
+		addLayer(validationLayers, "VK_LAYER_GOOGLE_unique_objects");
+	#endif
 	}
 
 	void VKValidation::create()

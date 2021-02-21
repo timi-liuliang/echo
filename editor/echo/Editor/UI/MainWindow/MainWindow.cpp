@@ -518,14 +518,14 @@ namespace Studio
 		if (!qssFile.isEmpty())
 		{
 			setTheme(qssFile.toStdString().c_str());
-			Studio::ConfigMgr::instance()->setValue("CurrentTheme", qssFile.toStdString().c_str());
+			Studio::EditorConfig::instance()->setValue("CurrentTheme", qssFile.toStdString().c_str());
 		}
 	}
 
 	void MainWindow::onChooseThemeDark()
 	{
 		setTheme(":/Qss/Qss/Ps.qss");
-		Studio::ConfigMgr::instance()->setValue("CurrentTheme", ":/Qss/Qss/Ps.qss");
+		Studio::EditorConfig::instance()->setValue("CurrentTheme", ":/Qss/Qss/Ps.qss");
 	}
 
 	void MainWindow::onPlayGame()
@@ -714,7 +714,7 @@ namespace Studio
 		// clear
 		m_menuRecents->clear();
 
-		ConfigMgr* configMgr = AStudio::instance()->getConfigMgr();
+		EditorConfig* configMgr = AStudio::instance()->getConfigMgr();
 
 		Echo::list<Echo::String>::type recentProjects;
 		configMgr->getAllRecentProject(recentProjects);

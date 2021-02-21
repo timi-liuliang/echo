@@ -6,14 +6,14 @@
 
 namespace Studio
 {
-	class ConfigMgr
+	class EditorConfig
 	{
 	public:
-		ConfigMgr();
-		~ConfigMgr();
+		EditorConfig();
+		~EditorConfig();
 
 		// instance
-		static ConfigMgr* instance();
+		static EditorConfig* instance();
 
 		// load
 		bool loadCfgFile( );

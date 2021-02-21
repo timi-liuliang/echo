@@ -4,7 +4,7 @@
 #include <engine/core/log/LogOutput.h>
 #include <engine/core/editor/editor.h>
 #include "ProjectMgr.h"
-#include "ConfigMgr.h"
+#include "EditorConfig.h"
 #include "IInputController.h"
 #include <QWidget>
 #include <QDockWidget>
@@ -32,7 +32,7 @@ namespace Studio
 		const char* getAppPath() const { return m_appPath.c_str(); }
 
 		// config manager
-		ConfigMgr* getConfigMgr() { return m_projectCfg; }
+		EditorConfig* getConfigMgr() { return m_projectCfg; }
 	
 		// input controller
 		virtual void setRenderWindowController( IRWInputController* controller);
@@ -107,7 +107,7 @@ namespace Studio
 		RenderWindow*					m_renderWindow = nullptr;
 		Echo::LogDefault*				m_log = nullptr;
 		LogPanel*						m_logPanel = nullptr;
-		ConfigMgr*						m_projectCfg = nullptr;
+		EditorConfig*						m_projectCfg = nullptr;
 	};
 }
 

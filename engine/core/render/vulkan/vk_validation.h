@@ -18,6 +18,9 @@ namespace Echo
 		// check layers
 		bool checkLayer(const char* layerName);
 
+		// add layer
+		bool addLayer(vector<const char*>::type& validationLayers, const char* layerName);
+
 		// create
 		void create();
 

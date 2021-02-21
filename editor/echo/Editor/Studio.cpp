@@ -9,7 +9,7 @@
 #include "PropertyChooseDialog.h"
 #include "NodeTreePanel.h"
 #include "LogPanel.h"
-#include "ConfigMgr.h"
+#include "EditorConfig.h"
 #include <QtUiTools/QUiLoader>
 #include <QFile>
 #include <QLibrary>
@@ -29,7 +29,7 @@ namespace Studio
 	AStudio::AStudio()
 	{
 		m_renderWindow = NULL;
-		m_projectCfg = EchoNew( ConfigMgr);
+		m_projectCfg = EchoNew( EditorConfig);
 
 		m_log = NULL;
         
@@ -56,7 +56,7 @@ namespace Studio
 
 		EchoSafeDelete(m_projectWindow, ProjectWnd);
 		EchoSafeDelete(m_renderWindow, RenderWindow);
-		EchoSafeDelete(m_projectCfg, ConfigMgr);
+		EchoSafeDelete(m_projectCfg, EditorConfig);
 		EchoSafeDelete(m_mainWindow, MainWindow);	}
 
 	AStudio* AStudio::instance()
