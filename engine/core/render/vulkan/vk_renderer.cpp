@@ -173,7 +173,6 @@ namespace Echo
 		createInfo.ppEnabledExtensionNames = m_enabledExtensions.data();
 		createInfo.enabledLayerCount = validationLayers.size();
 		createInfo.ppEnabledLayerNames = validationLayers.data();
-		createInfo.enabledLayerCount = 0;
 
 		// create instance
         VKDebug(vkCreateInstance(&createInfo, nullptr, &m_vkInstance));
@@ -349,8 +348,6 @@ namespace Echo
 
     void VKRenderer::draw(Renderable* renderable)
     {
-		return;
-
 		VKFramebuffer* currentFrameBuffer = VKFramebuffer::current();
 		if (currentFrameBuffer)
 		{
