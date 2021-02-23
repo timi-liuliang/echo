@@ -36,7 +36,9 @@ namespace Echo
             subpassDesc.pColorAttachments = &attachRef;
 
             VkAttachmentDescription attachDesc = {};
-            //attachDesc.format = ;
+            attachDesc.flags = VK_ATTACHMENT_DESCRIPTION_MAY_ALIAS_BIT;
+            attachDesc.format = VK_FORMAT_B8G8R8A8_UNORM;
+            attachDesc.samples = VK_SAMPLE_COUNT_1_BIT;
             attachDesc.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
             attachDesc.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
             attachDesc.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
@@ -477,6 +479,8 @@ namespace Echo
 
             VkFramebufferCreateInfo fbCreateInfo = {};
             fbCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+            fbCreateInfo.pNext = nullptr;
+            fbCreateInfo.flags = 0;
             fbCreateInfo.renderPass = m_vkRenderPass;
             fbCreateInfo.attachmentCount = 1;
             fbCreateInfo.pAttachments = &vkImageView;

@@ -135,8 +135,8 @@ namespace Echo
 		void createVkDescriptorPool();
 
     private:
-		ui32				m_screenWidth = 0;
-		ui32				m_screenHeight = 0;
+		ui32				m_screenWidth = 800;
+		ui32				m_screenHeight = 600;
 		Extensions			m_enabledExtensions;
 		VkInstance			m_vkInstance;
 		ExtensionProperties	m_vkExtensions;

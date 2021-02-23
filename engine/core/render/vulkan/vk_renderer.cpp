@@ -279,6 +279,7 @@ namespace Echo
 		VkDeviceQueueCreateInfo queueCreateInfos;
 		queueCreateInfos.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
 		queueCreateInfos.pNext = nullptr;
+		queueCreateInfos.flags = 0;
 		queueCreateInfos.queueFamilyIndex = getGraphicsQueueFamilyIndex();
 		queueCreateInfos.queueCount = 1;
 		queueCreateInfos.pQueuePriorities = &queuePrioritys[0];
