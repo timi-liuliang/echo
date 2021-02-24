@@ -168,6 +168,7 @@ namespace Echo
 		VkInstanceCreateInfo createInfo;
 		createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
 		createInfo.pNext = nullptr;
+		createInfo.flags = 0;
 		createInfo.pApplicationInfo = &appInfo;
 		createInfo.enabledExtensionCount = m_enabledExtensions.size();
 		createInfo.ppEnabledExtensionNames = m_enabledExtensions.data();

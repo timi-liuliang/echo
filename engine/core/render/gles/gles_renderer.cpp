@@ -81,9 +81,6 @@ namespace Echo
 		}
 #endif
 
-		m_screenWidth = config.m_windowWidth;
-		m_screenHeight = config.m_windowHeight;
-
 		checkOpenGLExtensions();
 
 		return true;

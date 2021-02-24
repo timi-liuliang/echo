@@ -22,7 +22,7 @@ namespace Echo
 		Echo::Renderer::Settings renderCfg;
 		renderCfg.m_windowHandle = hwnd;
 
-		EchoLogDebug("Canvas Size : %d x %d", renderCfg.m_windowWidth, renderCfg.m_windowHeight);
+		EchoLogDebug("Canvas Size : %d x %d", renderer->getWindowWidth(), renderer->getWindowHeight());
 		if (renderer && renderer->initialize(renderCfg))
 		{
             auto name = magic_enum::enum_name<Renderer::Type>(renderer->getType());

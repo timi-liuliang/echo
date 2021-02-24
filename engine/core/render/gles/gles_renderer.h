@@ -140,8 +140,8 @@ namespace Echo
 		DepthStencilState*			m_depthStencilState = nullptr;
 		BlendState*					m_blendState = nullptr;
 		String						m_gpuDesc;
-		ui32						m_screenWidth = 0;
-		ui32						m_screenHeight = 0;
+		ui32						m_screenWidth = 800;
+		ui32						m_screenHeight = 600;
 		std::set<GLESSamplerState*> m_vecSamlerStates;
 		NineBoolArray				m_isVertexAttribArrayEnable;
 

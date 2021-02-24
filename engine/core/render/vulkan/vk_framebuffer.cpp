@@ -120,8 +120,6 @@ namespace Echo
         createVkSurface((void*)settings.m_windowHandle);
 
         vkGetDeviceQueue(VKRenderer::instance()->getVkDevice(), VKRenderer::instance()->getPresentQueueFamilyIndex(m_vkWindowSurface), 0, &m_vkPresentQueue);
-
-        onSize(settings.m_windowWidth, settings.m_windowHeight);
     }
 
     VKFramebufferWindow::~VKFramebufferWindow()
@@ -300,6 +298,15 @@ namespace Echo
             EchoLogError("Vulkan Renderer failed to create window surface!");
         }
 #endif
+
+		// surface capabilities
+		VkSurfaceCapabilitiesKHR surfaceCapabilities;
+		if (VK_SUCCESS == vkGetPhysicalDeviceSurfaceCapabilitiesKHR(VKRenderer::instance()->getVkPhysicalDevice(), m_vkWindowSurface, &surfaceCapabilities))
+		{
+			ui32 width = surfaceCapabilities.currentExtent.width;
+			ui32 height = surfaceCapabilities.currentExtent.height;
+			onSize(width, height);
+		}
     }
 
     void VKFramebufferWindow::submitCommandBuffer()
@@ -472,6 +479,10 @@ namespace Echo
     {
         destroyVkFramebuffers();
 
+		// surface capabilities
+		VkSurfaceCapabilitiesKHR surfaceCapabilities;
+		vkGetPhysicalDeviceSurfaceCapabilitiesKHR(VKRenderer::instance()->getVkPhysicalDevice(), m_vkWindowSurface, &surfaceCapabilities);
+
         m_vkFramebuffers.resize(m_vkSwapChainImages.size());
         for (size_t i = 0; i < m_vkFramebuffers.size(); i++)
         {
@@ -484,8 +495,8 @@ namespace Echo
             fbCreateInfo.renderPass = m_vkRenderPass;
             fbCreateInfo.attachmentCount = 1;
             fbCreateInfo.pAttachments = &vkImageView;
-            fbCreateInfo.width = Renderer::instance()->getWindowWidth();
-            fbCreateInfo.height = Renderer::instance()->getWindowHeight();
+            fbCreateInfo.width = surfaceCapabilities.currentExtent.width;
+            fbCreateInfo.height = surfaceCapabilities.currentExtent.height;
             fbCreateInfo.layers = 1;
 
             VKDebug(vkCreateFramebuffer(VKRenderer::instance()->getVkDevice(), &fbCreateInfo, NULL, &m_vkFramebuffers[i]));

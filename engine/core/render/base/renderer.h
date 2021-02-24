@@ -27,8 +27,6 @@ namespace Echo
 		// config
 		struct Settings
 		{
-			ui32							m_windowWidth = 800;
-			ui32							m_windowHeight = 600;
 			bool							m_isFullscreen = false;
 			size_t							m_windowHandle = 0;								// window handle
 			RasterizerState::PolygonMode	m_polygonMode = RasterizerState::PM_FILL;		// Global Settings
