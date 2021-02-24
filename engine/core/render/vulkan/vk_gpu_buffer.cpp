@@ -39,8 +39,6 @@ namespace Echo
     {
         if (create(buff.getSize()))
         {
-            VKDebug(vkBindBufferMemory(VKRenderer::instance()->getVkDevice(), m_vkBuffer, m_vkBufferMemory, 0));
-
             // filling the buffer
             void* data = nullptr;
             VKDebug(vkMapMemory(VKRenderer::instance()->getVkDevice(), m_vkBufferMemory, 0, buff.getSize(), 0, &data));
@@ -82,6 +80,7 @@ namespace Echo
                 allocInfo.memoryTypeIndex = findMemoryType(VKRenderer::instance()->getVkPhysicalDevice(), memRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
                 VKDebug(vkAllocateMemory(VKRenderer::instance()->getVkDevice(), &allocInfo, nullptr, &m_vkBufferMemory));
+                VKDebug(vkBindBufferMemory(VKRenderer::instance()->getVkDevice(), m_vkBuffer, m_vkBufferMemory, 0));
 
                 m_size = sizeInBytes;
                 return true;

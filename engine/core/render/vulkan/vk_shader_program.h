@@ -22,7 +22,7 @@ namespace Echo
 
     public:
         // get shader stage create info
-        const array<VkPipelineSSCI, 2>& getVkShaderStageCreateInfo() { return m_vkShaderStagesCreateInfo; }
+        const array<VkPipelineShaderStageCreateInfo, 2>& getVkShaderStageCreateInfo() { return m_vkShaderStagesCreateInfo; }
 
         // get shader resources
         const spirv_cross::ShaderResources getSpirvShaderResources(ShaderType type);

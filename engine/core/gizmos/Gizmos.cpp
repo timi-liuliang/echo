@@ -37,8 +37,6 @@ void main(void)
 
 static const char* g_gizmoPsCode = R"(#version 450
 
-precision mediump float;
-
 // uniforms
 layout(binding = 0) uniform UBO
 {
