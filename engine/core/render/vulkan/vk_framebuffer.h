@@ -43,6 +43,7 @@ namespace Echo
         VkRenderPass                        m_vkRenderPass = VK_NULL_HANDLE;
 		VkRenderPassBeginInfo               m_vkRenderPassBeginInfo;
         VkViewport                          m_vkViewport;
+        VkRect2D                            m_vkScissor;
         VkPipelineViewportStateCreateInfo   m_vkViewportStateCreateInfo;
         vector<VkFramebuffer>::type         m_vkFramebuffers;
     };

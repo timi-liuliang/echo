@@ -187,10 +187,17 @@ namespace Echo
 		m_vkViewport.minDepth = 0.f;
 		m_vkViewport.maxDepth = 1.f;
 
+        m_vkScissor.offset = { 0, 0 };
+        m_vkScissor.extent = { width, height};
+
 		m_vkViewportStateCreateInfo = {};
 		m_vkViewportStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+        m_vkViewportStateCreateInfo.pNext = nullptr;
+        m_vkViewportStateCreateInfo.flags = 0;
 		m_vkViewportStateCreateInfo.viewportCount = 1;
 		m_vkViewportStateCreateInfo.pViewports = &m_vkViewport;
+        m_vkViewportStateCreateInfo.scissorCount = 1;
+        m_vkViewportStateCreateInfo.pScissors = &m_vkScissor;
 
         recreateVkSwapChain();
     }
