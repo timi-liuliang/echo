@@ -3,6 +3,7 @@
 
 namespace Echo
 {
+	// https://vulkan.lunarg.com/doc/view/1.2.162.1/mac/tutorial/html/index.html
 	void LoadVKRenderer(Renderer*& render)
 	{
 		render = EchoNew(VKRenderer);

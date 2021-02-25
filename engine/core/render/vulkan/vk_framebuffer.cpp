@@ -20,6 +20,7 @@ namespace Echo
         return g_current;
     }
 
+    // https://vulkan.lunarg.com/doc/view/1.2.162.1/mac/tutorial/html/10-init_render_pass.html
     void VKFramebuffer::createVkRenderPass()
     {
         destroyVkRenderPass();
@@ -48,10 +49,14 @@ namespace Echo
 
             VkRenderPassCreateInfo renderPassCreateInfo = {};
             renderPassCreateInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+            renderPassCreateInfo.pNext = nullptr;
+            renderPassCreateInfo.flags = 0;
             renderPassCreateInfo.attachmentCount = 1;
             renderPassCreateInfo.pAttachments = &attachDesc;
             renderPassCreateInfo.subpassCount = 1;
             renderPassCreateInfo.pSubpasses = &subpassDesc;
+            renderPassCreateInfo.dependencyCount = 0;
+            renderPassCreateInfo.pDependencies = nullptr;
 
             VKDebug(vkCreateRenderPass(VKRenderer::instance()->getVkDevice(), &renderPassCreateInfo, nullptr, &m_vkRenderPass));
         }
