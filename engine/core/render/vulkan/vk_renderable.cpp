@@ -46,9 +46,13 @@ namespace Echo
 				pipelineInputAssemblyStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
 				pipelineInputAssemblyStateCreateInfo.topology = VKMapping::MapPrimitiveTopology(m_mesh->getTopologyType());
 
-				vector<VkDynamicState>::type dynamicStateEnables = { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR };
-				VkPipelineDynamicStateCreateInfo dynamicState = {};
+                // https://gitmemory.com/issue/KhronosGroup/Vulkan-ValidationLayers/2124/678355023
+				vector<VkDynamicState>::type dynamicStateEnables = { };
+
+				VkPipelineDynamicStateCreateInfo dynamicState {};
 				dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+                dynamicState.pNext = nullptr;
+                dynamicState.flags = 0;
 				dynamicState.dynamicStateCount = dynamicStateEnables.size();
 				dynamicState.pDynamicStates = dynamicStateEnables.data();
 
@@ -181,7 +185,12 @@ namespace Echo
         VKBuffer* indexBuffer = ECHO_DOWN_CAST<VKBuffer*>(m_mesh->getIndexBuffer());
         if (indexBuffer)
         {
-            vkCmdBindIndexBuffer(vkCommandbuffer, indexBuffer->getVkBuffer(), 0, VK_INDEX_TYPE_UINT32);
+            VkIndexType idxType;
+			if (m_mesh->getIndexStride() == sizeof(ui32))		idxType = VK_INDEX_TYPE_UINT32;
+			else if (m_mesh->getIndexStride() == sizeof(Word))  idxType = VK_INDEX_TYPE_UINT16;
+			else											    idxType = VK_INDEX_TYPE_UINT8_EXT;
+
+            vkCmdBindIndexBuffer(vkCommandbuffer, indexBuffer->getVkBuffer(), 0, idxType);
         }
     }
 
