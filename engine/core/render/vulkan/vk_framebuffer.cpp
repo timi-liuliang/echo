@@ -27,25 +27,46 @@ namespace Echo
 
         if (!m_vkRenderPass)
         {
-            VkAttachmentReference attachRef = {};
-            attachRef.attachment = 0;
-            attachRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            VkAttachmentReference colorRef = {};
+            colorRef.attachment = 0;
+            colorRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
+            VkAttachmentReference depthRef = {};
+            depthRef.attachment = 1;
+            depthRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
+            // The pipelineBindPoint member is meant to indicate if this is a graphics or a compute subpass
             VkSubpassDescription subpassDesc = {};
+            subpassDesc.flags = 0;
             subpassDesc.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+            subpassDesc.inputAttachmentCount = 0;
+            subpassDesc.pInputAttachments = nullptr;
             subpassDesc.colorAttachmentCount = 1;
-            subpassDesc.pColorAttachments = &attachRef;
+            subpassDesc.pColorAttachments = &colorRef;
+            subpassDesc.pResolveAttachments = nullptr;
+            subpassDesc.pDepthStencilAttachment = nullptr;
+            subpassDesc.preserveAttachmentCount = 0;
+            subpassDesc.pPreserveAttachments = nullptr;
 
             VkAttachmentDescription attachDesc = {};
-            attachDesc.flags = VK_ATTACHMENT_DESCRIPTION_MAY_ALIAS_BIT;
+            attachDesc.flags = 0;
             attachDesc.format = VK_FORMAT_B8G8R8A8_UNORM;
             attachDesc.samples = VK_SAMPLE_COUNT_1_BIT;
             attachDesc.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
             attachDesc.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
             attachDesc.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
             attachDesc.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-            attachDesc.initialLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+            attachDesc.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
             attachDesc.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+
+            VkSubpassDependency subpassDependency = {};
+            subpassDependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+            subpassDependency.dstSubpass = 0;
+            subpassDependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+            subpassDependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+            subpassDependency.srcAccessMask = 0;
+            subpassDependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+            subpassDependency.dependencyFlags = 0;
 
             VkRenderPassCreateInfo renderPassCreateInfo = {};
             renderPassCreateInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
@@ -55,8 +76,8 @@ namespace Echo
             renderPassCreateInfo.pAttachments = &attachDesc;
             renderPassCreateInfo.subpassCount = 1;
             renderPassCreateInfo.pSubpasses = &subpassDesc;
-            renderPassCreateInfo.dependencyCount = 0;
-            renderPassCreateInfo.pDependencies = nullptr;
+            renderPassCreateInfo.dependencyCount = 1;
+            renderPassCreateInfo.pDependencies = &subpassDependency;
 
             VKDebug(vkCreateRenderPass(VKRenderer::instance()->getVkDevice(), &renderPassCreateInfo, nullptr, &m_vkRenderPass));
         }
