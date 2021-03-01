@@ -167,6 +167,9 @@ namespace Echo
 
 		VkCommandBufferBeginInfo commandBufferBeginInfo = {};
 		commandBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+        commandBufferBeginInfo.pNext = nullptr;
+        commandBufferBeginInfo.flags = 0;
+        commandBufferBeginInfo.pInheritanceInfo = nullptr;
 
 		if (VK_SUCCESS == vkBeginCommandBuffer(getVkCommandbuffer(), &commandBufferBeginInfo))
 		{
@@ -278,6 +281,8 @@ namespace Echo
     {
         VkSemaphoreCreateInfo semaphoreCreateInfo = {};
         semaphoreCreateInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+        semaphoreCreateInfo.pNext = nullptr;
+        semaphoreCreateInfo.flags = 0;
 
         VKDebug(vkCreateSemaphore(VKRenderer::instance()->getVkDevice(), &semaphoreCreateInfo, nullptr, &m_vkImageAvailableSemaphore));
         VKDebug(vkCreateSemaphore(VKRenderer::instance()->getVkDevice(), &semaphoreCreateInfo, nullptr, &m_vkRenderFinishedSemaphore));
@@ -290,6 +295,7 @@ namespace Echo
         // Fences (Used to check draw command buffer completion)
         VkFenceCreateInfo fenceCreateInfo = {};
         fenceCreateInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+        fenceCreateInfo.pNext = nullptr;
 
         // Create in signaled state so we don't wait on first render of each command buffer
         fenceCreateInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
@@ -353,7 +359,9 @@ namespace Echo
         VKDebug(vkWaitForFences(VKRenderer::instance()->getVkDevice(), 1, &m_waitFences[m_imageIndex], VK_TRUE, UINT64_MAX));
         VKDebug(vkResetFences(VKRenderer::instance()->getVkDevice(), 1, &m_waitFences[m_imageIndex]));
 
-        // wait stage flags
+		// wait stage flags
+        VkSemaphore waitSemaphores[] = { m_vkImageAvailableSemaphore };
+        VkSemaphore signalSemaphores[] = { m_vkRenderFinishedSemaphore };
         VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
 
         VkSubmitInfo submitInfo = {};
@@ -361,9 +369,9 @@ namespace Echo
         submitInfo.commandBufferCount = 1;
         submitInfo.pCommandBuffers = &m_vkCommandBuffers[m_imageIndex];
         submitInfo.waitSemaphoreCount = 1;
-        submitInfo.pWaitSemaphores = &m_vkImageAvailableSemaphore;							// Semaphore(s) to wait upon before the submitted command buffer starts executing
+        submitInfo.pWaitSemaphores = waitSemaphores;							            // Semaphore(s) to wait upon before the submitted command buffer starts executing
         submitInfo.signalSemaphoreCount = 1;
-        submitInfo.pSignalSemaphores = &m_vkRenderFinishedSemaphore;						// Semaphore(s) to be signaled when command buffers have completed
+        submitInfo.pSignalSemaphores = signalSemaphores;						// Semaphore(s) to be signaled when command buffers have completed
         submitInfo.pWaitDstStageMask = waitStages;
 
         VKDebug(vkQueueSubmit(VKRenderer::instance()->getVkGraphicsQueue(), 1, &submitInfo, m_waitFences[m_imageIndex]));
@@ -374,14 +382,15 @@ namespace Echo
         VkPresentInfoKHR present = {};
         present.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
         present.pNext = nullptr;
+		present.waitSemaphoreCount = 1;
+		present.pWaitSemaphores = &m_vkRenderFinishedSemaphore;
         present.swapchainCount = 1;
         present.pSwapchains = &m_vkSwapChain;
         present.pImageIndices = &m_imageIndex;
-        present.pWaitSemaphores = &m_vkRenderFinishedSemaphore;
-        present.waitSemaphoreCount = 1;
         present.pResults = nullptr;
 
         VKDebug(vkQueuePresentKHR(m_vkPresentQueue, &present));
+        VKDebug(vkQueueWaitIdle(m_vkPresentQueue));
     }
 
     void VKFramebufferWindow::createSwapChain(VkDevice vkDevice)

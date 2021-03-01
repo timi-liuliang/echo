@@ -313,7 +313,7 @@ namespace Echo
 		createInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
 		createInfo.pNext = nullptr;
 		createInfo.queueFamilyIndex = getGraphicsQueueFamilyIndex();
-		createInfo.flags = 0;
+		createInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 
         VKDebug(vkCreateCommandPool(m_vkDevice, &createInfo, nullptr, &m_vkCommandPool));
 	}
