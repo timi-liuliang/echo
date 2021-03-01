@@ -311,7 +311,7 @@ namespace Echo
 	{
 		VkCommandPoolCreateInfo createInfo = {};
 		createInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-		createInfo.pNext = NULL;
+		createInfo.pNext = nullptr;
 		createInfo.queueFamilyIndex = getGraphicsQueueFamilyIndex();
 		createInfo.flags = 0;
 

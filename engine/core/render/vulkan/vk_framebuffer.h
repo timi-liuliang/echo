@@ -137,7 +137,7 @@ namespace Echo
         VkSwapchainKHR				    m_vkSwapChain = VK_NULL_HANDLE;
         vector<VkImage>::type           m_vkSwapChainImages;
         vector<VkImageView>::type	    m_vkSwapChainImageViews;
-        vector<VkCommandBuffer>::type   m_vkCommandBuffers;
+        vector<VkCommandBuffer>::type   m_vkCommandBuffers;    // https://vulkan.lunarg.com/doc/view/1.2.141.0/windows/chunked_spec/chap5.html
         VkQueue                         m_vkPresentQueue;
     };
 }

@@ -189,10 +189,11 @@ namespace Echo
         VkPipelineLayoutCreateInfo plCreateInfo = {};
         plCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
         plCreateInfo.pNext = nullptr;
+        plCreateInfo.flags = 0;
+		plCreateInfo.setLayoutCount = m_vkDescriptorSetLayouts.size();
+		plCreateInfo.pSetLayouts = m_vkDescriptorSetLayouts.data();
         plCreateInfo.pushConstantRangeCount = 0;
         plCreateInfo.pPushConstantRanges = nullptr;
-        plCreateInfo.setLayoutCount = m_vkDescriptorSetLayouts.size();
-        plCreateInfo.pSetLayouts = m_vkDescriptorSetLayouts.data();
 
         VKDebug(vkCreatePipelineLayout(VKRenderer::instance()->getVkDevice(), &plCreateInfo, nullptr, &m_vkPipelineLayout));
     }

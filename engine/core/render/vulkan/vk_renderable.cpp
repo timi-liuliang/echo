@@ -57,18 +57,24 @@ namespace Echo
 				dynamicState.pDynamicStates = dynamicStateEnables.data();
 
 				m_vkPipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-				m_vkPipelineInfo.layout = vkShaderProgram->getVkPipelineLayout();
-				m_vkPipelineInfo.renderPass = vkFrameBuffer->getVkRenderPass();
+                m_vkPipelineInfo.pNext = nullptr;
+                m_vkPipelineInfo.flags = 0;
 				m_vkPipelineInfo.stageCount = vkShaderProgram->getVkShaderStageCreateInfo().size();
 				m_vkPipelineInfo.pStages = vkShaderProgram->getVkShaderStageCreateInfo().data();
-				m_vkPipelineInfo.pVertexInputState = &vertexInputStateCreateInfo;
-				m_vkPipelineInfo.pInputAssemblyState = &pipelineInputAssemblyStateCreateInfo;
-				m_vkPipelineInfo.pViewportState = vkFrameBuffer->getVkViewportStateCreateInfo();
+                m_vkPipelineInfo.pVertexInputState = &vertexInputStateCreateInfo;
+                m_vkPipelineInfo.pInputAssemblyState = &pipelineInputAssemblyStateCreateInfo;
+                m_vkPipelineInfo.pTessellationState = nullptr;
+                m_vkPipelineInfo.pViewportState = vkFrameBuffer->getVkViewportStateCreateInfo();
+                m_vkPipelineInfo.pRasterizationState = getVkRasterizationStateCreateInfo();
+                m_vkPipelineInfo.pMultisampleState = getVkMultiSampleStateCreateInfo();
 				m_vkPipelineInfo.pDepthStencilState = getVkDepthStencilStateCrateInfo();
-				m_vkPipelineInfo.pRasterizationState = getVkRasterizationStateCreateInfo();
-				m_vkPipelineInfo.pMultisampleState = getVkMultiSampleStateCreateInfo();
-				m_vkPipelineInfo.pColorBlendState = getVkColorBlendStateCreateInfo();
-				m_vkPipelineInfo.pDynamicState = &dynamicState;
+                m_vkPipelineInfo.pColorBlendState = getVkColorBlendStateCreateInfo();
+                m_vkPipelineInfo.pDynamicState = &dynamicState;
+				m_vkPipelineInfo.layout = vkShaderProgram->getVkPipelineLayout();
+				m_vkPipelineInfo.renderPass = vkFrameBuffer->getVkRenderPass();
+                m_vkPipelineInfo.subpass = 0;
+                m_vkPipelineInfo.basePipelineHandle = 0;
+                m_vkPipelineInfo.basePipelineIndex = 0;
 
 				VKDebug(vkCreateGraphicsPipelines(VKRenderer::instance()->getVkDevice(), VK_NULL_HANDLE, 1, &m_vkPipelineInfo, nullptr, &m_vkPipeline));
 			}
