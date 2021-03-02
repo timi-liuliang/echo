@@ -2,7 +2,7 @@
 
 namespace Echo
 {
-    VkPrimitiveTopology VKMapping::MapPrimitiveTopology(Mesh::TopologyType type)
+    VkPrimitiveTopology VKMapping::mapPrimitiveTopology(Mesh::TopologyType type)
     {
         switch (type)
         {
@@ -15,7 +15,7 @@ namespace Echo
         }
     }
 
-    String VKMapping::MapVertexSemanticString(VertexSemantic semantic)
+    String VKMapping::mapVertexSemanticString(VertexSemantic semantic)
     {
         switch (semantic)
         {
@@ -32,7 +32,7 @@ namespace Echo
         }
     }
 
-    VkBufferUsageFlags VKMapping::MapGpuBufferUsageFlags(GPUBuffer::GPUBufferType type)
+    VkBufferUsageFlags VKMapping::mapGpuBufferUsageFlags(GPUBuffer::GPUBufferType type)
     {
         switch (type)
         {
@@ -47,7 +47,7 @@ namespace Echo
         }
     }
 
-    VkFormat VKMapping::MapVertexFormat(PixelFormat pixelFormat)
+    VkFormat VKMapping::mapVertexFormat(PixelFormat pixelFormat)
     {
         switch (pixelFormat)
         {
@@ -60,7 +60,7 @@ namespace Echo
         }
     }
 
-    ShaderParamType VKMapping::MapUniformType(const spirv_cross::SPIRType& spirType)
+    ShaderParamType VKMapping::mapUniformType(const spirv_cross::SPIRType& spirType)
     {
         switch (spirType.basetype)
         {
@@ -86,4 +86,44 @@ namespace Echo
         default:  EchoLogError("vulkan MapUniformType failed"); return SPT_UNKNOWN;
         }
     }
+
+    VkBlendFactor VKMapping::mapBlendFactor(BlendState::BlendFactor factor)
+	{
+		switch (factor)
+		{
+		case BlendState::BF_ZERO:			return VK_BLEND_FACTOR_ZERO;
+		case BlendState::BF_ONE:			return VK_BLEND_FACTOR_ONE;
+		case BlendState::BF_SRC_ALPHA:		return VK_BLEND_FACTOR_SRC_ALPHA;
+		case BlendState::BF_DST_ALPHA:		return VK_BLEND_FACTOR_DST_ALPHA;
+		case BlendState::BF_INV_SRC_ALPHA:	return VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+		case BlendState::BF_INV_DST_ALPHA:	return VK_BLEND_FACTOR_ONE_MINUS_DST_ALPHA;
+		case BlendState::BF_SRC_COLOR:		return VK_BLEND_FACTOR_SRC_COLOR;
+		case BlendState::BF_DST_COLOR:		return VK_BLEND_FACTOR_DST_COLOR;
+		case BlendState::BF_INV_SRC_COLOR:	return VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR;
+		case BlendState::BF_INV_DST_COLOR:	return VK_BLEND_FACTOR_ONE_MINUS_DST_COLOR;
+		case BlendState::BF_SRC_ALPHA_SAT:	return VK_BLEND_FACTOR_SRC_ALPHA_SATURATE;
+		default:
+		{
+			EchoAssert(false);
+			return VK_BLEND_FACTOR_ZERO;
+		}
+		}
+	}
+
+    VkBlendOp VKMapping::mapBlendOperation(BlendState::BlendOperation op)
+	{
+		switch (op)
+		{
+		case BlendState::BOP_ADD:			return VK_BLEND_OP_ADD;
+		case BlendState::BOP_SUB:			return VK_BLEND_OP_SUBTRACT;
+		case BlendState::BOP_REV_SUB:		return VK_BLEND_OP_REVERSE_SUBTRACT;
+		case BlendState::BOP_MIN:			return VK_BLEND_OP_MIN;
+		case BlendState::BOP_MAX:			return VK_BLEND_OP_MAX;
+		default:
+		{
+			EchoAssert(false);
+			return VK_BLEND_OP_ADD;
+		}
+		}
+	}
 }

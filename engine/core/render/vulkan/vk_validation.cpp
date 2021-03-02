@@ -79,6 +79,7 @@ namespace Echo
 		addLayer(validationLayers, "VK_LAYER_LUNARG_object_tracker");
 		addLayer(validationLayers, "VK_LAYER_LUNARG_core_validation");
 		addLayer(validationLayers, "VK_LAYER_GOOGLE_unique_objects");
+		addLayer(validationLayers, "VK_LAYER_RENDERDOC_Capture");
 
 		for (const char* layer : validationLayers)
 		{

@@ -44,7 +44,7 @@ namespace Echo
 
 				VkPipelineInputAssemblyStateCreateInfo pipelineInputAssemblyStateCreateInfo = {};
 				pipelineInputAssemblyStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-				pipelineInputAssemblyStateCreateInfo.topology = VKMapping::MapPrimitiveTopology(m_mesh->getTopologyType());
+				pipelineInputAssemblyStateCreateInfo.topology = VKMapping::mapPrimitiveTopology(m_mesh->getTopologyType());
 
                 // https://gitmemory.com/issue/KhronosGroup/Vulkan-ValidationLayers/2124/678355023
 				vector<VkDynamicState>::type dynamicStateEnables = { };
@@ -94,7 +94,7 @@ namespace Echo
 
     bool VKRenderable::getVkVertexAttributeBySemantic(VertexSemantic semantic, spirv_cross::Resource& oResource)
     {
-        String attributeName = VKMapping::MapVertexSemanticString(semantic);
+        String attributeName = VKMapping::mapVertexSemanticString(semantic);
         VKShaderProgram* vkShaderProgram = ECHO_DOWN_CAST<VKShaderProgram*>(m_material->getShader());
         if (vkShaderProgram && vkShaderProgram->isLinked())
         {
@@ -128,7 +128,7 @@ namespace Echo
                     VkVertexInputAttributeDescription attributeDescription;
                     attributeDescription.binding = compiler->get_decoration(spirvResource.id, spv::DecorationBinding);
                     attributeDescription.location = compiler->get_decoration(spirvResource.id, spv::DecorationLocation);
-                    attributeDescription.format = VKMapping::MapVertexFormat(vertElements[i].m_pixFmt);
+                    attributeDescription.format = VKMapping::mapVertexFormat(vertElements[i].m_pixFmt);
                     attributeDescription.offset = elementOffset;
                     viAttributeDescriptions.emplace_back(attributeDescription);
                 }

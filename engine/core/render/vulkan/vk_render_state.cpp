@@ -1,19 +1,33 @@
 #include "vk_render_state.h"
 #include "vk_render_base.h"
+#include "vk_mapping.h"
 
 namespace Echo
 {
-    VKBlendState::VKBlendState(const BlendDesc &desc)
+    VKBlendState::VKBlendState(const BlendDesc& desc)
         : BlendState(desc)
     {
         VkPipelineColorBlendAttachmentState blendAttachState = {};
-        blendAttachState.colorWriteMask = 0xf;
+        blendAttachState.blendEnable = desc.bBlendEnable ? VK_TRUE : VK_FALSE;
+        blendAttachState.srcColorBlendFactor = VKMapping::mapBlendFactor(desc.srcBlend);
+        blendAttachState.dstColorBlendFactor = VKMapping::mapBlendFactor(desc.dstBlend);
+        blendAttachState.colorBlendOp = VKMapping::mapBlendOperation(desc.blendOP);
+        blendAttachState.srcAlphaBlendFactor = VKMapping::mapBlendFactor(desc.srcAlphaBlend);
+        blendAttachState.dstAlphaBlendFactor = VKMapping::mapBlendFactor(desc.dstAlphaBlend);
+        blendAttachState.alphaBlendOp = VKMapping::mapBlendOperation(desc.alphaBlendOP);;
+        blendAttachState.colorWriteMask = desc.colorWriteMask;
 
         m_vkCreateInfo = {};
         m_vkCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+        m_vkCreateInfo.pNext = nullptr;
+        m_vkCreateInfo.flags = 0;
         m_vkCreateInfo.logicOp = VK_LOGIC_OP_COPY;
         m_vkCreateInfo.attachmentCount = 1;
         m_vkCreateInfo.pAttachments = &blendAttachState;
+        m_vkCreateInfo.blendConstants[0] = desc.blendFactor.r;
+        m_vkCreateInfo.blendConstants[1] = desc.blendFactor.g;
+        m_vkCreateInfo.blendConstants[2] = desc.blendFactor.b;
+        m_vkCreateInfo.blendConstants[3] = desc.blendFactor.a;
     }
 
     VKDepthStencilState::VKDepthStencilState()

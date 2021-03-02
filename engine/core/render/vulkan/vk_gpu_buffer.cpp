@@ -65,7 +65,7 @@ namespace Echo
             VkBufferCreateInfo createInfo = {};
             createInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
             createInfo.size = sizeInBytes;
-            createInfo.usage = VKMapping::MapGpuBufferUsageFlags(m_type);
+            createInfo.usage = VKMapping::mapGpuBufferUsageFlags(m_type);
 
             if (VK_SUCCESS == vkCreateBuffer(VKRenderer::instance()->getVkDevice(), &createInfo, nullptr, &m_vkBuffer))
             {
