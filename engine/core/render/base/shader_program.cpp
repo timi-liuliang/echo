@@ -38,8 +38,6 @@ void main(void)
 
 static const char* g_2dPsCode = R"(#version 450
 
-precision mediump float;
-
 // uniforms
 layout(binding = 0) uniform UBO
 {
@@ -104,8 +102,6 @@ void main(void)
 )";
 
 static Echo::String g_3dPsCode = R"(#version 450
-
-precision mediump float;
 
 // inputs
 layout(location = 0) in vec3  v_Position;

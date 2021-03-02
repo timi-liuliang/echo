@@ -62,32 +62,39 @@ namespace Echo
         {
             clear();
 
-            VkBufferCreateInfo createInfo = {};
-            createInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-            createInfo.size = sizeInBytes;
-            createInfo.usage = VKMapping::mapGpuBufferUsageFlags(m_type);
-
-            if (VK_SUCCESS == vkCreateBuffer(VKRenderer::instance()->getVkDevice(), &createInfo, nullptr, &m_vkBuffer))
+            if (sizeInBytes)
             {
-                VkMemoryRequirements memRequirements;
-                vkGetBufferMemoryRequirements(VKRenderer::instance()->getVkDevice(), m_vkBuffer, &memRequirements);
+				VkBufferCreateInfo createInfo = {};
+				createInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+				createInfo.size = sizeInBytes;
+				createInfo.usage = VKMapping::mapGpuBufferUsageFlags(m_type);
 
-                VkMemoryAllocateInfo allocInfo = {};
-                allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-                allocInfo.pNext = nullptr;
-                allocInfo.memoryTypeIndex = 0;
-                allocInfo.allocationSize = memRequirements.size;
-                allocInfo.memoryTypeIndex = findMemoryType(VKRenderer::instance()->getVkPhysicalDevice(), memRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+				if (VK_SUCCESS == vkCreateBuffer(VKRenderer::instance()->getVkDevice(), &createInfo, nullptr, &m_vkBuffer))
+				{
+					VkMemoryRequirements memRequirements;
+					vkGetBufferMemoryRequirements(VKRenderer::instance()->getVkDevice(), m_vkBuffer, &memRequirements);
 
-                VKDebug(vkAllocateMemory(VKRenderer::instance()->getVkDevice(), &allocInfo, nullptr, &m_vkBufferMemory));
-                VKDebug(vkBindBufferMemory(VKRenderer::instance()->getVkDevice(), m_vkBuffer, m_vkBufferMemory, 0));
+					VkMemoryAllocateInfo allocInfo = {};
+					allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+					allocInfo.pNext = nullptr;
+					allocInfo.memoryTypeIndex = 0;
+					allocInfo.allocationSize = memRequirements.size;
+					allocInfo.memoryTypeIndex = findMemoryType(VKRenderer::instance()->getVkPhysicalDevice(), memRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
-                m_size = sizeInBytes;
-                return true;
+					VKDebug(vkAllocateMemory(VKRenderer::instance()->getVkDevice(), &allocInfo, nullptr, &m_vkBufferMemory));
+					VKDebug(vkBindBufferMemory(VKRenderer::instance()->getVkDevice(), m_vkBuffer, m_vkBufferMemory, 0));
+
+					m_size = sizeInBytes;
+					return true;
+				}
+
+				EchoLogError("vulkan crete gpu buffer failed");
+				return false;
             }
-
-            EchoLogError("vulkan crete gpu buffer failed");
-            return false;
+            else
+            {
+                return false;
+            }
         }
 
         return true;
