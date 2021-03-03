@@ -2,6 +2,7 @@
 
 #include "base/frame_buffer.h"
 #include "vk_render_base.h"
+#include "vk_texture.h"
 
 namespace Echo
 {
@@ -109,9 +110,13 @@ namespace Echo
         // create swap chain
         void createSwapChain(VkDevice vkDevice);
 
-        // create image views
-        void createVkImageViews(VkDevice vkDevice);
-        void destroyVkImageViews();
+        // create color image views
+        void createVkColorImageViews(VkDevice vkDevice);
+        void destroyVkColorImageViews();
+
+        // create depth image view
+        void createVkDepthImageView();
+        void destroyVkDepthImageView();
 
         // check surface format
         VkSurfaceFormatKHR pickSurfaceSupportFormat();
@@ -137,6 +142,7 @@ namespace Echo
         VkSwapchainKHR				    m_vkSwapChain = VK_NULL_HANDLE;
         vector<VkImage>::type           m_vkSwapChainImages;
         vector<VkImageView>::type	    m_vkSwapChainImageViews;
+        VKTextureRender*                m_vkDepthImageView = nullptr;
         vector<VkCommandBuffer>::type   m_vkCommandBuffers;    // https://vulkan.lunarg.com/doc/view/1.2.141.0/windows/chunked_spec/chap5.html
         VkQueue                         m_vkPresentQueue;
     };

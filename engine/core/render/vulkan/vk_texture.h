@@ -21,6 +21,10 @@ namespace Echo
 		// update texture by rect
         virtual bool updateTexture2D(PixelFormat format, TexUsage usage, i32 width, i32 height, void* data, ui32 size) override;
 
+    public:
+        // get vk image view
+        VkImageView getVkImageView() { return m_vkImageView; }
+
     protected:
         // VkImage
         void createVkImage();

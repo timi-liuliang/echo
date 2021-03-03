@@ -151,7 +151,8 @@ namespace Echo
     VKFramebufferWindow::~VKFramebufferWindow()
     {
         destroyVkFramebuffers();
-        destroyVkImageViews();
+        destroyVkColorImageViews();
+        destroyVkDepthImageView();
         destroyVkSwapChain(m_vkSwapChain);
 
         vkDestroySurfaceKHR(VKRenderer::instance()->getVkInstance(), m_vkWindowSurface, nullptr);
@@ -239,7 +240,7 @@ namespace Echo
             VKDebug(vkDeviceWaitIdle(vkDevice));
 
             createSwapChain(vkDevice);
-            createVkImageViews(vkDevice);
+            createVkColorImageViews(vkDevice);
             createVkRenderPass();
             createVkFramebuffers();
             createVkCommandBuffers();
@@ -465,11 +466,12 @@ namespace Echo
         VKDebug(vkCreateSwapchainKHR(vkDevice, &createInfo, nullptr, &m_vkSwapChain));
 
         // destroy old vk swapchain and clearsup all the presentable images
-        destroyVkImageViews();
+        destroyVkColorImageViews();
+        destroyVkDepthImageView();
         destroyVkSwapChain(oldVkSwapChain);
     }
 
-    void VKFramebufferWindow::createVkImageViews(VkDevice vkDevice)
+    void VKFramebufferWindow::createVkColorImageViews(VkDevice vkDevice)
     {
         // destroyVkImageViews has been called by createSwapChain()
         // do nothing
@@ -509,12 +511,23 @@ namespace Echo
         }
     }
 
-    void VKFramebufferWindow::destroyVkImageViews()
+    void VKFramebufferWindow::destroyVkColorImageViews()
     {
         for (VkImageView imageView : m_vkSwapChainImageViews)
             vkDestroyImageView(VKRenderer::instance()->getVkDevice(), imageView, nullptr);
 
         m_vkSwapChainImageViews.clear();
+    }
+
+    void VKFramebufferWindow::createVkDepthImageView()
+    {
+        m_vkDepthImageView = ECHO_DOWN_CAST<VKTextureRender*>(VKRenderer::instance()->createTextureRender("VK_WINDOW_DEPTH_IMAGE_VIEW"));
+        m_vkDepthImageView->updateTexture2D(PF_D16_UNORM, Texture::TU_GPU_READ, m_vkViewport.width, m_vkViewport.height, nullptr, 0);
+    }
+
+    void VKFramebufferWindow::destroyVkDepthImageView()
+    {
+        EchoSafeDelete(m_vkDepthImageView, VKTextureRender);
     }
 
     void VKFramebufferWindow::createVkFramebuffers()
@@ -528,15 +541,15 @@ namespace Echo
         m_vkFramebuffers.resize(m_vkSwapChainImages.size());
         for (size_t i = 0; i < m_vkFramebuffers.size(); i++)
         {
-            VkImageView vkImageView = m_vkSwapChainImageViews[i];
+            vector<VkImageView>::type attachments = { m_vkSwapChainImageViews[i], m_vkDepthImageView->getVkImageView() };
 
             VkFramebufferCreateInfo fbCreateInfo = {};
             fbCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
             fbCreateInfo.pNext = nullptr;
             fbCreateInfo.flags = 0;
             fbCreateInfo.renderPass = m_vkRenderPass;
-            fbCreateInfo.attachmentCount = 1;
-            fbCreateInfo.pAttachments = &vkImageView;
+            fbCreateInfo.attachmentCount = attachments.size();
+            fbCreateInfo.pAttachments = attachments.data();
             fbCreateInfo.width = surfaceCapabilities.currentExtent.width;
             fbCreateInfo.height = surfaceCapabilities.currentExtent.height;
             fbCreateInfo.layers = 1;
