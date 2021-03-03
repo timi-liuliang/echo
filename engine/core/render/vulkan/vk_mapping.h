@@ -19,16 +19,19 @@ namespace Echo
         // mapping gpubffer type
         static VkBufferUsageFlags mapGpuBufferUsageFlags(GPUBuffer::GPUBufferType type);
 
-        // Mapping VkFormat
+        // mapping VkFormat
         static VkFormat mapVertexFormat(PixelFormat pixelFormat);
 
-        // Mapping Uniform type
+        // mapping Uniform type
         static ShaderParamType mapUniformType(const spirv_cross::SPIRType& spirType);
 
-        // Mapping blend factor
+        // mapping blend factor
         static VkBlendFactor mapBlendFactor(BlendState::BlendFactor factor);
 
-        // Mapping blend operation
+        // mapping blend operation
         static VkBlendOp mapBlendOperation(BlendState::BlendOperation op);
+
+        // mapping pixel format
+        static VkFormat mapPixelFormat(PixelFormat pixFmt);
     };
 }

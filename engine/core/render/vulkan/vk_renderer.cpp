@@ -75,7 +75,7 @@ namespace Echo
 
 	TextureRender* VKRenderer::createTextureRender(const String& name)
 	{ 
-		return EchoNew(VKTextureRender); 
+		return EchoNew(VKTextureRender(name)); 
 	}
 
 	void VKRenderer::setTexture(ui32 index, Texture* texture, bool needUpdate)

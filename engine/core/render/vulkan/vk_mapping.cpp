@@ -60,6 +60,17 @@ namespace Echo
         }
     }
 
+    VkFormat VKMapping::mapPixelFormat(PixelFormat pixFmt)
+    {
+		switch (pixFmt)
+		{
+		case PF_D16_UNORM:          return VK_FORMAT_D16_UNORM;
+        case PF_D24_UNORM_S8_UINT:  return VK_FORMAT_D24_UNORM_S8_UINT;
+        case PF_D32_FLOAT:          return VK_FORMAT_D32_SFLOAT;
+		default:  EchoLogError("MapingVertexFormat failed");  return VK_FORMAT_UNDEFINED;
+		}
+    }
+
     ShaderParamType VKMapping::mapUniformType(const spirv_cross::SPIRType& spirType)
     {
         switch (spirType.basetype)
