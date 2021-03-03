@@ -107,6 +107,9 @@ namespace Echo
 		// get vk descriptor pool
 		VkDescriptorPool getVkDescriptorPool() { return m_vkDescriptorPool; }
 
+        // find memory type
+        ui32 findVkMemoryType(ui32 typeBits, VkFlags requirementsMask);
+
 	private:
 		// create vk instance
 		void createVkInstance();

@@ -48,16 +48,26 @@ namespace Echo
             subpassDesc.preserveAttachmentCount = 0;
             subpassDesc.pPreserveAttachments = nullptr;
 
-            VkAttachmentDescription attachDesc = {};
-            attachDesc.flags = 0;
-            attachDesc.format = VK_FORMAT_B8G8R8A8_UNORM;
-            attachDesc.samples = VK_SAMPLE_COUNT_1_BIT;
-            attachDesc.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-            attachDesc.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-            attachDesc.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-            attachDesc.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-            attachDesc.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-            attachDesc.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+            array<VkAttachmentDescription, 2> attachDescs;
+            attachDescs[0].flags = 0;
+            attachDescs[0].format = VK_FORMAT_B8G8R8A8_UNORM;
+            attachDescs[0].samples = VK_SAMPLE_COUNT_1_BIT;
+            attachDescs[0].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            attachDescs[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+            attachDescs[0].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+            attachDescs[0].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+            attachDescs[0].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            attachDescs[0].finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+
+            attachDescs[1].flags = 0;
+            attachDescs[1].format = VK_FORMAT_D16_UNORM;
+            attachDescs[1].samples = VK_SAMPLE_COUNT_1_BIT;
+            attachDescs[1].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            attachDescs[1].storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+            attachDescs[1].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+            attachDescs[1].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+            attachDescs[1].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            attachDescs[1].finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
             VkSubpassDependency subpassDependency = {};
             subpassDependency.srcSubpass = VK_SUBPASS_EXTERNAL;
@@ -72,8 +82,8 @@ namespace Echo
             renderPassCreateInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
             renderPassCreateInfo.pNext = nullptr;
             renderPassCreateInfo.flags = 0;
-            renderPassCreateInfo.attachmentCount = 1;
-            renderPassCreateInfo.pAttachments = &attachDesc;
+            renderPassCreateInfo.attachmentCount = attachDescs.size();
+            renderPassCreateInfo.pAttachments = attachDescs.data();
             renderPassCreateInfo.subpassCount = 1;
             renderPassCreateInfo.pSubpasses = &subpassDesc;
             renderPassCreateInfo.dependencyCount = 1;
@@ -174,7 +184,7 @@ namespace Echo
 
 		if (VK_SUCCESS == vkBeginCommandBuffer(getVkCommandbuffer(), &commandBufferBeginInfo))
 		{
-			VkClearValue clearValues[2];
+			array<VkClearValue, 2> clearValues;
 			clearValues[0].color = { m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a };
 			clearValues[1].depthStencil = { m_clearDepth, m_clearStencil };
 
@@ -186,8 +196,8 @@ namespace Echo
 			renderPassBeginInfo.renderArea.offset.y = 0;
 			renderPassBeginInfo.renderArea.extent.width = Renderer::instance()->getWindowWidth();
 			renderPassBeginInfo.renderArea.extent.height = Renderer::instance()->getWindowHeight();
-			renderPassBeginInfo.clearValueCount = 1;
-			renderPassBeginInfo.pClearValues = clearValues;
+			renderPassBeginInfo.clearValueCount = clearValues.size();
+			renderPassBeginInfo.pClearValues = clearValues.data();
 			renderPassBeginInfo.framebuffer = getVkFramebuffer();
 
 			vkCmdBeginRenderPass(getVkCommandbuffer(), &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
@@ -241,6 +251,7 @@ namespace Echo
 
             createSwapChain(vkDevice);
             createVkColorImageViews(vkDevice);
+            createVkDepthImageView();
             createVkRenderPass();
             createVkFramebuffers();
             createVkCommandBuffers();

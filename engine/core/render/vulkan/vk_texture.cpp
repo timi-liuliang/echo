@@ -88,7 +88,7 @@ namespace Echo
 		allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 		allocInfo.pNext = nullptr;
 		allocInfo.allocationSize = memRequirements.size;
-		allocInfo.memoryTypeIndex = 0;
+		allocInfo.memoryTypeIndex = VKRenderer::instance()->findVkMemoryType(memRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
 		VKDebug(vkAllocateMemory(VKRenderer::instance()->getVkDevice(), &allocInfo, nullptr, &m_vkImageMemory));
 		VKDebug(vkBindImageMemory(VKRenderer::instance()->getVkDevice(), m_vkImage, m_vkImageMemory, 0));
@@ -96,7 +96,11 @@ namespace Echo
 
 	void VKTextureRender::destroyVkImageMemory()
 	{
-
+		if (m_vkImageMemory)
+		{
+			vkFreeMemory(VKRenderer::instance()->getVkDevice(), m_vkImageMemory, nullptr);
+			m_vkImageMemory = VK_NULL_HANDLE;
+		}
 	}
 
     void VKTextureRender::createVkImageView()

@@ -339,6 +339,26 @@ namespace Echo
 		VKDebug(vkCreateDescriptorPool( m_vkDevice, &descriptorPoolInfo, nullptr, &m_vkDescriptorPool));
 	}
 
+	ui32 VKRenderer::findVkMemoryType(ui32 typeBits, VkFlags requirementsMask)
+	{
+		VkPhysicalDeviceMemoryProperties memProperties;
+		vkGetPhysicalDeviceMemoryProperties(m_vkPhysicalDevice, &memProperties);
+
+		for (ui32 i = 0; i < memProperties.memoryTypeCount; i++)
+		{
+			if ((typeBits & 1) == 1)
+			{
+				if ((memProperties.memoryTypes[i].propertyFlags & requirementsMask) == requirementsMask)
+					return i;
+			}
+
+			typeBits >>= 1;
+		}
+
+		// no memory types matched, return failure
+		return 0;
+	}
+
     void VKRenderer::onSize(int width, int height)
     {
 		m_screenWidth = width;
