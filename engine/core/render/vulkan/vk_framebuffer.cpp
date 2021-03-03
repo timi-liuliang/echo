@@ -44,7 +44,7 @@ namespace Echo
             subpassDesc.colorAttachmentCount = 1;
             subpassDesc.pColorAttachments = &colorRef;
             subpassDesc.pResolveAttachments = nullptr;
-            subpassDesc.pDepthStencilAttachment = nullptr;
+            subpassDesc.pDepthStencilAttachment = &depthRef;
             subpassDesc.preserveAttachmentCount = 0;
             subpassDesc.pPreserveAttachments = nullptr;
 

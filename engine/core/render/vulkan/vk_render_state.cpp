@@ -35,9 +35,9 @@ namespace Echo
     {
         m_vkCreateInfo = {};
         m_vkCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
-        m_vkCreateInfo.depthTestEnable = VK_TRUE;
-        m_vkCreateInfo.depthWriteEnable = VK_TRUE;
-        m_vkCreateInfo.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
+        m_vkCreateInfo.depthTestEnable = bDepthEnable ? VK_TRUE : VK_FALSE;
+        m_vkCreateInfo.depthWriteEnable = bWriteDepth ? VK_TRUE : VK_FALSE;
+        m_vkCreateInfo.depthCompareOp = VK_COMPARE_OP_ALWAYS;
         m_vkCreateInfo.depthBoundsTestEnable = VK_FALSE;
         m_vkCreateInfo.back.failOp = VK_STENCIL_OP_KEEP;
         m_vkCreateInfo.back.passOp = VK_STENCIL_OP_KEEP;
