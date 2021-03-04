@@ -144,16 +144,26 @@ namespace Echo
             // Update the descriptor set determining the shader binding points
             // For every binding point used in a shader there needs to be one
             // descriptor set matching that binding point
-            array<VkWriteDescriptorSet, 2> writeDescriptorSets = {};
-            for (size_t i = 0; i < writeDescriptorSets.size(); i++)
+            vector<VkWriteDescriptorSet>::type writeDescriptorSets;
+            for (size_t i = 0; i < m_vkShaderUniformBufferDescriptors.size(); i++)
             {
-                // Binding 0 : Uniform buffer
-                writeDescriptorSets[i].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-                writeDescriptorSets[i].dstSet = m_vkDescriptorSets[i];
-                writeDescriptorSets[i].descriptorCount = 1;
-                writeDescriptorSets[i].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-                writeDescriptorSets[i].pBufferInfo = &m_vkShaderUniformBufferDescriptors[i];
-                writeDescriptorSets[i].dstBinding = 0;
+                if (m_vkShaderUniformBufferDescriptors[i].buffer)
+                {
+					// Binding 0 : Uniform buffer
+					VkWriteDescriptorSet writeDescriptorSet;
+					writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                    writeDescriptorSet.pNext = nullptr;
+					writeDescriptorSet.dstSet = m_vkDescriptorSets[i];
+                    writeDescriptorSet.dstBinding = 0;
+                    writeDescriptorSet.dstArrayElement = 0;
+					writeDescriptorSet.descriptorCount = 1;
+					writeDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+                    writeDescriptorSet.pImageInfo = nullptr;
+					writeDescriptorSet.pBufferInfo = &m_vkShaderUniformBufferDescriptors[i];
+                    writeDescriptorSet.pTexelBufferView = nullptr;
+
+					writeDescriptorSets.emplace_back(writeDescriptorSet);
+                }
             }
 
             vkUpdateDescriptorSets(VKRenderer::instance()->getVkDevice(), writeDescriptorSets.size(), writeDescriptorSets.data(), 0, nullptr);
