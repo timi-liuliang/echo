@@ -2,6 +2,7 @@
 #include "base/Renderer.h"
 #include "vk_framebuffer.h"
 #include "vk_renderer.h"
+#include "vk_mapping.h"
 
 namespace Echo
 {
@@ -18,79 +19,6 @@ namespace Echo
     VKFramebuffer* VKFramebuffer::current()
     {
         return g_current;
-    }
-
-    // https://vulkan.lunarg.com/doc/view/1.2.162.1/mac/tutorial/html/10-init_render_pass.html
-    void VKFramebuffer::createVkRenderPass()
-    {
-        destroyVkRenderPass();
-
-        if (!m_vkRenderPass)
-        {
-            VkAttachmentReference colorRef = {};
-            colorRef.attachment = 0;
-            colorRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-
-            VkAttachmentReference depthRef = {};
-            depthRef.attachment = 1;
-            depthRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-
-            // The pipelineBindPoint member is meant to indicate if this is a graphics or a compute subpass
-            VkSubpassDescription subpassDesc = {};
-            subpassDesc.flags = 0;
-            subpassDesc.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-            subpassDesc.inputAttachmentCount = 0;
-            subpassDesc.pInputAttachments = nullptr;
-            subpassDesc.colorAttachmentCount = 1;
-            subpassDesc.pColorAttachments = &colorRef;
-            subpassDesc.pResolveAttachments = nullptr;
-            subpassDesc.pDepthStencilAttachment = &depthRef;
-            subpassDesc.preserveAttachmentCount = 0;
-            subpassDesc.pPreserveAttachments = nullptr;
-
-            array<VkAttachmentDescription, 2> attachDescs;
-            attachDescs[0].flags = 0;
-            attachDescs[0].format = VK_FORMAT_B8G8R8A8_UNORM;
-            attachDescs[0].samples = VK_SAMPLE_COUNT_1_BIT;
-            attachDescs[0].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-            attachDescs[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-            attachDescs[0].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-            attachDescs[0].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-            attachDescs[0].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-            attachDescs[0].finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-
-            attachDescs[1].flags = 0;
-            attachDescs[1].format = VK_FORMAT_D16_UNORM;
-            attachDescs[1].samples = VK_SAMPLE_COUNT_1_BIT;
-            attachDescs[1].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-            attachDescs[1].storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-            attachDescs[1].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-            attachDescs[1].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-            attachDescs[1].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-            attachDescs[1].finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-
-            VkSubpassDependency subpassDependency = {};
-            subpassDependency.srcSubpass = VK_SUBPASS_EXTERNAL;
-            subpassDependency.dstSubpass = 0;
-            subpassDependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-            subpassDependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-            subpassDependency.srcAccessMask = 0;
-            subpassDependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-            subpassDependency.dependencyFlags = 0;
-
-            VkRenderPassCreateInfo renderPassCreateInfo = {};
-            renderPassCreateInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-            renderPassCreateInfo.pNext = nullptr;
-            renderPassCreateInfo.flags = 0;
-            renderPassCreateInfo.attachmentCount = attachDescs.size();
-            renderPassCreateInfo.pAttachments = attachDescs.data();
-            renderPassCreateInfo.subpassCount = 1;
-            renderPassCreateInfo.pSubpasses = &subpassDesc;
-            renderPassCreateInfo.dependencyCount = 1;
-            renderPassCreateInfo.pDependencies = &subpassDependency;
-
-            VKDebug(vkCreateRenderPass(VKRenderer::instance()->getVkDevice(), &renderPassCreateInfo, nullptr, &m_vkRenderPass));
-        }
     }
 
     void VKFramebuffer::destroyVkRenderPass()
@@ -194,8 +122,8 @@ namespace Echo
 			renderPassBeginInfo.renderPass = m_vkRenderPass;
 			renderPassBeginInfo.renderArea.offset.x = 0;
 			renderPassBeginInfo.renderArea.offset.y = 0;
-			renderPassBeginInfo.renderArea.extent.width = Renderer::instance()->getWindowWidth();
-			renderPassBeginInfo.renderArea.extent.height = Renderer::instance()->getWindowHeight();
+			renderPassBeginInfo.renderArea.extent.width = m_vkViewport.width;
+			renderPassBeginInfo.renderArea.extent.height = m_vkViewport.height;
 			renderPassBeginInfo.clearValueCount = clearValues.size();
 			renderPassBeginInfo.pClearValues = clearValues.data();
 			renderPassBeginInfo.framebuffer = getVkFramebuffer();
@@ -241,6 +169,80 @@ namespace Echo
 
         recreateVkSwapChain();
     }
+
+	// https://vulkan.lunarg.com/doc/view/1.2.162.1/mac/tutorial/html/10-init_render_pass.html
+	void VKFramebufferWindow::createVkRenderPass()
+	{
+		destroyVkRenderPass();
+
+		if (!m_vkRenderPass)
+		{
+			VkAttachmentReference colorRef = {};
+			colorRef.attachment = 0;
+			colorRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+			VkAttachmentReference depthRef = {};
+			depthRef.attachment = 1;
+			depthRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
+			// The pipelineBindPoint member is meant to indicate if this is a graphics or a compute subpass
+			VkSubpassDescription subpassDesc = {};
+			subpassDesc.flags = 0;
+			subpassDesc.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+			subpassDesc.inputAttachmentCount = 0;
+			subpassDesc.pInputAttachments = nullptr;
+			subpassDesc.colorAttachmentCount = 1;
+			subpassDesc.pColorAttachments = &colorRef;
+			subpassDesc.pResolveAttachments = nullptr;
+			subpassDesc.pDepthStencilAttachment = &depthRef;
+			subpassDesc.preserveAttachmentCount = 0;
+			subpassDesc.pPreserveAttachments = nullptr;
+
+			array<VkAttachmentDescription, 2> attachDescs;
+			attachDescs[0].flags = 0;
+			attachDescs[0].format = VKMapping::mapPixelFormat(m_colorFormat);
+			attachDescs[0].samples = VK_SAMPLE_COUNT_1_BIT;
+			attachDescs[0].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+			attachDescs[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+			attachDescs[0].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+			attachDescs[0].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+			attachDescs[0].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+			attachDescs[0].finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+
+			attachDescs[1].flags = 0;
+            attachDescs[1].format = VKMapping::mapPixelFormat(m_vkDepthImageView->getPixelFormat());
+			attachDescs[1].samples = VK_SAMPLE_COUNT_1_BIT;
+			attachDescs[1].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+			attachDescs[1].storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+			attachDescs[1].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+			attachDescs[1].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+			attachDescs[1].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+			attachDescs[1].finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
+			VkSubpassDependency subpassDependency = {};
+			subpassDependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+			subpassDependency.dstSubpass = 0;
+			subpassDependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+			subpassDependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+			subpassDependency.srcAccessMask = 0;
+			subpassDependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+			subpassDependency.dependencyFlags = 0;
+
+			VkRenderPassCreateInfo renderPassCreateInfo = {};
+			renderPassCreateInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+			renderPassCreateInfo.pNext = nullptr;
+			renderPassCreateInfo.flags = 0;
+			renderPassCreateInfo.attachmentCount = attachDescs.size();
+			renderPassCreateInfo.pAttachments = attachDescs.data();
+			renderPassCreateInfo.subpassCount = 1;
+			renderPassCreateInfo.pSubpasses = &subpassDesc;
+			renderPassCreateInfo.dependencyCount = 1;
+			renderPassCreateInfo.pDependencies = &subpassDependency;
+
+			VKDebug(vkCreateRenderPass(VKRenderer::instance()->getVkDevice(), &renderPassCreateInfo, nullptr, &m_vkRenderPass));
+		}
+	}
+
 
     void VKFramebufferWindow::recreateVkSwapChain()
     {
@@ -506,7 +508,7 @@ namespace Echo
 				createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
 				createInfo.image = m_vkSwapChainImages[i];
 				createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-				createInfo.format = VK_FORMAT_B8G8R8A8_UNORM;
+                createInfo.format = VKMapping::mapPixelFormat(m_colorFormat);
 				createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
 				createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
 				createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
@@ -533,7 +535,7 @@ namespace Echo
     void VKFramebufferWindow::createVkDepthImageView()
     {
         m_vkDepthImageView = ECHO_DOWN_CAST<VKTextureRender*>(VKRenderer::instance()->createTextureRender("VK_WINDOW_DEPTH_IMAGE_VIEW"));
-        m_vkDepthImageView->updateTexture2D(PF_D16_UNORM, Texture::TU_GPU_READ, m_vkViewport.width, m_vkViewport.height, nullptr, 0);
+        m_vkDepthImageView->updateTexture2D(m_depthFormat, Texture::TU_GPU_READ, m_vkViewport.width, m_vkViewport.height, nullptr, 0);
     }
 
     void VKFramebufferWindow::destroyVkDepthImageView()

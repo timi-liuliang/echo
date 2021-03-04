@@ -37,8 +37,8 @@ namespace Echo
 
     protected:
         // create render pass
-        void createVkRenderPass();
-        void destroyVkRenderPass();
+        virtual void createVkRenderPass() {}
+        virtual void destroyVkRenderPass();
 
     protected:
         VkRenderPass                        m_vkRenderPass = VK_NULL_HANDLE;
@@ -88,6 +88,9 @@ namespace Echo
         virtual VkFramebuffer getVkFramebuffer() override { return m_vkFramebuffers[m_imageIndex]; }
 
     private:
+        // create render pass
+        virtual void createVkRenderPass() override;
+
         // recreate swap chain
         void recreateVkSwapChain();
         void destroyVkSwapChain(VkSwapchainKHR vkSwapChain);
@@ -138,10 +141,12 @@ namespace Echo
         vector<VkFence>::type           m_waitFences;
         VkSemaphore                     m_vkImageAvailableSemaphore;
         VkSemaphore                     m_vkRenderFinishedSemaphore;
+        PixelFormat                     m_colorFormat = PF_BGRA8_UNORM;
         VkSurfaceKHR                    m_vkWindowSurface;
         VkSwapchainKHR				    m_vkSwapChain = VK_NULL_HANDLE;
         vector<VkImage>::type           m_vkSwapChainImages;
         vector<VkImageView>::type	    m_vkSwapChainImageViews;
+        PixelFormat                     m_depthFormat = PF_D32_FLOAT;
         VKTextureRender*                m_vkDepthImageView = nullptr;
         vector<VkCommandBuffer>::type   m_vkCommandBuffers;    // https://vulkan.lunarg.com/doc/view/1.2.141.0/windows/chunked_spec/chap5.html
         VkQueue                         m_vkPresentQueue;

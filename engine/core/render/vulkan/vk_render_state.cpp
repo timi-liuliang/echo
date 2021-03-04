@@ -46,15 +46,15 @@ namespace Echo
         m_vkCreateInfo.front = m_vkCreateInfo.back;
     }
 
-    VKRasterizerState::VKRasterizerState(const RasterizerDesc& desc)
-        : RasterizerState(desc)
+    VKRasterizerState::VKRasterizerState()
+        : RasterizerState()
     {
         m_vkCreateInfo = {};
         m_vkCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
         m_vkCreateInfo.polygonMode = VK_POLYGON_MODE_FILL;
-        m_vkCreateInfo.cullMode = VK_CULL_MODE_BACK_BIT;
+        m_vkCreateInfo.cullMode = VK_CULL_MODE_NONE;
         m_vkCreateInfo.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
-        m_vkCreateInfo.lineWidth = m_desc.lineWidth;
+        m_vkCreateInfo.lineWidth = m_lineWidth;
     }
 
     VKSamplerState::VKSamplerState(const SamplerDesc& desc)

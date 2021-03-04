@@ -34,7 +34,7 @@ namespace Echo
 	class VKRasterizerState : public RasterizerState
 	{
 	public:
-        VKRasterizerState(const RasterizerDesc& desc);
+        VKRasterizerState();
         virtual ~VKRasterizerState(){}
 
         // get vk create info

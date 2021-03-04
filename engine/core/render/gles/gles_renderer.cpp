@@ -414,9 +414,9 @@ namespace Echo
 		return EchoNew(GLESShader(type, srcBuffer, size));
 	}
 
-	RasterizerState* GLESRenderer::createRasterizerState(const RasterizerState::RasterizerDesc& desc)
+	RasterizerState* GLESRenderer::createRasterizerState()
 	{
-		return EchoNew(GLESRasterizerState(desc));
+		return EchoNew(GLESRasterizerState);
 	}
 
 	DepthStencilState* GLESRenderer::createDepthStencilState()

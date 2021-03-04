@@ -42,6 +42,9 @@ namespace Echo
 		bool isDirty() { return m_dirty; }
 		void setDirty(bool dirty) { m_dirty = dirty; }
 
+		// active
+		virtual void active() {}
+
 	protected:
 		bool	m_dirty = true;
 	};
@@ -124,7 +127,6 @@ namespace Echo
 		virtual ~BlendState();
 
 	public:
-		virtual void		active() {}
 		const BlendDesc&	getDesc() const;
 
 	protected:
@@ -164,9 +166,6 @@ namespace Echo
 		// create fun
 		static Res* create();
 
-		// active
-        virtual void active() {}
-
 	public:
 		// depth enable
 		bool isDepthEnable() const { return bDepthEnable; }
@@ -203,6 +202,8 @@ namespace Echo
 
 	class RasterizerState : public RenderState
 	{
+		ECHO_RES(DepthStencilState, RenderState, ".ers", RasterizerState::create, Res::load)
+
 	public:
 		enum PolygonMode
 		{
@@ -224,54 +225,48 @@ namespace Echo
 			CULL_BACK, 
 		};
 
-		struct RasterizerDesc
-		{
-			PolygonMode			polygonMode;
-			ShadeModel			shadeModel;
-			CullMode			cullMode;
-			bool				bFrontFaceCCW;
-
-			// depth bias
-			// z = depthBiasFactor * DZ + depthBias
-			// DZ is max depth slope
-			float				depthBias;
-			float				depthBiasFactor;
-
-			bool				bDepthClip;
-			bool				bScissor;
-			bool				bMultisample;
-
-            float               lineWidth = 1.f;
-
-			void reset()
-			{
-				polygonMode		= PM_FILL;
-				shadeModel		= SM_GOURAND;
-				cullMode		= CULL_BACK;
-				bFrontFaceCCW	= false;
-				depthBias		= 0.0f;
-				depthBiasFactor	= 0.0f;
-				bDepthClip		= true;
-				bScissor		= false;
-				bMultisample	= false;
-			}
-
-			RasterizerDesc()
-			{
-				reset();
-			}
-		};
-
-		RasterizerState(const RasterizerDesc& desc);
+	public:
+		RasterizerState();
 		virtual ~RasterizerState();
 
-	public:
-        virtual void					active() {}
-		const RasterizerDesc&			getDesc() const;
+		// create fun
+		static Res* create();
+
+		// cull mode
+		CullMode getCullMode() { return cullMode; }
+		void setCullMode(CullMode cullMode);
+
+		// Frontface
+		bool isFrontFaceCCW() const { return m_frontFaceCCW; }
+
+		// depth bias
+		float getDepthBias() const { return m_depthBias; }
+
+		// depth bias factor
+		float getDepthBiasFactor() const { return m_depthBiasFactor; }
+
+		// scissor
+		bool isScissor() const { return m_scissor; }
 
 	protected:
-		RasterizerDesc		m_desc;
+		PolygonMode			polygonMode = PM_FILL;
+		ShadeModel			shadeModel = SM_GOURAND;
+		CullMode			cullMode = CULL_BACK;
+		bool				m_frontFaceCCW = false;
+
+		// depth bias
+		// z = depthBiasFactor * DZ + depthBias
+		// DZ is max depth slope
+		float				m_depthBias = 0.f;
+		float				m_depthBiasFactor = 0.f;
+
+		bool				bDepthClip = true;
+		bool				m_scissor = false;
+		bool				bMultisample = false;
+
+		float               m_lineWidth = 1.f;
 	};
+	typedef ResRef<RasterizerState> RasterizerStatePtr;
 
 	class SamplerState : public RenderState
 	{
@@ -348,7 +343,6 @@ namespace Echo
 		};
 
 	public:
-        virtual void active(const SamplerState* pre) const {}
 		const SamplerDesc& getDesc() const;
 
 	protected:

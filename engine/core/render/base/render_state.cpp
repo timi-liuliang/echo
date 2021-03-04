@@ -69,8 +69,7 @@ namespace Echo
 		}
 	}
 
-	RasterizerState::RasterizerState(const RasterizerDesc& desc)
-		: m_desc(desc)
+	RasterizerState::RasterizerState()
 	{
 	}
 
@@ -78,9 +77,18 @@ namespace Echo
 	{
 	}
 
-	const RasterizerState::RasterizerDesc& RasterizerState::getDesc() const
+	Res* RasterizerState::create()
 	{
-		return m_desc;
+		return Renderer::instance()->createRasterizerState();
+	}
+
+	void RasterizerState::setCullMode(CullMode inCullMode)
+	{
+		if (cullMode != inCullMode)
+		{
+			cullMode = inCullMode;
+			setDirty(true);
+		}
 	}
 
 	SamplerState::SamplerState(const SamplerDesc& desc)

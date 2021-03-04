@@ -88,7 +88,7 @@ namespace Echo
 		virtual FrameBufferWindow* createFrameBufferWindow() = 0;
 
 		// create states
-		virtual RasterizerState* createRasterizerState(const RasterizerState::RasterizerDesc& desc) = 0;
+		virtual RasterizerState* createRasterizerState() = 0;
 		virtual DepthStencilState* createDepthStencilState() = 0;
 		virtual BlendState*	createBlendState(const BlendState::BlendDesc& desc) = 0;
         virtual MultisampleState* createMultisampleState() = 0;

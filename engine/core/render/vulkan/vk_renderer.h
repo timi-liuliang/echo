@@ -41,7 +41,7 @@ namespace Echo
         virtual FrameBufferWindow* createFrameBufferWindow() override { return EchoNew(VKFramebufferWindow); }
 
         // create states
-        virtual RasterizerState* createRasterizerState(const RasterizerState::RasterizerDesc& desc) override;
+        virtual RasterizerState* createRasterizerState() override;
         virtual DepthStencilState* createDepthStencilState()override;
         virtual BlendState* createBlendState(const BlendState::BlendDesc& desc) override;
         virtual MultisampleState* createMultisampleState() override;

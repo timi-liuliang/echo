@@ -80,7 +80,7 @@ namespace Echo
 		GLESShader*	createShader(GLESShader::ShaderType type, const char* srcBuffer, ui32 size);
 
 		// states
-		virtual RasterizerState* createRasterizerState(const RasterizerState::RasterizerDesc& desc) override;
+		virtual RasterizerState* createRasterizerState() override;
 		virtual DepthStencilState* createDepthStencilState() override;
 		virtual BlendState*	createBlendState(const BlendState::BlendDesc& desc) override;
         virtual MultisampleState* createMultisampleState() override { return nullptr; }

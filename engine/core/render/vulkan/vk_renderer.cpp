@@ -97,9 +97,9 @@ namespace Echo
         return EchoNew(VKShaderProgram);
     }
 
-    RasterizerState* VKRenderer::createRasterizerState(const RasterizerState::RasterizerDesc& desc)
+    RasterizerState* VKRenderer::createRasterizerState()
     {
-        return EchoNew(VKRasterizerState(desc));
+        return EchoNew(VKRasterizerState);
     }
 
     DepthStencilState* VKRenderer::createDepthStencilState()

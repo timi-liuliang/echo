@@ -68,11 +68,11 @@ namespace Echo
 		GLESBlendState(const BlendDesc &desc);
 		~GLESBlendState();
 
-	public:
-		void						active();
+		// create
+		void create();
 
-	private:
-		void						create();
+		// active
+		void active();
 
 	private:
 		GLenum						m_glBlendOP;
@@ -112,17 +112,14 @@ namespace Echo
 	class GLESRasterizerState: public RasterizerState
 	{
 	public:
-		GLESRasterizerState(const RasterizerDesc& desc);
+		GLESRasterizerState();
 		~GLESRasterizerState();
 
-	public:
-		void						active();
+		// active
+		void active();
 
 	private:
-		void						create();
-
-	private:
-		GLenum						m_glFrontFace;
+		GLenum		m_glFrontFace;
 	};
 
 	class GLESSamplerState: public SamplerState

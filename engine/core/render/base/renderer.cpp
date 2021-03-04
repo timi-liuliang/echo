@@ -98,6 +98,7 @@ namespace Echo
 		Class::registerType<TextureAtlas>();
 		Class::registerType<RenderState>();
 		Class::registerType<DepthStencilState>();
+		Class::registerType<RasterizerState>();
 
 	#ifdef ECHO_EDITOR_MODE
 		Class::registerType<ShaderNode>();

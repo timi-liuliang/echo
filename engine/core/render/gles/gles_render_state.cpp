@@ -337,10 +337,16 @@ namespace Echo
 		}
 	}
 
-	GLESRasterizerState::GLESRasterizerState(const RasterizerDesc& desc)
-		: RasterizerState(desc)
+	GLESRasterizerState::GLESRasterizerState()
+		: RasterizerState()
 	{
-		create();
+		if (polygonMode != PM_FILL)
+			EchoLogError("GLES2Renderer only support polygon fill mode [PM_FILL]. Check polygonMode property.");
+
+		if (shadeModel != SM_GOURAND)
+			EchoLogError("GLES2Renderer only support smooth shading [SM_SMOOTH]. Check shadeModel property.");
+
+		m_glFrontFace = m_frontFaceCCW ? GL_CCW : GL_CW;
 	}
 
 	GLESRasterizerState::~GLESRasterizerState()
@@ -349,18 +355,12 @@ namespace Echo
 
 	void GLESRasterizerState::active()
 	{
-		RasterizerState* pCurState = (ECHO_DOWN_CAST<GLESRenderer*>(Renderer::instance()))->getRasterizerState();
-		const RasterizerDesc* currDesc = nullptr;
-		if (pCurState)
+		RasterizerState* curState = (ECHO_DOWN_CAST<GLESRenderer*>(Renderer::instance()))->getRasterizerState();
+		if (curState)
 		{
-			currDesc = &pCurState->getDesc();
-		}
-
-		if (currDesc)
-		{
-			if (m_desc.cullMode != currDesc->cullMode)
+			if (cullMode != curState->getCullMode())
 			{
-				switch (m_desc.cullMode)
+				switch (cullMode)
 				{
 					case RasterizerState::CULL_NONE:
 					{
@@ -379,16 +379,15 @@ namespace Echo
 				}
 			}
 
-			if (m_desc.bFrontFaceCCW != currDesc->bFrontFaceCCW)
+			if (m_frontFaceCCW != curState->isFrontFaceCCW())
 			{
 				OGLESDebug(glFrontFace(m_glFrontFace));
 			}
 
-
-			if ((m_desc.depthBiasFactor != currDesc->depthBiasFactor) ||
-				(m_desc.depthBias != currDesc->depthBias))
+			if ((m_depthBiasFactor != curState->getDepthBiasFactor()) ||
+				(m_depthBias != curState->getDepthBias()))
 			{
-				if (m_desc.depthBias != 0.0f || m_desc.depthBiasFactor != 0.0f)
+				if (m_depthBias != 0.0f || m_depthBiasFactor != 0.0f)
 				{
 					OGLESDebug(glEnable(GL_POLYGON_OFFSET_FILL));
 				}
@@ -397,12 +396,12 @@ namespace Echo
 					OGLESDebug(glDisable(GL_POLYGON_OFFSET_FILL));
 				}
 
-				OGLESDebug(glPolygonOffset(m_desc.depthBiasFactor, m_desc.depthBias));
+				OGLESDebug(glPolygonOffset(m_depthBiasFactor, m_depthBias));
 			}
 
-			if (m_desc.bScissor != currDesc->bScissor)
+			if (m_scissor != curState->isScissor())
 			{
-				if (m_desc.bScissor)
+				if (m_scissor)
 				{
 					OGLESDebug(glEnable(GL_SCISSOR_TEST));
 				}
@@ -415,7 +414,7 @@ namespace Echo
 		else
 		{
 			// set cull mode
-			switch (m_desc.cullMode)
+			switch (cullMode)
 			{
 				case RasterizerState::CULL_NONE:
 				{
@@ -437,7 +436,7 @@ namespace Echo
 			OGLESDebug(glFrontFace(m_glFrontFace));
 
 			// Bias is in {0, 16}, scale the unit addition appropriately
-			if (m_desc.depthBias != 0.0f && m_desc.depthBiasFactor != 0.0f)
+			if (m_depthBias != 0.0f && m_depthBiasFactor != 0.0f)
 			{
 				OGLESDebug(glEnable(GL_POLYGON_OFFSET_FILL));
 			}
@@ -446,22 +445,10 @@ namespace Echo
 				OGLESDebug(glDisable(GL_POLYGON_OFFSET_FILL));
 			}
 
-			OGLESDebug(glPolygonOffset(m_desc.depthBiasFactor, m_desc.depthBias));
-
-			// depth clip
-			/*
-			if (myDesc.bDepthClip)
-			{
-			glDisable(GL_DEPTH_CLAMP);
-			}
-			else
-			{
-			glEnable(GL_DEPTH_CLAMP);
-			}
-			*/
+			OGLESDebug(glPolygonOffset(m_depthBiasFactor, m_depthBias));
 
 			// scissor test
-			if (m_desc.bScissor)
+			if (m_scissor)
 			{
 				OGLESDebug(glEnable(GL_SCISSOR_TEST));
 			}
@@ -470,17 +457,6 @@ namespace Echo
 				OGLESDebug(glDisable(GL_SCISSOR_TEST));
 			}
 		}
-	}
-
-	void GLESRasterizerState::create()
-	{
-		if(m_desc.polygonMode != PM_FILL)
-			EchoLogError("GLES2Renderer only support polygon fill mode [PM_FILL]. Check polygonMode property.");
-		
-		if(m_desc.shadeModel != SM_GOURAND)
-			EchoLogError("GLES2Renderer only support smooth shading [SM_SMOOTH]. Check shadeModel property.");
-		
-		m_glFrontFace = m_desc.bFrontFaceCCW ? GL_CCW : GL_CW;
 	}
 
 	GLESSamplerState::GLESSamplerState(const SamplerDesc& desc)
