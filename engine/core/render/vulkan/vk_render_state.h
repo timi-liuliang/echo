@@ -12,10 +12,10 @@ namespace Echo
         virtual ~VKBlendState(){}
 
         // get vk create info
-        const VkPipelineColorBlendStateCreateInfo* getVkCreateInfo() { return &m_vkCreateInfo; }
+        const VkPipelineColorBlendStateCreateInfo* getVkCreateInfo() { return &m_vkColorBlendStateCreateInfo; }
 
     private:
-        VkPipelineColorBlendStateCreateInfo     m_vkCreateInfo;
+        VkPipelineColorBlendStateCreateInfo     m_vkColorBlendStateCreateInfo;
 	};
 	
 	class VKDepthStencilState : public DepthStencilState
@@ -38,10 +38,10 @@ namespace Echo
         virtual ~VKRasterizerState(){}
 
         // get vk create info
-        const VkPipelineRasterizationStateCreateInfo* getVkCreateInfo() { return &m_vkCreateInfo; }
+        const VkPipelineRasterizationStateCreateInfo* getVkCreateInfo() { return &m_vkRasterizationStateCreateInfo; }
 
     private:
-        VkPipelineRasterizationStateCreateInfo m_vkCreateInfo;
+        VkPipelineRasterizationStateCreateInfo m_vkRasterizationStateCreateInfo;
 	};
 
 	class VKSamplerState : public SamplerState
