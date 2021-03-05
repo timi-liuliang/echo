@@ -65,9 +65,11 @@ namespace Echo
 		virtual void scissor(ui32 left, ui32 top, ui32 width, ui32 height)=0;
 		virtual void endScissor()=0;
 
+		// convert matrix
 		virtual void project(Vector3& screenPos, const Vector3& worldPos, const Matrix4& matVP, Viewport* pViewport = NULL);
 		virtual void unproject(Vector3& worldPos, const Vector3& screenPos, const Matrix4& matVP, Viewport* pViewport = NULL);
 		virtual void getDepthRange(Vector2& vec) = 0;
+		virtual void convertMatView(Matrix4& mat) = 0;
 		virtual void convertMatOrho(Matrix4& mat, const Matrix4& matOrth, Real zn, Real zf) = 0;
 		virtual void convertMatProj(Matrix4& mat, const Matrix4& matProj) = 0;
 

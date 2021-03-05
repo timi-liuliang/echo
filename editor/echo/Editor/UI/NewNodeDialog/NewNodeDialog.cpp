@@ -7,6 +7,23 @@
 
 namespace Studio
 {
+	static bool isModuleEnable(const Echo::String& nodeName)
+	{
+		Echo::ClassInfo* cinfo = Echo::Class::getClassInfo(nodeName);
+		if (!cinfo->m_module.empty())
+		{
+			Echo::Object* obj = Echo::Class::create(cinfo->m_module);
+			if (obj)
+			{
+				Echo::Module* module = dynamic_cast<Echo::Module*>(obj);
+				if (module)
+					return module->isEnable();
+			}
+		}
+
+		return true;
+	}
+
 	NewNodeDialog::NewNodeDialog(QWidget* parent)
 		: QDialog(parent)
 		, m_viewNodeByModule(true)
@@ -42,14 +59,12 @@ namespace Studio
 
 	}
 
-	// instance
 	NewNodeDialog* NewNodeDialog::instance()
 	{
 		NewNodeDialog* inst = new NewNodeDialog();
 		return inst;
 	}
 
-	// get node type
 	Echo::String NewNodeDialog::getSelectedNodeType()
 	{
 		NewNodeDialog* inst = instance();
@@ -133,17 +148,20 @@ namespace Studio
 
 	void NewNodeDialog::addNode(const Echo::String& nodeName)
 	{
-		// use module item as parent
-		QStandardItem* moduleParent = getModuleItem(nodeName);
-		createQTreeWidgetItemByNodeName(nodeName, moduleParent, false);
-
-		// recursive all children
-		Echo::StringArray childNodes;
-		if (Echo::Class::getChildClasses(childNodes, nodeName.c_str(), false))
+		if (isModuleEnable(nodeName))
 		{
-			for (const Echo::String& childNode : childNodes)
+			// use module item as parent
+			QStandardItem* moduleParent = getModuleItem(nodeName);
+			createQTreeWidgetItemByNodeName(nodeName, moduleParent, false);
+
+			// recursive all children
+			Echo::StringArray childNodes;
+			if (Echo::Class::getChildClasses(childNodes, nodeName.c_str(), false))
 			{
-				addNode(childNode);
+				for (const Echo::String& childNode : childNodes)
+				{
+					addNode(childNode);
+				}
 			}
 		}
 	}
@@ -161,35 +179,21 @@ namespace Studio
 
 	void NewNodeDialog::addNode(const Echo::String& nodeName, QStandardItem* parent)
 	{
-		// create by node name
-		QStandardItem* nodeItem = createQTreeWidgetItemByNodeName(nodeName, parent, true);
-
-		// recursive all children
-		Echo::StringArray childNodes;
-		if( Echo::Class::getChildClasses(childNodes, nodeName.c_str(), false))
+		if (isModuleEnable(nodeName))
 		{
-			for (const Echo::String& childNode : childNodes)
+			// create by node name
+			QStandardItem* nodeItem = createQTreeWidgetItemByNodeName(nodeName, parent, true);
+
+			// recursive all children
+			Echo::StringArray childNodes;
+			if (Echo::Class::getChildClasses(childNodes, nodeName.c_str(), false))
 			{
-				addNode(childNode, nodeItem);
+				for (const Echo::String& childNode : childNodes)
+				{
+					addNode(childNode, nodeItem);
+				}
 			}
 		}
-	}
-
-	static bool isModuleEnable(const Echo::String& nodeName)
-	{
-		Echo::ClassInfo* cinfo = Echo::Class::getClassInfo(nodeName);
-		if (!cinfo->m_module.empty())
-		{
-			Echo::Object* obj = Echo::Class::create(cinfo->m_module);
-			if (obj)
-			{
-				Echo::Module* module = dynamic_cast<Echo::Module*>(obj);
-				if (module)
-					return module->isEnable();
-			}
-		}
-
-		return true;
 	}
 
 	void NewNodeDialog::onSelectNode(QModelIndex index)

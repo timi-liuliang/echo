@@ -92,6 +92,15 @@ namespace Echo
         return renderable;
     }
 
+	// http://anki3d.org/vulkan-coordinate-system/
+	void VKRenderer::convertMatView(Matrix4& mat)
+	{
+		mat.m01 = -mat.m01;
+		mat.m11 = -mat.m11;
+		mat.m21 = -mat.m21;
+		mat.m31 = -mat.m31;
+	}
+
     ShaderProgram* VKRenderer::createShaderProgram()
     {
         return EchoNew(VKShaderProgram);

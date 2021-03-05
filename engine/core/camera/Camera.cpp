@@ -171,6 +171,8 @@ namespace Echo
 			);
 
 			m_right = xAxis;
+
+			Renderer::instance()->convertMatView(m_matView);
 		}
 
 		if(m_isProjDirty)

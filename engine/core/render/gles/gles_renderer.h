@@ -60,9 +60,11 @@ namespace Echo
 		// draw in WireFrame mode
 		bool drawWireframe(Renderable* renderable);
 
-		void getDepthRange(Vector2& vec) override;
-		void convertMatOrho(Matrix4& mat, const Matrix4& matOrth, Real zn, Real zf) override;
-		void convertMatProj(Matrix4& mat, const Matrix4& matProj) override;
+		// convert matrix
+		virtual void getDepthRange(Vector2& vec) override;
+		virtual void convertMatView(Matrix4& mat) override {}
+		virtual void convertMatOrho(Matrix4& mat, const Matrix4& matOrth, Real zn, Real zf) override;
+		virtual void convertMatProj(Matrix4& mat, const Matrix4& matProj) override;
 
 		void enableAttribLocation(ui32 attribLocation);
 		void disableAttribLocation(ui32 attribLocation);

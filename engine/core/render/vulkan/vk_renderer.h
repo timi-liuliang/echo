@@ -54,6 +54,7 @@ namespace Echo
         virtual Renderable* createRenderable() override;
 
         // convert matrix
+        virtual void convertMatView(Matrix4& mat);
         virtual void convertMatOrho(Matrix4& mat, const Matrix4& matOrth, Real zn, Real zf) override {}
         virtual void convertMatProj(Matrix4& mat, const Matrix4& matProj) override {}
 
