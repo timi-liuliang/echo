@@ -65,7 +65,7 @@ namespace Echo
         m_vkSampleStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
         m_vkSampleStateCreateInfo.pNext = nullptr;
         m_vkSampleStateCreateInfo.flags = 0;
-        m_vkSampleStateCreateInfo.rasterizationSamples = VK_SAMPLE_COUNT_4_BIT;
+        m_vkSampleStateCreateInfo.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
         m_vkSampleStateCreateInfo.sampleShadingEnable = false;
         m_vkSampleStateCreateInfo.minSampleShading = 0.f;
         m_vkSampleStateCreateInfo.pSampleMask = nullptr;
@@ -77,7 +77,13 @@ namespace Echo
     {
         m_vkMultiSampleStateCreateInfo = {};
         m_vkMultiSampleStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
+        m_vkMultiSampleStateCreateInfo.pNext = nullptr;
+        m_vkMultiSampleStateCreateInfo.flags = 0;
         m_vkMultiSampleStateCreateInfo.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
+        m_vkMultiSampleStateCreateInfo.sampleShadingEnable = false;
+        m_vkMultiSampleStateCreateInfo.minSampleShading = 0.f;
         m_vkMultiSampleStateCreateInfo.pSampleMask = nullptr;
+        m_vkMultiSampleStateCreateInfo.alphaToCoverageEnable = false;
+        m_vkMultiSampleStateCreateInfo.alphaToOneEnable = false;
     }
 }

@@ -73,6 +73,7 @@ namespace Echo
 
 	#ifdef ECHO_EDITOR_MODE
 		addLayer(validationLayers, "VK_LAYER_KHRONOS_validation");
+		//addLayer(validationLayers, "VK_LAYER_RENDERDOC_Capture");
 
 		for (const char* layer : validationLayers)
 		{
