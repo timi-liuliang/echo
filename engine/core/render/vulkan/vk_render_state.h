@@ -15,6 +15,7 @@ namespace Echo
         const VkPipelineColorBlendStateCreateInfo* getVkCreateInfo() { return &m_vkColorBlendStateCreateInfo; }
 
     private:
+        VkPipelineColorBlendAttachmentState     m_blendAttachState;
         VkPipelineColorBlendStateCreateInfo     m_vkColorBlendStateCreateInfo;
 	};
 	
@@ -25,10 +26,10 @@ namespace Echo
         virtual ~VKDepthStencilState() {}
 
         // get vk create info
-        const VkPipelineDepthStencilStateCreateInfo* getVkCreateInfo() { return &m_vkCreateInfo; }
+        const VkPipelineDepthStencilStateCreateInfo* getVkCreateInfo() { return &m_vkDepthStencilStateCreateInfo; }
 
     private:
-        VkPipelineDepthStencilStateCreateInfo m_vkCreateInfo;
+        VkPipelineDepthStencilStateCreateInfo m_vkDepthStencilStateCreateInfo;
 	};
 
 	class VKRasterizerState : public RasterizerState
@@ -51,10 +52,10 @@ namespace Echo
         virtual ~VKSamplerState() {}
 
         // get vk create info
-        const VkPipelineMultisampleStateCreateInfo* getVkCrateInfo() { return &m_vkCreateInfo; }
+        const VkPipelineMultisampleStateCreateInfo* getVkCrateInfo() { return &m_vkSampleStateCreateInfo; }
 
     private:
-        VkPipelineMultisampleStateCreateInfo m_vkCreateInfo;
+        VkPipelineMultisampleStateCreateInfo m_vkSampleStateCreateInfo;
 	};
 
     class VKMultisampleState : public MultisampleState
@@ -64,9 +65,9 @@ namespace Echo
         ~VKMultisampleState() {}
 
         // get vk create info
-        const VkPipelineMultisampleStateCreateInfo* getVkCreateInfo() { return &m_vkCreateInfo; }
+        const VkPipelineMultisampleStateCreateInfo* getVkCreateInfo() { return &m_vkMultiSampleStateCreateInfo; }
 
     private:
-        VkPipelineMultisampleStateCreateInfo m_vkCreateInfo;
+        VkPipelineMultisampleStateCreateInfo m_vkMultiSampleStateCreateInfo;
     };
 }
