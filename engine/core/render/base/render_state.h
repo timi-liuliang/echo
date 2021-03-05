@@ -248,6 +248,10 @@ namespace Echo
 		// scissor
 		bool isScissor() const { return m_scissor; }
 
+		// line width
+		float getLineWidth() const { return m_lineWidth; }
+		void setLineWidth(float lineWidth);
+
 	protected:
 		PolygonMode			polygonMode = PM_FILL;
 		ShadeModel			shadeModel = SM_GOURAND;

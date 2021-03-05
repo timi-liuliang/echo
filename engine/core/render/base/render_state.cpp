@@ -91,6 +91,15 @@ namespace Echo
 		}
 	}
 
+	void RasterizerState::setLineWidth(float lineWidth)
+	{ 
+		if (m_lineWidth != lineWidth)
+		{
+			m_lineWidth = lineWidth;
+			setDirty(true);
+		}
+	}
+
 	SamplerState::SamplerState(const SamplerDesc& desc)
 		: m_desc(desc)
 	{
