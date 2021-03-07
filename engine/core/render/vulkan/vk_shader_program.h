@@ -12,6 +12,16 @@ namespace Echo
         typedef VkPipelineShaderStageCreateInfo VkPipelineSSCI;
 
     public:
+        // Uniform Buffer
+        struct UniformsData
+        {
+			VKBuffer*                       m_vkVertexShaderUniformBuffer = nullptr;
+			VKBuffer*                       m_vkFragmentShaderUniformBuffer = nullptr;
+			array<VkDescriptorBufferInfo, 2>m_vkShaderUniformBufferDescriptors;
+			array<VkDescriptorSet, 2>       m_vkDescriptorSets = {};
+        };
+
+    public:
 		virtual ~VKShaderProgram();
 
         // is valid
@@ -66,13 +76,13 @@ namespace Echo
         spirv_cross::Compiler*          m_vertexShaderCompiler = nullptr;
         spirv_cross::Compiler*          m_fragmentShaderCompiler = nullptr;
         array<VkPipelineSSCI, 2>        m_vkShaderStagesCreateInfo;
+        array<VkDescriptorSetLayout, 2> m_vkDescriptorSetLayouts = {};
+        VkPipelineLayout                m_vkPipelineLayout = VK_NULL_HANDLE;
         vector<Byte>::type              m_vertexShaderUniformBytes;
         vector<Byte>::type              m_fragmentShaderUniformBytes;
-        VKBuffer*                       m_vkVertexShaderUniformBuffer = nullptr;
-        VKBuffer*                       m_vkFragmentShaderUniformBuffer = nullptr;
-        array<VkDescriptorBufferInfo, 2>m_vkShaderUniformBufferDescriptors;
-        array<VkDescriptorSetLayout, 2> m_vkDescriptorSetLayouts = {};
-        array<VkDescriptorSet, 2>       m_vkDescriptorSets = {};
-        VkPipelineLayout                m_vkPipelineLayout = VK_NULL_HANDLE;
+		VKBuffer*                       m_vkVertexShaderUniformBuffer = nullptr;
+		VKBuffer*                       m_vkFragmentShaderUniformBuffer = nullptr;
+		array<VkDescriptorBufferInfo, 2>m_vkShaderUniformBufferDescriptors;
+		array<VkDescriptorSet, 2>       m_vkDescriptorSets = {};
 	};
 }

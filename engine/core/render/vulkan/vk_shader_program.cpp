@@ -64,14 +64,12 @@ namespace Echo
 
             if (parseUniforms())
             {
-                createVkUniformBuffer();
-
-                createVkDescriptorSetLayout(ShaderType::VS);
-                createVkDescriptorSetLayout(ShaderType::FS);
-
-                createVkDescriptorSet();
-
+				createVkDescriptorSetLayout(ShaderType::VS);
+				createVkDescriptorSetLayout(ShaderType::FS);
                 createVkPipelineLayout();
+
+                createVkUniformBuffer();
+                createVkDescriptorSet();
             }
         }
 
