@@ -2,9 +2,9 @@
 
 #include "node.h"
 #include "bvh.h"
-#include "engine/core/gizmos/Gizmos.h"
-#include "engine/core/camera/Camera.h"
-#include "engine/core/camera/CameraShadow.h"
+#include "engine/core/gizmos/gizmos.h"
+#include "engine/core/camera/camera.h"
+#include "engine/core/camera/camera_shadow.h"
 
 namespace Echo
 {

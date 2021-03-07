@@ -340,10 +340,10 @@ namespace Echo
 	GLESRasterizerState::GLESRasterizerState()
 		: RasterizerState()
 	{
-		if (polygonMode != PM_FILL)
+		if (m_polygonMode != PM_FILL)
 			EchoLogError("GLES2Renderer only support polygon fill mode [PM_FILL]. Check polygonMode property.");
 
-		if (shadeModel != SM_GOURAND)
+		if (m_shadeModel != SM_GOURAND)
 			EchoLogError("GLES2Renderer only support smooth shading [SM_SMOOTH]. Check shadeModel property.");
 
 		m_glFrontFace = m_frontFaceCCW ? GL_CCW : GL_CW;
@@ -358,9 +358,9 @@ namespace Echo
 		RasterizerState* curState = (ECHO_DOWN_CAST<GLESRenderer*>(Renderer::instance()))->getRasterizerState();
 		if (curState)
 		{
-			if (cullMode != curState->getCullMode())
+			if (m_cullMode != curState->getCullMode())
 			{
-				switch (cullMode)
+				switch (m_cullMode)
 				{
 					case RasterizerState::CULL_NONE:
 					{
@@ -414,7 +414,7 @@ namespace Echo
 		else
 		{
 			// set cull mode
-			switch (cullMode)
+			switch (m_cullMode)
 			{
 				case RasterizerState::CULL_NONE:
 				{

@@ -33,5 +33,11 @@ namespace Echo
 
         // mapping pixel format
         static VkFormat mapPixelFormat(PixelFormat pixFmt);
+
+        // mapping polygon mode
+        static VkPolygonMode mapPolygonMode(RasterizerState::PolygonMode mode);
+
+        // mapping cull mode
+        static VkCullModeFlagBits mapCullMode(RasterizerState::CullMode cullMode);
     };
 }

@@ -233,7 +233,7 @@ namespace Echo
 		static Res* create();
 
 		// cull mode
-		CullMode getCullMode() { return cullMode; }
+		CullMode getCullMode() { return m_cullMode; }
 		void setCullMode(CullMode cullMode);
 
 		// Frontface
@@ -253,9 +253,9 @@ namespace Echo
 		void setLineWidth(float lineWidth);
 
 	protected:
-		PolygonMode			polygonMode = PM_FILL;
-		ShadeModel			shadeModel = SM_GOURAND;
-		CullMode			cullMode = CULL_BACK;
+		PolygonMode			m_polygonMode = PM_FILL;
+		ShadeModel			m_shadeModel = SM_GOURAND;
+		CullMode			m_cullMode = CULL_BACK;
 		bool				m_frontFaceCCW = false;
 
 		// depth bias
@@ -264,9 +264,8 @@ namespace Echo
 		float				m_depthBias = 0.f;
 		float				m_depthBiasFactor = 0.f;
 
-		bool				bDepthClip = true;
+		bool				m_depthClip = true;
 		bool				m_scissor = false;
-		bool				bMultisample = false;
 
 		float               m_lineWidth = 1.f;
 	};

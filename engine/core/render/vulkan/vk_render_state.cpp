@@ -50,11 +50,12 @@ namespace Echo
     VKRasterizerState::VKRasterizerState()
         : RasterizerState()
     {
+        // vulkan use different clockwise, because it has special coordinate-system http://anki3d.org/vulkan-coordinate-system/
         m_vkRasterizationStateCreateInfo = {};
         m_vkRasterizationStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
-        m_vkRasterizationStateCreateInfo.polygonMode = VK_POLYGON_MODE_FILL;
-        m_vkRasterizationStateCreateInfo.cullMode = VK_CULL_MODE_NONE;
-        m_vkRasterizationStateCreateInfo.frontFace = isFrontFaceCCW() ? VK_FRONT_FACE_COUNTER_CLOCKWISE : VK_FRONT_FACE_CLOCKWISE;
+        m_vkRasterizationStateCreateInfo.polygonMode = VKMapping::mapPolygonMode(m_polygonMode);
+        m_vkRasterizationStateCreateInfo.cullMode = VKMapping::mapCullMode(m_cullMode);
+        m_vkRasterizationStateCreateInfo.frontFace = isFrontFaceCCW() ? VK_FRONT_FACE_CLOCKWISE : VK_FRONT_FACE_COUNTER_CLOCKWISE;
         m_vkRasterizationStateCreateInfo.lineWidth = m_lineWidth;
     }
 

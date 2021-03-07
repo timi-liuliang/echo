@@ -1,4 +1,4 @@
-#include "engine/core/camera/CameraShadow.h"
+#include "engine/core/camera/camera_shadow.h"
 #include "engine/core/main/Engine.h"
 
 namespace Echo
@@ -22,31 +22,21 @@ namespace Echo
 		m_enable = visibleActorsAABB->isValid();
 		m_Box = *visibleActorsAABB;
 
-		// �����ڼ��������Ƿ���Ҫ������Ӱʱ��ʹ�ð�Χ���ཻ
-		// �����������ֵ�����ɫͶ����Ӱʱ����Ϊ��Χ�н�С������ӰͶ�䵽2Dƽ��֮���������������ཻ
-		// ��������һ�°�Χ�б�֤Ͷ��֮��������������ȷ������Ӱ
-		// һ���Ƚϵ��۵�Trick
-
-
 		if (visibleActorsAABB && visibleActorsAABB->isValid())
 		{
 			const Vector3 cameraDir = /*m_dir == Vector3::ZERO ? -EchoSceneManager->getMainLightDir() :*/ m_dir;
 
-			// �����������������ϵ�ͶӰ����
 			float	halfLen = visibleActorsAABB->getDY() * 0.5f / Echo::Math::Abs(cameraDir.y) + 0.5f;
 			Vector3 eyePos = visibleActorsAABB->getCenter() - cameraDir * halfLen;
 
-			// �����۲�����
 			Matrix4 viewMat;
 			Matrix4::LookAtRH(viewMat, eyePos, eyePos + cameraDir, Vector3::UNIT_Y);
 
-			// ������������
 			Matrix4 orthMat;
 			calcOrthoRH(orthMat, *visibleActorsAABB, viewMat);
 
 			m_viewProj = viewMat * orthMat;
 			m_view = viewMat;
-
 
 			Vector3 zAxis = -cameraDir;
 			zAxis.normalize();
@@ -78,20 +68,17 @@ namespace Echo
 
 	void CameraShadow::calcOrthoRH(Matrix4& oOrth, const AABB& box, const Matrix4& viewMat)
 	{
-		// �����۲��ռ�AABB
 		AABB orthAABB;
 		for (int i = AABB::CORNER_NLT; i < AABB::CORNER_FRT; i++)
 		{
 			orthAABB.addPoint(viewMat.transform(box.getCorner(AABB::Corner(i))));
 		}
 
-		// ����Զ������
 		orthAABB.vMax.z += 40.f;
 
 		float dx = orthAABB.getDX();
 		float dy = orthAABB.getDY();
 
-		// ִ�м���
 		Matrix4::OrthoRH(oOrth, dx, dy, orthAABB.vMin.z, orthAABB.vMax.z);
 	}
 

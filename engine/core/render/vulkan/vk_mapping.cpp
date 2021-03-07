@@ -142,4 +142,34 @@ namespace Echo
 		}
 		}
 	}
+
+    VkPolygonMode VKMapping::mapPolygonMode(RasterizerState::PolygonMode mode)
+    {
+        switch (mode)
+        {
+        case RasterizerState::PM_POINT:     return VK_POLYGON_MODE_POINT;
+        case RasterizerState::PM_LINE:      return VK_POLYGON_MODE_LINE;
+        case RasterizerState::PM_FILL:      return VK_POLYGON_MODE_FILL;
+        default: 
+        {
+            EchoLogError("Vulkan mapPolygonMode failed");
+            return VK_POLYGON_MODE_FILL; 
+        }
+        }
+    }
+
+    VkCullModeFlagBits VKMapping::mapCullMode(RasterizerState::CullMode cullMode)
+    {
+        switch (cullMode)
+        {
+        case RasterizerState::CULL_NONE:    return VK_CULL_MODE_NONE;
+        case RasterizerState::CULL_FRONT:   return VK_CULL_MODE_FRONT_BIT;
+        case RasterizerState::CULL_BACK:    return VK_CULL_MODE_BACK_BIT;
+        default:
+        {
+            EchoAssert(false);
+            return VK_CULL_MODE_NONE;
+        }
+        }
+    }
 }

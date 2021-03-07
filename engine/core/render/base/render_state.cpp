@@ -84,9 +84,9 @@ namespace Echo
 
 	void RasterizerState::setCullMode(CullMode inCullMode)
 	{
-		if (cullMode != inCullMode)
+		if (m_cullMode != inCullMode)
 		{
-			cullMode = inCullMode;
+			m_cullMode = inCullMode;
 			setDirty(true);
 		}
 	}
