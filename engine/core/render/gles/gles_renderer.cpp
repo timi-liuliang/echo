@@ -347,18 +347,14 @@ namespace Echo
 
 	void GLESRenderer::convertMatOrho(Matrix4& mat, const Matrix4& matOrth, Real zn, Real zf)
 	{
-		mat.m00 = matOrth.m00;	mat.m01 = matOrth.m01;	mat.m02 = matOrth.m02;		mat.m03 = matOrth.m03;
-		mat.m10 = matOrth.m10;	mat.m11 = matOrth.m11;	mat.m12 = matOrth.m12;		mat.m13 = matOrth.m13;
-		mat.m20 = matOrth.m20;	mat.m21 = matOrth.m21;	mat.m22 = 2 * matOrth.m22;	mat.m23 = matOrth.m23;
-		mat.m30 = matOrth.m30;	mat.m31 = matOrth.m31;	mat.m32 = (zn + zf) / (zn - zf);	mat.m33 = matOrth.m33;
+		mat.m22 = 2 * matOrth.m22;
+		mat.m32 = (zn + zf) / (zn - zf);
 	}
 
 	void GLESRenderer::convertMatProj(Matrix4& mat, const Matrix4& matProj)
 	{
-		mat.m00 = matProj.m00;	mat.m01 = matProj.m01;	mat.m02 = matProj.m02;		mat.m03 = matProj.m03;
-		mat.m10 = matProj.m10;	mat.m11 = matProj.m11;	mat.m12 = matProj.m12;		mat.m13 = matProj.m13;
-		mat.m20 = matProj.m20;	mat.m21 = matProj.m21;	mat.m22 = 2 * matProj.m22 + 1;	mat.m23 = matProj.m23;
-		mat.m30 = matProj.m30;	mat.m31 = matProj.m31;	mat.m32 = 2 * matProj.m32;	mat.m33 = matProj.m33;
+		mat.m22 = 2 * matProj.m22 + 1;
+		mat.m32 = 2 * matProj.m32;
 	}
 
 	void GLESRenderer::enableAttribLocation(ui32 attribLocation)

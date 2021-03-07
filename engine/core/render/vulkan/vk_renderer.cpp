@@ -92,6 +92,12 @@ namespace Echo
         return renderable;
     }
 
+	void VKRenderer::getDepthRange(Vector2& vec)
+	{
+		vec.x = 0.0f;
+		vec.y = 1.0f;
+	}
+
 	// http://anki3d.org/vulkan-coordinate-system/
 	void VKRenderer::convertMatView(Matrix4& mat)
 	{

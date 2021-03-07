@@ -54,7 +54,8 @@ namespace Echo
         virtual Renderable* createRenderable() override;
 
         // convert matrix
-        virtual void convertMatView(Matrix4& mat);
+        virtual void getDepthRange(Vector2& vec) override;
+        virtual void convertMatView(Matrix4& mat) override;
         virtual void convertMatOrho(Matrix4& mat, const Matrix4& matOrth, Real zn, Real zf) override {}
         virtual void convertMatProj(Matrix4& mat, const Matrix4& matProj) override {}
 
@@ -76,9 +77,6 @@ namespace Echo
         virtual void setTexture(ui32 index, Texture* texture, bool needUpdate = false) override;
 
     public:
-        // get depth range
-        virtual void getDepthRange(Vector2& vec) override {}
-
         // get screen width and height
         virtual ui32 getWindowWidth() override { return m_screenWidth; }
         virtual ui32 getWindowHeight() override { return m_screenHeight; }
