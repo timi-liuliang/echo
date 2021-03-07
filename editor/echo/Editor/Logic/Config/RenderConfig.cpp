@@ -15,6 +15,7 @@ namespace Echo
 #elif defined ECHO_PLATFORM_HTML5
 		LoadGLESRenderer(renderer);
 #else
+		//LoadGLESRenderer(renderer);
 		LoadVKRenderer(renderer);
 #endif
 

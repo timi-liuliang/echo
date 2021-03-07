@@ -107,7 +107,7 @@ namespace Studio
 		float						m_2dDepth = 250.f;
 		Echo::Vector2				m_mousePos;
 		Echo::Vector3				m_position;
-		Echo::Gizmos*				m_axis;
+		Echo::Gizmos*				m_axis = nullptr;
 		Echo::array<Echo::Box3, 6>	m_moveBoxs;
 		//VisualCycle3*				m_pCycle[3];
 		//VisualShape*				m_pScale;

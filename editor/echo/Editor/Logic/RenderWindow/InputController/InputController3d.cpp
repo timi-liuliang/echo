@@ -82,7 +82,7 @@ namespace Studio
 		QPointF posChanged = e->localPos() - m_pos;
 		if ( m_mouseRButtonPressed )
 		{
-			RotationCamera(posChanged.x() * kCameraRotationYScalar * kCameraRotationYScalar, posChanged.y() * kCameraRadiusScalar);
+			rotationCamera(posChanged.x() * kCameraRotationYScalar * kCameraRotationYScalar, posChanged.y() * kCameraRadiusScalar);
 		}
 
 		m_pos = e->localPos();
@@ -279,7 +279,7 @@ namespace Studio
 		}
 	}
 
-	void InputController3d::RotationCamera(float xValue, float yValue)
+	void InputController3d::rotationCamera(float xValue, float yValue)
 	{
 		if ( !xValue && !yValue )
 			return;

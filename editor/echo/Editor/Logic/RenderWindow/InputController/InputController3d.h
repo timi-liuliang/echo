@@ -67,7 +67,7 @@ namespace Studio
 		void CameraZoom(float zValue);
 
 		// rotation
-		void RotationCamera(float xValue, float yValue);
+		void rotationCamera(float xValue, float yValue);
 
 		// adapt camera
 		void AdaptCamera();
