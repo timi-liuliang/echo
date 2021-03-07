@@ -107,6 +107,25 @@ namespace Echo
 		mat.m31 = -mat.m31;
 	}
 
+	void VKRenderer::unproject(Vector3& worldPos, const Vector3& screenPos, const Matrix4& matVP, Viewport* viewport)
+	{
+		Viewport viewPort(0, 0, getWindowWidth(), getWindowHeight());
+		if (!viewport)
+			viewport = &viewPort;
+
+		Matrix4 matVPInv = matVP;
+		matVPInv.detInverse();
+
+		Vector4 vWSPos = Vector4(screenPos, 1.0f);
+		vWSPos.x = (screenPos.x - viewport->getLeft()) / (Real)viewport->getWidth() * 2.0f - 1.0f;
+		vWSPos.y = -(1.f - (screenPos.y - viewport->getTop()) / viewport->getHeight() * 2.0f);
+
+		Vector4 vWorld = vWSPos * matVPInv;
+		vWorld /= vWorld.w;
+
+		worldPos = (Vector3)vWorld;
+	}
+
     ShaderProgram* VKRenderer::createShaderProgram()
     {
         return EchoNew(VKShaderProgram);

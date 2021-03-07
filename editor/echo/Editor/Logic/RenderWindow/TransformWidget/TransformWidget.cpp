@@ -264,7 +264,6 @@ namespace Studio
 			camera->getCameraRay(ray0, m_mousePos);
 			camera->getCameraRay(ray1, localPos);
 
-
 			switch (m_editType)
 			{
 			case EditType::Translate:

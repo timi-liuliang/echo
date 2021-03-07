@@ -1,5 +1,5 @@
 #include "engine/core/log/Log.h"
-#include "engine/core/camera/Camera.h"
+#include "engine/core/camera/camera.h"
 #include "engine/core/render/base/renderer.h"
 #include "engine/core/render/base/view_port.h"
 #include "engine/core/geom/Ray.h"
@@ -28,7 +28,7 @@ namespace Echo
 	void Camera::setPosition( const Vector3& pos )
 	{
 		m_position = pos;
-		m_isViewDirty = true;
+		m_viewDirty = true;
 	}
 
 	void Camera::setDirection(const Vector3& dir)
@@ -37,19 +37,19 @@ namespace Echo
 
 		m_dir = dir;
 		m_dir.normalize();
-		m_isViewDirty = true;
+		m_viewDirty = true;
 	}
 
 	void Camera::setUp(const Vector3& vUp)
 	{
 		m_up = vUp;
-		m_isViewDirty = true;
+		m_viewDirty = true;
 	}
 
 	void Camera::setProjectionMode(ProjMode mode)
 	{
 		m_projMode = mode;
-		m_isProjDirty = true;
+		m_projDirty = true;
 	}
 
 	Camera::ProjMode Camera::getProjectionMode() const
@@ -60,43 +60,43 @@ namespace Echo
 	void Camera::setFov(Real fov)
 	{
 		m_fov = fov;
-		m_isProjDirty = true;
-		m_isViewDirty = true;
+		m_projDirty = true;
+		m_viewDirty = true;
 	}
 
 	void Camera::setWidth(ui32 width)
 	{
 		m_width = width;
-		m_isProjDirty = true;
-		m_isViewDirty = true;
+		m_projDirty = true;
+		m_viewDirty = true;
 	}
 
 	void Camera::setHeight(ui32 height)
 	{
 		m_height = height;
-		m_isProjDirty = true;
-		m_isViewDirty = true;
+		m_projDirty = true;
+		m_viewDirty = true;
 	}
 
 	void Camera::setScale(Real scale) 
 	{ 
 		m_scale = scale; 
-		m_isProjDirty = true;
-		m_isViewDirty = true;
+		m_projDirty = true;
+		m_viewDirty = true;
 	}
 
 	void Camera::setNearClip(Real nearClip)
 	{
 		m_nearClip = nearClip;
-		m_isProjDirty = true;
-		m_isViewDirty = true;
+		m_projDirty = true;
+		m_viewDirty = true;
 	}
 
 	void Camera::setFarClip(Real farClip)
 	{
 		m_farClip = farClip;
-		m_isProjDirty = true;
-		m_isViewDirty = true;
+		m_projDirty = true;
+		m_viewDirty = true;
 	}
 
 	Real Camera::getFov() const
@@ -126,35 +126,22 @@ namespace Echo
 
 	void Camera::getCameraRay(Ray& ray, const Vector2& screenPos)
 	{
-		Vector2 vDepth;
-		Renderer::instance()->getDepthRange(vDepth);
-		Vector3 v0(screenPos, vDepth.x);
-		Vector3 v1(screenPos, vDepth.y);
+		Vector2 depthRange;
+		Renderer::instance()->getDepthRange(depthRange);
+		Vector3 v0(screenPos, depthRange.x);
+		Vector3 v1(screenPos, depthRange.y);
 
 		Renderer::instance()->unproject(ray.m_origin, v0, m_matVP);
 
-		Vector3 vTarget;
-		Renderer::instance()->unproject(vTarget, v1, m_matVP);
-		ray.m_dir = vTarget - ray.m_origin;
+		Vector3 target;
+		Renderer::instance()->unproject(target, v1, m_matVP);
+		ray.m_dir = target - ray.m_origin;
 		ray.m_dir.normalize();
-	}
-
-	void Camera::unProjectionMousePos( Vector3& from, Vector3& to, const Vector2& screenPos )
-	{
-		Vector2 vDepth;
-		Renderer::instance()->getDepthRange(vDepth);
-		Vector3 v0(screenPos, vDepth.x);
-		Vector3 v1(screenPos, vDepth.y);
-
-		Renderer::instance()->unproject(from, v0, m_matVP);
-
-		Vector3 vTarget;
-		Renderer::instance()->unproject(to, v1, m_matVP);
 	}
 
 	void Camera::update()
 	{
-		if(m_isViewDirty)
+		if(m_viewDirty)
 		{
 			Vector3 xAxis;					// right
 			Vector3 yAxis;					// up axis
@@ -175,7 +162,7 @@ namespace Echo
 			Renderer::instance()->convertMatView(m_matView);
 		}
 
-		if(m_isProjDirty)
+		if(m_projDirty)
 		{
 			switch (m_projMode)
 			{
@@ -195,12 +182,12 @@ namespace Echo
 			}
 		}
 
-		if(m_isViewDirty || m_isProjDirty)
+		if(m_viewDirty || m_projDirty)
 		{
 			m_matVP = m_matView * m_matProj;
 
-			m_isViewDirty = false;
-			m_isProjDirty = false;
+			m_viewDirty = false;
+			m_projDirty = false;
 		}
 	}
 }

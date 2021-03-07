@@ -54,6 +54,7 @@ namespace Echo
         virtual Renderable* createRenderable() override;
 
         // convert matrix
+        virtual void unproject(Vector3& worldPos, const Vector3& screenPos, const Matrix4& matVP, Viewport* pViewport = NULL) override;
         virtual void getDepthRange(Vector2& vec) override;
         virtual void convertMatView(Matrix4& mat) override;
         virtual void convertMatOrho(Matrix4& mat, const Matrix4& matOrth, Real zn, Real zf) override {}

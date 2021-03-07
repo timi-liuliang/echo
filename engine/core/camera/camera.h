@@ -69,7 +69,6 @@ namespace Echo
 
 		// calculate
 		void getCameraRay(Ray& ray, const Vector2& screenPos);
-		void unProjectionMousePos(Vector3& from, Vector3& to, const Vector2& screenPos);
 
 		// matrix
 		const Matrix4& getViewMatrix() const { return m_matView; }
@@ -83,7 +82,7 @@ namespace Echo
 		Vector3			m_up = Vector3::UNIT_Y;
 		Vector3			m_right;
 		Matrix4			m_matView;
-		bool			m_isViewDirty = true;
+		bool			m_viewDirty = true;
 		Real			m_fov = Math::PI_DIV4;
 		ui32			m_width;
 		ui32			m_height;
@@ -92,7 +91,7 @@ namespace Echo
 		Real			m_nearClip = 0.1f;
 		Real			m_farClip = 100.f;
 		Matrix4			m_matProj;
-		bool			m_isProjDirty = true;
+		bool			m_projDirty = true;
 		Matrix4			m_matVP;
 	};
 }
