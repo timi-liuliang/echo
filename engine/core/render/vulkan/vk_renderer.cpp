@@ -402,9 +402,9 @@ namespace Echo
         RenderPipeline::current()->onSize(width, height);
     }
 
-    void VKRenderer::draw(Renderable* renderable)
+    void VKRenderer::draw(Renderable* renderable, FrameBufferPtr& frameBuffer)
     {
-		VKFramebuffer* currentFrameBuffer = VKFramebuffer::current();
+		VKFramebuffer* currentFrameBuffer = ECHO_DOWN_CAST<VKFramebuffer*>(frameBuffer.ptr());
 		if (currentFrameBuffer)
 		{
 			VKRenderable* vkRenderable = ECHO_DOWN_CAST<VKRenderable*>(renderable);

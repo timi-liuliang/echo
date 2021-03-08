@@ -15,7 +15,7 @@ namespace Echo
 		virtual ~RenderQueue();
 
 		// render
-		virtual void render();
+		virtual void render(FrameBufferPtr& frameBuffer);
 
 		// add render able
 		void addRenderable(RenderableID id) { m_renderables.emplace_back(id); }

@@ -6,19 +6,12 @@
 
 namespace Echo
 {
-    static VKFramebuffer* g_current = nullptr;
-
     VKFramebuffer::VKFramebuffer()
     {
     }
 
     VKFramebuffer::~VKFramebuffer()
     {
-    }
-
-    VKFramebuffer* VKFramebuffer::current()
-    {
-        return g_current;
     }
 
     void VKFramebuffer::destroyVkRenderPass()
@@ -100,8 +93,6 @@ namespace Echo
 
     bool VKFramebufferWindow::begin()
     {
-        g_current = this;
-
         VKDebug(vkAcquireNextImageKHR(VKRenderer::instance()->getVkDevice(), m_vkSwapChain, Math::MAX_UI64, m_vkImageAvailableSemaphore, VK_NULL_HANDLE, &m_imageIndex));
 
 		VkCommandBufferBeginInfo commandBufferBeginInfo = {};

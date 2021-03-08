@@ -17,7 +17,7 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(RenderQueue, "Sort", Variant::Type::Bool, "isSort", "setSort");
 	}
 
-	void RenderQueue::render()
+	void RenderQueue::render(FrameBufferPtr& frameBuffer)
 	{
 		onRenderBegin();
 		{
@@ -40,7 +40,7 @@ namespace Echo
 				{
 					Renderable* renderable = Renderer::instance()->getRenderable(id);
 					if (renderable)
-						render->draw(renderable);
+						render->draw(renderable, frameBuffer);
 				}
 			}
 

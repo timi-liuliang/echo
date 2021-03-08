@@ -148,6 +148,9 @@ namespace Echo
 		}
 
 		if (m_imageFilter)
-			m_imageFilter->render();
+		{
+			FrameBufferPtr nullFrameBuffer = nullptr;
+			m_imageFilter->render(nullFrameBuffer);
+		}
 	}
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/core/base/object.h"
+#include "../frame_buffer.h"
 
 namespace Echo
 {
@@ -28,7 +29,7 @@ namespace Echo
 		RenderStage* getStage() { return m_stage; }
 
 		// render
-		virtual void render() {}
+		virtual void render(FrameBufferPtr& frameBuffer) {}
 
 	public:
 		// Modified signal

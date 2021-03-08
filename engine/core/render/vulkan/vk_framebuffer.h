@@ -12,10 +12,6 @@ namespace Echo
         VKFramebuffer();
         virtual ~VKFramebuffer();
 
-        // current frame buffer
-        static VKFramebuffer* current();
-
-    public:
         // get vk viewPort
         VkViewport getVkViewport() { return m_vkViewport; }
 

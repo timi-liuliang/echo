@@ -106,7 +106,7 @@ namespace Echo
 		virtual void onSize(int width, int height) = 0;
 
 		// draw
-		virtual void draw(Renderable* renderable) = 0;
+		virtual void draw(Renderable* renderable, FrameBufferPtr& frameBuffer) = 0;
 
     public:
         // screen width and height

@@ -128,7 +128,7 @@ namespace Echo
 				for (IRenderQueue* iqueue : m_renderQueues)
 				{
 					if (iqueue->isEnable())
-						iqueue->render();
+						iqueue->render(m_frameBuffer);
 				}
 			}
 			onRenderEnd();

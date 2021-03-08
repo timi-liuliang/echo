@@ -55,7 +55,7 @@ namespace Echo
 		virtual void setTexture(ui32 index, Texture* texture,bool needUpdate = false) override;
 
 		// draw
-		virtual void draw(Renderable* renderable) override;
+		virtual void draw(Renderable* renderable, FrameBufferPtr& frameBuffer) override;
 
 		// draw in WireFrame mode
 		bool drawWireframe(Renderable* renderable);

@@ -41,7 +41,7 @@ namespace Echo
 		}
 	}
 
-	void ImageFilter::render()
+	void ImageFilter::render(FrameBufferPtr& frameBuffer)
 	{
 		onRenderBegin();
 
@@ -49,7 +49,7 @@ namespace Echo
 		if (render)
 		{
 			if(buildRenderable())
-				render->draw(m_renderable);
+				render->draw(m_renderable, frameBuffer);
 		}
 
 		onRenderEnd();

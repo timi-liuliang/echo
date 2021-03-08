@@ -279,7 +279,7 @@ namespace Echo
 		return false;
 	}
 
-	void GLESRenderer::draw(Renderable* renderable)
+	void GLESRenderer::draw(Renderable* renderable, FrameBufferPtr& frameBuffer)
 	{
 #ifdef ECHO_EDITOR_MODE
 		if (drawWireframe(renderable))

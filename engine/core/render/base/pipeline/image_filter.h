@@ -31,7 +31,7 @@ namespace Echo
 		void setMaterial(Object* material);
 
 		// render
-		virtual void render() override ;
+		virtual void render(FrameBufferPtr& frameBuffer) override ;
 
 	protected:
 		// build render able
