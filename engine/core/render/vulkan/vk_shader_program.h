@@ -13,7 +13,7 @@ namespace Echo
 
     public:
         // Uniform Buffer
-        struct UniformsData
+        struct UniformsInstance
         {
 			VKBuffer*                       m_vkVertexShaderUniformBuffer = nullptr;
 			VKBuffer*                       m_vkFragmentShaderUniformBuffer = nullptr;
@@ -28,7 +28,7 @@ namespace Echo
         bool isLinked() const { return m_isLinked; }
 
         // bind
-        void bindUniforms(VkCommandBuffer& vkCommandbuffer);
+        void bindUniforms(VkCommandBuffer& vkCommandbuffer, UniformsInstance& uniformsInstance);
 
     public:
         // get shader stage create info
@@ -48,11 +48,11 @@ namespace Echo
 		virtual bool createShaderProgram(const String& vsContent, const String& psContent) override;
 
         // create|update uniform buffer
-        void createVkUniformBuffer();
-        void updateVkUniformBuffer();
+        void createVkUniformBuffer(UniformsInstance& uniformData);
+        void updateVkUniformBuffer(UniformsInstance& uniformData);
 
         // setup descriptor set
-        void createVkDescriptorSet();
+        void createVkDescriptorSet(UniformsInstance& uniformData);
 
         // create vk descriptor set layout
         void createVkDescriptorSetLayout(ShaderType type);
@@ -80,9 +80,5 @@ namespace Echo
         VkPipelineLayout                m_vkPipelineLayout = VK_NULL_HANDLE;
         vector<Byte>::type              m_vertexShaderUniformBytes;
         vector<Byte>::type              m_fragmentShaderUniformBytes;
-		VKBuffer*                       m_vkVertexShaderUniformBuffer = nullptr;
-		VKBuffer*                       m_vkFragmentShaderUniformBuffer = nullptr;
-		array<VkDescriptorBufferInfo, 2>m_vkShaderUniformBufferDescriptors;
-		array<VkDescriptorSet, 2>       m_vkDescriptorSets = {};
 	};
 }

@@ -174,7 +174,7 @@ namespace Echo
 				}
 			}
 
-			vkShaderProgram->bindUniforms(vkCommandbuffer);
+			vkShaderProgram->bindUniforms(vkCommandbuffer, m_vkUniformsInstance);
 		}
     }
 

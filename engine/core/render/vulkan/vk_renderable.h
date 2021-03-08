@@ -49,7 +49,8 @@ namespace Echo
         const VkPipelineMultisampleStateCreateInfo* getVkMultiSampleStateCreateInfo();
 
 	private:
-        VkGraphicsPipelineCreateInfo    m_vkPipelineInfo = {};
-		VkPipeline                      m_vkPipeline = VK_NULL_HANDLE;
+        VkGraphicsPipelineCreateInfo        m_vkPipelineInfo = {};
+		VkPipeline                          m_vkPipeline = VK_NULL_HANDLE;
+        VKShaderProgram::UniformsInstance   m_vkUniformsInstance;
 	};
 }
