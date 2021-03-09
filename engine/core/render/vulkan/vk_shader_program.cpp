@@ -212,17 +212,27 @@ namespace Echo
         VKDebug(vkCreatePipelineLayout(VKRenderer::instance()->getVkDevice(), &plCreateInfo, nullptr, &m_vkPipelineLayout));
     }
 
+    // https://www.khronos.org/assets/uploads/developers/library/2016-vulkan-devday-uk/4-Using-spir-v-with-spirv-cross.pdf
     bool VKShaderProgram::parseUniforms()
     {
         m_uniforms.clear();
 
         // vertex uniforms
-        for (auto& resource : m_vertexShaderCompiler->get_shader_resources().uniform_buffers)
-            addUniform(resource, ShaderType::VS);
+        SPIRV_CROSS_NAMESPACE::ShaderResources vsResources = m_vertexShaderCompiler->get_shader_resources();
+        {
+			for (SPIRV_CROSS_NAMESPACE::Resource& resource : vsResources.uniform_buffers)
+				addUniform(resource, ShaderType::VS);
+        }
 
         // fragment uniforms
-        for (auto& resource : m_fragmentShaderCompiler->get_shader_resources().uniform_buffers)
-            addUniform(resource, ShaderType::FS);
+        SPIRV_CROSS_NAMESPACE::ShaderResources fsResources = m_fragmentShaderCompiler->get_shader_resources();
+        {
+			for (SPIRV_CROSS_NAMESPACE::Resource& resource : fsResources.uniform_buffers)
+				addUniform(resource, ShaderType::FS);
+
+			for (SPIRV_CROSS_NAMESPACE::Resource& resource : fsResources.sampled_images)
+				addUniform(resource, ShaderType::FS);
+        }
 
         allocUniformBytes();
 
@@ -233,17 +243,31 @@ namespace Echo
     {
         spirv_cross::Compiler* compiler = shaderType == ShaderType::VS ? m_vertexShaderCompiler : m_fragmentShaderCompiler;
         const spirv_cross::SPIRType& type = compiler->get_type(resource.base_type_id);
-        size_t memberCount = type.member_types.size();
-        for (size_t i = 0; i < memberCount; i++)
+        if (type.basetype == spirv_cross::SPIRType::SampledImage)
         {
-            Uniform* desc = EchoNew(Uniform);
-            desc->m_name = compiler->get_member_name(type.self, i);
-            desc->m_shader = shaderType;
-            desc->m_sizeInBytes = compiler->get_declared_struct_member_size(type, i);
-            desc->m_type = VKMapping::mapUniformType(compiler->get_type(type.member_types[i]));
-            desc->m_count = desc->m_sizeInBytes / mapUniformTypeSize(desc->m_type);
-            desc->m_location = compiler->type_struct_member_offset(type, i);
-            m_uniforms[desc->m_name] = desc;
+			Uniform* desc = EchoNew(Uniform);
+			desc->m_name = resource.name.c_str();
+			desc->m_shader = shaderType;
+			desc->m_type = VKMapping::mapUniformType(type);
+			desc->m_count = 1;
+            desc->m_sizeInBytes = 4;
+            desc->m_location = 0;// compiler->type_struct_member_offset(type, i);
+			m_uniforms[desc->m_name] = desc;
+        }
+        else
+        {
+			size_t memberCount = type.member_types.size();
+			for (size_t i = 0; i < memberCount; i++)
+			{
+				Uniform* desc = EchoNew(Uniform);
+				desc->m_name = compiler->get_member_name(type.self, i);
+				desc->m_shader = shaderType;
+				desc->m_sizeInBytes = compiler->get_declared_struct_member_size(type, i);
+				desc->m_type = VKMapping::mapUniformType(compiler->get_type(type.member_types[i]));
+				desc->m_count = desc->m_sizeInBytes / mapUniformTypeSize(desc->m_type);
+				desc->m_location = compiler->type_struct_member_offset(type, i);
+				m_uniforms[desc->m_name] = desc;
+			}
         }
     }
 

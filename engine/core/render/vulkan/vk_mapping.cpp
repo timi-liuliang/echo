@@ -97,7 +97,8 @@ namespace Echo
 
             EchoLogError("vulkan MapUniformType failed"); return SPT_UNKNOWN;
         }
-        case spirv_cross::SPIRType::Image:      return SPT_TEXTURE;
+        case spirv_cross::SPIRType::Image:
+        case spirv_cross::SPIRType::SampledImage:
         case spirv_cross::SPIRType::Sampler:    return SPT_TEXTURE;
         default:  EchoLogError("vulkan MapUniformType failed"); return SPT_UNKNOWN;
         }
