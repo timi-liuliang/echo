@@ -1,4 +1,4 @@
-#include "MemoryReader.h"
+#include "memory_reader.h"
 #include "IO.h"
 
 namespace Echo

@@ -9,7 +9,31 @@ namespace Echo
     class VKTexture2D : public Texture
     {
     public:
+        VKTexture2D(const String& pathName);
         virtual ~VKTexture2D();
+
+        // type
+        virtual TexType getType() const override { return TT_2D; }
+
+        // get vulkan texture
+        
+        // get vulkan sampler
+        
+        // load
+        virtual bool load() override;
+
+        // reset
+        void reset();
+
+    public:
+        // update
+        bool updateTexture2D(PixelFormat format, TexUsage usage, i32 width, i32 height, void* data, ui32 size);
+
+        // set surface data
+		void setSurfaceData(int level, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, const Buffer& buff);
+
+    private:
+
     };
 
     class VKTextureRender : public TextureRender

@@ -4,7 +4,7 @@
 #include "engine/core/base/class_method_bind.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/util/StringUtil.h"
-#include "engine/core/io/MemoryReader.h"
+#include "engine/core/io/memory_reader.h"
 #include "engine/core/util/Buffer.h"
 #include "engine/core/io/IO.h"
 #include "engine/core/main/Engine.h"

@@ -1,6 +1,6 @@
 #include "FilePackage.h"
 #include "engine/core/util/PathUtil.h"
-#include "engine/core/io/MemoryReader.h"
+#include "engine/core/io/memory_reader.h"
 #include "engine/core/io/stream/MemoryDataStream.h"
 #include "zlib/zlib.h"
 

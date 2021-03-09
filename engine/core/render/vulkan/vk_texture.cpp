@@ -1,13 +1,69 @@
 #include "vk_texture.h"
 #include "vk_mapping.h"
 #include "vk_renderer.h"
+#include "engine/core/io/io.h"
+#include "base/image/image.h"
 
 namespace Echo
 {
+	VKTexture2D::VKTexture2D(const String& pathName)
+		: Texture(pathName)
+	{
+
+	}
+
     VKTexture2D::~VKTexture2D()
     {
 
     }
+
+	bool VKTexture2D::load()
+	{
+		MemoryReader memReader(getPath());
+		if (memReader.getSize())
+		{
+			Buffer commonTextureBuffer(memReader.getSize(), memReader.getData<ui8*>(), false);
+			Image* image = Image::createFromMemory(commonTextureBuffer, Image::GetImageFormat(getPath()));
+			if (image)
+			{
+				m_isCompressed = false;
+				m_compressType = Texture::CompressType_Unknown;
+				m_width = image->getWidth();
+				m_height = image->getHeight();
+				m_depth = image->getDepth();
+				m_pixFmt = image->getPixelFormat();
+				m_numMipmaps = image->getNumMipmaps() ? image->getNumMipmaps() : 1;
+				ui32 pixelsSize = PixelUtil::CalcSurfaceSize(m_width, m_height, m_depth, m_numMipmaps, m_pixFmt);
+				Buffer buff(pixelsSize, image->getData(), false);
+
+				setSurfaceData(0, m_pixFmt, m_usage, m_width, m_height, buff);
+
+				EchoSafeDelete(image, Image);
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	void VKTexture2D::reset()
+	{
+
+	}
+
+	bool VKTexture2D::updateTexture2D(PixelFormat format, TexUsage usage, i32 width, i32 height, void* data, ui32 size)
+	{
+		Buffer buff(size, data, false);
+		setSurfaceData(0, format, usage, width, height, buff);
+
+		return true;
+	}
+
+	void VKTexture2D::setSurfaceData(int level, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, const Buffer& buff)
+	{
+		reset();
+	}
 
     VKTextureRender::VKTextureRender(const String& name)
         : TextureRender(name)

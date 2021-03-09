@@ -4,7 +4,7 @@
 #include "engine/core/base/object.h"
 #include "engine/core/thread/Threading.h"
 #include "stream/DataStream.h"
-#include "MemoryReader.h"
+#include "memory_reader.h"
 #include "archive/FileSystem.h"
 #include "archive/FilePackage.h"
 

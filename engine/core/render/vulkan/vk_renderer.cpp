@@ -70,7 +70,7 @@ namespace Echo
 
     Texture* VKRenderer::createTexture2D(const String& name)
     {
-        return EchoNew(VKTexture2D);
+        return EchoNew(VKTexture2D(name));
     }
 
 	TextureRender* VKRenderer::createTextureRender(const String& name)
