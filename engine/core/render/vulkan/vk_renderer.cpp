@@ -354,13 +354,13 @@ namespace Echo
 
 	void VKRenderer::createVkDescriptorPool()
 	{
-		array<VkDescriptorPoolSize, 1> typeCounts;
+		array<VkDescriptorPoolSize, 2> typeCounts;
 		typeCounts[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
 		typeCounts[0].descriptorCount = 512;
 
 		// For additional type you need to add new entries in the type count list
-		//typeCounts[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		//typeCounts[1].descriptorCount = 2;
+		typeCounts[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+		typeCounts[1].descriptorCount = 512;
 
 		// Create the global descriptor pool
 		VkDescriptorPoolCreateInfo descriptorPoolInfo = {};

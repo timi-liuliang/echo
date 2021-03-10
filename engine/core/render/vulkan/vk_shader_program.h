@@ -18,6 +18,7 @@ namespace Echo
 			VKBuffer*                       m_vkVertexShaderUniformBuffer = nullptr;
 			VKBuffer*                       m_vkFragmentShaderUniformBuffer = nullptr;
 			array<VkDescriptorBufferInfo, 2>m_vkShaderUniformBufferDescriptors;
+            array<VkDescriptorImageInfo, 2> m_vkShaderImageInfoDescriptors;
 			array<VkDescriptorSet, 2>       m_vkDescriptorSets = {};
         };
 

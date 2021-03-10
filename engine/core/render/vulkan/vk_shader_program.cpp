@@ -93,6 +93,8 @@ namespace Echo
         uniformsInstance.m_vkShaderUniformBufferDescriptors[ShaderType::FS].buffer = uniformsInstance.m_vkFragmentShaderUniformBuffer->getVkBuffer();
         uniformsInstance.m_vkShaderUniformBufferDescriptors[ShaderType::FS].offset = 0;
         uniformsInstance.m_vkShaderUniformBufferDescriptors[ShaderType::FS].range = uniformsInstance.m_vkFragmentShaderUniformBuffer->getSize();
+
+        //uniformsInstance.m_vkShaderImageInfoDescriptors[ShaderType::FS].sampler
     }
 
     void VKShaderProgram::updateVkUniformBuffer(UniformsInstance& uniformsInstance)
@@ -170,6 +172,27 @@ namespace Echo
                 }
             }
 
+            for (size_t i = 0; i < uniformsInstance.m_vkShaderImageInfoDescriptors.size(); i++)
+            {
+                if (uniformsInstance.m_vkShaderImageInfoDescriptors[i].sampler)
+                {
+					// Binding 1 : Combined Image
+					VkWriteDescriptorSet writeDescriptorSet;
+					writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+					writeDescriptorSet.pNext = nullptr;
+					writeDescriptorSet.dstSet = uniformsInstance.m_vkDescriptorSets[i];
+					writeDescriptorSet.dstBinding = 0;
+					writeDescriptorSet.dstArrayElement = 0;
+					writeDescriptorSet.descriptorCount = 1;
+					writeDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+					writeDescriptorSet.pImageInfo = &uniformsInstance.m_vkShaderImageInfoDescriptors[i];
+					writeDescriptorSet.pBufferInfo = nullptr;
+					writeDescriptorSet.pTexelBufferView = nullptr;
+
+					writeDescriptorSets.emplace_back(writeDescriptorSet);
+                }
+            }
+
             vkUpdateDescriptorSets(VKRenderer::instance()->getVkDevice(), writeDescriptorSets.size(), writeDescriptorSets.data(), 0, nullptr);
         }
         else
@@ -180,20 +203,29 @@ namespace Echo
 
     void VKShaderProgram::createVkDescriptorSetLayout(ShaderType type)
     {
-        VkDescriptorSetLayoutBinding layoutBindings;
-        layoutBindings.binding = 0;
-        layoutBindings.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        layoutBindings.descriptorCount = 1;
-        layoutBindings.stageFlags = type == ShaderType::VS ? VK_SHADER_STAGE_VERTEX_BIT : VK_SHADER_STAGE_FRAGMENT_BIT;
-        layoutBindings.pImmutableSamplers = nullptr;
+        VkDescriptorSetLayoutBinding uboLayoutBinding;
+        uboLayoutBinding.binding = 0;
+        uboLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        uboLayoutBinding.descriptorCount = 1;
+        uboLayoutBinding.stageFlags = type == ShaderType::VS ? VK_SHADER_STAGE_VERTEX_BIT : VK_SHADER_STAGE_FRAGMENT_BIT;
+        uboLayoutBinding.pImmutableSamplers = nullptr;
+
+        VkDescriptorSetLayoutBinding samplerLayoutBinding;
+        samplerLayoutBinding.binding = 1;
+        samplerLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+        samplerLayoutBinding.descriptorCount = 1;
+        samplerLayoutBinding.stageFlags = ShaderType::VS ? VK_SHADER_STAGE_VERTEX_BIT : VK_SHADER_STAGE_FRAGMENT_BIT;
+        samplerLayoutBinding.pImmutableSamplers = nullptr;
+
+        array<VkDescriptorSetLayoutBinding, 2> layoutBindings = { uboLayoutBinding, samplerLayoutBinding };
 
         // create a descriptor set layout based on layout bindings
         VkDescriptorSetLayoutCreateInfo dslCreateInfo = {};
         dslCreateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
         dslCreateInfo.pNext = nullptr;
         dslCreateInfo.flags = 0;
-        dslCreateInfo.bindingCount = 1;
-        dslCreateInfo.pBindings = &layoutBindings;
+        dslCreateInfo.bindingCount = layoutBindings.size();
+        dslCreateInfo.pBindings = layoutBindings.data();
 
         VKDebug(vkCreateDescriptorSetLayout(VKRenderer::instance()->getVkDevice(), &dslCreateInfo, nullptr, &m_vkDescriptorSetLayouts[type]));
     }
