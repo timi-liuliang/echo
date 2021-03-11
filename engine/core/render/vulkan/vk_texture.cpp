@@ -16,7 +16,7 @@ namespace Echo
 
 	}
 
-	void VKTexture::createVkImage(PixelFormat format, i32 width, i32 height, i32 depth)
+	void VKTexture::createVkImage(PixelFormat format, i32 width, i32 height, i32 depth, VkImageUsageFlags usage, VkFlags requirementsMask)
 	{
 		destroyVkImage();
 
@@ -31,7 +31,7 @@ namespace Echo
 		imageCreateInfo.arrayLayers = 1;
 		imageCreateInfo.samples = VK_SAMPLE_COUNT_1_BIT;
 		imageCreateInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
-		imageCreateInfo.usage = PixelUtil::IsDepth(format) ? VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT : VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+		imageCreateInfo.usage = usage;
 		imageCreateInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 		imageCreateInfo.queueFamilyIndexCount = 0;
 		imageCreateInfo.pQueueFamilyIndices = nullptr;
@@ -39,7 +39,7 @@ namespace Echo
 
 		if (VK_SUCCESS == vkCreateImage(VKRenderer::instance()->getVkDevice(), &imageCreateInfo, nullptr, &m_vkImage))
 		{
-			createVkImageMemory();
+			createVkImageMemory(requirementsMask);
 			createVkImageView(format);
 		}
 	}
@@ -53,7 +53,7 @@ namespace Echo
 		}
 	}
 
-	void VKTexture::createVkImageMemory()
+	void VKTexture::createVkImageMemory(VkFlags requirementsMask)
 	{
 		destroyVkImageMemory();
 
@@ -64,7 +64,7 @@ namespace Echo
 		allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 		allocInfo.pNext = nullptr;
 		allocInfo.allocationSize = memRequirements.size;
-		allocInfo.memoryTypeIndex = VKRenderer::instance()->findVkMemoryType(memRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+		allocInfo.memoryTypeIndex = VKRenderer::instance()->findVkMemoryType(memRequirements.memoryTypeBits, requirementsMask);
 
 		VKDebug(vkAllocateMemory(VKRenderer::instance()->getVkDevice(), &allocInfo, nullptr, &m_vkImageMemory));
 		VKDebug(vkBindImageMemory(VKRenderer::instance()->getVkDevice(), m_vkImage, m_vkImageMemory, 0));
@@ -114,6 +114,8 @@ namespace Echo
 
 	void VKTexture::setVkImageSurfaceData(int level, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, const Buffer& buff)
 	{
+		return;
+
 		void* data = nullptr;
 		if (VK_SUCCESS == vkMapMemory(VKRenderer::instance()->getVkDevice(), m_vkImageMemory, 0, buff.getSize(), 0, &data))
 		{
@@ -162,7 +164,9 @@ namespace Echo
 				m_pixFmt = image->getPixelFormat();
 				m_numMipmaps = image->getNumMipmaps() ? image->getNumMipmaps() : 1;
 
-				createVkImage(m_pixFmt, m_width, m_height, m_depth);
+				VkImageUsageFlags vkUsageFlags = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+				VkFlags requirementsMask = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+				createVkImage(m_pixFmt, m_width, m_height, m_depth, vkUsageFlags, requirementsMask);
 
 				ui32 pixelsSize = PixelUtil::CalcSurfaceSize(m_width, m_height, m_depth, m_numMipmaps, m_pixFmt);
 				Buffer buff(pixelsSize, image->getData(), false);
@@ -199,7 +203,9 @@ namespace Echo
         m_pixFmt = format;
         m_numMipmaps = 1;
 
-        createVkImage(m_pixFmt, m_width, m_height, m_depth);
+		VkImageUsageFlags vkUsageFlags = PixelUtil::IsDepth(format) ? VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT : VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+		VkFlags requirementsMask = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+        createVkImage(m_pixFmt, m_width, m_height, m_depth, vkUsageFlags, requirementsMask);
 
 		ui32 pixelsSize = PixelUtil::CalcSurfaceSize(m_width, m_height, m_depth, m_numMipmaps, m_pixFmt);
 		Buffer buff(pixelsSize, data, false);

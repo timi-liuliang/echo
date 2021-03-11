@@ -17,11 +17,11 @@ namespace Echo
 
 	protected:
 		// VkImage
-		void createVkImage(PixelFormat format, i32 width, i32 height, i32 depth);
+		void createVkImage(PixelFormat format, i32 width, i32 height, i32 depth, VkImageUsageFlags usage, VkFlags requirementsMask);
 		void destroyVkImage();
 
 		// VkImageMemory
-		void createVkImageMemory();
+		void createVkImageMemory(VkFlags requirementsMask);
 		void destroyVkImageMemory();
 
 		// VkImageView
