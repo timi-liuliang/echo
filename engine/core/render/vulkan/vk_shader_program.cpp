@@ -176,15 +176,18 @@ namespace Echo
             {
                 if (it.second->m_type == SPT_TEXTURE)
                 {
+                    i32 textureIdx = *(i32*)(it.second->getValue().data());
+                    VKTexture* texture = VKRenderer::instance()->getTexture(textureIdx);
+
 					VkWriteDescriptorSet writeDescriptorSet;
 					writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
 					writeDescriptorSet.pNext = nullptr;
-					writeDescriptorSet.dstSet = uniformsInstance.m_vkDescriptorSets[0];
+					writeDescriptorSet.dstSet = uniformsInstance.m_vkDescriptorSets[1];
 					writeDescriptorSet.dstBinding = it.second->m_location;
 					writeDescriptorSet.dstArrayElement = 0;
 					writeDescriptorSet.descriptorCount = 1;
 					writeDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-					writeDescriptorSet.pImageInfo = nullptr;
+					writeDescriptorSet.pImageInfo = texture->getVkDescriptorImageInfo();
 					writeDescriptorSet.pBufferInfo = nullptr;
 					writeDescriptorSet.pTexelBufferView = nullptr;
 

@@ -80,7 +80,12 @@ namespace Echo
 
 	void VKRenderer::setTexture(ui32 index, Texture* texture, bool needUpdate)
 	{
+		m_currentTextures[index] = texture;
+	}
 
+	VKTexture* VKRenderer::getTexture(ui32 index)
+	{
+		return ECHO_DOWN_CAST<VKTexture*>(m_currentTextures[index]);
 	}
 
     Renderable* VKRenderer::createRenderable()

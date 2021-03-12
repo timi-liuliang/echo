@@ -76,6 +76,7 @@ namespace Echo
     public:
         // set texture
         virtual void setTexture(ui32 index, Texture* texture, bool needUpdate = false) override;
+        VKTexture* getTexture(ui32 index);
 
     public:
         // get screen width and height
@@ -150,5 +151,6 @@ namespace Echo
         VkQueue             m_vkGraphicsQueue = nullptr;
 		VkCommandPool		m_vkCommandPool;
         VkDescriptorPool    m_vkDescriptorPool = VK_NULL_HANDLE;
+        array<Texture*, 32> m_currentTextures = { nullptr };
 	};
 }

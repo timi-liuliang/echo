@@ -17,7 +17,7 @@ namespace Echo
 		VkImageView getVkImageView() { return m_vkImageView; }
 
         // get vk descriptor image info
-        VkDescriptorImageInfo getVkDescriptorImageInfo() { return m_vkDescriptorImageInfo; }
+        VkDescriptorImageInfo* getVkDescriptorImageInfo() { return &m_vkDescriptorImageInfo; }
 
 	protected:
 		// VkImage
