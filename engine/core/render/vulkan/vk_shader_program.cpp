@@ -172,20 +172,19 @@ namespace Echo
                 }
             }
 
-            for (size_t i = 0; i < uniformsInstance.m_vkShaderImageInfoDescriptors.size(); i++)
+            for (auto& it : m_uniforms)
             {
-                if (uniformsInstance.m_vkShaderImageInfoDescriptors[i].sampler)
+                if (it.second->m_type == SPT_TEXTURE)
                 {
-					// Binding 1 : Combined Image
 					VkWriteDescriptorSet writeDescriptorSet;
 					writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
 					writeDescriptorSet.pNext = nullptr;
-					writeDescriptorSet.dstSet = uniformsInstance.m_vkDescriptorSets[i];
-					writeDescriptorSet.dstBinding = 0;
+					writeDescriptorSet.dstSet = uniformsInstance.m_vkDescriptorSets[0];
+					writeDescriptorSet.dstBinding = it.second->m_location;
 					writeDescriptorSet.dstArrayElement = 0;
 					writeDescriptorSet.descriptorCount = 1;
 					writeDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-					writeDescriptorSet.pImageInfo = &uniformsInstance.m_vkShaderImageInfoDescriptors[i];
+					writeDescriptorSet.pImageInfo = nullptr;
 					writeDescriptorSet.pBufferInfo = nullptr;
 					writeDescriptorSet.pTexelBufferView = nullptr;
 
@@ -277,13 +276,13 @@ namespace Echo
         const spirv_cross::SPIRType& type = compiler->get_type(resource.base_type_id);
         if (type.basetype == spirv_cross::SPIRType::SampledImage)
         {
-			Uniform* desc = EchoNew(Uniform);
+			Uniform* desc = EchoNew(UniformTexture);
 			desc->m_name = resource.name.c_str();
 			desc->m_shader = shaderType;
 			desc->m_type = VKMapping::mapUniformType(type);
 			desc->m_count = 1;
             desc->m_sizeInBytes = 4;
-            desc->m_location = 0;// compiler->type_struct_member_offset(type, i);
+            desc->m_location = compiler->get_decoration(resource.id, spv::DecorationBinding);
 			m_uniforms[desc->m_name] = desc;
         }
         else
@@ -291,7 +290,7 @@ namespace Echo
 			size_t memberCount = type.member_types.size();
 			for (size_t i = 0; i < memberCount; i++)
 			{
-				Uniform* desc = EchoNew(Uniform);
+				Uniform* desc = EchoNew(UniformNormal);
 				desc->m_name = compiler->get_member_name(type.self, i);
 				desc->m_shader = shaderType;
 				desc->m_sizeInBytes = compiler->get_declared_struct_member_size(type, i);

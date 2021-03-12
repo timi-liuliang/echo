@@ -151,7 +151,7 @@ namespace Echo
         return EchoNew(VKMultisampleState);
     }
 
-    const SamplerState* VKRenderer::getSamplerState(const SamplerState::SamplerDesc& desc)
+    SamplerState* VKRenderer::createSamplerState(const SamplerState::SamplerDesc& desc)
     {
         return EchoNew(VKSamplerState(desc));
     }

@@ -425,7 +425,7 @@ namespace Echo
 		return EchoNew(GLESBlendState(desc));
 	}
 
-	const SamplerState* GLESRenderer::getSamplerState(const SamplerState::SamplerDesc& desc)
+	SamplerState* GLESRenderer::createSamplerState(const SamplerState::SamplerDesc& desc)
 	{
 		// is exist
 		for (std::set<GLESSamplerState*>::iterator it = m_vecSamlerStates.begin(); it != m_vecSamlerStates.end(); it++)

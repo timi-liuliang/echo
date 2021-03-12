@@ -1,6 +1,7 @@
 #include "vk_render_state.h"
 #include "vk_render_base.h"
 #include "vk_mapping.h"
+#include "vk_renderer.h"
 
 namespace Echo
 {
@@ -62,16 +63,29 @@ namespace Echo
     VKSamplerState::VKSamplerState(const SamplerDesc& desc)
         : SamplerState(desc)
     {
-        m_vkSampleStateCreateInfo = {};
-        m_vkSampleStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
-        m_vkSampleStateCreateInfo.pNext = nullptr;
-        m_vkSampleStateCreateInfo.flags = 0;
-        m_vkSampleStateCreateInfo.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
-        m_vkSampleStateCreateInfo.sampleShadingEnable = false;
-        m_vkSampleStateCreateInfo.minSampleShading = 0.f;
-        m_vkSampleStateCreateInfo.pSampleMask = nullptr;
-        m_vkSampleStateCreateInfo.alphaToCoverageEnable = false;
-        m_vkSampleStateCreateInfo.alphaToOneEnable = false;
+        m_vkSamplerCreateInfo = {};
+        m_vkSamplerCreateInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+        m_vkSamplerCreateInfo.pNext = nullptr;
+        m_vkSamplerCreateInfo.flags = 0;
+        m_vkSamplerCreateInfo.magFilter = VK_FILTER_LINEAR;
+        m_vkSamplerCreateInfo.minFilter = VK_FILTER_LINEAR;
+        m_vkSamplerCreateInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+        m_vkSamplerCreateInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+        m_vkSamplerCreateInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+        m_vkSamplerCreateInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+        m_vkSamplerCreateInfo.mipLodBias = 0.f;
+        m_vkSamplerCreateInfo.compareOp = VK_COMPARE_OP_NEVER;
+        m_vkSamplerCreateInfo.minLod = 0.f;
+        m_vkSamplerCreateInfo.maxLod = 0.f;
+        m_vkSamplerCreateInfo.maxAnisotropy = 1.f;
+        m_vkSamplerCreateInfo.borderColor = VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
+        
+        VKDebug(vkCreateSampler(VKRenderer::instance()->getVkDevice(), &m_vkSamplerCreateInfo, nullptr, &m_vkSampler));
+    }
+
+    VKSamplerState::~VKSamplerState()
+    {
+        vkDestroySampler(VKRenderer::instance()->getVkDevice(), m_vkSampler, nullptr);
     }
 
     VKMultisampleState::VKMultisampleState()

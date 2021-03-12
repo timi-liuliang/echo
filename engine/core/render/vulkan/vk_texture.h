@@ -3,6 +3,7 @@
 #include "base/texture.h"
 #include "base/texture_render.h"
 #include "vk_render_base.h"
+#include "vk_render_state.h"
 
 namespace Echo
 {
@@ -14,6 +15,9 @@ namespace Echo
 
 		// get vk image view
 		VkImageView getVkImageView() { return m_vkImageView; }
+
+        // get vk descriptor image info
+        VkDescriptorImageInfo getVkDescriptorImageInfo() { return m_vkDescriptorImageInfo; }
 
 	protected:
 		// VkImage
@@ -28,13 +32,22 @@ namespace Echo
 		void createVkImageView(PixelFormat format);
 		void destroyVkImageView();
 
+        // VkSampler
+        void createVkSampler();
+        void destroyVkSampler();
+
+        // Descriptor info
+        void createDescriptorImageInfo();
+
 		// set surface data
 		void setVkImageSurfaceData(int level, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, const Buffer& buff);
 
 	protected:
-		VkImage             m_vkImage = VK_NULL_HANDLE;
-		VkDeviceMemory      m_vkImageMemory = VK_NULL_HANDLE;
-		VkImageView         m_vkImageView = VK_NULL_HANDLE;
+		VkImage                 m_vkImage = VK_NULL_HANDLE;
+		VkDeviceMemory          m_vkImageMemory = VK_NULL_HANDLE;
+		VkImageView             m_vkImageView = VK_NULL_HANDLE;
+        VKSamplerState*         m_samplerState = nullptr;
+        VkDescriptorImageInfo   m_vkDescriptorImageInfo;
     };
 
     class VKTexture2D : public Texture, public VKTexture

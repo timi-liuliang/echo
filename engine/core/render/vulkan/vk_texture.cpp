@@ -41,6 +41,9 @@ namespace Echo
 		{
 			createVkImageMemory(requirementsMask);
 			createVkImageView(format);
+			createVkSampler();
+
+			createDescriptorImageInfo();
 		}
 	}
 
@@ -110,6 +113,26 @@ namespace Echo
 			vkDestroyImageView(VKRenderer::instance()->getVkDevice(), m_vkImageView, nullptr);
 			m_vkImageView = VK_NULL_HANDLE;
 		}
+	}
+
+	void VKTexture::createVkSampler()
+	{
+		destroyVkSampler();
+
+		SamplerState::SamplerDesc desc;
+		m_samplerState = ECHO_DOWN_CAST<VKSamplerState*>(Renderer::instance()->createSamplerState(desc));
+	}
+
+	void VKTexture::destroyVkSampler()
+	{
+		EchoSafeDelete(m_samplerState, VKSamplerState);
+	}
+
+	void VKTexture::createDescriptorImageInfo()
+	{
+		m_vkDescriptorImageInfo.sampler = m_samplerState->getVkSampler();
+		m_vkDescriptorImageInfo.imageView = m_vkImageView;
+		m_vkDescriptorImageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 	}
 
 	void VKTexture::setVkImageSurfaceData(int level, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, const Buffer& buff)

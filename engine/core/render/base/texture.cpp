@@ -83,7 +83,7 @@ namespace Echo
 
 	void Texture::setSamplerState(const SamplerState::SamplerDesc& desc)
 	{
-		m_samplerState = Renderer::instance()->getSamplerState(desc);
+		m_samplerState = Renderer::instance()->createSamplerState(desc);
 	}
 
 	size_t Texture::calculateSize() const

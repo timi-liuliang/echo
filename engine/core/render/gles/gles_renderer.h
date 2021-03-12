@@ -86,7 +86,7 @@ namespace Echo
 		virtual DepthStencilState* createDepthStencilState() override;
 		virtual BlendState*	createBlendState(const BlendState::BlendDesc& desc) override;
         virtual MultisampleState* createMultisampleState() override { return nullptr; }
-		const SamplerState*	getSamplerState(const SamplerState::SamplerDesc& desc) override;
+		virtual SamplerState* createSamplerState(const SamplerState::SamplerDesc& desc) override;
 	
 		// frame buffer
 		virtual FrameBufferOffScreen* createFrameBufferOffScreen(ui32 width, ui32 height);

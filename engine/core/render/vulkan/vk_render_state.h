@@ -49,13 +49,14 @@ namespace Echo
 	{
 	public:
         VKSamplerState(const SamplerDesc& desc);
-        virtual ~VKSamplerState() {}
+        virtual ~VKSamplerState();
 
         // get vk create info
-        const VkPipelineMultisampleStateCreateInfo* getVkCrateInfo() { return &m_vkSampleStateCreateInfo; }
+        const VkSampler getVkSampler() { return m_vkSampler; }
 
     private:
-        VkPipelineMultisampleStateCreateInfo m_vkSampleStateCreateInfo;
+        VkSamplerCreateInfo m_vkSamplerCreateInfo;
+        VkSampler           m_vkSampler = VK_NULL_HANDLE;
 	};
 
     class VKMultisampleState : public MultisampleState
