@@ -65,6 +65,10 @@ namespace Echo
         
         // load
         virtual bool load() override;
+
+	private:
+		// convert format
+		void convertFormat(Image* image);
     };
 
     class VKTextureRender : public TextureRender, public VKTexture
