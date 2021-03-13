@@ -178,17 +178,28 @@ namespace Echo
 				imageMemoryBarrier.image = m_vkImage;
 				imageMemoryBarrier.subresourceRange = subResourcesRange;
 
-				// insert a memory dependency at the proper pipeline stages that will execute the image layout transition
-				// source pipeline stage is host write/read execution (VK_PIPELINE_STAGE_HOST_BIT)
-				// destination pipeline stage fragment shader access (VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT)
-				vkCmdPipelineBarrier(
-					copyCmd,
-					VK_PIPELINE_STAGE_HOST_BIT,
-					VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-					0,
-					0, nullptr,
-					0, nullptr,
-					1, &imageMemoryBarrier);
+				VkCommandBufferBeginInfo commandBufferBeginInfo = {};
+				commandBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+				commandBufferBeginInfo.pNext = nullptr;
+				commandBufferBeginInfo.flags = 0;
+				commandBufferBeginInfo.pInheritanceInfo = nullptr;
+
+				if (VK_SUCCESS == vkBeginCommandBuffer(copyCmd, &commandBufferBeginInfo))
+				{
+					// insert a memory dependency at the proper pipeline stages that will execute the image layout transition
+					// source pipeline stage is host write/read execution (VK_PIPELINE_STAGE_HOST_BIT)
+					// destination pipeline stage fragment shader access (VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT)
+					vkCmdPipelineBarrier(
+						copyCmd,
+						VK_PIPELINE_STAGE_HOST_BIT,
+						VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+						0,
+						0, nullptr,
+						0, nullptr,
+						1, &imageMemoryBarrier);
+
+					VKDebug(vkEndCommandBuffer(copyCmd));
+				}
 
 				VKRenderer::instance()->flushVkCommandBuffer(copyCmd, VKRenderer::instance()->getVkGraphicsQueue(), true);
 			}

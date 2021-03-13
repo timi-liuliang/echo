@@ -417,9 +417,8 @@ namespace Echo
 	{
 		if (commandBuffer)
 		{
-			VKDebug(vkEndCommandBuffer(commandBuffer));
-
 			VkSubmitInfo submitInfo = {};
+			submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 			submitInfo.commandBufferCount = 1;
 			submitInfo.pCommandBuffers = &commandBuffer;
 
@@ -427,7 +426,7 @@ namespace Echo
 			VkFenceCreateInfo fenceCreateInfo = {};
 			fenceCreateInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
 			fenceCreateInfo.pNext = nullptr;
-			fenceCreateInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
+			fenceCreateInfo.flags = 0;
 
 			VkFence fence;
 			VKDebug(vkCreateFence(getVkDevice(), &fenceCreateInfo, nullptr, &fence));
