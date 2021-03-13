@@ -46,7 +46,7 @@ layout(binding = 0) uniform UBO
 
 // uniforms
 #ifdef ENABLE_ALBEDO_TEXTURE
-layout(binding = 3) uniform sampler2D BaseColor;
+layout(set=1, binding = 3) uniform sampler2D BaseColor;
 #endif
 
 // inputs

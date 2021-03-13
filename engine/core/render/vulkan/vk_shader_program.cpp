@@ -244,6 +244,7 @@ namespace Echo
 		VKDebug(vkCreateDescriptorSetLayout(VKRenderer::instance()->getVkDevice(), &dslCreateInfo, nullptr, &m_vkDescriptorSetLayouts[type]));
     }
 
+    // https://vulkan.lunarg.com/doc/view/1.2.162.1/mac/tutorial/html/08-init_pipeline_layout.html
     void VKShaderProgram::createVkPipelineLayout()
     {
         VkPipelineLayoutCreateInfo plCreateInfo = {};

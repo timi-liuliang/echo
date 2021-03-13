@@ -140,6 +140,7 @@ namespace Echo
 		m_vkDescriptorImageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 	}
 
+	// https://github.com/SaschaWillems/Vulkan/blob/master/examples/texture/texture.cpp
 	void VKTexture::setVkImageSurfaceData(int level, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, const Buffer& buff)
 	{
 		return;
