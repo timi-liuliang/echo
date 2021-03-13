@@ -17,11 +17,11 @@ namespace Echo
 		VkImageView getVkImageView() { return m_vkImageView; }
 
         // get vk descriptor image info
-        VkDescriptorImageInfo* getVkDescriptorImageInfo() { return &m_vkDescriptorImageInfo; }
+        VkDescriptorImageInfo* getVkDescriptorImageInfo() { return m_vkDescriptorImageInfo.sampler ? &m_vkDescriptorImageInfo : nullptr; }
 
 	protected:
 		// VkImage
-		void createVkImage(PixelFormat format, i32 width, i32 height, i32 depth, VkImageUsageFlags usage, VkFlags requirementsMask);
+		bool createVkImage(PixelFormat format, i32 width, i32 height, i32 depth, VkImageUsageFlags usage, VkFlags requirementsMask);
 		void destroyVkImage();
 
 		// VkImageMemory
@@ -47,7 +47,7 @@ namespace Echo
 		VkDeviceMemory          m_vkImageMemory = VK_NULL_HANDLE;
 		VkImageView             m_vkImageView = VK_NULL_HANDLE;
         VKSamplerState*         m_samplerState = nullptr;
-        VkDescriptorImageInfo   m_vkDescriptorImageInfo;
+        VkDescriptorImageInfo   m_vkDescriptorImageInfo = {};
     };
 
     class VKTexture2D : public Texture, public VKTexture

@@ -16,7 +16,7 @@ namespace Echo
 
 	}
 
-	void VKTexture::createVkImage(PixelFormat format, i32 width, i32 height, i32 depth, VkImageUsageFlags usage, VkFlags requirementsMask)
+	bool VKTexture::createVkImage(PixelFormat format, i32 width, i32 height, i32 depth, VkImageUsageFlags usage, VkFlags requirementsMask)
 	{
 		destroyVkImage();
 
@@ -37,14 +37,19 @@ namespace Echo
 		imageCreateInfo.pQueueFamilyIndices = nullptr;
 		imageCreateInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 
-		if (VK_SUCCESS == vkCreateImage(VKRenderer::instance()->getVkDevice(), &imageCreateInfo, nullptr, &m_vkImage))
+		VKDebug(vkCreateImage(VKRenderer::instance()->getVkDevice(), &imageCreateInfo, nullptr, &m_vkImage));
+		if (m_vkImage)
 		{
 			createVkImageMemory(requirementsMask);
 			createVkImageView(format);
 			createVkSampler();
 
 			createDescriptorImageInfo();
+
+			return true;
 		}
+
+		return false;
 	}
 
 	void VKTexture::destroyVkImage()
@@ -189,15 +194,22 @@ namespace Echo
 
 				VkImageUsageFlags vkUsageFlags = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
 				VkFlags requirementsMask = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-				createVkImage(m_pixFmt, m_width, m_height, m_depth, vkUsageFlags, requirementsMask);
+				if (createVkImage(m_pixFmt, m_width, m_height, m_depth, vkUsageFlags, requirementsMask))
+				{
+					ui32 pixelsSize = PixelUtil::CalcSurfaceSize(m_width, m_height, m_depth, m_numMipmaps, m_pixFmt);
+					Buffer buff(pixelsSize, image->getData(), false);
+					setVkImageSurfaceData(0, m_pixFmt, m_usage, m_width, m_height, buff);
 
-				ui32 pixelsSize = PixelUtil::CalcSurfaceSize(m_width, m_height, m_depth, m_numMipmaps, m_pixFmt);
-				Buffer buff(pixelsSize, image->getData(), false);
-				setVkImageSurfaceData(0, m_pixFmt, m_usage, m_width, m_height, buff);
+					EchoSafeDelete(image, Image);
+					return true;
+				}
+				else
+				{
+					EchoLogError("vulkan texture [%s] load failed", getPath().c_str());
 
-				EchoSafeDelete(image, Image);
-
-				return true;
+					EchoSafeDelete(image, Image);
+					return false;
+				}
 			}
 		}
 
