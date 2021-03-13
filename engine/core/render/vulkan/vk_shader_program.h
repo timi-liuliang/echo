@@ -18,7 +18,7 @@ namespace Echo
 			VKBuffer*                       m_vkVertexShaderUniformBuffer = nullptr;
 			VKBuffer*                       m_vkFragmentShaderUniformBuffer = nullptr;
 			array<VkDescriptorBufferInfo, 2>m_vkShaderUniformBufferDescriptors;
-			vector<VkDescriptorSet>::type   m_vkDescriptorSets = {};
+			array<VkDescriptorSet, 2>       m_vkDescriptorSets = {};
         };
 
     public:
@@ -55,7 +55,7 @@ namespace Echo
         void createVkDescriptorSet(UniformsInstance& uniformData);
 
         // create vk descriptor set layout
-        void createVkDescriptorSetLayout(const String& uniformName, ShaderType type, VkDescriptorType descriptorType, ui32 binding);
+        void createVkDescriptorSetLayout(ShaderType type);
 
         // create descriptor and pipeline layouts
         void createVkPipelineLayout();
@@ -76,7 +76,7 @@ namespace Echo
         spirv_cross::Compiler*              m_vertexShaderCompiler = nullptr;
         spirv_cross::Compiler*              m_fragmentShaderCompiler = nullptr;
         array<VkPipelineSSCI, 2>            m_vkShaderStagesCreateInfo;
-        vector<VkDescriptorSetLayout>::type m_vkDescriptorSetLayouts;
+        array<VkDescriptorSetLayout, 2>     m_vkDescriptorSetLayouts;
         VkPipelineLayout                    m_vkPipelineLayout = VK_NULL_HANDLE;
         vector<Byte>::type                  m_vertexShaderUniformBytes;
         vector<Byte>::type                  m_fragmentShaderUniformBytes;
