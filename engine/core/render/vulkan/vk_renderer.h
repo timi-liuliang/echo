@@ -111,6 +111,11 @@ namespace Echo
         // find memory type
         ui32 findVkMemoryType(ui32 typeBits, VkFlags requirementsMask);
 
+    public:
+        // vulkan command buffer
+        VkCommandBuffer createVkCommandBuffer();
+        void flushVkCommandBuffer(VkCommandBuffer commandBuffer, VkQueue queue, bool free);
+
 	private:
 		// create vk instance
 		void createVkInstance();

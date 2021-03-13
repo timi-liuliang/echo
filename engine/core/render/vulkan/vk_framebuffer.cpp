@@ -265,15 +265,10 @@ namespace Echo
         destroyVkCommandBuffers();
 
         m_vkCommandBuffers.resize(m_vkSwapChainImages.size());
-
-        VkCommandBufferAllocateInfo createInfo = {};
-        createInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-        createInfo.pNext = nullptr;
-        createInfo.commandPool = VKRenderer::instance()->getVkCommandPool();
-        createInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-        createInfo.commandBufferCount = m_vkCommandBuffers.size();
-
-        VKDebug(vkAllocateCommandBuffers(VKRenderer::instance()->getVkDevice(), &createInfo, &m_vkCommandBuffers[0]));
+        for (size_t i = 0; i < m_vkCommandBuffers.size(); i++)
+        {
+            m_vkCommandBuffers[i] = VKRenderer::instance()->createVkCommandBuffer();
+        }
     }
 
     void VKFramebufferWindow::destroyVkCommandBuffers()

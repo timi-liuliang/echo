@@ -398,6 +398,52 @@ namespace Echo
 		return 0;
 	}
 
+	VkCommandBuffer VKRenderer::createVkCommandBuffer()
+	{
+		VkCommandBufferAllocateInfo createInfo = {};
+		createInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+		createInfo.pNext = nullptr;
+		createInfo.commandPool = getVkCommandPool();
+		createInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+		createInfo.commandBufferCount = 1;
+
+		VkCommandBuffer vkCommandBuffer;
+		VKDebug(vkAllocateCommandBuffers(VKRenderer::instance()->getVkDevice(), &createInfo, &vkCommandBuffer));
+		
+		return vkCommandBuffer;
+	}
+
+	void VKRenderer::flushVkCommandBuffer(VkCommandBuffer commandBuffer, VkQueue queue, bool free)
+	{
+		if (commandBuffer)
+		{
+			VKDebug(vkEndCommandBuffer(commandBuffer));
+
+			VkSubmitInfo submitInfo = {};
+			submitInfo.commandBufferCount = 1;
+			submitInfo.pCommandBuffers = &commandBuffer;
+
+			// Create fence to ensure that the command buffer has finished executing
+			VkFenceCreateInfo fenceCreateInfo = {};
+			fenceCreateInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+			fenceCreateInfo.pNext = nullptr;
+			fenceCreateInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
+
+			VkFence fence;
+			VKDebug(vkCreateFence(getVkDevice(), &fenceCreateInfo, nullptr, &fence));
+
+			// Submit to the queue
+			VKDebug(vkQueueSubmit(queue, 1, &submitInfo, fence));
+
+			// Wait for the fence to signal that command buffer has finished executing
+			VKDebug(vkWaitForFences(getVkDevice(), 1, &fence, VK_TRUE, UINT64_MAX));
+			vkDestroyFence(getVkDevice(), fence, nullptr);
+
+			if (free)
+				vkFreeCommandBuffers(getVkDevice(), getVkCommandPool(), 1, &commandBuffer);
+		}
+	}
+
     void VKRenderer::onSize(int width, int height)
     {
 		m_screenWidth = width;

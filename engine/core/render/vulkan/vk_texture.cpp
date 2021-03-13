@@ -16,7 +16,7 @@ namespace Echo
 
 	}
 
-	bool VKTexture::createVkImage(PixelFormat format, i32 width, i32 height, i32 depth, VkImageUsageFlags usage, VkFlags requirementsMask)
+	bool VKTexture::createVkImage(PixelFormat format, i32 width, i32 height, i32 depth, VkImageUsageFlags usage, VkFlags requirementsMask, VkImageTiling tiling, VkImageLayout initialLayout)
 	{
 		destroyVkImage();
 
@@ -30,12 +30,12 @@ namespace Echo
 		imageCreateInfo.mipLevels = 1;
 		imageCreateInfo.arrayLayers = 1;
 		imageCreateInfo.samples = VK_SAMPLE_COUNT_1_BIT;
-		imageCreateInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
+		imageCreateInfo.tiling = tiling;
 		imageCreateInfo.usage = usage;
 		imageCreateInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 		imageCreateInfo.queueFamilyIndexCount = 0;
 		imageCreateInfo.pQueueFamilyIndices = nullptr;
-		imageCreateInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+		imageCreateInfo.initialLayout = initialLayout;
 
 		VKDebug(vkCreateImage(VKRenderer::instance()->getVkDevice(), &imageCreateInfo, nullptr, &m_vkImage));
 		if (m_vkImage)
@@ -141,27 +141,61 @@ namespace Echo
 	}
 
 	// https://github.com/SaschaWillems/Vulkan/blob/master/examples/texture/texture.cpp
-	void VKTexture::setVkImageSurfaceData(int level, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, const Buffer& buff)
+	void VKTexture::setVkImageSurfaceData(int level, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, const Buffer& buff, bool isUseStaging)
 	{
-		return;
-
-		void* data = nullptr;
-		if (VK_SUCCESS == vkMapMemory(VKRenderer::instance()->getVkDevice(), m_vkImageMemory, 0, buff.getSize(), 0, &data))
+		if (isUseStaging)
 		{
-			memcpy(data, buff.getData(), buff.getSize());
 
-			VkMappedMemoryRange flushRange;
-			flushRange.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
-			flushRange.pNext = nullptr;
-			flushRange.memory = m_vkImageMemory;
-			flushRange.offset = 0;
-			flushRange.size = buff.getSize();
-			vkFlushMappedMemoryRanges(VKRenderer::instance()->getVkDevice(), 1, &flushRange);
-			vkUnmapMemory(VKRenderer::instance()->getVkDevice(), m_vkImageMemory);
 		}
 		else
 		{
-			EchoLogError("Vulkan vkMapMemory failed");
+			void* data = nullptr;
+			if (VK_SUCCESS == vkMapMemory(VKRenderer::instance()->getVkDevice(), m_vkImageMemory, 0, buff.getSize(), 0, &data))
+			{
+				memcpy(data, buff.getData(), buff.getSize());
+				vkUnmapMemory(VKRenderer::instance()->getVkDevice(), m_vkImageMemory);
+
+				// setup image memory barrier transfer image to shader read layout
+				VkCommandBuffer copyCmd = VKRenderer::instance()->createVkCommandBuffer();
+
+				// the sub resource range describes the regions of the image we will be transition
+				VkImageSubresourceRange subResourcesRange = {};
+				subResourcesRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+				subResourcesRange.baseMipLevel = 0;
+				subResourcesRange.levelCount = 1;
+				subResourcesRange.layerCount = 1;
+
+				// transition the texture image layout to shader read, so it can be sampled from
+				VkImageMemoryBarrier imageMemoryBarrier = {};
+				imageMemoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+				imageMemoryBarrier.pNext = nullptr;
+				imageMemoryBarrier.srcAccessMask = VK_ACCESS_HOST_WRITE_BIT;
+				imageMemoryBarrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+				imageMemoryBarrier.oldLayout = VK_IMAGE_LAYOUT_PREINITIALIZED;
+				imageMemoryBarrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+				imageMemoryBarrier.srcQueueFamilyIndex = VKRenderer::instance()->getGraphicsQueueFamilyIndex();
+				imageMemoryBarrier.dstQueueFamilyIndex = VKRenderer::instance()->getGraphicsQueueFamilyIndex();
+				imageMemoryBarrier.image = m_vkImage;
+				imageMemoryBarrier.subresourceRange = subResourcesRange;
+
+				// insert a memory dependency at the proper pipeline stages that will execute the image layout transition
+				// source pipeline stage is host write/read execution (VK_PIPELINE_STAGE_HOST_BIT)
+				// destination pipeline stage fragment shader access (VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT)
+				vkCmdPipelineBarrier(
+					copyCmd,
+					VK_PIPELINE_STAGE_HOST_BIT,
+					VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+					0,
+					0, nullptr,
+					0, nullptr,
+					1, &imageMemoryBarrier);
+
+				VKRenderer::instance()->flushVkCommandBuffer(copyCmd, VKRenderer::instance()->getVkGraphicsQueue(), true);
+			}
+			else
+			{
+				EchoLogError("Vulkan vkMapMemory failed");
+			}
 		}
 	}
 
@@ -206,12 +240,14 @@ namespace Echo
 				m_numMipmaps = image->getNumMipmaps() ? image->getNumMipmaps() : 1;
 
 				VkImageUsageFlags vkUsageFlags = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
-				VkFlags requirementsMask = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-				if (createVkImage(m_pixFmt, m_width, m_height, m_depth, vkUsageFlags, requirementsMask))
+				VkFlags requirementsMask = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;// VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+				VkImageTiling tiling = VK_IMAGE_TILING_LINEAR;
+				VkImageLayout initialLayout = VK_IMAGE_LAYOUT_PREINITIALIZED;
+				if (createVkImage(m_pixFmt, m_width, m_height, m_depth, vkUsageFlags, requirementsMask, tiling, initialLayout))
 				{
 					ui32 pixelsSize = PixelUtil::CalcSurfaceSize(m_width, m_height, m_depth, m_numMipmaps, m_pixFmt);
 					Buffer buff(pixelsSize, image->getData(), false);
-					setVkImageSurfaceData(0, m_pixFmt, m_usage, m_width, m_height, buff);
+					setVkImageSurfaceData(0, m_pixFmt, m_usage, m_width, m_height, buff, false);
 
 					EchoSafeDelete(image, Image);
 					return true;
@@ -253,11 +289,13 @@ namespace Echo
 
 		VkImageUsageFlags vkUsageFlags = PixelUtil::IsDepth(format) ? VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT : VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 		VkFlags requirementsMask = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
-        createVkImage(m_pixFmt, m_width, m_height, m_depth, vkUsageFlags, requirementsMask);
+		VkImageTiling tiling = VK_IMAGE_TILING_OPTIMAL;
+		VkImageLayout initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        createVkImage(m_pixFmt, m_width, m_height, m_depth, vkUsageFlags, requirementsMask, tiling, initialLayout);
 
 		ui32 pixelsSize = PixelUtil::CalcSurfaceSize(m_width, m_height, m_depth, m_numMipmaps, m_pixFmt);
 		Buffer buff(pixelsSize, data, false);
-        setVkImageSurfaceData(0, m_pixFmt, m_usage, m_width, m_height, buff);
+        setVkImageSurfaceData(0, m_pixFmt, m_usage, m_width, m_height, buff, true);
 
         return true;
     }

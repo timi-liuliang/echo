@@ -21,7 +21,7 @@ namespace Echo
 
 	protected:
 		// VkImage
-		bool createVkImage(PixelFormat format, i32 width, i32 height, i32 depth, VkImageUsageFlags usage, VkFlags requirementsMask);
+		bool createVkImage(PixelFormat format, i32 width, i32 height, i32 depth, VkImageUsageFlags usage, VkFlags requirementsMask, VkImageTiling tiling, VkImageLayout initialLayout);
 		void destroyVkImage();
 
 		// VkImageMemory
@@ -40,7 +40,7 @@ namespace Echo
         void createDescriptorImageInfo();
 
 		// set surface data
-		void setVkImageSurfaceData(int level, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, const Buffer& buff);
+		void setVkImageSurfaceData(int level, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, const Buffer& buff, bool isUseStaging);
 
 	protected:
 		VkImage                 m_vkImage = VK_NULL_HANDLE;
