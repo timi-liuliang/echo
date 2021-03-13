@@ -75,8 +75,8 @@ namespace Echo
 		VkShaderModule	                    m_vkFragmentShader = VK_NULL_HANDLE;
         spirv_cross::Compiler*              m_vertexShaderCompiler = nullptr;
         spirv_cross::Compiler*              m_fragmentShaderCompiler = nullptr;
-        array<VkPipelineSSCI, 2>            m_vkShaderStagesCreateInfo;
-        array<VkDescriptorSetLayout, 2>     m_vkDescriptorSetLayouts;
+        array<VkPipelineSSCI, 2>            m_vkShaderStagesCreateInfo = {};
+        array<VkDescriptorSetLayout, 2>     m_vkDescriptorSetLayouts = { VK_NULL_HANDLE, VK_NULL_HANDLE };
         VkPipelineLayout                    m_vkPipelineLayout = VK_NULL_HANDLE;
         vector<Byte>::type                  m_vertexShaderUniformBytes;
         vector<Byte>::type                  m_fragmentShaderUniformBytes;

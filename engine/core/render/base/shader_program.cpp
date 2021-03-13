@@ -45,7 +45,7 @@ layout(binding = 0) uniform UBO
 } fs_ubo;
 
 // uniforms
-layout(binding = 3) uniform sampler2D BaseColor;
+layout(set=1, binding = 3) uniform sampler2D BaseColor;
 
 // inputs
 layout(location = 0) in vec2  v_TexCoord;

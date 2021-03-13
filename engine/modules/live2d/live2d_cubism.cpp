@@ -49,7 +49,6 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(Live2dCubism, "Motion", Variant::Type::ResourcePath, "getMotionRes", "setMotionRes");
 	}
 
-	// parse paramters
 	void Live2dCubism::parseParams()
 	{
 		int paramerCount = csmGetParameterCount(m_model);
@@ -164,7 +163,6 @@ namespace Echo
 		}
 	}
 
-	// parse canvas info
 	void Live2dCubism::parseCanvasInfo()
 	{
 		csmVector2 sizeInPixels;
