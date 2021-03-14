@@ -92,7 +92,7 @@ namespace Echo
 		// create states
 		virtual RasterizerState* createRasterizerState() = 0;
 		virtual DepthStencilState* createDepthStencilState() = 0;
-		virtual BlendState*	createBlendState(const BlendState::BlendDesc& desc) = 0;
+		virtual BlendState*	createBlendState() = 0;
         virtual MultisampleState* createMultisampleState() = 0;
 		virtual SamplerState* createSamplerState(const SamplerState::SamplerDesc& desc) = 0;
 

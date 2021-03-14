@@ -146,9 +146,9 @@ namespace Echo
         return EchoNew(VKDepthStencilState);
     }
 
-    BlendState* VKRenderer::createBlendState(const BlendState::BlendDesc& desc)
+    BlendState* VKRenderer::createBlendState()
     {
-        return EchoNew(VKBlendState(desc));
+        return EchoNew(VKBlendState);
     }
 
     MultisampleState* VKRenderer::createMultisampleState()

@@ -20,7 +20,7 @@ namespace Echo
 
     bool VKRenderable::createVkPipeline(VKFramebuffer* vkFrameBuffer)
     {
-        if (m_vkPipelineInfo.renderPass != vkFrameBuffer->getVkRenderPass())
+        if (m_vkPipelineInfo.renderPass != vkFrameBuffer->getVkRenderPass() || isVkStateDirty())
         {
 			destroyVkPipeline();
 
@@ -198,6 +198,30 @@ namespace Echo
 
             vkCmdBindIndexBuffer(vkCommandbuffer, indexBuffer->getVkBuffer(), 0, idxType);
         }
+    }
+
+    bool VKRenderable::isVkStateDirty()
+    {
+        if (m_material)
+        {
+            ShaderProgram* shader = m_material->getShader();
+            if (shader)
+            {
+                if (shader->getBlendState()->isDirty())
+                    return true;
+
+                if (shader->getRasterizerState()->isDirty())
+                    return true;
+
+                if (shader->getDepthStencilState()->isDirty())
+                    return true;
+
+                if (shader->getMultisampleState()->isDirty())
+                    return true;
+            }
+        }
+
+        return false;
     }
 
     const VkPipelineColorBlendStateCreateInfo* VKRenderable::getVkColorBlendStateCreateInfo()

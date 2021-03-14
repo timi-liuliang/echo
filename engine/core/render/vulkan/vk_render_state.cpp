@@ -5,47 +5,70 @@
 
 namespace Echo
 {
-    VKBlendState::VKBlendState(const BlendDesc& desc)
-        : BlendState(desc)
+    VKBlendState::VKBlendState()
+        : BlendState()
     {
-        m_blendAttachState = {};
-        m_blendAttachState.blendEnable = desc.bBlendEnable ? VK_TRUE : VK_FALSE;
-        m_blendAttachState.srcColorBlendFactor = VKMapping::mapBlendFactor(desc.srcBlend);
-        m_blendAttachState.dstColorBlendFactor = VKMapping::mapBlendFactor(desc.dstBlend);
-        m_blendAttachState.colorBlendOp = VKMapping::mapBlendOperation(desc.blendOP);
-        m_blendAttachState.srcAlphaBlendFactor = VKMapping::mapBlendFactor(desc.srcAlphaBlend);
-        m_blendAttachState.dstAlphaBlendFactor = VKMapping::mapBlendFactor(desc.dstAlphaBlend);
-        m_blendAttachState.alphaBlendOp = VKMapping::mapBlendOperation(desc.alphaBlendOP);;
-        m_blendAttachState.colorWriteMask = desc.colorWriteMask;
 
-        m_vkColorBlendStateCreateInfo = {};
-        m_vkColorBlendStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-        m_vkColorBlendStateCreateInfo.pNext = nullptr;
-        m_vkColorBlendStateCreateInfo.flags = 0;
-        m_vkColorBlendStateCreateInfo.logicOpEnable = VK_FALSE;
-        m_vkColorBlendStateCreateInfo.logicOp = VK_LOGIC_OP_CLEAR;
-        m_vkColorBlendStateCreateInfo.attachmentCount = 1;
-        m_vkColorBlendStateCreateInfo.pAttachments = &m_blendAttachState;
-        m_vkColorBlendStateCreateInfo.blendConstants[0] = desc.blendFactor.r;
-        m_vkColorBlendStateCreateInfo.blendConstants[1] = desc.blendFactor.g;
-        m_vkColorBlendStateCreateInfo.blendConstants[2] = desc.blendFactor.b;
-        m_vkColorBlendStateCreateInfo.blendConstants[3] = desc.blendFactor.a;
+    }
+
+	const VkPipelineColorBlendStateCreateInfo* VKBlendState::getVkCreateInfo()
+    { 
+        if (m_dirty)
+        {
+			m_blendAttachState = {};
+			m_blendAttachState.blendEnable = m_blendEnable ? VK_TRUE : VK_FALSE;
+			m_blendAttachState.srcColorBlendFactor = VKMapping::mapBlendFactor(m_srcBlend);
+			m_blendAttachState.dstColorBlendFactor = VKMapping::mapBlendFactor(m_dstBlend);
+			m_blendAttachState.colorBlendOp = VKMapping::mapBlendOperation(m_blendOP);
+			m_blendAttachState.srcAlphaBlendFactor = VKMapping::mapBlendFactor(m_srcAlphaBlend);
+			m_blendAttachState.dstAlphaBlendFactor = VKMapping::mapBlendFactor(m_dstAlphaBlend);
+			m_blendAttachState.alphaBlendOp = VKMapping::mapBlendOperation(m_alphaBlendOP);;
+			m_blendAttachState.colorWriteMask = m_colorWriteMask;
+
+			m_vkColorBlendStateCreateInfo = {};
+			m_vkColorBlendStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+			m_vkColorBlendStateCreateInfo.pNext = nullptr;
+			m_vkColorBlendStateCreateInfo.flags = 0;
+			m_vkColorBlendStateCreateInfo.logicOpEnable = VK_FALSE;
+			m_vkColorBlendStateCreateInfo.logicOp = VK_LOGIC_OP_CLEAR;
+			m_vkColorBlendStateCreateInfo.attachmentCount = 1;
+			m_vkColorBlendStateCreateInfo.pAttachments = &m_blendAttachState;
+			m_vkColorBlendStateCreateInfo.blendConstants[0] = m_blendFactor.r;
+			m_vkColorBlendStateCreateInfo.blendConstants[1] = m_blendFactor.g;
+			m_vkColorBlendStateCreateInfo.blendConstants[2] = m_blendFactor.b;
+			m_vkColorBlendStateCreateInfo.blendConstants[3] = m_blendFactor.a;
+
+            m_dirty = false;
+        }
+
+        return &m_vkColorBlendStateCreateInfo; 
     }
 
     VKDepthStencilState::VKDepthStencilState()
         : DepthStencilState()
     {
-        m_vkDepthStencilStateCreateInfo = {};
-        m_vkDepthStencilStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
-        m_vkDepthStencilStateCreateInfo.depthTestEnable = bDepthEnable ? VK_TRUE : VK_FALSE;
-        m_vkDepthStencilStateCreateInfo.depthWriteEnable = bWriteDepth ? VK_TRUE : VK_FALSE;
-        m_vkDepthStencilStateCreateInfo.depthCompareOp = VK_COMPARE_OP_ALWAYS;
-        m_vkDepthStencilStateCreateInfo.depthBoundsTestEnable = VK_FALSE;
-        m_vkDepthStencilStateCreateInfo.back.failOp = VK_STENCIL_OP_KEEP;
-        m_vkDepthStencilStateCreateInfo.back.passOp = VK_STENCIL_OP_KEEP;
-        m_vkDepthStencilStateCreateInfo.back.compareOp = VK_COMPARE_OP_ALWAYS;
-        m_vkDepthStencilStateCreateInfo.stencilTestEnable = VK_FALSE;
-        m_vkDepthStencilStateCreateInfo.front = m_vkDepthStencilStateCreateInfo.back;
+    }
+
+	const VkPipelineDepthStencilStateCreateInfo* VKDepthStencilState::getVkCreateInfo()
+    { 
+        if (m_dirty)
+        {
+			m_vkDepthStencilStateCreateInfo = {};
+			m_vkDepthStencilStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+			m_vkDepthStencilStateCreateInfo.depthTestEnable = m_depthEnable ? VK_TRUE : VK_FALSE;
+			m_vkDepthStencilStateCreateInfo.depthWriteEnable = m_writeDepth ? VK_TRUE : VK_FALSE;
+            m_vkDepthStencilStateCreateInfo.depthCompareOp = VKMapping::mapCompareOperation(m_depthFunc);
+			m_vkDepthStencilStateCreateInfo.depthBoundsTestEnable = VK_FALSE;
+			m_vkDepthStencilStateCreateInfo.back.failOp = VK_STENCIL_OP_KEEP;
+			m_vkDepthStencilStateCreateInfo.back.passOp = VK_STENCIL_OP_KEEP;
+			m_vkDepthStencilStateCreateInfo.back.compareOp = VK_COMPARE_OP_ALWAYS;
+			m_vkDepthStencilStateCreateInfo.stencilTestEnable = VK_FALSE;
+			m_vkDepthStencilStateCreateInfo.front = m_vkDepthStencilStateCreateInfo.back;
+
+            m_dirty = false;
+        }
+
+        return &m_vkDepthStencilStateCreateInfo; 
     }
 
     VKRasterizerState::VKRasterizerState()

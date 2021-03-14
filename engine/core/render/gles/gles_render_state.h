@@ -65,7 +65,7 @@ namespace Echo
 	class GLESBlendState: public BlendState
 	{
 	public:
-		GLESBlendState(const BlendDesc &desc);
+		GLESBlendState();
 		~GLESBlendState();
 
 		// create

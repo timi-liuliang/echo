@@ -459,15 +459,13 @@ namespace Echo
     { 
         if (!m_blendState)
         {
-            BlendState::BlendDesc desc;
+            m_blendState = Renderer::instance()->createBlendState();
             if (m_blendMode.getIdx() == 1)
             {
-                desc.bBlendEnable = true;
-				desc.srcBlend = BlendState::BF_SRC_ALPHA;
-				desc.dstBlend = BlendState::BF_INV_SRC_ALPHA;
+                m_blendState->setBlendEnable(true);
+                m_blendState->setSrcBlend(BlendState::BF_SRC_ALPHA);
+                m_blendState->setDstBlend(BlendState::BF_INV_SRC_ALPHA);
             }
-
-            m_blendState = Renderer::instance()->createBlendState(desc);
         }
 
         return m_blendState; 

@@ -420,9 +420,9 @@ namespace Echo
 		return EchoNew(GLESDepthStencilState);
 	}
 
-	BlendState* GLESRenderer::createBlendState(const BlendState::BlendDesc& desc)
+	BlendState* GLESRenderer::createBlendState()
 	{
-		return EchoNew(GLESBlendState(desc));
+		return EchoNew(GLESBlendState);
 	}
 
 	SamplerState* GLESRenderer::createSamplerState(const SamplerState::SamplerDesc& desc)

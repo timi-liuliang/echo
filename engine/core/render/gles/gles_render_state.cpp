@@ -8,8 +8,8 @@
 
 namespace Echo
 {
-	GLESBlendState::GLESBlendState(const BlendDesc& desc)
-		: BlendState(desc)
+	GLESBlendState::GLESBlendState()
+		: BlendState()
 	{
 		create();
 	}
@@ -22,8 +22,8 @@ namespace Echo
 	{
 		BlendStateParams blendParams;
 		memset(&blendParams, 0, sizeof(blendParams));
-		blendParams.isA2CEnable = m_desc.bA2CEnable;
-		blendParams.isBlendEnable = m_desc.bBlendEnable;
+		blendParams.isA2CEnable = m_a2cEnable;
+		blendParams.isBlendEnable = m_blendEnable;
 		blendParams.blend_op = m_glBlendOP;
 		blendParams.alpha_blend_op = m_glAlphaBlendOP;
 		blendParams.src_blend = m_glSrcBlend;
@@ -34,42 +34,40 @@ namespace Echo
 		blendParams.green_mask = m_glGreenMask;
 		blendParams.blue_mask = m_glBlueMask;
 		blendParams.alpha_mask = m_glAlphaMask;
-		blendParams.blendFactor = m_desc.blendFactor;
+		blendParams.blendFactor = m_blendFactor;
 
 		BlendState* pCurState = (ECHO_DOWN_CAST<GLESRenderer*>(Renderer::instance()))->getBlendState();
 		if(pCurState)
 		{
-			const BlendDesc& currDesc = pCurState->getDesc();
-
-			if (m_desc.bA2CEnable != currDesc.bA2CEnable)
+			if (m_a2cEnable != pCurState->m_a2cEnable)
 			{
 				blendParams.isChangeA2C = true;
 			}
 
-			if (m_desc.bBlendEnable != currDesc.bBlendEnable)
+			if (m_blendEnable != pCurState->m_blendEnable)
 			{
 				blendParams.isChangeBlendEnable = true;
 			}
 
-			if (m_desc.blendOP != currDesc.blendOP)
+			if (m_blendOP != pCurState->m_blendOP)
 			{
 				blendParams.isChangeBlendOp = true;
 			}
 
-			if ((m_desc.srcBlend != currDesc.srcBlend) ||
-				(m_desc.dstBlend != currDesc.dstBlend) ||
-				(m_desc.srcAlphaBlend != currDesc.srcAlphaBlend) ||
-				(m_desc.dstAlphaBlend != currDesc.dstAlphaBlend))
+			if ((m_srcBlend != pCurState->m_srcBlend) ||
+				(m_dstBlend != pCurState->m_dstBlend) ||
+				(m_srcAlphaBlend != pCurState->m_srcAlphaBlend) ||
+				(m_dstAlphaBlend != pCurState->m_dstAlphaBlend))
 			{
 				blendParams.isChangeBlendFunc = true;
 			}
 
-			if (m_desc.colorWriteMask != currDesc.colorWriteMask)
+			if (m_colorWriteMask != pCurState->m_colorWriteMask)
 			{
 				blendParams.isChangeColorWriteMask = true;
 			}
 
-			if (m_desc.blendFactor != currDesc.blendFactor)
+			if (m_blendFactor != pCurState->m_blendFactor)
 			{
 				blendParams.isChangeBlendFactor = true;
 			}
@@ -136,16 +134,16 @@ namespace Echo
 
 	void GLESBlendState::create()
 	{
-		m_glBlendOP = GLESMapping::MapBlendOperation(m_desc.blendOP);
-		m_glAlphaBlendOP = GLESMapping::MapBlendOperation(m_desc.alphaBlendOP);
-		m_glSrcBlend = GLESMapping::MapBlendFactor(m_desc.srcBlend);
-		m_glDstBlend = GLESMapping::MapBlendFactor(m_desc.dstBlend);
-		m_glSrcAlphaBlend = GLESMapping::MapBlendFactor(m_desc.srcAlphaBlend);
-		m_glDstAlphaBlend = GLESMapping::MapBlendFactor(m_desc.dstAlphaBlend);
-		m_glRedMask = (m_desc.colorWriteMask & CMASK_RED) != 0;
-		m_glGreenMask = (m_desc.colorWriteMask & CMASK_GREEN) != 0;
-		m_glBlueMask = (m_desc.colorWriteMask & CMASK_BLUE) != 0;
-		m_glAlphaMask = (m_desc.colorWriteMask & CMASK_ALPHA) != 0;
+		m_glBlendOP = GLESMapping::MapBlendOperation(m_blendOP);
+		m_glAlphaBlendOP = GLESMapping::MapBlendOperation(m_alphaBlendOP);
+		m_glSrcBlend = GLESMapping::MapBlendFactor(m_srcBlend);
+		m_glDstBlend = GLESMapping::MapBlendFactor(m_dstBlend);
+		m_glSrcAlphaBlend = GLESMapping::MapBlendFactor(m_srcAlphaBlend);
+		m_glDstAlphaBlend = GLESMapping::MapBlendFactor(m_dstAlphaBlend);
+		m_glRedMask = (m_colorWriteMask & CMASK_RED) != 0;
+		m_glGreenMask = (m_colorWriteMask & CMASK_GREEN) != 0;
+		m_glBlueMask = (m_colorWriteMask & CMASK_BLUE) != 0;
+		m_glAlphaMask = (m_colorWriteMask & CMASK_ALPHA) != 0;
 	}
 
 	GLESDepthStencilState::GLESDepthStencilState()
@@ -161,8 +159,8 @@ namespace Echo
 	{
 		if (m_dirty)
 		{
-			m_glDepthMask = bWriteDepth ? GL_TRUE : GL_FALSE;
-			m_glDepthFunc = GLESMapping::MapComparisonFunc(depthFunc);
+			m_glDepthMask = m_writeDepth ? GL_TRUE : GL_FALSE;
+			m_glDepthFunc = GLESMapping::MapComparisonFunc(m_depthFunc);
 			m_glFrontStencilFunc = GLESMapping::MapComparisonFunc(frontStencilFunc);
 			m_glFrontStencilFailOP = GLESMapping::MapStencilOperation(frontStencilFailOP);
 			m_glFrontStencilDepthFailOP = GLESMapping::MapStencilOperation(frontStencilDepthFailOP);
@@ -177,9 +175,9 @@ namespace Echo
 
 		DepthStencilStateParams depthStencilParams;
 		memset(&depthStencilParams, 0, sizeof(depthStencilParams));
-		depthStencilParams.isEnableDepthTest = bDepthEnable;
+		depthStencilParams.isEnableDepthTest = m_depthEnable;
 		depthStencilParams.isEnableStencilTest = bFrontStencilEnable || bBackStencilEnable;
-		depthStencilParams.isWriteDepth = bWriteDepth;
+		depthStencilParams.isWriteDepth = m_writeDepth;
 		depthStencilParams.frontStencilRef = frontStencilRef;
 		depthStencilParams.frontStencilReadMask = frontStencilReadMask;
 		depthStencilParams.frontStencilWriteMask = frontStencilWriteMask;
@@ -199,17 +197,17 @@ namespace Echo
 		DepthStencilState* pCurState = (ECHO_DOWN_CAST<GLESRenderer*>(Renderer::instance()))->getDepthStencilState();
 		if(pCurState)
 		{
-			if (bDepthEnable != pCurState->bDepthEnable)
+			if (m_depthEnable != pCurState->m_depthEnable)
 			{
 				depthStencilParams.isChangeDepthTest = true;
 			}
 
-			if (bWriteDepth != pCurState->bWriteDepth)
+			if (m_writeDepth != pCurState->m_writeDepth)
 			{
 				depthStencilParams.isChangeDepthWrite = true;
 			}
 
-			if (depthFunc != pCurState->depthFunc)
+			if (m_depthFunc != pCurState->m_depthFunc)
 			{
 				depthStencilParams.isSetDepthFunc = true;
 			}

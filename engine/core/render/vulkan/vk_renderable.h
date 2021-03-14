@@ -36,6 +36,9 @@ namespace Echo
         // get vertex attribute by semantic
         bool getVkVertexAttributeBySemantic(VertexSemantic semantic, spirv_cross::Resource& oResource);
 
+        // is state dirty
+        bool isVkStateDirty();
+
         // get blend state create info
         const VkPipelineColorBlendStateCreateInfo* getVkColorBlendStateCreateInfo();
 

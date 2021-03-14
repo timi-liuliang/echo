@@ -77,60 +77,32 @@ namespace Echo
 			BF_MAX,
 		};
 
-		struct RenderTargetBlendDesc
-		{
-			
-		};
-
-		struct BlendDesc
-		{
-			bool				bBlendEnable;
-			BlendFactor			srcBlend;
-			BlendFactor			dstBlend;
-			BlendOperation		blendOP;
-			BlendFactor			srcAlphaBlend;
-			BlendFactor			dstAlphaBlend;
-			BlendOperation		alphaBlendOP;
-			ui8					colorWriteMask;
-
-			bool				bA2CEnable;
-			bool				bIndependBlendEnable;
-			Color				blendFactor;
-
-			void reset()
-			{
-				bBlendEnable	= false;
-				srcBlend		= BF_ONE;
-				dstBlend		= BF_ZERO;
-				blendOP			= BOP_ADD;
-				srcAlphaBlend	= BF_ONE;
-				dstAlphaBlend	= BF_ZERO;
-				alphaBlendOP	= BOP_ADD;
-				colorWriteMask	= CMASK_COLOR;
-
-				bA2CEnable = false;
-				bIndependBlendEnable	= false;
-
-				blendFactor.r = 0;
-				blendFactor.g = 0;
-				blendFactor.b = 0;
-				blendFactor.a = 0;
-			}
-
-			BlendDesc()
-			{
-				reset();
-			}
-		};
-
-		BlendState(const BlendDesc& desc);
+		BlendState();
 		virtual ~BlendState();
 
-	public:
-		const BlendDesc&	getDesc() const;
+		// blend enable
+		bool isBlendEnable() const { return m_blendEnable; }
+		void setBlendEnable(bool enable);
 
-	protected:
-		BlendDesc		m_desc;
+		// src blend
+		BlendFactor getSrcBlend() const { return m_srcBlend; }
+		void setSrcBlend(BlendFactor blendFactor);
+
+		// dst blend
+		BlendFactor getDstBlend() const { return m_dstBlend; }
+		void setDstBlend(BlendFactor blendFactor);
+
+	public:
+		bool				m_blendEnable = false;
+		BlendFactor			m_srcBlend = BF_ONE;
+		BlendFactor			m_dstBlend = BF_ZERO;
+		BlendOperation		m_blendOP = BOP_ADD;
+		BlendFactor			m_srcAlphaBlend = BF_ONE;
+		BlendFactor			m_dstAlphaBlend = BF_ZERO;
+		BlendOperation		m_alphaBlendOP = BOP_ADD;
+		ui8					m_colorWriteMask = CMASK_COLOR;
+		bool				m_a2cEnable = false;
+		Color				m_blendFactor = { 0.f, 0.f, 0.f, 0.f};
 	};
 
 	class DepthStencilState: public RenderState
@@ -168,17 +140,17 @@ namespace Echo
 
 	public:
 		// depth enable
-		bool isDepthEnable() const { return bDepthEnable; }
+		bool isDepthEnable() const { return m_depthEnable; }
 		void setDepthEnable(bool enable);
 
 		// write depth
-		bool isWriteDepth() const { return bWriteDepth; }
+		bool isWriteDepth() const { return m_writeDepth; }
 		void setWriteDepth(bool writeDepth);
 
 	public:
-		bool				bDepthEnable = true;
-		bool				bWriteDepth = true;
-		ComparisonFunc		depthFunc = CF_LESS;
+		bool				m_depthEnable = true;
+		bool				m_writeDepth = true;
+		ComparisonFunc		m_depthFunc = CF_LESS;
 
 		bool				bFrontStencilEnable = false;
 		ComparisonFunc		frontStencilFunc = CF_ALWAYS;

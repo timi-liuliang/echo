@@ -17,8 +17,7 @@ namespace Echo
 
 	}
 
-	BlendState::BlendState(const BlendDesc& desc)
-		: m_desc(desc)
+	BlendState::BlendState()
 	{
 	}
 
@@ -26,9 +25,31 @@ namespace Echo
 	{
 	}
 
-	const BlendState::BlendDesc& BlendState::getDesc() const
+	void BlendState::setBlendEnable(bool enable)
 	{
-		return m_desc;
+		if (m_blendEnable != enable)
+		{
+			m_blendEnable = enable;
+			setDirty(true);
+		}
+	}
+
+	void BlendState::setSrcBlend(BlendFactor blendFactor)
+	{
+		if (m_srcBlend != blendFactor)
+		{
+			m_srcBlend = blendFactor;
+			setDirty(true);
+		}
+	}
+
+	void BlendState::setDstBlend(BlendFactor blendFactor)
+	{
+		if (m_dstBlend != blendFactor)
+		{
+			m_dstBlend = blendFactor;
+			setDirty(true);
+		}
 	}
 
 	DepthStencilState::~DepthStencilState()
@@ -53,18 +74,18 @@ namespace Echo
 
 	void DepthStencilState::setDepthEnable(bool enable)
 	{ 
-		if (bDepthEnable != enable)
+		if (m_depthEnable != enable)
 		{
-			bDepthEnable = enable;
+			m_depthEnable = enable;
 			setDirty(true);
 		}
 	}
 
 	void DepthStencilState::setWriteDepth(bool writeDepth)
 	{ 
-		if (bWriteDepth != writeDepth)
+		if (m_writeDepth != writeDepth)
 		{
-			bWriteDepth = writeDepth; 
+			m_writeDepth = writeDepth; 
 			setDirty(true);
 		}
 	}

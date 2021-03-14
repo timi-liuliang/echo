@@ -8,11 +8,11 @@ namespace Echo
 	class VKBlendState : public BlendState
 	{
 	public:
-        VKBlendState(const BlendDesc &desc);
+        VKBlendState();
         virtual ~VKBlendState(){}
 
         // get vk create info
-        const VkPipelineColorBlendStateCreateInfo* getVkCreateInfo() { return &m_vkColorBlendStateCreateInfo; }
+        const VkPipelineColorBlendStateCreateInfo* getVkCreateInfo();
 
     private:
         VkPipelineColorBlendAttachmentState     m_blendAttachState;
@@ -26,7 +26,7 @@ namespace Echo
         virtual ~VKDepthStencilState() {}
 
         // get vk create info
-        const VkPipelineDepthStencilStateCreateInfo* getVkCreateInfo() { return &m_vkDepthStencilStateCreateInfo; }
+        const VkPipelineDepthStencilStateCreateInfo* getVkCreateInfo();
 
     private:
         VkPipelineDepthStencilStateCreateInfo m_vkDepthStencilStateCreateInfo;

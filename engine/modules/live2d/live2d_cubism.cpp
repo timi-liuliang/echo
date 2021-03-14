@@ -176,7 +176,6 @@ namespace Echo
 		m_canvas.m_pixelsPerUnit = pixelsPerUnit;
 	}
 
-	// set moc
 	void Live2dCubism::setMoc(const ResourcePath& res)
 	{
 		if (m_mocRes.setPath(res.getPath()))
@@ -235,7 +234,6 @@ namespace Echo
 		}
 	}
 
-	// set parameter value
 	void Live2dCubism::setParameter(const String& name, float value)
 	{
 		float* curValues = csmGetParameterValues(m_model);
@@ -249,13 +247,11 @@ namespace Echo
 		}
 	}
 
-	// set material
 	void Live2dCubism::setMaterial(Object* material)
 	{
 		m_material = (Material*)material;
 	}
 
-	// build drawable
 	void Live2dCubism::buildRenderable()
 	{
 		if (!m_textureRes.getPath().empty() && !m_drawables.empty())
@@ -275,7 +271,6 @@ namespace Echo
 		}
 	}
 
-	// update per frame
 	void Live2dCubism::update_self()
 	{
 		if (isNeedRender())

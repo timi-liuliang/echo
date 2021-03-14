@@ -31,6 +31,9 @@ namespace Echo
         // mapping blend operation
         static VkBlendOp mapBlendOperation(BlendState::BlendOperation op);
 
+        // maping compare operation
+        static VkCompareOp mapCompareOperation(RenderState::ComparisonFunc op);
+
         // mapping pixel format
         static VkFormat mapPixelFormat(PixelFormat pixFmt);
 

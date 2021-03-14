@@ -147,6 +147,26 @@ namespace Echo
 		}
 	}
 
+    VkCompareOp VKMapping::mapCompareOperation(RenderState::ComparisonFunc op)
+    {
+		switch (op)
+		{
+		case RenderState::CF_NEVER:		    return VK_COMPARE_OP_NEVER;
+        case RenderState::CF_LESS:		    return VK_COMPARE_OP_LESS;
+        case RenderState::CF_LESS_EQUAL:	return VK_COMPARE_OP_LESS_OR_EQUAL;
+        case RenderState::CF_EQUAL:		    return VK_COMPARE_OP_EQUAL;
+        case RenderState::CF_GREATER_EQUAL:	return VK_COMPARE_OP_GREATER_OR_EQUAL;
+        case RenderState::CF_GREATER:		return VK_COMPARE_OP_GREATER;
+        case RenderState::CF_ALWAYS:		return VK_COMPARE_OP_ALWAYS;
+        case RenderState::CF_NOT_EQUAL:		return VK_COMPARE_OP_NOT_EQUAL;
+		default:
+		{
+			EchoAssert(false);
+			return VK_COMPARE_OP_LESS_OR_EQUAL;
+		}
+		}
+    }
+
     VkPolygonMode VKMapping::mapPolygonMode(RasterizerState::PolygonMode mode)
     {
         switch (mode)
