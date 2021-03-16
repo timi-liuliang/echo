@@ -74,36 +74,61 @@ namespace Echo
     VKRasterizerState::VKRasterizerState()
         : RasterizerState()
     {
-        // vulkan use different clockwise, because it has special coordinate-system http://anki3d.org/vulkan-coordinate-system/
-        m_vkRasterizationStateCreateInfo = {};
-        m_vkRasterizationStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
-        m_vkRasterizationStateCreateInfo.polygonMode = VKMapping::mapPolygonMode(m_polygonMode);
-        m_vkRasterizationStateCreateInfo.cullMode = VKMapping::mapCullMode(m_cullMode);
-        m_vkRasterizationStateCreateInfo.frontFace = isFrontFaceCCW() ? VK_FRONT_FACE_CLOCKWISE : VK_FRONT_FACE_COUNTER_CLOCKWISE;
-        m_vkRasterizationStateCreateInfo.lineWidth = m_lineWidth;
+
+    }
+
+	const VkPipelineRasterizationStateCreateInfo* VKRasterizerState::getVkCreateInfo()
+    { 
+        if (m_dirty)
+        {
+			// vulkan use different clockwise, because it has special coordinate-system http://anki3d.org/vulkan-coordinate-system/
+			m_vkRasterizationStateCreateInfo = {};
+			m_vkRasterizationStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+			m_vkRasterizationStateCreateInfo.polygonMode = VKMapping::mapPolygonMode(m_polygonMode);
+			m_vkRasterizationStateCreateInfo.cullMode = VKMapping::mapCullMode(m_cullMode);
+			m_vkRasterizationStateCreateInfo.frontFace = isFrontFaceCCW() ? VK_FRONT_FACE_CLOCKWISE : VK_FRONT_FACE_COUNTER_CLOCKWISE;
+			m_vkRasterizationStateCreateInfo.lineWidth = m_lineWidth;
+
+            m_dirty = false;
+        }
+
+        return &m_vkRasterizationStateCreateInfo; 
     }
 
     VKSamplerState::VKSamplerState(const SamplerDesc& desc)
         : SamplerState(desc)
     {
-        m_vkSamplerCreateInfo = {};
-        m_vkSamplerCreateInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
-        m_vkSamplerCreateInfo.pNext = nullptr;
-        m_vkSamplerCreateInfo.flags = 0;
-        m_vkSamplerCreateInfo.magFilter = VK_FILTER_LINEAR;
-        m_vkSamplerCreateInfo.minFilter = VK_FILTER_LINEAR;
-        m_vkSamplerCreateInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
-        m_vkSamplerCreateInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-        m_vkSamplerCreateInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-        m_vkSamplerCreateInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-        m_vkSamplerCreateInfo.mipLodBias = 0.f;
-        m_vkSamplerCreateInfo.compareOp = VK_COMPARE_OP_NEVER;
-        m_vkSamplerCreateInfo.minLod = 0.f;
-        m_vkSamplerCreateInfo.maxLod = 0.f;
-        m_vkSamplerCreateInfo.maxAnisotropy = 1.f;
-        m_vkSamplerCreateInfo.borderColor = VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
-        
-        VKDebug(vkCreateSampler(VKRenderer::instance()->getVkDevice(), &m_vkSamplerCreateInfo, nullptr, &m_vkSampler));
+    }
+
+	const VkSampler VKSamplerState::getVkSampler()
+    { 
+        if (m_dirty)
+        {
+            vkDestroySampler(VKRenderer::instance()->getVkDevice(), m_vkSampler, nullptr);
+
+			m_vkSamplerCreateInfo = {};
+			m_vkSamplerCreateInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+			m_vkSamplerCreateInfo.pNext = nullptr;
+			m_vkSamplerCreateInfo.flags = 0;
+			m_vkSamplerCreateInfo.magFilter = VK_FILTER_LINEAR;
+			m_vkSamplerCreateInfo.minFilter = VK_FILTER_LINEAR;
+			m_vkSamplerCreateInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+			m_vkSamplerCreateInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+			m_vkSamplerCreateInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+			m_vkSamplerCreateInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+			m_vkSamplerCreateInfo.mipLodBias = 0.f;
+			m_vkSamplerCreateInfo.compareOp = VK_COMPARE_OP_NEVER;
+			m_vkSamplerCreateInfo.minLod = 0.f;
+			m_vkSamplerCreateInfo.maxLod = 0.f;
+			m_vkSamplerCreateInfo.maxAnisotropy = 1.f;
+			m_vkSamplerCreateInfo.borderColor = VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
+
+			VKDebug(vkCreateSampler(VKRenderer::instance()->getVkDevice(), &m_vkSamplerCreateInfo, nullptr, &m_vkSampler));
+
+            m_dirty = false;
+        }
+
+        return m_vkSampler; 
     }
 
     VKSamplerState::~VKSamplerState()
@@ -112,16 +137,28 @@ namespace Echo
     }
 
     VKMultisampleState::VKMultisampleState()
+        : MultisampleState()
     {
-        m_vkMultiSampleStateCreateInfo = {};
-        m_vkMultiSampleStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
-        m_vkMultiSampleStateCreateInfo.pNext = nullptr;
-        m_vkMultiSampleStateCreateInfo.flags = 0;
-        m_vkMultiSampleStateCreateInfo.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
-        m_vkMultiSampleStateCreateInfo.sampleShadingEnable = false;
-        m_vkMultiSampleStateCreateInfo.minSampleShading = 0.f;
-        m_vkMultiSampleStateCreateInfo.pSampleMask = nullptr;
-        m_vkMultiSampleStateCreateInfo.alphaToCoverageEnable = false;
-        m_vkMultiSampleStateCreateInfo.alphaToOneEnable = false;
+    }
+
+	const VkPipelineMultisampleStateCreateInfo* VKMultisampleState::getVkCreateInfo()
+    { 
+        if (m_dirty)
+        {
+			m_vkMultiSampleStateCreateInfo = {};
+			m_vkMultiSampleStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
+			m_vkMultiSampleStateCreateInfo.pNext = nullptr;
+			m_vkMultiSampleStateCreateInfo.flags = 0;
+			m_vkMultiSampleStateCreateInfo.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
+			m_vkMultiSampleStateCreateInfo.sampleShadingEnable = false;
+			m_vkMultiSampleStateCreateInfo.minSampleShading = 0.f;
+			m_vkMultiSampleStateCreateInfo.pSampleMask = nullptr;
+			m_vkMultiSampleStateCreateInfo.alphaToCoverageEnable = false;
+			m_vkMultiSampleStateCreateInfo.alphaToOneEnable = false;
+
+            m_dirty = false;
+        }
+
+        return &m_vkMultiSampleStateCreateInfo;
     }
 }

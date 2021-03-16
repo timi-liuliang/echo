@@ -39,7 +39,7 @@ namespace Echo
         virtual ~VKRasterizerState(){}
 
         // get vk create info
-        const VkPipelineRasterizationStateCreateInfo* getVkCreateInfo() { return &m_vkRasterizationStateCreateInfo; }
+        const VkPipelineRasterizationStateCreateInfo* getVkCreateInfo();
 
     private:
         VkPipelineRasterizationStateCreateInfo m_vkRasterizationStateCreateInfo;
@@ -52,7 +52,7 @@ namespace Echo
         virtual ~VKSamplerState();
 
         // get vk create info
-        const VkSampler getVkSampler() { return m_vkSampler; }
+        const VkSampler getVkSampler();
 
     private:
         VkSamplerCreateInfo m_vkSamplerCreateInfo;
@@ -66,7 +66,7 @@ namespace Echo
         ~VKMultisampleState() {}
 
         // get vk create info
-        const VkPipelineMultisampleStateCreateInfo* getVkCreateInfo() { return &m_vkMultiSampleStateCreateInfo; }
+        const VkPipelineMultisampleStateCreateInfo* getVkCreateInfo();
 
     private:
         VkPipelineMultisampleStateCreateInfo m_vkMultiSampleStateCreateInfo;
