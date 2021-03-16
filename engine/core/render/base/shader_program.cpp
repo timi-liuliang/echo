@@ -605,7 +605,7 @@ namespace Echo
 			shader->setDepthStencilState(depthState);
 
 			// reaster state
-			shader->setCullMode("CULL_NONE");
+			shader->setCullMode("CULL_BACK");
 
 			shader->setPath(shaderVirtualPath);
 			shader->setType("glsl");
