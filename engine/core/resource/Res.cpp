@@ -25,14 +25,17 @@ namespace Echo
 
 	static void removeResFromCache(const String& path)
 	{
-		auto it = g_ress.find(path);
-		if (it != g_ress.end())
+		if (!path.empty())
 		{
-			g_ress.erase(it);
-		}
-		else
-		{
-			EchoLogError("can't delete resource [%s] from cache", path.c_str());
+			auto it = g_ress.find(path);
+			if (it != g_ress.end())
+			{
+				g_ress.erase(it);
+			}
+			else
+			{
+				EchoLogError("can't delete resource [%s] from cache", path.c_str());
+			}
 		}
 	}
 
