@@ -66,6 +66,9 @@ namespace Echo
         // load
         virtual bool load() override;
 
+		// update data
+        virtual bool updateTexture2D(PixelFormat format, TexUsage usage, i32 width, i32 height, void* data, ui32 size);
+
 	private:
 		// convert format
 		void convertFormat(Image* image);

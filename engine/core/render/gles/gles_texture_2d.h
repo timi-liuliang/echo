@@ -10,7 +10,7 @@ namespace Echo
 
 	public:
 		// updateSubTex2D
-		bool updateTexture2D(PixelFormat format, TexUsage usage, i32 width, i32 height, void* data, ui32 size);
+		virtual bool updateTexture2D(PixelFormat format, TexUsage usage, i32 width, i32 height, void* data, ui32 size) override;
 		bool updateSubTex2D(ui32 level, const Rect& rect, void* pData, ui32 size);
 
 		// type

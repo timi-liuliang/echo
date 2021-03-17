@@ -79,6 +79,6 @@ namespace Echo
 		vector<Node>::type	m_nodes;
 		void*				m_textureData = nullptr;
 		PixelFormat			m_format = PF_RGBA8_UNORM;
-		TextureRenderPtr	m_texture;
+		TexturePtr			m_texture;
     };
 }

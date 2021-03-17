@@ -100,11 +100,13 @@ namespace Echo
 		// load operate
 		virtual bool load() { return false; }
 
+		// update data
+		virtual bool updateTexture2D(PixelFormat format, TexUsage usage, i32 width, i32 height, void* data, ui32 size) { return false; }
+
 	protected:
 		Texture(const String& name);
 		virtual ~Texture();
 
-	protected:
 		// static load
 		static Res* load(const ResourcePath& path);
 

@@ -242,37 +242,46 @@ namespace Echo
 				// metal doesn't support rgb format
 				convertFormat(image);
 
-				m_isCompressed = false;
-				m_compressType = Texture::CompressType_Unknown;
-				m_width = image->getWidth();
-				m_height = image->getHeight();
-				m_depth = image->getDepth();
-				m_pixFmt = image->getPixelFormat();
-				m_numMipmaps = image->getNumMipmaps() ? image->getNumMipmaps() : 1;
-
-				VkImageUsageFlags vkUsageFlags = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
-				VkFlags requirementsMask = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;// VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-				VkImageTiling tiling = VK_IMAGE_TILING_LINEAR;
-				VkImageLayout initialLayout = VK_IMAGE_LAYOUT_PREINITIALIZED;
-				if (createVkImage(m_pixFmt, m_width, m_height, m_depth, vkUsageFlags, requirementsMask, tiling, initialLayout))
+				if (updateTexture2D(image->getPixelFormat(), TexUsage::TU_CPU_READ, image->getWidth(), image->getHeight(), image->getData(), 0))
 				{
-					ui32 pixelsSize = PixelUtil::CalcSurfaceSize(m_width, m_height, m_depth, m_numMipmaps, m_pixFmt);
-					Buffer buff(pixelsSize, image->getData(), false);
-					setVkImageSurfaceData(0, m_pixFmt, m_usage, m_width, m_height, buff, false);
-
 					EchoSafeDelete(image, Image);
 					return true;
 				}
 				else
 				{
-					EchoLogError("vulkan texture [%s] load failed", getPath().c_str());
-
 					EchoSafeDelete(image, Image);
 					return false;
 				}
 			}
 		}
 
+		return false;
+	}
+
+	bool VKTexture2D::updateTexture2D(PixelFormat format, TexUsage usage, i32 width, i32 height, void* data, ui32 size)
+	{
+		m_isCompressed = false;
+		m_compressType = Texture::CompressType_Unknown;
+		m_width = width;
+		m_height = height;
+		m_depth = 1;
+		m_pixFmt = format;
+		m_numMipmaps = 1;
+
+		VkImageUsageFlags vkUsageFlags = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+		VkFlags requirementsMask = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;// VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+		VkImageTiling tiling = VK_IMAGE_TILING_LINEAR;
+		VkImageLayout initialLayout = VK_IMAGE_LAYOUT_PREINITIALIZED;
+		if (createVkImage(m_pixFmt, m_width, m_height, m_depth, vkUsageFlags, requirementsMask, tiling, initialLayout))
+		{
+			ui32 pixelsSize = PixelUtil::CalcSurfaceSize(m_width, m_height, m_depth, m_numMipmaps, m_pixFmt);
+			Buffer buff(pixelsSize, data, false);
+			setVkImageSurfaceData(0, m_pixFmt, m_usage, m_width, m_height, buff, false);
+
+			return true;
+		}
+			
+		EchoLogError("vulkan texture [%s] load failed", getPath().c_str());
 		return false;
 	}
 

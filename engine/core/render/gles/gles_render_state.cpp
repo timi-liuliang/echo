@@ -11,7 +11,6 @@ namespace Echo
 	GLESBlendState::GLESBlendState()
 		: BlendState()
 	{
-		create();
 	}
 
 	GLESBlendState::~GLESBlendState()
@@ -20,6 +19,8 @@ namespace Echo
 
 	void GLESBlendState::active()
 	{
+		create();
+
 		BlendStateParams blendParams;
 		memset(&blendParams, 0, sizeof(blendParams));
 		blendParams.isA2CEnable = m_a2cEnable;
@@ -134,16 +135,21 @@ namespace Echo
 
 	void GLESBlendState::create()
 	{
-		m_glBlendOP = GLESMapping::MapBlendOperation(m_blendOP);
-		m_glAlphaBlendOP = GLESMapping::MapBlendOperation(m_alphaBlendOP);
-		m_glSrcBlend = GLESMapping::MapBlendFactor(m_srcBlend);
-		m_glDstBlend = GLESMapping::MapBlendFactor(m_dstBlend);
-		m_glSrcAlphaBlend = GLESMapping::MapBlendFactor(m_srcAlphaBlend);
-		m_glDstAlphaBlend = GLESMapping::MapBlendFactor(m_dstAlphaBlend);
-		m_glRedMask = (m_colorWriteMask & CMASK_RED) != 0;
-		m_glGreenMask = (m_colorWriteMask & CMASK_GREEN) != 0;
-		m_glBlueMask = (m_colorWriteMask & CMASK_BLUE) != 0;
-		m_glAlphaMask = (m_colorWriteMask & CMASK_ALPHA) != 0;
+		if (m_dirty)
+		{
+			m_glBlendOP = GLESMapping::MapBlendOperation(m_blendOP);
+			m_glAlphaBlendOP = GLESMapping::MapBlendOperation(m_alphaBlendOP);
+			m_glSrcBlend = GLESMapping::MapBlendFactor(m_srcBlend);
+			m_glDstBlend = GLESMapping::MapBlendFactor(m_dstBlend);
+			m_glSrcAlphaBlend = GLESMapping::MapBlendFactor(m_srcAlphaBlend);
+			m_glDstAlphaBlend = GLESMapping::MapBlendFactor(m_dstAlphaBlend);
+			m_glRedMask = (m_colorWriteMask & CMASK_RED) != 0;
+			m_glGreenMask = (m_colorWriteMask & CMASK_GREEN) != 0;
+			m_glBlueMask = (m_colorWriteMask & CMASK_BLUE) != 0;
+			m_glAlphaMask = (m_colorWriteMask & CMASK_ALPHA) != 0;
+
+			m_dirty = false;
+		}
 	}
 
 	GLESDepthStencilState::GLESDepthStencilState()
