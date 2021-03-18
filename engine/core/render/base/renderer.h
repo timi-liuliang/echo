@@ -94,7 +94,7 @@ namespace Echo
 		virtual DepthStencilState* createDepthStencilState() = 0;
 		virtual BlendState*	createBlendState() = 0;
         virtual MultisampleState* createMultisampleState() = 0;
-		virtual SamplerState* createSamplerState(const SamplerState::SamplerDesc& desc) = 0;
+		virtual SamplerState* createSamplerState() = 0;
 
 		// renderable operate
 		virtual Renderable* createRenderable()=0;

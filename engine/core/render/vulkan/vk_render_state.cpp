@@ -95,8 +95,8 @@ namespace Echo
         return &m_vkRasterizationStateCreateInfo; 
     }
 
-    VKSamplerState::VKSamplerState(const SamplerDesc& desc)
-        : SamplerState(desc)
+    VKSamplerState::VKSamplerState()
+        : SamplerState()
     {
     }
 
@@ -112,14 +112,14 @@ namespace Echo
 			m_vkSamplerCreateInfo.flags = 0;
 			m_vkSamplerCreateInfo.magFilter = VK_FILTER_LINEAR;
 			m_vkSamplerCreateInfo.minFilter = VK_FILTER_LINEAR;
-			m_vkSamplerCreateInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+			m_vkSamplerCreateInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST;
 			m_vkSamplerCreateInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
 			m_vkSamplerCreateInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
 			m_vkSamplerCreateInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
 			m_vkSamplerCreateInfo.mipLodBias = 0.f;
 			m_vkSamplerCreateInfo.compareOp = VK_COMPARE_OP_NEVER;
-			m_vkSamplerCreateInfo.minLod = 0.f;
-			m_vkSamplerCreateInfo.maxLod = 0.f;
+			m_vkSamplerCreateInfo.minLod = minLOD;
+			m_vkSamplerCreateInfo.maxLod = maxLOD;
 			m_vkSamplerCreateInfo.maxAnisotropy = 1.f;
 			m_vkSamplerCreateInfo.borderColor = VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
 

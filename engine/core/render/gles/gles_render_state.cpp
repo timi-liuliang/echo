@@ -463,45 +463,38 @@ namespace Echo
 		}
 	}
 
-	GLESSamplerState::GLESSamplerState(const SamplerDesc& desc)
-		: SamplerState(desc)
+	GLESSamplerState::GLESSamplerState()
+		: SamplerState()
 	{
-		create();
 	}
 
 	GLESSamplerState::~GLESSamplerState()
 	{
 	}
 
-	void GLESSamplerState::active(const SamplerState* pre) const
+	void GLESSamplerState::active(SamplerState* pre)
 	{
-		const SamplerDesc* prev_desc = nullptr;
-		const SamplerDesc* curr_desc = nullptr;
+		create();
+
 		if (pre)
 		{
-			prev_desc = &pre->getDesc();
-			curr_desc = &m_desc;
-		}
-
-		if (prev_desc && curr_desc)
-		{
 			// only 2D texture type.
-			if (prev_desc->minFilter != curr_desc->minFilter || prev_desc->mipFilter != curr_desc->mipFilter)
+			if (pre->minFilter != minFilter || pre->mipFilter != mipFilter)
 			{
 				OGLESDebug(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_glMinFilter));
 			}
 
-			if (prev_desc->magFilter != curr_desc->magFilter || prev_desc->mipFilter != curr_desc->mipFilter)
+			if (pre->magFilter != magFilter || pre->mipFilter != mipFilter)
 			{
 				OGLESDebug(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_glMagFilter));
 			}
 
-			if (prev_desc->addrUMode != curr_desc->addrUMode)
+			if (pre->addrUMode != addrUMode)
 			{
 				OGLESDebug(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, m_glAddrModeU));
 			}
 
-			if (prev_desc->addrVMode != curr_desc->addrVMode)
+			if (pre->addrVMode != addrVMode)
 			{
 				OGLESDebug(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_glAddrModeV));
 			}
@@ -517,39 +510,44 @@ namespace Echo
 
 	void GLESSamplerState::create()
 	{
-		if (m_desc.minFilter == FO_NONE)
+		if (m_dirty)
 		{
-			m_glMinFilter = 0;
-		}
-		else if (m_desc.minFilter == FO_LINEAR || m_desc.minFilter == FO_ANISOTROPIC)
-		{
-			if (m_desc.mipFilter == FO_NONE)
-				m_glMinFilter = GL_LINEAR;
-			else if (m_desc.mipFilter == FO_LINEAR || m_desc.mipFilter == FO_ANISOTROPIC)
-				m_glMinFilter = GL_LINEAR_MIPMAP_LINEAR;
+			if (minFilter == FO_NONE)
+			{
+				m_glMinFilter = 0;
+			}
+			else if (minFilter == FO_LINEAR || minFilter == FO_ANISOTROPIC)
+			{
+				if (mipFilter == FO_NONE)
+					m_glMinFilter = GL_LINEAR;
+				else if (mipFilter == FO_LINEAR || mipFilter == FO_ANISOTROPIC)
+					m_glMinFilter = GL_LINEAR_MIPMAP_LINEAR;
+				else
+					m_glMinFilter = GL_LINEAR_MIPMAP_NEAREST;
+			}
 			else
-				m_glMinFilter = GL_LINEAR_MIPMAP_NEAREST;
-		}
-		else
-		{
-			if (m_desc.mipFilter == FO_NONE)
-				m_glMinFilter = GL_NEAREST;
-			else if (m_desc.mipFilter == FO_LINEAR || m_desc.mipFilter == FO_ANISOTROPIC)
-				m_glMinFilter = GL_NEAREST_MIPMAP_LINEAR;
+			{
+				if (mipFilter == FO_NONE)
+					m_glMinFilter = GL_NEAREST;
+				else if (mipFilter == FO_LINEAR || mipFilter == FO_ANISOTROPIC)
+					m_glMinFilter = GL_NEAREST_MIPMAP_LINEAR;
+				else
+					m_glMinFilter = GL_NEAREST_MIPMAP_NEAREST;
+			}
+
+			if (magFilter == FO_NONE)
+				m_glMagFilter = 0;
+			else if (magFilter == FO_LINEAR || magFilter == FO_ANISOTROPIC)
+				m_glMagFilter = GL_LINEAR;
 			else
-				m_glMinFilter = GL_NEAREST_MIPMAP_NEAREST;
+				m_glMagFilter = GL_NEAREST;
+
+			m_glAddrModeU = GLESMapping::MapAddressMode(addrUMode);
+			m_glAddrModeV = GLESMapping::MapAddressMode(addrVMode);
+			m_glAddrModeW = GLESMapping::MapAddressMode(addrWMode);
+
+			m_dirty = false;
 		}
-
-		if (m_desc.magFilter == FO_NONE)
-			m_glMagFilter = 0;
-		else if (m_desc.magFilter == FO_LINEAR || m_desc.magFilter == FO_ANISOTROPIC)
-			m_glMagFilter = GL_LINEAR;
-		else
-			m_glMagFilter = GL_NEAREST;
-
-		m_glAddrModeU = GLESMapping::MapAddressMode(m_desc.addrUMode);
-		m_glAddrModeV = GLESMapping::MapAddressMode(m_desc.addrVMode);
-		m_glAddrModeW = GLESMapping::MapAddressMode(m_desc.addrWMode);
 	}
 
 	GLint GLESSamplerState::getGLMinFilter() const

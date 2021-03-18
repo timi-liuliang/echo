@@ -121,8 +121,7 @@ namespace Echo
 		}
 	}
 
-	SamplerState::SamplerState(const SamplerDesc& desc)
-		: m_desc(desc)
+	SamplerState::SamplerState()
 	{
 	}
 
@@ -130,8 +129,8 @@ namespace Echo
 	{
 	}
 
-	const SamplerState::SamplerDesc& SamplerState::getDesc() const
+	Res* SamplerState::create()
 	{
-		return m_desc;
+		return Renderer::instance()->createSamplerState();
 	}
 }

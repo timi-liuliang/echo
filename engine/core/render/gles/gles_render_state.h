@@ -126,11 +126,10 @@ namespace Echo
 	{
 		friend class GLESRenderer;
 	private:
-		GLESSamplerState(const SamplerDesc& desc);
+		GLESSamplerState();
 		~GLESSamplerState();
 
-	public:
-		void			active(const SamplerState* pre) const;
+		void			active(SamplerState* pre);
 		GLint			getGLMinFilter() const;
 		GLint			getGLMagFilter() const;
 		GLint			getGLAddrModeU() const;

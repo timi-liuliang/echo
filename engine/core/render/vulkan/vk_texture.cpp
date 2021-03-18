@@ -16,7 +16,7 @@ namespace Echo
 
 	}
 
-	bool VKTexture::createVkImage(PixelFormat format, i32 width, i32 height, i32 depth, VkImageUsageFlags usage, VkFlags requirementsMask, VkImageTiling tiling, VkImageLayout initialLayout)
+	bool VKTexture::createVkImage(SamplerStatePtr samplerState, PixelFormat format, i32 width, i32 height, i32 depth, VkImageUsageFlags usage, VkFlags requirementsMask, VkImageTiling tiling, VkImageLayout initialLayout)
 	{
 		destroyVkImage();
 
@@ -42,9 +42,8 @@ namespace Echo
 		{
 			createVkImageMemory(requirementsMask);
 			createVkImageView(format);
-			createVkSampler();
 
-			createDescriptorImageInfo();
+			createDescriptorImageInfo(samplerState);
 
 			return true;
 		}
@@ -120,22 +119,11 @@ namespace Echo
 		}
 	}
 
-	void VKTexture::createVkSampler()
+	void VKTexture::createDescriptorImageInfo(SamplerStatePtr sampleState)
 	{
-		destroyVkSampler();
+		VKSamplerState* vkSamplerState = ECHO_DOWN_CAST<VKSamplerState*>(sampleState.ptr());
 
-		SamplerState::SamplerDesc desc;
-		m_samplerState = ECHO_DOWN_CAST<VKSamplerState*>(Renderer::instance()->createSamplerState(desc));
-	}
-
-	void VKTexture::destroyVkSampler()
-	{
-		EchoSafeDelete(m_samplerState, VKSamplerState);
-	}
-
-	void VKTexture::createDescriptorImageInfo()
-	{
-		m_vkDescriptorImageInfo.sampler = m_samplerState->getVkSampler();
+		m_vkDescriptorImageInfo.sampler = vkSamplerState->getVkSampler();
 		m_vkDescriptorImageInfo.imageView = m_vkImageView;
 		m_vkDescriptorImageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 	}
@@ -272,7 +260,7 @@ namespace Echo
 		VkFlags requirementsMask = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;// VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
 		VkImageTiling tiling = VK_IMAGE_TILING_LINEAR;
 		VkImageLayout initialLayout = VK_IMAGE_LAYOUT_PREINITIALIZED;
-		if (createVkImage(m_pixFmt, m_width, m_height, m_depth, vkUsageFlags, requirementsMask, tiling, initialLayout))
+		if (createVkImage(getSamplerState(), m_pixFmt, m_width, m_height, m_depth, vkUsageFlags, requirementsMask, tiling, initialLayout))
 		{
 			ui32 pixelsSize = PixelUtil::CalcSurfaceSize(m_width, m_height, m_depth, m_numMipmaps, m_pixFmt);
 			Buffer buff(pixelsSize, data, false);
@@ -311,7 +299,7 @@ namespace Echo
 		VkFlags requirementsMask = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
 		VkImageTiling tiling = VK_IMAGE_TILING_OPTIMAL;
 		VkImageLayout initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-        createVkImage(m_pixFmt, m_width, m_height, m_depth, vkUsageFlags, requirementsMask, tiling, initialLayout);
+        createVkImage(getSamplerState(), m_pixFmt, m_width, m_height, m_depth, vkUsageFlags, requirementsMask, tiling, initialLayout);
 
 		ui32 pixelsSize = PixelUtil::CalcSurfaceSize(m_width, m_height, m_depth, m_numMipmaps, m_pixFmt);
 		Buffer buff(pixelsSize, data, false);

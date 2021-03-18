@@ -88,8 +88,8 @@ namespace Echo
 		ui32 getNumMipmaps() const { return m_numMipmaps; }
 		
 		// sampler state
-		void setSamplerState( const SamplerState::SamplerDesc& desc);
-        const SamplerState* getSamplerState();
+		void setSamplerState(SamplerStatePtr sampleState);
+        SamplerStatePtr getSamplerState();
 
 		// get compress type
 		ui32 getCompressType() { return m_compressType; }
@@ -126,7 +126,7 @@ namespace Echo
 		ui32				m_yDimension = 0;
 		ui32				m_zDimension = 0;
 		ui32				m_surfaceNum;
-		const SamplerState*	m_samplerState = nullptr;
+		SamplerStatePtr		m_samplerState;
 	};
 	typedef ResRef<Texture> TexturePtr;
 }

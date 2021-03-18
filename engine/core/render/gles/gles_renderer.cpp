@@ -143,7 +143,6 @@ namespace Echo
 
 	void GLESRenderer::cleanSystemResource()
 	{
-		EchoSafeDeleteContainer(m_vecSamlerStates, GLESSamplerState);
 	}
 
 	void GLESRenderer::setViewport(Viewport* pViewport)
@@ -425,20 +424,9 @@ namespace Echo
 		return EchoNew(GLESBlendState);
 	}
 
-	SamplerState* GLESRenderer::createSamplerState(const SamplerState::SamplerDesc& desc)
+	SamplerState* GLESRenderer::createSamplerState()
 	{
-		// is exist
-		for (std::set<GLESSamplerState*>::iterator it = m_vecSamlerStates.begin(); it != m_vecSamlerStates.end(); it++)
-		{
-			if ((*it)->getDesc() == desc)
-				return *it;
-		}
-
-		// new one
-		GLESSamplerState* pState = EchoNew(GLESSamplerState(desc));
-		m_vecSamlerStates.insert(pState);
-
-		return pState;
+		return EchoNew(GLESSamplerState);
 	}
 
 	bool GLESRenderer::bindShaderProgram(GLESShaderProgram* program)

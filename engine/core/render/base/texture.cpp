@@ -70,20 +70,20 @@ namespace Echo
 		g_globalTextures[globalTextureIdx] = texture;
 	}
 
-    const SamplerState* Texture::getSamplerState()
+    SamplerStatePtr Texture::getSamplerState()
     {
         if(!m_samplerState)
         {
-            SamplerState::SamplerDesc desc;
-            setSamplerState(desc);
+			SamplerStatePtr defaultSampleState = Renderer::instance()->createSamplerState();
+            setSamplerState(defaultSampleState);
         }
         
         return m_samplerState;
     }
 
-	void Texture::setSamplerState(const SamplerState::SamplerDesc& desc)
+	void Texture::setSamplerState(SamplerStatePtr sampleState)
 	{
-		m_samplerState = Renderer::instance()->createSamplerState(desc);
+		m_samplerState = sampleState;
 	}
 
 	size_t Texture::calculateSize() const

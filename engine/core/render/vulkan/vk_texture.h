@@ -21,7 +21,7 @@ namespace Echo
 
 	protected:
 		// VkImage
-		bool createVkImage(PixelFormat format, i32 width, i32 height, i32 depth, VkImageUsageFlags usage, VkFlags requirementsMask, VkImageTiling tiling, VkImageLayout initialLayout);
+		bool createVkImage(SamplerStatePtr samplerState, PixelFormat format, i32 width, i32 height, i32 depth, VkImageUsageFlags usage, VkFlags requirementsMask, VkImageTiling tiling, VkImageLayout initialLayout);
 		void destroyVkImage();
 
 		// VkImageMemory
@@ -32,12 +32,8 @@ namespace Echo
 		void createVkImageView(PixelFormat format);
 		void destroyVkImageView();
 
-        // VkSampler
-        void createVkSampler();
-        void destroyVkSampler();
-
         // Descriptor info
-        void createDescriptorImageInfo();
+        void createDescriptorImageInfo(SamplerStatePtr samplerState);
 
 		// set surface data
 		void setVkImageSurfaceData(int level, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, const Buffer& buff, bool isUseStaging);
@@ -46,7 +42,6 @@ namespace Echo
 		VkImage                 m_vkImage = VK_NULL_HANDLE;
 		VkDeviceMemory          m_vkImageMemory = VK_NULL_HANDLE;
 		VkImageView             m_vkImageView = VK_NULL_HANDLE;
-        VKSamplerState*         m_samplerState = nullptr;
         VkDescriptorImageInfo   m_vkDescriptorImageInfo = {};
     };
 

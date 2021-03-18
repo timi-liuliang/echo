@@ -48,7 +48,7 @@ namespace Echo
 	class VKSamplerState : public SamplerState
 	{
 	public:
-        VKSamplerState(const SamplerDesc& desc);
+        VKSamplerState();
         virtual ~VKSamplerState();
 
         // get vk create info
@@ -58,6 +58,7 @@ namespace Echo
         VkSamplerCreateInfo m_vkSamplerCreateInfo;
         VkSampler           m_vkSampler = VK_NULL_HANDLE;
 	};
+    typedef ResRef<SamplerState> VKSamplerStatePtr;
 
     class VKMultisampleState : public MultisampleState
     {

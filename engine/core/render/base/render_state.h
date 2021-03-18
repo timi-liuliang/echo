@@ -107,7 +107,7 @@ namespace Echo
 
 	class DepthStencilState: public RenderState
 	{
-		ECHO_RES(DepthStencilState, RenderState, ".edss", DepthStencilState::create, Res::load)
+		ECHO_RES(DepthStencilState, RenderState, ".DepthStencilState", DepthStencilState::create, Res::load)
 
 	public:
 		enum StencilOperation
@@ -174,7 +174,7 @@ namespace Echo
 
 	class RasterizerState : public RenderState
 	{
-		ECHO_RES(DepthStencilState, RenderState, ".ers", RasterizerState::create, Res::load)
+		ECHO_RES(DepthStencilState, RenderState, ".RasterizerState", RasterizerState::create, Res::load)
 
 	public:
 		enum PolygonMode
@@ -245,6 +245,8 @@ namespace Echo
 
 	class SamplerState : public RenderState
 	{
+		ECHO_RES(SamplerState, RenderState, ".SampleState", SamplerState::create, Res::load)
+
 	public:
 		// texture filter option
 		enum FilterOption
@@ -266,69 +268,32 @@ namespace Echo
 			AM_MAX
 		};
 
-		// sampler description
-		struct SamplerDesc
-		{
-			FilterOption	minFilter;
-			FilterOption	magFilter;
-			FilterOption	mipFilter;
-			AddressMode		addrUMode;
-			AddressMode		addrVMode;
-			AddressMode		addrWMode;
-			ui8				maxAnisotropy;
-			ComparisonFunc	cmpFunc;
-			Color			borderColor;
-			float			minLOD;
-			float			maxLOD;
-			float			mipLODBias;
+	public:
+		SamplerState();
+		virtual ~SamplerState();
 
-			// constructor
-			SamplerDesc()
-			{
-				reset();
-			}
-
-			// reset
-			void reset()
-			{
-				minFilter = FO_LINEAR;
-				magFilter = FO_LINEAR;
-				mipFilter = FO_NONE;
-				addrUMode = AM_WRAP;
-				addrVMode = AM_WRAP;
-				addrWMode = AM_WRAP;
-				maxAnisotropy = 16;
-				cmpFunc		= CF_NEVER;
-				borderColor = Color::BLACK;
-				minLOD		= 0.0f;
-				maxLOD		= Math::MAX_FLOAT;
-				mipLODBias	= 0.0f;
-			}
-			bool operator==(const SamplerDesc& rhs) const
-			{
-				return minFilter == rhs.minFilter &&
-					magFilter == rhs.magFilter &&
-					mipFilter == rhs.mipFilter &&
-					addrUMode == rhs.addrUMode &&
-					addrWMode == rhs.addrWMode &&
-					maxAnisotropy == rhs.maxAnisotropy &&
-					cmpFunc == rhs.cmpFunc &&
-					borderColor == rhs.borderColor;
-			}
-		};
+		// create fun
+		static Res* create();
 
 	public:
-		const SamplerDesc& getDesc() const;
-
-	protected:
-		virtual ~SamplerState();
-		SamplerState(const SamplerDesc &desc);
-
-		SamplerDesc		m_desc;
+		FilterOption	minFilter = FO_LINEAR;
+		FilterOption	magFilter = FO_LINEAR;
+		FilterOption	mipFilter = FO_NONE;
+		AddressMode		addrUMode = AM_WRAP;
+		AddressMode		addrVMode = AM_WRAP;
+		AddressMode		addrWMode = AM_WRAP;
+		ui8				maxAnisotropy = 16;
+		ComparisonFunc	cmpFunc = CF_NEVER;
+		Color			borderColor = Color::BLACK;
+		float			minLOD = 0.f;
+		float			maxLOD = Math::MAX_FLOAT;
+		float			mipLODBias = 0.f;
 	};
+	typedef ResRef<SamplerState> SamplerStatePtr;
 
     class MultisampleState : public RenderState
     {
     public:
     };
+	typedef ResRef<MultisampleState> MultisampleStatePtr;
 }

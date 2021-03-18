@@ -86,7 +86,7 @@ namespace Echo
 		virtual DepthStencilState* createDepthStencilState() override;
 		virtual BlendState*	createBlendState() override;
         virtual MultisampleState* createMultisampleState() override { return nullptr; }
-		virtual SamplerState* createSamplerState(const SamplerState::SamplerDesc& desc) override;
+		virtual SamplerState* createSamplerState() override;
 	
 		// frame buffer
 		virtual FrameBufferOffScreen* createFrameBufferOffScreen(ui32 width, ui32 height);
@@ -144,7 +144,6 @@ namespace Echo
 		String						m_gpuDesc;
 		ui32						m_screenWidth = 800;
 		ui32						m_screenHeight = 600;
-		std::set<GLESSamplerState*> m_vecSamlerStates;
 		NineBoolArray				m_isVertexAttribArrayEnable;
 
 #ifdef ECHO_EDITOR_MODE
