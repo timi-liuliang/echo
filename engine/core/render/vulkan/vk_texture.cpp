@@ -329,15 +329,17 @@ namespace Echo
 		m_pixFmt = format;
 		m_numMipmaps = 1;
 
+		bool isUseTilingOptimal = true;
 		VkImageUsageFlags vkUsageFlags = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
 		VkFlags requirementsMask = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;// VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-		VkImageTiling tiling = VK_IMAGE_TILING_OPTIMAL;
+		VkImageTiling tiling = isUseTilingOptimal ? VK_IMAGE_TILING_OPTIMAL : VK_IMAGE_TILING_LINEAR;
 		VkImageLayout initialLayout = VK_IMAGE_LAYOUT_PREINITIALIZED;
+
 		if (createVkImage(getSamplerState(), m_pixFmt, m_width, m_height, m_depth, vkUsageFlags, requirementsMask, tiling, initialLayout))
 		{
 			ui32 pixelsSize = PixelUtil::CalcSurfaceSize(m_width, m_height, m_depth, m_numMipmaps, m_pixFmt);
 			Buffer buff(pixelsSize, data, false);
-			setVkImageSurfaceData(0, m_pixFmt, m_usage, m_width, m_height, buff, true);
+			setVkImageSurfaceData(0, m_pixFmt, m_usage, m_width, m_height, buff, isUseTilingOptimal);
 
 			return true;
 		}
