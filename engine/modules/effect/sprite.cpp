@@ -1,5 +1,5 @@
 #include "sprite.h"
-#include "engine/core/log/Log.h"
+#include "engine/core/log/log.h"
 #include "engine/core/scene/node_tree.h"
 #include "base/renderer.h"
 #include "base/shader_program.h"

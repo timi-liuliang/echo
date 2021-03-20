@@ -227,7 +227,7 @@ namespace Echo
 			Image* image = Image::createFromMemory(commonTextureBuffer, Image::GetImageFormat(getPath()));
 			if (image)
 			{
-				// metal doesn't support rgb format
+				// vulkan doesn't support rgb format
 				convertFormat(image);
 
 				if (updateTexture2D(image->getPixelFormat(), TexUsage::TU_CPU_READ, image->getWidth(), image->getHeight(), image->getData(), 0))
