@@ -133,7 +133,75 @@ namespace Echo
 	{
 		if (isUseStaging)
 		{
+			VkBuffer stagingBuffer;
+			VkDeviceMemory stagingMemory;
 
+			VkBufferCreateInfo bufferCreateInfo = {};
+			bufferCreateInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+			bufferCreateInfo.size = buff.getSize();
+			bufferCreateInfo.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
+			bufferCreateInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+			VKDebug(vkCreateBuffer(VKRenderer::instance()->getVkDevice(), &bufferCreateInfo, nullptr, &stagingBuffer));
+
+			// Get memroy requirements for the staging buffer (alignment, memory type bits)
+			VkMemoryRequirements memReqs;
+			vkGetBufferMemoryRequirements(VKRenderer::instance()->getVkDevice(), stagingBuffer, &memReqs);
+
+			VkMemoryAllocateInfo memAllocInfo{};
+			memAllocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+			memAllocInfo.allocationSize = memReqs.size;
+			memAllocInfo.memoryTypeIndex = VKRenderer::instance()->findVkMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+			VKDebug(vkAllocateMemory(VKRenderer::instance()->getVkDevice(), &memAllocInfo, nullptr, &stagingMemory));
+			VKDebug(vkBindBufferMemory(VKRenderer::instance()->getVkDevice(), stagingBuffer, stagingMemory, 0));
+
+			// Copy texture data into staging buffer
+			ui8* data = nullptr;
+			VKDebug(vkMapMemory(VKRenderer::instance()->getVkDevice(), stagingMemory, 0, memReqs.size, 0, (void**)&data));
+			memcpy(data, buff.getData(), buff.getSize());
+			vkUnmapMemory(VKRenderer::instance()->getVkDevice(), stagingMemory);
+
+			// setup buffer copy regions for each mip level
+			vector<VkBufferImageCopy>::type bufferCopyRegions;
+			for (ui32 i = 0; i < 1; i++)
+			{
+				VkBufferImageCopy bufferCopyRegion = {};
+				bufferCopyRegion.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+				bufferCopyRegion.imageSubresource.mipLevel = i;
+				bufferCopyRegion.imageSubresource.baseArrayLayer = 0;
+				bufferCopyRegion.imageSubresource.layerCount = 1;
+				bufferCopyRegion.imageExtent.width = Math::Max(1u, width >> i);
+				bufferCopyRegion.imageExtent.height = Math::Max(1u, height >> i);
+				bufferCopyRegion.imageExtent.depth = 1;
+				bufferCopyRegion.bufferOffset = 0;
+
+				bufferCopyRegions.push_back(bufferCopyRegion);
+			}
+
+			// setup image memory barrier transfer image to shader read layout
+			VkCommandBuffer copyCmd = VKRenderer::instance()->createVkCommandBuffer();
+
+			VkCommandBufferBeginInfo commandBufferBeginInfo = {};
+			commandBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+			commandBufferBeginInfo.pNext = nullptr;
+			commandBufferBeginInfo.flags = 0;
+			commandBufferBeginInfo.pInheritanceInfo = nullptr;
+
+			if (VK_SUCCESS == vkBeginCommandBuffer(copyCmd, &commandBufferBeginInfo))
+			{
+				setImageLayout(copyCmd, m_vkImage, VK_IMAGE_LAYOUT_PREINITIALIZED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+				vkCmdCopyBufferToImage(copyCmd, stagingBuffer, m_vkImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, static_cast<uint32_t>(bufferCopyRegions.size()), bufferCopyRegions.data());
+				setImageLayout(copyCmd, m_vkImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
+				VKDebug(vkEndCommandBuffer(copyCmd));
+			}
+
+			VKRenderer::instance()->flushVkCommandBuffer(copyCmd, VKRenderer::instance()->getVkGraphicsQueue(), true);
+
+			// Clean up staging resources
+			vkFreeMemory(VKRenderer::instance()->getVkDevice(), stagingMemory, nullptr);
+			vkDestroyBuffer(VKRenderer::instance()->getVkDevice(), stagingBuffer, nullptr);
 		}
 		else
 		{
@@ -146,26 +214,6 @@ namespace Echo
 				// setup image memory barrier transfer image to shader read layout
 				VkCommandBuffer copyCmd = VKRenderer::instance()->createVkCommandBuffer();
 
-				// the sub resource range describes the regions of the image we will be transition
-				VkImageSubresourceRange subResourcesRange = {};
-				subResourcesRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-				subResourcesRange.baseMipLevel = 0;
-				subResourcesRange.levelCount = 1;
-				subResourcesRange.layerCount = 1;
-
-				// transition the texture image layout to shader read, so it can be sampled from
-				VkImageMemoryBarrier imageMemoryBarrier = {};
-				imageMemoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-				imageMemoryBarrier.pNext = nullptr;
-				imageMemoryBarrier.srcAccessMask = VK_ACCESS_HOST_WRITE_BIT;
-				imageMemoryBarrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
-				imageMemoryBarrier.oldLayout = VK_IMAGE_LAYOUT_PREINITIALIZED;
-				imageMemoryBarrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-				imageMemoryBarrier.srcQueueFamilyIndex = VKRenderer::instance()->getGraphicsQueueFamilyIndex();
-				imageMemoryBarrier.dstQueueFamilyIndex = VKRenderer::instance()->getGraphicsQueueFamilyIndex();
-				imageMemoryBarrier.image = m_vkImage;
-				imageMemoryBarrier.subresourceRange = subResourcesRange;
-
 				VkCommandBufferBeginInfo commandBufferBeginInfo = {};
 				commandBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 				commandBufferBeginInfo.pNext = nullptr;
@@ -174,17 +222,7 @@ namespace Echo
 
 				if (VK_SUCCESS == vkBeginCommandBuffer(copyCmd, &commandBufferBeginInfo))
 				{
-					// insert a memory dependency at the proper pipeline stages that will execute the image layout transition
-					// source pipeline stage is host write/read execution (VK_PIPELINE_STAGE_HOST_BIT)
-					// destination pipeline stage fragment shader access (VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT)
-					vkCmdPipelineBarrier(
-						copyCmd,
-						VK_PIPELINE_STAGE_HOST_BIT,
-						VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-						0,
-						0, nullptr,
-						0, nullptr,
-						1, &imageMemoryBarrier);
+					setImageLayout(copyCmd, m_vkImage, VK_IMAGE_LAYOUT_PREINITIALIZED, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
 					VKDebug(vkEndCommandBuffer(copyCmd));
 				}
@@ -196,6 +234,41 @@ namespace Echo
 				EchoLogError("Vulkan vkMapMemory failed");
 			}
 		}
+	}
+
+	void VKTexture::setImageLayout(VkCommandBuffer cmdBuffer, VkImage image, VkImageLayout oldImageLayout, VkImageLayout newImageLayout)
+	{
+		// the sub resource range describes the regions of the image we will be transition
+		VkImageSubresourceRange subResourcesRange = {};
+		subResourcesRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+		subResourcesRange.baseMipLevel = 0;
+		subResourcesRange.levelCount = 1;
+		subResourcesRange.layerCount = 1;
+
+		// transition the texture image layout to shader read, so it can be sampled from
+		VkImageMemoryBarrier imageMemoryBarrier = {};
+		imageMemoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+		imageMemoryBarrier.pNext = nullptr;
+		imageMemoryBarrier.srcAccessMask = VK_ACCESS_HOST_WRITE_BIT;
+		imageMemoryBarrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+		imageMemoryBarrier.oldLayout = oldImageLayout;
+		imageMemoryBarrier.newLayout = newImageLayout;
+		imageMemoryBarrier.srcQueueFamilyIndex = VKRenderer::instance()->getGraphicsQueueFamilyIndex();
+		imageMemoryBarrier.dstQueueFamilyIndex = VKRenderer::instance()->getGraphicsQueueFamilyIndex();
+		imageMemoryBarrier.image = m_vkImage;
+		imageMemoryBarrier.subresourceRange = subResourcesRange;
+
+		// insert a memory dependency at the proper pipeline stages that will execute the image layout transition
+		// source pipeline stage is host write/read execution (VK_PIPELINE_STAGE_HOST_BIT)
+		// destination pipeline stage fragment shader access (VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT)
+		vkCmdPipelineBarrier(
+			cmdBuffer,
+			VK_PIPELINE_STAGE_HOST_BIT,
+			VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+			0,
+			0, nullptr,
+			0, nullptr,
+			1, &imageMemoryBarrier);
 	}
 
 	VKTexture2D::VKTexture2D(const String& pathName)
@@ -258,13 +331,13 @@ namespace Echo
 
 		VkImageUsageFlags vkUsageFlags = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
 		VkFlags requirementsMask = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;// VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-		VkImageTiling tiling = VK_IMAGE_TILING_LINEAR;
+		VkImageTiling tiling = VK_IMAGE_TILING_OPTIMAL;
 		VkImageLayout initialLayout = VK_IMAGE_LAYOUT_PREINITIALIZED;
 		if (createVkImage(getSamplerState(), m_pixFmt, m_width, m_height, m_depth, vkUsageFlags, requirementsMask, tiling, initialLayout))
 		{
 			ui32 pixelsSize = PixelUtil::CalcSurfaceSize(m_width, m_height, m_depth, m_numMipmaps, m_pixFmt);
 			Buffer buff(pixelsSize, data, false);
-			setVkImageSurfaceData(0, m_pixFmt, m_usage, m_width, m_height, buff, false);
+			setVkImageSurfaceData(0, m_pixFmt, m_usage, m_width, m_height, buff, true);
 
 			return true;
 		}
@@ -301,9 +374,9 @@ namespace Echo
 		VkImageLayout initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
         createVkImage(getSamplerState(), m_pixFmt, m_width, m_height, m_depth, vkUsageFlags, requirementsMask, tiling, initialLayout);
 
-		ui32 pixelsSize = PixelUtil::CalcSurfaceSize(m_width, m_height, m_depth, m_numMipmaps, m_pixFmt);
-		Buffer buff(pixelsSize, data, false);
-        setVkImageSurfaceData(0, m_pixFmt, m_usage, m_width, m_height, buff, true);
+		//ui32 pixelsSize = PixelUtil::CalcSurfaceSize(m_width, m_height, m_depth, m_numMipmaps, m_pixFmt);
+		//Buffer buff(pixelsSize, data, false);
+        //setVkImageSurfaceData(0, m_pixFmt, m_usage, m_width, m_height, buff, true);
 
         return true;
     }

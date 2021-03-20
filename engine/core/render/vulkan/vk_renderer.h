@@ -109,7 +109,7 @@ namespace Echo
 		VkDescriptorPool getVkDescriptorPool() { return m_vkDescriptorPool; }
 
         // find memory type
-        ui32 findVkMemoryType(ui32 typeBits, VkFlags requirementsMask);
+        ui32 findVkMemoryType(ui32 typeBits, VkMemoryPropertyFlags properties);
 
     public:
         // vulkan command buffer

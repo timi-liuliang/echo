@@ -378,7 +378,7 @@ namespace Echo
 		VKDebug(vkCreateDescriptorPool( m_vkDevice, &descriptorPoolInfo, nullptr, &m_vkDescriptorPool));
 	}
 
-	ui32 VKRenderer::findVkMemoryType(ui32 typeBits, VkFlags requirementsMask)
+	ui32 VKRenderer::findVkMemoryType(ui32 typeBits, VkMemoryPropertyFlags properties)
 	{
 		VkPhysicalDeviceMemoryProperties memProperties;
 		vkGetPhysicalDeviceMemoryProperties(m_vkPhysicalDevice, &memProperties);
@@ -387,7 +387,7 @@ namespace Echo
 		{
 			if ((typeBits & 1) == 1)
 			{
-				if ((memProperties.memoryTypes[i].propertyFlags & requirementsMask) == requirementsMask)
+				if ((memProperties.memoryTypes[i].propertyFlags & properties) == properties)
 					return i;
 			}
 

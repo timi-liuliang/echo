@@ -38,6 +38,9 @@ namespace Echo
 		// set surface data
 		void setVkImageSurfaceData(int level, PixelFormat pixFmt, Dword usage, ui32 width, ui32 height, const Buffer& buff, bool isUseStaging);
 
+        // tool set image layout
+        void setImageLayout(VkCommandBuffer cmdBuffer, VkImage image, VkImageLayout oldImageLayout, VkImageLayout newImageLayout);
+
 	protected:
 		VkImage                 m_vkImage = VK_NULL_HANDLE;
 		VkDeviceMemory          m_vkImageMemory = VK_NULL_HANDLE;
