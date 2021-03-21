@@ -4,7 +4,7 @@
 
 #ifdef ECHO_EDITOR_MODE
 
-#include "engine/modules/procedural/procedural_geometry.h"
+#include "pcg/pcg_flow_graph.h"
 #include <QPen>
 #include <QGraphicsScene>
 #include <QtWidgets/QGraphicsItem>

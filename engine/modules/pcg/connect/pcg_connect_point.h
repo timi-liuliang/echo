@@ -37,7 +37,7 @@ public:
 	void RemoveConnect(TSharedPtr<FPCGConnect> InConnect);
 
 	// Depend
-	TSharedPtr<PCGConnectPoint> GetDependEndPoint();
+	std::shared_ptr<PCGConnectPoint> GetDependEndPoint();
 
 protected:
 	PCGNode*										Owner = nullptr;

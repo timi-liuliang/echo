@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../pg_node.h"
+#include "pcg/node/pcg_node.h"
 
 namespace Echo
 {
