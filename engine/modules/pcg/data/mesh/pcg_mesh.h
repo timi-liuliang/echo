@@ -25,8 +25,8 @@ namespace Echo
 		void clear();
 
 	private:
-		i32							m_pointIdx = 0;
-		vector<PCGVertex>::type		m_vertices;
+		i32							m_vertexIdx = 0;
+		vector<PCGVertex*>::type	m_vertices;
 		i32							m_primitiveIdx = 0;
 		vector<PCGPrimitive*>::type	m_primitives;
 	};

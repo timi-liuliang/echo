@@ -18,9 +18,9 @@ namespace Echo
 #ifdef ECHO_EDITOR_MODE
 	PCGFlowGraphPanel::PCGFlowGraphPanel(Object* obj)
 	{
-		m_proceduralGeometry = ECHO_DOWN_CAST<PCGFlowGraph*>(obj);
+		m_flowGraph = ECHO_DOWN_CAST<PCGFlowGraph*>(obj);
 
-		m_ui = qobject_cast<QDockWidget*>(EditorApi.qLoadUi("engine/modules/procedural/editor/procedural_geometry_panel.ui"));
+		m_ui = qobject_cast<QDockWidget*>(EditorApi.qLoadUi("engine/modules/pcg/editor/pcg_flow_graph_panel.ui"));
 
 		QSplitter* splitter = m_ui->findChild<QSplitter*>("m_splitter");
 		if (splitter)
@@ -30,7 +30,7 @@ namespace Echo
 		}
 
 		// Tool button icons
-		m_ui->findChild<QToolButton*>("m_play")->setIcon(QIcon((Engine::instance()->getRootPath() + "engine/modules/procedural/editor/icon/play.png").c_str()));
+		m_ui->findChild<QToolButton*>("m_play")->setIcon(QIcon((Engine::instance()->getRootPath() + "engine/modules/pcg/editor/icon/play.png").c_str()));
 
 		// connect signal slots
 		EditorApi.qConnectWidget(m_ui->findChild<QWidget*>("m_graphicsView"), QSIGNAL(customContextMenuRequested(const QPoint&)), this, createMethodBind(&PCGFlowGraphPanel::onRightClickGraphicsView));
@@ -92,16 +92,16 @@ namespace Echo
 		if(action)
 		{ 
 			Echo::String className = action->data().toString().toStdString().c_str();
-			if (m_proceduralGeometry)
+			if (m_flowGraph)
 			{
-				Echo::PCGNode* root = m_proceduralGeometry->getPGNode();
-				if (root)
-				{
-					Echo::PCGNode* pgNode = Echo::Class::create<PCGNode*>(className);
-					pgNode->setPosition(m_newPGNodePosition);
+				//Echo::PCGNode* root = m_flowGraph->getPGNode();
+				//if (root)
+				//{
+				//	Echo::PCGNode* pgNode = Echo::Class::create<PCGNode*>(className);
+				//	pgNode->setPosition(m_newPGNodePosition);
 
-					root->addChild(pgNode);
-				}
+				//	root->addChild(pgNode);
+				//}
 			}
 		}
 	}
@@ -113,9 +113,9 @@ namespace Echo
 
 	void PCGFlowGraphPanel::onPlay()
 	{
-		if (m_proceduralGeometry)
+		if (m_flowGraph)
 		{
-			m_proceduralGeometry->play();
+			m_flowGraph->run();
 		}
 	}
 
@@ -140,32 +140,32 @@ namespace Echo
 
 	void PCGFlowGraphPanel::drawNodes()
 	{
-		const vector<PCGNode*>::type& pgNodes = m_proceduralGeometry->getPGNode()->children();
-		while (m_pgNodePainters.size() > pgNodes.size())
-		{
-			EchoSafeDelete(m_pgNodePainters.back(), PGNodePainter);
-			m_pgNodePainters.pop_back();
-		}
+		//const vector<PCGNode*>::type& pgNodes = m_flowGraph->getPGNode()->children();
+		//while (m_pgNodePainters.size() > pgNodes.size())
+		//{
+		//	EchoSafeDelete(m_pgNodePainters.back(), PGNodePainter);
+		//	m_pgNodePainters.pop_back();
+		//}
 
-		if (m_pgNodePainters.size() < pgNodes.size())
-		{
-			for (size_t i = m_pgNodePainters.size(); i < pgNodes.size(); ++i)
-				m_pgNodePainters.emplace_back(EchoNew(Procedural::PGNodePainter(m_graphicsView, m_graphicsScene, pgNodes[i])));
-		}
+		//if (m_pgNodePainters.size() < pgNodes.size())
+		//{
+		//	for (size_t i = m_pgNodePainters.size(); i < pgNodes.size(); ++i)
+		//		m_pgNodePainters.emplace_back(EchoNew(Procedural::PGNodePainter(m_graphicsView, m_graphicsScene, pgNodes[i])));
+		//}
 
-		for (size_t i = 0; i < pgNodes.size(); i++)
-		{
-			if (!m_pgNodePainters[i] || m_pgNodePainters[i]->m_pgNode != pgNodes[i])
-			{
-				EchoSafeDelete(m_pgNodePainters[i], PGNodePainter);
-				m_pgNodePainters[i] = EchoNew(Procedural::PGNodePainter(m_graphicsView, m_graphicsScene, pgNodes[i]));
-			}
-		}
+		//for (size_t i = 0; i < pgNodes.size(); i++)
+		//{
+		//	if (!m_pgNodePainters[i] || m_pgNodePainters[i]->m_pgNode != pgNodes[i])
+		//	{
+		//		EchoSafeDelete(m_pgNodePainters[i], PGNodePainter);
+		//		m_pgNodePainters[i] = EchoNew(Procedural::PGNodePainter(m_graphicsView, m_graphicsScene, pgNodes[i]));
+		//	}
+		//}
 
-		for (size_t i = 0; i < pgNodes.size(); i++)
-		{
-			m_pgNodePainters[i]->update();
-		}
+		//for (size_t i = 0; i < pgNodes.size(); i++)
+		//{
+		//	m_pgNodePainters[i]->update();
+		//}
 	}
 
 	void PCGFlowGraphPanel::clearImageItemAndBorder()

@@ -2,12 +2,15 @@
 
 #include "engine/core/memory/MemAllocDef.h"
 
-class PCGData
+namespace Echo
 {
-public:
-	PCGData();
-	virtual ~PCGData();
+	class PCGData
+	{
+	public:
+		PCGData();
+		virtual ~PCGData();
 
-	// Type
-	virtual const char* getType() { return "UnKnown"; }
-};
+		// Type
+		virtual String getType() { return "UnKnown"; }
+	};
+}

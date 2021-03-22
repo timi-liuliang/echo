@@ -21,7 +21,7 @@ namespace Echo
 		void addPoint(PCGVertex* point);
 
 		// get points
-		const vector<PCGVertex*>::type& getPoints() { return m_vertices; }
+		const vector<PCGVertex*>::type& getVertices() { return m_vertices; }
 
 	private:
 		Type						m_type = Triangle;

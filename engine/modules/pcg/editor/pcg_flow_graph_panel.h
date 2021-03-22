@@ -2,7 +2,7 @@
 
 #include "engine/core/util/Array.hpp"
 #include "engine/core/editor/editor_dock_panel.h"
-#include "pcg/pcg_flow_graph.h"
+#include "engine/modules/pcg/pcg_flow_graph.h"
 #include "painter/background_grid_painter.h"
 #include "painter/node_painter.h"
 
@@ -58,7 +58,7 @@ namespace Echo
 		void drawBackground();
 
 	protected:
-		PCGFlowGraph*					m_proceduralGeometry = nullptr;
+		PCGFlowGraph*						m_flowGraph = nullptr;
 		QDockWidget*						m_ui;
 		QMenu*								m_menuNew = nullptr;
 		QGraphicsView*						m_graphicsView = nullptr;

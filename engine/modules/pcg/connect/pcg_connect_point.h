@@ -1,48 +1,51 @@
 #pragma once
 
-#include "pcg/data/pcg_data.h"
+#include "engine/modules/pcg/data/pcg_data.h"
 
-class PCGNode;
-class PCGConnect;
-class PCGConnectPoint
+namespace Echo
 {
-	friend class PCGNode;
-
-public:
-	// Type
-	enum Type
+	class PCGNode;
+	class PCGConnect;
+	class PCGConnectPoint
 	{
-		Input,
-		Output
+		friend class PCGNode;
+
+	public:
+		// Type
+		enum Type
+		{
+			Input,
+			Output
+		};
+
+	public:
+		PCGConnectPoint(PCGNode* owner, const String& supportTypes);
+		PCGConnectPoint(PCGNode* owner, std::shared_ptr<PCGNode> data);
+		~PCGConnectPoint();
+
+		// Owner
+		PCGNode* GetOwner() { return m_owner; }
+
+		// Data type
+		String GetDataType() const { return m_data->getType(); }
+
+		// Data
+		std::shared_ptr<PCGData> GetData();
+		void SetData(std::shared_ptr<PCGData> InData) { m_data = InData; }
+
+	public:
+		// Connect
+		void AddConnect(std::shared_ptr<PCGConnect> InConnect);
+		void RemoveConnect(std::shared_ptr<PCGConnect> InConnect);
+
+		// Depend
+		std::shared_ptr<PCGConnectPoint> GetDependEndPoint();
+
+	protected:
+		PCGNode*										m_owner = nullptr;
+		Type											m_type;
+		String											m_supportTypes;
+		std::shared_ptr<PCGData>						m_data;
+		std::vector<std::shared_ptr<class PCGConnect>>	m_connects;
 	};
-
-public:
-	PCGConnectPoint(PCGNode* InOwner, const String& InSupportTypes);
-	PCGConnectPoint(PCGNode* InOwner, std::shared_ptr<PCGNode> InData);
-	~PCGConnectPoint();
-
-	// Owner
-	PCGNode* GetOwner() { return Owner; }
-
-	// Data type
-	String GetDataType() const { return Data->GetType(); }
-
-	// Data
-	std::shared_ptr<PCGData> GetData();
-	void SetData(std::shared_ptr<PCGData> InData) { Data = InData; }
-
-public:
-	// Connect
-	void AddConnect(TSharedPtr<FPCGConnect> InConnect);
-	void RemoveConnect(TSharedPtr<FPCGConnect> InConnect);
-
-	// Depend
-	std::shared_ptr<PCGConnectPoint> GetDependEndPoint();
-
-protected:
-	PCGNode*										Owner = nullptr;
-	EType											Type;
-	FString											SupportTypes;
-	std::shared_ptr<PCGData>						Data;
-	std::vector<std::shared_ptr<class PCGConnect>>	Connects;
-};
+}

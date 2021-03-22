@@ -1,26 +1,24 @@
 #include "pcg_mesh.h"
+#include "pcg_vertex.h"
 
 namespace Echo
 {
 	void PCGMesh::clear()
 	{
-		m_pointIdx = 0;
-		EchoSafeDeleteContainer(m_points, PGPoint);
-
-		m_points.clear();
-		m_vertices.clear();
+		m_vertexIdx = 0;
+		EchoSafeDeleteContainer(m_vertices, PCGVertex);
 
 		m_primitiveIdx = 0;
 		EchoSafeDeleteContainer(m_primitives, PCGPrimitive);
 	}
 
-	PGPoint* PCGMesh::addVertex()
+	PCGVertex* PCGMesh::addVertex()
 	{
-		m_pointIdx++;
+		m_vertexIdx++;
 
-		PGPoint* point = EchoNew(PGPoint);
-		point->m_id = m_pointIdx++;
-		m_points.push_back(point);
+		PCGVertex* point = EchoNew(PCGVertex);
+		point->m_id = m_vertexIdx++;
+		m_vertices.push_back(point);
 
 		return point;
 	}
@@ -57,7 +55,7 @@ namespace Echo
 
 		for (PCGPrimitive* primitive : m_primitives)
 		{
-			for (PGPoint* point : primitive->getPoints())
+			for (PCGVertex* point : primitive->getVertices())
 			{
 				indices.push_back(vertices.size());
 

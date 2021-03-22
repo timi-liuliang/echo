@@ -15,6 +15,6 @@ namespace Echo
 	void PCGNode::run()
 	{
 
-		m_dirty = false;
+		m_dirtyFlag = false;
 	}
 }

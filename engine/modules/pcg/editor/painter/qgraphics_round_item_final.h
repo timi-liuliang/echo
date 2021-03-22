@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/core/editor/editor.h"
-#include "pcg/node/pcg_node.h"
+#include "engine/modules/pcg/node/pcg_node.h"
 
 #ifdef ECHO_EDITOR_MODE
 
@@ -37,7 +37,7 @@ namespace Procedural
 
 			if (m_pgNode)
 			{
-				m_pgNode->setFinal(!m_pgNode->isFinal());
+				//m_pgNode->setFinal(!m_pgNode->isFinal());
 
 				EditorApi.showObjectProperty(m_pgNode);
 			}

@@ -4,7 +4,7 @@
 
 #ifdef ECHO_EDITOR_MODE
 
-#include "pcg/pcg_flow_graph.h"
+#include "engine/modules/pcg/pcg_flow_graph.h"
 #include <QPen>
 #include <QGraphicsScene>
 #include <QtWidgets/QGraphicsItem>
@@ -143,12 +143,12 @@ namespace Procedural
 		{
 			if (m_pgNode && m_rectFinal)
 			{
-				m_rectFinal->setBrush(QBrush( m_pgNode->isFinal() ? m_style.finalColor : Qt::transparent));
+				//m_rectFinal->setBrush(QBrush( m_pgNode->isFinal() ? m_style.finalColor : Qt::transparent));
 			}
 
 			if (m_pgNode && m_rect)
 			{
-				m_rect->setPen(QPen(m_pgNode->isSelected() ? m_style.m_selectedBoundaryColor : m_style.m_normalBoundaryColor, m_style.m_penWidth));
+				//m_rect->setPen(QPen(m_pgNode->isSelected() ? m_style.m_selectedBoundaryColor : m_style.m_normalBoundaryColor, m_style.m_penWidth));
 			}
 		}
 	};

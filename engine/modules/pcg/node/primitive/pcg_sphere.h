@@ -1,6 +1,6 @@
 #pragma once
 
-#include "pcg/node/pcg_node.h"
+#include "engine/modules/pcg/node/pcg_node.h"
 
 namespace Echo
 {
@@ -29,7 +29,7 @@ namespace Echo
 		float getRadius() const { return m_radius; }
 
 		// calculate
-		virtual void play(PCGData& data) override;
+		//virtual void play(PCGData& data) override;
 
 	protected:
 		Type	m_type = Type::Uv;

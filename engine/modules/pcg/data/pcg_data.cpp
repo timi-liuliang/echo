@@ -1,11 +1,14 @@
 #include "pcg_data.h"
 
-PCGData::PCGData()
+namespace Echo
 {
+	PCGData::PCGData()
+	{
 
-}
+	}
 
-PCGData::~PCGData()
-{
+	PCGData::~PCGData()
+	{
 
+	}
 }

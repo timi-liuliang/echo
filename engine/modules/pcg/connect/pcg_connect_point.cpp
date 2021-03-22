@@ -1,65 +1,70 @@
+#include "pcg_connect.h"
 #include "pcg_connect_point.h"
+#include "engine/modules/pcg/node/pcg_node.h"
 
-PCGConnectPoint::PCGConnectPoint(PCGNode* InOwner, const String& InSupportTypes)
-	: Owner(InOwner)
-	, Type(Input)
-	, SupportTypes(InSupportTypes)
+namespace Echo
 {
-}
-
-PCGConnectPoint::PCGConnectPoint(PCGNode* InOwner, std::shared_ptr<PCGData> InData)
-	: Owner(InOwner)
-	, Type(Output)
-{
-	Data = InData;
-
-	if (InData)
+	PCGConnectPoint::PCGConnectPoint(PCGNode* owner, const String& supportTypes)
+		: m_owner(owner)
+		, m_type(Type::Input)
+		, m_supportTypes(supportTypes)
 	{
-		SupportTypes = InData->getType();
 	}
-}
 
-PCGConnectPoint::~PCGConnectPoint()
-{
-
-}
-
-TSharedPtr<PCGData> PCGConnectPoint::GetData()
-{ 
-	if (Type == Input)
+	PCGConnectPoint::PCGConnectPoint(PCGNode* owner, std::shared_ptr<PCGNode> data)
+		: m_owner(owner)
+		, m_type(Type::Output)
 	{
-		if (Connects.Num() > 0)
+		//m_data = data;
+
+		if (data)
 		{
-			return Connects[0]->From->GetData();
-		}
-	}
-	else
-	{
-		return Data;
-	}
-
-	return nullptr;
-}
-
-void PCGConnectPoint::AddConnect(std::shared_ptr<PCGConnect> InConnect)
-{
-	Connects.Add(InConnect);
-}
-
-void PCGConnectPoint::RemoveConnect(std::shared_ptr<PCGConnect> InConnect)
-{
-	Connects.Remove(InConnect);
-}
-
-std::shared_ptr<PCGConnectPoint> PCGConnectPoint::GetDependEndPoint()
-{
-	if (Type == Input)
-	{
-		if (Connects.Num() > 0)
-		{
-			return Connects[0]->From;
+			m_supportTypes = data->getType();
 		}
 	}
 
-	return nullptr;
+	PCGConnectPoint::~PCGConnectPoint()
+	{
+
+	}
+
+	std::shared_ptr<PCGData> PCGConnectPoint::GetData()
+	{
+		if (m_type == Input)
+		{
+			if (m_connects.size() > 0)
+			{
+				//return m_connects[0]->m_from->GetData();
+			}
+		}
+		else
+		{
+			return m_data;
+		}
+
+		return nullptr;
+	}
+
+	void PCGConnectPoint::AddConnect(std::shared_ptr<PCGConnect> InConnect)
+	{
+		m_connects.push_back(InConnect);
+	}
+
+	void PCGConnectPoint::RemoveConnect(std::shared_ptr<PCGConnect> InConnect)
+	{
+		//m_connects.erase(InConnect);
+	}
+
+	std::shared_ptr<PCGConnectPoint> PCGConnectPoint::GetDependEndPoint()
+	{
+		if (m_type == Input)
+		{
+			if (m_connects.size() > 0)
+			{
+				//return m_connects[0]->m_from;
+			}
+		}
+
+		return nullptr;
+	}
 }

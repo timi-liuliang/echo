@@ -19,7 +19,7 @@ namespace Echo
 		REGISTER_MODULE(LightModule);
 		REGISTER_MODULE(ModelModule);
 		REGISTER_MODULE(PhysxModule);
-        REGISTER_MODULE(ProceduralModule);
+        REGISTER_MODULE(PCGModule);
 		REGISTER_MODULE(RaytracingModule);
         REGISTER_MODULE(SceneModule);
 #ifdef ECHO_PLATFORM_WINDOWS

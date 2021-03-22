@@ -3,7 +3,9 @@
 
 namespace Echo
 {
-	PCGConnnect::PCGConnnect()
+	PCGConnnect::PCGConnnect(std::shared_ptr<PCGConnectPoint> from, std::shared_ptr<PCGConnectPoint> to)
+		: m_from(from)
+		, m_to(to)
 	{
 
 	}
