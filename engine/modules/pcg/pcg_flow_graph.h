@@ -17,12 +17,39 @@ namespace Echo
 		PCGFlowGraph();
 		virtual ~PCGFlowGraph();
 
+		// Reset
+		void reset();
+
+		// Node
+		void addNode(PCGNode* node);
+		void removeNode(PCGNode* node);
+
+		// Connect
+		void addConnect(PCGConnect* connect);
+		void removeConnect(PCGConnect* connect);
+
+		// Node query
+		i32 getNodeNum() const { return m_nodes.size(); }
+		PCGNode* getNodeByName(const String& name);
+
+		// Current
+		void setAsOutput(PCGNode* node);
+		PCGNode* getOutputNode();
+
 		// run
 		void run();
 
+	public:
+		// Is Node Exist
+		bool isNodeExist(PCGNode* node);
+
+	private:
+		// Run
+		void run(PCGNode* node);
+
 	protected:
-		std::vector<std::shared_ptr<PCGNode>>	m_nodes;
-		std::shared_ptr<PCGNode>				m_nodeOutput;
-		std::vector<std::shared_ptr<PCGConnect>>m_connects;
+		std::vector<PCGNode*>		m_nodes;
+		PCGNode*					m_nodeOutput = nullptr;
+		std::vector<PCGConnect*>	m_connects;
 	};
 }

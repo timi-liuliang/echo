@@ -24,28 +24,28 @@ namespace Echo
 		~PCGConnectPoint();
 
 		// Owner
-		PCGNode* GetOwner() { return m_owner; }
+		PCGNode* getOwner() { return m_owner; }
 
 		// Data type
-		String GetDataType() const { return m_data->getType(); }
+		String getDataType() const { return m_data->getType(); }
 
 		// Data
-		std::shared_ptr<PCGData> GetData();
-		void SetData(std::shared_ptr<PCGData> InData) { m_data = InData; }
+		std::shared_ptr<PCGData> getData();
+		void setData(std::shared_ptr<PCGData> InData) { m_data = InData; }
 
 	public:
 		// Connect
-		void AddConnect(std::shared_ptr<PCGConnect> InConnect);
-		void RemoveConnect(std::shared_ptr<PCGConnect> InConnect);
+		void addConnect(PCGConnect* InConnect);
+		void removeConnect(PCGConnect* InConnect);
 
 		// Depend
-		std::shared_ptr<PCGConnectPoint> GetDependEndPoint();
+		PCGConnectPoint* getDependEndPoint();
 
 	protected:
-		PCGNode*										m_owner = nullptr;
-		Type											m_type;
-		String											m_supportTypes;
-		std::shared_ptr<PCGData>						m_data;
-		std::vector<std::shared_ptr<class PCGConnect>>	m_connects;
+		PCGNode*						m_owner = nullptr;
+		Type							m_type;
+		String							m_supportTypes;
+		std::shared_ptr<PCGData>		m_data;
+		std::vector<class PCGConnect*>	m_connects;
 	};
 }

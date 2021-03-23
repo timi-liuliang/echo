@@ -67,15 +67,15 @@ namespace Echo
 			m_menuNew = EchoNew(QMenu(m_ui));
 
 			Echo::StringArray pgNodeClasses;
-			Echo::Class::getChildClasses(pgNodeClasses, "PGNode", true);
+			Echo::Class::getChildClasses(pgNodeClasses, "PCGNode", true);
 			for (String& className : pgNodeClasses)
 			{
 				QAction* newAction = new QAction;
-				newAction->setText(Echo::StringUtil::Replace(className, "PG", "").c_str());
+				newAction->setText(Echo::StringUtil::Replace(className, "PCG", "").c_str());
 				newAction->setData(className.c_str());
 				m_menuNew->addAction(newAction);
 
-				EditorApi.qConnectAction(newAction, QSIGNAL(triggered()), this, createMethodBind(&PCGFlowGraphPanel::onNewPGNode));
+				EditorApi.qConnectAction(newAction, QSIGNAL(triggered()), this, createMethodBind(&PCGFlowGraphPanel::onNewPCGNode));
 			}
 		}
 
@@ -86,7 +86,7 @@ namespace Echo
 		m_menuNew->exec(QCursor::pos());
 	}
 
-	void PCGFlowGraphPanel::onNewPGNode()
+	void PCGFlowGraphPanel::onNewPCGNode()
 	{
 		QAction* action = qobject_cast<QAction*>(EditorApi.qSender());
 		if(action)
@@ -94,14 +94,10 @@ namespace Echo
 			Echo::String className = action->data().toString().toStdString().c_str();
 			if (m_flowGraph)
 			{
-				//Echo::PCGNode* root = m_flowGraph->getPGNode();
-				//if (root)
-				//{
-				//	Echo::PCGNode* pgNode = Echo::Class::create<PCGNode*>(className);
-				//	pgNode->setPosition(m_newPGNodePosition);
+				Echo::PCGNode* pcgNode = Echo::Class::create<PCGNode*>(className);
+				pcgNode->setPosition(m_newPGNodePosition);
 
-				//	root->addChild(pgNode);
-				//}
+				m_flowGraph->addNode(pcgNode);
 			}
 		}
 	}

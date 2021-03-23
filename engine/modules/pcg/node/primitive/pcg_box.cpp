@@ -89,4 +89,9 @@ namespace Echo
 	//	prim1->addPoint(points[2]);
 	//	prim1->addPoint(points[3]);
 	//}
+
+	void PCGBox::run()
+	{
+
+	}
 }

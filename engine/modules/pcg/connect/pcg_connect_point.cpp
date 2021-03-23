@@ -28,7 +28,7 @@ namespace Echo
 
 	}
 
-	std::shared_ptr<PCGData> PCGConnectPoint::GetData()
+	std::shared_ptr<PCGData> PCGConnectPoint::getData()
 	{
 		if (m_type == Input)
 		{
@@ -45,17 +45,17 @@ namespace Echo
 		return nullptr;
 	}
 
-	void PCGConnectPoint::AddConnect(std::shared_ptr<PCGConnect> InConnect)
+	void PCGConnectPoint::addConnect(PCGConnect* InConnect)
 	{
 		m_connects.push_back(InConnect);
 	}
 
-	void PCGConnectPoint::RemoveConnect(std::shared_ptr<PCGConnect> InConnect)
+	void PCGConnectPoint::removeConnect(PCGConnect* InConnect)
 	{
 		//m_connects.erase(InConnect);
 	}
 
-	std::shared_ptr<PCGConnectPoint> PCGConnectPoint::GetDependEndPoint()
+	PCGConnectPoint* PCGConnectPoint::getDependEndPoint()
 	{
 		if (m_type == Input)
 		{

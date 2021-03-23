@@ -40,7 +40,7 @@ namespace Echo
 
 		// import
 		void onRightClickGraphicsView();
-		void onNewPGNode();
+		void onNewPCGNode();
 
 		// delete 
 		void onDeletePGNodes();

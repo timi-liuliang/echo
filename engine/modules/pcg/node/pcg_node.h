@@ -11,15 +11,22 @@ namespace Echo
 		ECHO_CLASS(PCGNode, Object);
 
 	public:
+		PCGNode();
+		virtual ~PCGNode();
+
+		// Name
+		String getName() const { return m_name; }
+		void setName(const String& name) { m_name = name; }
+
 		// Type
 		virtual String getType() const { return "UnKnown"; }
 
 		// Output
-		const std::vector<std::shared_ptr<PCGConnectPoint>>& GetInputs() { return Inputs; }
-		const std::vector<std::shared_ptr<PCGConnectPoint>>& GetOutputs() { return Outputs; }
+		const std::vector<PCGConnectPoint*>& getInputs() { return m_inputs; }
+		const std::vector<PCGConnectPoint*>& getOutputs() { return m_outputs; }
 
 		// Dependent Inputs
-		virtual std::vector<std::shared_ptr<PCGConnectPoint>> GetDependentInputs() { return Inputs; }
+		virtual std::vector<PCGConnectPoint*> getDependentInputs() { return m_inputs; }
 
 		// pos
 		void setPosition(const Vector2& position) { m_position = position; }
@@ -28,13 +35,17 @@ namespace Echo
 		// is dirty
 		bool isDirty() { return m_dirtyFlag; }
 
+		// check
+		bool check() { return true; }
+
 		// calculate
 		virtual void run();
 
 	protected:
-		std::vector<std::shared_ptr<PCGConnectPoint>>	Inputs;
-		std::vector<std::shared_ptr<PCGConnectPoint>>	Outputs;
-		bool											m_dirtyFlag = true;
-		Vector2											m_position;
+		String								m_name;
+		std::vector<PCGConnectPoint*>		m_inputs;
+		std::vector<PCGConnectPoint*>		m_outputs;
+		bool								m_dirtyFlag = true;
+		Vector2								m_position;
 	};
 }

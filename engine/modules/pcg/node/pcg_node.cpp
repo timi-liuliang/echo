@@ -4,6 +4,16 @@
 
 namespace Echo
 {
+	PCGNode::PCGNode()
+	{
+
+	}
+
+	PCGNode::~PCGNode()
+	{
+
+	}
+
 	void PCGNode::bindMethods()
 	{
 		CLASS_BIND_METHOD(PCGNode, getPosition, DEF_METHOD("getPosition"));

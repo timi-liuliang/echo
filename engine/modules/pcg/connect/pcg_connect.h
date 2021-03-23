@@ -1,17 +1,23 @@
 #pragma once
 
-#include "engine/modules/pcg/node/pcg_node.h"
+#include "pcg_connect_point.h"
 
 namespace Echo
 {
-	class PCGConnnect
+	class PCGConnect
 	{
 	public:
-		PCGConnnect(std::shared_ptr<PCGConnectPoint> from, std::shared_ptr<PCGConnectPoint> to);
-		virtual ~PCGConnnect();
+		PCGConnect(PCGConnectPoint* from, PCGConnectPoint* to);
+		virtual ~PCGConnect();
+
+		// from
+		PCGConnectPoint* getFrom() { return m_from; }
+
+		// to
+		PCGConnectPoint* getTo() { return m_to; }
 
 	protected:
-		std::shared_ptr<PCGConnectPoint>	m_from;
-		std::shared_ptr<PCGConnectPoint>	m_to;
+		PCGConnectPoint* m_from = nullptr;
+		PCGConnectPoint* m_to = nullptr;
 	};
 }
