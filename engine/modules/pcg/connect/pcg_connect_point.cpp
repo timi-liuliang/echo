@@ -11,11 +11,11 @@ namespace Echo
 	{
 	}
 
-	PCGConnectPoint::PCGConnectPoint(PCGNode* owner, std::shared_ptr<PCGNode> data)
+	PCGConnectPoint::PCGConnectPoint(PCGNode* owner, std::shared_ptr<PCGData> data)
 		: m_owner(owner)
 		, m_type(Type::Output)
 	{
-		//m_data = data;
+		m_data = data;
 
 		if (data)
 		{

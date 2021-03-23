@@ -18,9 +18,6 @@ namespace Echo
 		String getName() const { return m_name; }
 		void setName(const String& name) { m_name = name; }
 
-		// Type
-		virtual String getType() const { return "UnKnown"; }
-
 		// Output
 		const std::vector<PCGConnectPoint*>& getInputs() { return m_inputs; }
 		const std::vector<PCGConnectPoint*>& getOutputs() { return m_outputs; }

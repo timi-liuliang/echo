@@ -29,7 +29,7 @@ namespace Echo
 		void removeConnect(PCGConnect* connect);
 
 		// Node query
-		i32 getNodeNum() const { return m_nodes.size(); }
+		const vector<PCGNode*>::type& getNodes() const { return m_nodes; }
 		PCGNode* getNodeByName(const String& name);
 
 		// Current
@@ -48,7 +48,7 @@ namespace Echo
 		void run(PCGNode* node);
 
 	protected:
-		std::vector<PCGNode*>		m_nodes;
+		vector<PCGNode*>::type		m_nodes;
 		PCGNode*					m_nodeOutput = nullptr;
 		std::vector<PCGConnect*>	m_connects;
 	};

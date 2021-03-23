@@ -136,32 +136,32 @@ namespace Echo
 
 	void PCGFlowGraphPanel::drawNodes()
 	{
-		//const vector<PCGNode*>::type& pgNodes = m_flowGraph->getPGNode()->children();
-		//while (m_pgNodePainters.size() > pgNodes.size())
-		//{
-		//	EchoSafeDelete(m_pgNodePainters.back(), PGNodePainter);
-		//	m_pgNodePainters.pop_back();
-		//}
+		const vector<PCGNode*>::type& pcgNodes = m_flowGraph->getNodes();
+		while (m_pgNodePainters.size() > pcgNodes.size())
+		{
+			EchoSafeDelete(m_pgNodePainters.back(), PCGNodePainter);
+			m_pgNodePainters.pop_back();
+		}
 
-		//if (m_pgNodePainters.size() < pgNodes.size())
-		//{
-		//	for (size_t i = m_pgNodePainters.size(); i < pgNodes.size(); ++i)
-		//		m_pgNodePainters.emplace_back(EchoNew(Procedural::PGNodePainter(m_graphicsView, m_graphicsScene, pgNodes[i])));
-		//}
+		if (m_pgNodePainters.size() < pcgNodes.size())
+		{
+			for (size_t i = m_pgNodePainters.size(); i < pcgNodes.size(); ++i)
+				m_pgNodePainters.emplace_back(EchoNew(Procedural::PCGNodePainter(m_graphicsView, m_graphicsScene, pcgNodes[i])));
+		}
 
-		//for (size_t i = 0; i < pgNodes.size(); i++)
-		//{
-		//	if (!m_pgNodePainters[i] || m_pgNodePainters[i]->m_pgNode != pgNodes[i])
-		//	{
-		//		EchoSafeDelete(m_pgNodePainters[i], PGNodePainter);
-		//		m_pgNodePainters[i] = EchoNew(Procedural::PGNodePainter(m_graphicsView, m_graphicsScene, pgNodes[i]));
-		//	}
-		//}
+		for (size_t i = 0; i < pcgNodes.size(); i++)
+		{
+			if (!m_pgNodePainters[i] || m_pgNodePainters[i]->m_pgNode != pcgNodes[i])
+			{
+				EchoSafeDelete(m_pgNodePainters[i], PCGNodePainter);
+				m_pgNodePainters[i] = EchoNew(Procedural::PCGNodePainter(m_graphicsView, m_graphicsScene, pcgNodes[i]));
+			}
+		}
 
-		//for (size_t i = 0; i < pgNodes.size(); i++)
-		//{
-		//	m_pgNodePainters[i]->update();
-		//}
+		for (size_t i = 0; i < pcgNodes.size(); i++)
+		{
+			m_pgNodePainters[i]->update();
+		}
 	}
 
 	void PCGFlowGraphPanel::clearImageItemAndBorder()

@@ -13,7 +13,7 @@
 
 namespace Procedural
 {
-	struct PGNodePainter
+	struct PCGNodePainter
 	{
 		struct 
 		{
@@ -48,7 +48,7 @@ namespace Procedural
 		Echo::Color							m_connectPointColor = Echo::Color::DARKCYAN;
 		QGraphicsSimpleTextItem*			m_text = nullptr;
 
-		PGNodePainter(QGraphicsView* view, QGraphicsScene* scene, Echo::PCGNode* pgNode)
+		PCGNodePainter(QGraphicsView* view, QGraphicsScene* scene, Echo::PCGNode* pgNode)
 		{
 			m_pgNode = pgNode;
 			m_graphicsView = view;
@@ -83,7 +83,7 @@ namespace Procedural
 				m_rectFinal->setZValue(-5.f);
 				m_rectFinal->setParentItem(m_rect);
 
-				m_text = m_graphicsScene->addSimpleText(Echo::StringUtil::Replace(pgNode->getClassName(), "PG", "").c_str());
+				m_text = m_graphicsScene->addSimpleText(Echo::StringUtil::Replace(pgNode->getClassName(), "PCG", "").c_str());
 				m_text->setBrush(QBrush(m_style.m_fontColor));
 				m_text->setParentItem(m_rect);
 
@@ -107,7 +107,7 @@ namespace Procedural
 			}
 		}
 
-		~PGNodePainter()
+		~PCGNodePainter()
 		{
 			reset();
 		}
@@ -152,7 +152,7 @@ namespace Procedural
 			}
 		}
 	};
-	typedef Echo::vector<PGNodePainter*>::type PGNodePainters;
+	typedef Echo::vector<PCGNodePainter*>::type PCGNodePainters;
 }
 
 #endif

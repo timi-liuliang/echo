@@ -20,7 +20,7 @@ namespace Echo
 
 	public:
 		PCGConnectPoint(PCGNode* owner, const String& supportTypes);
-		PCGConnectPoint(PCGNode* owner, std::shared_ptr<PCGNode> data);
+		PCGConnectPoint(PCGNode* owner, std::shared_ptr<PCGData> data);
 		~PCGConnectPoint();
 
 		// Owner
