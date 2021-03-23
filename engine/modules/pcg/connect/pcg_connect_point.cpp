@@ -11,7 +11,7 @@ namespace Echo
 	{
 	}
 
-	PCGConnectPoint::PCGConnectPoint(PCGNode* owner, std::shared_ptr<PCGData> data)
+	PCGConnectPoint::PCGConnectPoint(PCGNode* owner, PCGDataPtr data)
 		: m_owner(owner)
 		, m_type(Type::Output)
 	{
@@ -28,7 +28,12 @@ namespace Echo
 
 	}
 
-	std::shared_ptr<PCGData> PCGConnectPoint::getData()
+	String PCGConnectPoint::getDataType()
+	{ 
+		return m_data->getType(); 
+	}
+
+	PCGDataPtr PCGConnectPoint::getData()
 	{
 		if (m_type == Input)
 		{

@@ -20,18 +20,18 @@ namespace Echo
 
 	public:
 		PCGConnectPoint(PCGNode* owner, const String& supportTypes);
-		PCGConnectPoint(PCGNode* owner, std::shared_ptr<PCGData> data);
+		PCGConnectPoint(PCGNode* owner, PCGDataPtr data);
 		~PCGConnectPoint();
 
 		// Owner
 		PCGNode* getOwner() { return m_owner; }
 
 		// Data type
-		String getDataType() const { return m_data->getType(); }
+		String getDataType();
 
 		// Data
-		std::shared_ptr<PCGData> getData();
-		void setData(std::shared_ptr<PCGData> InData) { m_data = InData; }
+		PCGDataPtr getData();
+		void setData(PCGDataPtr InData) { m_data = InData; }
 
 	public:
 		// Connect
@@ -45,7 +45,7 @@ namespace Echo
 		PCGNode*						m_owner = nullptr;
 		Type							m_type;
 		String							m_supportTypes;
-		std::shared_ptr<PCGData>		m_data;
+		PCGDataPtr						m_data;
 		std::vector<class PCGConnect*>	m_connects;
 	};
 }

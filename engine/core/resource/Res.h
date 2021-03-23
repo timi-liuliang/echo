@@ -60,10 +60,8 @@ namespace Echo
 		virtual void enumFilesInDir(StringArray& ret, const String& rootPath, bool bIncDir = false, bool bIncSubDirs = false, bool bAbsPath = false) {}
 
 	public:
-		// add ref count
+		// ref count
 		void addRefCount() { m_refCount++; }
-
-		// release
 		void subRefCount();
 
 		// is loaded succeed

@@ -1,10 +1,11 @@
 #pragma once
 
 #include "engine/core/memory/MemAllocDef.h"
+#include "engine/core/resource/ResRef.h"
 
 namespace Echo
 {
-	class PCGData
+	class PCGData : public Refable
 	{
 	public:
 		PCGData();
@@ -13,4 +14,5 @@ namespace Echo
 		// Type
 		virtual String getType() { return "UnKnown"; }
 	};
+	typedef ResRef<PCGData> PCGDataPtr;
 }

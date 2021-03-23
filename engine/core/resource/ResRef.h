@@ -127,6 +127,11 @@ namespace Echo
 			return m_ptr;
 		}
 
+		const T* operator -> () const
+		{
+			return m_ptr;
+		}
+
 		T* ptr()
 		{
 			return m_ptr;
