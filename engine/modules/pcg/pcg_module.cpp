@@ -2,6 +2,7 @@
 #include "pcg_flow_graph.h"
 #include "node/primitive/pcg_box.h"
 #include "node/image/pcg_image_perlin_noise.h"
+#include "node/image/pcg_image_save.h"
 #include "editor/pcg_flow_graph_editor.h"
 
 namespace Echo
@@ -32,6 +33,7 @@ namespace Echo
 		Class::registerType<PCGBox>();
 
 		Class::registerType<PCGImagePerlinNoise>();
+		Class::registerType<PCGImageSave>();
 
 		CLASS_REGISTER_EDITOR(PCGFlowGraph, PCGFlowGraphEditor)
 	}

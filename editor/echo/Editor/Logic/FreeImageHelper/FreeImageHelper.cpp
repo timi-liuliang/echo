@@ -42,7 +42,6 @@ namespace Echo
 		
 		int fiFlags = mappingFlagsByFormat( fileFMT);
 
-		// 加载获取纹理信息
 		if( fileFMT!= FIF_UNKNOWN && FreeImage_FIFSupportsReading( fileFMT))
 		{
 			FIBITMAP* fileHandle = FreeImage_Load( fileFMT, filePath, fiFlags);
