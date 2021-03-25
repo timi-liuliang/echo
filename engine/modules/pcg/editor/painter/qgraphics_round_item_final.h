@@ -37,7 +37,9 @@ namespace Procedural
 
 			if (m_pgNode)
 			{
-				//m_pgNode->setFinal(!m_pgNode->isFinal());
+				Echo::PCGFlowGraph* graph = m_pgNode->getGraph();
+				if (graph)
+					graph->setAsOutput(m_pgNode);
 
 				EditorApi.showObjectProperty(m_pgNode);
 			}
@@ -56,8 +58,8 @@ namespace Procedural
 		}
 
 	protected:
-		float			m_radius = 3.f;
-		Echo::PCGNode*	m_pgNode = nullptr;
+		float					m_radius = 3.f;
+		Echo::PCGNode*			m_pgNode = nullptr;
 	};
 }
 

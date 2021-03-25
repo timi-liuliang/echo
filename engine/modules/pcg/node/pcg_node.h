@@ -6,6 +6,7 @@
 
 namespace Echo
 {
+	class PCGFlowGraph;
 	class PCGNode : public Object
 	{
 		ECHO_CLASS(PCGNode, Object);
@@ -17,6 +18,10 @@ namespace Echo
 		// Name
 		String getName() const { return m_name; }
 		void setName(const String& name) { m_name = name; }
+
+		// Graph
+		void setGraph(PCGFlowGraph* graph) { m_graph = graph; }
+		PCGFlowGraph* getGraph() { return m_graph; }
 
 		// Output
 		const std::vector<PCGConnectPoint*>& getInputs() { return m_inputs; }
@@ -40,6 +45,7 @@ namespace Echo
 
 	protected:
 		String								m_name;
+		PCGFlowGraph*						m_graph = nullptr;
 		std::vector<PCGConnectPoint*>		m_inputs;
 		std::vector<PCGConnectPoint*>		m_outputs;
 		bool								m_dirtyFlag = true;

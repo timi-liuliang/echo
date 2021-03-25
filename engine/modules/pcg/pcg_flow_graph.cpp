@@ -35,6 +35,7 @@ namespace Echo
 	{
 		if (!isNodeExist(node))
 		{
+			node->setGraph(this);
 			m_nodes.emplace_back(node);
 
 			if (!m_nodeOutput)

@@ -146,15 +146,15 @@ namespace Echo
 		if (m_pgNodePainters.size() < pcgNodes.size())
 		{
 			for (size_t i = m_pgNodePainters.size(); i < pcgNodes.size(); ++i)
-				m_pgNodePainters.emplace_back(EchoNew(Procedural::PCGNodePainter(m_graphicsView, m_graphicsScene, pcgNodes[i])));
+				m_pgNodePainters.emplace_back(EchoNew(Procedural::PCGNodePainter(m_graphicsView, m_graphicsScene, m_flowGraph, pcgNodes[i])));
 		}
 
 		for (size_t i = 0; i < pcgNodes.size(); i++)
 		{
-			if (!m_pgNodePainters[i] || m_pgNodePainters[i]->m_pgNode != pcgNodes[i])
+			if (!m_pgNodePainters[i] || m_pgNodePainters[i]->getPCGNode() != pcgNodes[i])
 			{
 				EchoSafeDelete(m_pgNodePainters[i], PCGNodePainter);
-				m_pgNodePainters[i] = EchoNew(Procedural::PCGNodePainter(m_graphicsView, m_graphicsScene, pcgNodes[i]));
+				m_pgNodePainters[i] = EchoNew(Procedural::PCGNodePainter(m_graphicsView, m_graphicsScene, m_flowGraph, pcgNodes[i]));
 			}
 		}
 
