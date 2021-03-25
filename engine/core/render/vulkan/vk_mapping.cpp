@@ -65,6 +65,8 @@ namespace Echo
 		switch (pixFmt)
 		{
         case PF_UNKNOWN:            return VK_FORMAT_UNDEFINED;
+        case PF_R8_UINT:            return VK_FORMAT_R8_UINT;
+        case PF_R16_UINT:           return VK_FORMAT_R16_UINT;
         case PF_RGB8_UNORM:         return VK_FORMAT_R8G8B8_UNORM;
         case PF_RGB8_SNORM:         return VK_FORMAT_R8G8B8_SNORM;
         case PF_RGBA8_UNORM:        return VK_FORMAT_R8G8B8A8_UNORM;
