@@ -27,6 +27,9 @@ namespace Procedural
 			painter->drawRoundedRect(rect(), m_radius, m_radius);
 		}
 
+		// is focused
+		bool isFocused() const { return m_focused; }
+
 		// set radius
 		void setRadius(float radius) { m_radius = radius; }
 
@@ -66,8 +69,19 @@ namespace Procedural
 			return QGraphicsRectItem::itemChange(change, value);
 		}
 
+		virtual void focusInEvent(QFocusEvent* event)
+		{
+			m_focused = true;
+		}
+
+		virtual void focusOutEvent(QFocusEvent* event)
+		{
+			m_focused = false;
+		}
+
 	protected:
 		bool			m_isFinalRect = false;
+		bool			m_focused = false;
 		float			m_radius = 3.f;
 		Echo::PCGNode*	m_pgNode = nullptr;
 	};

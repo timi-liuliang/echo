@@ -47,20 +47,8 @@ namespace Procedural
 			QRectF textRect = m_text->sceneBoundingRect();
 			m_text->setPos((m_width - textRect.width()) * 0.5f - halfWidth, (m_height - textRect.height()) * 0.5f - halfHeight);
 
-			float halfConnectPointRadius = m_connectPointRadius * 0.5f;
-			m_inputConnectionPoints.push_back(EditorApi.qGraphicsSceneAddEclipse(m_graphicsScene, 0.f, 0.f, m_connectPointRadius, m_connectPointRadius, m_connectPointColor));
-			for (QGraphicsItem* item : m_inputConnectionPoints)
-			{
-				item->setParentItem(m_rect);
-				item->setPos(0.f - halfConnectPointRadius, -halfHeight - halfConnectPointRadius * 3.f);
-			}
-
-			m_outputConnectionPoints.push_back(EditorApi.qGraphicsSceneAddEclipse(m_graphicsScene, 0.f, 0.f, m_connectPointRadius, m_connectPointRadius, m_connectPointColor));
-			for (QGraphicsItem* item : m_outputConnectionPoints)
-			{
-				item->setParentItem(m_rect);
-				item->setPos(0.f - halfConnectPointRadius, halfHeight + halfConnectPointRadius);
-			}
+			buildInputConnectPoints();
+			buildOutputConnectPoints();
 		}
 	}
 
@@ -88,9 +76,48 @@ namespace Procedural
 		m_text = nullptr;
 	}
 
-	void PCGNodePainter::set()
+	void PCGNodePainter::buildInputConnectPoints()
 	{
+		const std::vector<Echo::PCGConnectPoint*>& inputs = m_pcgNode->getInputs();
+		if (!inputs.empty())
+		{
+			float halfConnectPointRadius = m_connectPointRadius * 0.5f;	
+			float halfWidth = (inputs.size() + (inputs.size() - 1.f)) * m_connectPointRadius * 0.5f;
+			float nodeHalfHeight = m_height * 0.5f;
 
+			for (size_t i = 0; i < inputs.size(); i++)
+			{
+				QPen pen(QColor::fromRgbF(m_connectPointColor.r, m_connectPointColor.g, m_connectPointColor.b, m_connectPointColor.a));
+				QBrush brush(QColor::fromRgbF(m_connectPointColor.r, m_connectPointColor.g, m_connectPointColor.b, m_connectPointColor.a));
+
+				QGraphicsItem* item = m_graphicsScene->addEllipse(QRectF(0.f, 0.f, m_connectPointRadius, m_connectPointRadius), pen, brush);
+				item->setParentItem(m_rect);
+				item->setPos(0.f - halfConnectPointRadius - halfWidth, -nodeHalfHeight - halfConnectPointRadius * 3.f);
+				m_inputConnectionPoints.push_back(item);
+			}
+		}
+	}
+
+	void PCGNodePainter::buildOutputConnectPoints()
+	{
+		const std::vector<Echo::PCGConnectPoint*>& outputs = m_pcgNode->getOutputs();
+		if (!outputs.empty())
+		{
+			float halfConnectPointRadius = m_connectPointRadius * 0.5f;
+			float halfWidth = (outputs.size() + (outputs.size() - 1.f)) * m_connectPointRadius * 0.5f;
+			float nodeHalfHeight = m_height * 0.5f;
+
+			for (size_t i = 0; i < outputs.size(); i++)
+			{
+				QPen pen(QColor::fromRgbF(m_connectPointColor.r, m_connectPointColor.g, m_connectPointColor.b, m_connectPointColor.a));
+				QBrush brush(QColor::fromRgbF(m_connectPointColor.r, m_connectPointColor.g, m_connectPointColor.b, m_connectPointColor.a));
+
+				QGraphicsItem* item = m_graphicsScene->addEllipse(QRectF(0.f, 0.f, m_connectPointRadius, m_connectPointRadius), pen, brush);
+				item->setParentItem(m_rect);
+				item->setPos(0.f - halfConnectPointRadius - halfWidth, nodeHalfHeight + halfConnectPointRadius);
+				m_outputConnectionPoints.push_back(item);
+			}
+		}
 	}
 
 	void PCGNodePainter::update()
@@ -102,7 +129,8 @@ namespace Procedural
 
 		if (m_pcgNode && m_rect)
 		{
-			//m_rect->setPen(QPen(m_pcgNode->isSelected() ? m_style.m_selectedBoundaryColor : m_style.m_normalBoundaryColor, m_style.m_penWidth));
+		
+			m_rect->setPen(QPen(m_rect->isFocused() ? m_style.m_selectedBoundaryColor : m_style.m_normalBoundaryColor, m_style.m_penWidth));
 		}
 	}
 }

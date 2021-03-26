@@ -4,7 +4,9 @@ namespace Echo
 {
 	PCGImageSave::PCGImageSave()
 	{
+		m_inputs.push_back( EchoNew(PCGConnectPoint(this, "Image")));
 
+		m_outputs.push_back(EchoNew(PCGConnectPoint(this, "Image", PCGConnectPoint::Output)));
 	}
 
 	PCGImageSave::~PCGImageSave()

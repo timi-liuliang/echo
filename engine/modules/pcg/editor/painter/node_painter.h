@@ -44,15 +44,17 @@ namespace Procedural
 		// reset
 		void reset();
 
-		// set
-		void set();
-
 		// update
 		void update();
 
 	public:
 		// pcg node
 		Echo::PCGNode* getPCGNode() { return m_pcgNode; }
+
+	protected:
+		// build
+		void buildInputConnectPoints();
+		void buildOutputConnectPoints();
 
 	private:
 		Style								m_style;

@@ -4,9 +4,9 @@
 
 namespace Echo
 {
-	PCGConnectPoint::PCGConnectPoint(PCGNode* owner, const String& supportTypes)
+	PCGConnectPoint::PCGConnectPoint(PCGNode* owner, const String& supportTypes, PCGConnectPoint::Type type)
 		: m_owner(owner)
-		, m_type(Type::Input)
+		, m_type(type)
 		, m_supportTypes(supportTypes)
 	{
 	}

@@ -19,7 +19,7 @@ namespace Echo
 		};
 
 	public:
-		PCGConnectPoint(PCGNode* owner, const String& supportTypes);
+		PCGConnectPoint(PCGNode* owner, const String& supportTypes, Type type=Input);
 		PCGConnectPoint(PCGNode* owner, PCGDataPtr data);
 		~PCGConnectPoint();
 
