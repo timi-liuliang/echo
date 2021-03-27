@@ -14,7 +14,6 @@
 #include "engine/core/main/Engine.h"
 #include "engine/core/render/base/atla/texture_atlas.h"
 #include "engine/core/log/Log.h"
-#include "painter/custom/qgraphics_scene_ex.h"
 
 namespace Echo
 {
@@ -41,7 +40,7 @@ namespace Echo
 
 		// create QGraphicsScene
 		m_graphicsView = m_ui->findChild<QGraphicsView*>("m_graphicsView");
-		m_graphicsScene = new QGraphicsSceneEx;
+		m_graphicsScene = new Procedural::QGraphicsFlowScene;
 		m_graphicsView->setScene(m_graphicsScene);
 
 		// background

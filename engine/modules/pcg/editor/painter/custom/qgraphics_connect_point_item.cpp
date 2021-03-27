@@ -2,6 +2,8 @@
 
 #ifdef ECHO_EDITOR_MODE
 
+#include "qgraphics_flow_scene.h"
+
 namespace Procedural
 {
 	QGraphicsConnectPointItem::QGraphicsConnectPointItem()
@@ -26,17 +28,11 @@ namespace Procedural
 	void QGraphicsConnectPointItem::hoverEnterEvent(QGraphicsSceneHoverEvent* event)
 	{
 		QGraphicsEllipseItem::hoverEnterEvent(event);
-
-		if (m_hoverEnterEventCb)
-			m_hoverEnterEventCb(this);
 	}
 
 	void QGraphicsConnectPointItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* event)
 	{
 		QGraphicsEllipseItem::hoverLeaveEvent(event);
-
-		if (m_hoverLeaveEventCb)
-			m_hoverLeaveEventCb(this);
 	}
 
 	void QGraphicsConnectPointItem::mousePressEvent(QGraphicsSceneMouseEvent* event)
@@ -44,8 +40,10 @@ namespace Procedural
 		QGraphicsItem* item = scene()->itemAt(event->scenePos(), QTransform());
 		if (item == this)
 		{
-			if (m_mousePressEventCb)
-				m_mousePressEventCb(this);
+			// begin connection
+			QGraphicsFlowScene* flowScene = dynamic_cast<QGraphicsFlowScene*>(scene());
+			if(flowScene)
+				flowScene->beginConnect();
 		}
 	}
 
@@ -56,8 +54,6 @@ namespace Procedural
 
 	void QGraphicsConnectPointItem::keyPressEvent(QKeyEvent* event)
 	{
-		if (m_keyEventCb)
-			m_keyEventCb(event);
 	}
 
 	void QGraphicsConnectPointItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event)

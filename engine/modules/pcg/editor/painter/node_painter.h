@@ -10,6 +10,9 @@
 #include <QtWidgets/QGraphicsItem>
 #include "custom/qgraphics_round_item.h"
 #include "custom/qgraphics_round_item_final.h"
+#include "custom/qgraphics_connect_point_item.h"
+#include "custom/qgraphics_connect_item.h"
+#include "custom/qgraphics_flow_scene.h"
 
 namespace Procedural
 {
@@ -61,7 +64,7 @@ namespace Procedural
 		Echo::PCGFlowGraph*					m_pcgFlowGraph = nullptr;
 		Echo::PCGNode*						m_pcgNode = nullptr;
 		QGraphicsView*						m_graphicsView = nullptr;
-		QGraphicsScene*						m_graphicsScene = nullptr;
+		QGraphicsFlowScene*					m_graphicsScene = nullptr;
 		QGraphicsRoundRectItem*				m_rect = nullptr;
 		QGraphicsRoundRectItemFinal*		m_rectFinal = nullptr;
 		float								m_rectFinalWidth = 15;

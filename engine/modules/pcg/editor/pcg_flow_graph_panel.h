@@ -8,6 +8,8 @@
 
 #ifdef ECHO_EDITOR_MODE
 
+#include "painter/custom/qgraphics_flow_scene.h"
+
 namespace Echo
 {
 	class PCGFlowGraphPanel : public QObject
@@ -58,7 +60,7 @@ namespace Echo
 		QDockWidget*						m_ui;
 		QMenu*								m_menuNew = nullptr;
 		QGraphicsView*						m_graphicsView = nullptr;
-		QGraphicsScene*						m_graphicsScene = nullptr;
+		Procedural::QGraphicsFlowScene*		m_graphicsScene = nullptr;
 		BackgroundStyle						m_backgroundStyle;
 		Procedural::QBackgroundGridPainter	m_backgroundGridSmall;
 		Procedural::QBackgroundGridPainter	m_backgroundGridBig;

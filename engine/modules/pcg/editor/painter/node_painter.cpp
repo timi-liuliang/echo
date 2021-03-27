@@ -11,7 +11,7 @@ namespace Procedural
 		m_pcgFlowGraph = flowGraph;
 		m_pcgNode = pgNode;
 		m_graphicsView = view;
-		m_graphicsScene = scene;
+		m_graphicsScene = dynamic_cast<QGraphicsFlowScene*>(scene);
 
 		if (!m_rect)
 		{

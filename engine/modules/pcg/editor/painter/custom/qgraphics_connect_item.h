@@ -7,20 +7,20 @@
 #include <QPainter>
 #include <QGraphicsSceneEvent>
 #include <QApplication>
-#include <QGraphicsEllipseItem>
+#include <QGraphicsPathItem>
 #include <QMimeData>
 #include <QDrag>
 
 namespace Procedural
 {
-	class QGraphicsConnectPointItem : public QGraphicsEllipseItem
+	class QGraphicsConnectItem : public QGraphicsPathItem
 	{
 	public:
-		QGraphicsConnectPointItem();
-		~QGraphicsConnectPointItem();
+		QGraphicsConnectItem();
+		~QGraphicsConnectItem();
 
-		// is focused
-		bool isFocused() const { return m_focused; }
+		// set
+		void set(const Echo::Vector2& startPos, const Echo::Vector2& endPos);
 
 	protected:
 		// foucs event
@@ -45,8 +45,9 @@ namespace Procedural
 		virtual bool sceneEventFilter(QGraphicsItem* watched, QEvent* event);
 
 	protected:
-		Echo::ui32							m_objectId = 0;
-		bool								m_focused = false;
+		bool				m_focused = false;
+		Echo::Vector2		m_startPos = Echo::Vector2::ZERO;
+		Echo::Vector2		m_endPos = Echo::Vector2::ZERO;
 	};
 }
 
