@@ -20,6 +20,9 @@ namespace Procedural
 		QGraphicsConnectPointItem(Echo::PCGConnectPoint* connectPoint);
 		~QGraphicsConnectPointItem();
 
+		// get item
+		static QGraphicsConnectPointItem* getByPCGConnectPoint(Echo::PCGConnectPoint* connectPoint);
+
 		// connect point
 		Echo::PCGConnectPoint* getPCGConnectPoint() { return m_connectPoint; }		
 

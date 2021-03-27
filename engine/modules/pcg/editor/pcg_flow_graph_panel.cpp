@@ -117,8 +117,8 @@ namespace Echo
 	void PCGFlowGraphPanel::refreshUiDisplay()
 	{
 		drawBackground();
-
 		drawNodes();
+		drawConnects();
 	}
 
 	void PCGFlowGraphPanel::drawBackground()
@@ -160,6 +160,36 @@ namespace Echo
 		for (size_t i = 0; i < pcgNodes.size(); i++)
 		{
 			m_pgNodePainters[i]->update();
+		}
+	}
+
+	void PCGFlowGraphPanel::drawConnects()
+	{
+		const vector<PCGConnect*>::type& pcgConnects = m_flowGraph->getConnects();
+		while (m_pcgConnectPainters.size() > pcgConnects.size())
+		{
+			EchoSafeDelete(m_pcgConnectPainters.back(), PCGConnectPainter);
+			m_pcgConnectPainters.pop_back();
+		}
+
+		if (m_pcgConnectPainters.size() < pcgConnects.size())
+		{
+			for (size_t i = m_pcgConnectPainters.size(); i < pcgConnects.size(); ++i)
+				m_pcgConnectPainters.emplace_back(EchoNew(Procedural::PCGConnectPainter(m_graphicsView, m_graphicsScene, m_flowGraph, pcgConnects[i])));
+		}
+
+		for (size_t i = 0; i < pcgConnects.size(); i++)
+		{
+			if (!m_pcgConnectPainters[i] || m_pcgConnectPainters[i]->getPCGConnect() != pcgConnects[i])
+			{
+				EchoSafeDelete(m_pcgConnectPainters[i], PCGConnectPainter);
+				m_pcgConnectPainters[i] = EchoNew(Procedural::PCGConnectPainter(m_graphicsView, m_graphicsScene, m_flowGraph, pcgConnects[i]));
+			}
+		}
+
+		for (size_t i = 0; i < pcgConnects.size(); i++)
+		{
+			m_pcgConnectPainters[i]->update();
 		}
 	}
 }

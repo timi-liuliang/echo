@@ -5,6 +5,7 @@
 #include "engine/modules/pcg/pcg_flow_graph.h"
 #include "painter/background_grid_painter.h"
 #include "painter/node_painter.h"
+#include "painter/connect_painter.h"
 
 #ifdef ECHO_EDITOR_MODE
 
@@ -50,6 +51,7 @@ namespace Echo
 		// refresh list
 		void refreshUiDisplay();
 		void drawNodes();
+		void drawConnects();
 
 	private:
 		// draw
@@ -65,6 +67,7 @@ namespace Echo
 		Procedural::QBackgroundGridPainter	m_backgroundGridSmall;
 		Procedural::QBackgroundGridPainter	m_backgroundGridBig;
 		Procedural::PCGNodePainters			m_pgNodePainters;
+		Procedural::PCGConnectPainters		m_pcgConnectPainters;
 		Echo::Vector2						m_newPGNodePosition = Vector2::ZERO;
 	};
 }

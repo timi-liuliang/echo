@@ -39,7 +39,7 @@ namespace Echo
 		{
 			if (m_connects.size() > 0)
 			{
-				//return m_connects[0]->m_from->GetData();
+				return m_connects[0]->getFrom()->getData();
 			}
 		}
 		else
@@ -55,9 +55,9 @@ namespace Echo
 		m_connects.push_back(InConnect);
 	}
 
-	void PCGConnectPoint::removeConnect(PCGConnect* InConnect)
+	void PCGConnectPoint::removeConnect(PCGConnect* connect)
 	{
-		//m_connects.erase(InConnect);
+		m_connects.erase(std::remove(m_connects.begin(), m_connects.end(), connect), m_connects.end());
 	}
 
 	PCGConnectPoint* PCGConnectPoint::getDependEndPoint()
@@ -66,7 +66,7 @@ namespace Echo
 		{
 			if (m_connects.size() > 0)
 			{
-				//return m_connects[0]->m_from;
+				return m_connects[0]->getFrom();
 			}
 		}
 

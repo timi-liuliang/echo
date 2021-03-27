@@ -88,6 +88,8 @@ namespace Procedural
 			QGraphicsConnectPointItem* connectPointItem = dynamic_cast<QGraphicsConnectPointItem*>(item);
 			endConnect(connectPointItem);
 		}
+
+		endConnect(nullptr);
 	}
 }
 

@@ -2,6 +2,8 @@
 
 #ifdef ECHO_EDITOR_MODE
 
+#include "custom/qgraphics_connect_point_item.h"
+
 namespace Procedural
 {
 	PCGConnectPainter::PCGConnectPainter(QGraphicsView* view, QGraphicsScene* scene, Echo::PCGFlowGraph* flowGraph, Echo::PCGConnect* connect)
@@ -10,11 +12,33 @@ namespace Procedural
 		m_graphicsScene = scene;
 		m_pcgFlowGraph = flowGraph;
 		m_pcgConnect = connect;
+
+		m_connectItem = new QGraphicsConnectItem();
+		m_graphicsScene->addItem(m_connectItem);
 	}
 
 	PCGConnectPainter::~PCGConnectPainter()
 	{
+		if (m_connectItem)
+			m_graphicsScene->removeItem(m_connectItem);
+	}
 
+	void PCGConnectPainter::update()
+	{
+		if (m_connectItem && m_pcgConnect)
+		{
+			Echo::PCGConnectPoint* from = m_pcgConnect->getFrom();
+			Echo::PCGConnectPoint* to = m_pcgConnect->getTo();
+			if (from && to)
+			{
+				QGraphicsConnectPointItem* fromItem = QGraphicsConnectPointItem::getByPCGConnectPoint(from);
+				QGraphicsConnectPointItem* toItem = QGraphicsConnectPointItem::getByPCGConnectPoint(to);
+				if (fromItem && toItem)
+				{
+					m_connectItem->set(fromItem->scenePos(), toItem->scenePos());
+				}
+			}
+		}
 	}
 }
 

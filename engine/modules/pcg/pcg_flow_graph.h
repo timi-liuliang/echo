@@ -24,13 +24,16 @@ namespace Echo
 		void addNode(PCGNode* node);
 		void removeNode(PCGNode* node);
 
+		// Node query
+		const vector<PCGNode*>::type& getNodes() const { return m_nodes; }
+		PCGNode* getNodeByName(const String& name);
+
 		// Connect
 		void addConnect(PCGConnect* connect);
 		void removeConnect(PCGConnect* connect);
 
-		// Node query
-		const vector<PCGNode*>::type& getNodes() const { return m_nodes; }
-		PCGNode* getNodeByName(const String& name);
+		// Connect query
+		const vector<PCGConnect*>::type& getConnects() const { return m_connects; }
 
 		// Current
 		void setAsOutput(PCGNode* node);
