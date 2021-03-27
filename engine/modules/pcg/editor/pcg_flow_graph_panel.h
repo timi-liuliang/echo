@@ -48,10 +48,6 @@ namespace Echo
 		// refresh list
 		void refreshUiDisplay();
 		void drawNodes();
-		void refreshImageDisplay();
-
-		// clear
-		void clearImageItemAndBorder();
 
 	private:
 		// draw

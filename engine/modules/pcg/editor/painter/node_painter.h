@@ -8,8 +8,8 @@
 #include <QPen>
 #include <QGraphicsScene>
 #include <QtWidgets/QGraphicsItem>
-#include "qgraphics_round_item.h"
-#include "qgraphics_round_item_final.h"
+#include "custom/qgraphics_round_item.h"
+#include "custom/qgraphics_round_item_final.h"
 
 namespace Procedural
 {

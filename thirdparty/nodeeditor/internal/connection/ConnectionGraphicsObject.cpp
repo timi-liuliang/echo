@@ -22,46 +22,39 @@ using QtNodes::ConnectionGraphicsObject;
 using QtNodes::Connection;
 using QtNodes::FlowScene;
 
-ConnectionGraphicsObject::
-ConnectionGraphicsObject(FlowScene &scene,
-                         Connection &connection)
-  : _scene(scene)
+ConnectionGraphicsObject::ConnectionGraphicsObject(FlowScene &scene,Connection &connection)
+  : m_flowScene(scene)
   , _connection(connection)
 {
-  _scene.addItem(this);
+    m_flowScene.addItem(this);
 
-  setFlag(QGraphicsItem::ItemIsMovable, true);
-  setFlag(QGraphicsItem::ItemIsFocusable, true);
-  setFlag(QGraphicsItem::ItemIsSelectable, true);
+    setFlag(QGraphicsItem::ItemIsMovable, true);
+    setFlag(QGraphicsItem::ItemIsFocusable, true);
+    setFlag(QGraphicsItem::ItemIsSelectable, true);
 
-  setAcceptHoverEvents(true);
+    setAcceptHoverEvents(true);
 
-  // addGraphicsEffect();
+    // addGraphicsEffect();
 
-  setZValue(-1.0);
+    setZValue(-1.0);
 }
 
 
-ConnectionGraphicsObject::
-~ConnectionGraphicsObject()
+ConnectionGraphicsObject::~ConnectionGraphicsObject()
 {
-  _scene.removeItem(this);
+    m_flowScene.removeItem(this);
 }
 
 
-QtNodes::Connection&
-ConnectionGraphicsObject::
-connection()
+QtNodes::Connection& ConnectionGraphicsObject::connection()
 {
-  return _connection;
+    return _connection;
 }
 
 
-QRectF
-ConnectionGraphicsObject::
-boundingRect() const
+QRectF ConnectionGraphicsObject::boundingRect() const
 {
-  return _connection.connectionGeometry().boundingRect();
+    return _connection.connectionGeometry().boundingRect();
 }
 
 
@@ -159,7 +152,7 @@ mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 
   auto view = static_cast<QGraphicsView*>(event->widget());
   auto node = locateNodeAt(event->scenePos(),
-                           _scene,
+                           m_flowScene,
                            view->transform());
 
   auto &state = _connection.connectionState();
@@ -196,10 +189,10 @@ void ConnectionGraphicsObject::mouseReleaseEvent(QGraphicsSceneMouseEvent* event
 	ungrabMouse();
 	event->accept();
 
-	auto node = locateNodeAt(event->scenePos(), _scene,
-		_scene.views()[0]->transform());
+	auto node = locateNodeAt(event->scenePos(), m_flowScene,
+		m_flowScene.views()[0]->transform());
 
-	NodeConnectionInteraction interaction(*node, _connection, _scene);
+	NodeConnectionInteraction interaction(*node, _connection, m_flowScene);
 
 	if (node && interaction.tryConnect())
 	{
@@ -208,7 +201,7 @@ void ConnectionGraphicsObject::mouseReleaseEvent(QGraphicsSceneMouseEvent* event
 
 	if (_connection.connectionState().requiresPort())
 	{
-		_scene.deleteConnection(_connection);
+		m_flowScene.deleteConnection(_connection);
 	}
 }
 
@@ -220,7 +213,7 @@ hoverEnterEvent(QGraphicsSceneHoverEvent* event)
   _connection.connectionGeometry().setHovered(true);
 
   update();
-  _scene.connectionHovered(connection(), event->screenPos());
+  m_flowScene.connectionHovered(connection(), event->screenPos());
   event->accept();
 }
 
@@ -232,7 +225,7 @@ hoverLeaveEvent(QGraphicsSceneHoverEvent* event)
   _connection.connectionGeometry().setHovered(false);
 
   update();
-  _scene.connectionHoverLeft(connection());
+  m_flowScene.connectionHoverLeft(connection());
   event->accept();
 }
 

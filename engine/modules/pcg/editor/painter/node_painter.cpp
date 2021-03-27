@@ -2,6 +2,8 @@
 
 #ifdef ECHO_EDITOR_MODE
 
+#include "custom/qgraphics_connect_point_item.h"
+
 namespace Procedural
 {
 	PCGNodePainter::PCGNodePainter(QGraphicsView* view, QGraphicsScene* scene, Echo::PCGFlowGraph* flowGraph, Echo::PCGNode* pgNode)
@@ -90,9 +92,17 @@ namespace Procedural
 				QPen pen(QColor::fromRgbF(m_connectPointColor.r, m_connectPointColor.g, m_connectPointColor.b, m_connectPointColor.a));
 				QBrush brush(QColor::fromRgbF(m_connectPointColor.r, m_connectPointColor.g, m_connectPointColor.b, m_connectPointColor.a));
 
-				QGraphicsItem* item = m_graphicsScene->addEllipse(QRectF(0.f, 0.f, m_connectPointRadius, m_connectPointRadius), pen, brush);
+				QGraphicsConnectPointItem* item = new QGraphicsConnectPointItem();
 				item->setParentItem(m_rect);
+				item->setRect(QRectF(0.f, 0.f, m_connectPointRadius, m_connectPointRadius));
+				item->setPen(pen);
+				item->setBrush(brush);
 				item->setPos(0.f - halfConnectPointRadius - halfWidth, -nodeHalfHeight - halfConnectPointRadius * 3.f);
+				item->setFlag(QGraphicsItem::ItemIsFocusable);
+				item->setAcceptHoverEvents(true);
+				item->setFiltersChildEvents(true);
+				m_graphicsScene->addItem(item);
+
 				m_inputConnectionPoints.push_back(item);
 			}
 		}
@@ -112,9 +122,14 @@ namespace Procedural
 				QPen pen(QColor::fromRgbF(m_connectPointColor.r, m_connectPointColor.g, m_connectPointColor.b, m_connectPointColor.a));
 				QBrush brush(QColor::fromRgbF(m_connectPointColor.r, m_connectPointColor.g, m_connectPointColor.b, m_connectPointColor.a));
 
-				QGraphicsItem* item = m_graphicsScene->addEllipse(QRectF(0.f, 0.f, m_connectPointRadius, m_connectPointRadius), pen, brush);
+				QGraphicsConnectPointItem* item = new QGraphicsConnectPointItem();
 				item->setParentItem(m_rect);
+				item->setRect(QRectF(0.f, 0.f, m_connectPointRadius, m_connectPointRadius));
+				item->setPen(pen);
+				item->setBrush(brush);
 				item->setPos(0.f - halfConnectPointRadius - halfWidth, nodeHalfHeight + halfConnectPointRadius);
+				m_graphicsScene->addItem(item);
+
 				m_outputConnectionPoints.push_back(item);
 			}
 		}

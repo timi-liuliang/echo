@@ -1,4 +1,7 @@
 #include "pcg_flow_graph_panel.h"
+
+#ifdef ECHO_EDITOR_MODE
+
 #include "engine/core/editor/editor.h"
 #include "engine/core/editor/qt/QWidgets.h"
 #include "engine/core/base/class_method_bind.h"
@@ -11,11 +14,10 @@
 #include "engine/core/main/Engine.h"
 #include "engine/core/render/base/atla/texture_atlas.h"
 #include "engine/core/log/Log.h"
-#include "painter/qgraphics_scene_ex.h"
+#include "painter/custom/qgraphics_scene_ex.h"
 
 namespace Echo
 {
-#ifdef ECHO_EDITOR_MODE
 	PCGFlowGraphPanel::PCGFlowGraphPanel(Object* obj)
 	{
 		m_flowGraph = ECHO_DOWN_CAST<PCGFlowGraph*>(obj);
@@ -49,8 +51,6 @@ namespace Echo
 
 	PCGFlowGraphPanel::~PCGFlowGraphPanel()
 	{
-		clearImageItemAndBorder();
-
 		EditorApi.removeCenterPanel(m_ui);
 		delete m_ui; m_ui = nullptr;
 	}
@@ -163,14 +163,6 @@ namespace Echo
 			m_pgNodePainters[i]->update();
 		}
 	}
-
-	void PCGFlowGraphPanel::clearImageItemAndBorder()
-	{
-	}
-
-	void PCGFlowGraphPanel::refreshImageDisplay()
-	{
-
-	}
-#endif
 }
+
+#endif

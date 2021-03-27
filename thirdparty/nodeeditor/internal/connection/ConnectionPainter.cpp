@@ -7,50 +7,43 @@
 #include "../node/NodeData.hpp"
 #include "../style/StyleCollection.hpp"
 
-
 using QtNodes::ConnectionPainter;
 using QtNodes::ConnectionGeometry;
 using QtNodes::Connection;
 
-
-static
-QPainterPath
-cubicPath(ConnectionGeometry const& geom)
+static QPainterPath cubicPath(ConnectionGeometry const& geom)
 {
-  QPointF const& source = geom.source();
-  QPointF const& sink   = geom.sink();
+    QPointF const& source = geom.source();
+    QPointF const& sink   = geom.sink();
 
-  auto c1c2 = geom.pointsC1C2();
+    auto c1c2 = geom.pointsC1C2();
 
-  // cubic spline
-  QPainterPath cubic(source);
+    // cubic spline
+    QPainterPath cubic(source);
 
-  cubic.cubicTo(c1c2.first, c1c2.second, sink);
+    cubic.cubicTo(c1c2.first, c1c2.second, sink);
 
-  return cubic;
+    return cubic;
 }
 
-
-QPainterPath
-ConnectionPainter::
-getPainterStroke(ConnectionGeometry const& geom)
+QPainterPath ConnectionPainter::getPainterStroke(ConnectionGeometry const& geom)
 {
-  auto cubic = cubicPath(geom);
+    auto cubic = cubicPath(geom);
 
-  QPointF const& source = geom.source();
-  QPainterPath result(source);
+    QPointF const& source = geom.source();
+    QPainterPath result(source);
 
-  unsigned segments = 20;
+    unsigned segments = 20;
 
-  for (auto i = 0ul; i < segments; ++i)
-  {
-    double ratio = double(i + 1) / segments;
-    result.lineTo(cubic.pointAtPercent(ratio));
-  }
+    for (auto i = 0ul; i < segments; ++i)
+    {
+        double ratio = double(i + 1) / segments;
+        result.lineTo(cubic.pointAtPercent(ratio));
+    }
 
-  QPainterPathStroker stroker; stroker.setWidth(10.0);
+    QPainterPathStroker stroker; stroker.setWidth(10.0);
 
-  return stroker.createStroke(result);
+    return stroker.createStroke(result);
 }
 
 
@@ -275,35 +268,30 @@ drawNormalLine(QPainter * painter,
 }
 
 
-void
-ConnectionPainter::
-paint(QPainter* painter,
-      Connection const &connection)
+void ConnectionPainter::paint(QPainter* painter, Connection const &connection)
 {
-  drawHoveredOrSelected(painter, connection);
-
-  drawSketchLine(painter, connection);
-
-  drawNormalLine(painter, connection);
+    drawHoveredOrSelected(painter, connection);
+    drawSketchLine(painter, connection);
+    drawNormalLine(painter, connection);
 
 #ifdef NODE_DEBUG_DRAWING
-  debugDrawing(painter, connection);
+    debugDrawing(painter, connection);
 #endif
 
-  // draw end points
-  ConnectionGeometry const& geom = connection.connectionGeometry();
+    // draw end points
+    ConnectionGeometry const& geom = connection.connectionGeometry();
 
-  QPointF const & source = geom.source();
-  QPointF const & sink   = geom.sink();
+    QPointF const & source = geom.source();
+    QPointF const & sink   = geom.sink();
 
-  auto const & connectionStyle =
+    auto const & connectionStyle =
     QtNodes::StyleCollection::connectionStyle();
 
-  double const pointDiameter = connectionStyle.pointDiameter();
+    double const pointDiameter = connectionStyle.pointDiameter();
 
-  painter->setPen(connectionStyle.constructionColor());
-  painter->setBrush(connectionStyle.constructionColor());
-  double const pointRadius = pointDiameter / 2.0;
-  painter->drawEllipse(source, pointRadius, pointRadius);
-  painter->drawEllipse(sink, pointRadius, pointRadius);
+    painter->setPen(connectionStyle.constructionColor());
+    painter->setBrush(connectionStyle.constructionColor());
+    double const pointRadius = pointDiameter / 2.0;
+    painter->drawEllipse(source, pointRadius, pointRadius);
+    painter->drawEllipse(sink, pointRadius, pointRadius);
 }
