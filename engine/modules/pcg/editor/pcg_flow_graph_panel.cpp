@@ -40,7 +40,7 @@ namespace Echo
 
 		// create QGraphicsScene
 		m_graphicsView = m_ui->findChild<QGraphicsView*>("m_graphicsView");
-		m_graphicsScene = new Procedural::QGraphicsFlowScene;
+		m_graphicsScene = new Procedural::QGraphicsFlowScene(m_flowGraph);
 		m_graphicsView->setScene(m_graphicsScene);
 
 		// background

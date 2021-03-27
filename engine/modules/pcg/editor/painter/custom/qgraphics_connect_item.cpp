@@ -6,20 +6,22 @@ namespace Procedural
 {
 	QGraphicsConnectItem::QGraphicsConnectItem()
 		: QGraphicsPathItem()
-	{}
+	{
+		setZValue(-10.f);
+	}
 
 	QGraphicsConnectItem::~QGraphicsConnectItem()
 	{
 
 	}
 
-	void QGraphicsConnectItem::set(const Echo::Vector2& startPos, const Echo::Vector2& endPos)
+	void QGraphicsConnectItem::set(const QPointF& startPos, const QPointF& endPos)
 	{
 		if (m_startPos != startPos || m_endPos != endPos)
 		{
 			QPainterPath path;
-			path.moveTo(QPointF(startPos.x, startPos.y));
-			path.lineTo(QPointF(endPos.x, endPos.y));
+			path.moveTo(startPos);
+			path.lineTo(endPos);
 
 			setPath(path);
 

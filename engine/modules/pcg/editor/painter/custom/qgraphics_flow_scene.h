@@ -4,6 +4,8 @@
 
 #ifdef ECHO_EDITOR_MODE
 
+#include "engine/modules/pcg/pcg_flow_graph.h"
+#include "qgraphics_connect_point_item.h"
 #include "qgraphics_connect_item.h"
 
 namespace Procedural
@@ -11,12 +13,23 @@ namespace Procedural
 	class QGraphicsFlowScene : public QGraphicsScene
 	{
 	public:
+		QGraphicsFlowScene(Echo::PCGFlowGraph* flowGraph);
+		virtual ~QGraphicsFlowScene();
+
 		// connection
-		void beginConnect();
-		void endConnect();
+		void beginConnect(QGraphicsConnectPointItem* startPoint);
+		void endConnect(QGraphicsConnectPointItem* startPoint);
 
 	protected:
-		QGraphicsConnectItem*	m_editingConnectItem = nullptr;
+		// mouse event
+		virtual void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
+		virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
+		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
+
+	protected:
+		Echo::PCGFlowGraph*			m_flowGraph = nullptr;
+		QGraphicsConnectPointItem*  m_editingConnectionStartPoint = nullptr;
+		QGraphicsConnectItem*		m_editingConnectItem = nullptr;
 	};
 }
 

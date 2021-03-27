@@ -20,7 +20,7 @@ namespace Procedural
 		~QGraphicsConnectItem();
 
 		// set
-		void set(const Echo::Vector2& startPos, const Echo::Vector2& endPos);
+		void set(const QPointF& startPos, const QPointF& endPos);
 
 	protected:
 		// foucs event
@@ -45,9 +45,9 @@ namespace Procedural
 		virtual bool sceneEventFilter(QGraphicsItem* watched, QEvent* event);
 
 	protected:
-		bool				m_focused = false;
-		Echo::Vector2		m_startPos = Echo::Vector2::ZERO;
-		Echo::Vector2		m_endPos = Echo::Vector2::ZERO;
+		bool			m_focused = false;
+		QPointF			m_startPos = QPointF(1e30f, 1e30f);
+		QPointF			m_endPos = QPointF(1e30f, 1e30f);
 	};
 }
 

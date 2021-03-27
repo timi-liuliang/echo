@@ -92,7 +92,7 @@ namespace Procedural
 				QPen pen(QColor::fromRgbF(m_connectPointColor.r, m_connectPointColor.g, m_connectPointColor.b, m_connectPointColor.a));
 				QBrush brush(QColor::fromRgbF(m_connectPointColor.r, m_connectPointColor.g, m_connectPointColor.b, m_connectPointColor.a));
 
-				QGraphicsConnectPointItem* item = new QGraphicsConnectPointItem();
+				QGraphicsConnectPointItem* item = new QGraphicsConnectPointItem(inputs[i]);
 				item->setParentItem(m_rect);
 				item->setRect(QRectF(0.f, 0.f, m_connectPointRadius, m_connectPointRadius));
 				item->setPen(pen);
@@ -122,7 +122,7 @@ namespace Procedural
 				QPen pen(QColor::fromRgbF(m_connectPointColor.r, m_connectPointColor.g, m_connectPointColor.b, m_connectPointColor.a));
 				QBrush brush(QColor::fromRgbF(m_connectPointColor.r, m_connectPointColor.g, m_connectPointColor.b, m_connectPointColor.a));
 
-				QGraphicsConnectPointItem* item = new QGraphicsConnectPointItem();
+				QGraphicsConnectPointItem* item = new QGraphicsConnectPointItem(outputs[i]);
 				item->setParentItem(m_rect);
 				item->setRect(QRectF(0.f, 0.f, m_connectPointRadius, m_connectPointRadius));
 				item->setPen(pen);

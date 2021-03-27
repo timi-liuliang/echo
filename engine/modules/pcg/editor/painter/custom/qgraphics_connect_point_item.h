@@ -10,17 +10,18 @@
 #include <QGraphicsEllipseItem>
 #include <QMimeData>
 #include <QDrag>
+#include "engine/modules/pcg/connect/pcg_connect_point.h"
 
 namespace Procedural
 {
 	class QGraphicsConnectPointItem : public QGraphicsEllipseItem
 	{
 	public:
-		QGraphicsConnectPointItem();
+		QGraphicsConnectPointItem(Echo::PCGConnectPoint* connectPoint);
 		~QGraphicsConnectPointItem();
 
-		// is focused
-		bool isFocused() const { return m_focused; }
+		// connect point
+		Echo::PCGConnectPoint* getPCGConnectPoint() { return m_connectPoint; }		
 
 	protected:
 		// foucs event
@@ -31,22 +32,8 @@ namespace Procedural
 		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent* event) override;
 		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent* event) override;
 
-		// mouse press event
-		virtual void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
-		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
-
-		// key press event
-		virtual void keyPressEvent(QKeyEvent* event) override;
-
-		// mouse move event
-		virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
-
-		// scene event filter
-		virtual bool sceneEventFilter(QGraphicsItem* watched, QEvent* event);
-
 	protected:
-		Echo::ui32							m_objectId = 0;
-		bool								m_focused = false;
+		Echo::PCGConnectPoint*				m_connectPoint = nullptr;
 	};
 }
 
