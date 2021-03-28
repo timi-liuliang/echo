@@ -7,7 +7,7 @@
 #include "engine/modules/pcg/connect/pcg_connect.h"
 #include "engine/modules/pcg/connect/pcg_connect_point.h"
 #include "engine/modules/pcg/pcg_flow_graph.h"
-#include "custom/qgraphics_connect_item.h"
+#include "../item/qgraphics_connect_item.h"
 
 namespace Procedural
 {

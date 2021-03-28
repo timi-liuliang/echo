@@ -2,8 +2,6 @@
 
 #ifdef ECHO_EDITOR_MODE
 
-#include "qgraphics_flow_scene.h"
-
 namespace Procedural
 {
 	static std::unordered_map<Echo::PCGConnectPoint*, QGraphicsConnectPointItem*> g_connectPointItems;

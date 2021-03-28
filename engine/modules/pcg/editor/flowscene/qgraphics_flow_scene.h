@@ -5,8 +5,8 @@
 #ifdef ECHO_EDITOR_MODE
 
 #include "engine/modules/pcg/pcg_flow_graph.h"
-#include "qgraphics_connect_point_item.h"
-#include "qgraphics_connect_item.h"
+#include "item/qgraphics_connect_point_item.h"
+#include "item/qgraphics_connect_item.h"
 
 namespace Procedural
 {

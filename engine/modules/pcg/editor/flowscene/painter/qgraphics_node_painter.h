@@ -8,11 +8,11 @@
 #include <QPen>
 #include <QGraphicsScene>
 #include <QtWidgets/QGraphicsItem>
-#include "custom/qgraphics_round_item.h"
-#include "custom/qgraphics_round_item_final.h"
-#include "custom/qgraphics_connect_point_item.h"
-#include "custom/qgraphics_connect_item.h"
-#include "custom/qgraphics_flow_scene.h"
+#include "../item/qgraphics_round_item.h"
+#include "../item/qgraphics_round_item_final.h"
+#include "../item/qgraphics_connect_point_item.h"
+#include "../item/qgraphics_connect_item.h"
+#include "../qgraphics_flow_scene.h"
 
 namespace Procedural
 {
@@ -61,7 +61,6 @@ namespace Procedural
 
 	private:
 		Style								m_style;
-		Echo::PCGFlowGraph*					m_pcgFlowGraph = nullptr;
 		Echo::PCGNode*						m_pcgNode = nullptr;
 		QGraphicsView*						m_graphicsView = nullptr;
 		QGraphicsFlowScene*					m_graphicsScene = nullptr;

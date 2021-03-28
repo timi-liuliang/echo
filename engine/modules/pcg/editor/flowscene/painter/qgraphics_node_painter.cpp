@@ -1,14 +1,13 @@
-#include "node_painter.h"
+#include "qgraphics_node_painter.h"
 
 #ifdef ECHO_EDITOR_MODE
 
-#include "custom/qgraphics_connect_point_item.h"
+#include "../item/qgraphics_connect_point_item.h"
 
 namespace Procedural
 {
 	PCGNodePainter::PCGNodePainter(QGraphicsView* view, QGraphicsScene* scene, Echo::PCGFlowGraph* flowGraph, Echo::PCGNode* pgNode)
 	{
-		m_pcgFlowGraph = flowGraph;
 		m_pcgNode = pgNode;
 		m_graphicsView = view;
 		m_graphicsScene = dynamic_cast<QGraphicsFlowScene*>(scene);
@@ -139,7 +138,7 @@ namespace Procedural
 	{
 		if (m_pcgNode && m_rectFinal)
 		{	
-			m_rectFinal->setBrush(QBrush(m_pcgFlowGraph->getOutputNode() == m_pcgNode ? m_style.finalColor : Qt::transparent));
+			m_rectFinal->setBrush(QBrush(m_pcgNode->getGraph()->getOutputNode() == m_pcgNode ? m_style.finalColor : Qt::transparent));
 		}
 
 		if (m_pcgNode && m_rect)

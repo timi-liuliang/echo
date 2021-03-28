@@ -1,8 +1,8 @@
-#include "connect_painter.h"
+#include "qgraphics_connect_painter.h"
 
 #ifdef ECHO_EDITOR_MODE
 
-#include "custom/qgraphics_connect_point_item.h"
+#include "../item/qgraphics_connect_point_item.h"
 
 namespace Procedural
 {

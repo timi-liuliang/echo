@@ -3,13 +3,13 @@
 #include "engine/core/util/Array.hpp"
 #include "engine/core/editor/editor_dock_panel.h"
 #include "engine/modules/pcg/pcg_flow_graph.h"
-#include "painter/background_grid_painter.h"
-#include "painter/node_painter.h"
-#include "painter/connect_painter.h"
 
 #ifdef ECHO_EDITOR_MODE
 
-#include "painter/custom/qgraphics_flow_scene.h"
+#include "flowscene/qgraphics_flow_scene.h"
+#include "flowscene/painter/qgraphics_grid_painter.h"
+#include "flowscene/painter/qgraphics_node_painter.h"
+#include "flowscene/painter/qgraphics_connect_painter.h"
 
 namespace Echo
 {
