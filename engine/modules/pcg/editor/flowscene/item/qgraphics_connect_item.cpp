@@ -19,9 +19,15 @@ namespace Procedural
 	{
 		if (m_startPos != startPos || m_endPos != endPos)
 		{
+			float xdiff = endPos.x() - startPos.x();
+			float ydiff = endPos.y() - startPos.y();
+
+			QPointF ctrlPt1 = startPos + QPointF(-xdiff * 0.1f, ydiff * 1.f);
+			QPointF ctrlPt2 = endPos - QPointF(-xdiff * 0.1f, ydiff * 1.f);
+
 			QPainterPath path;
 			path.moveTo(startPos);
-			path.lineTo(endPos);
+			path.cubicTo(ctrlPt1, ctrlPt2, endPos);
 
 			setPath(path);
 
