@@ -52,6 +52,24 @@ namespace Echo
 		}
 	}
 
+	void PCGImagePerlinNoise::setAmplitude(float amplitude)
+	{ 
+		if (m_amplitude != amplitude)
+		{
+			m_amplitude = amplitude;
+			m_dirtyFlag = true;
+		}
+	}
+
+	void PCGImagePerlinNoise::setGridSize(float gridSize)
+	{ 
+		if (m_gridSize != gridSize)
+		{
+			m_gridSize = gridSize;
+			m_dirtyFlag = true;
+		}
+	}
+
 	void PCGImagePerlinNoise::run()
 	{
 		if (m_dirtyFlag)

@@ -23,11 +23,11 @@ namespace Echo
 
 		// amplitude
 		float getAmplitude() const { return m_amplitude; }
-		void setAmplitude(float InAmplitude) { m_amplitude = InAmplitude; }
+		void setAmplitude(float InAmplitude);
 
 		// grid size
 		float getGridSize() const { return m_gridSize; }
-		void setGridSize(float InGridSize) { m_gridSize = InGridSize; }
+		void setGridSize(float InGridSize);
 
 		// offset
 		const Vector2& getOffset() const { return m_offset; }
