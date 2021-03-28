@@ -35,7 +35,10 @@ namespace Procedural
 				QGraphicsConnectPointItem* toItem = QGraphicsConnectPointItem::getByPCGConnectPoint(to);
 				if (fromItem && toItem)
 				{
-					m_connectItem->set(fromItem->scenePos(), toItem->scenePos());
+					QPointF fromLocalCenter = fromItem->boundingRect().center();
+					QPointF toLocalCenter = toItem->boundingRect().center();
+
+					m_connectItem->set(fromItem->scenePos() + fromLocalCenter, toItem->scenePos() + toLocalCenter);
 				}
 			}
 		}

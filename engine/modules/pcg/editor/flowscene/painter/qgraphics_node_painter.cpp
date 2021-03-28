@@ -93,10 +93,10 @@ namespace Procedural
 
 				QGraphicsConnectPointItem* item = new QGraphicsConnectPointItem(inputs[i]);
 				item->setParentItem(m_rect);
-				item->setRect(QRectF(0.f, 0.f, m_connectPointRadius, m_connectPointRadius));
+				item->setRect(QRectF(-halfConnectPointRadius, -halfConnectPointRadius, halfConnectPointRadius, halfConnectPointRadius));
 				item->setPen(pen);
 				item->setBrush(brush);
-				item->setPos(0.f - halfConnectPointRadius - halfWidth, -nodeHalfHeight - halfConnectPointRadius * 3.f);
+				item->setPos(0.f + halfConnectPointRadius - halfWidth, -nodeHalfHeight - halfConnectPointRadius * 1.f);
 				item->setFlag(QGraphicsItem::ItemIsFocusable);
 				item->setAcceptHoverEvents(true);
 				item->setFiltersChildEvents(true);
@@ -123,10 +123,10 @@ namespace Procedural
 
 				QGraphicsConnectPointItem* item = new QGraphicsConnectPointItem(outputs[i]);
 				item->setParentItem(m_rect);
-				item->setRect(QRectF(0.f, 0.f, m_connectPointRadius, m_connectPointRadius));
+				item->setRect(QRectF(-halfConnectPointRadius, -halfConnectPointRadius, halfConnectPointRadius, halfConnectPointRadius));
 				item->setPen(pen);
 				item->setBrush(brush);
-				item->setPos(0.f - halfConnectPointRadius - halfWidth, nodeHalfHeight + halfConnectPointRadius);
+				item->setPos(0.f + halfConnectPointRadius - halfWidth, nodeHalfHeight + halfConnectPointRadius * 2.f);
 				m_graphicsScene->addItem(item);
 
 				m_outputConnectionPoints.push_back(item);

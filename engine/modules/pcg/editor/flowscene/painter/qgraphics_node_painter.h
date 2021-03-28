@@ -71,7 +71,7 @@ namespace Procedural
 		Echo::vector<QGraphicsItem*>::type	m_outputConnectionPoints;
 		float								m_width = 120;
 		float								m_height = 40;
-		float								m_connectPointRadius = 8.f;
+		float								m_connectPointRadius = 12.f;
 		Echo::Color							m_connectPointColor = Echo::Color::DARKCYAN;
 		QGraphicsSimpleTextItem*			m_text = nullptr;
 	};
