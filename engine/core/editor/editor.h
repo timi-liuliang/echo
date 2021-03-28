@@ -86,10 +86,7 @@ namespace Echo
         // add pixmap
         qGraphicsSceneAddPixmapFun qGraphicsSceneAddPixmap = nullptr;
         
-    public:
-        // disable viewport update
-        qGraphicsViewDisableViewportAutoUpdateFun qGraphicsViewDisableViewportAutoUpdate = nullptr;
-        
+    public:     
         // get view port
         qGraphicsViewSceneRectFun qGraphicsViewSceneRect = nullptr;
 

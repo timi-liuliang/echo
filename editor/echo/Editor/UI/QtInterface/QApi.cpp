@@ -28,7 +28,6 @@ namespace Studio
 		BIND_EDITOR_FUN(qGraphicsSceneAddPixmap);
 
 		// disable viewport update
-		BIND_EDITOR_FUN(qGraphicsViewDisableViewportAutoUpdate);
 		BIND_EDITOR_FUN(qGraphicsViewSceneRect);
 		BIND_EDITOR_FUN(qGraphicsViewFitInView);
 

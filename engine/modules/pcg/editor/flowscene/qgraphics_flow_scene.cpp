@@ -34,6 +34,7 @@ namespace Procedural
 
 			m_editingConnectItem = new QGraphicsConnectItem;
 			m_editingConnectItem->set(m_editingConnectionStartPoint->scenePos(), m_editingConnectionStartPoint->scenePos());
+			m_editingConnectItem->setPen(QPen(QColor(128, 128, 128), 1.5f, Qt::DashLine));
 
 			addItem(m_editingConnectItem);
 		}

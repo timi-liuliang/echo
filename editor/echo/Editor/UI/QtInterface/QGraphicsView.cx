@@ -4,15 +4,6 @@
 
 namespace Echo
 {
-	void qGraphicsViewDisableViewportAutoUpdate(QWidget* view)
-	{
-		QGraphicsView* graphicsView = qobject_cast<QGraphicsView*>(view);
-		if (graphicsView)
-		{
-			graphicsView->setViewportUpdateMode(QGraphicsView::NoViewportUpdate);
-		}
-	}
-
 	void qGraphicsViewSceneRect(QWidget* view, Rect& rect)
 	{
 		QGraphicsView* graphicsView = qobject_cast<QGraphicsView*>(view);

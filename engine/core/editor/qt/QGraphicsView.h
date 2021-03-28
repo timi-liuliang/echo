@@ -7,9 +7,6 @@
 
 namespace Echo
 {
-	// disable viewport update
-	typedef void (*qGraphicsViewDisableViewportAutoUpdateFun)(QWidget* graphicsView);
-
 	// get view port
 	typedef void (*qGraphicsViewSceneRectFun)(QWidget* view, Rect& rect);
 

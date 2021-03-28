@@ -14,6 +14,8 @@ namespace Procedural
 		m_pcgConnect = connect;
 
 		m_connectItem = new QGraphicsConnectItem();
+		m_connectItem->setPen(QPen(QColor(0, 139, 139), 1.5f));
+
 		m_graphicsScene->addItem(m_connectItem);
 	}
 
