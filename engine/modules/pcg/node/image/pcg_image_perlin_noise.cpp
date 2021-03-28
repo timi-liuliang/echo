@@ -16,7 +16,22 @@ namespace Echo
 
 	void PCGImagePerlinNoise::bindMethods()
 	{
+		CLASS_BIND_METHOD(PCGImagePerlinNoise, getWidth, DEF_METHOD("getWidth"));
+		CLASS_BIND_METHOD(PCGImagePerlinNoise, setWidth, DEF_METHOD("setWidth"));
+		CLASS_BIND_METHOD(PCGImagePerlinNoise, getHeight, DEF_METHOD("getHeight"));
+		CLASS_BIND_METHOD(PCGImagePerlinNoise, setHeight, DEF_METHOD("setHeight"));
+		CLASS_BIND_METHOD(PCGImagePerlinNoise, getAmplitude, DEF_METHOD("getAmplitude"));
+		CLASS_BIND_METHOD(PCGImagePerlinNoise, setAmplitude, DEF_METHOD("setAmplitude"));
+		CLASS_BIND_METHOD(PCGImagePerlinNoise, getGridSize, DEF_METHOD("getGridSize"));
+		CLASS_BIND_METHOD(PCGImagePerlinNoise, setGridSize, DEF_METHOD("setGridSize"));
+		CLASS_BIND_METHOD(PCGImagePerlinNoise, getOffset, DEF_METHOD("getOffset"));
+		CLASS_BIND_METHOD(PCGImagePerlinNoise, setOffset, DEF_METHOD("setOffset"));
 
+		CLASS_REGISTER_PROPERTY(PCGImagePerlinNoise, "Width", Variant::Type::Int, "getWidth", "setWidth");
+		CLASS_REGISTER_PROPERTY(PCGImagePerlinNoise, "Height", Variant::Type::Int, "getHeight", "setHeight");
+		CLASS_REGISTER_PROPERTY(PCGImagePerlinNoise, "Amplitude", Variant::Type::Real, "getAmplitude", "setAmplitude");
+		CLASS_REGISTER_PROPERTY(PCGImagePerlinNoise, "GridSize", Variant::Type::Real, "getGridSize", "setGridSize");
+		CLASS_REGISTER_PROPERTY(PCGImagePerlinNoise, "Offset", Variant::Type::Vector2, "getOffset", "setOffset");
 	}
 
 	void PCGImagePerlinNoise::setWidth(i32 width)

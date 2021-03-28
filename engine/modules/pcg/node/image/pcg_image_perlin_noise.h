@@ -22,9 +22,11 @@ namespace Echo
 		virtual ~PCGImagePerlinNoise();
 
 		// Set Bounds
+		i32 getWidth() const { return m_width; }
 		void setWidth(i32 width);
 
 		// height
+		i32 getHeight() const { return m_height; }
 		void setHeight(i32 height);
 
 		// amplitude
@@ -66,8 +68,8 @@ namespace Echo
 		float sCurveInterpolate(float t);
 
 	protected:
-		i32				m_width = 0;
-		i32				m_height = 0;
+		i32				m_width = 128;
+		i32				m_height = 128;
 		float			m_amplitude = 1.f;
 		float			m_gridSize = 32.f;
 		Vector2			m_offset = Vector2::ZERO;
