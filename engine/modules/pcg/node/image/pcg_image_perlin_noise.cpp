@@ -128,8 +128,7 @@ namespace Echo
 
 	float PCGImagePerlinNoise::interpolate(float a0, float a1, float w)
 	{
-		if (m_interpolateType == sCurve)return a0 + sCurveInterpolate(w) * (a1 - a0);
-		else							return a0 + w * (a1 - a0);
+		return a0 + sCurveInterpolate(w) * (a1 - a0);
 	}
 
 	// https://adrianb.io/2014/08/09/perlinnoise.html

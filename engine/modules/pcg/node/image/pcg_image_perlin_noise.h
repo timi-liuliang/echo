@@ -10,14 +10,6 @@ namespace Echo
 		ECHO_CLASS(PCGImagePerlinNoise, PCGNode);
 
 	public:
-		// Interpolate type
-		enum InterpolateType
-		{
-			Linear,
-			sCurve,
-		};
-
-	public:
 		PCGImagePerlinNoise();
 		virtual ~PCGImagePerlinNoise();
 
@@ -40,10 +32,6 @@ namespace Echo
 		// offset
 		const Vector2& getOffset() const { return m_offset; }
 		void setOffset(const Vector2& offset) { m_offset = offset; }
-
-		// interpolate Type
-		InterpolateType getInterpolateType() const { return m_interpolateType; }
-		void setInterpolateType(InterpolateType Type) { m_interpolateType = Type; }
 
 		// get result
 		PCGImagePtr getResultImage() { return m_resultImage; }
@@ -73,7 +61,6 @@ namespace Echo
 		float			m_amplitude = 1.f;
 		float			m_gridSize = 32.f;
 		Vector2			m_offset = Vector2::ZERO;
-		InterpolateType	m_interpolateType = InterpolateType::sCurve;
 		PCGImagePtr		m_resultImage;
 	};
 }
