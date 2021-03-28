@@ -12,7 +12,6 @@
 #include "../item/qgraphics_round_item_final.h"
 #include "../item/qgraphics_connect_point_item.h"
 #include "../item/qgraphics_connect_item.h"
-#include "../qgraphics_flow_scene.h"
 
 namespace Procedural
 {
@@ -63,7 +62,7 @@ namespace Procedural
 		Style								m_style;
 		Echo::PCGNode*						m_pcgNode = nullptr;
 		QGraphicsView*						m_graphicsView = nullptr;
-		QGraphicsFlowScene*					m_graphicsScene = nullptr;
+		class QGraphicsFlowScene*			m_graphicsScene = nullptr;
 		QGraphicsRoundRectItem*				m_rect = nullptr;
 		QGraphicsRoundRectItemFinal*		m_rectFinal = nullptr;
 		float								m_rectFinalWidth = 15;

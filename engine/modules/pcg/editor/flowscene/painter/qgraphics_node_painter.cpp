@@ -3,6 +3,7 @@
 #ifdef ECHO_EDITOR_MODE
 
 #include "../item/qgraphics_connect_point_item.h"
+#include "../qgraphics_flow_scene.h"
 
 namespace Procedural
 {
@@ -96,7 +97,7 @@ namespace Procedural
 				item->setRect(QRectF(-halfConnectPointRadius, -halfConnectPointRadius, halfConnectPointRadius, halfConnectPointRadius));
 				item->setPen(pen);
 				item->setBrush(brush);
-				item->setPos(0.f + halfConnectPointRadius - halfWidth, -nodeHalfHeight - halfConnectPointRadius * 1.f);
+				item->setPos(0.f + halfConnectPointRadius - halfWidth, -nodeHalfHeight - halfConnectPointRadius);
 				item->setFlag(QGraphicsItem::ItemIsFocusable);
 				item->setAcceptHoverEvents(true);
 				item->setFiltersChildEvents(true);

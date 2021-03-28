@@ -13,9 +13,6 @@ namespace Echo
 	// get view port
 	typedef void (*qGraphicsViewSceneRectFun)(QWidget* view, Rect& rect);
 
-	// set background brush
-	typedef void (*qGraphicsViewSetBackgroundBrushFun)(QWidget* view, const Color& color);
-
 	// fit in view
 	typedef void (*qGraphicsViewFitInViewFun)(QWidget* view, Rect& rect);
 }

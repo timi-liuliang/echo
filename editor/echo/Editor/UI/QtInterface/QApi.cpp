@@ -30,7 +30,6 @@ namespace Studio
 		// disable viewport update
 		BIND_EDITOR_FUN(qGraphicsViewDisableViewportAutoUpdate);
 		BIND_EDITOR_FUN(qGraphicsViewSceneRect);
-		BIND_EDITOR_FUN(qGraphicsViewSetBackgroundBrush);
 		BIND_EDITOR_FUN(qGraphicsViewFitInView);
 
 		// load ui file by path. then return the widget

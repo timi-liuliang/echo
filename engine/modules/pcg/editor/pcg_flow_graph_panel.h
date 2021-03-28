@@ -7,9 +7,6 @@
 #ifdef ECHO_EDITOR_MODE
 
 #include "flowscene/qgraphics_flow_scene.h"
-#include "flowscene/painter/qgraphics_grid_painter.h"
-#include "flowscene/painter/qgraphics_node_painter.h"
-#include "flowscene/painter/qgraphics_connect_painter.h"
 
 namespace Echo
 {
@@ -17,15 +14,6 @@ namespace Echo
 	{
 		typedef vector<QGraphicsItem*>::type QGraphicsItemArray;
 		typedef vector<QGraphicsProxyWidget*>::type QGraphicsWidgetArray;
-
-	public:
-		// Background style
-		struct BackgroundStyle
-		{
-			Color m_backgroundColor;
-			Color m_fineGridColor;
-			Color m_coarseGridColor;
-		};
 
 	public:
 		PCGFlowGraphPanel(Object* obj);
@@ -48,26 +36,12 @@ namespace Echo
 		// delete 
 		void onDeletePGNodes();
 
-		// refresh list
-		void refreshUiDisplay();
-		void drawNodes();
-		void drawConnects();
-
-	private:
-		// draw
-		void drawBackground();
-
 	protected:
 		PCGFlowGraph*						m_flowGraph = nullptr;
 		QDockWidget*						m_ui;
 		QMenu*								m_menuNew = nullptr;
 		QGraphicsView*						m_graphicsView = nullptr;
 		Procedural::QGraphicsFlowScene*		m_graphicsScene = nullptr;
-		BackgroundStyle						m_backgroundStyle;
-		Procedural::QBackgroundGridPainter	m_backgroundGridSmall;
-		Procedural::QBackgroundGridPainter	m_backgroundGridBig;
-		Procedural::PCGNodePainters			m_pgNodePainters;
-		Procedural::PCGConnectPainters		m_pcgConnectPainters;
 		Echo::Vector2						m_newPGNodePosition = Vector2::ZERO;
 	};
 }

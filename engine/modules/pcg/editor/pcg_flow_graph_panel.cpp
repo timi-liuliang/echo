@@ -40,12 +40,11 @@ namespace Echo
 
 		// create QGraphicsScene
 		m_graphicsView = m_ui->findChild<QGraphicsView*>("m_graphicsView");
-		m_graphicsScene = new Procedural::QGraphicsFlowScene(m_flowGraph);
-		m_graphicsView->setScene(m_graphicsScene);
+		m_graphicsView->setRenderHint(QPainter::Antialiasing);
 
-		// background
-		m_backgroundGridSmall.set(m_graphicsView, m_graphicsScene);
-		m_backgroundGridBig.set(m_graphicsView, m_graphicsScene);
+		// graphics scene
+		m_graphicsScene = new Procedural::QGraphicsFlowScene(m_graphicsView, m_flowGraph);
+		m_graphicsView->setScene(m_graphicsScene);
 	}
 
 	PCGFlowGraphPanel::~PCGFlowGraphPanel()
@@ -56,7 +55,7 @@ namespace Echo
 
 	void PCGFlowGraphPanel::update()
 	{
-		refreshUiDisplay();
+		m_graphicsScene->update();
 	}
 
 	void PCGFlowGraphPanel::onRightClickGraphicsView()
@@ -111,85 +110,6 @@ namespace Echo
 		if (m_flowGraph)
 		{
 			m_flowGraph->run();
-		}
-	}
-
-	void PCGFlowGraphPanel::refreshUiDisplay()
-	{
-		drawBackground();
-		drawNodes();
-		drawConnects();
-	}
-
-	void PCGFlowGraphPanel::drawBackground()
-	{
-		m_backgroundStyle.m_backgroundColor.setRGBA(77, 77, 77, 255);
-		m_backgroundStyle.m_fineGridColor.setRGBA(84, 84, 84, 255);
-		m_backgroundStyle.m_coarseGridColor.setRGBA(64, 64, 64, 255);
-
-		EditorApi.qGraphicsViewSetBackgroundBrush(m_ui->findChild<QGraphicsView*>("m_graphicsView"), m_backgroundStyle.m_backgroundColor);
-
-		m_backgroundGridSmall.update(15, m_backgroundStyle.m_fineGridColor);
-		m_backgroundGridBig.update(150, m_backgroundStyle.m_coarseGridColor);
-	}
-
-	void PCGFlowGraphPanel::drawNodes()
-	{
-		const vector<PCGNode*>::type& pcgNodes = m_flowGraph->getNodes();
-		while (m_pgNodePainters.size() > pcgNodes.size())
-		{
-			EchoSafeDelete(m_pgNodePainters.back(), PCGNodePainter);
-			m_pgNodePainters.pop_back();
-		}
-
-		if (m_pgNodePainters.size() < pcgNodes.size())
-		{
-			for (size_t i = m_pgNodePainters.size(); i < pcgNodes.size(); ++i)
-				m_pgNodePainters.emplace_back(EchoNew(Procedural::PCGNodePainter(m_graphicsView, m_graphicsScene, m_flowGraph, pcgNodes[i])));
-		}
-
-		for (size_t i = 0; i < pcgNodes.size(); i++)
-		{
-			if (!m_pgNodePainters[i] || m_pgNodePainters[i]->getPCGNode() != pcgNodes[i])
-			{
-				EchoSafeDelete(m_pgNodePainters[i], PCGNodePainter);
-				m_pgNodePainters[i] = EchoNew(Procedural::PCGNodePainter(m_graphicsView, m_graphicsScene, m_flowGraph, pcgNodes[i]));
-			}
-		}
-
-		for (size_t i = 0; i < pcgNodes.size(); i++)
-		{
-			m_pgNodePainters[i]->update();
-		}
-	}
-
-	void PCGFlowGraphPanel::drawConnects()
-	{
-		const vector<PCGConnect*>::type& pcgConnects = m_flowGraph->getConnects();
-		while (m_pcgConnectPainters.size() > pcgConnects.size())
-		{
-			EchoSafeDelete(m_pcgConnectPainters.back(), PCGConnectPainter);
-			m_pcgConnectPainters.pop_back();
-		}
-
-		if (m_pcgConnectPainters.size() < pcgConnects.size())
-		{
-			for (size_t i = m_pcgConnectPainters.size(); i < pcgConnects.size(); ++i)
-				m_pcgConnectPainters.emplace_back(EchoNew(Procedural::PCGConnectPainter(m_graphicsView, m_graphicsScene, m_flowGraph, pcgConnects[i])));
-		}
-
-		for (size_t i = 0; i < pcgConnects.size(); i++)
-		{
-			if (!m_pcgConnectPainters[i] || m_pcgConnectPainters[i]->getPCGConnect() != pcgConnects[i])
-			{
-				EchoSafeDelete(m_pcgConnectPainters[i], PCGConnectPainter);
-				m_pcgConnectPainters[i] = EchoNew(Procedural::PCGConnectPainter(m_graphicsView, m_graphicsScene, m_flowGraph, pcgConnects[i]));
-			}
-		}
-
-		for (size_t i = 0; i < pcgConnects.size(); i++)
-		{
-			m_pcgConnectPainters[i]->update();
 		}
 	}
 }
