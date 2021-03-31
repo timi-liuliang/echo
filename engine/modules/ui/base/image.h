@@ -57,7 +57,7 @@ namespace Echo
         MaterialPtr             m_materialDefault;
         Renderable*             m_renderable;
         Matrix4                 m_matWVP;
-        i32                     m_width;
-        i32                     m_height;
+        i32                     m_width = 128;
+        i32                     m_height = 128;
     };
 }
