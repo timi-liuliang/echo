@@ -20,6 +20,7 @@ namespace Echo
 		void setOutputFormat();
 
 		// Path
+		const String& getPathName() const { return m_pathName; }
 		void setPathName(const String& pathName);
 
 		// Run

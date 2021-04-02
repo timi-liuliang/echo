@@ -1,4 +1,6 @@
 #include "pcg_image_save.h"
+#include "engine/core/io/io.h"
+#include "engine/core/util/PathUtil.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
@@ -22,7 +24,10 @@ namespace Echo
 
 	void PCGImageSave::bindMethods()
 	{
+		CLASS_BIND_METHOD(PCGImageSave, getPathName, DEF_METHOD("getPathName"));
+		CLASS_BIND_METHOD(PCGImageSave, setPathName, DEF_METHOD("setPathName"));
 
+		CLASS_REGISTER_PROPERTY(PCGImageSave, "PathName", Variant::Type::String, "getPathName", "setPathName");
 	}
 
 	void PCGImageSave::setOutputFormat()
@@ -32,7 +37,11 @@ namespace Echo
 
 	void PCGImageSave::setPathName(const String& pathName)
 	{
-		m_pathName = pathName;
+		if(m_pathName!=pathName)
+		{
+			m_pathName = pathName;
+			m_dirtyFlag = true;
+		}
 	}
 
 	void PCGImageSave::run()
@@ -58,7 +67,15 @@ namespace Echo
 				pixels[idx++] = color.r * 255.99f;
 			}
 
-			stbi_write_png("D:/test.png", image->getWidth(), image->getHeight(), 1, pixels.data(), image->getWidth() * 1);
+			if (!m_pathName.empty())
+			{
+				String fullPath = IO::instance()->convertResPathToFullPath(m_pathName);
+				String pathDir = PathUtil::GetFileDirPath(fullPath);
+				if (!PathUtil::IsDirExist(pathDir))
+					PathUtil::CreateDir(pathDir);
+
+				stbi_write_png(fullPath.c_str(), image->getWidth(), image->getHeight(), 1, pixels.data(), image->getWidth() * 1);
+			}
 		}
 	}
 }
