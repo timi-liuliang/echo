@@ -22,8 +22,8 @@ namespace Procedural
 			float xdiff = endPos.x() - startPos.x();
 			float ydiff = endPos.y() - startPos.y();
 
-			QPointF ctrlPt1 = startPos + QPointF(-xdiff * 0.1f, ydiff * 1.f);
-			QPointF ctrlPt2 = endPos - QPointF(-xdiff * 0.1f, ydiff * 1.f);
+			QPointF ctrlPt1 = startPos + QPointF(-xdiff * 0.f, ydiff * 0.9f);
+			QPointF ctrlPt2 = endPos - QPointF(-xdiff * 0.f, ydiff * 0.9f);
 
 			QPainterPath path;
 			path.moveTo(startPos);

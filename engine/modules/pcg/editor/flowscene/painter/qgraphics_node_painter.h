@@ -31,8 +31,9 @@ namespace Procedural
 			QColor m_shadowColor = QColor(20, 20, 20);
 			QColor m_fontColor = Qt::gray;
 			QColor m_fontColorFaded = Qt::gray;
-			QColor m_connectionPointColor = QColor(169, 169, 169);
-			QColor m_filledConnectionPointColor = Qt::cyan;
+			QColor m_connectionPointBorderColor = QColor(132, 132, 132);
+			QColor m_filledConnectionPointColor = QColor(77, 77, 77, 0);
+			QColor m_filledConnectionPointColorActive = Qt::darkCyan;
 			QColor m_warningColor = QColor(128, 128, 0);
 			QColor m_errorColor = Qt::red;
 			QColor finalColor = QColor(54, 108, 179, 255);
@@ -58,21 +59,24 @@ namespace Procedural
 		void buildInputConnectPoints();
 		void buildOutputConnectPoints();
 
+		// update display
+		void updateInputConnectPoints();
+		void updateOutputConnectPoints();
+
 	private:
-		Style								m_style;
-		Echo::PCGNode*						m_pcgNode = nullptr;
-		QGraphicsView*						m_graphicsView = nullptr;
-		class QGraphicsFlowScene*			m_graphicsScene = nullptr;
-		QGraphicsRoundRectItem*				m_rect = nullptr;
-		QGraphicsRoundRectItemFinal*		m_rectFinal = nullptr;
-		float								m_rectFinalWidth = 15;
-		Echo::vector<QGraphicsItem*>::type	m_inputConnectionPoints;
-		Echo::vector<QGraphicsItem*>::type	m_outputConnectionPoints;
-		float								m_width = 120;
-		float								m_height = 40;
-		float								m_connectPointRadius = 12.f;
-		Echo::Color							m_connectPointColor = Echo::Color::DARKCYAN;
-		QGraphicsSimpleTextItem*			m_text = nullptr;
+		Style									m_style;
+		Echo::PCGNode*							m_pcgNode = nullptr;
+		QGraphicsView*							m_graphicsView = nullptr;
+		class QGraphicsFlowScene*				m_graphicsScene = nullptr;
+		QGraphicsRoundRectItem*					m_rect = nullptr;
+		QGraphicsRoundRectItemFinal*			m_rectFinal = nullptr;
+		float									m_rectFinalWidth = 15;
+		std::vector<QGraphicsConnectPointItem*>	m_inputConnectionPoints;
+		std::vector<QGraphicsConnectPointItem*>	m_outputConnectionPoints;
+		float									m_width = 120;
+		float									m_height = 40;
+		float									m_connectPointRadius = 7.f;
+		QGraphicsSimpleTextItem*				m_text = nullptr;
 	};
 	typedef Echo::vector<PCGNodePainter*>::type PCGNodePainters;
 }

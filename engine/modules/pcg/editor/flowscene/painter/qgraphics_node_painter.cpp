@@ -89,15 +89,15 @@ namespace Procedural
 
 			for (size_t i = 0; i < inputs.size(); i++)
 			{
-				QPen pen(QColor::fromRgbF(m_connectPointColor.r, m_connectPointColor.g, m_connectPointColor.b, m_connectPointColor.a));
-				QBrush brush(QColor::fromRgbF(m_connectPointColor.r, m_connectPointColor.g, m_connectPointColor.b, m_connectPointColor.a));
+				QPen pen(m_style.m_connectionPointBorderColor, 2.f);
+				QBrush brush(m_style.m_filledConnectionPointColorActive);
 
 				QGraphicsConnectPointItem* item = new QGraphicsConnectPointItem(inputs[i]);
 				item->setParentItem(m_rect);
-				item->setRect(QRectF(-halfConnectPointRadius, -halfConnectPointRadius, halfConnectPointRadius, halfConnectPointRadius));
+				item->setRect(QRectF(-halfConnectPointRadius, -halfConnectPointRadius, m_connectPointRadius, m_connectPointRadius));
 				item->setPen(pen);
 				item->setBrush(brush);
-				item->setPos(0.f + halfConnectPointRadius - halfWidth, -nodeHalfHeight - halfConnectPointRadius);
+				item->setPos(0.f + halfConnectPointRadius - halfWidth, -nodeHalfHeight - halfConnectPointRadius * 2.5f);
 				item->setFlag(QGraphicsItem::ItemIsFocusable);
 				item->setAcceptHoverEvents(true);
 				item->setFiltersChildEvents(true);
@@ -119,19 +119,39 @@ namespace Procedural
 
 			for (size_t i = 0; i < outputs.size(); i++)
 			{
-				QPen pen(QColor::fromRgbF(m_connectPointColor.r, m_connectPointColor.g, m_connectPointColor.b, m_connectPointColor.a));
-				QBrush brush(QColor::fromRgbF(m_connectPointColor.r, m_connectPointColor.g, m_connectPointColor.b, m_connectPointColor.a));
+				QPen pen(m_style.m_connectionPointBorderColor, 2.f);
+				QBrush brush(m_style.m_filledConnectionPointColorActive);
 
 				QGraphicsConnectPointItem* item = new QGraphicsConnectPointItem(outputs[i]);
 				item->setParentItem(m_rect);
-				item->setRect(QRectF(-halfConnectPointRadius, -halfConnectPointRadius, halfConnectPointRadius, halfConnectPointRadius));
+				item->setRect(QRectF(-halfConnectPointRadius, -halfConnectPointRadius, m_connectPointRadius, m_connectPointRadius));
 				item->setPen(pen);
 				item->setBrush(brush);
-				item->setPos(0.f + halfConnectPointRadius - halfWidth, nodeHalfHeight + halfConnectPointRadius * 2.f);
+				item->setPos(0.f + halfConnectPointRadius - halfWidth, nodeHalfHeight + halfConnectPointRadius * 2.5f);
 				m_graphicsScene->addItem(item);
 
 				m_outputConnectionPoints.push_back(item);
 			}
+		}
+	}
+
+	void PCGNodePainter::updateInputConnectPoints()
+	{
+		const std::vector<Echo::PCGConnectPoint*>& inputs = m_pcgNode->getInputs();
+		for (size_t i = 0; i < inputs.size(); i++)
+		{
+			QBrush brush(inputs[i]->isHaveConnect() ? m_style.m_filledConnectionPointColorActive : m_style.m_filledConnectionPointColor);
+			m_inputConnectionPoints[i]->setBrush(brush);
+		}
+	}
+
+	void PCGNodePainter::updateOutputConnectPoints()
+	{
+		const std::vector<Echo::PCGConnectPoint*>& outputs = m_pcgNode->getOutputs();
+		for (size_t i = 0; i < outputs.size(); i++)
+		{
+			QBrush brush(outputs[i]->isHaveConnect() ? m_style.m_filledConnectionPointColorActive : m_style.m_filledConnectionPointColor);
+			m_outputConnectionPoints[i]->setBrush(brush);
 		}
 	}
 
@@ -147,6 +167,9 @@ namespace Procedural
 		
 			m_rect->setPen(QPen(m_rect->isFocused() ? m_style.m_selectedBoundaryColor : m_style.m_normalBoundaryColor, m_style.m_penWidth));
 		}
+
+		updateInputConnectPoints();
+		updateOutputConnectPoints();
 	}
 }
 

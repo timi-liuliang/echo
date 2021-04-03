@@ -29,6 +29,9 @@ namespace Echo
 		// Data type
 		String getDataType();
 
+		// connect
+		bool isHaveConnect() const { return !m_connects.empty(); }
+
 		// Data
 		PCGDataPtr getData();
 		void setData(PCGDataPtr InData) { m_data = InData; }
