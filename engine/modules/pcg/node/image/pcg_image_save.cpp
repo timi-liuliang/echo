@@ -27,7 +27,8 @@ namespace Echo
 		CLASS_BIND_METHOD(PCGImageSave, getPathName, DEF_METHOD("getPathName"));
 		CLASS_BIND_METHOD(PCGImageSave, setPathName, DEF_METHOD("setPathName"));
 
-		CLASS_REGISTER_PROPERTY(PCGImageSave, "PathName", Variant::Type::String, "getPathName", "setPathName");
+		CLASS_REGISTER_PROPERTY(PCGImageSave, "PathName", Variant::Type::ResourcePath, "getPathName", "setPathName");
+		CLASS_REGISTER_PROPERTY_HINT(PCGImageSave, "PathName", PropertyHintType::ResourceBehavior, "save");
 	}
 
 	void PCGImageSave::setOutputFormat()
@@ -35,11 +36,10 @@ namespace Echo
 
 	}
 
-	void PCGImageSave::setPathName(const String& pathName)
+	void PCGImageSave::setPathName(const ResourcePath& pathName)
 	{
-		if(m_pathName!=pathName)
+		if(m_pathName.setPath(pathName.getPath()))
 		{
-			m_pathName = pathName;
 			m_dirtyFlag = true;
 		}
 	}
@@ -67,9 +67,9 @@ namespace Echo
 				pixels[idx++] = color.r * 255.99f;
 			}
 
-			if (!m_pathName.empty())
+			if (!m_pathName.isEmpty())
 			{
-				String fullPath = IO::instance()->convertResPathToFullPath(m_pathName);
+				String fullPath = IO::instance()->convertResPathToFullPath(m_pathName.getPath());
 				String pathDir = PathUtil::GetFileDirPath(fullPath);
 				if (!PathUtil::IsDirExist(pathDir))
 					PathUtil::CreateDir(pathDir);

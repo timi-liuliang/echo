@@ -20,8 +20,8 @@ namespace Echo
 		void setOutputFormat();
 
 		// Path
-		const String& getPathName() const { return m_pathName; }
-		void setPathName(const String& pathName);
+		const ResourcePath& getPathName() const { return m_pathName; }
+		void setPathName(const ResourcePath& pathName);
 
 		// Run
 		virtual void run() override;
@@ -31,6 +31,6 @@ namespace Echo
 		void save(PCGImagePtr image);
 
 	protected:
-		String			m_pathName;
+		ResourcePath	m_pathName = ResourcePath("", ".png");
 	};
 }

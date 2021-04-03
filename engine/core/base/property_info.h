@@ -16,6 +16,7 @@ namespace Echo
 		Range,				// variable range
         Category,           // property category
 		ResourceType,		// resource object type
+		ResourceBehavior,	// load|save
 		ReadOnly,
 		Language,
 	};

@@ -18,7 +18,7 @@ namespace Studio
 		// disable ok button
 		m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 
-		// 目录树型结构
+		// Tree Strict
 		m_dirModel = new QT_UI::QDirectoryModel();
 		m_dirModel->SetIcon("root", QIcon(":/icon/Icon/root.png"));
 		m_dirModel->SetIcon("filter", QIcon(":/icon/Icon/folder_close.png"));
@@ -37,7 +37,7 @@ namespace Studio
 		// show exts
 		m_comboBoxExts->addItem(Echo::StringUtil::Format("(%s)",exts).c_str());
 
-		// 消息链接
+		// connect signal slot
 		QObject::connect(m_dirModel, SIGNAL(FileSelected(const char*)), this, SLOT(onSelectDir(const char*)));
 		QObject::connect(m_fileNameLine, SIGNAL(textChanged(const QString &)), this, SLOT(onFileNameChanged()));
 

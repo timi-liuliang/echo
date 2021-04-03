@@ -3,6 +3,7 @@
 #include <QLineEdit>
 #include "QFileSelect.h"
 #include "QResSelect.h"
+#include "QResSave.h"
 #include "QNodeSelect.h"
 #include "QIntEditor.h"
 #include "QRealEditor.h"
@@ -31,6 +32,7 @@ namespace QT_UI
 		registerWidget("CheckBox", true, QCheckBoxEditor::ItemDelegatePaint);
 		registerWidget("ResEdit", true, QResEditor::ItemDelegatePaint);
 		registerWidget("AssetsSelect", true, QResSelect::ItemDelegatePaint);
+		registerWidget("AssetsSave", true, QResSave::ItemDelegatePaint);
 		registerWidget("ChannelEditor", true, QChannelEditor::ItemDelegatePaint);
 	}
 
@@ -84,7 +86,7 @@ namespace QT_UI
 		m_model->findValue(value, propertyName);
 
 		QSize size = QStyledItemDelegate::sizeHint( option, index);
-		if (widgetType == "AssetsSelect")
+		if (widgetType == "AssetsSelect" || widgetType=="AssetsSave")
 		{
 			Echo::String ext = userDatas.size() >= 2 ? userDatas[1] : "";
 			if (Echo::StringUtil::Equal(ext, ".png", false))
@@ -143,6 +145,12 @@ namespace QT_UI
 		else if( widgetType == "AssetsSelect")
 		{
 			QResSelect* widget = new QResSelect(m_model, propertyName, userDatas.size() > 1 ? userDatas[1].c_str() : nullptr, userDatas.size() > 2 ? userDatas[2].c_str() : nullptr, parent);
+
+			return widget;
+		}
+		else if (widgetType == "AssetsSave")
+		{
+			QResSave* widget = new QResSave(m_model, propertyName, userDatas.size() > 1 ? userDatas[1].c_str() : nullptr, userDatas.size() > 2 ? userDatas[2].c_str() : nullptr, parent);
 
 			return widget;
 		}
@@ -246,6 +254,11 @@ namespace QT_UI
 				QResSelect* widget = qobject_cast<QResSelect*>(editor);
 				widget->SetPath( value.toString().toStdString().c_str());
 			}
+			else if (widgetType == "AssetsSave")
+			{
+				QResSave* widget = qobject_cast<QResSave*>(editor);
+				widget->SetPath(value.toString().toStdString().c_str());
+			}
 			else if (widgetType == "NodeSelect")
 			{
 				QNodeSelect* widget = qobject_cast<QNodeSelect*>(editor);
@@ -332,6 +345,11 @@ namespace QT_UI
 			{
 				QResSelect* widget = qobject_cast<QResSelect*>(editor);
 				m_model->setValue( propertyName, widget->GetPath());
+			}
+			else if (widgetType == "AssetsSave")
+			{
+				QResSave* widget = qobject_cast<QResSave*>(editor);
+				m_model->setValue(propertyName, widget->GetPath());
 			}
 			else if (widgetType == "NodeSelect")
 			{

@@ -1039,7 +1039,16 @@ namespace Studio
 				case Echo::Variant::Type::Color:		m_propertyHelper.addItem(propertyName.c_str(), modelValue, QT_UI::WT_ColorSelect); break;
 				case Echo::Variant::Type::String:
 				case Echo::Variant::Type::Base64String:	m_propertyHelper.addItem(propertyName.c_str(), modelValue, QT_UI::WT_String, extraData.c_str()); break;
-				case Echo::Variant::Type::ResourcePath:	m_propertyHelper.addItem(propertyName.c_str(), modelValue, QT_UI::WT_AssetsSelect, var.toResPath().getSupportExts().c_str()); break;
+				case Echo::Variant::Type::ResourcePath:	
+				{
+					Echo::String resourceBehavir = propInfo->getHint(Echo::PropertyHintType::ResourceBehavior);
+					if(resourceBehavir=="load")
+						m_propertyHelper.addItem(propertyName.c_str(), modelValue, QT_UI::WT_AssetsSelect, var.toResPath().getSupportExts().c_str());
+					else
+						m_propertyHelper.addItem(propertyName.c_str(), modelValue, QT_UI::WT_AssetsSave, var.toResPath().getSupportExts().c_str());
+					
+					break;
+				}
 				case Echo::Variant::Type::StringOption: m_propertyHelper.addItem(propertyName.c_str(), modelValue, QT_UI::WT_ComboBox, var.toStringOption().getOptionsStr().c_str()); break;
 				case Echo::Variant::Type::NodePath:		m_propertyHelper.addItem(propertyName.c_str(), modelValue, QT_UI::WT_NodeSelect, Echo::StringUtil::ToString(object->getId()).c_str()); break;
 				case Echo::Variant::Type::Object:		m_propertyHelper.addItem(propertyName.c_str(), modelValue, QT_UI::WT_Res, resourceHint.c_str()); break;

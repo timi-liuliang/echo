@@ -20,6 +20,7 @@ namespace QT_UI
 		WT_ColorSelect,
 		WT_ComboBox,
 		WT_AssetsSelect,
+		WT_AssetsSave,
 		WT_NodeSelect,
 		WT_Res,
 		WT_Custom,
