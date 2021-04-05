@@ -19,6 +19,9 @@ namespace Echo
 		String getName() const { return m_name; }
 		void setName(const String& name) { m_name = name; }
 
+		// catergory
+		virtual String getCategory() const { return ""; }
+
 		// Graph
 		void setGraph(PCGFlowGraph* graph) { m_graph = graph; }
 		PCGFlowGraph* getGraph() { return m_graph; }

@@ -13,6 +13,9 @@ namespace Echo
 		PCGImagePerlinNoise();
 		virtual ~PCGImagePerlinNoise();
 
+		// catergory
+		virtual String getCategory() const override { return "Image"; }
+
 		// Set Bounds
 		i32 getWidth() const { return m_width; }
 		void setWidth(i32 width);

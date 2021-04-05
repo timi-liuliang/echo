@@ -58,22 +58,50 @@ namespace Echo
 		m_graphicsScene->update();
 	}
 
+	void PCGFlowGraphPanel::addActionToMenu(std::map<Echo::String, QMenu*>& subMenus, Echo::String& category, Echo::String& className)
+	{
+		Echo::String finalCategory = category.empty() ? "General" : category;
+
+		QMenu* categoryMenu = nullptr;
+		auto it = subMenus.find(category);
+		if (it != subMenus.end())
+		{
+			categoryMenu = it->second;
+		}
+
+		if (!categoryMenu)
+		{
+			categoryMenu = new QMenu(m_ui);
+			categoryMenu->setTitle(category.c_str());
+
+			m_menuNew->addMenu(categoryMenu);
+			subMenus[category] = categoryMenu;
+		}
+
+		QAction* newAction = new QAction;
+		newAction->setText(Echo::StringUtil::Replace(className, "PCG", "").c_str());
+		newAction->setData(className.c_str());
+		categoryMenu->addAction(newAction);
+
+		EditorApi.qConnectAction(newAction, QSIGNAL(triggered()), this, createMethodBind(&PCGFlowGraphPanel::onNewPCGNode));
+	}
+
 	void PCGFlowGraphPanel::onRightClickGraphicsView()
 	{
 		if (!m_menuNew)
 		{
 			m_menuNew = EchoNew(QMenu(m_ui));
 
+			std::map<Echo::String, QMenu*> subMenus;
 			Echo::StringArray pgNodeClasses;
 			Echo::Class::getChildClasses(pgNodeClasses, "PCGNode", true);
 			for (String& className : pgNodeClasses)
 			{
-				QAction* newAction = new QAction;
-				newAction->setText(Echo::StringUtil::Replace(className, "PCG", "").c_str());
-				newAction->setData(className.c_str());
-				m_menuNew->addAction(newAction);
+				Echo::PCGNode* pcgNode = Echo::Class::create<PCGNode*>(className);
+				Echo::String category = pcgNode->getCategory();
+				EchoSafeDelete(pcgNode, PCGNode);
 
-				EditorApi.qConnectAction(newAction, QSIGNAL(triggered()), this, createMethodBind(&PCGFlowGraphPanel::onNewPCGNode));
+				addActionToMenu(subMenus, category, className);
 			}
 		}
 

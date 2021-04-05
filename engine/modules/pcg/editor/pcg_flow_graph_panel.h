@@ -36,6 +36,10 @@ namespace Echo
 		// delete 
 		void onDeletePGNodes();
 
+	private:
+		// add action
+		void addActionToMenu(std::map<Echo::String, QMenu*>& subMenus, Echo::String& category, Echo::String& className);
+
 	protected:
 		PCGFlowGraph*						m_flowGraph = nullptr;
 		QDockWidget*						m_ui;

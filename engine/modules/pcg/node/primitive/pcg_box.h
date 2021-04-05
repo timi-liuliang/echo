@@ -12,6 +12,9 @@ namespace Echo
 		PCGBox();
 		virtual ~PCGBox();
 
+		// catergory
+		virtual String getCategory() const override { return "Primitive"; }
+
 		// width
 		void setSize(const Vector3& size);
 		const Vector3& getSize() const { return m_size; }

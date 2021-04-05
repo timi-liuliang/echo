@@ -13,8 +13,8 @@ namespace Echo
 		PCGImageSave();
 		virtual ~PCGImageSave();
 
-		// Name
-		virtual String getType() const { return "ImageSave"; }
+		// catergory
+		virtual String getCategory() const override { return "Image"; }
 
 		// Format
 		void setOutputFormat();
