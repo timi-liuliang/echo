@@ -17,27 +17,31 @@ namespace Echo
 		PCGFlowGraph();
 		virtual ~PCGFlowGraph();
 
-		// Reset
+		// reset
 		void reset();
 
-		// Node
+		// node
 		void addNode(PCGNode* node);
 		void removeNode(PCGNode* node);
 
-		// Node query
+		// node query
 		const vector<PCGNode*>::type& getNodes() const { return m_nodes; }
 		PCGNode* getNodeByName(const String& name);
 
-		// Connect
+		// connect
 		void addConnect(PCGConnect* connect);
 		void removeConnect(PCGConnect* connect);
 
-		// Connect query
+		// connect query
 		const vector<PCGConnect*>::type& getConnects() const { return m_connects; }
 
-		// Current
+		// current
 		void setAsOutput(PCGNode* node);
 		PCGNode* getOutputNode();
+
+		// data flow programming pcg flow graph
+		const String& getGraph() const;
+		void setGraph(const String& graph);
 
 		// run
 		void run();
@@ -51,6 +55,7 @@ namespace Echo
 		void run(PCGNode* node);
 
 	protected:
+		String						m_graph;
 		vector<PCGNode*>::type		m_nodes;
 		PCGNode*					m_nodeOutput = nullptr;
 		std::vector<PCGConnect*>	m_connects;

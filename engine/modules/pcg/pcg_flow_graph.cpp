@@ -21,6 +21,13 @@ namespace Echo
 
 	void PCGFlowGraph::bindMethods()
 	{
+		CLASS_BIND_METHOD(PCGFlowGraph, getGraph, DEF_METHOD("getGraph"));
+		CLASS_BIND_METHOD(PCGFlowGraph, setGraph, DEF_METHOD("setGraph"));
+
+		CLASS_REGISTER_PROPERTY(PCGFlowGraph, "Graph", Variant::Type::String, "getGraph", "setGraph");
+
+		CLASS_REGISTER_PROPERTY_HINT(PCGFlowGraph, "Graph", PropertyHintType::ReadOnly, "true");
+		CLASS_REGISTER_PROPERTY_HINT(PCGFlowGraph, "Graph", PropertyHintType::Language, "xml");
 	}
 
 	void PCGFlowGraph::reset()
@@ -117,5 +124,15 @@ namespace Echo
 	bool PCGFlowGraph::isNodeExist(PCGNode* node)
 	{
 		return std::find(m_nodes.begin(), m_nodes.end(), node) != m_nodes.end();
+	}
+
+	const String& PCGFlowGraph::getGraph() const
+	{ 
+		return m_graph; 
+	}
+
+	void PCGFlowGraph::setGraph(const String& graph)
+	{ 
+		m_graph = graph; 
 	}
 }
