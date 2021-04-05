@@ -31,9 +31,6 @@ namespace Procedural
 			QColor m_shadowColor = QColor(20, 20, 20);
 			QColor m_fontColor = Qt::gray;
 			QColor m_fontColorFaded = Qt::gray;
-			QColor m_connectionPointBorderColor = QColor(132, 132, 132);
-			QColor m_filledConnectionPointColor = QColor(77, 77, 77, 0);
-			QColor m_filledConnectionPointColorActive = Qt::darkCyan;
 			QColor m_warningColor = QColor(128, 128, 0);
 			QColor m_errorColor = Qt::red;
 			QColor finalColor = QColor(54, 108, 179, 255);

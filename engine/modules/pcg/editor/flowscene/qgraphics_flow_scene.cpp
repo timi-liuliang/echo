@@ -52,8 +52,19 @@ namespace Procedural
 				{
 					using namespace Echo;
 
-					PCGConnect* pcgConnect = EchoNew(PCGConnect(pcgStartPoint, pcgEndPoint));
-					m_flowGraph->addConnect(pcgConnect);
+					if (pcgStartPoint->getOwner() != pcgEndPoint->getOwner())
+					{
+						if (pcgStartPoint->getType() == PCGConnectPoint::Output && pcgEndPoint->getType() == PCGConnectPoint::Input)
+						{
+							PCGConnect* pcgConnect = EchoNew(PCGConnect(pcgStartPoint, pcgEndPoint));
+							m_flowGraph->addConnect(pcgConnect);
+						}
+						else if(pcgStartPoint->getType() == PCGConnectPoint::Input && pcgEndPoint->getType() == PCGConnectPoint::Output)
+						{
+							PCGConnect* pcgConnect = EchoNew(PCGConnect(pcgEndPoint, pcgStartPoint));
+							m_flowGraph->addConnect(pcgConnect);
+						}
+					}
 				}
 			}
 			else

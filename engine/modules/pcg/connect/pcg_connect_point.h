@@ -26,6 +26,9 @@ namespace Echo
 		// Owner
 		PCGNode* getOwner() { return m_owner; }
 
+		// type
+		Type getType() const { return m_type; }
+
 		// Data type
 		String getDataType();
 

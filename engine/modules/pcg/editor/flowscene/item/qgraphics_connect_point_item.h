@@ -24,7 +24,14 @@ namespace Procedural
 		static QGraphicsConnectPointItem* getByPCGConnectPoint(Echo::PCGConnectPoint* connectPoint);
 
 		// connect point
-		Echo::PCGConnectPoint* getPCGConnectPoint() { return m_connectPoint; }		
+		Echo::PCGConnectPoint* getPCGConnectPoint() { return m_connectPoint; }
+
+		// radius
+		float getRadius() const { return m_radius; }
+		void setRadius(float radius);
+
+		// update
+		void update();
 
 	protected:
 		// foucs event
@@ -36,7 +43,12 @@ namespace Procedural
 		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent* event) override;
 
 	protected:
-		Echo::PCGConnectPoint*				m_connectPoint = nullptr;
+		Echo::PCGConnectPoint*		m_connectPoint = nullptr;
+		QColor						m_connectionPointBorderColor = QColor(132, 132, 132);
+		QColor						m_filledConnectionPointColor = QColor(77, 77, 77, 0);
+		QColor						m_filledConnectionPointColorActive = Qt::darkCyan;
+		float						m_borderWidth = 2.f;
+		float						m_radius = 7.f;
 	};
 }
 
