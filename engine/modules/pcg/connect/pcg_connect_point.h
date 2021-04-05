@@ -31,6 +31,7 @@ namespace Echo
 
 		// Data type
 		String getDataType();
+		String getSupportDataTypes() const { return m_supportDataTypes; }
 
 		// connect
 		bool isHaveConnect() const { return !m_connects.empty(); }
@@ -50,7 +51,7 @@ namespace Echo
 	protected:
 		PCGNode*						m_owner = nullptr;
 		Type							m_type;
-		String							m_supportTypes;
+		String							m_supportDataTypes;
 		PCGDataPtr						m_data;
 		std::vector<class PCGConnect*>	m_connects;
 	};

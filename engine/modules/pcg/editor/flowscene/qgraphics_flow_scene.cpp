@@ -48,10 +48,14 @@ namespace Procedural
 		{
 			if (pcgStartPoint->getOwner() != pcgEndPoint->getOwner())
 			{
+				if (pcgStartPoint->getType() == Echo::PCGConnectPoint::Input && pcgEndPoint->getType() == Echo::PCGConnectPoint::Output)
+					std::swap(pcgStartPoint, pcgEndPoint);
+
 				if (pcgStartPoint->getType() == Echo::PCGConnectPoint::Output && pcgEndPoint->getType() == Echo::PCGConnectPoint::Input)
-					return true;
-				else if (pcgStartPoint->getType() == Echo::PCGConnectPoint::Input && pcgEndPoint->getType() == Echo::PCGConnectPoint::Output)
-					return true;
+				{
+					if(Echo::StringUtil::Contain(pcgEndPoint->getSupportDataTypes(), pcgStartPoint->getDataType(), false))
+						return true;
+				}
 			}
 		}
 
@@ -129,7 +133,9 @@ namespace Procedural
 				QGraphicsConnectPointItem* connectPointItem = dynamic_cast<QGraphicsConnectPointItem*>(item);
 				if (connectPointItem)
 				{
-					connectPointItem->setState(isCanConnect(connectPointItem) ? QGraphicsConnectPointItem::Big : QGraphicsConnectPointItem::Hide);
+					if (connectPointItem != m_editingConnectionStartPoint)
+						connectPointItem->setState(isCanConnect(connectPointItem) ? QGraphicsConnectPointItem::Big : QGraphicsConnectPointItem::Hide);
+
 					m_endConnectItemCandidate = connectPointItem;
 				}
 			}

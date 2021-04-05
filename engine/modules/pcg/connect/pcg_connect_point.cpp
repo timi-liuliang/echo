@@ -7,7 +7,7 @@ namespace Echo
 	PCGConnectPoint::PCGConnectPoint(PCGNode* owner, const String& supportTypes, PCGConnectPoint::Type type)
 		: m_owner(owner)
 		, m_type(type)
-		, m_supportTypes(supportTypes)
+		, m_supportDataTypes(supportTypes)
 	{
 	}
 
@@ -19,7 +19,7 @@ namespace Echo
 
 		if (data)
 		{
-			m_supportTypes = data->getType();
+			m_supportDataTypes = data->getType();
 		}
 	}
 
@@ -30,7 +30,7 @@ namespace Echo
 
 	String PCGConnectPoint::getDataType()
 	{ 
-		return m_data->getType(); 
+		return m_data ? m_data->getType() : StringUtil::BLANK; 
 	}
 
 	PCGDataPtr PCGConnectPoint::getData()
