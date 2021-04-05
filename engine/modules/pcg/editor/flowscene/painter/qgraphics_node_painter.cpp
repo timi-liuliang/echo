@@ -93,9 +93,6 @@ namespace Procedural
 				item->setParentItem(m_rect);
 				item->setRadius(m_connectPointRadius);
 				item->setPos(0.f + halfConnectPointRadius - halfWidth, -nodeHalfHeight - halfConnectPointRadius * 2.5f);
-				item->setFlag(QGraphicsItem::ItemIsFocusable);
-				item->setAcceptHoverEvents(true);
-				item->setFiltersChildEvents(true);
 				m_graphicsScene->addItem(item);
 
 				m_inputConnectionPoints.push_back(item);

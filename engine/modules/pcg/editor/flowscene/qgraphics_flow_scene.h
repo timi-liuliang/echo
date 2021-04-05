@@ -23,6 +23,9 @@ namespace Procedural
 		void beginConnect(QGraphicsConnectPointItem* startPoint);
 		void endConnect(QGraphicsConnectPointItem* startPoint);
 
+		// is can connect
+		bool isCanConnect(QGraphicsConnectPointItem* endPoint);
+
 		// update
 		void update();
 
@@ -44,6 +47,7 @@ namespace Procedural
 		Echo::PCGFlowGraph*					m_flowGraph = nullptr;
 		QGraphicsConnectPointItem*			m_editingConnectionStartPoint = nullptr;
 		QGraphicsConnectItem*				m_editingConnectItem = nullptr;
+		QGraphicsConnectPointItem*			m_endConnectItemCandidate = nullptr;
 		struct BackgroundStyle
 		{
 			Echo::Color m_backgroundColor;

@@ -16,6 +16,8 @@ namespace Procedural
 		setZValue(10.f);
 		setPen(pen);
 		setBrush(brush);
+		setFlag(QGraphicsItem::ItemIsFocusable);
+		setFiltersChildEvents(true);
 
 		g_connectPointItems[connectPoint] = this;
 	}
@@ -43,28 +45,52 @@ namespace Procedural
 		setRect(-halfRadius, -halfRadius, m_radius, m_radius);
 	}
 
-	void QGraphicsConnectPointItem::focusInEvent(QFocusEvent* event)
-	{
-	}
-
-	void QGraphicsConnectPointItem::focusOutEvent(QFocusEvent* event)
-	{
-	}
-
-	void QGraphicsConnectPointItem::hoverEnterEvent(QGraphicsSceneHoverEvent* event)
-	{
-		QGraphicsEllipseItem::hoverEnterEvent(event);
-	}
-
-	void QGraphicsConnectPointItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* event)
-	{
-		QGraphicsEllipseItem::hoverLeaveEvent(event);
+	void QGraphicsConnectPointItem::setState(State state)
+	{ 
+		if (m_state != state)
+		{
+			m_state = state;
+			m_stateDirty = true;
+		}
 	}
 
 	void QGraphicsConnectPointItem::update()
 	{
 		QBrush brush(m_connectPoint->isHaveConnect() ? m_filledConnectionPointColorActive : m_filledConnectionPointColor);
 		setBrush(brush);
+
+		if (m_stateDirty)
+		{
+			if (m_state == State::Normal)
+			{
+				float radius = m_radius;
+				float halfRadius = 0.5f * radius;
+				setRect(-halfRadius, -halfRadius, radius, radius);
+
+				QPen pen(m_connectionPointBorderColor, m_borderWidth, Qt::SolidLine);
+				setPen(pen);
+			}
+			else if (m_state == State::Big)
+			{
+				float radius = m_radius * 1.2f;
+				float halfRadius = 0.5f * radius;
+				setRect(-halfRadius, -halfRadius, radius, radius);
+
+				QPen pen(m_connectionPointBorderColor, m_borderWidth, Qt::DotLine);
+				setPen(pen);
+			}
+			else if (m_state == State::Hide)
+			{
+				float radius = m_radius;
+				float halfRadius = 0.5f * radius;
+				setRect(-halfRadius, -halfRadius, radius, radius);
+
+				QPen pen(m_filledConnectionPointColor, m_borderWidth, Qt::SolidLine);
+				setPen(pen);
+			}
+
+			m_stateDirty = false;
+		}
 	}
 }
 

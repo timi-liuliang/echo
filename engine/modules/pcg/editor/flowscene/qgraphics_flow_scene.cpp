@@ -40,6 +40,24 @@ namespace Procedural
 		}
 	}
 
+	bool QGraphicsFlowScene::isCanConnect(QGraphicsConnectPointItem* endPoint)
+	{
+		Echo::PCGConnectPoint* pcgStartPoint = m_editingConnectionStartPoint->getPCGConnectPoint();
+		Echo::PCGConnectPoint* pcgEndPoint = endPoint->getPCGConnectPoint();
+		if (pcgStartPoint && pcgEndPoint)
+		{
+			if (pcgStartPoint->getOwner() != pcgEndPoint->getOwner())
+			{
+				if (pcgStartPoint->getType() == Echo::PCGConnectPoint::Output && pcgEndPoint->getType() == Echo::PCGConnectPoint::Input)
+					return true;
+				else if (pcgStartPoint->getType() == Echo::PCGConnectPoint::Input && pcgEndPoint->getType() == Echo::PCGConnectPoint::Output)
+					return true;
+			}
+		}
+
+		return false;
+	}
+
 	void QGraphicsFlowScene::endConnect(QGraphicsConnectPointItem* endPoint)
 	{
 		if (m_editingConnectItem)
@@ -66,6 +84,8 @@ namespace Procedural
 						}
 					}
 				}
+
+				endPoint->setState(QGraphicsConnectPointItem::Normal);
 			}
 			else
 			{
@@ -93,9 +113,26 @@ namespace Procedural
 	{
 		QGraphicsScene::mouseMoveEvent(event);
 
+		if (m_endConnectItemCandidate)
+		{
+			m_endConnectItemCandidate->setState(QGraphicsConnectPointItem::Normal);
+			m_endConnectItemCandidate = nullptr;
+		}
+
 		if (m_editingConnectItem)
 		{
 			m_editingConnectItem->set(m_editingConnectionStartPoint->scenePos(), event->scenePos());
+
+			QGraphicsItem* item = itemAt(event->scenePos(), QTransform());
+			if (item)
+			{
+				QGraphicsConnectPointItem* connectPointItem = dynamic_cast<QGraphicsConnectPointItem*>(item);
+				if (connectPointItem)
+				{
+					connectPointItem->setState(isCanConnect(connectPointItem) ? QGraphicsConnectPointItem::Big : QGraphicsConnectPointItem::Hide);
+					m_endConnectItemCandidate = connectPointItem;
+				}
+			}
 		}
 	}
 

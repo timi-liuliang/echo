@@ -72,7 +72,7 @@ namespace Procedural
 		std::vector<QGraphicsConnectPointItem*>	m_outputConnectionPoints;
 		float									m_width = 120;
 		float									m_height = 40;
-		float									m_connectPointRadius = 7.f;
+		float									m_connectPointRadius = 6.f;
 		QGraphicsSimpleTextItem*				m_text = nullptr;
 	};
 	typedef Echo::vector<PCGNodePainter*>::type PCGNodePainters;
