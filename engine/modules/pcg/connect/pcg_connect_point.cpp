@@ -28,6 +28,21 @@ namespace Echo
 
 	}
 
+	i32 PCGConnectPoint::getIdx()
+	{
+		if (m_owner)
+		{
+			const std::vector<PCGConnectPoint*>& connectPoints = m_type == Type::Input ? m_owner->getInputs() : m_owner->getOutputs();
+			for (size_t i = 0; i < connectPoints.size(); i++)
+			{
+				if (this == connectPoints[i])
+					return i32(i);
+			}
+		}
+
+		return -1;
+	}
+
 	String PCGConnectPoint::getDataType()
 	{ 
 		return m_data ? m_data->getType() : StringUtil::BLANK; 

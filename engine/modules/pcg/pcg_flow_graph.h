@@ -32,6 +32,9 @@ namespace Echo
 		void addConnect(PCGConnect* connect);
 		void removeConnect(PCGConnect* connect);
 
+		// add connect by node name and connect point idx
+		PCGConnect* addConnect(const String& fromNode, i32 fromIdx, const String& toNode, i32 toIdx);
+
 		// connect query
 		const vector<PCGConnect*>::type& getConnects() const { return m_connects; }
 
@@ -40,7 +43,7 @@ namespace Echo
 		PCGNode* getOutputNode();
 
 		// data flow programming pcg flow graph
-		const String& getGraph() const;
+		const String& getGraph();
 		void setGraph(const String& graph);
 
 		// run

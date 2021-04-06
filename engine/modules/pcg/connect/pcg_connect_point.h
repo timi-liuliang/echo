@@ -26,6 +26,9 @@ namespace Echo
 		// Owner
 		PCGNode* getOwner() { return m_owner; }
 
+		// idx
+		i32 getIdx();
+
 		// type
 		Type getType() const { return m_type; }
 

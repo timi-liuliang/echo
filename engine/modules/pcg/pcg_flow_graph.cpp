@@ -68,6 +68,11 @@ namespace Echo
 		connect->getTo()->addConnect(connect);
 	}
 
+	PCGConnect* PCGFlowGraph::addConnect(const String& fromNode, i32 fromIdx, const String& toNode, i32 toIdx)
+	{
+		return nullptr;
+	}
+
 	void PCGFlowGraph::removeConnect(PCGConnect* connect)
 	{
 		m_connects.erase(std::remove(m_connects.begin(), m_connects.end(), connect), m_connects.end());
@@ -126,13 +131,60 @@ namespace Echo
 		return std::find(m_nodes.begin(), m_nodes.end(), node) != m_nodes.end();
 	}
 
-	const String& PCGFlowGraph::getGraph() const
-	{ 
+	const String& PCGFlowGraph::getGraph()
+	{
+		pugi::xml_document doc;
+		pugi::xml_node rootNode = doc.append_child("PCGFlowGraph");
+
+		for (PCGNode* node : m_nodes)
+		{
+			pugi::xml_node nodeXml = rootNode.append_child("node");
+			savePropertyRecursive(&nodeXml, node, node->getClassName());
+		}
+
+		for (PCGConnect* connect : m_connects)
+		{
+			if (connect->getFrom() && connect->getTo())
+			{
+				pugi::xml_node connectXml = rootNode.append_child("connect");
+				connectXml.append_attribute("from").set_value(connect->getFrom()->getOwner()->getName().c_str());
+				connectXml.append_attribute("fidx").set_value(connect->getFrom()->getIdx());
+
+				connectXml.append_attribute("to").set_value(connect->getTo()->getOwner()->getName().c_str());
+				connectXml.append_attribute("tidx").set_value(connect->getTo()->getIdx());
+			}
+		}
+
+		m_graph = pugi::get_doc_string(doc).c_str();
 		return m_graph; 
 	}
 
 	void PCGFlowGraph::setGraph(const String& graph)
-	{ 
+	{
+		pugi::xml_document doc;
+		doc.load(graph.c_str());
+
+		pugi::xml_node rootXmlNode = doc.child("PCGFlowGraph");
+		if (rootXmlNode)
+		{
+			for (pugi::xml_node nodeXml = rootXmlNode.child("node"); nodeXml; nodeXml = nodeXml.next_sibling("node"))
+			{
+				PCGNode* node = ECHO_DOWN_CAST<PCGNode*>(instanceObject(&nodeXml));
+				addNode(node);
+			}
+
+			for (pugi::xml_node connectXml = rootXmlNode.child("connect"); connectXml; connectXml = rootXmlNode.next_sibling("connect"))
+			{
+				String fromName = connectXml.attribute("from").as_string();
+				String toName = connectXml.attribute("to").as_string();
+
+				i32 fromIdx = connectXml.attribute("fidx").as_int();
+				i32 toIdx = connectXml.attribute("tidx").as_int();
+
+				addConnect(fromName, fromIdx, toName, toIdx);
+			}
+		}
+
 		m_graph = graph; 
 	}
 }
