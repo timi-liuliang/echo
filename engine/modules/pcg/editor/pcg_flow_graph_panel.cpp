@@ -14,33 +14,23 @@
 #include "engine/core/main/Engine.h"
 #include "engine/core/render/base/atla/texture_atlas.h"
 #include "engine/core/log/Log.h"
+#include "flowscene/qgraphics_flow_view.h"
 
 namespace Echo
 {
 	PCGFlowGraphPanel::PCGFlowGraphPanel(Object* obj)
 	{
+		setupUi(this);
+
 		m_flowGraph = ECHO_DOWN_CAST<PCGFlowGraph*>(obj);
 
-		m_ui = qobject_cast<QDockWidget*>(EditorApi.qLoadUi("engine/modules/pcg/editor/pcg_flow_graph_panel.ui"));
-
-		QSplitter* splitter = m_ui->findChild<QSplitter*>("m_splitter");
-		if (splitter)
-		{
-			splitter->setStretchFactor(0, 0);
-			splitter->setStretchFactor(1, 1);
-		}
-
 		// Tool button icons
-		m_ui->findChild<QToolButton*>("m_play")->setIcon(QIcon((Engine::instance()->getRootPath() + "engine/modules/pcg/editor/icon/play.png").c_str()));
+		m_play->setIcon(QIcon((Engine::instance()->getRootPath() + "engine/modules/pcg/editor/icon/play.png").c_str()));
 
 		// connect signal slots
-		EditorApi.qConnectWidget(m_ui->findChild<QWidget*>("m_graphicsView"), QSIGNAL(customContextMenuRequested(const QPoint&)), this, createMethodBind(&PCGFlowGraphPanel::onRightClickGraphicsView));
-		EditorApi.qConnectWidget(m_ui->findChild<QWidget*>("m_play"), QSIGNAL(clicked()), this, createMethodBind(&PCGFlowGraphPanel::onPlay));
-		EditorApi.qConnectAction(m_ui->findChild<QAction*>("m_actionDeleteNodes"), QSIGNAL(triggered()), this, createMethodBind(&PCGFlowGraphPanel::onDeletePGNodes));
-
-		// create QGraphicsScene
-		m_graphicsView = m_ui->findChild<QGraphicsView*>("m_graphicsView");
-		m_graphicsView->setRenderHint(QPainter::Antialiasing);
+		EditorApi.qConnectWidget(m_graphicsView, QSIGNAL(customContextMenuRequested(const QPoint&)), this, createMethodBind(&PCGFlowGraphPanel::onRightClickGraphicsView));
+		EditorApi.qConnectWidget(m_play, QSIGNAL(clicked()), this, createMethodBind(&PCGFlowGraphPanel::onPlay));
+		EditorApi.qConnectAction(m_actionDeleteNodes, QSIGNAL(triggered()), this, createMethodBind(&PCGFlowGraphPanel::onDeletePGNodes));
 
 		// graphics scene
 		m_graphicsScene = new Procedural::QGraphicsFlowScene(m_graphicsView, m_flowGraph);
@@ -49,8 +39,7 @@ namespace Echo
 
 	PCGFlowGraphPanel::~PCGFlowGraphPanel()
 	{
-		EditorApi.removeCenterPanel(m_ui);
-		delete m_ui; m_ui = nullptr;
+		EditorApi.removeCenterPanel(this);
 	}
 
 	void PCGFlowGraphPanel::update()
@@ -71,7 +60,7 @@ namespace Echo
 
 		if (!categoryMenu)
 		{
-			categoryMenu = new QMenu(m_ui);
+			categoryMenu = new QMenu(this);
 			categoryMenu->setTitle(category.c_str());
 
 			m_menuNew->addMenu(categoryMenu);
@@ -90,7 +79,7 @@ namespace Echo
 	{
 		if (!m_menuNew)
 		{
-			m_menuNew = EchoNew(QMenu(m_ui));
+			m_menuNew = EchoNew(QMenu(this));
 
 			std::map<Echo::String, QMenu*> subMenus;
 			Echo::StringArray pgNodeClasses;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ProceduralGeometryPanel</class>
- <widget class="QDockWidget" name="ProceduralGeometryPanel">
+ <class>PCGFlowGraphPanel</class>
+ <widget class="QDockWidget" name="PCGFlowGraphPanel">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -22,13 +22,13 @@
      <number>3</number>
     </property>
     <property name="topMargin">
-     <number>0</number>
+     <number>3</number>
     </property>
     <property name="rightMargin">
      <number>3</number>
     </property>
     <property name="bottomMargin">
-     <number>0</number>
+     <number>3</number>
     </property>
     <item>
      <widget class="QWidget" name="TopTools" native="true">
@@ -96,21 +96,16 @@
      </widget>
     </item>
     <item>
-     <widget class="QSplitter" name="m_splitter">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+     <widget class="Procedural::QGraphicsFlowView" name="m_graphicsView">
+      <property name="contextMenuPolicy">
+       <enum>Qt::CustomContextMenu</enum>
       </property>
-      <widget class="QGraphicsView" name="m_graphicsView">
-       <property name="contextMenuPolicy">
-        <enum>Qt::CustomContextMenu</enum>
-       </property>
-       <property name="verticalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="horizontalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-      </widget>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
      </widget>
     </item>
    </layout>
@@ -124,6 +119,13 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Procedural::QGraphicsFlowView</class>
+   <extends>QGraphicsView</extends>
+   <header>flowscene/qgraphics_flow_view.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

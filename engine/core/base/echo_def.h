@@ -142,7 +142,7 @@ To ECHO_DOWN_CAST(From* parent)
 	To to = dynamic_cast<To>(parent);
 	return to;
 #else
-	return static_cast<To>(parent);
+	return dynamic_cast<To>(parent);
 #endif
 }
 

@@ -23,7 +23,7 @@ namespace Echo
 
     void PCGFlowGraphEditor::onEditorSelectThisNode()
     {
-        Editor::instance()->showCenterPanel(m_panel->getUi(), 0.3f);
+        Editor::instance()->showCenterPanel(m_panel, 0.3f);
     }
 
     void PCGFlowGraphEditor::editor_update_self()
