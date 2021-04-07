@@ -116,7 +116,7 @@ namespace Studio
 		static Echo::i32 frameCount = 0; frameCount++;
 		if (frameCount > 2 && m_currentEditObject)
 		{		
-		//	updateObjectPropetyValueToModel(m_currentEditObject, m_currentEditObject->getClassName());
+			updateObjectPropetyValueToModel(m_currentEditObject, m_currentEditObject->getClassName());
 
 			frameCount = 0;
 		}

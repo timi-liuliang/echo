@@ -134,6 +134,16 @@ namespace Procedural
 			item->update();
 	}
 
+	void PCGNodePainter::syncNodePosition()
+	{
+		QPointF qPosition = m_rect->scenePos();
+		Echo::Vector2 ePosition = m_pcgNode->getPosition();
+		if (qPosition.x() != ePosition.x || qPosition.y() != ePosition.y)
+		{
+			m_pcgNode->setPosition(Echo::Vector2(qPosition.x(), qPosition.y()));
+		}
+	}
+
 	void PCGNodePainter::update()
 	{
 		if (m_pcgNode && m_rectFinal)
@@ -142,13 +152,14 @@ namespace Procedural
 		}
 
 		if (m_pcgNode && m_rect)
-		{
-		
+		{	
 			m_rect->setPen(QPen(m_rect->isFocused() ? m_style.m_selectedBoundaryColor : m_style.m_normalBoundaryColor, m_style.m_penWidth));
 		}
 
 		updateInputConnectPoints();
 		updateOutputConnectPoints();
+
+		syncNodePosition();
 	}
 }
 

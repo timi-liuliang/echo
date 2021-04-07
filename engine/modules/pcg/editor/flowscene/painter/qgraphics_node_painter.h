@@ -60,6 +60,9 @@ namespace Procedural
 		void updateInputConnectPoints();
 		void updateOutputConnectPoints();
 
+		// sync position
+		void syncNodePosition();
+
 	private:
 		Style									m_style;
 		Echo::PCGNode*							m_pcgNode = nullptr;
