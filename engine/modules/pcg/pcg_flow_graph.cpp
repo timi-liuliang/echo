@@ -198,6 +198,12 @@ namespace Echo
 			savePropertyRecursive(&nodeXml, node, node->getClassName());
 		}
 
+		if (m_nodeOutput)
+		{
+			pugi::xml_node nodeXml = rootNode.append_child("output");
+			nodeXml.append_attribute("name").set_value(m_nodeOutput->getName().c_str());
+		}
+
 		for (PCGConnect* connect : m_connects)
 		{
 			if (connect->getFrom() && connect->getTo())
@@ -229,6 +235,13 @@ namespace Echo
 			{
 				PCGNode* node = ECHO_DOWN_CAST<PCGNode*>(instanceObject(&nodeXml));
 				addNode(node);
+			}
+
+			pugi::xml_node outputXml = rootXmlNode.child("output");
+			if (outputXml)
+			{
+				String name = outputXml.attribute("name").as_string();
+				setAsOutput(getNodeByName(name));
 			}
 
 			for (pugi::xml_node connectXml = rootXmlNode.child("connect"); connectXml; connectXml = rootXmlNode.next_sibling("connect"))
