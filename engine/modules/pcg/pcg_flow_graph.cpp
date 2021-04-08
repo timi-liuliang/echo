@@ -45,6 +45,8 @@ namespace Echo
 			node->setGraph(this);
 			m_nodes.emplace_back(node);
 
+			makeNameUnique(node);
+
 			if (!m_nodeOutput)
 				m_nodeOutput = node;
 		}
@@ -131,6 +133,40 @@ namespace Echo
 		return std::find(m_nodes.begin(), m_nodes.end(), node) != m_nodes.end();
 	}
 
+	void PCGFlowGraph::makeNameUnique(PCGNode* node)
+	{
+		auto createANewNameFun = [this](PCGNode* node, const String& baseName)
+		{
+			for (i32 i = 0; i < 65535; i++)
+			{
+				String newName = StringUtil::Format("%s%d", baseName.c_str(), i);
+				if (!getNodeByName(newName))
+				{
+					node->setName(newName);
+					break;
+				}
+			}
+		};
+
+		String curName = node->getName();
+		if (curName.empty())
+		{
+			String baseName = StringUtil::Replace(node->getClassName(), "PCG", "");
+			createANewNameFun(node, baseName);
+		}
+		else
+		{
+			for (PCGNode* otherNode : m_nodes)
+			{
+				if (otherNode != node && otherNode->getName() == curName)
+				{
+					createANewNameFun(node, curName);
+					break;
+				}
+			}
+		}
+	}
+
 	const String& PCGFlowGraph::getGraph()
 	{
 		pugi::xml_document doc;
@@ -161,6 +197,8 @@ namespace Echo
 
 	void PCGFlowGraph::setGraph(const String& graph)
 	{
+		reset();
+
 		pugi::xml_document doc;
 		doc.load(graph.c_str());
 

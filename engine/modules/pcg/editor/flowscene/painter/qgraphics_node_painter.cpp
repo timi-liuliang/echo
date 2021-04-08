@@ -42,7 +42,7 @@ namespace Procedural
 			m_rectFinal->setZValue(-5.f);
 			m_rectFinal->setParentItem(m_rect);
 
-			m_text = m_graphicsScene->addSimpleText(Echo::StringUtil::Replace(pgNode->getClassName(), "PCG", "").c_str());
+			m_text = m_graphicsScene->addSimpleText(pgNode->getName().c_str());
 			m_text->setBrush(QBrush(m_style.m_fontColor));
 			m_text->setParentItem(m_rect);
 
@@ -146,14 +146,16 @@ namespace Procedural
 
 	void PCGNodePainter::update()
 	{
-		if (m_pcgNode && m_rectFinal)
-		{	
-			m_rectFinal->setBrush(QBrush(m_pcgNode->getGraph()->getOutputNode() == m_pcgNode ? m_style.finalColor : Qt::transparent));
-		}
+		if (m_pcgNode)
+		{
+			if (m_rectFinal)
+				m_rectFinal->setBrush(QBrush(m_pcgNode->getGraph()->getOutputNode() == m_pcgNode ? m_style.finalColor : Qt::transparent));
 
-		if (m_pcgNode && m_rect)
-		{	
-			m_rect->setPen(QPen(m_rect->isFocused() ? m_style.m_selectedBoundaryColor : m_style.m_normalBoundaryColor, m_style.m_penWidth));
+			if (m_rect)
+				m_rect->setPen(QPen(m_rect->isFocused() ? m_style.m_selectedBoundaryColor : m_style.m_normalBoundaryColor, m_style.m_penWidth));
+
+			if (m_text)
+				m_text->setText(m_pcgNode->getName().c_str());
 		}
 
 		updateInputConnectPoints();

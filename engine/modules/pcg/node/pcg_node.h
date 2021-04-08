@@ -17,7 +17,7 @@ namespace Echo
 
 		// Name
 		String getName() const { return m_name; }
-		void setName(const String& name) { m_name = name; }
+		void setName(const String& name);
 
 		// catergory
 		virtual String getCategory() const { return ""; }

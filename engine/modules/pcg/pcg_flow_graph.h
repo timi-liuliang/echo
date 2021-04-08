@@ -53,6 +53,9 @@ namespace Echo
 		// Is Node Exist
 		bool isNodeExist(PCGNode* node);
 
+		// unique name
+		void makeNameUnique(PCGNode* node);
+
 	private:
 		// Run
 		void run(PCGNode* node);
