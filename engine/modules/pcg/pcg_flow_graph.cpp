@@ -72,6 +72,26 @@ namespace Echo
 
 	PCGConnect* PCGFlowGraph::addConnect(const String& fromNode, i32 fromIdx, const String& toNode, i32 toIdx)
 	{
+		PCGNode* nodeA = getNodeByName(fromNode);
+		PCGNode* nodeB = getNodeByName(toNode);
+		if (nodeA && nodeB)
+		{
+			if (fromIdx >= 0 && fromIdx < nodeA->getOutputs().size() && toIdx >= 0 && toIdx < nodeB->getInputs().size())
+			{
+				PCGConnectPoint* pointA = nodeA->getOutputs()[fromIdx];
+				PCGConnectPoint* pointB = nodeB->getInputs()[toIdx];
+				if (pointA && pointB)
+				{
+					PCGConnect* newConnect = EchoNew(PCGConnect(pointA, pointB));
+					if (newConnect)
+					{
+						addConnect(newConnect);
+						return newConnect;
+					}
+				}
+			}
+		}
+
 		return nullptr;
 	}
 
