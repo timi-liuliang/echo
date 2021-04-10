@@ -138,6 +138,9 @@ To ECHO_DOWN_CAST(From& parent)
 template<class To, class From>
 To ECHO_DOWN_CAST(From* parent)
 {
+	if (!parent)
+		return nullptr;
+
 #ifdef ECHO_DEBUG
 	To to = dynamic_cast<To>(parent);
 	return to;

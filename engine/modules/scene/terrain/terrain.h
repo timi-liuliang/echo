@@ -33,6 +33,9 @@ namespace Echo
         // font res path
         void setDataPath(const ResourcePath& path);
         const ResourcePath& getDataPath() { return m_dataPath; }
+
+        // set height
+        void setHeight(i32 minX, i32 minY, i32 width, i32 height, vector<float>::type& heightData);
         
         // width height
         i32 getColumns() const { return m_columns; }
@@ -88,6 +91,7 @@ namespace Echo
         Renderable*             m_renderable = nullptr;
         i32                     m_columns = 0;
         i32                     m_rows = 0;
+        vector<float>::type     m_heightData;
 		//TerrainTiles			m_tiles;
     };
 }

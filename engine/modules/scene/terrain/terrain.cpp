@@ -54,6 +54,16 @@ namespace Echo
 					m_columns = m_heightmapImage->getWidth();
 					m_rows = m_heightmapImage->getHeight();
 
+                    m_heightData.clear();
+                    for (i32 column = 0; column < m_columns; column++)
+                    {
+                        for (i32 row = 0; row < m_rows; row++)
+                        {
+							Color color = m_heightmapImage->getColor(column, row, 0);
+                            m_heightData.push_back(color.r);
+                        }
+                    }
+
 					m_isRenderableDirty = true;
 				}
             }
@@ -72,6 +82,15 @@ namespace Echo
                 }
             }
         }
+    }
+
+    void Terrain::setHeight(i32 minX, i32 minY, i32 width, i32 height, vector<float>::type& heightData)
+    {
+        m_rows = width;
+        m_columns = height;
+        m_heightData = heightData;
+
+        m_isRenderableDirty = true;
     }
 
 	void Terrain::setHeightRange(float range)
@@ -97,7 +116,7 @@ namespace Echo
     
     void Terrain::buildRenderable()
     {
-        if (m_isRenderableDirty && m_heightmapImage && m_columns > 0 && m_rows > 0)
+        if (m_isRenderableDirty && m_columns > 0 && m_rows > 0)
         {
             clearRenderable();
             
@@ -209,22 +228,13 @@ namespace Echo
     
     float Terrain::getHeight(i32 x, i32 z)
     {
-        if(m_heightmapImage)
-        {
-            i32 column = Math::Clamp(x, 0, m_columns-1);
-            i32 row = Math::Clamp(z, 0, m_rows-1);
-            Color color = m_heightmapImage->getColor(column, row, 0);
-            float height = (color.r * 2.f - 1.f) * m_heightRange;
-            
-            return height;
-        }
-        
-        return 0.f;
+        i32 offset = z * m_rows + x;
+        return offset < m_heightData.size() ? (m_heightData[offset] * 2.f - 1.f) * m_heightRange : 0.f;
     }
     
     Vector3 Terrain::getNormal( i32 x, i32 z)
     {
-        if(m_heightmapImage)
+        if(!m_heightData.empty())
         {
             float h0 = getHeight(   x,   z);
             float h1 = getHeight( x+1,   z) - h0;
@@ -243,7 +253,7 @@ namespace Echo
 
     float Terrain::getWeight(i32 x, i32 z, i32 index)
     {
-        if (m_layerImages[index])
+        if (index<m_layerImages.size() && m_layerImages[index])
         {
 			i32 column = Math::Clamp(x, 0, m_columns - 1);
 			i32 row = Math::Clamp(z, 0, m_rows - 1);

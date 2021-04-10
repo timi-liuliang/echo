@@ -4,13 +4,13 @@
 
 namespace Echo
 {
-	class PCGTerrain : public PCGNode
+	class PCGHeightfieldOutput : public PCGNode
 	{
-		ECHO_CLASS(PCGTerrain, PCGNode)
+		ECHO_CLASS(PCGHeightfieldOutput, PCGNode)
 
 	public:
-		PCGTerrain();
-		virtual ~PCGTerrain();
+		PCGHeightfieldOutput();
+		virtual ~PCGHeightfieldOutput();
 
 		// Category
 		virtual String getCategory() const override { return "Terrain"; }
