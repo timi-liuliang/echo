@@ -1,7 +1,7 @@
 #pragma once
 
 #include <radeon_rays.h>
-#include "engine/core/render/base/texture_render.h"
+#include "engine/core/render/base/texture/texture_render.h"
 #include "engine/core/render/base/material.h"
 
 namespace Echo

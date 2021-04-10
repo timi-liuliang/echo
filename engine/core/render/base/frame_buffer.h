@@ -4,7 +4,7 @@
 #include "engine/core/scene/node.h"
 #include "engine/core/resource/Res.h"
 #include "texture.h"
-#include "texture_render.h"
+#include "texture/texture_render.h"
 
 namespace Echo
 {

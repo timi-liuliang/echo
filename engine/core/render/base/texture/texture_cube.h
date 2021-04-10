@@ -1,7 +1,7 @@
 #pragma once
 
 #include <engine/core/util/Array.hpp>
-#include "texture.h"
+#include "../texture.h"
 
 namespace Echo
 {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "texture.h"
+#include "engine/core/render/base/texture.h"
 
 namespace Echo
 {

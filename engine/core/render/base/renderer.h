@@ -3,7 +3,7 @@
 #include "device_features.h"
 #include "render_state.h"
 #include "texture.h"
-#include "texture_cube.h"
+#include "texture/texture_cube.h"
 #include "renderable.h"
 #include "frame_buffer.h"
 #include "gpu_buffer.h"

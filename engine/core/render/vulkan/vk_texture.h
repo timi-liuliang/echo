@@ -1,7 +1,7 @@
 #pragma once
 
 #include "base/texture.h"
-#include "base/texture_render.h"
+#include "base/texture/texture_render.h"
 #include "vk_render_base.h"
 #include "vk_render_state.h"
 

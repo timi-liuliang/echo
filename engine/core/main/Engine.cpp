@@ -13,7 +13,7 @@
 #include "engine/core/render/base/material.h"
 #include "engine/core/render/base/pipeline/render_stage.h"
 #include "engine/core/render/base/shader_program.h"
-#include "engine/core/render/base/texture_cube.h"
+#include "engine/core/render/base/texture/texture_cube.h"
 #include "engine/core/scene/render_node.h"
 #include "engine/core/scene/node_tree.h"
 #include "engine/core/util/Timer.h"
