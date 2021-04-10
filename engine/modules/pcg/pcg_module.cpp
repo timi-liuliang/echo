@@ -4,6 +4,7 @@
 #include "node/image/pcg_image_perlin_noise.h"
 #include "node/image/pcg_image_voronoi.h"
 #include "node/image/pcg_image_save.h"
+#include "node/terrain/pcg_terrain.h"
 #include "editor/pcg_flow_graph_editor.h"
 
 namespace Echo
@@ -36,6 +37,8 @@ namespace Echo
 		Class::registerType<PCGImagePerlinNoise>();
 		Class::registerType<PCGImageVoronoi>();
 		Class::registerType<PCGImageSave>();
+
+		Class::registerType<PCGTerrain>();
 
 		CLASS_REGISTER_EDITOR(PCGFlowGraph, PCGFlowGraphEditor)
 	}
