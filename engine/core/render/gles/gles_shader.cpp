@@ -5,7 +5,7 @@
 
 namespace Echo
 {
-	GLESShader::GLESShader(ShaderType type, const String& filename)
+	GLESShader::GLESShader(ShaderProgram::ShaderType type, const String& filename)
 		: m_filename(filename)
 	{
 		DataStream* pShaderStream = IO::instance()->open(filename);
@@ -28,7 +28,7 @@ namespace Echo
 		create(filename);
 	}
 
-	GLESShader::GLESShader(ShaderType type, const char* srcBuffer, ui32 size)
+	GLESShader::GLESShader(ShaderProgram::ShaderType type, const char* srcBuffer, ui32 size)
 		: m_program(NULL)
 	{
 		m_validata = true;
@@ -90,36 +90,43 @@ namespace Echo
 		// Windows platform，Debug mode，enable Nsight Shader debug
 #if defined(ECHO_PLATFORM_WINDOWS) && defined(ECHO_DEBUG)
 		size_t pos = m_srcData.find_first_of('\n') + 1;
-		if (m_shaderType==ST_VERTEXSHADER)
+		if (m_shaderType==ShaderProgram::VS)
 			m_srcData.insert(pos, "#line 29\r\n");
-		else if (m_shaderType==ST_PIXELSHADER)
+		else if (m_shaderType==ShaderProgram::FS)
 			m_srcData.insert(pos, "#line 30\r\n");
 #endif
 
 		switch (m_shaderType)
 		{
-			case ST_VERTEXSHADER:
-			{
-				m_glesShader = OGLESDebug(glCreateShader(GL_VERTEX_SHADER));
-				if (!m_glesShader)
-				{
-					EchoLogError("Create vertex Shader [%s] failed.", filename.c_str());
-				}
-			}
+		case ShaderProgram::VS:
+		{
+			m_glesShader = OGLESDebug(glCreateShader(GL_VERTEX_SHADER));
+			if (!m_glesShader)
+				EchoLogError("Create vertex Shader [%s] failed.", filename.c_str());
+
 			break;
-			case ST_PIXELSHADER:
-			{
-				m_glesShader = OGLESDebug(glCreateShader(GL_FRAGMENT_SHADER));
-				if (!m_glesShader)
-				{
-					EchoLogError("Create pixel Shader [%s] failed.", filename.c_str());
-				}
-			} break;
-			default:
-			{
-				EchoLogError("Unknown shader type, create Shader [%s] failed.", filename.c_str());
-			}break;
 		}
+		case ShaderProgram::CS:
+		{
+			m_glesShader = OGLESDebug(glCreateShader(GL_COMPUTE_SHADER));
+			if (!m_glesShader)
+				EchoLogError("Create computer shader [%s] failed.", filename.c_str());
+
+			break;
+		}
+		case ShaderProgram::FS:
+		{
+			m_glesShader = OGLESDebug(glCreateShader(GL_FRAGMENT_SHADER));
+			if (!m_glesShader)
+				EchoLogError("Create pixel Shader [%s] failed.", filename.c_str());
+
+			break;
+		} 
+		default:
+		{
+			EchoLogError("Unknown shader type, create Shader [%s] failed.", filename.c_str());
+			break;
+		}}
 
 		// bind shader source code to the shader object
 		const GLchar* srcData = &m_srcData[0];
@@ -173,18 +180,19 @@ namespace Echo
 		return m_program;
 	}
 
-	GLESShader::ShaderType GLESShader::getShaderType() const
+	ShaderProgram::ShaderType GLESShader::getShaderType() const
 	{
 		return m_shaderType;
 	}
 
-	String GLESShader::GetShaderTypeDesc(ShaderType type)
+	String GLESShader::GetShaderTypeDesc(ShaderProgram::ShaderType type)
 	{
 		switch (type)
 		{
-		case ST_VERTEXSHADER:	return "ST_VERTEXSHADER";
-		case ST_PIXELSHADER:	return "ST_PIXELSHADER";
-		default:				return "UNKNOWN";
+		case ShaderProgram::VS:	return "VS";
+		case ShaderProgram::CS:	return "CS";
+		case ShaderProgram::FS:	return "VS";
+		default:				return "Unknown";
 		}
 	}
 

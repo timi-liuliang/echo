@@ -79,7 +79,7 @@ namespace Echo
 		virtual TextureRender* createTextureRender(const String& name) override;
 
 		ShaderProgram*	createShaderProgram() override;
-		GLESShader*	createShader(GLESShader::ShaderType type, const char* srcBuffer, ui32 size);
+		GLESShader*	createShader(ShaderProgram::ShaderType type, const char* srcBuffer, ui32 size);
 
 		// states
 		virtual RasterizerState* createRasterizerState() override;

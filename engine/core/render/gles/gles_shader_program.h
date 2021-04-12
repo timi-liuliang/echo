@@ -13,7 +13,7 @@ namespace Echo
 	{
 	public:
 		typedef array<GLint, VS_MAX> AttribLocationArray;
-		typedef array<GLESShader*, GLESShader::ST_SHADERCOUNT> ShaderArray;
+		typedef array<GLESShader*, ShaderProgram::Total> ShaderArray;
 
 	public:
 		GLESShaderProgram();
@@ -21,7 +21,7 @@ namespace Echo
 
 		// attch|detach shader
 		bool attachShader(GLESShader* pShader);
-		GLESShader*	detachShader(GLESShader::ShaderType type);
+		GLESShader*	detachShader(ShaderProgram::ShaderType type);
 
 		// link shader
 		bool linkShaders();
@@ -45,7 +45,7 @@ namespace Echo
 
 	public:
 		// get shader
-		GLESShader* getShader(GLESShader::ShaderType type) const { return m_shaders[(ui32)type]; }
+		GLESShader* getShader(ShaderType type) const { return m_shaders[(ui32)type]; }
 	
 	private:
         bool                m_isLinked = false;

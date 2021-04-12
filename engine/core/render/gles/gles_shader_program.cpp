@@ -26,7 +26,7 @@ namespace Echo
 	{
 		if (shader)
 		{
-			GLESShader::ShaderType type = shader->getShaderType();
+			ShaderType type = shader->getShaderType();
 			if (!m_shaders[(ui32)type])
 			{
 				m_shaders[(ui32)type] = shader;
@@ -45,7 +45,7 @@ namespace Echo
 		return false;
 	}
 	
-	GLESShader* GLESShaderProgram::detachShader(GLESShader::ShaderType type)
+	GLESShader* GLESShaderProgram::detachShader(ShaderProgram::ShaderType type)
 	{
 		GLESShader* shader = m_shaders[(ui32)type];
 		m_shaders[(ui32)type] = nullptr;
@@ -216,14 +216,14 @@ namespace Echo
 		}
 
 		GLESRenderer* pRenderer = ECHO_DOWN_CAST<GLESRenderer*>(Renderer::instance());
-		GLESShader*pVertexShader = pRenderer->createShader(GLESShader::ST_VERTEXSHADER, vsContent.data(), (ui32)vsContent.size());
+		GLESShader*pVertexShader = pRenderer->createShader(ShaderType::VS, vsContent.data(), (ui32)vsContent.size());
 		if (!pVertexShader)
 		{
 			EchoLogError("Error in create vs file: ");
 			return false;
 		}
 
-		GLESShader*pPixelShader = pRenderer->createShader(GLESShader::ST_PIXELSHADER, psContent.data(), (ui32)psContent.size());
+		GLESShader*pPixelShader = pRenderer->createShader(ShaderType::FS, psContent.data(), (ui32)psContent.size());
 		if (!pPixelShader)
 		{
 			EchoLogError("Error in create ps file: ");
@@ -242,11 +242,14 @@ namespace Echo
 	{
 		(ECHO_DOWN_CAST<GLESRenderer*>(Renderer::instance()))->bindShaderProgram(nullptr);
 
-		GLESShader* pVertexShader = detachShader(GLESShader::ST_VERTEXSHADER);
-		EchoSafeDelete(pVertexShader, GLESShader);
+		GLESShader* vShader = detachShader(ShaderType::VS);
+		EchoSafeDelete(vShader, GLESShader);
 
-		GLESShader* pPixelShader = detachShader(GLESShader::ST_PIXELSHADER);
-		EchoSafeDelete(pPixelShader, GLESShader);
+		GLESShader* cShader = detachShader(ShaderType::CS);
+		EchoSafeDelete(cShader, GLESShader);
+
+		GLESShader* fShader = detachShader(ShaderType::FS);
+		EchoSafeDelete(fShader, GLESShader);
 
 		if (m_glesProgram)
 		{

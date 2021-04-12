@@ -404,7 +404,7 @@ namespace Echo
 		return EchoNew(GLESShaderProgram);
 	}
 
-	GLESShader* GLESRenderer::createShader(GLESShader::ShaderType type, const char* srcBuffer, ui32 size)
+	GLESShader* GLESRenderer::createShader(ShaderProgram::ShaderType type, const char* srcBuffer, ui32 size)
 	{
 		return EchoNew(GLESShader(type, srcBuffer, size));
 	}

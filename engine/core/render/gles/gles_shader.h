@@ -1,5 +1,6 @@
 #pragma once
 
+#include "base/shader_program.h"
 #include "gles_render_base.h"
 
 namespace Echo
@@ -10,16 +11,8 @@ namespace Echo
 		friend class GLESShaderProgram;
 
 	public:
-		enum ShaderType
-		{
-			ST_VERTEXSHADER,
-			ST_PIXELSHADER,
-			ST_SHADERCOUNT,
-		};
-
-	public:
-		GLESShader(ShaderType type, const String& filename);
-		GLESShader(ShaderType type, const char* srcBuffer, ui32 size);
+		GLESShader(ShaderProgram::ShaderType type, const String& filename);
+		GLESShader(ShaderProgram::ShaderType type, const char* srcBuffer, ui32 size);
 		~GLESShader();
 
 	private:
@@ -38,10 +31,10 @@ namespace Echo
 		GLESShaderProgram* getShaderProgram() const;
 
 		// shader type
-		ShaderType getShaderType() const;
+		ShaderProgram::ShaderType getShaderType() const;
 
 		// shader type desc
-		static String GetShaderTypeDesc(ShaderType type);
+		static String GetShaderTypeDesc(ShaderProgram::ShaderType type);
 
 		// validate
 		bool validate() const;
@@ -53,12 +46,12 @@ namespace Echo
 		GLuint getShaderHandle() const;
 
 	private:
-		GLESShaderProgram*	m_program = nullptr;
-		ShaderType			m_shaderType;
-		String				m_filename;
-		String				m_srcData;
-		ui32				m_shaderSize;
-		bool				m_validata;
-		GLuint				m_glesShader;
+		GLESShaderProgram*			m_program = nullptr;
+		ShaderProgram::ShaderType	m_shaderType;
+		String						m_filename;
+		String						m_srcData;
+		ui32						m_shaderSize;
+		bool						m_validata;
+		GLuint						m_glesShader;
 	};
 }
