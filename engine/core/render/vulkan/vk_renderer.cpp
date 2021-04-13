@@ -88,10 +88,10 @@ namespace Echo
 		return ECHO_DOWN_CAST<VKTexture*>(m_currentTextures[index]);
 	}
 
-    Renderable* VKRenderer::createRenderable()
+    RenderProxy* VKRenderer::createRenderable()
     {
         static ui32 id = 0; id++;
-        Renderable* renderable = EchoNew(VKRenderable(id));
+        RenderProxy* renderable = EchoNew(VKRenderable(id));
         m_renderables[id] = renderable;
 
         return renderable;
@@ -452,7 +452,7 @@ namespace Echo
         RenderPipeline::current()->onSize(width, height);
     }
 
-    void VKRenderer::draw(Renderable* renderable, FrameBufferPtr& frameBuffer)
+    void VKRenderer::draw(RenderProxy* renderable, FrameBufferPtr& frameBuffer)
     {
 		VKFramebuffer* currentFrameBuffer = ECHO_DOWN_CAST<VKFramebuffer*>(frameBuffer.ptr());
 		if (currentFrameBuffer)

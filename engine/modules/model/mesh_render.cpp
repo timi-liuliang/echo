@@ -74,7 +74,7 @@ namespace Echo
 			if (m_mesh)
 			{
 				// create renderable
-				m_renderable = Renderable::create(m_mesh, m_material, this);
+				m_renderable = RenderProxy::create(m_mesh, m_material, this);
 			}
 
 			m_isRenderableDirty = false;

@@ -51,7 +51,7 @@ namespace Echo
         virtual ShaderProgram* createShaderProgram() override;
 
 		// create renderable
-        virtual Renderable* createRenderable() override;
+        virtual RenderProxy* createRenderable() override;
 
         // convert matrix
         virtual void unproject(Vector3& worldPos, const Vector3& screenPos, const Matrix4& matVP, Viewport* pViewport = NULL) override;
@@ -68,7 +68,7 @@ namespace Echo
         virtual void onSize(int width, int height) override;
 
 		// draw
-        virtual void draw(Renderable* renderable, FrameBufferPtr& frameBuffer) override;
+        virtual void draw(RenderProxy* renderable, FrameBufferPtr& frameBuffer) override;
 
 		// present
         virtual bool present() override;

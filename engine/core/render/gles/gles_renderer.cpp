@@ -198,7 +198,7 @@ namespace Echo
 		}
 	}
 
-	bool GLESRenderer::drawWireframe(Renderable* renderable)
+	bool GLESRenderer::drawWireframe(RenderProxy* renderable)
 	{
 #ifdef ECHO_EDITOR_MODE
 		if (m_settings.m_polygonMode != RasterizerState::PM_FILL)
@@ -278,7 +278,7 @@ namespace Echo
 		return false;
 	}
 
-	void GLESRenderer::draw(Renderable* renderable, FrameBufferPtr& frameBuffer)
+	void GLESRenderer::draw(RenderProxy* renderable, FrameBufferPtr& frameBuffer)
 	{
 #ifdef ECHO_EDITOR_MODE
 		if (drawWireframe(renderable))
@@ -636,10 +636,10 @@ namespace Echo
 		return EchoNew(GLESFramebufferWindow);
 	}
 
-	Renderable* GLESRenderer::createRenderable()
+	RenderProxy* GLESRenderer::createRenderable()
 	{
         static ui32 id = 0; id++;
-		Renderable* renderable = EchoNew(GLESRenderable(id));
+		RenderProxy* renderable = EchoNew(GLESRenderable(id));
 		m_renderables[id] = renderable;
 
 		return renderable;

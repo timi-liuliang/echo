@@ -9,7 +9,7 @@
 namespace Echo
 {
     VKRenderable::VKRenderable(int identifier)
-        : Renderable( identifier)
+        : RenderProxy( identifier)
     {
     }
 

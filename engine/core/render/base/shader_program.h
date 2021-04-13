@@ -24,7 +24,7 @@ namespace Echo
     };
 
 	class Renderer;
-	class Renderable;
+	class RenderProxy;
     class Material;
 	class ShaderProgram : public Res
 	{

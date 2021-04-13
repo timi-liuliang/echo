@@ -3,7 +3,7 @@
 #include "engine/core/scene/render_node.h"
 #include "engine/core/render/base/mesh/mesh.h"
 #include "engine/core/render/base/material.h"
-#include "engine/core/render/base/render_proxy.h"
+#include "engine/core/render/base/proxy/render_proxy.h"
 
 namespace Echo
 {
@@ -55,6 +55,6 @@ namespace Echo
 		i32						m_height = 64;
 		MeshPtr				    m_mesh;						// Geometry Data for render
 		MaterialPtr				m_material;		            // Material Instance
-		Renderable*				m_renderable = nullptr;
+		RenderProxy*				m_renderable = nullptr;
 	};
 }

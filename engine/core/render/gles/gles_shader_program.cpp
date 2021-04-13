@@ -187,7 +187,7 @@ namespace Echo
 		}
 	}
 
-	void GLESShaderProgram::bindRenderable(Renderable* renderInput)
+	void GLESShaderProgram::bindRenderable(RenderProxy* renderInput)
 	{
 		GLESRenderable* ra = ECHO_DOWN_CAST<GLESRenderable*>(renderInput);
 		ra->bind(m_preRenderable);

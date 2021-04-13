@@ -55,10 +55,10 @@ namespace Echo
 		virtual void setTexture(ui32 index, Texture* texture,bool needUpdate = false) override;
 
 		// draw
-		virtual void draw(Renderable* renderable, FrameBufferPtr& frameBuffer) override;
+		virtual void draw(RenderProxy* renderable, FrameBufferPtr& frameBuffer) override;
 
 		// draw in WireFrame mode
-		bool drawWireframe(Renderable* renderable);
+		bool drawWireframe(RenderProxy* renderable);
 
 		// convert matrix
 		virtual void getDepthRange(Vector2& vec) override;
@@ -118,7 +118,7 @@ namespace Echo
 
 	protected:
 		//  interal implement
-		virtual Renderable* createRenderable() override;
+		virtual RenderProxy* createRenderable() override;
 
 		// preset to screen
 		virtual bool present() override;

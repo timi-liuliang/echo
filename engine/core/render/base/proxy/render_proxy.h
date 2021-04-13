@@ -1,17 +1,17 @@
 #pragma once
 
 #include <engine/core/util/Array.hpp>
-#include "shader_program.h"
-#include "texture.h"
-#include "render_state.h"
-#include "material.h"
-#include "mesh/mesh.h"
+#include "base/shader_program.h"
+#include "base/texture.h"
+#include "base/render_state.h"
+#include "base/material.h"
+#include "base/mesh/mesh.h"
 
 namespace Echo
 {
 	class Render;
 	class Material;
-	class Renderable : public Object
+	class RenderProxy : public Object
 	{
 		friend class Renderer;
 
@@ -20,7 +20,7 @@ namespace Echo
 		ui32 getIdentifier() const { return m_identifier; }
 
 		// create method
-		static Renderable* create(MeshPtr mesh, Material* matInst, Render* node);
+		static RenderProxy* create(MeshPtr mesh, Material* matInst, Render* node);
 
 		// release
 		void release();
@@ -41,8 +41,8 @@ namespace Echo
 		void submitToRenderQueue();
 
 	protected:
-		Renderable(int identifier);
-		virtual ~Renderable();
+		RenderProxy(int identifier);
+		virtual ~RenderProxy();
 
 	public:
 		ui32			m_identifier;

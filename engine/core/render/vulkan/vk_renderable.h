@@ -1,12 +1,12 @@
 #pragma once
 
-#include "base/render_proxy.h"
+#include "base/proxy/render_proxy.h"
 #include "vk_render_base.h"
 #include "vk_shader_program.h"
 
 namespace Echo
 {
-	class VKRenderable : public Renderable
+	class VKRenderable : public RenderProxy
 	{
 	public:
 		VKRenderable(int identifier);

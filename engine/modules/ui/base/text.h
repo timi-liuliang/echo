@@ -2,7 +2,7 @@
 
 #include "engine/core/render/base/mesh/mesh.h"
 #include "engine/core/render/base/material.h"
-#include "engine/core/render/base/render_proxy.h"
+#include "engine/core/render/base/proxy/render_proxy.h"
 #include "../render/vertex_format.h"
 #include "render.h"
 
@@ -60,7 +60,7 @@ namespace Echo
         MeshPtr                 m_mesh;            // Geometry Data for render
         ShaderProgramPtr        m_shader;
         MaterialPtr             m_material;        // Material Instance
-        Renderable*             m_renderable;
+        RenderProxy*             m_renderable;
         Matrix4                 m_matWVP;
         i32                     m_width;
         i32                     m_height;

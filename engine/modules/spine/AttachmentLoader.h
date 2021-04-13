@@ -2,7 +2,7 @@
 
 #include <spine/spine.h>
 #include <base/gpu_buffer.h>
-#include <base/render_proxy.h>
+#include <base/proxy/render_proxy.h>
 #include "base/texture.h"
 
 extern "C"

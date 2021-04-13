@@ -3,7 +3,7 @@
 #include "engine/core/log/Log.h"
 #include "view_port.h"
 #include "image/pixel_format.h"
-#include "render_proxy.h"
+#include "proxy/render_proxy.h"
 #include "../metal/mt.h"
 #include "../gles/gles.h"
 #include "pipeline/render_stage.h"
@@ -181,9 +181,9 @@ namespace Echo
 
 	Renderer::~Renderer()
 	{
-		for (std::map<ui32, Renderable*>::iterator it = m_renderables.begin(); it != m_renderables.end(); ++it)
+		for (std::map<ui32, RenderProxy*>::iterator it = m_renderables.begin(); it != m_renderables.end(); ++it)
 		{
-			EchoSafeDelete(it->second, Renderable);
+			EchoSafeDelete(it->second, RenderProxy);
 		}
 		m_renderables.clear();
 	}
@@ -235,35 +235,35 @@ namespace Echo
 		worldPos = (Vector3)vWorld;
 	}
 
-	Renderable* Renderer::getRenderable(RenderableID id)
+	RenderProxy* Renderer::getRenderable(RenderableID id)
 	{
-		std::map<ui32, Renderable*>::iterator it = m_renderables.find(id);
+		std::map<ui32, RenderProxy*>::iterator it = m_renderables.find(id);
 		if (it != m_renderables.end())
 			return it->second;
 
 		return nullptr;
 	}
 
-	void Renderer::destroyRenderables(Renderable** renderables, int num)
+	void Renderer::destroyRenderables(RenderProxy** renderables, int num)
 	{
 		for (int i = 0; i < num; i++)
 		{
-			Renderable* renderable = renderables[i];
+			RenderProxy* renderable = renderables[i];
 			if (renderable)
 			{
-				std::map<ui32, Renderable*>::iterator it = m_renderables.find(renderable->getIdentifier());
+				std::map<ui32, RenderProxy*>::iterator it = m_renderables.find(renderable->getIdentifier());
 				if(it != m_renderables.end())
                 {
                     m_renderables.erase(it);
                     
-                    EchoSafeDelete(renderable, Renderable);
+                    EchoSafeDelete(renderable, RenderProxy);
                     renderables[i] = nullptr;
                 }
 			}
 		}
 	}
 
-	void Renderer::destroyRenderables(vector<Renderable*>::type& renderables)
+	void Renderer::destroyRenderables(vector<RenderProxy*>::type& renderables)
 	{
 		destroyRenderables(renderables.data(), static_cast<int>(renderables.size()));
 		renderables.clear();

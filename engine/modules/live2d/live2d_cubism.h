@@ -4,7 +4,7 @@
 #include "engine/core/scene/render_node.h"
 #include "engine/core/render/base/mesh/mesh.h"
 #include "engine/core/render/base/material.h"
-#include "engine/core/render/base/render_proxy.h"
+#include "engine/core/render/base/proxy/render_proxy.h"
 #include "live2d_cubism_motion.h"
 
 namespace Echo
@@ -142,6 +142,6 @@ namespace Echo
 		MaterialPtr				m_material;			// Custom Material
         ShaderProgramPtr        m_shaderDefault;
 		MaterialPtr				m_materialDefault;
-		Renderable*				m_renderable;
+		RenderProxy*				m_renderable;
 	};
 }

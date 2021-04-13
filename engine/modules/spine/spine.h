@@ -4,7 +4,7 @@
 #include "engine/core/scene/render_node.h"
 #include "engine/core/render/base/mesh/mesh.h"
 #include "engine/core/render/base/material.h"
-#include "engine/core/render/base/render_proxy.h"
+#include "engine/core/render/base/proxy/render_proxy.h"
 #include "AttachmentLoader.h"
 
 struct spAtlas;
@@ -68,6 +68,6 @@ namespace Echo
 		MeshPtr			m_mesh;
         ShaderProgramPtr    m_shader;
 		Material*			m_material;
-		Renderable*			m_renderable;
+		RenderProxy*			m_renderable;
 	};
 }

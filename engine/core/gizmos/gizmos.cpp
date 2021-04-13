@@ -137,7 +137,7 @@ namespace Echo
 		}
 		else if(m_vertexs.size())
 		{
-			m_renderable = Renderable::create(m_mesh, m_material, m_gizmos);
+			m_renderable = RenderProxy::create(m_mesh, m_material, m_gizmos);
 			m_renderable->submitToRenderQueue();
 		}
 

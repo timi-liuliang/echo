@@ -4,7 +4,7 @@
 #include "render_state.h"
 #include "texture.h"
 #include "texture/texture_cube.h"
-#include "render_proxy.h"
+#include "base/proxy/render_proxy.h"
 #include "frame_buffer.h"
 #include "gpu_buffer.h"
 #include "view_port.h"
@@ -97,16 +97,16 @@ namespace Echo
 		virtual SamplerState* createSamplerState() = 0;
 
 		// renderable operate
-		virtual Renderable* createRenderable()=0;
-		Renderable* getRenderable(RenderableID id);
-		void destroyRenderables(Renderable** renderables, int num);
-		void destroyRenderables(vector<Renderable*>::type& renderables);
+		virtual RenderProxy* createRenderable()=0;
+		RenderProxy* getRenderable(RenderableID id);
+		void destroyRenderables(RenderProxy** renderables, int num);
+		void destroyRenderables(vector<RenderProxy*>::type& renderables);
 
 		// on size
 		virtual void onSize(int width, int height) = 0;
 
 		// draw
-		virtual void draw(Renderable* renderable, FrameBufferPtr& frameBuffer) = 0;
+		virtual void draw(RenderProxy* renderable, FrameBufferPtr& frameBuffer) = 0;
 
     public:
         // screen width and height
@@ -129,7 +129,7 @@ namespace Echo
 
 	protected:
 		Settings			m_settings;
-		std::map<ui32, Renderable*>	m_renderables;
+		std::map<ui32, RenderProxy*>	m_renderables;
 		ui32				m_startMipmap = 0;
 		DeviceFeature		m_deviceFeature;
 	};

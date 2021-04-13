@@ -267,7 +267,7 @@ namespace Echo
 			m_mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(Word), indices.data());
 			m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data());
 
-			m_renderable = Renderable::create(m_mesh, m_materialDefault, this);
+			m_renderable = RenderProxy::create(m_mesh, m_materialDefault, this);
 		}
 	}
 

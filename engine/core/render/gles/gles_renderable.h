@@ -1,11 +1,11 @@
 #pragma once
 
-#include "base/render_proxy.h"
+#include "base/proxy/render_proxy.h"
 #include "base/mesh/mesh.h"
 
 namespace Echo
 {
-	class GLESRenderable : public Renderable
+	class GLESRenderable : public RenderProxy
 	{
 	public:
 		// vertex declaration
@@ -37,7 +37,7 @@ namespace Echo
 		~GLESRenderable();
 
 		// bind geometry data
-		void bind( Renderable* pre);
+		void bind( RenderProxy* pre);
 
 		// unbind geometry data
 		void unbind();

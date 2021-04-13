@@ -4,7 +4,7 @@
 #include "engine/core/scene/node_path.h"
 #include "engine/core/render/base/mesh/mesh.h"
 #include "engine/core/render/base/material.h"
-#include "engine/core/render/base/render_proxy.h"
+#include "engine/core/render/base/proxy/render_proxy.h"
 #include "gltf_res.h"
 #include "gltf_skeleton.h"
 
@@ -61,7 +61,7 @@ namespace Echo
 
 	private:
 		bool					m_renderableDirty = true;
-		Renderable*				m_renderable = nullptr;
+		RenderProxy*				m_renderable = nullptr;
 		Matrix4					m_matWVP;
 		ResourcePath			m_assetPath = ResourcePath("", ".gltf");
 		GltfResPtr				m_asset;			                        // gltf asset ptr

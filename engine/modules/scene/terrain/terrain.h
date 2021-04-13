@@ -3,7 +3,7 @@
 #include "engine/core/scene/render_node.h"
 #include "engine/core/render/base/mesh/mesh.h"
 #include "engine/core/render/base/material.h"
-#include "engine/core/render/base/render_proxy.h"
+#include "engine/core/render/base/proxy/render_proxy.h"
 #include "engine/core/render/base/image/image.h"
 #include "terrain_tile.h"
 
@@ -88,7 +88,7 @@ namespace Echo
 		i32						m_gridSpacing = 1;
         MeshPtr                 m_mesh;
         MaterialPtr             m_material;
-        Renderable*             m_renderable = nullptr;
+        RenderProxy*             m_renderable = nullptr;
         i32                     m_columns = 0;
         i32                     m_rows = 0;
         vector<float>::type     m_heightData;

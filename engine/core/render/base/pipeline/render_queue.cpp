@@ -1,6 +1,6 @@
-#include "../render_proxy.h"
+#include "base/proxy/render_proxy.h"
 #include "engine/core/scene/render_node.h"
-#include "../renderer.h"
+#include "base/renderer.h"
 #include "render_queue.h"
 
 namespace Echo
@@ -29,8 +29,8 @@ namespace Echo
 				{
 					std::sort(m_renderables.begin(), m_renderables.end(), [](RenderableID a, RenderableID b) -> bool
 					{
-						Renderable* renderableA = Renderer::instance()->getRenderable(a);
-						Renderable* renderableB = Renderer::instance()->getRenderable(b);
+						RenderProxy* renderableA = Renderer::instance()->getRenderable(a);
+						RenderProxy* renderableB = Renderer::instance()->getRenderable(b);
 						return renderableA && renderableB ? renderableA->getNode()->getWorldPosition().z < renderableB->getNode()->getWorldPosition().z : false;
 					});
 				}
@@ -38,7 +38,7 @@ namespace Echo
 				// render
 				for (RenderableID id : m_renderables)
 				{
-					Renderable* renderable = Renderer::instance()->getRenderable(id);
+					RenderProxy* renderable = Renderer::instance()->getRenderable(id);
 					if (renderable)
 						render->draw(renderable, frameBuffer);
 				}

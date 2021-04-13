@@ -2,7 +2,7 @@
 
 #include <engine/core/util/Array.hpp>
 #include "base/shader_program.h"
-#include "base/render_proxy.h"
+#include "base/proxy/render_proxy.h"
 #include "base/mesh/mesh.h"
 #include "gles_shader.h"
 #include "gles_renderable.h"
@@ -34,7 +34,7 @@ namespace Echo
 		virtual void unbind() override;
 
 		// bind Renderable
-		void bindRenderable(Renderable* renderable);
+		void bindRenderable(RenderProxy* renderable);
 
 		// get attribute location
 		i32 getAtrribLocation(VertexSemantic vertexSemantic);

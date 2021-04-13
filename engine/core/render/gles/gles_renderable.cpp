@@ -16,7 +16,7 @@ namespace Echo
 	extern GLESRenderer* g_renderer;
 
 	GLESRenderable::GLESRenderable(int identifier)
-		: Renderable(identifier)
+		: RenderProxy(identifier)
 	{
 	}
 
@@ -90,7 +90,7 @@ namespace Echo
 		}
 	}
 
-	void GLESRenderable::bind(Renderable* pre)
+	void GLESRenderable::bind(RenderProxy* pre)
 	{
 		GPUBuffer* idxBuffer = m_mesh->getIndexBuffer();
 		GPUBuffer* preIdxBuffer = pre ? pre->getMesh()->getIndexBuffer() : nullptr;

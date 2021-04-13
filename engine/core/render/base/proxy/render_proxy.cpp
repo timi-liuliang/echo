@@ -1,5 +1,5 @@
 #include "engine/core/log/Log.h"
-#include "base/render_proxy.h"
+#include "base/proxy/render_proxy.h"
 #include "base/shader_program.h"
 #include "base/renderer.h"
 #include "base/pipeline/render_pipeline.h"
@@ -9,25 +9,25 @@
 
 namespace Echo
 {
-	Renderable::Renderable(int identifier)
+	RenderProxy::RenderProxy(int identifier)
 		: m_identifier(identifier)
 	{
 	}
 
-	Renderable::~Renderable()
+	RenderProxy::~RenderProxy()
 	{
 	}
 
-	void Renderable::release()
+	void RenderProxy::release()
 	{
-		Renderable* ptr = this;
+		RenderProxy* ptr = this;
 		Renderer::instance()->destroyRenderables(&ptr, 1);
 	}
 
-	Renderable* Renderable::create(MeshPtr mesh, Material* material, Render* node)
+	RenderProxy* RenderProxy::create(MeshPtr mesh, Material* material, Render* node)
 	{
 		// bind shader param
-		Renderable* renderable = Renderer::instance()->createRenderable();
+		RenderProxy* renderable = Renderer::instance()->createRenderable();
 		renderable->setMaterial(material);
 		renderable->setNode(node);
 		renderable->setMesh(mesh);
@@ -35,7 +35,7 @@ namespace Echo
 		return renderable;
 	}
 
-	void Renderable::submitToRenderQueue()
+	void RenderProxy::submitToRenderQueue()
 	{
 		if (m_mesh && m_mesh->isValid())
 		{
