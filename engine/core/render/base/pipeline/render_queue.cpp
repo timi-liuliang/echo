@@ -1,4 +1,4 @@
-#include "../renderable.h"
+#include "../render_proxy.h"
 #include "engine/core/scene/render_node.h"
 #include "../renderer.h"
 #include "render_queue.h"

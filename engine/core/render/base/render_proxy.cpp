@@ -1,5 +1,5 @@
 #include "engine/core/log/Log.h"
-#include "base/renderable.h"
+#include "base/render_proxy.h"
 #include "base/shader_program.h"
 #include "base/renderer.h"
 #include "base/pipeline/render_pipeline.h"

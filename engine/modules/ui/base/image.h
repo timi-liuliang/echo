@@ -2,7 +2,7 @@
 
 #include "engine/core/render/base/mesh/mesh.h"
 #include "engine/core/render/base/material.h"
-#include "engine/core/render/base/renderable.h"
+#include "engine/core/render/base/render_proxy.h"
 #include "../render/vertex_format.h"
 #include "render.h"
 

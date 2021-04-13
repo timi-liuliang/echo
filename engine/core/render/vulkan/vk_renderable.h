@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/Renderable.h"
+#include "base/render_proxy.h"
 #include "vk_render_base.h"
 #include "vk_shader_program.h"
 

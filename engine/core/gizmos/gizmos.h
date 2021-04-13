@@ -3,7 +3,7 @@
 #include "engine/core/math/Math.h"
 #include "engine/core/render/base/material.h"
 #include "engine/core/render/base/mesh/mesh.h"
-#include "engine/core/render/base/renderable.h"
+#include "engine/core/render/base/render_proxy.h"
 #include "engine/core/scene/render_node.h"
 
 namespace Echo

@@ -2,7 +2,7 @@
 
 #include <engine/core/util/Array.hpp>
 #include "base/shader_program.h"
-#include "base/renderable.h"
+#include "base/render_proxy.h"
 #include "base/mesh/mesh.h"
 #include "gles_shader.h"
 #include "gles_renderable.h"

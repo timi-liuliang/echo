@@ -4,7 +4,7 @@
 #include "engine/core/scene/node_path.h"
 #include "engine/core/render/base/mesh/mesh.h"
 #include "engine/core/render/base/material.h"
-#include "engine/core/render/base/renderable.h"
+#include "engine/core/render/base/render_proxy.h"
 #include "gltf_res.h"
 #include "gltf_skeleton.h"
 

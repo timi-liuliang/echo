@@ -3,7 +3,7 @@
 #include "engine/core/log/Log.h"
 #include "view_port.h"
 #include "image/pixel_format.h"
-#include "renderable.h"
+#include "render_proxy.h"
 #include "../metal/mt.h"
 #include "../gles/gles.h"
 #include "pipeline/render_stage.h"

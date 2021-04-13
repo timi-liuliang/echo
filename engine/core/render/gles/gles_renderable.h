@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/Renderable.h"
+#include "base/render_proxy.h"
 #include "base/mesh/mesh.h"
 
 namespace Echo
