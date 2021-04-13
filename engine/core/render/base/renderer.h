@@ -5,6 +5,7 @@
 #include "texture.h"
 #include "texture/texture_cube.h"
 #include "base/proxy/render_proxy.h"
+#include "base/proxy/compute_proxy.h"
 #include "frame_buffer.h"
 #include "gpu_buffer.h"
 #include "view_port.h"
@@ -97,10 +98,13 @@ namespace Echo
 		virtual SamplerState* createSamplerState() = 0;
 
 		// renderable operate
-		virtual RenderProxy* createRenderable()=0;
-		RenderProxy* getRenderable(RenderableID id);
-		void destroyRenderables(RenderProxy** renderables, int num);
-		void destroyRenderables(vector<RenderProxy*>::type& renderables);
+		virtual RenderProxy* createRenderProxy()=0;
+		RenderProxy* getRenderProxy(RenderableID id);
+		void destroyRenderProxies(RenderProxy** renderables, int num);
+		void destroyRenderProxies(vector<RenderProxy*>::type& renderables);
+
+		// computation proxy
+		virtual ComputeProxy* createComputeProxy() { return nullptr; }
 
 		// on size
 		virtual void onSize(int width, int height) = 0;
@@ -128,10 +132,11 @@ namespace Echo
 		ui32 getStartMipmap() const { return m_startMipmap; }
 
 	protected:
-		Settings			m_settings;
-		std::map<ui32, RenderProxy*>	m_renderables;
-		ui32				m_startMipmap = 0;
-		DeviceFeature		m_deviceFeature;
+		Settings						m_settings;
+		std::map<ui32, RenderProxy*>	m_renderProxies;
+		std::map<ui32, ComputeProxy*>	m_computeProxies;
+		ui32							m_startMipmap = 0;
+		DeviceFeature					m_deviceFeature;
 	};
     
     // initialize Renderer

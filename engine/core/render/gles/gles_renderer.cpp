@@ -636,13 +636,13 @@ namespace Echo
 		return EchoNew(GLESFramebufferWindow);
 	}
 
-	RenderProxy* GLESRenderer::createRenderable()
+	RenderProxy* GLESRenderer::createRenderProxy()
 	{
         static ui32 id = 0; id++;
-		RenderProxy* renderable = EchoNew(GLESRenderable(id));
-		m_renderables[id] = renderable;
+		RenderProxy* proxy = EchoNew(GLESRenderable(id));
+		m_renderProxies[id] = proxy;
 
-		return renderable;
+		return proxy;
 	}
 
 	RasterizerState* GLESRenderer::getRasterizerState() const

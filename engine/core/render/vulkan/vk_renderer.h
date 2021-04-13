@@ -51,7 +51,8 @@ namespace Echo
         virtual ShaderProgram* createShaderProgram() override;
 
 		// create renderable
-        virtual RenderProxy* createRenderable() override;
+        virtual RenderProxy* createRenderProxy() override;
+        virtual ComputeProxy* createComputeProxy() override;
 
         // convert matrix
         virtual void unproject(Vector3& worldPos, const Vector3& screenPos, const Matrix4& matVP, Viewport* pViewport = NULL) override;

@@ -11,7 +11,7 @@ namespace Echo
 {
 	class Render;
 	class Material;
-	class ComputationProxy : public Object
+	class ComputeProxy : public Object
 	{
 		friend class Renderer;
 
@@ -20,7 +20,7 @@ namespace Echo
 		ui32 getIdentifier() const { return m_identifier; }
 
 		// create method
-		static ComputationProxy* create(MeshPtr mesh, Material* matInst, Render* node);
+		static ComputeProxy* create(MeshPtr mesh, Material* matInst, Render* node);
 
 		// release
 		void release();
@@ -41,8 +41,8 @@ namespace Echo
 		void submitToRenderQueue();
 
 	protected:
-		ComputationProxy(int identifier);
-		virtual ~ComputationProxy();
+		ComputeProxy(int identifier);
+		virtual ~ComputeProxy();
 
 	public:
 		ui32			m_identifier;

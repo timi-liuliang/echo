@@ -118,7 +118,7 @@ namespace Echo
 
 	protected:
 		//  interal implement
-		virtual RenderProxy* createRenderable() override;
+		virtual RenderProxy* createRenderProxy() override;
 
 		// preset to screen
 		virtual bool present() override;

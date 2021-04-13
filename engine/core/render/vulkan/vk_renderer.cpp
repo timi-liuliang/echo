@@ -1,7 +1,8 @@
 #include "base/mesh/mesh.h"
 #include "base/pipeline/render_pipeline.h"
 #include "vk_renderer.h"
-#include "vk_renderable.h"
+#include "vk_render_proxy.h"
+#include "vk_compute_proxy.h"
 #include "vk_shader_program.h"
 #include "vk_render_state.h"
 #include "vk_gpu_buffer.h"
@@ -88,14 +89,23 @@ namespace Echo
 		return ECHO_DOWN_CAST<VKTexture*>(m_currentTextures[index]);
 	}
 
-    RenderProxy* VKRenderer::createRenderable()
+    RenderProxy* VKRenderer::createRenderProxy()
     {
         static ui32 id = 0; id++;
         RenderProxy* renderable = EchoNew(VKRenderable(id));
-        m_renderables[id] = renderable;
+        m_renderProxies[id] = renderable;
 
         return renderable;
     }
+
+	ComputeProxy* VKRenderer::createComputeProxy()
+	{
+		static ui32 id = 0; id++;
+		ComputeProxy* proxy = EchoNew(VKComputeProxy(id));
+		m_computeProxies[id] = proxy;
+
+		return proxy;
+	}
 
 	void VKRenderer::getDepthRange(Vector2& vec)
 	{

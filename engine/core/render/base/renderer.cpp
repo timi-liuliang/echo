@@ -181,11 +181,11 @@ namespace Echo
 
 	Renderer::~Renderer()
 	{
-		for (std::map<ui32, RenderProxy*>::iterator it = m_renderables.begin(); it != m_renderables.end(); ++it)
+		for (std::map<ui32, RenderProxy*>::iterator it = m_renderProxies.begin(); it != m_renderProxies.end(); ++it)
 		{
 			EchoSafeDelete(it->second, RenderProxy);
 		}
-		m_renderables.clear();
+		m_renderProxies.clear();
 	}
 
 	bool Renderer::isFullscreen() const
@@ -235,26 +235,26 @@ namespace Echo
 		worldPos = (Vector3)vWorld;
 	}
 
-	RenderProxy* Renderer::getRenderable(RenderableID id)
+	RenderProxy* Renderer::getRenderProxy(RenderableID id)
 	{
-		std::map<ui32, RenderProxy*>::iterator it = m_renderables.find(id);
-		if (it != m_renderables.end())
+		std::map<ui32, RenderProxy*>::iterator it = m_renderProxies.find(id);
+		if (it != m_renderProxies.end())
 			return it->second;
 
 		return nullptr;
 	}
 
-	void Renderer::destroyRenderables(RenderProxy** renderables, int num)
+	void Renderer::destroyRenderProxies(RenderProxy** renderables, int num)
 	{
 		for (int i = 0; i < num; i++)
 		{
 			RenderProxy* renderable = renderables[i];
 			if (renderable)
 			{
-				std::map<ui32, RenderProxy*>::iterator it = m_renderables.find(renderable->getIdentifier());
-				if(it != m_renderables.end())
+				std::map<ui32, RenderProxy*>::iterator it = m_renderProxies.find(renderable->getIdentifier());
+				if(it != m_renderProxies.end())
                 {
-                    m_renderables.erase(it);
+                    m_renderProxies.erase(it);
                     
                     EchoSafeDelete(renderable, RenderProxy);
                     renderables[i] = nullptr;
@@ -263,9 +263,9 @@ namespace Echo
 		}
 	}
 
-	void Renderer::destroyRenderables(vector<RenderProxy*>::type& renderables)
+	void Renderer::destroyRenderProxies(vector<RenderProxy*>::type& renderables)
 	{
-		destroyRenderables(renderables.data(), static_cast<int>(renderables.size()));
+		destroyRenderProxies(renderables.data(), static_cast<int>(renderables.size()));
 		renderables.clear();
 	}
 }

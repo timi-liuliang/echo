@@ -1,5 +1,5 @@
 #include "engine/core/log/Log.h"
-#include "computation_proxy.h"
+#include "compute_proxy.h"
 #include "base/shader_program.h"
 #include "base/renderer.h"
 #include "base/pipeline/render_pipeline.h"
@@ -9,35 +9,32 @@
 
 namespace Echo
 {
-	ComputationProxy::ComputationProxy(int identifier)
+	ComputeProxy::ComputeProxy(int identifier)
 		: m_identifier(identifier)
 	{
 	}
 
-	ComputationProxy::~ComputationProxy()
+	ComputeProxy::~ComputeProxy()
 	{
 	}
 
-	void ComputationProxy::release()
+	void ComputeProxy::release()
 	{
-		ComputationProxy* ptr = this;
+		ComputeProxy* ptr = this;
 		//Renderer::instance()->destroyRenderables(&ptr, 1);
 	}
 
-	ComputationProxy* ComputationProxy::create(MeshPtr mesh, Material* material, Render* node)
+	ComputeProxy* ComputeProxy::create(MeshPtr mesh, Material* material, Render* node)
 	{
-		return nullptr;
-
-		// bind shader param
-		//ComputationProxy* renderable = Renderer::instance()->createRenderable();
+		ComputeProxy* proxy = Renderer::instance()->createComputeProxy();
 		//renderable->setMaterial(material);
 		//renderable->setNode(node);
 		//renderable->setMesh(mesh);
 
-		//return renderable;
+		return proxy;
 	}
 
-	void ComputationProxy::submitToRenderQueue()
+	void ComputeProxy::submitToRenderQueue()
 	{
 		if (m_mesh && m_mesh->isValid())
 		{

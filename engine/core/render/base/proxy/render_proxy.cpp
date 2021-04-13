@@ -21,13 +21,13 @@ namespace Echo
 	void RenderProxy::release()
 	{
 		RenderProxy* ptr = this;
-		Renderer::instance()->destroyRenderables(&ptr, 1);
+		Renderer::instance()->destroyRenderProxies(&ptr, 1);
 	}
 
 	RenderProxy* RenderProxy::create(MeshPtr mesh, Material* material, Render* node)
 	{
 		// bind shader param
-		RenderProxy* renderable = Renderer::instance()->createRenderable();
+		RenderProxy* renderable = Renderer::instance()->createRenderProxy();
 		renderable->setMaterial(material);
 		renderable->setNode(node);
 		renderable->setMesh(mesh);
