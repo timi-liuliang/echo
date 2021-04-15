@@ -217,6 +217,9 @@ namespace Echo
 
 	void Node::insertChild(ui32 idx, Node* node)
 	{
+		if (node->getParent() == this)
+			removeChild(node);
+
 		// make sure the name is unique in current layer
 		int    id = 1;
 		String name = node->getName();
