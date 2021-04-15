@@ -70,10 +70,10 @@ namespace Echo
     FontGlyph* FontFace::copyGlyphToTexture(i32 charCode, FT_GlyphSlot glyphSlot, i32 fontSize)
     {
         // convert glyph to bitmap(color array)
-        i32 glyphWidth = fontSize * 2;
+        i32 glyphWidth = 0;
         i32 glyphHeight = fontSize * 2;
-        vector<Color>::type glyphBitmap(glyphWidth * glyphHeight, Color(0.f, 0.f, 0.f, 0.f));
-        if(!copyGlyphToBitmap( &glyphBitmap[0], glyphWidth, glyphHeight, charCode, glyphSlot))
+        vector<Color>::type glyphBitmap;;
+        if(!copyGlyphToBitmap( glyphBitmap, glyphWidth, glyphHeight, charCode, glyphSlot))
             return nullptr;
         
         // try to insert to exist font texture
@@ -100,20 +100,24 @@ namespace Echo
         return nullptr;
     }
     
-    bool FontFace::copyGlyphToBitmap(Color* oColor, i32 ioWidth, i32 ioHeight, i32 charCode, FT_GlyphSlot glyphSlot)
+    bool FontFace::copyGlyphToBitmap(vector<Color>::type& oColor, i32& glyphWidth, i32& glyphHeight, i32 charCode, FT_GlyphSlot glyphSlot)
     {
         FT_Bitmap* bitmap = &glyphSlot->bitmap;
-        if(ioWidth>=bitmap->width && ioHeight>=bitmap->rows)
+        glyphWidth = Math::Max<i32>(glyphWidth, bitmap->width * 1.3f);
+        glyphHeight = Math::Max<i32>(glyphHeight, bitmap->rows);
+        oColor.resize(glyphWidth * glyphHeight, Color(0.f, 0.f, 0.f, 0.f));
+
+        if(glyphWidth>=bitmap->width && glyphHeight>=bitmap->rows)
         {
-			i32 wOffset = (ioWidth - bitmap->width) / 2;
-			i32 hOffset = (ioHeight - bitmap->rows) / 2;
+			i32 wOffset = (glyphWidth - bitmap->width) / 2;
+			i32 hOffset = (glyphHeight - bitmap->rows) / 2;
 
             for(i32 w=0; w<bitmap->width; w++)
             {
                 for(i32 h=0; h<bitmap->rows; h++)
                 {
                     i32 index0 = h * bitmap->width + w;
-					i32 index1 = (h + hOffset) * ioWidth + w + wOffset;
+					i32 index1 = (h + hOffset) * glyphWidth + w + wOffset;
                     oColor[index1].r = bitmap->buffer[index0];
                     oColor[index1].g = bitmap->buffer[index0];
                     oColor[index1].b = bitmap->buffer[index0];

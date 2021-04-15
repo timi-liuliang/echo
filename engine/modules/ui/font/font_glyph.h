@@ -12,6 +12,10 @@ namespace Echo
 		FontGlyph();
 		~FontGlyph();
 
+		// width|height in pixels
+		float getWidth();
+		float getHeight();
+
 		// get uv
 		Vector4 getUV() const { return m_texture->getViewport(m_nodeIndex); }
     };

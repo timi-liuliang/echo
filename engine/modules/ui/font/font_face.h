@@ -27,7 +27,7 @@ namespace Echo
         
         // copy glyph bitmap to texture
         FontGlyph* copyGlyphToTexture(i32 charCode, FT_GlyphSlot glyphSlot, i32 fontSize);
-        bool copyGlyphToBitmap(Color* oColor, i32 ioWidth, i32 ioHeight, i32 charCode, FT_GlyphSlot glyphSlot);
+        bool copyGlyphToBitmap(vector<Color>::type& oColor, i32& ioWidth, i32& ioHeight, i32 charCode, FT_GlyphSlot glyphSlot);
 
 		// new glyph
 		FontGlyph* newGlyph(i32 charCode, FontTexture* texture, i32 nodeIndex);

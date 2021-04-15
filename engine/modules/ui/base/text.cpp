@@ -137,16 +137,20 @@ namespace Echo
                 FontGlyph* fontGlyph = FontLibrary::instance()->getFontGlyph( glyphCode, m_fontRes, m_fontSize);
                 if(fontGlyph)
                 {
-					float left = m_width;
-					float right = left + m_fontSize;
-					float top = m_height;
-					float bottom = 0;
-
 					Vector4 uv = fontGlyph->getUV();
 					float uvLeft = uv.x;
 					float uvTop = uv.y;
 					float uvRight = uv.x + uv.z;
 					float uvBottom = uv.y + uv.w;
+
+                    float glyphWidth = fontGlyph->getWidth();
+                    float glyphHeight = fontGlyph->getHeight();
+                    float fontSize = m_fontSize / glyphHeight * glyphWidth;
+
+					float left = m_width;
+					float right = left + fontSize;
+					float top = m_height;
+					float bottom = 0;
 
 					// vertices
 					Word vertBase = oVertices.size();
@@ -164,9 +168,13 @@ namespace Echo
 					oIndices.emplace_back(vertBase + 3);
 
                     m_material->getUniform("BaseColor")->setTexture(fontGlyph->m_texture->getTexture());
-                }
 
-				m_width += m_fontSize;
+                    m_width += fontSize;
+                }
+                else
+                {
+                    m_width += m_fontSize;
+                }
             }
         }
           
