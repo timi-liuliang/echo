@@ -8,13 +8,7 @@
 namespace Echo
 {
     UiImage::UiImage()
-    : UiRender()
-	, m_textureRes("", ".png")
-    , m_mesh(nullptr)
-    , m_material(nullptr)
-    , m_renderable(nullptr)
-    , m_width(0)
-    , m_height(0)
+        : UiRender()
     {
     }
     

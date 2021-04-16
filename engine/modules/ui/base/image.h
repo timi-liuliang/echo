@@ -50,12 +50,12 @@ namespace Echo
         void clearRenderable();
         
     private:
-        ResourcePath            m_textureRes;
-        MeshPtr                 m_mesh;            // Geometry Data for render
+        ResourcePath            m_textureRes = ResourcePath("", ".png");
+        MeshPtr                 m_mesh;
         ShaderProgramPtr        m_shader;
         MaterialPtr             m_material;
         MaterialPtr             m_materialDefault;
-        RenderProxy*             m_renderable;
+        RenderProxy*            m_renderable = nullptr;
         Matrix4                 m_matWVP;
         i32                     m_width = 128;
         i32                     m_height = 128;
