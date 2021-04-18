@@ -105,11 +105,11 @@ namespace Game
 
 	void Window::keyPressEvent(QKeyEvent* e)
 	{
-		Echo::Input::instance()->notifyKeyDown(e->key());
+		Echo::Input::instance()->notifyKeyDown(e->nativeVirtualKey());
 	}
 
 	void Window::keyReleaseEvent(QKeyEvent* e)
 	{
-		Echo::Input::instance()->notifyKeyUp(e->key());
+		Echo::Input::instance()->notifyKeyUp(e->nativeVirtualKey());
 	}
 }
