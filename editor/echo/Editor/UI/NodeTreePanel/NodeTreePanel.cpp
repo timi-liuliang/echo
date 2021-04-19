@@ -116,13 +116,13 @@ namespace Studio
 		static Echo::i32 frameCount = 0; frameCount++;
 		if (frameCount > 2 && m_currentEditObject)
 		{		
-			updateObjectPropetyValueToModel(m_currentEditObject, m_currentEditObject->getClassName());
+			updateObjectPropertyValueToModel(m_currentEditObject, m_currentEditObject->getClassName());
 
 			frameCount = 0;
 		}
 	}
 
-	void NodeTreePanel::updateObjectPropetyValueToModel(Echo::Object* classPtr, const Echo::String& className)
+	void NodeTreePanel::updateObjectPropertyValueToModel(Echo::Object* classPtr, const Echo::String& className)
 	{
 		// show parent property first
 		Echo::String parentClassName;
@@ -130,7 +130,7 @@ namespace Studio
 		{
 			// don't display property of object
 			if (parentClassName != "Object")
-				updateObjectPropetyValueToModel(classPtr, parentClassName);
+				updateObjectPropertyValueToModel(classPtr, parentClassName);
 		}
 
 		// show self property
@@ -201,20 +201,6 @@ namespace Studio
 		nodeItem->setData(0, Qt::UserRole, QVariant(node->getId()));
 		nodeItem->setFlags( nodeItem->flags() | Qt::ItemIsEditable);
 		parent->insertChild(nodeIdx, nodeItem);
-
-		if (node->isEnable())
-			nodeItem->setIcon(NodeDisableIndex, QIcon(":/icon/Icon/eye_open.png"));
-		else
-			nodeItem->setIcon(NodeDisableIndex, QIcon(":/icon/Icon/eye_close.png"));
-
-		if (!node->getScript().isEmpty())
-		{
-			nodeItem->setIcon(NodeScriptIndex, QIcon(":/icon/Icon/node_lua_script.png"));
-			nodeItem->setStatusTip(NodeScriptIndex, node->getScript().getPath().c_str());
-		}
-
-		if (!node->getPath().empty())
-			nodeItem->setIcon(NodeLinkIndex, QIcon(":/icon/node/link_child_scene.png"));
 
 		// change foreground color based on node state
 		updateNodeTreeWidgetItemDisplay(treeWidget, nodeItem);
@@ -289,6 +275,27 @@ namespace Studio
 			if (node)
 			{
 				curItem->setForeground(0, QBrush(node->isEnable() ? QColor(220, 220, 220) : QColor(120, 120, 120)));
+
+				if (!node->getScript().isEmpty())
+				{
+					curItem->setIcon(NodeScriptIndex, QIcon(":/icon/Icon/node_lua_script.png"));
+					curItem->setStatusTip(NodeScriptIndex, node->getScript().getPath().c_str());
+				}
+				else
+				{
+					curItem->setIcon(NodeScriptIndex, QIcon());
+					curItem->setStatusTip(NodeScriptIndex, "");
+				}
+
+				if (!node->getPath().empty())
+					curItem->setIcon(NodeLinkIndex, QIcon(":/icon/node/link_child_scene.png"));
+				else
+					curItem->setIcon(NodeLinkIndex, QIcon());
+
+				if (node->isEnable())
+					curItem->setIcon(NodeDisableIndex, QIcon(":/icon/Icon/eye_open.png"));
+				else
+					curItem->setIcon(NodeDisableIndex, QIcon(":/icon/Icon/eye_close.png"));
 			}
 		}
 	}

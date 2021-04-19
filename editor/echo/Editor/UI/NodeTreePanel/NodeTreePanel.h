@@ -137,7 +137,7 @@ namespace Studio
 	public slots:
 		// update
 		void update();
-		void updateObjectPropetyValueToModel(Echo::Object* classPtr, const Echo::String& className);
+		void updateObjectPropertyValueToModel(Echo::Object* classPtr, const Echo::String& className);
 
 		// on select node
         void onUnselectCurrentEditObject();
