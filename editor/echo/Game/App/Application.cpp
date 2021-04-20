@@ -1,25 +1,40 @@
-#include "App.h"
+#include "Application.h"
 #include "Log.h"
 #include <engine/core/render/gles/gles.h>
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/util/hash_generator.h>
 
-namespace Game
+namespace Echo
 {
-	App::App()
+	DECLARE_MODULE(Application)
+
+	Application::Application()
 		: m_log(nullptr)
 	{
 
 	}
 
-	App::~App()
+	Application::~Application()
 	{
 
 	}
 
-	void App::init(size_t hwnd, const Echo::String& echoProject)
+	Application* Application::instance()
 	{
-		m_log = EchoNew(GameLog("Game"));
+		static Application* inst = EchoNew(Application);
+		return inst;
+	}
+
+	void Application::bindMethods()
+	{
+		CLASS_BIND_METHOD(Application, quit, DEF_METHOD("quit"));
+	}
+
+	void Application::init(QWidget* mainWindow, size_t hwnd, const Echo::String& echoProject)
+	{
+		m_mainWindow = mainWindow;
+
+		m_log = EchoNew(Game::GameLog("Game"));
 		Echo::Log::instance()->addOutput(m_log);
 
         Echo::initRender(hwnd);
@@ -32,13 +47,21 @@ namespace Game
 		Echo::Engine::instance()->initialize(rootcfg);
 	}
 
-	void App::tick(float elapsedTime)
+	void Application::tick(float elapsedTime)
 	{
 		Echo::Engine::instance()->tick(elapsedTime);
 	}
 
-	void App::onSize(Echo::ui32 width, Echo::ui32 height)
+	void Application::onSize(Echo::ui32 width, Echo::ui32 height)
 	{
 		Echo::Engine::instance()->onSize(width, height);
+	}
+
+	void Application::quit()
+	{
+		if (m_mainWindow)
+		{
+			m_mainWindow->close();
+		}
 	}
 }

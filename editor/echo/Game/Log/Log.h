@@ -9,7 +9,7 @@ namespace Game
 	public:
 		GameLog(const Echo::String& name);
 
-		/** »’÷æ ‰≥ˆ */
+		/** output log */
 		virtual void logMessage(Level level, const Echo::String &msg);
 	};
 }

@@ -38,7 +38,6 @@ namespace Game
 
 		assert(!g_inst);
 		g_inst = this;
-
 	}
 
 	GameMainWindow::~GameMainWindow()

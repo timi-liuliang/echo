@@ -13,18 +13,15 @@ namespace Game
 		setUpdatesEnabled(false);
 		setMouseTracking(true);
 		setFocusPolicy(Qt::StrongFocus);
-
-		m_app = EchoNew(App);
 	}
 
 	Window::~Window()
 	{
-		EchoSafeDelete(m_app, App);
 	}
 
 	void Window::start(const Echo::String& echoProject)
 	{
-		m_app->init((size_t)winId(), echoProject);
+		Echo::Application::instance()->init( parentWidget(), (size_t)winId(), echoProject);
 
 		// change window size
 		GameMainWindow::instance()->setRenderWindowSize(Echo::GameSettings::instance()->getWindowWidth(), Echo::GameSettings::instance()->getWindowHeight());
@@ -45,7 +42,7 @@ namespace Game
         Echo::Dword elapsedTime = curTime - lastTime;
 
 		// Call the main render function
-		m_app->tick(elapsedTime * 0.001f);
+		Echo::Application::instance()->tick(elapsedTime * 0.001f);
 
 		lastTime = curTime;
 	}
@@ -57,7 +54,7 @@ namespace Game
 
 		if (m_size.width() != width || m_size.height() != height)
 		{
-			m_app->onSize(width, height);
+			Echo::Application::instance()->onSize(width, height);
 			m_size.setWidth(width);
 			m_size.setHeight(height);
 		}

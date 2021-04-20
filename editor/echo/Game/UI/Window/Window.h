@@ -2,7 +2,7 @@
 
 #include <QWidget>
 #include <QMenu>
-#include "App.h"
+#include "Application.h"
 
 namespace Game
 {
@@ -46,6 +46,5 @@ namespace Game
 		QSize					m_size;
 		QTimer*					m_timer = nullptr;
 		QSize					m_ratio;
-		App*					m_app = nullptr;
 	};
 }
