@@ -1,7 +1,10 @@
 #include "effect_module.h"
 #include "sprite.h"
 #include "particle_system.h"
+#include "trail.h"
+#include "editor/sprite_editor.h"
 #include "editor/particle_system_editor.h"
+#include "editor/trail_editor.h"
 
 namespace Echo
 {
@@ -26,7 +29,10 @@ namespace Echo
 	{
 		Class::registerType<Sprite>();
         Class::registerType<ParticleSystem>();
+		Class::registerType<Trail>();
         
+		CLASS_REGISTER_EDITOR(Sprite, SpriteEditor)
         CLASS_REGISTER_EDITOR(ParticleSystem, ParticleSystemEditor)
+		CLASS_REGISTER_EDITOR(Trail, TrailEditor)
 	}
 }
