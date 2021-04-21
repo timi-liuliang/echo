@@ -103,10 +103,13 @@ namespace Studio
 		}
 
 		// create module item
-		QStandardItem* nodeItem = new QStandardItem;
-		nodeItem->setText( moduleDisplayName.c_str());
-		nodeItem->setData( "module", Qt::UserRole);
-		rootItem->setChild(rootItem->rowCount(), nodeItem);
+		QStandardItem* moduleItem = new QStandardItem;
+		moduleItem->setText( moduleDisplayName.c_str());
+		moduleItem->setData( "module", Qt::UserRole);
+		rootItem->setChild(rootItem->rowCount(), moduleItem);
+
+		// sort
+		rootItem->sortChildren(0);
 
 		return getModuleItem( nodeName);
 	}
