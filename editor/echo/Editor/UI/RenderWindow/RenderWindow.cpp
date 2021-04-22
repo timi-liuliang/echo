@@ -12,6 +12,8 @@ namespace Studio
 	RenderWindow::RenderWindow(QWidget* parent/* = NULL*/)
 		: QWidget(parent)
 	{
+		setupUi(this);
+
 		setAttribute(Qt::WA_NativeWindow);
 		setUpdatesEnabled(false);
 		setMouseTracking(true);
@@ -45,6 +47,16 @@ namespace Studio
 			m_inputController3d = new InputController3d;
 
 		m_inputController = m_inputController2d;
+
+		if (!m_transformToolBar)
+		{
+			m_transformToolBar = new QToolBar(nullptr);
+			m_transformToolBar->addAction(m_actionTransition);
+			m_transformToolBar->addAction(m_actionRotation);
+			m_transformToolBar->addAction(m_actionScale);
+
+			MainWindow::instance()->addToolBar(m_transformToolBar);
+		}
 
 		if (!m_transformWidget)
 			m_transformWidget = EchoNew(TransformWidget);

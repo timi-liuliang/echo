@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>RenderWindow</class>
+ <widget class="QWidget" name="RenderWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>918</width>
+    <height>671</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>RenderWindow</string>
+  </property>
+  <action name="m_actionTransition">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../../Resource/App.qrc">
+     <normaloff>:/icon/Icon/transform/transition.png</normaloff>:/icon/Icon/transform/transition.png</iconset>
+   </property>
+   <property name="text">
+    <string>Transition</string>
+   </property>
+   <property name="toolTip">
+    <string>Transition</string>
+   </property>
+  </action>
+  <action name="m_actionRotation">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../../Resource/App.qrc">
+     <normaloff>:/icon/Icon/transform/rotation.png</normaloff>:/icon/Icon/transform/rotation.png</iconset>
+   </property>
+   <property name="text">
+    <string>Rotation</string>
+   </property>
+   <property name="toolTip">
+    <string>Rotation</string>
+   </property>
+  </action>
+  <action name="m_actionScale">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../../Resource/App.qrc">
+     <normaloff>:/icon/Icon/transform/scale.png</normaloff>:/icon/Icon/transform/scale.png</iconset>
+   </property>
+   <property name="text">
+    <string>Scale</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="../../../Resource/App.qrc"/>
+ </resources>
+ <connections/>
+</ui>

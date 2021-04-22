@@ -2,12 +2,14 @@
 
 #include <QWidget>
 #include <QMenu>
+#include <QToolBar>
 #include "IInputController.h"
 #include "TransformWidget.h"
+#include "ui_RenderWindow.h"
 
 namespace Studio
 {
-	class RenderWindow : public QWidget
+	class RenderWindow : public QWidget, public Ui_RenderWindow
 	{
 		Q_OBJECT
 
@@ -69,6 +71,7 @@ namespace Studio
 		IRWInputController*		m_inputController = nullptr;
 		IRWInputController*		m_inputController2d = nullptr;
 		IRWInputController*		m_inputController3d = nullptr;
+		QToolBar*				m_transformToolBar = nullptr;
 		TransformWidget*		m_transformWidget = nullptr;
 		bool					m_isLeftButtonDown = false;
 		QSize					m_ratio;
