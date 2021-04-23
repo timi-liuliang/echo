@@ -64,6 +64,11 @@ namespace Studio
 		// reset device
 		void  ResetDevice();
 
+		// set tranform widget edit type
+		void setTransformWidgetMove();
+		void setTransformWidgetRotate();
+		void setTransformWidgetScale();
+
 	protected:
 		QSize					m_size;
 		QTimer*					m_timer = nullptr;

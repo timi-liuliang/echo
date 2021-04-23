@@ -56,6 +56,10 @@ namespace Studio
 			m_transformToolBar->addAction(m_actionScale);
 
 			MainWindow::instance()->addToolBar(m_transformToolBar);
+
+			QObject::connect(m_actionTransition, SIGNAL(triggered()), this, SLOT(setTransformWidgetMove()));
+			QObject::connect(m_actionRotation, SIGNAL(triggered()), this, SLOT(setTransformWidgetRotate()));
+			QObject::connect(m_actionScale, SIGNAL(triggered()), this, SLOT(setTransformWidgetScale()));
 		}
 
 		if (!m_transformWidget)
@@ -112,6 +116,24 @@ namespace Studio
 
 	void  RenderWindow::ResetDevice()
 	{
+	}
+
+	void RenderWindow::setTransformWidgetMove()
+	{
+		if (m_transformWidget)
+			m_transformWidget->SetEditType(TransformWidget::EditType::Translate);
+	}
+
+	void RenderWindow::setTransformWidgetRotate()
+	{
+		if (m_transformWidget)
+			m_transformWidget->SetEditType(TransformWidget::EditType::Rotate);
+	}
+
+	void RenderWindow::setTransformWidgetScale()
+	{
+		if (m_transformWidget)
+			m_transformWidget->SetEditType(TransformWidget::EditType::Scale);
 	}
 
 	void RenderWindow::wheelEvent(QWheelEvent * e)
