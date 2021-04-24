@@ -196,6 +196,11 @@ QToolButton:pressed
 	border: 2px solid #666666;
 }
 
+QToolButton:checked
+{
+	background-color: rgb( 56, 56, 56);
+}
+
 QListWidget
 {
 	border : 1px solid rgb(56,56,56);

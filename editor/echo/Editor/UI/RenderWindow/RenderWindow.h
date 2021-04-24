@@ -18,12 +18,12 @@ namespace Studio
 		virtual ~RenderWindow();
 
 		// begin render
-		virtual void BeginRender();
+		virtual void beginRender();
 
 		// resize window
-		void ResizeWindow();
+		void resizeWindow();
 
-		void SetAspectRatio(const QSize& size);
+		void setAspectRatio(const QSize& size);
 
 		QSize GetAspectRatio() const { return m_ratio; }
 
@@ -59,10 +59,10 @@ namespace Studio
 
 	public slots:
 		// render
-        void  Render();
+        void  render();
 
 		// reset device
-		void  ResetDevice();
+		void  resetDevice();
 
 		// set tranform widget edit type
 		void setTransformWidgetMove();

@@ -14,7 +14,7 @@ namespace Studio
         virtual ~RenderWindowMetal();
         
         // begin render
-        virtual void BeginRender() override;
+        virtual void beginRender() override;
         
     public slots:
 #ifdef ECHO_PLATFORM_MAC

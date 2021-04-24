@@ -36,7 +36,7 @@ namespace Studio
 		return QSize( width, height);
 	}
 
-	void RenderWindow::BeginRender()
+	void RenderWindow::beginRender()
 	{
 		EchoEngine::instance()->Initialize((size_t)this->winId());
 
@@ -60,19 +60,21 @@ namespace Studio
 			QObject::connect(m_actionTransition, SIGNAL(triggered()), this, SLOT(setTransformWidgetMove()));
 			QObject::connect(m_actionRotation, SIGNAL(triggered()), this, SLOT(setTransformWidgetRotate()));
 			QObject::connect(m_actionScale, SIGNAL(triggered()), this, SLOT(setTransformWidgetScale()));
+
+			m_actionTransition->setChecked(true);
 		}
 
 		if (!m_transformWidget)
 			m_transformWidget = EchoNew(TransformWidget);
 
 		m_timer = new QTimer(this);
-		QObject::connect(m_timer, SIGNAL(timeout()), this, SLOT(Render()));
+		QObject::connect(m_timer, SIGNAL(timeout()), this, SLOT(render()));
 		m_timer->start(10);
 	}
 
-	void  RenderWindow::Render()
+	void  RenderWindow::render()
 	{
-		ResizeWindow();
+		resizeWindow();
 
         static Echo::Dword lastTime = QDateTime::currentMSecsSinceEpoch();
 
@@ -96,7 +98,7 @@ namespace Studio
 		lastTime = curTime;
 	}
 
-	void RenderWindow::ResizeWindow()
+	void RenderWindow::resizeWindow()
 	{		
 		int width = static_cast<int>(this->width());
 		int height = static_cast<int>(this->height());
@@ -109,31 +111,49 @@ namespace Studio
 		}
 	}
 
-	void RenderWindow::SetAspectRatio(const QSize& size)
+	void RenderWindow::setAspectRatio(const QSize& size)
 	{
 		m_ratio = size;
 	}
 
-	void  RenderWindow::ResetDevice()
+	void  RenderWindow::resetDevice()
 	{
 	}
 
 	void RenderWindow::setTransformWidgetMove()
 	{
-		if (m_transformWidget)
-			m_transformWidget->SetEditType(TransformWidget::EditType::Translate);
+		if (m_actionTransition->isChecked())
+		{
+			if (m_transformWidget)
+				m_transformWidget->SetEditType(TransformWidget::EditType::Translate);
+
+			m_actionRotation->setChecked(false);
+			m_actionScale->setChecked(false);
+		}
 	}
 
 	void RenderWindow::setTransformWidgetRotate()
 	{
-		if (m_transformWidget)
-			m_transformWidget->SetEditType(TransformWidget::EditType::Rotate);
+		if (m_actionRotation->isChecked())
+		{
+			if (m_transformWidget)
+				m_transformWidget->SetEditType(TransformWidget::EditType::Rotate);
+
+			m_actionTransition->setChecked(false);
+			m_actionScale->setChecked(false);
+		}
 	}
 
 	void RenderWindow::setTransformWidgetScale()
 	{
-		if (m_transformWidget)
-			m_transformWidget->SetEditType(TransformWidget::EditType::Scale);
+		if (m_actionScale->isChecked())
+		{
+			if (m_transformWidget)
+				m_transformWidget->SetEditType(TransformWidget::EditType::Scale);
+
+			m_actionTransition->setChecked(false);
+			m_actionRotation->setChecked(false);
+		}
 	}
 
 	void RenderWindow::wheelEvent(QWheelEvent * e)

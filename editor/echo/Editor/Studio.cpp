@@ -122,7 +122,7 @@ namespace Studio
         #else
             m_renderWindow = new RenderWindow;
         #endif
-            m_renderWindow->BeginRender();
+            m_renderWindow->beginRender();
 		}
 
 		return m_renderWindow;
