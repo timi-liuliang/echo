@@ -33,7 +33,7 @@ namespace Studio
 
 		enum class RotateType
 		{
-			None,
+			None = -1,
 			XAxis,
 			YAxis,
 			ZAxis,
@@ -41,7 +41,7 @@ namespace Studio
 
 		enum class ScaleType
 		{
-			None,
+			None = -1,
 			XAxis,
 			YAxis,
 			ZAxis,
@@ -52,7 +52,8 @@ namespace Studio
 		{
 		public:
 			// on translate
-			virtual void onTranslate(const Echo::Vector3& trans)=0;
+			virtual void onTranslate(const Echo::Vector3& trans) {}
+			virtual void onRotate(const Echo::Vector3& rotate) {}
 		};
 
 	public:
@@ -83,6 +84,7 @@ namespace Studio
 
 		// check move type
 		bool isMoveType(MoveType type) const { return m_moveType == type; }
+		bool isRotateType(RotateType type) const { return m_rotateType == type; }
 		bool isScaleType(ScaleType type) const { return m_scaleType==type; }
 
 	private:
@@ -90,6 +92,7 @@ namespace Studio
 		void draw();
 		void drawCone(float radius, float height, const Echo::Transform& transform, const Echo::Color& color);
 		void drawBox(const Echo::Vector3& extent, const Echo::Transform& transform, const Echo::Color& color);
+		void drawCircle(float radius, const Echo::Transform& transform, const Echo::Color& color);
 
 		// update collision box
 		void updateTranslateCollisionBox();
@@ -109,14 +112,12 @@ namespace Studio
 		Echo::Vector3				m_position;
 		Echo::Gizmos*				m_axis = nullptr;
 		Echo::array<Echo::Box3, 6>	m_moveBoxs;
-		//VisualCycle3*				m_pCycle[3];
-		//VisualShape*				m_pScale;
 		EditType					m_editType;
 		MoveType					m_moveType;
 		RotateType					m_rotateType;
 		ScaleType					m_scaleType;
 		bool						m_isVisible = true;
-		float						m_fScale;
+		float						m_scale = 1.f;
 		Listener*					m_listener = nullptr;
 	};
 }
