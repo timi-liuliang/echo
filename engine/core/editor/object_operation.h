@@ -12,6 +12,9 @@ namespace Echo
 		ObjectOperation() {}
 		virtual ~ObjectOperation() {}
 
+		// active
+		virtual void active() {}
+
 		// tick
 		virtual void tick(const set<Echo::ui32>::type& objects) {}
 	};

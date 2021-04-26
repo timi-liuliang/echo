@@ -12,6 +12,9 @@ namespace Studio
 		OperationTranslate();
 		virtual ~OperationTranslate();
 
+		// active
+		virtual void active();
+
 		// tick
 		virtual void tick(const Echo::set<Echo::ui32>::type& objects);
 

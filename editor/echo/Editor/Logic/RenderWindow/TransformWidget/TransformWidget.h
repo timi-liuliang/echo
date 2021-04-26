@@ -54,6 +54,7 @@ namespace Studio
 			// on translate
 			virtual void onTranslate(const Echo::Vector3& trans) {}
 			virtual void onRotate(const Echo::Vector3& rotate) {}
+			virtual void onScale(const Echo::Vector3& scale) {}
 		};
 
 	public:
@@ -99,11 +100,15 @@ namespace Studio
 
 		// translate
 		void onTranslate(const Echo::Vector3& trans);
+		void onRotate(const Echo::Vector3& rotate);
 
 	private:
 		// translate help function
 		float translateOnAxis(const Echo::Ray& ray0, const Echo::Ray& ray1, const Echo::Vector3& entityPos, const Echo::Vector3& translateAxis);
 		Echo::Vector3* translateOnPlane(Echo::Vector3* pOut, const Echo::Plane& plane, const Echo::Ray& ray0, const Echo::Ray& ray1);
+
+		// rotate help function
+		float rotateOnPlane(const Echo::Plane& plane, const Echo::Ray& ray0, const Echo::Ray& ray1);
 
 	private:
 		bool						m_is2d = false;

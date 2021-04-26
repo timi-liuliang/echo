@@ -69,6 +69,9 @@ namespace Studio
 		void setTransformWidgetRotate();
 		void setTransformWidgetScale();
 
+		// update toolbar display
+		void updateTransformToolBarCheckStates();
+
 	protected:
 		QSize					m_size;
 		QTimer*					m_timer = nullptr;

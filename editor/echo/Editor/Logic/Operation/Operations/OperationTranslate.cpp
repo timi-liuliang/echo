@@ -15,19 +15,25 @@ namespace Studio
 
 	}
 
+	void OperationTranslate::active()
+	{
+		TransformWidget* transformWidget = getTransformWidget();
+		if (transformWidget)
+		{
+			transformWidget->setPosition(getObjectsCenter());
+			transformWidget->setRenderType2d(is2d());
+			transformWidget->SetEditType(TransformWidget::EditType::Translate);
+			transformWidget->setListener(this);
+		}
+	}
+
 	void OperationTranslate::tick(const Echo::set<Echo::ui32>::type& objects)
 	{
 		if (m_selectedObjects != objects)
 		{
 			m_selectedObjects = objects;
 
-			TransformWidget* transformWidget = getTransformWidget();
-			if (transformWidget)
-			{
-				transformWidget->setPosition(getObjectsCenter());
-				transformWidget->setRenderType2d(is2d());
-				transformWidget->setListener(this);
-			}
+			active();
 		}
 	}
 

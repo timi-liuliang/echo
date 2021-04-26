@@ -21,36 +21,6 @@ namespace Studio
 		return acos(length);
 	}
 
-	//static float RotateOnPlane(const Vector3& planePoint, const Vector3& planeNormal, const Vector3& rayPos0, const Vector3& rayDir0, const Vector3& rayPos1, const Vector3& rayDir1)
-	//{
-	//	// 根据点与射线确定面
-	//	Plane3   rotatePlane(planePoint, planeNormal);
-	//	Line3 line0(rayPos0, rayDir0);
-	//	Line3 line1(rayPos1, rayDir1);
-	//	IntrLine3Plane3 intrLP0(line0, rotatePlane);
-	//	IntrLine3Plane3 intrLP1(line1, rotatePlane);
-	//	if (!intrLP0.Test() || !intrLP1.Test())
-	//		return 0.f;
-
-	//	Vector3 pointBegin = intrLP0.m_intrPoint;
-	//	Vector3 pointEnd = intrLP1.m_intrPoint;
-
-	//	// 求旋转角度
-	//	Matrix44 pOut;
-	//	float tpAngle = AresTwoLineAngle(pointBegin - planePoint, pointEnd - planePoint);
-	//	Matrix44RotationAxisAngle(pOut, planeNormal, tpAngle);
-
-	//	// 角度正负
-	//	Vector3 normal;
-	//	normal = Vector3Cross(planePoint - pointBegin, pointEnd - planePoint);
-	//	if (Vector3Dot(normal, planeNormal) < 0.0f)
-	//	{
-	//		tpAngle = -tpAngle;
-	//	}
-
-	//	return tpAngle;
-	//}
-
 	TransformWidget::TransformWidget()
 	{
 		m_editType = EditType::Translate;
@@ -377,47 +347,33 @@ namespace Studio
 			break;
 			case EditType::Rotate:
 			{
-				float fAngle0 = 0.0f;
-				float fAngle1 = 0.0f;
-				float fAngle2 = 0.0f;
+				float angleX = 0.0f;
+				float angleY = 0.0f;
+				float angleZ = 0.0f;
 
 				switch (m_rotateType)
 				{
 				case RotateType::XAxis:
 				{
-					//fAngle0 = RotateOnPlane(m_vPosition, m_vAxisDir[0], rayOrig0, rayDir0, rayOrig1, rayDir1);
+					Echo::Plane plane(m_position, Echo::Vector3::UNIT_X);
+					angleX = rotateOnPlane(plane, ray0, ray1);
 				}
 				break;
 				case RotateType::YAxis:
 				{
-					//fAngle1 = RotateOnPlane(m_vPosition, m_vAxisDir[1], rayOrig0, rayDir0, rayOrig1, rayDir1);
+					Echo::Plane plane(m_position, Echo::Vector3::UNIT_Y);
+					angleY = rotateOnPlane(plane, ray0, ray1);
 				}
 				break;
 				case RotateType::ZAxis:
 				{
-					//fAngle2 = RotateOnPlane(m_vPosition, m_vAxisDir[2], rayOrig0, rayDir0, rayOrig1, rayDir1);
+					Echo::Plane plane(m_position, Echo::Vector3::UNIT_Z);
+					angleZ = rotateOnPlane(plane, ray0, ray1);
 				}
 				break;
 				}
 
-	//			// 旋转所有模型
-	//			for (size_t i = 0; i < m_entityList.size(); i++)
-	//			{
-	//				Transform tranform = m_entityList[i]->GetTransform();
-	//				tranform.AddRotation(m_vAxisDir[0], fAngle0);
-	//				tranform.AddRotation(m_vAxisDir[1], fAngle1);
-	//				tranform.AddRotation(m_vAxisDir[2], fAngle2);
-
-	//				m_entityList[i]->SetTransform(tranform);
-	//			}
-
-	//			// 旋转所有模型
-	//			for (size_t i = 0; i < m_transforms.size(); i++)
-	//			{
-	//				m_transforms[i]->AddRotation(m_vAxisDir[0], fAngle0);
-	//				m_transforms[i]->AddRotation(m_vAxisDir[1], fAngle1);
-	//				m_transforms[i]->AddRotation(m_vAxisDir[2], fAngle2);
-	//			}
+				onRotate(Echo::Vector3(angleX, angleY, angleZ));
 			}
 			break;
 
@@ -638,6 +594,17 @@ namespace Studio
 		}
 	}
 
+	void TransformWidget::onRotate(const Echo::Vector3& rotate)
+	{
+		if (rotate != Echo::Vector3::ZERO)
+		{
+			if (m_listener)
+			{
+				m_listener->onRotate(rotate);
+			}
+		}
+	}
+
 	void TransformWidget::SetEditType(EditType type)
 	{
 		m_editType = type;
@@ -727,5 +694,32 @@ namespace Studio
 
 		*pOut = pointEnd - pointBegin;
 		return pOut;
+	}
+
+	float TransformWidget::rotateOnPlane(const Echo::Plane& plane, const Echo::Ray& ray0, const Echo::Ray& ray1)
+	{
+		// intersection
+		float hitDistance0;
+		float hitDistance1;
+		Echo::Ray::HitInfo hitResult0;
+		Echo::Ray::HitInfo hitResult1;
+		if (!ray0.hitPlane(plane, hitDistance0, hitResult0) || !ray1.hitPlane(plane, hitDistance1, hitResult1))
+		{
+			return 0.f;
+		}
+
+		Echo::Vector3 pointBegin = hitResult0.hitPos;
+		Echo::Vector3 pointEnd = hitResult1.hitPos;
+
+		float angle = AresTwoLineAngle(pointBegin - m_position, pointEnd - m_position);
+
+		Echo::Vector3 normal;
+		normal = (m_position - pointBegin).cross(pointEnd - m_position);
+		if (normal.dot(plane.n) > 0.0f)
+		{
+			angle = -angle;
+		}
+
+		return Echo::Math::RAD2DEG * angle;
 	}
 }

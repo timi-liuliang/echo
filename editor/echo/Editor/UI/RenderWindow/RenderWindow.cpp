@@ -124,11 +124,9 @@ namespace Studio
 	{
 		if (m_actionTransition->isChecked())
 		{
-			if (m_transformWidget)
-				m_transformWidget->SetEditType(TransformWidget::EditType::Translate);
+			OperationManager::instance()->setOperationType(OperationManager::Translate);
 
-			m_actionRotation->setChecked(false);
-			m_actionScale->setChecked(false);
+			updateTransformToolBarCheckStates();
 		}
 	}
 
@@ -136,11 +134,9 @@ namespace Studio
 	{
 		if (m_actionRotation->isChecked())
 		{
-			if (m_transformWidget)
-				m_transformWidget->SetEditType(TransformWidget::EditType::Rotate);
+			OperationManager::instance()->setOperationType(OperationManager::Rotate);
 
-			m_actionTransition->setChecked(false);
-			m_actionScale->setChecked(false);
+			updateTransformToolBarCheckStates();
 		}
 	}
 
@@ -148,12 +144,17 @@ namespace Studio
 	{
 		if (m_actionScale->isChecked())
 		{
-			if (m_transformWidget)
-				m_transformWidget->SetEditType(TransformWidget::EditType::Scale);
+			OperationManager::instance()->setOperationType(OperationManager::Scale);
 
-			m_actionTransition->setChecked(false);
-			m_actionRotation->setChecked(false);
+			updateTransformToolBarCheckStates();
 		}
+	}
+
+	void RenderWindow::updateTransformToolBarCheckStates()
+	{
+		m_actionTransition->setChecked(OperationManager::instance()->isOperationType(OperationManager::Translate));
+		m_actionRotation->setChecked(OperationManager::instance()->isOperationType(OperationManager::Rotate));
+		m_actionScale->setChecked(OperationManager::instance()->isOperationType(OperationManager::Scale));
 	}
 
 	void RenderWindow::wheelEvent(QWheelEvent * e)
