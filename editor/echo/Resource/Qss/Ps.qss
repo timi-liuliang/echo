@@ -184,21 +184,25 @@ QComboBox QAbstractItemView
 QToolButton
 {
 	border: 0px solid #666666;
+	border-radius: 3.6px;
 }
 
 QToolButton:hover
 {
 	border: 2px solid #1E90FF;
+	border-radius: 3.6px;
 }
 
 QToolButton:pressed
 {
 	border: 2px solid #666666;
+	border-radius: 3.6px;
 }
 
 QToolButton:checked
 {
 	background-color: rgb( 56, 56, 56);
+	border-radius: 3.6px;
 }
 
 QListWidget
