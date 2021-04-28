@@ -43,14 +43,14 @@ namespace Studio
 		}
 	}
 
-	void OperationScale::onScale(const Echo::Vector3& rotate)
+	void OperationScale::onScale(const Echo::Vector3& scale)
 	{
 		for (Echo::i32 id : m_selectedObjects)
 		{
 			Echo::Node* node = dynamic_cast<Echo::Node*>(Echo::Object::getById(id));
 			if (node)
 			{
-				node->setLocalYawPitchRoll(node->getLocalYawPitchRoll() + rotate);
+				node->setLocalScaling(node->getLocalScaling() + scale);
 			}
 		}
 	}

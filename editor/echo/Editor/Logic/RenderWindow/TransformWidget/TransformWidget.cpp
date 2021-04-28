@@ -6,21 +6,6 @@
 
 namespace Studio
 {
-	static float AresTwoLineAngle(const Echo::Vector3& lineFirst, const Echo::Vector3& lineSecond)
-	{
-		float length = lineFirst.len() * lineSecond.len();
-		if (length == 0.0f)
-		{
-			return 0.0f;
-		}
-
-		length = lineFirst.dot(lineSecond) / length;
-        length = std::max<float>(-1.0f, length);
-        length = std::min<float>(1.0f, length);
-
-		return acos(length);
-	}
-
 	TransformWidget::TransformWidget()
 	{
 		m_editType = EditType::Translate;
@@ -115,7 +100,7 @@ namespace Studio
 		{
 			if (m_is2d)
 			{
-				Vector3 position(m_position.x, m_position.y, -255.f);
+				Vector3 position(m_position.x, m_position.y, m_2dDepth);
 				m_axis->setWorldPosition(position);
 
 				// axis line
@@ -125,9 +110,9 @@ namespace Studio
 				// plane
 				m_axis->drawLine(Vector3(0.4f, 0.0f, 0.0f) * m_scale, Vector3(0.0f, 0.4f, 0.0f) * m_scale, isScaleType(ScaleType::All) ? White : Color::YELLOW);
 
-				// cones
-				drawBox(Echo::Vector3(0.06f, 0.06f, 0.06f) * m_scale, Transform(Vector3::UNIT_X * m_scale, Vector3::ONE, Quaternion::IDENTITY), isScaleType(ScaleType::XAxis) ? White : Color::RED);
-				drawBox(Echo::Vector3(0.06f, 0.06f, 0.06f) * m_scale, Transform(Vector3::UNIT_Y * m_scale, Vector3::ONE, Quaternion::fromVec3ToVec3(Echo::Vector3::UNIT_X, Echo::Vector3::UNIT_Y)), isScaleType(ScaleType::YAxis) ? White : Echo::Color::GREEN);
+				// boxes
+				drawBox(m_scaleBoxExtent * m_scale, Transform(Vector3::UNIT_X * m_scale, Vector3::ONE, Quaternion::IDENTITY), isScaleType(ScaleType::XAxis) ? White : Color::RED);
+				drawBox(m_scaleBoxExtent * m_scale, Transform(Vector3::UNIT_Y * m_scale, Vector3::ONE, Quaternion::fromVec3ToVec3(Echo::Vector3::UNIT_X, Echo::Vector3::UNIT_Y)), isScaleType(ScaleType::YAxis) ? White : Echo::Color::GREEN);
 			}
 			else
 			{
@@ -144,26 +129,11 @@ namespace Studio
 				m_axis->drawLine(Vector3(0.4f, 0.0f, 0.0f) * m_scale, Vector3(0.0f, 0.0f, 0.4f) * m_scale, isScaleType(ScaleType::All) ? White : Color::YELLOW);
 
 				// boxes
-				drawBox(Echo::Vector3(0.06f, 0.06f, 0.06f) * m_scale, Transform(Vector3::UNIT_X * m_scale, Vector3::ONE, Quaternion::IDENTITY), isScaleType(ScaleType::XAxis) ? White : Color::RED);
-				drawBox(Echo::Vector3(0.06f, 0.06f, 0.06f) * m_scale, Transform(Vector3::UNIT_Y * m_scale, Vector3::ONE, Quaternion::fromVec3ToVec3(Echo::Vector3::UNIT_X, Echo::Vector3::UNIT_Y)), isScaleType(ScaleType::YAxis) ? White : Echo::Color::GREEN);
-				drawBox(Echo::Vector3(0.06f, 0.06f, 0.06f) * m_scale, Transform(Vector3::UNIT_Z * m_scale, Vector3::ONE, Quaternion::fromVec3ToVec3(Echo::Vector3::UNIT_X, Echo::Vector3::UNIT_Z)), isScaleType(ScaleType::ZAxis) ? White : Echo::Color::BLUE);
+				drawBox(m_scaleBoxExtent * m_scale, Transform(Vector3::UNIT_X * m_scale, Vector3::ONE, Quaternion::IDENTITY), isScaleType(ScaleType::XAxis) ? White : Color::RED);
+				drawBox(m_scaleBoxExtent * m_scale, Transform(Vector3::UNIT_Y * m_scale, Vector3::ONE, Quaternion::fromVec3ToVec3(Echo::Vector3::UNIT_X, Echo::Vector3::UNIT_Y)), isScaleType(ScaleType::YAxis) ? White : Echo::Color::GREEN);
+				drawBox(m_scaleBoxExtent * m_scale, Transform(Vector3::UNIT_Z * m_scale, Vector3::ONE, Quaternion::fromVec3ToVec3(Echo::Vector3::UNIT_X, Echo::Vector3::UNIT_Z)), isScaleType(ScaleType::ZAxis) ? White : Echo::Color::BLUE);
 			}
 		}
-
-		//// 缩放
-		//m_pScale = visualShapeMgr.CreateVisualShape(5);
-		//Vector3 positions[] =
-		//{
-		//	Vector3(0.5f, 0.0f, 0.0f),
-		//	Vector3(0.0f, 0.5f, 0.0f),
-		//	Vector3(0.0f, 0.0f, 0.5f),
-		//};
-
-		//WORD  indices[] = { 0, 1, 2 };
-
-		//m_pScale->Set(RenderLayout::TT_TriangleList, positions, sizeof(positions), indices, sizeof(indices), EF_R16UI);
-		//m_pScale->SetColor(0xFF33AAFF);
-		//m_pScale->SetVisible(false);
 	}
 
 	void TransformWidget::drawCone(float radius, float height, const Echo::Transform& transform, const Echo::Color& color)
@@ -382,26 +352,76 @@ namespace Studio
 			}
 			break;
 
-	//		case EM_EDIT_SCALE:
-	//		{
-	//			// 缩放所有模型
-	//			for (size_t i = 0; i < m_entityList.size(); i++)
-	//			{
-	//				Transform tranform = m_entityList[i]->GetTransform();
-	//				float scale = tranform.GetScale().x - 0.002f * (ptPre->y - ptCurr->y);
-	//				tranform.SetScale(scale);
+			case EditType::Scale:
+			{
+				Echo::Vector2 relativeMove = localPos - m_mousePos;
+				Echo::Vector3 relaScale;
 
-	//				m_entityList[i]->SetTransform(tranform);
-	//			}
+				if (m_is2d)
+				{
+					switch (m_scaleType)
+					{
+					case ScaleType::XAxis:
+					{
+						Echo::Plane plane(m_position, Echo::Vector3::UNIT_Z);
+						translateOnPlane(&relaScale, plane, ray0, ray1);
+						relaScale.y = 0.f;
 
-	//			// 旋转所有模型
-	//			for (size_t i = 0; i < m_transforms.size(); i++)
-	//			{
-	//				float scale = m_transforms[i]->GetScale().x - 0.002f * (ptPre->y - ptCurr->y);
-	//				m_transforms[i]->SetScale(scale);
-	//			}
-	//		}
-	//		break;
+						break;
+					}
+					case ScaleType::YAxis:
+					{
+						Echo::Plane plane(m_position, Echo::Vector3::UNIT_Z);
+						translateOnPlane(&relaScale, plane, ray0, ray1);
+						relaScale.x = 0.f;
+
+						break;
+					}
+					case ScaleType::All:
+					{
+						float finalScale = (relativeMove.x + relativeMove.y) * 0.5f;
+						relaScale = Echo::Vector3(finalScale, finalScale, 0.f);
+
+						break;
+					}}
+				}
+				else
+				{
+					switch (m_scaleType)
+					{
+					case ScaleType::XAxis:
+					{
+						float fDist = translateOnAxis(ray0, ray1, m_position, Echo::Vector3::UNIT_X);
+						relaScale = fDist * Echo::Vector3::UNIT_X;
+
+						break;
+					}
+					case ScaleType::YAxis:
+					{
+						float fDist = translateOnAxis(ray0, ray1, m_position, Echo::Vector3::UNIT_Y);
+						relaScale = fDist * Echo::Vector3::UNIT_Y;
+
+						break;
+					}
+					case ScaleType::ZAxis:
+					{
+						float fDist = translateOnAxis(ray0, ray1, m_position, Echo::Vector3::UNIT_Z);
+						relaScale = fDist * Echo::Vector3::UNIT_Z;
+
+						break;
+					}
+					case ScaleType::All:
+					{
+						float finalScale = (relativeMove.x + relativeMove.y) * 0.5f;
+						relaScale = Echo::Vector3(finalScale, finalScale, finalScale);
+
+						break;
+					}}
+				}
+
+				onScale(relaScale * 0.002f);
+			}
+			break;
             default: break;
 			}
 		}
@@ -430,6 +450,23 @@ namespace Studio
 		}
 	}
 
+	void TransformWidget::updateScaleCollisionBox()
+	{
+		using namespace Echo;
+
+		if (m_is2d)
+		{
+			m_scaleBoxs[int(ScaleType::XAxis)].set(m_position + Vector3(1.f, 0.f, 0.f) * m_scale, Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, m_scaleBoxExtent.x * m_scale, m_scaleBoxExtent.y * m_scale, m_scaleBoxExtent.z * m_scale);
+			m_scaleBoxs[int(ScaleType::YAxis)].set(m_position + Vector3(0.f, 1.f, 0.f) * m_scale, Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, m_scaleBoxExtent.x * m_scale, m_scaleBoxExtent.y * m_scale, m_scaleBoxExtent.z * m_scale);
+		}
+		else
+		{
+			m_scaleBoxs[int(ScaleType::XAxis)].set(m_position + Vector3(1.f, 0.f, 0.f) * m_scale, Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, m_scaleBoxExtent.x * m_scale, m_scaleBoxExtent.y * m_scale, m_scaleBoxExtent.z * m_scale);
+			m_scaleBoxs[int(ScaleType::YAxis)].set(m_position + Vector3(0.f, 1.f, 0.f) * m_scale, Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, m_scaleBoxExtent.x * m_scale, m_scaleBoxExtent.y * m_scale, m_scaleBoxExtent.z * m_scale);
+			m_scaleBoxs[int(ScaleType::ZAxis)].set(m_position + Vector3(0.f, 0.f, 1.f) * m_scale, Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, m_scaleBoxExtent.x * m_scale, m_scaleBoxExtent.y * m_scale, m_scaleBoxExtent.z * m_scale);
+		}
+	}
+
 	bool TransformWidget::onMouseDown(const Echo::Vector2& localPos)
 	{
 		m_mousePos = localPos;
@@ -441,9 +478,6 @@ namespace Studio
 			Echo::Ray ray;
 			camera->getCameraRay(ray, localPos);
 
-			// update collision box
-			updateTranslateCollisionBox();
-
 			// hit operate
 			if (m_isVisible)
 			{
@@ -451,6 +485,9 @@ namespace Studio
 				{
 				case EditType::Translate:
 				{
+					// update collision box
+					updateTranslateCollisionBox();
+
 					m_moveType = MoveType::None;
 					for (int i = int(MoveType::XAxis); i <= int(MoveType::XZPlane); i++)
 					{
@@ -488,63 +525,60 @@ namespace Studio
 					draw();
 				} 
 				break;
-				//case EM_EDIT_ROTATE:
-				//{
-				//	float fLastDist = 1e30f;
-				//	float fDist;
-				//	Vector3 intersectPos;
-				//	Plane3 plane;
-				//	m_rotateType = EM_ROTATE_NULL;
-
-				//	// 选择
-				//	for (int i = 0; i < 3; i++)
-				//	{
-				//		Line3 ray(rayOrig, rayDir);
-				//		Plane3 plane(m_vPosition, m_vAxisDir[i]);
-				//		IntrLine3Plane3 intrLP(ray, plane);
-				//		if (intrLP.Test())
-				//		{
-				//			fDist = intrLP.m_distance;
-				//			intersectPos = intrLP.m_intrPoint;
-				//			if ((intersectPos - m_vPosition).Length() > 0.8f*m_fScale && (intersectPos - m_vPosition).Length() < 1.2f*m_fScale)
-				//			{
-				//				if (i == 0) m_rotateType = EM_ROTATE_X;
-				//				if (i == 1) m_rotateType = EM_ROTATE_Y;
-				//				if (i == 2) m_rotateType = EM_ROTATE_Z;
-
-				//				fLastDist = fDist;
-
-				//				break;
-				//			}
-				//		}
-				//	}
-
-				//	// 显示
-				//	switch (m_rotateType)
-				//	{
-				//	case EM_ROTATE_X:
-				//		m_pCycle[0]->SetColor(0xFFFFFFFF);
-				//		break;
-				//	case EM_ROTATE_Y:
-				//		m_pCycle[1]->SetColor(0xFFFFFFFF);
-				//		break;
-				//	case EM_ROTATE_Z:
-				//		m_pCycle[2]->SetColor(0xFFFFFFFF);
-				//		break;
-				//	}
-				//}
-				//break;
 				case EditType::Scale:
 				{
-				//	Triangle3 triangle(m_vPosition, m_vPosition, m_vPosition);
-				//	triangle.m_v[0].x += 0.5f*m_fScale; triangle.m_v[1].y += 0.5f*m_fScale; triangle.m_v[2].z += 0.5f*m_fScale;
-				//	Line3 line3(rayOrig, rayDir);
-				//	float fdist;
+					updateScaleCollisionBox();
+	
+					m_scaleType = ScaleType::None;
 
-				//	if (Intersect(line3, triangle, fdist))
-				//	{
-				//		m_pScale->SetColor(0xFFFFFFFF);
-				//	}
+					if (m_is2d)
+					{
+						Echo::Triangle triangle
+						(
+							m_position + Echo::Vector3::UNIT_X * 0.4f * m_scale,
+							m_position + Echo::Vector3::UNIT_Y * 0.4f * m_scale,
+							m_position
+						);
+
+						float tmin;
+						if (ray.hitTriangle(triangle, tmin))
+						{
+							m_scaleType = ScaleType::All;
+						}
+
+						for (int i = int(RotateType::XAxis); i <= int(RotateType::YAxis); i++)
+						{
+							if (ray.hitBox3(m_scaleBoxs[i]))
+							{
+								m_scaleType = ScaleType(i);
+								break;
+							}
+						}
+					}
+					else
+					{
+						Echo::Triangle triangle
+						(
+							m_position + Echo::Vector3::UNIT_X * 0.4f * m_scale,
+							m_position + Echo::Vector3::UNIT_Y * 0.4f * m_scale,
+							m_position + Echo::Vector3::UNIT_Z * 0.4f * m_scale
+						);
+
+						float tmin;
+						if (ray.hitTriangle(triangle, tmin))
+						{
+							m_scaleType = ScaleType::All;
+						}
+
+						for (int i = int(RotateType::XAxis); i <= int(RotateType::ZAxis); i++)
+						{
+							if (ray.hitBox3(m_scaleBoxs[i]))
+							{
+								m_scaleType = ScaleType(i);
+								break;
+							}
+						}
+					}
 
 					draw();
 				}
@@ -560,6 +594,7 @@ namespace Studio
 	{
 		m_moveType = MoveType::None;
 		m_rotateType = RotateType::None;
+		m_scaleType = ScaleType::None;
 
 		draw();
 	}
@@ -593,9 +628,7 @@ namespace Studio
 			setPosition(m_position + trans);
 
 			if (m_listener)
-			{
 				m_listener->onTranslate(trans);
-			}
 		}
 	}
 
@@ -604,9 +637,16 @@ namespace Studio
 		if (rotate != Echo::Vector3::ZERO)
 		{
 			if (m_listener)
-			{
 				m_listener->onRotate(rotate);
-			}
+		}
+	}
+
+	void TransformWidget::onScale(const Echo::Vector3& scale)
+	{
+		if (scale != Echo::Vector3::ZERO)
+		{
+			if (m_listener)
+				m_listener->onScale(scale);
 		}
 	}
 
@@ -720,7 +760,7 @@ namespace Studio
 		Echo::Vector3 pointBegin = hitResult0.hitPos;
 		Echo::Vector3 pointEnd = hitResult1.hitPos;
 
-		float angle = AresTwoLineAngle(pointBegin - m_position, pointEnd - m_position);
+		float angle = calcAngleBetweenTwoLines(pointBegin - m_position, pointEnd - m_position);
 
 		Echo::Vector3 normal;
 		normal = (m_position - pointBegin).cross(pointEnd - m_position);
@@ -730,5 +770,20 @@ namespace Studio
 		}
 
 		return Echo::Math::RAD2DEG * angle;
+	}
+
+	float TransformWidget::calcAngleBetweenTwoLines(const Echo::Vector3& lineFirst, const Echo::Vector3& lineSecond)
+	{
+		float length = lineFirst.len() * lineSecond.len();
+		if (length == 0.0f)
+		{
+			return 0.0f;
+		}
+
+		length = lineFirst.dot(lineSecond) / length;
+		length = std::max<float>(-1.0f, length);
+		length = std::min<float>(1.0f, length);
+
+		return acos(length);
 	}
 }

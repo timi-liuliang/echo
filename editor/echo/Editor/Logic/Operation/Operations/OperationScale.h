@@ -19,7 +19,7 @@ namespace Studio
 		virtual void tick(const Echo::set<Echo::ui32>::type& objects);
 
 		// on translate
-		virtual void onScale(const Echo::Vector3& rotate) override;
+		virtual void onScale(const Echo::Vector3& scale) override;
 
 	private:
 		// get transform widget

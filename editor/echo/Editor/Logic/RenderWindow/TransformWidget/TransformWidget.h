@@ -97,10 +97,12 @@ namespace Studio
 
 		// update collision box
 		void updateTranslateCollisionBox();
+		void updateScaleCollisionBox();
 
 		// translate
 		void onTranslate(const Echo::Vector3& trans);
 		void onRotate(const Echo::Vector3& rotate);
+		void onScale(const Echo::Vector3& scale);
 
 	private:
 		// set scale
@@ -113,6 +115,9 @@ namespace Studio
 		// rotate help function
 		float rotateOnPlane(const Echo::Plane& plane, const Echo::Ray& ray0, const Echo::Ray& ray1);
 
+		// calculate angle between two lines
+		float calcAngleBetweenTwoLines(const Echo::Vector3& lineFirst, const Echo::Vector3& lineSecond);
+
 	private:
 		bool						m_is2d = false;
 		float						m_2dDepth = 250.f;
@@ -123,9 +128,11 @@ namespace Studio
 		EditType					m_editType;
 		MoveType					m_moveType;
 		RotateType					m_rotateType;
-		ScaleType					m_scaleType;
+		Echo::array<Echo::Box3, 3>	m_scaleBoxs;
+		ScaleType					m_scaleType = ScaleType::None;
 		bool						m_isVisible = true;
 		float						m_scale = 1.f;
+		Echo::Vector3				m_scaleBoxExtent = Echo::Vector3(0.08f, 0.08f, 0.08f);
 		Listener*					m_listener = nullptr;
 	};
 }
