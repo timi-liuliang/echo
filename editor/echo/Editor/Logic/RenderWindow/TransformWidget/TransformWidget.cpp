@@ -37,7 +37,7 @@ namespace Studio
 
 	void TransformWidget::tick()
 	{
-		updateScale(100.f);
+		updateScale(TWODIMENSION_SCALE);
 	}
 
 	void TransformWidget::draw()
