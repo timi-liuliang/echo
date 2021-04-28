@@ -35,6 +35,12 @@ namespace Studio
 
 			active();
 		}
+
+		TransformWidget* transformWidget = getTransformWidget();
+		if (transformWidget)
+		{
+			transformWidget->tick();
+		}
 	}
 
 	void OperationScale::onScale(const Echo::Vector3& rotate)

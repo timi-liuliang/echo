@@ -35,6 +35,12 @@ namespace Studio
 
 			active();
 		}
+
+		TransformWidget* transformWidget = getTransformWidget();
+		if (transformWidget)
+		{
+			transformWidget->tick();
+		}
 	}
 
 	void OperationRotate::onRotate(const Echo::Vector3& rotate)

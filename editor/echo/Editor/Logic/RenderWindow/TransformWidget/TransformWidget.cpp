@@ -35,6 +35,11 @@ namespace Studio
 		draw();
 	}
 
+	void TransformWidget::tick()
+	{
+		updateScale(100.f);
+	}
+
 	void TransformWidget::draw()
 	{
 		using namespace Echo;
@@ -612,24 +617,28 @@ namespace Studio
 		draw();
 	}
 
-	void  TransformWidget::setScale(float fScale)
+	void TransformWidget::updateScale(float halfPixels)
 	{
-		/*
-		m_fScale = fScale;
-		for (int i = 0; i < 3; i++)
+		Echo::Camera* camera = (Echo::Render::getRenderTypes() & Echo::Render::Type::Type_3D) ? Echo::NodeTree::instance()->get3dCamera() : Echo::NodeTree::instance()->get2dCamera();
+		if (camera && m_isVisible)
 		{
-			//m_pAxes[i]->GetTransform()->SetScale( fScale);
-			m_pPlaneLine[i]->GetTransform()->SetScale( fScale);
-			m_pPlaneLine[3+i]->GetTransform()->SetScale( fScale);
-			m_pCone[i]->GetTransform()->SetScale( fScale);
-			m_pCycle[i]->GetTransform()->SetScale( fScale);
-		}
+			if (camera->getProjectionMode() == Echo::Camera::ProjMode::PM_PERSPECTIVE)
+			{
+				float halfHeight = camera->getHeight() * 0.5f;
+				float ratio = halfPixels / halfHeight;
+				float halfNearPlaneWidth = camera->getNear() * tan(camera->getFov() * 0.5f);
+				float pointDistance = (camera->getPosition() - m_position).len();
 
-		// 设置位置
-		m_pCone[0]->GetTransform()->SetTrans(m_fScale + m_vPosition.x, m_vPosition.y, m_vPosition.z);
-		m_pCone[1]->GetTransform()->SetTrans(m_vPosition.x, m_fScale + m_vPosition.y, m_vPosition.z);
-		m_pCone[2]->GetTransform()->SetTrans(m_vPosition.x, m_vPosition.y, m_fScale + m_vPosition.z);
-		*/
+				float scale = (ratio * halfNearPlaneWidth) * (pointDistance / camera->getNear());
+				
+				if (m_scale != scale)
+				{
+					m_scale = scale;
+
+					draw();
+				}
+			}
+		}
 	}
 
 	float TransformWidget::translateOnAxis(const Echo::Ray& ray0, const Echo::Ray& ray1, const Echo::Vector3& entityPos, const Echo::Vector3& translateAxis)

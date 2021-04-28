@@ -60,6 +60,9 @@ namespace Studio
 	public:
 		TransformWidget();
 
+		// tick
+		void tick();
+
 		// mouse event
 		bool onMouseDown(const Echo::Vector2& localPos);
 		void onMouseMove(const Echo::Vector2& localPos);
@@ -79,9 +82,6 @@ namespace Studio
 
 		// set edit type
 		void SetEditType(EditType type);
-
-		// set scale
-		void  setScale(float fScale);
 
 		// check move type
 		bool isMoveType(MoveType type) const { return m_moveType == type; }
@@ -103,6 +103,9 @@ namespace Studio
 		void onRotate(const Echo::Vector3& rotate);
 
 	private:
+		// set scale
+		void  updateScale(float halfPixels);
+
 		// translate help function
 		float translateOnAxis(const Echo::Ray& ray0, const Echo::Ray& ray1, const Echo::Vector3& entityPos, const Echo::Vector3& translateAxis);
 		Echo::Vector3* translateOnPlane(Echo::Vector3* pOut, const Echo::Plane& plane, const Echo::Ray& ray0, const Echo::Ray& ray1);
