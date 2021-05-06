@@ -612,7 +612,7 @@ namespace Studio
 						if (ray.hitPlane(Echo::Plane(m_position, dirs[i]), tmin, hitInfo))
 						{
 							float len = (m_position - hitInfo.hitPos).len();
-							if (len > 0.8f * m_scale && len < 1.2f * m_scale)
+							if (len > 0.75f * m_scale && len < 1.05f * m_scale)
 							{
 								m_rotateType = RotateType(i);
 							}
