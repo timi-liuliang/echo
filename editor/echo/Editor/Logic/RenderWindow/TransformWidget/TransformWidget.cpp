@@ -103,20 +103,20 @@ namespace Studio
 			Vector3 position(m_position.x, m_position.y, m_2dDepth);
 			m_axis->setWorldPosition(position);
 
-			drawSecotr(0.8f * m_scale, 1.f * m_scale, Transform(Vector3::ZERO, Vector3::ONE, Quaternion::fromVec3ToVec3(Vector3::UNIT_X, Vector3::UNIT_Z)), isRotateType(RotateType::ZAxis) ? Color::WHITE : Color::BLUE);
+			drawSecotr(0.8f * m_scale, 1.f * m_scale, Transform(Vector3::ZERO, Vector3::ONE, Quaternion::fromVec3ToVec3(Vector3::UNIT_X, Vector3::UNIT_Z)), isRotateType(RotateType::ZAxis) ? Color::WHITE : Color::BLUE, isRotateType(RotateType::ZAxis));
 		}
 		else
 		{
 			m_axis->setWorldPosition(m_position);
 
 			if(isRotateType(RotateType::None) || isRotateType(RotateType::XAxis))
-				drawSecotr(0.8f * m_scale, 1.f * m_scale, Transform(Vector3::ZERO, Vector3::ONE, Quaternion::IDENTITY), isRotateType(RotateType::XAxis) ? Color::WHITE : Color::RED);
+				drawSecotr(0.8f * m_scale, 1.f * m_scale, Transform(Vector3::ZERO, Vector3::ONE, Quaternion::IDENTITY), isRotateType(RotateType::XAxis) ? Color::WHITE : Color::RED, isRotateType(RotateType::XAxis));
 
 			if (isRotateType(RotateType::None) || isRotateType(RotateType::YAxis))
-				drawSecotr(0.8f * m_scale, 1.f * m_scale, Transform(Vector3::ZERO, Vector3::ONE, Quaternion::fromVec3ToVec3(Vector3::UNIT_X, Vector3::UNIT_Y)), isRotateType(RotateType::YAxis) ? Color::WHITE : Color::GREEN);
+				drawSecotr(0.8f * m_scale, 1.f * m_scale, Transform(Vector3::ZERO, Vector3::ONE, Quaternion::fromVec3ToVec3(Vector3::UNIT_X, Vector3::UNIT_Y)), isRotateType(RotateType::YAxis) ? Color::WHITE : Color::GREEN, isRotateType(RotateType::YAxis));
 			
 			if (isRotateType(RotateType::None) || isRotateType(RotateType::ZAxis))
-				drawSecotr(0.8f * m_scale, 1.f * m_scale, Transform(Vector3::ZERO, Vector3::ONE, Quaternion::fromVec3ToVec3(Vector3::UNIT_X, Vector3::UNIT_Z)), isRotateType(RotateType::ZAxis) ? Color::WHITE : Color::BLUE);
+				drawSecotr(0.8f * m_scale, 1.f * m_scale, Transform(Vector3::ZERO, Vector3::ONE, Quaternion::fromVec3ToVec3(Vector3::UNIT_X, Vector3::UNIT_Z)), isRotateType(RotateType::ZAxis) ? Color::WHITE : Color::BLUE, isRotateType(RotateType::ZAxis));
 		}
 	}
 
@@ -223,7 +223,7 @@ namespace Studio
 		m_axis->drawTriangle(positions[1], positions[6], positions[5], color);
 	}
 
-	void TransformWidget::drawSecotr(float startRadius, float endRadius, const Echo::Transform& transform, const Echo::Color& color)
+	void TransformWidget::drawSecotr(float startRadius, float endRadius, const Echo::Transform& transform, const Echo::Color& color, bool drawRuler)
 	{
 		// border
 		Echo::Color borderColor(color.r, color.g, color.b, 0.65f);
@@ -235,7 +235,8 @@ namespace Studio
 		fillSector(startRadius, endRadius, transform, fillColor);
 
 		// ruler
-		drawCircleRuler(startRadius, transform, color);
+		if(drawRuler)
+			drawCircleRuler(startRadius, transform, color);
 	}
 
 	void TransformWidget::drawCircle(float radius, const Echo::Transform& transform, const Echo::Color& color)

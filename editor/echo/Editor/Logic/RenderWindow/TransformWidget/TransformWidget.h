@@ -94,7 +94,7 @@ namespace Studio
 		void drawTranslate();
 		void drawRotator();
 		void drawScale();
-		void drawSecotr(float startRadius, float endRadius, const Echo::Transform& transform, const Echo::Color& color);
+		void drawSecotr(float startRadius, float endRadius, const Echo::Transform& transform, const Echo::Color& color, bool drawRuler);
 		void drawCone(float radius, float height, const Echo::Transform& transform, const Echo::Color& color);
 		void drawBox(const Echo::Vector3& extent, const Echo::Transform& transform, const Echo::Color& color);
 		void drawCircle(float radius, const Echo::Transform& transform, const Echo::Color& color);
