@@ -91,6 +91,9 @@ namespace Studio
 	private:
 		// draw
 		void draw();
+		void drawTranslate();
+		void drawRotator();
+		void drawScale();
 		void drawCone(float radius, float height, const Echo::Transform& transform, const Echo::Color& color);
 		void drawBox(const Echo::Vector3& extent, const Echo::Transform& transform, const Echo::Color& color);
 		void drawCircle(float radius, const Echo::Transform& transform, const Echo::Color& color);
