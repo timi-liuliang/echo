@@ -103,15 +103,15 @@ namespace Studio
 			Vector3 position(m_position.x, m_position.y, m_2dDepth);
 			m_axis->setWorldPosition(position);
 
-			drawCircle(1.f * m_scale, Transform(Vector3::ZERO, Vector3::ONE, Quaternion::fromVec3ToVec3(Vector3::UNIT_X, Vector3::UNIT_Z)), isRotateType(RotateType::ZAxis) ? Color::WHITE : Color::BLUE);
+			drawSecotr(0.8f * m_scale, 1.f * m_scale, Transform(Vector3::ZERO, Vector3::ONE, Quaternion::fromVec3ToVec3(Vector3::UNIT_X, Vector3::UNIT_Z)), isRotateType(RotateType::ZAxis) ? Color::WHITE : Color::BLUE);
 		}
 		else
 		{
 			m_axis->setWorldPosition(m_position);
 
-			drawCircle(1.f * m_scale, Transform(Vector3::ZERO, Vector3::ONE, Quaternion::IDENTITY), isRotateType(RotateType::XAxis) ? Color::WHITE : Color::RED);
-			drawCircle(1.f * m_scale, Transform(Vector3::ZERO, Vector3::ONE, Quaternion::fromVec3ToVec3(Vector3::UNIT_X, Vector3::UNIT_Y)), isRotateType(RotateType::YAxis) ? Color::WHITE : Color::GREEN);
-			drawCircle(1.f * m_scale, Transform(Vector3::ZERO, Vector3::ONE, Quaternion::fromVec3ToVec3(Vector3::UNIT_X, Vector3::UNIT_Z)), isRotateType(RotateType::ZAxis) ? Color::WHITE : Color::BLUE);
+			drawSecotr(0.8f * m_scale, 1.f * m_scale, Transform(Vector3::ZERO, Vector3::ONE, Quaternion::IDENTITY), isRotateType(RotateType::XAxis) ? Color::WHITE : Color::RED);
+			drawSecotr(0.8f * m_scale, 1.f * m_scale, Transform(Vector3::ZERO, Vector3::ONE, Quaternion::fromVec3ToVec3(Vector3::UNIT_X, Vector3::UNIT_Y)), isRotateType(RotateType::YAxis) ? Color::WHITE : Color::GREEN);
+			drawSecotr(0.8f * m_scale, 1.f * m_scale, Transform(Vector3::ZERO, Vector3::ONE, Quaternion::fromVec3ToVec3(Vector3::UNIT_X, Vector3::UNIT_Z)), isRotateType(RotateType::ZAxis) ? Color::WHITE : Color::BLUE);
 		}
 	}
 
@@ -218,12 +218,29 @@ namespace Studio
 		m_axis->drawTriangle(positions[1], positions[6], positions[5], color);
 	}
 
+	void TransformWidget::drawSecotr(float startRadius, float endRadius, const Echo::Transform& transform, const Echo::Color& color)
+	{
+		// border
+		Echo::Color borderColor(color.r, color.g, color.b, 0.65f);
+		drawCircle(startRadius, transform, borderColor);
+		drawCircle(endRadius, transform, borderColor);
+
+		// region
+		Echo::Color fillColor(color.r, color.g, color.b, 0.25f);
+		fillSector(startRadius, endRadius, transform, fillColor);
+
+		// ruler
+		drawCircleRuler(startRadius, transform, color);
+	}
+
 	void TransformWidget::drawCircle(float radius, const Echo::Transform& transform, const Echo::Color& color)
 	{
-		Echo::array<Echo::Vector3, 25> positions;
-		for (int i = 0; i < 25; i++)
+		const Echo::i32 seperatorCount = 36;
+
+		Echo::array<Echo::Vector3, seperatorCount> positions;
+		for (int i = 0; i < seperatorCount; i++)
 		{
-			float theta = (2 * Echo::Math::PI * i) / 24.0f;
+			float theta = (2 * Echo::Math::PI * i) / (seperatorCount - 1.f);
 
 			positions[i].x = 0.0f;
 			positions[i].y = sinf(theta) * radius;
@@ -237,9 +254,63 @@ namespace Studio
 		}
 
 		// draw lines
-		for (int i = 0; i < 24; i++)
+		for (int i = 0; i < (seperatorCount-1); i++)
 		{
 			m_axis->drawLine(positions[i], positions[i + 1], color);
+		}
+	}
+
+	void TransformWidget::drawCircleRuler(float radius, const Echo::Transform& transform, const Echo::Color& color)
+	{
+		const Echo::i32 seperatorCount = 36;
+
+		Echo::array<Echo::Vector3, seperatorCount> positions;
+		for (int i = 0; i < seperatorCount; i++)
+		{
+			float theta = (2 * Echo::Math::PI * i) / (seperatorCount - 1.f);
+
+			positions[i].x = 0.0f;
+			positions[i].y = sinf(theta) * radius;
+			positions[i].z = cosf(theta) * radius;
+		}
+
+		// transform
+		for (int i = 0; i < int(positions.size()); i++)
+		{
+			positions[i] = transform.transformVec3(positions[i]);
+		}
+
+		// draw lines
+		for (int i = 0; i < seperatorCount; i++)
+		{
+			m_axis->drawLine(positions[i], positions[i]*1.06f, color);
+		}
+	}
+
+	void TransformWidget::fillSector(float startRadius, float endRadius, const Echo::Transform& transform, const Echo::Color& color)
+	{
+		const Echo::i32 seperatorCount = 36;
+
+		Echo::array<Echo::Vector3, seperatorCount*2> positions;
+		for (int i = 0; i < seperatorCount; i++)
+		{
+			float theta = (2 * Echo::Math::PI * i) / (seperatorCount - 1.f);
+
+			positions[i*2+0] = Echo::Vector3(0.f, sinf(theta) * startRadius, cosf(theta) * startRadius);
+			positions[i*2+1] = Echo::Vector3(0.f, sinf(theta) * endRadius, cosf(theta) * endRadius);
+		}
+
+		// transform
+		for (int i = 0; i < int(positions.size()); i++)
+		{
+			positions[i] = transform.transformVec3(positions[i]);
+		}
+
+		// draw
+		for (int i = 0; i < (seperatorCount - 1); i++)
+		{
+			m_axis->drawTriangle(positions[i*2+0], positions[i*2+1], positions[(i+1)*2+1], color);
+			m_axis->drawTriangle(positions[i*2+0], positions[(i+1)*2+1], positions[(i+1)*2+0], color);
 		}
 	}
 
