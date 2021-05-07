@@ -155,9 +155,9 @@ namespace Studio
 			m_axis->drawLine(Vector3(0.4f, 0.0f, 0.0f) * m_scale, Vector3(0.0f, 0.0f, 0.4f) * m_scale, isScaleType(ScaleType::All) ? m_selectedColor : Color::YELLOW);
 
 			// boxes
-			drawBox(m_scaleBoxExtent * m_scale, Transform(Vector3::UNIT_X * m_scale, Vector3::ONE, Quaternion::IDENTITY), isScaleType(ScaleType::XAxis) ? m_selectedColor : m_xAxisColor);
-			drawBox(m_scaleBoxExtent * m_scale, Transform(Vector3::UNIT_Y * m_scale, Vector3::ONE, Quaternion::fromVec3ToVec3(Vector3::UNIT_X, Vector3::UNIT_Y)), isScaleType(ScaleType::YAxis) ? m_selectedColor : m_yAxisColor);
-			drawBox(m_scaleBoxExtent * m_scale, Transform(Vector3::UNIT_Z * m_scale, Vector3::ONE, Quaternion::fromVec3ToVec3(Vector3::UNIT_X, Vector3::UNIT_Z)), isScaleType(ScaleType::ZAxis) ? m_selectedColor : m_zAxisColor);
+			drawBox(m_scaleBoxExtent * m_scale * 0.8f, Transform(Vector3::UNIT_X * m_scale, Vector3::ONE, Quaternion::IDENTITY), isScaleType(ScaleType::XAxis) ? m_selectedColor : m_xAxisColor);
+			drawBox(m_scaleBoxExtent * m_scale * 0.8f, Transform(Vector3::UNIT_Y * m_scale, Vector3::ONE, Quaternion::fromVec3ToVec3(Vector3::UNIT_X, Vector3::UNIT_Y)), isScaleType(ScaleType::YAxis) ? m_selectedColor : m_yAxisColor);
+			drawBox(m_scaleBoxExtent * m_scale * 0.8f, Transform(Vector3::UNIT_Z * m_scale, Vector3::ONE, Quaternion::fromVec3ToVec3(Vector3::UNIT_X, Vector3::UNIT_Z)), isScaleType(ScaleType::ZAxis) ? m_selectedColor : m_zAxisColor);
 		}
 	}
 

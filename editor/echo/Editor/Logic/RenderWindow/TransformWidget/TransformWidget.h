@@ -140,7 +140,7 @@ namespace Studio
 		ScaleType					m_scaleType = ScaleType::None;
 		bool						m_isVisible = true;
 		float						m_scale = 1.f;
-		Echo::Vector3				m_scaleBoxExtent = Echo::Vector3(0.08f, 0.08f, 0.08f);
+		Echo::Vector3				m_scaleBoxExtent = Echo::Vector3(0.06f, 0.06f, 0.06f);
 		Listener*					m_listener = nullptr;
 		Echo::Color					m_xAxisColor = Echo::Color::fromRGBA(211,84,97,255);
 		Echo::Color					m_yAxisColor = Echo::Color::fromRGBA(128, 185, 75, 255);
