@@ -142,5 +142,9 @@ namespace Studio
 		float						m_scale = 1.f;
 		Echo::Vector3				m_scaleBoxExtent = Echo::Vector3(0.08f, 0.08f, 0.08f);
 		Listener*					m_listener = nullptr;
+		Echo::Color					m_xAxisColor = Echo::Color::fromRGBA(211,84,97,255);
+		Echo::Color					m_yAxisColor = Echo::Color::fromRGBA(128, 185, 75, 255);
+		Echo::Color					m_zAxisColor = Echo::Color::fromRGBA(64, 138, 237, 255);
+		Echo::Color					m_selectedColor = Echo::Color::fromRGBA(220, 221, 221, 255);
 	};
 }
