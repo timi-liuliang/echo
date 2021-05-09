@@ -47,7 +47,9 @@ namespace Echo
 				pipelineInputAssemblyStateCreateInfo.topology = VKMapping::mapPrimitiveTopology(m_mesh->getTopologyType());
 
                 // https://gitmemory.com/issue/KhronosGroup/Vulkan-ValidationLayers/2124/678355023
-				vector<VkDynamicState>::type dynamicStateEnables = { };
+				vector<VkDynamicState>::type dynamicStateEnables;
+                if (m_mesh->getTopologyType()== Mesh::TopologyType::TT_LINELIST || m_mesh->getTopologyType() == Mesh::TopologyType::TT_LINESTRIP)
+                    dynamicStateEnables.emplace_back(VK_DYNAMIC_STATE_LINE_WIDTH);
 
 				VkPipelineDynamicStateCreateInfo dynamicState {};
 				dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;

@@ -336,6 +336,7 @@ namespace Echo
 
 		// device features
 		VkPhysicalDeviceFeatures deviceFeatures = {};
+		deviceFeatures.wideLines = true;
 
 		VkDeviceCreateInfo createInfo = {};
 		createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
