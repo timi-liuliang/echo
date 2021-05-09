@@ -104,6 +104,11 @@ namespace Echo
 		void buildShaderProgram();
 
 	public:
+		// raster state
+		RasterizerState* getRasterizerState();
+		void setRasterizerState(RasterizerState* rasterState) { m_rasterizerState = rasterState; }
+
+	public:
 		// Modified signal
 		DECLARE_SIGNAL(Signal0, onShaderChanged)
 
@@ -121,10 +126,12 @@ namespace Echo
 		void matchUniforms();
 
 	private:
-		ResourcePath		m_shaderPath;				// shader res path
-		StringArray			m_macros;
-		ShaderProgramPtr	m_shaderProgram;
-		UniformValueMap		m_uniformValues;
+		ResourcePath			m_shaderPath;				// shader res path
+		StringArray				m_macros;
+		ShaderProgramPtr		m_shaderProgram;
+		UniformValueMap			m_uniformValues;
+		DepthStencilStatePtr    m_depthState;
+		RasterizerStatePtr		m_rasterizerState;
 	};
 	typedef ResRef<Material> MaterialPtr;
 }

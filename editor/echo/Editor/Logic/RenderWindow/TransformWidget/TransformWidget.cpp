@@ -15,6 +15,7 @@ namespace Studio
 
 		m_axis = ECHO_DOWN_CAST<Echo::Gizmos*>(Echo::Class::create("Gizmos"));
 		m_axis->setParent(EchoEngine::instance()->getInvisibleEditorNode());
+		m_axis->setLineWidth(3.f);
 		m_axis->setVisible(true);
 
 		draw();

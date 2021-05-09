@@ -208,9 +208,9 @@ namespace Echo
         String                  m_psCode;
         String                  m_graph;
 		BlendState*             m_blendState = nullptr;
-		DepthStencilStatePtr    m_depthState = nullptr;
-		RasterizerState*	    m_rasterizerState = nullptr;
-        MultisampleState*       m_multiSampleState = nullptr;
+		DepthStencilStatePtr    m_depthState;
+		RasterizerStatePtr	    m_rasterizerState;
+        MultisampleStatePtr     m_multiSampleState;
         UniformMap              m_uniforms;
 
     protected:

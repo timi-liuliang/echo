@@ -232,7 +232,7 @@ namespace Echo
 
     const VkPipelineRasterizationStateCreateInfo* VKComputeProxy::getVkRasterizationStateCreateInfo()
     {
-        VKRasterizerState* vkState = ECHO_DOWN_CAST<VKRasterizerState*>(m_material->getShader()->getRasterizerState());
+        VKRasterizerState* vkState = ECHO_DOWN_CAST<VKRasterizerState*>(m_material->getRasterizerState());
         return vkState->getVkCreateInfo();
     }
 

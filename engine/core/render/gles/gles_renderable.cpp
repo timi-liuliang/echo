@@ -227,7 +227,7 @@ namespace Echo
 		{
 			GLESRenderer* glesRenderer = (ECHO_DOWN_CAST<GLESRenderer*>(Renderer::instance()));
 			glesRenderer->setDepthStencilState(shaderProgram->getDepthStencilState());
-			glesRenderer->setRasterizerState(shaderProgram->getRasterizerState());
+			glesRenderer->setRasterizerState(m_material->getRasterizerState());
 			glesRenderer->setBlendState(shaderProgram->getBlendState());
 		}
 	}

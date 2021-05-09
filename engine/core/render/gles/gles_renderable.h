@@ -15,7 +15,7 @@ namespace Echo
 			ui32	count;
 			ui32	type;
 			bool	bNormalize;
-			ui32	elementOffset;
+			size_t	elementOffset;
 		};
 		typedef vector<VertexDeclaration>::type	VertexDeclarationList;
 

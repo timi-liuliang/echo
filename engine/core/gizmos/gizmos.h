@@ -77,6 +77,11 @@ namespace Echo
 		// clear mesh data
 		void clear();
 
+	public:
+		// set line width
+		void setLineWidth(float lineWidth);
+		float getLineWidth() const;
+
 	protected:
 		// update
 		virtual void update_self() override;
@@ -94,6 +99,7 @@ namespace Echo
 		bool			    m_autoClear = false;
         ShaderProgramPtr    m_shader;
 		MaterialPtr		    m_material;
+		RasterizerStatePtr	m_rasterizerState;
 		Batch*			    m_lineBatch = nullptr;
 		Batch*			    m_triangleBatch = nullptr;
 		ShaderProgramPtr	m_shaderSprite;

@@ -273,8 +273,9 @@ namespace Echo
 
 	void ShaderProgram::clear()
 	{
+        m_depthState.reset();
+
 		EchoSafeDelete(m_blendState, BlendState);
-		EchoSafeDelete(m_depthState, DepthStencilState);
 		EchoSafeDelete(m_rasterizerState, RasterizerState);
 	}
     

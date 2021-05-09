@@ -377,4 +377,14 @@ namespace Echo
 			}
 		}
 	}
+
+	RasterizerState* Material::getRasterizerState()
+	{
+		if (!m_rasterizerState && m_shaderProgram)
+		{
+			return m_shaderProgram->getRasterizerState();
+		}
+
+		return m_rasterizerState;
+	}
 }

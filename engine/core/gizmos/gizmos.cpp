@@ -156,6 +156,10 @@ namespace Echo
 		m_material = ECHO_CREATE_RES(Material);
 		m_material->setShaderPath( m_shader->getPath());
 
+		m_rasterizerState = Renderer::instance()->createRasterizerState();
+		m_rasterizerState->setCullMode(RasterizerState::CULL_NONE);
+		m_material->setRasterizerState(m_rasterizerState);
+
 		m_lineBatch = EchoNew(Batch(m_material, this));
 		m_lineBatch->m_mesh->setTopologyType(Mesh::TT_LINELIST);
 
@@ -249,6 +253,19 @@ namespace Echo
 
 		m_localAABB.addPoint(from);
 		m_localAABB.addPoint(to);
+	}
+
+	void Gizmos::setLineWidth(float lineWidth)
+	{
+		if (m_rasterizerState)
+		{
+			m_rasterizerState->setLineWidth(lineWidth);
+		}
+	}
+
+	float Gizmos::getLineWidth() const
+	{
+		return m_rasterizerState ? m_rasterizerState->getLineWidth() : 1.f;
 	}
 
 	void Gizmos::drawTriangle(const Vector3& v0, const Vector3& v1, const Vector3& v2, const Color& color)
