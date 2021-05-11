@@ -558,7 +558,7 @@ namespace Echo
 
     ResRef<ShaderProgram> ShaderProgram::getDefault2D(const StringArray& macros)
     {
-        String shaderVirtualPath = "_echo_default_2d_shader_" + StringUtil::ToString(macros);
+        String shaderVirtualPath = "ECHO_DEFAULT_2D_SHADER_" + StringUtil::ToString(macros);
         ShaderProgramPtr shader = ECHO_DOWN_CAST<ShaderProgram*>(ShaderProgram::get(shaderVirtualPath));
         if(!shader)
         {
@@ -589,7 +589,7 @@ namespace Echo
 
     ResRef<ShaderProgram> ShaderProgram::getDefault3D(const StringArray& macros)
     {
-		String shaderVirtualPath = "_echo_default_3d_shader_" + StringUtil::ToString(macros);
+		String shaderVirtualPath = "ECHO_DEFAULT_3D_SHADER_" + StringUtil::ToString(macros);
 		ShaderProgramPtr shader = ECHO_DOWN_CAST<ShaderProgram*>(ShaderProgram::get(shaderVirtualPath));
 		if (!shader)
 		{
