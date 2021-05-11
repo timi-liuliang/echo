@@ -55,7 +55,7 @@ namespace Studio
 
 	Echo::String PathChooseDialog::getSelectFile() const 
 	{ 
-		return m_selectedDir + m_fileNameLine->text().toStdString().c_str() + m_supportExts; 
+		return m_selectedDir + m_fileNameLine->text().toStdString().c_str(); 
 	}
 
 	Echo::String PathChooseDialog::getSelectPath() const
@@ -139,7 +139,7 @@ namespace Studio
 		}
 		else
 		{
-			Echo::String fileName = Echo::PathUtil::GetPureFilename(res, false);
+			Echo::String fileName = Echo::PathUtil::GetPureFilename(res, true);
 			m_fileNameLine->setText( fileName.c_str());
 		}
 	}

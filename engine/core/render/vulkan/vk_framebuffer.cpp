@@ -234,7 +234,6 @@ namespace Echo
 		}
 	}
 
-
     void VKFramebufferWindow::recreateVkSwapChain()
     {
         VkDevice vkDevice = VKRenderer::instance()->getVkDevice();
