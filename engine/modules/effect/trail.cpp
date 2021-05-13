@@ -97,14 +97,16 @@ namespace Echo
 		// update control points
 		if (m_controlPoints.empty())
 		{
-			add(getWorldPosition(), Vector3::UNIT_X, Vector3::UNIT_Z, 30.f, Color::RED, false);
+			Vector3 up = getWorldOrientation() * Vector3::UNIT_Z;
+			add(getWorldPosition(), Vector3::UNIT_X, up, 30.f, Color::RED, false);
 		}
 		else
 		{
 			Vector3 dir = getWorldPosition() - m_controlPoints.back().m_position;
 			if (dir.len() > m_stepLength)
 			{
-				add(getWorldPosition(), dir.normalize(), Vector3::UNIT_Z, 30.f, Color::RED);
+				Vector3 up = getWorldOrientation() * Vector3::UNIT_Z;
+				add(getWorldPosition(), dir.normalize(), up, 30.f, Color::RED);
 			}
 		}
 
