@@ -227,7 +227,7 @@ namespace Echo
 			m_material = ECHO_CREATE_RES(Material);
 			m_material->setShaderPath(m_shader->getPath());
 
-			m_material->getUniform("BaseColor")->setTexture(m_batch.m_texture);
+			m_material->setUniformTexture("BaseColor", m_batch.m_texture);
 
 			m_renderable = RenderProxy::create(m_mesh, m_material, this);
 		}

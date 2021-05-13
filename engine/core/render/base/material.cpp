@@ -148,6 +148,44 @@ namespace Echo
 		return NULL;
 	}
 
+	void Material::setUniformValue(const String& name, const void* value)
+	{
+		UniformValue* uniform = getUniform(name);
+		if (uniform)
+		{
+			uniform->setValue(value);
+		}
+		else
+		{
+			EchoLogError("Uniform %s not exist", name.c_str());
+		}
+	}
+	void Material::setUniformTexture(const String& name, const String& texturePath)
+	{
+		UniformValue* uniform = getUniform(name);
+		if (uniform)
+		{
+			uniform->setTexture(texturePath);
+		}
+		else
+		{
+			EchoLogError("Uniform %s not exist", name.c_str());
+		}
+	}
+
+	void Material::setUniformTexture(const String& name, TexturePtr texture)
+	{
+		UniformValue* uniform = getUniform(name);
+		if (uniform)
+		{
+			uniform->setTexture(texture);
+		}
+		else
+		{
+			EchoLogError("Uniform %s not exist", name.c_str());
+		}
+	}
+
 	void Material::setShaderPath(const ResourcePath& path)
 	{
 		if (m_shaderPath.setPath(path.getPath(), true))

@@ -50,8 +50,8 @@ namespace Echo
 	private:
         bool                m_isLinked = false;
 		ShaderArray			m_shaders;
-		GLESRenderable*	m_preRenderable;				// Geomerty
-		AttribLocationArray	m_attribLocationMapping;		// Attribute location
+		GLESRenderable*		m_preRenderable;					// Geomerty
+		AttribLocationArray	m_attribLocationMapping;			// Attribute location
 		GLuint				m_glesProgram = 0;
 	};
 }

@@ -166,7 +166,7 @@ namespace Echo
 			}
 			else
 			{
-				EchoLogError("Shader param is NULL, Material");
+				EchoLogError("Shader param [%s] is NULL, Material", uniform->m_name.c_str());
 			}
 		}
 	}
@@ -192,7 +192,7 @@ namespace Echo
 		GLESRenderable* ra = ECHO_DOWN_CAST<GLESRenderable*>(renderInput);
 		ra->bind(m_preRenderable);
 
-		m_preRenderable = ra;
+		m_preRenderable = nullptr;// ra;
 	}
 	
 	i32 GLESShaderProgram::getAtrribLocation(VertexSemantic vertexSemantic)

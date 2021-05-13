@@ -4,6 +4,7 @@
 #include "engine/core/render/base/mesh/mesh.h"
 #include "engine/core/render/base/material.h"
 #include "engine/core/render/base/proxy/render_proxy.h"
+#include <queue>
 
 namespace Echo
 {
@@ -33,8 +34,10 @@ namespace Echo
 			Vector3 m_forward;
 			Vector3	m_up;
 			float	m_width;
+			float	m_length = 0.f;
 			Color	m_color;
 			bool	m_separator = false;
+			float	m_life = 0.f;
 		};
 
 	public:
@@ -46,6 +49,10 @@ namespace Echo
 
 		// add
 		void add(const Vector3& position, const Vector3& forward, const Vector3& up, float width, const Color& color, bool separator = false);
+
+		// time
+		float getFadeTime() const { return m_fadeTime; }
+		void setFadeTime(float fadeTime);
 
 		// step length
 		float getStepLength() const { return m_stepLength; }
@@ -62,6 +69,9 @@ namespace Echo
 		// update
 		virtual void update_self() override;
 
+		// update control points
+		void updateControlPoints();
+
 		// update vertex buffer
 		void updateMeshBuffer();
 
@@ -71,6 +81,7 @@ namespace Echo
 	private:
 		bool						m_isRenderableDirty = true;
 		vector<ControlPoint>::type	m_controlPoints;
+		float						m_fadeTime = 1.f;
 		float						m_stepLength = 3.f;
 		Vector2						m_uvScale = Vector2(1.f, 1.f);
 		MeshPtr						m_mesh;

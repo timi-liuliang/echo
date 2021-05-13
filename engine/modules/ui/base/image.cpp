@@ -79,7 +79,7 @@ namespace Echo
                 m_materialDefault->setShaderPath(m_shader->getPath());
             }
 
-            m_materialDefault->getUniform("BaseColor")->setTexture(m_textureRes.getPath());
+            m_materialDefault->setUniformTexture("BaseColor", m_textureRes.getPath());
             
             // mesh
             Ui::VertexArray vertices;

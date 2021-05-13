@@ -127,7 +127,7 @@ namespace Echo
 
 		if (m_albedo && m_material->isMacroUsed("ENABLE_ALBEDO_TEXTURE"))
 		{
-			m_material->getUniform("BaseColor")->setTexture(m_albedo);
+			m_material->setUniformTexture("BaseColor", m_albedo);
 		}
 
 		// render

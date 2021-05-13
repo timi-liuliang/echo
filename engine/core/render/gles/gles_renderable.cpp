@@ -93,7 +93,7 @@ namespace Echo
 	void GLESRenderable::bind(RenderProxy* pre)
 	{
 		GPUBuffer* idxBuffer = m_mesh->getIndexBuffer();
-		GPUBuffer* preIdxBuffer = pre ? pre->getMesh()->getIndexBuffer() : nullptr;
+		GPUBuffer* preIdxBuffer = pre && pre->getNode() ? pre->getMesh()->getIndexBuffer() : nullptr;
 
 		// 1. is need set vertex buffer
 		bool isNeedSetVertexBuffer;

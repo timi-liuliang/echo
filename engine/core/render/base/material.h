@@ -100,6 +100,12 @@ namespace Echo
 		UniformValue* getUniform(const String& name);
         UniformValueMap& GetAllUniforms() { return m_uniformValues; }
 
+		// set uniform value
+		void setUniformValue(const String& name, const void* value);
+		void setUniformValue(const String& name, float value) { setUniformValue(name, &value); }
+		void setUniformTexture(const String& name, const String& texturePath);
+		void setUniformTexture(const String& name, TexturePtr texture);
+
 		// build shader program
 		void buildShaderProgram();
 

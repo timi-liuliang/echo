@@ -1063,45 +1063,45 @@ namespace Gltf
 		Vector2 metalicRoughnessFactor(matInfo.m_pbr.m_metallicFactor, matInfo.m_pbr.m_roughnessFactor);
 
 		// params
-		primitive.m_materialInst->getUniform("u_MetallicRoughnessValues")->setValue(&metalicRoughnessFactor);
-		primitive.m_materialInst->getUniform("u_BaseColorFactor")->setValue(matInfo.m_pbr.m_baseColorFactor);
+		primitive.m_materialInst->setUniformValue("u_MetallicRoughnessValues", &metalicRoughnessFactor);
+		primitive.m_materialInst->setUniformValue("u_BaseColorFactor", matInfo.m_pbr.m_baseColorFactor);
 
 		// base color texture
 		if (baseColorTextureIdx != -1)
 		{
 			i32 imageIdx = m_textures[baseColorTextureIdx].m_source;
-			primitive.m_materialInst->getUniform("BaseColor")->setTexture(m_images[imageIdx].m_uri);
+			primitive.m_materialInst->setUniformTexture("BaseColor", m_images[imageIdx].m_uri);
 		}
 
 		// normal map
 		if (normalTextureIdx != -1)
 		{
 			i32 imageIdx = m_textures[normalTextureIdx].m_source;
-			primitive.m_materialInst->getUniform("u_NormalSampler")->setTexture(m_images[imageIdx].m_uri);
-			primitive.m_materialInst->getUniform("u_NormalScale")->setValue(&matInfo.m_normalTexture.m_scale);
+			primitive.m_materialInst->setUniformTexture("u_NormalSampler", m_images[imageIdx].m_uri);
+			primitive.m_materialInst->setUniformValue("u_NormalScale", &matInfo.m_normalTexture.m_scale);
 		}
 
 		// emissive map
 		if (emissiveTextureIdx != -1)
 		{
 			i32 imageIdx = m_textures[emissiveTextureIdx].m_source;
-			primitive.m_materialInst->getUniform("u_EmissiveSampler")->setTexture(m_images[imageIdx].m_uri);
-			primitive.m_materialInst->getUniform("u_EmissiveFactor")->setValue(&matInfo.m_emissiveTexture.m_factor);
+			primitive.m_materialInst->setUniformTexture("u_EmissiveSampler", m_images[imageIdx].m_uri);
+			primitive.m_materialInst->setUniformValue("u_EmissiveFactor", &matInfo.m_emissiveTexture.m_factor);
 		}
 
 		// metallic roughness texture
 		if (metalicRoughnessIdx != -1)
 		{
 			i32 imageIdx = m_textures[metalicRoughnessIdx].m_source;
-			primitive.m_materialInst->getUniform("u_MetallicRoughnessSampler")->setTexture(m_images[imageIdx].m_uri);
+			primitive.m_materialInst->setUniformTexture("u_MetallicRoughnessSampler", m_images[imageIdx].m_uri);
 		}
 
 		// occlusion map
 		if (occusionTextureIdx != -1)
 		{
 			i32 imageIdx = m_textures[occusionTextureIdx].m_source;
-			primitive.m_materialInst->getUniform("u_OcclusionSampler")->setTexture(m_images[imageIdx].m_uri);
-			primitive.m_materialInst->getUniform("u_OcclusionStrength")->setValue(&matInfo.m_occlusionTexture.m_strength);
+			primitive.m_materialInst->setUniformTexture("u_OcclusionSampler", m_images[imageIdx].m_uri);
+			primitive.m_materialInst->setUniformValue("u_OcclusionStrength", &matInfo.m_occlusionTexture.m_strength);
 		}
 
 		return true;

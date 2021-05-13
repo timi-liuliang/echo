@@ -33,11 +33,8 @@ namespace Echo
 	{
 		if (m_material)
 		{
-			Material::UniformValue* worldMatrix = m_material->getUniform("u_WorldMatrix");
-			if (worldMatrix) worldMatrix->setValue(&Matrix4::IDENTITY);
-
-			Material::UniformValue* viewProjMatrix = m_material->getUniform("u_ViewProjMatrix");
-			if (viewProjMatrix) viewProjMatrix->setValue(&Matrix4::IDENTITY);
+			m_material->setUniformValue("u_WorldMatrix", &Matrix4::IDENTITY);
+			m_material->setUniformValue("u_ViewProjMatrix", &Matrix4::IDENTITY);
 		}
 	}
 
