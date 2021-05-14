@@ -177,37 +177,35 @@ namespace Echo
 			for (size_t i = 0; i < m_controlPoints.size(); i++)
 			{
 				const ControlPoint& controlPoint = m_controlPoints[i];
-				if (controlPoint.m_life < m_fadeTime)
+
+				Vector3 halfRightDir = controlPoint.m_forward.cross(controlPoint.m_up) * controlPoint.m_width * 0.5f;
+
+				// Update Vertices
+				VertexFormat v0;
+				v0.m_position = controlPoint.m_position + halfRightDir;
+				//v0.m_color = controlPoint.Color;
+				v0.m_uv = Vector2(0.f, controlPoint.m_length / controlPoint.m_width) * m_uvScale;
+
+				VertexFormat v1;
+				v1.m_position = controlPoint.m_position - halfRightDir;
+				//v1.Color = controlPoint.Color;
+				v1.m_uv = Vector2(1.f, controlPoint.m_length / controlPoint.m_width) * m_uvScale;
+
+				vertices.push_back(v0);
+				vertices.push_back(v1);
+
+				// Update Indices
+				if (i != 0 && !controlPoint.m_separator)
 				{
-					Vector3 halfRightDir = controlPoint.m_forward.cross(controlPoint.m_up) * controlPoint.m_width * 0.5f;
+					i32 base = vertices.size() - 4;
 
-					// Update Vertices
-					VertexFormat v0;
-					v0.m_position = controlPoint.m_position + halfRightDir;
-					//v0.m_color = controlPoint.Color;
-					v0.m_uv = Vector2(0.f, controlPoint.m_length / controlPoint.m_width) * m_uvScale;
+					indices.push_back(base);
+					indices.push_back(base + 3);
+					indices.push_back(base + 2);
 
-					VertexFormat v1;
-					v1.m_position = controlPoint.m_position - halfRightDir;
-					//v1.Color = controlPoint.Color;
-					v1.m_uv = Vector2(1.f, controlPoint.m_length / controlPoint.m_width) * m_uvScale;
-
-					vertices.push_back(v0);
-					vertices.push_back(v1);
-
-					// Update Indices
-					if (i != 0 && !controlPoint.m_separator)
-					{
-						i32 base = vertices.size() - 4;
-
-						indices.push_back(base);
-						indices.push_back(base + 3);
-						indices.push_back(base + 2);
-
-						indices.push_back(base);
-						indices.push_back(base + 1);
-						indices.push_back(base + 3);
-					}
+					indices.push_back(base);
+					indices.push_back(base + 1);
+					indices.push_back(base + 3);
 				}
 			}
 
