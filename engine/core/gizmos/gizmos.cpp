@@ -82,12 +82,7 @@ namespace Echo
 
 	Gizmos::Batch::~Batch()
 	{
-		if (m_renderable)
-		{
-			m_renderable->release();
-			m_renderable = nullptr;
-		}
-
+		m_renderable.reset();
 		m_mesh.reset();
 	}
 

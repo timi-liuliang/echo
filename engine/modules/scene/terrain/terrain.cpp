@@ -222,7 +222,7 @@ namespace Echo
     
     void Terrain::clearRenderable()
     {
-        EchoSafeRelease(m_renderable);
+        m_renderable.reset();
         m_mesh.reset();
     }
     

@@ -212,7 +212,7 @@ namespace Echo
     
     void UiText::clearRenderable()
     {
-        EchoSafeRelease(m_renderable);
+        m_renderable.reset();
         m_mesh.reset();
     }
 }

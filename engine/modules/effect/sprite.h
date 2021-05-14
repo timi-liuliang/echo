@@ -55,6 +55,6 @@ namespace Echo
 		i32						m_height = 64;
 		MeshPtr				    m_mesh;						// Geometry Data for render
 		MaterialPtr				m_material;		            // Material Instance
-		RenderProxy*				m_renderable = nullptr;
+		RenderProxyPtr			m_renderable = nullptr;
 	};
 }

@@ -14,7 +14,7 @@ namespace Echo
 
     ParticleSystem::~ParticleSystem()
     {
-        EchoSafeRelease(m_renderable);
+        m_renderable.reset();
         m_mesh.reset();
     }
 
@@ -38,8 +38,6 @@ namespace Echo
     {
         if (m_isRenderableDirty)
         {
-            EchoSafeRelease(m_renderable);
-
             if (!m_material)
             {
                 StringArray macros = { "ALPHA_ADJUST" };

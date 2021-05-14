@@ -142,6 +142,6 @@ namespace Echo
 		MaterialPtr				m_material;			// Custom Material
         ShaderProgramPtr        m_shaderDefault;
 		MaterialPtr				m_materialDefault;
-		RenderProxy*				m_renderable;
+		RenderProxyPtr			m_renderable;
 	};
 }

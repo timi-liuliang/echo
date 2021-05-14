@@ -60,7 +60,7 @@ namespace Echo
         MeshPtr                 m_mesh;            // Geometry Data for render
         ShaderProgramPtr        m_shader;
         MaterialPtr             m_material;        // Material Instance
-        RenderProxy*             m_renderable;
+        RenderProxyPtr          m_renderable;
         Matrix4                 m_matWVP;
         i32                     m_width;
         i32                     m_height;

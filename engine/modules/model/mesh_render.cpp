@@ -83,6 +83,6 @@ namespace Echo
 
 	void MeshRender::clearRenderable()
 	{
-		EchoSafeRelease(m_renderable);
+		m_renderable.reset();
 	}
 }

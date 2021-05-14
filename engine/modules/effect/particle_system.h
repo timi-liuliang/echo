@@ -46,6 +46,6 @@ namespace Echo
         bool                       m_isRenderableDirty = true;
         MeshPtr                    m_mesh;                        // Geometry Data for render
         MaterialPtr                m_material;                    // Material Instance
-        RenderProxy*                m_renderable = nullptr;
+        RenderProxyPtr             m_renderable;
     };
 }

@@ -43,7 +43,7 @@ namespace Echo
 			TexturePtr		m_albedo;
 			MaterialPtr		m_material;
 			MeshPtr			m_mesh;
-			RenderProxy*		m_renderable;
+			RenderProxyPtr	m_renderable;
 			bool			m_meshDirty;
 
 			Batch(Material* material, Gizmos* gizmos);

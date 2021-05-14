@@ -55,7 +55,7 @@ namespace Echo
         ShaderProgramPtr        m_shader;
         MaterialPtr             m_material;
         MaterialPtr             m_materialDefault;
-        RenderProxy*            m_renderable = nullptr;
+        RenderProxyPtr          m_renderable;
         Matrix4                 m_matWVP;
         i32                     m_width = 128;
         i32                     m_height = 128;

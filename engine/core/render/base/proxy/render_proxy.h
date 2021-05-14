@@ -9,9 +9,11 @@
 
 namespace Echo
 {
+	typedef ui32 RenderableID;
+
 	class Render;
 	class Material;
-	class RenderProxy : public Object
+	class RenderProxy : public Object, public Refable
 	{
 		friend class Renderer;
 
@@ -23,7 +25,7 @@ namespace Echo
 		static RenderProxy* create(MeshPtr mesh, Material* matInst, Render* node);
 
 		// release
-		void release();
+		virtual void subRefCount() override;
 
 		// set mesh
 		MeshPtr getMesh() { return m_mesh; }
@@ -50,5 +52,5 @@ namespace Echo
 		MeshPtr			m_mesh;
 		MaterialPtr		m_material;
 	};
-	typedef ui32 RenderableID;
+	typedef ResRef<RenderProxy> RenderProxyPtr;
 }

@@ -13,7 +13,7 @@ namespace Echo
 		void addRefCount() { m_refCount++; }
 
 		// release
-		void subRefCount()
+		virtual void subRefCount()
 		{
 			m_refCount--;
 			if (m_refCount <= 0)

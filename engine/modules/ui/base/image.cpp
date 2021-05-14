@@ -160,8 +160,7 @@ namespace Echo
     
     void UiImage::clearRenderable()
     {
-        EchoSafeRelease(m_renderable);
-
+        m_renderable.reset();
         m_mesh.reset();
 		m_material.reset();
     }

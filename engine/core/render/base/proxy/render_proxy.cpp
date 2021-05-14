@@ -18,10 +18,14 @@ namespace Echo
 	{
 	}
 
-	void RenderProxy::release()
+	void RenderProxy::subRefCount()
 	{
-		RenderProxy* ptr = this;
-		Renderer::instance()->destroyRenderProxies(&ptr, 1);
+		m_refCount--;
+		if (m_refCount <= 0)
+		{
+			RenderProxy* ptr = this;
+			Renderer::instance()->destroyRenderProxies(&ptr, 1);
+		}
 	}
 
 	RenderProxy* RenderProxy::create(MeshPtr mesh, Material* material, Render* node)

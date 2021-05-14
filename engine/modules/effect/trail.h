@@ -86,6 +86,6 @@ namespace Echo
 		Vector2						m_uvScale = Vector2(1.f, 1.f);
 		MeshPtr						m_mesh;
 		MaterialPtr					m_material;
-		RenderProxy*				m_renderable = nullptr;
+		RenderProxyPtr				m_renderable;
 	};
 }

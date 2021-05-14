@@ -247,6 +247,6 @@ namespace Echo
 
 	void GltfMesh::clearRenderable()
 	{
-		EchoSafeRelease(m_renderable);
+		m_renderable.reset();
 	}
 }

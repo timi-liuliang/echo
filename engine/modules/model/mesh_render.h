@@ -37,6 +37,6 @@ namespace Echo
 		bool			m_isRenderableDirty = true;
 		MeshPtr			m_mesh;
 		MaterialPtr		m_material;
-		RenderProxy*		m_renderable = nullptr;
+		RenderProxyPtr	m_renderable = nullptr;
 	};
 }

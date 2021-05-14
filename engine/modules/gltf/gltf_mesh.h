@@ -61,7 +61,7 @@ namespace Echo
 
 	private:
 		bool					m_renderableDirty = true;
-		RenderProxy*				m_renderable = nullptr;
+		RenderProxyPtr			m_renderable;
 		Matrix4					m_matWVP;
 		ResourcePath			m_assetPath = ResourcePath("", ".gltf");
 		GltfResPtr				m_asset;			                        // gltf asset ptr

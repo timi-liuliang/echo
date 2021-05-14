@@ -88,7 +88,7 @@ namespace Echo
 		i32						m_gridSpacing = 1;
         MeshPtr                 m_mesh;
         MaterialPtr             m_material;
-        RenderProxy*             m_renderable = nullptr;
+        RenderProxyPtr          m_renderable = nullptr;
         i32                     m_columns = 0;
         i32                     m_rows = 0;
         vector<float>::type     m_heightData;

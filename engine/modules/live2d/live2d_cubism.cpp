@@ -337,7 +337,7 @@ namespace Echo
 
 	void Live2dCubism::clearRenderable()
 	{
-		EchoSafeRelease(m_renderable);
+		m_renderable.reset();
 		m_mesh.reset();
 	}
 }

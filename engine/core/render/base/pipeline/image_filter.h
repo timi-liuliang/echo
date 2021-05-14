@@ -51,9 +51,9 @@ namespace Echo
 		void setGlobalUniforms();
 
 	protected:
-		bool        m_isRenderableDirty = true;
-		MeshPtr		m_mesh;
-		MaterialPtr	m_material;
-		RenderProxy* m_renderable = nullptr;
+		bool			m_isRenderableDirty = true;
+		MeshPtr			m_mesh;
+		MaterialPtr		m_material;
+		RenderProxyPtr	m_renderable;
 	};
 }
