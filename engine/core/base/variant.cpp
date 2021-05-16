@@ -24,7 +24,7 @@ namespace Echo
 	}
 
 	Variant::Variant(ui32 value)
-		: m_type(Type::Int)
+		: m_type(Type::UInt)
 	{
 		m_uint = value;
 	}

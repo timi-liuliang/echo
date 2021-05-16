@@ -40,7 +40,7 @@ namespace Echo
 		bool execString(const String& script, bool execute=true);
 
 		// call lua function with 0-10 parameters
-		template<typename ReturnT> ReturnT call(const char* const functionName);
+		template<typename ReturnT> ReturnT call(const char* const functionName, const Variant** args, int argCount);
 
 		// call lua function with 1 parameter
 		template<typename ReturnT, typename Param1T> ReturnT call(const char* const functionName, Param1T p1);
@@ -97,7 +97,7 @@ namespace Echo
 	};
 
 	// call lua function with no parameter
-	template<typename ReturnT> ReturnT LuaBinder::call(const char* const functionName)
+	template<typename ReturnT> ReturnT LuaBinder::call(const char* const functionName, const Variant** args, int argCount)
 	{
 		LUA_STACK_CHECK(m_luaState);
 
@@ -119,6 +119,12 @@ namespace Echo
 		if (/*lastSeparator == ':'*/true)
 		{
 			lua_pushvalue(m_luaState, -2);
+			narg++;
+		}
+
+		for (i32 i = 0; i < argCount; i++)
+		{
+			lua_pushvalue(m_luaState, *args[i]);
 			narg++;
 		}
 

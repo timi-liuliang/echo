@@ -24,6 +24,7 @@ namespace Echo
 			Unknown,
 			Bool,
 			Int,
+			UInt,
 			Real,
 			Vector2,
 			Vector3,
@@ -106,6 +107,8 @@ namespace Echo
 
 		// convert to other type
 		const bool toBool() const { return m_bool; }
+		const i32  toI32() const { return m_int; }
+		const ui32 toUI32() const { return m_uint; }
 		const Real& toReal() const { return m_real; }
 		const Vector2& toVector2() const { return any_cast<Vector2>(m_any); }
 		const Vector3& toVector3() const { return any_cast<Vector3>(m_any); }

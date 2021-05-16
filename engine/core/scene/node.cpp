@@ -380,7 +380,7 @@ namespace Echo
 			registerToScript();
 
 			String objectFun = StringUtil::Format("nodes._%d.%s", this->getId(), funName.c_str());
-			LuaBinder::instance()->call<void>(objectFun.c_str());
+			LuaBinder::instance()->call<void>(objectFun.c_str(), args, argCount);
 		}
     }
 

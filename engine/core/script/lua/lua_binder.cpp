@@ -138,7 +138,6 @@ namespace Echo
 		return 0;
 	}
 
-	// instance
 	LuaBinder* LuaBinder::instance()
 	{
 		static LuaBinder* binder = EchoNew(LuaBinder);
@@ -263,7 +262,6 @@ namespace Echo
 		return true;
 	}
 
-	// get class infos
 	void LuaBinder::getClassMethods(const String& className, StringArray& methods)
 	{
 		LUA_STACK_CHECK(m_luaState);
@@ -290,7 +288,6 @@ namespace Echo
 		lua_pop(m_luaState, 1);
 	}
 
-	// add search path
 	void LuaBinder::addSearchPath(const String& path)
 	{
 		String curPath = getGlobalVariableStr("package.path");
@@ -320,7 +317,6 @@ namespace Echo
 		}
 	}
 
-	// exec string
 	bool LuaBinder::execString(const String& script, bool execute)
 	{
 		LUA_STACK_CHECK(m_luaState);
@@ -366,7 +362,6 @@ namespace Echo
 		return static_cast<float>(getGlobalVariableDouble(varName));
 	}
 
-	// get global value (float)
 	double LuaBinder::getGlobalVariableDouble(const String& varName)
 	{
 		LUA_STACK_CHECK(m_luaState);
@@ -408,7 +403,6 @@ namespace Echo
 		return result;
 	}
 
-	// set global value
 	void LuaBinder::setGlobalVariableStr(const String& varName, const String& value)
 	{
 		LUA_STACK_CHECK(m_luaState);

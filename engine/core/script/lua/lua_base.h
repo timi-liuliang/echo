@@ -420,6 +420,8 @@ namespace Echo
 		switch (value.getType())
 		{
 		case Variant::Type::Bool:	lua_pushvalue<bool>(state, value.toBool()); break;
+		case Variant::Type::Int:	lua_pushvalue<i32>(state, value.toI32()); break;
+		case Variant::Type::UInt:	lua_pushvalue<ui32>(state, value.toUI32()); break;
 		case Variant::Type::Real:	lua_pushvalue<float>(state, value.toReal()); break;
 		default:					lua_pushnil(state); lua_binder_error("lua stack push value error, unknow c type"); break;
 		}
