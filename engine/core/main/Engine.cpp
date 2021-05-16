@@ -312,15 +312,15 @@ namespace Echo
 		elapsedTime = Math::Clamp( elapsedTime, 0.f, 1.f);
 		m_frameTime = elapsedTime;
 
+		// input update
+		Input::instance()->update();
+
 		// res
 		Res::updateAll(m_frameTime);
 
 		// update logic
 		Module::updateAll(m_frameTime);
 		NodeTree::instance()->update(m_frameTime);
-
-		// input update
-		Input::instance()->update();
 
 		// render
 		RenderPipeline::current()->render();

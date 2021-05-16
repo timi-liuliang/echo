@@ -76,13 +76,13 @@ namespace Echo
 			{
 				m_keyStates[event.m_id].m_isDown = true;
 
-				onKeyDown();
+				onKeyDown(event.m_id);
 			}
 			else if (event.m_type == Event::Type::KeyUp)
 			{
 				m_keyStates[event.m_id].m_isDown = false;
 
-				onKeyUp();
+				onKeyUp(event.m_id);
 			}
 
 			m_eventQueue.pop();

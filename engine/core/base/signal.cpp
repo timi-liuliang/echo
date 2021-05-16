@@ -46,7 +46,6 @@ namespace Echo
         }
 	}
 
-
 	ConnectLuaMethod::ConnectLuaMethod(Signal* signal, Object* target, const String& functionName)
 		: m_signal(signal)
 		, m_functionName(functionName)
@@ -72,9 +71,13 @@ namespace Echo
     { 
         Object* target = getTarget();
 		if (target)
-            target->callLuaFunction(m_functionName, args, argCount);
-        else
-            m_signal->disconnect(this);
+		{
+			target->callLuaFunction(m_functionName, args, argCount);
+		}
+		else
+		{
+			m_signal->disconnect(this);
+		}
     }
     
     Object* ConnectLuaMethod::getTarget()

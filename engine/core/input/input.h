@@ -71,8 +71,8 @@ namespace Echo
 		DECLARE_SIGNAL(Signal0, onMouseMove);
 
 		// on Key signal
-		DECLARE_SIGNAL(Signal0, onKeyDown);
-		DECLARE_SIGNAL(Signal0, onKeyUp);
+		DECLARE_SIGNAL(Signal1<ui32>, onKeyDown);
+		DECLARE_SIGNAL(Signal1<ui32>, onKeyUp);
 
 	private:
 		Input();
