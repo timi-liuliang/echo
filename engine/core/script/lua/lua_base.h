@@ -415,15 +415,20 @@ namespace Echo
         lua_pushvalue<Object*>(state, obj);
     }
 
-	template<> INLINE void lua_pushvalue<Variant>(lua_State* state, Variant value)
+	template<> INLINE void lua_pushvalue<const Variant*>(lua_State* state, const Variant* value)
 	{
-		switch (value.getType())
+		switch (value->getType())
 		{
-		case Variant::Type::Bool:	lua_pushvalue<bool>(state, value.toBool()); break;
-		case Variant::Type::Int:	lua_pushvalue<i32>(state, value.toI32()); break;
-		case Variant::Type::UInt:	lua_pushvalue<ui32>(state, value.toUI32()); break;
-		case Variant::Type::Real:	lua_pushvalue<float>(state, value.toReal()); break;
+		case Variant::Type::Bool:	lua_pushvalue<bool>(state, value->toBool()); break;
+		case Variant::Type::Int:	lua_pushvalue<i32>(state, value->toI32()); break;
+		case Variant::Type::UInt:	lua_pushvalue<ui32>(state, value->toUI32()); break;
+		case Variant::Type::Real:	lua_pushvalue<float>(state, value->toReal()); break;
 		default:					lua_pushnil(state); lua_binder_error("lua stack push value error, unknow c type"); break;
 		}
+	}
+
+	template<> INLINE void lua_pushvalue<Variant>(lua_State* state, Variant value)
+	{
+		lua_pushvalue<const Variant*>(state, &value);
 	}
 }

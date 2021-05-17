@@ -124,7 +124,9 @@ namespace Echo
 
 		for (i32 i = 0; i < argCount; i++)
 		{
-			lua_pushvalue(m_luaState, *args[i]);
+			const Variant* arg = args[i];
+			lua_pushvalue(m_luaState, arg);
+
 			narg++;
 		}
 
