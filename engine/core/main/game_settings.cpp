@@ -1,4 +1,4 @@
-#include "GameSettings.h"
+#include "game_settings.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/io/IO.h"

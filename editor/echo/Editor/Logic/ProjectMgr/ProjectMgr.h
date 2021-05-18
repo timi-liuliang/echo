@@ -1,6 +1,6 @@
 #pragma once
 
-#include <engine/core/main/GameSettings.h>
+#include <engine/core/main/game_settings.h>
 
 namespace Studio
 {

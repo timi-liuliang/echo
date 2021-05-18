@@ -2,7 +2,7 @@
 #include "Window.h"
 #include <QDateTime>
 #include "GameMainWindow.h"
-#include <engine/core/main/GameSettings.h>
+#include <engine/core/main/game_settings.h>
 #include <engine/core/input/input.h>
 
 namespace Game

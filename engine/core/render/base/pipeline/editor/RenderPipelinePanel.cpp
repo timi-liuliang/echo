@@ -4,8 +4,8 @@
 #include "engine/core/base/class_method_bind.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/util/StringUtil.h"
-#include "engine/core/main/Engine.h"
-#include "engine/core/main/GameSettings.h"
+#include "engine/core/main/engine.h"
+#include "engine/core/main/game_settings.h"
 
 namespace Echo
 {

@@ -1,6 +1,6 @@
 #include "camera_2d_editor.h"
 #include "engine/core/main/Engine.h"
-#include "engine/core/main/GameSettings.h"
+#include "engine/core/main/game_settings.h"
 #include "engine/core/scene/node_tree.h"
 #include "engine/core/gizmos/Gizmos.h"
 

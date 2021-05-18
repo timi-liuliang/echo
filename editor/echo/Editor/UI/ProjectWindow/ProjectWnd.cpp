@@ -9,7 +9,7 @@
 #include "MacHelper.h"
 #include <engine/core/log/Log.h>
 #include <engine/core/util/PathUtil.h>
-#include <engine/core/main/GameSettings.h>
+#include <engine/core/main/game_settings.h>
 
 namespace Studio
 {

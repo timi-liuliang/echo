@@ -1,7 +1,7 @@
 #include "tilemap_editor.h"
 #include "engine/core/editor/editor.h"
-#include "engine/core/main/Engine.h"
-#include "engine/core/main/GameSettings.h"
+#include "engine/core/main/engine.h"
+#include "engine/core/main/game_settings.h"
 
 namespace Echo
 {

@@ -1,7 +1,7 @@
 #include "camera_3d_editor.h"
 #include "engine/core/main/Engine.h"
 #include "engine/core/scene/node_tree.h"
-#include "engine/core/main/GameSettings.h"
+#include "engine/core/main/game_settings.h"
 
 namespace Echo
 {

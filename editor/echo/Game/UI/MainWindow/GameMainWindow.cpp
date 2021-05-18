@@ -4,7 +4,7 @@
 #include "GameMainWindow.h"
 #include "WindowMetal.h"
 #include "engine/core/util/PathUtil.h"
-#include "engine/core/main/GameSettings.h"
+#include "engine/core/main/game_settings.h"
 #include "MacHelper.h"
 
 namespace Game
