@@ -51,12 +51,9 @@ namespace Echo
 		void setRootPath(const String& rootPath) { m_rootPath = rootPath; }
 		virtual const String& getRootPath() { return m_rootPath; }
 
-		// res path
-		const String& getResPath() const;
-
-		// user path
-		const String& getUserPath() const;
-		void setUserPath(const String& strPath);
+		// Res|User path
+		const String& getResPath();
+		const String& getUserPath();
 
 		// on platform event
 		void onPlatformSuspend();
@@ -84,8 +81,6 @@ namespace Echo
 	private:
 		Config				m_config;
 		String				m_rootPath;
-		String				m_resPath;
-		String				m_userPath;
 		bool				m_isInited;
 		float				m_frameTime;
 	};

@@ -11,9 +11,10 @@ namespace QT_UI
 	{
 	}
 
-	void QDirectoryModel::SetRootPath(const char* rootPath, const char* extFilter, QTreeView* treeView, QSortFilterProxyModel* proxy)
+	void QDirectoryModel::SetRootPath(const char* rootPath, const char* extFilter, QTreeView* treeView, QSortFilterProxyModel* proxy, const char* rootPathText)
 	{
 		updateRootPath(rootPath);
+		m_rootPathText = rootPathText;
 
 		Echo::StringArray exts = Echo::StringUtil::Split(extFilter, "|");
 		for (size_t i = 0; i<exts.size(); i++)
@@ -23,7 +24,7 @@ namespace QT_UI
 		m_proxy = proxy;
 		connect(m_treeView, SIGNAL(expanded(const QModelIndex&)), this, SLOT(OnExpandedFilter(const QModelIndex&)));
 		connect(m_treeView, SIGNAL(collapsed(const QModelIndex&)), this, SLOT(OnExpandedFilter(const QModelIndex&)));
-		connect(m_treeView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(OnSelectedFile(const QModelIndex&)));
+		connect(m_treeView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(onSelectedFile(const QModelIndex&)));
 		connect(m_treeView, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(OnEditFile(const QModelIndex&)));
 	}
 
@@ -53,7 +54,7 @@ namespace QT_UI
 
 	void QDirectoryModel::setCurrentSelect(const char* dir)
 	{
-		// 查找Item
+		// find item
 		QStandardItem* lastItem = NULL;
 		for (size_t i = 0; i<m_dirItems.size(); i++)
 		{
@@ -67,12 +68,12 @@ namespace QT_UI
 
 		if (lastItem)
 		{
-			// 设置当前选中
+			// set current select
 			QModelIndex lastIdx = indexFromItem(lastItem);
 			m_treeView->setCurrentIndex(lastIdx);
-			OnSelectedFile(lastIdx);
+			onSelectedFile(lastIdx);
 
-			// 展开父
+			// expand parent
 			QStandardItem* parentItem = lastItem->parent();
 			while (parentItem)
 			{
@@ -82,7 +83,7 @@ namespace QT_UI
 				parentItem = parentItem->parent();
 			}
 
-			// 展开自身
+			// expand
 			m_treeView->expand(lastIdx);
 		}
 	}
@@ -98,7 +99,7 @@ namespace QT_UI
 			Echo::PathUtil::FormatPath(pathName);
 			Echo::String dirName = Echo::PathUtil::GetLastDirName(pathName);
 			QStandardItem* rootItem = new QStandardItem;
-			rootItem->setText("Res://");
+			rootItem->setText(m_rootPathText.c_str());
 			rootItem->setIcon(m_iconMaps["root"]);
 			rootItem->setData(m_rootPath.c_str(), Qt::UserRole);
 
@@ -168,7 +169,7 @@ namespace QT_UI
 
 		int tRow = 0;
 
-		// 先插入目录
+		// insert folder first
 		{
 			for (size_t i = 0; i < dirItems.size(); i++)
 			{
@@ -176,7 +177,7 @@ namespace QT_UI
 				tRow++;
 			}
 
-			// 插入文件
+			// then input file after
 			for (size_t i = 0; i < fileItems.size(); i++)
 			{
 				parentItem->setChild(tRow, 0, fileItems[i]);
@@ -201,7 +202,7 @@ namespace QT_UI
 		return filePath;
 	}
 
-	void QDirectoryModel::OnSelectedFile(const QModelIndex& pIndex)
+	void QDirectoryModel::onSelectedFile(const QModelIndex& pIndex)
 	{
         Echo::Dword currenTime = Echo::Time::instance()->getMilliseconds();
 		Echo::Dword elapsedTime = currenTime - m_selectTime;

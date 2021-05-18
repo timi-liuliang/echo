@@ -25,7 +25,7 @@ namespace QT_UI
 		QDirectoryModel();
 
 		// 设置主目录, 文件类型过滤
-		void SetRootPath( const char* rootPath, const char* extFilter, QTreeView* treeView, QSortFilterProxyModel* proxy);
+		void SetRootPath( const char* rootPath, const char* extFilter, QTreeView* treeView, QSortFilterProxyModel* proxy, const char* rootPathText="Res://");
 
 		void updateRootPath(const char* rootPath);
 
@@ -72,7 +72,7 @@ namespace QT_UI
 		void OnExpandedFilter(const QModelIndex& pIndex);
 
 		// 选择某文件
-		void OnSelectedFile( const QModelIndex& pIndex);
+		void onSelectedFile( const QModelIndex& pIndex);
 
 		// 双击某文件
 		void OnEditFile( const QModelIndex& pIndex);
@@ -80,7 +80,8 @@ namespace QT_UI
 	private:
 		QTreeView*						m_treeView = nullptr;	// treeView
 		QSortFilterProxyModel*			m_proxy = nullptr;	    // proxy
-		string							m_rootPath;		        // 主目录
+		string							m_rootPath;
+		string							m_rootPathText;
 		vector<string>					m_exts;			        // 文件类型
 		IconMap							m_iconMaps;		        // 图标
 		QStandardItem*					m_activeItem = nullptr;	// active item

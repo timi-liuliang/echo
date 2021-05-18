@@ -13,6 +13,12 @@ namespace Studio
 		Q_OBJECT
 
 	public:
+		enum PathType
+		{
+			Res,
+			User,
+		};
+
 		// Selecting type
 		enum SelectingType
 		{
@@ -28,18 +34,21 @@ namespace Studio
 		Echo::String getSelectFile() const;
 		Echo::String getSelectPath() const;
 
-		// 获取文件路径
+		// get path
 		static QString getExistingPath( QWidget* parent);
 
-		// 获取名称加路径
+		// get existing path name
 		static QString getExistingPathName(QWidget* parent,const char* ext, const char* title);
 
 	private:
+		// path
+		void setPathType(PathType pathType);
+
 		// set type
 		void setSelectingType(SelectingType type);
 
 	public slots:
-		// 选择文件夹
+		// on select dir
 		void onSelectDir(const char* dir);
 
 		// double click res

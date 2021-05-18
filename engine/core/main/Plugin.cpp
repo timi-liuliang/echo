@@ -4,6 +4,7 @@
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/io/stream/DataStream.h"
+#include "engine/core/io/io.h"
 #include <nlohmann/json.hpp>
 #ifdef ECHO_PLATFORM_WINDOWS
 #include <windows.h>
@@ -136,7 +137,7 @@ namespace Echo
         for(String& path : pluginPaths)
         {
             path = StringUtil::Replace(path, "${EchoDir}", PathUtil::GetCurrentDir());
-            path = StringUtil::Replace(path, "${ProjectDir}", Engine::instance()->getResPath());
+            path = StringUtil::Replace(path, "${ProjectDir}", IO::instance()->getResPath());
             path = StringUtil::Replace(path, "//", "/");
             PathUtil::FormatPath(path, false);
             

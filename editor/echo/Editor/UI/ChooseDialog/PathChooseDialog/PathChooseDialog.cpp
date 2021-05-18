@@ -27,13 +27,6 @@ namespace Studio
         m_resDirView->setAttribute(Qt::WA_MacShowFocusRect,0);
 		m_dirModel->Clean();
 
-		QStringList titleLable;
-		titleLable << "Res://";
-		m_dirModel->setHorizontalHeaderLabels(titleLable);
-
-		m_dirModel->SetRootPath(Echo::Engine::instance()->getResPath().c_str(), "none", m_resDirView, NULL);
-		m_dirModel->Refresh();
-
 		// show exts
 		m_comboBoxExts->addItem(Echo::StringUtil::Format("(%s)",exts).c_str());
 
@@ -44,8 +37,7 @@ namespace Studio
 		m_previewHelper = new QT_UI::QPreviewHelper(m_listView);
 		QObject::connect(m_previewHelper, SIGNAL(doubleClickedRes(const char*)), this, SLOT(onDoubleClickPreviewRes(const char*)));
 
-		// choose main directory
-		onSelectDir(Echo::Engine::instance()->getResPath().c_str());
+		setPathType(PathType::Res);
 	}
 
 	PathChooseDialog::~PathChooseDialog()
@@ -95,6 +87,30 @@ namespace Studio
 		}
 
 		return "";
+	}
+
+	void PathChooseDialog::setPathType(PathChooseDialog::PathType pathType)
+	{
+		if (pathType == PathType::Res)
+		{
+			m_dirModel->SetRootPath(Echo::Engine::instance()->getResPath().c_str(), "none", m_resDirView, NULL, "Res://");
+			m_dirModel->Refresh();
+
+			// choose main directory
+			onSelectDir(Echo::Engine::instance()->getResPath().c_str());
+		}
+		else
+		{
+			// Make sure user path exist
+			if (!Echo::PathUtil::IsDirExist(Echo::Engine::instance()->getUserPath()))
+				Echo::PathUtil::CreateDir(Echo::Engine::instance()->getUserPath());
+
+			m_dirModel->SetRootPath(Echo::Engine::instance()->getUserPath().c_str(), "none", m_resDirView, NULL, "User://");
+			m_dirModel->Refresh();
+
+			// choose main directory
+			onSelectDir(Echo::Engine::instance()->getUserPath().c_str());
+		}
 	}
 
 	void PathChooseDialog::setSelectingType(PathChooseDialog::SelectingType type)

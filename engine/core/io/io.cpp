@@ -41,6 +41,11 @@ namespace Echo
         loadPackages();
 	}
 
+    const String& IO::getResPath()
+    {
+        return m_resFileSystem->getPath();
+    }
+
     void IO::loadPackages()
     {
         StringArray packages;
@@ -59,6 +64,11 @@ namespace Echo
 	{
 		m_userFileSystem->setPath(userPath, "User://");
 	}
+
+    const String& IO::getUserPath()
+    {
+        return m_userFileSystem->getPath();
+    }
 
 	DataStream* IO::open(const String& resourceName, ui32 accessMode)
 	{

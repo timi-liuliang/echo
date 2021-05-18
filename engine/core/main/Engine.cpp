@@ -73,8 +73,8 @@ namespace Echo
 		setlocale(LC_ALL, "zh_CN.UTF-8");
         if (PathUtil::IsFileExist( m_config.m_projectFile))
         {
-            m_resPath = PathUtil::GetFileDirPath(m_config.m_projectFile);
-            IO::instance()->setResPath(m_resPath);
+            String resPath = PathUtil::GetFileDirPath(m_config.m_projectFile);
+            IO::instance()->setResPath(resPath);
         }
         else
         {
@@ -242,6 +242,16 @@ namespace Echo
 		doc.save_file(m_config.m_projectFile.c_str(), "\t", 1U, pugi::encoding_utf8);
 	}
 
+	const String& Engine::getResPath()
+	{
+		return IO::instance()->getResPath();
+	}
+
+	const String& Engine::getUserPath()
+	{
+		return IO::instance()->getUserPath();
+	}
+
 	void Engine::onPlatformSuspend()
 	{
 	}
@@ -282,23 +292,6 @@ namespace Echo
         
         Module::clear();
         Class::clear();
-	}
-
-	const String& Engine::getResPath() const
-	{
-		return m_resPath;
-	}
-
-	const String& Engine::getUserPath() const
-	{
-		return m_userPath;
-	}
-
-	void Engine::setUserPath(const String& strPath)
-	{
-		m_userPath = strPath;
-
-		IO::instance()->setUserPath(m_userPath);
 	}
 
 	void Engine::tick(float elapsedTime)

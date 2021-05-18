@@ -20,9 +20,13 @@ namespace Echo
 		// get instance
 		static IO* instance();
 
-		// set res|user path
+		// Res path
 		void setResPath(const String& resPath);
+		const String& getResPath();
+
+		// User path
 		void setUserPath(const String& userPath);
+		const String& getUserPath();
 
 		// open
 		DataStream* open(const String& resourceName, ui32 accessMode = DataStream::READ);
