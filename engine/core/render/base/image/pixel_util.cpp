@@ -453,6 +453,10 @@ namespace Echo
 				((float*)pDest)[2] = b;
 				((float*)pDest)[3] = a;
 			} break;
+			case PF_R16_UINT:
+			{
+				((ui16*)pDest)[0] = (ui16)r;
+			}
 			case PF_R16_FLOAT:
 			{
 				((ui16*)pDest)[0] = Math::FloatToHalf(r);
