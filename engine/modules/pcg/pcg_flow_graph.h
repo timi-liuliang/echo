@@ -58,7 +58,7 @@ namespace Echo
 
 	private:
 		// Run
-		void run(PCGNode* node);
+		void runNode(PCGNode* node);
 
 	protected:
 		String						m_graph;

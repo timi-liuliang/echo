@@ -21,6 +21,7 @@ namespace Echo
 
 	void PCGFlowGraph::bindMethods()
 	{
+		CLASS_BIND_METHOD(PCGFlowGraph, run, DEF_METHOD("run"));
 		CLASS_BIND_METHOD(PCGFlowGraph, getGraph, DEF_METHOD("getGraph"));
 		CLASS_BIND_METHOD(PCGFlowGraph, setGraph, DEF_METHOD("setGraph"));
 
@@ -129,18 +130,18 @@ namespace Echo
 	{
 		if (m_nodeOutput)
 		{
-			run(m_nodeOutput);
+			runNode(m_nodeOutput);
 		}
 	}
 
-	void PCGFlowGraph::run(PCGNode* node)
+	void PCGFlowGraph::runNode(PCGNode* node)
 	{
 		for (PCGConnectPoint* input : node->getDependentInputs())
 		{
 			PCGConnectPoint* from = input->getDependEndPoint();
 			if (from)
 			{
-				run(from->getOwner());
+				runNode(from->getOwner());
 			}
 		}
 
