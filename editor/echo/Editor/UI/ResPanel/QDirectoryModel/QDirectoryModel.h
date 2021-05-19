@@ -21,13 +21,21 @@ namespace QT_UI
 		typedef std::map<string, QIcon>  IconMap;
 
 	public:
+		// Root
+		struct RootPath
+		{
+			string		m_display;
+			string		m_path;
+		};
+		typedef std::vector<RootPath> RootPathArray;
+
+	public:
 		// 构造函数
 		QDirectoryModel();
 
 		// 设置主目录, 文件类型过滤
-		void SetRootPath( const char* rootPath, const char* extFilter, QTreeView* treeView, QSortFilterProxyModel* proxy, const char* rootPathText="Res://");
-
-		void updateRootPath(const char* rootPath);
+		void setRootPath( const char* rootPath, const char* extFilter, QTreeView* treeView, QSortFilterProxyModel* proxy, const char* rootPathText="Res://");
+		void setRootPath(const RootPathArray& rootPaths, const char* extFilter, QTreeView* treeView, QSortFilterProxyModel* proxy);
 
 		// 是否支持文件类型
 		bool IsSupportExt( const string& ext);
@@ -80,8 +88,7 @@ namespace QT_UI
 	private:
 		QTreeView*						m_treeView = nullptr;	// treeView
 		QSortFilterProxyModel*			m_proxy = nullptr;	    // proxy
-		string							m_rootPath;
-		string							m_rootPathText;
+		RootPathArray					m_rootPaths;
 		vector<string>					m_exts;			        // 文件类型
 		IconMap							m_iconMaps;		        // 图标
 		QStandardItem*					m_activeItem = nullptr;	// active item

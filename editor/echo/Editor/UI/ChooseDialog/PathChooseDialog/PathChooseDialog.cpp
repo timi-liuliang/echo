@@ -37,7 +37,7 @@ namespace Studio
 		m_previewHelper = new QT_UI::QPreviewHelper(m_listView);
 		QObject::connect(m_previewHelper, SIGNAL(doubleClickedRes(const char*)), this, SLOT(onDoubleClickPreviewRes(const char*)));
 
-		setPathType(PathType::Res);
+		setRootPaths();
 	}
 
 	PathChooseDialog::~PathChooseDialog()
@@ -89,28 +89,24 @@ namespace Studio
 		return "";
 	}
 
-	void PathChooseDialog::setPathType(PathChooseDialog::PathType pathType)
+	void PathChooseDialog::setRootPaths()
 	{
-		if (pathType == PathType::Res)
+		// Make sure user path exist
+		if (!Echo::PathUtil::IsDirExist(Echo::Engine::instance()->getUserPath()))
+			Echo::PathUtil::CreateDir(Echo::Engine::instance()->getUserPath());
+
+		// Set root paths
+		QT_UI::QDirectoryModel::RootPathArray rootPaths =
 		{
-			m_dirModel->SetRootPath(Echo::Engine::instance()->getResPath().c_str(), "none", m_resDirView, NULL, "Res://");
-			m_dirModel->Refresh();
+			{"Res://", Echo::Engine::instance()->getResPath().c_str()},
+			{"User://", Echo::Engine::instance()->getUserPath().c_str()}
+		};
 
-			// choose main directory
-			onSelectDir(Echo::Engine::instance()->getResPath().c_str());
-		}
-		else
-		{
-			// Make sure user path exist
-			if (!Echo::PathUtil::IsDirExist(Echo::Engine::instance()->getUserPath()))
-				Echo::PathUtil::CreateDir(Echo::Engine::instance()->getUserPath());
+		m_dirModel->setRootPath(rootPaths, "none", m_resDirView, NULL);
+		m_dirModel->Refresh();
 
-			m_dirModel->SetRootPath(Echo::Engine::instance()->getUserPath().c_str(), "none", m_resDirView, NULL, "User://");
-			m_dirModel->Refresh();
-
-			// choose main directory
-			onSelectDir(Echo::Engine::instance()->getUserPath().c_str());
-		}
+		// Choose main directory
+		onSelectDir(Echo::Engine::instance()->getResPath().c_str());
 	}
 
 	void PathChooseDialog::setSelectingType(PathChooseDialog::SelectingType type)

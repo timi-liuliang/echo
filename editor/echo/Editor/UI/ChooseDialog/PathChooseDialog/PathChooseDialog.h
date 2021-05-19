@@ -13,12 +13,6 @@ namespace Studio
 		Q_OBJECT
 
 	public:
-		enum PathType
-		{
-			Res,
-			User,
-		};
-
 		// Selecting type
 		enum SelectingType
 		{
@@ -42,7 +36,7 @@ namespace Studio
 
 	private:
 		// path
-		void setPathType(PathType pathType);
+		void setRootPaths();
 
 		// set type
 		void setSelectingType(SelectingType type);

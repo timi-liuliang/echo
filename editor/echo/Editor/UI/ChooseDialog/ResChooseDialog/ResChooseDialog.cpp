@@ -50,7 +50,7 @@ namespace Studio
 		titleLable << "Res://";
 		m_dirModel->setHorizontalHeaderLabels(titleLable);
 
-		m_dirModel->SetRootPath(Echo::Engine::instance()->getResPath().c_str(), "none", m_resDirView, NULL);
+		m_dirModel->setRootPath(Echo::Engine::instance()->getResPath().c_str(), "none", m_resDirView, NULL);
 		m_dirModel->Refresh();
 
 		if(!g_lastSelectDir.empty())

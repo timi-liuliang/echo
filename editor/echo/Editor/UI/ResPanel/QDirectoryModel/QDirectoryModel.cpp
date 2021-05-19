@@ -11,13 +11,20 @@ namespace QT_UI
 	{
 	}
 
-	void QDirectoryModel::SetRootPath(const char* rootPath, const char* extFilter, QTreeView* treeView, QSortFilterProxyModel* proxy, const char* rootPathText)
+	void QDirectoryModel::setRootPath(const char* rootPath, const char* extFilter, QTreeView* treeView, QSortFilterProxyModel* proxy, const char* rootPathText)
 	{
-		updateRootPath(rootPath);
-		m_rootPathText = rootPathText;
+		RootPathArray rootPaths = { { rootPathText, rootPath } };
+		setRootPath(rootPaths, extFilter, treeView, proxy);
+	}
+
+	void QDirectoryModel::setRootPath(const RootPathArray& rootPaths, const char* extFilter, QTreeView* treeView, QSortFilterProxyModel* proxy)
+	{
+		m_rootPaths = rootPaths;
+		for (RootPath& rootPath : m_rootPaths)
+			Echo::PathUtil::FormatPathAbsolut(rootPath.m_path, false);
 
 		Echo::StringArray exts = Echo::StringUtil::Split(extFilter, "|");
-		for (size_t i = 0; i<exts.size(); i++)
+		for (size_t i = 0; i < exts.size(); i++)
 			m_exts.emplace_back(exts[i].c_str());
 
 		m_treeView = treeView;
@@ -26,12 +33,6 @@ namespace QT_UI
 		connect(m_treeView, SIGNAL(collapsed(const QModelIndex&)), this, SLOT(OnExpandedFilter(const QModelIndex&)));
 		connect(m_treeView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(onSelectedFile(const QModelIndex&)));
 		connect(m_treeView, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(OnEditFile(const QModelIndex&)));
-	}
-
-	void QDirectoryModel::updateRootPath(const char* rootPath)
-	{
-		m_rootPath = rootPath;
-		Echo::PathUtil::FormatPathAbsolut(m_rootPath, false);
 	}
 
 	bool QDirectoryModel::IsSupportExt(const string& ext)
@@ -90,26 +91,29 @@ namespace QT_UI
 
 	void QDirectoryModel::Refresh(bool volatile* interrupt)
 	{
-		if (Echo::PathUtil::IsDirExist(m_rootPath.c_str()))
+		for (RootPath& root : m_rootPaths)
 		{
-			if (NULL != interrupt && *interrupt)
-				return;
+			if (Echo::PathUtil::IsDirExist(root.m_path.c_str()))
+			{
+				if (NULL != interrupt && *interrupt)
+					return;
 
-			Echo::String pathName = m_rootPath.c_str();
-			Echo::PathUtil::FormatPath(pathName);
-			Echo::String dirName = Echo::PathUtil::GetLastDirName(pathName);
-			QStandardItem* rootItem = new QStandardItem;
-			rootItem->setText(m_rootPathText.c_str());
-			rootItem->setIcon(m_iconMaps["root"]);
-			rootItem->setData(m_rootPath.c_str(), Qt::UserRole);
+				Echo::String pathName = root.m_path.c_str();
+				Echo::PathUtil::FormatPath(pathName);
+				Echo::String dirName = Echo::PathUtil::GetLastDirName(pathName);
+				QStandardItem* rootItem = new QStandardItem;
+				rootItem->setText(root.m_display.c_str());
+				rootItem->setIcon(m_iconMaps["root"]);
+				rootItem->setData(root.m_path.c_str(), Qt::UserRole);
 
-			invisibleRootItem()->setChild(invisibleRootItem()->rowCount(), 0, rootItem);
+				invisibleRootItem()->setChild(invisibleRootItem()->rowCount(), 0, rootItem);
 
-			m_dirItems.emplace_back(rootItem);
-			RecursiveDir(m_rootPath, rootItem, interrupt);
+				m_dirItems.emplace_back(rootItem);
+				RecursiveDir(root.m_path, rootItem, interrupt);
 
-			// expand root index
-			m_treeView->expand(rootItem->index());
+				// expand root index
+				m_treeView->expand(rootItem->index());
+			}
 		}
 	}
 

@@ -66,11 +66,13 @@ namespace Studio
 	{
 		m_dirModel->clear();
 
-		QStringList titleLable;
-		titleLable << "Res://";
-		m_dirModel->setHorizontalHeaderLabels(titleLable);
+		QT_UI::QDirectoryModel::RootPathArray rootPaths =
+		{
+			{"Res://", Echo::Engine::instance()->getResPath().c_str()},
+			{"User://", Echo::Engine::instance()->getUserPath().c_str()}
+		};
 
-		m_dirModel->SetRootPath(Echo::Engine::instance()->getResPath().c_str(), "none", m_resDirView, NULL);
+		m_dirModel->setRootPath( rootPaths, "none", m_resDirView, NULL);
 		m_dirModel->Refresh();
 
 		onSelectDir(Echo::Engine::instance()->getResPath().c_str());
