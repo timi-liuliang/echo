@@ -62,4 +62,6 @@ namespace Echo
 		char*	m_buffer;
 		ui16	m_access;
 	};
+
+	LUA_PUSH_VALUE(DataStream)
 }

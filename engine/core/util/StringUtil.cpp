@@ -202,7 +202,6 @@ namespace Echo
 		std::transform(str.begin(), str.end(), str.begin(), (int(*)(int)) toupper);
 	}
 
-	// ÅÐ¶Ï×Ö·û´®ÊÇ·ñÓÐ´óÐ´×ÖÄ¸
 	bool StringUtil::IsHaveUpper(const String& str)
 	{
 		for (char c : str)
@@ -214,7 +213,6 @@ namespace Echo
 		return false;
 	}
 
-	// ÅÐ¶Ï×Ö·û´®ÖÐÊÇ·ñÓÐÐ¡Ð´×ÖÄ¸
 	bool StringUtil::IsHaveLower(const String& str)
 	{
 		for (char c : str)
@@ -260,7 +258,7 @@ namespace Echo
 		return (startOfThis == pattern);
 	}
 
-	bool StringUtil::EndWith(const String& str, const String& pattern)
+	bool StringUtil::EndWith(const String& str, const String& pattern, bool bCaseSensitive)
 	{
 		size_t thisLen = str.length();
 		size_t patternLen = pattern.length();
@@ -269,7 +267,18 @@ namespace Echo
 
 		String endOfThis = str.substr(thisLen - patternLen, patternLen);
 
-		return (endOfThis == pattern);
+		if (bCaseSensitive)
+		{
+			return (endOfThis == pattern);
+		}
+		else
+		{
+			String lstr1 = endOfThis;
+			String lstr2 = pattern;
+			LowerCase(lstr1);
+			LowerCase(lstr2);
+			return (lstr1 == lstr2);
+		}
 	}
 
 	bool StringUtil::Equal(const String& str1, const String& str2, bool bCaseSensitive/*= true*/)
@@ -301,6 +310,16 @@ namespace Echo
 		}
 
 		return str.find(pattern) != std::string::npos;
+	}
+
+	String StringUtil::RemoveLast(const String& str, const String& subStr, bool isCaseSensitive)
+	{
+		if (EndWith(str, subStr, isCaseSensitive))
+		{
+			return str.substr(0, str.size() - subStr.size());
+		}
+
+		return BLANK;
 	}
 
 	String StringUtil::WCS2MBS(const WString &str)

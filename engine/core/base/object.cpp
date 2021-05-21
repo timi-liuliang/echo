@@ -69,6 +69,11 @@ namespace Echo
 		return nullptr;
 	}
 
+	bool Object::isObject(const void* ptr)
+	{
+		return getById(((Object*)ptr)->getId()) == ptr;
+	}
+
 	const String& Object::getClassName() const
 	{
 		static String className = "Object";

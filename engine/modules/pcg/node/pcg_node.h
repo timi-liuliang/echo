@@ -54,4 +54,6 @@ namespace Echo
 		bool								m_dirtyFlag = true;
 		Vector2								m_position;
 	};
+
+	LUA_PUSH_VALUE(PCGNode)
 }

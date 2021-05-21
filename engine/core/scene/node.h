@@ -185,6 +185,8 @@ namespace Echo
 		AABB			m_localAABB;		        // local aabb
 		LuaScript		m_script;			        // bind script
 	};
+
+	LUA_PUSH_VALUE(Node)
     
     // get node by path
     template<typename T>

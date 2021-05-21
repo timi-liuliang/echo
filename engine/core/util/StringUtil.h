@@ -26,9 +26,11 @@ namespace Echo
 		bool			IsHaveLower(const String& str);
 		String			Format(const char* formats, ...);
 		bool			StartWith(const String& str, const String& pattern, bool lowCase = false);
-		bool			EndWith(const String& str, const String& pattern);
+		bool			EndWith(const String& str, const String& pattern, bool bCaseSensitive = true);
 		bool			Equal(const String& str1, const String& str2, bool bCaseSensitive = true);
 		bool			Contain(const String& str, const String& pattern, bool bCaseSensitive = true);
+
+		String			RemoveLast(const String& str, const String& subStr, bool isCaseSensitive = true);
 
 		String			WCS2MBS(const WString& str);
 		WString			MBS2WCS(const String& str);

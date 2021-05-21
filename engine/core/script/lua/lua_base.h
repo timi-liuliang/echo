@@ -242,7 +242,7 @@ namespace Echo
 
 	// lua push vlaue to stack
 	template<typename T> INLINE void lua_pushvalue(lua_State* L, T value) 
-	{ 
+	{
 		lua_binder_error("lua stack push value error, unknow c type"); 
 	}
 
@@ -403,18 +403,6 @@ namespace Echo
 		}
 	}
 
-	template<> INLINE void lua_pushvalue<Node*>(lua_State* state, Node* value)
-	{
-        Object* obj = (Object*)value;
-        lua_pushvalue<Object*>(state, obj);
-	}
-
-    template<> INLINE void lua_pushvalue<DataStream*>(lua_State* state, DataStream* value)
-    {
-        Object* obj = (Object*)value;
-        lua_pushvalue<Object*>(state, obj);
-    }
-
 	template<> INLINE void lua_pushvalue<const Variant*>(lua_State* state, const Variant* value)
 	{
 		switch (value->getType())
@@ -430,5 +418,12 @@ namespace Echo
 	template<> INLINE void lua_pushvalue<Variant>(lua_State* state, Variant value)
 	{
 		lua_pushvalue<const Variant*>(state, &value);
+	}
+
+#define LUA_PUSH_VALUE(TYPE) \
+	template<> INLINE void lua_pushvalue<TYPE*>(lua_State* state, TYPE* value) \
+	{ \
+		Object* obj = (Object*)value; \
+		lua_pushvalue<Object*>(state, obj); \
 	}
 }

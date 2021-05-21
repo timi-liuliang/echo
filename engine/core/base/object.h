@@ -19,6 +19,9 @@ namespace Echo
 		// get by id
 		static Object* getById(i32 id);
 
+		// is object
+		static bool isObject(const void* ptr);
+
 		// is valid
 		bool isValid();
 

@@ -31,7 +31,7 @@ namespace Echo
                 String moduleName = StringUtil::Replace(m_file.getPath(), "Res://", "");
                 moduleName = StringUtil::Replace(moduleName, "/", ".");
                 moduleName = StringUtil::Replace(moduleName, "\\", ".");
-                moduleName = StringUtil::Replace(moduleName, ".lua", "");
+				moduleName = StringUtil::RemoveLast(moduleName, ".lua", false);
 
                 String luaStr = StringUtil::Format(
                     "nodes._%d = objs._%d\n"\
