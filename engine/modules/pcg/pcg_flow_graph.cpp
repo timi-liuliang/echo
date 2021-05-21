@@ -24,6 +24,7 @@ namespace Echo
 		CLASS_BIND_METHOD(PCGFlowGraph, run, DEF_METHOD("run"));
 		CLASS_BIND_METHOD(PCGFlowGraph, getGraph, DEF_METHOD("getGraph"));
 		CLASS_BIND_METHOD(PCGFlowGraph, setGraph, DEF_METHOD("setGraph"));
+		CLASS_BIND_METHOD(PCGFlowGraph, getNodeByName, DEF_METHOD("getNodeByName"));
 
 		CLASS_REGISTER_PROPERTY(PCGFlowGraph, "Graph", Variant::Type::String, "getGraph", "setGraph");
 
