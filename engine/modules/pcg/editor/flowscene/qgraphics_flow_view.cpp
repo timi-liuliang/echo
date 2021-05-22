@@ -23,16 +23,22 @@ namespace Procedural
 		if (event->button() == Qt::MiddleButton)
 		{
 			m_clickPos = mapToScene(event->pos());
+			m_isMiddleButtonDown = true;
 		}
 	}
 
 	void QGraphicsFlowView::mouseMoveEvent(QMouseEvent* event)
 	{
 		QGraphicsView::mouseMoveEvent(event);
-		if (event->button() == Qt::MiddleButton)
+		if (m_isMiddleButtonDown)
 		{
-			QPointF difference = m_clickPos - mapToScene(event->pos());
-			setSceneRect(sceneRect().translated(difference.x(), difference.y()));
+			QPointF newPos = mapToScene(event->pos());
+			QPointF difference = m_clickPos - newPos;
+			if (!difference.isNull())
+			{
+				QRectF  modifiedSceneRect = sceneRect().translated(difference.x(), difference.y());
+				setSceneRect(modifiedSceneRect);
+			}
 		}
 	}
 
@@ -41,6 +47,7 @@ namespace Procedural
 		QGraphicsView::mouseReleaseEvent(event);
 		if (event->button() == Qt::MiddleButton)
 		{
+			m_isMiddleButtonDown = false;
 		}
 	}
 }

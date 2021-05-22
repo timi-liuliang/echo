@@ -3,6 +3,7 @@
 #include "engine/core/editor/qt/QWidget.h"
 #include "engine/core/editor/editor.h"
 #include "engine/core/math/Rect.h"
+#include "engine/core/log/Log.h"
 
 #ifdef ECHO_EDITOR_MODE
 
@@ -10,7 +11,7 @@ namespace Procedural
 {
 	struct QBackgroundGridPainter
 	{
-		QWidget*		m_graphicsView = nullptr;
+		QGraphicsView*	m_graphicsView = nullptr;
 		QGraphicsScene*	m_graphicsScene = nullptr;
 		QGraphicsItem*	m_horizonalLines = nullptr;
 		QGraphicsItem*	m_verticalLines = nullptr;
@@ -24,7 +25,7 @@ namespace Procedural
 		}
 
 		// set
-		void set(QWidget* view, QGraphicsScene* scene)
+		void set(QGraphicsView* view, QGraphicsScene* scene)
 		{
 			m_graphicsView = view;
 			m_graphicsScene = scene;
@@ -108,6 +109,8 @@ namespace Procedural
 					m_viewRect = viewRect;
 					m_gridStep = gridStep;
 					m_color = color;
+
+					m_graphicsView->viewport()->update();
 				}
 			}
 		}

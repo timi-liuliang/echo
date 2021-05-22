@@ -20,6 +20,7 @@ namespace Procedural
 
 	protected:
 		QPointF     m_clickPos;
+		bool		m_isMiddleButtonDown = false;
 	};
 }
 
