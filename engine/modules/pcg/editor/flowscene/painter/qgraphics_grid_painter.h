@@ -109,8 +109,6 @@ namespace Procedural
 					m_viewRect = viewRect;
 					m_gridStep = gridStep;
 					m_color = color;
-
-					m_graphicsView->viewport()->update();
 				}
 			}
 		}

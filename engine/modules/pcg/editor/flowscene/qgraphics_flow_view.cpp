@@ -7,7 +7,7 @@ namespace Procedural
 	QGraphicsFlowView::QGraphicsFlowView(QWidget* parent)
 		: QGraphicsView(parent)
 	{
-		//setDragMode(QGraphicsView::ScrollHandDrag);
+		setDragMode(QGraphicsView::ScrollHandDrag);
 		setRenderHint(QPainter::Antialiasing);
 		setContextMenuPolicy(Qt::CustomContextMenu);
 	}
@@ -36,8 +36,9 @@ namespace Procedural
 			QPointF difference = m_clickPos - newPos;
 			if (!difference.isNull())
 			{
-				QRectF  modifiedSceneRect = sceneRect().translated(difference.x(), difference.y());
-				setSceneRect(modifiedSceneRect);
+				// low efficiency
+				//QRectF  modifiedSceneRect = sceneRect().translated(difference.x(), difference.y());
+				//setSceneRect(modifiedSceneRect);
 			}
 		}
 	}
