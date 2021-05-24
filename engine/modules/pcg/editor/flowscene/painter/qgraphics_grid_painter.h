@@ -103,6 +103,9 @@ namespace Procedural
 					m_verticalLines = EditorApi.qGraphicsSceneAddPath(m_graphicsScene, vpaths, 1.f, m_color);
 					m_horizonalLines = EditorApi.qGraphicsSceneAddPath(m_graphicsScene, hpaths, 1.f, m_color);
 
+					m_verticalLines->setData(Qt::UserRole, "bg");
+					m_horizonalLines->setData(Qt::UserRole, "bg");
+
 					m_verticalLines->setZValue(-255.f);
 					m_horizonalLines->setZValue(-255.f);
 

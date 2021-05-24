@@ -25,6 +25,7 @@ namespace Procedural
 
 		// is can connect
 		bool isCanConnect(QGraphicsConnectPointItem* endPoint);
+		bool isConnecting() const { return m_editingConnectItem ? true : false; }
 
 		// update
 		void update();

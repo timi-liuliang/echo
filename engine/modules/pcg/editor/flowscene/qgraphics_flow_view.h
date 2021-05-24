@@ -19,8 +19,6 @@ namespace Procedural
 		virtual void mouseReleaseEvent(QMouseEvent* event) override;
 
 	protected:
-		QPointF     m_clickPos;
-		bool		m_isMiddleButtonDown = false;
 	};
 }
 

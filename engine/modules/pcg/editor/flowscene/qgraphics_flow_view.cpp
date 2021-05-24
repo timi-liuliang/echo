@@ -1,4 +1,5 @@
 #include "qgraphics_flow_view.h"
+#include "qgraphics_flow_scene.h"
 
 #ifdef ECHO_EDITOR_MODE
 
@@ -7,7 +8,6 @@ namespace Procedural
 	QGraphicsFlowView::QGraphicsFlowView(QWidget* parent)
 		: QGraphicsView(parent)
 	{
-		setDragMode(QGraphicsView::ScrollHandDrag);
 		setRenderHint(QPainter::Antialiasing);
 		setContextMenuPolicy(Qt::CustomContextMenu);
 	}
@@ -19,37 +19,35 @@ namespace Procedural
 
 	void QGraphicsFlowView::mousePressEvent(QMouseEvent* event)
 	{
-		QGraphicsView::mousePressEvent(event);
-		if (event->button() == Qt::MiddleButton)
+		if (event->button() == Qt::LeftButton)
 		{
-			m_clickPos = mapToScene(event->pos());
-			m_isMiddleButtonDown = true;
+			QGraphicsFlowScene* flowScene = dynamic_cast<QGraphicsFlowScene*>(scene());
+			if (flowScene)
+			{
+				QGraphicsItem* item = flowScene->itemAt(mapToScene(event->pos()), QTransform());
+				if (!item || item->data(Qt::UserRole).toString() == "bg")
+				{
+					setDragMode(QGraphicsView::ScrollHandDrag);
+				}
+			}
 		}
+
+		QGraphicsView::mousePressEvent(event);
 	}
 
 	void QGraphicsFlowView::mouseMoveEvent(QMouseEvent* event)
 	{
 		QGraphicsView::mouseMoveEvent(event);
-		if (m_isMiddleButtonDown)
-		{
-			QPointF newPos = mapToScene(event->pos());
-			QPointF difference = m_clickPos - newPos;
-			if (!difference.isNull())
-			{
-				// low efficiency
-				//QRectF  modifiedSceneRect = sceneRect().translated(difference.x(), difference.y());
-				//setSceneRect(modifiedSceneRect);
-			}
-		}
 	}
 
 	void QGraphicsFlowView::mouseReleaseEvent(QMouseEvent* event)
 	{
-		QGraphicsView::mouseReleaseEvent(event);
-		if (event->button() == Qt::MiddleButton)
+		if (event->button() == Qt::LeftButton)
 		{
-			m_isMiddleButtonDown = false;
+			setDragMode(QGraphicsView::NoDrag);
 		}
+
+		QGraphicsView::mouseReleaseEvent(event);
 	}
 }
 
