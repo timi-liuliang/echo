@@ -6,6 +6,7 @@
 namespace Echo
 {
 #ifdef ECHO_EDITOR_MODE
+	// https://en.scratch-wiki.info/wiki/Blocks
     class ScratchEditor : public ObjectEditor
     {
     public:
