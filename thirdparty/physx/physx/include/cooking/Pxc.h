@@ -37,9 +37,9 @@
 #if !defined PX_PHYSX_STATIC_LIB 
 	#if PX_WINDOWS
 		#if defined PX_PHYSX_COOKING_EXPORTS
-			#define PX_PHYSX_COOKING_API __declspec(dllexport)
+			#define PX_PHYSX_COOKING_API// __declspec(dllexport)
 		#else
-			#define PX_PHYSX_COOKING_API __declspec(dllimport)
+			#define PX_PHYSX_COOKING_API// __declspec(dllimport)
 		#endif
 	#elif PX_UNIX_FAMILY
 		#define PX_PHYSX_COOKING_API PX_UNIX_EXPORT

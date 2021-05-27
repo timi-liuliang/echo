@@ -12,11 +12,17 @@ namespace Echo
 		PhysxShapeHeightfield();
 		virtual ~PhysxShapeHeightfield();
 
+		// font res path
+		void setDataPath(const ResourcePath& path);
+		const ResourcePath& getDataPath() { return m_dataPath; }
+
 	protected:
 		// create shape
 		virtual physx::PxShape* createPxShape() override;
 
 	private:
-		physx::PxHeightField* m_pxHeightField = nullptr;
+		ResourcePath            m_dataPath = ResourcePath("", "");
+		ImagePtr				m_heightmapImage;
+		physx::PxHeightField*	m_pxHeightField = nullptr;
 	};
 }

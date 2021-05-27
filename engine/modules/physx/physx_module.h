@@ -26,6 +26,9 @@ namespace Echo
 		// get pxPhysics
 		physx::PxPhysics* getPxPhysics() { return m_pxPhysics; }
 
+		// cooking
+		physx::PxCooking* getPxCooking() { return m_pxCooking; }
+
 		// get scene
 		physx::PxScene* getPxScene() { return m_pxScene; }
         
@@ -52,6 +55,7 @@ namespace Echo
 		physx::PxErrorCallback*			m_pxErrorCb = nullptr;
 		physx::PxFoundation*			m_pxFoundation = nullptr;
 		physx::PxPhysics*				m_pxPhysics = nullptr;
+		physx::PxCooking*				m_pxCooking = nullptr;
 		physx::PxDefaultCpuDispatcher*	m_pxCPUDispatcher = nullptr;
 		Vector3							m_gravity = Vector3(0.f, -9.8f, 0.f);
 		Vector3							m_shift = Vector3::ZERO;

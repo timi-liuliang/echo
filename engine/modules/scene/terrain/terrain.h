@@ -82,7 +82,7 @@ namespace Echo
     private:
         bool                    m_isRenderableDirty = true;
         ResourcePath            m_dataPath = ResourcePath("", "");
-        Image*                  m_heightmapImage = nullptr;
+        ImagePtr                m_heightmapImage = nullptr;
         vector<Image*>::type    m_layerImages;
 		float					m_heightRange = 256.f;
 		i32						m_gridSpacing = 1;
