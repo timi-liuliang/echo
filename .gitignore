@@ -21,3 +21,5 @@ bin/editor/Debug/echo
 /thirdparty/openal-soft/config.h
 .vscode/
 /build
+/cmake-build-debug
+/.idea
