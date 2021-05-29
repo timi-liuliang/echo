@@ -6,12 +6,14 @@
 #include "shape/physx_shape_capsule.h"
 #include "shape/physx_shape_plane.h"
 #include "shape/physx_shape_heightfield.h"
+#include "shape/physx_shape_mesh.h"
 #include "physx_body.h"
 #include "editor/physx_body_editor.h"
 #include "editor/physx_shape_sphere_editor.h"
 #include "editor/physx_shape_capsule_editor.h"
 #include "editor/physx_shape_plane_editor.h"
 #include "editor/physx_shape_heightfield_editor.h"
+#include "editor/physx_shape_mesh_editor.h"
 #include "engine/core/main/Engine.h"
 
 namespace Echo
@@ -108,12 +110,14 @@ namespace Echo
 		Class::registerType<PhysxShapeCapsule>();
 		Class::registerType<PhysxShapePlane>();
 		Class::registerType<PhysxShapeHeightfield>();
+		Class::registerType<PhysxShapeMesh>();
 
 		CLASS_REGISTER_EDITOR(PhysxBody, PhysxBodyEditor)
 		CLASS_REGISTER_EDITOR(PhysxShapeSphere, PhysxShapeSphereEditor)
 		CLASS_REGISTER_EDITOR(PhysxShapeCapsule, PhysxShapeCapsuleEditor)
 		CLASS_REGISTER_EDITOR(PhysxShapePlane, PhysxShapePlaneEditor)
 		CLASS_REGISTER_EDITOR(PhysxShapeHeightfield, PhysxShapeHeightfieldEditor)
+		CLASS_REGISTER_EDITOR(PhysxShapeMesh, PhysxShapeMeshEditor)
 	}
 
 	void PhysxModule::update(float elapsedTime)
