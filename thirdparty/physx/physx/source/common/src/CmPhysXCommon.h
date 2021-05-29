@@ -36,7 +36,7 @@
 #include "Ps.h"
 
 // Enable debug visualization
-#define PX_ENABLE_DEBUG_VISUALIZATION	1
+#define PX_ENABLE_DEBUG_VISUALIZATION	0
 
 // Enable simulation statistics generation
 #define PX_ENABLE_SIM_STATS 1

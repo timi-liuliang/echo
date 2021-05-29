@@ -41,7 +41,7 @@ namespace Echo
 		using namespace physx;
 
 		PxPhysics* physics = PhysxModule::instance()->getPxPhysics();
-		if (physics)
+		if (physics && m_heightmapImage)
 		{
 			i32 bytes = sizeof(physx::PxHeightFieldSample) * m_heightmapImage->getWidth() * m_heightmapImage->getHeight();
 			physx::PxHeightFieldSample* samples = (physx::PxHeightFieldSample*)EchoMalloc(bytes);

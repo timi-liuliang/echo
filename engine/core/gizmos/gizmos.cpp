@@ -92,7 +92,7 @@ namespace Echo
 		m_meshDirty = true;
 	}
 
-	void Gizmos::Batch::addIndex(Word idx)
+	void Gizmos::Batch::addIndex(ui32 idx)
 	{
 		m_indices.push_back(idx);
 		m_meshDirty = true;
@@ -114,7 +114,7 @@ namespace Echo
 			define.m_isUseVertexColor = true;
 			define.m_isUseUV = true;
 
-			m_mesh->updateIndices((ui32)m_indices.size(), sizeof(Word), m_indices.data());
+			m_mesh->updateIndices((ui32)m_indices.size(), sizeof(ui32), m_indices.data());
 			m_mesh->updateVertexs(define, (ui32)m_vertexs.size(), (const Byte*)m_vertexs.data());
 
 			m_meshDirty = false;
@@ -240,8 +240,8 @@ namespace Echo
 
 	void Gizmos::drawLine(const Vector3& from, const Vector3& to, const Color& color)
 	{
-		m_lineBatch->addIndex((Word)m_lineBatch->m_vertexs.size());
-		m_lineBatch->addIndex((Word)m_lineBatch->m_vertexs.size() + 1);
+		m_lineBatch->addIndex((ui32)m_lineBatch->m_vertexs.size());
+		m_lineBatch->addIndex((ui32)m_lineBatch->m_vertexs.size() + 1);
 
 		m_lineBatch->addVertex(VertexFormat(from, color));
 		m_lineBatch->addVertex(VertexFormat(to, color));
@@ -265,9 +265,9 @@ namespace Echo
 
 	void Gizmos::drawTriangle(const Vector3& v0, const Vector3& v1, const Vector3& v2, const Color& color)
 	{
-		m_triangleBatch->addIndex((Word)m_triangleBatch->m_vertexs.size());
-		m_triangleBatch->addIndex((Word)m_triangleBatch->m_vertexs.size() + 1);
-		m_triangleBatch->addIndex((Word)m_triangleBatch->m_vertexs.size() + 2);
+		m_triangleBatch->addIndex((ui32)m_triangleBatch->m_vertexs.size());
+		m_triangleBatch->addIndex((ui32)m_triangleBatch->m_vertexs.size() + 1);
+		m_triangleBatch->addIndex((ui32)m_triangleBatch->m_vertexs.size() + 2);
 
 		m_triangleBatch->addVertex(VertexFormat(v0, color));
 		m_triangleBatch->addVertex(VertexFormat(v1, color));
@@ -295,12 +295,12 @@ namespace Echo
 			Batch* spriteBatch = getSpriteBatch(texture);
 			if (spriteBatch)
 			{
-				spriteBatch->addIndex((Word)spriteBatch->m_vertexs.size() + 0);
-				spriteBatch->addIndex((Word)spriteBatch->m_vertexs.size() + 1);
-				spriteBatch->addIndex((Word)spriteBatch->m_vertexs.size() + 2);
-				spriteBatch->addIndex((Word)spriteBatch->m_vertexs.size() + 0);
-				spriteBatch->addIndex((Word)spriteBatch->m_vertexs.size() + 2);
-				spriteBatch->addIndex((Word)spriteBatch->m_vertexs.size() + 3);
+				spriteBatch->addIndex((ui32)spriteBatch->m_vertexs.size() + 0);
+				spriteBatch->addIndex((ui32)spriteBatch->m_vertexs.size() + 1);
+				spriteBatch->addIndex((ui32)spriteBatch->m_vertexs.size() + 2);
+				spriteBatch->addIndex((ui32)spriteBatch->m_vertexs.size() + 0);
+				spriteBatch->addIndex((ui32)spriteBatch->m_vertexs.size() + 2);
+				spriteBatch->addIndex((ui32)spriteBatch->m_vertexs.size() + 3);
 
 				spriteBatch->addVertex(VertexFormat(v0, color, Vector2(1.f, 1.f)));
 				spriteBatch->addVertex(VertexFormat(v1, color, Vector2(0.f, 1.f)));

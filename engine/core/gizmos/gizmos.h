@@ -32,7 +32,7 @@ namespace Echo
 			}
 		};
 		typedef vector<VertexFormat>::type	VertexArray;
-		typedef vector<Word>::type			IndiceArray;
+		typedef vector<ui32>::type			IndiceArray;
 
 		// batch
 		struct Batch
@@ -50,7 +50,7 @@ namespace Echo
 			~Batch();
 			void update();
 			void addVertex(const VertexFormat& vert);
-			void addIndex(Word idx);
+			void addIndex(ui32 idx);
 			void clear();
 		};
 
