@@ -38,6 +38,37 @@
 namespace Echo {
 
 
+    stbi_uc* decodeImpl(stbi_uc const *buffer, int len,Image::ImageInfo &imgInfo){
+        int width = 0;
+        int height = 0;
+        int channels_in_file = 0;
+        stbi_uc *pixels = stbi_load_from_memory(buffer,len,&width,&height,&channels_in_file,0);
+
+        if (!pixels) {
+            return pixels;
+        }
+
+        imgInfo.depth = 1;         // only 2D formats handled by this codec
+        imgInfo.width = width;
+        imgInfo.height = height;
+        imgInfo.size = channels_in_file * width * height;
+        imgInfo.numMipmaps = 0;     // no mipmaps in non-DDS
+        imgInfo.flags = 0;
+
+
+        switch (channels_in_file) {
+            case 1:imgInfo.pixFmt = PF_A8_UNORM;break;
+            case 3:imgInfo.pixFmt = PF_RGB8_UNORM;break;
+            case 4:imgInfo.pixFmt = PF_RGBA8_UNORM;break;
+            default:{
+                free(pixels);
+                EchoLogError("unsupported pixel format");
+                return false;
+            }
+        }
+        return pixels;
+    }
+
     ImageCodec::ImageCodec(ImageFormat imgFmt)
             : m_imgFmt(imgFmt) {
     }
@@ -311,62 +342,23 @@ namespace Echo {
 
     DataStream *ImageCodec::doDecode(ImageFormat imgFmt, DataStream *inStream, Image::ImageInfo &imgInfo) {
         MemoryDataStream memStream(inStream, true);
-
-        int width = 0;
-        int height = 0;
-        int channels_in_file = 0;
-        stbi_uc *pixels = stbi_load_from_memory(
-                memStream.getPtr(),
-                memStream.size(),
-                &width,
-                &height,
-                &channels_in_file,
-                0);
-
-        if (!pixels) {
-            return false;
+        stbi_uc *pixels = decodeImpl(memStream.getPtr(),memStream.size(),imgInfo);
+        if(!pixels){
+            return nullptr;
         }
-
-        imgInfo.depth = 1;         // only 2D formats handled by this codec
-        imgInfo.width = width;
-        imgInfo.height = height;
-        imgInfo.size = channels_in_file * width * height;
-        imgInfo.numMipmaps = 0;     // no mipmaps in non-DDS
-        imgInfo.flags = 0;
-        imgInfo.pixFmt = channels_in_file == 3 ? PF_RGB8_UNORM : PF_RGBA8_UNORM;
-
         MemoryDataStream *pResult = EchoNew(MemoryDataStream(pixels,imgInfo.size, false));
         return pResult;
-
     }
+
+
 
     bool ImageCodec::doDecode(ImageFormat imgFmt, const Buffer &inBuff, Buffer &outBuff, Image::ImageInfo &imgInfo) {
         // Buffer stream into memory (TODO: override IO functions instead?)
-        int width = 0;
-        int height = 0;
-        int channels_in_file = 0;
-        stbi_uc *pixels = stbi_load_from_memory(
-                inBuff.getData(),
-                inBuff.getSize(),
-                &width,
-                &height,
-                &channels_in_file,
-        0);
-
-        if (!pixels) {
+        stbi_uc *pixels = decodeImpl(inBuff.getData(),inBuff.getSize(),imgInfo);
+        if(!pixels){
             return false;
         }
-
-        imgInfo.depth = 1;         // only 2D formats handled by this codec
-        imgInfo.width = width;
-        imgInfo.height = height;
-        imgInfo.size = channels_in_file * width * height;
-        imgInfo.numMipmaps = 0;     // no mipmaps in non-DDS
-        imgInfo.flags = 0;
-        imgInfo.pixFmt = channels_in_file == 3 ? PF_RGB8_UNORM : PF_RGBA8_UNORM;
-
-
-        outBuff.set(imgInfo.size,pixels);
+        outBuff.set(imgInfo.size,pixels,true);
         return true;
     }
 }
