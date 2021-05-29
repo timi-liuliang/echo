@@ -134,7 +134,7 @@ ADD_EXECUTABLE(${MODULE_NAME} MACOSX_BUNDLE
 	CMakeLists.txt)
 
 # link libraries
-TARGET_LINK_LIBRARIES(${MODULE_NAME} zlib engine lua recast freeimage physx)
+TARGET_LINK_LIBRARIES(${MODULE_NAME} zlib engine lua recast physx)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} pugixml spine box2d)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} freetype)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} radeonrays)
