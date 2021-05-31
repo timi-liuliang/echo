@@ -54,6 +54,7 @@ namespace Echo
 		physx::PxAllocatorCallback*		m_pxAllocatorCb = nullptr;
 		physx::PxErrorCallback*			m_pxErrorCb = nullptr;
 		physx::PxFoundation*			m_pxFoundation = nullptr;
+		physx::PxPvd*					m_pxPvd = nullptr;
 		physx::PxPhysics*				m_pxPhysics = nullptr;
 		physx::PxCooking*				m_pxCooking = nullptr;
 		physx::PxDefaultCpuDispatcher*	m_pxCPUDispatcher = nullptr;
@@ -62,6 +63,7 @@ namespace Echo
 		physx::PxScene*					m_pxScene = nullptr;
 		float							m_stepLength = 0.025f;
 		float							m_accumulator = 0.f;
+		bool							m_enablePVD = true;
 		PhysxDebugDraw*					m_debugDraw = nullptr;
 	};
 }

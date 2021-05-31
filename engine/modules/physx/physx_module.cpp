@@ -1,5 +1,6 @@
 #include "physx_module.h"
 #include <thread>
+#include "pvd/PxPvdTransport.h"
 #include "physx_cb.cx"
 #include "shape/physx_shape.h"
 #include "shape/physx_shape_sphere.h"
@@ -52,10 +53,12 @@ namespace Echo
     {
 		physx::PxCloseVehicleSDK();
 
-		m_pxScene->release();
-		m_pxPhysics->release();
-		m_pxCPUDispatcher->release();
-		m_pxFoundation->release();
+		if (m_pxScene) m_pxScene->release();
+		if (m_pxPhysics) m_pxPhysics->release();
+		if (m_pxPvd) m_pxPvd->release();
+
+		if (m_pxCPUDispatcher) m_pxCPUDispatcher->release();
+		if (m_pxFoundation) m_pxFoundation->release();
 
 		EchoSafeDelete(m_pxAllocatorCb, PxAllocatorCallback);
 		EchoSafeDelete(m_pxErrorCb, PxErrorCallback);
@@ -163,8 +166,15 @@ namespace Echo
 		m_pxErrorCb = EchoNew(PhysxErrorReportCb);
 		m_pxFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, *m_pxAllocatorCb, *m_pxErrorCb);
 
+		if (m_enablePVD && IsGame)
+		{
+			m_pxPvd = PxCreatePvd(*m_pxFoundation);
+			physx::PxPvdTransport* transport = physx::PxDefaultPvdSocketTransportCreate("127.0.0.1", 5425, 10);
+			m_pxPvd->connect(*transport, physx::PxPvdInstrumentationFlag::eALL);
+		}
+
 		bool isRecordMemoryAllocations = false;
-		m_pxPhysics = PxCreateBasePhysics(PX_PHYSICS_VERSION, *m_pxFoundation, physx::PxTolerancesScale(), isRecordMemoryAllocations, nullptr);
+		m_pxPhysics = PxCreateBasePhysics(PX_PHYSICS_VERSION, *m_pxFoundation, physx::PxTolerancesScale(), isRecordMemoryAllocations, m_pxPvd);
 
 		// vehicle
 		PxInitVehicleSDK(*m_pxPhysics, nullptr);
