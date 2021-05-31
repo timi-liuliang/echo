@@ -57,7 +57,7 @@ namespace Echo {
 
 
         switch (channels_in_file) {
-            case 1:imgInfo.pixFmt = PF_A8_UNORM;break;
+            case 1:imgInfo.pixFmt = PF_R8_UNORM;break;
             case 3:imgInfo.pixFmt = PF_RGB8_UNORM;break;
             case 4:imgInfo.pixFmt = PF_RGBA8_UNORM;break;
             default:{
