@@ -36,7 +36,7 @@ namespace Echo
 	struct PropertyInfo
 	{
 		String			    m_name;
-		Variant::Type	    m_type;
+		Variant::Type	    m_type = Variant::Type::Unknown;
         PropertyHintArray   m_hints;
 		enum Type
 		{
@@ -80,8 +80,8 @@ namespace Echo
 	{
 		String				m_getter;
 		String				m_setter;
-		ClassMethodBind*	m_getterMethod;
-		ClassMethodBind*	m_setterMethod;
+		ClassMethodBind*	m_getterMethod = nullptr;
+		ClassMethodBind*	m_setterMethod = nullptr;
 
 		PropertyInfoStatic()
 			: PropertyInfo(Type::Static)

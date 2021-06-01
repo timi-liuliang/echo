@@ -635,6 +635,9 @@ static void visualizeTriangleMesh(const PxTriangleMeshGeometry& geometry, Render
 
 static void visualizeHeightField(const PxHeightFieldGeometry& hfGeometry, RenderOutput& out, const PxTransform& absPose, const PxBounds3& cullbox, bool useCullBox)
 {
+	// very slow
+	return;
+
 	const HeightField* heightfield = static_cast<const HeightField*>(hfGeometry.heightField);
 
 	// PT: TODO: the debug viz for HFs is minimal at the moment...

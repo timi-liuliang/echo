@@ -12,8 +12,8 @@ namespace Echo
 {
 	struct ClassInfo
 	{
-		bool			m_singleton;		// singleton class
-		bool			m_virtual;			// virtual class can't be instanced
+		bool			m_singleton = false;		// singleton class
+		bool			m_virtual = false;			// virtual class can't be instanced
 		String			m_parent;
 		String			m_module;
 		PropertyInfos	m_propertyInfos;
