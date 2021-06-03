@@ -1,7 +1,8 @@
 #include "physx_shape.h"
 #include "../physx_module.h"
 #include "../physx_body.h"
-#include <engine/core/main/Engine.h>
+#include <engine/core/main/engine.h>
+#include <engine/core/log/Log.h>
 
 namespace Echo
 {
@@ -36,14 +37,21 @@ namespace Echo
 			PhysxBody* body = ECHO_DOWN_CAST<PhysxBody*>(getParent());
 			if (body && body->getPxBody())
 			{
-				m_pxShape = createPxShape();
-				if (m_pxShape)
+				if (body->getPxBody())
 				{
-					physx::PxTransform localTransform((physx::PxVec3&)getLocalPosition(), (physx::PxQuat&)getLocalOrientation());
-					m_pxShape->setLocalPose(localTransform);
+					m_pxShape = createPxShape();
+					if (m_pxShape)
+					{
+						physx::PxTransform localTransform((physx::PxVec3&)getLocalPosition(), (physx::PxQuat&)getLocalOrientation());
+						m_pxShape->setLocalPose(localTransform);
 
-					body->getPxBody()->attachShape(*m_pxShape);
+						body->getPxBody()->attachShape(*m_pxShape);
+					}
 				}
+			}
+			else
+			{
+				EchoLogError("Physx shape [%s]'s parent should be a PhysxBody", getNodePath().c_str());
 			}
 		}
 

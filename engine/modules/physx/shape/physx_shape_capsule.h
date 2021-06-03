@@ -26,6 +26,6 @@ namespace Echo
 
 	private:
 		float	m_radius = 1.f;
-		float	m_height = 1.f;
+		float	m_height = 2.f;
 	};
 }
