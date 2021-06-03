@@ -48,6 +48,7 @@ namespace Echo
 	private:
 		// initialize
 		bool initPhysx();
+		bool initPVD();
         
     private:
         StringOption					m_drawDebugOption = StringOption("Editor", { "None","Editor","Game","All" });

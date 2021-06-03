@@ -170,13 +170,6 @@ namespace Echo
 		m_pxErrorCb = EchoNew(PhysxErrorReportCb);
 		m_pxFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, *m_pxAllocatorCb, *m_pxErrorCb);
 
-		if (m_enablePVD && IsGame)
-		{
-			m_pxPvd = PxCreatePvd(*m_pxFoundation);
-			physx::PxPvdTransport* transport = physx::PxDefaultPvdSocketTransportCreate("127.0.0.1", 5425, 10);
-			m_pxPvd->connect(*transport, physx::PxPvdInstrumentationFlag::eALL);
-		}
-
 		bool isRecordMemoryAllocations = false;
 		m_pxPhysics = PxCreateBasePhysics(PX_PHYSICS_VERSION, *m_pxFoundation, physx::PxTolerancesScale(), isRecordMemoryAllocations, m_pxPvd);
 
@@ -188,6 +181,28 @@ namespace Echo
 		physx::PxTolerancesScale scale;
 		m_pxCooking = PxCreateCooking(PX_PHYSICS_VERSION, *m_pxFoundation, physx::PxCookingParams(scale));
 
+		// connect physx visual debugger
+		initPVD();
+
 		return m_pxPhysics ? true : false;
+	}
+
+	bool PhysxModule::initPVD()
+	{
+		if (m_enablePVD && IsGame)
+		{
+			m_pxPvd = PxCreatePvd(*m_pxFoundation);
+			physx::PxPvdTransport* transport = physx::PxDefaultPvdSocketTransportCreate("localhost", 5425, 10);
+			m_pxPvd->connect(*transport, physx::PxPvdInstrumentationFlag::eALL);
+
+			if (m_pxPvd->isConnected())
+			{
+				EchoLogInfo("Physx Visual Debugger connect succeed.");
+				return true;
+			}
+		}
+
+		EchoLogError("Physx Visual Debugger connect failed.");
+		return false;
 	}
 }
