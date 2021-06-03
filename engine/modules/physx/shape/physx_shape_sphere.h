@@ -12,6 +12,10 @@ namespace Echo
 		PhysxShapeSphere();
 		~PhysxShapeSphere();
 
+		// radius
+		float getRadius() const { return m_radius; }
+		void setRadius(float radius);
+
 	protected:
 		// create shape
 		virtual physx::PxShape* createPxShape() override;
