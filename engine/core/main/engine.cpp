@@ -31,6 +31,7 @@
 #include "engine/core/render/metal/mt.h"
 #include "engine/core/gizmos/Gizmos.h"
 #include "engine/core/input/input.h"
+#include "engine/core/terminal/terminal.h"
 
 namespace Echo
 {
@@ -150,6 +151,9 @@ namespace Echo
 
 		Class::registerType<Translator>();
 		Class::registerType<Localization>();
+
+		Class::registerType<Command>();
+		Class::registerType<Terminal>();
 
 	#ifdef ECHO_EDITOR_MODE
 		Class::registerType<Importer>();
