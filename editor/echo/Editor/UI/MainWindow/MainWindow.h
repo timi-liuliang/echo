@@ -131,6 +131,9 @@ namespace Studio
 		void onShowStatusMessage();
         
     public slots:
+		// window
+		void onOpenWindow();
+
         // undo
         void onUndo();
         void onRedo();

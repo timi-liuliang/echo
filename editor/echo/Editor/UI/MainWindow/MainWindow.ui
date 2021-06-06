@@ -112,6 +112,13 @@
      <addaction name="m_actionThemeDark"/>
      <addaction name="m_actionThemeChoose"/>
     </widget>
+    <widget class="QMenu" name="menuWindow">
+     <property name="title">
+      <string>Window</string>
+     </property>
+     <addaction name="m_actionTerminal"/>
+    </widget>
+    <addaction name="menuWindow"/>
     <addaction name="menuTheme"/>
    </widget>
    <addaction name="menuFile_F"/>
@@ -297,6 +304,18 @@
    </property>
    <property name="text">
     <string>Editor Camera Settings</string>
+   </property>
+  </action>
+  <action name="m_actionTerminal">
+   <property name="icon">
+    <iconset resource="../../../Resource/App.qrc">
+     <normaloff>:/icon/Icon/window/terminal.png</normaloff>:/icon/Icon/window/terminal.png</iconset>
+   </property>
+   <property name="text">
+    <string>Terminal</string>
+   </property>
+   <property name="shortcut">
+    <string>`</string>
    </property>
   </action>
  </widget>

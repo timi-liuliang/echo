@@ -23,6 +23,7 @@
 #include "RenderWindow.h"
 #include "MacHelper.h"
 #include "BuildWindow.h"
+#include "TerminalDialog.h"
 #include "Document.h"
 #include "About.h"
 #include <QTimer>
@@ -70,6 +71,9 @@ namespace Studio
         // redo|undo
         QObject::connect(m_actionUndo, SIGNAL(triggered(bool)), this, SLOT(onUndo()));
         QObject::connect(m_actionRedo, SIGNAL(triggered(bool)), this, SLOT(onRedo()));
+
+		// window
+		QObject::connect(m_actionTerminal, SIGNAL(triggered(bool)), this, SLOT(onOpenWindow()));
 
 		// editor
 		QObject::connect(m_actionThemeDark, SIGNAL(triggered(bool)), this, SLOT(onChooseThemeDark()));
@@ -798,6 +802,23 @@ namespace Studio
                     
                     QObject::connect(action, SIGNAL(triggered()), this, SLOT(onEditSingletonSettings()));
                 }
+			}
+		}
+	}
+
+	void MainWindow::onOpenWindow()
+	{
+		QAction* action = qobject_cast<QAction*>(sender());
+		if (action)
+		{
+			Echo::String windowName = action->text().toStdString().c_str();
+			if (Echo::StringUtil::Equal(windowName, "Terminal"))
+			{
+				TerminalDialog* inst = TerminalDialog::instance();
+				inst->setVisible(true);
+				if (inst->exec() == QDialog::Accepted)
+				{
+				}
 			}
 		}
 	}

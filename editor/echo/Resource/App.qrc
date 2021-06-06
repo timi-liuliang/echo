@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/icon">
+    <file>Icon/window/terminal.png</file>
     <file>Icon/transform/rotation.png</file>
     <file>Icon/transform/transition.png</file>
     <file>Icon/transform/scale.png</file>
