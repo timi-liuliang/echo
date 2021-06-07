@@ -13,13 +13,15 @@ namespace Echo
 		ECHO_SINGLETON_CLASS(Terminal, Object)
 
 	public:
-		Terminal();
 		virtual ~Terminal();
 
 		// instance
 		static Terminal* instance();
 
 		// execute command
-		bool execCmd();
+		bool execCmd(const String& cmd);
+
+	private:
+		Terminal();
 	};
 }

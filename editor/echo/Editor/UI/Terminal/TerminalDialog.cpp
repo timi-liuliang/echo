@@ -15,6 +15,8 @@ namespace Studio
 
 		// hide default window title
 		setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+
+		QObject::connect(m_commandLineEdit, SIGNAL(returnPressed()), this, SLOT(onExec()));
 	}
 
 	TerminalDialog::~TerminalDialog()
@@ -30,6 +32,7 @@ namespace Studio
 
 	void TerminalDialog::onExec()
 	{
-		Echo::Terminal::instance()->execCmd();
+		Echo::String cmd = m_commandLineEdit->text().toStdString().c_str();
+		Echo::Terminal::instance()->execCmd(cmd);
 	}
 }

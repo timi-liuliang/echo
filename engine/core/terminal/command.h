@@ -11,5 +11,8 @@ namespace Echo
 	public:
 		Command();
 		virtual ~Command();
+
+		// exec
+		virtual bool exec(const StringArray& args) { return false; }
 	};
 }

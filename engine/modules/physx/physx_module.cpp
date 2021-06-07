@@ -1,6 +1,7 @@
 #include "physx_module.h"
 #include <thread>
 #include "pvd/PxPvdTransport.h"
+#include "cmd/pvd_command.h"
 #include "physx_cb.cx"
 #include "shape/physx_shape.h"
 #include "shape/physx_shape_sphere.h"
@@ -109,6 +110,7 @@ namespace Echo
 
 	void PhysxModule::registerTypes()
 	{
+		Class::registerType<PvdCommand>();
 		Class::registerType<PhysxBody>();
 		Class::registerType<PhysxShape>();
 		Class::registerType<PhysxShapeSphere>();
