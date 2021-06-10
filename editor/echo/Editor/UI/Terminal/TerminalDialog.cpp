@@ -34,5 +34,7 @@ namespace Studio
 	{
 		Echo::String cmd = m_commandLineEdit->text().toStdString().c_str();
 		Echo::Terminal::instance()->execCmd(cmd);
+
+		setVisible(false);
 	}
 }

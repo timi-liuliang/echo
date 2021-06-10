@@ -14,5 +14,9 @@ namespace Echo
 
 		// exec
 		virtual bool exec(const StringArray& args);
+
+	protected:
+		// connect
+		void pvdConnect();
 	};
 }

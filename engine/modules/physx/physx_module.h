@@ -26,6 +26,9 @@ namespace Echo
 		// get pxPhysics
 		physx::PxPhysics* getPxPhysics() { return m_pxPhysics; }
 
+		// get pxPVD
+		physx::PxPvd* getPxPvd() { return m_pxPvd; }
+
 		// cooking
 		physx::PxCooking* getPxCooking() { return m_pxCooking; }
 
@@ -48,7 +51,6 @@ namespace Echo
 	private:
 		// initialize
 		bool initPhysx();
-		bool initPVD();
         
     private:
         StringOption					m_drawDebugOption = StringOption("Editor", { "None","Editor","Game","All" });
@@ -64,7 +66,6 @@ namespace Echo
 		physx::PxScene*					m_pxScene = nullptr;
 		float							m_stepLength = 0.025f;
 		float							m_accumulator = 0.f;
-		bool							m_enablePVD = true;
 		PhysxDebugDraw*					m_debugDraw = nullptr;
 	};
 }

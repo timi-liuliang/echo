@@ -49,6 +49,11 @@ namespace Echo
 			// create scene
 			m_pxScene = m_pxPhysics->createScene(pxDesc);
 			m_debugDraw = EchoNew(PhysxDebugDraw(m_pxScene));
+
+			if (physx::PxPvdSceneClient* pvdClient = m_pxScene->getScenePvdClient())
+			{
+				pvdClient->setScenePvdFlags(physx::PxPvdSceneFlag::eTRANSMIT_CONSTRAINTS | physx::PxPvdSceneFlag::eTRANSMIT_CONTACTS | physx::PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES);
+			}
 		}
 	}
     
@@ -172,8 +177,10 @@ namespace Echo
 		m_pxErrorCb = EchoNew(PhysxErrorReportCb);
 		m_pxFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, *m_pxAllocatorCb, *m_pxErrorCb);
 
+		m_pxPvd = PxCreatePvd(*m_pxFoundation);
+
 		bool isRecordMemoryAllocations = false;
-		m_pxPhysics = PxCreateBasePhysics(PX_PHYSICS_VERSION, *m_pxFoundation, physx::PxTolerancesScale(), isRecordMemoryAllocations, m_pxPvd);
+		m_pxPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *m_pxFoundation, physx::PxTolerancesScale(), isRecordMemoryAllocations, m_pxPvd);
 
 		// vehicle
 		PxInitVehicleSDK(*m_pxPhysics, nullptr);
@@ -183,28 +190,6 @@ namespace Echo
 		physx::PxTolerancesScale scale;
 		m_pxCooking = PxCreateCooking(PX_PHYSICS_VERSION, *m_pxFoundation, physx::PxCookingParams(scale));
 
-		// connect physx visual debugger
-		initPVD();
-
 		return m_pxPhysics ? true : false;
-	}
-
-	bool PhysxModule::initPVD()
-	{
-		if (m_enablePVD && IsGame)
-		{
-			m_pxPvd = PxCreatePvd(*m_pxFoundation);
-			physx::PxPvdTransport* transport = physx::PxDefaultPvdSocketTransportCreate("localhost", 5425, 10);
-			m_pxPvd->connect(*transport, physx::PxPvdInstrumentationFlag::eALL);
-
-			if (m_pxPvd->isConnected())
-			{
-				EchoLogInfo("Physx Visual Debugger connect succeed.");
-				return true;
-			}
-		}
-
-		EchoLogError("Physx Visual Debugger connect failed.");
-		return false;
 	}
 }
