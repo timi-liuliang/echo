@@ -6,11 +6,11 @@
 #include <engine/core/io/IO.h>
 #include <thirdparty/pugixml/pugixml.hpp>
 
-extern "C" 
-{ 
-    #include <thirdparty/libicns/icns.h> 
-    int icns_png_to_image(icns_size_t dataSize, icns_byte_t* dataPtr, icns_image_t* imageOut);
-}
+//extern "C"
+//{
+//    #include <thirdparty/libicns/icns.h>
+//    int icns_png_to_image(icns_size_t dataSize, icns_byte_t* dataPtr, icns_image_t* imageOut);
+//}
 
 namespace Echo
 {
@@ -182,104 +182,104 @@ namespace Echo
 
 	void MacBuildSettings::replaceIcon()
 	{
-		String iconFullPath = IO::instance()->convertResPathToFullPath(m_iconRes.getPath());
-		if (PathUtil::IsFileExist(iconFullPath))
-		{
-            MemoryReader memReader(m_iconRes.getPath());
-            if (memReader.getSize())
-            {
-                icns_image_t* icnsImage = EchoNew(icns_image_t);
-                if (ICNS_STATUS_OK == icns_png_to_image(memReader.getSize(), memReader.getData<icns_byte_t*>(), icnsImage))
-                {
-                    icnsImage->pngFilename = iconFullPath.c_str();
-
-					icns_family_t* iconFamily = nullptr;
-                    if (ICNS_STATUS_OK == icns_create_family(&iconFamily))
-                    {
-                        // iterate all icon types
-						icns_element_t* iconElement = nullptr;
-                        vector<icns_type_t>::type  allTypes = 
-                        { 
-                            ICNS_TABLE_OF_CONTENTS,         // 0x544F4320  // "TOC "
-
-                            ICNS_ICON_VERSION,              // 0x69636E56  // "icnV"
-
-                            ICNS_256x256_2X_32BIT_ARGB_DATA,// 0x69633134 // "ic14"
-                            ICNS_128x128_2X_32BIT_ARGB_DATA,// 0x69633133 // "ic13"
-                            ICNS_32x32_2X_32BIT_ARGB_DATA,  // 0x69633132 // "ic12"
-                            ICNS_16x16_2X_32BIT_ARGB_DATA,  // 0x69633131 // "ic11"
-                            ICNS_512x512_2X_32BIT_ARGB_DATA,// 0x69633130 // "ic10"
-
-                            ICNS_1024x1024_32BIT_ARGB_DATA, // 0x69633130 // "ic10"
-
-                            ICNS_512x512_32BIT_ARGB_DATA,   // 0x69633039  // "ic09"
-                            ICNS_256x256_32BIT_ARGB_DATA,   // 0x69633038  // "ic08"
-                            ICNS_128x128_32BIT_ARGB_DATA,   // 0x69633037  // "ic07"
-
-                            ICNS_128X128_32BIT_DATA,        // 0x69743332  // "it32"
-                            ICNS_128X128_8BIT_MASK,         // 0x74386D6B  // "t8mk"
-
-                            ICNS_48x48_1BIT_DATA,           // 0x69636823  // "ich#"
-                            ICNS_48x48_4BIT_DATA,           // 0x69636834  // "ich4"
-                            ICNS_48x48_8BIT_DATA,           // 0x69636838  // "ich8"
-                            ICNS_48x48_32BIT_DATA,          // 0x69683332  // "ih32"
-                            ICNS_48x48_1BIT_MASK,           // 0x69636823  // "ich#"
-                            ICNS_48x48_8BIT_MASK,           // 0x68386D6B  // "h8mk"
-
-                            ICNS_32x32_1BIT_DATA,           // 0x49434E23  // "ICN#"
-                            ICNS_32x32_4BIT_DATA,           // 0x69636C34  // "icl4"
-                            ICNS_32x32_8BIT_DATA,           // 0x69636C38  // "icl8"
-                            ICNS_32x32_32BIT_DATA,          // 0x696C3332  // "il32"
-                            ICNS_32x32_1BIT_MASK,           // 0x49434E23  // "ICN#"
-                            ICNS_32x32_8BIT_MASK,           // 0x6C386D6B  // "l8mk"
-
-                            ICNS_16x16_1BIT_DATA,           // 0x69637323  // "ics#"
-                            ICNS_16x16_4BIT_DATA,           // 0x69637334  // "ics4"
-                            ICNS_16x16_8BIT_DATA,           // 0x69637338  // "ics8"
-                            ICNS_16x16_32BIT_DATA,          // 0x69733332  // "is32"
-                            ICNS_16x16_1BIT_MASK,           // 0x69637323  // "ics#"
-                            ICNS_16x16_8BIT_MASK,           // 0x73386D6B  // "s8mk"
-
-                            ICNS_16x12_1BIT_DATA,           // 0x69636D23  // "icm#"
-                            ICNS_16x12_4BIT_DATA,           // 0x69636D34  // "icm4"
-                            ICNS_16x12_1BIT_MASK,           // 0x69636D23  // "icm#"
-                            ICNS_16x12_8BIT_DATA,           // 0x69636D38  // "icm8"
-
-                            ICNS_32x32_1BIT_ICON,           // 0x49434F4E  // "ICON"
-
-                            ICNS_TILE_VARIANT,              // 0x74696C65  // "tile"
-                            ICNS_ROLLOVER_VARIANT,          // 0x6F766572  // "over"
-                            ICNS_DROP_VARIANT,              // 0x64726F70  // "drop"
-                            ICNS_OPEN_VARIANT,              // 0x6F70656E  // "open"
-                            ICNS_OPEN_DROP_VARIANT,         // 0x6F647270  // "odrp"
-                        };
-
-                        // all all types element to family
-                        for (size_t i=0; i<allTypes.size(); i++)
-                        {
-							if (ICNS_STATUS_OK == icns_new_element_from_image(icnsImage, allTypes[i], &iconElement))
-								icns_add_element_in_family(&iconFamily, iconElement);
-                        }
-
-                        icns_sint32_t count;
-                        icns_count_elements_in_family(iconFamily, &count);
-                        if (count)
-                        {
-							// write icon file
-							String outputPath = m_outputDir + StringUtil::Format("app/mac/resources/mac/App.icns");
-							FILE* fileHandle = fopen(outputPath.c_str(), "wb");
-							if (fileHandle)
-							{
-								icns_write_family_to_file(fileHandle, iconFamily);
-
-								fflush(fileHandle);
-								fclose(fileHandle);
-							}
-                        }
-                    }
-                }
-            }
-		}
+//		String iconFullPath = IO::instance()->convertResPathToFullPath(m_iconRes.getPath());
+//		if (PathUtil::IsFileExist(iconFullPath))
+//		{
+//            MemoryReader memReader(m_iconRes.getPath());
+//            if (memReader.getSize())
+//            {
+//                icns_image_t* icnsImage = EchoNew(icns_image_t);
+//                if (ICNS_STATUS_OK == icns_png_to_image(memReader.getSize(), memReader.getData<icns_byte_t*>(), icnsImage))
+//                {
+//                    icnsImage->pngFilename = iconFullPath.c_str();
+//
+//					icns_family_t* iconFamily = nullptr;
+//                    if (ICNS_STATUS_OK == icns_create_family(&iconFamily))
+//                    {
+//                        // iterate all icon types
+//						icns_element_t* iconElement = nullptr;
+//                        vector<icns_type_t>::type  allTypes =
+//                        {
+//                            ICNS_TABLE_OF_CONTENTS,         // 0x544F4320  // "TOC "
+//
+//                            ICNS_ICON_VERSION,              // 0x69636E56  // "icnV"
+//
+//                            ICNS_256x256_2X_32BIT_ARGB_DATA,// 0x69633134 // "ic14"
+//                            ICNS_128x128_2X_32BIT_ARGB_DATA,// 0x69633133 // "ic13"
+//                            ICNS_32x32_2X_32BIT_ARGB_DATA,  // 0x69633132 // "ic12"
+//                            ICNS_16x16_2X_32BIT_ARGB_DATA,  // 0x69633131 // "ic11"
+//                            ICNS_512x512_2X_32BIT_ARGB_DATA,// 0x69633130 // "ic10"
+//
+//                            ICNS_1024x1024_32BIT_ARGB_DATA, // 0x69633130 // "ic10"
+//
+//                            ICNS_512x512_32BIT_ARGB_DATA,   // 0x69633039  // "ic09"
+//                            ICNS_256x256_32BIT_ARGB_DATA,   // 0x69633038  // "ic08"
+//                            ICNS_128x128_32BIT_ARGB_DATA,   // 0x69633037  // "ic07"
+//
+//                            ICNS_128X128_32BIT_DATA,        // 0x69743332  // "it32"
+//                            ICNS_128X128_8BIT_MASK,         // 0x74386D6B  // "t8mk"
+//
+//                            ICNS_48x48_1BIT_DATA,           // 0x69636823  // "ich#"
+//                            ICNS_48x48_4BIT_DATA,           // 0x69636834  // "ich4"
+//                            ICNS_48x48_8BIT_DATA,           // 0x69636838  // "ich8"
+//                            ICNS_48x48_32BIT_DATA,          // 0x69683332  // "ih32"
+//                            ICNS_48x48_1BIT_MASK,           // 0x69636823  // "ich#"
+//                            ICNS_48x48_8BIT_MASK,           // 0x68386D6B  // "h8mk"
+//
+//                            ICNS_32x32_1BIT_DATA,           // 0x49434E23  // "ICN#"
+//                            ICNS_32x32_4BIT_DATA,           // 0x69636C34  // "icl4"
+//                            ICNS_32x32_8BIT_DATA,           // 0x69636C38  // "icl8"
+//                            ICNS_32x32_32BIT_DATA,          // 0x696C3332  // "il32"
+//                            ICNS_32x32_1BIT_MASK,           // 0x49434E23  // "ICN#"
+//                            ICNS_32x32_8BIT_MASK,           // 0x6C386D6B  // "l8mk"
+//
+//                            ICNS_16x16_1BIT_DATA,           // 0x69637323  // "ics#"
+//                            ICNS_16x16_4BIT_DATA,           // 0x69637334  // "ics4"
+//                            ICNS_16x16_8BIT_DATA,           // 0x69637338  // "ics8"
+//                            ICNS_16x16_32BIT_DATA,          // 0x69733332  // "is32"
+//                            ICNS_16x16_1BIT_MASK,           // 0x69637323  // "ics#"
+//                            ICNS_16x16_8BIT_MASK,           // 0x73386D6B  // "s8mk"
+//
+//                            ICNS_16x12_1BIT_DATA,           // 0x69636D23  // "icm#"
+//                            ICNS_16x12_4BIT_DATA,           // 0x69636D34  // "icm4"
+//                            ICNS_16x12_1BIT_MASK,           // 0x69636D23  // "icm#"
+//                            ICNS_16x12_8BIT_DATA,           // 0x69636D38  // "icm8"
+//
+//                            ICNS_32x32_1BIT_ICON,           // 0x49434F4E  // "ICON"
+//
+//                            ICNS_TILE_VARIANT,              // 0x74696C65  // "tile"
+//                            ICNS_ROLLOVER_VARIANT,          // 0x6F766572  // "over"
+//                            ICNS_DROP_VARIANT,              // 0x64726F70  // "drop"
+//                            ICNS_OPEN_VARIANT,              // 0x6F70656E  // "open"
+//                            ICNS_OPEN_DROP_VARIANT,         // 0x6F647270  // "odrp"
+//                        };
+//
+//                        // all all types element to family
+//                        for (size_t i=0; i<allTypes.size(); i++)
+//                        {
+//							if (ICNS_STATUS_OK == icns_new_element_from_image(icnsImage, allTypes[i], &iconElement))
+//								icns_add_element_in_family(&iconFamily, iconElement);
+//                        }
+//
+//                        icns_sint32_t count;
+//                        icns_count_elements_in_family(iconFamily, &count);
+//                        if (count)
+//                        {
+//							// write icon file
+//							String outputPath = m_outputDir + StringUtil::Format("app/mac/resources/mac/App.icns");
+//							FILE* fileHandle = fopen(outputPath.c_str(), "wb");
+//							if (fileHandle)
+//							{
+//								icns_write_family_to_file(fileHandle, iconFamily);
+//
+//								fflush(fileHandle);
+//								fclose(fileHandle);
+//							}
+//                        }
+//                    }
+//                }
+//            }
+//		}
 	}
 
     void MacBuildSettings::writeModuleConfig()
