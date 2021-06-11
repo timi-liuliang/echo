@@ -10,9 +10,6 @@ PROJECT(echo)
 
 # options
 OPTION(ECHO_BUILD_PLATFORM_ANDROID "Android platform." FALSE)
-OPTION(FREEIMAGE_SUPPORT_OPENEXR "FreeImage Support OpenEXR Format" FALSE)
-OPTION(FREEIMAGE_SUPPORT_LIBRAW "FreeImage Support LibRaw Format" FALSE)
-OPTION(FREEIMAGE_SUPPORT_WEBP "FreeImage Support WebP Format" FALSE)
 OPTION(MLPACK "mlpack Support" FALSE)
 
 IF(UNIX)
@@ -306,7 +303,6 @@ ADD_SUBDIRECTORY(thirdparty/physx)
 ADD_SUBDIRECTORY(thirdparty/spine)
 ADD_SUBDIRECTORY(thirdparty/recast)
 ADD_SUBDIRECTORY(thirdparty/lua)
-#ADD_SUBDIRECTORY(thirdparty/FreeImage)
 ADD_SUBDIRECTORY(thirdparty/freetype-2.10.0)
 ADD_SUBDIRECTORY(thirdparty/zlib)
 ADD_SUBDIRECTORY(thirdparty/Box2D)
