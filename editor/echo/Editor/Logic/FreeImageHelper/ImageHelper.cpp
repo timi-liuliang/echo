@@ -1,26 +1,29 @@
-#include "FreeImageHelper.h"
+#include "ImageHelper.h"
 #include "engine/core/util/PathUtil.h"
 #include "stb/stb_image.h"
 #include "stb/stb_image_resize.h"
 #include "stb/stb_image_write.h"
 
-namespace Echo {
-    static FreeImageHelper g_freeImageHelper;
+namespace Echo
+{
+    static ImageHelper g_freeImageHelper;
 
-    FreeImageHelper::FreeImageHelper() {
-        //FreeImage_Initialise();
+    ImageHelper::ImageHelper() 
+    {
     }
 
-    FreeImageHelper::~FreeImageHelper() {
-        //FreeImage_DeInitialise();
+    ImageHelper::~ImageHelper() 
+    {
     }
 
-    FreeImageHelper *FreeImageHelper::instance() {
-        static FreeImageHelper *inst = EchoNew(FreeImageHelper);
+    ImageHelper *ImageHelper::instance()
+    {
+        static ImageHelper *inst = EchoNew(ImageHelper);
         return inst;
     }
 
-    bool FreeImageHelper::getImageInfo(const char *filePath, ImageInfo &imageInfo) {
+    bool ImageHelper::getImageInfo(const char *filePath, ImageInfo &imageInfo)
+    {
         int x = 0;
         int y = 0;
         int channels = 0;
@@ -34,7 +37,8 @@ namespace Echo {
     }
 
 
-    bool FreeImageHelper::rescaleImage(const char *iFilePath, const char *oFilePath, float scaleValue) {
+    bool ImageHelper::rescaleImage(const char *iFilePath, const char *oFilePath, float scaleValue) 
+    {
         int x = 0;
         int y = 0;
         int channels = 0;
@@ -48,7 +52,8 @@ namespace Echo {
         return rescaleImage(iFilePath, oFilePath, nx, ny);
     }
 
-    bool FreeImageHelper::rescaleImage(const char *iFilePath, const char *oFilePath, ui32 targetWidth, ui32 targetHeight) {
+    bool ImageHelper::rescaleImage(const char *iFilePath, const char *oFilePath, ui32 targetWidth, ui32 targetHeight)
+    {
         int x = 0;
         int y = 0;
         int channels_in_file = 0;
@@ -87,16 +92,19 @@ namespace Echo {
         return result;
     }
 
-    stbi_uc *scaleImageImpl(const char *iFilePath, int tw, int th) {
+    stbi_uc *scaleImageImpl(const char *iFilePath, int tw, int th) 
+    {
         int x = 0;
         int y = 0;
         int channels_in_file = 0;
         stbi_uc *pixels = stbi_load(iFilePath, &x, &y, &channels_in_file, 0);
-        if (!pixels) {
+        if (!pixels) 
+        {
             return nullptr;
         }
 
-        if (tw == x && th == y) {
+        if (tw == x && th == y) 
+        {
             return pixels;
         }
 
@@ -105,7 +113,8 @@ namespace Echo {
         int stride = nx * channels_in_file;
         stbi_uc *output_pixels = (stbi_uc *) malloc(nx * ny * channels_in_file);
 
-        if (!stbir_resize_uint8(pixels, x, y, x * channels_in_file, output_pixels, nx, ny, stride, channels_in_file)) {
+        if (!stbir_resize_uint8(pixels, x, y, x * channels_in_file, output_pixels, nx, ny, stride, channels_in_file))
+        {
             free(pixels);
             free(output_pixels);
             return nullptr;
@@ -115,7 +124,8 @@ namespace Echo {
         return output_pixels;
     }
 
-    stbi_uc *scaleImageImpl(const char *iFilePath, float scale, int &nx, int &ny, int &nc) {
+    stbi_uc *scaleImageImpl(const char *iFilePath, float scale, int &nx, int &ny, int &nc) 
+    {
         int x = 0;
         int y = 0;
         int channels = 0;
@@ -127,11 +137,10 @@ namespace Echo {
         ny = scale * y;
         nc = channels;
         return scaleImageImpl(iFilePath, nx, ny);
-
     }
 
-    bool
-    FreeImageHelper::saveImageToTGA(const char *iFilePath, const char *oFilePath, bool isResale, float scaleValue) {
+    bool ImageHelper::saveImageToTGA(const char *iFilePath, const char *oFilePath, bool isResale, float scaleValue) 
+    {
         int nx = 0;
         int ny = 0;
         int nc = 0;
@@ -142,11 +151,10 @@ namespace Echo {
 
         int result = stbi_write_tga(oFilePath, nx, ny, nc, output_pixels);
         return result;
-
     }
 
-    bool FreeImageHelper::saveImageToBmp(const char *iFilePath, const char *oFilePath, bool isResale, ui32 width,
-                                         ui32 height) {
+    bool ImageHelper::saveImageToBmp(const char *iFilePath, const char *oFilePath, bool isResale, ui32 width, ui32 height) 
+    {
         int x = 0;
         int y = 0;
         int channels = 0;
@@ -167,7 +175,8 @@ namespace Echo {
         return result;
     }
 
-    bool FreeImageHelper::extracRGBAlphaChannel(const char *srcPath, const char *oRgbFile, const char *oAlphaFile) {
+    bool ImageHelper::extracRGBAlphaChannel(const char *srcPath, const char *oRgbFile, const char *oAlphaFile) 
+    {
         int x = 0;
         int y = 0;
         int channels_in_file = 0;
@@ -202,8 +211,8 @@ namespace Echo {
         return result;
     }
 
-    bool
-    FreeImageHelper::extractColors(const char *srcPath, std::vector<Echo::Color> &colors, int &width, int &height) {
+    bool ImageHelper::extractColors(const char *srcPath, std::vector<Echo::Color> &colors, int &width, int &height) 
+    {
         int x = 0;
         int y = 0;
         int channels_in_file = 0;
@@ -231,19 +240,20 @@ namespace Echo {
             }
         }
 
-
         return true;
     }
 
 #define GCC_PACK(n)
 
-    int FreeImageHelper::saveImageToBmp(Byte *pixelData, int width, int height, const char *savePath) {
+    int ImageHelper::saveImageToBmp(Byte *pixelData, int width, int height, const char *savePath) 
+    {
         PathUtil::DelPath(savePath);
         stbi_write_bmp(savePath, width, height, 3, pixelData);
         return true;
     }
 
-    bool FreeImageHelper::getImageBits(const char *filePath, unsigned char *bits) {
+    bool ImageHelper::getImageBits(const char *filePath, unsigned char *bits) 
+    {
         int x = 0;
         int y = 0;
         int channels_in_file = 0;
@@ -257,12 +267,14 @@ namespace Echo {
         return true;
     }
 
-    bool FreeImageHelper::addWaterMark(const char *dstFile, const char *srcFile) {
+    bool ImageHelper::addWaterMark(const char *dstFile, const char *srcFile) 
+    {
         int dx = 0;
         int dy = 0;
         int dc = 0;
         stbi_uc *dp = stbi_load(dstFile, &dx, &dy, &dc, 0);
-        if (!dp) {
+        if (!dp) 
+        {
             return false;
         }
 
@@ -270,17 +282,19 @@ namespace Echo {
         int sy = 0;
         int sc = 0;
         stbi_uc *sp = stbi_load(dstFile, &sx, &sy, &sc, 0);
-        if (!sp) {
+        if (!sp) 
+        {
             free(dp);
             return false;
         }
 
-        if ((dc - 3) * (dc - 4) * (sc - 3) * (sc - 4)) {
+        if ((dc - 3) * (dc - 4) * (sc - 3) * (sc - 4))
             return false;
-        }
 
-        for (int y = 0; y < dy && y < sy; ++y) {
-            for (int x = 0; x < dx && x < sx; ++x) {
+        for (int y = 0; y < dy && y < sy; ++y) 
+        {
+            for (int x = 0; x < dx && x < sx; ++x) 
+            {
                 int doffset = (y * dx + x) * dc;
                 int soffset = (y * sx + x) * sc;
 
@@ -314,25 +328,25 @@ namespace Echo {
         return result;
     }
 
-    bool
-    FreeImageHelper::saveRGBAtoRGBjpeg(const char *srcFile, const char *dstFile, ImageInfo &imageInfo, float scale) {
-
+    bool ImageHelper::saveRGBAtoRGBjpeg(const char *srcFile, const char *dstFile, ImageInfo &imageInfo, float scale) 
+    {
         int sx = 0;
         int sy = 0;
         int sc = 0;
         stbi_uc *sp = stbi_load(dstFile, &sx, &sy, &sc, 0);
-        if (!sp) {
+        if (!sp) 
             return false;
-        }
 
-        if (sc != 4) {
+        if (sc != 4) 
+        {
             free(sp);
             return false;
         }
 
         stbi_uc *dp = (stbi_uc *) malloc(sx * sy * 3 * 2);
         int offseto = sx * sy * 3;
-        for (size_t pix = 0; pix < sx * sy; pix++) {
+        for (size_t pix = 0; pix < sx * sy; pix++) 
+        {
             int offset = pix * 3;
             dp[offset + 0] = sp[pix * 4 + 0];
             dp[offset + 1] = sp[pix * 4 + 1];
@@ -348,10 +362,11 @@ namespace Echo {
         return result;
     }
 
-    bool FreeImageHelper::mergeIMage(StringArray *srcFile, const char *dstFile) {
+    bool ImageHelper::mergeIMage(StringArray *srcFile, const char *dstFile) 
+    {
         if ((*srcFile).empty())
             return false;
+
         return false;
     }
-
 }

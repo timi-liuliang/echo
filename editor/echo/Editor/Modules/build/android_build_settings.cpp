@@ -3,7 +3,7 @@
 #include "engine/core/main/Engine.h"
 #include <engine/core/io/IO.h>
 #include <thirdparty/pugixml/pugixml.hpp>
-#include "FreeImageHelper.h"
+#include "ImageHelper.h"
 #include <engine/core/main/module.h>
 #include <engine/core/io/stream/FileHandleDataStream.h>
 
@@ -296,7 +296,7 @@ namespace Echo
 
 	bool AndroidBuildSettings::rescaleIcon(const char* iFilePath, const char* oFilePath, ui32 targetWidth, ui32 targetHeight)
 	{
-        FreeImageHelper helper;
+        ImageHelper helper;
         return  helper.rescaleImage(iFilePath,oFilePath,targetWidth,targetHeight);
 	}
 }

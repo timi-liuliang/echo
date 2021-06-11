@@ -3,7 +3,7 @@
 #include "Studio.h"
 #include <engine/core/main/Engine.h>
 #include <engine/core/util/PathUtil.h>
-#include "FreeImageHelper.h"
+#include "ImageHelper.h"
 
 namespace Studio
 {
@@ -46,8 +46,8 @@ namespace Studio
 				if ( fileExt == exts[k] )
 				{
 					Echo::String fileLocation = it->second;
-					Echo::FreeImageHelper::ImageInfo info;
-					Echo::FreeImageHelper::instance()->getImageInfo(fileLocation.c_str(), info);
+					Echo::ImageHelper::ImageInfo info;
+					Echo::ImageHelper::instance()->getImageInfo(fileLocation.c_str(), info);
 					if ( info.m_width != info.m_height )
 					{
 						Echo::String msg = Echo::StringUtil::Format("Texture [%s] width [%d] is not equal to height [%d]!", it->first.c_str(), info.m_width, info.m_height);
