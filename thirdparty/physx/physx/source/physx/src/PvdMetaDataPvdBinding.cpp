@@ -539,6 +539,8 @@ void PvdMetaDataBinding::sendAllProperties(PvdDataStream& inStream, const PxPhys
 #elif defined(NDEBUG)
 	// This is a release build
 	String buildType = "Release";
+#else
+	String buildType = "Release";
 #endif
 	inStream.setPropertyValue(&inPhysics, "Version.Build", buildType);
 }

@@ -50,7 +50,7 @@ namespace Echo
 				for (i32 w = 0; w < m_heightmapImage->getWidth(); w++)
 				{
 					i32 offset = r * m_heightmapImage->getWidth() + w;
-					samples[offset].height = m_heightmapImage->getColor(w, r, 0).r * 65535;
+					samples[offset].height = (m_heightmapImage->getColor(w, r, 0).r * 2.f - 1.f) * m_heightRange;
 					samples[offset].materialIndex0 = 0;
 					samples[offset].materialIndex1 = 0;
 				}

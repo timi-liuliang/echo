@@ -63,6 +63,7 @@ namespace Echo
 
 		if (m_pxScene) m_pxScene->release();
 		if (m_pxPhysics) m_pxPhysics->release();
+		if (m_pxPvd->getTransport()) m_pxPvd->getTransport()->release();
 		if (m_pxPvd) m_pxPvd->release();
 
 		if (m_pxCPUDispatcher) m_pxCPUDispatcher->release();

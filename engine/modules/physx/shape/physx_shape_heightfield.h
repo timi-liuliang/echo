@@ -24,5 +24,6 @@ namespace Echo
 		ResourcePath            m_dataPath = ResourcePath("", "");
 		ImagePtr				m_heightmapImage;
 		physx::PxHeightField*	m_pxHeightField = nullptr;
+		float					m_heightRange = 256.f;
 	};
 }
