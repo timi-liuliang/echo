@@ -7,7 +7,7 @@
 #include "image_resampler.h"
 #include "image_codec.h"
 #include "image_codec_mgr.h"
-#include <thirdparty/FreeImage/FreeImage.h>
+
 
 namespace Echo
 {

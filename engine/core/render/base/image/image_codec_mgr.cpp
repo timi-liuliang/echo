@@ -1,6 +1,6 @@
 #include "image_codec.h"
 #include "image_codec_mgr.h"
-#include <thirdparty/FreeImage/FreeImage.h>
+
 
 namespace Echo
 {
@@ -13,7 +13,6 @@ namespace Echo
 	ImageCodecMgr::ImageCodecMgr()
 	{
 		// lazy initialization.
-		FreeImage_Initialise();
 
 		ImageCodec *pDDSCodec = EchoNew(ImageCodec(IF_DDS));
 		ImageCodec *pJPGCodec = EchoNew(ImageCodec(IF_JPG));
@@ -38,8 +37,6 @@ namespace Echo
 			EchoSafeDelete(it->second, ImageCodec);
 		}
 		m_codecMap.clear();
-
-		FreeImage_DeInitialise();
 	}
 
 	void ImageCodecMgr::registerCodec(ImageCodec* pImgCodec)

@@ -4,7 +4,6 @@
 #include <engine/core/main/Engine.h>
 #include <thirdparty/pugixml/pugixml.hpp>
 #include <QProcess>
-#include "FreeImageHelper.h"
 #include <engine/core/main/module.h>
 #include <engine/core/render/base/renderer.h>
 

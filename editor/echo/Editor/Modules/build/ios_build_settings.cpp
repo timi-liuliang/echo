@@ -234,31 +234,8 @@ namespace Echo
 
     bool iOSBuildSettings::rescaleIcon( const char* iFilePath, const char* oFilePath, ui32 targetWidth, ui32 targetHeight)
      {
-         std::string ext = PathUtil::GetFileExt( iFilePath).c_str();
-         FREE_IMAGE_FORMAT fileFMT = FreeImage_GetFIFFromFilename( iFilePath);
-         int fiFlags = FreeImageHelper::instance()->mappingFlagsByFormat( fileFMT);
-
-         // Load
-         if( fileFMT!= FIF_UNKNOWN && FreeImage_FIFSupportsReading( fileFMT))
-         {
-             FIBITMAP* dip = FreeImage_Load( fileFMT, iFilePath, fiFlags);
-             if( dip)
-             {
-                 FIBITMAP* dipScaled = FreeImage_Rescale( dip, targetWidth, targetHeight, FILTER_BSPLINE);
-                 
-                 // iOS icons can't have alpha channel
-                 dipScaled = FreeImage_ConvertTo24Bits(dipScaled);
-
-                 FreeImage_Save(fileFMT, dipScaled, oFilePath, TARGA_DEFAULT);
-
-                 FreeImage_Unload( dipScaled);
-                 FreeImage_Unload( dip);
-
-                 return true;
-             }
-         }
-
-         return false;
+         FreeImageHelper helper;
+         return  helper.rescaleImage(iFilePath,oFilePath,targetWidth,targetHeight);
      }
 
     void iOSBuildSettings::replaceIcon()
