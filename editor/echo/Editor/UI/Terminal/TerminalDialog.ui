@@ -22,23 +22,6 @@
      <item>
       <widget class="QLineEdit" name="m_commandLineEdit"/>
      </item>
-     <item>
-      <widget class="QToolButton" name="m_viewNodeButton">
-       <property name="toolTip">
-        <string>Display node by Module</string>
-       </property>
-       <property name="statusTip">
-        <string/>
-       </property>
-       <property name="text">
-        <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../../../Resource/App.qrc">
-         <normaloff>:/icon/Icon/res/view_type_list.png</normaloff>:/icon/Icon/res/view_type_list.png</iconset>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
   </layout>
