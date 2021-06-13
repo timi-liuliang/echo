@@ -1,7 +1,7 @@
 #include "property_editor.h"
 #include "engine/core/memory/MemAllocDef.h"
 #include "engine/core/log/Log.h"
-#include "engine/core/main/Engine.h"
+#include "engine/core/main/engine.h"
 
 namespace Echo
 {
@@ -27,7 +27,7 @@ namespace Echo
 		}
 		else
 		{
-			EchoLogError("property editor factory for [%s] has existed", finalName);
+			EchoLogError("property editor factory for [%s] has existed", finalName.c_str());
 		}
 	}
 

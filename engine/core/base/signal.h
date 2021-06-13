@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/core/memory/MemAllocDef.h"
+#include "engine/core/base/variant.h"
 
 namespace Echo
 {

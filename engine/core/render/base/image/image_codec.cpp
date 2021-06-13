@@ -35,10 +35,10 @@
 #	define FREEIMAGE_COLORORDER FREEIMAGE_COLORORDER_RGB
 #endif
 
-namespace Echo {
-
-
-    stbi_uc* decodeImpl(stbi_uc const *buffer, int len,Image::ImageInfo &imgInfo){
+namespace Echo
+{
+    stbi_uc* decodeImpl(stbi_uc const *buffer, int len,Image::ImageInfo &imgInfo)
+    {
         int width = 0;
         int height = 0;
         int channels_in_file = 0;
@@ -63,9 +63,10 @@ namespace Echo {
             default:{
                 free(pixels);
                 EchoLogError("unsupported pixel format");
-                return false;
+                return nullptr;
             }
         }
+        
         return pixels;
     }
 
