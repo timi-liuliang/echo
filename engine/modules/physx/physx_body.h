@@ -20,6 +20,10 @@ namespace Echo
 		// get physx body
 		physx::PxRigidActor* getPxBody() { return m_pxBody; }
 
+		// linear velocity
+		void setLinearVelocity(const Vector3& velocity);
+		Vector3 getLinearVelocity();
+
 	private:
 		// update
 		virtual void update_self() override;

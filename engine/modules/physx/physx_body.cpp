@@ -19,6 +19,8 @@ namespace Echo
 	{
 		CLASS_BIND_METHOD(PhysxBody, getType, DEF_METHOD("getType"));
 		CLASS_BIND_METHOD(PhysxBody, setType, DEF_METHOD("setType"));
+		CLASS_BIND_METHOD(PhysxBody, setLinearVelocity, DEF_METHOD("setLinearVelocity"));
+		CLASS_BIND_METHOD(PhysxBody, getLinearVelocity, DEF_METHOD("getLinearVelocity"));
 
 		CLASS_REGISTER_PROPERTY(PhysxBody, "Type", Variant::Type::StringOption, "getType", "setType");
 	}
@@ -65,5 +67,27 @@ namespace Echo
 				m_pxBody->setGlobalPose( pxTransform);
 			}
 		}
+	}
+
+	void PhysxBody::setLinearVelocity(const Vector3& velocity)
+	{
+		if (m_pxBody && m_type.getIdx() == 2)
+		{
+			physx::PxRigidDynamic* dyb = dynamic_cast<physx::PxRigidDynamic*>(m_pxBody);
+			if (dyb)
+				dyb->setLinearVelocity((physx::PxVec3&)velocity);
+		}
+	}
+
+	Vector3 PhysxBody::getLinearVelocity()
+	{
+		if (m_pxBody && m_type.getIdx() == 2)
+		{
+			physx::PxRigidDynamic* dyb = dynamic_cast<physx::PxRigidDynamic*>(m_pxBody);
+			if(dyb)
+				return (Vector3&)dyb->getLinearVelocity();
+		}
+
+		return Vector3::ZERO;
 	}
 }
