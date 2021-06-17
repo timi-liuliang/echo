@@ -11,6 +11,7 @@
 #include "shape/physx_shape_heightfield.h"
 #include "shape/physx_shape_mesh.h"
 #include "physx_body.h"
+#include "physx_character_controller.h"
 #include "editor/physx_body_editor.h"
 #include "editor/physx_shape_sphere_editor.h"
 #include "editor/physx_shape_box_editor.h"
@@ -49,6 +50,7 @@ namespace Echo
 			// create scene
 			m_pxScene = m_pxPhysics->createScene(pxDesc);
 			m_debugDraw = EchoNew(PhysxDebugDraw(m_pxScene));
+			m_pxControllerManager = PxCreateControllerManager(*m_pxScene);
 
 			if (physx::PxPvdSceneClient* pvdClient = m_pxScene->getScenePvdClient())
 			{
@@ -118,6 +120,7 @@ namespace Echo
 	{
 		Class::registerType<PvdCommand>();
 		Class::registerType<PhysxBody>();
+		Class::registerType<PhysxCharacterController>();
 		Class::registerType<PhysxShape>();
 		Class::registerType<PhysxShapeSphere>();
 		Class::registerType<PhysxShapeBox>();

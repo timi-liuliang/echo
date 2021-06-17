@@ -64,6 +64,7 @@ namespace Echo
 		Vector3							m_gravity = Vector3(0.f, -9.8f, 0.f);
 		Vector3							m_shift = Vector3::ZERO;
 		physx::PxScene*					m_pxScene = nullptr;
+		physx::PxControllerManager*		m_pxControllerManager = nullptr;
 		float							m_stepLength = 0.025f;
 		float							m_accumulator = 0.f;
 		PhysxDebugDraw*					m_debugDraw = nullptr;

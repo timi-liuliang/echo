@@ -5,13 +5,13 @@
 
 namespace Echo
 {
-	class PhysxBody : public Node 
+	class PhysxCharacterController : public Node
 	{
-		ECHO_CLASS(PhysxBody, Node)
+		ECHO_CLASS(PhysxCharacterController, Node)
 
 	public:
-		PhysxBody();
-		virtual ~PhysxBody();
+		PhysxCharacterController();
+		virtual ~PhysxCharacterController();
 
 		// type
 		const StringOption& getType() { return m_type; }
@@ -32,7 +32,7 @@ namespace Echo
 		virtual void update_self() override;
 
 	private:
-		physx::PxRigidActor*m_pxBody = nullptr;
+		physx::PxRigidActor* m_pxBody = nullptr;
 		StringOption		m_type;
 	};
 }

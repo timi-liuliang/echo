@@ -8,3 +8,4 @@
 
 #include <PxPhysicsAPI.h>
 #include <vehicle/PxVehicleSDK.h>
+#include <characterKinematic/PxControllerManager.h>
