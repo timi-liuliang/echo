@@ -11,7 +11,9 @@
 #include "shape/physx_shape_heightfield.h"
 #include "shape/physx_shape_mesh.h"
 #include "physx_body.h"
-#include "physx_character_controller.h"
+#include "controller/physx_controller.h"
+#include "controller/physx_controller_box.h"
+#include "controller/physx_controller_capsule.h"
 #include "editor/physx_body_editor.h"
 #include "editor/physx_shape_sphere_editor.h"
 #include "editor/physx_shape_box_editor.h"
@@ -120,7 +122,9 @@ namespace Echo
 	{
 		Class::registerType<PvdCommand>();
 		Class::registerType<PhysxBody>();
-		Class::registerType<PhysxCharacterController>();
+		Class::registerType<PhysxController>();
+		Class::registerType<PhysxControllerBox>(); 
+		Class::registerType<PhysxControllerCapsule>();
 		Class::registerType<PhysxShape>();
 		Class::registerType<PhysxShapeSphere>();
 		Class::registerType<PhysxShapeBox>();

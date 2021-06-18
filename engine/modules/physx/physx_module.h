@@ -34,6 +34,9 @@ namespace Echo
 
 		// get scene
 		physx::PxScene* getPxScene() { return m_pxScene; }
+
+		// get controller manager
+		physx::PxControllerManager* getPxControllerManager() { return m_pxControllerManager; }
         
     public:
         // debug draw
