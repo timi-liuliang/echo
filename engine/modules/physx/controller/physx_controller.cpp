@@ -24,23 +24,29 @@ namespace Echo
 
 	void PhysxController::update_self()
 	{
+		const Vector3& shift = PhysxModule::instance()->getShift();
+
 		if (m_isEnable && !m_pxController)
 		{
 			m_pxController = createController();
+			if (m_pxController)
+			{
+				Vector3 finalPosition = getWorldPosition() + shift;
+				m_pxController->setFootPosition(physx::PxExtendedVec3(finalPosition.x, finalPosition.y, finalPosition.z));
+			}
 		}
 
 		if (m_pxController)
 		{
-			const Vector3& shift = PhysxModule::instance()->getShift();
 			if (Engine::instance()->getConfig().m_isGame)
 			{
 				physx::PxExtendedVec3 position = m_pxController->getFootPosition();
-				this->setWorldPosition((Vector3&)position - shift);
+				this->setWorldPosition(Vector3(position.x, position.y, position.z) - shift);
 			}
 			else
 			{
 				Vector3 finalPosition = getWorldPosition() + shift;
-				m_pxController->setFootPosition((physx::PxExtendedVec3&)finalPosition);
+				m_pxController->setFootPosition(physx::PxExtendedVec3(finalPosition.x, finalPosition.y, finalPosition.z));
 			}
 		}
 
