@@ -11,9 +11,6 @@
 #include "shape/physx_shape_heightfield.h"
 #include "shape/physx_shape_mesh.h"
 #include "physx_body.h"
-#include "controller/physx_controller.h"
-#include "controller/physx_controller_box.h"
-#include "controller/physx_controller_capsule.h"
 #include "editor/physx_body_editor.h"
 #include "editor/physx_shape_sphere_editor.h"
 #include "editor/physx_shape_box_editor.h"
@@ -21,6 +18,11 @@
 #include "editor/physx_shape_plane_editor.h"
 #include "editor/physx_shape_heightfield_editor.h"
 #include "editor/physx_shape_mesh_editor.h"
+#include "controller/physx_controller.h"
+#include "controller/physx_controller_box.h"
+#include "controller/physx_controller_capsule.h"
+#include "editor/physx_controller_box_editor.h"
+#include "editor/physx_controller_capsule_editor.h"
 #include "engine/core/main/Engine.h"
 
 namespace Echo
@@ -140,6 +142,8 @@ namespace Echo
 		CLASS_REGISTER_EDITOR(PhysxShapePlane, PhysxShapePlaneEditor)
 		CLASS_REGISTER_EDITOR(PhysxShapeHeightfield, PhysxShapeHeightfieldEditor)
 		CLASS_REGISTER_EDITOR(PhysxShapeMesh, PhysxShapeMeshEditor)
+		CLASS_REGISTER_EDITOR(PhysxControllerBox, PhysxControllerBoxEditor)
+		CLASS_REGISTER_EDITOR(PhysxControllerCapsule, PhysxControllerCapsuleEditor)
 	}
 
 	void PhysxModule::update(float elapsedTime)
