@@ -98,13 +98,22 @@ namespace Echo
 		if (pxScene)
 		{
 			physx::PxOverlapBuffer hitCb;
-			bool result = pxScene->overlap(
+			pxScene->overlap(
 				physx::PxCapsuleGeometry(m_radius, m_height * 0.5f),
 				physx::PxTransform((physx::PxVec3&)getWorldPosition(), (physx::PxQuat&)getWorldOrientation()),
-				hitCb,
-				physx::PxQueryFilterData(physx::PxQueryFlag::eSTATIC));
+				hitCb/*,
+				physx::PxQueryFilterData(physx::PxQueryFlag::eSTATIC)*/);
 
-			return result;
+			for (i32 i = 0; i < hitCb.getMaxNbTouches(); i++)
+			{
+				const physx::PxOverlapHit& overlapHit = hitCb.getTouch(i);
+
+				// Ignore self
+				if (overlapHit.actor != m_pxController->getActor())
+					return true;
+			}
+
+			return false;
 		}
 
 		return false;
