@@ -13,6 +13,9 @@ namespace Echo
 		PhysxControllerBox();
 		virtual ~PhysxControllerBox();
 
+		// Sweep
+		virtual bool sweep(const Vector3& unitDir, float distance) override { return false; }
+
 	private:
 	};
 }

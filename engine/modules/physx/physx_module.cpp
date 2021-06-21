@@ -94,6 +94,7 @@ namespace Echo
 		CLASS_BIND_METHOD(PhysxModule, setGravity, DEF_METHOD("setGravity"));
 		CLASS_BIND_METHOD(PhysxModule, getShift, DEF_METHOD("getShift"));
 		CLASS_BIND_METHOD(PhysxModule, setShift, DEF_METHOD("setShift"));
+		CLASS_BIND_METHOD(PhysxModule, rayCast,  DEF_METHOD("rayCast"));
 
         CLASS_REGISTER_PROPERTY(PhysxModule, "DebugDraw", Variant::Type::StringOption, "getDebugDrawOption", "setDebugDrawOption");
 		CLASS_REGISTER_PROPERTY(PhysxModule, "Gravity", Variant::Type::Vector3, "getGravity", "setGravity");
@@ -203,5 +204,16 @@ namespace Echo
 		m_pxCooking = PxCreateCooking(PX_PHYSICS_VERSION, *m_pxFoundation, physx::PxCookingParams(scale));
 
 		return m_pxPhysics ? true : false;
+	}
+
+	bool PhysxModule::rayCast(const Vector3& origin, const Vector3& dir, float maxDistance)
+	{
+		if (m_pxScene)
+		{
+			physx::PxRaycastBuffer hitCb;
+			return m_pxScene->raycast((const physx::PxVec3&)origin, (const physx::PxVec3&)dir, maxDistance, hitCb);
+		}
+
+		return false;
 	}
 }

@@ -16,6 +16,12 @@ namespace Echo
 		// Move
 		void move(const Vector3& disp);
 
+		// Sweep
+		virtual bool sweep(const Vector3& unitDir, float distance) { return false; }
+
+		// Overlap
+		virtual bool overlap() { return false; }
+
 	protected:
 		// Create controller
 		virtual physx::PxController* createController() { return nullptr; }

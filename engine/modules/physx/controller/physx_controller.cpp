@@ -20,6 +20,8 @@ namespace Echo
 	void PhysxController::bindMethods()
 	{
 		CLASS_BIND_METHOD(PhysxController, move, DEF_METHOD("move"));
+		CLASS_BIND_METHOD(PhysxController, sweep, DEF_METHOD("sweep"));
+		CLASS_BIND_METHOD(PhysxController, overlap, DEF_METHOD("overlap"));
 	}
 
 	void PhysxController::update_self()
@@ -32,7 +34,7 @@ namespace Echo
 			if (m_pxController)
 			{
 				Vector3 finalPosition = getWorldPosition() + shift;
-				m_pxController->setFootPosition(physx::PxExtendedVec3(finalPosition.x, finalPosition.y, finalPosition.z));
+				m_pxController->setPosition(physx::PxExtendedVec3(finalPosition.x, finalPosition.y, finalPosition.z));
 			}
 		}
 
@@ -40,16 +42,15 @@ namespace Echo
 		{
 			if (Engine::instance()->getConfig().m_isGame)
 			{
-				physx::PxExtendedVec3 position = m_pxController->getFootPosition();
+				physx::PxExtendedVec3 position = m_pxController->getPosition();
 				this->setWorldPosition(Vector3(position.x, position.y, position.z) - shift);
 			}
 			else
 			{
 				Vector3 finalPosition = getWorldPosition() + shift;
-				m_pxController->setFootPosition(physx::PxExtendedVec3(finalPosition.x, finalPosition.y, finalPosition.z));
+				m_pxController->setPosition(physx::PxExtendedVec3(finalPosition.x, finalPosition.y, finalPosition.z));
 			}
 		}
-
 	}
 
 	void PhysxController::move(const Vector3& disp)

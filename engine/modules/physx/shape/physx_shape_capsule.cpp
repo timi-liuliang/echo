@@ -72,4 +72,21 @@ namespace Echo
 
 		return nullptr;
 	}
+
+	bool PhysxShapeCapsule::sweep(const Vector3& unitDir, float distance)
+	{
+		physx::PxScene* pxScene = PhysxModule::instance()->getPxScene();
+		if (pxScene)
+		{
+			physx::PxSweepBuffer hitCb;
+			return pxScene->sweep(
+				physx::PxCapsuleGeometry(m_radius, m_height * 0.5f),
+				physx::PxTransform((physx::PxVec3&)getWorldPosition(), (physx::PxQuat&)getWorldOrientation()),
+				(const physx::PxVec3&)unitDir,
+				distance,
+				hitCb);
+		}
+
+		return false;
+	}
 }

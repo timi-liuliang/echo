@@ -13,11 +13,14 @@ namespace Echo
 		PhysxShape();
 		~PhysxShape();
 
+		// Sweep
+		virtual bool sweep(const Vector3& unitDir, float distance) { return false; }
+
 	protected:
-		// update self
+		// Update self
 		virtual void update_self() override;
 
-		// create shape
+		// Create shape
 		virtual physx::PxShape* createPxShape() { return nullptr; }
 
 	protected:

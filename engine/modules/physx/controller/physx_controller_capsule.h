@@ -21,6 +21,12 @@ namespace Echo
 		float getHeight() const { return m_height; }
 		void setHeight(float height);
 
+		// Sweep
+		virtual bool sweep(const Vector3& unitDir, float distance) override;
+
+		// Overlap
+		virtual bool overlap() override;
+
 	protected:
 		// Create controller
 		virtual physx::PxController* createController() override;
