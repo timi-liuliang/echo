@@ -80,13 +80,19 @@ namespace Echo
 		physx::PxScene* pxScene = PhysxModule::instance()->getPxScene();
 		if (pxScene)
 		{
+			Vector3 checkPosition = getWorldPosition();
+
 			physx::PxSweepBuffer hitCb;
-			return pxScene->sweep(
+			bool result = pxScene->sweep(
 				physx::PxCapsuleGeometry(m_radius, m_height * 0.5f),
-				physx::PxTransform((physx::PxVec3&)getWorldPosition(), (physx::PxQuat&)getWorldOrientation()),
-				(const physx::PxVec3&)unitDir,
+				physx::PxTransform((physx::PxVec3&)checkPosition, (physx::PxQuat&)getWorldOrientation()),
+				(const physx::PxVec3&)Vector3::NEG_UNIT_Y,
 				distance,
-				hitCb);
+				hitCb,
+				physx::PxHitFlag::eDEFAULT,
+				physx::PxQueryFilterData(physx::PxQueryFlag::eSTATIC));
+
+			return result;
 		}
 
 		return false;
@@ -97,14 +103,16 @@ namespace Echo
 		physx::PxScene* pxScene = PhysxModule::instance()->getPxScene();
 		if (pxScene)
 		{
+			Vector3 checkPosition = getWorldPosition();
+
 			physx::PxOverlapBuffer hitCb;
 			pxScene->overlap(
 				physx::PxCapsuleGeometry(m_radius, m_height * 0.5f),
-				physx::PxTransform((physx::PxVec3&)getWorldPosition(), (physx::PxQuat&)getWorldOrientation()),
+				physx::PxTransform((physx::PxVec3&)(checkPosition), (physx::PxQuat&)getWorldOrientation()),
 				hitCb/*,
 				physx::PxQueryFilterData(physx::PxQueryFlag::eSTATIC)*/);
 
-			for (i32 i = 0; i < hitCb.getMaxNbTouches(); i++)
+			for (i32 i = 0; i < hitCb.getNbTouches(); i++)
 			{
 				const physx::PxOverlapHit& overlapHit = hitCb.getTouch(i);
 
@@ -112,8 +120,6 @@ namespace Echo
 				if (overlapHit.actor != m_pxController->getActor())
 					return true;
 			}
-
-			return false;
 		}
 
 		return false;
