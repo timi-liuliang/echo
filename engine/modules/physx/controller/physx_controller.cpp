@@ -22,6 +22,36 @@ namespace Echo
 		CLASS_BIND_METHOD(PhysxController, move, DEF_METHOD("move"));
 		CLASS_BIND_METHOD(PhysxController, sweep, DEF_METHOD("sweep"));
 		CLASS_BIND_METHOD(PhysxController, overlap, DEF_METHOD("overlap"));
+		CLASS_BIND_METHOD(PhysxController, getContactOffset, DEF_METHOD("getContactOffset"));
+		CLASS_BIND_METHOD(PhysxController, setContactOffset, DEF_METHOD("setContactOffset"));
+		CLASS_BIND_METHOD(PhysxController, getFootPosition, DEF_METHOD("getFootPosition"));
+
+		CLASS_REGISTER_PROPERTY(PhysxController, "ContactOffset", Variant::Type::Real, "getContactOffset", "setContactOffset");
+	}
+
+	float PhysxController::getContactOffset() const
+	{
+		if (m_pxController)
+			return m_pxController->getContactOffset();
+
+		return 0.f;
+	}
+
+	void PhysxController::setContactOffset(float offset)
+	{
+		if (m_pxController)
+			m_pxController->setContactOffset(offset);
+	}
+
+	Vector3 PhysxController::getFootPosition()
+	{
+		if (m_pxController)
+		{
+			physx::PxExtendedVec3 fp = m_pxController->getFootPosition();
+			return Vector3(fp.x, fp.y, fp.z);
+		}
+
+		return Vector3::ZERO;
 	}
 
 	void PhysxController::update_self()

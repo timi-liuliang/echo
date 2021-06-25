@@ -22,6 +22,14 @@ namespace Echo
 		// Overlap
 		virtual bool overlap() { return false; }
 
+	public:
+		// Contact offset
+		float getContactOffset() const;
+		void setContactOffset(float offset);
+
+		// foot position
+		Vector3 getFootPosition();
+
 	protected:
 		// Create controller
 		virtual physx::PxController* createController() { return nullptr; }
