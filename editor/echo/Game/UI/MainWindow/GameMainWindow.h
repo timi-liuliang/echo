@@ -54,6 +54,9 @@ namespace Game
 		// show message
 		void onShowStatusMessage();
 
+		// open Window
+		void onOpenWindow();
+
 	private:
 		Studio::AStudio*				m_studio = nullptr;
 		QTimer							m_timer;

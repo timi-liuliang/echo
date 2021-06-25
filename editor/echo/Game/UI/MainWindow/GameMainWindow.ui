@@ -38,7 +38,7 @@
      <x>0</x>
      <y>0</y>
      <width>517</width>
-     <height>22</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_menuWindow">
@@ -62,6 +62,8 @@
      <addaction name="m_menuHorizontal"/>
      <addaction name="m_menuVertical"/>
     </widget>
+    <addaction name="m_actionTerminal"/>
+    <addaction name="separator"/>
     <addaction name="m_menuSize"/>
    </widget>
    <addaction name="m_menuWindow"/>
@@ -70,6 +72,18 @@
   <action name="m_actionDesignSize">
    <property name="text">
     <string>Design</string>
+   </property>
+  </action>
+  <action name="m_actionTerminal">
+   <property name="icon">
+    <iconset resource="../../../Resource/App.qrc">
+     <normaloff>:/icon/Icon/window/terminal.png</normaloff>:/icon/Icon/window/terminal.png</iconset>
+   </property>
+   <property name="text">
+    <string>Terminal</string>
+   </property>
+   <property name="shortcut">
+    <string>`</string>
    </property>
   </action>
  </widget>

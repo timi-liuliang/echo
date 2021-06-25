@@ -3,6 +3,7 @@
 #include <QStatusBar>
 #include "GameMainWindow.h"
 #include "WindowMetal.h"
+#include "TerminalDialog.h"
 #include "engine/core/util/PathUtil.h"
 #include "engine/core/main/game_settings.h"
 #include "MacHelper.h"
@@ -18,6 +19,9 @@ namespace Game
 		m_studio = Studio::AStudio::instance();
 
 		setupUi( this);
+
+		// window
+		QObject::connect(m_actionTerminal, SIGNAL(triggered(bool)), this, SLOT(onOpenWindow()));
 
 #ifdef ECHO_PLATFORM_MAC
         m_renderWindow = new WindowMetal(this);
@@ -147,5 +151,22 @@ namespace Game
 	void GameMainWindow::onShowStatusMessage()
 	{
 		statusBar()->showMessage(Echo::StringUtil::Format("Fps:%d", Echo::FrameState::instance()->getFps()).c_str());
+	}
+
+	void GameMainWindow::onOpenWindow()
+	{
+		QAction* action = qobject_cast<QAction*>(sender());
+		if (action)
+		{
+			Echo::String windowName = action->text().toStdString().c_str();
+			if (Echo::StringUtil::Equal(windowName, "Terminal"))
+			{
+				Studio::TerminalDialog* inst = Studio::TerminalDialog::instance();
+				inst->setVisible(true);
+				if (inst->exec() == QDialog::Accepted)
+				{
+				}
+			}
+		}
 	}
 }
