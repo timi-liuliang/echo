@@ -25,6 +25,8 @@ namespace Studio
 		appendForegroundRule(192, 120, 221, "\\bwhile\\b");
 		appendForegroundRule(192, 120, 221, "\\bin\\b");
         appendForegroundRule(192, 120, 221, "\\bbreak\\b");
+		appendForegroundRule(192, 120, 221, "\\bor\\b");
+		appendForegroundRule(192, 120, 221, "\\band\\b");
 
 		// false true ...
 		appendForegroundRule(209, 154, 102, "\\bnil\\b");
